@@ -1,0 +1,412 @@
+﻿
+CREATE FUNCTION [dbo].[FN_GET_CONV_CALC]
+-- ================================================================================================
+-- Program ID          : 
+-- Program Name        : FN_GET_CONV_CALC
+-- Param               : PLANT_ID / LINE_ID / MODEL_ID / ITEM_ID / PRODUCTION_TYPE / FLAG
+-- Batch Period        : 
+-- Description         : 
+--
+-- Source System       : FP
+-- Destination System  : FP
+-- Source Table        : 
+-- Destination Table   : 
+--
+-- Create(Update) Date : 2020.07.03
+-- Author              : cys
+-- Version             : 1.0 SCM_MODEL_COMP_EFFECTIVE_DATE 기준으로 전달된 일자 기준으로 소요량 산출
+--                       
+-- ================================================================================================
+(
+	@P_INSTANCE_ID   NVARCHAR(30) = '-'
+   ,@P_PLANT_ID      NVARCHAR(30) = '-'
+   ,@P_FACTORY_ID    NVARCHAR(30) = '-'
+   ,@P_LINE_ID	     NVARCHAR(30) = '-'
+   ,@P_MODEL_ID      NVARCHAR(50) = '-'
+   ,@P_ITEM_ID		 NVARCHAR(50) = '-'
+   ,@P_PRODUCTION_TYPE	 NVARCHAR(10) = '-'
+   ,@P_CATEGORY		 NVARCHAR(30) = '-'
+   ,@P_FLAG			 NVARCHAR(30) = '-'
+)
+RETURNS NVARCHAR(10)
+AS
+
+BEGIN
+	DECLARE @INSTANCE_ID     NVARCHAR(30)
+    DECLARE @PLANT_ID        NVARCHAR(30)
+	DECLARE @FACTORY_ID      NVARCHAR(30)
+	DECLARE @LINE_ID	     NVARCHAR(30)
+    DECLARE @MODEL_ID        NVARCHAR(50)
+    DECLARE @ITEM_ID		 NVARCHAR(50)
+    DECLARE @PRODUCTION_TYPE NVARCHAR(10)
+	DECLARE @CATEGORY		 NVARCHAR(30)
+	DECLARE @FLAG			 NVARCHAR(30)
+	DECLARE @GUBUN			 NVARCHAR(10)
+
+	DECLARE @CALC_TYPE		 NVARCHAR(10)
+	DECLARE @CALC_VERSION	 NVARCHAR(10)
+	DECLARE @CALC_VALUE		 NUMERIC(18,5)
+	DECLARE @R_VAL			 NVARCHAR(30)
+	
+
+	IF @P_INSTANCE_ID = '-' OR @P_INSTANCE_ID = ''
+    	SELECT @INSTANCE_ID = NULL
+    ELSE 
+    	SELECT @INSTANCE_ID = @P_INSTANCE_ID
+    
+    IF @P_PLANT_ID = '-' OR @P_PLANT_ID = ''
+    	SELECT @PLANT_ID = NULL
+    ELSE 
+    	SELECT @PLANT_ID = @P_PLANT_ID
+    
+	IF @P_FACTORY_ID = '-' OR @P_FACTORY_ID = ''
+    	SELECT @FACTORY_ID = NULL
+    ELSE 
+    	SELECT @FACTORY_ID = @P_FACTORY_ID
+
+	IF @P_LINE_ID = '-' OR @P_LINE_ID = ''
+    	SELECT @LINE_ID = NULL
+    ELSE 
+    	SELECT @LINE_ID = @P_LINE_ID
+
+	IF @P_MODEL_ID = '-' OR @P_MODEL_ID = ''
+    	SELECT @MODEL_ID = NULL
+    ELSE 
+    	SELECT @MODEL_ID = @P_MODEL_ID
+
+	IF @P_ITEM_ID = '-' OR @P_ITEM_ID = ''
+    	SELECT @ITEM_ID = NULL
+    ELSE 
+    	SELECT @ITEM_ID = @P_ITEM_ID
+
+    IF @P_PRODUCTION_TYPE = '-' OR @P_PRODUCTION_TYPE = ''
+    	SELECT @PRODUCTION_TYPE = NULL
+    ELSE 
+    	SELECT @PRODUCTION_TYPE = @P_PRODUCTION_TYPE
+	
+	IF @P_CATEGORY = '-' OR @P_CATEGORY = ''
+    	SELECT @CATEGORY = NULL
+    ELSE 
+    	SELECT @CATEGORY = @P_CATEGORY
+
+    IF @P_FLAG = '-' OR @P_FLAG = ''
+    	SELECT @FLAG = 'CALC_TYPE'
+    ELSE 
+    	SELECT @FLAG = @P_FLAG
+
+	IF CHARINDEX(@FLAG,'POST_') > -1 
+		SET @GUBUN = 'POST'
+	ELSE
+		SET @GUBUN = 'CONVERT'
+
+	IF @GUBUN = 'POST'
+		SET @FLAG = REPLACE(@FLAG,'POST_','') 
+
+	--POST 인스턴스에서는 대표 환산자만 가져온다.
+	IF @GUBUN = 'POST' AND ( @CATEGORY = NULL OR @CATEGORY = '' )
+		BEGIN
+				SELECT	TOP 1 @CALC_TYPE = A.CALC_TYPE
+							, @CALC_VERSION = A.VERSION
+							, @CALC_VALUE = A.VALUE
+				FROM	(
+							SELECT	B.*
+									, MIN(B.IDX) OVER (PARTITION BY B.INSTANCE_ID, B.PRODUCTION_TYPE, A.LINE_ID, A.ITEM_ID ) AS MIN_IDX
+									, A.*
+							FROM	(
+					    				SELECT DISTINCT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID AS CALC_PLANT_ID, A.FACTORY_ID, B.LINE_ID, A.MODEL_ID, A.ITEM_ID, B.ELECTRODE_TYPE
+												, A.VERSION_TYPE AS CALC_TYPE, A.VERSION, A.VALUE
+												, DENSE_RANK() OVER (PARTITION BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.OPERATION
+																				, A.ITEM_ID, A.PROD_VERSION_TYPE, A.VERSION_TYPE
+																	ORDER     BY  A.APPLY_DATE DESC
+																				 ,(CASE WHEN A.MODEL_ID = C.APPLIED_MODEL  THEN 1 ELSE 2 END)
+																				 ,A.MODEL_ID
+																				 ,(CASE WHEN A.VERSION LIKE 'Z%' THEN REPLACE( A.VERSION, 'Z', '/') ELSE A.VERSION END) DESC ) AS SEQ
+										FROM   SCM_ITEM_CONV_CALC_M A WITH(NOLOCK)
+											  ,SCM_LINE_M B WITH(NOLOCK)
+											  ,SCM_ITEM_M C WITH(NOLOCK)
+										WHERE  1=1
+										AND    A.OPERATION    = 'E2000'
+										AND    A.MAX_VER_FLAG = 'Y'
+										AND    A.COMPANY_ID   = B.COMPANY_ID
+										AND    A.DIVISION_ID  = B.DIVISION_ID
+										AND    A.SITE_ID      = B.SITE_ID
+										AND    A.PLANT_ID     = B.PLANT_ID
+										AND    A.FACTORY_ID   = B.FACTORY_ID
+										AND    A.OPERATION    = B.OPERATION_ID
+										AND    A.PROD_VERSION_TYPE = ISNULL(B.PROD_VERSION_TYPE, 'GENERAL')
+										AND    B.ACTIVE_FLAG  = 'Y'
+										AND    A.COMPANY_ID   = C.COMPANY_ID
+										AND    A.DIVISION_ID  = C.DIVISION_ID
+										AND    A.SITE_ID      = C.SITE_ID
+										AND    A.ITEM_ID      = C.ITEM_ID
+										AND    C.ACTIVE_FLAG  = 'Y'
+										--AND	   A.FACTORY_ID	  = @FACTORY_ID
+										--AND	   A.PLANT_ID	  = @PLANT_ID
+										AND	   A.ITEM_ID	  = @ITEM_ID
+										AND	   EXISTS (
+															SELECT	1
+															FROM	FP_INSTANCE_INFO_V V
+															WHERE	V.INSTANCE_ID = @INSTANCE_ID
+															AND		V.COMPANY_ID = A.COMPANY_ID	
+															AND		V.DIVISION_ID = A.DIVISION_ID
+															AND		V.SITE_ID = A.SITE_ID
+															AND		V.PLANT_ID = A.PLANT_ID
+														)		
+									) A
+									, (
+										SELECT SEGMENT1 AS INSTANCE_ID, SEGMENT2 AS PLANT_ID, SEGMENT3 AS PRODUCTION_TYPE,  VERSION_TYPE
+												, RANK() OVER (PARTITION BY SEGMENT1, SEGMENT3 ORDER BY GUBUN) AS IDX
+										FROM (	
+												SELECT *
+												FROM   SCM_SYS_LOOKUP_VALUE A WITH(NOLOCK)
+												WHERE  1=1
+												AND	   LOOKUP_TYPE_CODE	= 'INSTANCE_CONV_PRIORITY'
+												AND	   SEGMENT1			= @INSTANCE_ID
+												AND    ACTIVE_FLAG		= 'Y'
+												AND	   SEGMENT3			= 'DEFAULT'
+										) A
+										UNPIVOT(VERSION_TYPE FOR GUBUN IN (ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5) ) AS VERSION_TYPE
+									) B
+							WHERE 1=1
+							--AND   A.CALC_PLANT_ID	= B.PLANT_ID
+							AND   A.CALC_TYPE		= B.VERSION_TYPE
+							AND   A.SEQ = 1
+						) A
+				WHERE	1=1
+				AND		A.IDX = A.MIN_IDX
+		END
+	ELSE IF @GUBUN = 'POST'
+		BEGIN
+				SELECT	TOP 1 @CALC_TYPE = A.CALC_TYPE
+							, @CALC_VERSION = A.VERSION
+							, @CALC_VALUE = A.VALUE
+				FROM	(
+							SELECT	B.*
+									, MIN(B.IDX) OVER (PARTITION BY B.INSTANCE_ID, B.PRODUCTION_TYPE, A.LINE_ID, A.ITEM_ID ) AS MIN_IDX
+									, A.*
+							FROM	(
+					    				SELECT DISTINCT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID AS CALC_PLANT_ID, A.FACTORY_ID, B.LINE_ID, A.MODEL_ID, A.ITEM_ID, B.ELECTRODE_TYPE
+												, A.VERSION_TYPE AS CALC_TYPE, A.VERSION, A.VALUE
+												, DENSE_RANK() OVER (PARTITION BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.OPERATION
+																				, A.ITEM_ID, A.PROD_VERSION_TYPE, A.VERSION_TYPE
+																	ORDER     BY  A.APPLY_DATE DESC
+																					,(CASE WHEN A.MODEL_ID = C.APPLIED_MODEL  THEN 1 ELSE 2 END)
+																					,A.MODEL_ID
+																					,(CASE WHEN A.VERSION LIKE 'Z%' THEN REPLACE( A.VERSION, 'Z', '/') ELSE A.VERSION END) DESC ) AS SEQ
+										FROM   SCM_ITEM_CONV_CALC_M A WITH(NOLOCK)
+												,SCM_LINE_M B WITH(NOLOCK)
+												,SCM_ITEM_M C WITH(NOLOCK)
+										WHERE  1=1
+										AND    A.OPERATION    = 'E2000'
+										AND    A.MAX_VER_FLAG = 'Y'
+										AND    A.COMPANY_ID   = B.COMPANY_ID
+										AND    A.DIVISION_ID  = B.DIVISION_ID
+										AND    A.SITE_ID      = B.SITE_ID
+										AND    A.PLANT_ID     = B.PLANT_ID
+										AND    A.FACTORY_ID   = B.FACTORY_ID
+										AND    A.OPERATION    = B.OPERATION_ID
+										AND    A.PROD_VERSION_TYPE = ISNULL(B.PROD_VERSION_TYPE, 'GENERAL')
+										AND    B.ACTIVE_FLAG  = 'Y'
+										AND    A.COMPANY_ID   = C.COMPANY_ID
+										AND    A.DIVISION_ID  = C.DIVISION_ID
+										AND    A.SITE_ID      = C.SITE_ID
+										AND    A.ITEM_ID      = C.ITEM_ID
+										AND    C.ACTIVE_FLAG  = 'Y'
+										--AND	   A.FACTORY_ID	  = @FACTORY_ID
+										--AND	   A.PLANT_ID	  = @PLANT_ID
+										AND	   A.ITEM_ID	  = @ITEM_ID
+										AND	   A.CATEGORY	  = @CATEGORY
+										AND	   EXISTS (
+															SELECT	1
+															FROM	FP_INSTANCE_INFO_V V
+															WHERE	V.INSTANCE_ID = @INSTANCE_ID
+															AND		V.COMPANY_ID = A.COMPANY_ID	
+															AND		V.DIVISION_ID = A.DIVISION_ID
+															AND		V.SITE_ID = A.SITE_ID
+															AND		V.PLANT_ID = A.PLANT_ID
+														)		
+									) A
+									, (
+										SELECT SEGMENT1 AS INSTANCE_ID, SEGMENT2 AS PLANT_ID, SEGMENT3 AS PRODUCTION_TYPE,  VERSION_TYPE
+												, RANK() OVER (PARTITION BY SEGMENT1, SEGMENT3 ORDER BY GUBUN) AS IDX
+										FROM (	
+												SELECT *
+												FROM   SCM_SYS_LOOKUP_VALUE A WITH(NOLOCK)
+												WHERE  1=1
+												AND	   LOOKUP_TYPE_CODE	= 'INSTANCE_CONV_PRIORITY'
+												AND	   SEGMENT1			= @INSTANCE_ID
+												AND    ACTIVE_FLAG		= 'Y'
+												AND	   SEGMENT3			= 'DEFAULT'
+										) A
+										UNPIVOT(VERSION_TYPE FOR GUBUN IN (ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5) ) AS VERSION_TYPE
+									) B
+							WHERE 1=1
+							--AND   A.CALC_PLANT_ID	= B.PLANT_ID
+							AND   A.CALC_TYPE		= B.VERSION_TYPE
+							AND   A.SEQ = 1
+						) A
+				WHERE	1=1
+				AND		A.IDX = A.MIN_IDX
+		END
+	ELSE IF @GUBUN <> 'POST' AND (@CATEGORY = NULL OR @CATEGORY = '')
+		BEGIN
+		
+			SELECT	TOP 1 @CALC_TYPE = A.CALC_TYPE
+						, @CALC_VERSION = A.VERSION
+						, @CALC_VALUE = A.VALUE
+			FROM	(
+						SELECT	B.*
+								, MIN(B.IDX) OVER (PARTITION BY B.INSTANCE_ID, B.PRODUCTION_TYPE, A.LINE_ID, A.ITEM_ID ) AS MIN_IDX
+								, A.*
+						FROM	(
+					    			SELECT DISTINCT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID AS CALC_PLANT_ID, A.FACTORY_ID, B.LINE_ID, A.MODEL_ID, A.ITEM_ID, B.ELECTRODE_TYPE
+											, A.VERSION_TYPE AS CALC_TYPE, A.VERSION, A.VALUE
+											, DENSE_RANK() OVER (PARTITION BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.OPERATION
+																			, A.ITEM_ID, A.PROD_VERSION_TYPE, A.VERSION_TYPE
+																ORDER     BY  A.APPLY_DATE DESC
+																			 ,(CASE WHEN A.MODEL_ID = C.APPLIED_MODEL  THEN 1 ELSE 2 END)
+																			 ,A.MODEL_ID
+																			 ,(CASE WHEN A.VERSION LIKE 'Z%' THEN REPLACE( A.VERSION, 'Z', '/') ELSE A.VERSION END) DESC ) AS SEQ
+									FROM   SCM_ITEM_CONV_CALC_M A WITH(NOLOCK)
+										  ,SCM_LINE_M B WITH(NOLOCK)
+										  ,SCM_ITEM_M C WITH(NOLOCK)
+									WHERE  1=1
+									AND    A.OPERATION    = 'E2000'
+									AND    A.MAX_VER_FLAG = 'Y'
+									AND    A.COMPANY_ID   = B.COMPANY_ID
+									AND    A.DIVISION_ID  = B.DIVISION_ID
+									AND    A.SITE_ID      = B.SITE_ID
+									AND    A.PLANT_ID     = B.PLANT_ID
+									AND    A.FACTORY_ID   = B.FACTORY_ID
+									AND    A.OPERATION    = B.OPERATION_ID
+									AND    A.PROD_VERSION_TYPE = ISNULL(B.PROD_VERSION_TYPE, 'GENERAL')
+									AND    B.ACTIVE_FLAG  = 'Y'
+									AND    A.COMPANY_ID   = C.COMPANY_ID
+									AND    A.DIVISION_ID  = C.DIVISION_ID
+									AND    A.SITE_ID      = C.SITE_ID
+									AND    A.ITEM_ID      = C.ITEM_ID
+									AND    C.ACTIVE_FLAG  = 'Y'
+									AND	   A.FACTORY_ID	  = @FACTORY_ID
+									AND	   A.PLANT_ID	  = @PLANT_ID
+									AND	   A.ITEM_ID	  = @ITEM_ID
+									AND	   EXISTS (
+															SELECT	1
+															FROM	FP_INSTANCE_INFO_V V
+															WHERE	V.INSTANCE_ID = @INSTANCE_ID
+															AND		V.COMPANY_ID = A.COMPANY_ID	
+															AND		V.DIVISION_ID = A.DIVISION_ID
+															AND		V.SITE_ID = A.SITE_ID
+															AND		V.PLANT_ID = A.PLANT_ID
+														)		
+								) A
+								, (
+									SELECT SEGMENT1 AS INSTANCE_ID, SEGMENT2 AS PLANT_ID, SEGMENT3 AS PRODUCTION_TYPE,  VERSION_TYPE
+											, RANK() OVER (PARTITION BY SEGMENT1, SEGMENT3 ORDER BY GUBUN) AS IDX
+									FROM (	
+											SELECT *
+											FROM   SCM_SYS_LOOKUP_VALUE A WITH(NOLOCK)
+											WHERE  1=1
+											AND	   LOOKUP_TYPE_CODE	= 'INSTANCE_CONV_PRIORITY'
+											AND	   SEGMENT1			= @INSTANCE_ID
+											AND    ACTIVE_FLAG		= 'Y'
+											AND	   SEGMENT3			= 'DEFAULT'
+									) A
+									UNPIVOT(VERSION_TYPE FOR GUBUN IN (ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5) ) AS VERSION_TYPE
+								) B
+						WHERE 1=1
+						AND   A.CALC_PLANT_ID	= B.PLANT_ID
+						AND   A.CALC_TYPE		= B.VERSION_TYPE
+						AND   A.SEQ = 1
+					) A
+			WHERE	1=1
+			AND		A.IDX = A.MIN_IDX
+
+
+		END ; -- END Category IF
+	ELSE -- Category IF
+		BEGIN
+		
+			SELECT	TOP 1 @CALC_TYPE = A.CALC_TYPE
+						, @CALC_VERSION = A.VERSION
+						, @CALC_VALUE = A.VALUE
+			FROM	(
+						SELECT	B.*
+								, MIN(B.IDX) OVER (PARTITION BY B.INSTANCE_ID, B.PRODUCTION_TYPE, A.LINE_ID, A.ITEM_ID ) AS MIN_IDX
+								, A.*
+						FROM	(
+					    			SELECT DISTINCT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID AS CALC_PLANT_ID, A.FACTORY_ID, B.LINE_ID, A.MODEL_ID, A.ITEM_ID, B.ELECTRODE_TYPE
+											, A.VERSION_TYPE AS CALC_TYPE, A.VERSION, A.VALUE
+											, DENSE_RANK() OVER (PARTITION BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.OPERATION
+																			, A.ITEM_ID, A.PROD_VERSION_TYPE, A.VERSION_TYPE
+																ORDER     BY  A.APPLY_DATE DESC
+																			 ,(CASE WHEN A.MODEL_ID = C.APPLIED_MODEL  THEN 1 ELSE 2 END)
+																			 ,A.MODEL_ID
+																			 ,(CASE WHEN A.VERSION LIKE 'Z%' THEN REPLACE( A.VERSION, 'Z', '/') ELSE A.VERSION END) DESC ) AS SEQ
+									FROM   SCM_ITEM_CONV_CALC_M A WITH(NOLOCK)
+										  ,SCM_LINE_M B WITH(NOLOCK)
+										  ,SCM_ITEM_M C WITH(NOLOCK)
+									WHERE  1=1
+									AND    A.OPERATION    = 'E2000'
+									AND    A.MAX_VER_FLAG = 'Y'
+									AND    A.COMPANY_ID   = B.COMPANY_ID
+									AND    A.DIVISION_ID  = B.DIVISION_ID
+									AND    A.SITE_ID      = B.SITE_ID
+									AND    A.PLANT_ID     = B.PLANT_ID
+									AND    A.FACTORY_ID   = B.FACTORY_ID
+									AND    A.OPERATION    = B.OPERATION_ID
+									AND    A.PROD_VERSION_TYPE = ISNULL(B.PROD_VERSION_TYPE, 'GENERAL')
+									AND    B.ACTIVE_FLAG  = 'Y'
+									AND    A.COMPANY_ID   = C.COMPANY_ID
+									AND    A.DIVISION_ID  = C.DIVISION_ID
+									AND    A.SITE_ID      = C.SITE_ID
+									AND    A.ITEM_ID      = C.ITEM_ID
+									AND    C.ACTIVE_FLAG  = 'Y'
+									AND	   A.FACTORY_ID	  = @FACTORY_ID
+									AND	   A.PLANT_ID	  = @PLANT_ID
+									AND	   A.ITEM_ID	  = @ITEM_ID
+									AND	   A.CATEGORY	  = @CATEGORY
+									AND	   EXISTS (
+															SELECT	1
+															FROM	FP_INSTANCE_INFO_V V
+															WHERE	V.INSTANCE_ID = @INSTANCE_ID
+															AND		V.COMPANY_ID = A.COMPANY_ID	
+															AND		V.DIVISION_ID = A.DIVISION_ID
+															AND		V.SITE_ID = A.SITE_ID
+															AND		V.PLANT_ID = A.PLANT_ID
+														)		
+								) A
+								, (
+									SELECT SEGMENT1 AS INSTANCE_ID, SEGMENT2 AS PLANT_ID, SEGMENT3 AS PRODUCTION_TYPE,  VERSION_TYPE
+											, RANK() OVER (PARTITION BY SEGMENT1, SEGMENT3 ORDER BY GUBUN) AS IDX
+									FROM (	
+											SELECT *
+											FROM   SCM_SYS_LOOKUP_VALUE A WITH(NOLOCK)
+											WHERE  1=1
+											AND	   LOOKUP_TYPE_CODE	= 'INSTANCE_CONV_PRIORITY'
+											AND	   SEGMENT1			= @INSTANCE_ID
+											AND    ACTIVE_FLAG		= 'Y'
+											AND	   SEGMENT3			= 'DEFAULT'
+									) A
+									UNPIVOT(VERSION_TYPE FOR GUBUN IN (ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5) ) AS VERSION_TYPE
+								) B
+						WHERE 1=1
+						AND   A.CALC_PLANT_ID	= B.PLANT_ID
+						AND   A.CALC_TYPE		= B.VERSION_TYPE
+						AND   A.SEQ = 1
+					) A
+			WHERE	1=1
+			AND		A.IDX = A.MIN_IDX
+
+
+		END ; -- END Category IF
+
+	IF @FLAG = 'CALC_TYPE'
+		SET @R_VAL = @CALC_TYPE
+	ELSE IF @FLAG = 'CALC_VERSION'
+		SET @R_VAL = @CALC_VERSION
+	ELSE	
+		SET @R_VAL = @CALC_VALUE
+
+	RETURN @R_VAL
+
+END

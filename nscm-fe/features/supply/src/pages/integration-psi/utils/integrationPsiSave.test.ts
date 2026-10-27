@@ -3,10 +3,12 @@ import { describe, expect, it } from 'vitest';
 import type { EditTracker } from '@foundation/utils';
 
 import {
+  buildAdminPayload,
   buildGeneralPayload,
   insertTargetMonths,
   unfoldSaveCells,
 } from './integrationPsiSave';
+import type { SaveCell } from './integrationPsiSave';
 
 type Row = Record<string, unknown>;
 
@@ -208,5 +210,96 @@ describe('buildGeneralPayload — P_ACTIVE_FLAG 계약', () => {
 
   it('변경셀이 없으면 null — 호출부가 MSG00004 로 끝낸다', () => {
     expect(buildGeneralPayload([], '20260901', 'tester')).toBeNull();
+  });
+});
+
+describe('unfoldSaveCells — 15필수 공백검증 (AS-IS roslyn L1237)', () => {
+  // 15필수 전부 채운 신규행. 공백검증은 trim()==='' 만 잡으므로 '-'(VALUE_TYPE 등)는 통과한다.
+  const fullInsert = (over: Row = {}): Row => ({
+    CRUD_TYPE: 'I',
+    PLAN_TYPE: 'FN',
+    DIVISION_ID: '40',
+    OPERATION_GROUP: 'Pack',
+    CELL_ITEM_ID: 'C1',
+    ITEM_ID: 'ITEM1',
+    COMPANY_ID: 'HQ00',
+    PLANT_ID: 'HQ06',
+    MEASURE: 'PROD_PLAN',
+    LINE_ID: 'LINE1',
+    VALUE_TYPE: '-',
+    TO_PRODUCT: '-',
+    TO_SITE: '-',
+    INCOTERMS: '-',
+    BOH_QTY: 0,
+    SEQ_FLAG: '550',
+    '202609': 0,
+    ...over,
+  });
+  const missing = (row: Row): string | undefined =>
+    unfoldSaveCells({
+      source: [row],
+      tracker: undefined,
+      fixedBindings: FIXED,
+      planStartYyyymmdd: '20260901',
+      horizonEndYyyymmdd: '20260930',
+    }).missingRequiredField;
+
+  it('전 필수 입력 시 undefined (저장 통과)', () => {
+    expect(missing(fullInsert())).toBeUndefined();
+  });
+
+  it('빈 필수 컬럼의 binding 을 돌려준다 (PLANT_ID)', () => {
+    expect(missing(fullInsert({ PLANT_ID: '' }))).toBe('PLANT_ID');
+  });
+
+  it('공백(스페이스)만 있어도 미입력으로 본다', () => {
+    expect(missing(fullInsert({ TO_SITE: '   ' }))).toBe('TO_SITE');
+  });
+
+  it('BOH_QTY=0 은 통과 — 공백만 필수대상이다', () => {
+    expect(missing(fullInsert({ BOH_QTY: 0 }))).toBeUndefined();
+  });
+
+  it('LINE_ID 공백이면 Line 을 필수로 잡는다 (admin V1 신규행)', () => {
+    expect(missing(fullInsert({ LINE_ID: '' }))).toBe('LINE_ID');
+  });
+});
+
+describe('buildAdminPayload — operationGroup 코드 변환 (ADMIN SP 는 코드 계약)', () => {
+  const saveCell = (over: Partial<Record<keyof SaveCell, string>> = {}) =>
+    ({
+      action: 'I',
+      planType: 'FN',
+      divisionId: '40',
+      companyId: 'HQ00',
+      plantId: 'HQ06',
+      operationGroup: 'Pack',
+      seqFlag: '550',
+      cellitemId: 'C1',
+      itemId: 'ITEM1',
+      measure: 'PROD_PLAN',
+      toSite: '-',
+      lineId: 'LINE1',
+      valuationType: '-',
+      toProduct: '-',
+      incoterms: '-',
+      yyyymm: '202609',
+      modiQty: '10',
+      bohQty: '0',
+      ...over,
+    }) as SaveCell;
+
+  it('ADMIN payload 는 operationGroup 을 코드(P/A/E)로 보낸다 — 표시명 금지(ORA-12899 회피)', () => {
+    const p = buildAdminPayload(
+      [saveCell({ operationGroup: 'Pack' }), saveCell({ operationGroup: 'Cell' }), saveCell({ operationGroup: 'Electrode' })],
+      '20260907',
+      'tester'
+    );
+    expect(p?.operationGroup).toBe('P^A^E');
+  });
+
+  it('일반 payload 는 operationGroup 을 표시명 그대로 보낸다 (일반 SP 가 내부 변환)', () => {
+    const p = buildGeneralPayload([saveCell({ operationGroup: 'Pack' })], '20260907', 'tester');
+    expect(p?.operationGroup).toBe('Pack');
   });
 });

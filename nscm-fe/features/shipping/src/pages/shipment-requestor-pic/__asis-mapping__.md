@@ -12,9 +12,9 @@
 | usrConditionPanel1(HidePanel) | designer:116 | `SearchArea`(접기 토글) — ShipmentRequestorPicForm |
 | cboDivision(UsrCombo, MyDivision) | cs:45,133 | Form Division 드롭다운 `useTabComboQueries(MyDivision)` |
 | clbFromSite(UsrCheckedList, PlantCell) | cs:140~141 | Form Plant Site 다중 CustomDropdown `PlantCell @divisionId` |
-| txtItemId(다건) + btnItemId | cs:260,704~720 | Form Material InputField + 돋보기 → ItemByDivisionModal(ITEM) |
+| txtItemId(다건) + btnItemId | cs:260,704~720 | Form Material InputField + 돋보기 → RequestorPicItemByDivisionModal(ITEM) |
 | txtNickName | cs:261 | Form Nick Name InputField |
-| txtModelId(다건) + btnModelId | cs:262,722~738 | Form Model InputField + 돋보기 → ItemByDivisionModal(MODEL) |
+| txtModelId(다건) + btnModelId | cs:262,722~738 | Form Model InputField + 돋보기 → RequestorPicItemByDivisionModal(MODEL) |
 | spdMain(FpSpread) | designer:539 | `DataGrid` — ShipmentRequestorPicGrid |
 | usrButton1 | (미배치) | dead control — 미이식(design 01 §1) |
 
@@ -44,7 +44,7 @@
 | R9 CellClick 가드(편집모드) | cs:622 | editLock.isCellEditable(모드×행상태) |
 | R10 CellClick 가드(Division 선점) | cs:628~633 | (신규행 SITE/ITEM 상호작용 전 Division 필요 — 셀콤보 division 컨텍스트) |
 | R11 신규행 SITE 재조회 | cs:637~641 | PlantCell cascade PARAM10='D'(행 division) — admin 메타 useRowParamCombos |
-| R12 신규행 ITEM 팝업 | cs:642~666 | Grid dblClick(ITEM_ID) → `handleItemCellDblClick` → ItemByDivisionModal(CELL) → 6칸 채움(POPUP_FILL_COLUMNS). PlantSite 공백 MSG(REQUIRED_FIELD) |
+| R12 신규행 ITEM 팝업 | cs:642~666 | Grid dblClick(ITEM_ID) → `handleItemCellDblClick` → RequestorPicItemByDivisionModal(CELL) → 6칸 채움(POPUP_FILL_COLUMNS). PlantSite 공백 MSG(REQUIRED_FIELD) |
 | R13 SITE→TO_SITE 파생 | cs:679~682 | Grid cellEditEnded(SITE_DESCRIPTION) → TO_SITE=값 |
 | R14 신규행 Division 변경 reset | cs:683~695 | Grid cellEditEnded(DIVISION_ID, 신규행) → DIVISION_CASCADE_CLEAR 7칸 '' |
 | R15 ComboSelChange 가드(행0) | cs:674 | cellEditEnded — row 없으면 return |
@@ -75,8 +75,13 @@
 | 셀 VALID_YN | dtYesOrNo(cs:47) | CMBO `YesOrNo` |
 | 셀 SITE_DESCRIPTION | dtToSite=PlantCell(cs:320,639) | 셀콤보 PlantCell(**미이관→05_register.sql**) |
 | 셀 DIVISION_ID | dtMyDivision(cs:318) | 셀콤보 MyDivision PARAM9(**미이관→05_register.sql**) |
-| SSP0025_ItembyDivisionPopup | ITEM/MODEL/CELL | 화면전용 `ItemByDivisionModal`(SSP0025 전용 SP) |
+| SSP0025_ItembyDivisionPopup | ITEM/MODEL/CELL | 화면전용 `RequestorPicItemByDivisionModal`(SSP0025 전용 SP) |
 | UserInfoPopup(User/Part/Team) | cs:543~609 | 공용 `SsoUserModal`(ssoUserYn='N') |
+
+> **전용 팝업 주의 (2026-10-16)**: `RequestorPicItemByDivisionModal` 은 공용 `ItemByDivisionModal`(COM0008)·SSP0024 전용 팝업과 **각각 다른 전용 팝업**이다. SP `P_SSP0025_GET_ITEM_BY_DIVISION_POPUP`·반환 컬럼(ITEM_ID/MODEL_ID/CELL_TYPE/NICK_NAME/ELECTRODE_TYPE/ITEM_UOM + FROM_SITE 식별축)이 공용(ITEM_ID 기반)·SSP0024(SCP_MST_FINAL_ITEM 10컬럼)와 달라 **합칠 수 없다**(POP-01 재사용 대상 아님). AS-IS `new` 클래스 `SSP0025_ItembyDivisionPopup`. 공용·SSP0024와 이름이 겹쳐 혼동되던 것을 `RequestorPicItemByDivisionModal` 로 개명(POP-01 동명 로컬 사본 금지·POP-03 식별자 고유). 단일 화면 전용이라 페이지 폴더 유지. 파일: `components/modals/RequestorPicItemByDivisionModal.tsx`.
+>
+> **POP-01 판정 근거 (2026-10-20 재확인)**: POP-01 은 "AS-IS 팝업에 대응하는 공용 modal 이 없을 때만 신규"를 허용한다. 공용 `ItemByDivisionModal` 의 대응 AS-IS 는 `DM0002_ItembyDivisionPopup(Ex)`(그 파일 머리 주석 2~9행)이고, SSP0025 가 `new` 하는 클래스는 `SSP0025_ItembyDivisionPopup`(cs:651·710·728)이다. GSCM 전체에서 `new SSP0025_ItembyDivisionPopup()` 호출처는 SSP0025 한 화면뿐이다(grep 실측). 따라서 대응 공용 modal 이 없는 경우에 해당해 로컬 신규가 규칙상 허용 경로다. 공용 modal 에 optional prop 으로 흡수하는 안은 SP·menuId·파라미터·조회조건·컬럼·반환 형태를 전부 갈라야 해 채택하지 않는다(공용 영역 변경은 분리 PR 대상, CORE-05/06).
+> 주의: `Doc/new_rules/screen/popup-modal.md` POP-01 배경의 반례 목록에는 개명 전 경로(`shipment-requestor-pic/components/modals/ItemByDivisionModal.tsx`)가 남아 있다. POP-01 확인 명령 `grep -rln "ItemByDivisionModal"` 은 새 파일명도 부분 문자열로 잡으므로, 이 화면이 다시 나오면 위 근거로 판정한다.
 
 ## UI 공통(통합테스트) 체크 축 (2026-08-12 — 전 화면 상시 6항목)
 

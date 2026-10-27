@@ -1,0 +1,690 @@
+{
+  "id": "SCP0007",
+  "mode": "division",
+  "modeSource": "auto(Division 조회조건 있음)",
+  "menuId": "SCP0007",
+  "condOrder": [
+    "Div",
+    "From Site",
+    "To Site",
+    "Incoterms",
+    "SSP Incoterms",
+    "Trans Mode",
+    "Status",
+    "Active"
+  ],
+  "condGone": [],
+  "page": "Bod",
+  "routePath": "supply/bod",
+  "asisName": "BOD",
+  "fields": [
+    {
+      "key": "divisionIds",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision",
+      "tobeLabel": "Div.",
+      "catalog": "Div → Div. · 명칭",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite",
+      "tobeLabel": "From Site",
+      "catalog": "From Site → From Site",
+      "labels": [
+        "From Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "toSiteIds",
+      "label": "To Site",
+      "lbl": "LBL00023",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbToSite",
+      "tobeLabel": "To Site",
+      "catalog": "To Site → To Site",
+      "labels": [
+        "To Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "incoterms",
+      "label": "Incoterms",
+      "lbl": "LBL00024",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbIncoterms",
+      "tobeLabel": "Incoterms",
+      "catalog": "Incoterms → Incoterms",
+      "labels": [
+        "Incoterms"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "incotermsSsp",
+      "label": "SSP Incoterms",
+      "lbl": "LBL00026",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbIncotermsSSP",
+      "tobeLabel": "SSP Incoterms",
+      "catalog": "SSP Incoterms → SSP Incoterms",
+      "labels": [
+        "SSP Incoterms"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "transMode",
+      "label": "Trans Mode",
+      "lbl": "LBL00025",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbTransMode",
+      "tobeLabel": "Trans Mode",
+      "catalog": "Trans Mode → Trans Mode",
+      "labels": [
+        "Trans Mode"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "inputStatus",
+      "label": "Status",
+      "lbl": "LBL00014",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboInputStatus",
+      "tobeLabel": "Status",
+      "catalog": "",
+      "labels": [
+        "Status"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "validYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValidYN",
+      "tobeLabel": "Active",
+      "catalog": "",
+      "labels": [
+        "Active"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": {
+    "rows": 2,
+    "spans": 0,
+    "literals": [],
+    "maxRowPx": 32
+  },
+  "catalogScreen": "BOD",
+  "asisMapping": "features\\supply\\src\\pages\\bod\\__asis-mapping__.md",
+  "buttons": [],
+  "mainSheets": [
+    {
+      "name": "BOD",
+      "key": "BOD",
+      "labels": [
+        "Additional Lead Time",
+        "Before",
+        "BOD_ID",
+        "BOD Valid*",
+        "Created By",
+        "Creation Date",
+        "Customer",
+        "Fri",
+        "Mon",
+        "Sat",
+        "Sun",
+        "Thu",
+        "Tue",
+        "Wed",
+        "Distribution Total Lead Time",
+        "Division*",
+        "From City",
+        "FROM_COUNTRY",
+        "From Site*",
+        "FROM*",
+        "Incoterms*",
+        "Incoterms SSP*",
+        "Last Update Date",
+        "Last Updated By",
+        "Lead Time",
+        "L/T Type",
+        "Priority*",
+        "Remarks",
+        "ROUTE_CHK",
+        "Route Count",
+        "Route Id*",
+        "Route Valid",
+        "Safety Stock",
+        "To City",
+        "TO_COUNTRY",
+        "To Site*",
+        "TO*",
+        "Trans Mode",
+        "To Site VMI"
+      ]
+    },
+    {
+      "name": "Distribution Route",
+      "key": "DISTRIBUTION_ROUTE",
+      "labels": [
+        "Country",
+        "Port Code",
+        "Port",
+        "Country",
+        "Port Code",
+        "Port",
+        "Departure Days",
+        "Fri",
+        "Mon",
+        "Sat",
+        "Sun",
+        "Thu",
+        "Tue",
+        "Wed",
+        "City",
+        "City Name",
+        "Country",
+        "Arrival Inland",
+        "Departure Inland",
+        "Lay Off/Customs Clearance",
+        "Sum",
+        "L/T Type",
+        "Sea/Air Ferry",
+        "Waiting For Shipping",
+        "Priority",
+        "Route Id",
+        "Shipping Document Preparation Data",
+        "Shipping Company",
+        "City",
+        "City Name",
+        "Country",
+        "Trans Mode",
+        "Valid"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "BOD",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0007.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "BOD",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0007.P_",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0007_GET_BOD",
+      "sheet": "BOD",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0007.P_SCP0007_GET_BOD",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0007_GET_COUNTRY_CITY",
+      "sheet": "BOD",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0007.P_SCP0007_GET_COUNTRY_CITY",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0007_SAVE_BOD",
+      "sheet": "BOD",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0007.P_SCP0007_SAVE_BOD",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0007_GET_ROUTE_CNT",
+      "sheet": "Distribution Route",
+      "btn": "ROUTE_CNT",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0007.P_SCP0007_GET_ROUTE_CNT",
+      "entries": [
+        "event:dsdm.Changed"
+      ]
+    },
+    {
+      "sp": "SCP0005_GET_DISTRIBUTION_ROUTE",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0007.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "BOD": {
+      "40": [
+        "Div*",
+        "Customer",
+        "From Site*",
+        "From City",
+        "To Site*",
+        "To City",
+        "To Site VMI",
+        "Incoterms*",
+        "Incoterms SSP*",
+        "Priority*",
+        "Route Count",
+        "Trans Mode",
+        "Route Id*",
+        "L/T Type",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun",
+        "Lead Time",
+        "Distribution Total Lead Time",
+        "BOD_ID",
+        "Additional Lead Time",
+        "FROM*",
+        "TO*",
+        "Remarks",
+        "BOD Valid*",
+        "Route Valid",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div*",
+        "Customer",
+        "From Site*",
+        "From City",
+        "To Site*",
+        "To City",
+        "To Site VMI",
+        "Incoterms*",
+        "Incoterms SSP*",
+        "Priority*",
+        "Route Count",
+        "Trans Mode",
+        "Route Id*",
+        "L/T Type",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun",
+        "Lead Time",
+        "Distribution Total Lead Time",
+        "BOD_ID",
+        "Additional Lead Time",
+        "FROM*",
+        "TO*",
+        "Remarks",
+        "BOD Valid*",
+        "Route Valid",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div*",
+        "Customer",
+        "From Site*",
+        "From City",
+        "To Site*",
+        "To City",
+        "To Site VMI",
+        "Incoterms*",
+        "Incoterms SSP*",
+        "Priority*",
+        "Route Count",
+        "Trans Mode",
+        "Route Id*",
+        "L/T Type",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun",
+        "Lead Time",
+        "Distribution Total Lead Time",
+        "BOD_ID",
+        "Additional Lead Time",
+        "FROM*",
+        "TO*",
+        "Remarks",
+        "BOD Valid*",
+        "Route Valid",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    },
+    "Distribution Route": {
+      "40": [],
+      "81": [],
+      "82": []
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "dodae",
+      "name": "도대현 책임",
+      "groups": [
+        "SCP Planner"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "SCP Planner"
+      },
+      "roleNote": "",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
+        "DM Viewer",
+        "FP Viewer",
+        "GMES Viewer",
+        "GUEST",
+        "SCP Planner",
+        "SSP Viewer"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH"
+      ],
+      "matrix": []
+    },
+    {
+      "id": "bottle",
+      "name": "김재병 선임",
+      "groups": [
+        "SCP Planner"
+      ],
+      "divisions": [
+        "81"
+      ],
+      "roles": {
+        "81": "SCP Planner"
+      },
+      "roleNote": "",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
+        "DM Viewer",
+        "FP Viewer",
+        "GUEST",
+        "SCM Viewer",
+        "SCP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH"
+      ],
+      "matrix": []
+    },
+    {
+      "id": "coeogus",
+      "name": "채대현 책임",
+      "groups": [
+        "SCP Planner"
+      ],
+      "divisions": [
+        "82"
+      ],
+      "roles": {
+        "82": "SCP Planner"
+      },
+      "roleNote": "",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
+        "DM Viewer",
+        "FP Viewer",
+        "GMES Viewer",
+        "GUEST",
+        "SCM Viewer",
+        "SCP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH"
+      ],
+      "matrix": []
+    },
+    {
+      "id": "jaeuk.shin",
+      "name": "",
+      "groups": [
+        "SCP ADMIN",
+        "SYSTEM ADMIN"
+      ],
+      "divisions": [
+        "40",
+        "81",
+        "82"
+      ],
+      "roles": {},
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
+        "ADMIN",
+        "DM ADMIN",
+        "FP Planner",
+        "FP Viewer",
+        "GUEST",
+        "JV Planner",
+        "SCM PI Admin",
+        "SCM Viewer",
+        "SCP Planner",
+        "SCP Tester",
+        "SSP Planner",
+        "SSP Viewer"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "DELETE",
+        "SAVE",
+        "INSERT",
+        "SEARCH"
+      ],
+      "matrix": []
+    },
+    {
+      "id": "jiwon.park",
+      "name": "박지원 선임",
+      "groups": [
+        "DM Admin"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "81": "DM Admin"
+      },
+      "roleNote": "권한 없음 대표",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
+        "DM ADMIN",
+        "GUEST"
+      ],
+      "menuAccess": "N",
+      "expectedBtns": [],
+      "matrix": []
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "DELETE",
+      "SAVE",
+      "INSERT",
+      "SEARCH"
+    ],
+    "DM ADMIN": [
+      "SEARCH"
+    ],
+    "DM Planner": [
+      "DELETE",
+      "INSERT",
+      "SEARCH",
+      "SAVE"
+    ],
+    "DM Planner (W/S)": [
+      "SEARCH"
+    ],
+    "DM Viewer": [
+      "SEARCH"
+    ],
+    "FP Planner": [
+      "SEARCH"
+    ],
+    "FP Viewer": [
+      "SEARCH"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "SAVE",
+      "DELETE",
+      "INSERT"
+    ],
+    "SCM Viewer": [
+      "SEARCH"
+    ],
+    "SCP Planner": [
+      "SEARCH"
+    ],
+    "SCP Tester": [
+      "SEARCH"
+    ],
+    "SSP Planner": [
+      "SEARCH",
+      "DELETE",
+      "INSERT",
+      "SAVE"
+    ],
+    "SSP Viewer": [
+      "SEARCH",
+      "INSERT",
+      "DELETE",
+      "SAVE"
+    ]
+  },
+  "menuBtnCodes": [
+    "DELETE",
+    "SAVE",
+    "INSERT",
+    "SEARCH"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

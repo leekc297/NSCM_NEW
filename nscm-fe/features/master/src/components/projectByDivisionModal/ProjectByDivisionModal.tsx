@@ -35,7 +35,11 @@ interface ProjectByDivisionModalProps {
     // DMF0021 (2026-08-14, 통합테스트 1st No.61-④): Team 자동 채움 — Team 은 입력 불가 컬럼이라
     //   선택한 마스터 행의 팀을 그대로 내려줘야 화면에 표시된다. 미사용 호출부는 무시 → 회귀 0.
     deptId?: string,
-    deptName?: string
+    deptName?: string,
+    // DMF0003 (2026-10-22): Biz Type 코드 반환 — 호출 화면의 BIZ_TYPE 칸이 코드 콤보라 4번째
+    //   bizTypeName(명칭)으로는 채울 수 없다. COM0005 응답(o_rc1)에 BIZ_TYPE 이 실려 있다.
+    //   additive → 미사용 호출부 회귀 없음.
+    bizType?: string
   ) => void;
   preSearchParams: ProcRequest<MODAL_PROJECT_BY_DIVISION, MODAL_SHEET_PROJECT_BY_DIVISION>;
   // ⭐ 2026-07-03 — cell/Form 호출 모두 동일 5개 조건 표시 + preSearchParams 그대로 사용 (사용자 요구).
@@ -154,7 +158,9 @@ export const ProjectByDivisionModal = ({
       undefined,
       // 단건 선택일 때만 팀을 넘긴다 — 다건은 어느 팀인지 확정할 수 없다.
       selections.length === 1 ? ((firstSelection?.DEPT_ID as string) ?? undefined) : undefined,
-      selections.length === 1 ? ((firstSelection?.DEPT_NAME_KO as string) ?? undefined) : undefined
+      selections.length === 1 ? ((firstSelection?.DEPT_NAME_KO as string) ?? undefined) : undefined,
+      // Biz Type 코드도 단건 선택일 때만 넘긴다.
+      selections.length === 1 ? ((firstSelection?.BIZ_TYPE as string) ?? undefined) : undefined
     );
     modalClose();
   };
@@ -181,7 +187,8 @@ export const ProjectByDivisionModal = ({
       (dataItem as Record<string, unknown>).BIZ_TYPE_NAME as string | undefined,
       (dataItem as Record<string, unknown>).PROJECT_OWNER as string | undefined,
       (dataItem as Record<string, unknown>).DEPT_ID as string | undefined,
-      (dataItem as Record<string, unknown>).DEPT_NAME_KO as string | undefined
+      (dataItem as Record<string, unknown>).DEPT_NAME_KO as string | undefined,
+      (dataItem as Record<string, unknown>).BIZ_TYPE as string | undefined
     );
     modalClose();
   };

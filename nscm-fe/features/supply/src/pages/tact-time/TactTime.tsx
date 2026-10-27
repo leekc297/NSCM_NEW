@@ -19,6 +19,7 @@ import { MENU_ID, MSG, SHEETS, TACT_MODE } from './tact-time.constants';
 import type { ExceptRow, MainRow, PackerRow, PlantRow } from './tact-time.types';
 import styles from './TactTime.module.scss';
 import { useTactTimeStore } from './useTactTimeStore';
+import { toYmd } from './utils/tactTimeDerive';
 import {
   exceptInsertDefaults,
   packerInsertDefaults,
@@ -43,6 +44,8 @@ export const TactTime = ({ tabId, title }: PageProps<MENU_ID>) => {
   const exceptGridRef = useRef<FlexGrid>();
   const exceptFilterRef = useRef<FlexGridFilter>();
   const exceptTrackerRef = useRef<EditTracker>();
+  // 하단을 조회한 상단 행(더블클릭 행). AS-IS nMainSelRow — 예외 Insert 는 이 행 기준.
+  const exceptParentRef = useRef<Record<string, unknown>>();
 
   const sc = useTactTimeStore(s => s.searchCondition);
   const setSearchCondition = useTactTimeStore(s => s.setSearchCondition);
@@ -134,7 +137,9 @@ export const TactTime = ({ tabId, title }: PageProps<MENU_ID>) => {
       const grid = exceptGridRef.current;
       if (!grid) return;
       // AS-IS: 상단 Tact Time 행을 더블클릭해 선택한 뒤에만 예외행 추가 (cs:873 nMainSelRow<0 -> 가드).
-      const src = mainGridRef.current?.selectedItems[0] as Record<string, unknown> | undefined;
+      //   현재 선택 행이 아니라 하단을 조회한 더블클릭 행을 쓴다(cs:878 nRow = nMainSelRow).
+      // const src = mainGridRef.current?.selectedItems[0] as Record<string, unknown> | undefined;
+      const src = filters[SHEETS.EXCEPT] ? exceptParentRef.current : undefined;
       if (!src) {
         void setAlert({
           type: 'alert',
@@ -179,12 +184,20 @@ export const TactTime = ({ tabId, title }: PageProps<MENU_ID>) => {
       const grid = exceptGridRef.current;
       grid?.finishEditing();
       const src = (grid?.collectionView?.sourceCollection ?? []) as Record<string, unknown>[];
-      const dirty = src.filter(r => r.CRUD_TYPE);
+      // 날짜 셀은 Date 객체로 들어오므로 검증/저장 전에 yyyyMMdd 로 맞춘다.
+      const dirty = src
+        .filter(r => r.CRUD_TYPE)
+        .map(r => ({
+          ...r,
+          TACT_TIME_START_DATE: toYmd(r.TACT_TIME_START_DATE),
+          TACT_TIME_END_DATE: toYmd(r.TACT_TIME_END_DATE),
+        }));
       if (dirty.length === 0) {
         setToast({ type: 'error', message: t('MSG00004', '_No changes.') });
         return;
       }
-      if (!validateExceptRows(dirty).ok) return;
+      // 기간 중복은 저장된 행까지 포함해 본다(SP 에 중복 검사 없음).
+      if (!validateExceptRows(dirty, src).ok) return;
       // 필수 컬럼(메타 M/IM) 검증 통과 시 mutate — 미입력이면 alert 후 저장 차단(전 화면 공통).
       saveWithValidation(
         dirty as unknown as ExceptRow[],
@@ -260,6 +273,23 @@ export const TactTime = ({ tabId, title }: PageProps<MENU_ID>) => {
               //   (AS-IS cs:246 SpdMain_CellDoubleClick). setFocused('except') 를 넣으면 상단 셀을
               //   더블클릭해 편집한 뒤 저장이 하단을 보게 되어 상단 편집분이 "변경 없음(MSG00004)"으로
               //   새고, 좌상단 조회건수도 상단<->하단으로 깜빡인다. 대상 전환은 각 그리드 gotFocus 가 담당.
+              // 하단에 저장 안 한 행(CRUD_TYPE)이 있으면 다시 조회 전에 확인한다.
+              const exceptSrc = (exceptGridRef.current?.collectionView?.sourceCollection ??
+                []) as Record<string, unknown>[];
+              if (exceptSrc.some(r => r.CRUD_TYPE)) {
+                void setAlert({
+                  type: 'confirm',
+                  content: t(MSG.CONFIRM_RESEARCH_UNSAVED, {
+                    defaultValue: '_There are unsaved changes. Do you want to search again?',
+                  }),
+                  onConfirm: () => {
+                    exceptParentRef.current = row as Record<string, unknown>;
+                    setExceptFilter(row);
+                  },
+                });
+                return;
+              }
+              exceptParentRef.current = row as Record<string, unknown>;
               setExceptFilter(row);
             }}
             onFocus={() => setFocused('main')}

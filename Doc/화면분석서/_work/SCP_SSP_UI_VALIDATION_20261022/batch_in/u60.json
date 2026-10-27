@@ -1,0 +1,97 @@
+[
+ {
+  "screen": "SSP0050",
+  "title": "Shipment Change Request Integration",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0050_ShipmentChangeRequestIntegration.cs:898"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0050_ShipmentChangeRequestIntegration.Designer.cs:601"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0050_GET_SHIPMENT_APPORVAL",
+    "member": "FindData_Main",
+    "line": "328",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0050_ShipmentChangeRequestIntegration.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+    "member": "SaveData",
+    "line": "496",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0050_ShipmentChangeRequestIntegration.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0014_GET_USER_ID_CHECK",
+    "member": "GetUserIDChk",
+    "line": "561",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0050_ShipmentChangeRequestIntegration.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0050_GET_SHIPMENT_APPORVAL",
+    "member": "FindData_Main",
+    "line": "328",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0050_ShipmentChangeRequestIntegration.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+    "member": "SaveData",
+    "line": "496",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0050_ShipmentChangeRequestIntegration.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0014_GET_USER_ID_CHECK",
+    "member": "GetUserIDChk",
+    "line": "561",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0050_ShipmentChangeRequestIntegration.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SSP0014_GET_USER_ID_CHECK",
+   "SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+   "SSP0050_GET_SHIPMENT_APPORVAL"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SSP0014_GET_USER_ID_CHECK",
+    "sp": "SSP0014_GET_USER_ID_CHECK",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "AUTH",
+    "desc": "[조회표시] 입력한 담당자 ID 가 사용자 마스터에 있고 SSP Planner/ADMIN/SCM PI Admin 그룹 권한을 하나라도 가진 경우만 반환",
+    "message": null,
+    "on_fail": "조건 충족 USER_ID 목록만 반환 — 누락된 ID 를 UI 가 미등록/권한없음으로 판정"
+   },
+   {
+    "entry_sp": "SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+    "sp": "SSP0014_SAVE_SHIPMENT_MODEL_PIC",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "PIC MERGE 저장 중 오류 시 전체 롤백·로그 후 F 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ }
+]

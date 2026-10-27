@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -36,7 +36,7 @@ const pickMulti = (picked: unknown): string[] =>
     .split(',')
     .filter(v => v !== '' && v.toUpperCase() !== 'ALL');
 
-// design 02 조회조건 7행(1단): Division('81' 고정+disabled) / Plant Site(다중) /
+// design 02 조회조건 7행(1단): Division(권한 콤보 첫 항목 기본선택) / Plant Site(다중) /
 //   Model/Nickname(텍스트+MaterialByDivisionModal 돋보기) / Parent Item / Child Item(텍스트) / Alter BOM(체크박스).
 //   6필드 ≤2단 → extraConditions 불요(§5).
 export const ScpBomForm = ({ onSearch, onModelSearch, onDivisionAuth }: Props) => {
@@ -49,12 +49,12 @@ export const ScpBomForm = ({ onSearch, onModelSearch, onDivisionAuth }: Props) =
 
   const tabId = useTabid();
 
-  // Division 은 '81' 고정이라 PlantSite 콤보 파라미터도 고정('81'). MyDivision 은 표시명·권한 판정용.
+  // Division 은 권한 콤보(MyDivision) 배열 첫 항목이 기본선택이라, PlantSite 콤보 파라미터도 선택 Division 으로 cascade 된다.
   const [divisions, plantSites] = useTabComboQueries({
     filters: [COMBO.DIVISION, { comboId: COMBO.PLANT_SITE, divisionId: sc.divisionId }],
   });
 
-  const divisionOptions = toOptions(divisions);
+  const divisionOptions = useMemo(() => toOptions(divisions), [divisions]);
   const plantSiteOptions = toOptions(plantSites);
 
   // R8 권한 게이트 — MyDivision 응답이 왔고(≠undefined) 0건이면 권한 없음(design 01 R8, cs:121~122
@@ -67,6 +67,15 @@ export const ScpBomForm = ({ onSearch, onModelSearch, onDivisionAuth }: Props) =
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [divisions]);
 
+  // Division 기본값 — 현재값이 옵션에 없으면 목록 첫 항목으로(사용자 지시 2026-10-22, AS-IS R7 '81' 고정 폐기).
+  //   권한 콤보(MyDivision, @mnuId 게이트)가 반환하는 배열의 첫 항목(권한목록 최상위)을 기본 선택한다.
+  //   개인화 복원(restoreSearchConditions)으로 들어온 유효 divisionId 는 그대로 둔다(옵션에 있으면 early return).
+  useEffect(() => {
+    if (sc.divisionId && divisionOptions.some(o => o.value === sc.divisionId)) return;
+    const first = String(divisionOptions[0]?.value ?? '');
+    if (first) setDivision(first);
+  }, [divisionOptions, sc.divisionId, setDivision]);
+
   return (
     <SearchArea
       searchButtonLabel={t(LBL.SEARCH, '_Search')}
@@ -74,7 +83,7 @@ export const ScpBomForm = ({ onSearch, onModelSearch, onDivisionAuth }: Props) =
       onSearch={onSearch}
       conditions={
         <>
-          {/* Division — '81'(Automotive Battery) 고정 + disabled (design 01 R7) */}
+          {/* Division — 권한 콤보(MyDivision) 배열 첫 항목 기본선택 (사용자 지시 2026-10-22, R7 '81' 고정 폐기) */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -83,9 +92,8 @@ export const ScpBomForm = ({ onSearch, onModelSearch, onDivisionAuth }: Props) =
               required
               render={() => (
                 <CustomDropdown
-                  // 잠금 임시 해제 (2026-10-07, 사용자 요청) — AS-IS OnShown 의 cboDivision.Enabled=false(cs:737)가
-                  //   최신 운영 소스와 다를 수 있어 보류. 복원 시 아래 disabled 주석 해제 + onChange 를 () => undefined 로 되돌림.
-                  // disabled
+                  // 사용자 선택 가능(enabled) — AS-IS OnShown 의 '81' 고정+disabled(R7)는 폐기(2026-10-22).
+                  //   권한 콤보 배열 첫 항목이 기본선택이고, 사용자가 자유롭게 Division 을 바꿀 수 있다.
                   value={sc.divisionId}
                   options={divisionOptions}
                   // Division 변경(싱글 콤보) = Division 제외 검색조건 전부 + 그리드 초기화(store setDivision, TO-BE 공통 요건).

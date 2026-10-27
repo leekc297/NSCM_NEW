@@ -95,11 +95,12 @@ describe('editLock 축 (CB-101~104 — 버킷×시점)', () => {
     expect(dynKindOf('MEASURE')).toBe(null);
   });
 
-  it('thisWeekMondayYmd — 당주 월요일 (.cs L953 AddDays(Monday-DayOfWeek))', () => {
-    // 2026-08-12(수) → 2026-08-10(월)
+  it('thisWeekMondayYmd — AS-IS cutoff 기준일 (.cs L953 AddDays(Monday-DayOfWeek) = Today+(1-dow))', () => {
+    // 2026-08-12(수) → 당주 월요일 2026-08-10
     expect(thisWeekMondayYmd(new Date(2026, 7, 12))).toBe('20260810');
-    // 일요일은 **전주** 월요일 (C# DayOfWeek.Sunday=0 → +(1-0)=+1 이 아니라 JS 구현은 -6)
-    expect(thisWeekMondayYmd(new Date(2026, 7, 16))).toBe('20260810');
+    // 일요일(dow=0)은 +(1-0)=+1 → **차주** 월요일. AS-IS 와 등가(ISO 당주 월요일 아님).
+    //   2026-08-16(일) → 2026-08-17(월). (이전 JS 구현은 -6 = 20260810 이라 AS-IS 와 하루 엇갈렸다.)
+    expect(thisWeekMondayYmd(new Date(2026, 7, 16))).toBe('20260817');
     // 월요일은 그 날
     expect(thisWeekMondayYmd(new Date(2026, 7, 10))).toBe('20260810');
   });
@@ -126,6 +127,26 @@ describe('editLock 축 (CB-101~104 — 버킷×시점)', () => {
     expect(past('W_20261040')).toBe(false); // 당주 조각
     expect(past('W_20260939')).toBe(true); // 진짜 지난주(9월 W39)는 과거 유지
     expect(past('W_20261041')).toBe(false); // 다음 주 — 과거 아님
+  });
+
+  it('isPastDynColumn W_ 일요일: 당주 컬럼까지 과거로 잠그고 차주는 열린다 (Daily 월요일 cutoff 롤오버 등가)', () => {
+    const weekBindings = ['W_20261042', 'W_20261043', 'W_20261044'];
+    const o3 = { THIS_YYYYMM: 'M_202610', THIS_YYYYMMWW: 'W_20261043' };
+    // 2026-10-25 = 일요일 (dow=0). 당주 = W43.
+    const sunday = buildEditCutoff(null, o3, new Date(2026, 9, 25), weekBindings);
+    const pastSun = (b: string) => isPastDynColumn({ binding: b, divisionId: '82', cutoff: sunday });
+    expect(sunday.isSunday).toBe(true);
+    expect(pastSun('W_20261042')).toBe(true); // 지난주
+    expect(pastSun('W_20261043')).toBe(true); // 당주 — 일요일엔 잠김(차주부터 입력)
+    expect(pastSun('W_20261044')).toBe(false); // 차주 — 열림
+
+    // 평일(월~토)은 당주가 열려 있어야 한다 (2026-10-21 = 수요일).
+    const wed = buildEditCutoff(null, o3, new Date(2026, 9, 21), weekBindings);
+    const pastWed = (b: string) => isPastDynColumn({ binding: b, divisionId: '82', cutoff: wed });
+    expect(wed.isSunday).toBe(false);
+    expect(pastWed('W_20261042')).toBe(true); // 지난주
+    expect(pastWed('W_20261043')).toBe(false); // 당주 — 평일엔 열림
+    expect(pastWed('W_20261044')).toBe(false); // 차주
   });
 
   it('isPartialWeekPartnerOfCurrent: 당주 뒷달 조각의 같은 ISO 주 앞달 조각만 true (초록 레일·헤더 해석 B)', () => {

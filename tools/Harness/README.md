@@ -87,3 +87,24 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 | `rules/tobe_catalog.csv` + `check.js D01` | TobeFacts `framework.js` 카탈로그의 컴포넌트 전부가 허용 집합 — 사전 밖 컴포넌트는 전 tsx 에서 WARN |
 | `pipeline.js` / `harness_pipeline.cmd <ID> [--e2e] [--no-claude]` | FE 골격 → 등록 SQL → PKG 골격 → FE 수선 루프 → PKG 이식 루프 → E2E 스펙 → 대사표. `Doc/gen/<ID>/PIPELINE.md` 에 단계·다음 할 일 |
 | `prompts/new_screen.md` | 입력 6 카탈로그(있는 것만 쓴다) · 7 예제, 상단에 DoD 요구 |
+
+### 2026-10-23 — VALIDATION 취합 참고자료 연결 (사용자 지시)
+- 원천: `Doc/화면분석서/{SCP|SSP}_화면_VALIDATION_취합_<STAMP>.md`(엑셀 전 시트 텍스트본) + 같은 이름 폴더 `<ID>.md`(화면별)·`_INDEX.md`. 엑셀 재생성 시 `Doc/화면분석서/_work/SCP_SSP_UI_VALIDATION_20261022/export_md.py` 재실행. STAMP 는 최신 자동 선택.
+- `lib/valref.js` — 화면 ID → 화면 파일·차단/보정_필터/제외 행·적용여부·TAG 집계(SCP/SSP 외 null).
+- 생성기 `gen.js` → GEN_NOTES **§11**(화면 파일·건수·대조 지시) · 프롬프트 `new_screen.md` **6-1/6-2**(UI 검증·메시지) · `port_pkg.md` **3-1/3-2**(DB 검증) · `repair-loop.js`·`new-screen.ps1` 지시문에 화면 파일 첨부.
+- 게이트(WARN — 취합은 2026-10-22 판독 시점 판정이라 이후 보완은 코드 우선): `check.js` **VR1**(UI 미적용 행) · **VR2**(취합이 [메시지 불일치]/[메시지 미등록]으로 판정한 TO-BE ID 가 코드에 잔존 — 의도면 같은 줄 `VR-OK`) · `check-pkg.js` **VR3**(DB 미적용·TAG 현황). 룰 `VibeManager/rules/10_RULES_KEEP.md` E10.
+
+### 2026-10-23 — AS-IS 액션 대조표 (사용자 지시: 사전 미등록 외부 호출까지 대조표·게이트 연결)
+- 원천 `Doc/asisfacts/screens/<AS-IS ID>/actions.csv`·`actions_entries.csv`(AsisFacts pack 액션 추출). `lib/actions.js` 가 사용자 결과에 영향 있는 kind 전수를 `__asis-actions__.md` 로 렌더(메서드별 묶음, 진입점·호출 조건·guard·종류·대상·값·의미·TO-BE 위치·상태·사유). 행 ID `AC-<hash8>` 고정 → 재생성 시 상태·위치·사유·의미 보존.
+- 신규 화면 = `gen.js` 가 페이지 폴더에 생성 · 기존 화면 문서 = `node tools/Harness/actions-checklist.js <ID>|--all` → `Doc/asisfacts/screens/<AS-IS ID>/__asis-actions__.md`(커밋본 페이지·Doc/gen 무변경 — Doc/gen 은 VM 생성분 판정·gen.js 삭제 대상이라 쓰지 않음). 2026-10-23 445화면 생성(226,959행 · 의미 확인 필요 9,609).
+- `CALL_EXT`(사전 미등록 외부)·`CALL_BASE`(상속 메서드) 행 '의미' = `⚠ 의미 확인 필요` → AS-IS 원문 확인 후 실제 의미 기입.
+- 게이트 `check.js`: **AC0** 대조표 없음(WARN) · **AC1** 상태 빈칸/미구현/위치·사유 누락 · **AC2** 의미 미기입 — 페이지 폴더 대조표(신규 화면)는 --final BLOCK, 기존 화면 문서는 항상 WARN(사용자 지시: 개발된 UI·흐름 무영향, 문서 보강 먼저). 프롬프트 `new_screen.md` 6-3 · 룰 `10_RULES_KEEP.md` E11.
+
+### 2026-10-26 — 독립 판정 · 근거 등급 · 결과 봉투 (Atlas Studio 규약 이식)
+| 파일 | 역할 |
+|---|---|
+| `e2e-judge.js <ID> <kind> [--round N] [--from json]` | 🩹 수선 뒤 **새 Claude 세션·읽기 전용**(Read·Glob·Grep) 독립 판정 → `Doc/gen/<ID>/E2E_REPAIR.result.json`(decision.expectFix = 근거 확인된 기대값 결함만 보정 허용 · decision.human = 사람 확인 큐 `Doc/e2e/_human_review.md`) |
+| `verify/evidence_check.py <봉투>` | 근거(경로:줄 + 원문 인용)가 실제로 있는지 기계 확인 → 이슈별 grade hard/soft |
+| `verify/weaken_check.py <ID> --snapshot/--compare` | 시험 기준 보정 전후 테스트 약화(검사 감소·skip 증가·예외 삼키기·파일 삭제) → `Doc/gen/<ID>/E2E_EXPECTFIX.result.json` |
+| `lib/envelope.js` ↔ `verify/envelope.py` | 결과 봉투 vibe-result/1(state·verdict·summary·issues·evidence) 읽기·쓰기 — 없음·깨짐 = error. 생산처: e2e-judge · check.js(`CHECK.result.json`) · run_verify(`Doc/verify/<ID>/run_verify.result.json`) |
+상세·한계: `Doc/verify/README.md` §12 · 변경 이력: `tools/VibeManager/CHANGELOG.md`.

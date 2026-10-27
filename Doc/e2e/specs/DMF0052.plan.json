@@ -17,6 +17,7 @@
       "popup": false,
       "asis": "chkToday",
       "tobeLabel": "",
+      "catalog": "",
       "labels": [
         "Today"
       ],
@@ -33,6 +34,7 @@
       "popup": true,
       "asis": "txtItemId",
       "tobeLabel": "Model/Nickname",
+      "catalog": "",
       "labels": [
         "Model/Nickname",
         "Model / Nickname",
@@ -52,6 +54,7 @@
       "popup": true,
       "asis": "txtProject",
       "tobeLabel": "Project",
+      "catalog": "",
       "labels": [
         "Project"
       ],
@@ -68,6 +71,7 @@
       "popup": false,
       "asis": "drpPeriod",
       "tobeLabel": "Period",
+      "catalog": "",
       "labels": [
         "Period",
         "From",
@@ -87,6 +91,7 @@
       "popup": false,
       "asis": "clbEDISender",
       "tobeLabel": "",
+      "catalog": "",
       "labels": [
         "EDI Sender"
       ],
@@ -95,6 +100,10 @@
     }
   ],
   "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "",
   "asisMapping": "features\\report\\src\\pages\\dmf0052\\__asis-mapping__.md",
   "buttons": [
     {

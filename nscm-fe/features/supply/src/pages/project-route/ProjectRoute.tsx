@@ -8,10 +8,12 @@ import type { EditTracker } from '@foundation/utils';
 import { GridAction, safeString } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import {
+  formatTotalCases,
   useSaveWithValidation,
   useTabBtnPermissions,
   useTabComboQueries,
   useTabProcQuery,
+  useTitleAreaLanguage,
 } from '@shared/hooks';
 import { TitleArea } from '@shared/lges';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
@@ -41,6 +43,8 @@ import { submitPlantSaveRequest } from './utils/projectRoute.plantSaveRequest';
 
 export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
+  // 건수 표기 언어(총/건 ↔ Total/rows) — 공용 SubTitle · ResultArea 와 같은 규칙(useTitleAreaLanguage 주석).
+  const titleAreaLanguage = useTitleAreaLanguage();
   const { setAlert, setToast } = useMessageStore.getState();
   const setProgress = useUIStore.getState().setProgress;
   const sessionUserId = useSessionStore(s => s.session.userId);
@@ -198,7 +202,8 @@ export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   }, [bomRows, bomKey]);
 
-  // CELL_TYPE 'CA*' 는 Plant 편집불가(design/03 R-EDIT).
+  // CELL_TYPE 이 'CA' 로 시작하면 Plant 추가/편집 불가.
+  // const plantReadOnly = (bomKey?.cellType ?? '').toUpperCase() === 'CA1';
   const plantReadOnly = (bomKey?.cellType ?? '').toUpperCase().startsWith('CA');
 
   // ---- mount 1회 컬럼 메타 fetch(admin 즉시반영 baseline) ----
@@ -237,9 +242,7 @@ export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // Insert(design/03 R-INS-DEF) — BOM 더블클릭 선행 필수(MSG00116). 신규행 기본값 5종 세팅.
-  //   G2 교정(04_impl-gap-audit): AS-IS EditButton()(design/03 §4 L493-527)은 CA*(외주) 선택 시
-  //   Edit 진입 자체를 무반응(메시지 없음) 차단해 Insert 로직에 도달하지 못한다 — plantReadOnly 로
-  //   동일 조건 재현. BOM 미선택(MSG00116)과 달리 CA* 는 alert 없이 조용히 무시한다.
+  //   CELL_TYPE 이 CA* 이면 메시지 없이 무시한다.
   const handleInsert = () => {
     if (plantReadOnly) return;
     if (!isBomClicked || !siteKey || !bomKey || !bomKey.itemId) {
@@ -258,16 +261,6 @@ export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
       ITEM_ID: bomKey.itemId,
       VALID_YN: 'Y',
     });
-  };
-
-  // Delete(design/03 R-DEL) — 신규행('I')만 제거. 기존행은 삭제 불가.
-  //   G8 교정(04_impl-gap-audit): AS-IS DeleteButton()(L482 미선택, L484-488 기존행)은 두 경우 모두
-  //   메시지 없이 무반응이다(00_checklist.md §4d hasMessage=false) — alert 를 내지 않는다.
-  const handleDelete = () => {
-    const grid = plantGridRef.current;
-    const sel = grid?.selectedItems?.[0] as PlantRow | undefined;
-    if (!grid || !sel || sel.CRUD_TYPE !== 'I') return;
-    GridAction.removeRow(grid);
   };
 
   // 저장검증 실패 셀 하이라이트(design/03 §3.4 SetBGColor). 뷰행 index 로 배경색 직접 지정.
@@ -380,7 +373,10 @@ export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
     search: hasButton('SEARCH') ? handleSearch : false,
     insert: hasButton('INSERT') ? handleInsert : false,
     save: hasButton('SAVE') ? handleSave : false,
-    delete: hasButton('DELETE') ? handleDelete : false,
+    // Delete 버튼은 쓰지 않는다(테스트 지적 「Delete 버튼 필요없으므로 제거」, 2026-10-21). AS-IS 에는
+    //   신규 행만 지우는 Delete 가 있었으나(SCP0006_ProjectRoute.cs DeleteButton) 업무 요청으로 뺀다.
+    //   버튼 메타(SCM_ADM_MNU_BTN_MPG_M plant · DELETE)가 남아 있어도 화면에 나오지 않는다.
+    delete: false,
     resetCondition: handleResetCondition,
     excel: handleExcelDownload,
     manual: false,
@@ -426,7 +422,8 @@ export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
               isSubTitle
               title=''
               depth='h4'
-              totalCases={siteRows.length === 0 ? undefined : siteRows.length}
+              totalCases={formatTotalCases(siteRows.length === 0 ? undefined : siteRows.length)}
+              language={titleAreaLanguage}
             />
             <ProjectRouteMainGrid
               gridRef={mainGridRef}
@@ -449,7 +446,8 @@ export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
                   isSubTitle
                   title={COLUMN_SHEET_NAME[RESPONSE_SET.BOM]}
                   depth='h4'
-                  totalCases={bomRows.length === 0 ? undefined : bomRows.length}
+                  totalCases={formatTotalCases(bomRows.length === 0 ? undefined : bomRows.length)}
+                  language={titleAreaLanguage}
                 />
                 <ProjectRouteBomGrid
                   gridRef={bomGridRef}
@@ -468,7 +466,10 @@ export const ProjectRoute = ({ tabId, title }: PageProps<MENU_ID>) => {
                   isSubTitle
                   title={COLUMN_SHEET_NAME[RESPONSE_SET.PLANT]}
                   depth='h4'
-                  totalCases={plantRows.length === 0 ? undefined : plantRows.length}
+                  totalCases={formatTotalCases(
+                    plantRows.length === 0 ? undefined : plantRows.length
+                  )}
+                  language={titleAreaLanguage}
                 />
                 <ProjectRoutePlantGrid
                   gridRef={plantGridRef}

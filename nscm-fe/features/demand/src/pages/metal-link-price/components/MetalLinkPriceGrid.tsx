@@ -1,10 +1,9 @@
 import { CellType, type FlexGrid, type FormatItemEventArgs } from '@mescius/wijmo.grid';
-import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
-import { rebindFilterColumns } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import { MAIN_COLUMNS, type MainColumnMeta } from '../metal-link-price.constants';
@@ -242,38 +241,18 @@ export const MetalLinkPriceGrid = ({
     };
   }, [gridRef]);
 
-  // ⭐ F4 Filter — 피처 소유 FlexGridFilter
+  // ⭐ F4 Filter — FlexGridFilter 는 공용 DataGrid 가 만든다(아래 JSX 의 gridFilterRef). 여기서는 핸들러만 얹는다.
+  //   금지: 여기서 new FlexGridFilter 를 만들지 말 것. DataGrid 밖에서 만든 필터에는 재조회 시 필터 유지
+  //   (itemsSourceChanged 캡처/복원 · 끊긴 컬럼 재바인딩)가 걸리지 않아, 조회할 때마다 필터가 풀렸다
+  //   (2026-10-27 DM 필터 유지 점검). 종전에 여기서 직접 하던 Clear 즉시 반영(isEditorClear → apply)과
+  //   끊긴 필터 재바인딩(rebindFilterColumns)도 DataGrid 가 생성 옵션·updatedLayout 에서 이미 한다.
   useEffect(() => {
     const g = gridRef.current;
-    if (!g) return;
+    const f = gridFilterRef.current;
+    if (!g || f?.grid !== g) return;
 
     const onFilterApplied = () => g.invalidate(true);
-
-    let f = gridFilterRef.current;
-    if (!f || f.grid !== g) {
-      f = new FlexGridFilter(g);
-      f.filterColumns = [''];
-      // wijmo 컬럼필터 팝업의 Clear 버튼은 편집기만 비우고 실제 필터에는 반영하지 않는다
-      // (clearEditor 문서: "without applying changes to the filter"). 편집기가 비워지면
-      // (isEditorClear) 그 즉시 apply() 를 호출해 실제 필터에도 반영한다. DataGrid.tsx 의
-      // FlexGridFilter 생성 옵션과 동일한 보정 — 이 화면은 필터를 직접 생성해 그 옵션을 못 받는다.
-      f.filterChanging.addHandler((s: FlexGridFilter) => {
-        const editor = s.activeEditor as unknown as { isEditorClear?: boolean } | null;
-        if (!editor) return;
-        s.activeEditor.buttonClicked.addHandler(() => {
-          if (editor.isEditorClear) s.apply();
-        });
-      });
-      gridFilterRef.current = f;
-    }
     f.filterApplied.addHandler(onFilterApplied);
-
-    // ⭐ [공통 UC-07, hook #133 §5] 재조회해도 사용자가 걸어둔 **필터가 유지**되어야 한다.
-    //   이 화면은 조회마다 baseStaticColumns key 로 DataGrid 를 재마운트하고 메탈 42 dynamicColumns
-    //   를 재생성하므로, FlexGridFilter 가 죽은 Column 객체를 붙든 채 남으면 "아이콘은 꺼졌는데
-    //   행은 걸러진" 상태가 된다. 끊긴 필터만 재바인딩한다(끊긴 게 없으면 no-op — 유틸 내부 가드).
-    //   정본 = business-plan/components/BusinessPlanGrid.tsx:715 (DMF0042).
-    rebindFilterColumns(g as unknown as FlexGrid<WijmoRowItem>, f);
 
     return () => {
       try {
@@ -286,8 +265,14 @@ export const MetalLinkPriceGrid = ({
 
   return (
     <DataGrid<MetalLinkPriceRow>
-      key={baseStaticColumns.map(c => c.colNm).join(',')}
+      // 금지: key={baseStaticColumns...} 로 재마운트하지 말 것. 정적 컬럼 메타를 divisionId 로 받아와
+      //   division 전환으로 컬럼 목록(PROJECT_CODE/NAME 등)이 바뀌면 key 가 바뀌어 DataGrid 가 통째로
+      //   재마운트되고, 새로 생긴 FlexGridFilter 에는 사용자가 건 필터가 없어 그대로 사라진다
+      //   (2026-10-27 DM 필터 유지 점검 — DMF0021 8fef47623 과 같은 원인). 컬럼 변경은 공용 DataGrid 가
+      //   columnGroups 재대입으로 처리한다.
       gridRef={gridRef}
+      // 필수: gridFilterRef 를 넘겨 FlexGridFilter 를 DataGrid 가 만들게 한다 — 재조회 시 필터 유지가 여기 걸려 있다.
+      gridFilterRef={gridFilterRef}
       staticColumns={baseStaticColumns}
       dynamicColumns={dynamicColumns}
       itemsSource={data}

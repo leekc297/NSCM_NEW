@@ -1,0 +1,48 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-10-27T08:44:30.323Z",
+ "producer": "check.js",
+ "id": "DMF0082",
+ "final": false,
+ "page": "nscm-fe/features/demand/src/pages/forecast-price",
+ "state": "completed",
+ "verdict": "fail",
+ "summary": {
+  "block": 2,
+  "warn": 102
+ },
+ "issues": [
+  {
+   "id": "F11",
+   "class": "BLOCK",
+   "msg": "빈 catch 금지(콤보 호출 실패 삼킴)",
+   "where": "components/ForecastPriceGrid.tsx:830",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js F11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "H02",
+   "class": "BLOCK",
+   "msg": "ColumnLayoutModal 에 fallbackColumns 가 없음 — 저장된 개인화(titleSet)가 없는 사용자는 목록이 \"No Column\" 으로 빈다. 활성 시트 admin 컬럼 메타(staticColumns)를 { key: colNm, header: colLblNm, width } 로 넘길 것(SalesPlanModals 패턴)",
+   "where": "ForecastPrice.tsx",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js H02"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "check.js"
+  }
+ ]
+}

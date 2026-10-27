@@ -1,4 +1,4 @@
-import { toggleClass } from '@mescius/wijmo';
+import { DataType } from '@mescius/wijmo';
 import {
   CellType,
   DataMap,
@@ -17,7 +17,6 @@ import { useTabComboQueries } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import {
-  ALWAYS_LOCKED_COLUMNS,
   COMBO,
   DIVISION_82,
   INVALID_CELL_BG_COLOR,
@@ -25,6 +24,7 @@ import {
   LOCK_ON_NON_WARRANTY,
   LOCK_ON_WARRANTY_EXISTING,
   MSG,
+  NO_VALUE_PLACEHOLDER,
   OPERATION_GROUP_WARRANTY,
   POPUP_ONLY_COLUMNS,
 } from '../project-route-warranty.constants';
@@ -37,8 +37,6 @@ interface Props {
   editTrackerRef: MutableRefObject<EditTracker<MainRow> | undefined>;
   data: MainRow[];
   staticColumns: RawFlexGridColumnConfig[];
-  // Edit 토글(R-L1) — false 면 전 셀 편집 잠금. true 라도 R-L2/R-L3·ALWAYS_LOCKED 는 개별 잠금.
-  editMode: boolean;
   // 저장검증 실패 셀(design/03 §3.4 R-B1/R-B2). dataItem 참조 + 컬럼 binding 으로 식별해 배경 강조.
   invalidCells: { row: MainRow; column: string }[];
   // ITEM_ID 셀 더블클릭 → Item 팝업(R-D8). div=81 SCM_SITE_ID/PROJECT_CODE 셀 → SalesSite 팝업(R-D6).
@@ -46,6 +44,24 @@ interface Props {
   onSalesSiteCellDblClick: (row: MainRow) => void;
   gotFocus?: () => void;
 }
+
+// FROM/TO_YYYYMMDD 날짜 컬럼 — 이 화면만 YYYY-MM-DD(설계 03 §표시, AS-IS 는 '-' strip 전 대시 표기).
+//   admin 메타가 FPDate 라 columnMapping 이 InputDate(달력) 에디터를 붙이지만 dataType 을 비워 둬
+//   달력이 Date 값에 못 묶이고, 공용 getFormat 은 전역 yyyy.MM.dd(점)를 적용해 편집 후 셀이 점
+//   구분자로 튄다(2026-10-16 사용자 신고). 공용 수정은 범위가 너무 넓어(전 화면 날짜) 하지 않고,
+//   페이지(mainRows)에서 값을 Date 로 변환한 뒤 여기서 두 컬럼의 dataType=Date + format='yyyy-MM-dd'
+//   를 명시해 (a) 달력 편집 정상 (b) 조회·편집 모두 YYYY-MM-DD 표시를 함께 해결한다
+//   (precede-safety-stock-day 검증 패턴). updatedLayout 마다 재적용(columnGroups 재대입으로
+//   리셋될 수 있음, 이미 설정돼 있으면 건너뛰어 재귀 invalidate 방지).
+const DATE_COLUMNS = ['FROM_YYYYMMDD', 'TO_YYYYMMDD'];
+const applyDateColumnTypes = (g: FlexGrid): void => {
+  for (const binding of DATE_COLUMNS) {
+    const col = g.getColumn(binding);
+    if (!col) continue;
+    if (col.dataType !== DataType.Date) col.dataType = DataType.Date;
+    if (col.format !== 'yyyy-MM-dd') col.format = 'yyyy-MM-dd';
+  }
+};
 
 // SCP0048 단일 그리드(spdMain) — 31 컬럼 DB 메타 구동. 편집은 조건부(R-L1~R-L5), 파생 R-D1~D8.
 //   셀콤보: VALID_YN(정적 YesOrNo 자동) / PLANT_SITE_ID(ElecRoutePlantByOperation_SCP, 행 파라미터
@@ -57,7 +73,6 @@ export const ProjectRouteWarrantyGrid = ({
   editTrackerRef,
   data,
   staticColumns,
-  editMode,
   invalidCells,
   onItemCellDblClick,
   onSalesSiteCellDblClick,
@@ -114,92 +129,79 @@ export const ProjectRouteWarrantyGrid = ({
     const col = grid.getColumn('DIVISION_ID');
     if (col && col.dataMap !== map) col.dataMap = map;
   }, []);
-  // 팝업 셀 아이콘(MUI OpenInNew) — ITEM_ID/SCM_SITE_ID/PROJECT_CODE 는 더블클릭으로만 값을 넣는
-  //   팝업 셀인데 메타 CELL_CONTROL_OBJECT_TYPE_CODE 가 공백(AS-IS 가 메타 아닌 코드로 팝업을 배선 —
-  //   spdMain_CellDoubleClick if 분기)이라 공용 DataGrid 의 자동 팝업 아이콘(FPModal/FPTextModal 메타
-  //   전용)이 안 붙는다. 그래서 더블클릭으로 팝업이 실제 열리는 셀에만 화면에서 wj-cell-popup 을 토글해
-  //   FPModal 컬럼과 동일한 OpenInNew 아이콘을 보여준다(메타는 건드리지 않는다). 공용 아이콘 클래스는
-  //   wj-cell-popup(_grid.scss ::after SVG mask)이다 — is-popup 은 미완성 placeholder(폰트 없는
-  //   \e900 → 깨진 네모)라 쓰지 않는다. 조건은 handleDblClick 의 팝업 오픈 분기와 동일하게 맞춘다 —
-  //   신규행(CRUD_TYPE='I', AS-IS action=='I')에서만 열리고, SCM_SITE_ID/PROJECT_CODE 는 division=='81'
-  //   일 때만(그 외엔 "-" 고정이라 팝업 없음), ITEM_ID 는 division 이 채워져 있을 때만(공백이면 더블클릭이
-  //   MSG00097 로 막힌다).
-  const formatPopupCell = useCallback((s: FlexGrid<MainRow>, e: FormatItemEventArgs) => {
+
+  // 저장검증 실패 셀 집합(design/03 §3.4 R-B1/R-B2) — formatItem 클로저가 최신값을 보도록 ref 로 보관.
+  //   값이 바뀌면 아래 effect 가 invalidate 로 재도색한다.
+  const invalidCellsRef = useRef(invalidCells);
+  invalidCellsRef.current = invalidCells;
+
+  // formatItem 핸들러 — DIVISION_ID 조회행 코드표시(AS-IS SCP0048.cs:453) + 저장검증 실패 셀 배경강조.
+  //   s/e 는 핸들러 호출마다 들어오므로 클로저 캡처는 invalidCellsRef(최신 invalidCells) 뿐이다.
+  const formatItemHandler = useCallback((s: FlexGrid<MainRow>, e: FormatItemEventArgs) => {
     if (e.panel.cellType !== CellType.Cell) return;
     const binding = s.columns[e.col]?.binding;
     if (!binding) return;
     const dataItem = GridUtils.getRow(s, e.row) as MainRow | undefined;
     if (!dataItem) return;
-    const isInsert = dataItem.CRUD_TYPE === 'I';
-    const division = String(dataItem.DIVISION_ID ?? '').trim();
-    let isPopupCell = false;
-    if (binding === 'ITEM_ID') {
-      isPopupCell = isInsert && division !== '';
-    } else if (binding === 'SCM_SITE_ID' || binding === 'PROJECT_CODE') {
-      isPopupCell = isInsert && isSalesSitePopupDivision(division);
+    // DIVISION_ID 표시 분기(AS-IS SCP0048.cs:453) — 신규행만 콤보 셀(NAME), 조회행은 코드값.
+    //   DataMap 은 신규행 드롭다운/편집용으로 컬럼에 붙어 있어 조회행 셀도 CODE→NAME 으로 그려진다.
+    //   AS-IS 는 기존행 DIVISION_ID 를 일반 텍스트 셀로 둬 코드 원문만 보인다 → 조회행은 셀 텍스트를
+    //   원본 코드로 되돌린다(신규행은 DataMap 매핑 NAME 그대로).
+    if (binding === 'DIVISION_ID' && dataItem.CRUD_TYPE !== 'I') {
+      e.cell.textContent = String(dataItem.DIVISION_ID ?? '');
     }
-    // 셀 DOM 재사용 대비 항상 재설정(매칭 아니면 해제).
-    toggleClass(e.cell, 'wj-cell-popup', isPopupCell);
+    // 매칭 시 배경 강조, 아니면 해제(셀 DOM 재사용 대비 항상 재설정).
+    const isInvalid = invalidCellsRef.current.some(
+      c => c.row === dataItem && c.column === binding
+    );
+    e.cell.style.backgroundColor = isInvalid ? INVALID_CELL_BG_COLOR : '';
   }, []);
-  // (1) 그리드 생성 시 1회 — updatedLayout 재부착 등록 + 즉시 부착 + 팝업아이콘 formatItem 등록.
-  //   주의: popup formatItem 을 별도 useEffect([gridRef])로 등록하면 안 된다. gridRef.current 는
-  //   wijmo 비동기 mount 라 첫 pass 에서 undefined → early-return 하고, ref deps 는 바뀌지 않아
-  //   재실행되지 않는다(DIVISION_ID DataMap 과 동일한 함정). initialized 는 grid 확정 후 1회 호출이
-  //   보장돼 여기서 붙여야 확실하다.
+
+  // 그리드 생성 시 1회(initialized, grid 확정 보장) — 모든 셀 렌더링 훅을 여기서 건다.
+  //   주의: 이들을 useEffect([gridRef])로 걸면 안 된다. gridRef.current 는 wijmo 비동기 mount 라
+  //   첫 pass 에서 undefined → early-return 하고, ref deps 는 안 바뀌어 재실행되지 않는다
+  //   (DIVISION_ID DataMap·날짜·formatItem 모두 같은 함정 — 2026-10-05/2026-10-16 실사고).
+  //   initialized 는 grid 확정 후 1회 호출이 보장돼 여기서 붙여야 확실하다.
+  //   (a) DIVISION_ID 신규행 DataMap 재부착(updatedLayout 마다 — columnGroups 재대입이 지움)
+  //   (b) FROM/TO dataType=Date + format='yyyy-MM-dd'(updatedLayout 마다 재적용)
+  //   (c) formatItem(DIVISION_ID 코드표시 + 저장검증 실패 배경).
   const handleGridInitialized = useCallback(
     (grid: FlexGrid<MainRow>) => {
       grid.updatedLayout.addHandler(() => attachDivisionDataMap(grid));
       attachDivisionDataMap(grid);
-      grid.formatItem.addHandler(formatPopupCell);
+      grid.updatedLayout.addHandler(applyDateColumnTypes);
+      applyDateColumnTypes(grid);
+      grid.formatItem.addHandler(formatItemHandler);
     },
-    [attachDivisionDataMap, formatPopupCell]
+    [attachDivisionDataMap, formatItemHandler]
   );
-  // (2) 콤보가 grid mount 이후 도착하는 경우 — 변경 시 즉시 부착.
+  // 콤보가 grid mount 이후 도착하는 경우 — 변경 시 즉시 DataMap 부착.
   useEffect(() => {
     const grid = gridRef.current;
     if (grid && divisionDataMap) attachDivisionDataMap(grid);
   }, [gridRef, divisionDataMap, attachDivisionDataMap]);
 
-  // 조건부 편집 잠금(design/03 §3.3)은 beginningEdit override 로 배선한다(GAP-4).
-  //   메타 INPUT_TP_CD(SCM_MST_SHEET_COLUMNS 실측: S 22 / IM 3(DIVISION_ID·ITEM_ID·PLANT_SITE_ID) /
-  //   IO 2(SCM_SITE_ID·PROJECT_CODE) / M 4(FROM/TO_YYYYMMDD·PRIORITY·VALID_YN))는 "정적 editable" 만
-  //   표현한다 — IM/IO=insert 행만, M=EDIT_FLAG 기준(공용 isEditableCell). 그러나 이 화면의 잠금은
-  //   행-조건부(opGroup·PRIORITY_SEQ·division)·팝업전용이라 컬럼 단위 메타로는 표현 불가해 코드로
-  //   재현한다. R-L1(Edit 토글 off → 전잠금) / ALWAYS_LOCKED(감사·파생·키) / R-C5(div=82 PLANT_SITE
-  //   비움) / 팝업전용(ITEM_ID·SCM_SITE_ID·PROJECT_CODE 키인 금지) / R-L2(opGroup≠"W" →
-  //   PLANT_SITE_ID~VALID_YN) / R-L3(W & PRIORITY_SEQ≠"" 기존행 → PLANT_SITE_ID~PROJECT_CODE).
-  //   신규행(CRUD_TYPE='I')은 DIVISION_ID 편집 허용(R-C1).
+  // 조건부 편집 잠금(design/03 §3.3)은 beginningEdit 로 배선한다(GAP-4). 단방향(잠그기만)이다 —
+  //   공용 DataGrid(setEditableColumns)의 기본 편집게이트가 이 화면보다 먼저 등록돼 메타
+  //   INPUT_TP_CD 로 cancel 을 세워 둔다(SCM_MST_SHEET_COLUMNS 실측: S 22 / IM 3(DIVISION_ID·ITEM_ID·
+  //   PLANT_SITE_ID) / IO 2(SCM_SITE_ID·PROJECT_CODE) / M 4(FROM/TO_YYYYMMDD·PRIORITY·VALID_YN)).
+  //   S=cancel, IM/IO=insert 행만 허용, M=편집 허용. 여기서 다시 cancel=false 로 되돌리면 admin 메타를
+  //   화면이 덮어쓰는 셈이라(CLAUDE.md §2 속성 단위 덮어쓰기 금지) 절대 하지 않는다 — 공용 게이트가
+  //   이미 막은 셀(e.cancel===true)은 그대로 둔다. 화면은 메타로 표현 못하는 "행-조건부/팝업전용"
+  //   잠금만 추가로 건다: R-C5(div=82 PLANT_SITE 비움) / 팝업전용(ITEM_ID·SCM_SITE_ID·PROJECT_CODE
+  //   키인 금지) / R-L2(opGroup≠"W" → PLANT_SITE_ID~VALID_YN) / R-L3(W & PRIORITY_SEQ≠"" 기존행 →
+  //   PLANT_SITE_ID~PROJECT_CODE). DIVISION_ID insert-only·S 컬럼 잠금은 메타(IM/S)가 이미 처리한다.
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
-    const alwaysLocked: readonly string[] = ALWAYS_LOCKED_COLUMNS;
     const lockNonWarranty: readonly string[] = LOCK_ON_NON_WARRANTY;
     const lockWarrantyExisting: readonly string[] = LOCK_ON_WARRANTY_EXISTING;
     const popupOnly: readonly string[] = POPUP_ONLY_COLUMNS;
     const beginningEditHandler = (s: FlexGrid<MainRow>, e: { cancel: boolean; row: number; col: number }) => {
-      if (!editMode) {
-        e.cancel = true;
-        return;
-      }
+      // 공용 게이트가 메타(INPUT_TP_CD)로 이미 막은 셀은 그대로 둔다 — 화면은 추가로 잠그기만.
+      if (e.cancel) return;
       const binding = s.columns[e.col]?.binding ?? '';
       const row = s.rows[e.row]?.dataItem as MainRow | undefined;
-      const isInsert = row?.CRUD_TYPE === 'I';
-      // 필수: 편집 허용 셀은 마지막 분기에서 e.cancel=false 를 명시해야 한다. 공용 DataGrid
-      //   (setEditableColumns)의 기본 편집게이트가 이 화면보다 먼저 등록돼 메타 INPUT_TP_CD 로
-      //   cancel 을 세운다(S=cancel, IM/IO=insert 행만 허용, M=EDIT_FLAG 기준). 이 화면의 조건부
-      //   규칙은 메타와 어긋나는 방향 둘 다 있다 — IM 인 PLANT_SITE_ID 를 기존 Warranty 행에서
-      //   열거나(메타는 insert-only로 막음), IM/M 인 ITEM_ID·VALID_YN 을 팝업전용·되돌림으로 더
-      //   좁힌다. wijmo 는 등록순 호출이라 뒤에 도는 이 핸들러가 양방향으로 최종 결정한다. 그래서
-      //   허용 분기는 반드시 cancel=false 를 명시해 공용 게이트 판정을 덮는다.
-      // 신규행은 DIVISION_ID 편집 허용, 그 외 ALWAYS_LOCKED 는 항상 잠금.
-      if (binding === 'DIVISION_ID') {
-        e.cancel = !isInsert;
-        return;
-      }
-      if (alwaysLocked.includes(binding)) {
-        e.cancel = true;
-        return;
-      }
       // 팝업 전용 셀(ITEM_ID/SCM_SITE_ID/PROJECT_CODE)은 키인 편집기를 열지 않는다 — 값 입력은
       //   더블클릭 팝업(handleDblClick)으로만. 신규행에서 R-L2/R-L3 에 안 걸려도 항상 잠근다.
       if (popupOnly.includes(binding)) {
@@ -230,8 +232,6 @@ export const ProjectRouteWarrantyGrid = ({
         e.cancel = true;
         return;
       }
-      // 위 잠금 조건 모두 통과 = 편집 허용. 공용 게이트의 cancel=true 를 명시적으로 되돌린다.
-      e.cancel = false;
     };
     grid.beginningEdit.addHandler(beginningEditHandler);
     return () => {
@@ -241,38 +241,12 @@ export const ProjectRouteWarrantyGrid = ({
         /* unmount race */
       }
     };
-  }, [gridRef, editMode]);
+  }, [gridRef]);
 
-  // 저장검증 실패 셀 배경 강조(design/03 §3.4 R-B1/R-B2, AS-IS SetBGColor(InvalidColor)).
-  //   뷰행 index 로 DOM 을 직접 칠하면 스크롤 시 셀 DOM 이 재활용돼 강조가 어긋난다 → formatItem 이
-  //   재도색할 때마다 dataItem 참조 + 컬럼 binding 으로 다시 판정한다(BodGrid saveError 패턴 준용).
-  //   effect 클로저가 최신 invalidCells 를 보도록 ref 로 보관하고, 값이 바뀌면 invalidate 로 재도색한다.
-  const invalidCellsRef = useRef(invalidCells);
-  invalidCellsRef.current = invalidCells;
+  // 저장검증 실패 셀 집합이 바뀌면 재도색(formatItemHandler 가 invalidCellsRef 로 최신값을 읽어
+  //   다시 판정한다 — DOM 직접 칠하기는 스크롤 시 셀 재활용으로 어긋난다, BodGrid saveError 패턴 준용).
   useEffect(() => {
-    const grid = gridRef.current;
-    if (!grid) return;
-    const handler = (s: FlexGrid<MainRow>, e: FormatItemEventArgs) => {
-      if (e.panel.cellType !== CellType.Cell) return;
-      const binding = s.columns[e.col]?.binding;
-      if (!binding) return;
-      const dataItem = GridUtils.getRow(s, e.row) as MainRow | undefined;
-      if (!dataItem) return;
-      // 매칭 시 배경 강조, 아니면 해제(셀 DOM 재사용 대비 항상 재설정).
-      const isInvalid = invalidCellsRef.current.some(
-        c => c.row === dataItem && c.column === binding
-      );
-      e.cell.style.backgroundColor = isInvalid ? INVALID_CELL_BG_COLOR : '';
-    };
-    grid.formatItem.addHandler(handler);
-    grid.invalidate();
-    return () => {
-      try {
-        grid.formatItem.removeHandler(handler);
-      } catch {
-        /* unmount race */
-      }
-    };
+    gridRef.current?.invalidate();
   }, [gridRef, invalidCells]);
 
   // 파생(design/03 §3.2). PLANT_SITE_ID 변경 → TACT_TIME_FLAG(R-D1, last-char). VALID_YN 되돌림은
@@ -316,7 +290,7 @@ export const ProjectRouteWarrantyGrid = ({
     }
 
     // R-D4 — DIVISION_ID 변경 시 PLANT_SITE_ID/ITEM_ID/NICK_NAME clear, SCM_SITE_ID/PROJECT_CODE 는
-    //   비-81 이면 "-"(R-D5). div=81 이면 팝업으로 채우므로 여기선 clear 만.
+    //   비-81 이면 "없는 값"(NO_VALUE_PLACEHOLDER='/', R-D5). div=81 이면 팝업으로 채우므로 여기선 clear 만.
     if (binding === 'DIVISION_ID') {
       const clears: [string, string][] = [
         ['PLANT_SITE_ID', ''],
@@ -325,7 +299,10 @@ export const ProjectRouteWarrantyGrid = ({
       ];
       const div = String(dataItem.DIVISION_ID ?? '');
       if (!isSalesSitePopupDivision(div)) {
-        clears.push(['SCM_SITE_ID', '-'], ['PROJECT_CODE', '-']);
+        clears.push(
+          ['SCM_SITE_ID', NO_VALUE_PLACEHOLDER],
+          ['PROJECT_CODE', NO_VALUE_PLACEHOLDER]
+        );
       }
       for (const [col, val] of clears) {
         editTrackerRef.current?.storeChange(dataItem, col, record[col] as string, val);
@@ -335,8 +312,10 @@ export const ProjectRouteWarrantyGrid = ({
     }
   };
 
-  // 더블클릭 팝업(design/03 R-G3/R-D6~D8). ITEM_ID → Item 팝업, div=81 의 SCM_SITE_ID/PROJECT_CODE
-  //   → SalesSite 팝업. Rows<=0(R-G3) 이면 무반응.
+  // 더블클릭 팝업(design/03 R-G3/R-D6~D8). ITEM_ID → Model 팝업, div=81 의 SCM_SITE_ID/PROJECT_CODE
+  //   → SalesSite 팝업. Rows<=0(R-G3) 이면 무반응. AS-IS(.cs:733·765)는 두 팝업 모두 신규행
+  //   (action==CAppSetting.FlagI, 즉 CRUD_TYPE==='I')에서만 연다 — 조회행에서는 더블클릭해도
+  //   팝업을 열지 않는다. 신규행 가드가 없으면 조회행에서도 팝업이 뜨는 오동작이 난다(2026-10-16 교정).
   const handleDblClick = (mouseEvent: MouseEvent) => {
     const grid = gridRef.current;
     if (!grid || grid.rows.length <= 0) return;
@@ -345,6 +324,8 @@ export const ProjectRouteWarrantyGrid = ({
     const binding = grid.columns[ht.col]?.binding ?? '';
     const row = grid.rows[ht.row]?.dataItem as MainRow | undefined;
     if (!row) return;
+    // 신규행(CRUD_TYPE==='I')에서만 팝업 — AS-IS action==FlagI 가드.
+    if (row.CRUD_TYPE !== 'I') return;
     if (binding === 'ITEM_ID') {
       onItemCellDblClick(row);
       return;

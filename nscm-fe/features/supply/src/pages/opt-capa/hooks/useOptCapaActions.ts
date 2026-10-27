@@ -8,6 +8,7 @@ import { useSaveWithValidation, useTabBtnPermissions } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import {
+  BUCKET,
   COLUMN,
   EXCEL_FORM_FILE_NAME,
   GRID_SHEETS,
@@ -15,6 +16,7 @@ import {
   LINE_TYPE_DEFAULT,
   MENU_ID,
   MSG,
+  NO_WORK_WEEK_HIDDEN_COLUMNS,
   SHEETS,
   SHEET_LABEL,
   VALID_YN_DEFAULT,
@@ -25,7 +27,7 @@ import type { GridRow } from '../opt-capa.types';
 import { useOptCapaStore } from '../useOptCapaStore';
 import { resolveFilterCodes, str } from '../utils/optCapa.candidates';
 import { buildExcelFormColumns, buildExcelFormRows } from '../utils/optCapa.excelForm';
-import { buildFlatSavePayload, isPersistedRow } from '../utils/optCapa.save';
+import { buildFlatSavePayload, buildWeekSavePayload, isPersistedRow } from '../utils/optCapa.save';
 import { buildFeatureButtonVisibility } from '../utils/optCapa.sheetVisibility';
 
 import { submitOptCapaSave } from './useOptCapaSave';
@@ -282,7 +284,16 @@ export const useOptCapaActions = ({
    * 재조회는 **저장한 시트만**이다(CommonCheckList "필요 영역만 재조회") — `[tabId]` prefix 를 주면
    * 조회조건 마스터(`init`)까지 invalidate 돼 SP 가 불필요하게 다시 돈다.
    */
-  const afterSaveSuccess = (savedSheet: GridSheet, savedCount: number) => {
+  /**
+   * 저장 성공 후처리 — EditTracker 는 **그리드 시트**(No Work Week 모드도 grid 는 NO_WORK)로 비우고,
+   * 쿼리 무효화는 **실효 조회 시트**로 한다. Week 모드는 조회가 `noWorkWeek` 키라 NO_WORK 로
+   * 무효화하면 재조회가 안 돼 저장분이 화면에 반영되지 않는다(이동이력 아님).
+   */
+  const afterSaveSuccess = (
+    gridSheet: GridSheet,
+    querySheet: GridSheet | SHEETS.NO_WORK_WEEK,
+    savedCount: number
+  ) => {
     void setToast({
       type: 'success',
       message: t(MSG.SAVE_SUCCESS, { defaultValue: '{0} data saved.' }).replace(
@@ -290,8 +301,8 @@ export const useOptCapaActions = ({
         String(savedCount)
       ),
     });
-    editTrackerRefs[savedSheet].current?.clearChanges();
-    void queryClient.invalidateQueries({ queryKey: [tabId, savedSheet] });
+    editTrackerRefs[gridSheet].current?.clearChanges();
+    void queryClient.invalidateQueries({ queryKey: [tabId, querySheet] });
   };
 
   /**
@@ -336,16 +347,26 @@ export const useOptCapaActions = ({
      */
     const rowsForRequired = dirty.filter(row => str(row.CRUD_TYPE) !== 'D');
 
+    // No Work + Bucket=Week → `noWorkWeek` SAVE SP 로 라우팅하고, 필수·값 검증도 Week 컬럼
+    //   (Date·Day of Week·Valid·Fix 숨김)으로 좁힌다. 검증 sheet 는 NO_WORK 그대로 둬도 안전하다 —
+    //   `findValueProblem` 의 NO_WORK_DATE 날짜검증은 Week 행에 그 컬럼이 없어 공백으로 건너뛴다.
+    const isWeekNoWork = sheet === SHEETS.NO_WORK && sc.bucket === BUCKET.WEEK;
+    const saveColumns = isWeekNoWork
+      ? staticColumns[SHEETS.NO_WORK].filter(
+          col => !NO_WORK_WEEK_HIDDEN_COLUMNS.includes(col.colNm)
+        )
+      : staticColumns[sheet];
+
     // 검증 순서 = 필수 → 업무규칙(AS-IS cs:1573 → 1603 순서).
     saveWithValidation(
       dirty,
-      sheet === SHEETS.DAILY_CAPA ? NO_META_REQUIRED_COLUMNS : staticColumns[sheet],
+      sheet === SHEETS.DAILY_CAPA ? NO_META_REQUIRED_COLUMNS : saveColumns,
       rows => {
         const failure = validateSave({
           sheet,
           dirtyRows: rows,
           sourceRows: source,
-          staticColumns: staticColumns[sheet],
+          staticColumns: saveColumns,
         });
         if (failure) {
           const message = t(failure.msgId, { defaultValue: '' });
@@ -360,7 +381,12 @@ export const useOptCapaActions = ({
         // SAVE SP 는 컬럼별 `'^'`-결합 CLOB 계약이라 **평면 payload** 를 보낸다(RP-1 — 행 배열을
         //   그대로 보내면 전 파라미터가 NULL 바인딩된다). {@link buildFlatSavePayload} 주석 참조.
         void (async () => {
-          const result = await submitOptCapaSave(sheet, buildFlatSavePayload(sheet, rows, sesUserId));
+          const result = await submitOptCapaSave(
+            isWeekNoWork ? SHEETS.NO_WORK_WEEK : sheet,
+            isWeekNoWork
+              ? buildWeekSavePayload(rows, sesUserId)
+              : buildFlatSavePayload(sheet, rows, sesUserId)
+          );
           if (!result.ok) {
             void setAlert({
               type: 'alert',
@@ -369,7 +395,7 @@ export const useOptCapaActions = ({
             });
             return;
           }
-          afterSaveSuccess(sheet, rows.length);
+          afterSaveSuccess(sheet, isWeekNoWork ? SHEETS.NO_WORK_WEEK : sheet, rows.length);
         })();
       },
       rowsForRequired as unknown as WijmoRowItem[]
@@ -381,7 +407,13 @@ export const useOptCapaActions = ({
     void GridAction.flatExcelDownload(
       buildExcelFormRows(),
       buildExcelFormColumns(),
-      EXCEL_FORM_FILE_NAME
+      EXCEL_FORM_FILE_NAME,
+      // Date(YYYYMMDD) 등 입력칸을 텍스트 서식(@)으로 — 사용자가 날짜를 입력해도 엑셀이 날짜형 셀로
+      //   바꾸지 않게 한다. 날짜형 셀이면 BE POI 가 Date.toString()='Fri Oct 02...' 로 읽어
+      //   업로드 SP 날짜 검증(하이픈 제거 후 8/6자, PKG_SCP0126 BODY:3047)에서 Invalid Date 로 탈락한다.
+      //   AS-IS 고정 양식 NoWork_ExcelForm.xls 가 Date 컬럼을 텍스트 서식으로 배포한 것과 등가.
+      undefined,
+      { textColumns: true }
     );
   };
 
@@ -433,12 +465,19 @@ export const useOptCapaActions = ({
   const authorized = hasDivisionAuth;
 
   /**
-   * **생략·`false` 둘 다 금지**(R20 / design 01 §2.2 OV-05):
-   *   · 키를 생략하면 공용 `SubTitle` 기본 핸들러(`addRow`/`removeRow`)가 살아나 Daily Capa 에서도
-   *     행이 생기고, AS-IS 에 없던 동작이 붙는다.
-   *   · `false` 로 두면 버튼이 **사라지는데** AS-IS 는 Save/Delete/Insert 버튼이 항상 보인다.
-   * 그래서 버튼은 항상 노출하고, 무동작 처리(편집권한 `canEdit` 없음 / Daily Capa Insert 무행 /
-   * 저장할 변경 없음)는 **핸들러 안에서** 판단한다(`handleSave`/`handleDelete`/`handleInsert` 첫 가드).
+   * **버튼 가시성은 권한별이다** — 각 키에 `authorized && hasButton('<BTN_CD>')` 게이트를 곱한다.
+   * 권한(`SCM_ADM_USER_GR_MNU_BTN_MPG_M` → `/admin/menu/SCP0126/auth` → `hasButton`)이 있으면 실제
+   * 핸들러를, 없으면 `false` 를 둔다. 공용 `SubTitle` 은 값이 `false` 인 버튼을 렌더하지 않으므로
+   * (`SubTitle.tsx` `{buttonActions.X === false || <Button/>}`), **권한 없는 유저에겐 버튼이 숨는다.**
+   * admin(전 BTN_CD USE_YN='Y')에겐 전부 보인다.
+   *
+   * 주의: AS-IS(design 01 §2.2 R6/R7/R8)는 Save/Delete/Insert 를 권한 무관 **항상 노출(Enabled)**
+   * 했다 — 이 권한별 숨김은 그에 대한 **의도적 이탈**(NSCM auth-button 표준: 버튼 가시성=권한).
+   *
+   * 키는 **생략 금지**: 생략하면 `{ ...DefaultButtonActions, ...hotkeyConfig }` 스프레드에서 공용
+   * 기본 핸들러(`addRow`/`removeRow`)가 살아나 권한·시트 분기를 우회한다(Daily Capa 에도 행이 생김).
+   * 권한이 있을 때의 추가 무동작(편집권한 `canEdit` 없음 / Daily Capa Insert 무행 / 저장할 변경 없음)은
+   * **핸들러 안에서** 판단한다(`handleSave`/`handleDelete`/`handleInsert` 첫 가드).
    */
   const hotkeyConfig: HotkeyConfig = {
     search: authorized && hasButton('SEARCH') ? handleSearch : false,

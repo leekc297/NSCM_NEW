@@ -6,6 +6,7 @@ import type { ComboResponse, RawFlexGridColumnConfig } from '@foundation/models'
 import { buildLeafColumnDataMap, GridUtils, type EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
+import { usePinDashDateFormat } from '../../../hooks/usePinDashDateFormat';
 import type {
   EndCustomerKeys,
   TransModeKeys,
@@ -128,6 +129,11 @@ export const ShipmentChangeRequestPlanMainGrid = ({
   onDrillDown,
   onBlocked,
 }: Props) => {
+  // 날짜 컬럼 형식을 조회값과 같은 대시(yyyy-MM-dd)로 고정 — 공용 getFormat 은 점 형식을 준다.
+  //   이 그리드의 SHIPMENT_DATE 는 메타 INPUT_TP_CD='M'(편집가능, 실측)이라 달력으로 고르면
+  //   셀 값이 Date 가 되어 점 형식 문자열로 커밋된다. 그걸 막는다.
+  usePinDashDateFormat(gridRef, columns);
+
   // 그리드 단위 콤보 파라미터. 인용은 화면이 아니라 getCombo 가 처리한다 —
   //   `quoteComboParams` 가 mnuId 의 겉 홑따옴표를 벗겨 raw 로 통일하므로 여기서 감싸면 표기만 갈린다.
   //   조회조건 쪽(`ShipmentChangeRequestPlanForm.tsx`)과 같은 raw 표기로 맞춘다(설계 §6.1).

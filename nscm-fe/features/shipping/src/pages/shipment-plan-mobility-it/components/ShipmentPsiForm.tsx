@@ -1,10 +1,11 @@
 import { PeriodField } from 'features/master/src/components';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 import dayjs from '@foundation/dayjs';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
+import { sessionTimeZone } from '@foundation/utils';
 import { CustomDropdown, SearchArea } from '@shared/components';
-import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
+import { useTabComboQueries } from '@shared/hooks';
 import { Button, Checkbox, FormItem, InputField, Label } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Box, Grid, Stack } from '@shared/mui';
@@ -16,7 +17,6 @@ import {
   COMBO,
   FIXED_DIVISION,
   LBL,
-  LOOKUP,
   MENU_ID,
   PERIOD_OFFSET_DAY,
 } from '../shipment-plan-mobility-it.constants';
@@ -55,6 +55,7 @@ export const ShipmentPsiForm = ({ onSearch, onItemSearch }: Props) => {
   const setLatestPlanDate = useShipmentPlanMobilityItStore(s => s.setLatestPlanDate);
   const mainSheet = useShipmentPlanMobilityItStore(s => s.mainSheet);
   const openSearchArea = useShipmentPlanMobilityItStore(s => s.openSearchArea);
+  const tmzCd = useSessionStore(s => s.session.tmzCd);
 
   // Plant Site — 활성시트별 comboId 스왑(design 02 §2.2). 이름유사 재사용 아님(convert-core §2.6 — 실 SQL_ID).
   //   Main=ShipmentRequestPlantSite_SCP(@divisionId @operationGroup='P' @param3='E') /
@@ -97,13 +98,14 @@ export const ShipmentPsiForm = ({ onSearch, onItemSearch }: Props) => {
       },
       COMBO.BUCKET,
       // Period 조회구간(SCM0001_GET_SCP_DAY_PERIOD) — AS-IS GetDayRange(.cs L9224-9229): p_from_date=Plan Date
-      //   (Packer -1일), p_offset_day="31", p_timezone=사용자TZ(TO-BE 세션 미보유 → '').
+      //   (Packer -1일), p_offset_day="31", p_timezone=사용자TZ(session.tmzCd).
+      //   fromDate 가 비는 경우에만 SP 가 FN_MULTY_TIME(timeZone) 으로 "오늘"을 잡는다.
       {
         comboId: COMBO.DAY_PERIOD,
         mnuId: MENU_ID,
         fromDate: periodFromDate,
         offsetDay: String(PERIOD_OFFSET_DAY),
-        timeZone: '',
+        timeZone: sessionTimeZone({ tmzCd }),
       },
     ],
   });
@@ -154,17 +156,18 @@ export const ShipmentPsiForm = ({ onSearch, onItemSearch }: Props) => {
   //   로그인 사용자 회사(session.companyId)가 있으면 chkMyModel 자동 ON. 룩업은 VALID_YN='Y' 만 반환하므로
   //   CODE 멤버십만 대조하면 된다. 마운트당 1회만 적용(ref 가드) — 적용 후 사용자 토글은 덮지 않는다.
   //   Part/Team/Delegatee 는 AS-IS 도 기본체크 대상이 아니다(초기화 코드 주석처리됨).
-  const companyId = useSessionStore(s => s.session.companyId);
-  const [myModelDefaultCheck] = useTabLookupQueries({ filters: [LOOKUP.MY_MODEL_DEFAULT_CHECK] });
-  const myModelDefaultApplied = useRef(false);
-  useEffect(() => {
-    if (myModelDefaultApplied.current) return;
-    if (!companyId || !myModelDefaultCheck || myModelDefaultCheck.length === 0) return;
-    const whitelist = new Set(myModelDefaultCheck.map(r => str(r.CODE)));
-    myModelDefaultApplied.current = true;
-    if (whitelist.has(companyId)) set({ chkMyModel: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [companyId, myModelDefaultCheck]);
+  // My Model 기본체크 해제(사용자 요청 2026-10-21) — 진입 시 체크 없이 시작한다
+  // const companyId = useSessionStore(s => s.session.companyId);
+  // const [myModelDefaultCheck] = useTabLookupQueries({ filters: [LOOKUP.MY_MODEL_DEFAULT_CHECK] });
+  // const myModelDefaultApplied = useRef(false);
+  // useEffect(() => {
+  //   if (myModelDefaultApplied.current) return;
+  //   if (!companyId || !myModelDefaultCheck || myModelDefaultCheck.length === 0) return;
+  //   const whitelist = new Set(myModelDefaultCheck.map(r => str(r.CODE)));
+  //   myModelDefaultApplied.current = true;
+  //   if (whitelist.has(companyId)) set({ chkMyModel: true });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [companyId, myModelDefaultCheck]);
 
   return (
     <SearchArea
@@ -254,7 +257,8 @@ export const ShipmentPsiForm = ({ onSearch, onItemSearch }: Props) => {
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' onClick={onItemSearch} />}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}

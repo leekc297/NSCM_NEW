@@ -16,6 +16,8 @@
 | 83 | [search-area-button-position-and-toggle](../hooks/search-area-button-position-and-toggle.md) | ⭐ | 검색버튼 위치 + 3단↑ 펼침/닫기 토글 |
 | 87 | [screen-combo-validation-message-mandatory](../hooks/screen-combo-validation-message-mandatory.md) §L·§V | ⭐⭐⭐ | 콤보 옵션=룩업 조회(하드코딩 금지) + 날짜 셀 표시↔검증 형식 일치 |
 | 94 | [search-condition-height-uniformity](../hooks/search-condition-height-uniformity.md) | ⭐⭐⭐ | (디자인 축 — 카테고리 01 참조) 36px + 1단 4개 |
+| 154 | [search-condition-labelless-toggle-input-column](../hooks/search-condition-labelless-toggle-input-column.md) | ⭐⭐⭐ | (디자인 축 — 카테고리 01 주소속) 조회조건 Radio/CheckBox = 좌측 라벨 열 조건명 + 입력 열 컨트롤 (v2 2026-10-23) |
+| 155 | [search-area-bulk-input-button-popup](../hooks/search-area-bulk-input-button-popup.md) | ⭐⭐⭐ | 조회영역 일괄 입력(대상 선택+Input Value+Input 버튼) = SubTitle 버튼 1개 + `<Page>InputModal`(정본 SCP0096) · 셀 기록만(EditTracker) · 저장은 Save · BU1 |
 | 121 | [form-common-styles-mandatory](../hooks/form-common-styles-mandatory.md) | ⭐⭐ | (디자인 축 — 카테고리 01 주소속) SearchArea/폼 스타일 = 공용 common-styles 클래스만(`formItem` 등 4종) — 로컬 scss 폼 레이아웃 금지 |
 | 29 | [oracle-cmbo-varname-quote](../hooks/oracle-cmbo-varname-quote.md) | ⭐ | CMBO_SQL_M `@varName` → `TO_CHAR()` wrap (ORA-01722) |
 | 123 | [screen-modal-cascade-filter-analysis](../hooks/screen-modal-cascade-filter-analysis.md) | ⭐⭐⭐ | 신규 화면=Cascade/Filter **AS-IS 전수 상세분석 → `Doc/화면분석서/{UI}_..._Cascade_Filter_전수.md` 생성 후 적용** / UI 보완 시 md 부재면 **선분석·생성 후 보완** |

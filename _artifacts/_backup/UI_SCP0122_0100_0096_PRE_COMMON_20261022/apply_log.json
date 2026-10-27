@@ -1,0 +1,74 @@
+{
+ "tip": "061ecd0b2a748321f6e00ca82d5285a54def4a14",
+ "at": "2026-10-22T18:49:42",
+ "pages": {
+  "SCP0122": {
+   "path": "features/supply/src/pages/plan-activity-mgmt",
+   "common_files": 9,
+   "same": [
+    "index.ts",
+    "plan-activity-mgmt.types.ts",
+    "usePlanActivityMgmtStore.ts"
+   ],
+   "written": [
+    "PlanActivityMgmt.tsx",
+    "__asis-mapping__.md",
+    "components/PlanActivityMgmtForm.tsx",
+    "components/PlanActivityMgmtGrid.tsx",
+    "plan-activity-mgmt.constants.ts",
+    "utils/plan-activity-mgmt.util.ts"
+   ],
+   "deleted": [
+    "__tests__/PlanActivityMgmt.asis.spec.ts",
+    "utils/plan-activity-mgmt.util.test.ts"
+   ]
+  },
+  "SCP0100": {
+   "path": "features/supply/src/pages/global-psi-report",
+   "common_files": 11,
+   "same": [
+    "index.ts"
+   ],
+   "written": [
+    "GlobalPsiReport.tsx",
+    "__asis-mapping__.md",
+    "components/GlobalPsiReportForm.tsx",
+    "components/GlobalPsiReportGrid.tsx",
+    "components/GlobalPsiReportModals.tsx",
+    "global-psi-report.constants.ts",
+    "global-psi-report.types.ts",
+    "useGlobalPsiReportStore.ts",
+    "utils/globalPsiReportColumns.ts",
+    "utils/globalPsiReportMerge.ts"
+   ],
+   "deleted": [
+    "__tests__/GlobalPsiReport.spec.ts",
+    "utils/globalPsiReportCalendar.ts"
+   ]
+  },
+  "SCP0096": {
+   "path": "features/supply/src/pages/shipment-working-day-osp",
+   "common_files": 11,
+   "same": [
+    "index.ts"
+   ],
+   "written": [
+    "ShipmentWorkingDayOsp.tsx",
+    "__asis-mapping__.md",
+    "components/ShipmentWorkingDayOspForm.tsx",
+    "components/ShipmentWorkingDayOspGrid.tsx",
+    "components/ShipmentWorkingDayOspInputModal.module.scss",
+    "components/ShipmentWorkingDayOspInputModal.tsx",
+    "shipment-working-day-osp.constants.ts",
+    "shipment-working-day-osp.dynamic-columns.ts",
+    "shipment-working-day-osp.types.ts",
+    "useShipmentWorkingDayOspStore.ts"
+   ],
+   "deleted": [
+    "__tests__/ShipmentWorkingDayOsp.spec.ts",
+    "hooks/useShipmentWorkingDayOspInputValue.ts"
+   ]
+  }
+ },
+ "verify_bad": 0
+}

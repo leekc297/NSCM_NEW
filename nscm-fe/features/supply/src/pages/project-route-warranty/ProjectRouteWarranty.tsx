@@ -1,6 +1,7 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ItemByDivisionModal } from 'features/master/src/components';
+import { ItemByDivisionModal, ModelByDivisionPopup } from 'features/master/src/components';
+import type { ModelSelection } from 'features/master/src/components';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
@@ -18,6 +19,7 @@ import {
   isSalesSitePopupDivision,
   MENU_ID,
   MSG,
+  SAVE_VALIDATION_FALLBACK,
   NEW_ROW_DEFAULT_OPERATION_GROUP_NAME,
   NEW_ROW_DEFAULT_PRIORITY,
   NEW_ROW_DEFAULT_PROJECT_CODE,
@@ -25,10 +27,12 @@ import {
   NEW_ROW_DEFAULT_VALID_YN,
   OPERATION_GROUP_WARRANTY,
   RESPONSE_SET,
+  stripNoValuePlaceholder,
   SHEETS,
 } from './project-route-warranty.constants';
 import type { MainRow } from './project-route-warranty.types';
 import { useProjectRouteWarrantyStore } from './useProjectRouteWarrantyStore';
+import { toGridDate } from './utils/projectRouteWarranty.date';
 import { submitWarrantySaveRequest } from './utils/projectRouteWarranty.saveRequest';
 
 export const ProjectRouteWarranty = ({ tabId, title }: PageProps<MENU_ID>) => {
@@ -65,8 +69,10 @@ export const ProjectRouteWarranty = ({ tabId, title }: PageProps<MENU_ID>) => {
   const canEdit = hasButton('INSERT') || hasButton('SAVE');
 
   // ITEM_ID / Sales Site 셀 팝업(R-D6/R-D8). 어느 행·어느 용도로 열렸는지 추적한다.
-  //   AS-IS 는 두 셀 모두 같은 팝업(SCP0048_ItembyDivisionPopupEx = COM0008)을 열되 되돌려 받는
-  //   컬럼만 다르다(ITEM_ID vs SCM_SITE_ID+PROJECT_CODE). 그래서 모달은 1개, mode 로 write-back 을 가른다.
+  //   AS-IS 는 셀마다 다른 팝업을 연다: ITEM_ID → SCM0002_ItembyDivisionPopup(.cs:749),
+  //   div=81 SCM_SITE_ID/PROJECT_CODE → SCP0048_ItembyDivisionPopupEx(.cs:777). TO-BE 도 이에 맞춰
+  //   Model=ModelByDivisionPopup(SCM0002/ModelPopup), SalesSite=ItemByDivisionModal(COM0008)로 가른다.
+  //   팝업은 둘이지만 열림 상태는 이 mode 하나로 관리한다(동시에 하나만 열린다).
   const [popupTarget, setPopupTarget] = useState<{
     row: MainRow;
     mode: 'item' | 'salesSite';
@@ -83,7 +89,18 @@ export const ProjectRouteWarranty = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   만들면, 셀 팝업 열기(setPopupTarget) 같은 리렌더마다 itemsSource 참조가 바뀌어 wijmo 가
   //   CollectionView 를 통째로 교체한다 → 그리드에 addRow 로 추가한 신규행이 사라진다
   //   (Model 더블클릭 시 "추가한 행이 사라짐" 증상). 자매 화면 outsourcing-capacity 와 동일 처방.
-  const mainRows = useMemo<MainRow[]>(() => mainData?.[RESPONSE_SET.MAIN] ?? [], [mainData]);
+  //   FROM/TO_YYYYMMDD 는 Date 로 변환해 FPDate 달력 편집과 YYYY-MM-DD 표시가 성립하게 한다
+  //   (ProjectRouteWarrantyGrid dataType=Date 와 짝, precede-safety-stock-day 패턴). 저장/검증은
+  //   toYmd8 로 Date·문자열을 'YYYYMMDD' 8자리로 재정규화한다.
+  const mainRows = useMemo<MainRow[]>(
+    () =>
+      (mainData?.[RESPONSE_SET.MAIN] ?? []).map(row => ({
+        ...row,
+        FROM_YYYYMMDD: toGridDate(row.FROM_YYYYMMDD) as unknown as string,
+        TO_YYYYMMDD: toGridDate(row.TO_YYYYMMDD) as unknown as string,
+      })),
+    [mainData]
+  );
 
   // mount 1회 컬럼 메타 fetch(admin 즉시반영 baseline) + F10 자가복구. reset()→initState() 가
   //   staticColumns 를 [] 로 비우고 initialized=false 로 돌리므로(컬럼 메타는 조회조건이 아니라
@@ -148,8 +165,33 @@ export const ProjectRouteWarranty = ({ tabId, title }: PageProps<MENU_ID>) => {
     handleSearch();
   };
 
-  // Save(design/03 §4.3) — 검증 N1~N11 통과 후 ^-delim CLOB SAVE. 공통 saveWithValidation 로
-  //   메타 필수(INPUT_TP_CD) 는 SCP0048 전건 'S' 라 커스텀 N1~N11 이 주 검증(design/03 §6-2).
+  // 커스텀 N1~N11 검증 후 실제 SAVE. 표준 필수검증(saveWithValidation) 통과 뒤에만 호출된다.
+  //   AS-IS 는 표준 필수(checkRequiredOfSpread, cs:522)를 먼저 돌리고 그 다음 N1~N11(cs:531~)을
+  //   돈다. TO-BE 도 그 순서를 지켜 빈 필수컬럼(Div/Model/Plant 등)은 표준검증이 "[항목] 입력하세요"
+  //   로 먼저 안내하고, 그걸 통과한 뒤에야 N1~N11 업무규칙을 검사한다. 이렇게 해야 FROM/TO 공백이
+  //   N8-a(silent)에 먼저 걸려 다른 필수 미입력까지 통째로 무언 차단되던 문제가 사라진다.
+  const runCustomValidationThenSubmit = (source: MainRow[], changed: MainRow[]) => {
+    const v = validateWarrantySave(source);
+    if (!v.ok) {
+      setInvalidCells(v.invalidCells);
+      // 사용자 결정(2026-10-19): TO-BE 는 silent 분기도 안내 메시지를 띄운다. AS-IS N8-a 무언 차단은
+      //   표준 필수검증이 FROM/TO(둘 다 M) 공백을 먼저 잡으므로 여기까지 공백으로 도달하지 않는다.
+      //   혹시 남는 silent 케이스는 공통 검증실패 문구로 안내한다(무반응 방지).
+      const msgId = v.msgId ?? MSG.SAVE_ERROR;
+      const text = t(msgId, SAVE_VALIDATION_FALLBACK[msgId] ?? '_저장 검증 실패');
+      void setAlert({
+        type: 'alert',
+        // msgArg 가 있으면 문구의 {0} 를 항목명으로 치환(N10 "[Sales Site Code, Project] 값은 필수…").
+        content: v.msgArg ? text.replace('{0}', `[${v.msgArg}]`) : text,
+      });
+      return;
+    }
+    // 검증 통과 → 이전 하이라이트 제거 후 저장.
+    setInvalidCells([]);
+    void submitSave(changed);
+  };
+
+  // Save(design/03 §4.3) — 표준 필수검증 → 커스텀 N1~N11 → ^-delim CLOB SAVE.
   const handleSave = () => {
     const grid = gridRef.current;
     if (!grid) return;
@@ -161,19 +203,11 @@ export const ProjectRouteWarranty = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
 
-    const v = validateWarrantySave(source);
-    if (!v.ok) {
-      setInvalidCells(v.invalidCells);
-      // N8-a(FROM/TO 공백)는 AS-IS 가 메시지 없이 조용히 저장을 막는 분기 — alert 생략.
-      if (!v.silent) {
-        void setAlert({ type: 'alert', content: t(v.msgId ?? MSG.SAVE_ERROR, '_저장 검증 실패') });
-      }
-      return;
-    }
-    // 검증 통과 → 이전 하이라이트 제거.
-    setInvalidCells([]);
-
-    saveWithValidation(changed, staticColumns[RESPONSE_SET.MAIN], rows => void submitSave(rows));
+    // 표준 메타 필수검증(Div/Model/Plant/Priority/FROM/TO/Valid)이 먼저. 통과한 경우에만
+    //   콜백에서 커스텀 N1~N11 을 돌려 저장한다(AS-IS cs:522 → cs:531 순서).
+    saveWithValidation(changed, staticColumns[RESPONSE_SET.MAIN], () =>
+      runCustomValidationThenSubmit(source, changed)
+    );
   };
 
   // Reset Condition(F10) — 공용 동작(검색조건 삭제 + store initState). SCP0048 은 보존할 기간
@@ -310,35 +344,38 @@ export const ProjectRouteWarranty = ({ tabId, title }: PageProps<MENU_ID>) => {
         editTrackerRef={editTrackerRef}
         data={mainRows}
         staticColumns={staticColumns[RESPONSE_SET.MAIN]}
-        editMode={canEdit}
         invalidCells={invalidCells}
         onItemCellDblClick={handleItemCellDblClick}
         onSalesSiteCellDblClick={handleSalesSiteCellDblClick}
       />
 
-      {/* ITEM_ID / Sales Site 셀 팝업 — base ItemByDivisionModal(COM0008). AS-IS Ex 팝업과 동일 백엔드.
-          mode 로 write-back 컬럼을 가른다: item→ITEM_ID(+NICK_NAME), salesSite→SCM_SITE_ID+PROJECT_CODE. */}
+      {/* Model(ITEM_ID) 셀 팝업 — ModelByDivisionPopup(SCM0002/ModelPopup). AS-IS(.cs:749
+          SCM0002_ItembyDivisionPopup)와 동일 백엔드다. AS-IS Form_Load(false, division, "", "", itemId)
+          처럼 division/itemId 만 실어 좁힌다(scmSite/project 는 비움 → 팝업이 'ALL' 보정). */}
+      <ModelByDivisionPopup
+        open={popupTarget?.mode === 'item'}
+        onClose={() => setPopupTarget(null)}
+        onSelect={(selected: ModelSelection) => handleItemSelected(selected.itemId, selected.nickName)}
+        params={{
+          divisionId: String(popupTarget?.row.DIVISION_ID ?? ''),
+          itemId: String(popupTarget?.row.ITEM_ID ?? ''),
+        }}
+      />
+
+      {/* Sales Site(div=81) 셀 팝업 — base ItemByDivisionModal(COM0008). AS-IS Ex 팝업
+          (SCP0048_ItembyDivisionPopupEx)과 동일 백엔드로 SCM_SITE_ID+PROJECT_CODE 를 되돌려 받는다. */}
       <ItemByDivisionModal
-        open={popupTarget !== null}
+        open={popupTarget?.mode === 'salesSite'}
         modalClose={() => setPopupTarget(null)}
-        setSelectedValue={(items, _n, _c, nickName, _t, _d, _dn, _ec, scmSiteId, projectCode) => {
-          // 주의: NICK_NAME 은 4번째 인자다 — 인터페이스 파라미터명(itemType)과 모달 실제 호출
-          //   순서가 다르다(ItemByDivisionModal.tsx:355-368·387-399 실측, 5번째는 항상 undefined).
-          //   이름이 아니라 위치를 따른다(자매 OptCapa.tsx:300 동일 교정).
-          if (popupTarget?.mode === 'salesSite') handleSalesSiteSelected(scmSiteId, projectCode);
-          else handleItemSelected(items, nickName);
+        setSelectedValue={(_items, _n, _c, _nickName, _t, _d, _dn, _ec, scmSiteId, projectCode) => {
+          handleSalesSiteSelected(scmSiteId, projectCode);
         }}
         preSearchParams={{
           divisionId: String(popupTarget?.row.DIVISION_ID ?? ''),
-          // Sales Site 호출은 AS-IS(cs:786)처럼 행의 SCM_SITE_ID/PROJECT_CODE(하이픈 제거)·ITEM_ID 를 실어 좁힌다.
-          salesSite:
-            popupTarget?.mode === 'salesSite'
-              ? String(popupTarget.row.SCM_SITE_ID ?? '').replace(/-/g, '') || undefined
-              : undefined,
-          projectCode:
-            popupTarget?.mode === 'salesSite'
-              ? String(popupTarget.row.PROJECT_CODE ?? '').replace(/-/g, '') || undefined
-              : undefined,
+          // Sales Site 호출은 AS-IS(cs:779)처럼 행의 SCM_SITE_ID/PROJECT_CODE(없는 값 표식 제거)·ITEM_ID 를
+          //   실어 좁힌다. placeholder('/'·기존 '-')는 stripNoValuePlaceholder 로 빼 조회가 0건이 되지 않게 한다.
+          salesSite: stripNoValuePlaceholder(popupTarget?.row.SCM_SITE_ID),
+          projectCode: stripNoValuePlaceholder(popupTarget?.row.PROJECT_CODE),
           itemId: String(popupTarget?.row.ITEM_ID ?? ''),
         }}
         callFromCell

@@ -68,7 +68,7 @@ describe('toTreeData — 고객 > 프로젝트 > 빌드 No. 3-level 변환 (LEVE
 });
 
 describe('filterProgressRows — 진행 샘플 현황 스위치', () => {
-  it("On 이면 IN_PROGRESS='PROGRESS' 행만 남긴다 (전 레벨)", () => {
+  it('On 이면 IN_PROGRESS=\'PROGRESS\' 행만 남긴다 (전 레벨)', () => {
     const filtered = filterProgressRows(cursor, true);
     expect(filtered.map(r => r.ITEM_ID)).toEqual(['VW', '26VW01', 'A1-N1']);
     expect(toTreeData(filtered)[0].childrens?.[0].childrens?.map(n => n.nodeName)).toEqual([

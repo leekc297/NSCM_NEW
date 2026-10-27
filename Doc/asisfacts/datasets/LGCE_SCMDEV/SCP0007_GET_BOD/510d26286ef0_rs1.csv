@@ -1,0 +1,1001 @@
+﻿DIVISION_ID,BOD_ID,CUSTOMER,INCOTERMS,INCOTERMS_SSP,FROM_SITE_CODE,TO_SITE_CODE,FROM_COUNTRY,FROM_CITY,TO_COUNTRY,TO_CITY,TRANSPORT_MODE_CODE,transport_mode,SAFETY_STOCK,PRIORITY,BOD_VALID,ROUTE_VALID,ROUTE_ID,LT_TYPE,DAYS_MON,DAYS_TUE,DAYS_WED,DAYS_THU,DAYS_FRI,DAYS_SAT,DAYS_SUN,LEAD_TIME,DIS_TOTAL_LEAD_TIME,FROM_YYYYMMDD,TO_YYYYMMDD,BEFORE_LEAD_TIME,AFTER_LEAD_TIME,REMARKS,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE,ROUTE_CHK,route_cnt,vmi_yn
+40,,,DAP,DAP,,CN00732500_40-P,,,CN,CNCKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,,DAP,DAP,CN00774400_40-A,CN00254300_40-P,KR,KRKUM,CN,CNNKG,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,,DAP,DAP,CN00774400_40-A,KR02265100_40-P,KR,KRKUM,VN,VNQUG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,A01,A01,,Gims_KR_CHF,,,KR,KRCHF,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,A01,A01,CN00774400_40-A,Peopleworks_KR_KUM,KR,KRKUM,KR,KRKUM,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,A01,A01,CN00774400_40-A,Peopleworks_KR_SEL,KR,KRKUM,KR,KRSEL,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,A01,A01,KR02149300_40-A,Doosan_KR_INC,CN,CNNKG,KR,KRINC,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,A01,A01,KR02149300_40-A,Doosan_KR_INC,CN,CNNKG,KR,KRINC,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,CIF,CIF,,Amazon_TW_KEL,,,TW,TWKEL,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Anjin_CN_SHA,,,CN,CNSHA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Celxpert_CN_KUS,,,CN,CNKUS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Chervon_CN_NJG,,,CN,CNNJG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,C-Tech_TW_TPE,,,TW,TWTPE,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,EATON_HK_YUE,,,HK,HKYUE,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,FEY_DE_HAM,,,DE,DEHAM,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,GETAC_CN_KUS,,,CN,CNKUS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Globetools_CN_CZX,,,CN,CNCZX,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Google_TW_KEL,,,TW,TWKEL,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Greenway Dongguan_CN_DGG,,,CN,CNDGG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Hilti_DE_KAG,,,DE,DEKAG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Hitachi_HK_HKG,,,HK,HKHKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Honda_JP_STM,,,JP,JPSTM,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,ITM_VN_BNH,,,VN,VNBNH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Meta_TW_KEL,,,TW,TWKEL,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Non Hyper Scaler_TW_KEL,,,TW,TWKEL,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Oceanwing_CN_CSX,,,CN,CNCSX,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Powtech_CN_DGG,,,CN,CNDGG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,SCUD_CN_FOC,,,CN,CNFOC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Simplo_CN_CKG,,,CN,CNCKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,STL_TW_KHH,,,TW,TWKHH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Trend Power Singapore_TW_HSZ,,,TW,TWHSZ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Wanghsing_TW_NTC,,,TW,TWNTC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,,Xing Mobility_TW_TPE,,,TW,TWTPE,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,CN00774400_40-A,Comlink_TW_TYN,KR,KRKUM,TW,TWTYN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,CN00774400_40-A,C-Tech_TW_TPE,KR,KRKUM,TW,TWTPE,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,CN00774400_40-A,C-Tech_TW_TPE,KR,KRKUM,TW,TWTPE,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,CN00774400_40-A,Darfon_CN_SUZ,KR,KRKUM,CN,CNSUZ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,CN00774400_40-A,Hitachi_HK_HKG,KR,KRKUM,HK,HKHKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,CN00774400_40-A,KRJ_HK_HKG,KR,KRKUM,HK,HKHKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,CN00774400_40-A,STL_TW_KHH,KR,KRKUM,TW,TWKHH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,CN00774400_40-A,Trend Energy_TW_HSZ,KR,KRKUM,TW,TWHSZ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIF,CIF,KR02149300_40-A,Asus_CH_BE1,CN,CNNKG,CN,CHBE1,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,Celxpert_CN_KUS,CN,CNNKG,CN,CNKUS,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,Dynapack_CN_WJA,CN,CNNKG,CN,CNWJA,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,Dynapack_CN_WJA,CN,CNNKG,CN,CNWJA,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,Fabricators_CN_QIN,CN,CNNKG,CN,CNQIN,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,High Power (Icon)_CN_SZX,CN,CNNKG,CN,CNSZX,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,Powerlogics_VN_VPC,CN,CNNKG,VN,VNVPC,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,CIF,CIF,KR02149300_40-A,Powerlogics_VN_VPC,CN,CNNKG,VN,VNVPC,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,CIF,CIF,KR02149300_40-A,Proterra_US_BGI,CN,CNNKG,US,USBGI,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,Proterra_US_BGI,CN,CNNKG,US,USBGI,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,River Mobility_IN_BLR,CN,CNNKG,IN,INBLR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,CIF,CIF,KR02149300_40-A,River Mobility_IN_BLR,CN,CNNKG,IN,INBLR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,4,N
+40,,-,CIF,CIF,KR02149300_40-A,SCUD_CN_FOC,CN,CNNKG,CN,CNFOC,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,KR02149300_40-A,Simplo_CN_CKG,CN,CNNKG,CN,CNCKG,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIF,CIF,VN00188600_40-P,Electrum_ID_JUT,VN,VNBTN,ID,IDJUT,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,Ansmann_DE_ASA,,,DE,DEASA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,Blueway Energy_CN_HUI,,,CN,CNHUI,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,BMW_DE_MUC,,,DE,DEMUC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,China Effort_HK_HKG,,,HK,HKHKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,Dynapack_CN_WJA,,,CN,CNWJA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,Dyson_GB_MMB,,,GB,GBMMB,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,Dyson_MY_JHB,,,MY,MYJHB,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,EMBS_PL_GWC,,,PL,PLGWC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,Flex Ltd._CN_ZUH,,,CN,CNZUH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,GETAC_CN_KUS,,,CN,CNKUS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,JJ Solstice_DE_FRA,,,DE,DEFRA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,MBAG_DE_SDN,,,DE,DESDN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,MBAG_DE_STR,,,DE,DESTR,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,MBAG_US_USC,,,US,USUSC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,Simplo_CN_CKG,,,CN,CNCKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,Tonly_HK_ZTW,,,HK,HKZTW,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,TTi_MO_MFM,,,MO,MOMFM,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,Venture_MY_JHB,,,MY,MYJHB,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,Vertical Aerospace_GB_BRS,,,GB,GBBRS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,,Vorwerk_DE_WUP,,,DE,DEWUP,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,CN00774400_40-A,Blueway Energy_CN_HUI,KR,KRKUM,CN,CNHUI,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,CN00774400_40-A,BMZ_PL_GWC,KR,KRKUM,PL,PLGWC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,CN00774400_40-A,Dynapack_CN_WJA,KR,KRKUM,CN,CNWJA,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIP,CIP,CN00774400_40-A,Dynapack_CN_WJA,KR,KRKUM,CN,CNWJA,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIP,CIP,CN00774400_40-A,Dynapack_TW_TYN,KR,KRKUM,TW,TWTYN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,CN00774400_40-A,Dyson_GB_MMB,KR,KRKUM,GB,GBMMB,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,CN00774400_40-A,Hilti_PL_GWC,KR,KRKUM,PL,PLGWC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,CN00774400_40-A,JJ Solstice_DE_FRA,KR,KRKUM,DE,DEFRA,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,CIP,CIP,CN00774400_40-A,JJ Solstice_DE_FRA,KR,KRKUM,DE,DEFRA,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,CIP,CIP,CN00774400_40-A,Vorwerk_CN_SHA,KR,KRKUM,CN,CNSHA,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIP,CIP,CN00774400_40-A,Vorwerk_CN_SHA,KR,KRKUM,CN,CNSHA,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,CIP,CIP,CN00774400_40-A,Vorwerk_CN_SHA,KR,KRKUM,CN,CNSHA,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,CIP,CIP,CN00774400_40-A,Vorwerk_DE_WUP,KR,KRKUM,DE,DEWUP,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,CIP,CIP,KR02149300_40-A,Arrival_GB_OXF,CN,CNNKG,GB,GBOXF,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,CIP,CIP,KR02149300_40-A,Corvus_NO_NTN,CN,CNNKG,NO,NONTN,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIP,CIP,KR02149300_40-A,Proterra_US_BGI,CN,CNNKG,US,USBGI,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,CIP,CIP,KR02149300_40-A,Proterra_US_BGI,CN,CNNKG,US,USBGI,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,,acer_CN_CKG,,,CN,CNCKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,Y
+40,,-,DAP,DAP,,Akasol Inc_US_HZP,,,US,USHZP,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Akku_DE_SDF,,,DE,DESDF,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,APRO_KR_ANY,,,KR,KRANY,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Arima_CN_WJA,,,CN,CNWJA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Bafang_CN_SZH,,,CN,CNSZH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,BMW_DE_MUC,,,DE,DEMUC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,BorgWarner Akasol_DE_DAR,,,DE,DEDAR,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Bosch Mcp_HU_MCQ,,,HU,HUMCQ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Bumhan Unisolution_KR_HWS,,,KR,KRHWS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,BYD Electronics_CN_SZX,,,CN,CNSZX,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Dualtron_CN_JHA,,,CN,CNJHA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,ENCOS_CN_NKG,,,CN,CNNKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Estes_US_SFO,,,US,USSFO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Ferrari_IT_MAR,,,IT,ITMAR,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Foxconn_CN_TSN,,,CN,CNTSN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,Y
+40,,-,DAP,DAP,,Gims_KR_SEL,,,KR,KRSEL,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Globetools_CN_CZX,,,CN,CNCZX,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Greenway Dongguan_CN_DGG,,,CN,CNDGG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Greenway_CN_DGG,,,CN,CNDGG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Hanwha Aerospace_KR_CHU,,,KR,KRCHU,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Hilti_DE_KAG,,,DE,DEKAG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Huaqin Telecom_CN_DNN,,,CN,CNDNN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,HUAYOU_CN_NKG,,,CN,CNNKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Hyundai Motor Lab_KR_HWS,,,KR,KRHWS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Hyundai Motor_KR_YGU,,,KR,KRYGU,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,IM_CN_NGG,,,CN,CNNGG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,IM_DE_BER,,,DE,DEBER,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,IM_US_PAO,,,US,USPAO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,IM_US_SPK,,,US,USSPK,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,IM-Re_CN_NGG,,,CN,CNNGG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,ITM_KR_CHU,,,KR,KRCHU,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Jinle_KR_SEL,,,KR,KRSEL,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,JRBS_KR_GUN,,,KR,KRGUN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,KDP_KR_SEL,,,KR,KRSEL,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Kion_DE_KSN,,,DE,DEKSN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,KULR_US_WB3,,,US,USWB3,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Kwonnie_HK_HKG,,,HK,HKHKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Lanwwei_CN_HUI,,,CN,CNHUI,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Lenovo_CN_KUS,,,CN,CNKUS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,Y
+40,,-,DAP,DAP,,LGE_CN_NJG,,,CN,CNNJG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,LGE_CN_TAO,,,CN,CNTAO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,LGE_CN_YNT,,,CN,CNYNT,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,LGE_KR_CHW,,,KR,KRCHW,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,LGE_VN_HAP,,,VN,VNHAP,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,LGE_VN_VLM,,,VN,VNVLM,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,MBAG_DE_STR,,,DE,DESTR,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,NT_US_CUO,,,US,USCUO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Oceanwing Anker_CN_DGG,,,CN,CNDGG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,OP Mobility_US_EKI,,,US,USEKI,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,phisemi_CN_SZX,,,CN,CNSZX,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Phylion_CN_SUZ,,,CN,CNSUZ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Powtech_CN_DGG,,,CN,CNDGG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,PYTES_CN_SHA,,,CN,CNSHA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Rivian Automotive_US_TUN,,,US,USTUN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,SCUD_CN_FOC,,,CN,CNFOC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Sumec_CN_NJG,,,CN,CNNJG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Sunwoda_CN_SZX,,,CN,CNSZX,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Topband_CN_HUI,,,CN,CNHUI,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,TWS Liangshi_CN_CA0,,,CN,CNCA0,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Vertical Aerospace_GB_BRS,,,GB,GBBRS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Vinfast_VN_HAN,,,VN,VNHAN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Wandadian_CN_KUS,,,CN,CNKUS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,,Wanghsing_TW_NTC,,,TW,TWNTC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,CN00774400_40-A,Bosch Mcp_HU_MCQ,KR,KRKUM,HU,HUMCQ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,CN00774400_40-A,Gims_KR_SEL,KR,KRKUM,KR,KRSEL,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,CN00774400_40-A,Hilti_DE_KAG,KR,KRKUM,DE,DEKAG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,CN00774400_40-A,Husqvarna_SE_JKG,KR,KRKUM,SE,SEJKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,CN00774400_40-A,JMBS_PL_GWC,KR,KRKUM,PL,PLGWC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,CN00774400_40-A,Kwonnie_CN_DGG,KR,KRKUM,CN,CNDGG,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,CN00774400_40-A,Kwonnie_CN_DGG,KR,KRKUM,CN,CNDGG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,DAP,DAP,CN00774400_40-A,Kwonnie_HK_HKG,KR,KRKUM,HK,HKHKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,CN00774400_40-A,Lucid Motors_US_NKQ,KR,KRKUM,US,USNKQ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,CN00774400_40-A,MEC_CN_SHA,KR,KRKUM,CN,CNSHA,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,CN00774400_40-A,MEC_CN_SHA,KR,KRKUM,CN,CNSHA,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,DAP,DAP,CN00774400_40-A,MEC_CN_SHA,KR,KRKUM,CN,CNSHA,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,DAP,DAP,CN00774400_40-A,phisemi_CN_FOC,KR,KRKUM,CN,CNFOC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,CN00774400_40-A,phisemi_CN_HUI,KR,KRKUM,CN,CNHUI,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,CN00774400_40-A,phisemi_CN_SZX,KR,KRKUM,CN,CNSZX,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,CN00774400_40-A,phisemi_CN_SZX,KR,KRKUM,CN,CNSZX,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,DAP,DAP,CN00774400_40-A,phisemi_CN_SZX,KR,KRKUM,CN,CNSZX,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,CN00774400_40-A,Powtech_CN_DGG,KR,KRKUM,CN,CNDGG,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,CN00774400_40-A,Powtech_CN_DGG,KR,KRKUM,CN,CNDGG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,DAP,DAP,CN00774400_40-A,Rihuida_CN_SZX,KR,KRKUM,CN,CNSZX,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,CN00774400_40-A,Rihuida_CN_SZX,KR,KRKUM,CN,CNSZX,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,DAP,DAP,CN00774400_40-A,Rihuida_CN_SZX,KR,KRKUM,CN,CNSZX,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,CN00774400_40-A,SCUD_CN_FOC,KR,KRKUM,CN,CNFOC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,CN00774400_40-A,Vestel_TR_IST,KR,KRKUM,TR,TRIST,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,CN00774400_40-A,마크원테크놀로지_KR_INC,KR,KRKUM,KR,KRINC,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,CN00774400_40-A,중국 LEV(염가)_CN_CAN,KR,KRKUM,CN,CNCAN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DAP,DAP,KR02149300_40-A,Apex Tech_US_LAX,CN,CNNKG,US,USLAX,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Bosch Mcp_HU_MCQ,CN,CNNKG,HU,HUMCQ,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Bosch Mcp_HU_MCQ,CN,CNNKG,HU,HUMCQ,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,CTNS_KR_CHW,CN,CNNKG,KR,KRCHW,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,CTNS_KR_CHW,CN,CNNKG,KR,KRCHW,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,DAP,DAP,KR02149300_40-A,Dynapack_TW_TYN,CN,CNNKG,TW,TWTYN,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Dynapack_TW_TYN,CN,CNNKG,TW,TWTYN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Eclipse Space_US_ELS,CN,CNNKG,US,USELS,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,GWKC_CN_SZP,CN,CNNKG,CN,CNSZP,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,JS Tech_JP_HIU,CN,CNNKG,JP,JPHIU,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DAP,DAP,KR02149300_40-A,JS Tech_JP_HIU,CN,CNNKG,JP,JPHIU,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DAP,DAP,KR02149300_40-A,Livewire_US_NUQ,CN,CNNKG,US,USNUQ,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DAP,DAP,KR02149300_40-A,Livewire_US_NUQ,CN,CNNKG,US,USNUQ,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DAP,DAP,KR02149300_40-A,Lucid Motors_US_NKQ,CN,CNNKG,US,USNKQ,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DAP,DAP,KR02149300_40-A,Lucid Motors_US_NKQ,CN,CNNKG,US,USNKQ,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DAP,DAP,KR02149300_40-A,Lucid Motors_US_PAO,CN,CNNKG,US,USPAO,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DAP,DAP,KR02149300_40-A,Lucid Motors_US_PAO,CN,CNNKG,US,USPAO,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DAP,DAP,KR02149300_40-A,Magna Yuma_IN_BLR,CN,CNNKG,IN,INBLR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DAP,DAP,KR02149300_40-A,Magna Yuma_IN_BLR,CN,CNNKG,IN,INBLR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,4,N
+40,,-,DAP,DAP,KR02149300_40-A,MS Tablet_US_XLC,CN,CNNKG,US,USXLC,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,MS Tablet_US_XLC,CN,CNNKG,US,USXLC,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Phylion_CN_SUZ,CN,CNNKG,CN,CNSUZ,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Proterra_US_BGI,CN,CNNKG,US,USBGI,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Proterra_US_BGI,CN,CNNKG,US,USBGI,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,PYTES_CN_SHA,CN,CNNKG,CN,CNSHA,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,SHINDEN_JP_CHC,CN,CNNKG,JP,JPCHC,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Simplo_CN_CGU,CN,CNNKG,CN,CNCGU,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Simplo_TW_HSZ,CN,CNNKG,TW,TWHSZ,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Simplo_TW_HSZ,CN,CNNKG,TW,TWHSZ,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Toyota Tsusho KR_KR_SEL,CN,CNNKG,KR,KRSEL,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,DAP,DAP,KR02149300_40-A,Toyota Tsusho KR_KR_SEL,CN,CNNKG,KR,KRSEL,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Ubinetsys_KR_ANY,CN,CNNKG,KR,KRANY,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Ubinetsys_KR_ANY,CN,CNNKG,KR,KRANY,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Veken_CN_NGB,CN,CNNKG,CN,CNNGB,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DAP,DAP,KR02149300_40-A,Xerotech_IE_GWY,CN,CNNKG,IE,IEGWY,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,,ABS_US_LRP,,,US,USLRP,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Acculon Energy_US_CMH,,,US,USCMH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,AJ상사_JP_OSA,,,JP,JPOSA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Amazon Prime Air_US_SEA,,,US,USSEA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Amazon_US_SEA,,,US,USSEA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Archer_US_SJC,,,US,USSJC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,B&S_CN_SHA,,,CN,CNSHA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Beta Technologies_US_QSB,,,US,USQSB,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Blueway Energy_CN_HUI,,,CN,CNHUI,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Boston Dynamics_US_WLM,,,US,USWLM,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,BRP_CA_QUE,,,CA,CAQUE,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Desay_CN_HUI,,,CN,CNHUI,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Dhoot_IN_IXU,,,IN,INIXU,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Dynapack_TW_TYN,,,TW,TWTYN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,EATON_HK_YUE,,,HK,HKYUE,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Elentec_KR_HWS,,,KR,KRHWS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Fabricators_HK_HKG,,,HK,HKHKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Globetools_CN_CZX,,,CN,CNCZX,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Greenway_CN_DGG,,,CN,CNDGG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Greenway_HK_HKG,,,HK,HKHKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Huapu_CN_CGU,,,CN,CNCGU,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,IM_US_PAO,,,US,USPAO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,INFAC_KR_JCH,,,KR,KRJCH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Inventus Power_US_WOQ,,,US,USWOQ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,JJ Solstice_DE_FRA,,,DE,DEFRA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,JMBS_PL_GWC,,,PL,PLGWC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,LGE_KR_CHW,,,KR,KRCHW,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,LGESKR_KR_GCN,,,KR,KRGCN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,NT_CN_HUI,,,CN,CNHUI,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,NT_US_CUO,,,US,USCUO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,phisemi_01_HK_STN,,,HK,HKSTN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Regent_US_NKT,,,US,USNKT,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,SBD_US_Z2A,,,US,USZ2A,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,SCUD_CN_FOC,,,CN,CNFOC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,SCUD_US_ZTZ,,,US,USZTZ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Shuodao_CN_SZH,,,CN,CNSZH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Simplo_CN_CKG,,,CN,CNCKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Tocad Energy_JP_OOT,,,JP,JPOOT,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Trend Power Singapore_CN_CGU,,,CN,CNCGU,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Trend Power Singapore_TW_HSZ,,,TW,TWHSZ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Trend Power_TW_HSZ,,,TW,TWHSZ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,TTi(PDL)_US_XCH,,,US,USXCH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,,Zipline_US_SFO,,,US,USSFO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,CN00774400_40-A,Facebook_US_DAL,KR,KRKUM,US,USDAL,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,CN00774400_40-A,Facebook_US_DAL,KR,KRKUM,US,USDAL,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,CN00774400_40-A,Globetools_CN_CZX,KR,KRKUM,CN,CNCZX,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,CN00774400_40-A,Globetools_CN_CZX,KR,KRKUM,CN,CNCZX,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,DDP,DDP,CN00774400_40-A,Globetools_CN_CZX,KR,KRKUM,CN,CNCZX,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,CN00774400_40-A,Hilti_DE_KAG,KR,KRKUM,DE,DEKAG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,DDP,DDP,HQ10-A,John Deere_US_XZM,KR,KRCOJ,US,USXZM,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,HQ10-A,O&J_ES_BCN,KR,KRCOJ,ES,ESBCN,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,HQ10-A,O&J_ES_BCN,KR,KRCOJ,ES,ESBCN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,ABS_US_LRP,CN,CNNKG,US,USLRP,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,ABS_US_LRP,CN,CNNKG,US,USLRP,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Ambrane_IN_HAR,CN,CNNKG,IN,INHAR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Ambrane_IN_HAR,CN,CNNKG,IN,INHAR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Ather Energy_IN_BLR,CN,CNNKG,IN,INBLR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Ather Energy_IN_BLR,CN,CNNKG,IN,INBLR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,4,N
+40,,-,DDP,DDP,KR02149300_40-A,B&S_CN_SHA,CN,CNNKG,CN,CNSHA,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Beta Technologies_US_QSB,CN,CNNKG,US,USQSB,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Beta Technologies_US_QSB,CN,CNNKG,US,USQSB,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,BRP_CA_QUE,CN,CNNKG,CA,CAQUE,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,BRP_CA_QUE,CN,CNNKG,CA,CAQUE,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Dualtron_CN_JHA,CN,CNNKG,CN,CNJHA,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Dynapack_CN_WJA,CN,CNNKG,CN,CNWJA,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Dynapack_CN_WJA,CN,CNNKG,CN,CNWJA,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Enertect Vision_IN_ABN,CN,CNNKG,IN,INABN,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Enertect Vision_IN_ABN,CN,CNNKG,IN,INABN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Fabricators_HK_HKG,CN,CNNKG,HK,HKHKG,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Fabricators_HK_HKG,CN,CNNKG,HK,HKHKG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Fabricators_HK_HKG,CN,CNNKG,HK,HKHKG,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Forsee_HK_HKG,CN,CNNKG,HK,HKHKG,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Forsee_HK_HKG,CN,CNNKG,HK,HKHKG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Forsee_HK_HKG,CN,CNNKG,HK,HKHKG,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,GM_US_DET,CN,CNNKG,US,USDET,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,GM_US_DET,CN,CNNKG,US,USDET,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Gogoro_TW_TYN,CN,CNNKG,TW,TWTYN,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Gogoro_TW_TYN,CN,CNNKG,TW,TWTYN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,GWKC_CN_SZP,CN,CNNKG,CN,CNSZP,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Honda_JP_STM,CN,CNNKG,JP,JPSTM,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Honda_JP_STM,CN,CNNKG,JP,JPSTM,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,4,N
+40,,-,DDP,DDP,KR02149300_40-A,Inventus Power_US_WOQ,CN,CNNKG,US,USWOQ,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Inventus Power_US_WOQ,CN,CNNKG,US,USWOQ,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Kabra Extrusion_IN_MUB,CN,CNNKG,IN,INMUB,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Kabra Extrusion_IN_MUB,CN,CNNKG,IN,INMUB,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,LGESIL_IN_ICD,CN,CNNKG,IN,INICD,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,LGESIL_IN_ICD,CN,CNNKG,IN,INICD,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Lithos Energy_US_HWD,CN,CNNKG,US,USHWD,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Lithos Energy_US_HWD,CN,CNNKG,US,USHWD,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,DDP,DDP,KR02149300_40-A,Lithos Energy_US_SRF,CN,CNNKG,US,USSRF,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Lithos Energy_US_SRF,CN,CNNKG,US,USSRF,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Ninebot Shenzhen_CN_SZX,CN,CNNKG,CN,CNSZX,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,NT_CN_CGU,CN,CNNKG,CN,CNCGU,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,NT_US_CUO,CN,CNNKG,US,USCUO,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,NT_US_CUO,CN,CNNKG,US,USCUO,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Phylion_CN_SUZ,CN,CNNKG,CN,CNSUZ,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Rivian Automotive_US_IVN,CN,CNNKG,US,USIVN,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Rivian Automotive_US_IVN,CN,CNNKG,US,USIVN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Romeo Power_US_CYQ,CN,CNNKG,US,USCYQ,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Romeo Power_US_CYQ,CN,CNNKG,US,USCYQ,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,SBD_US_Z2A,CN,CNNKG,US,USZ2A,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,SBD_US_Z2A,CN,CNNKG,US,USZ2A,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Simplo_CN_CGU,CN,CNNKG,CN,CNCGU,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Sunwoda_CN_SZX,CN,CNNKG,CN,CNSZX,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Toyota Tsusho KR_IN_BLR,CN,CNNKG,IN,INBLR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Toyota Tsusho KR_IN_BLR,CN,CNNKG,IN,INBLR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,4,N
+40,,-,DDP,DDP,KR02149300_40-A,Toyota Tsusho KR_KR_SEL,CN,CNNKG,KR,KRSEL,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,DDP,DDP,KR02149300_40-A,Toyota Tsusho KR_KR_SEL,CN,CNNKG,KR,KRSEL,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Ultraviolette_IN_MAA,CN,CNNKG,IN,INMAA,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Ultraviolette_IN_MAA,CN,CNNKG,IN,INMAA,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,DDP,DDP,KR02149300_40-A,Veken_CN_NGB,CN,CNNKG,CN,CNNGB,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,DDP,DDP,KR02149300_40-A,Wandadian_CN_KUS,CN,CNNKG,CN,CNKUS,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,,acer_CN_CKG,,,CN,CNCKG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,Y
+40,,-,EXW,EXW,,Boston Dynamics_US_WLM,,,US,USWLM,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Celxpert_CN_KUS,,,CN,CNKUS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,d2 Engineering_KR_GNO,,,KR,KRGNO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Dynapack_CN_WJA,,,CN,CNWJA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Flex Ltd._CN_ZUH,,,CN,CNZUH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Foxconn_CN_TSN,,,CN,CNTSN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,Y
+40,,-,EXW,EXW,,Honda_JP_STM,,,JP,JPSTM,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,HP_MX_MTM,,,MX,MXMTM,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Hyundai Motor_KR_YGU,,,KR,KRYGU,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Isuzu_JP_TYO,,,JP,JPTYO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,JJ Solstice_DE_ESC,,,DE,DEESC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Lenovo MBG_US_CHI,,,US,USCHI,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Lenovo_CN_KUS,,,CN,CNKUS,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,Y
+40,,-,EXW,EXW,,LGE_CN_TAO,,,CN,CNTAO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,LGE_CN_YNT,,,CN,CNYNT,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,LGE_KR_PTK,,,KR,KRPTK,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,LGE_VN_HAP,,,VN,VNHAP,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Lucid Motors_US_PAO,,,US,USPAO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,MS Tablet_US_XLC,,,US,USXLC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Shin-Sung Delta Tech_KR_CHW,,,KR,KRCHW,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Simplo_CN_CGU,,,CN,CNCGU,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Tabos_KR_CHO,,,KR,KRCHO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Tech-com_CN_SHA,,,CN,CNSHA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,,Venture_MY_JHB,,,MY,MYJHB,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,EXW,EXW,CN00774400_40-A,LGE_KR_CHW,KR,KRKUM,KR,KRCHW,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,CN00774400_40-A,마크원테크놀로지_KR_INC,KR,KRKUM,KR,KRINC,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,HQ06-A,EMNI_KR_ASN,KR,KRCOJ,KR,KRASN,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,HQ06-A,EMNI_KR_ASN,KR,KRCOJ,KR,KRASN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,HQ06-A,EMNI_KR_ASN,KR,KRCOJ,KR,KRASN,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,HQ10-A,Bumhan Unisolution_KR_HWS,KR,KRCOJ,KR,KRHWS,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,EXW,EXW,KR02149300_40-A,Celxpert_CN_KUS,CN,CNNKG,CN,CNKUS,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,KR02149300_40-A,CTNS_US_JIN,CN,CNNKG,US,USJIN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,KR02149300_40-A,Elentec_KR_HWS,CN,CNNKG,KR,KRHWS,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,KR02149300_40-A,Elentec_KR_HWS,CN,CNNKG,KR,KRHWS,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,KR02149300_40-A,EMNI_KR_ASN,CN,CNNKG,KR,KRASN,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,KR02149300_40-A,EMNI_KR_ASN,CN,CNNKG,KR,KRASN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,KR02149300_40-A,MS Tablet_US_XLC,CN,CNNKG,US,USXLC,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,KR02149300_40-A,MS Tablet_US_XLC,CN,CNNKG,US,USXLC,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,KR02149300_40-A,Simplo_CN_CGU,CN,CNNKG,CN,CNCGU,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,EXW,EXW,KR02149300_40-A,Skyworth power_CN_XUZ,CN,CNNKG,CN,CNXUZ,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FCA,FCA,,Archer_US_SJC,,,US,USSJC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,Audi_DE_ING,,,DE,DEING,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,Bosch Mcp_HU_MCQ,,,HU,HUMCQ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,Ford_US_DEO,,,US,USDEO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,Hilti_DE_KAG,,,DE,DEKAG,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,Husqvarna_PL_MLC,,,PL,PLMLC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,IM_CN_SHA,,,CN,CNSHA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,IM_DE_BER,,,DE,DEBER,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,IM_US_SPK,,,US,USSPK,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,IM_US_TXT,,,US,USTXT,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,John Deere_US_XZM,,,US,USXZM,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,Oshkosh_US_OSH,,,US,USOSH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,Rivian Automotive_US_IVN,,,US,USIVN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,Rivian Automotive_US_TUN,,,US,USTUN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,SpaceX_US_HHR,,,US,USHHR,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,,미주 UAM_US_SJC,,,US,USSJC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,AZ00-A,Volvo_SE_GOT,US,USAAZ,SE,SEGOT,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,CN00774400_40-A,Bosch Mcp_HU_MCQ,KR,KRKUM,HU,HUMCQ,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,CN00774400_40-A,EMNI_KR_ASN,KR,KRKUM,KR,KRASN,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FCA,FCA,CN00774400_40-A,Husqvarna_GB_AYF,KR,KRKUM,GB,GBAYF,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FCA,FCA,KR02149300_40-A,BRP_CA_QUE,CN,CNNKG,CA,CAQUE,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FCA,FCA,KR02149300_40-A,BRP_CA_QUE,CN,CNNKG,CA,CAQUE,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FCA,FCA,KR02149300_40-A,EMNI_KR_ASN,CN,CNNKG,KR,KRASN,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FCA,FCA,KR02149300_40-A,EMNI_KR_ASN,CN,CNNKG,KR,KRASN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FCA,FCA,KR02149300_40-A,GM_US_DET,CN,CNNKG,US,USDET,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FCA,FCA,KR02149300_40-A,GM_US_DET,CN,CNNKG,US,USDET,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FCA,FCA,KR02149300_40-A,Lithos Energy_US_HWD,CN,CNNKG,US,USHWD,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FCA,FCA,KR02149300_40-A,Lithos Energy_US_HWD,CN,CNNKG,US,USHWD,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,FCA,FCA,KR02149300_40-A,Lucid Motors_US_TPE,CN,CNNKG,US,USTPE,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FCA,FCA,KR02149300_40-A,Lucid Motors_US_TPE,CN,CNNKG,US,USTPE,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FCA,FCA,KR02149300_40-A,Proterra_US_BGI,CN,CNNKG,US,USBGI,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FCA,FCA,KR02149300_40-A,Proterra_US_BGI,CN,CNNKG,US,USBGI,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FCA,FCA,KR02149300_40-A,Salcomp PIC_BR_MAO,CN,CNNKG,BR,BRMAO,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,FCA,FCA,KR02149300_40-A,Salcomp PIC_BR_MAO,CN,CNNKG,BR,BRMAO,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,FCA,FCA,KR02149300_40-A,Toyota Tsusho KR_IN_BLR,CN,CNNKG,IN,INBLR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FCA,FCA,KR02149300_40-A,Toyota Tsusho KR_IN_BLR,CN,CNNKG,IN,INBLR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,4,N
+40,,-,FCA,FCA,KR02149300_40-A,Toyota Tsusho KR_KR_SEL,CN,CNNKG,KR,KRSEL,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,FCA,FCA,KR02149300_40-A,Toyota Tsusho KR_KR_SEL,CN,CNNKG,KR,KRSEL,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FCA,FCA,KR02149300_40-A,TVS Motor_IN_HSR,CN,CNNKG,IN,INHSR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FCA,FCA,KR02149300_40-A,TVS Motor_IN_HSR,CN,CNNKG,IN,INHSR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,FOB,FOB,,B&S_US_XOH,,,US,USXOH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,,Hero Motocorp_IN_CHT,,,IN,INCHT,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,,Hero Motocorp_IN_JAI,,,IN,INJAI,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,,Hero Motorcorp_DE_BGH,,,DE,DEBGH,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,,Lamborghini_IT_SBN,,,IT,ITSBN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,,LGE_VN_VLM,,,VN,VNVLM,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,,Peg-Perego_IT_ARC,,,IT,ITARC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,,Peopleworks_KR_KUM,,,KR,KRKUM,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,,TVS Motor_IN_HSR,,,IN,INHSR,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,CN00774400_40-A,Ather Energy_IN_BLR,KR,KRKUM,IN,INBLR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,CN00774400_40-A,Ather Energy_IN_BLR,KR,KRKUM,IN,INBLR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,CN00774400_40-A,Bajaj Auto_IN_NSA,KR,KRKUM,IN,INNSA,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,CN00774400_40-A,Elentec_VN_HAN,KR,KRKUM,VN,VNHAN,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,CN00774400_40-A,EMNI_KR_ASN,KR,KRKUM,KR,KRASN,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FOB,FOB,CN00774400_40-A,TVS Motor_IN_HSR,KR,KRKUM,IN,INHSR,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,FOB,FOB,HQ06-A,Isuzu_JP_TYO,KR,KRCOJ,JP,JPTYO,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,FOB,FOB,HQ06-A,Isuzu_JP_TYO,KR,KRCOJ,JP,JPTYO,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,Ambrane_IN_HAR,CN,CNNKG,IN,INHAR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FOB,FOB,KR02149300_40-A,Ambrane_IN_HAR,CN,CNNKG,IN,INHAR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FOB,FOB,KR02149300_40-A,Ather Energy_IN_BLR,CN,CNNKG,IN,INBLR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,Ather Energy_IN_BLR,CN,CNNKG,IN,INBLR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,4,N
+40,,-,FOB,FOB,KR02149300_40-A,Brisk EV_IN_HYD,CN,CNNKG,IN,INHYD,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,Brisk EV_IN_HYD,CN,CNNKG,IN,INHYD,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,Eicher Motors_IN_MAA,CN,CNNKG,IN,INMAA,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,Eicher Motors_IN_MAA,CN,CNNKG,IN,INMAA,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,EMNI_KR_ASN,CN,CNNKG,KR,KRASN,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FOB,FOB,KR02149300_40-A,EMNI_KR_ASN,CN,CNNKG,KR,KRASN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FOB,FOB,KR02149300_40-A,Hero Motocorp_IN_CHT,CN,CNNKG,IN,INCHT,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FOB,FOB,KR02149300_40-A,Hero Motocorp_IN_CHT,CN,CNNKG,IN,INCHT,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,Hero Motocorp_IN_CHT,CN,CNNKG,IN,INCHT,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FOB,FOB,KR02149300_40-A,Lucid Motors_US_NKQ,CN,CNNKG,US,USNKQ,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,Lucid Motors_US_NKQ,CN,CNNKG,US,USNKQ,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,Magna Yuma_IN_BLR,CN,CNNKG,IN,INBLR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,Magna Yuma_IN_BLR,CN,CNNKG,IN,INBLR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,4,N
+40,,-,FOB,FOB,KR02149300_40-A,Matter Energy_IN_AMD,CN,CNNKG,IN,INAMD,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FOB,FOB,KR02149300_40-A,Matter Energy_IN_AMD,CN,CNNKG,IN,INAMD,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FOB,FOB,KR02149300_40-A,OLA Electric_IN_BLR,CN,CNNKG,IN,INBLR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,OLA Electric_IN_BLR,CN,CNNKG,IN,INBLR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,4,N
+40,,-,FOB,FOB,KR02149300_40-A,TVS Motor_IN_HSR,CN,CNNKG,IN,INHSR,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,FOB,FOB,KR02149300_40-A,TVS Motor_IN_HSR,CN,CNNKG,IN,INHSR,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,FOB,FOB,KR02149300_40-A,Ultraviolette_IN_MAA,CN,CNNKG,IN,INMAA,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02149300_40-A,Ultraviolette_IN_MAA,CN,CNNKG,IN,INMAA,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,FOB,FOB,KR02265100_40-P,LGE VC_CN_NKG,VN,VNQUG,CN,CNNKG,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,Z01,Z01,,Huapu_CN_CGU,,,CN,CNCGU,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,Z01,Z01,CN00774400_40-A,BYD Group_CN_SZX,KR,KRKUM,CN,CNSZX,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,BYD Group_CN_SZX,KR,KRKUM,CN,CNSZX,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,Z01,Z01,CN00774400_40-A,BYD Group_CN_SZX,KR,KRKUM,CN,CNSZX,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,Greenway_CN_DGG,KR,KRKUM,CN,CNDGG,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,Greenway_CN_DGG,KR,KRKUM,CN,CNDGG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,Z01,Z01,CN00774400_40-A,High Power (Boke)_CN_SZX,KR,KRKUM,CN,CNSZX,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,High Power (Boke)_CN_SZX,KR,KRKUM,CN,CNSZX,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,Z01,Z01,CN00774400_40-A,High Power (Boke)_CN_SZX,KR,KRKUM,CN,CNSZX,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,Oceanwing Anker_CN_SZX,KR,KRKUM,CN,CNSZX,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,Oceanwing Anker_CN_SZX,KR,KRKUM,CN,CNSZX,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,Z01,Z01,CN00774400_40-A,Oceanwing Anker_CN_SZX,KR,KRKUM,CN,CNSZX,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,phisemi_CN_SZX,KR,KRKUM,CN,CNSZX,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,phisemi_CN_SZX,KR,KRKUM,CN,CNSZX,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,Z01,Z01,CN00774400_40-A,phisemi_CN_SZX,KR,KRKUM,CN,CNSZX,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,Powtech_CN_DGG,KR,KRKUM,CN,CNDGG,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,Powtech_CN_DGG,KR,KRKUM,CN,CNDGG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,Z01,Z01,CN00774400_40-A,Rihuida_CN_SZX,KR,KRKUM,CN,CNSZX,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,Rihuida_CN_SZX,KR,KRKUM,CN,CNSZX,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,Z01,Z01,CN00774400_40-A,Rihuida_CN_SZX,KR,KRKUM,CN,CNSZX,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,SCUD_CN_FOC,KR,KRKUM,CN,CNFOC,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,Z01,Z01,CN00774400_40-A,Sunwoda_CN_SZX,KR,KRKUM,CN,CNSZX,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,Sunwoda_CN_SZX,KR,KRKUM,CN,CNSZX,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,Z01,Z01,CN00774400_40-A,Sunwoda_CN_SZX,KR,KRKUM,CN,CNSZX,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,CN00774400_40-A,Veken_CN_NGB,KR,KRKUM,CN,CNNGB,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,Z01,Z01,KR02149300_40-A,Dualtron_CN_JHA,CN,CNNKG,CN,CNJHA,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,KR02149300_40-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,KR02149300_40-A,HUAYOU_CN_NKG,CN,CNNKG,CN,CNNKG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z01,Z01,KR02149300_40-A,HUAYOU_CN_NKG,CN,CNNKG,CN,CNNKG,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,3,N
+40,,-,Z01,Z01,KR02149300_40-A,Shandong PYTES_CN_SAD,CN,CNNKG,CN,CNSAD,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z02,Z02,,LGE VC_KR_PTK,,,KR,KRPTK,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,Z02,Z02,,LGE_KR_PTK,,,KR,KRPTK,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,Z02,Z02,,Tabos_KR_CHO,,,KR,KRCHO,,,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,0,N
+40,,-,Z02,Z02,CN00774400_40-A,EMNI_KR_ASN,KR,KRKUM,KR,KRASN,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z02,Z02,CN00774400_40-A,Gims_KR_SEL,KR,KRKUM,KR,KRSEL,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z02,Z02,CN00774400_40-A,LGE_KR_CHW,KR,KRKUM,KR,KRCHW,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z02,Z02,CN00774400_40-A,Shinsung_KR_SEL,KR,KRKUM,KR,KRSEL,TRK,TRUCK,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z02,Z02,KR02149300_40-A,CTNS_KR_CHW,CN,CNNKG,KR,KRCHW,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z02,Z02,KR02149300_40-A,CTNS_KR_CHW,CN,CNNKG,KR,KRCHW,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,2,N
+40,,-,Z02,Z02,KR02149300_40-A,Daedong Mobility_KR_DSG,CN,CNNKG,KR,KRDSG,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z02,Z02,KR02149300_40-A,Daedong Mobility_KR_DSG,CN,CNNKG,KR,KRDSG,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z02,Z02,KR02149300_40-A,EMNI_KR_ASN,CN,CNNKG,KR,KRASN,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z02,Z02,KR02149300_40-A,EMNI_KR_ASN,CN,CNNKG,KR,KRASN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z02,Z02,KR02149300_40-A,MPST_KR_GUN,CN,CNNKG,KR,KRGUN,FRY,FERRY,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,,-,Z02,Z02,KR02149300_40-A,MPST_KR_GUN,CN,CNNKG,KR,KRGUN,SEA,SEA,,,,,,,,,,,,,,,0,,,0,0,,,,,,N,1,N
+40,10000,-,DAP,DAP,CN00732500_40-P,HP_MX_MTM,CN,CNCKG,MX,MXMTM,SEA,SEA,0E-10,1,N,Y,3433,AVERAGE,,,,,,Y,,45,45,2022-04-11,2100-12-26,0,0,,legalenergy,2022-04-12T15:34:45.460000,legalenergy,2025-10-02T15:33:01.930000,Y,1,N
+40,10006,-,Z01,Z01,NJ01-A,Jiutong_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,0E-10,5,N,Y,7637,AVERAGE,,,,,,Y,,0,13,2022-04-11,2100-12-26,0,0,,legalenergy,2022-04-14T16:16:48.443000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10007,-,Z01,Z01,NJ01-A,Jiutong_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,0E-10,2,N,Y,7636,AVERAGE,,Y,Y,,,,,0,26,2022-04-11,2100-12-26,0,0,,legalenergy,2022-04-14T16:16:48.443000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10008,-,Z01,Z01,NJ01-A,Jiutong_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,0E-10,1,N,Y,3409,AVERAGE,Y,Y,Y,Y,Y,Y,,0,2,2022-04-11,2100-12-26,0,0,,legalenergy,2022-04-14T16:16:48.443000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10016,-,FCA,FCA,NJ01-A,IM-Re_CN_NGG,CN,CNNKG,CN,CNNGG,TRK,TRUCK,0E-10,1,Y,Y,5492,MAX,Y,Y,Y,Y,Y,Y,Y,0,0,2022-04-18,2099-12-27,0,0,,juyeong.park,2022-04-18T16:19:44.123000,NERP_SCP_3RD,2025-10-02T18:07:47.223000,Y,3,N
+40,10169,-,DAP,DAP,HQ06-A,Bosch PgP_MY_BLE,KR,KRCOJ,MY,MYBLE,AIR,AIR,0E-10,2,Y,Y,5172,AVERAGE,Y,Y,Y,Y,Y,Y,Y,4,4,2022-04-18,2100-04-18,0,0,,jeongholee,2022-04-21T11:16:59.897000,jeongholee,2022-04-21T11:16:59.897000,Y,1,N
+40,10170,-,DAP,DAP,HQ06-A,Bosch PgP_MY_BLE,KR,KRCOJ,MY,MYBLE,SEA,SEA,0E-10,1,Y,Y,3691,,,,,,,,Y,17,17,2022-04-18,2100-04-18,0,0,,jeongholee,2022-04-21T11:16:59.897000,jeongholee,2022-04-21T11:16:59.897000,Y,1,N
+40,10171,-,DAP,DAP,HQ06-A,Sebang _KR_KWJ,KR,KRCOJ,KR,KRKWJ,TRK,TRUCK,0E-10,1,Y,Y,749,,Y,Y,Y,Y,Y,Y,Y,1,1,2022-04-18,2100-04-18,0,0,,jeongholee,2022-04-21T11:16:59.897000,jeongholee,2022-04-21T11:16:59.897000,Y,1,N
+40,10172,-,DAP,DAP,NJ01-A,Bosch PgP_MY_BLE,CN,CNNKG,MY,MYBLE,AIR,AIR,0E-10,4,Y,Y,5120,MAX,Y,Y,Y,Y,Y,Y,Y,6,6,2022-04-18,2100-04-18,0,0,,jeongholee,2022-04-21T11:16:59.897000,NERP_SCP_3RD,2025-10-02T18:06:18.050000,Y,3,N
+40,10173,-,DAP,DAP,NJ01-A,Bosch PgP_MY_BLE,CN,CNNKG,MY,MYBLE,SEA,SEA,0E-10,1,Y,Y,5117,MAX,,,,,Y,Y,,20,20,2022-04-18,2100-04-18,0,0,,jeongholee,2022-04-21T11:16:59.897000,NERP_SCP_3RD,2025-10-02T18:06:17.627000,Y,3,N
+40,10174,-,CIP,CIP,CN00254300_40-P,Flex Ltd._HK_HKG,CN,CNNKG,HK,HKHKG,AIR,AIR,0E-10,3,Y,Y,3477,AVERAGE,Y,Y,Y,Y,Y,Y,Y,3,8,2022-04-18,2100-04-18,0,0,,jeongholee,2022-04-21T11:18:26.453000,jeongholee,2022-04-21T11:18:26.453000,Y,1,N
+40,10175,-,CIP,CIP,CN00254300_40-P,Flex Ltd._HK_HKG,CN,CNNKG,HK,HKHKG,SEA,SEA,0E-10,2,Y,Y,3476,AVERAGE,Y,Y,Y,Y,Y,Y,Y,4,12,2022-04-18,2100-04-18,0,0,,jeongholee,2022-04-21T11:18:26.453000,jeongholee,2022-04-21T11:18:26.453000,Y,1,N
+40,10176,-,CIP,CIP,CN00254300_40-P,Flex Ltd._HK_HKG,CN,CNNKG,HK,HKHKG,TRK,TRUCK,0E-10,1,Y,Y,3926,AVERAGE,Y,Y,Y,Y,Y,Y,,0,3,2022-04-18,2100-04-18,0,0,,jeongholee,2022-04-21T11:18:26.453000,jeongholee,2022-04-21T11:18:26.453000,Y,1,N
+40,10177,-,CIP,CIP,CN00254300_40-P,Venture_MY_JHB,CN,CNNKG,MY,MYJHB,AIR,AIR,0E-10,4,Y,Y,6019,MAX,Y,Y,Y,Y,Y,Y,Y,3,6,2022-04-18,2100-04-18,0,0,,jeongholee,2022-04-21T11:18:26.453000,jeongholee,2022-04-21T11:18:26.453000,Y,3,N
+40,10178,-,CIP,CIP,CN00254300_40-P,Venture_MY_JHB,CN,CNNKG,MY,MYJHB,SEA,SEA,0E-10,1,Y,Y,6016,MAX,,Y,,Y,,,,5,19,2022-04-18,2100-04-18,0,0,,jeongholee,2022-04-21T11:18:26.453000,jeongholee,2022-04-21T11:18:26.453000,Y,3,N
+40,10181,-,CIF,CIF,CN00254300_40-P,Tonly_HK_ZTW,CN,CNNKG,HK,HKZTW,AIR,AIR,0E-10,4,Y,Y,8658,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-04-25,2100-04-25,0,0,,jeongholee,2022-04-25T13:33:16.730000,jeongholee,2022-04-25T13:33:16.730000,Y,3,N
+40,10182,-,CIF,CIF,CN00254300_40-P,Tonly_HK_ZTW,CN,CNNKG,HK,HKZTW,SEA,SEA,0E-10,1,Y,Y,8655,MAX,,Y,,Y,,Y,,8,16,2022-04-25,2100-04-25,0,0,,jeongholee,2022-04-25T13:33:16.730000,jeongholee,2022-04-25T13:33:16.730000,Y,3,N
+40,10190,-,CIP,CIP,CN00254300_40-P,Tonly_HK_ZTW,CN,CNNKG,HK,HKZTW,AIR,AIR,0E-10,4,Y,Y,8658,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-04-25,2100-04-25,0,0,,jeongholee,2022-04-25T13:34:27.117000,jeongholee,2022-04-25T13:34:27.117000,Y,3,N
+40,10191,-,CIP,CIP,CN00254300_40-P,Tonly_HK_ZTW,CN,CNNKG,HK,HKZTW,SEA,SEA,0E-10,1,Y,Y,8655,MAX,,Y,,Y,,Y,,8,16,2022-04-25,2100-04-25,0,0,,jeongholee,2022-04-25T13:34:27.117000,jeongholee,2022-04-25T13:34:27.117000,Y,3,N
+40,10194,-,Z01,Z01,NJ01-A,Weidian_CN_AOY,CN,CNNKG,CN,CNAOY,TRK,TRUCK,0E-10,10,N,Y,8671,AVERAGE,Y,Y,Y,Y,Y,Y,,0,2,2022-04-25,2100-04-25,0,0,,jeongholee,2022-04-26T11:07:32.233000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10195,-,DAP,DAP,NJ01-A,Elentec_CN_AOY,CN,CNNKG,CN,CNAOY,TRK,TRUCK,0E-10,10,Y,Y,8671,AVERAGE,Y,Y,Y,Y,Y,Y,,2,2,2022-04-25,2100-12-26,0,0,,legalenergy,2022-04-26T13:47:45.290000,NERP_SCP_3RD,2025-10-02T18:06:36.887000,Y,1,N
+40,10196,-,DDP,DDP,NJ01-A,Elentec_CN_AOY,CN,CNNKG,CN,CNAOY,TRK,TRUCK,0E-10,10,Y,Y,8671,AVERAGE,Y,Y,Y,Y,Y,Y,,2,2,2022-04-25,2100-12-26,0,0,,legalenergy,2022-04-26T13:47:45.290000,NERP_SCP_3RD,2025-10-02T18:06:36.957000,Y,1,N
+40,10201,-,DAP,DAP,HQ06-A,Shinko_JP_KGQ,KR,KRCOJ,JP,JPKGQ,AIR,AIR,0E-10,4,Y,Y,8678,MAX,,Y,Y,Y,Y,Y,Y,10,10,2022-04-25,2100-04-25,0,0,,jeongholee,2022-04-27T13:19:57.653000,jeongholee,2022-04-27T13:19:57.653000,Y,3,N
+40,10202,-,DAP,DAP,HQ06-A,Shinko_JP_KGQ,KR,KRCOJ,JP,JPKGQ,SEA,SEA,0E-10,1,Y,Y,8675,MAX,,,,,,,Y,15,15,2022-04-25,2100-04-25,0,0,,jeongholee,2022-04-27T13:19:57.653000,jeongholee,2022-04-27T13:19:57.653000,Y,3,N
+40,10203,-,DAP,DAP,NJ01-A,Shinko_JP_KGQ,CN,CNNKG,JP,JPKGQ,AIR,AIR,0E-10,4,Y,Y,8684,MAX,Y,Y,Y,Y,Y,Y,Y,9,9,2022-04-25,2100-04-25,0,0,,jeongholee,2022-04-27T13:19:57.653000,NERP_SCP_3RD,2025-10-02T18:09:01.993000,Y,3,N
+40,10204,-,DAP,DAP,NJ01-A,Shinko_JP_KGQ,CN,CNNKG,JP,JPKGQ,SEA,SEA,0E-10,1,Y,Y,8681,MAX,,,,,,Y,,15,15,2022-04-25,2100-04-25,0,0,,jeongholee,2022-04-27T13:19:57.653000,NERP_SCP_3RD,2025-10-02T18:09:01.927000,Y,3,N
+40,10205,-,CIP,CIP,CN00254300_40-P,Flex Ltd._CN_ZUH,CN,CNNKG,CN,CNZUH,TRK,TRUCK,0E-10,10,Y,Y,8685,AVERAGE,Y,Y,Y,Y,Y,Y,,2,2,2022-04-25,2100-04-25,0,0,,jeongholee,2022-04-27T13:30:20.327000,jeongholee,2022-04-27T13:30:20.327000,Y,1,N
+40,10211,-,FCA,FCA,NJ01-A,GM_US_DET,CN,CNNKG,US,USDET,SEA,SEA,0E-10,2,Y,Y,4484,AVERAGE,,,Y,,,,,1,55,2022-04-25,2099-12-27,0,0,,hyunsung.kim,2022-04-29T13:00:43.707000,NERP_SCP_3RD,2025-10-02T18:06:56.490000,Y,3,N
+40,10212,-,FCA,FCA,NJ01-A,GM_US_DET,CN,CNNKG,US,USDET,AIR,AIR,0E-10,5,Y,Y,4487,AVERAGE,Y,Y,Y,Y,Y,Y,Y,1,6,2022-04-25,2099-12-27,0,0,,hyunsung.kim,2022-04-29T13:00:43.707000,NERP_SCP_3RD,2025-10-02T18:06:56.880000,Y,3,N
+40,10213,-,FOB,FOB,NJ01-A,Lion Electric_CA_QUE,CN,CNNKG,CA,CAQUE,AIR,AIR,0E-10,2,Y,Y,3757,,Y,Y,Y,Y,Y,Y,Y,3,8,2022-05-02,2100-12-26,0,0,,legalenergy,2022-05-03T17:20:51.780000,NERP_SCP_3RD,2025-10-02T18:08:16.873000,Y,1,N
+40,10214,-,FOB,FOB,NJ01-A,Lion Electric_CA_QUE,CN,CNNKG,CA,CAQUE,SEA,SEA,0E-10,1,Y,Y,3756,AVERAGE,,,,,Y,,,11,42,2022-05-02,2100-12-26,0,0,,legalenergy,2022-05-03T17:20:51.780000,NERP_SCP_3RD,2025-10-02T18:08:16.407000,Y,1,N
+40,10215,-,Z01,Z01,NJ01-A,Xianzhong_CN_TSN,CN,CNNKG,CN,CNTSN,TRK,TRUCK,0E-10,1,N,Y,3759,AVERAGE,Y,Y,Y,Y,Y,Y,,0,3,2022-05-02,2100-12-26,0,0,,legalenergy,2022-05-03T17:20:51.780000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10216,-,FOB,FOB,HQ06-A,Lion Electric_CA_QUE,KR,KRCOJ,CA,CAQUE,AIR,AIR,0E-10,4,Y,Y,4098,MAX,Y,Y,Y,Y,Y,Y,Y,2,16,2022-05-02,2100-12-26,0,0,,legalenergy,2022-05-03T17:20:51.780000,legalenergy,2022-05-03T17:20:51.780000,Y,3,N
+40,10217,-,FOB,FOB,HQ06-A,Lion Electric_CA_QUE,KR,KRCOJ,CA,CAQUE,SEA,SEA,0E-10,1,Y,Y,4095,MAX,,,,,Y,,,8,35,2022-05-02,2100-12-26,0,0,,legalenergy,2022-05-03T17:20:51.780000,legalenergy,2022-05-03T17:20:51.780000,Y,3,N
+40,10231,-,EXW,EXW,VN00188600_40-P,Isuzu_JP_TYO,VN,VNBTN,JP,JPTYO,AIR,AIR,0E-10,4,Y,Y,8693,MAX,Y,Y,Y,Y,Y,Y,Y,0,11,2022-05-09,2100-05-09,0,0,,jeongholee,2022-05-10T17:48:15.487000,jeongholee,2022-05-10T17:48:15.487000,Y,3,N
+40,10232,-,EXW,EXW,VN00188600_40-P,Isuzu_JP_TYO,VN,VNBTN,JP,JPTYO,SEA,SEA,0E-10,1,Y,Y,8690,MAX,,,,Y,,,,0,18,2022-05-09,2100-05-09,0,0,,jeongholee,2022-05-10T17:48:15.487000,jeongholee,2022-05-10T17:48:15.487000,Y,3,N
+40,10240,-,DDP,DDP,HQ06-A,Darfon_TW_TYN,KR,KRCOJ,TW,TWTYN,AIR,AIR,0E-10,2,Y,Y,3620,,Y,Y,Y,Y,Y,Y,Y,5,5,2022-05-16,2100-05-16,0,0,,jeongholee,2022-05-17T10:20:24.433000,jeongholee,2022-05-17T10:20:24.433000,Y,1,N
+40,10241,-,DDP,DDP,HQ06-A,Darfon_TW_TYN,KR,KRCOJ,TW,TWTYN,SEA,SEA,0E-10,1,Y,Y,3619,AVERAGE,,,,Y,,Y,,10,10,2022-05-16,2100-05-16,0,0,,jeongholee,2022-05-17T10:20:24.433000,jeongholee,2022-05-17T10:20:24.433000,Y,1,N
+40,10242,-,DDP,DDP,NJ01-A,Mica_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,0E-10,5,Y,Y,7637,AVERAGE,,,,,,Y,,13,13,2022-05-16,2100-05-16,0,0,,jeongholee,2022-05-17T10:20:24.433000,NERP_SCP_3RD,2025-10-02T18:08:30.687000,Y,1,N
+40,10243,-,DDP,DDP,NJ01-A,Mica_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,0E-10,2,Y,Y,7636,AVERAGE,,Y,Y,,,,,26,26,2022-05-16,2100-05-16,0,0,,jeongholee,2022-05-17T10:20:24.433000,NERP_SCP_3RD,2025-10-02T18:08:30.453000,Y,1,N
+40,10244,-,DDP,DDP,NJ01-A,Mica_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,0E-10,1,Y,Y,3409,AVERAGE,Y,Y,Y,Y,Y,Y,,2,2,2022-05-16,2100-05-16,0,0,,jeongholee,2022-05-17T10:20:24.433000,NERP_SCP_3RD,2025-10-02T18:08:30.370000,Y,1,N
+40,10245,-,CIF,CIF,NJ01-A,Atex_IT_SVT,CN,CNNKG,IT,ITSVT,AIR,AIR,0E-10,4,Y,Y,8705,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-05-16,2100-05-16,0,0,,jeongholee,2022-05-17T10:20:24.433000,NERP_SCP_3RD,2025-10-02T18:06:05.603000,Y,3,N
+40,10246,-,CIF,CIF,NJ01-A,Atex_IT_SVT,CN,CNNKG,IT,ITSVT,SEA,SEA,0E-10,1,Y,Y,8702,MAX,,,,Y,,,,8,50,2022-05-16,2100-05-16,0,0,,jeongholee,2022-05-17T10:20:24.433000,NERP_SCP_3RD,2025-10-02T18:06:04.493000,Y,3,N
+40,10255,-,FOB,FOB,HQ06-A,Lion Electric_US_HLM,KR,KRCOJ,US,USHLM,AIR,AIR,0E-10,4,Y,Y,64,MIN,Y,Y,Y,Y,Y,Y,Y,2,7,2022-05-16,2099-12-27,0,0,,taehopark,2022-05-19T14:05:32.967000,taehopark,2022-05-19T14:05:32.967000,Y,1,N
+40,10256,-,FOB,FOB,HQ06-A,Lion Electric_US_HLM,KR,KRCOJ,US,USHLM,SEA,SEA,0E-10,5,Y,Y,6925,AVERAGE,,,,,Y,,Y,7,27,2022-05-16,2099-12-27,0,0,,taehopark,2022-05-19T14:05:32.967000,taehopark,2022-05-19T14:05:32.967000,Y,26,N
+40,10257,-,FCA,FCA,HQ06-A,Lion Electric_US_HLM,KR,KRCOJ,US,USHLM,AIR,AIR,0E-10,4,Y,Y,64,MIN,Y,Y,Y,Y,Y,Y,Y,1,7,2022-05-16,2099-12-27,0,0,,taehopark,2022-05-19T14:05:32.967000,taehopark,2022-05-19T14:05:32.967000,Y,1,N
+40,10258,-,FCA,FCA,HQ06-A,Lion Electric_US_HLM,KR,KRCOJ,US,USHLM,SEA,SEA,0E-10,31,Y,Y,8911,AVERAGE,,,,,Y,,,1,52,2022-05-16,2099-12-27,0,0,,taehopark,2022-05-19T14:05:32.967000,bigdamon,2022-08-17T16:13:30.153000,Y,26,N
+40,10259,-,FCA,FCA,NJ01-A,Lion Electric_US_HLM,CN,CNNKG,US,USHLM,AIR,AIR,0E-10,2,Y,Y,5050,MAX,Y,Y,Y,Y,Y,Y,Y,1,8,2022-05-23,2100-12-26,0,0,,legalenergy,2022-05-23T16:55:59.357000,NERP_SCP_3RD,2025-10-02T18:08:16.940000,Y,3,N
+40,10260,-,FCA,FCA,NJ01-A,Lion Electric_US_HLM,CN,CNNKG,US,USHLM,SEA,SEA,0E-10,26,Y,Y,8387,AVERAGE,,,,,Y,,,1,68,2022-05-23,2100-12-26,0,0,,legalenergy,2022-05-23T16:55:59.357000,NERP_SCP_3RD,2025-10-02T18:08:17.007000,Y,24,N
+40,10269,-,CIP,CIP,HQ06-A,BorgWarner Akasol_DE_DAR,KR,KRCOJ,DE,DEDAR,SEA,SEA,0E-10,1,Y,Y,3930,AVERAGE,Y,Y,Y,Y,Y,Y,Y,5,59,2022-05-23,2100-12-26,0,0,,legalenergy,2022-05-25T10:44:29.427000,legalenergy,2022-05-25T10:44:29.427000,Y,1,N
+40,10270,-,DDP,DDP,KR02265100_40-P,ITM_VN_BNH,VN,VNQUG,VN,VNBNH,TRK,TRUCK,0E-10,1,Y,Y,3544,,Y,Y,Y,Y,Y,Y,,1,1,2022-05-23,2100-12-26,0,0,,legalenergy,2022-05-25T10:44:29.427000,legalenergy,2022-05-25T10:44:29.427000,Y,1,N
+40,10271,-,DDP,DDP,KR00995200_40-P,ITM_VN_BNH,VN,VNHDG,VN,VNBNH,TRK,TRUCK,0E-10,1,Y,Y,7382,AVERAGE,Y,Y,Y,Y,Y,Y,,1,1,2022-05-23,2100-12-26,0,0,,legalenergy,2022-05-25T10:44:29.427000,legalenergy,2022-05-25T10:44:29.427000,Y,1,N
+40,10272,-,CIP,CIP,NJ01-A,BorgWarner Akasol_DE_DAR,CN,CNNKG,DE,DEDAR,AIR,AIR,0E-10,2,Y,Y,4281,MAX,Y,Y,Y,Y,Y,Y,Y,3,7,2022-05-23,2100-12-26,0,0,,legalenergy,2022-05-25T10:44:29.427000,NERP_SCP_3RD,2025-10-02T18:06:15.840000,Y,3,N
+40,10273,-,CIP,CIP,NJ01-A,BorgWarner Akasol_DE_DAR,CN,CNNKG,DE,DEDAR,SEA,SEA,0E-10,1,Y,Y,9064,AVERAGE,Y,Y,Y,Y,Y,Y,Y,5,69,2022-05-23,2100-12-26,0,0,,legalenergy,2022-05-25T10:44:29.427000,NERP_SCP_3RD,2025-10-02T18:06:16.167000,Y,5,N
+40,10284,-,FCA,FCA,CN00732500_40-P,HP1_CN_SZP,CN,CNCKG,CN,CNSZP,AIR,AIR,0E-10,1,Y,Y,6650,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,1,2022-05-30,2100-12-26,0,0,,legalenergy,2022-06-02T16:26:33.547000,legalenergy,2022-06-02T16:26:33.547000,Y,1,N
+40,10287,-,CIP,CIP,HQ06-A,DAFTRUCKS N.V._NL_EIN,KR,KRCOJ,NL,NLEIN,SEA,SEA,0E-10,1,Y,Y,8748,MAX,,,,Y,,,,11,50,2022-05-30,2100-05-30,0,0,,jeongholee,2022-06-03T15:26:32.100000,jeongholee,2022-06-03T15:26:32.100000,Y,3,N
+40,10288,-,CIP,CIP,NJ01-A,DAFTRUCKS N.V._NL_EIN,CN,CNNKG,NL,NLEIN,SEA,SEA,0E-10,1,Y,Y,8751,MAX,,Y,,,,,,11,54,2022-05-30,2100-05-30,0,0,,jeongholee,2022-06-03T15:26:32.100000,NERP_SCP_3RD,2025-10-02T18:06:27.507000,Y,3,N
+40,10289,-,DAP,DAP,HQ06-A,Hanwha Defense_KR_SGM,KR,KRCOJ,KR,KRSGM,TRK,TRUCK,0E-10,1,Y,Y,756,,Y,Y,Y,Y,Y,Y,Y,1,1,2022-06-06,2100-06-06,0,0,,jeongholee,2022-06-08T14:52:28.477000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,1,N
+40,10290,-,A01,A01,NJ01-A,Hanwha Defense_KR_SGM,CN,CNNKG,KR,KRSGM,FRY,FERRY,0E-10,2,N,Y,1694,,Y,,Y,,Y,,,0,6,2022-06-06,2100-06-06,0,0,,jeongholee,2022-06-08T14:52:28.477000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10291,-,A01,A01,NJ01-A,Hanwha Defense_KR_SGM,CN,CNNKG,KR,KRSGM,SEA,SEA,0E-10,1,N,Y,1693,,,,Y,,,,Y,0,10,2022-06-06,2100-06-06,0,0,,jeongholee,2022-06-08T14:52:28.477000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10301,-,FOB,FOB,CN00254300_40-P,Whill_CN_SZH,CN,CNNKG,CN,CNSZH,TRK,TRUCK,0E-10,1,Y,Y,3758,AVERAGE,Y,Y,Y,Y,Y,Y,,3,3,2022-06-06,2100-12-26,0,0,,legalenergy,2022-06-09T09:16:46.047000,legalenergy,2022-06-09T09:16:46.047000,Y,1,N
+40,10302,-,FOB,FOB,CN00254300_40-P,Whill_JP_YOK,CN,CNNKG,JP,JPYOK,AIR,AIR,0E-10,4,Y,Y,5923,MAX,Y,Y,Y,Y,Y,Y,Y,2,6,2022-06-06,2100-12-26,0,0,,legalenergy,2022-06-09T09:16:46.047000,legalenergy,2022-06-09T09:16:46.047000,Y,3,N
+40,10303,-,FOB,FOB,CN00254300_40-P,Whill_JP_YOK,CN,CNNKG,JP,JPYOK,SEA,SEA,0E-10,1,Y,Y,5920,MAX,Y,Y,Y,Y,Y,Y,Y,4,14,2022-06-06,2100-12-26,0,0,,legalenergy,2022-06-09T09:16:46.047000,legalenergy,2022-06-09T09:16:46.047000,Y,3,N
+40,10304,-,FOB,FOB,CN00254300_40-P,Whill_NL_RTM,CN,CNNKG,NL,NLRTM,SEA,SEA,0E-10,1,Y,Y,7271,MAX,,,,,Y,,,4,56,2022-06-06,2100-12-26,0,0,,legalenergy,2022-06-09T09:16:46.047000,legalenergy,2022-06-09T09:16:46.047000,Y,3,N
+40,10305,-,FOB,FOB,CN00254300_40-P,Whill_US_BNA,CN,CNNKG,US,USBNA,SEA,SEA,0E-10,2,Y,Y,7254,AVERAGE,Y,,,,,,,9,34,2022-06-06,2100-12-26,0,0,,legalenergy,2022-06-09T09:16:46.047000,legalenergy,2022-06-09T09:16:46.047000,Y,3,N
+40,10310,-,CIF,CIF,NJ01-A,Trend Energy_CN_CGU,CN,CNNKG,CN,CNCGU,TRK,TRUCK,0E-10,1,Y,Y,3405,AVERAGE,Y,Y,Y,Y,Y,Y,,1,1,2022-06-13,2100-06-13,0,0,,jeongholee,2022-06-15T15:09:21.177000,NERP_SCP_3RD,2025-10-02T18:09:13.760000,Y,1,N
+40,10311,-,EXW,EXW,HQ06-A,B&S_US_XOH,KR,KRCOJ,US,USXOH,SEA,SEA,0E-10,1,Y,Y,3892,AVERAGE,,,,,Y,,,0,54,2022-06-13,2099-12-27,0,0,,jaehyuny,2022-06-16T10:29:56.010000,jaehyuny,2022-06-16T10:29:56.010000,Y,1,N
+40,10312,-,EXW,EXW,HQ06-A,B&S_US_XOH,KR,KRCOJ,US,USXOH,AIR,AIR,0E-10,2,Y,Y,3893,,Y,Y,Y,Y,Y,Y,Y,0,7,2022-06-13,2100-06-13,0,0,,jeongholee,2022-06-17T13:44:13.817000,jeongholee,2022-06-17T13:44:13.817000,Y,1,N
+40,10313,-,EXW,EXW,NJ01-A,B&S_US_XOH,CN,CNNKG,US,USXOH,AIR,AIR,0E-10,2,Y,Y,3907,,Y,Y,Y,Y,Y,Y,Y,0,8,2022-06-13,2100-06-13,0,0,,jeongholee,2022-06-17T13:44:13.817000,NERP_SCP_3RD,2025-10-02T18:06:09.460000,Y,1,N
+40,10314,-,EXW,EXW,NJ01-A,B&S_US_XOH,CN,CNNKG,US,USXOH,SEA,SEA,0E-10,1,Y,Y,3906,AVERAGE,,,,,Y,,,0,52,2022-06-13,2100-06-13,0,0,,jeongholee,2022-06-17T13:44:13.817000,NERP_SCP_3RD,2025-10-02T18:06:09.197000,Y,1,N
+40,10331,-,DDP,DDP,CN00254300_40-P,Compal Elec_TW_TPE,CN,CNNKG,TW,TWTPE,SEA,SEA,0E-10,1,Y,Y,1721,AVERAGE,,,Y,Y,,,Y,16,16,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-22T16:27:04.273000,legalenergy,2022-06-22T16:27:04.273000,Y,1,N
+40,10332,-,DDP,DDP,CN00254300_40-P,Compal Elec_TW_TPE,CN,CNNKG,TW,TWTPE,TRK,TRUCK,0E-10,2,Y,Y,6361,AVERAGE,Y,Y,Y,Y,Y,Y,,5,5,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-22T16:27:04.273000,legalenergy,2022-06-22T16:27:04.273000,Y,1,N
+40,10333,-,CIF,CIF,NJ01-A,Acer BC_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:05:47.073000,Y,3,N
+40,10334,-,CIF,CIF,NJ01-A,Asus_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:05:58.547000,Y,3,N
+40,10335,-,CIF,CIF,NJ01-A,C-Tech_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:06:25.793000,Y,3,N
+40,10336,-,CIF,CIF,NJ01-A,Formosa_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:06:45.457000,Y,3,N
+40,10337,-,CIF,CIF,NJ01-A,Foxlink_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:06:49.187000,Y,3,N
+40,10338,-,CIF,CIF,NJ01-A,GLW_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:06:56.333000,Y,3,N
+40,10339,-,CIF,CIF,NJ01-A,Kymco_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:08:11.470000,Y,3,N
+40,10340,-,CIF,CIF,NJ01-A,MPS Energy_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:08:32.590000,Y,3,N
+40,10341,-,CIF,CIF,NJ01-A,Powergene_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:08:47.323000,Y,3,N
+40,10342,-,CIF,CIF,NJ01-A,SEGL Energy_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:09:00.710000,Y,3,N
+40,10343,-,CIF,CIF,NJ01-A,Xing Mobility_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:09:29.010000,Y,3,N
+40,10344,-,DAP,DAP,CN00254300_40-P,Pegatron_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,9,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,legalenergy,2022-06-24T11:14:37.637000,Y,3,N
+40,10345,-,DAP,DAP,NJ01-A,Inventec_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,9,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:07:56.100000,Y,3,N
+40,10346,-,DDP,DDP,CN00254300_40-P,Compal Elec_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,9,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,legalenergy,2022-06-24T11:14:37.637000,Y,3,N
+40,10347,-,EXW,EXW,CN00254300_40-P,Pegatron_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,0,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,legalenergy,2022-06-24T11:14:37.637000,Y,3,N
+40,10348,-,EXW,EXW,NJ01-A,Skypower_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,0,9,2022-06-20,2100-12-26,0,0,,legalenergy,2022-06-24T11:14:37.637000,NERP_SCP_3RD,2025-10-02T18:09:03.653000,Y,3,N
+40,10349,-,CIF,CIF,HQ06-A,Thinked_CN_SZH,KR,KRCOJ,CN,CNSZH,AIR,AIR,0E-10,4,Y,Y,595,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,5,2022-06-27,2100-12-26,0,0,,legalenergy,2022-06-27T10:38:06.143000,legalenergy,2022-06-27T10:38:06.143000,Y,1,N
+40,10350,-,CIF,CIF,HQ06-A,Thinked_CN_SZH,KR,KRCOJ,CN,CNSZH,SEA,SEA,0E-10,1,Y,Y,594,AVERAGE,Y,Y,Y,Y,Y,Y,Y,5,15,2022-06-27,2100-12-26,0,0,,legalenergy,2022-06-27T10:38:06.143000,legalenergy,2022-06-27T10:38:06.143000,Y,1,N
+40,10351,-,CIF,CIF,HQ06-A,Thinked_CN_SZH,KR,KRCOJ,CN,CNSZH,FRY,FERRY,0E-10,2,Y,Y,596,AVERAGE,Y,Y,Y,Y,Y,Y,,3,7,2022-06-27,2100-12-26,0,0,,legalenergy,2022-06-27T10:38:06.143000,legalenergy,2022-06-27T10:38:06.143000,Y,2,N
+40,10355,-,DDP,DDP,HQ06-A,Inventus Power_US_WOQ,KR,KRCOJ,US,USWOQ,AIR,AIR,0E-10,4,Y,Y,5546,MAX,Y,Y,Y,Y,Y,Y,Y,6,6,2022-06-27,2100-07-04,0,0,,jeongholee,2022-06-30T16:09:21.110000,jeongholee,2022-06-30T16:09:21.110000,Y,3,N
+40,10356,-,DDP,DDP,HQ06-A,Inventus Power_US_WOQ,KR,KRCOJ,US,USWOQ,SEA,SEA,0E-10,1,Y,Y,5543,MAX,,,,,,,Y,48,48,2022-06-27,2100-07-04,0,0,,jeongholee,2022-06-30T16:09:21.110000,jeongholee,2022-06-30T16:09:21.110000,Y,3,N
+40,10361,-,CIP,CIP,NJ01-A,Totex Manufacturing_US_TOA,CN,CNNKG,US,USTOA,SEA,SEA,0E-10,1,Y,Y,8775,MAX,,,,,,Y,,8,47,2022-06-27,2100-12-26,0,0,,legalenergy,2022-07-01T16:17:33.973000,NERP_SCP_3RD,2025-10-02T18:09:12.317000,Y,3,N
+40,10363,-,DDP,DDP,HQ06-A,Romeo Power_US_CYQ,KR,KRCOJ,US,USCYQ,SEA,SEA,0E-10,1,Y,Y,8778,MAX,,,,,,Y,,47,47,2022-07-04,2100-12-26,0,0,,legalenergy,2022-07-04T10:42:02.913000,legalenergy,2022-07-04T10:42:02.913000,Y,3,N
+40,10365,-,FOB,FOB,KR02265100_40-P,LGE_VN_VLM,VN,VNQUG,VN,VNVLM,TRK,TRUCK,0E-10,1,Y,Y,4355,AVERAGE,Y,Y,Y,Y,Y,Y,,4,4,2022-07-04,2100-12-26,0,0,,legalenergy,2022-07-04T16:58:18.167000,legalenergy,2022-07-04T16:58:18.167000,Y,1,N
+40,10366,-,FOB,FOB,CN00254300_40-P,LGE_VN_VLM,CN,CNNKG,VN,VNVLM,TRK,TRUCK,0E-10,2,Y,Y,7226,AVERAGE,Y,Y,Y,Y,Y,Y,,4,4,2022-07-04,2100-12-26,0,0,,legalenergy,2022-07-04T16:58:18.167000,legalenergy,2022-07-04T16:58:18.167000,Y,3,N
+40,10367,-,DAP,DAP,CN00732500_40-P,Dell_VN_HAN,CN,CNCKG,VN,VNHAN,TRK,TRUCK,0E-10,1,Y,Y,8792,AVERAGE,Y,Y,Y,Y,Y,Y,Y,4,4,2022-07-04,2100-12-26,0,0,,legalenergy,2022-07-04T17:02:57.497000,legalenergy,2022-07-04T17:02:57.497000,Y,1,Y
+40,10369,-,CIF,CIF,VN00188600_40-P,John Deere_US_MLI,VN,VNBTN,US,USMLI,SEA,SEA,0E-10,1,Y,Y,8804,MAX,,,,Y,,,,8,56,2022-07-04,2100-12-26,0,0,,legalenergy,2022-07-06T16:33:06.320000,legalenergy,2022-07-06T16:33:06.320000,Y,3,N
+40,10383,-,Z04,Z04,NJ01-A,Kingin_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,0E-10,5,N,Y,7637,AVERAGE,,,,,,Y,,0,13,2022-07-11,2100-12-26,0,0,,legalenergy,2022-07-14T17:36:29.480000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10384,-,Z04,Z04,NJ01-A,Kingin_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,0E-10,2,N,Y,7636,AVERAGE,,Y,Y,,,,,0,26,2022-07-11,2100-12-26,0,0,,legalenergy,2022-07-14T17:36:29.480000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10385,-,Z04,Z04,NJ01-A,Kingin_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,0E-10,1,N,Y,3409,AVERAGE,Y,Y,Y,Y,Y,Y,,0,2,2022-07-11,2100-12-26,0,0,,legalenergy,2022-07-14T17:36:29.480000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10417,-,DAP,DAP,CN00732500_40-P,Dell_VN_HAN,CN,CNCKG,VN,VNHAN,AIR,AIR,0E-10,2,Y,Y,8852,AVERAGE,Y,Y,Y,Y,Y,Y,Y,8,8,2022-07-18,2100-12-26,0,0,,legalenergy,2022-07-19T16:15:07.320000,legalenergy,2022-07-19T16:15:07.320000,Y,1,Y
+40,10419,-,CIF,CIF,NJ01-A,Trend Power (CN)_CN_CGU,CN,CNNKG,CN,CNCGU,TRK,TRUCK,0E-10,1,Y,Y,3405,AVERAGE,Y,Y,Y,Y,Y,Y,,1,1,2022-07-18,2100-12-26,0,0,,legalenergy,2022-07-21T09:41:04.677000,NERP_SCP_3RD,2025-10-02T18:09:14.453000,Y,1,N
+40,10420,-,DDP,DDP,NJ01-A,NT_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,0E-10,5,Y,Y,7637,AVERAGE,,,,,,Y,,13,13,2022-07-18,2100-12-26,0,0,,legalenergy,2022-07-21T09:41:04.677000,NERP_SCP_3RD,2025-10-02T18:08:38.637000,Y,1,N
+40,10421,-,DDP,DDP,NJ01-A,NT_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,0E-10,2,Y,Y,7636,AVERAGE,,Y,Y,,,,,26,26,2022-07-18,2100-12-26,0,0,,legalenergy,2022-07-21T09:41:04.677000,NERP_SCP_3RD,2025-10-02T18:08:38.370000,Y,1,N
+40,10422,-,DDP,DDP,NJ01-A,NT_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,0E-10,1,Y,Y,3409,AVERAGE,Y,Y,Y,Y,Y,Y,,2,2,2022-07-18,2100-12-26,0,0,,legalenergy,2022-07-21T09:41:04.677000,NERP_SCP_3RD,2025-10-02T18:08:38.297000,Y,1,N
+40,10430,,EXW,EXW,NJ01-A,NJ01-P,CN,CNNKG,CN,CNNKG,TRK,TRUCK,0E-10,1,Y,Y,1583,MIN,Y,Y,Y,Y,Y,Y,Y,0,0,2022-07-25,2099-12-27,0,0,,blueeos,2022-07-25T09:25:27.440000,NERP_SCP_3RD,2025-10-02T18:08:36.890000,Y,3,N
+40,10431,,DAP,DAP,NJ01-P,VN00188600_40-P,CN,CNNKG,VN,VNBTN,AIR,AIR,0E-10,4,Y,Y,7447,MAX,Y,Y,Y,Y,Y,Y,Y,11,11,2022-07-25,2099-12-27,0,0,,blueeos,2022-07-25T09:32:14.543000,NERP_SCP_3RD,2025-10-02T18:09:35.277000,Y,3,N
+40,10440,-,EXW,EXW,NJ01-P,Isuzu_JP_TYO,CN,CNNKG,JP,JPTYO,SEA,SEA,0E-10,1,Y,Y,1653,AVERAGE,,,Y,,,,Y,0,16,2022-07-25,2100-07-25,0,0,,jeongholee,2022-07-28T18:09:24.193000,NERP_SCP_3RD,2025-10-02T18:09:34.487000,Y,1,N
+40,10441,-,EXW,EXW,NJ01-P,Isuzu_JP_TYO,CN,CNNKG,JP,JPTYO,FRY,FERRY,0E-10,2,Y,Y,1654,AVERAGE,,,Y,,,,Y,0,16,2022-07-25,2100-07-25,0,0,,jeongholee,2022-07-28T18:09:24.193000,NERP_SCP_3RD,2025-10-02T18:09:34.553000,Y,2,N
+40,10450,-,CIP,CIP,NJ01-A,Totex Manufacturing_HK_HKG,CN,CNNKG,HK,HKHKG,AIR,AIR,0E-10,3,Y,Y,3477,AVERAGE,Y,Y,Y,Y,Y,Y,Y,3,8,2022-08-01,2100-12-26,0,0,,legalenergy,2022-08-04T16:09:33.820000,NERP_SCP_3RD,2025-10-02T18:09:12.180000,Y,1,N
+40,10451,-,CIP,CIP,NJ01-A,Totex Manufacturing_HK_HKG,CN,CNNKG,HK,HKHKG,SEA,SEA,0E-10,2,Y,Y,3476,AVERAGE,Y,Y,Y,Y,Y,Y,Y,4,12,2022-08-01,2100-12-26,0,0,,legalenergy,2022-08-04T16:09:33.820000,NERP_SCP_3RD,2025-10-02T18:09:12.113000,Y,1,N
+40,10452,-,CIP,CIP,NJ01-A,Totex Manufacturing_HK_HKG,CN,CNNKG,HK,HKHKG,TRK,TRUCK,0E-10,1,Y,Y,3926,AVERAGE,Y,Y,Y,Y,Y,Y,,0,3,2022-08-01,2100-12-26,0,0,,legalenergy,2022-08-04T16:09:33.820000,NERP_SCP_3RD,2025-10-02T18:09:12.247000,Y,1,N
+40,10453,-,DAP,DAP,NJ01-A,Dell_CN_CTU,CN,CNNKG,CN,CNCTU,TRK,TRUCK,0E-10,1,Y,Y,3408,AVERAGE,Y,Y,Y,Y,Y,,,3,3,2022-08-01,2100-12-26,0,0,,legalenergy,2022-08-04T16:09:33.820000,NERP_SCP_3RD,2025-10-02T18:06:29.790000,Y,1,Y
+40,10476,-,DAP,DAP,CN00732500_40-P,Quanta_CN_CKG,CN,CNCKG,CN,CNCKG,TRK,TRUCK,0E-10,1,Y,Y,3396,,Y,Y,Y,Y,Y,Y,,1,1,2022-08-15,2100-12-26,0,0,,legalenergy,2022-08-18T08:50:43.243000,legalenergy,2022-08-18T08:50:43.243000,Y,2,N
+40,10484,-,DAP,DAP,NJ01-A,NT_US_CUO,CN,CNNKG,US,USCUO,AIR,AIR,0E-10,4,Y,Y,4296,MAX,Y,Y,Y,Y,Y,Y,Y,10,10,2022-08-15,2100-12-26,0,0,,legalenergy,2022-08-19T08:13:00.337000,NERP_SCP_3RD,2025-10-02T18:08:39.280000,Y,3,N
+40,10485,-,DAP,DAP,NJ01-A,NT_US_CUO,CN,CNNKG,US,USCUO,SEA,SEA,0E-10,1,Y,Y,4293,MAX,,,,Y,,,,49,49,2022-08-15,2100-12-26,0,0,,legalenergy,2022-08-19T08:13:00.337000,NERP_SCP_3RD,2025-10-02T18:08:39.117000,Y,3,N
+40,10498,-,CIP,CIP,NJ01-A,Akasol Inc_US_HZP,CN,CNNKG,US,USHZP,AIR,AIR,0E-10,2,Y,Y,7704,AVERAGE,Y,Y,Y,Y,Y,Y,Y,3,8,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-22T12:09:59.860000,NERP_SCP_3RD,2025-10-02T18:05:48.113000,Y,2,N
+40,10499,-,CIP,CIP,HQ06-A,Akasol Inc_US_HZP,KR,KRCOJ,US,USHZP,AIR,AIR,0E-10,2,Y,Y,5301,MAX,Y,Y,Y,Y,Y,Y,Y,3,7,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-22T12:09:59.860000,sangdal,2023-03-17T11:05:55.700000,Y,3,N
+40,10500,-,CIP,CIP,NJ01-A,Akasol Inc_US_HZP,CN,CNNKG,US,USHZP,SEA,SEA,0E-10,1,Y,Y,7652,AVERAGE,,,Y,,,,,9,48,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-22T12:09:59.860000,NERP_SCP_3RD,2025-10-02T18:05:48.047000,Y,7,N
+40,10501,-,CIP,CIP,HQ06-A,Akasol Inc_US_HZP,KR,KRCOJ,US,USHZP,SEA,SEA,0E-10,1,Y,Y,8649,AVERAGE,,,,,Y,,Y,8,34,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-22T12:09:59.860000,enamhyun45,2024-03-19T16:09:42.847000,Y,14,N
+40,10504,-,CIF,CIF,HQ06-A,E3 Mobility_KR_SEL,KR,KRCOJ,KR,KRSEL,TRK,TRUCK,0E-10,1,Y,Y,740,AVERAGE,Y,Y,Y,Y,Y,,,0,1,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,1,N
+40,10505,-,CIF,CIF,HQ10-A,BAIC_CN_BJS,KR,KRCOJ,CN,CNBJS,AIR,AIR,0E-10,2,Y,Y,2343,,Y,Y,Y,Y,Y,Y,Y,2,5,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,1,N
+40,10506,-,CIF,CIF,HQ10-A,BAIC_CN_BJS,KR,KRCOJ,CN,CNBJS,SEA,SEA,0E-10,1,Y,Y,2342,,Y,Y,,,,,Y,3,11,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,1,N
+40,10507,-,CIF,CIF,NJ01-A,E3 Mobility_KR_SEL,CN,CNNKG,KR,KRSEL,FRY,FERRY,0E-10,2,Y,Y,1692,AVERAGE,Y,,Y,,Y,,,3,6,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP_SCP_3RD,2025-10-02T18:06:35.207000,Y,2,N
+40,10508,-,CIF,CIF,NJ01-A,E3 Mobility_KR_SEL,CN,CNNKG,KR,KRSEL,SEA,SEA,0E-10,1,Y,Y,1691,AVERAGE,,,Y,,,,Y,5,13,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP_SCP_3RD,2025-10-02T18:06:35.137000,Y,1,N
+40,10509,-,DAP,DAP,NJ01-A,Facebook_US_DAL,CN,CNNKG,US,USDAL,AIR,AIR,0E-10,2,Y,Y,8228,AVERAGE,Y,Y,Y,Y,Y,Y,Y,12,12,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP_SCP_3RD,2025-10-02T18:06:43.087000,Y,1,N
+40,10510,-,DDP,DDP,NJ01-A,Daechang Motors_KR_CHU,CN,CNNKG,KR,KRCHU,FRY,FERRY,0E-10,3,Y,Y,1666,AVERAGE,Y,,Y,,Y,,,5,5,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP_SCP_3RD,2025-10-02T18:06:27.150000,Y,1,N
+40,10511,-,FCA,FCA,HQ10-A,IM_DE_BER,KR,KRCOJ,DE,DEBER,AIR,AIR,0E-10,4,Y,Y,490,,Y,Y,Y,Y,Y,Y,Y,1,5,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,1,N
+40,10512,-,EXW,EXW,HQ10-A,BAIC_CN_BJS,KR,KRCOJ,CN,CNBJS,AIR,AIR,0E-10,2,Y,Y,2343,,Y,Y,Y,Y,Y,Y,Y,0,5,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,10513,-,EXW,EXW,HQ10-A,BAIC_CN_BJS,KR,KRCOJ,CN,CNBJS,SEA,SEA,0E-10,1,Y,Y,2342,,Y,Y,,,,,Y,0,11,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,10514,-,Z01,Z01,NJ01-A,Dreame_CN_SZH,CN,CNNKG,CN,CNSZH,TRK,TRUCK,0E-10,1,N,Y,3758,AVERAGE,Y,Y,Y,Y,Y,Y,,0,3,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10515,-,Z01,Z01,NJ01-A,Honhai_CN_HGH,CN,CNNKG,CN,CNHGH,TRK,TRUCK,0E-10,1,N,Y,3414,AVERAGE,Y,Y,Y,Y,Y,Y,,0,3,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10516,-,DAP,DAP,HQ06-A,E3 Mobility_KR_SEL,KR,KRCOJ,KR,KRSEL,TRK,TRUCK,0E-10,1,Y,Y,740,AVERAGE,Y,Y,Y,Y,Y,,,1,1,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,1,N
+40,10517,-,Z02,Z02,NJ01-A,E3 Mobility_KR_SEL,CN,CNNKG,KR,KRSEL,FRY,FERRY,0E-10,2,N,Y,1692,AVERAGE,Y,,Y,,Y,,,6,6,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,2,N
+40,10518,-,Z02,Z02,NJ01-A,E3 Mobility_KR_SEL,CN,CNNKG,KR,KRSEL,SEA,SEA,0E-10,1,N,Y,1691,AVERAGE,,,Y,,,,Y,13,13,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10519,-,CIP,CIP,HQ10-A,Volvo_SE_GOT,KR,KRCOJ,SE,SEGOT,AIR,AIR,0E-10,7,Y,Y,469,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,5,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,2,N
+40,10520,-,DAP,DAP,NJ01-A,Asus_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,9,9,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP_SCP_3RD,2025-10-02T18:05:58.160000,Y,3,N
+40,10521,-,DDP,DDP,HQ06-A,Daechang Motors_KR_CHU,KR,KRCOJ,KR,KRCHU,TRK,TRUCK,0E-10,1,Y,Y,739,AVERAGE,Y,Y,Y,Y,Y,,,1,1,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,3,N
+40,10522,-,DDP,DDP,VN00188600_40-P,Boston Dynamics_US_WLM,VN,VNBTN,US,USWLM,AIR,AIR,0E-10,4,Y,Y,8542,MAX,Y,Y,Y,Y,Y,Y,Y,19,19,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,3,N
+40,10523,-,DDP,DDP,VN00188600_40-P,Boston Dynamics_US_WLM,VN,VNBTN,US,USWLM,SEA,SEA,0E-10,2,Y,Y,8537,AVERAGE,,,,Y,,,,64,64,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,3,N
+40,10524,-,DDP,DDP,VN00188600_40-P,E3 Mobility_KR_SEL,VN,VNBTN,KR,KRSEL,AIR,AIR,0E-10,4,Y,Y,8116,MAX,,,Y,,Y,,Y,7,7,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,3,N
+40,10525,-,DDP,DDP,VN00188600_40-P,E3 Mobility_KR_SEL,VN,VNBTN,KR,KRSEL,SEA,SEA,0E-10,1,Y,Y,8113,MAX,Y,,,,,,,16,16,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,3,N
+40,10526,-,FCA,FCA,HQ06-A,IM_DE_BER,KR,KRCOJ,DE,DEBER,SEA,SEA,0E-10,3,Y,Y,488,MAX,Y,Y,Y,Y,Y,Y,Y,0,58,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,3,N
+40,10527,-,FCA,FCA,HQ10-A,IM_CN_NGG,KR,KRCOJ,CN,CNNGG,AIR,AIR,0E-10,7,Y,Y,6633,MAX,Y,Y,Y,Y,Y,Y,Y,1,7,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,3,N
+40,10528,-,FCA,FCA,HQ10-A,IM_CN_NGG,KR,KRCOJ,CN,CNNGG,SEA,SEA,0E-10,1,Y,Y,6630,MAX,,Y,,,,Y,,1,9,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,3,N
+40,10529,-,FCA,FCA,HQ10-A,IM_DE_BER,KR,KRCOJ,DE,DEBER,SEA,SEA,0E-10,2,Y,Y,489,AVERAGE,,,,,,,Y,0,59,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,3,N
+40,10530,-,FCA,FCA,HQ10-A,IM_US_SPK,KR,KRCOJ,US,USSPK,AIR,AIR,0E-10,5,Y,Y,4122,MAX,Y,Y,Y,Y,Y,Y,Y,1,8,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2023-02-08T16:09:45.900000,Y,3,N
+40,10531,-,CIP,CIP,HQ10-A,Volvo_SE_GOT,KR,KRCOJ,SE,SEGOT,SEA,SEA,0E-10,2,Y,Y,373,AVERAGE,,,,,,,Y,6,70,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,4,N
+40,10532,-,FCA,FCA,HQ10-A,IM_US_SPK,KR,KRCOJ,US,USSPK,SEA,SEA,0E-10,4,Y,Y,7615,MIN,Y,Y,Y,Y,Y,Y,Y,0,36,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2023-02-08T16:09:45.900000,Y,4,N
+40,10533,-,CIP,CIP,HQ10-A,Volvo_SE_GOT,KR,KRCOJ,SE,SEGOT,RAI,RAIL,0E-10,5,Y,Y,5964,AVERAGE,,,,,Y,,,3,30,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,legalenergy,2022-08-23T13:21:04.030000,Y,5,N
+40,10534,-,DDP,DDP,NJ01-A,Daechang Motors_KR_CHU,CN,CNNKG,KR,KRCHU,SEA,SEA,0E-10,9,Y,Y,8064,AVERAGE,,Y,,,,,,11,11,2022-08-22,2100-12-26,0,0,,legalenergy,2022-08-23T13:21:04.030000,NERP_SCP_3RD,2025-10-02T18:06:27.297000,Y,5,N
+40,10539,-,DDP,DDP,NJ01-A,Darfon_TW_TYN,CN,CNNKG,TW,TWTYN,AIR,AIR,0E-10,2,Y,Y,3512,AVERAGE,Y,Y,Y,Y,Y,Y,Y,8,8,2022-08-22,2100-08-22,0,0,,jeongholee,2022-08-23T16:06:29.807000,NERP_SCP_3RD,2025-10-02T18:06:28.790000,Y,1,N
+40,10540,-,DDP,DDP,NJ01-A,Darfon_TW_TYN,CN,CNNKG,TW,TWTYN,SEA,SEA,0E-10,1,Y,Y,3511,,Y,,,Y,,,,20,20,2022-08-22,2100-08-22,0,0,,jeongholee,2022-08-23T16:06:29.807000,NERP_SCP_3RD,2025-10-02T18:06:28.587000,Y,1,N
+40,10541,-,FCA,FCA,HQ06-A,IM_DE_PRU,KR,KRCOJ,DE,DEPRU,SEA,SEA,0E-10,1,Y,Y,8969,MAX,,,,,,,Y,1,64,2022-08-22,2100-08-22,0,0,,jeongholee,2022-08-23T16:06:29.807000,jeongholee,2022-08-23T16:06:29.807000,Y,3,N
+40,10542,-,FOB,FOB,HQ06-A,Navistar_US_LSA,KR,KRCOJ,US,USLSA,SEA,SEA,0E-10,1,Y,Y,8975,MAX,,,,,,Y,,8,46,2022-08-22,2100-08-22,0,0,,jeongholee,2022-08-23T16:06:29.807000,jeongholee,2022-08-23T16:06:29.807000,Y,3,N
+40,10547,-,FCA,FCA,HQ06-A,IM_DE_PRU,KR,KRCOJ,DE,DEPRU,AIR,AIR,0E-10,4,Y,Y,9045,MAX,,Y,,Y,,Y,,1,10,2022-08-22,2100-08-22,0,0,,jeongholee,2022-08-24T13:24:56.420000,jeongholee,2022-08-24T13:24:56.420000,Y,3,N
+40,10548,-,FOB,FOB,HQ06-A,Navistar_US_LSA,KR,KRCOJ,US,USLSA,AIR,AIR,0E-10,4,Y,Y,9048,MAX,Y,,Y,,Y,,Y,4,10,2022-08-22,2100-08-22,0,0,,jeongholee,2022-08-24T13:24:56.420000,jeongholee,2022-08-24T13:24:56.420000,Y,3,N
+40,10566,-,CIF,CIF,HQ06-A,SBD_US_Z2A,KR,KRCOJ,US,USZ2A,AIR,AIR,0E-10,4,Y,Y,4748,MAX,Y,Y,Y,Y,Y,Y,Y,2,7,2022-08-29,2100-12-26,0,0,,legalenergy,2022-08-29T16:45:18.780000,legalenergy,2022-08-29T16:45:18.780000,Y,3,N
+40,10567,-,CIF,CIF,HQ06-A,SBD_US_Z2A,KR,KRCOJ,US,USZ2A,SEA,SEA,0E-10,1,Y,Y,4745,MAX,,,,,,,Y,7,37,2022-08-29,2100-12-26,0,0,,legalenergy,2022-08-29T16:45:18.780000,legalenergy,2022-08-29T16:45:18.780000,Y,3,N
+40,10581,-,DDP,DDP,HQ06-A,SpaceX_US_HHR,KR,KRCOJ,US,USHHR,AIR,AIR,0E-10,5,Y,Y,8175,AVERAGE,Y,Y,Y,Y,Y,Y,Y,10,10,2022-08-29,2099-12-27,0,0,,juyeong.park,2022-09-01T10:07:58.280000,juyeong.park,2022-09-01T10:07:58.280000,Y,3,N
+40,10582,-,CIF,CIF,NJ01-A,SBD_US_Z2A,CN,CNNKG,US,USZ2A,AIR,AIR,0E-10,4,Y,Y,4727,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-08-29,2100-12-26,0,0,,legalenergy,2022-09-01T14:37:26.770000,NERP_SCP_3RD,2025-10-02T18:08:57.473000,Y,3,N
+40,10583,-,CIF,CIF,NJ01-A,SBD_US_Z2A,CN,CNNKG,US,USZ2A,SEA,SEA,0E-10,1,Y,Y,4724,MAX,Y,,,,,,,7,37,2022-08-29,2100-12-26,0,0,,legalenergy,2022-09-01T14:37:26.770000,NERP_SCP_3RD,2025-10-02T18:08:57.270000,Y,3,N
+40,10584,-,DAP,DAP,CN00732500_40-P,Wistron_TW_NTC,CN,CNCKG,TW,TWNTC,AIR,AIR,0E-10,7,Y,Y,4916,MAX,Y,Y,Y,Y,Y,Y,Y,6,6,2022-08-29,2100-12-26,0,0,,legalenergy,2022-09-01T14:37:26.770000,legalenergy,2022-09-01T14:37:26.770000,Y,3,N
+40,10585,-,DAP,DAP,CN00732500_40-P,Wistron_TW_NTC,CN,CNCKG,TW,TWNTC,FRY,FERRY,0E-10,4,Y,Y,4913,MAX,,,Y,,,Y,,7,7,2022-08-29,2100-12-26,0,0,,legalenergy,2022-09-01T14:37:26.770000,legalenergy,2022-09-01T14:37:26.770000,Y,3,N
+40,10586,-,DAP,DAP,CN00732500_40-P,Wistron_TW_NTC,CN,CNCKG,TW,TWNTC,SEA,SEA,0E-10,1,Y,Y,4910,MAX,,,Y,,,Y,,16,16,2022-08-29,2100-12-26,0,0,,legalenergy,2022-09-01T14:37:26.770000,legalenergy,2022-09-01T14:37:26.770000,Y,3,N
+40,10587,-,DDP,DDP,CN00732500_40-P,Compal Elec_TW_TPE,CN,CNCKG,TW,TWTPE,AIR,AIR,0E-10,7,Y,Y,6322,MAX,Y,Y,Y,Y,Y,Y,Y,7,7,2022-08-29,2100-12-26,0,0,,legalenergy,2022-09-01T14:37:26.770000,legalenergy,2022-09-01T14:37:26.770000,Y,3,N
+40,10588,-,DDP,DDP,CN00732500_40-P,Compal Elec_TW_TPE,CN,CNCKG,TW,TWTPE,FRY,FERRY,0E-10,4,Y,Y,6319,MAX,,,,,Y,,,10,10,2022-08-29,2100-12-26,0,0,,legalenergy,2022-09-01T14:37:26.770000,legalenergy,2022-09-01T14:37:26.770000,Y,3,N
+40,10589,-,DDP,DDP,CN00732500_40-P,Compal Elec_TW_TPE,CN,CNCKG,TW,TWTPE,SEA,SEA,0E-10,1,Y,Y,6316,MAX,,Y,,,,,Y,18,18,2022-08-29,2100-12-26,0,0,,legalenergy,2022-09-01T14:37:26.770000,legalenergy,2022-09-01T14:37:26.770000,Y,3,N
+40,10592,-,DDP,DDP,NJ01-A,SpaceX_US_HHR,CN,CNNKG,US,USHHR,AIR,AIR,0E-10,5,Y,Y,8047,AVERAGE,,,Y,,,,,16,16,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-05T16:09:56.263000,NERP_SCP_3RD,2025-10-02T18:09:05.243000,Y,1,N
+40,10593,-,DDP,DDP,NJ01-A,SpaceX_US_HHR,CN,CNNKG,US,USHHR,SEA,SEA,0E-10,2,Y,Y,8048,AVERAGE,,,,,Y,,,43,43,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-05T16:09:56.263000,NERP_SCP_3RD,2025-10-02T18:09:05.463000,Y,1,N
+40,10594,-,DDP,DDP,HQ06-A,SpaceX_US_HHR,KR,KRCOJ,US,USHHR,SEA,SEA,0E-10,1,Y,Y,8171,MAX,,,,,,,Y,47,47,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-05T16:09:56.263000,legalenergy,2022-09-05T16:09:56.263000,Y,4,N
+40,10595,-,DAP,DAP,NJ01-P,Isuzu_KR_OCH,CN,CNNKG,KR,KROCH,SEA,SEA,0E-10,1,Y,Y,1863,AVERAGE,,,Y,,Y,,,10,10,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-05T16:17:34.630000,NERP_SCP_3RD,2025-10-02T18:09:34.770000,Y,1,N
+40,10596,-,EXW,EXW,HQ06-A,Cyoshin_CN_SZX,KR,KRCOJ,CN,CNSZX,AIR,AIR,0E-10,4,Y,Y,608,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,5,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-05T16:17:34.630000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,10597,-,EXW,EXW,HQ06-A,Cyoshin_CN_SZX,KR,KRCOJ,CN,CNSZX,SEA,SEA,0E-10,1,Y,Y,607,AVERAGE,,Y,,Y,,Y,,0,11,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-05T16:17:34.630000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,10598,-,Z01,Z01,NJ01-A,Cyoshin_CN_SZX,CN,CNNKG,CN,CNSZX,TRK,TRUCK,0E-10,1,N,Y,1792,AVERAGE,Y,Y,Y,Y,Y,,,0,2,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-05T16:17:34.630000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10599,-,EXW,EXW,HQ06-A,Cyoshin_CN_SZX,KR,KRCOJ,CN,CNSZX,FRY,FERRY,0E-10,2,Y,Y,609,AVERAGE,Y,Y,Y,Y,Y,Y,,0,7,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-05T16:17:34.630000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,2,N
+40,10602,-,DAP,DAP,NJ01-P,Isuzu_JP_TYO,CN,CNNKG,JP,JPTYO,SEA,SEA,0E-10,1,Y,Y,1653,AVERAGE,,,Y,,,,Y,16,16,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-08T16:21:38.840000,NERP_SCP_3RD,2025-10-02T18:09:34.257000,Y,1,N
+40,10603,-,Z01,Z01,NJ01-A,Semiroad_KR_PJU,CN,CNNKG,KR,KRPJU,FRY,FERRY,0E-10,2,N,Y,1690,,Y,,Y,,Y,,,0,6,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-08T16:21:38.840000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10604,-,Z01,Z01,NJ01-A,Semiroad_KR_PJU,CN,CNNKG,KR,KRPJU,SEA,SEA,0E-10,1,N,Y,1689,,,,Y,,,,Y,0,10,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-08T16:21:38.840000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10605,-,DAP,DAP,NJ01-P,Isuzu_JP_TYO,CN,CNNKG,JP,JPTYO,FRY,FERRY,0E-10,2,Y,Y,1654,AVERAGE,,,Y,,,,Y,16,16,2022-09-05,2100-12-26,0,0,,legalenergy,2022-09-08T16:21:38.840000,NERP_SCP_3RD,2025-10-02T18:09:34.630000,Y,2,N
+40,10611,-,DDP,DDP,HQ06-A,Fabricators_CN_QIN,KR,KRCOJ,CN,CNQIN,AIR,AIR,0E-10,2,Y,Y,4512,AVERAGE,Y,Y,Y,Y,Y,Y,Y,5,5,2022-09-12,2100-12-26,0,0,,legalenergy,2022-09-14T16:09:51.770000,legalenergy,2022-09-14T16:09:51.770000,Y,1,N
+40,10612,-,DDP,DDP,HQ06-A,Fabricators_CN_QIN,KR,KRCOJ,CN,CNQIN,SEA,SEA,0E-10,1,Y,Y,4513,AVERAGE,Y,,,Y,,Y,,15,15,2022-09-12,2100-12-26,0,0,,legalenergy,2022-09-14T16:09:51.770000,legalenergy,2022-09-14T16:09:51.770000,Y,1,N
+40,10613,-,DDP,DDP,HQ06-A,Fabricators_HK_HKG,KR,KRCOJ,HK,HKHKG,AIR,AIR,0E-10,2,Y,Y,3587,AVERAGE,Y,Y,Y,Y,Y,Y,Y,6,6,2022-09-12,2100-12-26,0,0,,legalenergy,2022-09-14T16:09:51.770000,legalenergy,2022-09-14T16:09:51.770000,Y,2,N
+40,10614,-,DDP,DDP,HQ06-A,Fabricators_HK_HKG,KR,KRCOJ,HK,HKHKG,SEA,SEA,0E-10,1,Y,Y,3586,AVERAGE,Y,Y,Y,Y,Y,Y,Y,15,15,2022-09-12,2100-12-26,0,0,,legalenergy,2022-09-14T16:09:51.770000,legalenergy,2022-09-14T16:09:51.770000,Y,3,N
+40,10621,-,FCA,FCA,HQ06-A,Lion Electric_CA_QUE,KR,KRCOJ,CA,CAQUE,SEA,SEA,0E-10,2,Y,Y,4093,AVERAGE,,,,,Y,,,1,35,2022-09-12,2099-12-27,0,0,,taehopark,2022-09-15T14:38:16.187000,taehopark,2022-09-15T14:38:16.187000,Y,3,N
+40,10622,-,FCA,FCA,HQ06-A,Lion Electric_CA_QUE,KR,KRCOJ,CA,CAQUE,AIR,AIR,0E-10,5,Y,Y,4096,AVERAGE,Y,Y,Y,Y,Y,Y,Y,1,10,2022-09-12,2099-12-27,0,0,,taehopark,2022-09-15T14:38:16.187000,taehopark,2022-09-15T14:38:16.187000,Y,3,N
+40,10623,-,FCA,FCA,NJ01-A,Lion Electric_CA_QUE,CN,CNNKG,CA,CAQUE,SEA,SEA,0E-10,1,Y,Y,3756,AVERAGE,,,,,Y,,,1,42,2022-09-12,2099-12-27,0,0,,taehopark,2022-09-15T14:38:16.187000,NERP_SCP_3RD,2025-10-02T18:08:16.473000,Y,1,N
+40,10624,-,CIF,CIF,NJ01-A,Acell Electronic_TW_NTC,CN,CNNKG,TW,TWNTC,AIR,AIR,0E-10,2,Y,Y,3964,,Y,Y,Y,Y,Y,Y,Y,3,6,2022-09-12,2100-09-12,0,0,,jeongholee,2022-09-16T10:53:16.107000,NERP_SCP_3RD,2025-10-02T18:05:46.723000,Y,1,N
+40,10625,-,CIF,CIF,NJ01-A,Acell Electronic_TW_NTC,CN,CNNKG,TW,TWNTC,SEA,SEA,0E-10,1,Y,Y,3963,,Y,,,Y,,,,5,20,2022-09-12,2100-09-12,0,0,,jeongholee,2022-09-16T10:53:16.107000,NERP_SCP_3RD,2025-10-02T18:05:46.653000,Y,1,N
+40,10629,-,Z02,Z02,NJ01-A,Weidian_CN_AOY,CN,CNNKG,CN,CNAOY,AIR,AIR,0E-10,5,N,Y,7635,AVERAGE,,,,Y,,,,13,13,2022-09-19,2100-09-19,0,0,,jeongholee,2022-09-19T09:50:47.560000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10630,-,Z02,Z02,NJ01-A,Weidian_CN_AOY,CN,CNNKG,CN,CNAOY,SEA,SEA,0E-10,2,N,Y,7634,AVERAGE,,Y,,,,,,28,28,2022-09-19,2100-09-19,0,0,,jeongholee,2022-09-19T09:50:47.560000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10631,-,Z02,Z02,NJ01-A,Weidian_CN_AOY,CN,CNNKG,CN,CNAOY,TRK,TRUCK,0E-10,10,N,Y,8671,AVERAGE,Y,Y,Y,Y,Y,Y,,2,2,2022-09-19,2100-09-19,0,0,,jeongholee,2022-09-19T09:50:47.560000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10632,-,DAP,DAP,HQ06-A,Rivian Automotive_US_IVN,KR,KRCOJ,US,USIVN,AIR,AIR,0E-10,4,Y,Y,4696,MAX,Y,Y,Y,Y,Y,Y,Y,8,8,2022-09-19,2099-12-27,0,0,,hyunsung.kim,2022-09-19T10:31:44.333000,hyunsung.kim,2022-09-19T10:31:44.333000,Y,3,N
+40,10633,-,Z01,Z01,NJ01-A,Dualtron_CN_JHA,CN,CNNKG,CN,CNJHA,TRK,TRUCK,0E-10,1,N,Y,1791,AVERAGE,Y,Y,Y,Y,Y,,,0,1,2022-09-19,2100-09-19,0,0,,jeongholee,2022-09-19T14:42:50.270000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10636,-,Z02,Z02,NJ01-A,Dualtron_CN_JHA,CN,CNNKG,CN,CNJHA,TRK,TRUCK,0E-10,1,N,Y,1791,AVERAGE,Y,Y,Y,Y,Y,,,1,1,2022-09-19,2100-09-19,0,0,,jeongholee,2022-09-19T16:54:14.500000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10639,-,Z01,Z01,NJ01-A,Taiding_CN_SZH,CN,CNNKG,CN,CNSZH,TRK,TRUCK,0E-10,1,N,Y,3758,AVERAGE,Y,Y,Y,Y,Y,Y,,0,3,2022-09-19,2100-09-19,0,0,,jeongholee,2022-09-20T15:36:19.017000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10640,-,Z01,Z01,NJ01-A,HLDS_CN_HUI,CN,CNNKG,CN,CNHUI,TRK,TRUCK,0E-10,1,N,Y,3415,AVERAGE,Y,Y,Y,Y,Y,Y,,0,2,2022-09-19,2100-09-19,0,0,,jeongholee,2022-09-20T15:36:19.017000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10641,-,Z01,Z01,NJ01-A,Elite Electronic_CN_YCG,CN,CNNKG,CN,CNYCG,TRK,TRUCK,0E-10,2,N,Y,7907,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,1,2022-09-19,2100-09-19,0,0,,jeongholee,2022-09-21T14:43:36.523000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10647,-,FCA,FCA,NJ01-A,Lion Electric_CA_QUE,CN,CNNKG,CA,CAQUE,AIR,AIR,0E-10,2,Y,Y,3757,,Y,Y,Y,Y,Y,Y,Y,2,8,2022-09-26,2100-09-26,0,0,,jeongholee,2022-09-26T12:28:11.150000,NERP_SCP_3RD,2025-10-02T18:08:16.807000,Y,1,N
+40,10652,-,DAP,DAP,HQ06-A,Ganfeng_CN_DGG,KR,KRCOJ,CN,CNDGG,AIR,AIR,0E-10,3,Y,Y,719,,Y,Y,Y,Y,Y,Y,Y,5,5,2022-09-26,2100-12-26,0,0,,legalenergy,2022-09-27T09:05:58.647000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,1,N
+40,10653,-,Z02,Z02,NJ01-A,Ganfeng_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,0E-10,5,N,Y,7637,AVERAGE,,,,,,Y,,13,13,2022-09-26,2100-12-26,0,0,,legalenergy,2022-09-27T09:05:58.647000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10654,-,Z02,Z02,NJ01-A,Ganfeng_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,0E-10,2,N,Y,7636,AVERAGE,,Y,Y,,,,,26,26,2022-09-26,2100-12-26,0,0,,legalenergy,2022-09-27T09:05:58.647000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10655,-,Z02,Z02,NJ01-A,Ganfeng_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,0E-10,1,N,Y,3409,AVERAGE,Y,Y,Y,Y,Y,Y,,2,2,2022-09-26,2100-12-26,0,0,,legalenergy,2022-09-27T09:05:58.647000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10656,-,DAP,DAP,HQ06-A,Ganfeng_CN_DGG,KR,KRCOJ,CN,CNDGG,SEA,SEA,0E-10,1,Y,Y,717,,Y,,Y,,Y,,,10,10,2022-09-26,2100-12-26,0,0,,legalenergy,2022-09-27T09:05:58.647000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,2,N
+40,10671,-,CIP,CIP,HQ06-A,Arrival_GB_OXF,KR,KRCOJ,GB,GBOXF,AIR,AIR,0E-10,1,Y,Y,9118,MAX,Y,Y,Y,Y,Y,Y,Y,3,10,2022-10-03,2099-12-27,0,0,,djpark,2022-10-06T10:21:44.757000,djpark,2022-10-06T10:21:44.757000,Y,1,N
+40,10672,-,CIF,CIF,HQ06-A,Trend Power (CN)_CN_CGU,KR,KRCOJ,CN,CNCGU,AIR,AIR,0E-10,3,Y,Y,3325,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,7,2022-10-03,2100-12-26,0,0,,legalenergy,2022-10-07T08:38:11.510000,legalenergy,2022-10-07T08:38:11.510000,Y,1,N
+40,10673,-,CIF,CIF,HQ06-A,Trend Power (CN)_CN_CGU,KR,KRCOJ,CN,CNCGU,FRY,FERRY,0E-10,2,Y,Y,3324,AVERAGE,,,Y,,,Y,,2,6,2022-10-03,2100-12-26,0,0,,legalenergy,2022-10-07T08:38:11.510000,legalenergy,2022-10-07T08:38:11.510000,Y,1,N
+40,10674,-,CIF,CIF,HQ06-A,Trend Power (CN)_CN_CGU,KR,KRCOJ,CN,CNCGU,SEA,SEA,0E-10,1,Y,Y,3323,AVERAGE,,,,Y,Y,,,5,17,2022-10-03,2100-12-26,0,0,,legalenergy,2022-10-07T08:38:11.510000,legalenergy,2022-10-07T08:38:11.510000,Y,1,N
+40,10680,-,CIF,CIF,HQ06-A,Ather Energy_IN_BLR,KR,KRCOJ,IN,INBLR,AIR,AIR,0E-10,2,Y,Y,3367,,Y,Y,Y,Y,Y,Y,Y,2,7,2022-10-10,2100-10-17,0,0,,sangdal,2022-10-14T13:14:22.580000,sangdal,2022-10-14T13:14:22.580000,Y,1,N
+40,10681,-,CIF,CIF,HQ06-A,Ather Energy_IN_BLR,KR,KRCOJ,IN,INBLR,SEA,SEA,0E-10,1,Y,Y,3366,,,,Y,,,,,5,24,2022-10-10,2100-10-17,0,0,,sangdal,2022-10-14T13:14:22.580000,sangdal,2022-10-14T13:14:22.580000,Y,1,N
+40,10696,-,DAP,DAP,HQ06-A,CS Enertech_KR_OSN,KR,KRCOJ,KR,KROSN,TRK,TRUCK,0E-10,1,N,Y,735,AVERAGE,Y,Y,Y,Y,Y,,,0,0,2022-10-17,2100-12-26,0,0,,legalenergy,2022-10-18T16:06:42.160000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,1,N
+40,10697,-,A01,A01,NJ01-A,CS Enertech_KR_OSN,CN,CNNKG,KR,KROSN,FRY,FERRY,0E-10,2,N,Y,1684,,Y,,Y,,Y,,,0,6,2022-10-17,2100-12-26,0,0,,legalenergy,2022-10-18T16:06:42.160000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10698,-,A01,A01,NJ01-A,CS Enertech_KR_OSN,CN,CNNKG,KR,KROSN,SEA,SEA,0E-10,1,N,Y,1683,AVERAGE,,,Y,,,,Y,0,13,2022-10-17,2100-12-26,0,0,,legalenergy,2022-10-18T16:06:42.160000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10741,-,CIP,CIP,NJ01-A,Arrival_GB_OXF,CN,CNNKG,GB,GBOXF,SEA,SEA,0E-10,1,Y,Y,9125,MAX,,,,,Y,,,8,51,2022-10-17,2100-12-26,0,0,,legalenergy,2022-10-20T09:06:07.503000,NERP_SCP_3RD,2025-10-02T18:05:52.420000,Y,3,N
+40,10744,-,DAP,DAP,HQ06-A,Toyota Tsusho KR_KR_SEL,KR,KRCOJ,KR,KRSEL,TRK,TRUCK,0E-10,1,Y,Y,740,AVERAGE,Y,Y,Y,Y,Y,,,1,1,2022-10-17,2100-12-26,0,0,,legalenergy,2022-10-21T16:09:41.160000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,1,N
+40,10745,-,A01,A01,NJ01-A,Toyota Tsusho KR_KR_SEL,CN,CNNKG,KR,KRSEL,FRY,FERRY,0E-10,2,N,Y,1692,AVERAGE,Y,,Y,,Y,,,0,6,2022-10-17,2100-12-26,0,0,,legalenergy,2022-10-21T16:09:41.160000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,2,N
+40,10746,-,A01,A01,NJ01-A,Toyota Tsusho KR_KR_SEL,CN,CNNKG,KR,KRSEL,SEA,SEA,0E-10,1,N,Y,1691,AVERAGE,,,Y,,,,Y,0,13,2022-10-17,2100-12-26,0,0,,legalenergy,2022-10-21T16:09:41.160000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10747,-,DAP,DAP,HQ06-A,LGE_KR_PTK,KR,KRCOJ,KR,KRPTK,TRK,TRUCK,0E-10,1,Y,Y,772,,Y,Y,Y,Y,Y,Y,Y,0,0,2022-10-24,2100-12-26,0,0,,legalenergy,2022-10-25T08:39:54.737000,legalenergy,2022-10-25T08:39:54.737000,Y,1,N
+40,10748,-,DDP,DDP,NJ01-A,LGE_KR_CHW,CN,CNNKG,KR,KRCHW,FRY,FERRY,0E-10,2,Y,Y,1668,,Y,,Y,,Y,,,6,6,2022-10-24,2100-12-26,0,0,,legalenergy,2022-10-25T08:39:54.737000,NERP_SCP_3RD,2025-10-02T18:08:14.420000,Y,1,N
+40,10749,-,DDP,DDP,NJ01-A,LGE_KR_CHW,CN,CNNKG,KR,KRCHW,SEA,SEA,0E-10,1,Y,Y,1667,AVERAGE,,,Y,,,,Y,13,13,2022-10-24,2100-12-26,0,0,,legalenergy,2022-10-25T08:39:54.737000,NERP_SCP_3RD,2025-10-02T18:08:14.217000,Y,2,N
+40,10756,-,Z01,Z01,NJ01-A,BakNew Power_CN_SUH,CN,CNNKG,CN,CNSUH,TRK,TRUCK,0E-10,2,N,Y,9175,MIN,Y,Y,Y,Y,Y,Y,,0,1,2022-10-24,2100-12-26,0,0,,legalenergy,2022-10-25T16:30:39.370000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,3,N
+40,10762,-,CIF,CIF,HQ06-A,Trend Power (CN)_TW_HSZ,KR,KRCOJ,TW,TWHSZ,AIR,AIR,0E-10,2,Y,Y,3622,,Y,Y,Y,Y,Y,Y,Y,2,5,2022-10-24,2100-12-26,0,0,,legalenergy,2022-10-27T13:12:51.827000,legalenergy,2022-10-27T13:12:51.827000,Y,1,N
+40,10763,-,CIF,CIF,HQ06-A,Trend Power (CN)_TW_HSZ,KR,KRCOJ,TW,TWHSZ,SEA,SEA,0E-10,1,Y,Y,3621,,,,,Y,,Y,,3,12,2022-10-24,2100-12-26,0,0,,legalenergy,2022-10-27T13:12:51.827000,legalenergy,2022-10-27T13:12:51.827000,Y,1,N
+40,10764,-,CIF,CIF,NJ01-A,Trend Power (CN)_TW_HSZ,CN,CNNKG,TW,TWHSZ,AIR,AIR,0E-10,2,Y,Y,3508,,Y,Y,Y,Y,Y,Y,Y,3,8,2022-10-24,2100-12-26,0,0,,legalenergy,2022-10-27T13:12:51.827000,NERP_SCP_3RD,2025-10-02T18:09:14.660000,Y,1,N
+40,10765,-,CIF,CIF,NJ01-A,Trend Power (CN)_TW_HSZ,CN,CNNKG,TW,TWHSZ,SEA,SEA,0E-10,1,Y,Y,3507,,Y,,,Y,,,,5,20,2022-10-24,2100-12-26,0,0,,legalenergy,2022-10-27T13:12:51.827000,NERP_SCP_3RD,2025-10-02T18:09:14.587000,Y,1,N
+40,10788,-,Z02,Z02,VN00188600_40-P,Daedong Mobility_KR_DSG,VN,VNBTN,KR,KRDSG,SEA,SEA,0E-10,1,N,Y,9209,AVERAGE,Y,Y,Y,Y,,,,16,16,2022-10-31,2100-12-26,0,0,,legalenergy,2022-11-03T08:46:23.283000,legalenergy,2025-10-02T15:33:01.930000,Y,1,N
+40,10806,-,CIF,CIF,NJ01-A,Welldone_TW_TPE,CN,CNNKG,TW,TWTPE,SEA,SEA,0E-10,1,Y,Y,1721,AVERAGE,,,Y,Y,,,Y,5,16,2022-11-07,2100-12-26,0,0,,legalenergy,2022-11-10T15:53:29.277000,NERP_SCP_3RD,2025-10-02T18:09:26.860000,Y,1,N
+40,10807,-,CIF,CIF,NJ01-A,Welldone_TW_TPE,CN,CNNKG,TW,TWTPE,TRK,TRUCK,0E-10,2,Y,Y,6361,AVERAGE,Y,Y,Y,Y,Y,Y,,3,5,2022-11-07,2100-12-26,0,0,,legalenergy,2022-11-10T15:53:29.277000,NERP_SCP_3RD,2025-10-02T18:09:26.930000,Y,1,N
+40,10808,-,CIF,CIF,NJ01-A,Welldone_TW_TPE,CN,CNNKG,TW,TWTPE,AIR,AIR,0E-10,4,Y,Y,8768,MAX,Y,Y,Y,Y,Y,Y,Y,3,9,2022-11-07,2100-12-26,0,0,,legalenergy,2022-11-10T15:53:29.277000,NERP_SCP_3RD,2025-10-02T18:09:27.070000,Y,3,N
+40,10825,-,A01,A01,NJ01-A,Hanwha Aerospace_KR_CHU,CN,CNNKG,KR,KRCHU,FRY,FERRY,0E-10,3,N,Y,1666,AVERAGE,Y,,Y,,Y,,,0,5,2022-11-14,2100-12-26,0,0,,legalenergy,2022-11-15T09:56:21.850000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10826,-,DAP,DAP,HQ06-A,Hanwha Aerospace_KR_CHU,KR,KRCOJ,KR,KRCHU,TRK,TRUCK,0E-10,2,N,Y,2439,AVERAGE,Y,Y,Y,Y,Y,,,0,0,2022-11-14,2100-12-26,0,0,,legalenergy,2022-11-15T09:56:21.850000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,3,N
+40,10827,-,A01,A01,NJ01-A,Hanwha Aerospace_KR_CHU,CN,CNNKG,KR,KRCHU,SEA,SEA,0E-10,4,N,Y,7210,AVERAGE,,,Y,,,,Y,0,11,2022-11-14,2100-12-26,0,0,,legalenergy,2022-11-15T09:56:21.850000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,5,N
+40,10834,-,CIF,CIF,HQ06-A,LGE VC_CN_NKG,KR,KRCOJ,CN,CNNKG,AIR,AIR,0E-10,4,Y,Y,722,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,4,2022-11-14,2100-11-21,0,0,,sangdal,2022-11-18T16:55:42.880000,sangdal,2022-11-18T16:55:42.880000,Y,2,N
+40,10835,-,CIF,CIF,HQ06-A,LGE VC_CN_NKG,KR,KRCOJ,CN,CNNKG,FRY,FERRY,0E-10,1,Y,Y,4666,AVERAGE,,Y,,,,Y,,2,5,2022-11-14,2100-11-21,0,0,,sangdal,2022-11-18T16:55:42.880000,sangdal,2022-11-18T16:55:42.880000,Y,2,N
+40,10836,-,CIF,CIF,HQ06-A,OLA Electric_IN_BLR,KR,KRCOJ,IN,INBLR,AIR,AIR,0E-10,2,Y,Y,3367,,Y,Y,Y,Y,Y,Y,Y,2,7,2022-11-14,2100-11-21,0,0,,sangdal,2022-11-18T16:55:42.880000,sangdal,2022-11-18T16:55:42.880000,Y,1,N
+40,10837,-,CIF,CIF,HQ06-A,OLA Electric_IN_BLR,KR,KRCOJ,IN,INBLR,SEA,SEA,0E-10,1,Y,Y,3366,,,,Y,,,,,5,24,2022-11-14,2100-11-21,0,0,,sangdal,2022-11-18T16:55:42.880000,sangdal,2022-11-18T16:55:42.880000,Y,1,N
+40,10838,-,CIF,CIF,HQ06-A,LGE VC_CN_NKG,KR,KRCOJ,CN,CNNKG,SEA,SEA,0E-10,3,Y,Y,721,AVERAGE,,Y,,,,Y,,4,11,2022-11-14,2100-11-21,0,0,,sangdal,2022-11-18T16:55:42.880000,sangdal,2022-11-18T16:55:42.880000,Y,2,N
+40,10839,-,CIF,CIF,NJ01-A,OLA Electric_IN_BLR,CN,CNNKG,IN,INBLR,AIR,AIR,0E-10,4,Y,Y,4812,MAX,Y,Y,Y,Y,Y,Y,Y,2,6,2022-11-14,2100-11-21,0,0,,sangdal,2022-11-18T16:55:42.880000,NERP_SCP_3RD,2025-10-02T18:08:41.897000,Y,3,N
+40,10840,-,CIF,CIF,NJ01-A,OLA Electric_IN_BLR,CN,CNNKG,IN,INBLR,SEA,SEA,0E-10,1,Y,Y,4809,MAX,,,,,,,Y,10,28,2022-11-14,2100-11-21,0,0,,sangdal,2022-11-18T16:55:42.880000,NERP_SCP_3RD,2025-10-02T18:08:41.760000,Y,4,N
+40,10843,-,CIF,CIF,HQ06-A,Sunwoda_CN_SZX,KR,KRCOJ,CN,CNSZX,AIR,AIR,0E-10,4,Y,Y,608,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,5,2022-11-21,2100-12-26,0,0,,legalenergy,2022-11-21T17:28:19.007000,legalenergy,2022-11-21T17:28:19.007000,Y,1,N
+40,10844,-,CIF,CIF,HQ06-A,Sunwoda_CN_SZX,KR,KRCOJ,CN,CNSZX,SEA,SEA,0E-10,1,Y,Y,607,AVERAGE,,Y,,Y,,Y,,3,11,2022-11-21,2100-12-26,0,0,,legalenergy,2022-11-21T17:28:19.007000,legalenergy,2022-11-21T17:28:19.007000,Y,1,N
+40,10845,-,CIF,CIF,HQ06-A,Sunwoda_CN_SZX,KR,KRCOJ,CN,CNSZX,FRY,FERRY,0E-10,3,Y,Y,610,AVERAGE,Y,Y,Y,Y,Y,Y,,2,7,2022-11-21,2100-12-26,0,0,,legalenergy,2022-11-21T17:28:19.007000,legalenergy,2022-11-21T17:28:19.007000,Y,2,N
+40,10846,-,DAP,DAP,KR02265100_40-P,LGE_VN_VLM,VN,VNQUG,VN,VNVLM,TRK,TRUCK,0E-10,1,N,Y,4355,AVERAGE,Y,Y,Y,Y,Y,Y,,4,4,2022-11-21,2100-12-26,0,0,,legalenergy,2022-11-22T17:56:44.947000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,1,N
+40,10847,-,Z02,Z02,CN00254300_40-P,LGE_VN_VLM,CN,CNNKG,VN,VNVLM,TRK,TRUCK,0E-10,2,N,Y,7226,AVERAGE,Y,Y,Y,Y,Y,Y,,4,4,2022-11-21,2100-12-26,0,0,,legalenergy,2022-11-22T17:56:44.947000,legalenergy,2025-10-02T15:33:01.930000,Y,3,N
+40,10854,-,DAP,DAP,IN00142000_40-P,Honda_JP_STM,IN,INDEL,JP,JPSTM,AIR,AIR,0E-10,5,Y,Y,7448,AVERAGE,Y,Y,Y,Y,Y,Y,Y,6,6,2022-11-21,2100-12-26,0,0,,legalenergy,2022-11-25T14:05:37.817000,legalenergy,2022-11-25T14:05:37.817000,Y,3,N
+40,10855,-,DAP,DAP,IN00142000_40-P,Honda_JP_STM,IN,INDEL,JP,JPSTM,SEA,SEA,0E-10,2,Y,Y,7451,AVERAGE,,,,,Y,,,52,52,2022-11-21,2100-12-26,0,0,,legalenergy,2022-11-25T14:05:37.817000,legalenergy,2022-11-25T14:05:37.817000,Y,3,N
+40,10856,-,CIF,CIF,HQ06-A,Trend Power Singapore_CN_CGU,KR,KRCOJ,CN,CNCGU,AIR,AIR,0E-10,3,Y,Y,3325,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,7,2022-11-21,2100-12-26,0,0,,legalenergy,2022-11-25T16:19:52.150000,legalenergy,2022-11-25T16:19:52.150000,Y,1,N
+40,10857,-,CIF,CIF,HQ06-A,Trend Power Singapore_CN_CGU,KR,KRCOJ,CN,CNCGU,FRY,FERRY,0E-10,2,Y,Y,3324,AVERAGE,,,Y,,,Y,,2,6,2022-11-21,2100-12-26,0,0,,legalenergy,2022-11-25T16:19:52.150000,legalenergy,2022-11-25T16:19:52.150000,Y,1,N
+40,10858,-,CIF,CIF,HQ06-A,Trend Power Singapore_CN_CGU,KR,KRCOJ,CN,CNCGU,SEA,SEA,0E-10,1,Y,Y,3323,AVERAGE,,,,Y,Y,,,5,17,2022-11-21,2100-12-26,0,0,,legalenergy,2022-11-25T16:19:52.150000,legalenergy,2022-11-25T16:19:52.150000,Y,1,N
+40,10859,-,CIF,CIF,NJ01-A,Trend Power Singapore_CN_CGU,CN,CNNKG,CN,CNCGU,TRK,TRUCK,0E-10,1,Y,Y,3405,AVERAGE,Y,Y,Y,Y,Y,Y,,1,1,2022-11-21,2100-12-26,0,0,,legalenergy,2022-11-25T16:19:52.150000,NERP_SCP_3RD,2025-10-02T18:09:14.800000,Y,1,N
+40,10862,-,DDP,DDP,NJ01-A,Fabricators_CN_QIN,CN,CNNKG,CN,CNQIN,TRK,TRUCK,0E-10,1,Y,Y,4511,AVERAGE,Y,Y,Y,Y,Y,Y,,3,3,2022-11-28,2100-12-26,0,0,,legalenergy,2022-11-28T09:22:12.950000,NERP_SCP_3RD,2025-10-02T18:06:41.843000,Y,1,N
+40,10863,-,Z01,Z01,NJ01-A,Leineng_CN_FOS,CN,CNNKG,CN,CNFOS,TRK,TRUCK,0E-10,1,N,Y,3411,AVERAGE,Y,Y,Y,Y,Y,Y,,0,3,2022-11-28,2100-12-26,0,0,,legalenergy,2022-11-28T09:22:12.950000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10866,-,Z02,Z02,NJ01-A,Taiding_CN_SZH,CN,CNNKG,CN,CNSZH,TRK,TRUCK,0E-10,1,N,Y,3758,AVERAGE,Y,Y,Y,Y,Y,Y,,3,3,2022-11-28,2100-12-26,0,0,,legalenergy,2022-11-30T15:06:59.577000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10876,-,CIF,CIF,NJ01-A,Wanghsing_TW_KHH,CN,CNNKG,TW,TWKHH,AIR,AIR,0E-10,2,Y,Y,3510,,Y,Y,Y,Y,Y,Y,Y,3,8,2022-12-05,2100-12-26,0,0,,legalenergy,2022-12-05T14:30:37.097000,NERP_SCP_3RD,2025-10-02T18:09:25.607000,Y,1,N
+40,10877,-,CIF,CIF,NJ01-A,Wanghsing_TW_KHH,CN,CNNKG,TW,TWKHH,SEA,SEA,0E-10,1,Y,Y,3509,,Y,,,Y,,,,5,20,2022-12-05,2100-12-26,0,0,,legalenergy,2022-12-05T14:30:37.097000,NERP_SCP_3RD,2025-10-02T18:09:25.540000,Y,1,N
+40,10878,-,EXW,EXW,NJ01-A,SpaceX_US_HHR,CN,CNNKG,US,USHHR,AIR,AIR,0E-10,5,Y,Y,8047,AVERAGE,,,Y,,,,,0,16,2022-12-05,2100-12-26,0,0,,legalenergy,2022-12-05T14:30:37.097000,NERP_SCP_3RD,2025-10-02T18:09:05.317000,Y,1,N
+40,10879,-,EXW,EXW,NJ01-A,SpaceX_US_HHR,CN,CNNKG,US,USHHR,SEA,SEA,0E-10,2,Y,Y,8048,AVERAGE,,,,,Y,,,0,43,2022-12-05,2100-12-26,0,0,,legalenergy,2022-12-05T14:30:37.097000,NERP_SCP_3RD,2025-10-02T18:09:05.393000,Y,1,N
+40,10905,-,DAP,DAP,HQ06-A,Panasonic_JP_TSU,KR,KRCOJ,JP,JPTSU,AIR,AIR,0E-10,4,Y,Y,7283,MAX,Y,Y,Y,Y,Y,Y,Y,5,5,2022-12-12,2099-12-27,0,0,,dmcom96,2022-12-12T16:44:00.667000,dmcom96,2022-12-12T16:44:00.667000,Y,3,N
+40,10906,-,FCA,FCA,NJ01-A,BRP_CA_QUE,CN,CNNKG,CA,CAQUE,AIR,AIR,0E-10,2,Y,Y,3757,,Y,Y,Y,Y,Y,Y,Y,2,8,2022-12-12,2100-12-26,0,0,,legalenergy,2022-12-13T17:48:59.093000,NERP_SCP_3RD,2025-10-02T18:06:19.120000,Y,1,N
+40,10907,-,FCA,FCA,NJ01-A,BRP_CA_QUE,CN,CNNKG,CA,CAQUE,SEA,SEA,0E-10,1,Y,Y,3756,AVERAGE,,,,,Y,,,1,42,2022-12-12,2100-12-26,0,0,,legalenergy,2022-12-13T17:48:59.093000,NERP_SCP_3RD,2025-10-02T18:06:18.550000,Y,1,N
+40,10908,-,FCA,FCA,HQ06-A,BRP_CA_QUE,KR,KRCOJ,CA,CAQUE,AIR,AIR,0E-10,5,Y,Y,4096,AVERAGE,Y,Y,Y,Y,Y,Y,Y,1,10,2022-12-12,2100-12-26,0,0,,legalenergy,2022-12-13T17:48:59.093000,legalenergy,2022-12-13T17:48:59.093000,Y,3,N
+40,10909,-,FCA,FCA,HQ06-A,BRP_CA_QUE,KR,KRCOJ,CA,CAQUE,SEA,SEA,0E-10,2,Y,Y,4093,AVERAGE,,,,,Y,,,1,35,2022-12-12,2100-12-26,0,0,,legalenergy,2022-12-13T17:48:59.093000,legalenergy,2022-12-13T17:48:59.093000,Y,3,N
+40,10914,-,CIF,CIF,NJ01-A,Panasonic_JP_TSU,CN,CNNKG,JP,JPTSU,AIR,AIR,0E-10,5,Y,Y,9268,AVERAGE,,Y,,,,Y,,5,10,2022-12-12,2100-12-26,0,0,,legalenergy,2022-12-15T18:05:13.417000,NERP_SCP_3RD,2025-10-02T18:08:42.550000,Y,3,N
+40,10915,-,CIF,CIF,NJ01-A,Panasonic_JP_TSU,CN,CNNKG,JP,JPTSU,SEA,SEA,0E-10,2,Y,Y,9265,AVERAGE,,,,Y,,,,8,13,2022-12-12,2100-12-26,0,0,,legalenergy,2022-12-15T18:05:13.417000,NERP_SCP_3RD,2025-10-02T18:08:42.477000,Y,3,N
+40,10919,-,CIP,CIP,NJ01-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,0E-10,5,Y,Y,7637,AVERAGE,,,,,,Y,,4,13,2022-12-19,2100-12-19,0,0,,sangdal,2022-12-19T10:34:59.987000,NERP_SCP_3RD,2025-10-02T18:07:30.970000,Y,1,N
+40,10920,-,CIP,CIP,NJ01-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,0E-10,2,Y,Y,7636,AVERAGE,,Y,Y,,,,,7,26,2022-12-19,2100-12-19,0,0,,sangdal,2022-12-19T10:34:59.987000,NERP_SCP_3RD,2025-10-02T18:07:30.880000,Y,1,N
+40,10921,-,CIP,CIP,NJ01-A,PYTES_CN_SHA,CN,CNNKG,CN,CNSHA,TRK,TRUCK,0E-10,1,Y,Y,2066,AVERAGE,Y,Y,Y,Y,Y,,,0,1,2022-12-19,2100-12-19,0,0,,sangdal,2022-12-19T10:34:59.987000,NERP_SCP_3RD,2025-10-02T18:08:50.457000,Y,1,N
+40,10922,-,DDP,DDP,NJ01-A,Fabricators_HK_HKG,CN,CNNKG,HK,HKHKG,AIR,AIR,0E-10,3,Y,Y,3477,AVERAGE,Y,Y,Y,Y,Y,Y,Y,8,8,2022-12-19,2100-12-19,0,0,,sangdal,2022-12-19T10:34:59.987000,NERP_SCP_3RD,2025-10-02T18:06:42.280000,Y,1,N
+40,10923,-,DDP,DDP,NJ01-A,Fabricators_HK_HKG,CN,CNNKG,HK,HKHKG,SEA,SEA,0E-10,2,Y,Y,3476,AVERAGE,Y,Y,Y,Y,Y,Y,Y,12,12,2022-12-19,2100-12-19,0,0,,sangdal,2022-12-19T10:34:59.987000,NERP_SCP_3RD,2025-10-02T18:06:41.910000,Y,1,N
+40,10924,-,DDP,DDP,NJ01-A,Fabricators_HK_HKG,CN,CNNKG,HK,HKHKG,TRK,TRUCK,0E-10,1,Y,Y,3926,AVERAGE,Y,Y,Y,Y,Y,Y,,3,3,2022-12-19,2100-12-19,0,0,,sangdal,2022-12-19T10:34:59.987000,NERP_SCP_3RD,2025-10-02T18:06:42.357000,Y,1,N
+40,10925,-,CIP,CIP,HQ06-A,PYTES_CN_SHA,KR,KRCOJ,CN,CNSHA,AIR,AIR,0E-10,4,Y,Y,616,,Y,Y,Y,Y,Y,Y,Y,2,5,2022-12-19,2100-12-19,0,0,,sangdal,2022-12-19T10:34:59.987000,sangdal,2022-12-19T10:34:59.987000,Y,2,N
+40,10926,-,CIP,CIP,HQ06-A,PYTES_CN_SHA,KR,KRCOJ,CN,CNSHA,FRY,FERRY,0E-10,2,Y,Y,617,,Y,Y,Y,Y,Y,Y,,2,5,2022-12-19,2100-12-19,0,0,,sangdal,2022-12-19T10:34:59.987000,sangdal,2022-12-19T10:34:59.987000,Y,3,N
+40,10927,-,CIP,CIP,HQ06-A,PYTES_CN_SHA,KR,KRCOJ,CN,CNSHA,SEA,SEA,0E-10,1,Y,Y,615,AVERAGE,Y,Y,Y,Y,Y,Y,Y,4,12,2022-12-19,2100-12-19,0,0,,sangdal,2022-12-19T10:34:59.987000,sangdal,2022-12-19T10:34:59.987000,Y,3,N
+40,10928,-,DAP,DAP,NJ01-A,GLW_CN_SHA,CN,CNNKG,CN,CNSHA,TRK,TRUCK,0E-10,1,Y,Y,2066,AVERAGE,Y,Y,Y,Y,Y,,,1,1,2022-12-19,2100-12-19,0,0,,jeongholee,2022-12-20T15:17:33.250000,NERP_SCP_3RD,2025-10-02T18:06:55.520000,Y,1,N
+40,10929,-,DDP,DDP,HQ06-A,Topband_CN_HUI,KR,KRCOJ,CN,CNHUI,AIR,AIR,0E-10,3,Y,Y,3295,AVERAGE,Y,Y,Y,Y,Y,Y,Y,7,7,2022-12-19,2100-12-19,0,0,,jeongholee,2022-12-20T15:17:33.250000,jeongholee,2022-12-20T15:17:33.250000,Y,1,N
+40,10930,-,DDP,DDP,HQ06-A,Topband_CN_HUI,KR,KRCOJ,CN,CNHUI,FRY,FERRY,0E-10,2,Y,Y,3294,AVERAGE,,Y,,Y,,Y,,9,9,2022-12-19,2100-12-19,0,0,,jeongholee,2022-12-20T15:17:33.250000,jeongholee,2022-12-20T15:17:33.250000,Y,1,N
+40,10931,-,DDP,DDP,HQ06-A,Topband_CN_HUI,KR,KRCOJ,CN,CNHUI,SEA,SEA,0E-10,1,Y,Y,3293,AVERAGE,,,,Y,,,,12,12,2022-12-19,2100-12-19,0,0,,jeongholee,2022-12-20T15:17:33.250000,jeongholee,2022-12-20T15:17:33.250000,Y,1,N
+40,10932,-,DDP,DDP,NJ01-A,PYTES_CN_SHA,CN,CNNKG,CN,CNSHA,TRK,TRUCK,0E-10,1,Y,Y,2066,AVERAGE,Y,Y,Y,Y,Y,,,1,1,2022-12-19,2100-12-19,0,0,,jeongholee,2022-12-20T15:17:33.250000,NERP_SCP_3RD,2025-10-02T18:08:50.527000,Y,1,N
+40,10933,-,DDP,DDP,NJ01-A,Topband_CN_HUI,CN,CNNKG,CN,CNHUI,TRK,TRUCK,0E-10,1,Y,Y,3415,AVERAGE,Y,Y,Y,Y,Y,Y,,2,2,2022-12-19,2100-12-19,0,0,,jeongholee,2022-12-20T15:17:33.250000,NERP_SCP_3RD,2025-10-02T18:09:12.047000,Y,1,N
+40,10934,-,DDP,DDP,HQ06-A,PYTES_CN_SHA,KR,KRCOJ,CN,CNSHA,AIR,AIR,0E-10,4,Y,Y,616,,Y,Y,Y,Y,Y,Y,Y,5,5,2022-12-19,2100-12-19,0,0,,jeongholee,2022-12-20T15:17:33.250000,jeongholee,2022-12-20T15:17:33.250000,Y,2,N
+40,10935,-,DDP,DDP,HQ06-A,PYTES_CN_SHA,KR,KRCOJ,CN,CNSHA,FRY,FERRY,0E-10,3,Y,Y,618,,Y,Y,Y,Y,Y,Y,,5,5,2022-12-19,2100-12-19,0,0,,jeongholee,2022-12-20T15:17:33.250000,jeongholee,2022-12-20T15:17:33.250000,Y,3,N
+40,10936,-,DDP,DDP,HQ06-A,PYTES_CN_SHA,KR,KRCOJ,CN,CNSHA,SEA,SEA,0E-10,1,Y,Y,615,AVERAGE,Y,Y,Y,Y,Y,Y,Y,12,12,2022-12-19,2100-12-19,0,0,,jeongholee,2022-12-20T15:17:33.250000,jeongholee,2022-12-20T15:17:33.250000,Y,3,N
+40,10943,-,FCA,FCA,HQ06-A,IM_US_PAO,KR,KRCOJ,US,USPAO,AIR,AIR,0E-10,5,Y,Y,4964,AVERAGE,Y,Y,Y,Y,Y,Y,Y,1,5,2022-12-26,2099-12-27,0,0,,juyeong.park,2022-12-26T11:50:52.433000,juyeong.park,2022-12-26T11:50:52.433000,Y,3,N
+40,10944,-,FCA,FCA,HQ10-A,IM_US_PAO,KR,KRCOJ,US,USPAO,AIR,AIR,0E-10,5,Y,Y,4964,AVERAGE,Y,Y,Y,Y,Y,Y,Y,1,5,2022-12-26,2099-12-27,0,0,,juyeong.park,2022-12-26T12:19:19.643000,juyeong.park,2022-12-26T12:19:19.643000,Y,3,N
+40,10946,-,CIF,CIF,NJ01-A,Alelion_SE_GOT,CN,CNNKG,SE,SEGOT,AIR,AIR,0E-10,2,Y,Y,2544,,Y,Y,Y,Y,Y,Y,Y,3,8,2022-12-26,2100-12-26,0,0,,jeongholee,2022-12-27T10:23:57.787000,NERP_SCP_3RD,2025-10-02T18:05:49.193000,Y,1,N
+40,10947,-,CIF,CIF,NJ01-A,Alelion_SE_GOT,CN,CNNKG,SE,SEGOT,SEA,SEA,0E-10,1,Y,Y,2543,,Y,,,,,,,8,44,2022-12-26,2100-12-26,0,0,,jeongholee,2022-12-27T10:23:57.787000,NERP_SCP_3RD,2025-10-02T18:05:49.123000,Y,1,N
+40,10948,-,CIF,CIF,HQ06-A,Alelion_SE_GOT,KR,KRCOJ,SE,SEGOT,AIR,AIR,0E-10,7,Y,Y,469,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,5,2022-12-26,2100-12-26,0,0,,jeongholee,2022-12-27T10:23:57.787000,jeongholee,2022-12-27T10:23:57.787000,Y,2,N
+40,10949,-,FCA,FCA,HQ10-A,IM_US_PAO,KR,KRCOJ,US,USPAO,SEA,SEA,0E-10,1,Y,Y,4963,MAX,,,,,Y,,,1,27,2022-12-26,2100-12-26,0,0,,jeongholee,2022-12-27T10:23:57.787000,jeongholee,2022-12-27T10:23:57.787000,Y,3,N
+40,10950,-,CIF,CIF,HQ06-A,Alelion_SE_GOT,KR,KRCOJ,SE,SEGOT,SEA,SEA,0E-10,2,Y,Y,373,AVERAGE,,,,,,,Y,6,70,2022-12-26,2100-12-26,0,0,,jeongholee,2022-12-27T10:23:57.787000,jeongholee,2022-12-27T10:23:57.787000,Y,4,N
+40,10958,-,FCA,FCA,HQ06-A,Lion Electric_CA_MRB,KR,KRCOJ,CA,CAMRB,SEA,SEA,0E-10,1,Y,Y,9272,MAX,,,,Y,,,,1,44,2023-01-02,2100-01-10,0,0,,jeongholee,2023-01-02T18:16:55.057000,jeongholee,2023-01-02T18:16:55.057000,Y,3,N
+40,10967,-,FCA,FCA,HQ06-A,Lion Electric_CA_MRB,KR,KRCOJ,CA,CAMRB,AIR,AIR,0E-10,4,Y,Y,9277,MAX,,Y,,,,,,1,11,2023-01-02,2100-01-10,0,0,,jeongholee,2023-01-03T13:55:19.813000,jeongholee,2023-01-03T13:55:19.813000,Y,3,N
+40,10968,-,FCA,FCA,NJ01-A,Lion Electric_CA_MRB,CN,CNNKG,CA,CAMRB,AIR,AIR,0E-10,4,Y,Y,9283,MAX,,,,Y,,,,1,11,2023-01-02,2100-01-10,0,0,,jeongholee,2023-01-03T13:55:19.813000,NERP_SCP_3RD,2025-10-02T18:08:16.340000,Y,3,N
+40,10969,-,FCA,FCA,NJ01-A,Lion Electric_CA_MRB,CN,CNNKG,CA,CAMRB,SEA,SEA,0E-10,1,Y,Y,9280,MAX,,,,Y,,,,1,41,2023-01-02,2100-01-10,0,0,,jeongholee,2023-01-03T13:55:19.813000,NERP_SCP_3RD,2025-10-02T18:08:16.067000,Y,3,N
+40,10978,-,DDP,DDP,HQ06-A,Nikola Motor_US_SLC,KR,KRCOJ,US,USSLC,AIR,AIR,0E-10,1,Y,Y,7899,AVERAGE,,,,,,Y,,14,14,2023-01-02,2099-12-27,0,0,,seran.lee,2023-01-05T13:25:22.633000,seran.lee,2023-01-05T13:25:22.633000,Y,1,N
+40,10979,-,DDP,DDP,NJ01-A,Nikola Motor_US_SLC,CN,CNNKG,US,USSLC,SEA,SEA,0E-10,2,Y,Y,7766,AVERAGE,,,Y,,,,,31,31,2023-01-02,2099-12-27,0,0,,seran.lee,2023-01-05T13:25:22.633000,NERP_SCP_3RD,2025-10-02T18:08:35.520000,Y,2,N
+40,10983,-,EXW,EXW,IN00142000_40-P,Honda_IN_HAR,IN,INDEL,IN,INHAR,TRK,TRUCK,0E-10,1,Y,Y,9308,AVERAGE,Y,Y,Y,Y,Y,,,0,0,2023-01-02,2100-12-26,0,0,,legalenergy,2023-01-06T16:50:30.670000,legalenergy,2023-01-06T16:50:30.670000,Y,1,N
+40,10984,-,CIF,CIF,HQ06-A,Alelion_SE_GOT,KR,KRCOJ,SE,SEGOT,RAI,RAIL,0E-10,10,Y,Y,8157,AVERAGE,Y,,Y,,Y,,,2,38,2023-01-02,2100-01-10,0,0,,jeongholee,2023-01-06T17:21:22.817000,jeongholee,2023-01-06T17:21:22.817000,Y,5,N
+40,10985,-,CIF,CIF,NJ01-A,Forsee_FR_SCN,CN,CNNKG,FR,FRSCN,AIR,AIR,0E-10,5,Y,Y,9312,AVERAGE,,,,Y,,,,8,13,2023-01-09,2100-12-26,0,0,,legalenergy,2023-01-09T09:49:52.817000,NERP_SCP_3RD,2025-10-02T18:06:46.270000,Y,3,N
+40,10986,-,CIF,CIF,NJ01-A,Forsee_FR_SCN,CN,CNNKG,FR,FRSCN,SEA,SEA,0E-10,2,Y,Y,9309,AVERAGE,,,Y,,,,,8,54,2023-01-09,2100-12-26,0,0,,legalenergy,2023-01-09T09:49:52.817000,NERP_SCP_3RD,2025-10-02T18:06:46.183000,Y,3,N
+40,10991,-,CIF,CIF,NJ01-A,Darfon Energy_TW_TYN,CN,CNNKG,TW,TWTYN,AIR,AIR,0E-10,2,Y,Y,3512,AVERAGE,Y,Y,Y,Y,Y,Y,Y,3,8,2023-01-09,2100-01-10,0,0,,jeongholee,2023-01-10T12:59:30.453000,NERP_SCP_3RD,2025-10-02T18:06:27.780000,Y,1,N
+40,10992,-,CIF,CIF,NJ01-A,Darfon Energy_TW_TYN,CN,CNNKG,TW,TWTYN,SEA,SEA,0E-10,1,Y,Y,3511,,Y,,,Y,,,,5,20,2023-01-09,2100-01-10,0,0,,jeongholee,2023-01-10T12:59:30.453000,NERP_SCP_3RD,2025-10-02T18:06:27.643000,Y,1,N
+40,10993,-,DDP,DDP,HQ06-A,Nikola Motor_US_SLC,KR,KRCOJ,US,USSLC,SEA,SEA,0E-10,2,Y,Y,7763,AVERAGE,,,,,,,Y,23,23,2023-01-09,2100-01-10,0,0,,jeongholee,2023-01-10T12:59:30.453000,jeongholee,2023-01-10T12:59:30.453000,Y,1,N
+40,10994,-,Z01,Z01,NJ01-A,Triteck_CN_SZX,CN,CNNKG,CN,CNSZX,TRK,TRUCK,0E-10,1,N,Y,1792,AVERAGE,Y,Y,Y,Y,Y,,,0,2,2023-01-09,2100-01-10,0,0,,jeongholee,2023-01-10T12:59:30.453000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,10995,-,EXW,EXW,HQ06-A,JS Tech_JP_HIU,KR,KRCOJ,JP,JPHIU,AIR,AIR,0E-10,4,Y,Y,9320,MAX,,,,,Y,,,0,14,2023-01-09,2100-01-10,0,0,,jeongholee,2023-01-10T12:59:30.453000,jeongholee,2023-01-10T12:59:30.453000,Y,3,N
+40,10996,-,EXW,EXW,HQ06-A,JS Tech_JP_HIU,KR,KRCOJ,JP,JPHIU,SEA,SEA,0E-10,2,Y,Y,9315,AVERAGE,,,,,Y,,,0,13,2023-01-09,2100-01-10,0,0,,jeongholee,2023-01-10T12:59:30.453000,jeongholee,2023-01-10T12:59:30.453000,Y,3,N
+40,11007,-,CIF,CIF,NJ01-A,JS Tech_JP_HIU,CN,CNNKG,JP,JPHIU,AIR,AIR,0E-10,5,Y,Y,9334,AVERAGE,,,,,Y,,,8,13,2023-01-09,2100-12-26,0,0,,legalenergy,2023-01-12T16:04:17.290000,NERP_SCP_3RD,2025-10-02T18:08:05.163000,Y,3,N
+40,11008,-,CIF,CIF,NJ01-A,JS Tech_JP_HIU,CN,CNNKG,JP,JPHIU,SEA,SEA,0E-10,2,Y,Y,9331,AVERAGE,,,,Y,,,,8,13,2023-01-09,2100-12-26,0,0,,legalenergy,2023-01-12T16:04:17.290000,NERP_SCP_3RD,2025-10-02T18:08:04.967000,Y,3,N
+40,11009,-,DAP,DAP,NJ01-A,JS Tech_JP_HIU,CN,CNNKG,JP,JPHIU,AIR,AIR,0E-10,5,Y,Y,9334,AVERAGE,,,,,Y,,,13,13,2023-01-09,2100-12-26,0,0,,legalenergy,2023-01-12T16:04:17.290000,NERP_SCP_3RD,2025-10-02T18:08:05.097000,Y,3,N
+40,11010,-,DAP,DAP,NJ01-A,JS Tech_JP_HIU,CN,CNNKG,JP,JPHIU,SEA,SEA,0E-10,2,Y,Y,9331,AVERAGE,,,,Y,,,,13,13,2023-01-09,2100-12-26,0,0,,legalenergy,2023-01-12T16:04:17.290000,NERP_SCP_3RD,2025-10-02T18:08:04.900000,Y,3,N
+40,11011,-,EXW,EXW,NJ01-A,JS Tech_JP_HIU,CN,CNNKG,JP,JPHIU,AIR,AIR,0E-10,5,Y,Y,9334,AVERAGE,,,,,Y,,,0,13,2023-01-09,2100-12-26,0,0,,legalenergy,2023-01-12T16:04:17.290000,NERP_SCP_3RD,2025-10-02T18:08:05.230000,Y,3,N
+40,11012,-,EXW,EXW,NJ01-A,JS Tech_JP_HIU,CN,CNNKG,JP,JPHIU,SEA,SEA,0E-10,2,Y,Y,9331,AVERAGE,,,,Y,,,,0,13,2023-01-09,2100-12-26,0,0,,legalenergy,2023-01-12T16:04:17.290000,NERP_SCP_3RD,2025-10-02T18:08:05.033000,Y,3,N
+40,11014,-,DAP,DAP,HQ06-A,JS Tech_JP_HIU,KR,KRCOJ,JP,JPHIU,AIR,AIR,0E-10,4,Y,Y,9320,MAX,,,,,Y,,,14,14,2023-01-09,2100-01-10,0,0,,jeongholee,2023-01-13T12:19:54.183000,jeongholee,2023-01-13T12:19:54.183000,Y,3,N
+40,11015,-,DAP,DAP,HQ06-A,JS Tech_JP_HIU,KR,KRCOJ,JP,JPHIU,SEA,SEA,0E-10,1,Y,Y,9317,MAX,,,,,Y,,,14,14,2023-01-09,2100-01-10,0,0,,jeongholee,2023-01-13T12:19:54.183000,jeongholee,2023-01-13T12:19:54.183000,Y,3,N
+40,11016,-,DAP,DAP,NJ01-A,NT_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,0E-10,5,Y,Y,7637,AVERAGE,,,,,,Y,,13,13,2023-01-16,2100-12-26,0,0,,legalenergy,2023-01-17T09:33:17.783000,NERP_SCP_3RD,2025-10-02T18:08:38.553000,Y,1,N
+40,11017,-,DAP,DAP,NJ01-A,NT_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,0E-10,2,Y,Y,7636,AVERAGE,,Y,Y,,,,,26,26,2023-01-16,2100-12-26,0,0,,legalenergy,2023-01-17T09:33:17.783000,NERP_SCP_3RD,2025-10-02T18:08:38.470000,Y,1,N
+40,11018,-,DAP,DAP,NJ01-A,NT_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,0E-10,1,Y,Y,3409,AVERAGE,Y,Y,Y,Y,Y,Y,,2,2,2023-01-16,2100-12-26,0,0,,legalenergy,2023-01-17T09:33:17.783000,NERP_SCP_3RD,2025-10-02T18:08:38.217000,Y,1,N
+40,11020,-,EXW,EXW,IN00142000_40-P,Honda_IN_BLR,IN,INDEL,IN,INBLR,TRK,TRUCK,0E-10,1,Y,Y,9337,AVERAGE,Y,Y,Y,Y,Y,,,0,4,2023-01-16,2100-12-26,0,0,,legalenergy,2023-01-17T09:40:45.810000,legalenergy,2023-01-17T09:40:45.810000,Y,1,N
+40,11040,-,CIP,CIP,HQ06-A,Porta Power_HK_HKG,KR,KRCOJ,HK,HKHKG,AIR,AIR,0E-10,2,Y,Y,3587,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,6,2023-01-23,2100-12-26,0,0,,eunah.koo,2023-01-25T14:45:33.200000,eunah.koo,2023-01-25T14:45:33.200000,Y,2,N
+40,11046,-,CIP,CIP,NJ01-A,Porta Power_HK_HKG,CN,CNNKG,HK,HKHKG,AIR,AIR,0E-10,3,Y,Y,3477,AVERAGE,Y,Y,Y,Y,Y,Y,Y,3,8,2023-01-30,2100-12-26,0,0,,legalenergy,2023-01-31T16:11:41.983000,NERP_SCP_3RD,2025-10-02T18:08:45.793000,Y,1,N
+40,11047,-,CIP,CIP,NJ01-A,Porta Power_HK_HKG,CN,CNNKG,HK,HKHKG,SEA,SEA,0E-10,2,Y,Y,3476,AVERAGE,Y,Y,Y,Y,Y,Y,Y,4,12,2023-01-30,2100-12-26,0,0,,legalenergy,2023-01-31T16:11:41.983000,NERP_SCP_3RD,2025-10-02T18:08:45.563000,Y,1,N
+40,11048,-,CIP,CIP,NJ01-A,Porta Power_HK_HKG,CN,CNNKG,HK,HKHKG,TRK,TRUCK,0E-10,1,Y,Y,3926,AVERAGE,Y,Y,Y,Y,Y,Y,,0,3,2023-01-30,2100-12-26,0,0,,legalenergy,2023-01-31T16:11:41.983000,NERP_SCP_3RD,2025-10-02T18:08:46,Y,1,N
+40,11049,-,CIP,CIP,HQ06-A,Porta Power_HK_HKG,KR,KRCOJ,HK,HKHKG,SEA,SEA,0E-10,1,Y,Y,3586,AVERAGE,Y,Y,Y,Y,Y,Y,Y,6,15,2023-01-30,2100-12-26,0,0,,legalenergy,2023-01-31T16:11:41.983000,legalenergy,2023-01-31T16:11:41.983000,Y,3,N
+40,11054,-,DAP,DAP,HQ06-A,Lucid Motors_US_PAO,KR,KRCOJ,US,USPAO,SEA,SEA,0E-10,1,Y,Y,4963,MAX,,,,,Y,,,27,27,2023-01-30,2099-12-27,0,0,,doochoi,2023-02-01T17:39:10.720000,doochoi,2023-02-01T17:39:10.720000,Y,3,N
+40,11055,-,DAP,DAP,HQ06-A,Lucid Motors_US_PAO,KR,KRCOJ,US,USPAO,AIR,AIR,0E-10,4,Y,Y,4966,MAX,Y,Y,Y,Y,Y,Y,Y,7,7,2023-01-30,2099-12-27,0,0,,doochoi,2023-02-01T17:39:10.720000,doochoi,2023-02-01T17:39:10.720000,Y,3,N
+40,11057,-,CIP,CIP,HQ06-A,Volta_CN_NTG,KR,KRCOJ,CN,CNNTG,AIR,AIR,0E-10,7,Y,Y,5102,MAX,Y,Y,Y,Y,Y,Y,Y,2,6,2023-01-30,2099-12-27,0,0,,yony.lee,2023-02-02T17:11:57.060000,yony.lee,2023-02-02T17:11:57.060000,Y,3,N
+40,11058,-,DDP,DDP,HQ06-A,Volta_CN_NTG,KR,KRCOJ,CN,CNNTG,AIR,AIR,0E-10,7,Y,Y,5102,MAX,Y,Y,Y,Y,Y,Y,Y,6,6,2023-01-30,2099-12-27,0,0,,yony.lee,2023-02-02T17:57:35.583000,yony.lee,2023-02-02T17:57:35.583000,Y,3,N
+40,11059,-,CIF,CIF,HQ06-A,Darfon Energy_TW_TYN,KR,KRCOJ,TW,TWTYN,AIR,AIR,0E-10,2,Y,Y,3620,,Y,Y,Y,Y,Y,Y,Y,2,5,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-06T10:14:22.610000,legalenergy,2023-02-06T10:14:22.610000,Y,1,N
+40,11060,-,CIF,CIF,HQ06-A,Darfon Energy_TW_TYN,KR,KRCOJ,TW,TWTYN,SEA,SEA,0E-10,1,Y,Y,3619,AVERAGE,,,,Y,,Y,,4,10,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-06T10:14:22.610000,legalenergy,2023-02-06T10:14:22.610000,Y,1,N
+40,11061,-,DDP,DDP,HQ06-A,Volta_CN_NTG,KR,KRCOJ,CN,CNNTG,FRY,FERRY,0E-10,5,Y,Y,5097,AVERAGE,Y,,Y,,,Y,,6,6,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-06T10:14:22.610000,legalenergy,2023-02-06T10:14:22.610000,Y,3,N
+40,11062,-,DDP,DDP,HQ06-A,Volta_CN_NTG,KR,KRCOJ,CN,CNNTG,SEA,SEA,0E-10,2,Y,Y,5094,AVERAGE,,Y,Y,Y,,Y,Y,17,17,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-06T10:14:22.610000,legalenergy,2023-02-06T10:14:22.610000,Y,3,N
+40,11063,-,DDP,DDP,NJ01-A,Volta_CN_NTG,CN,CNNKG,CN,CNNTG,TRK,TRUCK,0E-10,2,Y,Y,5072,AVERAGE,Y,Y,Y,Y,Y,Y,,1,1,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-06T10:14:22.610000,NERP_SCP_3RD,2025-10-02T18:09:23.793000,Y,3,N
+40,11064,-,FOB,FOB,NJ01-P,Isuzu_JP_TYO,CN,CNNKG,JP,JPTYO,SEA,SEA,0E-10,1,Y,Y,1653,AVERAGE,,,Y,,,,Y,4,16,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-06T17:12:09.027000,NERP_SCP_3RD,2025-10-02T18:09:34.330000,Y,1,N
+40,11065,-,FOB,FOB,NJ01-P,Isuzu_KR_OCH,CN,CNNKG,KR,KROCH,SEA,SEA,0E-10,1,Y,Y,1863,AVERAGE,,,Y,,Y,,,5,10,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-06T17:12:09.027000,NERP_SCP_3RD,2025-10-02T18:09:34.700000,Y,1,N
+40,11066,-,FOB,FOB,NJ01-P,Isuzu_JP_TYO,CN,CNNKG,JP,JPTYO,FRY,FERRY,0E-10,3,Y,Y,1652,AVERAGE,,Y,,,,Y,,4,16,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-06T17:12:09.027000,NERP_SCP_3RD,2025-10-02T18:09:34.183000,Y,2,N
+40,11068,-,CIF,CIF,HQ06-A,Trend Power Singapore_TW_HSZ,KR,KRCOJ,TW,TWHSZ,AIR,AIR,0E-10,2,Y,Y,3622,,Y,Y,Y,Y,Y,Y,Y,2,5,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-07T10:01:09.610000,legalenergy,2023-02-07T10:01:09.610000,Y,1,N
+40,11069,-,CIF,CIF,HQ06-A,Trend Power Singapore_TW_HSZ,KR,KRCOJ,TW,TWHSZ,SEA,SEA,0E-10,1,Y,Y,3621,,,,,Y,,Y,,3,12,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-07T10:01:09.610000,legalenergy,2023-02-07T10:01:09.610000,Y,1,N
+40,11070,-,CIF,CIF,NJ01-A,Trend Power Singapore_TW_HSZ,CN,CNNKG,TW,TWHSZ,AIR,AIR,0E-10,2,Y,Y,3508,,Y,Y,Y,Y,Y,Y,Y,3,8,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-07T10:01:09.610000,NERP_SCP_3RD,2025-10-02T18:09:15.073000,Y,1,N
+40,11071,-,CIF,CIF,NJ01-A,Trend Power Singapore_TW_HSZ,CN,CNNKG,TW,TWHSZ,SEA,SEA,0E-10,1,Y,Y,3507,,Y,,,Y,,,,5,20,2023-02-06,2100-12-26,0,0,,legalenergy,2023-02-07T10:01:09.610000,NERP_SCP_3RD,2025-10-02T18:09:14.940000,Y,1,N
+40,11078,-,DDP,DDP,HQ06-A,Mini Battery_CN_JHA,KR,KRCOJ,CN,CNJHA,AIR,AIR,0E-10,3,Y,Y,2522,AVERAGE,Y,Y,Y,Y,Y,Y,Y,6,6,2023-02-06,2100-01-31,0,0,,yoojjkk,2023-02-09T10:00:16.757000,yoojjkk,2023-02-09T10:00:16.757000,Y,1,N
+40,11079,-,DDP,DDP,HQ06-A,Mini Motors_CN_JHA,KR,KRCOJ,CN,CNJHA,AIR,AIR,0E-10,3,Y,Y,2522,AVERAGE,Y,Y,Y,Y,Y,Y,Y,6,6,2023-02-06,2099-12-27,0,0,,yoojjkk,2023-02-09T10:47:01.327000,yoojjkk,2023-02-09T10:47:01.327000,Y,1,N
+40,11080,-,DDP,DDP,HQ06-A,Mini Motors_CN_JHA,KR,KRCOJ,CN,CNJHA,FRY,FERRY,0E-10,2,Y,Y,2521,AVERAGE,N,Y,N,Y,N,Y,N,11,11,2023-02-06,2100-02-07,0,0,,jeongholee,2023-02-09T14:49:56.587000,jeongholee,2023-02-09T14:49:56.587000,Y,1,N
+40,11081,-,DDP,DDP,HQ06-A,Mini Motors_CN_JHA,KR,KRCOJ,CN,CNJHA,SEA,SEA,0E-10,1,Y,Y,2520,AVERAGE,Y,Y,Y,Y,Y,Y,Y,13,13,2023-02-06,2100-02-07,0,0,,jeongholee,2023-02-09T14:49:56.587000,jeongholee,2023-02-09T14:49:56.587000,Y,1,N
+40,11082,-,DDP,DDP,HQ06-A,Runing Power_CN_SZH,KR,KRCOJ,CN,CNSZH,AIR,AIR,0E-10,4,Y,Y,595,AVERAGE,Y,Y,Y,Y,Y,Y,Y,5,5,2023-02-06,2100-02-07,0,0,,jeongholee,2023-02-09T14:49:56.587000,jeongholee,2023-02-09T14:49:56.587000,Y,1,N
+40,11083,-,DDP,DDP,HQ06-A,Runing Power_CN_SZH,KR,KRCOJ,CN,CNSZH,SEA,SEA,0E-10,1,Y,Y,594,AVERAGE,Y,Y,Y,Y,Y,Y,Y,15,15,2023-02-06,2100-02-07,0,0,,jeongholee,2023-02-09T14:49:56.587000,jeongholee,2023-02-09T14:49:56.587000,Y,1,N
+40,11084,-,DDP,DDP,NJ01-A,Mini Motors_CN_JHA,CN,CNNKG,CN,CNJHA,TRK,TRUCK,0E-10,1,Y,Y,1791,AVERAGE,Y,Y,Y,Y,Y,,,1,1,2023-02-06,2100-02-07,0,0,,jeongholee,2023-02-09T14:49:56.587000,NERP_SCP_3RD,2025-10-02T18:08:31.967000,Y,1,N
+40,11085,-,DDP,DDP,HQ06-A,Runing Power_CN_SZH,KR,KRCOJ,CN,CNSZH,FRY,FERRY,0E-10,2,Y,Y,596,AVERAGE,Y,Y,Y,Y,Y,Y,,7,7,2023-02-06,2100-02-07,0,0,,jeongholee,2023-02-09T14:49:56.587000,jeongholee,2023-02-09T14:49:56.587000,Y,2,N
+40,11127,-,CIP,CIP,NJ01-A,Webasto Roof_DE_SKF,CN,CNNKG,DE,DESKF,AIR,AIR,0E-10,5,Y,Y,9371,AVERAGE,,,Y,,,,,8,12,2023-02-13,2100-02-14,0,0,,jeongholee,2023-02-15T13:36:13.177000,NERP_SCP_3RD,2025-10-02T18:09:25.887000,Y,3,N
+40,11128,-,CIP,CIP,NJ01-A,Webasto Roof_DE_SKF,CN,CNNKG,DE,DESKF,SEA,SEA,0E-10,2,Y,Y,9368,AVERAGE,,,,Y,,,,8,60,2023-02-13,2100-02-14,0,0,,jeongholee,2023-02-15T13:36:13.177000,NERP_SCP_3RD,2025-10-02T18:09:25.817000,Y,3,N
+40,11140,-,CIP,CIP,HQ06-A,Webasto Roof_DE_SKF,KR,KRCOJ,DE,DESKF,AIR,AIR,0E-10,5,Y,Y,9377,AVERAGE,Y,Y,Y,Y,Y,Y,Y,3,8,2023-02-13,2100-02-14,0,0,,jeongholee,2023-02-15T17:08:33.210000,jeongholee,2023-02-15T17:08:33.210000,Y,3,N
+40,11141,-,CIP,CIP,HQ06-A,Webasto Roof_DE_SKF,KR,KRCOJ,DE,DESKF,SEA,SEA,0E-10,2,Y,Y,9374,AVERAGE,,,,,Y,,,8,57,2023-02-13,2100-02-14,0,0,,jeongholee,2023-02-15T17:08:33.210000,jeongholee,2023-02-15T17:08:33.210000,Y,3,N
+40,11163,-,CIF,CIF,HQ06-A,Eicher Motors_IN_MAA,KR,KRCOJ,IN,INMAA,AIR,AIR,0E-10,5,Y,Y,8453,AVERAGE,Y,Y,Y,Y,Y,Y,Y,5,11,2023-02-27,2100-02-28,0,0,,jeongholee,2023-02-27T11:49:55.503000,jeongholee,2023-02-27T11:49:55.503000,Y,3,N
+40,11164,-,CIF,CIF,HQ06-A,Eicher Motors_IN_MAA,KR,KRCOJ,IN,INMAA,SEA,SEA,0E-10,2,Y,Y,8450,AVERAGE,,,,,,Y,,14,36,2023-02-27,2100-02-28,0,0,,jeongholee,2023-02-27T11:49:55.503000,jeongholee,2023-02-27T11:49:55.503000,Y,3,N
+40,11165,-,CIF,CIF,NJ01-A,Eicher Motors_IN_MAA,CN,CNNKG,IN,INMAA,AIR,AIR,0E-10,5,Y,Y,8403,AVERAGE,Y,,Y,,,Y,Y,2,8,2023-02-27,2100-02-28,0,0,,jeongholee,2023-02-27T11:49:55.503000,NERP_SCP_3RD,2025-10-02T18:06:36.217000,Y,3,N
+40,11166,-,CIF,CIF,NJ01-A,Eicher Motors_IN_MAA,CN,CNNKG,IN,INMAA,SEA,SEA,0E-10,2,Y,Y,8400,AVERAGE,,,,,Y,,,10,28,2023-02-27,2100-02-28,0,0,,jeongholee,2023-02-27T11:49:55.503000,NERP_SCP_3RD,2025-10-02T18:06:36.003000,Y,3,N
+40,11178,-,EXW,EXW,HQ06-A,Skyworth power_CN_XUZ,KR,KRCOJ,CN,CNXUZ,SEA,SEA,0E-10,2,Y,Y,9417,AVERAGE,,,,Y,,Y,Y,0,9,2023-02-27,2100-03-07,0,0,,jeongholee,2023-03-02T17:20:15.767000,jeongholee,2023-03-02T17:20:15.767000,Y,1,N
+40,11180,-,EXW,EXW,HQ06-A,BMSPro_CN_SZX,KR,KRCOJ,CN,CNSZX,AIR,AIR,0E-10,4,Y,Y,608,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,5,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T13:24:58.513000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11181,-,EXW,EXW,HQ06-A,BMSPro_CN_SZX,KR,KRCOJ,CN,CNSZX,SEA,SEA,0E-10,1,Y,Y,607,AVERAGE,,Y,,Y,,Y,,0,11,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T13:24:58.513000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11182,-,EXW,EXW,HQ06-A,Dualtron_CN_JHA,KR,KRCOJ,CN,CNJHA,AIR,AIR,0E-10,3,Y,Y,2522,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,6,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T13:24:58.513000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11183,-,EXW,EXW,HQ06-A,Dualtron_CN_JHA,KR,KRCOJ,CN,CNJHA,FRY,FERRY,0E-10,2,Y,Y,2521,AVERAGE,N,Y,N,Y,N,Y,N,0,11,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T13:24:58.513000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11184,-,EXW,EXW,HQ06-A,Dualtron_CN_JHA,KR,KRCOJ,CN,CNJHA,SEA,SEA,0E-10,1,Y,Y,2520,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,13,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T13:24:58.513000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11185,-,EXW,EXW,HQ06-A,GWKC_CN_SZP,KR,KRCOJ,CN,CNSZP,AIR,AIR,0E-10,2,Y,Y,2166,,Y,Y,Y,Y,Y,Y,Y,0,5,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T13:24:58.513000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11186,-,EXW,EXW,HQ06-A,GWKC_CN_SZP,KR,KRCOJ,CN,CNSZP,SEA,SEA,0E-10,1,Y,Y,2165,,Y,,,Y,,Y,,0,15,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T13:24:58.513000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11187,-,EXW,EXW,HQ06-A,BMSPro_CN_SZX,KR,KRCOJ,CN,CNSZX,FRY,FERRY,0E-10,2,Y,Y,609,AVERAGE,Y,Y,Y,Y,Y,Y,,0,7,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T13:24:58.513000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,2,N
+40,11188,-,EXW,EXW,HQ06-A,Elite Electronic_CN_YCG,KR,KRCOJ,CN,CNYCG,AIR,AIR,0E-10,5,Y,Y,7506,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,8,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T13:24:58.513000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,3,N
+40,11189,-,EXW,EXW,HQ06-A,Elite Electronic_CN_YCG,KR,KRCOJ,CN,CNYCG,FRY,FERRY,0E-10,7,Y,Y,7539,MAX,Y,Y,Y,Y,Y,Y,Y,0,7,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T13:24:58.513000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,3,N
+40,11190,-,EXW,EXW,HQ06-A,Elite Electronic_CN_YCG,KR,KRCOJ,CN,CNYCG,SEA,SEA,0E-10,1,Y,Y,7524,MAX,Y,Y,Y,Y,Y,Y,Y,0,11,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T13:24:58.513000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,3,N
+40,11191,-,Z01,Z01,NJ01-A,Globetools_CN_CZX,CN,CNNKG,CN,CNCZX,TRK,TRUCK,0E-10,1,N,Y,1633,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,2,2023-02-27,2099-12-27,0,0,,eunah.koo,2023-03-03T16:39:13.897000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,11192,-,EXW,EXW,HQ06-A,BakNew Power_CN_SUH,KR,KRCOJ,CN,CNSUH,AIR,AIR,0E-10,5,Y,Y,9430,AVERAGE,,,,,Y,,,0,13,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T17:44:07.873000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,3,N
+40,11193,-,EXW,EXW,HQ06-A,BakNew Power_CN_SUH,KR,KRCOJ,CN,CNSUH,SEA,SEA,0E-10,2,Y,Y,9427,AVERAGE,,,,Y,,,,0,15,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T17:44:07.873000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,3,N
+40,11194,-,EXW,EXW,HQ06-A,Taotao tech_CN_YKG,KR,KRCOJ,CN,CNYKG,AIR,AIR,0E-10,5,Y,Y,9436,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,7,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T17:44:07.873000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,3,N
+40,11195,-,EXW,EXW,HQ06-A,Taotao tech_CN_YKG,KR,KRCOJ,CN,CNYKG,SEA,SEA,0E-10,2,Y,Y,9433,AVERAGE,Y,Y,Y,Y,,,,0,15,2023-02-27,2100-12-26,0,0,,legalenergy,2023-03-03T17:44:07.873000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,3,N
+40,11200,-,DAP,DAP,NJ01-A,Foxlink_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,0E-10,5,Y,Y,7637,AVERAGE,,,,,,Y,,13,13,2023-03-06,2100-03-07,0,0,,jeongholee,2023-03-07T12:44:59.440000,NERP_SCP_3RD,2025-10-02T18:06:47.230000,Y,1,N
+40,11201,-,DAP,DAP,NJ01-A,Foxlink_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,0E-10,2,Y,Y,7636,AVERAGE,,Y,Y,,,,,26,26,2023-03-06,2100-03-07,0,0,,jeongholee,2023-03-07T12:44:59.440000,NERP_SCP_3RD,2025-10-02T18:06:47.157000,Y,1,N
+40,11202,-,DAP,DAP,NJ01-A,Foxlink_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,0E-10,1,Y,Y,3409,AVERAGE,Y,Y,Y,Y,Y,Y,,2,2,2023-03-06,2100-03-07,0,0,,jeongholee,2023-03-07T12:44:59.440000,NERP_SCP_3RD,2025-10-02T18:06:47.077000,Y,1,N
+40,11208,-,DDP,DDP,HQ06-A,Jinle_CN_DGG,KR,KRCOJ,CN,CNDGG,AIR,AIR,0E-10,3,Y,Y,719,,Y,Y,Y,Y,Y,Y,Y,5,5,2023-03-06,2100-12-26,0,0,,legalenergy,2023-03-10T16:34:02.470000,legalenergy,2023-03-10T16:34:02.470000,Y,1,N
+40,11209,-,DDP,DDP,HQ06-A,Jinle_CN_DGG,KR,KRCOJ,CN,CNDGG,SEA,SEA,0E-10,1,Y,Y,717,,Y,,Y,,Y,,,10,10,2023-03-06,2100-12-26,0,0,,legalenergy,2023-03-10T16:34:02.470000,legalenergy,2023-03-10T16:34:02.470000,Y,2,N
+40,11210,-,EXW,EXW,HQ06-A,IM_CN_NGG,KR,KRCOJ,CN,CNNGG,AIR,AIR,0E-10,8,Y,Y,6632,MIN,Y,Y,Y,Y,Y,Y,Y,0,6,2023-03-06,2100-12-26,0,0,,legalenergy,2023-03-10T16:34:02.470000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,3,N
+40,11211,-,EXW,EXW,HQ06-A,IM_CN_NGG,KR,KRCOJ,CN,CNNGG,SEA,SEA,0E-10,2,Y,Y,6628,AVERAGE,,Y,,,,Y,,0,7,2023-03-06,2100-12-26,0,0,,legalenergy,2023-03-10T16:34:02.470000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,3,N
+40,11222,-,CIF,CIF,NJ01-A,Greenway Dongguan_HK_HKG,CN,CNNKG,HK,HKHKG,TRK,TRUCK,0E-10,1,Y,Y,3926,AVERAGE,Y,Y,Y,Y,Y,Y,,0,3,2023-03-20,2099-12-27,0,0,,yoojjkk,2023-03-20T10:42:14.690000,NERP_SCP_3RD,2025-10-02T18:07:00.190000,Y,1,N
+40,11236,-,DAP,DAP,HQ06-A,JMBS_PL_GWC,KR,KRCOJ,PL,PLGWC,AIR,AIR,0E-10,2,Y,Y,3385,AVERAGE,Y,Y,Y,Y,Y,,,7,7,2023-03-20,2100-12-26,0,0,,legalenergy,2023-03-23T08:54:51.800000,legalenergy,2023-03-23T08:54:51.800000,Y,1,N
+40,11237,-,DAP,DAP,HQ06-A,JMBS_PL_GWC,KR,KRCOJ,PL,PLGWC,SEA,SEA,0E-10,1,Y,Y,3384,AVERAGE,Y,Y,Y,Y,Y,,,61,61,2023-03-20,2100-12-26,0,0,,legalenergy,2023-03-23T08:54:51.800000,legalenergy,2023-03-23T08:54:51.800000,Y,1,N
+40,11238,-,DAP,DAP,KR00496300_40-P,EM Tech_VN_BNH,VN,VNHDG,VN,VNBNH,TRK,TRUCK,0E-10,1,Y,Y,7382,AVERAGE,Y,Y,Y,Y,Y,Y,,1,1,2023-03-27,2099-12-27,0,0,,woosuk.chang,2023-03-27T14:39:33.690000,woosuk.chang,2023-03-27T14:39:33.690000,Y,1,N
+40,11240,-,DAP,DAP,HQ06-A,Honhai_CN_HGH,KR,KRCOJ,CN,CNHGH,AIR,AIR,0E-10,4,Y,Y,620,,Y,Y,Y,Y,Y,Y,Y,5,5,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,jeongholee,2023-03-30T16:11:10.937000,Y,1,N
+40,11241,-,DAP,DAP,HQ06-A,Honhai_CN_HGH,KR,KRCOJ,CN,CNHGH,SEA,SEA,0E-10,1,Y,Y,619,,Y,Y,Y,Y,Y,Y,Y,13,13,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,jeongholee,2023-03-30T16:11:10.937000,Y,1,N
+40,11242,-,DAP,DAP,HQ06-A,Yunzhong_CN_FOC,KR,KRCOJ,CN,CNFOC,AIR,AIR,0E-10,3,Y,Y,3301,AVERAGE,Y,Y,Y,Y,Y,Y,Y,7,7,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,jeongholee,2023-03-30T16:11:10.937000,Y,1,N
+40,11243,-,DAP,DAP,HQ06-A,Yunzhong_CN_FOC,KR,KRCOJ,CN,CNFOC,FRY,FERRY,0E-10,2,Y,Y,3300,AVERAGE,,Y,,,Y,,,11,11,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,jeongholee,2023-03-30T16:11:10.937000,Y,1,N
+40,11244,-,DAP,DAP,HQ06-A,Yunzhong_CN_FOC,KR,KRCOJ,CN,CNFOC,SEA,SEA,0E-10,1,Y,Y,3299,AVERAGE,Y,,,,Y,,Y,22,22,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,jeongholee,2023-03-30T16:11:10.937000,Y,1,N
+40,11245,-,DDP,DDP,HQ06-A,Tongfan_CN_SZH,KR,KRCOJ,CN,CNSZH,AIR,AIR,0E-10,4,Y,Y,595,AVERAGE,Y,Y,Y,Y,Y,Y,Y,5,5,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,jeongholee,2023-03-30T16:11:10.937000,Y,1,N
+40,11246,-,DDP,DDP,HQ06-A,Tongfan_CN_SZH,KR,KRCOJ,CN,CNSZH,SEA,SEA,0E-10,1,Y,Y,594,AVERAGE,Y,Y,Y,Y,Y,Y,Y,15,15,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,jeongholee,2023-03-30T16:11:10.937000,Y,1,N
+40,11247,-,EXW,EXW,HQ06-A,Bmspow Dianzi_CN_SZX,KR,KRCOJ,CN,CNSZX,AIR,AIR,0E-10,4,Y,Y,608,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,5,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11248,-,EXW,EXW,HQ06-A,Bmspow Dianzi_CN_SZX,KR,KRCOJ,CN,CNSZX,SEA,SEA,0E-10,1,Y,Y,607,AVERAGE,,Y,,Y,,Y,,0,11,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11249,-,EXW,EXW,HQ06-A,Elite Electronic_CN_SZX,KR,KRCOJ,CN,CNSZX,AIR,AIR,0E-10,4,Y,Y,608,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,5,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11250,-,EXW,EXW,HQ06-A,Elite Electronic_CN_SZX,KR,KRCOJ,CN,CNSZX,SEA,SEA,0E-10,1,Y,Y,607,AVERAGE,,Y,,Y,,Y,,0,11,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11251,-,DAP,DAP,HQ06-A,Peopleworks_KR_SEL,KR,KRCOJ,KR,KRSEL,TRK,TRUCK,0E-10,1,Y,Y,740,AVERAGE,Y,Y,Y,Y,Y,,,1,1,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,1,N
+40,11252,-,DAP,DAP,HQ06-A,Corun_CN_SZX,KR,KRCOJ,CN,CNSZX,AIR,AIR,0E-10,4,N,Y,608,AVERAGE,Y,Y,Y,Y,Y,Y,Y,5,5,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,1,N
+40,11253,-,DAP,DAP,HQ06-A,Corun_CN_SZX,KR,KRCOJ,CN,CNSZX,SEA,SEA,0E-10,1,N,Y,607,AVERAGE,,Y,,Y,,Y,,11,11,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,1,N
+40,11254,-,DAP,DAP,HQ06-A,Honhai_CN_HGH,KR,KRCOJ,CN,CNHGH,FRY,FERRY,0E-10,2,Y,Y,621,,Y,Y,Y,Y,Y,Y,,5,5,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,jeongholee,2023-03-30T16:11:10.937000,Y,2,N
+40,11255,-,DDP,DDP,HQ06-A,Tongfan_CN_SZH,KR,KRCOJ,CN,CNSZH,FRY,FERRY,0E-10,2,Y,Y,596,AVERAGE,Y,Y,Y,Y,Y,Y,,7,7,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,jeongholee,2023-03-30T16:11:10.937000,Y,2,N
+40,11256,-,EXW,EXW,HQ06-A,Bmspow Dianzi_CN_SZX,KR,KRCOJ,CN,CNSZX,FRY,FERRY,0E-10,2,Y,Y,609,AVERAGE,Y,Y,Y,Y,Y,Y,,0,7,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,2,N
+40,11257,-,EXW,EXW,HQ06-A,Elite Electronic_CN_SZX,KR,KRCOJ,CN,CNSZX,FRY,FERRY,0E-10,2,Y,Y,609,AVERAGE,Y,Y,Y,Y,Y,Y,,0,7,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,2,N
+40,11258,-,DAP,DAP,HQ06-A,Corun_CN_SZX,KR,KRCOJ,CN,CNSZX,FRY,FERRY,0E-10,2,N,Y,609,AVERAGE,Y,Y,Y,Y,Y,Y,,7,7,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,NERP INCOTERMS UPDATE:PI,2025-01-02T16:15:14.430000,Y,2,N
+40,11259,-,CIF,CIF,HQ06-A,Merry_TW_TXG,KR,KRCOJ,TW,TWTXG,AIR,AIR,0E-10,4,Y,Y,4838,MAX,Y,Y,Y,Y,Y,Y,Y,2,7,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,jeongholee,2023-03-30T16:11:10.937000,Y,3,N
+40,11260,-,CIF,CIF,HQ06-A,Merry_TW_TXG,KR,KRCOJ,TW,TWTXG,SEA,SEA,0E-10,1,Y,Y,4835,MAX,,Y,,,,,,4,15,2023-03-27,2100-03-28,0,0,,jeongholee,2023-03-30T16:11:10.937000,jeongholee,2023-03-30T16:11:10.937000,Y,3,N
+40,11268,-,EXW,EXW,VN00188600_40-P,John Deere_US_GTS,VN,VNBTN,US,USGTS,AIR,AIR,0E-10,4,Y,Y,9474,MAX,,,,,Y,,,0,16,2023-04-03,2100-04-04,0,0,,sangdal,2023-04-03T17:32:26.847000,sangdal,2023-04-03T17:32:26.847000,Y,3,N
+40,11269,-,EXW,EXW,VN00188600_40-P,John Deere_US_GTS,VN,VNBTN,US,USGTS,SEA,SEA,0E-10,1,Y,Y,9471,MAX,,,,,Y,,,0,52,2023-04-03,2100-04-04,0,0,,sangdal,2023-04-03T17:32:26.847000,sangdal,2023-04-03T17:32:26.847000,Y,3,N
+40,11270,-,EXW,EXW,VN00188600_40-P,John Deere_US_MLI,VN,VNBTN,US,USMLI,SEA,SEA,0E-10,1,Y,Y,8804,MAX,,,,Y,,,,0,56,2023-04-03,2100-04-04,0,0,,sangdal,2023-04-03T17:32:26.847000,sangdal,2023-04-03T17:32:26.847000,Y,3,N
+40,11274,-,CIF,CIF,HQ06-A,Bafang_CN_SZH,KR,KRCOJ,CN,CNSZH,AIR,AIR,0E-10,4,Y,Y,595,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,5,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,1,N
+40,11275,-,CIF,CIF,HQ06-A,Bafang_CN_SZH,KR,KRCOJ,CN,CNSZH,SEA,SEA,0E-10,1,Y,Y,594,AVERAGE,Y,Y,Y,Y,Y,Y,Y,5,15,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,1,N
+40,11276,-,CIF,CIF,HQ06-A,Greenway_CN_DGG,KR,KRCOJ,CN,CNDGG,AIR,AIR,0E-10,3,Y,Y,719,,Y,Y,Y,Y,Y,Y,Y,2,5,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,1,N
+40,11277,-,CIF,CIF,HQ06-A,Ninebot Changzhou_CN_CZX,KR,KRCOJ,CN,CNCZX,AIR,AIR,0E-10,4,Y,Y,612,,Y,Y,Y,Y,Y,Y,Y,2,5,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,1,N
+40,11278,-,CIF,CIF,NJ01-A,Bafang_CN_SZH,CN,CNNKG,CN,CNSZH,TRK,TRUCK,0E-10,1,Y,Y,3758,AVERAGE,Y,Y,Y,Y,Y,Y,,3,3,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,NERP_SCP_3RD,2025-10-02T18:06:09.983000,Y,1,N
+40,11279,-,CIF,CIF,NJ01-A,Darfon Energy_CN_SZH,CN,CNNKG,CN,CNSZH,TRK,TRUCK,0E-10,1,Y,Y,3758,AVERAGE,Y,Y,Y,Y,Y,Y,,3,3,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,NERP_SCP_3RD,2025-10-02T18:06:27.577000,Y,1,N
+40,11280,-,CIF,CIF,NJ01-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,AIR,AIR,0E-10,5,Y,Y,7637,AVERAGE,,,,,,Y,,4,13,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,NERP_SCP_3RD,2025-10-02T18:07:31.040000,Y,1,N
+40,11281,-,CIF,CIF,NJ01-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,SEA,SEA,0E-10,2,Y,Y,7636,AVERAGE,,Y,Y,,,,,7,26,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,NERP_SCP_3RD,2025-10-02T18:07:30.583000,Y,1,N
+40,11282,-,CIF,CIF,NJ01-A,Greenway_CN_DGG,CN,CNNKG,CN,CNDGG,TRK,TRUCK,0E-10,1,Y,Y,3409,AVERAGE,Y,Y,Y,Y,Y,Y,,2,2,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,NERP_SCP_3RD,2025-10-02T18:07:00.427000,Y,1,N
+40,11283,-,CIF,CIF,NJ01-A,Ninebot Changzhou_CN_CZX,CN,CNNKG,CN,CNCZX,TRK,TRUCK,0E-10,1,Y,Y,1633,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,2,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,NERP_SCP_3RD,2025-10-02T18:08:36.137000,Y,1,N
+40,11284,-,CIF,CIF,NJ01-A,PYTES_CN_SHA,CN,CNNKG,CN,CNSHA,TRK,TRUCK,0E-10,1,Y,Y,2066,AVERAGE,Y,Y,Y,Y,Y,,,0,1,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,NERP_SCP_3RD,2025-10-02T18:08:50.593000,Y,1,N
+40,11285,-,FOB,FOB,KR00995200_40-P,EM Tech_VN_BNH,VN,VNHDG,VN,VNBNH,TRK,TRUCK,0E-10,1,Y,Y,7382,AVERAGE,Y,Y,Y,Y,Y,Y,,1,1,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,1,N
+40,11286,-,CIF,CIF,HQ06-A,Bafang_CN_SZH,KR,KRCOJ,CN,CNSZH,FRY,FERRY,0E-10,2,Y,Y,596,AVERAGE,Y,Y,Y,Y,Y,Y,,3,7,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,2,N
+40,11287,-,CIF,CIF,HQ06-A,Greenway_CN_DGG,KR,KRCOJ,CN,CNDGG,SEA,SEA,0E-10,2,Y,Y,718,,Y,,Y,,Y,,,3,11,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,2,N
+40,11288,-,CIF,CIF,HQ06-A,Ninebot Changzhou_CN_CZX,KR,KRCOJ,CN,CNCZX,FRY,FERRY,0E-10,2,Y,Y,613,,Y,Y,Y,Y,Y,Y,,2,5,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,2,N
+40,11289,-,CIF,CIF,HQ06-A,PYTES_CN_SHA,KR,KRCOJ,CN,CNSHA,AIR,AIR,0E-10,4,Y,Y,616,,Y,Y,Y,Y,Y,Y,Y,2,5,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,2,N
+40,11290,-,CIF,CIF,HQ06-A,Ninebot Changzhou_CN_CZX,KR,KRCOJ,CN,CNCZX,SEA,SEA,0E-10,2,Y,Y,670,,Y,Y,Y,Y,Y,Y,Y,3,13,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,3,N
+40,11291,-,CIF,CIF,HQ06-A,PYTES_CN_SHA,KR,KRCOJ,CN,CNSHA,FRY,FERRY,0E-10,2,Y,Y,617,,Y,Y,Y,Y,Y,Y,,2,5,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,3,N
+40,11292,-,CIF,CIF,HQ06-A,PYTES_CN_SHA,KR,KRCOJ,CN,CNSHA,SEA,SEA,0E-10,2,Y,Y,665,,Y,Y,Y,Y,Y,Y,Y,3,13,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,3,N
+40,11293,-,CIF,CIF,HQ06-A,Varta RO_RO_OTP,KR,KRCOJ,RO,ROOTP,AIR,AIR,0E-10,5,Y,Y,9463,AVERAGE,,,,Y,,,,8,16,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,3,N
+40,11294,-,CIF,CIF,HQ06-A,Varta RO_RO_OTP,KR,KRCOJ,RO,ROOTP,SEA,SEA,0E-10,2,Y,Y,9460,AVERAGE,,,,,Y,,,8,42,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,3,N
+40,11295,-,EXW,EXW,VN00188600_40-P,Boston Dynamics_US_WLM,VN,VNBTN,US,USWLM,AIR,AIR,0E-10,5,Y,Y,8540,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,19,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,3,N
+40,11296,-,EXW,EXW,VN00188600_40-P,Boston Dynamics_US_WLM,VN,VNBTN,US,USWLM,SEA,SEA,0E-10,2,Y,Y,8537,AVERAGE,,,,Y,,,,0,64,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,3,N
+40,11297,-,FOB,FOB,HQ06-A,Varta RO_RO_OTP,KR,KRCOJ,RO,ROOTP,AIR,AIR,0E-10,5,Y,Y,9463,AVERAGE,,,,Y,,,,8,16,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,3,N
+40,11298,-,FOB,FOB,HQ06-A,Varta RO_RO_OTP,KR,KRCOJ,RO,ROOTP,SEA,SEA,0E-10,2,Y,Y,9460,AVERAGE,,,,,Y,,,8,42,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,jeongholee,2023-04-04T16:52:32.983000,Y,3,N
+40,11299,-,Z01,Z01,NJ01-A,Junchang_CN_YBN,CN,CNNKG,CN,CNYBN,TRK,TRUCK,0E-10,3,N,Y,9467,MIN,Y,Y,Y,Y,Y,,,0,10,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-04T16:52:32.983000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,3,N
+40,11310,-,CIP,CIP,HQ06-A,Jinle_CN_SZX,KR,KRCOJ,CN,CNSZX,AIR,AIR,0E-10,4,Y,Y,608,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,5,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-07T17:48:01.153000,jeongholee,2023-04-07T17:48:01.153000,Y,1,N
+40,11311,-,CIP,CIP,HQ06-A,Jinle_CN_SZX,KR,KRCOJ,CN,CNSZX,SEA,SEA,0E-10,1,Y,Y,607,AVERAGE,,Y,,Y,,Y,,3,11,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-07T17:48:01.153000,jeongholee,2023-04-07T17:48:01.153000,Y,1,N
+40,11312,-,CIP,CIP,NJ01-A,Jinle_CN_SZX,CN,CNNKG,CN,CNSZX,TRK,TRUCK,0E-10,1,Y,Y,1792,AVERAGE,Y,Y,Y,Y,Y,,,2,2,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-07T17:48:01.153000,NERP_SCP_3RD,2025-10-02T18:08:01.587000,Y,1,N
+40,11313,-,CIP,CIP,HQ06-A,Jinle_CN_SZX,KR,KRCOJ,CN,CNSZX,FRY,FERRY,0E-10,2,Y,Y,609,AVERAGE,Y,Y,Y,Y,Y,Y,,2,7,2023-04-03,2100-04-04,0,0,,jeongholee,2023-04-07T17:48:01.153000,jeongholee,2023-04-07T17:48:01.153000,Y,2,N
+40,11315,-,DAP,DAP,HQ06-A,MAZDA_JP_AIG,KR,KRCOJ,JP,JPAIG,AIR,AIR,0E-10,5,Y,Y,9490,AVERAGE,,Y,,Y,,,,10,10,2023-04-10,2100-04-04,0,0,,jeongholee,2023-04-10T13:40:34.613000,jeongholee,2023-04-10T13:40:34.613000,Y,3,N
+40,11316,-,DAP,DAP,HQ06-A,MAZDA_JP_AIG,KR,KRCOJ,JP,JPAIG,SEA,SEA,0E-10,2,Y,Y,9487,AVERAGE,,,,,,Y,,15,15,2023-04-10,2100-04-04,0,0,,jeongholee,2023-04-10T13:40:34.613000,jeongholee,2023-04-10T13:40:34.613000,Y,3,N
+40,11317,-,CIF,CIF,HQ06-A,Topband_CN_HUI,KR,KRCOJ,CN,CNHUI,AIR,AIR,0E-10,3,Y,Y,3295,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,7,2023-04-10,2100-12-26,0,0,,legalenergy,2023-04-11T08:55:29.473000,legalenergy,2023-04-11T08:55:29.473000,Y,1,N
+40,11318,-,CIF,CIF,HQ06-A,Topband_CN_HUI,KR,KRCOJ,CN,CNHUI,FRY,FERRY,0E-10,2,Y,Y,3294,AVERAGE,,Y,,Y,,Y,,2,9,2023-04-10,2100-12-26,0,0,,legalenergy,2023-04-11T08:55:29.473000,legalenergy,2023-04-11T08:55:29.473000,Y,1,N
+40,11319,-,CIF,CIF,HQ06-A,Topband_CN_HUI,KR,KRCOJ,CN,CNHUI,SEA,SEA,0E-10,1,Y,Y,3293,AVERAGE,,,,Y,,,,5,12,2023-04-10,2100-12-26,0,0,,legalenergy,2023-04-11T08:55:29.473000,legalenergy,2023-04-11T08:55:29.473000,Y,1,N
+40,11320,-,CIF,CIF,NJ01-A,Topband_CN_HUI,CN,CNNKG,CN,CNHUI,TRK,TRUCK,0E-10,1,Y,Y,3415,AVERAGE,Y,Y,Y,Y,Y,Y,,0,2,2023-04-10,2100-12-26,0,0,,legalenergy,2023-04-11T08:55:29.473000,NERP_SCP_3RD,2025-10-02T18:09:11.910000,Y,1,N
+40,11321,-,Z01,Z01,NJ01-A,Nexcon_KR_SUO,CN,CNNKG,KR,KRSUO,FRY,FERRY,0E-10,2,N,Y,1698,,Y,,Y,,Y,,,0,6,2023-04-10,2100-04-11,0,0,,jeongholee,2023-04-12T09:31:13.267000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,11322,-,Z01,Z01,NJ01-A,Nexcon_KR_SUO,CN,CNNKG,KR,KRSUO,SEA,SEA,0E-10,9,N,Y,8095,AVERAGE,,Y,,,,,,0,13,2023-04-10,2100-04-11,0,0,,jeongholee,2023-04-12T09:31:13.267000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,3,N
+40,11323,-,FCA,FCA,HQ06-A,SpaceX_US_HHR,KR,KRCOJ,US,USHHR,AIR,AIR,0E-10,4,Y,Y,8177,MAX,Y,Y,Y,Y,Y,Y,Y,2,13,2023-04-10,2100-04-18,0,0,,sangdal,2023-04-12T15:29:52.203000,sangdal,2023-04-12T15:50:38.907000,Y,3,N
+40,11324,-,FCA,FCA,HQ06-A,SpaceX_US_HHR,KR,KRCOJ,US,USHHR,SEA,SEA,0E-10,1,Y,Y,9505,AVERAGE,,,,,,,Y,0,47,2023-04-10,2100-04-18,0,0,,sangdal,2023-04-12T15:29:52.203000,sangdal,2023-04-12T15:50:38.907000,Y,4,N
+40,11325,-,FCA,FCA,HQ06-A,SpaceX_US_XLC,KR,KRCOJ,US,USXLC,AIR,AIR,0E-10,4,Y,Y,8494,MAX,Y,Y,,Y,Y,,,2,14,2023-04-10,2100-04-18,0,0,,sangdal,2023-04-12T15:29:52.203000,sangdal,2023-04-12T15:29:52.203000,Y,3,N
+40,11326,-,FCA,FCA,HQ06-A,SpaceX_US_XLC,KR,KRCOJ,US,USXLC,SEA,SEA,0E-10,1,Y,Y,9508,MAX,,,,,,Y,,0,51,2023-04-10,2100-04-18,0,0,,sangdal,2023-04-12T15:29:52.203000,sangdal,2023-04-12T15:50:38.907000,Y,4,N
+40,11328,-,DDP,DDP,HQ06-A,Skyworth power_CN_XUZ,KR,KRCOJ,CN,CNXUZ,SEA,SEA,0E-10,2,Y,Y,9417,AVERAGE,,,,Y,,Y,Y,9,9,2023-04-17,2100-12-26,0,0,,legalenergy,2023-04-17T17:06:13.687000,legalenergy,2023-04-17T17:06:13.687000,Y,1,N
+40,11329,-,DDP,DDP,NJ01-A,Skyworth power_CN_XUZ,CN,CNNKG,CN,CNXUZ,TRK,TRUCK,0E-10,1,Y,Y,9509,AVERAGE,Y,Y,Y,Y,Y,,,1,1,2023-04-17,2100-12-26,0,0,,legalenergy,2023-04-17T17:06:13.687000,NERP_SCP_3RD,2025-10-02T18:09:03.727000,Y,1,N
+40,11331,-,EXW,EXW,HQ06-A,Yunzhong_CN_FOC,KR,KRCOJ,CN,CNFOC,AIR,AIR,0E-10,3,Y,Y,3301,AVERAGE,Y,Y,Y,Y,Y,Y,Y,0,7,2023-04-24,2100-12-26,0,0,,legalenergy,2023-04-24T13:11:07.247000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11332,-,EXW,EXW,HQ06-A,Yunzhong_CN_FOC,KR,KRCOJ,CN,CNFOC,FRY,FERRY,0E-10,2,Y,Y,3300,AVERAGE,,Y,,,Y,,,0,11,2023-04-24,2100-12-26,0,0,,legalenergy,2023-04-24T13:11:07.247000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11333,-,EXW,EXW,HQ06-A,Yunzhong_CN_FOC,KR,KRCOJ,CN,CNFOC,SEA,SEA,0E-10,1,Y,Y,3299,AVERAGE,Y,,,,Y,,Y,0,22,2023-04-24,2100-12-26,0,0,,legalenergy,2023-04-24T13:11:07.247000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11337,-,DDP,DDP,HQ06-A,Ninebot Changzhou_CN_CZX,KR,KRCOJ,CN,CNCZX,AIR,AIR,0E-10,4,Y,Y,612,,Y,Y,Y,Y,Y,Y,Y,5,5,2023-04-24,2100-04-25,0,0,,jeongholee,2023-04-26T14:03:11.450000,jeongholee,2023-04-26T14:03:11.450000,Y,1,N
+40,11338,-,DDP,DDP,NJ01-A,Ninebot Changzhou_CN_CZX,CN,CNNKG,CN,CNCZX,TRK,TRUCK,0E-10,1,Y,Y,1633,AVERAGE,Y,Y,Y,Y,Y,Y,Y,2,2,2023-04-24,2100-04-25,0,0,,jeongholee,2023-04-26T14:03:11.450000,NERP_SCP_3RD,2025-10-02T18:08:36.060000,Y,1,N
+40,11339,-,DDP,DDP,HQ06-A,Ninebot Changzhou_CN_CZX,KR,KRCOJ,CN,CNCZX,FRY,FERRY,0E-10,2,Y,Y,613,,Y,Y,Y,Y,Y,Y,,5,5,2023-04-24,2100-04-25,0,0,,jeongholee,2023-04-26T14:03:11.450000,jeongholee,2023-04-26T14:03:11.450000,Y,2,N
+40,11340,-,DDP,DDP,HQ06-A,Ninebot Changzhou_CN_CZX,KR,KRCOJ,CN,CNCZX,SEA,SEA,0E-10,1,Y,Y,669,,Y,Y,Y,Y,Y,Y,Y,13,13,2023-04-24,2100-04-25,0,0,,jeongholee,2023-04-26T14:03:11.450000,jeongholee,2023-04-26T14:03:11.450000,Y,3,N
+40,11341,-,Z01,Z01,NJ01-A,Keyway_CN_SZH,CN,CNNKG,CN,CNSZH,TRK,TRUCK,0E-10,1,N,Y,3758,AVERAGE,Y,Y,Y,Y,Y,Y,,0,3,2023-04-24,2100-04-25,0,0,,jeongholee,2023-04-26T17:20:29.050000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,11342,-,CIP,CIP,HQ06-A,Vestel_TR_IST,KR,KRCOJ,TR,TRIST,AIR,AIR,0E-10,5,Y,Y,8128,AVERAGE,,,,,Y,,Y,4,10,2023-04-24,2100-04-25,0,0,,jeongholee,2023-04-26T17:23:58.220000,jeongholee,2023-04-26T17:23:58.220000,Y,3,N
+40,11343,-,CIP,CIP,HQ06-A,Vestel_TR_IST,KR,KRCOJ,TR,TRIST,SEA,SEA,0E-10,1,Y,Y,8127,MAX,,,,,,,Y,8,61,2023-04-24,2100-04-25,0,0,,jeongholee,2023-04-26T17:23:58.220000,jeongholee,2023-04-26T17:23:58.220000,Y,3,N
+40,11344,-,CIP,CIP,NJ01-A,Vestel_TR_IST,CN,CNNKG,TR,TRIST,AIR,AIR,0E-10,5,Y,Y,8134,AVERAGE,,,,,,,Y,4,9,2023-04-24,2100-04-25,0,0,,jeongholee,2023-04-26T17:23:58.220000,NERP_SCP_3RD,2025-10-02T18:09:22.557000,Y,3,N
+40,11345,-,CIP,CIP,NJ01-A,Vestel_TR_IST,CN,CNNKG,TR,TRIST,SEA,SEA,0E-10,1,Y,Y,8133,MAX,,,Y,,,,,8,61,2023-04-24,2100-04-25,0,0,,jeongholee,2023-04-26T17:23:58.220000,NERP_SCP_3RD,2025-10-02T18:09:22.483000,Y,3,N
+40,11350,-,CIF,CIF,HQ06-A,Spard_CN_ZSN,KR,KRCOJ,CN,CNZSN,SEA,SEA,0E-10,2,Y,Y,8055,AVERAGE,Y,,,,,,,8,29,2023-05-01,2099-12-27,0,0,,eunah.koo,2023-05-02T18:01:11.470000,eunah.koo,2023-05-02T18:01:11.470000,Y,1,N
+40,11351,-,DDP,DDP,HQ06-A,Ninebot Shenzhen_CN_SZX,KR,KRCOJ,CN,CNSZX,SEA,SEA,0E-10,1,Y,Y,607,AVERAGE,,Y,,Y,,Y,,11,11,2023-05-01,2099-12-27,0,0,,eunah.koo,2023-05-03T11:04:33.103000,eunah.koo,2023-05-03T11:04:33.103000,Y,1,N
+40,11352,-,DDP,DDP,HQ06-A,Ninebot Shenzhen_CN_SZX,KR,KRCOJ,CN,CNSZX,AIR,AIR,0E-10,4,Y,Y,608,AVERAGE,Y,Y,Y,Y,Y,Y,Y,5,5,2023-05-01,2100-12-26,0,0,,legalenergy,2023-05-04T16:08:35.837000,legalenergy,2023-05-04T16:08:35.837000,Y,1,N
+40,11353,-,DDP,DDP,NJ01-A,Ninebot Shenzhen_CN_SZX,CN,CNNKG,CN,CNSZX,TRK,TRUCK,0E-10,1,Y,Y,1792,AVERAGE,Y,Y,Y,Y,Y,,,2,2,2023-05-01,2100-12-26,0,0,,legalenergy,2023-05-04T16:08:35.837000,NERP_SCP_3RD,2025-10-02T18:08:36.240000,Y,1,N
+40,11354,-,DDP,DDP,HQ06-A,Ninebot Shenzhen_CN_SZX,KR,KRCOJ,CN,CNSZX,FRY,FERRY,0E-10,2,Y,Y,609,AVERAGE,Y,Y,Y,Y,Y,Y,,7,7,2023-05-01,2100-12-26,0,0,,legalenergy,2023-05-04T16:08:35.837000,legalenergy,2023-05-04T16:08:35.837000,Y,2,N
+40,11357,-,CIF,CIF,NJ01-A,acer_TW_NTC,CN,CNNKG,TW,TWNTC,SEA,SEA,0E-10,1,Y,Y,3963,,Y,,,Y,,,,5,20,2023-05-08,2099-12-27,0,0,,irenejo,2023-05-08T09:35:19.887000,NERP_SCP_3RD,2025-10-02T18:05:47.340000,Y,1,Y
+40,11358,-,CIF,CIF,NJ01-A,acer_TW_NTC,CN,CNNKG,TW,TWNTC,AIR,AIR,0E-10,2,Y,Y,3964,,Y,Y,Y,Y,Y,Y,Y,3,6,2023-05-08,2099-12-27,0,0,,irenejo,2023-05-08T09:35:19.887000,NERP_SCP_3RD,2025-10-02T18:05:47.413000,Y,1,Y
+40,11359,-,DDP,DDP,HQ06-A,BRP_CA_QUE,KR,KRCOJ,CA,CAQUE,AIR,AIR,0E-10,5,Y,Y,4096,AVERAGE,Y,Y,Y,Y,Y,Y,Y,10,10,2023-05-08,2100-05-09,0,0,,jeongholee,2023-05-08T16:21:17.540000,jeongholee,2023-05-08T16:21:17.540000,Y,3,N
+40,11360,-,DDP,DDP,HQ06-A,BRP_CA_QUE,KR,KRCOJ,CA,CAQUE,SEA,SEA,0E-10,1,Y,Y,4095,MAX,,,,,Y,,,35,35,2023-05-08,2100-05-09,0,0,,jeongholee,2023-05-08T16:21:17.540000,jeongholee,2023-05-08T16:21:17.540000,Y,3,N
+40,11362,-,DDP,DDP,HQ06-A,Lucid Motors_US_NKQ,KR,KRCOJ,US,USNKQ,SEA,SEA,0E-10,1,Y,Y,4957,MAX,,,,,,,Y,54,54,2023-05-08,2099-12-27,0,0,,cheon7943,2023-05-10T17:20:17.287000,cheon7943,2023-05-10T17:20:17.287000,Y,3,N
+40,11363,-,DDP,DDP,HQ06-A,Lucid Motors_US_NKQ,KR,KRCOJ,US,USNKQ,AIR,AIR,0E-10,4,Y,Y,4960,MAX,Y,Y,Y,Y,Y,Y,Y,7,7,2023-05-08,2099-12-27,0,0,,cheon7943,2023-05-10T17:20:17.287000,cheon7943,2023-05-10T17:20:17.287000,Y,3,N
+40,11369,-,DAP,DAP,HQ06-A,Stark Future_ES_BCN,KR,KRCOJ,ES,ESBCN,SEA,SEA,0E-10,2,Y,Y,7753,AVERAGE,,,,Y,,,,66,66,2023-05-15,2099-12-27,0,0,,cheon7943,2023-05-18T14:48:29.597000,cheon7943,2023-05-18T14:48:29.597000,Y,1,N
+40,11370,-,DAP,DAP,HQ06-A,Stark Future_ES_BCN,KR,KRCOJ,ES,ESBCN,AIR,AIR,0E-10,1,Y,Y,7752,AVERAGE,,Y,,,,,,10,10,2023-05-15,2099-12-27,0,0,,cheon7943,2023-05-18T14:48:29.597000,cheon7943,2023-05-18T14:48:29.597000,Y,1,N
+40,11371,,DAP,CIF,NJ01-A,VN00188600_40-P,CN,CNNKG,VN,VNBTN,SEA,SEA,0E-10,1,Y,Y,9543,AVERAGE,Y,,,,,,,16,16,2023-05-22,2100-12-26,0,0,,legalenergy,2023-05-22T17:08:27.207000,NERP_SCP_3RD,2025-10-02T18:09:23.727000,Y,3,N
+40,11371,,DAP,DAP,NJ01-A,VN00188600_40-P,CN,CNNKG,VN,VNBTN,SEA,SEA,0E-10,1,Y,Y,9543,AVERAGE,Y,,,,,,,16,16,2023-05-22,2100-12-26,0,0,,legalenergy,2023-05-22T17:08:27.207000,NERP_SCP_3RD,2025-10-02T18:09:23.727000,Y,3,N
+40,11372,,DAP,CIF,NJ01-A,VN00188600_40-P,CN,CNNKG,VN,VNBTN,TRK,TRUCK,0E-10,2,Y,Y,9515,AVERAGE,Y,Y,Y,Y,Y,,,8,8,2023-05-22,2100-12-26,0,0,,legalenergy,2023-05-22T17:08:27.207000,NERP_SCP_3RD,2025-10-02T18:09:23.660000,Y,3,N
+40,11372,,DAP,DAP,NJ01-A,VN00188600_40-P,CN,CNNKG,VN,VNBTN,TRK,TRUCK,0E-10,2,Y,Y,9515,AVERAGE,Y,Y,Y,Y,Y,,,8,8,2023-05-22,2100-12-26,0,0,,legalenergy,2023-05-22T17:08:27.207000,NERP_SCP_3RD,2025-10-02T18:09:23.660000,Y,3,N
+40,11379,,DAP,CIF,NJ01-P,VN00188600_40-P,CN,CNNKG,VN,VNBTN,TRK,TRUCK,0E-10,2,Y,Y,9515,AVERAGE,Y,Y,Y,Y,Y,,,8,8,2021-12-27,2099-12-27,0,0,,jaeuk.shin,2023-05-22T17:29:50.373000,NERP_SCP_3RD,2025-10-02T18:09:35.350000,Y,3,N
+40,11380,,DAP,CIF,NJ01-P,VN00188600_40-P,CN,CNNKG,VN,VNBTN,SEA,SEA,0E-10,8,Y,Y,9543,AVERAGE,Y,,,,,,,16,16,2021-12-27,2099-12-27,0,0,,jaeuk.shin,2023-05-22T17:29:50.373000,NERP_SCP_3RD,2025-10-02T18:09:35.417000,Y,3,N
+40,11384,-,EXW,EXW,HQ06-A,Xianzhong_CN_TSN,KR,KRCOJ,CN,CNTSN,AIR,AIR,0E-10,3,Y,Y,3733,,Y,Y,Y,Y,Y,Y,Y,0,5,2023-05-22,2100-05-23,0,0,,jeongholee,2023-05-24T17:33:56.473000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11385,-,EXW,EXW,HQ06-A,Xianzhong_CN_TSN,KR,KRCOJ,CN,CNTSN,FRY,FERRY,0E-10,2,Y,Y,3732,AVERAGE,,,,,,,Y,0,11,2023-05-22,2100-05-23,0,0,,jeongholee,2023-05-24T17:33:56.473000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11386,-,EXW,EXW,HQ06-A,Xianzhong_CN_TSN,KR,KRCOJ,CN,CNTSN,SEA,SEA,0E-10,1,Y,Y,3731,,,,Y,,,,Y,0,9,2023-05-22,2100-05-23,0,0,,jeongholee,2023-05-24T17:33:56.473000,NERP INCOTERMS UPDATE:PI,2025-01-02T15:35:15.593000,Y,1,N
+40,11387,-,Z01,Z01,NJ01-A,Samsung Electronics_KR_SUO,CN,CNNKG,KR,KRSUO,FRY,FERRY,0E-10,2,N,Y,1698,,Y,,Y,,Y,,,0,6,2023-05-22,2100-05-23,0,0,,jeongholee,2023-05-24T17:33:56.473000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,1,N
+40,11388,-,Z01,Z01,NJ01-A,Samsung Electronics_KR_SUO,CN,CNNKG,KR,KRSUO,SEA,SEA,0E-10,99,N,Y,9349,AVERAGE,,,Y,,,,Y,0,20,2023-05-22,2100-05-23,0,0,,jeongholee,2023-05-24T17:33:56.473000,NERP_SCP_3RD,2025-10-02T18:05:44.593000,Y,3,N
+40,11391,-,DDP,DDP,NJ01-A,Apack Tech_TW_NTC,CN,CNNKG,TW,TWNTC,SEA,SEA,0E-10,1,Y,Y,3963,,Y,,,Y,,,,20,20,2023-05-22,2099-12-27,0,0,,irenejo,2023-05-25T14:51:02.767000,NERP_SCP_3RD,2025-10-02T18:05:51.770000,Y,1,N
+40,11392,-,DDP,DDP,NJ01-A,Apack Tech_TW_NTC,CN,CNNKG,TW,TWNTC,AIR,AIR,0E-10,2,Y,Y,3964,,Y,Y,Y,Y,Y,Y,Y,6,6,2023-05-22,2099-12-27,0,0,,irenejo,2023-05-25T14:51:02.767000,NERP_SCP_3RD,2025-10-02T18:05:51.967000,Y,1,N

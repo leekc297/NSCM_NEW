@@ -1,0 +1,7 @@
+﻿"screen_id","class","entry_kind","entry","handler","methods","statements","rows","classified","other","call_ext","classified_pct","by_kind"
+"NSD0100","NSD0100_SSPX_SOCompletedEventArgs","ctor",".ctor",".ctor","1","4","4","4","0","0","100","FLAG:4"
+"NSD0100","NSD0100_SSPX_SOService","ctor",".ctor",".ctor","2","44","44","44","0","0","100","FLAG:16 RETURN:12 CALL_LOCAL:4 BRANCH:4 LOCAL:4 EXPR:4"
+"NSD0100","NSD0100_SSPX_SOService","unreached","(진입점 미연결)","CancelAsync","1","4","4","4","0","0","100","CALL_LOCAL:4"
+"NSD0100","NSD0100_SSPX_SOService","unreached","(진입점 미연결)","NSD0100_SSPX_SO","1","8","8","8","0","4","100","CALL_BASE:4 RETURN:4"
+"NSD0100","NSD0100_SSPX_SOService","unreached","(진입점 미연결)","NSD0100_SSPX_SOAsync","1","16","16","16","0","4","100","CALL_LOCAL:4 BRANCH:4 FLAG:4 CALL_BASE:4"
+"NSD0100","NSD0100_SSPX_SOService","unreached","(진입점 미연결)","OnNSD0100_SSPX_SOOperationCompleted","1","12","12","12","0","4","100","BRANCH:4 LOCAL:4 CALL_BASE:4"

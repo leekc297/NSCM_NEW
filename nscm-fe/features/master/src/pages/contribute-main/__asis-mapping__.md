@@ -64,7 +64,7 @@
 
 | # | As-Is Method (Line) | Kind | Category | MsgID | Msg (KO) | 조건 | To-Be 적용 위치 |
 |---:|---|---|---|---|---|---|---|
-| 1 | `SaveData` L344 | GMessageBox | 숫자값검증 | **MSG00303** → TO-BE **MSG01306** | "입력한 데이터가 100을 초과하거나 미만입니다." | 연/월 기여율 합계 ≠ 100 | `utils/validators.ts` → `validChk(rows): boolean` + `ContributeMain.handleSave` 호출 전 검증 + setAlert. 2026-10-08 정정: AS-IS 번호 MSG00303 은 TO-BE DB 미등록 → 같은 문구가 등록된 MSG01306 사용(DB 실측). 화면 검증이며 저장 SP 는 이 검사를 하지 않는다 |
+| 1 | `SaveData` L344 | GMessageBox | 숫자값검증 | **MSG00303** → TO-BE **MSG01306** | "입력한 데이터가 100을 초과하거나 미만입니다." | 연/월 기여율 합계 ≠ 100, 또는 월 모드에서 수정 행의 값 있는 달 수 ≠ 12 (.cs L767 `ValidChkCol.Count != 12`) | `utils/validators.ts` → `validChk(rows)` (합계 100/0 + 월 모드 12개월 개수 검사. 개수 검사는 2026-08-11 제거 후 2026-10-16 갭분석으로 AS-IS 와 같게 복원, 알림에 `(값 있는 달 수/12)` 부기) + `ContributeMain.handleSave` 호출 전 검증 + setAlert. 2026-10-08 정정: AS-IS 번호 MSG00303 은 TO-BE DB 미등록 → 같은 문구가 등록된 MSG01306 사용(DB 실측). 화면 검증이며 저장 SP 는 이 검사를 하지 않는다 |
 | 2 | `SaveData` L351 | GMessageBox | 필수값 | **MSG00308** → TO-BE **MSG01310** | "구분값을 입력해 주세요." | `RBU_0999` 컬럼 NULL when 기여율 입력 | `utils/validators.ts` → `validChk2(rows): boolean` + 동일 setAlert. 2026-10-08 정정: MSG00308 미등록 → MSG01310 사용, fallback 도 종전 '필수값을 입력해주세요.' 에서 AS-IS 문구로 맞춤 |
 | 3 | `SaveData` L459 | GMessageBox | 확인메시지 | **MSG00004** | "저장하시겠습니까?" | response.DataSet[0]='success' | `useMessageStore.setAlert({type:'confirm', msgId:'MSG00004'}) → boolean` 후 진행 |
 | 4 | `chkYear_CheckedChanged` L703 | GMessageBox | 기타 | **MSG00266** | "(미등록)" | `!siMain.IsLock(sheetName)` | `chkYear` 토글 핸들러 + setAlert |

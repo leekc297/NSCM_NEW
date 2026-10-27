@@ -1,0 +1,4 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,GroupID,CODE,GroupInfo,GroupInfo.cs:104,GroupID*,Text,,None,코드 선언 FPMerge.None,250,true,,,,"if(sheetName == ""GroupInfo"")"
+,GrpName,CODE,GroupInfo,GroupInfo.cs:105,GrpName*,Text,,None,코드 선언 FPMerge.None,300,true,,,,"if(sheetName == ""GroupInfo"")"
+,UseYN,CODE,GroupInfo,GroupInfo.cs:106,UseYN*,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,60,true,Center,,,"if(sheetName == ""GroupInfo"")"

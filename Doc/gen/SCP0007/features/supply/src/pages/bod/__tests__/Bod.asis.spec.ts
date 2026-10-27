@@ -1,0 +1,63 @@
+// SCP0007 BOD — TobeGen 생성 골격 (As-is SCP0007_BOD, Fact Pack Doc/asisfacts/screens/SCP0007)
+//   생성기: tools/Harness/gen.js · 사전: tools/Harness/rules/ · 수정 지점은 TODO(이식) 주석 — 그 외는 사전 규칙이므로 손대지 말 것
+// As-is 기반 단위테스트 초안 — Doc/asisfacts/agent/SCP0007/unit_test.md 의 TC 를 it.todo 로. 구현 시 it 로 바꾸고 삭제 금지(건수 게이트 대상).
+import { describe, it } from 'vitest';
+
+describe('SCP0007 BOD — As-is 단위테스트 (56건)', () => {
+  it.todo('TC-ID [구분] 기대결과 — 근거: 근거');
+  it.todo('TC-SCP0007-001 [초기화] usrConditionPanel1(상단, HidePanel)과 spdMain(하단 Fill)이 표시된다. spdMain에 시트 `BOD`가 2단 헤더로 생성된다. 데이터 0행 — 근거: `Form_Load`(메인), 시트 `BOD`, CreateSpread:262, InitSpread:275');
+  it.todo('TC-SCP0007-002 [초기화] clbDivision="Div", clbFromSite="From Site", clbToSite="To Site", clbIncoterms="Incoterms", clbTransMode="Trans Mode", cl — 근거: props.csv layout*.Text, usrLayoutControl2');
+  it.todo('TC-SCP0007-003 [초기화] LookupCommon 코드 목록이 로드된다. 바인딩 대상 컨트롤(clbIncoterms, clbTransMode 후보)은 (확인 필요) — 근거: `biz:CommonData.CommonDataList` [code=LookupCommon], dtIncoterms:65, dtTransMode:66');
+  it.todo('TC-SCP0007-004 [초기화] Yes/No 목록이 표시된다(원천 확인 필요) — 근거: `biz:CommonData.YesOrNo`, dtValidYN:68');
+  it.todo('TC-SCP0007-005 [초기화] incotermsEdit 목록이 dtIncotermsEdit에 로드된다 — 근거: `biz:CommonData.CommonDataList` [code=incotermsEdit], dtIncotermsEdit:69');
+  it.todo('TC-SCP0007-006 [조회] spdMain 시트 `BOD`에 결과가 표시된다. 행 수는 SP 직접 실행 결과와 같다 — 근거: FindButton → FindData_Main, `SCP.SCP0007_GET_BOD`, SP `SCP0007_GET_BOD`');
+  it.todo('TC-SCP0007-007 [조회] `SCP.SCP0007_GET_COUNTRY_CITY`가 1회 호출되고 오류가 없다. GET_BOD와의 호출 순서와 결과 용도는 (확인 필요) — 근거: FindButton → GetData_Country, `SCP.SCP0007_GET_COUNTRY_CITY`, SP `SCP0007_GET_COUNTRY_CITY`');
+  it.todo('TC-SCP0007-008 [조회] 시트 `BOD`가 0행으로 표시되고 오류가 나지 않는다. 0건 안내 메시지는 (확인 필요) — 근거: `SCP.SCP0007_GET_BOD`, SP `SCP0007_GET_BOD`, 시트 `BOD`');
+  it.todo('TC-SCP0007-009 [조회] 오류 메시지가 표시되고 그리드 기존 데이터가 깨지지 않는다. 메시지 문구는 (확인 필요) — 근거: `SCP.SCP0007_GET_BOD`, SP `SCP0007_GET_BOD`');
+  it.todo('TC-SCP0007-010 [조회] 선택한 CODE 값이 모두 SP 파라미터로 전달된다(GetCheckedListValue). 파라미터 매핑은 (확인 필요) — 근거: FindData_Main:517/518/530~534, `SCP.SCP0007_GET_BOD`');
+  it.todo('TC-SCP0007-011 [그리드] 표시 34개. BEFORE_LEAD_TIME, FROM_COUNTRY, ROUTE_CHK, SAFETY_STOCK, TO_COUNTRY 5개는 보이지 않는다. 헤더 라벨이 메타 라벨(예: "Route Id*", "T — 근거: 시트 `BOD`, grid_effective.csv, SCM_MST_SHEET_COLUMNS');
+  it.todo('TC-SCP0007-012 [그리드] SAFETY_STOCK(Safety Stock)이 숨겨져 있다 — 근거: 시트 `BOD`, InitSpread:338 Visible=false');
+  it.todo('TC-SCP0007-013 [그리드] 코드 정의 33컬럼이 정의돼 있고 헤더 문구가 원문(예: "Shipping Document Preparation Data", "Sea/Air Ferry")과 같다. DAYS_MON~DAYS_SUN 7개는 bVisib — 근거: 시트 `Distribution Route`, InitSpread:264~297');
+  it.todo('TC-SCP0007-014 [그리드] Route Id, L/T Type, Valid, Trans Mode, Priority, Departure Days, Shipping Company, Shipping Document Preparation Data, S — 근거: 시트 `Distribution Route`, ColumnHeaderSpan:301~335');
+  it.todo('TC-SCP0007-015 [division] 모든 division에서 표시 34 / 숨김 5로 같다 — 근거: 시트 `BOD`, grid_effective.csv division 열');
+  it.todo('TC-SCP0007-016 [division] 모든 division에서 같은 33컬럼 정의(코드추가) — 근거: 시트 `Distribution Route`, grid_effective.csv');
+  it.todo('TC-SCP0007-017 [division] 후보가 `BLUtils.GetDivisionWithoutEE(false,"")` 결과와 같다. EE 계열 제외 여부는 (확인 필요) — 근거: InsertButton:387, 시트 `BOD`');
+  it.todo('TC-SCP0007-018 [이벤트] `cboDivision_SelectedIndexChanged`가 실행된다. 연동 결과(예: Site 목록 갱신)는 AS-IS 실행 결과와 대조 (확인 필요) — 근거: `cboDivision_SelectedIndexChanged` (InitEvent:176)');
+  it.todo('TC-SCP0007-019 [이벤트] TO_SITE_CODE 셀 콤보가 필터된 To Site 목록으로 다시 바인딩된다 — 근거: `SpdMain_ComboSelChange`:1146');
+  it.todo('TC-SCP0007-020 [이벤트] TO_SITE_CODE 셀 콤보가 필터 목록으로 다시 바인딩된다. 위 두 조건 밖의 값일 때의 동작은 (확인 필요) — 근거: `SpdMain_ComboSelChange`:1154');
+  it.todo('TC-SCP0007-021 [이벤트] TO_SITE_CODE 콤보가 다시 바인딩되지 않는다 — 근거: `SpdMain_ComboSelChange` (`!siMain.IsLock` 조건)');
+  it.todo('TC-SCP0007-022 [이벤트] `SCP.SCP0007_GET_ROUTE_CNT`가 호출되고 결과 `route_cnt`가 행에 반영된다(대상 컬럼 ROUTE_CNT 후보, 확인 필요). From/To 국가·도시, To VMI_YN·SITE_TYPE — 근거: `SpdMain_Changed` → SetCityCode:1448, `SCP.SCP0007_GET_ROUTE_CNT`, SP `SCP0007_GET_ROUTE_CNT`');
+  it.todo('TC-SCP0007-023 [이벤트] Route 건수 0이 반영되고 오류가 없다. 후속 처리는 (확인 필요) — 근거: `SpdMain_Changed`, `SCP.SCP0007_GET_ROUTE_CNT`, SP `SCP0007_GET_ROUTE_CNT`');
+  it.todo('TC-SCP0007-024 [이벤트] 셀 1회 변경에 `SCP.SCP0007_GET_ROUTE_CNT` 연쇄 재호출이 생기지 않는다(1284 해제 / 1315 재등록) — 근거: `SpdMain_Changed`:1284/1315');
+  it.todo('TC-SCP0007-025 [이벤트] `SpdMain_ClipboardPasted`가 실행되고 OSP_YN, CITY를 참조해 처리한다. 결과는 AS-IS와 대조 (확인 필요) — 근거: `SpdMain_ClipboardPasted`:1218~1255');
+  it.todo('TC-SCP0007-026 [이벤트] `SpdMain_EditChange`가 실행되고 To SITE_TYPE을 참조한다. 결과는 (확인 필요) — 근거: `SpdMain_EditChange`:1344');
+  it.todo('TC-SCP0007-027 [이벤트] `SpdMain_KeyPress`가 실행된다. 동작은 AS-IS와 대조 (확인 필요) — 근거: `SpdMain_KeyPress` (InitEvent:182)');
+  it.todo('TC-SCP0007-028 [이벤트] `SpdMain_TopChange`가 실행된다. 동작은 AS-IS와 대조 (확인 필요) — 근거: `SpdMain_TopChange` (InitEvent:179)');
+  it.todo('TC-SCP0007-029 [이벤트] 선택한 경로의 ROUTE_ID, TRANSPORT_MODE_NAME, PRIORITY, DAYS_MON~DAYS_SUN, VALID_YN, LT_SUM, LT_TYPE 값이 BOD 행에 반영된다(대상 컬럼 매핑 확인 — 근거: `spdMain_CellDoubleClick`(메인):1068~1104, 시트 `BOD`, 시트 `Distribution Route`');
+  it.todo('TC-SCP0007-030 [그리드] 새 행의 DIVISION_ID(dtMyDivision), INCOTERMS, INCOTERMS_SSP(dtIncotermsEdit)에 셀 콤보가 설정된다 — 근거: InsertButton:387/424/425, `biz:CommonData.CommonDataList` [code=incotermsEdit], 시트 `BOD`');
+  it.todo('TC-SCP0007-031 [그리드] TC-030의 셀 콤보 설정 분기로 들어가지 않는다. "R" 분기의 동작은 (확인 필요) — 근거: InsertButton (`else!(strSel_InputStatus == "R")` 분기)');
+  it.todo('TC-SCP0007-032 [권한] 셀 콤보가 설정되지 않는다 — 근거: InsertButton (`siMain.IsLock(...) == false` 조건)');
+  it.todo('TC-SCP0007-033 [그리드] PLANT 행의 INCOTERMS_SSP 콤보가 incotermsEdit 목록이다 — 근거: EditButton:476/484, `biz:CommonData.CommonDataList` [code=incotermsEdit]');
+  it.todo('TC-SCP0007-034 [그리드] PLANT 행의 INCOTERMS_SSP 콤보가 LookupCommon "INCOTERMS" 목록이다. PLANT가 아닌 행은 바뀌지 않는다 — 근거: EditButton:490, `biz:CommonData.CommonDataList` [code=LookupCommon]');
+  it.todo('TC-SCP0007-035 [저장] `SCP.SCP0007_SAVE_BOD` 호출이 성공한다. SCP_MST_BOD에 행이 생기고, SCP_MST_BOD_H와 SCM_SYS_LOG_BATCH에 기록된다. 이어서 `SCP.SCP0007_GET_BOD`  — 근거: SaveData_Main:794, `SCP.SCP0007_SAVE_BOD`, SP `SCP0007_SAVE_BOD`, `SCP.SCP0007_GET_BOD`');
+  it.todo('TC-SCP0007-036 [저장] SCP_MST_BOD가 MERGE로 갱신되고, SCP_MST_BOD_ITEM INSERT/UPDATE 전개 결과가 SP 기대와 같다(전개 규칙 확인 필요). 재조회 후 수정값이 표시된다 — 근거: `SCP.SCP0007_SAVE_BOD`, SP `SCP0007_SAVE_BOD`');
+  it.todo('TC-SCP0007-037 [저장] `ERR_MESSAGE`의 오류 문구가 표시되고 원장에 반영되지 않는다. 검증 위치(FE/SP)와 오류 시 재조회 여부는 (확인 필요) — 근거: SaveData_Main:930 `ERR_MESSAGE`, `SCP.SCP0007_SAVE_BOD`');
+  it.todo('TC-SCP0007-038 [저장] 저장 SP 호출 여부와 안내 메시지는 (확인 필요). 데이터 변경은 없다 — 근거: SaveButton, `SCP.SCP0007_SAVE_BOD`');
+  it.todo('TC-SCP0007-039 [저장] SCP_MST_BOD에서 해당 행이 DELETE된다(SP 참조 DELETE:SCP_MST_BOD). 이력 기록 여부는 (확인 필요) — 근거: `SCP.SCP0007_SAVE_BOD`, SP `SCP0007_SAVE_BOD`');
+  it.todo('TC-SCP0007-040 [초기화] txtFromCountry, txtFromCity, txtToCountry, txtToCity에 생성자 값이 표시되고 Enabled=false다. btnFromSrch, btnToSrch, clbTransMode도  — 근거: `Form_Load`(팝업 .ctor:149) → FindDataMain:436, `SCP.SCP0005_GET_DISTRIBUTION_ROUTE`, SP `SCP0005_GET_');
+  it.todo('TC-SCP0007-041 [조회] `SCP.SCP0005_GET_DISTRIBUTION_ROUTE`가 다시 호출되고 시트 `Distribution Route`가 갱신된다 — 근거: `btnButtonList_UsrButtonList_Click_Detected` → FindDataMain, `SCP.SCP0005_GET_DISTRIBUTION_ROUTE`');
+  it.todo('TC-SCP0007-042 [조회] TC-041과 같다 — 근거: 팝업 FindButton → FindDataMain, `SCP.SCP0005_GET_DISTRIBUTION_ROUTE`');
+  it.todo('TC-SCP0007-043 [조회] 시트 `Distribution Route`가 0행이고 오류가 없다 — 근거: `SCP.SCP0005_GET_DISTRIBUTION_ROUTE`, SP `SCP0005_GET_DISTRIBUTION_ROUTE`');
+  it.todo('TC-SCP0007-044 [조회] 오류 메시지가 표시되고 팝업이 비정상 종료되지 않는다. 문구는 (확인 필요) — 근거: `SCP.SCP0005_GET_DISTRIBUTION_ROUTE`');
+  it.todo('TC-SCP0007-045 [이벤트] txtFromCountry ← popCity.Country, txtFromCity ← popCity.City — 근거: `btnFromSrch_Click`:689~690');
+  it.todo('TC-SCP0007-046 [이벤트] txtToCountry ← popCity.Country, txtToCity ← popCity.City — 근거: `btnToSrch_Click`:707~708');
+  it.todo('TC-SCP0007-047 [이벤트] 버튼이 Enabled=false라 반응하지 않는다 — 근거: `btnFromSrch_Click`, `btnToSrch_Click`, InitControls:216/220');
+  it.todo('TC-SCP0007-048 [이벤트] 팝업 `spdMain_CellDoubleClick`가 실행된다. 선택 행 반환 후 팝업 닫힘 여부는 (확인 필요) — 근거: `spdMain_CellDoubleClick`(팝업 InitEvent:201), 시트 `Distribution Route`');
+  it.todo('TC-SCP0007-049 [이벤트] `spdMainDataModel_Changed`가 실행되고 실행 중 자기 이벤트 해제(489)/재등록(521)으로 재진입이 생기지 않는다 — 근거: `spdMainDataModel_Changed`:489/521');
+  it.todo('TC-SCP0007-050 [그리드] VALID_YN(및 DAYS_* 정의)이 Yes/No 목록이다 — 근거: `biz:CommonData.YesOrNo`, dtYesOrNo:48, 시트 `Distribution Route`');
+  it.todo('TC-SCP0007-051 [초기화] COUNTRY_MST 목록이 dtFromCountry/dtToCountry에 로드된다. 사용처는 (확인 필요) — 근거: `biz:CommonData.CommonDataList` [code=COUNTRY_MST], dtFromCountry:44, dtToCountry:46');
+  it.todo('TC-SCP0007-052 [초기화] LookupCommon 기반 Trans Mode 목록(Enabled=false 상태로 표시) — 근거: `biz:CommonData.CommonDataList` [code=LookupCommon], 팝업 dtTransMode:49');
+  it.todo('TC-SCP0007-053 [권한] 그룹 권한 범위에 따라 후보가 다르다. 팝업 GetDivision/GetFromSitebyDivision/GetToSitebyDivision 실제 호출 여부는 (확인 필요) — 근거: `biz:CommonData.CommonDataList` [code=MyDivision / FromSiteByDivision / ToSiteByDivision], NowGroupI');
+  it.todo('TC-SCP0007-054 [초기화] 파서 분류는 \'진입점 미연결\'이다. 실제 호출과 사용처를 AS-IS 실행으로 확인한다 (확인 필요) — 근거: `biz:CommonData.CommonDataList` [code=BodType / TransportMode], GetBodType:569, GetTransMode:579');
+  it.todo('TC-SCP0007-055 [권한] 그룹 C/R/U/D 설정대로 버튼이 활성/비활성된다. 권한 값은 (확인 필요) — 근거: TB_FX_GroupMenuAuth 13행, FindButton / InsertButton / EditButton / SaveButton');
+});

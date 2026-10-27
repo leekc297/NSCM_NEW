@@ -1,6 +1,6 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ItemByDivisionModal, MeasureSelectModal, ProjectByDivisionModal } from 'features/master/src/components';
+import { MaterialByDivisionModal, MeasureSelectModal, ProjectByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
@@ -130,7 +130,8 @@ export const WaterfallShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) =>
       return false;
     }
     if (sc.versionNos.length === 0) {
-      void setAlert({ type: 'alert', content: requiredMsg(t(LBL.VERSION, '_Version')) });
+      // 라벨 'Ver.' 하드코딩(조회조건 라벨과 일치, 사용자 지시 2026-10-20) — DB/번들 미등록 약어.
+      void setAlert({ type: 'alert', content: requiredMsg('Ver.') });
       return false;
     }
     if (!sc.fromYyyymmdd || !sc.toYyyymmdd) {
@@ -288,14 +289,14 @@ export const WaterfallShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) =>
         />
       </div>
 
-      {/* Model 검색 — 공용 표준 ItemByDivisionModal(btnItem_Id → txtItem_Id, design 02 §4.6 P1). */}
-      <ItemByDivisionModal
+      {/* Model/Nickname 검색 — 메1 MaterialByDivisionModal(COM0013). 사용자 지시: 모3(ItemByDivisionModal COM0008)
+          에서 메1로 교체(Model/Nickname 통합 픽커 패턴, 자매 SCP0013/stock-osp 동일). scpModuleType=호출 화면 ID
+          (SP Operation Group 분기 기준). 반환 없으면 기존값 유지(모달이 빈 선택을 콜백하지 않음). */}
+      <MaterialByDivisionModal
         open={openModel}
         modalClose={() => setOpenModel(false)}
         setSelectedValue={itemIds => setSearchParams({ itemId: itemIds })}
-        // 반환 없으면 기존값 유지(AS-IS if(!="") 가드) — 모달이 빈 선택을 콜백하지 않는다.
-        preSearchParams={{ divisionId: sc.divisionId, itemId: sc.itemId }}
-        callFromCell={false}
+        preSearchParams={{ divisionId: sc.divisionId, scpModuleType: MENU_ID, itemId: sc.itemId }}
       />
 
       {/* Project 검색 — 공용 표준 ProjectByDivisionModal(btnProject → txtProject, design 02 §4.6 P2). */}

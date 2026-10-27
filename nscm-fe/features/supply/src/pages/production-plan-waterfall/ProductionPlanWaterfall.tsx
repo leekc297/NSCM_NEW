@@ -113,14 +113,26 @@ export const ProductionPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) =>
     () => new Set(staticMeasures.map(m => m.colNm)),
     [staticMeasures]
   );
+  // UOM 클라 필터(AS-IS ApplyUOM cs:2247~2279) — clbUOM 선택값으로 로드된 데이터를 거른다(재조회 없음).
+  //   AS-IS: _uom=="" 또는 콤마 포함이면 전체, 아니면 "UOM = '값'". single 콤보라 콤마는 없고, UOM 컬럼은 MODEL
+  //   시트 등록행(label 'Unit', ora.py 실측) — 응답 행의 UOM 값과 일치 비교. UOM 컬럼이 없는 행은 거르지 않는다.
   const visibleData = useMemo<MainRow[]>(() => {
-    if (visibleMeasures == null) return rows;
-    return rows.filter(row => {
+    const uom = String(sc.uom ?? '').trim();
+    const byMeasure = (row: MainRow): boolean => {
+      if (visibleMeasures == null) return true;
       const measure = String(row.MEASURE ?? '');
       if (!selectableMeasures.has(measure)) return true; // 파생 measure = 필터 면제
       return visibleMeasures.includes(measure);
-    });
-  }, [rows, visibleMeasures, selectableMeasures]);
+    };
+    const byUom = (row: MainRow): boolean => {
+      if (!uom) return true; // 미선택 = 전체(AS-IS _uom=="")
+      const raw = (row as Record<string, unknown>).UOM;
+      if (raw == null) return true; // UOM 값 없는 응답 = 필터 면제
+      return typeof raw === 'string' ? raw === uom : true; // UOM 은 'M'/'EA' 문자열 — 비문자열은 면제
+    };
+    if (visibleMeasures == null && !uom) return rows;
+    return rows.filter(row => byMeasure(row) && byUom(row));
+  }, [rows, visibleMeasures, selectableMeasures, sc.uom]);
 
   // Column Set 팝업 초기값 — 이전 OK 결과가 있으면 그것, 없으면 현재 메타(admin fetch)에서 파생.
   const columnLayoutSettings = useMemo(
@@ -132,7 +144,7 @@ export const ProductionPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) =>
   const requiredMsg = (label: string): string =>
     t(MSG.REQUIRED_FIELD, '_{0} is required.').replace('{0}', label);
 
-  // 조회 사전조건 (design 02 §6 / 03 §4.3): 필수값(Division/OperationGroup/Version/Period) + Gap→version 2건(MSG00376) + 기간.
+  // 조회 사전조건 (design 02 §6 / 03 §4.3): 필수값(Division/OperationGroup/Version/Period) + Gap→version 2건(MSG01368) + 기간.
   const validateSearch = (): boolean => {
     if (!sc.divisionId) {
       void setAlert({ type: 'alert', content: requiredMsg(t(LBL.DIVISION, '_Div')) });
@@ -170,13 +182,13 @@ export const ProductionPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) =>
       });
       return false;
     }
-    // Gap 체크 시 version 정확히 2건(version_no 길이 27) — design 02 §4e MSG00376.
+    // Gap 체크 시 version 정확히 2건(version_no 길이 27) — design 02 §4e MSG01368.
     if (sc.chkGap) {
       const versionNo = sc.versionNos.join(',');
       if (versionNo.length !== GAP_VERSION_NO_LENGTH || sc.versionNos.length !== 2) {
         void setAlert({
           type: 'alert',
-          content: t(MSG.GAP_NEED_TWO_VERSION, '_Select 2 versions when Gap is checked.'),
+          content: t(MSG.GAP_NEED_TWO_VERSION, '_Choose two versions.'),
         });
         return false;
       }

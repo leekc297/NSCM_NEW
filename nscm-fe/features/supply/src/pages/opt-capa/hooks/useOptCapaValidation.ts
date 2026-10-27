@@ -6,6 +6,7 @@ import {
   MAX_DECIMAL_SCALE,
   MSG,
   NON_NEGATIVE_COLUMNS,
+  NUMERIC_PARSE_COLUMNS,
   PERIOD_RANGE_COLUMNS,
   PRE_KEY_COLUMNS,
   SHEETS,
@@ -200,7 +201,7 @@ export const useOptCapaValidation = () => {
    * 대상은 시작·종료가 쌍으로 있는 3시트뿐이다(`Ramp-up(Interval)` 은 `START_DATE` 단일).
    * 중첩 비교 그룹 = `PRE_KEY_COLUMNS` 중 기간 컬럼을 뺀 나머지 키(= 동일 대상 식별키).
    *
-   * 순서는 **중첩(`MSG00105`) → 역전(`MSG00108`)** 이다 — AS-IS 가 그 순서다(cs:2156-2161 →
+   * 순서는 **중첩(AS-IS `MSG00105`→TO-BE `MSG00700` 재매핑) → 역전(`MSG00108`)** 이다 — AS-IS 가 그 순서다(cs:2156-2161 →
    * 2171-2175 · 2714-2719 → 2728-2732 · 2970-2975 → 2984-2988). 두 오류가 동시에 성립하는 행에서
    * 표시 메시지가 갈리므로 순서를 맞춘다(iter-3 감사 G3-11 ①).
    *
@@ -295,6 +296,15 @@ export const useOptCapaValidation = () => {
         if (!inAsisBranch(binding, row)) continue;
         const parsed = parseNumber(raw);
         if (parsed === undefined || parsed < 0) {
+          return { msgId: MSG.INVALID_NUMBER, arg: `${label(binding)} : ${str(raw)}` };
+        }
+      }
+      for (const binding of NUMERIC_PARSE_COLUMNS) {
+        const raw = row[binding];
+        if (raw === undefined || isBlank(raw)) continue;
+        if (!inAsisBranch(binding, row)) continue;
+        // AS-IS `CheckDouble`(cs:3320) = `double.TryParse` 실패만 차단한다. 음수는 허용(추가 차단 금지).
+        if (parseNumber(raw) === undefined) {
           return { msgId: MSG.INVALID_NUMBER, arg: `${label(binding)} : ${str(raw)}` };
         }
       }

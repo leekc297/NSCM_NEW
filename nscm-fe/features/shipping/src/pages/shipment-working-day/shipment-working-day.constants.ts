@@ -96,11 +96,13 @@ export const DAY_CELL_DATA_MAP: readonly string[] = ['Y', 'N'];
 // 동적 일자 컬럼 폭 — AS-IS AddComboColumn(..., 70, ...) .cs:263 리터럴.
 export const DAY_COLUMN_WIDTH = 70;
 
-// 다단 헤더 총높이 — 48px 고정(hook #93 단일 출처 = foundation HEIGHT_BY_COLUMN_DEPTH).
-//   AS-IS ColumnHeaderSpan 의 20 을 3배(60)로 옮기면 위반이다. 자매 SCP0096 의 TOTAL=60 은 복사 금지.
-//   per-tier 높이는 여기서 상수로 박지 않는다 — 실제 렌더된 columnHeaders.rows.length 로 나눈다
-//   (hook #93 §3 원칙 2. 3SPAN 응답이 비거나 늦는 프레임에서 tier 수 추정이 어긋난다).
-export const HEADER_TOTAL_HEIGHT = 48;
+// 다단 헤더 총높이 — 54px(3단 = 18px/tier). foundation 표준(HEIGHT_BY_COLUMN_DEPTH=48, 3단 16px/tier)은
+//   이 화면의 일(leaf) 헤더 숫자가 아주 살짝 잘려(사용자 신고 2026-10-14) 최소폭으로 +6px 늘렸다.
+//   48→54 는 월/주차 상위 tier 를 그대로 보이게 둔 채 일자 tier 의 clip 만 해소하는 최소 증분이다
+//   (SCP0096 의 TOTAL=60 과는 별개 — 필요폭만 반영). per-tier 높이는 여기서 쪼개 박지 않는다 —
+//   실제 렌더된 columnHeaders.rows.length 로 나눈다(hook #93 §3 원칙 2. 3SPAN 응답이 비거나 늦는
+//   프레임에서 tier 수 추정이 어긋난다).
+export const HEADER_TOTAL_HEIGHT = 54;
 
 // i18n — 전부 SCM_ADM_MSG_M 역조회 실측치다. AS-IS 번호 그대로 쓰면 문구가 뒤집힌다(hook #114).
 //   AS-IS MSG00097 -> MSG00667 / MSG00093 -> MSG01122 / MSG00134 -> MSG01153 / MSG00004 -> MSG00672.
@@ -135,8 +137,10 @@ export const LBL = {
   PERIOD: 'LBL00013',
   DAY_OF_WEEK: 'LBL01067',
   INPUT_VALUE: 'LBL01084',
-  INPUT_BUTTON: 'LBL00872',
   SEARCH: 'LBL00112',
+  // Bulk Update 팝업 OK/Close — SCP0098 BulkUpdateModal 과 동일 라벨.
+  OK: 'LBL00716',
+  CLOSE: 'LBL00627',
   // 동적 일자 컬럼 지시용(메시지 인자 전용 — 화면 라벨로는 쓰지 않는다. 컬럼 헤더는 3SPAN 메타다).
   DATE: 'LBL00069',
 } as const;

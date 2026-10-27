@@ -6,6 +6,7 @@ import { createPersistedStoreWithTab } from '@shared/stores';
 import {
   ADMIN_SHEET_NAME,
   ALL,
+  BUCKET,
   DEFAULT_SHEET,
   GRID_SHEETS,
   MENU_ID,
@@ -73,6 +74,8 @@ const initSearchParams = (): OptCapaSearchParams => ({
   lineIds: [],
   nickName: '',
   itemId: '',
+  // No Work 탭 Bucket 기본 Day — AS-IS 진입 시 Bucket 콤보 index 0('Day', 스크린샷 실측).
+  bucket: BUCKET.DAY,
 });
 
 const emptyStaticColumns = (): StaticColumnsBySheet =>
@@ -123,6 +126,8 @@ export const useOptCapaStore = createPersistedStoreWithTab<State & Action>(
           divisionId,
           fromYyyymm: cur.fromYyyymm,
           toYyyymm: cur.toYyyymm,
+          // Bucket 은 Period 처럼 유지 — No Work 탭 전용 표시축이라 Division 변경과 독립적이다.
+          bucket: cur.bucket,
         };
         state.filters = {}; // 그리드 초기화 — 재조회(Search) 전까지 빈 상태
         state.applied = null;
@@ -155,7 +160,9 @@ export const useOptCapaStore = createPersistedStoreWithTab<State & Action>(
             toYyyymm: params.toYyyymm,
             plantId: plantCodes.join(','),
             lineId: lineCodes.join(','),
-            nickName: isNoWork ? '' : params.nickName,
+            // 갭분석 C-06 — Nick Name 칸은 Model/Nickname 한 칸으로 합쳤다. 조회 프로시저가 itemId 하나로
+            //   코드 · 별칭 부분 일치 · 쉼표 복수 · 대소문자 무시를 처리하므로 nickName 은 항상 공백(옛 F6 저장값 무시).
+            nickName: '',
             itemId: isNoWork ? '' : params.itemId,
           },
         };

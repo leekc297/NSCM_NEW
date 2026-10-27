@@ -1,0 +1,8 @@
+﻿rule,value,ref,meaning
+meta_column_merge_policy,Restricted,GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909,메타(SCM_MST_SHEET_COLUMNS)로 만든 컬럼은 모두 FPMerge.Restricted(왼쪽 컬럼이 병합된 범위 안에서 동일 인접값 세로 병합)
+meta_check_column_merge_policy,None,GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:2090,메타 체크 컬럼(AddCheckColumn)은 병합 없음
+grid_merge_option_default,SmartMerge,GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:12345,SmartColMerge() 기본 옵션 — 빈 값은 병합하지 않음(SmartMerge: DO NOT MERGE WHITE SPACE)
+smart_col_merge_start,first visible Restricted column,GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:SmartColMergeOld,COLMERGE 보조열(Always)을 첫 표시+Restricted 컬럼 앞에 숨겨 넣고 그 뒤 컬럼을 계층 병합
+cell_type_default,Text,GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1387~1393,CELL_CONTROL_OBJECT_TYPE_CODE 가 NULL 이면 기본 텍스트 셀
+cell_type_combo,FPComboBox → CELL_COMBO_DATA_TYPE 콤보,GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1444~1455,메타 FPComboBox 컬럼은 CELL_COMBO_DATA_TYPE(예 YesOrNo) 데이터로 콤보 셀
+checked_list_no_selection,ALL,GSCM/01.Framework/GSCM.Windows.Forms/Class/UsrCheckedList.cs:298-307,다중 체크리스트 선택 없음 = ALL(전체)

@@ -50,14 +50,19 @@ export const submitElectrodeSaveRequest = async (
   };
   for (const r of changed) {
     const rec = r as Record<string, unknown>;
-    const isInsert = r.CRUD_TYPE === 'I';
+    // AS-IS cs:537-539 — M 행이라도 PRIORITY_SEQ 공란(GET 전극아이템 골격행)은 신규(I)로 저장한다. [F-3]
+    const prioritySeq = safeString(rec.PRIORITY_SEQ);
+    const isInsert = r.CRUD_TYPE === 'I' || prioritySeq === '';
     acc.activeFlag.push(isInsert ? 'I' : 'M');
-    acc.prioritySeq.push(safeString(rec.PRIORITY_SEQ));
+    acc.prioritySeq.push(prioritySeq);
     acc.divisionId.push(safeString(rec.DIVISION_ID));
     acc.projectCode.push(safeString(rec.PROJECT_CODE));
     acc.scmSiteId.push(safeString(rec.SCM_SITE_ID));
-    // 표시컬럼 PLANT_SITE_ID 는 합성문자열 — 저장은 원본 PLANT_SITE_ID_B(design/03 col29).
-    acc.plantSiteId.push(safeString(rec.PLANT_SITE_ID_B));
+    // 저장 원본 = PLANT_SITE_ID_B(design/03 col29). 신규행/콤보수정은 _B 가 비어 표시컬럼
+    //   PLANT_SITE_ID(콤보 CODE)에만 값이 있으므로, AS-IS(cs:566~570)처럼 _B 공란이면 PLANT_SITE_ID
+    //   폴백(없으면 공백 저장→ORA-01407 롤백). [F-2, 자매 SCP0048 동일]
+    const plantSiteB = safeString(rec.PLANT_SITE_ID_B);
+    acc.plantSiteId.push(plantSiteB !== '' ? plantSiteB : safeString(rec.PLANT_SITE_ID));
     acc.itemId.push(safeString(rec.ITEM_ID).toUpperCase());
     acc.priority.push(safeString(rec.PRIORITY));
     acc.fromYyyymmdd.push(ymd8(rec.FROM_YYYYMMDD));

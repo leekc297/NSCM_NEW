@@ -1,4 +1,4 @@
-import { ModelByDivisionPopup, ProjectByDivisionPopup } from 'features/master/src/components';
+import { MaterialByDivisionModal,  ProjectByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -136,7 +136,7 @@ export const DemandGroupMasterForm = ({ onSearch }: DemandGroupMasterFormProps) 
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.PROJECT, '_Project')}
+                label={t(LBL.PROJECT, '_PJT')}
                 labelAlign='right'
                 render={() => (
                   <InputField
@@ -150,12 +150,8 @@ export const DemandGroupMasterForm = ({ onSearch }: DemandGroupMasterFormProps) 
                           appearance='outlined'
                           priority='normal'
                           disabled={isAuthDenied}
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => !isAuthDenied && setOpenProjectModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => !isAuthDenied && setOpenProjectModal(true)}
                         />
                       ),
                     }}
@@ -167,7 +163,7 @@ export const DemandGroupMasterForm = ({ onSearch }: DemandGroupMasterFormProps) 
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.MODEL, '_Model')}
+                label={t(LBL.MODEL, '_Model/Nickname')}
                 labelAlign='right'
                 render={() => (
                   <InputField
@@ -181,12 +177,8 @@ export const DemandGroupMasterForm = ({ onSearch }: DemandGroupMasterFormProps) 
                           appearance='outlined'
                           priority='normal'
                           disabled={isAuthDenied}
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => !isAuthDenied && setOpenItemModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => !isAuthDenied && setOpenItemModal(true)}
                         />
                       ),
                     }}
@@ -200,28 +192,41 @@ export const DemandGroupMasterForm = ({ onSearch }: DemandGroupMasterFormProps) 
       />
       {/* Project 팝업 — 사용자 지시(2026-10-02)로 프2(ProjectByDivisionModal, COM0005 Ex)에서
           프1(ProjectByDivisionPopup, SCM0002 base)로 교체. design/02 §4.6(btnProject AS-IS
-          SCM0002_ProjectbyDivisionPopup)과 정합. division 선필터 전달. */}
-      <ProjectByDivisionPopup
+          SCM0002_ProjectbyDivisionPopup)과 정합. division 선필터 전달.  Project 팝업 — 사용자 지시(2026-10-14)로 프1(ProjectByDivisionPopup, SCM0002 base)에서
+          프2(ProjectByDivisionModal, COM0005 = DMF000_ProjectbyDivisionPopupEx 공용)로 교체.
+          project-route(SCP) 선례와 동일. division 선필터 전달. */}
+      <ProjectByDivisionModal
         open={openProjectModal}
-        onClose={() => setOpenProjectModal(false)}
-        params={{ divisionId: searchParams.divisionId, projectCode: searchParams.projectId }}
-        onSelect={selected => {
-          if (selected.projectCode) setSearchParams({ projectId: selected.projectCode });
+        modalClose={() => setOpenProjectModal(false)}
+        setSelectedValue={projects => {
+          if (projects) setSearchParams({ projectId: projects });
         }}
+        preSearchParams={{
+          divisionId: searchParams.divisionId,
+          deptId: 'ALL',
+          endCustomer: 'ALL',
+          salesSite: 'ALL',
+          etc: 'N',
+          projectCode: searchParams.projectId,
+        }}
+        callFromCell={false}
       />
       {/* Model(Item) 팝업 — 사용자 지시(2026-10-02)로 ItemByDivisionModal(COM0008, AS-IS
           DM0002_ItembyDivisionPopup)에서 모1(ModelByDivisionPopup, SCM0002 base)로 교체.
-          design/02 §4.6(btnItemId AS-IS SCM0002_ItembyDivisionPopup)과 정합. */}
-      <ModelByDivisionPopup
+          design/02 §4.6(btnItemId AS-IS SCM0002_ItembyDivisionPopup)과 정합.Model 팝업 — 사용자 지시(2026-10-14)로 모1(ModelByDivisionPopup, SCM0002 base)에서
+          메1(MaterialByDivisionModal, COM0013 = SCM0002_MaterialByDivisionPopup 공용)로 교체.
+          project-route(SCP) 선례와 동일. */}
+      <MaterialByDivisionModal
         open={openItemModal}
-        onClose={() => setOpenItemModal(false)}
-        params={{
-          divisionId: searchParams.divisionId,
-          projectCode: searchParams.projectId,
-          itemId: searchParams.itemId,
+        modalClose={() => setOpenItemModal(false)}
+        setSelectedValue={items => {
+          if (items) setSearchParams({ itemId: items });
         }}
-        onSelect={selected => {
-          if (selected.itemId) setSearchParams({ itemId: selected.itemId });
+        preSearchParams={{
+          divisionId: searchParams.divisionId,
+          operationGroup: '',
+          scpModuleType: MENU_ID,
+          itemId: searchParams.itemId,
         }}
       />
     </>

@@ -1,7 +1,7 @@
 import { apiClient } from '@foundation/apis';
 import { useSessionStore } from '@shared/stores';
 
-import { MENU_ID, MSG, SHEETS } from '../delegate.constants';
+import { BTN, MENU_ID, MSG, SHEETS } from '../delegate.constants';
 import type { DelegateInput, DelegateRow } from '../delegate.types';
 
 // 검증 실패 결과 — 화면이 msgKey(TO-BE MSG_ID) + 영문 fallback + args 로 alert 를 띄운다.
@@ -46,7 +46,7 @@ export const useDelegateValidation = () => {
       return {
         ok: false,
         msgKey: MSG.DELEGATEE_REQUIRED,
-        msgDefault: '_Please enter the delegatee.',
+        msgDefault: 'Please enter Delegatee.',
       };
     }
     // 위임자 == 본인 (MSG00305, cs:379)
@@ -54,7 +54,7 @@ export const useDelegateValidation = () => {
       return {
         ok: false,
         msgKey: MSG.DELEGATEE_SELF,
-        msgDefault: '_You cannot delegate to yourself.',
+        msgDefault: 'The delegator and the officer are the same.',
       };
     }
     // 기간 공백 (MSG00134, cs:385)
@@ -62,7 +62,7 @@ export const useDelegateValidation = () => {
       return {
         ok: false,
         msgKey: MSG.PERIOD_REQUIRED,
-        msgDefault: '_Please enter the period.',
+        msgDefault: 'Select a date and enter it.',
       };
     }
     // From > To (MSG00219, cs:393)
@@ -70,7 +70,7 @@ export const useDelegateValidation = () => {
       return {
         ok: false,
         msgKey: MSG.PERIOD_REVERSED,
-        msgDefault: '_The start date must be earlier than the end date.',
+        msgDefault: 'The start date can not be later than the end date.',
       };
     }
     // Division 미체크 (MSG00299 -> TO-BE MSG00097, cs:462 bolDivisionChk)
@@ -78,7 +78,7 @@ export const useDelegateValidation = () => {
       return {
         ok: false,
         msgKey: MSG.REQUIRE_DIVISION,
-        msgDefault: '_Please select Division.',
+        msgDefault: 'No Division ID selected.',
       };
     }
     // 중복·중첩 검증 (Validation_Check cs:407-458) — dtFind_Data(=GET rs1, 내가 위임한 목록,
@@ -100,7 +100,7 @@ export const useDelegateValidation = () => {
       return {
         ok: false,
         msgKey: MSG.OVERLAP_PERIOD,
-        msgDefault: '_There are overlapping periods.',
+        msgDefault: 'The period overlaps with an existing one.',
       };
     }
     // MSG00296 (cs:430) — 수임 대상자(delegateeId)가 위임자(USER_ID)로 이미 걸린 중첩 위임 현황
@@ -108,7 +108,7 @@ export const useDelegateValidation = () => {
       return {
         ok: false,
         msgKey: MSG.DELEGATEE_OTHER,
-        msgDefault: '_The delegatee has other delegations in the period.',
+        msgDefault: 'There is another delegation status of the appointed person.',
       };
     }
     // MSG00297 (cs:444) — 본인(sessionUserId)이 수임자(DELEGATEE_ID)로 걸린 중첩 수임 현황
@@ -116,7 +116,7 @@ export const useDelegateValidation = () => {
       return {
         ok: false,
         msgKey: MSG.OVERLAP_RECEIVED,
-        msgDefault: '_You have overlapping received delegations in the period.',
+        msgDefault: 'You have a status that you have received in the nested period.',
       };
     }
     return { ok: true };
@@ -129,9 +129,11 @@ export const useDelegateValidation = () => {
   const searchDelegatee = async (search: string): Promise<DelegateeSearch> => {
     if (!search.trim()) return { status: 'none' };
     try {
+      // useYn — AS-IS UseYN='Y' 파리티. P_USER_CHECK 는 NVL(...,'Y') 로 기본값을 두지만
+      //   (PKG_SSP0020 body 426), 계약(SCM_ADM_PROC_M 3파라미터)대로 명시 전송한다.
       const res = await apiClient.post<Record<string, unknown>[]>(
-        `/${MENU_ID}/${SHEETS.DELEGATE}/USER_CHECK/call-proc`,
-        { search: search.trim(), language: langCd ?? '' }
+        `/${MENU_ID}/${SHEETS.DELEGATE}/${BTN.USER_CHECK}/call-proc`,
+        { search: search.trim(), language: langCd ?? '', useYn: 'Y' }
       );
       if (res.status >= 400 || Number(res.data?.code)) return { status: 'error' };
       const rows =

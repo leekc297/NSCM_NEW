@@ -1,0 +1,972 @@
+{
+  "menuId": "SCP0007",
+  "page": "Bod",
+  "feature": "supply",
+  "routePath": "supply/bod",
+  "asisName": "BOD",
+  "fields": [
+    {
+      "key": "divisionIds",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision"
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite"
+    },
+    {
+      "key": "toSiteIds",
+      "label": "To Site",
+      "lbl": "LBL00023",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbToSite"
+    },
+    {
+      "key": "incoterms",
+      "label": "Incoterms",
+      "lbl": "LBL00024",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbIncoterms"
+    },
+    {
+      "key": "incotermsSsp",
+      "label": "SSP Incoterms",
+      "lbl": "LBL00026",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbIncotermsSSP"
+    },
+    {
+      "key": "transMode",
+      "label": "Trans Mode",
+      "lbl": "LBL00025",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbTransMode"
+    },
+    {
+      "key": "inputStatus",
+      "label": "Status",
+      "lbl": "LBL00014",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboInputStatus"
+    },
+    {
+      "key": "validYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValidYN"
+    }
+  ],
+  "buttons": [],
+  "sheets": [
+    {
+      "name": "BOD",
+      "key": "BOD",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "AFTER_LEAD_TIME",
+        "BEFORE_LEAD_TIME",
+        "BOD_ID",
+        "BOD_VALID",
+        "CREATED_BY",
+        "CREATION_DATE",
+        "CUSTOMER",
+        "DAYS_FRI",
+        "DAYS_MON",
+        "DAYS_SAT",
+        "DAYS_SUN",
+        "DAYS_THU",
+        "DAYS_TUE",
+        "DAYS_WED",
+        "DIS_TOTAL_LEAD_TIME",
+        "DIVISION_ID",
+        "FROM_CITY",
+        "FROM_COUNTRY",
+        "FROM_SITE_CODE",
+        "FROM_YYYYMMDD",
+        "INCOTERMS",
+        "INCOTERMS_SSP",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LEAD_TIME",
+        "LT_TYPE",
+        "PRIORITY",
+        "REMARKS",
+        "ROUTE_CHK",
+        "ROUTE_CNT",
+        "ROUTE_ID",
+        "ROUTE_VALID",
+        "SAFETY_STOCK",
+        "TO_CITY",
+        "TO_COUNTRY",
+        "TO_SITE_CODE",
+        "TO_YYYYMMDD",
+        "TRANSPORT_MODE",
+        "VMI_YN"
+      ],
+      "labels": [
+        "Additional Lead Time",
+        "Before",
+        "BOD_ID",
+        "BOD Valid*",
+        "Created By",
+        "Creation Date",
+        "Customer",
+        "Fri",
+        "Mon",
+        "Sat",
+        "Sun",
+        "Thu",
+        "Tue",
+        "Wed",
+        "Distribution Total Lead Time",
+        "Division*",
+        "From City",
+        "FROM_COUNTRY",
+        "From Site*",
+        "FROM*",
+        "Incoterms*",
+        "Incoterms SSP*",
+        "Last Update Date",
+        "Last Updated By",
+        "Lead Time",
+        "L/T Type",
+        "Priority*",
+        "Remarks",
+        "ROUTE_CHK",
+        "Route Count",
+        "Route Id*",
+        "Route Valid",
+        "Safety Stock",
+        "To City",
+        "TO_COUNTRY",
+        "To Site*",
+        "TO*",
+        "Trans Mode",
+        "To Site VMI"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Distribution Route",
+      "key": "DISTRIBUTION_ROUTE",
+      "popup": false,
+      "rule": "코드 하드코딩 전용(메타 없음)",
+      "columns": [
+        "A_COUNTRY",
+        "A_PORT_CODE",
+        "A_PORT_NAME",
+        "D_COUNTRY",
+        "D_PORT_CODE",
+        "D_PORT_NAME",
+        "DAYS",
+        "DAYS_FRI",
+        "DAYS_MON",
+        "DAYS_SAT",
+        "DAYS_SUN",
+        "DAYS_THU",
+        "DAYS_TUE",
+        "DAYS_WED",
+        "FROM_CITY",
+        "FROM_CITY_NAME",
+        "FROM_COUNTRY",
+        "LT_ARRIVAL_INLAND",
+        "LT_DEPARTURE_INLAND",
+        "LT_LAY_OFF_CLEARANCE",
+        "LT_SUM",
+        "LT_TYPE",
+        "LT_VOYAGE",
+        "LT_WAIT_SHIPPING",
+        "PRIORITY",
+        "ROUTE_ID",
+        "SHIP_DOC_PREPARATION_DATE",
+        "SHIPPING_COMPANY",
+        "TO_CITY",
+        "TO_CITY_NAME",
+        "TO_COUNTRY",
+        "TRANSPORT_MODE_NAME",
+        "VALID_YN"
+      ],
+      "labels": [
+        "Country",
+        "Port Code",
+        "Port",
+        "Country",
+        "Port Code",
+        "Port",
+        "Departure Days",
+        "Fri",
+        "Mon",
+        "Sat",
+        "Sun",
+        "Thu",
+        "Tue",
+        "Wed",
+        "City",
+        "City Name",
+        "Country",
+        "Arrival Inland",
+        "Departure Inland",
+        "Lay Off/Customs Clearance",
+        "Sum",
+        "L/T Type",
+        "Sea/Air Ferry",
+        "Waiting For Shipping",
+        "Priority",
+        "Route Id",
+        "Shipping Document Preparation Data",
+        "Shipping Company",
+        "City",
+        "City Name",
+        "Country",
+        "Trans Mode",
+        "Valid"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "BOD",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0007.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "BOD",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0007.P_",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0007_GET_BOD",
+      "sheet": "BOD",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0007.P_SCP0007_GET_BOD",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0007_GET_COUNTRY_CITY",
+      "sheet": "BOD",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0007.P_SCP0007_GET_COUNTRY_CITY",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0007_SAVE_BOD",
+      "sheet": "BOD",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0007.P_SCP0007_SAVE_BOD",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0007_GET_ROUTE_CNT",
+      "sheet": "Distribution Route",
+      "btn": "ROUTE_CNT",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0007.P_SCP0007_GET_ROUTE_CNT",
+      "entries": [
+        "event:dsdm.Changed"
+      ]
+    },
+    {
+      "sp": "SCP0005_GET_DISTRIBUTION_ROUTE",
+      "sheet": "Distribution Route",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0007.P_SCP0005_GET_DISTRIBUTION_ROUTE",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCP0005_GET_DISTRIBUTION_ROUTE"
+      ]
+    },
+    {
+      "name": "handleDivision",
+      "target": "clbDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleMain",
+      "target": "spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainComboSelChange",
+      "target": "spdMain",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainClipboardPasted",
+      "target": "spdMain",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainKeyPress",
+      "target": "spdMain",
+      "event": "KeyPress",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainEditChange",
+      "target": "spdMain",
+      "event": "EditChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0007_GET_ROUTE_CNT"
+      ]
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0007_GET_ROUTE_CNT"
+      ]
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0007_GET_ROUTE_CNT"
+      ]
+    }
+  ],
+  "tcs": [
+    {
+      "id": "TC-ID",
+      "kind": "구분",
+      "pre": "사전조건",
+      "step": "절차",
+      "input": "입력값",
+      "expect": "기대결과",
+      "basis": "근거"
+    },
+    {
+      "id": "TC-SCP0007-001",
+      "kind": "초기화",
+      "pre": "메뉴 권한(R)이 있는 사용자",
+      "step": "SCP0007 화면을 연다",
+      "input": "–",
+      "expect": "usrConditionPanel1(상단, HidePanel)과 spdMain(하단 Fill)이 표시된다. spdMain에 시트 `BOD`가 2단 헤더로 생성된다. 데이터 0행",
+      "basis": "`Form_Load`(메인), 시트 `BOD`, CreateSpread:262, InitSpread:275"
+    },
+    {
+      "id": "TC-SCP0007-002",
+      "kind": "초기화",
+      "pre": "TC-001",
+      "step": "조회조건 컨트롤의 라벨을 확인한다",
+      "input": "–",
+      "expect": "clbDivision=\"Div\", clbFromSite=\"From Site\", clbToSite=\"To Site\", clbIncoterms=\"Incoterms\", clbTransMode=\"Trans Mode\", clbIncotermsSSP=\"SSP Incoterms\", cboValidYN=\"Valid\", cboInputStatus=\"Input Status\"",
+      "basis": "props.csv layout*.Text, usrLayoutControl2"
+    },
+    {
+      "id": "TC-SCP0007-003",
+      "kind": "초기화",
+      "pre": "TC-001",
+      "step": "Incoterms·Trans Mode 공통코드가 로드됐는지 확인한다",
+      "input": "–",
+      "expect": "LookupCommon 코드 목록이 로드된다. 바인딩 대상 컨트롤(clbIncoterms, clbTransMode 후보)은 (확인 필요)",
+      "basis": "`biz:CommonData.CommonDataList` [code=LookupCommon], dtIncoterms:65, dtTransMode:66"
+    },
+    {
+      "id": "TC-SCP0007-004",
+      "kind": "초기화",
+      "pre": "TC-001",
+      "step": "cboValidYN 목록을 연다",
+      "input": "–",
+      "expect": "Yes/No 목록이 표시된다(원천 확인 필요)",
+      "basis": "`biz:CommonData.YesOrNo`, dtValidYN:68"
+    },
+    {
+      "id": "TC-SCP0007-005",
+      "kind": "초기화",
+      "pre": "TC-001",
+      "step": "incotermsEdit 공통코드가 로드됐는지 확인한다",
+      "input": "–",
+      "expect": "incotermsEdit 목록이 dtIncotermsEdit에 로드된다",
+      "basis": "`biz:CommonData.CommonDataList` [code=incotermsEdit], dtIncotermsEdit:69"
+    },
+    {
+      "id": "TC-SCP0007-006",
+      "kind": "조회",
+      "pre": "조회 대상 BOD 데이터가 있음",
+      "step": "clbDivision, clbFromSite, clbToSite, clbIncoterms, clbTransMode, clbIncotermsSSP, cboValidYN, cboInputStatus를 고른 뒤 조회(FindButton)",
+      "input": "각 조건 1개 이상 선택",
+      "expect": "spdMain 시트 `BOD`에 결과가 표시된다. 행 수는 SP 직접 실행 결과와 같다",
+      "basis": "FindButton → FindData_Main, `SCP.SCP0007_GET_BOD`, SP `SCP0007_GET_BOD`"
+    },
+    {
+      "id": "TC-SCP0007-007",
+      "kind": "조회",
+      "pre": "TC-006",
+      "step": "조회 시 국가·도시 조회가 호출되는지 확인한다(네트워크/로그)",
+      "input": "TC-006과 같음",
+      "expect": "`SCP.SCP0007_GET_COUNTRY_CITY`가 1회 호출되고 오류가 없다. GET_BOD와의 호출 순서와 결과 용도는 (확인 필요)",
+      "basis": "FindButton → GetData_Country, `SCP.SCP0007_GET_COUNTRY_CITY`, SP `SCP0007_GET_COUNTRY_CITY`"
+    },
+    {
+      "id": "TC-SCP0007-008",
+      "kind": "조회",
+      "pre": "조건에 맞는 데이터 없음",
+      "step": "데이터가 없는 조건 조합으로 조회(FindButton)",
+      "input": "존재하지 않는 clbFromSite·clbToSite 조합",
+      "expect": "시트 `BOD`가 0행으로 표시되고 오류가 나지 않는다. 0건 안내 메시지는 (확인 필요)",
+      "basis": "`SCP.SCP0007_GET_BOD`, SP `SCP0007_GET_BOD`, 시트 `BOD`"
+    },
+    {
+      "id": "TC-SCP0007-009",
+      "kind": "조회",
+      "pre": "SP 오류를 유도할 수 있는 환경(예: SP 권한 회수)",
+      "step": "조회(FindButton)",
+      "input": "–",
+      "expect": "오류 메시지가 표시되고 그리드 기존 데이터가 깨지지 않는다. 메시지 문구는 (확인 필요)",
+      "basis": "`SCP.SCP0007_GET_BOD`, SP `SCP0007_GET_BOD`"
+    },
+    {
+      "id": "TC-SCP0007-010",
+      "kind": "조회",
+      "pre": "TC-001",
+      "step": "clbDivision, clbFromSite, clbToSite, clbIncoterms, clbTransMode, clbIncotermsSSP에서 다중 선택 후 조회",
+      "input": "각 2개 이상 선택",
+      "expect": "선택한 CODE 값이 모두 SP 파라미터로 전달된다(GetCheckedListValue). 파라미터 매핑은 (확인 필요)",
+      "basis": "FindData_Main:517/518/530~534, `SCP.SCP0007_GET_BOD`"
+    },
+    {
+      "id": "TC-SCP0007-011",
+      "kind": "그리드",
+      "pre": "TC-006",
+      "step": "시트 `BOD`의 표시 컬럼을 센다",
+      "input": "–",
+      "expect": "표시 34개. BEFORE_LEAD_TIME, FROM_COUNTRY, ROUTE_CHK, SAFETY_STOCK, TO_COUNTRY 5개는 보이지 않는다. 헤더 라벨이 메타 라벨(예: \"Route Id*\", \"To Site VMI\")과 같다",
+      "basis": "시트 `BOD`, grid_effective.csv, SCM_MST_SHEET_COLUMNS"
+    },
+    {
+      "id": "TC-SCP0007-012",
+      "kind": "그리드",
+      "pre": "TC-006",
+      "step": "SAFETY_STOCK 컬럼 표시 여부를 확인한다",
+      "input": "–",
+      "expect": "SAFETY_STOCK(Safety Stock)이 숨겨져 있다",
+      "basis": "시트 `BOD`, InitSpread:338 Visible=false"
+    },
+    {
+      "id": "TC-SCP0007-013",
+      "kind": "그리드",
+      "pre": "팝업 열림(TC-040)",
+      "step": "시트 `Distribution Route`의 컬럼과 헤더를 확인한다",
+      "input": "–",
+      "expect": "코드 정의 33컬럼이 정의돼 있고 헤더 문구가 원문(예: \"Shipping Document Preparation Data\", \"Sea/Air Ferry\")과 같다. DAYS_MON~DAYS_SUN 7개는 bVisible=false로 정의돼 있으며, 실제로 보이는지는 (확인 필요)",
+      "basis": "시트 `Distribution Route`, InitSpread:264~297"
+    },
+    {
+      "id": "TC-SCP0007-014",
+      "kind": "그리드",
+      "pre": "TC-013",
+      "step": "`Distribution Route` 2단 헤더 병합을 확인한다",
+      "input": "–",
+      "expect": "Route Id, L/T Type, Valid, Trans Mode, Priority, Departure Days, Shipping Company, Shipping Document Preparation Data, Sum이 0행부터 2행 병합. FROM/TO/D_/A_ 계열 Country·City·Port Code는 1행. 상단 그룹 헤더 문구는 (확인 필요)",
+      "basis": "시트 `Distribution Route`, ColumnHeaderSpan:301~335"
+    },
+    {
+      "id": "TC-SCP0007-015",
+      "kind": "division",
+      "pre": "division 40, 81, 81_HD, 81_HG, 81_HM, 81_ST, 81_UC, 82, EE, EE_HD, EE_HG, EE_HM, EE_ST, EE_UC 각각의 사용자",
+      "step": "division별 사용자로 로그인해 조회(FindButton)하고 시트 `BOD`의 컬럼을 센다(파라미터화 14회)",
+      "input": "division 14종",
+      "expect": "모든 division에서 표시 34 / 숨김 5로 같다",
+      "basis": "시트 `BOD`, grid_effective.csv division 열"
+    },
+    {
+      "id": "TC-SCP0007-016",
+      "kind": "division",
+      "pre": "TC-015 사용자",
+      "step": "division별로 팝업을 열고 시트 `Distribution Route`의 컬럼을 센다",
+      "input": "division 14종",
+      "expect": "모든 division에서 같은 33컬럼 정의(코드추가)",
+      "basis": "시트 `Distribution Route`, grid_effective.csv"
+    },
+    {
+      "id": "TC-SCP0007-017",
+      "kind": "division",
+      "pre": "cboInputStatus=\"C\"",
+      "step": "행 추가 후 DIVISION_ID 콤보 후보를 확인한다",
+      "input": "–",
+      "expect": "후보가 `BLUtils.GetDivisionWithoutEE(false,\"\")` 결과와 같다. EE 계열 제외 여부는 (확인 필요)",
+      "basis": "InsertButton:387, 시트 `BOD`"
+    },
+    {
+      "id": "TC-SCP0007-018",
+      "kind": "이벤트",
+      "pre": "TC-001",
+      "step": "clbDivision 선택을 바꾼다",
+      "input": "Div 값 변경",
+      "expect": "`cboDivision_SelectedIndexChanged`가 실행된다. 연동 결과(예: Site 목록 갱신)는 AS-IS 실행 결과와 대조 (확인 필요)",
+      "basis": "`cboDivision_SelectedIndexChanged` (InitEvent:176)"
+    },
+    {
+      "id": "TC-SCP0007-019",
+      "kind": "이벤트",
+      "pre": "시트 `BOD` 편집 가능(잠금 아님)",
+      "step": "spdMain에서 FROM_SITE_CODE 콤보로 sFromSite가 \"E\"인 Site를 고른다",
+      "input": "FROM_SITE_CODE = (sFromSite=\"E\" Site)",
+      "expect": "TO_SITE_CODE 셀 콤보가 필터된 To Site 목록으로 다시 바인딩된다",
+      "basis": "`SpdMain_ComboSelChange`:1146"
+    },
+    {
+      "id": "TC-SCP0007-020",
+      "kind": "이벤트",
+      "pre": "시트 `BOD` 편집 가능",
+      "step": "spdMain에서 sFromSite가 \"A\"이고 OSP_YN=\"Y\"인 Site를 FROM_SITE_CODE로 고른다",
+      "input": "FROM_SITE_CODE = (sFromSite=\"A\", OSP_YN=\"Y\")",
+      "expect": "TO_SITE_CODE 셀 콤보가 필터 목록으로 다시 바인딩된다. 위 두 조건 밖의 값일 때의 동작은 (확인 필요)",
+      "basis": "`SpdMain_ComboSelChange`:1154"
+    },
+    {
+      "id": "TC-SCP0007-021",
+      "kind": "이벤트",
+      "pre": "시트 `BOD` 잠금 상태",
+      "step": "spdMain에서 FROM_SITE_CODE 콤보를 고른다",
+      "input": "–",
+      "expect": "TO_SITE_CODE 콤보가 다시 바인딩되지 않는다",
+      "basis": "`SpdMain_ComboSelChange` (`!siMain.IsLock` 조건)"
+    },
+    {
+      "id": "TC-SCP0007-022",
+      "kind": "이벤트",
+      "pre": "조회된 BOD 행",
+      "step": "spdMain에서 FROM_SITE_CODE 또는 TO_SITE_CODE 값을 바꾼다",
+      "input": "유효한 From/To Site",
+      "expect": "`SCP.SCP0007_GET_ROUTE_CNT`가 호출되고 결과 `route_cnt`가 행에 반영된다(대상 컬럼 ROUTE_CNT 후보, 확인 필요). From/To 국가·도시, To VMI_YN·SITE_TYPE 관련 값이 채워진다",
+      "basis": "`SpdMain_Changed` → SetCityCode:1448, `SCP.SCP0007_GET_ROUTE_CNT`, SP `SCP0007_GET_ROUTE_CNT`"
+    },
+    {
+      "id": "TC-SCP0007-023",
+      "kind": "이벤트",
+      "pre": "조회된 BOD 행",
+      "step": "Route가 없는 From/To 조합으로 바꾼다",
+      "input": "SCP_MST_DISTRIBUTION_ROUTE에 없는 조합",
+      "expect": "Route 건수 0이 반영되고 오류가 없다. 후속 처리는 (확인 필요)",
+      "basis": "`SpdMain_Changed`, `SCP.SCP0007_GET_ROUTE_CNT`, SP `SCP0007_GET_ROUTE_CNT`"
+    },
+    {
+      "id": "TC-SCP0007-024",
+      "kind": "이벤트",
+      "pre": "TC-022",
+      "step": "`SpdMain_Changed` 실행 중 이벤트 재진입 여부를 확인한다(호출 로그)",
+      "input": "Site 1회 변경",
+      "expect": "셀 1회 변경에 `SCP.SCP0007_GET_ROUTE_CNT` 연쇄 재호출이 생기지 않는다(1284 해제 / 1315 재등록)",
+      "basis": "`SpdMain_Changed`:1284/1315"
+    },
+    {
+      "id": "TC-SCP0007-025",
+      "kind": "이벤트",
+      "pre": "시트 `BOD` 편집 가능",
+      "step": "외부 데이터(From/To Site 포함 여러 행)를 spdMain에 붙여넣는다",
+      "input": "클립보드 2행",
+      "expect": "`SpdMain_ClipboardPasted`가 실행되고 OSP_YN, CITY를 참조해 처리한다. 결과는 AS-IS와 대조 (확인 필요)",
+      "basis": "`SpdMain_ClipboardPasted`:1218~1255"
+    },
+    {
+      "id": "TC-SCP0007-026",
+      "kind": "이벤트",
+      "pre": "시트 `BOD` 편집 가능",
+      "step": "spdMain 셀을 편집 중 값을 입력한다",
+      "input": "To Site가 PLANT인 행",
+      "expect": "`SpdMain_EditChange`가 실행되고 To SITE_TYPE을 참조한다. 결과는 (확인 필요)",
+      "basis": "`SpdMain_EditChange`:1344"
+    },
+    {
+      "id": "TC-SCP0007-027",
+      "kind": "이벤트",
+      "pre": "조회된 BOD 행",
+      "step": "spdMain 셀에서 키를 입력한다",
+      "input": "임의 문자",
+      "expect": "`SpdMain_KeyPress`가 실행된다. 동작은 AS-IS와 대조 (확인 필요)",
+      "basis": "`SpdMain_KeyPress` (InitEvent:182)"
+    },
+    {
+      "id": "TC-SCP0007-028",
+      "kind": "이벤트",
+      "pre": "화면 높이를 넘는 BOD 행",
+      "step": "spdMain을 세로로 스크롤한다",
+      "input": "–",
+      "expect": "`SpdMain_TopChange`가 실행된다. 동작은 AS-IS와 대조 (확인 필요)",
+      "basis": "`SpdMain_TopChange` (InitEvent:179)"
+    },
+    {
+      "id": "TC-SCP0007-029",
+      "kind": "이벤트",
+      "pre": "조회된 BOD 행",
+      "step": "spdMain의 Route 관련 셀을 더블클릭하고 팝업에서 경로를 고른다",
+      "input": "–",
+      "expect": "선택한 경로의 ROUTE_ID, TRANSPORT_MODE_NAME, PRIORITY, DAYS_MON~DAYS_SUN, VALID_YN, LT_SUM, LT_TYPE 값이 BOD 행에 반영된다(대상 컬럼 매핑 확인 필요). 반영 중 `SCP.SCP0007_GET_ROUTE_CNT`는 호출되지 않는다(1073 해제 / 1104 재등록)",
+      "basis": "`spdMain_CellDoubleClick`(메인):1068~1104, 시트 `BOD`, 시트 `Distribution Route`"
+    },
+    {
+      "id": "TC-SCP0007-030",
+      "kind": "그리드",
+      "pre": "cboInputStatus=\"C\", 시트 `BOD` 잠금 아님",
+      "step": "행 추가(InsertButton)",
+      "input": "–",
+      "expect": "새 행의 DIVISION_ID(dtMyDivision), INCOTERMS, INCOTERMS_SSP(dtIncotermsEdit)에 셀 콤보가 설정된다",
+      "basis": "InsertButton:387/424/425, `biz:CommonData.CommonDataList` [code=incotermsEdit], 시트 `BOD`"
+    },
+    {
+      "id": "TC-SCP0007-031",
+      "kind": "그리드",
+      "pre": "cboInputStatus=\"R\"",
+      "step": "행 추가(InsertButton)",
+      "input": "–",
+      "expect": "TC-030의 셀 콤보 설정 분기로 들어가지 않는다. \"R\" 분기의 동작은 (확인 필요)",
+      "basis": "InsertButton (`else!(strSel_InputStatus == \"R\")` 분기)"
+    },
+    {
+      "id": "TC-SCP0007-032",
+      "kind": "권한",
+      "pre": "cboInputStatus=\"C\", 시트 `BOD` 잠금 상태",
+      "step": "행 추가(InsertButton)",
+      "input": "–",
+      "expect": "셀 콤보가 설정되지 않는다",
+      "basis": "InsertButton (`siMain.IsLock(...) == false` 조건)"
+    },
+    {
+      "id": "TC-SCP0007-033",
+      "kind": "그리드",
+      "pre": "To Site SITE_TYPE=\"PLANT\" 행이 있는 조회 결과, boolEditChange=true 상태",
+      "step": "수정(EditButton)",
+      "input": "–",
+      "expect": "PLANT 행의 INCOTERMS_SSP 콤보가 incotermsEdit 목록이다",
+      "basis": "EditButton:476/484, `biz:CommonData.CommonDataList` [code=incotermsEdit]"
+    },
+    {
+      "id": "TC-SCP0007-034",
+      "kind": "그리드",
+      "pre": "TC-033과 같고 boolEditChange=false",
+      "step": "수정(EditButton)",
+      "input": "–",
+      "expect": "PLANT 행의 INCOTERMS_SSP 콤보가 LookupCommon \"INCOTERMS\" 목록이다. PLANT가 아닌 행은 바뀌지 않는다",
+      "basis": "EditButton:490, `biz:CommonData.CommonDataList` [code=LookupCommon]"
+    },
+    {
+      "id": "TC-SCP0007-035",
+      "kind": "저장",
+      "pre": "신규 행(TC-030) 입력 완료, 원장에 없는 키",
+      "step": "저장(SaveButton)",
+      "input": "Division, From Site, To Site, FROM/TO 일자, Incoterms, Incoterms SSP, Priority, Route Id 입력",
+      "expect": "`SCP.SCP0007_SAVE_BOD` 호출이 성공한다. SCP_MST_BOD에 행이 생기고, SCP_MST_BOD_H와 SCM_SYS_LOG_BATCH에 기록된다. 이어서 `SCP.SCP0007_GET_BOD` 재조회로 시트 `BOD`에 반영된다",
+      "basis": "SaveData_Main:794, `SCP.SCP0007_SAVE_BOD`, SP `SCP0007_SAVE_BOD`, `SCP.SCP0007_GET_BOD`"
+    },
+    {
+      "id": "TC-SCP0007-036",
+      "kind": "저장",
+      "pre": "조회된 기존 행 수정",
+      "step": "저장(SaveButton)",
+      "input": "Remarks 등 수정",
+      "expect": "SCP_MST_BOD가 MERGE로 갱신되고, SCP_MST_BOD_ITEM INSERT/UPDATE 전개 결과가 SP 기대와 같다(전개 규칙 확인 필요). 재조회 후 수정값이 표시된다",
+      "basis": "`SCP.SCP0007_SAVE_BOD`, SP `SCP0007_SAVE_BOD`"
+    },
+    {
+      "id": "TC-SCP0007-037",
+      "kind": "저장",
+      "pre": "SP 검증에 걸리는 데이터(예: 필수값 누락)",
+      "step": "저장(SaveButton)",
+      "input": "라벨 `*` 컬럼 1개를 비움",
+      "expect": "`ERR_MESSAGE`의 오류 문구가 표시되고 원장에 반영되지 않는다. 검증 위치(FE/SP)와 오류 시 재조회 여부는 (확인 필요)",
+      "basis": "SaveData_Main:930 `ERR_MESSAGE`, `SCP.SCP0007_SAVE_BOD`"
+    },
+    {
+      "id": "TC-SCP0007-038",
+      "kind": "저장",
+      "pre": "변경 행 없음",
+      "step": "저장(SaveButton)",
+      "input": "–",
+      "expect": "저장 SP 호출 여부와 안내 메시지는 (확인 필요). 데이터 변경은 없다",
+      "basis": "SaveButton, `SCP.SCP0007_SAVE_BOD`"
+    },
+    {
+      "id": "TC-SCP0007-039",
+      "kind": "저장",
+      "pre": "삭제 대상 행이 있는 상태(삭제 표시 방식 확인 필요)",
+      "step": "저장(SaveButton)",
+      "input": "–",
+      "expect": "SCP_MST_BOD에서 해당 행이 DELETE된다(SP 참조 DELETE:SCP_MST_BOD). 이력 기록 여부는 (확인 필요)",
+      "basis": "`SCP.SCP0007_SAVE_BOD`, SP `SCP0007_SAVE_BOD`"
+    },
+    {
+      "id": "TC-SCP0007-040",
+      "kind": "초기화",
+      "pre": "메인 BOD 행 더블클릭으로 팝업 호출",
+      "step": "Distribution Route Popup이 열리는 것을 확인한다",
+      "input": "From/To 국가·도시 값이 있는 행",
+      "expect": "txtFromCountry, txtFromCity, txtToCountry, txtToCity에 생성자 값이 표시되고 Enabled=false다. btnFromSrch, btnToSrch, clbTransMode도 Enabled=false. `SCP.SCP0005_GET_DISTRIBUTION_ROUTE` 결과가 시트 `Distribution Route`에 표시된다",
+      "basis": "`Form_Load`(팝업 .ctor:149) → FindDataMain:436, `SCP.SCP0005_GET_DISTRIBUTION_ROUTE`, SP `SCP0005_GET_DISTRIBUTION_ROUTE`, InitControls:214~229"
+    },
+    {
+      "id": "TC-SCP0007-041",
+      "kind": "조회",
+      "pre": "TC-040",
+      "step": "btnButtonList의 조회 버튼을 누른다",
+      "input": "–",
+      "expect": "`SCP.SCP0005_GET_DISTRIBUTION_ROUTE`가 다시 호출되고 시트 `Distribution Route`가 갱신된다",
+      "basis": "`btnButtonList_UsrButtonList_Click_Detected` → FindDataMain, `SCP.SCP0005_GET_DISTRIBUTION_ROUTE`"
+    },
+    {
+      "id": "TC-SCP0007-042",
+      "kind": "조회",
+      "pre": "TC-040",
+      "step": "팝업 조회(FindButton)",
+      "input": "–",
+      "expect": "TC-041과 같다",
+      "basis": "팝업 FindButton → FindDataMain, `SCP.SCP0005_GET_DISTRIBUTION_ROUTE`"
+    },
+    {
+      "id": "TC-SCP0007-043",
+      "kind": "조회",
+      "pre": "From/To 조합에 경로 없음",
+      "step": "경로가 없는 행에서 팝업을 연다",
+      "input": "SCP_MST_DISTRIBUTION_ROUTE에 없는 From/To",
+      "expect": "시트 `Distribution Route`가 0행이고 오류가 없다",
+      "basis": "`SCP.SCP0005_GET_DISTRIBUTION_ROUTE`, SP `SCP0005_GET_DISTRIBUTION_ROUTE`"
+    },
+    {
+      "id": "TC-SCP0007-044",
+      "kind": "조회",
+      "pre": "SP 오류 유도 환경",
+      "step": "팝업을 연다",
+      "input": "–",
+      "expect": "오류 메시지가 표시되고 팝업이 비정상 종료되지 않는다. 문구는 (확인 필요)",
+      "basis": "`SCP.SCP0005_GET_DISTRIBUTION_ROUTE`"
+    },
+    {
+      "id": "TC-SCP0007-045",
+      "kind": "이벤트",
+      "pre": "btnFromSrch가 활성화된 상태(활성 조건 확인 필요)",
+      "step": "btnFromSrch를 눌러 도시를 고른다",
+      "input": "임의 국가/도시",
+      "expect": "txtFromCountry ← popCity.Country, txtFromCity ← popCity.City",
+      "basis": "`btnFromSrch_Click`:689~690"
+    },
+    {
+      "id": "TC-SCP0007-046",
+      "kind": "이벤트",
+      "pre": "btnToSrch가 활성화된 상태",
+      "step": "btnToSrch를 눌러 도시를 고른다",
+      "input": "임의 국가/도시",
+      "expect": "txtToCountry ← popCity.Country, txtToCity ← popCity.City",
+      "basis": "`btnToSrch_Click`:707~708"
+    },
+    {
+      "id": "TC-SCP0007-047",
+      "kind": "이벤트",
+      "pre": "기본 상태(InitControls)",
+      "step": "btnFromSrch, btnToSrch를 누른다",
+      "input": "–",
+      "expect": "버튼이 Enabled=false라 반응하지 않는다",
+      "basis": "`btnFromSrch_Click`, `btnToSrch_Click`, InitControls:216/220"
+    },
+    {
+      "id": "TC-SCP0007-048",
+      "kind": "이벤트",
+      "pre": "TC-040",
+      "step": "팝업 spdMain 행을 더블클릭한다",
+      "input": "경로 1행",
+      "expect": "팝업 `spdMain_CellDoubleClick`가 실행된다. 선택 행 반환 후 팝업 닫힘 여부는 (확인 필요)",
+      "basis": "`spdMain_CellDoubleClick`(팝업 InitEvent:201), 시트 `Distribution Route`"
+    },
+    {
+      "id": "TC-SCP0007-049",
+      "kind": "이벤트",
+      "pre": "TC-040, 셀 편집 가능 여부 확인 필요",
+      "step": "팝업 spdMain 셀 값을 바꾼다",
+      "input": "–",
+      "expect": "`spdMainDataModel_Changed`가 실행되고 실행 중 자기 이벤트 해제(489)/재등록(521)으로 재진입이 생기지 않는다",
+      "basis": "`spdMainDataModel_Changed`:489/521"
+    },
+    {
+      "id": "TC-SCP0007-050",
+      "kind": "그리드",
+      "pre": "TC-040",
+      "step": "시트 `Distribution Route`의 Valid와 요일 콤보 후보를 확인한다",
+      "input": "–",
+      "expect": "VALID_YN(및 DAYS_* 정의)이 Yes/No 목록이다",
+      "basis": "`biz:CommonData.YesOrNo`, dtYesOrNo:48, 시트 `Distribution Route`"
+    },
+    {
+      "id": "TC-SCP0007-051",
+      "kind": "초기화",
+      "pre": "TC-040",
+      "step": "팝업 국가 공통코드가 로드됐는지 확인한다",
+      "input": "–",
+      "expect": "COUNTRY_MST 목록이 dtFromCountry/dtToCountry에 로드된다. 사용처는 (확인 필요)",
+      "basis": "`biz:CommonData.CommonDataList` [code=COUNTRY_MST], dtFromCountry:44, dtToCountry:46"
+    },
+    {
+      "id": "TC-SCP0007-052",
+      "kind": "초기화",
+      "pre": "TC-040",
+      "step": "팝업 clbTransMode 목록을 확인한다",
+      "input": "–",
+      "expect": "LookupCommon 기반 Trans Mode 목록(Enabled=false 상태로 표시)",
+      "basis": "`biz:CommonData.CommonDataList` [code=LookupCommon], 팝업 dtTransMode:49"
+    },
+    {
+      "id": "TC-SCP0007-053",
+      "kind": "권한",
+      "pre": "그룹이 다른 사용자 A, B(TB_FX_USERGROUPAUTHEXTENTION 범위가 다름)",
+      "step": "각 사용자로 화면과 팝업을 열어 Division·From Site·To Site 후보를 비교한다",
+      "input": "NowGroupID A/B",
+      "expect": "그룹 권한 범위에 따라 후보가 다르다. 팝업 GetDivision/GetFromSitebyDivision/GetToSitebyDivision 실제 호출 여부는 (확인 필요)",
+      "basis": "`biz:CommonData.CommonDataList` [code=MyDivision / FromSiteByDivision / ToSiteByDivision], NowGroupID(메인 55/60/63/64, 팝업 58)"
+    },
+    {
+      "id": "TC-SCP0007-054",
+      "kind": "초기화",
+      "pre": "TC-040",
+      "step": "BOD Type·Transport Mode 공통코드 호출 여부를 확인한다",
+      "input": "–",
+      "expect": "파서 분류는 '진입점 미연결'이다. 실제 호출과 사용처를 AS-IS 실행으로 확인한다 (확인 필요)",
+      "basis": "`biz:CommonData.CommonDataList` [code=BodType / TransportMode], GetBodType:569, GetTransMode:579"
+    },
+    {
+      "id": "TC-SCP0007-055",
+      "kind": "권한",
+      "pre": "TB_FX_GroupMenuAuth에 SCP0007 조회 전용 그룹 사용자",
+      "step": "화면을 열어 조회·행 추가·수정·저장 버튼 사용 가능 여부를 확인한다",
+      "input": "–",
+      "expect": "그룹 C/R/U/D 설정대로 버튼이 활성/비활성된다. 권한 값은 (확인 필요)",
+      "basis": "TB_FX_GroupMenuAuth 13행, FindButton / InsertButton / EditButton / SaveButton"
+    }
+  ],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

@@ -5,9 +5,10 @@ import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 import {
   ADMIN_SHEET_NAME,
   BUCKET_DEFAULT,
+  CONDITION_NOT_SAVED,
+  LEGACY_SAVED_DATE_ALIAS,
   MEASURE_SHEET_NAME,
   MENU_ID,
-  SAVE_DATE_ALIAS,
   SHEETS,
   SITE_SENTINEL,
 } from './global-psi.constants';
@@ -60,11 +61,9 @@ interface Action {
 //   Site(fromSite/toSite)는 콤마 문자열 그대로 저장/복원이라 배열키 없음.
 const BOOL_KEYS = new Set<string>(['chkAll', 'chkSum']);
 
-// F6 저장 시 날짜키는 별칭(...Ymd)으로 평문화돼 저장된다(GlobalPsi savedParam, 공용 날짜 제외 정규식 회피).
-//   복원 때 별칭 → 원래 SearchCondition 키로 역매핑. 그 외 키는 그대로.
-const DATE_ALIAS_TO_FIELD: Record<string, string> = Object.fromEntries(
-  Object.entries(SAVE_DATE_ALIAS).map(([field, alias]) => [alias, field])
-);
+// F6 복원 제외 키 — Plan Date · Plan Type · Seq · Period 는 저장 대상이 아니다(AS-IS ConditionNotUseList,
+//   갭분석 C-11). 예전 판이 저장해 둔 행(원래 키 · ...Ymd 별칭)이 남아 있어도 복원하지 않는다.
+const SKIP_RESTORE_KEYS = new Set<string>([...CONDITION_NOT_SAVED, ...LEGACY_SAVED_DATE_ALIAS]);
 
 // 주의: 상수가 아니라 함수 — 모듈 최상위로 굳히면 청크 최초 로드 시점 session.div 로 얼어붙어
 //   재로그인 시 앞 계정 division 이 고정된다(global-psi-elec makeInitSearch 규약 동일).
@@ -226,8 +225,8 @@ export const useGlobalPsiStore = createPersistedStoreWithTab<State & Action>(
         const base = makeInitSearch();
         const patch: Record<string, unknown> = {};
         for (const { paramNm, paramCtn } of rows) {
-          // 날짜 별칭(...Ymd)은 원래 키로 역매핑 후 적용(그 외 키는 그대로).
-          const key = DATE_ALIAS_TO_FIELD[paramNm] ?? paramNm;
+          if (SKIP_RESTORE_KEYS.has(paramNm)) continue;
+          const key = paramNm;
           if (!(key in base)) continue;
           const val = paramCtn ?? '';
           patch[key] = BOOL_KEYS.has(key) ? val === 'true' : val;

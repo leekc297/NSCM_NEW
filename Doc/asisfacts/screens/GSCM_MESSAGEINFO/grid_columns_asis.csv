@@ -1,0 +1,8 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,MessageID,CODE,MessageInfo,MessageInfo.cs:131,MessageID*,Text,,None,코드 선언 FPMerge.None,80,true,,,,
+,Ko,CODE,MessageInfo,MessageInfo.cs:132,Ko*,Text,,None,코드 선언 FPMerge.None,250,true,,,,
+,En,CODE,MessageInfo,MessageInfo.cs:133,En*,Text,,None,코드 선언 FPMerge.None,250,true,,,,
+,Ch,CODE,MessageInfo,MessageInfo.cs:134,Ch*,Text,,None,코드 선언 FPMerge.None,250,true,,,,
+,Type,CODE,MessageInfo,MessageInfo.cs:135,Type*,Combo,Data.Common(Data.Type.MessageType),None,코드 선언 FPMerge.None,120,true,Center,,,
+,Button,CODE,MessageInfo,MessageInfo.cs:136,Button*,Combo,Data.Common(Data.Type.MessageButton),None,코드 선언 FPMerge.None,120,true,Center,,,
+,UseYN,CODE,MessageInfo,MessageInfo.cs:137,UseYN*,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,80,true,Center,,,

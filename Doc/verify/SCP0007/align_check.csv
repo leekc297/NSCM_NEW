@@ -1,0 +1,73 @@
+﻿menu_id,sheet,column,label,asis_halign,asis_ref,tobe_program,tobe_sheet,tobe_halign,tobe_source,verdict,note
+SCP0007,Distribution Route,ROUTE_ID,Route Id,R,SCP0007_DistributionRoutePopup.cs:264,SCP0005,route,R,메타 SCP0005/route,PASS,AS-IS right ↔ TO-BE right
+SCP0007,Distribution Route,LT_TYPE,L/T Type,C,SCP0007_DistributionRoutePopup.cs:265,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,VALID_YN,Valid,C,SCP0007_DistributionRoutePopup.cs:266,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,FROM_CITY_NAME,City Name,L,SCP0007_DistributionRoutePopup.cs:267,SCP0005,route,L,메타 SCP0005/route,PASS,AS-IS left ↔ TO-BE left
+SCP0007,Distribution Route,FROM_COUNTRY,Country,C,SCP0007_DistributionRoutePopup.cs:268,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,FROM_CITY,City,C,SCP0007_DistributionRoutePopup.cs:269,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,TRANSPORT_MODE_NAME,Trans Mode,C,SCP0007_DistributionRoutePopup.cs:271,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,PRIORITY,Priority,R,SCP0007_DistributionRoutePopup.cs:272,SCP0005,route,R,메타 SCP0005/route,PASS,AS-IS right ↔ TO-BE right
+SCP0007,Distribution Route,DAYS_MON,Mon,C,SCP0007_DistributionRoutePopup.cs:273,SCP0005,route,C,메타 SCP0005/route,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,Distribution Route,DAYS_TUE,Tue,C,SCP0007_DistributionRoutePopup.cs:274,SCP0005,route,C,메타 SCP0005/route,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,Distribution Route,DAYS_WED,Wed,C,SCP0007_DistributionRoutePopup.cs:275,SCP0005,route,C,메타 SCP0005/route,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,Distribution Route,DAYS_THU,Thu,C,SCP0007_DistributionRoutePopup.cs:276,SCP0005,route,C,메타 SCP0005/route,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,Distribution Route,DAYS_FRI,Fri,C,SCP0007_DistributionRoutePopup.cs:277,SCP0005,route,C,메타 SCP0005/route,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,Distribution Route,DAYS_SAT,Sat,C,SCP0007_DistributionRoutePopup.cs:278,SCP0005,route,C,메타 SCP0005/route,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,Distribution Route,DAYS_SUN,Sun,C,SCP0007_DistributionRoutePopup.cs:279,SCP0005,route,C,메타 SCP0005/route,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,Distribution Route,DAYS,Departure Days,L,SCP0007_DistributionRoutePopup.cs:280,SCP0005,route,L,메타 SCP0005/route,PASS,AS-IS left ↔ TO-BE left
+SCP0007,Distribution Route,D_PORT_NAME,Port,L,SCP0007_DistributionRoutePopup.cs:281,SCP0005,route,L,메타 SCP0005/route,PASS,AS-IS left ↔ TO-BE left
+SCP0007,Distribution Route,D_COUNTRY,Country,C,SCP0007_DistributionRoutePopup.cs:282,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,D_PORT_CODE,Port Code,C,SCP0007_DistributionRoutePopup.cs:283,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,A_PORT_NAME,Port,L,SCP0007_DistributionRoutePopup.cs:284,SCP0005,route,L,메타 SCP0005/route,PASS,AS-IS left ↔ TO-BE left
+SCP0007,Distribution Route,A_COUNTRY,Country,C,SCP0007_DistributionRoutePopup.cs:285,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,A_PORT_CODE,Port Code,C,SCP0007_DistributionRoutePopup.cs:286,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,SHIPPING_COMPANY,Shipping Company,C,SCP0007_DistributionRoutePopup.cs:287,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,TO_CITY_NAME,City Name,L,SCP0007_DistributionRoutePopup.cs:288,SCP0005,route,L,메타 SCP0005/route,PASS,AS-IS left ↔ TO-BE left
+SCP0007,Distribution Route,TO_COUNTRY,Country,C,SCP0007_DistributionRoutePopup.cs:289,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,TO_CITY,City,C,SCP0007_DistributionRoutePopup.cs:290,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,SHIP_DOC_PREPARATION_DATE,Shipping Document Preparation Data,C,SCP0007_DistributionRoutePopup.cs:291,SCP0005,route,C,메타 SCP0005/route,PASS,AS-IS center ↔ TO-BE center
+SCP0007,Distribution Route,LT_DEPARTURE_INLAND,Departure Inland,R,SCP0007_DistributionRoutePopup.cs:292,SCP0005,route,R,메타 SCP0005/route,PASS,AS-IS right ↔ TO-BE right
+SCP0007,Distribution Route,LT_WAIT_SHIPPING,Waiting For Shipping,R,SCP0007_DistributionRoutePopup.cs:293,SCP0005,route,R,메타 SCP0005/route,PASS,AS-IS right ↔ TO-BE right
+SCP0007,Distribution Route,LT_VOYAGE,Sea/Air Ferry,R,SCP0007_DistributionRoutePopup.cs:294,SCP0005,route,R,메타 SCP0005/route,PASS,AS-IS right ↔ TO-BE right
+SCP0007,Distribution Route,LT_LAY_OFF_CLEARANCE,Lay Off/Customs Clearance,R,SCP0007_DistributionRoutePopup.cs:295,SCP0005,route,R,메타 SCP0005/route,PASS,AS-IS right ↔ TO-BE right
+SCP0007,Distribution Route,LT_ARRIVAL_INLAND,Arrival Inland,R,SCP0007_DistributionRoutePopup.cs:296,SCP0005,route,R,메타 SCP0005/route,PASS,AS-IS right ↔ TO-BE right
+SCP0007,Distribution Route,LT_SUM,Sum,R,SCP0007_DistributionRoutePopup.cs:297,SCP0005,route,R,메타 SCP0005/route,PASS,AS-IS right ↔ TO-BE right
+SCP0007,BOD,AFTER_LEAD_TIME,Additional Lead Time,R,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,R,메타 SCP0007/bod,PASS,AS-IS right ↔ TO-BE right
+SCP0007,BOD,BEFORE_LEAD_TIME,Before,R,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,R,메타 SCP0007/bod,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,BOD,BOD_ID,BOD_ID,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,BOD_VALID,BOD Valid*,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,CREATED_BY,Created By,L,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,L,메타 SCP0007/bod,PASS,AS-IS left ↔ TO-BE left
+SCP0007,BOD,CREATION_DATE,Creation Date,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,CUSTOMER,Customer,L,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,L,메타 SCP0007/bod,PASS,AS-IS left ↔ TO-BE left
+SCP0007,BOD,DAYS_FRI,Fri,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,DAYS_MON,Mon,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,DAYS_SAT,Sat,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,DAYS_SUN,Sun,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,DAYS_THU,Thu,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,DAYS_TUE,Tue,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,DAYS_WED,Wed,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,DIS_TOTAL_LEAD_TIME,Distribution Total Lead Time,R,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,R,메타 SCP0007/bod,PASS,AS-IS right ↔ TO-BE right
+SCP0007,BOD,DIVISION_ID,Division*,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,FROM_CITY,From City,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,FROM_COUNTRY,FROM_COUNTRY,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,BOD,FROM_SITE_CODE,From Site*,L,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,L,메타 SCP0007/bod,PASS,AS-IS left ↔ TO-BE left
+SCP0007,BOD,FROM_YYYYMMDD,FROM*,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,INCOTERMS,Incoterms*,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,INCOTERMS_SSP,Incoterms SSP*,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,LAST_UPDATED_BY,Last Updated By,L,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,L,메타 SCP0007/bod,PASS,AS-IS left ↔ TO-BE left
+SCP0007,BOD,LAST_UPDATE_DATE,Last Update Date,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,LEAD_TIME,Lead Time,R,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,R,메타 SCP0007/bod,PASS,AS-IS right ↔ TO-BE right
+SCP0007,BOD,LT_TYPE,L/T Type,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,PRIORITY,Priority*,R,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,R,메타 SCP0007/bod,PASS,AS-IS right ↔ TO-BE right
+SCP0007,BOD,REMARKS,Remarks,L,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,L,메타 SCP0007/bod,PASS,AS-IS left ↔ TO-BE left
+SCP0007,BOD,ROUTE_CHK,ROUTE_CHK,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,BOD,ROUTE_CNT,Route Count,R,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,R,메타 SCP0007/bod,PASS,AS-IS right ↔ TO-BE right
+SCP0007,BOD,ROUTE_ID,Route Id*,L,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,L,메타 SCP0007/bod,PASS,AS-IS left ↔ TO-BE left
+SCP0007,BOD,ROUTE_VALID,Route Valid,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,SAFETY_STOCK,Safety Stock,R,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,R,메타 SCP0007/bod,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,BOD,TO_CITY,To City,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,TO_COUNTRY,TO_COUNTRY,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0007,BOD,TO_SITE_CODE,To Site*,L,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,L,메타 SCP0007/bod,PASS,AS-IS left ↔ TO-BE left
+SCP0007,BOD,TO_YYYYMMDD,TO*,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,TRANSPORT_MODE,Trans Mode,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center
+SCP0007,BOD,VMI_YN,To Site VMI,C,META SCM_MST_SHEET_COLUMNS(SCP0007/BOD),SCP0007,bod,C,메타 SCP0007/bod,PASS,AS-IS center ↔ TO-BE center

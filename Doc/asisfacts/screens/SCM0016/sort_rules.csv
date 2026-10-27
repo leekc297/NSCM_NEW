@@ -1,0 +1,6 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCM0016,SQL,SCM0016_GET_BATCH_LOG,Doc\asisfacts\db\modules\dbo.SCM0016_GET_BATCH_LOG.sql,60,,"RUN_DATE DESC,RUN_TIME DESC",", ROW_NUMBER() OVER ( PARTITION BY [job_id]	ORDER BY [run_date] DESC, [run_time] DESC  ) AS RowNumber",2,정적 · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SCM0016,SQL,SCM0016_GET_BATCH_LOG,Doc\asisfacts\db\modules\dbo.SCM0016_GET_BATCH_LOG.sql,70,,JOB_NAME,ORDER BY [job_name],0,정적
+SCM0016,SQL,SCM0016_GET_BATCH_LOG_HIST,Doc\asisfacts\db\modules\dbo.SCM0016_GET_BATCH_LOG_HIST.sql,30,,"RUN_DATE DESC,RUN_TIME DESC",", ROW_NUMBER() OVER (	PARTITION BY [job_id] ORDER BY [run_date] DESC, [run_time] DESC  ) AS RowNumber",2,정적 · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SCM0016,SQL,SCM0016_GET_BATCH_LOG_HIST,Doc\asisfacts\db\modules\dbo.SCM0016_GET_BATCH_LOG_HIST.sql,37,,ROWNUMBER,order by RowNumber,0,정적
+SCM0016,SQL,SCM0016_GET_BATCH_STEP_INFO,Doc\asisfacts\db\modules\dbo.SCM0016_GET_BATCH_STEP_INFO.sql,72,,"JOB_NAME,STEP_ID","ORDER BY [job_name], [step_id]",0,정적

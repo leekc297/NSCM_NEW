@@ -1,0 +1,436 @@
+﻿row_id,source,check,instance,result
+FindButton → Find_Data(),FE 대조표,X-LOC,X-LOC|ROW:FindButton → Find_Data(),FAIL
+FindButton → Find_Data(),FE 대조표,G1,G1|ROW:FindButton → Find_Data(),REVIEW
+FindButton → Find_Data(),FE 대조표,A1,A1|ROW:FindButton → Find_Data(),REVIEW
+FindButton → Find_Data(),FE 대조표,J2,J2|SCREEN,NOT_RUN
+EditButton → GMessageBox('MSG00109'); return,FE 대조표,X-LOC,X-LOC|ROW:EditButton → GMessageBox('MSG00109'); return,FAIL
+EditButton → GMessageBox('MSG00109'); return,FE 대조표,D1,D1|ROW:EditButton → GMessageBox('MSG00109'); return,NA
+EditButton → GMessageBox('MSG00109'); return,FE 대조표,D3,D3|ROW:EditButton → GMessageBox('MSG00109'); return,NA
+EditButton → GMessageBox('MSG00109'); return,FE 대조표,J2,J2|SCREEN,NOT_RUN
+EditButton → GMessageBox('MSG00109'); return,FE 대조표,E4,E4|MSG:MSG00109,NOT_RUN
+EditButton → GMessageBox('MSG00109'); return,FE 대조표,I1,I1|SCREEN,NOT_RUN
+EditButton → GMessageBox('MSG00109'); return,FE 대조표,H10,H10|SCREEN,PASS
+(Excel — BaseForm 표준 export),FE 대조표,X-LOC,X-LOC|ROW:(Excel — BaseForm 표준 export),FAIL
+(Excel — BaseForm 표준 export),FE 대조표,X-ROW,X-ROW|ENTRY:(Excel — BaseForm 표준 export),REVIEW
+(Save/Insert/Delete override 없음),FE 대조표,X-LOC,X-LOC|ROW:(Save/Insert/Delete override 없음),FAIL
+(Save/Insert/Delete override 없음),FE 대조표,F1,F1|SCREEN,NOT_RUN
+(Save/Insert/Delete override 없음),FE 대조표,F2,F2|SCREEN,NOPATH
+(Save/Insert/Delete override 없음),FE 대조표,J2,J2|SCREEN,NOT_RUN
+(Save/Insert/Delete override 없음),FE 대조표,D4,D4|ROW:(Save/Insert/Delete override 없음),NA
+(Save/Insert/Delete override 없음),FE 대조표,D6,D6|SCREEN,NOT_RUN
+(Save/Insert/Delete override 없음),FE 대조표,F5,F5|SCREEN,NOT_RUN
+R1,FE 대조표,X-LOC,X-LOC|ROW:R1,FAIL
+R1,FE 대조표,D1,D1|ROW:R1,NA
+R1,FE 대조표,D3,D3|ROW:R1,NA
+R1,FE 대조표,G1,G1|ROW:R1,REVIEW
+R1,FE 대조표,A1,A1|ROW:R1,REVIEW
+R1,FE 대조표,J2,J2|SCREEN,NOT_RUN
+R1,FE 대조표,E4,E4|MSG:MSG00097,NOT_RUN
+R1,FE 대조표,I1,I1|SCREEN,NOT_RUN
+R1,FE 대조표,H10,H10|SCREEN,PASS
+R2,FE 대조표,X-LOC,X-LOC|ROW:R2,FAIL
+R2,FE 대조표,D1,D1|ROW:R2,NA
+R2,FE 대조표,D3,D3|ROW:R2,NA
+R2,FE 대조표,J2,J2|SCREEN,NOT_RUN
+R3/S1,FE 대조표,X-LOC,X-LOC|ROW:R3/S1,FAIL
+R3/S1,FE 대조표,G4,G4|ROW:R3/S1,REVIEW
+R3/S1,FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+R3/S1,FE 대조표,G1,G1|ROW:R3/S1,REVIEW
+R3/S1,FE 대조표,G6,G6|ROW:R3/S1,REVIEW
+R3/S1,FE 대조표,A1,A1|ROW:R3/S1,REVIEW
+R3/S1,FE 대조표,J2,J2|SCREEN,NOT_RUN
+R4/R5,FE 대조표,X-LOC,X-LOC|ROW:R4/R5,FAIL
+R4/R5,FE 대조표,A5,A5|ROW:R4/R5,NA
+R4/R5,FE 대조표,H5,H5|ROW:R4/R5,REVIEW
+R4/R5,FE 대조표,H2,H2|ROW:R4/R5,NA
+R4/R5,FE 대조표,D1,D1|ROW:R4/R5,NA
+R4/R5,FE 대조표,D3,D3|ROW:R4/R5,NA
+R4/R5,FE 대조표,G1,G1|ROW:R4/R5,REVIEW
+R4/R5,FE 대조표,A1,A1|ROW:R4/R5,REVIEW
+R4/R5,FE 대조표,J2,J2|SCREEN,NOT_RUN
+R6,FE 대조표,X-LOC,X-LOC|ROW:R6,FAIL
+R6,FE 대조표,A5,A5|ROW:R6,NA
+R6,FE 대조표,H5,H5|COND:cboDivision,NOT_RUN
+R6,FE 대조표,H2,H2|ROW:R6,NA
+R6,FE 대조표,G1,G1|COND:cboDivision,NOT_RUN
+R6,FE 대조표,A1,A1|ROW:R6,REVIEW
+R6,FE 대조표,J2,J2|SCREEN,NOT_RUN
+R7,FE 대조표,X-LOC,X-LOC|ROW:R7,FAIL
+R7,FE 대조표,K-SA,K-SA|SCREEN,NOT_RUN
+R7,FE 대조표,G3,G3|SCREEN,NOT_RUN
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,X-LOC,X-LOC|ROW:cboDivision = Data.Common(Type.MyDivision),FAIL
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,G4,G4|COND:cboDivision,NOT_RUN
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,G1,G1|COND:cboDivision,NOT_RUN
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,G6,G6|COND:cboDivision,NOT_RUN
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,H6,H6|COND:cboDivision,NOT_RUN
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,G5,G5|COND:cboDivision,NOPATH
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,M4,M4|COND:cboDivision,NOT_RUN
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,A1,A1|ROW:cboDivision = Data.Common(Type.MyDivision),REVIEW
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,J2,J2|SCREEN,NOT_RUN
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,B4,B4|COND:cboDivision,NOPATH
+cboDivision = Data.Common(Type.MyDivision),FE 대조표,B3,B3|COND:cboDivision,TODO
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,X-LOC,"X-LOC|ROW:cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FAIL
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,G4,G4|COND:cboResultType,NOT_RUN
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,G1,G1|COND:cboResultType,NOT_RUN
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,G6,G6|COND:cboResultType,NOT_RUN
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,H6,H6|COND:cboResultType,NOT_RUN
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,G5,G5|COND:cboResultType,NOPATH
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,M4,M4|COND:cboResultType,NOT_RUN
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,A1,"A1|ROW:cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",REVIEW
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,J2,J2|SCREEN,NOT_RUN
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,B4,B4|COND:cboResultType,NOPATH
+"cboResultType = Data.Common(Type.LookupCommon,'SHIPMENT_RESU",FE 대조표,B3,B3|COND:cboResultType,TODO
+"txtPlantSite (TextBox, 콤보 주석)",FE 대조표,X-LOC,"X-LOC|ROW:txtPlantSite (TextBox, 콤보 주석)",FAIL
+"txtPlantSite (TextBox, 콤보 주석)",FE 대조표,G4,G4|COND:txtPlantSite,NOT_RUN
+"txtPlantSite (TextBox, 콤보 주석)",FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+"txtPlantSite (TextBox, 콤보 주석)",FE 대조표,G1,G1|COND:txtPlantSite,NOT_RUN
+"txtPlantSite (TextBox, 콤보 주석)",FE 대조표,G6,G6|COND:txtPlantSite,NOT_RUN
+"txtPlantSite (TextBox, 콤보 주석)",FE 대조표,H6,H6|COND:txtPlantSite,NOT_RUN
+"txtPlantSite (TextBox, 콤보 주석)",FE 대조표,G5,G5|COND:txtPlantSite,NOPATH
+"txtPlantSite (TextBox, 콤보 주석)",FE 대조표,M4,M4|COND:txtPlantSite,NOT_RUN
+"txtPlantSite (TextBox, 콤보 주석)",FE 대조표,A1,"A1|ROW:txtPlantSite (TextBox, 콤보 주석)",REVIEW
+"txtPlantSite (TextBox, 콤보 주석)",FE 대조표,J2,J2|SCREEN,NOT_RUN
+"txtSaleSite (TextBox, 콤보 주석)",FE 대조표,X-LOC,"X-LOC|ROW:txtSaleSite (TextBox, 콤보 주석)",FAIL
+"txtSaleSite (TextBox, 콤보 주석)",FE 대조표,G4,G4|COND:txtSaleSite,NOT_RUN
+"txtSaleSite (TextBox, 콤보 주석)",FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+"txtSaleSite (TextBox, 콤보 주석)",FE 대조표,G1,G1|COND:txtSaleSite,NOT_RUN
+"txtSaleSite (TextBox, 콤보 주석)",FE 대조표,G6,G6|COND:txtSaleSite,NOT_RUN
+"txtSaleSite (TextBox, 콤보 주석)",FE 대조표,H6,H6|COND:txtSaleSite,NOT_RUN
+"txtSaleSite (TextBox, 콤보 주석)",FE 대조표,G5,G5|COND:txtSaleSite,NOPATH
+"txtSaleSite (TextBox, 콤보 주석)",FE 대조표,M4,M4|COND:txtSaleSite,NOT_RUN
+"txtSaleSite (TextBox, 콤보 주석)",FE 대조표,A1,"A1|ROW:txtSaleSite (TextBox, 콤보 주석)",REVIEW
+"txtSaleSite (TextBox, 콤보 주석)",FE 대조표,J2,J2|SCREEN,NOT_RUN
+btnProjectID → SCM0002_ProjectbyDivisionPopup,FE 대조표,X-LOC,X-LOC|ROW:btnProjectID → SCM0002_ProjectbyDivisionPopup,FAIL
+btnProjectID → SCM0002_ProjectbyDivisionPopup,FE 대조표,G4,G4|BTN:btnProjectID,NOPATH
+btnProjectID → SCM0002_ProjectbyDivisionPopup,FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+btnProjectID → SCM0002_ProjectbyDivisionPopup,FE 대조표,G1,G1|ROW:btnProjectID → SCM0002_ProjectbyDivisionPopup,REVIEW
+btnProjectID → SCM0002_ProjectbyDivisionPopup,FE 대조표,G6,G6|ROW:btnProjectID → SCM0002_ProjectbyDivisionPopup,REVIEW
+btnProjectID → SCM0002_ProjectbyDivisionPopup,FE 대조표,H6,H6|BTN:btnProjectID,NOPATH
+btnProjectID → SCM0002_ProjectbyDivisionPopup,FE 대조표,G5,G5|BTN:btnProjectID,NOPATH
+btnProjectID → SCM0002_ProjectbyDivisionPopup,FE 대조표,M4,M4|BTN:btnProjectID,NOT_RUN
+btnProjectID → SCM0002_ProjectbyDivisionPopup,FE 대조표,A1,A1|ROW:btnProjectID → SCM0002_ProjectbyDivisionPopup,REVIEW
+btnProjectID → SCM0002_ProjectbyDivisionPopup,FE 대조표,J2,J2|SCREEN,NOT_RUN
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,X-LOC,X-LOC|ROW:btnItemId → SCM0002_ItembyDivisionPopup,FAIL
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,G4,G4|COND:txtPlantSite,NOT_RUN
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,G4,G4|BTN:btnItemId,NOPATH
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,G1,G1|COND:txtPlantSite,NOT_RUN
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,G6,G6|COND:txtPlantSite,NOT_RUN
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,H6,H6|COND:txtPlantSite,NOT_RUN
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,H6,H6|BTN:btnItemId,NOPATH
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,G5,G5|COND:txtPlantSite,NOPATH
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,G5,G5|BTN:btnItemId,NOPATH
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,M4,M4|COND:txtPlantSite,NOT_RUN
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,M4,M4|BTN:btnItemId,NOT_RUN
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,A1,A1|ROW:btnItemId → SCM0002_ItembyDivisionPopup,REVIEW
+btnItemId → SCM0002_ItembyDivisionPopup,FE 대조표,J2,J2|SCREEN,NOT_RUN
+drpPeriod = GetDayRange(),FE 대조표,X-LOC,X-LOC|ROW:drpPeriod = GetDayRange(),FAIL
+drpPeriod = GetDayRange(),FE 대조표,G4,G4|ROW:drpPeriod = GetDayRange(),REVIEW
+drpPeriod = GetDayRange(),FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+drpPeriod = GetDayRange(),FE 대조표,G1,G1|ROW:drpPeriod = GetDayRange(),REVIEW
+drpPeriod = GetDayRange(),FE 대조표,G6,G6|ROW:drpPeriod = GetDayRange(),REVIEW
+drpPeriod = GetDayRange(),FE 대조표,H6,H6|ROW:drpPeriod = GetDayRange(),REVIEW
+drpPeriod = GetDayRange(),FE 대조표,G5,G5|ROW:drpPeriod = GetDayRange(),REVIEW
+drpPeriod = GetDayRange(),FE 대조표,M4,M4|ROW:drpPeriod = GetDayRange(),REVIEW
+drpPeriod = GetDayRange(),FE 대조표,E2,E2|ROW:drpPeriod = GetDayRange(),NA
+drpPeriod = GetDayRange(),FE 대조표,A1,A1|ROW:drpPeriod = GetDayRange(),REVIEW
+drpPeriod = GetDayRange(),FE 대조표,J2,J2|SCREEN,NOT_RUN
+Query(ds) 시트 바인딩,FE 대조표,X-LOC,X-LOC|ROW:Query(ds) 시트 바인딩,FAIL
+Query(ds) 시트 바인딩,FE 대조표,A5,A5|ROW:Query(ds) 시트 바인딩,NA
+Query(ds) 시트 바인딩,FE 대조표,H5,H5|ROW:Query(ds) 시트 바인딩,REVIEW
+Query(ds) 시트 바인딩,FE 대조표,H2,H2|ROW:Query(ds) 시트 바인딩,NA
+"LockColumn(0,max,true)",FE 대조표,X-LOC,"X-LOC|ROW:LockColumn(0,max,true)",FAIL
+"LockColumn(0,max,true)",FE 대조표,A5,"A5|ROW:LockColumn(0,max,true)",NA
+"LockColumn(0,max,true)",FE 대조표,H5,"H5|ROW:LockColumn(0,max,true)",REVIEW
+"LockColumn(0,max,true)",FE 대조표,H2,"H2|ROW:LockColumn(0,max,true)",NA
+"LockColumn(0,max,true)",FE 대조표,D1,"D1|ROW:LockColumn(0,max,true)",NA
+"LockColumn(0,max,true)",FE 대조표,D3,"D3|ROW:LockColumn(0,max,true)",NA
+InitSpread() 리터럴 22컬럼·헤더 span·Freeze,FE 대조표,X-LOC,X-LOC|ROW:InitSpread() 리터럴 22컬럼·헤더 span·Freeze,FAIL
+InitSpread() 리터럴 22컬럼·헤더 span·Freeze,FE 대조표,A5,A5|ROW:InitSpread() 리터럴 22컬럼·헤더 span·Freeze,NA
+InitSpread() 리터럴 22컬럼·헤더 span·Freeze,FE 대조표,H5,H5|ROW:InitSpread() 리터럴 22컬럼·헤더 span·Freeze,REVIEW
+InitSpread() 리터럴 22컬럼·헤더 span·Freeze,FE 대조표,H2,H2|ROW:InitSpread() 리터럴 22컬럼·헤더 span·Freeze,NA
+"SetSheetHeaderColumn(siMain,2)",FE 대조표,X-LOC,"X-LOC|ROW:SetSheetHeaderColumn(siMain,2)",FAIL
+"SetSheetHeaderColumn(siMain,2)",FE 대조표,A5,"A5|ROW:SetSheetHeaderColumn(siMain,2)",NA
+"SetSheetHeaderColumn(siMain,2)",FE 대조표,H5,"H5|ROW:SetSheetHeaderColumn(siMain,2)",REVIEW
+"SetSheetHeaderColumn(siMain,2)",FE 대조표,H2,"H2|ROW:SetSheetHeaderColumn(siMain,2)",NA
+ACT:SCM0014_ValidationShipmentResult..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCM0014_ValidationShipmentResult..ctor:120:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCM0014_ValidationShipmentResult..ctor:123:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:380:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:380:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:381:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:381:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:382:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:382:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:383:4,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:383:4,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:385:5,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:385:5,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:385:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.BtnItemId_Click,REVIEW
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:386:6,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:386:6,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:386:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.BtnItemId_Click,REVIEW
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:387:7,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:387:7,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:387:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.BtnItemId_Click,REVIEW
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:388:8,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:388:8,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:388:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.BtnItemId_Click,REVIEW
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:390:9,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:390:9,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:392:10,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:392:10,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:393:11,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:393:11,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnItemId_Click:393:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.BtnItemId_Click,REVIEW
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:398:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:398:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:399:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:399:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:400:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:400:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:402:4,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:402:4,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:402:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.BtnProject_Click,REVIEW
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:403:5,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:403:5,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:403:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.BtnProject_Click,REVIEW
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:404:6,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:404:6,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:404:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.BtnProject_Click,REVIEW
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:405:7,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:405:7,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:405:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.BtnProject_Click,REVIEW
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:407:8,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:407:8,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:409:9,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:409:9,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:410:10,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:410:10,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.BtnProject_Click:410:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.BtnProject_Click,REVIEW
+ACT:SCM0014_ValidationShipmentResult.CboDivision_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.CboDivision_SelectedIndexChanged,REVIEW
+ACT:SCM0014_ValidationShipmentResult.CboDivision_SelectedIndexChanged:415:1,AS-IS 액션,C2,C2|ENTRY:SCM0014_ValidationShipmentResult.CboDivision_SelectedIndexChanged,NA
+ACT:SCM0014_ValidationShipmentResult.CboDivision_SelectedIndexChanged:415:1,AS-IS 액션,C3,C3|ENTRY:SCM0014_ValidationShipmentResult.CboDivision_SelectedIndexChanged,NA
+ACT:SCM0014_ValidationShipmentResult.CboDivision_SelectedIndexChanged:415:1,AS-IS 액션,C6,C6|ENTRY:SCM0014_ValidationShipmentResult.CboDivision_SelectedIndexChanged,NA
+ACT:SCM0014_ValidationShipmentResult.ClearUsrCheckedList,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.ClearUsrCheckedList,REVIEW
+ACT:SCM0014_ValidationShipmentResult.ClearUsrCheckedList:363:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.ClearUsrCheckedList,REVIEW
+ACT:SCM0014_ValidationShipmentResult.ClearUsrCheckedList:364:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.ClearUsrCheckedList,REVIEW
+ACT:SCM0014_ValidationShipmentResult.ClearUsrCheckedList:365:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.ClearUsrCheckedList,REVIEW
+ACT:SCM0014_ValidationShipmentResult.CreateSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,REVIEW
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:183:1,AS-IS 액션,A5,A5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:183:1,AS-IS 액션,H2,H2|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:183:1,AS-IS 액션,H5,H5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,REVIEW
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:183:1,AS-IS 액션,D5,D5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:184:2,AS-IS 액션,A5,A5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:184:2,AS-IS 액션,H2,H2|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:184:2,AS-IS 액션,H5,H5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,REVIEW
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:184:2,AS-IS 액션,D5,D5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:185:3,AS-IS 액션,A5,A5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:185:3,AS-IS 액션,H2,H2|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:185:3,AS-IS 액션,H5,H5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,REVIEW
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:185:3,AS-IS 액션,D5,D5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:188:4,AS-IS 액션,A5,A5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:188:4,AS-IS 액션,H2,H2|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:188:4,AS-IS 액션,H5,H5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,REVIEW
+ACT:SCM0014_ValidationShipmentResult.CreateSpread:188:4,AS-IS 액션,D5,D5|ENTRY:SCM0014_ValidationShipmentResult.CreateSpread,NA
+ACT:SCM0014_ValidationShipmentResult.DefineProperty,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.DefineProperty,REVIEW
+ACT:SCM0014_ValidationShipmentResult.DefineProperty,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.DefineProperty:196:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.DefineProperty:196:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.DefineProperty,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Dispose,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Dispose:16:1,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Dispose:18:2,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Dispose:20:3,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.EditButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.EditButton,REVIEW
+ACT:SCM0014_ValidationShipmentResult.EditButton:284:1,AS-IS 액션,E4,E4|MSG:MSG00109,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.EditButton:284:1,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.EditButton:285:2,AS-IS 액션,D1,D1|ENTRY:SCM0014_ValidationShipmentResult.EditButton,NA
+ACT:SCM0014_ValidationShipmentResult.EditButton:285:2,AS-IS 액션,D3,D3|ENTRY:SCM0014_ValidationShipmentResult.EditButton,NA
+ACT:SCM0014_ValidationShipmentResult.FindButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.FindButton,REVIEW
+ACT:SCM0014_ValidationShipmentResult.FindButton,AS-IS 액션,A1,A1|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,REVIEW
+ACT:SCM0014_ValidationShipmentResult.FindButton,AS-IS 액션,A6,A6|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.FindButton,AS-IS 액션,F4,F4|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.FindButton:279:1,AS-IS 액션,A1,A1|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,REVIEW
+ACT:SCM0014_ValidationShipmentResult.FindButton:279:1,AS-IS 액션,A6,A6|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.FindButton:279:1,AS-IS 액션,F4,F4|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Find_Data,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:293:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:293:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:295:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:298:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:301:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:302:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:303:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:304:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:305:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:306:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:307:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:308:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:311:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:313:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:315:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:317:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:318:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:320:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:320:18,AS-IS 액션,F4,F4|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Find_Data:320:18,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,PASS
+ACT:SCM0014_ValidationShipmentResult.Find_Data:321:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:321:19,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Find_Data:322:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:322:20,AS-IS 액션,F4,F4|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Find_Data:322:20,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,PASS
+ACT:SCM0014_ValidationShipmentResult.Find_Data:323:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:324:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:325:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:326:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:327:25,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:328:26,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:329:27,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:330:28,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:331:29,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:331:29,AS-IS 액션,F4,F4|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Find_Data:331:29,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,PASS
+ACT:SCM0014_ValidationShipmentResult.Find_Data:332:30,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:337:31,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:339:32,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:339:32,AS-IS 액션,A1,A1|SP:P_SCM0014_GET_VALIDATION_SHIPMENT_RESULT,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:341:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:342:34,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:345:35,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:348:36,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:350:37,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:350:37,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Find_Data:352:38,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:353:39,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:356:40,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Find_Data:357:41,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Find_Data,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Form_Load,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.Form_Load,REVIEW
+ACT:SCM0014_ValidationShipmentResult.Form_Load,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Form_Load:129:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Form_Load:130:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Form_Load:131:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Form_Load:132:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.Form_Load:133:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.GetDayRange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.GetDayRange,REVIEW
+ACT:SCM0014_ValidationShipmentResult.GetDayRange:162:1,AS-IS 액션,B4,B4|ENTRY:SCM0014_ValidationShipmentResult.GetDayRange,REVIEW
+ACT:SCM0014_ValidationShipmentResult.GetDayRange:162:1,AS-IS 액션,B3,B3|ENTRY:SCM0014_ValidationShipmentResult.GetDayRange,REVIEW
+ACT:SCM0014_ValidationShipmentResult.GetDayRange:164:2,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.GetDayRange:165:3,AS-IS 액션,F4,F4|ENTRY:SCM0014_ValidationShipmentResult.GetDayRange,REVIEW
+ACT:SCM0014_ValidationShipmentResult.GetDayRange:165:3,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCM0014_ValidationShipmentResult.GetDayRange,PASS
+ACT:SCM0014_ValidationShipmentResult.GetDayRange:166:4,AS-IS 액션,B4,B4|ENTRY:SCM0014_ValidationShipmentResult.GetDayRange,REVIEW
+ACT:SCM0014_ValidationShipmentResult.GetDayRange:166:4,AS-IS 액션,B3,B3|ENTRY:SCM0014_ValidationShipmentResult.GetDayRange,REVIEW
+ACT:SCM0014_ValidationShipmentResult.GetDayRange:167:5,AS-IS 액션,F4,F4|ENTRY:SCM0014_ValidationShipmentResult.GetDayRange,REVIEW
+ACT:SCM0014_ValidationShipmentResult.GetDayRange:167:5,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCM0014_ValidationShipmentResult.GetDayRange,PASS
+ACT:SCM0014_ValidationShipmentResult.GetDayRange:170:6,AS-IS 액션,B4,B4|ENTRY:SCM0014_ValidationShipmentResult.GetDayRange,REVIEW
+ACT:SCM0014_ValidationShipmentResult.GetDayRange:170:6,AS-IS 액션,B3,B3|ENTRY:SCM0014_ValidationShipmentResult.GetDayRange,REVIEW
+ACT:SCM0014_ValidationShipmentResult.InitControls,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls,AS-IS 액션,G6,G6|COND:cboResultType,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls,AS-IS 액션,G4,G4|COND:cboResultType,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:143:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:144:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:144:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.InitControls,REVIEW
+ACT:SCM0014_ValidationShipmentResult.InitControls:147:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:149:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:151:5,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:151:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:151:5,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:151:5,AS-IS 액션,C1,C1|COND:cboDivision,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:151:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.InitControls,REVIEW
+ACT:SCM0014_ValidationShipmentResult.InitControls:153:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:155:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:155:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.InitControls,REVIEW
+ACT:SCM0014_ValidationShipmentResult.InitControls:156:8,AS-IS 액션,G6,G6|COND:cboResultType,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:156:8,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:156:8,AS-IS 액션,G4,G4|COND:cboResultType,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:156:8,AS-IS 액션,C1,C1|COND:cboResultType,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitControls:156:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.InitControls,REVIEW
+ACT:SCM0014_ValidationShipmentResult.InitControls:158:9,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitEvent,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCM0014_ValidationShipmentResult.InitEvent,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitEvent,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitEvent,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitEvent,AS-IS 액션,G4,G4|BTN:btnProjectID,NOPATH
+ACT:SCM0014_ValidationShipmentResult.InitEvent,AS-IS 액션,G4,G4|BTN:btnItemId,NOPATH
+ACT:SCM0014_ValidationShipmentResult.InitEvent:137:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCM0014_ValidationShipmentResult.InitEvent:137:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitEvent:137:1,AS-IS 액션,G4,G4|BTN:btnProjectID,NOPATH
+ACT:SCM0014_ValidationShipmentResult.InitEvent:138:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCM0014_ValidationShipmentResult.InitEvent:138:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitEvent:138:2,AS-IS 액션,G4,G4|BTN:btnItemId,NOPATH
+ACT:SCM0014_ValidationShipmentResult.InitEvent:139:3,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCM0014_ValidationShipmentResult.InitEvent:139:3,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitEvent:139:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitEvent:139:3,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.InitSpread,REVIEW
+ACT:SCM0014_ValidationShipmentResult.InitSpread,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:216:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:219:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:220:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:221:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:222:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:223:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:224:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:225:8,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:226:9,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:227:10,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:228:11,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:229:12,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:230:13,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:231:14,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:232:15,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:233:16,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:234:17,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:235:18,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:236:19,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:237:20,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:238:21,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:239:22,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:240:23,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:241:24,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:244:25,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:245:26,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:247:27,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:248:28,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:249:29,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:250:30,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:251:31,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:252:32,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:253:33,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:254:34,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:255:35,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:256:36,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:257:37,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:258:38,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:260:39,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:261:40,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:262:41,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:263:42,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:265:43,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:266:44,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:267:45,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:268:46,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:269:47,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:270:48,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:271:49,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread:273:50,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread_2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.InitSpread_2,REVIEW
+ACT:SCM0014_ValidationShipmentResult.InitSpread_2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread_2:202:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread_2:202:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.InitSpread_2,REVIEW
+ACT:SCM0014_ValidationShipmentResult.InitSpread_2:203:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.InitSpread_2:203:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.InitSpread_2,REVIEW
+ACT:SCM0014_ValidationShipmentResult.SetChangedControl,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.SetChangedControl,REVIEW
+ACT:SCM0014_ValidationShipmentResult.SetChangedControl,AS-IS 액션,E4,E4|COND:cboDivision,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.SetChangedControl:174:1,AS-IS 액션,E4,E4|COND:cboDivision,NOT_RUN
+ACT:SCM0014_ValidationShipmentResult.clbDivision_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCM0014_ValidationShipmentResult.clbDivision_SelectedIndexChanged,REVIEW
+ACT:SCM0014_ValidationShipmentResult.clbDivision_SelectedIndexChanged:376:1,AS-IS 액션,C2,C2|ENTRY:SCM0014_ValidationShipmentResult.clbDivision_SelectedIndexChanged,NA
+ACT:SCM0014_ValidationShipmentResult.clbDivision_SelectedIndexChanged:376:1,AS-IS 액션,C3,C3|ENTRY:SCM0014_ValidationShipmentResult.clbDivision_SelectedIndexChanged,NA
+ACT:SCM0014_ValidationShipmentResult.clbDivision_SelectedIndexChanged:376:1,AS-IS 액션,C6,C6|ENTRY:SCM0014_ValidationShipmentResult.clbDivision_SelectedIndexChanged,NA

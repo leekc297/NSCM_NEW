@@ -16,7 +16,7 @@ const s = (v: unknown): string => (typeof v === 'string' ? v : typeof v === 'num
 
 // SCP0028 저장 전 클라 검증 (design 03 §4.3 checkValidSize — cs:762~773).
 //   대상 = 편집/신규 행(CRUD_TYPE, 삭제행 제외). 순서 AS-IS 동일:
-//     ① LOT_SIZE < INCREMENT → MSG.INC_GT_LOT (구 MSG00099, TO-BE 미등재 → 영문 fallback)
+//     ① LOT_SIZE < INCREMENT → MSG.INC_GT_LOT (MSG01127 = AS-IS MSG00099 동일 문구. MSG00099 는 TO-BE 미등재)
 //     ② LOT_SIZE==0 또는 INCREMENT==0 → MSG.ZERO_VALUE (MSG00699 'Please enter an integer greater than 0.')
 //   메타 필수검증(INPUT_TP_CD='M')은 useSaveWithValidation 이 별도로 건다(convert-core §2.4) — 여기선 산식만.
 export const useShipmentLotSizeValidation = () => {
@@ -47,12 +47,9 @@ export const useShipmentLotSizeValidation = () => {
         if (lot !== null && inc !== null && lot < inc) {
           invalidCells.push({ row: r, column: 'LOT_SIZE' });
           invalidCells.push({ row: r, column: 'INCREMENT' });
-          // MSG00099 '{0}은 {1} 보다 클 수 없습니다.' — {0}=Increment, {1}=Lot Size 치환
-          //   (등재돼 있어 인자 없으면 플레이스홀더가 그대로 노출됨. 라벨은 그리드 헤더 문구).
-          remember(MSG.INC_GT_LOT, 'Increment cannot be greater than Lot Size.', [
-            'Increment',
-            'Lot Size',
-          ]);
+          // MSG01127 '{0}은 {1} 보다 클 수 없습니다.' — {0}=Increment, {1}=Lot Size 치환
+          //   (인자 없으면 플레이스홀더가 그대로 노출됨. 라벨은 그리드 헤더 문구).
+          remember(MSG.INC_GT_LOT, '{0}은 {1} 보다 클 수 없습니다.', ['Increment', 'Lot Size']);
           continue;
         }
         // ② LOT_SIZE==0 또는 INCREMENT==0(또는 미입력) 차단 — 0보다 큰 정수 필요

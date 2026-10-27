@@ -2,6 +2,8 @@
 
 같은 유형의 As-is 항목을 기존 To-Be 화면이 어떻게 구현했는지. **모양(훅·컴포넌트·네이밍·주석 규약)을 그대로 따른다.**
 
+> ⚠ 아래 끝부분 `Sum` 체크박스(`customGrid` 에 `customCheckbox` 직접 배치)는 **구 패턴**이다 — 조회조건 Checkbox/Radio 는 hook #154 v2(룰 E12, 2026-10-23): `FormItem label={조건명}` + `customCheckbox` 안 박스만(labelText 금지), 정본 `features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx` `checkbox()`/`radio()`.
+
 ## SCP0016 · §2 dCalendar / ValueChanged
 - 위치: `features/supply/src/pages/waterfall-shipment-plan-fg/components/WaterfallShipmentPlanFgForm.tsx:244-270`
 

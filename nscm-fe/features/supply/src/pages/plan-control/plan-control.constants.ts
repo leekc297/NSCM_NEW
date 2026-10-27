@@ -12,6 +12,13 @@ export enum SHEETS {
   PLAN_CONTROL = 'planControl', // spdMain — 마스터 Activity 목록 (컬럼메타 'Plan Control' 22행)
   ENGINE_RUN = 'engineRun', // spdSub  — Engine Run 상태 (컬럼메타 'Status' 7행)
   SEARCH_INFO = 'searchInfo', // 조회조건 Plan Group 공급 (PKG_COM0000, 커서 6개 중 planGroupList)
+  // A002 Create Plan ID 팝업(SCP0123_PlanIDCreatePopup) 전용 2시트. DB·메타 실측:
+  //   GET  P_SCP0123_PLAN_ID_INFO_GET → PKG_SCP0123.P_SCP0123_GET_PLAN_ID_INFO (IN 4 / OUT 커서 5)
+  //   SAVE P_SCP0123_PLAN_ID_SAVE     → PKG_SCP0123.P_SCP0123_SAVE_PLAN_ID_CREATE (IN 23 / OUT 3)
+  //   두 API 바인딩(SCM_ADM_API_M)은 USE_YN='Y' 로 이미 등록돼 있고, SCM_ADM_MNU_BTN_MPG_M 의
+  //   시트 바인딩 2행만 신규 등록한다(06_register_plan_id_create_popup.sql).
+  PLAN_ID_INFO = 'planIdInfo', // 팝업 초기정보 조회 (5커서)
+  PLAN_ID_CREATE = 'planIdCreate', // 팝업 Plan ID 생성 저장
 }
 
 // FE 응답 키 = SCM_ADM_PROC_M.COL_NM 실측값. 커서 인자명(O_RC1)과 별개 축이며 이 화면은 o_rc1 이
@@ -22,6 +29,16 @@ export const RESPONSE_SET = {
   SEARCH_INFO: 'planGroupList',
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
+
+// A002 팝업 GET(P_SCP0123_GET_PLAN_ID_INFO)의 OUT 커서 5개. PKG 본문 OPEN O_RC1~O_RC5 순서 그대로다
+//   (SCM_ADM_PROC_M COL_NM 실측: horizonInfo/frozenInfo/fpPlanList/scpPlanList/planInfo).
+export const PLAN_ID_INFO_RESPONSE_SET = {
+  HORIZON: 'horizonInfo', // O_RC1 HORIZON_END_DATE·VERSION_NO (1행)
+  FROZEN: 'frozenInfo', // O_RC2 OPERATION_GROUP·PROD_FROZEN·SHIP_FROZEN (A/E/P)
+  FP_PLAN: 'fpPlanList', // O_RC3 CODE·NAME·PLAN_TYPE (FP/SSP 후보)
+  SCP_PLAN: 'scpPlanList', // O_RC4 CODE·NAME·PLAN_TYPE(SCP) 후보
+  PLAN_INFO: 'planInfo', // O_RC5 기생성 Plan ID 상세(조회모드에서만 1행)
+} as const;
 
 // admin SCM_MST_SHEET_COLUMNS.SHEET_NAME (AS-IS 시트명 그대로, DB 실측). 컬럼 메타 조회 sheetNm.
 //   위 SHEETS(호출 축 = SHT_NM)와 값이 다르다 — 섞으면 조용히 컬럼 0건이 된다(00_checklist §0.3).
@@ -48,6 +65,20 @@ export const COMBO = {
 // 일단위 Plan Date 운영 Division 집합 — 실측 2행(81_UC, EE_UC). SEGMENT2 가 '-' 라 표시용이
 //   아니라 코드 집합 판정 전용이다(design 02 §2-5). COMBO.LOOKUP_COMMON 의 @lookupType 파라미터.
 export const GM_DIVISION_LOOKUP_TYPE = 'OPMZ_DIVISION_GM';
+
+// A002 팝업 Prod/Ship System 콤보 lookupType(COMBO.LOOKUP_COMMON). DB 실측 CODE:
+//   PROD = FP·SCP / SHIP = SCP·SSP. 선택한 CODE(plan_type)가 Plan ID 후보를 가른다(SCP→scpPlanList,
+//   그 외→fpPlanList 의 PLAN_TYPE 필터). GM(일단위) Division 은 생성 시 SCP 를 후보에서 제외한다
+//   (AS-IS PJ20257329 2025-10-20).
+export const SYS_PROD_LOOKUP_TYPE = 'OPMZ_SCM_SYS_PROD_CD';
+export const SYS_SHIP_LOOKUP_TYPE = 'OPMZ_SCM_SYS_SHIP_CD';
+// SCP 선택 시에만 scpPlanList 후보를 쓴다(AS-IS RefreshPlanId 분기 기준값).
+export const SYS_PLAN_TYPE_SCP = 'SCP';
+// Parameter 콤보는 AS-IS 가 'Normal' 단일 고정 + 비활성(cs:143-149)이다.
+export const PARAMETER_NORMAL = 'Normal';
+// tgt_divis_cd 가 'P'(Pack/완제품)가 아니면 Cell 필드를 숨기고 Prod→Cell 로 저장을 치환한다
+//   (AS-IS cs:185-191 · 480-488).
+export const TGT_DIVS_PACK = 'P';
 
 // X21 owner 분기 — 이 그룹 소속이면 searchInfo 의 userId 를 '' 로 보내 owner 필터를 우회한다.
 //   그 외 사용자는 본인이 owner 인 Plan Group 만 받는다(design 02 §2-2).
@@ -146,8 +177,10 @@ export const MSG = {
   PLAN_ID_ALREADY_PROCESSED: 'MSG01463', // B24
   ENGINE_RUN_NOT_EXECUTED: 'MSG01464', // B30 · B37
   SAVE_CONFIRMED: 'MSG01465', // 저장 성공 — confirm_yn='Y'
-  SAVE_EXECUTED: 'MSG01466', // 저장 성공 — A003·A004·A005·A009
+  SAVE_EXECUTED: 'MSG01466', // 저장 성공 — A003·A004·A005·A009 + A002 팝업 Plan ID 생성(AS-IS "Executed.")
   SAVE_RELEASED: 'MSG01467', // 저장 성공 — A006
+  // A002 팝업 Frozen Period 검증 — 시작일 > 종료일 금지(AS-IS MSG00108, TO-BE 동일 코드 실재).
+  INVALID_PERIOD: 'MSG00108',
 } as const;
 
 // 위 신규 6건의 영문 원문 — t(id, fallback) 의 fallback 이다. 번들 로드 실패·구버전 번들에서도

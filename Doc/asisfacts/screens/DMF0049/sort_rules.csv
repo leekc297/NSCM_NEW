@@ -1,0 +1,19 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+DMF0049,SQL,DMF0049_GET_SALES_ETC_REPORTS_DATA,Doc\asisfacts\db\modules\dbo.DMF0049_GET_SALES_ETC_REPORTS_DATA.sql,288,,BASIS_YYYYMM,ORDER BY BASIS_YYYYMM,0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,65,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,78,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,101,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,134,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,181,,"SORT_ORDER,CODE","ORDER BY SORT_ORDER, CODE",0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,232,,"SORT_ORDER,CODE","ORDER BY SORT_ORDER, CODE",0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,245,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,254,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,284,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,295,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,418,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0049,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,564,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0049,SQL,SCM0001_GET_LOOKUP_VALUES,Doc\asisfacts\db\modules\dbo.SCM0001_GET_LOOKUP_VALUES.sql,26,,DISPLAY_SEQ,ORDER BY L.DISPLAY_SEQ,0,정적
+DMF0049,SQL,DMF0049_GET_MEASURE,Doc\asisfacts\db\modules\dbo.DMF0049_GET_MEASURE.sql,40,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO,0,정적
+DMF0049,SQL,DMF0049_GET_MEASURE,Doc\asisfacts\db\modules\dbo.DMF0049_GET_MEASURE.sql,53,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO,0,정적
+DMF0049,SQL,DMF0049_GET_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0049_GET_SPREAD_TITLE.sql,126,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO,0,정적
+DMF0049,SQL,DMF0049_SAVE_SALES_ETC_REPORT_C,Doc\asisfacts\db\modules\dbo.DMF0049_SAVE_SALES_ETC_REPORT_C.sql,1013,,"DEPARTMENT_ID,DEPT_ID,CUST_REPORT,END_CUST_REPORT",", DENSE_RANK() OVER ( ORDER BY DEPARTMENT_ID, DEPT_ID, CUST_REPORT, END_CUST_REPORT",1,정적 · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님

@@ -19,8 +19,8 @@
 | D00-1-010 | §1 dCalendar / UsrDateRangePicker3 | StockOspForm.tsx:238-244 (PeriodField from/to) |  | 구현 |
 | D00-1-011 | §1 layoutControlItem1 / LayoutControlItem | StockOspForm.tsx:146-161 (Inspection 레이아웃, Pack extra) |  | 구현 |
 | D00-1-012 | §1 btnExcelUpload / UsrButton | StockOspPage.tsx:179-189 (customButtons Excel Upload, !isPack) |  | 구현 |
-| D00-1-013 | §1 layoutControlItem2 / LayoutControlItem | — | AS-IS formDown(Form Download) 레이아웃 아이템 — 버튼 DB 미등록으로 미이식(§5, R7) | 제외 |
-| D00-1-014 | §1 formDown / UsrButton | — | Form Download 버튼 — SCM_ADM_MNU_BTN_MPG_M 미등록(hasButton false), AS-IS 근거만으론 미러 금지 | 제외 |
+| D00-1-013 | §1 layoutControlItem2 / LayoutControlItem | SubTitle customButtons | AS-IS formDown(Form Download) — iter-3 이식(사용자 지시 2026-10-14). SubTitle customButton 로 재현 | 반영(iter-3) |
+| D00-1-014 | §1 formDown / UsrButton | StockOspPage customButtons[FORM_DATA] | Form Download 버튼 — iter-3 이식. FORM_DATA 버튼·권한 DB 등록(05_register.sql), hasButton('FORM_DATA') 게이트, 양식=flatExcelDownload 클라 생성(hook #135) | 반영(iter-3) |
 | D00-1-015 | §1 layoutInspection / LayoutControlItem | StockOspForm.tsx:146-161 (Inspection FormItem, Pack extra) |  | 구현 |
 | D00-1-016 | §1 txtInspection / UsrMultiLineEditor | StockOspForm.tsx:151-158 (Inspection InputField sc.inspectionId) |  | 구현 |
 | D00-1-017 | §1 layStatus / LayoutControlItem | StockOspForm.tsx:162-178 (Status FormItem, Pack extra) |  | 구현 |
@@ -39,7 +39,7 @@
 | D00-2-002 | §2 btnExcelUpload / Click | StockOspPage.tsx:184 (action setOpenExcelUpload(true)) |  | 구현 |
 | D00-2-003 | §2 btnItemId / Click | StockOspPage.tsx:202 (onItemSearch setOpenItem(true)) → ItemByDivisionModal |  | 구현 |
 | D00-2-004 | §2 cboDivision / SelectedIndexChanged | StockOspForm.tsx:107-109 (onDivisionChange cascade + PlantSite 초기화) |  | 구현 |
-| D00-2-005 | §2 formDown / Click | — | Form Download 버튼 미이식(D00-1-014)에 종속 — 이벤트도 미이식 | 제외 |
+| D00-2-005 | §2 formDown / Click | StockOspPage.handleFormDownload | Form Download Click — iter-3 이식. GridAction.flatExcelDownload(EXCEL_FORM_HEADER 9컬럼 빈 양식, 'StockOsp_ExcelForm') | 반영(iter-3) |
 | D00-2-006 | §2 spdMain / EditChange | PackHoldStockGrid.tsx:84-100 (cellEditEnded 편집 반영) |  | 구현 |
 | D00-2-007 | §2 spdMain / SheetTabClick | StockOspPage.tsx:104-106,222 (handleTabChange setActiveTab) |  | 구현 |
 | D00-3-001 | §3 ChangeActiveSheet / (SpdSheet.shtMain) | StockOspPage.tsx:60-61 (isPack/activeSheet 파생), :207-209 (활성 탭 라우팅) |  | 구현 |
@@ -138,7 +138,7 @@
 | [R4] | InsertButton NO-OP `{ }` | `insert: hasButton('INSERT') ? () => undefined : false` (DB 미등록 → 미노출) | 반영 |
 | [R5] | DeleteButton NO-OP `{ }` | `delete: hasButton('DELETE') ? () => undefined : false` (DB 미등록 → 미노출) | 반영 |
 | [R6] | EditButton 모드토글 | 미이식 (convert-core §2.1(11)). editMode 상태 없음. DB 미등록 → 미노출 | 반영 |
-| [R7] | btnExcelUpload / formDown (Osp 탭) | Excel Upload = customButtons + ExcelUploadModal(hasButton('UPLOAD') 게이트). Form Download = DB 미등록 미이식 | 반영(Upload) / 미이식(FormDown) |
+| [R7] | btnExcelUpload / formDown (Osp 탭) | Excel Form(FORM_DATA)→Excel Upload(UPLOAD) 순 customButtons(hook #135 §6). Upload=ExcelUploadModal 2-phase(mode0 검증→mode1 적재). Form Download=flatExcelDownload 클라 양식 생성 | 반영(Upload+FormDown, iter-3) |
 | [R8] | 탭0: Excel 버튼 표시 / Inspection·Status·Cutoff 숨김 | Osp 탭: extraConditions 미표시 (packExtra=undefined) + Excel Upload 버튼 노출(!isPack customButtons) | 반영 |
 | [R9] | 탭1: Excel 숨김 / Inspection·Status·Cutoff 표시 | Pack 탭: packExtra extraConditions 노출 | 반영 |
 | [R10] | 탭 전환 시 조건세트/기간 재계산 | 탭 전환 = setActiveTab (자동 재조회 없음, Search 버튼만). 편집 pending 보존 | 반영 |
@@ -154,7 +154,7 @@
 ## 5. 미이식/보류 (사유 명시 — skill §3 예외조항)
 
 - **Excel Upload (R7, Osp 탭)**: DB 버튼 등록됨(UPLOAD/UPLOAD_SAVE — SCM_ADM_MNU_BTN_MPG_M 실측 USE_YN=Y, 권한 각 2행, 2026-09-27 재실측 gap-resolve). SP `P_SCP0041_STOCK_OSP_EXCEL_UPLOAD` 존재. `customButtons` + `ExcelUploadModal`(파일선택 팝업 1-Step, DistributionRoute 선례)로 배선 완료 — `!isPack && hasButton('UPLOAD')` 게이트(StockOspPage.tsx:179-189). 공용 `hotkeyConfig.upload` 훅은 미사용(upload=false)이나 이는 훅 경로 미사용일 뿐 버튼은 customButtons 경로로 노출된다. GAP-03 해소.
-- **Form Download (R7, Osp 탭)**: AS-IS `formDown` — DB 버튼 미등록. 미이식.
+- **Form Download (R7, Osp 탭)**: AS-IS `formDown`(`MenuEtcFileDownButton("StockOSP_ExcelForm.xls")`) — iter-3 이식(사용자 지시 2026-10-14). FORM_DATA 버튼·권한 DB 등록(05_register.sql, ADMIN·SCP Planner) + Osp 탭 customButton(hasButton('FORM_DATA'), Excel Form→Excel Upload 순) + `handleFormDownload`=`GridAction.flatExcelDownload`(EXCEL_FORM_HEADER 고정 9컬럼 빈 양식). 양식 고정이라 서버 proc 불요(API_ID=P_SCP0041_UPLOAD placeholder, FE 미호출).
 - **SaveData / SCP0040_SAVE_CHARACTERISTIC_CAPA (01_layout §5-F)**: AS-IS 정의만 존재, 호출 경로 없음(dead) → 미이식.
 - **usrButton1 dead control (01_layout §5-D)**: 어떤 Controls 컬렉션에도 add 안 됨 → 미표시 dead → 미이식.
 - **EditButton 모드토글(R6) / 조회모드 전열잠금(R12/R13)**: convert-core §2.1(11) 미이식 — 그리드 상시 편집 default ON.

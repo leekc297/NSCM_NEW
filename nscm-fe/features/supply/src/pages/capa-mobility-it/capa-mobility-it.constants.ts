@@ -5,6 +5,9 @@
 export const MENU_ID = 'SCP0098' as const;
 export type MENU_ID = typeof MENU_ID;
 
+/** Excel 파일명 접두 — AS-IS this.Name(폼 클래스명, .cs:557 sFileName). AS-IS 와 동일 파일명 유지. */
+export const EXCEL_FILE_PREFIX = 'SCP0098_CAPAReprotSmall' as const;
+
 /**
  * SHEETS — value = BE 프로시저 라우팅 키(SCM_ADM_MNU_BTN_MPG_M.SHT_NM). procedures.d.ts 유니온과 정합.
  * - `MAIN`             = 메인 조회 (PKG_SCP0098.P_GET_CAPA_MOBILITYIT)
@@ -47,6 +50,8 @@ export const MSG = {
   NO_CHANGES: 'MSG00004', // 저장할 데이터가 없습니다. (AS-IS validations #20)
   SAVE_ERROR: 'MSG00618', // 저장 중 오류가 발생했습니다.
   PERIOD_REQUIRED: 'MSG00108', // 조회 기간을 입력하세요.
+  COPY_WEEK: 'MSG01462', // 전 주 데이터를 금 주로 복사 (Copy Type 팝업 안내)
+  COPY_MONTH: 'MSG01461', // 전 월 데이터를 금 월로 복사 (Copy Type 팝업 안내)
 } as const;
 
 /** Bucket — To-Be 문서(SCP0098)에서 조회조건이 삭제되어 DAILY 고정. */
@@ -82,6 +87,22 @@ export const CATEGORY_OPTIONS = [
 
 /** Division 고정값 — AS-IS cboDivision.ControlValues='40'; Enabled=false (cs L182~183). */
 export const FIXED_DIVISION = '40' as const;
+
+/**
+ * 조회조건 콤보 SQL_ID — SCM_ADM_CMBO_SQL_M 실측(design 02 §2, DB 확인).
+ *   DIVISION   = Division_SCP             (SCP 권한필터본, @sesUserId 세션+@mnuId. 비활성·'40' 고정 표시용)
+ *   PLANT_SITE = PlantByDivisionOperation (@divisionId='40')
+ *   LINE       = LineByOperation          (@divisionId='40'+@plantId, '-' 미선택 UNION 행)
+ */
+export const COMBO = {
+  DIVISION: 'Division_SCP',
+  PLANT_SITE: 'PlantByDivisionOperation',
+  LINE: 'LineByOperation',
+  DAY_PERIOD: 'SCM0001_GET_SCP_DAY_PERIOD', // @fromDate(='')/@offsetDay/@timeZone → CODE='YYYYMMDD:YYYYMMDD'
+} as const;
+
+/** Period 초기범위 offset — AS-IS GetDayRange(PeriodType.W52): 52주*7-1 = 363일(일요일 보정 -1). */
+export const PERIOD_OFFSET_DAY = '363' as const;
 
 /** CAPA_WORK(일) 저장 상한 — AS-IS validations #16/#23 (iCount_CAPA_WORK > 10000). */
 export const CAPA_WORK_SAVE_LIMIT = 10000;

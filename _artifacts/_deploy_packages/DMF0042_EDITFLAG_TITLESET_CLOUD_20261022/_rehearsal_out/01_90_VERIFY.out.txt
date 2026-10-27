@@ -1,0 +1,11 @@
+CHK | N | LINES | JUDGE
+V1 마커 | 1 | 2741 | PASS
+(1 rows)
+
+CHK | N | JUDGE
+V1 판정줄 | 0 | PASS (활성 IS NULL 판정 없음)
+(1 rows)
+
+CHK | STATUS | ERRS | LAST_DDL | JUDGE
+V2 상태 | VALID | 0 | 2026-10-22 10:32:23 | PASS
+(1 rows)

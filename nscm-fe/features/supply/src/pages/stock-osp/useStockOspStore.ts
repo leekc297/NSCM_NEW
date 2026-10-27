@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
+import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { ADMIN_SHEET_NAME, MENU_ID, SHEETS, TAB_INDEX } from './stock-osp.constants';
 import type { SearchCondition } from './stock-osp.types';
@@ -41,10 +41,12 @@ interface Action {
 //   공용 EXCLUDED_DATE_PARAM(/yyyymmdd$/)에 걸려 저장 자체가 안 되므로 복원 응답에도 없음 → 기간 유지.
 const RESTORE_ARRAY_KEYS = new Set<string>(['plantSiteIds']);
 
-// 기본 조회조건 — Division 은 세션 사업부 기본(페이지 mount 시 권한 첫 항목으로 재보정) / 멀티 = [](ALL) /
-//   Status = ''(전체) / 날짜는 Form PeriodField 기본 로직에 위임(빈 값 시작).
+// 기본 조회조건 — Division 은 빈 값 시작 → StockOspForm 의 보정 effect 가 권한목록 첫 항목으로 초기화
+//   (AS-IS setListBox 데이터 바인딩 index 0 선택 재현, 사용자 지시 2026-10-14 — 세션 사업부 기본 금지) /
+//   멀티 = [](ALL) / Status = ''(전체) / 날짜는 빈 값 시작 — 탭별 effect 가 마운트·탭 전환마다 기본값을 채운다
+//   (Osp=PERIOD_DEFAULT 일자~+11M / Pack=now−3M~now+9M·Cutoff now~now, design 02 §4).
 const initSearch: SearchCondition = {
-  divisionId: useSessionStore.getState().session.div ?? '',
+  divisionId: '',
   plantSiteIds: [],
   itemId: '',
   fromYyyymmdd: '',

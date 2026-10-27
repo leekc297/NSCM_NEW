@@ -1,0 +1,24 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-22 11:44:38
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+L0 | PACKAGE | VALID | 2026-10-16 17:24:06 | 89
+L0 | PACKAGE BODY | VALID | 2026-10-22 11:44:35 | 1357
+(2 rows)
+
+CHK | N | LINES | JUDGE
+L1 대상 | 2 | 1226,1262 | PASS
+(1 rows)
+
+CHK | N | JUDGE
+L2 마커 | 0 | PASS (미적용)
+(1 rows)
+
+CHK | DIVISION_ID | SOLDTO_CODE | N | VERS
+L3 데이터 | 40 | (NULL) | 863497 | 66
+(1 rows)
+
+CHK | N | JUDGE
+L3 백업 | 1 | 있음 — 20 은 빠진 행만 추가
+(1 rows)

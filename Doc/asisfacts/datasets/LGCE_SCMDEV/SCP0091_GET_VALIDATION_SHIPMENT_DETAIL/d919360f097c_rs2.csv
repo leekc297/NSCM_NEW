@@ -1,0 +1,120 @@
+﻿""
+" with CY2 as   (															
+ select * from (															
+ SELECT COMPANY_ID    														
+ 	  , SHIPMENT_NO    														
+ 	  , ZFCY2 AS cy2_port    												
+ 	  , CASE WHEN ZFCY2ETA is null then null WHEN ZFCY2ETA = '' then null else  convert(char(10), convert(datetime, ZFCY2ETA ), 23) END AS cy2_eta    	
+ 	  , CASE WHEN ZFCY2ATA is null then null WHEN ZFCY2ATA = '' then null else  convert(char(10), convert(datetime, ZFCY2ATA ), 23) END AS cy2_ata    	
+ 	  , ROW_NUMBER() OVER (PARTITION BY COMPANY_ID,SHIPMENT_NO ORDER BY LAST_UPDATE_DATE DESC) AS seq    			
+ 	  FROM SCM_DNM_DELIVERY_TRACKING WITH (NOLOCK)    									
+ 	  WHERE COMPANY_ID is not null    										
+ 	  AND  COMPANY_ID != ''    											
+ 	  AND ( ZFCY2 IS NOT NULL     											
+ 	     OR ZFCY2ETA IS NOT NULL     										
+ 		 OR ZFCY2ATA IS NOT NULL     										
+ 		 )    																
+ 		)  data  where data.seq = 1	   										
+ 	)    																	
+ 	, PID as   (																				  
+ 				SELECT COMPANY_ID , SHIPMENT_NO, MAX(PLANT_ISSUE_DATE)  AS PLANT_ISSUE_DATE		  
+ 	 			  FROM scm_dnm_intransit_c WITH (NOLOCK)    									    			  
+ 	 			group by COMPANY_ID, SHIPMENT_NO										    	  
+ 		       )	    																	      
+ 		SELECT *		    	
+   	FROM					
+   	(						
+   	SELECT convert(char(10), convert(datetime, sdic.result_date), 23) result_date             
+   		  ,dbo.FN_GET_LOOKUP_CODE_DESC('SHIPMENT_RESULT_TYPE', sdic.result_type) AS result_type             
+   		  ,sdic.division_id             
+   		  ,CASE sdic.result_type              
+   		   WHEN 'S' THEN '-'             
+   		   ELSE dbo.FN_GET_SHIPMENT_NO_DISPLAY(sdic.shipment_no, sdic.result_type)               
+   		   END  shipment_no              
+   		  ,sdic.project_code             
+   		  , cp.GROUP_CODE1 AS  CELL_GROUP             
+   		  , cp.GROUP_CODE2 AS  PACK_GROUP             
+   		  ,sdic.item_id             
+   		  ,(SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-' WHEN X.NICK_NAME='' THEN '-' ELSE X.NICK_NAME END) FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK) WHERE X.ITEM_ID = sdic.item_id) AS nick_name             
+   		  ,sdic.plant_id as plant             
+   		  ,sdic.transport_mode as Trans_Mode             
+   		  ,dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) operation_group             
+   		  ,sdic.delivery_qty             
+   		  ,sdic.final_soldto_code	AS customer_code             
+   		  ,sdic.shipto_code             
+   		  ,sdic.final_incoterms		AS incoterms             
+   		  ,sdic.from_scm_site_id             
+   		  ,sdic.to_scm_site_id             
+   		  ,smbv.lt_total bod_lead_time             
+   		  ,IIF(ISNULL(sdic.plant_issue_date,'')='','', convert(char(10), convert(datetime, sdic.plant_issue_date), 23)) as plant_issue_date             
+   		  ,case when isnull(sdic.pol_atd_date,'') = '' then ''              
+   		   else IIF(ISNULL(sdic.pol_atd_date,'')='','', convert(char(10), convert(datetime, sdic.pol_atd_date), 23))             
+   		  end pol_atd_date             
+   		  ,case when isnull(sdic.pod_ata_date,'') = ''              
+   				then IIF(ISNULL(sdic.pod_eta_date,'')='','', convert(char(10), convert(datetime, sdic.pod_eta_date), 23))             
+   				when sdic.pod_ata_date = ''              
+   				then IIF(ISNULL(sdic.pod_eta_date,'')='','', convert(char(10), convert(datetime, sdic.pod_eta_date), 23))             
+   		   else convert(char(10), convert(datetime, sdic.pod_ata_date), 23)              
+   		   end pod_ata_date             
+   		  ,case when isnull(sdic.pod_atd_date,'') = ''              
+   				then IIF(ISNULL(sdic.pod_etd_date,'')='','', convert(char(10), convert(datetime, sdic.pod_etd_date), 23))             
+   				when sdic.pod_atd_date =''             
+   				then IIF(ISNULL(sdic.pod_etd_date,'')='','', convert(char(10), convert(datetime, sdic.pod_etd_date), 23))             
+   		   else convert(char(10), convert(datetime, sdic.pod_atd_date), 23)              
+   		   end pod_atd_date             
+   		  ,case when isnull(sdic.ATTRIBUTE3,'')= '' then ''              
+   				when sdic.ATTRIBUTE3 ='' then ''             
+   		        else              
+   					CASE              
+   					WHEN convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) <  convert(char(8), convert(datetime, sdic.result_date), 112) then convert(char(8), convert(datetime, sdic.result_date), 112)             
+   					ELSE convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112)             
+   					END             
+   				end f_dest_eta_date             
+   		  ,case when isnull(sdic.f_dest_eta_date,'')= '' then ''              
+   				when sdic.f_dest_eta_date ='' then ''             
+   		  else convert(char(10), convert(datetime, sdic.f_dest_eta_date), 23) end f_dest_eta_date2             
+       			  ,(select max(port_description) from SCM_MST_PORT WITH (NOLOCK)  where port_code = sdic.POL)              AS pol_port				
+       			  ,IIF(ISNULL(sdic.POL_ATD_DATE,'')='','', convert(char(10), convert(datetime, sdic.POL_ATD_DATE), 23))    AS pol_atd					
+       			  ,''					AS pol_etd				
+       			  ,(select max(port_description) from SCM_MST_PORT WITH (NOLOCK)  where port_code = sdic.POD)            AS pod_arrive_port      
+       			  ,IIF(ISNULL(sdic.POD_ETA_DATE    ,'')='','', convert(char(10), convert(datetime, sdic.POD_ETA_DATE    ), 23)) AS pod_arrive_eta     
+       			  ,IIF(ISNULL(sdic.POD_ATA_DATE    ,'')='','', convert(char(10), convert(datetime, sdic.POD_ATA_DATE    ), 23)) AS pod_arrive_ata     
+       			  ,IIF(ISNULL(sdic.POD_ETD_DATE    ,'')='','', convert(char(10), convert(datetime, sdic.POD_ETD_DATE    ), 23)) AS pod_departure_etd  
+       			  ,IIF(ISNULL(sdic.POD_ATD_DATE    ,'')='','', convert(char(10), convert(datetime, sdic.POD_ATD_DATE    ), 23)) AS pod_departure_atd  
+       			   ,(select max(cy2_port) from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO and sdic.plant_issue_date  =pid.plant_issue_date)  AS cy2_port		
+       			   ,(select max(cy2_eta)  from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO  and sdic.plant_issue_date =pid.plant_issue_date)  AS cy2_eta		
+       			   ,(select max(cy2_ata)  from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO  and sdic.plant_issue_date =pid.plant_issue_date)  AS cy2_ata 		
+   	FROM  scm_dnm_intransit_c sdic  WITH (NOLOCK)            
+   	LEFT JOIN scp_mst_bod_n_v smbv  WITH (NOLOCK)            
+   		ON    sdic.division_id = smbv.division_id             
+   		AND   sdic.from_scm_site_id = smbv.from_site             
+   		AND   sdic.to_scm_site_id = smbv.to_site             
+   		AND   ( CASE WHEN ISNULL(sdic.final_incoterms, '') = '' THEN sdic.incoterms             
+   				ELSE sdic.final_incoterms             
+   			   END ) = smbv.incoterms             
+   		AND   sdic.transport_mode = smbv.transport_mode             
+   		AND   smbv.bod_valid_yn = 'Y'             
+   		AND   smbv.route_valid_yn = 'Y'             
+   		AND sdic.result_date >= smbv.from_yyyymmdd             
+   		AND sdic.result_date <= smbv.to_yyyymmdd             
+     LEFT JOIN SCP_MST_FINAL_ITEM cp WITH (NOLOCK) on cp.DIVISION_ID = sdic.division_id and  cp.ITEM_ID = sdic.ITEM_ID               
+             left join pid on  pid.COMPANY_ID = sdic.COMPANY_ID AND pid.SHIPMENT_NO = sdic.SHIPMENT_NO  AND pid.plant_issue_date = sdic.plant_issue_date        
+   	  WHERE 1 = 1																									
+   			
+ AND sdic.division_id IN (N'81') 																						
+   		             
+   		             
+   						
+   							
+   		            
+   		            
+       	AND sdic.result_date BETWEEN '20261001' AND '20261031'        
+   		AND sdic.RESULT_TYPE in ('I','C','B')             
+   		AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''             
+ 										
+ 	
+   	) DATA             
+   	WHERE f_dest_eta_date = '20261023'             
+ 	
+   	ORDER BY result_date, result_type, division_id, shipment_no             
+"

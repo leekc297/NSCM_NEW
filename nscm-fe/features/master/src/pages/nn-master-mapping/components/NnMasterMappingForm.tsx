@@ -286,12 +286,8 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
                         disabled={sc.divisionId === '40'}
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon
-                            appearance='lined'
-                            onClick={() => setOpenProjectModal(true)}
-                          />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={() => setOpenProjectModal(true)}
                       />
                     ),
                   }}
@@ -324,12 +320,8 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon
-                            appearance='lined'
-                            onClick={() => setOpenItemModal(true)}
-                          />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={() => setOpenItemModal(true)}
                       />
                     ),
                   }}

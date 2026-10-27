@@ -1,0 +1,246 @@
+[
+ {
+  "screen": "SCP0079",
+  "title": "ESS RTF Analysis Report",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0079_RTF_Analysis_Report/POPUP/SCP0079_RTF_Analysis_Report_DetailPopup.cs:372",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0079_RTF_Analysis_Report/POPUP/SCP0079_RTF_Analysis_Report_DetailPopup.designer.cs:117",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0079_RTF_Analysis_Report/SCP0079_RTF_Analysis_Report.cs:988",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0079_RTF_Analysis_Report/SCP0079_RTF_Analysis_Report.designer.cs:1212"
+  ],
+  "designer_files": [],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0079_GET_RTF_ANALYSIS_REPORT_DETAIL",
+    "member": "FindData",
+    "line": "168",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0079_RTF_Analysis_Report\\POPUP\\SCP0079_RTF_Analysis_Report_DetailPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "359",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0079_RTF_Analysis_Report\\POPUP\\SCP0079_RTF_Analysis_Report_DetailPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0079_GET_RTF_ANALYSIS_REPORT",
+    "member": "FindData_Main",
+    "line": "671",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0079_RTF_Analysis_Report\\SCP0079_RTF_Analysis_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "810",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0079_RTF_Analysis_Report\\SCP0079_RTF_Analysis_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "825",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0079_RTF_Analysis_Report\\SCP0079_RTF_Analysis_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0079_GET_RTF_ANALYSIS_REPORT_DETAIL",
+    "member": "FindData",
+    "line": "168",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0079_RTF_Analysis_Report\\POPUP\\SCP0079_RTF_Analysis_Report_DetailPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "359",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0079_RTF_Analysis_Report\\POPUP\\SCP0079_RTF_Analysis_Report_DetailPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0079_GET_RTF_ANALYSIS_REPORT",
+    "member": "FindData_Main",
+    "line": "671",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0079_RTF_Analysis_Report\\SCP0079_RTF_Analysis_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "810",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0079_RTF_Analysis_Report\\SCP0079_RTF_Analysis_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "825",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0079_RTF_Analysis_Report\\SCP0079_RTF_Analysis_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0079_GET_RTF_ANALYSIS_REPORT",
+   "SCP0079_GET_RTF_ANALYSIS_REPORT_DETAIL"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0080",
+  "title": "Model Code Master",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0080_GroupCodeManagement/SCP0080_GroupCodeManagement.cs:1792",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0080_GroupCodeManagement/SCP0080_GroupCodeManagement.designer.cs:1059"
+  ],
+  "designer_files": [],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/group-code-management"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+    "member": "CheckUser",
+    "line": "1754",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0080_GroupCodeManagement\\SCP0080_GroupCodeManagement.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0080_GET_GROUP_CODE_MANAGEMENT",
+    "member": "SetQueryInfoGet",
+    "line": "988",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0080_GroupCodeManagement\\SCP0080_GroupCodeManagement.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0080_SAVE_GROUP_CODE_MANAGEMENT",
+    "member": "SetQueryInfoSave",
+    "line": "1063",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0080_GroupCodeManagement\\SCP0080_GroupCodeManagement.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+    "member": "CheckUser",
+    "line": "1754",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0080_GroupCodeManagement\\SCP0080_GroupCodeManagement.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+   "SCP0080_GET_GROUP_CODE_MANAGEMENT",
+   "SCP0080_SAVE_GROUP_CODE_MANAGEMENT"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0080_SAVE_GROUP_CODE_MANAGEMENT",
+    "sp": "SCP0080_SAVE_GROUP_CODE_MANAGEMENT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 중 예외 발생 시 전체 롤백하고 결과코드 F 와 오류번호·메시지를 별도 결과셋으로 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() (두 번째 결과셋)",
+    "on_fail": "ROLLBACK + SCM_SYS_LOG_BATCH 에 ERROR 로그 INSERT 후 SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0081",
+  "title": "Production Plan Report",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0081_ProductionPlanReport/SCP0081_ProductionPlanReport.cs:1058",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0081_ProductionPlanReport/SCP0081_ProductionPlanReport.designer.cs:1194"
+  ],
+  "designer_files": [],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "756",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0081_ProductionPlanReport\\SCP0081_ProductionPlanReport.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "859",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0081_ProductionPlanReport\\SCP0081_ProductionPlanReport.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0081_GET_PRODUCTION_PLAN_REPORT",
+    "member": "Find_Data",
+    "line": "723",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0081_ProductionPlanReport\\SCP0081_ProductionPlanReport.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "756",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0081_ProductionPlanReport\\SCP0081_ProductionPlanReport.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "859",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0081_ProductionPlanReport\\SCP0081_ProductionPlanReport.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0052_GET_DAY_RANGE",
+   "SCP0081_GET_PRODUCTION_PLAN_REPORT"
+  ],
+  "db_validation_brief": []
+ }
+]

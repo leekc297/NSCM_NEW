@@ -7,6 +7,8 @@
 |---:|---|:--:|---|
 | 90 | [figma-layout-parity-mandatory](../hooks/figma-layout-parity-mandatory.md) | ⭐⭐⭐ | Figma MD 영역 배치대로 구현(디자인-우선). 수정 시 불일치면 레이아웃 교체. **단, Figma=디자인 참조 only — 정책 판단 금지(§1.5)** |
 | 94 | [search-condition-height-uniformity](../hooks/search-condition-height-uniformity.md) | ⭐⭐⭐ | 조회조건 모든 객체 높이 **36px** (Main+Popup). DatePicker=`.datePickerFix`. 1단 4개=`gridSize` |
+| 154 | [search-condition-labelless-toggle-input-column](../hooks/search-condition-labelless-toggle-input-column.md) | ⭐⭐⭐ | 조회조건 Radio/CheckBox = **좌측 라벨 열(조건명/그룹명) + 입력 열 시작선(컨트롤)** — v2 2026-10-23 (Checkbox 박스만·labelText 금지·조건마다 1칸 · Radio `RadioGroup row` · 정본 GlobalPsiReportForm · v1 NBSP 폐지 · G-H WARN · 하네스 H03) |
+| 155 | [search-area-bulk-input-button-popup](../hooks/search-area-bulk-input-button-popup.md) | ⭐⭐⭐ | (조회조건 축 — 카테고리 04 주소속) 조회영역 일괄 입력 = 버튼 영역 버튼 + 입력 팝업(520×280 modaless · OK/Close) |
 | 93 | [grid-multi-tier-header-height](../hooks/grid-multi-tier-header-height.md) | ⭐⭐⭐ | 다단 헤더 총높이 **48px 고정** (1단48/2단24/3단16). 1단높이×N 비대화 금지 |
 | 95 | [grid-cell-backcolor-standard](../hooks/grid-cell-backcolor-standard.md) | ⭐⭐⭐ | 셀 배경 3색: 기본 White+zebra / 편집가능 Yellow / 편집-잠금 Gray. 전체 회색·inline 색 금지 |
 | 108 | [ui-grid-corner-no-header](../hooks/ui-grid-corner-no-header.md) | ⭐⭐ | rowHeader 그리드 = TopLeft 전체 단일 머지 + **'No.'** 라벨 + 중앙 정렬 |

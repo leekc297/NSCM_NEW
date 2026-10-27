@@ -1,0 +1,794 @@
+[
+ {
+  "screen": "SCP0123",
+  "title": "Plan Control",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0123_PlanControl/SCP0123_PlanControl.cs:1328",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0123_PlanControl/SCP0123_PlanIDCreatePopup.cs:608"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0123_PlanControl/SCP0123_PlanControl.Designer.cs:477",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0123_PlanControl/SCP0123_PlanIDCreatePopup.Designer.cs:1732"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/plan-control"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetPlanGroupByUserID",
+    "line": "338",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanControl.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0123_GET_PLAN_CONTROL",
+    "member": "GetDataSet_Main",
+    "line": "488",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanControl.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0123_GET_PLAN_ENGINE_RUN",
+    "member": "FindData_Sub",
+    "line": "557",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanControl.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN",
+    "member": "SaveData",
+    "line": "733",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanControl.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETGSCMAUTHENTICATIONMENULIST",
+    "member": "GoPage",
+    "line": "816",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanControl.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0123_GET_PLAN_ID_CREATE_INFO",
+    "member": "GetInitInfo",
+    "line": "276",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanIDCreatePopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0123_SAVE_PLAN_ID_CREATE",
+    "member": "SaveData",
+    "line": "533",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanIDCreatePopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetPlanGroupByUserID",
+    "line": "338",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanControl.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0123_GET_PLAN_CONTROL",
+    "member": "GetDataSet_Main",
+    "line": "488",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanControl.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0123_GET_PLAN_ENGINE_RUN",
+    "member": "FindData_Sub",
+    "line": "557",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanControl.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN",
+    "member": "SaveData",
+    "line": "733",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanControl.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETGSCMAUTHENTICATIONMENULIST",
+    "member": "GoPage",
+    "line": "816",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanControl.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0123_GET_PLAN_ID_CREATE_INFO",
+    "member": "GetInitInfo",
+    "line": "276",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanIDCreatePopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0123_SAVE_PLAN_ID_CREATE",
+    "member": "SaveData",
+    "line": "533",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0123_PlanControl\\SCP0123_PlanIDCreatePopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL",
+   "SCP0121_GET_SEARCH_INFO",
+   "SCP0123_GET_PLAN_CONTROL",
+   "SCP0123_GET_PLAN_ENGINE_RUN",
+   "SCP0123_GET_PLAN_ID_CREATE_INFO",
+   "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN",
+   "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+   "SCP0123_SAVE_PLAN_ID_CREATE",
+   "UP_FX_GETGSCMAUTHENTICATIONMENULIST"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Activity 실행(하위 I/F) 오류 시 F 와 오류 메시지 반환, 지정된 업무성 메시지 2종은 오류 로그 적재만 생략",
+    "message": "하위 I/F SP 발생 메시지 그대로 '[번호]' + ERROR_MESSAGE() — 예: 'I/F not executed because PLAN_TYPE is FN.' / ' Order Production data to interface.'",
+    "on_fail": "(위 2개 메시지 외) INSERT scm_sys_log_batch; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "SCP0123_SAVE_PLAN_ID_CREATE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Plan ID 생성 오류 시 로그 후 F 와 오류 메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_INPUT_SHIPMENT_SNAPSHOT",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 프로시저명을 메시지로 오류를 재발생시켜 부모로 전파",
+    "message": "PR_SCP_OPT_ENG_INPUT_SHIPMENT_SNAPSHOT",
+    "on_fail": "RAISERROR(@V_PROGRAM_NAME, 16,1)  (ROLLBACK·로그 호출은 주석)"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_FP_PROD_TARGET",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류번호·메시지를 결과셋으로 내보내고 로그만 남김",
+    "message": "ERROR_NUMBER()+ERROR_MESSAGE() 결과셋",
+    "on_fail": "SELECT '' + Convert(NVARCHAR(10), ERROR_NUMBER()) + '' + ERROR_MESSAGE(); PR_SCM_SYS_LOG_BATCH ERROR 로그 (ROLLBACK 주석, 재발생 없음)"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "해당 주 최신 Plan Version 이 FN(최종)이면 엔진 결과 반영(I/F)을 거부",
+    "message": "I/F not executed because PLAN_TYPE is FN.",
+    "on_fail": "SET XACT_ABORT OFF; RAISERROR (...,15,0) → CATCH 에서 SAVEPOINT 롤백·END 로그 후 THROW"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "반영할 엔진 생산 결과가 0건이면 I/F 를 중단하고 오류 반환",
+    "message": "No Order Production data to interface.",
+    "on_fail": "SET XACT_ABORT OFF; RAISERROR(…,15,0) → CATCH SAVEPOINT 롤백·END 로그 후 THROW"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 본 SP 세이브포인트까지 롤백하고 로그 후 예외를 부모로 재발생",
+    "message": "ERROR_MESSAGE() (THROW 로 부모 전파)",
+    "on_fail": "XACT_STATE()=-1 → ROLLBACK(전체), =1 → ROLLBACK TRAN SP_OUTPUT_TRANS_ANL; COMMIT TRAN; 메시지 2종(FN/No Order…)은 END 로그, 그 외 scm_sys_log_batch ERROR INSERT; THROW"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "해당 주 최신 Plan Version 이 FN(최종)이면 전극 엔진 결과 반영(I/F)을 거부",
+    "message": "I/F not executed because PLAN_TYPE is FN.",
+    "on_fail": "SET XACT_ABORT OFF; RAISERROR (...,15,0) → CATCH 에서 SAVEPOINT 롤백·END 로그 후 THROW"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "반영할 전극 엔진 생산 결과가 0건이면 I/F 를 중단하고 오류 반환",
+    "message": "No Order Production data to interface.",
+    "on_fail": "SET XACT_ABORT OFF; RAISERROR(…,15,0) → CATCH SAVEPOINT 롤백·END 로그 후 THROW"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 본 SP 세이브포인트까지 롤백하고 로그 후 예외를 부모로 재발생",
+    "message": "ERROR_MESSAGE() (THROW 로 부모 전파)",
+    "on_fail": "XACT_STATE()=-1 → ROLLBACK(전체), =1 → ROLLBACK TRAN SP_OUTPUT_TRANS_ANL; COMMIT TRAN; 메시지 2종은 END 로그, 그 외 scm_sys_log_batch ERROR INSERT; THROW"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "대상 SCP 계획 버전의 Plan Type 이 FN(확정)이면 I/F 를 수행하지 않고 오류로 중단",
+    "message": "I/F not executed because PLAN_TYPE is FN.",
+    "on_fail": "SET XACT_ABORT OFF; RAISERROR ('I/F not executed because PLAN_TYPE is FN.',15,0); → CATCH(SAVEPOINT 롤백·END 로그·THROW)"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "I/F 할 생산 결과가 0건이면 오류로 중단",
+    "message": "No Order Production data to interface.",
+    "on_fail": "SET XACT_ABORT OFF; RAISERROR ('No Order Production data to interface.',15,0) → CATCH(SAVEPOINT 롤백·END 로그·THROW)"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 자체 SAVEPOINT 까지 롤백하고 로그 후 오류를 부모로 재발생",
+    "message": "ERROR_MESSAGE() 재발생(THROW)",
+    "on_fail": "IF XACT_STATE()=-1 ROLLBACK; ELSE IF =1 ROLLBACK TRAN SP_OUTPUT_TRANS_ANL; COMMIT TRAN; FN·무생산 메시지면 END 로그, 그 외 scm_sys_log_batch ERROR INSERT; THROW;"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_GM_A",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "대상 계획 버전이 FN 이면 I/F 를 수행하지 않고 조용히 종료",
+    "message": null,
+    "on_fail": "END 로그(description 'SCP_PLAN_TYPE IS FN@…') 후 RETURN (오류 없이 종료)"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_GM_A",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "I/F 할 생산 결과가 0건이면 오류로 중단",
+    "message": "Order Production count is zero",
+    "on_fail": "RAISERROR ('Order Production count is zero',15,0) → CATCH(ROLLBACK·ERROR 로그·SELECT 메시지·THROW)"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_GM_A",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 전체 롤백·오류 로그 후 메시지 결과셋 반환 및 오류 재발생",
+    "message": "ERROR_MESSAGE() (SELECT 결과셋 + THROW)",
+    "on_fail": "ROLLBACK; scm_sys_log_batch ERROR INSERT; SELECT @V_MESSAGE_TEXT; THROW"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_GM_EE",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "대상 계획 버전이 FN 이면 I/F 를 수행하지 않고 조용히 종료",
+    "message": null,
+    "on_fail": "END 로그(description 'SCP_PLAN_TYPE IS FN@…') 후 RETURN (오류 없이 종료)"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_GM_EE",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "I/F 할 생산(COATING) 결과가 0건이면 오류로 중단",
+    "message": "Order Production count is zero",
+    "on_fail": "RAISERROR ('Order Production count is zero',15,0) → CATCH(ROLLBACK·ERROR 로그·SELECT 메시지·THROW)"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_GM_EE",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 전체 롤백·오류 로그 후 메시지 결과셋 반환 및 오류 재발생",
+    "message": "ERROR_MESSAGE() (SELECT 결과셋 + THROW)",
+    "on_fail": "ROLLBACK; scm_sys_log_batch ERROR INSERT; SELECT @V_MESSAGE_TEXT; THROW"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "대상 계획 버전이 FN 이면 I/F 를 수행하지 않고 오류로 중단",
+    "message": "I/F not executed because PLAN_TYPE is FN.",
+    "on_fail": "SET XACT_ABORT OFF; RAISERROR ('I/F not executed because PLAN_TYPE is FN.',15,0); → CATCH(SAVEPOINT 롤백·END 로그·THROW)"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "I/F 할 생산 결과가 0건이면 오류로 중단",
+    "message": "No Order Production data to interface.",
+    "on_fail": "SET XACT_ABORT OFF; RAISERROR ('No Order Production data to interface.',15,0) → CATCH"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 자체 SAVEPOINT 까지 롤백하고 로그 후 오류를 부모로 재발생",
+    "message": "ERROR_MESSAGE() 재발생(THROW)",
+    "on_fail": "IF XACT_STATE()=-1 ROLLBACK; ELSE IF =1 ROLLBACK TRAN SP_OUTPUT_TRANS_ANL; COMMIT TRAN; FN·무생산 메시지면 END 로그, 그 외 ERROR INSERT; THROW;"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "FN_NEXT_DAY",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "FORMAT",
+    "desc": "요일 코드가 SUN~SAT 이 아니면 NULL 반환(계산 중단)",
+    "message": null,
+    "on_fail": "RETURN NULL"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_ELECTRODE",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "PIVOT 생성 하위 SP 가 음수 반환 시 -1 로 중단",
+    "message": null,
+    "on_fail": "RETURN -1 (L2818~2821)"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_ELECTRODE",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "EXEC PR_SCP_SYS_LOG_BATCH (ERROR); return -1"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_SYS_LOG_BATCH",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백하고 오류 내용을 별도 트랜잭션으로 로그 테이블에 다시 기록",
+    "message": "ERROR_MESSAGE() (로그 테이블 기록)",
+    "on_fail": "ROLLBACK TRANSACTION PR_SCP_SYS_LOG_BATCH; BEGIN TRANSACTION PR_SCP_SYS_LOG_BATCH2; INSERT INTO scm_sys_log_batch VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_M"
+   },
+   {
+    "entry_sp": "SCP0123_SAVE_PLAN_CTRL_ACTV_RUN / SCP0123_SAVE_PLAN_ID_CREATE",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_ELECTRODE_S",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 배치 로그 기록 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 없음)"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0124",
+  "title": "Plan Group Dashboard",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0124_PlanGroupDashboard/SCP0124_PlanGroupDashboard.cs:381"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0124_PlanGroupDashboard/SCP0124_PlanGroupDashboard.Designer.cs:459"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/plan-group-dashboard"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "187",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0124_PlanGroupDashboard\\SCP0124_PlanGroupDashboard.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0124_GET_PLAN_GROUP_DASHBOARD",
+    "member": "FindData_Main",
+    "line": "321",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0124_PlanGroupDashboard\\SCP0124_PlanGroupDashboard.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "187",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0124_PlanGroupDashboard\\SCP0124_PlanGroupDashboard.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0124_GET_PLAN_GROUP_DASHBOARD",
+    "member": "FindData_Main",
+    "line": "321",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0124_PlanGroupDashboard\\SCP0124_PlanGroupDashboard.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0121_GET_SEARCH_INFO",
+   "SCP0124_GET_PLAN_GROUP_DASHBOARD"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0125",
+  "title": "Workbench",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0125_Workbench/SCP0125_Workbench.cs:2405"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0125_Workbench/SCP0125_Workbench.Designer.cs:523"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/workbench"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "241",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_MKT_FCST_ADJ",
+    "member": "FindData_Main",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_STOCK_ADJ",
+    "member": "FindData_Main",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_STOCK_ADJ_UC",
+    "member": "FindData_Main",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_STOCK_ELEC_PLNT",
+    "member": "FindData_Main",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_STOCK_ELEC_PLNT_UC",
+    "member": "FindData_Main",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_MKT_FCST_ELEC_DEMAND",
+    "member": "FindData_Main",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_STOCK_SECOND_OCV",
+    "member": "FindData_Main",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_SAVE_MKT_FCST_ADJ",
+    "member": "Save_Data",
+    "line": "1100",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_SAVE_STOCK_ADJ",
+    "member": "Save_Data",
+    "line": "1400",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+    "member": "Save_Data",
+    "line": "1661",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_SAVE_STOCK_SECOND_OCV",
+    "member": "Save_SecondOcv",
+    "line": "1923",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "241",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_MKT_FCST_ADJ",
+    "member": "FindData_Main",
+    "line": "563",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_STOCK_ADJ",
+    "member": "FindData_Main",
+    "line": "574",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_STOCK_ADJ_UC",
+    "member": "FindData_Main",
+    "line": "581",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_STOCK_ELEC_PLNT",
+    "member": "FindData_Main",
+    "line": "590",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_STOCK_ELEC_PLNT_UC",
+    "member": "FindData_Main",
+    "line": "597",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_MKT_FCST_ELEC_DEMAND",
+    "member": "FindData_Main",
+    "line": "605",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_GET_STOCK_SECOND_OCV",
+    "member": "FindData_Main",
+    "line": "614",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_SAVE_MKT_FCST_ADJ",
+    "member": "Save_Data",
+    "line": "1100",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_SAVE_STOCK_ADJ",
+    "member": "Save_Data",
+    "line": "1400",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+    "member": "Save_Data",
+    "line": "1661",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0125_SAVE_STOCK_SECOND_OCV",
+    "member": "Save_SecondOcv",
+    "line": "1923",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0125_Workbench\\SCP0125_Workbench.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0125_GET_MKT_FCST_ADJ",
+   "SCP0125_GET_MKT_FCST_ELEC_DEMAND",
+   "SCP0125_GET_SEARCH_INFO",
+   "SCP0125_GET_STOCK_ADJ",
+   "SCP0125_GET_STOCK_ADJ_UC",
+   "SCP0125_GET_STOCK_ELEC_PLNT",
+   "SCP0125_GET_STOCK_ELEC_PLNT_UC",
+   "SCP0125_GET_STOCK_SECOND_OCV",
+   "SCP0125_SAVE_MKT_FCST_ADJ",
+   "SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+   "SCP0125_SAVE_STOCK_ADJ",
+   "SCP0125_SAVE_STOCK_SECOND_OCV"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0125_SAVE_MKT_FCST_ADJ",
+    "sp": "SCP0125_SAVE_MKT_FCST_ADJ",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "Insert(I) 이고 변경사유(CHG_RSN)가 'New' 인 행이 Net Demand 원장(DM_PLN_NET_DEMAND)에 동일 키로 이미 있으면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW @v_err_code, @v_err_message, 1 → CATCH: ROLLBACK, SELECT 'F' AS result_code; SELECT '[99010]'+ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0125_SAVE_MKT_FCST_ADJ",
+    "sp": "SCP0125_SAVE_MKT_FCST_ADJ",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 오류 로그 기록, 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+    "sp": "SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규(CHG_TYPE='New') 입력 행이 Elec Demand 조정표에 동일 키로 이미 있으면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+    "sp": "SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 오류 로그 기록, 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0125_SAVE_STOCK_ADJ",
+    "sp": "SCP0125_SAVE_STOCK_ADJ",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외(PK 중복 INSERT 포함) 발생 시 롤백 후 오류 로그 기록, 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0125_SAVE_STOCK_SECOND_OCV",
+    "sp": "SCP0125_SAVE_STOCK_SECOND_OCV",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외(PK 중복 INSERT 포함) 발생 시 롤백 후 오류 로그 기록, 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ }
+]

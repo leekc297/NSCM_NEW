@@ -44,8 +44,8 @@ TO-BE 는 같은 효과를 `beginningEdit`(편집 가능 판정) + `cellEditEnde
 | MSG00096 | 편집 그룹 아님 (2곳) | MSG00096 | `validateEditGroup` |
 | MSG00283 | 버전 공란 | MSG00283 | `validateFind` |
 | MSG00002 | 필수값 (조회 1 + 저장 3) | **MSG00614** | `validateFind` / `validateSaveRow` |
-| MSG00049 | 날짜 형식 (2곳) | **MSG00611** | 〃 |
-| MSG00108 | 기간 대소 (2곳) | MSG00108 | 〃 |
+| MSG00049 | 날짜 형식 (2곳) | **MSG01081** (설계 MSG00611 → 2026-10-09 커밋 0765133a0 교체: 화면 기간이 yyyyMM 이라 '(YYYYMMDD)' 문구가 맞지 않음. {0} 에 틀린 값 치환, 2026-10-16) | 〃 |
+| MSG00108 | 기간 대소 (2곳) | **MSG01135** (설계 MSG00108 → 2026-10-09 커밋 0765133a0 교체: 같은 뜻의 '시작일자가 종료일자보다 늦을 수 없습니다.') | 〃 |
 | MSG00084 | 0보다 큰 정수 (2곳) | **MSG00699**(신규) | `validateSaveRow` |
 | MSG00113 | 신규 행 짝 미충족 | MSG00113 | `validateNewRowPairs` |
 | MSG00004 | 저장·삭제 결과 (2곳) | **MSG00672** | `handleSave` |

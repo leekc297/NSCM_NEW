@@ -21,26 +21,37 @@
 }
 
 // 편집 가능 셀 — AS-IS UnLockColor `#FFFF86`(연노랑)의 TO-BE 대응(hook #95 Yellow).
+//   색은 NSCM 표준 토큰 `$wj-editable-cell`(foundation _variables.scss:58 = #fff8cd, 공용
+//   `.wj-cell-editable` 와 동일)과 일치시킨다 — 비표준 #FFFDE7 사용 금지(자매 SSP0024 동일).
+//   필수: `!important` — 공용 `.wj-cell.wj-alt`(특이성 0,2,0, 배경 흰색 통일 2026-07-09)가
+//   이 단일 클래스(0,1,0) 배경을 이겨 홀수(alt) 행에서 노랑이 흰색으로 덮인다. 공용 `.wj-cell-editable`
+//   은 `.wj-cell` 아래 중첩(0,2,0)이라 이기지만 Module 클래스는 그럴 수 없어 !important 로 올린다.
 .editableCell {
-  background-color: #fffde7;
+  background-color: #fff8cd !important;
 }
 
 // AS-IS cs:1090 (R15-b) — Frozen 이전(확정) 구간 회색 RGB(242,242,242).
+//   !important 이유는 `.editableCell` 주석 참조(alt 행 zebra 배경이 덮는 것 방지).
 .frozenPastCell {
-  background-color: #f2f2f2;
+  background-color: #f2f2f2 !important;
 }
 
-// AS-IS cs:912-917 (R13/S37/V-E12) — 저장 시 음수로 판정된 셀. `InvalidColor` 대응.
+// AS-IS cs:914 (R13/S37/V-E12) — 저장 시 음수로 판정된 셀 배경. AS-IS 는 `ControlColor.InvalidColor`
+//   = 청록(92,209,229)이지만, TO-BE 는 '에러=빨강' 직관 + '음수=빨강' 테마 일치를 위해 분홍/빨강을
+//   쓴다(사용자 결정 2026-10-20 — AS-IS 청록 파리티보다 가독성 우선). 비AS-IS 색은 의도된 선택이다.
+//   !important 이유는 `.editableCell` 주석 참조(alt 행 zebra 배경이 덮는 것 방지).
 .negativeCell {
-  background-color: #ffcdd2;
+  background-color: #ffcdd2 !important;
 }
 
 // AS-IS `SetReNumerCellType` 4-인자 오버로드(`SpreadInfo.cs:11013`)의 `NumberCellType.NegativeRed = true`
 //   대응 — 기간셀 음수는 **입력 즉시** 빨간 글자로 보인다(cs:355·359 가 전 기간칼럼에 이 셀타입을 건다).
 //   저장 시점 배경(`negativeCell`, R13)과는 별개 축이다: 이쪽은 글자색이고 저장 전에도 상시 적용된다.
 //   CommonCheckList "음수 빨간색" 항목의 실제 대응부다(react-gap-audit iter-3 N-04).
+//   색은 NSCM 공통 표준 `NEGATIVE_TEXT_COLOR`(foundation gridNegativeText.ts = #c0392b, 전 화면
+//   동일 톤)과 일치시킨다 — 비표준 #d32f2f 사용 금지.
 .negativeValue {
-  color: #d32f2f;
+  color: #c0392b;
 }
 
 // AS-IS cs:189-193 + cs:807-824 (R18/G13) — 신규행 `TR_MODE` 셀의 `edit.png` 우측정렬 배경.

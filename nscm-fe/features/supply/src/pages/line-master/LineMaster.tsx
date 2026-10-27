@@ -1,9 +1,9 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useMutation, useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';

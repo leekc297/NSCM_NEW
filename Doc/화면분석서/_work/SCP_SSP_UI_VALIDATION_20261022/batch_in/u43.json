@@ -1,0 +1,768 @@
+[
+ {
+  "screen": "SCP0128",
+  "title": "Precede/Safety Stock Qty",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0128_SafetyStock/SCP0128_SafetyStock.cs:1136"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0128_SafetyStock/SCP0128_SafetyStock.Designer.cs:746"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/safety-stock"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0128_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "205",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0128_SafetyStock\\SCP0128_SafetyStock.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0128_GET_SAFETY_STOCK",
+    "member": "FindData_Main",
+    "line": "432",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0128_SafetyStock\\SCP0128_SafetyStock.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0128_SAVE_SAFETY_STOCK",
+    "member": "SaveData",
+    "line": "800",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0128_SafetyStock\\SCP0128_SafetyStock.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0128_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "205",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0128_SafetyStock\\SCP0128_SafetyStock.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0128_GET_SAFETY_STOCK",
+    "member": "FindData_Main",
+    "line": "432",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0128_SafetyStock\\SCP0128_SafetyStock.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0128_SAVE_SAFETY_STOCK",
+    "member": "SaveData",
+    "line": "800",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0128_SafetyStock\\SCP0128_SafetyStock.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0128_GET_SAFETY_STOCK",
+   "SCP0128_GET_SEARCH_INFO",
+   "SCP0128_SAVE_SAFETY_STOCK"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0128_SAVE_SAFETY_STOCK",
+    "sp": "SCP0128_SAVE_SAFETY_STOCK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규·수정 행의 키가 (자기 이전 키 행 제외) 이미 존재하면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0128_SAVE_SAFETY_STOCK",
+    "sp": "SCP0128_SAVE_SAFETY_STOCK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "RANGE",
+    "desc": "같은 키 조합에서 입력 기간이 기존 기간과 겹치면(자기 이전 기간 제외) 기간 중복 오류",
+    "message": "입력 데이터 중 날짜가 중복되는 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, 'F'"
+   },
+   {
+    "entry_sp": "SCP0128_SAVE_SAFETY_STOCK",
+    "sp": "SCP0128_SAVE_SAFETY_STOCK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0129",
+  "title": "Demand Exception",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0129_DemandException/SCP0129_DemandException.cs:1090"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0129_DemandException/SCP0129_DemandException.Designer.cs:733"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0128_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "206",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0129_DemandException\\SCP0129_DemandException.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0129_GET_DEMAND_EXCEPTION",
+    "member": "FindData_Main",
+    "line": "440",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0129_DemandException\\SCP0129_DemandException.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0129_SAVE_DEMAND_EXCEPTION",
+    "member": "SaveData",
+    "line": "759",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0129_DemandException\\SCP0129_DemandException.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0128_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "206",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0129_DemandException\\SCP0129_DemandException.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0129_GET_DEMAND_EXCEPTION",
+    "member": "FindData_Main",
+    "line": "440",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0129_DemandException\\SCP0129_DemandException.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0129_SAVE_DEMAND_EXCEPTION",
+    "member": "SaveData",
+    "line": "759",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0129_DemandException\\SCP0129_DemandException.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0128_GET_SEARCH_INFO",
+   "SCP0129_GET_DEMAND_EXCEPTION",
+   "SCP0129_SAVE_DEMAND_EXCEPTION"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0129_SAVE_DEMAND_EXCEPTION",
+    "sp": "SCP0129_SAVE_DEMAND_EXCEPTION",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규·수정 행의 키가 (자기 이전 키 행 제외) 이미 존재하면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0129_SAVE_DEMAND_EXCEPTION",
+    "sp": "SCP0129_SAVE_DEMAND_EXCEPTION",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "RANGE",
+    "desc": "같은 키 조합에서 수요제외 기간이 기존 기간과 겹치면(자기 이전 기간 제외) 기간 중복 오류",
+    "message": "입력 데이터 중 날짜가 중복되는 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, 'F'"
+   },
+   {
+    "entry_sp": "SCP0129_SAVE_DEMAND_EXCEPTION",
+    "sp": "SCP0129_SAVE_DEMAND_EXCEPTION",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0130",
+  "title": "Scheduled Reciept Information",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0130_ScheduledRecieptInformation/SCP0130_ScheduledRecieptInformation.cs:1625"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0130_ScheduledRecieptInformation/SCP0130_ScheduledRecieptInformation.Designer.cs:762"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/scheduled-receipt-information"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "245",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0130_ScheduledRecieptInformation\\SCP0130_ScheduledRecieptInformation.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_GET_VIRTUAL_BOM",
+    "member": "FindData_Main",
+    "line": "619",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0130_ScheduledRecieptInformation\\SCP0130_ScheduledRecieptInformation.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_GET_SCHEDULED_RECIEPT_INFORMATION",
+    "member": "FindData_Main",
+    "line": "619",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0130_ScheduledRecieptInformation\\SCP0130_ScheduledRecieptInformation.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_SVAE_VIRTUAL_BOM",
+    "member": "SaveData",
+    "line": "952",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0130_ScheduledRecieptInformation\\SCP0130_ScheduledRecieptInformation.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION",
+    "member": "SaveData",
+    "line": "1223",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0130_ScheduledRecieptInformation\\SCP0130_ScheduledRecieptInformation.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "245",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0130_ScheduledRecieptInformation\\SCP0130_ScheduledRecieptInformation.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_GET_VIRTUAL_BOM",
+    "member": "FindData_Main",
+    "line": "580",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0130_ScheduledRecieptInformation\\SCP0130_ScheduledRecieptInformation.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_GET_SCHEDULED_RECIEPT_INFORMATION",
+    "member": "FindData_Main",
+    "line": "588",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0130_ScheduledRecieptInformation\\SCP0130_ScheduledRecieptInformation.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_SVAE_VIRTUAL_BOM",
+    "member": "SaveData",
+    "line": "952",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0130_ScheduledRecieptInformation\\SCP0130_ScheduledRecieptInformation.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION",
+    "member": "SaveData",
+    "line": "1223",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0130_ScheduledRecieptInformation\\SCP0130_ScheduledRecieptInformation.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0130_GET_SCHEDULED_RECIEPT_INFORMATION",
+   "SCP0130_GET_SEARCH_INFO",
+   "SCP0130_GET_VIRTUAL_BOM",
+   "SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION",
+   "SCP0130_SVAE_VIRTUAL_BOM"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION",
+    "sp": "SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규·수정 행의 키(사업부·Plan Group·Plant·Child Item·입고예정일)가 (자기 이전 키 제외) 이미 있으면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION",
+    "sp": "SCP0130_SAVE_SCHEDULED_RECIEPT_INFORMATION",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0130_SVAE_VIRTUAL_BOM",
+    "sp": "SCP0130_SVAE_VIRTUAL_BOM",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "신규·수정 행의 부모 ITEM_ID 가 (전극 사업부는 원 사업부로 치환한) Item 마스터에 없으면 오류로 전체 저장 중단",
+    "message": "Material 를 확인할 수 없습니다. ('+ @v_item_id+')",
+    "on_fail": "SET @v_err_code = 99020; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99020]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0130_SVAE_VIRTUAL_BOM",
+    "sp": "SCP0130_SVAE_VIRTUAL_BOM",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "수정(M) 후 키가 (자기 이전 키 제외) 다른 행과 겹치면 중복 오류",
+    "message": "입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, 'F'"
+   },
+   {
+    "entry_sp": "SCP0130_SVAE_VIRTUAL_BOM",
+    "sp": "SCP0130_SVAE_VIRTUAL_BOM",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0131",
+  "title": "Sales Site Priority",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0131_SalesSitePriority/SCP0131_SalesSitePriority.cs:1075"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0131_SalesSitePriority/SCP0131_SalesSitePriority.Designer.cs:699"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/sales-site-priority"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0128_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "199",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0131_SalesSitePriority\\SCP0131_SalesSitePriority.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0131_GET_SALES_SITE_PRIORITY",
+    "member": "FindData_Main",
+    "line": "434",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0131_SalesSitePriority\\SCP0131_SalesSitePriority.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+    "member": "SaveData",
+    "line": "743",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0131_SalesSitePriority\\SCP0131_SalesSitePriority.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0128_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "199",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0131_SalesSitePriority\\SCP0131_SalesSitePriority.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0131_GET_SALES_SITE_PRIORITY",
+    "member": "FindData_Main",
+    "line": "434",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0131_SalesSitePriority\\SCP0131_SalesSitePriority.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+    "member": "SaveData",
+    "line": "743",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0131_SalesSitePriority\\SCP0131_SalesSitePriority.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0128_GET_SEARCH_INFO",
+   "SCP0131_GET_SALES_SITE_PRIORITY",
+   "SCP0131_SAVE_SALES_SITE_PRIORITY"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+    "sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규·수정 행의 키가 (자기 이전 키 행 제외) 이미 존재하면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+    "sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "RANGE",
+    "desc": "같은 사업부·Plan Group·Site·Item 에서 우선순위 적용 기간이 기존 기간과 겹치면(자기 이전 기간 제외) 기간 중복 오류",
+    "message": "입력 데이터 중 날짜가 중복되는 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, 'F'"
+   },
+   {
+    "entry_sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+    "sp": "SCP0131_SAVE_SALES_SITE_PRIORITY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0132",
+  "title": "Constraint Of Shipment Qty",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0132_ConstraintOfShipmentQty/SCP0132_ConstraintOfShipmentQty.cs:1125"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0132_ConstraintOfShipmentQty/SCP0132_ConstraintOfShipmentQty.Designer.cs:872"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/constraint-of-shipment-qty"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0132_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "217",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0132_ConstraintOfShipmentQty\\SCP0132_ConstraintOfShipmentQty.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0132_GET_CONSTRAINT_OF_SHIPMENT_QTY",
+    "member": "FindData_Main",
+    "line": "464",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0132_ConstraintOfShipmentQty\\SCP0132_ConstraintOfShipmentQty.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+    "member": "SaveData",
+    "line": "814",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0132_ConstraintOfShipmentQty\\SCP0132_ConstraintOfShipmentQty.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0132_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "217",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0132_ConstraintOfShipmentQty\\SCP0132_ConstraintOfShipmentQty.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0132_GET_CONSTRAINT_OF_SHIPMENT_QTY",
+    "member": "FindData_Main",
+    "line": "464",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0132_ConstraintOfShipmentQty\\SCP0132_ConstraintOfShipmentQty.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+    "member": "SaveData",
+    "line": "814",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0132_ConstraintOfShipmentQty\\SCP0132_ConstraintOfShipmentQty.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0132_GET_CONSTRAINT_OF_SHIPMENT_QTY",
+   "SCP0132_GET_SEARCH_INFO",
+   "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+    "sp": "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "I/M 행의 키(사업부·Plan Group·Model Group·Item)가 자기 자신(pre 키) 외 기존 행과 중복이면 전체 롤백",
+    "message": " 신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW @v_err_code, @v_err_message, 1 → CATCH: ROLLBACK, SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER()+']'+ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+    "sp": "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "CONSISTENCY",
+    "desc": "신규 입력 시 같은 Model Group 의 유효 행들은 Key 외 값(Stage·Site·기간·수량)이 동일해야 함 — 일부만 일치하면 오류",
+    "message": " 입력한 데이타의 값이 일치하지 않는 데이타가 있습니다.",
+    "on_fail": "THROW 99010 → CATCH: ROLLBACK, SELECT 'F' AS result_code + 오류 메시지 결과셋"
+   },
+   {
+    "entry_sp": "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+    "sp": "SCP0132_SAVE_CONSTRAINT_OF_SHIPMENT_QTY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외(THROW, 수량 숫자 CONVERT 실패 포함) 시 전체 롤백 후 F + 오류 메시지 반환",
+    "message": "'[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0133",
+  "title": "Warehouse Capacity",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0133_WarehouseCapacity/SCP0133_WarehouseCapacity.cs:1559"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0133_WarehouseCapacity/SCP0133_WarehouseCapacity.Designer.cs:783"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/warehouse-capacity"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0133_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "250",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0133_WarehouseCapacity\\SCP0133_WarehouseCapacity.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0133_GET_WAREHOUSE_CAPACITY",
+    "member": "FindData_Main",
+    "line": "644",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0133_WarehouseCapacity\\SCP0133_WarehouseCapacity.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0133_GET_WAREHOUSE_ITEM_MAPPING",
+    "member": "FindData_Main",
+    "line": "644",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0133_WarehouseCapacity\\SCP0133_WarehouseCapacity.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0133_SAVE_WAREHOUSE_CAPACITY",
+    "member": "SaveData_WhCapa",
+    "line": "878",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0133_WarehouseCapacity\\SCP0133_WarehouseCapacity.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING",
+    "member": "SaveData_ItemMapping",
+    "line": "1071",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0133_WarehouseCapacity\\SCP0133_WarehouseCapacity.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0133_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "250",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0133_WarehouseCapacity\\SCP0133_WarehouseCapacity.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0133_GET_WAREHOUSE_CAPACITY",
+    "member": "FindData_Main",
+    "line": "605",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0133_WarehouseCapacity\\SCP0133_WarehouseCapacity.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0133_GET_WAREHOUSE_ITEM_MAPPING",
+    "member": "FindData_Main",
+    "line": "612",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0133_WarehouseCapacity\\SCP0133_WarehouseCapacity.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0133_SAVE_WAREHOUSE_CAPACITY",
+    "member": "SaveData_WhCapa",
+    "line": "878",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0133_WarehouseCapacity\\SCP0133_WarehouseCapacity.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING",
+    "member": "SaveData_ItemMapping",
+    "line": "1071",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0133_WarehouseCapacity\\SCP0133_WarehouseCapacity.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0133_GET_SEARCH_INFO",
+   "SCP0133_GET_WAREHOUSE_CAPACITY",
+   "SCP0133_GET_WAREHOUSE_ITEM_MAPPING",
+   "SCP0133_SAVE_WAREHOUSE_CAPACITY",
+   "SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0133_SAVE_WAREHOUSE_CAPACITY",
+    "sp": "SCP0133_SAVE_WAREHOUSE_CAPACITY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "I/M 행 키(사업부·Plan Group·창고명·From/To)가 자기 자신 외 기존 행과 중복이면 전체 롤백",
+    "message": " 신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "THROW 99010 → CATCH: ROLLBACK, SELECT 'F' AS result_code + 오류 메시지"
+   },
+   {
+    "entry_sp": "SCP0133_SAVE_WAREHOUSE_CAPACITY",
+    "sp": "SCP0133_SAVE_WAREHOUSE_CAPACITY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "RANGE",
+    "desc": "같은 창고의 다른 행과 From~To 기간이 겹치면 오류",
+    "message": " 중첩구간이 있는 데이터가 있습니다.",
+    "on_fail": "THROW 99010 → CATCH: ROLLBACK, SELECT 'F' AS result_code + 오류 메시지"
+   },
+   {
+    "entry_sp": "SCP0133_SAVE_WAREHOUSE_CAPACITY",
+    "sp": "SCP0133_SAVE_WAREHOUSE_CAPACITY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외(THROW·MAX_CAPA 숫자 변환 실패 포함) 시 전체 롤백 후 F 반환",
+    "message": "'[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING",
+    "sp": "SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "I/M 행 키(사업부·Plan Group·창고·Item) 중복 시 전체 롤백",
+    "message": " 신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "THROW 99010 → CATCH: ROLLBACK, SELECT 'F' AS result_code + 오류 메시지"
+   },
+   {
+    "entry_sp": "SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING",
+    "sp": "SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "CONSISTENCY",
+    "desc": "같은 Item 을 Site·Stage·Storage Loc 가 같은 다른 창고에 중복 매핑 불가",
+    "message": " 동일 Item을 Site, Stage, Stoage Loc가 동일한 다른 창고에 입고할 수 없습니다. ",
+    "on_fail": "THROW 99010 → CATCH: ROLLBACK, SELECT 'F' AS result_code + 오류 메시지"
+   },
+   {
+    "entry_sp": "SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING",
+    "sp": "SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 전체 롤백 후 F + 오류 메시지 반환",
+    "message": "'[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ }
+]

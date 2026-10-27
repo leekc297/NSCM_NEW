@@ -8,7 +8,7 @@ import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/component
 import { useTabComboQueries, useTabLookupQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
-import { Grid, Stack } from '@shared/mui';
+import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
 import {
@@ -397,7 +397,8 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
                 <Button
                   appearance='outlined'
                   priority='normal'
-                  iconComponent={<FunctionSearchIcon appearance='lined' onClick={onItemSearch} />}
+                  iconComponent={<FunctionSearchIcon appearance='lined' />}
+                  onClick={onItemSearch}
                 />
               ),
             }}
@@ -459,20 +460,24 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
         <>
           {/* Row2 — Plan-date* / Plan-type* / Seq* / Period* / Bucket / Sum */}
           {/* Plan-date → Plan-type → Seq 는 AS-IS UsrCombo 단일선택 필수 종속 콤보(design 02 #9/#10). 공용
-              PlanVersionCascade(종속 콤보 + 공유 캐스케이더)로 교체 — 아무 필드나 눌러도 같은 컬럼 팝업이 열려
-              date→type→seq 경로를 고르고, 상위 변경 시 하위 초기화. 선택값은 기존과 동일하게 1-요소 배열로
-              store 에 보존(하위 cascade·기본값 effect 호환). 자동선택(최신 date·마지막 type·첫 seq)은
-              기존 effect 가 그대로 채운다. 3필드 = 기존 폭(size 3×3) 유지로 size=9 래퍼. */}
-          <Grid size={9}>
+              PlanVersionCascade(종속 콤보 + 공유 캐스케이더)로 교체 — 클릭하면 date→type→seq 컬럼 팝업이 열려
+              경로를 고르고, 상위 변경 시 하위 초기화. 선택값은 기존과 동일하게 1-요소 배열로 store 에 보존
+              (하위 cascade·기본값 effect 호환). 자동선택(최신 date·마지막 type·첫 seq)은 기존 effect 가 그대로
+              채운다. combined 단일 입력칸(기본) — 라벨 'Plan Date/Type/Seq' 하나 + 선택값 'date / type / seq'로
+              표시(사용자 지시 2026-10-21, 참조 Bootstrap Cascader). 입력칸 고정폭 190px(사용자 지시 2026-10-21
+              — 자동폭보다 190px 가 보기 좋음). 190+라벨(140)=330 이 size=3 슬롯에 들어가 옆 필드 안 밀림. 길면
+              … 로 잘리고 전체값은 hover title. slot 확대(size>3)는 뒤틀림 유발하므로 금지. */}
+          <Grid size={3}>
             <PlanVersionCascade
-              gridSize={4}
               variant='horizontal'
               labelAlign='right'
               formItemClassName={commonStyles.formItem}
+              label='Plan Date/Type/Seq'
+              inputWidth='190px'
               levels={planVersionLevels}
               divisionId={sc.divisionId}
               value={planVersionValue}
-              onChange={v =>
+              onChange={(v: Record<string, string>) =>
                 set({
                   planStartYyyymmdds: v.planDate ? [v.planDate] : [],
                   planTypes: v.planType ? [v.planType] : [],
@@ -481,6 +486,16 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
               }
             />
           </Grid>
+          {/* Bucket — chkAll 체크 시 AS-IS ChkAll_CheckedChanged 는 Daily 강제 → 선택 비활성(design 02 §1 row21/§3.3).
+              Bucket↔Period 순서 교체(사용자 지시 2026-10-21) — Bucket 을 Period 앞으로. */}
+          {single(
+            t(LBL.BUCKET, '_Bucket'),
+            sc.bucket,
+            bucketOptions,
+            v => set({ bucket: v as BUCKET_TYPE }),
+            false,
+            sc.chkAll
+          )}
           {/* Period — Templates.tsx 의 임시 Period 컴포넌트(PeriodRangePicker)로 교체(사용자 지시 2026-10-01). */}
           <Grid size={3}>
             <PeriodRangePicker
@@ -493,27 +508,22 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
               lastWeeks={divisionPeriod}
             />
           </Grid>
-          {/* Bucket — chkAll 체크 시 AS-IS ChkAll_CheckedChanged 는 Daily 강제 → 선택 비활성(design 02 §1 row21/§3.3). */}
-          {single(
-            t(LBL.BUCKET, '_Bucket'),
-            sc.bucket,
-            bucketOptions,
-            v => set({ bucket: v as BUCKET_TYPE }),
-            false,
-            sc.chkAll
-          )}
 
-          {/* 체크박스 — Sum(SUM 컬럼 토글). ALL/Line Assign 은 사용자 지시(2026-10-01)로 제거. */}
-          <Grid size={6} className={commonStyles.customGrid}>
-            <div className={commonStyles.customCheckbox}>
-              <Stack direction='row' spacing={2} alignItems='center'>
-                <Checkbox
-                  labelText={t(LBL.SUM, '_Sum')}
-                  checked={sc.chkSum}
-                  onChange={checked => set({ chkSum: checked })}
-                />
-              </Stack>
-            </div>
+          {/* Sum(SUM 컬럼 토글). ALL/Line Assign 은 사용자 지시(2026-10-01)로 제거. SCP0009(ShipmentPlanFgForm)
+              동일 패턴으로 교체 — FormItem label(140px 우측정렬) + customGrid 로 체크박스를 행 높이 기준 세로
+              중앙 정렬(사용자 지시 2026-10-21, Period 와 겹침 해소). 윗줄 마지막 칸 size=3(cascade3+Bucket3+
+              Period3+Sum3=12). */}
+          <Grid size={3} className={commonStyles.customGrid}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t(LBL.SUM, '_Sum')}
+              labelAlign='right'
+              render={() => (
+                <div className={commonStyles.customCheckbox}>
+                  <Checkbox checked={sc.chkSum} onChange={checked => set({ chkSum: checked })} />
+                </div>
+              )}
+            />
           </Grid>
         </>
       }

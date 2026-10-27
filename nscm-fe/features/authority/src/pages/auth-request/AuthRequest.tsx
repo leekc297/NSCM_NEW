@@ -7,7 +7,12 @@ import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import { GridUtils } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useProcMutation, useTabProcQuery } from '@shared/hooks';
+import {
+  formatTotalCases,
+  useProcMutation,
+  useTabProcQuery,
+  useTitleAreaLanguage,
+} from '@shared/hooks';
 import { Button, TitleArea } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -32,6 +37,8 @@ const collectCheckedRows = <T,>(grid: FlexGrid<T> | null | undefined): T[] => {
 
 export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
+  // 건수 표기 언어(총/건 ↔ Total/rows) — 공용 SubTitle · ResultArea 와 같은 규칙(useTitleAreaLanguage 주석).
+  const titleAreaLanguage = useTitleAreaLanguage();
 
   const authorityGridRef = useRef<FlexGrid<ResponseData<MENU_ID, SHEETS.AUTHORITY>>>();
   const authorityGridFilterRef = useRef<FlexGridFilter>();
@@ -329,7 +336,8 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
               isSubTitle
               title={t('LBL00640', 'Authority')}
               depth='h4'
-              totalCases={authorityCount === 0 ? undefined : authorityCount}
+              totalCases={formatTotalCases(authorityCount === 0 ? undefined : authorityCount)}
+              language={titleAreaLanguage}
             />
             <AuthorityGrid
               gridRef={authorityGridRef}
@@ -342,7 +350,8 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
               isSubTitle
               title={t('LBL00641', 'Division')}
               depth='h4'
-              totalCases={divisionCount === 0 ? undefined : divisionCount}
+              totalCases={formatTotalCases(divisionCount === 0 ? undefined : divisionCount)}
+              language={titleAreaLanguage}
             />
             <DivisionGrid
               gridRef={divisionGridRef}
@@ -361,7 +370,8 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
               isSubTitle
               title={t('LBL00673', 'My Authority List')}
               depth='h4'
-              totalCases={myAuthCount === 0 ? undefined : myAuthCount}
+              totalCases={formatTotalCases(myAuthCount === 0 ? undefined : myAuthCount)}
+              language={titleAreaLanguage}
               rightButtons={myAuthListButtons}
             />
             <MyAuthorityListGrid

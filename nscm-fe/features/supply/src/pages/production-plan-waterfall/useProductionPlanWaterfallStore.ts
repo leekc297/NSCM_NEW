@@ -9,9 +9,11 @@ import { createPersistedStoreWithTab } from '@shared/stores';
 import {
   ADMIN_SHEET_NAME,
   BUCKET_TYPE,
+  isEeDivision,
   LINE_SENTINEL,
   MENU_ID,
   SHEETS,
+  UOM_VISIBLE_OPERATION_GROUP,
   VERSION_CODE_LENGTH,
 } from './production-plan-waterfall.constants';
 import type { SearchParams } from './production-plan-waterfall.types';
@@ -49,11 +51,16 @@ interface Action {
   setSearchParams: (p: Partial<SearchParams>) => void;
   // division 변경 = 하위 cascade 초기화 + 그리드 clear (design 02 §3, Hook #5).
   setDivision: (divisionId: string) => void;
+  // operationGroup 변경 = 하위(plantSite/line) 초기화 + 그리드 clear
+  //   (AS-IS cboOperationGroup_SelectedIndexChanged → RefreshPlantSite/RefreshLine/RefreshUOM + InitSpread).
+  setOperationGroup: (operationGroupId: string) => void;
   // Version 변경 = Period(dCalendar) 재산정 (AS-IS CboVersion_SelectedIndexChanged → GetDayRange, design 02 §3).
   //   AS-IS 는 version 뒤 8자의 연도로 그 해 0101:1231 을 만든다(DateUtil.cs:362, 로컬 산식 — 서버 SP 아님).
   setVersions: (versionNos: string[]) => void;
   // 전체기간(chkAll) 토글 = 그리드 재구성 + 데이터 clear (AS-IS ChkAll_CheckedChanged, design 03 §2.5).
   setChkAll: (checked: boolean) => void;
+  // Bucket 변경 = 그리드 재구성 + 데이터 clear (AS-IS cboBucketType_SelectedIndexChanged → InitSpread_2 → InitSheet).
+  setBucket: (bucket: BUCKET_TYPE) => void;
   // 조회 발사 — main(15 IN) + title(캘린더) payload 구성. userId = 세션 사용자.
   setFilters: (input: { userId: string }) => void;
   // 날짜 동적컬럼 헤더만 선조회 — 진입 시 Division/Bucket/기간이 준비되면 TITLE(캘린더) filters 만
@@ -106,6 +113,7 @@ const initSearch: SearchParams = {
   ...defaultPeriod(),
   modelId: '',
   nickName: '',
+  uom: 'EA', // AS-IS RefreshUOM 기본 — 비EE/비E 숨김 시 'EA' 암묵 체크(cs:502). EE+E 전환 시 Form effect 가 'M' 으로 교정.
   chkGap: false,
   chkAll: false,
   chkSum: false,
@@ -165,6 +173,24 @@ export const useProductionPlanWaterfallStore = createPersistedStoreWithTab<State
         state.visibleMeasures = null;
         state.columnSettings = null;
       }),
+    // OperationGroup 변경 = AS-IS cboOperationGroup_SelectedIndexChanged (cs:2286-2295): RefreshPlantSite/
+    //   RefreshLine/RefreshUOM 후 InitSpread(siMain). 하위(plantSite/line) 초기화 + 그리드 clear 를 재현한다.
+    //   유지: operationGroupId(새 값) + 상위(division)·기간·bucket·version·model 등. UOM 은 SearchParams 의
+    //   클라 필터값이라 RefreshUOM(cs:474~510)을 여기서 재현한다 — EE+E 면 'M', 그 외 'EA' 로 재설정.
+    setOperationGroup: operationGroupId =>
+      set(state => {
+        const cur = get().searchParams;
+        const uomVisible =
+          isEeDivision(cur.divisionId) && operationGroupId === UOM_VISIBLE_OPERATION_GROUP;
+        state.searchParams = {
+          ...cur,
+          operationGroupId,
+          plantSiteIds: [], // RefreshPlantSite
+          lineIds: [], // RefreshLine
+          uom: uomVisible ? 'M' : 'EA', // RefreshUOM — EE+E 노출 시 'M', 그 외 숨김 'EA'
+        };
+        state.filters = {}; // InitSpread(siMain) — 그리드 비움(재조회 필요)
+      }),
     // Version 변경 → Period 재산정 (AS-IS CboVersion_SelectedIndexChanged → GetDayRange, G2).
     //   AS-IS 는 version 뒤 8자의 연도로 그 해 0101:1231 을 만드는 로컬 산식뿐이다(DateUtil.cs:362 — 서버 SP 아님).
     //   version 코드가 무효면 기간 유지. PeriodField 수동 변경은 이후에도 사용자 입력대로 둔다.
@@ -184,6 +210,14 @@ export const useProductionPlanWaterfallStore = createPersistedStoreWithTab<State
       set(state => {
         state.searchParams = { ...get().searchParams, chkAll: checked };
         state.filters = {}; // ClearDataSource — 그리드 비움(재조회 필요)
+      }),
+    // Bucket 변경 = AS-IS cboBucketType_SelectedIndexChanged → InitSpread_2 → siMain.InitSheet(RowCount=0,ColumnCount=0):
+    //   그리드(데이터+날짜헤더)를 비우고 재조회(Search)를 요구한다. filters clear 로 MAIN 데이터 + TITLE 캘린더를
+    //   모두 비워, 옛 bucket 기준 결과가 새 bucket 인 것처럼 남는 drift 를 막는다(setChkAll 선례와 동일).
+    setBucket: bucket =>
+      set(state => {
+        state.searchParams = { ...get().searchParams, bucket };
+        state.filters = {}; // InitSheet — 그리드 비움(재조회 필요)
       }),
     // 메인 GET 15-param 매핑 (design 03 §4.1 — SP IN 순번 주석) + title(캘린더) payload.
     setFilters: ({ userId }) => {
@@ -279,11 +313,14 @@ export const useProductionPlanWaterfallStore = createPersistedStoreWithTab<State
       });
     },
     // admin SCM_MST_SHEET_MEASURE('MODEL') 동적 fetch — Measure 팝업 원천(design 03 §1.3). 미등록/실패 시 빈 배열.
+    //   divisionId 미전송: SCP0017 measure 등록행은 전부 DIVISION_ID=NULL 이라, SP(PR_GET_SHEET_MEASURE_LIST,
+    //   개인화 분기 L391-393)의 'P_DIVISION_ID IN split(M.DIVISION_ID)' 필터에 division 을 주면 NULL 행이 전부
+    //   제외돼 0건이 된다(DB 실측 2026-10-20). division 미전송 시 'P_DIVISION_ID IS NULL' 분기로 NULL 행이
+    //   정상 반환된다. AS-IS SCP0017 은 division 별 measure 구분이 없어 등가(division 별 세트 운용 시 DB 등록 선행).
     fetchStaticMeasures: async () => {
       try {
         const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {
           sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] ?? SHEETS.MAIN,
-          divisionId: get().searchParams.divisionId,
         });
         const next = res.data.result ?? [];
         set(state => {

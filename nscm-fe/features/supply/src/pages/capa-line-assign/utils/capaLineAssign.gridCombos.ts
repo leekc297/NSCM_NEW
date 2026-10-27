@@ -180,12 +180,14 @@ export const buildCellComboCandidates = (
 export const syncCodeAndName = (
   binding: string,
   row: GridRow,
-  masterRows: ComboRow[]
+  sources: CellComboSources
 ): string[] => {
   const pair = ID_NAME_PAIRS.find(entry => entry.id === binding || entry.name === binding);
   if (!pair) return [];
+  // OPERATION 은 `operationRows`(CODE/NAME), 나머지는 location `masterRows` 에서 찾는다(AS-IS cs:2803-2820).
+  const source = pair.source === 'operation' ? sources.operationRows : sources.masterRows;
   const division = str(row[COLUMN.DIVISION_ID]);
-  const scoped = masterRows.filter(r => matches(r, { DIVISION_ID: division }));
+  const scoped = source.filter(r => matches(r, { DIVISION_ID: division }));
 
   if (binding === pair.id) {
     const id = str(row[pair.id]);

@@ -31,19 +31,6 @@ export type AuxSheet = (typeof AUX_SHEET)[keyof typeof AUX_SHEET];
 // P_SCP0100_GET_PLAN_DATE 의 IN P_PROGRAM_ID 고정값(design 02 §2.3 cs:1357 GetPlanDate p_program_id="SCP0100").
 export const PLAN_DATE_PROGRAM_ID = MENU_ID;
 
-// 조회기간 종료일 원천 — AS-IS GetPlanEndDate(SCP0100_Global_PSI_Report.cs:2029~2052)
-//   Data_REPORT.CallBizCommonData(PLAN_END_DATE, '81', _plan_start_yyyymmdd, "WEEKLY")
-//   → UP_FX_GetCommonDataList_REPORT: SELECT TOP 1 HORIZON_END_DATE FROM SCM_MST_PLAN
-//     WHERE DIVISION_ID=@param1 AND PLAN_NAME=@param2 AND PLAN_CYCLE=@param3 (As-is DB 원문 2026-10-20 실측).
-//   To-Be 등록 콤보 SCPPlanPeriod_SCP(SCM_ADM_CMBO_SQL_M, 자매 global-psi SCP0031 사용 중)가 같은 표·같은 조건
-//   (PLAN_NAME=@planName · DIVISION_ID=@divisionId · PLAN_CYCLE='WEEKLY' 고정)이라 그대로 재사용한다.
-//   사내 (DIVISION_ID, PLAN_NAME, PLAN_CYCLE) 중복 0건 실측 → 첫 행 = TOP 1 과 동등.
-export const PLAN_END_COMBO_ID = 'SCPPlanPeriod_SCP';
-export const PLAN_END_COL = 'HORIZON_END_DATE';
-// AS-IS .cs:2037~2038 — `//, CommonUtils.GetValue(_division)` 주석 처리 후 `CommonUtils.GetValue("81")` 고정 호출.
-//   선택 division 과 무관하게 '81' 의 WEEKLY horizon 종료일을 쓴다(As-is 동작 그대로).
-export const PLAN_END_DIVISION = '81';
-
 // NSCM 단일 cursor 표준. GET SP 는 O_RC1(PIVOT 데이터) + O_RESULT_CURSOR(상태봉투) 반환 —
 //   O_RC1 을 그리드로 바인딩(hook#80 cursor 이름 매핑). 표준 response key 'o_rc1'.
 export const RESPONSE_SET = {
@@ -71,23 +58,54 @@ export const COMBO = {
   //   AS-IS BLUtils.GetDivisionWithoutEE + DBUtils.Filter(CODE<>'40')(CODE<>'82') = EE/40/82 3중 제외.
   //   공유 SQL 수정 금지 -> 3중 제외는 FE 후처리(DIVISION_EXCLUDE)로 재현(design 02 §2.7).
   DIVISION: 'Division_SCP',
+  // cboPlanType — AS-IS SCP0031_GlobalPSI RefreshPlanType 등가(사용자 지시 2026-10-26). SCP0100 자체 AS-IS 는
+  //   정적 lookup('PLAN_TYPE')+FN 고정이나, 사용자가 본 실동작(Division/Plan Date 에 따라 TE/PR/MA/FN 만 노출)은
+  //   SCP0031 패턴이다. 소스 = 자매 global-psi(SCP0031) 와 동일 공유 콤보 'PlanType1_SCP_ALL'(= AS-IS
+  //   Data_SCP.Type.PlanType1). DB 실측 SQL: SELECT PLAN_TYPE AS CODE, PLAN_TYPE AS NAME, MAX(PLAN_TYPE_ORDER),
+  //   DIVISION_ID, PLAN_START_YYYYMMDD AS PLANDATE FROM SCP_PLAN_VERSION_V GROUP BY ... (실제 plan version 전량).
+  //   FE 에서 DIVISION_ID + PLANDATE 로 필터 → 그 조합에 실존하는 plan type 만 노출(CODE=NAME 이라 CODE 표시).
+  PLAN_TYPE: 'PlanType1_SCP_ALL',
 } as const;
+
+// PlanType1_SCP_ALL 반환 컬럼(종속 필터용). 자매 global-psi(SCP0031) CASCADE_COL 과 동일 규약.
+export const CASCADE_COL = {
+  DIVISION_ID: 'DIVISION_ID',
+  PLANDATE: 'PLANDATE', // = PLAN_START_YYYYMMDD
+  PLAN_TYPE_ORDER: 'PLAN_TYPE_ORDER',
+} as const;
+
+// 조회기간 종료일(HORIZON_END_DATE) 산출 콤보 — AS-IS GetPlanEndDate(cs:2029~2050) =
+//   Data_REPORT.CallBizCommonData(PLAN_END_DATE, false, "81", _plan_start_yyyymmdd, "WEEKLY").
+//   DB 실측 SQL(SCM_ADM_CMBO_SQL_M.SQL_ID='PLAN_END_DATE_REPORT', ora.py 2026-10-14):
+//     SELECT HORIZON_END_DATE FROM SCM_MST_PLAN WHERE DIVISION_ID=@divisionId AND PLAN_NAME=@planName
+//     AND PLAN_CYCLE=@planCycle (ROWNUM<=1). 바인드 @divisionId/@planName/@planCycle.
+export const PLAN_END_DATE_COMBO_ID = 'PLAN_END_DATE_REPORT';
+export const PLAN_END_DATE_DIVISION = '81'; // AS-IS 하드코딩(cs:2038) — 선택 division 아님
+export const PLAN_END_DATE_PLAN_CYCLE = 'WEEKLY'; // AS-IS 하드코딩(cs:2040)
+export const PLAN_END_DATE_COL = 'HORIZON_END_DATE';
 
 // EE division 제외 필터값 (SCM_MST_DIVISION.ATTRIBUTE3='EE' — 전극 6종, 부록 B-2). FE 후처리 대상.
 export const DIVISION_EE_EXCLUDE = 'EE';
 // 완제품 division 제외 코드 (부록 B-2): 40=Mobility & IT Battery, 82=ESS Battery. 셀 단위 division 만 남김.
 export const DIVISION_EXCLUDE_CODES = ['40', '82'] as const;
 
+// Division "ALL"(전체) 센티넬 — AS-IS clbDivision 은 멀티 CheckedList 로 setListBox(dtMyDivision,clbDivision,true)
+//   가 맨 앞 전체선택 항목을 추가하고 기본선택한다(cs:586). getDivision() 은 전체선택이면 "" 로 정규화해
+//   SP 에 넘긴다(cs:468) → 메인 SP 의 TRIM(P_DIVISION_ID) IS NULL 분기(전체 division)로 조회된다(ora.py 실측).
+export const DIVISION_ALL = 'ALL';
+// Division 값 → SP 파라미터 정규화: ALL/빈값이면 '' (전체), 특정 division 이면 그 CODE.
+export const normalizeDivision = (v: string): string => (v && v !== DIVISION_ALL ? v : '');
+
 // lookup TYPE (SCM_ADM_LOOKUP_MASTER_DETAIL — design 02 부록 B-4). useTabLookupQueries 로 조회.
 //   반환은 소스 index 가 아니라 code(SEGMENT1) 기반, VALID_YN='Y' + DISPLAY_SEQ 순.
 export const LOOKUP = {
   DISPLAY: 'STOCK_TREND_DISPLAY', // ALL(All) / CHART(Chart) / GRID(Grid) — 3종 VALID
   SEARCH_LEVEL: 'PRODUCT_LEVEL', // CELL_GROUP / CELL_GROUP_DETAIL / PRODUCT_LEVEL1..3 — 5종 VALID
-  PLAN_TYPE: 'PLAN_TYPE', // PR/MA/SE/FN/TE — 5종 VALID, 기본 FN='Final Plan'
-  // cboUnitQty — AS-IS ScpUtils.GetUnitQty()(SheetUtils.cs:1856) = LookupCommon 'SCP_UNIT_QTY'.
-  //   사내 SCM_ADM_LOOKUP_MASTER_DETAIL 실측(2026-10-21) Q1/Q1000/Q1000000/Q100000000 4종 VALID, DISPLAY_SEQ 순.
-  //   배율은 AS-IS SetUnitQty(.cs:1697) 처럼 선택 index 로 정한다(UNIT_QTY_SCALE).
-  UNIT_QTY: 'SCP_UNIT_QTY',
+  // 주의: Plan Type 은 정적 lookup 에서 Division/Plan Date 종속 콤보(COMBO.PLAN_TYPE)로 전환됨(2026-10-26). 아래 Bucket 만 유지.
+  // Bucket — AS-IS GetBucketType("CODE='DAILY'")(cs:603) = DM0003_GET_BUCKET_TYPE_CODE SP =
+  //   lookup BUCKET_TYPE_CODE(VALID_YN='Y')에서 DAILY 행 제거. DB 실측(ora.py 2026-10-14):
+  //   DAILY(seq1)/WEEKLY(seq2)/MONTHLY(seq3) → DAILY 제외 후 DISPLAY_SEQ 순 [Weekly, Monthly].
+  BUCKET: 'BUCKET_TYPE_CODE',
 } as const;
 
 // lookup code 상수 — 화면 로직 분기용(부록 B-4 실측 code).
@@ -103,24 +121,7 @@ export const SEARCH_LEVEL_CODE = {
   PRODUCT_LEVEL1: 'PRODUCT_LEVEL1',
   PRODUCT_LEVEL2: 'PRODUCT_LEVEL2',
   PRODUCT_LEVEL3: 'PRODUCT_LEVEL3',
-  // rgrpSearchLevel=Detail 일 때 P_SEARCH_LEVEL 로 보내는 값 — AS-IS getSearchLevel(.cs:414-417) `res = "DETAIL"`.
-  //   PKG_SCP0100 BODY 의 DETAIL 분기(L849·L1493)가 이 값으로 REPORT 상세 데이터를 만든다(콤보 lookup 코드 아님).
-  DETAIL: 'DETAIL',
 } as const;
-
-// SetLayout(.cs:1490-1542) — Search Level 별 Product Level 컬럼 표시. Detail 모드는 사용자 정의 컬럼 기준이라 미적용.
-//   AS-IS 는 cboSearchLevel.SelectedIndex 로 분기하므로 lookup PRODUCT_LEVEL 의 VALID·DISPLAY_SEQ 순서(사내 실측
-//   CELL_GROUP / CELL_GROUP_DETAIL / PRODUCT_LEVEL1 / 2 / 3)로 index→code 를 대응시킨다. 목록에 없는 코드 = default(전부 숨김).
-export const PRODUCT_LEVEL_COLUMNS = ['PRODUCT_LEVEL1', 'PRODUCT_LEVEL2', 'PRODUCT_LEVEL3'] as const;
-export const PRODUCT_LEVEL_VISIBLE: Record<string, readonly string[]> = {
-  CELL_GROUP_DETAIL: ['PRODUCT_LEVEL1', 'PRODUCT_LEVEL2'], // case 1
-  PRODUCT_LEVEL1: ['PRODUCT_LEVEL1'], // case 2
-  PRODUCT_LEVEL2: ['PRODUCT_LEVEL2'], // case 3
-  PRODUCT_LEVEL3: ['PRODUCT_LEVEL1', 'PRODUCT_LEVEL2', 'PRODUCT_LEVEL3'], // case 4
-};
-
-// PlanType 기본값 — AS-IS InitControlsAfter cboPlanType.SelectedValue="FN"(design 02 §4.2 cs:628).
-export const PLAN_TYPE_DEFAULT = 'FN';
 
 // BucketType — AS-IS 콤보 목록은 CODE='DAILY' 필터 로드하나 선택 기본은 Monthly(design 02 §4.2 cs:606).
 //   Monthly/Weekly 토글이 M_/W_ pivot 컬럼 visible 을 전환(design 03 §2.5). 정적 select(BucketField 등가).
@@ -138,12 +139,11 @@ export const SEARCH_MODE = {
 } as const;
 export type SearchMode = (typeof SEARCH_MODE)[keyof typeof SEARCH_MODE];
 
-// rgrpSearchLevel 대응 — 공유 UI 에 RadioGroup 이 없어 2지선다 CustomDropdown 으로 재현(design 01 §2 R1/R4).
+// rgrpSearchLevel 대응 — AS-IS 라디오그룹 원형 그대로 공용 @shared/lges RadioGroup/Radio 로 재현(design 01 §2 R1/R4).
 //   value = SEARCH_MODE. idx0 Search Level(기본) / idx1 Detail(REPORT 시트 show, SearchLevel 콤보 disable R4).
-//   항목 문구 = AS-IS RadioGroupItem(designer:239-240) "Search Level"/"Detail" → 등록 LBL(LBL00050/LBL00316)로 표시.
 export const SEARCH_MODE_OPTIONS = [
-  { lbl: 'LBL00050', label: 'Search Level', value: SEARCH_MODE.SEARCH },
-  { lbl: 'LBL00316', label: 'Detail', value: SEARCH_MODE.DETAIL },
+  { label: 'Search Level', value: SEARCH_MODE.SEARCH },
+  { label: 'Detail', value: SEARCH_MODE.DETAIL },
 ] as const;
 
 // 컬럼/measure 개인화 titleSet columnType — SalesPlan(DMF0021) 선례 동일('C'/'M'). saveTitleSet 3점 일치
@@ -164,40 +164,49 @@ export const SITE_TYPE = {
 // Validation MSG ID — TO-BE SCM_ADM_MSG_M 역매핑(Hook #114). AS-IS 리터럴 문구를 그대로 쓰지 않는다.
 //   {0} 자리표시자는 i18next 자동치환 안 함 — 호출부에서 .replace 로 넣는다.
 export const MSG = {
-  // 조회 시작일 > Plan 시작일 (DCalendar_ValueChanged .cs:2013-2015). AS-IS 리터럴 "[조회 시작일] Plan Date 이전으로
-  //   설정해야 합니다." -> 사내 SCM_ADM_MSG_M 역조회(2026-10-21) MSG01186 EN 'Begin Date is early or equal to Plan Date.'
-  //   (같은 규칙). 주의: 같은 코드의 KO 문구는 '크거나 같아야' 로 의미가 반대 — 기존 MSG 문구 수정은 사용자 결정 사항.
-  PLAN_DATE_RANGE: 'MSG01186',
+  // dStart>dPlan 검증 문구는 AS-IS 가 카탈로그 미사용 한국어 하드코딩(cs:2014)이라 TO-BE 도 호출부
+  //   (GlobalPsiReport.tsx)에서 AS-IS 원문 그대로 하드코딩 — MSG 상수 미사용(2026-10-19 사용자 지시).
   // 권한 Division 0건 (design 01 A1 cs:583). AS-IS MSG00097 "권한을 가진 Division이 없습니다".
   //   SCP0100 은 권한조인 2행 등록으로 실발동 안 함(부록 B-6)이나 A1 규칙 재현을 위해 코드 보존.
   NO_DIVISION_AUTH: 'MSG00097',
 } as const;
 
 // i18n 라벨 — SCM_ADM_MSG_M(MSG_TP_CD='LBL') 실측 LBL ID(design 02 부록 B-5). t(LBL.KEY, '_Fallback').
-//   값 = LBL 코드. 명칭은 조회조건 카탈로그(search_conditions_scp_dm.md 'Global PSI New' To-Be 명칭) 기준 —
-//   Div.(LBL00001) / PJT(LBL00012) / Model/Nickname(LBL00618) / Unit(LBL00045). 사내 MSG_M 역조회 2026-10-21.
+//   값 = LBL 코드. DB 미매칭 라벨(Item ID / Search Mode)은 코드 미할당 — 호출부에서 리터럴 유지.
 export const LBL = {
   SEARCH: 'LBL00112', // Search (표준 LBL00112)
   DIVISION: 'LBL00001', // Div. — 조회조건 Division 표준 코드(shipment-working-day 선례 동일)
   FROM_SITE: 'LBL00022', // From Site
   TO_SITE: 'LBL00023', // To Site
   PLAN_DATE: 'LBL00039', // Plan Date
-  PERIOD: 'LBL00013', // Period — AS-IS layPeriod "Period*"(dCalendar UsrDateRangePicker3)
   BUCKET: 'LBL00710', // Bucket
   DISPLAY: 'LBL01073', // Display
   SEARCH_LEVEL: 'LBL00050', // Search Level
   PLAN_TYPE: 'LBL00040', // Plan Type
-  PROJECT: 'LBL00012', // PJT — 카탈로그 Project→PJT (자매 화면 사용 코드)
-  MODEL_NICKNAME: 'LBL00618', // Model/Nickname — AS-IS layModel "Model / Nick Name"(txtItemId)
+  PROJECT: 'LBL00012', // Project
   CELL_GROUP: 'LBL00049', // Cell Group
-  UNIT: 'LBL00045', // Unit — 카탈로그 Unit (Qty)→Unit. 로컬 표시배율 콤보
-  AS: 'LBL01167', // A/S — AS-IS chkAS.Text "A/S"(designer:927)
+  // Scale — 로컬 표시배율 콤보. 라벨 LBL01163('Scale')로 유지(사용자 지시 2026-10-23, Unit(Qty)→Scale 재복귀).
+  //   AS-IS 원문은 'Unit (Qty)'(LBL01129)이나 Scale 표기를 쓴다. 둘 다 KO/EN/CN 등록 확인(SCM_ADM_MSG_M).
+  SCALE: 'LBL01163',
+  NICK_NAME: 'LBL00767', // Nick Name
   CELL_QTY: 'LBL00690', // Cell Qty 체크박스
+  AS: 'LBL01167', // A/S 체크박스 — DB 신규 등록(LBL01167). 미싱크 시 fallback 'A/S'(AS-IS 원문)
   MONTHLY: 'LBL00684', // Monthly — Bucket 옵션
   WEEKLY: 'LBL00683', // Weekly — Bucket 옵션
   COLUMN: 'LBL00605', // Column Setting — 개인화 팝업 버튼
   MEASURE: 'LBL00310', // Measure — 개인화 팝업 버튼
 } as const;
+
+// Unit(Qty) 로컬 표시배율 콤보 표시 항목 (design 02 §2.5). 서버 조회 없는 정적 select — index=UNIT_QTY_SCALE.
+//   라벨 = AS-IS ScpUtils.GetUnitQty() = lookup SCP_UNIT_QTY 의 NAME(SEGMENT2) 실측(ora.py 2026-10-14):
+//   Q1 'QTY/1' / Q1000 'QTY/1,000' / Q1000000 'QTY/1,000,000' / Q100000000 'QTY/100,000,000' (DISPLAY_SEQ 순).
+//   value=index(배율) — AS-IS SetUnitQty(cs:1695) 는 cboUnitQty.SelectedIndex 0/1/2/3 으로 나눗셈(code 아닌 순번).
+export const UNIT_QTY_OPTIONS = [
+  { label: 'QTY/1', value: '0' },
+  { label: 'QTY/1,000', value: '1' },
+  { label: 'QTY/1,000,000', value: '2' },
+  { label: 'QTY/100,000,000', value: '3' },
+] as const;
 
 // 동적 pivot 기간칼럼 접두 (design 03 §2). M_(월)/W_(주) 표시, B_(BOH 보조) 숨김(width 0).
 //   InitSpreadDateColumn cs:714~817: B_ 포함 -> AddTextColumn 숨김 / 그 외 -> AddNumColumn width70.
@@ -211,7 +220,7 @@ export const PIVOT_PREFIX = {
 //   SHEET_MEASURE 에 색상 메타 컬럼이 없어(확인필요 §6.2 #4) 코드 스위치로 재현 — cs 하드코딩 1:1 이식.
 //   TOT_INV 는 sn81 2행 중복 실측(§6.2 #3) — 표시는 색상만 관여, dedup 은 measure fetch 가 담당.
 export const MEASURE_BG = {
-  INVENTORY: 'rgb(239, 239, 239)', // VMI/Intransit/Semi Intransit/Pack·Cell Inv/AS Inv/Char.Available/Form.Progress
+  INVENTORY: 'rgb(239, 239, 239)', // VMI Inventory/Intransit/Semi Intransit/Pack·Cell Inventory(Pack)/Cell Inv/AS Inv/Char. Available/Form. Progress
   DIO: 'rgb(219, 219, 219)', // DIO / STD_DIO
   TOT_INV: 'rgb(219, 219, 219)', // Total Inv
   BLUE: 'rgb(219, 229, 241)', // MKT FCST / Ship Plan / RTF
@@ -220,16 +229,9 @@ export const MEASURE_BG = {
   PAST_INVENTORY: 'rgb(192, 192, 192)', // WEEKLY inventory measure x W_..A 칼럼(은색)
 } as const;
 
-// 숫자 기간칼럼 음수 글자색 — AS-IS SetReNumerCellType(SpreadInfo.cs:13815) NumberCellType.NegativeRed=true.
-export const NEGATIVE_FORE = '#ff0000';
-
-// Measure Group 이 바뀌는 행의 상단 경계선 — AS-IS SetBackColor(.cs:877-904·947-954) complexBorderDarkGray
-//   (ComplexBorder(left, top=DarkGray 2px, right, bottom)). 'AS Sales PSI' Black 경계는 적용 직전 Clear(.cs:955)라 실효 없음.
-export const MEASURE_GROUP_BORDER_TOP = '2px solid rgb(169, 169, 169)';
-
-// MEASURE_NAME -> 배경색 그룹 매핑 (SetBackColor .cs:922-940 switch 이식). 키 = 행 MEASURE_NAME 정확 일치 —
-//   값 원천은 SCM_MST_SHEET_MEASURE('Global PSI New') COLUMN_LABEL_NAME(사내 실측: 'VMI Inventory'·'Char. Available'·
-//   'Form. Progress'·'Cell Inventory(Pack)' — 공백·괄호 포함). 주석 처리된 case(MKT_FCST 등 코드형)는 이식하지 않는다.
+// MEASURE_NAME -> 배경색 그룹 매핑 (design 03 §3-B cs:907~941 SetBackColor switch 이식). 행 라벨(MEASURE_NAME =
+//   SCM_MST_SHEET_MEASURE.COLUMN_LABEL_NAME) 정확 일치. DB 실측(ora.py 2026-10-14)으로 라벨 문자열 확정 —
+//   AS-IS cs 와 동일: 'VMI Inventory'·'Cell Inventory(Pack)'·'Char. Available'·'Form. Progress'(마침표 뒤 공백).
 export const MEASURE_NAME_BG: Record<string, string> = {
   'VMI Inventory': MEASURE_BG.INVENTORY,
   Intransit: MEASURE_BG.INVENTORY,
@@ -250,8 +252,9 @@ export const MEASURE_NAME_BG: Record<string, string> = {
   'Production(PKG)': MEASURE_BG.ORANGE,
 };
 
-// WEEKLY 과거재고 은색 대상 measure — SetBackColor WEEKLY 분기(.cs:1055-1061) case 7종. 배경색 INVENTORY 그룹과
-//   다르다('Cell Inventory(Pack)'·'AS Inventory' 는 제외 — .cs:1062 주석 "PACK_CELL_EOH 와 CELL_EOH 는 동일한 명칭").
+// WEEKLY 과거 W_..A 셀 은색(PAST_INVENTORY) 대상 measure — AS-IS SetBackColor switch(cs:1055~1061)의 7개.
+//   MEASURE_NAME_BG 의 INVENTORY 배경(9개)의 부분집합 — 'Cell Inventory(Pack)'·'AS Inventory' 는 제외(AS-IS
+//   과거 회색 유지). 은색 조건을 INVENTORY 배경 전체로 걸면 이 2개가 과잉 은색이 되므로 명시 집합으로 한정.
 export const PAST_INVENTORY_MEASURES: ReadonlySet<string> = new Set([
   'VMI Inventory',
   'Intransit',
@@ -262,7 +265,7 @@ export const PAST_INVENTORY_MEASURES: ReadonlySet<string> = new Set([
   'Form. Progress',
 ]);
 
-// 팝업 대상 텍스트 필드 (design 02 §4.6). btnItemId -> MaterialByDivisionModal(Model/Nickname, 카탈로그 메1), btnProject -> ProjectByDivisionModal.
+// 팝업 대상 텍스트 필드 (design 02 §4.6). btnItemId -> ItemByDivisionModal, btnProject -> ProjectByDivisionModal.
 //   division 파라미터 cascade(현재 선택 division 으로 후보 필터, preSearchParams).
 export const POPUP_TARGET = {
   ITEM: 'itemId',

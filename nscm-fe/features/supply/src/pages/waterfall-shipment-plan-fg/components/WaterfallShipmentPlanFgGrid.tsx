@@ -5,6 +5,7 @@ import type { MutableRefObject } from 'react';
 import { useEffect, useMemo, useRef } from 'react';
 
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
+import { paintNegativeText, toGridNumber } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 
@@ -26,6 +27,7 @@ import {
   BUCKET_TYPE,
   HEADER_COLORS,
   MENU_ID,
+  PERIOD_COLUMN_REGEX,
   quoteComboParam,
   SHEETS,
 } from '../waterfall-shipment-plan-fg.constants';
@@ -179,11 +181,22 @@ export const WaterfallShipmentPlanFgGrid = ({
     };
   }, [gridRef, staticColumns, dynamicColumns, headerRowHeight]);
 
-  // ── 계층 병합 (AS-IS SmartColMerge + 헤더 스팬) — binding 키 기준(KEY_IDX 그룹) ──
+  // ── 계층 병합 (AS-IS SmartColMerge + 헤더 스팬) — 실제 보이는 정적 컬럼 좌→우 순서로 ──
+  //   fixedBindings 는 admin 메타 전체(staticColumns)가 아니라 g.columns 에서 "보이는 비기간" 컬럼만
+  //   추린다. 메타에는 숨김 축 컬럼(MEASURE 등 — 행마다 값이 달라 계층키를 매 행 깨뜨림)이 섞여 있어
+  //   그대로 쓰면 세로병합이 전혀 안 걸린다. 자매 production-plan-waterfall(SCP0017)과 동일 방식.
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
-    g.mergeManager = new WaterfallMergeManager(staticColumns.map(column => column.colNm));
+    const fixedBindings = g.columns
+      .filter(
+        column =>
+          column.visible !== false &&
+          !!column.binding &&
+          !PERIOD_COLUMN_REGEX.test(column.binding)
+      )
+      .map(column => column.binding as string);
+    g.mergeManager = new WaterfallMergeManager(fixedBindings);
     g.invalidate(true);
   }, [gridRef, staticColumns, dynamicColumns]);
 
@@ -231,25 +244,34 @@ export const WaterfallShipmentPlanFgGrid = ({
     return () => host.removeEventListener('dblclick', onDblClick);
   }, [gridRef, dynBindings, bucket]);
 
-  // ── 표시 규칙: 주말 헤더색(토=파랑/일=빨강, design 03 §3 R9) ──
+  // ── 표시 규칙: 주말 헤더색(토=파랑/일=빨강, design 03 §3 R9) + 데이터 셀 음수=빨강 ──
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
     const handler = (_sender: FlexGrid, e: FormatItemEventArgs) => {
       const panel = e.panel;
-      if (panel.cellType !== CellType.ColumnHeader) return;
-      const col = panel.columns[e.col];
-      if (!col) return;
-      const binding = col.binding ?? '';
-      const isLeafRow = e.row === panel.rows.length - 1;
-      const dayCode = isLeafRow ? dayCodeOf.get(binding) : undefined;
-      const weekend =
-        dayCode === 'SAT'
-          ? HEADER_COLORS.SATURDAY
-          : dayCode === 'SUN'
-            ? HEADER_COLORS.SUNDAY
-            : '';
-      e.cell.style.color = weekend;
+      // 헤더 주말색
+      if (panel.cellType === CellType.ColumnHeader) {
+        const col = panel.columns[e.col];
+        if (!col) return;
+        const binding = col.binding ?? '';
+        const isLeafRow = e.row === panel.rows.length - 1;
+        const dayCode = isLeafRow ? dayCodeOf.get(binding) : undefined;
+        const weekend =
+          dayCode === 'SAT'
+            ? HEADER_COLORS.SATURDAY
+            : dayCode === 'SUN'
+              ? HEADER_COLORS.SUNDAY
+              : '';
+        e.cell.style.color = weekend;
+        return;
+      }
+      // 데이터 셀 음수 = 빨강 (AS-IS NumberCellType.NegativeRed=true — 전 수치 셀 공통).
+      //   문자/코드 셀은 toGridNumber 가 0 으로 떨어져 자연히 제외. paintNegativeText 는 양수일 때
+      //   색을 지운다 — Wijmo 셀 DOM 재사용 시 색 누수 방지(공용 헬퍼 규약).
+      if (panel.cellType === CellType.Cell) {
+        paintNegativeText(e.cell, toGridNumber(panel.getCellData(e.row, e.col, false)));
+      }
     };
     g.formatItem.addHandler(handler);
     g.invalidate(true);

@@ -86,3 +86,46 @@ export const applyRatio = (
     return next;
   });
 };
+
+// ===== Measure 행 순서 교정 (design 03 §1 — SCM_MST_SHEET_MEASURE SORT_ORDER_NO) =====
+//   그리드 measure 행을 line 블록(DIVISION_ID/SCM_SITE_ID/OPERATION_ID/LINE_ID) 안에서 등록 SORT 순으로
+//   재배치한다 — % measure(LINE_TOTAL_*, SORT 최하)가 각 Plant site 행그룹 맨 아래로 간다(사용자 지시
+//   2026-10-13). line 블록 자체의 순서(SP 반환 순서)는 그대로 보존하고, 블록 "안"의 measure 순서만 바꾼다.
+//   measureOrder = staticMeasures(동적) 또는 MEASURE_ROW_ORDER(fallback). 미등록 measure 는 블록 끝으로(원순서
+//   보존). SP 가 이미 올바른 순서로 반환하면 멱등(no-op). 안정 정렬(원 인덱스 tiebreak).
+const lineBlockKey = (row: Record<string, unknown>): string => {
+  const g = (k: string): string => {
+    const v = row[k];
+    return typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+  };
+  return [g('DIVISION_ID'), g('SCM_SITE_ID'), g('OPERATION_ID'), g('LINE_ID')].join('|');
+};
+
+export const orderRowsByMeasure = (
+  rows: Record<string, unknown>[],
+  measureOrder: readonly string[]
+): Record<string, unknown>[] => {
+  if (rows.length === 0 || measureOrder.length === 0) return rows;
+  const rank = new Map<string, number>();
+  measureOrder.forEach((code, i) => rank.set(code, i));
+  // 블록 첫 등장 순서 — SP 반환 블록(=Plant site 행그룹) 순서를 그대로 보존(블록 재배열 금지).
+  const blockOrder = new Map<string, number>();
+  for (const r of rows) {
+    const k = lineBlockKey(r);
+    if (!blockOrder.has(k)) blockOrder.set(k, blockOrder.size);
+  }
+  const measureRank = (r: Record<string, unknown>): number => {
+    const m = typeof r.MEASURE === 'string' ? r.MEASURE : '';
+    const v = rank.get(m);
+    return v === undefined ? measureOrder.length : v; // 미등록 measure 는 블록 끝으로
+  };
+  return rows
+    .map((r, i) => ({ r, i }))
+    .sort(
+      (a, b) =>
+        (blockOrder.get(lineBlockKey(a.r)) ?? 0) - (blockOrder.get(lineBlockKey(b.r)) ?? 0) ||
+        measureRank(a.r) - measureRank(b.r) ||
+        a.i - b.i
+    )
+    .map(x => x.r);
+};

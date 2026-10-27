@@ -26,8 +26,11 @@ import { GridUtils, safeString } from '@foundation/utils';
 import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
+import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore, useSessionStore } from '@shared/stores';
+
+import { MaterialByDivisionModal } from '../materialByDivisionModal/MaterialByDivisionModal';
 
 import {
   buildCapaNewModelColumns,
@@ -102,6 +105,7 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
   const [modelId, setModelId] = useState('');
   const [itemId, setItemId] = useState('');
   const [nickName, setNickName] = useState('');
+  const [modelPopupOpen, setModelPopupOpen] = useState(false);
 
   const [rows, setRows] = useState<CapaNewModelRow[]>([]);
   const [loading, setLoading] = useState(false);
@@ -685,17 +689,27 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
                     )}
                   />
                 </Grid>
+                {/* Model/Nickname 한 칸으로 통합, 값은 modelId 로 전송 */}
                 <Grid size={2}>
                   <FormItem
-                    label={t('LBL00669', '_Model')}
+                    label={t('LBL00618', '_Model/Nickname')}
                     labelAlign='right'
                     render={() => (
-                      <InputField
-                        fullWidth
-                        value={modelId}
-                        onChange={e => setModelId(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && void fetchList()}
-                      />
+                      // 입력칸 옆에 돋보기 버튼(SearchFields PopupSearchInput 과 같은 배치)
+                      <div className={styles.popupSearchRow}>
+                        <InputField
+                          fullWidth
+                          value={modelId}
+                          onChange={e => setModelId(e.target.value)}
+                          onKeyDown={e => e.key === 'Enter' && void fetchList()}
+                        />
+                        <Button
+                          appearance='outlined'
+                          priority='normal'
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setModelPopupOpen(true)}
+                        />
+                      </div>
                     )}
                   />
                 </Grid>
@@ -713,7 +727,7 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
                     )}
                   />
                 </Grid>
-                <Grid size={2}>
+                {/* <Grid size={2}>
                   <FormItem
                     label={t('LBL00767', '_Nick Name')}
                     labelAlign='right'
@@ -726,7 +740,7 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
                       />
                     )}
                   />
-                </Grid>
+                </Grid> */}
               </>
             }
           />
@@ -767,6 +781,19 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
               onClick={onClose}
             />
           </div>
+          {/* CAPA 메인 Model/Nickname 과 같은 팝업 */}
+          <MaterialByDivisionModal
+            open={modelPopupOpen}
+            modalClose={() => setModelPopupOpen(false)}
+            multiCheckbox
+            setSelectedValue={items => setModelId(items)}
+            preSearchParams={{
+              divisionId,
+              operationGroup: '',
+              scpModuleType: MNU_ID,
+              itemId: modelId,
+            }}
+          />
         </div>
       }
     />

@@ -9,13 +9,15 @@ import { IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, saveTitleSet, SubTitle } from '@shared/components';
-import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ShipmentPlanSemiForm } from './components/ShipmentPlanSemiForm';
 import { ShipmentPlanSemiGrid, type SpreadTitleRow } from './components/ShipmentPlanSemiGrid';
 import { useShipmentPlanSemiValidation } from './hooks/useShipmentPlanSemiValidation';
 import {
+  BUCKET_TYPE,
+  COMBO,
   LBL,
   MEASURE_SHEET_NAME,
   MENU_ID,
@@ -25,6 +27,7 @@ import {
 } from './shipment-plan-semi.constants';
 import type { FixInfoRow, MainRow } from './shipment-plan-semi.types';
 import { useShipmentPlanSemiStore } from './useShipmentPlanSemiStore';
+import { isDivision81Series } from './utils/shipment-plan-semi.editLock';
 import {
   buildFixRows,
   buildSaveRows,
@@ -66,6 +69,7 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
   const appliedToYyyymmdd = useShipmentPlanSemiStore(s => s.appliedToYyyymmdd);
   const appliedPlanType = useShipmentPlanSemiStore(s => s.appliedPlanType);
   const appliedPlanSeq = useShipmentPlanSemiStore(s => s.appliedPlanSeq);
+  const appliedDivisionId = useShipmentPlanSemiStore(s => s.appliedDivisionId);
 
   const [openItem, setOpenItem] = useState(false);
   const [openMeasureSetup, setOpenMeasureSetup] = useState(false);
@@ -93,10 +97,14 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
   );
   // plan-level 편집가능 — GET SP o_rc2 IS_EDITABLE(플랜 시작주 < 이번주 월요일이면 'N', PKG_SCP0010 L2951).
   //   AS-IS grid 잠금/Get_IsSaveYn 상당. 값 없으면 보수적으로 false(편집불가).
-  const planEditable = useMemo(
-    () => ((mainData as { o_rc2?: { IS_EDITABLE?: string }[] })?.o_rc2?.[0]?.IS_EDITABLE ?? 'N') === 'Y',
-    [mainData]
-  );
+  // const planEditable = useMemo(
+  //   () => ((mainData as { o_rc2?: { IS_EDITABLE?: string }[] })?.o_rc2?.[0]?.IS_EDITABLE ?? 'N') === 'Y',
+  //   [mainData]
+  // );
+  // QA 테스트용 잠금 해제(2026-10-15): SP 는 플랜 시작주가 이번주보다 과거면 IS_EDITABLE='N' 을 준다.
+  //   QA 플랜 배치가 돌지 않아 최신 플랜이 과거주(EE 0928, 그 외 0824)라 전 셀이 잠겨 테스트가 안 된다.
+  //   테스트 끝나면 위 주석 해제하고 아래 줄 삭제.
+  const planEditable = true;
   const spreadTitle = useMemo<SpreadTitleRow[]>(
     () => (calendarData as { o_rc1?: SpreadTitleRow[] })?.o_rc1 ?? [],
     [calendarData]
@@ -148,7 +156,43 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   자동선택값과 같은지를 별도로 재조회하지 않고 "폼이 자동으로 최댓값을 유지한다"는 전제(§2.6)로
   //   isLockedPlanType 만 disabled 조건에 반영한다 — 사용자가 PlanSeq 를 최댓값이 아닌 값으로 강제
   //   변경할 UI 경로가 없으므로(폼이 항상 재확정) 이 축은 실질적으로 isLockedPlanType 과 동치.
-  const canOperate = !isLockedPlanType;
+  // const canOperate = !isLockedPlanType;
+  // 최신 Seq 여부(AS-IS Set_FixButtonEnabled .cs:3523 curPlanSeq == maxSeq). Cascade 로 하위 Seq 선택이 가능하다.
+  // const [planSeqRows] = useTabComboQueries({ filters: [COMBO.PLAN_SEQ] });
+  const [planSeqRows, planTypeRows] = useTabComboQueries({
+    filters: [COMBO.PLAN_SEQ, COMBO.PLAN_TYPE],
+  });
+  const isLatestPlanSeq = useMemo(() => {
+    const seqs = (planSeqRows ?? [])
+      .filter(
+        r =>
+          String(r.DIVISION_ID ?? '') === sc.divisionId &&
+          String(r.PLANDATE ?? '') === sc.planStartYyyymmdd &&
+          String(r.PLANTYPE ?? '') === sc.planType
+      )
+      .map(r => Number(r.CODE));
+    return seqs.length > 0 && Number(sc.planSeq) === Math.max(...seqs);
+  }, [planSeqRows, sc.divisionId, sc.planStartYyyymmdd, sc.planType, sc.planSeq]);
+  const canOperate = !isLockedPlanType && isLatestPlanSeq;
+  // AS-IS Get_IsSaveYn(SCP0013_GET_PLAN_TYPE_SAVE_YN, .cs:1483) 화면 근사 — 선택 Plan Type 이 그 Plan Date 의
+  //   마지막(최신) 단계가 아니면(예: FN 진행된 날짜에서 MA 선택) 수정 불가. 사용자 결정 2026-10-19.
+  //   SP 의 '최종단계 실행 실패 시 직전 단계 허용' 규칙은 반영하지 않는다.
+  const isLatestPlanType = useMemo(() => {
+    const types = (planTypeRows ?? [])
+      .filter(
+        r =>
+          String(r.DIVISION_ID ?? '') === sc.divisionId &&
+          String(r.PLANDATE ?? '') === sc.planStartYyyymmdd
+      )
+      .map(r => String(r.CODE ?? ''));
+    return types.length > 0 && types[types.length - 1] === sc.planType;
+  }, [planTypeRows, sc.divisionId, sc.planStartYyyymmdd, sc.planType]);
+  // 최신 단계가 아니면 MSG01196("수정할 수 없는 플랜입니다.", AS-IS MSG00182) 후 false.
+  const checkPlanTypeSavable = (): boolean => {
+    if (isLatestPlanType) return true;
+    void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This Plan can not be modified.') });
+    return false;
+  };
 
   const saveFixDataset = async (action: 'FIX' | 'UNFIX', fixReason: string): Promise<boolean> => {
     // Fix/Unfix 는 "선택 셀" 기반(AS-IS SaveData_FixInfo, 사용자 결정 2026-10-13) — 편집(EditTracker)이
@@ -213,11 +257,13 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: t(MSG.LOCKED_MODE, '_Not in edit mode.') });
       return;
     }
+    if (!checkPlanTypeSavable()) return; // AS-IS BtnFix_Click Get_IsSaveYn(.cs:4865)
+    // AS-IS 는 New/Fix/Unfix 에서 IS_EDITABLE 을 보지 않아 제외(2026-10-15). 원복 시 아래 주석 해제.
     // plan-level 편집가능(IS_EDITABLE) 게이트 — 과거주 플랜은 Fix 불가(AS-IS Get_IsSaveYn=false→MSG00182 상당).
-    if (!planEditable) {
-      void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') });
-      return;
-    }
+    // if (!planEditable) {
+    //   void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') });
+    //   return;
+    // }
     // Fix 는 confirm 없이 즉시 실행(design 01 §2 #2 가드체인 통과 후 즉시 저장) — 저장 SP 는
     //   PROC_M 등록 완료(iter-2, ora.py 재실측 확인), E2E 런타임(브라우저 왕복)만 미검증(ERROR,
     //   __asis-mapping__.md 명시. iter-2 gap-audit SCP0010-G-08).
@@ -235,11 +281,13 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: t(MSG.LOCKED_MODE, '_Not in edit mode.') });
       return;
     }
+    if (!checkPlanTypeSavable()) return; // AS-IS BtnUnfix_Click Get_IsSaveYn(.cs:4888)
+    // AS-IS 는 New/Fix/Unfix 에서 IS_EDITABLE 을 보지 않아 제외(2026-10-15). 원복 시 아래 주석 해제.
     // plan-level 편집가능(IS_EDITABLE) 게이트 — 과거주 플랜은 Unfix 불가(confirm 전에 차단).
-    if (!planEditable) {
-      void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') });
-      return;
-    }
+    // if (!planEditable) {
+    //   void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') });
+    //   return;
+    // }
     // Unfix 는 Fix 와 달리 confirm(MSG00016) 필수(design 01 §2 #3) — Yes 선택 시에만 저장.
     void setAlert({
       type: 'confirm',
@@ -269,7 +317,8 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 팝업 저장 성공 후 — 비EE 는 신규 Item 을 조회조건에 채우고 재조회 여부를 묻는다(AS-IS .cs:4932-4948).
   //   EE 는 아무 동작도 하지 않는다(AS-IS SetChangedControlPart 호출이 주석 처리돼 있다, .cs:4934-4937).
   const handleNewPlanSaved = (itemIds: string[]) => {
-    if (sc.divisionId.startsWith('EE')) return;
+    // EE 도 다른 Division 과 같이 Item 채우고 재조회 확인(2026-10-15, AS-IS 와 다름). 원복 시 아래 주석 해제.
+    // if (sc.divisionId.startsWith('EE')) return;
     set({ itemId: itemIds.join(',') });
     void setAlert({
       type: 'confirm',
@@ -292,11 +341,13 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   SCP0013 메뉴 소관이라 SCP0010 이 배선 불가(Hard Boundary, __asis-mapping__ G-05). canOperate(PlanType
     //   FN/TE 잠금 여부)로 대체 — handleFix/handleSave 와 동일 게이트.
     if (!canOperate) return;
+    if (!checkPlanTypeSavable()) return; // AS-IS BtnNew_Click Get_IsSaveYn(.cs:4909)
+    // AS-IS 는 New/Fix/Unfix 에서 IS_EDITABLE 을 보지 않아 제외(2026-10-15). 원복 시 아래 주석 해제.
     // plan-level 편집가능(IS_EDITABLE) 게이트 — 과거주 플랜은 New 불가(AS-IS Get_IsSaveYn=false→MSG00182 상당).
-    if (!planEditable) {
-      void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') });
-      return;
-    }
+    // if (!planEditable) {
+    //   void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') });
+    //   return;
+    // }
     // EE+Operation Group A 가드는 FG 호출부에만 있고 SEMI 는 없다(newPlan.ts isNewPlanBlocked 주석, FG .cs:1130-1131).
     setOpenNewPlan(true); // AS-IS SCM0002_ShipmentPlanInsertPopup ShowDialog(.cs:4919-4930)
   };
@@ -307,6 +358,8 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   canOperate(PlanType 잠금 여부)만 게이트로 쓴다 — Edit 토글 자체는 별도 미구현.
   //   81 계열 Weekly LOT SIZE 분배 저장(P_SCP0010_SAVE_SEMI_WEEKLY)은 알고리즘 상세 확인 필요(design
   //   03 §6#4)라 이 activity 범위에서 분기 배선하지 않는다 — 일반 저장 SP 로만 전송(확인 필요 남김).
+  // WEEKLY SP 버튼코드. SCM_ADM_MNU_BTN_MPG_M(SCP0010/main) 에 API P_SCP0010_WEEKLY_SAVE 매핑 필요.
+  const SAVE_WEEKLY_BTN = 'SAVE_WEEKLY';
   const handleSave = async () => {
     // AS-IS SaveData_Main(.cs:2124-2132)도 Get_IsSaveYn()(SCP0013_GET_PLAN_TYPE_SAVE_YN, MSG00182)를
     //   호출한다(design 01 §5-1 — Fix/Unfix/New 와 동일 SP 를 공유, 체크리스트가 영역3 항목으로
@@ -314,10 +367,13 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   — gap-resolve iter-1 확정, 독립 react-gap-audit G-06). SP 는 G-05 와 동일한 Hard Boundary
     //   (SCP0013 메뉴 소관, SCP0010 이 임의 배선 불가)라 Fix/Unfix/New 와 동일하게 canOperate 대체
     //   게이트만 재현한다 — SP 실배선은 교차 화면 정책 사용자 결정 후 별도 activity.
-    if (!canOperate) {
+    // 저장은 AS-IS 에 최신 Seq 조건이 없어 Plan Type 잠금만 본다(canOperate 는 New/Fix/Unfix 전용).
+    // if (!canOperate) {
+    if (isLockedPlanType) {
       void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_Save is not allowed for this plan.') });
       return;
     }
+    if (!checkPlanTypeSavable()) return; // AS-IS SaveData_Main Get_IsSaveYn(.cs:2132)
     const grid = mainGridRef.current;
     grid?.finishEditing();
     const tracker = mainTrackerRef.current;
@@ -325,12 +381,24 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No changes.') });
       return;
     }
+    // 81/81_UC + Weekly 는 W_ 주 수량을 WEEKLY SP 로 보낸다(SP 가 Lot Size·출하요일로 일별 분배, AS-IS .cs:2887).
+    //   81 계열 Daily 는 AS-IS 도 WEEKLY SP 를 부르지만 SP 안 DAILY 분기가 DATASET 과 같아 DATASET 으로 보낸다.
+    const isWeeklySave = isDivision81Series(appliedDivisionId) && sc.bucketType === BUCKET_TYPE.WEEKLY;
+    // const rows = buildSaveRows(
+    //   tracker,
+    //   useSessionStore.getState().session.userId ?? '',
+    //   '',
+    //   appliedPlanType,
+    //   appliedPlanSeq
+    // );
     const rows = buildSaveRows(
       tracker,
       useSessionStore.getState().session.userId ?? '',
       '',
       appliedPlanType,
-      appliedPlanSeq
+      appliedPlanSeq,
+      '',
+      isWeeklySave ? 'WEEKLY' : 'DAILY'
     );
     if (rows.length === 0) {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No changes.') });
@@ -340,7 +408,8 @@ export const ShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   (ora.py 실측, iter-2) — pData/pUserId 로 보내면 name-lookup 바인딩이 NULL 처리돼 저장이
     //   빈 값으로 실행된다.
     const res = await apiClient.post<{ o_rc1?: { RESULT_CODE?: string; RESULT_MSG?: string }[] }>(
-      `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
+      // `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
+      `/${MENU_ID}/${SHEETS.MAIN}/${isWeeklySave ? SAVE_WEEKLY_BTN : 'SAVE'}/call-proc`,
       { data: buildSavePayloadJson(rows), sesUserId: useSessionStore.getState().session.userId ?? '' }
     );
     if (isSaveResultFailure(res)) {

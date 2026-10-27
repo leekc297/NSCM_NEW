@@ -105,7 +105,7 @@ export const NEW_ROW_EDITABLE = ['SCM_SITE_ID', 'ITEM_ID', 'LT_DAY', 'INV_FLAG']
 // 기존행 편집 허용 컬럼 (design 03 §3-1 — 기존행: LT_DAY/INV_FLAG(PRE_INSP)).
 export const EXISTING_ROW_EDITABLE = ['LT_DAY', 'INV_FLAG'] as const;
 
-// 저장 필수 컬럼 (design 03 §5-8 — 라벨 '*' : SCM_SITE_ID/ITEM_ID/LT_OPERATION/LT_DAY).
-export const REQUIRED_COLUMNS = ['SCM_SITE_ID', 'ITEM_ID', 'LT_OPERATION', 'LT_DAY'] as const;
+// 저장 필수값은 공통 useSaveWithValidation(컬럼메타 INPUT_TP_CD M/IM + 헤더 라벨 '*')이 판정한다.
+//   AS-IS checkRequiredOfSpread 등가 — FE 하드코딩 필수집합 금지(convert-core hook #130).
 // 4키 중복검증 (design 01 §2 R9 / 03 §3-4 — DIVISION+SCM_SITE+ITEM+LT_OPERATION).
 export const DUP_KEY_COLUMNS = ['DIVISION_ID', 'SCM_SITE_ID', 'ITEM_ID', 'LT_OPERATION'] as const;

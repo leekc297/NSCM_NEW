@@ -34,6 +34,8 @@ interface ShipmentRequestPackState {
   isOpenSearchArea: boolean;
   staticColumns: Record<StaticColumnSheet, RawFlexGridColumnConfig[]>;
   staticMeasures: Record<SHEETS.PACK | SHEETS.CELL, MeasureMeta[]>;
+  // Measure 설정(btnMeasure) 결과 — 표시 measure 코드(null = 전체). spdMain 시트별 독립.
+  visibleMeasures: Record<SHEETS.PACK | SHEETS.CELL, string[] | null>;
   activeMainSheet: ActiveMainSheet; // Pack Biz ↔ Cell Biz(design 01 R14)
   activeDetailSheet: ActiveDetailSheet; // Request ↔ Result Detail(design 01 R15)
   activeGrid: ActiveGrid;
@@ -42,7 +44,13 @@ interface ShipmentRequestPackState {
 interface ShipmentRequestPackAction {
   reset: () => void;
   setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
-  setFilters: () => boolean;
+  // 상단 Search/F5 — 현재 활성 main 시트(Pack/Cell)의 필터 + spreadTitle 만 세팅(하단 미건드림, SSP0015 동작).
+  setMainFilters: () => void;
+  // 하단 Search — 현재 활성 detail 시트(Request/Result Detail)의 필터만 세팅.
+  setDetailFilters: () => void;
+  // 메인(Pack) 그리드 Measure/날짜 셀 더블클릭 → 하단 Request Detail 을 그 행 item/toSite(+날짜)로 재조회
+  //   (AS-IS SpdMain_CellDoubleClick→FindData_Detail_DblClick). date=null 이면 상단 Period 전체.
+  drillDetailFromMain: (modelId: string, scmSiteId: string, date: string | null) => void;
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   setActiveMainSheet: (sheet: ActiveMainSheet) => void;
@@ -50,6 +58,7 @@ interface ShipmentRequestPackAction {
   setActiveGrid: (grid: ActiveGrid) => void;
   fetchStaticColumns: () => void;
   fetchStaticMeasures: () => void;
+  applyVisibleMeasures: (sheet: SHEETS.PACK | SHEETS.CELL, codes: string[] | null) => void;
   // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchParams 패치(1회).
   restoreSearchConditions: () => Promise<void>;
 }
@@ -95,6 +104,10 @@ const makeInitState = (): ShipmentRequestPackState => ({
     [SHEETS.PACK]: [],
     [SHEETS.CELL]: [],
   },
+  visibleMeasures: {
+    [SHEETS.PACK]: null,
+    [SHEETS.CELL]: null,
+  },
   activeMainSheet: 'pack',
   activeDetailSheet: 'requestDetail',
   activeGrid: null,
@@ -133,11 +146,14 @@ export const useShipmentRequestPackStore = createPersistedStoreWithTab<
         state.activeGrid = grid;
       });
     },
-    // AS-IS FindData/FindData_Detail 파라미터 조립(design 02 §2/§5). 메인 그리드 조회 SP(PACK/CELL)
-    //   2건이 미배포(goal.md ②)라 필터 셋만 정확히 재현하고 실제 커서 반환은 확인하지 못했다.
-    setFilters: () => {
+    // 상단 Search/F5(AS-IS FindButton→FindData) — **현재 활성 main 시트(Pack/Cell)**의 필터 + 그 시트
+    //   spreadTitle 만 세팅한다. 하단(Request/Result Detail) 필터는 건드리지 않아 상단 조회가 하단을
+    //   함께 돌리지 않는다(SSP0015 동작 참고). 비활성 시트 필터는 undefined 유지 → 탭 전환해도 그 시트는
+    //   자기 Search 전까지 조회되지 않고(enabled 게이트), 이미 조회한 시트는 react-query 캐시로 유지된다.
+    setMainFilters: () => {
       const sesUserId = useSessionStore.getState().session.userId ?? '';
       const sp: SearchParamProps = { ...makeInitSearchParams(), ...get().searchParams };
+      const activeSheet = get().activeMainSheet;
 
       const common = {
         divisionId: sp.divisionId,
@@ -153,51 +169,77 @@ export const useShipmentRequestPackStore = createPersistedStoreWithTab<
         sesUserId,
         mnuId: MENU_ID,
       };
-      const newFilters: ProcRequest<MENU_ID, SHEETS.PACK> = common;
-      const newCellFilters: ProcRequest<MENU_ID, SHEETS.CELL> = common;
-      const newRequestDetailFilters: ProcRequest<MENU_ID, SHEETS.REQUEST_DETAIL> = {
-        divisionId: sp.divisionId,
-        fromYyyymmdd: sp.fromYyyymmdd2,
-        toYyyymmdd: sp.toYyyymmdd2,
-        modelId: sp.modelId2,
-        nickName: sp.nickName2,
-        lotId: sp.lotId, // §2.9 dead parameter — SP 파라미터 목록에 없음, AS-IS 그대로 전달만 유지
-        requestorName: sp.requestor,
-        sesUserId,
-        mnuId: MENU_ID,
-      };
-      const newResultDetailFilters: ProcRequest<MENU_ID, SHEETS.RESULT_DETAIL> = {
-        divisionId: sp.divisionId,
-        fromYyyymmdd: sp.fromYyyymmdd2,
-        toYyyymmdd: sp.toYyyymmdd2,
-        modelId: sp.modelId2,
-        nickName: sp.nickName2,
-        sesUserId,
-        mnuId: MENU_ID,
-      };
       const newSpreadTitleFilters: ProcRequest<MENU_ID, SHEETS.SPREAD_TITLE> = {
         fromYyyymmdd: sp.fromYyyymmdd,
         toYyyymmdd: sp.toYyyymmdd,
         sesUserId,
-        sheetName: ADMIN_SHEET_NAME[get().activeMainSheet === 'cell' ? SHEETS.CELL : SHEETS.PACK],
+        sheetName: ADMIN_SHEET_NAME[activeSheet === 'cell' ? SHEETS.CELL : SHEETS.PACK],
         divisionId: sp.divisionId,
       };
 
-      const isSame =
-        JSON.stringify(get().filters) === JSON.stringify(newFilters) &&
-        JSON.stringify(get().cellFilters) === JSON.stringify(newCellFilters) &&
-        JSON.stringify(get().requestDetailFilters) === JSON.stringify(newRequestDetailFilters) &&
-        JSON.stringify(get().resultDetailFilters) === JSON.stringify(newResultDetailFilters) &&
-        JSON.stringify(get().spreadTitleFilters) === JSON.stringify(newSpreadTitleFilters);
-
       set(state => {
-        state.filters = newFilters;
-        state.cellFilters = newCellFilters;
-        state.requestDetailFilters = newRequestDetailFilters;
-        state.resultDetailFilters = newResultDetailFilters;
+        if (activeSheet === 'cell') state.cellFilters = common;
+        else state.filters = common;
         state.spreadTitleFilters = newSpreadTitleFilters;
       });
-      return isSame;
+    },
+    // 하단 Search(AS-IS btnSearch→FindData_Detail/_Result_Detail) — **현재 활성 detail 시트**의 필터만
+    //   세팅한다. 상단 main 필터는 건드리지 않는다.
+    setDetailFilters: () => {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
+      const sp: SearchParamProps = { ...makeInitSearchParams(), ...get().searchParams };
+      const activeDetail = get().activeDetailSheet;
+
+      set(state => {
+        if (activeDetail === 'resultDetail') {
+          state.resultDetailFilters = {
+            divisionId: sp.divisionId,
+            fromYyyymmdd: sp.fromYyyymmdd2,
+            toYyyymmdd: sp.toYyyymmdd2,
+            modelId: sp.modelId2,
+            nickName: sp.nickName2,
+            sesUserId,
+            mnuId: MENU_ID,
+          };
+        } else {
+          state.requestDetailFilters = {
+            divisionId: sp.divisionId,
+            fromYyyymmdd: sp.fromYyyymmdd2,
+            toYyyymmdd: sp.toYyyymmdd2,
+            modelId: sp.modelId2,
+            nickName: sp.nickName2,
+            lotId: sp.lotId, // §2.9 dead parameter — SP 파라미터 목록에 없음, AS-IS 그대로 전달만 유지
+            requestorName: sp.requestor,
+            sesUserId,
+            mnuId: MENU_ID,
+          };
+        }
+      });
+    },
+    // AS-IS SpdMain_CellDoubleClick→FindData_Detail_DblClick(vItem, vToSite, vDate) 이식 — Pack 메인
+    //   그리드 SHIP_REQ 행의 Measure/날짜 셀 더블클릭 시 하단 Request Detail 을 그 행 item(MODEL_ID)·
+    //   toSite(TO_SITE=P_SCM_SITE_ID)로 좁혀 재조회한다. date 있으면 그 하루, 없으면 상단 Period 전체.
+    //   activeDetailSheet 를 requestDetail 로 맞춰 쿼리 enabled 게이트를 연다(SP GET_REQUEST_DETAIL_PACK 배포됨).
+    drillDetailFromMain: (modelId, scmSiteId, date) => {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
+      const sp: SearchParamProps = { ...makeInitSearchParams(), ...get().searchParams };
+      const from = date ?? sp.fromYyyymmdd;
+      const to = date ?? sp.toYyyymmdd;
+      set(state => {
+        state.activeDetailSheet = 'requestDetail';
+        state.requestDetailFilters = {
+          divisionId: sp.divisionId,
+          fromYyyymmdd: from,
+          toYyyymmdd: to,
+          modelId,
+          scmSiteId,
+          nickName: sp.nickName2,
+          lotId: sp.lotId, // §2.9 dead parameter — 타입상 필수라 전달만 유지(AS-IS 미반영)
+          requestorName: sp.requestor,
+          sesUserId,
+          mnuId: MENU_ID,
+        };
+      });
     },
     // Division 은 고정값이라 재선택 트리거는 없으나, 화면 재진입/그리드 탭 전환 시 전 시트
     //   filters 무효화(nscm-patterns.md §5-5 준용).
@@ -250,6 +292,13 @@ export const useShipmentRequestPackStore = createPersistedStoreWithTab<
           }
         }
       })();
+    },
+    // Measure 설정(btnMeasure) 적용 — 활성 시트의 표시 measure 코드 목록(null=전체) 저장. 그리드는
+    //   이 목록으로 행(MEASURE)을 필터해 표시한다(페이지 packRowsShown/cellRowsShown).
+    applyVisibleMeasures: (sheet, codes) => {
+      set(state => {
+        state.visibleMeasures = { ...get().visibleMeasures, [sheet]: codes };
+      });
     },
     // 개인화 조회조건 복원 (SubTitle F6 저장분 되불러오기) — 형제 화면(shipment-plan-mobility-it) 파리티.
     //   진입 시 GET /admin/menu/{MENU_ID}/search-conditions → paramNm/paramCtn 을 searchParams 에 역직렬화.

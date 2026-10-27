@@ -1,0 +1,8 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,M_{?a.Field<string>(DefColumns.YYYYMM)},CODE,SCP0047_KPI_Target,SCP0047_KPI_Target.cs:195,a.Field<string>(DefColumns.YYYYMM_NAME),Number,,None,코드 선언 FPMerge.None,75,true,,,,foreach(a in dtCalendar.AsEnumerable())
+KPI Target,DEPT_ID,META,,META SCM_MST_SHEET_COLUMNS(SCP0047/KPI Target),DEPT_ID,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),60,N,C,,,
+KPI Target,DEPT_NM,META,,META SCM_MST_SHEET_COLUMNS(SCP0047/KPI Target),Department,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),140,Y,L,,,
+KPI Target,DIVISION_ID,META,,META SCM_MST_SHEET_COLUMNS(SCP0047/KPI Target),DIVISION_ID,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,N,L,,,
+KPI Target,DIVISION_NAME,META,,META SCM_MST_SHEET_COLUMNS(SCP0047/KPI Target),Division,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),140,Y,L,,,
+KPI Target,KPI_ID,META,,META SCM_MST_SHEET_COLUMNS(SCP0047/KPI Target),KPI_ID,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),60,N,C,,,
+KPI Target,KPI_NM,META,,META SCM_MST_SHEET_COLUMNS(SCP0047/KPI Target),KPI,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),140,Y,L,,,

@@ -1,0 +1,264 @@
+{
+ "version": 2,
+ "menu_id": "SSP0025",
+ "asis_id": "SSP0025",
+ "generated": "2026-10-26T12:59:24",
+ "mapping_file": "nscm-fe\\features\\shipping\\src\\pages\\shipment-requestor-pic\\__asis-mapping__.md",
+ "rows": 565,
+ "fe_rows": 55,
+ "action_rows": 510,
+ "fe_page": "nscm-fe\\features\\shipping\\src\\pages\\shipment-requestor-pic",
+ "fe_mapping_missing": false,
+ "verdict": {
+  "FAIL": 45,
+  "미검증": 519,
+  "해당없음": 1
+ },
+ "instances": 384,
+ "instance_result": {
+  "FAIL": 45,
+  "NOT_RUN": 137,
+  "REVIEW": 126,
+  "PASS": 27,
+  "NOPATH": 41,
+  "NA": 1,
+  "TODO": 7
+ },
+ "by_layer": {
+  "동적 생성·조회": {
+   "FAIL": 45,
+   "REVIEW": 62,
+   "PASS": 9,
+   "NOPATH": 1,
+   "NOT_RUN": 16
+  },
+  "공통 기능": {
+   "NOT_RUN": 3
+  },
+  "정적 디자인": {
+   "REVIEW": 13,
+   "NOT_RUN": 18,
+   "PASS": 2,
+   "NOPATH": 2
+  },
+  "DB 실행·접근": {
+   "REVIEW": 2,
+   "PASS": 7,
+   "NOT_RUN": 5
+  },
+  "권한": {
+   "NOT_RUN": 1
+  },
+  "편집·검증": {
+   "REVIEW": 23,
+   "PASS": 9,
+   "NOT_RUN": 46,
+   "NOPATH": 3
+  },
+  "CRUD": {
+   "NOT_RUN": 2,
+   "NOPATH": 2
+  },
+  "Cascade": {
+   "REVIEW": 14,
+   "NA": 1,
+   "NOT_RUN": 32
+  },
+  "팝업": {
+   "NOPATH": 20,
+   "NOT_RUN": 14,
+   "REVIEW": 6
+  },
+  "콤보 후보": {
+   "NOPATH": 13,
+   "TODO": 7,
+   "REVIEW": 6
+  }
+ },
+ "by_check": {
+  "A1": {
+   "REVIEW": 9
+  },
+  "A10": {
+   "NOT_RUN": 1
+  },
+  "A5": {
+   "REVIEW": 4,
+   "NOT_RUN": 3
+  },
+  "A6": {
+   "REVIEW": 1,
+   "NOT_RUN": 2
+  },
+  "B1": {
+   "NOPATH": 3
+  },
+  "B2": {
+   "NOPATH": 3
+  },
+  "B3": {
+   "TODO": 7,
+   "REVIEW": 3
+  },
+  "B4": {
+   "NOPATH": 7,
+   "REVIEW": 3
+  },
+  "C1": {
+   "REVIEW": 1,
+   "NOT_RUN": 4
+  },
+  "C2": {
+   "NOT_RUN": 8,
+   "REVIEW": 4
+  },
+  "C3": {
+   "NOT_RUN": 12,
+   "REVIEW": 5
+  },
+  "C4": {
+   "NA": 1
+  },
+  "C6": {
+   "NOT_RUN": 8,
+   "REVIEW": 4
+  },
+  "D1": {
+   "REVIEW": 7,
+   "NOT_RUN": 13
+  },
+  "D3": {
+   "REVIEW": 7,
+   "NOT_RUN": 13
+  },
+  "D4": {
+   "NOT_RUN": 2,
+   "REVIEW": 1
+  },
+  "D5": {
+   "NOT_RUN": 6,
+   "REVIEW": 1
+  },
+  "D6": {
+   "NOT_RUN": 1
+  },
+  "DB-SYN": {
+   "PASS": 7
+  },
+  "E3": {
+   "PASS": 9
+  },
+  "E4": {
+   "REVIEW": 7,
+   "NOT_RUN": 11
+  },
+  "E5": {
+   "NOPATH": 3
+  },
+  "F1": {
+   "NOT_RUN": 1
+  },
+  "F2": {
+   "NOPATH": 1
+  },
+  "F4": {
+   "REVIEW": 2,
+   "NOT_RUN": 5
+  },
+  "F5": {
+   "NOT_RUN": 1
+  },
+  "F6": {
+   "NOPATH": 1
+  },
+  "G03-WIRE": {
+   "NOPATH": 1
+  },
+  "G1": {
+   "REVIEW": 7,
+   "NOT_RUN": 7
+  },
+  "G3": {
+   "NOT_RUN": 1
+  },
+  "G4": {
+   "REVIEW": 1,
+   "NOT_RUN": 5,
+   "NOPATH": 2
+  },
+  "G5": {
+   "NOPATH": 11,
+   "REVIEW": 2
+  },
+  "G6": {
+   "REVIEW": 1,
+   "NOT_RUN": 5
+  },
+  "H10": {
+   "PASS": 1
+  },
+  "H2": {
+   "REVIEW": 4,
+   "NOT_RUN": 3
+  },
+  "H3": {
+   "NOT_RUN": 1
+  },
+  "H4": {
+   "NOT_RUN": 1
+  },
+  "H5": {
+   "REVIEW": 4,
+   "NOT_RUN": 3
+  },
+  "H6": {
+   "NOPATH": 9,
+   "REVIEW": 2,
+   "NOT_RUN": 2
+  },
+  "I1": {
+   "NOT_RUN": 1
+  },
+  "J2": {
+   "NOT_RUN": 1
+  },
+  "K-SA": {
+   "NOT_RUN": 1
+  },
+  "K4": {
+   "NOT_RUN": 1
+  },
+  "M3": {
+   "NOT_RUN": 1
+  },
+  "M4": {
+   "NOT_RUN": 11,
+   "REVIEW": 2
+  },
+  "SC1": {
+   "NOT_RUN": 1
+  },
+  "X-LOC": {
+   "FAIL": 45,
+   "PASS": 9
+  },
+  "X-REASON": {
+   "PASS": 1
+  },
+  "X-REOPEN": {
+   "NOT_RUN": 1
+  },
+  "X-ROW": {
+   "REVIEW": 44
+  }
+ },
+ "todo_checks": {
+  "B3": 10
+ },
+ "unverified_reasons": {
+  "REVIEW": 462,
+  "NOPATH": 259,
+  "NOT_RUN": 898,
+  "TODO": 8
+ }
+}

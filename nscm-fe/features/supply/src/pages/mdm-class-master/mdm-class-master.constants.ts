@@ -32,7 +32,7 @@ export const EDITABLE_COLUMNS = ['ITEM_TYPE', 'PROCESS_GROUP', 'PROCESS_DETAIL']
 export const LBL = {
   CLASS_ID: 'LBL00017', // Class ID (KO/EN/CN 등재)
   CLASS_NAME: 'LBL00035', // Class Name (KO/EN/CN 등재)
-  USE_FLAG: 'LBL01131', // Use Flag (KO/EN/CN 등재)
+  USE_FLAG: 'LBL00007', // Active (조회조건 명칭 변경 — 사용자 지시 2026-10-20. LBL00007 'Active' KO/EN/CN 실측. 콤보는 Y/N 유지)
   SEARCH: 'LBL00112', // Search (표준 LBL00112)
 } as const;
 

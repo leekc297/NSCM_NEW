@@ -1,13 +1,46 @@
 // SCP0015 레이아웃 — AS-IS splitContainer1/2 상하 분할(design 01 §1) 대응
 .tableWrapper {
-  display: flex;
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-height: 0;
-  flex-direction: column;
+
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+
+  // react-resizable-panels v4 의 Panel 은 자식을 2중 div 로 감싼다 — 바깥 div[data-panel] 안쪽에
+  // overflow:auto + display 미지정(=block) 인 콘텐츠 래퍼가 있다. block 이면 그리드가 데이터만큼만
+  // 커지고 Panel 높이(반반 분할)를 못 채운다 — 래퍼를 flex 로 바꿔 Panel 높이를 정확히 채운다
+  // (constraint-mgmt·SYS0010 동일 처방). PanelSeparator 는 자식이 없어 매칭되지 않는다.
+  > div > div {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
+// PanelSeparator 는 기본 높이 0 + 커서 없음이라 잡을 영역이 없다 — 두께/커서/중앙선을 직접 준다.
+// inline style 로 flexGrow/flexShrink:0 이 걸리므로 두께는 flex-basis 가 아니라 height 로 지정한다.
 .splitBar {
-  flex: 0 0 5px; // AS-IS SplitterWidth=5(드래그 리사이즈 가능)
+  height: 16px;
+  cursor: row-resize;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
 }
 
 .engineSection {
@@ -22,6 +55,8 @@
 }
 
 .engineGrid {
-  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
   min-height: 0;
 }

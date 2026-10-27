@@ -1,4 +1,4 @@
-# 완료 정의(DoD) — SCP0011 2026-10-20 04:44
+# 완료 정의(DoD) — SCP0011 2026-10-23 02:54
 
 22/35 충족
 
@@ -38,4 +38,4 @@
 | B22 | ✅ | 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0011_GET_PROD_MODEL_TITLE · 시트 'modelTitle') | IN 18개 일치 |
 | B24 | ✅ | As-is Form_Load 초기 조회기간(InitValue/GetDayRange) → store 초기값 | As-is: dCalendar.InitValue = GetDayRange(); / dCalendar.InitValue = GetDayRange(); — 프레임워크 유틸 호출은 flow.csv 에 없으므로 .cs 를 직접 읽어 채운다(DateUtil.GetDayRange = SCM0001_GET_SCP_MONTH_PERIOD, Doc/tobefacts/db/proc_meta.csv 의 dayRange 배선 참조) |
 | B26 | ✅ | RESPONSE_SET 응답 키 = 사내 PROC_M OUT COL_NM(proc_params.csv) | 3키 일치 |
-| B27 | ❌ | 동적 헤더 원천 SCP0009_GET_SHEET_CALENDAR_3SPAN → FE 조회 | As-is GetSpdTitle → SCP0009_GET_SHEET_CALENDAR_3SPAN [sp명+메서드] · 사내 배선 시트 'calendar'(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN)를 FE 가 조회하지 않음 → 기간 컬럼이 그려지지 않음. SHEETS 에 시트 추가 + useTabProcQuery 로 조회기간을 넘겨 o_rc1(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)로 헤더 생성(As-is InitSpreadDateColumn 1:1) |
+| B27 | ❌ | 동적 헤더 원천 SCP0009_GET_SHEET_CALENDAR_3SPAN → FE 조회 | As-is GetSpdTitle → SCP0009_GET_SHEET_CALENDAR_3SPAN [sp명+메서드 + grid_code DB루프 InitSpreadDateColumn:462,InitSpreadDateColumn:466] · 사내 배선 시트 'calendar'(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN)를 FE 가 조회하지 않음 → 기간 컬럼이 그려지지 않음. SHEETS 에 시트 추가 + useTabProcQuery 로 조회기간을 넘겨 o_rc1(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)로 헤더 생성(As-is InitSpreadDateColumn 1:1) |

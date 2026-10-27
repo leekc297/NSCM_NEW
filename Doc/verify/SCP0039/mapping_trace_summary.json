@@ -1,0 +1,233 @@
+{
+ "version": 2,
+ "menu_id": "SCP0039",
+ "asis_id": "SCP0039",
+ "generated": "2026-10-26T12:53:41",
+ "mapping_file": "nscm-fe\\features\\supply\\src\\pages\\master-validation\\__asis-mapping__.md",
+ "rows": 362,
+ "fe_rows": 22,
+ "action_rows": 340,
+ "fe_page": "nscm-fe\\features\\supply\\src\\pages\\master-validation",
+ "fe_mapping_missing": false,
+ "verdict": {
+  "FAIL": 13,
+  "미구현": 2,
+  "미검증": 346,
+  "해당없음": 1
+ },
+ "instances": 170,
+ "instance_result": {
+  "FAIL": 15,
+  "REVIEW": 83,
+  "NOT_RUN": 48,
+  "NOPATH": 9,
+  "NA": 8,
+  "TODO": 1,
+  "BLOCKED": 4,
+  "PASS": 2
+ },
+ "by_layer": {
+  "동적 생성·조회": {
+   "FAIL": 15,
+   "REVIEW": 43,
+   "NOT_RUN": 8,
+   "BLOCKED": 1,
+   "NOPATH": 1
+  },
+  "DB 실행·접근": {
+   "REVIEW": 10,
+   "NOT_RUN": 3,
+   "NOPATH": 2,
+   "PASS": 1
+  },
+  "권한": {
+   "NOT_RUN": 1
+  },
+  "CRUD": {
+   "NOT_RUN": 2,
+   "NOPATH": 1
+  },
+  "편집·검증": {
+   "NA": 3,
+   "NOT_RUN": 12,
+   "REVIEW": 5
+  },
+  "콤보 후보": {
+   "NOPATH": 1,
+   "TODO": 1,
+   "REVIEW": 8
+  },
+  "Cascade": {
+   "REVIEW": 5,
+   "NA": 5,
+   "NOT_RUN": 8
+  },
+  "팝업": {
+   "NOT_RUN": 5,
+   "NOPATH": 3,
+   "BLOCKED": 3,
+   "REVIEW": 3
+  },
+  "정적 디자인": {
+   "NOT_RUN": 8,
+   "REVIEW": 9,
+   "PASS": 1,
+   "NOPATH": 1
+  },
+  "공통 기능": {
+   "NOT_RUN": 1
+  }
+ },
+ "by_check": {
+  "A1": {
+   "REVIEW": 8
+  },
+  "A10": {
+   "NOT_RUN": 1
+  },
+  "A5": {
+   "NOT_RUN": 2,
+   "REVIEW": 1
+  },
+  "A6": {
+   "REVIEW": 5,
+   "NOT_RUN": 1
+  },
+  "B3": {
+   "TODO": 1,
+   "REVIEW": 4
+  },
+  "B4": {
+   "NOPATH": 1,
+   "REVIEW": 4
+  },
+  "C1": {
+   "REVIEW": 1,
+   "NOT_RUN": 2
+  },
+  "C2": {
+   "NA": 2
+  },
+  "C3": {
+   "REVIEW": 4,
+   "NOT_RUN": 6
+  },
+  "C4": {
+   "NA": 1
+  },
+  "C6": {
+   "NA": 2
+  },
+  "D1": {
+   "REVIEW": 1,
+   "NOT_RUN": 3
+  },
+  "D3": {
+   "REVIEW": 1,
+   "NOT_RUN": 3
+  },
+  "D4": {
+   "NA": 1
+  },
+  "D5": {
+   "NA": 1
+  },
+  "D6": {
+   "NOT_RUN": 1
+  },
+  "DB-SYN": {
+   "REVIEW": 4,
+   "NOPATH": 2,
+   "PASS": 1
+  },
+  "E3": {
+   "NA": 1
+  },
+  "E4": {
+   "REVIEW": 3,
+   "NOT_RUN": 5
+  },
+  "F1": {
+   "NOT_RUN": 1
+  },
+  "F2": {
+   "NOPATH": 1
+  },
+  "F4": {
+   "REVIEW": 6,
+   "NOT_RUN": 3
+  },
+  "F5": {
+   "NOT_RUN": 1
+  },
+  "G03-WIRE": {
+   "NOPATH": 1
+  },
+  "G1": {
+   "REVIEW": 5,
+   "NOT_RUN": 3
+  },
+  "G4": {
+   "NOT_RUN": 2,
+   "NOPATH": 1
+  },
+  "G5": {
+   "NOPATH": 2,
+   "BLOCKED": 1,
+   "REVIEW": 1
+  },
+  "G6": {
+   "NOT_RUN": 2
+  },
+  "H2": {
+   "NOT_RUN": 2,
+   "REVIEW": 1
+  },
+  "H5": {
+   "NOT_RUN": 2,
+   "REVIEW": 1
+  },
+  "H6": {
+   "NOT_RUN": 1,
+   "NOPATH": 1,
+   "BLOCKED": 1,
+   "REVIEW": 1
+  },
+  "J2": {
+   "NOT_RUN": 1
+  },
+  "K4": {
+   "NOT_RUN": 1
+  },
+  "M4": {
+   "NOT_RUN": 4,
+   "BLOCKED": 1,
+   "REVIEW": 1
+  },
+  "X-LOC": {
+   "FAIL": 13
+  },
+  "X-NOTIMPL": {
+   "FAIL": 2
+  },
+  "X-REASON": {
+   "REVIEW": 6,
+   "PASS": 1
+  },
+  "X-REOPEN": {
+   "NOT_RUN": 1
+  },
+  "X-ROW": {
+   "REVIEW": 25,
+   "BLOCKED": 1
+  }
+ },
+ "todo_checks": {
+  "B3": 5
+ },
+ "unverified_reasons": {
+  "REVIEW": 417,
+  "NOPATH": 19,
+  "NOT_RUN": 176
+ }
+}

@@ -234,6 +234,7 @@ export const MSG = {
   READ_ONLY: 'MSG00109', // 읽기전용 상태입니다.
   INSERT_GUIDE: 'MSG00662', // 조회 후 수정 모드로 가능합니다. (SCM_ADM_MSG_M 실측 2026-09-14 KO/EN/CN 등록 — 신규행 추가 사전조건 안내)
   REQUIRED_POSITIVE: 'MSG01035', // {0} 초과의 값만 입력 가능합니다. (SCM_ADM_MSG_M 등록 2026-09-15 KO/EN/CN — AS-IS 초과 규칙 {0}=0, PRIORITY/TACT_TIME>0. 구 MSG00225 "0 이상/수량" 은 초과 의미 불일치라 교체)
+  CONFIRM_RESEARCH_UNSAVED: 'MSG00703', // 저장하지 않은 변경 사항이 있습니다. 다시 조회하시겠습니까? (SSP 화면 공용)
   WORKING_DATA_EXIST: 'MSG00137', // 이전 작업이 아직 실행 중입니다. 잠시 후 다시 시도해주세요.
   TACT_MAX_CLAMP: 'MSG00203', // SCM_ADM_MSG_M 미등록 확인(2026-09-25 ora.py 실측 0행) — 영문 fallback. 등록 필요.
 } as const;

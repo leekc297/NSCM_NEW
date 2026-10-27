@@ -1,0 +1,26 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0049,SQL,PR_UI_FP03033_MODEL_MEASURECONVERSION,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SCP0049,SQL,SCP0049_GET_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_GET_CAPA.sql,3657,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,0,정적
+SCP0049,SQL,SCP0049_GET_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_GET_CAPA.sql,3692,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,0,정적
+SCP0049,SQL,SCP0049_GET_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_GET_CAPA.sql,4064,ELSE,ITEM_ID,SET @MEXEC = @MEXEC+'							ORDER BY R.ITEM_ID) AS ROW_RANKING												        ' + CHAR(10);,2,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SCP0049,SQL,SCP0049_GET_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_GET_CAPA.sql,6996,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,0,정적
+SCP0049,SQL,SCP0049_GET_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_GET_CAPA.sql,7367,ELSE,ITEM_ID,SET @MEXEC = @MEXEC+'							ORDER BY R.ITEM_ID) AS ROW_RANKING												' + CHAR(10);,2,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SCP0049,SQL,UP_FX_GetReqAuthMyListAdded,Doc\asisfacts\db\modules\dbo.UP_FX_GetReqAuthMyListAdded.sql,147,,"GROUP_ID,DIVISION_ID,PLANT_ID","Order by a.group_id, a.division_id, a.plant_id",0,정적
+SCP0049,SQL,SCP0049_GET_DAY_RANGE,Doc\asisfacts\db\modules\dbo.SCP0049_GET_DAY_RANGE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0049,SQL,PR_UI_SCP0049_FIND,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SCP0049,SQL,SCP0049_GET_SHEET_CALENDAR,Doc\asisfacts\db\modules\dbo.SCP0049_GET_SHEET_CALENDAR.sql,130,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적
+SCP0049,SQL,SCP0049_GET_SHEET_USER_TITLE,Doc\asisfacts\db\modules\dbo.SCP0049_GET_SHEET_USER_TITLE.sql,78,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO,0,정적
+SCP0049,SQL,SCP0049_GET_SHEET_USER_TITLE,Doc\asisfacts\db\modules\dbo.SCP0049_GET_SHEET_USER_TITLE.sql,153,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO,0,정적
+SCP0049,SQL,PR_UI_FP01886_AUTHORITY_REQUEST,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SCP0049,SQL,SCP0049_SAVE_MAIL_SEND_REQUEST,Doc\asisfacts\db\modules\dbo.SCP0049_SAVE_MAIL_SEND_REQUEST.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0049,SQL,PR_SCM_SYS_LOG_BATCH,Doc\asisfacts\db\modules\dbo.PR_SCM_SYS_LOG_BATCH.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0049,SQL,SCP0049_SAVE_CAPA,Doc\asisfacts\db\modules\dbo.SCP0049_SAVE_CAPA.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0049,SQL,SCP0049_GET_NEW_MODEL,Doc\asisfacts\db\modules\dbo.SCP0049_GET_NEW_MODEL.sql,523,,SORT_ORDER_NO,ORDER BY SORT_ORDER_NO;,0,정적
+SCP0049,SQL,SCP0049_GET_NEW_MODEL,Doc\asisfacts\db\modules\dbo.SCP0049_GET_NEW_MODEL.sql,582,IF( @debug_mode ='T'),DIVISION_ID,SET @MEXEC = @MEXEC+'		 ORDER BY A.DIVISION_ID										' + CHAR(10);,0,동적 SQL
+SCP0049,SQL,SCP0049_GET_SHEET_CALENDAR_POPUP,Doc\asisfacts\db\modules\dbo.SCP0049_GET_SHEET_CALENDAR_POPUP.sql,41,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적
+SCP0049,SQL,SCP0049_SAVE_NEW_MODEL,Doc\asisfacts\db\modules\dbo.SCP0049_SAVE_NEW_MODEL.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0049,SQL,SCP0049_SAVE_NEW_VERSION,Doc\asisfacts\db\modules\dbo.SCP0049_SAVE_NEW_VERSION.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0049,SQL,SCP0049_GET_NEW_VERSION_INFO,Doc\asisfacts\db\modules\dbo.SCP0049_GET_NEW_VERSION_INFO.sql,63,,VERSION_ID,ORDER BY VERSION_ID ASC,0,정적
+SCP0049,CODE,,06.UIL\GSCM.FP.Forms.UIL\CAPA\SCP0049_CAPA.UIL\SCP0049_CAPA.cs,488,,SORT_ORDER,"tmpDivision.DefaultView.Sort = ""SORT_ORDER Asc"";",0,화면 코드 정렬
+SCP0049,CODE,,06.UIL\GSCM.FP.Forms.UIL\CAPA\SCX0049_CAPA.UIL\SCP0049_CAPA.cs,341,,SORT_ORDER,"tmpDivision.DefaultView.Sort = ""SORT_ORDER Asc"";",0,화면 코드 정렬
+SCP0049,CODE,,06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0049_CAPA\SCP0049_CAPA.cs,290,,SORT_ORDER,"tmpDivision.DefaultView.Sort = ""SORT_ORDER Asc"";",0,화면 코드 정렬

@@ -1,5 +1,6 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -11,13 +12,12 @@ import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@s
 import { ProgressIndicator } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
-import { ItemByDivisionModal } from './components/modals/ItemByDivisionModal';
+import { ElectrodeItemByDivisionModal } from './components/modals/ElectrodeItemByDivisionModal';
 import { ShipmentMasterElectrodeForm } from './components/ShipmentMasterElectrodeForm';
 import { ShipmentMasterElectrodeGrid } from './components/ShipmentMasterElectrodeGrid';
 import { useShipmentMasterElectrodeValidation } from './hooks/useShipmentMasterElectrodeValidation';
 import {
   EDIT_EDITABLE_COLUMNS,
-  LBL,
   MAIN_COLUMNS,
   MENU_ID,
   MSG,
@@ -123,23 +123,15 @@ export const ShipmentMasterElectrode = ({ tabId, title }: PageProps<MENU_ID>) =>
   }, [tabId]);
 
   // 진입 시 SSP Planner 권한 확인(AS-IS GetSSPUserCheck / SP SSP0002, cs:877~899).
-  //   통과하면 편집 가능, 아니면 편집 차단. 거부(반환 0건)일 때만 MSG01261 을 띄운다 —
-  //   `available=false`(PKG_SSP0002 미배포·호출 실패)는 권한 거부가 아니라 환경 문제라 잘못된 문구를
-  //   띄우지 않고 편집만 막는다(false-success 방지, convert-core §2.4).
+  //   통과하면 편집 가능, 아니면 편집 차단(isEditMode=false). 진입 알럿(MSG01261)은 띄우지 않는다 —
+  //   비SSP(예: SSP Viewer)에겐 수정 버튼이 뜨지 않고 편집도 막히므로 진입 즉시 알림이 불필요하다
+  //   (사용자 지시 2026-10-22, SSP0015 와 동일 방침). AS-IS 도 이 메시지는 Edit 버튼 클릭 시에만 떴다.
   useEffect(() => {
     let alive = true;
     void (async () => {
       const res = await checkEditPermission();
       if (!alive) return;
       setIsEditMode(res.ok);
-      if (res.ok || !res.available) return;
-      void setAlert({
-        type: 'alert',
-        content: t(MSG.EDIT_NO_PERMISSION, {
-          defaultValue: 'This user does not have permission to the SSP Planner. User ID : {0}',
-          0: res.userId,
-        }),
-      });
     })();
     return () => {
       alive = false;
@@ -211,33 +203,31 @@ export const ShipmentMasterElectrode = ({ tabId, title }: PageProps<MENU_ID>) =>
     GridAction.addRow(g, newRow as Partial<WijmoRowItem>, 'above', true);
   };
 
-  // Delete — 신규행('I')만 즉시 제거. 기존행 삭제 불가(design 03 §3.4 cs:272).
+  // Delete — 공용 GridAction.removeRow(deleteOnlyNew=true)에 위임(grid.md GRID-04). 신규행('I')만 그리드에서
+  //   제거하고 기존행은 조용히 no-op 한다(AS-IS DeleteButton cs:272 guard return·표준 동일 — 메시지 없음).
+  //   화면별 splice 직접조작 금지(GRID-04): editableCollectionView.remove + insert-pin/mergeManager 정리를
+  //   공용 함수가 담당한다. 선택한 신규행 다건도 함께 제거된다(AS-IS 단건 → TO-BE 표준 selection 기준).
   const handleDelete = () => {
     const g = gridRef.current;
     if (!g) return;
-    const sel = g.selectedItems?.[0] as Record<string, unknown> | undefined;
-    if (!sel || sel.CRUD_TYPE !== 'I') {
-      void setAlert({
-        type: 'alert',
-        content: t(LBL.ONLY_NEW_ROWS_DELETABLE, '_Only new rows can be deleted.'),
-      });
-      return;
-    }
-    const source = g.collectionView?.sourceCollection ?? [];
-    for (let i = source.length - 1; i >= 0; i -= 1) {
-      if (source[i] === sel) source.splice(i, 1);
-    }
-    g.collectionView?.refresh();
+    GridAction.removeRow(g, true);
   };
 
-  // Material/Model 조회조건 팝업 확정 -> 텍스트 채움(다건 콤마). design 02 §4.6.
-  const handleMaterialSelected = (picked: PopupRow[]) => {
-    const ids = picked.map(r => str(r.MATERIAL_ID)).filter(Boolean).join(',');
-    if (ids) setSearchCondition({ materialId: ids });
+  // Material/Model(NickName) 조회조건 팝업 확정 -> 텍스트 채움(다건 콤마). 공용 MaterialByDivisionModal
+  //   setSelectedValue 시그니처: (items=ITEM_ID csv, itemName?, itemClassName?, nickName?). 사용자 지시 2026-10-22.
+  const handleMaterialSelected = (items: string) => {
+    if (items) setSearchCondition({ materialId: items });
   };
-  const handleModelSelected = (picked: PopupRow[]) => {
-    const ids = picked.map(r => str(r.MODEL_ID)).filter(Boolean).join(',');
-    if (ids) setSearchCondition({ modelId: ids });
+  // Model/NickName 통합 조회조건 — 품번(ITEM_ID)→modelId, 닉네임(NICK_NAME)→nickName 둘 다 세팅해
+  //   GET SP p_model_id + p_nick_name 양쪽을 채운다(다건 선택 시 nickName 은 첫 행 기준 — 모달 규약).
+  const handleModelSelected = (
+    items: string,
+    _itemName?: string,
+    _itemClassName?: string,
+    nickName?: string
+  ) => {
+    if (!items) return;
+    setSearchCondition({ modelId: items, nickName: nickName ?? '' });
   };
 
   // MATERIAL 셀팝업 확정 -> 신규행 10칸 일괄 채움(design 03 §3.2 cs:570~579).
@@ -335,7 +325,7 @@ export const ShipmentMasterElectrode = ({ tabId, title }: PageProps<MENU_ID>) =>
         }
         void setToast({
           type: 'success',
-          message: t(MSG.SAVE_SUCCESS, { defaultValue: '{0} data saved.', 0: dirty.length }),
+          message: t(MSG.SAVE_SUCCESS, '_{0} data saved.').replace('{0}', String(dirty.length)),
         });
         editTrackerRef.current?.clearChanges();
         // 저장 후에도 편집 가능 상태 유지(진입=편집 모드) — 재조회만 한다.
@@ -367,7 +357,7 @@ export const ShipmentMasterElectrode = ({ tabId, title }: PageProps<MENU_ID>) =>
     if (missing) {
       void setAlert({
         type: 'alert',
-        content: t(MSG.REQUIRED_FIELD, { defaultValue: '{0} value is required.', 0: missing }),
+        content: t(MSG.REQUIRED_FIELD, '_{0} value is required.').replace('{0}', missing),
       });
       return;
     }
@@ -435,34 +425,41 @@ export const ShipmentMasterElectrode = ({ tabId, title }: PageProps<MENU_ID>) =>
         />
       </div>
 
-      {/* 조회조건 Material 검색 팝업 (SSP0024 전용 — 다중 선택, MaterialId 채움). */}
-      <ItemByDivisionModal
+      {/* 조회조건 Material 검색 팝업 — 공용 MaterialByDivisionModal(COM0013, 사용자 지시 2026-10-22,
+          Model/NickName 과 동일 팝업). 다건 선택(multiCheckbox) → MATERIAL_ID(ITEM_ID) csv 를 materialId 로.
+          Division 단일이라 multiDivision 불요. 한계: 이 모달엔 Plant Site 축이 없어 기존 Electrode 팝업이
+          넘기던 plantSite 사전필터는 빠진다(SSP0003 전환과 동일 기록). 그리드 MATERIAL '셀' 팝업은 신규행
+          10칸을 채워야 해 다컬럼 반환이 필요하므로 아래 ElectrodeItemByDivisionModal 로 유지한다. */}
+      <MaterialByDivisionModal
         open={openMaterial}
         modalClose={() => setOpenMaterial(false)}
         setSelectedValue={handleMaterialSelected}
+        multiCheckbox
         preSearchParams={{
           divisionId: sc.divisionId,
-          plantSiteId: sc.scmSiteIds.join(','),
-          materialId: sc.materialId,
+          operationGroup: '',
+          scpModuleType: MENU_ID,
+          itemId: sc.materialId,
         }}
-        callFromCell={false}
       />
 
-      {/* 조회조건 Model 검색 팝업 (SSP0024 전용 — 다중 선택, ModelId 채움). */}
-      <ItemByDivisionModal
+      {/* 조회조건 Model/NickName 검색 팝업 — 공용 MaterialByDivisionModal(COM0013). 다건 선택 →
+          품번(ITEM_ID) csv 를 modelId 로, 첫 행 NICK_NAME 을 nickName 으로(handleModelSelected). */}
+      <MaterialByDivisionModal
         open={openModel}
         modalClose={() => setOpenModel(false)}
         setSelectedValue={handleModelSelected}
+        multiCheckbox
         preSearchParams={{
           divisionId: sc.divisionId,
-          plantSiteId: sc.scmSiteIds.join(','),
-          materialId: sc.materialId,
+          operationGroup: '',
+          scpModuleType: MENU_ID,
+          itemId: sc.modelId,
         }}
-        callFromCell={false}
       />
 
       {/* 그리드 MATERIAL 셀 팝업 (단건 선택 -> 신규행 10칸 일괄 채움). design 03 §3.2. */}
-      <ItemByDivisionModal
+      <ElectrodeItemByDivisionModal
         open={openMaterialCell}
         modalClose={() => setOpenMaterialCell(false)}
         setSelectedValue={handleMaterialCellSelected}

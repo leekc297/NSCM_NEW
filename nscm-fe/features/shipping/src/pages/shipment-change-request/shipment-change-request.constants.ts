@@ -1,4 +1,8 @@
 export const MENU_ID = 'SSP0201' as const;
+
+// 저장 전 출하상태 재검사 call-proc 버튼코드 — API_ID `SSP0201_main_STATUS_CHECK`(SP: P_SSP0201_GET_SHIPMENT_STATUS).
+//   버튼맵/권한은 28_register_search_new_btn_auth.sql [B]STATUS_CHECK 블록에 등록(화면 버튼 아님, 백그라운드 검사).
+export const BTN_STATUS_CHECK = 'STATUS_CHECK' as const;
 export type MENU_ID = typeof MENU_ID;
 
 // AS-IS GSCM.SSP.Plan.UIL SSP0201_ShipmentChangeRequest (출하 변경 요청, 5838라인):
@@ -19,10 +23,11 @@ export type MENU_ID = typeof MENU_ID;
 //       _GET_SHIPMENT_REQUEST_DRAFTING / _GET_CHANGE_REQ_NO / _GET_ERP_SO_NO_CNT / _GET_SHIPMENT_STATUS /
 //       _SAVE_SHIPMENT_CONFIRM_NEW / _SAVE_SHIPMENT_REQUEST_DRAFTING / _SAVE_SHIPMENT_REQUEST_COMPLETE /
 //       _DELETE_SHIPMENT_REQUEST_DRAFTING.
-//   - 단, 버튼메타(SCM_ADM_MNU_BTN_MPG_M)는 SEARCH/SAVE/EDIT/INSERT + sub SEARCH **5행만** 등록돼 있다.
-//       DELETE · EXCEL · GET_CHANGE_REQ_NO · GET_SCP_DAY_PERIOD · GET_SHIPMENT_STATUS · GET_ERP_SO_NO_CNT ·
-//       SEARCH_NEW · SAVE_DRAFTING · SAVE_COMPLETE · USER_CHECK 미등록 → 해당 FE 경로는 메타 등록 후 배선.
-//       (자매 SSP0200 은 18행 등록. 등록 SQL 은 다음 회차 산출물.)
+//   - 단, 버튼메타(SCM_ADM_MNU_BTN_MPG_M)는 초기 SEARCH/SAVE/EDIT/INSERT + sub SEARCH **5행만**이었고
+//       증분 등록으로 DELETE(21_) · SEARCH_NEW/STATUS_CHECK(28_) · GET_SCP_DAY_PERIOD(32_) · EXCEL(33_)
+//       을 보강했다. EXCEL 은 클라이언트 그리드 export 라 API_ID 없이 버튼맵만 등록(hasButton('EXCEL')→공용 SubTitle 기본 핸들러).
+//       GET_CHANGE_REQ_NO · GET_ERP_SO_NO_CNT · USER_CHECK 는 아직 미등록 → 해당 FE 경로는 메타 등록 후 배선.
+//       (자매 SSP0200 은 18행 등록.)
 export enum SHEETS {
   MAIN = 'main', // spdMain "Shipment Change Request" (65컬럼)
   SUB = 'sub', // spdSub "Change Request" (58컬럼, 읽기전용)
@@ -55,13 +60,61 @@ export const ADMIN_SHEET_NAME: Record<SHEETS, string> = {
 export const COMBO = {
   DIVISION: 'MyDivision',
   TO_SITE: 'ShipmentPlanToSite_SCP',
-  FROM_SITE: 'ShipmentPlanPlantSite_SCP', // CN-1: OSP팩 의미 등가 미검증(확인필요)
+  FROM_SITE: 'ShipmentPlanPlantSite_SCP', // CN-1 해소 — 아래 CELL_FROM_SITE 주석 참조
+  // ── 그리드 셀 콤보(From/To Site) — 신규행 편집·복제값 표시용 dataMap 공급원 ──
+  //   두 콤보 모두 `CODE=SCM_SITE_ID` / `NAME=SITE_DESCRIPTION` 이라, 셀에는 **코드가 저장되고
+  //   화면에는 설명이 보인다**. 저장 payload(`P_FROM_SITE`/`P_TO_SITE`)가 site_id 를 요구하므로
+  //   이 대응이 성립해야 복제·저장이 동시에 맞는다(dataMap 없으면 코드가 날것으로 보인다).
+  //
+  //   **CELL_FROM_SITE 는 조회조건과 같은 `ShipmentPlanPlantSite_SCP` 다(CN-1 해소, 측정 근거).**
+  //   AS-IS 는 `Data.UserPlantSiteByDivisionOspPack`(OSP 팩, C# 전용 메서드라 CMBO 미등록)를 쓴다.
+  //   자매 SSP0200 은 셀 From Site 에 `PlantSiteByDivisionEEOperation_SCP` 를 쓰지만 그 SQL 은
+  //   `NOT EXISTS(... OPERATION_GROUP='P' AND OSP_YN='Y')` 로 **OSP 패커 사이트를 배제**한다 —
+  //   SSP0201 은 Packer 화면이라 정반대다. ora.py 실측(2026-10-13): SSP0201 이 실제로 쓰는
+  //   From Site 12종 중 `PlantSiteByDivisionEEOperation_SCP` 커버리지 **0/12**,
+  //   `ShipmentPlanPlantSite_SCP` **12/12**. 자매 값을 베끼면 전 행이 매칭 실패한다.
+  CELL_FROM_SITE: 'ShipmentPlanPlantSite_SCP',
+  //   셀 To Site 는 조회조건(`ShipmentPlanToSite_SCP`)과 **다른 SQL_ID** 다 — AS-IS
+  //   `ToSiteByDivisionEEForSSP`(cs:2478) 의 TO-BE 등가(design 03 §1.3-B).
+  CELL_TO_SITE: 'ToSiteByDivisionEEForSSP_SCP',
+  //   셀 End Customer — 신규행 div40 필수 편집셀. per-row 재조회(div/toSite/item + 상수 param5='P').
+  //   AS-IS setEndCustomer(div,toSite,item,fromSite,'P')(cs:5743) 의 TO-BE 등가.
+  //   메타 cascade(PARAM10='D')로는 상수 'P' 를 못 실어(ATTRIBUTE2 는 행컬럼 바인드 전용) FE 가 직접
+  //   행별로 조회해 dataMap 을 교체한다(From/To Site 와 같은 FE dataMap 처방, 단 per-row 스왑).
+  //   콤보 바인드는 @divisionId/@scmSiteId/@itemId/@param5 — fromSite 는 TO-BE 콤보 바인드가 아니다
+  //   (05_runtime-parity §콤보 ora.py 실측, SSP0200 과 동일 콤보·바인드. SSP0200 은 param5='' 비-packer,
+  //   SSP0201 은 param5='P' packer 분기).
+  CELL_END_CUSTOMER: 'EndCustomerByItemForSSP_SCP',
+  // 요청정보 Change Reason — 그리드 셀 콤보(META_COMBO.CHANGE_REASON_CODE)와 같은 SQL_ID 다.
+  //   다만 요청정보는 화면이 직접 호출하므로 @lookupType/@mnuId 를 **명시 전달**해야 한다(LOOKUP 주석).
+  CHANGE_REASON: 'CHANGE_REASON_CODE_ALL',
+  // 요청정보 Requestor Dept — AS-IS 는 `UserInfoContext["Dept_ID"]/["Dept_Name"]`(cs:521~526)를 쓰는데
+  //   TO-BE UserSession 에는 부서 필드가 없다(groupId/langCd/userId/userEngNm/userNm/div/menus 뿐).
+  //   -> 로그인 사용자 부서를 주는 기등록 콤보로 보완한다(자매 SSP0200 과 동일 축).
+  //   `SalesPlanUserDept` = SELECT DEPT_ID CODE, DEPT_ID NAME FROM SCM_ADM_USER_M WHERE USER_ID=@sesUserId
+  //   (ora.py 본문 실측 2026-10-13, USE_YN='Y'). @sesUserId 는 BE 주입이라 화면은 파라미터를 싣지 않는다.
+  REQUESTOR_DEPT: 'SalesPlanUserDept',
+  // 부서ID -> 부서명. 본문 WHERE 가 `DEPT_ID LIKE '%'||@deptId||'%' OR DEPT_NAME_KO LIKE …` OR 체인이라
+  //   과다 매칭된다 — 호출부가 CODE 완전일치로 좁힌다. @param1=langCd 로 KO/EN/CN 분기.
+  DEPT_NAME: 'Dept',
 } as const;
 
 export const LOOKUP = {
   CHANGE_REQ_TYPE: 'CHANGE_REQ_TYPE', // Plan Type: P/C/N/A (ALL 없음, 기본 C)
   SHIPMENT_STATUS: 'SHIPMENT_STATUS', // Status: P/C/D/R (P 제외 + ALL 선두, 기본 ALL)
   SALES_TYPE_CODE: 'SALES_TYPE_CODE', // 그리드 FCST_TYPE 셀콤보
+  // `CHANGE_REASON_CODE_ALL`(CMBO_SQL) 의 @lookupType 인자값. 본문이
+  //   `WHERE A.LOOKUP_TYPE = @lookupType` 라 **미전달 시 BE 가 '' 로 치환**해 후보가 더미 '-' 1행만
+  //   남는다(ora.py 실측 2026-10-13: @lookupType='CHANGE_REASON_CODE' 8행 vs '' 1행).
+  //   Change Reason 은 요청완료 필수 4항목이라 이 값을 빠뜨리면 완료가 불가능해진다.
+  CHANGE_REASON_CODE: 'CHANGE_REASON_CODE',
+  // 출하일 상·하한 기준일수(dDay). MASTER 헤더가 SEGMENT1='CODE'/SEGMENT2='NAME' 라 응답 키는
+  //   CODE/NAME 이고 AS-IS `dtBaseDay.Rows[0][1]`(= NAME) 이 기준일수다(ora.py 실측 CODE='D'/NAME='-56').
+  CHANGE_REQ_DAY: 'CHANGE_REQ_DAY',
+  // 저장 시 출하일 허용범위 기준(AS-IS SHIPMENT_PERIOD_DAY inner-table, cs:347/490). CODE/NAME 2행:
+  //   '1D+'/NAME=상한일수(today+N), '2D-'/NAME=하한일수(today-N). ora.py·BE log 실측 +56 / -30.
+  //   완료 경로의 CHANGE_REQ_DAY(-56)와 다른 축이다 — 저장은 이 범위(today-30~+56)로 막는다(MSG00194).
+  SHIPMENT_PERIOD_DAY: 'SHIPMENT_PERIOD_DAY',
 } as const;
 
 // 조회조건 sentinel/기본값 (design 02 §4)
@@ -70,13 +123,21 @@ export const FIXED_DIVISION = '40'; // R3: Division "40" 고정 + disabled
 export const DEFAULT_PLAN_TYPE = 'C'; // Plan Type 기본 Confirm (SelectedIndex=1)
 export const DEFAULT_STATUS = ALL; // Status 기본 ALL
 export const PLAN_TYPE_PLAN = 'P'; // Plan 분기(from=오늘+9D 재계산)
-export const PERIOD_OFFSET_DAY = '30'; // Period 기본 30일 (SCM0001_GET_SCP_DAY_PERIOD)
+export const PERIOD_OFFSET_DAY = '30'; // Period 기본 30일 (SCM0001_GET_SCP_DAY_PERIOD p_offset_day)
 export const PLAN_TYPE_P_FROM_OFFSET = 9; // Plan Type='P' 시 from = 오늘+9D (design 02 §3 cascade#2)
+// Period 기본값 SP 호출 버튼코드 — 공용 API SCM0001_SCP_DAY_PERIOD_GET(→PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD)
+//   을 /SSP0201/main/GET_SCP_DAY_PERIOD/call-proc 로 경유한다. 버튼맵/권한은 32_register_day_period_btn_auth.sql
+//   에 등록(화면 버튼 아님, 백그라운드 기간 산출 — 자매 SSP0200 05_register.sql:156 동일). dayjs 근사 금지(design 02 §5.4).
+export const BTN_DAY_PERIOD = 'GET_SCP_DAY_PERIOD' as const;
 
 // ====================================================================================
 // 그리드 셀 콤보 (design 03 §1.3)
 // ====================================================================================
 // A. 메타 구동 콤보(FPComboBox, admin 메타 정상 등록 — 자동 배선). CELL_COMBO_DATA_TYPE 로 DataGrid 자동.
+//    **참조용 상수다(코드 소비처 없음)** — 후보는 DataGrid 가 DB 메타로 직접 가져온다. 화면에서
+//    `useTabComboQueries` 로 다시 부르지 마라: 이 값들은 comboId 뿐이라 @lookupType/@mnuId 같은
+//    바인드가 빠지고, 실제로 그렇게 쓴 Change Reason 이 더미 1행만 받았다(2026-10-13 교정).
+//    화면이 직접 호출해야 하는 콤보는 위 `COMBO` 에 바인드 주석과 함께 둔다.
 export const META_COMBO = {
   SHIPMENT_STATUS: 'LookupCommon', // PARAM1=SHIPMENT_STATUS (lookup)
   FCST_TYPE: 'LookupCommon', // PARAM1=SALES_TYPE_CODE (lookup)
@@ -106,40 +167,12 @@ export const CASCADE_CELL_COMBO = {
 } as const;
 
 // ====================================================================================
-// 편집 화이트리스트 (design 03 §3.1 lock 39건)
+// 편집 축 (design 03 §3.1) — **열 잠금의 원천은 메타 INPUT_TP_CD** 다(표준 COL-02 / hook #130).
+//   종전 EXISTING_ROW_EDIT_COLUMNS / NEW_ROW_EDIT_COLUMNS 컬럼명 화이트리스트(`new Set([컬럼명])`)는
+//   제거하고 design/31_fix_main_input-tp-cd_standard-parity.sql 로 메타에 이관했다(IM/IO/M/O).
+//   공용 DataGrid 가 GridUtils.isEditableCell 로 열 축을, editLock.ts 의 isRowEditable 이 행 축을 판정한다
+//   (자매 SSP0200 과 동일 구조). 선행조건: 그 SQL 적용 — 미적용이면 메타 전건 'S'라 편집 전면 잠김.
 // ====================================================================================
-// 기존행 status='C' AND erp_status!='C' 일 때 편집가능한 컬럼셋(그 외 전부 잠금).
-export const EXISTING_ROW_EDIT_COLUMNS = [
-  'SHIPMENT_CONFIRM_QTY',
-  'SHIPMENT_DATE',
-  'TRANSPORT_MODE',
-  'CHANGE_REASON_CODE',
-  'CHANGE_REASON_DETAIL',
-  'REMARKS2',
-  'REMARKS',
-  'REMARKS3',
-  'TO_SITE_SHIPTO_CODE',
-] as const;
-
-// 신규행(action='I') 편집가능 컬럼셋 (design 03 §3.1 :747-750).
-export const NEW_ROW_EDIT_COLUMNS = [
-  'ITEM_ID',
-  'FCST_TYPE',
-  'FROM_SITE_DESCRIPTION',
-  'TO_SITE_DESCRIPTION',
-  'INCOTERMS',
-  'SHIPMENT_CONFIRM_QTY',
-  'SHIPMENT_DATE',
-  'TRANSPORT_MODE',
-  'CHANGE_REASON_CODE',
-  'CHANGE_REASON_DETAIL',
-  'REMARKS2',
-  'REMARKS',
-  'REMARKS3',
-  'TO_SITE_SHIPTO_CODE',
-  'PROJECT_CODE',
-  'END_CUSTOMER',
-] as const;
 
 // 라벨 `*` 필수 컬럼(메인, INPUT_TP_CD 전건 'S'라 라벨 매핑으로 필수검증 — design 03 §1.1/§4.4).
 export const REQUIRED_MAIN_COLUMNS = [
@@ -160,20 +193,39 @@ export const PROJECT_POPUP_COLUMN = 'PROJECT_CODE'; // SCM0002_ProjectbyDivision
 
 // EDIT_MAIN 파생마다 재계산되는 변경검지 플래그(design 03 §3.2). 저장 대상 판정 근거.
 export const EDIT_MAIN_FLAG = 'EDIT_MAIN';
+// Insert(복사) 경로로 생성된 신규행 표식 — **UI 편집 축 전용**, 저장 payload 에 실리지 않는다.
+//   AS-IS 비대칭 재현용: Insert 복사행은 END_CUSTOMER 를 잠그고(InsertRow cs:2523 LockRange),
+//   New 버튼 빈 행은 편집 허용(BtnNew cs:3007-3014). 메타(INPUT_TP_CD)는 New/Insert 를 구분 못 해
+//   (둘 다 CRUD_TYPE='I') 화면단에서만 가를 수 있다 — buildCopiedRow 만 이 표식을 심는다.
+//   CRUD_TYPE(저장 판정 축, convert-core §2.4)과 다른 축이라 isNew 대체 필드가 아니다.
+export const INSERT_COPIED_FLAG = 'INSERT_COPIED';
 // SO No 그룹 전파 키(같은 ERP_SO_NO 전행에 동일 변경 복제, design 03 §3.2).
 export const SO_GROUP_KEY = 'ERP_SO_NO';
 
-// 폭 0 + VISIBLE_FLAG='Y' 인 핵심 편집 2열의 최소폭 보정 — 자매 SSP0200 과 동일 값/동일 방식.
-//   메타가 두 열을 COLUMN_WIDTH=0 으로 두고 있어(ora.py 실측, SSP0200 도 같다) 보정 없이는 폭 0 으로
-//   렌더돼 입력이 도달 불가다. 메타 폭을 UPDATE 하지 않고 FE 최소폭으로 올리는 것이 자매의 처방이다
-//   (07_register_column-width-parity.sql 은 VISIBLE_FLAG 만 'Y' 로 복원했다).
-export const MIN_WIDTH_OVERRIDE: Record<string, number> = {
-  CHANGE_REASON_CODE: 110,
-  CHANGE_REASON_DETAIL: 150,
-};
+// 동적 컬럼/헤더 토글 대상 (design 03 §2 #1) — changeType='P' 면 숨김.
+//   **CONFIRM_ID 만이다.** AS-IS cs:567~570 은 'P' 에서 ERP_SO_NO·CONFIRM_ID 둘 다 Width=0 으로
+//   접지만, else 분기에서 되살리는 줄이 ERP_SO_NO 쪽은 **주석**이다(cs:569, "20211109 ERP_SO_NO
+//   컬럼 안보이게 수정") — 즉 메인 ERP_SO_NO 는 어느 분기에서도 보이지 않는다. 메타도 그에 맞춰
+//   VISIBLE_FLAG='N'/W=0 으로 복원했다(24_fix_main_visible_asis_parity.sql) → 컬럼셋에 아예 없으므로
+//   여기 넣어 두면 죽은 분기다. 주의: **서브 그리드의 ERP_SO_NO 는 반대로 표시가 정상**이다
+//   (AS-IS cs:649 `siSub...ERP_SO_NO.Visible = true`) — buildSubColumns 가 'P' 때만 숨긴다.
+export const PLAN_TOGGLE_COLUMNS = ['CONFIRM_ID'];
 
-// 동적 컬럼/헤더 토글 대상 (design 03 §2)
-export const PLAN_TOGGLE_COLUMNS = ['ERP_SO_NO', 'CONFIRM_ID']; // changeType='P' -> width 0
+// 화면이 dataMap 을 주입하는 셀 콤보 2열(useShipmentChangeRequestCellCombos).
+//   값=site_id(코드) / 표시=SITE_DESCRIPTION. 복제·저장은 코드, 화면은 설명이 되게 하는 축이다.
+//   주의: 주입 시 `cellCboDataTp` 를 반드시 비운다 — 비우지 않으면 공용 DataGrid 의 자동 콤보가
+//   같은 컬럼을 덮어써 다른 후보(또는 빈 목록)가 붙는다.
+export const CELL_COMBO_COLUMNS = {
+  FROM_SITE_DESCRIPTION: 'FROM_SITE_DESCRIPTION',
+  TO_SITE_DESCRIPTION: 'TO_SITE_DESCRIPTION',
+  // END_CUSTOMER 도 FE dataMap 주입이다 — From/To 는 division 고정이라 전행 공용이지만 END_CUSTOMER 는
+  //   행별(item/toSite 종속)이라 포커스 행마다 재조회해 같은 dataMap 슬롯을 교체한다(SSP0200 미러).
+  END_CUSTOMER: 'END_CUSTOMER',
+} as const;
+
+// EndCustomer 후보가 0행일 때 AS-IS 가 합성하는 단일 행(자매 SSP0200 END_CUSTOMER_EMPTY_CODE 동일).
+//   자동선택(1건 확정)과는 별개 축이다 — '-' 합성은 드롭다운 표시용이고 셀 자동대입은 하지 않는다.
+export const END_CUSTOMER_EMPTY_CODE = '-';
 
 // ====================================================================================
 // spdSub "Change Request" 런타임 파생 (AS-IS InitSpread(shtSub) cs:597~653 실측)
@@ -208,17 +260,56 @@ export const MSG = {
   SAVE_CONFIRM: 'MSG00001', // 저장 확인 다이얼로그 "Would you like to save it?" (AS-IS 번호 MSG00012). iter-3 GAP-11: TO-BE MSG00012='Maximum of 10 tabs allowed.' 오매핑을 실측(EN/KO.json) 정문구 MSG00001 로 수정
   SAVE_SUCCESS: 'MSG00672', // 저장 성공(건수)
   SAVE_FAIL: 'MSG00003', // 저장 실패
-  ERP_BLOCK: 'MSG00267', // R8: ERP 중단기간 차단 alert
-  ALREADY_COMPLETE: 'MSG00174', // SHIPMENT_STATUS='R'(요청완료) 저장 차단
-  CANCEL_CONFIRM: 'MSG00195', // 취소 확인 다이얼로그
-  QTY_ZERO: 'MSG00202', // 수량 0 차단("0보다 큰 수를 입력하십시오")
-  DATE_UNDER_BASE: 'MSG00201', // 출하일 하한(현재+D일 미만) 차단
-  DATE_OVER_MAX: 'MSG00194', // 출하일 상한(현재+D일 초과) 차단
-  ERP_STATUS_LOCKED: 'MSG00189', // erp_status='C'(DO 생성됨) 변경 차단
+  // R8 ERP 중단기간 차단 — **TO-BE 등가 미등록**(역조회 0건). 번호를 다른 코드로 빌리면 그 코드가
+  //   등록되는 순간 엉뚱한 문구가 뜬다(#114) → AS-IS 번호 유지 + 영문 fallback. 자매 SSP0200 도 동일.
+  ERP_BLOCK: 'MSG00267',
+  // AS-IS MSG00174 -> 등가 MSG01189 'You have already requested to change your shipment plan'
+  //   (SHIPMENT_STATUS='R' 저장 차단. MSG00174 는 TO-BE 미등록 — ora.py 실측 0행)
+  ALREADY_COMPLETE: 'MSG01189',
+  // AS-IS MSG00195('취소하시겠습니까?') -> 등가 MSG00684 'Are you sure you want to cancel?'
+  //   MSG00195 는 TO-BE 미등록이라 종전엔 defaultValue 가 그대로 떠 `__Cancel this request?` 가
+  //   보였다(사용자 신고 2026-10-13). 등가 2후보(MSG00684/MSG01459, EN 동일) 중 먼저 등록된 쪽을
+  //   쓴다 — 자매 SSP0200 과 같은 선택이다.
+  CANCEL_CONFIRM: 'MSG00684',
+  // ── 요청완료 수량·출하일 검증 3종 ──
+  //   종전엔 AS-IS 번호(MSG00202/00201/00194)를 그대로 썼는데 **TO-BE 에 전부 미등록**이라
+  //   (ora.py 실측 2026-10-13 KO/EN 0행) alert 가 defaultValue `_Invalid.` 로만 떴다 —
+  //   사용자가 왜 막혔는지 알 수 없었다(사용자 신고 2026-10-13). Hook #114 대로 **문구 역조회**로
+  //   TO-BE 등가 코드에 재매핑한다(자매 SSP0200 과 동일 번호, KO/EN 등록 확인).
+  QTY_ZERO: 'MSG01213', // AS-IS MSG00202 등가 — 'Enter a number greater than 0.'
+  // AS-IS MSG00201 등가 — 'Current D + {0} days can not be requested. Please delete and request again.'
+  DATE_UNDER_BASE: 'MSG01212',
+  // AS-IS MSG00194 등가 — 'Change requests are possible from the current D + {0} ship date.'
+  DATE_OVER_MAX: 'MSG01206',
+  // AS-IS MSG00359('변경요청은 Shipment Date 조회 구간에서 가능합니다') -> 등가 MSG01353
+  //   (재번호 동일 문구 'Change request can be made within the inquiry date.', placeholder 없음).
+  //   저장 시 출하일이 조회구간 Period[from,to] 밖이면 차단(AS-IS SSP_Main_Validation
+  //   cs:3173-3178/3383-3388 = 07_validation-audit C7). Period 는 SCM0001_GET_SCP_DAY_PERIOD 산출값.
+  SHIP_DATE_OUT_OF_PERIOD: 'MSG01353',
+  // 날짜로 해석 안 되는 NEW_SHIPMENT_DATE — AS-IS 는 `Convert.ToDateTime` 예외로 죽는 자리다.
+  //   TO-BE 는 조용히 skip 하지 않고 명시 차단한다(자매 SSP0200 선례).
+  INVALID_DATE_FORMAT: 'MSG01081', // 'This is not a valid date format. {0}'
+  // AS-IS MSG00189 -> 등가 MSG01202 'In ERP, DO is created and can not request change. …'
+  //   (erp_status='C' = DO 생성됨 변경 차단. MSG00189 는 TO-BE 미등록)
+  ERP_STATUS_LOCKED: 'MSG01202',
+  // 아래 2종은 **TO-BE 등가 미등록**(역조회 0건) — AS-IS 번호 유지 + 영문 fallback. SSP0200 도 동일.
   REASON_CODE_REQUIRED: 'MSG00287', // Reason Detail 입력 전 Reason Code 필수
   FROM_SITE_REQUIRED: 'MSG00098', // To Site/Incoterms 선행 필수(From Site 등)
-  TRANS_MODE_UNAVAILABLE: 'MSG00293', // TransMode 후보 없음(FindData_BOD 실패)
-  REQUIRED_FIELD: 'MSG00013', // 필수값 누락 "Please enter the required fields."(승인자/제목/변경사유/사유상세, AS-IS 번호 MSG00002). iter-3 GAP-11: TO-BE MSG00002='Saved successfully.' 오매핑을 실측(EN/KO.json) 정문구 MSG00013 로 수정
+  // AS-IS MSG00293(TransMode 후보 없음) -> 근사 MSG01296 'BOD (Trans mode, Incoterms) information
+  //   corresponding to Div, From Site, To Site is invalid.' MSG00293 전용 등가는 TO-BE 미등록이라
+  //   뜻이 가장 가까운 등록 문구를 쓴다(SSP0200 과 같은 근사 — 04 확인필요 유지).
+  TRANS_MODE_UNAVAILABLE: 'MSG01296',
+  // 필수값 누락 — **어느 항목인지 알려주는** MSG00614 'The {0} value is required.'(KO '{0} 값은 필수
+  //   입력입니다.')를 쓴다. AS-IS 번호 MSG00002 는 TO-BE 에서 'Saved successfully.' 로 뜻이 달라
+  //   금지(iter-3 GAP-11). 종전 MSG00013('Please enter the required fields.')은 `{0}` 자리가 없어
+  //   호출부가 넘긴 항목명이 **버려졌다** — 어느 칸이 비었는지 알 수 없었다.
+  //   주의: `{0}` 치환은 `.replace('{0}', …)` 수동이다(i18next 보간자는 `{{ }}`).
+  REQUIRED_FIELD: 'MSG00614',
+  // AS-IS MSG00286('{0}Row There is a Shipment not change. Unable To enter Change_Reason') -> 등가 MSG01290
+  //   (재번호 동일 문구, ora.py 실측). 변경 없이 Change_Reason 만 입력된 행 저장 차단(AS-IS
+  //   SSP_Main_Validation cs:3265-3355 = 07_validation-audit C8). `{0}` 은 1-based 행번호 —
+  //   i18next 보간자가 아니라 수동 replace 다.
+  REASON_WITHOUT_CHANGE: 'MSG01290',
   // ── 신규행 저장(SAVE_SHIPMENT_CONFIRM_NEW) 응답 RESULT_CODE 분기 (AS-IS L994~1010) ──
   //   'N' AS-IS MSG00261 "Model 조회 후 입력하여 주십시오" -> SCM_ADM_MSG_M 문구 역조회
   //       (convert-core §4.1). TO-BE 에 MSG00261 번호는 부재하고 MSG01269 가 동치 문구다.
@@ -226,6 +317,14 @@ export const MSG = {
   //   'F' AS-IS MSG00328 — TO-BE 에 **같은 번호로 같은 문구**가 실재(실측):
   //       "The sales price has not been entered. Please enter the sales price before proceeding."
   NEW_PRICE_REQUIRED: 'MSG00328',
+  // ── 변경요청 완료(btnChangeRe2) ──
+  //   AS-IS MSG00173('확정 출하 계획 변경 요청이 완료되었습니다') -> TO-BE 등가 MSG01188
+  //   'Your confirmed shipment plan change request has been completed.'(EN 실측, 자매 SSP0200 동일 번호).
+  REQUEST_COMPLETED: 'MSG01188',
+  // 아래 2종은 TO-BE 미등록(역조회 0건) — AS-IS 번호 유지 + 영문 fallback.
+  //   완료 SP 결과 커서의 실패 사유 분기다(AS-IS cs:2305~2320).
+  APPROVER_UNAVAILABLE: 'MSG00316', // 'Unauthorized' — 모델 담당자 미등록으로 승인자 지정 불가
+  MODEL_PIC_MISMATCH: 'MSG00353', // 'UnModelPic'/'UnModelItem' — 서로 다른 PIC·Model 혼재
 } as const;
 
 // ====================================================================================
@@ -287,4 +386,9 @@ export const SCREEN_TEXT = {
   //   'Confirmed'/'Change'/'Plan'/'Confirm' 4문구 모두 SCM_ADM_MSG_M 0행이라 화면 전용 키로 둔다.
   SUB_GROUP_PLAN: '_ssp0201.subGroupPlan',
   SUB_GROUP_CONFIRM: '_ssp0201.subGroupConfirm',
+  // ERP 중단기간 게이트가 판정 불가('unknown')일 때의 고지 — 조용히 통과시키지 않는다(V-13 정직 판정,
+  //   SSP0200 미러). AS-IS 에 대응 문구가 없다 — MSG 코드를 빌리면 그 코드가 등록되는 순간 엉뚱한
+  //   문구가 뜬다(hook #114). 콤보 SQL 자체가 실패하는 상태(SEGMENT2 시각포함 ↔ TO_DATE 마스크
+  //   불일치, GAP-ERP-DATEFMT)라 'unknown'을 차단으로 올리면 저장이 영구 불가가 된다 → 고지 후 진행.
+  ERP_BLOCK_UNKNOWN: '_ssp0201.erpBlockUnknown',
 } as const;

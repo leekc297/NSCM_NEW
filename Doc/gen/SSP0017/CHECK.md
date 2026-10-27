@@ -1,0 +1,36 @@
+# [Harness] SSP0017 inventory-raw — BLOCK 0 / WARN 34
+
+- WARN AC1 액션 대조표 미처리 91행: AC-268145b2(상태 빈칸 POPUP new SCM0002_ItembyDivisionPopu), AC-d5c79650(상태 빈칸 POPUP popItem.Form_Load), AC-c5d78613(상태 빈칸 UI_PROP popItem.StartPosition), AC-4fd82c6d(상태 빈칸 POPUP popItem.ShowDialog), AC-e0abead9(상태 빈칸 VALUE_SET txtItemId.Text), AC-e314e25d(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-36477b88(상태 빈칸 RETURN return;), AC-c85742a6(상태 빈칸 MESSAGE MessageHelper.GMessageBox) … @Doc/asisfacts/screens/SSP0017/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 2행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-d465cfa5(siMain.ActiveSheet.ColumnFooter.SetAggre @SSP0017_InventoryRaw.cs:228), AC-0c0e5ee7(siMain.ActiveSheet.ColumnFooter.SetAggre @SSP0017_InventoryRaw.cs:229) @Doc/asisfacts/screens/SSP0017/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SSP.SSP0017_GET_INVENTORY_RAW (SSP0017_GET_INVENTORY_RAW) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCM0001_GET_SCP_DAY_PERIOD (SCM0001_GET_SCP_DAY_PERIOD) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.TopChange → SpdMain_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → btnItemId_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnMeasure.Click → btnMeasure_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbDivision.SelectedIndexChanged → clbDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 usrButton1 / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanDate / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnMeasure / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbPlantSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboInventoryType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbDivision / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN V01 As-is Validation 2건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 3건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 기타(ETC) — Measure 버튼 SEQ1 [MSG00007] 선택한 Spread 가 없습니다. → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SSP_화면_VALIDATION_취합_20261022/SSP0017.md
+- WARN SC1 조회조건 순서가 기준표(SSP SCP_DM_SSP 화면별 조회조건 정리_260731_(1차 완료).xlsx 1191~1195행)와 다를 수 있음(라벨 대조): 'Model/Nickname' 이 'Inventory Type' 보다 앞 — 기준 순서: Div → From Site → Model/Nickname → Inventory Type → Plan Date (40_SEARCH_COND.md #### SSP0017) @components/InventoryRawForm.tsx:147
+- WARN VC1 대조표 FAIL 20행 (Doc/verify/SSP0017/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미검증 177행 — 검사 사유 NOPATH 15 · REVIEW 129 · NOT_RUN 252 · TODO 3 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 129건 / 검사 인스턴스 186 — W2 20 · W4 2 · W5 11 · W6 44 · W7 52 · 구현 의심 3 (Doc/verify/SSP0017/work_ledger.md)
+- WARN B08 As-is InsertButton override 있음 → hotkeyConfig.insert 가 false 가 아니어야 함 — As-is 기능 누락(members.csv InsertButton)
+- WARN B08 As-is DeleteButton override 있음 → hotkeyConfig.delete 가 false 가 아니어야 함 — As-is 기능 누락(members.csv DeleteButton)
+- WARN B08 As-is SaveButton override 있음 → hotkeyConfig.save 가 false 가 아니어야 함 — As-is 기능 누락(members.csv SaveButton)
+- WARN B19 validation.md 2행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SSP0017/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0017/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0017/SSP0017_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0017/SSP0017_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SSP0017_GET_INVENTORY_RAW · 시트 'main') — 누락 userId, programId — 현재 키: divisionId, plantSite, itemId, inventoryType, planStartYyyymmdd, sheetName · BE positional 매핑이라 값이 NULL 로 감

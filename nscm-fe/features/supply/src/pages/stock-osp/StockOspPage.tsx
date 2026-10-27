@@ -1,13 +1,15 @@
 import { FileExceluploadIcon } from '@lges/design-system/icon';
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ItemByDivisionModal } from 'features/master/src/components';
+import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
-import type { EditTracker } from '@foundation/utils';
+import { GridAction, type EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { FileExceldownloadIcon } from '@shared/lges-icons';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ExcelUploadModal } from './components/modals/ExcelUploadModal';
@@ -15,7 +17,16 @@ import { OspStockGrid } from './components/OspStockGrid';
 import { PackHoldStockGrid } from './components/PackHoldStockGrid';
 import { StockOspForm } from './components/StockOspForm';
 import { useStockOspValidation } from './hooks/useStockOspValidation';
-import { LBL, MENU_ID, MSG, RESPONSE_KEY, SHEETS, TAB_INDEX } from './stock-osp.constants';
+import {
+  ADMIN_SHEET_NAME,
+  EXCEL_FORM_HEADER,
+  LBL,
+  MENU_ID,
+  MSG,
+  RESPONSE_KEY,
+  SHEETS,
+  TAB_INDEX,
+} from './stock-osp.constants';
 import type { OspStockRow, PackHoldStockRow } from './stock-osp.types';
 import styles from './StockOspPage.module.scss';
 import { useStockOspStore } from './useStockOspStore';
@@ -66,7 +77,7 @@ export const StockOspPage = ({ tabId, title }: PageProps<MENU_ID>) => {
   // Division 권한 게이트(null=로딩). false 면 조회 차단(design 02 §6-8).
   const [divisionAuth, setDivisionAuth] = useState<boolean | null>(null);
 
-  const { data: ospData, refetch: refetchOsp } = useTabProcQuery<MENU_ID, SHEETS.OSP>({
+  const { data: ospData } = useTabProcQuery<MENU_ID, SHEETS.OSP>({
     menuId: MENU_ID,
     sheetName: SHEETS.OSP,
     tabId,
@@ -114,6 +125,15 @@ export const StockOspPage = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 날짜셀 입력형식 무효(달력에 없는 날짜) — 그리드가 커밋 취소, 여기선 alert 만(MSG00611).
+  const onInvalidDate = useCallback(() => {
+    void setAlert({
+      type: 'alert',
+      content: t(MSG.INVALID_DATE_FORMAT, '_유효한 날짜 형식이 아닙니다. (YYYYMMDD)'),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const doSave = async (dirty: Record<string, unknown>[]) => {
     if (savingRef.current) return;
     savingRef.current = true;
@@ -124,10 +144,7 @@ export const StockOspPage = ({ tabId, title }: PageProps<MENU_ID>) => {
       if (result.ok) {
         setToast({
           type: 'success',
-          message: t(MSG.SAVE_SUCCESS, '_{0}개의 데이터가 저장되었습니다.').replace(
-            '{0}',
-            String(result.count ?? dirty.length)
-          ),
+          message: t(MSG.SAVE_SUCCESS, '_저장되었습니다.'),
         });
         packTrackerRef.current?.clearChanges();
         // 저장 성공 후 재조회 — filters 불변이라 refetch 직접 호출 허용(nscm-patterns §5 예외).
@@ -177,19 +194,45 @@ export const StockOspPage = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  // Excel Upload(Osp Stock 탭 전용) — hasButton('UPLOAD') 등록 게이트(SCM_ADM_MNU_BTN_MPG_M
-  //   API_ID=P_SCP0041_UPLOAD, SP=P_SCP0041_STOCK_OSP_EXCEL_UPLOAD DB 실측 배포, 2026-09-27 GAP-03).
-  const customButtons =
-    !isPack && hasButton('UPLOAD')
-      ? [
-          {
-            label: t(LBL.EXCEL_UPLOAD, '_Excel Upload'),
-            action: () => setOpenExcelUpload(true),
-            iconComponent: <FileExceluploadIcon />,
-            iconPosition: 'leading' as const,
-          },
-        ]
-      : [];
+  // Excel 양식 다운로드(Osp Stock 탭 전용) — AS-IS MenuEtcFileDownButton("StockOSP_ExcelForm.xls") 대체.
+  //   양식 헤더가 고정(SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT 실측)이라 서버 조회 없이 클라에서 생성한다
+  //   (flat 업로드 — pivot GET_EXCEL_FORM proc 불요, hook #135 excel-form-upload-standard). 헤더만 있는 빈 양식.
+  const handleFormDownload = () => {
+    const columns = EXCEL_FORM_HEADER.split('|').map(h => ({ header: h, key: h }));
+    // void GridAction.flatExcelDownload([], columns, 'StockOsp_ExcelForm');
+    // 입력칸을 텍스트 서식으로 — 날짜가 엑셀 날짜로 바뀌어 'TueOct13' 처럼 저장되는 문제 방지.
+    void GridAction.flatExcelDownload([], columns, 'StockOsp_ExcelForm', undefined, {
+      textColumns: true,
+    });
+  };
+
+  // Osp 탭 전용 Excel 2종 — Excel Form → Excel Upload 순(hook #135 §6, 정본 DMF0082 배치). 각각 자체 hasButton 게이트:
+  //   FORM_DATA(양식 다운로드, API_ID=P_SCP0041_UPLOAD placeholder — 클라 액션이라 FE 미호출) ·
+  //   UPLOAD(업로드, API_ID=P_SCP0041_UPLOAD → SP P_SCP0041_STOCK_OSP_EXCEL_UPLOAD). DB 실측 2026-10-14.
+  const customButtons = !isPack
+    ? [
+        ...(hasButton('FORM_DATA')
+          ? [
+              {
+                label: t(LBL.EXCEL_FORM, '_Excel Form'),
+                action: handleFormDownload,
+                iconComponent: <FileExceldownloadIcon />,
+                iconPosition: 'leading' as const,
+              },
+            ]
+          : []),
+        ...(hasButton('UPLOAD')
+          ? [
+              {
+                label: t(LBL.EXCEL_UPLOAD, '_Excel Upload'),
+                action: () => setOpenExcelUpload(true),
+                iconComponent: <FileExceluploadIcon />,
+                iconPosition: 'leading' as const,
+              },
+            ]
+          : []),
+      ]
+    : [];
 
   return (
     <div className={styles.container}>
@@ -243,28 +286,61 @@ export const StockOspPage = ({ tabId, title }: PageProps<MENU_ID>) => {
               staticColumns={staticColumns[SHEETS.PACK] ?? []}
               isReversed={isReversed}
               onReversed={onReversed}
+              onInvalidDate={onInvalidDate}
             />
           </TabItem>
         </TabWrapper>
       </div>
 
-      {/* Model 돋보기 — ItemByDivisionModal(COM0008). 단일 선택 → itemId 반영(design 02 §popup). */}
-      <ItemByDivisionModal
+      {/* Model/Nickname 돋보기 — 메1 MaterialByDivisionModal(COM0013). 사용자 지시 2026-10-14:
+          AS-IS 모3(ItemByDivisionModal COM0008)에서 메1로 교체(Model/Nickname 통합 픽커 패턴, 자매 화면 동일).
+          콤마 다중 itemId 반영. scpModuleType=호출 화면 ID(SP Operation Group 분기 기준). */}
+      <MaterialByDivisionModal
         open={openItem}
         modalClose={() => setOpenItem(false)}
         setSelectedValue={itemIds => setSearchCondition({ itemId: itemIds })}
         preSearchParams={{
           divisionId: sc.divisionId,
+          scpModuleType: MENU_ID,
           itemId: sc.itemId,
         }}
-        callFromCell={false}
       />
 
-      {/* Excel 업로드 팝업(Osp Stock, R7) — 완료 후 Osp 재조회(filters 불변, refetch 직접 호출 허용) */}
+      {/* Excel 업로드 팝업(Osp Stock, R7) — 검증(mode=0) 후 onSave(mode=1) 적재, 저장 성공 후 '다시 조회하시겠습니까?'
+          Yes 시 Osp 재조회(iter-2 GAP-A / 옵션1). onUploaded 은 refetch 가 아니라 setFilter 로 filters[OSP] 참조를
+          새로 만들어 재조회한다 — refetch(동일 queryKey)는 플레이키하게 스킵되지만 setFilter→useLayoutEffect
+          removeQueries 경로는 Search 버튼과 동일하게 매번 확정적으로 재요청한다. */}
       <ExcelUploadModal
         open={openExcelUpload}
         modalClose={() => setOpenExcelUpload(false)}
-        onUploaded={() => void refetchOsp()}
+        onUploaded={() => setFilter(SHEETS.OSP)}
+        onSave={async () => {
+          // PKG_SCP0041.P_SCP0041_STOCK_OSP_EXCEL_UPLOAD(mode=1) — 검증 통과분 DB 원장 반영(2번째 호출).
+          //   라우팅 (SCP0041,'Osp Stock',UPLOAD_SAVE) → P_SCP0041_UPLOAD → 업로드 SP (SCM_ADM_MNU_BTN_MPG_M·
+          //   SCM_ADM_API_M 실측 2026-10-14, USE_YN='Y'). P_CREATED_BY=세션 = mode=0 스테이징 키와 동일.
+          try {
+            const res = await apiClient.post<Record<string, unknown>>(
+              `/${MENU_ID}/${ADMIN_SHEET_NAME[SHEETS.OSP]}/UPLOAD_SAVE/call-proc`,
+              {
+                mode: 1,
+                createdBy: userId,
+                programId: MENU_ID,
+                sheetName: ADMIN_SHEET_NAME[SHEETS.OSP],
+              }
+            );
+            const code = Number((res.data as { code?: string })?.code ?? 0);
+            const inner = (
+              res.data?.result as { o_result_cursor?: { CODE?: string; MSG?: string }[] }
+            )?.o_result_cursor?.[0];
+            // SP 반환 CODE!='0' = 실패(전량 게이트 위반 등) — MSG passthrough
+            if (res.status >= 400 || code || (inner && inner.CODE !== '0')) {
+              return { ok: false, message: inner?.MSG || (res.data as { message?: string })?.message };
+            }
+            return { ok: true };
+          } catch (e) {
+            return { ok: false, message: e instanceof Error ? e.message : undefined };
+          }
+        }}
       />
     </div>
   );

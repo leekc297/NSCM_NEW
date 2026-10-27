@@ -75,13 +75,16 @@ export const PlanGroupDashboard = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const rows = useMemo(() => data?.o_rc1 ?? [], [data]);
 
-  // 사용자 지시(2026-10-13): AS-IS 는 조회 전용이지만 Insert/Delete/Save 버튼은 **보이게** 둔다.
-  //   insert/delete/save 키를 넘기지 않으면 SubTitle 기본동작이 노출된다 — Insert(F8)=행 추가,
-  //   Delete(F9)=선택행 삭제, Save(F7)=no-op(PKG_SCP0124 에 SAVE SP 없음). 그리드는 isReadOnly
-  //   유지(변경상태 M/D rowHeader 컬럼 숨김) — 실제 편집·저장은 SAVE SP + 컬럼 편집가능화가 있어야
-  //   동작한다. useTabProcQuery 는 filters 참조 교체로 재조회(refetch 직접 호출 금지, nscm-patterns §5-1).
+  // 사용자 지시(2026-10-15): AS-IS 는 조회 전용이고 CRUD 배선이 없어 Insert/Delete/Save 버튼을
+  //   **숨긴다**. insert/delete/save 를 false 로 넘기면 SubTitle 이 해당 버튼을 렌더하지 않는다
+  //   (SubTitle.tsx `buttonActions.* === false` 분기). 이전(2026-10-13)에는 키를 생략해 기본동작을
+  //   노출했으나, 실동작이 없는 버튼이라 숨김으로 되돌린다. useTabProcQuery 는 filters 참조 교체로
+  //   재조회한다(refetch 직접 호출 금지, nscm-patterns §5-1).
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
+    insert: false,
+    delete: false,
+    save: false,
     manual: false,
     upload: false,
   };

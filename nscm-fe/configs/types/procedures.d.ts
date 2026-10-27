@@ -296,6 +296,9 @@ interface RawProcedureMap extends Base {
         nickName: string;
         lotId: string; // §2.9 dead parameter — AS-IS 그대로 미반영
         requestorName: string; // txtRequestor.Text(이름 문자열, ID 아님)
+        // 메인 그리드 Measure/날짜 셀 더블클릭 재조회 시 그 행 TO_SITE(=P_SCM_SITE_ID)로 좁힌다
+        //   (PROC_M scmSiteId 매핑 실측 확인, AS-IS FindData_Detail_DblClick). 일반 조회는 미전달.
+        scmSiteId?: string;
         sesUserId: string;
         mnuId: string;
       };
@@ -333,12 +336,20 @@ interface RawProcedureMap extends Base {
     };
     requestDetailExcel: {
       request: {
+        // GET_REQUEST_DETAIL_PACK_EXCEL_DOWN — PROC_M 실측(itemId/userId/programId/sheetName).
+        //   일반 detail(modelId/sesUserId/mnuId)과 키가 달라 그대로 재사용하면 빈값→0행.
         divisionId: string;
         fromYyyymmdd: string;
         toYyyymmdd: string;
-        modelId: string;
-        sesUserId: string;
-        mnuId: string;
+        plantSiteId: string;
+        scmSiteId: string;
+        lotId: string;
+        itemId: string;
+        nickName: string;
+        userId: string;
+        requestorId: string;
+        programId: string;
+        sheetName: string;
       };
       response: {
         o_rc1: {
@@ -369,18 +380,19 @@ interface RawProcedureMap extends Base {
       };
     };
     bodItem: {
+      // P_SSP0026_GET_BOD_ITEM — AS-IS FindData_BOD(Div/From/To/Item 로 BOD_ID 조회). PROC_M 실측 키
+      //   (SCM_ADM_PROC_M, 2026-10-21): divisionId/fromSiteId/toSiteId/itemId/bodId. Trans Mode/Incoterms 는 넘기지 않는다.
       request: {
         divisionId: string;
-        modelId: string;
-        incoterms: string;
-        transportMode: string;
+        fromSiteId: string;
+        toSiteId: string;
+        itemId: string;
+        bodId: string;
       };
       response: {
         o_rc1: {
           BOD_ID: string;
-          MODEL_ID: string;
-          INCOTERMS: string;
-          TRANSPORT_MODE: string;
+          [key: string]: string | number;
         };
       };
     };
@@ -1339,102 +1351,6 @@ interface RawProcedureMap extends Base {
       };
     };
   };
-
-  /**
-   * Production Plan Line — SCP0013 (SCP 도메인 1호 화면, Phase A = Shell+메타)
-   *
-   * SHEETS:
-   * - `Line` (메인 조회 — SP `SCP0013_GET_PRODUCTION_PLAN_LINEBY`, AS-IS 22 IN positional 1:1.
-   *   ⚠️ 사내 Oracle SP 전원 INVALID(기계변환 초안) — T19 정식 변환 전까지 조회 비활성.
-   *   차단 handoff: `_artifacts/_apply_corporate/A5_scp0013_phase0_sp_blocked_handoff.md`)
-   *
-   * request 키 = AS-IS .cs FindData_Main L2053~2074 파라미터 camelCase 1:1 (22개).
-   * response = AS-IS 반환 DataSet 4테이블 1:1 (o_rc1 메인 wide-pivot / o_rc2 Fix / o_rc3 W ratio / o_rc4 M ratio).
-   */
-  SCP0013: {
-    Line: {
-      request: {
-        divisionId: string;
-        operationGroup: string;
-        scmSiteId: string;
-        lineId: string;
-        modelId: string;
-        itemId: string;
-        fromYyyymmdd: string;
-        toYyyymmdd: string;
-        planStartYyyymmdd: string;
-        planType: string;
-        seq: string;
-        programId: string;
-        sheetName: string;
-        userId: string;
-        electrodeType: string;
-        nickName: string;
-        cellTypeGr: string;
-        lineAssign: string;
-        bucket: string;
-        chkAll: string;
-        extraSpec: string;
-        debugMode: string;
-      };
-      response: {
-        // 메인 그리드 — measure 별 행 + D_/W_/M_/B_ wide-pivot 동적 컬럼 (AS-IS Tables[0]).
-        o_rc1: {
-          KEY_IDX: string;
-          DIVISION_ID: string;
-          DIVISION_NAME: string;
-          ORIGIN_DIVISION_ID: string;
-          OPERATION_GROUP: string;
-          OPERATION_GROUP_NAME: string;
-          SCM_SITE_ID: string;
-          SCM_SITE_DESCRIPTION: string;
-          OPERATION_ID: string;
-          LINE_ID: string;
-          ITEM_ID: string;
-          MODEL_ID: string;
-          NICK_NAME: string;
-          CELL_ID: string;
-          EXTRA_SPEC: string;
-          CELL_TYPE_GROUP_CODE: string;
-          ELECTRODE_TYPE: string;
-          MEASURE: string;
-          MEASURE_NAME: string;
-          UNIT: string;
-          FROM_YYYYMMDD: string;
-          TO_YYYYMMDD: string;
-          PLAN_START_YYYYMMDD: string;
-          PLAN_TYPE: string;
-          PLAN_SEQ: string;
-          CP_KEY: string;
-          FIX_KEY: string;
-          [key: string]: string | number;
-        };
-        // Fix 정보 (AS-IS Tables[1] — Set_FixCellColor 입력).
-        o_rc2: {
-          FIX_KEY: string;
-          [key: string]: string | number;
-        };
-        // WEEKLY Ratio (AS-IS Tables[2] — LINE_TOTAL_LOAD W_ 덮어쓰기).
-        o_rc3: {
-          DIVISION_ID: string;
-          SCM_SITE_ID: string;
-          OPERATION_ID: string;
-          LINE_ID: string;
-          MEASURE: string;
-          [key: string]: string | number;
-        };
-        // MONTHLY Ratio (AS-IS Tables[3] — LINE_TOTAL_LOAD M_ 덮어쓰기).
-        o_rc4: {
-          DIVISION_ID: string;
-          SCM_SITE_ID: string;
-          OPERATION_ID: string;
-          LINE_ID: string;
-          MEASURE: string;
-          [key: string]: string | number;
-        };
-      };
-    };
-  };
   /**
    * MetalLinkPrice — DMF0074 (Metal Link Price · 메탈 판가 연동)
    *
@@ -1882,94 +1798,6 @@ interface RawProcedureMap extends Base {
       request: {
         createdBy: string; // 1 P_CREATED_BY (BE 세션 자동)
         month: string; // 2 P_MONTH (AS-IS GetDayRange p_month=6 — .cs L1237)
-      };
-      response: {
-        o_rc1: { DAY_RANGE: string; [key: string]: string | number };
-        o_rc2: { DAY_RANGE: string; [key: string]: string | number };
-      };
-    };
-  };
-
-  /**
-   * CustPsiUpload — DMF0013 (Customer PSI Upload)
-   *
-   * DMF0014(CustomerFcstUpload)를 복제·파생한 화면 — MeasureGroup 고정값만 "PSI" 로 분기
-   * (AS-IS DMF0013_CustPsiUpload.cs 헤더 주석이 "DMF0014_CustFcstUpload" 로 남음, 원장 §0.3).
-   * 타입 형상(request/response)은 DMF0014 와 동일하다 — SP 는 DMF0013 계열(직접 GET/SAVE)이나
-   * PROC_M ALL_ARGUMENTS 가 이 FE 저장소에 없어(seed 만, 원장 §7.3-1) DMF0014 실측 형상을 승계한다.
-   * SHEETS:
-   * - `PSI Upload`  (메인 — AS-IS SheetView "PSI Upload" 등록명 그대로. excel-upload 체인 키)
-   * - `spreadTitle` (동적 기간 헤더 — 공유 SP DM.DMF0014_GET_SPREAD_TITLE 재사용, 원장 §6.1)
-   * - `dayRange`    (PR_GET_DAY_RANGE 재사용 — DMF0014/DMF0048 와 동일 계약)
-   * SAVE(P_DMF0013_SAVE_CUST_PSI_UPLOAD_DATA 17 IN '^'delim)는 apiClient.post 직접 — 타입 미등재.
-   */
-  DMF0013: {
-    'PSI Upload': {
-      // DM.DMF0013_GET_CUST_PSI_UPLOAD_DATA (13 IN + 세션 2 — DMF0014 형상 승계, 원장 §E10 L435~448)
-      request: {
-        divisionId: string; // 1  P_DIVISION_ID (단일 필수)
-        deptId: string; // 2  P_DEPT_ID (Team — 콤마 delim, 빈값 'ALL')
-        endCustomer: string; // 3  P_END_CUSTOMER
-        scmSiteId: string; // 4  P_SCM_SITE_ID (Sales Site)
-        plantSiteId: string; // 5  P_PLANT_SITE_ID
-        projectCode: string; // 6  P_PROJECT_CODE (텍스트 raw — 빈값 '')
-        itemId: string; // 7  P_ITEM_ID (Model 텍스트 raw)
-        startYyyymmdd: string; // 8  P_START_YYYYMMDD
-        endYyyymmdd: string; // 9  P_END_YYYYMMDD
-        bucketType: string; // 10 P_BUCKET_TYPE ('DAILY'/'WEEKLY'/'MONTHLY' full-word)
-        domExp: string; // 11 P_DOM_EXP (Customs Handbook)
-        createdBy: string; // 12 P_CREATED_BY (BE 세션 자동)
-        userinfo: string; // 13 P_USERINFO (AS-IS NowGroupID)
-        sesUserId: string; // 14 P_USER_ID (BE 세션 자동)
-        mnuId: string; // 15 P_MENU_ID (BE 메뉴 자동)
-      };
-      response: {
-        // O_RC1 — 식별 14 (DIVISION_ID~EDIT_FLAG) + 동적 D_ 기간 컬럼 (원장 §3.1).
-        //   EDIT_YN 유무(14 vs 15열)는 admin SHEET_COLUMNS 실측 필요(원장 §5-4) — 승계로 함께 선언.
-        o_rc1: {
-          DIVISION_ID: string;
-          SCM_SITE_ID: string;
-          PLANT_SITE_ID: string;
-          CUSTOMER_PROJECT_CODE: string;
-          CUSTOMER_MODEL: string;
-          INCOTERMS: string;
-          FCST_TYPE: string;
-          DOM_EXP: string;
-          MEASURE_GROUP: string; // 이 화면 고정값 "PSI" (AS-IS InsertRow L631)
-          MEASURE: string;
-          UPLOAD_UOM: string;
-          PROJECT_CODE: string;
-          ITEM_ID: string;
-          EDIT_FLAG: string; // 'Y' = 기간 셀 편집 가능 행 (AS-IS EditButton 판정 1:1)
-          EDIT_YN: string;
-          [key: string]: string | number;
-        };
-      };
-    };
-    spreadTitle: {
-      // 공유 SP DM.DMF0014_GET_SPREAD_TITLE (3 IN + 세션 2 + o_rc1) — DMF0013 이 그대로 재사용(원장 §6.1)
-      request: {
-        startYyyymmdd: string; // 1 P_START_YYYYMMDD
-        endYyyymmdd: string; // 2 P_END_YYYYMMDD
-        bucketType: string; // 3 P_BUCKET_TYPE (full-word)
-        sesUserId: string; // 4 P_USER_ID (BE 세션 자동)
-        mnuId: string; // 5 P_MENU_ID (BE 메뉴 자동)
-      };
-      response: {
-        o_rc1: {
-          COLUMN_NAME: string; // 'D_yyyymmdd' (전 버킷 D_ 접두)
-          COLUMN_LABEL: string; // 'yyyymmdd'
-          SMALL_LABEL_NAME: string; // 상단 그룹 라벨 (요일 / Wnn / yyyy-mm)
-          EDIT_YN: string;
-          [key: string]: string | number;
-        };
-      };
-    };
-    dayRange: {
-      // PR_GET_DAY_RANGE PROC_M 재사용 (AS-IS GetDayRange p_month=6 — 원장 §6.1)
-      request: {
-        createdBy: string; // 1 P_CREATED_BY (BE 세션 자동)
-        month: string; // 2 P_MONTH (AS-IS p_month=6)
       };
       response: {
         o_rc1: { DAY_RANGE: string; [key: string]: string | number };
@@ -4583,85 +4411,6 @@ interface RawProcedureMap extends Base {
       };
     };
   };
-  /**
-   * Demand Manager — DMF0068 (소형 수주관리, Division 40 전용)
-   *
-   * SHEETS:
-   * - `ContributeSalesList` (메인 조회. `PKG_DMF0068.P_DMF0068_GET_ORDERLIST`
-   *                          — o_rc1=데이터 / o_rc2=조립된 SQL 텍스트(진단용, 화면 미사용))
-   * - `versionPopup`        (버전 팝업. `PKG_DMF0068.P_DMF0068_GET_CONT_VIEW_VERSIONPOPUP`)
-   * - `lookupProject`       (Project 셀 콤보. `PKG_DMF0068.P_DMF0068_GET_LOOKUPPROJECT`)
-   *
-   * 저장/삭제는 컬렉션 IN 을 바인딩할 수 없어 CLOB(JSON) 래퍼를 사용한다
-   * (`P_DMF0068_SAVE_ORDERLIST_JSON` / `P_DMF0068_DEL_ORDERLIST_JSON`).
-   * 월 컬럼 M1..Mn 은 조회 기간의 월 수만큼만 내려온다 (n번째 표시 월 = Mn).
-   */
-  DMF0068: {
-    ContributeSalesList: {
-      request: {
-        divisionId: string;
-        versionNo: string;
-        fromDt: string;
-        toDt: string;
-      };
-      response: {
-        o_rc1: {
-          PROJECT_NAME: string;
-          MEASURE: string;
-          ORDERSTART: string;
-          ORDEREND: string;
-          ORDERAPPROVAL: number;
-          ORDERNOW: number;
-          SRESULT: number;
-          SPLAN: number;
-          STOCK: number;
-          STOCK2: number;
-          KEYVALUE: string;
-          KEYVALUE2: string;
-          MEASURE2: string;
-          EDIT_YN: string;
-          [key: string]: string | number;
-        };
-        o_rc2: {
-          SQL_TEXT: string;
-        };
-      };
-    };
-    versionPopup: {
-      request: {
-        startYyyymmdd: string;
-        endYyyymmdd: string;
-        divisionId: string;
-        versionType: string;
-        description: string;
-      };
-      response: {
-        o_rc1: {
-          CODE: string;
-          VERSION_NO: string;
-          VERSION_DESCRIPTION: string;
-          VERSION_TYPE: string;
-          VER_CRE_SEQ: string;
-          YYYYMMDD: string;
-          CREATED_BY: string;
-          CREATION_DATE: string;
-          EDIT_YN: string;
-        };
-      };
-    };
-    lookupProject: {
-      request: {
-        divisionId: string;
-        versionNo: string;
-      };
-      response: {
-        o_rc1: {
-          CODE: string;
-          NAME: string;
-        };
-      };
-    };
-  };
   SCM0007: {
     main: {
       // SCM.SCM0006_GET_RECIPIENT_MASTER(p_use_type, p_module, p_submodule, p_active) — SYS0017 공유
@@ -6019,11 +5768,14 @@ interface RawProcedureMap extends Base {
       response: { o_rc1: { [key: string]: string | number } };
     };
   };
+
   /**
    * SCP0023 Outsourcing Capacity (Supply Master). 단일 그리드 — 외주(OSP) Plant 별 Model 의 Daily Capacity.
-   * GET 결과 컬럼은 SCP0023_GET_OUTSOURCING_CAPA 반환 형상 기준(design 03 §4.1, lowercase colNm=SHEET_COLUMNS).
-   *   item_id='-' 는 SP 가 'Total' 로 변환, capa_order 는 파생 정렬값. TO-BE PKG_SCP0023 미배포(convert-sp 후속).
-   * 편집 컬럼 = daily_capa_qty(정수 최소1) + valid_yn. created_by/last_updated_by 는 저장 시 스칼라(단일값).
+   * GET 결과 컬럼은 SCP0023_GET_OUTSOURCING_CAPA 반환 형상 기준. colNm 은 admin SCM_MST_SHEET_COLUMNS
+   *   (PROGRAM_ID='SCP0023') 실측대로 대문자(2026-10-14 ora.py 재확인 — design 03 §4.1 의 lowercase 가정은 오류,
+   *   GET SP 가 unquoted alias 라 Oracle 기본 폴딩으로 대문자 반환됨).
+   *   ITEM_ID='-' 는 SP 가 'Total' 로 변환, CAPA_ORDER 는 파생 정렬값. TO-BE PKG_SCP0023 미배포(convert-sp 후속).
+   * 편집 컬럼 = DAILY_CAPA_QTY(정수 최소1) + VALID_YN. CREATED_BY/LAST_UPDATED_BY 는 저장 시 스칼라(단일값).
    */
   SCP0023: {
     main: {
@@ -6037,19 +5789,19 @@ interface RawProcedureMap extends Base {
       };
       response: {
         o_rc1: {
-          division_id: string;
-          scm_site_id: string;
-          vendor_code: string;
-          vendor_name: string;
-          item_id: string;
-          nick_name: string;
-          daily_capa_qty: string;
-          capa_order: string;
-          valid_yn: string;
-          created_by: string;
-          creation_date: string;
-          last_updated_by: string;
-          last_update_date: string;
+          DIVISION_ID: string;
+          SCM_SITE_ID: string;
+          VENDOR_CODE: string;
+          VENDOR_NAME: string;
+          ITEM_ID: string;
+          NICK_NAME: string;
+          DAILY_CAPA_QTY: string;
+          CAPA_ORDER: string;
+          VALID_YN: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          LAST_UPDATED_BY: string;
+          LAST_UPDATE_DATE: string;
         };
       };
     };
@@ -6147,6 +5899,83 @@ interface RawProcedureMap extends Base {
           CONFIRM_YN: string;
           CONFIRM_USER: string;
           CONFIRM_TIME: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
+
+  /**
+   * SCP0134 Plan Management (Supply Plan) — PKG_SCP0134 신규 백엔드 이식(2026-10-14). SCP0015 후신.
+   * 그리드 2개: mainGrid(상단, P_SCP0134_GET_PLAN_MST) / detailGrid(하단 Engine, P_SCP0134_GET_PLAN_ENGINE_RUN).
+   * 파라미터 키 = SCM_ADM_PROC_M COL_NM(ora.py 실측). sesUserId=BE 세션 주입(FE 미전송), sesUserGrId=FE 전송.
+   * mainGrid 응답 o_rc2~o_rc5 = REVISION_NO 행별 콤보 후보 4종(Pre=PR/Main=MA/Semi=SE/Final=FN 순, SP 바디 실측).
+   *   O_RC 본문에 CONFIRM_YN/TIME/USER·RUN/CREATE/CANCEL/SHIP_REQ_AUTH 동봉(SCP0015 의 별도 planConfirm 채널 폐지).
+   * 저장 액션은 통합 SP P_SCP0134_SAVE_PLAN_MANAGEMENT_ACTV_RUN(actvCd A01~A04)로 apiClient.post 수동 호출
+   *   — 화면 코드 참조. SP 본문은 엔진호출 주석처리 스텁(convert-sp 백로그).
+   * 컬럼명 매핑(설계서 SHEET_COLUMNS ↔ 커서 필드): STATUS↔PLAN_STATUS_NAME, UPDATE_TIME↔CONFIRM_TIME,
+   *   UPDATE_USER↔CONFIRM_USER, PLAN_TYPE(표시)↔PLAN_TYPE_DESCRIPTION — FE 그리드에서 매핑.
+   */
+  SCP0134: {
+    mainGrid: {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID
+        planYear: string; // 2 P_PLAN_YEAR
+        planWeek: string; // 3 P_PLAN_WEEK
+        sesUserGrId: string; // 5 P_GROUP_ID (FE session.groupId 전송. 4 P_USER_ID=sesUserId BE 주입)
+      };
+      response: {
+        o_rc: {
+          DIVISION_ID: string;
+          DIVISION_NAME: string;
+          PLAN_TYPE_DESCRIPTION: string; // 표시용(Pre/Main/Semi/Final Plan)
+          PLAN_TYPE: string; // 코드(PR/MA/SE/FN)
+          MODELING_ID: string;
+          REVISION_NO: string;
+          REVISION_DESC: string;
+          PLAN_STATUS_NAME: string; // 설계서 'Status' 컬럼 바인딩
+          PLAN_STATUS: string; // 0 실행중 / 1 정상종료 / -1 에러 / -2 종료중
+          CONFIRM_YN: string; // Engine Run 버튼 활성 판정(Final CONFIRM_YN='N')
+          CONFIRM_TIME: string; // 설계서 'Update Time'
+          CONFIRM_USER: string; // 설계서 'Update User'
+          RUN_AUTH: string; // ENGINE_RUN(A01) 버튼 활성
+          CREATE_AUTH: string; // VER_CREATE(A02)
+          CANCEL_AUTH: string; // VER_CANCEL(A03)
+          SHIP_REQ_AUTH: string; // SHIP_REQ_CREATE(A04)
+          [key: string]: string | number;
+        };
+      } & {
+        [K in 'o_rc2' | 'o_rc3' | 'o_rc4' | 'o_rc5']: {
+          CODE: string; // REVISION_NO 후보(= PLAN_VERSION_ID)
+          NAME: string;
+          MODELING_ID: string;
+          PLAN_STATUS: string;
+          PLAN_STATUS_NAME: string;
+          PLAN_TYPE: string;
+          PLAN_TYPE_DESCRIPTION: string;
+          DISPLAY_SEQ: string | number;
+          [key: string]: string | number;
+        };
+      };
+    };
+    detailGrid: {
+      request: {
+        divisionId: string; // 1 P_DIVISION_ID
+        revisionNo: string; // 2 P_REVISION_NO (SCP0015 와 달리 modelingId 없음)
+      };
+      response: {
+        o_rc: {
+          PLAN_ID: string;
+          PROGRESS_CODE: string; // 설계서 'Step' 바인딩(SP SEGMENT2)
+          PROGRESS_TEXT: string; // 설계서 'Progress' 바인딩(SP ATTRIBUTE1)
+          STATUS: string;
+          START_DATE: string;
+          END_DATE: string;
+          DETAILS: string; // SP MESSAGE_TEXT
+          [key: string]: string | number;
+        };
+        o_rc2: {
+          // SP 바디 미오픈(시그니처만 존재) — 폴링 상태커서 없음. 방어적 선언.
           [key: string]: string | number;
         };
       };
@@ -7837,6 +7666,89 @@ interface RawProcedureMap extends Base {
   };
 
   /**
+   * SCP0132 Constraint Of Shipment Qty (Supply Master) — 단일 그리드 CRUD + 조회조건 전용 `init` 시트.
+   *   main GET  SCP.SCP0132_GET_CONSTRAINT_OF_SHIPMENT_QTY (10 param → 23컬럼, design 03 §1/§4).
+   *   init SEARCH SCP.SCP0132_GET_SEARCH_INFO (IN 2: p_division_id/p_site_id → OUT 커서 6).
+   *     조회조건 콤보(PlanGroup/ToSite/FromSite/Stage/ModelGroup) + Item(팝업) 다중커서 원천 —
+   *     AS-IS GetSearchInfo(SCP0132_ConstraintOfShipmentQty.cs:202~227)가 DataSet Tables[0]~[5] 로
+   *     꺼내 쓰는 바로 그 SP 다(InitControls .cs:174~190 매핑). AS-IS 는 division 빈/‘81’ 로 전사
+   *     로드 후 DBUtils.Filter 로 Division cascade(.cs:265~306) — FE 가 클라 필터로 재현한다.
+   *   커서 순서는 AS-IS .cs:174~190 원문이 정본: Tables[0]=PlanGroup / [1]=ToSite / [2]=FromSite /
+   *     [3]=Stage / [4]=ModelGroup / [5]=Item (SCP0128 과 PlanGroup 외 순서가 다름 — ToSite 가 먼저).
+   *   PKG_SCP0132 는 TO-BE 미배포(ora.py 접속 불가로 재확인 보류, 2026-10-13) — 미배포 구간엔 init
+   *     커서가 비어 조회조건 콤보가 빈 옵션으로 렌더된다(배선은 AS-IS 정합, 배포 후 즉시 채워짐).
+   */
+  SCP0132: {
+    main: {
+      request: {
+        divisionId: string; // 1 p_division_id
+        planGroupId: string; // 2 p_plan_group_id (다중, 콤마결합)
+        fromSiteId: string; // 3 p_from_site_id (다중, 콤마결합)
+        toSiteId: string; // 4 p_to_site_id (다중, 콤마결합)
+        modelGroupName: string; // 5 p_model_group_name (다중, 콤마결합)
+        itemId: string; // 6 p_item_id (Item ID 팝업 결과)
+        stage: string; // 7 p_stage (다중, 콤마결합)
+        fromDate: string; // 8 p_from_date
+        toDate: string; // 9 p_to_date
+        validYn: string; // 10 p_valid_yn
+      };
+      response: {
+        // main 그리드 행 — SCM_MST_SHEET_COLUMNS 동적 컬럼(23행). PROC_M 미배포라 loose.
+        o_rc1: WijmoRowItem;
+      };
+    };
+    init: {
+      request: {
+        divisionId: string; // 1 p_division_id (AS-IS 는 '81' 로 전사 로드 — FE 는 빈 값 호출 후 클라 cascade)
+        scmSiteId: string; // 2 p_site_id (AS-IS sSite='ALL' → 빈 문자열)
+      };
+      response: {
+        /** Plan Group(AS-IS Tables[0]) — Division cascade(.cs:265 RefreshPlanGroupByDivision). */
+        o_rc1: {
+          CODE: string;
+          NAME: string;
+          DIVISION_ID: string;
+          [key: string]: string | number;
+        };
+        /** To Site(Tables[1]) — Division cascade + base 필터 IN('81','40','82')(.cs:272 RefreshSiteByDivision). */
+        o_rc2: {
+          CODE: string;
+          NAME: string;
+          DIVISION_ID: string;
+          [key: string]: string | number;
+        };
+        /** From Site(Tables[2]) — To Site 와 동일 소스/필터(.cs:272 동일 메서드). */
+        o_rc3: {
+          CODE: string;
+          NAME: string;
+          DIVISION_ID: string;
+          [key: string]: string | number;
+        };
+        /** Stage(Tables[3]) — Division cascade(.cs:292 RefreshStageByDivision). */
+        o_rc4: {
+          CODE: string;
+          NAME: string;
+          DIVISION_ID: string;
+          [key: string]: string | number;
+        };
+        /** Model Group(Tables[4]) — Division cascade(.cs:300 RefreshStageByModelGroup). */
+        o_rc5: {
+          CODE: string;
+          NAME: string;
+          DIVISION_ID: string;
+          [key: string]: string | number;
+        };
+        /** Item(Tables[5]) — 조회조건 콤보 아님(팝업 원천·내부 보조, .cs:190/308). */
+        o_rc6: {
+          DIVISION_ID: string;
+          ITEM_ID: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
+
+  /**
    * SCP0133 Warehouse Capacity (Supply Master) — 2 sheetNm 정적 그리드(Warehouse Capacity
    * 15컬럼 + Warehouse Item Mapping 16컬럼, pivot 없음). 신규 전환(nscmPath 후보 확정,
    * goal.md ①) — GSCM 원본 `.cs` 미확보 + AS-IS MSSQL 접속 불가(design 00~03 3중 ERROR)라
@@ -8138,6 +8050,82 @@ interface RawProcedureMap extends Base {
           DIVISION_ID: string; // F01·F02 클라 필터 키
         };
       };
+    };
+    // A002 Create Plan ID 팝업 GET(P_SCP0123_GET_PLAN_ID_INFO, IN 4 / OUT 커서 5) — plan-control.constants
+    // 의 PLAN_ID_INFO_RESPONSE_SET 실측 순서 그대로(horizonInfo/frozenInfo/fpPlanList/scpPlanList/planInfo).
+    planIdInfo: {
+      request: {
+        divisionId: string;
+        planGroupId: string;
+        planStartYyyymmdd: string;
+        planId: string; // 전체(생성 모드)는 '' / 조회 모드는 기생성 Plan ID
+      };
+      response: {
+        horizonInfo: {
+          HORIZON_END_DATE: string;
+          VERSION_NO: string;
+        };
+        frozenInfo: {
+          OPERATION_GROUP: string;
+          PROD_FROZEN: string;
+          SHIP_FROZEN: string;
+        };
+        fpPlanList: {
+          CODE: string;
+          NAME: string;
+          PLAN_TYPE: string;
+        };
+        scpPlanList: {
+          CODE: string;
+          NAME: string;
+          PLAN_TYPE: string;
+        };
+        planInfo: {
+          PROD_REF_SYS_DIVS_CD: string;
+          PROD_REF_SYS_PLAN_ID: string;
+          SHIP_REF_SYS_DIVS_CD: string;
+          SHIP_REF_SYS_PLAN_ID: string;
+          OPMZ_PLAN_DESC: string;
+          PLAN_END_YYYYMMDD: string;
+          PROD_NO_FROZEN_YN: string;
+          CELL_NO_FROZEN_YN: string;
+          SHIP_NO_FROZEN_YN: string;
+          PMDU_PROD_FRZ_END_YYYYMMDD: string;
+          CELL_PROD_FRZ_END_YYYYMMDD: string;
+          SHIP_FRZ_END_YYYYMMDD: string;
+        };
+      };
+    };
+    // A002 팝업 SAVE(P_SCP0123_SAVE_PLAN_ID_CREATE, IN 23) — FE 는 raw apiClient.post 로 호출하므로
+    // response 는 쓰지 않지만, FiltersBySheet(usePlanControlStore.ts) 의 `[key in SHEETS]` 매핑이
+    // 전 시트의 request 타입을 요구해 선언한다.
+    planIdCreate: {
+      request: {
+        divisionId: string;
+        planGrId: string;
+        planGrName: string;
+        prsCd: string;
+        planStartYyyymmdd: string;
+        planEndYyyymmdd: string;
+        dmdVerId: string;
+        prodRefSysDivsCd: string;
+        prodRefSysPlanId: string;
+        prodFrzStartYyyymmdd: string;
+        prodFrzEndYyyymmdd: string;
+        cellProdFrzStartYyyymmdd: string;
+        cellProdFrzEndYyyymmdd: string;
+        shipRefSysDivsCd: string;
+        shipRefSysPlanId: string;
+        shipFrzStartYyyymmdd: string;
+        shipFrzEndYyyymmdd: string;
+        pramTyCd: string;
+        planDesc: string;
+        prodNoFrzYn: string;
+        cellNoFrzYn: string;
+        shipNoFrzYn: string;
+        sesUserId: string;
+      };
+      response: Record<string, never>;
     };
   };
 
@@ -9794,7 +9782,22 @@ interface RawProcedureMap extends Base {
           LOT_YN: string;
           [key: string]: string | number; // D_yyyymmdd / W_ / M_ 동적 수량 컬럼
         };
-        o_rc2: { [key: string]: string | number };
+        // o_rc2 — NOTE Load (P_SSP0060_GET_SHIPMENT_PSI_COMMENTS, PKG 본문 L4160). AS-IS dtNote(ds.Tables[1])
+        //   등가. SHIP_PLAN_DETAIL 일자셀의 파란 StickyNote(■) 원천 — 키 8컬럼으로 셀을 찾아 NOTE 를 건다.
+        //   NOTE = 'Input Qty(Min) : ' || NOEDIT_QTY(= SHIPMENT_STATUS<>'C' OR ERP_STATUS='C' 합계 = DO 발행/입력불가 수량).
+        o_rc2: {
+          DIVISION_ID: string;
+          FROM_SITE: string;
+          ITEM_ID: string;
+          TO_SITE: string;
+          TRANSPORT_MODE: string;
+          INCOTERMS: string;
+          FCST_TYPE: string;
+          YYYYMMDD: string;
+          QTY: string | number;
+          NOEDIT_QTY: string | number;
+          NOTE: string;
+        };
       };
     };
     // Detail — Shipment Plan Detail (GET 19 IN 실측). SAVE=SAVE_SHIPMENT_REQUEST_CONFIRM(38 IN 실측 —
@@ -10268,6 +10271,269 @@ interface RawProcedureMap extends Base {
         apploval: string; // 2 apploval (SP 파라미터명 오타 그대로 — 승인자)
       };
       response: { o_rc1: WijmoRowItem };
+    };
+  };
+
+  /**
+   * Production Plan Line — SCP0013 (SCP 도메인 1호 화면, Phase A = Shell+메타)
+   *
+   * SHEETS:
+   * - `Line` (메인 조회 — SP `SCP0013_GET_PRODUCTION_PLAN_LINEBY`, AS-IS 22 IN positional 1:1.
+   *   ⚠️ 사내 Oracle SP 전원 INVALID(기계변환 초안) — T19 정식 변환 전까지 조회 비활성.
+   *   차단 handoff: `_artifacts/_apply_corporate/A5_scp0013_phase0_sp_blocked_handoff.md`)
+   *
+   * request 키 = AS-IS .cs FindData_Main L2053~2074 파라미터 camelCase 1:1 (22개).
+   * response = AS-IS 반환 DataSet 4테이블 1:1 (o_rc1 메인 wide-pivot / o_rc2 Fix / o_rc3 W ratio / o_rc4 M ratio).
+   */
+  SCP0013: {
+    Line: {
+      request: {
+        divisionId: string;
+        operationGroup: string;
+        scmSiteId: string;
+        lineId: string;
+        modelId: string;
+        itemId: string;
+        fromYyyymmdd: string;
+        toYyyymmdd: string;
+        planStartYyyymmdd: string;
+        planType: string;
+        seq: string;
+        programId: string;
+        sheetName: string;
+        userId: string;
+        electrodeType: string;
+        nickName: string;
+        cellTypeGr: string;
+        lineAssign: string;
+        bucket: string;
+        chkAll: string;
+        extraSpec: string;
+        debugMode: string;
+      };
+      response: {
+        // 메인 그리드 — measure 별 행 + D_/W_/M_/B_ wide-pivot 동적 컬럼 (AS-IS Tables[0]).
+        o_rc1: {
+          KEY_IDX: string;
+          DIVISION_ID: string;
+          DIVISION_NAME: string;
+          ORIGIN_DIVISION_ID: string;
+          OPERATION_GROUP: string;
+          OPERATION_GROUP_NAME: string;
+          SCM_SITE_ID: string;
+          SCM_SITE_DESCRIPTION: string;
+          OPERATION_ID: string;
+          LINE_ID: string;
+          ITEM_ID: string;
+          MODEL_ID: string;
+          NICK_NAME: string;
+          CELL_ID: string;
+          EXTRA_SPEC: string;
+          CELL_TYPE_GROUP_CODE: string;
+          ELECTRODE_TYPE: string;
+          MEASURE: string;
+          MEASURE_NAME: string;
+          UNIT: string;
+          FROM_YYYYMMDD: string;
+          TO_YYYYMMDD: string;
+          PLAN_START_YYYYMMDD: string;
+          PLAN_TYPE: string;
+          PLAN_SEQ: string;
+          CP_KEY: string;
+          FIX_KEY: string;
+          [key: string]: string | number;
+        };
+        // Fix 정보 (AS-IS Tables[1] — Set_FixCellColor 입력).
+        o_rc2: {
+          FIX_KEY: string;
+          [key: string]: string | number;
+        };
+        // WEEKLY Ratio (AS-IS Tables[2] — LINE_TOTAL_LOAD W_ 덮어쓰기).
+        o_rc3: {
+          DIVISION_ID: string;
+          SCM_SITE_ID: string;
+          OPERATION_ID: string;
+          LINE_ID: string;
+          MEASURE: string;
+          [key: string]: string | number;
+        };
+        // MONTHLY Ratio (AS-IS Tables[3] — LINE_TOTAL_LOAD M_ 덮어쓰기).
+        o_rc4: {
+          DIVISION_ID: string;
+          SCM_SITE_ID: string;
+          OPERATION_ID: string;
+          LINE_ID: string;
+          MEASURE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
+
+  /**
+   * CustPsiUpload — DMF0013 (Customer PSI Upload)
+   *
+   * DMF0014(CustomerFcstUpload)를 복제·파생한 화면 — MeasureGroup 고정값만 "PSI" 로 분기
+   * (AS-IS DMF0013_CustPsiUpload.cs 헤더 주석이 "DMF0014_CustFcstUpload" 로 남음, 원장 §0.3).
+   * 타입 형상(request/response)은 DMF0014 와 동일하다 — SP 는 DMF0013 계열(직접 GET/SAVE)이나
+   * PROC_M ALL_ARGUMENTS 가 이 FE 저장소에 없어(seed 만, 원장 §7.3-1) DMF0014 실측 형상을 승계한다.
+   * SHEETS:
+   * - `PSI Upload`  (메인 — AS-IS SheetView "PSI Upload" 등록명 그대로. excel-upload 체인 키)
+   * - `spreadTitle` (동적 기간 헤더 — 공유 SP DM.DMF0014_GET_SPREAD_TITLE 재사용, 원장 §6.1)
+   * - `dayRange`    (PR_GET_DAY_RANGE 재사용 — DMF0014/DMF0048 와 동일 계약)
+   * SAVE(P_DMF0013_SAVE_CUST_PSI_UPLOAD_DATA 17 IN '^'delim)는 apiClient.post 직접 — 타입 미등재.
+   */
+  DMF0013: {
+    'PSI Upload': {
+      // DM.DMF0013_GET_CUST_PSI_UPLOAD_DATA (13 IN + 세션 2 — DMF0014 형상 승계, 원장 §E10 L435~448)
+      request: {
+        divisionId: string; // 1  P_DIVISION_ID (단일 필수)
+        deptId: string; // 2  P_DEPT_ID (Team — 콤마 delim, 빈값 'ALL')
+        endCustomer: string; // 3  P_END_CUSTOMER
+        scmSiteId: string; // 4  P_SCM_SITE_ID (Sales Site)
+        plantSiteId: string; // 5  P_PLANT_SITE_ID
+        projectCode: string; // 6  P_PROJECT_CODE (텍스트 raw — 빈값 '')
+        itemId: string; // 7  P_ITEM_ID (Model 텍스트 raw)
+        startYyyymmdd: string; // 8  P_START_YYYYMMDD
+        endYyyymmdd: string; // 9  P_END_YYYYMMDD
+        bucketType: string; // 10 P_BUCKET_TYPE ('DAILY'/'WEEKLY'/'MONTHLY' full-word)
+        domExp: string; // 11 P_DOM_EXP (Customs Handbook)
+        createdBy: string; // 12 P_CREATED_BY (BE 세션 자동)
+        userinfo: string; // 13 P_USERINFO (AS-IS NowGroupID)
+        sesUserId: string; // 14 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 15 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        // O_RC1 — 식별 14 (DIVISION_ID~EDIT_FLAG) + 동적 D_ 기간 컬럼 (원장 §3.1).
+        //   EDIT_YN 유무(14 vs 15열)는 admin SHEET_COLUMNS 실측 필요(원장 §5-4) — 승계로 함께 선언.
+        o_rc1: {
+          DIVISION_ID: string;
+          SCM_SITE_ID: string;
+          PLANT_SITE_ID: string;
+          CUSTOMER_PROJECT_CODE: string;
+          CUSTOMER_MODEL: string;
+          INCOTERMS: string;
+          FCST_TYPE: string;
+          DOM_EXP: string;
+          MEASURE_GROUP: string; // 이 화면 고정값 "PSI" (AS-IS InsertRow L631)
+          MEASURE: string;
+          UPLOAD_UOM: string;
+          PROJECT_CODE: string;
+          ITEM_ID: string;
+          EDIT_FLAG: string; // 'Y' = 기간 셀 편집 가능 행 (AS-IS EditButton 판정 1:1)
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    spreadTitle: {
+      // 공유 SP DM.DMF0014_GET_SPREAD_TITLE (3 IN + 세션 2 + o_rc1) — DMF0013 이 그대로 재사용(원장 §6.1)
+      request: {
+        startYyyymmdd: string; // 1 P_START_YYYYMMDD
+        endYyyymmdd: string; // 2 P_END_YYYYMMDD
+        bucketType: string; // 3 P_BUCKET_TYPE (full-word)
+        sesUserId: string; // 4 P_USER_ID (BE 세션 자동)
+        mnuId: string; // 5 P_MENU_ID (BE 메뉴 자동)
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string; // 'D_yyyymmdd' (전 버킷 D_ 접두)
+          COLUMN_LABEL: string; // 'yyyymmdd'
+          SMALL_LABEL_NAME: string; // 상단 그룹 라벨 (요일 / Wnn / yyyy-mm)
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    dayRange: {
+      // PR_GET_DAY_RANGE PROC_M 재사용 (AS-IS GetDayRange p_month=6 — 원장 §6.1)
+      request: {
+        createdBy: string; // 1 P_CREATED_BY (BE 세션 자동)
+        month: string; // 2 P_MONTH (AS-IS p_month=6)
+      };
+      response: {
+        o_rc1: { DAY_RANGE: string; [key: string]: string | number };
+        o_rc2: { DAY_RANGE: string; [key: string]: string | number };
+      };
+    };
+  };
+  /**
+   * Demand Manager — DMF0068 (소형 수주관리, Division 40 전용)
+   *
+   * SHEETS:
+   * - `ContributeSalesList` (메인 조회. `PKG_DMF0068.P_DMF0068_GET_ORDERLIST`
+   *                          — o_rc1=데이터 / o_rc2=조립된 SQL 텍스트(진단용, 화면 미사용))
+   * - `versionPopup`        (버전 팝업. `PKG_DMF0068.P_DMF0068_GET_CONT_VIEW_VERSIONPOPUP`)
+   * - `lookupProject`       (Project 셀 콤보. `PKG_DMF0068.P_DMF0068_GET_LOOKUPPROJECT`)
+   *
+   * 저장/삭제는 컬렉션 IN 을 바인딩할 수 없어 CLOB(JSON) 래퍼를 사용한다
+   * (`P_DMF0068_SAVE_ORDERLIST_JSON` / `P_DMF0068_DEL_ORDERLIST_JSON`).
+   * 월 컬럼 M1..Mn 은 조회 기간의 월 수만큼만 내려온다 (n번째 표시 월 = Mn).
+   */
+  DMF0068: {
+    ContributeSalesList: {
+      request: {
+        divisionId: string;
+        versionNo: string;
+        fromDt: string;
+        toDt: string;
+      };
+      response: {
+        o_rc1: {
+          PROJECT_NAME: string;
+          MEASURE: string;
+          ORDERSTART: string;
+          ORDEREND: string;
+          ORDERAPPROVAL: number;
+          ORDERNOW: number;
+          SRESULT: number;
+          SPLAN: number;
+          STOCK: number;
+          STOCK2: number;
+          KEYVALUE: string;
+          KEYVALUE2: string;
+          MEASURE2: string;
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+        o_rc2: {
+          SQL_TEXT: string;
+        };
+      };
+    };
+    versionPopup: {
+      request: {
+        startYyyymmdd: string;
+        endYyyymmdd: string;
+        divisionId: string;
+        versionType: string;
+        description: string;
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
+          VERSION_NO: string;
+          VERSION_DESCRIPTION: string;
+          VERSION_TYPE: string;
+          VER_CRE_SEQ: string;
+          YYYYMMDD: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          EDIT_YN: string;
+        };
+      };
+    };
+    lookupProject: {
+      request: {
+        divisionId: string;
+        versionNo: string;
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
+          NAME: string;
+        };
+      };
     };
   };
 

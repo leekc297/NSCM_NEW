@@ -1,0 +1,66 @@
+{
+ "note": "조회조건 기준표 적용 결과 — check.js SC1(순서)·SC2(제외 조건 잔존)가 Form.tsx 의 AS-IS 표지와 대조",
+ "domain": "SCP",
+ "screen": "BOD",
+ "src": "SCP_화면별 조회조건 정리_260731_v0.5.xlsx 44~51행",
+ "order": [
+  {
+   "ctl": "clbDivision",
+   "label": "Div",
+   "tobe": "Div",
+   "seq": 1,
+   "usage": "USE"
+  },
+  {
+   "ctl": "clbFromSite",
+   "label": "From Site",
+   "tobe": "From Site",
+   "seq": 2,
+   "usage": "USE"
+  },
+  {
+   "ctl": "clbToSite",
+   "label": "To Site",
+   "tobe": "To Site",
+   "seq": 3,
+   "usage": "USE"
+  },
+  {
+   "ctl": "clbIncoterms",
+   "label": "Incoterms",
+   "tobe": "Incoterms",
+   "seq": 4,
+   "usage": "USE"
+  },
+  {
+   "ctl": "clbIncotermsSSP",
+   "label": "SSP Incoterms",
+   "tobe": "SSP Incoterms",
+   "seq": 5,
+   "usage": "USE"
+  },
+  {
+   "ctl": "clbTransMode",
+   "label": "Trans Mode",
+   "tobe": "Trans Mode",
+   "seq": 6,
+   "usage": "USE"
+  },
+  {
+   "ctl": "cboInputStatus",
+   "label": "Status",
+   "tobe": "Status",
+   "seq": 7,
+   "usage": "USE"
+  },
+  {
+   "ctl": "cboValidYN",
+   "label": "Active",
+   "tobe": "Active",
+   "seq": 8,
+   "usage": "USE"
+  }
+ ],
+ "excluded": [],
+ "missing": []
+}

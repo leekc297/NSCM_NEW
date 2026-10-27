@@ -60,6 +60,18 @@ const initState: State = {
   },
 } as const;
 
+// division 토큰 매칭이 0건일 때 division 필터 없이 전체 컬럼을 다시 받는 fallback.
+const fetchAllColumns = async (division: string): Promise<RawFlexGridColumnConfig[] | undefined> => {
+  try {
+    const res = await apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
+      sheetNm: resolveSheetNm(division),
+    });
+    return res.data.result ?? undefined;
+  } catch {
+    return undefined;
+  }
+};
+
 export const useGroupCodeManagementStore = createPersistedStoreWithTab<State & Action>(
   (set, get) => ({
     ...initState,
@@ -174,15 +186,3 @@ export const useGroupCodeManagementStore = createPersistedStoreWithTab<State & A
   }),
   'group-code-management'
 );
-
-// division 토큰 매칭이 0건일 때 division 필터 없이 전체 컬럼을 다시 받는 fallback.
-const fetchAllColumns = async (division: string): Promise<RawFlexGridColumnConfig[] | undefined> => {
-  try {
-    const res = await apiClient.post<RawFlexGridColumnConfig[]>(`/admin/menu/${MENU_ID}/column`, {
-      sheetNm: resolveSheetNm(division),
-    });
-    return res.data.result ?? undefined;
-  } catch {
-    return undefined;
-  }
-};

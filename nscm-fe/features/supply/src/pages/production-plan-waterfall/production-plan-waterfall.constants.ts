@@ -59,6 +59,15 @@ export const ELECTRODE_LOOKUP = 'ELECTRODE_TYPE';
 // Line 콤보 sentinel — 결과에 코드=이름='-' 행 존재. 조회 파라미터에서 '' 로 치환(AS-IS cs:1060~1063, design 02 §2 #4).
 export const LINE_SENTINEL = '-';
 
+// UOM 필터 옵션 — AS-IS InitUOM(cs:454~472) dtUOM 하드코딩 2행("M","EA"). clbUOM 은 CheckedListBox(단일선택)
+//   라 TO-BE 는 single 콤보로 이식한다. 조회결과를 UOM 컬럼값으로 거르는 클라 필터(ApplyUOM, SP 파라미터 아님).
+export const UOM_OPTIONS = [
+  { label: 'M', value: 'M' },
+  { label: 'EA', value: 'EA' },
+] as const;
+// RefreshUOM 가시성(cs:474~510) — EE Division + OperationGroup='E' 일 때만 노출(체크 'M'), 그 외 숨김(암묵 'EA').
+export const UOM_VISIBLE_OPERATION_GROUP = 'E';
+
 // Validation MSG — TO-BE SCM_ADM_MSG_M 문구 역조회(Hook #114). AS-IS 번호 그대로 재사용 금지(convert-core §4.1).
 //   design 01 §5 Q2 확인필요 — 문구 기준 매핑. 미확정분은 영문 defaultValue fallback 병기.
 export const MSG = {
@@ -67,11 +76,10 @@ export const MSG = {
   //   Division 없음')가 1:1 일치하는 TO-BE 코드 MSG00667(EN 'No authority assigned.', ora.py 실측)을 쓴다.
   //   자매 inventory-trend 선례 동일.
   REQUIRE_DIVISION: 'MSG00667',
-  // Gap 체크 시 version 2건 필요 (design 02 §4e). AS-IS MSG00376 은 TO-BE 미등록(ora.py 0행)이고 문구
-  //   역조회(ora.py)로 1:1 일치 코드 없음 — MSG00255('You can select up to 2 versions.')는 상한 제약이라
-  //   'Gap 시 정확히 2건' 의도와 불일치. EN defaultValue fallback 유지, 정식 코드 신규 등록은 i18n 팀 소관
-  //   (SCM_ADM_MSG_M INSERT 금지, memory deploy-sql-no-msg-m-insert). 04 리포트 잔여(I1).
-  GAP_NEED_TWO_VERSION: 'MSG00376',
+  // Gap 체크 시 version 2건 필요 (design 02 §4e). AS-IS MSG00376 은 TO-BE 미등록(ora.py 0행)이라, 의도가
+  //   1:1 일치하는 TO-BE 등록 코드 MSG01368(KO 'Gap 체크 시 version(2) 선택해야 합니다.', EN/CN 'Choose two
+  //   versions.', 3개 locale USE_YN='Y' ora.py 실측 2026-10-21)로 교체. 번호 재사용 아님(Hook #114 준수).
+  GAP_NEED_TWO_VERSION: 'MSG01368',
   REQUIRED_FIELD: 'MSG00429', // {0} value is required. (조회 필수값)
   PERIOD_RANGE: 'MSG00108', // Invalid period (start > end). (ora.py 실측 EN 확인)
   // 최대 조회기간 초과 (AS-IS DateUtil.Check_PeriodDate cs:142~144, param 364+7=371). AS-IS MSG00172 은
@@ -94,6 +102,8 @@ export const LBL = {
   ELECTRODE: 'LBL00038',
   BUCKET: 'LBL00710',
   PERIOD: 'LBL00013',
+  UOM: 'LBL01126', // AS-IS lciUOM.Text="UOM" (Designer.cs:1178) — TO-BE 등록 LBL01126(KO/EN/CN 'UOM', ora.py 실측).
+
   ALL: 'LBL00632',
   GAP: 'LBL01079',
   MODEL: 'LBL00669',

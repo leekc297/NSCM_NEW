@@ -133,7 +133,7 @@ describe('insertStaticEditable — No.61-④ Team 전 Div 잠금 (통합테스�
   });
 });
 
-describe('requiredFieldsFor — No.59 TEXT=ETC 한정 + No.61-④ Team 해제', () => {
+describe('requiredFieldsFor — No.59 TEXT=ETC 한정 + Team 전 Div 필수(2026-10-14 Insert Mandatory)', () => {
   const cols = (div: string, measure: string, fcst: string) =>
     requiredFieldsFor(div, measure, fcst).map(f => f.col);
   it('81 TEXT 필수 = FCST_TYPE=ETC 행만 (RTF 행 면제 — 오발동 정정)', () => {
@@ -141,9 +141,11 @@ describe('requiredFieldsFor — No.59 TEXT=ETC 한정 + No.61-④ Team 해제', 
     expect(cols('81', 'RTF_SYS_RP', 'MPS')).not.toContain('TEXT');
     expect(cols('81', 'RTF_SYS_RP', 'RMA')).not.toContain('TEXT');
   });
-  it('Team(DEPT_ID) 필수 해제 — 전 Div (입력 불가 컬럼)', () => {
-    expect(cols('40', 'SalesAmt_LOC', 'ETC')).not.toContain('DEPT_ID');
-    expect(cols('40', 'Catch_Up', 'MPS')).not.toContain('DEPT_ID');
+  it('Team(DEPT_ID) 필수 — 전 Div, Catch_Up 포함 예외 없음 (컬럼 메타 Insert Mandatory)', () => {
+    expect(cols('40', 'SalesAmt_LOC', 'ETC')).toContain('DEPT_ID');
+    expect(cols('40', 'Catch_Up', 'MPS')).toContain('DEPT_ID');
+    expect(cols('81', 'RTF_SYS_RP', 'MPS')).toContain('DEPT_ID');
+    expect(cols('82', 'SalesAmt_LOC', '')).toContain('DEPT_ID');
   });
   it('40 Catch_Up = DomExp/FcstType/Incoterms 필수 유지 — AS-IS L2231~2233', () => {
     const c = cols('40', 'Catch_Up', 'MPS');

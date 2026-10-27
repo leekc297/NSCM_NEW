@@ -162,7 +162,9 @@ export const BodDistributionRoutePopup = ({
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          <h2 className='headerTitle'>{t('LBL_DISTRIBUTION_ROUTE', '_Distribution Route')}</h2>
+          {/* AS-IS 제목 'Distribution Route Popup'(SCP0007_DistributionRoutePopup.Designer.cs:640).
+              LBL01200 은 다른 팝업 라벨(LBL00334 'Project Popup' 등)처럼 KO·EN·CN 모두 영문으로 등록한다. */}
+          <h2 className='headerTitle'>{t('LBL01200', '_Distribution Route Popup')}</h2>
         </div>
       }
       customContentArea={

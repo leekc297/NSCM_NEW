@@ -161,7 +161,7 @@ export const ShipmentMasterElectrodeForm = ({ onSearch, onMaterialSearch, onMode
             />
           </Grid>
 
-          {/* Material — 입력 + 돋보기(SSP0024 전용 ItemByDivisionModal), 다건(콤마/개행). design 02 §4.6. */}
+          {/* Material — 입력 + 돋보기(SSP0024 전용 ElectrodeItemByDivisionModal), 다건(콤마/개행). design 02 §4.6. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -170,6 +170,11 @@ export const ShipmentMasterElectrodeForm = ({ onSearch, onMaterialSearch, onMode
               render={() => (
                 <InputField
                   fullWidth
+                  // 다건(개행/콤마) 입력 — store multi() 가 `[\n,]` 로 분해해 SP IN 절로 보내는데 multiline 이
+                  //   없으면 단일행 input 이 붙여넣기 개행을 제거해 엑셀 세로복사가 한 값으로 뭉친다
+                  //   (자매 shipment-change-request·SSP0200 = multiline+maxRows=3 동일 처방).
+                  multiline
+                  maxRows={3}
                   disabled={noDivisionAuth}
                   className={commonStyles.popupSearchField}
                   value={sc.materialId}
@@ -191,33 +196,22 @@ export const ShipmentMasterElectrodeForm = ({ onSearch, onMaterialSearch, onMode
             />
           </Grid>
 
-          {/* Nick Name (단일 텍스트). */}
+          {/* Model/NickName — Nick Name + Model 조회조건 통합(사용자 지시 2026-10-22). 입력 + 돋보기
+              (MaterialByDivisionModal COM0013), 다건. 팝업 선택 시 품번(ITEM_ID)→modelId, 닉네임(NICK_NAME)
+              →nickName 둘 다 세팅(page handleModelSelected)해 GET SP 의 p_model_id + p_nick_name 양쪽을 채운다.
+              직접입력은 품번 기준이므로 modelId 만 쓰고 nickName 은 비운다(이전 팝업 nickName 잔존 방지). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.NICK_NAME, '_Nick Name')}
+              label={t(LBL.MODEL_NICKNAME, '_Model/Nickname')}
               labelAlign='right'
               render={() => (
                 <InputField
                   fullWidth
-                  disabled={noDivisionAuth}
-                  value={sc.nickName}
-                  onChange={e => set({ nickName: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
-                />
-              )}
-            />
-          </Grid>
-
-          {/* Model — 입력 + 돋보기(SSP0024 전용 ItemByDivisionModal), 다건. design 02 §4.6. */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.MODEL, '_Model')}
-              labelAlign='right'
-              render={() => (
-                <InputField
-                  fullWidth
+                  // 다건(개행/콤마) 입력 — Material 과 동일 처방(multiline+maxRows=3). store multi() 가
+                  //   개행을 분해해 SP IN 절로 보내므로 붙여넣기 개행이 보존돼야 한다.
+                  multiline
+                  maxRows={3}
                   disabled={noDivisionAuth}
                   className={commonStyles.popupSearchField}
                   value={sc.modelId}
@@ -232,7 +226,8 @@ export const ShipmentMasterElectrodeForm = ({ onSearch, onMaterialSearch, onMode
                       />
                     ),
                   }}
-                  onChange={e => set({ modelId: e.target.value })}
+                  // 직접입력은 품번(modelId) 기준 — 이전 팝업에서 세팅된 nickName 보조조건을 지운다.
+                  onChange={e => set({ modelId: e.target.value, nickName: '' })}
                   onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}

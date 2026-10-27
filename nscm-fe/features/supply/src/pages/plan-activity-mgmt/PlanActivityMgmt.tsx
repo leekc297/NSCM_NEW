@@ -153,6 +153,8 @@ export const PlanActivityMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
     insert: hasButton('INSERT') ? handleInsert : false,
     delete: hasButton('DELETE') ? handleDelete : false,
     save: hasButton('SAVE') ? handleSave : false,
+    upload: false, // 메타·설계 스코프 밖(동작 없는 빈 버튼) — SubTitle 기본 노출 차단
+    manual: false, // 메타·설계 스코프 밖 — SubTitle 기본 노출 차단
   };
 
   return (

@@ -13,6 +13,12 @@
   }
 }
 
+// Main 그리드 수요 없는 Demand Group 모델 행(NO_DEMAND=1) 배경 — AS-IS 화면 캡처의 주황빛 노란색.
+//   선택 셀은 선택 색이 보이도록 제외한다(TactTime .tact-except-row 와 같은 방식).
+.tableWrapper :global(.wj-cell.project-route-no-demand-row:not(.wj-state-selected):not(.wj-state-multi-selected)) {
+  background-color: #f5c86b;
+}
+
 // 그리드별 건수 타이틀(TitleArea) + 그리드 묶음 — Main/BOM Explosion/Plant Assign 공통.
 //   중첩 PanelGroup(BOM/Plant, horizontal) 안쪽은 .tableWrapper 의 `> div > div` 규칙이
 //   닿지 않는 깊이라, 타이틀 추가로 그리드가 넘쳐 스크롤이 생기지 않도록 여기서 직접

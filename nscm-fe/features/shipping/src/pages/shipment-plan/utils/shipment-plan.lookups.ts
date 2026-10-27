@@ -1,9 +1,11 @@
 import { DataMap } from '@mescius/wijmo.grid';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { useTabLookupQueries } from '@shared/hooks';
+import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { useSessionStore } from '@shared/stores';
+
+import { COMBO, MENU_ID } from '../shipment-plan.constants';
 
 // 그리드 셀 콤보 code->name 주입 대상 (runtime-parity §3.2 H2 — 공용 DataGrid 자동 콤보는
 //   'LookupCommon'/'LookupCommon3'/'CHANGE_REASON_CODE_ALL' 의 @lookupType 토큰을 못 실어(comboId+mnuId만
@@ -32,6 +34,25 @@ const str = (v: unknown): string =>
 
 type LookupRow = Record<string, string>;
 
+/**
+ * lookup 행 배열의 참조 안정화 — useTabLookupQueries 는 useQueries 결과를 `.map(d => d.data)` 로
+ * 돌려줘 **매 렌더 새 배열**이다(참조 불안정). 그대로 useMemo deps 에 쓰면 파생 DataMap/맵이
+ * 매 렌더 재생성되고, 그 인스턴스를 그리드 col.dataMap 에 재대입하는 effect 가 매 렌더 돌아
+ * 편집 중 드롭다운이 닫히고 커밋이 증발한다 (2026-10-22 실사고 — Request 팝업 "Maximum update
+ * depth exceeded" 300건/3초 + 하단 그리드 콤보 소실. DataGrid L1762 주석이 경고한 유형).
+ * 내용 시그니처(CODE·NAME*)가 같으면 직전 배열 참조를 돌려줘 로드 완료 후 참조를 고정한다.
+ */
+const useStableLookup = (rows: LookupRow[] | undefined): LookupRow[] | undefined => {
+  const ref = useRef<{ sig: string; rows: LookupRow[] | undefined }>({ sig: '', rows: undefined });
+  const sig = (rows ?? [])
+    .map(r => `${r.CODE}${r.NAME ?? ''}${r.NAME_K ?? ''}${r.NAME_E ?? ''}`)
+    .join('');
+  if (ref.current.sig !== sig || (ref.current.rows === undefined && rows !== undefined)) {
+    ref.current = { sig, rows };
+  }
+  return ref.current.rows;
+};
+
 const toRecord = (rows: LookupRow[] | undefined, nameOf: (r: LookupRow) => string): Record<string, string> => {
   const m: Record<string, string> = {};
   (rows ?? []).forEach(r => {
@@ -48,6 +69,8 @@ export interface ShipmentPlanLookups {
   stockStatusMap: Record<string, string>;
   // 편집 콤보(드롭다운 + 'CODE : 명' 표시) — 미로딩이면 null
   changeReasonDataMap: DataMap | null;
+  // oWMS Inventory Status(STOCK_STATUS) 편집 콤보 — 드롭다운 + 'CODE : 명' 표시. 미로딩이면 null.
+  stockStatusDataMap: DataMap | null;
 }
 
 /**
@@ -56,7 +79,7 @@ export interface ShipmentPlanLookups {
  */
 export const useShipmentPlanLookups = (): ShipmentPlanLookups => {
   const langCd = useSessionStore(s => s.session.langCd);
-  const [salesType, shipmentStatus, stockStatus, changeReason] = useTabLookupQueries({
+  const [salesTypeRaw, shipmentStatusRaw, stockStatusRaw, changeReasonRaw] = useTabLookupQueries({
     filters: [
       { lookupType: LOOKUP_TYPE.SALES_TYPE },
       { lookupType: LOOKUP_TYPE.SHIPMENT_STATUS },
@@ -64,6 +87,11 @@ export const useShipmentPlanLookups = (): ShipmentPlanLookups => {
       { lookupType: LOOKUP_TYPE.CHANGE_REASON },
     ],
   });
+  // 참조 안정화 필수 — useStableLookup 주석 참조(매 렌더 새 배열 → DataMap 재생성 → 편집 파손).
+  const salesType = useStableLookup(salesTypeRaw);
+  const shipmentStatus = useStableLookup(shipmentStatusRaw);
+  const stockStatus = useStableLookup(stockStatusRaw);
+  const changeReason = useStableLookup(changeReasonRaw);
 
   const nameByLang = (r: LookupRow): string =>
     (langCd === 'KO' ? str(r.NAME_K) : str(r.NAME_E)) || str(r.NAME_E) || str(r.NAME_K);
@@ -90,7 +118,71 @@ export const useShipmentPlanLookups = (): ShipmentPlanLookups => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changeReason, langCd]);
 
-  return { fcstTypeMap, shipmentStatusMap, stockStatusMap, changeReasonDataMap };
+  // oWMS Inventory Status(STOCK_STATUS) 편집 콤보 — 드롭다운 + 'CODE : 명' 표시(사용자 지시 2026-10-20:
+  //   자매 SSP0021 처럼 콤보 선택 가능해야 한다). 원천은 표시전용 stockStatusMap 과 동일(OWMS_STOCK lookup) —
+  //   값=CODE, 표시='CODE : 명'(SSP0021 '80 : 검사합격' 비주얼 일치). 종전엔 formatItem 표시만 있어 드롭다운이 없었다.
+  const stockStatusDataMap = useMemo(() => {
+    const rows = stockStatus ?? [];
+    if (rows.length === 0) return null;
+    const list = rows.map(r => {
+      const code = str(r.CODE);
+      return { CODE: code, NAME: `${code} : ${nameByLang(r)}` };
+    });
+    return new DataMap(list, 'CODE', 'NAME');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stockStatus, langCd]);
+
+  return {
+    fcstTypeMap,
+    shipmentStatusMap,
+    stockStatusMap,
+    changeReasonDataMap,
+    stockStatusDataMap,
+  };
+};
+
+// 신규행 From/To Site 셀 콤보 주입 대상 컬럼(값=site_id 코드 / 표시=SITE_DESCRIPTION).
+//   AS-IS BtnNew_Click 이 SetCellTypeCombo 로 이 두 *_DESCRIPTION 컬럼에 거는 콤보(cs L7421~7422)의
+//   TO-BE 등가. 값 모델은 EditorValue=ItemData(= 코드 저장, 명 표시, SpreadInfo.LoadCombo L4576)라
+//   dataMap(코드->명)으로 재현한다 — dataMap 이 없으면 코드가 날것으로 보인다([[ssp0201-site-description
+//   -cell-needs-combo-datamap]]).
+export const SITE_CELL_COLUMN = {
+  FROM_SITE_DESCRIPTION: 'FROM_SITE_DESCRIPTION',
+  TO_SITE_DESCRIPTION: 'TO_SITE_DESCRIPTION',
+} as const;
+
+export interface ShipmentPlanSiteCombos {
+  fromSiteDataMap: DataMap | null;
+  toSiteDataMap: DataMap | null;
+}
+
+const buildSiteDataMap = (
+  rows: readonly Record<string, unknown>[] | undefined
+): DataMap | null => {
+  if (!rows || rows.length === 0) return null;
+  const list = rows.map(r => ({ CODE: str(r.CODE), NAME: str(r.NAME) || str(r.CODE) }));
+  return new DataMap(list, 'CODE', 'NAME');
+};
+
+/**
+ * 신규행 From/To Site 셀 콤보 데이터(design 03 §0 G24/§1.2 route 구간, gap-resolve iter-4).
+ *   - From Site: `Com_FromSite_SCP`(@divisionId @companyId) — AS-IS `dtFromSite`(cs L7180) 등가.
+ *   - To Site:   `ShipmentPlanToSite_SCP`(@divisionId, @group·@user BE주입) — AS-IS `dtToSite`(cs L7185) 등가.
+ *   조회조건 From Site 콤보와 동일 토큰이라 react-query 가 division/company 키로 중복제거(1회 조회).
+ */
+export const useShipmentPlanSiteCombos = (
+  divisionId: string,
+  companyId: string
+): ShipmentPlanSiteCombos => {
+  const [fromSites, toSites] = useTabComboQueries({
+    filters: [
+      { comboId: COMBO.FROM_SITE, mnuId: MENU_ID, divisionId, companyId },
+      { comboId: COMBO.TO_SITE, mnuId: MENU_ID, divisionId },
+    ],
+  });
+  const fromSiteDataMap = useMemo(() => buildSiteDataMap(fromSites), [fromSites]);
+  const toSiteDataMap = useMemo(() => buildSiteDataMap(toSites), [toSites]);
+  return { fromSiteDataMap, toSiteDataMap };
 };
 
 /**

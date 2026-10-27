@@ -4,6 +4,7 @@ import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { EXCEPT_DATE_MIN, MSG, YIELD_MAX, YIELD_MIN } from '../tact-time.constants';
+import { toYmd } from '../utils/tactTimeDerive';
 
 import { useTactTimeValidation } from './useTactTimeValidation';
 
@@ -115,6 +116,8 @@ describe('validateExceptRows — Except 저장 검증', () => {
       OPERATION_ID: 'O1',
       TACT_TIME_START_DATE: '20260101',
       TACT_TIME_END_DATE: '20260131',
+      TACT_TIME: 10,
+      YIELD: 90,
       ...over,
     });
 
@@ -163,9 +166,16 @@ describe('validateExceptRows — Except 저장 검증', () => {
     expect(setAlertMock).toHaveBeenCalledWith({ type: 'alert', content: MSG.REQUIRED_POSITIVE });
   });
 
-  it('빈 TACT_TIME(null) 은 건너뜀 — 통과(빈값은 필수검증 소관)', () => {
+  it('빈 TACT_TIME 은 0 으로 보고 REQUIRED_POSITIVE 로 실패 (AS-IS 동일, SP 는 NULL 저장)', () => {
     const { validateExceptRows } = setup();
-    expect(validateExceptRows([baseExcept({ TACT_TIME: '' })]).ok).toBe(true);
+    expect(validateExceptRows([baseExcept({ TACT_TIME: '' })]).ok).toBe(false);
+    expect(setAlertMock).toHaveBeenCalledWith({ type: 'alert', content: MSG.REQUIRED_POSITIVE });
+  });
+
+  it('빈 YIELD 는 0 으로 보고 RANGE_MIN 으로 실패 (AS-IS 동일)', () => {
+    const { validateExceptRows } = setup();
+    expect(validateExceptRows([baseExcept({ YIELD: '' })]).ok).toBe(false);
+    expect(setAlertMock).toHaveBeenCalledWith({ type: 'alert', content: MSG.RANGE_MIN });
   });
 
   it('YIELD 범위 위반이면 실패(Except 도 1~100)', () => {
@@ -182,6 +192,35 @@ describe('validateExceptRows — Except 저장 검증', () => {
     ];
     expect(validateExceptRows(rows).ok).toBe(false);
     expect(setAlertMock).toHaveBeenCalledWith({ type: 'alert', content: MSG.PERIOD_OVERLAP });
+  });
+
+  it('신규 행이 저장된 행(allRows)과 기간이 겹치면 실패 — Date 객체도 비교', () => {
+    const { validateExceptRows } = setup();
+    const saved: Record<string, unknown> = { ...baseExcept(), CRUD_TYPE: undefined };
+    // 저장된 행 기간을 10일 뒤로 민 Date 객체 — 앞쪽이 겹친다
+    const shift = (ymd: unknown, days: number) => {
+      const v = String(ymd);
+      return new Date(+v.slice(0, 4), +v.slice(4, 6) - 1, +v.slice(6, 8) + days);
+    };
+    const added: Record<string, unknown> = baseExcept({
+      TACT_TIME_START_DATE: shift(saved.TACT_TIME_START_DATE, 10),
+      TACT_TIME_END_DATE: shift(saved.TACT_TIME_END_DATE, 10),
+    });
+    const normalized = {
+      ...added,
+      TACT_TIME_START_DATE: toYmd(added.TACT_TIME_START_DATE),
+      TACT_TIME_END_DATE: toYmd(added.TACT_TIME_END_DATE),
+    };
+    expect(validateExceptRows([normalized], [saved, added]).ok).toBe(false);
+    expect(setAlertMock).toHaveBeenCalledWith({ type: 'alert', content: MSG.PERIOD_OVERLAP });
+  });
+
+  it('삭제 행(D)은 기간 중복 검사에서 제외', () => {
+    const { validateExceptRows } = setup();
+    const deleted = { ...baseExcept(), CRUD_TYPE: 'D' };
+    // 삭제 행과 기간이 완전히 같은 신규 행
+    const added = baseExcept();
+    expect(validateExceptRows([added], [deleted, added]).ok).toBe(true);
   });
 
   it('같은 복합키라도 기간이 안 겹치면 통과', () => {

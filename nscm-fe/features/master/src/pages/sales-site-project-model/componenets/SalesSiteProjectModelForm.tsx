@@ -293,12 +293,8 @@ export const SalesSiteProjectModelForm = ({
                           <Button
                             appearance='outlined'
                             priority='normal'
-                            iconComponent={
-                              <FunctionSearchIcon
-                                appearance='lined'
-                                onClick={() => setOpenProjectByDivisionModal(true)}
-                              />
-                            }
+                            iconComponent={<FunctionSearchIcon appearance='lined' />}
+                            onClick={() => setOpenProjectByDivisionModal(true)}
                           />
                         ),
                       }}
@@ -323,12 +319,8 @@ export const SalesSiteProjectModelForm = ({
                         <Button
                           appearance='outlined'
                           priority='normal'
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => setOpenItemByDivisionModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setOpenItemByDivisionModal(true)}
                         />
                       ),
                     }}
@@ -352,12 +344,8 @@ export const SalesSiteProjectModelForm = ({
                         <Button
                           appearance='outlined'
                           priority='normal'
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => setOpenOwnerByDivisionModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setOpenOwnerByDivisionModal(true)}
                         />
                       ),
                     }}

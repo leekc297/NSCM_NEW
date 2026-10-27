@@ -245,12 +245,8 @@ export const DemandPlanWaterfallForm = ({
                         <Button
                           appearance='outlined'
                           priority='normal'
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => setOpenVersionModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setOpenVersionModal(true)}
                         />
                       ),
                     }}

@@ -1,21 +1,20 @@
-import { DataType } from '@mescius/wijmo';
 import {
   type CellRangeEventArgs,
   type FlexGrid,
   type FormatItemEventArgs,
+  AllowMerging,
   CellType,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { MutableRefObject } from 'react';
 import { useEffect, useMemo, useRef } from 'react';
 
-import { CELL_CONTROL_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import { CustomMergeManager, type EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
-import { MENU_ID, REQUEST_CHK_BINDING, SHEETS } from '../capa.constants';
+import { MENU_ID, SHEETS } from '../capa.constants';
 import type { CalendarRow, CapaRow } from '../capa.types';
 import { recalcAll, recalcBestWorst } from '../utils/capa.derive';
 import { type EditContext, isCellEditable } from '../utils/capa.editLock';
@@ -50,7 +49,6 @@ const GRAY_BEF = '#f0f0f0'; // C1 BEF 실적 회색
 const LIGHT_BLUE = '#add8e6'; // C2/C3 계산행
 const GREEN_EMPTY = '#d8e4bc'; // C14 checkEmpty 연두
 const GRAY_NORUN = '#f0f0f0'; // C13 No-Run D_ 회색
-const YELLOW_EDITABLE = '#ffff99'; // Mail REQ 편집 가능 셀(AS-IS 노란 배경)
 
 const CAL_LOSS = new Set(['XB020', 'XB021', 'XC041', 'XC042', 'XE500', 'M08', 'XD101']);
 const NO_RUN_NOT_PM = new Set([
@@ -73,7 +71,7 @@ const NO_RUN_NOT_PM = new Set([
 
 /**
  * SCP0049 메인 그리드(siMain, 03 설계). 고정칼럼 = staticColumns(userTitle).
- * 동적 기간칼럼(D_/M_/Y_) = calendar SP + 맨 뒤 REQUEST_CHK(Mail REQ). D_ 초기 숨김(Vis7) + 월 헤더 더블클릭 드릴다운(Vis8).
+ * 동적 기간칼럼(D_/M_/Y_) = calendar SP(Mail REQ 칸 미부착). D_ 초기 숨김(Vis7) + 월 헤더 더블클릭 드릴다운(Vis8).
  * 편집 = beginningEdit 종합식(capa.editLock — EDIT 모드 토글 미이식). 파생 재계산 = cellEditEnded(capa.derive).
  * 셀 병합 G4(좌측 키) + 헤더 span G5 = 공용 CustomMergeManager + DataGrid 헤더 머지.
  */
@@ -94,6 +92,10 @@ export const CapaGrid = ({
   const drilledMonthsRef = useRef<Set<string>>(new Set());
   const editContextRef = useRef(editContext);
   editContextRef.current = editContext;
+  // 승인 Planner 판정이 조회 뒤 늦게 도착해도 CONFIRM_FLAG 체크박스 잠금 표시를 다시 그린다.
+  useEffect(() => {
+    gridRef.current?.invalidate();
+  }, [editContext, gridRef]);
   const fromRef = useRef(fromYyyymm);
   fromRef.current = fromYyyymm;
   const checkEmptyRef = useRef(checkEmpty);
@@ -124,44 +126,32 @@ export const CapaGrid = ({
   );
 
   // 동적 기간칼럼(calendar) → FlexGridColumnConfig. D_ 는 초기 숨김(Vis7), 드릴다운 시 노출(Vis8).
-  //   REQUEST_CHK 는 AS-IS 처럼 기간칼럼 뒤 마지막에 붙인다(03 §1.1-D, cs:1471 AddCheckColumn).
-  //   dataType Boolean + isRequired true: 값 없음(null)을 미정(indeterminate) 아닌 미체크로 그린다.
-  const dynamicColumns = useMemo<FlexGridColumnConfig[]>(() => {
-    const periodColumns = [...calendar]
-      .sort((a, b) => Number(a.SORT_ORDER_NO) - Number(b.SORT_ORDER_NO))
-      .map<FlexGridColumnConfig>(c => {
-        const binding = c.COLUMN_NAME;
-        const kind = kindOf(binding);
-        const isDay = kind === 'D';
-        const month = kind === 'D' ? `M_${binding.slice(2, 8)}` : '';
-        return {
-          binding,
-          header: c.COLUMN_LABEL_NAME,
-          width: 70,
-          align: 'R',
-          format: 'n2',
-          allowMerging: false,
-          allowSorting: false,
-          _dynamic: true,
-          // D_ 는 소속 월이 드릴다운된 경우에만 표시.
-          visible: isDay ? drilledMonthsRef.current.has(month) : true,
-        };
-      });
-    return [
-      ...periodColumns,
-      {
-        binding: REQUEST_CHK_BINDING,
-        header: 'Mail REQ',
-        width: 60,
-        align: 'center',
-        allowMerging: false,
-        allowSorting: false,
-        dataType: DataType.Boolean,
-        isRequired: true,
-        _ctrlType: CELL_CONTROL_TYPE.CHECKBOX,
-      },
-    ];
-  }, [calendar]);
+  //   AS-IS 맨 뒤 REQUEST_CHK(Mail REQ, cs:1471 AddCheckColumn)는 붙이지 않는다 — Mail Request 버튼이
+  //   설계상 제거돼 이 칸을 쓰는 기능이 없다.
+  const dynamicColumns = useMemo<FlexGridColumnConfig[]>(
+    () =>
+      [...calendar]
+        .sort((a, b) => Number(a.SORT_ORDER_NO) - Number(b.SORT_ORDER_NO))
+        .map<FlexGridColumnConfig>(c => {
+          const binding = c.COLUMN_NAME;
+          const kind = kindOf(binding);
+          const isDay = kind === 'D';
+          const month = kind === 'D' ? `M_${binding.slice(2, 8)}` : '';
+          return {
+            binding,
+            header: c.COLUMN_LABEL_NAME,
+            width: 70,
+            align: 'R',
+            format: 'n2',
+            allowMerging: false,
+            allowSorting: false,
+            _dynamic: true,
+            // D_ 는 소속 월이 드릴다운된 경우에만 표시.
+            visible: isDay ? drilledMonthsRef.current.has(month) : true,
+          };
+        }),
+    [calendar]
+  );
 
   // 그리드 이벤트 배선 — 편집 잠금/파생 재계산/조건부 서식/월 드릴다운.
   useEffect(() => {
@@ -196,7 +186,7 @@ export const CapaGrid = ({
 
     // 편집 잠금(03 §3 종합식) — 편집 불가 셀은 진입 취소.
     //   공용 DataGrid 의 beginningEdit(setEditableColumns)가 먼저 돌아 `_inputEditType` 이 편집형(O/M)이 아닌
-    //   컬럼(INPUT_TP_CD 전건 'S', Mail REQ 동적 컬럼)을 전부 cancel=true 로 만든다. 이 핸들러가 뒤에 등록되므로
+    //   컬럼(INPUT_TP_CD 전건 'S')을 전부 cancel=true 로 만든다. 이 핸들러가 뒤에 등록되므로
     //   취소만 세우지 말고 종합식 결과로 덮어써야 편집 가능 셀이 열린다(pastingCell 과 동일 판정).
     const beginningEdit = (_s: FlexGrid<CapaRow>, e: CellRangeEventArgs) => {
       const row = dataRowOf(e.row);
@@ -227,24 +217,28 @@ export const CapaGrid = ({
     const formatItem = (_s: FlexGrid<CapaRow>, e: FormatItemEventArgs) => {
       const binding = bindingOf(e.col);
       if (e.panel.cellType === CellType.ColumnHeader) {
-        // C4 D_ 헤더 요일색 — 토=파랑/일=빨강(calendar DAY_CODE).
+        // C4 D_ 헤더 요일색 — 토=파랑/일=빨강(calendar DAY_CODE, SP는 'SAT'/'SUN' 문자열로 반환).
         const cal = calendar.find(c => c.COLUMN_NAME === binding);
-        if (cal?.DAY_CODE === '7') e.cell.style.color = 'blue';
-        else if (cal?.DAY_CODE === '1') e.cell.style.color = 'red';
+        if (cal?.DAY_CODE === 'SAT') e.cell.style.color = 'blue';
+        else if (cal?.DAY_CODE === 'SUN') e.cell.style.color = 'red';
         return;
       }
       if (e.panel.cellType !== CellType.Cell) return;
       const row = dataRowOf(e.row);
       if (!row) return;
+      // C4 D_ 데이터셀 요일색 — 토=파랑/일=빨강(헤더와 동일 calendar DAY_CODE, 월+일 드릴다운 시에도 적용).
+      if (kindOf(binding) === 'D') {
+        const cal = calendar.find(c => c.COLUMN_NAME === binding);
+        if (cal?.DAY_CODE === 'SAT') e.cell.style.color = 'blue';
+        else if (cal?.DAY_CODE === 'SUN') e.cell.style.color = 'red';
+      }
       const loss = String(row.LOSS_CODE ?? '');
       // 체크박스 칼럼 — 잠금은 beginningEdit 취소뿐이라 Wijmo 가 체크박스를 활성으로 그려 눌리면 시각적으로
       //   토글된다. 편집 불가 셀은 체크박스를 disabled 로 그려 클릭을 막는다(AS-IS 잠금 셀 회색과 동일).
-      //   Mail REQ 편집 가능 셀은 AS-IS 처럼 노란 배경(Spread 의 잠금 해제 셀 표시).
-      if (binding === 'CONFIRM_FLAG' || binding === REQUEST_CHK_BINDING) {
+      if (binding === 'CONFIRM_FLAG') {
         const editable = isCellEditable(row, binding, editContextRef.current);
         const cb = e.cell.querySelector<HTMLInputElement>('input[type="checkbox"]');
         if (cb) cb.disabled = !editable;
-        if (binding === REQUEST_CHK_BINDING && editable) e.cell.style.backgroundColor = YELLOW_EDITABLE;
       }
       // CONFIRM_FLAG 클릭 피드백(AS-IS SpdMain_CellClick) — 다른 조건부 서식과 독립적으로 우선 적용.
       if (binding === 'CONFIRM_FLAG' && confirmFlagClicked.has(e.row)) {
@@ -357,6 +351,10 @@ export const CapaGrid = ({
       dynamicColumns={dynamicColumns}
       comboParams={{ mnuId: `'${MENU_ID}'`, divisionId: `'${divisionId}'` }}
       sheetName={SHEETS.CAPA}
+      // 셀 세로 병합(G4) — 공용 기본값(ColumnHeaders)이면 CustomMergeManager 를 달아도 셀은 병합되지 않는다.
+      //   정본은 칸 설정 칼럼 전부 MergePolicy.Restricted(SpreadInfo.cs:1407 — 왼쪽 칼럼까지 같은 행끼리만),
+      //   기간칼럼은 FPMerge.None(cs:2665) → CustomMergeManager 의 좌측 누적 키와 같고 기간칼럼은 allowMerging=false.
+      allowMerging={AllowMerging.All}
       useHotkey
     />
   );

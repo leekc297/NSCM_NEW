@@ -1,24 +1,25 @@
 # SCP0100 — To-Be Fact Pack 요약
 
-- page_key: `supply/global-psi-report` · feature: supply · As-is Fact Pack 있음
-- 파일 12 · 엔드포인트 호출 13 (미해결 0, 주석 속 7) · 이벤트 20 · 컴포넌트 사용 32 · 하드코딩 컬럼 2 · 메시지 26
+- page_key: `supply/global-psi-report` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
+- 파일 13 · 엔드포인트 호출 13 (미해결 0, 주석 속 7) · 이벤트 22 · 컴포넌트 사용 37 · 하드코딩 컬럼 2 · 메시지 26
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | component | 510 |
-| features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | component | 217 |
-| features/supply/src/pages/global-psi-report/components/GlobalPsiReportModals.tsx | component | 124 |
+| features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | component | 540 |
+| features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | component | 260 |
+| features/supply/src/pages/global-psi-report/components/GlobalPsiReportModals.tsx | component | 134 |
 | features/supply/src/pages/global-psi-report/global-psi-report.constants.ts | constants | 275 |
 | features/supply/src/pages/global-psi-report/global-psi-report.types.ts | types | 30 |
 | features/supply/src/pages/global-psi-report/GlobalPsiReport.tsx | page | 310 |
 | features/supply/src/pages/global-psi-report/index.ts | index | 2 |
 | features/supply/src/pages/global-psi-report/useGlobalPsiReportStore.ts | store | 322 |
 | features/supply/src/pages/global-psi-report/utils/globalPsiReportCalendar.ts | util | 23 |
-| features/supply/src/pages/global-psi-report/utils/globalPsiReportColumns.ts | util | 170 |
-| features/supply/src/pages/global-psi-report/__asis-mapping__.md | mapping | 231 |
-| features/supply/src/pages/global-psi-report/__tests__/GlobalPsiReport.spec.ts | test | 168 |
+| features/supply/src/pages/global-psi-report/utils/globalPsiReportColumns.ts | util | 204 |
+| features/supply/src/pages/global-psi-report/utils/globalPsiReportMerge.ts | util | 42 |
+| features/supply/src/pages/global-psi-report/__asis-mapping__.md | mapping | 234 |
+| features/supply/src/pages/global-psi-report/__tests__/GlobalPsiReport.spec.ts | test | 198 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
@@ -50,12 +51,14 @@
 | InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 347 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 358 |
 | PeriodField | onChange | changePeriod | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 407 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 492 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 501 |
-| g | formatItem | formatHandler | addHandler | features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | 190 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | 213 |
-| ColumnLayoutModal | onSave | <arrow> settings.filter,saveTitleSet({menuId:MENU_ID,sheetName,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet,visible.map,alertSaveFailed,queryClient.invalidateQueries | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportModals.tsx | 70 |
-| MeasureSelectModal | onApply | <arrow> staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:MEASURE_SHEET_NAME,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,alertSaveFailed,fetchStaticMeasures | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportModals.tsx | 103 |
+| RadioGroup | onChange | <arrow> setSearchMode | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 445 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 523 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportForm.tsx | 528 |
+| g | formatItem | formatHandler | addHandler | features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | 193 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | 231 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportGrid.tsx | 256 |
+| ColumnLayoutModal | onSave | <arrow> settings.filter,saveTitleSet({menuId:MENU_ID,sheetName,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet,visible.map,alertSaveFailed,queryClient.invalidateQueries | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportModals.tsx | 80 |
+| MeasureSelectModal | onApply | <arrow> staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:MEASURE_SHEET_NAME,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,alertSaveFailed,fetchStaticMeasures | jsx | features/supply/src/pages/global-psi-report/components/GlobalPsiReportModals.tsx | 113 |
 | GlobalPsiReportForm | onSearch | handleSearch | jsx | features/supply/src/pages/global-psi-report/GlobalPsiReport.tsx | 226 |
 | GlobalPsiReportForm | onItemSearch | <arrow> setPopupTarget | jsx | features/supply/src/pages/global-psi-report/GlobalPsiReport.tsx | 227 |
 | GlobalPsiReportForm | onProjectSearch | <arrow> setPopupTarget | jsx | features/supply/src/pages/global-psi-report/GlobalPsiReport.tsx | 228 |
@@ -66,7 +69,7 @@
 | component | count |
 |---|---|
 | Grid | 6 |
-| FormItem | 4 |
+| FormItem | 6 |
 | CustomDropdown | 2 |
 | InputField | 2 |
 | Checkbox | 2 |
@@ -74,6 +77,9 @@
 | FunctionSearchIcon | 1 |
 | SearchArea | 1 |
 | PeriodField | 1 |
+| RadioGroup | 1 |
+| Radio | 1 |
+| Stack | 1 |
 | DataGrid | 1 |
 | ColumnLayoutModal | 1 |
 | MeasureSelectModal | 1 |
@@ -90,8 +96,8 @@
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| leafOf | c.columnName | c.columnLabel \|\| 'Qty' | 70 | true | true |  | object | features/supply/src/pages/global-psi-report/utils/globalPsiReportColumns.ts | 128 |
-| LEVEL_COLS | colNm | colNm |  |  |  |  | meta-map | features/supply/src/pages/global-psi-report/__tests__/GlobalPsiReport.spec.ts | 116 |
+| leafOf | c.columnName | Qty | 70 | true | true |  | object | features/supply/src/pages/global-psi-report/utils/globalPsiReportColumns.ts | 154 |
+| LEVEL_COLS | colNm | colNm |  |  |  |  | meta-map | features/supply/src/pages/global-psi-report/__tests__/GlobalPsiReport.spec.ts | 146 |
 
 ## 7. 메시지 코드
 | code | count |
@@ -122,7 +128,7 @@
 | LBL00310 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0100(14), SCM0002(2), DMF0021(2), SCP0031(2), SCP0111(1), SCP0025(1), SCP0053(1), SCP0095(1)
+- 화면ID: SCP0100(15), SCM0002(2), DMF0021(2), SCP0031(2), SCP0111(1), SCP0025(1), SCP0053(1), SCP0095(1)
 - SP/PKG: PKG_SCP0100(8), P_SCP0100_GET_SITE(5), P_SCP0100_GET_PLAN_DATE(4), P_DIVISION_ID(4), P_CHK_AS(2), P_CHK_CELL_QTY(2), P_CELL_GROUP(2), FN_SPLITSTRING(2), P_SITE_TPYE(2), P_BUCKET(2), P_PROGRAM_ID(2), P_SEARCH_LEVEL(2), P_FROM_SITE(2), P_TO_SITE(2), P_SCP0100_GET_GLOBAL_PSI_REPORT(1), P_START_YYYYMMDD(1), P_END_YYYYMMDD(1), P_FROM_YYYYMMDD(1), P_TO_YYYYMMDD(1), P_PLAN_START_YYYYMMDD(1), P_ITEM_ID(1), P_NICK_NAME(1), P_PROJECT(1), PR_GET_SHEET_COLUMN_LIST(1), P_SCP0100_GET_SHEET_CALENDAR_3SPAN(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
@@ -137,8 +143,8 @@
 
 ## 10. __asis-mapping__.md 상태
 - 제외: 8
-- 구현: 61
-- 미구현: 3
+- 구현: 62
+- null = null` 필드 때문에 DataGrid mergeManager prop 전달 시 Wijmo copy() 가 'Unknown property "inner"' 단언 → 화면 열면 그리드 생성 실패(E2E smoke 라벨 0/15). 처리: 필드 제거 — 위임 인스턴스는 모듈 `WeakMap<FlexGrid, CustomMergeManager>` 에 보관(getMergedRange 에서 panel.grid 키로 조회) · 수정 뒤 화면을 열어 콘솔 단언 0 확인 → 2026-10-21 회귀 정정(H06): 위 MergeManager 의 인스턴스 필드 inner 가 Wijmo copy() 'Unknown property' 단언으로 화면 생성 실패(19:22 smoke 오류 화면) → utils/globalPsiReportMerge.ts:17-25 모듈 WeakMap<FlexGrid,CustomMergeManager> 로 이동, 클래스는 메서드만(:27-40): 1
 | design_id | summary | reason | status |
 |---|---|---|---|
 | D00-1-001 | §1 usrButton1 / UsrButton | designer 실측 EventName=null·Controls.Add 미등록·codeBehind 참조 0건 = dead control(CA-105 동일) | 제외 |
@@ -149,7 +155,5 @@
 | D00-2-014 | §2 cboPlanType / SelectedIndexChanged (.cs:1985 본문 공백) | NO-OP — 살아있는 동작 없음 | 제외 |
 | D00-2-017 | §2 chkCellQty / CheckedChanged (.cs:1915 본문 전부 주석) | 주석 처리 코드(commented_calls) 이식 금지 — 살아있는 동작 없음 | 제외 |
 | D00-2-018 | §2 chkAS / CheckedChanged (.cs:1924 본문 전부 주석) | 주석 처리 코드(commented_calls) 이식 금지 — 살아있는 동작 없음 | 제외 |
-| D00-7-015 | 카탈로그 'Global PSI New' NoName(Search Level/Detail 라디오) = 조회조건 삭제 | 사람 판단 필요: 카탈로그(2026-01-22 v0.4)는 삭제 지시이나, 삭제하면 Detail(REPORT 시트) 진입 경로가 사라짐 — 이후 REPORT 시트 SHEET_COLUMNS 15행·btn_auth 'report' 시트 등록(2026-09-24)이 기능 유지 근거. hook #112 §4-1 '최신 지시 우선·충돌 보고' | 미구현 |
-| D00-7-016 | 카탈로그 Cell Qty·A/S 체크박스 = 공통기능화 검토(조회영역 승계 금지, 임의 삭제도 금지) | 사용자 확인 필요: hook #112 §2.5 — 재배치(표시 옵션/공통버튼 등)는 확정 스펙 아님. P_CHK_CELL_QTY/P_CHK_AS 는 SP 파라미터라 위치만 결정 대상 | 미구현 |
-| D00-7-017 | MSG01186 KO 문구('조회 시작일은 Plan Date보다 크거나 같아야 합니다.')가 EN·AS-IS 규칙과 반대 의미 | 사용자 결정 필요: 기존 MSG 문구 UPDATE 는 #140(MSG 원장 INSERT 전용) 범위 밖 — KO 사용자에게 반대 안내가 나감 | 미구현 |
+| D00-6-005 | InitSpreadDateColumn / 787·794 (ColumnHeaderSpan 3단 — Large 월 / Small 주 / Qty) | ⚠ 2026-10-21 실측 정정(사용자 확인 요청): 라이브 헤더가 144px 한 칸으로 병합되고 'Qty' 행이 없음 · As-is = 3행(SetSheetHeaderColumn 3) 20/20/20~30px, 0행 LARGE(월) · 1행 SMALL(주)/'Qty' · 2행 'Qty'. 처리 지침 ① utils/globalPsiReportColumns.ts leafOf header 를 'Qty' 고정(As-is ColumnHeaderSpan 이 1~2행을 'Qty' 로 덮음 — COLUMN_LABEL_NAME 사용 금지) ② 행 높이: 공용 DataGrid 는 initialized 1회만 적용하므로 Grid 의 DataGrid initialized 에서 grid.updatedLayout.addHandler(() => { const r = grid.columnHeaders.rows; if (Math.round(r.defaultSize) !== HEADER_ROW_HEIGHT) r.defaultSize = HEADER_ROW_HEIGHT; }) 등록(공용 변경 없음) — 게이트 check.js H01 · E2E smoke 'header' 어노테이션(행 3·리터럴 Qty·높이 ≤32×3)으로 확인 → 2026-10-21 보완: ①leaf 'Qty' 고정(Cols:110·134) ②Grid:202-236 updatedLayout 헤더 행 높이 재적용(공용 변경 없음) — H01 해소. 라이브 헤더 행 수·높이는 런타임 미검증 ⚠ 2026-10-21 18:5x 규칙 정정(사용자 실측 지적): 라이브 = 월 칸 h48(행 0~1 병합) / Qty 행 h24 · Qty 가 전 월에 걸쳐 **1칸(w910)으로 가로 병합** — As-is 와 반대(월 행 20 / Qty 1~2행 병합 40~50, 월마다 Qty 분리). 처리 지침 ① **Qty 칸 분리**: 헤더 가로 병합을 끈다 — DataGrid allowMerging 을 AllowMerging.Cells(본문 병합만) 로 넘기거나 mergeManager 가 ColumnHeader 패널은 건너뛰게(동일 문구 인접 셀 자동 병합 금지). 상단 월 칸이 분리돼 있으면 하단 Qty 도 월마다 자동 분리돼야 한다 ② **행 높이 역전**: 그룹(월/주) 행 = 20px, leaf(Qty) 행 = 40px(As-is 1~2행 병합). applyHeaderHeight 를 행 인덱스별 높이로(마지막 행 40, 나머지 20). 월간은 헤더 2행(월/Qty)이어야 한다 — 현재 3행이 생기는 원인(숨긴 주간 그룹 깊이) 제거 ③ 주간 = 월 20 / 주 20 / Qty 30. 검증 = E2E smoke header 어노테이션(리터럴 칸 수·leaf 행 높이 ≥ 상단 행) → 2026-10-21 수선(E2E smoke header 행 2=72+24 · 18:5x 지침): ①Qty 월마다 분리 + 1·2행 세로 병합 해소 = 화면 전용 GlobalPsiReportMergeManager(기간칼럼 헤더만 Wijmo 기본 컬럼그룹 범위, 고정 컬럼·본문은 공용 CustomMergeManager 위임 — 공용 변경 없음, H05 해소) ②행 높이 = 그룹 20 / Qty 40(월간)·30(주간) 행별 재적용 ③월간 2행(M_ 의 SMALL 라벨로 중간 그룹 생성 안 함). 라이브 헤더는 런타임 미검증 ⚠ 2026-10-21 19:5x 런타임 사고: 수선 1 이 넣은 utils/globalPsiReportMerge.ts 의 `private inner: CustomMergeManager | null = null` 필드 때문에 DataGrid mergeManager prop 전달 시 Wijmo copy() 가 'Unknown property "inner"' 단언 → 화면 열면 그리드 생성 실패(E2E smoke 라벨 0/15). 처리: 필드 제거 — 위임 인스턴스는 모듈 `WeakMap<FlexGrid, CustomMergeManager>` 에 보관(getMergedRange 에서 panel.grid 키로 조회) · 수정 뒤 화면을 열어 콘솔 단언 0 확인 → 2026-10-21 회귀 정정(H06): 위 MergeManager 의 인스턴스 필드 inner 가 Wijmo copy() 'Unknown property' 단언으로 화면 생성 실패(19:22 smoke 오류 화면) → utils/globalPsiReportMerge.ts:17-25 모듈 WeakMap<FlexGrid,CustomMergeManager> 로 이동, 클래스는 메서드만(:27-40) |
 

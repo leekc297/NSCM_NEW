@@ -1,0 +1,89 @@
+{
+ "note": "AS-IS 메시지 ID → TO-BE 메시지 ID (문구로 찾음). tobe=MSG????? 는 TO-BE 에 같은 문구가 없어 신규 등록 대상(MSG01001+)",
+ "map": [
+  {
+   "asis": "MSG00043",
+   "tobe": "MSG00043",
+   "how": "KO 문구 일치",
+   "asisText": "저장시 중복 오류가 발생하였습니다.{0}",
+   "tobeText": "저장시 중복 오류가 발생하였습니다. {0}",
+   "cands": [
+    "MSG00043"
+   ],
+   "sameId": true,
+   "idCollision": false
+  },
+  {
+   "asis": "MSG00006",
+   "tobe": "MSG00003",
+   "how": "KO 문구 일치",
+   "asisText": "저장에 실패하였습니다.",
+   "tobeText": "저장에 실패하였습니다.",
+   "cands": [
+    "MSG00003"
+   ],
+   "sameId": false,
+   "idCollision": false
+  },
+  {
+   "asis": "MSG00165",
+   "tobe": "MSG00165",
+   "how": "KO 문구 일치",
+   "asisText": "입력할 수 있는 자리수를 초과하였습니다.",
+   "tobeText": "입력할 수 있는 자리수를 초과하였습니다.",
+   "cands": [
+    "MSG00165"
+   ],
+   "sameId": true,
+   "idCollision": false
+  },
+  {
+   "asis": "MSG00219",
+   "tobe": "MSG01230",
+   "how": "EN 문구 일치",
+   "asisText": "//PJ20209642 : BOT LT 2단계 개발                         if (Convert.ToInt32(sFromYy",
+   "tobeText": "시작일자가 종료일자보다 늦을 수 없습니다.\\n\\r리스트 확인 후 입력하십시오.",
+   "cands": [
+    "MSG01230"
+   ],
+   "sameId": false,
+   "idCollision": false
+  },
+  {
+   "asis": "MSG00355",
+   "tobe": "MSG01349",
+   "how": "KO 문구 일치",
+   "asisText": "{0} 기간을 다시 선택하여 주십시오.({1})",
+   "tobeText": "{0} 기간을 다시 선택하여 주십시오.({1})",
+   "cands": [
+    "MSG01349"
+   ],
+   "sameId": false,
+   "idCollision": false
+  },
+  {
+   "asis": "MSG00253",
+   "tobe": "MSG01263",
+   "how": "KO 문구 일치",
+   "asisText": "From Site와 To Site는 동일할 수 없습니다.",
+   "tobeText": "From Site와 To Site는 동일할 수 없습니다.",
+   "cands": [
+    "MSG01263"
+   ],
+   "sameId": false,
+   "idCollision": false
+  },
+  {
+   "asis": "MSG00004",
+   "tobe": "MSG00672",
+   "how": "KO 문구 일치",
+   "asisText": "{0}개의 데이터가 저장되었습니다.",
+   "tobeText": "{0}개의 데이터가 저장되었습니다.",
+   "cands": [
+    "MSG00672"
+   ],
+   "sameId": false,
+   "idCollision": true
+  }
+ ]
+}

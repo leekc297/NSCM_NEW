@@ -347,8 +347,9 @@ export const MSG = {
   SCP_TIME_WINDOW: 'MSG00477',
   // DM Planner류 시간창 — MSG00478 5파라미터 {0}~{4}=LIMIT_AUTH/EDIT_DAYS/FROM_TIME/TO_TIME/AUTH (.cs L862~874).
   DM_TIME_WINDOW: 'MSG00478',
-  // ESS 조회 가드 — 사내 MSG00147 EXACT (Model 셀 팝업 오픈 차단).
-  ESS_ITEM_SEARCH: 'MSG00147',
+  // ESS 조회 가드 (Model 셀 팝업 오픈 차단) — AS-IS MSG00147 문구. TO-BE DB 에는 MSG00147 이 없고
+  //   같은 문구(KO/EN 동일)가 MSG01165 로 등록돼 있어 그 코드를 쓴다 (2026-10-14 개발 DB 실측).
+  ESS_ITEM_SEARCH: 'MSG01165',
 } as const;
 
 // ⭐ AS-IS 권한 그룹명 원문 (UserInfoContext["NowGroupID"] 비교 문자열 — .cs 정확 일치, 공백·괄호 포함).

@@ -176,6 +176,8 @@
 | 147 | excel-upload-nls-safe-parsing | 12, 09 |
 | 148 | cloud-deploy-silent-failure-gates | 12, 10, 09 |
 | 149 | remediation-closure-symptom-reproduction | 12, 10 |
+| 154 | search-condition-labelless-toggle-input-column | 01, 04 |
+| 155 | search-area-bulk-input-button-popup | 04, 01 |
 
 ## 커버리지 검증 (신규 hook 등재 시 재실행 의무)
 
@@ -217,3 +219,6 @@ ls Doc/_rules_v2/hooks/*.md | wc -l
 | 룰 v1: 02/28(git)·21(진단)·22/29/30(배포·환경)·31(Figma)·32(Oracle 도구) | 12 / 10 / 12 / 01 / 09·10 |
 > 2026-08-23 **#147 excel-upload-nls-safe-parsing 신설** — 카테고리 12(주·프로세스/운영) + 09(Oracle SP). 엑셀 업로드 값 파싱의 NLS·셀서식 의존 제거(사내 정상·클라우드 전건 반려 실사고 계보).
 > 2026-08-28 **#148 cloud-deploy-silent-failure-gates 신설** — 카테고리 12(주·이관 패키지 게이트) + 10(클라우드만 실패 진단 순서) + 09(동적 SQL NLS). 룰 본문에만 있고 생성기에 없던 V11 이 재발한 계보.
+> 2026-10-21 **#154 search-condition-labelless-toggle-input-column 신설** — 카테고리 01(주·디자인 배치) + 04(조회조건). 라벨 없는 Radio/CheckBox 조회조건 = 입력창 열 배치(사용자 지시, SCP0100 캡처).
+> 2026-10-23 **#154 v2 개정** — 조회조건 Radio/CheckBox = 좌측 라벨 열(조건명/그룹명) + 입력 열 시작선(컨트롤). Checkbox 박스만(labelText 금지)·조건마다 1칸 · v1 NBSP 무라벨 폐지(사용자 지시, SCP0100 캡처 · 정본 GlobalPsiReportForm).
+> 2026-10-23 **#155 search-area-bulk-input-button-popup 신설** — 카테고리 04(주·조회조건) + 01(버튼·팝업 배치). AS-IS 조회영역 일괄 입력 묶음 = 버튼 영역 버튼 + 입력 팝업(정본 SCP0096).

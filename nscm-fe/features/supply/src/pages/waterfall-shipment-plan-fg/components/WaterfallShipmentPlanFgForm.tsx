@@ -7,7 +7,7 @@ import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
-import { Grid, Stack } from '@shared/mui';
+import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shared/stores';
 
 import { useWaterfallShipmentPlanFgStore } from '../useWaterfallShipmentPlanFgStore';
@@ -24,7 +24,7 @@ import {
 
 interface Props {
   onSearch: () => void;
-  onModelSearch: () => void; // Model 팝업(ItemByDivisionModal) 오픈 — 페이지 소유
+  onModelSearch: () => void; // Model/Nickname 팝업(메1 MaterialByDivisionModal) 오픈 — 페이지 소유
   onProjectSearch: () => void; // Project 팝업(ProjectByDivisionModal) 오픈 — 페이지 소유
 }
 
@@ -207,6 +207,8 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
       onSearch={onSearch}
       conditions={
         <>
+          {/* AS-IS SCP0016 조회조건 순서 그대로(사용자 지시 2026-10-20, AS-IS 화면 캡처 기준):
+              1행 Div·Operation Group·Project·Model / 2행 Electrode·Ver.·Bucket·Period. Sum 만 접기 영역. */}
           {/* Division 변경 = 검색조건(Div·기간 제외) + 그리드 초기화(store setDivision, TO-BE 공통 요건). 편집중(dirty)이면
               MSG00704 confirm 후에만 실행, 취소 시 controlled 콤보가 이전 Div 로 복귀(commit 51d4e9fa 패턴).
               조회전용 화면이라 실제 dirty 는 없어 no-op 가드지만 공통 패턴을 동일하게 둔다(정본 SCP0025). */}
@@ -228,15 +230,10 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
             v => set({ operationGroupId: v }),
             true
           )}
-          {/* Version — 다중선택 CheckedList(필수). 변경 시 Period 재산정(AS-IS ClbVersion → GetDayRange). */}
-          {multi(
-            t(LBL.VERSION, '_Version'),
-            sc.versionNos,
-            versionOptions,
-            v => setVersions(v),
-            false,
-            true
+          {popupField(t(LBL.PROJECT, '_PJT'), sc.projectCode, onProjectSearch, v =>
+            set({ projectCode: v })
           )}
+          {popupField(t(LBL.MODEL, '_Model/Nickname'), sc.itemId, onModelSearch, v => set({ itemId: v }))}
           {/* Electrode — enable=isEe(division), 비EE 면 disable+clear(design 01 D2). */}
           {multi(
             t(LBL.ELECTRODE, '_Electrode'),
@@ -245,10 +242,16 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
             v => set({ electrodeTypes: v }),
             !isEe
           )}
-        </>
-      }
-      extraConditions={
-        <>
+          {/* Version — 다중선택 CheckedList(필수). 변경 시 Period 재산정(AS-IS ClbVersion → GetDayRange).
+              라벨 'Ver.' 는 하드코딩(사용자 지시 2026-10-20) — DB/번들 미등록 약어, KO/EN/CN 동일 표기라 i18n 불요. */}
+          {multi(
+            'Ver.',
+            sc.versionNos,
+            versionOptions,
+            v => setVersions(v),
+            false,
+            true
+          )}
           {single(t(LBL.BUCKET, '_Bucket'), sc.bucket, bucketOptions, v =>
             set({ bucket: v as BUCKET_TYPE })
           )}
@@ -259,23 +262,22 @@ export const WaterfallShipmentPlanFgForm = ({ onSearch, onModelSearch, onProject
             onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
             label={t(LBL.PERIOD, '_Period')}
           />
-          {popupField(t(LBL.MODEL, '_Model'), sc.itemId, onModelSearch, v => set({ itemId: v }))}
-          {popupField(t(LBL.PROJECT, '_Project'), sc.projectCode, onProjectSearch, v =>
-            set({ projectCode: v })
-          )}
-
-          {/* Sum — W_/M_ 합계칼럼 표시 토글. WeeklyISO 면 숨김(design 01 D1). */}
+        </>
+      }
+      extraConditions={
+        <>
+          {/* Sum — W_/M_ 합계칼럼 표시 토글. WeeklyISO 면 숨김(design 01 D1). 접기 펼침 시 Electrode(2행 1열)
+              아래 1열에 노출(사용자 지시 2026-10-20). 라벨 우측정렬 FormItem 으로 세로 정렬. */}
           {showSum && (
-            <Grid size={3} className={commonStyles.customGrid}>
-              <div className={commonStyles.customCheckbox}>
-                <Stack direction='row' spacing={2} alignItems='center'>
-                  <Checkbox
-                    labelText={t(LBL.SUM, '_Sum')}
-                    checked={sc.chkSum}
-                    onChange={checked => set({ chkSum: checked })}
-                  />
-                </Stack>
-              </div>
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t(LBL.SUM, '_Sum')}
+                labelAlign='right'
+                render={() => (
+                  <Checkbox checked={sc.chkSum} onChange={checked => set({ chkSum: checked })} />
+                )}
+              />
             </Grid>
           )}
         </>

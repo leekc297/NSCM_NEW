@@ -24,7 +24,7 @@ export interface SaveScpBomResult {
 // SAVE SP IN 13종(PROC_M COL_NM 실측, sesUserId 는 @LoginUser 자동·debugMode 미전달):
 //   activeFlag / divisionId / plantCd / modelId / parentItemId / childItemId / altId /
 //   effStartDate / effEndDate / ecoCode / scpYn / siAltPriority / siScpYn.
-//   UPDATE SET = scpYn/siAltPriority(ATTRIBUTE11)/siScpYn(ATTRIBUTE12), WHERE = division+parent+child(전 플랜트 반영).
+//   UPDATE SET = scpYn/siAltPriority(ATTRIBUTE11)/siScpYn(ATTRIBUTE12), WHERE = division+plant+parent+child(SP 변경 2026-10-15, 이전엔 plant 제외로 전 플랜트 반영).
 export const buildSavePayload = (dirty: Row[]): Record<string, string> | null => {
   if (dirty.length === 0) return null;
   const join = (sel: (r: Row) => string): string => dirty.map(sel).join('^');

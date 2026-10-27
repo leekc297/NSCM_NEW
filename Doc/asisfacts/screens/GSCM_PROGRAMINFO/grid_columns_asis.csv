@@ -1,0 +1,6 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,ProgramID,CODE,ProgramInfo,ProgramInfo.cs:106,ProgramID*,Text,,None,코드 선언 FPMerge.None,150,true,,,,
+,ProgramName,CODE,ProgramInfo,ProgramInfo.cs:107,ProgramName*,Text,,None,코드 선언 FPMerge.None,200,true,,,,
+,ProgramPath,CODE,ProgramInfo,ProgramInfo.cs:108,ProgramPath*,Text,,None,코드 선언 FPMerge.None,250,true,,,,
+,ClassName,CODE,ProgramInfo,ProgramInfo.cs:109,ClassName*,Text,,None,코드 선언 FPMerge.None,350,true,,,,
+,UseYN,CODE,ProgramInfo,ProgramInfo.cs:110,UseYN,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,60,false,Center,,,

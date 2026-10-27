@@ -4,11 +4,12 @@ import { useEffect } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
-import { FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
+import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
-import { ALL, LBL } from '../opt-capa.constants';
+import { ALL, BUCKET, BUCKET_OPTIONS, LBL, SHEETS } from '../opt-capa.constants';
 import type { ComboOption } from '../opt-capa.types';
 import { useOptCapaStore } from '../useOptCapaStore';
 
@@ -20,14 +21,18 @@ interface Props {
   /** 권한 Division 0건이면 조회조건 **전 영역** 비활성(AS-IS 는 패널 통째 비활성 — R01). */
   hasDivisionAuth: boolean;
   onSearch: () => void;
+  /** 갭분석 C-06 — Model/Nickname 돋보기(메1 = Material by Division 창). 페이지가 open state 소유. */
+  onModelSearch: () => void;
 }
 
 /**
  * 영역2 조회조건 — AS-IS `usrConditionPanel1` / `usrLayoutControl2`(design 02 §1 S-1~S-7).
  *
- * 조건 7개 > 6 이므로 hook #52(12-column 그리드 2단 = 6필드) 기준 초과분을 접는다:
- *   conditions      : Division · Plan Group · Period(2칸) · Plant · Line · Nick Name  → 6필드
- *   extraConditions : Model                                                          → 1필드
+ * 레이아웃: 한 줄 4필드(각 size 3) × 2줄(사용자 지시 2026-10-20). Bucket 은 No Work 탭에서만 1줄차에
+ * 끼고, 숨겨지면 뒤 필드가 MUI Grid wrap 으로 앞으로 당겨져 계속 4필드/줄을 유지한다:
+ *   1줄 : Division · Plan Group · Period · Bucket(No Work 전용)
+ *   2줄 : Plant · Line · Model/Nickname   (Bucket 숨김 시: Plant 가 1줄로 올라가 2줄은 2필드)
+ * 전 조건이 2줄에 들어가므로 접힘 영역(extraConditions)은 없다 — 3줄차가 생기면 그때 분리한다.
  *
  * 조회조건 변경만으로는 조회가 발사되지 않는다 — `setFilters()` 참조 교체만이 트리거다
  * (`refetch()` 직접 호출 금지, nscm-patterns §5-1).
@@ -39,6 +44,7 @@ export const OptCapaForm = ({
   lineOptions,
   hasDivisionAuth,
   onSearch,
+  onModelSearch,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -46,6 +52,8 @@ export const OptCapaForm = ({
   const setSearchParams = useOptCapaStore(s => s.setSearchParams);
   const setDivision = useOptCapaStore(s => s.setDivision);
   const openSearchArea = useOptCapaStore(s => s.openSearchArea);
+  // Bucket 조회조건은 활성 시트가 No Work 일 때만 노출한다(AS-IS `SetVisibleSearchControls` 축, 스크린샷 실측).
+  const activeSheet = useOptCapaStore(s => s.activeSheet);
 
   const tabId = useTabid();
 
@@ -120,30 +128,6 @@ export const OptCapaForm = ({
     </Grid>
   );
 
-  const textField = (
-    labelCode: string,
-    labelEn: string,
-    value: string,
-    onChange: (next: string) => void
-  ) => (
-    <Grid size={3}>
-      <FormItem
-        className={commonStyles.formItem}
-        label={t(labelCode, labelEn)}
-        labelAlign='right'
-        render={() => (
-          <InputField
-            fullWidth
-            disabled={locked}
-            value={value}
-            onChange={event => onChange(event.target.value)}
-            onKeyDown={event => event.key === 'Enter' && onSearch()}
-          />
-        )}
-      />
-    </Grid>
-  );
-
   return (
     <SearchArea
       searchButtonLabel={t(LBL.SEARCH, 'Search')}
@@ -183,13 +167,20 @@ export const OptCapaForm = ({
               (design 02 §5 M-2) `LBL00013` 을 **명시 전달**한다. 공용 컴포넌트 기본값 수정은
               Hard Boundary 위반이므로 건드리지 않는다. 값 형식 `YYYYMM` = SP 계약과 동일. */}
           <PeriodField
-            gridSize={4}
+            gridSize={3}
             mode='month'
             label={t(LBL.PERIOD, 'Period')}
             start={sc.fromYyyymm}
             end={sc.toYyyymm}
             onChange={(start, end) => setSearchParams({ fromYyyymm: start, toYyyymm: end })}
           />
+          {/* Bucket(Day/Week) — **No Work 탭 전용**(AS-IS 는 활성 시트 No Work 일 때만 노출). Week 선택 시
+              조회는 `noWorkWeek` SP 로 라우팅되고 그리드는 Date·Day of Week·Valid·Fix 컬럼을 숨긴다
+              (`OptCapa` querySheet / `NO_WORK_WEEK_HIDDEN_COLUMNS`). LBL 미존재라 리터럴 라벨을 쓴다. */}
+          {activeSheet === SHEETS.NO_WORK &&
+            singleField('Bucket', 'Bucket', sc.bucket, BUCKET_OPTIONS, code =>
+              setSearchParams({ bucket: (code as BUCKET) || BUCKET.DAY })
+            )}
           {/* S-4 Plant — 변경 시 Line 을 비운다(AS-IS `ClbPlant_SelectedIndexChanged` → `RefreshLine`). */}
           {multiField(LBL.PLANT, 'Plant', sc.plantIds, plantOptions, codes =>
             setSearchParams({ plantIds: codes, lineIds: [] })
@@ -198,17 +189,38 @@ export const OptCapaForm = ({
           {multiField(LBL.LINE, 'Line', sc.lineIds, lineOptions, codes =>
             setSearchParams({ lineIds: codes })
           )}
-          {/* S-6 Nick Name — No Work 시트에서도 **보이고 입력되지만** payload 만 공백이다(§4.4).
-              숨기는 AS-IS 코드는 주석처리돼 있어 이식 금지. */}
-          {textField(LBL.NICK_NAME, 'Nick Name', sc.nickName, next =>
-            setSearchParams({ nickName: next })
-          )}
-        </>
-      }
-      extraConditions={
-        <>
-          {/* S-7 Model(= `ITEM_ID`) — 7번째 필드라 접힘 영역으로 분리(hook #52). 동상. */}
-          {textField(LBL.MODEL, 'Model', sc.itemId, next => setSearchParams({ itemId: next }))}
+          {/* S-6 Model/Nickname — 갭분석 C-06 : 조회조건 표준(SCP v0.5)대로 AS-IS Nick Name · Model 두 칸을
+              한 칸(LBL00618) + 메1 팝업(Material by Division)으로 합쳤다. 값은 조회 인자 itemId 로 보내고
+              조회 프로시저가 코드 · 별칭 부분 일치 · 쉼표 복수 · 대소문자 무시로 처리한다.
+              No Work 시트에서도 보이고 입력되지만 payload 만 공백이다(§4.4). */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t(LBL.MODEL_NICKNAME, 'Model/Nickname')}
+              labelAlign='right'
+              render={() => (
+                <InputField
+                  fullWidth
+                  className={commonStyles.popupSearchField}
+                  disabled={locked}
+                  value={sc.itemId}
+                  InputProps={{
+                    endAdornment: (
+                      <Button
+                        appearance='outlined'
+                        priority='normal'
+                        iconComponent={
+                          <FunctionSearchIcon appearance='lined' onClick={onModelSearch} />
+                        }
+                      />
+                    ),
+                  }}
+                  onChange={event => setSearchParams({ itemId: event.target.value })}
+                  onKeyDown={event => event.key === 'Enter' && onSearch()}
+                />
+              )}
+            />
+          </Grid>
         </>
       }
     />

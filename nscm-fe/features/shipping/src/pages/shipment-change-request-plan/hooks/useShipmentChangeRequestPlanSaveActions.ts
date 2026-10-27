@@ -2,7 +2,7 @@ import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { MutableRefObject } from 'react';
 
 import { CRUD_MSG } from '@foundation/constants';
-import { GridAction, type EditTracker } from '@foundation/utils';
+import { GridAction, sessionTimeZone, type EditTracker } from '@foundation/utils';
 import { useSaveWithValidation } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -13,10 +13,15 @@ import {
   CHANGE_TYPE_CONFIRM,
   CHANGE_TYPE_NEW,
   COLUMN,
+  ERP_IF_ERROR,
+  ERP_IF_NO_DATA,
+  ERP_IF_PARTIAL_ERROR,
+  ERP_IF_PI_FAIL,
   ERP_IF_SUCCESS,
   IF_SEND_OFF,
   IF_SEND_ON,
   MSG,
+  MSG_ERP,
   RESULT_SUCCESS,
   SCREEN_TEXT,
   SHIP_STATUS_REQUEST_DONE,
@@ -38,11 +43,15 @@ import {
 } from '../utils/shipmentChangeRequestPlanRequest';
 import {
   draftingModifyGroups,
+  parseErpErrorConfirms,
   saveTargetRows,
   submitConfirmNewSave,
+  submitDeleteDraftingByConfirm,
   submitDraftingModifySave,
+  submitErpErrorConfirm,
   submitErpIfSeqMerge,
   submitErpInterface,
+  type ErpErrorConfirm,
 } from '../utils/shipmentChangeRequestPlanSave';
 
 import { useShipmentChangeRequestPlanPreChecks } from './useShipmentChangeRequestPlanPreChecks';
@@ -136,8 +145,10 @@ export const useShipmentChangeRequestPlanSaveActions = ({
 
   const chainSession: RequestChainSession = {
     userId: String(session.userId ?? ''),
-    // TO-BE UserSession 에 타임존 필드가 없다(실측) — 빈 값으로 보내 SP 기본 처리에 맡긴다.
-    timeZone: '',
+    // 사용자 TZ(SCM_ADM_USER_M.TMZ_CD). CONFIRM_NEW 2430행이 새 Confirm ID 날짜부
+    //   'C'+YYYYMMDD 를 FN_MULTY_TIME(P_TIME_ZONE) 으로 잡는다 — 이 값이 ID 날짜를 결정한다.
+    //   DRAFTING·DELETE_DRAFTING·REQUEST_COMPLETE 는 받기만 하고 미사용(SYSDATE).
+    timeZone: sessionTimeZone(session),
     groupId: String(session.groupId ?? ''),
   };
 
@@ -145,6 +156,30 @@ export const useShipmentChangeRequestPlanSaveActions = ({
     const grid = mainGridRef.current;
     grid?.finishEditing();
     return (grid?.collectionView?.sourceCollection ?? []) as GridRowData[];
+  };
+
+  /** 취소 대상 요청번호 — 하단 그리드 행들은 한 요청에 속하므로 중복을 제거한다(AS-IS 는 단일 값). */
+  const cancelRequestNo = (rows: GridRowData[]): string => {
+    const seen = new Set(rows.map(r => str(r[COLUMN.CHANGE_REQ_NO])).filter(no => no !== ''));
+    return [...seen].join('^'); // 실시간 SP 는 '^' 다건을 받는다(SCM_ARR_SPL_CNT)
+  };
+
+  /**
+   * 취소 후 ERP 송신 결과 안내 — AS-IS `GetErpIFCheck`(cs:4946~4965).
+   *   Save 경로(`GetErpIFCheckNew`)와 달리 C_E 를 MSG00306 으로 따로 가른다. 성공은 알리지 않는다.
+   */
+  const notifyCancelErpResult = async (requestNo: string): Promise<void> => {
+    if (!requestNo) return;
+    const erp = await submitErpInterface(requestNo);
+    const eType = erp.ok ? erp.eType : ERP_IF_PI_FAIL;
+    if (!eType || eType === ERP_IF_SUCCESS) return;
+    if (eType === ERP_IF_NO_DATA) {
+      alert(MSG_ERP.SYSTEM_ERROR, 'System error. Request No : {0}', requestNo);
+    } else if (eType === ERP_IF_PI_FAIL) {
+      alert(MSG_ERP.PI_FAIL, 'An error occurred while transferring data.');
+    } else {
+      alert(MSG_ERP.ISSUE, 'ERP cannot be processed due to an ISSUE. {0}', erp.eMessage || eType);
+    }
   };
 
   // 변경분 판정은 CRUD_TYPE + EDIT_MAIN 두 축 모두 본다(CP-12) — "수정한 내용 없음" 오판 방지.
@@ -180,17 +215,23 @@ export const useShipmentChangeRequestPlanSaveActions = ({
    *   주석이다(cs:3616/3631). 사유는 묶음별로 바로 알린다.
    *   반환값은 "한 묶음이라도 DRAFTING 저장에 성공했는지" 다 — 재조회 여부를 가르는 기준이다.
    *
-   *   AS-IS 차이(의도적, 사용자 승인 2026-10-03): ERP I/F 결과는 저장 성패로 올리지 않는다.
-   *   AS-IS 는 E_TYPE 'S_E'/'E' 면 전송 실패분 초안을 되돌리지만(cs:4656
-   *   `SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM`) 그 SP 가 TO-BE 미배포라 롤백이 불가하다.
-   *   되돌릴 수 없는데 "저장 실패" 로 알리면 사용자가 재저장해 ERP 전송행만 중복 누적된다 —
-   *   초안은 저장됐음을 유지하고 전송 사유만 별도 안내한다(04 확인필요로 기록).
+   *   AS-IS 차이(의도적, 사용자 승인 2026-10-03): ERP I/F 결과는 저장 성패(= 재조회 여부)로 올리지 않는다.
+   *   단 **보상은 한다** — 2026-10-25 DB 실측으로 SP 가 배포돼 있음을 확인해 배선했다(종전 주석의
+   *   "TO-BE 미배포" 는 사실이 아니었다). AS-IS 정본 cs:4978~5057 + 뒤처리 cs:3931~4015 를 따른다:
+   *     E · S_E → 실패 CONFIRM 초안 되돌림(cs:5011) → 전 묶음 종료 후 오류 적재(cs:3952) + MSG00197
+   *     F · C_E → 해당 요청 초안 전체 되돌림 + ERP 취소 송신(cs:3991~4007) + MSG00204
+   *   보상은 ERP 가 거절했을 때만 돈다 — 연계 미구성 환경(BE stub)은 항상 'S' 라 발동하지 않는다.
    */
   const saveModifyGroups = async (
     groups: GridRowData[][],
     changeReqNo: string
   ): Promise<boolean> => {
     let savedAny = false;
+    // AS-IS errConfirmList / F_CE_requestNo 등가(cs:93~94). 묶음 루프가 끝난 뒤 한 번에 처리한다.
+    const errConfirms: ErpErrorConfirm[] = [];
+    let fCeRequestNo = '';
+    let fCeConfirmIds: string[] = [];
+
     for (const group of groups) {
       const result = await submitDraftingModifySave(group, {
         userId: chainSession.userId,
@@ -231,12 +272,44 @@ export const useShipmentChangeRequestPlanSaveActions = ({
       savedAny = true;
       // 한 요청번호 아래 전송행이 2건 이상일 때만 IFSEQNO 를 병합한다(cs:4514 `if (iCount > 1)`).
       if (group.length > 1) await submitErpIfSeqMerge(result.requestNo);
+
       const erp = await submitErpInterface(result.requestNo);
-      if (!erp.ok) {
-        alert(SCREEN_TEXT.ERP_IF_FAILED, 'ERP interface call failed. ({0})', 'call failed');
-      } else if (erp.eType && erp.eType !== ERP_IF_SUCCESS) {
-        alert(SCREEN_TEXT.ERP_IF_FAILED, 'ERP interface failed. ({0})', erp.eMessage || erp.eType);
+      // 호출 자체 실패는 AS-IS catch 와 같이 C_E 로 본다(= F 와 같은 묶음 처리).
+      const eType = erp.ok ? erp.eType : ERP_IF_PI_FAIL;
+
+      if (eType === ERP_IF_ERROR || eType === ERP_IF_PARTIAL_ERROR) {
+        // cs:4993~5024 — 실패 CONFIRM 만 초안을 되돌리고, 사유는 모아 두었다가 루프 뒤 한 번에 적재한다.
+        const parsed = parseErpErrorConfirms(erp.eMessage, result.requestNo);
+        if (parsed.length > 0) {
+          await submitDeleteDraftingByConfirm(
+            parsed.map(e => e.confirmId),
+            result.requestNo,
+            chainSession
+          );
+          errConfirms.push(...parsed);
+        }
+      } else if (eType === ERP_IF_NO_DATA || eType === ERP_IF_PI_FAIL) {
+        // cs:5041~5046 — 요청번호와 그 묶음 CONFIRM 을 남겨 두고 루프 뒤에 통째로 되돌린다.
+        fCeRequestNo = result.requestNo;
+        fCeConfirmIds = group.map(r => str(r[COLUMN.CONFIRM_ID])).filter(id => id !== '');
       }
+    }
+
+    // 묶음 루프 종료 후 — AS-IS cs:3931~4015
+    if (errConfirms.length > 0) {
+      await submitErpErrorConfirm(errConfirms, chainSession.userId);
+      alert(
+        MSG_ERP.ISSUE,
+        'ERP cannot be processed due to an ISSUE. {0}',
+        errConfirms.map(e => `${e.confirmId}:${e.message}`).join('\n')
+      );
+    } else if (fCeRequestNo) {
+      // cs:3970~4008 — 해당 요청 초안 전체를 되돌리고 ERP 로 취소를 보낸 뒤 안내한다.
+      if (fCeConfirmIds.length > 0) {
+        await submitDeleteDraftingByConfirm(fCeConfirmIds, fCeRequestNo, chainSession);
+        await submitErpInterface(fCeRequestNo);
+      }
+      alert(MSG_ERP.SYSTEM_ERROR, 'System error. Request No : {0}', fCeRequestNo);
     }
     return savedAny;
   };
@@ -506,8 +579,23 @@ export const useShipmentChangeRequestPlanSaveActions = ({
           reportChainFailure(result);
           return;
         }
-        // 성공('S')·부분성공('X') 모두 재조회한다. ERP I/F 후속(GetErpIFCheck cs:2650)은
-        //   PKG_SSP0200.P_SSP0200_ERP_IFSEQ_MERGE 가 버튼/API 메타에 없어 미배선이다(04 기록).
+        // 성공('S')·부분성공('X') 모두 재조회한다.
+        // 취소 후 ERP 전송 — AS-IS cs:2650 `GetErpIFCheck(p_change_request_no)`.
+        //   위 DELETE_DRAFTING 이 ifSendFlag='Y' 로 송신표에 취소('D') 줄을 쌓고, 그걸 여기서 내보낸다.
+        //   분기는 Save 경로와 다르다(cs:4946~4965): E → MSG00197 / F → MSG00204 / C_E → MSG00306.
+        //   AS-IS 의 실패 시 DELETE_DRAFTING 재호출(cs:4930~4943, del_flag='E'·if_send_flag='N')은
+        //   **일부러 이식하지 않는다**. 미배선 누락이 아니라 TO-BE SP 기준 무동작이기 때문이다
+        //   (DB 실측 2026-10-25, PKG_SSP0200 BODY 3147~3279):
+        //     P_DEL_FLAG 는 전체에서 두 번만 나온다 — 선언(3151)과 3227 `IF P_DEL_FLAG='D' AND
+        //     P_IF_SEND_FLAG='Y'` 뿐이고, 그 안의 PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_NEW('D',…)
+        //     (ERP 취소 적재)를 가르는 게이트로만 쓰인다.
+        //     무효화 UPDATE 들은 플래그와 무관한 리터럴이다 —
+        //       3199/3205 VALID_YN='N' · 3211 SHIPMENT_STATUS='C', CHANGE_REQ_NO=NULL, ATTRIBUTE1=NULL
+        //       3221 DELETE ... CHANGE_TYPE='N'
+        //     따라서 'D'/'Y' 로 이미 부른 뒤 'E'/'N' 으로 다시 부르면 같은 멱등 UPDATE 를 반복하고
+        //     유일하게 달라질 적재만 건너뛴다 = 아무 효과가 없다. DB 왕복만 늘어난다.
+        //   (AS-IS 는 그 호출에서 p_confirm_id 자리에 CONFIRM_ID 가 아니라 RequestNo 를 넘긴다(cs:4932).)
+        await notifyCancelErpResult(cancelRequestNo(subRows));
         clearRequestInfo();
         editTrackerRef.current?.clearChanges();
         refetchAll();

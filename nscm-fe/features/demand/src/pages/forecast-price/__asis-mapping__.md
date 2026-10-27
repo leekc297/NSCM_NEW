@@ -201,7 +201,7 @@
 | S-20 | 저장 대상 셀 / Red 셀 존재 행만, `PRICE_ALL`·비W_ 컬럼 제외, `p_yyyymmdd = W_ 제거값`, qty = PRICE_ALL 값(콤마… | components/modals/SavePricePeriodModal.tsx — 저장 대상 = 변경 셀 보유 행, PRICE_ALL 값 전달 | — | 구현 |
 | S-21 | qty 0 → D / `qty==""` → "0"; `Action != "D" && qty=="0"` → 해당 건 action "D"(stempAction) | components/modals/SavePricePeriodModal.tsx — qty 0 → D 액션 전환 | — | 구현 |
 | S-22 | 파라미터 조립 / 16개 파라미터 `CString.AppendStringEx` ^연결 → `DM.DMF0082_SAVE_MAIN_DATA` (CommandTim… | 기배선 SAVE(DMF0082_SAVE_MAIN_DATA) 재사용 — 16 IN ^ bulk | — | 구현 |
-| S-23 | 결과 처리 / RESULT_CODE=="S" → MSG00004(건수) / "F" → ERR_MESSAGE·RESULT_MSG 표시, Tables[1].TITL… | components/modals/SavePricePeriodModal.tsx — 결과 코드 분기(성공 MSG00672 / 실패 원문 표시) | SSP_SYNC_T_ERR 시 DMF0003_SspSyncPopUp 표시는 E08-B 와 동일하게 보류(2026-07-20 사용자) | 구현 |
+| S-23 | 결과 처리 / RESULT_CODE=="S" → MSG00004(건수) / "F" → ERR_MESSAGE·RESULT_MSG 표시, Tables[1].TITL… | components/modals/SavePricePeriodModal.tsx — 결과 코드 분기(성공 토스트 MSG00002 / 실패 원문 표시) | SSP_SYNC_T_ERR 시 DMF0003_SspSyncPopUp 표시는 E08-B 와 동일하게 보류(2026-07-20 사용자) | 구현 |
 | S-24 | 저장 후 / isSaveOK=true, panel1 숨김, FindData(false) 재조회 | components/modals/SavePricePeriodModal.tsx — 저장 후 재조회 | — | 구현 |
 | S-25 | ① 동일 통화 / `sBaseER == sTargetER` → 입력값 그대로 | components/modals/ExchangeRateModal.tsx — 동일 통화 그대로 | 환율 4룰은 AS-IS 팝업에서 **이벤트 미배선(잠재)** 상태(§7.4 ⚠ 실측). TO-BE 는 ExchangeRateModal 의 환율 마스터 조회·저장 경로로 별도 구현 | 구현 |
 | S-26 | ② 직행 환산 / dtFuturePrice에서 `CURRENCY=Target, UNIT_CURRENCY=Base, YYYYMM, DIVISION_ID` 행 존재… | components/modals/ExchangeRateModal.tsx — 직행 환산 | §7.4 동일 | 구현 |

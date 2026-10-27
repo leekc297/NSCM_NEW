@@ -33,10 +33,11 @@ export const bohSumColumnVisibility = (mode: BohMode): Record<string, boolean> =
 /**
  * 동적 pivot 컬럼 1개의 visible 여부 — design 03 §2.2 규칙 1~3(BOH모드 × Bucket × chkSum × chkPastPeriod).
  *
- * 규칙(AS-IS cs:1879-2044 그대로):
+ * 규칙(SSP0015 shipment-plan isDynVisible 와 통일):
  * 1. bohMode 와 일치하는 접두(X_/Y_/Z_)만 후보 — 불일치 접두는 전부 숨김.
- * 2. bucket 별 세부 노출: Daily→D_+W_ 표시(M_은 chkSum 연동) / Weekly→D_숨김,W_표시(M_은 chkSum 연동) /
- *    Monthly→D_+W_ 숨김, M_ 표시.
+ * 2. bucket 별 세부 노출: Daily→D_ 표시, W_/M_(SUM 컬럼)은 chkSum 연동 / Weekly→D_숨김, W_표시(M_은
+ *    chkSum 연동) / Monthly→D_+W_ 숨김, M_ 표시. (사용자 지시 2026-10-27: SUM 컬럼은 chkSum 체크 시에만.
+ *    종전 Daily 는 W_ 를 항상 표시해 SUM 미체크에도 주간 SUM 이 떴다 — SSP0015 규칙으로 교정.)
  * 3. PastPeriod 필터 — chkPastPeriod 해제 시, planDate 기준일보다 과거인 컬럼은 숨김.
  */
 export const isDynamicColumnVisible = (
@@ -56,7 +57,8 @@ export const isDynamicColumnVisible = (
   const { bucketType, sumChecked } = params;
   let bucketVisible: boolean;
   if (bucketType === 'D') {
-    bucketVisible = tag.bucket === 'D' || tag.bucket === 'W' || (tag.bucket === 'M' && sumChecked);
+    // Daily: D_ 는 항상, W_/M_(SUM 컬럼)은 chkSum 체크 시에만 (SSP0015 규칙 통일).
+    bucketVisible = tag.bucket === 'D' ? true : sumChecked;
   } else if (bucketType === 'W') {
     bucketVisible = tag.bucket === 'W' || (tag.bucket === 'M' && sumChecked);
   } else {
@@ -64,7 +66,9 @@ export const isDynamicColumnVisible = (
   }
   if (!bucketVisible) return false;
 
-  if (!params.pastPeriodChecked && params.planDateYyyymmdd) {
+  // pastPeriod 필터 — AS-IS SetSpreadColumn(cs:2072-2089): SUM 컬럼(W_/M_, leaf='SUM')은 제외(continue),
+  //   일(D_) 컬럼만 planDate 이전이면 숨김. W_/M_ 의 날짜코드는 날짜가 아니라(주차코드/yyyymm) 비교 대상 아님.
+  if (tag.bucket === 'D' && !params.pastPeriodChecked && params.planDateYyyymmdd) {
     if (tag.yyyymmdd < params.planDateYyyymmdd) return false;
   }
   return true;

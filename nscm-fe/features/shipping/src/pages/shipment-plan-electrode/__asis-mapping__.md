@@ -15,7 +15,7 @@
 | D00-1-006 | §1 btnMeasure / UsrButton | ShipmentPlanElectrode.tsx:378-387 (customButtons Measure → handleMeasure) |  | 구현 |
 | D00-1-007 | §1 btnRequestor / UsrButton | — | UserInfoPopup(btnRequestor) 공통 사용자검색 팝업 미이식(04 excluded, §6) | 제외 |
 | D00-1-008 | §1 btnSearch / SimpleButton | ShipmentPlanElectrode.tsx:368-369 (hotkeyConfig.search=handleSearch), ShipmentPlanElectrodeForm.tsx:103-106 (SearchArea onSearch) |  | 구현 |
-| D00-1-009 | §1 btnSimulation / UsrButton | ShipmentPlanElectrode.tsx:369-370 (hotkeyConfig.save=handleSave → SIMU 저장 main 경로 219-274) |  | 구현 |
+| D00-1-009 | §1 btnSimulation / UsrButton | ShipmentPlanElectrode.tsx customButtons Simulation(LBL01119, hasButton('SAVE_SHIPMENT_PLAN_SIMU') 게이트) → handleSimulation(Main siMain SIMU 저장) | AS-IS Save/Simulation 별개 버튼 — TO-BE 도 분리(2026-10-16 사용자 결정, 통합 철회). Main SIMU=handleSimulation / Detail 확정=handleSave | 구현 |
 | D00-1-010 | §1 cboBucketType / UsrCombo | components/ShipmentPlanElectrodeForm.tsx:193-206 (Bucket CustomDropdown, COMBO.BUCKET_TYPE) |  | 구현 |
 | D00-1-011 | §1 cboPlanDate / UsrCombo | components/ShipmentPlanElectrodeForm.tsx:161-174 (Plan Date CustomDropdown, COMBO.PLAN_INFOR) |  | 구현 |
 | D00-1-012 | §1 chkDelegateeModel / UsrCheckBox | — | 검색 SP 파라미터 체크박스 — iter-1 UI 미배치(범위 외, 04 §6 My Model auto-check(R09) 그룹 보류) | 제외 |
@@ -102,7 +102,7 @@
 | D00-2-004 | §2 btnMeasure / Click | ShipmentPlanElectrode.tsx:362-365 (handleMeasure → setOpenMeasure, spdDetail 활성이면 no-op) |  | 구현 |
 | D00-2-005 | §2 btnRequestor / Click | — | UserInfoPopup 미이식 — Requestor 팝업 열기 핸들러 없음(04 excluded, §6) | 제외 |
 | D00-2-006 | §2 btnSearch / Click | ShipmentPlanElectrode.tsx:185-209 (handleSearch — 필수검증 + 미저장 confirm + runMainSearch) |  | 구현 |
-| D00-2-007 | §2 btnSimulation / Click | ShipmentPlanElectrode.tsx:219-274 (handleSave main 경로 → SAVE_SHIPMENT_PLAN_SIMU call-proc) |  | 구현 |
+| D00-2-007 | §2 btnSimulation / Click | ShipmentPlanElectrode.tsx handleSimulation → main/SAVE_SHIPMENT_PLAN_SIMU call-proc(건별 단일객체 순차 POST, P_SSP0023_SAVE_SIMU) |  | 구현 |
 | D00-2-008 | §2 cboBucketType / SelectedIndexChanged | components/ShipmentPlanElectrodeForm.tsx:199-204 (set bucketType → MainGrid 열 재구성, 재조회 없음) |  | 구현 |
 | D00-2-009 | §2 cboPlanDate / SelectedIndexChanged | components/ShipmentPlanElectrodeForm.tsx:96-100 (handlePlanDateChange → setPlanDate period+realFlag) |  | 구현 |
 | D00-2-010 | §2 chkPastPeriod / CheckedChanged | ShipmentPlanElectrode.tsx:434-437 (setChkPastPeriod → MainGrid isVisible 과거 D_/W_ 숨김) |  | 구현 |
@@ -165,11 +165,11 @@
 | ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
 |---|---|---|---|---|
 | CRUD:EP02:SEARCH | 툴바 SEARCH — 조회 실행(수정 중이면 MSG00703 confirm) | ShipmentPlanElectrode.tsx:369 (hotkeyConfig.search → handleSearch 185-209, 195-206 MSG00703) |  | 구현 |
-| CRUD:EP03:SAVE | 툴바 SAVE — siMain 시뮬레이션 저장 | ShipmentPlanElectrode.tsx:370 (hotkeyConfig.save → handleSave 219-333, 255-256 MAIN SIMU call-proc, 267 Toast) |  | 구현 |
+| CRUD:EP03:SAVE | 툴바 SAVE — Detail(PlanDetail 확정) 저장 / Simulation 버튼 — Main siMain SIMU 저장 | SAVE: hotkeyConfig.save → handleSave(PLAN_DETAIL SAVE_CONFIRM). Simulation: customButtons → handleSimulation(main/SAVE_SHIPMENT_PLAN_SIMU, Toast MSG.SAVED). AS-IS 분리버튼 복원(2026-10-16) |  | 구현 |
 | CRUD:EP13:EXCEL | 툴바 EXCEL 다운로드 | ShipmentPlanElectrode.tsx:398-408 (SubTitle excelFileName='ShipmentPlanElectrode' 공용 다운로드 배선) |  | 구현 |
 | CRUD:EP04:DELETE | 툴바 DELETE | ShipmentPlanElectrode.tsx:373 (hotkeyConfig.delete — AS-IS 빈 몸체 재현, NO-OP 노출) | AS-IS BtnDelete_Click 빈 몸체 — 삭제 로직 없음(03 §3.5). 버튼 노출 유지 + 명시적 무동작 | 해당없음 |
 | CRUD:EP05:INSERT | 툴바 INSERT — 상세(PlanDetail) 신규행 추가 | ShipmentPlanElectrode.tsx:371 (hotkeyConfig.insert → handleInsert 336-356, GridAction.addRow 355) |  | 구현 |
-| MODAL:ColumnSettingModal | Measure 설정 모달(btnMeasure → 공용 ColumnSettingModal, TITLESET 'M') | ShipmentPlanElectrode.tsx:3 (import) + 486-496 (usage, columnType=TITLESET_MEASURE_TYPE, onSave 재조회) |  | 구현 |
+| MODAL:MeasureSelectModal | Measure 설정 모달(btnMeasure → 공통 MeasureSelectModal, /measure 원천, OK=saveTitleSet 'M') | 공통 features/master/src/components/measureSelectModal/MeasureSelectModal + ShipmentPlanElectrode.tsx (import + usage, onApply=applyVisibleMeasures→saveTitleSet(columnType='M')→fetchStaticMeasures+재조회) | 공용 ColumnSettingModal 의 DMF0002_GET_TITLESET_POPUP 은 SHEET_COLUMNS 원천+NULL division 필터라 SSP0023 Measure 0건 → 공통 MeasureSelectModal(/measure 원천)로 교체(2026-10-14). 데이터 원천(divisionId 미전달)이 실제 수정이고 모달은 공통본 재사용 | 구현 |
 | MODAL:UserInfoPopup | 담당자 조회 팝업(txtRequestor/btnRequestor) | — | UserInfoPopup 어포던스 미이식 결정(04 excluded, 2026-09-23) — Requestor 키인/팝업 iter-1 범위 외 | 제외 |
 | MODAL:SCM0002_ItembyDivisionPopup | Item 조회 팝업(btnItemId/btnItemId2) | — | SCM0002_ItembyDivisionPopup 어포던스 미이식 결정(04 excluded, 2026-09-23) — Item 키인/팝업 iter-1 범위 외 | 제외 |
 
@@ -182,7 +182,7 @@
 |---|---|---|---|---|
 | COMMON:UC-01 | 필터링 상태에서 신규행 Insert 시 필터를 **유지한 채** 추가 행이 보이도록 (keepRowVisibleUnderFilter — 필터 clear 금지, 1st 행3 + 2026-08-14 공통 수정사항①) | ShipmentPlanElectrode.tsx:355 (GridAction.addRow 배선) | 신규행 Insert 대상 상세(PlanDetail) 저장은 확정 SAVE SP(I2) 미배포(04 부분구현·high)라 end-to-end 검증 불가 — 필터-유지 삽입 요건은 SAVE 배선(convert-sp) 완료 후 검증(현재 addRow 배선까지 완비) | 제외 |
 | COMMON:UC-02 | 데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠습니까?' confirm (MSG00703 — 1st 행4) | ShipmentPlanElectrode.tsx:194-207 (hasUnsaved → MSG.CONFIRM_RESEARCH_UNSAVED confirm, onConfirm runMainSearch) |  | 구현 |
-| COMMON:UC-03 | 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 (hook #132 §2-2 — 1st 행5) | ShipmentPlanElectrode.tsx:492-495 (ColumnSettingModal onSave → main 활성+filters 있으면 refetchMain) |  | 구현 |
+| COMMON:UC-03 | 컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후 재조회 유도 (hook #132 §2-2 — 1st 행5) | ShipmentPlanElectrode.tsx (MeasureSelectModal onApply → saveTitleSet 성공 시 main 활성+filters 있으면 refetchMain) |  | 구현 |
 | COMMON:UC-04 | CRUD 완료 알림 = Alert 아닌 하단 중앙 Toast 후 자동 소멸 (LGES WDG 표준·hook #132 §3 — 1st 행6) | ShipmentPlanElectrode.tsx:267 (저장 성공 setToast type='success', MSG.SAVED) |  | 구현 |
 | COMMON:UC-05 | Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 (gridAction dataMap 승계 — 1st 행7) | — | 공용 SubTitle/gridAction 엑셀 다운로드에 위임(ShipmentPlanElectrode.tsx:398-408) — dataMap→Name 변환은 공용 컴포넌트 책임, 화면 오버라이드 없음 | 해당없음 |
 | COMMON:UC-06 | Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 (1st 행8) | — | SSP0023 1차/2차 조회조건은 전부 콤보 드롭다운(Division/Company/FromSite/PlanDate/Bucket) — 콤마 다중 key-in 텍스트 조회조건 없음. Item/Requestor key-in 필드는 iter-1 미이식(제외) | 해당없음 |
@@ -216,7 +216,7 @@
 | drpPeriod2/3(C24/C25) | DetailBar Shipment Date(표시전용, 1차 period) | 독립축 미구현(G10) |
 | txtRequestor(C84) | (팝업 결과 채움 — 미구현) | 제외: UserInfoPopup 미이식(§아래 제외목록) |
 | btnItemId/btnItemId2(C04/C05) | (Item 팝업 — 미구현) | 제외: SCM0002_ItembyDivisionPopup 미이식 |
-| btnMeasure(C06) | customButtons Measure → ColumnSettingModal | measure 재구성 |
+| btnMeasure(C06) | customButtons Measure → MeasureSelectModal | measure 재구성 |
 | chkMyModel/PartLeader/TeamLeader/DelegateeModel(C12~14/17) | (검색 파라미터 — 미노출) | 보류: 조회 SP 파라미터, UI 미배치(iter-1 범위 외) |
 | txtModelId/textNickName/txtItemId 등 텍스트 | (검색 필터 텍스트 — 미노출) | 보류: iter-1 핵심(cascade+pivot+저장) 우선 |
 
@@ -266,11 +266,12 @@
 | AS-IS | TO-BE | 처리 |
 |---|---|---|
 | FindButton(Search) | hotkeyConfig.search=handleSearch | hasButton('SEARCH') 조건부 |
-| SaveButton(Save) | hotkeyConfig.save=handleSave | main SIMU 저장 + detail 보류 |
+| SaveButton(Save) | hotkeyConfig.save=handleSave | Detail(PlanDetail 확정) 저장 전용 — Main SIMU 저장은 Simulation 버튼으로 분리 |
+| btnSimulation(Simulation) | customButtons Simulation → handleSimulation | Main siMain SIMU 저장(SAVE_SHIPMENT_PLAN_SIMU) — hasButton 게이트, AS-IS 분리버튼 복원 |
 | InsertButton(Insert) | hotkeyConfig.insert=handleInsert | PlanDetail 신규행 복제 |
 | DeleteButton(Delete) | hotkeyConfig.delete=()=>undefined | NO-OP(노출·무동작, plan §6) |
 | EditButton(Edit) | canEdit=hasButton('INSERT')\|\|hasButton('SAVE') | SwitchLock 미이식 — EDIT 권한 미등록이라 편집계 권한으로 게이트(SCP0048 선례) |
-| btnMeasure | customButtons Measure → ColumnSettingModal | — |
+| btnMeasure | customButtons Measure → MeasureSelectModal | — |
 | btnExcelUpload/formDown | UPLOAD/EXCEL 버튼(SHEETS.EXCEL 배선) | iter-1 배선만 |
 
 ## 6. 제외 / 해당없음 (사유 필수)

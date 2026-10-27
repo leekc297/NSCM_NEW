@@ -1,0 +1,3 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0026,SQL,SCP0026_GET_DEMAND_GROUPING,Doc\asisfacts\db\modules\dbo.SCP0026_GET_DEMAND_GROUPING.sql,43,,"DIVISION_ID,OPERATION_GROUP,ITEM_ID","Order by division_id, operation_group, item_id",0,정적
+SCP0026,SQL,SCP0026_SAVE_DEMAND_GROUPING,Doc\asisfacts\db\modules\dbo.SCP0026_SAVE_DEMAND_GROUPING.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

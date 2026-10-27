@@ -6,9 +6,10 @@ import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
-import { GridUtils, paintNegativeText, toGridNumber } from '@foundation/utils';
+import { CustomMergeManager, GridUtils, paintNegativeText, toGridNumber } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
+import { usePinDashDateFormat } from '../../../hooks/usePinDashDateFormat';
 import {
   BUCKET_TYPE,
   LBL,
@@ -92,6 +93,9 @@ export const ShipmentPsiMainGrid = ({
 }: Props) => {
   const { t } = useTranslation();
   const columns = adminColumns ?? [];
+
+  // 날짜 컬럼 형식을 조회값과 같은 대시(yyyy-MM-dd)로 고정 — 공용 getFormat 은 점 형식을 준다.
+  usePinDashDateFormat(gridRef, columns);
 
   // Sum 토글은 컬럼 재생성 없이 imperative 로 반영(스크롤/폭 보존, 헤더 SUM 병합 유지) —
   //   빌드 시점 초기 visible 계산만 최신값을 참조하고, 토글 자체는 아래 applyDynVisibility 가 flip.
@@ -202,7 +206,11 @@ export const ShipmentPsiMainGrid = ({
   const drillVisRef = useRef<Map<string, boolean>>(new Map());
   const applyDynVisibilityRef = useRef<(() => void) | null>(null);
   // 동적 헤더 SUM 병합 매니저 설치 표식 — grid 인스턴스당 1회만 래핑(체인 무한 증식 방지).
-  const mergeWrappedRef = useRef<FlexGridType | null>(null);
+  // const mergeWrappedRef = useRef<FlexGridType | null>(null);
+  // 설치한 매니저(grid 인스턴스별). DataGrid 가 TopLeft 래퍼로 감싸므로 g.mergeManager 로는 꺼낼 수 없다
+  const mergeInstalledRef = useRef<{ grid: FlexGridType; manager: ShipmentPsiMergeManager } | null>(
+    null
+  );
 
   const setActiveGrid = useShipmentPlanMobilityItStore(s => s.setActiveGrid);
   const setActiveGridRef = useRef(setActiveGrid);
@@ -281,13 +289,25 @@ export const ShipmentPsiMainGrid = ({
     // 병합 매니저 — DataGrid 공용 매니저를 감싸 (a) 선행 식별 컬럼 데이터셀 계층 세로병합
     //   (b) 동적 M_/W_/D_ 헤더 병합(년월/주차 가로 · M_ SUM 세로) 전담. 정적 헤더·그 외는 delegate.
     //   (DM MktFcst HierarchicalMergeManager 1:1 — 사용자 요구 "DM 화면과 동일" 2026-09-30). grid 인스턴스당 1회 래핑.
-    if (mergeWrappedRef.current !== g) {
-      g.mergeManager = new ShipmentPsiMergeManager(g.mergeManager);
-      mergeWrappedRef.current = g;
-    }
-    const mergeManager = g.mergeManager as ShipmentPsiMergeManager;
-    mergeManager.groupBindings = MAIN_GROUP_MERGE_COLUMNS;
-    mergeManager.groupKeyBindings = MAIN_GROUP_MERGE_KEYS;
+    // if (mergeWrappedRef.current !== g) {
+    //   g.mergeManager = new ShipmentPsiMergeManager(g.mergeManager);
+    //   mergeWrappedRef.current = g;
+    // }
+    // const mergeManager = g.mergeManager as ShipmentPsiMergeManager;
+    // mergeManager.groupBindings = MAIN_GROUP_MERGE_COLUMNS;
+    // mergeManager.groupKeyBindings = MAIN_GROUP_MERGE_KEYS;
+    // 최초 설치, 또는 미저장 변경 버리기(GridAction.discardChanges)가 공용 CustomMergeManager 로
+    //   갈아끼웠을 때만 다시 감싼다. TopLeft 래퍼는 그대로 둔다(매번 감싸면 레이아웃 갱신이 반복돼 편집창이 닫힌다)
+    const ensureMergeManager = (): ShipmentPsiMergeManager => {
+      const installed = mergeInstalledRef.current;
+      if (installed?.grid === g && !(g.mergeManager instanceof CustomMergeManager)) return installed.manager;
+      const wrapped = new ShipmentPsiMergeManager(g.mergeManager);
+      wrapped.groupBindings = MAIN_GROUP_MERGE_COLUMNS;
+      wrapped.groupKeyBindings = MAIN_GROUP_MERGE_KEYS;
+      g.mergeManager = wrapped;
+      mergeInstalledRef.current = { grid: g, manager: wrapped };
+      return wrapped;
+    };
 
     // 병합 대상 컬럼(allowMerging) + 계층 키(fixedBindings) 갱신 — 동적(M_/W_/D_/B_)·MEASURE(측정치 행라벨)를
     //   제외한 선행 식별 컬럼(Div/From Site/Model/Nick Name/BOH/TYPE/FIGURE …)을 값이 같은 연속 행끼리 세로병합한다.
@@ -303,9 +323,11 @@ export const ShipmentPsiMainGrid = ({
         col.allowMerging = mergeable;
         if (mergeable) fixed.push(b);
       });
-      mergeManager.fixedBindings = fixed;
+      ensureMergeManager().fixedBindings = fixed;
     };
     g.updatedLayout.addHandler(applyMerge);
+    // discardChanges 는 view.refresh 로 행만 다시 읽어 updatedLayout 이 안 올 수 있어 loadedRows 에도 건다
+    g.loadedRows.addHandler(applyMerge);
     applyMerge();
 
     const beginningEditHandler = (
@@ -513,6 +535,7 @@ export const ShipmentPsiMainGrid = ({
     return () => {
       try {
         g.updatedLayout?.removeHandler(applyMerge);
+        g.loadedRows?.removeHandler(applyMerge);
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.pastingCell?.removeHandler(pastingCellHandler);
         g.formatItem?.removeHandler(formatItemHandler);

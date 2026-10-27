@@ -1,6 +1,8 @@
-# [Harness] SCP0011 production-plan — BLOCK 1 / WARN 76
+# [Harness] SCP0011 production-plan — BLOCK 1 / WARN 84
 
 - BLOCK F05 inline style 금지 — SCSS Module @components/ProductionPlanForm.tsx:389
+- WARN AC1 액션 대조표 미처리 479행: AC-370e26bd(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-9c8505dd(상태 빈칸 RETURN return;), AC-1d6f8a1a(상태 빈칸 VALIDATE DataUtil.checkRequiredOfSearch), AC-f77f09b9(상태 빈칸 RETURN return;), AC-ae7e79b7(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-0c56d988(상태 빈칸 RETURN return;), AC-40be4260(상태 빈칸 CALL_EXT UIUtils.GetAllDivisionCheckedE), AC-5d49577f(상태 빈칸 POPUP new SCM0002_MaterialByDivision) … @Doc/asisfacts/screens/SCP0011/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 28행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-40be4260(UIUtils.GetAllDivisionCheckedElectrode @SCP0011_ProductionPlan.cs:756), AC-dfbaf024(fps.ActiveSheet.GetColumnFromTag @SCP0011_ProductionPlan.cs:652), AC-4c497f6c(fps.ActiveSheet.Columns.Get @SCP0011_ProductionPlan.cs:653), AC-ba9b8482(fps.ActiveSheet.Columns.Get @SCP0011_ProductionPlan.cs:661), AC-829893b6(SimplexelService.ExportFpSpread @SCP0011_ProductionPlan.cs:881), AC-656246ff(siLine.SetDecimal @SCP0011_ProductionPlan.cs:1689), AC-2fd1b731(spdLine.ShowCell @SCP0011_ProductionPlan.cs:1731), AC-5bb1efef(spdMain.ShowCell @SCP0011_ProductionPlan.cs:1268) … @Doc/asisfacts/screens/SCP0011/__asis-actions__.md
 - WARN G02 As-is 엔드포인트 SCP.SCP0011_GET_LAST_PLAN_VERSION (SCP0011_GET_LAST_PLAN_VERSION) 매핑표 §4 에 없음
 - WARN G02 As-is 엔드포인트 SCP.SCP0011_GET_PRODUCTION_PLAN_MODEL (SCP0011_GET_PRODUCTION_PLAN_MODEL) 매핑표 §4 에 없음
 - WARN G02 As-is 엔드포인트 SCP.SCP0011_GET_PRODUCTION_PLAN_MODEL_TITLE_PARAL (SCP0011_GET_PRODUCTION_PLAN_MODEL_TITLE_PARAL) 매핑표 §4 에 없음
@@ -56,8 +58,13 @@
 - WARN G04 As-is 컨트롤 txtModelId / TextBox 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 spdLine / FpSpread 매핑표 §1 에 없음
+- WARN H03 조회조건 <Checkbox> 디자인(hook #154 v2): FormItem label 빈값/미지정(라벨 트랙 없음). 정본 GlobalPsiReportForm checkbox()/radio() — Grid(customGrid)+FormItem(formItem, label=조건명, labelAlign='right')+customCheckbox+<Checkbox checked onChange/> · Radio = FormItem label=그룹명 + <RadioGroup row><Radio labelText/> @components/ProductionPlanForm.tsx:390
 - WARN D01 사전 밖 컴포넌트 <PlanVersionCascade> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ProductionPlanForm.tsx
 - WARN V01 As-is Validation 3건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00096 — AS-IS '사용 권한이 없습니다.' / TO-BE MSG00096 = '권한이 없습니다.' → 문구로 찾은 TO-BE ID MSG01125 @production-plan.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @production-plan.constants.ts
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 8건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ3 [MSG00002] 항목명 값은 필수 입력입니다 / 조회(SEARCH) SEQ4 [MSG00049] 유효한 날짜 형식이 아닙니다. / 조회(SEARCH) SEQ6 [MSG00172] 최대 조회일은 From Date + / 실행(RUN) — Calculate 버튼 SEQ2 [MSG00097] 권한을 가진 Division이 없습 … → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0011.md
+- WARN SC1 조회조건 순서가 기준표(SCP SCP_화면별 조회조건 정리_260731_v0.5.xlsx 188~202행)와 다를 수 있음(라벨 대조): 'Division' 이 'Seq.' 보다 앞 — 기준 순서: Div → Plan Date → Plan Type → Seq. → Operation group → Plant Site → Electrode → Material → Model/Nickname → Period → Bucket → Sum (40_SEARCH_COND.md #### SCP0011) @components/ProductionPlanForm.tsx:305
 - WARN R12 inline style 금지 → SCSS Module (절대금지 ⑤) @components/ProductionPlanForm.tsx:365
 - WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ProductionPlanGrid.tsx:393
 - WARN R06 DataGrid initialized prop deprecated → useEffect+gridRef (#70 runtime-pitfalls) @components/ProductionPlanGrid.tsx:389
@@ -75,5 +82,6 @@
 - WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 시트 'calendar') — 누락 startYyyymmdd, endYyyymmdd — 현재 키: (toFilter 없음) · BE positional 매핑이라 값이 NULL 로 감
 - WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0011_GET_PLAN_EDIT_INFO · 시트 'editInfo') — 누락 originDivisionId — 현재 키: divisionId, scmSiteId, planStartYyyymmdd, planType, seq, debugMode · BE positional 매핑이라 값이 NULL 로 감
 - WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0011_GET_PROD_PLAN_MODEL · 시트 'main') — 누락 toPeriod — 현재 키: divisionId, operationGroup, scmSiteId, modelId, itemId, fromYyyymmdd, toYyyymmdd, planStartYyyymmdd, planType, seq, programId, sheetName, userId, electrodeType, nickName, bucket, chkAll, debugMode · BE positional 매핑이라 값이 NULL 로 감
-- WARN B27 As-is FindData_Model_Parallel → SCP0011_GET_PRODUCTION_PLAN_MODEL_TITLE_PARAL [sp명] · 사내 정확 배선 없음(같은 화면 타이틀 계열 'calendar' 추정) — 동적 컬럼 원천을 확인: 배선 등록(DB 메타) 후 FE 조회 또는 대사표에 대체 근거(BE/메타 원문 확인)를 적고 '제외' @grid
-- WARN B27 동적 헤더 원천 SCP0009_GET_SHEET_CALENDAR_3SPAN → FE 조회 — As-is GetSpdTitle → SCP0009_GET_SHEET_CALENDAR_3SPAN [sp명+메서드] · 사내 배선 시트 'calendar'(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN)를 FE 가 조회하지 않음 → 기간 컬럼이 그려지지 않음. SHEETS 에 시트 추가 + useTabProcQuery 로 조회기간을 넘겨 o_rc1(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)로 헤더 생성(As-is InitSpreadDateColumn 1:1)
+- WARN B27 As-is FindData_Model_Parallel → SCP0011_GET_PRODUCTION_PLAN_MODEL_TITLE_PARAL [sp명 + grid_code DB루프 InitSpreadDateColumn:462,InitSpreadDateColumn:466] · 사내 정확 배선 없음 — 동적 컬럼 원천을 확인: 배선 등록(DB 메타) 후 FE 조회 또는 대조표에 대체 근거(BE/메타 원문 확인)를 적고 '제외' @grid
+- WARN B27 동적 헤더 원천 SCP0009_GET_SHEET_CALENDAR_3SPAN → FE 조회 — As-is GetSpdTitle → SCP0009_GET_SHEET_CALENDAR_3SPAN [sp명+메서드 + grid_code DB루프 InitSpreadDateColumn:462,InitSpreadDateColumn:466] · 사내 배선 시트 'calendar'(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN)를 FE 가 조회하지 않음 → 기간 컬럼이 그려지지 않음. SHEETS 에 시트 추가 + useTabProcQuery 로 조회기간을 넘겨 o_rc1(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)로 헤더 생성(As-is InitSpreadDateColumn 1:1)
+- WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: InitSpreadDateColumn:462, InitSpreadDateColumn:466 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpreadDateColumn / 462 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md

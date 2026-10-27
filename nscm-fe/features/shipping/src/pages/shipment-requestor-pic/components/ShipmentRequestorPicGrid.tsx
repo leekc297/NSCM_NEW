@@ -44,8 +44,11 @@ interface Props {
 }
 
 // 편집가능 셀 배경(#95 grid-cell-backcolor-standard, design 03 §5.1). 잠금셀은 기본색.
+//   표준 토큰 $wj-editable-cell(packages/foundation styles/wijmo/misc/_variables.scss = #fff8cd)과
+//   동일한 값. 공용 .wj-cell-editable 은 INPUT_TP_CD 기준이라 전건 'S' 인 이 화면에서 안 켜져
+//   formatItem 으로 직접 칠하되, 색은 표준과 일치시킨다(비표준 #FFFDE7 사용 금지 — 자매 SSP0024 동일).
 //   Wijmo 셀 DOM 직접 스타일(inline React style 아님) — BodGrid/gridNegativeText 와 동일 패턴.
-const EDITABLE_CELL_BG = '#FFFDE7';
+const EDITABLE_CELL_BG = '#fff8cd';
 
 export const ShipmentRequestorPicGrid = ({
   rows,
@@ -73,6 +76,11 @@ export const ShipmentRequestorPicGrid = ({
   // 최신 editMode 를 stale 없이 참조(핸들러는 mount 후 등록, deps 최소화).
   const editModeRef = useRef(editMode);
   editModeRef.current = editMode;
+
+  // Division cascade clear(R14) 가드용 — beginningEdit 에서 편집 시작 시점의 DIVISION_ID 값을 담는다.
+  //   cellEditEnded 는 값 변경·취소(Esc)·같은값 커밋과 무관하게 발생하므로, 콤보를 열었다 그대로 닫았을 때
+  //   종속 7칸이 지워지는 것을 막으려면 **값이 실제로 바뀐 경우에만** 클리어해야 한다(GRID-09).
+  const editOldDivisionRef = useRef<unknown>(undefined);
 
   useEffect(() => {
     const g = gridRef.current;
@@ -105,6 +113,8 @@ export const ShipmentRequestorPicGrid = ({
         onDivisionRequired();
         return;
       }
+      // Division cascade clear 가드용 — 편집 시작 시점 값 보관(cellEditEnded 에서 실제 변경 여부 비교).
+      if (binding === DIVISION_COLUMN) editOldDivisionRef.current = row?.[DIVISION_COLUMN];
       e.cancel = !isInlineEditable(binding, row, editModeRef.current);
     };
     g.beginningEdit.addHandler(beginningEditHandler);
@@ -128,8 +138,11 @@ export const ShipmentRequestorPicGrid = ({
         // SITE_DESCRIPTION 셀 value = SCM_SITE_ID(코드) → TO_SITE 동기(R13).
         setCell(TO_SITE_COLUMN, row[SITE_DESCRIPTION_COLUMN]);
       } else if (binding === DIVISION_COLUMN && isInsertRow(row)) {
-        // 신규행 Division 변경 → 종속 7칸 초기화(R14).
-        for (const key of DIVISION_CASCADE_CLEAR) setCell(key, '');
+        // 신규행 Division 변경 → 종속 7칸 초기화(R14). **값이 실제로 바뀐 경우에만**(GRID-09) —
+        //   콤보를 열었다 그대로 닫거나(Esc 는 값이 원복됨) 같은 값을 다시 골라도 7칸이 지워지지 않게 한다.
+        if (row[DIVISION_COLUMN] !== editOldDivisionRef.current) {
+          for (const key of DIVISION_CASCADE_CLEAR) setCell(key, '');
+        }
       }
       sender.invalidate();
     };
@@ -150,11 +163,16 @@ export const ShipmentRequestorPicGrid = ({
       }
       if (isItemPopupColumn(binding)) {
         if (!isCellEditable(binding, row, editModeRef.current)) return; // 신규행만
+        // ITEM_ID 는 키인(FPTextModal)도 되는 셀이라 더블클릭이 인라인 편집을 시작할 수 있다 —
+        //   팝업을 열기 전에 편집을 종료해 에디터가 모달 아래 남지 않게 한다(키인은 클릭+타이핑/F2 경로로 유지).
+        g.finishEditing();
         onItemCellDblClick(row);
         return;
       }
       if (isUserPopupColumn(binding)) {
         if (!isCellEditable(binding, row, editModeRef.current)) return;
+        // User 셀도 키인(FPTextModal) 가능하므로 ITEM_ID 와 동일하게 팝업 전 인라인 편집을 종료한다.
+        g.finishEditing();
         onUserCellDblClick(row, binding);
       }
     };

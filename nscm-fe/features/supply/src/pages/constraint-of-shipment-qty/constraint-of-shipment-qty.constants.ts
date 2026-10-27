@@ -8,11 +8,27 @@ export type MENU_ID = typeof MENU_ID;
 //   - 조회조건 cascade: Division -> {PlanGroup, FromSite, ToSite, Stage, ModelGroup} 5갈래 fan-out(동시 갱신, 순차 아님)
 export enum SHEETS {
   MAIN = 'main', // spdMain 단일 시트
+  // 조회조건 콤보 다중커서 전용 시트 — AS-IS GetSearchInfo(SCP0132_GET_SEARCH_INFO) 1회 호출로
+  //   PlanGroup/ToSite/FromSite/Stage/ModelGroup/Item 을 DataSet Tables[0]~[5] 로 받는다(.cs:174~190).
+  //   자매 SCP0128 의 init 시트와 동형(SCM_ADM_MNU_BTN_MPG_M 전용 SHT_NM='init' + MNU_BTN_CD='SEARCH').
+  INIT = 'init',
 }
 
 // NSCM 단일 cursor 표준 'o_rc1'
 export const RESPONSE_SET = { MAIN: 'o_rc1' } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
+
+// init(GET_SEARCH_INFO) 커서 ↔ 조회조건 콤보 매핑 — AS-IS InitControls(.cs:174~190) DataSet Tables
+//   순서가 정본이다: Tables[0]=PlanGroup / [1]=ToSite / [2]=FromSite / [3]=Stage / [4]=ModelGroup /
+//   [5]=Item(팝업 원천, 조회조건 콤보 아님). SCP0128 과 달리 ToSite 가 FromSite 보다 먼저 온다.
+export const INIT_SET = {
+  PLAN_GROUP: 'o_rc1',
+  TO_SITE: 'o_rc2',
+  FROM_SITE: 'o_rc3',
+  STAGE: 'o_rc4',
+  MODEL_GROUP: 'o_rc5',
+  ITEM: 'o_rc6',
+} as const;
 
 // admin UI Category Setup(SCM_MST_SHEET_COLUMNS) SHEET_NAME — 실측 PROGRAM_ID='SCP0132' 23컬럼.
 export const ADMIN_SHEET_NAME: Partial<Record<SHEETS, string>> = {
@@ -22,42 +38,31 @@ export const ADMIN_SHEET_NAME: Partial<Record<SHEETS, string>> = {
 // ====================================================================================
 // 조회조건/셀 콤보 SQL_ID (design 02 §2 / 03 §1)
 // ====================================================================================
+// 조회조건 콤보 중 CMBO_SQL 원천은 Division/Valid 둘뿐이다. PlanGroup/ToSite/FromSite/Stage/
+//   ModelGroup 은 CMBO 가 아니라 전용 SP SCP0132_GET_SEARCH_INFO(init 시트) 다중커서에서 온다
+//   (INIT_SET 매핑·AS-IS .cs:174~190). 이전 회차가 설계 당시 AS-IS .cs 부재로 범용 SQL_ID
+//   (PlanGroup_SCP_ALL/FromSite/ToSite/Stage/ModelGroup)를 잠정 배선했으나, AS-IS 원문 확보로
+//   전용 SP 다중커서가 정본임이 확정돼 제거했다(2026-10-13).
 export const COMBO = {
-  // Division_SCP = 사용자 권한 조인 + "코드 이름" 표시(design 02 §2.1) — AS-IS BLUtils.GetDivision
-  //   본문 미확보로 1·2·4층(convert-core §2.6) 확인 필요. 자매 SCP0131 이 채택한 것과 동일 후보.
+  // Division_SCP = 사용자 권한 조인 + "코드 이름" 표시(design 02 §2.1, AS-IS BLUtils.GetDivision).
   DIVISION: 'Division_SCP',
-  // Plan Group — TO-BE 유일 등록 후보(division 파라미터 바인드 없음, 전건 반환). AS-IS 공급원
-  //   자체가 확인 필요(design 02 §2.3)라 이 후보를 division 클라 필터와 함께 잠정 배선한다.
-  PLAN_GROUP: 'PlanGroup_SCP_ALL',
-  // Valid — 파라미터 없는 정적 Y/N 2행(design 02 §2.2, 확정 재사용 가능).
+  // Valid — 파라미터 없는 정적 Y/N 2행(design 02 §2.2, AS-IS Data.Type.YesOrNo 와 1:1).
   VALID: 'YesOrNo',
-  // From Site/To Site/Stage/Model Group — design 02 §2.3 실측 결과 TO-BE 미배포(SQL_ID 자체 없음,
-  //   From/To Site 는 이름 유사 후보 있으나 화이트리스트 미재현이라 재사용 금지 잠정). 아래 4개는
-  //   그리드 셀 콤보 CELL_COMBO_DATA_TYPE 명칭과 동일하게 맞춰둔 자리표시자 — 05_register.sql 로
-  //   등록을 시도하되 AS-IS 원천 SQL 미확보로 등록 보류, 등록 전까지 이 조건은 빈 옵션으로 렌더된다
-  //   (확인 필요, 03_grid-columns.md §6-3).
-  FROM_SITE: 'FromSite',
-  TO_SITE: 'ToSite',
-  STAGE: 'Stage',
-  MODEL_GROUP: 'ModelGroup',
 } as const;
 
-// From/To Site 화이트리스트(design 02 §2.3/§3) — AS-IS 리터럴 DIVISION_ID IN ('81','40','82').
-//   TO-BE 후보 콤보(FromSiteByDivision_SCP 등)는 전부 @divisionId 재조회형이라 이 리터럴을
-//   포함하지 않는다(재사용 금지 잠정) — 신규 콤보 미등록 상태이므로 이 화면은 해당 사업부 소속
-//   사이트 후보를 마스터에서 직접 가져올 방법이 없다. §확인 필요: convert-sp/신규 콤보 등록 후
-//   FromSite/ToSite 후보 목록 자체를 채울 데이터소스가 없어 이번 회차엔 빈 옵션으로 남긴다.
+// From/To Site 기저 필터(design 02 §3 filterCalls#2/#3) — AS-IS RefreshSiteByDivision 가 EE 선택 시
+//   DIVISION_ID IN('81','40','82')(배터리 셀 3개 사업부)로 먼저 좁힌 뒤 Division cascade 한다(.cs:276~286).
 export const SITE_BASE_DIVISIONS = ['81', '40', '82'] as const;
 
-// Stage/Model Group — TO-BE 미배포(design 02 §2.3 §2.6) — 신규 콤보 등록 대상.
-//   이번 회차는 등록을 시도하되(05_register.sql), 실 데이터 원천(AS-IS 조회 SQL 본문) 미확보로
-//   등록 SQL 자체가 잠정(추측 금지 원칙상 실행 보류) — 화면은 빈 옵션으로 렌더된다(확인 필요).
-
-// AS-IS Validation MSG(design 03 §3.1). TO-BE 미등록 3종(MSG00099/046/022)은 등록 전까지
+// AS-IS Validation MSG(design 03 §3.1). TO-BE 미등록(MSG00046/00022)은 등록 전까지
 //   defaultValue 영문 fallback 만 표시한다(convert-core §4.1 — 임의 코드 재사용 금지).
 export const MSG = {
-  REQUIRED_FIELDS: 'MSG00001', // 등록됨(KO/EN/CN) — AS-IS 동일 msgId, 8개 필수값 일괄체크
-  MIN_MAX_INVALID: 'MSG00099', // 미등록 — "Min qty can not be greater than Max qty." fallback (AS-IS MSG00099)
+  // 필수값 일괄체크(8개 OR). AS-IS .cs:678 은 GMessageBox("MSG00001")("모든 항목은 필수입력입니다")였으나
+  //   TO-BE DB 에서 MSG00001 은 "저장 하시겠습니까?"(공통 SAVE_CONFIRM)로 재정의돼 의미가 다르다 —
+  //   그대로 쓰면 필수값 Alert 에 "저장 하시겠습니까?" 가 떴다(2026-10-14 실측·교정). TO-BE 필수값
+  //   메시지는 MSG00013("필수 입력란을 입력해 주세요 / Please enter the required fields.", KO/EN/CN USE_YN=Y).
+  REQUIRED_FIELDS: 'MSG00013',
+  MIN_MAX_INVALID: 'MSG00099', // 등록됨(KO/EN/CN USE_YN=Y, DB 실측 2026-10-14) — "{0}은 {1} 보다 클 수 없습니다." ({0}=MIN타이틀,{1}=MAX타이틀)
   MIN_MAX_BOTH_EMPTY: 'MSG00022', // 미등록 — "Please enter Min qty or Max qty." fallback (AS-IS MSG00022)
   PERIOD_INVALID: 'MSG00219', // 등록됨(EN 본문 공백) — "The start date can not be later than the end date." fallback
   ITEM_NOT_EXIST: 'MSG00458', // 등록됨 — "MODEL: {0} \nInvalid MODEL Code!"
@@ -67,7 +72,7 @@ export const MSG = {
   // Sales Site Priority(AS-IS MSG00046) — 대상 컬럼·조건 확인 필요(design 03 §3.1 #3). 미구현.
 } as const;
 
-// 다국어 LABEL(design 02 §4.5). To Date/Item ID 는 미등록 — defaultValue 로만 표기.
+// 다국어 LABEL(design 02 §4.5).
 export const LBL = {
   DIVISION: 'LBL00001',
   PLAN_GROUP: 'LBL00002',
@@ -75,12 +80,23 @@ export const LBL = {
   TO_SITE: 'LBL00023',
   MODEL_GROUP: 'LBL01092',
   STAGE: 'LBL00061',
-  VALID: 'LBL00639',
-  FROM_DATE: 'LBL00062',
+  // Valid — AS-IS lblValid "Active"(사용자 지정 LBL00007). 이전 LBL00639("Valid")에서 교체.
+  VALID: 'LBL00007',
+  // Item ID — AS-IS Model/Nickname 라벨(사용자 지정 LBL00618). 이전 하드코딩 'Item ID'에서 교체.
+  ITEM_ID: 'LBL00618',
+  // Period — AS-IS lblPeriod "Period*"(UsrDateRangePicker3 단일 컨트롤). From Date/To Date 2분할이
+  //   아니라 하나의 기간 범위다(.Designer.cs:520~527 lblPeriod + dCalendar UsrDateRangePicker3).
+  //   라벨값은 사용자 지정 LBL00013("Period"). 이전 LBL00062 에서 교체.
+  PERIOD: 'LBL00013',
+  // 조회 버튼 — "Search(F5)"(사용자 지정 LBL00112). SearchArea 기본 라벨('조회') 대체.
+  SEARCH: 'LBL00112',
 } as const;
 
-// Valid(cboValid) 기본값 — 필수값 8종에 포함(design 03 §3.1 #2).
-export const VALID_DEFAULT = '';
+// Valid(cboValid) 조회조건 기본값 — AS-IS cboValid.DataBind(Data.Type.YesOrNo, true)(.cs:171)로
+//   콤보가 [ALL, Y, N] 3행이고 기본 선택이 ALL 이다. CustomDropdown 단일 allOption 은 value==='ALL'
+//   일 때만 ALL 항목이 선택 표시되므로(CustomDropdown L369) 초기값도 'ALL' 센티널로 둔다.
+//   조회 시 ALL → 빈 문자열 변환은 store setFilter 가 담당(AS-IS .cs:452 pValidYn = Equals("ALL")?"":...).
+export const VALID_DEFAULT = 'ALL';
 
 // 저장 전 필수 8컬럼(design 03 §1/§4 validations#2 MSG00001 원문 8개 OR 조건). STAGE/MDL_GR_NM 은
 //   그리드 라벨상 '*' 이나 이 조건식에는 없음(design 03 §6#5 확인 필요) — 라벨 표기를 임의로

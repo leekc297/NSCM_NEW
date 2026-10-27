@@ -1,4 +1,4 @@
-# [Harness] SCP0080 group-code-management — BLOCK 2 / WARN 47
+# [Harness] SCP0080 group-code-management — BLOCK 2 / WARN 51
 
 - BLOCK T03 i18next TFunction 타입 사용 — tsc 타입 폭발(교차곱) 원인. t 는 좁은 콜백 타입 '(key: string, opts?: { defaultValue?: string }) => string' 으로 받거나 호출측에서 문자열을 만들어 넘길 것 @utils/group-code-management.save.ts:1
 - BLOCK T03 i18next TFunction 타입 사용 — tsc 타입 폭발(교차곱) 원인. t 는 좁은 콜백 타입 '(key: string, opts?: { defaultValue?: string }) => string' 으로 받거나 호출측에서 문자열을 만들어 넘길 것 @utils/group-code-management.save.ts:122
@@ -41,6 +41,10 @@
 - WARN G04 As-is 컨트롤 spd81_UC / FpSpread 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 spd81_ST / FpSpread 매핑표 §1 에 없음
 - WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/GroupCodeRtfGubunModal.tsx
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 3건 — 조회(SEARCH) SEQ3 [MSG00002] Bucket 값은 필수 입력입니다 / 저장(SAVE) SEQ4 [MSG00097] 권한을 가진 Division이 없습 / 저장(SAVE) SEQ5 [MSG00002] Bucket 값은 필수 입력입니다 → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0080.md
+- WARN VR2 MSG00048 — VALIDATION 취합 판정: 저장(SAVE) SEQ1 AS-IS MSG00048 [메시지 불일치] — [메시지 불일치] TO-BE 미등록 — MSG00048 마스터 없음 → 영문 fallback "시작일>종료일 불가"(AS-IS 검사 의도와 같은 뜻) / TO-B @group-code-management.constants.ts:94
+- WARN VR2 MSG00133 — VALIDATION 취합 판정: 저장(SAVE) SEQ3 AS-IS MSG00133 [메시지 불일치] — [메시지 불일치] TO-BE 미등록 — MSG00133 마스터 없음 → fallback(뜻 같음). 등록본 MSG00004 있음 / TO-BE 마스터 같은 의미  @group-code-management.constants.ts:103
+- WARN SC1 조회조건 순서가 기준표(SCP SCP_화면별 조회조건 정리_260731_v0.5.xlsx 33~40행)와 다를 수 있음(라벨 대조): 'Div' 이 'BOM' 보다 앞 — 기준 순서: Div → Operation → Model/Nickname → Model Attribute (40_SEARCH_COND.md #### SCP0080) @components/GroupCodeManagementForm.tsx:102
 - WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/GroupCodeRtfGubunModal.tsx:109
 - WARN R02 직접 import 금지 → @foundation 재export (#40 react-query-foundation-reexport, UI체크 3.3) @GroupCodeManagement.tsx:3
 - WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨

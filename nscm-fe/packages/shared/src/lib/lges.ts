@@ -46,4 +46,9 @@ export {
   DetailTableBox,
   Tree,
   type TreeData,
+  Accordion,
+  type AccordionProps,
+  AccordionHeader,
+  type AccordionHeaderProps,
+  AccordionBody,
 } from '@lges/design-system';

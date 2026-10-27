@@ -15,8 +15,8 @@ import commonStyles from '@foundation/styles/common-styles.module.scss';
 | 공용 클래스 | 대상 | 내용 |
 |---|---|---|
 | `commonStyles.formItem` | **모든 `<FormItem>` 필수** | HD 50px / FHD 140px 라벨 칼럼 + `min-width:0` (멀티선택 칩 오버플로 방지) |
-| `commonStyles.customGrid` | 라벨 없는 `<Grid>` 셀 (체크박스 등) | 세로 정렬 |
-| `commonStyles.customCheckbox` | Checkbox + Label | 가로 배치 |
+| `commonStyles.customGrid` | 체크박스 조건의 `<Grid>` 셀(세로 가운데) — ⚠ **조회조건에서는 단독 사용 금지**: 안에 `FormItem label={조건명}` 을 두는 #154 v2 패턴으로만(2026-10-21 개정 · 2026-10-23 v2 — 조건명 = 좌측 라벨 열) | 세로 정렬 |
+| `commonStyles.customCheckbox` | Checkbox 컨테이너 — 조회조건에서는 #154 v2 `FormItem` render 안에 **박스만**(`labelText` 금지, 조건명은 FormItem label) | 가로 배치 |
 | `commonStyles.popupSearchField` | 팝업 검색 아이콘 버튼이 붙는 `<InputField>` | 아이콘 버튼 결합 레이아웃 |
 
 원본: `nscm-fe/packages/foundation/src/styles/common-styles.module.scss`
@@ -49,4 +49,4 @@ grep -L "common-styles.module.scss" $(grep -rl "<FormItem" nscm-fe/features/**/c
 
 ---
 
-> Cross-ref: `_tobe/06_search_area.md` (SearchArea 구조) / #94 search-condition-height-uniformity (높이 36px) / #41 regression-zero-mandatory (shared 변경 경계) / RULESET_MASTER §3.1 PRE-WRITE 항목
+> Cross-ref: `_tobe/06_search_area.md` (SearchArea 구조) / #154 search-condition-labelless-toggle-input-column (v2 2026-10-23: 조회조건 Radio/Checkbox = 좌측 라벨 열 조건명 + 입력 열 컨트롤) / #94 search-condition-height-uniformity (높이 36px) / #41 regression-zero-mandatory (shared 변경 경계) / RULESET_MASTER §3.1 PRE-WRITE 항목

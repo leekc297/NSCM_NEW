@@ -120,7 +120,7 @@ export const LBL = {
   DIVISION: 'LBL00001', // "Div." (조회조건 Division 라벨 — 정책상 LBL00641 금지)
   OPERATION_GROUP: 'LBL00027', // "Operation group"
   FROM_SITE: 'LBL00022', // "From Site"
-  VALID: 'LBL00639', // "Valid"
+  VALID: 'LBL00007', // "Valid"
   MODEL: 'LBL00669', // "Model" (구 라벨 — Model/Nickname 으로 대체, 참조 보존)
   MODEL_NICKNAME: 'LBL00618', // "Model/Nickname" (SCP0013 정합 — MaterialByDivisionModal 픽커)
   USER_ID_NAME: 'LBL00339', // "User ID(Name)"

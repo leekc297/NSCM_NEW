@@ -7,6 +7,7 @@ import type { SearchCondition } from './warehouse-capacity.types';
 
 type FiltersBySheet = {
   [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
+  [SHEETS.ITEM_MAPPING]?: ProcRequest<MENU_ID, SHEETS.ITEM_MAPPING>;
 };
 
 interface StaticColumnsBySheet {
@@ -35,16 +36,33 @@ interface Action {
   restoreSearchCondition: () => Promise<void>;
 }
 
+// AS-IS setPeriod()(SCP0133_WarehouseCapacity.cs:1137-1152) 기본 조회기간 재현:
+//   From = 이번주 월요일, To = 월요일 + 52주(364일). .NET DayOfWeek(일=0..토=6)과 JS getDay()가
+//   같아 동일 계산이다(일요일이면 formula 상 다음날 월요일이 From 이 된다 — AS-IS와 동일).
+const pad2 = (n: number): string => String(n).padStart(2, '0');
+const fmtYmd = (d: Date): string => `${d.getFullYear()}${pad2(d.getMonth() + 1)}${pad2(d.getDate())}`;
+const defaultPeriod = (): { from: string; to: string } => {
+  const today = new Date();
+  const monday = new Date(today);
+  monday.setDate(today.getDate() + (1 - today.getDay())); // 이번주 월요일
+  const to = new Date(monday);
+  to.setDate(monday.getDate() + 52 * 7); // 월요일 + 52주
+  return { from: fmtYmd(monday), to: fmtYmd(to) };
+};
+const DEFAULT_PERIOD = defaultPeriod();
+
 const initSearch: SearchCondition = {
   // 기본 사업부 = 세션 division (supply 표준, outsourcing-capacity/formation 동일 관례).
   divisionId: useSessionStore.getState().session.div ?? '',
   planGroupIds: [],
   siteIds: [],
-  stages: [],
+  // Stage 는 단일선택(AS-IS cboStage, UsrComboBox). 기본 'ALL'(Valid 와 동형).
+  stage: 'ALL',
   warehouses: [],
   validYn: 'ALL',
-  fromYyyymmdd: '',
-  toYyyymmdd: '',
+  // AS-IS setPeriod() 기본 조회기간(이번주 월요일 ~ +52주). 과거엔 공백이라 기본값이 없었다.
+  fromYyyymmdd: DEFAULT_PERIOD.from,
+  toYyyymmdd: DEFAULT_PERIOD.to,
   itemId: '',
 };
 
@@ -69,8 +87,8 @@ const orAll = (v: string): string => (v && v.trim() ? v.trim() : 'ALL');
 // F6(조회조건 저장, SubTitle searchParam={sc})로 서버에 저장한 조회조건을 init 기준으로 복원한다.
 //   GridAction.personalizeCondition 이 배열을 콤마로 접어 저장하므로 다중 조회조건(planGroup/site/
 //   stage/warehouse)은 콤마로 분해하고, 기간(from/to)은 EXCLUDED_DATE_PARAM 로 저장에서 제외되므로
-//   init 기본값('')을 유지한다. 저장되지 않은 키는 init 을 그대로 둔다(constraint-mgmt 선례와 동형).
-const RESTORE_MULTI_KEYS = ['planGroupIds', 'siteIds', 'stages', 'warehouses'] as const;
+//   init 기본값(AS-IS setPeriod 기본 조회기간)을 유지한다. 저장되지 않은 키는 init 을 그대로 둔다.
+const RESTORE_MULTI_KEYS = ['planGroupIds', 'siteIds', 'warehouses'] as const;
 const buildSearchConditionFromSaved = (
   saved: readonly { paramNm: string; paramCtn: string }[],
   init: SearchCondition
@@ -81,6 +99,8 @@ const buildSearchConditionFromSaved = (
   if (divisionId !== undefined) next.divisionId = divisionId;
   const validYn = map.get('validYn');
   if (validYn !== undefined) next.validYn = validYn;
+  const stage = map.get('stage');
+  if (stage !== undefined) next.stage = stage;
   const itemId = map.get('itemId');
   if (itemId !== undefined) next.itemId = itemId;
   RESTORE_MULTI_KEYS.forEach(key => {
@@ -115,22 +135,26 @@ export const useWarehouseCapacityStore = createPersistedStoreWithTab<State & Act
         };
         state.filters = {};
       }),
-    // GET 파라미터(procedures.d.ts SCP0133.main.request, design 03 §4.2 9파라미터 순서 그대로).
+    // GET 파라미터(procedures.d.ts SCP0133.main/itemMapping.request, design 03 §4.2). 두 시트의
+    //   조회 파라미터는 동일한 9항목(ALL_ARGUMENTS 실측 — ItemMapping GET 도 main 과 같은 IN 계약)
+    //   이라 같은 조회조건으로 두 시트를 함께 채운다.
     setFilter: () => {
       set(state => {
         const c = state.searchCondition;
+        const params = {
+          divisionId: orAll(c.divisionId),
+          opmzPlanGrId: joinOrAll(c.planGroupIds),
+          siteId: joinOrAll(c.siteIds),
+          stage: orAll(c.stage),
+          whNm: joinOrAll(c.warehouses),
+          fromYyyymmdd: c.fromYyyymmdd,
+          toYyyymmdd: c.toYyyymmdd,
+          itemId: orAll(c.itemId),
+          validYn: orAll(c.validYn),
+        };
         state.filters = {
-          [SHEETS.MAIN]: {
-            divisionId: orAll(c.divisionId),
-            opmzPlanGrId: joinOrAll(c.planGroupIds),
-            siteId: joinOrAll(c.siteIds),
-            stage: joinOrAll(c.stages),
-            whNm: joinOrAll(c.warehouses),
-            fromYyyymmdd: c.fromYyyymmdd,
-            toYyyymmdd: c.toYyyymmdd,
-            itemId: orAll(c.itemId),
-            validYn: orAll(c.validYn),
-          },
+          [SHEETS.MAIN]: params,
+          [SHEETS.ITEM_MAPPING]: params,
         };
       });
     },

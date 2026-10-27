@@ -15,6 +15,22 @@ export type BulkInputError =
   | 'INVALID_DAILY_CAPA' // 빈 값 또는 정수 < 0
   | 'WEEKDAY_NOT_ALLOWED'; // DAILY_CAPA 에 요일 Type
 
+/** BulkInputError → AS-IS 하드코딩 리터럴(.cs btnInput_Click L3837~3905, MSG 코드 없음 = 다국어 아님). */
+export const bulkErrorMessage = (code: BulkInputError): string => {
+  switch (code) {
+    case 'INVALID_YN':
+      return '비조업은 Y 혹은 N 을 입력하시오.';
+    case 'INVALID_LOAD_RATE':
+      return '가동율(%)은 0.0~100.0 사이의 값을 입력하시오.';
+    case 'INVALID_RAMP_UP':
+      return 'Ramp-up은 0.0~1.0 사이의 값을 입력하시오.';
+    case 'INVALID_DAILY_CAPA':
+      return 'Daily Capa 는 0보다 큰 값을 입력하시오.';
+    case 'WEEKDAY_NOT_ALLOWED':
+      return 'Daily Capa 는 요일입력을 허용하지 않습니다.';
+  }
+};
+
 /** AS-IS Day Type(cboDayWeek) 9옵션 — EveryDay/SelectDay 는 범위 지정, Mon~Sun 은 일(D_) 컬럼의 요일 필터. */
 export const BULK_TYPE = {
   EVERY_DAY: 'EveryDay',
@@ -118,8 +134,11 @@ export const applyBulkInput = (args: BulkInputArgs): number => {
       for (let r = range.topRow; r <= range.bottomRow; r++) {
         for (let c = range.leftCol; c <= range.rightCol; c++) {
           if (targetKind === 'M') {
+            // 월 뷰(M_ 직접 선택) / 일 뷰(D_ 선택 → 속한 월) 둘 다 `행:YYYYMM` 키로 수렴.
             const binding = grid.columns[c]?.binding ?? '';
-            if (kindOf(binding) === 'D') inScope.add(`${r}:${binding.slice(2, 8)}`);
+            const kind = kindOf(binding);
+            if (kind === 'M') inScope.add(`${r}:${binding.slice(2)}`);
+            else if (kind === 'D') inScope.add(`${r}:${binding.slice(2, 8)}`);
           } else {
             inScope.add(`${r}:${c}`);
           }

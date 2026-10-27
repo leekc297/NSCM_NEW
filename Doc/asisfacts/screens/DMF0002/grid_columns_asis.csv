@@ -1,0 +1,12 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,DIVISION_ID,CODE,BucketConversion,BucketConversion.cs:166,Division,Combo,GetDivision(),None,코드 선언 FPMerge.None,130,true,Center,,,
+,END_CUSTOMER,CODE,BucketConversion,BucketConversion.cs:167,Customer,Text,,None,코드 선언 FPMerge.None,120,true,,,,
+,SCM_SITE_ID,CODE,BucketConversion,BucketConversion.cs:168,SalesSite,Combo,"GetSalesSitebyDivision(clbDivision.ControlValues)} || {?GetSalesSitebyDivision(siMain.GetValue(e.Row, e.Column).ToString())",None,코드 선언 FPMerge.None,100,true,Center,,,
+Monthly to Weekly,string.Empty} || {?dr[DefColumns.ColumnName],CODE,BucketConversion,BucketConversion.cs:195,string.Empty} || {?dr[DefColumns.ColumnLabel],Number,,None,코드 선언 FPMerge.None,40,true,Right,,,"if(siMain.SheetName == ""Monthly to Weekly"") ⟫ foreach(dr in dsSpdTitle.Tables[0].Rows)"
+Monthly to Weekly,D_MON,CODE,BucketConversion,BucketConversion.cs:211,MON,Number,,None,코드 선언 FPMerge.None,40,true,Right,,,"else!(siMain.SheetName == ""Monthly to Weekly"")"
+Monthly to Weekly,D_TUE,CODE,BucketConversion,BucketConversion.cs:212,TUE,Number,,None,코드 선언 FPMerge.None,40,true,Right,,,"else!(siMain.SheetName == ""Monthly to Weekly"")"
+Monthly to Weekly,D_WED,CODE,BucketConversion,BucketConversion.cs:213,WED,Number,,None,코드 선언 FPMerge.None,40,true,Right,,,"else!(siMain.SheetName == ""Monthly to Weekly"")"
+Monthly to Weekly,D_THU,CODE,BucketConversion,BucketConversion.cs:214,THU,Number,,None,코드 선언 FPMerge.None,40,true,Right,,,"else!(siMain.SheetName == ""Monthly to Weekly"")"
+Monthly to Weekly,D_FRI,CODE,BucketConversion,BucketConversion.cs:215,FRI,Number,,None,코드 선언 FPMerge.None,40,true,Right,,,"else!(siMain.SheetName == ""Monthly to Weekly"")"
+Monthly to Weekly,D_SAT,CODE,BucketConversion,BucketConversion.cs:216,SAT,Number,,None,코드 선언 FPMerge.None,40,true,Right,,,"else!(siMain.SheetName == ""Monthly to Weekly"")"
+Monthly to Weekly,D_SUN,CODE,BucketConversion,BucketConversion.cs:217,SUN,Number,,None,코드 선언 FPMerge.None,40,true,Right,,,"else!(siMain.SheetName == ""Monthly to Weekly"")"

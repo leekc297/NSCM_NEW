@@ -166,7 +166,8 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
     }
     const selectedItems = g.selectedItems as VersionPopupRow[];
     if (!selectedItems || selectedItems.length === 0) {
-      void setAlert({ type: 'alert', content: t('MSG00113', '_Version 을 선택해 주세요.') });
+      // MSG00113('필수 입력 컬럼이 없습니다.') 대신 MSG00283 '버전을 선택하세요.' (갭분석 F-16, 2026-10-16)
+      void setAlert({ type: 'alert', content: t('MSG00283', '_버전을 선택하세요.') });
       return;
     }
     if (selectedItems.length > 2) {
@@ -180,7 +181,7 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
     if (versionNos.length === 0) {
       void setAlert({
         type: 'alert',
-        content: t('MSG00113', '_유효한 Version 이 선택되지 않았습니다.'),
+        content: t('MSG00283', '_버전을 선택하세요.'),
       });
       return;
     }

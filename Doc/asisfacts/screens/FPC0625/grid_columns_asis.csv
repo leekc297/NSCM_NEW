@@ -1,0 +1,12 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+ItemPopup,INSTANCE_NAME,CODE,FPC0625_AttrOptionEditPopup,FPC0625_AttrOptionEditPopup.cs:283,Instance*,Text,,None,코드 선언 FPMerge.None,210,true,,,,
+ItemPopup,OPERATION_ID,CODE,FPC0625_AttrOptionEditPopup,FPC0625_AttrOptionEditPopup.cs:284,Operation*,Text,,None,코드 선언 FPMerge.None,120,true,,,,
+ItemPopup,ATTRIBUTE_TYPE,CODE,FPC0625_AttrOptionEditPopup,FPC0625_AttrOptionEditPopup.cs:292,Attribute Type,Combo,dtYesOrNo.Clone(),None,코드 선언 FPMerge.None,100,true,Center,,,
+ItemPopup,ATTRIBUTE_NAME,CODE,FPC0625_AttrOptionEditPopup,FPC0625_AttrOptionEditPopup.cs:293,Name,Text,,None,코드 선언 FPMerge.None,80,true,,,,
+ItemPopup,ATTRIBUTE_LIST,CODE,FPC0625_AttrOptionEditPopup,FPC0625_AttrOptionEditPopup.cs:294,Attribute Option,Text,,None,코드 선언 FPMerge.None,120,true,,,,
+ItemPopup,DESCRIPTION,CODE,FPC0625_AttrOptionEditPopup,FPC0625_AttrOptionEditPopup.cs:295,Description,Text,,None,코드 선언 FPMerge.None,120,true,,,,
+ItemPopup,ACTIVE_FLAG,CODE,FPC0625_AttrOptionEditPopup,FPC0625_AttrOptionEditPopup.cs:297,Active,Combo,"Data.Common(Data.Type.YesOrNo, false)",None,코드 선언 FPMerge.None,50,true,Center,,,
+ItemPopup,UPDATE_ID,CODE,FPC0625_AttrOptionEditPopup,FPC0625_AttrOptionEditPopup.cs:299,UPDATE ID,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,
+ItemPopup,UPDATE_TIME,CODE,FPC0625_AttrOptionEditPopup,FPC0625_AttrOptionEditPopup.cs:300,UPDATE TIME,Date,,None,코드 선언 FPMerge.None,120,true,Center,,,
+ItemPopup,INSERT_ID,CODE,FPC0625_AttrOptionEditPopup,FPC0625_AttrOptionEditPopup.cs:301,INSERT ID,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,
+ItemPopup,INSERT_TIME,CODE,FPC0625_AttrOptionEditPopup,FPC0625_AttrOptionEditPopup.cs:302,INSERT TIME,Date,,None,코드 선언 FPMerge.None,120,true,Center,,,

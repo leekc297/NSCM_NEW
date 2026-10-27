@@ -1,0 +1,401 @@
+[
+ {
+  "screen": "SCP0078",
+  "title": "SCP system VOC",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0078_GSCM_VOC/POPUP/SCP0078_FileUpload.cs:1584",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0078_GSCM_VOC/POPUP/SCP0078_GSCM_VOC_Popup.cs:243",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0078_GSCM_VOC/POPUP/SCP0078_UserInfoPopup.cs:280",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0078_GSCM_VOC/SCP0078_GSCM_VOC.cs:3726",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0078_GSCM_VOC/SCP0078_GSCM_VOC.designer.cs:823"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0078_GSCM_VOC/POPUP/SCP0078_FileUpload.Designer.cs:232",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0078_GSCM_VOC/POPUP/SCP0078_GSCM_VOC_Popup.Designer.cs:240",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0078_GSCM_VOC/POPUP/SCP0078_UserInfoPopup.Designer.cs:294"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_GET_GSCM_VOC_DATA",
+    "member": "GetFileMapping",
+    "line": "389",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_FileUpload.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_SAVE_GSCM_VOC_FILE",
+    "member": "UpdateFileList",
+    "line": "757",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_FileUpload.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_GET_GSCM_VOC_DATA",
+    "member": "SetVOCFileList",
+    "line": "809",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_FileUpload.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_LOOKUP_VALUES",
+    "member": "GetVocFileAPI",
+    "line": "1045",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_FileUpload.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_SAVE_GSCM_VOC_DATA",
+    "member": "SaveDetailData",
+    "line": "114",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_GSCM_VOC_Popup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_GET_GSCM_VOC_DATA",
+    "member": "GetDetailText",
+    "line": "215",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_GSCM_VOC_Popup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+    "member": "FindData",
+    "line": "157",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_UserInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_LOOKUP_VALUES",
+    "member": "GetVocDivision",
+    "line": "313",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\SCP0078_GSCM_VOC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH_VOC",
+    "line": "941",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\SCP0078_GSCM_VOC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_GET_GSCM_VOC",
+    "member": "FindData_Main",
+    "line": "1001",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\SCP0078_GSCM_VOC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_SAVE_GSCM_VOC",
+    "member": "Save_Data",
+    "line": "1706",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\SCP0078_GSCM_VOC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "3306",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\SCP0078_GSCM_VOC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_GET_GSCM_VOC_DATA",
+    "member": "GetFileMapping",
+    "line": "389",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_FileUpload.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_SAVE_GSCM_VOC_FILE",
+    "member": "UpdateFileList",
+    "line": "757",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_FileUpload.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_GET_GSCM_VOC_DATA",
+    "member": "SetVOCFileList",
+    "line": "809",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_FileUpload.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_LOOKUP_VALUES",
+    "member": "GetVocFileAPI",
+    "line": "1045",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_FileUpload.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_SAVE_GSCM_VOC_DATA",
+    "member": "SaveDetailData",
+    "line": "114",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_GSCM_VOC_Popup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_GET_GSCM_VOC_DATA",
+    "member": "GetDetailText",
+    "line": "215",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_GSCM_VOC_Popup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+    "member": "FindData",
+    "line": "157",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\POPUP\\SCP0078_UserInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_LOOKUP_VALUES",
+    "member": "GetVocDivision",
+    "line": "313",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\SCP0078_GSCM_VOC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH_VOC",
+    "line": "941",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\SCP0078_GSCM_VOC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_GET_GSCM_VOC",
+    "member": "FindData_Main",
+    "line": "1001",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\SCP0078_GSCM_VOC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0078_SAVE_GSCM_VOC",
+    "member": "Save_Data",
+    "line": "1706",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\SCP0078_GSCM_VOC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "3306",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0078_GSCM_VOC\\SCP0078_GSCM_VOC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCM0001_GET_LOOKUP_VALUES",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+   "SCP0078_GET_GSCM_VOC",
+   "SCP0078_GET_GSCM_VOC_DATA",
+   "SCP0078_SAVE_GSCM_VOC",
+   "SCP0078_SAVE_GSCM_VOC_DATA",
+   "SCP0078_SAVE_GSCM_VOC_FILE"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SCP0078_GET_GSCM_VOC",
+    "sp": "SCP0078_GET_GSCM_VOC",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "VOC 각 단계의 지연·진행·완료임박 여부를 함수로 판정해 플래그로 반환",
+    "message": null,
+    "on_fail": "단계별 지연/진행중/임박 여부 Y 플래그를 계산해 반환(조회조건 @p_voc_status DL/RN/FS 필터에도 사용)"
+   },
+   {
+    "entry_sp": "SCP0078_SAVE_GSCM_VOC",
+    "sp": "SCP0078_SAVE_GSCM_VOC",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 중 예외 시 롤백 후 F 결과코드와 오류 메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN → scm_sys_log_batch ERROR INSERT → SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0078_SAVE_GSCM_VOC_DATA",
+    "sp": "SCP0078_SAVE_GSCM_VOC_DATA",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 중 예외 시 롤백 후 F 결과코드와 오류 메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN → scm_sys_log_batch ERROR INSERT → SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0078_SAVE_GSCM_VOC_FILE",
+    "sp": "SCP0078_SAVE_GSCM_VOC_FILE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "첨부파일 목록 갱신 중 예외 시 롤백 후 F 결과코드와 오류 메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN → scm_sys_log_batch ERROR INSERT → SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0078_GET_GSCM_VOC",
+    "sp": "FN_GET_VOC_DELAY_YN",
+    "depth": 1,
+    "cls": "D 검증리포트형",
+    "check_type": "REQUIRED",
+    "desc": "완료 예정일 값이 없으면 'NULL' 표시값 반환",
+    "message": "NULL",
+    "on_fail": "RETURN 'NULL'"
+   },
+   {
+    "entry_sp": "SCP0078_GET_GSCM_VOC",
+    "sp": "FN_GET_VOC_DELAY_YN",
+    "depth": 1,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "진행중(RN)이 아닌 VOC 는 지연 체크 대상 아님('NO RUN')",
+    "message": "NO RUN",
+    "on_fail": "RETURN 'NO RUN'"
+   },
+   {
+    "entry_sp": "SCP0078_GET_GSCM_VOC",
+    "sp": "FN_GET_VOC_DELAY_YN",
+    "depth": 1,
+    "cls": "D 검증리포트형",
+    "check_type": "FORMAT",
+    "desc": "완료일 수정 이력(CRLF 2번째 값)의 '-' 제거 후 8자리가 아니면 날짜 오류 표시",
+    "message": "DATE ERROR",
+    "on_fail": "LEN(@CHECK_DATE)<>8 이면 'DATE ERROR' 반환"
+   },
+   {
+    "entry_sp": "SCP0078_GET_GSCM_VOC",
+    "sp": "FN_GET_VOC_DELAY_YN",
+    "depth": 1,
+    "cls": "D 검증리포트형",
+    "check_type": "RANGE",
+    "desc": "수정된 완료 예정일이 오늘보다 이전이면 지연(Y) 표시",
+    "message": "Y",
+    "on_fail": "SET @DELAY_YN = 'Y' (지연)"
+   },
+   {
+    "entry_sp": "SCP0078_GET_GSCM_VOC",
+    "sp": "FN_GET_VOC_SOON_YN",
+    "depth": 1,
+    "cls": "D 검증리포트형",
+    "check_type": "REQUIRED",
+    "desc": "완료 예정일 값이 없으면 'NO DATE' 표시값 반환",
+    "message": "NO DATE",
+    "on_fail": "RETURN 'NO DATE'"
+   },
+   {
+    "entry_sp": "SCP0078_GET_GSCM_VOC",
+    "sp": "FN_GET_VOC_SOON_YN",
+    "depth": 1,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "진행중(RN)이 아닌 VOC 는 임박 체크 대상 아님",
+    "message": "NO RUN",
+    "on_fail": "RETURN 'NO RUN'"
+   },
+   {
+    "entry_sp": "SCP0078_GET_GSCM_VOC",
+    "sp": "FN_GET_VOC_SOON_YN",
+    "depth": 1,
+    "cls": "D 검증리포트형",
+    "check_type": "FORMAT",
+    "desc": "완료일 수정 이력(2번째 값)이 8자리 날짜가 아니면 날짜 오류 표시",
+    "message": "DATE ERROR",
+    "on_fail": "LEN(@CHECK_DATE)<>8 이면 'DATE ERROR' 반환"
+   },
+   {
+    "entry_sp": "SCP0078_GET_GSCM_VOC",
+    "sp": "FN_GET_VOC_SOON_YN",
+    "depth": 1,
+    "cls": "D 검증리포트형",
+    "check_type": "RANGE",
+    "desc": "수정된 완료 예정일이 오늘 이후 7일 이내면 임박(Y) 표시",
+    "message": "Y",
+    "on_fail": "SET @SOON_YN = 'Y' (완료 임박)"
+   },
+   {
+    "entry_sp": "SCP0078_SAVE_GSCM_VOC",
+    "sp": "SCP0078_GET_GSCM_VOC_MAIL_SEND",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "메일 발송 실패 시 오류 로그 후 F 결과셋 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "scm_sys_log_batch ERROR INSERT → IF @@TRANCOUNT > 0 COMMIT WORK → SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0078_SAVE_GSCM_VOC",
+    "sp": "SCM_ADM_MAIL_SEND",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "메일 발송 실패 시 오류 로그 후 F 결과 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER+']'+ERROR_MESSAGE()"
+   }
+  ]
+ }
+]

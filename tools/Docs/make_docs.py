@@ -7,7 +7,7 @@
     Doc/화면설계서/{ID}_{Name}_화면설계서_v{N}.0.xlsx   8시트 (개요·전체흐름·LAYOUT·조회조건·버튼·GRID·EVENT·VALIDATION·API·SP)
     Doc/화면분석서/{ID}_{Name}_UI분석서_v{N}.0.xlsx     10시트 (개요·전체흐름·VALIDATION취합·MATRIX_Division·MATRIX_권한·MATRIX_Measure·MATRIX_Bucket·가시성·SP_LOOKUP_콤보·이전소스_차이점)
     Doc/화면분석서/{ID}_{Name}_GAP분석서_v{N}.0.xlsx    3시트 (요약·GAP 전체·조치 필요)
-    Doc/단위테스트/{ID}_{Name}_TestCases4_v{N}.0.xlsx   Division 별 시트 (33열 TestCases4 양식) — unit_test.md 가 있을 때만
+    Doc/단위테스트/{ID}_{Name}_TestCases4_v{N}.0.xlsx   사용자 흐름형(make_testcases.py — 팀 34열 + 흐름·대상 열, Division 별 작업 화면만 Division 시트) · 원천 없으면 구 unit_test.md 양식
     Doc/화면분석서/{ID}_{Name}_대조표_v{N}.0.xlsx     4시트 (화면·시트·SP 대조 = Doc/recon CSV 의 이 화면 행 · AS-IS↔TO-BE 매핑 = 페이지 __asis-mapping__.md) — 2026-10-21 사용자 요청
 
   원천: Doc/asisfacts/agent/<ID>/*.md (문서 생성 S3.agent) · Doc/asisfacts/screens/<ID>/*.csv (Fact Pack) · Doc/gap/<ID>_gap.csv
@@ -626,7 +626,11 @@ for ID in IDS:
     rc = build_recon(S)
     if rc: made.append(save(rc, OUT_ANALYSIS, f'{ID}_{nm}_대조표'))
     else: print(f'[{ID}] 대조 원천 없음(Doc/recon 행·__asis-mapping__.md) — 대조표 생략')
-    tc = build_testcases(S)
+    # 2026-10-27: 단위테스트 = 사용자 흐름 재구성본(make_testcases — 정합검증 원장·Fact Pack·TO-BE 메타). 원천이 없을 때만 구 unit_test.md 양식
+    import make_testcases
+    tc, tsm = make_testcases.build(ID)
+    if tc is None:
+        print(f'[{ID}] 흐름형 단위테스트 생략 — {tsm.get("reason")} · 구 양식(unit_test.md) 시도'); tc = build_testcases(S)
     if tc: made.append(save(tc, OUT_TEST, f'{ID}_{nm}_TestCases4'))
-    else: print(f'[{ID}] unit_test.md 없음 — 단위테스트(TestCases4) 생략')
+    else: print(f'[{ID}] 단위테스트 원천 없음 — 단위테스트(TestCases4) 생략')
     for m in made: print(f'{ID} → {os.path.relpath(m, ROOT)}')

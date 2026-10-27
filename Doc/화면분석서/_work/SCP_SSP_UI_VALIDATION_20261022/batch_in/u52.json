@@ -1,0 +1,600 @@
+[
+ {
+  "screen": "SSP0016",
+  "title": "Shipment Request(Mobility & IT)",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0016_ShipmentRequest.cs:2681"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0016_ShipmentRequest.Designer.cs:1349"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1120",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0016_GET_SHIPMENT_REQUEST_PLAN_SMALL",
+    "member": "FindData_Main",
+    "line": "1224",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0016_GET_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL",
+    "member": "FindData_Detail",
+    "line": "1393",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0016_GET_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL_ALL",
+    "member": "FindData_Detail_All",
+    "line": "1505",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0016_SAVE_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL",
+    "member": "SaveData_Detail",
+    "line": "1820",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2565",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "SetWeekEnd",
+    "line": "2576",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0016_GET_SHEET_HOLIDAY_CALENDAR",
+    "member": "GetSpdHoliday",
+    "line": "2646",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1120",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0016_GET_SHIPMENT_REQUEST_PLAN_SMALL",
+    "member": "FindData_Main",
+    "line": "1224",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0016_GET_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL",
+    "member": "FindData_Detail",
+    "line": "1393",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0016_GET_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL_ALL",
+    "member": "FindData_Detail_All",
+    "line": "1505",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0016_SAVE_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL",
+    "member": "SaveData_Detail",
+    "line": "1820",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2565",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "SetWeekEnd",
+    "line": "2576",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0016_GET_SHEET_HOLIDAY_CALENDAR",
+    "member": "GetSpdHoliday",
+    "line": "2646",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0016_ShipmentRequest.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SSP0016_GET_SHEET_HOLIDAY_CALENDAR",
+   "SSP0016_GET_SHIPMENT_REQUEST_PLAN_SMALL",
+   "SSP0016_GET_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL",
+   "SSP0016_GET_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL_ALL",
+   "SSP0016_SAVE_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SSP0016_SAVE_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL",
+    "sp": "SSP0016_SAVE_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "QTY",
+    "desc": "신규/수정 요청 반영 후 재계산한 Balance 가 변경 시작일 이후 음수가 되는 날이 있으면 저장하지 않고 M 과 해당 일자 반환",
+    "message": "M + result_Date(음수 Balance 첫 일자)",
+    "on_fail": "SELECT 'M' AS result_code, 'YYYY-MM-DD' AS result_Date (SSP_ANL_SHIP_REQ 삭제·재INSERT 생략)"
+   },
+   {
+    "entry_sp": "SSP0016_SAVE_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL",
+    "sp": "SSP0016_SAVE_SHIPMENT_REQUEST_PLAN_SMALL_DETAIL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 롤백 후 F 와 오류코드·메시지 반환",
+    "message": "F / err_code, err_message",
+    "on_fail": "ROLLBACK TRAN; INSERT scm_sys_log_batch; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   }
+  ]
+ },
+ {
+  "screen": "SSP0017",
+  "title": "Inventory Raw(Mobility  & IT)",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0017_InventoryRaw.cs:547"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0017_InventoryRaw.Designer.cs:641"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/shipping/src/pages/inventory-raw"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0017_GET_INVENTORY_RAW",
+    "member": "FindData_Main",
+    "line": "405",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0017_InventoryRaw.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "478",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0017_InventoryRaw.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "514",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0017_InventoryRaw.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0017_GET_INVENTORY_RAW",
+    "member": "FindData_Main",
+    "line": "405",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0017_InventoryRaw.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "478",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0017_InventoryRaw.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "514",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0017_InventoryRaw.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCM0001_GET_DIVISION",
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SSP0017_GET_INVENTORY_RAW"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SSP0018",
+  "title": "Production Plan(OSP)",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0018_ProductionPlanOSP.cs:923"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0018_ProductionPlanOSP.Designer.cs:734"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "162",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "207",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0018_SAVE_PRODUCTION_PLAN_OSP",
+    "member": "SaveData",
+    "line": "662",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0018_GET_PRODUCTION_PLAN_OSP",
+    "member": "FindData_Main",
+    "line": "807",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "875",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "909",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "162",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "207",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0018_SAVE_PRODUCTION_PLAN_OSP",
+    "member": "SaveData",
+    "line": "662",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0018_GET_PRODUCTION_PLAN_OSP",
+    "member": "FindData_Main",
+    "line": "807",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "875",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "909",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0018_ProductionPlanOSP.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCM0001_GET_DIVISION",
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SSP0018_GET_PRODUCTION_PLAN_OSP",
+   "SSP0018_SAVE_PRODUCTION_PLAN_OSP"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SSP0018_SAVE_PRODUCTION_PLAN_OSP",
+    "sp": "SSP0018_SAVE_PRODUCTION_PLAN_OSP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외(수량 숫자 변환 실패 포함) 발생 시 오류 로그 기록 후 F 와 오류코드·메시지 반환",
+    "message": "F / err_code, err_message",
+    "on_fail": "INSERT scm_sys_log_batch; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   }
+  ]
+ },
+ {
+  "screen": "SSP0019",
+  "title": "Shipment Change History",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0019_ShipmentChangeHistory.cs:543"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0019_ShipmentChangeHistory.Designer.cs:845"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/shipping/src/pages/shipment-change-history"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0019_GET_SHIPMENT_CHANGE_HISTORY",
+    "member": "FindData_Main",
+    "line": "409",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0019_ShipmentChangeHistory.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\SCP.GET_DATE_RANGE_1MONTH.sql",
+    "member": "GetDayRange",
+    "line": "522",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0019_ShipmentChangeHistory.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0019_GET_SHIPMENT_CHANGE_HISTORY",
+    "member": "FindData_Main",
+    "line": "409",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0019_ShipmentChangeHistory.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\SCP.GET_DATE_RANGE_1MONTH.sql",
+    "member": "GetDayRange",
+    "line": "522",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0019_ShipmentChangeHistory.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SSP0019_GET_SHIPMENT_CHANGE_HISTORY",
+   "foxquery_sql\\SCP.GET_DATE_RANGE_1MONTH.sql"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SSP0020",
+  "title": "Delegate",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0020_Delegate.cs:958"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0020_Delegate.Designer.cs:764"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/shipping/src/pages/delegate"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0020_GET_DELEGATE",
+    "member": "FindData_Main",
+    "line": "268",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0020_SAVE_DELEGATE",
+    "member": "SaveData",
+    "line": "507",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0020_SAVE_UNSET",
+    "member": "UnSet",
+    "line": "657",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0020_SAVE_UNSET",
+    "member": "UnSet",
+    "line": "715",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETSSPUSERUSEINFOLIST",
+    "member": "UserName_Search",
+    "line": "781",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0020_GET_DELEGATE",
+    "member": "FindData_Main",
+    "line": "268",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0020_SAVE_DELEGATE",
+    "member": "SaveData",
+    "line": "507",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0020_SAVE_UNSET",
+    "member": "UnSet",
+    "line": "657",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0020_SAVE_UNSET",
+    "member": "UnSet",
+    "line": "715",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETSSPUSERUSEINFOLIST",
+    "member": "UserName_Search",
+    "line": "781",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0020_Delegate.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SSP0020_GET_DELEGATE",
+   "SSP0020_SAVE_DELEGATE",
+   "SSP0020_SAVE_UNSET",
+   "UP_FX_GETSSPUSERUSEINFOLIST"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SSP0020_SAVE_DELEGATE",
+    "sp": "SSP0020_SAVE_DELEGATE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외(PK 중복 등) 발생 시 오류 로그 기록 후 F 와 오류코드·메시지 반환",
+    "message": "F / err_code, err_message",
+    "on_fail": "INSERT scm_sys_log_batch; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SSP0020_SAVE_UNSET",
+    "sp": "SSP0020_SAVE_UNSET",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 오류 로그 기록 후 F 와 오류코드·메시지 반환",
+    "message": "F / err_code, err_message",
+    "on_fail": "INSERT scm_sys_log_batch; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   }
+  ]
+ }
+]

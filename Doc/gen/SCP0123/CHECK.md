@@ -1,0 +1,41 @@
+# [Harness] SCP0123 plan-control — BLOCK 0 / WARN 39
+
+- WARN AC1 액션 대조표 미처리 386행: AC-8d26bf7b(상태 빈칸 GRID_CLEAR SpreadInfo.ClearDataSource), AC-b30d4965(상태 빈칸 GRID_CLEAR SpreadInfo.ClearDataSource), AC-eb978be2(상태 빈칸 GRID_CLEAR SpreadInfo.ClearDataSource), AC-0d6d40cc(상태 빈칸 GRID_CLEAR SpreadInfo.ClearDataSource), AC-690c1b6b(상태 빈칸 GRID_CLEAR SpreadInfo.ClearDataSource), AC-c814f07d(상태 빈칸 GRID_CLEAR SpreadInfo.ClearDataSource), AC-9debe027(상태 빈칸 RETURN return false;), AC-54ae59ac(상태 빈칸 RETURN return false;) … @Doc/asisfacts/screens/SCP0123/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 14행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-740bd2c5(timerStatus.Stop @SCP0123_PlanControl.cs:376), AC-e7885b79(timerStatus.Stop @SCP0123_PlanControl.cs:546), AC-81ff3e2e(timerStatus.Stop @SCP0123_PlanControl.cs:641), AC-9f8f8110(timerStatus.Start @SCP0123_PlanControl.cs:646), AC-8dbce89f(openSubMenu @SCP0123_PlanControl.cs:831), AC-a166618e(DateTime.Now.ToShortDateString @SCP0123_PlanControl.cs:230), AC-d5852b57(cboPlanGroup.SelectedValue.ToSafeString @SCP0123_PlanControl.cs:246), AC-62c3bd5f(cboPlanDate.SelectedValue.ToSafeString @SCP0123_PlanControl.cs:259) … @Doc/asisfacts/screens/SCP0123/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SCP.SCP0123_GET_PLAN_CONTROL (SCP0123_GET_PLAN_CONTROL) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0123_GET_PLAN_ENGINE_RUN (SCP0123_GET_PLAN_ENGINE_RUN) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0123_SAVE_PLAN_CTRL_ACTV_RUN (SCP0123_SAVE_PLAN_CTRL_ACTV_RUN) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 MenuContainer.UP_FX_GetGSCMAuthenticationMenuList (UP_FX_GetGSCMAuthenticationMenuList) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0123_GET_PLAN_ID_CREATE_INFO (SCP0123_GET_PLAN_ID_CREATE_INFO) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0123_SAVE_PLAN_ID_CREATE (SCP0123_SAVE_PLAN_ID_CREATE) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellClick → SpdMain_CellClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellDoubleClick → SpdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ComboSelChange → SpdMain_ComboSelChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.KeyPress → SpdMain_KeyPress 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDivision.SelectedIndexChanged → cboDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanGroup.SelectedIndexChanged → CboPlanGroup_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanDate.SelectedIndexChanged → CboPlanDate_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dpPlanDate_Days.ValueChanged → DpPlanDate_Days_ValueChanged 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 dpPlanDate_Days / UsrDatePicker 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanDate / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanGroup / UsrComboBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdSub / FpSpread 매핑표 §1 에 없음
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00108 — AS-IS '시작일자가 종료일자보다 늦을 수 없습니다.' / TO-BE MSG00108 = '조회 기간이 잘못되었습니다 (시작일 > 종료일).' → 문구로 찾은 TO-BE ID MSG01135 @plan-control.constants.ts
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 4건 — 저장(SAVE) — SCP0123_PlanIDCreatePopup SEQ1 [MSG00108] 시작일자가 종료일자보다 늦을 수 없 / 저장(SAVE) — SCP0123_PlanIDCreatePopup SEQ2 [MSG00108] 시작일자가 종료일자보다 늦을 수 없 / 저장(SAVE) — SCP0123_PlanIDCreatePopup SEQ3 [MSG00108] 시작일자가 종료일자보다 늦을 수 없 / 실행(RUN) — Action 버튼 SEQ3 [MSG00470] Master Validation C → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0123.md
+- WARN VR2 MSG01462 — VALIDATION 취합 판정: 실행(RUN) — Action 버튼 SEQ1 AS-IS - [메시지 미등록] — [메시지 미등록] TO-BE 미등록 — tobe_msg_master.csv 에 MSG01459~MSG01468 0행 → fallback '_The previous @plan-control.constants.ts:176
+- WARN VR2 MSG01463 — VALIDATION 취합 판정: 실행(RUN) — Action 버튼 SEQ4 AS-IS - [메시지 미등록] — [메시지 미등록] TO-BE 미등록 — 마스터 0행 → fallback '_This Plan ID has already been processed.' 표시 예상( @plan-control.constants.ts:177
+- WARN VR2 MSG01464 — VALIDATION 취합 판정: 실행(RUN) — Action 버튼 SEQ7 AS-IS - [메시지 미등록] — [메시지 미등록] TO-BE 미등록 — 마스터 0행 → fallback '_The Engine Run for the selected Plan ID has not  @plan-control.constants.ts:178
+- WARN SC1 조회조건 순서가 기준표(SCP SCP_화면별 조회조건 정리_260731_v0.5.xlsx 436~438행)와 다를 수 있음(라벨 대조): 'Plan Date' 이 'Plan Group' 보다 앞 — 기준 순서: Div → Plan Date → Plan Group (40_SEARCH_COND.md #### SCP0123) @components/PlanControlForm.tsx:165
+- WARN VC1 대조표 FAIL 128행 (Doc/verify/SCP0123/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미검증 848행 — 검사 사유 REVIEW 940 · NOT_RUN 1285 · NOPATH 364 · TODO 6 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 685건 / 검사 인스턴스 748 — W2 128 · W4 4 · W5 22 · W6 164 · W7 367 · 구현 의심 6 (Doc/verify/SCP0123/work_ledger.md)
+- WARN B10 As-is 팝업 SCP0123_PlanIDCreatePopup → components/modals/*Modal.tsx 또는 매핑표에 공통 모달 재사용 명시 — 룰 25 §3 연결 POPUP 1:1
+- WARN B11 __asis-mapping__.md 에 POPUP 매핑 섹션 — 룰 25 §3.3.1 — button/SP/event/validation 4축
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0123/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0123/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0123/SCP0123_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0123/SCP0123_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import type { MeasureMeta } from 'features/master/src/components';
 
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
@@ -19,7 +20,9 @@ type FiltersBySheet = {
 };
 
 type StaticColumnsBySheet = Partial<Record<SHEETS, RawFlexGridColumnConfig[]>>;
-type StaticMeasures = RawFlexGridColumnConfig[];
+// 측정치 메타는 Measure 팝업이 소비하는 MeasureMeta 형(colNm/colLblNm/personalizable/display/defaultFlag).
+//   /admin/menu/{id}/measure 응답(camelCase)이 그대로 이 형이다 — RawFlexGridColumnConfig 는 과거 과잉추론.
+type StaticMeasures = MeasureMeta[];
 
 interface State {
   initialized: boolean;
@@ -39,6 +42,8 @@ interface State {
   staticColumns: StaticColumnsBySheet;
   // 측정치 pivot 11 (SCM_MST_SHEET_MEASURE) — btnMeasure 커스터마이즈 대상 (03 §1.8)
   staticMeasures: StaticMeasures;
+  // Measure 팝업 OK 결과 — 표시할 measure 코드(순서 포함). null = 아직 개인화 안 함(전체 기본 표시).
+  visibleMeasures: string[] | null;
 }
 
 interface Action {
@@ -59,17 +64,34 @@ interface Action {
   setActiveDetailSheet: (sheet: DetailSheet) => void;
   setMainFilters: () => void;
   // overrides: Main 드릴다운(P_DBL_FLAG='Y') 시 클릭 행의 item/fromSite 로 좁힘 (03 §3-D)
+  //   PlanDetail 드릴다운은 AS-IS FindData_Detail(bolDoubleClick=true, cs:5292~5313)처럼 클릭 행의
+  //   division/model/nickName 과 클릭 일자 하루(from=to), requestor 공란까지 덮어쓴다.
   setDetailFilter: (
     sheet: DetailSheet,
     dblFlag: 'Y' | 'N',
-    overrides?: { itemId?: string; fromSite?: string }
+    overrides?: DetailFilterOverrides
   ) => void;
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   fetchStaticColumns: (sheets: SHEETS[]) => Promise<void>;
   fetchStaticMeasures: () => Promise<void>;
+  // Measure 팝업 OK — 표시 measure 코드 목록 적용(저장은 호출부 saveTitleSet 가 담당).
+  //   공통 MeasureSelectModal onApply 는 string[] | null 시그니처(null=전체표시 복원 의미)라 그대로 받는다.
+  applyVisibleMeasures: (codes: string[] | null) => void;
   // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchCondition 패치(1회).
   restoreSearchConditions: () => Promise<void>;
+}
+
+// setDetailFilter 덮어쓰기 값. itemId/fromSite 는 3-sheet 공통, 나머지는 PlanDetail 드릴다운 전용.
+export interface DetailFilterOverrides {
+  itemId?: string;
+  fromSite?: string;
+  divisionId?: string;
+  modelId?: string;
+  nickName?: string;
+  requestor?: string;
+  fromYyyymmdd?: string;
+  toYyyymmdd?: string;
 }
 
 // clbFromSite 다중선택 → SP 는 CSV 로 받음(미선택=전체=''). 자매 shipment-plan-mobility-it 와 동일 규약.
@@ -178,6 +200,7 @@ const initState: State = {
   detailFieldSet: INITIAL_FIELDSET,
   staticColumns: {},
   staticMeasures: [],
+  visibleMeasures: null,
 };
 
 export const useShipmentPlanElectrodeStore = createPersistedStoreWithTab<State & Action>(
@@ -326,17 +349,20 @@ export const useShipmentPlanElectrodeStore = createPersistedStoreWithTab<State &
         if (sheet === SHEETS.PLAN_DETAIL) {
           // 22 IN (PROC_M 실측 camelCase). drpPeriod2 독립축 + Model2/NickName2/Requestor
           //   + 1차 4체크박스/nonChk 재사용 (AS-IS FindData_Detail cs:5282~5330).
+          //   상단 셀 더블클릭 드릴다운(dblFlag='Y')은 overrides 로 클릭 행·클릭 일자를 넣는다
+          //   (AS-IS FindData_Detail bolDoubleClick=true 분기 cs:5292~5313 — division/fromSite/item/model/
+          //   nickName = siMain 클릭 행, from=to = 클릭 컬럼 일자, requestor ''). company·planStart 는 조회조건 그대로.
           state.filters[SHEETS.PLAN_DETAIL] = {
-            divisionId: c.divisionId,
+            divisionId: overrides?.divisionId ?? c.divisionId,
             companyId: c.companyId,
             fromSite,
             itemId: detailItemId,
-            modelId: c.detailModelId.toUpperCase(),
-            nickName: c.detailNickName.toUpperCase(),
-            requestor: c.detailRequestor,
+            modelId: overrides?.modelId ?? c.detailModelId.toUpperCase(),
+            nickName: overrides?.nickName ?? c.detailNickName.toUpperCase(),
+            requestor: overrides?.requestor ?? c.detailRequestor,
             planStartYyyymmdd: c.planDateYyyymmdd,
-            fromYyyymmdd: c.planDetailShipFrom,
-            toYyyymmdd: c.planDetailShipTo,
+            fromYyyymmdd: overrides?.fromYyyymmdd ?? c.planDetailShipFrom,
+            toYyyymmdd: overrides?.toYyyymmdd ?? c.planDetailShipTo,
             dblFlag,
             realFlag,
             language,
@@ -379,7 +405,9 @@ export const useShipmentPlanElectrodeStore = createPersistedStoreWithTab<State &
             fromSite,
             planStartYyyymmdd: c.planDateYyyymmdd,
             itemId: detailItemId,
-            nickName: c.detailNickName.toUpperCase(),
+            // Model/Nickname 칸 값을 P_NICK_NAME으로 넘겨 SP에서 코드·닉네임 부분일치로 넓힌다(2026-10-23).
+            // nickName: c.detailNickName.toUpperCase(),
+            nickName: c.detailModelId.toUpperCase(),
             lotId: c.detailLotId,
             userId,
             programId: PROGRAM_ID,
@@ -433,12 +461,14 @@ export const useShipmentPlanElectrodeStore = createPersistedStoreWithTab<State &
     },
 
     fetchStaticMeasures: async () => {
-      // 측정치 pivot 11 (SCM_MST_SHEET_MEASURE) — btnMeasure 커스터마이즈 원천 (03 §1.8).
+      // 측정치 pivot 11 (SCM_MST_SHEET_MEASURE) — btnMeasure(Measure 팝업) 원천 (03 §1.8).
+      //   필수: divisionId 를 넘기지 않는다. PR_GET_SHEET_MEASURE_LIST 는 `P_DIVISION_ID IS NULL`
+      //   탈출만 있고 `M.DIVISION_ID IS NULL` 탈출이 없어, 값을 주면 NULL division 메타(SSP0023 전건)가
+      //   모두 걸러져 0행이 된다. sheetNm 만 넘긴다(형제 SSP0060 동일, MeasureSelectModal 주석 참조).
       try {
-        const res = await apiClient.post<RawFlexGridColumnConfig[]>(
-          `/admin/menu/${MENU_ID}/measure`,
-          { sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] }
-        );
+        const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {
+          sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN],
+        });
         const next = res.data.result ?? [];
         if (next.length > 0) {
           set(state => {
@@ -448,9 +478,14 @@ export const useShipmentPlanElectrodeStore = createPersistedStoreWithTab<State &
           });
         }
       } catch {
-        // 미등록/실패 = 기존 값 유지
+        // 미등록/실패 = 기존 값 유지 (팝업은 빈 목록 — console 금지 룰)
       }
     },
+
+    applyVisibleMeasures: codes =>
+      set(state => {
+        state.visibleMeasures = codes;
+      }),
 
     // 개인화 조회조건 복원 (SubTitle F6 저장분 되불러오기) — AS-IS/형제 화면 파리티.
     //   진입 시 GET /admin/menu/{MENU_ID}/search-conditions → PRAM_NM/PRAM_CTN 을 searchCondition 에 역직렬화.

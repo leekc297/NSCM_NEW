@@ -53,13 +53,13 @@ const kindOf = (binding: string): DynKind | undefined =>
 //   세로 span 도 그 높이에 끌려간다. 공용 컬럼매핑의 depth 별 높이(ONE 48 / TWO 24 / THREE 16)와 같은
 //   값을 동적 group·leaf 에 명시해 총 48px(= 정적 ONE_DEPTH 1행 높이)로 맞춘다 — hook #93 표준.
 //   자매 SSP0060 과 동일 처방(같은 3단 캘린더 헤더 구조라 같은 결함을 그대로 갖고 있었다).
-const DYN_HEADER_ROW_HEIGHT = 16;
+const DYN_HEADER_ROW_HEIGHT = 18; // 16→18: 3단 헤더가 너무 좁아 상향(사용자 지시 2026-10-15, SSP0005 동일)
 
 // Main 헤더 총높이(px) — 공용 1단 표준(HEIGHT_BY_COLUMN_DEPTH.ONE_DEPTH)과 같은 값.
 //   정적 base 컬럼이 ONE_DEPTH 라 공용 매핑이 거기에 height:48 을 박고, 그 명시값이 동적 3단의
 //   height:16 과 `rows.defaultSize` 를 모두 이긴다 → 조회 후 헤더가 48x3 으로 벌어진다.
 //   실제 렌더된 tier 수로 나눠 헤더 row 높이를 직접 강제한다(선례 CustFcstWaterfallGrid).
-const MAIN_HEADER_HEIGHT = 48;
+const MAIN_HEADER_HEIGHT = 54; // 48→54(18px/tier): 3단 헤더 가독성 상향(사용자 지시 2026-10-15, SSP0005 동일)
 
 // SHIP_PLAN 행 구분색 — AS-IS Re_Design(cs L4778) `Color.FromArgb(80, Color.LightSkyBlue)`.
 //   LightSkyBlue = rgb(135,206,250), 알파 80/255 ≈ 0.314 → 흰 배경 위에서 옅은 하늘색.

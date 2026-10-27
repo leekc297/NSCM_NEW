@@ -1,6 +1,7 @@
-// 조회조건 5필드 — AS-IS usrConditionPanel1 2행 3열(01 §1.1).
-//   주의: dayWeekCode / inputValue 는 조회 파라미터가 아니다(btnInput 전용). setFilters payload 에
-//   넣으면 요일만 바꿔도 filters 참조가 갈려 무의미한 재조회가 난다(02 §1 / §5.2).
+// 조회조건 3필드 — AS-IS usrConditionPanel1 에서 조회 파라미터만 남긴다.
+//   DayWeek/InputValue 는 조회 파라미터가 아니라 Bulk Update 팝업의 단발 입력 상태로 옮겼다
+//   (ShipmentWorkingDayBulkModal 로컬 state). setFilters payload 에 넣으면 요일만 바꿔도 filters
+//   참조가 갈려 무의미한 재조회가 난다(02 §1 / §5.2).
 export interface SearchCondition {
   // cboCompany — 단일, ALL 옵션 없음(AS-IS 에 ALL 행이 없다).
   companyId: string;
@@ -9,10 +10,6 @@ export interface SearchCondition {
   // drpPeriod — 표시는 YYYY-MM-DD, payload 는 YYYYMMDD. store 는 payload 형식으로 보관한다.
   fromYyyymmdd: string;
   toYyyymmdd: string;
-  // cboDayWeek — WEEK_WORK_TIME lookup 값(EveryDay/SelectDay/Mon~Sun).
-  dayWeekCode: string;
-  // cboInputValue — Y/N. 초기값은 빈값이며 요일 변경 시 항상 리셋된다(AS-IS .cs:669).
-  inputValue: string;
 }
 
 // GET o_rc1 1행 = (division x company) 조합 1건. 동적 D_YYYYMMDD 키가 조회기간만큼 붙는다.

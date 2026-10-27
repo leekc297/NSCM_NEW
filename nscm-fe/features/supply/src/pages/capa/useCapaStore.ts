@@ -6,6 +6,7 @@ import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 import type { SHEETS} from './capa.constants';
 import { ADMIN_SHEET_NAME, CHECK_DEFAULTS, MENU_ID, VERSION_CURRENT } from './capa.constants';
 import type { CalendarRow, CapaSearchParams, CapaSummary } from './capa.types';
+import { toUserAuth } from './utils/capa.editLock';
 
 const EMPTY_SUMMARY: CapaSummary = { total: '', auto: '', small: '', elec: '', pic: '' };
 
@@ -165,7 +166,7 @@ export const useCapaStore = createPersistedStoreWithTab<CapaState & CapaAction>(
     }),
   setFilters: () => {
     const sp = get().searchParams;
-    const userAuth = useSessionStore.getState().session.groupId ?? '';
+    const userAuth = toUserAuth(useSessionStore.getState().session.groups);
     // GET_CAPA 23 IN(procedures.d.ts SCP0049.capa.request — userId 는 BE 자동 주입). 02 §5.186.
     //   Model/Nickname 통합 텍스트 → modelId. nickName 조건은 TO-BE 삭제(02 §1 #11) → 'ALL'.
     const newFilters: ProcRequest<MENU_ID, SHEETS.CAPA> = {
@@ -183,10 +184,12 @@ export const useCapaStore = createPersistedStoreWithTab<CapaState & CapaAction>(
       itemId: sp.materialId.trim() === '' ? 'ALL' : sp.materialId.trim(),
       nickName: 'ALL',
       bucket: sp.bucketDay ? 'D,M' : 'M',
+      // Loss = 조회조건 체크박스 사용자 값(cs:352 기본 N). Line/Tact/Yield = UI 없음 → CHECK_DEFAULTS(Y) 고정
+      //   (F6 복원값이 섞여도 고정값 유지).
       checkLoss: sp.checkLoss ? 'Y' : 'N',
-      checkLine: sp.checkLine ? 'Y' : 'N',
-      checkTact: sp.checkTact ? 'Y' : 'N',
-      checkYield: sp.checkYield ? 'Y' : 'N',
+      checkLine: 'Y',
+      checkTact: 'Y',
+      checkYield: 'Y',
       checkEmpty: sp.checkEmpty ? 'Y' : 'N',
       userAuth,
       searchType: 'CAPA',

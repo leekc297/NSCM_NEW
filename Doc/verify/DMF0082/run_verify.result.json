@@ -1,0 +1,3029 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-10-26T17:37:08+09:00",
+ "producer": "run_verify",
+ "id": "DMF0082",
+ "skip_e2e": false,
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-a7f8b567",
+   "class": "A1",
+   "msg": "DMF0082 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a056c320",
+   "class": "A2",
+   "msg": "DMF0082 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-75957a15",
+   "class": "A5",
+   "msg": "DMF0082 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "요소 판정 집계(검증엔진)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-36b4fa25",
+   "class": "F4",
+   "msg": "DMF0082 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "요소 판정 집계(검증엔진)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-870c8e49",
+   "class": "F5",
+   "msg": "DMF0082 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-56830f95",
+   "class": "L1",
+   "msg": "DMF0082 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-20e289c9",
+   "class": "A6",
+   "msg": "DMF0082_GET_MAIN_DATA",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC sort_check (ZIOUI1 ALL_SOURCE LAST_DDL 2026-10-21 22:47:30)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0c0b6342",
+   "class": "A6",
+   "msg": "DMF0003_GET_MKT_FCST_COMPARE_POPUP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC sort_check (ZIOUI1 ALL_SOURCE LAST_DDL 2026-10-23 16:53:25)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ba656754",
+   "class": "G2",
+   "msg": "조회조건 Sales Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5537bfe4",
+   "class": "B3",
+   "msg": "조회조건 End Customer",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "W1 combo_oracle (AS-IS DMF0082 DB 동시 실행 · 계정 minyonglee1/ADMIN)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8d4c7bcb",
+   "class": "G1",
+   "msg": "조회조건 Team",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c1efd948",
+   "class": "G1",
+   "msg": "조회조건 Division",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2507864c",
+   "class": "G1",
+   "msg": "조회조건 Version",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a795197a",
+   "class": "G1",
+   "msg": "조회조건 Model / Nickname",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-09e00564",
+   "class": "D5",
+   "msg": "FcstNPrice.DIVISION_ID (Div*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2cece244",
+   "class": "B4",
+   "msg": "FcstNPrice.TEAM_ID (Team)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "W1 combo_oracle (AS-IS DMF0082 DB 동시 실행 · 계정 minyonglee1/ADMIN)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7d068c94",
+   "class": "H2",
+   "msg": "FcstNPrice.END_CUSTOMER (End Customer*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-edfc2808",
+   "class": "H2",
+   "msg": "FcstNPrice.SCM_SITE_ID (Sales Site*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d9d2a8c3",
+   "class": "H2",
+   "msg": "FcstNPrice.ITEM_ID (Model*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d5552a30",
+   "class": "H2",
+   "msg": "FcstNPrice.INCOTERMS (Incoterms*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c7a4b5d8",
+   "class": "B3",
+   "msg": "FcstNPrice.FCST_TYPE (FCST Type*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "W1 combo_oracle (AS-IS DMF0082 DB 동시 실행 · 계정 minyonglee1/ADMIN)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-67e34115",
+   "class": "B4",
+   "msg": "FcstNPrice.FCST_TYPE (FCST Type*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "W1 combo_oracle (AS-IS DMF0082 DB 동시 실행 · 계정 minyonglee1/ADMIN)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2f211f21",
+   "class": "H2",
+   "msg": "FcstNPrice.FCST_TYPE (FCST Type*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a65b7a10",
+   "class": "H2",
+   "msg": "FcstNPrice.DOM_EXP (Customs Handbook*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-48949855",
+   "class": "B4",
+   "msg": "FcstNPrice.CELL_PROD_SITE_ID (Cell Prod Site*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "W1 combo_oracle (AS-IS DMF0082 DB 동시 실행 · 계정 minyonglee1/ADMIN)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a35fb514",
+   "class": "H2",
+   "msg": "FcstNPrice.CELL_PROD_SITE_ID (Cell Prod Site*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a1173add",
+   "class": "B1",
+   "msg": "FcstNPrice.CURRENCY (Currency*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9cfe3f33",
+   "class": "H2",
+   "msg": "FcstNPrice.CURRENCY (Currency*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5e7446f0",
+   "class": "H2",
+   "msg": "FcstNPrice.MEASURE (Measure*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8243243b",
+   "class": "D3",
+   "msg": "siMain.LockColumn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c03c107d",
+   "class": "D3",
+   "msg": "siMain.SetLockFlag",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e36b7206",
+   "class": "D3",
+   "msg": "siMain.LockColumn2",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e885c307",
+   "class": "D3",
+   "msg": "siMain.SetLockFlag",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c7a9409a",
+   "class": "D3",
+   "msg": "siMain.LockRange2",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6103516a",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2282146b",
+   "class": "D3",
+   "msg": "siMain.LockRange2",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c6ee1d63",
+   "class": "D3",
+   "msg": "siMain.LockRange2",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9e8c6818",
+   "class": "D3",
+   "msg": "siMain.LockRange2",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0bf11310",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e9f9f028",
+   "class": "F3",
+   "msg": "M",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c531688d",
+   "class": "F3",
+   "msg": "I",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-47e9c264",
+   "class": "F3",
+   "msg": "CELL_PROD_SITE_ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-08ef7bac",
+   "class": "F3",
+   "msg": "CELL_PROD_SITE_ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fb001d96",
+   "class": "F3",
+   "msg": "M",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6f20d1e8",
+   "class": "D3",
+   "msg": "P,P",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2ba348a5",
+   "class": "D3",
+   "msg": "P,P",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5b23be70",
+   "class": "D3",
+   "msg": "siMain.SwitchLock",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c7d705d0",
+   "class": "D3",
+   "msg": "siMain.LockColumn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-154a022d",
+   "class": "D3",
+   "msg": "siMain.LockColumn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-826a02fb",
+   "class": "D3",
+   "msg": "siMain.LockColumn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e1a0f68c",
+   "class": "D3",
+   "msg": "siMain.LockColumn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f700acb7",
+   "class": "D3",
+   "msg": "DIVISION_ID,DIVISION_ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f7261ea0",
+   "class": "D3",
+   "msg": "DEPT_ID,DEPT_ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-db62ed6d",
+   "class": "D3",
+   "msg": "DEPT_NAME,DEPT_NAME",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c9d3eb1a",
+   "class": "D3",
+   "msg": "END_CUSTOMER,END_CUSTOMER",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b24d6ff8",
+   "class": "D3",
+   "msg": "SCM_SITE_ID,SCM_SITE_ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-98cd8436",
+   "class": "D3",
+   "msg": "PROJECT_CODE,PROJECT_CODE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d9c042fa",
+   "class": "D3",
+   "msg": "PROJECT_NAME,PROJECT_NAME",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-39d5c265",
+   "class": "D3",
+   "msg": "P,P",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f97c3dcb",
+   "class": "D3",
+   "msg": "B,B",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-cae669c8",
+   "class": "D3",
+   "msg": "B,B",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0c79b76f",
+   "class": "D3",
+   "msg": "ITEM_ID,ITEM_ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-de6fefba",
+   "class": "D3",
+   "msg": "ITEM_CLASS_NAME,ITEM_CLASS_NAME",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-65bbf7d5",
+   "class": "D3",
+   "msg": "ITEM_NAME,ITEM_NAME",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-16bb2eee",
+   "class": "D3",
+   "msg": "NICK_NAME,NICK_NAME",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-423cd9a1",
+   "class": "D3",
+   "msg": "MEASURE,MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4554bac9",
+   "class": "D3",
+   "msg": "DIVISION_ID,MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-999595f0",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f52613e6",
+   "class": "D3",
+   "msg": "siMain.LockRange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-550094ae",
+   "class": "D3",
+   "msg": "siMain.LockRange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-719c6960",
+   "class": "D3",
+   "msg": "DIVISION_ID,DIVISION_ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ad8773f4",
+   "class": "D3",
+   "msg": "DIVISION_ID,MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d702fad5",
+   "class": "D3",
+   "msg": "PROJECT_NAME,PROJECT_NAME",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-af265b50",
+   "class": "D3",
+   "msg": "P,P",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-819c9996",
+   "class": "D3",
+   "msg": "B,B",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d98cbb9f",
+   "class": "D3",
+   "msg": "ITEM_CLASS_NAME,ITEM_CLASS_NAME",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f452433d",
+   "class": "D3",
+   "msg": "ITEM_NAME,ITEM_NAME",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e5914055",
+   "class": "D3",
+   "msg": "MEASURE,MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-07303a9b",
+   "class": "D3",
+   "msg": "NICK_NAME,NICK_NAME",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3a196c6d",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0215b8b1",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-39848305",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-650ce160",
+   "class": "D3",
+   "msg": "siMain.LockColumn",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9b36903b",
+   "class": "D4",
+   "msg": "InsertButton 전제 isCurVersion",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c9418872",
+   "class": "A5",
+   "msg": "컬럼/Measure 셋팅(개인화 Default)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c6c0002f",
+   "class": "B4",
+   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c50a7727",
+   "class": "B8",
+   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e7a33be2",
+   "class": "B3",
+   "msg": "그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-be18b4bb",
+   "class": "B4",
+   "msg": "그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Customer)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-20fbecc6",
+   "class": "A1",
+   "msg": "조회 건수",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-890e2cd5",
+   "class": "F5",
+   "msg": "CRUD Status · 대량 저장",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-034eeb35",
+   "class": "F3",
+   "msg": "Exchange Rate 팝업 저장",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-94014d09",
+   "class": "A5",
+   "msg": "Measure 셋팅(미사용 Measure · VMI 메저 · MKT FCST AMT)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-24046745",
+   "class": "G2",
+   "msg": "Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b2de6658",
+   "class": "A5",
+   "msg": "조회 그리드 컬럼 구성",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-55849490",
+   "class": "D3",
+   "msg": "Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI_In_Req)·AS From Site 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-29f13179",
+   "class": "B4",
+   "msg": "Current 버전 입력 Measure(MKT_FCST·SCM_FCST·Unit Price·AS_In_Req·VMI_In_Req)·AS From Site 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-dfdceec5",
+   "class": "B4",
+   "msg": "FCST Type 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7269b9f1",
+   "class": "F4",
+   "msg": "Bucket 전환 후 저장",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6e04e5bb",
+   "class": "D3",
+   "msg": "AS From Site 활성·콤보, Measure 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-21428077",
+   "class": "B4",
+   "msg": "AS From Site 활성·콤보, Measure 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4eac6b9a",
+   "class": "A5",
+   "msg": "Div 81 컬럼·Measure 구성(Project·Cust FCST 등)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-24b606ab",
+   "class": "A5",
+   "msg": "그리드 표시 컬럼(AS-IS 미존재 컬럼)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e68c728e",
+   "class": "L1",
+   "msg": "조회조건 텍스트 입력 중 그리드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f53564eb",
+   "class": "F5",
+   "msg": "Delete 버튼·CRUD Status D Flag",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4afc06ac",
+   "class": "B4",
+   "msg": "Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-87bfbd41",
+   "class": "B4",
+   "msg": "Team(DEPT_ID) 셀 콤보 표시값",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-182d9079",
+   "class": "A1",
+   "msg": "RTF[R+P] Measure 행",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5df57972",
+   "class": "H8",
+   "msg": "총 건수 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b0298e2b",
+   "class": "A5",
+   "msg": "컬럼/Measure 셋팅(개인화 Default)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2d6f69ab",
+   "class": "B4",
+   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-84589cd1",
+   "class": "A5",
+   "msg": "컬럼셋팅 팝업 Default",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-021c10a8",
+   "class": "D4",
+   "msg": "Insert 시 Project 컬럼 · Sort",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4bc1856e",
+   "class": "H2",
+   "msg": "입력 불가 컬럼 배경색",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-01a86cfa",
+   "class": "H2",
+   "msg": "실적 구간 배경색",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-de120f74",
+   "class": "B8",
+   "msg": "Team 컬럼(MKT FCST 조회·신규행)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-18423af3",
+   "class": "G1",
+   "msg": "Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-367d9ab9",
+   "class": "D4",
+   "msg": "Insert 행 Div · Div 변경 시 그리드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-99843c35",
+   "class": "G2",
+   "msg": "Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-917d764f",
+   "class": "A5",
+   "msg": "Div 전환 컬럼 구성·컬럼셋팅 OK 반영",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-15766cf4",
+   "class": "G1",
+   "msg": "텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f65eed03",
+   "class": "A5",
+   "msg": "컬럼셋팅 Company ID(필수 표시·Invisible 이동)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b5c6027c",
+   "class": "G1",
+   "msg": "API Name 조회조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-efa6ed8d",
+   "class": "F5",
+   "msg": "Delete 버튼·CRUD Status D Flag",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8f465896",
+   "class": "B4",
+   "msg": "Active 관리 마스터 기반 조회조건(End Customer·Sold to·Sales Site·Model/Nickname)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c7dc3c99",
+   "class": "H8",
+   "msg": "총 건수 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-afdd07ed",
+   "class": "G2",
+   "msg": "멀티선택 조회조건 Select ALL",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-186dadfa",
+   "class": "A6",
+   "msg": "E05 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-33ab5070",
+   "class": "D6",
+   "msg": "DMF0082 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ae6f6625",
+   "class": "F5",
+   "msg": "DMF0082 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-67c6521a",
+   "class": "X-LOC",
+   "msg": "E07 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-030c97ce",
+   "class": "F3",
+   "msg": "DMF0082 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-00d4b671",
+   "class": "X-LOC",
+   "msg": "A-01 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8e01da15",
+   "class": "D3",
+   "msg": "MEASURE / Measure",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9b730926",
+   "class": "X-LOC",
+   "msg": "A-15 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9ea3507c",
+   "class": "A6",
+   "msg": "A-15 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9205bf19",
+   "class": "E3",
+   "msg": "CURRENCY / Currency",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d35072bc",
+   "class": "X-LOC",
+   "msg": "D-07 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b290ebb3",
+   "class": "E3",
+   "msg": "PROJECT_CODE / Project Code",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0880bbe0",
+   "class": "E3",
+   "msg": "END_CUSTOMER / End Customer",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0d37e73a",
+   "class": "C2",
+   "msg": "DIVISION_ID / Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-62637cb3",
+   "class": "E3",
+   "msg": "DP-02 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8716611b",
+   "class": "E3",
+   "msg": "DP-04 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9553cf3c",
+   "class": "E3",
+   "msg": "DP-08 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-48c20115",
+   "class": "H2",
+   "msg": "ITEM_ID / Model",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-13ca144b",
+   "class": "H2",
+   "msg": "CELL_PROD_SITE_ID / Cell Prod Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0aca18f0",
+   "class": "A6",
+   "msg": "F-02 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-37ba23e2",
+   "class": "H2",
+   "msg": "MEASURE / Measure",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-22cd82b1",
+   "class": "D5",
+   "msg": "MEASURE / Measure",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-02513beb",
+   "class": "D1",
+   "msg": "INCOTERMS / Incoterms",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2e981994",
+   "class": "D3",
+   "msg": "P",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-19e2aa13",
+   "class": "A6",
+   "msg": "P-24 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1cd782b7",
+   "class": "A6",
+   "msg": "PL-36 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-cef56050",
+   "class": "X-LOC",
+   "msg": "S-07 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b72b45a9",
+   "class": "A6",
+   "msg": "S-07 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-70aac638",
+   "class": "X-LOC",
+   "msg": "S-22 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-515232e6",
+   "class": "A6",
+   "msg": "S-24 (이벤트·제약 (EID 1:1))",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6a3d2db5",
+   "class": "E3",
+   "msg": "CRUD:E04:SAVE (CRUD·모달 매트릭스 (2026-08-07 축 — M)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3bf12ddb",
+   "class": "A6",
+   "msg": "CRUD:E05:SEARCH (CRUD·모달 매트릭스 (2026-08-07 축 — M)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d7c7bae7",
+   "class": "F4",
+   "msg": "POPUP_GET_FUTUREPRICE_INFO",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a5a57deb",
+   "class": "X-LOC",
+   "msg": "REQ:CHAT-20260915-PRICEPJTGAP (CRUD·모달 매트릭스 (2026-08-07 축 — M)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3052e069",
+   "class": "F4",
+   "msg": "PKG_DMF0082",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0d5b4776",
+   "class": "X-LOC",
+   "msg": "REQ:CHAT-20260915-EXLASTUPD (CRUD·모달 매트릭스 (2026-08-07 축 — M)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a0be9aae",
+   "class": "X-LOC",
+   "msg": "MODAL:MeasureSelectModal (CRUD·모달 매트릭스 (2026-08-07 축 — M)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0230a46d",
+   "class": "D5",
+   "msg": "DIVISION_ID / Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f1796be5",
+   "class": "E3",
+   "msg": "E01-B1 (CRUD·모달 매트릭스 (2026-08-07 축 — M)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0412fc96",
+   "class": "X-LOC",
+   "msg": "CRUD:MAIN:SEARCH (CRUD·모달 매트릭스 (2026-08-07 축 — M)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-224f77d6",
+   "class": "X-LOC",
+   "msg": "CRUD:MAIN:SEARCH_CURRENT (CRUD·모달 매트릭스 (2026-08-07 축 — M)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-396c5369",
+   "class": "X-LOC",
+   "msg": "CRUD:MAIN:UPDATE (CRUD·모달 매트릭스 (2026-08-07 축 — M)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-01be0079",
+   "class": "X-LOC",
+   "msg": "CRUD:MAIN:SAVE (CRUD·모달 매트릭스 (2026-08-07 축 — M)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c5544af1",
+   "class": "X-LOC",
+   "msg": "CRUD:MAIN:UPLOAD (CRUD·모달 매트릭스 (2026-08-07 축 — M)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-53f6e73e",
+   "class": "X-LOC",
+   "msg": "COMMON:UC-07 (UI 공통(통합테스트) 체크 축 (2026-08-12 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0584da32",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-33-2 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a418d6ea",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-33-3 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b7a726c4",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-33-4 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-36a2a5c1",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-35-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-450ca75e",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-36-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fe4bbd32",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-37-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-271dffbe",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-37-2 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f723492f",
+   "class": "E3",
+   "msg": "REQ:1ST-38-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d8b47654",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-39-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6535a0e9",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-39-2 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-36878b85",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-39-3 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0c26260e",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-40-2 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-335630c6",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-41-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7e7d1b54",
+   "class": "E3",
+   "msg": "REQ:1ST-41-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-697873d3",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-42-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c593f633",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-44-2 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4f1a25c4",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-45-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c9671b74",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-45-2 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-04971c10",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-47-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-80defaf8",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-47-2 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-eb83afaf",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-47-3 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-37ca6ec2",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-48-2 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7c1b282a",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-48-3 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-06d4d8c6",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-48-4 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3ab7710c",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-49-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a08ff8ea",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-63-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-baa75090",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-63-2 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f7268de3",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-63-3 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-531acba7",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-64-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-518c22f7",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-65-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8b108f5c",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-65-2 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ea6bdcf9",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-65-3 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-181e723e",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-66-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f8b59afe",
+   "class": "X-LOC",
+   "msg": "REQ:1ST-67-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-be6caf1c",
+   "class": "X-LOC",
+   "msg": "REQ:CHAT-20260820-1 (보완요청(REQ) 축 (2026-08-20 — 사용자 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-221120c7",
+   "class": "H2",
+   "msg": "END_CUSTOMER / End Customer",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4dc83538",
+   "class": "H2",
+   "msg": "SCM_SITE_ID / Sales Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9b249d30",
+   "class": "X-LOC",
+   "msg": "EVENT:E-04 (AS-IS 그리드 셀 EVENT — **컬럼 종속 축*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f839cdb9",
+   "class": "A5",
+   "msg": "MEASURE / Measure",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-bb06ef86",
+   "class": "H2",
+   "msg": "INCOTERMS / Incoterms",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6d4e5f78",
+   "class": "H2",
+   "msg": "CURRENCY / Currency",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-65112855",
+   "class": "A6",
+   "msg": "HANDLER:FindData (AS-IS 이벤트 핸들러 인벤토리 (2026-08-08)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2ee0e938",
+   "class": "E3",
+   "msg": "HANDLER:FindData (AS-IS 이벤트 핸들러 인벤토리 (2026-08-08)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4ad3e083",
+   "class": "E3",
+   "msg": "HANDLER:SaveData (AS-IS 이벤트 핸들러 인벤토리 (2026-08-08)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-38610295",
+   "class": "C2",
+   "msg": "INCOTERMS / Incoterms",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a16ce18c",
+   "class": "X-LOC",
+   "msg": "DPF-01 (AS-IS 제약 — §1.2 division 파라미터 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a0d0decf",
+   "class": "X-LOC",
+   "msg": "DPF-02 (AS-IS 제약 — §1.2 division 파라미터 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-275f2f0b",
+   "class": "X-LOC",
+   "msg": "DPF-04 (AS-IS 제약 — §1.2 division 파라미터 )",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ed359344",
+   "class": "F4",
+   "msg": "SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b9427555",
+   "class": "X-ROW",
+   "msg": "DMF0082_FcstNPrice_Mgmt.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4db7283f",
+   "class": "X-ROW",
+   "msg": "DMF0082_FcstNPrice_Mgmt.FindData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-786235be",
+   "class": "F4",
+   "msg": "DMF0003_GET_BUCKET_TYPE_CODE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-df9f27cc",
+   "class": "G6",
+   "msg": "clbDivision / Division",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a062a959",
+   "class": "G6",
+   "msg": "clbTeam / Team",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-69f06ebd",
+   "class": "G6",
+   "msg": "clbCustomer / End Customer / Customer",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0b7b1272",
+   "class": "G6",
+   "msg": "clbBizType / Biz Type",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-59deef1c",
+   "class": "G6",
+   "msg": "clbSalesSite / Sales Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e1c19df5",
+   "class": "G6",
+   "msg": "txtVersion / Version",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fea529cf",
+   "class": "G6",
+   "msg": "chkSum / Sum",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b768e3bd",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-537897b3",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-bf2105e6",
+   "class": "F3",
+   "msg": "M",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f039cc4d",
+   "class": "F3",
+   "msg": "I",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3de77b09",
+   "class": "F3",
+   "msg": "CELL_PROD_SITE_ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f27b6802",
+   "class": "F3",
+   "msg": "CELL_PROD_SITE_ID",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-969cc043",
+   "class": "F3",
+   "msg": "M",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-209287f7",
+   "class": "D3",
+   "msg": "P,P",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b773cd9c",
+   "class": "D3",
+   "msg": "P,P",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ef682386",
+   "class": "D3",
+   "msg": "P,P",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-22b52450",
+   "class": "D3",
+   "msg": "MEASURE,MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9f12a49d",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e1c01485",
+   "class": "D3",
+   "msg": "P,P",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-cd3e9431",
+   "class": "D3",
+   "msg": "MEASURE,MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1ee00db0",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8d5ea684",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ae194ecd",
+   "class": "D3",
+   "msg": "MEASURE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3a17dded",
+   "class": "F4",
+   "msg": "SCM0001_GET_LOOKUP_VALUES",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-26 17:27"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "summary": {
+  "rows": 2543,
+  "PASS": 483,
+  "FAIL": 249,
+  "판정필요": 1444,
+  "미검증": 0,
+  "해당없음": 367,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 947,
+   "없음(판정 대기)": 1444,
+   "기계(상속·집계)": 152
+  },
+  "fail_listed": 249
+ },
+ "docs": {
+  "정합검증서": "Doc/화면분석서/DMF0082_FcstMgmt_정합검증서_v26.xlsx",
+  "보완대상": "Doc/화면분석서/DMF0082_FcstMgmt_보완대상_v26.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/DMF0082/e2e_results.json"
+  }
+ ],
+ "note": ""
+}

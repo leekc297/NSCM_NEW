@@ -1,0 +1,161 @@
+[
+ {
+  "screen": "SCP0051",
+  "title": "Production Plan Target",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0051_ProductionPlanTarget/SCP0051_ProductionPlanTarget.cs:1621"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0051_ProductionPlanTarget/SCP0051_ProductionPlanTarget.Designer.cs:701"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_GET_NEW_INFO",
+    "member": "SpdMain_ComboSelChange",
+    "line": "272",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_GET_NEW_INFO",
+    "member": "SpdMain_ComboSelChange",
+    "line": "287",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_GET_NEW_INFO",
+    "member": "SpdMain_ComboSelChange",
+    "line": "293",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_GET_PRODUCTION_PLAN_TARGET",
+    "member": "FindData_Main",
+    "line": "475",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET",
+    "member": "SaveData_Main",
+    "line": "607",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_GET_NEW_INFO",
+    "member": "Get_DataTable_Info",
+    "line": "674",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_GET_NEW_INFO",
+    "member": "InsertRow",
+    "line": "716",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_GET_NEW_INFO",
+    "member": "InsertRow",
+    "line": "743",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM",
+    "member": "btnConfirm_Click",
+    "line": "863",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_GET_PRODUCTION_PLAN_TARGET",
+    "member": "FindData_Main",
+    "line": "475",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET",
+    "member": "SaveData_Main",
+    "line": "607",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_GET_NEW_INFO",
+    "member": "Get_DataTable_Info",
+    "line": "674",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM",
+    "member": "btnConfirm_Click",
+    "line": "863",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0051_ProductionPlanTarget\\SCP0051_ProductionPlanTarget.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0051_GET_NEW_INFO",
+   "SCP0051_GET_PRODUCTION_PLAN_TARGET",
+   "SCP0051_SAVE_PRODUCTION_PLAN_TARGET",
+   "SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET",
+    "sp": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Target 등록/삭제 중 예외 시 전체 롤백 후 F 와 오류 메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT INTO scm_sys_log_batch(…); SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ER"
+   },
+   {
+    "entry_sp": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM",
+    "sp": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Target 확정 UPDATE 중 예외 시 롤백 후 F 와 오류 메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT INTO scm_sys_log_batch(…); SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ER"
+   }
+  ]
+ }
+]

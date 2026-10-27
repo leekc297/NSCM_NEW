@@ -59,7 +59,7 @@ export const DIVISION_EE_EXCLUDE = 'EE';
 export const LBL = {
   DIVISION: 'LBL00001', // Division
   OPERATION_GROUP: 'LBL00027', // Operation group
-  VALID: 'LBL00639', // Valid
+  VALID: 'LBL00007', // Valid
   TRANS_MODE: 'LBL00025', // Trans Mode
   FROM_SITE: 'LBL00022', // From Site
   TO_SITE: 'LBL00023', // To Site
@@ -85,13 +85,17 @@ export const LBL = {
 // ====================================================================================
 export const MSG = {
   SAVE_SUCCESS: 'MSG00002', // Saved successfully. (실측 — AS-IS MSG00004 는 TO-BE 'No changes'라 재매핑)
-  NO_CHANGE: 'MSG00133', // No modifications have been made. (실측 — modiCnt==0, design R-msg MSG00133)
-  SAVE_FAIL: 'MSG00006', // Failed to save. (실측)
+  // 변경 없음(modiCnt==0) — TO-BE 표준 MSG00004(수정한 내용이 없습니다. / No changes to save., KO/EN/CN 등록).
+  //   design R-msg 의 MSG00133 은 SCM_ADM_MSG_M 미등록이라(2026-10-20 실측 0행) 사용자 언어와 무관하게 영문 기본 문구가 떴다.
+  NO_CHANGE: 'MSG00004',
+  SAVE_FAIL: 'MSG00003', // Failed to save. (AS-IS MSG00006 는 TO-BE 미등록 → 같은 문구 MSG00003, KO/EN/CN)
   DELETE_SUCCESS: 'MSG00031', // Deleted successfully. (실측 — Delete 팝업 SAVE active_flag='D')
   DELETE_FAIL: 'MSG00618', // An error occurred while saving. (실측 — AS-IS MSG00284 는 TO-BE 'grid not ready'라 재매핑)
-  // LOT_SIZE < INCREMENT 차단 — MSG00099 '{0}은 {1} 보다 클 수 없습니다.'(등재됨). 호출부에서
-  //   {0}=Increment / {1}=Lot Size 수동 치환(useShipmentLotSizeValidation) — 미치환 시 플레이스홀더 노출.
-  INC_GT_LOT: 'MSG00099',
+  // LOT_SIZE < INCREMENT 차단 — MSG01127 '{0}은 {1} 보다 클 수 없습니다.' / '{0} can not be greater than {1}.'
+  //   (KO/EN/CN 등록). AS-IS MSG00099 와 같은 문구다. 종전 MSG00099 는 SCM_ADM_MSG_M 미등록이라(2026-10-20 실측 0행)
+  //   사용자 언어와 무관하게 영문 기본 문구가 떴다. 호출부에서 {0}=Increment / {1}=Lot Size 수동 치환
+  //   (useShipmentLotSizeValidation) — 미치환 시 플레이스홀더 노출.
+  INC_GT_LOT: 'MSG01127',
   // LOT_SIZE==0 또는 INCREMENT==0 차단 — 실측 MSG00699('Please enter an integer greater than 0.') 의도 일치.
   ZERO_VALUE: 'MSG00699',
   // {0} value is required. — 필수 조회조건 공통. 본화면 Division(design R9) + Input/Delete 팝업 From Site

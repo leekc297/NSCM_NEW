@@ -62,6 +62,9 @@ export const useFilteredGridCount = (
     };
   }, [gridRef?.current, gridFilterRef?.current, dataCount]);
 
-  // 필터 적용 시엔 0건이어도 명시 표시, 미적용 시엔 dataCount가 0이면 숨김
-  return filteredCount !== null ? filteredCount : dataCount === 0 ? undefined : dataCount;
+  // 건수가 0이면 배지를 숨긴다 — 필터로 전 행이 가려진 '0'(filteredCount===0)이든 조회 0건이든
+  //   동일하게 미표시. '0' 표기는 실제 그리드 건수와도 어긋나 혼동을 준다(사용자 지시 2026-10-27).
+  //   0 초과일 때만 표시(필터 적용 시 가시 건수, 미적용 시 dataCount).
+  const count = filteredCount ?? dataCount;
+  return count === 0 ? undefined : count;
 };

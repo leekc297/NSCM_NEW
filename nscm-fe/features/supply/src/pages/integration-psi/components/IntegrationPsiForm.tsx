@@ -92,9 +92,6 @@ export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
     filters: [COMBO.DIVISION, COMBO.PLAN_DATE, COMBO.PLAN_TYPE],
   });
 
-  // 선택 PlanDate 앞 6자리(YYYYMM) 를 시작월로 기간 콤보(CalendarMonth) 재조회 — design 02 §3.2 재조회 방식.
-  const fromMonth = sc.planStartYyyymmdd ? sc.planStartYyyymmdd.slice(0, 6) : '';
-
   // 통합PSI Default 조회기간(개월수) — AS-IS Data.Common(LookupCommon,"INTEGRATION_PSI_DEFAULT_PERIOD") (cs:66).
   //   응답 CODE=개월수. To "선택값" 산정 전용(목록 범위 아님). 부재 시 fallback DEFAULT_PERIOD_MONTHS(cs:256-264).
   const [defaultPeriodRows] = useTabLookupQueries({
@@ -102,10 +99,6 @@ export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
   });
   const periodCode = Number(str(defaultPeriodRows?.[0]?.CODE));
   const periodCount = Number.isFinite(periodCode) && periodCode > 0 ? periodCode : DEFAULT_PERIOD_MONTHS;
-
-  // To "선택값"(periodMonth) = 시작월 + (개월수-1)월 — AS-IS cs:260(있음)/264(없음, 5월=6개월치).
-  //   주의: 이 값은 초기 선택만 정한다. From/To 콤보 목록 범위는 아래 horizonTo(HORIZON_END)로 별도 산정.
-  const periodMonth = fromMonth ? addMonths(fromMonth, periodCount - 1) : '';
 
   // Period 는 공통 PeriodRangePicker(자유 달력)로 바뀌어 **선택 가능한 월 목록 자체가 없다**(사용자 지시 2026-10-12).
   //   그래서 AS-IS SetChangedPeriod 의 "목록 상한" 산정(HORIZON_END_DATE via SCPPlanPeriod_SCP, 없으면 시작월+11월,
@@ -154,21 +147,22 @@ export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
   }, [firstDivision, hasDivision, setDivision]);
 
   // PlanDate 기본값 = 목록 첫/최신(design 02 §4.2 RefreshPlanDate 후 setListBox 434). 단일 필수 콤보.
+  //   PlanDate 가 옵션에 없을 때(최초 진입 / F10 초기화)만 첫/최신 PlanDate + 기간 기본선택을 **함께** 넣는다.
+  //   F6 복원으로 PlanDate 가 이미 옵션에 있으면(hasPlanDate=true) skip → 복원된 PlanDate·Period 를 보존한다.
+  //   종전엔 기간 전용 effect 가 PlanDate 파생값(시작월~+N월)으로 Period 를 매번 덮어써, F6 로 Period 를
+  //   저장해도 복원 직후 기본값으로 덮여 "저장이 안 되는" 것처럼 보였다(2026-10-19 수정). PlanDate 변경 시의
+  //   기간 재설정(AS-IS SetChangedPeriod 무조건 재계산)은 아래 PlanDate onChange 가 동기로 담당한다.
   const firstPlanDate = planDateOptions[0]?.value ?? '';
   const hasPlanDate = planDateOptions.some(o => o.value === sc.planStartYyyymmdd);
   useEffect(() => {
-    if (firstPlanDate && !hasPlanDate) set({ planStartYyyymmdd: firstPlanDate });
-  }, [firstPlanDate, hasPlanDate, set]);
-
-  // 기간 기본선택 — From = 시작월(cs:293), To = periodMonth(= 시작월 + Default개월수 - 1, cs:294).
-  //   AS-IS 는 PlanDate 가 바뀌면 SetChangedPeriod 로 **무조건 재설정**한다
-  //   (cs:1859 CboPlanDate_SelectedIndexChanged → SetChangedPeriod → cs:293~294).
-  //   deps 가 [fromMonth, periodMonth] 뿐이라 사용자가 달력으로 고친 값은 PlanDate 가 바뀔 때까지 유지된다
-  //   (종전처럼 월 콤보 옵션 포함여부로 판정하지 않는다 — 자유 달력에는 옵션 목록이 없다).
-  useEffect(() => {
-    if (!fromMonth || !periodMonth) return;
-    set({ fromYyyymm: fromMonth, toYyyymm: periodMonth });
-  }, [fromMonth, periodMonth, set]);
+    if (!firstPlanDate || hasPlanDate) return;
+    const fm = firstPlanDate.slice(0, 6);
+    set({
+      planStartYyyymmdd: firstPlanDate,
+      fromYyyymm: fm,
+      toYyyymm: addMonths(fm, periodCount - 1),
+    });
+  }, [firstPlanDate, hasPlanDate, periodCount, set]);
 
   const single = (
     labelText: string,
@@ -299,32 +293,40 @@ export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* Row1 — Plan-date* / Period(From ~ To) */}
+          {/* Row1 — Plan-date* / Period(From ~ To) / Qty < 0 */}
           {/* Plan Date 는 AS-IS UsrCombo 단일선택. SP p_plan_start_yyyymmdd 에 그대로 TO_DATE 되므로 단일값.
               변경 시 하위 cascade(기간) 재계산 + 그리드 초기화(§3 ClearDataSource) — filters clear 는 handleSearch 재조회로 재현. */}
           {single(
             t(LBL.PLAN_DATE, '_Plan-date'),
             sc.planStartYyyymmdd,
             planDateOptions,
-            v => set({ planStartYyyymmdd: v, fromYyyymm: '', toYyyymm: '' }),
+            // PlanDate 변경 = 기간을 그 PlanDate 기준 기본값(시작월 ~ 시작월+(기본개월수-1))으로 **동기 재설정**
+            //   (AS-IS SetChangedPeriod 무조건 재계산 cs:1859→293~294). 종전엔 from/to 를 '' 로 비우고 별도
+            //   effect 가 다시 채웠는데, 같은 '월'의 다른 PlanDate 로 바꾸면 effect deps(fromMonth)가 안 바뀌어
+            //   비운 채 남아 Period 칸이 비고 줄어들어 보였다(2026-10-19 수정). 여기서 바로 채워 빈 전이를 없앤다.
+            v => {
+              const fm = v.slice(0, 6);
+              set({ planStartYyyymmdd: v, fromYyyymm: fm, toYyyymm: addMonths(fm, periodCount - 1) });
+            },
             true
           )}
           {period}
+          {/* Qty < 0 — Row1 Period 옆 빈 자리에 상시 노출(사용자 지시 2026-10-23). 조건 하나뿐이라 하단
+              확장영역으로 접어두면 펼쳐야만 보여 불편 → 메인 조회조건으로 올린다.
+              alignSelf:center — conditions 그리드는 align-items:stretch 라 36px 입력 FormItem 이 행 높이를
+                채우는데, 체크박스 FormItem(~20px)은 스트레치 셀 상단에 붙어 위로 치우쳐 보인다.
+                셀을 세로 중앙정렬해 같은 행 Period·입력칸의 수직 중심에 맞춘다(폭은 stretch 유지). */}
+          <Grid size={3} sx={{ alignSelf: 'center' }}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t(LBL.QTY, '_Qty < 0')}
+              labelAlign='right'
+              render={() => (
+                <Checkbox checked={sc.qtyYn} onChange={checked => set({ qtyYn: checked })} />
+              )}
+            />
+          </Grid>
         </>
-      }
-      // Qty < 0 은 하단 확장영역으로 분리한다(사용자 지시 2026-10-12).
-      //   SearchArea 의 extraConditions = 2단 초과 조건을 접어 두는 하단 영역(hook #52, 자매 SSP0021 Sum 선례).
-      extraConditions={
-        <Grid size={3}>
-          <FormItem
-            className={commonStyles.formItem}
-            label={t(LBL.QTY, '_Qty < 0')}
-            labelAlign='right'
-            render={() => (
-              <Checkbox checked={sc.qtyYn} onChange={checked => set({ qtyYn: checked })} />
-            )}
-          />
-        </Grid>
       }
     />
   );

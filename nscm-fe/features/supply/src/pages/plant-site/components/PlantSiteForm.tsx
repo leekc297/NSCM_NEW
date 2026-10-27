@@ -3,14 +3,19 @@ import { useEffect } from 'react';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { FormItem, InputField } from '@shared/lges';
+import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
 import { LBL, MSG } from '../plant-site.constants';
 import { usePlantSiteStore } from '../usePlantSiteStore';
 import { COMBO } from '../utils/plant-site.plantSiteCombo';
-import { filterEeDivisions, str, toComboOptions } from '../utils/plant-site.util';
+import {
+  filterEeDivisions,
+  filterPlantSiteByDivision,
+  str,
+  toComboOptions,
+} from '../utils/plant-site.util';
 
 export const PlantSiteForm = () => {
   const { t } = useTranslation();
@@ -23,17 +28,25 @@ export const PlantSiteForm = () => {
   const fetchStaticColumns = usePlantSiteStore(state => state.fetchStaticColumns);
 
   // Division_SCP + FE EE 필터(design 02 §2-1). OSP/Active 는 YesOrNo(+FE 'ALL' 선두).
-  //   Plant/Vendor·Plant Site 는 AS-IS(txtPlantVendor/txtPlantSite TextBox) 그대로 자유 텍스트
-  //   입력이다 — SP(PKG_SCP0001.GET_PLANT_SITE)가 코드·명칭 양쪽을 UPPER LIKE 부분일치로 처리한다
-  //   (design 02 §2-3). 콤보가 아니므로 조회조건 콤보는 Division·YesOrNo 두 건뿐이다.
-  const [divisions, yesOrNo] = useTabComboQueries({
-    filters: [COMBO.DIVISION, COMBO.YES_OR_NO],
+  //   Plant Site 는 Bod(SCP0007) From Site 와 동일 콤보 — 서버 재조회 없이 전체 1회 조회 후
+  //   division 선택값으로 client-side 필터(filterPlantSiteByDivision).
+  //   Plant/Vendor 는 SQL_ID(PlantVendorByDivision) 자체가 @divisionId 바인드를 받아 서버에서
+  //   IN-list/'ALL' 필터링하므로 ComboParam 으로 넘겨 division 변경 시 자동 재조회한다.
+  const [divisions, yesOrNo, plantSites, plantVendors] = useTabComboQueries({
+    filters: [
+      COMBO.DIVISION,
+      COMBO.YES_OR_NO,
+      COMBO.PLANT_SITE,
+      { comboId: COMBO.PLANT_VENDOR, divisionId: searchParams.divisionId },
+    ],
   });
 
   const { setAlert } = useMessageStore.getState();
 
   const divisionOptions = toComboOptions(filterEeDivisions(divisions));
   const yesNoOptions = toComboOptions(yesOrNo);
+  const plantSiteOptions = filterPlantSiteByDivision(plantSites, searchParams.divisionId);
+  const plantVendorOptions = toComboOptions(plantVendors);
 
   // R-01(G5): 권한 division 0건이면 조회영역 전체 비활성 + 조회 차단(AS-IS cs:260-261 SetDivisionAuthCheck).
   //   divisions===undefined 는 로딩 중이므로 제외 — 콤보가 로드된 뒤에도 EE 제외 결과가 0이면 무권한.
@@ -93,11 +106,16 @@ export const PlantSiteForm = () => {
               label={t(LBL.PLANT_VENDOR, '_Plant/Vendor')}
               labelAlign='right'
               render={() => (
-                <InputField
-                  fullWidth
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  sortBy='label'
                   disabled={noAuth}
                   value={searchParams.plantVendor}
-                  onChange={event => setSearchParams({ plantVendor: event.target.value })}
+                  options={plantVendorOptions}
+                  onChange={(_, options) => setSearchParams({ plantVendor: options || 'ALL' })}
                 />
               )}
             />
@@ -108,11 +126,16 @@ export const PlantSiteForm = () => {
               label={t(LBL.PLANT_SITE, '_Plant Site')}
               labelAlign='right'
               render={() => (
-                <InputField
-                  fullWidth
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  sortBy='label'
                   disabled={noAuth}
                   value={searchParams.plantSite}
-                  onChange={event => setSearchParams({ plantSite: event.target.value })}
+                  options={plantSiteOptions}
+                  onChange={(_, options) => setSearchParams({ plantSite: options || 'ALL' })}
                 />
               )}
             />

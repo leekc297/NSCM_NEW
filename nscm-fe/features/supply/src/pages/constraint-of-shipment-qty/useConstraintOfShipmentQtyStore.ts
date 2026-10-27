@@ -34,6 +34,8 @@ interface Action {
   fetchStaticColumns: () => Promise<void>;
   // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchCondition 패치(1회).
   restoreSearchConditions: () => Promise<void>;
+  // Period 기본값 세팅 — AS-IS setPeriod() 파리티. fromDate/toDate 가 비어 있을 때만 채운다.
+  setDefaultPeriod: () => void;
 }
 
 // 개인화 조건 복원 역직렬화 키(SubTitle F6 저장은 배열=콤마join·불리언=String 평문화 — personalizeCondition).
@@ -59,6 +61,22 @@ const initSearch: SearchCondition = {
   fromDate: '',
   toDate: '',
   validYn: VALID_DEFAULT,
+};
+
+const toYyyymmdd = (d: Date): string =>
+  `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+
+// AS-IS setPeriod()(.cs:891~906) Period 기본값: From = 이번 주 월요일, To = 그 월요일 + 52주(364일).
+//   C# DateTime.Today.AddDays(DayOfWeek.Monday - today.DayOfWeek) 와 동일 — JS getDay()도 일=0·월=1 이라
+//   (1 - getDay()) 일을 더하면 이번 주 월요일이 된다(일요일이면 +1 = 바로 다음날 월요일, AS-IS 동일).
+//   기본값은 화면 진입 시점 기준이어야 해서 모듈 상수가 아니라 호출 시 계산한다(persist 고정 방지).
+const defaultPeriod = (): { fromDate: string; toDate: string } => {
+  const today = new Date();
+  const monday = new Date(today);
+  monday.setDate(today.getDate() + (1 - today.getDay()));
+  const to = new Date(monday);
+  to.setDate(monday.getDate() + 52 * 7);
+  return { fromDate: toYyyymmdd(monday), toDate: toYyyymmdd(to) };
 };
 
 const emptyStaticColumns: StaticColumnsBySheet = {
@@ -115,7 +133,9 @@ export const useConstraintOfShipmentQtyStore = createPersistedStoreWithTab<State
             stage: c.stageIds.join(','),
             fromDate: c.fromDate,
             toDate: c.toDate,
-            validYn: c.validYn,
+            // AS-IS .cs:452 pValidYn = sValidYn.Equals("ALL") ? string.Empty : sValidYn —
+            //   콤보 ALL 선택(기본값)은 빈 문자열로 보내 Y/N 필터 없이 전건 조회한다.
+            validYn: c.validYn === 'ALL' ? '' : c.validYn,
           },
         };
       });
@@ -182,6 +202,19 @@ export const useConstraintOfShipmentQtyStore = createPersistedStoreWithTab<State
         // 미저장/실패 = 기본값 유지 (console 금지 룰)
       }
     },
+
+    // AS-IS setPeriod()(.cs:891~906, InitControls L194)는 persist 가 없어 진입마다 From/To 를 무조건 덮는다.
+    //   TO-BE 는 persist + F6 개인화 복원이 fromDate/toDate 를 저장/복원할 수 있으므로(restoreSearchConditions),
+    //   복원값이 있으면 그것을 존중하고 둘 다 비어 있을 때만 AS-IS 기본값(이번 주 월요일 ~ +52주)을 채운다.
+    //   주의: restoreSearchConditions 이후에 호출해야 복원값을 덮지 않는다(ConstraintOfShipmentQty mount effect).
+    setDefaultPeriod: () =>
+      set(state => {
+        const c = state.searchCondition;
+        if (c.fromDate || c.toDate) return;
+        const { fromDate, toDate } = defaultPeriod();
+        state.searchCondition.fromDate = fromDate;
+        state.searchCondition.toDate = toDate;
+      }),
   }),
   'constraint-of-shipment-qty-store'
 );

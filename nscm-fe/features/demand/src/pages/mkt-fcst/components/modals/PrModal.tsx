@@ -258,7 +258,7 @@ export const PrModal = ({ open, modalClose, params, onSaved }: PrModalProps) => 
                 </Grid>
                 <Grid size={3}>
                   <FormItem
-                    label={t('LBL00747', '_Request Date')}
+                    label={t('LBL00677', '_Request Date')}
                     labelAlign='right'
                     render={() => (
                       <InputField fullWidth disabled value={String(header?.REQUEST_DATE ?? '')} />

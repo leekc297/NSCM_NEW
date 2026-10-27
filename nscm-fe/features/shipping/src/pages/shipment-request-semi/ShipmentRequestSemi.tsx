@@ -1,6 +1,6 @@
 import { CellRange, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ModelByDivisionPopup } from 'features/master/src/components';
+import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { CRUD_TYPE } from '@foundation/constants';
@@ -43,10 +43,10 @@ const str = (v: unknown): string =>
 
 // AS-IS GSCM.SSP.Plan.UIL SSP0045_ShipmentRequest — 반제품(SEMI) 출하요청.
 //   설계: .atlas/gscm-design/SSP0045/design/00~03. 상세 매핑: __asis-mapping__.md.
-//   이 화면의 특이점 4가지:
-//     · Insert(F8) = **명시적 NO-OP**. AS-IS override 본문이 주석 1줄뿐이다(K6) — 버튼은 보이되 아무 일도 없다.
+//   이 화면의 특이점 3가지:
+//     · Insert(F8)·Delete(F9) 버튼 숨김(2026-10-21 사용자 결정). 첫 신규행('I') 생성 경로가 없어(Q1)
+//       AS-IS Insert(NO-OP, K6)·Delete(신규행만 hard remove, K7)가 실사용 불가다. 코드는 복원 대비 보존한다.
 //     · Edit 모드토글 미이식(`asis_to_tobe.md §11`) — 단 **실질 잠금범위는 보존**한다(editLock util).
-//     · Delete 는 신규행('I')만 hard remove. 기존행은 **무동작(메시지도 없음)** — SAVE SP 에 DELETE 경로가 없다(K7).
 //     · 저장은 **셀 단위** 수집. 행 단위로 전 기간을 보내면 `_H` 이력이 오염된다(K9).
 export const ShipmentRequestSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
@@ -190,6 +190,8 @@ export const ShipmentRequestSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ── 삭제(EP05 / R11 / R17) ──
   //   BG07 선택 행 없으면 무동작 → `CRUD_TYPE!=='I'` 이면 **무동작(메시지 없음)** → 'I' 면 즉시 제거.
   //   금지: 기존행 `CRUD_TYPE='D'` 마킹(AS-IS·SP04 둘 다 삭제 경로가 없다) / 임의 alert 추가.
+  //   2026-10-21: 신규행 기능 미사용(Q1)으로 Delete 버튼을 숨겨 현재 미참조 — 복원 대비 보존한다(hotkeyConfig 주석 참조).
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const handleDelete = () => {
     const grid = gridRef.current;
     if (!grid) return;
@@ -205,10 +207,12 @@ export const ShipmentRequestSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
     grid.invalidate();
   };
 
-  // ── Model 픽커(PU03) — 반환 ItemID 가 **공백이 아닐 때만** 반영한다(취소 시 기존 입력 보존, cs:1197) ──
-  const handleModelSelected = (selected: { itemId: string }) => {
-    if (!selected.itemId) return;
-    set({ itemId: selected.itemId });
+  // ── Model 픽커(PU03) — 반환 ItemID(다건 콤마 결합)가 **공백이 아닐 때만** 반영(취소 시 기존 입력 보존, cs:1197) ──
+  //   `MaterialByDivisionModal.setSelectedValue(items, ...)` 는 다건 선택 시 ITEM_ID 를 콤마로 결합해 넘긴다.
+  //   F3 Model 은 콤마 구분 다중 입력(design 02 §1 F3)이라 그대로 itemId 에 싣는다.
+  const handleModelSelected = (items: string) => {
+    if (!items) return;
+    set({ itemId: items });
   };
 
   // ── BOD 팝업(PU04) 확정 — AS-IS 반영 순서 그대로(R09·R10·R12 / L13·L14) ──
@@ -283,20 +287,22 @@ export const ShipmentRequestSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     save: hasButton('SAVE') ? handleSave : false,
-    // AS-IS InsertButton(cs:530-533) = NO-OP(본문이 주석뿐). 버튼은 노출하되 아무 일도 하지 않는다.
-    //   금지: `false`(버튼 숨김) / 키 생략(공용 SubTitle 기본 `GridAction.addRow` 가 부활해 실제로 행이 추가된다).
-    //   권한 게이트(`hasButton('INSERT')`)도 **곱하지 않는다** — 메타 미등록 시 false 가 되어 버튼이 사라진다.
-    insert: () => undefined,
-    delete: hasButton('DELETE') ? handleDelete : false,
+    // Insert/Delete 버튼 숨김 (2026-10-21 사용자 결정). 신규행(첫 'I' 행) 생성 경로가 AS-IS·TO-BE 모두
+    //   없어(설계 Q1/L-12) Insert(AS-IS NO-OP)·Delete(신규행만 삭제)가 실사용상 도달 불가이기 때문이다.
+    //   기능(handleDelete·BOD 팝업·저장-INSERT)은 보존한다. 신규행 기능 복원 시 아래 원형으로 되돌린다:
+    //     insert: () => undefined,                         // AS-IS InsertButton NO-OP 노출(cs:530-533)
+    //     delete: hasButton('DELETE') ? handleDelete : false,
+    insert: false,
+    delete: false,
     manual: false,
     upload: false,
-    // EXCEL — admin 권한 게이트를 곱한다(CLAUDE.md §2 체크3 / iter-3 N-07).
-    //   AS-IS `toolbarOverride`(cs:334-339)에 Excel 항목이 없고 `SCM_ADM_MNU_BTN_MPG_M` 실측도
-    //   SEARCH(main/calendar/bodPopup)·SAVE(main)·DELETE(main) **5행뿐 = EXCEL 미등록**이다.
-    //   키를 생략하면 공용 SubTitle 기본 액션이 살아 **무조건 노출**되므로(= admin 에서 끈 버튼이
-    //   화면에 남는 SCM0008 유형) 미등록 상태에서는 `false` 로 숨긴다. 업무가 엑셀 다운로드를
-    //   원하면 05_register.sql 에 EXCEL 을 등록하는 것만으로 이 줄이 자동 노출로 바뀐다.
-    excel: hasButton('EXCEL') ? undefined : false,
+    // EXCEL — admin 권한 게이트(CLAUDE.md §2 체크3 / N-07 (a)안, 2026-10-21 등록 확정).
+    //   권한이 있으면 키를 **통째로 생략**(`{}`)해 공용 SubTitle 기본 액션(GridAction.excelDownload)을
+    //   그대로 쓰고, 없을 때만 `excel: false` 로 숨긴다. 주의: `excel: undefined` 는 금지다 —
+    //   공용 SubTitle 이 `{...DefaultButtonActions, ...hotkeyConfig}`(SubTitle.tsx:202)로 병합하는데
+    //   스프레드는 **undefined 값 own 속성도 복사**하므로 기본 핸들러가 undefined 로 덮여 버튼이
+    //   떠도 onClick 이 죽는다(키 생략과 다르다). 형제 Workbench/ShipmentWorkingDay/SCP0123 과 동형.
+    ...(hasButton('EXCEL') ? {} : { excel: false as const }),
     // sort(F3)/filter(F4)/condition(F6)/resetCondition(F10) 은 생략 → 공용 기본동작 사용.
     // edit: AS-IS EditButton 모드토글은 미이식(asis_to_tobe.md §11) — HotkeyConfig 에 키 자체가 없다.
   };
@@ -345,7 +351,7 @@ export const ShipmentRequestSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
             type: 'alert',
             content: t(MSG.SELECT_FIRST, '_First, select {0}.').replace(
               '{0}',
-              t(LBL.MODEL, '_Model')
+              t(LBL.MODEL, '_Model/Nickname')
             ),
           })
         }
@@ -353,16 +359,21 @@ export const ShipmentRequestSemi = ({ tabId, title }: PageProps<MENU_ID>) => {
         onFocus={() => undefined}
       />
 
-      {/* PU03 Model 픽커 — AS-IS `SCM0002_ItembyDivisionPopup` 의 TO-BE 1:1 대응(design 02 §4.6).
-          `ItemByDivisionModal`(COM0008)·`MaterialByDivisionModal` 은 SP 가 달라 재사용 금지. */}
-      <ModelByDivisionPopup
+      {/* PU03 Model 픽커 — AS-IS tabIndex 의 `SCM0002_ItembyDivisionPopup` 대신 공용
+          `MaterialByDivisionModal`(COM0013) 로 교체하고 **다중 선택**(multiCheckbox)을 켠다.
+          AS-IS 와 다르게 적용하기로 한 결정(사용자 지시 2026-10-20, design 02 §5.7 에 기록).
+          다건 선택 시 ITEM_ID 를 콤마로 결합해 F3 Model(콤마 구분 다중 입력)에 싣는다.
+          scpModuleType 은 호출 화면 ID(SP 의 Operation Group 분기 기준) — COM0013 SP 의 'SSP0045'
+          분기 처리는 런타임 확인 필요(PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION). */}
+      <MaterialByDivisionModal
         open={modelPopupOpen}
-        onClose={() => setModelPopupOpen(false)}
-        onSelect={handleModelSelected}
-        params={{
+        modalClose={() => setModelPopupOpen(false)}
+        multiCheckbox
+        setSelectedValue={handleModelSelected}
+        preSearchParams={{
           divisionId: sc.divisionId,
-          projectCode: '',
-          scmSiteId: '',
+          operationGroup: '',
+          scpModuleType: MENU_ID,
           itemId: sc.itemId,
         }}
       />

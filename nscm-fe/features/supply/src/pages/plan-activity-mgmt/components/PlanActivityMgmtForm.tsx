@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown, SearchArea } from '@shared/components';
+import { CustomDropdown, SearchArea, sortOptionsBy } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
@@ -62,6 +62,49 @@ export const PlanActivityMgmtForm = ({ onSearch }: Props) => {
     }
   }, [noAuthDivision, setAlert, t]);
 
+  // 조회조건 기본 선택 — 각 콤보 로드 후 현재값이 옵션에 없으면 첫 항목 자동선택(사용자 요구 2026-10-19:
+  //   "조회조건 default 없음 → 첫 데이터 선택"). AS-IS 는 명시 기본값 없음(design 02 §4)이나 스펙 우선.
+  //   현재값 보유(has*)를 deps 에 넣어 Reset 으로 비어도 재선택되게 한다(형제 SCP0129 선례).
+  //   프로그램 선택이라 dirty confirm 은 건너뛰고, 권한 division 0건(비활성)이면 기본선택도 하지 않는다.
+  const firstDivision = divisionOptions[0]?.value;
+  const hasDivision = divisionOptions.some(o => o.value === sc.divisionId);
+  useEffect(() => {
+    if (noAuthDivision) return;
+    if (!hasDivision && firstDivision) setDivision(firstDivision);
+  }, [noAuthDivision, hasDivision, firstDivision, setDivision]);
+
+  // PlanGroup — 선택 Division 으로 필터된 옵션의 첫 항목(Division 기본선택 후 cascade 로 채워진다).
+  //   주의: CustomDropdown 이 sortBy='label' 로 표시만 정렬하므로, 기본선택도 같은 정렬의 첫 항목을
+  //   골라야 "보이는 첫째"와 일치한다(raw [0] 은 서버순서라 어긋남 — ESS_NAM 앞 ESS_NB 선택 사고).
+  const firstPlanGroup = sortOptionsBy(planGroupOptions, 'label')[0];
+  const firstPlanGroupValue = firstPlanGroup?.value;
+  const firstPlanGroupLabel = firstPlanGroup?.label;
+  const hasPlanGroup = planGroupOptions.some(o => o.value === sc.planGroupId);
+  useEffect(() => {
+    if (noAuthDivision) return;
+    if (sc.divisionId && !hasPlanGroup && firstPlanGroupValue) {
+      setSearchParams({ planGroupId: firstPlanGroupValue, planGroupName: firstPlanGroupLabel ?? '' });
+    }
+  }, [
+    noAuthDivision,
+    sc.divisionId,
+    hasPlanGroup,
+    firstPlanGroupValue,
+    firstPlanGroupLabel,
+    setSearchParams,
+  ]);
+
+  // Process — 정적 lookup(OPMZ_PRS_CD) 첫 항목(cascade 없음).
+  const firstProcessValue = processOptions[0]?.value;
+  const firstProcessLabel = processOptions[0]?.label;
+  const hasProcess = processOptions.some(o => o.value === sc.prsCd);
+  useEffect(() => {
+    if (noAuthDivision) return;
+    if (!hasProcess && firstProcessValue) {
+      setSearchParams({ prsCd: firstProcessValue, prsName: firstProcessLabel ?? '' });
+    }
+  }, [noAuthDivision, hasProcess, firstProcessValue, firstProcessLabel, setSearchParams]);
+
   // 조회영역 전체 비활성(AS-IS SetDivisionAuthCheck usrLayoutControl2 Enabled=false, design 01 §2 L2) —
   //   콤보 disabled 와 함께 Search 도 무동작으로 막는다(shared SearchArea 무수정 = 화면 함수 게이트).
   const handleSearch = () => {
@@ -115,10 +158,14 @@ export const PlanActivityMgmtForm = ({ onSearch }: Props) => {
                   options={planGroupOptions}
                   onChange={(_, picked) => {
                     const option = planGroupOptions.find(o => o.value === picked);
-                    // PlanGroup 변경 = 그리드 clear(store setSearchParams).
-                    setSearchParams({
-                      planGroupId: String(picked ?? ''),
-                      planGroupName: option?.label ?? '',
+                    // PlanGroup 변경 = 그리드 clear(store setSearchParams). 편집중(dirty)이면 MSG00704 confirm
+                    //   후에만 실행, 취소 시 controlled 콤보가 이전 PlanGroup 으로 복귀(Division 과 동일, commit 51d4e9fa 패턴).
+                    void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+                      if (!ok) return;
+                      setSearchParams({
+                        planGroupId: String(picked ?? ''),
+                        planGroupName: option?.label ?? '',
+                      });
                     });
                   }}
                 />

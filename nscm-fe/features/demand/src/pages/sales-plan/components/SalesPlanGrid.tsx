@@ -1222,7 +1222,12 @@ export const SalesPlanGrid = ({
   return (
     // <div className={styles.gridContainer}>
     <DataGrid
-      key={mainStaticColumns.map(c => c.colNm).join(',')}
+      // 금지: key={mainStaticColumns...} 로 재마운트하지 말 것. division 전환(40→81)으로 정적 컬럼
+      //   목록이 바뀌면 key 가 바뀌어 React 가 DataGrid 를 통째로 언마운트/재마운트한다. 그러면
+      //   itemsSourceChanged 의 capture->restore 필터 보존이 빈 그리드에서 돌아 복원 소스가 비고,
+      //   division 에 따라 메타가 달라지는 컬럼(DIVISION_ID 등)의 필터가 그대로 사라진다
+      //   (forecast-price/mkt-fcst 는 key 가 없어 인스턴스가 유지돼 정상 — 2026-10-27 사용자 리포트).
+      //   컬럼 변경은 공용 DataGrid 가 columnGroups 재대입으로 내부 처리하므로 재마운트가 불필요하다.
       className={styles.grid}
       gridRef={gridRef as never}
       gridFilterRef={gridFilterRef}

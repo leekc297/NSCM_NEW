@@ -4,6 +4,7 @@ import {
   CellType,
   type CellRangeEventArgs,
   type FlexGrid,
+  type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
@@ -18,6 +19,7 @@ import { ItemByDivisionModal, OwnerModal, TeamModal, ProjectModal } from '../../
 import type { MODAL_OWNER } from '../../../components/ownerModal/owner-modal.constants';
 import type { RESPONSE_SET } from '../sales-site-project-model.constants';
 import {
+  DM_PLANNER_LOCKED_BINDINGS_40,
   MAX_OWNER_COUNT,
   MENU_ID,
   MODEL_POPUP_COLUMNS,
@@ -172,6 +174,187 @@ export const SalesSiteProjectModelGrid = ({
     };
   }, [gridRef, data, resyncRow]);
 
+  // Cell/Car · Cell/Module 편집 시 Module/Car 계산 + 정수 검사 — AS-IS shtMainDataModel_Changed
+  //   (DMF0005_SaleSite_PjtModelMapping.cs L2674~2726) 이식. AS-IS 도 상단 그리드에만 있다.
+  //   Module/Car 는 원장에 없는 값이라(조회 SP 가 Cell/Car ÷ Cell/Module 로 계산) 화면에서만 채운다.
+  //   - 입력값 0 → 빈 값.
+  //   - 두 칸이 다 있으면 몫이 0보다 큰 정수여야 한다. 아니면 MSG00177 문구(TO-BE MSG01192) 후 세 칸 비움.
+  //     AS-IS 는 소수를 버리고 판정했지만 TO-BE 칸은 소수 입력이 되므로 소수도 정수 아님으로 막는다
+  //     (사용자 결정 2026-10-14 — 문구가 "정수이여야만 합니다").
+  //   - 한쪽만 있으면 Module/Car 만 비운다.
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    type Row = ResponseData<MENU_ID, SHEETS.PRODUCTION, RESPONSE_SET.PRODUCTION>;
+    const toNum = (value: unknown): number | null => {
+      if (value === null || value === undefined) return null;
+      const text = String(value as string | number).replace(/,/g, '').trim();
+      if (text === '') return null;
+      const num = Number(text);
+      return Number.isFinite(num) ? num : null;
+    };
+    const setCell = (row: Row, binding: string, value: number | null) => {
+      const rec = row as unknown as Record<string, WijmoPrimitive>;
+      editTrackerRef.current?.storeChange(row, binding, rec[binding], value);
+      rec[binding] = value;
+    };
+
+    const applyModulePerCar = (rowIndex: number, editedBinding?: string) => {
+      const row = GridUtils.getRow(grid, rowIndex) as Row | undefined;
+      if (!row) return;
+      const rec = row as unknown as Record<string, unknown>;
+      if (editedBinding && toNum(rec[editedBinding]) === 0) setCell(row, editedBinding, null);
+
+      const cellPerCar = toNum(rec.CELL_PER_CAR);
+      const cellPerModule = toNum(rec.CELL_PER_MODULE);
+      if (cellPerCar !== null && cellPerModule !== null) {
+        const valid =
+          Number.isInteger(cellPerCar) &&
+          Number.isInteger(cellPerModule) &&
+          cellPerCar > 0 &&
+          cellPerModule > 0 &&
+          cellPerCar % cellPerModule === 0;
+        if (!valid) {
+          void setAlert({
+            type: 'alert',
+            content: t(
+              'MSG01192',
+              '_Module/Car는 0보다 큰 정수이여야만 합니다. Cell/Car, Cell/Module 수량을 다시 입력 하십시오.'
+            ),
+          });
+          setCell(row, 'CELL_PER_CAR', null);
+          setCell(row, 'CELL_PER_MODULE', null);
+          setCell(row, 'MODULE_PER_CAR', null);
+        } else {
+          setCell(row, 'MODULE_PER_CAR', cellPerCar / cellPerModule);
+        }
+      } else if (toNum(rec.MODULE_PER_CAR) !== null) {
+        setCell(row, 'MODULE_PER_CAR', null);
+      }
+      resyncRow(row);
+      GridUtils.refreshRow(grid, rowIndex);
+    };
+
+    const isPerCarBinding = (binding: string | null | undefined) =>
+      binding === 'CELL_PER_CAR' || binding === 'CELL_PER_MODULE';
+
+    const handleEditEnded = (_sender: unknown, event: CellRangeEventArgs) => {
+      const binding = GridUtils.getBinding(grid, event.col);
+      if (!isPerCarBinding(binding)) return;
+      applyModulePerCar(event.row, binding as string);
+    };
+
+    // 붙여넣기는 영역 단위로 한 번 판정한다 — 두 칸을 함께 붙여넣을 때 첫 칸에서 옛 값과 엇갈려
+    //   잘못 경고하지 않도록, 셀 단위(pastedCell)가 아니라 붙여넣기가 끝난 뒤(pasted) 행마다 본다.
+    const handlePasted = (_sender: unknown, event: CellRangeEventArgs) => {
+      const range = event.range;
+      const cols: string[] = [];
+      for (let col = range.leftCol; col <= range.rightCol; col += 1) {
+        const binding = GridUtils.getBinding(grid, col);
+        if (isPerCarBinding(binding)) cols.push(binding as string);
+      }
+      if (cols.length === 0) return;
+      for (let rowIndex = range.topRow; rowIndex <= range.bottomRow; rowIndex += 1) {
+        const row = GridUtils.getRow(grid, rowIndex) as Record<string, unknown> | undefined;
+        if (!row) continue;
+        // 0 정리는 붙여넣은 칸 전부에 적용하고, 경고는 행당 한 번만 나간다(applyModulePerCar 1회).
+        cols.slice(1).forEach(binding => {
+          if (toNum(row[binding]) === 0) setCell(row as unknown as Row, binding, null);
+        });
+        applyModulePerCar(rowIndex, cols[0]);
+      }
+    };
+
+    grid.cellEditEnded.addHandler(handleEditEnded);
+    grid.pasted.addHandler(handlePasted);
+    return () => {
+      grid.cellEditEnded.removeHandler(handleEditEnded);
+      grid.pasted.removeHandler(handlePasted);
+    };
+    // data — 그리드 인스턴스가 첫 렌더 뒤에 생기므로, 위 Team 붙여넣기 핸들러와 같이 조회 때 다시 건다.
+  }, [gridRef, data, resyncRow, setAlert]);
+
+  // VMI LT 편집 시 같은 사업부 · Sales Site · Model 의 다른 프로젝트 행에도 같은 값을 넣고 수정 표시한다
+  //   — AS-IS shtMainDataModel_Changed (DMF0005_SaleSite_PjtModelMapping.cs L2728~2789) 이식.
+  //   VMI LT 는 원장(SCM_MST_SITE_ITEM.SCP_VMI_LT)에서 프로젝트와 무관하게 사이트 · 모델 단위로 맞추는
+  //   값이라, 저장 SP 도 사업부 · 사이트 · 모델 기준으로 모든 프로젝트 행을 갱신한다(PKG_DMF0005
+  //   BODY 1225~1233행). 화면에서 한 행만 고치면 저장 뒤 재조회해야 다른 행이 맞춰지고, 같은
+  //   모델의 다른 행을 함께 고쳐 저장하면 행 순서대로 갱신되다 예전 값으로 되덮일 수 있었다
+  //   (통합테스트 지적 2026-10-13). 여기서 같은 묶음 전부를 같은 값으로 맞춰 두면 저장 행끼리
+  //   값이 같아 어느 순서로 갱신돼도 결과가 같다.
+  //   - 사이트 키: 40 은 SCM_SITE_ID40, 그 외는 SCM_SITE_ID (AS-IS 와 같음). 비교는 저장 SP 와 같이
+  //     대소문자 · 앞뒤 공백 무시.
+  //   - AS-IS 는 같은 사이트가 이어진 구간만 훑었지만(정렬 전제), 여기서는 필터로 가려진 행까지
+  //     그리드 소스 전체를 본다. 정렬 상태와 무관하게 같은 결과를 내기 위해서다.
+  //   - 복사된 행은 storeChange 로 기록해 CRUD_TYPE 'M' 이 되고 저장 대상에 들어간다. 값이 이미
+  //     같은 행은 건드리지 않는다.
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    type Row = ResponseData<MENU_ID, SHEETS.PRODUCTION, RESPONSE_SET.PRODUCTION>;
+    const norm = (value: unknown): string =>
+      String((value as string | number | null | undefined) ?? '')
+        .trim()
+        .toUpperCase();
+    const siteOf = (rec: Record<string, unknown>): string =>
+      norm(rec.DIVISION_ID) === '40'
+        ? norm(rec.SCM_SITE_ID40 ?? rec.SCM_SITE_ID)
+        : norm(rec.SCM_SITE_ID);
+
+    const syncVmiLt = (rowIndex: number) => {
+      const edited = GridUtils.getRow(grid, rowIndex) as Row | undefined;
+      if (!edited) return;
+      const editedRec = edited as unknown as Record<string, WijmoPrimitive>;
+      const value = editedRec.VMI_LT;
+      const division = norm(editedRec.DIVISION_ID);
+      const site = siteOf(editedRec);
+      const item = norm(editedRec.ITEM_ID);
+      if (!site || !item) return;
+
+      const source: Row[] = grid.collectionView?.sourceCollection ?? [];
+      let touched = false;
+      source.forEach(row => {
+        if (row === edited) return;
+        const rec = row as unknown as Record<string, WijmoPrimitive>;
+        if (norm(rec.DIVISION_ID) !== division || siteOf(rec) !== site || norm(rec.ITEM_ID) !== item)
+          return;
+        if (String(rec.VMI_LT ?? '') === String(value ?? '')) return;
+        editTrackerRef.current?.storeChange(row, 'VMI_LT', rec.VMI_LT, value);
+        rec.VMI_LT = value;
+        resyncRow(row);
+        touched = true;
+      });
+      if (touched) grid.invalidate();
+    };
+
+    const handleVmiEditEnded = (_sender: unknown, event: CellRangeEventArgs) => {
+      if (GridUtils.getBinding(grid, event.col) !== 'VMI_LT') return;
+      syncVmiLt(event.row);
+    };
+
+    // 붙여넣기도 같은 규칙 — VMI LT 열이 포함된 영역이면 붙여넣은 행마다 묶음을 맞춘다.
+    const handleVmiPasted = (_sender: unknown, event: CellRangeEventArgs) => {
+      const range = event.range;
+      let hasVmi = false;
+      for (let col = range.leftCol; col <= range.rightCol; col += 1) {
+        if (GridUtils.getBinding(grid, col) === 'VMI_LT') hasVmi = true;
+      }
+      if (!hasVmi) return;
+      for (let rowIndex = range.topRow; rowIndex <= range.bottomRow; rowIndex += 1) {
+        syncVmiLt(rowIndex);
+      }
+    };
+
+    grid.cellEditEnded.addHandler(handleVmiEditEnded);
+    grid.pasted.addHandler(handleVmiPasted);
+    return () => {
+      grid.cellEditEnded.removeHandler(handleVmiEditEnded);
+      grid.pasted.removeHandler(handleVmiPasted);
+    };
+  }, [gridRef, data, resyncRow]);
+
   const handleTeamSelected = (teamId: string, teamName?: string) => {
     if (!clickedDataItem) return;
 
@@ -220,34 +403,9 @@ export const SalesSiteProjectModelGrid = ({
       clickedDataItem.OWNER = owners;
       clickedDataItem.OWNER_NAME = ownersNames;
 
-      // Team(DEPT_ID/TEAM_NAME)은 비어 있을 때만 담당자 소속으로 채운다.
-      //   COM0004(owner popup) 결과에 담당자 소속(DEPT_ID/DEPT_NAME_KO)이 함께 내려와 별도 조회가
-      //   필요없다. 다만 행의 Team 은 담당자 소속과 별개로 관리하는 값이라, 이미 값이 있으면
-      //   Owner 만 바꿔도 Team 이 덮어써지는 사고가 났다 - 채워져 있으면 건드리지 않는다.
-      //   저장 키인 DEPT_ID 를 기준으로 판정한다(TEAM_NAME 은 표시용).
-      //   Team 을 직접 바꾸려면 Team 컬럼 더블클릭(TeamModal)을 쓴다.
-      //   다중 선택이면 소속이 있는 첫 담당자 기준 - 소속이 비면 기존 팀 값을 지우지 않는다.
-      const ownerWithDept = selectedUsers.find(item => !!item.DEPT_ID);
-      if (!clickedDataItem.DEPT_ID && ownerWithDept) {
-        const deptId = ownerWithDept.DEPT_ID;
-        const deptName = ownerWithDept.DEPT_NAME_KO ?? '';
-
-        editTrackerRef.current?.storeChange(
-          clickedDataItem,
-          'DEPT_ID',
-          clickedDataItem.DEPT_ID,
-          deptId
-        );
-        editTrackerRef.current?.storeChange(
-          clickedDataItem,
-          'TEAM_NAME',
-          clickedDataItem.TEAM_NAME,
-          deptName
-        );
-
-        clickedDataItem.DEPT_ID = deptId;
-        clickedDataItem.TEAM_NAME = deptName;
-      }
+      // Team(DEPT_ID/TEAM_NAME)은 Owner 선택으로 채우지 않는다(2026-10-26 요청 — AS-IS 는 담당자 소속을
+      //   넣었다). Team 은 Team 컬럼 더블클릭(TeamModal)으로만 입력하고, 비어 있으면 저장 시 필수
+      //   검증(TEAM_NAME INPUT_TP_CD M)에서 막는다.
     }
 
     resyncRow(clickedDataItem);
@@ -364,8 +522,9 @@ export const SalesSiteProjectModelGrid = ({
     if (hasPurchaseChanges()) {
       void setAlert({
         type: 'alert',
-        // 백엔드 메시지 코드가 아직 없어 MSG_NO_CHANGE 처럼 임시 키 + 기본문구로 둔다.
-        content: t('MSG_PURCHASE_EDITING', 'Purchase 수정 중이라 조회할 수 없습니다.'),
+        // 갭분석 F-23(2026-10-16): 미등록 임시 키 MSG_PURCHASE_EDITING 대신 같은 뜻으로 KO/EN/CN 등록된
+        //   MSG01148 '{0}를 수정 중이어서 조회를 할 수 없습니다.'({0}=Purchase)를 쓴다.
+        content: t('MSG01148', '_{0}를 수정 중이어서 조회를 할 수 없습니다.').replace('{0}', 'Purchase'),
       });
       return;
     }
@@ -378,6 +537,38 @@ export const SalesSiteProjectModelGrid = ({
       activeFlag: dataItem.VALID_YN,
     });
   };
+
+  // 40 DM Planner 칸 잠금 (갭분석 F-26) — EDIT_FLAG3='Y' 인 기존 행의 10칸(DM_PLANNER_LOCKED_BINDINGS_40)은 편집 · 붙여넣기 · 지우기 불가, 편집색도 뺀다.
+  //   공용 판정(GridUtils.isEditableCell)은 행 단위 EDIT_FLAG 만 보므로 칸 단위 잠금은 화면이 맡는다.
+  //   필수: 공용 DataGrid 의 편집 판정 핸들러(그리드 생성 시 등록)보다 뒤에 등록돼야 cancel 이 덮이지 않는다 —
+  //   그래서 initialized 가 아니라 이 effect 에서 붙인다(NnMasterMappingGrid 와 같은 순서 전제).
+  //   신규 행(CRUD_TYPE='I')은 SP 가 EDIT_FLAG3 을 주지 않아 대상이 아니다(AS-IS 도 InsertRowLockRangeMain40 별도).
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const isLocked = (row: number, col: number) => {
+      const item = GridUtils.getRow(grid, row) as WijmoRowItem | undefined;
+      if (!item || item.DIVISION_ID !== '40' || item.EDIT_FLAG3 !== 'Y') return false;
+      if (item.CRUD_TYPE === CRUD_TYPE.INSERT) return false;
+      return DM_PLANNER_LOCKED_BINDINGS_40.has(String(GridUtils.getBinding(grid, col) ?? ''));
+    };
+    const cancelIfLocked = (_: FlexGrid, e: CellRangeEventArgs) => {
+      if (isLocked(e.row, e.col)) e.cancel = true;
+    };
+    const unmarkLocked = (_: FlexGrid, e: FormatItemEventArgs) => {
+      if (e.panel.cellType !== CellType.Cell) return;
+      if (isLocked(e.row, e.col)) e.cell.classList.remove('wj-cell-editable');
+    };
+    grid.beginningEdit.addHandler(cancelIfLocked);
+    grid.pastingCell.addHandler(cancelIfLocked);
+    grid.formatItem.addHandler(unmarkLocked);
+    grid.invalidate();
+    return () => {
+      grid.beginningEdit.removeHandler(cancelIfLocked);
+      grid.pastingCell.removeHandler(cancelIfLocked);
+      grid.formatItem.removeHandler(unmarkLocked);
+    };
+  }, [gridRef, data]);
 
   return (
     <>

@@ -9,6 +9,7 @@ import { type MutableRefObject, useCallback, useEffect, useMemo, useRef, useStat
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { DataGrid } from '@shared/components';
 
+import { usePinDashDateFormat } from '../../../hooks/usePinDashDateFormat';
 import {
   CHANGE_TYPE_PLAN,
   MENU_ID,
@@ -77,6 +78,9 @@ export const ShipmentChangeRequestConfirmSsp0003SubGrid = ({
     () => applyChangeTypeBranch(buildColumns(adminColumns, true), changeType),
     [adminColumns, changeType]
   );
+  // 날짜 컬럼 형식을 조회값과 같은 대시(yyyy-MM-dd)로 고정 — 공용 getFormat 은 점 형식을 준다.
+  //   ETD/ETA/NEW_*/SHIPMENT_DATE(FPDate) 6열이 대상이다. 전열 조회전용이라 예방 성격이다.
+  usePinDashDateFormat(gridRef, columns);
   const comboParams = useMemo(
     () => ({ mnuId: `'${MENU_ID}'`, divisionId: `'${division}'` }),
     [division]

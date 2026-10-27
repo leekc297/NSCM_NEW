@@ -200,7 +200,7 @@ export const LBL = {
   MODEL: 'LBL00669', // Item ID 라벨 = "Model"(AS-IS Designer). 임의 "Item" 변경 금지.
   MODEL_NICKNAME: 'LBL00618', // 조회조건 Model/Nickname 라벨.
   NICK_NAME: 'LBL00767',
-  BOD_ITEM_VALID: 'LBL01054',
+  BOD_ITEM_ACTIVE: 'LBL01054',
   PLAN_GROUP: 'LBL00002',
   ACTIVE: 'LBL00007',
   NO: 'LBL00674',

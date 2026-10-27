@@ -1,0 +1,1041 @@
+[
+ {
+  "screen": "SSP0029",
+  "title": "Shipment Plan(Pack)",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0029_ShipmentPlanPackPopup.cs:447",
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0029_ShipmentPlanPack.cs:9440"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0029_ShipmentPlanPackPopup.Designer.cs:960",
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0029_ShipmentPlanPack.Designer.cs:1654"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_PSI_COMMENTS",
+    "member": "SaveData",
+    "line": "333",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0029_ShipmentPlanPackPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1995",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_PSI_PACKER_PAST",
+    "member": "FindData_Main_Packer_Past",
+    "line": "2123",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P3_not_in_foxquery",
+    "status": "NOT_IN_FOXQUERY"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_PSI_PACKER",
+    "member": "FindData_Main_Packer",
+    "line": "2242",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P3_not_in_foxquery",
+    "status": "NOT_IN_FOXQUERY"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_PSI",
+    "member": "FindData_Main",
+    "line": "2366",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_CONFIRM_DETAIL",
+    "member": "FindData_Detail",
+    "line": "2959",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_CONFIRM_DETAIL",
+    "member": "FindData_Detail",
+    "line": "3097",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_CONFIRM_DETAIL_PACKER",
+    "member": "FindData_Detail_Packer_btnSearch",
+    "line": "3233",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P3_not_in_foxquery",
+    "status": "NOT_IN_FOXQUERY"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_CONFIRM_DETAIL",
+    "member": "FindData_Detail_btnSearch",
+    "line": "3499",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_WH_STOCK",
+    "member": "FindData_WHstock",
+    "line": "3644",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_MES_STOCK",
+    "member": "FindData_mes_stock",
+    "line": "3761",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_BLOCK_STOCK",
+    "member": "FindData_block_stock",
+    "line": "3865",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_BLOCK_STOCK",
+    "member": "FindData_BolckStockDetail_btnSearch",
+    "line": "3988",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_STOCK_LOCATION_DETAIL",
+    "member": "FindData_shtStockLocationDetail_btnSearch",
+    "line": "4131",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SCS_STOCK",
+    "member": "FindData_ScsStock_btnSearch",
+    "line": "4231",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_MES_STOCK",
+    "member": "FindData_MesStock_btnSearch",
+    "line": "4322",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "member": "FindData_Request_Detail",
+    "line": "4434",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_PSI_COMMENTS",
+    "member": "FindData_WHinPlanDetail_btnSearch",
+    "line": "4517",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_RESULT_PACKER",
+    "member": "FindData_ShipmentSCSResult_btnSearch",
+    "line": "4626",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P3_not_in_foxquery",
+    "status": "NOT_IN_FOXQUERY"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_RESULT",
+    "member": "FindData_ShipmentResult_btnSearch",
+    "line": "4738",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_PSI",
+    "member": "SaveData_Main",
+    "line": "5206",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER",
+    "member": "SaveData_Detail_Packer",
+    "line": "5396",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P3_not_in_foxquery",
+    "status": "NOT_IN_FOXQUERY"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "member": "SaveData_Detail",
+    "line": "5614",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_BLOCK_STOCK_DATA",
+    "member": "SaveData_Detail",
+    "line": "5780",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_MES_STOCK",
+    "member": "SaveData_Detail",
+    "line": "5881",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_MES_STOCK",
+    "member": "SaveData_Detail",
+    "line": "5988",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "member": "NonSoNo",
+    "line": "6486",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER",
+    "member": "NonSoNo",
+    "line": "6490",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P3_not_in_foxquery",
+    "status": "NOT_IN_FOXQUERY"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "member": "SoNo",
+    "line": "6717",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER",
+    "member": "SoNo",
+    "line": "6721",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P3_not_in_foxquery",
+    "status": "NOT_IN_FOXQUERY"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_ERP_SO_NO_CNT",
+    "member": "GetErpSoNoCnt",
+    "line": "6824",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_STATUS",
+    "member": "GetShipmentStatusChk",
+    "line": "6849",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_DELETE_SHIPMENT_REQUEST_DRAFTING",
+    "member": "GetErpIFCheck",
+    "line": "6924",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "7400",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+    "member": "EngProcessingChk",
+    "line": "7427",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "8760",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "8815",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "8857",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "member": "NewNonSoNo",
+    "line": "9179",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER",
+    "member": "NewNonSoNo",
+    "line": "9183",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P3_not_in_foxquery",
+    "status": "NOT_IN_FOXQUERY"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_DELETE_SHIPMENT_REQUEST_DRAFTING",
+    "member": "GetErpIFCheckNew",
+    "line": "9299",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0202_GET_SCS_CONFIRM_ID_CHECK",
+    "member": "chkSaveYN",
+    "line": "9389",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_PSI_COMMENTS",
+    "member": "SaveData",
+    "line": "333",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0029_ShipmentPlanPackPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1995",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_PSI",
+    "member": "FindData_Main",
+    "line": "2366",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_CONFIRM_DETAIL",
+    "member": "FindData_Detail",
+    "line": "2959",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_CONFIRM_DETAIL",
+    "member": "FindData_Detail",
+    "line": "3097",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_CONFIRM_DETAIL",
+    "member": "FindData_Detail_btnSearch",
+    "line": "3499",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_WH_STOCK",
+    "member": "FindData_WHstock",
+    "line": "3644",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_MES_STOCK",
+    "member": "FindData_mes_stock",
+    "line": "3761",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_BLOCK_STOCK",
+    "member": "FindData_block_stock",
+    "line": "3865",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_BLOCK_STOCK",
+    "member": "FindData_BolckStockDetail_btnSearch",
+    "line": "3988",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_STOCK_LOCATION_DETAIL",
+    "member": "FindData_shtStockLocationDetail_btnSearch",
+    "line": "4131",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SCS_STOCK",
+    "member": "FindData_ScsStock_btnSearch",
+    "line": "4231",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_MES_STOCK",
+    "member": "FindData_MesStock_btnSearch",
+    "line": "4322",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "member": "FindData_Request_Detail",
+    "line": "4434",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_PSI_COMMENTS",
+    "member": "FindData_WHinPlanDetail_btnSearch",
+    "line": "4517",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_RESULT",
+    "member": "FindData_ShipmentResult_btnSearch",
+    "line": "4738",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_PSI",
+    "member": "SaveData_Main",
+    "line": "5206",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "member": "SaveData_Detail",
+    "line": "5614",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_BLOCK_STOCK_DATA",
+    "member": "SaveData_Detail",
+    "line": "5780",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_MES_STOCK",
+    "member": "SaveData_Detail",
+    "line": "5881",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_MES_STOCK",
+    "member": "SaveData_Detail",
+    "line": "5988",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "member": "NonSoNo",
+    "line": "6486",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "member": "SoNo",
+    "line": "6717",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_ERP_SO_NO_CNT",
+    "member": "GetErpSoNoCnt",
+    "line": "6824",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_GET_SHIPMENT_STATUS",
+    "member": "GetShipmentStatusChk",
+    "line": "6849",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_DELETE_SHIPMENT_REQUEST_DRAFTING",
+    "member": "GetErpIFCheck",
+    "line": "6924",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "7400",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+    "member": "EngProcessingChk",
+    "line": "7427",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "8760",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "8815",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "8857",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "member": "NewNonSoNo",
+    "line": "9179",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0029_DELETE_SHIPMENT_REQUEST_DRAFTING",
+    "member": "GetErpIFCheckNew",
+    "line": "9299",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0202_GET_SCS_CONFIRM_ID_CHECK",
+    "member": "chkSaveYN",
+    "line": "9389",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0029_ShipmentPlanPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "PR_DM_SSP_CONFIRM_SYNC",
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCM0001_GET_DIVISION",
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCM0001_GET_SCP_DAY_PERIOD / SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+   "SSP0026_GET_REQUEST_DETAIL_PACK",
+   "SSP0029_DELETE_SHIPMENT_REQUEST_DRAFTING",
+   "SSP0029_GET_BLOCK_STOCK",
+   "SSP0029_GET_ERP_SO_NO_CNT",
+   "SSP0029_GET_MES_STOCK",
+   "SSP0029_GET_SCS_STOCK",
+   "SSP0029_GET_SHIPMENT_CONFIRM_DETAIL",
+   "SSP0029_GET_SHIPMENT_CONFIRM_DETAIL_PACKER",
+   "SSP0029_GET_SHIPMENT_PSI",
+   "SSP0029_GET_SHIPMENT_PSI_COMMENTS",
+   "SSP0029_GET_SHIPMENT_PSI_PACKER",
+   "SSP0029_GET_SHIPMENT_PSI_PACKER_PAST",
+   "SSP0029_GET_SHIPMENT_RESULT",
+   "SSP0029_GET_SHIPMENT_RESULT_PACKER",
+   "SSP0029_GET_SHIPMENT_STATUS",
+   "SSP0029_GET_STOCK_LOCATION_DETAIL",
+   "SSP0029_GET_WH_STOCK",
+   "SSP0029_SAVE_BLOCK_STOCK_DATA",
+   "SSP0029_SAVE_MES_STOCK",
+   "SSP0029_SAVE_SHIPMENT_PSI",
+   "SSP0029_SAVE_SHIPMENT_PSI_COMMENTS",
+   "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+   "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40 / SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+   "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER",
+   "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+   "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER",
+   "SSP0202_GET_SCS_CONFIRM_ID_CHECK"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+    "sp": "SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "RUNNING",
+    "desc": "SSP Daily Plan 엔진이 수행 중(PLAN_STATUS=0)인지와 예상 남은 시간(분)을 반환",
+    "message": null,
+    "on_fail": "PLAN_STATUS='Y'(수행중) 와 예상 잔여분 반환 — UI 가 저장/확정 차단 판단"
+   },
+   {
+    "entry_sp": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "sp": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "RANGE",
+    "desc": "확정(CONFIRM_ID 존재)된 건 또는 출하일이 현재일+Ship Frozen 기간 이내인 건은 편집 불가 플래그 N",
+    "message": null,
+    "on_fail": "EDIT_FLAG='N' 반환(UI 편집 불가 판정용)"
+   },
+   {
+    "entry_sp": "SSP0029_DELETE_SHIPMENT_REQUEST_DRAFTING",
+    "sp": "SSP0029_DELETE_SHIPMENT_REQUEST_DRAFTING",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 처리",
+    "message": "F + 오류메시지",
+    "on_fail": "scm_sys_log_batch INSERT; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SSP0029_GET_ERP_SO_NO_CNT",
+    "sp": "SSP0029_GET_ERP_SO_NO_CNT",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "COUNT",
+    "desc": "ERP SO 번호에 연결된 수량 0 아닌 Confirm 건수 반환",
+    "message": null,
+    "on_fail": "건수 반환(판정은 UI)"
+   },
+   {
+    "entry_sp": "SSP0029_GET_SHIPMENT_STATUS",
+    "sp": "SSP0029_GET_SHIPMENT_STATUS",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "선택 Confirm ID 중 확정(C) 아닌 건 목록 반환",
+    "message": null,
+    "on_fail": "해당 CONFIRM_ID 목록을 결과셋1로 반환"
+   },
+   {
+    "entry_sp": "SSP0029_GET_SHIPMENT_STATUS",
+    "sp": "SSP0029_GET_SHIPMENT_STATUS",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "QTY",
+    "desc": "선택 Confirm ID 중 수량 0 건 목록 반환",
+    "message": null,
+    "on_fail": "해당 CONFIRM_ID 목록을 결과셋2로 반환"
+   },
+   {
+    "entry_sp": "SSP0029_GET_SHIPMENT_STATUS",
+    "sp": "SSP0029_GET_SHIPMENT_STATUS",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "선택 Confirm ID 중 ERP 완료(C) 건 목록 반환",
+    "message": null,
+    "on_fail": "해당 CONFIRM_ID 목록을 결과셋3로 반환"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_BLOCK_STOCK_DATA",
+    "sp": "SSP0029_SAVE_BLOCK_STOCK_DATA",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 처리",
+    "message": "F + 오류메시지",
+    "on_fail": "scm_sys_log_batch INSERT; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_MES_STOCK",
+    "sp": "SSP0029_SAVE_MES_STOCK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 처리",
+    "message": "F + 오류메시지",
+    "on_fail": "scm_sys_log_batch INSERT; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_PSI",
+    "sp": "SSP0029_SAVE_SHIPMENT_PSI",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 처리",
+    "message": "F + err_code/err_message",
+    "on_fail": "scm_sys_log_batch INSERT; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_PSI_COMMENTS",
+    "sp": "SSP0029_SAVE_SHIPMENT_PSI_COMMENTS",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 트랜잭션 롤백 후 F 반환",
+    "message": "F + err_code/err_message",
+    "on_fail": "IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION PSI_CMT; scm_sys_log_batch INSERT; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_mess"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "변경 운송조건·출하일·품목에 유효 BOD 가 없으면 중단",
+    "message": "X",
+    "on_fail": "SELECT 'X' AS result_code, NULL AS Request_no; RETURN;"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 처리",
+    "message": "F + ERR_MESSAGE",
+    "on_fail": "scm_sys_log_batch INSERT; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE() AS ERR_MESSAGE"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "sp": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "변경 운송조건·품목에 유효 BOD 가 없으면 중단",
+    "message": "X",
+    "on_fail": "SELECT 'X' AS result_code, NULL AS Request_no; RETURN;"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "sp": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 처리",
+    "message": "F + 오류메시지",
+    "on_fail": "scm_sys_log_batch INSERT; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SSP0202_GET_SCS_CONFIRM_ID_CHECK",
+    "sp": "SSP0202_GET_SCS_CONFIRM_ID_CHECK",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "선택 Confirm 중 SCS 출하실적이 이미 수신된 건수 반환 — 실적 있는 건 변경 차단 판단용",
+    "message": null,
+    "on_fail": "건수 CNT 결과셋 1 반환(판정은 UI)"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "PR_DM_SSP_CONFIRM_SYNC",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "RANGE",
+    "desc": "운영 DB 에서는 월요일 07:50~23:55 사이에만 MKT FCST 동기화 수행",
+    "message": null,
+    "on_fail": "RETURN; (조용히 종료, 동기화 미실행)"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "PR_DM_SSP_CONFIRM_SYNC",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "CONSISTENCY",
+    "desc": "40(소형) 사업부가 아니면 동기화 없이 종료",
+    "message": null,
+    "on_fail": "RETURN;"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "PR_DM_SSP_CONFIRM_SYNC",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "REQUIRED",
+    "desc": "동기화 일수 룩업이 없거나 1 미만이면 동기화 중단",
+    "message": "LOOKUP 정보가 없습니다.",
+    "on_fail": "SET @V_LOG_TYPE = 'END'; SET @V_DESCRIPTION = N'LOOKUP 정보가 없습니다.'; GOTO ERR_RTN (END 로그 후 종료)"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "PR_DM_SSP_CONFIRM_SYNC",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 롤백 후 로그만 기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRAN SALES_SITE_MODEL_PRODUCTION; ERROR 로그 (메시지 SELECT 는 주석)"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 롤백 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블에만 기록)",
+    "on_fail": "ROLLBACK, 에러 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그만 남기고 종료",
+    "message": "ERROR_MESSAGE() (로그만)",
+    "on_fail": "scm_sys_log_batch 에 ERROR INSERT; IF @@TRANCOUNT > 0 COMMIT WORK"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "PR_SSP_MAIL_SEND_ADJUST_MST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "메일 대상이 0건이면 발송 없이 종료",
+    "message": null,
+    "on_fail": "END 로그 후 RETURN;"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "PR_SSP_MAIL_SEND_ADJUST_MST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그·메일 오류 로그만 남기고 종료",
+    "message": "ERROR_MESSAGE() (로그만)",
+    "on_fail": "scm_sys_log_batch ERROR INSERT; COMMIT WORK; SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG 'ERROR' 'MAIN ERROR'"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "FN_NEXT_DAY",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "FORMAT",
+    "desc": "요일 코드가 SUN~SAT 이 아니면 NULL 반환(계산 중단)",
+    "message": null,
+    "on_fail": "RETURN NULL"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "sp": "PR_SCP_SYS_LOG_BATCH",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백하고 오류 내용을 별도 트랜잭션으로 로그 테이블에 다시 기록",
+    "message": "ERROR_MESSAGE() (로그 테이블 기록)",
+    "on_fail": "ROLLBACK TRANSACTION PR_SCP_SYS_LOG_BATCH; BEGIN TRANSACTION PR_SCP_SYS_LOG_BATCH2; INSERT INTO scm_sys_log_batch VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_M"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 -1 반환",
+    "message": null,
+    "on_fail": "RETURN -1"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "PR_SSP_MAIL_SEND_ADJUST_SUB",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "메일 발송 실패 시 로그만 기록",
+    "message": "ERROR_MESSAGE() (로그만)",
+    "on_fail": "scm_sys_log_batch ERROR INSERT; IF @@TRANCOUNT > 0 COMMIT WORK"
+   },
+   {
+    "entry_sp": "SSP0029_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "sp": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "발송 로그 저장 실패 시 오류 로그 후 F 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER+']'+ERROR_MESSAGE()"
+   }
+  ]
+ }
+]

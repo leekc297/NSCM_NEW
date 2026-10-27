@@ -1,0 +1,40 @@
+[
+ {
+  "screen": "SCP0105",
+  "title": "Speed Plan",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0105_CAPA_Speed_Plan/SCP0105_CAPA_Speed_Plan.cs:3178"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0105_CAPA_Speed_Plan/SCP0105_CAPA_Speed_Plan.Designer.cs:1096"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/capa-speed-plan"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "1316",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0105_CAPA_Speed_Plan\\SCP0105_CAPA_Speed_Plan.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "1316",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0105_CAPA_Speed_Plan\\SCP0105_CAPA_Speed_Plan.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0104_GET_SPREAD_TITLE"
+  ],
+  "db_validation_brief": []
+ }
+]

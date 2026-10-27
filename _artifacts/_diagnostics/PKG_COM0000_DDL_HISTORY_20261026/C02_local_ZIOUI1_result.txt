@@ -1,0 +1,65 @@
+================= §0 환경 지문 (QA / DEV 구분) =================
+
+DB_NAME      CON_NAME     SERVER_HOST          CONNECTED_AS RUN_AT
+------------ ------------ -------------------- ------------ -------------------
+ZIOUI1       ZIOUI1       localhost            SCM_MGR      2026-10-26 15:26:03
+
+================= §1 객체 현재 상태 (LAST_DDL = 마지막 1건만, 이력 아님) =================
+
+OBJECT_TYPE    STATUS   CREATED             LAST_DDL            SPEC_TIMESTAMP            LINES
+-------------- -------- ------------------- ------------------- -------------------- ----------
+PACKAGE        VALID    2026-10-09 13:38:26 2026-10-09 13:38:30 2026-10-06:16:44:16         220
+PACKAGE BODY   VALID    2026-10-09 13:38:50 2026-10-23 12:04:37 2026-10-23:12:04:37        4109
+
+
+선택된 레코드가 없습니다.
+
+================= §7 ⭐⭐ 정리표 — 누가 · 언제 · 무엇을 =================
+[A] 이벤트 정리표 (시간순) · [B] LAST_DDL 대조 · [C] 대상 멤버 변경 상세(직전 버전 대비 줄 단위 -삭제 / +추가)
+※ 출처: AUDIT = Unified Audit(원문 보존) / AWR = DBA_HIST_SQLTEXT(원문 보존) / ASH = 세션 샘플(원문 없음)
+※ 비교는 공백·들여쓰기 정규화 후 줄 단위 · 줄 순서 이동만 있는 경우는 변경으로 잡지 않음
+[A] 이벤트 정리표 — PKG_COM0000 · 대상 멤버 P_COM0003_GET_STORAGE_BY_DIVISION_POPUP
+    수행 주체 = 실행 프로그램·원문 흔적 기준 추정 — 사람(GUI DB 도구 직접 실행) / AI·자동화(스크립트 런타임·AI 마커) / 구분 불가(sqlplus·JDBC 등)
+No   | 언제                         | 출처  | DB계정     | OS사용자                 | PC                       | 프로그램                                         | DDL                 | 수행 주체(근거)                                                        | 무엇을
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#1   | 2026-10-10 12:31:46          | AUDIT | SYS        | oracle                   | localhost.localdomain    | sqlplus@localhost.localdomain (TNS V1-V3)        | CREATE PACKAGE BODY | 구분 불가 — DB 서버 콘솔 SYS sqlplus 스크립트 (DBA·배치 적용)          | 기준본 (기간 내 첫 원문 · 비교 대상 없음) · 멤버 67줄
+#2   | 2026-10-10 12:35:42          | AUDIT | SYS        | oracle                   | localhost.localdomain    | sqlplus@localhost.localdomain (TNS V1-V3)        | CREATE PACKAGE BODY | 구분 불가 — DB 서버 콘솔 SYS sqlplus 스크립트 (DBA·배치 적용)          | 멤버 변경 없음 (다른 멤버 수정 또는 동일본 재생성)
+#3   | 2026-10-10 12:38:26          | AUDIT | SYS        | oracle                   | localhost.localdomain    | sqlplus@localhost.localdomain (TNS V1-V3)        | CREATE PACKAGE BODY | 구분 불가 — DB 서버 콘솔 SYS sqlplus 스크립트 (DBA·배치 적용)          | ★ 멤버 변경 : -1줄 / +1줄 → [C] 상세 · 내용 작성 태그 [2026.10.01] AJS(실행자와 다를 수 있음)
+#4   | 2026-10-12 19:18:17          | AUDIT | SYS        | oracle                   | localhost.localdomain    | sqlplus@localhost.localdomain (TNS V1-V3)        | CREATE PACKAGE BODY | 구분 불가 — DB 서버 콘솔 SYS sqlplus 스크립트 (DBA·배치 적용)          | ★ 멤버 변경 : -6줄 / +6줄 → [C] 상세
+#5   | 2026-10-19 18:13:33          | ASH   | SCM_MGR    | POJ(PC기준)              | DESKTOP-N00HD67          | C:\Users\POJ\AppData\Local\Programs\Python\Pytho | DROP PACKAGE        | AI·자동화 추정 — python 스크립트 실행                                  | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#6   | 2026-10-19 18:27:54          | ASH   | SCM_MGR    | POJ(PC기준)              | DESKTOP-N00HD67          | C:\Users\POJ\AppData\Local\Programs\Python\Pytho | CREATE PACKAGE BODY | AI·자동화 추정 — python 스크립트 실행                                  | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#7   | 2026-10-20 17:23:47          | ASH   | SCM_MGR    | jinseon_ahn(PC기준)      | LGENSOL\P2605LN0024      | powershell.exe                                   | CREATE PACKAGE BODY | AI·자동화 추정 — PowerShell 스크립트 실행                              | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#8   | 2026-10-21 18:43:21          | ASH   | SCM_MGR    | SUNGHAN.JUNG(PC기준)     | DESKTOP-BMHBA84          | DBeaver 26?2?0 ? Main                            | CREATE PACKAGE BODY | 사람 — DBeaver 객체 편집기 저장·컴파일                                 | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#9   | 2026-10-21 20:11:24          | ASH   | SCM_MGR    | gyucheol_lee(PC기준)     | P2605LN0006              | C:\Python3.11.5\python.exe                       | CREATE PACKAGE BODY | AI·자동화 추정 — python 스크립트 실행 · 본 파일 작성 PC(P2605LN0006)   | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#10  | 2026-10-21 20:12:04          | ASH   | SCM_MGR    | gyucheol_lee(PC기준)     | P2605LN0006              | C:\Python3.11.5\python.exe                       | ALTER PACKAGE BODY  | AI·자동화 추정 — python 스크립트 실행 · 본 파일 작성 PC(P2605LN0006)   | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#11  | 2026-10-23 10:56:36          | ASH   | SCM_MGR    | 신승훈(PC기준)           | DESKTOP-ELMPP0M          | DBeaver 26?1?4 ? Main                            | CREATE PACKAGE BODY | 사람 — DBeaver 객체 편집기 저장·컴파일                                 | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#12  | 2026-10-23 16:53:27          | ASH   | SCM_MGR    | jinseon_ahn(PC기준)      | P2605LN0024              | C:\Users\LGES\AppData\Local\Programs\Python\Pyth | CREATE PACKAGE BODY | AI·자동화 추정 — python 스크립트 실행                                  | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#13  | 2026-10-26 14:57:24          | ASH   | SCM_MGR    | gyucheol_lee(PC기준)     | P2605LN0006              | C:\Python3.11.5\python.exe                       | CREATE PACKAGE      | AI·자동화 추정 — python 스크립트 실행 · 본 파일 작성 PC(P2605LN0006)   | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    수행 주체 집계 : 사람 2건 / AI·자동화 추정 7건 / 구분 불가 4건 (전체 13건)
+
+[B] 현재 LAST_DDL 대조 (±10초 이내 이벤트가 있으면 그 이벤트가 마지막 변경)
+    PACKAGE       LAST_DDL=2026-10-09 13:38:30  → 일치 이벤트 없음 (감사·ASH 미포착 — 실행자·내용 DB 로 확인 불가 · GRANT/재컴파일도 갱신됨)
+    PACKAGE BODY  LAST_DDL=2026-10-23 12:04:37  → 일치 이벤트 없음 (감사·ASH 미포착 — 실행자·내용 DB 로 확인 불가 · GRANT/재컴파일도 갱신됨)
+
+[C] 대상 멤버 변경 상세 (직전 버전 대비 · - 삭제된 줄 / + 추가된 줄)
+#3  2026-10-10 12:38:26  [AUDIT] CREATE PACKAGE BODY  누가=SYS / OS=oracle / PC=localhost.localdomain / sqlplus@localhost.localdomain (TNS V1-V3
+      - /* [2026.10.01] AJS ������������(������ ������) ������ - ������ ��������� ��������� ������ ������ ������ ��������� (START) */
+      + /* [2026.10.01] AJS 복수조건(쉼표 구분) 조회 - 입력 원문과 쉼표로 쪼갠 값을 함께 견준다 (START) */
+#4  2026-10-12 19:18:17  [AUDIT] CREATE PACKAGE BODY  누가=SYS / OS=oracle / PC=localhost.localdomain / sqlplus@localhost.localdomain (TNS V1-V3
+      - S.STORAGE_ID LIKE '6%'
+      - OR S.STORAGE_ID LIKE 'A%'
+      - OR S.STORAGE_ID LIKE 'B%'
+      - OR (S.STORAGE_ID LIKE '799%' AND S.STORAGE_ID NOT IN ('7990', '7999'))
+      - AND (
+      - )
+      + -- AND (
+      + -- S.STORAGE_ID LIKE '6%'
+      + -- OR S.STORAGE_ID LIKE 'A%'
+      + -- OR S.STORAGE_ID LIKE 'B%'
+      + -- OR (S.STORAGE_ID LIKE '799%' AND S.STORAGE_ID NOT IN ('7990', '7999'))
+      + -- )
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+================= 끝 =================

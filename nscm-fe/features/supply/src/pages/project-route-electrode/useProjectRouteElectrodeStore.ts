@@ -29,7 +29,8 @@ interface ProjectRouteElectrodeAction {
   reset: () => void;
   setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
   // Search(F5) — MAIN 조회 커밋. ALL sentinel(plantSite/validFlag)은 SP DBNull 치환(design/02 §2-4).
-  setFilters: () => void;
+  //   authDivisionCsv = 권한 division CODE CSV(Form 의 MyDivision 콤보). divisionId='ALL' 일 때 사용.
+  setFilters: (authDivisionCsv?: string) => void;
   fetchStaticColumns: () => Promise<void>;
   setOpenSearchArea: (open?: boolean) => void;
 }
@@ -76,14 +77,17 @@ export const useProjectRouteElectrodeStore = createPersistedStoreWithTab<
         state.searchParams = next;
       }),
 
-    setFilters: () =>
+    setFilters: authDivisionCsv =>
       set(state => {
         const p = get().searchParams;
         // GET 파라미터(design/03 §4, P_GET_ProjectRoute_Electrode IN 7).
         //   ALL sentinel → 빈값(BE PROC 가 NULL 치환, design/02 §2-4). FROM/TO_YYYYMM 은
         //   AS-IS FindData 가 항상 "" 전송(design/03 §4) — 이 화면 조회조건에 기간 없음.
         state.filters[SHEETS.MAIN] = {
-          divisionId: p.divisionId,
+          // Division 'ALL'(전체선택)은 GET SP(BODY:144 'ALL'→NULL)가 권한을 무시하고 전 사업부를
+          //   반환하므로, AS-IS GetCheckedListValue 처럼 권한 division CODE CSV 로 펼쳐 보낸다
+          //   (부분선택 CSV 는 그대로 — SP 가 FN_STRING_SPLIT IN절 처리). [F-8]
+          divisionId: p.divisionId === ALL_SENTINEL ? (authDivisionCsv ?? '') : p.divisionId,
           plantSite: p.plantSite === ALL_SENTINEL ? '' : p.plantSite,
           operationGroup: p.operationGroup,
           itemId: p.itemId,

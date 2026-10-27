@@ -1,0 +1,97 @@
+# [Harness] SCP0007 bod — BLOCK 0 / WARN 95
+
+- WARN M05 구현 위치 파일 없음: D00-1-001 → BodForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-002 → BodForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-003 → BodForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-004 → BodForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-005 → BodForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-006 → BodForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-007 → BodForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-008 → BodForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-026 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-027 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-2-002 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-2-003 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-2-004 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-2-009 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-2-005 → BodGrid.tsx @__asis-mapping__.md
+- WARN M04 미구현: D00-2-006 §2 spdMain / EditChange — AS-IS `SpdMain_EditChange`(cs:1328-1353)의 2가지 동작 중 INCOTERMS_SSP 동기화(`BodGrid.tsx:237-244`)만 구현됨 — ROUTE_ID 직접편집 차단(`CancelCellEditing()`, cs:1330-1333)은 미구현(§D00-2-007과 동일 결함) @__asis-mapping__.md
+- WARN M04 미구현: D00-2-007 §2 spdMain / KeyPress — AS-IS `SpdMain_KeyPress`(cs:1322-1327)가 `ActiveColumnIndex==ROUTE_ID`일 때 `e.Handled=true`로 직접 키보드 입력을 막는다. TO-BE `BodGrid.tsx`에 ROUTE_ID 컬럼 편집 차단 로직이 없다(grep 0건) — 그리드 메타도 `CELL_CONTROL_OBJECT_TYPE_CODE` 미등록(ora.py 실측)이라 편집 자체를 막는 장치가 없다. ROUTE_ID는 팝업 선택으로만 채워져야 하는데 사용자가 직접 타이핑 가능한 상태 -- 중위험 — ROUTE_ID 직접 편집 시 Route 팝업 매칭 없는 값이 저장될 수 있음. `SpdMain_EditChange`의 `CancelCellEditing()`과 합쳐 재현 필요 @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-002 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-003 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-004 → BodGrid.tsx @__asis-mapping__.md
+- WARN M04 미구현: D00-3-009 §3 SetCellTypeCombo / (DIVISION_ID, dtMyDivision) — **신규 발견**: 신규행에서 DIVISION_ID를 "내 division 목록" 콤보로 제한하는 로직이 TO-BE에 없다(`BodGrid.tsx` grep 0건). DB 메타도 `CELL_CONTROL_OBJECT_TYPE_CODE`/`CELL_COMBO_DATA_TYPE` 둘 다 공란(ora.py 실측) — `03_grid-columns.md:118`도 "코드 전용 배선 필요"로 이미 명시했으나 실제 구현이 안 됐다. 조회조건 division이 정확히 1개일 때는 자동세팅+잠금(D00-3-016/017 구현됨)되어 영향 없지만, 다중/미선택 division으로 조회 후 신규행을 추가하면 DIVISION_ID가 자유 텍스트 입력이 되어 권한 없는 division 코드를 입력할 수 있다 -- 중위험 — 신규 발견, 권한 밖 division 입력 가능 @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-017 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-018 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-019 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-020 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-021 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-022 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-023 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-024 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-025 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-032 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-033 → BodGrid.tsx @__asis-mapping__.md
+- WARN M04 미구현: D00-3-034 §3 SetCellTypeCombo / (i,INCOTERMS_SSP, dtIncotermsEdit) — EditButton 진입 시 전행에 신규행 전용 콤보로 스왑하는 로직이나, TO-BE는 ATTRIBUTE9가 CRUD_TYPE='I'(신규행)에만 적용되고 기존행 재편집에는 적용되지 않는다. **토글 어포던스 미이식 결정(D00-3-027 등, §11)의 예외 대상 아님** — 이건 "어떤 컬럼이 잠겨야 하는가"라는 실질 잠금 범위 질문이라 계속 R1/R2 검증 대상(`kyr/screens/scp/bod-review-issues.md` #1과 동일 잔여 갭) — 기존행 재편집 시 dtIncotermsEdit 스왑 없음 @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-035 → BodGrid.tsx @__asis-mapping__.md
+- WARN M04 미구현: D00-3-036 §3 SetCellTypeCombo / (i,INCOTERMS_SSP, dtIncoterms) — D00-3-034와 동일 근거(EditButton 진입 시 원래 콤보로 복귀) — TO-BE는 이 스왑 자체가 없음(콤보는 조회조건과 동일한 `Incoterms` SQL_ID 고정, 단 §G18 대소문자 결함 별도). **토글 어포던스 미이식 결정의 예외 대상 아님**(D00-3-034와 동일 이유) @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-037 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-040 → BodGrid.tsx @__asis-mapping__.md
+- WARN M04 미구현: D00-3-043 §3 SetBGColor / (DIVISION_ID..INCOTERMS,InvalidColor) — **신규 발견**: 저장 실패(SP 응답 errCode 99010/99020/99030/99040)시 중복행의 DIVISION_ID~INCOTERMS 구간을 배경색으로 강조하는 로직(cs:900-916). TO-BE `Bod.tsx` `mutate()`(L78-103)는 서버 에러 메시지를 alert으로만 표시하고 셀 하이라이트는 전혀 없다(grep `99010`,`InvalidColor` 0건) — `04_react-gap.md §2 표 #23 "저장 실패 errCode별 강조색 4패턴 — 통과"는 오기재였다(이전 회차가 근거 없이 통과 처리)** -- 고위험, 오기재 정정 — 저장 실패 원인 컬럼이 시각적으로 구분되지 않아 사용자가 어느 행이 문제인지 알기 어려움 @__asis-mapping__.md
+- WARN M04 미구현: D00-3-044 §3 SetBGColor / (TRANSPORT_MODE..TO_YYYYMMDD,InvalidColor) — D00-3-043과 동일 결함(errCode 99030/99040 분기) -- 고위험, D00-3-043과 동일 사유 @__asis-mapping__.md
+- WARN M04 미구현: D00-3-045 §3 SetBGColor / (TRANSPORT_MODE,InvalidColor) — D00-3-043과 동일 결함(errCode 99010 분기) -- 고위험, D00-3-043과 동일 사유 @__asis-mapping__.md
+- WARN M04 미구현: D00-3-046 §3 SetBGColor / (PRIORITY,InvalidColor) — D00-3-043과 동일 결함(errCode 99020 분기) -- 고위험, D00-3-043과 동일 사유 @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-047 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-048 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-049 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-050 → BodGrid.tsx @__asis-mapping__.md
+- WARN M04 미구현: D00-3-065 §3 SetActiveCell / (e.Row,e.Column) — Route 팝업 선택 후 커서를 해당 셀로 이동시키는 UX 동작 — `Bod.tsx handleRouteSelect`에 대응 로직 없음(`GridUtils.refreshRow`만 호출) -- 저위험, UX 커서이동 @__asis-mapping__.md
+- WARN M04 미구현: D00-3-066 §3 ShowCell / (0,0,e.Row,e.Column,Center,Right) — 위와 동일(선택 셀을 화면 중앙으로 스크롤) -- 저위험, D00-3-065와 동일 사유 @__asis-mapping__.md
+- WARN M04 미구현: D00-3-067 §3 SetCellTypeCombo / (e.Row,TO_SITE_CODE,dtToSiteOfSpd) — FROM_SITE_CODE 변경 시(`sFromSite=='E'`) TO_SITE 콤보를 `ToSiteBOD1_SCP_ALL` 계열로 교체 — TO-BE `BodGrid.tsx`는 TO_SITE_CODE 셀 콤보를 항상 고정(`ToSiteByDivision`)으로만 쓰고 FROM_SITE_CODE 값에 따른 3분기 전환이 없다(G16과 동일 축, `resolveToSiteBucket` 호출부 0건) -- 중위험, G16 @__asis-mapping__.md
+- WARN M04 미구현: D00-3-068 §3 SetCellTypeCombo / (e.Row,TO_SITE_CODE,dtToSiteOfSpd) — `sFromSite=='A' && OSP_YN=='Y'` 분기(`ToSiteByDivisionPlant1_SCP_ALL`) — 위와 동일 결함(G16) -- 중위험, G16 @__asis-mapping__.md
+- WARN M04 미구현: D00-3-069 §3 SetCellTypeCombo / (e.Row,TO_SITE_CODE,dtToSiteOfSpd) — 그 외 분기(`ToSiteByDivision1_SCP_ALL`) — 위와 동일 결함(G16) -- 중위험, G16 @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-070 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-071 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-072 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-073 → BodGrid.tsx @__asis-mapping__.md
+- WARN M04 미구현: D00-3-074 §3 SetCellTypeCombo / (iRow,TO_SITE_CODE,dtToSiteOfSpd) — `SpdMain_ClipboardPasted`(붙여넣기)의 동일 3분기 — D00-3-067과 동일 결함(G16) -- 중위험, G16 @__asis-mapping__.md
+- WARN M04 미구현: D00-3-075 §3 SetCellTypeCombo / (iRow,TO_SITE_CODE,dtToSiteOfSpd) — 위와 동일(G16) -- 중위험, G16 @__asis-mapping__.md
+- WARN M04 미구현: D00-3-076 §3 SetCellTypeCombo / (iRow,TO_SITE_CODE,dtToSiteOfSpd) — 위와 동일(G16) -- 중위험, G16 @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-077 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-078 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-079 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-080 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-081 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-082 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-084 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-085 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-086 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-087 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-088 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-089 → BodGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-090 → BodGrid.tsx @__asis-mapping__.md
+- WARN AC1 액션 대조표 미처리 435행: AC-d70f8de7(상태 빈칸 GRID_INIT this.AddSheet), AC-8f05afde(상태 빈칸 FLAG siMain), AC-ada6aa53(상태 빈칸 GRID_INIT siMain.ChangeSheet), AC-8f4d3986(상태 빈칸 UI_PROP siMain.ImagePopUp), AC-03ed0734(상태 빈칸 FLAG cellTypeImage), AC-4947fe92(상태 빈칸 UI_PROP cellTypeImage.BackgroundImage), AC-01a99c2f(상태 빈칸 UI_PROP cellTypeImage.BackgroundImage.), AC-2e069c41(상태 빈칸 RETURN return;) … @Doc/asisfacts/screens/SCP0007/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 12행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-9e47b134(Encoding.Default.GetByteCount @SCP0007_BOD.cs:717), AC-0e5d9696(siMain.ActiveSheet.GetViewRowFromModelRo @SCP0007_BOD.cs:1393), AC-af04f010(spdMain.ShowCell @SCP0007_BOD.cs:1096), AC-51f4de02(((FarPoint.Win.Spread.FpSpread)sender).C @SCP0007_BOD.cs:1332), AC-04f12067(clbTransMode.SetValues @SCP0007_DistributionRoutePopup.cs:231), AC-dab6a2fe(clsCtrl.HeaderSpan @SCP0007_DistributionRoutePopup.cs:338), AC-9959a86a(clsCtrl.HeaderSpan @SCP0007_DistributionRoutePopup.cs:340), AC-e916186d(clsCtrl.HeaderSpan @SCP0007_DistributionRoutePopup.cs:341) … @Doc/asisfacts/screens/SCP0007/__asis-actions__.md
+- WARN G01 As-is 시트 'Distribution Route' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G02 As-is 엔드포인트 SCP.SCP0007_GET_BOD (SCP0007_GET_BOD) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0007_GET_COUNTRY_CITY (SCP0007_GET_COUNTRY_CITY) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0007_SAVE_BOD (SCP0007_SAVE_BOD) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0007_GET_ROUTE_CNT (SCP0007_GET_ROUTE_CNT) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0005_GET_DISTRIBUTION_ROUTE (SCP0005_GET_DISTRIBUTION_ROUTE) 매핑표 §4 에 없음
+- WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/BodDistributionRoutePopup.tsx
+- WARN V01 As-is Validation 8건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- WARN V01 As-is Expression 15건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 2건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 팝업(POPUP) — SCP0007_DistributionRoutePopup SEQ1 [MSG00222] 선택할 수 없습니다. Departu → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0007.md
+- WARN VR2 MSG00253 — VALIDATION 취합 판정: 저장(SAVE) SEQ8 AS-IS MSG00253 [메시지 불일치] — [메시지 불일치] TO-BE 미등록 — MSG00253 TO-BE 마스터 없음 -> fallback "_From Site와 To Site는 동일할 수 없습니다." @bod.util.ts:77
+- WARN VC1 대조표 FAIL 374행 (Doc/verify/SCP0007/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미구현 32행 — 작업 원장 Doc/verify/SCP0007/work_ledger.md W1(기능 구현)
+- WARN VC1 대조표 미검증 386행 — 검사 사유 REVIEW 461 · WARN 62 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 408건 / 검사 인스턴스 1118 — W1 32 · W2 7 · W3 175 · W7 155 · W8 39 (Doc/verify/SCP0007/work_ledger.md)
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @Bod.tsx:201
+- WARN B10 As-is 팝업 SCP0007_DistributionRoutePopup → components/modals/*Modal.tsx 또는 매핑표에 공통 모달 재사용 명시 — 룰 25 §3 연결 POPUP 1:1
+- WARN B11 __asis-mapping__.md 에 POPUP 매핑 섹션 — 룰 25 §3.3.1 — button/SP/event/validation 4축
+- WARN B19 validation.md 8행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
+- WARN B19 expressions.md 15행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0007/SCP0007_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0007/SCP0007_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)

@@ -5,7 +5,7 @@ import {
   type FlexGrid,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
-import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo } from 'react';
 
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
@@ -282,19 +282,16 @@ export const CustomerFcstUploadGrid = ({
     };
   }, [gridRef]);
 
-  // ⭐ F4 Filter — 피처 소유 FlexGridFilter
+  // ⭐ F4 Filter — FlexGridFilter 는 공용 DataGrid 가 만든다(아래 JSX 의 gridFilterRef). 여기서는 핸들러만 얹는다.
+  //   금지: 여기서 new FlexGridFilter 를 만들지 말 것. DataGrid 밖에서 만든 필터에는 재조회 시 필터 유지
+  //   (itemsSourceChanged 캡처/복원 · 끊긴 컬럼 재바인딩)가 걸리지 않아, 조회할 때마다 필터가 풀렸다
+  //   (2026-10-27 DM 필터 유지 점검). 필터 대상 [''](F4 로 켠 컬럼만)·Clear 즉시 반영도 DataGrid 기본값이다.
   useEffect(() => {
     const g = gridRef.current;
-    if (!g) return;
+    const f = gridFilterRef.current;
+    if (!g || f?.grid !== g) return;
 
     const onFilterApplied = () => g.invalidate(true);
-
-    let f = gridFilterRef.current;
-    if (!f || f.grid !== g) {
-      f = new FlexGridFilter(g);
-      f.filterColumns = [''];
-      gridFilterRef.current = f;
-    }
     f.filterApplied.addHandler(onFilterApplied);
 
     return () => {
@@ -305,17 +302,17 @@ export const CustomerFcstUploadGrid = ({
       }
     };
     // 필수: deps 를 [gridRef, gridFilterRef] 로만 두면 두 값이 ref 라 불변 → effect 가 최초 1회만
-    //   실행된다. 이 화면은 DataGrid key(311) 가 조회 시 mainStaticColumns 변경으로 리마운트되어
-    //   wijmo grid 인스턴스가 새로 생기는데, effect 가 재실행되지 않으면 새 인스턴스에 FlexGridFilter
-    //   가 안 붙어 gridFilterRef.current 가 undefined 로 남는다 → SubTitle F4 action(gridFilter.current
-    //   가 falsy 면 no-op)이 무동작 = F4 필터 안 먹음. visibleColumns/dynBindings 를 deps 에 넣어
-    //   컬럼/인스턴스 변경마다 재실행해 새 grid 에 filter 를 (재)생성한다(sales-monitoring 1:1).
+    //   실행된다. 이 화면은 DataGrid key 가 조회 시 mainStaticColumns 변경으로 리마운트되어
+    //   wijmo grid 인스턴스와 DataGrid 의 FlexGridFilter 가 새로 생긴다. visibleColumns/dynBindings 를
+    //   deps 에 넣어 컬럼/인스턴스 변경마다 재실행해 새 필터에 핸들러를 다시 얹는다.
   }, [visibleColumns, dynBindings, gridRef, gridFilterRef]);
 
   return (
     <DataGrid<CustomerFcstUploadRow>
       key={mainStaticColumns.map(c => c.colNm).join(',')}
       gridRef={gridRef}
+      // 필수: gridFilterRef 를 넘겨 FlexGridFilter 를 DataGrid 가 만들게 한다 — 재조회 시 필터 유지가 여기 걸려 있다.
+      gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
       staticColumns={mainStaticColumns}
       dynamicColumns={dynamicColumns}

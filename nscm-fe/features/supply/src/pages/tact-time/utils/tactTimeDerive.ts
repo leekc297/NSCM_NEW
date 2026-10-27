@@ -38,3 +38,14 @@ export const clampTactTime = (value: unknown, max: number): { value: number; cla
   }
   return { value: n, clamped: false };
 };
+
+// 날짜 셀 값 -> yyyyMMdd. InputDate 편집기는 Date 객체를 넣고, 조회값은 문자열이라 둘 다 처리한다.
+export const toYmd = (v: unknown): string => {
+  if (v instanceof Date) {
+    if (Number.isNaN(v.getTime())) return '';
+    const m = String(v.getMonth() + 1).padStart(2, '0');
+    const d = String(v.getDate()).padStart(2, '0');
+    return `${v.getFullYear()}${m}${d}`;
+  }
+  return typeof v === 'string' ? v.replace(/\D/g, '').slice(0, 8) : '';
+};

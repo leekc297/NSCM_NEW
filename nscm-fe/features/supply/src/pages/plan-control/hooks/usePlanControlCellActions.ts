@@ -67,6 +67,7 @@ export const usePlanControlCellActions = ({
   const searchParams = usePlanControlStore(state => state.searchParams);
   const masterValidation = usePlanControlStore(state => state.masterValidation);
   const setEngineRunContext = usePlanControlStore(state => state.setEngineRunContext);
+  const setPlanIdCreateContext = usePlanControlStore(state => state.setPlanIdCreateContext);
   const staticColumns = usePlanControlStore(state => state.staticColumns[SHEETS.PLAN_CONTROL]);
 
   // 메타 기반 필수검증(INPUT_TP_CD=M/IM 또는 라벨 `*`). 이 화면은 현재 29컬럼 전건 'S' 라 대상이 0건이지만
@@ -107,6 +108,24 @@ export const usePlanControlCellActions = ({
       void navigate(`/view/${encodeURIComponent(target)}`);
     },
     [findMenuPath, navigate]
+  );
+
+  // A002 Create Plan ID 팝업 오픈(X20 생성 모드 · B03 조회 모드 공통). AS-IS 생성자 7인자와 1:1 로
+  //   컨텍스트를 만들어 store 에 싣는다. division/planGroup 은 조회조건, name/tgt/prs/planId 는 행 값이다
+  //   (AS-IS cs:894-897·913-914). planStartYyyymmdd 는 조회 시점 확정값(모드 분기 결과)을 그대로 쓴다.
+  const openPlanIdCreate = useCallback(
+    (row: PlanControlRow, planId: string) => {
+      setPlanIdCreateContext({
+        divisionId: searchParams.divisionId,
+        prsCd: str(row.OPMZ_PRS_CD),
+        planGroupId: searchParams.planGroupId,
+        planGroupName: str(row.OPMZ_PLAN_GR_NAME),
+        planStartYyyymmdd,
+        planId,
+        tgtDivsCd: str(row.OPMZ_TGT_DIVS_CD),
+      });
+    },
+    [planStartYyyymmdd, searchParams.divisionId, searchParams.planGroupId, setPlanIdCreateContext]
   );
 
   // 단건 상태 재조회 — 같은 GET SP 를 actvCd/planId 지정으로 호출하면 4컬럼만 돌아온다(design 03 §4.4).
@@ -245,9 +264,13 @@ export const usePlanControlCellActions = ({
       const status = str(row.OPMZ_ACTV_RUN_STAT_CD);
       const planId = str(row.OPMZ_PLAN_ID);
 
-      // X20 — Plan ID 생성 팝업(plan_id=''). B3 결정에 따라 모달 본체는 이번 회차 범위 밖이라
-      //   오픈 지점까지만 배선한다(04_react-gap.md 에 미구현 명시).
-      if (actvCd === ACTIVITY.CREATE_PLAN_ID) return;
+      // X20 — Plan ID 생성 팝업(plan_id=''). AS-IS cs:1059-1072 는 비독립 경로에서 Create 버튼 셀이
+      //   생성 모달을 열고, OK(저장 성공) 시 Plan ID 재조회 + 메인 재조회한다. 재조회는 팝업 onSaved 가
+      //   queryClient.invalidateQueries 로 수행한다(아래 PlanControl 배선).
+      if (actvCd === ACTIVITY.CREATE_PLAN_ID) {
+        openPlanIdCreate(row, '');
+        return;
+      }
 
       if (actvCd === ACTIVITY.ENGINE_RUN) {
         // B24 — 이미 처리된 Plan ID(상태가 붙어 있으면 재요청 불가).
@@ -300,6 +323,7 @@ export const usePlanControlCellActions = ({
       alertSelectPlanId,
       confirmMsg,
       fetchSingleStatus,
+      openPlanIdCreate,
       saveActivity,
       setEngineRunContext,
     ]
@@ -348,9 +372,14 @@ export const usePlanControlCellActions = ({
         return;
       }
 
-      // B03·B04 — A002 Plan ID Info 조회 팝업. planId 가 비었거나 상태가 C 가 아니면 **조용히**
-      //   무동작이다(메시지 금지). 팝업 본체는 B3 결정으로 이번 회차 범위 밖.
-      if (actvCd === ACTIVITY.CREATE_PLAN_ID) return;
+      // B03·B04 — A002 Plan ID Info 조회 팝업. planId 가 비었거나 상태가 'C'(Completed)가 아니면
+      //   **조용히** 무동작이다(메시지 금지 — AS-IS cs:942-943). 아니면 기생성 Plan ID 를 읽기전용
+      //   모드로 연다(planId 전달 → 팝업이 planInfo 커서로 상세를 채우고 입력을 잠근다).
+      if (actvCd === ACTIVITY.CREATE_PLAN_ID) {
+        if (!planId || str(row.OPMZ_ACTV_RUN_STAT_CD) !== RUN_STATUS.COMPLETED) return;
+        openPlanIdCreate(row, planId);
+        return;
+      }
 
       // B05·B06 — A003 LINK 는 **선택 행 컨텍스트만 보관하고 하단 Status 를 조회**한다. 저장하지 않는다.
       //   AS-IS cs:949-962 는 `this.nSelRowSpdMain = e.Row`(선택된 셀 위치 = 행 인덱스 보관) 후
@@ -373,7 +402,7 @@ export const usePlanControlCellActions = ({
       const linkAddress = str(row.LINK_ADDRESS);
       openScreen(LINK_ADDRESS_ALIAS[linkAddress] ?? linkAddress);
     },
-    [alertSelectPlanId, openScreen, setEngineRunContext]
+    [alertSelectPlanId, openPlanIdCreate, openScreen, setEngineRunContext]
   );
 
   const rowAt = useCallback(

@@ -418,9 +418,9 @@ export const BusinessPlanGrid = ({
   //   필수: wijmo React wrapper 는 initialized 를 setTimeout 으로 미뤄 부르고
   //   (@mescius/wijmo.react.base useWjComponentBase), 공용 DataGrid 는 그 콜백에서만
   //   gridRef.current 를 채운다(handleInitialized). 언마운트 정리에서는 다시 undefined 로 비운다.
-  //   이 화면은 정적 컬럼 목록을 DataGrid key 로 쓰므로(아래 JSX) 정적 컬럼이 들어오는 순간
-  //   그리드가 재마운트되고, 새 인스턴스의 initialized 도 다음 틱으로 밀린다. 그래서 재마운트가
-  //   일어난 커밋의 effect 는 gridRef.current 가 undefined 인 상태로 돌아 아무것도 설치하지
+  //   (종전에는 정적 컬럼 목록을 DataGrid key 로 써서 정적 컬럼이 들어오는 순간마다 재마운트됐다 —
+  //   2026-10-27 key 제거 후에는 최초 마운트에서만 해당.) 새 인스턴스의 initialized 는 다음 틱으로
+  //   밀리므로, 마운트가 일어난 커밋의 effect 는 gridRef.current 가 undefined 인 상태로 돌아 아무것도 설치하지
   //   못하고, 그 뒤로 리렌더가 없으면 formatItem/beginningEdit/mergeManager 가 영구 미설치로 남는다.
   //   증상(2026-08-24 실측): 헤더가 공용 CustomMergeManager 의 내용 기반 가로 병합으로 보인다
   //   (연 SUM 과 분기 SUM 이 한 칸으로 붙고 Y_ 의 2·3단 세로 병합이 사라짐). 같은 원인으로
@@ -1122,7 +1122,10 @@ export const BusinessPlanGrid = ({
   return (
     // <div className={styles.gridContainer}>
     <DataGrid
-      key={mainStaticColumns.map(c => c.colNm).join(',')}
+      // 금지: key={mainStaticColumns...} 로 재마운트하지 말 것. 정적 컬럼 메타를 divisionId 로 받아와
+      //   division 전환으로 컬럼 목록이 바뀌면 key 가 바뀌어 DataGrid 가 통째로 재마운트되고, 새로 생긴
+      //   FlexGridFilter 에는 사용자가 건 필터가 없어 그대로 사라진다(2026-10-27 DM 필터 유지 점검 —
+      //   DMF0021 8fef47623 과 같은 원인). 컬럼 변경은 공용 DataGrid 가 columnGroups 재대입으로 처리한다.
       className={styles.grid}
       gridRef={gridRef as never}
       gridFilterRef={gridFilterRef}

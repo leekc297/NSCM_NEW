@@ -1,0 +1,11 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,s,CODE,SCP0075_Allo_Target,SCP0075_Allo_Target.cs:361,"string.Empty} || {?s.Substring(2, 6)",Number,,None,코드 선언 FPMerge.None,70,true,,,,foreach(s in sColArray)
+,siMain.GetColumnIndex(DefCol.SORT_ORDER)}1 || {?iCurIdx,CODE,SCP0075_Allo_Target,SCP0075_Allo_Target.cs:390,0,AddColumnHeaderSpanCell,,,코드 선언(병합 인자 없음),,,,,,for(iCol <= siMain.GetMaxColumnIndex()) ⟫ else!(sPrevious.Equals(string.Empty)) ⟫ else!(sPrevious == sHeaderText)
+Allo Target,CUTOFF_YYYYMMDD,META,,META SCM_MST_SHEET_COLUMNS(SCP0075/Allo Target),Cutoff,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),66,Y,L,,,
+Allo Target,DEPT_ID,META,,META SCM_MST_SHEET_COLUMNS(SCP0075/Allo Target),Dept_ID,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),70,Y,L,,,
+Allo Target,DEPT_NAME,META,,META SCM_MST_SHEET_COLUMNS(SCP0075/Allo Target),Dept_Name,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),130,Y,L,,,
+Allo Target,DIVISION_ID,META,,META SCM_MST_SHEET_COLUMNS(SCP0075/Allo Target),Division_ID,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),0,Y,L,,,
+Allo Target,EXTRA_SPEC,META,,META SCM_MST_SHEET_COLUMNS(SCP0075/Allo Target),Extra_Spec,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),70,Y,L,,,
+Allo Target,ITEM_ID,META,,META SCM_MST_SHEET_COLUMNS(SCP0075/Allo Target),Model,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Allo Target,MODEL,META,,META SCM_MST_SHEET_COLUMNS(SCP0075/Allo Target),Nick_Name,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),70,Y,L,,,
+Allo Target,SORT_ORDER,META,,META SCM_MST_SHEET_COLUMNS(SCP0075/Allo Target),Sort_Order,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),0,Y,L,,,

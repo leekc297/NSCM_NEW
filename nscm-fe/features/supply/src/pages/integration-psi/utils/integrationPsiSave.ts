@@ -5,7 +5,7 @@
 
 import type { EditTracker } from '@foundation/utils';
 
-import { OPERATION_GROUP_CODE } from '../integration-psi.constants';
+import { OPERATION_GROUP_CODE, REQUIRED_SAVE_FIELDS } from '../integration-psi.constants';
 
 import { periodMonthRange } from './integrationPsiColumns';
 
@@ -65,6 +65,9 @@ export interface UnfoldResult {
   opGroupLookupMissing: boolean;
   // 신규행에 LINE_ID 가 sentinel('-') 인 채 저장 시도 (design 03 §5 MSG00453 확인 대상).
   hasEmptyLineInsert: boolean;
+  // 신규행(I)에서 공백인 첫 필수 컬럼 binding (AS-IS roslyn L1237 15필수). 없으면 undefined.
+  //   호출부가 REQUIRED_SAVE_FIELDS 로 label 을 찾아 MSG00429("{0} 값은 필수 입력 항목입니다")로 안내.
+  missingRequiredField?: string;
 }
 
 // 행의 SP 배열 공통 컬럼 채우기 (measure/식별키).
@@ -140,6 +143,7 @@ export const unfoldSaveCells = (params: {
   const cells: SaveCell[] = [];
   let opGroupLookupMissing = false;
   let hasEmptyLineInsert = false;
+  let missingRequiredField: string | undefined;
 
   const originals = tracker?.getOriginalValues();
 
@@ -156,6 +160,12 @@ export const unfoldSaveCells = (params: {
     const base = baseCell(row);
 
     if (crud === 'I') {
+      // 15필수 공백검증 (AS-IS roslyn L1237) — 신규행 전 필드의 첫 공백 컬럼을 기록한다. OPERATION_GROUP
+      //   공백은 위 opGroup 분기가 이미 처리(continue)하므로 여기엔 안 온다. 저장행(M)은 조회결과라 제외.
+      if (missingRequiredField === undefined) {
+        const miss = REQUIRED_SAVE_FIELDS.find(f => s(row[f.binding]).trim() === '');
+        if (miss) missingRequiredField = miss.binding;
+      }
       // 신규행 — LINE_ID sentinel 확인(MSG00453 대상). Plan 전체 개월수를 절대값으로 삽입.
       if (s(row.LINE_ID).trim() === '-' || s(row.LINE_ID).trim() === '') {
         hasEmptyLineInsert = true;
@@ -187,7 +197,7 @@ export const unfoldSaveCells = (params: {
     }
   }
 
-  return { cells, opGroupLookupMissing, hasEmptyLineInsert };
+  return { cells, opGroupLookupMissing, hasEmptyLineInsert, missingRequiredField };
 };
 
 // SaveCell[] → 일반 저장 payload (P_SCP0111_SAVE_INTEGRATION_PSI 19 CLOB 배열 + planStartYyyymmdd/userId).
@@ -227,6 +237,11 @@ export const buildGeneralPayload = (
 };
 
 // ADMIN 저장 payload (P_SCP0111_SAVE_PSI_ADMIN — 일반 19 + p_boh_qty). BOH_QTY 를 절대값으로 함께 전송.
+//   **operationGroup 은 코드(P/A/E)로 보낸다** — ADMIN SP 는 일반 SP(L806-808 CASE 변환)와 달리
+//   INSERT(L3439)·WHERE(L3355/L3392)에서 값을 **그대로** 쓴다(ALL_SOURCE 실측 2026-10-19). 표시명 "Pack"(4자)을
+//   보내면 OPERATION_GROUP(VARCHAR(1)) 초과로 ORA-12899. 타 화면(SCP0110 등)도 operation group 은 코드로 저장한다.
+//   일반 저장(buildGeneralPayload)은 표시명을 유지한다 — 일반 SP 가 내부에서 코드로 바꾸기 때문(비대칭 계약).
+//   변환 불가값은 handleSave 의 opGroupLookupMissing(MSG.OP_GROUP_INVALID)이 선차단하므로 여기선 fallback 만 둔다.
 export const buildAdminPayload = (
   cells: SaveCell[],
   planStartYyyymmdd: string,
@@ -234,5 +249,11 @@ export const buildAdminPayload = (
 ): Record<string, string> | null => {
   const general = buildGeneralPayload(cells, planStartYyyymmdd, userId);
   if (general === null) return null;
-  return { ...general, bohQty: cells.map(c => c.bohQty).join('^') };
+  return {
+    ...general,
+    operationGroup: cells
+      .map(c => operationGroupToCode(c.operationGroup) ?? c.operationGroup)
+      .join('^'),
+    bohQty: cells.map(c => c.bohQty).join('^'),
+  };
 };

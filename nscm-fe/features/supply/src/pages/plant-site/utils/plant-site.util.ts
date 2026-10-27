@@ -39,9 +39,28 @@ export const toComboOptions = (rows: ComboResponse[] | undefined): Option[] => [
 export const filterEeDivisions = (rows: ComboResponse[] | undefined): ComboResponse[] =>
   (rows ?? []).filter(r => str(r.ATTRIBUTE3) !== 'EE');
 
-// 텍스트 조회조건('ALL' sentinel 아님) -> trim 후 빈 문자열은 null, 아니면 입력값 그대로.
-//   SP 는 IS NULL 이면 전체, 값이 있으면 UPPER LIKE 부분일치(design 02 §2-3).
-export const textToNull = (value: string): string | null => str(value).trim() || null;
+// Division 선택값으로 Plant Site(Bod From Site 공유 콤보) 행을 client-side 필터링.
+//   서버 재조회 없이 1회 조회한 전체 목록을 DIVISION_ID 로 좁힌다(Bod.buildDivisionFilteredOptions와 동일 패턴,
+//   cascade-combo-filter.md §4). divisionId 가 비어있거나 'ALL' 이면 전체 통과.
+export const filterPlantSiteByDivision = (rows: ComboResponse[] | undefined, divisionId: string): Option[] => {
+  const divisionCodes = str(divisionId)
+    .split(',')
+    .map(v => v.trim())
+    .filter(v => v !== '' && v.toUpperCase() !== 'ALL');
+
+  const byCode = new Map<string, Option>();
+  for (const row of rows ?? []) {
+    const code = str(row.CODE).trim();
+    if (code === '') continue;
+    if (divisionCodes.length > 0) {
+      const rowDivision = str(row.DIVISION_ID).trim();
+      if (rowDivision !== '' && !divisionCodes.includes(rowDivision)) continue;
+    }
+    if (byCode.has(code)) continue;
+    byCode.set(code, { label: str(row.NAME).trim() || code, value: code });
+  }
+  return [...byCode.values()];
+};
 
 // 'ALL' sentinel(다중선택 전체) -> 권한 division(EE 제외) 전 코드 콤마 확장.
 //   주의: null/빈문자 전달 금지 — GET SP 는 P_DIVISION_ID IS NULL 이면 권한 무관 전체를 반환한다

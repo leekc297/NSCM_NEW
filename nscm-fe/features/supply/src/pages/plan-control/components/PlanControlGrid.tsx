@@ -60,6 +60,12 @@ export const PlanControlGrid = ({
 
   // G06·G07·G09~G11·X03 — 셀 표현. 컬럼 메타에 없는 시각 규칙만 여기서 그린다.
   //   DETAIL·CONFIRM 은 SP 가 값을 주지 않는 코드 전용 컬럼이라 반드시 textContent 를 채워야 보인다.
+  //   <DataGrid formatItem={...}> prop 이 아니라 아래 effect 에서 gridRef 에 직접 addHandler 한다 —
+  //   DataGrid 의 formatEditableColumns(dataGridUtils.ts)가 메타만 보고 `wj-cell-editable` 을 거는
+  //   핸들러를 beginningEdit 와 같은 지연 경로(initialized 콜백)에서 뒤늦게 등록해, prop 으로 넘긴
+  //   행조건부 토글을 다시 덮어썼다 — INDP_YN='Y' 행의 Plan ID 가 흰색이 아니라 편집가능 색으로 보이는
+  //   실사고(2026-10-26, beginningEdit 과 동일 원인). 아래 handleBeginningEdit effect 와 같은 이유로
+  //   직접 등록해 DataGrid 내부보다 나중에 붙인다.
   const handleFormatItem = useCallback(
     (grid: FlexGrid<PlanControlRow>, e: FormatItemEventArgs) => {
       if (e.panel.cellType !== CellType.Cell || e.row < 0) return;
@@ -111,11 +117,36 @@ export const PlanControlGrid = ({
 
   // G08 — 행 조건부 편집잠금. 컬럼 축 잠금은 메타(INPUT_TP_CD)가 하고, 행 조건은 메타로 표현할 수
   //   없으므로 여기서 마지막에 override 한다(hook #70). Plan ID 외 컬럼은 메타가 이미 잠근다.
-  const handleBeginningEdit = (grid: FlexGrid<PlanControlRow>, e: CellRangeEventArgs) => {
-    if (grid.columns[e.col]?.binding !== ACTION_COLUMN.PLAN_ID) return;
-    const row = grid.rows[e.row]?.dataItem as PlanControlRow | undefined;
-    if (!row || str(row.OPMZ_PLAN_ID_INDP_YN) === 'Y') e.cancel = true;
-  };
+  //   <DataGrid beginningEdit={...}> prop 으로 넘기지 않는다 — DataGrid 의 setEditableColumns
+  //   (dataGridUtils.ts)가 메타만 보는 동명 핸들러를 initialized 콜백에서 뒤늦게 등록하는데, prop 으로
+  //   넘긴 핸들러는 그보다 먼저 붙어 뒤 핸들러의 `cancel` 덮어쓰기에 묻힌다 — `OPMZ_PLAN_ID` 메타가
+  //   편집가능('O')이라 INDP_YN='Y' 행에서도 Plan ID 가 선택되는 실사고(2026-10-26).
+  //   마운트 effect 에서 gridRef 로 거는 방식도 쓰지 않는다 — effect 는 마운트 때 한 번만 돌아서, 그 뒤
+  //   그리드 인스턴스가 바뀌면 옛 그리드에 붙은 채로 남아 잠금이 다시 풀렸다(같은 날 재발).
+  //   DataGrid 의 initialized prop 은 내부 설정(setEditableColumns 포함)이 끝난 뒤 그 그리드로 마지막에
+  //   호출되므로, 여기서 걸면 항상 실제 그리드에, 항상 마지막 순서로 붙는다.
+  const handleBeginningEdit = useCallback(
+    (grid: FlexGrid<PlanControlRow>, e: CellRangeEventArgs) => {
+      if (grid.columns[e.col]?.binding !== ACTION_COLUMN.PLAN_ID) return;
+      const row = grid.rows[e.row]?.dataItem as PlanControlRow | undefined;
+      if (!row || str(row.OPMZ_PLAN_ID_INDP_YN) === 'Y' ) e.cancel = true;
+    },
+    []
+  );
+
+  const handleInitialized = useCallback(
+    (grid: FlexGrid<PlanControlRow>) => {
+      grid.beginningEdit.addHandler(handleBeginningEdit);
+    },
+    [handleBeginningEdit]
+  );
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    grid.formatItem.addHandler(handleFormatItem);
+    return () => grid.formatItem.removeHandler(handleFormatItem);
+  }, [gridRef, handleFormatItem]);
 
   // E08 — 콤보 셀 키입력 차단. AS-IS SpdMain_KeyPress(cs:1313-1322)는 "잠기지 않은 셀이면서 그 컬럼의
   //   CellType 이 ComboBoxCellType 이면 e.Handled = true" 로 문자 키 입력을 통째로 막는다. 즉 Plan ID 는
@@ -157,10 +188,9 @@ export const PlanControlGrid = ({
       allowMerging={AllowMerging.Cells}
       click={click}
       dblClick={dblClick}
-      beginningEdit={handleBeginningEdit}
       cellEditEnded={cellEditEnded}
-      formatItem={handleFormatItem}
       gotFocus={gotFocus}
+      initialized={handleInitialized}
     />
   );
 };

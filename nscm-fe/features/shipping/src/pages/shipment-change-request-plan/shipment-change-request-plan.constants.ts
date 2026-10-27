@@ -141,14 +141,14 @@ export const RESULT_PARTIAL = 'X';
 // ====================================================================================
 // ERP I/F (SAP PI) 호출 — AS-IS GetErpIFCheckNew(cs:4623) 의 TO-BE 등가
 // ====================================================================================
-// AS-IS `CallClient.FN_ERP_UIWebService(RequestNo, "C", "")` 는 TO-BE BE 공통 SOAP 창구로 대체됐다
+// AS-IS `CallClient.FN_ERP_UIWebService(RequestNo, "C", "")` 는 TO-BE BE 공통 창구로 대체됐다
 //   (framework/webservice/WebServiceCommonController `POST /common/web-service/{serviceKey}/call`).
-//   BE 가 응답 XML 말단을 파싱해 `{ E_TYPE, E_MESSAGE }` Map 으로 돌려준다 —
+//   BE 는 `{ E_TYPE, E_MESSAGE }` Map 으로 돌려준다 —
 //   E_TYPE = AS-IS RtFlag, E_MESSAGE = AS-IS ReErrorMsg('^' 구분 `confirmId:msg`).
-//   실서비스(UIC0001.asmx) 미완성이라 현 시점 경로는 mock(`/call-test`)이다. 자매 화면 선례와 같은 축으로
-//   둔다(features/shipping/.../shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx:684) —
-//   실서비스 완성 시 두 화면의 이 상수만 `/call` 로 바꾼다.
-export const ERP_IF_PATH = '/common/web-service/erpIf/call-test';
+//   2026-10-25: AS-IS UIC0001.asmx 는 TO-BE 에 없고 nscm-if 가 그 자리를 REST 로 대신한다.
+//   BE 가 serviceKey=erpIf 를 nscm-if `POST /api/if/send/NSD0100` 으로 라우팅하므로(config.nscm-if.routes)
+//   화면은 실경로 `/call` 을 쓴다. mock(`/call-test`)은 BE 에 그대로 남아 있어 배선 점검용으로 쓸 수 있다.
+export const ERP_IF_PATH = '/common/web-service/erpIf/call';
 export const ERP_IF_CHANGE_TYPE = 'C'; // AS-IS 2번째 인자 "C"(변경요청)
 export const ERP_IF_SUCCESS = 'S'; // E_TYPE 정상 — AS-IS else 분기(cs:4692)
 // AS-IS 는 E_TYPE 'S_E'/'E' 일 때 전송 실패 confirm_id 목록으로 초안을 되돌린다
@@ -157,6 +157,26 @@ export const ERP_IF_SUCCESS = 'S'; // E_TYPE 정상 — AS-IS else 분기(cs:469
 //   롤백은 미배선이고 04 에 확인필요로 기록했다. 값만 두고 소비처는 사유 노출까지다.
 export const ERP_IF_PARTIAL_ERROR = 'S_E';
 export const ERP_IF_ERROR = 'E';
+export const ERP_IF_NO_DATA = 'F'; // AS-IS RtFlag 'F' — 데이터 없음·서버오류(cs:4675)
+export const ERP_IF_PI_FAIL = 'C_E'; // AS-IS RtFlag 'C_E' — SAP PI 호출 실패(CallClient catch)
+
+// ERP 송신 결과 메시지 — AS-IS RtFlag 분기(cs:4666~4692)를 그대로 옮긴다.
+//   TO-BE 코드는 SCM_ADM_MSG_M 실측(2026-10-25, KO/EN USE_YN='Y', AS-IS 문구와 동일).
+//   종전에는 세 분기를 SCREEN_TEXT.ERP_IF_FAILED 하나로 뭉쳤는데, AS-IS 는 원인별로 다른 안내를 준다.
+// 주의 — AS-IS 는 경로에 따라 분기가 **다르다**. 각 경로의 원본을 따른다.
+//   Save   : `GetErpIFCheckNew`(cs:4978) + 뒤처리(cs:3931~4015) — E·S_E → MSG00197, **F·C_E 묶어** MSG00204
+//   Cancel : `GetErpIFCheck`(cs:4914, 호출 cs:2650)            — E → MSG00197, F → MSG00204, C_E → MSG00306
+export const MSG_ERP = {
+  ISSUE: 'MSG01208', // AS-IS MSG00197 — {0}=실패 `confirmId:msg` 목록 또는 ReErrorMsg
+  SYSTEM_ERROR: 'MSG01215', // AS-IS MSG00204 — {0}=Request No
+  PI_FAIL: 'MSG01309', // AS-IS MSG00306 — Cancel 경로의 C_E 전용(SAP PI 호출 실패)
+} as const;
+
+// ERP 실패 보상 — AS-IS cs:5011(초안 되돌림)·cs:3952(오류 적재). SP·버튼 메타 모두 등록 완료
+//   (DB 실측 2026-10-25: PKG_SSP0200 BODY 3389/3352 VALID, SCM_ADM_MNU_BTN_MPG_M USE_YN='Y').
+export const BTN_DELETE_DRAFTING_BY_CONFIRM = 'DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM';
+export const BTN_ERP_ERROR_CONFIRM = 'ERP_ERROR_CONFIRM';
+export const ERP_ERROR_E_TYPE = 'E'; // ERP_ERROR_CONFIRM p_e_type 고정값(cs:3956)
 
 // ====================================================================================
 // 그리드 셀 콤보 (design 03 §1.3)
@@ -385,11 +405,11 @@ export const EDIT_MAIN_OFF = 'N';
 // ====================================================================================
 export const MSG = {
   NO_AUTH_DIVISION: 'MSG00667', // AS-IS MSG00097. TO-BE MSG00097 은 'Please select Division.' 로 다름
-  NO_CHANGES: 'MSG00133', // 동일 — 'No modifications have been made.'
+  NO_CHANGES: 'MSG00004', // 'No modifications have been made.' (AS-IS MSG00133 는 TO-BE 미등록 → 같은 문구 MSG00004, KO/EN/CN)
   SAVE_CONFIRM: 'MSG00001', // AS-IS 저장확인 번호의 등가(충돌 번호 재사용 금지)
   REQUIRED_VALUE: 'MSG00614', // 필수값 안내 등가 — '{0} value is required.'
   REQUIRED_COMBO: 'MSG00429', // Change Reason 미선택(design 02 §4.7)
-  ERP_BLOCK_PERIOD: 'MSG00267', // 미등록 — 영문 fallback + {0}=PERIOD
+  ERP_BLOCK_PERIOD: 'MSG01275', // {0}=PERIOD (AS-IS MSG00267 는 TO-BE 미등록 → 같은 문구 MSG01275, KO/EN/CN)
   ALREADY_REQUESTED: 'MSG01189', // AS-IS MSG00174 -> 등가
   // AS-IS MSG00195('취소하시겠습니까?') -> 등가 2후보(MSG00684 / MSG01459, EN 문구 동일).
   //   먼저 등록된 MSG00684 를 쓴다(LBL 동일문구 2코드 선례와 같은 관례).
@@ -406,21 +426,21 @@ export const MSG = {
   //   AS-IS MSG00293(Trans mode 후보 없음)에도 이 코드를 쓰고 있어 두 자리가 같은 문구를 받는다 —
   //   MSG00293 전용 등가는 TO-BE 미등록(역조회 0건)이라 근사 유지, 04 확인필요로 보고.
   BOD_INVALID: 'MSG01296',
-  PREREQUISITE_REQUIRED: 'MSG00098', // 선행값 필수(Div/From/To/Item) — 미등록, 영문 fallback
+  PREREQUISITE_REQUIRED: 'MSG01126', // 선행값 필수(Div/From/To/Item) (AS-IS MSG00098 는 TO-BE 미등록 → 같은 문구 MSG01126, KO/EN/CN)
   // AS-IS MSG00194 -> TO-BE MSG01206 'Change requests are possible from the current D + {0} ship date.'
   //   셀 입력 시 하한 위반(cs:6318) + 요청확정 상한 위반(cs:3286) 두 자리에서 같은 코드를 쓴다.
   SHIPMENT_DATE_UNDER_BASE: 'MSG01206',
   // AS-IS MSG00201 -> TO-BE MSG01212 'Current D + {0} days can not be requested. Please delete and request again.'
   SHIPMENT_DATE_BEFORE_BASE: 'MSG01212',
   QTY_ZERO: 'MSG01213', // AS-IS MSG00202 -> 등가 'Enter a number greater than 0.'
-  REASON_CODE_REQUIRED: 'MSG00287', // Reason Detail 선행으로 Reason Code 필수 — 미등록, 영문 fallback
+  REASON_CODE_REQUIRED: 'MSG01291', // Reason Detail 선행으로 Reason Code 필수 (AS-IS MSG00287 는 TO-BE 미등록 → 같은 문구 MSG01291, KO/EN/CN)
   SO_PARTIAL_SELECT: 'MSG00247', // 동일 SO 부분선택 금지 — 미등록, 영문 fallback
   // 저장 결과 **'F' 한 자리 전용**이다(AS-IS cs:1125~1128 / 설계 L-092). TO-BE 등록 문구가
   //   'The sales price has not been entered...' 라, 통신오류·사전검증 실패·요청확정/취소 실패까지
   //   이 코드로 묶으면 전부 '판가를 입력하세요' 가 뜬다(L-094/L-100/L-101 번호 재사용 금지).
   //   그 외 실패는 SCREEN_TEXT.SAVE_FAILED(미등록 전용 키)로 분리한다.
   SALES_PRICE_MISSING: 'MSG00328',
-  MODEL_NOT_SELECTED: 'MSG00261', // 저장 결과 'N'(AS-IS cs:1123) — 미등록, 영문 fallback
+  MODEL_NOT_SELECTED: 'MSG01269', // 저장 결과 'N'(AS-IS cs:1123) (AS-IS MSG00261 는 TO-BE 미등록 → 같은 문구 MSG01269, KO/EN/CN)
   // 요청확정 실패 분기 — AS-IS cs:2559~2578 의 3종. 전건 TO-BE 등가 실측(EN 완전일치).
   UNAUTHORIZED_APPROVER: 'MSG01317', // AS-IS MSG00316 'Unauthorized'
   DIFFERENT_MODEL_PIC: 'MSG01350', // AS-IS MSG00353 'UnModelPic'
@@ -429,7 +449,7 @@ export const MSG = {
   FIRST_ITEM_NOT_DELETABLE: 'MSG01209', // AS-IS MSG00198 -> 등가(체크 삭제 경로 전용)
   // Insert Multiple 건수 검증 — AS-IS 동일(cs 팝업 GMessageBox("MSG00050")). '{0}' = 입력값.
   //   'This is not a valid numeric format. {0}' / '유효한 숫자 형식이 아닙니다. {0}'(DB 실측).
-  INVALID_NUMBER_FORMAT: 'MSG00050',
+  INVALID_NUMBER_FORMAT: 'MSG01082', // (AS-IS MSG00050 는 TO-BE 미등록 → 같은 문구 MSG01082, KO/EN/CN)
 } as const;
 
 // 라벨 — design 02 §4.5 / 03 §2.2 실측(SCM_ADM_MSG_M + public/locales 번들 존재 확인).

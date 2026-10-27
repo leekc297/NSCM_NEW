@@ -20,7 +20,7 @@ import { buildSavePayload, callSaveScpBomElec } from './utils/scp-bom-elec.save'
 // AS-IS GSCM.SCP.Master.UIL SCP0097_SCP_BOM_Elec — 단일 그리드 마스터, UPDATE 전용(INSERT/DELETE NO-OP).
 //   설계: .atlas/gscm-design/SCP0097/design/00~03 · convert-flow/{goal,plan}.md. 매핑: __asis-mapping__.md.
 //   NSCM 표준: 그리드 상시 편집(Edit 토글 미이식, asis_to_tobe §11) — 셀별 편집가부는 메타 INPUT_TP_CD(S11/M2),
-//   행 단위 잠금은 SCP_YN 비 Y/N(design 03 §3 W7). Division 은 선택 가능(기본 '81', design 01 R6b).
+//   행 단위 잠금은 SCP_YN 비 Y/N(design 03 §3 W7). Division 은 선택 가능(권한 콤보 첫 항목 기본선택, 2026-10-22 R6b 폐기).
 export const ScpBomElec = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
   const setToast = useMessageStore.getState().setToast;

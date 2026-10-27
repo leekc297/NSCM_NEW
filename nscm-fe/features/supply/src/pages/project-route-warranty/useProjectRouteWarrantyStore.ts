@@ -30,6 +30,8 @@ interface ProjectRouteWarrantyAction {
   setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
   // Search(F5) — MAIN 조회 커밋. ALL sentinel(plantSite/validFlag)은 SP DBNull 치환(design/02 §4).
   setFilters: () => void;
+  // cboOperationGroup_SelectedIndexChanged 재현(cs L1012-1017 ClearDataSource+InitSpread) — 그리드 비움.
+  clearMainFilter: () => void;
   fetchStaticColumns: () => Promise<void>;
   setOpenSearchArea: (open?: boolean) => void;
 }
@@ -39,7 +41,10 @@ const initSearchParams = (): SearchParamProps => ({
   //   콤보 로드 후 session.div 가 권한목록(EE 제외)에 있으면 그 값, 없으면 목록 첫 행으로 채운다.
   divisionId: '',
   plantSite: ALL_SENTINEL, // clbPlantSite ALL → SP NULL
-  operationGroup: '', // cboOperationGroup 숨김 — 기본 미선택(전체)
+  // cboOperationGroup 은 AS-IS Designer Visibility=Never(숨김)지만 ALL 항목 포함 로드(cs L165
+  //   setListBox(...,true))되고 기본 선택이 ALL 이다. FindData 가 GetCheckedListValue 로 값을 꺼내
+  //   p_operation_group 에 실으므로 TO-BE 도 기본 ALL 로 두고, setFilters 에서 ALL→'' 치환한다.
+  operationGroup: ALL_SENTINEL,
   itemId: '',
   validFlag: ALL_SENTINEL, // cboValid ALL → SP NULL
 });
@@ -79,17 +84,26 @@ export const useProjectRouteWarrantyStore = createPersistedStoreWithTab<
       set(state => {
         const p = get().searchParams;
         // GET 파라미터(design/03 §4.2, P_SCP0048_GET_PROJECTROUTE_WARRANTY 12 args 중 IN 7).
-        //   ALL sentinel → 빈값(BE PROC 가 NULL 치환, design/02 §4 cs L360). FROM/TO_YYYYMM 은
+        //   ALL sentinel → 빈값(BE PROC 가 NULL 치환, design/02 §4 cs L360). operationGroup 도
+        //   plantSite/validFlag 와 동일 ALL→'' 치환(cboOperationGroup 기본 ALL=전체). FROM/TO_YYYYMM 은
         //   AS-IS FindData 가 항상 "" 전송(design/03 §4.2) — 이 화면 조회조건에 기간 없음.
         state.filters[SHEETS.MAIN] = {
           divisionId: p.divisionId,
           plantSite: p.plantSite === ALL_SENTINEL ? '' : p.plantSite,
-          operationGroup: p.operationGroup,
+          operationGroup: p.operationGroup === ALL_SENTINEL ? '' : p.operationGroup,
           itemId: p.itemId,
           fromYyyymm: '',
           toYyyymm: '',
           validFlag: p.validFlag === ALL_SENTINEL ? '' : p.validFlag,
         };
+      }),
+
+    // cboOperationGroup 변경 시 AS-IS 는 그리드를 비운다(cs L1012-1017 SpreadInfo.ClearDataSource(spdMain)
+    //   + InitSpread()). TO-BE 는 MAIN 조회가 filters[SHEETS.MAIN] 로 구동(enabled=!!filters[MAIN])되므로
+    //   이 filter 를 undefined 로 비우면 쿼리가 disable 되어 mainRows=[] (그리드 비움)과 동치다.
+    clearMainFilter: () =>
+      set(state => {
+        state.filters[SHEETS.MAIN] = undefined;
       }),
 
     // 컬럼 메타는 admin(SCM_MST_SHEET_COLUMNS)에서 동적 fetch(ui-category hook, 하드코딩 금지).

@@ -4,6 +4,7 @@
 //   AS-IS 는 매 렌더마다 컬럼 배열을 인덱스로 순회해 판정하지만, TO-BE 는 행 렌더 시점에
 //   editableColumnRange 를 미리 계산해 O(1) 판정한다(design 03 §3.1 TO-BE 구현 지침).
 import { MEASURE } from '../shipment-plan-fg.constants';
+import type { PlanStatusRow } from '../shipment-plan-fg.types';
 
 export type DynColKind = 'D' | 'W' | 'M';
 
@@ -97,6 +98,39 @@ export const computeEditableRange = (params: {
   return { from, to: bodToHasColumn ? bodTo : queryToYyyymmdd };
 };
 
+// PLAN_TYPE -> 다음 단계 조회용 PLAN_TYPE_SEQ(AS-IS 주석 "PR:0/MA:1/SE:2/FN:3") — PR 이 생성되면
+//   plan_type_seq=1(=MA) 가 있는지 보는 식으로 "바로 다음 단계"를 찾는다. SE 의 다음은 FN(3).
+const NEXT_PLAN_TYPE_SEQ: Record<string, string> = { PR: '1', MA: '2', SE: '3' };
+
+const str = (v: unknown): string => (typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '');
+
+// Plan 전체 편집가능 게이트 — AS-IS GetIsEditable(.cs:3527-3658) 이식. SHIP_PLAN_AMEND 행 단위 날짜
+//   판정(위 computeEditableRange)보다 앞서 통과해야 하는 더 상위 게이트다: 더 나중 단계 Plan
+//   (PR→MA→SE→FN 순서)이 이미 생성되어 있고 그 PLAN_STATUS 가 '실패'(-1)가 아니면, 현재 선택된
+//   (더 이전 단계) Plan 은 전체 잠금된다 — 다음 단계가 이미 진행/완료됐으므로 현 단계는 더 이상
+//   손대면 안 된다는 업무 규칙. rows 는 O_RC2(Weekly/Monthly 조회일 때만 non-empty, design 03 §4.2) —
+//   Daily 는 SP 가 이 커서를 채우지 않으므로(P_BUCKET 조건) 이 게이트 자체가 적용 대상이 아니다(gate
+//   통과로 간주 — Daily 는 기존 SHIP_FROZEN/BOD 판정만 적용).
+export const computeIsEditable = (rows: PlanStatusRow[], curPlanType: string, curPlanSeq: string): boolean => {
+  if (rows.length === 0) return true; // O_RC2 비어있음(=Daily) — 이 게이트 적용 대상 아님
+  if (curPlanType === 'FN' || curPlanType === 'TE') return false; // L3546 — 최종/임시 단계는 항상 잠금
+
+  const nextSeq = NEXT_PLAN_TYPE_SEQ[curPlanType];
+  if (!nextSeq) return false; // PR/MA/SE/FN/TE 외 미지 PLAN_TYPE — AS-IS 도 분기 없이 기본값 'N'
+
+  const nextRows = rows.filter(r => str(r.PLAN_TYPE_SEQ) === nextSeq);
+  if (nextRows.length > 0) {
+    // 다음 단계가 이미 존재 — 그중 하나라도 '실패'(-1)가 아니면 잠금.
+    return !nextRows.some(r => str(r.PLAN_STATUS) !== '-1');
+  }
+
+  // 다음 단계 미생성 — PR/SE 는 무조건 Y(190604 PR 확인, SE 는 원래부터 confirm_yn 체크 없음).
+  //   MA 만 현재(planType=MA, planSeq=curPlanSeq) 행의 CONFIRM_YN 을 본다(L3622-3631).
+  if (curPlanType !== 'MA') return true;
+  const current = rows.find(r => r.PLAN_TYPE === 'MA' && str(r.PLAN_SEQ) === curPlanSeq);
+  return current?.CONFIRM_YN === 'Y';
+};
+
 export interface MainEditContext {
   bucketType: string; // BUCKET_TYPE
   division: string;
@@ -104,6 +138,7 @@ export interface MainEditContext {
   queryFromYyyymmdd: string;
   queryToYyyymmdd: string;
   weekOrMonthStart: Map<string, string>; // binding -> 대표일(yyyymmdd), calendar SP 결과에서 구성
+  isEditable: boolean; // computeIsEditable 결과(페이지가 1회 계산해 전달) — false 면 전체 잠금
 }
 
 // spdMain 셀 1개의 편집가능 여부 — 행렌더 시 계산해 캐시하는 O(1) 판정 함수.
@@ -117,6 +152,8 @@ export const isMainCellEditable = (
 
   const measure = typeof row.MEASURE === 'string' ? row.MEASURE : '';
   if (measure !== MEASURE.SHIP_PLAN_AMEND) return false; // 규칙1 — SHIP_PLAN_AMEND 행만 편집후보
+
+  if (!ctx.isEditable) return false; // computeIsEditable 게이트(AS-IS EditBlockChecking(2)) — 전체 잠금
 
   // W_/M_ SUM 컬럼은 판정과 무관하게 항상 잠금(design 03 §3.1) — M_ 은 전 Bucket 에서 항상 잠금,
   //   W_ 는 Bucket=Weekly + 81계열일 때만 편집후보(그 외 Bucket 조합은 전부 잠금).

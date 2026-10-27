@@ -1,0 +1,6 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0003,SQL,SCP0003_GET_PRODUCTION_CAPACITY_OSP,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SCP0003,SQL,SCP0003_GET_PRODUCTION_CAPACITY,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SCP0003,SQL,SCP0003_GET_SHEET_CALENDAR_3SPAN,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SCP0003,SQL,SCP0003_SAVE_PRODUCTION_CAPACITY_OSP,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SCP0003,GRID,,06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0003_ProductionCapacity\SCP0003_ProductionCapacity.cs,787,,,dt = (siMain.ActiveSheet.DataSource as DataSet).Tables[0].Select().OrderBy(c => c[DefColumns.USER_SORT_ORDER_NO]).CopyToDataTable();,0,화면 코드 정렬

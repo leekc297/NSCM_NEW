@@ -15,12 +15,12 @@ import { GlobalPsiForm } from './components/GlobalPsiForm';
 import { GlobalPsiGrid } from './components/GlobalPsiGrid';
 import { GlobalPsiModals } from './components/GlobalPsiModals';
 import {
+  CONDITION_NOT_SAVED,
   LBL,
   MENU_ID,
   MSG,
   PLAN_PERIOD_COL,
   PLAN_PERIOD_COMBO_ID,
-  SAVE_DATE_ALIAS,
   SHEETS,
 } from './global-psi.constants';
 import type { GlobalPsiRow } from './global-psi.types';
@@ -91,17 +91,11 @@ export const GlobalPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
     [calendarQuery.data]
   );
 
-  // F6 개인화 저장 payload — 공용 personalizeCondition 이 날짜키(planStartYyyymmdd/from·toYyyymmdd)를
-  //   EXCLUDED_DATE_PARAM 으로 제외해 저장에서 빠지므로, 날짜 3종만 정규식을 피하는 별칭(...Ymd)으로 바꿔 넘긴다.
-  //   나머지 조건은 그대로. 복원은 useGlobalPsiStore.restoreSearchConditions 가 같은 별칭을 되읽어 원래 키로 역매핑.
+  // F6 개인화 저장 payload — Plan Date · Plan Type · Seq · Period 는 저장하지 않는다(AS-IS ConditionNotUseList,
+  //   갭분석 C-11). 다시 열면 항상 최신 계획으로 시작한다. 복원도 같은 키를 무시(useGlobalPsiStore).
   const savedParam = useMemo(() => {
-    const { planStartYyyymmdd, fromYyyymmdd, toYyyymmdd, ...rest } = sc;
-    return {
-      ...rest,
-      [SAVE_DATE_ALIAS.planStartYyyymmdd]: planStartYyyymmdd,
-      [SAVE_DATE_ALIAS.fromYyyymmdd]: fromYyyymmdd,
-      [SAVE_DATE_ALIAS.toYyyymmdd]: toYyyymmdd,
-    };
+    const notSaved = new Set<string>(CONDITION_NOT_SAVED);
+    return Object.fromEntries(Object.entries(sc).filter(([key]) => !notSaved.has(key)));
   }, [sc]);
 
   // mount — keep-alive 탭에 남은 stale filters 자동발사 차단(clearFilters) + admin 동적 메타 fetch(mount 1회).
@@ -128,6 +122,14 @@ export const GlobalPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
       void useMessageStore.getState().setAlert({
         type: 'alert',
         content: t(MSG.REQUIRE_CONDITION, '_Please enter the required fields.'),
+      });
+      return false;
+    }
+    // 기간 시작 > 종료 — AS-IS 는 MSG00108 안내 후 조회 중단(갭분석 F-02).
+    if (Number(sc.fromYyyymmdd) > Number(sc.toYyyymmdd)) {
+      void useMessageStore.getState().setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_INVALID, '_Invalid period (start > end).'),
       });
       return false;
     }
@@ -259,17 +261,19 @@ export const GlobalPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
       {/* Nick Name 팝업(TO-BE 변경: Material 과 동일 MaterialByDivisionModal) — 선택 결과의 NICK_NAME(콜백 4번째
           인자, itembydivisionmodal-nickname-is-4th-arg-not-5th)을 searchCondition.nickName 에 저장. 취소 시 기존값 유지.
           itemId 가 아닌 nickName 축이라 별도 인스턴스로 둔다(어느 필드에서 열었는지 결과 저장이 명확). */}
+      {/* 갭분석 C-06 — 창을 열 때 Model/Nickname 입력값을 검색어로 넘기고(Material 창 검색어는 별칭도 찾는다),
+          여러 행을 고르면 고른 별칭 전부를 쉼표로 합쳐 받는다(조회 프로시저가 별칭 쉼표 복수 조회 지원). */}
       <MaterialByDivisionModal
         open={openNickNamePopup}
         modalClose={() => setOpenNickNamePopup(false)}
         setSelectedValue={(_items, _itemName, _itemClassName, nickName) =>
-          set({ nickName: nickName ?? '' })
+          set({ nickName: nickName || '' })
         }
         preSearchParams={{
           divisionId: sc.divisionId,
           scpModuleType: MENU_ID,
           operationGroup: '',
-          itemId: sc.itemId,
+          itemId: sc.nickName,
         }}
       />
 

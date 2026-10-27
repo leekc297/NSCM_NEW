@@ -1,0 +1,1205 @@
+[
+ {
+  "screen": "SCP0113",
+  "title": "Long Term Stock MGMT",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0113_LongTermStockMgmt/SCP0113_LongTermProcessPopup.cs:4054",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0113_LongTermStockMgmt/SCP0113_LongTermStockMgmt.cs:3214",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0113_LongTermStockMgmt/SCP0113_LongTermStockMgmtViewPopup.cs:869"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0113_LongTermStockMgmt/SCP0113_LongTermProcessPopup.Designer.cs:1541",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0113_LongTermStockMgmt/SCP0113_LongTermStockMgmt.Designer.cs:1071",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0113_LongTermStockMgmt/SCP0113_LongTermStockMgmtViewPopup.Designer.cs:119"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE",
+    "member": "GetPlanDateComboBox",
+    "line": "293",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MRP_VERSION",
+    "member": "GetMrpVersionComboBox",
+    "line": "303",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Find_Data_Sub",
+    "line": "514",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Save_Release",
+    "line": "568",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Save_Release",
+    "line": "639",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Save_Release",
+    "line": "654",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Save_Release",
+    "line": "725",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_Release_Queue",
+    "line": "1113",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Find_Duplicate_Check",
+    "line": "1396",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Execute_Calcuration",
+    "line": "1448",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Update_DivisionList",
+    "line": "1524",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Exec_Release_Plan",
+    "line": "1599",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_Release_Plan",
+    "line": "1628",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_Send_Mail_Quantity_Check",
+    "line": "1691",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Find_Release_Valid",
+    "line": "1741",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Find_Release_Valid",
+    "line": "1777",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_RollBack_Release",
+    "line": "1866",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Update_Release_Flag",
+    "line": "1952",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Update_Release_PlanList_2",
+    "line": "2047",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Find_Release_Plan_List_2",
+    "line": "2117",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Insert_Is_Running_Release",
+    "line": "2188",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Delete_Is_Running_Release",
+    "line": "2259",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Find_Confirm_Valid",
+    "line": "2306",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Find_Confirm_Valid",
+    "line": "2340",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_SendMail_FinalTotal",
+    "line": "2411",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Insert_Hist_Detail",
+    "line": "2479",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Exec_Send_SMS",
+    "line": "2547",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_Send_SMS",
+    "line": "2568",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Exec_MES_ERP_WO_MASTER",
+    "line": "2641",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_MES_ERP_WO_MASTER",
+    "line": "2659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Insert_OT_NET_JOB",
+    "line": "2720",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Insert_OT_NET_JOB",
+    "line": "2741",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_PR_SCM_OF_ASSY_ELEC_REPORT",
+    "line": "2806",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_PR_SCM_OF_PACK_REQUIRE_CEL",
+    "line": "2868",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Exec_PR_SCM_OF_PACK_TO_CELL",
+    "line": "2937",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_PR_SCM_OF_PACK_TO_CELL",
+    "line": "2957",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_PR_SCM_OF_CELL_DELIVERY_PLAN",
+    "line": "3024",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Exec_PR_SCM_PIC_ALARM",
+    "line": "3093",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_PR_SCM_PIC_ALARM",
+    "line": "3113",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_LGTM_MRP_P_RESULT",
+    "member": "btnCreatePlan_ClickAsync",
+    "line": "3234",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "member": "btnCreatePlan_ClickAsync",
+    "line": "3282",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "btnSearch_Click",
+    "line": "3395",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Check_Exec_IsRunningEngine",
+    "line": "3454",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Check_isConfirmed",
+    "line": "3572",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Check_CapaValidation",
+    "line": "3690",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Check_CapaValidation",
+    "line": "3700",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Check_IsPastDate",
+    "line": "3740",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "RunSqlSource",
+    "line": "3815",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN",
+    "member": "Find_Data",
+    "line": "709",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_BOH_DETAIL",
+    "member": "FindData_Detail1",
+    "line": "781",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PSI_DETAIL",
+    "member": "FindData_Detail2",
+    "line": "832",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_BOH_ENDING_DETAIL",
+    "member": "FindData_Detail3",
+    "line": "885",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MASTER_DATA",
+    "member": "GetComboBoxMasterData",
+    "line": "999",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_COMBOBOX_DATA",
+    "member": "GetComboBoxMasterData",
+    "line": "1012",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_MONTH_RANGE",
+    "member": "GetMonthRange",
+    "line": "1038",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_SAVE_REASON_FOR_LONG_TERM_MGMT_PLAN",
+    "member": "SaveDataReason",
+    "line": "1237",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_SAVE_REASON_FOR_LONG_TERM_MGMT_PLAN",
+    "member": "Save_Data_Import",
+    "line": "2115",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE",
+    "member": "GetPlanDateComboBox",
+    "line": "2313",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_BASE_MONTH",
+    "member": "GetBaseMonth",
+    "line": "2334",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_EDIT_PERIOD",
+    "member": "GetEditPeriod",
+    "line": "2521",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_MONTHLY_QTY_INPUT_PERIOD",
+    "member": "GetQtyInputPeriod",
+    "line": "2539",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION",
+    "member": "GetItemTypeQTYInputException",
+    "line": "2558",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_DETAIL_FOR_EXPORT",
+    "member": "FindData",
+    "line": "673",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmtViewPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_COMBOBOX_DATA",
+    "member": "GetComboBoxMasterData",
+    "line": "705",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmtViewPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_BASE_MONTH",
+    "member": "GetBaseMonth",
+    "line": "844",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmtViewPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "<field:_FormProcedure>",
+    "line": "55",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE",
+    "member": "GetPlanDateComboBox",
+    "line": "293",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MRP_VERSION",
+    "member": "GetMrpVersionComboBox",
+    "line": "303",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Find_Data_Sub",
+    "line": "514",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_Release_Queue",
+    "line": "1113",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Execute_Calcuration",
+    "line": "1448",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Update_DivisionList",
+    "line": "1524",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_Release_Plan",
+    "line": "1628",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_Send_Mail_Quantity_Check",
+    "line": "1691",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Find_Release_Valid",
+    "line": "1777",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_RollBack_Release",
+    "line": "1866",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Update_Release_Flag",
+    "line": "1952",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Update_Release_PlanList_2",
+    "line": "2047",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Insert_Is_Running_Release",
+    "line": "2188",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Delete_Is_Running_Release",
+    "line": "2259",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Find_Confirm_Valid",
+    "line": "2340",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_SendMail_FinalTotal",
+    "line": "2411",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Insert_Hist_Detail",
+    "line": "2479",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_Send_SMS",
+    "line": "2568",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_MES_ERP_WO_MASTER",
+    "line": "2659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Insert_OT_NET_JOB",
+    "line": "2741",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_PR_SCM_OF_ASSY_ELEC_REPORT",
+    "line": "2806",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_PR_SCM_OF_PACK_REQUIRE_CEL",
+    "line": "2868",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_PR_SCM_OF_PACK_TO_CELL",
+    "line": "2957",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_PR_SCM_OF_CELL_DELIVERY_PLAN",
+    "line": "3024",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+    "member": "Exec_PR_SCM_PIC_ALARM",
+    "line": "3113",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_LGTM_MRP_P_RESULT",
+    "member": "btnCreatePlan_ClickAsync",
+    "line": "3234",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "member": "btnCreatePlan_ClickAsync",
+    "line": "3282",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+    "member": "Check_Exec_IsRunningEngine",
+    "line": "3454",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermProcessPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN",
+    "member": "Find_Data",
+    "line": "709",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_BOH_DETAIL",
+    "member": "FindData_Detail1",
+    "line": "781",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PSI_DETAIL",
+    "member": "FindData_Detail2",
+    "line": "832",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_BOH_ENDING_DETAIL",
+    "member": "FindData_Detail3",
+    "line": "885",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MASTER_DATA",
+    "member": "GetComboBoxMasterData",
+    "line": "999",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_COMBOBOX_DATA",
+    "member": "GetComboBoxMasterData",
+    "line": "1012",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_MONTH_RANGE",
+    "member": "GetMonthRange",
+    "line": "1038",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_SAVE_REASON_FOR_LONG_TERM_MGMT_PLAN",
+    "member": "SaveDataReason",
+    "line": "1237",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_SAVE_REASON_FOR_LONG_TERM_MGMT_PLAN",
+    "member": "Save_Data_Import",
+    "line": "2115",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE",
+    "member": "GetPlanDateComboBox",
+    "line": "2313",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_BASE_MONTH",
+    "member": "GetBaseMonth",
+    "line": "2334",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_PLAN_EDIT_PERIOD",
+    "member": "GetEditPeriod",
+    "line": "2521",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_MONTHLY_QTY_INPUT_PERIOD",
+    "member": "GetQtyInputPeriod",
+    "line": "2539",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION",
+    "member": "GetItemTypeQTYInputException",
+    "line": "2558",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_LGTM_DETAIL_FOR_EXPORT",
+    "member": "FindData",
+    "line": "673",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmtViewPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_COMBOBOX_DATA",
+    "member": "GetComboBoxMasterData",
+    "line": "705",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmtViewPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0113_GET_BASE_MONTH",
+    "member": "GetBaseMonth",
+    "line": "844",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0113_LongTermStockMgmt\\SCP0113_LongTermStockMgmtViewPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_SCM_LGTM_INV_ALLOCATION_CAL",
+   "PR_SCM_LGTM_INV_ALLOCATION_IGR",
+   "PR_SCM_LGTM_INV_ALLOCATION_SPRD",
+   "PR_SCM_LGTM_INV_ALLOCATION_START",
+   "PR_SCM_LGTM_MRP_P_RESULT",
+   "PR_UI_FP00590_PLAN_CONTROL_RELEASE",
+   "SCP0084_GET_COMBOBOX_DATA",
+   "SCP0084_GET_MONTH_RANGE",
+   "SCP0113_GET_BASE_MONTH",
+   "SCP0113_GET_LGTM_DETAIL_FOR_EXPORT",
+   "SCP0113_GET_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION",
+   "SCP0113_GET_LGTM_MONTHLY_QTY_INPUT_PERIOD",
+   "SCP0113_GET_LGTM_PLAN_EDIT_PERIOD",
+   "SCP0113_GET_LGTM_PLAN_STATUS_DATA",
+   "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_BOH_DETAIL",
+   "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_BOH_ENDING_DETAIL",
+   "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MASTER_DATA",
+   "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_MRP_VERSION",
+   "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN",
+   "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN_DATE",
+   "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PSI_DETAIL",
+   "SCP0113_SAVE_REASON_FOR_LONG_TERM_MGMT_PLAN"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 라인·메시지 결과셋 반환 및 로그",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "SELECT ERROR_LINE() AS ERRORLINE; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE(); EXEC PR_SCM_SYS_LOG_BATCH(ERROR)"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_MRP_P_RESULT",
+    "sp": "PR_SCM_LGTM_MRP_P_RESULT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 후 오류 메시지 결과셋 반환 및 로그",
+    "message": "ERROR_NUMBER+ERROR_MESSAGE",
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_LGTM_MRP_P_RESULT; SELECT '' + ERROR_NUMBER + '' + ERROR_MESSAGE(); EXEC PR_SCM_SYS_LOG_BATCH(ERROR)"
+   },
+   {
+    "entry_sp": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN",
+    "sp": "SCP0113_GET_LONG_TERM_STOCK_INV_MGMT_PLAN",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "QTY",
+    "desc": "계획 소진수량 합계가 장기재고를 넘으면 잔여 장기재고를 0 으로 표시하고 초과분을 장기 징후 잔여에서 차감",
+    "message": null,
+    "on_fail": "잔여 장기재고가 0 이하이면 0 표시, 초과분은 REMAIN_LONG_TERM_EXPECT_QTY 에서 차감 표시"
+   },
+   {
+    "entry_sp": "SCP0113_SAVE_REASON_FOR_LONG_TERM_MGMT_PLAN",
+    "sp": "SCP0113_SAVE_REASON_FOR_LONG_TERM_MGMT_PLAN",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 로그 후 err_code/err_message 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "scm_sys_log_batch ERROR INSERT; SELECT @v_err_code AS err_code, @v_err_message AS err_message; IF @@TRANCOUNT > 0 COMMIT WORK"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 메시지 결과셋·로그",
+    "message": "ERROR_NUMBER() + ERROR_MESSAGE()",
+    "on_fail": "SELECT '' + Convert(NVARCHAR(10), ERROR_NUMBER()) + '' + ERROR_MESSAGE(); ERROR 로그 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION_CAL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 메시지 결과셋·로그",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE(); ERROR 로그 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION_GODS",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 메시지 결과셋·로그",
+    "message": "ERROR_NUMBER() + ERROR_MESSAGE()",
+    "on_fail": "SELECT '' + Convert(NVARCHAR(10), ERROR_NUMBER()) + '' + ERROR_MESSAGE(); ERROR 로그 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION_GODS_CAL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 메시지 결과셋·로그",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE(); ERROR 로그 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION_PLAN_COPY",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 롤백·메시지 결과셋·로그",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "ROLLBACK TRANSACTION PSI_ALLOCATION_COPY; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE(); ERROR 로그"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION_RMTL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 메시지 결과셋 반환 및 배치 로그 기록",
+    "message": "ERROR_NUMBER+ERROR_MESSAGE",
+    "on_fail": "SELECT '' + Convert(NVARCHAR(10), ERROR_NUMBER()) + '' + ERROR_MESSAGE(); EXEC PR_SCM_SYS_LOG_BATCH(ERROR)"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION_RMTL_CAL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 메시지 결과셋 반환 및 로그",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE(); EXEC PR_SCM_SYS_LOG_BATCH(ERROR)"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION_SPRD",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 메시지 결과셋 및 로그",
+    "message": "ERROR_NUMBER+ERROR_MESSAGE",
+    "on_fail": "SELECT '' + ERROR_NUMBER + '' + ERROR_MESSAGE(); EXEC PR_SCM_SYS_LOG_BATCH(ERROR)"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION_SPRD_CAL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 메시지 결과셋 및 로그",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE(); EXEC PR_SCM_SYS_LOG_BATCH(ERROR)"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "FN_NEXT_DAY",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "FORMAT",
+    "desc": "요일 코드가 SUN~SAT 이 아니면 NULL 반환(계산 중단)",
+    "message": null,
+    "on_fail": "RETURN NULL"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION_IGR",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 메시지 결과셋·로그",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE(); ERROR 로그 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "PR_SCM_LGTM_INV_ALLOCATION_START",
+    "sp": "PR_SCM_LGTM_INV_ALLOCATION_SPRD_IGR",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 메시지 결과셋 및 로그",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE(); EXEC PR_SCM_SYS_LOG_BATCH(ERROR)"
+   }
+  ]
+ }
+]

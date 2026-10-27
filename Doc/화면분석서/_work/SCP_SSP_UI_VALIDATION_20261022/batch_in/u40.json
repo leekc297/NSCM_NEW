@@ -1,0 +1,555 @@
+[
+ {
+  "screen": "SCP0116",
+  "title": "Global PSI New ESS",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0116_Global_PSI_Report_New_ESS/SCP0116_Global_PSI_Report_New_ESS.cs:2006",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0116_Global_PSI_Report_New_ESS/SCP0116_Global_PSI_Report_New_ESS.designer.cs:1636"
+  ],
+  "designer_files": [],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0116_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1305",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0116_Global_PSI_Report_New_ESS\\SCP0116_Global_PSI_Report_New_ESS.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0116_GET_SITE",
+    "member": "GetSiteList",
+    "line": "1321",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0116_Global_PSI_Report_New_ESS\\SCP0116_Global_PSI_Report_New_ESS.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0116_GET_PLAN_DATE",
+    "member": "GetPlanDate",
+    "line": "1344",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0116_Global_PSI_Report_New_ESS\\SCP0116_Global_PSI_Report_New_ESS.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0116_GET_GLOBAL_PSI_REPORT",
+    "member": "FindDataMain",
+    "line": "1225",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0116_Global_PSI_Report_New_ESS\\SCP0116_Global_PSI_Report_New_ESS.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0116_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1305",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0116_Global_PSI_Report_New_ESS\\SCP0116_Global_PSI_Report_New_ESS.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0116_GET_SITE",
+    "member": "GetSiteList",
+    "line": "1321",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0116_Global_PSI_Report_New_ESS\\SCP0116_Global_PSI_Report_New_ESS.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0116_GET_PLAN_DATE",
+    "member": "GetPlanDate",
+    "line": "1344",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0116_Global_PSI_Report_New_ESS\\SCP0116_Global_PSI_Report_New_ESS.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0116_GET_GLOBAL_PSI_REPORT",
+   "SCP0116_GET_PLAN_DATE",
+   "SCP0116_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0116_GET_SITE"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0120",
+  "title": "Constraint Mgmt",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0120_ConstraintMgmt/SCP0120_ConstraintMgmt.cs:1013"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0120_ConstraintMgmt/SCP0120_ConstraintMgmt.Designer.cs:437"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/constraint-mgmt"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetPlanGroupByUserID",
+    "line": "306",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0120_GET_LOOKUP_MASTER",
+    "member": "FindData_Main",
+    "line": "399",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0120_GET_LOOKUP_MASTER_DETAIL",
+    "member": "FindData_Sub",
+    "line": "438",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetPlanGroupByUserID",
+    "line": "306",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0120_GET_LOOKUP_MASTER",
+    "member": "FindData_Main",
+    "line": "399",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0120_GET_LOOKUP_MASTER_DETAIL",
+    "member": "FindData_Sub",
+    "line": "438",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0120_SAVE_LOOKUP_MASTER",
+    "member": "SaveData",
+    "line": "630",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0120_DELETE_LOOKUP_MASTER",
+    "member": "SaveData",
+    "line": "631",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0120_SAVE_LOOKUP_MASTER",
+    "member": "SaveData",
+    "line": "632",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0120_SAVE_LOOKUP_MASTER_DETAIL",
+    "member": "SaveData",
+    "line": "747",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0120_DELETE_LOOKUP_MASTER_DETAIL",
+    "member": "SaveData",
+    "line": "748",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0120_SAVE_LOOKUP_MASTER_DETAIL",
+    "member": "SaveData",
+    "line": "749",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0120_ConstraintMgmt\\SCP0120_ConstraintMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0120_DELETE_LOOKUP_MASTER",
+   "SCP0120_DELETE_LOOKUP_MASTER_DETAIL",
+   "SCP0120_GET_LOOKUP_MASTER",
+   "SCP0120_GET_LOOKUP_MASTER_DETAIL",
+   "SCP0120_SAVE_LOOKUP_MASTER",
+   "SCP0120_SAVE_LOOKUP_MASTER_DETAIL",
+   "SCP0121_GET_SEARCH_INFO"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0120_DELETE_LOOKUP_MASTER",
+    "sp": "SCP0120_DELETE_LOOKUP_MASTER",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "삭제 중 오류 시 로그 적재 후 F 결과코드와 오류 메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0120_DELETE_LOOKUP_MASTER_DETAIL",
+    "sp": "SCP0120_DELETE_LOOKUP_MASTER_DETAIL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Lookup Value 삭제 중 오류 시 로그 후 F 와 오류 메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0120_SAVE_LOOKUP_MASTER",
+    "sp": "SCP0120_SAVE_LOOKUP_MASTER",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 오류 시 로그 후 F 와 오류 메시지 반환(중복 Lookup Type 사전 검사 없음 — DB 제약 오류로만 차단)",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0120_SAVE_LOOKUP_MASTER_DETAIL",
+    "sp": "SCP0120_SAVE_LOOKUP_MASTER_DETAIL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Lookup Value 저장 오류 시 로그 후 F 와 오류 메시지 반환(중복 사전 검사 없음)",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0120_SAVE_LOOKUP_MASTER",
+    "sp": "SCP0120_SCP_OPT_LOOKUP_MASTER_HIST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "이력 저장 오류는 로그만 남기고 종료",
+    "message": null,
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; (결과셋·RAISERROR 없음)"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0121",
+  "title": "Plan Group Master",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0121_PlanGroupMaster/SCP0121_OwnerPopup.cs:552",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0121_PlanGroupMaster/SCP0121_PlanGroupInfoPopup.cs:436",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0121_PlanGroupMaster/SCP0121_PlanGroupMaster.cs:971"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0121_PlanGroupMaster/SCP0121_OwnerPopup.Designer.cs:431",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0121_PlanGroupMaster/SCP0121_PlanGroupInfoPopup.Designer.cs:342",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0121_PlanGroupMaster/SCP0121_PlanGroupMaster.Designer.cs:665"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/plan-group-master/components/modals",
+   "nscm-fe/features/supply/src/pages/plan-group-master"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "226",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_OwnerPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_OWNER_DATA_POPUP",
+    "member": "GetOwnerData",
+    "line": "283",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_OwnerPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_PLAN_GROUP_POPUP",
+    "member": "FindData",
+    "line": "225",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_PlanGroupInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_SAVE_PLAN_GROUP_POPUP",
+    "member": "SaveData",
+    "line": "314",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_PlanGroupInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "169",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_PlanGroupMaster.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_PLAN_GROUP_LINE",
+    "member": "FindData_PlanGroup",
+    "line": "421",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_PlanGroupMaster.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_SAVE_PLAN_GROUP_LINE",
+    "member": "Save_Data",
+    "line": "791",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_PlanGroupMaster.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DMF0000_GET_COMMON_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "226",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_OwnerPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_OWNER_DATA_POPUP",
+    "member": "GetOwnerData",
+    "line": "283",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_OwnerPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_PLAN_GROUP_POPUP",
+    "member": "FindData",
+    "line": "225",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_PlanGroupInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_SAVE_PLAN_GROUP_POPUP",
+    "member": "SaveData",
+    "line": "314",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_PlanGroupInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "169",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_PlanGroupMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_PLAN_GROUP_LINE",
+    "member": "FindData_PlanGroup",
+    "line": "421",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_PlanGroupMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_SAVE_PLAN_GROUP_LINE",
+    "member": "Save_Data",
+    "line": "791",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0121_PlanGroupMaster\\SCP0121_PlanGroupMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DMF0000_GET_COMMON_SPREAD_TITLE",
+   "SCP0121_GET_OWNER_DATA_POPUP",
+   "SCP0121_GET_PLAN_GROUP_LINE",
+   "SCP0121_GET_PLAN_GROUP_POPUP",
+   "SCP0121_GET_SEARCH_INFO",
+   "SCP0121_SAVE_PLAN_GROUP_LINE",
+   "SCP0121_SAVE_PLAN_GROUP_POPUP"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0121_SAVE_PLAN_GROUP_LINE",
+    "sp": "SCP0121_SAVE_PLAN_GROUP_LINE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "라인-Plan Group 저장 오류 시 로그 후 F 와 오류 메시지 반환(중복·존재 사전 검사 없음)",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0121_SAVE_PLAN_GROUP_POPUP",
+    "sp": "SCP0121_SAVE_PLAN_GROUP_POPUP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Plan Group 저장 오류 시 로그 후 F 와 오류 메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0121_SAVE_PLAN_GROUP_POPUP",
+    "sp": "SCP0121_SCP_OPMZ_PLAN_GR_M_HIST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "이력 저장 오류는 로그만 남기고 종료",
+    "message": null,
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; (결과셋·RAISERROR 없음)"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0122",
+  "title": "Plan Activity Mgmt",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0122_PlanActivityMgmt/SCP0122_PlanActivityMgmt.cs:587"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0122_PlanActivityMgmt/SCP0122_PlanActivityMgmt.Designer.cs:336"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/plan-activity-mgmt"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetPlanGroupByUserID",
+    "line": "155",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0122_PlanActivityMgmt\\SCP0122_PlanActivityMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0122_GET_PLAN_ACTIVITY_MGMT",
+    "member": "FindData_Main",
+    "line": "321",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0122_PlanActivityMgmt\\SCP0122_PlanActivityMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
+    "member": "Save_Data",
+    "line": "480",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0122_PlanActivityMgmt\\SCP0122_PlanActivityMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetPlanGroupByUserID",
+    "line": "155",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0122_PlanActivityMgmt\\SCP0122_PlanActivityMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0122_GET_PLAN_ACTIVITY_MGMT",
+    "member": "FindData_Main",
+    "line": "321",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0122_PlanActivityMgmt\\SCP0122_PlanActivityMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
+    "member": "Save_Data",
+    "line": "480",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0122_PlanActivityMgmt\\SCP0122_PlanActivityMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0121_GET_SEARCH_INFO",
+   "SCP0122_GET_PLAN_ACTIVITY_MGMT",
+   "SCP0122_SAVE_PLAN_ACTIVITY_MGMT"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
+    "sp": "SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Activity 저장 오류 시 로그 후 F 와 오류 메시지 반환(중복 사전 검사 없음)",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
+    "sp": "SCP0122_SCP_OPMZ_PLAN_GR_ACTV_HIST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "이력 저장 오류는 로그만 남기고 종료",
+    "message": null,
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; (결과셋·RAISERROR 없음)"
+   }
+  ]
+ }
+]

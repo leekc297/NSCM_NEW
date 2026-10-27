@@ -1,0 +1,415 @@
+# -*- coding: utf-8 -*-
+"""SCP / SSP 화면 VALIDATION 전체 산출물 빌더.
+입력: out/u*.jsonl(화면 판독) · db_rows.json(DB 판독+TO-BE 비교) · db_items.json · screens.csv · msgcalls_grep.csv · item_map.json(선택, NEW 항목 정규화)
+출력: Doc/화면분석서/{SCP,SSP}_화면_VALIDATION_취합_20261022.xlsx
+"""
+import csv, glob, json, os, re, sys
+from collections import OrderedDict, Counter, defaultdict
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+
+W = os.path.dirname(os.path.abspath(__file__))
+ROOT = r'C:/Projects/NSCM'
+OUTDIR = f'{ROOT}/Doc/화면분석서'
+STAMP = '20261022'
+
+MSG = {r['MessageID']: r for r in csv.DictReader(open(f'{ROOT}/Doc/asisfacts/db/meta/dbo.TB_FX_MessageInfo.csv', encoding='utf-8-sig'))}
+screens = OrderedDict((r['screen'], r) for r in csv.DictReader(open(f'{W}/screens.csv', encoding='utf-8-sig')))
+grep_cnt = {r['screen']: int(r['msgcalls_grep']) for r in csv.DictReader(open(f'{W}/msgcalls_grep.csv', encoding='utf-8-sig'))}
+db_rows = json.load(open(f'{W}/db_rows.json', encoding='utf-8'))
+db_items = json.load(open(f'{W}/db_items.json', encoding='utf-8'))
+item_map = json.load(open(f'{W}/item_map.json', encoding='utf-8')) if os.path.exists(f'{W}/item_map.json') else {}
+
+def sname(sid):
+    t = screens[sid]['title'] if sid in screens else ''
+    return f'{sid} {t}'.strip()
+
+def _args(a):
+    if isinstance(a, str):
+        try:
+            import ast
+            v = ast.literal_eval(a)
+            return list(v) if isinstance(v, (list, tuple)) else [v]
+        except Exception:
+            return [a] if a.strip() not in ('', '[]') else []
+    return list(a or [])
+
+def render(msg_id, args, text=''):
+    """(KO, EN) — MSG ID 면 TB_FX_MessageInfo 문구에 인자 치환."""
+    args = _args(args)
+    if msg_id and msg_id in MSG:
+        ko, en = MSG[msg_id]['Ko'], MSG[msg_id]['En']
+        for i, a in enumerate(args or []):
+            ko = ko.replace('{%d}' % i, str(a)); en = en.replace('{%d}' % i, str(a))
+        return f'[{msg_id}] {ko}', en
+    if msg_id:
+        return f'[{msg_id}] (메시지 마스터에 없음) {text}'.strip(), ''
+    return text or '(메시지 없음)', ''
+
+def norm_item(name):
+    name = item_map.get(name, name)
+    return name[4:] if name.startswith('NEW:') else name
+
+# ------------------------------------------------------------------ 판독 결과 로드
+ui, ref, excl, sp, msgcall, summ = [], [], [], {}, defaultdict(list), {}
+loaded = set()
+for f in sorted(glob.glob(f'{W}/out/u*.jsonl')):
+    for _ln, line in enumerate(open(f, encoding='utf-8'), 1):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            o = json.loads(line)
+        except json.JSONDecodeError:
+            print('BAD JSON', f, line[:80]); continue
+        t = o.get('t')
+        o['_uid'] = f'{os.path.basename(f)}:{_ln}'
+        if t == 'ui': ui.append(o)
+        elif t == 'ref': ref.append(o)
+        elif t == 'excl': excl.append(o)
+        elif t == 'sp': sp[(o['screen'], o['sp'])] = o
+        elif t == 'msgcall': msgcall[o['screen']].append(o)
+        elif t == 'summary': summ[o['screen']] = o; loaded.add(o['screen'])
+
+# 메시지 ID AS-IS↔TO-BE 대조 결과(msgcheck_out — TO-BE FE 코드 + SCM_ADM_MSG_M 2026-10-23 06:58)
+msgchk = {}
+for f in glob.glob(f'{W}/msgcheck_out/m*.jsonl'):
+    for line in open(f, encoding='utf-8'):
+        if line.strip():
+            o = json.loads(line); msgchk[o['uid']] = o
+
+# ------------------------------------------------------------------ 행 구성
+EV_ORDER = ['화면 열기(OPEN)', '조회(SEARCH)', '편집(EDIT)', '행추가(INSERT)', '삭제(DELETE)', '셀 클릭(CLICK)', '셀 입력(CHANGE)', '붙여넣기(PASTE)',
+            '저장(SAVE)', '실행(RUN)', '엑셀 업로드(UPLOAD)', '엑셀 다운로드(EXCEL)', '팝업(POPUP)', '기타(ETC)']
+def ev_rank(ev):
+    for i, k in enumerate(EV_ORDER):
+        if ev.startswith(k):
+            return i
+    return len(EV_ORDER)
+
+DB_EXC_ITEM = ('DB 처리 오류(일반 예외 — 롤백·실패 반환)', 'EXCEPTION')
+
+def db_item_of(r):
+    if r['check_type'] == 'EXCEPTION':
+        return DB_EXC_ITEM
+    it = db_items.get(r['item'] or '', {})
+    desc = it.get('desc') or r['desc'] or ''
+    return (f"[DB {r['item']}] {desc}".strip(), r['check_type'] or '')
+
+block, refrows, exclrows = [], [], []
+VALID_APPLY = ('적용', '부분적용', '미적용', 'TO-BE 미개발')
+for o in ui:
+    sid = o['screen']
+    if o.get('tobe_apply') not in VALID_APPLY and o.get('tobe_basis') in VALID_APPLY:
+        # 칸 밀림 보정(판독 출력에서 tobe_apply↔위치·설명이 한 칸씩 밀린 경우)
+        # 확인된 밀림 형태(SCP0005 업로드): msg_text←TO-BE근거, remark←메시지, asis_loc←설명, tobe_apply←위치, tobe_basis←적용여부
+        mt, rm, al, ta, tb = o.get('msg_text', ''), o.get('remark', ''), o.get('asis_loc', ''), o.get('tobe_apply', ''), o.get('tobe_basis')
+        o['msg_text'], o['remark'], o['asis_loc'], o['tobe_apply'], o['tobe_basis'] = rm, al, ta, tb, f'{mt} (판독 출력 칸 밀림 보정)'
+    ko, en = render(o.get('msg_id'), o.get('msg_args'), o.get('msg_text', ''))
+    apply_, basis_ = o.get('tobe_apply') or 'TO-BE 미개발', o.get('tobe_basis', '')
+    mc = msgchk.get(o['_uid'])
+    tobe_ids, tobe_msg, meaning = [], '', ''
+    if apply_ in ('적용', '부분적용'):
+        if mc:
+            tobe_ids = [x for x in (mc.get('tobe_msg_ids') or []) if x]
+            tobe_msg = mc.get('tobe_msg_ko') or mc.get('tobe_text') or ''
+            meaning = (mc.get('meaning') or '') + (f" — {mc['note']}" if mc.get('note') else '')
+            if mc.get('meaning') in ('불일치', 'TO-BE 미등록') and apply_ == '적용':
+                apply_ = '부분적용'
+                basis_ += f" | [메시지 의미 대조] {mc.get('meaning')}: TO-BE 가 표시하는 문구가 AS-IS 와 뜻이 다름 → 부분적용"
+        else:
+            meaning = '미대조'
+    asis_id = o.get('msg_id') or ''
+    id_disp = ', '.join(([asis_id] if asis_id else []) + [f'{x}(TO-BE)' for x in tobe_ids])
+    block.append({'sid': sid, 'event': o['event'], 'kind': 'UI', 'apply': apply_, 'seq': o.get('seq') or 0,
+                  'msg': ko, 'remark': o.get('remark', ''), 'cls': o.get('cls', 'A'), 'msgid': asis_id, 'msgid_disp': id_disp,
+                  'tobe_ids': tobe_ids, 'tobe_msg': tobe_msg, 'meaning': meaning, 'en': en,
+                  'item': (norm_item(o.get('item', '')), o.get('check_type', '')), 'target': o.get('target', ''),
+                  'loc': o.get('asis_loc', ''), 'tobe': basis_})
+for o in ref:
+    refrows.append({'sid': o['screen'], 'event': o['event'], 'kind': 'UI', 'gubun': o.get('gubun', ''), 'item': norm_item(o.get('item', '')),
+                    'content': o.get('content', ''), 'loc': o.get('loc', ''), 'tobe': o.get('tobe', '-')})
+for o in excl:
+    exclrows.append([sname(o['screen']), o.get('event', ''), o.get('kind', ''), o.get('what', ''), o.get('loc', ''), o.get('reason', '')])
+
+ui_msgids = {(o['screen'], o.get('msg_id')) for o in ui if o.get('msg_id')}
+missing_sp = []
+for sid, rs in db_rows.items():
+    for r in rs:
+        h = sp.get((sid, r['entry_sp'])) or sp.get((sid, r['sp']))
+        if not h:
+            missing_sp.append((sid, r['entry_sp']))
+        ev = (h or {}).get('event') or '기타(ETC)'
+        cls = (r['cls'] or '')[:1]
+        sub = '' if not r['depth'] or str(r['depth']) == '0' else f" (하위 SP {r['sp']} 에서 검사)"
+        remark = (r['desc'] or '') + sub
+        if r.get('note'):
+            remark += f" {r['note']}"
+        loc = f"{r['sp']} L{r['asis_line']}" if r['asis_line'] else r['sp']
+        if h and h.get('asis_loc'):
+            loc += f" / {h['asis_loc']}"
+        cmp = r['tobe_cmp'][0] if r['tobe_cmp'] else {}
+        basis = ' '.join(x for x in [f"[DB {cmp.get('verdict', '')}]" if cmp else '', cmp.get('tobe') or '', cmp.get('loc') or '', cmp.get('diff') or ''] if x)
+        apply_ = r['tobe_apply']
+        if h and h.get('fe_note'):
+            basis += f" | FE: {h['fe_note']}"
+        if h and h.get('fe_downgrade') and apply_ == '적용':
+            apply_ = '부분적용'
+            basis += f" | 화면 결과 차이: {h.get('fe_downgrade_reason', '')}"
+        if h and h.get('unreachable'):
+            exclrows.append([sname(sid), ev, 'DB', f"[{r['cls']}] {r['desc'] or ''} ({r['sp']})", loc, f"SP 호출 경로 미실행 — {h.get('unreachable_reason', '')}"])
+            continue
+        if cls in ('A', 'D'):
+            if cls == 'D':
+                ko = '(메시지 없음) 조회 결과에 표시'
+                en = ''
+                fb = (h or {}).get('fail_business') or {}
+                if fb.get('msg_id') and (sid, fb.get('msg_id')) in ui_msgids:
+                    remark += f" (이 결과로 화면이 막는 메시지 [{fb.get('msg_id')}] 는 UI 행 참조)"
+                elif fb.get('msg_id'):
+                    # 화면이 이 조회 결과(목록·건수·플래그)로 메시지를 띄우고 진행을 막는 경우
+                    ko, en = render(fb.get('msg_id'), fb.get('msg_args'), fb.get('msg_text', ''))
+                    remark += ' (화면이 이 조회 결과로 메시지를 띄우고 진행을 막음)'
+                if h and h.get('display_note'):
+                    remark += f" [화면 표시: {h['display_note']}]"
+                if r.get('message'):
+                    remark += f" (표시값: {r['message']})"
+            else:
+                hd = (h or {}).get('fail_exception' if r['check_type'] == 'EXCEPTION' else 'fail_business') or {}
+                ko, en = render(hd.get('msg_id'), hd.get('msg_args'), (hd.get('msg_text') or '').replace('{DB메시지}', str(r.get('message') or '')))
+                if not hd:
+                    ko = f"(화면 처리 미확인) DB 메시지: {r.get('message') or ''}"
+                if r.get('message') and '{DB메시지}' not in (hd.get('msg_text') or ''):
+                    remark += f" (DB 반환 메시지: {r['message']})"
+            block.append({'sid': sid, 'event': ev, 'kind': 'DB', 'apply': apply_, 'seq': None, 'msg': ko, 'remark': remark, 'cls': cls,
+                          'msgid': (h or {}).get('fail_business', {}).get('msg_id', '') if cls == 'A' else '-', 'en': en,
+                          'item': db_item_of(r), 'target': r['target'] or '', 'loc': loc, 'tobe': basis,
+                          '_ord': (int(r['depth'] or 0), r['sp'], str(r['asis_line']))})
+        else:
+            g = {'B': 'B 보정', 'C': 'C 필터'}.get(cls, cls)
+            it = db_item_of(r)[0]
+            refrows.append({'sid': sid, 'event': ev, 'kind': 'DB', 'gubun': g, 'item': it, 'content': remark, 'loc': loc,
+                            'tobe': f"{apply_} — {basis}"})
+
+# SP 결과로 화면이 막는 메시지(sp.fail_business.msg_id)가 UI 행에도, 그 SP 의 DB 행에도 반영되지 않았으면 UI 행으로 보완
+db_sps_used = {(sid, r['entry_sp']) for sid, rs in db_rows.items() for r in rs if (r['cls'] or '')[:1] in ('A', 'D')} | \
+              {(sid, r['sp']) for sid, rs in db_rows.items() for r in rs if (r['cls'] or '')[:1] in ('A', 'D')}
+for (sid, spn), h in sp.items():
+    fb = h.get('fail_business') or {}
+    mid = fb.get('msg_id')
+    if not mid or h.get('unreachable') or (sid, mid) in ui_msgids or (sid, spn) in db_sps_used or mid in ('MSG00006', 'MSG00003', 'MSG00042', 'MSG00284'):
+        continue
+    ko, en = render(mid, fb.get('msg_args'), fb.get('msg_text', ''))
+    block.append({'sid': sid, 'event': h.get('event') or '기타(ETC)', 'kind': 'UI', 'apply': 'TO-BE 미개발' if not screens.get(sid, {}).get('tobe_folders') else '미확인',
+                  'seq': 0, 'msg': ko, 'remark': f"{spn} 조회·처리 결과를 화면이 판정해 메시지를 띄우고 진행을 막음. {h.get('display_note', '')}".strip(),
+                  'cls': 'A', 'msgid': mid, 'en': en, 'item': ('SP 결과 기반 화면 차단', 'STATUS'), 'target': spn,
+                  'loc': h.get('asis_loc', ''), 'tobe': (h.get('fe_note') or '') + ' [SP 처리 매핑 기반 자동 보완 — TO-BE 적용여부 개별 대조 안 됨]'})
+    ui_msgids.add((sid, mid))
+
+# 같은 항목명은 검증 유형이 배치마다 달라도 한 항목으로 — 유형은 최빈값
+_ct = defaultdict(Counter)
+for b in block: _ct[b['item'][0]][b['item'][1]] += 1
+for b in block: b['item'] = (b['item'][0], _ct[b['item'][0]].most_common(1)[0][0])
+
+# SEQ: UI 행은 에이전트 SEQ, DB 행은 같은 이벤트 UI 행 뒤에 이어 번호
+order_scr = list(screens)
+block.sort(key=lambda b: (order_scr.index(b['sid']) if b['sid'] in order_scr else 999, ev_rank(b['event']), b['event'],
+                          0 if b['kind'] == 'UI' else 1, b['seq'] or 0, b.get('_ord', (0, '', ''))))
+last = defaultdict(int)
+for b in block:  # 이벤트 안 일련번호(정렬 순서 = UI 검사 순서 → DB) — 보완 행과 SEQ 중복 방지
+    k = (b['sid'], b['event'])
+    last[k] += 1; b['seq'] = last[k]
+refrows.sort(key=lambda r: (order_scr.index(r['sid']) if r['sid'] in order_scr else 999, ev_rank(r['event']), r['event'], 0 if r['kind'] == 'UI' else 1))
+
+# ------------------------------------------------------------------ 공통 프레임워크(BaseForm 자동) — FRAMEWORK_REF §1-A 중 A 차단
+COMMON = [
+    ('조회(SEARCH)', 'MSG00096', [], '로그인 사용자에게 이 화면의 조회 권한이 없으면 조회를 막습니다.', 'BaseForm.OnClickFindButton L3607-3611'),
+    ('편집(EDIT)', 'MSG00096', [], '수정 권한이 없으면 편집 모드로 바꾸지 않습니다.', 'BaseForm.OnClickEditButton L3668-3672'),
+    ('편집(EDIT)', 'MSG00115', [], '그리드가 그룹 보기 상태면 편집 모드로 바꿀 수 없습니다.', 'BaseForm L3675-3679'),
+    ('편집(EDIT)', 'MSG00139', [], '그리드가 정렬된 상태면 편집 모드로 바꿀 수 없습니다.', 'BaseForm L3682-3686'),
+    ('편집(EDIT)', 'MSG00162', [], '정렬을 바꾼 뒤에는 다시 조회해야 편집 모드로 바꿀 수 있습니다.', 'BaseForm L3689-3693'),
+    ('편집(EDIT)', 'MSG00007', [], '대상 그리드를 선택하지 않았으면 막습니다(그리드가 하나면 자동 선택).', 'BaseForm CheckValidation L3697-3703, L3941-3946'),
+    ('행추가(INSERT)', 'MSG00096', [], '입력 권한이 없으면 행 추가를 막습니다.', 'BaseForm.OnClickInsertButton L3790-3794'),
+    ('행추가(INSERT)', 'MSG00007', [], '대상 그리드를 선택하지 않았으면 막습니다.', 'BaseForm L3816, L3941-3946'),
+    ('행추가(INSERT)', 'MSG00008', [], '편집 모드가 아니면(시트 잠금) 행 추가를 막습니다.', 'BaseForm L3941-3976'),
+    ('삭제(DELETE)', 'MSG00096', [], '삭제 권한이 없으면 막습니다.', 'BaseForm.OnClickDeleteButton L3828-3832'),
+    ('삭제(DELETE)', 'MSG00007', [], '대상 그리드를 선택하지 않았으면 막습니다.', 'BaseForm L3836, L3941-3946'),
+    ('삭제(DELETE)', 'MSG00009', [], '편집 모드가 아니면(시트 잠금) 삭제를 막습니다.', 'BaseForm L3941-3976'),
+    ('저장(SAVE)', 'MSG00096', [], '저장 권한이 없으면 막습니다.', 'BaseForm.OnClickSaveButton L3844-3848'),
+    ('저장(SAVE)', '', [], '대상 그리드가 없으면 메시지 없이 저장을 중단합니다.', 'BaseForm L3854'),
+    ('저장(SAVE)', 'MSG00010', [], '편집 모드가 아니면(시트 잠금) 저장을 막습니다.', 'BaseForm L3861, L3954-3969'),
+    ('저장(SAVE)', 'MSG00133', [], '모든 그리드에 추가·수정·삭제 표시(Action)가 하나도 없으면 "수정한 내용이 없습니다"로 막고 화면 저장 로직을 부르지 않습니다.', 'BaseForm L3864-3919'),
+    ('엑셀 다운로드(EXCEL)', 'MSG00007', [], '대상 그리드를 선택하지 않았으면 막습니다.', 'BaseForm.OnClickExcelButton L3925, L3941-3946'),
+    ('기타(ETC) — 정렬', 'MSG00140', [], '편집 모드에서는 정렬할 수 없습니다.', 'BaseForm L5268-5275, L5623-5656'),
+    ('화면 열기(OPEN) — 메인 메뉴', 'MSG00095', [], '동시에 열 수 있는 화면 수를 넘으면 새 화면을 열지 않습니다.', 'GSCM_MainForm L1665'),
+    ('화면 열기(OPEN) — 메인 메뉴', 'MSG00096', [], '메뉴 권한이 없으면 화면을 열지 않습니다.', 'GSCM_MainForm L1676-1683, L1715-1721'),
+]
+
+# ------------------------------------------------------------------ 출력 유틸
+HF = PatternFill('solid', fgColor='1F4E78'); GF = PatternFill('solid', fgColor='808080'); SF = PatternFill('solid', fgColor='D9E1F2')
+thin = Side(style='thin', color='BFBFBF'); BD = Border(left=thin, right=thin, top=thin, bottom=thin)
+AF = {'적용': 'E2EFDA', '부분적용': 'FFF2CC', '미적용': 'F8CBAD', 'TO-BE 미개발': 'EDEDED', '미확인': 'DDEBF7'}
+
+def col_letter(i):
+    s = ''
+    while i:
+        i, r = divmod(i - 1, 26); s = chr(65 + r) + s
+    return s
+
+def sheet(ws, cols, data, widths, extra_from=None):
+    ws.append(cols)
+    for i, c in enumerate(ws[1], 1):
+        c.font = Font(bold=True, color='FFFFFF'); c.alignment = Alignment(wrap_text=True, vertical='center', horizontal='center')
+        c.fill = HF if (extra_from is None or i < extra_from) else GF
+        c.border = BD
+    for r in data:
+        ws.append([('' if v is None else (str(v)[:32000] if isinstance(v, str) else v)) for v in r])
+    for row in ws.iter_rows(min_row=2):
+        for c in row:
+            c.alignment = Alignment(wrap_text=True, vertical='top'); c.border = BD
+    for i, w in enumerate(widths, 1):
+        ws.column_dimensions[col_letter(i)].width = w
+    ws.freeze_panes = 'A2'
+    ws.auto_filter.ref = ws.dimensions
+
+def band(ws, keycols, ncols):
+    prev = None
+    for r in ws.iter_rows(min_row=2):
+        k = tuple(r[i].value for i in keycols)
+        if k != prev:
+            for c in r[:ncols]:
+                c.fill = SF
+        prev = k
+
+def build(dom):
+    other = 'SSP' if dom == 'SCP' else 'SCP'
+    B = [b for b in block if b['sid'].startswith(dom)]
+    R = [r for r in refrows if r['sid'].startswith(dom)]
+    Bo = [b for b in block if b['sid'].startswith(other)]
+    Ro = [r for r in refrows if r['sid'].startswith(other)]
+
+    # 집계 — 차단
+    gi = OrderedDict()
+    for b in B: gi.setdefault(b['item'], []).append(b)
+    oth = defaultdict(set)
+    for b in Bo: oth[b['item']].add(b['sid'])
+    srt = sorted(gi.items(), key=lambda kv: (-len({x['sid'] for x in kv[1]}), kv[0][0].startswith('[DB'), kv[0][0]))
+    bid = {k: f'VB{i:03d}' for i, (k, _) in enumerate(srt, 1)}
+    agg = []
+    for k, rs in srt:
+        uis = list(OrderedDict.fromkeys(sname(x['sid']) for x in rs))
+        cnt = Counter(x['apply'] for x in rs)
+        agg.append([bid[k], k[0], k[1], '/'.join(OrderedDict.fromkeys(x['kind'] for x in rs)), '/'.join(OrderedDict.fromkeys(x['cls'] for x in rs)),
+                    ', '.join([m for m in OrderedDict.fromkeys(x['msgid'] for x in rs) if m and m != '-'][:8]),
+                    ', '.join(f'{m}(TO-BE)' for m in list(OrderedDict.fromkeys(t for x in rs for t in x.get('tobe_ids', [])))[:8]), rs[0]['msg'],
+                    len(uis), '\n'.join(uis), len(rs),
+                    '\n'.join(f"· {sname(x['sid'])} | {x['event']} | SEQ {x['seq']} | {x['target']} | TO-BE {x['apply']}" for x in rs[:200]) + (f'\n… 외 {len(rs) - 200}건' if len(rs) > 200 else ''),
+                    ' / '.join(f'{a} {cnt[a]}' for a in ('적용', '부분적용', '미적용', 'TO-BE 미개발') if cnt[a]),
+                    ', '.join(sorted(oth.get(k, [])))])
+    # 집계 — 보정_필터
+    gr = OrderedDict()
+    for r in R: gr.setdefault(r['item'], []).append(r)
+    otr = defaultdict(set)
+    for r in Ro: otr[r['item']].add(r['sid'])
+    srt2 = sorted(gr.items(), key=lambda kv: (-len({x['sid'] for x in kv[1]}), kv[0].startswith('[DB'), kv[0]))
+    rid = {k: f'VR{i:03d}' for i, (k, _) in enumerate(srt2, 1)}
+    agg2 = []
+    for k, rs in srt2:
+        uis = list(OrderedDict.fromkeys(sname(x['sid']) for x in rs))
+        agg2.append([rid[k], k, '/'.join(OrderedDict.fromkeys(x['gubun'] for x in rs)), '/'.join(OrderedDict.fromkeys(x['kind'] for x in rs)),
+                     len(uis), '\n'.join(uis), len(rs),
+                     '\n'.join(f"· {sname(x['sid'])} | {x['event']} | {x['content'][:160]}" for x in rs[:200]) + (f'\n… 외 {len(rs) - 200}건' if len(rs) > 200 else ''),
+                     ', '.join(sorted(otr.get(k, [])))])
+
+    wb = Workbook()
+    ws = wb.active; ws.title = '작성기준'
+    dsc = [s for s in screens if s.startswith(dom)]
+    cB = Counter(b['apply'] for b in B)
+    basis = [
+        ['대상 화면', f'{dom} {len(dsc)}화면 (DB VALIDATION 취합과 동일 범위). 화면별 AS-IS C#(GSCM 최신 소스) 로직 파일 전문 판독 + 화면 전용 팝업 소스 포함'],
+        ['화면 ID', 'UI_ID + 공백 + UI 명. UI 명 = AS-IS 메뉴명(TB_FX_MenuItemInfo.Title, 없으면 ProgramInfo.ProgramName)'],
+        ['UI별VALIDATION_차단', '사용자가 인지하는 검증: A 차단형(메시지를 띄우고 진행을 막음) + D 검증리포트형(조회 결과로 문제 데이터를 보여줌). UI = 화면(C#) 검증, DB = 저장·조회 SP 검증(화면이 보여주는 메시지로 표기)'],
+        ['UI별VALIDATION_보정_필터', 'B 보정형(값을 자동으로 바꾸고 계속) · C 필터형(조건 불충족 행을 조용히 제외) · 메시지 없는 화면 편집 제어. 참고 데이터'],
+        ['집계 시트', '같은 검증 항목을 묶어 어느 화면이 같이 쓰는지 표시. 항목 ID = VB(차단)·VR(보정_필터) 일련번호, 사용 화면 수가 많은 순. 상세 시트 "(참고) 항목 ID" 로 연결. "타 도메인 사용 UI" = 같은 항목을 쓰는 상대 도메인 화면'],
+        ['항목 기준', 'UI 검증 = 표준 항목명(권한·필수·범위·중복 등). DB 검증 = DB VALIDATION 취합의 항목 ID([DB Vxxxx] 대표 설명). 단 DB 일반 예외(CATCH)는 "DB 처리 오류(일반 예외 — 롤백·실패 반환)" 하나로 묶음'],
+        ['공통_프레임워크', 'BaseForm 이 버튼마다 자동으로 하는 검사(권한·편집 모드·수정 내용 없음 등). 모든 화면 공통이라 화면별 시트에 반복하지 않음. 화면이 자체 버튼으로 이 흐름을 우회하면 판독현황 비고에 기재'],
+        ['제외_미실행', '코드에는 있으나 현재 사용자가 실행할 수 없는 경로(숨김 시트, 쓰이지 않는 결과셋, 항상 거짓 분기 등). 주석 처리된 코드는 어디에도 싣지 않음'],
+        ['메시지 원문', 'AS-IS 메시지 마스터 TB_FX_MessageInfo(LGCE_SCMDEV 2026-10-16 덤프) 한국어 문구에 화면이 넘기는 값({0},{1})을 채워 표기. DB 가 만든 문구는 원문. 영문은 (참고) 영문 메시지'],
+        ['DB 근거', f'{dom}_DB_VALIDATION_취합_20261022 판독 결과(AS-IS 덤프 라인) · TO-BE 비교 = 사내 ZIOUI1 2026-10-22 16:25 스냅샷. DB 행의 EVENT·화면 메시지는 화면 C# 의 SP 호출·결과 처리 판독으로 매핑'],
+        ['SEQ', '이벤트 안에서 검사 순서. UI 행이 먼저, 그 이벤트에서 호출하는 SP 의 DB 검증이 뒤(호출 깊이·SP·라인 순)'],
+        ['TO-BE 적용여부', '적용 = 같은 조건으로 막음(메시지 번호·문구·시점 차이는 근거에 기재) / 부분적용 = 검사는 있으나 대상·경로·표시·반환값·로그 일부 다름 / 미적용 = TO-BE 에 해당 검사 없음 / TO-BE 미개발 = TO-BE 화면(FE) 또는 DB 전환본이 없음. '
+                           'UI 행 = TO-BE FE 소스(nscm-fe, 2026-10-22) 코드 대조, DB 행 = 16:25 스냅샷 비교(+FE 처리 차이 반영). 코드 판독 기준이며 화면 실행 검증은 하지 않음'],
+        ['MSG ID 표기', '(참고) MSG ID 칸은 AS-IS 메시지 ID 를 먼저 적고, TO-BE 가 적용(적용·부분적용)된 행은 TO-BE 화면이 실제로 표시하는 메시지 ID 를 옆에 "(TO-BE)" 로 덧붙임(예: MSG00002, MSG00429(TO-BE)). VALIDATION MESSAGE 칸은 AS-IS 문구. 집계 시트는 MSG ID(AS-IS)·MSG ID(TO-BE) 두 칸'],
+        ['메시지 의미 대조', 'AS-IS·TO-BE 는 메시지 번호 체계가 다르므로 번호가 아니라 문구 의미로 대조(2026-10-23 사용자 지시). TO-BE ID·문구는 TO-BE FE 코드(상수 정의까지 추적)와 TO-BE 메시지 마스터(사내 ZIOUI1 SCM_ADM_MSG_M, 2026-10-23 06:58 조회, 740 ID)로 확정. '
+                     '일치 / 불일치(번호가 같아도 뜻이 다름 — 예: TO-BE MSG00002="성공적으로 저장되었습니다") / TO-BE 미등록(마스터에 없는 ID → fallback 문자열 표시) / 메시지 없음 / AS-IS 문구 이상(AS-IS 코드 의도와 AS-IS 마스터 문구가 이미 어긋남 — 의도 기준으로 판정). 불일치·미등록이면 적용 → 부분적용으로 조정'],
+        ['AS-IS 문구 재확인(2026-10-23)', '① 조회 필수 메시지 MSG00002 의 {0} = GetTerm(LayoutControlItem.CustomizationFormText)(DataUtil.cs L437 외) — 다수 화면 Designer 에서 Division 항목 CustomizationFormText="Bucket"(예: SCP0012 L736) + AS-IS 용어 마스터 Bucket→Bucket 이라 AS-IS 실제 표시는 "Bucket 값은 필수 입력입니다"(AS-IS 원문 동작). '
+                     '② SCP0125~0133 등은 날짜 형식 오류에 MSG00046 을 쓰나(코드 주석 의도 "유효한 날짜 형식이 아닙니다 {0}") AS-IS DB(LGCE_SCMDEV, 2026-10-23 06:57 직접 조회) MSG00046="삭제할 데이터가 없습니다." — AS-IS 문구 이상. 같은 의미 ID 는 AS-IS MSG00049 / TO-BE MSG01081·MSG00611. ※ AS-IS 운영 DB 는 접속 불가라 개발 DB 기준'],
+        ['건수', f'차단 {len(B)}행(UI {sum(1 for b in B if b["kind"] == "UI")} / DB {sum(1 for b in B if b["kind"] == "DB")}) · 항목 {len(agg)} · 보정_필터 {len(R)}행 · 항목 {len(agg2)} · TO-BE ' + ' / '.join(f'{a} {cB[a]}' for a in ('적용', '부분적용', '미적용', 'TO-BE 미개발') if cB[a])],
+        ['TO-BE 미확인', '"미확인" = SP 결과로 화면이 막는 메시지를 SP 처리 판독에서 보완해 넣은 행(TO-BE 개별 대조 안 함). 근거 칸에 "[SP 처리 매핑 기반 자동 보완]" 표기'],
+        ['공통 확인 사실', '① BaseFormAsync.ExecuteSQL(06.UIL/GSCM.SystemMgmt.UIL/BaseFormAsync.cs L454·L536)은 조건 없이 조회조건 검사를 다시 호출 → 이를 쓰는 이벤트마다 권한 Division·필수 라벨 검사 실행(보완 판독 반영). '
+                    '② 화면이 결과코드를 보지 않고 서비스 Success 만 보는 경우, SP 가 'F' 결과셋을 돌려줘도 실패로 볼지는 외부 DLL(TheOne.ServiceModel)이라 원문 확인 불가 → "결과코드 미판정" 으로 표기. '
+                    '③ Division 컨트롤 이름이 cboDivision/clbDivision 이 아니거나 UsrCheckedList2 면 권한 Division 검사 대상 아님(DataUtil L390-416). '
+                    '④ 메시지 호출 대조 기준값은 문자열 리터럴을 인식하는 주석 제거로 산출(정규식 제거는 문자열 안 /* 를 주석으로 오인)'],
+        ['판독 한계', 'Designer 1,500줄 초과 파일은 필수 라벨(*)·Visible·Enabled grep 판독. 필수 컬럼 메타(TO-BE INPUT_TP_CD) 실등록값 미대조. DB 결과코드의 TO-BE 화면 표시는 BE 공통 판정 의존(FE 판정 없음) — 실행 검증 필요'],
+    ]
+    sheet(ws, ['항목', '내용'], basis, [20, 150])
+
+    ws = wb.create_sheet('UI별VALIDATION_차단')
+    data = [[sname(b['sid']), b['event'], b['kind'], b['apply'], b['seq'], b['msg'], b['remark'], b['cls'], b.get('msgid_disp') or b['msgid'],
+             b.get('tobe_msg', ''), b.get('meaning', ''), b['en'], bid[b['item']], b['target'], b['loc'], b['tobe']] for b in B]
+    sheet(ws, ['화면 ID', 'EVENT', 'UI / DB', 'TO-BE 적용여부', 'SEQ', 'VALIDATION MESSAGE', 'REMARK', '(참고) 분류', '(참고) MSG ID',
+               '(참고) TO-BE 메시지', '(참고) 메시지 의미 대조', '(참고) 영문 메시지', '(참고) 항목 ID', '(참고) 검증 대상', '(참고) AS-IS 근거 위치', '(참고) TO-BE 근거'],
+          data, [24, 30, 7, 12, 6, 44, 70, 7, 22, 36, 30, 34, 10, 26, 45, 60], extra_from=8)
+    band(ws, (0, 1), 7)
+    for r in ws.iter_rows(min_row=2):
+        r[3].fill = PatternFill('solid', fgColor=AF.get(r[3].value, 'FFFFFF')); r[3].alignment = Alignment(horizontal='center', vertical='top', wrap_text=True)
+
+    ws = wb.create_sheet('VALIDATION_차단_집계')
+    sheet(ws, ['항목 ID', '검증 항목', '검증 유형', 'UI / DB', '분류', 'MSG ID(AS-IS)', 'MSG ID(TO-BE)', '대표 VALIDATION MESSAGE', '사용 UI 수', '사용 UI 목록', '건수', '화면별 상세 (화면 | EVENT | SEQ | 검증 대상 | TO-BE)', 'TO-BE 적용 현황', f'타 도메인({other}) 사용 UI'],
+          agg, [9, 34, 11, 8, 6, 18, 22, 40, 9, 26, 6, 95, 24, 26])
+
+    ws = wb.create_sheet('UI별VALIDATION_보정_필터')
+    data = [[sname(r['sid']), r['event'], r['kind'], r['gubun'], rid[r['item']], r['item'], r['content'], r['loc'], r['tobe']] for r in R]
+    sheet(ws, ['화면 ID', 'EVENT', 'UI / DB', '구분', '항목 ID', '항목', '내용(REMARK)', '근거 위치', 'TO-BE 비교'], data, [24, 30, 7, 14, 9, 32, 75, 45, 45])
+    band(ws, (0, 1), 9)
+
+    ws = wb.create_sheet('VALIDATION_보정_필터_집계')
+    sheet(ws, ['항목 ID', '항목', '구분', 'UI / DB', '사용 UI 수', '사용 UI 목록', '건수', '화면별 상세 (화면 | EVENT | 내용)', f'타 도메인({other}) 사용 UI'], agg2, [9, 36, 16, 8, 9, 26, 6, 110, 26])
+
+    ws = wb.create_sheet('제외_미실행')
+    sheet(ws, ['화면 ID', 'EVENT', 'UI / DB', '검증 / 메시지', '근거 위치', '제외 사유'], [e for e in exclrows if e[0].startswith(dom)], [24, 30, 7, 60, 40, 60])
+
+    ws = wb.create_sheet('공통_프레임워크')
+    data = []
+    for i, (ev, mid, args, rm, loc) in enumerate(COMMON, 1):
+        ko, en = render(mid, args) if mid else ('(메시지 없음)', '')
+        data.append(['전 화면 공통(BaseForm)', ev, 'UI', i, ko, rm, en, loc])
+    sheet(ws, ['적용 범위', 'EVENT', 'UI / DB', 'SEQ', 'VALIDATION MESSAGE', 'REMARK', '(참고) 영문 메시지', '(참고) 근거 위치'], data, [22, 26, 7, 6, 44, 70, 34, 45])
+
+    ws = wb.create_sheet('판독현황')
+    data = []
+    for s in dsc:
+        sm = summ.get(s, {})
+        logic = [e.rsplit(':', 1)[0] for e in screens[s]['logic_files'].split(';') if e and not e.rsplit(':', 1)[0].lower().endswith('.designer.cs')]
+        fr = [x for x in sm.get('files_read', []) if any(str(x.get('file', '')).replace(chr(92), '/').startswith(lp) for lp in logic)]
+        tot = sum(int(x.get('lines_total') or 0) for x in fr); rd = sum(int(x.get('lines_read') or 0) for x in fr)
+        mc = len(msgcall.get(s, []))
+        data.append([sname(s), '판독 완료' if s in loaded else '미판독', len(fr), tot, rd, 'OK' if tot and tot == rd else ('확인 필요' if s in loaded else '-'),
+                     grep_cnt.get(s, 0), mc, 'OK' if mc == grep_cnt.get(s, 0) else '차이', sm.get('designer', ''),
+                     len(sm.get('fe_files_read', [])), screens[s]['tobe_folders'] or 'TO-BE 화면 미개발',
+                     sum(1 for b in B if b['sid'] == s and b['kind'] == 'UI'), sum(1 for b in B if b['sid'] == s and b['kind'] == 'DB'),
+                     sum(1 for r in R if r['sid'] == s), sum(1 for e in exclrows if e[0].startswith(s)), sm.get('notes', '')])
+    sheet(ws, ['화면 ID', '상태', '로직 파일 수', '총 줄수', '판독 줄수', '전문 판독', '메시지 호출(grep)', '메시지 호출(판독)', '메시지 대조', 'Designer', 'TO-BE FE 파일 수', 'TO-BE 화면 폴더',
+               '차단 UI', '차단 DB', '보정_필터', '제외', '비고'], data, [24, 9, 8, 9, 9, 9, 10, 10, 9, 12, 9, 40, 7, 7, 8, 6, 70])
+
+    path = f'{OUTDIR}/{dom}_화면_VALIDATION_취합_{STAMP}.xlsx'
+    wb.save(path)
+    return path, len(B), len(agg), len(R), len(agg2)
+
+if __name__ == '__main__':
+    doms = sys.argv[1:] or ['SCP', 'SSP']
+    for d in doms:
+        print(build(d))
+    print('loaded screens', len(loaded), 'missing sp handling', len(set(missing_sp)))
+    new_items = Counter(o.get('item') for o in ui + ref if str(o.get('item', '')).startswith('NEW:'))
+    print('NEW items', len(new_items))

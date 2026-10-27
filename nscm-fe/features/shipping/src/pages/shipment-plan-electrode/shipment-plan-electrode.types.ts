@@ -36,7 +36,7 @@ export interface SearchCondition {
   bohRadio: BOH_RADIO; // BOH 3-radio (span prefix 동시 선택)
   resultType: string[]; // clbResultType 다중선택(체크리스트) — shtShipmentResult 조회 Result Type. SP 전달 시 CSV join. 기본 P(Plan)+O(oWMS) 체크(AS-IS cs:914~915)
   chkSum: boolean; // SUM 칼럼 표시
-  chkPastPeriod: boolean; // 과거기간(tag-date<planDate) 숨김
+  chkPastPeriod: boolean; // Including Past Period — 체크 시 과거기간(tag-date<planDate) 포함, 미체크 시 숨김(AS-IS cs:4580)
   periodFrom: string; // drpPeriod 시작(yyyymmdd)
   periodTo: string; // drpPeriod 종료(yyyymmdd)
   // 메인조회 SP(P_SSP0023_GET_SHIPMENT_PLAN) 검색 파라미터 (AS-IS FindData_Main cs:4639~4649).

@@ -1,0 +1,450 @@
+[
+ {
+  "screen": "SCP0093",
+  "title": "DIO Trend Report",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0093_DIO_Trend_Report/POPUP/SCP0093_DioTrendReportPopup.cs:1307",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0093_DIO_Trend_Report/SCP0093_DIO_Trend_Report.cs:3078",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0093_DIO_Trend_Report/SCP0093_DIO_Trend_Report.designer.cs:1226"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0093_DIO_Trend_Report/POPUP/SCP0093_DioTrendReportPopup.Designer.cs:895"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_DATA_REASON",
+    "member": "FindData",
+    "line": "392",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_DATA_PRICE",
+    "member": "FindPrice",
+    "line": "452",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_DATA_PRICE",
+    "member": "GetListPrice",
+    "line": "506",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_DATA_REASON",
+    "member": "FindCopyData",
+    "line": "553",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_SAVE_DIO_REPORT_REASON",
+    "member": "SaveData",
+    "line": "650",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "717",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_MONTH_RANGE",
+    "member": "GetMonthRange",
+    "line": "839",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_DATA",
+    "member": "Find_Data",
+    "line": "1422",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\SCP0093_DIO_Trend_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL",
+    "member": "Find_Chart_Model",
+    "line": "1620",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\SCP0093_DIO_Trend_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_SAVE_DIO_TREND_DATA",
+    "member": "Save_Data",
+    "line": "1904",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\SCP0093_DIO_Trend_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0070_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2583",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\SCP0093_DIO_Trend_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_DATA_REASON",
+    "member": "FindData",
+    "line": "392",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_DATA_PRICE",
+    "member": "FindPrice",
+    "line": "452",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_DATA_PRICE",
+    "member": "GetListPrice",
+    "line": "506",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_DATA_REASON",
+    "member": "FindCopyData",
+    "line": "553",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_SAVE_DIO_REPORT_REASON",
+    "member": "SaveData",
+    "line": "650",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "717",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_MONTH_RANGE",
+    "member": "GetMonthRange",
+    "line": "839",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\POPUP\\SCP0093_DioTrendReportPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_DATA",
+    "member": "Find_Data",
+    "line": "1411",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\SCP0093_DIO_Trend_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL",
+    "member": "Find_Chart_Model",
+    "line": "1609",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\SCP0093_DIO_Trend_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0093_SAVE_DIO_TREND_DATA",
+    "member": "Save_Data",
+    "line": "1904",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\SCP0093_DIO_Trend_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0070_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2583",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0093_DIO_Trend_Report\\SCP0093_DIO_Trend_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCP0070_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0084_GET_MONTH_RANGE",
+   "SCP0093_GET_DIO_TREND_DATA",
+   "SCP0093_GET_DIO_TREND_DATA_PRICE",
+   "SCP0093_GET_DIO_TREND_DATA_REASON",
+   "SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL",
+   "SCP0093_SAVE_DIO_REPORT_REASON",
+   "SCP0093_SAVE_DIO_TREND_DATA"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SCP0093_GET_DIO_TREND_DATA",
+    "sp": "SCP0093_GET_DIO_TREND_DATA",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "Bucket 이 MONTHLY 일 때만 월별 조회 SP 호출, WEEKLY 는 미구현, 그 외는 미지원 bucket 으로 처리 없이 종료",
+    "message": null,
+    "on_fail": "WEEKLY: print N'주별' 만 / 그 외: print N'지원되지 않는 bucket입니다.' (결과셋 없이 종료)"
+   },
+   {
+    "entry_sp": "SCP0093_SAVE_DIO_REPORT_REASON",
+    "sp": "SCP0093_SAVE_DIO_REPORT_REASON",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "사유 저장 중 예외 시 롤백·오류로그 후 오류코드/메시지 반환",
+    "message": "ERROR_NUMBER() / ERROR_MESSAGE() 원문",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(...'ERROR'...); SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0093_SAVE_DIO_TREND_DATA",
+    "sp": "SCP0093_SAVE_DIO_TREND_DATA",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "기타충당금 저장 중 예외 시 롤백·오류로그 후 F 와 오류 메시지 반환",
+    "message": "'[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(...'ERROR'...); SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + '"
+   },
+   {
+    "entry_sp": "SCP0093_GET_DIO_TREND_DATA",
+    "sp": "SCP0093_GET_DIO_TREND_DATA_MM",
+    "depth": 1,
+    "cls": "D 검증리포트형",
+    "check_type": "REQUIRED",
+    "desc": "[조회표시] 월별·셀그룹별 DIO 초과 사유 입력 유무(Y/N) 플래그 반환",
+    "message": null,
+    "on_fail": "월별 EXISTS_REASON_yyyymm = ISNULL(...,'N') 컬럼으로 표시"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0094",
+  "title": "Global PSI Auto",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0094_GlobalPSI_Auto/SCP0094_GlobalPSI_Auto.cs:1180"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0094_GlobalPSI_Auto/SCP0094_GlobalPSI_Auto.Designer.cs:1255"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1034",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0094_GlobalPSI_Auto\\SCP0094_GlobalPSI_Auto.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1056",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0094_GlobalPSI_Auto\\SCP0094_GlobalPSI_Auto.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0094_GET_GLOBAL_PSI_AUTO",
+    "member": "FindDataMain",
+    "line": "800",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0094_GlobalPSI_Auto\\SCP0094_GlobalPSI_Auto.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1034",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0094_GlobalPSI_Auto\\SCP0094_GlobalPSI_Auto.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1056",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0094_GlobalPSI_Auto\\SCP0094_GlobalPSI_Auto.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0094_GET_GLOBAL_PSI_AUTO"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0095",
+  "title": "Global PSI Elec",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0095_GlobalPSI_Elec/SCP0095_GlobalPSI_Elec.cs:1110"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0095_GlobalPSI_Elec/SCP0095_GlobalPSI_Elec.Designer.cs:1000"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/global-psi-elec"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "393",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0095_GlobalPSI_Elec\\SCP0095_GlobalPSI_Elec.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "830",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0095_GlobalPSI_Elec\\SCP0095_GlobalPSI_Elec.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "956",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0095_GlobalPSI_Elec\\SCP0095_GlobalPSI_Elec.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "393",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0095_GlobalPSI_Elec\\SCP0095_GlobalPSI_Elec.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0095_GET_GLOBAL_PSI_ELEC",
+    "member": "FindDataMain",
+    "line": "763",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0095_GlobalPSI_Elec\\SCP0095_GlobalPSI_Elec.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0095_GET_GLOBAL_PSI_ELEC",
+    "member": "FindDataMainParallel",
+    "line": "799",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0095_GlobalPSI_Elec\\SCP0095_GlobalPSI_Elec.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "830",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0095_GlobalPSI_Elec\\SCP0095_GlobalPSI_Elec.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "956",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0095_GlobalPSI_Elec\\SCP0095_GlobalPSI_Elec.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0095_GET_GLOBAL_PSI_ELEC"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0095_GET_GLOBAL_PSI_ELEC",
+    "sp": "SCP0095_GET_GLOBAL_PSI_ELEC",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 로그만 적재",
+    "message": null,
+    "on_fail": "INSERT INTO scm_sys_log_batch (… 'ERROR', ERROR_MESSAGE() …); IF @@TRANCOUNT > 0 COMMIT WORK"
+   }
+  ]
+ }
+]

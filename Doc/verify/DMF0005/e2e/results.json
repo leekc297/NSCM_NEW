@@ -1,0 +1,250 @@
+{
+  "config": {
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/DMF0005/e2e/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.49.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 DMF0005 @verify",
+          "file": "_verify.spec.ts",
+          "line": 128,
+          "column": 6,
+          "specs": [
+            {
+              "title": "조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 24422,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-24T19:41:55.525Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b405660f71f75cf9f940",
+              "file": "_verify.spec.ts",
+              "line": 133,
+              "column": 7
+            },
+            {
+              "title": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 399966,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-24T19:42:20.755Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-49fa95f9364558f1b757",
+              "file": "_verify.spec.ts",
+              "line": 154,
+              "column": 7
+            },
+            {
+              "title": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 36258,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-24T19:49:00.767Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-cf0785586931698e8e9f",
+              "file": "_verify.spec.ts",
+              "line": 408,
+              "column": 7
+            },
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 251923,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-24T19:49:37.047Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-0318a54df691e9cd9df1",
+              "file": "_verify.spec.ts",
+              "line": 471,
+              "column": 7
+            },
+            {
+              "title": "조회조건 콤보 후보 품질(B1·B2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 237474,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-24T19:53:48.999Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c11dae3d2776f24f41f6",
+              "file": "_verify.spec.ts",
+              "line": 947,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-24T19:41:53.624Z",
+    "duration": 956455.224,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -9,10 +9,10 @@ import { useMessageStore } from '@shared/stores';
 
 import { MAIN_COLUMNS, DIVISION_40_ONLY_COLUMNS, DIVISION_EE_ONLY_COLUMNS, FREEZE_ANCHOR_COLUMN } from '../shipment-plan-fg.columns';
 import { BUCKET_TYPE, MEASURE, MSG, QTY_MAX, WEEKEND_HEADER_COLOR } from '../shipment-plan-fg.constants';
-import type { FixInfoRow, MainColumnMeta, MainRow } from '../shipment-plan-fg.types';
+import type { FixInfoRow, MainColumnMeta, MainRow, PlanStatusRow } from '../shipment-plan-fg.types';
 import { buildColumns } from '../utils/shipment-plan-fg.buildColumns';
 import { computeDrillToggles } from '../utils/shipment-plan-fg.drilldown';
-import { dynColKindOf, isMainCellEditable, type MainEditContext } from '../utils/shipment-plan-fg.editLock';
+import { computeIsEditable, dynColKindOf, isMainCellEditable, type MainEditContext } from '../utils/shipment-plan-fg.editLock';
 import { buildFixedCellSet, type FixedCellSet, isCellFixed } from '../utils/shipment-plan-fg.fix';
 import { type HeaderKey, ShipmentPlanFgHeaderMergeManager } from '../utils/shipment-plan-fg.headerMerge';
 
@@ -30,6 +30,7 @@ interface Props {
   rows: MainRow[];
   spreadTitle: SpreadTitleRow[];
   fixInfoRows: FixInfoRow[];
+  planStatusRows: PlanStatusRow[];
   gridRef: MutableRefObject<FlexGridType | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   editTrackerRef: MutableRefObject<EditTracker | undefined>;
@@ -41,6 +42,8 @@ interface Props {
   toYyyymmdd: string;
   bucketType: BUCKET_TYPE;
   chkSum: boolean;
+  planType: string;
+  planSeq: string;
   onFocus: () => void;
 }
 
@@ -52,6 +55,7 @@ export const ShipmentPlanFgGrid = ({
   rows,
   spreadTitle,
   fixInfoRows,
+  planStatusRows,
   gridRef,
   gridFilterRef,
   editTrackerRef,
@@ -63,6 +67,8 @@ export const ShipmentPlanFgGrid = ({
   toYyyymmdd,
   bucketType,
   chkSum,
+  planType,
+  planSeq,
   onFocus,
 }: Props) => {
   const { t } = useTranslation();
@@ -230,6 +236,13 @@ export const ShipmentPlanFgGrid = ({
   const fixedCells = useMemo(() => buildFixedCellSet(fixInfoRows, weekOrMonthStart), [fixInfoRows, weekOrMonthStart]);
   fixCellsRef.current = fixedCells;
 
+  // Plan 전체 편집가능 게이트(AS-IS GetIsEditable, design 03 §3.1 R-K 상위 게이트) — SHIP_PLAN_AMEND
+  //   행이라도 더 나중 단계 Plan(PR→MA→SE→FN)이 이미 생성돼 있으면 전체 잠금(2026-10-21 추가 구현).
+  const isEditable = useMemo(
+    () => computeIsEditable(planStatusRows, planType, planSeq),
+    [planStatusRows, planType, planSeq]
+  );
+
   const editCtxRef = useRef<MainEditContext>({
     bucketType,
     division,
@@ -237,8 +250,17 @@ export const ShipmentPlanFgGrid = ({
     queryFromYyyymmdd: fromYyyymmdd,
     queryToYyyymmdd: toYyyymmdd,
     weekOrMonthStart,
+    isEditable,
   });
-  editCtxRef.current = { bucketType, division, planStartYyyymmdd, queryFromYyyymmdd: fromYyyymmdd, queryToYyyymmdd: toYyyymmdd, weekOrMonthStart };
+  editCtxRef.current = {
+    bucketType,
+    division,
+    planStartYyyymmdd,
+    queryFromYyyymmdd: fromYyyymmdd,
+    queryToYyyymmdd: toYyyymmdd,
+    weekOrMonthStart,
+    isEditable,
+  };
 
   useEffect(() => {
     const g = gridRef.current;

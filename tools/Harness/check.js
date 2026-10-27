@@ -42,6 +42,34 @@ for (const f of files.filter(x => /\.(ts|tsx)$/.test(x) && !/\.d\.ts$/.test(x)))
   const txt = fs.readFileSync(f, 'utf8'); if (!/\bTFunction\b/.test(txt)) continue;
   txt.split(/\r?\n/).forEach((l, i) => { if (/(^|[^\w])TFunction\b/.test(l) && !/^\s*\/\//.test(l)) F('BLOCK', 'T03', `i18next TFunction 타입 사용 — tsc 타입 폭발(교차곱) 원인. t 는 좁은 콜백 타입 '(key: string, opts?: { defaultValue?: string }) => string' 으로 받거나 호출측에서 문자열을 만들어 넘길 것`, `${rel(f)}:${i + 1}`); });
 }
+// H01/H02 (2026-10-21 SCP0100 사고 — 대조표 '구현' 인데 실측 불일치였던 2종을 정적으로 잡는다. 사용자 지시 "사전 조치가 앞으로는 자동 적용")
+//   H01: DataGrid 에 headerRowHeight 를 주면서 동적 컬럼(dynamicColumns/columnGroups)을 쓰는 페이지는 Wijmo 가 columnGroups 재대입 때 헤더 행 높이를 기본값으로
+//        되돌리므로(공용 DataGrid 는 initialized 1회만 적용 — DataGrid.tsx:1739) `updatedLayout` 핸들러에서 `columnHeaders.rows.defaultSize` 를 다시 세워야 한다. 없으면 3행×48=144px 로 보인다.
+//   H02: 공용 ColumnLayoutModal 은 저장된 개인화(titleSet)가 없으면 fallbackColumns 로 목록을 만든다 — 안 넘기면 "No Column". 다른 8개 화면은 전부 넘긴다.
+for (const f of files.filter(x => /\.tsx$/.test(x))) {
+  const txt = fs.readFileSync(f, 'utf8');
+  if (/headerRowHeight\s*=/.test(txt) && /(dynamicColumns\s*=|columnGroups)/.test(txt) && !/updatedLayout/.test(txt))
+    F('BLOCK', 'H01', `headerRowHeight 를 주고 동적 컬럼을 쓰는데 updatedLayout 재적용이 없음 — columnGroups 재대입 뒤 헤더 행 높이가 기본(48px)으로 돌아간다. 그리드 initialized 에서 grid.updatedLayout.addHandler(() => { const r = grid.columnHeaders.rows; if (Math.round(r.defaultSize) !== HEADER_ROW_HEIGHT) r.defaultSize = HEADER_ROW_HEIGHT; }) 를 등록할 것`, rel(f));
+  // H05 (2026-10-21 사용자 지적): 동적 컬럼을 그룹(columnGroups: header + columns[])으로 만들고 leaf 가 리터럴(예 'Qty')이면 헤더 가로 병합을 꺼야 한다 — 기본 allowMerging(ColumnHeaders/All) 은
+  //   동일 문구 인접 헤더 셀을 1칸으로 합쳐 'Qty' 가 전 월에 걸친 1칸(w910)이 된다. AllowMerging.Cells(본문만) 또는 None, 또는 mergeManager 의 ColumnHeader 제외가 있어야 통과.
+  if (/dynamicColumns\s*=/.test(txt) && /<DataGrid\b/.test(txt) && !/AllowMerging\.(Cells|None)\b/.test(txt) && !/mergeManager/.test(txt)) {
+    const utilHasGroups = files.some(u => /\.(ts|tsx)$/.test(u) && u !== f && /columns:\s*\[\]/.test(fs.readFileSync(u, 'utf8')) && /header:/.test(fs.readFileSync(u, 'utf8')));
+    if (utilHasGroups) F(FINAL ? 'BLOCK' : 'WARN', 'H05', `동적 그룹 헤더(columnGroups)인데 헤더 가로 병합이 켜져 있음(allowMerging 기본/All) — 리터럴 leaf(Qty) 칸이 인접 월에 걸쳐 1칸으로 합쳐진다. allowMerging={AllowMerging.Cells}(본문 병합만) 로 넘기거나 mergeManager 에서 ColumnHeader 패널 제외. 행 높이는 그룹 행 20 / leaf 행 40(As-is ColumnHeaderSpan)`, rel(f));
+  }
+  // H06 (2026-10-21 SCP0100 런타임 사고): DataGrid mergeManager prop 으로 넘긴 MergeManager 인스턴스는 Wijmo Control.initialize 의 copy() 가 **객체 속성을 재귀 복사**한다 —
+  //   클래스에 own 인스턴스 필드(private inner = null 등, useDefineForClassFields)가 있으면 "Assertion failed in Wijmo: Unknown property "inner"" 로 그리드 생성 자체가 죽는다(화면 전체 빈 화면).
+  //   룰 D4(props 직접 전달)는 유지하되 상태는 모듈 WeakMap/클로저로 두고 클래스 본문에는 메서드만 둔다.
+  if (/mergeManager\s*=\s*\{/.test(txt)) {
+    for (const u of files.filter(x => /\.(ts|tsx)$/.test(x))) {
+      const ut = fs.readFileSync(u, 'utf8'); if (!/extends\s+(CustomMergeManager|MergeManager)\b/.test(ut)) continue;
+      const body = ut.slice(ut.search(/extends\s+(CustomMergeManager|MergeManager)\b/));
+      const fieldDecl = body.match(/^\s*(private|protected|public|readonly)?\s*(static\s+)?[A-Za-z_]\w*\s*(\?|!)?\s*(:\s*[^=;(]+)?(=\s*[^;]+)?;\s*$/m);
+      if (fieldDecl && !/static/.test(fieldDecl[0]) && !/^\s*(get|set|async)\b/.test(fieldDecl[0])) F('BLOCK', 'H06', `DataGrid mergeManager prop 으로 넘기는 MergeManager 클래스에 인스턴스 필드가 있음(${fieldDecl[0].trim().slice(0, 60)}) — Wijmo copy() 가 "Unknown property" 단언으로 그리드 생성 실패. 상태는 모듈 WeakMap<FlexGrid,…>/클로저로 옮기고 클래스에는 메서드만 둘 것`, rel(u));
+    }
+  }
+  if (/<ColumnLayoutModal\b/.test(txt) && !/fallbackColumns\s*=/.test(txt))
+    F('BLOCK', 'H02', `ColumnLayoutModal 에 fallbackColumns 가 없음 — 저장된 개인화(titleSet)가 없는 사용자는 목록이 "No Column" 으로 빈다. 활성 시트 admin 컬럼 메타(staticColumns)를 { key: colNm, header: colLblNm, width } 로 넘길 것(SalesPlanModals 패턴)`, rel(f));
+}
 if (hasAsis && !files.some(f => rel(f) === '__asis-mapping__.md')) F('BLOCK', 'S01', '표준 파일 없음: __asis-mapping__.md (As-is Fact Pack 이 있는 화면은 대조표 필수)');
 for (const [n, lv] of need) if (!files.some(f => rel(f) === n)) F(lv, 'S01', `표준 파일 없음: ${n}`);
 if (!files.some(f => /components\/.*Form\.tsx$/.test(rel(f)))) F('WARN', 'S01', '표준 파일 없음: components/{Page}Form.tsx');
@@ -60,6 +88,29 @@ if (mapFile) for (const line of read(mapFile).split(/\r?\n/)) { const m = line.m
   else if (/^미구현/.test(row.status)) F(FINAL ? 'BLOCK' : 'WARN', 'M04', `미구현: ${row.id} ${row.summary}${row.reason ? ' — ' + row.reason : ''}`, '__asis-mapping__.md');
   if (/^구현/.test(row.status) && row.impl) { const fn = (row.impl.match(/([\w./-]+\.tsx?)/) || [])[1]; if (fn && !files.some(f => rel(f) === fn.replace(/^\.\//, ''))) F('WARN', 'M05', `구현 위치 파일 없음: ${row.id} → ${fn}`, '__asis-mapping__.md'); }
 }
+// 3a) AS-IS 액션 대조표 (사용자 지시 2026-10-23) — tools/AsisFacts 가 추출한 핸들러 본문의 구체 액션(값 비움·목록 재구성·그리드·상태·메시지·엔드포인트·
+//     사전 미등록 외부 호출 포함) 1건 1행. 페이지 폴더 __asis-actions__.md(신규 화면 — 생성기) → 없으면 Doc/asisfacts/screens/<AS-IS ID>/__asis-actions__.md(기존 화면 문서 — actions-checklist.js).
+//     AC0 = 대조표 없음 · AC1 = 상태 빈칸/미구현/구현인데 위치 없음/제외·해당없음인데 사유 없음 · AC2 = 사전 미등록 외부/상속 호출(CALL_EXT·CALL_BASE) 의미 미기입
+//     수준(사용자 지시 2026-10-23 '개발된 UI·작업 흐름 무영향 — 문서 보강 먼저'): 페이지 폴더 대조표(생성기가 만든 신규 화면) = --final BLOCK,
+//     기존 화면 문서(AS-IS 자료 폴더) = 항상 WARN · AC0 = WARN
+if (ID) {
+  const AC = require('./lib/actions');
+  const acPage = files.find(f => rel(f) === AC.FILE); const acGen = AC.docPath(cfg, ID);
+  const acFile = acPage || (fs.existsSync(acGen) ? acGen : null);
+  const hasActs = fs.existsSync(path.join(cfg.asisOutDir, 'screens', AC.asisId(cfg, ID), 'actions.csv'));
+  if (!acFile && hasActs) F('WARN', 'AC0', `AS-IS 액션 대조표 없음 — node tools/Harness/actions-checklist.js ${ID} 로 생성(${path.relative(path.dirname(cfg.feRoot), acGen).replace(/\\/g, '/')}) 후 행마다 상태·구현 위치·사유 기입`);
+  if (acFile) {
+    const where = acPage ? AC.FILE : path.relative(path.dirname(cfg.feRoot), acGen).replace(/\\/g, '/');
+    const lv = FINAL && acPage ? 'BLOCK' : 'WARN'; const cnt = { AC1: 0, AC2: 0 }; const first = { AC1: [], AC2: [] };
+    for (const r of AC.rowsOf(fs.readFileSync(acFile, 'utf8'))) {
+      const bad1 = !r.status ? '상태 빈칸' : /^미구현/.test(r.status) ? '미구현' : (/^구현/.test(r.status) && !r.impl) ? '구현인데 위치 없음' : (/^(제외|해당없음)/.test(r.status) && !r.reason) ? `${r.status}인데 사유 없음` : '';
+      if (bad1) { cnt.AC1++; if (first.AC1.length < 8) first.AC1.push(`${r.id}(${bad1} ${r.kind} ${r.target.slice(0, 30)})`); }
+      if (AC.UNKNOWN.has(r.kind) && (!r.meaning || r.meaning.startsWith('⚠'))) { cnt.AC2++; if (first.AC2.length < 8) first.AC2.push(`${r.id}(${r.target.slice(0, 40)} @${r.where})`); }
+    }
+    if (cnt.AC1) F(lv, 'AC1', `액션 대조표 미처리 ${cnt.AC1}행: ${first.AC1.join(', ')}${cnt.AC1 > 8 ? ' …' : ''}`, where);
+    if (cnt.AC2) F(lv, 'AC2', `사전 미등록 외부/상속 호출 의미 미기입 ${cnt.AC2}행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): ${first.AC2.join(', ')}${cnt.AC2 > 8 ? ' …' : ''}`, where);
+  }
+}
 // 3b) 커밋본 대비 후퇴 감지 — 2026-10-19 SCP0096 사고(파이프라인이 손으로 완성한 커밋본을 골격으로 교체: 대조표 91→20행, dynamic-columns/types 삭제)
 //     git 이 추적하는 페이지면 ①커밋본 파일 삭제(M07) ②대조표 행·구현 수 축소(M06) 를 BLOCK — "빈 칸 0" 만 보던 M01~M05 의 구멍
 {
@@ -71,9 +122,15 @@ if (mapFile) for (const line of read(mapFile).split(/\r?\n/)) { const m = line.m
     if (mapFile && GT.files.some(f => strip(f) === '__asis-mapping__.md')) {
       const headTxt = git(['show', `HEAD:${GT.rel === '.' ? '' : GT.rel + '/'}__asis-mapping__.md`]);
       if (headTxt != null) {
-        const cnt = txt => { let n = 0, impl = 0; for (const line of txt.split(/\r?\n/)) { const m = line.match(/^\|\s*([A-Z]\d{2}-[\dP]+-\d{3})\s*\|(.*)\|\s*$/); if (!m) continue; n++; if (/^구현/.test((m[2].split('|').pop() || '').trim())) impl++; } return { n, impl }; };
-        const h = cnt(headTxt), c = cnt(read(mapFile));
-        if (c.n < h.n || c.impl < h.impl) F(FINAL ? 'BLOCK' : 'WARN', 'M06', `대조표 후퇴: 행 ${h.n}→${c.n} · 구현 ${h.impl}→${c.impl} (커밋본 대비) — 기존 대조표를 재생성하지 말고 커밋본 위에 행을 추가`, '__asis-mapping__.md');
+        // 2026-10-21: '구현' → '부분/미구현' 으로 내려간 행이라도 비고에 날짜 있는 '실측 정정' 표식(예 "2026-10-21 실측 정정")이 있으면 후퇴가 아니라 정정이다
+        //   (SCP0100 헤더·모달 행 — 라이브 실측으로 '구현' 이 틀렸음을 확인하고 내린 경우). 표식 없는 하향만 후퇴로 센다.
+        const parse = txt => { const m = new Map(); for (const line of txt.split(/\r?\n/)) { const r = line.match(/^\|\s*([A-Z]\d{2}-[\dP]+-\d{3})\s*\|(.*)\|\s*$/); if (!r) continue; const cells = r[2].split('|').map(s => s.trim()); m.set(r[1], { status: cells[cells.length - 1] || '', note: cells.slice(0, -1).join(' ') }); } return m; };
+        const H = parse(headTxt), C = parse(read(mapFile));
+        const corrected = [...H.entries()].filter(([id, hv]) => /^구현/.test(hv.status) && C.has(id) && !/^구현/.test(C.get(id).status) && /\d{4}-\d{2}-\d{2}\s*(실측|규칙|룰)\s*정정/.test(C.get(id).note)).map(([id]) => id);
+        const cnt = M => { let impl = 0; for (const v of M.values()) if (/^구현/.test(v.status)) impl++; return { n: M.size, impl }; };
+        const h = cnt(H), c = cnt(C); const cImplAdj = c.impl + corrected.length;
+        if (corrected.length) F('WARN', 'M06', `대조표 실측 정정 ${corrected.length}행(구현→${corrected.map(id => C.get(id).status).join('/')}): ${corrected.join(', ')} — 후퇴로 세지 않음(비고의 'YYYY-MM-DD 실측|규칙 정정' 표식)`, '__asis-mapping__.md');
+        if (c.n < h.n || cImplAdj < h.impl) F(FINAL ? 'BLOCK' : 'WARN', 'M06', `대조표 후퇴: 행 ${h.n}→${c.n} · 구현 ${h.impl}→${c.impl}${corrected.length ? `(정정 ${corrected.length} 제외 시 ${cImplAdj})` : ''} (커밋본 대비) — 기존 대조표를 재생성하지 말고 커밋본 위에 행을 추가`, '__asis-mapping__.md');
       }
     }
   }
@@ -103,6 +160,35 @@ if (sdir && fs.existsSync(sdir)) {
   const mapCtl = readCsv(path.join(R, 'map_control.csv'));
   for (const c of ctls) { const t = c.type.split('.').pop(); const r = mapCtl.find(x => x.asis_type === t); if (allowed('control_type', t) || allowed('control_name', c.name) || (r && (r.gen === 'skip' || r.gen === 'container'))) continue;
     const row = mapRows.find(x => x.summary.includes(`${c.name} / `)); if (!row) F('WARN', 'G04', `As-is 컨트롤 ${c.name} / ${t} 매핑표 §1 에 없음`); }
+  // H04 (2026-10-21 사용자 룰 "Checkbox·RadioButton Design"): As-is RadioGroup/UsrRadio/RadioButton 컨트롤은 To-Be 도 라디오(@shared/lges 의 Radio·RadioGroup — packages/shared/src/lib/lges.ts 가 design-system 을 재export)로 만든다.
+  //   "공용 RadioGroup 부재" 를 이유로 CustomDropdown 으로 바꾼 사례(SCP0100 rgrpSearchLevel, capa-line-master)는 사실과 다르다. 예외 = 매핑표 §1 그 컨트롤 행이 '제외'(카탈로그 '조회조건 삭제' 근거).
+  {
+    const radios = ctls.filter(c => /RadioGroup|UsrRadio|RadioButton/i.test(c.type));
+    const pageHasRadio = Object.values(src).some(t => /<RadioGroup\b|<Radio\b/.test(t));
+    for (const c of radios) {
+      if (allowed('control_name', c.name)) continue;
+      const row = mapRows.find(x => x.summary.includes(`${c.name} / `));
+      if (row && /^(제외|해당없음)/.test(row.status)) continue;
+      if (!pageHasRadio) F(FINAL ? 'BLOCK' : 'WARN', 'H04', `As-is 라디오 ${c.name}(${c.type.split('.').pop()}) 인데 페이지에 RadioGroup/Radio 가 없음 — 드롭다운 대체 금지. @shared/lges 의 RadioGroup+Radio(labelText) 로 구현하거나, 카탈로그 '조회조건 삭제' 면 매핑표 행을 '제외'(근거 기재)로`, '__asis-mapping__.md');
+    }
+  }
+  // H03 (hook #154 v2 — 사용자 지시 2026-10-23 캡처, 10-21 '한 칸 묶음' 판정을 대체): 조회조건 Checkbox/Radio 디자인 =
+  //   조건명은 FormItem 좌측 라벨 열(label=조건명/그룹명) · Checkbox 는 박스만(labelText 금지) · 체크박스 조건마다 Grid 칸 1개.
+  //   정본 = supply/global-psi-report GlobalPsiReportForm checkbox()/radio(). 판정 구간 = 컨트롤 직전 <Grid ~ 컨트롤.
+  for (const [f, t] of Object.entries(src)) if (/Form\.tsx$/.test(f) && /<SearchArea\b|conditions=\{/.test(t)) {
+    for (const m of t.matchAll(/<(Checkbox|RadioGroup)\b/g)) {
+      const g = t.lastIndexOf('<Grid', m.index); if (g < 0) continue;
+      const seg = t.slice(g, m.index); const fi = seg.lastIndexOf('<FormItem'); const tail = fi >= 0 ? seg.slice(fi) : '';
+      const tag = t.slice(m.index, t.indexOf('>', m.index) + 1); const ln = t.slice(0, m.index).split('\n').length;
+      let why = '';
+      if (fi < 0) why = 'FormItem 없음(라벨 열부터 시작)';
+      else if (/\blabel=\{?(''|"")\}?/.test(tail) || !/\blabel=/.test(tail)) why = "FormItem label 빈값/미지정(라벨 트랙 없음)";
+      else if (/\blabel=\{?['"`](\\u00[Aa]0| | )['"`]\}?/.test(tail)) why = 'v1 무라벨(NBSP/공백 라벨) — 조건명을 FormItem label 로';
+      else if (m[1] === 'Checkbox' && /\blabelText=/.test(tag)) why = 'Checkbox labelText(박스 옆 글자) — 조건명은 FormItem label 로, 박스만';
+      else if (m[1] === 'Checkbox' && (seg.slice(fi).match(/<Checkbox\b/g) || []).length >= 1) why = '한 FormItem 안에 체크박스 여러 개 — 조건마다 Grid 칸 1개';
+      if (why) F(FINAL ? 'BLOCK' : 'WARN', 'H03', `조회조건 <${m[1]}> 디자인(hook #154 v2): ${why}. 정본 GlobalPsiReportForm checkbox()/radio() — Grid(customGrid)+FormItem(formItem, label=조건명, labelAlign='right')+customCheckbox+<Checkbox checked onChange/> · Radio = FormItem label=그룹명 + <RadioGroup row><Radio labelText/>`, `${rel(f)}:${ln}`);
+    }
+  }
   // 4e 사전 준수 — Form 에서 쓴 컴포넌트가 사전의 To-Be 컴포넌트 집합 안인가
   // 카탈로그(rules/tobe_catalog.csv — TobeFacts framework.js 가 @foundation/@shared/master 공통에서 추출) 가 있으면 그 컴포넌트 전부가 허용 집합
   const catalog = fs.existsSync(path.join(R, 'tobe_catalog.csv')) ? readCsv(path.join(R, 'tobe_catalog.csv')) : [];
@@ -122,6 +208,161 @@ if (ID && cfg.analysisRoot) {
     if (missing.length) F('BLOCK', 'V01', `${label} 마커 누락 ${missing.length}/${rows.length}: ${missing.slice(0, 8).map(r => kind + '-' + String(r.no).padStart(3, '0') + '(L' + r.line + ')').join(' ')}`, rel(hook[0]));
     const todo = (hook[1].match(/apply: \(\) => \{ \/\* TODO/g) || []).length;
     if (todo) F(FINAL ? 'BLOCK' : 'WARN', 'V02', `${label} 미이식 ${todo}/${rows.length} (apply 본문이 TODO)`, rel(hook[0]));
+  }
+}
+// 6) 메시지 ID (2026-10-22 사용자 지시) — AS-IS 와 TO-BE 는 같은 MSG ID 를 다른 문구에 쓴다(MSG00001 AS-IS '모든 항목은 필수 입력입니다.' / TO-BE '저장 하시겠습니까?').
+//    이 화면이 AS-IS 에서 쓰던 MSG ID 가 페이지 코드에 그대로 있고 TO-BE 에서 뜻이 다르면 BLOCK — 문구로 찾은 TO-BE ID(lib/msgmap)를 써야 한다.
+//    TO-BE 뜻으로 일부러 쓴 것이면 같은 줄에 `MSG-OK` 주석. 주석 안의 ID(생성기 표기 'AS-IS MSGxxxxx')는 보지 않는다.
+if (ID) {
+  const MM = require('./lib/msgmap'); const MSGM = MM.load(cfg);
+  if (MSGM.ok) {
+    const asisUsed = new Set(); const seenMs1 = new Set();
+    try { for (const r of require('./lib/analysis').load(cfg.analysisRoot, ID, 'V')) { const c = String(r.asisMsg || r.msg || '').trim().toUpperCase(); if (/^MSG\d+$/.test(c)) asisUsed.add(c); } } catch { /* 분석서 없음 */ }
+    const fpDir = path.join(cfg.asisOutDir || '', 'screens', ID);
+    if (fs.existsSync(fpDir)) for (const f of fs.readdirSync(fpDir)) { try { for (const m of fs.readFileSync(path.join(fpDir, f), 'utf8').matchAll(/MSG\d{5}/g)) asisUsed.add(m[0]); } catch { /* 폴더 등 */ } }
+    for (const [f, t] of Object.entries(src)) t.split(/\r?\n/).forEach(ln => {
+      if (/MSG-OK/.test(ln)) return;
+      const cut = ln.indexOf('//'); const codePart = cut >= 0 ? ln.slice(0, cut) : ln;
+      for (const m of codePart.replace(/\/\*.*?\*\//g, '').matchAll(/MSG\d{5}/g)) {
+        const c = m[0]; if (!asisUsed.has(c) || !MM.collides(MSGM, c)) continue;
+        const r = MM.map(MSGM, c); if (r.tobe === c || seenMs1.has(c + '@' + f)) continue; seenMs1.add(c + '@' + f);
+        const tt = (MSGM.tobe.get(c) || {}).KO || '';
+        // 검증 마커(생성기가 만든 AS-IS 유래 자리)·TO-BE 에 같은 문구가 없는 ID 는 BLOCK, 그 밖(핸들러 등)은 의도적 TO-BE 사용일 수 있어 WARN(전수 스캔 10-22: 44화면 — MSG00002 'TO-BE 저장 성공' 등 오탐 가능)
+        const lv = (/Validation\.ts$/.test(f) && /\bmsg:\s*'MSG\d{5}'/.test(ln)) || r.tobe === 'MSG?????' ? 'BLOCK' : 'WARN';
+        F(lv, 'MS1', `AS-IS 메시지 ID 그대로 사용: ${c} — AS-IS '${r.asisText.slice(0, 40)}' / TO-BE ${c} = '${tt.slice(0, 40)}' → 문구로 찾은 TO-BE ID ${r.tobe}${r.tobe === 'MSG?????' ? ' (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+)' : ''}`, rel(f));
+      }
+    });
+  }
+}
+
+// 7) VALIDATION 취합 대조 (사용자 지시 2026-10-23) — SCP·SSP 화면은 Doc/화면분석서/{SCP|SSP}_화면_VALIDATION_취합_<최신>/<ID>.md 가 AS-IS 검증 전수 + TO-BE 판정.
+//    VR1 = 취합 기준 UI 미적용 행(AS-IS 에 있고 TO-BE 에 없던 검사) 안내 · VR2 = 취합이 [메시지 불일치]/[메시지 미등록] 으로 판정한 TO-BE ID 가 코드에 남아 있음.
+//    취합은 2026-10-22 판독 시점의 판정이라 이후 보완을 반영하지 못한다 → BLOCK 이 아닌 WARN(확인 후 고쳤거나 의도면 같은 줄 `VR-OK` 주석).
+if (ID) {
+  const VR = require('./lib/valref'); const vr = VR.find(cfg, ID);
+  if (vr && vr.screen) {
+    const one = s => String(s || '').replace(/\s+/g, ' ');
+    const ui = vr.block.filter(x => x['UI / DB'] === 'UI');
+    const miss = ui.filter(x => x['TO-BE 적용여부'] === '미적용');
+    if (miss.length) F('WARN', 'VR1', `VALIDATION 취합(${vr.stamp}) 기준 UI 미적용 ${miss.length}건 — ${miss.slice(0, 6).map(x => `${x.EVENT} SEQ${x.SEQ} ${one(x['VALIDATION MESSAGE']).slice(0, 30)}`).join(' / ')}${miss.length > 6 ? ' …' : ''} → 이식 또는 __asis-mapping__ 에 제외 근거`, vr.screen);
+    const bad = new Map(); // TO-BE ID → 행 설명
+    for (const x of ui) {
+      const tag = VR.tagOf(x, '[메시지 미등록]') ? '[메시지 미등록]' : VR.tagOf(x, '[메시지 불일치]') ? '[메시지 불일치]' : ''; if (!tag) continue;
+      const ids = VR.msgIds(x['(참고) MSG ID']);
+      for (const t of ids.tobe) if (!bad.has(t)) bad.set(t, `${x.EVENT} SEQ${x.SEQ} AS-IS ${ids.asis.join('/') || '-'} ${tag} — ${one(x['(참고) 메시지 의미 대조']).slice(0, 90)}`);
+    }
+    const seenVr = new Set();
+    for (const [f, t] of Object.entries(src)) t.split(/\r?\n/).forEach((ln, i) => {
+      if (/VR-OK/.test(ln)) return; const cut = ln.indexOf('//'); const codePart = (cut >= 0 ? ln.slice(0, cut) : ln).replace(/\/\*.*?\*\//g, '');
+      for (const m of codePart.matchAll(/MSG\d{5}/g)) if (bad.has(m[0]) && !seenVr.has(m[0] + '@' + f)) { seenVr.add(m[0] + '@' + f); F('WARN', 'VR2', `${m[0]} — VALIDATION 취합 판정: ${bad.get(m[0])}`, `${rel(f)}:${i + 1}`); }
+    });
+  }
+}
+
+// 8) 조회조건 기준표 (사용자 지시 2026-10-23) — SCP·SSP 화면 조회조건 순서·사용여부 = rules/search_cond.csv (참고자료 tools/VibeManager/rules/40_SEARCH_COND.md)
+//    SC1 = 조회조건 순서가 기준표와 다름 · SC2 = 기준표가 제외/통합한 AS-IS 조건이 Form 에 남아 있음.
+//    gen.js 산출(Form 주석 '기준표 #n' 표지 + Doc/gen/<ID>/search_cond.json)이 있는 페이지 = BLOCK(생성 후 손으로 순서·제외를 되돌린 것),
+//    표지 없는 기존 화면 = WARN(라벨 문자열로 대조 — 기준표 반영 검토). 의도된 차이는 해당 줄 `SC-OK` 주석.
+if (ID) {
+  const SC = require('./lib/searchcond'); const ref = SC.forScreen(R, ID);
+  if (ref) {
+    const forms = Object.entries(src).filter(([f]) => /Form\.tsx$/.test(f) && !/[\\/]modals[\\/]/.test(f));
+    const jf = path.join(cfg.genOutDir || '', ID, 'search_cond.json'); const J = cfg.genOutDir && fs.existsSync(jf) ? JSON.parse(read(jf)) : null;
+    const tagged = forms.some(([, t]) => /기준표 #\d/.test(t)); const lv = tagged && J ? 'BLOCK' : 'WARN';
+    if (J) {
+      for (const [f, t] of forms) {
+        const lines = t.split(/\r?\n/); const posOf = ctl => lines.findIndex(l => new RegExp(`AS-IS ${ctl} /`).test(l) && !/SC-OK/.test(l));
+        const seq = J.order.map(o => ({ ...o, at: posOf(o.ctl) })).filter(o => o.at >= 0);
+        for (let i = 1; i < seq.length; i++) if (seq[i].at < seq[i - 1].at) { F(lv, 'SC1', `조회조건 순서가 기준표(${J.domain} ${J.src})와 다름: '${seq[i].label}'(기준 ${seq[i].seq}번) 이 '${seq[i - 1].label}'(기준 ${seq[i - 1].seq}번) 보다 앞 — 기준 순서: ${J.order.map(o => o.label).join(' → ')}`, `${rel(f)}:${seq[i].at + 1}`); break; }
+        for (const x of J.excluded) { const at = posOf(x.ctl); if (at >= 0) F(lv, 'SC2', `기준표가 ${x.usage}(${x.reason}) 로 정한 AS-IS 조회조건 ${x.ctl} 가 Form 에 남아 있음 — 제거(BUTTON_AREA 면 버튼 영역으로 이식)`, `${rel(f)}:${at + 1}`); }
+      }
+    } else if (forms.length) {
+      // 라벨 대조: t('LBL…' | LBL.X, '_라벨') 의 '_라벨' 순서를 기준표 To-Be/As-Is 명칭에 대어 단조 증가인지
+      const want = ref.main.filter(r => r.tobe_order); const ordOf = s => { const k = SC.canon(s.replace(/\*$/, '')); const r = want.find(r => SC.canon(r.tobe_name) === k) || want.find(r => SC.canon(r.asis_name) === k); return r ? Number(r.tobe_order) : 0; };
+      for (const [f, t] of forms) {
+        const hits = [...t.matchAll(/\bt\(\s*(?:'[A-Z?0-9]+'|LBL\.[A-Z0-9_]+)\s*,\s*'_([^']+)'\s*\)/g)].map(m => ({ label: m[1], o: ordOf(m[1]), line: t.slice(0, m.index).split('\n').length })).filter(h => h.o);
+        for (let i = 1; i < hits.length; i++) if (hits[i].o < hits[i - 1].o) { F('WARN', 'SC1', `조회조건 순서가 기준표(${ref.domain} ${ref.src})와 다를 수 있음(라벨 대조): '${hits[i].label}' 이 '${hits[i - 1].label}' 보다 앞 — 기준 순서: ${[...new Map(want.sort((x, y) => x.tobe_order - y.tobe_order).map(r => [r.tobe_order, r.tobe_name])).values()].join(' → ')} (40_SEARCH_COND.md #### ${ID})`, `${rel(f)}:${hits[i].line}`); break; }
+        const gone = ref.main.filter(r => SC.EXCLUDE.has(r.usage) && r.asis_name);
+        for (const h of [...t.matchAll(/\bt\(\s*(?:'[A-Z?0-9]+'|LBL\.[A-Z0-9_]+)\s*,\s*'_([^']+)'\s*\)/g)]) { const k = SC.canon(h[1].replace(/\*$/, '')); const r = gone.find(r => SC.canon(r.asis_name) === k && !ref.main.some(x => x.usage === 'USE' && SC.canon(x.tobe_name) === k)); if (r) F('WARN', 'SC2', `기준표가 ${r.usage}(${r.usage_reason || r.change}) 로 정한 조회조건 '${h[1]}' 가 Form 에 있음 — 기준표 반영 검토`, `${rel(f)}:${t.slice(0, h.index).split('\n').length}`); }
+      }
+    }
+  }
+}
+
+// 8b) 조회영역 일괄 입력 = 버튼 영역 버튼 + 입력 팝업 (hook #155 — 사용자 지시 2026-10-23, 정본 SCP0096 shipment-working-day-osp)
+//    대상 = 조회조건 기준표가 BUTTON_AREA + 'Bulk Update' 검토문구로 표시한 화면(SCP0019/SCP0096/SCP0098/SSP0005).
+//    BU1 = ①SubTitle customButtons 에 Input/Bulk 버튼 없음 ②<Page>InputModal.tsx / BulkUpdateModal.tsx 없음(FINAL BLOCK·평소 WARN) ③버튼 라벨 리터럴(WARN)
+if (ID) {
+  const SCb = require('./lib/searchcond'); const refB = SCb.forScreen(R, ID);
+  const bulk = refB ? refB.main.filter(r => r.usage === 'BUTTON_AREA' && /Bulk Update/i.test(`${r.review} ${r.change}`)) : [];
+  if (bulk.length) {
+    const all = Object.entries(src); const lv = FINAL ? 'BLOCK' : 'WARN';
+    const btnHit = all.find(([, t]) => /customButtons=\{[\s\S]{0,600}?(LBL\.INPUT|'_?Input'|Bulk)/.test(t));
+    const modalHit = files.find(f => /(InputModal|BulkUpdateModal)\.tsx$/.test(f));
+    const where = `기준표 ${bulk.map(r => r.asis_name).join('·')} (${refB.domain} ${bulk[0].src_row}행~)`;
+    if (!btnHit) F(lv, 'BU1', `조회영역 일괄 입력(${where}) — SubTitle customButtons 에 Input 버튼 없음. hook #155: 조회영역에서 빼고 customButtons [{ label: t(LBL.INPUT, '_Input'), action: handleInputOpen }](편집 권한 게이트 · 조회 선행 가드) — 정본 SCP0096`);
+    if (!modalHit) F(lv, 'BU1', `조회영역 일괄 입력(${where}) — 입력 팝업 components/<Page>InputModal.tsx 없음. hook #155 정본 ShipmentWorkingDayOspInputModal(CustomDialog 520×280 modaless · FormItem · OK/Close · onConfirm boolean · EditTracker 경유 셀 기록)`);
+    if (btnHit && /customButtons=\{[\s\S]{0,600}?label:\s*'[^']*(Input|Bulk)[^']*'/.test(btnHit[1])) F('WARN', 'BU1', `일괄 입력 버튼 라벨이 리터럴 — t(LBL.INPUT, '_Input') 로(다국어 E13·hook #155 X3)`, rel(btnHit[0]));
+  }
+}
+
+// 8c) 대조표 검증 커버리지 (사용자 지시 2026-10-26 — "대조표에 있는데 오류여부를 확인하지 않으면 제대로 생성된 것인지 확인할 방법이 없다 · 누락되는 검증 없이")
+//    원천 = Doc/verify/<ID>/mapping_trace_summary.json (tools/Harness/verify/mapping_trace.py — 🔎 화면 정합검증 run_verify 마지막 단계)
+//    VC1 = 대조표(FE __asis-mapping__ + AS-IS 액션 전 문장) 행 중 FAIL·미구현·미검증(NOT_RUN·NOPATH·TODO·BLOCKED·REVIEW) > 0 또는 추적 미실행 · FE 대조표 없음 — 완료(--final) 차단, 평소 WARN (v2 2026-10-26: 검증 불필요 분류 없음)
+//    VC2 = 시노님·권한 누락(Doc/verify/<ID>/syn_check.csv — SCMP_APP 이 부르는 PKG·콤보 SQL 객체) — 완료 차단, 평소 WARN
+if (ID) {
+  const vdir = path.join(path.dirname(cfg.genOutDir || path.join(__dirname, '..', '..', 'Doc', 'gen')), 'verify', ID);
+  const sumF = path.join(vdir, 'mapping_trace_summary.json'); const lv = FINAL ? 'BLOCK' : 'WARN';
+  if (!fs.existsSync(sumF)) F(lv, 'VC1', `대조표 검증 추적 없음 — 🔎 화면 정합검증(python tools/Harness/verify/run_verify.py ${ID}) 또는 mapping_trace.py ${ID} 실행. 대조표 행마다 검증 결과가 있어야 완료`);
+  else {
+    const s = JSON.parse(read(sumF)); const v = s.verdict || {};
+    if (s.fe_mapping_missing) F(lv, 'VC1', `FE 대조표(__asis-mapping__.md) 없음 — AS-IS 기능 대조 원천이 없어 검증 대상 자체가 없다`);
+    if (v.FAIL) F(lv, 'VC1', `대조표 FAIL ${v.FAIL}행 (Doc/verify/${ID}/mapping_trace.md §FAIL)`);
+    if (v['미구현']) F(lv, 'VC1', `대조표 미구현 ${v['미구현']}행 — 작업 원장 Doc/verify/${ID}/work_ledger.md W1(기능 구현)`);
+    if (v['미검증']) F(lv, 'VC1', `대조표 미검증 ${v['미검증']}행 — 검사 사유 ${Object.entries(s.unverified_reasons || {}).map(([k, n]) => `${k} ${n}`).join(' · ')} (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다`);
+    // 작업 원장(impl_engine.py) — PASS·NA 가 아닌 검사 인스턴스 전부 = 할 일. 0건이어야 완료
+    const wlF = path.join(vdir, 'work_ledger_summary.json');
+    if (fs.existsSync(wlF)) { const w = JSON.parse(read(wlF)); if (w.open) F(lv, 'VC1', `작업 원장 미완료 ${w.open}건 / 검사 인스턴스 ${w.instances} — ${Object.entries(w.by_type || {}).map(([k, n]) => `${k} ${n}`).join(' · ')}${w.suspect_not_implemented ? ` · 구현 의심 ${w.suspect_not_implemented}` : ''} (Doc/verify/${ID}/work_ledger.md)`); }
+    else F('WARN', 'VC1', `작업 원장 없음 — python tools/Harness/verify/impl_engine.py ${ID}`);
+    if (s.version !== 2) F('WARN', 'VC1', `대조표 추적 v1 결과 — mapping_trace.py v2(대조표 전 행 × 검사 카탈로그) 로 재실행`);
+    const age = (Date.now() - fs.statSync(sumF).mtimeMs) / 36e5; if (age > 24) F('WARN', 'VC1', `대조표 검증 추적이 ${Math.round(age)}시간 전 결과 — 재실행 후 판정`);
+  }
+  const synF = path.join(vdir, 'syn_check.csv');
+  if (fs.existsSync(synF)) { const bad = readCsv(synF).filter(r => /SYN_MISSING|PRIV_MISSING|TARGET_MISSING|INVALID/.test(r.verdict)); if (bad.length) F(lv, 'VC2', `BE 계정 시노님·권한 문제 ${bad.length}건 — ${bad.slice(0, 4).map(r => `[${r.verdict}] ${r.kind} ${r.source} ${r.name}`).join(' · ')} (호출 시 ${bad[0].error_if_called}) · Doc/verify/${ID}/syn_check.csv`); }
+}
+
+// 9) 다국어 미적용 (사용자 지시 2026-10-23 — "다국어가 적용되지 않아서 접두어(_) 붙어서 나오는 것도 오류")
+//    번역 원천 = DB SCM_ADM_MSG_M(FE i18n loadPath 'admin/message'). t(코드, '_기본문구') 의 코드가 마스터에 없으면(또는 '' / LBL????? / 미해석 상수)
+//    화면에 '_기본문구' 가 그대로 보인다. I18N1 = '_' 노출 확정(FINAL BLOCK · 평소 WARN) · I18N2 = 코드 미등록이지만 기본문구에 '_' 없음(영문 고정 — 다국어 미적용, WARN)
+//    · I18N3 = 코드는 있으나 KO/EN 행 일부 없음(WARN). 판정 원천 = Doc/tobefacts/db/msg_master.csv 스냅샷(24h 초과면 메시지에 표기 — 런타임 확인은 E2E smoke 'i18n').
+//    의도된 예외는 해당 줄 `I18N-OK` 주석.
+{
+  const mf = path.join(cfg.tobeOutDir || '', 'db', 'msg_master.csv');
+  if (cfg.tobeOutDir && fs.existsSync(mf)) {
+    const ageH = Math.round((Date.now() - fs.statSync(mf).mtimeMs) / 36e5); const stale = ageH > 24 ? ` (msg_master 스냅샷 ${ageH}시간 전 — python tools/DbConn/export_tobe_meta.py msg_master 로 새로고침 후 재판정)` : '';
+    const langs = new Map(); for (const r of readCsv(mf)) { if ((r.use_yn || 'Y') === 'N') continue; const k = String(r.msg_id || '').toUpperCase(); if (!langs.has(k)) langs.set(k, new Set()); langs.get(k).add(String(r.lang_cd || '').toUpperCase()); }
+    // 페이지 안 상수 객체(export const LBL/MSG/… = { NAME: 'LBL00112', … }) → 'LBL.NAME' 해석표
+    const consts = new Map();
+    for (const t of Object.values(src)) for (const m of t.matchAll(/export\s+const\s+([A-Z_][A-Z0-9_]*)\s*=\s*\{([\s\S]*?)\}\s*(?:as\s+const)?\s*;/g)) for (const kv of m[2].matchAll(/([A-Z_][A-Z0-9_]*)\s*:\s*'((?:LBL|MSG|MNU)[0-9?]{5})'/g)) consts.set(`${m[1]}.${kv[1]}`, kv[2]);
+    const seenI = new Set();
+    for (const [f, t] of Object.entries(src)) {
+      if (/\.test\.tsx?$|__tests__/.test(f)) continue;
+      const lines = t.split(/\r?\n/); const code0 = stripComments(t); // 주석 속 예시(t(LBL.KEY, '_Fallback') 등)는 제외 — 위치는 보존
+      for (const m of code0.matchAll(/\bt\(\s*('([^']*)'|([A-Z_][A-Z0-9_]*\.[A-Z0-9_]+))\s*,\s*'([^']*)'/g)) {
+        const ln = code0.slice(0, m.index).split('\n').length; if (/I18N-OK/.test(lines[ln - 1] || '')) continue;
+        const ref = m[2] != null ? m[2] : m[3]; const code = m[2] != null ? m[2] : consts.get(m[3]) || ''; const def = m[4];
+        const key = `${f}:${ln}:${ref}`; if (seenI.has(key)) continue; seenI.add(key);
+        const has = code && /^(LBL|MSG|MNU)\d{5}$/.test(code) && langs.has(code.toUpperCase());
+        if (!has) {
+          const why = !ref ? "코드 '' (빈 키)" : /\?/.test(code) ? `코드 ${code}(미확정)` : !code ? `상수 ${ref} 해석 불가(페이지 constants 에 없음)` : `코드 ${code} 가 msg_master 에 없음`;
+          if (/^_/.test(def)) F(FINAL ? 'BLOCK' : 'WARN', 'I18N1', `다국어 미적용 — 화면에 '${def}' 가 그대로 보임: ${why}. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입${stale}`, `${rel(f)}:${ln}`);
+          else if (def) F('WARN', 'I18N2', `다국어 미적용(영문 고정 '${def.slice(0, 30)}'): ${why} — 언어 전환 시 번역되지 않음${stale}`, `${rel(f)}:${ln}`);
+        } else {
+          const ls = langs.get(code.toUpperCase()); const miss = ['KO', 'EN'].filter(x => !ls.has(x));
+          if (miss.length) F('WARN', 'I18N3', `${code} 의 ${miss.join('/')} 행 없음 — 해당 언어에서 '${def}' 로 보일 수 있음${stale}`, `${rel(f)}:${ln}`);
+        }
+      }
+    }
   }
 }
 
@@ -168,9 +409,14 @@ const DOD = []; const dod = (code, ok, what, how, level) => { DOD.push({ code, o
   // As-is 근거 대조: members.csv(BaseForm override) 가 있으면 override 된 버튼이 false 면 BLOCK
   if (sdir && fs.existsSync(path.join(sdir, 'members.csv'))) {
     const mem = readCsv(path.join(sdir, 'members.csv')).filter(r => r.variant !== 'legacy' && /override/.test(r.modifiers || '') && Number(r.lines) > 3);
-    const over = n => mem.some(r => r.member === n);
+    // 2026-10-26 TO-BE 룰: 기능이 없는 공통버튼은 숨긴다 — AS-IS override 가 있어도 본문이 NO-OP(actions.csv 에 그 메서드의 RETURN/주석 외 동작 문장 0)이면 false 가 정답
+    const acts = fs.existsSync(path.join(sdir, 'actions.csv')) ? readCsv(path.join(sdir, 'actions.csv')) : null;
+    const noop = n => acts ? !acts.some(a => a.method === n && !/^(RETURN|COMMENT)$/.test(a.kind || '')) : false;
+    const over = n => mem.some(r => r.member === n) && !noop(n);
     const pairs = [['InsertButton', 'insert'], ['DeleteButton', 'delete'], ['SaveButton', 'save'], ['UploadButton', 'upload'], ['ImportButton', 'upload']];
     for (const [asis, key] of pairs) if (over(asis) && hk) dod('B08', !new RegExp(`\\b${key}:\\s*false`).test(hkBody), `As-is ${asis} override 있음 → hotkeyConfig.${key} 가 false 가 아니어야 함`, `As-is 기능 누락(members.csv ${asis})`);
+    // 역방향(2026-10-26): AS-IS 가 NO-OP 인데 TO-BE 가 핸들러를 넘기면 '기능 없는 버튼 노출' — 명시적 무동작 `() => undefined` 도 금지
+    for (const [asis, key] of pairs) if (mem.some(r => r.member === asis) && noop(asis) && hk) dod('B08', !new RegExp(`\\b${key}:\\s*\\(\\)\\s*=>\\s*undefined`).test(hkBody), `As-is ${asis} 는 NO-OP → hotkeyConfig.${key} 는 false(기능 없는 공통버튼 숨김 — TO-BE 룰 2026-10-26)`, `무동작 핸들러로 버튼을 노출 중`);
     if (!over('ExcelButton') && hk) dod('B08', /excel:\s*false/.test(hkBody) || true, 'As-is ExcelButton 없음 — excel 기본 활성 허용(SubTitle 기본)', '정보', 'WARN');
     const ctl = readCsv(path.join(sdir, 'controls.csv')).filter(r => r.variant !== 'legacy'); const hasCond = ctl.some(c => /UsrConditionPanel/i.test(c.type));
     if (hk && !hasCond) dod('B09', /condition:\s*false/.test(hkBody) && /resetCondition:\s*false/.test(hkBody), 'UsrConditionPanel 없는 화면: condition/resetCondition: false 명시', '룰 25 §1.5.3');
@@ -368,6 +614,14 @@ const block = findings.filter(f => f.level === 'BLOCK'), warn = findings.filter(
 const title = `[Harness] ${ID || '?'} ${path.basename(pageDir)} — BLOCK ${block.length} / WARN ${warn.length}${FINAL ? ' (final)' : ''}`;
 const lines = [title, ...block.map(f => `  ✗ ${f.code} ${f.msg}${f.where ? '  @' + f.where : ''}`), ...warn.slice(0, 40).map(f => `  ! ${f.code} ${f.msg}${f.where ? '  @' + f.where : ''}`), warn.length > 40 ? `  … 경고 ${warn.length - 40}건 더 (CHECK.md)` : ''].filter(Boolean);
 try { const rep = path.join(cfg.genOutDir, ID || path.basename(pageDir)); fs.mkdirSync(rep, { recursive: true }); fs.writeFileSync(path.join(rep, 'CHECK.md'), `# ${title}\n\n` + findings.map(f => `- ${f.level} ${f.code} ${f.msg}${f.where ? ' @' + f.where : ''}`).join('\n') + '\n', 'utf8'); } catch (_) { }
+// 결과 봉투 Doc/gen/<ID>/CHECK.result.json (vibe-result/1, 2026-10-26) — CHECK.md 의 기계 판독본. BLOCK 0 = pass(--final 이 아니면 최종 판정 아님을 final 로 표시)
+try {
+  const rep = path.join(cfg.genOutDir, ID || path.basename(pageDir)); const kindOf = c => /^T0/.test(c) ? 'build' : /^L0/.test(c) ? 'lint' : 'exec';
+  require('./lib/envelope').write(path.join(rep, 'CHECK.result.json'), { producer: 'check.js', id: ID || null, final: FINAL, page: path.relative(path.resolve(__dirname, '..', '..'), pageDir).split(path.sep).join('/'),
+    state: 'completed', verdict: block.length ? 'fail' : 'pass', summary: { block: block.length, warn: warn.length },
+    issues: block.map(f => ({ id: f.code, class: 'BLOCK', msg: f.msg, where: f.where, evidence: [{ kind: kindOf(f.code), ref: `check.js ${f.code}` }] })),
+    evidence: [{ kind: 'exec', ref: `check.js${FINAL ? ' --final' : ''}` }] });
+} catch (e) { console.error(`[WARN] CHECK.result.json 기록 실패: ${e.message}`); }
 if (a.includes('--json')) console.log(JSON.stringify({ id: ID, pageDir, block: block.length, warn: warn.length, findings }));
 else (block.length ? console.error : console.log)(lines.join('\n'));
 process.exit(block.length ? 2 : warn.length ? 1 : 0);

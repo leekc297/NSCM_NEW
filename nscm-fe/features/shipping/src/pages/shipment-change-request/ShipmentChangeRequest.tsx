@@ -15,6 +15,8 @@ import { RequestInfoPanel } from './components/RequestInfoPanel';
 import { ShipmentChangeRequestForm } from './components/ShipmentChangeRequestForm';
 import { ShipmentChangeRequestMainGrid } from './components/ShipmentChangeRequestMainGrid';
 import { ShipmentChangeRequestSubGrid } from './components/ShipmentChangeRequestSubGrid';
+import { useShipmentChangeRequestBusyTask } from './hooks/useShipmentChangeRequestBusyTask';
+import { useShipmentChangeRequestCellCombos } from './hooks/useShipmentChangeRequestCellCombos';
 import { useShipmentChangeRequestValidation } from './hooks/useShipmentChangeRequestValidation';
 import {
   ITEM_POPUP_COLUMN,
@@ -27,15 +29,67 @@ import {
 import type { MainRow, SubRow } from './shipment-change-request.types';
 import styles from './ShipmentChangeRequest.module.scss';
 import { useShipmentChangeRequestStore } from './useShipmentChangeRequestStore';
-import { isInsertedRow } from './utils/shipmentChangeRequestEditLock';
-import { buildCopiedRow } from './utils/shipmentChangeRequestInsert';
+import { submitCancelDrafting } from './utils/shipmentChangeRequestCancel';
+import {
+  resolveAuthGroup,
+  submitRequestComplete,
+  type CompleteResult,
+} from './utils/shipmentChangeRequestComplete';
+import { firstReasonWithoutChangeRow } from './utils/shipmentChangeRequestDerive';
+import { isEndCustomerDivision, isInsertedRow } from './utils/shipmentChangeRequestEditLock';
+import { buildCopiedRow, buildNewRow } from './utils/shipmentChangeRequestInsert';
 import {
   runSaveChain,
   type SaveChainResult,
 } from './utils/shipmentChangeRequestSaveChain';
+import {
+  checkShipmentStatus,
+  type ShipmentStatusBlock,
+} from './utils/shipmentChangeRequestStatusCheck';
 
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+
+/**
+ * alert/toast 의 `defaultValue` 는 **그 코드 전용 영문 문구**다. `_`/`__` 접두를 붙이지 마라 —
+ *   접두는 SCREEN_TEXT 처럼 "의도적 미등록 i18n **키**" 표시용이고, defaultValue 는 **화면에 그대로
+ *   렌더되는 문구**라 `__Cancel this request?` 처럼 밑줄이 노출된다(사용자 신고 2026-10-13).
+ *   여러 자리가 한 문구를 공유해도 안 된다 — 어느 검증에 걸렸는지 알 수 없다.
+ */
+// MSG00267(ERP 중단기간)은 TO-BE 등가 미등록이라 이 fallback 이 실제로 쓰인다 — 2곳 공용.
+const ERP_BLOCK_TEXT = 'ERP interface is blocked during the maintenance period.';
+// MSG00672 EN 실문구. `{0}`=건수(호출부에서 수동 치환).
+const SAVED_TEXT = '{0} data saved.';
+
+/**
+ * 완료 SP 실패 사유 -> [MSG 코드, 영문 fallback]. AS-IS cs:2305~2320 의 3분기를 그대로 옮긴다.
+ *   MSG00316/MSG00353 은 TO-BE 미등록이라 fallback 이 실제로 쓰인다(문구 공유 금지 — 사유가 다르다).
+ */
+const completeFailMessage = (
+  kind: CompleteResult['failKind']
+): [string, { defaultValue: string }] => {
+  if (kind === 'unauthorized') {
+    return [
+      MSG.APPROVER_UNAVAILABLE,
+      {
+        defaultValue:
+          'No model owner is registered, so an approver cannot be assigned. Please assign an owner for this model.',
+      },
+    ];
+  }
+  if (kind === 'modelPic' || kind === 'modelItem') {
+    return [
+      MSG.MODEL_PIC_MISMATCH,
+      {
+        defaultValue:
+          kind === 'modelPic'
+            ? 'Different Model PICs are included. Requests are possible per the same PIC.'
+            : 'Different Models are included. Requests are possible per the same Model.',
+      },
+    ];
+  }
+  return [MSG.SAVE_FAIL, { defaultValue: 'Failed to save.' }];
+};
 
 /**
  * 실패 단계·코드 -> 안내 MSG 코드. 전용 MSG 코드를 임의로 만들지 않는다(CORE-08).
@@ -50,6 +104,9 @@ const saveFailMessage = (chain: SaveChainResult): string => {
   if (chain.failedStage === 'new') {
     if (chain.failedCode === 'N') return MSG.NEW_MODEL_REQUIRED;
     if (chain.failedCode === 'F') return MSG.NEW_PRICE_REQUIRED;
+    // 'X' = BOD(Trans mode·Incoterms) 무효 — AS-IS cs:1003-1012 MSG00324. modify 'X' 와 같은 의미라
+    //   TO-BE 등가 MSG01296(TRANS_MODE_UNAVAILABLE)로 안내한다(종전 미매핑 → 일반 SAVE_FAIL 로 떨어짐).
+    if (chain.failedCode === 'X') return MSG.TRANS_MODE_UNAVAILABLE;
   }
   return MSG.SAVE_FAIL;
 };
@@ -58,7 +115,11 @@ const saveFailMessage = (chain: SaveChainResult): string => {
 //   자매 SSP0200 과 동일 값 — 섹션 헤더 1줄 + 컴팩트 폼 + 액션바가 들어가는 높이. 조정 시 이 값만 바꾼다.
 //   패널은 overflow:hidden 이라 모자라면 **조용히 잘린다** — 내용이 늘면 이 값도 함께 올려야 한다.
 //   2026-10-08: `usrLabel2`("Request Info") 섹션 헤더(16px 가운데정렬, lineHeight 1.4) 반영분 포함.
-const FORM_PANEL_SIZE = '224px';
+//   2026-10-14: 224 -> 248. Request Complete 버튼 아래쪽이 잘려 보인다는 신고 — 폼+액션바 자연높이
+//     합이 224 를 넘어 마지막 요소(액션바)가 clip 되고 있었다. +24 중 4px 은 액션바 하단 여백
+//     증가분(8->12, RequestActionBar.module.scss)이고 나머지 20px 이 잘림 여유다. 폰트·확대율이
+//     달라져도 버티도록 넉넉히 뒀다 — 그만큼 Grid1/Grid2 가 나눠 갖는 높이가 줄어든다.
+const FORM_PANEL_SIZE = '248px';
 
 // AS-IS GSCM.SSP.Plan.UIL SSP0201_ShipmentChangeRequest — 출하 변경 요청(멀티그리드 + cascade 셀콤보).
 //   설계: .atlas/gscm-design/SSP0201/design/00~03. 상세 매핑: __asis-mapping__.md.
@@ -71,6 +132,11 @@ const FORM_PANEL_SIZE = '224px';
 //     Period 기본값 SP(GET_SCP_DAY_PERIOD) · Excel. 전부 버튼메타 미등록이 선행조건이다(constants 참조).
 export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
+  // 필수값 누락 안내 — MSG00614 'The {0} value is required.' 의 {0} 에 누락 항목명을 넣는다.
+  //   `{0}` 은 i18next 보간자({{ }})가 아니라 리터럴이라 수동 replace 다(`{ 0: … }` 로는 안 바뀐다).
+  //   종전엔 MSG00013(자리 없음) + `{ 0: missing }` 이라 항목명이 조용히 버려졌다.
+  const requiredFieldMessage = (missing: string): string =>
+    t(MSG.REQUIRED_FIELD, { defaultValue: 'The {0} value is required.' }).replace('{0}', missing);
   const setToast = useMessageStore.getState().setToast;
   const setAlert = useMessageStore.getState().setAlert;
   const langCd = useSessionStore(s => s.session.langCd);
@@ -79,7 +145,10 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     checkErpBlock,
     checkChangeRequestRequired,
     checkRequiredMainColumns,
+    firstModifiedRowMissingSoldtoShipto,
     checkCompleteQtyDate,
+    checkShipmentDateInPeriod,
+    checkShipDateInRange,
   } = useShipmentChangeRequestValidation();
 
   const mainGridRef = useRef<FlexGrid>();
@@ -105,6 +174,40 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
   const requestInfo = useShipmentChangeRequestStore(s => s.requestInfo);
   const setRequestInfo = useShipmentChangeRequestStore(s => s.setRequestInfo);
   const clearRequestInfo = useShipmentChangeRequestStore(s => s.clearRequestInfo);
+  const initSessionFields = useShipmentChangeRequestStore(s => s.initSessionFields);
+  const fetchRequestorDept = useShipmentChangeRequestStore(s => s.fetchRequestorDept);
+
+  // 그리드1 셀콤보(From/To Site) dataMap — 신규행 복제값이 코드로 보이던 것을 설명으로 매핑한다.
+  const { dataMaps: cellDataMaps, loadEndCustomer, focusEndCustomerRow } =
+    useShipmentChangeRequestCellCombos(sc.divisionId);
+
+  /**
+   * Save / Request Complete / Cancel 공통 실행 래퍼 — **연타 가드 + 전역 스피너**를 한자리에 모은다.
+   *
+   *   `savingRef` : 재진입 차단(같은 핸들러 연타 + 서로 다른 핸들러 교차 호출). 조회·Insert·New·
+   *                 Delete 도 이 플래그를 읽어 "저장 중"에는 비켜선다.
+   *   `runBusy`   : react-query mutation 으로 감싸 `useIsBusy([tabId])` 가 전역 스피너를 켜게 한다
+   *                 (조회와 같은 오버레이). 스피너가 화면을 덮어 조작까지 막는다 —
+   *                 종전엔 저장 체인이 `apiClient.post` 직호출이라 어느 카운터에도 안 잡혀
+   *                 저장 중 화면이 멀쩡해 보였다(사용자 요청 2026-10-13).
+   *
+   * 지켜야 할 3규약:
+   *   1. 가드를 **핸들러 진입 즉시** 켠다 — 확인창(setAlert confirm)보다 **먼저**. 종전 구현은
+   *      confirm 뒤에 켜서, 느린 회선에서 Save 를 두 번 누르면 확인창이 두 개 뜨고 둘 다 통과해
+   *      SAVE_NEW 가 2회 나갔다(신규행 중복 채번·중복 적재).
+   *   2. 작업이 **완전히 끝난 뒤** 끈다(`finally`). 동기 검증 early-return 도 같은 경로를 타므로
+   *      가드가 새지 않는다.
+   *   3. 비동기는 전부 await 한다 — 실행체인과 그 안의 재조회까지. 체인이 채번·수정·신규를 순차로
+   *      돌므로 가드는 **마지막 재조회가 끝난 뒤** 풀린다.
+   */
+  const runBusy = useShipmentChangeRequestBusyTask(tabId);
+  const runExclusive = (task: () => Promise<void>) => {
+    if (savingRef.current) return;
+    savingRef.current = true;
+    void runBusy(task).finally(() => {
+      savingRef.current = false;
+    });
+  };
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   // 편집 기본 ON — mount 시 EDIT 권한 1회만 확인한다(모드 state 0건, convert-core §2.4).
@@ -141,6 +244,10 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     clearFilters();
     // GAP-08 Period 기본값(30일 범위) 세팅 — AS-IS InitControls GetDayRange("") (design 02 §4-6).
     initPeriodDefault();
+    // 요청정보 세션 축 — AS-IS SetUserInfo(cs:517~526). 이름은 세션, 부서는 콤보 1회 조회다
+    //   (UserSession 에 부서 필드가 없다). 종전엔 둘 다 없어 Dept Name 이 상시 빈칸이었다.
+    initSessionFields();
+    void fetchRequestorDept();
     if (!initialized) void fetchStaticColumns();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
@@ -159,7 +266,9 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!sc.divisionId) {
       void setAlert({
         type: 'alert',
-        content: t(MSG.REQUIRED_DIVISION, '__Division is required.\', 0: \'Division'),
+        // 종전 리터럴이 escape 깨진 `'__Division is required.\', 0: \'Division'` 한 덩어리였다 —
+        //   MSG00097 이 등록돼 있어 안 보였을 뿐 미등록이면 그 문자열이 그대로 떴다.
+        content: t(MSG.REQUIRED_DIVISION, { defaultValue: 'Please select Division.' }),
       });
       return;
     }
@@ -184,13 +293,70 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     return source[Math.max(g.selection?.row ?? 0, 0)];
   };
 
+  /**
+   * End Customer 후보 재조회 + 1건 자동확정 (AS-IS `setEndCustomer` cs:5731~5748).
+   *   div40/EE 신규행 전용 — Model 팝업 선택·Insert 복제 직후(여기) + To Site 인라인 편집(MainGrid 콜백)
+   *   에서 부른다. 후보가 정확히 1건이면 그 코드를 셀에 넣는다(EditTracker 경유, writeCell 과 동일 규약).
+   *   0행이면 훅이 '-' 를 합성해 드롭다운에만 표시하고 셀 자동대입은 하지 않는다(AS-IS 대입은 주석).
+   *   콤보 바인드는 @divisionId/@scmSiteId(=To Site)/@itemId/@param5='P' — fromSite 는 콤보 바인드가 아니다.
+   */
+  const applyEndCustomer = async (row: Record<string, unknown>): Promise<void> => {
+    if (!isEndCustomerDivision(row)) return;
+    const scmSiteId = str(row.TO_SITE_DESCRIPTION);
+    const itemId = str(row.ITEM_ID);
+    if (!scmSiteId || !itemId) return; // AS-IS 3키 가드(div 는 40 고정이라 상시 충족)
+    const candidates = await loadEndCustomer({
+      divisionId: str(row.DIVISION_ID) || sc.divisionId,
+      scmSiteId,
+      itemId,
+    });
+    if (candidates?.length !== 1) return;
+    const code = str(candidates[0].CODE);
+    const prev = row.END_CUSTOMER;
+    if (prev === code) return;
+    editTrackerRef.current?.storeChange(row as never, 'END_CUSTOMER', prev as never, code as never);
+    row.END_CUSTOMER = code;
+    mainGridRef.current?.invalidate();
+  };
+
+  /**
+   * End Customer 셀 포커스 — 그 행 기준으로 드롭다운 슬롯을 **동기 교체**(자동확정 없음).
+   *   공유 dataMap 슬롯이 마지막 조회(Insert/New/To Site) 행 후보로 덮여 있어 다른 행에도 그대로
+   *   보이던 문제를 포커스마다 맞춰 푼다(AS-IS 행별 셀 콤보 등가, 사용자 신고 2026-10-27).
+   *   item/To Site 미설정 행이면 훅이 슬롯을 비운다 — 이전 행 후보가 남지 않는다.
+   */
+  const focusEndCustomer = (row: Record<string, unknown>): void => {
+    if (!isEndCustomerDivision(row)) return;
+    focusEndCustomerRow({
+      divisionId: str(row.DIVISION_ID) || sc.divisionId,
+      scmSiteId: str(row.TO_SITE_DESCRIPTION),
+      itemId: str(row.ITEM_ID),
+    });
+  };
+
   const handleInsert = () => {
     if (savingRef.current) return; // 저장 중 신규행 추가 금지 — 저장 대상 집합이 전송 중에 바뀐다.
     const g = mainGridRef.current;
     if (!g || !canEdit) return;
     const base = copySourceRow();
     if (!base) return; // RowCount>0 가드 — 조회 전/빈 그리드에서는 조용히 끝낸다(AS-IS 동일)
-    GridAction.addRow(g, buildCopiedRow(base, sc.divisionId) as never, 'above', true);
+    const newRow = buildCopiedRow(base, sc.divisionId);
+    GridAction.addRow(g, newRow as never, 'above', true);
+    // AS-IS cs:2457 — 복제행은 item/toSite 가 채워져 있어 End Customer 후보를 바로 재조회·자동확정한다.
+    void applyEndCustomer(newRow);
+  };
+
+  /**
+   * btnNew(cs:2959) — **빈 행**(DIVISION_ID + div 분기 `'-'`)을 넣는다. 복사하지 않는다.
+   *   AS-IS 가 의도적으로 `RowCount>0` 가드를 뺀 경로라 조회 전 빈 그리드에서도 추가된다.
+   *   자매 SSP0200 `handleNew` 와 동일 동작(사용자 지시 2026-10-13) — 종전엔 New 가 handleInsert 를
+   *   재사용해 Insert 와 구분이 없었다.
+   */
+  const handleNew = () => {
+    if (savingRef.current) return; // 저장 중 신규행 추가 금지 — 저장 대상 집합이 전송 중에 바뀐다.
+    const g = mainGridRef.current;
+    if (!g || !canEdit) return;
+    GridAction.addRow(g, buildNewRow(sc.divisionId) as never, 'above', true);
   };
 
   /**
@@ -231,11 +397,14 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     else if (binding === PROJECT_POPUP_COLUMN) setOpenProject(true);
   };
 
-  const onBlockedEdit = (msgKey: string) => {
+  // 변경 차단·선행값 안내. arg 가 있으면 MSG00098 "먼저 {0}을(를) 선택하십시오" 의 `{0}` 를 치환한다
+  //   (`{0}` 은 i18next 보간자가 아니라 리터럴이라 수동 replace — memory i18n-zero-placeholder-needs-manual-replace).
+  const onBlockedEdit = (msgKey: string, defaultValue?: string, arg?: string) => {
     const code = (MSG as Record<string, string>)[msgKey] ?? msgKey;
+    const text = t(code, { defaultValue: defaultValue ?? 'This change is not allowed.' });
     void setAlert({
       type: 'alert',
-      content: t(code, { defaultValue: '_Not allowed.' }),
+      content: arg !== undefined ? text.replace('{0}', arg) : text,
     });
   };
 
@@ -293,15 +462,16 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
   const runSave = async (rows: Record<string, unknown>[]) => {
     const chain = await runSaveChain(rows, {
       userId: useSessionStore.getState().session.userId ?? '',
-      // userDeptId: 세션에 부서 필드가 없다 — 빈 값(SP 는 APPROVAL_DEPT 갱신에만 쓴다).
-      userDeptId: '',
+      // 요청부서 — 세션에 부서 필드가 없어 `fetchRequestorDept()`(SalesPlanUserDept 콤보)가 채운 값이다.
+      //   조회 실패 시에만 빈 값으로 나간다(종전에는 상시 빈 값이었다).
+      userDeptId: requestInfo.requestDeptId,
       language: langCd ?? '',
     });
 
     // 보낼 것이 없었다 — **clearChanges/재조회를 하지 않는다.** 아무것도 보내지 않았는데 화면을
     //   갈아엎으면 사용자가 손댄 'P' 행 편집이 조용히 사라진다.
     if (chain.nothingToSend) {
-      setToast({ type: 'error', message: t(MSG.NO_CHANGES, '__No changes to save.') });
+      setToast({ type: 'error', message: t(MSG.NO_CHANGES, { defaultValue: 'No modifications have been made.' }) });
       return;
     }
 
@@ -311,7 +481,10 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     await refetchAll();
 
     if (!chain.ok) {
-      void setAlert({ type: 'alert', content: t(saveFailMessage(chain), '__Save failed.') });
+      void setAlert({
+        type: 'alert',
+        content: t(saveFailMessage(chain), { defaultValue: 'Failed to save.' }),
+      });
       return;
     }
     // GAP-13: MSG00672='{0} data saved.' 의 {0} 는 i18next 보간자({{ }})가 아니므로 수동 치환
@@ -319,55 +492,148 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   건수는 **수정 성공 행 수 + 신규 DRAFTING 성공 행 수**다(전체 행 수가 아니다).
     void setToast({
       type: 'success',
-      message: t(MSG.SAVE_SUCCESS, '__Saved.').replace('{0}', String(chain.savedCount)),
+      message: t(MSG.SAVE_SUCCESS, { defaultValue: SAVED_TEXT }).replace(
+        '{0}',
+        String(chain.savedCount)
+      ),
     });
   };
 
+  // R8 ERP 차단게이트 공통 처리 — 저장/변경요청 두 진입이 공유한다(GAP-ERP-BIND 교정).
+  //   'blocked' 면 안내 후 차단(false), 'unknown' 이면 고지를 확인시킨 뒤 진행(true), 'clear' 면 진행.
+  //   'unknown' 을 차단으로 올리면 콤보 SQL 자체가 실패하는 상태(GAP-ERP-DATEFMT, 공용 콤보)에서
+  //   저장이 영구 불가가 된다 — 조용히 통과시키지도 않는다(V-13 정직 판정, 서버 SP 가 최종 방어).
+  const passErpBlockGate = async (): Promise<boolean> => {
+    const block = await checkErpBlock();
+    if (block.status === 'blocked') {
+      void setAlert({ type: 'alert', content: t(MSG.ERP_BLOCK, { defaultValue: ERP_BLOCK_TEXT }) });
+      return false;
+    }
+    if (block.status === 'unknown') {
+      await setAlert({
+        type: 'alert',
+        content: t(SCREEN_TEXT.ERP_BLOCK_UNKNOWN, {
+          defaultValue:
+            'The ERP interface block period could not be verified. Proceeding without the check.',
+        }),
+      });
+    }
+    return true;
+  };
+
   // 저장 — R8 ERP 게이트 + 필수검증 -> 확인창 -> 실행체인(runSave).
-  /**
-   * 연타 방지 가드(savingRef) 규약 — Save / Request Complete / Cancel 3핸들러 공통.
-   *
-   *   1. **핸들러 진입 즉시** 켠다. 확인창(setAlert confirm)보다 먼저여야 한다 — 종전 구현은 confirm
-   *      **뒤에** 켰기 때문에, 느린 회선에서 Save 를 두 번 누르면 확인창이 두 개 떠 둘 다 통과하고
-   *      SAVE_NEW 가 2회 나갔다(신규행이 중복 채번·중복 적재된다).
-   *   2. `try/finally` 로 **작업이 완전히 끝난 뒤** 끈다. 동기 검증 early-return 도 finally 를 타므로
-   *      가드가 새지 않는다.
-   *   3. 비동기 작업은 전부 await 한다 — 실행체인(runSave)과 그 안의 재조회까지. 체인은 채번·수정·신규를
-   *      순차로 돌므로, 가드는 **마지막 재조회가 끝난 뒤**에 풀린다.
-   */
+  //   실행 래퍼는 `runExclusive`(연타 가드 + 전역 스피너) — 위 정의 주석 참조.
   const handleSave = () => {
-    if (savingRef.current) return;
-    savingRef.current = true;
-    void (async () => {
-      try {
+    runExclusive(async () => {
+      {
         const g = mainGridRef.current;
         g?.finishEditing();
         const src = (g?.collectionView?.sourceCollection ?? []) as Record<string, unknown>[];
         // 저장 대상 = CRUD_TYPE(EditTracker) 또는 EDIT_MAIN='Y'(SO그룹 전파 포함).
         const dirty = src.filter(r => str(r.CRUD_TYPE) || str(r.EDIT_MAIN) === 'Y');
         if (dirty.length === 0) {
-          setToast({ type: 'error', message: t(MSG.NO_CHANGES, '__No changes to save.') });
+          setToast({ type: 'error', message: t(MSG.NO_CHANGES, { defaultValue: 'No modifications have been made.' }) });
           return;
         }
         // R14: 이미 요청완료(SHIPMENT_STATUS='R') 행 저장 차단.
         if (dirty.some(r => str(r.SHIPMENT_STATUS) === 'R')) {
-          void setAlert({ type: 'alert', content: t(MSG.ALREADY_COMPLETE, '__Already completed.') });
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.ALREADY_COMPLETE, {
+              defaultValue: 'You have already requested to change your shipment plan',
+            }),
+          });
           return;
         }
         // GAP-01 라벨 * 9컬럼 필수(INPUT_TP_CD='S' 대체, checkRequiredOfSpread(siMain) L800).
         const missing = checkRequiredMainColumns(dirty);
         if (missing) {
-          void setAlert({ type: 'alert', content: t(MSG.REQUIRED_FIELD, { defaultValue: '_Required.', 0: missing }) });
+          void setAlert({ type: 'alert', content: requiredFieldMessage(missing) });
+          return;
+        }
+        // SoldTo/ShipTo 빈값 차단 — **수정행만**(AS-IS SSP_Main_Validation_SoldTo_ShipTo cs:3151, 신규행 제외).
+        //   잠금/파생 컬럼이라 마스터가 비면 변경요청 자체를 막는다(사용자 확인 2026-10-27).
+        const missingSoldtoShipto = firstModifiedRowMissingSoldtoShipto(dirty);
+        if (missingSoldtoShipto) {
+          void setAlert({ type: 'alert', content: requiredFieldMessage(missingSoldtoShipto) });
+          return;
+        }
+        // C8: 변경 없이 Change_Reason 만 입력된 행 차단(AS-IS SSP_Main_Validation cs:3265-3355, MSG00286
+        //   -> TO-BE MSG01290). "변경" 판정은 출하필드 7종(SHIPMENT_CHANGE_FIELDS)을 EditTracker 원본과
+        //   대조한다 — 사유만 바꾼 행은 변경 없음으로 보고 막는다(SO그룹 전파 사유분은 제외).
+        const originals = editTrackerRef.current?.getOriginalValues();
+        const reasonOnlyRow = firstReasonWithoutChangeRow(src, row =>
+          Object.keys(originals?.get(row as never) ?? {})
+        );
+        if (reasonOnlyRow !== null) {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.REASON_WITHOUT_CHANGE, {
+              defaultValue:
+                'Row {0} has no shipment change, so Change Reason cannot be entered.',
+            }).replace('{0}', String(reasonOnlyRow)),
+          });
+          return;
+        }
+        // C7-range: 출하일 허용범위(오늘-'2D-'~오늘+'1D+') 밖이면 저장 차단(AS-IS SSP_Main_Validation
+        //   cs:3165 수정행 / cs:3368 신규행, MSG00194 -> TO-BE MSG01206). 조회구간(아래 C7/MSG00359)과
+        //   별개 축 — 조회기간을 과거로 넓혀 구간검사를 통과하는 범위밖 출하일을 여기서 막는다(지적 2026-10-27).
+        //   AS-IS 와 동일하게 저장 순서상 구간검사보다 먼저 건다.
+        const rangeHit = checkShipDateInRange(dirty);
+        if (rangeHit) {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.DATE_OVER_MAX, {
+              defaultValue: 'Change requests are possible from the current D + {0} ship date.',
+            }).replace('{0}', rangeHit.dDay),
+          });
+          return;
+        }
+        // C7: 출하일이 조회구간(Period) 밖이면 저장 차단(AS-IS SSP_Main_Validation cs:3173-3178/3383-3388,
+        //   MSG00359 -> TO-BE MSG01353). Period 는 SCM0001_GET_SCP_DAY_PERIOD 산출값(store).
+        if (checkShipmentDateInPeriod(dirty, sc.fromYyyymmdd, sc.toYyyymmdd)) {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.SHIP_DATE_OUT_OF_PERIOD, {
+              defaultValue: 'Change request can be made within the inquiry date.',
+            }),
+          });
           return;
         }
         // R8 화면레벨 ERP 차단 게이트.
-        if (await checkErpBlock(sc.divisionId)) {
-          void setAlert({ type: 'alert', content: t(MSG.ERP_BLOCK, '__ERP interface is blocked.') });
+        if (!(await passErpBlockGate())) return;
+        // GAP-09 저장 확인 다이얼로그(TO-BE MSG00001 "Would you like to save it?", AS-IS BtnSave_Click L2776 MSG00012).
+        const ok = await setAlert({
+          type: 'confirm',
+          content: t(MSG.SAVE_CONFIRM, { defaultValue: 'Would you like to save it?' }),
+        });
+        if (!ok) return;
+
+        // 저장 전 출하상태 재검사(AS-IS GetShipmentStatusChk cs:3416) — 다른 사용자 변경·확정삭제(Qty:0)·
+        //   ERP DO 생성(erp_status='C') CONFIRM_ID 가 있으면 서버 기준으로 저장을 막는다. 동일 SO 전파로
+        //   편집 불가 행이 묶여 저장되는 노출을 여기서 차단한다(전파는 AS-IS 처럼 무조건, 차단은 저장 단계).
+        let statusBlock: ShipmentStatusBlock | null;
+        try {
+          statusBlock = await checkShipmentStatus(
+            sc.divisionId,
+            dirty.map(r => str(r.CONFIRM_ID))
+          );
+        } catch {
+          // 검사 호출 자체가 실패(403·통신)하면 저장 여부를 검증할 수 없다 — 조용히 멈추지 않고 저장
+          //   실패를 알린 뒤 중단한다(busyTask 가 미처리 에러를 삼키므로 핸들러가 직접 번역한다, 리뷰 #2).
+          void setAlert({ type: 'alert', content: t(MSG.SAVE_FAIL, { defaultValue: 'Failed to save.' }) });
           return;
         }
-        // GAP-09 저장 확인 다이얼로그(TO-BE MSG00001 "Would you like to save it?", AS-IS BtnSave_Click L2776 MSG00012).
-        const ok = await setAlert({ type: 'confirm', content: t(MSG.SAVE_CONFIRM, '__Save?') });
-        if (!ok) return;
+        if (statusBlock) {
+          void setAlert({
+            type: 'alert',
+            content: (statusBlock.msgCode
+              ? t(statusBlock.msgCode, { defaultValue: statusBlock.defaultText })
+              : statusBlock.defaultText
+            ).replace('{0}', statusBlock.confirmIds),
+          });
+          return;
+        }
 
         // 공통 메타 필수검증(라벨 * 9컬럼은 INPUT_TP_CD 'S'라 staticColumns 기준 M/IM 은 없음 — 배선 유지).
         //   `saveWithValidation` 은 동기 함수이고 콜백도 동기로 호출한다(검증 통과 시 즉시 `mutate(rows)`).
@@ -379,65 +645,122 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
           pending = runSave(rows);
         });
         await pending;
-      } finally {
-        savingRef.current = false;
       }
-    })();
+    });
   };
 
-  // R9 취소(btnCancel) — siSub.RowCount==0 가드 + MSG00195 confirm -> 취소 + 요청정보 clear.
-  //   취소 **동작 자체**는 이번에 바꾸지 않는다(다음 단계) — 연타 가드와 재조회 await 만 입힌다.
+  /**
+   * R9 취소(btnCancel, AS-IS BtnCancel_Click cs:3021~3040).
+   *   하위 그리드 가드 -> MSG00195 확인 -> **DeleteDataDrafting("C")** -> 요청정보 clear -> 재조회.
+   *
+   *   종전엔 가운데 서버 호출이 빠져 있어 폼만 비우고 재조회했다 — 초안이 DB 에 그대로 남아
+   *   하위 그리드에 다시 올라왔다(사용자 신고 2026-10-13). 이제 초안을 실제로 무효화한다.
+   *   실패하면 **요청정보를 비우지 않는다** — 서버에 남아 있는데 화면만 비면 사용자가 취소된 줄 안다.
+   */
   const handleCancel = () => {
-    if (savingRef.current) return;
-    savingRef.current = true;
-    void (async () => {
-      try {
+    runExclusive(async () => {
+      {
         if (subRows.length === 0) return;
         const ok = await setAlert({
           type: 'confirm',
-          content: t(MSG.CANCEL_CONFIRM, '__Cancel this request?'),
+          content: t(MSG.CANCEL_CONFIRM, { defaultValue: 'Are you sure you want to cancel?' }),
         });
         if (!ok) return;
+
+        const result = await submitCancelDrafting(subRows, {
+          userId: useSessionStore.getState().session.userId ?? '',
+          // TO-BE UserSession 에 타임존 필드가 없다 — 빈 값으로 보내 SP 기본 처리에 맡긴다
+          //   (신규/수정 저장 경로·자매 SSP0200 과 같은 규약).
+          timeZone: '',
+          changeType: sc.changeType,
+        });
+        if (result.outcome !== 'ok') {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.SAVE_FAIL, { defaultValue: 'Failed to save.' }),
+          });
+          return;
+        }
+        // 무효화에 성공했을 때만 폼을 비우고 재조회한다. nothingToSend(대상 0건)도 ok 지만
+        //   서버 상태가 바뀐 게 없으므로 clear 는 해도 무해하다(AS-IS 도 iCount==0 이면 clear 만 한다).
         clearRequestInfo();
+        editTrackerRef.current?.clearChanges();
         await refetchAll();
-      } finally {
-        savingRef.current = false;
       }
-    })();
+    });
   };
 
   // R14 변경요청 완료(btnChangeRe2) — 필수 4항목 + ERP 게이트 -> 완료(SP: _SAVE_..._COMPLETE, convert-sp).
-  //   완료 **실행체인**(임시 토스트 포함)은 이번에 바꾸지 않는다(다음 단계) — 연타 가드만 입힌다.
+  //   완료 **실행체인**(임시 토스트 포함)은 이번에 바꾸지 않는다(다음 단계) — 실행 래퍼만 입힌다.
   const handleChangeRequest = () => {
-    if (savingRef.current) return;
-    savingRef.current = true;
-    void (async () => {
-      try {
+    runExclusive(async () => {
+      {
         const missing = checkChangeRequestRequired(requestInfo);
         if (missing) {
-          void setAlert({ type: 'alert', content: t(MSG.REQUIRED_FIELD, { defaultValue: '_Required.', 0: missing }) });
+          void setAlert({ type: 'alert', content: requiredFieldMessage(missing) });
           return;
         }
-        // GAP-07 수량0 + 출하일 하한 검증(design 01 R14 :2838/2850/2868, 서브그리드 NEW_* 기준).
+        // GAP-07 수량0 + 출하일 하한/상한 검증(design 01 R14 :2838/2850/2868, 서브그리드 NEW_* 기준).
+        //   검증마다 전용 코드·문구를 쓴다 — 종전엔 3종이 `_Invalid.` 하나를 공유해 사유를 알 수 없었다.
         const qd = checkCompleteQtyDate(subRows, sc.changeType);
         if (qd) {
-          void setAlert({ type: 'alert', content: t(MSG[qd.msg], { defaultValue: '_Invalid.', 0: qd.args ?? '' }) });
+          void setAlert({
+            type: 'alert',
+            // `{0}` 는 i18next 보간자({{ }})가 아니라 리터럴이라 수동 치환이다
+            //   (memory i18n-zero-placeholder-needs-manual-replace). `{ 0: … }` 로는 안 바뀐다.
+            content: t(qd.msgId, { defaultValue: qd.defaultText }).replace('{0}', qd.arg ?? ''),
+          });
           return;
         }
-        if (await checkErpBlock(sc.divisionId)) {
-          void setAlert({ type: 'alert', content: t(MSG.ERP_BLOCK, '__ERP interface is blocked.') });
+        if (!(await passErpBlockGate())) return;
+        // 완료 실행체인 — AS-IS BtnChangeRe_Click(cs:2801) 통과 후 SAVE_SHIPMENT_REQUEST_COMPLETE.
+        //   종전엔 이 호출이 **없었다**: 사전검증만 돌고 성공 토스트를 띄워 "저장된 것처럼" 보였다
+        //   (사용자 신고 2026-10-13 — 하위 그리드가 안 비는 것이 그 증상이었다).
+        const done = await submitRequestComplete(subRows, {
+          requestInfo,
+          changeType: sc.changeType,
+          userId: useSessionStore.getState().session.userId ?? '',
+          // TO-BE UserSession 에 타임존 필드가 없다 — 빈 값(SP 보정). 저장 경로와 같은 규약.
+          timeZone: '',
+          // p_auth — SP 자가승인 가드가 보는 값이다. `groupId` 는 비어 있는 계정이 많아
+          //   `groups`(USER_GR_NM 배열)로 보완한다(resolveAuthGroup 주석 참조).
+          groupId: resolveAuthGroup(
+            String(useSessionStore.getState().session.groupId ?? ''),
+            useSessionStore.getState().session.groups ?? []
+          ),
+        });
+
+        if (done.invalidDate !== undefined) {
+          // AS-IS MSG00049 '유효한 날짜 형식이 아닙니다. {0}' — 조용히 넘기지 않는다(cs:2152~2156).
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.INVALID_DATE_FORMAT, {
+              defaultValue: 'This is not a valid date format. {0}',
+            }).replace('{0}', done.invalidDate),
+          });
           return;
         }
-        // 완료 mutate 배선은 convert-sp(PKG_SSP0201._SAVE_SHIPMENT_REQUEST_COMPLETE) 배포 후 실행체인 확정.
-        // GAP-13: MSG00672 {0} 수동 치환(위 handleSave 와 동일).
+        if (done.outcome !== 'ok') {
+          void setAlert({ type: 'alert', content: t(...completeFailMessage(done.failKind)) });
+          return;
+        }
+        if (done.nothingToSend) return; // 하위 행 0건 — AS-IS `if (iCount > 0)` 와 동일하게 무동작
+
+        // 성공 — AS-IS cs:2288~2300: 안내 -> ClearRequestInfo() -> InitSpread(siSub) -> FindButton().
+        //   TO-BE 등가: 요청정보 clear + 변경마킹 clear + 재조회(상/하위 동시). 재조회가 하위 그리드를
+        //   서버 기준으로 다시 그리므로 InitSpread(siSub) 자리를 대신한다 — 로컬 초기화만 하면
+        //   서버 상태와 어긋난 빈 화면이 남는다.
+        clearRequestInfo();
+        editTrackerRef.current?.clearChanges();
+        await refetchAll();
         void setToast({
           type: 'success',
-          message: t(MSG.SAVE_SUCCESS, '__Requested.').replace('{0}', '1'),
+          message: t(MSG.REQUEST_COMPLETED, {
+            defaultValue: 'Your confirmed shipment plan change request has been completed.',
+          }),
         });
-      } finally {
-        savingRef.current = false;
       }
-    })();
+    });
   };
 
   const hotkeyConfig: HotkeyConfig = {
@@ -446,8 +769,8 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     insert: hasButton('INSERT') ? handleInsert : false,
     // Delete 는 저장 전 신규행 전용 실동작. 키를 생략하면 공용 SubTitle 기본 `removeRow`
     //   (= deleteOnlyNew=false)가 살아나 **기존행까지 'D' 마킹**되므로 생략 금지.
-    //   주의: SSP0201 은 `DELETE` 버튼메타가 아직 미등록이라(ora.py 실측 5행) 권한축이 false 다 —
-    //   메타 등록 전에는 버튼이 노출되지 않는다. 하드코딩 노출 금지(CLAUDE.md §2 체크3).
+    //   `SSP0201/main/DELETE`(API_ID 없음)는 등록 완료다(ora.py 실측 2026-10-13, 자매 SSP0200 과
+    //   동일 모양) — 다른 키와 같은 권한 축으로 둔다. 하드코딩 노출 금지(CLAUDE.md §2 체크3).
     delete: hasButton('DELETE') ? handleDelete : false,
     manual: false,
     upload: false,
@@ -465,7 +788,8 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
         {
           label: t(SCREEN_TEXT.NEW, { defaultValue: 'New' }),
           title: t(SCREEN_TEXT.NEW, { defaultValue: 'New' }),
-          action: handleInsert,
+          // 빈 행 경로다 — 툴바 Insert(복사)와 다른 핸들러를 쓴다(SSP0200 패리티).
+          action: handleNew,
         },
       ]
     : undefined;
@@ -479,7 +803,16 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
         toggleOpenSearchArea={setOpenSearchArea}
       />
       {openSearchArea && (
-        <ShipmentChangeRequestForm onSearch={handleSearch} onItemSearch={() => setOpenItem(true)} />
+        <ShipmentChangeRequestForm
+          onSearch={handleSearch}
+          onItemSearch={() => {
+            // 조회조건 경로 — 직전에 셀 팝업을 열고 취소했을 수 있으므로 대상 셀 참조를 먼저 끊는다.
+            //   끊지 않으면 stale popupTargetRef 때문에 (1) 그 행의 Model 로 사전필터돼 전체 조회가 안 되고
+            //   (2) 선택값이 조회조건이 아니라 이전 셀에 다시 쓰인다(자매 SSP0200 과 동일 처방).
+            popupTargetRef.current = null;
+            setOpenItem(true);
+          }}
+        />
       )}
       <SubTitle
         menuId={MENU_ID}
@@ -514,7 +847,10 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
                 changeType={sc.changeType}
                 canEdit={canEdit}
                 adminColumns={staticColumns[SHEETS.MAIN]}
+                cellDataMaps={cellDataMaps}
                 onPopupCellDblClick={handlePopupCellDblClick}
+                onEndCustomerSourceChanged={applyEndCustomer}
+                onEndCustomerCellFocus={focusEndCustomer}
                 onBlockedEdit={onBlockedEdit}
               />
             </div>
@@ -582,8 +918,12 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
           const picked = String(itemId ?? '');
           if (!picked) return;
           const target = popupTargetRef.current;
-          if (target) writeCell(picked, str(nickName), 'NICK_NAME');
-          else setSearchCondition({ itemId: picked }); // 조회조건 Model
+          if (target) {
+            const row = target.row; // writeCell 이 popupTargetRef 를 비우므로 먼저 잡아둔다
+            writeCell(picked, str(nickName), 'NICK_NAME');
+            // AS-IS cs:4343 — Model 확정 후 End Customer 후보 재조회·자동확정(div40).
+            void applyEndCustomer(row);
+          } else setSearchCondition({ itemId: picked }); // 조회조건 Model
         }}
         // 셀에서 열 때는 그 행의 기존 Model 값으로 사전조회한다(조회조건 itemId 를 쓰면 엉뚱한 후보가 뜬다).
         //   조회조건 돋보기로 열 때는 조회조건 값 — 자매 SSP0200 과 동일 규약.

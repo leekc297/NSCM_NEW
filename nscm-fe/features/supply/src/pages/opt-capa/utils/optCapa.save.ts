@@ -15,6 +15,7 @@ import {
 import type { GridRow } from '../opt-capa.types';
 
 import { str } from './optCapa.candidates';
+import { weekNameToIsoYyyyww } from './optCapa.week';
 
 /**
  * 저장 payload 조립 — SAVE SP 8종의 `all_arguments`/`SCM_ADM_PROC_M` 실측 계약 이식(design 03 §4.3).
@@ -44,17 +45,19 @@ import { str } from './optCapa.candidates';
 export const SAVE_CLOB_DELIMITER = '^';
 
 /**
- * 표시 포맷 → 저장 포맷 환원. `YYYY-MM-DD`→8자리 / `YYYY-MM`→6자리(design 03 §4.2).
+ * 표시 포맷 → 저장 포맷 환원. `YYYYMMDD`(8자리) / `YYYYMM`(6자리)로 **숫자만** 남긴다(design 03 §4.2).
  *
- * `-` 제거만으로는 부족하다 — AS-IS 는 `.Replace("-","").Substring(0,8)`(cs:1348·1374·1907·2188·2189·
- * 2466·2745·2746·3001·3002) / `Substring(0,6)`(cs:3214)로 **자릿수까지 절단**한다. Wijmo 날짜 셀이
- * 시각을 붙여 내려주면 14자 문자열이 그대로 SP 로 가므로 같은 절단을 이식한다(iter-3 감사 G3-16).
+ * **구분자 종류를 가리지 않고 비(非)숫자를 전부 제거**한다 — GET 은 `'2026-10-01'`(대시)로 내려오지만,
+ * 공용 DataGrid 의 날짜 셀 표시 포맷이 `'yyyy.MM.dd'`(점, `columnMapping.getFormat`)라 FPDate 피커로
+ * **편집하면 셀 값이 `'2026.10.01'`(점)으로 바뀐다.** `-` 만 제거하면 점 구분자가 남아 8자리 검증
+ * (`isValidDate8`)·저장이 실패한다(2026-10-20 실사고). AS-IS `.Replace("-","").Substring(0,8)`
+ * (cs:1348 등)의 TO-BE 등가 — 공용 표시 포맷(Hard Boundary)은 두고 여기서 숫자만 추린다.
  */
 export const toStoredDateValue = (binding: string, value: unknown): string => {
   const text = str(value);
   if (!text) return '';
-  if (DATE_DISPLAY_COLUMNS.includes(binding)) return text.replace(/-/g, '').slice(0, 8);
-  if (MONTH_DISPLAY_COLUMNS.includes(binding)) return text.replace(/-/g, '').slice(0, 6);
+  if (DATE_DISPLAY_COLUMNS.includes(binding)) return text.replace(/\D/g, '').slice(0, 8);
+  if (MONTH_DISPLAY_COLUMNS.includes(binding)) return text.replace(/\D/g, '').slice(0, 6);
   return text;
 };
 
@@ -333,6 +336,45 @@ export const buildFlatSavePayload = (
   // 키 집합은 행마다 동일하다(`buildSaveRow` 가 시트 계약으로 만든다) — 첫 행 기준으로 순회한다.
   for (const key of Object.keys(perRow[0] ?? {})) {
     if (key === 'sesUserId') continue;
+    flat[key] = perRow.map(row => row[key] ?? '').join(SAVE_CLOB_DELIMITER);
+  }
+  flat.sesUserId = sesUserId;
+  return flat;
+};
+
+/**
+ * No Work **Week 모드** 저장 payload — `P_SCP0126_SAVE_NO_WORK_WEEK`(`SCM_ADM_PROC_M` 11파라미터 실측
+ * 2026-10-20). Day 모드(`noWork`, 20파라미터)와 달리 `NO_WORK_DATE`·`VALID_YN`·`FIX`·`pre*` 가 없고,
+ * `weekName` 은 표시 라벨('2026-W40')이 아니라 **저장키 ISO_YYYYWW('202640')** 로 보낸다
+ * (SAVE SP 가 `WHERE ISO_YYYYWW = V_WEEK_NAME` 로 조회 — PKG_SCP0126 BODY:3761).
+ *
+ * 평면화 규약은 {@link buildFlatSavePayload} 와 동일(컬럼별 `'^'`-결합 + `sesUserId` 스칼라).
+ */
+const WEEK_VALUE_PARAMS: readonly { param: string; column: string }[] = [
+  { param: 'divisionId', column: COLUMN.DIVISION_ID },
+  { param: 'plantId', column: COLUMN.PLANT_ID },
+  { param: 'lineId', column: COLUMN.LINE_ID },
+  { param: 'operationId', column: COLUMN.OPERATION_ID },
+  { param: 'lineType', column: COLUMN.LINE_TYPE },
+  { param: 'weekName', column: COLUMN.WEEK_NAME },
+  { param: 'offTime', column: COLUMN.OFF_TIME },
+  { param: 'type', column: COLUMN.NO_WORK_TYPE },
+  { param: 'desc', column: COLUMN.DESC },
+];
+
+export const buildWeekSavePayload = (
+  rows: readonly GridRow[],
+  sesUserId: string
+): Record<string, string> => {
+  const perRow = rows.map(row => {
+    const payload: Record<string, string> = { activeFlag: str(row.CRUD_TYPE) };
+    for (const { param, column } of WEEK_VALUE_PARAMS) payload[param] = str(row[column]);
+    // 셀은 표시 라벨을 들고 있으므로 저장키로 변환한다('2026-W40' → '202640').
+    payload.weekName = weekNameToIsoYyyyww(payload.weekName);
+    return payload;
+  });
+  const flat: Record<string, string> = {};
+  for (const key of Object.keys(perRow[0] ?? {})) {
     flat[key] = perRow.map(row => row[key] ?? '').join(SAVE_CLOB_DELIMITER);
   }
   flat.sesUserId = sesUserId;

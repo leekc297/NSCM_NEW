@@ -1,0 +1,4 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,dr[DefColumns.COLUMN_NAME],CODE,SSP0005_ShipmentWorkingDay,SSP0005_ShipmentWorkingDay.cs:263,dr[DefColumns.COLUMN_LABEL_NAME],Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,70,true,Center,,,"foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0)"
+Shipment Working Day,COMPANY_ID,META,,META SCM_MST_SHEET_COLUMNS(SSP0005/Shipment Working Day),Company,FPComboBox,Company,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),150,Y,L,,,
+Shipment Working Day,DIVISION_ID,META,,META SCM_MST_SHEET_COLUMNS(SSP0005/Shipment Working Day),Divison,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),50,Y,C,,,

@@ -1,0 +1,3 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0035,SQL,SCP0035_GET_JIG_MASTER,Doc\asisfacts\db\modules\dbo.SCP0035_GET_JIG_MASTER.sql,49,,"DIVISION_ID,SCM_SITE_ID,OPERATION_GROUP","ORDER BY A.DIVISION_ID, A.SCM_SITE_ID, B.OPERATION_GROUP",0,정적
+SCP0035,SQL,SCP0035_SAVE_JIG_MASTER,Doc\asisfacts\db\modules\dbo.SCP0035_SAVE_JIG_MASTER.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

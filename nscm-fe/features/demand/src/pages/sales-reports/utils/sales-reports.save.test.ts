@@ -135,7 +135,7 @@ describe('buildBulkPayload', () => {
     expect(buildBulkPayload([])).toBeNull();
   });
 
-  it("'^' 구분으로 컬럼별 값을 join 한다", () => {
+  it('\'^\' 구분으로 컬럼별 값을 join 한다', () => {
     const payload = buildBulkPayload([
       { a: '1', b: 'x' },
       { a: '2', b: 'y' },

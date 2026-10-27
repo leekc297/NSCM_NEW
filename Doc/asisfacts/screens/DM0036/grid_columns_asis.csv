@@ -1,0 +1,12 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,M_{?a.Field<string>(DefColumns.YYYYMM)},CODE,DM0036_Capacity_Allocation,DM0036_Capacity_Allocation.cs:191,a.Field<string>(DefColumns.YYYYMM_NAME),Number,,None,코드 선언 FPMerge.None,75,true,,,,foreach(a in dtCalendar.AsEnumerable())
+,M_{?a.Field<string>(DefColumns.YYYYMM)},CODE,DM0036_Capacity_Allocation,DM0036_Capacity_Allocation.cs:191,a.Field<string>(DefColumns.YYYYMM_NAME),Number,,None,코드 선언 FPMerge.None,75,true,,,,foreach(a in dtCalendar.AsEnumerable())
+Main,DEPT_NAME_KO,META,,META SCM_MST_SHEET_COLUMNS(DM0036/Main),Team,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Main,DIVISION_ID,META,,META SCM_MST_SHEET_COLUMNS(DM0036/Main),Division,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),60,Y,C,,,
+Main,ITEM_ID,META,,META SCM_MST_SHEET_COLUMNS(DM0036/Main),Model,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,Y,L,,,
+Main,LEVEL,META,,META SCM_MST_SHEET_COLUMNS(DM0036/Main),LEVEL,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),0,N,C,,,
+Main,NICK_NAME,META,,META SCM_MST_SHEET_COLUMNS(DM0036/Main),Nick Name,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,Y,L,,,
+Main,PROJECT_CODE,META,,META SCM_MST_SHEET_COLUMNS(DM0036/Main),End Customer,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Main,SCM_SITE_ID,META,,META SCM_MST_SHEET_COLUMNS(DM0036/Main),Sales Site,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Main,UPPER_DEPT_NAME_KO,META,,META SCM_MST_SHEET_COLUMNS(DM0036/Main),Department,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Main,VALID_YN,META,,META SCM_MST_SHEET_COLUMNS(DM0036/Main),Valid,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),40,N,C,,,

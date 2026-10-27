@@ -1,0 +1,232 @@
+[
+ {
+  "screen": "SCP0111",
+  "title": "Integration PSI",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0111_IntegrationPSI/SCP0111_IntegrationPSI.cs:2136"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0111_IntegrationPSI/SCP0111_IntegrationPSI.Designer.cs:989"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/integration-psi"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0111_GET_ESS_PACK_LINE",
+    "member": "GetEssPackLineAll",
+    "line": "490",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0111_IntegrationPSI\\SCP0111_IntegrationPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0111_GET_INTEGRATION_PSI",
+    "member": "FindData_Main",
+    "line": "874",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0111_IntegrationPSI\\SCP0111_IntegrationPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1095",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0111_IntegrationPSI\\SCP0111_IntegrationPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+    "member": "SaveData",
+    "line": "1379",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0111_IntegrationPSI\\SCP0111_IntegrationPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0111_SAVE_INTEGRATION_PSI",
+    "member": "SaveData",
+    "line": "1637",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0111_IntegrationPSI\\SCP0111_IntegrationPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0111_GET_ESS_PACK_LINE",
+    "member": "GetEssPackLineAll",
+    "line": "490",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0111_IntegrationPSI\\SCP0111_IntegrationPSI.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0111_GET_INTEGRATION_PSI",
+    "member": "FindData_Main",
+    "line": "874",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0111_IntegrationPSI\\SCP0111_IntegrationPSI.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1095",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0111_IntegrationPSI\\SCP0111_IntegrationPSI.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+    "member": "SaveData",
+    "line": "1379",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0111_IntegrationPSI\\SCP0111_IntegrationPSI.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0111_SAVE_INTEGRATION_PSI",
+    "member": "SaveData",
+    "line": "1637",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0111_IntegrationPSI\\SCP0111_IntegrationPSI.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCP0111_GET_ESS_PACK_LINE",
+   "SCP0111_GET_INTEGRATION_PSI",
+   "SCP0111_SAVE_INTEGRATION_PSI",
+   "SCP0111_SAVE_INTEGRATION_PSI_ADMIN"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0111_SAVE_INTEGRATION_PSI",
+    "sp": "SCP0111_SAVE_INTEGRATION_PSI",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 전체 롤백 후 실패코드 F 와 오류메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR INSERT; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER()+']'+ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+    "sp": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "Admin 신규 입력 시 동일 키(PLAN_TYPE 포함) 데이터가 이미 있으면 저장 중단",
+    "message": "동일한 데이터가 존재합니다.",
+    "on_fail": "SET @v_err_code=99010; THROW → CATCH: ROLLBACK TRAN; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER()+']'+ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+    "sp": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 후 실패코드 F 와 오류메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR INSERT; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER()+']'+ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0112",
+  "title": "Cell Tray Simulation",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0112_CellTraySimulation/SCP0112_CellTraySimulation.cs:719"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0112_CellTraySimulation/SCP0112_CellTraySimulation.Designer.cs:563"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0112_GET_CELL_TRAY_SIMULATION",
+    "member": "FindData_Main",
+    "line": "399",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0112_CellTraySimulation\\SCP0112_CellTraySimulation.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0112_SAVE_CELL_TRAY_SIMULATION",
+    "member": "SaveData",
+    "line": "601",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0112_CellTraySimulation\\SCP0112_CellTraySimulation.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "686",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0112_CellTraySimulation\\SCP0112_CellTraySimulation.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0112_GET_CELL_TRAY_SIMULATION",
+    "member": "FindData_Main",
+    "line": "399",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0112_CellTraySimulation\\SCP0112_CellTraySimulation.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0112_SAVE_CELL_TRAY_SIMULATION",
+    "member": "SaveData",
+    "line": "601",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0112_CellTraySimulation\\SCP0112_CellTraySimulation.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "686",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0112_CellTraySimulation\\SCP0112_CellTraySimulation.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0112_GET_CELL_TRAY_SIMULATION",
+   "SCP0112_SAVE_CELL_TRAY_SIMULATION"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0112_SAVE_CELL_TRAY_SIMULATION",
+    "sp": "SCP0112_SAVE_CELL_TRAY_SIMULATION",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 후 실패코드 F 와 오류메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR INSERT; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER()+']'+ERROR_MESSAGE()"
+   }
+  ]
+ }
+]

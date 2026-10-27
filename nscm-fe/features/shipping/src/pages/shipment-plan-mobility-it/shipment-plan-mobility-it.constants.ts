@@ -88,6 +88,10 @@ export const LOOKUP = {
   // My Model 기본체크 whitelist — 유효행 CODE(=회사ID) 가 로그인 사용자 회사와 일치하면 로드 시 chkMyModel 자동 ON.
   //   AS-IS Form_Load: LookupCommon "MY_MODEL_DEFAULT_CHECK" + SSP0015 프로그램권한 → chkMyModel.Checked=true.
   MY_MODEL_DEFAULT_CHECK: 'MY_MODEL_DEFAULT_CHECK',
+  // 출하일 입력 가능 기간 — 1D+ = 오늘+N일(상한), 2D- = 오늘-N일(하한). AS-IS dateMax/MinShipDate
+  SHIPMENT_PERIOD_DAY: 'SHIPMENT_PERIOD_DAY',
+  // 출하일 범위 메시지 인자 dDay(-56). AS-IS dtBaseDay
+  CHANGE_REQ_DAY: 'CHANGE_REQ_DAY',
 } as const;
 
 // Bucket Type — 기본 Daily. 값은 BucketType 콤보 CODE 와 동일해야 선택 매칭됨(콤보 실측 DAILY/WEEKLY/MONTHLY).
@@ -181,8 +185,12 @@ export const MSG = {
   GRID_NOT_READY: 'MSG00284',
   // (MSG00084) Main 일자수량 음수
   NEGATIVE_QTY: 'MSG00225',
-  // (MSG00133) 변경 없음
-  NO_MODIFICATION: 'MSG00133',
+  // (MSG00133) 변경 없음 — (AS-IS MSG00133 는 TO-BE 미등록 → 같은 문구 MSG00004, KO/EN/CN)
+  NO_MODIFICATION: 'MSG00004',
+  // 저장 변경 없음 표준 코드(MSG00133 은 TO-BE 미등록)
+  NO_CHANGES: 'MSG00004',
+  // 미저장 변경 상태 조회 확인(공용 조회 가드와 같은 문구)
+  UNSAVED_SEARCH: 'MSG00704',
   // (MSG00098) 팝업 오픈 전 필수값
   REQUIRED_FIELDS: 'MSG00013',
   // (MSG00278) 운송수단 필수
@@ -213,6 +221,8 @@ export const MSG = {
   SO_NO_COUNT_MISMATCH: 'MSG00247',
   // Shipment Date 날짜 형식 오류 (AS-IS MSG00049 "유효한 날짜 형식..." → TO-BE 문구 역조회 MSG01081).
   INVALID_DATE_FORMAT: 'MSG01081',
+  // 출하일 입력 가능 기간 밖 (AS-IS MSG00194 "변경요청은 현재일 기준 D+{0} 출하일부터..." → TO-BE MSG01206)
+  SHIP_DATE_OUT_OF_RANGE: 'MSG01206',
   // GetShipmentStatusChk 저장 게이트 3커서 (AS-IS SSP0015.cs GetShipmentStatusChk, 002xx → TO-BE 012xx 역매핑).
   //   o_rc1: 다른 사용자가 변경요청한 CONFIRM_ID 존재 (AS-IS MSG00248 → MSG01258, SCM_ADM_MSG_M 실측 일치).
   STATUS_OTHER_USER_REQUEST: 'MSG01258',
@@ -273,3 +283,55 @@ export const REQ_DRAFTING_BTN = 'GET_REQ_DRAFTING';
 //   API_M(P_SSP0200_USER_CHECK → PKG_SSP0002.P_SSP0002_GET_USER_INFO_LIST)·PROC_M 재사용, 버튼+권한만 등록
 //   (output/ssp0015_user_check_register.sql, 권한 ADMIN·SSP Planner).
 export const USER_CHECK_BTN = 'USER_CHECK';
+
+// ====================================================================================
+// ERP I/F (SAP PI) 실시간 송신 — AS-IS GetErpIFCheckNew(cs:7262) 의 TO-BE 등가
+// ====================================================================================
+// AS-IS `CallClient.FN_ERP_UIWebService(RequestNo, "C", "")` 자리. TO-BE 는 BE 공통 창구
+//   (framework/webservice/WebServiceCommonController `POST /common/web-service/{serviceKey}/call`)를 거치고,
+//   BE 가 serviceKey=erpIf 를 nscm-if `POST /api/if/send/NSD0100` 으로 라우팅한다(config.nscm-if.routes).
+//   응답은 AS-IS 와 같은 `{ E_TYPE, E_MESSAGE }` — E_TYPE = AS-IS RtFlag,
+//   E_MESSAGE = AS-IS ReErrorMsg('^' 구분 `confirmId:msg`). 자매 SSP0200 과 같은 축이다.
+//   배선 점검용 mock 은 BE 에 `/common/web-service/erpIf/call-test` 로 남아 있다.
+export const ERP_IF_PATH = '/common/web-service/erpIf/call';
+export const ERP_IF_CHANGE_TYPE = 'C'; // AS-IS 2번째 인자 "C"(변경요청)
+export const ERP_IF_SUCCESS = 'S'; // E_TYPE 정상 — AS-IS else 분기
+export const ERP_IF_ERROR = 'E'; // AS-IS RtFlag 'E' — ERP 전건 거절
+export const ERP_IF_PARTIAL_ERROR = 'S_E'; // AS-IS RtFlag 'S_E' — 일부 거절
+export const ERP_IF_NO_DATA = 'F'; // AS-IS RtFlag 'F' — 데이터 없음·서버오류(cs:7243)
+export const ERP_IF_PI_FAIL = 'C_E'; // AS-IS RtFlag 'C_E' — SAP PI 호출 실패(CallClient catch)
+
+// 수정행 저장 1단계 — 변경요청 초안(CHG_REQ·CHG_REQ_DE INSERT + XIF 'C' 적재 + 요청번호 채번).
+//   AS-IS cs:7011/7015. 메타 등록 실측(SCM_ADM_MNU_BTN_MPG_M, USE_YN='Y').
+export const BTN_SAVE_DRAFTING = 'SAVE_SHIPMENT_REQUEST_DRAFTING';
+export const BTN_SAVE_DRAFTING_PACKER = 'SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER';
+
+// ERP 거절 보상 — AS-IS cs:7298(초안 되돌림)·오류 적재. 둘 다 메타 등록 완료(USE_YN='Y'):
+//   DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM → P_SSP0015_SCM_SSP_DEL_DRAFTING_BY_CONFIRM
+//   ERP_ERROR_CONFIRM                           → P_SSP0015_SCM_SSP_ERP_ERROR_CONFIRM
+export const BTN_DELETE_DRAFTING_BY_CONFIRM = 'DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM';
+export const BTN_ERP_ERROR_CONFIRM = 'ERP_ERROR_CONFIRM';
+export const ERP_DELETE_FLAG = 'D'; // AS-IS p_del_flag(cs:7302)
+export const ERP_IF_SEND_ON = 'Y'; // AS-IS p_if_send_flag(cs:7305)
+export const ERP_ERROR_E_TYPE = 'E'; // AS-IS p_e_type 고정값
+
+// 2차 적재 — AS-IS CHG_BATCH('B', REQ_NO)(cs:7317~7334) 의 TO-BE 등가.
+//   전용 SP 를 만들지 않고 PKG_SSP0003.P_SSP0003_SAVE_REQ_IF_CHECK 를 빌려 쓴다. 그 SP 는
+//   changeStatus='A' + changeType='C' 에서 V_STATUS='B' 로 CHG_BATCH 만 하고 COMMIT 한다
+//   (BODY 1850/1852/1858/1882 실측).
+//   선례: SSP0015 의 GET_REQ_DRAFTING 이 P_SSP0003_GET_DRAFTING 을 빌려 쓴다(SSP0012·0021 도 동일).
+//   필요 메타 1행 — MNU_ID='SSP0015', SHT_NM='main', MNU_BTN_CD='IF_CHECK',
+//                   API_ID='P_SSP0003_GET_IF_CHECK'  ← SSP0003 등록값과 같아야 한다
+//   (주의: API_ID 는 `P_SSP0003_IF_CHECK` 가 아니다. 실제 등록값은 GET 접두가 붙어 있다.)
+export const BTN_IF_CHECK = 'IF_CHECK';
+export const IF_CHECK_STATUS_APPLY = 'A'; // 이 값에서만 CHG_BATCH 가 돈다(BODY 1850)
+export const IF_CHECK_PARTIAL_OFF = 'F'; // IFSEQ merge 안 함(AS-IS GetErpIFCheck 는 'F' 고정)
+
+// ERP 송신 결과 메시지 — AS-IS GetErpIFCheck/New 의 RtFlag 분기(cs:7230~7259)를 그대로 옮긴다.
+//   TO-BE 코드는 SCM_ADM_MSG_M 실측(2026-10-25, KO/EN USE_YN='Y', AS-IS 문구와 동일).
+//   종전에는 세 분기를 MSG.SAVE_FAILED 하나로 뭉쳤는데, AS-IS 는 원인별로 다른 안내를 준다.
+export const MSG_ERP = {
+  ISSUE: 'MSG01208', // AS-IS MSG00197 — RtFlag 'E'/'S_E', {0}=ReErrorMsg
+  SYSTEM_ERROR: 'MSG01215', // AS-IS MSG00204 — RtFlag 'F', {0}=Request No
+  PI_FAIL: 'MSG01309', // AS-IS MSG00306 — RtFlag 'C_E'
+} as const;

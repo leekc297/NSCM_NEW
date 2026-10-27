@@ -42,11 +42,77 @@ const mergeSx = (...sxs: Array<SxProps<Theme> | undefined>) => {
 //   튜닝: 필드를 더 크게/작게 유지하려면 이 값만 올리거나 내린다(필드폭 ≈ +(Δ폭)/4).
 export const SEARCH_AREA_MIN_WIDTH = 1460;
 
+// 조회조건 그리드를 12열 CSS Grid 로 깐다(레거시 flex-wrap Grid 대체).
+//   목적 1) 열 정렬: 레거시 flex-wrap 은 행마다 독립 배치라, 한 칸이 넓어지면(예: PeriodField 처럼
+//     날짜범위가 든 긴 필드) 그 행의 뒤 칸만 밀려 윗줄/아랫줄 같은 열이 세로로 어긋난다. CSS Grid 는
+//     모든 행이 같은 12트랙 경계를 공유하므로 입력칸 시작점이 열끼리 정렬된다 — 긴 필드가 있는 열은
+//     그 트랙을 쓰는 모든 행(예: Period 열이면 바로 위 Company 까지)이 같이 넓어진다.
+//   목적 2) 붕괴 방지 + 스크롤: 트랙 최소폭을 minmax 로 박아(TRACK_MIN) 좁은 폭에서도 칸이 읽기 가능한
+//     크기 밑으로는 '절대' 줄지 않게 한다. 긴 필드 열(min-width)과 바닥(TRACK_MIN)의 합이 컨테이너를
+//     넘으면 그리드가 넘쳐 페이지가 가로 스크롤된다(ViewContainer .viewInner + .view overflow-x, 공통 보유).
+//     (이전 시도는 바닥 없는 'repeat(12,1fr)' 라, 필드 많은 화면에서 긴 필드 열이 나머지를 0 가까이
+//      짜부라뜨렸다 — TRACK_MIN 이 그 붕괴를 막는 핵심이다.)
+//   아이템은 레거시 size 클래스(MuiGrid-grid-xs-N)를 그대로 달고 오므로 grid-column 스팬으로 매핑하고,
+//   레거시의 25% max-width 캡은 푼다(트랙이 폭을 정하므로 불필요).
+//   트랙은 'repeat(12, 1fr)'(= minmax(auto,1fr)) 로 둔다 — auto 최소라 긴 필드(PeriodField 의
+//     min-width)가 자기 열 트랙을 넓힌다(고정 px minmax 는 min-width 를 무시해 긴 필드 열이 안 넓어진다).
+//   붕괴 방지 바닥은 '각 아이템(칸)의 min-width'로 준다(ITEM_MIN) — auto 트랙이 아이템 min-width 를
+//     반영해 커지므로, 좁은 폭에서도 칸이 ITEM_MIN 밑으로 안 줄고(읽기 가능) 그 밑으론 페이지 스크롤.
+//     긴 필드(PeriodField)는 ITEM_MIN 보다 큰 min-width(!important)로 그 열만 더 넓어진다 — 아래 블랭킷
+//     규칙(& > .MuiGrid-root)이 셀렉터 특이도상 아이템 sx 를 이기므로 Period 는 !important 로 되이긴다.
+//   ITEM_MIN=290 → size=3 칸 ≈ 290px(라벨 140 + 입력 ~150, 레거시 flex 25% 원래 크기와 동일).
+//     긴 필드 열(388)이 폭을 가져가도 나머지 입력칸이 이 밑으로 안 줄어 '입력칸이 작아졌다'를 막는다 —
+//     대신 긴 필드 행은 좁은 폭에서 그만큼 더 일찍 가로 스크롤된다(입력 크기 유지 ↔ 스크롤 트레이드).
+//     정상 화면(긴 필드 없음)은 viewInner 1460 안에서 4*290=1160 < 가용폭이라 조기 스크롤 없음.
+const CONDITIONS_GRID_ITEM_MIN = 290;
+// 상단 SearchArea 와 하단 DetailBar(SSP0060/0021/mobility 등) 가 공유하는 조회조건 Grid 레이아웃.
+//   하단바도 같은 구조(<Grid container columns={12}> + size=3)라 그대로 재사용한다 — 재사용처가 gap 을
+//   따로 안 줘도 되게 간격(24/8px)을 내장한다.
+export const CONDITIONS_GRID_LAYOUT_SX = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(12, 1fr)',
+  columnGap: '24px',
+  rowGap: '8px',
+  // 그리드(= 버튼 왼쪽 flex 아이템)가 자기 내용(열 min 합) 밑으로는 안 줄게 min-content 로 박는다.
+  //   MUI 기본 min-width:0 이면 좁아질 때 그리드가 쪼그라들며 내용이 오른쪽 버튼 위로 '겹쳐' 보였다 —
+  //   min-content 면 안 줄고 대신 전체가 넘쳐 페이지가 가로 스크롤된다(버튼은 제자리, 멈춰서 스크롤).
+  minWidth: 'min-content',
+  '& > .MuiGrid-root': {
+    minWidth: `${CONDITIONS_GRID_ITEM_MIN}px`,
+    maxWidth: 'none',
+    // 레거시 MUI 아이템의 고정폭(width:calc(25%))을 푼다 — 안 풀면 넓혀도 아이템이 트랙(1fr)을 꽉
+    //   안 채워 입력박스가 작은 채 옆 여백만 늘어난다. auto 면 아이템이 트랙을 채워 입력칸이 함께 늘어난다.
+    width: 'auto',
+  },
+  // 긴 날짜범위(PeriodField = periodSplit)가 든 칸만 더 넓게(라벨 140 + 피커 241 ≈ 388) — 겹침 방지.
+  //   PeriodField 자체에 전역 min-width 를 걸면 bespoke flex 하단바(예: SSP0023 electrode, MUI Grid 아님)
+  //   까지 깨지므로, '이 그리드 안의 Period 칸'에만 :has 로 스코프한다(블랭킷 290 보다 특이도 높아 이김).
+  '& > .MuiGrid-root:has([class*="periodSplit"])': { minWidth: '388px' },
+  ...Object.fromEntries(
+    Array.from({ length: 12 }, (_, i) => [
+      `& > .MuiGrid-grid-xs-${i + 1}`,
+      { gridColumn: `span ${i + 1}` },
+    ])
+  ),
+};
+
+// 하단 DetailBar 전용. 상단(CSS Grid)과 달리 레거시 flex-wrap Grid 를 그대로 둔다 — 하단바는
+//   리사이즈 Panel(width 1460 + overflow:hidden) 안이라 넘쳐도 가로 스크롤이 닿지 않아, 넘치면
+//   '2줄로 줄바꿈'을 허용하는 쪽이 자연스럽다(사용자 결정 2026-10-21). 날짜범위(PeriodField) 칸만
+//   min-width 388 로 넓혀 겹침만 막는다 — 필드가 많은 하단바(SSP0060: 4필드)는 좁아지면 2줄로
+//   접히고, 적은 하단바(SSP0021: 3필드)는 1줄로 들어간다(스크롤·잘림 없음).
+export const DETAIL_CONDITIONS_SX = {
+  '& > .MuiGrid-root:has([class*="periodSplit"])': { minWidth: '388px' },
+} as const;
+
 export type SearchAreaProps = BoxProps & {
   searchButtonLabel?: string;
   isHidden?: boolean;
   myOptions?: string[];
   onSearch?: () => void;
+  // 조회 미저장 변경 가드의 dirty 키 override(옵션). 미지정 시 tab 전역 키(현행). 상단/하단 그리드가
+  //   독립적인 화면이 "조회 대상 그리드만" 확인하도록 그리드 단위 키를 넘긴다(SSP0060/SSP0021).
+  searchDirtyKey?: string;
   onResetCondition?: () => void;
   onSelectedMyOption?: (val?: string) => void;
   onSaveOption?: () => void;
@@ -65,6 +131,7 @@ export const SearchArea = ({
   sx,
   myOptions,
   onSearch,
+  searchDirtyKey,
   onResetCondition,
   onSaveOption,
   onSelectedMyOption,
@@ -78,7 +145,7 @@ export const SearchArea = ({
     palette: { semantic },
   } = useTheme();
   const { sizesCommon } = $semantic.shared.size;
-  const { size1, size2, size4, size8, size10, size16, size24, size32, size48 } = sizesCommon;
+  const { size1, size2, size4, size8, size10, size16, size32, size48 } = sizesCommon;
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const buttonGroups = useRef<HTMLElement>();
@@ -112,7 +179,8 @@ export const SearchArea = ({
   //   조회는 그리드 데이터를 통째로 덮어쓰므로 dirty 면 confirm 후 실행한다.
   const tabId = useTabid();
   const scopeId = useContext(DialogScopeContext);
-  const dirtyKey = scopeId === null ? tabDirtyKey(tabId) : scopeDirtyKey(scopeId);
+  const dirtyKey =
+    searchDirtyKey ?? (scopeId === null ? tabDirtyKey(tabId) : scopeDirtyKey(scopeId));
   const handleSearchClick = onSearch
     ? () => {
         void confirmIfDirtyKey(dirtyKey, 'search').then(ok => {
@@ -212,7 +280,7 @@ export const SearchArea = ({
   //   그리드 기준 크기가 커지며 초과분이 형제에게 비율 분배되어 조회영역이 0 높이로 눌린다.
   //   페이지 화면들이 래퍼 div 에 수동으로 걸던 방어를 컴포넌트로 내재화한 것.
   return (
-    <Collapse in={!isHidden} timeout='auto' sx={{ flexShrink: 0 }}>
+    <Collapse in={!isHidden} timeout='auto' sx={{ flexShrink: 0, minWidth: 'min-content' }}>
       <Box ref={rootRef} sx={mergeSx(sx)}>
         {myOptions && (
           <Box
@@ -244,13 +312,7 @@ export const SearchArea = ({
           borderRadius={`${size2}px`}
         >
           <Box display='flex' alignItems='flex-end' gap={`${size48}px`}>
-            <Grid
-              container
-              columns={12}
-              columnSpacing={`${size24}px`}
-              rowSpacing={`${size8}px`}
-              flexGrow={size1}
-            >
+            <Grid container columns={12} flexGrow={size1} sx={CONDITIONS_GRID_LAYOUT_SX}>
               {conditions}
             </Grid>
             {aboveSearch ? (
@@ -272,13 +334,7 @@ export const SearchArea = ({
                 pr={`${size48}px`}
                 width={`calc(100% - ${buttonGroupsWidth}px)`}
               >
-                <Grid
-                  container
-                  columnSpacing={`${size24}px`}
-                  rowSpacing={`${size8}px`}
-                  flexGrow={size1}
-                  columns={12}
-                >
+                <Grid container columns={12} flexGrow={size1} sx={CONDITIONS_GRID_LAYOUT_SX}>
                   {extraConditions}
                 </Grid>
               </Box>

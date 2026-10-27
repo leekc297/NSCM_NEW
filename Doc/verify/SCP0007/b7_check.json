@@ -1,0 +1,253 @@
+{
+ "menu_id": "SCP0007",
+ "asis_id": "SCP0007",
+ "generated": "2026-10-28 02:06:59",
+ "a": {
+  "verdict": "NA",
+  "note": "저장 SP SCP0007_SAVE_BOD 대상 SCP_MST_BOD, SCP_MST_BOD_ITEM 와 콤보 원천 23종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
+  "save_tables": [
+   "SCP_MST_BOD",
+   "SCP_MST_BOD_ITEM"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "cboInputStatus",
+    "label": "Input Status",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbDivision",
+    "label": "Div",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=Division 분기 + FN_GET_DIVISION 원문",
+    "tables": [
+     "FN_GET_DIVISION",
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbIncoterms",
+    "label": "Incoterms",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbIncotermsSSP",
+    "label": "SSP Incoterms",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbTransMode",
+    "label": "Trans Mode",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboValidYN",
+    "label": "Valid",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbFromSite",
+    "label": "From Site",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=FromSiteByDivision1Ex 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbToSite",
+    "label": "To Site",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=ToSiteBOD1 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DIVISION_ID",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=Division 분기 + FN_GET_DIVISION 원문",
+    "tables": [
+     "FN_GET_DIVISION",
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "INCOTERMS",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=incotermsEdit 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "INCOTERMS_SSP",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=incotermsEdit 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "INCOTERMS_SSP",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "TO_SITE_CODE",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=ToSiteBOD1 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "TO_SITE_CODE",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=ToSiteByDivisionPlant1 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "TO_SITE_CODE",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=ToSiteByDivision1 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "FromSiteByDivision",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=FromSiteByDivision1 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "ToSiteByDivision",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=ToSiteBOD1 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "ToSiteByDivision",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=ToSiteByDivisionPlant1 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "PARAM",
+    "target": "ToSiteByDivision",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=ToSiteByDivision1 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "BOD_VALID",
+    "label": "BOD Valid*",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "FROM_SITE_CODE",
+    "label": "From Site*",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=FromSiteByDivision1 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "INCOTERMS",
+    "label": "Incoterms*",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "VMI_YN",
+    "label": "To Site VMI",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   }
+  ]
+ }
+}

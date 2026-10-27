@@ -184,11 +184,11 @@ export const ShipmentModelPicForm = ({
             />
           </Grid>
 
-          {/* Valid (단일 + ALL) — YesOrNo. */}
+          {/* Active (단일 + ALL) — YesOrNo. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.VALID, '_Valid')}
+              label={t(LBL.VALID, '_Active')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -221,9 +221,8 @@ export const ShipmentModelPicForm = ({
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}

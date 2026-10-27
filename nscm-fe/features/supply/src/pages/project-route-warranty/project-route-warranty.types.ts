@@ -8,7 +8,7 @@ export type MainRow = ResponseData<MENU_ID, SHEETS.MAIN, RESPONSE_SET.MAIN>;
 export interface SearchParamProps {
   divisionId: string;
   plantSite: string; // 'ALL' → SP NULL
-  operationGroup: string; // UI 숨김 — LookupCommon(P/A/E), 기본 '' (그리드 리셋 트리거)
+  operationGroup: string; // UI 숨김(AS-IS Visibility=Never) — LookupCommon(ALL+P/A/E), 기본 'ALL' → SP NULL
   itemId: string;
   validFlag: string; // 'ALL' → SP NULL
 }

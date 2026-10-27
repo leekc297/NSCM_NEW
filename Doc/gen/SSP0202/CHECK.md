@@ -1,0 +1,65 @@
+# [Harness] SSP0202 shipment-change-request-confirm — BLOCK 1 / WARN 62
+
+- WARN AC1 액션 대조표 미처리 287행: AC-8b5ac5c3(상태 빈칸 RETURN return;), AC-fdd5ab93(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-20918eba(상태 빈칸 RETURN return;), AC-e3fd3c7c(상태 빈칸 RETURN return;), AC-20dd6cd5(상태 빈칸 RETURN return;), AC-c346ba8b(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-ac6211c8(상태 빈칸 RETURN return;), AC-81d0e9a1(상태 빈칸 FLAG _sStatus) … @Doc/asisfacts/screens/SSP0202/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 1행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-edc4bba6(Convert.ToInt64 @SSP0202_ShipmentChangeRequestConfirm.cs:835) @Doc/asisfacts/screens/SSP0202/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SSP.SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM (SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING (SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40 (SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM (SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK (SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0202_GET_SSP_PLAN_PROCESSING_CHECK (SSP0202_GET_SSP_PLAN_PROCESSING_CHECK) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0202_GET_SCS_CONFIRM_ID_CHECK (SSP0202_GET_SCS_CONFIRM_ID_CHECK) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0202_GET_DELEGATEE_LOAD (SSP0202_GET_DELEGATEE_LOAD) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCM0001_GET_SCP_DAY_PERIOD (SCM0001_GET_SCP_DAY_PERIOD) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellDoubleClick → SpdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbDivision.SelectedIndexChanged → ClbDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.TopChange → SpdMain_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnApproval.Click → BtnApproval_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnReject.Click → BtnReject_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnSelfReject.Click → BtnSelfReject_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnRequestUser.Click → BtnRequestUser_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → btnItemId_Click 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbDivision / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbFromSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 drpPeriod / UsrDateRangePicker 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnSelfReject / SimpleButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboStatus / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnReject / SimpleButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnApproval / SimpleButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnRequestUser / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtRequest / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemID / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboChangeType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtApprovalDeptName / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtRequestNo / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtTitle / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtRequestor / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtRequestDeptName / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtApproval / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtAppDeptName / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtReasonDetail / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtChangeReason / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtRejectReason / TextBox 매핑표 §1 에 없음
+- WARN V01 As-is Validation 3건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- BLOCK MS1 AS-IS 메시지 ID 그대로 사용: MSG00109 — AS-IS '읽기 전용입니다.' / TO-BE MSG00109 = '읽기전용 상태입니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+) @shipment-change-request-confirm.constants.ts
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 5건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 편집(EDIT) SEQ1 [MSG00109] 읽기 전용입니다. / 실행(RUN) — Approval 버튼 SEQ1 [MSG00362] SCS에서 해당 Confirm ID / 실행(RUN) — Approval 버튼 SEQ2 [MSG00291] SSP Daily Plan 수행중입 → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SSP_화면_VALIDATION_취합_20261022/SSP0202.md
+- WARN VR2 MSG01395 — VALIDATION 취합 판정: 실행(RUN) — Approval 버튼 SEQ3 AS-IS MSG00267 [메시지 미등록] — [메시지 미등록] 불일치 — TO-BE="ERP I/F로 인해 이전 작업 2분 이후 변경 진행 가능합니다."(2분 대기 안내). AS-IS=정해진 기간 동안 ER @shipment-change-request-confirm.constants.ts:175
+- WARN VC1 대조표 FAIL 12행 (Doc/verify/SSP0202/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미검증 639행 — 검사 사유 REVIEW 448 · NOT_RUN 1329 · NOPATH 302 · TODO 4 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 339건 / 검사 인스턴스 376 — W2 12 · W4 5 · W5 20 · W6 150 · W7 152 · 구현 의심 6 (Doc/verify/SSP0202/work_ledger.md)
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ShipmentChangeRequestConfirmSubGrid.tsx:95
+- WARN R06 DataGrid initialized prop deprecated → useEffect+gridRef (#70 runtime-pitfalls) @components/ShipmentChangeRequestConfirmSubGrid.tsx:91
+- WARN R16 진입 Page 416 라인 > 400 — components/ 분리 (#9) @ShipmentChangeRequestConfirm.tsx
+- WARN B08 As-is DeleteButton override 있음 → hotkeyConfig.delete 가 false 가 아니어야 함 — As-is 기능 누락(members.csv DeleteButton)
+- WARN B08 As-is SaveButton override 있음 → hotkeyConfig.save 가 false 가 아니어야 함 — As-is 기능 누락(members.csv SaveButton)
+- WARN B19 validation.md 3행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SSP0202/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0202/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0202/SSP0202_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0202/SSP0202_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM · 시트 'main') — 누락 language — 현재 키: divisionId, fromSite, requestId, fromYyyymmdd, toYyyymmdd, status, itemId, changeType · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING · 시트 'sub') — 누락 changeReqNo, language — 현재 키: (toFilter 없음) · BE positional 매핑이라 값이 NULL 로 감

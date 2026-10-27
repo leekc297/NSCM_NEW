@@ -1,0 +1,62 @@
+{
+  "id": "SCP0122",
+  "task": "S5.pipeline",
+  "scope": "both",
+  "note": "pipeline.js SCP0122 --max 3 --phase 1",
+  "start": "2026-10-22T11:26:40+09:00",
+  "end": "2026-10-22T11:26:44+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0122",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0122",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-10-22T11:26:44+09:00",
+  "changed": [
+    {
+      "file": "fe\\components\\PlanActivityMgmtForm.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\components\\PlanActivityMgmtGrid.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\index.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\plan-activity-mgmt.constants.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\PlanActivityMgmt.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\usePlanActivityMgmtStore.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\__asis-mapping__.md",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\__tests__\\PlanActivityMgmt.asis.spec.ts",
+      "kind": "added"
+    }
+  ]
+}

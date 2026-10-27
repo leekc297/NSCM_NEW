@@ -200,7 +200,12 @@ public static class Pack
 
         var baseDir = P("screens");
         Directory.CreateDirectory(baseDir);
+        // 화면 지정 실행 시 _index.csv 의 다른 화면 행 보존(2026-10-23 — 종전엔 지정 화면만 남기고 덮어씀)
+        var keepIdx = new List<Dictionary<string, string>>();
+        if (want != null && File.Exists(Path.Combine(baseDir, "_index.csv")))
+            keepIdx = CsvIn.Read(Path.Combine(baseDir, "_index.csv")).Where(r => !scr.ContainsKey(r.GetValueOrDefault("screen_id", ""))).ToList();
         using var idx = new CsvOut(Path.Combine(baseDir, "_index.csv"), "screen_id", "files", "current_files", "legacy_files", "endpoints", "match", "not_in_foxquery", "unresolved", "commented_calls", "controls", "events", "meta_columns", "grid_mode", "grid_hardcoded_columns", "grid_db_loop_columns", "grid_overrides", "current_project");
+        var actTotals = new long[4];
         foreach (var s in scr.Values.OrderBy(x => x.Id, StringComparer.Ordinal))
         {
             var variant = Variants(s, slnProjects);
@@ -221,6 +226,9 @@ public static class Pack
             using (var w = new CsvOut(Path.Combine(dir, "flow.csv"), "variant", "file", "class", "entry_kind", "entry", "path", "member", "line", "endpoint", "status", "sp_or_sql", "objects"))
                 foreach (var f in flows) w.Row(f.variant, f.file, f.cls, f.entryKind, f.entry, f.path, f.member, f.line, f.key, f.status, Detail(f.key, eps), Objects(f.key, eps, refs));
             var curFiles = variant.Where(v => v.Value != "legacy").Select(v => v.Key).ToHashSet();
+            // 액션 추출(2026-10-23) — 핸들러 본문의 모든 실행 문장(Clear·값 설정·목록 재구성·상태·메시지·중단·엔드포인트) → actions.csv / actions_summary.csv
+            var act = Actions.Write(cfg, root, dir, s.Id, curFiles.ToList(), s.Events, visible.Select(u => new Actions.EpUse(u.File, u.Line, Show(u))).ToList(), EntryOverrides);
+            actTotals[0] += act.rows; actTotals[1] += act.stmts; actTotals[2] += act.other; actTotals[3] += act.ext;
             var gridRows = s.Grid.Where(g => curFiles.Contains(g.File)).ToList();
             GridCode.AssignSheets(s.Grid);
             GridCode.WriteCsv(dir, s.Grid, f => variant.GetValueOrDefault(f, ""));
@@ -241,6 +249,20 @@ public static class Pack
                 s.Grid.Count(g => cur.Contains(g.File) && GridCode.IsColumnDef(g) && g.Source != "HARDCODED"),
                 s.Grid.Count(g => cur.Contains(g.File) && GridCode.IsOverride(g)),
                 string.Join(" | ", s.Files.Where(f => variant.GetValueOrDefault(f["file"]) == "current").Select(f => f["project"]).Distinct()));
+        }
+        foreach (var r in keepIdx.OrderBy(r => r["screen_id"], StringComparer.Ordinal))
+            idx.Row(new[] { "screen_id", "files", "current_files", "legacy_files", "endpoints", "match", "not_in_foxquery", "unresolved", "commented_calls", "controls", "events", "meta_columns", "grid_mode", "grid_hardcoded_columns", "grid_db_loop_columns", "grid_overrides", "current_project" }.Select(k => (object)r.GetValueOrDefault(k, "")).ToArray());
+        Console.WriteLine($"actions: rows {actTotals[0]} · statements {actTotals[1]} · OTHER {actTotals[2]} · CALL_EXT {actTotals[3]}");
+        // 프레임워크 액션(2026-10-23 — 2a DB 연결): 화면이 부르는 프레임워크 메서드(DataService.GetDMInnerTable 등)의 본문 — switch case 별 필터·엔드포인트.
+        //   화면 액션의 COMBO_DATA/CALL_EXT → 프레임워크 메서드 → 엔드포인트·SP 로 잇는 원천. 전체 실행(화면 미지정) 때만 갱신.
+        if (want == null)
+        {
+            var fwFiles = CsvIn.Read(P("files.csv")).Select(r => r["file"]).Where(f => f.StartsWith("01.Framework", StringComparison.Ordinal) && f.EndsWith(".cs", StringComparison.OrdinalIgnoreCase)).ToList();
+            var fwEps = CsvIn.Read(P("endpoint_usage.csv")).Where(r => r["file"].StartsWith("01.Framework", StringComparison.Ordinal) && r["active"] == "1" && r["commented"] == "0" && !HideStatus.Contains(r["status"]))
+                             .Select(r => new Actions.EpUse(r["file"], r["line"], r["kind"] == "biz" && r["key"].StartsWith("biz:") ? "biz:" + r["candidate"] : (r["key"] == "" ? r["candidate"] : r["key"]))).ToList();
+            var fwDir = Path.Combine(outDir, "framework_actions"); Directory.CreateDirectory(fwDir);
+            var fa = Actions.Write(cfg, root, fwDir, "FRAMEWORK", fwFiles, new List<Dictionary<string, string>>(), fwEps, EntryOverrides);
+            Console.WriteLine($"framework actions: files {fwFiles.Count} · rows {fa.rows} · statements {fa.stmts} · CALL_EXT {fa.ext} → {fwDir}");
         }
         Console.WriteLine($"screens: {scr.Count} → {baseDir}");
         return 0;

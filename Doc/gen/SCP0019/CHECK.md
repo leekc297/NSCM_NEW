@@ -1,9 +1,27 @@
-# [Harness] SCP0019 working-time — BLOCK 0 / WARN 15
+# [Harness] SCP0019 working-time — BLOCK 0 / WARN 34
 
+- WARN AC1 액션 대조표 미처리 214행: AC-36c0a08c(상태 빈칸 CALL_EXT siMain.ActiveSheet.Columns.Get), AC-8e4ca4dc(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-dd0eff62(상태 빈칸 RETURN return;), AC-fe9de3ce(상태 빈칸 RETURN return;), AC-2888d5d2(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-d9394ad7(상태 빈칸 RETURN return;), AC-161863c4(상태 빈칸 RETURN return;), AC-f6cbdd4f(상태 빈칸 MESSAGE MessageHelper.GMessageBox) … @Doc/asisfacts/screens/SCP0019/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 10행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-36c0a08c(siMain.ActiveSheet.Columns.Get @SCP0019_WorkingTime.cs:1220), AC-60f47abc(spdMain.ActiveSheet.GetModelColumnFromVi @SCP0019_WorkingTime.cs:1281), AC-7685cddd(spdMain.ActiveSheet.GetModelColumnFromVi @SCP0019_WorkingTime.cs:1282), AC-2f2eba82(fps.ActiveSheet.GetColumnFromTag @SCP0019_WorkingTime.cs:434), AC-84e0550e(fps.ActiveSheet.Columns.Get @SCP0019_WorkingTime.cs:435), AC-8cddc130(DateUtil.GetDayRange @SCP0019_WorkingTime.cs:1520), AC-634ecca2(row.SetAdded @SCP0019_WorkingTime.cs:923), AC-1f5f8a8a(row.SetModified @SCP0019_WorkingTime.cs:924) … @Doc/asisfacts/screens/SCP0019/__asis-actions__.md
 - WARN G02 As-is 엔드포인트 SCP.SCP0019_GET_WORKING_TIME (SCP0019_GET_WORKING_TIME) 매핑표 §4 에 없음
 - WARN G02 As-is 엔드포인트 SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN (SCP0009_GET_SHEET_CALENDAR_3SPAN) 매핑표 §4 에 없음
 - WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
 - WARN V01 As-is Validation 3건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00135 — AS-IS '수정모드가 아니므로 입력할 수 없습니다.' / TO-BE MSG00135 = '편집 모드에서는 이 기능을 사용할 수 없습니다.' → 문구로 찾은 TO-BE ID MSG01154 @working-time.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @working-time.constants.ts
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 4건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 저장(SAVE) SEQ1 [MSG00203] 0~7.0 사이의 수를 입력하세요. / 저장(SAVE) SEQ2 [MSG00203] 0~1440 사이의 수를 입력하세요 → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0019.md
+- WARN VR2 MSG00135 — VALIDATION 취합 판정: 조회(SEARCH) SEQ2 AS-IS MSG00002 [메시지 불일치] — [메시지 불일치] 불일치 — AS-IS "Division 값은 필수 입력입니다" <-> TO-BE "편집 모드에서는 이 기능을 사용할 수 없습니다." — 필수 입 @working-time.constants.ts:87
+- WARN VR2 MSG00134 — VALIDATION 취합 판정: 기타(ETC) — Input 버튼 SEQ2 AS-IS MSG00134 [메시지 불일치] — [메시지 불일치] TO-BE 미등록 — MSG00134 TO-BE 마스터·정적 번들 모두 없음 -> fallback "_Please select cell(s)." @working-time.constants.ts:91
+- WARN VR2 MSG00050 — VALIDATION 취합 판정: 기타(ETC) — Input 버튼 SEQ3 AS-IS MSG00050 [메시지 불일치] — [메시지 불일치] TO-BE 미등록 — MSG00050 TO-BE 마스터·정적 번들 모두 없음 -> fallback "_Invalid input value." 노 @working-time.constants.ts:93
+- WARN SC2 기준표가 BUTTON_AREA(조회조건 영역 → 버튼 영역) 로 정한 조회조건 'Day of the week' 가 Form 에 있음 — 기준표 반영 검토 @components/WorkingTimeForm.tsx:171
+- WARN SC2 기준표가 BUTTON_AREA(조회조건 영역 → 버튼 영역) 로 정한 조회조건 'Input Value' 가 Form 에 있음 — 기준표 반영 검토 @components/WorkingTimeForm.tsx:198
+- WARN SC2 기준표가 BUTTON_AREA(조회조건 영역 → 버튼 영역) 로 정한 조회조건 'Input' 가 Form 에 있음 — 기준표 반영 검토 @components/WorkingTimeForm.tsx:222
+- WARN BU1 조회영역 일괄 입력(기준표 Day of the week·Input Value·Input (SCP 66행~)) — SubTitle customButtons 에 Input 버튼 없음. hook #155: 조회영역에서 빼고 customButtons [{ label: t(LBL.INPUT, '_Input'), action: handleInputOpen }](편집 권한 게이트 · 조회 선행 가드) — 정본 SCP0096
+- WARN BU1 조회영역 일괄 입력(기준표 Day of the week·Input Value·Input (SCP 66행~)) — 입력 팝업 components/<Page>InputModal.tsx 없음. hook #155 정본 ShipmentWorkingDayOspInputModal(CustomDialog 520×280 modaless · FormItem · OK/Close · onConfirm boolean · EditTracker 경유 셀 기록)
+- WARN I18N1 다국어 미적용 — 화면에 '_Invalid period (start > end).' 가 그대로 보임: 코드 MSG00050 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @WorkingTime.tsx:110
+- WARN I18N1 다국어 미적용 — 화면에 '_Please select cell(s).' 가 그대로 보임: 코드 MSG00134 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @WorkingTime.tsx:250
+- WARN I18N1 다국어 미적용 — 화면에 '_Invalid input value.' 가 그대로 보임: 코드 MSG00050 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @WorkingTime.tsx:257
+- WARN I18N1 다국어 미적용 — 화면에 '_Value out of range.' 가 그대로 보임: 코드 MSG00203 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @WorkingTime.tsx:265
+- WARN I18N1 다국어 미적용 — 화면에 '_Please select editable cell(s).' 가 그대로 보임: 코드 MSG00134 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @WorkingTime.tsx:290
 - WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @WorkingTime.tsx:79
 - WARN B08 As-is InsertButton override 있음 → hotkeyConfig.insert 가 false 가 아니어야 함 — As-is 기능 누락(members.csv InsertButton)
 - WARN B08 As-is DeleteButton override 있음 → hotkeyConfig.delete 가 false 가 아니어야 함 — As-is 기능 누락(members.csv DeleteButton)
@@ -13,5 +31,6 @@
 - WARN B21 Doc/gen/SCP0019/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
 - WARN B21 Doc/gen/SCP0019/SCP0019_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
 - WARN B21 Doc/gen/SCP0019/SCP0019_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
-- WARN B26 RESPONSE_SET 응답 키 = 사내 PROC_M OUT COL_NM(proc_params.csv) — DYN_COLUMNS='o_rc1_columns' → 사내 PROC_M OUT 어디에도 없음(ResultSetMetaData 사이드카 = SYS0013 DynamicQuery 전용, 일반 call-proc 응답에 없음) — 이 키로 읽는 데이터는 항상 undefined(조회 0건·동적 컬럼 0). 동적 헤더 원천은 사내 배선 타이틀 SP 시트(B27)
-- WARN B27 As-is GetSpdTitle → SCP0009_GET_SHEET_CALENDAR_3SPAN [sp명+메서드] · 사내 정확 배선 없음 — 동적 컬럼 원천을 확인: 배선 등록(DB 메타) 후 FE 조회 또는 대사표에 대체 근거(BE/메타 원문 확인)를 적고 '제외' @grid
+- WARN B26 RESPONSE_SET 응답 키 = 사내 PROC_M OUT COL_NM(proc_params.csv) — DYN_COLUMNS='o_rc1_columns' → 사내 PROC_M OUT 어디에도 없음(ResultSetMetaData 사이드카 = SYS0013 DynamicQuery 전용, 일반 call-proc 응답에 없음) — 이 키로 읽는 값은 항상 undefined(빈 그리드·빈 팝업으로 보이고 오류는 안 남). 동적 헤더 원천은 사내 배선 타이틀 SP 시트(B27) 또는 Object.keys(rows[0])(mybatis callSettersOnNulls=true)
+- WARN B27 As-is GetSpdTitle → SCP0009_GET_SHEET_CALENDAR_3SPAN [sp명+메서드 + grid_code DB루프 InitSpreadDateColumn:336] · 사내 정확 배선 없음 — 동적 컬럼 원천을 확인: 배선 등록(DB 메타) 후 FE 조회 또는 대조표에 대체 근거(BE/메타 원문 확인)를 적고 '제외' @grid
+- WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: InitSpreadDateColumn:336 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpreadDateColumn / 336 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md

@@ -1,6 +1,7 @@
 import { PeriodField } from 'features/master/src/components';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
+import dayjs from '@foundation/dayjs';
 import type { ComboParam, ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
@@ -17,6 +18,7 @@ import {
   LBL,
   MENU_ID,
   MSG,
+  PERIOD_BUSINESS_DAYS,
 } from '../shipment-plan-confirm-detail.constants';
 import { useShipmentPlanConfirmDetailStore } from '../useShipmentPlanConfirmDetailStore';
 
@@ -36,9 +38,10 @@ const str = (v: unknown): string =>
 const toOptions = (rows: ComboResponse[] | undefined): Option[] =>
   (rows ?? []).map(r => ({ label: str(r.NAME) || str(r.CODE), value: str(r.CODE) }));
 
-// design 02 (02_search-combo.md) 조회조건 7건 — 2단 초과라 extraConditions 접기(hook #52):
-//   메인(4): Division(다중, EE 제외) / From Site(다중+ALL, EE/비-EE 재조회) / Model(입력+SCM0002 팝업) / Period*(오늘~+55영업일)
-//   확장(2): Sold To Party(자유) / Ship To Party(자유)
+// design 02 (02_search-combo.md) 조회조건 6건 — 1.5단(6칸)이라 접기 없이 전량 conditions.
+//   SRCH-02: 8칸(2단) 초과 시에만 extraConditions 로 분리하고, 그때만 SearchArea 가 펼침/닫기 토글을 렌더.
+//   Division(다중, EE 제외) / From Site(다중+ALL, EE/비-EE 재조회) / Model(입력+SCM0002 팝업) /
+//   Period*(오늘~+55영업일) / Sold To Party(자유) / Ship To Party(자유)
 export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -50,6 +53,7 @@ export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props)
   const openSearchArea = useShipmentPlanConfirmDetailStore(s => s.openSearchArea);
   const hasDivisionAuth = useShipmentPlanConfirmDetailStore(s => s.hasDivisionAuth);
   const setDivisionAuth = useShipmentPlanConfirmDetailStore(s => s.setDivisionAuth);
+  const setServerPeriod = useShipmentPlanConfirmDetailStore(s => s.setServerPeriod);
 
   // Division = MyDivisionInEE_SCP(권한 @sesUserId·@mnuId 세션). From Site = EE/비-EE 분기 재조회.
   //   design 02 §3: 선택 division 에 'EE' 부분문자열 포함 시 EE 콤보(ShipmentPlanPlantSite_SCP), else 비-EE.
@@ -62,9 +66,28 @@ export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props)
     divisionId: sc.divisionIds.join(','),
   };
 
-  const [divisions, fromSites] = useTabComboQueries({
-    filters: [divisionFilter, fromSiteFilter],
+  // Period 기본구간 — AS-IS GetDayRange(cs:588-608): SCM0001_GET_SCP_DAY_PERIOD(@fromDate=오늘, @offsetDay='55',
+  //   @timeZone=''(TO-BE 세션 미보유)). fromDate 를 마운트당 1회 고정해 콤보 재발사·깜빡임을 막는다.
+  const today = useMemo(() => dayjs().format('YYYYMMDD'), []);
+  const dayPeriodFilter: ComboParam = {
+    comboId: COMBO.DAY_PERIOD,
+    mnuId: MENU_ID,
+    fromDate: today,
+    offsetDay: String(PERIOD_BUSINESS_DAYS),
+    timeZone: '',
+  };
+
+  const [divisions, fromSites, dayPeriod] = useTabComboQueries({
+    filters: [divisionFilter, fromSiteFilter, dayPeriodFilter],
   });
+
+  // Period 기본값 서버 구간 반영 — 콤보 결과 CODE="from:to"(자매 shipment-plan-mobility-it ShipmentPsiForm 동일).
+  //   파라미터(오늘) 불변이라 1회 도착하며, 그 시점에 store 의 dayjs 초기 근사를 AS-IS 서버 구간으로 덮는다.
+  useEffect(() => {
+    const [from, to] = str(dayPeriod?.[0]?.CODE).split(':');
+    if (from && to) setServerPeriod(from, to);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayPeriod]);
 
   // Division: MyDivisionInEE_SCP(EE 미제외) — AS-IS cs:237 클라 후처리 CODE!=='EE'(정확히 'EE') 재현.
   //   EE_HD/EE_HG 등 부분문자열 코드는 유지(EE 분기 도달 대상).
@@ -152,7 +175,7 @@ export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props)
             />
           </Grid>
 
-          {/* Model — 입력 + 돋보기(SCM0002_ItembyDivisionPopup=ItemByDivisionModal), 다건(개행/콤마). design 02 §4.6. */}
+          {/* Model — 입력 + 돋보기(AS-IS SCM0002_ItembyDivisionPopup → TO-BE MaterialByDivisionModal COM0013, 사용자 지시 2026-10-22), 다건(개행/콤마). design 02 §4.6. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -192,10 +215,7 @@ export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props)
             end={sc.toYyyymmdd}
             onChange={(start, end) => setPeriod(start, end)}
           />
-        </>
-      }
-      extraConditions={
-        <>
+
           {/* Sold To Party — 자유 텍스트(SP p_Sold_To_Party). */}
           <Grid size={3}>
             <FormItem

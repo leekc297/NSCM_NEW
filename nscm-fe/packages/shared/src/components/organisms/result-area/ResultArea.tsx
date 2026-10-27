@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { Children, Fragment, isValidElement, type ReactNode } from 'react';
 
-import { useFilteredGridCount } from '@shared/hooks';
+import { formatTotalCases, useFilteredGridCount, useTitleAreaLanguage } from '@shared/hooks';
 import { TitleArea } from '@shared/lges';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 
@@ -80,6 +80,8 @@ const ResultAreaRoot = ({
 }: ResultAreaProps) => {
   // gridRef/gridFilterRef 미지정 시 종전과 동일하게 count 그대로(0/undefined 면 미표시) 반환.
   const totalCases = useFilteredGridCount(gridRef, gridFilterRef, count ?? 0);
+  // 건수 표기 언어(총/건 ↔ Total/rows) — 화면 언어를 따른다(useTitleAreaLanguage 주석).
+  const titleAreaLanguage = useTitleAreaLanguage();
 
   return (
     <div
@@ -92,7 +94,8 @@ const ResultAreaRoot = ({
           isSubTitle
           depth={depth}
           title={title ?? ''}
-          totalCases={totalCases}
+          totalCases={formatTotalCases(totalCases)}
+          language={titleAreaLanguage}
           rightButtons={rightButtons}
         />
       )}

@@ -25,6 +25,13 @@ export const EndingInventory = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setOpenSearchArea = useEndingInventoryStore(state => state.setOpenSearchArea);
   const searchParams = useEndingInventoryStore(state => state.searchParams);
   const setSearchParams = useEndingInventoryStore(state => state.setSearchParams);
+  // Condition(F6) 저장 제외 — 날짜(month/date)는 저장하지 않는다(사용자 결정 2026-10-21). 공통
+  //   EXCLUDED_DATE_PARAM 은 'yyyymm'/'yyyymmdd' 키명만 잡아 SCP0085 의 'month'/'date' 키는 안 걸리므로
+  //   SubTitle 로 넘기는 저장용 조건에서 직접 뺀다(복원도 저장분만 패치하므로 날짜는 기본값 유지).
+  const conditionParam = useMemo(() => {
+    const { month: _month, date: _date, ...rest } = searchParams;
+    return rest;
+  }, [searchParams]);
   const filters = useEndingInventoryStore(state => state.filters);
   const setFilters = useEndingInventoryStore(state => state.setFilters);
   const clearFilters = useEndingInventoryStore(state => state.clearFilters);
@@ -93,14 +100,15 @@ export const EndingInventory = ({ tabId, title }: PageProps<MENU_ID>) => {
   }, [tabId]);
 
   // 버튼 게이트 — 조회 전용 Report(01_layout §2 R4~R7):
-  //   search = 실동작(hasButton('SEARCH') 게이트) / save = AS-IS SaveButton NO-OP(노출 + 무동작,
-  //   false·키 생략 금지) / excel = 실동작(0건 가드) / insert·delete = 미노출(report — 기본 addRow/
-  //   removeRow 핸들러 차단) / manual·upload = 미사용.
+  //   search = 실동작(hasButton('SEARCH') 게이트) / save = 미노출(save: false) — 저장 기능 없음.
+  //     AS-IS SaveButton 은 NO-OP(노출+무동작)였으나 실제 저장 기능이 없어 버튼 제거(사용자 결정 2026-10-21).
+  //   excel = 실동작(0건 가드) / insert·delete = 미노출(report — 기본 addRow/removeRow 핸들러 차단) /
+  //   manual·upload = 미사용.
   //   AS-IS EditButton(NO-OP)은 NSCM 공용 툴바에 Edit 버튼 자체가 없어 대응 버튼 없음(파리티: 편집 불가 동일).
   //   R1(cs:188): MyDivision 0건이면 조회영역 전체 Enabled=false — 입력 disable(Form)에 더해 조회 액션도 차단.
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') && !noDivisionAuth ? handleSearch : false,
-    save: () => undefined,
+    save: false,
     excel: handleExcel,
     insert: false,
     delete: false,
@@ -124,7 +132,7 @@ export const EndingInventory = ({ tabId, title }: PageProps<MENU_ID>) => {
         dataCount={rows.length}
         excelFileName='EndingInventory'
         hotkeyConfig={hotkeyConfig}
-        searchParam={searchParams}
+        searchParam={conditionParam}
       />
       <EndingInventoryGrid
         gridRef={gridRef}

@@ -48,3 +48,14 @@ export interface FixInfoRow {
   BOD_ID?: string;
   YYYYMMDD?: string; // 'D_'+원본일자 형태로 이미 컬럼ID 매칭 가능
 }
+
+// Plan 상태(O_RC2) — AS-IS GetIsEditable(.cs:3527-3658) 입력. Weekly/Monthly 조회일 때만 non-empty
+//   (SP WHERE P_BUCKET IN ('WEEKLY','MONTHLY')) — Daily 는 항상 0 rows.
+export interface PlanStatusRow {
+  PLAN_TYPE?: string; // PR/MA/SE/FN/TE
+  PLAN_TYPE_SEQ?: number | string; // CASE PR=0/MA=1/SE=2/FN=3(TE 는 이 값 없음, SP 가 NULL)
+  PLAN_STATUS?: number | string; // -1=실패, 0/1=진행중·성공
+  CONFIRM_YN?: string; // 'Y'/'N'
+  PLAN_SEQ?: number | string;
+  PLAN_START_YYYYMMDD?: string;
+}

@@ -1,0 +1,3 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+FP00960,SQL,PR_UI_FP00960_AGING_INVENTORY,Doc\asisfacts\db\modules\dbo.PR_UI_FP00960_AGING_INVENTORY.sql,134,IF(@p_sys_flag ='SELECT'),OPERATION_ID DESC,SELECT @v_dSql += '       ORDER BY X.OPERATION_ID DESC) AS LINE_NAME /* LINE 정보 표기 20171114 YANG*/  ' + char(10),1,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+FP00960,SQL,PR_UI_FP00960_AGING_INVENTORY,Doc\asisfacts\db\modules\dbo.PR_UI_FP00960_AGING_INVENTORY.sql,315,IF(LEN(@p_item_id) > 0),"DIVISION_ID,SITE_ID,PLANT_ID,FACTORY_ID","SELECT @v_dSql += '  ORDER BY A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID                  ' + char(10)",0,동적 SQL

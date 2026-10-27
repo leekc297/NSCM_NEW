@@ -6,17 +6,14 @@ export type MENU_ID = typeof MENU_ID;
 //   출하 변경 이력(Shipment Change History) 조회 화면. 도메인 SSP(features/shipping, 00 §0 트리 실측 판정).
 //   화면 성격: 읽기전용 조회(inquiry) — 그리드 전열 LockColumn, 편집 4버튼(Insert/Delete/Edit/Save) AS-IS NO-OP.
 //   - GET   SP : PKG_SSP0019.P_SSP0019_GET_SHIPMENT_CHANGE_HISTORY (Table[0] 그리드 47열, 파라미터 12개)
-//   - POPUP    : SCM0002_ItembyDivisionPopup(Model 조회조건 팝업) / SCM0002_ShipmentPlanRequestPopup(REQUEST_NO 드릴다운)
-//   - SP 미배포(goal.md ②): PKG_SSP0019 all_objects 0건 -> 조회 런타임 미완(convert-sp 후속). FE 는 47컬럼 계약으로 구현.
+//   - POPUP    : 공용 MaterialByDivisionModal(Model/Nickname 조회조건 팝업) / SCM0002_ShipmentPlanRequestPopup(REQUEST_NO 드릴다운)
 export enum SHEETS {
   MAIN = 'main', // spdMain 단일 시트 (47컬럼, 표시 46 + LAST_SEQ 숨김)
-  POPUP = 'popup', // SCM0002 Item by Division (Model 조회조건 팝업)
 }
 
 // NSCM 단일 cursor 표준 'o_rc1'
 export const RESPONSE_SET = {
   MAIN: 'o_rc1',
-  POPUP: 'o_rc1',
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
@@ -77,6 +74,12 @@ export const FREEZE_COLUMN_COUNT = 7;
 export const ELECTRODE_DIVISION_EXACT = 'EE';
 export const ELECTRODE_DIVISION_PREFIX = 'EE';
 
+// Division 미체크(=권한범위 전체) 를 Model/Nickname 팝업에 넘길 때 쓰는 센티널.
+//   MaterialByDivisionModal 은 `enabled: !!divisionId` 로 빈값이면 조회를 아예 막으므로 빈 문자열을
+//   넘기면 검색이 안 된다. 팝업 SP P_SCM0002_GET_MATERIAL_BY_DIVISION 이 P_DIVISION_ID='ALL' 분기로
+//   전체를 돌려주므로 'ALL' 을 보낸다(자매 SSP0003 선례 — 사용자 신고 2026-10-12 로 확정된 규약).
+export const DIVISION_ALL = 'ALL';
+
 // TO-BE MSG 코드 (SCM_ADM_MSG_M 문구 역조회 확정 — Hook #114, ora.py 실측 2026-09-24):
 //   NO_DIVISION_AUTH = MSG00667("No authority assigned.") — 권한 division 0건 게이트(design 01 §2#1). AS-IS
 //     SetDivisionAuthCheck 는 MSG00097 을 쓰나 TO-BE MSG00097 문구는 "Please select Division." 라 의도가 다르다
@@ -96,16 +99,16 @@ export const LBL = {
   INCOTERMS: 'LBL00024',
   TRANS_MODE: 'LBL00025',
   SHIPMENT_DATE: 'LBL01115',
-  MODEL: 'LBL00669',
+  // 입력값이 ITEM_ID 와 NICK_NAME 양쪽에 LIKE 매칭되므로(팝업 SP 실측) 라벨도 둘을 모두 알린다.
+  //   LBL00618 'Model/Nickname' — SCM_ADM_MSG_M KO/EN/CN 전건 등록·USE_YN='Y' 실측(2026-10-14)이라
+  //   등록 요청 불요. 기존 LBL00669 는 'Model' 단독이라 교체. 4자매(SSP0003/0026/0027/0028) 공통 규약.
+  MODEL_NICKNAME: 'LBL00618',
   SO_NO: 'LBL01111',
   CONFIRM_ID: 'LBL01063',
   CURRENT: 'LBL01065',
   SEARCH: 'LBL00112', // 메인 SearchArea 조회 버튼
-  SEARCH_POPUP: 'LBL00664', // 팝업 SearchArea 조회 버튼
-  ITEM_POPUP: 'LBL00343', // Item by Division 팝업 타이틀
-  NO: 'LBL00674', // 팝업 그리드 No 컬럼
-  OK: 'LBL00716',
-  CLOSE: 'LBL00627',
+  // Model/Nickname 팝업 내부 라벨(SEARCH_POPUP/ITEM_POPUP/NO/OK/CLOSE)은 공용 MaterialByDivisionModal 로
+  //   교체하면서 그 컴포넌트 소관이 되어 제거. REQUEST_NO 는 ShipmentPlanRequestModal 이 계속 쓴다.
   REQUEST_NO: 'LBL00744',
 } as const;
 

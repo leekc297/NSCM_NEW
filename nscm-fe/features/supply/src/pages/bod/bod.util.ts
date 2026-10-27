@@ -18,24 +18,27 @@ const toSelectedCodes = (value: string): string[] =>
  * client-side 필터(cascade-combo-filter.md §4)로 재현. Map dedup(§3, 복합키 없이 CODE 단일 — 이
  * 화면은 division 별로 같은 CODE 가 겹치는 사례가 없어 CODE 단일 키로 충분).
  *
- * divisionIds 가 비어있거나(ALL) 전부이면 전체 통과.
+ * Division 이 ALL(또는 미선택)이면 allowedDivisionIds(Division 콤보에 보이는 권한 Division, EE 제외)로
+ * 거른다 — AS-IS CString.GetCheckedListValue(CString.cs L533-544)가 ALL 을 dtMyDivision 코드 전체로
+ * 바꿔 같은 IN 필터를 탄다. To Site 원천(ToSiteBOD1_SCP_ALL)은 SQL 에 권한 필터가 없어, ALL 을 전체
+ * 통과로 두면 권한 밖 Division 의 Site 까지 노출된다. AS-IS IN 필터처럼 DIVISION_ID 가 빈 행도 제외한다.
  */
 export const buildDivisionFilteredOptions = (
   rows: ComboResponse[] | undefined,
   divisionId: string,
+  allowedDivisionIds: string[],
   codeColumn = 'CODE',
   nameColumn = 'NAME'
 ): { label: string; value: string }[] => {
-  const divisionCodes = toSelectedCodes(divisionId);
+  const selectedCodes = toSelectedCodes(divisionId);
+  const divisionCodes = selectedCodes.length > 0 ? selectedCodes : allowedDivisionIds;
 
   const byCode = new Map<string, { label: string; value: string }>();
   for (const row of rows ?? []) {
     const code = String(row[codeColumn] ?? '').trim();
     if (code === '') continue;
-    if (divisionCodes.length > 0) {
-      const rowDivision = String(row.DIVISION_ID ?? '').trim();
-      if (rowDivision !== '' && !divisionCodes.includes(rowDivision)) continue;
-    }
+    const rowDivision = String(row.DIVISION_ID ?? '').trim();
+    if (!divisionCodes.includes(rowDivision)) continue;
     if (byCode.has(code)) continue;
     byCode.set(code, { label: String(row[nameColumn] ?? code), value: code });
   }
@@ -48,11 +51,26 @@ const isBlankValue = (value: unknown): boolean =>
 /** UTF-8 바이트 길이 — mail-setup.util.ts getByteLength 와 동일 방식(TextEncoder). */
 const getByteLength = (text: string): number => new globalThis.TextEncoder().encode(text).length;
 
-/** 'yyyy-MM-dd' 문자열을 로컬 자정 Date 로 변환 — `new Date(str)` 의 UTC 파싱으로 인한 요일 오차 방지. */
+/**
+ * 'yyyy-MM-dd'(구분자 -/. 또는 없음) 문자열을 로컬 자정 Date 로 변환 — `new Date(str)` 의 UTC 파싱으로 인한
+ * 요일 오차 방지. 없는 날짜는 undefined — `new Date(2026, 9, 33)` 은 11-02 로 넘어가 버려, 마스크 입력
+ * (FPDateText '0000-00-00')으로 들어온 2026-10-33 이 검증을 통과해 저장되고 조회 SP 의 TO_DATE 가 실패했다
+ * (QA 결함). AS-IS 는 저장 시 Convert.ToDateTime 이 예외를 내 저장이 막혔다(SCP0007_BOD.cs L692-693).
+ */
 const parseLocalDate = (value: string): Date | undefined => {
-  const [y, m, d] = value.split('-').map(Number);
-  if (!y || !m || !d) return undefined;
-  return new Date(y, m - 1, d);
+  const match = /^(\d{4})[-/.]?(\d{2})[-/.]?(\d{2})$/.exec(value.trim());
+  if (!match) return undefined;
+  const [y, m, d] = [Number(match[1]), Number(match[2]), Number(match[3])];
+  const date = new Date(y, m - 1, d);
+  if (date.getFullYear() !== y || date.getMonth() !== m - 1 || date.getDate() !== d) return undefined;
+  return date;
+};
+
+// 셀 값 → 로컬 Date. FPDateText 칸은 문자열('yyyy-MM-dd')이지만 Date 객체가 와도 유효하면 그대로 쓴다.
+const toLocalDate = (value: unknown): Date | undefined => {
+  if (value instanceof Date) return Number.isNaN(value.getTime()) ? undefined : value;
+  if (typeof value === 'string' || typeof value === 'number') return parseLocalDate(String(value));
+  return undefined;
 };
 
 const toYyyyMmDd = (date: Date): string =>
@@ -93,13 +111,19 @@ export const validateBodRows = (rows: WijmoRowItem[]): BodSaveValidationError | 
 
     const fromValue = row[BOD_COLUMN.FROM_YYYYMMDD];
     const toValue = row[BOD_COLUMN.TO_YYYYMMDD];
-    const fromDate = isBlankValue(fromValue) ? undefined : parseLocalDate(String(fromValue));
-    const toDate = isBlankValue(toValue) ? undefined : parseLocalDate(String(toValue));
+    const fromDate = isBlankValue(fromValue) ? undefined : toLocalDate(fromValue);
+    const toDate = isBlankValue(toValue) ? undefined : toLocalDate(toValue);
+    // 값은 있는데 날짜가 아니면(없는 날짜·형식 오류) 저장을 막는다 — 자매 화면 BOD Item 과 같은 MSG00611.
+    if ((!isBlankValue(fromValue) && !fromDate) || (!isBlankValue(toValue) && !toDate)) {
+      return { id: 'MSG00611', fallback: '_유효한 날짜 형식이 아닙니다. (YYYYMMDD)' };
+    }
 
     if (fromDate && toDate) {
       if (fromDate.getTime() > toDate.getTime()) {
+        // AS-IS MSG00219·MSG00355·MSG00253 는 TO-BE 미등록 — 같은 문구로 등록된 MSG01230·MSG01349·
+        //   MSG01263 을 쓴다(KO/EN/CN 실재, bod-item 의 MSG00219 → MSG01230 매핑과 같은 방식).
         return {
-          id: 'MSG00219',
+          id: 'MSG01230',
           fallback: '_시작일자가 종료일자보다 늦을 수 없습니다.\n\r리스트 확인 후 입력하십시오.',
         };
       }
@@ -108,21 +132,21 @@ export const validateBodRows = (rows: WijmoRowItem[]): BodSaveValidationError | 
         const monday = new Date(fromDate);
         monday.setDate(fromDate.getDate() - ((fromDate.getDay() + 6) % 7));
         row[BOD_COLUMN.FROM_YYYYMMDD] = toYyyyMmDd(monday);
-        return { id: 'MSG00355', fallback: '_{0}기간을 다시 선택하여 주십시오.({1})', params: ['FROM', 'Monday'] };
+        return { id: 'MSG01349', fallback: '_{0} 기간을 다시 선택하여 주십시오.({1})', params: ['FROM', 'Monday'] };
       }
 
       if (toDate.getDay() !== 0 /* Sunday */) {
         const sunday = new Date(toDate);
         sunday.setDate(toDate.getDate() + (7 - toDate.getDay()));
         row[BOD_COLUMN.TO_YYYYMMDD] = toYyyyMmDd(sunday);
-        return { id: 'MSG00355', fallback: '_{0}기간을 다시 선택하여 주십시오.({1})', params: ['TO', 'Sunday'] };
+        return { id: 'MSG01349', fallback: '_{0} 기간을 다시 선택하여 주십시오.({1})', params: ['TO', 'Sunday'] };
       }
     }
 
     const fromSite = row[BOD_COLUMN.FROM_SITE_CODE];
     const toSite = row[BOD_COLUMN.TO_SITE_CODE];
     if (!isBlankValue(fromSite) && fromSite === toSite) {
-      return { id: 'MSG00253', fallback: '_From Site와 To Site는 동일할 수 없습니다.' };
+      return { id: 'MSG01263', fallback: '_From Site와 To Site는 동일할 수 없습니다.' };
     }
   }
 

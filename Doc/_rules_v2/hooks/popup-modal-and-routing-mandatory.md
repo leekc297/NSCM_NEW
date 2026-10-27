@@ -270,7 +270,7 @@ const MyScreenWithTab = LazyLoader(() =>
 |---|---|---|
 | `customForm` | FormItem 안 grid template 반응형 | DMF0004 Form |
 | `customGrid` | FormItem 안 flex grid | DMF0004 Form |
-| `customCheckbox` | Checkbox + Label 묶음 | DMF0004 Form |
+| `customCheckbox` | Checkbox 컨테이너 (조회조건은 #154 v2 — FormItem label=조건명 + 박스만) | DMF0004 Form · SCP0100 GlobalPsiReportForm |
 | `formItem` | FormItem 자체 className | DMF0005/0006 Form |
 | `input` | InputField / CustomDropdown className | DMF0006 Form |
 | `inputWithSearch` | InputField + endAdornment Button | DMF0005/0006 Form |

@@ -5,9 +5,9 @@ import type { MENU_ID, SHEETS } from './scp-bom.constants';
 export type ScpBomRow = ResponseData<MENU_ID, SHEETS.MAIN>;
 
 // 조회조건 (Form 입력 상태 — searchParams). design 02 §1 인벤토리 7행:
-//   Division(단일, '81' 고정) / PlantSite(다중) / Model·Parent·Child(텍스트 단일값) / AlterBOM(체크박스).
+//   Division(단일, 권한 콤보 첫 항목 기본선택) / PlantSite(다중) / Model·Parent·Child(텍스트 단일값) / AlterBOM(체크박스).
 export interface SearchCondition {
-  divisionId: string; // '81' 고정 (R7)
+  divisionId: string; // 콤보 배열 첫 항목 기본선택 (2026-10-22, R7 '81' 고정 폐기)
   plantSiteIds: string[]; // 다중 — 전체선택 시 NULL(빈 문자열) 전달
   modelId: string;
   parentId: string;

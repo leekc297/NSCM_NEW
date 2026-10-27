@@ -1,0 +1,133 @@
+================= §0 환경 =================
+
+DB_NAME        CONNECTED_AS                                                                                                                     RUN_AT
+-------------- -------------------------------------------------------------------------------------------------------------------------------- -------------------
+ZIOUI1         SCM_MGR                                                                                                                          2026-10-26 17:19:58
+
+================= §1 현재 행 — 상태 · 마지막 수정자 · 수정 시각 =================
+
+SQL_ID                       STATE     UPD_BY           UPD_AT              CRT_BY           CRT_AT                   BYTES    ROW_SCN
+---------------------------- --------- ---------------- ------------------- ---------------- ------------------- ---------- ----------
+FcstTypeByUserGroupDMF0082   FIXED     admin            2026-10-12 23:35:45 admin            2026-08-07 19:22:39       2557   43264670
+FcstTypeEditDMF0082          FIXED     admin            2026-10-12 23:35:45 admin            2026-08-14 05:45:18       2165   43264670
+
+    ROWSCN 시각 FcstTypeByUserGroupDMF0082   = 2026-10-26 17:07:27  (블록 단위 근사 — 마지막 물리 변경 시각)
+    ROWSCN 시각 FcstTypeEditDMF0082          = 2026-10-26 17:07:27  (블록 단위 근사 — 마지막 물리 변경 시각)
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+================= §2 ⭐ 보관 테이블(SCM_ADM_CMBO_SQL_M_*) 시점별 상태 — FIXED→REVERTED 전환 구간 =================
+보관 테이블은 각 배포·보완 스크립트가 "그 작업 직전" 상태를 떠 둔 스냅숏. 생성 시각 순으로 상태가 바뀌는 두 행 사이가 원복 구간
+보관 테이블                                  | 생성 시각           | Edit 상태 | Edit 행 수정           | Group 상  | Group 행 수정          | 전환
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SCM_ADM_CMBO_SQL_M_BAK20260930_DMF0042       | 2026-10-09 10:24:26 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_B20260908_7               | 2026-10-09 10:24:29 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_BAK20260909               | 2026-10-09 10:24:29 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_B20260908_8               | 2026-10-09 10:24:30 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_BAK20261001_DMF0044       | 2026-10-09 10:24:32 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20260930               | 2026-10-09 10:24:34 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_B20260908_2               | 2026-10-09 10:24:40 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_B20260908_6               | 2026-10-09 10:24:41 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_BK20260821                | 2026-10-09 10:24:41 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BK20260910                | 2026-10-09 10:24:41 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_B20260910C                | 2026-10-09 10:24:44 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_BAK20261007_SSP0023       | 2026-10-09 10:24:44 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BK20260908                | 2026-10-09 10:24:45 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20261007_SSP0017       | 2026-10-09 10:24:47 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BK20260907                | 2026-10-09 10:24:49 | REVERTED  | AJS 08-31 16:28        | REVERTED  | AJS 08-31 16:28        |
+SCM_ADM_CMBO_SQL_M_B20260911S                | 2026-10-09 10:24:51 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_BAK20260917_DIVSCP        | 2026-10-09 10:24:51 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BK20260918P               | 2026-10-09 10:24:51 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BK20260916S               | 2026-10-09 10:24:52 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20260929D              | 2026-10-09 10:24:53 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20260914_P17           | 2026-10-09 10:24:54 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20261007_SCP0095       | 2026-10-09 10:24:56 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_B20260910C3               | 2026-10-09 10:24:57 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_BAK20260917_PLANTCOMP     | 2026-10-09 10:24:57 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20261007_SSP0060       | 2026-10-09 10:24:59 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BK20260821_AJS            | 2026-10-09 10:24:59 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20260910_ADMGRP        | 2026-10-09 10:25:00 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_B20260908_3               | 2026-10-09 10:25:01 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_BAK20260910_ADM7          | 2026-10-09 10:25:02 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_B20260910S                | 2026-10-09 10:25:06 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_B20260908_4               | 2026-10-09 10:25:07 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_B20260910S2               | 2026-10-09 10:25:07 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_BK20260909                | 2026-10-09 10:25:07 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_B20260908_5               | 2026-10-09 10:25:08 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_B20260911C                | 2026-10-09 10:25:10 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_BAK20260930_SSP0017       | 2026-10-09 10:25:11 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_B20260917P                | 2026-10-09 10:25:13 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BK20260824                | 2026-10-09 10:25:18 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_B20260911C2               | 2026-10-09 10:25:20 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_B20260929                 | 2026-10-09 10:25:21 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_BAK20261008_DMF0003       | 2026-10-09 10:25:21 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_B20260917Q                | 2026-10-09 10:25:24 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BK20260823                | 2026-10-09 10:25:29 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BK20260911                | 2026-10-09 10:25:30 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_B20260910S3               | 2026-10-09 10:25:31 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_B20260910C2               | 2026-10-09 10:25:32 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_B20260911S2               | 2026-10-09 10:25:32 | REVERTED  | AJS 09-07 13:44        | REVERTED  | AJS 09-07 13:44        |
+SCM_ADM_CMBO_SQL_M_BAK20260910               | 2026-10-09 10:25:33 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20261013_DW1           | 2026-10-13 14:53:27 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20261013_DT8           | 2026-10-13 15:21:20 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20261013_FSBD          | 2026-10-13 16:14:50 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20261014               | 2026-10-14 11:41:50 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20261016_S200          | 2026-10-16 15:16:39 | (행없음)  | -                      | (행없음)  | -                      |
+SCM_ADM_CMBO_SQL_M_BAK20261021_SCP0049       | 2026-10-21 18:33:18 | (행없음)  | -                      | (행없음)  | -                      |
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+================= §3 ⭐ 현재 행과 같은 시각(±5분)에 함께 수정된 콤보 — 어느 일괄 반영이었는지 =================
+
+SQL_ID                       UPD_BY           UPD_AT
+---------------------------- ---------------- -------------------
+FcstTypeByUserGroupDMF0082   admin            2026-10-12 23:35:45
+FcstTypeEditDMF0082          admin            2026-10-12 23:35:45
+
+================= §4 Flashback 버전 이력 (UNDO 보존 범위 안에서만 — 범위 밖이면 그 사실을 출력) =================
+
+NAME
+--------------------------------------------------------------------------------
+VALUE
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+undo_retention
+900
+
+
+    FcstTypeByUserGroupDMF0082   FIXED     op=- 시작=(보존범위 이전) 끝=2026-10-26 17:07:27 수정자=admin 2026-10-12 23:35:45 XID=-
+    FcstTypeByUserGroupDMF0082   FIXED     op=U 시작=2026-10-26 17:07:27 끝=(현재) 수정자=admin 2026-10-12 23:35:45 XID=0A001F00EA710000
+    FcstTypeEditDMF0082          FIXED     op=- 시작=(보존범위 이전) 끝=2026-10-26 17:07:27 수정자=admin 2026-10-12 23:35:45 XID=-
+    FcstTypeEditDMF0082          FIXED     op=U 시작=2026-10-26 17:07:27 끝=(현재) 수정자=admin 2026-10-12 23:35:45 XID=0A001F00EA710000
+    ※ 시작이 "(보존범위 이전)" 인 행만 있으면 UNDO 에 변경 기록이 남아 있지 않은 것 — §2·§5 로 판정
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+================= §5 DML 원문 — SCM_ADM_CMBO_SQL_M 을 바꾼 SQL (공유풀 + AWR 8일) + 실행 세션 =================
+HIT = 원문에 대상 SQL_ID 직접 포함(Y) / 대상 미포함 일괄 갱신(N — MERGE·전체 동기화 가능성)
+#1 [GV$SQL] ghv3h7cbj1g1b cmd=47 HIT=Y 수정마커=Y | 세션시각=- 공유풀최근=2026-10-26 17:07:29 | 계정=SCM_MGR PC=- 프로그램=SQL*Plus
+     DECLARE     c_mark CONSTANT VARCHAR2(40)   := 'E20261012-FCSTTYPEADM';     c_p1   CONSTANT VARCHAR2(2000) := '(G\.USER_GR_ID\s*=\s*''DM Planner \(W/S\)''\s+AND\
+#2 [GV$SQL] ann08043fyuyv cmd=47 HIT=Y 수정마커=Y | 세션시각=- 공유풀최근=2026-10-26 17:07:30 | 계정=SCM_MGR PC=- 프로그램=SQL*Plus
+     DECLARE     TYPE t_s IS TABLE OF VARCHAR2(200) INDEX BY PLS_INTEGER;     v_case t_s; v_user t_s; v_exp81 t_s;     v_sql  VARCHAR2(32767);     v_txt  VARCHAR2(40
+#3 [GV$SQL] 4ndy8dry2bha9 cmd=47 HIT=Y 수정마커=N | 세션시각=- 공유풀최근=2026-10-26 17:19:31 | 계정=SCM_MGR PC=- 프로그램=SQL*Plus
+     DECLARE   V_TS VARCHAR2(30); BEGIN   FOR R IN (SELECT SQL_ID, ORA_ROWSCN AS SCN FROM SCM_ADM_CMBO_SQL_M              WHERE SQL_ID IN ('FcstTypeEditDMF0082','Fcs
+#4 [GV$SQL] 69gj74mxtn96r cmd=47 HIT=Y 수정마커=Y | 세션시각=- 공유풀최근=2026-10-26 17:19:31 | 계정=SCM_MGR PC=- 프로그램=SQL*Plus
+     DECLARE   TYPE T_CUR IS REF CURSOR;   C T_CUR;   V_ID VARCHAR2(60); V_ST VARCHAR2(10); V_OP VARCHAR2(2); V_T1 VARCHAR2(20); V_T2 VARCHAR2(20); V_BY VARCHAR2(60)
+#5 [AWR] 69df3whd3kz44 cmd=6 HIT=N 수정마커=N | 세션시각=- 공유풀최근=- | 계정= PC=- 프로그램=
+     UPDATE SCM_ADM_CMBO_SQL_M SET SQL_NM = :v0, SQL_DTL_CTN = :v1, USE_YN = :v2, LAST_UPDATED_BY = :v3, LAST_UPDATE_DATE = TO_DATE(:v4, 'YYYY-MM-DD HH24:MI:SS') WHE
+#6 [AWR] 1kxmgwszbu4qt cmd=7 HIT=N 수정마커=N | 세션시각=- 공유풀최근=- | 계정= PC=- 프로그램=
+     DELETE FROM SCM_ADM_CMBO_SQL_M WHERE SQL_ID = :k0 AND MDU_DIVS_CD = :k1
+#7 [AWR] 48dm27jk07pmx cmd=6 HIT=N 수정마커=N | 세션시각=- 공유풀최근=- | 계정= PC=- 프로그램=
+     UPDATE SCM_MGR.SCM_ADM_CMBO_SQL_M x 	SET x.SQL_DTL_CTN=:1 WHERE x.SQL_ID=:2 AND x.MDU_DIVS_CD=:3
+    ※ 다른 특정 콤보만 바꾼 SQL 43건은 생략 (대상 콤보와 무관)
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+================= §6 감사 로그 원문 — SCM_ADM_CMBO_SQL_M 언급 (SYSTEM 등 감사 대상 계정 실행분) =================
+#1 2026-10-09 21:19:11 SYS OS=oracle PC=localhost.localdomain oracle@localhost.localdomain (DW04) ALTER TABLE RC=0 HIT=N 수정마커=N
+     ALTER TABLE "SCM_MGR"."SCM_ADM_CMBO_SQL_M" ADD CONSTRAINT "SCM_ADM_CMBO_SQL_M_PK" PRIMARY KEY ("SQL_ID", "MDU_DIVS_CD") USING INDEX "SCM_MGR"."SCM_ADM_CMBO_SQL_
+#2 2026-10-10 00:02:49 SYS OS=oracle PC=localhost.localdomain oracle@localhost.localdomain (DW02) ALTER TABLE RC=2260 HIT=N 수정마커=N
+     ALTER TABLE "SCM_MGR"."SCM_ADM_CMBO_SQL_M" ADD CONSTRAINT "SCM_ADM_CMBO_SQL_M_PK" PRIMARY KEY ("SQL_ID", "MDU_DIVS_CD") USING INDEX "SCM_MGR"."SCM_ADM_CMBO_SQL_
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+================= 끝 =================

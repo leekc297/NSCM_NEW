@@ -3,6 +3,7 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { CRUD_TYPE } from '@foundation/constants';
+import { t } from '@foundation/i18n';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction } from '@foundation/utils';
@@ -14,10 +15,12 @@ import {
   useTabBtnPermissions,
   useTabComboQueries,
 } from '@shared/hooks';
+import { useMessageStore } from '@shared/stores';
 
 import { CustomerFcstMasterFcstGrid } from './componenets/CustomerFcstMasterFcstGrid';
 import { CustomerFcstMasterForm } from './componenets/CustomerFcstMasterForm';
 import { MENU_ID, SHEET_NAME } from './customer-fcst-master.constants';
+import { hasUniqueViolation } from './customer-fcst-master.uniqueCheck';
 import { useCustomerFcstMasterStore } from './useCustomerFcstMasterStore';
 
 export const CustomerFcstMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
@@ -93,7 +96,9 @@ export const CustomerFcstMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       DIVISION_ID: searchParams.divisionId,
       SUMMARY_BUCKET_TYPE: searchParams.bucketType,
       MEASURE_GROUP: 'CUST_FCST',
-      MEASURE: 'Customer Fcst',
+      // MEASURE 는 기본값을 넣지 않는다 — 사용자가 셀 콤보(CustFcstMeasure)에서 고른다(AS-IS InsertRow 도
+      //   콤보만 붙이고 값은 비움). 종전 하드코딩 'Customer Fcst' 는 콤보 값('Customer FCST')과 대소문자가
+      //   달라 목록에 없는 값이 그대로 저장됐다. 미선택 저장은 메타 필수(INPUT_TP_CD=IM) 검증이 막는다.
       EDI_FCST_YN: 'Y',
       VALID_YN: 'Y',
       ...dateBindings,
@@ -127,6 +132,16 @@ export const CustomerFcstMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
 
     saveWithValidation(dirtyRows, staticColumn, rows => {
+      // 같은 구간 Y 중복·신규 행 키 중복은 셀 편집 때만 검사돼, 날짜 칸이 전부 Y 로 들어가는 신규 행은
+      //   그대로 저장됐다(갭분석 F-03). 필수값 검사를 통과한 뒤 저장 요청 전에 한 번 더 막는다.
+      if (hasUniqueViolation(gridRows, dirtyRows)) {
+        void useMessageStore.getState().setAlert({
+          type: 'alert',
+          content: t('MSG00136', '_동일 구간에 하나의 Y만 가능합니다.'),
+        });
+        return;
+      }
+
       const saveData: ResponseData<MENU_ID, SHEET_NAME>[] = [];
       rows.forEach(row => {
         Object.keys(row).forEach(key => {

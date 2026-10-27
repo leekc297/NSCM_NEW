@@ -1,0 +1,342 @@
+[
+ {
+  "screen": "SCP0054",
+  "title": "CAPA Simulation",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0054_CAPA_Simulation.UIL/SCP0054_CAPA_SIMULATION.cs:1337",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0054_CAPA_Simulation.UIL/SCP0054_CAPA_SIMULATION.designer.cs:953",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0054_CAPA_Simulation.UIL/TestCode.cs:48",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0054_CAPA_SIMULATION/SCP0054_CAPA_SIMULATION.cs:1338",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0054_CAPA_SIMULATION/SCP0054_CAPA_SIMULATION.designer.cs:953"
+  ],
+  "designer_files": [],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_CAPA_SIMULATION",
+    "member": "FindData_Main",
+    "line": "607",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0054_CAPA_Simulation.UIL\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "681",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0054_CAPA_Simulation.UIL\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "715",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0054_CAPA_Simulation.UIL\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_CAPA_SIMULATION",
+    "member": "FindData_Main",
+    "line": "608",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0054_CAPA_SIMULATION\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "682",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0054_CAPA_SIMULATION\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "716",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0054_CAPA_SIMULATION\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_CAPA_SIMULATION",
+    "member": "FindData_Main",
+    "line": "607",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0054_CAPA_Simulation.UIL\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "681",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0054_CAPA_Simulation.UIL\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "715",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0054_CAPA_Simulation.UIL\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_CAPA_SIMULATION",
+    "member": "FindData_Main",
+    "line": "608",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0054_CAPA_SIMULATION\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "682",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0054_CAPA_SIMULATION\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0054_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "716",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0054_CAPA_SIMULATION\\SCP0054_CAPA_SIMULATION.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0054_GET_CAPA_SIMULATION",
+   "SCP0054_GET_DAY_RANGE",
+   "SCP0054_GET_SHEET_CALENDAR"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0055",
+  "title": "Shipment(Allo) Report",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0055_Shipment_Allo_Report/SCP0055_Shipment_Allo_Report.cs:1516"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0055_Shipment_Allo_Report/SCP0055_Shipment_Allo_Report.Designer.cs:1448"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/shipment-allo-report"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "271",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0055_Shipment_Allo_Report\\SCP0055_Shipment_Allo_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0055_GET_SHIPMENT_ALLO_PLAN",
+    "member": "RefreshGrid",
+    "line": "779",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0055_Shipment_Allo_Report\\SCP0055_Shipment_Allo_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "member": "RefreshNote",
+    "line": "1049",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0055_Shipment_Allo_Report\\SCP0055_Shipment_Allo_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0055_SAVE_SHIPMENT_ALLO_PLAN",
+    "member": "SaveData_Main",
+    "line": "1274",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0055_Shipment_Allo_Report\\SCP0055_Shipment_Allo_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1431",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0055_Shipment_Allo_Report\\SCP0055_Shipment_Allo_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "271",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0055_Shipment_Allo_Report\\SCP0055_Shipment_Allo_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0055_GET_SHIPMENT_ALLO_PLAN",
+    "member": "RefreshGrid",
+    "line": "779",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0055_Shipment_Allo_Report\\SCP0055_Shipment_Allo_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+    "member": "RefreshNote",
+    "line": "1049",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0055_Shipment_Allo_Report\\SCP0055_Shipment_Allo_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0055_SAVE_SHIPMENT_ALLO_PLAN",
+    "member": "SaveData_Main",
+    "line": "1274",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0055_Shipment_Allo_Report\\SCP0055_Shipment_Allo_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1431",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0055_Shipment_Allo_Report\\SCP0055_Shipment_Allo_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCP0055_GET_SHIPMENT_ALLO_NOTE",
+   "SCP0055_GET_SHIPMENT_ALLO_PLAN",
+   "SCP0055_SAVE_SHIPMENT_ALLO_PLAN"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0056",
+  "title": "MPP Mgmt.",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0056_MPP_Result_Mgmt/SCP0056_MPP_Result_Mgmt.cs:1197"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0056_MPP_Result_Mgmt/SCP0056_MPP_Result_Mgmt.Designer.cs:1391"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "261",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0056_MPP_Result_Mgmt\\SCP0056_MPP_Result_Mgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0056_SET_MPP_NOTE",
+    "member": "SaveButton",
+    "line": "638",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0056_MPP_Result_Mgmt\\SCP0056_MPP_Result_Mgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0056_GET_MPP",
+    "member": "FindData_Main",
+    "line": "874",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0056_MPP_Result_Mgmt\\SCP0056_MPP_Result_Mgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "261",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0056_MPP_Result_Mgmt\\SCP0056_MPP_Result_Mgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0056_SET_MPP_NOTE",
+    "member": "SaveButton",
+    "line": "638",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0056_MPP_Result_Mgmt\\SCP0056_MPP_Result_Mgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0056_GET_MPP",
+    "member": "FindData_Main",
+    "line": "874",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0056_MPP_Result_Mgmt\\SCP0056_MPP_Result_Mgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCP0056_GET_MPP",
+   "SCP0056_SET_MPP_NOTE"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0056_SET_MPP_NOTE",
+    "sp": "SCP0056_SET_MPP_NOTE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "사유 저장 중 예외 시 롤백하고 오류 로그만 남김",
+    "message": null,
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT INTO scm_sys_log_batch(…ERROR_MESSAGE()…) — 결과셋 반환 없음"
+   }
+  ]
+ }
+]

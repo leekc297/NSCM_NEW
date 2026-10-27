@@ -31,16 +31,18 @@ export enum BUCKET_TYPE {
 // ⭐ AS-IS Validation MSG — 사내 SCM_ADM_MSG_M 실측 대조 완료 (2026-07-04, 신규 채번 0):
 //   AS-IS MSG00002('{0} 값은 필수 입력')는 사내에서 저장성공으로 재정의됨 → 의미 1:1 = MSG00429.
 export const MSG = {
-  // "권한을 가진 Division이 없습니다." → 사내 "Please select Division." (.cs L568)
-  REQUIRE_DIVISION: 'MSG00097',
-  // "시작일자가 종료일자보다 늦을 수 없습니다." (.cs L579 + drpPeriod_ValueChanged L980)
-  PERIOD_INVERTED: 'MSG00108',
+  // 2026-10-16 갭분석 F-15: AS-IS 번호(MSG00097/00108/00152/00004)를 그대로 쓰면 TO-BE 의 다른 문구가 떠서
+  //   같은 문구가 등록된 TO-BE 번호로 바꿨다(ZIOUI1 실측, KO/EN/CN 등록 확인).
+  // "권한을 가진 Division이 없습니다." (.cs L568, AS-IS MSG00097)
+  REQUIRE_DIVISION: 'MSG00667',
+  // "시작일자가 종료일자보다 늦을 수 없습니다." (.cs L579 + drpPeriod_ValueChanged L980, AS-IS MSG00108)
+  PERIOD_INVERTED: 'MSG01135',
   // 기간 상한 (.cs L583: AddYears(2) — 조건 2년 / AS-IS·사내 문구 '3년' 불일치는 AS-IS 자체 상태 1:1 보존)
   PERIOD_MAX: 'MSG00164',
   // "{0} value is required." — spdMain_Changed 필수 11건 (AS-IS MSG00002 의미 1:1)
   REQUIRED_VALUE: 'MSG00429',
-  // "Customer FCST 수량이 입력된 일자가 없습니다." → 사내 "No data to save." (SaveData iCount=0)
-  NO_SAVE_DATA: 'MSG00152',
+  // "Customer FCST 수량이 입력된 일자가 없습니다. Row 기준으로 …" (SaveData iCount=0, AS-IS MSG00152)
+  NO_SAVE_DATA: 'MSG01169',
   // 저장 확인 — MSG00001 '저장 하시겠습니까?' (2026-07-07 사용자 요구 — MSG00004='수정한 내용이 없습니다' 오용 수정)
   CONFIRM_SAVE: 'MSG00001',
   // "직접 INSERT 불가한 화면 — 엑셀 업로드 이용" (AS-IS InsertRow L790 1:1, 사내 기등록)

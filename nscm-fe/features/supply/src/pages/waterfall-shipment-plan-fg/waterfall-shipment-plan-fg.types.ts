@@ -14,7 +14,7 @@ export interface SearchParams {
   bucket: BUCKET_TYPE; // 단일, 기본 DAILY
   fromYyyymmdd: string; // date range from
   toYyyymmdd: string; // date range to
-  itemId: string; // 팝업 결과(ItemByDivisionModal) → p_item_id (Model)
+  itemId: string; // 팝업 결과(메1 MaterialByDivisionModal) → p_item_id (Model/Nickname)
   projectCode: string; // 팝업 결과(ProjectByDivisionModal) → p_project_code
   chkSum: boolean; // W_/M_ 합계칼럼 표시 토글 (WeeklyISO 면 체크박스 숨김, design 01 D1)
 }

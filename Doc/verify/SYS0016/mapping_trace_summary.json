@@ -1,0 +1,132 @@
+{
+ "version": 2,
+ "menu_id": "SYS0016",
+ "asis_id": "GSCM_BASECODE",
+ "generated": "2026-10-26T13:00:40",
+ "mapping_file": "",
+ "rows": 340,
+ "fe_rows": 0,
+ "action_rows": 340,
+ "fe_page": "nscm-fe\\features\\admin\\src\\pages\\notice-setup",
+ "fe_mapping_missing": true,
+ "verdict": {
+  "미검증": 280,
+  "검증완료": 60
+ },
+ "instances": 50,
+ "instance_result": {
+  "NOPATH": 3,
+  "REVIEW": 15,
+  "NA": 24,
+  "NOT_RUN": 8
+ },
+ "by_layer": {
+  "동적 생성·조회": {
+   "NOPATH": 1,
+   "REVIEW": 15,
+   "NOT_RUN": 2,
+   "NA": 6
+  },
+  "정적 디자인": {
+   "NA": 3,
+   "NOT_RUN": 1
+  },
+  "편집·검증": {
+   "NA": 3,
+   "NOT_RUN": 3
+  },
+  "CRUD": {
+   "NOT_RUN": 2,
+   "NOPATH": 2
+  },
+  "DB 실행·접근": {
+   "NA": 6
+  },
+  "팝업": {
+   "NA": 6
+  }
+ },
+ "by_check": {
+  "A1": {
+   "NA": 2
+  },
+  "A10": {
+   "NOT_RUN": 1
+  },
+  "A5": {
+   "NA": 1
+  },
+  "A6": {
+   "NA": 2
+  },
+  "D1": {
+   "NA": 1
+  },
+  "D3": {
+   "NA": 1
+  },
+  "D5": {
+   "NA": 1
+  },
+  "D6": {
+   "NOT_RUN": 1
+  },
+  "DB-SYN": {
+   "NA": 2
+  },
+  "E4": {
+   "NOT_RUN": 2
+  },
+  "F1": {
+   "NOT_RUN": 1
+  },
+  "F2": {
+   "NOPATH": 1
+  },
+  "F4": {
+   "NA": 4
+  },
+  "F5": {
+   "NOT_RUN": 1
+  },
+  "F6": {
+   "NOPATH": 1
+  },
+  "G03-WIRE": {
+   "NOPATH": 1
+  },
+  "G1": {
+   "NA": 2
+  },
+  "G5": {
+   "NA": 2
+  },
+  "H2": {
+   "NA": 1
+  },
+  "H5": {
+   "NA": 1
+  },
+  "H6": {
+   "NA": 2
+  },
+  "I1": {
+   "NOT_RUN": 1
+  },
+  "M4": {
+   "NA": 2
+  },
+  "X-REOPEN": {
+   "NOT_RUN": 1
+  },
+  "X-ROW": {
+   "REVIEW": 15
+  }
+ },
+ "todo_checks": {},
+ "unverified_reasons": {
+  "NOPATH": 168,
+  "REVIEW": 136,
+  "NOT_RUN": 159
+ }
+}

@@ -17,13 +17,20 @@ export enum SHEETS {
   MAIN = 'Main',
 }
 
-// 각 시트 커서 결과 key. NSCM 단일 cursor 표준 = 'o_rc1'(자매 SCP0048/SCP0006 등 단일그리드
-//   supply 화면 공통). SCP0027 GET(P_SCP0027_GET_PROJECTROUTE_ELECTRODE)도 단일 OUT 커서 1개라
-//   표준 'o_rc1' 로 읽는다. 미배포(procedures.d.ts 미등재)라 Base index-signature fallback 이며,
-//   실제 반환 키는 배포 후 재확인 대상(04_react-gap).
+// GET(PKG_SCP0027.P_SCP0027_GET_PROJECTROUTE_ELECTRODE) OUT 커서 결과 key — SCM_ADM_PROC_M 실측
+//   (2026-10-21 ora.py): mainList(그리드) / allList(저장검증 전체 route) / itemList(전극아이템·N0·NICK_NAME).
+//   그리드 바인딩 정본 = 'mainList'(AS-IS Tables[0]=O_MAIN_LIST). 당초 'o_rc1'("단일 커서" 오판)은
+//   mainData?.['o_rc1']=undefined → 그리드가 빈 채로 뜨던 결함(자매 SCP0048 이 2026-10-16 'mainList' 로 정정).
+//   allList/itemList 는 저장검증(F-5)·N0/NICK_NAME(F-7) 에서 읽는다.
 export enum RESPONSE_SET {
-  MAIN = 'o_rc1',
+  MAIN = 'mainList',
 }
+
+// GET 2·3번째 커서 key — 그리드 바인딩이 아니라 저장검증 전용 데이터(컬럼 메타 불요라 RESPONSE_SET enum 과 분리).
+//   allList = 조회조건 무관 전체 route(F-5 N1~N6/N9 중첩·연속성 대조 모집단, AS-IS dsFullBinding).
+//   itemList = 전극아이템 목록(F-7 N0 신규행 ITEM_ID 대조, AS-IS dsItemBinding=Tables[2]).
+export const ALL_LIST_KEY = 'allList' as const;
+export const ITEM_LIST_KEY = 'itemList' as const;
 
 /**
  * 컬럼 메타 fetch(/admin/menu/SCP0027/column)의 sheetNm 은 SCM_MST_SHEET_COLUMNS.SHEET_NAME 과
@@ -52,17 +59,26 @@ export const NEW_ROW_DEFAULT_OPERATION_GROUP_NAME = 'Electrode';
 // 저장검증 실패 셀 배경 강조(design/03 §3.4, AS-IS SetBGColor(InvalidColor)). 자매 SCP0048 동일값 준용.
 export const INVALID_CELL_BG_COLOR = '#cce5ff';
 
+// 행 타입 잠금 셀의 기본(비편집) 배경. 공용 isEditableCell 은 메타(INPUT_TP_CD='M')만 봐 전 행에 편집
+//   스타일(wj-cell-editable=#fff8cd 노랑)을 붙이므로, 행 타입으로 잠긴 셀은 이 흰색을 inline 으로 덮어
+//   그리드 기본 컬럼처럼 보이게 한다(wj-cell-editable 은 !important 아님 → inline 우선). $wj-cell 기본색.
+export const DEFAULT_CELL_BG_COLOR = '#ffffff';
+
 // 조건부 편집잠금 컬럼 범위(design/03 §3-1, R-LOCK-EXIST-ROW). INPUT_TP_CD 전건 'S' 라 메타로
 //   표현 불가 → beginningEdit override 로 배선(리터럴 하드코딩 아님, 업무규칙 화이트리스트).
-//   R-LOCK-EXIST-ROW: OPERATION_GROUP≠"E" 행 → PRIORITY~TO_YYYYMMDD + PLANT_SITE_ID 잠금(cs:445~448).
+//   R-LOCK-EXIST-ROW: OPERATION_GROUP≠"E" 행 → PLANT_SITE_ID + PRIORITY~TO_YYYYMMDD 잠금(cs:281-282).
+//   VALID_YN 은 제외 — AS-IS 는 LockRange(PRIORITY, TO_YYYYMMDD)(cs:281) + PLANT_SITE_ID(cs:282)만 잠그고
+//   그 다음 컬럼 VALID_YN 은 비전극 행에서도 편집 가능하게 둔다. [F-15]
 export const LOCK_ON_NON_ELECTRODE = [
   'PLANT_SITE_ID',
   'PRIORITY',
   'FROM_YYYYMMDD',
   'TO_YYYYMMDD',
-  'VALID_YN',
 ] as const;
-// OPERATION_GROUP=="E" & PRIORITY_SEQ≠"" (기존 저장행) → PLANT_SITE_ID 잠금(cs:452~455, 신규행만 편집).
+// 전극 기존행(opGroup='E' && PRIORITY_SEQ≠'')은 PLANT_SITE_ID 잠금(AS-IS EditButton cs:286-289).
+//   AS-IS 실측(2026-10-22 화면 이미지): Plant Site 는 값이 없는 신규/골격행(PRIORITY_SEQ='')에서만 콤보
+//   편집 가능(노랑)이고, 값이 있는 기존 route 세그먼트(PRIORITY_SEQ≠'')는 흰색/잠금이다. 2026-10-21 "전 행
+//   편집" 지시는 AS-IS 를 과하게 해석한 것으로 2026-10-22 정정 — 기존 전극행 Plant Site 는 고정.
 export const LOCK_ON_ELECTRODE_EXISTING = ['PLANT_SITE_ID'] as const;
 
 // 항상 편집불가(감사·파생·키). NICK_NAME/TACT_TIME_FLAG/OPERATION_GROUP_NAME 는 파생 잠금.
@@ -135,6 +151,26 @@ export const MSG = {
   N9_PRIORITY_ONE: 'MSG00220', // 동일기간 Priority=1 존재
 } as const;
 
+/**
+ * 저장검증 실패 알람 fallback 문구 — N 메시지(MSG00212~00220·00257·00107)가 SCM_ADM_MSG_M 에 미등록이라
+ * t(msgId) 가 번역을 못 찾아 일반 '_저장 검증 실패' 로만 뜨던 문제 보완(어느 검증 실패인지 식별 불가).
+ * t() 2번째 인자(코드 fallback)로 넘기므로 DB 등록 시 자동으로 DB 번역이 우선한다(locale JSON 수기편집 아님).
+ * 문구는 AS-IS SaveData 검증 의미 기준(design/03 §3-4).
+ */
+export const MSG_VALIDATION_FALLBACK: Record<string, string> = {
+  [MSG.N0_ELECTRODE_ITEM]: '_선택한 품번이 전극 아이템 목록에 없습니다.',
+  [MSG.N1_END_OVERLAP]: '_동일 시작일에 종료일이 다른 데이터가 있습니다.',
+  [MSG.N2_START_OVERLAP]: '_동일 종료일에 시작일이 다른 데이터가 있습니다.',
+  [MSG.N3_PLANT_DUP]: '_동일 기간에 Plant Site 가 중복됩니다.',
+  [MSG.N4_PRIORITY_DUP]: '_동일 기간에 Priority 가 중복됩니다.',
+  [MSG.N5_PERIOD_OVERLAP]: '_기간이 다른 일정과 중첩됩니다.',
+  [MSG.N6_CONTINUITY]: '_기간이 연속되지 않습니다(종료일 +1 = 다음 시작일).',
+  [MSG.N7_PRIORITY_POSITIVE]: '_Priority 는 1 이상의 정수여야 합니다.',
+  [MSG.N8_DATE_ORDER]: '_시작일이 종료일보다 클 수 없습니다.',
+  [MSG.N8_DATE_RANGE]: '_유효하지 않은 날짜입니다.',
+  [MSG.N9_PRIORITY_ONE]: '_동일 기간에 Priority 1 데이터가 존재해야 합니다.',
+};
+
 // 다국어 LABEL(design/02 §4.5, 전건 기존 등록 — 신규 0건). i18n key 유지.
 //   EDIT/CANCEL(Edit 토글 버튼)은 전사 공통 등록코드: LBL00414='Edit'/'수정', LBL00394='Cancel'/'취소'
 //   (자매 SCP0048 G-7 실측 재사용). 신규 INSERT 없이 기등록 코드 재사용.
@@ -143,8 +179,10 @@ export const LBL = {
   DIVISION: 'LBL00001',
   PLANT_SITE: 'LBL00005',
   OPERATION_GROUP: 'LBL00027',
-  MODEL: 'LBL00669',
-  VALID: 'LBL00639',
+  // 조회조건 #4 명칭 To-Be 변경(SCP0027.md): Model→Model/Nickname = LBL00618(실측 EN/KO). AS-IS 는 Model(LBL00669). [F-12a]
+  MODEL: 'LBL00618',
+  // 조회조건 #5 명칭 To-Be 변경(SCP0027.md): Valid→Active = LBL00007(실측 'Active' EN/KO). AS-IS 는 Valid(LBL00639). [F-12b]
+  ACTIVE: 'LBL00007',
   ALL: 'LBL00632',
   EDIT: 'LBL00414',
   CANCEL: 'LBL00394',

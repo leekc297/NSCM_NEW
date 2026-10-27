@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { safeString } from '@foundation/utils';
+
 import { MSG, OPERATION_GROUP_ELECTRODE } from '../project-route-electrode.constants';
 import type { MainRow } from '../project-route-electrode.types';
 import { toYmd8 } from '../utils/projectRouteElectrode.derive';
@@ -37,17 +39,26 @@ interface Period {
   plantSiteId: string;
 }
 
+// SCM_SITE/PROJECT placeholder 정규화 — 전극 라우트에서 둘 다 "값 없음"의 placeholder 인데 GET 이
+//   골격행은 '-'(BODY:209), 기존 저장행은 '/'(BODY:318 NVL(NULLIF(SALES_SITE_ID,'-'),'/'))로 서로 다르게
+//   반환한다. 신규행 default 도 '-' 라, 같은 라우트가 '-'↔'/' 로 그룹이 갈려 N1~N6/N9 가 오탐한다.
+//   placeholder('-'·'/')를 '' 로 통일해 동일 라우트로 묶는다.
+const normPlaceholder = (v: unknown): string => {
+  const s = safeString(v);
+  return s === '-' || s === '/' ? '' : s;
+};
+
 // 그룹키(design/03 §3-4). N1~N6 은 "동일 Div/Site/Project/Item"(cs:1144~ 대상행).
 //   N9 만 예외: OPERATION_GROUP='E' 면 DIVISION 제외(SCM_SITE/PROJECT/ITEM 키), 아니면 DIVISION 포함.
 const groupKey = (r: MainRow): string =>
-  `${String(r.DIVISION_ID ?? '')}^${String(r.ITEM_ID ?? '')}^${String(
-    r.SCM_SITE_ID ?? ''
-  )}^${String(r.PROJECT_CODE ?? '')}`;
+  `${String(r.DIVISION_ID ?? '')}^${String(r.ITEM_ID ?? '')}^${normPlaceholder(
+    r.SCM_SITE_ID
+  )}^${normPlaceholder(r.PROJECT_CODE)}`;
 
 // N9 전용 그룹키 — 전극(E)이면 DIVISION 제외.
 const groupKeyForN9 = (r: MainRow): string => {
-  const base = `${String(r.ITEM_ID ?? '')}^${String(r.SCM_SITE_ID ?? '')}^${String(
-    r.PROJECT_CODE ?? ''
+  const base = `${String(r.ITEM_ID ?? '')}^${normPlaceholder(r.SCM_SITE_ID)}^${normPlaceholder(
+    r.PROJECT_CODE
   )}`;
   return String(r.OPERATION_GROUP ?? '') === OPERATION_GROUP_ELECTRODE
     ? base
@@ -82,9 +93,14 @@ const nextDay = (ymd8: string): string => {
 };
 
 export const useProjectRouteElectrodeValidation = () => {
-  // electrodeItemIds: 셀 팝업 등에서 확보한 전극아이템 ID 집합(대문자). 있으면 N0 대조, 없으면 skip.
+  // changedRows: 변경행(I/M). allRoutes: 조회조건 무관 전체 route(GET allList, F-5).
+  //   electrodeItemIds: 전극아이템 ID 집합(대문자, GET itemList, F-7). 있으면 N0 대조, 없으면 skip.
   const validateElectrodeSave = useCallback(
-    (rows: MainRow[], electrodeItemIds?: Set<string>): ElectrodeValidationResult => {
+    (
+      changedRows: MainRow[],
+      allRoutes: MainRow[],
+      electrodeItemIds?: Set<string>
+    ): ElectrodeValidationResult => {
       const fail = (
         msgId: string,
         cells: { row: MainRow; column: string }[]
@@ -97,12 +113,28 @@ export const useProjectRouteElectrodeValidation = () => {
         silent: true,
       });
 
+      // 검증 모집단(F-5) = 전체 route(allRoutes, 조회조건 무관)에서 변경행(M)의 원본(PRIORITY_SEQ 매칭)을
+      //   빼고 변경행(I/M)을 더한다 — AS-IS set_ValidDataSet(dsFullBinding.Copy()+changed, cs:948-1000).
+      //   화면에 안 뜬 같은 그룹 route 와도 중첩·연속성을 대조한다. allRoutes 미수신 시 변경행만(폴백).
+      const seqOf = (r: MainRow): string => String(r.PRIORITY_SEQ ?? '');
+      const changedMSeqs = new Set(
+        changedRows.filter(c => c.CRUD_TYPE === 'M').map(seqOf).filter(Boolean)
+      );
+      const merged = [...allRoutes.filter(r => !changedMSeqs.has(seqOf(r))), ...changedRows];
+
       // 검증 대상: VALID_YN='Y' 행.
-      const targets = rows.filter(r => String(r.VALID_YN ?? '') === 'Y');
+      const targets = merged.filter(r => String(r.VALID_YN ?? '') === 'Y');
+
+      // 검증 범위(AS-IS 동치) — allRoutes 로 그룹의 기존 sibling 까지 모집단에 넣되, 실제 검증은
+      //   '변경행(I/M)이 속한 그룹'(N1~N6/N9)·'변경행'(N7/N8)으로 한정한다. 안 그러면 사용자가 손대지
+      //   않은 타 아이템 route 의 기존 불일치(연속성 갭 등)로 저장이 막힌다(AS-IS 는 변경행만 검증).
+      const changedTargets = changedRows.filter(r => String(r.VALID_YN ?? '') === 'Y');
+      const changedGroupKeys = new Set(changedRows.map(r => groupKey(r)));
+      const changedGroupKeysN9 = new Set(changedRows.map(r => groupKeyForN9(r)));
 
       // N0(MSG00257) — 신규행 ITEM_ID 가 전극아이템 목록에 존재. electrodeItemIds 있을 때만 대조.
       if (electrodeItemIds && electrodeItemIds.size > 0) {
-        for (const r of rows) {
+        for (const r of changedRows) {
           if (r.CRUD_TYPE !== 'I') continue;
           const itemId = String(r.ITEM_ID ?? '')
             .trim()
@@ -112,10 +144,12 @@ export const useProjectRouteElectrodeValidation = () => {
         }
       }
 
-      // 그룹별 기간(N1~N6 공용).
+      // 그룹별 기간(N1~N6 공용) — 변경행이 속한 그룹만 수집(그룹 내 기존 sibling 은 전부 포함).
       const groups = new Map<string, Period[]>();
       for (const r of targets) {
-        const list = groups.get(groupKey(r)) ?? [];
+        const gk = groupKey(r);
+        if (!changedGroupKeys.has(gk)) continue;
+        const list = groups.get(gk) ?? [];
         list.push({
           row: r,
           from: fromOf(r),
@@ -123,7 +157,7 @@ export const useProjectRouteElectrodeValidation = () => {
           priority: Number(r.PRIORITY),
           plantSiteId: String(r.PLANT_SITE_ID_B ?? r.PLANT_SITE_ID ?? ''),
         });
-        groups.set(groupKey(r), list);
+        groups.set(gk, list);
       }
 
       // N1(MSG00212) — 시작일 동일·종료일 상이(중첩 종료일). mark TO.
@@ -198,8 +232,9 @@ export const useProjectRouteElectrodeValidation = () => {
         }
       }
 
-      // N5(MSG00216) — 서로 다른 기간의 FROM/TO 가 타 일정 기간 내부에 걸침(중첩기간).
-      //   AS-IS cs:1405~1478. 경계 포함(>=/<=). 완전 동일 기간은 N3/N4 소관이라 제외.
+      // N5(MSG00216) — 서로 다른 기간의 FROM 또는 TO 가 타 일정 기간 내부에 엄격히 걸침(중첩기간).
+      //   AS-IS cs:1338-1339. 경계 미포함(strict >,<) — 종료일==타 시작일(맞물림)은 중첩 아님(N6 연속성 소관).
+      //   완전 동일 기간(MERGE_DATE 동일)은 N3/N4 소관이라 제외. 완전포함(contains)은 AS-IS 가 검사하지 않는다. [F-13]
       for (const periods of groups.values()) {
         for (let i = 0; i < periods.length; i++) {
           for (let j = 0; j < periods.length; j++) {
@@ -207,11 +242,9 @@ export const useProjectRouteElectrodeValidation = () => {
               continue;
             const same = periods[i].from === periods[j].from && periods[i].to === periods[j].to;
             if (same) continue;
-            const startInside =
-              periods[i].from >= periods[j].from && periods[i].from <= periods[j].to;
-            const endInside = periods[i].to >= periods[j].from && periods[i].to <= periods[j].to;
-            const contains = periods[i].to >= periods[j].to && periods[i].from <= periods[j].from;
-            if (startInside || endInside || contains) {
+            const startInside = periods[i].from > periods[j].from && periods[i].from < periods[j].to;
+            const endInside = periods[i].to > periods[j].from && periods[i].to < periods[j].to;
+            if (startInside || endInside) {
               return fail(MSG.N5_PERIOD_OVERLAP, [
                 { row: periods[i].row, column: 'FROM_YYYYMMDD' },
                 { row: periods[i].row, column: 'TO_YYYYMMDD' },
@@ -238,15 +271,15 @@ export const useProjectRouteElectrodeValidation = () => {
         }
       }
 
-      // N7(MSG00107) — PRIORITY 양의 정수(<1 금지).
-      for (const r of targets) {
+      // N7(MSG00107) — PRIORITY 양의 정수(<1 금지). 변경행만(입력값 검증).
+      for (const r of changedTargets) {
         const p = Number(r.PRIORITY);
         if (Number.isNaN(p) || p < 1)
           return fail(MSG.N7_PRIORITY_POSITIVE, [{ row: r, column: 'PRIORITY' }]);
       }
 
-      // N8 — FROM/TO 공백이면 무언 차단(N8-a), 그 외 자리수·범위·순서(MSG00219/00048).
-      for (const r of targets) {
+      // N8 — FROM/TO 공백이면 무언 차단(N8-a), 그 외 자리수·범위·순서(MSG00219/00048). 변경행만(입력값 검증).
+      for (const r of changedTargets) {
         const f = fromOf(r);
         const tv = toOf(r);
         if (!f || !tv)
@@ -269,6 +302,7 @@ export const useProjectRouteElectrodeValidation = () => {
       const n9groups = new Map<string, Period[]>();
       for (const r of targets) {
         const k = groupKeyForN9(r);
+        if (!changedGroupKeysN9.has(k)) continue; // 변경행이 속한 그룹만 검증
         const list = n9groups.get(k) ?? [];
         list.push({
           row: r,

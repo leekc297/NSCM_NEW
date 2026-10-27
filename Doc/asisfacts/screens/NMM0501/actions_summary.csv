@@ -1,0 +1,7 @@
+﻿"screen_id","class","entry_kind","entry","handler","methods","statements","rows","classified","other","call_ext","classified_pct","by_kind"
+"NMM0501","NMM0501_SSPX_SOCompletedEventArgs","ctor",".ctor",".ctor","1","2","2","2","0","0","100","FLAG:2"
+"NMM0501","NMM0501_SSPX_SOService","ctor",".ctor",".ctor","2","22","22","22","0","0","100","FLAG:8 RETURN:6 CALL_LOCAL:2 BRANCH:2 LOCAL:2 EXPR:2"
+"NMM0501","NMM0501_SSPX_SOService","unreached","(진입점 미연결)","CancelAsync","1","2","2","2","0","0","100","CALL_LOCAL:2"
+"NMM0501","NMM0501_SSPX_SOService","unreached","(진입점 미연결)","NMM0501_SSPX_SO","1","4","4","4","0","2","100","CALL_BASE:2 RETURN:2"
+"NMM0501","NMM0501_SSPX_SOService","unreached","(진입점 미연결)","NMM0501_SSPX_SOAsync","1","8","8","8","0","2","100","CALL_LOCAL:2 BRANCH:2 FLAG:2 CALL_BASE:2"
+"NMM0501","NMM0501_SSPX_SOService","unreached","(진입점 미연결)","OnNMM0501_SSPX_SOOperationCompleted","1","6","6","6","0","2","100","BRANCH:2 LOCAL:2 CALL_BASE:2"

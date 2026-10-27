@@ -55,7 +55,7 @@ set MODE=
 :loop
 if /i "%~1"=="--mode" ( set MODE=%~2 & shift & shift & goto loop )
 if not "%~1"=="" ( set IDS=%IDS% %~1 & shift & goto loop )
-REM test mode (2026-10-20): --mode admin (area ADMIN + no-auth user, master screens) | division (per-Division role accounts) | auto (users.json screens -> else meta guess)
+REM test mode (2026-10-27): --mode single (default: 1 account ADMIN or PLANNER) | admin (area ADMIN + no-auth user) | division (per role x Division accounts, CASCADE then CRUD - only screens the user designates) | auto (users.json screens -> else single)
 set MODEARG=
 if not "%MODE%"=="" set MODEARG=--mode %MODE%
 node probe-accounts.js >> %LOG% 2>&1 || echo [WARN] no account can log in (BE down or users not registered) - specs use defaultAccount
@@ -69,13 +69,47 @@ node runlock.js release
 endlocal & exit /b 6
 :gen_ok
 set PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+REM 2026-10-22: "all" = smoke, crud, auth in order, then authcrud only when crud passed (crud failed -> authcrud SKIP)
+if /i "%KIND%"=="all" goto run_all
 REM @auth also matches @authcrud, so for auth only use a lookahead
 set GREP=@%KIND%
 if /i "%KIND%"=="auth" set GREP=@auth(?!crud)
 REM with screen IDs only those spec files run (file-name filter, 2026-10-20)
 echo Playwright %KIND%%IDS% running - output goes to the log file
-if /i "%KIND%"=="all" ( node node_modules\@playwright\test\cli.js test %IDS% >> %LOG% 2>&1 ) else ( node node_modules\@playwright\test\cli.js test %IDS% --grep "%GREP%" >> %LOG% 2>&1 )
+node node_modules\@playwright\test\cli.js test %IDS% --grep "%GREP%" >> %LOG% 2>&1
 set RC=%ERRORLEVEL%
+goto after_pw
+:run_all
+set RC=0
+set CRUD_RC=
+call :one smoke
+call :one crud
+call :one auth
+if "%CRUD_RC%"=="0" goto all_authcrud
+echo [SKIP] authcrud - crud failed with exit %CRUD_RC%, authcrud not executed
+echo [SKIP] authcrud - crud failed with exit %CRUD_RC% >> %LOG%
+goto all_done
+:all_authcrud
+call :one authcrud
+:all_done
+echo log: %LOG%
+node runlock.js release
+endlocal & exit /b %RC%
+:one
+set K=%1
+set G=@%K%
+if /i "%K%"=="auth" set G=@auth(?!crud)
+echo Playwright %K%%IDS% running - output goes to the log file
+echo ---- %K% >> %LOG%
+node node_modules\@playwright\test\cli.js test %IDS% --grep "%G%" >> %LOG% 2>&1
+set KRC=%ERRORLEVEL%
+node report.js
+if errorlevel 1 if "%KRC%"=="0" set KRC=3
+if /i "%K%"=="crud" set CRUD_RC=%KRC%
+if not "%KRC%"=="0" echo [FAIL] %K% exit %KRC%
+if not "%KRC%"=="0" if "%RC%"=="0" set RC=%KRC%
+exit /b 0
+:after_pw
 REM 2026-10-21: propagate exit code (before, the last command's 0 was returned even when Playwright could not start - SCP0100)
 if "%RC%"=="0" goto pw_ok
 echo [FAIL] Playwright exit code %RC% - log tail:

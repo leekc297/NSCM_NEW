@@ -7,6 +7,7 @@ export interface SearchParams {
   divisionId: string; // 콤마 다중(전체=ALL) — cboDivision(Division_SCP + EE 클라 제외)
   plantId: string; // 콤마 다중(전체=ALL) — clbPlant(PlantByGroup_SCP, @divisionId cascade)
   itemId: string; // Item 팝업 반환값/텍스트 다중 — txtItem_Id(Material 라벨)
+  detail: boolean; // Detail 체크 — 상세 22컬럼 표시 토글(chkDetail, 기본 false=숨김). SP 미전달(setFilters 명시키만)
 }
 
 // 조회 결과 행 — GET SP 반환 ∩ SCM_MST_SHEET_COLUMNS 메타(design 03 §1, 47컬럼). 컬럼셋은

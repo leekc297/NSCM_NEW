@@ -13,9 +13,11 @@ import { useShipmentPlanElectrodeStore } from '../useShipmentPlanElectrodeStore'
 
 interface Props {
   onDetailSearch: () => void; // btnSearch — 활성 Detail sheet 재조회
-  // btnItemId2 → ItemByDivisionModal(page 소유). 상세 Material 팝업(AS-IS BtnMaterialId2_Click cs:824~).
+  // btnItemId2 → MaterialByDivisionModal(page 소유). 상세 Material 팝업(AS-IS BtnMaterialId2_Click cs:824~).
   onItemSearch2: () => void;
-  // btnRequestor → RequestorModal(page 소유). PlanDetail 전용(AS-IS BtnRequestor_Click cs:1812~).
+  // Model/Nickname 돋보기 → MaterialByDivisionModal(page 소유, 사용자 지시 2026-10-22).
+  onModelSearch2: () => void;
+  // btnRequestor → SsoUserModal(공용, page 소유). PlanDetail 전용(AS-IS BtnRequestor_Click cs:1812~).
   onRequestorSearch: () => void;
 }
 
@@ -44,6 +46,7 @@ const toOptions = (rows: { CODE?: unknown; NAME?: unknown }[] | undefined): Opti
 export const ShipmentPlanElectrodeDetailBar = ({
   onDetailSearch,
   onItemSearch2,
+  onModelSearch2,
   onRequestorSearch,
 }: Props) => {
   const { t } = useTranslation();
@@ -84,29 +87,10 @@ export const ShipmentPlanElectrodeDetailBar = ({
           </div>
         )}
 
-        {/* Model — txtModel2 (PlanDetail 전용). P_MODEL_ID(저장 시 store 에서 ToUpper). */}
-        {fieldSet.model && (
-          <div className={styles.detailBarField}>
-            <FormItem
-              className={`${commonStyles.formItem} ${styles.detailBarFieldItem}`}
-              label={t(LBL.MODEL, '_Model')}
-              labelAlign='right'
-              render={() => (
-                <InputField
-                  fullWidth
-                  value={sc.detailModelId}
-                  onChange={e => set({ detailModelId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
-                />
-              )}
-            />
-          </div>
-        )}
-
         {/* Material — txtItemId2 + btnItemId2 팝업(ItemByDivisionModal, page 소유). 3-sheet 공통.
             빈 반환 시 기존값 유지(AS-IS BtnMaterialId2_Click cs:824~836). */}
         {fieldSet.material && (
-          <div className={styles.detailBarField}>
+          <div className={`${styles.detailBarField} ${styles.detailBarPopupField}`}>
             <FormItem
               className={`${commonStyles.formItem} ${styles.detailBarFieldItem}`}
               label={t(LBL.MATERIAL, '_Material')}
@@ -135,18 +119,42 @@ export const ShipmentPlanElectrodeDetailBar = ({
           </div>
         )}
 
-        {/* Nick Name — txtNickName2 (PlanDetail/StockDetail). P_NICK_NAME(저장 시 store 에서 ToUpper). */}
-        {fieldSet.nickName && (
-          <div className={styles.detailBarField}>
+        {/* Model/Nickname — Model + NickName 통합(사용자 지시 2026-10-22). txtModel2 + 돋보기
+            (MaterialByDivisionModal, page 소유). 노출: fieldSet.model || fieldSet.nickName
+            (PlanDetail: model+nickName SP 둘 다 / StockDetail: nickName SP 만 — 품번은 Material 칸).
+            팝업 선택 → detailModelId + detailNickName 둘 다 세팅. 직접입력은 detailModelId 만(nickName 비움).
+            Shipment Date 와 겹쳐 Material 과 자리를 바꿈(2026-10-19). */}
+        {(fieldSet.model || fieldSet.nickName) && (
+          <div className={`${styles.detailBarField} ${styles.detailBarPopupField}`}>
             <FormItem
               className={`${commonStyles.formItem} ${styles.detailBarFieldItem}`}
-              label={t(LBL.NICK_NAME, '_Nick Name')}
+              label={t(LBL.MODEL, '_Model/Nickname')}
               labelAlign='right'
               render={() => (
                 <InputField
                   fullWidth
-                  value={sc.detailNickName}
-                  onChange={e => set({ detailNickName: e.target.value })}
+                  className={commonStyles.popupSearchField}
+                  value={sc.detailModelId}
+                  InputProps={{
+                    endAdornment: (
+                      // 클릭을 아이콘이 아닌 버튼 전체에 건다(2026-10-23).
+                      // <Button
+                      //   appearance='outlined'
+                      //   priority='normal'
+                      //   iconComponent={
+                      //     <FunctionSearchIcon appearance='lined' onClick={onModelSearch2} />
+                      //   }
+                      // />
+                      <Button
+                        appearance='outlined'
+                        priority='normal'
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onModelSearch2}
+                      />
+                    ),
+                  }}
+                  // 직접입력은 품번(detailModelId) 기준 — 이전 팝업에서 세팅된 detailNickName 보조조건을 지운다.
+                  onChange={e => set({ detailModelId: e.target.value, detailNickName: '' })}
                   onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
                 />
               )}
@@ -154,10 +162,10 @@ export const ShipmentPlanElectrodeDetailBar = ({
           </div>
         )}
 
-        {/* Requestor — txtRequestor + btnRequestor 팝업(RequestorModal, page 소유, PlanDetail 전용).
+        {/* Requestor — txtRequestor + btnRequestor 팝업(공용 SsoUserModal, page 소유, PlanDetail 전용).
             AS-IS 는 p_requestor 로 표시명을 전달 — 선택/직접입력 모두 표시명을 detailRequestor 에 둔다. */}
         {fieldSet.requestor && (
-          <div className={styles.detailBarField}>
+          <div className={`${styles.detailBarField} ${styles.detailBarPopupField}`}>
             <FormItem
               className={`${commonStyles.formItem} ${styles.detailBarFieldItem}`}
               label={t(LBL.REQUESTOR, '_Requestor')}

@@ -1,0 +1,49 @@
+# [Harness] SSP0023 shipment-plan-electrode — BLOCK 0 / WARN 47
+
+- WARN F13 native HTML 폼 요소 금지 — LGES 디자인 시스템(FormItem/InputField/Button) 사용 (룰 06 §3.1/§3.7) @components/ShipmentPlanElectrodeForm.tsx:321
+- WARN F13 native HTML 폼 요소 금지 — LGES 디자인 시스템(FormItem/InputField/Button) 사용 (룰 06 §3.1/§3.7) @components/ShipmentPlanElectrodeForm.tsx:322
+- WARN M05 구현 위치 파일 없음: D00-1-058 → ShipmentPlanElectrodeForm.tsx @__asis-mapping__.md
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_SAVE_SHIPMENT_REQUEST_CONFIRM (SSP0023_SAVE_SHIPMENT_REQUEST_CONFIRM) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM (SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM (SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_GET_SHIPMENT_STATUS (SSP0023_GET_SHIPMENT_STATUS) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_GET_ERP_SO_NO_CNT (SSP0023_GET_ERP_SO_NO_CNT) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_SAVE_SHIPMENT_REQUEST_DRAFTING (SSP0023_SAVE_SHIPMENT_REQUEST_DRAFTING) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_DELETE_SHIPMENT_REQUEST_DRAFTING (SSP0023_DELETE_SHIPMENT_REQUEST_DRAFTING) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH (PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_GET_SHIPMENT_PLAN (SSP0023_GET_SHIPMENT_PLAN) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_GET_SHIPMENT_PLAN_DETAIL (SSP0023_GET_SHIPMENT_PLAN_DETAIL) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_GET_SHIPMENT_PLAN_STOCK_DETAIL (SSP0023_GET_SHIPMENT_PLAN_STOCK_DETAIL) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_GET_SHIPMENT_PLAN_RESULT (SSP0023_GET_SHIPMENT_PLAN_RESULT) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_GET_SHEET_CALENDAR_3SPAN (SSP0023_GET_SHEET_CALENDAR_3SPAN) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_SAVE_SHIPMENT_PLAN_SIMU (SSP0023_SAVE_SHIPMENT_PLAN_SIMU) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0023_GET_SHIPMENT_PLAN_DETAIL_EXCEL (SSP0023_GET_SHIPMENT_PLAN_DETAIL_EXCEL) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME (SCM_SSP_CHECK_CONFIRM_CHANGETIME) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0002_GET_USER_INFO_LIST (SSP0002_GET_USER_INFO_LIST) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN H04 As-is 라디오 rdButton3(UsrRadio) 인데 페이지에 RadioGroup/Radio 가 없음 — 드롭다운 대체 금지. @shared/lges 의 RadioGroup+Radio(labelText) 로 구현하거나, 카탈로그 '조회조건 삭제' 면 매핑표 행을 '제외'(근거 기재)로 @__asis-mapping__.md
+- WARN H04 As-is 라디오 rdButton1(UsrRadio) 인데 페이지에 RadioGroup/Radio 가 없음 — 드롭다운 대체 금지. @shared/lges 의 RadioGroup+Radio(labelText) 로 구현하거나, 카탈로그 '조회조건 삭제' 면 매핑표 행을 '제외'(근거 기재)로 @__asis-mapping__.md
+- WARN H04 As-is 라디오 rdButton2(UsrRadio) 인데 페이지에 RadioGroup/Radio 가 없음 — 드롭다운 대체 금지. @shared/lges 의 RadioGroup+Radio(labelText) 로 구현하거나, 카탈로그 '조회조건 삭제' 면 매핑표 행을 '제외'(근거 기재)로 @__asis-mapping__.md
+- WARN V01 As-is Validation 10건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- WARN V01 As-is Expression 139건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00284 — AS-IS '실행중 에러가 발생했습니다.' / TO-BE MSG00284 = 'Grid 가 준비되지 않았습니다.' → 문구로 찾은 TO-BE ID MSG01288 @shipment-plan-electrode.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00003 — AS-IS '실행중 에러가 발생했습니다.\n\r {0}' / TO-BE MSG00003 = '저장에 실패하였습니다.' → 문구로 찾은 TO-BE ID MSG01041 @shipment-plan-electrode.constants.ts
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 17건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ2 [MSG00313] 변경된 Plan Date가 존재 합 / 조회(SEARCH) SEQ4 [MSG00108] 시작일자가 종료일자보다 늦을 수 없 / 조회(SEARCH) SEQ5 [MSG00172] 최대 조회일은 From Date + / 편집(EDIT) — Shipment Plan(Electrode) SEQ1 [MSG00251] SSP Planner 권한이 없는  / 편집(EDIT) — 하단 Detail SEQ1 [MSG00251] SSP Planner 권한이 없는  … → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SSP_화면_VALIDATION_취합_20261022/SSP0023.md
+- WARN VR2 MSG00013 — VALIDATION 취합 판정: 조회(SEARCH) SEQ3 AS-IS MSG00049 [메시지 불일치] — [메시지 불일치] 불일치 — AS-IS=날짜 형식 오류, TO-BE=필수 입력 안내(공란만 검사·형식 검사 없음, 달력 입력) / TO-BE 마스터 같은 의미 I @shipment-plan-electrode.constants.ts:226
+- WARN VR2 MSG00133 — VALIDATION 취합 판정: 저장(SAVE) — Shipment Plan Detail SEQ5 AS-IS MSG00133 [메시지 불일치] — [메시지 불일치] TO-BE 미등록 — 마스터에 MSG00133 없음 → "__No modifications…" fallback 노출. 의미는 일치 / TO-BE @shipment-plan-electrode.constants.ts:238
+- WARN SC1 조회조건 순서가 기준표(SSP SCP_DM_SSP 화면별 조회조건 정리_260731_(1차 완료).xlsx 1101~1134행)와 다를 수 있음(라벨 대조): 'Material' 이 'Model' 보다 앞 — 기준 순서: Div → Company → From Site → Bucket → UOM → Cell → Pancake m → Including Past Period → Plan Date → Period → Material → Model/Nickname → My Model → Part Leader → Team Leader → Delegatee Model (40_SEARCH_COND.md #### SSP0023) @components/ShipmentPlanElectrodeForm.tsx:268
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/RequestorModal.tsx:100
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ShipmentPlanElectrodeMainGrid.tsx:351
+- WARN R16 진입 Page 543 라인 > 400 — components/ 분리 (#9) @ShipmentPlanElectrode.tsx
+- WARN B19 validation.md 10행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
+- WARN B19 expressions.md 139행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SSP0023/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0023/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0023/SSP0023_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0023/SSP0023_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SSP0023_GET_SHIPMENT_PLAN_DETAIL_EXCEL · 시트 'excel') — 누락 language, nonChk — 현재 키: divisionId, companyId, fromSite, itemId, modelId, nickName, requestor, planStartYyyymmdd, fromYyyymmdd, toYyyymmdd, dblFlag, realFlag, programId, sheetName, myModelChk, delegateeChk, partLeaderChk, teamLeaderChk, userId, debugMode · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SSP0023_GET_SHIPMENT_PLAN · 시트 'main') — 누락 nonChk — 현재 키: divisionId, companyId, fromSite, planStartYyyymmdd, fromYyyymmdd, toYyyymmdd, modelId, itemId, nickName, userId, programId, sheetName, realFlag, myModelChk, delegateeChk, partLeaderChk, teamLeaderChk · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SSP0023_GET_SHIPMENT_PLAN_DETAIL · 시트 'planDetail') — 누락 language, nonChk — 현재 키: divisionId, companyId, fromSite, itemId, modelId, nickName, requestor, planStartYyyymmdd, fromYyyymmdd, toYyyymmdd, dblFlag, realFlag, programId, sheetName, myModelChk, delegateeChk, partLeaderChk, teamLeaderChk, userId, debugMode · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SSP0023_GET_SHIPMENT_PLAN_STOCK_DETAIL · 시트 'stockDetail') — 누락 nonChk — 현재 키: divisionId, companyId, fromSite, planStartYyyymmdd, itemId, nickName, lotId, userId, programId, sheetName, myModelChk, delegateeChk, partLeaderChk, teamLeaderChk · BE positional 매핑이라 값이 NULL 로 감
+- WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: InitSpreadDateColumn:738, InitSpreadDateColumn:744 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpreadDateColumn / 738 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md

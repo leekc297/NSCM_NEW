@@ -31,6 +31,9 @@ export const ConstraintMgmtMasterGrid = ({
   const setActiveGrid = useConstraintMgmtStore(state => state.setActiveGrid);
   const setSubFilters = useConstraintMgmtStore(state => state.setSubFilters);
   const applyDynamicSubColumns = useConstraintMgmtStore(state => state.applyDynamicSubColumns);
+  const mainLookupType = useConstraintMgmtStore(state => state.mainLookupType);
+  const mainLookupTypeRef = useRef(mainLookupType);
+  mainLookupTypeRef.current = mainLookupType;
 
   const canEditRef = useRef(canEdit);
   canEditRef.current = canEdit;
@@ -61,16 +64,33 @@ export const ConstraintMgmtMasterGrid = ({
 
     const hitTest = grid.hitTest(mouseEvent);
     if (hitTest.cellType !== CellType.Cell) return;
-    if (canEditRef.current && GridUtils.isEditableCell(grid, hitTest.row, hitTest.col)) return;
+    // 편집 칸에서도 하단 조회되도록 제외(2026-10-15, c55755cf 원복). 원복 시 아래 주석 해제.
+    // if (canEditRef.current && GridUtils.isEditableCell(grid, hitTest.row, hitTest.col)) return;
 
     const dataItem = GridUtils.getRow(grid, hitTest.row);
     if (!dataItem) return;
 
     const lookupType = String(dataItem.LOOKUP_TYPE ?? '');
     if (!lookupType) return;
+    // 이미 하단에 띄운 LOOKUP_TYPE 이면 재조회 생략(2026-10-15).
+    if (lookupType === mainLookupTypeRef.current) return;
 
     applyDynamicSubColumns(dataItem);
     setSubFilters(lookupType);
+  };
+
+  // 편집 종료로 셀이 다시 그려지면 브라우저 dblclick 이 빠질 수 있어 같은 행 연속 클릭도 더블클릭으로 본다.
+  //   중복 호출은 위 같은 LOOKUP_TYPE 가드가 막는다.
+  const lastClickRef = useRef({ row: -1, time: 0 });
+  const handleClick = (mouseEvent: MouseEvent) => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const hitTest = grid.hitTest(mouseEvent);
+    if (hitTest.cellType !== CellType.Cell) return;
+    const now = Date.now();
+    const last = lastClickRef.current;
+    lastClickRef.current = { row: hitTest.row, time: now };
+    if (last.row === hitTest.row && now - last.time < 500) handleDblClick(mouseEvent);
   };
 
   return (
@@ -83,6 +103,7 @@ export const ConstraintMgmtMasterGrid = ({
       sheetName={SHEETS.LOOKUP_MASTER}
       gotFocus={handleGotFocus}
       dblClick={handleDblClick}
+      click={handleClick}
     />
   );
 };

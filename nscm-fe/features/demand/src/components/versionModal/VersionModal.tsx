@@ -444,12 +444,12 @@ export const VersionModal = ({
             searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleSearch}
             conditions={
-              /* styles.searchGrid = display:contents 스코프 래퍼 — 4필드 라벨 열을 글자 폭에 맞춘다
-                 (기본 100px 고정 라벨이 셀 폭을 먹어 Div 콤보가 잘리던 문제. scss 주석 참조).
-                 칸 배분은 Div / Type / Period / Description 각 3칸 = 12칸 균등.
-                 라벨이 고정 100px 이 아니라 글자 폭만 쓰므로 Period(달력 2개 = 110px x 2 + 구분자)도
-                 3칸에 들어가고, 나머지 셋은 모두 종전보다 넓어진다. */
-              <div className={styles.searchGrid}>
+              /* 칸 배분은 Div / Type / Period / Description 각 3칸 = 12칸 균등.
+                 필수: 4필드를 래퍼 없이 SearchArea 의 Grid container 직계 자식으로 둔다. 공통 조회조건
+                 그리드(CONDITIONS_GRID_LAYOUT_SX)의 칸 폭 규칙이 직계 자식에만 걸려, 래퍼로 감싸면
+                 칸이 한 트랙으로 쪼그라들어 서로 겹친다(2026-10-27). 라벨 폭·칸 최소폭은 다른
+                 Version 팝업(MetalLinkVersionModal 등)과 같이 공통 규칙을 그대로 쓴다. */
+              <>
                 {/* V-1 Division = 표준 카탈로그 DivisionField. AS-IS L119~120 `SelectedValue=_sDiv;
                     Enabled=false` 1:1 — 부모 확정값이라 비활성(값은 부모가 소유).
                     disabled 필수: onChange 를 no-op 으로 둔 것만으로는 목록이 열려 고를 수 있어
@@ -495,7 +495,7 @@ export const VersionModal = ({
                     )}
                   />
                 </Grid>
-              </div>
+              </>
             }
           />
 

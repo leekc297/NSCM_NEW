@@ -24,7 +24,7 @@ interface MetalLinkPriceFormProps {
 // AS-IS DMF0074_MetalLinkPrice 조회조건 9 (SetChangeControl L100~159 + Designer 1:1):
 //   Division(단일 필수) / Team / End Customer / Sales Site / Plant Site(81* 전용) /
 //   Project(text+modal — 40 비활성) / Model(text+modal) / Plan Date(월 범위, 필수) /
-//   Version(text+modal, 기본 'Current' — Division 변경 시 clear .cs L574)
+//   Version(text+modal, 기본 'Current' — Division/Team 변경 시 'Current' 로 복귀)
 export const MetalLinkPriceForm = ({
   onSubmit,
   setOpenPrjByDivisionModal,
@@ -179,7 +179,8 @@ export const MetalLinkPriceForm = ({
                   options={buildComboOptions(divisions)}
                   onChange={(_, option) => {
                     // AS-IS clbDivisions SIC (.cs L249) — 하위 콤보 5종 reset + Project/PlantSite
-                    //   활성 분기 + Version clear (.cs L574 — 버전은 division 종속)
+                    //   활성 분기 + Version 초기화. 버전NO 는 division 종속이라 지우되, 빈칸이 아니라
+                    //   진입 기본값 'Current' 로 되돌린다. 빈칸이면 조회마다 Version 입력 요구가 떠서다.
                     setSearchParams({
                       divisionId: String(option ?? ''),
                       team: '',
@@ -187,7 +188,7 @@ export const MetalLinkPriceForm = ({
                       salesSite: '',
                       plantSite: '',
                       project: '',
-                      version: '',
+                      version: 'Current',
                       modelNickname: '',
                     });
                     setComboTrigger('change');
@@ -209,7 +210,7 @@ export const MetalLinkPriceForm = ({
                 salesSite: '',
                 plantSite: '',
                 project: '',
-                version: '',
+                version: 'Current',
                 modelNickname: '',
               });
               setComboTrigger('change');

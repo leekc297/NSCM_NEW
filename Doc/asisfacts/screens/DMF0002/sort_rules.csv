@@ -1,0 +1,10 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+DMF0002,SQL,DMF0002_GET_MONTH_TO_WEEK_DATA,Doc\asisfacts\db\modules\dbo.DMF0002_GET_MONTH_TO_WEEK_DATA.sql,34,,MONTH_NAME,"THEN 'UNLOCK_' + CONVERT(CHAR(1), ROW_NUMBER() OVER(PARTITION BY C.month_name  ORDER BY C.month_name ASC))",2,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+DMF0002,SQL,DMF0002_GET_MONTH_TO_WEEK_DATA,Doc\asisfacts\db\modules\dbo.DMF0002_GET_MONTH_TO_WEEK_DATA.sql,35,,MONTH_NAME,"ELSE 'LOCK_' + CONVERT(CHAR(1), ROW_NUMBER() OVER(PARTITION BY month_name  ORDER BY month_name ASC))",2,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+DMF0002,SQL,DMF0002_GET_WEEK_TO_DAY_DATA,Doc\asisfacts\db\modules\dbo.DMF0002_GET_WEEK_TO_DAY_DATA.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+DMF0002,SQL,SCM_SYS_GET_DIVISION,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+DMF0002,SQL,Get_Month_Range,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+DMF0002,SQL,SCM_SYS_GET_SITE_BY_DIVISION,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+DMF0002,SQL,DMF0002_GET_MTOW_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0002_GET_MTOW_SPREAD_TITLE.sql,16,,MONTH_NAME,"THEN 'UNLOCK_' + CONVERT(CHAR(1), ROW_NUMBER() OVER(PARTITION BY a.month_name  ORDER BY a.month_name ASC))",2,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+DMF0002,SQL,DMF0002_GET_MTOW_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0002_GET_MTOW_SPREAD_TITLE.sql,17,,MONTH_NAME,"ELSE 'LOCK_' + CONVERT(CHAR(1), ROW_NUMBER() OVER(PARTITION BY month_name  ORDER BY month_name ASC))",2,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+DMF0002,SQL,DMF0002_SAVE_BUCKET_CONVERSION_OK,Doc\asisfacts\db\modules\dbo.DMF0002_SAVE_BUCKET_CONVERSION_OK.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

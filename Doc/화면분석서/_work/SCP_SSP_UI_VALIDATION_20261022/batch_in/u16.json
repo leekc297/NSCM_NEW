@@ -1,0 +1,384 @@
+[
+ {
+  "screen": "SCP0052",
+  "title": "CAPA Report",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0052_CAPA_Report.UIL/SCP0052_CAPAReportYieldMonitoringPopup.cs:210",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0052_CAPA_Report.UIL/SCP0052_CAPA_Report.cs:1542",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0052_CAPA_Report.UIL/SCP0052_CAPA_Report.designer.cs:1555",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0052_CAPA_Report.UIL/TestCode.cs:48",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0052_CAPA_Report/POPUP/SCP0052_CAPAReportYieldMonitoringPopup.cs:210",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0052_CAPA_Report/SCP0052_CAPA_Report.cs:1542",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0052_CAPA_Report/SCP0052_CAPA_Report.designer.cs:1555"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0052_CAPA_Report.UIL/SCP0052_CAPAReportYieldMonitoringPopup.Designer.cs:115",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0052_CAPA_Report/POPUP/SCP0052_CAPAReportYieldMonitoringPopup.Designer.cs:115"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT",
+    "member": "FindData_History",
+    "line": "481",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_TOTAL_YIELD",
+    "member": "FindData_TotalYield",
+    "line": "599",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING",
+    "member": "FindData_YieldMonitoring",
+    "line": "704",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "765",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_SHEET_CALENDAR_YIELD_MONITORING",
+    "member": "GetSpdTitle2",
+    "line": "799",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "887",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING_DETAIL",
+    "member": "FindData",
+    "line": "152",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPAReportYieldMonitoringPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING_DETAIL",
+    "member": "FindData",
+    "line": "152",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\POPUP\\SCP0052_CAPAReportYieldMonitoringPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT",
+    "member": "FindData_History",
+    "line": "481",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_TOTAL_YIELD",
+    "member": "FindData_TotalYield",
+    "line": "599",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING",
+    "member": "FindData_YieldMonitoring",
+    "line": "704",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "765",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_SHEET_CALENDAR_YIELD_MONITORING",
+    "member": "GetSpdTitle2",
+    "line": "799",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "887",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING_DETAIL",
+    "member": "FindData",
+    "line": "152",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPAReportYieldMonitoringPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT",
+    "member": "FindData_History",
+    "line": "481",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_TOTAL_YIELD",
+    "member": "FindData_TotalYield",
+    "line": "599",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING",
+    "member": "FindData_YieldMonitoring",
+    "line": "704",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "765",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_SHEET_CALENDAR_YIELD_MONITORING",
+    "member": "GetSpdTitle2",
+    "line": "799",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "887",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0052_CAPA_Report.UIL\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING_DETAIL",
+    "member": "FindData",
+    "line": "152",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\POPUP\\SCP0052_CAPAReportYieldMonitoringPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT",
+    "member": "FindData_History",
+    "line": "481",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_TOTAL_YIELD",
+    "member": "FindData_TotalYield",
+    "line": "599",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING",
+    "member": "FindData_YieldMonitoring",
+    "line": "704",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "765",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_SHEET_CALENDAR_YIELD_MONITORING",
+    "member": "GetSpdTitle2",
+    "line": "799",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0052_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "887",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0052_CAPA_Report\\SCP0052_CAPA_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0052_GET_CAPA_REPORT",
+   "SCP0052_GET_CAPA_REPORT_TOTAL_YIELD",
+   "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING",
+   "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING_DETAIL",
+   "SCP0052_GET_DAY_RANGE",
+   "SCP0052_GET_SHEET_CALENDAR",
+   "SCP0052_GET_SHEET_CALENDAR_YIELD_MONITORING"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING",
+    "sp": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "CONSISTENCY",
+    "desc": "계획 수율과 실적 수율 차이로 1%p 미만 GREEN, 1~3%p YELLOW, 3%p 초과 RED 신호등 건수·정확도 산출",
+    "message": null,
+    "on_fail": "월별 GREEN/YELLOW/RED 건수 및 ACCURACY=(1-SUM(GAP)/건수)*100 집계 반환"
+   },
+   {
+    "entry_sp": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING_DETAIL",
+    "sp": "SCP0052_GET_CAPA_REPORT_YIELD_MONITORING_DETAIL",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "CONSISTENCY",
+    "desc": "계획·실적 수율 차이로 품목별 신호등(GREEN/YELLOW/RED)과 Gap% 를 표시",
+    "message": null,
+    "on_fail": "품목별 PLAN_YIELD/RESULT_YIELD/GAP/GAP_PER/SIGNAL/담당자 반환(@p_signal 로 필터, ORDER BY GAP DESC)"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0053",
+  "title": "SCP BOM (Cell~Pack)",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0053_SCPBOM/SCP0053_SCPBOM.cs:677"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0053_SCPBOM/SCP0053_SCPBOM.Designer.cs:690"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/scp-bom"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0053_GET_SCP_BOM",
+    "member": "FindData_Main",
+    "line": "387",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0053_SCPBOM\\SCP0053_SCPBOM.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0053_SAVE_SCP_BOM",
+    "member": "SaveData_Main",
+    "line": "496",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0053_SCPBOM\\SCP0053_SCPBOM.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0053_GET_SCP_BOM",
+    "member": "FindData_Main",
+    "line": "387",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0053_SCPBOM\\SCP0053_SCPBOM.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0053_SAVE_SCP_BOM",
+    "member": "SaveData_Main",
+    "line": "496",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0053_SCPBOM\\SCP0053_SCPBOM.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0053_GET_SCP_BOM",
+   "SCP0053_SAVE_SCP_BOM"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0053_SAVE_SCP_BOM",
+    "sp": "SCP0053_SAVE_SCP_BOM",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SCP BOM 저장 중 예외 시 롤백 후 F 와 오류코드·메시지·실패 행 키 반환",
+    "message": "ERROR_NUMBER() / ERROR_MESSAGE() + 실패 행 키값",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT INTO scm_sys_log_batch(…); SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0053_GET_SCP_BOM",
+    "sp": "FN_NEXT_DAY",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "FORMAT",
+    "desc": "요일 코드가 SUN~SAT 이 아니면 NULL 반환(계산 중단)",
+    "message": null,
+    "on_fail": "RETURN NULL"
+   }
+  ]
+ }
+]

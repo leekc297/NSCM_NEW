@@ -239,6 +239,13 @@ export const PRICE_MEASURES = ['LOC', 'KRW', 'USD'] as const;
 export const AUTH_MEASURES = ['SCM_FCST', 'MKT_FCST', 'LOC', 'VMI_In_Req', 'AS_In_Req'] as const;
 
 /**
+ * 참고값 컬럼 — 행 키가 아니다 (사용자 요청 2026-10-27 · DB [E20261027-DMF0082LASTUPD]/[LASTUPDORD] 와 짝).
+ * 조회 SP 는 이 두 컬럼을 줄 묶음·정렬에서 빼고 키마다 최신 수정 1쌍만 준다. 화면도 셀 병합에서 뺀다 —
+ * 자기 셀은 병합하지 않고, 다른 컬럼의 병합 키(좌측 누적)에도 넣지 않는다.
+ */
+export const REFERENCE_ONLY_BINDINGS: ReadonlySet<string> = new Set(['LAST_UPDATED_BY', 'LAST_UPDATE_DATE']);
+
+/**
  * AS-IS MSG 매핑 — 사내 MSG_M 실문구 대사 완료 (2026-07-12, fallback 신뢰 금지 룰).
  * AS-IS TB_FX_MessageInfo 원문 16종 ↔ TO-BE SCM_ADM_MSG_M 실측 재매핑:
  *   AS-IS MSG00002→MSG00429 / 00012→00001 / 00259→00662 (동ID 문구 뒤틀림 사고 방지).
@@ -272,14 +279,13 @@ export const MSG = {
   //   DMF0003(MKT FCST)이 같은 규칙에 이미 사용 중이라 신규 채번이 아니다 (mkt-fcst.constants L306).
   AS_FROM_SITE_REQUIRED: 'MSG00476',
   // ── SavePricePeriodModal (AS-IS DMF0082_SaveSalesFuturePrice_Popup MSG 전수 대사 2026-07-12) ──
-  //   AS-IS 활성 10종: 00002→00429 / 00004→00672(신규) / 00043 동일 / 00097→00667 / 00108 동일 /
+  //   AS-IS 활성 10종: 00002→00429 / 00004→00002(성공 토스트) / 00043 동일 / 00097→00667 / 00108 동일 /
   //   00113 동일(Edit 모드 부재로 TO-BE 미사용) / 00133→00004 / 00137 동일 / 00330·00409 = ID 승계 신규 등록.
   //   MSG00079 는 AS-IS 주석 블록 전용(dead) — 미배선.
   NO_CHANGES: 'MSG00004', // 수정한 내용이 없습니다. (AS-IS MSG00133)
   WORK_IN_PROGRESS: 'MSG00137', // 이전 작업이 아직 실행 중입니다. (동일)
   PERIOD_MONDAY: 'MSG00330', // 기간을 다시 선택하여 주십시오.(월요일) — AS-IS ID 승계 (P2 SQL 등록)
   PAST_PERIOD: 'MSG00409', // 과거 구간은 일괄입력이 불가합니다. — AS-IS ID 승계 (P2 SQL 등록)
-  SAVED_COUNT: 'MSG00672', // [신규 채번] {0}개의 데이터가 저장되었습니다. (AS-IS MSG00004)
   // ── ExchangeRateModal ADMIN 편집/저장 (AS-IS DMF0000_ExchangeRatePopup SaveData 2026-07-24) ──
   //   AS-IS MSG00456 원문 1:1 — 사내 부재 → MSG00689 신규 채번 (max=MSG00688+1,
   //   등록 SQL = _artifacts/_apply_corporate/DMF0082_exchange_modal_save_wiring_20260724.sql)
@@ -318,3 +324,17 @@ export const EXCHANGE_RATE_TRAILING_COLUMNS: ExchangeRateColumnMeta[] = [
 
 /** Excel Form 전용 컬럼 메타 시트. */
 export const TEMPLATE_META_SHEET = 'Sales Price Template';
+
+/**
+ * 메인 그리드에서 셀 병합·행 표시 정렬·신규행 그룹 키 대상에서 빼는 정적 컬럼 (2026-10-27 요청).
+ *
+ * 수정자·수정일은 같은 data Group 안에서도 Measure 행마다 값이 달라, 키로 쓰면 블록이 잘게 쪼개진다.
+ *   - 병합: 같은 수정자/수정일끼리 세로로 붙어 보인다.
+ *   - 표시 정렬: 같은 그룹의 Measure 행이 팝업 순서보다 수정일·수정자 순으로 먼저 갈린다.
+ *   - 신규행 그룹 키: Insert 위치가 그룹 맨 위가 아니라 Measure 행 사이로 떨어진다.
+ * 세 곳이 같은 기준이어야 화면에 보이는 블록과 Insert 기준 블록이 어긋나지 않는다.
+ */
+export const NON_GROUPING_BINDINGS: ReadonlySet<string> = new Set([
+  'LAST_UPDATED_BY',
+  'LAST_UPDATE_DATE',
+]);

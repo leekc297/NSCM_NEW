@@ -5,7 +5,7 @@ import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Box, Grid } from '@shared/mui';
 
-import { LBL, META_COMBO } from '../shipment-change-request.constants';
+import { COMBO, LBL, LOOKUP, MENU_ID } from '../shipment-change-request.constants';
 import type { RequestInfo } from '../shipment-change-request.types';
 
 interface Props {
@@ -25,11 +25,21 @@ export const RequestInfoPanel = ({ requestInfo, canEdit, onChange, onApprovalSea
   const { t } = useTranslation();
   const disabled = !canEdit;
   // Change Reason* — CHANGE_REASON_CODE_ALL(CMBO_SQL, design 03 §1.3-A / 01 §1).
-  const [changeReasons] = useTabComboQueries({ filters: [META_COMBO.CHANGE_REASON_CODE] });
-  const reasonOptions = (changeReasons ?? []).map(r => ({
-    label: str(r.NAME) || str(r.CODE),
-    value: str(r.CODE),
-  }));
+  //   필수: @lookupType/@mnuId. 종전엔 comboId 만 넘겨(`filters: ['CHANGE_REASON_CODE_ALL']`)
+  //   콤보 본문의 `WHERE A.LOOKUP_TYPE = @lookupType` 가 '' 로 치환돼 후보가 더미 '-' 1행뿐이었다
+  //   (ora.py 실측 2026-10-13: 전달 8행 vs 미전달 1행). 요청완료 필수항목이라 선택 자체가 불가능했다.
+  const [changeReasons] = useTabComboQueries({
+    filters: [{ comboId: COMBO.CHANGE_REASON, mnuId: MENU_ID, lookupType: LOOKUP.CHANGE_REASON_CODE }],
+  });
+  // 콤보는 더미행(CODE='-', NAME=NULL) + T01~T07(NAME="T01 : 물류이슈"…)을 준다. AS-IS 는
+  //   `setListBoxEx(dt, cbo, true, …)` 의 true 로 맨 앞에 'ALL' 행을 강제 삽입한다(CControl.cs:379~400).
+  //   더미행(NAME 없음)은 버리고 실제 사유코드만 옵션으로 만든다 — 선두 'ALL'(value '')은
+  //   CustomDropdown 의 `allOption` 이 공급한다. 직접 value '' 로 ALL 을 만들어 넣으면
+  //   CustomDropdown 의 센티널 제거 규칙(''/'-'/'--' 옵션 숨김, 2026-08-18 전역 확정)이 걸러
+  //   목록에 안 떴다. ALL=미선택('') 의미는 그대로라 요청완료 필수검증(changeReason '' 차단)과 일치.
+  const reasonOptions = (changeReasons ?? [])
+    .map(r => ({ label: str(r.NAME), value: str(r.CODE) }))
+    .filter(o => o.label);
 
   return (
     // 2열 배치 — AS-IS Designer 좌표 그대로다(SSP0201_ShipmentChangeRequest.Designer.cs).
@@ -161,6 +171,7 @@ export const RequestInfoPanel = ({ requestInfo, canEdit, onChange, onApprovalSea
           required
           render={() => (
             <CustomDropdown
+              allOption
               value={requestInfo.changeReason}
               options={reasonOptions}
               disabled={disabled}

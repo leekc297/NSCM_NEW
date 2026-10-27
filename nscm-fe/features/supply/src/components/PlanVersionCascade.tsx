@@ -19,6 +19,12 @@ export interface PlanVersionCascadeProps {
   variant?: 'horizontal' | 'vertical';
   labelAlign?: 'left' | 'right';
   formItemClassName?: string;
+  // 단일 입력칸(combined) — 기본 true(CascadeDropdown 기본). 단일 라벨 label·구분자 separator·
+  //   입력칸 고정폭 inputWidth 패스스루.
+  combined?: boolean;
+  label?: string;
+  separator?: string;
+  inputWidth?: number | string;
 }
 
 /**
@@ -35,6 +41,10 @@ export const PlanVersionCascade = ({
   variant,
   labelAlign,
   formItemClassName,
+  combined,
+  label,
+  separator,
+  inputWidth,
 }: PlanVersionCascadeProps) => {
   const tree = useMemo(() => buildPlanVersionTree(levels, divisionId), [levels, divisionId]);
   const cascadeLevels = useMemo(
@@ -52,6 +62,10 @@ export const PlanVersionCascade = ({
       variant={variant}
       labelAlign={labelAlign}
       formItemClassName={formItemClassName}
+      combined={combined}
+      label={label}
+      separator={separator}
+      inputWidth={inputWidth}
     />
   );
 };

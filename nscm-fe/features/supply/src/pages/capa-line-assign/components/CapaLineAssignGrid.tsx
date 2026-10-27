@@ -8,7 +8,7 @@ import { DataGrid } from '@shared/components';
 
 import {
   ADMIN_SHEET_NAME,
-  ASSIGN_HEADER_ROW_HEIGHT,
+  ASSIGN_HEADER_TOTAL_HEIGHT,
   COLUMN,
   MENU_ID,
   SHEETS,
@@ -24,7 +24,11 @@ import {
   syncCodeAndName,
   type CellComboSources,
 } from '../utils/capaLineAssign.gridCombos';
-import { applyEditModeVisibility, applyLayoutToColumns } from '../utils/capaLineAssignColumns';
+import {
+  applyEditModeVisibility,
+  applyLayoutToColumns,
+  collapseStaticLargeTier,
+} from '../utils/capaLineAssignColumns';
 
 interface Props {
   sheet: SHEETS.ASSEMBLY | SHEETS.ELTR;
@@ -92,8 +96,14 @@ export const CapaLineAssignGrid = ({
 
   // 편집모드 표시/숨김(X-F)은 개인화 오버레이 **뒤**에 얹는다 — AS-IS 도 `SetVisibleSheetColumns` 가
   //   컬럼셋 구성 말미에 호출된다(cs:5545-5548 → BeforeFindData* 경유).
+  // 정적 컬럼 1단은 AS-IS 가 숨겨 2단이다(collapseStaticLargeTier) — 개인화/편집모드 오버레이 전에 접는다.
   const columns = useMemo(
-    () => applyEditModeVisibility(applyLayoutToColumns(adminColumns, userColumnLayout), editMode, true),
+    () =>
+      applyEditModeVisibility(
+        applyLayoutToColumns(collapseStaticLargeTier(adminColumns), userColumnLayout),
+        editMode,
+        true
+      ),
     [adminColumns, userColumnLayout, editMode]
   );
 
@@ -174,7 +184,7 @@ export const CapaLineAssignGrid = ({
       if (column?.dataMap && buildCellComboCandidates(binding, row ?? {}, comboSourcesRef.current, isEltr))
         column.dataMap = null;
       if (!row) return;
-      syncCodeAndName(binding, row, comboSourcesRef.current.masterRows);
+      syncCodeAndName(binding, row, comboSourcesRef.current);
       clearSubCodes(binding, row);
       markDummyYn(row, dummyCodesRef.current);
       sender.invalidate();
@@ -233,6 +243,42 @@ export const CapaLineAssignGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columns, dateColumns, isEltr]);
 
+  // 헤더 총높이 48px 고정 — `headerRowHeight` prop 만으로는 공용 mapRawColumnsToWijmoColumns 가 정적
+  //   컬럼에 박는 명시 height 가 defaultSize 를 이겨 tier 마다 48 로 벌어진다(형제 CapaLobReportGrid
+  //   applyHeaderHeight 정본). 실제 렌더된 tier 수로 48 을 균등배분해 각 헤더 row·defaultSize 에 박는다.
+  //   목표값과 같으면 skip → updatedLayout 무한루프 방지.
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const applyHeaderHeight = () => {
+      const headerRows = grid.columnHeaders?.rows;
+      if (!headerRows || headerRows.length === 0) return;
+      const target = ASSIGN_HEADER_TOTAL_HEIGHT / headerRows.length;
+      let changed = false;
+      for (let i = 0; i < headerRows.length; i += 1) {
+        if (Math.round(headerRows[i].height ?? headerRows.defaultSize) !== Math.round(target)) {
+          headerRows[i].height = target;
+          changed = true;
+        }
+      }
+      if (Math.round(headerRows.defaultSize) !== Math.round(target)) {
+        headerRows.defaultSize = target;
+        changed = true;
+      }
+      if (changed) grid.invalidate(true);
+    };
+    grid.updatedLayout.addHandler(applyHeaderHeight);
+    applyHeaderHeight();
+    return () => {
+      try {
+        grid.updatedLayout?.removeHandler(applyHeaderHeight);
+      } catch {
+        /* unmount race */
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columns, dateColumns]);
+
   return (
     <DataGrid
       gridRef={gridRef}
@@ -244,8 +290,9 @@ export const CapaLineAssignGrid = ({
       comboParams={comboParams}
       sheetName={ADMIN_SHEET_NAME[sheet]}
       excelFileName='CapaLineAssign'
-      // 3단 헤더 총높이 48px 고정(hook #93).
-      headerRowHeight={ASSIGN_HEADER_ROW_HEIGHT}
+      // 헤더 단당 기본높이(prop 은 defaultSize 만 세팅) — 표시 2단 기준 48/2=24. 실제 총높이 48px 고정은
+      //   위 applyHeaderHeight 가 tier 수로 균등배분해 각 row 에 박는 것이 단일 출처다(hook #93).
+      headerRowHeight={ASSIGN_HEADER_TOTAL_HEIGHT / 2}
       /*
         셀 병합은 조회모드일 때만이다(AS-IS `SetSheetMergeAssign` = `SetToggleMerge(si, !editMode)`) —
         병합된 셀을 편집하면 어느 행을 고쳤는지 알 수 없다. 신규행(`CRUD_TYPE='I'`) 제외는 공용

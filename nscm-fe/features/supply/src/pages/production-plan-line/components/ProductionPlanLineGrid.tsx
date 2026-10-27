@@ -310,6 +310,23 @@ export const ProductionPlanLineGrid = ({
         //   cutoff(이번 주 월요일) 이전 pivot 셀은 실적 확정 구간이라 회색 배경으로 재현.
         if (isPastPivot(binding, cutoff)) ev.cell.style.backgroundColor = CELL_COLOR.PAST_GRAY;
 
+        // 편집가능 pivot 셀 노란색 (수정가능 표시 — AS-IS Set_FPOperationColor 편집밴드의 TO-BE 치환).
+        //   전건 INPUT_TP_CD='S' 라 공용 formatEditableColumns(wj-cell-editable) 이 안 걸리므로 여기서
+        //   직접 칠한다. isPivotCellEditable 이 measure(AMEND)·bucket 편집kind·미래·행편집가능(new_edit_mode
+        //   포함)을 이미 종합하므로 참이면 진짜 편집셀이다. 과거회색을 덮고, fix 녹색엔 덮인다(아래 우선).
+        if (
+          isPivotCellEditable(
+            binding,
+            dataItem,
+            bucketRef.current,
+            ctxRef.current,
+            cutoff,
+            editInfoRef.current
+          )
+        ) {
+          ev.cell.style.backgroundColor = CELL_COLOR.EDIT_YELLOW;
+        }
+
         // fix 확정 셀 녹색 (M4a/M2 — design 03 §3.8 #62~64 / AS-IS Set_FixCellColor cs:3621~3653).
         //   O_RC2(dtFix) FIX_KEY 8필드 + 기간키 매칭. PROD_PLAN_AMEND 행만(cs:3606). 과거회색보다 우선.
         //   Daily=D_·W_, Weekly=W_ 셀(fixCellSet 이 두 키를 모두 담음 — 보이는 버킷 셀만 매칭됨).

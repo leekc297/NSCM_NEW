@@ -20,12 +20,19 @@ export enum SHEETS {
   MAIN = 'Main',
 }
 
-// 각 시트 커서 결과 key(call-proc response 의 실제 cursor 키). NSCM 단일 cursor 표준 = 'o_rc1'
-//   (자매 SCP0005/SCP0002/SCP0007 등 단일그리드 supply 화면 공통). SCP0048 GET(P_SCP0048_GET_
-//   PROJECTROUTE_WARRANTY)도 단일 OUT 커서 1개라 표준 'o_rc1' 로 읽는다. 미배포(procedures.d.ts
-//   미등재)라 Base index-signature fallback 이며, 실제 반환 키는 배포 후 재확인 대상(04_react-gap).
+// 각 시트 커서 결과 key(call-proc response 의 실제 cursor 키).
+//   GET SP(PKG_SCP0048.P_SCP0048_GET_PROJECTROUTE_WARRANTY)는 3 cursor 를 반환한다(2026-10-16
+//   ora.py 실측): O_MAIN_LIST→'mainList', O_ALL_LIST→'allList', O_ITEM_LIST→'itemList'.
+//   이는 AS-IS DataSet 의 Tables[0]/[1]/[2] 를 그대로 옮긴 것이다(.cs FindData 390~399).
+//   그리드 바인딩은 AS-IS 가 siMain.Query(ds)=ds.Tables[0]=O_MAIN_LIST 를 쓰므로 'mainList' 가
+//   정본이다. 'allList'(O_ALL_LIST=Tables[1]=dsFullBinding 저장검증 비교본)에는 PLANT_SITE_ID_B
+//   (저장원본)·NICK_NAME·TACT_TIME_FLAG·합성 PLANT_SITE_ID 가 없어, 이를 그리드에 바인딩하면
+//   plantSiteId 가 저장 payload 에서 빈값이 되고(ORA-01407 ROLLBACK) nick/표시컬럼이 비는 사고가
+//   난다(2026-10-16 근본원인 확정). 이전 'allList' 는 세 cursor 중 하나가 온 것을 그리드용으로
+//   오인한 것이라 'mainList' 로 바로잡는다. 키 불일치 시 mainData?.[키] 가 undefined 라 그리드가
+//   빈 채로 뜬다.
 export enum RESPONSE_SET {
-  MAIN = 'o_rc1',
+  MAIN = 'mainList',
 }
 
 /**
@@ -37,8 +44,24 @@ export const COLUMN_SHEET_NAME: Record<RESPONSE_SET, string> = {
   [RESPONSE_SET.MAIN]: 'Main',
 };
 
+// SCM_SITE_ID/PROJECT_CODE "없는 값" 표식. AS-IS 는 '-' 였으나 TO-BE 는 '/' 로 통일(2026-10-19).
+//   근거: TO-BE PKG_SCP0048 GET SP 가 이미 NVL(NULLIF(..,'-'),'/') / NVL(..,'/') 로 조회 시점에
+//   '/' 로 내려준다(ora.py 실측). FE 신규행 기본값·clear·저장 payload 를 '/' 로 맞춰 BE/DB 규약과
+//   일치시킨다. '/' 는 null 회피용 기본값이자 유효한 저장값이므로 N10 저장검증은 '/' 를 미입력으로
+//   보지 않는다 — 공백/null 과 AS-IS 레거시 '-' 만 미입력(사용자 확인 2026-10-19, isSalesSiteBlank).
+export const NO_VALUE_PLACEHOLDER = '/';
+
+// SalesSite 팝업 조회조건으로 넘길 때 "없는 값" 표식은 빈 값으로 보낸다(AS-IS cs:779 .Replace("-","")
+//   의 등가). placeholder 가 그대로 넘어가면 그 값으로 좁혀 조회가 0건이 된다. 신규 규약 '/' 와
+//   기존 데이터의 '-' 를 둘 다 제거한다(저장검증 isSalesSiteBlank 와 동일 하위호환 규약).
+//   placeholder 만으로 채워진 값은 undefined 로 떨궈 조회조건에서 아예 뺀다.
+export const stripNoValuePlaceholder = (v: unknown): string | undefined => {
+  const s = String(v ?? '').replace(/[-/]/g, '');
+  return s || undefined;
+};
+
 // 사업부 분기 — div=81 만 SCM_SITE_ID/PROJECT_CODE 팝업 반환·필수(design/03 R-D5~D7, N10).
-//   그 외 사업부는 두 컬럼 "-" 고정. div=82 는 PLANT_SITE_ID 콤보 비움(design/03 R-C5).
+//   그 외 사업부는 두 컬럼 "없는 값"(NO_VALUE_PLACEHOLDER) 고정. div=82 는 PLANT_SITE_ID 콤보 비움(design/03 R-C5).
 export const DIVISION_81 = '81';
 export const DIVISION_82 = '82';
 export const isSalesSitePopupDivision = (divisionId: string): boolean => divisionId === DIVISION_81;
@@ -51,8 +74,8 @@ export const INSERT_BLOCKED_OPERATION_GROUPS = ['P', 'A'] as const;
 // 신규행 기본값(design/03 §4.1). DIVISION_ID 는 조회조건 division(len!=2 → "")으로 화면이 채운다.
 export const NEW_ROW_DEFAULT_VALID_YN = 'Y';
 export const NEW_ROW_DEFAULT_PRIORITY = '11';
-export const NEW_ROW_DEFAULT_SCM_SITE_ID = '-';
-export const NEW_ROW_DEFAULT_PROJECT_CODE = '-';
+export const NEW_ROW_DEFAULT_SCM_SITE_ID = NO_VALUE_PLACEHOLDER;
+export const NEW_ROW_DEFAULT_PROJECT_CODE = NO_VALUE_PLACEHOLDER;
 export const NEW_ROW_DEFAULT_OPERATION_GROUP_NAME = 'Warranty';
 
 // 저장검증 실패 셀 배경 강조(design/03 §3.4 R-B1/R-B2, AS-IS SetBGColor(InvalidColor)).
@@ -126,8 +149,8 @@ export const EXCLUDE_EE_DIVISION = (row: ComboResponse): boolean =>
 export const MSG = {
   REQUIRE_DIVISION: 'MSG00097', // 권한 division 없음(design/02 §7-1, 자매 SCP0006 준용)
   SAVE_RESULT: 'MSG00002', // 저장 성공 토스트(자매 SCP0006 SAVE_RESULT 관례 준용)
-  SAVE_ERROR: 'MSG00006', // 저장 에러(O_RESULT_CODE≠S)
-  NO_CHANGE: 'MSG00133', // 수정 내용 없음
+  SAVE_ERROR: 'MSG00618', // 저장 중 오류가 발생했습니다.(TO-BE DB 실측 정정, O_RESULT_CODE≠S)
+  NO_CHANGE: 'MSG00004', // 수정한 내용이 없습니다.(TO-BE DB 실측 정정)
   // Edit 진입 시 데이터 없음(R-G2). AS-IS MSG00259 는 TO-BE 미등록 → 문구기준 재매핑
   //   MSG00662("Edit mode is available after search." 3언어 등록)로 통일(자매 mkt-fcst/forecast-price 선례, G-6).
   EDIT_NO_DATA: 'MSG00662',
@@ -138,21 +161,48 @@ export const MSG = {
   //   MSG01222("Can not modify its Valid." / "해당 Valid는 수정할 수 없습니다." 3언어 등록)로 통일(G-6).
   VALID_REVERT: 'MSG01222',
   // 저장검증 N1~N11(design/03 §4.3 순서: N1→N2→N5→N3→N4→N7→N8→N9→N10→N11)
-  N1_END_OVERLAP: 'MSG00212', // 중첩 종료일자
-  N2_START_OVERLAP: 'MSG00213', // 중첩 시작일자
-  N5_PERIOD_OVERLAP: 'MSG00215', // 중첩기간(기간 겹침)
-  N5_PERIOD_OVERLAP_ALT: 'MSG00216', // 중첩기간(Priority 중복/기간중첩 분기)
-  N3_PLANT_DUP: 'MSG00214', // Plant Site 중복
-  N4_PRIORITY_DUP: 'MSG00215', // Priority 중복(동일기간·PLANT상이·PRIORITY동일)
-  N7_PRIORITY_POSITIVE: 'MSG00107', // Priority 양의 정수
-  N8_DATE_ORDER: 'MSG00219', // from>to
-  N8_DATE_RANGE: 'MSG00048', // 날짜범위(<17530101 / 공백)
-  N9_PRIORITY_ONE: 'MSG00220', // Priority=1 존재
-  N10_SALES_SITE_REQUIRED: 'MSG00002', // div=81 SCM_SITE_ID/PROJECT_CODE 필수
+  //   AS-IS MSG ID(00212/213/214/215/216/220/048)는 TO-BE 미등록 → 문구기준 재매핑(G-6).
+  //   동일 영문/국문 텍스트가 TO-BE SCM_ADM_MSG_M 에 신 ID 로 3언어·USE_YN=Y 등록(2026-10-16 ora.py 실측):
+  //   00212→01223, 00213→01224, 00214→01225, 00215→01226, 00216→01227, 00220→01231, 00048→01080,
+  //   00107→01134, 00219→01230. (00107·00219 는 당초 TO-BE 기등록으로 보았으나 ora.py 실측 결과 미등록
+  //   이라 문구기준 재매핑으로 정정. MSG00107 vs MSG01134 동일성은 사용자 제보로 확인.)
+  N1_END_OVERLAP: 'MSG01223', // 중첩 종료일자(AS-IS MSG00212 재매핑)
+  N2_START_OVERLAP: 'MSG01224', // 중첩 시작일자(AS-IS MSG00213 재매핑)
+  N5_PERIOD_OVERLAP: 'MSG01226', // 중첩기간-Priority 중복(AS-IS MSG00215 재매핑)
+  N5_PERIOD_OVERLAP_ALT: 'MSG01227', // 중첩기간-기간 겹침(AS-IS MSG00216 재매핑)
+  N3_PLANT_DUP: 'MSG01225', // Plant Site 중복(AS-IS MSG00214 재매핑)
+  N4_PRIORITY_DUP: 'MSG01226', // Priority 중복(AS-IS MSG00215 재매핑)
+  N7_PRIORITY_POSITIVE: 'MSG01134', // Priority 양의 정수(AS-IS MSG00107 재매핑)
+  N8_DATE_ORDER: 'MSG01230', // from>to(AS-IS MSG00219 재매핑)
+  N8_DATE_RANGE: 'MSG01080', // 날짜범위(<17530101 / 공백)(AS-IS MSG00048 재매핑)
+  N9_PRIORITY_ONE: 'MSG01231', // Priority=1 존재(AS-IS MSG00220 재매핑)
+  // div=81 SCM_SITE_ID/PROJECT_CODE 필수. AS-IS 는 MSG00002("Salse Site Code, Project" 치환)로 썼으나
+  //   TO-BE DB 의 MSG00002 는 "Saved successfully./저장되었습니다"(성공문구)라 충돌(ora.py 실측
+  //   2026-10-19). 문구기준 재매핑으로 표준 필수문구 MSG00429("{0} value is required.")에 항목명 치환.
+  N10_SALES_SITE_REQUIRED: 'MSG00429',
+  N10_SALES_SITE_LABEL: 'Sales Site Code, Project', // MSG00429 {0} 치환 인자(AS-IS GetTerm 인자)
   // Warranty PRIORITY≥11(N11). AS-IS MSG00322 는 TO-BE 미등록 → 문구기준 재매핑
   //   MSG01319("Warranty Priority must be at least 11." 3언어 등록)로 통일(G-6).
   N11_WARRANTY_PRIORITY: 'MSG01319',
 } as const;
+
+// 저장검증 msgId 별 fallback 문구(MSG-03 `_` 접두). 재매핑 결과 N1~N11 전건이 TO-BE
+//   SCM_ADM_MSG_M 에 3언어·USE_YN=Y 로 등록되어 있으므로(2026-10-16 ora.py 실측) 런타임은 DB
+//   문구로 표시한다 → fallback 은 DB 미표시(캐시 누락 등) 대비용 안전망이며 정상 흐름에선 쓰이지
+//   않는다. 키는 MSG 상수의 신 ID 와 일치시켜 둔다. 별도 DB INSERT 는 하지 않는다.
+export const SAVE_VALIDATION_FALLBACK: Record<string, string> = {
+  MSG01223: '_중첩되는 종료일자가 있습니다.\n리스트 확인 후 입력하십시오.',
+  MSG01224: '_중첩되는 시작일자가 있습니다.\n리스트 확인 후 입력하십시오.',
+  MSG01225: '_동일 기간에 Plant Site가 중복되었습니다.\n리스트 확인 후 입력하십시오.',
+  MSG01226: '_동일 기간에 Priority가 중복되었습니다.\n리스트 확인 후 입력하십시오.',
+  MSG01227: '_중첩된 기간이 있습니다.\n리스트 확인 후 입력하십시오.',
+  MSG01231: '_해당 기간에 Priority 1이 없습니다.\n리스트 확인 후 입력하십시오.',
+  MSG01134: '_Priority는 양의 정수입니다.',
+  MSG01230: '_시작일자가 종료일자보다 늦을 수 없습니다.\n리스트 확인 후 입력하십시오.',
+  MSG01080: '_처리가능한 날짜 범위가 아닙니다.',
+  MSG01319: '_Warranty의 Priority 는 11 이상 입력해야 합니다.',
+  MSG00429: '_{0} 값은 필수 입력 항목입니다.', // N10(div=81 Sales Site/Project 필수) 재매핑
+};
 
 // 다국어 LABEL(design/02 §4.5, 전건 기존 등록 — 신규 0건). i18n key 유지.
 //   EDIT/CANCEL(Edit 토글 버튼)은 전사 공통 등록코드를 쓴다 — LBL00414='Edit'/'수정', LBL00394='Cancel'/'취소'

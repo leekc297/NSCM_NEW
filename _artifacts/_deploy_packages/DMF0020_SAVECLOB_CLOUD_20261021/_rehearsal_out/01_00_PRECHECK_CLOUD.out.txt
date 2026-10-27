@@ -1,0 +1,107 @@
+=== 00_PRECHECK_CLOUD.sql 2026-10-21 22:47:19 ===
+  CHK | DB_NAME | USR | NOW
+  L0 | ZIOUI1 | SCM_MGR | 2026-10-21 22:47:19
+  (1 rows)
+  CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+  L0 | PACKAGE | VALID | 2026-10-21 22:47:13 | 296
+  L0 | PACKAGE BODY | VALID | 2026-10-21 22:47:13 | 10212
+  (2 rows)
+BLOCK OK
+  L2 marker count spec=0 body=0 (not applied - expected)
+  L1 SPEC_ALL  P_ACTIVE_FLAG       IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_DIVISION_ID       IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_PROJECT_CODE      IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_SCM_SITE_ID       IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_PLANT_SITE_ID     IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_ITEM_ID           IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_YYYYMMDD          IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_CURRENCY          IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_MEASURE           IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_DOM_EXP           IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_FCST_TYPE         IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_INCOTERMS         IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_PRICE             IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_CREATED_BY        IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_CREATION_DATE     IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_LAST_UPDATED_BY   IN  VARCHAR2,                    1 PASS
+  L1 SPEC_ALL  P_ROWNUM            IN  VARCHAR2,                    1 PASS
+  L1 SPEC_POP  p_active_flag             IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_DIVISION_ID             IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_PROJECT_CODE            IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_SCM_SITE_ID             IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_PLANT_SITE_ID           IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_ITEM_ID                 IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_YYYYMMDD                IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_CURRENCY                IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_MEASURE                 IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_DOM_EXP                 IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_FCST_TYPE               IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_INCOTERMS               IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_PRICE                   IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_CREATED_BY              IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_CREATION_DATE           IN  VARCHAR2,              1 PASS
+  L1 SPEC_POP  p_LAST_UPDATED_BY         IN  VARCHAR2,              1 PASS
+  L1 BODY_ALL  P_ACTIVE_FLAG       IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_DIVISION_ID       IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_PROJECT_CODE      IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_SCM_SITE_ID       IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_PLANT_SITE_ID     IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_ITEM_ID           IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_YYYYMMDD          IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_CURRENCY          IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_MEASURE           IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_DOM_EXP           IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_FCST_TYPE         IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_INCOTERMS         IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_PRICE             IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_CREATED_BY        IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_CREATION_DATE     IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_LAST_UPDATED_BY   IN  VARCHAR2,                    1 PASS
+  L1 BODY_ALL  P_ROWNUM            IN  VARCHAR2,                    1 PASS
+  L1 A2 anchor 1 PASS
+  L1 A3 region len=7122 tok=33 (expected 7122/33 or 7122/33) PASS
+  L1 A5 region len=1589 tok=1 (expected 1589/1 or 1589/1) PASS
+  L1 A6 region len=1765 tok=1 (expected 1765/1 or 1765/1) PASS
+  L1 A7 region len=970 tok=10 (expected 970/10 or 970/10) PASS
+  L1 A8 region len=970 tok=10 (expected 970/10 or 970/10) PASS
+  L1 A4 start 1 end 1 PASS
+  L1 BODY_POP  p_active_flag             IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_DIVISION_ID             IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_PROJECT_CODE            IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_SCM_SITE_ID             IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_PLANT_SITE_ID           IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_ITEM_ID                 IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_YYYYMMDD                IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_CURRENCY                IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_MEASURE                 IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_DOM_EXP                 IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_FCST_TYPE               IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_INCOTERMS               IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_PRICE                   IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_CREATED_BY              IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_CREATION_DATE           IN  VARCHAR2,              1 PASS
+  L1 BODY_POP  p_LAST_UPDATED_BY         IN  VARCHAR2,              1 PASS
+  L1 P2 start 1 end 1 PASS
+  L1 P2B anchor 1 PASS
+  L1 P3 start 1 end 1 PASS
+  L1 P4 region len=8829 tok=22 (expected 8829/22 or 8804/22) PASS
+  L1 P4 extract-tail 1 ELSE 1 PASS
+  CHK | PROC_NM | DATA_TP_CD | COL_TP_CD | N | JUDGE
+  L3 PROC_M | PKG_DMF0020.P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL | VARCHAR | IN | 17 | VARCHAR (expected before apply)
+  L3 PROC_M | PKG_DMF0020.P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL | CURSOR | OUT | 1 | 
+  L3 PROC_M | PKG_DMF0020.P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL | PROC_RESULT | OUT | 1 | 
+  L3 PROC_M | PKG_DMF0020.P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP | VARCHAR | IN | 16 | VARCHAR (expected before apply)
+  L3 PROC_M | PKG_DMF0020.P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP | CURSOR | OUT | 1 | 
+  (5 rows)
+  CHK | NAME | TYPE | STATUS
+  L4 dependents | DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL | PROCEDURE | VALID
+  L4 dependents | DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP | PROCEDURE | VALID
+  L4 dependents | PKG_DMF0000 | PACKAGE BODY | VALID
+  L4 dependents | PKG_DMF0082 | PACKAGE BODY | VALID
+  (4 rows)
+  CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+  (0 rows)
+  CHK | MNU_ID | SHT_NM | MNU_BTN_CD | API_URL | USE_YN
+  L6 wiring | DMF0020 | main | SAVE | PKG_DMF0020.P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL | Y
+  L6 wiring | DMF0020 | priceBatch | SAVE | PKG_DMF0020.P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP | Y
+  (2 rows)

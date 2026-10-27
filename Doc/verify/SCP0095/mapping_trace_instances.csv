@@ -1,0 +1,489 @@
+﻿key,trace_row,check,layer,et,name,display,impl,result,why,rows,cs
+X-LOC|ROW:D00-1-001,T-00d4b4a2,X-LOC,GEN,ROW,D00-1-001,D00-1-001,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-001,T-eeef0c4e,X-ROW,GEN,ENTRY,D00-1-001,D00-1-001,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-002,T-308ea6aa,X-LOC,GEN,ROW,D00-1-002,D00-1-002,Y,PASS,구현 위치 실존 1곳,1,
+G4|COND:cboDivision,T-fabe79b3,G4,DESIGN,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,5,SCP0095_GlobalPSI_Elec.cs:360 SCP0095_GlobalPSI_Elec.cs:361 SCP0095_GlobalPSI_Elec.cs:363 SCP0095_GlobalPSI_Elec.cs:365 SCP0095_GlobalPSI_Elec.cs:367 SCP0095_GlobalPSI_Elec.cs:513 SCP0095_GlobalPSI_Elec.cs:514 SCP0095_GlobalPSI_Elec.cs:515 SCP0095_GlobalPSI_Elec.cs:516 SCP0095_GlobalPSI_Elec.cs:517
+SC1|SCREEN,T-01415264,SC1,DESIGN,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(check.js SC1·smoke 기준표 순서) — 실행 필요: smoke,15,
+G1|COND:cboDivision,T-18c76954,G1,GEN,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,1,
+G6|COND:cboDivision,T-70fdd892,G6,GEN,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,5,SCP0095_GlobalPSI_Elec.cs:360 SCP0095_GlobalPSI_Elec.cs:361 SCP0095_GlobalPSI_Elec.cs:363 SCP0095_GlobalPSI_Elec.cs:365 SCP0095_GlobalPSI_Elec.cs:367 SCP0095_GlobalPSI_Elec.cs:513 SCP0095_GlobalPSI_Elec.cs:514 SCP0095_GlobalPSI_Elec.cs:515 SCP0095_GlobalPSI_Elec.cs:516 SCP0095_GlobalPSI_Elec.cs:517
+B1|COND:cboDivision,T-1df17119,B1,COMBO,COND,cboDivision,cboDivision / Division,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B2|COND:cboDivision,T-b325cf17,B2,COMBO,COND,cboDivision,cboDivision / Division,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B4|COND:cboDivision,T-464e597f,B4,COMBO,COND,cboDivision,cboDivision / Division,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),4,SCP0095_GlobalPSI_Elec.cs:153
+B6|COND:cboDivision,T-08aa64b8,B6,COMBO,COND,cboDivision,cboDivision / Division,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+X-LOC|ROW:D00-1-003,T-77aaf40c,X-LOC,GEN,ROW,D00-1-003,D00-1-003,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-003,T-3880014d,X-ROW,GEN,ENTRY,D00-1-003,D00-1-003,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-004,T-3f573d27,X-LOC,GEN,ROW,D00-1-004,D00-1-004,Y,PASS,구현 위치 실존 1곳,1,
+G4|COND:txtItem_Id,T-0b1fe296,G4,DESIGN,COND,txtItem_Id,txtItem_Id / Elec Material / Item_Id / Meterial,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,1,
+G1|COND:txtItem_Id,T-c4c979f4,G1,GEN,COND,txtItem_Id,txtItem_Id / Elec Material / Item_Id / Meterial,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,1,
+G6|COND:txtItem_Id,T-6a2d07e3,G6,GEN,COND,txtItem_Id,txtItem_Id / Elec Material / Item_Id / Meterial,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,1,
+X-LOC|ROW:D00-1-005,T-71e33505,X-LOC,GEN,ROW,D00-1-005,D00-1-005,Y,PASS,구현 위치 실존 1곳,1,
+G4|COND:cboCompany,T-66383332,G4,DESIGN,COND,cboCompany,cboCompany / Company,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,1,
+G1|COND:cboCompany,T-25ab2716,G1,GEN,COND,cboCompany,cboCompany / Company,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,1,
+G6|COND:cboCompany,T-f58f4852,G6,GEN,COND,cboCompany,cboCompany / Company,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,1,
+B1|COND:cboCompany,T-c57d6042,B1,COMBO,COND,cboCompany,cboCompany / Company,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B2|COND:cboCompany,T-e326431f,B2,COMBO,COND,cboCompany,cboCompany / Company,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B4|COND:cboCompany,T-fe002e71,B4,COMBO,COND,cboCompany,cboCompany / Company,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),4,SCP0095_GlobalPSI_Elec.cs:168
+B6|COND:cboCompany,T-580a675e,B6,COMBO,COND,cboCompany,cboCompany / Company,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+X-LOC|ROW:D00-1-006,T-8dd374d8,X-LOC,GEN,ROW,D00-1-006,D00-1-006,Y,PASS,구현 위치 실존 2곳,1,
+H6|BTN:btnItem,T-dc9914f9,H6,POPUP,BTN,btnItem,btnItem,Y,NOPATH,검사기(_verify.spec(@verify)·smoke popup)는 있으나 이 대상(BTN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,
+G5|BTN:btnItem,T-c91a361f,G5,POPUP,BTN,btnItem,btnItem,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(BTN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,
+M4|BTN:btnItem,T-b6f07328,M4,POPUP,BTN,btnItem,btnItem,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace,3,
+G1|ROW:D00-1-006,T-ce1cc0d1,G1,GEN,ROW,D00-1-006,D00-1-006,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:D00-1-006,T-6d7507fd,A1,GEN,ROW,D00-1-006,D00-1-006,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+J2|SCREEN,T-5eaff3a3,J2,AUTH,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(auth·authcrud spec) — 실행 필요: auth,36,SCP0095_GlobalPSI_Elec.cs:1026 SCP0095_GlobalPSI_Elec.cs:1028 SCP0095_GlobalPSI_Elec.cs:1030 SCP0095_GlobalPSI_Elec.cs:1032 SCP0095_GlobalPSI_Elec.cs:525 SCP0095_GlobalPSI_Elec.cs:527 SCP0095_GlobalPSI_Elec.cs:528 SCP0095_GlobalPSI_Elec.cs:531 SCP0095_GlobalPSI_Elec.cs:533 SCP0095_GlobalPSI_Elec.cs:
+X-LOC|ROW:D00-1-007,T-36411df1,X-LOC,GEN,ROW,D00-1-007,D00-1-007,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-007,T-27e88027,X-ROW,GEN,ENTRY,D00-1-007,D00-1-007,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-008,T-4b143240,X-LOC,GEN,ROW,D00-1-008,D00-1-008,Y,PASS,구현 위치 실존 1곳,1,
+K-SA|SCREEN,T-0b9ff1ae,K-SA,COMMON,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(smoke 공통 기능(Search Area)) — 실행 필요: smoke,5,
+G3|SCREEN,T-95693344,G3,COMMON,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(smoke 공통 기능(Condition·Reset)) — 실행 필요: smoke,7,
+X-LOC|ROW:D00-1-009,T-1d44792d,X-LOC,GEN,ROW,D00-1-009,D00-1-009,Y,PASS,구현 위치 실존 1곳,1,
+G4|COND:cboPlanDate,T-44400a69,G4,DESIGN,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,4,SCP0095_GlobalPSI_Elec.cs:513 SCP0095_GlobalPSI_Elec.cs:514 SCP0095_GlobalPSI_Elec.cs:515 SCP0095_GlobalPSI_Elec.cs:516 SCP0095_GlobalPSI_Elec.cs:517
+G1|COND:cboPlanDate,T-d34fb2c6,G1,GEN,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,2,
+G6|COND:cboPlanDate,T-b593b33d,G6,GEN,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,4,SCP0095_GlobalPSI_Elec.cs:513 SCP0095_GlobalPSI_Elec.cs:514 SCP0095_GlobalPSI_Elec.cs:515 SCP0095_GlobalPSI_Elec.cs:516 SCP0095_GlobalPSI_Elec.cs:517
+B1|COND:cboPlanDate,T-5062fe73,B1,COMBO,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B2|COND:cboPlanDate,T-673adfbf,B2,COMBO,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B4|COND:cboPlanDate,T-ce459b8f,B4,COMBO,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,SCP0095_GlobalPSI_Elec.cs:262
+B6|COND:cboPlanDate,T-fac45226,B6,COMBO,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+X-LOC|ROW:D00-1-010,T-274425a5,X-LOC,GEN,ROW,D00-1-010,D00-1-010,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-010,T-b8f20986,X-ROW,GEN,ENTRY,D00-1-010,D00-1-010,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-011,T-b2907ce4,X-LOC,GEN,ROW,D00-1-011,D00-1-011,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-011,T-d6c55c69,X-ROW,GEN,ENTRY,D00-1-011,D00-1-011,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-012,T-966bb1e6,X-LOC,GEN,ROW,D00-1-012,D00-1-012,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-012,T-cd36fe1f,X-ROW,GEN,ENTRY,D00-1-012,D00-1-012,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-013,T-99836bf5,X-LOC,GEN,ROW,D00-1-013,D00-1-013,Y,PASS,구현 위치 실존 1곳,1,
+G4|COND:cboBucketType,T-6b8b6d3a,G4,DESIGN,COND,cboBucketType,cboBucketType / Bucket / Bucket Type,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,7,SCP0095_GlobalPSI_Elec.cs:320 SCP0095_GlobalPSI_Elec.cs:322 SCP0095_GlobalPSI_Elec.cs:324 SCP0095_GlobalPSI_Elec.cs:325 SCP0095_GlobalPSI_Elec.cs:326 SCP0095_GlobalPSI_Elec.cs:360 SCP0095_GlobalPSI_Elec.cs:361 SCP0095_GlobalPSI_Elec.cs:363 SCP0095_GlobalPSI_Elec.cs:365 SCP0095_GlobalPSI_Elec.cs:367 
+G1|COND:cboBucketType,T-c25391af,G1,GEN,COND,cboBucketType,cboBucketType / Bucket / Bucket Type,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,1,
+G6|COND:cboBucketType,T-b680e074,G6,GEN,COND,cboBucketType,cboBucketType / Bucket / Bucket Type,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,7,SCP0095_GlobalPSI_Elec.cs:320 SCP0095_GlobalPSI_Elec.cs:322 SCP0095_GlobalPSI_Elec.cs:324 SCP0095_GlobalPSI_Elec.cs:325 SCP0095_GlobalPSI_Elec.cs:326 SCP0095_GlobalPSI_Elec.cs:360 SCP0095_GlobalPSI_Elec.cs:361 SCP0095_GlobalPSI_Elec.cs:363 SCP0095_GlobalPSI_Elec.cs:365 SCP0095_GlobalPSI_Elec.cs:367 
+B1|COND:cboBucketType,T-40bc9523,B1,COMBO,COND,cboBucketType,cboBucketType / Bucket / Bucket Type,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B2|COND:cboBucketType,T-ce532240,B2,COMBO,COND,cboBucketType,cboBucketType / Bucket / Bucket Type,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B4|COND:cboBucketType,T-ca005f76,B4,COMBO,COND,cboBucketType,cboBucketType / Bucket / Bucket Type,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),4,SCP0095_GlobalPSI_Elec.cs:198
+B6|COND:cboBucketType,T-f29c5180,B6,COMBO,COND,cboBucketType,cboBucketType / Bucket / Bucket Type,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+X-LOC|ROW:D00-1-014,T-a68a34de,X-LOC,GEN,ROW,D00-1-014,D00-1-014,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-014,T-8d19e4d8,X-ROW,GEN,ENTRY,D00-1-014,D00-1-014,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-REASON|ROW:D00-1-015,T-4566db00,X-REASON,DESIGN,ROW,D00-1-015,D00-1-015,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:D00-1-016,T-05203682,X-REASON,DESIGN,ROW,D00-1-016,D00-1-016,Y,PASS,사유 있음: chkSum(#015) 라벨 슬롯 — chkSum 미노출이라 라벨도 없음,1,
+X-LOC|ROW:D00-1-017,T-8b54da59,X-LOC,GEN,ROW,D00-1-017,D00-1-017,Y,PASS,구현 위치 실존 1곳,1,
+G1|ROW:D00-1-017,T-224e3e35,G1,GEN,ROW,D00-1-017,D00-1-017,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:D00-1-017,T-89770c5c,A1,GEN,ROW,D00-1-017,D00-1-017,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:D00-1-018,T-e4e52197,X-LOC,GEN,ROW,D00-1-018,D00-1-018,Y,PASS,구현 위치 실존 1곳,1,
+G4|ROW:D00-1-018,T-9f909c94,G4,DESIGN,ROW,D00-1-018,D00-1-018,Y,REVIEW,행 집계 — G4 9요소: NOT_RUN:7 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+G1|ROW:D00-1-018,T-65fe6f4b,G1,GEN,ROW,D00-1-018,D00-1-018,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+G6|ROW:D00-1-018,T-d4494b3b,G6,GEN,ROW,D00-1-018,D00-1-018,Y,REVIEW,행 집계 — G6 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
+A1|ROW:D00-1-018,T-b5a1007f,A1,GEN,ROW,D00-1-018,D00-1-018,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:D00-1-019,T-2461fc46,X-LOC,GEN,ROW,D00-1-019,D00-1-019,Y,PASS,구현 위치 실존 1곳,1,
+G4|ROW:D00-1-019,T-217d4410,G4,DESIGN,ROW,D00-1-019,D00-1-019,Y,REVIEW,행 집계 — G4 9요소: NOT_RUN:7 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+G1|ROW:D00-1-019,T-e0b334e2,G1,GEN,ROW,D00-1-019,D00-1-019,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+G6|ROW:D00-1-019,T-8cfc2a2c,G6,GEN,ROW,D00-1-019,D00-1-019,Y,REVIEW,행 집계 — G6 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:D00-1-020,T-6cc48661,X-LOC,GEN,ROW,D00-1-020,D00-1-020,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-1-020,T-dfc66b1d,A5,DESIGN,ROW,D00-1-020,D00-1-020,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:D00-1-020,T-eb228496,H5,DESIGN,ROW,D00-1-020,D00-1-020,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:D00-1-020,T-495adeca,H2,DESIGN,ROW,D00-1-020,D00-1-020,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-1-021,T-db37fe4b,X-LOC,GEN,ROW,D00-1-021,D00-1-021,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-1-021,T-0ba29047,A5,DESIGN,ROW,D00-1-021,D00-1-021,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:D00-1-021,T-faff1ee7,H5,DESIGN,ROW,D00-1-021,D00-1-021,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:D00-1-021,T-645d7c88,H2,DESIGN,ROW,D00-1-021,D00-1-021,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-REASON|ROW:D00-1-022,T-f9dcf5bd,X-REASON,DESIGN,ROW,D00-1-022,D00-1-022,Y,PASS,사유 있음: WinForms Designer 컨테이너(런타임 컴포넌트 트레이) — React 무대응,1,
+X-REASON|ROW:D00-1-023,T-498dba58,X-REASON,DESIGN,ROW,D00-1-023,D00-1-023,Y,PASS,"사유 있음: WinForms 이미지 리소스 컨테이너 — React 아이콘(@shared/lges-icons)로 대체, 별",1,
+X-REASON|ROW:D00-1-024,T-4b260790,X-REASON,DESIGN,ROW,D00-1-024,D00-1-024,Y,PASS,사유 있음: DevExpress LayoutControl 여백 정렬 요소 — CSS/Grid 레이아웃이 대신 처리,1,
+X-REASON|ROW:D00-1-025,T-afec6abe,X-REASON,DESIGN,ROW,D00-1-025,D00-1-025,Y,PASS,사유 있음: LayoutControl 여백 요소 — CSS/Grid 레이아웃 대체,1,
+X-REASON|ROW:D00-1-026,T-811a5be1,X-REASON,DESIGN,ROW,D00-1-026,D00-1-026,Y,PASS,사유 있음: LayoutControl 여백 요소 — CSS/Grid 레이아웃 대체,1,
+X-REASON|ROW:D00-1-027,T-72ad0c8e,X-REASON,DESIGN,ROW,D00-1-027,D00-1-027,Y,PASS,사유 있음: LayoutControl 여백 요소 — CSS/Grid 레이아웃 대체,1,
+X-REASON|ROW:D00-1-028,T-06bedba5,X-REASON,DESIGN,ROW,D00-1-028,D00-1-028,Y,PASS,사유 있음: LayoutControl 여백 요소 — CSS/Grid 레이아웃 대체,1,
+X-REASON|ROW:D00-1-029,T-56def2fe,X-REASON,DESIGN,ROW,D00-1-029,D00-1-029,Y,PASS,사유 있음: LayoutControl 여백 요소 — CSS/Grid 레이아웃 대체,1,
+X-REASON|ROW:D00-1-030,T-691dd2d1,X-REASON,DESIGN,ROW,D00-1-030,D00-1-030,Y,PASS,사유 있음: LayoutControl 여백 요소 — CSS/Grid 레이아웃 대체,1,
+X-REASON|ROW:D00-1-031,T-2d89d3b6,X-REASON,DESIGN,ROW,D00-1-031,D00-1-031,Y,PASS,사유 있음: LayoutControl 여백 요소 — CSS/Grid 레이아웃 대체,1,
+X-REASON|ROW:D00-1-032,T-02d538df,X-REASON,DESIGN,ROW,D00-1-032,D00-1-032,Y,PASS,"사유 있음: DEAD — 어떤 컨테이너에도 미부모화(Designer), 이벤트 미배선(§3 dead 판정) — 미이관",1,
+X-REASON|ROW:D00-1-033,T-2cafb839,X-REASON,DESIGN,ROW,D00-1-033,D00-1-033,Y,PASS,"사유 있음: DEAD/hidden — Visible=false + 이벤트 미배선(chkSum 중복명, §3 dead 판정",1,
+X-LOC|ROW:D00-2-001,T-5835312e,X-LOC,GEN,ROW,D00-2-001,D00-2-001,Y,PASS,구현 위치 실존 1곳,1,
+C1|COND:cboDivision,T-d266b993,C1,CASCADE,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,2,SCP0095_GlobalPSI_Elec.cs:365
+C4|COND:cboDivision,T-81f55363,C4,CASCADE,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 조건 변경→그리드 상태) — 실행 필요: trace,1,
+X-LOC|ROW:D00-2-002,T-090b6b75,X-LOC,GEN,ROW,D00-2-002,D00-2-002,Y,PASS,구현 위치 실존 1곳,1,
+C1|COND:cboPlanDate,T-5020ad09,C1,CASCADE,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,2,SCP0095_GlobalPSI_Elec.cs:384
+C4|COND:cboPlanDate,T-7c57cb17,C4,CASCADE,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 조건 변경→그리드 상태) — 실행 필요: trace,1,
+X-LOC|ROW:D00-2-003,T-853b60a3,X-LOC,GEN,ROW,D00-2-003,D00-2-003,Y,PASS,구현 위치 실존 1곳,1,
+C1|COND:cboBucketType,T-e16b4539,C1,CASCADE,COND,cboBucketType,cboBucketType / Bucket / Bucket Type,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,2,SCP0095_GlobalPSI_Elec.cs:370
+C4|COND:cboBucketType,T-8c36ad19,C4,CASCADE,COND,cboBucketType,cboBucketType / Bucket / Bucket Type,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 조건 변경→그리드 상태) — 실행 필요: trace,1,
+X-REASON|ROW:D00-2-004,T-ec0ae72e,X-REASON,DESIGN,ROW,D00-2-004,D00-2-004,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:D00-2-005,T-3d3bd6f9,X-LOC,GEN,ROW,D00-2-005,D00-2-005,Y,PASS,구현 위치 실존 1곳,1,
+X-LOC|ROW:D00-2-006,T-b0e27041,X-LOC,GEN,ROW,D00-2-006,D00-2-006,Y,PASS,구현 위치 실존 1곳,1,
+H6|ROW:D00-2-006,T-9a51ef45,H6,POPUP,ROW,D00-2-006,D00-2-006,Y,REVIEW,행 집계 — H6 3요소: NOT_RUN:2 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+G5|ROW:D00-2-006,T-ae5420cd,G5,POPUP,ROW,D00-2-006,D00-2-006,Y,REVIEW,행 집계 — G5 3요소: NOPATH:3 (미실행 요소가 남아 판정필요),1,
+M4|ROW:D00-2-006,T-393bbc5e,M4,POPUP,ROW,D00-2-006,D00-2-006,Y,REVIEW,행 집계 — M4 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:D00-2-007,T-6ee913a6,X-LOC,GEN,ROW,D00-2-007,D00-2-007,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-2-007,T-ba9b75bd,A5,DESIGN,ROW,D00-2-007,D00-2-007,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:D00-2-007,T-393b182d,H5,DESIGN,ROW,D00-2-007,D00-2-007,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:D00-2-007,T-cc6ce556,H2,DESIGN,ROW,D00-2-007,D00-2-007,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H4|SCREEN,T-158bb37c,H4,DESIGN,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4b 레이아웃 — 가로 스크롤·그리드 높이·컬럼 폭 실측(기대 = AS-IS 폭 메타)) — 실행 필요: trace,5,SCP0095_GlobalPSI_Elec.cs:562 SCP0095_GlobalPSI_Elec.cs:563 SCP0095_GlobalPSI_Elec.cs:564
+H3|ROW:D00-2-007,T-1d906a06,H3,DESIGN,ROW,D00-2-007,D00-2-007,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-001,T-1bb416eb,X-LOC,GEN,ROW,D00-3-001,D00-3-001,Y,PASS,구현 위치 실존 1곳,1,
+H3|ROW:D00-3-001,T-5e3898ce,H3,DESIGN,ROW,D00-3-001,D00-3-001,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-002,T-73c84e87,X-LOC,GEN,ROW,D00-3-002,D00-3-002,Y,PASS,구현 위치 실존 1곳,1,
+E1|ROW:D00-3-002,T-6d03c09a,E1,EDIT,ROW,D00-3-002,D00-3-002,Y,NA,검사 대상 아님 — 이 화면에 E1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-003,T-3e046518,X-LOC,GEN,ROW,D00-3-003,D00-3-003,Y,PASS,구현 위치 실존 1곳,1,
+E1|ROW:D00-3-003,T-ddff9855,E1,EDIT,ROW,D00-3-003,D00-3-003,Y,NA,검사 대상 아님 — 이 화면에 E1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-004,T-d6de029d,X-LOC,GEN,ROW,D00-3-004,D00-3-004,Y,PASS,구현 위치 실존 1곳,1,
+H2|ROW:D00-3-004,T-57638917,H2,DESIGN,ROW,D00-3-004,D00-3-004,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-005,T-df101b80,X-LOC,GEN,ROW,D00-3-005,D00-3-005,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-005,T-f80b790b,X-ROW,GEN,ENTRY,D00-3-005,D00-3-005,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-006,T-2fb00dd1,X-LOC,GEN,ROW,D00-3-006,D00-3-006,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-006,T-fbd4aae9,X-ROW,GEN,ENTRY,D00-3-006,D00-3-006,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-007,T-eafa8947,X-LOC,GEN,ROW,D00-3-007,D00-3-007,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-007,T-c7094fe0,X-ROW,GEN,ENTRY,D00-3-007,D00-3-007,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-008,T-f2cdf8c9,X-LOC,GEN,ROW,D00-3-008,D00-3-008,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-008,T-45ffd899,X-ROW,GEN,ENTRY,D00-3-008,D00-3-008,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-009,T-5c461367,X-LOC,GEN,ROW,D00-3-009,D00-3-009,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-009,T-ba790fcc,X-ROW,GEN,ENTRY,D00-3-009,D00-3-009,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-010,T-eef394eb,X-LOC,GEN,ROW,D00-3-010,D00-3-010,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-010,T-fdbcc35d,X-ROW,GEN,ENTRY,D00-3-010,D00-3-010,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-011,T-7b0bb7e5,X-LOC,GEN,ROW,D00-3-011,D00-3-011,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-011,T-e73240ff,X-ROW,GEN,ENTRY,D00-3-011,D00-3-011,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-012,T-913769eb,X-LOC,GEN,ROW,D00-3-012,D00-3-012,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-012,T-875a8092,X-ROW,GEN,ENTRY,D00-3-012,D00-3-012,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-013,T-f9aaaee9,X-LOC,GEN,ROW,D00-3-013,D00-3-013,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-013,T-727fbad5,X-ROW,GEN,ENTRY,D00-3-013,D00-3-013,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-014,T-7118140f,X-LOC,GEN,ROW,D00-3-014,D00-3-014,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-014,T-b997cbdc,X-ROW,GEN,ENTRY,D00-3-014,D00-3-014,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-015,T-713479c0,X-LOC,GEN,ROW,D00-3-015,D00-3-015,Y,PASS,구현 위치 실존 1곳,1,
+H3|ROW:D00-3-015,T-6e3c1a43,H3,DESIGN,ROW,D00-3-015,D00-3-015,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-016,T-987e1790,X-LOC,GEN,ROW,D00-3-016,D00-3-016,Y,PASS,구현 위치 실존 2곳,1,
+G1|ROW:D00-3-016,T-f183fff7,G1,GEN,ROW,D00-3-016,D00-3-016,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:D00-3-016,T-43d1d0f5,A1,GEN,ROW,D00-3-016,D00-3-016,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:D00-3-017,T-a98a3505,X-LOC,GEN,ROW,D00-3-017,D00-3-017,Y,PASS,구현 위치 실존 1곳,1,
+D1|ROW:D00-3-017,T-d5c71c09,D1,EDIT,ROW,D00-3-017,D00-3-017,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:D00-3-017,T-3cc57f1d,D3,EDIT,ROW,D00-3-017,D00-3-017,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+G1|ROW:D00-3-017,T-efea2ca1,G1,GEN,ROW,D00-3-017,D00-3-017,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:D00-3-017,T-78206bfb,A1,GEN,ROW,D00-3-017,D00-3-017,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:D00-3-018,T-66116b24,X-LOC,GEN,ROW,D00-3-018,D00-3-018,Y,PASS,구현 위치 실존 1곳,1,
+H3|ROW:D00-3-018,T-8b06a794,H3,DESIGN,ROW,D00-3-018,D00-3-018,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-019,T-18abf44e,X-LOC,GEN,ROW,D00-3-019,D00-3-019,Y,PASS,구현 위치 실존 1곳,1,
+H2|ROW:D00-3-019,T-b88c23a7,H2,DESIGN,ROW,D00-3-019,D00-3-019,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-020,T-30871021,X-LOC,GEN,ROW,D00-3-020,D00-3-020,Y,PASS,구현 위치 실존 1곳,1,
+H2|ROW:D00-3-020,T-3aa964a4,H2,DESIGN,ROW,D00-3-020,D00-3-020,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-021,T-5789a3f3,X-LOC,GEN,ROW,D00-3-021,D00-3-021,Y,PASS,구현 위치 실존 1곳,1,
+H2|ROW:D00-3-021,T-89150aa5,H2,DESIGN,ROW,D00-3-021,D00-3-021,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-022,T-acf705ab,X-LOC,GEN,ROW,D00-3-022,D00-3-022,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-3-022,T-7204cf3e,A5,DESIGN,ROW,D00-3-022,D00-3-022,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-023,T-0d4748ac,X-LOC,GEN,ROW,D00-3-023,D00-3-023,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-3-023,T-56b6fc90,A5,DESIGN,ROW,D00-3-023,D00-3-023,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-024,T-63505145,X-LOC,GEN,ROW,D00-3-024,D00-3-024,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-3-024,T-ff3a0024,A5,DESIGN,ROW,D00-3-024,D00-3-024,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-025,T-32bdc492,X-LOC,GEN,ROW,D00-3-025,D00-3-025,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-3-025,T-c82b25bc,A5,DESIGN,ROW,D00-3-025,D00-3-025,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-026,T-d1e3f248,X-LOC,GEN,ROW,D00-3-026,D00-3-026,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-3-026,T-5c0eddad,A5,DESIGN,ROW,D00-3-026,D00-3-026,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-027,T-ec83d3b6,X-LOC,GEN,ROW,D00-3-027,D00-3-027,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-3-027,T-6a225d36,A5,DESIGN,ROW,D00-3-027,D00-3-027,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-028,T-08865f6f,X-LOC,GEN,ROW,D00-3-028,D00-3-028,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-3-028,T-b403f805,A5,DESIGN,ROW,D00-3-028,D00-3-028,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-029,T-991facad,X-LOC,GEN,ROW,D00-3-029,D00-3-029,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-029,T-ae765b4f,X-ROW,GEN,ENTRY,D00-3-029,D00-3-029,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-4b-001,T-b5d58db7,X-LOC,GEN,ROW,D00-4b-001,D00-4b-001,Y,PASS,구현 위치 실존 1곳,1,
+B4|ROW:D00-4b-001,T-8ac98516,B4,COMBO,ROW,D00-4b-001,D00-4b-001,Y,REVIEW,행 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),1,
+B3|ROW:D00-4b-001,T-a1b1bdb9,B3,COMBO,ROW,D00-4b-001,D00-4b-001,N,REVIEW,행 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:D00-4b-002,T-0c7e3286,X-LOC,GEN,ROW,D00-4b-002,D00-4b-002,Y,PASS,구현 위치 실존 1곳,1,
+B4|ROW:D00-4b-002,T-f0f29d14,B4,COMBO,ROW,D00-4b-002,D00-4b-002,Y,REVIEW,행 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),1,
+B3|ROW:D00-4b-002,T-41b18901,B3,COMBO,ROW,D00-4b-002,D00-4b-002,N,REVIEW,행 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:D00-4b-003,T-02777c1f,X-LOC,GEN,ROW,D00-4b-003,D00-4b-003,Y,PASS,구현 위치 실존 1곳,1,
+B4|ROW:D00-4b-003,T-64782ba6,B4,COMBO,ROW,D00-4b-003,D00-4b-003,Y,REVIEW,행 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),1,
+B3|ROW:D00-4b-003,T-715f99f4,B3,COMBO,ROW,D00-4b-003,D00-4b-003,N,REVIEW,행 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),1,
+X-REASON|ROW:COMMON:UC-01,T-ede0b147,X-REASON,DESIGN,ROW,COMMON:UC-01,COMMON:UC-01,Y,PASS,"사유 있음: 순수 조회(read-only) 화면 — Insert 없음(전열 INPUT_TP_CD='S', hotkeyCo",1,
+X-REASON|ROW:COMMON:UC-02,T-71630b79,X-REASON,DESIGN,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:COMMON:UC-03,T-18c31628,X-REASON,DESIGN,ROW,COMMON:UC-03,COMMON:UC-03,Y,PASS,사유 있음: AS-IS SCP0095 는 measure/컬럼 개인화 UI 부재(자매 SCP0100 과 달리 btnMeas,1,
+X-REASON|ROW:COMMON:UC-04,T-6b937385,X-REASON,DESIGN,ROW,COMMON:UC-04,COMMON:UC-04,Y,PASS,사유 있음: CRUD(Insert/Save/Delete) 없음(모두 hotkeyConfig false·미노출) — 완료 ,1,
+X-LOC|ROW:COMMON:UC-05,T-c2f75976,X-LOC,GEN,ROW,COMMON:UC-05,COMMON:UC-05,Y,PASS,구현 위치 실존 1곳,1,
+K4|SCREEN,T-db27c0a8,K4,COMMON,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 버튼 구성) — 실행 필요: trace,18,SCP0095_GlobalPSI_Elec.cs:1026 SCP0095_GlobalPSI_Elec.cs:1028 SCP0095_GlobalPSI_Elec.cs:1030 SCP0095_GlobalPSI_Elec.cs:1032 SCP0095_GlobalPSI_Elec.cs:525 SCP0095_GlobalPSI_Elec.cs:527 SCP0095_GlobalPSI_Elec.cs:528 SCP0095_GlobalPSI_Elec.cs:531 SCP0095_GlobalPSI_Elec.cs:533 SCP0095_GlobalPSI_Elec.cs:
+H10|SCREEN,T-011d0bb7,H10,DESIGN,SCREEN,SCP0095,SCP0095 화면,Y,PASS,브라우저 alert/confirm 직접 호출 0 · 공용 메시지 API 사용,2,
+A5|ROW:COMMON:UC-05,T-3992620d,A5,DESIGN,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:COMMON:UC-05,T-58b463ff,H5,DESIGN,ROW,COMMON:UC-05,COMMON:UC-05,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:COMMON:UC-05,T-76f1d8c2,H2,DESIGN,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+B1|ROW:COMMON:UC-05,T-f73b2e92,B1,COMBO,ROW,COMMON:UC-05,COMMON:UC-05,Y,REVIEW,행 집계 — B1 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
+B2|ROW:COMMON:UC-05,T-3d994730,B2,COMBO,ROW,COMMON:UC-05,COMMON:UC-05,Y,REVIEW,행 집계 — B2 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
+B4|ROW:COMMON:UC-05,T-d88bc60d,B4,COMBO,ROW,COMMON:UC-05,COMMON:UC-05,Y,REVIEW,행 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),1,
+D5|ROW:COMMON:UC-05,T-79fcdac9,D5,EDIT,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 D5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E5|ROW:COMMON:UC-05,T-1736a5d2,E5,EDIT,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 E5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-REASON|ROW:COMMON:UC-06,T-15102cc4,X-REASON,DESIGN,ROW,COMMON:UC-06,COMMON:UC-06,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:COMMON:UC-07,T-3ad7264c,X-LOC,GEN,ROW,COMMON:UC-07,COMMON:UC-07,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:COMMON:UC-07,T-28dd886f,A5,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:COMMON:UC-07,T-1e55b78a,H5,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:COMMON:UC-07,T-4b2e0d61,H2,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+G1|ROW:COMMON:UC-07,T-6112a742,G1,GEN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:COMMON:UC-07,T-f8006a86,A1,GEN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,T-691eec07,X-LOC,GEN,ROW,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|ROW:`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,T-6f8aa0b6,G4,DESIGN,ROW,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,Y,REVIEW,행 집계 — G4 9요소: NOT_RUN:7 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+G1|ROW:`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,T-1c76859c,G1,GEN,ROW,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+G6|ROW:`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,T-c1e67b9a,G6,GEN,ROW,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,Y,REVIEW,행 집계 — G6 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
+D4|ROW:`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,T-06080fe4,D4,EDIT,ROW,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D6|SCREEN,T-19ab8200,D6,EDIT,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) Insert 위치) — 실행 필요: trace,3,
+A1|ROW:`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,T-ecb473fe,A1,GEN,ROW,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+B4|ROW:`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,T-e9cd9d67,B4,COMBO,ROW,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,Y,REVIEW,행 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),1,
+B3|ROW:`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,T-9998b92d,B3,COMBO,ROW,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,`dtDivision = BLUtils.GetDivisionEE(false)` (Division_SCP + ,N,REVIEW,행 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),1,
+"X-LOC|ROW:`Data.Common(Type.COMPANY_EE,false)`",T-0c2e8e8c,X-LOC,GEN,ROW,"`Data.Common(Type.COMPANY_EE,false)`","`Data.Common(Type.COMPANY_EE,false)`",Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+"G4|ROW:`Data.Common(Type.COMPANY_EE,false)`",T-acfaa9d7,G4,DESIGN,ROW,"`Data.Common(Type.COMPANY_EE,false)`","`Data.Common(Type.COMPANY_EE,false)`",Y,REVIEW,행 집계 — G4 9요소: NOT_RUN:7 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+"G1|ROW:`Data.Common(Type.COMPANY_EE,false)`",T-14a2f84b,G1,GEN,ROW,"`Data.Common(Type.COMPANY_EE,false)`","`Data.Common(Type.COMPANY_EE,false)`",Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+"G6|ROW:`Data.Common(Type.COMPANY_EE,false)`",T-ec8c45f5,G6,GEN,ROW,"`Data.Common(Type.COMPANY_EE,false)`","`Data.Common(Type.COMPANY_EE,false)`",Y,REVIEW,행 집계 — G6 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
+"D4|ROW:`Data.Common(Type.COMPANY_EE,false)`",T-ddc8321c,D4,EDIT,ROW,"`Data.Common(Type.COMPANY_EE,false)`","`Data.Common(Type.COMPANY_EE,false)`",Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+"A1|ROW:`Data.Common(Type.COMPANY_EE,false)`",T-058f958d,A1,GEN,ROW,"`Data.Common(Type.COMPANY_EE,false)`","`Data.Common(Type.COMPANY_EE,false)`",Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+"B4|ROW:`Data.Common(Type.COMPANY_EE,false)`",T-308fb165,B4,COMBO,ROW,"`Data.Common(Type.COMPANY_EE,false)`","`Data.Common(Type.COMPANY_EE,false)`",Y,REVIEW,행 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),1,
+"B3|ROW:`Data.Common(Type.COMPANY_EE,false)`",T-aeee0af9,B3,COMBO,ROW,"`Data.Common(Type.COMPANY_EE,false)`","`Data.Common(Type.COMPANY_EE,false)`",N,REVIEW,행 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),1,
+"X-LOC|ROW:`Data.Common(Type.DATE_WEEKLY,false,_division)`",T-9ab35932,X-LOC,GEN,ROW,"`Data.Common(Type.DATE_WEEKLY,false,_division)`","`Data.Common(Type.DATE_WEEKLY,false,_division)`",Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+"G4|ROW:`Data.Common(Type.DATE_WEEKLY,false,_division)`",T-025e3317,G4,DESIGN,ROW,"`Data.Common(Type.DATE_WEEKLY,false,_division)`","`Data.Common(Type.DATE_WEEKLY,false,_division)`",Y,REVIEW,행 집계 — G4 9요소: NOT_RUN:7 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+"G1|ROW:`Data.Common(Type.DATE_WEEKLY,false,_division)`",T-0b2fa78a,G1,GEN,ROW,"`Data.Common(Type.DATE_WEEKLY,false,_division)`","`Data.Common(Type.DATE_WEEKLY,false,_division)`",Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+"G6|ROW:`Data.Common(Type.DATE_WEEKLY,false,_division)`",T-cc4e27a8,G6,GEN,ROW,"`Data.Common(Type.DATE_WEEKLY,false,_division)`","`Data.Common(Type.DATE_WEEKLY,false,_division)`",Y,REVIEW,행 집계 — G6 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
+"A1|ROW:`Data.Common(Type.DATE_WEEKLY,false,_division)`",T-287776f6,A1,GEN,ROW,"`Data.Common(Type.DATE_WEEKLY,false,_division)`","`Data.Common(Type.DATE_WEEKLY,false,_division)`",Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+"B4|ROW:`Data.Common(Type.DATE_WEEKLY,false,_division)`",T-53a0ff31,B4,COMBO,ROW,"`Data.Common(Type.DATE_WEEKLY,false,_division)`","`Data.Common(Type.DATE_WEEKLY,false,_division)`",Y,REVIEW,행 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),1,
+"B3|ROW:`Data.Common(Type.DATE_WEEKLY,false,_division)`",T-89484515,B3,COMBO,ROW,"`Data.Common(Type.DATE_WEEKLY,false,_division)`","`Data.Common(Type.DATE_WEEKLY,false,_division)`",N,REVIEW,행 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:`GetBucketType()` FoxDataRequest(DM0003),T-6a6584db,X-LOC,GEN,ROW,`GetBucketType()` FoxDataRequest(DM0003),`GetBucketType()` FoxDataRequest(DM0003),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|ROW:`GetBucketType()` FoxDataRequest(DM0003),T-db863bba,G4,DESIGN,ROW,`GetBucketType()` FoxDataRequest(DM0003),`GetBucketType()` FoxDataRequest(DM0003),Y,REVIEW,행 집계 — G4 9요소: NOT_RUN:7 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+G1|ROW:`GetBucketType()` FoxDataRequest(DM0003),T-180350ba,G1,GEN,ROW,`GetBucketType()` FoxDataRequest(DM0003),`GetBucketType()` FoxDataRequest(DM0003),Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+G6|ROW:`GetBucketType()` FoxDataRequest(DM0003),T-0c8b8b2d,G6,GEN,ROW,`GetBucketType()` FoxDataRequest(DM0003),`GetBucketType()` FoxDataRequest(DM0003),Y,REVIEW,행 집계 — G6 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
+A1|ROW:`GetBucketType()` FoxDataRequest(DM0003),T-24587855,A1,GEN,ROW,`GetBucketType()` FoxDataRequest(DM0003),`GetBucketType()` FoxDataRequest(DM0003),Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+"X-LOC|ROW:`dCalendar.InitValue=GetDayRange(""52"")`",T-b583dc96,X-LOC,GEN,ROW,"`dCalendar.InitValue=GetDayRange(""52"")`","`dCalendar.InitValue=GetDayRange(""52"")`",Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+"G4|ROW:`dCalendar.InitValue=GetDayRange(""52"")`",T-271a6599,G4,DESIGN,ROW,"`dCalendar.InitValue=GetDayRange(""52"")`","`dCalendar.InitValue=GetDayRange(""52"")`",Y,REVIEW,행 집계 — G4 9요소: NOT_RUN:7 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+"G1|ROW:`dCalendar.InitValue=GetDayRange(""52"")`",T-9637ba00,G1,GEN,ROW,"`dCalendar.InitValue=GetDayRange(""52"")`","`dCalendar.InitValue=GetDayRange(""52"")`",Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+"G6|ROW:`dCalendar.InitValue=GetDayRange(""52"")`",T-32223578,G6,GEN,ROW,"`dCalendar.InitValue=GetDayRange(""52"")`","`dCalendar.InitValue=GetDayRange(""52"")`",Y,REVIEW,행 집계 — G6 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
+"D4|ROW:`dCalendar.InitValue=GetDayRange(""52"")`",T-2a05f797,D4,EDIT,ROW,"`dCalendar.InitValue=GetDayRange(""52"")`","`dCalendar.InitValue=GetDayRange(""52"")`",Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+A1|SP:P_SCM0001_GET_SCP_DAY_PERIOD,T-c4c532d3,A1,GEN,SP,PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD,PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD,Y,REVIEW,골든 비교 케이스 없음(PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),1,
+A6|SP:P_SCM0001_GET_SCP_DAY_PERIOD,T-2f0ddfd4,A6,GEN,SP,PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD,PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD,Y,NOT_RUN,"검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) — 실행 필요: trace",1,
+F4|SP:P_SCM0001_GET_SCP_DAY_PERIOD,T-7ae4f9f2,F4,DB,SP,PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD,PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,3,SCP0095_GlobalPSI_Elec.cs:830 SCP0095_GlobalPSI_Elec.cs:835
+DB-SYN|SP:P_SCM0001_GET_SCP_DAY_PERIOD,T-f7019a20,DB-SYN,DB,SP,PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD,PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD,Y,PASS,시노님검사 OK,3,SCP0095_GlobalPSI_Elec.cs:830 SCP0095_GlobalPSI_Elec.cs:835
+"E3|ROW:`dCalendar.InitValue=GetDayRange(""52"")`",T-37857c13,E3,EDIT,ROW,"`dCalendar.InitValue=GetDayRange(""52"")`","`dCalendar.InitValue=GetDayRange(""52"")`",Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+"E4|ROW:`dCalendar.InitValue=GetDayRange(""52"")`",T-c37045c9,E4,EDIT,ROW,"`dCalendar.InitValue=GetDayRange(""52"")`","`dCalendar.InitValue=GetDayRange(""52"")`",Y,REVIEW,행 집계 — E4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:`SetChangedControl()` (Div→Company/PlanDate 재적재),T-d1a23406,X-LOC,GEN,ROW,`SetChangedControl()` (Div→Company/PlanDate 재적재),`SetChangedControl()` (Div→Company/PlanDate 재적재),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|ROW:`SetChangedControl()` (Div→Company/PlanDate 재적재),T-7ce77c83,G4,DESIGN,ROW,`SetChangedControl()` (Div→Company/PlanDate 재적재),`SetChangedControl()` (Div→Company/PlanDate 재적재),Y,REVIEW,행 집계 — G4 9요소: NOT_RUN:7 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+G1|ROW:`SetChangedControl()` (Div→Company/PlanDate 재적재),T-a13004b9,G1,GEN,ROW,`SetChangedControl()` (Div→Company/PlanDate 재적재),`SetChangedControl()` (Div→Company/PlanDate 재적재),Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+G6|ROW:`SetChangedControl()` (Div→Company/PlanDate 재적재),T-1ccdf836,G6,GEN,ROW,`SetChangedControl()` (Div→Company/PlanDate 재적재),`SetChangedControl()` (Div→Company/PlanDate 재적재),Y,REVIEW,행 집계 — G6 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
+A5|ROW:`SetChangedControl()` (Div→Company/PlanDate 재적재),T-ab4785ea,A5,DESIGN,ROW,`SetChangedControl()` (Div→Company/PlanDate 재적재),`SetChangedControl()` (Div→Company/PlanDate 재적재),Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:`SetChangedControl()` (Div→Company/PlanDate 재적재),T-d3b05997,H5,DESIGN,ROW,`SetChangedControl()` (Div→Company/PlanDate 재적재),`SetChangedControl()` (Div→Company/PlanDate 재적재),Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:`SetChangedControl()` (Div→Company/PlanDate 재적재),T-d13514f8,H2,DESIGN,ROW,`SetChangedControl()` (Div→Company/PlanDate 재적재),`SetChangedControl()` (Div→Company/PlanDate 재적재),Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+A1|ROW:`SetChangedControl()` (Div→Company/PlanDate 재적재),T-4205b747,A1,GEN,ROW,`SetChangedControl()` (Div→Company/PlanDate 재적재),`SetChangedControl()` (Div→Company/PlanDate 재적재),Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:cboPlanDate Changed → 기간 재계산 + 그리드 clear,T-03385847,X-LOC,GEN,ROW,cboPlanDate Changed → 기간 재계산 + 그리드 clear,cboPlanDate Changed → 기간 재계산 + 그리드 clear,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:cboPlanDate Changed → 기간 재계산 + 그리드 clear,T-476bb207,A5,DESIGN,ROW,cboPlanDate Changed → 기간 재계산 + 그리드 clear,cboPlanDate Changed → 기간 재계산 + 그리드 clear,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|COND:cboPlanDate,T-44a5d2ee,H5,DESIGN,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOT_RUN,검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace,1,
+H2|ROW:cboPlanDate Changed → 기간 재계산 + 그리드 clear,T-11c6abba,H2,DESIGN,ROW,cboPlanDate Changed → 기간 재계산 + 그리드 clear,cboPlanDate Changed → 기간 재계산 + 그리드 clear,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+A1|ROW:cboPlanDate Changed → 기간 재계산 + 그리드 clear,T-ef549c05,A1,GEN,ROW,cboPlanDate Changed → 기간 재계산 + 그리드 clear,cboPlanDate Changed → 기간 재계산 + 그리드 clear,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,T-ca6d179b,X-LOC,GEN,ROW,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|ROW:`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,T-dd5c53fe,G4,DESIGN,ROW,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,Y,REVIEW,행 집계 — G4 9요소: NOT_RUN:7 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+G1|ROW:`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,T-90486fef,G1,GEN,ROW,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+G6|ROW:`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,T-67ba2349,G6,GEN,ROW,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,Y,REVIEW,행 집계 — G6 7요소: NOT_RUN:7 (미실행 요소가 남아 판정필요),1,
+A1|ROW:`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,T-1b5a1fb3,A1,GEN,ROW,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+E3|ROW:`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,T-b3c9dd33,E3,EDIT,ROW,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E4|ROW:`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,T-7acae9c4,E4,EDIT,ROW,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,`checkRequired(usrConditionPanel1)` + `Check_PeriodDate`,Y,REVIEW,행 집계 — E4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:`SCM0002_ItembyDivisionPopupEE` (btnItem_Id),T-ad98c771,X-LOC,GEN,ROW,`SCM0002_ItembyDivisionPopupEE` (btnItem_Id),`SCM0002_ItembyDivisionPopupEE` (btnItem_Id),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-LOC|ROW:R1/R18,T-2034d693,X-LOC,GEN,ROW,R1/R18,R1/R18,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R1/R18,T-33b53a14,A5,DESIGN,ROW,R1/R18,R1/R18,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R1/R18,T-b0437ede,H5,DESIGN,ROW,R1/R18,R1/R18,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R1/R18,T-36b3a98b,H2,DESIGN,ROW,R1/R18,R1/R18,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H3|ROW:R1/R18,T-f981ce4c,H3,DESIGN,ROW,R1/R18,R1/R18,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:R3,T-793c2e01,X-LOC,GEN,ROW,R3,R3,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R3,T-d9a2ed5e,A5,DESIGN,ROW,R3,R3,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R3,T-e5bb2296,H5,DESIGN,ROW,R3,R3,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R3,T-5151bb89,H2,DESIGN,ROW,R3,R3,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E1|ROW:R3,T-0a389a2a,E1,EDIT,ROW,R3,R3,Y,NA,검사 대상 아님 — 이 화면에 E1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:R4,T-ac062487,X-LOC,GEN,ROW,R4,R4,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R4,T-4020128f,A5,DESIGN,ROW,R4,R4,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R4,T-d958dc17,H5,DESIGN,ROW,R4,R4,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R4,T-ac2ee6b8,H2,DESIGN,ROW,R4,R4,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E2|ROW:R4,T-f73b7cb8,E2,EDIT,ROW,R4,R4,Y,NA,검사 대상 아님 — 이 화면에 E2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:R5~R14,T-c6c439bb,X-LOC,GEN,ROW,R5~R14,R5~R14,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R5~R14,T-13e8ef4c,A5,DESIGN,ROW,R5~R14,R5~R14,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R5~R14,T-b64ee064,H5,DESIGN,ROW,R5~R14,R5~R14,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R5~R14,T-e88d8b77,H2,DESIGN,ROW,R5~R14,R5~R14,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:R15,T-35b2ae3f,X-LOC,GEN,ROW,R15,R15,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R15,T-ee380370,A5,DESIGN,ROW,R15,R15,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R15,T-7f5cefb8,H5,DESIGN,ROW,R15,R15,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R15,T-e6d4bcc3,H2,DESIGN,ROW,R15,R15,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H3|ROW:R15,T-6fa87f8d,H3,DESIGN,ROW,R15,R15,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:R16,T-ffe7fc99,X-LOC,GEN,ROW,R16,R16,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R16,T-865ece17,A5,DESIGN,ROW,R16,R16,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R16,T-b85db9f4,H5,DESIGN,ROW,R16,R16,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R16,T-ecb480f2,H2,DESIGN,ROW,R16,R16,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+A1|ROW:R16,T-19144523,A1,GEN,ROW,R16,R16,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+A6|ROW:R16,T-b19a7556,A6,GEN,ROW,R16,R16,Y,REVIEW,행 집계 — A6 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+F4|ROW:R16,T-bea6b545,F4,DB,ROW,R16,R16,Y,REVIEW,행 집계 — F4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+DB-SYN|ROW:R16,T-90b5278b,DB-SYN,DB,ROW,R16,R16,Y,REVIEW,행 집계 — DB-SYN 4요소: PASS:3 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:R17,T-b21fc329,X-LOC,GEN,ROW,R17,R17,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R17,T-b4dbdf1e,A5,DESIGN,ROW,R17,R17,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R17,T-c437ade5,H5,DESIGN,ROW,R17,R17,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R17,T-6dcfadce,H2,DESIGN,ROW,R17,R17,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D1|ROW:R17,T-c2cbcae9,D1,EDIT,ROW,R17,R17,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:R17,T-67d7a46a,D3,EDIT,ROW,R17,R17,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+G1|ROW:R17,T-97c78fd5,G1,GEN,ROW,R17,R17,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:R17,T-a1407d8c,A1,GEN,ROW,R17,R17,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:R19,T-5798095a,X-LOC,GEN,ROW,R19,R19,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R19,T-b980ff63,A5,DESIGN,ROW,R19,R19,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R19,T-e03aef65,H5,DESIGN,ROW,R19,R19,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R19,T-733733e5,H2,DESIGN,ROW,R19,R19,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:R19,T-6b4a590d,D3,EDIT,ROW,R19,R19,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:R20,T-d1236b26,X-LOC,GEN,ROW,R20,R20,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R20,T-7c9e455e,A5,DESIGN,ROW,R20,R20,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R20,T-4d194291,H5,DESIGN,ROW,R20,R20,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R20,T-3c7d2ea8,H2,DESIGN,ROW,R20,R20,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:R20,T-8967f580,D3,EDIT,ROW,R20,R20,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:R21,T-cf165fa6,X-LOC,GEN,ROW,R21,R21,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R21,T-d2443364,A5,DESIGN,ROW,R21,R21,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R21,T-4440093a,H5,DESIGN,ROW,R21,R21,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R21,T-ebb5f8d5,H2,DESIGN,ROW,R21,R21,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:R21,T-5d055bfa,D3,EDIT,ROW,R21,R21,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:R22~R28,T-13c3efbc,X-LOC,GEN,ROW,R22~R28,R22~R28,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R22~R28,T-60a909d3,A5,DESIGN,ROW,R22~R28,R22~R28,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|COND:chkSum,T-446186e1,H5,DESIGN,COND,chkSum,chkSum / Sum,Y,NOT_RUN,검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace,4,SCP0095_GlobalPSI_Elec.cs:978 SCP0095_GlobalPSI_Elec.cs:980 SCP0095_GlobalPSI_Elec.cs:982 SCP0095_GlobalPSI_Elec.cs:984 SCP0095_GlobalPSI_Elec.cs:986 SCP0095_GlobalPSI_Elec.cs:991 SCP0095_GlobalPSI_Elec.cs:1007
+H2|ROW:R22~R28,T-1f7c784a,H2,DESIGN,ROW,R22~R28,R22~R28,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:R29,T-fd74860e,X-LOC,GEN,ROW,R29,R29,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R29,T-9999c2dc,A5,DESIGN,ROW,R29,R29,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R29,T-6591c5d7,H5,DESIGN,ROW,R29,R29,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R29,T-97637517,H2,DESIGN,ROW,R29,R29,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:R30,T-7f5fad04,X-LOC,GEN,ROW,R30,R30,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:R30,T-3d7c8a7d,A5,DESIGN,ROW,R30,R30,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:R30,T-9b8ab70f,H5,DESIGN,ROW,R30,R30,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:R30,T-0cfb116b,H2,DESIGN,ROW,R30,R30,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E1|ROW:R30,T-f8d90e4d,E1,EDIT,ROW,R30,R30,Y,NA,검사 대상 아님 — 이 화면에 E1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:drilldown,T-ae57e5fc,X-LOC,GEN,ROW,drilldown,drilldown,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:drilldown,T-e1b83ff0,A5,DESIGN,ROW,drilldown,drilldown,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:drilldown,T-c8cd403b,H5,DESIGN,ROW,drilldown,drilldown,Y,REVIEW,행 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:drilldown,T-f1a1f33f,H2,DESIGN,ROW,drilldown,drilldown,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H6|ROW:drilldown,T-29b2cc25,H6,POPUP,ROW,drilldown,drilldown,Y,REVIEW,행 집계 — H6 3요소: NOT_RUN:2 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+G5|ROW:drilldown,T-3b0a6e5b,G5,POPUP,ROW,drilldown,drilldown,Y,REVIEW,행 집계 — G5 3요소: NOPATH:3 (미실행 요소가 남아 판정필요),1,
+M4|ROW:drilldown,T-b6a0a160,M4,POPUP,ROW,drilldown,drilldown,Y,REVIEW,행 집계 — M4 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+X-REASON|ROW:usrButton1 (#32),T-9aedeae4,X-REASON,DESIGN,ROW,usrButton1 (#32),usrButton1 (#32),Y,PASS,사유 있음: ,1,
+"X-REASON|ROW:usrCheckBox1 (#33, chkSum 중복명)",T-5ad96be5,X-REASON,DESIGN,ROW,"usrCheckBox1 (#33, chkSum 중복명)","usrCheckBox1 (#33, chkSum 중복명)",Y,PASS,사유 있음: ,1,
+X-REASON|ROW:bChgDiv 플래그 (cs L64/459),T-bc896c56,X-REASON,DESIGN,ROW,bChgDiv 플래그 (cs L64/459),bChgDiv 플래그 (cs L64/459),Y,PASS,사유 있음: ,1,
+"X-LOC|ROW:B_ 접두 칼럼 분기 (R2, cs L394~398)",T-6ef2c12b,X-LOC,GEN,ROW,"B_ 접두 칼럼 분기 (R2, cs L394~398)","B_ 접두 칼럼 분기 (R2, cs L394~398)",Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+"X-ROW|ENTRY:B_ 접두 칼럼 분기 (R2, cs L394~398)",T-578dcf32,X-ROW,GEN,ENTRY,"B_ 접두 칼럼 분기 (R2, cs L394~398)","B_ 접두 칼럼 분기 (R2, cs L394~398)",Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+"X-REASON|ROW:Set_MeasureColor (R31, cs L680~683)",T-e8bc813e,X-REASON,DESIGN,ROW,"Set_MeasureColor (R31, cs L680~683)","Set_MeasureColor (R31, cs L680~683)",Y,PASS,사유 있음: ,1,
+"X-REASON|ROW:Set_SumValues (R32, cs L658~678)",T-b4ffa8f2,X-REASON,DESIGN,ROW,"Set_SumValues (R32, cs L658~678)","Set_SumValues (R32, cs L658~678)",Y,PASS,사유 있음: ,1,
+X-LOC|ROW:FindButton,T-61531394,X-LOC,GEN,ROW,FindButton,FindButton,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A1|ROW:FindButton,T-91206a81,A1,GEN,ROW,FindButton,FindButton,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+A6|ROW:FindButton,T-79ee9ab5,A6,GEN,ROW,FindButton,FindButton,Y,REVIEW,행 집계 — A6 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+F4|ROW:FindButton,T-3cd29f5d,F4,DB,ROW,FindButton,FindButton,Y,REVIEW,행 집계 — F4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+DB-SYN|ROW:FindButton,T-e10b4a5d,DB-SYN,DB,ROW,FindButton,FindButton,Y,REVIEW,행 집계 — DB-SYN 4요소: PASS:3 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+G1|ROW:FindButton,T-94986845,G1,GEN,ROW,FindButton,FindButton,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:EditButton,T-313ed416,X-LOC,GEN,ROW,EditButton,EditButton,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D1|ROW:EditButton,T-a935a60a,D1,EDIT,ROW,EditButton,EditButton,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:EditButton,T-7898faff,D3,EDIT,ROW,EditButton,EditButton,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:SaveButton,T-9184f372,X-LOC,GEN,ROW,SaveButton,SaveButton,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+F1|SCREEN,T-c61629e1,F1,CRUD,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) 실저장·crud spec) — 실행 필요: crud,2,
+F2|SCREEN,T-e81efaca,F2,CRUD,SCREEN,SCP0095,SCP0095 화면,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+X-LOC|ROW:InsertButton,T-03acb728,X-LOC,GEN,ROW,InsertButton,InsertButton,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D4|ROW:InsertButton,T-96e35834,D4,EDIT,ROW,InsertButton,InsertButton,Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:DeleteButton,T-62574203,X-LOC,GEN,ROW,DeleteButton,DeleteButton,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+F5|SCREEN,T-db914c5c,F5,CRUD,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4b CRUD 상태 — Insert 행 CRUD_TYPE=I·편집 행 M 표시) — 실행 필요: trace,1,
+G03-WIRE|SCREEN,T-524931d8,G03-WIRE,GEN,SCREEN,SCP0095,SCP0095 화면,Y,NOPATH,검사기(check.js G03)는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),12,SCP0095_GlobalPSI_Elec.cs:295 SCP0095_GlobalPSI_Elec.cs:297 SCP0095_GlobalPSI_Elec.cs:513 SCP0095_GlobalPSI_Elec.cs:514 SCP0095_GlobalPSI_Elec.cs:515 SCP0095_GlobalPSI_Elec.cs:516 SCP0095_GlobalPSI_Elec.cs:517 SCP0095_GlobalPSI_Elec.cs:518 SCP0095_GlobalPSI_Elec.cs:519 SCP0095_GlobalPSI_Elec.cs:520
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.AfterFindData,T-d395207b,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.AfterFindData,SCP0095_GlobalPSI_Elec.AfterFindData,Y,REVIEW,진입점 집계 1검사 — NOPATH:1 (미실행 검사가 남아 판정필요),14,SCP0095_GlobalPSI_Elec.cs:664 SCP0095_GlobalPSI_Elec.cs:666 SCP0095_GlobalPSI_Elec.cs:668 SCP0095_GlobalPSI_Elec.cs:670 SCP0095_GlobalPSI_Elec.cs:672 SCP0095_GlobalPSI_Elec.cs:673 SCP0095_GlobalPSI_Elec.cs:676 SCP0095_GlobalPSI_Elec.cs:677 SCP0095_GlobalPSI_Elec.cs:679
+A1|ENTRY:SCP0095_GlobalPSI_Elec.AfterFindData,T-83fc507b,A1,GEN,ENTRY,SCP0095_GlobalPSI_Elec.AfterFindData,SCP0095_GlobalPSI_Elec.AfterFindData,Y,REVIEW,진입점 집계 — A1 2요소: REVIEW:2,1,SCP0095_GlobalPSI_Elec.cs:666
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.AfterFindDataParallel,T-e367f594,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.AfterFindDataParallel,SCP0095_GlobalPSI_Elec.AfterFindDataParallel,Y,REVIEW,진입점 집계 1검사 — NOPATH:1 (미실행 검사가 남아 판정필요),42,SCP0095_GlobalPSI_Elec.cs:692 SCP0095_GlobalPSI_Elec.cs:694 SCP0095_GlobalPSI_Elec.cs:696 SCP0095_GlobalPSI_Elec.cs:700 SCP0095_GlobalPSI_Elec.cs:703 SCP0095_GlobalPSI_Elec.cs:704 SCP0095_GlobalPSI_Elec.cs:705 SCP0095_GlobalPSI_Elec.cs:706 SCP0095_GlobalPSI_Elec.cs:707 SCP0095_GlobalPSI_Elec.cs:708 
+A1|ENTRY:SCP0095_GlobalPSI_Elec.AfterFindDataParallel,T-0f3c9d1a,A1,GEN,ENTRY,SCP0095_GlobalPSI_Elec.AfterFindDataParallel,SCP0095_GlobalPSI_Elec.AfterFindDataParallel,Y,REVIEW,진입점 집계 — A1 2요소: REVIEW:2,1,SCP0095_GlobalPSI_Elec.cs:735
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,T-fe02849c,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:966 SCP0095_GlobalPSI_Elec.cs:967
+C2|ENTRY:SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,T-0d7b1131,C2,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C2 를 적용할 요소(컬럼·조회조건·SP)가 없다,2,SCP0095_GlobalPSI_Elec.cs:966 SCP0095_GlobalPSI_Elec.cs:967
+C3|ENTRY:SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,T-566b7907,C3,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,2,SCP0095_GlobalPSI_Elec.cs:966 SCP0095_GlobalPSI_Elec.cs:967
+C6|ENTRY:SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,T-29a411d1,C6,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboBucketType_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C6 를 적용할 요소(컬럼·조회조건·SP)가 없다,2,SCP0095_GlobalPSI_Elec.cs:966 SCP0095_GlobalPSI_Elec.cs:967
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,T-7d731026,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:551 SCP0095_GlobalPSI_Elec.cs:552
+C2|ENTRY:SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,T-4f08c577,C2,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C2 를 적용할 요소(컬럼·조회조건·SP)가 없다,2,SCP0095_GlobalPSI_Elec.cs:551 SCP0095_GlobalPSI_Elec.cs:552
+C3|ENTRY:SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,T-459f0366,C3,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,2,SCP0095_GlobalPSI_Elec.cs:551 SCP0095_GlobalPSI_Elec.cs:552
+C6|ENTRY:SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,T-812a338b,C6,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboDivision_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C6 를 적용할 요소(컬럼·조회조건·SP)가 없다,2,SCP0095_GlobalPSI_Elec.cs:551 SCP0095_GlobalPSI_Elec.cs:552
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,T-dc8dbf3b,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:557 SCP0095_GlobalPSI_Elec.cs:558
+C2|ENTRY:SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,T-c7f4480e,C2,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C2 를 적용할 요소(컬럼·조회조건·SP)가 없다,3,SCP0095_GlobalPSI_Elec.cs:557 SCP0095_GlobalPSI_Elec.cs:558
+C3|ENTRY:SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,T-1c4aea9b,C3,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,3,SCP0095_GlobalPSI_Elec.cs:557 SCP0095_GlobalPSI_Elec.cs:558
+C6|ENTRY:SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,T-d0056cfa,C6,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,SCP0095_GlobalPSI_Elec.CboPlanDate_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C6 를 적용할 요소(컬럼·조회조건·SP)가 없다,3,SCP0095_GlobalPSI_Elec.cs:557 SCP0095_GlobalPSI_Elec.cs:558
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.CheckKeyColumn,T-cfb47ed8,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.CheckKeyColumn,SCP0095_GlobalPSI_Elec.CheckKeyColumn,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 DATA_OP/ENTRY, 연결된 요소 검사 없음",3,SCP0095_GlobalPSI_Elec.cs:684 SCP0095_GlobalPSI_Elec.cs:685
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.CreateSpread,T-635d9a9a,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.CreateSpread,SCP0095_GlobalPSI_Elec.CreateSpread,Y,REVIEW,진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요),4,SCP0095_GlobalPSI_Elec.cs:403 SCP0095_GlobalPSI_Elec.cs:405 SCP0095_GlobalPSI_Elec.cs:407 SCP0095_GlobalPSI_Elec.cs:409
+A5|ENTRY:SCP0095_GlobalPSI_Elec.CreateSpread,T-4328b0e2,A5,DESIGN,ENTRY,SCP0095_GlobalPSI_Elec.CreateSpread,SCP0095_GlobalPSI_Elec.CreateSpread,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,4,SCP0095_GlobalPSI_Elec.cs:403 SCP0095_GlobalPSI_Elec.cs:405 SCP0095_GlobalPSI_Elec.cs:407 SCP0095_GlobalPSI_Elec.cs:409
+H2|ENTRY:SCP0095_GlobalPSI_Elec.CreateSpread,T-a22c7046,H2,DESIGN,ENTRY,SCP0095_GlobalPSI_Elec.CreateSpread,SCP0095_GlobalPSI_Elec.CreateSpread,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,4,SCP0095_GlobalPSI_Elec.cs:403 SCP0095_GlobalPSI_Elec.cs:405 SCP0095_GlobalPSI_Elec.cs:407 SCP0095_GlobalPSI_Elec.cs:409
+H5|ENTRY:SCP0095_GlobalPSI_Elec.CreateSpread,T-42cf8ade,H5,DESIGN,ENTRY,SCP0095_GlobalPSI_Elec.CreateSpread,SCP0095_GlobalPSI_Elec.CreateSpread,Y,REVIEW,진입점 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),4,SCP0095_GlobalPSI_Elec.cs:403 SCP0095_GlobalPSI_Elec.cs:405 SCP0095_GlobalPSI_Elec.cs:407 SCP0095_GlobalPSI_Elec.cs:409
+D5|ENTRY:SCP0095_GlobalPSI_Elec.CreateSpread,T-5b42638f,D5,EDIT,ENTRY,SCP0095_GlobalPSI_Elec.CreateSpread,SCP0095_GlobalPSI_Elec.CreateSpread,Y,NA,검사 대상 아님 — 이 화면에 D5 를 적용할 요소(컬럼·조회조건·SP)가 없다,4,SCP0095_GlobalPSI_Elec.cs:403 SCP0095_GlobalPSI_Elec.cs:405 SCP0095_GlobalPSI_Elec.cs:407 SCP0095_GlobalPSI_Elec.cs:409
+A10|SCREEN,T-7f553f29,A10,GEN,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 조회 전 그리드) — 실행 필요: trace,109,SCP0095_GlobalPSI_Elec.cs:320 SCP0095_GlobalPSI_Elec.cs:322 SCP0095_GlobalPSI_Elec.cs:324 SCP0095_GlobalPSI_Elec.cs:325 SCP0095_GlobalPSI_Elec.cs:326 SCP0095_GlobalPSI_Elec.cs:328 SCP0095_GlobalPSI_Elec.cs:307 SCP0095_GlobalPSI_Elec.cs:308 SCP0095_GlobalPSI_Elec.cs:309 SCP0095_GlobalPSI_Elec.cs:310 
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.DefineProperty,T-5f2dcba0,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.DefineProperty,SCP0095_GlobalPSI_Elec.DefineProperty,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요),4,SCP0095_GlobalPSI_Elec.cs:320 SCP0095_GlobalPSI_Elec.cs:322 SCP0095_GlobalPSI_Elec.cs:325 SCP0095_GlobalPSI_Elec.cs:326
+X-REOPEN|SCREEN,T-50e8dcbd,X-REOPEN,GEN,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 닫기·재오픈) — 실행 필요: trace,7,SCP0095_GlobalPSI_Elec.Designer.cs:16 SCP0095_GlobalPSI_Elec.Designer.cs:18 SCP0095_GlobalPSI_Elec.Designer.cs:20 SCP0095_GlobalPSI_Elec.cs:391 SCP0095_GlobalPSI_Elec.cs:828 SCP0095_GlobalPSI_Elec.cs:954
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.FindButton,T-9b1c0161,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.FindButton,SCP0095_GlobalPSI_Elec.FindButton,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:2 · REVIEW:1,1,SCP0095_GlobalPSI_Elec.cs:572
+A1|SP:P_SCP0095_GET_GLOBAL_PSI_ELEC,T-5231f371,A1,GEN,SP,PKG_SCP0095.P_SCP0095_GET_GLOBAL_PSI_ELEC,PKG_SCP0095.P_SCP0095_GET_GLOBAL_PSI_ELEC,Y,REVIEW,골든 비교 케이스 없음(PKG_SCP0095.P_SCP0095_GET_GLOBAL_PSI_ELEC — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),53,SCP0095_GlobalPSI_Elec.cs:572 SCP0095_GlobalPSI_Elec.cs:643 SCP0095_GlobalPSI_Elec.cs:644 SCP0095_GlobalPSI_Elec.cs:646 SCP0095_GlobalPSI_Elec.cs:647 SCP0095_GlobalPSI_Elec.cs:652 SCP0095_GlobalPSI_Elec.cs:753 SCP0095_GlobalPSI_Elec.cs:755 SCP0095_GlobalPSI_Elec.cs:758 SCP0095_GlobalPSI_Elec.cs:760 
+A6|SP:P_SCP0095_GET_GLOBAL_PSI_ELEC,T-bbdd3298,A6,GEN,SP,PKG_SCP0095.P_SCP0095_GET_GLOBAL_PSI_ELEC,PKG_SCP0095.P_SCP0095_GET_GLOBAL_PSI_ELEC,Y,NOT_RUN,"검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) — 실행 필요: trace",53,SCP0095_GlobalPSI_Elec.cs:572 SCP0095_GlobalPSI_Elec.cs:643 SCP0095_GlobalPSI_Elec.cs:644 SCP0095_GlobalPSI_Elec.cs:646 SCP0095_GlobalPSI_Elec.cs:647 SCP0095_GlobalPSI_Elec.cs:652 SCP0095_GlobalPSI_Elec.cs:753 SCP0095_GlobalPSI_Elec.cs:755 SCP0095_GlobalPSI_Elec.cs:758 SCP0095_GlobalPSI_Elec.cs:760 
+F4|SP:P_SCP0095_GET_GLOBAL_PSI_ELEC,T-042fac73,F4,DB,SP,PKG_SCP0095.P_SCP0095_GET_GLOBAL_PSI_ELEC,PKG_SCP0095.P_SCP0095_GET_GLOBAL_PSI_ELEC,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,53,SCP0095_GlobalPSI_Elec.cs:572 SCP0095_GlobalPSI_Elec.cs:643 SCP0095_GlobalPSI_Elec.cs:644 SCP0095_GlobalPSI_Elec.cs:646 SCP0095_GlobalPSI_Elec.cs:647 SCP0095_GlobalPSI_Elec.cs:652 SCP0095_GlobalPSI_Elec.cs:753 SCP0095_GlobalPSI_Elec.cs:755 SCP0095_GlobalPSI_Elec.cs:758 SCP0095_GlobalPSI_Elec.cs:760 
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.FindData,T-cfbdba94,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.FindData,SCP0095_GlobalPSI_Elec.FindData,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:2 · REVIEW:1,5,SCP0095_GlobalPSI_Elec.cs:643 SCP0095_GlobalPSI_Elec.cs:644 SCP0095_GlobalPSI_Elec.cs:646 SCP0095_GlobalPSI_Elec.cs:647 SCP0095_GlobalPSI_Elec.cs:652
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.FindDataMain,T-be350a9a,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.FindDataMain,SCP0095_GlobalPSI_Elec.FindDataMain,Y,REVIEW,진입점 집계 4검사 — NOT_RUN:2 · REVIEW:1 · PASS:1,9,SCP0095_GlobalPSI_Elec.cs:753 SCP0095_GlobalPSI_Elec.cs:755 SCP0095_GlobalPSI_Elec.cs:758 SCP0095_GlobalPSI_Elec.cs:760 SCP0095_GlobalPSI_Elec.cs:761 SCP0095_GlobalPSI_Elec.cs:762 SCP0095_GlobalPSI_Elec.cs:763
+DB-SYN|SP:P_SCP0095_GET_GLOBAL_PSI_ELEC,T-4850c4ce,DB-SYN,DB,SP,PKG_SCP0095.P_SCP0095_GET_GLOBAL_PSI_ELEC,PKG_SCP0095.P_SCP0095_GET_GLOBAL_PSI_ELEC,Y,PASS,시노님검사 OK,2,SCP0095_GlobalPSI_Elec.cs:780 SCP0095_GlobalPSI_Elec.cs:821
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.FindDataMainParallel,T-44b6ecea,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.FindDataMainParallel,SCP0095_GlobalPSI_Elec.FindDataMainParallel,Y,REVIEW,진입점 집계 4검사 — NOT_RUN:2 · REVIEW:1 · PASS:1,9,SCP0095_GlobalPSI_Elec.cs:785 SCP0095_GlobalPSI_Elec.cs:787 SCP0095_GlobalPSI_Elec.cs:790 SCP0095_GlobalPSI_Elec.cs:792 SCP0095_GlobalPSI_Elec.cs:794 SCP0095_GlobalPSI_Elec.cs:796 SCP0095_GlobalPSI_Elec.cs:797 SCP0095_GlobalPSI_Elec.cs:798 SCP0095_GlobalPSI_Elec.cs:799
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.Form_Load,T-149a57ac,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.Form_Load,SCP0095_GlobalPSI_Elec.Form_Load,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:307 SCP0095_GlobalPSI_Elec.cs:308 SCP0095_GlobalPSI_Elec.cs:309 SCP0095_GlobalPSI_Elec.cs:310 SCP0095_GlobalPSI_Elec.cs:311
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.GetBucketType,T-82ebbadf,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.GetBucketType,SCP0095_GlobalPSI_Elec.GetBucketType,Y,REVIEW,진입점 집계 5검사 — NOPATH:2 · NOT_RUN:2 · TODO:1 (미실행 검사가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:389 SCP0095_GlobalPSI_Elec.cs:391 SCP0095_GlobalPSI_Elec.cs:393 SCP0095_GlobalPSI_Elec.cs:395
+B4|ENTRY:SCP0095_GlobalPSI_Elec.GetBucketType,T-340d18aa,B4,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.GetBucketType,SCP0095_GlobalPSI_Elec.GetBucketType,Y,REVIEW,진입점 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:389 SCP0095_GlobalPSI_Elec.cs:395 SCP0095_GlobalPSI_Elec.cs:398
+B3|ENTRY:SCP0095_GlobalPSI_Elec.GetBucketType,T-71fd616a,B3,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.GetBucketType,SCP0095_GlobalPSI_Elec.GetBucketType,N,REVIEW,진입점 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:389 SCP0095_GlobalPSI_Elec.cs:395 SCP0095_GlobalPSI_Elec.cs:398
+F4|SP:DM0003_GET_BUCKET_TYPE_CODE,T-1fb8cef0,F4,DB,SP,DM0003_GET_BUCKET_TYPE_CODE,DM0003_GET_BUCKET_TYPE_CODE,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,2,SCP0095_GlobalPSI_Elec.cs:393 SCP0095_GlobalPSI_Elec.cs:395
+DB-SYN|SP:DM0003_GET_BUCKET_TYPE_CODE,T-518dfda6,DB-SYN,DB,SP,DM0003_GET_BUCKET_TYPE_CODE,DM0003_GET_BUCKET_TYPE_CODE,Y,NOPATH,검사기(syn_check.py·fixture dberr)는 있으나 이 대상(SP)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,SCP0095_GlobalPSI_Elec.cs:393 SCP0095_GlobalPSI_Elec.cs:395
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.GetDayRange,T-8f6b3495,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.GetDayRange,SCP0095_GlobalPSI_Elec.GetDayRange,Y,REVIEW,진입점 집계 5검사 — NOT_RUN:2 · NOPATH:1 · TODO:1 · PASS:1 (미실행 검사가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:826 SCP0095_GlobalPSI_Elec.cs:828 SCP0095_GlobalPSI_Elec.cs:830 SCP0095_GlobalPSI_Elec.cs:831 SCP0095_GlobalPSI_Elec.cs:832
+B4|ENTRY:SCP0095_GlobalPSI_Elec.GetDayRange,T-1fc62992,B4,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.GetDayRange,SCP0095_GlobalPSI_Elec.GetDayRange,Y,REVIEW,진입점 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),6,SCP0095_GlobalPSI_Elec.cs:826 SCP0095_GlobalPSI_Elec.cs:831 SCP0095_GlobalPSI_Elec.cs:832 SCP0095_GlobalPSI_Elec.cs:833 SCP0095_GlobalPSI_Elec.cs:835 SCP0095_GlobalPSI_Elec.cs:837
+B3|ENTRY:SCP0095_GlobalPSI_Elec.GetDayRange,T-7586bd19,B3,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.GetDayRange,SCP0095_GlobalPSI_Elec.GetDayRange,N,REVIEW,진입점 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),6,SCP0095_GlobalPSI_Elec.cs:826 SCP0095_GlobalPSI_Elec.cs:831 SCP0095_GlobalPSI_Elec.cs:832 SCP0095_GlobalPSI_Elec.cs:833 SCP0095_GlobalPSI_Elec.cs:835 SCP0095_GlobalPSI_Elec.cs:837
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.GetSpdTitle,T-6f44d6fe,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.GetSpdTitle,SCP0095_GlobalPSI_Elec.GetSpdTitle,Y,REVIEW,진입점 집계 5검사 — NOT_RUN:2 · PASS:1 · NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:954 SCP0095_GlobalPSI_Elec.cs:956 SCP0095_GlobalPSI_Elec.cs:957 SCP0095_GlobalPSI_Elec.cs:958 SCP0095_GlobalPSI_Elec.cs:960
+F4|SP:P_SCP0009_GET_SHEET_CALENDAR_3SPAN,T-a4b4653f,F4,DB,SP,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,2,SCP0095_GlobalPSI_Elec.cs:956 SCP0095_GlobalPSI_Elec.cs:960
+DB-SYN|SP:P_SCP0009_GET_SHEET_CALENDAR_3SPAN,T-9f3395ca,DB-SYN,DB,SP,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,Y,PASS,시노님검사 OK,2,SCP0095_GlobalPSI_Elec.cs:956 SCP0095_GlobalPSI_Elec.cs:960
+B4|ENTRY:SCP0095_GlobalPSI_Elec.GetSpdTitle,T-85ec453e,B4,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.GetSpdTitle,SCP0095_GlobalPSI_Elec.GetSpdTitle,Y,REVIEW,진입점 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:957 SCP0095_GlobalPSI_Elec.cs:958 SCP0095_GlobalPSI_Elec.cs:960
+B3|ENTRY:SCP0095_GlobalPSI_Elec.GetSpdTitle,T-3515cdce,B3,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.GetSpdTitle,SCP0095_GlobalPSI_Elec.GetSpdTitle,N,REVIEW,진입점 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:957 SCP0095_GlobalPSI_Elec.cs:958 SCP0095_GlobalPSI_Elec.cs:960
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.InitControls,T-91eb082e,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.InitControls,SCP0095_GlobalPSI_Elec.InitControls,Y,REVIEW,진입점 집계 7검사 — NOT_RUN:7 (미실행 검사가 남아 판정필요),5,SCP0095_GlobalPSI_Elec.cs:361 SCP0095_GlobalPSI_Elec.cs:365 SCP0095_GlobalPSI_Elec.cs:370 SCP0095_GlobalPSI_Elec.cs:372
+G6|COND:chkSum,T-77c1fc74,G6,GEN,COND,chkSum,chkSum / Sum,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,2,SCP0095_GlobalPSI_Elec.cs:513 SCP0095_GlobalPSI_Elec.cs:514 SCP0095_GlobalPSI_Elec.cs:515 SCP0095_GlobalPSI_Elec.cs:516 SCP0095_GlobalPSI_Elec.cs:517
+G4|COND:chkSum,T-ef22cc8a,G4,DESIGN,COND,chkSum,chkSum / Sum,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,2,SCP0095_GlobalPSI_Elec.cs:513 SCP0095_GlobalPSI_Elec.cs:514 SCP0095_GlobalPSI_Elec.cs:515 SCP0095_GlobalPSI_Elec.cs:516 SCP0095_GlobalPSI_Elec.cs:517
+G4|BTN:btnItem,T-2d4f4f85,G4,DESIGN,BTN,btnItem,btnItem,Y,NOPATH,검사기(smoke 화면 열림(labels)·_verify)는 있으나 이 대상(BTN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,SCP0095_GlobalPSI_Elec.cs:513 SCP0095_GlobalPSI_Elec.cs:514 SCP0095_GlobalPSI_Elec.cs:515 SCP0095_GlobalPSI_Elec.cs:516 SCP0095_GlobalPSI_Elec.cs:517
+G4|BTN:btnMeasure,T-4dca4dc5,G4,DESIGN,BTN,btnMeasure,btnMeasure,Y,NOPATH,검사기(smoke 화면 열림(labels)·_verify)는 있으나 이 대상(BTN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,SCP0095_GlobalPSI_Elec.cs:513 SCP0095_GlobalPSI_Elec.cs:514 SCP0095_GlobalPSI_Elec.cs:515 SCP0095_GlobalPSI_Elec.cs:516 SCP0095_GlobalPSI_Elec.cs:517 SCP0095_GlobalPSI_Elec.cs:520
+G6|COND:cboPlanType,T-8d4ce0d8,G6,GEN,COND,cboPlanType,cboPlanType / Report Type / Plan Type,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,4,SCP0095_GlobalPSI_Elec.cs:333 SCP0095_GlobalPSI_Elec.cs:334 SCP0095_GlobalPSI_Elec.cs:335 SCP0095_GlobalPSI_Elec.cs:337 SCP0095_GlobalPSI_Elec.cs:338 SCP0095_GlobalPSI_Elec.cs:348 SCP0095_GlobalPSI_Elec.cs:350 SCP0095_GlobalPSI_Elec.cs:351
+G4|COND:cboPlanType,T-a0ac88f5,G4,DESIGN,COND,cboPlanType,cboPlanType / Report Type / Plan Type,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,4,SCP0095_GlobalPSI_Elec.cs:333 SCP0095_GlobalPSI_Elec.cs:334 SCP0095_GlobalPSI_Elec.cs:335 SCP0095_GlobalPSI_Elec.cs:337 SCP0095_GlobalPSI_Elec.cs:338 SCP0095_GlobalPSI_Elec.cs:348 SCP0095_GlobalPSI_Elec.cs:350 SCP0095_GlobalPSI_Elec.cs:351
+C1|COND:cboPlanType,T-c3517f2a,C1,CASCADE,COND,cboPlanType,cboPlanType / Report Type / Plan Type,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,1,SCP0095_GlobalPSI_Elec.cs:348
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.InitPlanType,T-441cc418,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.InitPlanType,SCP0095_GlobalPSI_Elec.InitPlanType,Y,REVIEW,진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:348 SCP0095_GlobalPSI_Elec.cs:351 SCP0095_GlobalPSI_Elec.cs:354
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.InitQueryDics,T-add604e0,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.InitQueryDics,SCP0095_GlobalPSI_Elec.InitQueryDics,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:302
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.InitSpread,T-7676bfc1,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.InitSpread,SCP0095_GlobalPSI_Elec.InitSpread,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),6,SCP0095_GlobalPSI_Elec.cs:659
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.InitSpreadDateColumn,T-0959277b,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.InitSpreadDateColumn,SCP0095_GlobalPSI_Elec.InitSpreadDateColumn,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),32,SCP0095_GlobalPSI_Elec.cs:432 SCP0095_GlobalPSI_Elec.cs:433 SCP0095_GlobalPSI_Elec.cs:436 SCP0095_GlobalPSI_Elec.cs:437 SCP0095_GlobalPSI_Elec.cs:445 SCP0095_GlobalPSI_Elec.cs:462 SCP0095_GlobalPSI_Elec.cs:463 SCP0095_GlobalPSI_Elec.cs:467 SCP0095_GlobalPSI_Elec.cs:468 SCP0095_GlobalPSI_Elec.cs:472 
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.InitSpread_2,T-aaf66caa,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.InitSpread_2,SCP0095_GlobalPSI_Elec.InitSpread_2,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),8,SCP0095_GlobalPSI_Elec.cs:414 SCP0095_GlobalPSI_Elec.cs:417 SCP0095_GlobalPSI_Elec.cs:419 SCP0095_GlobalPSI_Elec.cs:421 SCP0095_GlobalPSI_Elec.cs:423 SCP0095_GlobalPSI_Elec.cs:425
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.SetChangedControl,T-8e26882d,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.SetChangedControl,SCP0095_GlobalPSI_Elec.SetChangedControl,Y,REVIEW,진입점 집계 6검사 — NOT_RUN:6 (미실행 검사가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:380 SCP0095_GlobalPSI_Elec.cs:382 SCP0095_GlobalPSI_Elec.cs:384
+E4|COND:cboCompany,T-9c8a7568,E4,EDIT,COND,cboCompany,cboCompany / Company,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,SCP0095_GlobalPSI_Elec.cs:380 SCP0095_GlobalPSI_Elec.cs:382 SCP0095_GlobalPSI_Elec.cs:384
+E4|COND:cboPlanDate,T-08d0b228,E4,EDIT,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,SCP0095_GlobalPSI_Elec.cs:380 SCP0095_GlobalPSI_Elec.cs:382 SCP0095_GlobalPSI_Elec.cs:384
+C1|COND:cboCompany,T-b2019218,C1,CASCADE,COND,cboCompany,cboCompany / Company,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,1,SCP0095_GlobalPSI_Elec.cs:380
+C3|ENTRY:SCP0095_GlobalPSI_Elec.SetChangedControl,T-be3f60bb,C3,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.SetChangedControl,SCP0095_GlobalPSI_Elec.SetChangedControl,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,2,SCP0095_GlobalPSI_Elec.cs:382
+E4|ENTRY:SCP0095_GlobalPSI_Elec.SetChangedControl,T-a0a80c5e,E4,EDIT,ENTRY,SCP0095_GlobalPSI_Elec.SetChangedControl,SCP0095_GlobalPSI_Elec.SetChangedControl,Y,REVIEW,진입점 집계 — E4 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:382
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.SetSpreadColumn,T-1c9d3312,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.SetSpreadColumn,SCP0095_GlobalPSI_Elec.SetSpreadColumn,Y,REVIEW,진입점 집계 8검사 — NOT_RUN:8 (미실행 검사가 남아 판정필요),11,SCP0095_GlobalPSI_Elec.cs:978 SCP0095_GlobalPSI_Elec.cs:980 SCP0095_GlobalPSI_Elec.cs:982 SCP0095_GlobalPSI_Elec.cs:984 SCP0095_GlobalPSI_Elec.cs:986 SCP0095_GlobalPSI_Elec.cs:991 SCP0095_GlobalPSI_Elec.cs:998 SCP0095_GlobalPSI_Elec.cs:1002 SCP0095_GlobalPSI_Elec.cs:1007 SCP0095_GlobalPSI_Elec.cs:10
+E4|COND:chkSum,T-11b7388f,E4,EDIT,COND,chkSum,chkSum / Sum,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,3,SCP0095_GlobalPSI_Elec.cs:978 SCP0095_GlobalPSI_Elec.cs:980 SCP0095_GlobalPSI_Elec.cs:982 SCP0095_GlobalPSI_Elec.cs:984 SCP0095_GlobalPSI_Elec.cs:986 SCP0095_GlobalPSI_Elec.cs:991 SCP0095_GlobalPSI_Elec.cs:1007
+A5|ENTRY:SCP0095_GlobalPSI_Elec.SetSpreadColumn,T-e081136d,A5,DESIGN,ENTRY,SCP0095_GlobalPSI_Elec.SetSpreadColumn,SCP0095_GlobalPSI_Elec.SetSpreadColumn,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,11,SCP0095_GlobalPSI_Elec.cs:978 SCP0095_GlobalPSI_Elec.cs:980 SCP0095_GlobalPSI_Elec.cs:982 SCP0095_GlobalPSI_Elec.cs:984 SCP0095_GlobalPSI_Elec.cs:989 SCP0095_GlobalPSI_Elec.cs:994 SCP0095_GlobalPSI_Elec.cs:996 SCP0095_GlobalPSI_Elec.cs:1000 SCP0095_GlobalPSI_Elec.cs:1005 SCP0095_GlobalPSI_Elec.cs:10
+H2|ENTRY:SCP0095_GlobalPSI_Elec.SetSpreadColumn,T-62f4b3cd,H2,DESIGN,ENTRY,SCP0095_GlobalPSI_Elec.SetSpreadColumn,SCP0095_GlobalPSI_Elec.SetSpreadColumn,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,11,SCP0095_GlobalPSI_Elec.cs:978 SCP0095_GlobalPSI_Elec.cs:980 SCP0095_GlobalPSI_Elec.cs:982 SCP0095_GlobalPSI_Elec.cs:984 SCP0095_GlobalPSI_Elec.cs:989 SCP0095_GlobalPSI_Elec.cs:994 SCP0095_GlobalPSI_Elec.cs:996 SCP0095_GlobalPSI_Elec.cs:1000 SCP0095_GlobalPSI_Elec.cs:1005 SCP0095_GlobalPSI_Elec.cs:10
+H5|ENTRY:SCP0095_GlobalPSI_Elec.SetSpreadColumn,T-f3067ff2,H5,DESIGN,ENTRY,SCP0095_GlobalPSI_Elec.SetSpreadColumn,SCP0095_GlobalPSI_Elec.SetSpreadColumn,Y,REVIEW,진입점 집계 — H5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),11,SCP0095_GlobalPSI_Elec.cs:978 SCP0095_GlobalPSI_Elec.cs:980 SCP0095_GlobalPSI_Elec.cs:982 SCP0095_GlobalPSI_Elec.cs:984 SCP0095_GlobalPSI_Elec.cs:989 SCP0095_GlobalPSI_Elec.cs:994 SCP0095_GlobalPSI_Elec.cs:996 SCP0095_GlobalPSI_Elec.cs:1000 SCP0095_GlobalPSI_Elec.cs:1005 SCP0095_GlobalPSI_Elec.cs:10
+D5|ENTRY:SCP0095_GlobalPSI_Elec.SetSpreadColumn,T-e66fd4a5,D5,EDIT,ENTRY,SCP0095_GlobalPSI_Elec.SetSpreadColumn,SCP0095_GlobalPSI_Elec.SetSpreadColumn,Y,NA,검사 대상 아님 — 이 화면에 D5 를 적용할 요소(컬럼·조회조건·SP)가 없다,11,SCP0095_GlobalPSI_Elec.cs:978 SCP0095_GlobalPSI_Elec.cs:980 SCP0095_GlobalPSI_Elec.cs:982 SCP0095_GlobalPSI_Elec.cs:984 SCP0095_GlobalPSI_Elec.cs:989 SCP0095_GlobalPSI_Elec.cs:994 SCP0095_GlobalPSI_Elec.cs:996 SCP0095_GlobalPSI_Elec.cs:1000 SCP0095_GlobalPSI_Elec.cs:1005 SCP0095_GlobalPSI_Elec.cs:10
+C3|ENTRY:SCP0095_GlobalPSI_Elec.SetSpreadColumn,T-6d3edbf0,C3,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.SetSpreadColumn,SCP0095_GlobalPSI_Elec.SetSpreadColumn,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,11,SCP0095_GlobalPSI_Elec.cs:978 SCP0095_GlobalPSI_Elec.cs:980 SCP0095_GlobalPSI_Elec.cs:982 SCP0095_GlobalPSI_Elec.cs:984 SCP0095_GlobalPSI_Elec.cs:989 SCP0095_GlobalPSI_Elec.cs:994 SCP0095_GlobalPSI_Elec.cs:996 SCP0095_GlobalPSI_Elec.cs:1000 SCP0095_GlobalPSI_Elec.cs:1005 SCP0095_GlobalPSI_Elec.cs:10
+E4|ENTRY:SCP0095_GlobalPSI_Elec.SetSpreadColumn,T-e6d42470,E4,EDIT,ENTRY,SCP0095_GlobalPSI_Elec.SetSpreadColumn,SCP0095_GlobalPSI_Elec.SetSpreadColumn,Y,REVIEW,진입점 집계 — E4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),11,SCP0095_GlobalPSI_Elec.cs:978 SCP0095_GlobalPSI_Elec.cs:980 SCP0095_GlobalPSI_Elec.cs:982 SCP0095_GlobalPSI_Elec.cs:984 SCP0095_GlobalPSI_Elec.cs:989 SCP0095_GlobalPSI_Elec.cs:994 SCP0095_GlobalPSI_Elec.cs:996 SCP0095_GlobalPSI_Elec.cs:1000 SCP0095_GlobalPSI_Elec.cs:1005 SCP0095_GlobalPSI_Elec.cs:10
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.Set_CellType,T-272535d2,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.Set_CellType,SCP0095_GlobalPSI_Elec.Set_CellType,Y,REVIEW,진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요),5,SCP0095_GlobalPSI_Elec.cs:889 SCP0095_GlobalPSI_Elec.cs:893 SCP0095_GlobalPSI_Elec.cs:895 SCP0095_GlobalPSI_Elec.cs:898 SCP0095_GlobalPSI_Elec.cs:900 SCP0095_GlobalPSI_Elec.cs:908 SCP0095_GlobalPSI_Elec.cs:910
+C3|ENTRY:SCP0095_GlobalPSI_Elec.Set_CellType,T-92254577,C3,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.Set_CellType,SCP0095_GlobalPSI_Elec.Set_CellType,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,8,SCP0095_GlobalPSI_Elec.cs:889 SCP0095_GlobalPSI_Elec.cs:893 SCP0095_GlobalPSI_Elec.cs:895 SCP0095_GlobalPSI_Elec.cs:898 SCP0095_GlobalPSI_Elec.cs:900 SCP0095_GlobalPSI_Elec.cs:902 SCP0095_GlobalPSI_Elec.cs:906 SCP0095_GlobalPSI_Elec.cs:918
+E4|ENTRY:SCP0095_GlobalPSI_Elec.Set_CellType,T-1442f6ec,E4,EDIT,ENTRY,SCP0095_GlobalPSI_Elec.Set_CellType,SCP0095_GlobalPSI_Elec.Set_CellType,Y,REVIEW,진입점 집계 — E4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),8,SCP0095_GlobalPSI_Elec.cs:889 SCP0095_GlobalPSI_Elec.cs:893 SCP0095_GlobalPSI_Elec.cs:895 SCP0095_GlobalPSI_Elec.cs:898 SCP0095_GlobalPSI_Elec.cs:900 SCP0095_GlobalPSI_Elec.cs:902 SCP0095_GlobalPSI_Elec.cs:906 SCP0095_GlobalPSI_Elec.cs:918
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.Set_FPOperationColor,T-5432d774,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.Set_FPOperationColor,SCP0095_GlobalPSI_Elec.Set_FPOperationColor,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:842 SCP0095_GlobalPSI_Elec.cs:844 SCP0095_GlobalPSI_Elec.cs:846 SCP0095_GlobalPSI_Elec.cs:848 SCP0095_GlobalPSI_Elec.cs:854
+H2|ENTRY:SCP0095_GlobalPSI_Elec.Set_FPOperationColor,T-be78043b,H2,DESIGN,ENTRY,SCP0095_GlobalPSI_Elec.Set_FPOperationColor,SCP0095_GlobalPSI_Elec.Set_FPOperationColor,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,17,SCP0095_GlobalPSI_Elec.cs:842 SCP0095_GlobalPSI_Elec.cs:844 SCP0095_GlobalPSI_Elec.cs:846 SCP0095_GlobalPSI_Elec.cs:848 SCP0095_GlobalPSI_Elec.cs:854 SCP0095_GlobalPSI_Elec.cs:858 SCP0095_GlobalPSI_Elec.cs:860 SCP0095_GlobalPSI_Elec.cs:861 SCP0095_GlobalPSI_Elec.cs:863 SCP0095_GlobalPSI_Elec.cs:865 
+C3|ENTRY:SCP0095_GlobalPSI_Elec.Set_FPOperationColor,T-7233cbf8,C3,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.Set_FPOperationColor,SCP0095_GlobalPSI_Elec.Set_FPOperationColor,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,17,SCP0095_GlobalPSI_Elec.cs:842 SCP0095_GlobalPSI_Elec.cs:844 SCP0095_GlobalPSI_Elec.cs:846 SCP0095_GlobalPSI_Elec.cs:848 SCP0095_GlobalPSI_Elec.cs:854 SCP0095_GlobalPSI_Elec.cs:858 SCP0095_GlobalPSI_Elec.cs:860 SCP0095_GlobalPSI_Elec.cs:861 SCP0095_GlobalPSI_Elec.cs:863 SCP0095_GlobalPSI_Elec.cs:865 
+E4|ENTRY:SCP0095_GlobalPSI_Elec.Set_FPOperationColor,T-177efc9f,E4,EDIT,ENTRY,SCP0095_GlobalPSI_Elec.Set_FPOperationColor,SCP0095_GlobalPSI_Elec.Set_FPOperationColor,Y,REVIEW,진입점 집계 — E4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),17,SCP0095_GlobalPSI_Elec.cs:842 SCP0095_GlobalPSI_Elec.cs:844 SCP0095_GlobalPSI_Elec.cs:846 SCP0095_GlobalPSI_Elec.cs:848 SCP0095_GlobalPSI_Elec.cs:854 SCP0095_GlobalPSI_Elec.cs:858 SCP0095_GlobalPSI_Elec.cs:860 SCP0095_GlobalPSI_Elec.cs:861 SCP0095_GlobalPSI_Elec.cs:863 SCP0095_GlobalPSI_Elec.cs:865 
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.Set_SumValues,T-abdffed7,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.Set_SumValues,SCP0095_GlobalPSI_Elec.Set_SumValues,Y,REVIEW,진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:924 SCP0095_GlobalPSI_Elec.cs:926 SCP0095_GlobalPSI_Elec.cs:927 SCP0095_GlobalPSI_Elec.cs:930 SCP0095_GlobalPSI_Elec.cs:932
+C3|ENTRY:SCP0095_GlobalPSI_Elec.Set_SumValues,T-bf20600c,C3,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.Set_SumValues,SCP0095_GlobalPSI_Elec.Set_SumValues,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,8,SCP0095_GlobalPSI_Elec.cs:924 SCP0095_GlobalPSI_Elec.cs:926 SCP0095_GlobalPSI_Elec.cs:927 SCP0095_GlobalPSI_Elec.cs:930 SCP0095_GlobalPSI_Elec.cs:932 SCP0095_GlobalPSI_Elec.cs:934 SCP0095_GlobalPSI_Elec.cs:937 SCP0095_GlobalPSI_Elec.cs:939
+E4|ENTRY:SCP0095_GlobalPSI_Elec.Set_SumValues,T-866c5784,E4,EDIT,ENTRY,SCP0095_GlobalPSI_Elec.Set_SumValues,SCP0095_GlobalPSI_Elec.Set_SumValues,Y,REVIEW,진입점 집계 — E4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),8,SCP0095_GlobalPSI_Elec.cs:924 SCP0095_GlobalPSI_Elec.cs:926 SCP0095_GlobalPSI_Elec.cs:927 SCP0095_GlobalPSI_Elec.cs:930 SCP0095_GlobalPSI_Elec.cs:932 SCP0095_GlobalPSI_Elec.cs:934 SCP0095_GlobalPSI_Elec.cs:937 SCP0095_GlobalPSI_Elec.cs:939
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.SpdMain_TopChange,T-370ff033,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.SpdMain_TopChange,SCP0095_GlobalPSI_Elec.SpdMain_TopChange,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:562 SCP0095_GlobalPSI_Elec.cs:563 SCP0095_GlobalPSI_Elec.cs:564
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.btnItem_Id_Click,T-6456d82a,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.btnItem_Id_Click,SCP0095_GlobalPSI_Elec.btnItem_Id_Click,Y,REVIEW,진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요),7,SCP0095_GlobalPSI_Elec.cs:1026 SCP0095_GlobalPSI_Elec.cs:1028 SCP0095_GlobalPSI_Elec.cs:1030 SCP0095_GlobalPSI_Elec.cs:1032
+E4|MSG:MSG00007,T-c86f75ce,E4,EDIT,MSG,MSG00007,MSG00007,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,1,SCP0095_GlobalPSI_Elec.cs:527
+I1|SCREEN,T-270b7b11,I1,DESIGN,SCREEN,SCP0095,SCP0095 화면,Y,NOT_RUN,검사기 있음(judge(DB 조회)·하네스 I18N1) — 실행 필요: meta,1,SCP0095_GlobalPSI_Elec.cs:527
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.btnMeasure_Click,T-28a55709,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.btnMeasure_Click,SCP0095_GlobalPSI_Elec.btnMeasure_Click,Y,REVIEW,진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요),10,SCP0095_GlobalPSI_Elec.cs:531 SCP0095_GlobalPSI_Elec.cs:533 SCP0095_GlobalPSI_Elec.cs:535 SCP0095_GlobalPSI_Elec.cs:539 SCP0095_GlobalPSI_Elec.cs:543
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,T-7868257c,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요),3,SCP0095_GlobalPSI_Elec.cs:972 SCP0095_GlobalPSI_Elec.cs:973
+C2|ENTRY:SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,T-395cacb1,C2,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,Y,NA,검사 대상 아님 — 이 화면에 C2 를 적용할 요소(컬럼·조회조건·SP)가 없다,2,SCP0095_GlobalPSI_Elec.cs:972 SCP0095_GlobalPSI_Elec.cs:973
+C3|ENTRY:SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,T-adf350e2,C3,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,2,SCP0095_GlobalPSI_Elec.cs:972 SCP0095_GlobalPSI_Elec.cs:973
+C6|ENTRY:SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,T-0cec546f,C6,CASCADE,ENTRY,SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,SCP0095_GlobalPSI_Elec.chkSum_CheckedChanged,Y,NA,검사 대상 아님 — 이 화면에 C6 를 적용할 요소(컬럼·조회조건·SP)가 없다,2,SCP0095_GlobalPSI_Elec.cs:972 SCP0095_GlobalPSI_Elec.cs:973
+B3|COND:cboBucketType,T-93ffd150,B3,COMBO,COND,cboBucketType,cboBucketType / Bucket / Bucket Type,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,3,SCP0095_GlobalPSI_Elec.cs:198
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.getCellValue,T-55461ba7,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.getCellValue,SCP0095_GlobalPSI_Elec.getCellValue,Y,REVIEW,진입점 집계 2검사 — NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:1040 SCP0095_GlobalPSI_Elec.cs:1044 SCP0095_GlobalPSI_Elec.cs:1045 SCP0095_GlobalPSI_Elec.cs:1047 SCP0095_GlobalPSI_Elec.cs:1049
+B4|ENTRY:SCP0095_GlobalPSI_Elec.getCellValue,T-e7367202,B4,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.getCellValue,SCP0095_GlobalPSI_Elec.getCellValue,Y,REVIEW,진입점 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),7,SCP0095_GlobalPSI_Elec.cs:1040 SCP0095_GlobalPSI_Elec.cs:1044 SCP0095_GlobalPSI_Elec.cs:1045 SCP0095_GlobalPSI_Elec.cs:1047 SCP0095_GlobalPSI_Elec.cs:1049 SCP0095_GlobalPSI_Elec.cs:1056
+B3|ENTRY:SCP0095_GlobalPSI_Elec.getCellValue,T-8b615a44,B3,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.getCellValue,SCP0095_GlobalPSI_Elec.getCellValue,N,REVIEW,진입점 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),7,SCP0095_GlobalPSI_Elec.cs:1040 SCP0095_GlobalPSI_Elec.cs:1044 SCP0095_GlobalPSI_Elec.cs:1045 SCP0095_GlobalPSI_Elec.cs:1047 SCP0095_GlobalPSI_Elec.cs:1049 SCP0095_GlobalPSI_Elec.cs:1056
+B3|COND:cboCompany,T-99bbfd81,B3,COMBO,COND,cboCompany,cboCompany / Company,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,3,SCP0095_GlobalPSI_Elec.cs:168
+B3|COND:cboDivision,T-2bb52e3a,B3,COMBO,COND,cboDivision,cboDivision / Division,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,3,SCP0095_GlobalPSI_Elec.cs:153
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.getFromYYYYMMDD,T-009938d0,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.getFromYYYYMMDD,SCP0095_GlobalPSI_Elec.getFromYYYYMMDD,Y,REVIEW,진입점 집계 2검사 — NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:214
+B4|ENTRY:SCP0095_GlobalPSI_Elec.getFromYYYYMMDD,T-7ea01ceb,B4,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.getFromYYYYMMDD,SCP0095_GlobalPSI_Elec.getFromYYYYMMDD,Y,REVIEW,진입점 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:214
+B3|ENTRY:SCP0095_GlobalPSI_Elec.getFromYYYYMMDD,T-a7500be3,B3,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.getFromYYYYMMDD,SCP0095_GlobalPSI_Elec.getFromYYYYMMDD,N,REVIEW,진입점 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:214
+B4|COND:txtItem_Id,T-a63b7eaf,B4,COMBO,COND,txtItem_Id,txtItem_Id / Elec Material / Item_Id / Meterial,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,SCP0095_GlobalPSI_Elec.cs:183
+B3|COND:txtItem_Id,T-5f14fb87,B3,COMBO,COND,txtItem_Id,txtItem_Id / Elec Material / Item_Id / Meterial,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,3,SCP0095_GlobalPSI_Elec.cs:183
+B3|COND:cboPlanDate,T-e5db9c2e,B3,COMBO,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,2,SCP0095_GlobalPSI_Elec.cs:262
+B4|COND:cboPlanType,T-031fe029,B4,COMBO,COND,cboPlanType,cboPlanType / Report Type / Plan Type,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,SCP0095_GlobalPSI_Elec.cs:243
+B3|COND:cboPlanType,T-85b92dac,B3,COMBO,COND,cboPlanType,cboPlanType / Report Type / Plan Type,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,3,SCP0095_GlobalPSI_Elec.cs:243
+X-ROW|ENTRY:SCP0095_GlobalPSI_Elec.getToYYYYMMDD,T-b9cdceaa,X-ROW,GEN,ENTRY,SCP0095_GlobalPSI_Elec.getToYYYYMMDD,SCP0095_GlobalPSI_Elec.getToYYYYMMDD,Y,REVIEW,진입점 집계 2검사 — NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:228
+B4|ENTRY:SCP0095_GlobalPSI_Elec.getToYYYYMMDD,T-ba778903,B4,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.getToYYYYMMDD,SCP0095_GlobalPSI_Elec.getToYYYYMMDD,Y,REVIEW,진입점 집계 — B4 6요소: NOPATH:6 (미실행 요소가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:228
+B3|ENTRY:SCP0095_GlobalPSI_Elec.getToYYYYMMDD,T-688f40b8,B3,COMBO,ENTRY,SCP0095_GlobalPSI_Elec.getToYYYYMMDD,SCP0095_GlobalPSI_Elec.getToYYYYMMDD,N,REVIEW,진입점 집계 — B3 6요소: TODO:6 (미실행 요소가 남아 판정필요),2,SCP0095_GlobalPSI_Elec.cs:228
+H6|COND:cboDivision,T-36c6acc6,H6,POPUP,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke,2,SCP0095_GlobalPSI_Elec.cs:1085 SCP0095_GlobalPSI_Elec.cs:1086 SCP0095_GlobalPSI_Elec.cs:1089 SCP0095_GlobalPSI_Elec.cs:1092 SCP0095_GlobalPSI_Elec.cs:1093 SCP0095_GlobalPSI_Elec.cs:1100
+H6|COND:cboPlanDate,T-c9e0f9ae,H6,POPUP,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke,2,SCP0095_GlobalPSI_Elec.cs:1085 SCP0095_GlobalPSI_Elec.cs:1086 SCP0095_GlobalPSI_Elec.cs:1089 SCP0095_GlobalPSI_Elec.cs:1092 SCP0095_GlobalPSI_Elec.cs:1093 SCP0095_GlobalPSI_Elec.cs:1104
+G5|COND:cboDivision,T-281b43aa,G5,POPUP,COND,cboDivision,cboDivision / Division,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,SCP0095_GlobalPSI_Elec.cs:1085 SCP0095_GlobalPSI_Elec.cs:1086 SCP0095_GlobalPSI_Elec.cs:1089 SCP0095_GlobalPSI_Elec.cs:1092 SCP0095_GlobalPSI_Elec.cs:1093 SCP0095_GlobalPSI_Elec.cs:1100
+G5|COND:cboPlanDate,T-0049d6f3,G5,POPUP,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,SCP0095_GlobalPSI_Elec.cs:1085 SCP0095_GlobalPSI_Elec.cs:1086 SCP0095_GlobalPSI_Elec.cs:1089 SCP0095_GlobalPSI_Elec.cs:1092 SCP0095_GlobalPSI_Elec.cs:1093 SCP0095_GlobalPSI_Elec.cs:1104
+M4|COND:cboDivision,T-a6a54faa,M4,POPUP,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace,2,SCP0095_GlobalPSI_Elec.cs:1085 SCP0095_GlobalPSI_Elec.cs:1086 SCP0095_GlobalPSI_Elec.cs:1089 SCP0095_GlobalPSI_Elec.cs:1092 SCP0095_GlobalPSI_Elec.cs:1093 SCP0095_GlobalPSI_Elec.cs:1100
+M4|COND:cboPlanDate,T-6542e482,M4,POPUP,COND,cboPlanDate,cboPlanDate / Plan-date / Plan Date,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace,2,SCP0095_GlobalPSI_Elec.cs:1085 SCP0095_GlobalPSI_Elec.cs:1086 SCP0095_GlobalPSI_Elec.cs:1089 SCP0095_GlobalPSI_Elec.cs:1092 SCP0095_GlobalPSI_Elec.cs:1093 SCP0095_GlobalPSI_Elec.cs:1104
+H6|ENTRY:SCP0095_GlobalPSI_Elec.spdMain_CellDoubleClick,T-f795d2a1,H6,POPUP,ENTRY,SCP0095_GlobalPSI_Elec.spdMain_CellDoubleClick,SCP0095_GlobalPSI_Elec.spdMain_CellDoubleClick,Y,REVIEW,진입점 집계 — H6 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),12,SCP0095_GlobalPSI_Elec.cs:1085 SCP0095_GlobalPSI_Elec.cs:1086 SCP0095_GlobalPSI_Elec.cs:1089 SCP0095_GlobalPSI_Elec.cs:1092 SCP0095_GlobalPSI_Elec.cs:1093 SCP0095_GlobalPSI_Elec.cs:1095 SCP0095_GlobalPSI_Elec.cs:1096 SCP0095_GlobalPSI_Elec.cs:1098 SCP0095_GlobalPSI_Elec.cs:1101 SCP0095_GlobalPSI_Ele
+G5|ENTRY:SCP0095_GlobalPSI_Elec.spdMain_CellDoubleClick,T-c7d61576,G5,POPUP,ENTRY,SCP0095_GlobalPSI_Elec.spdMain_CellDoubleClick,SCP0095_GlobalPSI_Elec.spdMain_CellDoubleClick,Y,REVIEW,진입점 집계 — G5 2요소: NOPATH:2 (미실행 요소가 남아 판정필요),12,SCP0095_GlobalPSI_Elec.cs:1085 SCP0095_GlobalPSI_Elec.cs:1086 SCP0095_GlobalPSI_Elec.cs:1089 SCP0095_GlobalPSI_Elec.cs:1092 SCP0095_GlobalPSI_Elec.cs:1093 SCP0095_GlobalPSI_Elec.cs:1095 SCP0095_GlobalPSI_Elec.cs:1096 SCP0095_GlobalPSI_Elec.cs:1098 SCP0095_GlobalPSI_Elec.cs:1101 SCP0095_GlobalPSI_Ele
+M4|ENTRY:SCP0095_GlobalPSI_Elec.spdMain_CellDoubleClick,T-1724de4a,M4,POPUP,ENTRY,SCP0095_GlobalPSI_Elec.spdMain_CellDoubleClick,SCP0095_GlobalPSI_Elec.spdMain_CellDoubleClick,Y,REVIEW,진입점 집계 — M4 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),12,SCP0095_GlobalPSI_Elec.cs:1085 SCP0095_GlobalPSI_Elec.cs:1086 SCP0095_GlobalPSI_Elec.cs:1089 SCP0095_GlobalPSI_Elec.cs:1092 SCP0095_GlobalPSI_Elec.cs:1093 SCP0095_GlobalPSI_Elec.cs:1095 SCP0095_GlobalPSI_Elec.cs:1096 SCP0095_GlobalPSI_Elec.cs:1098 SCP0095_GlobalPSI_Elec.cs:1101 SCP0095_GlobalPSI_Ele

@@ -1,0 +1,810 @@
+{
+  "config": {
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/DMF0082/e2e/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.49.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_trace.spec.ts",
+      "file": "_trace.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "검증엔진 DMF0082 @trace",
+          "file": "_trace.spec.ts",
+          "line": 69,
+          "column": 6,
+          "specs": [
+            {
+              "title": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 73925,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:38:29.693Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-b2f407245ef36b0ccb50",
+              "file": "_trace.spec.ts",
+              "line": 74,
+              "column": 7
+            },
+            {
+              "title": "G6 조회조건 초기값 = AS-IS 로드 문장",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 29170,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:39:45.612Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-d8106495ef3bc788837a",
+              "file": "_trace.spec.ts",
+              "line": 120,
+              "column": 7
+            },
+            {
+              "title": "C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 134644,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:40:14.808Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-d5d032158bd62ed2f26a",
+              "file": "_trace.spec.ts",
+              "line": 156,
+              "column": 7
+            },
+            {
+              "title": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 93799,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:42:29.477Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-cdef68a84ff2c4409b27",
+              "file": "_trace.spec.ts",
+              "line": 204,
+              "column": 7
+            },
+            {
+              "title": "PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 13764,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:44:03.315Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-3b5b88bffe611357cde0",
+              "file": "_trace.spec.ts",
+              "line": 401,
+              "column": 7
+            },
+            {
+              "title": "W4 D3 행 조건부 잠금 = AS-IS lock_rules",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 62553,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:44:17.117Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-561e0572598d8cd75e72",
+              "file": "_trace.spec.ts",
+              "line": 473,
+              "column": 7
+            },
+            {
+              "title": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 48125,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:45:19.735Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-8df96dfcf23c250eca63",
+              "file": "_trace.spec.ts",
+              "line": 535,
+              "column": 7
+            },
+            {
+              "title": "W4 M4 팝업 선택값 반영 = AS-IS",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 43025,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:46:07.902Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-26f64eb145c8cca0e3e7",
+              "file": "_trace.spec.ts",
+              "line": 606,
+              "column": 7
+            },
+            {
+              "title": "A6 조회 결과 행 순서 = AS-IS ORDER BY",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 43531,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:46:50.979Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-82ccc2b0ae3592b1a058",
+              "file": "_trace.spec.ts",
+              "line": 655,
+              "column": 7
+            },
+            {
+              "title": "W4b H3·F5·F3·M3·J1·H4",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 54682,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:47:34.529Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-6ba5c2db4c3cb889ceda",
+              "file": "_trace.spec.ts",
+              "line": 708,
+              "column": 7
+            },
+            {
+              "title": "D6 Insert 위치·상태 = AS-IS",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "failed",
+                      "duration": 80578,
+                      "error": {
+                        "message": "Error: file data stream has unexpected number of bytes",
+                        "stack": "Error: file data stream has unexpected number of bytes"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: file data stream has unexpected number of bytes"
+                        },
+                        {
+                          "message": "Error: end of central directory record signature not found"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:48:29.236Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0082\\e2e\\artifacts\\_trace-검증엔진-DMF0082-trace-D6-Insert-위치·상태-AS-IS-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0082\\e2e\\artifacts\\_trace-검증엔진-DMF0082-trace-D6-Insert-위치·상태-AS-IS-chromium\\test-failed-2.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-a810fc52aede31e9d269",
+              "file": "_trace.spec.ts",
+              "line": 873,
+              "column": 7
+            },
+            {
+              "title": "W4c 정밀 판정 — 판정필요 해소",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "passed",
+                      "duration": 521588,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:50:01.750Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-f3e0242e719aa840ed13",
+              "file": "_trace.spec.ts",
+              "line": 899,
+              "column": 7
+            },
+            {
+              "title": "W4d 잔여 판정필요 실측",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "passed",
+                      "duration": 214481,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T07:58:44.694Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-fe58d6104e4a19827977",
+              "file": "_trace.spec.ts",
+              "line": 1234,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 DMF0082 @verify",
+          "file": "_verify.spec.ts",
+          "line": 128,
+          "column": 6,
+          "specs": [
+            {
+              "title": "조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "passed",
+                      "duration": 27702,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T08:02:19.707Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ec637560547500630a5e",
+              "file": "_verify.spec.ts",
+              "line": 133,
+              "column": 7
+            },
+            {
+              "title": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "passed",
+                      "duration": 268856,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T08:02:47.433Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-6c01451338aa389c770a",
+              "file": "_verify.spec.ts",
+              "line": 154,
+              "column": 7
+            },
+            {
+              "title": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 0건 · 같은 시간 BE 로그 DB 오류 1건: [DB] ORA-01400 \"SCM_MGR\".\"SCM_COM_SYS_LOG\""
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "passed",
+                      "duration": 63615,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T08:07:16.324Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-43243401675a76973b36",
+              "file": "_verify.spec.ts",
+              "line": 408,
+              "column": 7
+            },
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "failed",
+                      "duration": 382425,
+                      "error": {
+                        "message": "Error: page.evaluate: TypeError: Cannot read properties of undefined (reading 'dataItem')\n    at eval (eval at evaluate (:234:30), <anonymous>:3:54)\n    at eval (eval at evaluate (:234:30), <anonymous>:3:111)\n    at eval (<anonymous>)\n    at UtilityScript.evaluate (<anonymous>:234:30)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)",
+                        "stack": "Error: page.evaluate: TypeError: Cannot read properties of undefined (reading 'dataItem')\n    at eval (eval at evaluate (:234:30), <anonymous>:3:54)\n    at eval (eval at evaluate (:234:30), <anonymous>:3:111)\n    at eval (<anonymous>)\n    at UtilityScript.evaluate (<anonymous>:234:30)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at eval (C:\\Projects\\NSCM\\tools\\E2E\\eval at evaluate (:234:30), <anonymous>:3:54)\n    at eval (C:\\Projects\\NSCM\\tools\\E2E\\eval at evaluate (:234:30), <anonymous>:3:111)\n    at UtilityScript.evaluate (C:\\Projects\\NSCM\\tools\\E2E\\<anonymous>:234:30)\n    at UtilityScript.<anonymous> (C:\\Projects\\NSCM\\tools\\E2E\\<anonymous>:1:44)\n    at Object.candidates (C:\\Projects\\NSCM\\tools\\E2E\\lib\\probe.ts:47:7)\n    at valueFor (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:557:29)\n    at fillEmpty (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:573:19)\n    at ensureFreeKey (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:781:11)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:806:11",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\eval at evaluate (:234:30), <anonymous>",
+                          "column": 54,
+                          "line": 3
+                        }
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\eval at evaluate (:234:30), <anonymous>",
+                            "column": 54,
+                            "line": 3
+                          },
+                          "message": "Error: page.evaluate: TypeError: Cannot read properties of undefined (reading 'dataItem')\n    at eval (eval at evaluate (:234:30), <anonymous>:3:54)\n    at eval (eval at evaluate (:234:30), <anonymous>:3:111)\n    at eval (<anonymous>)\n    at UtilityScript.evaluate (<anonymous>:234:30)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at eval (C:\\Projects\\NSCM\\tools\\E2E\\eval at evaluate (:234:30), <anonymous>:3:54)\n    at eval (C:\\Projects\\NSCM\\tools\\E2E\\eval at evaluate (:234:30), <anonymous>:3:111)\n    at UtilityScript.evaluate (C:\\Projects\\NSCM\\tools\\E2E\\<anonymous>:234:30)\n    at UtilityScript.<anonymous> (C:\\Projects\\NSCM\\tools\\E2E\\<anonymous>:1:44)\n    at Object.candidates (C:\\Projects\\NSCM\\tools\\E2E\\lib\\probe.ts:47:7)\n    at valueFor (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:557:29)\n    at fillEmpty (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:573:19)\n    at ensureFreeKey (C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:781:11)\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:806:11"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T08:08:19.974Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0082\\e2e\\artifacts\\_verify-정합검증-DMF0082-verif-d6aec-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0082\\e2e\\artifacts\\_verify-정합검증-DMF0082-verif-d6aec-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\eval at evaluate (:234:30), <anonymous>",
+                        "column": 54,
+                        "line": 3
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-e401b02cc97a417973d4",
+              "file": "_verify.spec.ts",
+              "line": 471,
+              "column": 7
+            },
+            {
+              "title": "조회조건 콤보 후보 품질(B1·B2)",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 3건: [DB] ORA-01704 문자열이 너무 깁니다 | [DB] ORA-01400 \"SCM_MGR\".\"SCM_COM_SYS_LOG\" | [DB] ORA-01704 문자열이 너무 깁니다\\n\\r\\nhttps://docs.oracle.com/error-help/db/ora-0"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "status": "failed",
+                      "duration": 727174,
+                      "error": {
+                        "message": "Error: BE DB 오류 — SQL 오류 3건(ORA-01704 문자열이 너무 깁니다, ORA-01400 NULL을 (\"SCM_MGR\".\"SCM_COM_SYS_LOG\".\"CREATED_BY\") 안, ORA-01704 문자열이 너무 깁니다\\n\\r\\nhttps://docs.oracle.com/error-hel)",
+                        "stack": "Error: BE DB 오류 — SQL 오류 3건(ORA-01704 문자열이 너무 깁니다, ORA-01400 NULL을 (\"SCM_MGR\".\"SCM_COM_SYS_LOG\".\"CREATED_BY\") 안, ORA-01704 문자열이 너무 깁니다\\n\\r\\nhttps://docs.oracle.com/error-hel)\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:17:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 17
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:17\n\n\u001b[0m \u001b[90m 15 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 16 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 17 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 18 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 19 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 20 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 17
+                          },
+                          "message": "Error: BE DB 오류 — SQL 오류 3건(ORA-01704 문자열이 너무 깁니다, ORA-01400 NULL을 (\"SCM_MGR\".\"SCM_COM_SYS_LOG\".\"CREATED_BY\") 안, ORA-01704 문자열이 너무 깁니다\\n\\r\\nhttps://docs.oracle.com/error-hel)\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:17\n\n\u001b[0m \u001b[90m 15 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 16 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 17 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 18 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 19 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 20 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:17:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-26T08:14:59.329Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0082\\e2e\\artifacts\\_verify-정합검증-DMF0082-verify-조회조건-콤보-후보-품질-B1·B2--chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\DMF0082\\e2e\\artifacts\\_verify-정합검증-DMF0082-verify-조회조건-콤보-후보-품질-B1·B2--chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 17
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-26dfe3695a16840fa626",
+              "file": "_verify.spec.ts",
+              "line": 947,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T07:38:23.085Z",
+    "duration": 3024492.796,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

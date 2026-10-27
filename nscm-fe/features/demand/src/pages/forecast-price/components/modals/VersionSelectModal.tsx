@@ -238,6 +238,16 @@ export const VersionSelectModal = ({
           <SearchArea
             searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleFind}
+            sx={{
+              // 기간이 아닌 칸의 최소폭(공통 290px) 해제 — 이 팝업은 1~2칸짜리 작은 칸(Div / 체크박스 등)이
+              //   많아 공통 조회조건 그리드의 칸 최소폭 합이 팝업 폭을 넘으면 조회조건만 오른쪽으로 튀어나와
+              //   아래 그리드와 끝선이 어긋난다(2026-10-27, CustFcstWaterfallForm 과 같은 처리).
+              //   기간 칸은 공통 388px 바닥(:has periodSplit)을 그대로 두어 날짜 겹침을 막고, 나머지 칸만
+              //   남는 폭에 맞춰 줄게 한다. 공통 규칙(.css-xxx > .MuiGrid-root)보다 특이도가 높아 !important 불필요.
+              //   주의: 근본 원인은 공통 SearchArea(cf8a4526f)의 칸 최소폭 + min-content 설정이다. 공통 쪽에서
+              //   고쳐지면 이 덮어쓰기는 지워도 된다.
+              '& .MuiGrid-container > .MuiGrid-root:not(:has([class*="periodSplit"]))': { minWidth: 0 },
+            }}
             conditions={
               <>
                 <Grid size={2}>

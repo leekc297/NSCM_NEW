@@ -1,0 +1,46 @@
+# [Harness] SCP0018 waterfall-shipment-plan-semi — BLOCK 1 / WARN 43
+
+- WARN AC1 액션 대조표 미처리 200행: AC-10c2a3ac(상태 빈칸 POPUP new SCM0002_ItembyDivisionPopu), AC-eb54c59d(상태 빈칸 POPUP popItem.Form_Load), AC-2c402a01(상태 빈칸 UI_PROP popItem.StartPosition), AC-b7310009(상태 빈칸 POPUP popItem.ShowDialog), AC-7cc8b3c1(상태 빈칸 VALUE_SET txtItemId.Text), AC-4326cd5b(상태 빈칸 POPUP new SCM0002_TitleSetForm_Popup), AC-42fd92ce(상태 빈칸 UI_PROP frm.StartPosition), AC-a52debf3(상태 빈칸 POPUP frm.ShowDialog) … @Doc/asisfacts/screens/SCP0018/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 4행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-acbe6638(DateUtil.GetDayRange @SCP0018_WaterfallShipmentPlanSemi.cs:1039), AC-252453fb(Debug.Print @SCP0018_WaterfallShipmentPlanSemi.cs:348), AC-6ce7d88c(Convert.ToInt64 @SCP0018_WaterfallShipmentPlanSemi.cs:845), AC-4fd72ac1(siMain.SetDblClickColumnShowHide @SCP0018_WaterfallShipmentPlanSemi.cs:978) @Doc/asisfacts/screens/SCP0018/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SCP.SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL (SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO (SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN (SCP0009_GET_SHEET_CALENDAR_3SPAN) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 chkSum.CheckedChanged → chkSum_CheckedChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDivision.SelectedIndexChanged → CboDivision_SelectedIndexChanged1 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbVersion.SelectedIndexChanged → ClbVersion_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboBucketType.SelectedIndexChanged → CboBucketType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItem_Id.Click → BtnItem_Id_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnMeasure.Click → btnMeasure_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 chkSum.CheckedChanged → ChkSum_CheckedChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellDoubleClick → SpdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.TopChange → SpdMain_TopChange 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 usrButton1 / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 dCalendar / UsrDateRangePicker3 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboOperGroup / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkSum / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnMeasure / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItem_Id / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboBucketType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbVersion / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbElecType / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN H03 조회조건 <Checkbox> 디자인(hook #154 v2): v1 무라벨(NBSP/공백 라벨) — 조건명을 FormItem label 로. 정본 GlobalPsiReportForm checkbox()/radio() — Grid(customGrid)+FormItem(formItem, label=조건명, labelAlign='right')+customCheckbox+<Checkbox checked onChange/> · Radio = FormItem label=그룹명 + <RadioGroup row><Radio labelText/> @components/WaterfallShipmentPlanSemiForm.tsx:271
+- WARN V01 As-is Validation 1건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- BLOCK MS1 AS-IS 메시지 ID 그대로 사용: MSG00109 — AS-IS '읽기 전용입니다.' / TO-BE MSG00109 = '읽기전용 상태입니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+) @waterfall-shipment-plan-semi.constants.ts
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 2건 — 조회(SEARCH) SEQ4 [MSG00108] 시작일자가 종료일자보다 늦을 수 없 / 조회(SEARCH) SEQ5 [MSG00172] 최대 조회일은 From Date + → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0018.md
+- WARN VR2 MSG00097 — VALIDATION 취합 판정: 화면 열기(OPEN) SEQ1 AS-IS MSG00097 [메시지 불일치] — [메시지 불일치] 불일치 — AS-IS '권한을 가진 Division이 없습니다.' ↔ TO-BE MSG00097 KO 'Division 을 선택하세요.' — 권 @waterfall-shipment-plan-semi.constants.ts:44
+- WARN VR2 MSG00013 — VALIDATION 취합 판정: 조회(SEARCH) SEQ1 AS-IS MSG00097 [메시지 불일치] — [메시지 불일치] 불일치 — AS-IS 권한 Division 없음 ↔ TO-BE '필수 입력란을 입력해 주세요.'(필수 입력 안내) / TO-BE 마스터 같은 의 @waterfall-shipment-plan-semi.constants.ts:46
+- WARN VC1 대조표 미검증 463행 — 검사 사유 NOPATH 43 · NOT_RUN 962 · REVIEW 459 · TODO 19 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 217건 / 검사 인스턴스 233 — W4 3 · W5 8 · W6 141 · W7 65 · 구현 의심 2 (Doc/verify/SCP0018/work_ledger.md)
+- WARN B08 As-is DeleteButton override 있음 → hotkeyConfig.delete 가 false 가 아니어야 함 — As-is 기능 누락(members.csv DeleteButton)
+- WARN B13 AS-IS 파일:라인 주석(// AS-IS …:L) — 이벤트 10건 대비 AS-IS 참조 주석 1건 — 1:1 추적 근거
+- WARN B19 validation.md 1행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0018/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0018/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0018/SCP0018_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0018/SCP0018_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: InitSpreadDateColumnISO:344, InitSpreadDateColumnNotISO:413, InitSpreadDateColumnNotISO:421 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpreadDateColumnISO / 344 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md

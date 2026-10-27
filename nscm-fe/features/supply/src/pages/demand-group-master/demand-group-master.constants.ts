@@ -51,8 +51,8 @@ export const LBL = {
   DIVISION: 'LBL00001',
   OPERATION_GROUP: 'LBL00027',
   GROUP_NAME: 'LBL00037',
-  PROJECT: 'LBL00617',
-  MODEL: 'LBL00669',
+  PROJECT: 'LBL00012',
+  MODEL: 'LBL00618',
   SEARCH: 'LBL00112',
 } as const;
 
@@ -65,8 +65,8 @@ export const MSG = {
   // 저장 성공 — SCM_ADM_MSG_M 실측 MSG00002='Saved successfully.'(KO/EN/CN 3행). hook #114 문구 역조회.
   //   gap-resolve iter-1 G-01: 기존 'MSG00004' 는 TO-BE 에서 'No changes to save.' 라 성공 문구 아님 → 재매핑.
   SAVED: 'MSG00002',
-  // 저장 실패 — SCM_ADM_MSG_M 실측 MSG00006='Failed to save.'(KO/EN/CN 3행). 저장 오류 alert 전용.
-  SAVE_FAILED: 'MSG00006',
+  // 저장 실패 — 저장 오류 alert 전용. (AS-IS MSG00006 는 TO-BE 미등록 → 같은 문구 MSG00003, KO/EN/CN)
+  SAVE_FAILED: 'MSG00003',
   // 복수 Project 동일그룹 금지 — AS-IS 리터럴(SCM_ADM_MSG_M 미등록). 다국어 신규 등록 필요(04 확인필요/I-04).
   //   미등록 상태라 fallback 문구(AS-IS 한글 리터럴)로 노출 — 기존 화면의 t(key,'_fallback') 관례.
   MULTI_PROJECT_SAME_GROUP: 'MSG_SCP0110_MULTI_PROJECT',

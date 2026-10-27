@@ -1,4 +1,4 @@
-import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import { DataMap, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -6,12 +6,19 @@ import { apiClient } from '@foundation/apis';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDialog, CustomDropdown, DataGrid, ResultArea } from '@shared/components';
+import {
+  CustomDialog,
+  CustomDropdown,
+  DataGrid,
+  PeriodRangePicker,
+  ResultArea,
+} from '@shared/components';
 import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import {
+  ALL,
   BATCH_DAY_OF_WEEK,
   BATCH_DEFAULT_OFF_TIME,
   BATCH_DEFAULT_WEEKS,
@@ -20,11 +27,12 @@ import {
   BATCH_ROW_DELIMITER,
   FALLBACK_LABEL,
   LBL,
+  MAX_DECIMAL_SCALE,
   MENU_ID,
   MSG,
   SHEETS,
 } from '../../opt-capa.constants';
-import type { BatchGridRow, ComboOption, LineRow } from '../../opt-capa.types';
+import type { BatchGridRow, ComboOption, LineRow, NoWorkTypeRow } from '../../opt-capa.types';
 import { buildLineOptions, str } from '../../utils/optCapa.candidates';
 
 import styles from './NoWorkBatchModal.module.scss';
@@ -33,9 +41,13 @@ interface Props {
   open: boolean;
   /** 부모가 확정한 조회조건 — AS-IS `popup.Form_Load(division, dtPlantId, dtLineAll)`(cs:3852). */
   divisionId: string;
+  /** Division 콤보 옵션 — AS-IS `cboDivision` 은 부모 값 고정·비활성이라 표시(코드→명)용으로만 쓴다. */
+  divisionOptions: ComboOption[];
   plantOptions: ComboOption[];
   /** `dtLineAll` 원본 — 팝업이 Plant 선택으로 다시 좁히므로 옵션이 아니라 행을 받는다(cs:172). */
   lineAll: LineRow[];
+  /** `init` `o_rc6`(lookup `NO_WORK_TYPE`) — 그리드 Type 칸 선택 목록(AS-IS BatchPopup cs:490-500). */
+  noWorkTypes: NoWorkTypeRow[];
   onClose: () => void;
   /** AS-IS `DialogResult.OK` — **저장 성공 시에만** 부모가 재조회한다(cs:3855-3858 / R07). */
   onSaved: () => void;
@@ -112,8 +124,10 @@ const useBatchColumns = (open: boolean): RawFlexGridColumnConfig[] => {
 export const NoWorkBatchModal = ({
   open,
   divisionId,
+  divisionOptions,
   plantOptions,
   lineAll,
+  noWorkTypes,
   onClose,
   onSaved,
 }: Props) => {
@@ -136,13 +150,39 @@ export const NoWorkBatchModal = ({
   const [saving, setSaving] = useState(false);
 
   /**
+   * Type 칸 선택 목록 — AS-IS 는 Edit 상태에서 셀을 누르면 lookup `NO_WORK_TYPE` 목록을 붙인다
+   * (BatchPopup cs:490-500). 칸 구성은 DataGrid 가 메타로 만들므로 그리드가 생긴 뒤 붙인다.
+   */
+  useEffect(() => {
+    if (!open) return;
+    let attempts = 0;
+    let timer = 0;
+    const apply = () => {
+      const column = gridRef.current?.columns.getColumn('NO_WORK_TYPE');
+      if (!column) {
+        if (++attempts <= 20) timer = window.setTimeout(apply, 100);
+        return;
+      }
+      column.dataMap = new DataMap(
+        ['', ...noWorkTypes.map(row => str(row.CODE)).filter(Boolean)].map(value => ({ value })),
+        'value',
+        'value'
+      );
+    };
+    apply();
+    return () => window.clearTimeout(timer);
+  }, [open, batchColumns, noWorkTypes, rows]);
+
+  /**
    * Line 후보 — AS-IS `RefreshLine`(BatchPopup cs:165-175):
    * `DIVISION_ID = '<부모 division>' AND PLANT_ID IN (선택 Plant)`.
-   * Plant 미선택(ALL)이면 부모가 넘긴 Plant 후보 전체를 전개한다(`GetCheckedListValue` 규약).
+   * Plant 미선택 또는 전체 선택(`'ALL'`)이면 부모가 넘긴 Plant 후보 전체를 전개한다(`GetCheckedListValue` 규약).
    */
   const scopedLineOptions = useMemo(() => {
     const plantCodes =
-      plantIds.length > 0 ? plantIds : plantOptions.map(option => option.value).filter(Boolean);
+      plantIds.length > 0 && !plantIds.includes(ALL)
+        ? plantIds
+        : plantOptions.map(option => option.value).filter(Boolean);
     return buildLineOptions(lineAll, divisionId, [...new Set(plantCodes)]);
   }, [lineAll, divisionId, plantIds, plantOptions]);
 
@@ -161,6 +201,7 @@ export const NoWorkBatchModal = ({
           SEQ: seq,
           DAY_OF_WEEK: dayOfWeek,
           OFF_TIME: BATCH_DEFAULT_OFF_TIME,
+          NO_WORK_TYPE: '',
           DESC: '',
         });
         seq += 1;
@@ -207,6 +248,25 @@ export const NoWorkBatchModal = ({
         return;
       }
 
+      // 가드 ④ 행별 Off Time 숫자·소수 10자리(BatchPopup cs:367-405 · AS-IS MSG00050 → TO-BE MSG01082).
+      for (const row of source) {
+        const offTime = str(row.OFF_TIME).trim();
+        if (!/^\d+(\.\d+)?$/.test(offTime)) {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.INVALID_NUMBER, '_Invalid number format. {0}').replace(
+              '{0}',
+              `Off Time : ${offTime}`
+            ),
+          });
+          return;
+        }
+        if ((offTime.split('.')[1] ?? '').length > MAX_DECIMAL_SCALE) {
+          void setAlert({ type: 'alert', content: t(MSG.DIGIT_EXCEEDED, '_Too many digits.') });
+          return;
+        }
+      }
+
       savingRef.current = true;
       setSaving(true);
       try {
@@ -217,19 +277,27 @@ export const NoWorkBatchModal = ({
         //   · VARCHAR `lineId`                        -> `','`  (`STRING_SPLIT`, BODY:3467)
         // 하나로 합쳐 쓰면 `F_INT` 가 `INVALID_NUMBER` 를 던져 일괄저장이 전건 실패한다(RP-3).
         //
-        // `type` 은 AS-IS 워킹트리가 보내지 않는 신 리비전 파라미터다(§6-L1) — 행마다 빈 값을
-        //   자리수만 맞춰 보낸다(누락하면 다른 CLOB 과 행 수가 어긋난다). SP 는 이 값을
-        //   `SCP_OPMZ_NO_WORK.ATTRIBUTE2`(NULLABLE) 에 넣으므로 공백이어도 NOT NULL 위반이 아니다
-        //   (BODY:3516 `V_DAY_TYPE -- ATTRIBUTE2 AS TYPE`, 컬럼 실측 `NULLABLE='Y'`).
+        // `type` = 그리드 Type 칸(AS-IS BatchPopup `NO_WORK_TYPE`, cs:186-197·490-500). 행마다 보내며
+        //   SP 는 `SCP_OPMZ_NO_WORK.ATTRIBUTE2` 에 넣는다(빈 값 허용).
+        // 공용 드롭다운은 전체 선택을 `'ALL'` 한 값으로 둔다(다시 누르면 전체 해제되도록 화면 값은 그대로 둔다).
+        //   그대로 보내면 `lineId='ALL'` 로 0건 저장이 되므로 보낼 때만 후보 코드 전부로 바꾼다
+        //   — AS-IS 팝업은 체크한 코드 전부를 보낸다(BP 411-428). 같은 Line 코드가 여러 Plant 에 있어
+        //   후보에 중복이 생기므로 코드 기준으로 한 번만 보낸다.
+        const lineCodes = [
+          ...new Set(
+            lineIds.includes(ALL)
+              ? scopedLineOptions.map(option => option.value).filter(Boolean)
+              : lineIds
+          ),
+        ];
         const payload = {
           divisionId,
-          lineId: lineIds.join(BATCH_LINE_DELIMITER),
+          lineId: lineCodes.join(BATCH_LINE_DELIMITER),
           startDate: period.start,
           endDate: period.end,
           seq: source.map(row => str(row.SEQ)).join(BATCH_ROW_DELIMITER),
           offTime: source.map(row => str(row.OFF_TIME)).join(BATCH_ROW_DELIMITER),
-          // 행 수만 맞춘 공백 토큰 — 감사키가 아니라 위치 정렬용이다(위 주석 참조).
-          type: new Array(source.length).fill('').join(BATCH_ROW_DELIMITER),
+          type: source.map(row => str(row.NO_WORK_TYPE)).join(BATCH_ROW_DELIMITER),
           desc: source.map(row => str(row.DESC)).join(BATCH_ROW_DELIMITER),
           sesUserId: useSessionStore.getState().session.userId ?? '',
         };
@@ -325,13 +393,16 @@ export const NoWorkBatchModal = ({
             placement='parent'
           />
           <Grid container spacing={1}>
-            {/* Division — 부모 값 고정 + 비활성(cs:116·120). 사용자가 바꿀 수 없다. */}
+            {/* Division — 부모 값 고정 + 비활성(cs:116·120). 사용자가 바꿀 수 없다.
+                AS-IS `cboDivision` 과 동일하게 콤보로 표시하되 disabled 로 코드가 아닌 사업부명을 보여준다. */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
                 label={t(LBL.DIVISION, 'Division')}
                 labelAlign='right'
-                render={() => <InputField fullWidth readOnly disabled value={divisionId} />}
+                render={() => (
+                  <CustomDropdown disabled value={divisionId} options={divisionOptions} />
+                )}
               />
             </Grid>
             {multiCondition(LBL.PLANT, 'Plant', plantIds, plantOptions, codes => {
@@ -356,14 +427,10 @@ export const NoWorkBatchModal = ({
             </Grid>
           </Grid>
           <div className={styles.periodRow}>
-            <InputField
-              value={period.start}
-              onChange={event => setPeriod({ ...period, start: event.target.value })}
-            />
-            <span className={styles.periodSep}>~</span>
-            <InputField
-              value={period.end}
-              onChange={event => setPeriod({ ...period, end: event.target.value })}
+            <PeriodRangePicker
+              start={period.start}
+              end={period.end}
+              onChange={(start, end) => setPeriod({ start, end })}
             />
             <Button
               appearance='outlined'

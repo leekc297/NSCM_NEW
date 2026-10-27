@@ -68,28 +68,34 @@ interface Action {
 
 type DayRange = { fromYyyymmdd: string; toYyyymmdd: string };
 
-// AS-IS DateUtil.GetDayRange(division, bucket, fromDate) 이식(design 02 §2 C6/§3). 공통 유틸 본문은 이 화면
-//   소스 밖이고 AS-IS 원본(회사 소스) 접근이 차단돼 직접 실측 불가 — 확인된 사실만 반영한다:
-//   (a) 기본 오프셋 12개월(자매 SCP0017 이 DateUtil.cs:156 실측). Check_PeriodDate 상한(from+1년+7일=371일) 이내.
-//   (b) bucket 반영: MONTHLY 는 월 단위 계획이라 anchor 를 월초로 정렬(월중 시작 배제). DAILY/WEEKLY/WEEKLY_ISO
-//       는 version 계획시작일(주 시작)을 그대로 anchor 로 쓴다.
-//   division 은 AS-IS 시그니처 파라미터로 받되 기본 기간을 바꾼다는 근거가 없어 산식에 미반영한다 — 근거 없는
-//   division 별 offset 임의 부여는 anti-simplification 위반이라 하지 않는다(정본 확인 후 반영, design 02 §7 확인필요).
+// AS-IS DateUtil.GetDayRange → 서버 SP SCM0001_GET_SCP_MONTH_PERIOD 이식(design 02 §C6/§3).
+//   AS-IS 원본은 리포 GSCM/ 에 있어 실측(AGENT rule #5 / SCP0016.cs:214·609·1162 → DateUtil.cs:156):
+//   SP Branch1(선택 Version 의 weekly plan 이 SCM_MST_PLAN 에 존재 — Version 필수라 상시 경로)은
+//   bucket·division 무관하게 to = from + 363일. (AS-IS MSSQL 실측: PLAN_NAME 20260824 → 20270822, span 363.)
+//   종전 근사(+12개월−1일 · MONTHLY 월초정렬)는 설계 C6 의 "SP 없음" 오기에 기반한 추정이라 제거한다.
 const getDayRange = (
   division: string,
   bucket: BUCKET_TYPE,
   from: ReturnType<typeof dayjs>
 ): DayRange => {
-  void division; // 시그니처 파라미터(확인필요) — 정본 산식 확정 후 반영
-  const anchor = bucket === BUCKET_TYPE.MONTHLY ? from.startOf('month') : from;
+  void division; // AS-IS SP 시그니처 파라미터 — Branch1 산식 미반영(SP 실측 확인)
+  void bucket; // AS-IS Branch1 은 bucket 무관 (월초정렬 없음)
   return {
-    fromYyyymmdd: anchor.format('YYYYMMDD'),
-    toYyyymmdd: anchor.add(12, 'month').subtract(1, 'day').format('YYYYMMDD'),
+    fromYyyymmdd: from.format('YYYYMMDD'),
+    toYyyymmdd: from.add(363, 'day').format('YYYYMMDD'),
   };
 };
 
-// 버전 미선택(mount/reset) 기본 = 당월 1일 anchor. division 미정('')·bucket 기본 DAILY 로 getDayRange.
-const defaultPeriod = (): DayRange => getDayRange('', BUCKET_TYPE.DAILY, dayjs().startOf('month'));
+// 버전 미선택(mount/reset) 기본 = AS-IS SP Branch2(GetWaterInit cs:214, strFromDate 공란):
+//   from = 오늘, to = (오늘 + 12개월)을 그 주의 주초(일요일)로 라운딩.
+//   AS-IS SP ELSE 분기 — SCM_SYS_CALENDAR_M MAX 를 `-DATEPART(DW)+1`(일요일 시작) 로 당긴다.
+//   화면 실측(81 Division, Version 미선택): 오늘 2026-10-20 → 2026-10-20 ~ 2027-10-17.
+const defaultPeriod = (): DayRange => {
+  const from = dayjs();
+  const maxEnd = from.add(12, 'month');
+  const to = maxEnd.subtract(maxEnd.day(), 'day'); // dayjs day(): Sun=0 → 그 주 일요일로 당김
+  return { fromYyyymmdd: from.format('YYYYMMDD'), toYyyymmdd: to.format('YYYYMMDD') };
+};
 
 // AS-IS ClbVersion_SelectedIndexChanged → dCalendar.InitValue = GetDayRange(division, bucket, versionStart).
 //   versionStart = 선택 version 코드 뒤 8자(SP_W_YYYYMMDD 의 계획시작일). 코드가 무효면 null(기존 기간 유지).
@@ -167,13 +173,18 @@ export const useWaterfallShipmentPlanFgStore = createPersistedStoreWithTab<State
         state.visibleMeasures = null;
         state.columnSettings = null;
       }),
-    // Version 변경 → Period 재산정 (AS-IS ClbVersion_SelectedIndexChanged, design 02 §3). 코드 뒤 8자 = 계획시작일.
-    //   코드가 무효면 기간 유지(추측 금지). PeriodField 수동 변경은 이후에도 그대로 override.
+    // Version 변경 → Period 재산정 (AS-IS ClbVersion_SelectedIndexChanged → GetDayRange(), design 02 §3).
+    //   AS-IS 는 선택/해제 모두에서 GetDayRange() 를 재호출한다: 선택 시 strFromDate=계획시작일 → Branch1(+363),
+    //   전체 해제(ALL) 시 strFromDate 공란 → Branch2(오늘 기본값)로 복귀. 선택했는데 코드가 무효면 기간 유지.
+    //   PeriodField 수동 변경은 이후에도 그대로 override.
     setVersions: versionNos =>
       set(state => {
         const cur = get().searchParams;
         const next: SearchParams = { ...cur, versionNos };
-        const period = periodFromVersion(versionNos[0], cur.divisionId, cur.bucket);
+        const period =
+          versionNos.length === 0
+            ? defaultPeriod() // 전체 해제 = AS-IS GetDayRange() 공란 → Branch2 오늘 기본값 복귀
+            : periodFromVersion(versionNos[0], cur.divisionId, cur.bucket);
         if (period) {
           next.fromYyyymmdd = period.fromYyyymmdd;
           next.toYyyymmdd = period.toYyyymmdd;
@@ -241,9 +252,14 @@ export const useWaterfallShipmentPlanFgStore = createPersistedStoreWithTab<State
     // admin SCM_MST_SHEET_MEASURE('Shipment Plan FG') 동적 fetch — Measure 팝업 원천(design 03 §4.3). 미등록 시 빈 배열.
     fetchStaticMeasures: async () => {
       try {
+        // divisionId 를 넘기지 않는다(빈값 → SP P_DIVISION_ID IS NULL 분기 → 전체 반환).
+        //   SCM_MST_SHEET_MEASURE 의 measure 는 DIVISION_ID=NULL(전 사업부 공통)인데, SP
+        //   PR_GET_SHEET_MEASURE_LIST 의 필터가 `P_DIVISION_ID IN (split(M.DIVISION_ID))` 라
+        //   구체 division('40')을 넘기면 NULL 분할=공집합이 되어 공통 measure 가 전부 탈락한다
+        //   (조회 후 저장→재조회 시 팝업 공란 버그). 컬럼 메타 fetch 와 동일하게 division 미전달로 통일.
         const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {
           sheetNm: ADMIN_MEASURE_SHEET_NAME,
-          divisionId: get().searchParams.divisionId,
+          divisionId: '',
         });
         const next = res.data.result ?? [];
         set(state => {

@@ -1,22 +1,27 @@
-import { PeriodField } from 'features/master/src/components';
+import { useEffect, useMemo, useRef } from 'react';
 
 import type { ComboParam, ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown, SearchArea } from '@shared/components';
-import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
-import { Button, FormItem } from '@shared/lges';
+import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
+import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
-import { COMBO, DAY_WEEK, DAY_WEEK_LOOKUP, LBL } from '../shipment-working-day-osp.constants';
+import {
+  COMBO,
+  DAY_RANGE_PARAMS,
+  LBL,
+  MENU_ID,
+  RESPONSE_SET,
+  SHEETS,
+} from '../shipment-working-day-osp.constants';
 import { useShipmentWorkingDayOspStore } from '../useShipmentWorkingDayOspStore';
 
 interface Props {
   onSubmit: () => void;
   // Division 변경 = Grid 초기화 (부모 resetGrid — 조회 결과·미저장 편집 폐기)
   onDivisionChange: () => void;
-  // btnInput 값입력 — 부모(ShipmentWorkingDayOsp)가 가드(조회 전/SelectDay/셀 미선택/형식) 후 선택 D_ 셀에 write.
-  onInput: () => void;
 }
 
 interface Option {
@@ -36,9 +41,9 @@ const toOptions = (rows: ComboResponse[] | undefined): Option[] =>
 //      반환하지 않아 클라필터가 무동작이었음. 서버 필터를 가진 자매 등록행으로 교체).
 //   #2 PlantSite(PlantByDivisionOperOsp3_SCP, OSP_YN='Y' 고정) — cascade 재조회형: 선택 division 을
 //      ComboParam.divisionId 로 실어 react-query 키를 바꿔 자동 재조회(TactTime 필터형과 달리 §3 재조회).
-//   #3 Period(dCalendar) · #4 DayWeek(lookup WEEK_WORK_TIME) · #5 InputValue(YesOrNo — 셀콤보와 공유).
-//   DayWeek→InputValue enable 토글(§2 #4): DayWeek 값 없으면 InputValue 비활성, 있으면(SelectDay 포함) 활성.
-export const ShipmentWorkingDayOspForm = ({ onSubmit, onDivisionChange, onInput }: Props) => {
+//   #3 Period(dCalendar). (DayWeek·InputValue·Input 버튼은 조회조건에서 분리 — 버튼영역 '입력' 버튼이 여는
+//   ShipmentWorkingDayOspInputModal 로 이동, 2026-10-15 사용자 지시.)
+export const ShipmentWorkingDayOspForm = ({ onSubmit, onDivisionChange }: Props) => {
   const { t } = useTranslation();
 
   const searchParams = useShipmentWorkingDayOspStore(state => state.searchParams);
@@ -55,31 +60,55 @@ export const ShipmentWorkingDayOspForm = ({ onSubmit, onDivisionChange, onInput 
     divisionId: searchParams.divisionId,
   };
 
-  // 콤보 — Division 전량 로드 + PlantSite 는 division 키로 재조회(§3). InputValue(YesOrNo) 는 셀콤보와 공유.
-  const [divisions, plantSites, inputValues] = useTabComboQueries({
-    filters: [COMBO.DIVISION, plantSiteFilter, COMBO.INPUT_VALUE],
+  // 콤보 — Division 전량 로드 + PlantSite 는 division 키로 재조회(§3).
+  const [divisions, plantSites] = useTabComboQueries({
+    filters: [COMBO.DIVISION, plantSiteFilter],
   });
-  const [dayWeeks] = useTabLookupQueries({ filters: [DAY_WEEK_LOOKUP] });
 
   // Division — EE 제외는 COMBO.DIVISION(Division_SCP_NoEE) SQL 의 ATTRIBUTE3<>'EE' 서버 필터로 처리된다.
   const divisionOptions = toOptions(divisions);
 
-  // PlantSite — 재조회 결과 그대로(server @divisionId 바인딩). 클라 재필터 불필요(§3 재조회형).
-  const plantSiteOptions = toOptions(plantSites);
+  // WLast 프리셋(PeriodRangePicker)용 사업부 기본기간 주차 — SCM_MST_DIVISION.DAILY_PLAN_PERIOD.
+  //   Division_SCP_NoEE 콤보가 이 컬럼을 함께 반환(DB 실측)하므로 선택행에서 읽는다. 조회기간 "기본값"은
+  //   아래 dayRange SP 가 산정하고, 이 값은 WLast 프리셋 버튼에만 쓴다(production-plan-line 동형).
+  const divisionPeriod =
+    Number(
+      (divisions ?? []).find(r => str(r.CODE) === searchParams.divisionId)?.DAILY_PLAN_PERIOD
+    ) || 0;
 
-  // InputValue(YesOrNo) — Y/N. cboDayWeek 값이 없으면 비활성(§2 #4). SelectDay 포함 값이 있으면 활성.
-  const inputValueOptions = toOptions(inputValues);
-
-  // cboDayWeek = lookup WEEK_WORK_TIME (SEGMENT1=CODE/SEGMENT2=NAME → 공용 lookup 훅 정규화). 기본 SelectDay.
-  const dayWeekOptions: Option[] = (dayWeeks ?? []).map(r => {
-    const rec = r as Record<string, unknown>;
-    return { label: str(rec.NAME) || str(rec.CODE), value: str(rec.CODE) };
+  // AS-IS DateUtil.GetDayRange(division,"DAILY") 재현 — 조회기간 기본값은 서버 SP(dayRange)가 산정한다
+  //   (SCP0096.cs:837 → DateUtil.cs:156 → PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD). 클라 계산 아님.
+  //   필터는 divisionId 가 바뀔 때만 새 참조가 되도록 useMemo 로 고정한다(useTabProcQuery 참조고정 규약).
+  const periodFilter = useMemo(
+    () => ({ divisionId: searchParams.divisionId, ...DAY_RANGE_PARAMS }),
+    [searchParams.divisionId]
+  );
+  const { data: periodData } = useTabProcQuery<MENU_ID, SHEETS.PERIOD>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.PERIOD,
+    tabId,
+    filters: periodFilter,
+    enabled: !!searchParams.divisionId,
   });
 
-  // cboDayWeek→cboInputValue enable 토글(02 §2 #4, AS-IS CboDayWeek_SelectedIndexChanged .cs:669-681):
-  //   DayWeek 값이 없으면 InputValue 비활성, 값이 있으면(SelectDay 포함) 활성. SelectDay 는 선택 D_ 셀에
-  //   InputValue 값을 일괄 SetText 하는 경로이므로(AS-IS BtnInput_Click .cs:698-707) 활성이어야 한다.
-  const isDayWeekEmpty = !searchParams.dayWeekCode;
+  // SP 결과 O_RC1.PERIOD='YYYYMMDD:YYYYMMDD' 를 조회기간에 적용 — division 이 바뀌어 새 결과가 올 때만 1회
+  //   적용(appliedPeriodDivisionRef 가드)해, 그 사이 사용자의 기간 수동 편집은 보존한다(AS-IS 는 division 종속).
+  //   PERIOD 가 NULL/형식불량이면 skip(store 기본기간 유지). 컬럼키는 PERIOD, 안전하게 positional fallback.
+  const appliedPeriodDivisionRef = useRef<string>('');
+  useEffect(() => {
+    const rows = (periodData as { o_rc1?: Record<string, unknown>[] })?.[RESPONSE_SET.PERIOD];
+    const first = rows?.[0];
+    if (!first) return;
+    const raw = first.PERIOD ?? Object.values(first)[0];
+    const [from, to] = str(raw).split(':');
+    if (!/^\d{8}$/.test(from ?? '') || !/^\d{8}$/.test(to ?? '')) return;
+    if (appliedPeriodDivisionRef.current === searchParams.divisionId) return;
+    appliedPeriodDivisionRef.current = searchParams.divisionId;
+    setSearchParams({ startYyyymmdd: from, endYyyymmdd: to });
+  }, [periodData, searchParams.divisionId, setSearchParams]);
+
+  // PlantSite — 재조회 결과 그대로(server @divisionId 바인딩). 클라 재필터 불필요(§3 재조회형).
+  const plantSiteOptions = toOptions(plantSites);
 
   const multi = (
     labelCode: string,
@@ -127,7 +156,7 @@ export const ShipmentWorkingDayOspForm = ({ onSubmit, onDivisionChange, onInput 
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.DIVISION, '_Division')}
+              label={t(LBL.DIVISION, '_Div.')}
               labelAlign='right'
               required
               render={() => (
@@ -153,59 +182,23 @@ export const ShipmentWorkingDayOspForm = ({ onSubmit, onDivisionChange, onInput 
           {multi(LBL.PLANT_SITE, '_Plant Site', searchParams.plantSiteIds, plantSiteOptions, plantSiteIds =>
             setSearchParams({ plantSiteIds })
           )}
-          {/* dCalendar 조회기간 — 공용 PeriodField(features/master 카탈로그, 타 supply 화면 1:1). */}
-          <PeriodField
-            gridSize={3}
-            start={searchParams.startYyyymmdd}
-            end={searchParams.endYyyymmdd}
-            onChange={(start, end) => setSearchParams({ startYyyymmdd: start, endYyyymmdd: end })}
-            label={t(LBL.PERIOD, '_Period')}
-          />
-          {/* Day of the week (lookup WEEK_WORK_TIME, 기본 SelectDay — 02 §2 #4). btnInput 값입력 대상 요일 결정. */}
+          {/* 조회기간 — 공용 PeriodRangePicker(2개월 달력 팝업 + 프리셋 내장, 값 YYYYMMDD).
+              사용자 지시 2026-10-13: features/master PeriodField → shared PeriodRangePicker 로 교체. */}
           <Grid size={3}>
-            <FormItem
+            <PeriodRangePicker
+              start={searchParams.startYyyymmdd}
+              end={searchParams.endYyyymmdd}
+              onChange={(start, end) => setSearchParams({ startYyyymmdd: start, endYyyymmdd: end })}
+              label={t(LBL.PERIOD, '_Period')}
+              // AS-IS 필수값(checkRequiredOfSearch .cs:435 — Division/기간) — Division 과 동일하게 필수 표시.
+              required
               className={commonStyles.formItem}
-              label={t(LBL.DAY_OF_THE_WEEK, '_Day of the week')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  value={searchParams.dayWeekCode}
-                  options={dayWeekOptions}
-                  onChange={(_, picked) =>
-                    setSearchParams({ dayWeekCode: String(picked ?? DAY_WEEK.SELECT_DAY) })
-                  }
-                />
-              )}
+              // WLast 프리셋 = 사업부 DAILY_PLAN_PERIOD(주). 52면 W52와 중복이라 내부에서 자동 숨김.
+              lastWeeks={divisionPeriod || undefined}
             />
           </Grid>
-          {/* Input Value(cboInputValue YesOrNo) — 선택 D_ 셀에 요일단위 Y/N write(02 §2 #5). SelectDay 면 비활성(§5). */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.INPUT_VALUE, '_Input Value')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  disabled={isDayWeekEmpty}
-                  value={searchParams.inputValue}
-                  options={inputValueOptions}
-                  onChange={(_, picked) => setSearchParams({ inputValue: String(picked ?? '') })}
-                />
-              )}
-            />
-          </Grid>
-          <Grid size={3}>
-            <Button
-              appearance='outlined'
-              priority='normal'
-              // btnInput 가드(조회 전/SelectDay 셀 미선택/형식)는 onInput(부모)에서 순서대로 판정.
-              //   버튼 자체는 DayWeek 값이 있으면 활성(값 없을 때만 비활성 — AS-IS BtnInput 가드 #4 :710-713).
-              disabled={isDayWeekEmpty}
-              onClick={onInput}
-            >
-              {t(LBL.INPUT, '_Input')}
-            </Button>
-          </Grid>
+          {/* Day of the week · Input Value · Input 버튼은 버튼영역 '입력' 버튼이 여는
+              ShipmentWorkingDayOspInputModal 로 이동했다(2026-10-15 사용자 지시). */}
         </>
       }
     />

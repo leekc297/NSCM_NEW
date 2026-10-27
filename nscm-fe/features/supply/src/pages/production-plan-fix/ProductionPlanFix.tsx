@@ -25,11 +25,13 @@ import { buildUnfixPayload } from './utils/productionPlanFixSave';
 //   AS-IS 소스 확정(gap-resolve iter-2 — GSCM/ 리포 반입 후 정독):
 //     FindButton=조회(cs:605) / btnUnfix=선택셀 기반 Unfix(cs:1199→1249 SaveData_FixInfo_U) /
 //     InsertButton=빈 본문(cs:1059-1061)·DeleteButton=주석(cs:615-618) = NO-OP 확정 →
-//     노출 + 명시적 무동작(insert/delete: ()=>undefined). EditButton=MSG00109("Read-only mode.") 안내 후
+//     당초 노출+무동작이었으나 동작 없는 버튼이라 2026-10-20 제거(아래 hotkeyConfig 참조).
+//     EditButton=MSG00109("Read-only mode.") 안내 후
 //     return(cs:621-634, SwitchLock 주석) — 모드 토글 자체는 asis_to_tobe.md §11 (b) 결정으로 미이식.
 //   주의: AS-IS SaveButton 은 본문 주석(`//SaveData()`, cs:636-639)의 NO-OP 이고 시트도 ReadOnly(cs:415)라
 //     AS-IS 화면엔 편집·Fix 저장 경로가 없다(확정은 SCP0013 쪽). 사용자 결정(2026-09-26, gap-resolve G20):
-//     AS-IS 엄격 재현 채택 — SAVE=NO-OP(노출 유지 무동작), 편집 band·Fix 저장 경로 제거, 시트 전 셀 읽기전용.
+//     AS-IS 엄격 재현 채택 — SAVE=NO-OP, 편집 band·Fix 저장 경로 제거, 시트 전 셀 읽기전용.
+//     (SAVE 버튼은 동작 없는 no-op 이라 2026-10-20 노출도 제거 — false.)
 //     화면의 유일한 활성 쓰기는 Unfix(선택 셀 기반). DB 메타(main/SAVE→_DS 배선)는 유지하되 FE 가 호출하지 않는다.
 //   권한 모델(design 01 R2): Fix/Unfix 는 AS-IS CanUpdate(화면 update 권한) 단일 게이트 — TO-BE 는 SAVE 권한으로 통일
 //     (전용 BTN_CD 미등록, 자매 SCP0013/BOD 선례).
@@ -157,14 +159,15 @@ export const ProductionPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   INSERT/DELETE 는 미등록 → hasButton 이 false → Insert/Delete 버튼은 그려지지 않는다.
   //   사용자 결정(2026-10-09): SCP0024 는 Insert/Delete 버튼을 노출하지 않는다. AS-IS 도 두 버튼은
   //   NO-OP(InsertRow 빈 본문 cs:1059-1061 / DeleteButton 주석 cs:615-618)이라 기능 손실이 없다.
-  //   종전 `() => undefined` 상시 노출(2026-09-26 G20)을 대체한다 — 권한 판정을 타게 되었으므로
-  //   나중에 두 버튼을 되살리려면 FE 수정이 아니라 버튼 메타 등록으로 한다.
+  //   종전 `() => undefined` 상시 노출(2026-09-26 G20)을 대체한다 — 동작 없는 버튼이라 완전 제거(false,
+  //   2026-10-20). 되살리려면 FE 에 실제 핸들러를 배선하고 버튼 메타를 등록한다.
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    // Save — AS-IS SaveButton 은 NO-OP(주석 cs:636-639). 권한이 있을 때만 노출하고 동작은 무동작 유지(G20).
-    save: hasButton('SAVE') ? () => undefined : false,
-    insert: hasButton('INSERT') ? () => undefined : false,
-    delete: hasButton('DELETE') ? () => undefined : false,
+    // Save/Insert/Delete = 동작 없는 no-op 버튼이라 전부 제거(false, 사용자 결정 2026-10-20: 무동작 버튼 미노출).
+    //   AS-IS SaveButton/InsertRow/DeleteButton 본문 공백(cs:636-639 등) — 기능 손실 없음.
+    save: false,
+    insert: false,
+    delete: false,
     manual: false,
     upload: false,
   };

@@ -6,6 +6,7 @@ import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
+import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
@@ -23,7 +24,7 @@ import styles from './ShipmentChangeHistoryForm.module.scss';
 
 interface Props {
   onSearch: () => void;
-  // Model 팝업 버튼(design 02 §4.6) — 페이지가 ItemByDivisionModal 오픈(division/scmSite 사전필터).
+  // Model/Nickname 팝업 버튼(design 02 §4.6) — 페이지가 공용 MaterialByDivisionModal 오픈(division 사전필터).
   onOpenModelPopup: () => void;
 }
 
@@ -44,8 +45,8 @@ const toDate = (value: string): dayjs.Dayjs | null =>
     ? dayjs(`${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`)
     : null;
 
-// design 02 조회조건 10건 — main 6(Division/FromSite/ToSite/Incoterms/TransMode/ShipmentDate) +
-//   extra 4(Model/SoNo/ConfirmId/Current). 6필드 초과 -> extraConditions 분리(hook #52). 기본포커스=Division.
+// design 02 조회조건 10건 — main 8(Division/FromSite/ToSite/Incoterms/TransMode/ShipmentDate/Model/SoNo) +
+//   extra 2(ConfirmId/Current). Model/SoNo 를 2번째 줄로 올려 main 에 배치(사용자 지시 2026-10-22). 기본포커스=Division.
 export const ShipmentChangeHistoryForm = ({ onSearch, onOpenModelPopup }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -238,79 +239,88 @@ export const ShipmentChangeHistoryForm = ({ onSearch, onOpenModelPopup }: Props)
             />
           </Grid>
 
-          {/* Shipment Date (기간 range — design 02 §1 #6 / §4. 기본 1개월은 page 가 mount 시 세팅). */}
+          {/* Shipment Date (기간 range — design 02 §1 #6 / §4. 기본 1개월은 page 가 mount 시 세팅).
+              피커 스타일은 SSP0012 PeriodField 와 동일(datePickerFix 36px 높이 정합 + periodSplit 분리 레이아웃).
+              PeriodField 는 label·required(*) 가 FormItem 에 고정 묶음이라 컴포넌트는 재사용하지 않고
+              SSP0019 자체 FormItem(필수 아님) 을 유지한 채 스타일만 맞춘다(사용자 지시 2026-10-22). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
               label={t(LBL.SHIPMENT_DATE, '_Shipment Date')}
               labelAlign='right'
               render={() => (
-                <div className={styles.periodWrapper}>
-                  <DatePickerCalendar
-                    usecase='date'
-                    elevation
-                    size='small'
-                    format='YYYY.MM.DD'
-                    disabled={noDivisionAuth}
-                    value={toDate(sc.fromDate)}
-                    onChange={
-                      ((date: dayjs.Dayjs | null) => {
-                        set({ fromDate: date?.format('YYYYMMDD') ?? '' });
-                      }) as never
-                    }
-                  />
-                  <span className={styles.periodSeparator}>~</span>
-                  <DatePickerCalendar
-                    usecase='date'
-                    elevation
-                    size='small'
-                    format='YYYY.MM.DD'
-                    disabled={noDivisionAuth}
-                    mindate={toDate(sc.fromDate) ?? undefined}
-                    value={toDate(sc.toDate)}
-                    onChange={
-                      ((date: dayjs.Dayjs | null) => {
-                        set({ toDate: date?.format('YYYYMMDD') ?? '' });
-                      }) as never
-                    }
-                  />
-                </div>
-              )}
-            />
-          </Grid>
-        </>
-      }
-      extraConditions={
-        <>
-          {/* Model (텍스트 콤마 다중 + 팝업 버튼 — design 02 §1 #7/#8 / §4.6). LBL00669. */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.MODEL, '_Model')}
-              labelAlign='right'
-              render={() => (
-                <div className={styles.modelWrapper}>
-                  <InputField
-                    fullWidth
-                    disabled={noDivisionAuth}
-                    value={sc.itemId}
-                    onChange={e => set({ itemId: e.target.value })}
-                    onKeyDown={e => e.key === 'Enter' && onSearch()}
-                  />
-                  <Button
-                    appearance='outlined'
-                    priority='normal'
-                    size='small'
-                    buttonLabel='...'
-                    disabled={noDivisionAuth}
-                    onClick={onOpenModelPopup}
-                  />
+                <div className={styles.periodSplit}>
+                  <div className={styles.datePickerFix}>
+                    <DatePickerCalendar
+                      usecase='date'
+                      elevation
+                      size='small'
+                      format='YYYY.MM.DD'
+                      disabled={noDivisionAuth}
+                      value={toDate(sc.fromDate)}
+                      onChange={
+                        ((date: dayjs.Dayjs | null) => {
+                          set({ fromDate: date?.format('YYYYMMDD') ?? '' });
+                        }) as never
+                      }
+                    />
+                  </div>
+                  <span className={styles.periodSep}>~</span>
+                  <div className={styles.datePickerFix}>
+                    <DatePickerCalendar
+                      usecase='date'
+                      elevation
+                      size='small'
+                      format='YYYY.MM.DD'
+                      disabled={noDivisionAuth}
+                      mindate={toDate(sc.fromDate) ?? undefined}
+                      value={toDate(sc.toDate)}
+                      onChange={
+                        ((date: dayjs.Dayjs | null) => {
+                          set({ toDate: date?.format('YYYYMMDD') ?? '' });
+                        }) as never
+                      }
+                    />
+                  </div>
                 </div>
               )}
             />
           </Grid>
 
-          {/* SO No (텍스트 콤마 다중 — design 02 §1 #9). LBL01111. */}
+          {/* Model/Nickname (텍스트 콤마 다중 + 팝업 돋보기 — design 02 §1 #7/#8 / §4.6). LBL00618.
+              2번째 줄(Trans Mode·Shipment Date 뒤)로 이동(사용자 지시 2026-10-22). 트리거는 SSP0012 Model
+              필드와 동일 구조(FunctionSearchIcon endAdornment). 호출 팝업은 공용 MaterialByDivisionModal(page onOpenModelPopup). */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t(LBL.MODEL_NICKNAME, '_Model/Nickname')}
+              labelAlign='right'
+              render={() => (
+                <InputField
+                  fullWidth
+                  className={commonStyles.popupSearchField}
+                  disabled={noDivisionAuth}
+                  value={sc.itemId}
+                  InputProps={{
+                    endAdornment: (
+                      <Button
+                        appearance='outlined'
+                        priority='normal'
+                        disabled={noDivisionAuth}
+                        iconComponent={
+                          <FunctionSearchIcon appearance='lined' onClick={onOpenModelPopup} />
+                        }
+                      />
+                    ),
+                  }}
+                  onChange={e => set({ itemId: e.target.value })}
+                  onKeyDown={e => e.key === 'Enter' && onSearch()}
+                />
+              )}
+            />
+          </Grid>
+
+          {/* SO No (텍스트 콤마 다중 — design 02 §1 #9). LBL01111. 2번째 줄로 이동(사용자 지시 2026-10-22). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -327,7 +337,10 @@ export const ShipmentChangeHistoryForm = ({ onSearch, onOpenModelPopup }: Props)
               )}
             />
           </Grid>
-
+        </>
+      }
+      extraConditions={
+        <>
           {/* Confirm ID (텍스트 콤마 다중 — design 02 §1 #10). LBL01063. */}
           <Grid size={3}>
             <FormItem

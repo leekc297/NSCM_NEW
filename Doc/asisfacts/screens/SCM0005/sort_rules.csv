@@ -1,0 +1,15 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCM0005,SQL,DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST,Doc\asisfacts\db\modules\dbo.DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0005,SQL,DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST2,Doc\asisfacts\db\modules\dbo.DMF0027_GET_DM_TMP_DYNAMIC_QUERY_LIST2.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0005,SQL,PR_DM_ADM_DQ_EXECUTE_HIST,Doc\asisfacts\db\modules\dbo.PR_DM_ADM_DQ_EXECUTE_HIST.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0005,SQL,DMF0027_GET_DM_TMP_DYNAMIC_QUERY_COLUMNS,Doc\asisfacts\db\modules\dbo.DMF0027_GET_DM_TMP_DYNAMIC_QUERY_COLUMNS.sql,42,,CAST,"ORDER BY CAST(ISNULL(ATTRIBUTE1,'0') AS INT), [LAST_UPDATE_DATE]",0,동적 SQL
+SCM0005,SQL,DMF0027_GET_DM_TMP_DYNAMIC_QUERY_PARAMETERS,Doc\asisfacts\db\modules\dbo.DMF0027_GET_DM_TMP_DYNAMIC_QUERY_PARAMETERS.sql,41,,CAST,"ORDER BY CAST(ISNULL(ATTRIBUTE1,'0') AS INT), [LAST_UPDATE_DATE]",0,동적 SQL
+SCM0005,SQL,PR_DM_ADM_DQ_CREATE,Doc\asisfacts\db\modules\dbo.PR_DM_ADM_DQ_CREATE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0005,SQL,PR_DM_ADM_DQ_CREATE_USER_GROUP,Doc\asisfacts\db\modules\dbo.PR_DM_ADM_DQ_CREATE_USER_GROUP.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0005,SQL,PR_DM_ADM_DQ_CREATE_COLUMN,Doc\asisfacts\db\modules\dbo.PR_DM_ADM_DQ_CREATE_COLUMN.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0005,SQL,PR_DM_ADM_DQ_CREATE_PARAMETER,Doc\asisfacts\db\modules\dbo.PR_DM_ADM_DQ_CREATE_PARAMETER.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0005,CODE,,06.UIL\GSCM.SCM.Master.UIL\SCM0005_DynamicQueryList.cs,390,,SEQNO,"dtGroup.DefaultView.Sort = ""SEQNO ASC"";",0,화면 코드 정렬
+SCM0005,CODE,,06.UIL\GSCM.SCM.Master.UIL\SCM0005_DynamicQueryList.cs,682,,,Array.Sort(sParams);,0,화면 코드 정렬
+SCM0005,CODE,,06.UIL\GSCM.SCM.Master.UIL\SCM0005_DynamicQueryList.cs,1248,,ORDER,"strOri = strOri.ToUpper().Replace("" ORDER BY "", @""IE9SREVSIEJZIA=="");",0,화면 코드 정렬
+SCM0005,CODE,,06.UIL\GSCM.SCM.Master.UIL\SCM0005_DynamicQueryList.cs,1249,,ORDER,"strOri = strOri.ToUpper().Replace(""ORDER BY "", @""T1JERVIgQlkg"");",0,화면 코드 정렬
+SCM0005,CODE,,06.UIL\GSCM.SCM.Master.UIL\SCM0005_DynamicQueryList.cs,1250,,ORDER,"strOri = strOri.ToUpper().Replace("" ORDER BY"", @""IE9SREVSIEJZ"");",0,화면 코드 정렬

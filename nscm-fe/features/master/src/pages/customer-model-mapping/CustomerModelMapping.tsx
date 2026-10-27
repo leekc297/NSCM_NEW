@@ -8,13 +8,19 @@ import { t } from '@foundation/i18n';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabProcQuery, useProcMutation, useSaveWithValidation } from '@shared/hooks';
+import {
+  useTabBtnPermissions,
+  useTabProcQuery,
+  useProcMutation,
+  useSaveWithValidation,
+} from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import { CustomerModelMappingForm } from './components/CustomerModelMappingForm';
 import { CustomerModelMappingGrid } from './components/CustomerModelMappingGrid';
 import { CONVERT_QTY_BINDINGS, MENU_ID, SHEETS } from './customer-model-mapping.constants';
 import {
+  DUPLICATE_MSG_CODE,
   duplicateAlertContent,
   findGridDuplicate,
   findLedgerDuplicate,
@@ -35,6 +41,7 @@ export const CustomerModelMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
   const searchParams = useCustomerModelMappingStore(state => state.searchParams);
 
   const { saveWithValidation } = useSaveWithValidation();
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   const { setAlert } = useMessageStore.getState();
 
   const { data } = useTabProcQuery<MENU_ID>({
@@ -76,7 +83,7 @@ export const CustomerModelMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // 신규 행 4키(Division, Sales Site, Customer PJT, Customer Model)로 원장을 읽는다 — 조회 화면과 같은
-  //   SP(SEARCH). 조회 SP 는 PJT / Model 을 UPPER LIKE 로 거르므로 정확 일치 판정은 duplicateCheck 가 한다.
+  //   SP(SEARCH). 조회 SP 는 PJT / Model 을 UPPER LIKE 로 거르므로 4키 일치(대소문자 무시) 판정은 duplicateCheck 가 한다.
   //   사용여부(activeFlag)는 'ALL' — AS-IS 중복 검사(.cs L518~528)가 VALID_YN 을 보지 않았고, 비활성
   //   매핑도 PK 를 차지해 신규로 넣으면 SP 가 덮어쓴다.
   const fetchLedgerRows = async (row: ResponseData<MENU_ID, SHEETS>) => {
@@ -113,14 +120,14 @@ export const CustomerModelMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   내려오지 않고, 81·82 에는 M 으로 내려와 아래 saveWithValidation 의 공용 필수 검증이 MSG00429 로
     //   막는다(2026-10-07 사용자 결정 — 메타 UPDATE 는 _artifacts/_deploy_packages/DMF0006_PJT_CODE_REQUIRED_20261007).
 
-    // 신규 행 중복 검사 — AS-IS .cs L518~535 1:1(MSG00060 후 저장 중단). 사유와 두 겹(그리드 안 / 원장)
-    //   규칙은 customer-model-mapping.duplicateCheck 참조. 저장 SP 신규 분기가 같은 키를 지우고 다시
+    // 신규 행 중복 검사 — AS-IS .cs L518~535 1:1(AS-IS MSG00060 문구 = TO-BE MSG01092 안내 후 저장 중단).
+    //   사유와 두 겹(그리드 안 / 원장) 규칙은 customer-model-mapping.duplicateCheck 참조. 저장 SP 신규 분기가 같은 키를 지우고 다시
     //   넣어 기존 매핑을 덮어쓰므로, 여기서 막지 않으면 데이터가 조용히 바뀐다.
     const gridDuplicate = findGridDuplicate(gridRows);
     if (gridDuplicate) {
       void setAlert({
         type: 'alert',
-        content: duplicateAlertContent(t('MSG00060', '_중복된 키가 존재합니다.'), gridDuplicate.row),
+        content: duplicateAlertContent(t(DUPLICATE_MSG_CODE, '_동일한 {0}이(가) 존재합니다.'), gridDuplicate.row),
       });
       return;
     }
@@ -128,7 +135,7 @@ export const CustomerModelMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (ledgerCheck.status === 'duplicate') {
       void setAlert({
         type: 'alert',
-        content: duplicateAlertContent(t('MSG00060', '_중복된 키가 존재합니다.'), ledgerCheck.hit.row),
+        content: duplicateAlertContent(t(DUPLICATE_MSG_CODE, '_동일한 {0}이(가) 존재합니다.'), ledgerCheck.hit.row),
       });
       return;
     }
@@ -145,11 +152,16 @@ export const CustomerModelMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!initialized) void fetchStaticColumns(searchParams.divisionId);
   }, [tabId]);
 
+  // 버튼 노출은 그룹 버튼 권한(SCM_ADM_USER_GR_MNU_BTN_MPG_M)으로 정한다 — 공용 훅 표준 패턴(AUTH-02).
+  //   종전엔 핸들러를 조건 없이 넘겨 권한이 없는 그룹(DM Viewer 등)에도 저장·행추가·삭제 버튼이 보였다
+  //   (2026-10-14 리포트, DMF0004·DMF0005·DMF0007 과 같은 조치). 조회는 종전대로 둔다(같은 화면들과 동일).
+  //   INSERT/DELETE 는 버튼 메타가 함께 등록돼야 보인다 — 배포 SQL
+  //   _artifacts/_deploy_packages/DMF0006_BTN_INSERT_DELETE_20261014/ (SAVE 보유 그룹에 동일 부여).
   const hotkeyConfig: HotkeyConfig = {
-    insert: handleInsert,
-    delete: handleDelete,
+    insert: hasButton('INSERT') ? handleInsert : false,
+    delete: hasButton('DELETE') ? handleDelete : false,
     search: setFilters,
-    save: handleSave,
+    save: hasButton('SAVE') ? handleSave : false,
     manual: false,
     upload: false,
   };

@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { useTabComboQueries } from '@shared/hooks';
 
 import {
-  ALL,
   COMBO,
   DIVISION_EXCLUDE_ATTRIBUTE3,
   DIVISION_TYPE,
@@ -20,40 +19,18 @@ import {
 import type { ComboOption, ComboRow } from '../capa-line-assign.types';
 import { useCapaLineAssignStore } from '../useCapaLineAssignStore';
 import type { CandidateCodes } from '../useCapaLineAssignStore';
-import { sortLineCodes, sortMasterCodes } from '../utils/capaLineAssign.cascade';
+import {
+  distinctByCode,
+  inSet,
+  pickedSet,
+  sortLineCodes,
+  sortMasterCodes,
+} from '../utils/capaLineAssign.cascade';
 
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
 
 const rowsOf = (rows: readonly unknown[] | undefined): ComboRow[] => (rows ?? []) as ComboRow[];
-
-/** `'ALL'` 이거나 선택 0건이면 필터를 걸지 않는다(= 상위 단계 결과 전부). */
-const pickedSet = (selected: string[]): Set<string> | null => {
-  if (selected.includes(ALL)) return null;
-  const picked = selected.filter(code => code && code !== ALL);
-  return picked.length === 0 ? null : new Set(picked);
-};
-
-const inSet = (set: Set<string> | null, value: string): boolean => !set || set.has(value);
-
-/** 마스터 축별 distinct — `DBUtils.GetDistinctTable(CODE, NAME)` + `DeleteEmptyName` 등가. */
-const distinctByCode = (
-  rows: ComboRow[],
-  idKey: string,
-  nameKey: string,
-  accept: (row: ComboRow) => boolean
-): ComboOption[] => {
-  const seen = new Map<string, string>();
-  for (const row of rows) {
-    if (!accept(row)) continue;
-    const code = str(row[idKey]);
-    const name = str(row[nameKey]);
-    // `CODE <> '-'` + 공백 제거(ScpCapaBL `DeleteEmptyName`) — design 02 §3.3.
-    if (!code || code === EMPTY_CODE || !name) continue;
-    if (!seen.has(code)) seen.set(code, name);
-  }
-  return [...seen.entries()].map(([value, label]) => ({ value, label }));
-};
 
 /**
  * 조회조건 cascade (design 02 §3·§5.4) — **전건 필터형**. 서버 재조회는 `divisionType` 1건뿐이다.

@@ -50,6 +50,7 @@ export const PlanGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setMainFilters = usePlanGroupMasterStore(state => state.setMainFilters);
   const loadSearchInfo = usePlanGroupMasterStore(state => state.loadSearchInfo);
   const fetchStaticColumns = usePlanGroupMasterStore(state => state.fetchStaticColumns);
+  const restoreSearchConditions = usePlanGroupMasterStore(state => state.restoreSearchConditions);
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   // 편집 모드 토글 미이식(convert-core §2.4 / 01_layout R4·R5) — mount 1회 canEdit 만. 모드 상태 신설 금지.
@@ -108,11 +109,25 @@ export const PlanGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     [mainData]
   );
 
-  // mount 1회 — 컬럼 메타 + 조회조건 공급 로드.
+  // mount 1회 — 컬럼 메타 로드 + F6 저장 조회조건 복원(basic-check #3).
+  //   복원은 searchParams 만 patch 하고 filters 는 불변이라 진입 자동조회 게이트는 유지된다
+  //   (저장측은 아래 SubTitle `searchParam={searchParams}`).
   useEffect(() => {
     if (!initialized) void fetchStaticColumns();
-    loadSearchInfo();
+    void restoreSearchConditions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
+
+  // 조회조건 6커서 공급 시드 + F10 자가복구(basic-check #4). mount([tabId])가 아니라 값 축
+  //   (searchInfoFilters)으로 둔다 — F10(공용 SubTitle resetSearchCondition → store reset())은
+  //   searchInfoFilters 를 {} 로 비우는데(공용 PRESERVED_ON_CONDITION_RESET 밖 화면 로컬 키), 그러면
+  //   GET_SEARCH_INFO 쿼리 enabled 가 false 로 떨어지고 queryKey 가 빈 filters 로 갈려 searchInfoData 가
+  //   사라져 5개 멀티셀렉트(Operation/Plant/Building/Line/Plan Group) 공급 커서가 공란이 된다. [tabId]
+  //   마운트 effect 는 F10 후 재발화하지 않으니 비면 재시드해 자가복구한다(loadSearchInfo 내부 가드로
+  //   1회만 세팅 — 재진입 전까지 콤보 소실 방지, f10-wipes-combo-seeded-auth-gate-flags 패턴).
+  useEffect(() => {
+    loadSearchInfo();
+  }, [searchInfoFilters, loadSearchInfo]);
 
   const handleSearch = () => {
     setMainFilters();
@@ -135,6 +150,15 @@ export const PlanGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     (defaults as Record<string, unknown>)[COLUMNS.PRE_PLAN_GR_ID] = '';
     (defaults as Record<string, unknown>)[COLUMNS.PRE_PLAN_GR_ITEM_ID] = '';
     GridAction.addRow(grid, defaults, 'above', true);
+  };
+
+  // Delete (사용자 지시 2026-10-14) — 선택행 삭제. 미저장 신규행은 그리드에서 제거, 기존행은 CRUD_TYPE='D'
+  //   마킹 후 저장 시 SAVE SP 의 'D' 경로(DELETE WHERE line/op/factory/plant + pre 키, 03_grid §3-d)로 반영.
+  //   canEdit 아니면 비활성(hotkeyConfig 차단) + 그리드 isReadOnly 로 removeRow 자체가 no-op.
+  const handleDelete = () => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    GridAction.removeRow(grid);
   };
 
   // ^-결합 payload → call-proc 실제 저장 (SP MISSING — convert-sp 후속). false-success 판별(§5-10).
@@ -202,9 +226,8 @@ export const PlanGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     search: hasButton('SEARCH') ? handleSearch : false,
     save: hasButton('SAVE') && canEdit ? handleSave : false,
     insert: hasButton('INSERT') && canEdit ? handleInsert : false,
-    // Delete 미노출(false) — AS-IS entryPoints(00 §4)=Find/Save/Edit/Insert 4개뿐, DeleteButton override 없음.
-    //   기존행 삭제는 Plan Group 공백화('D' 저장판정, 03_grid §3-d)로만 수행(GAP-06, __asis-mapping__ §2).
-    delete: false,
+    // Delete (사용자 지시 2026-10-14) — 선택행 삭제. 버튼권한 DELETE + canEdit 게이트.
+    delete: hasButton('DELETE') && canEdit ? handleDelete : false,
     manual: false,
     upload: false,
   };
@@ -219,7 +242,8 @@ export const PlanGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const customButtons = canReg
     ? [
         {
-          label: t('_SCP0121_PLAN_GROUP_REG', '_Plan Group Reg.'),
+          // 사용자 요청(2026-10-14): Plan Group Reg 는 다국어 처리하지 않고 영문 고정.
+          label: 'Plan Group Reg.',
           action: () => setOpenRegModal(true),
         },
       ]

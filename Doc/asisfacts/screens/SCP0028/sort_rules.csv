@@ -1,0 +1,4 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0028,SQL,SCP0028_GET_SHIPMENT_LOT_SIZE,Doc\asisfacts\db\modules\dbo.SCP0028_GET_SHIPMENT_LOT_SIZE.sql,93,,"DIVISION_ID,OPERATION_GROUP_ID,FROM_SITE,TO_SITE,ITEM_ID,TRANS_MODE_CODE","order by a.DIVISION_ID, OPERATION_GROUP_ID, a.from_site, a.to_site, a.ITEM_ID, a.trans_mode_code",0,정적
+SCP0028,SQL,SCP0028_SAVE_SHIPMENT_LOT_SIZE,Doc\asisfacts\db\modules\dbo.SCP0028_SAVE_SHIPMENT_LOT_SIZE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0028,SQL,SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,Doc\asisfacts\db\modules\dbo.SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

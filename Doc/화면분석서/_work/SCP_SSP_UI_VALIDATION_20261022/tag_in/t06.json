@@ -1,0 +1,2834 @@
+[
+ {
+  "key": "DB:SSP0003#69",
+  "kind": "DB",
+  "screen": "SSP0003",
+  "event": "실행(RUN) — Approval 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+  "asis_line": "L739-755",
+  "condition": "BEGIN CATCH",
+  "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 기록만",
+  "desc": "예외 시 로그만 남김",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+    "loc": "PR_SSP_PLN_FP_SHIP_TARGET_WA.PROCEDURE.sql L489-493",
+    "diff": "AS-IS CATCH 는 PR_SCP_SYS_LOG_BATCH ERROR 기록만(ROLLBACK 없음). TO-BE 는 ROLLBACK 추가 + 로그 대상이 PR_SSP_LOG_ERROR(SCM_SYS_LOG_BATCH 자율 트랜잭션)로 변경. 예외 미전파는 동일"
+   }
+  ],
+  "fe_note": "features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx doSave L234-316 — apiClient.post call-proc 후 isFail(status≥400 또는 code≠0)이면 MSG00003 '저장 실패' 알림, 공용 인터셉터가 throw 하면 catch(L413-426)에서 서버 메시지 표시. 결과커서 F 는 BE/인터셉터 판정 의존. TO-BE 는 상세(DE) 저장 실패 시 확정 저장을 하지 않음(AS-IS 는 비동기 동시 실행)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0003#73",
+  "kind": "DB",
+  "screen": "SSP0003",
+  "event": "실행(RUN) — Approval 버튼",
+  "cls": "A 차단형",
+  "sp": "SCM_SSP_MAIL_SEND",
+  "asis_line": "L483-516",
+  "condition": "BEGIN CATCH",
+  "on_fail": "CLOSE CUR_SEND; DEALLOCATE CUR_SEND; INSERT scm_sys_log_batch(ERROR); COMMIT; SELECT 'F' AS result_code; SELECT 오류메시지",
+  "desc": "메일 발송 오류 시 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_SSP_MAIL_SEND",
+    "loc": "SCM_SSP_MAIL_SEND.PROCEDURE.sql L573-609",
+    "diff": "로그·COMMIT 은 동일. AS-IS 'F'+메시지 결과셋 → TO-BE DBMS_OUTPUT 출력(OUT 인자 없음, 호출부에 반환되지 않음). AS-IS 의 미선언 CUR_SEND CLOSE 재오류(원문이슈)는 제거. 본문 구성부(L81-482)는 AS-IS 처럼 예외 블록 밖이라 그 구간 오류는 호출부로 전파."
+   }
+  ],
+  "fe_note": "features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx doSave L234-316 — apiClient.post call-proc 후 isFail(status≥400 또는 code≠0)이면 MSG00003 '저장 실패' 알림, 공용 인터셉터가 throw 하면 catch(L413-426)에서 서버 메시지 표시. 결과커서 F 는 BE/인터셉터 판정 의존. TO-BE 는 상세(DE) 저장 실패 시 확정 저장을 하지 않음(AS-IS 는 비동기 동시 실행)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0003#79",
+  "kind": "DB",
+  "screen": "SSP0003",
+  "event": "실행(RUN) — Approval 버튼",
+  "cls": "A 차단형",
+  "sp": "SCM_SSP_MODEL_USER_MAIL_SEND",
+  "asis_line": "L486-519",
+  "condition": "BEGIN CATCH",
+  "on_fail": "CLOSE CUR_SEND; DEALLOCATE CUR_SEND; INSERT scm_sys_log_batch(ERROR); COMMIT; SELECT 'F' AS result_code; SELECT 오류메시지",
+  "desc": "오류 시 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_SSP_MODEL_USER_MAIL_SEND",
+    "loc": "SCM_SSP_MODEL_USER_MAIL_SEND.PROCEDURE.sql L551-586",
+    "diff": "로그·COMMIT 동일. AS-IS 'F'+메시지 결과셋 → TO-BE DBMS_OUTPUT(호출부 미전달). 미선언 CUR_SEND CLOSE 재오류(원문이슈) 제거."
+   }
+  ],
+  "fe_note": "features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx doSave L234-316 — apiClient.post call-proc 후 isFail(status≥400 또는 code≠0)이면 MSG00003 '저장 실패' 알림, 공용 인터셉터가 throw 하면 catch(L413-426)에서 서버 메시지 표시. 결과커서 F 는 BE/인터셉터 판정 의존. TO-BE 는 상세(DE) 저장 실패 시 확정 저장을 하지 않음(AS-IS 는 비동기 동시 실행)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0003#83",
+  "kind": "DB",
+  "screen": "SSP0003",
+  "event": "실행(RUN) — Approval 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE",
+  "asis_line": "L470-474",
+  "condition": "BEGIN CATCH",
+  "on_fail": "RETURN -1",
+  "desc": "예외 시 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE.PROCEDURE.sql L226-229",
+    "diff": "AS-IS RETURN -1(롤백·로그 없음) → TO-BE 예외 완전 무시(반환 없음). 롤백·로그 없음은 동일, 반환코드만 상실"
+   }
+  ],
+  "fe_note": "features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx doSave L234-316 — apiClient.post call-proc 후 isFail(status≥400 또는 code≠0)이면 MSG00003 '저장 실패' 알림, 공용 인터셉터가 throw 하면 catch(L413-426)에서 서버 메시지 표시. 결과커서 F 는 BE/인터셉터 판정 의존. TO-BE 는 상세(DE) 저장 실패 시 확정 저장을 하지 않음(AS-IS 는 비동기 동시 실행)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0003#84",
+  "kind": "DB",
+  "screen": "SSP0003",
+  "event": "실행(RUN) — Approval 버튼",
+  "cls": "A 차단형",
+  "sp": "SCM_ADM_MAIL_SEND",
+  "asis_line": "L73-106",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER+']'+ERROR_MESSAGE()",
+  "desc": "메일 발송 실패 시 오류 로그 후 F 결과 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_ADM_MAIL_SEND",
+    "loc": "SCM_ADM_MAIL_SEND.PROCEDURE.sql L82-103",
+    "diff": "AS-IS: 로그 INSERT + COMMIT + SELECT 'F' result_code/메시지 결과셋 반환(예외 삼킴). TO-BE: 로그 후 RAISE_APPLICATION_ERROR 로 호출자에 예외 전파, COMMIT 없음(2026-10-07 ROLLBACK 제거 주석). 호출자 PKG_SSP0003 등은 예외 처리 여부에 따라 저장 실패로 이어질 수 있음"
+   }
+  ],
+  "fe_note": "features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx doSave L234-316 — apiClient.post call-proc 후 isFail(status≥400 또는 code≠0)이면 MSG00003 '저장 실패' 알림, 공용 인터셉터가 throw 하면 catch(L413-426)에서 서버 메시지 표시. 결과커서 F 는 BE/인터셉터 판정 의존. TO-BE 는 상세(DE) 저장 실패 시 확정 저장을 하지 않음(AS-IS 는 비동기 동시 실행)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0003#85",
+  "kind": "DB",
+  "screen": "SSP0003",
+  "event": "실행(RUN) — Approval 버튼",
+  "cls": "A 차단형",
+  "sp": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+  "asis_line": "L104-134",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER+']'+ERROR_MESSAGE()",
+  "desc": "발송 로그 저장 실패 시 오류 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+    "loc": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG.PROCEDURE.sql L134-165",
+    "diff": "AS-IS: 오류 로그 후 COMMIT, 'F' 결과셋 반환(호출부 계속 진행). TO-BE: AUTONOMOUS_TRANSACTION 안에서 ROLLBACK(발송로그 INSERT 취소) 후 로그, END 로그 뒤 RAISE_APPLICATION_ERROR(-20001) 로 호출부(SCM_ADM_SMS_SEND_BATCH·SCM_SSP_MAIL_SEND 등)에 예외 전파. 'F'/메시지 결과셋은 주석(L152-153). 실패 처리가 결과 반환→예외 전파로 바뀜(AS-IS 원문이슈 COMMIT 은 ROLLBACK 으로 교정)."
+   }
+  ],
+  "fe_note": "features/shipping/src/pages/shipment-change-request-confirm-ssp0003/ShipmentChangeRequestConfirmSsp0003.tsx doSave L234-316 — apiClient.post call-proc 후 isFail(status≥400 또는 code≠0)이면 MSG00003 '저장 실패' 알림, 공용 인터셉터가 throw 하면 catch(L413-426)에서 서버 메시지 표시. 결과커서 F 는 BE/인터셉터 판정 의존. TO-BE 는 상세(DE) 저장 실패 시 확정 저장을 하지 않음(AS-IS 는 비동기 동시 실행)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0005#1",
+  "kind": "DB",
+  "screen": "SSP0005",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW",
+  "asis_line": "L101-125",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message",
+  "desc": "UPDATE 예외 시 F + 오류코드·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0005.P_SSP0005_SAVE_SHIPMENT_WORKING_DAY",
+    "loc": "PKG_SSP0005.PACKAGE_BODY.sql L432-475",
+    "diff": "AS-IS 는 화면이 행마다 호출·트랜잭션 없음(앞 행 저장 유지), 결과는 'F' + err_code/err_message 별도 칸. TO-BE 는 '^' 일괄 1회 호출이라 한 행 실패 시 저장점까지 전 행 ROLLBACK, 결과는 'F' + '[번호]메시지' 한 칸."
+   }
+  ],
+  "fe_note": "features/shipping/src/pages/shipment-working-day/ShipmentWorkingDay.tsx postSave L265-321 — apiClient.post 후 status≥400 또는 code≠0 이면 서버 메시지(없으면 MSG00618) 알림. 성공 건수는 SP RESULT_CNT 사용",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0007#0",
+  "kind": "DB",
+  "screen": "SSP0007",
+  "event": "실행(RUN) — Calculate 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCP_ANL_PRODUCTION_PLAN_I_AMEND",
+  "asis_line": "L161-182",
+  "condition": "BEGIN CATCH (TRY L58~159)",
+  "on_fail": "ERROR 로그; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER()+']'+ERROR_MESSAGE()",
+  "desc": "EOH 재계산 UPDATE 중 예외 시 result_code 'F' 와 오류메시지 결과셋 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0011.P_SCP_ANL_PROD_PLAN_I_AMEND",
+    "loc": "PKG_SCP0011.PACKAGE_BODY.sql L2431-2454",
+    "diff": "반환 'F'·'[번호]메시지'·ERROR 로그는 동일(메시지는 2번째 결과셋 대신 O_RESULT_MSG). 실패 시 동작 차이: AS-IS 는 명시 트랜잭션 없이 단일 UPDATE 문장 원자, TO-BE 는 전체 ROLLBACK(SAVEPOINT 아님) — 호출측 세션의 미확정 작업까지 되돌림. 또 TO-BE 는 P_SEQ 형변환(L2333)을 블록 안에서 수행해 AS-IS 와 같이 CATCH 로 처리"
+   }
+  ],
+  "fe_note": "TO-BE 미개발",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0008#4",
+  "kind": "DB",
+  "screen": "SSP0008",
+  "event": "실행(RUN) — Fix/Unfix 버튼",
+  "cls": "A 차단형",
+  "sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+  "asis_line": "L303-333",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS ERR_MESSAGE",
+  "desc": "예외 시 F 결과코드와 오류번호·메시지 1결과셋 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0024.P_SCP0024_SAVE_PROD_PLAN_FIX",
+    "loc": "PKG_SCP0024.PACKAGE_BODY.sql L1638-1655",
+    "diff": "AS-IS 는 BEGIN TRAN 없이 행 단위 확정 + CATCH 에서 COMMIT(앞 행 반영 잔존). TO-BE 는 SAVEPOINT 로 전체 되돌림(의도적 개선, 주석 L1368-1369). 결과셋 → OUT 파라미터(O_RESULT_CODE/CNT/MSG)"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0013#14",
+  "kind": "DB",
+  "screen": "SSP0013",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+  "asis_line": "L296-437",
+  "condition": "SELECT TOP 1 ... FROM SCP_MST_BOD_N_V(DIVISION_ID, FROM_SITE, TO_SITE, TRANSPORT_MODE=@v_new_transport_mode, ssp_incoterms=@v_new_incoterms, BOD_VALID_YN='Y', FROM_YYYYMMDD<=@v_shipment_date<=TO_YYYYMMDD) JOIN SCP_MST_BOD_ITEM(ITEM_ID) ORDER BY PRIORITY; IF ((@v_division_id_temp = '' or ... IS NULL) OR (@v_new_bod_id_temp ...) OR ... OR (@v_new_to_city_temp ...))",
+  "on_fail": "SELECT 'X' AS result_code, NULL AS Request_no; END 로그; RETURN;",
+  "desc": "선택한 Transport Mode·Incoterms·출하일로 유효한 BOD(품목 매핑 포함)를 찾지 못하거나 BOD 의 Route/국가/항구/LT/도착국·도시 중 하나라도 비면 X 반환 후 중단",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L6186-6331",
+    "diff": "조건(14개 값 NULL/빈값)·X 반환·RETURN 동일, 행별 미초기화(앞 행 값으로 통과 가능) 원형도 유지. 다른 점: (1) TO-BE 는 X 반환 전 SAVEPOINT 되돌림(L6312~6317)으로 앞 행 저장분 취소 — AS-IS 는 트랜잭션 없어 앞 행 반영 유지. (2) 로그 LOG_TYPE 'END'→'FIND'. (3) 출하일 비교를 하이픈 제거값(V_BOD_SHIPMENT_DATE)으로 하여 AS-IS CI 콜레이션 결과(종료일 당일 제외) 재현 — 의도상 동일"
+   }
+  ],
+  "fe_note": "TO-BE 미개발",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0013#19",
+  "kind": "DB",
+  "screen": "SSP0013",
+  "event": "저장(SAVE)",
+  "cls": "B 보정형",
+  "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+  "asis_line": "L1271-1300",
+  "condition": "IF @v_plan_start_yyyymmdd IS NULL  -- #TblDynamic_SSP0015_40_STD(최근 3일 SHIP_PLAN_40, QTY>0) 에 From Site 기준 버전 없음 → Company 기준 재조회 후 다시 IS NULL",
+  "on_fail": "1차: 같은 COMPANY_ID 사이트의 MAX(PLAN_START_YYYYMMDD) 로 대체 / 2차: convert(char(8), GETDATE(), 112)",
+  "desc": "edit_main='Y' 행의 Plan 반영 대상 버전을 From Site→Company→오늘 순으로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L7431-7456",
+    "diff": "From Site→Company 1·2차 대체는 동일하나 AS-IS L1300~1303 의 2차 'IS NULL → GETDATE() 오늘' 보정이 TO-BE 에 없음(NULL 이면 DELETE/INSERT 가 PLAN_START NULL 로 수행). 또한 기준 GTT 적재(L6128~6150)에서 AS-IS '최근 3일(GETDATE()-3 ~ GETDATE())' 기간 조건(AS-IS L252~253)이 TO-BE L6144~6145 주석 처리 — 전 기간 최신 버전을 기준으로 삼아 대체 대상 버전 범위가 다름"
+   }
+  ],
+  "fe_note": "TO-BE 미개발",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0013#23",
+  "kind": "DB",
+  "screen": "SSP0013",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+  "asis_line": "L1596-1625",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS ERR_MESSAGE",
+  "desc": "예외 발생 시 오류 로그 기록 후 F 와 오류 메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L7762-7803",
+    "diff": "F + '[번호]메시지' 반환 동일. (1) AS-IS CATCH 는 COMMIT(부분 반영 유지) → TO-BE 는 SAVEPOINT/전체 ROLLBACK. (2) 오류 로그 LOG_TYPE 이 AS-IS 'ERROR' → TO-BE 'END'(L7790), PROGRAM_NAME 도 ERROR_PROCEDURE() → 고정 패키지명"
+   }
+  ],
+  "fe_note": "TO-BE 미개발",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0013#26",
+  "kind": "DB",
+  "screen": "SSP0013",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L51-59",
+  "condition": "IF DB_NAME() <> 'LGCE_SCMDEV' → IF DATEPART(WEEKDAY, GETDATE()) <> 2 OR ( (DATEPART(HH, GETDATE()) <= 7 AND DATEPART(MI, GETDATE()) < 50 ) OR (DATEPART(HH, GETDATE()) = 23 AND DATEPART(MI, GETDATE()) > 55 ) )",
+  "on_fail": "RETURN; (조용히 종료, 동기화 미실행)",
+  "desc": "운영 DB 에서는 월요일 07:50~23:55 사이에만 MKT FCST 동기화 수행",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L60-71",
+    "diff": "요일·시각 조건과 원문 결함((HH<=7 AND MI<50))은 동일. 차이: AS-IS 는 DB_NAME() <> 'LGCE_SCMDEV' 일 때만 검사(개발 DB 면 항상 동기화) → TO-BE 는 환경 구분 없이 항상 검사. 요일 판정은 DATEPART(WEEKDAY)=2 → ISO 주 월요일(DATEFIRST 무관)."
+   }
+  ],
+  "fe_note": "TO-BE 미개발",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0013#53",
+  "kind": "DB",
+  "screen": "SSP0013",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+  "asis_line": "L1618-1639",
+  "condition": "BEGIN CATCH IF @@TRANCOUNT > 0 ROLLBACK TRAN TX_SH",
+  "on_fail": "ROLLBACK, 에러 로그 후 return -1",
+  "desc": "예외 시 롤백 후 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH.PROCEDURE.sql L1636-1646",
+    "diff": "ROLLBACK TO TX_SH + ERROR 로그는 동일. AS-IS 는 return -1 로 실패를 반환하나 TO-BE 는 반환값/RAISE 없이 정상 종료 → 호출자가 실패를 알 수 없음"
+   }
+  ],
+  "fe_note": "TO-BE 미개발",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0013#56",
+  "kind": "DB",
+  "screen": "SSP0013",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+  "asis_line": "L673-699",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch 에 ERROR INSERT; IF @@TRANCOUNT > 0 COMMIT WORK",
+  "desc": "예외 시 오류 로그만 남기고 종료",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_HIST.PROCEDURE.sql L390-393",
+    "diff": "로그 기록·예외 미전파는 동일. AS-IS 는 IF @@TRANCOUNT>0 COMMIT WORK 로 호출자 트랜잭션(1차 INSERT 부분분 포함)까지 확정하나 TO-BE 는 PR_SSP_LOG_ERROR(자율 트랜잭션)만 커밋하고 호출자 트랜잭션은 미확정·미롤백(1차 INSERT 부분 결과가 호출자 트랜잭션에 잔존)"
+   }
+  ],
+  "fe_note": "TO-BE 미개발",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0013#58",
+  "kind": "DB",
+  "screen": "SSP0013",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_UPDATE_BOH_VAL",
+  "asis_line": "L392-413",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRAN TX_SH; PR_SCP_SYS_LOG_BATCH ERROR; return -1",
+  "desc": "예외 시 롤백·로그 후 -1",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_UPDATE_BOH_VAL",
+    "loc": "PR_SSP_ANL_SHIP_UPDATE_BOH_VAL.PROCEDURE.sql L279-286",
+    "diff": "롤백·로그 동일. AS-IS return -1 → TO-BE 반환/RAISE 없음 → 화면 저장 호출자에 BOH 갱신 실패가 전달되지 않음"
+   }
+  ],
+  "fe_note": "TO-BE 미개발",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0013#70",
+  "kind": "DB",
+  "screen": "SSP0013",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE",
+  "asis_line": "L470-474",
+  "condition": "BEGIN CATCH",
+  "on_fail": "RETURN -1",
+  "desc": "예외 시 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE.PROCEDURE.sql L226-229",
+    "diff": "AS-IS RETURN -1(롤백·로그 없음) → TO-BE 예외 완전 무시(반환 없음). 롤백·로그 없음은 동일, 반환코드만 상실"
+   }
+  ],
+  "fe_note": "TO-BE 미개발",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0013#71",
+  "kind": "DB",
+  "screen": "SSP0013",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_MAIL_SEND_ADJUST_SUB",
+  "asis_line": "L78-107",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR INSERT; IF @@TRANCOUNT > 0 COMMIT WORK",
+  "desc": "메일 발송 실패 시 로그만 기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_MAIL_SEND_ADJUST_SUB",
+    "loc": "PR_SSP_MAIL_SEND_ADJUST_SUB.PROCEDURE.sql L52-55",
+    "diff": "로그·예외 미전파 동일. AS-IS 는 IF @@TRANCOUNT>0 COMMIT WORK 로 호출자 트랜잭션까지 확정, TO-BE 는 자율 트랜잭션 로그만 커밋(호출자 트랜잭션 미확정)"
+   }
+  ],
+  "fe_note": "TO-BE 미개발",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0013#72",
+  "kind": "DB",
+  "screen": "SSP0013",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+  "asis_line": "L104-134",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER+']'+ERROR_MESSAGE()",
+  "desc": "발송 로그 저장 실패 시 오류 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+    "loc": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG.PROCEDURE.sql L134-165",
+    "diff": "AS-IS: 오류 로그 후 COMMIT, 'F' 결과셋 반환(호출부 계속 진행). TO-BE: AUTONOMOUS_TRANSACTION 안에서 ROLLBACK(발송로그 INSERT 취소) 후 로그, END 로그 뒤 RAISE_APPLICATION_ERROR(-20001) 로 호출부(SCM_ADM_SMS_SEND_BATCH·SCM_SSP_MAIL_SEND 등)에 예외 전파. 'F'/메시지 결과셋은 주석(L152-153). 실패 처리가 결과 반환→예외 전파로 바뀜(AS-IS 원문이슈 COMMIT 은 ROLLBACK 으로 교정)."
+   }
+  ],
+  "fe_note": "TO-BE 미개발",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0014#0",
+  "kind": "DB",
+  "screen": "SSP0014",
+  "event": "저장(SAVE)",
+  "cls": "D 검증리포트형",
+  "sp": "SSP0014_GET_USER_ID_CHECK",
+  "asis_line": "L22-28",
+  "condition": "SELECT DISTINCT A.UserID FROM TB_FX_User A JOIN TB_FX_UserGroupAuthExtention B ON A.UserID = B.UserID WHERE A.UserID IN (split @p_user_id '^') AND B.GroupID IN ('SSP Planner', 'ADMIN', 'SCM PI Admin')",
+  "on_fail": "조건 충족 USER_ID 목록만 반환 — 누락된 ID 를 UI 가 미등록/권한없음으로 판정",
+  "desc": "[조회표시] 입력한 담당자 ID 가 사용자 마스터에 있고 SSP Planner/ADMIN/SCM PI Admin 그룹 권한을 하나라도 가진 경우만 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0014.P_SSP0014_GET_USER_ID_CHECK",
+    "loc": "PKG_SSP0014.PACKAGE_BODY.sql L398-407",
+    "diff": "그룹 3종·사용자 존재 조건은 동일(TB_FX_User→SCM_ADM_USER_M, TB_FX_UserGroupAuthExtention→SCM_ADM_USER_GR_UNIT_AUTH_MPG_M, 대소문자 무시는 UPPER 재현). 단 TO-BE 는 B.USE_YN = 'Y' 조건이 추가돼 사용중지된 그룹권한은 통과하지 않음(AS-IS 는 권한행 존재만 확인)."
+   }
+  ],
+  "fe_note": "hooks/useShipmentModelPicValidation.ts L45-62 — o_rc1 통과 목록과 대조해 미통과면 MSG01261(ShipmentModelPic.tsx L269-279), 호출 실패·code≠0 이면 MSG00003 알림 후 저장 중단(L280-286)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#0",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "기타(ETC)",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_SYS_LOG_BATCH",
+  "asis_line": "L60-94",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT",
+  "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_SYS_LOG_BATCH",
+    "loc": "PR_SCM_SYS_LOG_BATCH.PROCEDURE.sql L84-143",
+    "diff": "롤백 후 오류내용 재기록·COMMIT 구조는 동일. 차이: (1) AUTONOMOUS_TRANSACTION 이라 ROLLBACK 이 호출자 트랜잭션을 롤백하지 않음(AS-IS 원문이슈 해소), (2) log_type 이 소문자 'error'(AS-IS 'ERROR'), (3) 오류 메시지를 log_message 가 아닌 sql_err_msg 컬럼에 저장, program_name 은 ERROR_PROCEDURE() 대신 입력 p_program_name, 입력값 JSON(in_para_data) 추가."
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#8",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+  "asis_line": "L1618-1639",
+  "condition": "BEGIN CATCH IF @@TRANCOUNT > 0 ROLLBACK TRAN TX_SH",
+  "on_fail": "ROLLBACK, 에러 로그 후 return -1",
+  "desc": "예외 시 롤백 후 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH.PROCEDURE.sql L1636-1646",
+    "diff": "ROLLBACK TO TX_SH + ERROR 로그는 동일. AS-IS 는 return -1 로 실패를 반환하나 TO-BE 는 반환값/RAISE 없이 정상 종료 → 호출자가 실패를 알 수 없음"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#13",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+  "asis_line": "L166-191",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message",
+  "desc": "오류 시 로그 후 F 와 오류코드·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+    "loc": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM.PROCEDURE.sql L168-214",
+    "diff": "로그·'F'·ERR_CODE/ERR_MESSAGE 반환은 동일(결과커서 O_RC1/O_RC2). 단 TO-BE 는 SAVEPOINT(L54) 로 ROLLBACK TO 하여 오류 이전 루프의 INSERT/UPDATE 를 되돌림 — AS-IS 는 BEGIN TRAN/ROLLBACK 주석이라 부분 반영(원문이슈 교정)."
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#19",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+  "asis_line": "L579-608",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT 오류메시지",
+  "desc": "오류 시 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+    "loc": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM.PROCEDURE.sql L426-465",
+    "diff": "로그·'F'·메시지 반환은 동일. TO-BE 는 SAVEPOINT(L56) 로 ROLLBACK TO 하여 오류 이전 Confirm 별 UPDATE/DELETE/I/F INSERT 를 전부 되돌림 — AS-IS 는 트랜잭션 없음으로 부분 반영(원문이슈 교정)."
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#21",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "SSP0015_DELETE_SHIPMENT_REQUEST_DRAFTING",
+  "asis_line": "L70-99",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR) 후 SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()",
+  "desc": "작성중 변경요청 논리삭제 오류 시 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_DELETE_SHIPMENT_REQUEST_DRAFTING",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L2419-2436",
+    "diff": "F·'[오류번호]메시지' 반환·ERROR 로그는 동일. TO-BE 는 SAVEPOINT(L2386)로 되돌림 추가 — AS-IS 는 트랜잭션·ROLLBACK 없어 1번째 UPDATE(CHG_REQ) 반영분 잔존. 성공 시 TO-BE 는 'S' 결과커서 반환. CHANGE_REQ_NO 존재 검증은 양쪽 모두 없음"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#39",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Hold stock",
+  "cls": "A 차단형",
+  "sp": "SSP0015_SAVE_BLOCK_STOCK_DATA",
+  "asis_line": "L358-387",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()",
+  "desc": "Hold 재고 저장 오류 시 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_BLOCK_STOCK_DATA",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L3752-3768",
+    "diff": "F·'[번호]메시지'·ERROR 로그 동일. AS-IS 는 CATCH 에서 COMMIT(오류 이전 행 저장분 확정) → TO-BE 는 SAVEPOINT(L3630) 되돌림으로 앞 행까지 취소. RESULT_CNT(0) 추가"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#42",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Stock Detail",
+  "cls": "A 차단형",
+  "sp": "SSP0015_SAVE_MES_STOCK",
+  "asis_line": "L413-442",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT INTO scm_sys_log_batch(... 'ERROR' ...); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();",
+  "desc": "예외 발생 시 오류 로그 기록 후 F 와 오류 메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_MES_STOCK",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L3962-3978",
+    "diff": "F·'[번호]메시지'·ERROR 로그 동일. AS-IS 는 CATCH 에서 COMMIT(앞 MERGE 반영 유지) → TO-BE 는 SAVEPOINT(L3834) 되돌림. RESULT_CNT(0) 추가"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#43",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment PSI 메인(WH_IN)",
+  "cls": "A 차단형",
+  "sp": "SSP0015_SAVE_SHIPMENT_PSI",
+  "asis_line": "L302-327",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT INTO scm_sys_log_batch(...'ERROR'...); SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message",
+  "desc": "예외 발생 시 오류 로그 기록 후 F 와 오류코드·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_PSI",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L3333-3349",
+    "diff": "F + err_code/err_message 반환·ERROR 로그 동일. TO-BE 는 SAVEPOINT(L3167) 되돌림으로 예외 이전 행의 PLAN_40/WH_IN_CMT/이력 반영분까지 취소 — AS-IS 는 BEGIN TRAN·ROLLBACK 주석이라 부분 반영 유지. TO-BE 결과커서에 RESULT_CNT(0) 추가"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#45",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+  "asis_line": "L296-437",
+  "condition": "SELECT TOP 1 ... FROM SCP_MST_BOD_N_V(DIVISION_ID, FROM_SITE, TO_SITE, TRANSPORT_MODE=@v_new_transport_mode, ssp_incoterms=@v_new_incoterms, BOD_VALID_YN='Y', FROM_YYYYMMDD<=@v_shipment_date<=TO_YYYYMMDD) JOIN SCP_MST_BOD_ITEM(ITEM_ID) ORDER BY PRIORITY; IF ((@v_division_id_temp = '' or ... IS NULL) OR (@v_new_bod_id_temp ...) OR ... OR (@v_new_to_city_temp ...))",
+  "on_fail": "SELECT 'X' AS result_code, NULL AS Request_no; END 로그; RETURN;",
+  "desc": "선택한 Transport Mode·Incoterms·출하일로 유효한 BOD(품목 매핑 포함)를 찾지 못하거나 BOD 의 Route/국가/항구/LT/도착국·도시 중 하나라도 비면 X 반환 후 중단",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L6186-6331",
+    "diff": "조건(14개 값 NULL/빈값)·X 반환·RETURN 동일, 행별 미초기화(앞 행 값으로 통과 가능) 원형도 유지. 다른 점: (1) TO-BE 는 X 반환 전 SAVEPOINT 되돌림(L6312~6317)으로 앞 행 저장분 취소 — AS-IS 는 트랜잭션 없어 앞 행 반영 유지. (2) 로그 LOG_TYPE 'END'→'FIND'. (3) 출하일 비교를 하이픈 제거값(V_BOD_SHIPMENT_DATE)으로 하여 AS-IS CI 콜레이션 결과(종료일 당일 제외) 재현 — 의도상 동일"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#50",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "B 보정형",
+  "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+  "asis_line": "L1271-1300",
+  "condition": "IF @v_plan_start_yyyymmdd IS NULL  -- #TblDynamic_SSP0015_40_STD(최근 3일 SHIP_PLAN_40, QTY>0) 에 From Site 기준 버전 없음 → Company 기준 재조회 후 다시 IS NULL",
+  "on_fail": "1차: 같은 COMPANY_ID 사이트의 MAX(PLAN_START_YYYYMMDD) 로 대체 / 2차: convert(char(8), GETDATE(), 112)",
+  "desc": "edit_main='Y' 행의 Plan 반영 대상 버전을 From Site→Company→오늘 순으로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L7431-7456",
+    "diff": "From Site→Company 1·2차 대체는 동일하나 AS-IS L1300~1303 의 2차 'IS NULL → GETDATE() 오늘' 보정이 TO-BE 에 없음(NULL 이면 DELETE/INSERT 가 PLAN_START NULL 로 수행). 또한 기준 GTT 적재(L6128~6150)에서 AS-IS '최근 3일(GETDATE()-3 ~ GETDATE())' 기간 조건(AS-IS L252~253)이 TO-BE L6144~6145 주석 처리 — 전 기간 최신 버전을 기준으로 삼아 대체 대상 버전 범위가 다름"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#54",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+  "asis_line": "L1596-1625",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS ERR_MESSAGE",
+  "desc": "예외 발생 시 오류 로그 기록 후 F 와 오류 메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L7762-7803",
+    "diff": "F + '[번호]메시지' 반환 동일. (1) AS-IS CATCH 는 COMMIT(부분 반영 유지) → TO-BE 는 SAVEPOINT/전체 ROLLBACK. (2) 오류 로그 LOG_TYPE 이 AS-IS 'ERROR' → TO-BE 'END'(L7790), PROGRAM_NAME 도 ERROR_PROCEDURE() → 고정 패키지명"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#55",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Packer)",
+  "cls": "A 차단형",
+  "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER",
+  "asis_line": "L275-427",
+  "condition": "SELECT TOP 1 ... FROM SCP_MST_BOD_N_V(..., TRANSPORT_MODE, ssp_incoterms, BOD_VALID_YN='Y', 출하일 유효기간) JOIN (SCP_MST_BOD_ITEM ⋈ SCM_MST_SITE B.OSP_YN='Y', ITEM_ID 12번째 자리를 PACKER_ITEM_ID_SUFFIX 로 치환한 값 = @v_item_id_temp) ORDER BY PRIORITY; IF ((@v_division_id_temp = '' or ... IS NULL) OR ... OR (@v_new_to_city_temp ...))",
+  "on_fail": "SELECT 'X' AS result_code, NULL AS Request_no; END 로그; RETURN;",
+  "desc": "Packer(OSP) 사이트 기준으로 유효한 BOD(품목 Suffix 치환 매칭 포함)가 없거나 BOD 상세 값이 비면 X 반환 후 중단",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L8018-8149",
+    "diff": "OSP_YN='Y'·Suffix 12번째 자리 치환·14개 값 NULL 검사·X 반환은 동일(앞 행 반영 유지도 COMMIT 으로 AS-IS 와 같음). 그러나 AS-IS L347~348 의 BOD 출하일 유효기간 조건(FROM_YYYYMMDD <= 출하일 <= TO_YYYYMMDD)이 TO-BE L8085~8088 에서 주석(2026.10.20 AJS) — 유효기간이 지났거나 미래인 BOD 도 선택되어 X 대신 저장 진행 가능. 또한 X 시 루프 EXIT 후 반환(로그 END 동일)"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#59",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Packer)",
+  "cls": "A 차단형",
+  "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER",
+  "asis_line": "L1160-1189",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS ERR_MESSAGE",
+  "desc": "예외 발생 시 오류 로그 기록 후 F 와 오류 메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L9022-9051",
+    "diff": "F + '[번호]메시지'·ERROR 로그 동일. AS-IS CATCH 는 COMMIT(부분 반영 유지) → TO-BE 는 SAVEPOINT/전체 ROLLBACK 으로 앞 행까지 취소"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#63",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING",
+  "asis_line": "L515-545",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();",
+  "desc": "예외 발생 시 오류 로그 기록 후 F 와 오류 메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L9685-9712",
+    "diff": "AS-IS CATCH 는 ROLLBACK 없이 COMMIT(앞 행 저장분 확정). TO-BE 는 저장점(또는 전체) ROLLBACK 후 로그·F 반환 → 오류 시 부분 저장분이 남지 않음(의도된 보완, 2026.10.21 AJS). 반환 형식(F + [코드]메시지)은 동일"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#67",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Packer)",
+  "cls": "A 차단형",
+  "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER",
+  "asis_line": "L525-555",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();",
+  "desc": "예외 발생 시 오류 로그 기록 후 F 와 오류 메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER",
+    "loc": "PKG_SSP0015.PACKAGE_BODY.sql L10355-10382",
+    "diff": "AS-IS CATCH 는 ROLLBACK 없이 COMMIT. TO-BE 는 저장점/전체 ROLLBACK 후 로그·F 반환(부분 저장분 제거). 반환 형식 동일"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#74",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L51-59",
+  "condition": "IF DB_NAME() <> 'LGCE_SCMDEV' → IF DATEPART(WEEKDAY, GETDATE()) <> 2 OR ( (DATEPART(HH, GETDATE()) <= 7 AND DATEPART(MI, GETDATE()) < 50 ) OR (DATEPART(HH, GETDATE()) = 23 AND DATEPART(MI, GETDATE()) > 55 ) )",
+  "on_fail": "RETURN; (조용히 종료, 동기화 미실행)",
+  "desc": "운영 DB 에서는 월요일 07:50~23:55 사이에만 MKT FCST 동기화 수행",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L60-71",
+    "diff": "요일·시각 조건과 원문 결함((HH<=7 AND MI<50))은 동일. 차이: AS-IS 는 DB_NAME() <> 'LGCE_SCMDEV' 일 때만 검사(개발 DB 면 항상 동기화) → TO-BE 는 환경 구분 없이 항상 검사. 요일 판정은 DATEPART(WEEKDAY)=2 → ISO 주 월요일(DATEFIRST 무관)."
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#98",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Packer)",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER",
+  "asis_line": "L1399-1420",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRAN TX_SH; PR_SCP_SYS_LOG_BATCH ERROR; return -1",
+  "desc": "예외 시 롤백·로그 후 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER.PROCEDURE.sql L672-687",
+    "diff": "AS-IS: ROLLBACK TRAN TX_SH(세이브포인트) + 로그 + return -1(예외 삼킴). TO-BE: 전체 ROLLBACK(호출자 트랜잭션 포함) + 로그 + RAISE 재전파 → 호출자까지 실패 전파·롤백 범위 확대"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#101",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+  "asis_line": "L673-699",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch 에 ERROR INSERT; IF @@TRANCOUNT > 0 COMMIT WORK",
+  "desc": "예외 시 오류 로그만 남기고 종료",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_HIST.PROCEDURE.sql L390-393",
+    "diff": "로그 기록·예외 미전파는 동일. AS-IS 는 IF @@TRANCOUNT>0 COMMIT WORK 로 호출자 트랜잭션(1차 INSERT 부분분 포함)까지 확정하나 TO-BE 는 PR_SSP_LOG_ERROR(자율 트랜잭션)만 커밋하고 호출자 트랜잭션은 미확정·미롤백(1차 INSERT 부분 결과가 호출자 트랜잭션에 잔존)"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#110",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE",
+  "asis_line": "L470-474",
+  "condition": "BEGIN CATCH",
+  "on_fail": "RETURN -1",
+  "desc": "예외 시 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE.PROCEDURE.sql L226-229",
+    "diff": "AS-IS RETURN -1(롤백·로그 없음) → TO-BE 예외 완전 무시(반환 없음). 롤백·로그 없음은 동일, 반환코드만 상실"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#111",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_MAIL_SEND_ADJUST_SUB",
+  "asis_line": "L78-107",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR INSERT; IF @@TRANCOUNT > 0 COMMIT WORK",
+  "desc": "메일 발송 실패 시 로그만 기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_MAIL_SEND_ADJUST_SUB",
+    "loc": "PR_SSP_MAIL_SEND_ADJUST_SUB.PROCEDURE.sql L52-55",
+    "diff": "로그·예외 미전파 동일. AS-IS 는 IF @@TRANCOUNT>0 COMMIT WORK 로 호출자 트랜잭션까지 확정, TO-BE 는 자율 트랜잭션 로그만 커밋(호출자 트랜잭션 미확정)"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0015#112",
+  "kind": "DB",
+  "screen": "SSP0015",
+  "event": "저장(SAVE) — Shipment Confirm Detail(Mobility & IT)",
+  "cls": "A 차단형",
+  "sp": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+  "asis_line": "L104-134",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER+']'+ERROR_MESSAGE()",
+  "desc": "발송 로그 저장 실패 시 오류 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+    "loc": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG.PROCEDURE.sql L134-165",
+    "diff": "AS-IS: 오류 로그 후 COMMIT, 'F' 결과셋 반환(호출부 계속 진행). TO-BE: AUTONOMOUS_TRANSACTION 안에서 ROLLBACK(발송로그 INSERT 취소) 후 로그, END 로그 뒤 RAISE_APPLICATION_ERROR(-20001) 로 호출부(SCM_ADM_SMS_SEND_BATCH·SCM_SSP_MAIL_SEND 등)에 예외 전파. 'F'/메시지 결과셋은 주석(L152-153). 실패 처리가 결과 반환→예외 전파로 바뀜(AS-IS 원문이슈 COMMIT 은 ROLLBACK 으로 교정)."
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0020#0",
+  "kind": "DB",
+  "screen": "SSP0020",
+  "event": "저장(SAVE) — SAVE 버튼",
+  "cls": "A 차단형",
+  "sp": "SSP0020_SAVE_DELEGATE",
+  "asis_line": "L122-147",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message",
+  "desc": "예외(PK 중복 등) 발생 시 오류 로그 기록 후 F 와 오류코드·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0020.P_SAVE_DELEGATE",
+    "loc": "PKG_SSP0020.PACKAGE_BODY.sql L227-253",
+    "diff": "AS-IS 는 트랜잭션 없음·ROLLBACK 주석 → 복수 Division 중 앞 행 INSERT 유지. TO-BE 는 ROLLBACK 으로 전체 취소. 반환도 AS-IS 2번째 결과셋(err_code, err_message) 대신 O_RC1.RESULT_CNT 에 SQLERRM, O_RESULT_CURSOR CODE '1'(오류번호 별도 칸 없음)"
+   }
+  ],
+  "fe_note": "TO-BE 는 apiClient.post(call-proc) 응답 status≥400 또는 code≠0 일 때만 서버 message alert, 그 외 성공 토스트 — 결과커서 RESULT_CODE('F')는 FE 가 판정하지 않음(BE 판정 의존): features/shipping/src/pages/delegate/Delegate.tsx L207-224",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0020#2",
+  "kind": "DB",
+  "screen": "SSP0020",
+  "event": "실행(RUN) — UnSet 버튼",
+  "cls": "A 차단형",
+  "sp": "SSP0020_SAVE_UNSET",
+  "asis_line": "L144-169",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message",
+  "desc": "예외 발생 시 오류 로그 기록 후 F 와 오류코드·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0020.P_SAVE_UNSET",
+    "loc": "PKG_SSP0020.PACKAGE_BODY.sql L379-405",
+    "diff": "AS-IS 트랜잭션 없음·ROLLBACK 주석 → TO-BE ROLLBACK 추가. 오류 반환 형식(err_code/err_message 결과셋 → RESULT_CNT·O_RESULT_CURSOR) 변경"
+   }
+  ],
+  "fe_note": "TO-BE 는 apiClient.post(call-proc) 응답 status≥400 또는 code≠0 일 때만 서버 message alert, 그 외 성공 토스트 — 결과커서 RESULT_CODE('F')는 FE 가 판정하지 않음(BE 판정 의존): features/shipping/src/pages/delegate/Delegate.tsx L273-290",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#7",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+  "asis_line": "L1618-1639",
+  "condition": "BEGIN CATCH IF @@TRANCOUNT > 0 ROLLBACK TRAN TX_SH",
+  "on_fail": "ROLLBACK, 에러 로그 후 return -1",
+  "desc": "예외 시 롤백 후 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH.PROCEDURE.sql L1636-1646",
+    "diff": "ROLLBACK TO TX_SH + ERROR 로그는 동일. AS-IS 는 return -1 로 실패를 반환하나 TO-BE 는 반환값/RAISE 없이 정상 종료 → 호출자가 실패를 알 수 없음"
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — ERP 변경요청 체인 미배포(__asis-mapping__.md L507)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#10",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+  "asis_line": "L166-191",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message",
+  "desc": "오류 시 로그 후 F 와 오류코드·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+    "loc": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM.PROCEDURE.sql L168-214",
+    "diff": "로그·'F'·ERR_CODE/ERR_MESSAGE 반환은 동일(결과커서 O_RC1/O_RC2). 단 TO-BE 는 SAVEPOINT(L54) 로 ROLLBACK TO 하여 오류 이전 루프의 INSERT/UPDATE 를 되돌림 — AS-IS 는 BEGIN TRAN/ROLLBACK 주석이라 부분 반영(원문이슈 교정)."
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — ERP 오류 기록 단계 없음(__asis-mapping__.md L507)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#11",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+  "asis_line": "L72-99",
+  "condition": "SELECT @v_chk=COUNT(*) … WHERE de.CONFIRM_ID=@v_confirm_id; IF @v_chk>0 SELECT TOP 1 @v_chk_interval = CASE WHEN DATEDIFF(MI,ISNULL(de.LAST_UPDATE_DATE,2),GETDATE()) >= 2 THEN 1 ELSE 0 END … ORDER BY LAST_UPDATE_DATE desc; IF @v_chk > 0 AND @v_chk_interval = 0",
+  "on_fail": "SELECT 'X' AS result_code, @v_chk AS CHK1, @v_chk_interval AS CHK2; RETURN",
+  "desc": "Confirm 변경요청 이력이 있고 가장 최근 변경이 2분 이내이면 재변경을 막고 'X' 반환(첫 해당 Confirm 에서 즉시 종료)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+    "loc": "SCM_SSP_CHECK_CONFIRM_CHANGETIME.PROCEDURE.sql L51-95",
+    "diff": "TOP 1 … ORDER BY LAST_UPDATE_DATE DESC → MAX(LAST_UPDATE_DATE)(MSSQL DESC 에서 NULL 후순위라 등가), DATEDIFF(MI) 분경계 → TRUNC 'MI' 차, NULL→1900-01-03 통과 동일. 'X'·CHK1·CHK2(=0) 반환 후 첫 해당 Confirm 에서 즉시 종료 동일. TO-BE 는 RETURN 전 END 로그 추가."
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — ShipmentPlanAutoEss.tsx handleSave L360-405 에 변경 간격 확인 없음",
+  "fe_downgrade_reason": "2분 이내 재변경 차단(MSG00404)을 TO-BE 화면에서 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0021#12",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+  "asis_line": "L116-146",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT 오류메시지",
+  "desc": "오류 시 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+    "loc": "SCM_SSP_CHECK_CONFIRM_CHANGETIME.PROCEDURE.sql L108-130",
+    "diff": "AS-IS 2개 결과셋('F' / 메시지) → TO-BE 단일 커서 RESULT_CODE·RESULT_MSG 로 통합. AS-IS 의 COMMIT WORK 없음(조회 전용이라 영향 없음)."
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — ShipmentPlanAutoEss.tsx handleSave L360-405 에 변경 간격 확인 없음",
+  "fe_downgrade_reason": "2분 이내 재변경 차단(MSG00404)을 TO-BE 화면에서 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0021#16",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+  "asis_line": "L579-608",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT 오류메시지",
+  "desc": "오류 시 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+    "loc": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM.PROCEDURE.sql L426-465",
+    "diff": "로그·'F'·메시지 반환은 동일. TO-BE 는 SAVEPOINT(L56) 로 ROLLBACK TO 하여 오류 이전 Confirm 별 UPDATE/DELETE/I/F INSERT 를 전부 되돌림 — AS-IS 는 트랜잭션 없음으로 부분 반영(원문이슈 교정)."
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — ERP 변경요청 체인 미배포(__asis-mapping__.md L507)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#18",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "D 검증리포트형",
+  "sp": "SSP0021_GET_ERP_SO_NO_CNT",
+  "asis_line": "L22-26",
+  "condition": "SELECT COUNT(*) CNT FROM SSP_ANL_SHIP_CONFIRM WHERE DIVISION_ID = @p_division_id AND ERP_SO_NO = @p_erp_so_no AND QTY <> 0",
+  "on_fail": "건수(CNT) 반환 — 판정은 UI",
+  "desc": "입력한 ERP SO 번호가 수량 0 이 아닌 확정건에 존재하는지 건수로 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_GET_ERP_SO_NO_CNT",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L366-371",
+    "diff": null
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — SO 건수 대조 없음(ShipmentPlanAutoEss.tsx handleSave L360-405)",
+  "fe_downgrade_reason": "같은 SO 일부만 조회된 상태의 변경 차단(MSG00247)을 TO-BE 화면에서 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0021#19",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "화면 열기(OPEN)",
+  "cls": "C 필터형",
+  "sp": "SSP0021_GET_SHIPMENT_DIVISION",
+  "asis_line": "L53-128",
+  "condition": "WHERE DIVISION_ID IN (SELECT CODE FROM TB_FX_UserGroupAuthExtention WHERE GroupID = @Param1 AND UserID = @Param2 AND AuthType = @AuthTypeParaDivisionOut40) / VP 추가권한 JOIN ... A.GroupID = @Param1",
+  "on_fail": null,
+  "desc": "사용자·그룹 권한(Division 권한 확장 테이블)에 등록된 Division/Company 만 콤보로 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이(AS-IS 추출누락 보충)",
+    "tobe": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_DIVISION",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L69-182",
+    "diff": "차이: TO-BE 는 PARAM1(그룹) 미지정 시 사용자 보유 그룹 전체로 권한 판정(AJS 20261007 화면검증) — AS-IS 는 그룹 NULL 이면 0건. 권한 원천 테이블 TB_FX→SCM_ADM 전환"
+   }
+  ],
+  "fe_note": "DIVISION 시트 useTabProcQuery(components/ShipmentPlanAutoEssForm.tsx L107-128) — 응답 code≠0 이면 서버 message 알림",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#20",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "기타(ETC) — Company 변경",
+  "cls": "C 필터형",
+  "sp": "SSP0021_GET_SHIPMENT_FROM_SITE",
+  "asis_line": "L52-74",
+  "condition": "AND DIVISION_ID IN (SELECT CODE FROM TB_FX_UserGroupAuthExtention WHERE GroupID = @Param3 AND UserID = @Param4 AND AuthType = @AuthTypePara) / VP JOIN ... GroupID = @Param3 AND UserID = @Param4",
+  "on_fail": null,
+  "desc": "사용자·그룹 Division 권한이 있는 From Site 만 콤보로 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이(AS-IS 추출누락 보충)",
+    "tobe": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_FROM_SITE",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L246-285",
+    "diff": "차이: TO-BE 는 PARAM3(그룹) 미지정 시 사용자 보유 그룹 전체로 판정(2026.10.21 AJS) — AS-IS 는 0건. 권한 원천 TB_FX→SCM_ADM 전환"
+   }
+  ],
+  "fe_note": "TO-BE 는 이 SP 대신 콤보 Com_FromSite_SCP(@divisionId @companyId) 사용 — components/ShipmentPlanAutoEssForm.tsx L132-140, constants L60. AS-IS 2026-03 VP 권한 확장(그룹·사용자 파라미터) 반영 여부는 콤보 SQL 미대조(확인 필요)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#21",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "조회(SEARCH)",
+  "cls": "C 필터형",
+  "sp": "SSP0021_GET_SHIPMENT_PLAN",
+  "asis_line": "L614-649",
+  "condition": "CASE WHEN isnull(fs.ship_frozen,0) > 0 THEN CONVERT(VARCHAR, DATEADD(D, FN_GET_ANL_SHIP_FROZEN_DAY_CNT(@v_app_type, ...), @p_from_yyyymmdd),112) ... END AS frozen_yyyymmdd ... AND YYYYMMDD >= frozen_yyyymmdd",
+  "on_fail": null,
+  "desc": "Ship Frozen 구간 안의 미확정 출하요청은 SHIP_PLAN 측정값에서 제외(SSP0015 idx696 과 같은 유형)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치(AS-IS 추출누락 보충)",
+    "tobe": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_PLAN",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L2499-2534",
+    "diff": "이관 일치(DATEADD→DATE+N)"
+   }
+  ],
+  "fe_note": "MAIN useTabProcQuery(ShipmentPlanAutoEss.tsx L179-185) — 응답 code≠0 이면 서버 message 알림. LOT_YN='N' Container 빈칸 처리는 미이식(__asis-mapping__.md L289)",
+  "fe_downgrade_reason": "Lot Size 미등록 품목의 Container 값을 빈칸이 아니라 SP 값(0) 그대로 표시 — 미등록 구분 불가"
+ },
+ {
+  "key": "DB:SSP0021#22",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "조회(SEARCH)",
+  "cls": "D 검증리포트형",
+  "sp": "SSP0021_GET_SHIPMENT_PLAN",
+  "asis_line": "L1500-1531",
+  "condition": "CASE WHEN B.LOT_SIZE IS NULL THEN 'N' ELSE 'Y' END AS LOT_YN  -- LEFT JOIN scp_mst_shipment_lot_size(DIVISION_ID, ITEM_ID, FROM_SITE, VALID_YN='Y', TRANSPORT_MODE=G382_Transport 룩업 사이트면 'TRK' 아니면 'SEA')",
+  "on_fail": "LOT_YN='N' 반환, CONTAINER 수량 0 (CASE WHEN ISNULL(MAX(B.LOT_SIZE),0)=0 THEN 0)",
+  "desc": "품목·From Site 의 출하 Lot Size 마스터 존재 여부를 LOT_YN 으로 표시(없으면 Container 0)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_PLAN",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L2926-2954",
+    "diff": "LEFT JOIN ON 절 조건을 인라인 뷰로 이동(외부조인 보존, 결과 동일). P_REAL_FLAG<>'Y' 분기 LOT_YN NULL(L3416/3457) 동일"
+   }
+  ],
+  "fe_note": "MAIN useTabProcQuery(ShipmentPlanAutoEss.tsx L179-185) — 응답 code≠0 이면 서버 message 알림. LOT_YN='N' Container 빈칸 처리는 미이식(__asis-mapping__.md L289)",
+  "fe_downgrade_reason": "Lot Size 미등록 품목의 Container 값을 빈칸이 아니라 SP 값(0) 그대로 표시 — 미등록 구분 불가"
+ },
+ {
+  "key": "DB:SSP0021#24",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "D 검증리포트형",
+  "sp": "SSP0021_GET_SHIPMENT_STATUS",
+  "asis_line": "L24-29",
+  "condition": "DIVISION_ID IN (split @p_division_id '^') AND CONFIRM_ID IN (split @p_confirm_id '^') AND SHIPMENT_STATUS != 'C'",
+  "on_fail": "해당 CONFIRM_ID 목록을 결과셋1로 반환(SP 내 차단 없음, UI가 건수로 판정)",
+  "desc": "선택한 Confirm 건 중 출하상태가 확정(C)이 아닌 건 목록을 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_STATUS",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L317-324",
+    "diff": "결과셋1→O_RC1"
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — 저장 직전 DB 상태 재확인 없음. ERP_STATUS='C' 는 조회 시점 값으로 편집만 막음(components/ShipmentPlanAutoEssDetailGrid.tsx L176-197)",
+  "fe_downgrade_reason": "다른 사용자 변경요청·확정 삭제(Qty 0)·조회 후 생긴 ERP DO 를 저장 시점에 차단·안내받지 못함"
+ },
+ {
+  "key": "DB:SSP0021#25",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "D 검증리포트형",
+  "sp": "SSP0021_GET_SHIPMENT_STATUS",
+  "asis_line": "L31-36",
+  "condition": "DIVISION_ID IN (split) AND CONFIRM_ID IN (split) AND QTY = 0",
+  "on_fail": "해당 CONFIRM_ID 목록을 결과셋2로 반환",
+  "desc": "선택한 Confirm 건 중 수량이 0인 건 목록을 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_STATUS",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L326-333",
+    "diff": "결과셋2→O_RC2"
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — 저장 직전 DB 상태 재확인 없음. ERP_STATUS='C' 는 조회 시점 값으로 편집만 막음(components/ShipmentPlanAutoEssDetailGrid.tsx L176-197)",
+  "fe_downgrade_reason": "다른 사용자 변경요청·확정 삭제(Qty 0)·조회 후 생긴 ERP DO 를 저장 시점에 차단·안내받지 못함"
+ },
+ {
+  "key": "DB:SSP0021#26",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "D 검증리포트형",
+  "sp": "SSP0021_GET_SHIPMENT_STATUS",
+  "asis_line": "L38-43",
+  "condition": "DIVISION_ID IN (split) AND CONFIRM_ID IN (split) AND ERP_STATUS = 'C'",
+  "on_fail": "해당 CONFIRM_ID 목록을 결과셋3으로 반환",
+  "desc": "ERP 상태가 C(마감)인 건 목록을 반환 — 이력 주석 2020/07/15 'ERP_STATUS 가 C 인 경우 수정 못하도록 추가'",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_STATUS",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L335-342",
+    "diff": "결과셋3→O_RC3"
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — 저장 직전 DB 상태 재확인 없음. ERP_STATUS='C' 는 조회 시점 값으로 편집만 막음(components/ShipmentPlanAutoEssDetailGrid.tsx L176-197)",
+  "fe_downgrade_reason": "다른 사용자 변경요청·확정 삭제(Qty 0)·조회 후 생긴 ERP DO 를 저장 시점에 차단·안내받지 못함"
+ },
+ {
+  "key": "DB:SSP0021#27",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+  "asis_line": "L237-367",
+  "condition": "IF ((@v_division_id_temp='' or IS NULL) OR (@v_new_bod_id_temp …) OR (@v_from_site_temp …) … OR (@v_new_to_city_temp='' or IS NULL))  -- L237 SELECT TOP 1 FROM SCP_MST_BOD_N_V(DIVISION/FROM/TO/TRANSPORT_MODE/ssp_incoterms/BOD_VALID_YN='Y'/FROM~TO_YYYYMMDD) JOIN BOD_ITEM ORDER BY PRIORITY",
+  "on_fail": "SELECT 'X' AS result_code, NULL AS Request_no; (END LOG) RETURN;",
+  "desc": "원 Confirm 의 From/To Site·품목과 변경 Transport Mode·Incoterms·출하일로 유효 BOD(품목 매핑 포함)를 찾지 못하거나 Route/국가/항구/LT/To Country/To City 중 하나라도 비면 X 반환 후 중단",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L5255-5384",
+    "diff": "''/NULL 이중검사 → IS NULL 단일(Oracle ''=NULL). 유효기간 비교 출하일을 'YYYY-MM-DD'→YYYYMMDD 로 정규화(2026.10.20). X 반환 시 ROLLBACK TO 없음 — 앞선 루프 행 DML 은 남음(AS-IS 부분저장과 동일, 최종 확정은 BE 트랜잭션 경계). _TEMP 변수 루프 미초기화·NO_DATA_FOUND 시 직전 값 유지도 AS-IS 원문이슈 그대로. 반환: O_RC1 RESULT_CODE='X'(RESULT_CNT/CHANGE_REQ_NO NULL)."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#28",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+  "asis_line": "L452-460",
+  "condition": "SELECT @Mail_CHK = COUNT(*) FROM SSP_MST_SEND_MAIL_REQ WHERE CHANGE_REQ_NO = @v_change_req_no; IF @Mail_CHK = 0",
+  "on_fail": "이미 있으면 메일요청 INSERT 생략(@Mail_Flag 미설정 → 메일 발송 SP 미호출)",
+  "desc": "같은 Change Req No 의 메일 발송 요청 중복 등록 방지 (active_flag<>'I' 이고 len(@v_change_req_no)>0 일 때)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L5454-5502",
+    "diff": "V_ACTIVE_FLAG <> 'I' 분기 안. AS-IS 원문이슈(EDIT_MAIN='Y' 일 때만 요청번호 조회, 이후 처리는 무조건·V_CHANGE_REQ_NO 루프 간 미초기화)도 TO-BE 에 그대로 재현됨."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#29",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+  "asis_line": "L496-513",
+  "condition": "IF @v_plan_start_yyyymmdd IS NULL  -- PLAN_TYPE='SP' AND CONFIRM_FLAG='Y' 최신 버전 MAX 조회 결과 없음",
+  "on_fail": "SET @v_plan_start_yyyymmdd = 오늘 YYYYMMDD; SET @v_seq = 1;",
+  "desc": "신규(I) Confirm 생성 시 확정된 SP 계획버전이 없으면 오늘 일자·SEQ 1 로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L5529-5546",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#30",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+  "asis_line": "L994-994",
+  "condition": "CASE WHEN A.PROJECT_CODE IS NULL OR A.PROJECT_CODE ='' OR A.PROJECT_CODE ='-' THEN 'TBD' ELSE A.PROJECT_CODE END",
+  "on_fail": "ERP I/F 적재 PROJECT_CODE 를 'TBD' 로 대체",
+  "desc": "신규 Confirm ERP 송신 시 Project Code 가 비었거나 '-' 이면 TBD 로 보정",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L6106-6106",
+    "diff": "AS-IS 의 ='' 조건은 Oracle 에서 IS NULL 로 흡수(표현 차이)."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#31",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+  "asis_line": "L1059-1061",
+  "condition": "WHERE A.CONFIRM_ID = @v_new_confirm_id AND ISNULL(A.QTY,0) <> 0  -- 0은IF 제외",
+  "on_fail": "수량 0/NULL 신규 Confirm 은 ERP I/F 테이블 적재에서 조용히 제외",
+  "desc": "수량 0 인 신규 Confirm 은 ERP 송신 대상에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L6171-6172",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#33",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+  "asis_line": "L1236-1265",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR INSERT; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS ERR_MESSAGE",
+  "desc": "실행 중 예외 시 로그 후 F 와 오류메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L6519-6569",
+    "diff": "AS-IS 는 CATCH 에서 @@TRANCOUNT>0 이면 COMMIT(오류 이전 처리분 확정)인데 TO-BE 는 SAVEPOINT SP_SAVE_CONFIRM 으로 ROLLBACK(저장점 없으면 전체 ROLLBACK, 2026.10.16) — 원문이슈를 의도적으로 바로잡은 동작 차이. 로그 INSERT·'F'·'[번호]메시지' 반환은 동일(결과셋 1개 → O_RC1 CODE + O_RC2 ERR_MESSAGE 분리)."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#34",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+  "asis_line": "L228-231",
+  "condition": "IF @v_change_reason_code = '' OR @v_change_reason_code IS NULL",
+  "on_fail": "SET @v_change_reason_code = 'T07';",
+  "desc": "변경사유 코드가 비어 있으면 기본 T07 로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L4592-4594",
+    "diff": "AS-IS L396 도 @v_change_reason_code 사용 — 동일"
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — Drafting 3경로 미배포(__asis-mapping__.md L507)",
+  "fe_downgrade_reason": "ERP 변경요청 Drafting 단계 검증(BOD 미등록 X)을 TO-BE 화면에서 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0021#35",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+  "asis_line": "L245-374",
+  "condition": "IF ((@v_division_id_temp='' or IS NULL) OR (@v_new_bod_id_temp …) … OR (@v_new_to_city_temp='' or IS NULL))  -- L245 SELECT TOP 1 BOD_N_V(DIVISION/@v_from_site/TO_SITE/TRANSPORT_MODE/ssp_incoterms/BOD_VALID_YN='Y'/유효기간 @v_shipment_date) JOIN BOD_ITEM ORDER BY PRIORITY",
+  "on_fail": "SELECT 'X' AS result_code, NULL AS Request_no; (END LOG) RETURN;",
+  "desc": "변경 Transport Mode·Incoterms·출하일 기준 유효 BOD(품목 매핑 포함)가 없거나 경로 속성이 하나라도 비면 X 반환 후 중단",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L4614-4742",
+    "diff": "루프 중 RETURN 구조·_TEMP 미초기화 그대로 이관. 출하일 '-' 제거 정규화 추가(2026.10.20 AJS). TO-BE 자체 COMMIT 은 없고 END 로그(PR_SCM_SYS_LOG_BATCH, 주석상 확정 동반)로 앞 행 저장분이 확정됨 — AS-IS 잔존 동작과 동일"
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — Drafting 3경로 미배포(__asis-mapping__.md L507)",
+  "fe_downgrade_reason": "ERP 변경요청 Drafting 단계 검증(BOD 미등록 X)을 TO-BE 화면에서 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0021#36",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+  "asis_line": "L419-425",
+  "condition": "IF ISNULL(@v_shipment_date,'')!='' and LEN(@v_shipment_date)=8 and ISNULL(@v_new_customer_lt,'')!='' and LEN(@v_new_customer_lt)>0",
+  "on_fail": "충족 시 SET @v_new_etd_date = @v_shipment_date (불충족 시 화면 전달 ETD 유지)",
+  "desc": "출하일이 8자리이고 Customer LT 가 있으면 NEW_ETD_DATE 를 출하일로 보정",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L4825-4828",
+    "diff": "V_EDIT_MAIN='Y' 분기 안 동일"
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — Drafting 3경로 미배포(__asis-mapping__.md L507)",
+  "fe_downgrade_reason": "ERP 변경요청 Drafting 단계 검증(BOD 미등록 X)을 TO-BE 화면에서 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0021#37",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+  "asis_line": "L518-548",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR INSERT; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE();",
+  "desc": "예외 시 로그 후 F 결과셋과 오류메시지 결과셋(2개) 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0021.P_SSP0021_SAVE_SHIPMENT_REQUEST_DRAFTING",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L5010-5059",
+    "diff": "AS-IS CATCH 는 ROLLBACK 없이 COMMIT. TO-BE 는 저장점(START 로그 직후)/전체 ROLLBACK(2026.10.16 AJS) 후 로그·F 반환, 오류 로그 INSERT 뒤 COMMIT 없음(BE 트랜잭션 의존)"
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — Drafting 3경로 미배포(__asis-mapping__.md L507)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#39",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "FN_GET_SSP_MKT_FCST_INCOTERMS",
+  "asis_line": "L46-58",
+  "condition": "IF @v_incoterms IS NULL  -- MEASURE='MKT_FCST' AND PLANT_SITE_ID·SCM_SITE_ID·ITEM_ID·PROJECT_CODE·FCST_TYPE·YYYYMMDD>=@p_yyyymmdd 로 미발견",
+  "on_fail": "SELECT top 1 @v_incoterms = INCOTERMS … (PLANT_SITE_ID·SCM_SITE_ID 조건만으로 재조회, 나머지 조건 주석)",
+  "desc": "정확한 키로 MKT FCST INCOTERMS 를 못 찾으면 From/To 사이트 기준 첫 INCOTERMS 로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "FN_GET_SSP_MKT_FCST_INCOTERMS",
+    "loc": "FN_GET_SSP_MKT_FCST_INCOTERMS.FUNCTION.sql L49-69",
+    "diff": "재조회 조건(사업부·From/To 사이트만, 나머지 주석)·정렬(YYYYMMDD)·미발견 시 NULL 모두 동일. TOP 1 → 정렬 서브쿼리+ROWNUM=1"
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — ERP 변경요청(Drafting) 체인 미배포(__asis-mapping__.md L507, ShipmentPlanAutoEss.tsx L395-404 Confirm 저장만)",
+  "fe_downgrade_reason": "Drafting 단계 BOD 미등록(X) 판정과 매뉴얼 안내를 TO-BE 화면에서 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0021#40",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "FN_GET_SSP_VMI_YN",
+  "asis_line": "L35-37",
+  "condition": "IF @v_vmi_yn IS NULL  -- DIVISION_ID·SCM_SITE_ID 사이트 미존재 또는 VMI_YN NULL",
+  "on_fail": "SET @v_vmi_yn = 'N'",
+  "desc": "사이트가 없거나 VMI 여부가 비어 있으면 'N' 으로 간주",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "FN_GET_SSP_VMI_YN",
+    "loc": "FN_GET_SSP_VMI_YN.FUNCTION.sql L24-38",
+    "diff": "사이트 미존재(NO_DATA_FOUND)·VMI_YN NULL 모두 'N' 대체로 동일"
+   }
+  ],
+  "fe_note": "TO-BE 미호출 — ERP 변경요청(Drafting) 체인 미배포(__asis-mapping__.md L507, ShipmentPlanAutoEss.tsx L395-404 Confirm 저장만)",
+  "fe_downgrade_reason": "Drafting 단계 BOD 미등록(X) 판정과 매뉴얼 안내를 TO-BE 화면에서 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0021#41",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "FN_MULTY_TIME",
+  "asis_line": "L44-44",
+  "condition": "WHERE A.SEGMENT1 = isnull(@v_time_zone, 'AS054')",
+  "on_fail": "타임존 미입력 시 'AS054' 기준으로 산출",
+  "desc": "타임존 코드가 NULL 이면 기본 타임존 AS054 로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "FN_MULTY_TIME",
+    "loc": "FN_MULTY_TIME.FUNCTION.sql L30-30",
+    "diff": "isnull(@v_time_zone,'AS054') → 선언부 NVL. Oracle 에서는 빈 문자열도 AS054 로 대체(AS-IS 는 '' 이면 미발견 → NULL)"
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#42",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L51-59",
+  "condition": "IF DB_NAME() <> 'LGCE_SCMDEV' → IF DATEPART(WEEKDAY, GETDATE()) <> 2 OR ( (DATEPART(HH, GETDATE()) <= 7 AND DATEPART(MI, GETDATE()) < 50 ) OR (DATEPART(HH, GETDATE()) = 23 AND DATEPART(MI, GETDATE()) > 55 ) )",
+  "on_fail": "RETURN; (조용히 종료, 동기화 미실행)",
+  "desc": "운영 DB 에서는 월요일 07:50~23:55 사이에만 MKT FCST 동기화 수행",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L60-71",
+    "diff": "요일·시각 조건과 원문 결함((HH<=7 AND MI<50))은 동일. 차이: AS-IS 는 DB_NAME() <> 'LGCE_SCMDEV' 일 때만 검사(개발 DB 면 항상 동기화) → TO-BE 는 환경 구분 없이 항상 검사. 요일 판정은 DATEPART(WEEKDAY)=2 → ISO 주 월요일(DATEFIRST 무관)."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#43",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L61-64",
+  "condition": "IF @P_DIVISION_ID NOT LIKE '%40%'",
+  "on_fail": "RETURN;",
+  "desc": "40(소형) 사업부가 아니면 동기화 없이 종료",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L73-75",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#44",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L116-138",
+  "condition": "IF ( ISNUMERIC(@V_SYNC_DAY_CNT) < 1 OR @V_SYNC_DAY_CNT < 1 )  -- SEGMENT1=사업부 AND VALID_YN='Y' 룩업 동기화 일수",
+  "on_fail": "SET @V_LOG_TYPE = 'END'; SET @V_DESCRIPTION = N'LOOKUP 정보가 없습니다.'; GOTO ERR_RTN (END 로그 후 종료)",
+  "desc": "동기화 일수 룩업이 없거나 1 미만이면 동기화 중단",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L110-135",
+    "diff": "ISNUMERIC<1 → TO_NUMBER 변환 실패/미존재 시 NULL 로 차단(동치). END 로그+DESCRIPTION 동일, UI 미반환."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#45",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L330-334",
+  "condition": "INNER JOIN SCP_MST_BOD_N_V T1 ON BOD_ID … INNER JOIN SCP_MST_DISTRIBUTION_ROUTE T2 ON ROUTE_ID … INNER JOIN SCM_MST_SITE T4 ON T0.TO_SITE = T4.SCM_SITE_ID AND T4.SITE_TYPE = 'SALES'",
+  "on_fail": "DM_PLN_MKT_FCST_CONFIRM 적재 제외",
+  "desc": "BOD·물류경로·판매(SALES) 사이트 마스터와 매칭되지 않는 확정 출하는 동기화 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L193-205",
+    "diff": "INNER JOIN → 콤마 조인 동치."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#46",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L341-341",
+  "condition": "AND FCST_TYPE <> '-' -- 문제임. MKT_FCST 없는 경우",
+  "on_fail": "DM_PLN_MKT_FCST_CONFIRM 적재 제외",
+  "desc": "FCST Type 미지정('-') 확정 출하는 동기화 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L214-214",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#47",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L342-349",
+  "condition": "AND SHIPMENT_STATUS = 'C' … AND T0.CHANGE_TYPE = 'C'",
+  "on_fail": "DM_PLN_MKT_FCST_CONFIRM 적재 제외",
+  "desc": "확정(C) 상태·확정 변경유형 건만 동기화",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L215-217",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#48",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L343-347",
+  "condition": "AND EXISTS (SELECT 'X' FROM DM_MST_ITEM_SINGLE_V I WHERE I.DIVISION_ID = T0.DIVISION_ID AND I.ITEM_ID = T0.ITEM_ID AND I.FORECAST_INFO_BIZ_TYPE IS NOT NULL )",
+  "on_fail": "DM_PLN_MKT_FCST_CONFIRM 적재 제외",
+  "desc": "품목 마스터에 없거나 FORECAST_INFO_BIZ_TYPE 이 없는(전극) 품목은 동기화 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L206-210",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#49",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L348-348",
+  "condition": "AND T0.BIZ_TYPE = 'A'  -- [C20211122-000433]",
+  "on_fail": "DM_PLN_MKT_FCST_CONFIRM 적재 제외",
+  "desc": "Pack 등 BIZ_TYPE 'A' 외 건은 동기화 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L216-216",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#50",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L376-390",
+  "condition": "JOIN LOOKUP 'ERP_SSP_TYPE'(VALID_YN='Y', SEGMENT1=SSP_TYPE) … AND ISNULL(E.EXFACTORY_STATUS,'D90') NOT IN ('D90','D10') AND E.CONFIRM_ID LIKE 'C%' AND E.ORDER_TYPE_CODE NOT IN ( 'ZKM', 'ZKN' )",
+  "on_fail": "#TEMP_SHIP_RESULT(출하실적) 집계 제외",
+  "desc": "DO 삭제/생성 단계, 미등록 공정, ZKM/ZKN 오더유형 출하실적은 반영 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L257-269",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#51",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L394-410",
+  "condition": "PLAN_QTY = (CASE WHEN PLAN_QTY <> B.SHIP_RESULT_QTY THEN B.SHIP_RESULT_QTY ELSE PLAN_QTY END)",
+  "on_fail": "계획수량을 출하실적수량으로 맞춤",
+  "desc": "출하실적이 있는 SO 는 확정 계획수량을 출하실적으로 보정",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L273-296",
+    "diff": "UPDATE FROM → 상관 UPDATE. 원문 결함(SHIP BETWEEN 과 OR(ETA) 를 AND 결합) 그대로 보존."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#52",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L429-439",
+  "condition": "WHERE DIVISION_ID = @V_DIVISION_ID AND YYYYMMDD BETWEEN ... AND MEASURE IN ('RTF') AND QTY <> 0",
+  "on_fail": null,
+  "desc": "수량 0 인 매출실적은 SO 분해·매출실적 반영 대상에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치(AS-IS 추출누락 보충)",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L322-325",
+    "diff": "이관 일치(AS-IS 는 내·외부 2회 동일 조건, TO-BE 는 내부 1회로 동치)."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#53",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L440-440",
+  "condition": "AND SQ.VALUE <> '' -- 2022.09.12",
+  "on_fail": "#TEMP_SALES_RESULT 적재 제외",
+  "desc": "SO 수량 분해값이 빈 행은 매출실적 반영 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L330-330",
+    "diff": "SQ.VALUE <> '' → IS NOT NULL(Oracle ''=NULL 동치). 수량 변환은 TO_NUMBER DEFAULT NULL ON CONVERSION ERROR 로 완화."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#54",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L468-483",
+  "condition": "WHERE SALES_RESULT_QTY IS NULL",
+  "on_fail": "SO_NO 매칭 매출실적이 없을 때만 CONFIRM_ID 기준 매출실적으로 보완",
+  "desc": "SO 번호로 매출실적을 못 찾은 확정건은 CONFIRM_ID 기준 실적으로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L369-393",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#55",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L524-529",
+  "condition": "AND SHIP_YYYYMMDD BETWEEN @V_START_YYYYMMDD AND @V_END_YYYYMMDD AND ETA >= @V_START_YYYYMMDD AND ISNULL(SALES_RESULT_QTY, 0) = 0",
+  "on_fail": "#T_SSP(동기화 대상) 제외",
+  "desc": "매출실적이 이미 있는 확정건과 당주 이전 ETA 건은 MKT FCST 동기화 제외(네팅)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L428-430",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L533-558",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#56",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L636-656",
+  "condition": "AND ISNUMERIC(A.ATTRIBUTE3) > 0  -- 이전 동기화분 존재, YYYYMMDD >= 금주 월요일",
+  "on_fail": "QTY = CASE WHEN A.QTY - ATTRIBUTE1 - ATTRIBUTE3 > 0 THEN A.QTY ELSE ATTRIBUTE1 END; ATTRIBUTE3 = ''; ATTRIBUTE4 = ''",
+  "desc": "이전 동기화 흔적이 있으면 원 MKT FCST 수량으로 원복 후 재동기화",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L468-487",
+    "diff": "ISNUMERIC(ATTRIBUTE3)>0 → TO_NUMBER(... ) IS NOT NULL. 극단 케이스: ATTRIBUTE1 이 비숫자면 AS-IS 는 CAST 오류로 CATCH, TO-BE 는 오류 없이 QTY 가 NULL 로 갱신됨."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#57",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L730-750",
+  "condition": "AND ISNULL(SHIP_RESULT_QTY, 0) <> 0 … HAVING SUM(ISNULL(PLAN_QTY, 0)) <> SUM(ISNULL(SALES_RESULT_QTY, 0))",
+  "on_fail": "#T_MKT_RESULT(캐리오버 대상) 제외",
+  "desc": "출하실적이 있고 계획≠매출실적인 확정건만 캐리오버 대상",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L428-430",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L533-558",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#58",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L753-755",
+  "condition": "DELETE A FROM #T_MKT_RESULT A JOIN #T_SSP B ON A.CONFIRM_ID = B.CONFIRM_ID",
+  "on_fail": "캐리오버 대상에서 삭제",
+  "desc": "일반 동기화에 포함된 CONFIRM_ID 는 캐리오버에서 제외(중복 반영 방지)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L561-564",
+    "diff": "DELETE JOIN → EXISTS 동치."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#59",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L884-935",
+  "condition": "ISNUMERIC(A.ATTRIBUTE2) > 0 AND CAST(A.ATTRIBUTE2 AS NUMERIC(30,10)) > 0",
+  "on_fail": "기존 캐리오버(ATTRIBUTE2) 차감·초기화 후 재반영: 캐리오버 있으면 QTY 유지·ATTRIBUTE2 유지, 없으면 QTY + B.QTY, ATTRIBUTE2 = B.QTY",
+  "desc": "SYNC 반복 실행 시 캐리오버 수량이 중복 가산되지 않도록 보정",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L615-674",
+    "diff": "기존 캐리오버 차감·초기화 후 재반영 2단계 동일. ISNUMERIC/CAST → TO_NUMBER DEFAULT NULL ON CONVERSION ERROR."
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L676-703",
+    "diff": "LEFT JOIN … IS NULL → NOT EXISTS 동치."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#60",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L937-962",
+  "condition": "WHERE A.QTY > 0 AND B.DIVISION_ID IS NULL  -- 첫 계획일 MKT_FCST 행 미존재",
+  "on_fail": "이미 있으면 INSERT 생략(UPDATE 로 처리됨)",
+  "desc": "캐리오버 신규 행은 양수이고 기존 행이 없을 때만 생성",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L615-674",
+    "diff": "기존 캐리오버 차감·초기화 후 재반영 2단계 동일. ISNUMERIC/CAST → TO_NUMBER DEFAULT NULL ON CONVERSION ERROR."
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L676-703",
+    "diff": "LEFT JOIN … IS NULL → NOT EXISTS 동치."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#61",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_DM_SSP_CONFIRM_SYNC",
+  "asis_line": "L1092-1105",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRAN SALES_SITE_MODEL_PRODUCTION; ERROR 로그 (메시지 SELECT 는 주석)",
+  "desc": "오류 시 롤백 후 로그만 기록",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_DM_SSP_CONFIRM_SYNC",
+    "loc": "PR_DM_SSP_CONFIRM_SYNC.PROCEDURE.sql L713-723",
+    "diff": "명명 트랜잭션 롤백 → SAVEPOINT(L158) 롤백. 호출자 미전파 동일. 정상 경로 COMMIT(L705) 있음."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#63",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS",
+  "asis_line": "L164-175",
+  "condition": "JOIN SCM_MST_SITE TAB ON ... TAB.SITE_TYPE = 'PLANT' AND TAB.VALID_YN = 'Y' AND TAB.OSP_YN = 'Y' AND TAB.OPERATION_GROUP = 'P' ... AND P.DIVISION_ID = '82'",
+  "on_fail": "외주 Packer(유효·OSP·P) From Site 가 아닌 행 SCS I/F 제외",
+  "desc": "From Site 가 유효한 외주(OSP) Pack 공장인 82 사업부 건만 SCS 로 전송",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS.PROCEDURE.sql L131-144",
+    "diff": "SSP_ANL_SHIP_CONFIRM 내부조인(L132-136)도 동일"
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#64",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS",
+  "asis_line": "L211-232",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRAN TX_SH; PR_SCP_SYS_LOG_BATCH ERROR; return -1",
+  "desc": "예외 시 롤백·로그 후 -1",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS.PROCEDURE.sql L184-203",
+    "diff": "ROLLBACK·로그 동일. AS-IS return -1 → TO-BE 반환 없음(주석상 호출측 미사용 근거로 의도적 생략)"
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#65",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+  "asis_line": "L248-252",
+  "condition": "INNER JOIN ... B ON A.CONFIRM_ID = B.CONFIRM_ID AND B.CHANGE_REQ_NO = @p_change_request_no AND B.NEW_YN = 'N' AND B.VALID_YN = 'Y'",
+  "on_fail": "VALID_YN<>'Y' 기존 행은 이력(OLD) 미생성",
+  "desc": "변경 전(OLD) 이력은 유효한 변경요청 상세 행만 기록",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_HIST.PROCEDURE.sql L200-205",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_HIST.PROCEDURE.sql L375-382",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#66",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+  "asis_line": "L429-434",
+  "condition": "INNER JOIN ... B ON ... AND B.NEW_YN = 'Y' AND B.VALID_YN = 'Y' INNER JOIN SSP_ANL_SHIP_CONFIRM_CHG_REQ C",
+  "on_fail": "VALID_YN<>'Y' 신규 행 이력(NEW) 미생성",
+  "desc": "신규(NEW) 이력은 유효한 신규 상세 행만 기록 (CHANGE_TYPE='P' 면 PLANNED_QTY 유지, 아니면 0)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_HIST.PROCEDURE.sql L200-205",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_HIST.PROCEDURE.sql L375-382",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#67",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+  "asis_line": "L673-699",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch 에 ERROR INSERT; IF @@TRANCOUNT > 0 COMMIT WORK",
+  "desc": "예외 시 오류 로그만 남기고 종료",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_HIST",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_HIST.PROCEDURE.sql L390-393",
+    "diff": "로그 기록·예외 미전파는 동일. AS-IS 는 IF @@TRANCOUNT>0 COMMIT WORK 로 호출자 트랜잭션(1차 INSERT 부분분 포함)까지 확정하나 TO-BE 는 PR_SSP_LOG_ERROR(자율 트랜잭션)만 커밋하고 호출자 트랜잭션은 미확정·미롤백(1차 INSERT 부분 결과가 호출자 트랜잭션에 잔존)"
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#68",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_MAIL_SEND_ADJUST_MST",
+  "asis_line": "L228-229",
+  "condition": "AND D.REQUESTOR IS NOT NULL AND H.DIVISION_ID = '40'",
+  "on_fail": "요청자 없는 행은 요청자 수신 메일 대상 제외",
+  "desc": "Shipment Request 요청자가 있는 경우에만 요청자에게 메일",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_MAIL_SEND_ADJUST_MST",
+    "loc": "PR_SSP_MAIL_SEND_ADJUST_MST.PROCEDURE.sql L253-254",
+    "diff": "Oracle ''=NULL 이라 빈 문자열 REQUESTOR 도 제외(AS-IS 는 '' 통과) — 사실상 동등"
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#69",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_MAIL_SEND_ADJUST_MST",
+  "asis_line": "L459-462",
+  "condition": "AND D.BIZ_TYPE = 'E' AND UE.USER_ID IS NOT NULL AND D.QTY <> D.NEW_QTY AND C.ERP_STATUS IN ('A','D')",
+  "on_fail": "PO 미생성/수량 미변경/담당자 없음 행 제외",
+  "desc": "전극(E): PO 생성(ERP_STATUS A/D) 건의 확정수량 변경 시에만 모델 PIC 에게 메일",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_MAIL_SEND_ADJUST_MST",
+    "loc": "PR_SSP_MAIL_SEND_ADJUST_MST.PROCEDURE.sql L484-488",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_MAIL_SEND_ADJUST_MST",
+    "loc": "PR_SSP_MAIL_SEND_ADJUST_MST.PROCEDURE.sql L549-553",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#70",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_MAIL_SEND_ADJUST_MST",
+  "asis_line": "L524-527",
+  "condition": "AND D.BIZ_TYPE = 'E' AND M.SEGMENT2 IS NOT NULL AND D.QTY <> D.NEW_QTY AND C.ERP_STATUS IN ('A','D')",
+  "on_fail": "PO 미생성/수량 미변경/수신자 없음 행 제외",
+  "desc": "전극(E): PO 생성 건 수량 변경 시 Lookup(ADJUST_MAIL_SEND) 등록자에게 메일",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_MAIL_SEND_ADJUST_MST",
+    "loc": "PR_SSP_MAIL_SEND_ADJUST_MST.PROCEDURE.sql L484-488",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_MAIL_SEND_ADJUST_MST",
+    "loc": "PR_SSP_MAIL_SEND_ADJUST_MST.PROCEDURE.sql L549-553",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#71",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_MAIL_SEND_ADJUST_MST",
+  "asis_line": "L532-532",
+  "condition": "WHERE ( M.YYYYMMDD <> M.NEW_YYYYMMDD OR M.QTY <> M.NEW_QTY OR M.TRANSPORT_MODE <> M.NEW_TRANSPORT_MODE )",
+  "on_fail": "날짜·수량·운송모드 변경 없는 행 메일 대상 제외",
+  "desc": "실제 변경(일자/수량/운송모드)이 없는 행은 메일에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_MAIL_SEND_ADJUST_MST",
+    "loc": "PR_SSP_MAIL_SEND_ADJUST_MST.PROCEDURE.sql L557-557",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#72",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_MAIL_SEND_ADJUST_MST",
+  "asis_line": "L542-554",
+  "condition": "SELECT @chk = COUNT(*) FROM #TblSSPAdjustMailSend ; IF @chk = 0",
+  "on_fail": "END 로그 후 RETURN;",
+  "desc": "메일 대상이 0건이면 발송 없이 종료",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_MAIL_SEND_ADJUST_MST",
+    "loc": "PR_SSP_MAIL_SEND_ADJUST_MST.PROCEDURE.sql L566-578",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#73",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_MAIL_SEND_ADJUST_MST",
+  "asis_line": "L844-894",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR INSERT; COMMIT WORK; SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG 'ERROR' 'MAIN ERROR'",
+  "desc": "예외 시 오류 로그·메일 오류 로그만 남기고 종료",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_MAIL_SEND_ADJUST_MST",
+    "loc": "PR_SSP_MAIL_SEND_ADJUST_MST.PROCEDURE.sql L847-897",
+    "diff": "@@TRANCOUNT>0 → DBMS_TRANSACTION.LOCAL_TRANSACTION_ID IS NOT NULL 표현 차이"
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#74",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+  "asis_line": "L307-337",
+  "condition": "AND C.QTY >= 0 (L307) / AND R.QTY >= 0 (L337)",
+  "on_fail": "음수 수량 행 FP 전송 제외",
+  "desc": "전극(BIZ_TYPE E) 확정·요청 출하 중 음수 수량은 FP 타겟에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+    "loc": "PR_SSP_PLN_FP_SHIP_TARGET_WA.PROCEDURE.sql L198-224",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#75",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+  "asis_line": "L308-338",
+  "condition": "AND ISNULL(C.FROM_SITE_PLANT_ID,'F') != ISNULL(C.TO_SITE_PLANT_ID,'T') (L308) / AND ISNULL(R.FROM_PLANT_ID,'F') != ISNULL(R.TO_PLANT_ID,'T') (L338)",
+  "on_fail": "From/To 동일 Plant 행 제외",
+  "desc": "전극 출하 중 동일 Plant 간 이동은 FP 타겟 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+    "loc": "PR_SSP_PLN_FP_SHIP_TARGET_WA.PROCEDURE.sql L199-225",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#76",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+  "asis_line": "L482-583",
+  "condition": "AND ISNULL(C.FROM_SITE_PLANT_ID,'F') != ISNULL(C.TO_SITE_PLANT_ID,'T') (L482) / AND ISNULL(R.FROM_PLANT_ID,'F') != ISNULL(R.TO_PLANT_ID, 'T') (L567) / AND P.QTY >= 0 (L583)",
+  "on_fail": "동일 Plant 이동·음수 수량 제외",
+  "desc": "비전극 확정+확정구간 이후 Ship Req 중 동일 Plant 이동·음수 수량 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+    "loc": "PR_SSP_PLN_FP_SHIP_TARGET_WA.PROCEDURE.sql L304-360",
+    "diff": null
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#77",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+  "asis_line": "L572-578",
+  "condition": "JOIN SCP_MST_FINAL_ITEM V ON V.ITEM_ID = P.ITEM_ID AND V.DIVISION_ID = P.DIVISION_ID JOIN SCM_MST_SITE FS ON ... AND FS.COMPANY_ID = @p_company_id",
+  "on_fail": "Final Item 미등록 품목·대상 법인 외 From Site 제외",
+  "desc": "Final Item 마스터에 없는 품목은 FP 타겟 미전송",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+    "loc": "PR_SSP_PLN_FP_SHIP_TARGET_WA.PROCEDURE.sql L353-359",
+    "diff": "@p_company_id → V_P_COMPANY_ID(LOOKUP SSP_PLN_FP_SHIP_TARGET_WA SEGMENT1) 표현 차이"
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#78",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+  "asis_line": "L739-755",
+  "condition": "BEGIN CATCH",
+  "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 기록만",
+  "desc": "예외 시 로그만 남김",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_PLN_FP_SHIP_TARGET_WA",
+    "loc": "PR_SSP_PLN_FP_SHIP_TARGET_WA.PROCEDURE.sql L489-493",
+    "diff": "AS-IS CATCH 는 PR_SCP_SYS_LOG_BATCH ERROR 기록만(ROLLBACK 없음). TO-BE 는 ROLLBACK 추가 + 로그 대상이 PR_SSP_LOG_ERROR(SCM_SYS_LOG_BATCH 자율 트랜잭션)로 변경. 예외 미전파는 동일"
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#79",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "FN_NEXT_DAY",
+  "asis_line": "L26-30",
+  "condition": "ELSE BEGIN SET @dayval = 0 RETURN NULL END  -- @week 가 SUN~SAT 이 아님",
+  "on_fail": "RETURN NULL",
+  "desc": "요일 코드가 SUN~SAT 이 아니면 NULL 반환(계산 중단)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "FN_NEXT_DAY",
+    "loc": "FN_NEXT_DAY.FUNCTION.sql L40-43",
+    "diff": "SUN~SAT 외 요일 코드 → NULL 반환 동일. datepart(dw) 는 MOD(…'IW'…) 식으로 대체(DATEFIRST=7 기준 일=1 동일)"
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": "결과 X 시 매뉴얼 열람 안내가 없고, BE 가 결과커서 코드를 실패로 보지 않으면 성공 토스트가 뜰 수 있음"
+ },
+ {
+  "key": "DB:SSP0021#81",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE",
+  "asis_line": "L470-474",
+  "condition": "BEGIN CATCH",
+  "on_fail": "RETURN -1",
+  "desc": "예외 시 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_ROUTE.PROCEDURE.sql L226-229",
+    "diff": "AS-IS RETURN -1(롤백·로그 없음) → TO-BE 예외 완전 무시(반환 없음). 롤백·로그 없음은 동일, 반환코드만 상실"
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#82",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "PR_SSP_MAIL_SEND_ADJUST_SUB",
+  "asis_line": "L78-107",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR INSERT; IF @@TRANCOUNT > 0 COMMIT WORK",
+  "desc": "메일 발송 실패 시 로그만 기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SSP_MAIL_SEND_ADJUST_SUB",
+    "loc": "PR_SSP_MAIL_SEND_ADJUST_SUB.PROCEDURE.sql L52-55",
+    "diff": "로그·예외 미전파 동일. AS-IS 는 IF @@TRANCOUNT>0 COMMIT WORK 로 호출자 트랜잭션까지 확정, TO-BE 는 자율 트랜잭션 로그만 커밋(호출자 트랜잭션 미확정)"
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#83",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "A 차단형",
+  "sp": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+  "asis_line": "L104-134",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER+']'+ERROR_MESSAGE()",
+  "desc": "발송 로그 저장 실패 시 오류 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+    "loc": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG.PROCEDURE.sql L134-165",
+    "diff": "AS-IS: 오류 로그 후 COMMIT, 'F' 결과셋 반환(호출부 계속 진행). TO-BE: AUTONOMOUS_TRANSACTION 안에서 ROLLBACK(발송로그 INSERT 취소) 후 로그, END 로그 뒤 RAISE_APPLICATION_ERROR(-20001) 로 호출부(SCM_ADM_SMS_SEND_BATCH·SCM_SSP_MAIL_SEND 등)에 예외 전파. 'F'/메시지 결과셋은 주석(L152-153). 실패 처리가 결과 반환→예외 전파로 바뀜(AS-IS 원문이슈 COMMIT 은 ROLLBACK 으로 교정)."
+   }
+  ],
+  "fe_note": "useProcMutation PLAN_DETAIL(ShipmentPlanAutoEss.tsx L268-278, L402) — 응답 code≠0 이면 서버 message 알림, 결과커서 RESULT_CODE(X/F)는 FE 미판정(BE 판정 의존). 성공 시 MSG00002 토스트",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#85",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "화면 열기(OPEN)",
+  "cls": "C 필터형",
+  "sp": "SSP0021_GET_SHIPMENT_DIVISION",
+  "asis_line": "",
+  "condition": "",
+  "on_fail": "",
+  "desc": "사용자·그룹 권한(Division 권한 확장 테이블)에 등록된 Division/Company 만 콤보로 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이(AS-IS 추출누락 보충)",
+    "tobe": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_DIVISION",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L69-182",
+    "diff": "차이: TO-BE 는 PARAM1(그룹) 미지정 시 사용자 보유 그룹 전체로 권한 판정(AJS 20261007 화면검증) — AS-IS 는 그룹 NULL 이면 0건. 권한 원천 테이블 TB_FX→SCM_ADM 전환"
+   }
+  ],
+  "fe_note": "DIVISION 시트 useTabProcQuery(components/ShipmentPlanAutoEssForm.tsx L107-128) — 응답 code≠0 이면 서버 message 알림",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#86",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "기타(ETC) — Company 변경",
+  "cls": "C 필터형",
+  "sp": "SSP0021_GET_SHIPMENT_FROM_SITE",
+  "asis_line": "",
+  "condition": "",
+  "on_fail": "",
+  "desc": "사용자·그룹 Division 권한이 있는 From Site 만 콤보로 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이(AS-IS 추출누락 보충)",
+    "tobe": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_FROM_SITE",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L246-285",
+    "diff": "차이: TO-BE 는 PARAM3(그룹) 미지정 시 사용자 보유 그룹 전체로 판정(2026.10.21 AJS) — AS-IS 는 0건. 권한 원천 TB_FX→SCM_ADM 전환"
+   }
+  ],
+  "fe_note": "TO-BE 는 이 SP 대신 콤보 Com_FromSite_SCP(@divisionId @companyId) 사용 — components/ShipmentPlanAutoEssForm.tsx L132-140, constants L60. AS-IS 2026-03 VP 권한 확장(그룹·사용자 파라미터) 반영 여부는 콤보 SQL 미대조(확인 필요)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0021#87",
+  "kind": "DB",
+  "screen": "SSP0021",
+  "event": "조회(SEARCH)",
+  "cls": "C 필터형",
+  "sp": "SSP0021_GET_SHIPMENT_PLAN",
+  "asis_line": "",
+  "condition": "",
+  "on_fail": "",
+  "desc": "Ship Frozen 구간 안의 미확정 출하요청은 SHIP_PLAN 측정값에서 제외(SSP0015 idx696 과 같은 유형)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치(AS-IS 추출누락 보충)",
+    "tobe": "PKG_SSP0021.P_SSP0021_GET_SHIPMENT_PLAN",
+    "loc": "PKG_SSP0021.PACKAGE_BODY.sql L2499-2534",
+    "diff": "이관 일치(DATEADD→DATE+N)"
+   }
+  ],
+  "fe_note": "MAIN useTabProcQuery(ShipmentPlanAutoEss.tsx L179-185) — 응답 code≠0 이면 서버 message 알림. LOT_YN='N' Container 빈칸 처리는 미이식(__asis-mapping__.md L289)",
+  "fe_downgrade_reason": "Lot Size 미등록 품목의 Container 값을 빈칸이 아니라 SP 값(0) 그대로 표시 — 미등록 구분 불가"
+ },
+ {
+  "key": "DB:SSP0022#4",
+  "kind": "DB",
+  "screen": "SSP0022",
+  "event": "셀 입력(CHANGE) — Shipment Request Detail",
+  "cls": "B 보정형",
+  "sp": "SSP0022_GET_ITEM_POPUP",
+  "asis_line": "L197-202",
+  "condition": "SELECT @p_division_id = DIVISION_ID FROM SCM_MST_SITE WHERE SCM_SITE_ID = @p_from_site_id AND VALID_YN='Y' AND SITE_TYPE='PLANT'",
+  "on_fail": "From Site 의 실제 사업부로 Division 파라미터 덮어씀(조회 없으면 입력값 유지)",
+  "desc": "화면이 넘긴 Division 대신 From Site(PLANT) 마스터의 Division 으로 보정",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0022.P_SSP0022_GET_ITEM_POPUP",
+    "loc": "PKG_SSP0022.PACKAGE_BODY.sql L329-339",
+    "diff": "조회 없음 → 입력값 유지 동일. 단 다건이면 AS-IS 는 마지막 값 대입, TO-BE 는 TOO_MANY_ROWS 로 EXCEPTION('-1') — 사이트 마스터가 유일하면 영향 없음."
+   }
+  ],
+  "fe_note": "TO-BE BOD/Item 팝업·BOD 자동조회 미구현(BOD_ITEM_POPUP 시트 상수만 — shipment-request-electrode.constants.ts L34)",
+  "fe_downgrade_reason": "BOD 자동 채움이 없어 AS-IS 와 같은 Incoterms/Trans Mode/Confirm Day 보정 결과를 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0022#5",
+  "kind": "DB",
+  "screen": "SSP0022",
+  "event": "조회(SEARCH) — Detail Search 버튼",
+  "cls": "D 검증리포트형",
+  "sp": "SSP0022_GET_REQUEST_DETAIL",
+  "asis_line": "L70-75",
+  "condition": "CASE WHEN (위 CONFIRM_DAY) <= CONVERT(ETA_DATE,23) THEN 'Y' ELSE 'N' END AS EDIT_FLAG",
+  "on_fail": "EDIT_FLAG Y/N 반환(N 이면 UI 편집 불가)",
+  "desc": "요청 ETA 가 입력 가능 최초일 이후면 편집 가능(Y), 확정구간 안이면 N",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0022.P_SSP0022_GET_REQUEST_DETAIL",
+    "loc": "PKG_SSP0022.PACKAGE_BODY.sql L577-577",
+    "diff": "같은 식을 안쪽에서 한 번만 계산 후 바깥에서 비교(SHIPMENT_DATE=ETA_DATE 'YYYY-MM-DD', AS-IS CONVERT(…,23) 과 동형)."
+   }
+  ],
+  "fe_note": "TO-BE useTabProcQuery(ShipmentRequestElectrode.tsx L93-102) — 응답 code!=='0' 이면 서버 메시지 알림(AS-IS 는 무음). EDIT_FLAG 잠금은 editLock.ts 가 반대로 해석하고 isEditMode=false 고정(utils/shipment-request-electrode.editLock.ts L25-28, ShipmentRequestElectrode.tsx L218)",
+  "fe_downgrade_reason": "EDIT_FLAG 기반 행 잠금이 AS-IS 와 다르게(반대로) 정의되고 수정모드가 없어 같은 결과를 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0022#6",
+  "kind": "DB",
+  "screen": "SSP0022",
+  "event": "엑셀 다운로드(EXCEL) — Excel Form 버튼",
+  "cls": "C 필터형",
+  "sp": "SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN",
+  "asis_line": "L56-138",
+  "condition": "EDIT_FLAG = CASE WHEN 입력가능최초일(후공정LT/SHIP_FROZEN 큰 값 + FN_GET_SSP_ETA_DATE) <= YYYYMMDD THEN 'Y' ELSE 'N' END; WHERE T.EDIT_FLAG <> 'N'",
+  "on_fail": "확정구간 안(편집 불가) 일자 행은 다운로드 결과에서 조용히 제외",
+  "desc": "엑셀 업로드 양식에는 입력 가능한 일자 행만 내려줌",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0022.P_SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN",
+    "loc": "PKG_SSP0022.PACKAGE_BODY.sql L825-931",
+    "diff": "EDIT_FLAG 식과 EDIT_FLAG<>'N' 행 제외 규칙은 동일. 단 AS-IS LEFT JOIN 의 B.TO_PLANT_ID = @P_PLANT_ID 단일 등호를 제거(L897, 원문이슈 의도 수정). Plant 빈값/복수 선택 시 AS-IS 는 B 미매칭 → B.BOD_ID NULL → ETA 함수 NULL → ISNULL 0 → CONFIRM_DAY=계획시작일(대부분 'Y', 확정구간 행도 다운로드)였으나 TO-BE 는 실제 BOD 로 계산되어 확정구간 내 일자 행이 제외됨 — 제외 결과가 달라짐(수량도 0 대신 실값)."
+   }
+  ],
+  "fe_note": "TO-BE Excel Form 다운로드 미구현 — REQUEST_DETAIL_EXCEL 은 컬럼 메타만 조회(useShipmentRequestElectrodeStore.ts L278)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0022#7",
+  "kind": "DB",
+  "screen": "SSP0022",
+  "event": "조회(SEARCH)",
+  "cls": "C 필터형",
+  "sp": "SSP0022_GET_SHIPMENT_PSI",
+  "asis_line": "L2030-2030",
+  "condition": "AND ISNULL(T0.ELECTRODE_TYPE,'-') <> '-'",
+  "on_fail": "전극 Type 이 없는(Site-Item EE 마스터 미매핑) 행은 결과에서 제외",
+  "desc": "전극 Site-Item 마스터에 Electrode Type 이 없는 품목은 PSI 화면에 표시하지 않음",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0022.P_SSP0022_GET_SHIPMENT_PSI",
+    "loc": "PKG_SSP0022.PACKAGE_BODY.sql L3802-3802",
+    "diff": "REAL_FLAG='Y' 동적 SQL."
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0022.P_SSP0022_GET_SHIPMENT_PSI",
+    "loc": "PKG_SSP0022.PACKAGE_BODY.sql L3977-3977",
+    "diff": "REAL_FLAG='N' 동적 SQL."
+   }
+  ],
+  "fe_note": "TO-BE useTabProcQuery(ShipmentRequestElectrode.tsx L86-92) — code!=='0' 이면 서버 메시지 알림(AS-IS 는 무음). BACK_COLOR 색칠·확정일 기준 편집 미구현(components/ShipmentRequestElectrodeMainGrid.tsx L99-110)",
+  "fe_downgrade_reason": "확정구간 배경색 표시 없음"
+ },
+ {
+  "key": "DB:SSP0022#8",
+  "kind": "DB",
+  "screen": "SSP0022",
+  "event": "조회(SEARCH)",
+  "cls": "C 필터형",
+  "sp": "SSP0022_GET_SHIPMENT_PSI",
+  "asis_line": "L2493-2493",
+  "condition": "AND ISNULL(T0.ELECTRODE_TYPE,'-') <> '-'",
+  "on_fail": "Electrode Type 없는 행 제외",
+  "desc": "과거 기준 조회에서도 Electrode Type 미존재 품목 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0022.P_SSP0022_GET_SHIPMENT_PSI",
+    "loc": "PKG_SSP0022.PACKAGE_BODY.sql L3802-3802",
+    "diff": "REAL_FLAG='Y' 동적 SQL."
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0022.P_SSP0022_GET_SHIPMENT_PSI",
+    "loc": "PKG_SSP0022.PACKAGE_BODY.sql L3977-3977",
+    "diff": "REAL_FLAG='N' 동적 SQL."
+   }
+  ],
+  "fe_note": "TO-BE useTabProcQuery(ShipmentRequestElectrode.tsx L86-92) — code!=='0' 이면 서버 메시지 알림(AS-IS 는 무음). BACK_COLOR 색칠·확정일 기준 편집 미구현(components/ShipmentRequestElectrodeMainGrid.tsx L99-110)",
+  "fe_downgrade_reason": "확정구간 배경색 표시 없음"
+ },
+ {
+  "key": "DB:SSP0022#9",
+  "kind": "DB",
+  "screen": "SSP0022",
+  "event": "저장(SAVE) — Shipment Request(Electrode)",
+  "cls": "A 차단형",
+  "sp": "SSP0022_SAVE_SHIPMENT_REQUEST",
+  "asis_line": "L208-340",
+  "condition": "IF ((@v_division_id_temp='' or IS NULL) OR (@v_new_bod_id_temp …) … OR (@v_new_to_city_temp='' or IS NULL))  -- L208 SELECT TOP 1 (내부 TOP 1 ORDER BY PRIORITY: DIVISION/FROM/TO/TRANSPORT_MODE/ssp_incoterms/BOD_VALID_YN='Y'/FROM~TO_YYYYMMDD 에 오늘 포함) JOIN BOD_ITEM(@v_item_id)",
+  "on_fail": "SELECT 'X' AS result_code, NULL AS Request_no; (END LOG) RETURN;",
+  "desc": "From/To Site·Transport Mode·Incoterms 로 오늘 유효한 최우선 BOD 가 없거나 그 BOD 에 품목 매핑이 없거나 경로 속성이 비면 X 반환 후 중단",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0022.P_SSP0022_SAVE_SHIPMENT_REQUEST",
+    "loc": "PKG_SSP0022.PACKAGE_BODY.sql L4134-4307",
+    "diff": "조건·'X' 반환·내부 TOP1(품목 조인 전 최우선 BOD) 은 동일. 차이: TO-BE 는 14개 _TEMP 변수를 줄마다 NULL 초기화 — AS-IS 는 경로 미발견 줄이 직전 줄 값으로 통과했으나 TO-BE 는 'X' 로 중단(원문이슈 의도 수정). 'X' 시 ROLLBACK TO 저장점(AS-IS 는 #temp 만이라 실DB 영향 없음 — 결과 동등). TRIM 으로 공백값도 빈값 처리."
+   }
+  ],
+  "fe_note": "TO-BE 저장은 SP 를 호출하지 않고 'SP not deployed yet' 알림만 표시(ShipmentRequestElectrode.tsx L146-160)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0022#10",
+  "kind": "DB",
+  "screen": "SSP0022",
+  "event": "저장(SAVE) — Shipment Request(Electrode)",
+  "cls": "C 필터형",
+  "sp": "SSP0022_SAVE_SHIPMENT_REQUEST",
+  "asis_line": "L386-397",
+  "condition": "LEFT JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L (ELECTRODE_SHIP_FROM_TO, SEGMENT5=TO_DIVISION, SEGMENT3=FROM_SITE, ATTRIBUTE1=TO_SITE) … JOIN SSP_MST_SITE_ITEM_EE_V F ON L.SEGMENT2 = F.DIVISION_ID AND T0.FROM_SITE = F.SCM_SITE_ID AND T0.ITEM_ID = F.ITEM_ID",
+  "on_fail": "출하경로 룩업 또는 전극 Site-Item 마스터가 없는 행은 #temp 에 들어가지 않아 저장에서 조용히 제외(결과는 S)",
+  "desc": "전극 출하경로·Site-Item 마스터에 없는 요청 행은 저장 대상에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0022.P_SSP0022_SAVE_SHIPMENT_REQUEST",
+    "loc": "PKG_SSP0022.PACKAGE_BODY.sql L4358-4369",
+    "diff": "룩업 B 는 외부조인 표기지만 B.SEGMENT2 = D.DIVISION_ID 내부조인으로 사실상 AS-IS 와 같이 룩업/전극 Site-Item 미매핑 행이 GT_0022_SAVE_REQ 에 들어가지 않음(결과는 'S')."
+   }
+  ],
+  "fe_note": "TO-BE 저장은 SP 를 호출하지 않고 'SP not deployed yet' 알림만 표시(ShipmentRequestElectrode.tsx L146-160)",
+  "fe_downgrade_reason": "저장 자체가 미구현이라 X(기준정보 없음)·F(시스템 오류) 결과를 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0022#11",
+  "kind": "DB",
+  "screen": "SSP0022",
+  "event": "저장(SAVE) — Shipment Request(Electrode)",
+  "cls": "C 필터형",
+  "sp": "SSP0022_SAVE_SHIPMENT_REQUEST",
+  "asis_line": "L440-546",
+  "condition": "WHERE NOT EXISTS (SELECT 1 FROM SSP_ANL_SHIP_REQ_EE A WHERE 키 8개 일치)",
+  "on_fail": "동일 키 기존 행은 L417-433 UPDATE(QTY 갱신)만, 신규 키만 INSERT(REQUEST_ID 채번, CONFIRM_FLAG='N')",
+  "desc": "같은 키의 요청이 있으면 수량 갱신, 없으면 신규 등록하여 중복 행 방지",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SSP0022.P_SSP0022_SAVE_SHIPMENT_REQUEST",
+    "loc": "PKG_SSP0022.PACKAGE_BODY.sql L4384-4512",
+    "diff": "MSSQL UPDATE…FROM → 상관 UPDATE + EXISTS 로 표현 차이."
+   }
+  ],
+  "fe_note": "TO-BE 저장은 SP 를 호출하지 않고 'SP not deployed yet' 알림만 표시(ShipmentRequestElectrode.tsx L146-160)",
+  "fe_downgrade_reason": "저장 자체가 미구현이라 X(기준정보 없음)·F(시스템 오류) 결과를 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0022#12",
+  "kind": "DB",
+  "screen": "SSP0022",
+  "event": "저장(SAVE) — Shipment Request(Electrode)",
+  "cls": "A 차단형",
+  "sp": "SSP0022_SAVE_SHIPMENT_REQUEST",
+  "asis_line": "L669-704",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR INSERT; IF @@TRANCOUNT > 0 COMMIT WORK; IF (@v_err_message IS NULL OR '') SELECT 'F' AS result_code, '['+ERROR_NUMBER()+']'+ERROR_MESSAGE() AS ERR_MESSAGE ELSE SELECT 'N' …",
+  "desc": "예외 시 로그 후 F 와 오류메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SSP0022.P_SSP0022_SAVE_SHIPMENT_REQUEST",
+    "loc": "PKG_SSP0022.PACKAGE_BODY.sql L4675-4694",
+    "diff": "AS-IS 는 ROLLBACK 없이 COMMIT, TO-BE 는 저장점 ROLLBACK 후 로그만 COMMIT — 원문이슈 의도 수정. 'F'+'[번호]메시지' 반환 동일. AS-IS 'N' 분기는 미도달이라 미이관 정상."
+   }
+  ],
+  "fe_note": "TO-BE 저장은 SP 를 호출하지 않고 'SP not deployed yet' 알림만 표시(ShipmentRequestElectrode.tsx L146-160)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SSP0022#13",
+  "kind": "DB",
+  "screen": "SSP0022",
+  "event": "엑셀 다운로드(EXCEL) — Excel Form 버튼",
+  "cls": "B 보정형",
+  "sp": "FN_GET_SSP_ETA_DATE",
+  "asis_line": "L184-190",
+  "condition": "IF @v_eta_date IS NULL  -- BOD(항로)·INCOTERMS 룩업 또는 항차 요일 캘린더 매칭 실패",
+  "on_fail": "SET @v_eta_date = @p_yyyymmdd (출하일 그대로 반환)",
+  "desc": "BOD/항차 정보로 ETA 를 산출하지 못하면 입력 출하일을 ETA 로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "FN_GET_SSP_ETA_DATE",
+    "loc": "FN_GET_SSP_ETA_DATE.FUNCTION.sql L181-185",
+    "diff": "BOD 룩업 실패(L76-78 NO_DATA_FOUND→V_CHECK NULL → ELSE 분기)·캘린더 매칭 실패(L173-175 NO_DATA_FOUND→NULL) 모두 출하일로 대체되어 동일. 검증 외 참고: TO-BE 원천 SELECT 에 INCOTERMS 룩업(SCM_ADM_LOOKUP_MASTER_DETAIL) 조인·SEGMENT3/OPERATION_GROUP 분기가 있어 산출식 자체는 AS-IS 원문과 별도 대조 필요"
+   }
+  ],
+  "fe_note": "TO-BE 두 SP 모두 Excel Form 경로 미구현, 상단 조회는 useTabProcQuery(ShipmentRequestElectrode.tsx L86-92)",
+  "fe_downgrade_reason": "확정구간 배경색 표시·Excel Form 다운로드 없음"
+ },
+ {
+  "key": "DB:SSP0022#14",
+  "kind": "DB",
+  "screen": "SSP0022",
+  "event": "저장(SAVE) — Shipment Request(Electrode)",
+  "cls": "B 보정형",
+  "sp": "FN_GET_SSP_ETD_DATE",
+  "asis_line": "L103-109",
+  "condition": "IF @v_etd_date IS NULL  -- BOD 룩업 또는 항차 요일 캘린더 매칭 실패",
+  "on_fail": "SET @v_etd_date = @p_yyyymmdd (도착일 그대로 반환)",
+  "desc": "BOD/항차 정보로 ETD 를 산출하지 못하면 입력 도착일을 ETD 로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "FN_GET_SSP_ETD_DATE",
+    "loc": "FN_GET_SSP_ETD_DATE.FUNCTION.sql L99-103",
+    "diff": "BOD 미발견(L51-55 NULL)·캘린더 매칭 0건(MAX→NULL) 모두 도착일로 대체되어 동일"
+   }
+  ],
+  "fe_note": "TO-BE 저장은 SP 를 호출하지 않고 'SP not deployed yet' 알림만 표시(ShipmentRequestElectrode.tsx L146-160)",
+  "fe_downgrade_reason": "저장 자체가 미구현이라 X(기준정보 없음)·F(시스템 오류) 결과를 볼 수 없음"
+ },
+ {
+  "key": "DB:SSP0023#0",
+  "kind": "DB",
+  "screen": "SSP0023",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+  "asis_line": "L269-269",
+  "condition": "CASE WHEN PROJECT_CODE IS NULL OR PROJECT_CODE ='' OR PROJECT_CODE ='-' THEN 'TBD' ELSE PROJECT_CODE END",
+  "on_fail": "빈/'-' 프로젝트코드를 'TBD' 로 전송",
+  "desc": "ERP I/F 전송 시 프로젝트코드 미지정이면 TBD 로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH.PROCEDURE.sql L236-236",
+    "diff": "4개 분기 모두 존재. ''→NULL(TRIM) 표현 차이. 참고: Oracle 빈값 센티널 '/' 는 TBD 치환 대상에 없음 — '/' 로 저장된 PROJECT_CODE 는 '/' 그대로 ERP 전송(과도기 '-'·'/' 병행 규칙 확인 필요)"
+   }
+  ],
+  "fe_note": "TO-BE Detail 확정 저장은 SP 미배포 — 필수값·사유 검사 후 MSG00003 '미배포' 안내로 종료하고 SP 를 호출하지 않음(features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx L335-355)",
+  "fe_downgrade_reason": "초안 저장·CHG_BATCH 미호출"
+ },
+ {
+  "key": "DB:SSP0023#1",
+  "kind": "DB",
+  "screen": "SSP0023",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "B 보정형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+  "asis_line": "L399-399",
+  "condition": "CASE WHEN R.CHANGE_REASON_CODE = 'Select' THEN NULL ELSE R.CHANGE_REASON_CODE END",
+  "on_fail": "콤보 미선택 값 'Select' 를 NULL 로 대체",
+  "desc": "변경사유코드가 화면 기본값 'Select' 이면 NULL 로 전송",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH.PROCEDURE.sql L365-365",
+    "diff": null
+   }
+  ],
+  "fe_note": "TO-BE Detail 확정 저장은 SP 미배포 — 필수값·사유 검사 후 MSG00003 '미배포' 안내로 종료하고 SP 를 호출하지 않음(features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx L335-355)",
+  "fe_downgrade_reason": "초안 저장·CHG_BATCH 미호출"
+ },
+ {
+  "key": "DB:SSP0023#2",
+  "kind": "DB",
+  "screen": "SSP0023",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "cls": "C 필터형",
+  "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+  "asis_line": "L441-444",
+  "condition": "WHERE R.CHANGE_REQ_NO = D.CHANGE_REQ_NO AND R.CHANGE_REQ_NO = @p_change_req_no AND ISNULL(D.VALID_YN , 'N')= 'Y'",
+  "on_fail": "VALID_YN 이 'Y' 가 아닌 상세행은 ERP I/F 미전송",
+  "desc": "변경요청 상세 중 유효(VALID_YN='Y') 행만 ERP 전송",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+    "loc": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH.PROCEDURE.sql L406-407",
+    "diff": null
+   }
+  ],
+  "fe_note": "TO-BE Detail 확정 저장은 SP 미배포 — 필수값·사유 검사 후 MSG00003 '미배포' 안내로 종료하고 SP 를 호출하지 않음(features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx L335-355)",
+  "fe_downgrade_reason": "초안 저장·CHG_BATCH 미호출"
+ }
+]

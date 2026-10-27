@@ -1,0 +1,20 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.field {
+  flex-shrink: 0;
+  padding: 16px 8px;
+}
+
+.buttonRow {
+  flex-shrink: 0;
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0;
+}

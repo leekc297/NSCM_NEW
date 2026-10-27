@@ -81,10 +81,12 @@ export const dayOf = (binding: string): Date | null => {
  *   WeeklyISO  : W 만 표시 · 그 외(D_/M_) 숨김
  *   Monthly    : M 만 표시
  * 생성은 항상 D_/W_/M_ 전량, 표시 여부만 토글(AS-IS Columns[i].Visible 상수배열 이식 금지 — 계산 재현).
- * WeeklyISO(= 콤보 'Only Weekly', AS-IS `Visible = isWeeklyISO` cs:892-894): TO-BE 캘린더 SP 가 하나뿐이고
- *   (P_SCP0017_GET_SHEET_CALENDAR_3SPAN, bucket/ISO 인자 없음) 그 SP 가 이미 W_ 를 ISO 주차로 만든다
- *   (binding = 'W_'||BASIS_YYYYMM||ISO_WEEK, PKG_SCP0017 본문 line152 DB 실측 2026-10-13). AS-IS 의 별도
- *   _3SPAN_ISO SP·'_ISO' 접미는 TO-BE 에 존재하지 않으므로, WeeklyISO 는 일반 Weekly 와 같은 W_ 를 표시한다.
+ * WeeklyISO(= 콤보 'Only Weekly', AS-IS `Visible = isWeeklyISO` cs:892-894): P_SCP0017_GET_SHEET_CALENDAR_3SPAN
+ *   이 P_BUCKET='WEEKLY_ISO' 일 때 내부에서 _3SPAN_ISO 로 분기해 RETURN 한다(PKG_SCP0017 본문 line152 DB 실측
+ *   2026-10-20). ISO 응답의 W_ binding 은 'W_'||BASIS_YYYYMM||ISO_WEEK||'_ISO' 로 '_ISO' 접미가 붙지만
+ *   slice 경계(2~10) 밖이라 dynKindOf/largeKeyOf/weekNoOf 파싱에는 영향이 없다. 헤더 렌더는 비-ISO 월롤업
+ *   병합과 달리 컬럼마다 MMDD/W01/SUM 개별 셀(AS-IS InitSpreadDateColumnISO) — buildDynamicColumns 의
+ *   WEEKLY_ISO 전용 분기 + WaterfallMergeManager 가로병합 차단으로 재현한다. 표시는 W 만.
  */
 export const baseVisibleOf = (
   bucket: BUCKET_TYPE,

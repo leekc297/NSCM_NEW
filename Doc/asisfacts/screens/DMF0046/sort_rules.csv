@@ -1,0 +1,2 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+DMF0046,SQL,DMF0046_GET_BODITEM_FOR_PRJROUTE_POPUP,Doc\asisfacts\db\modules\dbo.DMF0046_GET_BODITEM_FOR_PRJROUTE_POPUP.sql,64,,"VALID_YN DESC,DIVISION_ID,FROM_SITE,TO_SITE,PRIORITY,TRANSPORT_MODE","ORDER BY a.valid_yn desc, a.division_id, b.from_site, b.to_site, a.priority, c.transport_mode",0,정적

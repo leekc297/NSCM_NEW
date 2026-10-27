@@ -195,8 +195,11 @@ export const buildPivotColumns = (
   cols: readonly PivotCol[],
   isVisible: (binding: string) => boolean
 ): FlexGridColumnConfig[] => {
-  const visibleCols = cols.filter(c => isVisible(c.binding));
-  if (visibleCols.length === 0) return [];
+  // 필수: 숨김 컬럼도 **전부 생성**하고 `visible` 로만 토글한다(design 03 §2.5 / 규칙 GRID-12).
+  //   필터로 숨김 컬럼을 아예 빼면 (A) SUM 더블클릭 드릴다운이 펼칠 대상(숨은 D_/W_)을 못 찾고,
+  //   (B) Frozen 이전 회색 범위가 숨은 `D_(frozen)` 의 인덱스를 못 찾아 -1 이 된다
+  //   (자매 ProductionPlanWaterfallGrid 와 동일 원칙 — 생성은 전건, 가시성만 토글).
+  if (cols.length === 0) return [];
 
   const leafOf = (c: PivotCol): FlexGridColumnConfig => ({
     header: c.kind === 'D' ? c.leaf || c.binding.slice(2) : 'SUM',
@@ -210,8 +213,9 @@ export const buildPivotColumns = (
     // admin 속성 덮어쓰기가 아니다 — 동적 기간칼럼은 `SCM_MST_SHEET_COLUMNS` 에 **행 자체가 없다**
     //   (SP05 구동, 조회 기간마다 컬럼셋이 바뀐다). 덮을 메타값이 없으므로 CLAUDE.md §2 체크4
     //   ("VISIBLE_FLAG 등 admin 관리 속성 리터럴 덮어쓰기 금지") 대상이 아니다.
-    //   실제 가시성은 이 함수 진입부의 `isVisible`(Bucket×Sum 매트릭스 + 드릴다운)이 결정한다.
-    visible: true,
+    //   가시성은 `isVisible`(Bucket×Sum 매트릭스 + 드릴다운 override)이 컬럼마다 결정한다 —
+    //   숨김은 컬럼을 빼는 게 아니라 `visible:false` 로 둔다(위 함수 주석 참조).
+    visible: isVisible(c.binding),
     _dynamic: true,
   });
 
@@ -221,7 +225,7 @@ export const buildPivotColumns = (
   let largeGroup: FlexGridColumnConfig | null = null;
   let smallGroup: FlexGridColumnConfig | null = null;
 
-  for (const c of visibleCols) {
+  for (const c of cols) {
     const ym = c.binding.slice(2, 8);
     if (largeGroup === null || ym !== largeKey) {
       largeKey = ym;

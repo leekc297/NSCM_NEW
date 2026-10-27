@@ -198,8 +198,9 @@ export const DemandGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     save: hasButton('SAVE') ? handleSave : false,
-    insert: hasButton('SAVE') ? handleInsert : false,
-    delete: hasButton('SAVE') ? handleDelete : false,
+    // 버튼 코드별 권한(TO-BE 룰 2026-10-26) — INSERT/DELETE 메타는 groupName/modelList 시트에 등록(SAVE 권한 복사)
+    insert: hasButton('INSERT') ? handleInsert : false,
+    delete: hasButton('DELETE') ? handleDelete : false,
     manual: false,
     upload: false,
   };

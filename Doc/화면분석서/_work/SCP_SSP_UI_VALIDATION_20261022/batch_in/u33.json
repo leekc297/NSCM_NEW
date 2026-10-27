@@ -1,0 +1,205 @@
+[
+ {
+  "screen": "SCP0104",
+  "title": "Line Assign",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line.cs:1110",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line_Assign.cs:6108",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line_Assign_Model.cs:1373"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line.Designer.cs:733",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line_Assign.Designer.cs:1201",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Line_Assign_Model.Designer.cs:903",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0104_CAPA_Line_Assign/SCP0104_CAPA_Linen.Designer.cs:1279"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/capa-line-assign"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+    "member": "CheckNameOnDummyCodeDB",
+    "line": "843",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0104_CAPA_Line_Assign\\SCP0104_CAPA_Line_Assign_Model.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_GET_SPREAD_TITLE",
+    "member": "GetSpdTitleAssign",
+    "line": "2094",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0104_CAPA_Line_Assign\\SCP0104_CAPA_Line_Assign.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+    "member": "CheckNameOnDummyCodeDB",
+    "line": "2970",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0104_CAPA_Line_Assign\\SCP0104_CAPA_Line_Assign.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_GET_SPREAD_TITLE",
+    "member": "GetSpdTitleAssign",
+    "line": "2094",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0104_CAPA_Line_Assign\\SCP0104_CAPA_Line_Assign.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+    "member": "CheckNameOnDummyCodeDB",
+    "line": "2970",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0104_CAPA_Line_Assign\\SCP0104_CAPA_Line_Assign.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_ADD_CAPA_NEW_VERSION",
+    "member": "SetQueryInfoAddNewVersion",
+    "line": "4608",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0104_CAPA_Line_Assign\\SCP0104_CAPA_Line_Assign.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY",
+    "member": "SetQueryInfoSaveAssignASSEMBLY",
+    "line": "4952",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0104_CAPA_Line_Assign\\SCP0104_CAPA_Line_Assign.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_SAVE_CAPA_LINE_ASSIGN_ELTR",
+    "member": "SetQueryInfoSaveAssignELTR",
+    "line": "5051",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0104_CAPA_Line_Assign\\SCP0104_CAPA_Line_Assign.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DW0105_GET_RESULT",
+    "member": "SetQueryInfoTestIF",
+    "line": "6085",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0104_CAPA_Line_Assign\\SCP0104_CAPA_Line_Assign.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+    "member": "CheckNameOnDummyCodeDB",
+    "line": "843",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0104_CAPA_Line_Assign\\SCP0104_CAPA_Line_Assign_Model.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DW0105_GET_RESULT",
+   "SCP0104_ADD_CAPA_NEW_VERSION",
+   "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+   "SCP0104_GET_SPREAD_TITLE",
+   "SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY",
+   "SCP0104_SAVE_CAPA_LINE_ASSIGN_ELTR",
+   "SCP0106_CHECK_CAPA_LOSS_PLAN_BY_ASSIGN_ASSEMBLY",
+   "SCP0106_CHECK_CAPA_LOSS_PLAN_BY_ASSIGN_ELTR"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0104_ADD_CAPA_NEW_VERSION",
+    "sp": "SCP0104_ADD_CAPA_NEW_VERSION",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 롤백·로그 후 F 와 오류메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT SCM_SYS_LOG_BATCH(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+    "sp": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 롤백·로그 후 F 와 오류메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT SCM_SYS_LOG_BATCH(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY",
+    "sp": "SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 롤백·로그 후 F 와 오류위치 포함 메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + CONCAT('[ERROR LINE : ', ERROR_PROCEDURE(), ' - ', ERROR_LINE(), ']') + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT SCM_SYS_LOG_BATCH(ERROR); SELECT 'F' AS result_code; SELECT '[ERR]'+'[ERROR LINE : proc - line]'+ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0104_SAVE_CAPA_LINE_ASSIGN_ELTR",
+    "sp": "SCP0104_SAVE_CAPA_LINE_ASSIGN_ELTR",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 롤백·로그 후 F 와 오류위치 포함 메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + CONCAT('[ERROR LINE : ', ERROR_PROCEDURE(), ' - ', ERROR_LINE(), ']') + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT SCM_SYS_LOG_BATCH(ERROR); SELECT 'F' AS result_code; SELECT 오류위치 포함 메시지"
+   },
+   {
+    "entry_sp": "SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY",
+    "sp": "SCP0105_CHECK_CAPA_SPEED_PLAN_BY_ASSIGN_ASSEMBLY",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 롤백·로그 후 F 와 오류메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT SCM_SYS_LOG_BATCH(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0104_SAVE_CAPA_LINE_ASSIGN_ELTR",
+    "sp": "SCP0105_CHECK_CAPA_SPEED_PLAN_BY_ASSIGN_ELTR",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 후 실패코드와 오류메시지 결과셋 반환",
+    "message": "'F' + [오류번호][ERROR LINE : 프로시저 - 라인]오류메시지",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT SCM_SYS_LOG_BATCH; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + '[ERROR LINE : …]' + ERROR_MESSAGE("
+   },
+   {
+    "entry_sp": "SCP0104_SAVE_CAPA_LINE_ASSIGN_ASSEMBLY",
+    "sp": "SCP0106_CHECK_CAPA_LOSS_PLAN_BY_ASSIGN_ASSEMBLY",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 후 실패코드와 오류메시지 결과셋 반환",
+    "message": "'F' + [오류번호]오류메시지",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT SCM_SYS_LOG_BATCH; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0104_SAVE_CAPA_LINE_ASSIGN_ELTR",
+    "sp": "SCP0106_CHECK_CAPA_LOSS_PLAN_BY_ASSIGN_ELTR",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 후 실패코드와 오류메시지 결과셋 반환",
+    "message": "'F' + [오류번호][ERROR LINE : 프로시저 - 라인]오류메시지",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT SCM_SYS_LOG_BATCH; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + '[ERROR LINE : …]' + ERROR_MESSAGE("
+   }
+  ]
+ }
+]

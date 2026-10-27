@@ -1,0 +1,2 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,"dt.Rows[i][""NEWCOLLIST""]",CODE,DMF0037_SalesPlanReport,DMF0037_SalesPlanReport.cs:414,"dt.Rows[i][""DESCRIPTION""]",Number,,None,코드 선언 FPMerge.None,"Convert.ToInt16(dt.Rows[i][""ColumnWidth""].ToString())",true,Right,,,for(i < dt.Rows.Count)

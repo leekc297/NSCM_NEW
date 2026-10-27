@@ -43,8 +43,12 @@ export const buildColumns = (
         //   취소한다(팝업 전용, 더블클릭 오픈, nscm-patterns §5-16).
         col.cellCtrlObjTpCd = CELL_CONTROL_TYPE.TEXT_MODAL;
       }
-      // ITEM_ID(팝업)은 셀타입 미지정 — 더블클릭 팝업(화면 dblClick)으로만 열고,
-      //   beginningEdit 이 인라인 편집을 취소한다(팝업 전용, design 03 §3 R12).
+      // ITEM_ID(Material) 어포던스는 admin 메타가 authoritative — CELL_CONTROL_OBJECT_TYPE_CODE='FPTextModal'
+      //   (05_register.sql §7-4)로 등재돼 신규행(INPUT_TP_CD='IM')에서 공용 DataGrid 가 돋보기(wj-cell-popup)를
+      //   붙이고 **키인(타이핑)도 허용**한다. AS-IS SSP0025 ITEM_ID 는 FPText + KeyPress 차단 없음 = 키인 가능이라
+      //   FPTextModal 이 맞다(자매 SSP0024 는 KeyPress 로 키인 차단 → FPModal 로 달라짐). 더블클릭 팝업은 화면
+      //   dblClick(isItemPopupColumn), 인라인 키인은 beginningEdit(isInlineEditable: ITEM_ID 허용)이 판정(design 03 §3 R12).
+      //   fallback(admin fetch 실패)은 셀타입 미지정 — 그때는 돋보기 없이 더블클릭 팝업만 동작(degraded).
       return col;
     });
 };

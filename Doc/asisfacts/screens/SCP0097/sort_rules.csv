@@ -1,0 +1,3 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0097,SQL,SCP0097_GET_SCP_BOM_ELEC,Doc\asisfacts\db\modules\dbo.SCP0097_GET_SCP_BOM_ELEC.sql,58,,"DIVISION_ID,PARENT_ITEM_ID,ELECTRODE_TYPE,CHILD_ITEM_ID","ORDER BY A.DIVISION_ID, A.PARENT_ITEM_ID, A.ELECTRODE_TYPE, A.CHILD_ITEM_ID",0,정적
+SCP0097,SQL,SCP0097_SAVE_SCP_BOM_ELEC,Doc\asisfacts\db\modules\dbo.SCP0097_SAVE_SCP_BOM_ELEC.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

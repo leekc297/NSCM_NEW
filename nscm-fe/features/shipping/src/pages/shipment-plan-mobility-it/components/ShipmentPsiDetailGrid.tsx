@@ -16,6 +16,7 @@ import { GridUtils, paintNegativeText, toGridNumber } from '@foundation/utils';
 import { DataGrid, TabItem, TabWrapper } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
+import { attachDashDateFormat } from '../../../hooks/usePinDashDateFormat';
 import {
   ADMIN_SHEET_NAME,
   FOOTER_FORMAT,
@@ -29,6 +30,27 @@ import { useShipmentPlanMobilityItStore } from '../useShipmentPlanMobilityItStor
 import { detailSheetsFor, FOOTER_SUM_COLUMNS } from '../utils/shipment-plan-mobility-it.detailSheets';
 import { isDetailCellEditable } from '../utils/shipment-plan-mobility-it.editLock';
 import { toValidYmd } from '../utils/shipment-plan-mobility-it.save';
+
+// 가로 스크롤바 높이(px) — Sum 푸터 바닥 고정 시 스크롤바 자리 예약용 표준값(SSP0021 동일)
+const HSCROLLBAR_HEIGHT = 17;
+
+// Sum 푸터를 그리드 바닥에 고정한다. wijmo 는 푸터를 마지막 데이터 행 바로 아래에 두므로 행이 적으면
+//   위로 붙고 아래가 빈다(AS-IS FarPoint 는 바닥 고정). SSP0021 ShipmentPlanDetailGrid pinFooterToBottom 이식.
+const pinFooterToBottom = (g: FlexGridType) => {
+  const footerPanel = g.columnFooters.hostElement?.parentElement;
+  const scrollRoot = footerPanel?.parentElement;
+  const footerHeight = g.columnFooters.height;
+  if (!footerPanel || !scrollRoot || footerHeight <= 0) return;
+  const hScrollReserve =
+    g.scrollSize.width > g.clientSize.width
+      ? scrollRoot.offsetHeight - scrollRoot.clientHeight || HSCROLLBAR_HEIGHT
+      : 0;
+  const pinnedTop = scrollRoot.clientHeight - footerHeight - hScrollReserve;
+  if (pinnedTop <= footerPanel.offsetTop) return; // 내용이 더 길면 wijmo 기본 위치 유지
+  footerPanel.style.top = `${pinnedTop}px`;
+  const bottomLeftPanel = g.bottomLeftCells.hostElement?.parentElement;
+  if (bottomLeftPanel) bottomLeftPanel.style.top = `${pinnedTop}px`;
+};
 
 interface Props {
   rowsBySheet: Partial<Record<SHEETS, WijmoRowItem[]>>;
@@ -148,12 +170,13 @@ export const ShipmentPsiDetailGrid = ({
       const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
       const cellEditable = isDetailCellEditable(SHEETS.CONFIRM_DETAIL, row, binding, editableRef.current, isPackerRef.current);
       e.cancel = !cellEditable;
-      if (!cellEditable && row && str(row.ERP_STATUS) === 'C' && editableRef.current) {
-        void setAlert({
-          type: 'alert',
-          content: t(MSG.READONLY_SHEET, '__This row cannot be changed.'),
-        });
-      }
+      // 편집 불가 셀은 조용히 막기만 한다. 읽기전용 팝업 미표시(사용자 요청 2026-10-21)
+      // if (!cellEditable && row && str(row.ERP_STATUS) === 'C' && editableRef.current) {
+      //   void setAlert({
+      //     type: 'alert',
+      //     content: t(MSG.READONLY_SHEET, '__This row cannot be changed.'),
+      //   });
+      // }
     };
     g.beginningEdit.addHandler(gateHandler);
     g.pastingCell.addHandler(gateHandler);
@@ -333,7 +356,32 @@ export const ShipmentPsiDetailGrid = ({
         }
       };
       g.formatItem.addHandler(fmt);
-      // Hold stock End Date - 없는 날짜면 비우고 알린다. 맞는 날짜는 YYYY-MM-DD 로 맞춘다.
+      // Hold stock End Date - 없는 날짜면 편집을 취소해 기존 값을 유지하고 알린다.
+      const isInvalidReleaseDate = (sender: FlexGridType, col: number, value: unknown): boolean => {
+        if (sheet !== SHEETS.HOLD_STOCK) return false;
+        if ((sender.columns[col]?.binding ?? '') !== 'RELEASE_YYYYMMDD') return false;
+        const raw = str(value).trim();
+        if (raw === '' || toValidYmd(raw)) return false;
+        void setAlert({
+          type: 'alert',
+          content: t(MSG.INVALID_DATE_FORMAT, '__This is not a valid date format.'),
+        });
+        return true;
+      };
+      const editEnding = (sender: FlexGridType, e: { col: number; cancel: boolean }) => {
+        if (e.cancel) return;
+        if (isInvalidReleaseDate(sender, e.col, sender.activeEditor?.value)) e.cancel = true;
+      };
+      const pasteCheck = (
+        sender: FlexGridType,
+        e: { col: number; data: unknown; cancel: boolean }
+      ) => {
+        if (e.cancel) return;
+        if (isInvalidReleaseDate(sender, e.col, e.data)) e.cancel = true;
+      };
+      g.cellEditEnding.addHandler(editEnding);
+      g.pastingCell.addHandler(pasteCheck);
+      // Hold stock End Date - 맞는 날짜는 YYYY-MM-DD 로 맞춘다.
       const dateCheck = (sender: FlexGridType, e: { row: number; col: number }) => {
         if (sheet !== SHEETS.HOLD_STOCK) return;
         if ((sender.columns[e.col]?.binding ?? '') !== 'RELEASE_YYYYMMDD') return;
@@ -342,17 +390,18 @@ export const ShipmentPsiDetailGrid = ({
         const raw = str(row.RELEASE_YYYYMMDD).trim();
         if (raw === '') return;
         const ymd = toValidYmd(raw);
-        if (ymd) {
-          const iso = `${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`;
-          if (iso === raw) return;
-          row.RELEASE_YYYYMMDD = iso;
-        } else {
-          row.RELEASE_YYYYMMDD = '';
-          void setAlert({
-            type: 'alert',
-            content: t(MSG.INVALID_DATE_FORMAT, '__This is not a valid date format.'),
-          });
-        }
+        // 잘못된 날짜는 cellEditEnding/pastingCell 에서 취소되므로 여기서 비우지 않는다.
+        if (!ymd) return;
+        const iso = `${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`;
+        if (iso === raw) return;
+        row.RELEASE_YYYYMMDD = iso;
+        // } else {
+        //   row.RELEASE_YYYYMMDD = '';
+        //   void setAlert({
+        //     type: 'alert',
+        //     content: t(MSG.INVALID_DATE_FORMAT, '__This is not a valid date format.'),
+        //   });
+        // }
         sender.invalidate();
       };
       g.cellEditEnded.addHandler(dateCheck);
@@ -362,6 +411,8 @@ export const ShipmentPsiDetailGrid = ({
           g.beginningEdit?.removeHandler(gate);
           g.pastingCell?.removeHandler(gate);
           g.formatItem?.removeHandler(fmt);
+          g.cellEditEnding?.removeHandler(editEnding);
+          g.pastingCell?.removeHandler(pasteCheck);
           g.cellEditEnded?.removeHandler(dateCheck);
           g.pastedCell?.removeHandler(dateCheck);
         } catch {
@@ -376,6 +427,7 @@ export const ShipmentPsiDetailGrid = ({
   // 하단 SUM footer (AS-IS InitSpreadFooterSum L987/9328) — 6개 detail 시트.
   //   데이터 없으면 footer 숨김(사용자 요청 2026-09-30 — 빈 그리드에 헤더만; sibling CustFcstWaterfall 동일).
   //   합산 대상 = FOOTER_SUM_COLUMNS(가시 FPNumber, AS-IS 범위 실측). "Sum" 라벨 = AS-IS ColumnFooter[0,1].
+  const footerPinnedGrids = useRef(new WeakSet<FlexGridType>());
   useEffect(() => {
     (Object.keys(FOOTER_SUM_COLUMNS) as SHEETS[]).forEach(sheet => {
       const g = gridRefs[sheet]?.current;
@@ -391,6 +443,12 @@ export const ShipmentPsiDetailGrid = ({
         col.aggregate = sumSet.has(col.binding ?? '') ? Aggregate.Sum : Aggregate.None;
       });
       g.columnFooters.setCellData(0, 0, t(LBL.SUM, '_Sum'));
+      pinFooterToBottom(g);
+      // 레이아웃 갱신(리사이즈·탭 전환·행 변경) 때마다 다시 고정. 그리드 인스턴스당 1회만 등록
+      if (!footerPinnedGrids.current.has(g)) {
+        footerPinnedGrids.current.add(g);
+        g.updatedLayout.addHandler(() => pinFooterToBottom(g));
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rowsBySheet, staticColumns, activeDetailSheet]);
@@ -464,6 +522,22 @@ export const ShipmentPsiDetailGrid = ({
     return () => cleanups.forEach(fn => fn());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staticColumns, rowsBySheet, visibleSheets, activeDetailSheet]);
+
+  // 날짜 컬럼 형식을 조회값과 같은 대시(yyyy-MM-dd)로 고정 — 공용 getFormat 은 점 형식을 준다.
+  //   시트별 그리드가 여러 개라 단일 ref 훅(usePinDashDateFormat) 대신 여기서 한 번에 돈다.
+  //   ref 원천은 resolveGridRef(부모+로컬 병합)다. 종전엔 부모 gridRefs 만 돌아 drill 서브시트
+  //   (WH_STOCK_DETAIL·HOLD_STOCK_DETAIL·WH_IN_PLAN_DETAIL — 로컬 ref)의 LOT_ISSUE_DATE 등이 점 형식으로 남았다.
+  //   의존성은 음수 도색 effect 와 같다 — 시트 순차 도착·탭 전환으로 늦게 mount 된 그리드도 덮는다.
+  //   RELEASE_YYYYMMDD 는 아래 dateCheck 가 이미 행 값을 'YYYY-MM-DD' 로 정규화하므로
+  //   이 처리는 표시 형식(컬럼 format)만 맞추는 것이고 서로 충돌하지 않는다.
+  useEffect(() => {
+    const cleanups = visibleSheets
+      .map(sheet => resolveGridRef(sheet).current)
+      .filter((g): g is FlexGridType => !!g)
+      .map(g => attachDashDateFormat(g));
+    return () => cleanups.forEach(fn => fn());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [staticColumns, confirmColumns, rowsBySheet, visibleSheets, activeDetailSheet]);
 
   const isReadOnlySheet = (sheet: SHEETS): boolean => !EDITABLE_SHEETS.has(sheet);
 

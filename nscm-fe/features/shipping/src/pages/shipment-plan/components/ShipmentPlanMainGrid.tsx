@@ -18,9 +18,10 @@ import {
   toGridNumber,
 } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
+import { useMessageStore } from '@shared/stores';
 
-import { BUCKET_TYPE, MENU_ID } from '../shipment-plan.constants';
-import type { CalendarRow, MainRow } from '../shipment-plan.types';
+import { BUCKET_TYPE, MENU_ID, MSG } from '../shipment-plan.constants';
+import type { CalendarRow, MainRow, NoteRow } from '../shipment-plan.types';
 import { useShipmentPlanStore } from '../useShipmentPlanStore';
 import { calcPlanQty, type CalcRow } from '../utils/shipment-plan.calc';
 import { createSameCellDblClickGuard } from '../utils/shipment-plan.dblClickGuard';
@@ -30,6 +31,8 @@ import { LOOKUP_COLUMN, stripComboMeta, useShipmentPlanLookups } from '../utils/
 interface Props {
   rows: MainRow[];
   calendar: CalendarRow[];
+  // NOTE 행(Main o_rc2) — SHIP_PLAN_DETAIL 일자셀 파란 StickyNote(■) 원천. AS-IS dtNote(ds.Tables[1]) 등가.
+  notes: NoteRow[];
   gridRef: MutableRefObject<FlexGridType | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   editTrackerRef: MutableRefObject<EditTracker | undefined>;
@@ -58,19 +61,89 @@ type DynKind = 'D' | 'W' | 'M';
 const kindOf = (binding: string): DynKind | undefined =>
   binding.startsWith('D_') ? 'D' : binding.startsWith('W_') ? 'W' : binding.startsWith('M_') ? 'M' : undefined;
 
+// 파란 StickyNote(■) 매칭 키 — AS-IS SetNote_Display(cs L7069~7077) dtNote LINQ 의 8컬럼 조인과 동일 순서.
+//   일자(YYYYMMDD)는 양변 숫자만 남겨 비교(AS-IS 는 note 쪽 YYYYMMDD 를 .Replace("-","") 후 대조).
+const noteKey = (...parts: string[]): string => parts.join('|');
+
+// Main o_rc2 note 행 1건 — 툴팁 텍스트 + 하한 가드 수량. AS-IS EditByChange(cs L2118~2119)가 같은
+//   행에서 QTY(원 확정수량)·NOEDIT_QTY(DO 발행분 = 입력 하한)를 읽어 하한 가드(MSG00425)에 쓴다.
+interface DoNoteEntry {
+  note: string; // 'Input Qty(Min) : N' — ■ 호버 툴팁
+  qty: number; // 원 확정수량 — 하한 위반 시 되돌릴 값(AS-IS L2124 SetValue(dQty))
+  noEditQty: number; // 입력 하한 = DO 발행(입력불가) 수량
+}
+
+// SHIP_PLAN_DETAIL D_ 셀의 note 매칭 키 — 대상 셀이 아니면 null. ■ 표시(applyDoNote)와
+//   하한 가드(recalcCell·Delete키)가 같은 키를 쓴다.
+const noteKeyOf = (
+  row: Record<string, unknown> | undefined,
+  binding: string
+): string | null => {
+  if (!row || !binding.startsWith('D_')) return null;
+  if (str(row.MEASURE) !== 'SHIP_PLAN_DETAIL' || str(row.TO_SITE).trim() === '') return null;
+  return noteKey(
+    str(row.DIVISION_ID),
+    str(row.FROM_SITE),
+    str(row.ITEM_ID),
+    str(row.TO_SITE),
+    str(row.TRANSPORT_MODE),
+    str(row.INCOTERMS),
+    str(row.FCST_TYPE),
+    binding.slice(2).replace(/\D/g, '')
+  );
+};
+
+const DO_NOTE_DOT_CLASS = 'ssp0060-do-note-dot';
+
+// AS-IS SetNote_Display(cs L7056~7095): SHIP_PLAN_DETAIL measure 행의 D_ 일자셀 중 dtNote(=o_rc2) 키 매칭이
+//   있으면 셀 우상단에 파란 5×5 인디케이터(NoteIndicatorColor=Blue, Size(5,5)) + 마우스오버 NOTE 말풍선(StickyNote).
+//   NOTE = 'Input Qty(Min) : …' = DO 발행(입력불가) 수량 참고. AS-IS 는 EDIT_YN 숫자셀만 호출하나 TO-BE 는
+//   EDIT_YN 컬럼 부재(gap-audit G15) — 키 매칭(값이 있는 셀)으로 등가 재현. 셀 DOM 재사용이라 비대상은 원복.
+//   title 은 공용 setCellTooltip(dataGridUtils)이 먼저 셀 값으로 설정한다 — 노트 셀만 그 위에 NOTE 로 덮고,
+//   비노트 셀은 공용 title(전체 값 툴팁)을 보존해야 하므로 건드리지 않고 ■(dot)만 제거한다.
+const applyDoNote = (
+  cell: HTMLElement,
+  row: Record<string, unknown> | undefined,
+  binding: string,
+  noteMap: ReadonlyMap<string, DoNoteEntry>
+): void => {
+  const key = noteKeyOf(row, binding);
+  const note = (key ? noteMap.get(key)?.note : '') ?? '';
+  const existing = cell.querySelector<HTMLElement>(`.${DO_NOTE_DOT_CLASS}`);
+  if (note) {
+    cell.title = note; // 공용이 설정한 셀 값 툴팁 위에 NOTE(DO 발행 수량)로 덮는다.
+    if (!existing) {
+      const dot = document.createElement('span');
+      dot.className = DO_NOTE_DOT_CLASS;
+      // 우상단 파란 5×5 사각 — pointer-events 차단으로 클릭/편집 진입에 간섭하지 않는다.
+      dot.style.cssText =
+        'position:absolute;top:0;right:0;width:5px;height:5px;background:#0000ff;pointer-events:none;';
+      cell.appendChild(dot);
+    }
+  } else {
+    // 파란점(DO 발행)이 없는 셀에는 호버(툴팁)도 뜨지 않게 한다 — 사용자 지시(2026-10-22):
+    //   호버는 "이 셀에 이미 발행돼 취소할 수 없는 DO 수량(= 입력 최소)이 있다"는 신호여야 하므로,
+    //   DO 발행건이 포함된 파란점 셀에서만 떠야 한다. 공용 setCellTooltip 이 전 셀에 건 값 툴팁을
+    //   나중 등록된 이 핸들러가 비노트 셀에서 비운다(cell 은 매 formatItem 마다 공용이 title 을 다시
+    //   세팅하므로 재사용 잔상 없음). ■ 도 함께 제거.
+    cell.title = '';
+    existing?.remove();
+  }
+};
+
 // 3단(월>주/SUM>일) 동적 헤더의 행 높이 — GRID-11: nested columns 에 height 를 안 적으면 Wijmo 기본
 //   48px 이 단마다 적용돼 헤더가 48×3=144px 로 부풀고(AS-IS FarPoint 는 20px×3≈60px), base 컬럼의
 //   세로 span 도 그 높이에 끌려간다(사용자 신고 2026-10-06 "ASIS 랑 Grid1 Header 크기가 다르다").
 //   공용 컬럼매핑의 depth 별 높이(ONE 48 / TWO 24 / THREE 16)와 같은 값을 동적 group·leaf 에 명시해
 //   총 48px(= 정적 ONE_DEPTH 1행 높이)로 맞춘다 — hook #93 표준.
-const DYN_HEADER_ROW_HEIGHT = 16;
+const DYN_HEADER_ROW_HEIGHT = 18; // 16→18: 3단 헤더가 너무 좁아 상향(사용자 지시 2026-10-15, SSP0005 동일)
 
 // Main 헤더 총높이(px) — 공용 1단 표준(HEIGHT_BY_COLUMN_DEPTH.ONE_DEPTH)과 같은 값.
 //   정적 18컬럼이 ONE_DEPTH 라 공용 매핑이 거기에 height:48 을 박고, 그 명시값이 동적 3단의
 //   height:16 과 `rows.defaultSize` 를 모두 이긴다 → 조회 후 헤더가 48×3 으로 벌어진다
 //   (사용자 신고 2026-10-06 "1번 그리드는 헤더가 그대로고 계속 48 크기"). 선례
 //   CustFcstWaterfallGrid(L349~378)처럼 실제 렌더된 tier 수로 나눠 헤더 row 높이를 직접 강제한다.
-const MAIN_HEADER_HEIGHT = 48;
+const MAIN_HEADER_HEIGHT = 54; // 48→54(18px/tier): 3단 헤더 가독성 상향(사용자 지시 2026-10-15, SSP0005 동일)
 
 // 편집 가능 셀 배경(AS-IS SwitchLock 해제 셀의 노란 배경)은 공용 wj-cell-editable 클래스(#fff8cd =
 //   $wj-editable-cell)로 통일한다 — Detail 그리드(gap-audit J5)와 동일. formatItem 에서 실제
@@ -81,6 +154,101 @@ const MAIN_HEADER_HEIGHT = 48;
 //     private static Color m_InValidColor = Color.FromArgb(92, 209, 229);
 //   즉 빨강이 아니라 시안계(#5CD1E5)다 — 이름만 보고 빨강으로 칠하면 AS-IS 와 달라진다.
 const INVALID_CELL_COLOR = '#5CD1E5';
+
+// AS-IS Re_Design(cs L5440~5570) measure 행 배경색 — 행 유형(MEASURE)을 색으로 구분한다(design 03 §3-I).
+//   값은 FarPoint Color.FromArgb 실측. α 가 붙은 두 색은 ARGB 의 A=80(=80/255≈0.314) 반투명이다.
+//   Rb SHIP_PLAN·TOT_SHIP_PLAN      → MEASURE_NAME~끝 불투명 #A7D5FF (167,213,255)         cs L5515
+//   Rc SHIP_PLAN_DETAIL·SHIP_RESULT → TO_SITE~끝 LightSkyBlue α80 (135,206,250,.314)       cs L5521
+//   Rd 위 3종 외 measure            → 과거 일자(D_ < planDate) 셀 #A9A9A9 (169,169,169)     cs L5554
+//   Re TOT 8종                      → MEASURE_NAME~끝 Yellow α80 (255,255,0,.314)           cs L5569
+const MEASURE_BG = {
+  PLAN: 'rgb(167, 213, 255)',
+  PLAN_DETAIL: 'rgba(135, 206, 250, 0.314)',
+  PAST: 'rgb(169, 169, 169)',
+  TOT: 'rgba(255, 255, 0, 0.314)',
+} as const;
+
+// Re(노랑) 대상 TOT 8종 — AS-IS cs L5565~5566 그대로. TOT_SHIP_PLAN 은 제외다(Rb 파랑 대상).
+const RE_TOT_MEASURES: ReadonlySet<string> = new Set([
+  'TOT_SHIP_REQ',
+  'TOT_SHIP_AVAL',
+  'TOT_SHIP_AVAL_GAP',
+  'TOT_INTN_MOVEMENT',
+  'TOT_CONTAINER',
+  'TOT_PROD_PLAN',
+  'TOT_WH_STOCK',
+  'TOT_BALANCE',
+]);
+
+/**
+ * AS-IS Re_Design(cs L5512~5570) 의 measure 행 배경색을 셀 1개 기준으로 재현한다.
+ *   AS-IS 는 한 행을 순회하며 Rb→Rc→Rd→Re 순으로 BackColor 를 덮어쓰므로(뒤가 이김) 같은 순서로
+ *   평가해 마지막 값을 돌려준다. 색이 없으면 '' (기본 흰 배경 — DOM 재사용 잔상 방지용 명시 비우기).
+ *   편집 가능 셀(노랑, wj-cell-editable)은 호출부에서 제외한다 — AS-IS 도 편집셀은 별도 색이다.
+ */
+const measureRowBackground = (
+  measure: string,
+  col: number,
+  measureNameCol: number,
+  toSiteCol: number,
+  binding: string,
+  planDate: string
+): string => {
+  let bg = '';
+  // Rb — SHIP_PLAN·TOT_SHIP_PLAN: MEASURE_NAME~끝 불투명 파랑
+  if (
+    (measure === 'SHIP_PLAN' || measure === 'TOT_SHIP_PLAN') &&
+    measureNameCol >= 0 &&
+    col >= measureNameCol
+  )
+    bg = MEASURE_BG.PLAN;
+  // Rc — SHIP_PLAN_DETAIL·SHIP_RESULT: TO_SITE~끝 반투명 하늘색
+  if (
+    (measure === 'SHIP_PLAN_DETAIL' || measure === 'SHIP_RESULT') &&
+    toSiteCol >= 0 &&
+    col >= toSiteCol
+  )
+    bg = MEASURE_BG.PLAN_DETAIL;
+  // Rd — 위 3종 외 measure 의 과거 일자(D_ < planDate) 셀: 진한 회색
+  if (
+    measure !== 'SHIP_PLAN' &&
+    measure !== 'SHIP_PLAN_DETAIL' &&
+    measure !== 'SHIP_RESULT' &&
+    binding.startsWith('D_') &&
+    planDate &&
+    binding.slice(2) < planDate
+  )
+    bg = MEASURE_BG.PAST;
+  // Re — TOT 8종: MEASURE_NAME~끝 반투명 노랑(Rd 회색을 덮는다 — AS-IS 는 Re 가 뒤 순서)
+  if (RE_TOT_MEASURES.has(measure) && measureNameCol >= 0 && col >= measureNameCol)
+    bg = MEASURE_BG.TOT;
+  return bg;
+};
+
+// 확정구간 배경 (AS-IS Re_Design cs L5468~5478 "확정일자 구분 처리") — CONFIRM_DAY 가 있는 행의
+//   startIdx(FCST_TYPE+1)~CONFIRM_DAY 컬럼 구간을 행별 BACK_COLOR 로 칠한다. BACK_COLOR 는 서버가
+//   내리는 "r,g,b" 문자열 = SCM_MST_SHEET_MEASURE.ATTRIBUTE3(PKG_SSP0060 L3891 `C.ATTRIBUTE3 AS
+//   BACK_COLOR`, DB 실측 전 measure 242,242,242 = 옅은 회색 #F2F2F2).
+//   AS-IS 는 이 색을 Re_Design 맨 앞(L5468)에 깔고 뒤의 measure 색(Rb/Rc/Rd/Re)이 덮으므로, 결국
+//   **measure 색이 없는 행**(SHIP_REQ·SHIP_AVAL·CONTAINER·WH_STOCK 등 비특수·비TOT)의 확정구간
+//   일자셀에만 보인다. 그래서 호출부는 measureRowBackground()=='' 일 때만 이 값을 쓴다
+//   (사용자 지시 2026-10-21 "배경색 없는 셀에만, AS-IS 그대로"). 과거(< planStart)는 Rd 회색이
+//   이미 선점(bg != '')하므로 여기 닿지 않는다 — 상한(CONFIRM_DAY)만 본다.
+const parseRgb = (raw: string): string => {
+  const p = raw.split(',').map(s => s.trim());
+  if (p.length !== 3 || p.some(v => v === '' || Number.isNaN(Number(v)))) return '';
+  return `rgb(${Number(p[0])}, ${Number(p[1])}, ${Number(p[2])})`;
+};
+
+const confirmWindowBackground = (
+  row: Record<string, unknown> | undefined,
+  binding: string
+): string => {
+  if (!row || !binding.startsWith('D_')) return '';
+  const confirmDay = str(row.CONFIRM_DAY).trim();
+  if (!confirmDay || binding.slice(2) > confirmDay) return '';
+  return parseRgb(str(row.BACK_COLOR).trim());
+};
 
 // AS-IS MergePolicy.Always 컬럼 (cs L651~656) — 좌측 컬럼과 무관하게 같은 값이면 세로 병합한다.
 //   나머지 base 컬럼은 FPMerge.Restricted(= 공용 CustomMergeManager 의 좌측 누적키)와 같다.
@@ -155,14 +323,15 @@ const isDynVisible = (kind: DynKind, bucket: BUCKET_TYPE, chkSum: boolean): bool
 };
 
 // Main(PSI) 그리드 — base 18컬럼(admin 메타) + D_/W_/M_ 동적(서버 wide pivot + calendar 3단 헤더).
-//   편집 표면은 동적 D_ 셀만(SHIP_PLAN_DETAIL 행 + CONFIRM_DAY 를 지난 일자 — 확정구간은 조회전용,
-//   사용자 결정 2026-10-12. 판정·근거는 utils/shipment-plan.editLock.ts isMainCellEditable).
+//   편집 표면은 동적 D_ 셀만(SHIP_PLAN_DETAIL 행 + 확정구간 curPlanDate~CONFIRM_DAY 일자 — AS-IS 그대로,
+//   사용자 결정 2026-10-21. 판정·근거는 utils/shipment-plan.editLock.ts isMainCellEditable).
 //   W_/M_(Sum) 컬럼은 항상 잠금(03 §2.3). 병합 = base 전 컬럼(AS-IS 메타 구동 FPMerge.Restricted,
 //   framework SpreadInfo.cs:1295 + SmartColMerge) + Always 6컬럼(L651~656)은 그 부분집합 — 동적
 //   D_/W_/M_ 만 병합 제외(FPMerge.None 재현, gap-audit I4).
 export const ShipmentPlanMainGrid = ({
   rows,
   calendar,
+  notes,
   gridRef,
   gridFilterRef,
   editTrackerRef,
@@ -304,6 +473,13 @@ export const ShipmentPlanMainGrid = ({
   const fcstTypeMapRef = useRef(fcstTypeMap);
   fcstTypeMapRef.current = fcstTypeMap;
 
+  // DO 하한 가드(MSG00666) 경고용 — formatItem/핸들러는 deps 재등록이 드물어 ref 로 읽는다.
+  const { t } = useTranslation();
+  const tRef = useRef(t);
+  tRef.current = t;
+  const setAlertRef = useRef(useMessageStore.getState().setAlert);
+  setAlertRef.current = useMessageStore.getState().setAlert;
+
   const editableRef = useRef(editable);
   editableRef.current = editable;
   const curPlanDateRef = useRef(curPlanDate);
@@ -317,6 +493,38 @@ export const ShipmentPlanMainGrid = ({
   onDrilldownRef.current = onDrilldown;
   const onCellEditedRef = useRef(onCellEdited);
   onCellEditedRef.current = onCellEdited;
+
+  // NOTE(파란 StickyNote) 조회 Map — 키 8컬럼 + 일자(YYYYMMDD 숫자) → NOTE. AS-IS SetNote_Display dtNote LINQ 등가.
+  //   필수 게이트: NOEDIT_QTY > 0 인 셀만 — o_rc2 는 QTY>0 인 모든 (키,일자)에 NOTE('Input Qty(Min) : 0' 포함)를
+  //   돌려주므로, 텍스트 존재만으로 찍으면 Plan 셀 전부에 점이 생긴다(2026-10-21 신고). AS-IS 는 EDIT_YN_<날짜>가
+  //   숫자인 셀(= DO 발행/확정으로 '입력 최소'가 실재하는 셀)만 SetNote_Display 를 호출하는데, TO-BE wide 커서엔
+  //   EDIT_YN 페어 컬럼이 없다(gap-audit G15). 그 게이트의 등가 = NOEDIT_QTY(입력불가/DO 발행 수량) > 0 이다.
+  const noteMap = useMemo(() => {
+    const m = new Map<string, DoNoteEntry>();
+    notes.forEach(n => {
+      const rec = n as Record<string, unknown>;
+      const noEditQty = Number(rec.NOEDIT_QTY);
+      if (!(noEditQty > 0)) return;
+      const text = str(rec.NOTE);
+      if (!text) return;
+      m.set(
+        noteKey(
+          str(rec.DIVISION_ID),
+          str(rec.FROM_SITE),
+          str(rec.ITEM_ID),
+          str(rec.TO_SITE),
+          str(rec.TRANSPORT_MODE),
+          str(rec.INCOTERMS),
+          str(rec.FCST_TYPE),
+          str(rec.YYYYMMDD).replace(/\D/g, '')
+        ),
+        { note: text, qty: Number(rec.QTY) || 0, noEditQty }
+      );
+    });
+    return m;
+  }, [notes]);
+  const noteMapRef = useRef(noteMap);
+  noteMapRef.current = noteMap;
 
   useEffect(() => {
     const g = gridRef.current;
@@ -455,9 +663,30 @@ export const ShipmentPlanMainGrid = ({
       //   (_inputEditType=OPTIONAL)만 보고 클래스를 붙여, 확정구간·W_/M_(Sum)·비SHIP_PLAN_DETAIL 등
       //   실제로 잠긴 셀에도 노란 배경이 샜다(사용자 신고 2026-10-13). wrapper 보다 나중에 등록된 이
       //   핸들러가 실제 편집게이트(isMainCellEditable) 기준으로 클래스를 재대입해 최종 판정으로 덮는다.
-      //   이전 invalid 도색(인라인)이 DOM 재사용으로 남을 수 있어 인라인 배경은 비운다.
-      e.cell.style.backgroundColor = '';
       e.cell.classList.toggle('wj-cell-editable', editable);
+      // measure 행 배경(Re_Design, 03 §3-I) — 편집색(노랑)이 우선하므로 편집 가능 셀은 제외하고,
+      //   그 외 셀만 행 유형 색으로 칠한다. 색이 없는 셀은 '' 로 비워 DOM 재사용 잔상을 막는다
+      //   (이전 invalid 인라인 도색도 함께 해제된다).
+      if (editable) {
+        e.cell.style.backgroundColor = '';
+      } else {
+        const measureNameCol = sender.columns.getColumn('MEASURE_NAME')?.index ?? -1;
+        const toSiteCol = sender.columns.getColumn('TO_SITE')?.index ?? -1;
+        const measureBg = measureRowBackground(
+          str(row?.MEASURE),
+          e.col,
+          measureNameCol,
+          toSiteCol,
+          binding,
+          curPlanDateRef.current
+        );
+        // measure 색이 있으면 그것, 없으면 확정구간 BACK_COLOR(AS-IS 레이어링 — measure 색이 위, 없을 때만 보임).
+        e.cell.style.backgroundColor = measureBg || confirmWindowBackground(row, binding);
+      }
+
+      // 파란 StickyNote(■) — DO 발행(입력불가) 수량 참고. SHIP_PLAN_DETAIL D_ 일자셀 + o_rc2 키 매칭 시만.
+      //   textContent 조작(FCST_TYPE)은 D_ 셀 대상이 아니라 자식 span 과 충돌하지 않는다. 비대상 원복 포함.
+      applyDoNote(e.cell, row, binding, noteMapRef.current);
     };
     g.formatItem.addHandler(formatItemHandler);
 
@@ -483,13 +712,34 @@ export const ShipmentPlanMainGrid = ({
       if (!binding.startsWith('D_')) return;
       const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
       if (!row) return;
+      // DO 하한 가드 (AS-IS EditByChange cs L2101~2126 — D00-2b-014 MSG00425 이식 2026-10-22):
+      //   이 셀의 note 행(o_rc2 ■)이 있으면 NOEDIT_QTY(= DO 발행분)가 입력 하한이다. 미만 입력이면
+      //   경고(MSG00666 "최소입력수량 이상") 후 원 확정수량(QTY)으로 되돌린다(AS-IS SetValue(dQty)).
+      //   하한 이상 증감은 그대로 통과 — 파란 ■ 는 완전 잠금이 아니라 하한 표시다(증가는 신규 Confirm,
+      //   하한 이상 감소는 비DO 확정분 차감 — SAVE_SHIPMENT_PLAN 증감 분기).
+      //   AS-IS 게이트는 EDIT_YN 숫자이나 TO-BE 는 EDIT_YN 부재(G15) — note 존재(NOEDIT_QTY>0)가
+      //   등가 게이트다(■ 표시와 동일 기준). 원복이 원본값과 같아지면 저장 diff 에서 자연 제외된다.
+      let reverted = false;
+      const key = noteKeyOf(row, binding);
+      const entry = key ? noteMapRef.current.get(key) : undefined;
+      if (entry && toGridNumber(row[binding]) < entry.noEditQty) {
+        row[binding] = entry.qty;
+        reverted = true;
+        void setAlertRef.current({
+          type: 'alert',
+          content: tRef.current(
+            MSG.BELOW_LOCKED_QTY,
+            '__A value smaller than the actual quantity cannot be entered.'
+          ),
+        });
+      }
       const changes = calcPlanQty(
         rowsRef.current as unknown as CalcRow[],
         dayBindingsRef.current,
         row as CalcRow,
         binding
       );
-      if (changes.length > 0) sender.collectionView?.refresh();
+      if (changes.length > 0 || reverted) sender.collectionView?.refresh();
       onCellEditedRef.current?.();
     };
     g.cellEditEnded.addHandler(recalcCell);
@@ -509,6 +759,7 @@ export const ShipmentPlanMainGrid = ({
       ev.stopPropagation();
       const tracker = editTrackerRef.current;
       const touched: { row: Record<string, unknown>; binding: string }[] = [];
+      let blockedByFloor = false;
       for (let r = sel.topRow; r <= sel.bottomRow; r += 1) {
         const row = GridUtils.getRow(g, r) as Record<string, unknown> | undefined;
         if (!row) continue;
@@ -517,12 +768,29 @@ export const ShipmentPlanMainGrid = ({
           if (!binding.startsWith('D_')) continue;
           if (!isMainCellEditable(row, binding, editableRef.current, curPlanDateRef.current))
             continue;
+          // DO 하한 가드 — 0 세팅은 하한(NOEDIT_QTY>0) 미만이므로 차단(현재값 유지, 경고는 루프 뒤 1회).
+          //   AS-IS KeyUp 은 0 세팅 후 EditByChange 가 MSG00425+QTY 원복 — 편집시점 가드가 하한 이상을
+          //   이미 보장하므로 현재값 유지가 등가다(셀마다 경고 반복만 1회로 합친다).
+          const floorKey = noteKeyOf(row, binding);
+          if (floorKey && noteMapRef.current.get(floorKey)) {
+            blockedByFloor = true;
+            continue;
+          }
           const original = row[binding] as WijmoPrimitive;
           if (Number(original ?? 0) === 0) continue;
           row[binding] = 0;
           tracker?.storeChange(row as WijmoRowItem, binding, original, 0);
           touched.push({ row, binding });
         }
+      }
+      if (blockedByFloor) {
+        void setAlertRef.current({
+          type: 'alert',
+          content: tRef.current(
+            MSG.BELOW_LOCKED_QTY,
+            '__A value smaller than the actual quantity cannot be entered.'
+          ),
+        });
       }
       if (touched.length > 0) {
         // AS-IS 는 셀마다 EditByChange → CalcPlanQty — 셀 단위로 동일 재현(그룹 다수 선택 대응)
@@ -596,6 +864,12 @@ export const ShipmentPlanMainGrid = ({
     gridRef.current?.invalidate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fcstTypeMap]);
+
+  // NOTE(o_rc2) 가 본문 조회와 별도 커서라 늦게 반영될 수 있다 — 도착/변경 시 재도색해 ■ 를 그린다.
+  useEffect(() => {
+    gridRef.current?.invalidate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [noteMap]);
 
   return (
     <DataGrid

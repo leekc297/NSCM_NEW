@@ -1,0 +1,54 @@
+# [Harness] SCP0111 integration-psi — BLOCK 0 / WARN 52
+
+- WARN AC1 액션 대조표 미처리 299행: AC-afe23b85(상태 빈칸 RETURN return;), AC-a70f26bc(상태 빈칸 RETURN return;), AC-d76306b7(상태 빈칸 RETURN return;), AC-94bd70f5(상태 빈칸 RETURN return;), AC-d57f5ba8(상태 빈칸 RETURN return;), AC-8df57fea(상태 빈칸 CALL_EXT siMain.IsLockCell), AC-4f71766d(상태 빈칸 RETURN return;), AC-4baa3910(상태 빈칸 RETURN return;) … @Doc/asisfacts/screens/SCP0111/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 13행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-8df57fea(siMain.IsLockCell @SCP0111_IntegrationPSI.cs:1962), AC-b28a3158(DateUtil.GetDayRange @SCP0111_IntegrationPSI.cs:1800), AC-290efc31(SheetUtils.SetVisibleSheetColumn @SCP0111_IntegrationPSI.cs:1069), AC-a8b37914(SheetUtils.SetVisibleSheetColumn @SCP0111_IntegrationPSI.cs:1070), AC-4af1c952(SheetUtils.SetVisibleSheetColumn @SCP0111_IntegrationPSI.cs:1072), AC-763dc26d(SheetUtils.SetVisibleSheetColumn @SCP0111_IntegrationPSI.cs:1073), AC-ae318ef5(SheetUtils.SetVisibleSheetColumn @SCP0111_IntegrationPSI.cs:1078), AC-36f5c6bd(SheetUtils.SetVisibleSheetColumn @SCP0111_IntegrationPSI.cs:1079) … @Doc/asisfacts/screens/SCP0111/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SCP.SCP0111_GET_ESS_PACK_LINE (SCP0111_GET_ESS_PACK_LINE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0111_GET_INTEGRATION_PSI (SCP0111_GET_INTEGRATION_PSI) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0111_SAVE_INTEGRATION_PSI_ADMIN (SCP0111_SAVE_INTEGRATION_PSI_ADMIN) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0111_SAVE_INTEGRATION_PSI (SCP0111_SAVE_INTEGRATION_PSI) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnNickName.Click → BtnNickName_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → BtnItemId_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellDoubleClick → SpdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.TopChange → SpdMain_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellClick → spdMain_CellClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDivision.SelectedIndexChanged → CboDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanDate.SelectedIndexChanged → CboPlanDate_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanType.SelectedIndexChanged → CboPlanType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 _defaultDataModel.Changed → _defaultDataModel_Changed 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 usrButton1 / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cmbToMonth / UsrComboBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cmbFromMonth / UsrComboBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtNickName / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnNickName / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnCellItem_Id / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtCellItemId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanDate / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkQty / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN V01 As-is Validation 6건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00260 — AS-IS '신규 입력 데이터 중 중복된 데이터가 있습니다.' / TO-BE MSG00260 = '중복된 조합이 존재합니다 (Division/Project/Item/일자/' → 문구로 찾은 TO-BE ID MSG00428 @integration-psi.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @integration-psi.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @utils/integrationPsiSave.test.ts
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 5건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ2 [MSG00002] Bucket 값은 필수 입력입니다 / 조회(SEARCH) SEQ3 [MSG00002] Plan-date 값은 필수 입력입 / 저장(SAVE) — ADMIN 권한 SEQ3 [MSG00001] 모든 항목은 필수 입력입니다. → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0111.md
+- WARN SC1 조회조건 순서가 기준표(SCP SCP_화면별 조회조건 정리_260731_v0.5.xlsx 365~371행)와 다를 수 있음(라벨 대조): 'Div' 이 'Period' 보다 앞 — 기준 순서: Div → Plan Date → Model/Nickname → Cell Model → Period → Qty ＜ 0 (40_SEARCH_COND.md #### SCP0111) @components/IntegrationPsiForm.tsx:255
+- WARN VC1 대조표 미검증 770행 — 검사 사유 REVIEW 358 · NOT_RUN 1856 · NOPATH 792 · TODO 6 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 144건 / 검사 인스턴스 217 — W4 2 · W5 14 · W6 50 · W7 78 · 구현 의심 7 (Doc/verify/SCP0111/work_ledger.md)
+- WARN VC2 BE 계정 시노님·권한 문제 1건 — [SYN_MISSING] COMBO LineByOperationPlantId_SCP_ALL SCM_LINE_HIERARCHY_CPS_V_SN (호출 시 ORA-00942 / ORA-00904) · Doc/verify/SCP0111/syn_check.csv
+- WARN I18N2 다국어 미적용(영문 고정 'Operation 은 Pack / Cell / Elec'): 상수 MSG.OP_GROUP_INVALID 해석 불가(페이지 constants 에 없음) — 언어 전환 시 번역되지 않음 (msg_master 스냅샷 72시간 전 — python tools/DbConn/export_tobe_meta.py msg_master 로 새로고침 후 재판정) @IntegrationPsi.tsx:280
+- WARN I18N2 다국어 미적용(영문 고정 '수량 불일치'): 상수 MSG.DERIV_MISMATCH 해석 불가(페이지 constants 에 없음) — 언어 전환 시 번역되지 않음 (msg_master 스냅샷 72시간 전 — python tools/DbConn/export_tobe_meta.py msg_master 로 새로고침 후 재판정) @IntegrationPsi.tsx:502
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/IntegrationPsiGrid.tsx:148
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @IntegrationPsi.tsx:374
+- WARN R16 진입 Page 531 라인 > 400 — components/ 분리 (#9) @IntegrationPsi.tsx
+- WARN B19 validation.md 6행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0111/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0111/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0111/SCP0111_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0111/SCP0111_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B27 As-is grid_code DB루프(SetCalendar:354) — 루프 원천 결과셋이 타이틀 SP 판정에 안 걸림. 동적 컬럼 원천 확인 @grid
+- WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: SetCalendar:354 — '## §6 동적 컬럼' 에 행 추가(요지 'SetCalendar / 354 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md

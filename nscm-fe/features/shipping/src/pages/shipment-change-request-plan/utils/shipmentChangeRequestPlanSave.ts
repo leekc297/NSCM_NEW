@@ -16,6 +16,8 @@ import { apiClient } from '@foundation/apis';
 
 import {
   ADMIN_SHEET_NAME,
+  BTN_DELETE_DRAFTING_BY_CONFIRM,
+  BTN_ERP_ERROR_CONFIRM,
   BTN_ERP_IFSEQ_MERGE,
   BTN_SAVE_DRAFTING,
   CHANGE_TYPE_CONFIRM,
@@ -23,16 +25,20 @@ import {
   CHANGE_TYPE_PLAN,
   COLUMN,
   CRUD_INSERT,
+  DELETE_FLAG,
   DRAFTING_GROUP_ACTIONS,
   DRAFTING_MODIFY_ACTIONS,
+  ERP_ERROR_E_TYPE,
   ERP_IF_CHANGE_TYPE,
   ERP_IF_PATH,
+  IF_SEND_ON,
   IFSEQ_MERGE_STATUS,
   MENU_ID,
   SHEETS,
 } from '../shipment-change-request-plan.constants';
 
 import { str, type GridRowData } from './shipmentChangeRequestPlanDerive';
+import type { RequestChainSession } from './shipmentChangeRequestPlanRequest';
 
 export interface SaveResult {
   /** SP o_rc1 1행 1열 — 'S' 성공 / 'N' Model 미조회 / 'F' 저장실패 / 'X' SoldTo·ShipTo 오류. */
@@ -45,7 +51,10 @@ export interface SaveResult {
 
 interface SaveSession {
   userId: string;
-  /** TO-BE UserSession 에 타임존 필드가 없다(실측) — 빈 값으로 보내 SP 기본 처리에 맡긴다. */
+  /**
+   * 사용자 TZ 코드(`sessionTimeZone(session)` = SCM_ADM_USER_M.TMZ_CD). 빈 값이면 SP 가 AS054(한국).
+   *   CONFIRM_NEW 2430행이 새 Confirm ID 날짜부를 FN_MULTY_TIME(P_TIME_ZONE) 으로 잡는다.
+   */
   timeZone: string;
 }
 
@@ -522,9 +531,16 @@ export interface ErpIfResult {
  * ERP I/F(SAP PI) 전송 — AS-IS `GetErpIFCheckNew(RequestNo)`(cs:4623) 의 TO-BE 등가.
  *   `FN_ERP_UIWebService(RequestNo, "C", "")` 3인자가 BE 공통 창구의 body 3키로 매핑된다.
  *   BE 가 응답 XML 말단을 `{ E_TYPE, E_MESSAGE }` 로 파싱해 준다(WebServiceCommonService).
- *   미구현 잔여: E_TYPE 'S_E'/'E' 일 때 AS-IS 가 수행하는 초안 롤백
- *   (`SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM`)은 그 SP 가 TO-BE 미배포라 미배선이다 —
- *   사유만 노출한다(04 확인필요).
+ *   미구현 잔여: E_TYPE 'S_E'/'E' 일 때 AS-IS 가 수행하는 초안 롤백·오류 적재가 아직 미배선이다 —
+ *   현재는 사유만 노출한다.
+ *   주의 — 종전 주석의 "그 SP 가 TO-BE 미배포" 는 **사실이 아니다**(2026-10-25 DB 실측으로 정정).
+ *     PKG_SSP0200 BODY 3389 `P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM`
+ *     PKG_SSP0200 BODY 3352 `P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM`   (PACKAGE BODY VALID)
+ *     버튼 메타도 등록·활성이다(SCM_ADM_MNU_BTN_MPG_M, USE_YN='Y'):
+ *       DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM → P_SSP0200_SCM_SSP_DEL_DRAFTING_BY_CONFIRM
+ *       ERP_ERROR_CONFIRM                           → P_SSP0200_SCM_SSP_ERP_ERROR_CONFIRM
+ *     막혀 있는 것은 DB 가 아니라 FE 배선뿐이다. 자매 SSP0003 과 달리 이 화면은 저장 순서가 이미
+ *     AS-IS 와 같아(초안저장 → ERP 송신) **순서 재배치 없이** 보상만 이어 붙이면 된다.
  */
 export const submitErpInterface = async (changeReqNo: string): Promise<ErpIfResult> => {
   try {
@@ -542,5 +558,86 @@ export const submitErpInterface = async (changeReqNo: string): Promise<ErpIfResu
     return { ok: true, eType: str(result?.E_TYPE), eMessage: str(result?.E_MESSAGE) };
   } catch {
     return { ok: false, eType: '', eMessage: '' };
+  }
+};
+
+/** ERP 가 거절한 CONFIRM 한 건. AS-IS `errConfirmList` 항목 `confirmId:msg:reqNo` 에 대응한다. */
+export interface ErpErrorConfirm {
+  confirmId: string;
+  message: string;
+  changeReqNo: string;
+}
+
+/**
+ * AS-IS `ReErrorMsg` 파싱 — cs:4993~5006 그대로다.
+ *   `confirmId:msg^confirmId:msg` (끝 '^' 는 버린다). ':' 앞이 CONFIRM_ID, 뒤가 사유다.
+ *   사유에 ':' 가 더 있을 수 있으므로 첫 ':' 에서만 가른다(AS-IS Split(':')[0]/[1] 과 같은 결과).
+ */
+export const parseErpErrorConfirms = (eMessage: string, changeReqNo: string): ErpErrorConfirm[] => {
+  const body = eMessage.endsWith('^') ? eMessage.slice(0, -1) : eMessage;
+  if (!body) return [];
+  return body
+    .split('^')
+    .map(part => {
+      const at = part.indexOf(':');
+      return at < 0
+        ? { confirmId: part.trim(), message: '', changeReqNo }
+        : { confirmId: part.slice(0, at).trim(), message: part.slice(at + 1).trim(), changeReqNo };
+    })
+    .filter(e => e.confirmId !== '');
+};
+
+/**
+ * 전송 실패 CONFIRM 의 초안 되돌림 — AS-IS cs:5011 `SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM`.
+ *   파라미터·고정값(del_flag 'D' / if_send_flag 'Y' / change_type 'C')은 AS-IS cs:5013~5019 그대로다.
+ */
+export const submitDeleteDraftingByConfirm = async (
+  confirmIds: string[],
+  changeReqNo: string,
+  session: RequestChainSession
+): Promise<boolean> => {
+  if (confirmIds.length === 0 || !changeReqNo) return false;
+  try {
+    const res = await apiClient.post<Record<string, unknown>>(
+      `/${MENU_ID}/${SHEETS.MAIN}/${BTN_DELETE_DRAFTING_BY_CONFIRM}/call-proc`,
+      {
+        confirmId: confirmIds.join('^'),
+        changeRequestNo: changeReqNo,
+        delFlag: DELETE_FLAG,
+        userId: session.userId, // PROC 메타 키는 userId 다(lastUpdatedBy 는 SP 에 안 닿아 NULL → ORA-01407 롤백, 결함 D-1).
+        timeZone: session.timeZone,
+        ifSendFlag: IF_SEND_ON,
+        changeType: ERP_IF_CHANGE_TYPE,
+      }
+    );
+    return !(res.status >= 400 || Number(res.data?.code));
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * ERP 거절 내역 적재 — AS-IS cs:3952 `SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM`.
+ *   AS-IS 는 CONFIRM 별 값을 '^' 로 이어 한 번에 보낸다(cs:3943~3945). p_e_type 은 'E' 고정.
+ */
+export const submitErpErrorConfirm = async (
+  errors: ErpErrorConfirm[],
+  userId: string
+): Promise<boolean> => {
+  if (errors.length === 0) return false;
+  try {
+    const res = await apiClient.post<Record<string, unknown>>(
+      `/${MENU_ID}/${SHEETS.MAIN}/${BTN_ERP_ERROR_CONFIRM}/call-proc`,
+      {
+        changeRequestNo: errors.map(e => e.changeReqNo).join('^'),
+        confirmId: errors.map(e => e.confirmId).join('^'),
+        eType: ERP_ERROR_E_TYPE,
+        eMessage: errors.map(e => e.message).join('^'),
+        userId, // PROC 메타 키는 userId 다(lastUpdatedBy 는 SP 에 안 닿아 NULL → ORA-01407 롤백, 결함 D-1).
+      }
+    );
+    return !(res.status >= 400 || Number(res.data?.code));
+  } catch {
+    return false;
   }
 };

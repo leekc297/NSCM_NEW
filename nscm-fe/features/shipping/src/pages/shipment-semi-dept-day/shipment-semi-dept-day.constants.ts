@@ -158,8 +158,8 @@ export const MAIN_COLUMNS: ColumnMeta[] = [
 //   조회영역 Search 버튼 = LBL00112. 팝업/결과영역 Search 버튼 = LBL00664(위치로 구분).
 export const LBL = {
   DIVISION: 'LBL00001', // "Div"
-  MODEL: 'LBL00669', // "Model" (ITEM_ID 라벨)
-  VALID: 'LBL00639', // "Valid"
+  MODEL: 'LBL00618', // "Model/Nickname" (ITEM_ID 라벨)
+  VALID: 'LBL00007', // "Active"
   SEARCH: 'LBL00112', // 조회영역 상단 Search
   SEARCH_POPUP: 'LBL00664', // 팝업 내부 Search
   ITEM_POPUP_TITLE: 'LBL00343', // "Item Popup"

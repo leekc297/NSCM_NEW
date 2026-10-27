@@ -7,7 +7,7 @@ import {
   type FormatItemEventArgs,
   GroupRow,
 } from '@mescius/wijmo.grid';
-import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
 
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
@@ -46,7 +46,7 @@ const COMBO_PARAMS = { mnuId: `'${MENU_ID}'` };
 interface Props {
   rows: SalesMonitoringRow[];
   gridRef: Ref<FlexGridType<SalesMonitoringRow>>;
-  // F4 Filter — 피처 소유 FlexGridFilter (동적 M_/W_/D_ 컬럼 필터 제외)
+  // F4 Filter — 공용 DataGrid 가 만든 FlexGridFilter 를 받는 ref (동적 M_/W_/D_ 컬럼은 F4 로 켜기 전엔 대상 아님)
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   divisionId?: string;
   bucketType?: BUCKET_TYPE;
@@ -648,19 +648,16 @@ export const SalesMonitoringGrid = ({
     g?.invalidate(true);
   }, [currentWeekInfo, colorYn, gridRef]);
 
-  // ⭐ F4 Filter — 피처 소유 FlexGridFilter
+  // ⭐ F4 Filter — FlexGridFilter 는 공용 DataGrid 가 만든다(아래 JSX 의 gridFilterRef). 여기서는 핸들러만 얹는다.
+  //   금지: 여기서 new FlexGridFilter 를 만들지 말 것. DataGrid 밖에서 만든 필터에는 재조회 시 필터 유지
+  //   (itemsSourceChanged 캡처/복원 · 끊긴 컬럼 재바인딩)가 걸리지 않아, 조회할 때마다 필터가 풀렸다
+  //   (2026-10-27 DM 필터 유지 점검). 필터 대상 [''](F4 로 켠 컬럼만)·Clear 즉시 반영도 DataGrid 기본값이다.
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<SalesMonitoringRow> | null } | null)?.current;
-    if (!g || !gridFilterRef) return;
+    const f = gridFilterRef?.current;
+    if (!g || f?.grid !== g) return;
 
     const onFilterApplied = () => g.invalidate(true);
-
-    let f = gridFilterRef.current;
-    if (!f || f.grid !== g) {
-      f = new FlexGridFilter(g);
-      f.filterColumns = [''];
-      gridFilterRef.current = f;
-    }
     f.filterApplied.addHandler(onFilterApplied);
 
     return () => {
@@ -677,6 +674,8 @@ export const SalesMonitoringGrid = ({
     <DataGrid
       className={styles.grid}
       gridRef={gridRef as never}
+      // 필수: gridFilterRef 를 넘겨 FlexGridFilter 를 DataGrid 가 만들게 한다 — 재조회 시 필터 유지가 여기 걸려 있다.
+      gridFilterRef={gridFilterRef}
       staticColumns={mainStaticColumns}
       dynamicColumns={mainDynamicColumns}
       comboParams={COMBO_PARAMS}

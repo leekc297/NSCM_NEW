@@ -39,7 +39,7 @@ import type { MainRow, SubRow } from './shipment-change-request-plan.types';
 import styles from './ShipmentChangeRequestPlan.module.scss';
 import { useShipmentChangeRequestPlanStore } from './useShipmentChangeRequestPlanStore';
 import { buildMainColumns, buildSubColumns } from './utils/shipmentChangeRequestPlanColumns';
-import { str, type GridRowData } from './utils/shipmentChangeRequestPlanDerive';
+import { str, trackedWriter, type GridRowData } from './utils/shipmentChangeRequestPlanDerive';
 import { isInsertedRow } from './utils/shipmentChangeRequestPlanEditLock';
 import { buildCopiedRow, buildNewRow } from './utils/shipmentChangeRequestPlanInsert';
 import {
@@ -52,7 +52,11 @@ import {
 //   패널은 overflow:hidden 이라 모자라면 **조용히 잘린다** — 내용이 늘면 이 값도 함께 올려야 한다.
 //   2026-10-08: AS-IS `usrLabel2`("Request Info") 섹션 헤더를 이식하면서 그 한 줄을 반영.
 //     헤더 폰트를 16px(가운데 정렬)로 키운 분(lineHeight 1.4 -> 약 22px)까지 포함한 값이다.
-const FORM_PANEL_SIZE = '224px';
+//   2026-10-14: 224 -> 248. Request Complete 버튼 아래쪽이 잘려 보인다는 신고 — 폼+액션바 자연높이
+//     합이 224 를 넘어 마지막 요소(액션바)가 clip 되고 있었다. +24 중 4px 은 액션바 하단 여백
+//     증가분(8->12, RequestActionBar.module.scss)이고 나머지 20px 이 잘림 여유다. 자매 SSP0201 과
+//     같은 값을 유지한다(두 화면 조작감 일치).
+const FORM_PANEL_SIZE = '248px';
 
 // AS-IS GSCM.SSP.Forms.UIL/Plan/SSP0200_ShipmentChangeRequest.cs (정본 6,906행).
 //   상세 매핑·dead 미이식 근거: __asis-mapping__.md / design/04_react-gap.md.
@@ -136,12 +140,10 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
   const mainRows = useMemo<MainRow[]>(() => mainData?.o_rc1 ?? [], [mainData]);
   const subRows = useMemo<SubRow[]>(() => subData?.o_rc1 ?? [], [subData]);
 
-  // 컬럼 가시성 토글·셀콤보는 **조회된 division**(filters) 기준으로 묶는다 — 폼의 sc.divisionId 가 아니다
-  //   (사용자 지시 2026-10-07). div 만 바꾸고 조회하지 않으면 이 값이 안 바뀌어 컬럼 재빌드·셀콤보 재조회가
-  //   없어 그리드가 깜빡이지 않는다. 조회(setFilter) 시점에만 — 그때는 데이터도 다시 그려지므로 — 한 번 갱신된다.
-  //   (AS-IS 는 div 변경 즉시 SetChangeControl 로 토글했으나, 조회 전엔 그리드가 이전 division 데이터를
-  //    보여주므로 컬럼도 그 division 에 맞추는 편이 일관적이다 — 의도적 TO-BE 차이.)
-  const searchedDivisionId = String(filters[SHEETS.MAIN]?.divisionId ?? '');
+  // 컬럼 가시성 토글·셀콤보는 폼 division(sc.divisionId) 기준이다(2026-10-26).
+  //   조회 전 New 행이 division '' 콤보로 그려지던 문제 수정. div 변경 시 그리드를 비우므로 깜빡임 우려 없음.
+  // const searchedDivisionId = String(filters[SHEETS.MAIN]?.divisionId ?? '');
+  const gridDivisionId = sc.divisionId;
 
   // 셀 콤보 주입 dataMap (design 03 §1.3 D-1/D-2) — 상세 근거는 훅 헤더 주석 참조.
   const {
@@ -151,7 +153,7 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
     loadEndCustomer,
     isTransModeLoaded,
     cellCombosLoading,
-  } = useShipmentChangeRequestPlanCellCombos(searchedDivisionId);
+  } = useShipmentChangeRequestPlanCellCombos(gridDivisionId);
 
   // 조회 시 "데이터 나왔다 사라졌다" 방지(사용자 지시 2026-10-07): div 로 재조회하는 대용량 셀콤보가
   //   데이터보다 늦게 도착하면 mainColumns 재빌드로 그리드가 한 번 비워졌다 다시 그려진다. 셀콤보가
@@ -192,12 +194,12 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
   const mainColumns = useMemo(
     () =>
       buildMainColumns(staticColumns[SHEETS.MAIN], {
-        // 가시성 토글(End Customer ↔ Project)도 조회된 division 기준 — div 만 바꿔도 컬럼 안 바뀜(위 주석).
-        divisionId: searchedDivisionId,
+        // 가시성 토글(End Customer ↔ Project)도 폼 division 기준(위 주석).
+        divisionId: gridDivisionId,
         changeType: sc.changeType,
         dataMaps: bakedDataMaps,
       }),
-    [staticColumns, searchedDivisionId, sc.changeType, bakedDataMaps]
+    [staticColumns, gridDivisionId, sc.changeType, bakedDataMaps]
   );
 
   // ChangeType='P' 분기 2단 헤더 라벨은 i18n 경유다(영문 하드코딩 금지).
@@ -301,12 +303,37 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
     return source[Math.max(grid.selection?.row ?? 0, 0)];
   };
 
+  // End Customer 후보 조회 + 1건이면 자동선택(AS-IS setEndCustomer). 팝업·행복사는 셀 편집 종료가 없어 여기서 건다.
+  const applyEndCustomer = useCallback(
+    async (rows: GridRowData[]) => {
+      const first = rows[0];
+      if (!first) return;
+      const divisionId = str(first[COLUMN.DIVISION_ID]);
+      const scmSiteId = str(first[COLUMN.TO_SITE_DESCRIPTION]);
+      const itemId = str(first[COLUMN.ITEM_ID]);
+      if (!divisionId || !scmSiteId || !itemId) return;
+      const candidates = await loadEndCustomer({ divisionId, scmSiteId, itemId });
+      if (candidates?.length !== 1) return;
+      const write = trackedWriter(editTrackerRef.current);
+      rows.forEach(row => write(row, COLUMN.END_CUSTOMER, str(candidates[0].CODE)));
+      mainGridRef.current?.invalidate();
+    },
+    [loadEndCustomer]
+  );
+
   const handleInsert = () => {
     const grid = mainGridRef.current;
     if (!grid || !canEdit) return;
     const base = copySourceRow();
     if (!base) return;
-    GridAction.addRow(grid, buildCopiedRow(base, sc.divisionId) as never, 'above', true);
+    // GridAction.addRow(grid, buildCopiedRow(base, sc.divisionId) as never, 'above', true);
+    const added = GridAction.addRow(
+      grid,
+      buildCopiedRow(base, sc.divisionId) as never,
+      'above',
+      true
+    ) as GridRowData | undefined;
+    if (added) void applyEndCustomer([added]);
   };
 
   /**
@@ -353,7 +380,11 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
     const base = copySourceRow();
     if (!base) return;
     const copied = Array.from({ length: count }, () => buildCopiedRow(base, sc.divisionId));
-    GridAction.addRowSet(grid, copied as never[], 'above', { preserveMergeManager: true });
+    // GridAction.addRowSet(grid, copied as never[], 'above', { preserveMergeManager: true });
+    const added = GridAction.addRowSet(grid, copied as never[], 'above', {
+      preserveMergeManager: true,
+    });
+    if (added) void applyEndCustomer(added as GridRowData[]);
   };
 
   // 팝업 대상 셀 참조 해제 — 셀 팝업을 취소한 뒤 조회조건 돋보기로 열면 결과가 이전 셀에 쓰이는 것을 막는다.
@@ -400,6 +431,8 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
       target.row[target.binding] = value;
       if (nameCol && nameValue !== undefined) target.row[nameCol] = nameValue;
       mainGridRef.current?.invalidate();
+      // Model 은 팝업으로만 들어와 그리드의 ITEM_ID 편집 종료 트리거를 타지 않는다.
+      if (target.binding === ITEM_POPUP_COLUMN) void applyEndCustomer([target.row]);
     }
     popupTargetRef.current = null;
   };

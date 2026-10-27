@@ -75,7 +75,7 @@ export const useSalesPlanValidation = () => {
   // ===== 저장 1차 — 필수 13종 division×measure 분기 (SaveData L2198~2239 — validation.md #60~70/74~76) =====
   //   대상 = 신규(I) 행만 (2026-08-11 사용자 확정). 수정(M) 행은 조회 시점에 이미 빈 필수값을 가질 수
   //   있어 셀 하나만 고쳐도 저장이 막히던 문제 — 필수값 검증은 Insert 경로 한정.
-  //   첫 결손 필드로 MSG00429 {0} + 행 번호 병기.
+  //   첫 결손 필드로 MSG00429 {0} 알림 (AS-IS 동일 — 행 번호 미병기, 2026-10-14).
   const validateSaveRows = (
     rows: SalesPlanRow[],
     divisionId: string,
@@ -111,9 +111,10 @@ export const useSalesPlanValidation = () => {
         const value = field.read ? field.read(r) : str(r[field.col]);
         if (value === '') {
           const label = field.lblKey ? t(field.lblKey, field.fallback) : field.fallback;
+          // AS-IS MSG00429 는 라벨({0})만 치환하고 행 번호를 붙이지 않는다 — 본문만 표시 (2026-10-14).
           void setAlert({
             type: 'alert',
-            content: `${t(MSG.REQUIRED_FIELD, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', label)} (${i + 1})`,
+            content: t(MSG.REQUIRED_FIELD, '_{0} 값은 필수 입력 항목입니다.').replace('{0}', label),
           });
           return { ok: false, msgId: MSG.REQUIRED_FIELD, rowIdx: i, detail: field.col };
         }

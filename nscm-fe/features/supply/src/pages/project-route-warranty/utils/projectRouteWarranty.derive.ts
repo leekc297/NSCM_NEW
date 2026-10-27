@@ -10,8 +10,11 @@
 
 import { safeString } from '@foundation/utils';
 
-/** 하이픈 제거 후 8자리 숫자만. 그 외는 빈 문자열. */
+import { toYmd8Date } from './projectRouteWarranty.date';
+
+/** 하이픈 제거 후 8자리 숫자만. Date(FPDate 편집값)도 'YYYYMMDD' 로. 그 외는 빈 문자열. */
 const toYmd8 = (value: unknown): string => {
+  if (value instanceof Date) return toYmd8Date(value);
   const digits = safeString(value).replace(/\D/g, '');
   return digits.length === 8 ? digits : '';
 };

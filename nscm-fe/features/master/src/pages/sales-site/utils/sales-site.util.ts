@@ -172,6 +172,8 @@ export const hasRepresentative = (
 // ── 하단 탭 중복 키 검사 (AS-IS DMF0004_SalesSite.cs MSG00060 파리티) ──
 //   AS-IS 는 그리드 안 행끼리 키 값을 문자열로 비교해 두 번째부터 MSG00060 으로 막는다.
 //   저장 SP 에는 같은 사이트 안 중복 검사가 없으므로 화면에서 막지 않으면 그대로 저장된다.
+//   안내 코드는 TO-BE MSG00060 「중복된 키가 존재합니다.」를 쓴다. AS-IS 문구(「동일한 {0}이(가)
+//   존재합니다.」, TO-BE MSG01092)로 바꾸지 않는다 — 2026-10-19 업무 확인: 메시지 코드는 TO-BE 기준.
 export const DUPLICATE_KEY_MSG_ID = 'MSG00060';
 export const DUPLICATE_KEY_MSG = '_중복된 키가 존재합니다.';
 
@@ -230,6 +232,37 @@ export const formatDuplicateKeyMessage = (
   keys: readonly string[],
   headerOf: (key: string) => string | null | undefined
 ) => `${base} (${keys.map(key => headerOf(key) || key).join(', ')})`;
+
+/** Sales Customer — Sold-To · Ship-To 선택 즉시 검사. AS-IS shtSubCustomerDataModel_Changed(.cs:2296~2331). */
+export const CUSTOMER_DUPLICATE_KEYS = ['SOLDTO_CODE', 'SHIPTO_CODE'] as const;
+
+/**
+ * 같은 Sold-To · Ship-To 의 사용 중(Active = Y) 다른 행이 있는가.
+ *   AS-IS 는 같은 조합이 두 번째로 나온 뒤 그 행의 Active 가 Y 면 MSG00060 후 값을 비웠다.
+ *   사용 중지 행과 겹치는 것은 막지 않는다. 비교는 AS-IS 처럼 철자 그대로 한다.
+ *   저장 SP(P_DMF0004_SAVE_SALES_SITE_CUSTOMER_DATA)는 사이트 · Sold-To · Ship-To 로 기존 행을 찾아
+ *   UPDATE 하므로, 막지 않으면 두 행이 한 행으로 합쳐지고 뒤 행의 Rep · Active 값이 남는다.
+ *   Active 값은 Rep 과 같은 콤보 'Y'/'N' · 체크박스 boolean 이라 isRepresentative 로 정규화한다.
+ */
+export const hasActiveCustomerDuplicate = (
+  rows: ResponseData<MENU_ID, SHEETS.CUSTOMER, RESPONSE_SET.CUSTOMER>[],
+  row: ResponseData<MENU_ID, SHEETS.CUSTOMER, RESPONSE_SET.CUSTOMER>,
+  soldTo: string,
+  shipTo: string
+) => {
+  const targetSoldTo = soldTo.trim();
+  const targetShipTo = shipTo.trim();
+  if (targetSoldTo === '' || targetShipTo === '') return false;
+  return rows.some(
+    other =>
+      other !== row &&
+      other.CRUD_TYPE !== CRUD_TYPE.DELETE &&
+      isSameSite(other.SCM_SITE_ID, row.SCM_SITE_ID) &&
+      String(other.SOLDTO_CODE ?? '').trim() === targetSoldTo &&
+      String(other.SHIPTO_CODE ?? '').trim() === targetShipTo &&
+      isRepresentative(other.VALID_YN)
+  );
+};
 
 // SCM_SITE_ID 값 자동생성
 export const applySalesSite = <

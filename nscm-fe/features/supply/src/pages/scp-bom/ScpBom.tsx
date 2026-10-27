@@ -24,11 +24,12 @@ import type { ScpBomRow } from './scp-bom.types';
 import { useScpBomStore } from './useScpBomStore';
 import { isRowLocked } from './utils/scp-bom.editLock';
 import { buildSavePayload, callSaveScpBom } from './utils/scp-bom.save';
+import { findInvalidScpYnParents } from './utils/scp-bom.scpYn';
 
 // AS-IS GSCM.SCP.Master.UIL SCP0053_SCPBOM — 단일 그리드 마스터, UPDATE 전용(INSERT/DELETE NO-OP).
 //   설계: .atlas/gscm-design/SCP0053/design/00~03 · convert-flow/{goal,plan}.md. 매핑: __asis-mapping__.md.
 //   NSCM 표준: 그리드 상시 편집(Edit 토글 미이식, asis_to_tobe §11) — 셀별 편집가부는 메타 INPUT_TP_CD(S15/M3),
-//   행 단위 잠금은 SCP_PLAN_YN 비 Y/N(design 03 §3 W6). Division 은 '81' 고정+disabled(R7).
+//   행 단위 잠금은 SCP_PLAN_YN 비 Y/N(design 03 §3 W6). Division 은 권한 콤보 첫 항목 기본선택(2026-10-22, R7 '81' 고정 폐기).
 export const ScpBom = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
   const setToast = useMessageStore.getState().setToast;
@@ -128,6 +129,18 @@ export const ScpBom = ({ tabId, title }: PageProps<MENU_ID>) => {
     const dirty = src.filter(r => r.CRUD_TYPE && !isRowLocked(r));
     if (dirty.length === 0) {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No changes to save.') });
+      return;
+    }
+    // SCP YN 'Y' 는 같은 Plant + Parent Item 에 반드시 1개(0개, 2개 이상 차단).
+    const invalidParents = findInvalidScpYnParents(src);
+    if (invalidParents.length > 0) {
+      void setAlert({
+        type: 'alert',
+        // 메시지 코드 미등록 - 사용자 요청으로 문구 하드코딩.
+        // content: `같은 Parent Item 에 SCP YN Y 는 반드시 1개여야 합니다. PARENT ITEM : ${invalidParents.join(', ')}`,
+        // 위반 3건까지만 표시하고 나머지는 건수로 줄인다.
+        content: `SCP YN Y 는 Plant·Parent 별 1개만 가능합니다. (${invalidParents.slice(0, 3).join(', ')}${invalidParents.length > 3 ? ` 외 ${invalidParents.length - 3}건` : ''})`,
+      });
       return;
     }
     // 필수 컬럼(메타 M) 검증 통과 후 '^' bulk 저장. saveWithValidation 이 M 3종 빈값을 alert·차단.

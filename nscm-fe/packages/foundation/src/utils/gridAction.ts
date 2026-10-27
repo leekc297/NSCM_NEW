@@ -977,7 +977,9 @@ export const GridAction = {
       row: Record<string, string | number | null | undefined>,
       column: { header: string; key: string },
       rowIndex: number
-    ) => string | undefined
+    ) => string | undefined,
+    // textColumns: 빈 입력칸까지 컬럼 전체를 텍스트 서식으로(날짜 자동변환 방지)
+    options?: { textColumns?: boolean }
   ): Promise<void> => {
     const headerFont = new WorkbookFont();
     headerFont.family = 'Spoqa Han Sans Neo';
@@ -1054,10 +1056,15 @@ export const GridAction = {
 
     const sheet = new WorkSheet();
     sheet.name = 'Sheet1';
-    if (columns.some(column => column.width != null)) {
+    // 컬럼 단위 텍스트 서식 — 사용자가 새로 입력하는 칸에도 적용된다.
+    const columnTextStyle = new WorkbookStyle();
+    columnTextStyle.format = '@';
+    // if (columns.some(column => column.width != null)) {
+    if (options?.textColumns || columns.some(column => column.width != null)) {
       columns.forEach(column => {
         const workbookColumn = new WorkbookColumn();
         if (column.width != null) workbookColumn.width = column.width;
+        if (options?.textColumns) workbookColumn.style = columnTextStyle;
         sheet.columns.push(workbookColumn);
       });
     }

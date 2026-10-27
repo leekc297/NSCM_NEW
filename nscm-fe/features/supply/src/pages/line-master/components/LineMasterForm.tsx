@@ -143,8 +143,8 @@ export const LineMasterForm = ({ onSearch }: Props) => {
   // cboValid — 독립 Y/N + 전체(ALL). 정적 옵션(design 02 §4 기본 "전체").
   const validOptions: Option[] = [
     { label: t(LBL.ALL, '_All'), value: 'ALL' },
-    { label: t('LBL00728', '_Y'), value: 'Y' },
-    { label: t('LBL00729', '_N'), value: 'N' },
+    { label: 'Y', value: 'Y' },
+    { label: 'N', value: 'N' },
   ];
 
   const multi = (

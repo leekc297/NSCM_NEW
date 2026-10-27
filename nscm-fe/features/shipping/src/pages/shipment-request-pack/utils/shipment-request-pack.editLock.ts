@@ -2,24 +2,49 @@ import {
   INSERT_EDITABLE_COLUMNS_MAIN,
   REQUEST_DETAIL_EDIT_COLUMNS,
 } from '../shipment-request-pack.constants';
+import type { SearchParamProps } from '../shipment-request-pack.types';
+
+import { parseDynamicColumnTag } from './shipment-request-pack.dynamicColumn';
+import { BUCKET_PREFIX } from './shipment-request-pack.spreadHeader';
+
+const MAIN_EDITABLE_MEASURE = ['SHIP_REQ', 'Ship Req'];
 
 /**
- * spdMain(Pack Biz/Cell Biz) 셀 편집 가능 판정(design 01 R7/R9, `.cs:628-822`/`:2120-2186`).
+ * 확정구간(회색) 판정(design 01 R18, AS-IS cs:718-724 SetBGColor 242,242,242) — 활성 D_ 날짜 컬럼 중
+ * confirmDay(Pack=Plan_InforPacker_SCP NAME / Cell=CONFIRM_DAY, yyyymmdd) 이하(과거/확정) 셀. 전 행 적용.
+ * W_/M_ 는 AS-IS 가 "D_"+confirmDay 컬럼 인덱스로만 회색 처리(일 단위)라 대상 아님.
+ */
+export const isMainGridDateConfirmed = (columnBinding: string, confirmDay?: string): boolean => {
+  if (!confirmDay) return false;
+  const tag = parseDynamicColumnTag(columnBinding);
+  return !!tag && tag.bucket === 'D' && tag.yyyymmdd <= confirmDay;
+};
+
+/**
+ * spdMain(Pack Biz/Cell Biz) 셀 편집 가능 판정(design 01 R7/R9/R18, `.cs:628-822`/`:2120-2186`).
  *
  * - 신규행(CRUD_TYPE='I')은 `INSERT_EDITABLE_COLUMNS_MAIN` 화이트리스트만 unlock(R9).
- *   Measure=="SHIP_REQ" 행의 확정구간 이후 동적 pivot 컬럼 추가 unlock 은 CONFIRM_DAY 기반 판정이
- *   아직 없어(design 01 R7/R18, GAP-08) 이번 회차에는 포함하지 않는다 — 잠금 유지(확인 필요 이월).
- * - 기존행은 Edit 버튼 토글(`isEditMode`) 상태를 그대로 따른다 — Measure=="SHIP_REQ" 행만
- *   확정구간 이후로 좁히는 세분화(R7)는 위와 같은 이유로 이번 회차 미착수, 전체 unlock 으로 남긴다.
+ * - 기존행(R7, DMF0045 shaded=lock 정합): Measure=="SHIP_REQ" 행의 **활성 버킷 동적(D_/W_/M_) 컬럼**만
+ *   편집 가능하고, 그 중 **확정구간(D_ ≤ confirmDay)·정적 컬럼·비활성 버킷·他 measure** 는 잠금.
+ *   confirmDay 미전달(조회 전/초기) 이면 확정구간 체크를 건너뛴다.
  */
 export const isMainGridCellEditable = (params: {
   columnBinding: string;
   crudType?: string;
   isEditMode: boolean;
+  measure?: string;
+  bucketType?: SearchParamProps['bucketType'];
+  confirmDay?: string;
 }): boolean => {
-  const { columnBinding, crudType, isEditMode } = params;
-  if (crudType === 'I') return (INSERT_EDITABLE_COLUMNS_MAIN).includes(columnBinding);
-  return isEditMode;
+  const { columnBinding, crudType, isEditMode, measure, bucketType, confirmDay } = params;
+  if (crudType === 'I') return INSERT_EDITABLE_COLUMNS_MAIN.includes(columnBinding);
+  if (!isEditMode) return false;
+  if (!MAIN_EDITABLE_MEASURE.includes(measure ?? '')) return false; // SHIP_REQ 행만
+  const tag = parseDynamicColumnTag(columnBinding);
+  if (!tag) return false; // 정적 컬럼 잠금
+  if (bucketType && tag.bucket !== BUCKET_PREFIX[bucketType]) return false; // 비활성 버킷 잠금
+  if (isMainGridDateConfirmed(columnBinding, confirmDay)) return false; // 확정구간 잠금
+  return true;
 };
 
 /**

@@ -123,17 +123,32 @@ export const ShipmentPlanSemiGrid = ({
   }, [dynColMetas]);
 
   // W_ binding -> 그 주에 속한 7개 D_ binding 목록(design 03 §3.3 R-DeptDist 분배용) — weekStart 매칭.
+  // const weekToDayBindings = useMemo(() => {
+  //   const map = new Map<string, string[]>();
+  //   const dBindings = dynColMetas.filter(m => m.kind === 'D');
+  //   dynColMetas
+  //     .filter(m => m.kind === 'W')
+  //     .forEach(w => {
+  //       const days = dBindings.filter(d => weekOrMonthStart.get(d.binding) === w.weekStart).map(d => d.binding);
+  //       if (days.length > 0) map.set(w.binding, days);
+  //     });
+  //   return map;
+  // }, [dynColMetas, weekOrMonthStart]);
+  // AS-IS 와 같이 W_ 뒤로 이어지는 D_ 7개를 그 주로 본다(W_/M_ 는 건너뜀, .cs:4524-4555).
+  //   D_ 의 BASIS_START_DATE 가 주 시작일이 아니면 위 매칭이 0건이 돼 분배가 안 됐다.
   const weekToDayBindings = useMemo(() => {
     const map = new Map<string, string[]>();
-    const dBindings = dynColMetas.filter(m => m.kind === 'D');
-    dynColMetas
-      .filter(m => m.kind === 'W')
-      .forEach(w => {
-        const days = dBindings.filter(d => weekOrMonthStart.get(d.binding) === w.weekStart).map(d => d.binding);
-        if (days.length > 0) map.set(w.binding, days);
-      });
+    const ordered = [...dynColMetas].sort((a, b) => a.sort - b.sort);
+    ordered.forEach((w, i) => {
+      if (w.kind !== 'W') return;
+      const days: string[] = [];
+      for (let j = i + 1; j < ordered.length && days.length < 7; j++) {
+        if (ordered[j].kind === 'D') days.push(ordered[j].binding);
+      }
+      if (days.length > 0) map.set(w.binding, days);
+    });
     return map;
-  }, [dynColMetas, weekOrMonthStart]);
+  }, [dynColMetas]);
 
   // W_ binding 오름차순 목록(design 03 §3.1 Weekly 동일주차 반복 방어, R-K §6#7) — calendar SP 가
   //   이미 SORT_ORDER_NO(BASIS_START_DATE 기준) 오름차순으로 내려주므로 dynColMetas 필터만으로 충분.
@@ -141,6 +156,20 @@ export const ShipmentPlanSemiGrid = ({
     () => dynColMetas.filter(m => m.kind === 'W').map(m => m.binding),
     [dynColMetas]
   );
+
+  // SUM 헤더 더블클릭 접기/펼치기용 — W_ 뒤로 다음 W_/M_ 전까지의 D_ (AS-IS SetDblClickColumnShowHide 범위).
+  //   월 경계 주는 월마다 W_ 가 따로 있어 그 달 몫의 일자만 묶인다(weekToDayBindings 의 7일 고정과 다름).
+  const weekOwnDayBindings = useMemo(() => {
+    const map = new Map<string, string[]>();
+    const ordered = [...dynColMetas].sort((a, b) => a.sort - b.sort);
+    ordered.forEach((w, i) => {
+      if (w.kind !== 'W') return;
+      const days: string[] = [];
+      for (let j = i + 1; j < ordered.length && ordered[j].kind === 'D'; j++) days.push(ordered[j].binding);
+      map.set(w.binding, days);
+    });
+    return map;
+  }, [dynColMetas]);
 
   // Bucket x chkSum -> visible 토글(design 03 §2.4) — SCP0009 와 달리 chkAll 예외 없음(§0.2, 죽은 코드).
   const isDynVisible = (kind: 'D' | 'W' | 'M'): boolean => {
@@ -286,13 +315,26 @@ export const ShipmentPlanSemiGrid = ({
     return { fixedDayKeys: dayKeys, fixedWeekKeys: weekKeys };
   }, [fixInfoRows, weekOrMonthStart]);
 
+  // 편집 잠금 판정용 대표일 — D_ 는 자기 날짜, W_ 는 그 칸 뒤 첫 D_ 날짜(AS-IS 는 컬럼 위치로 잠금 구간을 정한다).
+  //   calendar BASIS_START_DATE 가 W_ 에 비어 있으면 binding 일부로 대체돼 잠금 구간 판정이 틀렸다.
+  const editRepDate = useMemo(() => {
+    const map = new Map(weekOrMonthStart);
+    dynColMetas.forEach(m => {
+      if (m.kind === 'D') map.set(m.binding, m.binding.slice(2));
+    });
+    weekToDayBindings.forEach((days, w) => {
+      if (days[0]) map.set(w, days[0].slice(2));
+    });
+    return map;
+  }, [dynColMetas, weekOrMonthStart, weekToDayBindings]);
   const editCtxRef = useRef<MainEditContext>({
     bucketType,
     division,
     planStartYyyymmdd,
     queryToYyyymmdd: toYyyymmdd,
     planEditable,
-    weekOrMonthStart,
+    // weekOrMonthStart,
+    weekOrMonthStart: editRepDate,
     weekBindingsAsc,
   });
   editCtxRef.current = {
@@ -301,7 +343,8 @@ export const ShipmentPlanSemiGrid = ({
     planStartYyyymmdd,
     queryToYyyymmdd: toYyyymmdd,
     planEditable,
-    weekOrMonthStart,
+    // weekOrMonthStart,
+    weekOrMonthStart: editRepDate,
     weekBindingsAsc,
   };
 
@@ -344,12 +387,19 @@ export const ShipmentPlanSemiGrid = ({
       }
       if (kind === 'W') {
         const dayBindings = weekToDayBindings.get(binding);
-        const deptDayVal = pickField(row as Record<string, unknown>, 'DEPT_DAY');
+        const deptDayVal = pickField(row, 'DEPT_DAY');
         const deptDay = typeof deptDayVal === 'string' ? deptDayVal : 'X';
         if (dayBindings) {
           const distributed = distributeWeeklyToDailyBindings(dayBindings, deptDay, clamped);
+          // Object.entries(distributed).forEach(([dBinding, value]) => {
+          //   row[dBinding] = value;
+          // });
+          // 분배된 D_ 도 변경으로 기록해야 저장 대상이 된다(저장은 D_ 셀만 보냄).
+          const tracker = editTrackerRef.current;
           Object.entries(distributed).forEach(([dBinding, value]) => {
+            const before = row[dBinding] as WijmoPrimitive;
             row[dBinding] = value;
+            tracker?.storeChange(row as WijmoRowItem, dBinding, before, value);
           });
         }
       }
@@ -432,6 +482,38 @@ export const ShipmentPlanSemiGrid = ({
   // 헤더 행 높이 고정 — tier 수로 HEADER_TOTAL_HEIGHT 를 나눠 각 헤더 row 에 직접 쓴다(공용 매핑이 명시
   //   height 를 박아 defaultSize 가 무시되므로). 컬럼그룹 재대입마다 되돌아가 updatedLayout 에 재적용.
   //   effect 가 아니라 DataGrid init 콜백으로 처리해 init 순서 레이스(헤더 리셋)를 피한다(SCP0013 동일).
+  // SUM 헤더 더블클릭 접기/펼치기 — AS-IS SpdMain_CellDoubleClick → SetDblClickColumnShowHide.
+  //   월 SUM(M_): 그 달 W_ 토글 + 보이는 D_ 숨김. 주 SUM(W_): 그 주 D_ 토글.
+  //   'SUM' 라벨 칸에서만 동작 — M_ 는 월 라벨(0행) 아래, W_ 는 맨 아래 행(위는 주 라벨 병합).
+  //   Bucket/Sum 변경·재조회로 컬럼이 다시 만들어지면 원래 표시 상태로 돌아간다(AS-IS 동일).
+  const handleHeaderDblClick = useCallback(
+    (ev: MouseEvent) => {
+      const g = gridRef.current;
+      if (!g) return;
+      const ht = g.hitTest(ev);
+      if (ht.cellType !== CellType.ColumnHeader) return;
+      const binding = s(g.columns[ht.col]?.binding);
+      const kind = dynColKindOf(binding);
+      const lastRow = g.columnHeaders.rows.length - 1;
+      if (kind === 'M' && ht.row > 0) {
+        const ym = binding.slice(2, 8);
+        dynColMetas.forEach(m => {
+          if (m.binding.slice(2, 8) !== ym) return;
+          const col = g.getColumn(m.binding);
+          if (!col) return;
+          if (m.kind === 'W') col.visible = !col.visible;
+          else if (m.kind === 'D' && col.visible) col.visible = false;
+        });
+      } else if (kind === 'W' && ht.row === lastRow) {
+        (weekOwnDayBindings.get(binding) ?? []).forEach(d => {
+          const col = g.getColumn(d);
+          if (col) col.visible = !col.visible;
+        });
+      }
+    },
+    [gridRef, dynColMetas, weekOwnDayBindings]
+  );
+
   const handleGridInitialized = useCallback((grid: FlexGridType) => {
     const applyHeaderHeight = () => {
       const hdrRows = grid.columnHeaders?.rows;
@@ -466,6 +548,7 @@ export const ShipmentPlanSemiGrid = ({
         allowMerging={AllowMerging.All}
         initialized={handleGridInitialized}
         gotFocus={onFocus}
+        dblClick={handleHeaderDblClick}
       />
     </>
   );

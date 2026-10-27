@@ -1,6 +1,10 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ModelByDivisionPopup, type ModelSelection } from 'features/master/src/components';
+import {
+  MaterialByDivisionModal,
+  ModelByDivisionPopup,
+  type ModelSelection,
+} from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -61,6 +65,7 @@ export const ShipmentSemiDeptDay = ({ tabId, title }: PageProps<MENU_ID>) => {
   const savingRef = useRef(false);
 
   const sc = useShipmentSemiDeptDayStore(s => s.searchCondition);
+  const setSearchCondition = useShipmentSemiDeptDayStore(s => s.setSearchCondition);
   const filters = useShipmentSemiDeptDayStore(s => s.filters);
   const setFilter = useShipmentSemiDeptDayStore(s => s.setFilter);
   const clearFilters = useShipmentSemiDeptDayStore(s => s.clearFilters);
@@ -74,6 +79,7 @@ export const ShipmentSemiDeptDay = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   const [itemPopup, setItemPopup] = useState<ItemPopupState | null>(null);
+  const [modelPopupOpen, setModelPopupOpen] = useState(false);
 
   const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
@@ -322,7 +328,12 @@ export const ShipmentSemiDeptDay = ({ tabId, title }: PageProps<MENU_ID>) => {
         openSearchArea={openSearchArea}
         toggleOpenSearchArea={setOpenSearchArea}
       />
-      {openSearchArea && <ShipmentSemiDeptDayForm onSearch={handleSearch} />}
+      {openSearchArea && (
+        <ShipmentSemiDeptDayForm
+          onSearch={handleSearch}
+          onModelSearch={() => setModelPopupOpen(true)}
+        />
+      )}
       <SubTitle
         menuId={MENU_ID}
         grid={gridRef}
@@ -369,6 +380,28 @@ export const ShipmentSemiDeptDay = ({ tabId, title }: PageProps<MENU_ID>) => {
         onClose={() => setItemPopup(null)}
         onSelect={handleModelSelected}
         params={itemPopup?.preSearchParams ?? {}}
+      />
+
+      {/* 조회조건 Model 팝업 — Material by Division(MaterialByDivisionModal COM0013, 자매 SCP0013/SSP0003/
+          global-psi 동일 패턴, 사용자 지시 2026-10-22). AS-IS 는 텍스트 전용이나 TO-BE 는 팝업 선택 추가. 단건
+          선택 → ITEM_ID 를 itemId 로(GET SP p_item_id prefix 매칭, 단건 코드=정확 매칭). 위 그리드 신규행
+          ITEM_ID 팝업(ModelByDivisionPopup=SCM0002 ItembyDivision)과는 호출 SP·컬럼이 다른 별개 팝업이다.
+          divisionId 는 팝업이 그대로 미러(읽기전용)하므로 부모 조회조건 값을 변형 없이 넘긴다 — 선택이 있으면
+          콤마 결합(SP 가 P_DIVISION_ID 콤마 split → IN), 비었으면(=부모 ALL) 'ALL' 센티널(SP 가 'ALL' 분기로
+          전체 반환, SSP0003 2026-10-12 신고 수정과 동일). authDivisionIds 로 전개하면 팝업에 전 division 이
+          개별 선택돼 보여 부모 'ALL' 표시와 어긋난다(사용자 신고 2026-10-22). EE 는 모달 내부 mapElectrodeDivision
+          이 처리(표시값은 원본 유지). */}
+      <MaterialByDivisionModal
+        open={modelPopupOpen}
+        modalClose={() => setModelPopupOpen(false)}
+        setSelectedValue={items => setSearchCondition({ itemId: items })}
+        preSearchParams={{
+          divisionId: sc.divisionIds.length ? sc.divisionIds.join(',') : 'ALL',
+          operationGroup: '',
+          scpModuleType: MENU_ID,
+          itemId: sc.itemId,
+        }}
+        multiDivision
       />
     </>
   );

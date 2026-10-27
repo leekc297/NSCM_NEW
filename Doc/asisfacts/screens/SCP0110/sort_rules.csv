@@ -1,0 +1,6 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0110,SQL,SCP0110_GET_GROUP_MASTER,Doc\asisfacts\db\modules\dbo.SCP0110_GET_GROUP_MASTER.sql,32,,"DIVISION_ID,OPERATION_GROUP,GROUP_ID","ORDER BY DIVISION_ID, OPERATION_GROUP, GROUP_ID",0,정적
+SCP0110,SQL,SCP0110_GET_MODEL_LIST,Doc\asisfacts\db\modules\dbo.SCP0110_GET_MODEL_LIST.sql,54,IF (@p_operation_group = 'A'),,"ORDER BY (CASE WHEN ISNULL(a.GROUP_ID,'') = '' THEN 1 ELSE 0 END), a.GROUP_ID, a.DIVISION_ID, a.PROJECT_CODE, a.ITEM_ID",0,동적 SQL · 키 해석 실패(사람 확인)
+SCP0110,SQL,SCP0110_SAVE_GROUP_MASTER,Doc\asisfacts\db\modules\dbo.SCP0110_SAVE_GROUP_MASTER.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0110,SQL,SCP0110_SAVE_MODEL_LIST,Doc\asisfacts\db\modules\dbo.SCP0110_SAVE_MODEL_LIST.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0110,CODE,,06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0110_GroupModelMapping\SCP0110_GroupModelMapping.cs,184,,CODE,"tmpDivision.DefaultView.Sort = ""CODE Asc"";",0,화면 코드 정렬

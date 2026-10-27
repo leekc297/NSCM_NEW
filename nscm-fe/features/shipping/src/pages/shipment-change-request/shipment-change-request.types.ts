@@ -25,7 +25,10 @@ export interface RequestInfo {
   requestNo: string; // hidden 내부 상태(R5) — 화면 비노출
   title: string; // Title* (필수)
   requestor: string; // Requestor (세션 사용자, 읽기전용)
-  requestDeptName: string; // Dept Name (읽기전용)
+  requestDeptName: string; // Dept Name (읽기전용) — store.fetchRequestorDept() 가 채운다
+  // 요청부서 ID — 저장 시 `P_USER_DEPT_ID`(DRAFTING) / `P_REQUEST_DEPT_ID`(COMPLETE) 로 나간다.
+  //   금지: 서브 조회 o_rc2(모델 담당자)로 채우기 — 남의 부서가 요청부서로 저장된다.
+  requestDeptId: string;
   approval: string; // Approval* 승인자명 (btnApprovalUser 팝업)
   approvalId: string; // 승인자 ID(내부)
   appDeptName: string; // 승인부서명 (AS-IS txtAppDeptName <- 팝업 반환 Dept_Name, cs:2764)

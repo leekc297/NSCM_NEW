@@ -47,12 +47,16 @@ const RESTORE_ARRAY_KEYS = new Set<keyof SearchParamProps>([
   'lineIds',
 ]);
 
-// dCalendar 기본기간 — 02_search-combo §4 PERIOD_* BIZ 프리셋. 데이터량·성능 확정 전 기본안으로
-//   당월 1일 ~ 익월 말일(근무 캘린더는 단기 범위) — dayjs 로컬 날짜(toISOString UTC 금지).
-//   PERIOD_* SP 연동은 확인필요 이월(04_react-gap) — 우선 클라 기본값으로 개통.
+// dCalendar 기본기간 — AS-IS DateUtil.GetDayRange → SP SCM0001_GET_SCP_MONTH_PERIOD(from_date=공란,
+//   offset_month=12) 1:1. 반환 규칙(DB 실측 2026-10-15, 예 오늘 20261015 → 20261015:20271010):
+//     start = 오늘, end = 오늘+12개월을 그 주 일요일(주 시작)로 week-align.
+//   division/bucket 무관 — 기본 호출(from_date 공란)은 ELSE 분기라 SCM_SYS_CALENDAR_M 달력만 쓴다.
+//   dayjs 로컬 날짜(toISOString UTC 금지). day()=0(일)~6(토) 로 week 시작 일요일 정렬(locale 무관).
+//   주의: AS-IS 는 서버 timezone·달력테이블 기준이라 timezone/달력 공백 시 수일 오차 가능(클라 근사).
+const periodEndBase = dayjs().add(12, 'month');
 const initPeriod = {
-  start: dayjs().startOf('month').format('YYYYMMDD'),
-  end: dayjs().add(1, 'month').endOf('month').format('YYYYMMDD'),
+  start: dayjs().format('YYYYMMDD'),
+  end: periodEndBase.subtract(periodEndBase.day(), 'day').format('YYYYMMDD'),
 };
 
 const initWorkingTimeState: WorkingTimeState = {
@@ -60,17 +64,16 @@ const initWorkingTimeState: WorkingTimeState = {
   conditionsRestored: false,
   isOpenSearchArea: true,
   searchParams: {
-    // 마운트 시 첫 권한 division 자동선택 — Form 이 옵션 로드 후 교정(session.div 비어있을 수 있음).
-    divisionId: useSessionStore.getState().session.div ?? '',
+    // Division 기본값은 빈 값 — Form 이 옵션 로드 후 권한목록 첫 항목으로 교정한다(WorkingTimeForm effect).
+    //   session.div('40' 등)를 기본으로 쓰지 않는다. AS-IS cboDivision 은 세션값이 아니라 권한목록 첫 항목을
+    //   기본선택하기 때문(사용자 지시 2026-10-15, group-code-management/global-psi-report 선례 1:1).
+    divisionId: '',
     plantSiteIds: [],
     buildingIds: [],
     operationIds: [],
     lineIds: [],
-    // cboDayWeek 기본 SelectDay — btnInput 값입력 전 미선택 상태(02 §2-b·§4).
-    dayWeekCode: 'SelectDay',
     startYyyymmdd: initPeriod.start,
     endYyyymmdd: initPeriod.end,
-    inputValue: '',
   },
   filters: {},
   staticColumn: [],
@@ -96,7 +99,7 @@ export const useWorkingTimeStore = createPersistedStoreWithTab<
     // Division 변경(싱글 콤보) = TO-BE 공통 요건: Division·기간(날짜)을 제외한 검색조건을 전부 초기화하고
     //   그리드도 초기화(filters clear)한다(사용자 지시 2026-10-02 — TO-BE 공통 요건이 AS-IS 핸들러보다 우선,
     //   정본 SCP0025 setShipmentPlanFix setDivision 1:1). 기간(start/end yyyymmdd)은 유지한다.
-    //   초기화 대상: plantSite/building/operation/line cascade + dayWeekCode(→SelectDay) + inputValue.
+    //   초기화 대상: plantSite/building/operation/line cascade(Day of week·Input Value 는 '입력' 팝업 로컬).
     //   편집중(dirty) 확인 가드(MSG00704)는 Form 의 onChange 가 confirmIfDirtyKey 로 처리한다(commit 51d4e9fa 패턴).
     //   그리드측 EditTracker clearChanges·hasSearched 되돌림은 store 가 만질 수 없어 부모 resetGrid 가 보완한다.
     setDivision: divisionId =>

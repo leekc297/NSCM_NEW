@@ -33,7 +33,9 @@ import {
   GRID_EDIT_COMBO,
   MENU_ID,
   MSG,
+  NON_GROUPING_BINDINGS,
   PRICE_MEASURES,
+  REFERENCE_ONLY_BINDINGS,
   SHEETS,
 } from '../forecast-price.constants';
 import type { ForecastPriceRow, SpreadTitleRow } from '../forecast-price.types';
@@ -89,8 +91,54 @@ class FcstHeaderMergeManager extends CustomMergeManager<ForecastPriceRow> {
     return panel.cellType === CellType.Cell;
   }
 
+  // ⭐ [2026-10-27 사용자 요청] 참고값 컬럼(LAST_UPDATED_BY · LAST_UPDATE_DATE)은 셀 병합에서 뺀다.
+  //   ① 자기 셀은 병합하지 않는다.
+  //   ② 공용 머지키는 좌측 전 컬럼 값 누적(`_getMergeKey`, private)이라, 이 컬럼이 왼쪽에 있으면 오른쪽
+  //      컬럼(SENDER_NAME · CELL_PROD_SITE_ID · CURRENCY · VERSION_NO …)의 병합이 수정일·수정자 차이로 끊긴다.
+  //      ⇒ 왼쪽에 참고값 컬럼이 있을 때만 이 화면에서 범위를 계산한다 — 키에서 참고값 컬럼만 빼고
+  //        나머지 판정(allowMerging · 신규행 제외 · 화면 범위)은 공용 `_getCellMergedRange` 와 같게 둔다.
+  //        빈 셀 병합 허용은 이 화면 규칙(allowEmptyCellMerge = 전 컬럼 허용) 그대로라 빈 셀 가드는 두지 않는다.
+  //   참고값 컬럼이 왼쪽에 없으면 공용 동작 그대로(회귀 0).
+  private getCellRangeWithoutReference(panel: GridPanel, r: number, c: number): CellRange | null {
+    const bindingAt = (i: number): string => panel.columns[i]?.binding ?? '';
+    if (REFERENCE_ONLY_BINDINGS.has(bindingAt(c))) return null;
+    let hasReferenceLeft = false;
+    for (let i = 0; i < c; i++) if (REFERENCE_ONLY_BINDINGS.has(bindingAt(i))) hasReferenceLeft = true;
+    if (!hasReferenceLeft) return super.getMergedRange(panel, r, c);
+
+    if (!panel.columns[c]?.allowMerging) return null;
+    if (![AllowMerging.All, AllowMerging.Cells].includes(panel.grid.allowMerging)) return null;
+    const items = panel.grid.collectionView.items as ForecastPriceRow[];
+    if (isInsertRow(items[r])) return null;
+
+    const keyOf = (row: number): string => {
+      const parts: string[] = [];
+      for (let i = 0; i <= c; i++) {
+        if (!REFERENCE_ONLY_BINDINGS.has(bindingAt(i))) parts.push(String(panel.getCellData(row, i, false)));
+      }
+      return parts.join('|');
+    };
+
+    // 화면 범위 · 첫 행 보정 = 공용 _getCellMergedRange 와 동일
+    let minRow = panel.viewRange.row;
+    const maxRow = panel.viewRange.row2;
+    const staticHeight = panel.grid.rows.defaultSize;
+    const checkCount = minRow * staticHeight + panel.grid.scrollPosition.y + staticHeight;
+    if (1 < checkCount && checkCount <= 15 && ((minRow === 0 && checkCount <= 12) || minRow > 0)) minRow = minRow + 1;
+
+    const key = keyOf(r);
+    const rng = new CellRange(r, c);
+    while (rng.row > minRow && rng.row > 0 && keyOf(rng.row - 1) === key && !isInsertRow(items[rng.row - 1])) rng.row--;
+    while (rng.row2 < maxRow && keyOf(rng.row2 + 1) === key && !isInsertRow(items[rng.row2 + 1])) rng.row2++;
+    return rng.isSingleCell ? null : rng;
+  }
+
   getMergedRange(panel: GridPanel, r: number, c: number): CellRange | null {
-    // TopLeft / Cell = 기존 동작 유지 (회귀 0)
+    // Cell = 참고값 컬럼 제외 병합 (그 외 공용 동작) / TopLeft = 기존 동작 유지 (회귀 0)
+    if (panel.cellType === CellType.Cell) {
+      if (r < 0 || c < 0 || r >= panel.rows.length || c >= panel.columns.length) return null;
+      return this.getCellRangeWithoutReference(panel, r, c);
+    }
     if (panel.cellType !== CellType.ColumnHeader) return super.getMergedRange(panel, r, c);
 
     const keys = this.getKeys();
@@ -254,6 +302,14 @@ export const ForecastPriceGrid = ({
 
   const searchParams = useForecastPriceStore(state => state.searchParams);
   const staticColumns = useForecastPriceStore(state => state.staticColumns);
+  // DataGrid 에 넘기는 정적 컬럼 — 수정자·수정일(NON_GROUPING_BINDINGS)만 셀 병합을 끈다.
+  //   공용 컬럼 변환은 정적 컬럼 병합을 기본 허용(allowMerging ?? true)이라 컬럼 단위로 꺼야 한다.
+  //   필수: useMemo — DataGrid 는 staticColumns 참조가 바뀌면 컬럼을 다시 깐다(렌더마다 새 배열 금지).
+  const gridStaticColumns = useMemo(
+    () =>
+      staticColumns.map(c => (NON_GROUPING_BINDINGS.has(c.colNm) ? { ...c, allowMerging: false } : c)),
+    [staticColumns]
+  );
   const measureAuth = useForecastPriceStore(state => state.measureAuth);
   const measureAuthRef = useRef(measureAuth);
   measureAuthRef.current = measureAuth;
@@ -606,7 +662,7 @@ export const ForecastPriceGrid = ({
       .getCombo({
         comboId: 'FcstPriceEditMeasure',
         divisionId: q(div),
-        scmSiteId: `'${site.trim() !== '' ? site.replace(/'/g, "''") : ' '}'`,
+        scmSiteId: `'${site.trim() !== '' ? site.replace(/'/g, '\'\'') : ' '}'`,
         bucketType: q(bucketTypeParamRef.current),
       })
       .then(rows => {
@@ -2044,8 +2100,8 @@ export const ForecastPriceGrid = ({
       gridFilterRef={gridFilterRef}
       itemsSource={data}
       // 열고정은 공용 DataGrid 가 컬럼 메타의 fixed(=Y)를 읽어 산출한다(마지막 fixed 컬럼까지 고정).
-      //   이 화면은 MEASURE 가 fixed=Y 라 Div~Measure 가 고정된다. staticColumns 를 그대로 넘긴다.
-      staticColumns={staticColumns}
+      //   이 화면은 MEASURE 가 fixed=Y 라 Div~Measure 가 고정된다. 수정자·수정일 병합만 끈 사본을 넘긴다.
+      staticColumns={gridStaticColumns}
       dynamicColumns={dynamicColumns}
       // ⭐ 메타 셀 콤보의 @토큰 해소 (정본 mkt-fcst MktFcstGrid — 2026-07-20 measure 코드 표시 사고 대응).
       //   `Measure` CMBO 는 `WHERE A.PROGRAM_ID = @mnuId` 라 미전달 시 '' 치환 → SHEET_MEASURE 0행 →

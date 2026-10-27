@@ -3,6 +3,8 @@ import type { Menu } from './menu';
 export interface UserSession {
   groupId: string;
   langCd: string;
+  /** 사용자 타임존 코드(SCM_ADM_USER_M.TMZ_CD). 헤더 설정 팝업에서 변경. 콤보 'TimeZone'의 CODE. */
+  tmzCd: string;
   userId: string;
   userEngNm: string;
   userNm: string;

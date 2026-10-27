@@ -41,45 +41,37 @@ export const TeamModal = ({
   const staticColumns = useTeamModalStore(state => state.staticColumns);
   const fetchStaticColumns = useTeamModalStore(state => state.fetchStaticColumns);
 
-  // Team ID/Name 을 하나의 'Team' 검색으로 통합했다. 서버(COM0009)에는 빈 파라미터로 전체 팀
-  //   목록을 1회 받아오고(teamId/teamName 은 서버에서 AND 라 단일값 OR 검색이 불가), ID/이름
-  //   매칭은 화면에서 OR 필터한다(MessageModal 과 동일한 클라이언트 필터 방식).
+  // 단일 'Team' 검색창 — 검색어를 서버(COM0009)로 보내 Search·팝업 열림마다 DB 재조회한다(화면 필터 없음).
+  //   단일 박스라 같은 검색어를 p_team_id/p_team_name 두 파라미터에 함께 싣는다. SP
+  //   P_COM0009_GET_TEAM_POPUP 의 ①·② 분기가 p_team_id OR p_team_name(DEPT_ID 또는 이름)로 매칭하도록
+  //   변경되어 있어야 한다(DB 담당자 요청건).
   const [teamInput, setTeamInput] = useState<string>(teamId || teamName); // 입력 중인 값
-  const [appliedTerm, setAppliedTerm] = useState<string>(teamId || teamName); // 실제 적용된 필터어
+  const [appliedTerm, setAppliedTerm] = useState<string>(teamId || teamName); // 실제 적용된 검색어
 
-  // teamId/teamName 은 화면에서 OR 필터하므로 서버엔 빈 값으로 보내고, divisionId 만 SP 조회조건이다.
-  //   filters 는 useTabProcQuery 의 query key 라 divisionId 가 바뀌면 재조회된다 — 참조 고정용 useMemo.
+  // filters 는 useTabProcQuery 의 query key 라 참조가 바뀌면(검색어·division) 재조회된다 — 참조 고정용 useMemo.
   const filters = useMemo(
-    () => ({ teamId: '', teamName: '', divisionId }),
-    [divisionId]
+    () => ({ teamId: appliedTerm, teamName: appliedTerm, divisionId }),
+    [appliedTerm, divisionId]
   );
 
   const {
     data: teamData,
     isLoading,
     isFetching,
+    refetch,
   } = useTabProcQuery<MODAL_TEAM>({
     menuId: MODAL_TEAM,
     sheetName: MODAL_SHEET_TEAM,
     tabId: 'TeamModal',
     filters,
-    enabled: true,
+    // 열려 있을 때만 조회(팝업 열림마다 DB 호출).
+    enabled: open,
   });
   const loading = isLoading || isFetching;
 
-  // 단일 'Team' 검색 — 서버가 준 전체 목록에서 TEAM_ID 또는 TEAM_NAME_KO(그리드 표시값)에
-  //   검색어가 포함되면 매칭한다(대소문자 무시). 서버 결과셋에 이름은 KO 만 내려온다.
+  // 서버가 이미 검색어로 좁힌 결과를 그대로 쓴다.
   //   useMemo — 매 렌더 새 배열이면 그리드가 re-bind 되어 스크롤·선택이 초기화된다.
-  const itemsSource = useMemo(() => {
-    const rows = teamData?.o_rc1 ?? [];
-    const term = appliedTerm.trim().toLowerCase();
-    if (!term) return rows;
-    return rows.filter(
-      row =>
-        (row.TEAM_ID ?? '').toLowerCase().includes(term) ||
-        (row.TEAM_NAME_KO ?? '').toLowerCase().includes(term)
-    );
-  }, [teamData, appliedTerm]);
+  const itemsSource = useMemo(() => teamData?.o_rc1 ?? [], [teamData]);
 
   const handleSearch = () => {
     setAppliedTerm(teamInput.trim());
@@ -115,7 +107,13 @@ export const TeamModal = ({
     if (!open) return;
     const seed = teamId || teamName;
     setTeamInput(seed);
-    setAppliedTerm(seed);
+    if (appliedTerm === seed) {
+      // seed 가 직전 조건과 같으면 filters 참조가 안 바뀌어 자동 재조회가 안 되므로 강제한다
+      //   — "팝업 열 때마다 DB 호출" 요구 충족. 조건이 바뀌면 setAppliedTerm 이 재조회를 일으킨다.
+      void refetch();
+    } else {
+      setAppliedTerm(seed);
+    }
     if (!initialized) void fetchStaticColumns();
   }, [open]);
 

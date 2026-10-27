@@ -1,0 +1,618 @@
+[
+ {
+  "screen": "SCP0099",
+  "title": "Business Plan LongTerm",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_Business_Plan_LongTerm.cs:1222",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_CreatePlanPopup.cs:216",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_ExcelUploadPopup.cs:1156",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_ExcelUploadPopup.designer.cs:289",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_PlanCopyPopup.cs:278",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_PlanInfoPopup.cs:428"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_Business_Plan_LongTerm.Designer.cs:1073",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_CreatePlanPopup.Designer.cs:419",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_PlanCopyPopup.Designer.cs:503",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0099_Business_Plan_LongTerm/SCP0099_PlanInfoPopup.Designer.cs:379"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN",
+    "member": "setCboPlan",
+    "line": "284",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_PROD_EDIT",
+    "member": "SaveData",
+    "line": "639",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_PROD",
+    "member": "SaveData",
+    "line": "668",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_PROD",
+    "member": "SaveData",
+    "line": "668",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_PROD_DEL",
+    "member": "SaveData",
+    "line": "693",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_RTF_EDIT",
+    "member": "SaveData",
+    "line": "815",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_RTF",
+    "member": "SaveData",
+    "line": "844",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_RTF",
+    "member": "SaveData",
+    "line": "844",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_RTF_DEL",
+    "member": "SaveData",
+    "line": "869",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN_DETAIL",
+    "member": "FindData_Main",
+    "line": "990",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_LONGTERM_PLAN_RELEASE",
+    "member": "btnRelease_Click",
+    "line": "1129",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN",
+    "member": "cboPlan_SelectedIndexChanged",
+    "line": "1182",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_VERSION_INFO",
+    "member": "InitControls",
+    "line": "107",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_CreatePlanPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_LONGTERM_PLAN",
+    "member": "SaveData",
+    "line": "160",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_CreatePlanPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_PROD",
+    "member": "SaveProd",
+    "line": "1034",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_ExcelUploadPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_PROD",
+    "member": "SaveProd",
+    "line": "1034",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_ExcelUploadPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_RTF",
+    "member": "SaveRTF",
+    "line": "1131",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_ExcelUploadPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_PLAN_RTF",
+    "member": "SaveRTF",
+    "line": "1131",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_ExcelUploadPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN",
+    "member": "setCboPlan",
+    "line": "89",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanCopyPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN_DATE",
+    "member": "setPlanDate",
+    "line": "115",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanCopyPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_VERSION_INFO",
+    "member": "InitControls",
+    "line": "162",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanCopyPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_LONGTERM_PLAN_COPY",
+    "member": "btnCopy_Click",
+    "line": "244",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanCopyPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN",
+    "member": "FindData",
+    "line": "171",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_DEL_LONGTERM_PLAN",
+    "member": "DelPlan",
+    "line": "224",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_DEL_LONGTERM_PLAN",
+    "member": "OKButtonClick",
+    "line": "300",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_LONGTERM_PLAN_RELEASE",
+    "member": "ReleasePlan",
+    "line": "383",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN",
+    "member": "setCboPlan",
+    "line": "284",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN_DETAIL",
+    "member": "FindData_Main",
+    "line": "990",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_LONGTERM_PLAN_RELEASE",
+    "member": "btnRelease_Click",
+    "line": "1129",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN",
+    "member": "cboPlan_SelectedIndexChanged",
+    "line": "1182",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_Business_Plan_LongTerm.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_VERSION_INFO",
+    "member": "InitControls",
+    "line": "107",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_CreatePlanPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_LONGTERM_PLAN",
+    "member": "SaveData",
+    "line": "160",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_CreatePlanPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN",
+    "member": "setCboPlan",
+    "line": "89",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanCopyPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN_DATE",
+    "member": "setPlanDate",
+    "line": "115",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanCopyPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_VERSION_INFO",
+    "member": "InitControls",
+    "line": "162",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanCopyPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_LONGTERM_PLAN_COPY",
+    "member": "btnCopy_Click",
+    "line": "244",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanCopyPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_GET_LONGTERM_PLAN",
+    "member": "FindData",
+    "line": "171",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_DEL_LONGTERM_PLAN",
+    "member": "DelPlan",
+    "line": "224",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_DEL_LONGTERM_PLAN",
+    "member": "OKButtonClick",
+    "line": "300",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0099_SAVE_LONGTERM_PLAN_RELEASE",
+    "member": "ReleasePlan",
+    "line": "383",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0099_Business_Plan_LongTerm\\SCP0099_PlanInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0099_DEL_LONGTERM_PLAN",
+   "SCP0099_GET_LONGTERM_PLAN",
+   "SCP0099_GET_LONGTERM_PLAN_DATE",
+   "SCP0099_GET_LONGTERM_PLAN_DETAIL",
+   "SCP0099_GET_VERSION_INFO",
+   "SCP0099_SAVE_LONGTERM_PLAN",
+   "SCP0099_SAVE_LONGTERM_PLAN_COPY",
+   "SCP0099_SAVE_LONGTERM_PLAN_RELEASE",
+   "SCP0099_SAVE_PLAN_PROD",
+   "SCP0099_SAVE_PLAN_PROD_DEL",
+   "SCP0099_SAVE_PLAN_PROD_EDIT",
+   "SCP0099_SAVE_PLAN_RTF",
+   "SCP0099_SAVE_PLAN_RTF_DEL",
+   "SCP0099_SAVE_PLAN_RTF_EDIT"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0099_DEL_LONGTERM_PLAN",
+    "sp": "SCP0099_DEL_LONGTERM_PLAN",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 F 와 오류번호/메시지 반환",
+    "message": "ERROR_MESSAGE() 원문",
+    "on_fail": "INSERT scm_sys_log_batch 'ERROR'; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0099_GET_LONGTERM_PLAN_DATE",
+    "sp": "SCP0099_GET_LONGTERM_PLAN_DATE",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "계획 시작일 콤보에서 FP 대상 Plan 이 없는 주차를 (No Plan) 으로 표시",
+    "message": " (No Plan)",
+    "on_fail": "FP 대상이 아닌(또는 인터페이스 미등록) 주차는 콤보 표시명 뒤에 ' (No Plan)' 표기"
+   },
+   {
+    "entry_sp": "SCP0099_SAVE_LONGTERM_PLAN",
+    "sp": "SCP0099_SAVE_LONGTERM_PLAN",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 F 와 오류번호/메시지 반환",
+    "message": "ERROR_MESSAGE() 원문",
+    "on_fail": "INSERT scm_sys_log_batch 'ERROR'; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0099_SAVE_LONGTERM_PLAN_COPY",
+    "sp": "SCP0099_SAVE_LONGTERM_PLAN_COPY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "대상 중장기 계획(유효)의 기간 또는 엔진 Plan 이 없으면 복사 중단",
+    "message": "check parameters",
+    "on_fail": "SELECT 'F' AS result_code, 0 AS result_cnt, 'check parameters' AS result_message; RETURN 9;"
+   },
+   {
+    "entry_sp": "SCP0099_SAVE_LONGTERM_PLAN_COPY",
+    "sp": "SCP0099_SAVE_LONGTERM_PLAN_COPY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 후 F 와 오류 메시지 반환",
+    "message": "CAST(ERROR_MESSAGE() AS NVARCHAR(1000))",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; SELECT 'F' AS result_code, 0 AS result_cnt, @v_log_message AS result_message; EXEC PR_SCP_SYS_LOG_BATCH 'ERROR'"
+   },
+   {
+    "entry_sp": "SCP0099_SAVE_LONGTERM_PLAN_RELEASE",
+    "sp": "SCP0099_SAVE_LONGTERM_PLAN_RELEASE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 F 와 오류번호/메시지 반환",
+    "message": "ERROR_MESSAGE() 원문",
+    "on_fail": "INSERT scm_sys_log_batch 'ERROR'; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0099_SAVE_PLAN_PROD",
+    "sp": "SCP0099_SAVE_PLAN_PROD",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 F 와 오류번호/메시지 반환",
+    "message": "ERROR_MESSAGE() 원문",
+    "on_fail": "INSERT scm_sys_log_batch 'ERROR'; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0099_SAVE_PLAN_PROD_DEL",
+    "sp": "SCP0099_SAVE_PLAN_PROD_DEL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 F 와 오류번호/메시지 반환",
+    "message": "ERROR_MESSAGE() 원문",
+    "on_fail": "INSERT scm_sys_log_batch 'ERROR'; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0099_SAVE_PLAN_PROD_EDIT",
+    "sp": "SCP0099_SAVE_PLAN_PROD_EDIT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 F 와 오류번호/메시지 반환",
+    "message": "ERROR_MESSAGE() 원문",
+    "on_fail": "INSERT scm_sys_log_batch 'ERROR'; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0099_SAVE_PLAN_RTF",
+    "sp": "SCP0099_SAVE_PLAN_RTF",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 F 와 오류번호/메시지 반환",
+    "message": "ERROR_MESSAGE() 원문",
+    "on_fail": "INSERT scm_sys_log_batch 'ERROR'; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0099_SAVE_PLAN_RTF_DEL",
+    "sp": "SCP0099_SAVE_PLAN_RTF_DEL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 F 와 오류번호/메시지 반환",
+    "message": "ERROR_MESSAGE() 원문",
+    "on_fail": "INSERT scm_sys_log_batch 'ERROR'; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0099_SAVE_PLAN_RTF_EDIT",
+    "sp": "SCP0099_SAVE_PLAN_RTF_EDIT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 F 와 오류번호/메시지 반환",
+    "message": "ERROR_MESSAGE() 원문",
+    "on_fail": "INSERT scm_sys_log_batch 'ERROR'; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0099_SAVE_LONGTERM_PLAN_COPY",
+    "sp": "PR_SCP_SYS_LOG_BATCH",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백하고 오류 내용을 별도 트랜잭션으로 로그 테이블에 다시 기록",
+    "message": "ERROR_MESSAGE() (로그 테이블 기록)",
+    "on_fail": "ROLLBACK TRANSACTION PR_SCP_SYS_LOG_BATCH; BEGIN TRANSACTION PR_SCP_SYS_LOG_BATCH2; INSERT INTO scm_sys_log_batch VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_M"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0100",
+  "title": "Global PSI New",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0100_Global_PSI_Report/SCP0100_Global_PSI_Report.cs:2056",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0100_Global_PSI_Report/SCP0100_Global_PSI_Report.designer.cs:1682"
+  ],
+  "designer_files": [],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/global-psi-report"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0100_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1326",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0100_Global_PSI_Report\\SCP0100_Global_PSI_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0100_GET_SITE",
+    "member": "GetSiteList",
+    "line": "1342",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0100_Global_PSI_Report\\SCP0100_Global_PSI_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0100_GET_PLAN_DATE",
+    "member": "GetPlanDate",
+    "line": "1365",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0100_Global_PSI_Report\\SCP0100_Global_PSI_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0100_GET_GLOBAL_PSI_REPORT",
+    "member": "FindDataMain",
+    "line": "1239",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0100_Global_PSI_Report\\SCP0100_Global_PSI_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0100_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1326",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0100_Global_PSI_Report\\SCP0100_Global_PSI_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0100_GET_SITE",
+    "member": "GetSiteList",
+    "line": "1342",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0100_Global_PSI_Report\\SCP0100_Global_PSI_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0100_GET_PLAN_DATE",
+    "member": "GetPlanDate",
+    "line": "1365",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0100_Global_PSI_Report\\SCP0100_Global_PSI_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0100_GET_GLOBAL_PSI_REPORT",
+   "SCP0100_GET_GLOBAL_PSI_REPORT_WW_DATAONLY",
+   "SCP0100_GET_PLAN_DATE",
+   "SCP0100_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0100_GET_SITE"
+  ],
+  "db_validation_brief": []
+ }
+]

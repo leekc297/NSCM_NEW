@@ -2,8 +2,8 @@
 //   설계 근거: .atlas/gscm-design/SCP0097/design/00_checklist.md ~ 03_grid-columns.md · convert-flow/{goal,plan}.md
 //   - GET  SP : PKG_SCP0097.P_SCP0097_GET_SCP_BOM_ELEC  (IN 4, 커서 O_RC1 13필드) — 배포 VALID
 //   - SAVE SP : PKG_SCP0097.P_SCP0097_SAVE_SCP_BOM_ELEC (IN 8, '^' bulk 파싱, 'S'/'F' 상태커서) — 배포 VALID
-//   - Division 은 선택 가능(자매 SCP0053 과 달리 disabled 아님). 기본값 '81'(Automotive Battery) 존재 시
-//     선택, 미존재 시 마지막 항목(design 01 R6b — AS-IS SelectCombo 등가). Plant Site/Alter BOM/모달 없음.
+//   - Division 은 선택 가능 + 권한 콤보 배열 첫 항목 기본선택(사용자 지시 2026-10-22 — AS-IS R6b '81'/마지막항목
+//     규칙 폐기, 자매 SCP0053 과 통일). Plant Site/Alter BOM/모달 없음.
 //   - 편집 2컬럼(SCP_YN/STOCK_SUM, INPUT_TP_CD='M') 외 잠금. SCP_YN 이 'Y'/'N' 아닌 행은 행 전체 편집
 //     차단 + Gray(design 03 §3 W7/W8). INSERT/DELETE 는 노출 + NO-OP(design 01 R4, base 빈 본문).
 export const MENU_ID = 'SCP0097' as const;
@@ -31,10 +31,6 @@ export const ADMIN_SHEET_NAME: Record<SHEETS, string> = {
 export const COMBO = {
   DIVISION: 'MyDivision',
 } as const;
-
-// Division 기본값 — AS-IS OnShown SelectCombo(cboDivision,"CODE","81")(design 01 R6b, cs:513~519).
-//   '81' = Automotive Battery(ora 실측). 후보에 '81' 존재 시 선택, 미존재 시 마지막 항목(자매와 달리 선택 가능).
-export const DEFAULT_DIVISION = '81';
 
 // 편집 컬럼(INPUT_TP_CD='M', design 03 §1.3 SORT 42~43). 상수 이식이 아니라 잠금행 판정용 참조.
 export const EDITABLE_COLUMNS = ['SCP_YN', 'STOCK_SUM'] as const;
@@ -67,6 +63,6 @@ export const LBL = {
 export const MSG = {
   REQUIRE_DIVISION: 'MSG00097', // Please select Division. (R1 Division 필수 + R6a 권한 0건 게이트)
   SAVE_SUCCESS: 'MSG00606', // 저장되었습니다. (건수 미표시 — 사용자 지시 2026-10-13)
-  SAVE_FAIL: 'MSG00006', // Failed to save. (V3 — AS-IS MSG00006 의미 일치)
+  SAVE_FAIL: 'MSG00003', // Failed to save. (V3) (AS-IS MSG00006 는 TO-BE 미등록 → 같은 문구 MSG00003, KO/EN/CN)
   NO_CHANGE: 'MSG00004', // No changes to save. (저장 대상 0건)
 } as const;

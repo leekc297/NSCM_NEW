@@ -3,55 +3,97 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import {
   ItemByDivisionModal,
   MaterialByDivisionModal,
+  MeasureSelectModal,
   ProjectByDivisionModal,
 } from 'features/master/src/components';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  ConfirmDetailModal,
+  OrderDetailModal,
+  type OrderDetailContext,
+} from 'features/shipping/src/components';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { IcMeasureSelect } from '@foundation/assets';
+import dayjs from '@foundation/dayjs';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
-import { useQuery } from '@foundation/query-client';
+import { useMutation, useQuery } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
-import { GridAction, GridUtils } from '@foundation/utils';
-import { MainTitle, saveTitleSet, SubTitle } from '@shared/components';
-import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { GridAction, GridUtils, sessionTimeZone } from '@foundation/utils';
+import { MainTitle, saveTitleSet, SsoUserModal, SubTitle } from '@shared/components';
+import { useTabBtnPermissions, useTabLookupQueries, useTabProcQuery } from '@shared/hooks';
+import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
+import {
+  registerDirtyCheck,
+  registerDirtyReset,
+  useMessageStore,
+  useSessionStore,
+} from '@shared/stores';
 
-import { MeasureSelectModal } from './components/modals/MeasureSelectModal';
-import { OrderDetailModal, type OrderDetailContext } from './components/modals/OrderDetailModal';
-import { RequestorModal } from './components/modals/RequestorModal';
 import { ShipmentPlanAutoEssDetailBar } from './components/ShipmentPlanAutoEssDetailBar';
 import { ShipmentPlanAutoEssDetailGrid } from './components/ShipmentPlanAutoEssDetailGrid';
 import { ShipmentPlanAutoEssForm } from './components/ShipmentPlanAutoEssForm';
 import { ShipmentPlanAutoEssMainGrid } from './components/ShipmentPlanAutoEssMainGrid';
 import {
   ADMIN_SHEET_NAME,
+  CONFIRM_DETAIL_SHEET,
   LBL,
+  LOOKUP,
   MENU_ID,
   MSG,
+  ORDER_DETAIL_BTN,
   PLAN_DETAIL_INSERT_COPY_COLUMNS,
   SHEETS,
+  STANDARD_MANUAL_URL,
   TITLESET_MEASURE_TYPE,
   USER_CHECK_BTN,
 } from './shipment-plan-auto-ess.constants';
-import type { MainRow, PlanDetailRow } from './shipment-plan-auto-ess.types';
+import type { MainRow } from './shipment-plan-auto-ess.types';
 import styles from './ShipmentPlanAutoEss.module.scss';
 import { useShipmentPlanAutoEssStore } from './useShipmentPlanAutoEssStore';
-import { BOH_DRILLDOWN, measureDrilldownOf } from './utils/shipment-plan-auto-ess.detailSheets';
+import {
+  BOH_DRILLDOWN,
+  DETAIL_SHEETS,
+  measureDrilldownOf,
+} from './utils/shipment-plan-auto-ess.detailSheets';
+import { runErpChain } from './utils/shipment-plan-auto-ess.erpChain';
+import {
+  collectConfirmSaveRows,
+  type ConfirmSaveFolded,
+  needsChangeReason,
+} from './utils/shipment-plan-auto-ess.save';
 
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+
+// 저장 SP 업무결과 'X'(기준정보 미등록) 센티넬 — assertSaveResult 가 이 메시지로 던지면 handleSaveError 가
+//   일반 실패(F)와 구분해 MSG01321(예/아니오)+매뉴얼 열람으로 처리한다(AS-IS SaveData_Detail cs L2736).
+const SAVE_RESULT_X = 'SSP_SAVE_RESULT_X';
 
 // AS-IS GSCM.SSP.Plan.UIL SSP0021_ShipmentPlan (Shipment Plan) — 신규 전환(2026-09-27).
 //   설계: .atlas/gscm-design/SSP0021/design/00~03. 매핑: __asis-mapping__.md. 자매 SSP0060 패턴 준용.
 //   툴바: Find/Save/Insert=실동작, Delete=NO-OP `() => undefined`(design 01 §2 — 노출 유지, false·키생략 금지),
 //   Edit=미이식(convert-core §2.4 — 편집 기본 ON, canEdit=hasButton('EDIT')).
 //   저장 = Detail Confirm 만(design 01 §2 SaveData_Detail / 03 §4.1) — Main SHIP_PLAN 편집은 Simulation 입력.
-//   주의: Drafting 3경로 ERP IF 체인·Hold stock 편집은 SP 미배포 — 04_react-gap.md "확인 필요/SP 후속" 참조.
+//   하단 저장은 AS-IS 순서의 ERP 연쇄(상태검사→2분잠금→DRAFTING→erpIf→IF_CHECK→CONFIRM)로 돈다 — runDetailSaveChain.
+//   Hold stock 편집은 SP 미배포 — 04_react-gap.md "확인 필요/SP 후속" 참조.
 export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
+
+  // 알림 메시지 포맷 — 공용 카탈로그(SCM_ADM_MSG_M → locales)에 '{0}' 치환자와 **이스케이프된 '\n\r'**
+  //   (JSON 이중 이스케이프라 파싱 후 리터럴 백슬래시-n)이 섞여 있다. 그대로 t() 결과를 알림 content 로
+  //   쓰면 (1) i18next 보간은 {{...}} 형식이라 '{0}' 가 글자로 노출되고 (2) 알림창은 white-space:pre-line
+  //   이라 리터럴 '\n' 이 개행이 아니라 글자 "\n" 으로 보인다(사용자 신고 2026-10-20 — Shipment Qty 수정 후
+  //   저장 시 MSG01289 깨짐). 여기서 {0} 치환 + '\r' 제거 + 리터럴 '\n' → 실제 개행으로 정규화한다.
+  const fmtMsg = useCallback(
+    (code: string, fallback: string, arg0?: string): string => {
+      const raw = arg0 === undefined ? t(code, fallback) : t(code, fallback).replace('{0}', arg0);
+      return raw.replace(/\\r/g, '').replace(/\\n/g, '\n');
+    },
+    [t]
+  );
 
   // ── refs (Main + Detail 7-sheet) ──
   const mainGridRef = useRef<FlexGridType>();
@@ -106,8 +148,7 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   **0행이면 false**(= GSCM 미등록 사용자)다. 자매 SSP0060(cs L8011~8033)과 의미 동일하다.
   //   TO-BE 등가 = USER_CHECK call-proc(PKG_SSP0002.P_SSP0002_GET_USER_INFO_LIST).
   //   판정 전(undefined)에는 낙관적 허용 — 로드 중 불필요한 편집 차단을 만들지 않는다.
-  //   비SSP 확정(false) 시에만 편집 차단 + 1회 알럿(AS-IS 는 Edit 클릭 시점 알럿이나, 편집 기본 ON
-  //   전환(convert-core §2.4)에서는 클릭 시점이 없어 판정 완료 시점 1회로 옮긴다).
+  //   비SSP 확정(false) 시에만 편집 차단(canEdit=false). 진입 알럿은 띄우지 않는다(아래 참조).
   const { data: sspUserCheck } = useQuery({
     queryKey: [tabId, 'sspUserCheck', session.userId],
     queryFn: async () => {
@@ -128,20 +169,10 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!session.userId,
     staleTime: Infinity,
   });
+  // 편집 가드만 유지하고 진입 알럿(MSG01261)은 띄우지 않는다 — 비SSP(예: SSP Viewer)는 EDIT 버튼
+  //   권한도 없어 버튼이 뜨지 않고 편집도 막히므로 진입 즉시 알림이 불필요하다(사용자 지시 2026-10-22,
+  //   SSP0015 와 동일 방침). AS-IS 도 이 메시지는 Edit 버튼 클릭 시에만 떴다.
   const isSspUser = sspUserCheck !== false;
-  const sspAlertShownRef = useRef(false);
-  useEffect(() => {
-    if (sspUserCheck === false && !sspAlertShownRef.current) {
-      sspAlertShownRef.current = true;
-      void setAlert({
-        type: 'alert',
-        content: t(
-          MSG.NO_AUTHORITY,
-          '__This user does not have permission to the SSP Planner.\n\rUser ID : {0}'
-        ).replace('{0}', session.userId ?? ''),
-      });
-    }
-  }, [sspUserCheck, t, session.userId, setAlert]);
 
   // 편집 가능 = 권한(canEdit = hasButton('EDIT'), 마운트 1회) · 최신 Plan(realFlag).
   //   AS-IS EditButton/SwitchLock '수정 모드' 토글은 이식하지 않는다(convert-core §2.4). 편집 기본 ON.
@@ -174,6 +205,7 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [cellPopupKind, setCellPopupKind] = useState<'item' | 'project' | null>(null);
   // ERP Order Detail 팝업(SSP0300) — Shipment Plan Detail 의 ERP_SO_NO 더블클릭 컨텍스트.
   const [orderDetail, setOrderDetail] = useState<OrderDetailContext | null>(null);
+  const [confirmDetailNo, setConfirmDetailNo] = useState(''); // CHANGE_REQ_NO 더블클릭(Request Info 팝업)
 
   // ── 조회 (React Query — SSOT) ──
   const { data: mainData, refetch: refetchMain } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
@@ -190,7 +222,10 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: filters[SHEETS.CALENDAR],
     enabled: !!filters[SHEETS.CALENDAR],
   });
-  const { data: planDetailData } = useTabProcQuery<MENU_ID, SHEETS.PLAN_DETAIL>({
+  const { data: planDetailData, refetch: refetchPlanDetail } = useTabProcQuery<
+    MENU_ID,
+    SHEETS.PLAN_DETAIL
+  >({
     menuId: MENU_ID,
     sheetName: SHEETS.PLAN_DETAIL,
     tabId,
@@ -243,6 +278,36 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
   const mainRows = useMemo<MainRow[]>(() => mainData?.o_rc1 ?? [], [mainData]);
   const calendarRows = useMemo(() => calendarData?.o_rc1 ?? [], [calendarData]);
 
+  // 하단 저장 출하일 허용범위 (AS-IS Validation_Check MSG00194, SSP0021_ShipmentPlan.cs L2961~2984). 상한 오늘+'1D+', 하한 오늘-'2D-',
+  //   안내 문구 {0}=CHANGE_REQ_DAY. 종전엔 이 검사가 없어 범위 밖 날짜도 저장됐다(결함 E1).
+  //   자매 SSP0015(ShipmentPlanMobilityIt shipDateRange)와 같은 계산. lookup 미도착·비수치면 검사를 생략한다
+  //   (임의 기본값으로 전건 차단 방지).
+  const [shipPeriodDay, changeReqDay] = useTabLookupQueries({
+    filters: [LOOKUP.SHIPMENT_PERIOD_DAY, LOOKUP.CHANGE_REQ_DAY],
+  });
+  const shipDateRange = useMemo(() => {
+    const num = (v: unknown): number | undefined => {
+      const s = str(v).trim();
+      const n = Number(s);
+      return s !== '' && Number.isFinite(n) ? n : undefined;
+    };
+    const rows = (shipPeriodDay ?? []) as Record<string, unknown>[];
+    const dayOf = (code: string) => {
+      const r = rows.find(x => str(x.CODE ?? x.SEGMENT1).trim() === code);
+      return r ? num(r.NAME ?? r.SEGMENT2) : undefined;
+    };
+    const plus = dayOf('1D+');
+    const minus = dayOf('2D-');
+    if (plus === undefined || minus === undefined) return undefined;
+    const today = dayjs().startOf('day');
+    const first = (changeReqDay ?? [])[0] as Record<string, unknown> | undefined;
+    return {
+      max: today.add(plus, 'day'),
+      min: today.subtract(minus, 'day'),
+      dDay: first ? str(first.NAME ?? first.SEGMENT2).trim() : '',
+    };
+  }, [shipPeriodDay, changeReqDay]);
+
   const rowsBySheet = useMemo(
     () => ({
       [SHEETS.PLAN_DETAIL]: (planDetailData?.o_rc1 ?? []) as WijmoRowItem[],
@@ -265,16 +330,78 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
   );
 
   // ── 저장 — Detail Confirm 만(design 01 §2 SaveData_Detail / 03 §4.3) ──
-  const { mutate: mutateConfirm } = useProcMutation<MENU_ID, SHEETS.PLAN_DETAIL>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.PLAN_DETAIL,
-    tabId,
+  //   proc P_SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM(24 IN)은 전건 VARCHAR + SCM_ARR_SPL_CNT('^') WHILE LOOP
+  //   다건 처리라, 공용 useProcMutation 의 행 객체 배열({data:[]}) 전송은 전건 null 바인딩 →
+  //   P_ACTIVE_FLAG 빈값 → 루프 0회 → 0행 UPDATE 인데 성공 반환(false-success)이었다(사용자 신고
+  //   2026-10-20 "저장했는데 재조회하면 그대로"). 그래서 편집 행을 컬럼별 '^'-폴딩 단일 객체
+  //   (collectConfirmSaveRows, 키=SCM_ADM_PROC_M COL_NM camelCase)로 조립해 apiClient.post 로 직배선한다
+  //   (자매 SSP0060 ShipmentPlan.tsx 동일 처방, memory `save-proc-per-column-caret-fold-fe`).
+  //   assertSaveResult 로 업무결과(o_rc1 RESULT_CODE!='S')까지 검사해 false-success 를 2중으로 막는다.
+  const assertSaveResult = (data: unknown): void => {
+    const result = (
+      data as {
+        result?: {
+          o_rc1?: { RESULT_CODE?: unknown; ERR_MESSAGE?: unknown }[];
+          o_rc2?: { ERR_MESSAGE?: unknown }[];
+        };
+      }
+    )?.result;
+    const rc = result?.o_rc1?.[0];
+    const resultCode = str(rc?.RESULT_CODE);
+    // 'X' = 기준정보(BOD/route) 미등록 — AS-IS SaveData_Detail(cs L2736) 는 일반 실패(MSG00284)와 달리
+    //   MSG00324(route 미등록)를 예/아니오로 띄우고 '예' 면 매뉴얼을 연다. 센티넬로 구분해 던진다.
+    if (resultCode === 'X') {
+      throw new Error(SAVE_RESULT_X);
+    }
+    if (resultCode && resultCode !== 'S') {
+      const errMsg = str(rc?.ERR_MESSAGE) || str(result?.o_rc2?.[0]?.ERR_MESSAGE);
+      throw new Error(errMsg || t(MSG.SAVE_FAILED, '__Save failed.'));
+    }
+  };
+
+  // AS-IS AddHelpButton(BaseForm.cs L3501→FileDownLoad L3406) 대응 — 사내 Help 서버의
+  //   'Standard Information SSP Manual.pptx'(STANDARD_MANUAL_URL)를 새 탭으로 열어 바로 내려받는다.
+  const openStandardManual = (): void => {
+    window.open(STANDARD_MANUAL_URL, '_blank', 'noopener,noreferrer');
+  };
+
+  // 저장 결과 오류 공통 처리 — 'X'(기준정보 미등록)는 AS-IS 처럼 MSG01321(예/아니오) 후 '예' 면 매뉴얼
+  //   열람, 그 외 실패는 일반 알림(AS-IS MSG00284 대응).
+  const handleSaveError = (error: Error): void => {
+    if (error.message === SAVE_RESULT_X) {
+      void setAlert({
+        type: 'confirm',
+        content: t(MSG.STD_INFO_NOT_REGISTERED, '_기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?'),
+        onConfirm: openStandardManual,
+      });
+      return;
+    }
+    void setAlert({ type: 'alert', content: error.message || t(MSG.SAVE_FAILED, '__Save failed.') });
+  };
+  // 연쇄의 마지막 단계(④ CONFIRM)라 await 할 수 있게 mutateAsync 로 쓴다. 성공·실패 처리(onSuccess 재조회 B7,
+  //   onError 알림)는 그대로다.
+  const { mutateAsync: mutateConfirmAsync } = useMutation({
+    mutationKey: [tabId, SHEETS.PLAN_DETAIL, 'SAVE'],
+    mutationFn: async (payload: ConfirmSaveFolded) => {
+      const res = await apiClient.post(`/${MENU_ID}/${SHEETS.PLAN_DETAIL}/SAVE/call-proc`, payload);
+      // false-success 판별 (np §5-10 — 인터셉터가 500/403 도 resolve)
+      if (res.status >= 400 || Number(res.data?.code)) {
+        throw new Error(t(MSG.SAVE_FAILED, '__Save failed.'));
+      }
+      assertSaveResult(res.data);
+      return res.data;
+    },
     onSuccess: () => {
       planDetailEditTrackerRef.current?.clearChanges();
       // 편집 기본 ON(convert-core §2.4) — 저장 후 조회모드 복귀 없음.
       setToast({ type: 'success', message: t(MSG.SAVED, '__Saved successfully.') });
-      setDetailFilter(SHEETS.PLAN_DETAIL, 'N');
+      // AS-IS 저장 성공 후 재조회(SSP0021_ShipmentPlan.cs L2701~2714): 상단에 행이 있으면 상단도 다시 조회하고,
+      //   하단은 직전 조회 방식(드릴다운이면 그 행·일자) 그대로 다시 조회한다. 종전엔 하단만
+      //   dblFlag 'N' 으로 바꿔 재조회해 드릴다운 조건이 풀렸고 상단 PSI 는 저장 전 값으로 남았다(결함 B7).
+      if (filters[SHEETS.MAIN]) void refetchMain();
+      if (filters[SHEETS.PLAN_DETAIL]) void refetchPlanDetail();
     },
+    onError: handleSaveError,
   });
 
   // ── mount — SubTitle F6 저장 조회조건 복원(1회, conditionsRestored 가드) ──
@@ -282,11 +409,32 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
     void restoreSearchConditions();
   }, [restoreSearchConditions]);
 
+  // 상단(Main) 조회 dirty 가드 전용 키 — 공용 SearchArea/SubTitle 은 기본 tab 전역 키로 "탭 내 아무
+  //   그리드나 dirty" 를 묻는데, 상단 조회는 Main 그리드만 재조회(setMainFilters)하므로 Main 만 확인해야
+  //   한다(사용자 지시 2026-10-20). Main 그리드를 이 그리드 단위 키에 별도 등록하고, Form/SubTitle 에
+  //   searchDirtyKey 로 넘겨 그 키로만 가드하게 한다. tab 키 등록(DataGrid 자동)은 그대로라 탭 닫기 가드는 불변.
+  const mainDirtyKey = `grid:${tabId}:main`;
+  useEffect(() => {
+    const unCheck = registerDirtyCheck([mainDirtyKey], () =>
+      GridUtils.isDirty(mainGridRef.current)
+    );
+    const unReset = registerDirtyReset([mainDirtyKey], () =>
+      GridAction.discardChanges(mainGridRef.current, mainEditTrackerRef.current)
+    );
+    return () => {
+      unCheck();
+      unReset();
+    };
+  }, [mainDirtyKey]);
+
   // ── mount — keep-alive 잔여 filters 무효화 + 컬럼 메타 1회 fetch (np §5-7) ──
   useEffect(() => {
     clearFilters();
     if (!initialized) {
-      void fetchStaticColumns([SHEETS.MAIN, SHEETS.PLAN_DETAIL]);
+      // 마운트 1회 — Main + **전 Detail 시트** 컬럼 메타를 받아, 조회 전에도 모든 하단 탭에
+      //   컬럼 헤더가 보이게 한다(사용자 신고 2026-10-16 "첫 탭 외 다른 탭은 조회 전 헤더 없음").
+      //   컬럼 메타(SCM_MST_SHEET_COLUMNS)는 데이터와 무관하므로 탭 자동조회 금지 규칙과 무관.
+      void fetchStaticColumns([SHEETS.MAIN, ...DETAIL_SHEETS]);
       void fetchStaticMeasures();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -332,9 +480,40 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // ── Detail Search (2차 btnSearch — 활성 sheet 재조회, hook #81 lazy) ──
+  //   미저장 편집 재조회 가드 — 종전엔 확인 없이 바로 재조회해 편집분이 조용히 날아갔다(사용자 신고
+  //   2026-10-20). **조회 대상 그리드만** 확인한다: 2차 Search 는 활성 detail sheet 만 재조회하므로 그
+  //   sheet 그리드의 dirty 만 본다 — 상단(main)이나 다른 detail 탭이 수정 중이어도 묻지 않는다.
+  //   확인(버림) 시 그 그리드의 변경만 되돌린다(discardChanges) — 다른 그리드 편집은 보존.
   const handleDetailSearch = () => {
-    setDetailFilter(activeDetailSheet, 'N');
-    void fetchStaticColumns([activeDetailSheet]);
+    const gridBySheet: Partial<Record<SHEETS, typeof planDetailGridRef>> = {
+      [SHEETS.PLAN_DETAIL]: planDetailGridRef,
+      [SHEETS.STOCK_DETAIL]: stockDetailGridRef,
+      [SHEETS.OWMS_DETAIL]: owmsDetailGridRef,
+      [SHEETS.HOLD_STOCK]: holdStockGridRef,
+      [SHEETS.MES_STOCK]: mesStockGridRef,
+      [SHEETS.MES_STOCK_DETAIL]: mesStockDetailGridRef,
+      [SHEETS.SHIPMENT_RESULT]: shipmentResultGridRef,
+    };
+    const run = () => {
+      setDetailFilter(activeDetailSheet, 'N');
+      void fetchStaticColumns([activeDetailSheet]);
+    };
+    const grid = gridBySheet[activeDetailSheet]?.current;
+    if (!grid || !GridUtils.isDirty(grid)) {
+      run();
+      return;
+    }
+    void setAlert({
+      type: 'confirm',
+      content: t('MSG00704', '_작업중인 데이터가 있습니다. 조회 하시겠습니까?'),
+    }).then(ok => {
+      if (!ok) return;
+      GridAction.discardChanges(
+        grid,
+        activeDetailSheet === SHEETS.PLAN_DETAIL ? planDetailEditTrackerRef.current : undefined
+      );
+      run();
+    });
   };
 
   // ── Main 드릴다운 (design 03 §3.7 — BOH_TYPE / MEASURE 분기) ──
@@ -352,8 +531,60 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
       binding === 'BOH_QTY' ? BOH_DRILLDOWN[str(row.BOH_TYPE)] : measureDrilldownOf(str(row.MEASURE));
     if (!sheet) return;
     setActiveDetailSheet(sheet);
-    setDetailFilter(sheet, 'Y', overrides);
+    if (sheet === SHEETS.PLAN_DETAIL) {
+      // AS-IS FindData_Detail(bolDoubleClick=true, cs:4837~4848) — 클릭 행의 division·from site·item 과
+      //   **클릭한 컬럼 일자 하루(from=to)** 로 조회한다. 요청자는 공란. 종전엔 일자를 안 넘겨
+      //   drpPeriod2 기간 시작일 하루만 조회됐다(결함 B4). 일자 추출은 AS-IS GetColumnTag().Replace("D_","")
+      //   그대로 — W_/M_ 셀은 'W_…' 가 그대로 가서 0건(AS-IS 동일, 자매 SSP0060 과 같은 처리).
+      const day = binding.replace(/^D_/, '');
+      setDetailFilter(sheet, 'Y', {
+        ...overrides,
+        divisionId: str(row.DIVISION_ID),
+        fromYyyymmdd: day,
+        toYyyymmdd: day,
+        requestor: '',
+      });
+    } else {
+      setDetailFilter(sheet, 'Y', overrides);
+    }
     void fetchStaticColumns([sheet]);
+  };
+
+  // ── 하단 저장 ERP 연쇄 — AS-IS SaveData_Detail(SSP0021_ShipmentPlan.cs L2521~2756) ─────────────
+  //   흐름·분기는 utils/shipment-plan-auto-ess.erpChain.ts runErpChain 에 있다(ERP 중단기간 → 상태검사·SO 건수 →
+  //   2분 잠금 → 단위별 DRAFTING·erpIf·IF_CHECK → 보상·안내). 이 함수는 의존성(API·알림·세션)을 넘기고,
+  //   연쇄가 돌려준 행으로 CONFIRM(planDetail/SAVE, cs L2602~2700) 을 부른다.
+  const savingRef = useRef(false);
+
+  const runDetailSaveChain = async (dirty: Record<string, unknown>[]): Promise<void> => {
+    const userId = session.userId ?? '';
+    const gridRows = (planDetailGridRef.current?.collectionView?.sourceCollection ??
+      []) as Record<string, unknown>[];
+    const outcome = await runErpChain(
+      {
+        post: (url, body) => apiClient.post(url, body),
+        getCombo: params => apiClient.getCombo(params),
+        t: (key, fallback) => t(key, fallback),
+        alert: content => setAlert({ type: 'alert', content }),
+        confirm: (content, onYes) => setAlert({ type: 'confirm', content, onConfirm: onYes }),
+        openManual: openStandardManual,
+        userId,
+        timeZone: sessionTimeZone(session),
+        // AS-IS siDetail.ActiveSheet.SheetName(cs L3469) = "Shipment Plan Detail"
+        title: ADMIN_SHEET_NAME[SHEETS.PLAN_DETAIL] ?? '',
+      },
+      dirty,
+      gridRows
+    );
+    if (!outcome.proceed) return;
+    // ⑤ CONFIRM — 남은 행이 없으면 AS-IS 처럼 끝(iCount=0, cs L2690).
+    const confirmPayload = collectConfirmSaveRows(outcome.confirmRows, userId);
+    if (!confirmPayload) return;
+    try {
+      await mutateConfirmAsync(confirmPayload);
+    } catch {
+      /* onError(handleSaveError) 가 알린다 */
+    }
   };
 
   // ── Save (F7 — Detail Confirm 만. design 01 §2 SaveData_Detail) ──
@@ -373,34 +604,64 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     // 행별 필수 (design 03 §3.3): TRANSPORT_MODE 공백 / CHANGE_REASON_CODE 미선택 차단
     for (const row of dirty) {
+      // 행번호(1-based) — MSG01289 "{0}열 출하 변경사항..." 의 {0} 치환용(AS-IS 행번호).
+      const rowNo = (planDetailGridRef.current?.rows.findIndex(r => r.dataItem === row) ?? -1) + 1;
+      // 출하일 입력 가능 기간 (AS-IS SSP0021_ShipmentPlan.cs L2961~2984, M/I 행) — 범위 밖이면 저장 차단(결함 E1).
+      if (shipDateRange) {
+        const digits = str(row.SHIPMENT_DATE).replace(/\D/g, '').slice(0, 8);
+        const d = digits.length === 8 ? dayjs(`${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6, 8)}`) : undefined;
+        if (d?.isValid() && (d.isAfter(shipDateRange.max, 'day') || d.isBefore(shipDateRange.min, 'day'))) {
+          void setAlert({
+            type: 'alert',
+            content: t(
+              MSG.SHIP_DATE_OUT_OF_RANGE,
+              '__Change requests are possible from the current D + {0} ship date.'
+            ).replace('{0}', shipDateRange.dDay),
+          });
+          return;
+        }
+      }
       if (str(row.TRANSPORT_MODE).trim() === '') {
+        // MSG00429 "{0} value is required." — {0}=Trans Mode. fmtMsg 가 치환·개행 정규화.
         void setAlert({
           type: 'alert',
-          content: t(MSG.REQUIRED_VALUE, '__{0} value is required.\', 0: \'Trans Mode'),
+          content: fmtMsg(MSG.REQUIRED_VALUE, '_{0} value is required.', 'Trans Mode'),
         });
         return;
       }
       const reason = str(row.CHANGE_REASON_CODE).trim();
-      if (reason === '' || reason === '-') {
+      const original = planDetailEditTrackerRef.current?.getOriginalValues().get(row as WijmoRowItem);
+      if ((reason === '' || reason === '-') && needsChangeReason(row, original)) {
+        // MSG01289 — {0}=행번호 치환 + 이스케이프 개행 정규화(종전 { defaultValue } 는 카탈로그 값이
+        //   우선돼 '{0}'·'\n' 이 글자로 노출됐다 — 사용자 신고 2026-10-20).
         void setAlert({
           type: 'alert',
-          content: t(MSG.ROW_REASON_REQUIRED, {
-            defaultValue: '_There is a shipment change. Please enter Change_Reason.',
-          }),
+          content: fmtMsg(
+            MSG.ROW_REASON_REQUIRED,
+            '_There is a shipment change in {0} row.\nPlease enter Change_Reason.',
+            String(rowNo)
+          ),
         });
         return;
       }
     }
-    // 확인창 (design 03 §4.3 — MSG01201)
+    // 확인창 (design 03 §4.3 — MSG01201). 확인 뒤 AS-IS 순서의 ERP 연쇄를 돈다(runDetailSaveChain).
+    //   onConfirm 대신 결과(Promise)로 이어 붙인다 — 연쇄 안에서 다음 알림을 띄우기 전에 이 확인창이 닫혀 있어야 한다
+    //   (공용 알림은 한 칸이라 겹쳐 띄우면 앞 알림의 Promise 가 풀리지 않는다).
+    if (savingRef.current) return; // 연쇄 진행 중 중복 저장 차단
     void setAlert({
       type: 'confirm',
       content: t(MSG.CONFIRM_SAVE, {
         defaultValue: '_Are you sure you want to confirm the shipping plan change requests?',
       }),
-      onConfirm: () => {
-        // payload = 그리드 행 그대로 — 컬럼↔SAVE 24 IN 매핑은 PROC_M(convert-sp 소관, 03 §4.3)
-        mutateConfirm(dirty as unknown as PlanDetailRow[]);
-      },
+    }).then(async ok => {
+      if (!ok || savingRef.current) return;
+      savingRef.current = true;
+      try {
+        await runDetailSaveChain(dirty);
+      } finally {
+        savingRef.current = false;
+      }
     });
   };
 
@@ -506,6 +767,7 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
           tabId={tabId}
           onSearch={handleSearch}
           onItemSearch={() => setOpenItemMain(true)}
+          searchDirtyKey={mainDirtyKey}
         />
       )}
       <SubTitle
@@ -517,36 +779,48 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
+        searchDirtyKey={mainDirtyKey}
         customButtons={customButtons}
       />
 
-      {/* splitContainer1 — Main(상) / Detail(하) 수직 분할 (design 01 §1) */}
-      <div className={styles.gridArea}>
-        <div className={styles.mainGrid}>
-          <ShipmentPlanAutoEssMainGrid
-            rows={mainRows}
-            calendar={calendarRows}
-            gridRef={mainGridRef}
-            gridFilterRef={mainGridFilterRef}
-            editTrackerRef={mainEditTrackerRef}
-            adminColumns={staticColumns[SHEETS.MAIN]}
-            staticMeasures={staticMeasures}
-            bucketType={sc.bucketType}
-            chkSum={sc.chkSum}
-            editable={mainEditable}
-            curPlanDate={sc.planDate}
-            onDrilldown={handleMainDrilldown}
-          />
-        </div>
+      {/* splitContainer1 — Main(상) / Detail(하) 수직 드래그 분할 (design 01 §1).
+          DMF0004(SalesSite) PanelGroup 패턴 참조 — 스플릿 바(.splitBar)를 드래그해 상/하 그리드 높이 조절.
+          minSize 는 픽셀(react-resizable-panels v4 — "NNpx")로 드래그 범위를 제한한다(사용자 지시 2026-10-20):
+            위로는 상단 그리드 헤더(2행 병합 ~60px)를 가리지 않도록 100px, 아래로는 하단 조회조건 바
+            (ShipmentPlanAutoEssDetailBar 실측 44px) + 탭 스트립을 가리지 않도록 92px 이하로는 줄지 않는다.
+          초기 비율은 종전 flex 55:45 를 그대로 옮긴 defaultSize 55/45. */}
+      <PanelGroup className={styles.gridArea} orientation='vertical'>
+        <Panel defaultSize={55} minSize='100px'>
+          <div className={styles.mainGrid}>
+            <ShipmentPlanAutoEssMainGrid
+              rows={mainRows}
+              calendar={calendarRows}
+              gridRef={mainGridRef}
+              gridFilterRef={mainGridFilterRef}
+              editTrackerRef={mainEditTrackerRef}
+              adminColumns={staticColumns[SHEETS.MAIN]}
+              staticMeasures={staticMeasures}
+              bucketType={sc.bucketType}
+              chkSum={sc.chkSum}
+              editable={mainEditable}
+              curPlanDate={sc.planDate}
+              onDrilldown={handleMainDrilldown}
+            />
+          </div>
+        </Panel>
 
-        <div className={styles.detailArea}>
-          <ShipmentPlanAutoEssDetailBar
-            onDetailSearch={handleDetailSearch}
-            onModelSearch={() => setOpenItemDetailBar(true)}
-            onRequestorSearch={() => setOpenRequestor(true)}
-          />
+        <PanelSeparator className={styles.splitBar} />
+
+        <Panel defaultSize={45} minSize='92px'>
+          <div className={styles.detailArea}>
+            <ShipmentPlanAutoEssDetailBar
+              onDetailSearch={handleDetailSearch}
+              onModelSearch={() => setOpenItemDetailBar(true)}
+              onRequestorSearch={() => setOpenRequestor(true)}
+            />
           <ShipmentPlanAutoEssDetailGrid
             onOrderDetail={setOrderDetail}
+            onConfirmDetail={setConfirmDetailNo}
             rowsBySheet={rowsBySheet}
             gridRefs={{
               [SHEETS.PLAN_DETAIL]: planDetailGridRef,
@@ -574,8 +848,9 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
             onItemCellSearch={row => openCellPopup('item', row)}
             onProjectCellSearch={row => openCellPopup('project', row)}
           />
-        </div>
-      </div>
+          </div>
+        </Panel>
+      </PanelGroup>
 
       {/* 1차·2차 Model/Nickname 팝업 — MaterialByDivisionModal(COM0013), 사용자 지시 2026-10-12.
           주의(의도적 AS-IS 이탈): AS-IS SSP0021 은 두 자리 모두 `SCM0002_ItembyDivisionPopup`
@@ -641,11 +916,20 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
         callFromCell={true}
       />
 
-      {/* Requestor 팝업 (UserInfoPopup — 02 §4.6) */}
-      <RequestorModal
+      {/* Requestor 팝업 — 공용 SsoUserModal(= SSP0014 그리드 User ID 더블클릭 팝업, AS-IS UserInfoPopup).
+          사용자 지시(2026-10-20): Requestor 는 유저 팝업으로 통일한다. 팝업 행을 더블클릭하면 그 사용자가
+          확정되고, Requestor 입력칸에는 **유저 이름**(언어별 KO/EN)이 표시된다. 조회 파라미터(P_REQUESTOR)는
+          requestorId 로 간다(DetailBar value=requestorName||requestorId). ssoUserYn='N'(등록 사용자 기준). */}
+      <SsoUserModal
         open={openRequestor}
         modalClose={() => setOpenRequestor(false)}
-        setSelectedValue={(userId, userName) => set({ requestorId: userId, requestorName: userName })}
+        ssoUserYn='N'
+        setSelectedValue={(userId, userNm, userEngNm) =>
+          set({
+            requestorId: userId,
+            requestorName: (session.langCd === 'KO' ? userNm : userEngNm) ?? '',
+          })
+        }
       />
 
       {/* ERP Order Detail 팝업 (AS-IS SSP0300_OrderDetailPopup — cs L1591~1611) */}
@@ -653,13 +937,27 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={orderDetail !== null}
         data={orderDetail}
         onClose={() => setOrderDetail(null)}
+        menuId={MENU_ID}
+        shtNm={SHEETS.MAIN}
+        btnId={ORDER_DETAIL_BTN}
+      />
+
+      {/* Request Info 팝업 (CHANGE_REQ_NO 더블클릭 — 표시전용). AS-IS SCM0002 를 SSP0060 팝업으로 커버.
+          조회 proc 은 SSP0021/confirmDetail 버튼매핑(action=SEARCH)으로 등록 필요(운영 메타, 사용자 실행). */}
+      <ConfirmDetailModal
+        open={confirmDetailNo !== ''}
+        onClose={() => setConfirmDetailNo('')}
+        changeReqNo={confirmDetailNo}
+        menuId={MENU_ID}
+        sheetName={CONFIRM_DETAIL_SHEET}
       />
 
       {/* Measure 설정 (btnMeasure — AS-IS TitleSetForm(Measure) = D00-1-005).
           종전에는 공용 ColumnSettingModal 에 columnType='M' 만 끼워 썼는데, 그 팝업의 조회 proc
           (DMF0002_GET_TITLESET_POPUP)은 목록 원천이 SCM_MST_SHEET_COLUMNS 라 Measure 를 못 내리고
           division 조건 때문에 SSP0021 에서도 0건이었다(실측 2026-10-12 — 자매 SSP0060 동일 결함).
-          화면 전용 MeasureSelectModal + /measure 엔드포인트로 교체(상세 근거는 그 파일 주석). */}
+          공통 MeasureSelectModal(features/master) + /measure 엔드포인트로 교체(형제 SSP0023 동일).
+          onApply codes 는 공통본 시그니처상 string[] | null(null=전체표시 복원)이라 ?? [] 로 가드한다. */}
       <MeasureSelectModal
         open={openMeasure}
         modalClose={() => setOpenMeasure(false)}
@@ -673,7 +971,7 @@ export const ShipmentPlanAutoEss = ({ tabId, title }: PageProps<MENU_ID>) => {
             menuId: MENU_ID,
             sheetName: ADMIN_SHEET_NAME[SHEETS.MAIN] ?? '',
             columnType: TITLESET_MEASURE_TYPE,
-            rows: codes.map((name, i) => ({ name, sortOrderNo: i + 1 })),
+            rows: (codes ?? []).map((name, i) => ({ name, sortOrderNo: i + 1 })),
           }).then(ok => {
             if (!ok) {
               void setAlert({ type: 'alert', content: t(MSG.SAVE_FAILED, '__Save failed.') });

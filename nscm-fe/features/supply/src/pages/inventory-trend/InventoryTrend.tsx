@@ -1,17 +1,26 @@
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ItemByDivisionModal } from 'features/master/src/components';
+import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { IcGridColumnSetup } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { queryClient } from '@foundation/query-client';
 import { GridAction } from '@foundation/utils';
-import { MainTitle, SubTitle } from '@shared/components';
+import { ColumnLayoutModal, MainTitle, saveTitleSet, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useUIStore } from '@shared/stores';
 
 import { InventoryTrendForm } from './components/InventoryTrendForm';
 import { InventoryTrendGrid } from './components/InventoryTrendGrid';
-import { MENU_ID, MSG, SHEETS } from './inventory-trend.constants';
+import {
+  ADMIN_SHEET_NAME,
+  LBL,
+  MENU_ID,
+  MSG,
+  SHEETS,
+  TITLESET_COLUMN_TYPE,
+} from './inventory-trend.constants';
 import { useInventoryTrendStore } from './useInventoryTrendStore';
 
 // AS-IS: SCP0101_InventoryTrend.cs — 조회 전용 Report. Find + Excel 실동작 / Save NO-OP / 전 컬럼 Lock.
@@ -23,6 +32,8 @@ export const InventoryTrend = ({ tabId, title }: PageProps<MENU_ID>) => {
   const gridFilterRef = useRef<FlexGridFilter>();
 
   const [openItem, setOpenItem] = useState(false);
+  // 컬럼 설정 팝업(AS-IS btnColumn→SCM0002_TitleSetForm_Popup, cs:957~968) open 상태.
+  const [columnSettingsOpen, setColumnSettingsOpen] = useState(false);
 
   const isOpenSearchArea = useInventoryTrendStore(state => state.isOpenSearchArea);
   const setOpenSearchArea = useInventoryTrendStore(state => state.setOpenSearchArea);
@@ -33,6 +44,7 @@ export const InventoryTrend = ({ tabId, title }: PageProps<MENU_ID>) => {
   const clearFilters = useInventoryTrendStore(state => state.clearFilters);
   const initialized = useInventoryTrendStore(state => state.initialized);
   const fetchStaticColumns = useInventoryTrendStore(state => state.fetchStaticColumns);
+  const staticColumns = useInventoryTrendStore(state => state.staticColumns);
   const restoreSearchConditions = useInventoryTrendStore(state => state.restoreSearchConditions);
   const noDivisionAuth = useInventoryTrendStore(state => state.noDivisionAuth);
 
@@ -82,19 +94,33 @@ export const InventoryTrend = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // 버튼 게이트 — 조회 전용 Report(01_layout §2):
   //   search = 실동작(hasButton('SEARCH') + Division 권한 게이트) / excel = 실동작(0건 가드) /
-  //   save = AS-IS SaveButton NO-OP(cs:248~249 빈 본문. 노출 + 무동작, false·키 생략 금지 —
-  //          생략 시 공용 SubTitle 기본 addRow/removeRow 되살아남, convert-core §3) /
+  //   save = 숨김(false). AS-IS SaveButton 은 빈 본문 NO-OP(cs:248~249)라 저장 동작이 없고, 저장 SP 도
+  //          없는 조회 전용 Report 이므로 버튼을 노출하지 않는다(사용자 지시 2026-10-19).
+  //          동일하게 AS-IS SaveButton 이 빈 몸통인 DMF0040(mkt-fcst-comparison)·저장 SP 없는 capa-* 선례와 일치.
+  //          주의: insert/delete 와 달리 save 는 공용 SubTitle 기본값이 no-op(F7=()=>undefined)이라 false 로 둬도
+  //          부작용(기본 행조작 복귀) 없음 — 숨김만 적용된다.
   //   insert·delete·manual·upload = 미사용(리포트).
   //   R1(cs:153~154): 권한 Division 0건이면 조회영역 전체 Enabled=false — 조회 액션도 차단.
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') && !noDivisionAuth ? handleSearch : false,
-    save: () => undefined,
+    save: false,
     excel: handleExcel,
     insert: false,
     delete: false,
     manual: false,
     upload: false,
   };
+
+  // 컬럼 설정 버튼 — AS-IS btnColumn(SCM0002_TitleSetForm_Popup) 대응. SubTitle 표준 custom icon 버튼(Save 좌측,
+  //   SCP0100 global-psi-report 선례 동형). 클릭 시 공용 ColumnLayoutModal(컬럼 표시/순서/폭·색 개인화) open.
+  const customButtons = [
+    {
+      label: t(LBL.COLUMN, 'Column Setting'),
+      action: () => setColumnSettingsOpen(true),
+      iconComponent: <IcGridColumnSetup />,
+      buttonLabel: '',
+    },
+  ];
 
   return (
     <>
@@ -113,22 +139,73 @@ export const InventoryTrend = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='InventoryTrend'
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
+        customButtons={customButtons}
       />
       <InventoryTrendGrid
         gridRef={gridRef}
         gridFilterRef={gridFilterRef}
         data={rows}
         month={searchParams.month}
+        detail={searchParams.detail}
       />
-      {/* Item 검색 — 공용 ItemByDivisionModal(SCM0002). 빈 반환 시 기존값 유지(AS-IS cs:983~988). */}
-      <ItemByDivisionModal
+      {/* Material 검색 — 공용 MaterialByDivisionModal(메1, COM0013). division 컨텍스트, 콤마 다중.
+          scpModuleType=호출 화면 ID(SCP0101) — SP 의 Operation Group 분기 기준.
+          빈 반환 시 기존값 유지(AS-IS cs:983~988). */}
+      <MaterialByDivisionModal
         open={openItem}
         modalClose={() => setOpenItem(false)}
         setSelectedValue={itemIds => {
           if (itemIds) setSearchParams({ itemId: itemIds });
         }}
-        preSearchParams={{ divisionId: searchParams.divisionId, itemId: searchParams.itemId }}
-        callFromCell={false}
+        preSearchParams={{
+          divisionId: searchParams.divisionId,
+          itemId: searchParams.itemId,
+          scpModuleType: MENU_ID,
+        }}
+      />
+      {/* 컬럼 설정 팝업 — AS-IS btnColumn→SCM0002_TitleSetForm_Popup(cs:957~968) 대응. 공용 ColumnLayoutModal
+          (표시/순서 + Width/Cell·Text Color) + titleSet 'C' 영구 저장. read-only 리포트라 저장 후 메타 refetch 로만
+          반영(SCP0100 global-psi-report 동형). divisionId 는 ALL→'' 정규화(컬럼메타는 division 무관). */}
+      <ColumnLayoutModal
+        open={columnSettingsOpen}
+        modalClose={() => setColumnSettingsOpen(false)}
+        menuId={MENU_ID}
+        sheetName={ADMIN_SHEET_NAME[SHEETS.MAIN]}
+        columnType={TITLESET_COLUMN_TYPE}
+        divisionId={searchParams.divisionId === 'ALL' ? '' : searchParams.divisionId}
+        // 저장된 개인화가 없으면 모달 beRows 0건 → admin 컬럼메타(staticColumns)를 기본 리스트로 넘긴다(SCP0100 동형).
+        fallbackColumns={staticColumns
+          .filter(column => column.visible !== false)
+          .map(column => ({
+            key: column.colNm,
+            header: column.colLblNm ?? column.colNm,
+            width: column.colWth,
+          }))}
+        title={t(LBL.COLUMN, 'Column Setting')}
+        onSave={settings => {
+          // 표시 컬럼만(USER_FLAG='Y') sortOrderNo 1..n 으로 저장 — 행 존재 = 표시(titleSetApi 계약).
+          const visible = settings.filter(s => s.USER_FLAG === 'Y');
+          void saveTitleSet({
+            menuId: MENU_ID,
+            sheetName: ADMIN_SHEET_NAME[SHEETS.MAIN],
+            columnType: TITLESET_COLUMN_TYPE,
+            rows: visible.map((s, i) => ({
+              name: s.COLUMN_NAME,
+              sortOrderNo: i + 1,
+              colWidth: s.COL_WIDTH,
+              cellColor: s.CELL_COLOR,
+              textColor: s.TEXT_COLOR,
+            })),
+          }).then(ok => {
+            if (!ok) {
+              void setAlert({ type: 'alert', content: t('MSG00618', '_An error occurred while saving.') });
+              return;
+            }
+            // 팝업 titleSet 조회 캐시 무효화(전역 staleTime=Infinity) + 컬럼 메타 refetch 로 그리드 반영.
+            void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+            void fetchStaticColumns();
+          });
+        }}
       />
     </>
   );

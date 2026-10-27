@@ -1,5 +1,7 @@
 import { CellRange, CellType, type GridPanel, MergeManager } from '@mescius/wijmo.grid';
 
+import { BUCKET_TYPE } from '../production-plan-waterfall.constants';
+
 import { dynKindOf, largeKeyOf, rankOf, weekKeyOf } from './waterfall.periods';
 
 /**
@@ -19,10 +21,14 @@ const cellText = (value: unknown): string =>
 
 export class WaterfallMergeManager extends MergeManager {
   private readonly fixedBindings: string[];
+  // WeeklyISO 면 기간 헤더 가로병합(1·2단)을 끈다 — AS-IS InitSpreadDateColumnISO 는 컬럼마다
+  //   개별 셀(MMDD/W01/SUM)이라 월·주 묶음이 없다(비-ISO 는 월 롤업 가로병합 유지).
+  private readonly bucket: BUCKET_TYPE | undefined;
 
-  constructor(fixedBindings: string[]) {
+  constructor(fixedBindings: string[], bucket?: BUCKET_TYPE) {
     super();
     this.fixedBindings = fixedBindings;
+    this.bucket = bucket;
   }
 
   /** 2단(중분류) 키 — 월 + 주차. 최상위 합계(월)는 월+':SUM'(그룹당 1열) */
@@ -84,6 +90,11 @@ export class WaterfallMergeManager extends MergeManager {
       const kind = dynKindOf(binding);
       const rank = rankOf(kind);
       if (rank === null) return null;
+
+      // WeeklyISO: 기간 헤더를 컬럼마다 개별 셀(MMDD/W01/SUM)로 둔다 — 월·주 가로병합 없음
+      //   (AS-IS InitSpreadDateColumnISO 는 컬럼마다 ColumnHeaderSpan(.,1,1,.)). buildDynamicColumns 가
+      //   이미 3단 그룹을 컬럼당 1칸으로 만들므로 병합을 꺼 한 칸을 유지한다.
+      if (this.bucket === BUCKET_TYPE.WEEKLY_ISO) return null;
 
       // 최상위 합계 컬럼(월) — 2·3단 라벨이 모두 'SUM' → 세로 단일 셀
       if (r >= 1 && rank === 0) {

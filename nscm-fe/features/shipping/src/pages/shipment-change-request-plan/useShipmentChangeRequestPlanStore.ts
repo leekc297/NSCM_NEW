@@ -1,5 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
+import { sessionTimeZone } from '@foundation/utils';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import {
@@ -382,15 +383,16 @@ export const useShipmentChangeRequestPlanStore = createPersistedStoreWithTab<Sta
     fetchDayRange: async fromDate => {
       // PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD — IN fromDate/offsetDay/timeZone, OUT o_rc1 1행 1열
       //   "YYYYMMDD:YYYYMMDD". SCM_SYS_CALENDAR_M 기준이라 dayjs 근사로는 경계가 어긋난다.
-      //   timeZone: TO-BE UserSession 에 타임존 필드가 없다 — 빈 값으로 보내 SP 기본 처리에 맡긴다.
-      //   (AS-IS 는 클라 타임존을 명시 전달했다. 차이는 04 확인필요로 남긴다.)
+      //   timeZone: 사용자 TZ(session.tmzCd) 를 보낸다 — SP 2603행이 시작일이 비면
+      //   FN_MULTY_TIME(P_TIMEZONE) 으로 "오늘"을 잡으므로 이 값이 조회조건 Shipment Date
+      //   기본 시작일을 결정한다(AS-IS UserInfoContext.TimeZone 전달 동작 회복).
       try {
         const res = await apiClient.post<Record<string, Record<string, string>[]>>(
           `/${MENU_ID}/${SHEETS.MAIN}/${BTN_DAY_PERIOD}/call-proc`,
           {
             fromDate,
             offsetDay: PERIOD_OFFSET_DAY,
-            timeZone: '',
+            timeZone: sessionTimeZone(useSessionStore.getState().session),
           }
         );
         if (res.status >= 400 || Number(res.data.code)) return;

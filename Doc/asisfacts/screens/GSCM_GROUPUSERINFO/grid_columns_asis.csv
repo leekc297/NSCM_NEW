@@ -1,0 +1,17 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,GroupID,CODE,GroupUserInfo,GroupUserInfo.cs:155,GroupID,Text,,None,코드 선언 FPMerge.None,140,true,,,,"if(sheetName == ""GroupInfo"")"
+,GrpName,CODE,GroupUserInfo,GroupUserInfo.cs:156,GrpName,Text,,None,코드 선언 FPMerge.None,170,true,,,,"if(sheetName == ""GroupInfo"")"
+,UseYN,CODE,GroupUserInfo,GroupUserInfo.cs:157,UseYN,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,60,false,Center,,,"if(sheetName == ""GroupInfo"")"
+,GroupID,CODE,GroupUserInfo,GroupUserInfo.cs:169,GroupID*,Text,,None,코드 선언 FPMerge.None,80,false,,,,"if(sheetName == ""UserInfo"")"
+,UserID,CODE,GroupUserInfo,GroupUserInfo.cs:170,UserID*,Text,,None,코드 선언 FPMerge.None,80,true,,,,"if(sheetName == ""UserInfo"")"
+,UserName,CODE,GroupUserInfo,GroupUserInfo.cs:171,UserName*,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(sheetName == ""UserInfo"")"
+,UserName_E,CODE,GroupUserInfo,GroupUserInfo.cs:172,EnglishName,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(sheetName == ""UserInfo"")"
+,Email,CODE,GroupUserInfo,GroupUserInfo.cs:173,Email,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(sheetName == ""UserInfo"")"
+,Dept_ID,CODE,GroupUserInfo,GroupUserInfo.cs:174,Dept_ID*,Text,,None,코드 선언 FPMerge.None,100,false,,,,"if(sheetName == ""UserInfo"")"
+,Dept_Name,CODE,GroupUserInfo,GroupUserInfo.cs:175,Dept_Name*,Text,,None,코드 선언 FPMerge.None,220,true,,,,"if(sheetName == ""UserInfo"")"
+,UseYN,CODE,GroupUserInfo,GroupUserInfo.cs:176,UseYN,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,60,false,Center,,,"if(sheetName == ""UserInfo"")"
+,Name,CODE,GroupUserInfo,GroupUserInfo.cs:188,Name*,Text,,None,코드 선언 FPMerge.None,180,true,,,,if(sheetName == SpdSheet.shtDivision)
+,Code,CODE,GroupUserInfo,GroupUserInfo.cs:189,Code,Text,,None,코드 선언 FPMerge.None,40,false,,,,if(sheetName == SpdSheet.shtDivision)
+,JV_PLANT_ID,CODE,GroupUserInfo,GroupUserInfo.cs:190,JV Plant*,Text,,None,코드 선언 FPMerge.None,180,{p:JV_Plant_Enable},,,,if(sheetName == SpdSheet.shtDivision)
+,Name,CODE,GroupUserInfo,GroupUserInfo.cs:202,Name*,Text,,None,코드 선언 FPMerge.None,400,true,,,,"if(sheetName == ""Plant"")"
+,Code,CODE,GroupUserInfo,GroupUserInfo.cs:203,Code,Text,,None,코드 선언 FPMerge.None,40,false,,,,"if(sheetName == ""Plant"")"

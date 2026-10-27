@@ -1,0 +1,27 @@
+// MUI Grid v2 컬럼은 flex item 이라 기본 min-width:auto(=콘텐츠 크기) 를 가진다.
+// 멀티선택 CustomDropdown 에 칩이 여러 개 쌓이면 그 min-content 폭만큼 컬럼 자체가 늘어나
+// InputBox/조회조건 행 전체가 넓어진다. display:contents 라 레이아웃엔 관여하지 않고
+// (자식이 SearchArea 의 Grid container 직계 자식으로 그대로 취급됨) CSS 스코프용
+// DOM 조상만 제공해, 이 조상 아래 모든 MuiGrid-root(컬럼)에 min-width:0 을 강제한다.
+//
+// FormItem(@lges/design-system) 자체도 display:grid; grid-template-columns: {labelWidth}px auto
+//   구조라 콘텐츠 칼럼(auto 트랙)이 grid item 이다. grid item 도 flex item 과 동일하게
+//   기본 min-width:auto(=content 기준 최소폭) 라, 위 MuiGrid-root 만 풀어줘선 부족하다 —
+//   FormItem 내부 콘텐츠 Box(MuiBox-root)까지 min-width:0 을 안 걸면 칩 많은 필드(Team 등)에서
+//   그 auto 트랙이 그대로 늘어나 옆 필드를 침범한다.
+.searchGrid {
+  display: contents;
+
+  :global([class*='MuiGrid-root']),
+  :global([class*='MuiBox-root']) {
+    min-width: 0;
+  }
+}
+
+// 조회조건 2행 체크박스 가로 배치 (Sum / Color / Include Internal Txn)
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 36px; // hook #94 — 조회조건 객체 높이 36px 동일화
+}

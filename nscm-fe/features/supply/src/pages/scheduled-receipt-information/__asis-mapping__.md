@@ -88,10 +88,10 @@
 
 | 조건 | AS-IS 근거 | TO-BE comboId | 상태 |
 |---|---|---|:--:|
-| Division | `BLUtils.GetDivision(false,"")`→`dtMyDivision` | `COMBO.DIVISION='MyDivision'`(변수명 일치 강한 정황, BLUtils 소스·AS-IS DB 둘 다 미확보로 5층 완전대조 미완) | 구현(확인 필요 — EE 노출 QA) |
-| Plan Group | `dtPlanGroupAll`(최초적재 경로 미포착) → `RefreshPlanGroupByDivision` 클라필터 | `COMBO.PLAN_GROUP='PlanGroup_SCP_ALL'`(전량로드+클라필터 패턴 일치, 5층 대조 미완) | 구현(확인 필요) |
-| Site | `dtPlantSiteAll`/`dtPlantSiteTemp`, Division 1차+PlanGroup 2차 cascade | **미배선** — 후보 다수(`PlantSiteByDivision` 등)이나 이름 유사성만으로 단정 금지(SCP0022 오배선 선례), UI 골격만 노출 | 확인 필요 |
-| Child Material | `dtItemIdChildlAll`, Division 필터 | **미배선** — `SCM_ADM_CMBO_SQL_M` 0건(미등록), AS-IS 실측 불가(DB ERROR)로 등록 불가 | 확인 필요(AS-IS 축단, 등록 보류) |
+| Division | `BLUtils.GetDivision(false,"")`→`FN_GET_DIVISION`(SP `@Code='Division'`, asis.py 원문 "EE 포함") | `COMBO.DIVISION='Division_SCP'`(2026-10-21 `MyDivision`에서 교정 — Division_SCP SQL=FN_GET_DIVISION 동형: 권한사업부·VALID_YN='Y'·EE 미제외·동일 NAME 포맷) | **구현(AS-IS 대조 완료)** |
+| Plan Group | 시트별: Virtual Bom=`GetSearchInfo` Tables[0] 전체 / Scheduled Receipt=Tables[8] 가상BOM 등록분(`.cs:1479/1500`) | `COMBO.PLAN_GROUP='PlanGroup_SCP_ALL'`(VBom) + `COMBO.PLAN_GROUP_VBOM='PlanGroupVirtualBom'`(Sir, 신규등록=Tables[8]), Form 이 isVirtualBom 분기 | **구현(시트별 정합)** |
+| Site | `dtPlantSiteAll`=`GetSearchInfo` Tables[7]=`PLANT_SITE_BY_DIVISION`, Division 필터(EE→81/40/82 확장) | `COMBO.SITE='PlantSiteSir'`(SQL=Tables[7] 동일, asis.py 확인), Form Division 필터+CODE dedup+EE 확장(siteDivisionFilter) | **구현(AS-IS SQL 동일)** |
+| Child Material | `dtItemIdChildlAll`=`GetSearchInfo` Tables[5]=`Child ID`, Division 필터 | `COMBO.CHILD_MATERIAL='ItemIdChild'`(SQL=Tables[5] 동일, asis.py 확인), Form Division 필터+CODE dedup | **구현(AS-IS SQL 동일)** |
 | Valid(조회조건) | UsrComboBox 정적 하드코딩(Designer.cs 미확보) | 정적 옵션 All/Y/N — 화면설계서 엑셀 "1.화면 개요" 목업("Valid \| All ▼") + 그리드 VALID_YN 값역(Y/N) 실측으로 확정 | 구현(엑셀 근거) |
 | 그리드 셀 `OPMZ_PLAN_GR_ID`(FPComboBox) | `PlanGroup` SQL_ID(2 sheetNm 공통) | **등록 완료**(`PlanGroup_SCP_ALL`의 기존 AS-IS 실측·변환 SQL 본문을 그대로 복제 등록, `ora.py exec` 적용+재조회 확인) | **구현(iter-2 해소, SCP0130-01)** |
 | 그리드 셀 `PLANT_SITE_ID`/`ITEM_ID_CHILD`/`VALID_YN`(Scheduled Reciept Information 시트) | `CELL_COMBO_DATA_TYPE`='PlantSiteSir'/'ItemIdChild'/'ValidYn' 값은 있으나 `SCM_ADM_CMBO_SQL_M`/`SCM_ADM_LOOKUP_MASTER_DETAIL` 전부 0 rows(재확인, ora.py) — PlanGroup과 달리 재사용할 기존 등록 콤보가 없어 미러 등록 불가 | 미완(확인 필요, SCP0130-05 — AS-IS 축단) |

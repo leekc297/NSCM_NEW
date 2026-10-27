@@ -1,0 +1,3 @@
+| 일시 | 화면 | 종류 | 실패 항목 | 근거 | 생성기 보정 제안 |
+|---|---|---|---|---|---|
+| 2026-10-22 15:38 | SCP0122 | authcrud (crud 동일) | [jaeuk.shin] 재조회 후 신규 행 존재 (found=N, saveCalls=0) | plan.json keyColumns=null → 마커가 col 0(Div./Process, INPUT_TP_CD=S 읽기전용)에 입력됨. 신규행 편집 가능 셀 = OPMZ_ACTV_SEQ(M, 숫자)·OPMZ_ACTV_NAME(M, FPComboBox 마스터 코드) 뿐(sheet_columns.csv · AS-IS cs:381-383 LockRange) → 자유 텍스트 마커 행 생성 불가. ACTV_CD/SEQ 공란 신규행은 AS-IS cs:428-430 과 같이 저장 대상 제외(FE PlanActivityMgmt.tsx:156-165) → call-proc 0 | ① 마커 대상 열은 sheet_columns INPUT_TP_CD∈(M,E) 이고 셀 콤보가 아닌 텍스트 열만 선택 — 없으면 insert 모드 대신 'insert-combo'(콤보 미사용 코드 선택 + 숫자 열 최대값+1, 재조회 키=선택 코드) 또는 'insert-n/a' 로 note 처리 ② crud.ts insert 모드 saved 판정에 `s1.calls.length > 0` 추가(edit-save 와 동일) — 현재 call 0건이 saved=Y 로 기록됨 |

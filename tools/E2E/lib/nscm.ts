@@ -14,18 +14,43 @@ export const CFG = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'e2e.co
 export const FE: string = process.env.E2E_FE || CFG.feUrl;
 export const BE: string = process.env.E2E_BE || CFG.beUrl;
 
-export type ProcCall = { url: string; menu: string; sheet: string; btn: string; status: number; rows: number | null; ms: number; req?: string; res?: string };
+export type ProcCall = { url: string; menu: string; sheet: string; btn: string; status: number; rows: number | null; ms: number; req?: string; res?: string; body?: string };
 
 export class Nscm {
   calls: ProcCall[] = [];
+  /** 2026-10-24 W1: 콤보 API(admin/combo·combo-muti) 요청 본문·응답 건수 — AS-IS 원천 비교의 TO-BE 인자 증거 */
+  combos: { url: string; body: string; status: number; n: number | null; keys: string[]; rows?: { c: string; v: string }[] }[] = [];
+  /** 2026-10-21: 화면 콘솔 오류·페이지 예외 — 공용 그리드 생성이 Wijmo 단언으로 죽어도(SCP0100 "Unknown property inner") 라벨 누락으로만 보였던 사고. smoke 가 어노테이션 `console` 로 남기고 FAIL 로 세운다 */
+  consoleErrors: string[] = [];
+  /** 2026-10-26: 이 화면 요청 중 HTTP 5xx(모든 /api/ — 콤보·call-proc·메타) — BE 로그 DB 오류를 이 테스트에 귀속하는 근거 */
+  serverErrors: { url: string; status: number }[] = [];
   constructor(public page: Page) {
+    page.on('response', (res: Response) => { if (res.status() >= 500 && /\/api\//.test(res.url())) this.serverErrors.push({ url: res.url().slice(0, 200), status: res.status() }); });
+    page.on('pageerror', err => { this.consoleErrors.push(`pageerror: ${String(err && err.message || err).slice(0, 300)}`); });
+    page.on('console', msg => { if (msg.type() === 'error') { const t = msg.text(); if (!/favicon|net::ERR_|Failed to load resource|\[vite\]|React DevTools|Download the React/i.test(t)) this.consoleErrors.push(`console.error: ${t.slice(0, 300)}`); } });
     page.on('response', async (res: Response) => {
       const u = res.url();
+      if (/\/admin\/combo(?:-muti)?(?:\?|$)/.test(u)) {
+        const rec = { url: u, body: '', status: res.status(), n: null as number | null, keys: [] as string[] };
+        this.combos.push(rec);
+        try { rec.body = (res.request().postData() || '').slice(0, 2000); } catch { /* no body */ }
+        try {
+          const j = await res.json(); const d = j?.result ?? j?.data; // BaseResponse = {code, message, result}
+          // 코드·명칭 쌍 — 화면 표시 문구를 코드로 환산(세션 언어와 무관하게 AS-IS 코드와 비교 · 2026-10-24 DMF0005 Team KO/EN 불일치)
+          const pairs = (arr: Record<string, unknown>[]) => { const ks = Object.keys(arr[0] || {}); const kc = ks.find(k => /^code$/i.test(k)) || ks[0]; const kv = ks.find(k => /^name$/i.test(k)) || ks[1] || kc;
+            return arr.slice(0, 6000).map(r => ({ c: String(r[kc] ?? ''), v: String(r[kv] ?? '') })); };
+          if (Array.isArray(d)) { rec.n = d.length; rec.keys = Object.keys(d[0] || {}); rec.rows = pairs(d); }
+          else if (d && typeof d === 'object') { rec.keys = Object.keys(d); rec.n = Object.values(d).reduce((s: number, v: unknown) => s + (Array.isArray(v) ? v.length : 0), 0); }
+        } catch { /* 비JSON */ }
+        return;
+      }
       const m = u.match(/\/([^/]+)\/([^/]+)\/([^/]+)\/call-proc(?:-stream)?(?:\?|$)/);
       if (!m) return;
       // 응답 헤더 시점에 먼저 기록(동기) — json 파싱을 기다린 뒤 push 하면 search() 가 calls 를 자른 뒤에 들어가 '호출 0' 으로 오판한다(2026-10-20)
       const rec: ProcCall = { url: u, menu: decodeURIComponent(m[1]), sheet: decodeURIComponent(m[2]), btn: decodeURIComponent(m[3]), status: res.status(), rows: null, ms: 0 };
       this.calls.push(rec);
+      // 2026-10-23 조회조건 동작 검사: 조회 요청 본문(조건 인자) — 조건을 바꾼 뒤 인자가 달라졌는지 비교한다(최대 4000자)
+      try { const pd = res.request().postData() || ''; rec.body = pd.length > 4000 ? pd.slice(0, 4000) : pd; } catch { /* no body */ }
       try {
         // SAVE 류는 요청 본문(보낸 행 수)·응답 요약을 남긴다 — "HTTP 200 인데 DB 미반영"(silent no-op) 을 가려내기 위해(2026-10-20 SCP0096)
         if (/SAVE|INS|UPD|DEL/i.test(rec.btn)) { try { const pd = res.request().postData() || ''; rec.req = pd.length > 400 ? pd.slice(0, 400) + `…(+${pd.length - 400})` : pd; } catch { /* no body */ } }
@@ -136,7 +161,7 @@ export class Nscm {
 
   /** MDI 딥링크로 화면을 연다. 반환: authorized(권한 안내가 뜨지 않음), notFound */
   async openScreen(menuId: string) {
-    this.calls = []; this.searchExpanded = false;
+    this.calls = []; this.searchExpanded = false; this.consoleErrors = [];
     await this.page.goto(`${FE}/view/${menuId}`, { waitUntil: 'domcontentloaded' });
     await this.dismissNotices();
     await this.activateScreenTab(menuId);
@@ -153,17 +178,20 @@ export class Nscm {
 
   /** 알림/확인 다이얼로그 닫기 (확인 우선) */
   async closeAlert(prefer: 'ok' | 'cancel' = 'ok') {
-    const dlg = this.page.locator('[role="dialog"], [role="alertdialog"], .MuiDialog-root').last();
+    // 보이는 대화상자만(닫힌 요소 잔존 오인 방지). 확인 쪽 = Confirm 포함 — 'Cancel·Confirm' 확인창에서 /./ 대체 규칙이 첫 버튼 Cancel 을 눌러
+    //   저장이 취소되던 사고(2026-10-24 DMF0082 'Would you like to save it?'). 해당 버튼이 없으면 마지막 버튼(주 동작)
+    const dlg = this.page.locator('[role="dialog"]:visible, [role="alertdialog"]:visible, .MuiDialog-root:visible').last();
     if (!(await dlg.isVisible({ timeout: 1_000 }).catch(() => false))) return false;
-    const names = prefer === 'ok' ? [/^(확인|OK|Yes|예|닫기|Close)$/i, /./] : [/^(취소|Cancel|No|아니오)$/i, /^(확인|OK|닫기|Close)$/i];
+    const names = prefer === 'ok' ? [/^(확인|OK|Yes|예|Confirm|저장|Save|닫기|Close)$/i] : [/^(취소|Cancel|No|아니오)$/i, /^(확인|OK|닫기|Close)$/i];
     for (const n of names) { const b = dlg.getByRole('button', { name: n }).first(); if (await b.isVisible().catch(() => false)) { await b.click(); return true; } }
+    if (prefer === 'ok') { const last = dlg.getByRole('button').last(); if (await last.isVisible().catch(() => false)) { await last.click(); return true; } }
     await this.page.keyboard.press('Escape'); return true;
   }
 
   /** 열려 있는 에러/경고 알림 텍스트(없으면 '') */
   async alertText() {
     const dlg = this.page.locator('[role="dialog"], [role="alertdialog"], .MuiDialog-root').last();
-    return (await dlg.isVisible({ timeout: 500 }).catch(() => false)) ? (await dlg.innerText()).trim() : '';
+    return (await dlg.isVisible({ timeout: 500 }).catch(() => false)) ? (await dlg.innerText({ timeout: 2_000 }).catch(() => '')).trim() : '';  // 닫히는 중인 대화상자(W9 저장 직후) 예외 방지 2026-10-27
   }
 
   searchArea(): Locator { return this.page.locator('[class*="SearchArea"], [class*="searchArea"], form').first(); }
@@ -207,7 +235,13 @@ export class Nscm {
    * 2026-10-21 SCP0100: 접힌 조건(Search Mode·Display·Plan Type·Cell Qty…)을 라벨 검사가 못 찾아 smoke FAIL → 라벨 검사 전에 한 번 펼친다.
    * 화면당 1회(openScreen 이 플래그 초기화). 화살표가 없으면(extraConditions 없음) false.
    */
-  async expandSearchArea() {
+  async expandSearchArea(force = false) {
+    // force(2026-10-23 조회조건 동작 검사): 플래그와 무관하게 '지금 접혀 있으면' 다시 펼친다 — 접힘 판정 = 보이는 조회영역 안 MUI Collapse 가 hidden
+    if (force) {
+      const collapsed = await this.page.evaluate(() => Array.from(document.querySelectorAll('.MuiCollapse-hidden')).some(e => !!(e as HTMLElement).closest('form, [class*="SearchArea"], [class*="searchArea"]'))).catch(() => false);
+      if (!collapsed) return true;
+      this.searchExpanded = false;
+    }
     if (this.searchExpanded) return true;
     const searchBtn = await this.visibleFirst(this.page.getByRole('button', { name: /^(조회|Search)(\(F5\))?$/ }));
     if (!searchBtn) return false;
@@ -253,6 +287,19 @@ export class Nscm {
     const g = this.grid(i); await g.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => undefined);
     const cells = await g.locator('.wj-colheaders .wj-cell').allInnerTexts();
     return cells.map(s => s.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  }
+  /** 헤더 행 구성 — 보이는 헤더 셀을 top 좌표로 묶어 행 수·행 높이·글자를 돌려준다(병합 셀은 자기 top 에 한 번). 2026-10-21 헤더 사양 대조용 */
+  async gridHeaderRows(i = 0): Promise<{ height: number; rows: { top: number; h: number; n: number; cells: string[]; texts: string[] }[] }> {
+    const g = this.grid(i); await g.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => undefined);
+    return g.evaluate(el => {
+      const hdr = el.querySelector('.wj-colheaders'); if (!hdr) return { height: 0, rows: [] };
+      // 2026-10-21 측정 정정(🩹 수선 2 지적): 행 높이 = 그 top 의 **가장 낮은** 셀(고정 컬럼은 전 행을 세로 병합해 그 top 의 첫 셀이 되면 행 높이가 과대) · 총 높이 = 셀 top 최소~bottom 최대 실측(.wj-colheaders 의 rect 가 0 인 경우 대비)
+      const map: Record<string, { top: number; h: number; n: number; cells: string[]; texts: string[] }> = {}; let minTop = Infinity, maxBottom = -Infinity;
+      for (const c of Array.from(hdr.querySelectorAll('.wj-cell')) as HTMLElement[]) { const r = c.getBoundingClientRect(); if (r.height <= 0) continue; minTop = Math.min(minTop, r.top); maxBottom = Math.max(maxBottom, r.bottom); const k = String(Math.round(r.top)); (map[k] = map[k] || { top: Math.round(r.top), h: Math.round(r.height), n: 0, cells: [], texts: [] }); map[k].h = Math.min(map[k].h, Math.round(r.height)); const t = (c.innerText || '').replace(/\s+/g, ' ').trim(); map[k].n++; if (map[k].cells.length < 200) map[k].cells.push(t); if (t && !map[k].texts.includes(t)) map[k].texts.push(t); }
+      const rows = Object.values(map).sort((a, b) => a.top - b.top).map(r => ({ top: r.top, h: r.h, n: r.n, cells: r.cells, texts: r.texts.slice(0, 40) }));
+      const extent = isFinite(minTop) && isFinite(maxBottom) ? Math.round(maxBottom - minTop) : 0;
+      return { height: extent || Math.round((hdr as HTMLElement).getBoundingClientRect().height) || rows.reduce((s, r) => s + r.h, 0), rows };
+    });
   }
   /**
    * 그리드 컬럼 정의 binding 전부(가상화 무관) — DOM 헤더(gridHeaders)는 화면에 보이는 열만 있어 동적 기간 컬럼 수를 셀 수 없다.
@@ -382,10 +429,51 @@ export class Nscm {
     const calls = this.calls.slice(before); for (const c of calls) { const m2 = /"ERR_CODE":\s*(-?\d+)[^}]*"ERR_MESSAGE":\s*"([^"]{0,200})/.exec(c.res || ''); if (m2 && m2[1] !== '0' && !msg) msg = m2[2]; }
     return { calls, message: msg };
   }
+  /**
+   * 다국어 미적용 노출 — 2026-10-23 사용자 지시: t(코드, '_기본문구') 의 코드가 SCM_ADM_MSG_M 에 없으면 '_기본문구' 가 그대로 보인다 → 오류.
+   *  보이는 글자 노드(라벨·버튼·그리드 헤더·알림) + aria-label/title/placeholder 중 '_' 로 시작하는 단어 덩어리를 모은다(입력값·그리드 데이터 셀 제외).
+   */
+  async untranslatedTexts(): Promise<string[]> {
+    return this.page.evaluate(() => {
+      const out = new Set<string>();
+      const vis = (e: Element | null) => { if (!e) return false; const r = (e as HTMLElement).getBoundingClientRect(); return r.width > 0 && r.height > 0 && (e as HTMLElement).offsetParent !== null; };
+      const skip = (e: Element | null) => !e || !!e.closest('.wj-cells, input, textarea, [contenteditable="true"], script, style');
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) { const p = n.parentElement; const t = (n.textContent || '').trim(); if (!t || skip(p) || !vis(p)) continue; if (/^_[A-Za-z가-힣0-9]/.test(t)) out.add(t.slice(0, 60)); }
+      for (const e of Array.from(document.querySelectorAll('[aria-label], [title], [placeholder]'))) { if (!vis(e) || e.closest('.wj-cells')) continue; for (const a of ['aria-label', 'title', 'placeholder']) { const v = (e.getAttribute(a) || '').trim(); if (/^_[A-Za-z가-힣0-9]/.test(v)) out.add(`${a}=${v.slice(0, 60)}`); } }
+      return [...out];
+    }).catch(() => [] as string[]);
+  }
   /** 열린 대화상자가 있으면 전부 닫는다(최대 3개) — 조회/편집 전에 호출 */
   async clearDialogs() { for (let k = 0; k < 3; k++) { if (!(await this.closeAlert('ok'))) break; await this.page.waitForTimeout(200); } }
 
   snapshot(name: string) { return this.page.screenshot({ path: path.join(process.env.E2E_RESULTS || CFG.resultsDir, 'shots', `${name}.png`), fullPage: false }).catch(() => undefined); }
+}
+
+/**
+ * BE 로그 DB 오류 — 2026-10-26 사용자 지시 "시노님이 없어서 오류가 발생하는 것도 오류로 검출".
+ *  사내 BE 계정 SCMP_APP 에 시노님·권한이 없으면 BE 는 HTTP 500 'Sql Error' 만 돌려주고 원인(ORA-00942 "SCMP_APP"."X")은 nscm.log 에만 남는다.
+ *  beLogMark() 로 시작 위치를 잡고 beLogErrors() 로 그 뒤에 추가된 ORA-/PLS- 를 모은다(자정 로테이션으로 파일이 줄면 처음부터).
+ *  분류 SYN = 시노님·권한·객체 해석(ORA-00942·ORA-04043·PLS-00201·ORA-01031·ORA-00980·ORA-04063·ORA-06508) / DB = 그 밖의 ORA·PLS.
+ */
+export const BE_LOG: string = process.env.E2E_BE_LOG || CFG.beLogFile || path.join(__dirname, '..', '..', '..', 'nscm-be', 'logs', 'nscm.log');
+export type DbErr = { code: string; cls: 'SYN' | 'DB'; object: string; msg: string };
+export function beLogMark(): { size: number } { try { return { size: fs.statSync(BE_LOG).size }; } catch { return { size: -1 }; } }
+export function beLogErrors(mark: { size: number }): DbErr[] {
+  try {
+    if (mark.size < 0) return [];
+    const st = fs.statSync(BE_LOG); const from = st.size >= mark.size ? mark.size : 0; const len = Math.min(st.size - from, 64 * 1024 * 1024);
+    if (len <= 0) return [];
+    const fd = fs.openSync(BE_LOG, 'r'); const buf = Buffer.alloc(len); fs.readSync(fd, buf, 0, len, from); fs.closeSync(fd);
+    const out = new Map<string, DbErr>();
+    for (const m of buf.toString('utf8').matchAll(/\b((?:ORA|PLS)-\d{5}):?([^\r\n]{0,240})/g)) {
+      const code = m[1]; const msg = m[2].trim(); const obj = (/"([A-Z0-9_$#]+)"\."([A-Z0-9_$#]+)"/.exec(msg) || [])[0] || '';
+      const cls: DbErr['cls'] = /ORA-00942|ORA-04043|PLS-00201|ORA-01031|ORA-00980|ORA-04063|ORA-06508/.test(code) ? 'SYN' : 'DB';
+      if (/ORA-06512|ORA-06550/.test(code)) continue; // 스택 위치·PL/SQL 래퍼 줄 — 원인 코드가 따로 있다
+      const k = `${code}|${obj}|${msg.slice(0, 60)}`; if (!out.has(k)) out.set(k, { code, cls, object: obj, msg: msg.slice(0, 200) });
+    }
+    return [...out.values()];
+  } catch { return []; }
 }
 
 export function escapeRe(s: string) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }

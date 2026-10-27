@@ -113,3 +113,25 @@ Fact Pack 만을 입력으로 LLM 이 분석서 5종을 쓰고, 프로그램이 
 - `agent.ps1 <화면ID>` 는 1차 분석서 5종 뒤에 **업무분석서 `business_analysis.md` · 화면설계서 `screen_design.md` · 단위테스트 `unit_test.md`** 를 2차 호출로 생성합니다.
 - `-Phase docs` : 이미 PASS 한 1차 분석서를 그대로 두고 문서 3종만 생성 / `-Phase analysis` : 1차만.
 - 2차 게이트(`_gate.csv` 의 `summary2`): 업무분석서에 엔드포인트·SP 전부, 화면설계서에 컨트롤·시트·이벤트·엔드포인트 전부, 단위테스트의 근거 열에 이벤트·엔드포인트·시트 전부. `total` 행이 최종 PASS/FAIL.
+
+## 액션 추출 (2026-10-23 추가 — 사용자 지시: 파싱 단계에서 핸들러 본문의 구체 액션까지)
+`pack` 이 화면마다 추가로 만든다(`src/Actions.cs`, 분류 사전 `actions_dict.json`):
+- `actions.csv` — 화면 클래스 메서드의 **모든 실행 문장**(메서드당 1회). kind = VALUE_CLEAR/VALUE_SET(컨트롤 값) · LIST_REBIND/LIST_CLEAR/LIST_BIND(목록) · GRID_INIT/GRID_CLEAR/GRID_SET/GRID_LOCK/GRID_STYLE · STATE(Enabled/Visible/ReadOnly) · FLAG(화면 필드) · STATE_RESET · MESSAGE · VALIDATE · RETURN/THROW/FLOW · ENDPOINT(endpoint 열 = FoxQuery 키) · COMBO_DATA · POPUP · CALL_LOCAL · CALL_EXT(사전 미등록 외부 호출) · OTHER(미분류 — 버리지 않음) 등. guard = if/else/switch case/loop/try/catch/lambda 문맥.
+- `actions_entries.csv` — 진입점(이벤트·버튼 override·기타 override·생성자, 진입점 미연결 포함) → 도달 메서드(depth·path·호출 지점의 call_guard 누적).
+- `actions_summary.csv` — 진입점별 문장 수·분류 수·OTHER·CALL_EXT·분류율·kind 분포.
+- 제외: 주석·#if 비활성(Roslyn trivia), legacy 사본 파일, 디자이너 `InitializeComponent` 본문(props/controls/events.csv 담당).
+- 분류율 개선 = `actions_dict.json` 에 반복 CALL_EXT 추가(코드 수정 불필요). 화면 지정 `pack` 도 `screens/_index.csv` 의 다른 화면 행을 보존한다(2026-10-23 수정).
+
+## 2a — 액션 → DB 정적 연결 (2026-10-23 추가 — 사용자 지시: 콤보·조회조건은 DB 안 2~3단계 실행까지 담는다)
+- `pack`(전체 실행)이 `framework_actions/`(01.Framework 182파일의 액션 — `GetDMInnerTable` 등 switch case 별 필터·엔드포인트)를 추가 생성.
+- `python links.py [화면ID…]` → `screens/<ID>/action_links.csv`: 액션 1건이 DB 까지 닿는 체인(홉 1행). PARAM(요청 파라미터) · FW_METHOD/FW_CASE(프레임워크 메서드·넘긴 코드값의 case 동작) · ENDPOINT(FoxQuery·BIZ→BLL→DLL, 같은 프로젝트·같은 클래스 우선) · SP/SQL · SP_BRANCH(`IF @변수='값'` — 넘긴 값과 일치 RESOLVED / 미확정 CANDIDATE) · SP_REF(테이블·하위 SP 4단계) · STORED_QUERY(SCM_ADM_DQ_LIST.DQ_TEXT) · DYNAMIC_SQL(sp_executesql) · DATA_SOURCE(목록·그리드에 넣는 화면 필드가 채워진 행).
+- 키 비교는 대소문자 무시. 스캐너 래퍼 전파의 일반 템플릿 키(`{p:…}`, `PseudoDataClient`)는 실행부에서 무시(실제 키는 요청 생성 행).
+- 한계: 지역 변수로 넘긴 목록 데이터 원천 미추적(DATA_SOURCE UNRESOLVED) · 동적 키/동적 SQL 은 실행 시 결정(2b 데이터셋 단계에서 확정).
+
+## 2b — 액션 데이터셋 (2026-10-23 — 사용자 승인: 계획(--dry) 검토 후 실행)
+- `python datasets.py [--dry] [화면ID…]` → `datasets/plan.csv`(계획) · `datasets/runs.csv`(실행 1건 1행: 파라미터 값·출처·안전판정·상태·결과셋별 행 수) · `datasets/<DB>/<SP|키>/<run_id>_rs<n>.csv`(결과셋마다 최대 1,000행) · `screens/<ID>/action_data.csv`(액션 → 실행).
+- 안전: closure 영구 테이블 쓰기·COMMIT·시스템 SP·동적 SQL 쓰기 문자열 = 실행 안 함(UNSAFE) · 트랜잭션+항상 ROLLBACK · 실행 뒤 트랜잭션 로그 기록 수 확인(1차 전체 0).
+- 인라인 SQL 은 sp_executesql 바인딩(FoxQuery 런타임과 동일) · dbType=command 파라미터는 본문 텍스트 치환(필터 없음 = 빈 텍스트).
+- 재실행 시 OK/EMPTY 는 재사용(오류·신규만 실행). 2026-10-23 결과: 4,150건 — OK 1,228 · EMPTY 1,894 · UNSAFE 585 · UNRESOLVED 261 · ERROR 174 · TIMEOUT 8.
+- 한계: 지역 변수로 넘기는 파라미터는 빈값(실제 운영 호출 값 원천 없음 — TB_FX_PerformanceLog* 0행, TB_STORED_PROCEDURE_LOG = DDL 이력) → EMPTY 다수의 원인.
+- ⭐ **사용 원칙(사용자 결정 2026-10-23)**: datasets/·action_data.csv 는 **기대값으로 쓰지 않는다** — 데이터는 사용자 권한·조건마다 다르므로 사전 데이터셋은 잘못된 판정을 낳는다. 실행 가능 여부·결과 컬럼 구조·UNSAFE 판정 참고용. 실제 데이터 동작 확인은 E2E 실행 시점에 실제 사용자로 추출해 검증한다. 2b 개선(대표 사용자 보정·재실행)은 진행하지 않음.

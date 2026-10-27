@@ -1,0 +1,40 @@
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref
+DIVISION_ID,Y,COND,N,잠금 when if (strSel_Division!=null && strSel_Division.Length==2),,,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:411 LockRange
+CUSTOMER,Y,N,N,,,,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:414 LockRange
+FROM_SITE_CODE,Y,Y,N,,,,기존행 SCP0007_BOD:453 LockColumn
+FROM_CITY,Y,N,N,,,,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:415 LockRange
+TO_SITE_CODE,Y,Y,N,,,,기존행 SCP0007_BOD:453 LockColumn
+TO_CITY,Y,N,N,,,,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:416 LockRange
+VMI_YN,Y,Y,N,,,,기존행 SCP0007_BOD:453 LockColumn
+INCOTERMS,Y,COND,COND,"잠금 when if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1415) | 해제 when else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1423)","잠금 when if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1415) | 해제 when else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1423)",,기존행 SCP0007_BOD:453 LockColumn
+INCOTERMS_SSP,Y,COND,COND,"해제 when if (boolEditChange == true) (EditButton:482) | 잠금 when else of (boolEditChange == true) (EditButton:488) | 잠금 when else of (strTO_SITE_TYPE == ""PLANT"") (EditButton:496) | 해제 when if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1418) | 잠금 when else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1427)","해제 when if (boolEditChange == true) (EditButton:482) | 잠금 when else of (boolEditChange == true) (EditButton:488) | 잠금 when else of (strTO_SITE_TYPE == ""PLANT"") (EditButton:496) | 해제 when if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1418) | 잠금 when else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1427)",,
+SAFETY_STOCK,N,COND,COND,"잠금 when if (siMain.ActiveSheet.GetText(i, siMain.GetColumnIndex(DefColumns.VMI_YN)).ToString() != ""Y"") (EditButton:462) | 해제 when if (dr[DefColumns.VMI_YN.ToLower()].ToString() == ""Y"") (SetCityCode:1433) | 잠금 when else of (dr[DefColumns.VMI_YN.ToLower()].ToString() == ""Y"") (SetCityCode:1437) | 해제 when if (svmiYn == ""Y"") (SpdMain_ClipboardPasted:1263) | 잠금 when else of (svmiYn == ""Y"") (SpdMain_ClipboardPasted:1265) | 해제 when if (svmiYn == ""Y"") (SpdMain_ComboSelChange:1184) | 잠금 when else of (svmiYn == ""Y"") (SpdMain_ComboSelChange:1186)","잠금 when if (siMain.ActiveSheet.GetText(i, siMain.GetColumnIndex(DefColumns.VMI_YN)).ToString() != ""Y"") (EditButton:462) | 해제 when if (dr[DefColumns.VMI_YN.ToLower()].ToString() == ""Y"") (SetCityCode:1433) | 잠금 when else of (dr[DefColumns.VMI_YN.ToLower()].ToString() == ""Y"") (SetCityCode:1437) | 해제 when if (svmiYn == ""Y"") (SpdMain_ClipboardPasted:1263) | 잠금 when else of (svmiYn == ""Y"") (SpdMain_ClipboardPasted:1265) | 해제 when if (svmiYn == ""Y"") (SpdMain_ComboSelChange:1184) | 잠금 when else of (svmiYn == ""Y"") (SpdMain_ComboSelChange:1186)",,신규행 SCP0007_BOD:417 LockRange
+PRIORITY,Y,Y,Y,,,,
+ROUTE_CNT,Y,N,N,,,,기존행 SCP0007_BOD:454 LockColumn | 신규행 SCP0007_BOD:418 LockRange
+TRANSPORT_MODE,Y,Y,N,,,,기존행 SCP0007_BOD:454 LockColumn
+ROUTE_ID,Y,N,Y,,,,신규행 SCP0007_BOD:419 LockRange
+LT_TYPE,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+DAYS_MON,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+DAYS_TUE,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+DAYS_WED,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+DAYS_THU,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+DAYS_FRI,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+DAYS_SAT,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+DAYS_SUN,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+LEAD_TIME,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+DIS_TOTAL_LEAD_TIME,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+BEFORE_LEAD_TIME,N,N,N,,,정렬번호 25 동률(BOD_ID) — 범위 경계 포함 여부 확정 불가,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+BOD_ID,Y,N,N,,,정렬번호 25 동률(BEFORE_LEAD_TIME) — 범위 경계 포함 여부 확정 불가,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
+AFTER_LEAD_TIME,Y,Y,Y,,,,
+FROM_YYYYMMDD,Y,Y,Y,,,,
+REMARKS,Y,Y,Y,,,,
+TO_YYYYMMDD,Y,Y,Y,,,,
+BOD_VALID,Y,Y,Y,,,,
+ROUTE_VALID,Y,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
+CREATED_BY,Y,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
+CREATION_DATE,Y,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
+LAST_UPDATED_BY,Y,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
+LAST_UPDATE_DATE,Y,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
+FROM_COUNTRY,N,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
+TO_COUNTRY,N,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
+ROUTE_CHK,N,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange

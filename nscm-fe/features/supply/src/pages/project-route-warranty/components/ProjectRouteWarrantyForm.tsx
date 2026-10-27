@@ -1,4 +1,4 @@
-import { ItemByDivisionModal } from 'features/master/src/components';
+import { ModelByDivisionPopup } from 'features/master/src/components';
 import { useEffect, useMemo, useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -14,7 +14,9 @@ import {
   COMBO,
   EXCLUDE_EE_DIVISION,
   LBL,
+  MENU_ID,
   MSG,
+  OPERATION_GROUP_LOOKUP_TYPE,
 } from '../project-route-warranty.constants';
 import { useProjectRouteWarrantyStore } from '../useProjectRouteWarrantyStore';
 
@@ -31,10 +33,25 @@ export const ProjectRouteWarrantyForm = ({ onSearch }: Props) => {
   const searchParams = useProjectRouteWarrantyStore(state => state.searchParams);
   const setSearchParams = useProjectRouteWarrantyStore(state => state.setSearchParams);
   const openSearchArea = useProjectRouteWarrantyStore(state => state.openSearchArea);
+  const clearMainFilter = useProjectRouteWarrantyStore(state => state.clearMainFilter);
 
   const [openItemModal, setOpenItemModal] = useState(false);
 
   const [divisionsRaw] = useTabComboQueries({ filters: [COMBO.DIVISION] });
+
+  // cboOperationGroup = 숨김 콤보(AS-IS Designer Visibility=Never, cs L164-165 setListBox(...,true)로
+  //   ALL 항목 포함 로드). UI 엔 렌더하지 않지만 AS-IS 구조와 동일하게 LookupCommon(OPERATION_GROUP)을
+  //   로드해 둔다 — 값은 store(기본 ALL)가 보유하고 SP 로 실린다(setFilters ALL→'' 치환).
+  useTabComboQueries({
+    filters: [{ comboId: COMBO.OPERATION_GROUP, mnuId: MENU_ID, lookupType: OPERATION_GROUP_LOOKUP_TYPE }],
+  });
+
+  // cboOperationGroup_SelectedIndexChanged 재현(cs L1012-1017) — operationGroup 변경 시 그리드 비움.
+  //   숨김 콤보라 사용자가 직접 바꿀 길은 없지만(=실질 dead-path), AS-IS 구조를 그대로 미러한다.
+  useEffect(() => {
+    clearMainFilter();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams.operationGroup]);
   // BLUtils.GetDivisionWithoutEE 2단계 중 화면측 후처리 — EE 사업부 제외(constants COMBO 주석).
   //   참조 안정화(nscm-patterns §5-4) — 매 렌더 새 배열 방지.
   const divisions = useMemo(() => divisionsRaw?.filter(EXCLUDE_EE_DIVISION), [divisionsRaw]);
@@ -199,18 +216,18 @@ export const ProjectRouteWarrantyForm = ({ onSearch }: Props) => {
         }
       />
 
-      {/* Model 픽커(btnItemId, design/02 §4.6) — base ItemByDivisionModal(COM0008). div=81
-          SCM_SITE_ID/PROJECT_CODE 반환은 SCP0048Ex 팝업 소관이나 미이관(GAP-1) — 조회조건 Model 은
-          품번만 필요하므로 base 팝업으로 충분하다. 셀 팝업(div=81)의 Ex 반환만 문서화 gap. */}
-      <ItemByDivisionModal
+      {/* Model 픽커(btnItemId, design/02 §4.6) — SCM0002 ModelByDivisionPopup. 조회조건 Model 은
+          품번(ITEM_ID)만 필요하므로 onSelect 의 itemId 만 반영한다. */}
+      <ModelByDivisionPopup
         open={openItemModal}
-        modalClose={() => setOpenItemModal(false)}
-        setSelectedValue={items => setSearchParams({ itemId: items })}
-        preSearchParams={{
+        onClose={() => setOpenItemModal(false)}
+        onSelect={selected => setSearchParams({ itemId: selected.itemId })}
+        params={{
           divisionId: searchParams.divisionId,
+          projectCode: '',
+          scmSiteId: '',
           itemId: searchParams.itemId ?? '',
         }}
-        callFromCell={false}
       />
     </>
   );

@@ -164,19 +164,19 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ----- 조회 validation (AS-IS FindData L564~590 1:1) -----
   const validateFind = (): boolean => {
     if (isFetching) return false;
-    // MSG00097 — Division 필수 (.cs L566~571)
+    // MSG.REQUIRE_DIVISION — Division 필수 (.cs L566~571)
     if (!searchParams.divisionId) {
       void setAlert({
         type: 'alert',
-        content: t(MSG.REQUIRE_DIVISION, '_Please select Division.'),
+        content: t(MSG.REQUIRE_DIVISION, '_권한을 가진 Division이 없습니다.'),
       });
       return false;
     }
-    // MSG00108 — 기간 역전 (.cs L577~581)
+    // MSG.PERIOD_INVERTED — 기간 역전 (.cs L577~581)
     if (Number(searchParams.startYyyymmdd) > Number(searchParams.endYyyymmdd)) {
       void setAlert({
         type: 'alert',
-        content: t(MSG.PERIOD_INVERTED, '_Invalid period (start > end).'),
+        content: t(MSG.PERIOD_INVERTED, '_시작일자가 종료일자보다 늦을 수 없습니다.'),
       });
       return false;
     }
@@ -355,7 +355,10 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
     }
     if (entries.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_SAVE_DATA, '_No data to save.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.NO_SAVE_DATA, '_Customer FCST 수량이 입력된 일자가 없습니다.'),
+      });
       return;
     }
     // 저장 confirm 없음 (표준화) — 저장은 되돌릴 수 있고 결과는 Toast 로 알린다.
@@ -379,6 +382,7 @@ export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
         void setAlert({ type: 'alert', content: reason });
         return;
       }
+      // AS-IS 는 저장 건수(MSG00004 + iCount, .cs L599)를 붙였으나 TO-BE 는 건수 없는 공통 성공 문구(MSG00002)로 통일한다.
       void setToast({ message: t(MSG.SAVED, '_성공적으로 저장되었습니다.'), type: 'success' });
       saveEntriesRef.current.clear();
       editTrackerRef.current?.clearChanges();

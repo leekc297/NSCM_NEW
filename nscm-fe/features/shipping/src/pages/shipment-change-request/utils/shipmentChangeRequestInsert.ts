@@ -1,4 +1,15 @@
-import { EDIT_MAIN_FLAG, FIXED_DIVISION } from '../shipment-change-request.constants';
+import { EDIT_MAIN_FLAG, FIXED_DIVISION, INSERT_COPIED_FLAG } from '../shipment-change-request.constants';
+
+/**
+ * 신규행 초기값 — **경로가 둘이고 서로 다르다**(자매 SSP0200 과 동일 규약, 사용자 지시 2026-10-13).
+ *
+ *  - `InsertButton`(툴바 Insert) : 선택행 복사 + `RowCount>0` 가드  -> `buildCopiedRow`
+ *  - `btnNew`(New 버튼)          : `DIVISION_ID` 만 + div 분기 `'-'`, **가드 없음** -> `buildNewRow`
+ *
+ * 종전에는 New 도 `buildCopiedRow` 를 재사용해 두 버튼이 같은 동작이었다. SSP0200 과 맞추라는
+ * 지시로 경로를 분리했다 — 2026-10-08 "New 가 선택 행을 복사하지 않는다" 신고로 복사를 붙였던
+ * 결정을 뒤집은 것이다(그 신고의 복사 요구는 **Insert** 쪽에서 계속 충족된다).
+ */
 
 /**
  * Insert 신규행 초기값 — **선택(활성) 행의 값을 복사**한다.
@@ -8,10 +19,17 @@ import { EDIT_MAIN_FLAG, FIXED_DIVISION } from '../shipment-change-request.const
  *   복사원은 `siMain.Insert()` 로 행을 끼워 넣은 **뒤**의 `ActiveRowIndex + 1`(L2438) —
  *   삽입으로 한 칸 밀린 **원래 활성 행**이다. 즉 "누르기 직전에 선택돼 있던 행"이 원본이다.
  *
- * 복사 12키(L2493~2516 `defaultData` 그대로):
+ * 복사 12키 — AS-IS L2491~2512 `defaultData` 그대로:
  *   DIVISION_ID · ITEM_ID · FROM_SITE_DESCRIPTION · TO_SITE_DESCRIPTION · TO_SITE_SHIPTO_CODE ·
  *   PROJECT_CODE/END_CUSTOMER(div 분기) · SHIPMENT_CONFIRM_QTY · SHIPMENT_DATE · INCOTERMS ·
  *   TRANSPORT_MODE · FCST_TYPE
+ *
+ * `NICK_NAME`/`MTK_OWNER` 는 **복사하지 않는다** — AS-IS SSP0201 `defaultData` 에 없는 키다.
+ *   AS-IS 는 NICK_NAME 을 삽입 시 비우고 잠그며(cs:2523 LockRange), Model 팝업에서 모델을 고를 때만
+ *   채운다(cs:4339). 즉 복사 삽입한 행은 Model(ITEM_ID)만 복사되고 Nick Name 은 빈 칸이다.
+ *   MTK_OWNER 는 SSP0201.cs 에 참조 자체가 없다. 종전엔 SSP0200 패리티 지시(2026-10-13)로 두 키를
+ *   넣었으나, AS-IS·설계서(복제 12필드, cs:2493-2514 확정) 기준으로 되돌렸다(사용자 결정 2026-10-26).
+ *   `TO_SITE_SHIPTO_CODE` 는 SSP0201 AS-IS `defaultData`(cs:2495)에 실재하는 키라 **유지**한다.
  *
  * 함정 2개 — 자매 SSP0200 이 같은 지점에서 이미 겪은 것이다:
  *
@@ -33,7 +51,7 @@ import { EDIT_MAIN_FLAG, FIXED_DIVISION } from '../shipment-change-request.const
  *
  * 미이식(의도): AS-IS 는 복사와 함께 셀 콤보 재조회(ShipToCodeByDivision/FromSite/ToSite/MyDivision),
  *   이미지 셀타입, `LockRange` 5구간을 건다. TO-BE 에서 콤보는 컬럼 메타(PARAM10='D') 구동이고
- *   잠금은 `NEW_ROW_EDIT_COLUMNS` 화이트리스트가 담당하므로 여기서는 **값만** 만든다.
+ *   잠금은 컬럼 메타(INPUT_TP_CD) + 행 조건(editLock.ts isRowEditable)이 담당하므로 여기서는 **값만** 만든다.
  */
 
 export type GridRowData = Record<string, unknown>;
@@ -58,8 +76,35 @@ export const buildCopiedRow = (base: GridRowData, divisionId: string): GridRowDa
     INCOTERMS: base.INCOTERMS,
     TRANSPORT_MODE: base.TRANSPORT_MODE,
     FCST_TYPE: base.FCST_TYPE,
+    // NICK_NAME·MTK_OWNER 는 복사하지 않는다 — AS-IS defaultData 에 없다(헤더 주석 참조).
+    //   AS-IS 와 동일하게 복사 삽입 행은 Model 만 채워지고 Nick Name 은 빈 칸으로 두며,
+    //   Nick Name 은 Model 팝업 재선택 시 writeCell 이 NICK_NAME 에 채운다.
     // 변경검지 플래그 — 신규행은 '수정됨' 이 아니다(design 03 §3.2). AS-IS defaultData 에는 없고
     //   TO-BE 저장 판정(EDIT_MAIN)이 쓰는 값이라 종전 handleInsert 와 동일하게 'N' 으로 둔다.
+    [EDIT_MAIN_FLAG]: 'N',
+    // Insert(복사) 경로 표식 — END_CUSTOMER 를 잠그는 근거(AS-IS InsertRow cs:2523). New 버튼
+    //   경로(buildNewRow)는 이 표식이 없어 END_CUSTOMER 편집이 열린다(AS-IS BtnNew). UI 전용이라
+    //   저장 payload 매핑 키에 없어 전송되지 않는다.
+    [INSERT_COPIED_FLAG]: 'Y',
+  };
+};
+
+/**
+ * `btnNew` — 조회조건 division + div 분기 `'-'` 뿐이다(자매 SSP0200 `buildNewRow` 와 동일).
+ *
+ * AS-IS 가 **의도적으로** `RowCount>0` 가드를 뺀 경로다 — 빈 그리드(조회 전)에서도 행이 추가된다.
+ * 복사원을 읽지 않으므로 가드가 필요 없다.
+ *
+ * `CHANGE_REASON_CODE` 는 **넣지 않는다** — `'T07'` 은 `SSP_Main_Validation`(cs:3130~3221)이
+ * 저장 직전에 **수정행**을 상대로 자동 세팅하는 값이다(미구현, 04 GAP-VALCHK). 신규행 기본값으로
+ * 넣으면 사용자가 사유를 고르지 않아도 채워진 것처럼 보여 그 규칙의 판정 자체를 흐린다.
+ */
+export const buildNewRow = (divisionId: string): GridRowData => {
+  const endCustomerDiv = divisionId === FIXED_DIVISION;
+  return {
+    DIVISION_ID: divisionId,
+    PROJECT_CODE: endCustomerDiv ? EXCLUSIVE_NONE : '',
+    END_CUSTOMER: endCustomerDiv ? '' : EXCLUSIVE_NONE,
     [EDIT_MAIN_FLAG]: 'N',
   };
 };

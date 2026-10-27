@@ -126,6 +126,23 @@ export const ScpBomGrid = ({
     return () => g.pastingCell?.removeHandler(handler);
   }, [gridRef, rows]);
 
+  // 잠금행 M 3컬럼 노란 하이라이트 제거 — 공용 formatEditableColumns 는 메타만 보고 칠하므로
+  //   편집 불가 행도 노랗게 보인다. 공용 핸들러 뒤에 등록되어 잠금행에서만 클래스를 떼어 흰색으로 둔다.
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const handler = (sender: FlexGrid, e: FormatItemEventArgs) => {
+      if (e.panel.cellType !== CellType.Cell) return;
+      const binding = sender.columns[e.col]?.binding ?? '';
+      if (!EDITABLE.includes(binding)) return;
+      const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
+      if (isRowLocked(row)) e.cell.classList.remove('wj-cell-editable');
+    };
+    g.formatItem.addHandler(handler);
+    g.invalidate();
+    return () => g.formatItem?.removeHandler(handler);
+  }, [gridRef, staticColumns, rows]);
+
   // 잠금행 배경 Gray(AS-IS W7, design 03 §3 / hook #95) 비활성 (2026-10-07, 사용자 요청) —
   //   다른 화면처럼 흰색으로 보이도록 SCP0053 고유 잠금행 회색(#f0f0f0)을 제거한다. 편집 셀 노란
   //   하이라이트(wj-cell-editable)는 공통 표준이라 유지. 복원 시 아래 블록 주석 해제 +

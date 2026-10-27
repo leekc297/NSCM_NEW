@@ -1,0 +1,15 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0063,SQL,UP_FX_GetUserGroupAuthExtentionList,Doc\asisfacts\db\modules\dbo.UP_FX_GetUserGroupAuthExtentionList.sql,34,,DIVISION_ID,ORDER BY DIVISION_ID,0,정적
+SCP0063,SQL,UP_FX_GetUserGroupAuthExtentionList,Doc\asisfacts\db\modules\dbo.UP_FX_GetUserGroupAuthExtentionList.sql,56,,CODE,ORDER BY S.Code,0,정적
+SCP0063,SQL,UP_FX_GetUserGroupAuthExtentionList,Doc\asisfacts\db\modules\dbo.UP_FX_GetUserGroupAuthExtentionList.sql,103,,DIVISION_ID,ORDER BY DIVISION_ID,0,정적
+SCP0063,SQL,SCP0012_GET_PSI,Doc\asisfacts\db\modules\dbo.SCP0012_GET_PSI.sql,723,,TCO_CELL_YN,ORDER BY FI.TCO_CELL_YN,0,정적
+SCP0063,SQL,SCP0012_GET_PSI,Doc\asisfacts\db\modules\dbo.SCP0012_GET_PSI.sql,727,,TCO_CELL_YN,ORDER BY FI.TCO_CELL_YN,0,정적
+SCP0063,SQL,SCP0012_GET_PSI,Doc\asisfacts\db\modules\dbo.SCP0012_GET_PSI.sql,730,,TCO_CELL_YN,ORDER BY FI.TCO_CELL_YN,0,정적
+SCP0063,SQL,SCP0012_GET_PSI,Doc\asisfacts\db\modules\dbo.SCP0012_GET_PSI.sql,833,,SORT_ORDER_NO,ORDER BY sort_order_no  ;,0,정적
+SCP0063,SQL,SCP0012_GET_PSI,Doc\asisfacts\db\modules\dbo.SCP0012_GET_PSI.sql,894,IF NOT(@p_cell_type_gr IS NULL OR  @p_cell_type_gr    ='') BEGIN SET @mEXEC = @mEXEC+' and ( b.CELL_TYPE_GROUP_CODE  IN ('+@arr_cell_type_gr+') )					'+CHAR(10),"DIVISION_ID,OPERATION_GROUP,FROM_SITE,ITEM_ID,ELECTRODE_TYPE,PSI_SEQ,INVENTORY_SEQ,PSI_VALUE","SET @mEXEC = @mEXEC+' ORDER BY  A.DIVISION_ID , A.OPERATION_GROUP, A.FROM_SITE , A.ITEM_ID, A.ELECTRODE_TYPE, A.PSI_SEQ, A.INVENTORY_SEQ ASC /*, A.PSI_VALUE*/ '+CHAR(10);",0,동적 SQL
+SCP0063,SQL,SCP0012_GET_PSI_QTY,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SCP0063,SQL,SCP0012_GET_PSI_PARAL,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SCP0063,SQL,DM0003_GET_BUCKET_TYPE_CODE,Doc\asisfacts\db\modules\dbo.DM0003_GET_BUCKET_TYPE_CODE.sql,41,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+SCP0063,SQL,SCM0001_GET_FROM_SITE,Doc\asisfacts\db\modules\dbo.SCM0001_GET_FROM_SITE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0063,SQL,SCP0011_GET_LAST_PLAN_VERSION,Doc\asisfacts\db\modules\dbo.SCP0011_GET_LAST_PLAN_VERSION.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0063,SQL,SCP0009_GET_SHEET_CALENDAR_3SPAN,Doc\asisfacts\db\modules\dbo.SCP0009_GET_SHEET_CALENDAR_3SPAN.sql,57,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적

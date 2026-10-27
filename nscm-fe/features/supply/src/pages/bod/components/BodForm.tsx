@@ -41,6 +41,15 @@ export const BodForm = () => {
     ],
   });
 
+  // Division_SCP 는 EE 사업부를 포함하므로 fetch 후 ATTRIBUTE3='EE' 행을 제외한다
+  // (AS-IS GetDivisionWithoutEE 재현 — 공유 콤보라 SQL 대신 화면에서 필터, bod.constants.ts 참조).
+  const divisionOptions =
+    divisions
+      ?.filter(item => item.ATTRIBUTE3 !== 'EE')
+      .map(item => ({ label: item.NAME, value: item.CODE })) ?? [];
+  // Division ALL 일 때 From/To Site 를 거를 권한 Division 코드(bod.util.ts buildDivisionFilteredOptions 참조).
+  const allowedDivisionIds = divisionOptions.map(option => option.value);
+
   const onSearch = () => {
     setFilters();
     void fetchStaticColumns();
@@ -64,13 +73,7 @@ export const BodForm = () => {
                   multiple
                   allOption
                   value={searchParams.divisionId}
-                  // Division_SCP 는 EE 사업부를 포함하므로 fetch 후 ATTRIBUTE3='EE' 행을 제외한다
-                  // (AS-IS GetDivisionWithoutEE 재현 — 공유 콤보라 SQL 대신 화면에서 필터, bod.constants.ts 참조).
-                  options={
-                    divisions
-                      ?.filter(item => item.ATTRIBUTE3 !== 'EE')
-                      .map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                  }
+                  options={divisionOptions}
                   onChange={(_, option) => setSearchParams({ divisionId: option })}
                 />
               )}
@@ -86,7 +89,7 @@ export const BodForm = () => {
                   multiple
                   allOption
                   value={searchParams.fromSite}
-                  options={buildDivisionFilteredOptions(fromSites, searchParams.divisionId)}
+                  options={buildDivisionFilteredOptions(fromSites, searchParams.divisionId, allowedDivisionIds)}
                   onChange={(_, options) => setSearchParams({ fromSite: options })}
                 />
               )}
@@ -102,7 +105,7 @@ export const BodForm = () => {
                   multiple
                   allOption
                   value={searchParams.toSite}
-                  options={buildDivisionFilteredOptions(toSites, searchParams.divisionId)}
+                  options={buildDivisionFilteredOptions(toSites, searchParams.divisionId, allowedDivisionIds)}
                   onChange={(_, options) => setSearchParams({ toSite: options })}
                 />
               )}
@@ -127,6 +130,22 @@ export const BodForm = () => {
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
+              label={t('LBL00026', '_SSP Incoterms')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  multiple
+                  allOption
+                  value={searchParams.incotermsSsp}
+                  options={incotermsRows?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
+                  onChange={(_, options) => setSearchParams({ incotermsSsp: options })}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
               label={t('LBL00025', '_Trans Mode')}
               labelAlign='right'
               render={() => (
@@ -143,7 +162,7 @@ export const BodForm = () => {
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t('LBL01083', '_Input Status')}
+              label={t('LBL00014', '_Status')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -157,7 +176,7 @@ export const BodForm = () => {
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t('LBL00639', '_Valid YN')}
+              label={t('LBL00007', '_Active')}
               labelAlign='right'
               render={() => (
                 // allOption — AS-IS cboValidYN 최초 진입 시 미선택(전체) 상태 재현(useBodStore.ts validYn 기본값 참고).
@@ -166,22 +185,6 @@ export const BodForm = () => {
                   value={searchParams.validYn}
                   options={[...VALID_YN_OPTIONS]}
                   onChange={(_, option) => setSearchParams({ validYn: option })}
-                />
-              )}
-            />
-          </Grid>
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t('LBL00026', '_Incoterms(SSP)')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  multiple
-                  allOption
-                  value={searchParams.incotermsSsp}
-                  options={incotermsRows?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
-                  onChange={(_, options) => setSearchParams({ incotermsSsp: options })}
                 />
               )}
             />

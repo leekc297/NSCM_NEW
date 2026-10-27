@@ -9,6 +9,7 @@ export const LBL = {
   MATERIAL: 'LBL00021', // Material
   NICK_NAME: 'LBL00767', // Nick Name
   MODEL: 'LBL00669', // Model
+  MODEL_NICKNAME: 'LBL00618', // Model/Nickname (Model+NickName 합친 단일 조회조건 — 사용자 지시 2026-10-22, SCP0033 동일 코드)
   SEARCH: 'LBL00112', // Search (메인 SearchArea)
   SEARCH_SUB: 'LBL00664', // Search (모달/보조 영역)
   NO: 'LBL00674', // No (행번호 컬럼)

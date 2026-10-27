@@ -1,0 +1,3 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0023,SQL,SCP0023_GET_OUTSOURCING_CAPA,Doc\asisfacts\db\modules\dbo.SCP0023_GET_OUTSOURCING_CAPA.sql,124,,"CAPA_ORDER,DIVISION_ID,SCM_SITE_ID,VENDOR_CODE,ITEM_ID","ORDER BY capa_order, t.division_id		,t.scm_site_id		,t.vendor_code		,t.item_id",0,정적
+SCP0023,SQL,SCP0023_SAVE_OUTSOURCING_CAPA,Doc\asisfacts\db\modules\dbo.SCP0023_SAVE_OUTSOURCING_CAPA.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

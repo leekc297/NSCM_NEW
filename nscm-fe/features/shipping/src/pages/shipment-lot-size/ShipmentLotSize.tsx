@@ -184,7 +184,7 @@ export const ShipmentLotSize = ({ tabId, title }: PageProps<MENU_ID>) => {
     // 기본값 회귀행(M & LOT=''&INC=''&VALID='Y'&SPLIT='N')은 변경취소로 제외(design 03 §3-13).
     const dirty = src.filter(r => r.CRUD_TYPE && !(r.CRUD_TYPE === 'M' && isDefaultRevertRow(r)));
     if (dirty.length === 0) {
-      setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No modifications have been made.') });
+      setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_수정한 내용이 없습니다.') });
       return;
     }
     setInvalidCells([]);

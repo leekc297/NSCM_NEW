@@ -2,7 +2,7 @@ import { PeriodField } from 'features/master/src/components';
 import { useEffect, useRef } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDropdown } from '@shared/components';
+import { CustomDropdown, DETAIL_CONDITIONS_SX } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
@@ -84,7 +84,7 @@ export const ShipmentPlanDetailBar = ({
 
   return (
     <Stack direction='row' alignItems='center' className={styles.detailBar}>
-      <Grid container columns={12} className={styles.detailBarFields}>
+      <Grid container columns={12} className={styles.detailBarFields} sx={DETAIL_CONDITIONS_SX}>
         {/* Shipment Date (drpPeriod2 — PlanDetail 전용). 범위 이탈 시 무메시지 clamp(buttonGuard #37) */}
         {fieldSet.period2 && (
           <PeriodField
@@ -124,9 +124,8 @@ export const ShipmentPlanDetailBar = ({
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onModelSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onModelSearch}
                       />
                     ),
                   }}
@@ -157,9 +156,8 @@ export const ShipmentPlanDetailBar = ({
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onRequestorSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onRequestorSearch}
                       />
                     ),
                   }}
@@ -185,7 +183,11 @@ export const ShipmentPlanDetailBar = ({
                   useClearIcon
                   limitTags={1}
                   sortBy='label'
-                  value={sc.productLevel12.join(',')}
+                  // 빈 배열(= ALL 상태)은 value 를 'ALL' 로 내보내야 CustomDropdown 의 SELECT ALL 이
+                  //   체크 상태로 유지된다(onChange 가 ALL 선택을 'ALL' 로 보냄 → 스토어는 [] 저장 →
+                  //   value 가 ''이면 즉시 꺼져 'ALL 선택이 안 됨'. SSP0005 Div 와 동일 규약). SP 파라미터는
+                  //   스토어 [] → '' 그대로라 조회는 영향 없음.
+                  value={sc.productLevel12.length ? sc.productLevel12.join(',') : ALL}
                   options={toOptions(cellGroups)}
                   onChange={(_, picked) =>
                     set({
@@ -214,7 +216,8 @@ export const ShipmentPlanDetailBar = ({
                   useClearIcon
                   limitTags={1}
                   sortBy='label'
-                  value={sc.resultTypes.join(',')}
+                  // 빈 배열(= ALL)은 value 를 'ALL' 로 — SELECT ALL 유지(위 Product Level1 주석 참조).
+                  value={sc.resultTypes.length ? sc.resultTypes.join(',') : ALL}
                   options={toOptions(resultTypes)}
                   onChange={(_, picked) =>
                     set({
@@ -256,9 +259,10 @@ export const ShipmentPlanDetailBar = ({
             {t(LBL.NEW, '_New')}
           </Button>
         )}
-        {/* Search — 6 sheet 전부 항상 표시(02 §4.2) — 활성 sheet 재조회 */}
+        {/* Search — 6 sheet 전부 항상 표시(02 §4.2) — 활성 sheet 재조회. Detail 은 F5 로 조회하지
+            않으므로 (F5) 없는 평문 'Search'(DETAIL_SEARCH=LBL00664). 상단 Main 검색만 LBL.SEARCH="Search(F5)". */}
         <Button appearance='contained' priority='primary' onClick={onDetailSearch}>
-          {t(LBL.SEARCH, '_Search')}
+          {t(LBL.DETAIL_SEARCH, '_Search')}
         </Button>
       </Stack>
     </Stack>

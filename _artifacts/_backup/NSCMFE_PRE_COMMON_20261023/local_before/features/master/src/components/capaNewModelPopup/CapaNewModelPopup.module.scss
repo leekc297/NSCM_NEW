@@ -1,0 +1,22 @@
+// ModelByDivisionPopup.module.scss 와 동일 관례 — CustomDialog 의 customContentArea 는 block
+//   래퍼라 DataGrid(height:100%) 가 높이를 못 받는다. flex-column 체인을 여기서 이어준다.
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gridWrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}

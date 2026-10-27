@@ -195,7 +195,7 @@ export const BodItemRouteModal = ({
                 </Grid>
                 <Grid size={4}>
                   <FormItem
-                    label={t(LBL.MODEL, '_Model')}
+                    label={t(LBL.MODEL, '_Model/Nickname')}
                     labelAlign='right'
                     render={() => (
                       <InputField

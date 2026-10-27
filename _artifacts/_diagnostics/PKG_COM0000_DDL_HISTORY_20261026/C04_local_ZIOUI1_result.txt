@@ -1,0 +1,91 @@
+================= §0 환경 =================
+
+DB_NAME        CONNECTED_AS RUN_AT
+-------------- ------------ -------------------
+ZIOUI1         SCM_MGR      2026-10-26 15:38:51
+
+================= §1 10-12 PKG_COM0000 감사 이벤트 (있으면 원문 보존) =================
+
+T_FIRST             DBUSERNAME   OS_USERNAME      USERHOST               PROGRAM                                  ACTION_NAME            OBJECT_NAME                    RETURN_CODE
+------------------- ------------ ---------------- ---------------------- ---------------------------------------- ---------------------- ------------------------------ -----------
+2026-10-12 19:18:17 SYS          oracle           localhost.localdomain  sqlplus@localhost.localdomain (TNS V1-V3 CREATE PACKAGE BODY    PKG_COM0000                              0
+2026-10-12 19:18:28 SYS          oracle           localhost.localdomain  sqlplus@localhost.localdomain (TNS V1-V3 CREATE PACKAGE BODY    PKG_SCP0017                              0
+
+================= §2 10-12 감사 이벤트 전체 요약 (누가 그날 DB 에 있었나 · 시간대 18~21시 강조) =================
+
+T_FIRST             T_LAST              DBUSERNAME   OS_USERNAME      USERHOST               PROGRAM                                  ACTION_NAME                   CNT  CNT_18_21
+------------------- ------------------- ------------ ---------------- ---------------------- ---------------------------------------- ---------------------- ---------- ----------
+2026-10-12 08:50:55 2026-10-12 19:18:35 SYS          oracle           localhost.localdomain  sqlplus@localhost.localdomain (TNS V1-V3 CREATE PACKAGE BODY            38         37
+2026-10-12 08:50:55 2026-10-12 19:18:38 SYS          oracle           localhost.localdomain  sqlplus@localhost.localdomain (TNS V1-V3 CREATE PROCEDURE               21         17
+2026-10-12 19:23:41 2026-10-12 19:23:41 SYSTEM       root             localhost.localdomain  /opt/anaconda/anaconda3/bin/python3      CREATE PACKAGE BODY             1          1
+2026-10-12 21:52:18 2026-10-12 21:52:18 SYSTEM       root             localhost.localdomain  /opt/anaconda/anaconda3/bin/python3      ALTER TABLE                     2          0
+
+================= §3 SCM_MGR 객체 중 마지막 DDL 이 10-12 인 것 (그날 DDL 작업 흔적) =================
+
+OBJECT_NAME                    OBJECT_TYPE    LAST_DDL            TIMESTAMP
+------------------------------ -------------- ------------------- -------------------
+PR_DM_ANL_SALES_PLAN_AMT_CREAT PROCEDURE      2026-10-12 08:50:55 2026-10-12:08:50:55
+E_LOCAL_KRW_MKT_FCST_SAVE
+
+PKG_DMF0043                    PACKAGE BODY   2026-10-12 19:18:22 2026-10-12:19:18:22
+PKG_DMF0045                    PACKAGE BODY   2026-10-12 19:18:23 2026-10-12:19:18:23
+PKG_SCP0009                    PACKAGE BODY   2026-10-12 19:18:27 2026-10-12:19:18:27
+PKG_SCP0013                    PACKAGE BODY   2026-10-12 19:18:28 2026-10-12:19:18:28
+PKG_SCP0104                    PACKAGE BODY   2026-10-12 19:18:30 2026-10-12:19:18:30
+PKG_SCP0106                    PACKAGE BODY   2026-10-12 19:18:31 2026-10-12:19:18:31
+PKG_SCP0105                    PACKAGE BODY   2026-10-12 19:18:31 2026-10-12:19:18:31
+PKG_SCP0120                    PACKAGE BODY   2026-10-12 19:18:32 2026-10-12:19:18:32
+PKG_SCP0124                    PACKAGE BODY   2026-10-12 19:18:32 2026-10-12:19:18:32
+DMF0073_GET_VERSION_SALESPRICE PROCEDURE      2026-10-12 19:18:36 2026-10-12:19:18:36
+PR_DM_CUST_ITEM_MAPPING        PROCEDURE      2026-10-12 19:18:36 2026-10-12:19:18:36
+PR_DM_ANL_KPI_SALES_ACCURACY   PROCEDURE      2026-10-12 19:18:36 2026-10-12:19:18:36
+DMF0043_GET_CONTRIBUTION_SALES PROCEDURE      2026-10-12 19:18:36 2026-10-12:19:18:36
+_LIST
+
+DMF0043_GET_CONTRIBUTE_MAIN_DA PROCEDURE      2026-10-12 19:18:36 2026-10-12:19:18:36
+TA
+
+PR_DM_PLN_MKT_FCST_QTY_BALANCE PROCEDURE      2026-10-12 19:18:37 2026-10-12:19:18:37
+_CREATE_BATCH
+
+PR_DM_LONGPLAN_40_DELETE_IMPOR PROCEDURE      2026-10-12 19:18:37 2026-10-12:19:18:37
+T
+
+PR_DM_PLN_SALES_PLAN_RESULT_MO PROCEDURE      2026-10-12 19:18:38 2026-10-12:19:18:38
+VE
+
+ISEQ$$_77256                   SEQUENCE       2026-10-12 21:52:18 2026-10-09:10:25:05
+GT_PRDM_AS_INV                 TABLE          2026-10-12 21:52:18 2026-10-12:21:52:18
+SEQ1_SCP_ANL_PRODUCTION_PLAN_H SEQUENCE       2026-10-12 21:52:18 2026-10-09:10:24:23
+SEQ1_SSP_ANL_SHIP_CONFIRM_ID   SEQUENCE       2026-10-12 21:52:18 2026-10-09:10:24:23
+SEQ1_SSP_ANL_SHIP_PLAN_40_WH_I SEQUENCE       2026-10-12 21:52:18 2026-10-09:10:24:23
+N_CMT_H
+
+SEQ1_SSP_ANL_SHIP_CHG_REQ_NO   SEQUENCE       2026-10-12 21:52:18 2026-10-09:10:24:23
+SEQ1_SCP_MST_OPERATION_LT_H    SEQUENCE       2026-10-12 21:52:18 2026-10-09:10:24:23
+SEQ1_SCP_MST_FINAL_ITEM_H      SEQUENCE       2026-10-12 21:52:18 2026-10-09:10:24:23
+SEQ1_SCP_ANL_PRODUCTION_PLAN_F SEQUENCE       2026-10-12 21:52:18 2026-10-09:10:24:23
+IX
+
+SEQ1_SCM_MST_SITE_H            SEQUENCE       2026-10-12 21:52:18 2026-10-09:10:24:23
+SEQ1_SCP_ANL_PRODUCTION_PLAN_F SEQUENCE       2026-10-12 21:52:18 2026-10-09:10:24:23
+IX_H
+
+SEQ1_SCP_ANL_SHIPMENT_PLAN_SEM SEQUENCE       2026-10-12 21:52:18 2026-10-09:10:24:23
+I_H
+
+PR_DM_DNM_CREATE_C_WS_RTF      PROCEDURE      2026-10-12 21:52:19 2026-10-12:21:52:19
+PR_DM_DNM_CREATE_WS_RTF        PROCEDURE      2026-10-12 21:52:19 2026-10-12:21:52:19
+
+32 행이 선택되었습니다.
+
+================= §4 AWR/ASH 보존 시작 (10-12 이 보존 범위 밖이면 세션 기록 확인 불가) =================
+
+AWR_FROM            NOTE
+------------------- ------------------------------------------------------------
+2026-10-18 00:00:14 10-12 은 AWR 보존 범위 밖 — 세션·DDL 원문 확인 불가
+
+
+선택된 레코드가 없습니다.
+
+================= 끝 =================

@@ -207,10 +207,10 @@ export const MasterValidation = ({ tabId, title }: PageProps<MENU_ID>) => {
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     // read-only 뷰어 — AS-IS Insert/Edit/Delete/Save override 본문 공백(NO-OP, design 00 §4d).
-    //   명시적 무동작 함수로 배선(키 생략 금지 — 공용 SubTitle addRow/removeRow 재활성 방지, self-check §3).
-    insert: () => undefined,
-    save: () => undefined,
-    delete: () => undefined,
+    //   TO-BE 룰(2026-10-26): 기능 없는 공통버튼은 노출하지 않는다 → false(버튼·단축키 숨김).
+    insert: false,
+    save: false,
+    delete: false,
     manual: false,
     upload: false,
   };

@@ -1,0 +1,4 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCM0009,SQL,UP_FX_GetApprovalAuthRequest,Doc\asisfacts\db\modules\dbo.UP_FX_GetApprovalAuthRequest.sql,68,,"CREATION_DATE,DIVISION_ID,USER_ID","ORDER BY A.CREATION_DATE asc ,  A.DIVISION_ID asc, A.USER_ID asc",0,정적
+SCM0009,SQL,GET_DATE_RANGE_1MONTH_BEFORE,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SCM0009,SQL,UP_FX_SaveApprovalAuthRequest,Doc\asisfacts\db\modules\dbo.UP_FX_SaveApprovalAuthRequest.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

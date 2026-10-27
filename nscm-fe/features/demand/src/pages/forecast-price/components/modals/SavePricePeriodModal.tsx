@@ -207,6 +207,7 @@ export const SavePricePeriodModal = ({
 }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
+  const setToast = useMessageStore.getState().setToast;
   const gridRef = useRef<FlexGridType<PriceRow> | null>(null);
   // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
   const gridFilterRef = useRef<FlexGridFilter | undefined>();
@@ -647,24 +648,36 @@ export const SavePricePeriodModal = ({
     setSaving(true);
     try {
       // 기배선 fcstNPrice SAVE 라우트 재사용 — DMF0082_SAVE_MAIN_DATA (PROC_M 17 row 실측 일치).
-      const res = await apiClient.post<
-        { RESULT_CODE?: string; RESULT_MSG?: string; EVENT?: string }[]
-      >(`/${MENU_ID}/FcstNPrice/SAVE/call-proc`, buildSavePayload(saveRows, sesUserId));
-      const result = (res.data.result ?? [])[0];
-      if (result && result.RESULT_CODE !== undefined && String(result.RESULT_CODE) !== '0') {
-        // 실패 — SP RESULT_MSG 그대로 표기 (AS-IS L2018/L2025 MessageBox.Show 1:1)
+      //   응답 형태는 본 화면 저장과 같다: result = { o_rc1: [{ RESULT_CODE, RESULT_MSG, EVENT|ERR_EVENT }] }.
+      //   종전에는 result 를 배열로 보고 result[0] 을 읽어 판정값이 늘 비었고, SP 가 'F' 를 돌려줘도
+      //   MSG00672 성공 안내 뒤 재조회가 돌았다(통합테스트 지적 2026-10-15). 본 화면 handleSave 와
+      //   같은 순서로 판정한다: HTTP·BE 코드 선검사 → o_rc1 첫 행 RESULT_CODE.
+      const res = await apiClient.post<{
+        o_rc1?: { RESULT_CODE?: string; RESULT_MSG?: string; EVENT?: string; ERR_EVENT?: string }[];
+      }>(`/${MENU_ID}/FcstNPrice/SAVE/call-proc`, buildSavePayload(saveRows, sesUserId));
+
+      // HTTP/BE 레벨 실패 선검사 — responseErrorInterceptor 가 403/500 을 reject 하지 않고 그대로
+      //   resolve 하므로 여기서 거른다. 이 응답에는 result.o_rc1 이 없어 아래 가드만으로는 성공으로 샌다.
+      if (res.status >= 400 || Number(res.data?.code)) {
+        void setAlert({
+          type: 'alert',
+          content: String(res.data?.message ?? '').trim() || t(MSG.DUP_SAVE_ERROR, '_Save error.'),
+        });
+        return;
+      }
+
+      const result = (res.data?.result?.o_rc1 ?? [])[0];
+      if (result && String(result.RESULT_CODE ?? '') !== '0') {
+        // 실패 — SP RESULT_MSG 그대로 표기하고 창은 유지 (AS-IS L2018/L2025 MessageBox.Show 1:1)
         void setAlert({
           type: 'alert',
           content: String(result.RESULT_MSG ?? t(MSG.DUP_SAVE_ERROR, '_Save error.')),
         });
         return;
       }
-      // 성공 — {0}개 저장 (AS-IS MSG00004 + RESULT_CNT → TO-BE MSG00672 + EVENT=N_LOG_COUNT)
-      const cnt = String(result?.EVENT ?? saveRows.length);
-      void setAlert({
-        type: 'alert',
-        content: t(MSG.SAVED_COUNT, '_{0} data saved.').replace('{0}', cnt),
-      });
+      // 성공 — AS-IS 는 MSG00004 + RESULT_CNT 창이었으나 TO-BE 는 본 화면 저장과 같은 성공 토스트(MSG00002).
+      //   건수 문구(MSG00672)는 SP EVENT 가 0 으로 와 "0개 저장"으로 보였다.
+      setToast({ type: 'success', message: t(MSG.SAVED, '_Saved.') });
       onSaveResult?.(); // 부모 재조회 (AS-IS isSaveOK)
       void refetch?.(); // AS-IS L2082 FindData(false) — 저장 후 재조회
     } catch (e) {
@@ -1134,8 +1147,10 @@ export const SavePricePeriodModal = ({
                 open={loading || saving}
                 placement='parent'
               />
+              {/* 건수 영역은 행이 있을 때만 그린다 — 0건이면 글자 없이 테두리만 남는다(사용자 요청 2026-10-14).
+                  ResultArea 는 title 이 undefined 면 제목줄(TitleArea) 자체를 그리지 않는다. */}
               <ResultArea
-                title=''
+                title={rows.length > 0 ? '' : undefined}
                 count={rows.length}
                 gridRef={gridRef as never}
                 gridFilterRef={gridFilterRef}

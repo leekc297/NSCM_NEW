@@ -12,6 +12,7 @@ import { GridUtils } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabLookupQueries } from '@shared/hooks';
 
+import { usePinDashDateFormat } from '../../../hooks/usePinDashDateFormat';
 import { LOOKUP, MASTER_USER_COLUMNS, MENU_ID } from '../shipment-change-request-confirm-ssp0003.constants';
 import type { MainRow } from '../shipment-change-request-confirm-ssp0003.types';
 import { buildColumns } from '../utils/shipmentChangeRequestConfirmSsp0003Columns';
@@ -40,6 +41,11 @@ export const ShipmentChangeRequestConfirmSsp0003MainGrid = ({
   onRowDblClick,
 }: Props) => {
   const columns = useMemo(() => buildColumns(adminColumns, false), [adminColumns]);
+  // 날짜 컬럼 형식을 조회값과 같은 대시(yyyy-MM-dd)로 고정 — 공용 getFormat 은 점 형식을 준다.
+  //   이 화면은 전열 조회전용(메타 INPUT_TP_CD 전건 'S' 실측)이라 Date 커밋 경로가 없다.
+  //   REQUEST_TIME·APPROVAL_TIME(FPDateTime) 이 DATE 원형으로 내려오면 점 형식이 보일 수 있어
+  //   예방으로 건다 — 문자열로 내려오는 현재는 아무것도 바뀌지 않는다.
+  usePinDashDateFormat(gridRef, columns);
   const comboParams = useMemo(
     () => ({ mnuId: `'${MENU_ID}'`, divisionId: `'${division}'` }),
     [division]

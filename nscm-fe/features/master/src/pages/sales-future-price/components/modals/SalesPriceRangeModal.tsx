@@ -140,7 +140,9 @@ export const SalesPriceRangeModal = ({ open, modalClose, rows, onSaved }: Props)
     const g = gridRef.current;
     const selected = (g?.selectedItems ?? []) as SalesPriceRangeRow[];
     if (selected.length === 0) {
-      void setAlert({ type: 'alert', content: t('MSG00113', '_저장할 행을 선택하세요.') });
+      // MSG00113 은 '필수 입력 컬럼이 없습니다.' 라 상황과 맞지 않았다(갭분석 F-16). 같은 뜻으로 KO/EN/CN 등록된
+      //   MSG00014 '행이 선택되지 않았습니다.' 를 쓴다 (2026-10-16).
+      void setAlert({ type: 'alert', content: t('MSG00014', '_행이 선택되지 않았습니다.') });
       return;
     }
 

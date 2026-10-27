@@ -3,6 +3,7 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
@@ -11,6 +12,7 @@ import { useMessageStore, useSessionStore } from '@shared/stores';
 import { EngineRunGrid } from './components/EngineRunGrid';
 import { PlanControlForm } from './components/PlanControlForm';
 import { PlanControlGrid } from './components/PlanControlGrid';
+import { PlanIdCreatePopup } from './components/PlanIdCreatePopup';
 import { usePlanControlCellActions } from './hooks/usePlanControlCellActions';
 import { usePlanControlPolling } from './hooks/usePlanControlPolling';
 import {
@@ -49,6 +51,11 @@ export const PlanControl = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchStaticColumns = usePlanControlStore(state => state.fetchStaticColumns);
   const setOpenSearchArea = usePlanControlStore(state => state.setOpenSearchArea);
   const restoreSearchConditions = usePlanControlStore(state => state.restoreSearchConditions);
+  // A002 Create Plan ID 팝업 — null 이면 닫힘. 저장 성공 시 두 시트 재조회(R29 — AS-IS cs:1064-1072
+  //   Plan ID 재조회 + FindData_Main).
+  const planIdCreateContext = usePlanControlStore(state => state.planIdCreateContext);
+  const setPlanIdCreateContext = usePlanControlStore(state => state.setPlanIdCreateContext);
+  const queryClient = useQueryClient();
 
   // R18 — 사용자가 포커스한 그리드로 SubTitle 의 동작 대상(Excel/Sort/Filter)이 따라간다.
   //   건수 배지는 상단 고정(countGrid)이다.
@@ -163,15 +170,19 @@ export const PlanControl = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticColumns();
   };
 
-  // 확정 hotkeyConfig(01_layout §2.3 R10~R15). insert/delete/save 를 **생략하면** 공용 SubTitle 의
-  //   기본 GridAction.addRow/removeRow 가 살아나 AS-IS 에 없던 행 추가·삭제가 실제로 동작한다.
-  //   AS-IS override 본문이 비어 있고(NO-OP) admin 메타에도 미등록이라 두 축이 "이 화면 기능 아님"으로
-  //   일치하므로 false 로 노출 자체를 막는다. 저장은 툴바가 아니라 그리드 CONFIRM 셀이 한다(R12).
+  // 확정 hotkeyConfig(01_layout §2.3 R10~R15).
+  //   insert/delete/save = 사용자 지시(2026-10-15)로 **노출**한다(자매 SCP0100 동일 결정). AS-IS 는 저장류
+  //   미배선(read-only, 저장은 그리드 CONFIRM 셀) + admin 메타 미등록이라 기능은 없지만 버튼만 보이게 한다.
+  //   필수: **키 생략이 아니라 no-op 핸들러**를 준다 — 생략하면 공용 SubTitle 의 기본 GridAction.addRow/
+  //   removeRow 가 살아나 AS-IS 에 없던 행 추가·삭제가 실제로 동작한다. () => undefined 로 버튼만 렌더하고
+  //   동작은 막는다(SubTitle 은 hotkeyConfig 값이 false 가 아니면 버튼을 렌더). 기능 구현 시 실제 핸들러로 교체.
+  //   저장은 여전히 그리드 CONFIRM 셀이 수행한다(R12) — 이 툴바 save 버튼은 no-op 이다.
   //   sort/filter/condition/resetCondition 은 키를 생략해 공용 기본 동작을 쓴다.
   //   excel 은 admin 메타(MNU_BTN_CD='EXCEL', iter-2 등록)를 제어축으로 둔다 — 권한이 있으면 키를
   //   생략해 공용 DefaultButtonActions.excelDownload 를 그대로 쓰고, 없으면 false 로 감춘다.
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
+    // Insert/Delete/Save 기능 없음 → 숨김(TO-BE 룰 2026-10-26, 종전 no-op 노출 폐지)
     insert: false,
     delete: false,
     save: false,
@@ -244,6 +255,11 @@ export const PlanControl = ({ tabId, title }: PageProps<MENU_ID>) => {
           </div>
         </Panel>
       </PanelGroup>
+      <PlanIdCreatePopup
+        context={planIdCreateContext}
+        onClose={() => setPlanIdCreateContext(null)}
+        onSaved={() => void queryClient.invalidateQueries({ queryKey: [tabId] })}
+      />
     </>
   );
 };

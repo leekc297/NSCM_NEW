@@ -1,0 +1,7381 @@
+[
+ {
+  "t": "ref",
+  "item": "NEW:'-' 표시값 공란 변환",
+  "screens": [
+   "SCP0058"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Origin From/To Division, Electrode Type 값이 1글자 이하 '-' 이면 빈 값으로 바꿔 저장합니다(Fix 저장은 변환 없이 그대로 전달).",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:BOD 유효기간·Frozen 이후 일자만 편집",
+  "screens": [
+   "SSP0045"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Edit 시 전 셀을 잠근 뒤 Measure=SHIP_REQ 행만 일자(D_) 셀을 열어 줌. 시작일 = max(Frozen일, 조회 시작일), BOD 기간과 겹치는 구간만 편집 가능(Frozen≥BOD To 면 편집 없음). 그 외 measure 행·고정 컬럼은 잠금",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:BOD 팝업으로 행 추가",
+  "screens": [
+   "SCP0009"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드에서 편집 가능 상태(_isInsert)일 때, 값이 있는 행의 Trans Mode/From Site 칸을 클릭하면 BOD 선택 팝업(SCM0002_GetBODPopup)이 열리고 고른 BOD 로 SHIP 계열 행 묶음을 삽입(Action=I). 이미 I/D 표",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Bucket 조건부 컬럼 잠금",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Bucket=Day 이면 Week 컬럼 잠금",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Cell Type CA 품목 Plant 편집 불가",
+  "screens": [
+   "SCP0006"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "더블클릭한 BOM Item 의 Cell Type 이 'CA' 로 시작하면 Edit 를 눌러도 메시지 없이 수정모드로 바뀌지 않음(활성화코드 분리 품목)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Change Type P 행 ERP 작성중 요청 제외",
+  "screens": [
+   "SSP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Change Type 이 P 인 행은 ERP 작성중 요청(DRAFTING)·ERP 전송을 건너뛰고 최종 저장 SP 로만 보냄. 같은 SO No 묶음은 첫 행에서 한 번에 처리",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Copy 시 작업월 일괄 변경·값 있는 행만 저장 대상",
+  "screens": [
+   "SCP0093"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Copy 버튼: 수정모드로 바꾼 뒤 GAP 행을 제외한 모든 행의 작업월을 Copy Month 값으로 바꾸고, 수량·금액·내용 중 값이 있는 행만 수정(M) 표시(파란 글자). 저장 시 \"… Copy 해 … 데이터를 생성합니다\" Yes/No 확인",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:D/O 생성 건 자동 반려(O) 처리",
+  "screens": [
+   "SSP0003"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "상세 행 중 하나라도 ERP D/O 가 생성돼 있으면(또는 확인 중 오류) 승인 대신 요청 전체를 D/O 반려(O) 상태로 자동 저장합니다(MSG00413 안내 후).",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Delete 버튼 무동작",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "DeleteButton 본문이 비어 있어 Delete 는 아무 동작 없음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Delete 키·Ctrl+Z 동작 대체",
+  "screens": [
+   "SCP0106"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "그리드에서 Ctrl+Z(되돌리기)는 막힙니다. Delete 키는 기본 지우기 대신 '선택 범위에 0.0 입력' 으로 대체되어 있으나, 선택 범위를 기록하는 SelectionChanged 이벤트가 등록되어 있지 않아(주석) 범위가 항상 0행 0열로 남습니다 — 실제로는 ",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Division 40 고정(변경 불가)",
+  "screens": [
+   "SSP0016",
+   "SSP0017",
+   "SSP0018"
+  ],
+  "rows": 3,
+  "examples": [
+   [
+    "Division 은 '40' 으로 고정되고 비활성화되어 사용자가 바꿀 수 없습니다. Request Input Available 기간도 표시 전용(비활성)입니다.",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Division 은 '40' 으로 고정·비활성화되어 바꿀 수 없습니다.",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Division 은 '40' 으로 고정·비활성화되어 바꿀 수 없습니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Division 40 고정·비활성",
+  "screens": [
+   "SCP0098"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "화면을 열면 Division 을 40 으로 지정하고 콤보를 비활성화(사용자 변경 불가)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Division 고정",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "팝업 Division 은 부모 화면 값으로 고정·비활성",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Division 기본값 강제(81, 없으면 마지막 항목)",
+  "screens": [
+   "SCP0097"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "화면이 뜬 직후(저장 조회조건 복원 뒤) Division 을 81 로 다시 선택. 후보에 81 이 없으면 마지막 항목이 선택됨",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Division 별 조회조건 표시 전환",
+  "screens": [
+   "SCP0092"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Weekly: Division 40 이면 Project 숨김, Owner 는 81·40 일 때만 표시. Summary: Category 는 82 일 때만, Project 는 40 이면 숨김, Owner 는 81·40·ALL 일 때 표시",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Division 선택 고정(변경 불가)",
+  "screens": [
+   "SCP0090"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회조건 Division 콤보를 비활성화해 사용자가 바꿀 수 없음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Division 없으면 Weekly 조회 생략(메시지 없음)",
+  "screens": [
+   "SCP0092"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Weekly 탭에서 Division 값이 비어 있으면 조회 SP 를 부르지 않고 메시지 없이 종료",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Division 조건부 컬럼 잠금",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Division≠EE_UC 이면 Line Type 컬럼 잠금(No Work·SOP/EOP·Ramp-up 2종, 신규행 포함)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Division별 시트 표시 제외",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회조건 정보 4번째 결과(제외 목록)의 Division×시트명에 해당하는 탭 제거, Division 변경 시 다시 계산. 진입 시 Preparation Rate 탭은 Division=40 일 때만 생성",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:ERP 변경요청 대상 제외(Plan 유형·신규 행)",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP 변경요청(SSP0027_SAVE_SHIPMENT_REQUEST_DRAFTING) 전송은 CHANGE_TYPE='P'(Plan) 행과 신규(I) 행을 건너뛰고, 같은 SO 번호는 첫 행에서 한 번만 묶어 보냅니다.",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:ERP 오류 Confirm ID 저장 제외",
+  "screens": [
+   "SSP0021"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP 변경요청 I/F 에서 오류로 돌아온 Confirm ID 행은 최종 확정 저장(SSP0021_SAVE_SHIPMENT_REQUEST_CONFIRM) 대상에서 조용히 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:ERP 오류 Confirm 행 저장 제외",
+  "screens": [
+   "SSP0015"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP 회신이 일부 오류(S_E)일 때 오류 Confirm ID 행은 확정 저장(SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40) 대상에서 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:ERP 오류 행 저장 제외",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP 전송에서 오류가 난 Confirm ID 행은 이후 확정 저장(SSP0027_SAVE_SHIPMENT_REQUEST_CONFIRM) 대상에서 조용히 뺍니다.",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:ERP 전송 적재 실패 시 무음 중단",
+  "screens": [
+   "SSP0202"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "승인(항상)·반려/자기반려(Confirm/New 일 때)는 ERP 전송 적재(IF_CHECK) 결과가 'S' 가 아니거나 오류면 메시지 없이 저장하지 않습니다.",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:ERP 처리 실패 시 오류(E) 상태 저장",
+  "screens": [
+   "SSP0003"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP 점검이 실패(false)하면 승인(A) 대신 ERP 오류(E) 상태로 확정 저장합니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Empty Value 시 Line Assign 행 제거",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Empty Value 체크 + Line Assign 미체크면 조회 결과에서 LA001 행을 화면에서 삭제",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Finish 셀 클릭 시 저장 대상 표시",
+  "screens": [
+   "SCP0049"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Finish 셀을 클릭하면 글자를 빨간색으로 바꾸고, 저장은 빨간 글자 셀만 대상으로 삼으므로 클릭한 Finish 값이 저장 대상이 됩니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Finish·Lane 조건부 편집",
+  "screens": [
+   "SCP0049"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Finish(CONFIRM_FLAG)는 담당자 행 중 ROW_RANKING=1 행만(Planner 분기는 Line+Operation+Type+Category+Loss 묶음의 첫 행만) 편집, Lane 은 LINE ASSIGN 행 중 공정 E2000/E3000/E4000",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Fix 대상 셀 범위 제한",
+  "screens": [
+   "SCP0058"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택 영역 중 SHIP_PLAN_AMEND 행이면서 화면에 보이는 행(필터 적용 시 숨은 행 제외), 보이는 일자(D_)·주(W_) 컬럼만 Fix 대상으로 모읍니다. 주 합계 셀을 선택하면 그 주의 일자 셀 전체로 펼쳐 처리하고, 빈 수량은 0 으로 보냅니다.",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Fix 대상 셀 선별",
+  "screens": [
+   "SCP0009"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택 영역 중 SHIP_PLAN_AMEND 행, 보이는 행(필터로 숨긴 행 제외), 보이는 일자/주 컬럼만 대상. 주 합계 선택 시 그 주의 일자 셀로 펼침. Unfix 는 Fix 색(연두) 셀만",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Fix 사유 입력 팝업",
+  "screens": [
+   "SCP0013",
+   "SCP0058"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Fix 전 사유 입력 팝업(Fix Reason)을 띄우고 취소하면 중단. 사유를 비운 채 확인해도 진행",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Fix 시 사유 입력 팝업(SCM0002_RejectReasonPopup 'Fix Reason')을 띄우며 취소하면 메시지 없이 멈춥니다. 사유가 비어도 화면은 막지 않습니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Fix 셀 여부 자동 전달",
+  "screens": [
+   "SCP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "녹색(Fix) 배경 셀은 저장 시 Fix 여부 'Y' 로 함께 보냄",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Formation 공정 행은 일 생산Capa만 입력",
+  "screens": [
+   "SCP0106"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Current 상태이고 Electrode 가 아닌(Cell·Module/Pack) 경우, 공정이 Formation(FORMATION_OPERATION) 인 행은 운영계획 기간 컬럼에서 생산 Capa(일)(PROD_CAPA_D) Measure 만 입력할 수 있고 다른 M",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Frozen 구간 잠금·Ship Req 행만 편집",
+  "screens": [
+   "SSP0046"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "행의 SHIP_FROZEN 일수만큼 앞쪽 기간 셀을 잠그고 회색 처리. Measure 표시가 'Ship Req' 인 행만 Frozen 이후 셀과 FCST Type(노란색)을 열고 다른 measure 행은 잠금. SHIP_FROZEN 이 0 인 행은 전체 잠금. To S",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Item 팝업 선택 입력",
+  "screens": [
+   "SCP0132"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "신규 행/수정모드에서 Item 더블클릭 → 품목 팝업 선택값 입력",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:JV 플랜트 출발지 행만 표시(화면)",
+  "screens": [
+   "SCP0062"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회 결과(모든 결과 테이블)에서 From Site 코드에 사용자 JV 플랜트 ID 가 포함된 행만 남김(부분 문자열 일치). JV 등록이 없으면 빈 문자열로 비교해 모든 행이 그대로 남음(필터 무효)",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Line '-' 조건은 전체로 조회",
+  "screens": [
+   "SCP0051"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회조건 Line 값이 '-' 이면 Line 조건 없이(전체) 조회",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Line Assign 행 화면 제거",
+  "screens": [
+   "SCP0049"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Empty Value 체크 ∧ Line Assign 미체크로 조회하면 LA001 행을 그리드에서 지웁니다.",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Lookup Type 선택값으로 고정 저장",
+  "screens": [
+   "SCP0120"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "행의 Lookup Type 칸 값과 무관하게 더블클릭한 상단 Lookup Type 으로 저장",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Mail REQ 체크 가능 행 제한",
+  "screens": [
+   "SCP0049"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Mail REQ 체크는 LA001/LA002/LA003 행만 열리고, 잠긴 셀에서 체크가 바뀌면 즉시 False 로 되돌립니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Main 시트에서만 저장",
+  "screens": [
+   "SCP0055",
+   "SCP0056"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "현재 선택 Spread 가 Main(spdMain)일 때만 저장 처리(Gap 탭에서 저장하면 무반응)",
+    "C 필터",
+    ""
+   ],
+   [
+    "현재 Spread 가 spdMain 이고 첫 시트일 때만 저장 처리(그 외 무반응)",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Measure 별 편집 셀 결정",
+  "screens": [
+   "SCP0098"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Daily Capa 행 = 월(M_) 컬럼만 편집, 비조업·가동율·Ramp-up 행 = 월(M_) 잠금·그 외 기간 컬럼(D_/W_ 등) 편집",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Model 대문자 변환",
+  "screens": [
+   "SCP0036"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장 시 Model(ITEM_ID)을 대문자로 바꿔 보냄",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Model 더블클릭 품목 팝업",
+  "screens": [
+   "SCP0121"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드에서 Model 셀 더블클릭 → 품목 팝업(Division 기준) 선택값을 셀에 입력",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Model 팝업 선택 입력",
+  "screens": [
+   "SCP0128",
+   "SCP0129",
+   "SCP0131",
+   "SCP0133"
+  ],
+  "rows": 4,
+  "examples": [
+   [
+    "신규 행 또는 수정모드에서 Model 셀 더블클릭 → 품목 팝업(SCM0002_MaterialByDivisionPopup) 선택값 입력",
+    "편집 제어",
+    ""
+   ],
+   [
+    "신규 행/수정모드에서 Model 더블클릭 → 품목 팝업 선택값 입력",
+    "편집 제어",
+    ""
+   ],
+   [
+    "신규 행/수정모드에서 Model 더블클릭 → 품목 팝업 선택값 입력",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:My Model 조회옵션 기본 체크",
+  "screens": [
+   "SSP0022"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "숨김 체크박스 My Model 은 기본 해제이며, 사용자 그룹이 PGM_AUTH_ID(SSP0022) 권한 그룹이고 첫 Company 가 MY_MODEL_DEFAULT_CHECK 목록에 있으면 자동 체크됩니다(사용자가 바꿀 수 없음 — Designer chkMyMode",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:No Frozen 체크 시 종료일 비움·잠금",
+  "screens": [
+   "SCP0123"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Prod/Cell/Ship No Frozen 체크 시 해당 종료일을 비우고 잠그며, 체크 해제 시 대상 구분(Type)별 기본 Frozen 종료일(없으면 오늘)로 되돌림",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:No-Run 일자 값 지움",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "No-Run 분류(PM=EL011 제외) 행의 일(D_) 셀은 회색 처리하고 값 표시를 지움",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Operation Group P/A 선택 시 행추가 무반응",
+  "screens": [
+   "SCP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회조건 Operation Group 이 P(Pack) 또는 A(Cell)이면 메시지 없이 행추가 안 함",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:PR 수량=배분 수량이면 ERP PR 전송 생략",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "PR PO Detail 저장 대상이 1행이고 Request Qty 와 Allo Qty 가 같으면 ERP PR 생성 전송을 하지 않습니다(여러 행이면 항상 전송).",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:PR 체크 행 삭제 무반응(메시지 없음)",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "PR PO Detail 에서만 삭제가 동작하며, 현재 행 또는 선택 영역에 PR Check=True 행이 있으면 메시지 없이 삭제하지 않습니다. 다른 시트에서는 삭제가 무반응입니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:PROD_PLAN_AMEND 행만 Fix/Unfix",
+  "screens": [
+   "SCP0029"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택 범위 중 Measure=PROD_PLAN_AMEND 행만 대상. 주 합계 셀을 선택하면 그 주 일자 전체를 대상으로 펼침. Unfix 는 Fix(연두색) 일자만 대상",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Parent Item 팝업 선택 입력",
+  "screens": [
+   "SCP0130"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "신규 행/수정모드에서 Parent Item 더블클릭 → 품목 팝업 선택값 입력",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Plan Group 권한 행 필터(화면)",
+  "screens": [
+   "SCP0120"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ADMIN/SCM PI Admin 이 아니고 정의값이 PLAN_GROUP 인 Segment 가 있으면, 조회조건 Plan Group 체크값(없으면 본인 Owner Plan Group 전체)에 해당하는 하단 행만 표시",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Plan Group 비우면 삭제 처리",
+  "screens": [
+   "SCP0121"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "기존 Plan Group 이 있던 행의 Plan Group 을 비우면 삭제(D)로 저장",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Plan Group 이름→코드 변환",
+  "screens": [
+   "SCP0121"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Plan Group 칸에 이름을 붙여넣으면 Division Plan Group 목록에서 코드로 바꿔 넣음(목록에 없으면 예외)",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Plan 변경건·신규 행 ERP 처리 제외",
+  "screens": [
+   "SSP0021"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Change Type=P 행은 ERP 변경요청(Drafting) 대상에서 제외, 추가(I) 행은 출하상태 재확인·Drafting 대상에서 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Plan 변경유형 행 ERP 변경요청 제외",
+  "screens": [
+   "SSP0015"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Change Type 이 P 인 행과 신규(I) 행은 ERP 변경요청(Drafting) 생성 대상에서 제외. 같은 SO 번호는 첫 행에서 한 번만 묶어 생성",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Plan 변경유형 행 ERP 전송 제외",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "행 CHANGE_TYPE='P' 이면 변경요청 초안 저장(NonSoNo/SoNo)·ERP 전송에서 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Plan 상태별 시트 데이터 잠금(메시지 없음)",
+  "screens": [
+   "SCP0058"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회 결과 Table[1] 과 Plan-type 으로 편집 가능 여부를 계산합니다: is_editable=N 이거나 Plan-type 이 FN/TE 이면 불가, PR 은 MA 가 생성되어 PLAN_STATUS≠-1 이면 불가, MA 는 SE 가 생성되어 PLAN_STA",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Plan 유형 자기반려 무음 미처리",
+  "screens": [
+   "SSP0202"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Self Reject 는 Change Type 이 Confirm/New 일 때만 ERP 적재 확인 후 저장하고, Plan(P) 이면 메시지 없이 아무것도 저장하지 않습니다.",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Plan 유형 행 ERP 변경초안 제외",
+  "screens": [
+   "SSP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "CHANGE_TYPE='P' 행은 변경요청 초안(DRAFTING) 저장 대상에서 제외합니다.",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Plan-date 없으면 무반응",
+  "screens": [
+   "SCP0013"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Plan-date 값이 없으면 메시지 없이 아무 동작도 하지 않음",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Plan-date 값이 없으면 메시지 없이 팝업을 열지 않음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Planner 승인권한별 편집 개방",
+  "screens": [
+   "SCP0049"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "담당자가 아니어도 승인된 Planner 권한(FP/CAPA/SCP Planner, Division 별)과 FP Instance(Plant_Building_Group) 권한에 따라 Super/Side Planner 로 구분해 메인·서브 공정의 Finish·Lane·기간 ",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Prod Plan 행·수량 있는 셀만 Unfix",
+  "screens": [
+   "SCP0061"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택 범위 중 Measure 가 Prod Plan 인 행만, 수량이 있는 일자 셀만 대상으로 모음. 주합계(W_) 칸을 고르면 그 주의 일자 칸 전체로 펼침. 월합계·Fix Reason 행 등은 조용히 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Prod Plan 행·수량 있는 일자 셀만 해제",
+  "screens": [
+   "SCP0024"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택 범위 중 Measure='Prod Plan' 행만, 일자(D_) 셀은 수량 있는 셀만, 주 합계(W_) 선택 시 그 주 일자 셀로 확장해 수량 있는 셀만 해제 대상. 월 합계(M_)·Fix Reason 행은 조용히 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:SO 유무별 편집·버튼 전환",
+  "screens": [
+   "SSP0002"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "SO No 있는 요청: 신규 출하일 편집 가능·체크박스 숨김·Add Date/Delete/날짜 숨김 / SO No 없는(또는 Plan) 요청: 체크박스 편집·출하일 잠금·Add Date/Delete/날짜 표시",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:SOP 탭 행추가는 New 버튼(Model 팝업)으로만",
+  "screens": [
+   "SCP0104"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "SOP 탭에서 툴바 Insert 는 무반응이고, 수정모드에서만 활성화되는 New 버튼으로 Model 팝업을 열어 선택한 라인/공정 조합만 행으로 추가됩니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Ship Plan 행·수량 있는 셀만 Unfix",
+  "screens": [
+   "SCP0062"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택 범위 중 Measure 가 Ship Plan 인 행, 수량 있는 일자 셀만 대상. 주합계(W_) 칸을 고르면 그 주의 일자 칸 전체로 펼침. 그 밖은 조용히 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Ship Plan 행·수량 있는 일자 셀만 해제",
+  "screens": [
+   "SCP0025"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택 범위 중 Measure='Ship Plan' 행만, 수량 있는 일자(D_) 셀만, 주 합계(W_) 선택 시 그 주 일자 셀로 확장. 월 합계(M_)·Fix Reason 행은 조용히 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Shipment SUM 직접 입력 시 하위 검사·대기 값 0 처리",
+  "screens": [
+   "SCP0083"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Shipment Cell SUM 에 값이 있으면 Cell Inspection/Load·Waiting 을 0 으로 저장. Pack Inspection/Load·Waiting 도 (Pack SUM 이 아니라) Cell SUM 기준으로 0 처리됨(L948 조건이 Cell S",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Single Process 시 두 번째 이후 SO 묶음 저장 생략",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Single Process 체크 시 SoNo 2번째 호출부터 아무 것도 하지 않고 성공 처리(iCallChk>1 → return true)",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:UOM 기본값·표시 전환",
+  "screens": [
+   "SCP0017"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Division='EE' 이고 Operation Group='E' 이면 UOM 을 M 으로 체크하고 UOM 조건을 표시, 그 외에는 EA 로 체크하고 UOM 조건을 숨김",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:UOM 선택값으로 조회 결과 행 필터",
+  "screens": [
+   "SCP0017"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회 결과에서 UOM 이 선택값 하나일 때 그 UOM 행만 그리드에 표시(여러 개·공란이면 전체)",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Unfix 대상 = Fix 색상 셀만",
+  "screens": [
+   "SCP0058"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Unfix 는 선택 영역 중 Fix 색(연두색 배경 ffbce55c) 셀만 대상으로 모으고 나머지는 조용히 건너뜁니다.",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:V 키 붙여넣기(숨김 제외)",
+  "screens": [
+   "SSP0046"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Requestor 오른쪽 칸에서 V 키(Ctrl 유무 무관)를 떼면 숨김 행·열을 건너뛰며 클립보드 붙여넣기, C 키는 복사",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:Valid Y/N 편집값 대신 'Y' 고정 저장",
+  "screens": [
+   "SCP0114"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Level5 의 Valid Y/N 칸을 N 으로 바꿔도 저장할 때는 모든 레벨·모든 행에 'Y' 를 보냄(화면 값 무시). 사용자가 바꾼 사용여부가 반영되지 않음",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:값 없는 월 셀 잠금",
+  "screens": [
+   "SCP0111"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드에서 월 셀 값이 비어 있으면(DB 에 데이터가 없어 저장 불가) 그 셀을 잠급니다(모든 권한·Division 공통).",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:값 있는 Request No 셀만 상세 팝업",
+  "screens": [
+   "SSP0019"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Request No 셀 클릭 시 값이 비어 있으면 아무 동작도 하지 않고, 값이 있을 때만 요청 상세 팝업을 엽니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:값 있는 일자 셀만 상세 조회",
+  "screens": [
+   "SCP0014"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Demand 그리드에서 일자(D_) 컬럼의 값이 있는 데이터 셀을 더블클릭할 때만 Pegging Info·Plan Problem 을 조회(헤더·합계·빈 셀은 메시지 없이 무시)",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:같은 SO No 행 일괄 반영",
+  "screens": [
+   "SSP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP SO No 가 있는 행에서 Trans Mode·Shipment Date·Shipment Qty·Remarks·Building·Change Reason·Reason Detail 을 바꾸면 같은 SO No 의 모든 행에 같은 값/EDIT_MAIN=Y 를 넣고 작업 ",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:같은 SO 번호 행 동시 변경 표시",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Shipment Qty·Remarks·Building·Reason Detail·Trans Mode 를 바꾸면 SO 번호가 같은 모든 행의 작업 표시를 M 으로 강제하고 변경 표시(EDIT_MAIN=Y)를 붙여 SO 번호 단위로 함께 저장되게 합니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:같은 SO 행 수정표시 강제",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Remarks/Remarks2/Shipment Qty/Change Reason 변경 시 Single Process 해제면 같은 SO 전 행 EDIT_MAIN='Y'·Action='M' 강제",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:검증 항목별 조회조건 비활성",
+  "screens": [
+   "SCP0039"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Validation Info 행을 클릭하면 그 항목 제약값(CONSTRAINTS01 Const:Division^PlanGroup^Name)에 따라 Division / Plan Group / Model 입력·팝업 버튼을 비활성화(나머지는 다시 활성)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:고정 입력란 비활성",
+  "screens": [
+   "SCP0123"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Plan Group·Plan Horizon 시작일·FCST Version·각 Frozen 시작일 입력란 비활성, Parameter 는 'Normal' 1개 고정·비활성",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:과거 Plan Date 선택 시 수정 불가 상태",
+  "screens": [
+   "SSP0023"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Plan-date 콤보에서 첫 번째(최신)가 아닌 값을 고르면 실시간 플래그를 끄고, 이 상태에서는 Edit 이 MSG00312 로 막히며 조회·상세조회에 과거 데이터 플래그(N)가 전달됩니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:과거 Plan Date 선택 시 실시간 아님 처리",
+  "screens": [
+   "SSP0021"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Plan Date 콤보에서 첫 번째(최신)가 아닌 항목을 고르면 실시간 아님(bRealFlag=false)으로 표시 → Edit 차단(MSG00312)·조회/시뮬레이션 파라미터 real_flag=N",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:과거 Plan·Lot 미등록 Container 재계산 제외",
+  "screens": [
+   "SSP0021"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "과거 Plan Date(실시간 아님)면 Container 단위수량을 0 으로 보고(MSG00292 안내) Container 를 0 으로 계산, LOT_YN=N 인 Container 행은 재계산 대상에서 제외. 재계산은 빨간 글자(붙여넣기·변경 표시)된 SHIP_PLAN",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:과거 기간 셀 잠금",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Work Calendar 행: 월 컬럼은 현재월+4개월 이전 잠금, 일 컬럼은 오늘 이전 잠금 / Loss 행: 일 컬럼 전부 잠금",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:과거 일자 수정 불가",
+  "screens": [
+   "SCP0046"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "기준일(조회기간 시작 주 월요일, editYYYYMMDD) 이전 일자 칸 잠금, 기준일이 조회 마지막 일자보다 뒤면 일자 칸 전부 잠금. 신규 행도 같은 기준으로 잠그고 편집 가능 칸은 'N' 으로 채움",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:구분=입고계획이면 소진방안 '*' 고정",
+  "screens": [
+   "SCP0115"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "편집 중인 I/M 행에서 구분을 '입고계획' 으로 바꾸면 소진방안 칸을 잠그고 '*' 를 자동 입력. 다른 구분으로 바꾸면 소진방안 잠금을 풀고 값을 비움(다시 골라야 함)",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:권한 그룹별 버튼 무반응(메시지 없음)",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "현재 그룹이 'DM Planner' 이면 PR PO Detail 의 Edit 가 메시지 없이 아무 동작도 하지 않습니다.",
+    "편집 제어",
+    ""
+   ],
+   [
+    "현재 그룹이 'DM Planner' 이면 Confirm·Monthly BOH 버튼이 메시지 없이 아무 동작도 하지 않습니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:권한별 BOH 편집 허용",
+  "screens": [
+   "SCP0111"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ADMIN·SCM PI Admin·SCP Planner 그룹이 수정모드일 때만 재고(INV, SEQ_FLAG 두 번째 자리 6) 행의 BOH 셀을 편집할 수 있고, 그 외 사용자는 BOH 를 잠급니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:기간 빠른 설정",
+  "screens": [
+   "SCP0061",
+   "SCP0062"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "W26/W52/W Last(W78·W82) 버튼 → 오늘 기준 해당 주수만큼 Period 를 자동 설정(SCM0001_GET_SCP_DAY_PERIOD)",
+    "B 보정",
+    ""
+   ],
+   [
+    "W26/W52/W Last(W78·W82) 버튼 → 해당 주수만큼 Period 자동 설정(SCM0001_GET_SCP_DAY_PERIOD)",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:기간 선택 범위 제한",
+  "screens": [
+   "SCP0049"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Period 피커의 선택 가능 월을 제한합니다(From: 하한=DAY_RANGE FROM, 상한=당월 / To: 상한=당월+2년).",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:기간 시작월 > 종료월 자동 보정",
+  "screens": [
+   "SCP0052"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Period 를 바꿀 때 시작월이 종료월보다 뒤이면 시작월을 종료월과 같게 자동으로 맞춤(메시지 없음)",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:기본 필터값 자동 선택",
+  "screens": [
+   "SCP0092"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Division 기본값 82(권한 없으면 두 번째 항목), FCST Type 은 81(또는 ALL)이면 전체, 그 외는 'Mass' 만 체크. Weekly 쪽 판단에 Summary Division 공백 조건이 섞여 있음(L351)",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:기준 행 Model/Dept 없으면 행추가 무반응",
+  "screens": [
+   "SCP0075"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택한 행의 Model(ITEM_ID) 또는 Dept ID 가 비어 있으면 메시지 없이 행을 추가하지 않음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:날짜 컬럼만 상세 조회·편집 가능일 판정",
+  "screens": [
+   "SSP0001"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "상단 그리드에서 날짜(D_) 컬럼을 더블클릭했을 때만 하단 상세를 조회합니다(다른 컬럼은 무반응). 이때 더블클릭한 날짜가 'Plan-date + Ship Frozen 일' 이고 Plan-date 가 최신(첫 번째)이면 편집 가능으로, 아니거나 Ship Frozen=0",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:단계 검증 실패 시 상태값 자동 지움",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "셀 입력 검사(CHANGE 1~3)에 걸린 칸이 단계 상태 칸이면 값을 비움(완료일 칸은 그대로)",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:담당자 이름 비움",
+  "screens": [
+   "SCP0080"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "PIC ID 를 키보드로 바꾸면 등록 사용자여도 PIC Name 셀을 빈 값으로 만듦(미등록이면 PIC ID·PIC Name 모두 비움)",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:담당자(PIC) 행만 편집 허용",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Role 이 SCM PI Admin 이거나 로그인 사용자가 그 행의 USER_ID_1~10 중 하나일 때만 값 셀 잠금 해제(아니면 메시지 없이 잠김)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:대상 Division 아닌 검증 항목 건너뜀",
+  "screens": [
+   "SCP0039"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "전체 조회 시 검증 항목의 제약값(CONSTRAINTS01)에 Div:xx 가 있고 선택 Division 과 다르면 그 항목은 조회하지 않고 건수를 비워 둠(예: Tact Time(OSP) [82], Outsourcing Capacity [40]). 행별 Query 클",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:더블클릭 시 Drafting 자동 저장",
+  "screens": [
+   "SSP0002"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "확정(C)/계획(P) 행을 열면 확인 외 별도 저장 버튼 없이 즉시 상태 D(Drafting)로 저장하고 상단 행 상태·요청자·요청번호를 갱신",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:등록 필요 행 삭제 무반응",
+  "screens": [
+   "SCP0020"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "삭제는 새로 추가한 행(작업표시 I) 또는 등록된 행(입력상태 M)만 가능. 조회로 나온 \"등록 필요\" 행(입력상태 I)은 삭제 버튼에 메시지 없이 반응하지 않음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:메시지 없는 실행 중단",
+  "screens": [
+   "SCP0009"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Plan Date 미선택이면, 또는 Division EE계열+Operation Group A 이면 메시지 없이 New 팝업을 열지 않음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:미등록 Nickname/Model 명칭 → Dummy 코드 자동 채번",
+  "screens": [
+   "SCP0104"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Nickname(Cell·Module/Pack) 또는 Model(전극) 셀에 마스터에 없는 이름을 입력하면 SCP0104_CHECK_NAME_ON_DUMMY_CODE 로 Dummy 코드를 받아 목록에 덧붙이고 Dummy=Y 로 표시합니다. SP 가 실패해도(빈 코드) ",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:미사용 컬럼 값 강제 대체",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "전극 행은 Capa='0.0', 비전극 행은 Coating Speed='0'·Lane='0'·Wide Y/N='Y' 로 덮어써 저장",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:미저장 신규 요청 있으면 New 무반응",
+  "screens": [
+   "SCP0090"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "첫 행이 이전 New 로 추가된 미저장 행(INS_FLAG=Y)이면 메시지 없이 New 를 무시",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:미저장 행이 있으면 편집모드 전환 무시",
+  "screens": [
+   "SCP0114"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "활성 그리드에 추가(I)·수정(M) 표시 행이 하나라도 남아 있으면 Edit 버튼을 눌러도 아무 메시지 없이 무시(편집모드 켜기/끄기 안 됨). 저장하거나 재조회해야 전환 가능",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:변경 셀 빨간 표시(시뮬레이션 저장 대상 지정)",
+  "screens": [
+   "SSP0023"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "상단 그리드 셀을 바꾸거나 붙여넣으면(붙여넣기는 조회 원본과 값이 다를 때만) 해당 셀과 측정치 셀 글자를 빨간색으로 바꿉니다. Simulation 은 빨간 글자 셀만 저장 대상으로 삼습니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:변경 셀 표시(빨간 글자)",
+  "screens": [
+   "SSP0022"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "상단 그리드 셀 값을 바꾸면 그 셀과 Measure 셀 글자를 빨간색으로 바꿉니다. 이 빨간 글자가 저장 대상 판정 기준이 됩니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:변경 셀만 저장",
+  "screens": [
+   "SCP0003"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "PPM/CAPACITY 행은 저장 제외, 조회 당시 값과 같은 셀은 제외, 신규 셀이 비어 있으면 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:변경 없는 붙여넣기 행 작업표시 해제",
+  "screens": [
+   "SSP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Shipment Date 를 붙여넣었는데 기존 New Shipment Date 와 같고 다른 변경(빨간 글자)도 없으면 작업 표시를 지움",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:변경 없음 시 무음 중단",
+  "screens": [
+   "SCP0109"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "행 수가 원본과 같고 I/M/D 행이 없으면(CheckChangedValues=false) 메시지 없이 저장을 멈춤. 저장 대상은 원본 대비 바뀐 행만(SheetUtils.GetChangedData)",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:변경 표시 색 지정",
+  "screens": [
+   "SCP0047"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드에서 월 칸 값을 바꾸면 값이 있으면 빨간 글자, 비우면 Beige 글자로 표시(저장 대상 판정 근거)",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:변경 표시 셀만 저장",
+  "screens": [
+   "SCP0011",
+   "SCP0019",
+   "SCP0029",
+   "SCP0045",
+   "SCP0046",
+   "SCP0047",
+   "SCP0096",
+   "SCP0201",
+   "SSP0045",
+   "SSP0046"
+  ],
+  "rows": 10,
+  "examples": [
+   [
+    "작업표시(I/M/D) 행의 일자(D_) 셀 중 글자색이 빨간색(변경 표시)이거나 값이 빈 셀만 저장 대상으로 모음. 그 외 셀은 조용히 제외",
+    "C 필터",
+    ""
+   ],
+   [
+    "작업 표시(I/M/D)가 있는 행 중 Working Time Default·일자 셀의 글자색이 빨간색(변경 표시)인 셀만 저장 대상으로 모음. 빨간 글자가 아닌 셀은 조용히 제외",
+    "C 필터",
+    ""
+   ],
+   [
+    "작업 표시 I/M/D 행의 일자(D_) 셀 중 빨간 글자(변경)이거나 빈 셀만 저장 대상, 나머지 셀은 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:변경(빨간 글자) 셀·빈 셀만 저장",
+  "screens": [
+   "SCP0060"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "작업 표시(I/M/D)가 있는 행의 일자(D_) 칸 중 글자색이 빨간색(변경 표시)이거나 빈 칸만 저장 대상으로 모음. 그 밖의 칸은 조용히 제외. 대상 0건이면 메시지 없이 종료",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:변경·빈 셀만 저장",
+  "screens": [
+   "SCP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "작업 표시(I/M/D)가 있는 행 중 값을 바꿨거나(빨간 글자) 비어 있는 셀만 저장 대상으로 모음. Bucket=Daily/ALL 이면 일자 셀, 그 외는 주 합계 셀 기준",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:부모 화면 값 고정(조회조건 잠금)",
+  "screens": [
+   "SCP0093"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "팝업 Div·Work Month·Plan Date 는 부모 화면 값으로 채우고 비활성(변경 불가). Copy Month 선택 범위 = 부모 Period 의 From~To 월",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:붙여넣기 Plan Group 명칭→코드 변환",
+  "screens": [
+   "SCP0128",
+   "SCP0129",
+   "SCP0130",
+   "SCP0131",
+   "SCP0132"
+  ],
+  "rows": 5,
+  "examples": [
+   [
+    "Plan Group 칸에 명칭을 붙여넣으면 코드로 바꿔 저장(일치 명칭이 없으면 예외)",
+    "B 보정",
+    ""
+   ],
+   [
+    "Plan Group 명칭 붙여넣기 시 코드로 변환(미일치 시 예외)",
+    "B 보정",
+    ""
+   ],
+   [
+    "Plan Group 명칭 붙여넣기 시 코드로 변환(미일치 시 예외)",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:붙여넣기 값 변환·연동",
+  "screens": [
+   "SCP0133"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Plan Group 명칭→코드, (Item Mapping) Warehouse Name 붙여넣기 시 Site·Stage 연동, Storage Loc 명칭→코드",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:붙여넣기 시 연동값 재계산",
+  "screens": [
+   "SSP0002"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "붙여넣은 Division/From·To Site/Incoterms/Trans Mode/Shipment Date/Model 에 대해 셀 입력과 같은 초기화·후보 재조회·자동 입력을 수행(시트 잠금 상태면 무시). Division 40 만 Project '-' 잠금(셀 입",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:붙여넣기 표시명→코드 변환",
+  "screens": [
+   "SCP0001"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Location·Building·Operation·Storage 칸에 붙여넣은 표시명을 콤보 목록에서 찾아 코드로 바꿔 넣음. 목록에 없는 이름이면 처리 중 오류(미처리 예외) 발생",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:붙여넣은 이름을 코드로 변환",
+  "screens": [
+   "SCP0127"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Plan Group 셀에 이름을 붙여넣으면 Plan Group 목록에서 이름으로 찾아 코드로 바꿔 넣음(목록에 없으면 예외 가능)",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:비고 셀 단축키 복사·붙여넣기 차단",
+  "screens": [
+   "SSP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드에서 Remarks·Building·Reason Detail 셀을 클릭하면 Ctrl+V/Ctrl+C 를 비활성화, 다음 셀 클릭 때 다시 활성화",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:비고 수정 행 표시(저장 대상 지정)",
+  "screens": [
+   "SSP0016"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Remarks 를 고치면 행 머리글을 빨간색으로 표시하며, 저장 시 이 표시가 있는 행의 비고만 비고 변경으로 전송합니다.",
+    "B 보정",
+    ""
+   ],
+   [
+    "Remarks 컬럼에 붙여넣으면 붙여넣은 행 수만큼 행 머리글을 빨간색으로 표시해 비고 저장 대상으로 만듭니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:비고·사유상세 칸 Ctrl+C/V 단축키 차단",
+  "screens": [
+   "SSP0021"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Remarks·Remarks2·Change Reason Detail 칸을 클릭하면 그리드 Ctrl+V/Ctrl+C 동작을 없앰(다른 칸 클릭 시 복원)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:비조업 Y/N → 1/0 변환",
+  "screens": [
+   "SCP0098"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "비조업 일자 값 N→0, Y→1 로 바꿔 저장",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:빈 값 → 삭제 처리",
+  "screens": [
+   "SCP0047"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "값을 지운 칸(Beige 표시)은 KPI Target='9999', 처리구분 'D' 로 보내 삭제 처리",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:빈 값이면 팝업 미오픈",
+  "screens": [
+   "SSP0012"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Change Req No 셀이 비어 있으면 변경요청 팝업을 열지 않음(INCOTERMS 셀은 항상 BOD 팝업, EE 행은 ORIGIN_FROM_DIVISION_ID 로)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:빈 그리드 행추가 무반응",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Insert 는 시트가 수정모드이고 그리드 행이 1건 이상일 때만 동작(메시지 없음)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:빈 그리드/조회 모드 다건추가 무반응",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "건수 입력 후 시트가 잠금이거나 행 0건이면 메시지 없이 추가하지 않음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:사업부별 조회조건 잠금",
+  "screens": [
+   "SCP0006"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Sales Site 는 항상 ALL 고정·비활성(속도 문제), Division 40/82 이면 Project 를 비우고 Project 입력·버튼 비활성",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:사유 입력 취소 시 중단",
+  "screens": [
+   "SCP0009"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Fix 사유 팝업(SCM0002_RejectReasonPopup)을 취소하면 메시지 없이 중단",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:삭제 기능 없음(Delete 무반응)",
+  "screens": [
+   "SSP0022"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "DeleteButton 이 비어 있어 Delete(F9)는 어떤 시트에서도 행을 삭제하지 않습니다(프레임워크 권한·잠금 검사 뒤 무반응).",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:삭제 기능 없음(무반응)",
+  "screens": [
+   "SSP0021",
+   "SSP0023"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "DeleteButton 이 비어 있어 삭제 버튼을 눌러도 아무 동작 없음",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Delete 버튼은 프레임워크 공통 검사 후 화면 처리 함수가 비어 있어 아무 동작도 하지 않습니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:삭제 미지원(무반응)",
+  "screens": [
+   "SCP0050"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "삭제(F9)는 시트가 하나(Index 0)뿐이라 항상 첫 분기에서 그냥 끝나 아무것도 삭제되지 않습니다. 원래 띄우던 \"읽기 전용입니다\"(MSG00109) 메시지는 주석 처리되어 메시지도 없습니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:상세 그리드 선택 시 Measure 설정 무반응",
+  "screens": [
+   "SSP0001"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "하단 상세 그리드를 선택한 상태에서 Measure 버튼을 누르면 메시지 없이 아무 동작도 하지 않습니다. 컬럼 설정은 상단 그리드에서만 가능합니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:상세 그리드에서만 저장",
+  "screens": [
+   "SSP0001"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장은 하단 상세 그리드가 선택되어 있고 수정모드이며 행이 1건 이상일 때만 진행합니다. 그 외(상단 그리드 선택, 상세 0건)는 메시지 없이 아무것도 하지 않습니다. 저장 시 Measure 는 SHIP_CONFIRM, 날짜는 더블클릭한 날짜로 고정해 넘깁니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:상세 시트 수정모드가 아니면 저장 무반응",
+  "screens": [
+   "SSP0016"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "활성 Spread 가 상세(spdDetail)가 아니거나 상세 시트가 잠금 상태이거나 행이 0건이면 메시지 없이 저장하지 않습니다.",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:상세 조회 대상 셀 제한",
+  "screens": [
+   "SSP0006"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Demand 그리드에서 일자(D_) 열이면서 값이 있는 셀을 더블클릭할 때만 Pegging Info·Plan Problem 을 조회합니다. 그 외 셀은 메시지 없이 무반응입니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:상세 행 없으면 버튼 무반응",
+  "screens": [
+   "SSP0003",
+   "SSP0202"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "상세 그리드에 행이 없으면(요청을 더블클릭하지 않은 상태) 세 버튼 모두 메시지 없이 아무것도 하지 않습니다.",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Approval/Reject/Self Reject 는 상세 그리드에 행이 없으면 아무 반응이 없습니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:상태별 승인 체크(CHK) 잠금·초기값",
+  "screens": [
+   "SSP0003"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "상세 조회 후 요청 상태에 따라 CHK 컬럼을 정합니다: E/O/R/S(반려·완료) → 전부 해제+잠금, D/A(초안·승인) → 전부 체크+잠금, P(부분승인) → 상세 상태가 R/E/S 인 행만 해제+잠금, 그 외(Q) → 전부 체크 상태로 사용자가 바꿀 수 있음. ",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:생산확정 기간 생산계획 입력 잠금",
+  "screens": [
+   "SCP0106"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "1차 컷오프×LINE 시트에서 생산계획(SCP_PROD_PLAN) 행은 생산확정 기간(조회 결과 첫 행의 SCP_PRDN_PLAN_REF_ST_YM~END_YM)에 해당하는 월 셀이 잠깁니다. 코드상 판정값을 컬럼마다 초기화하지 않아, 확정 기간에 처음 걸린 월 이후의",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:선택 불가 Measure 이동 제한",
+  "screens": [
+   "SSP0046"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "사용자 목록에서 USER_SELECTABLE_FLAG≠Y 항목은 왼쪽으로 빼기·끌어 옮기기가 무시됨, Sub Total 체크는 한 행만 유지",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:선택 불가 Owner 순서 이동 차단",
+  "screens": [
+   "SCP0121"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Owner User 그리드에서 USER_SELECTABLE_FLAG≠Y 행은 끌어 옮기기 취소, 두 그리드 모두 잠금",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:선택 없으면 무반응",
+  "screens": [
+   "SCP0069"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "팝업 Save 버튼은 CHK 가 체크된 행만 넘기며, 하나도 체크하지 않아도 메시지 없이 닫히고 본 화면에는 아무 행도 추가되지 않음",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:선택 행 기준 하위 조회",
+  "screens": [
+   "SCP0021"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Loss Time 행을 더블클릭하면 그 행 키로 하단 Loss Time Except 목록을 조회(수정모드가 아닐 때만 — 현재는 항상)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:선행값 없을 때 입력값 자동 삭제",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Change Reason 이 없는 행에 입력한 Reason Detail 값은 MSG00287 과 함께 자동으로 지워집니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:세부내역·비고 팝업 즉시 저장(수정모드·권한 잠금 무관)",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "VOC NO 가 있는 행의 세부내역(또는 VIEW)·비고 칸 더블클릭 → 팝업에서 OK 시 별도 SP(SCP0078_SAVE_GSCM_VOC_DATA)로 즉시 저장. 수정모드 여부·그룹별 컬럼 잠금(예: TEST/PI 그룹의 세부내역 잠금)과 상관없이 저장되고 닫힌 뒤",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:셀 클릭 시 선택 팝업",
+  "screens": [
+   "SSP0002"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Project 칸 클릭 = SCM0002_ProjectbyDivisionPopup(Division 40/EE 는 '-' 고정), Model 칸 클릭 = SCM0002_ItembyDivisionPopup 으로 선택(선택 시 Nick Name·End Customer 자동)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:수정 Measure 세트 전체 저장 대상 표시",
+  "screens": [
+   "SCP0106"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Current 상태에서 한 셀을 고치면 자동 계산된 7개 Measure 외에도 같은 블록의 비율 Measure 18종(PF·QL·ID·NM·BM·CM·PD·PM·UD·PP·MR 등) 행의 작업 표시를 'M' 으로 바꿔, 값이 그대로여도 블록 전체가 저장 대상이 됩니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:수정 불가 Valid 원복",
+  "screens": [
+   "SCP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "MSG00211 표시와 함께 Valid=N, 작업 표시 빈 값으로 되돌림",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:수정 시 SAVE 자동 체크",
+  "screens": [
+   "SCP0049"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "셀을 수정하면(M) 해당 행 SAVE 를 자동 체크하고, 수정되지 않은 행의 SAVE 체크는 해제합니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:수정(M) 행만 저장",
+  "screens": [
+   "SCP0026"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "작업 표시가 M 인 행만 저장 대상으로 모음(I/D 는 조용히 제외)",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:수정모드 시 Bucket Daily 전환",
+  "screens": [
+   "SCP0060"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Line 그리드를 수정모드로 바꾸면 Bucket 을 DAILY 로 바꿔 일자 칸을 표시",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:수정모드 시 전체 컬럼 편집 가능(잠금 제한 없음)",
+  "screens": [
+   "SSP0050"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드 전환(SwitchLock)은 Action 다음 컬럼부터 끝까지 전부 잠금 해제함. 키·이름·감사 컬럼을 다시 잠그는 코드는 모두 주석 처리되어 있어 컬럼별 편집 제한이 없음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:수정모드 진입 시 Bucket Daily 전환",
+  "screens": [
+   "SCP0011"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Line 그리드에서 수정모드로 들어가면 Bucket 을 Daily 로 바꿔 일자 열이 보이게 함",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:수정모드 진입 시 합계 수식 해제·작업표시 초기화",
+  "screens": [
+   "SCP0083"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드로 바꾸면 Shipment Cell/Pack/전체 SUM 의 수식을 값으로 바꾸고 각 행의 작업 표시(Action)를 비움. 수정모드를 끄면 조회 원본(dsOrigianlCopy)으로 화면을 되돌림",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:수정모드 토글 해제 시 전체 잠금",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Edit 를 다시 누르면 Site~끝 컬럼 전부 잠금",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:수정모드에서 선택(CHK) 컬럼 잠금",
+  "screens": [
+   "SSP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드에서는 선택 체크박스 컬럼을 잠그고, 조회모드로 돌아가면 해제 → Checked 버튼용 체크는 조회모드에서만 가능",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:수정모드에서만 사용자 검색 팝업",
+  "screens": [
+   "SSP0014",
+   "SSP0050"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "수정모드(시트 잠금 해제)일 때만 User ID·Part Leader·Team Leader·Mail User1~5 셀을 더블클릭하면 사용자 검색 팝업이 열리고, 고른 사용자 ID 가 그 셀에 들어감. 보기 모드에서는 팝업이 열리지 않음(메시지 없음). 셀은 텍스트 셀이",
+    "편집 제어",
+    ""
+   ],
+   [
+    "수정모드(시트 잠금 해제)일 때만 User ID·Part Leader·Team Leader·Mail User1~5 셀을 더블클릭하면 사용자 검색 팝업(UserInfoPopup, 단일 선택)이 열리고, 고른 사용자 ID 가 그 셀에 들어감. 보기 모드에서는 팝업이 열리지",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:숨김 My Model 조건 자동 설정",
+  "screens": [
+   "SSP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "숨김 체크박스 My Model(Visible=false)을 사용자 회사가 Lookup MY_MODEL_DEFAULT_CHECK 에 있으면 체크, 아니면 해제해 조회 파라미터(p_myModelChk)로 보냄 — 사용자가 바꿀 수 없음",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:숨김 조건 고정값(FCST Pegging = N)",
+  "screens": [
+   "SCP0055"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "FCST Pegging 체크박스가 숨김(Visible=false)이라 조회 파라미터 P_FCST_YN 은 항상 N",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:시트별 조회조건 표시 전환",
+  "screens": [
+   "SCP0130",
+   "SCP0133"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "SIR 시트로 바꾸면 Parent Model 조건 숨김·Child Material 라벨 'Material' 로 변경 후 조회조건 원천 재조회, Virtual BOM 으로 바꾸면 복원",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Item Mapping 시트에서는 Warehouse Name·Period 조건 숨기고 Model 조건 표시, 조회조건 원천 재조회",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:시트별 조회조건 표시·비활성 전환",
+  "screens": [
+   "SCP0052"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "CAPA History: Loss/Line Assign/Tact Time/Yield 체크박스와 전 조건 사용. Total Yield(Assembly): 체크박스 숨김, Operation·Version 비활성 + 선택값 비움. Yield Monitoring: Buildi",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:신규 비편집 Measure 행 0 수량 저장",
+  "screens": [
+   "SCP0058"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "신규(I) 행 중 SHIP_PLAN_AMEND 가 아닌 Measure 행은 입력값과 관계없이 첫 일자(D_) 컬럼 날짜에 수량 0 으로 1건 저장합니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:신규 행 Plan 전체 월 생성",
+  "screens": [
+   "SCP0111"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "신규 행은 Plan-date 월부터 Plan HORIZON_END 월(없으면 +11개월)까지 월마다 한 건씩 만들어 저장합니다.",
+    "B 보정",
+    ""
+   ],
+   [
+    "일반 저장 시 신규 행은 Plan-date 월~Plan HORIZON_END 월(없으면 +11개월) 각 월을 수량 0 으로 만들어 저장합니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:신규 행 오늘+10일 이전·버킷 외 컬럼 잠금",
+  "screens": [
+   "SSP0046"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "신규 행은 Division·Nick Name~Customer·Measure~Requestor 잠금(2번째 행부터), 오늘+10일 이전 일자 셀 잠금·회색, 현재 Bucket 과 다른 단위(D_/W_/M_) 컬럼 잠금",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:신규 행 팝업 선택 입력(더블클릭)",
+  "screens": [
+   "SCP0125"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "신규 행에서만 Project Code 더블클릭 → 프로젝트 팝업, Item 더블클릭 → 모델 팝업으로 값 입력(반환값 공백이면 미입력)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:신규 행만 팝업 입력",
+  "screens": [
+   "SCP0051"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드에서 작업 표시가 I(신규) 인 행의 Material·Request User 셀을 더블클릭할 때만 팝업이 열림(기존 행은 무반응). 셀 직접 입력도 잠겨 있지 않음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:실제 변경 없는 수정 행 저장 제외",
+  "screens": [
+   "SCP0130"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정(M) 표시지만 모든 값이 이전 값과 같으면 조용히 저장 대상에서 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:업로드 값 대문자·공백 제거",
+  "screens": [
+   "SCP0099"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "업로드한 모든 셀 값을 앞뒤 공백 제거·대문자 변환·공백/줄바꿈 제거 후 사용(예: 'ab c' → 'ABC')",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:업로드 결과에 따른 OK 버튼 활성화",
+  "screens": [
+   "SCP0049",
+   "SCP0113"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "업로드 후 성공 건수가 1건 이상이면 OK(저장) 버튼을 켭니다. SaveExceptError=true 라 오류 건이 있어도 저장 가능(오류는 Error Detail 시트에 표시).",
+    "편집 제어",
+    ""
+   ],
+   [
+    "공통 업로드 창을 SaveExceptError=true 로 열어, 업로드 결과 성공 건수가 1건 이상이면 오류 건이 있어도 OK(저장) 버튼이 켜집니다(오류 내역은 Error Detail 시트에 표시, 오류 행 저장 여부는 DB 처리).",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:업로드 오류 1건이라도 있으면 저장 불가",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "SaveExceptError=false 로 공통 업로드 창이 오류 행이 있으면 OK 버튼을 비활성(메시지 없음, 오류 내역은 Error Detail 시트)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:오류 행 있어도 업로드 저장 허용",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "SaveExceptError=true 로 열어 업로드 오류 행이 있어도 OK 버튼 활성(오류 내역은 Error Detail 시트)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:오류 행 제외 저장 허용",
+  "screens": [
+   "SCP0041",
+   "SSP0026"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "업로드 창을 SaveExceptError=true 로 띄워, 업로드 결과에 오류 행이 있어도 성공 행이 1건 이상이면 OK(저장) 버튼이 활성 — 오류 행은 Error Detail 에만 보이고 저장에서 빠짐",
+    "C 필터",
+    ""
+   ],
+   [
+    "공통 업로드 창을 SaveExceptError=true 로 열어 오류 행이 있어도 정상 행만 저장 가능, 저장 후 \"다시 조회하시겠습니까?\" Yes 면 메인·상세 재조회",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:완료 Activity 재실행 무시(메시지 없음)",
+  "screens": [
+   "SCP0123"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "독립 실행 Activity 가 이미 Completed(C)면 Action 버튼을 눌러도 메시지 없이 무시(A009 Ship Plan Semi Cut-off 만 반복 실행 허용)",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:완료일 1줄 입력 자동 복사·날짜 형식 변환",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "단계 완료일을 1줄만 입력하면 같은 날짜를 2줄(최초/변경)로 복사하고, 8자리(yyyyMMdd) 값은 yyyy-MM-dd 로 바꿔 저장 파라미터에 넣음",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:요청 입력 기간 없으면 상세 조회 무음 중단",
+  "screens": [
+   "SSP0016"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택 계획일자의 요청 입력 기간(REQ_IN_START_DATE)이 없으면 상세/상세(All) 조회를 메시지 없이 중단합니다.",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:요청번호 없으면 버튼 무반응",
+  "screens": [
+   "SSP0002"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Request No 가 비어 있으면 Save Draft·Request Complete 를 눌러도 메시지 없이 아무 일도 하지 않음. 하단 행이 0건이면 Add Date·Delete·Cancel 도 무반응",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:우선순위 없는 기간 셀 잠금",
+  "screens": [
+   "SCP0105",
+   "SCP0106"
+  ],
+  "rows": 3,
+  "examples": [
+   [
+    "Status=Current 이면 각 월·연 셀마다 짝 컬럼(_ASSIGN_PRIORITY)의 우선순위가 없으면(0/공백) 그 셀을 잠금. 우선순위 컬럼 자체는 폭 0·크기조절 불가로 숨김",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Electrode 시트도 Status=Current 이면 우선순위(_ASSIGN_PRIORITY)가 없는 월·연 셀을 잠금(EDITABLE_YN 조건은 보지 않음)",
+    "편집 제어",
+    ""
+   ],
+   [
+    "기간 셀마다 짝으로 내려오는 우선순위 값(컬럼명_ASSIGN_PRIORITY)이 없거나 0 이면 그 기간 셀은 잠깁니다(라인 배정 우선순위가 없는 달은 입력 불가). Current 와 1차 컷오프×LINE 시트에 적용됩니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:원본 행 삭제 불가(조정 행만 삭제, 메시지 없음)",
+  "screens": [
+   "SCP0125"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Change Type 이 있는 행(New·Change)만 삭제 표시, 원본 행(Change Type 공백)은 메시지 없이 무시",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:월별 수량 자동 삭제",
+  "screens": [
+   "SCP0113"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "위 잠금 조건(예외 조합)에 해당하면 그 행의 월별 소진 계획 수량 값을 모두 빈 값으로 지웁니다(메시지 없음).",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:일괄 값 입력",
+  "screens": [
+   "SCP0019",
+   "SCP0096",
+   "SCP0098"
+  ],
+  "rows": 3,
+  "examples": [
+   [
+    "SelectDay=선택 셀·행·열의 일자 셀, EveryDay=전 행 전 일자, 요일(Mon~Sun)=전 행의 해당 요일 일자 셀에 Input Value 를 써 넣음. 잠긴 행(OSP_YN≠Y)에도 글자는 써지지만 변경 표시가 생기지 않아 저장되지 않음",
+    "B 보정",
+    ""
+   ],
+   [
+    "SelectDay=선택한 셀·행·열의 일자(D_) 셀, EveryDay=전 행 전 일자, 요일(Mon~Sun)=전 행의 해당 요일 일자 셀에 Input Value(Y/N)를 써 넣음. 요일은 캘린더 SP 의 DAY_CODE 로 판정",
+    "B 보정",
+    ""
+   ],
+   [
+    "Category 표시명과 Measure 표시명이 같은 행만 대상. Daily Capa = 월(M_) 컬럼, 그 외 = 일(D_) 컬럼. SelectDay=선택 범위, EveryDay=전체, 요일=해당 요일 일자 셀에 Input Value 기록. 비조업 빈 값은 빈 값 ",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:일괄 입력(요일·선택영역)",
+  "screens": [
+   "SSP0005"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Input 을 누르면 Day of the week 값에 따라 EveryDay=전 일자, 요일=그 요일 일자, SelectDay=선택 영역(행·열·블록)의 일자 셀에 Input Value 를 일괄로 씁니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:일괄삭제 값 고정",
+  "screens": [
+   "SCP0028"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "팝업에서 확정한 키마다 작업표시 D, Trans Mode 'X', Lot/Increment 0, Valid·Split N 으로 저장 SP 호출",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:일괄입력 후보 로드 후 자동 수정모드",
+  "screens": [
+   "SCP0028"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "팝업에서 확정한 후보 키로 입력 후보를 조회해 그리드에 올리고 자동으로 수정모드 전환",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:작업 표시 무관 전 행 저장",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "팝업 Save 는 Action(I/M/D) 표시와 수정모드 여부를 보지 않고 그리드 전 행을 저장(팝업 자체 버튼 목록이라 BaseForm 저장 사전검사 없음)",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:작업 표시(I/M/D) 행만 저장",
+  "screens": [
+   "SCP0097"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "작업 표시가 I/M/D 인 행만 '^' 로 이어 저장 SP 에 전달. 시트 행이 0건이면 메시지 없이 종료",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:작업표시 자동 해제",
+  "screens": [
+   "SCP0048"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "M 행에서 Plant Site·FROM·TO 가 비고 Priority=0 이 되면 작업 표시를 지워 저장 대상에서 뺌",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:작업표시 행만 저장",
+  "screens": [
+   "SCP0128"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "작업 표시가 I/M/D 인 행만 저장 대상으로 모음(빈 행은 조용히 제외)",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:잠긴 Mail REQ 체크 자동 해제",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "잠긴 Mail REQ 셀 값이 바뀌면 False 로 되돌림",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:저장 대상 그리드 제한",
+  "screens": [
+   "SCP0113"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장은 현재 선택 그리드가 메인 그리드(spdMain)이고 메인 시트가 수정모드(잠금 해제)일 때만 실행됩니다. 하위 상세 그리드가 선택된 상태면 저장 로직이 실행되지 않습니다(메시지 없음).",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:저장 대상 없으면 메시지 없이 종료",
+  "screens": [
+   "SCP0096"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "시트 행이 0건이면 바로 종료하고, 모은 저장 대상 셀이 0건이면(iCount=0) 저장 SP 를 부르지 않고 메시지 없이 끝남",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:저장 시 화면 단위 → 원 단위 환산",
+  "screens": [
+   "SCP0093"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "그리드는 Unit(Qty/Amount) 콤보 단위로 나눠 표시하고(기본 수량 1,000·금액 100,000,000), 저장 시 각 월 값에 '금액 단위' 배수를 곱해 원 단위로 되돌려 전송(수량 행도 금액 단위로 곱함). 저장 직전 \"Unit Qty = …, Unit ",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:저장 조건 불충족 시 무음 종료",
+  "screens": [
+   "SCP0011"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "포커스 그리드가 Line 이 아니거나, Line 시트가 수정모드가 아니거나, Line 행이 0건이거나, 저장 대상 셀이 0건이면 메시지 없이 아무것도 하지 않음",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:저장 후 Amend 재계산 자동 실행",
+  "screens": [
+   "SCP0060"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Line 저장 성공(MSG00004) 후 Target-Plan(Amend) 재계산(PR_SCP_ANL_PRODUCTION_PLAN_I_AMEND)을 확인 질문 없이 자동 실행하고 Model·Line 을 다시 조회",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:저장 후 자동 재조회",
+  "screens": [
+   "SCP0055",
+   "SCP0056"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "저장 처리 후 성공 건수와 무관하게 다시 조회",
+    "B 보정",
+    ""
+   ],
+   [
+    "저장 처리 후 성공 건수와 무관하게 다시 조회",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:저장된 행만 삭제(미저장 행 삭제 무반응)",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Daily Capa 는 이전 키(PRE_KEY_VALUES)가 있는 저장된 행만 삭제 표시, 아니면 무반응",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:전극 신규 행 Nickname 잠금",
+  "screens": [
+   "SCP0104"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Electrode 모드에서 행을 추가하면 그 행의 Nickname 셀을 잠그고, Nickname 셀 더블클릭 시 Item 팝업도 열지 않습니다(2025-03-31 개정).",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:전체 Division 기본 체크·기간 초기화",
+  "screens": [
+   "SSP0020"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "화면을 열 때(그리고 저장/해제 성공 후 다시) 권한 Division(EE 제외)을 모두 체크하고 Delegatee·기간을 비웁니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:전체 선택 시 신규(I) 행 제외",
+  "screens": [
+   "SCP0090"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "chk 헤더 클릭 전체 선택/해제 시 잠긴 행은 건너뛰고 작업 표시 I 행은 항상 해제",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:전체 선택 시 신규·잠금 행 제외",
+  "screens": [
+   "SCP0051"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "헤더 체크박스를 누르면 잠기지 않은 행의 선택 체크를 일괄 켬/끔. 신규(I) 행은 항상 해제, 확정(잠금) 행은 변경 안 함",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:정확도 구간 밖 행 숨김(화면)",
+  "screens": [
+   "SCP0102"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "정확도 콤보에서 구간(91~100%, 81~90%, 51~80%, 0~50%)을 고르면, 각 BOD 행의 월별 값 중 오른쪽부터 처음 만나는 정수 값이 그 구간에 들지 않는 BOD 행과 정수 값이 하나도 없는 BOD 행을 메시지 없이 숨깁니다(기준 셀은 분홍색 표시, ",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:정확도 범위 밖 행 숨김",
+  "screens": [
+   "SSP0028"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "정확도 콤보에서 구간(91~100%, 81~90%, 51~80%, 0~50%)을 고르면 마지막 월 정확도가 그 구간에 들지 않거나 숫자가 아닌 BOD 행을 숨깁니다(ALL 이면 모두 표시).",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건 변경 시 자동 재조회",
+  "screens": [
+   "SCP0079"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Bucket(Daily/Weekly/Monthly) 콤보를 바꾸면 즉시 조회를 다시 실행(조회 검사 전부 동일 적용) 후 해당 Bucket 컬럼만 표시",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건 불충족 시 팝업 미오픈(메시지 없음)",
+  "screens": [
+   "SCP0123"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Create Plan ID(A002) 행 Link 는 Plan ID 가 있고 상태가 Completed(C)일 때만 Plan ID 정보 팝업을 열고, 아니면 아무 메시지 없이 무시",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 버튼 표시",
+  "screens": [
+   "SCP0013",
+   "SCP0201"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "사업부 일일계획 기간(SCM0001_GET_SCP_DAILY_PLAN_PERIOD)이 52 이면 W-Last 기간 버튼 숨김, 아니면 'W+기간' 표시",
+    "편집 제어",
+    ""
+   ],
+   [
+    "New Version 버튼은 현재 Role 이 'SCM PI Admin' 일 때만 보이고 그 외에는 숨김",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 상세 조회",
+  "screens": [
+   "SSP0009"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Measure 가 MKT_FCST 인 행의 일자 셀을 더블클릭할 때만 Pegging Info·Plan Problem 을 조회. 헤더 영역·주/월합계 컬럼·다른 Measure 는 조용히 무시",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 상세 팝업 미표시",
+  "screens": [
+   "SCP0079"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Measure 라벨 셀을 더블클릭하면 상세 팝업(SCP0079_RTF_Analysis_Report_DetailPopup)을 여는데, Measure 가 PACK_INV_EOH(Pack Inv. EOH) 인 행은 메시지 없이 열지 않음",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 상세 팝업 열기",
+  "screens": [
+   "SCP0052"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Yield Monitoring 시트에서만, 값이 0 이 아닌 Green/Yellow/Red/월별 Accuracy/전체 Accuracy(%) 셀을 더블클릭하면 상세 팝업(SCP0052_CAPAReportYieldMonitoringPopup)을 엶. 월 셀은 그 달만, 전",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 셀 잠금",
+  "screens": [
+   "SCP0001"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Division=40 이고 Outsourcing=Y 인 행만 Packer Item Suffix 편집 가능, Outsourcing=Y 인 행만 Packer Line Active 편집 가능. 행추가 후 Division·Outsourcing 콤보를 바꾸면 같은 규칙으로 다시",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 셀 잠금(독립 실행 행 Plan ID)",
+  "screens": [
+   "SCP0123"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "독립 실행 Activity(OPMZ_PLAN_ID_INDP_YN=Y) 행은 Plan ID 셀을 잠그고, 그 외 행은 Plan ID 셀을 노란색(선택 가능)으로 표시",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 셀 편집 허용",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Finish(CONFIRM_FLAG)는 담당자 행 중 ROW_RANKING=1 행만, Mail REQ 는 LA001~LA003 행만 편집 가능",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 셀 편집 허용(설비유형)",
+  "screens": [
+   "SCP0105"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Equipment Type(ELTR_LN_TP_CD) 셀은 설비유형이 비었거나 장비(EQUIPMENT_ID)가 비었거나 Dummy 라인(UI_UPD_YN='Y')인 행만 편집 가능, 나머지 행은 잠금",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 입력란 비활성화",
+  "screens": [
+   "SCP0024",
+   "SCP0025"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Division 이 EE 로 시작하지 않으면 Electrode 조건을 비우고 비활성",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Division 이 EE 로 시작하지 않으면 Electrode 조건을 비우고 비활성(Division 변경 시도 동일)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 입력란 활성화",
+  "screens": [
+   "SCP0011",
+   "SCP0012",
+   "SCP0019",
+   "SCP0060",
+   "SCP0061",
+   "SCP0062",
+   "SCP0096",
+   "SSP0010",
+   "SSP0011"
+  ],
+  "rows": 9,
+  "examples": [
+   [
+    "Division 이 EE 계열이 아니면 Electrode 조건을 비우고 비활성, EE 계열이면 활성",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Division 이 40 일 때만 Cell Type Gr 조건 활성(아니면 비활성+선택 해제), EE 계열일 때만 Electrode 조건 활성(아니면 값 비우고 비활성)",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Day of the week 를 고르지 않으면 Input Value 입력란 비활성, 고르면 활성(값은 비움)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 조회조건 비활성",
+  "screens": [
+   "SCP0009",
+   "SCP0058",
+   "SCP0079",
+   "SCP0116"
+  ],
+  "rows": 4,
+  "examples": [
+   [
+    "Division 이 EE계열이 아니면 Electrode 조회조건 값을 비우고 비활성",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Division 이 EE(전극) 계열이 아니면 Electrode Type 조회조건 값을 비우고 비활성화합니다.",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Division 이 EE 로 시작하지 않으면 Electrode 조건을 비우고 비활성화, EE 계열이면 활성화",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 조회조건 비활성화",
+  "screens": [
+   "SCP0013",
+   "SCP0014"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Operation Group 이 Cell(A)·Pack(P) 이면 Electrode 를 ALL 로 고정하고 비활성, Division=40 일 때만 Cell Type Gr·Extra Spec 활성(그 외는 선택 해제 후 비활성)",
+    "편집 제어",
+    ""
+   ],
+   [
+    "EE 사업부가 아니면 Electrode 선택을 비우고 비활성, EE 이면 활성",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 조회조건 활성화",
+  "screens": [
+   "SCP0016",
+   "SCP0017",
+   "SCP0018",
+   "SCP0113",
+   "SSP0006",
+   "SSP0007",
+   "SSP0008",
+   "SSP0009"
+  ],
+  "rows": 8,
+  "examples": [
+   [
+    "Division 이 EE 로 시작하지 않으면 Electrode 조건을 비우고 비활성, EE 면 활성",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Division 이 EE 로 시작하지 않으면 Electrode 조건을 비우고 비활성, EE 면 활성",
+    "편집 제어",
+    ""
+   ],
+   [
+    "화면 열 때 Division 이 EE 로 시작하지 않으면 Electrode 조건을 비우고 비활성, EE 면 활성(Division 변경 시에는 재평가되지 않음)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 필수 전환",
+  "screens": [
+   "SCP0038"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "From Site 를 고르면 Material 라벨의 * 를 빼서 필수 해제, From Site 가 ALL 이면 Material* 로 되돌려 필수",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조건부 행추가 차단(메시지 없음)",
+  "screens": [
+   "SCP0048"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "숨김 조회조건 Operation Group 값이 P 또는 A 이면 행추가 무반응",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 결과 1건 자동 선택",
+  "screens": [
+   "SSP0024",
+   "SSP0025"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "팝업 조회 결과가 정확히 1건이면 그 행을 자동 선택하고 팝업을 닫음",
+    "B 보정",
+    ""
+   ],
+   [
+    "팝업 조회 결과가 정확히 1건이면 그 행을 자동 선택하고 팝업을 닫음",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 결과 없으면 수정모드 전환 무반응",
+  "screens": [
+   "SCP0087"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "그리드 행이 0건이면 Edit 버튼을 눌러도 메시지 없이 아무 동작도 하지 않음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 기간 미래일 선택 불가",
+  "screens": [
+   "SCP0051"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Period 기본값 = 어제~오늘, 시작·종료 모두 오늘 이후 날짜는 고를 수 없음(MaxDate=오늘)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 기간 선택 범위 제한",
+  "screens": [
+   "SCP0052"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "CAPA History·Total Yield: 시작월은 이번 달(SCP0052_GET_DAY_RANGE FROM_VALUE)로 고정(최소=최대), 종료월은 이번 달 ~ 이번 달+3년5개월만 선택 가능. Yield Monitoring 시트로 바꾸면 시작·종료월 모두 이번",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 기간 선택 범위 제한(메시지 없음)",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Period 기본값 = 현재월~GET_DAY_RANGE(13개월) 종료월, 시작월 선택 범위 = DAY_RANGE 시작월~현재월, 종료월 최대 = 현재월+3년5개월 (결과 0건이면 설정 안 함)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 데이터 없으면 수정모드 전환 무반응",
+  "screens": [
+   "SCP0083"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회된 행이 0건이면 Edit 를 눌러도 메시지 없이 아무 일도 하지 않음(Cycle 탭도 동일)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 데이터 없으면 수정모드 전환 안 됨",
+  "screens": [
+   "SCP0057"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회 결과가 0행이면 Edit(F2)를 눌러도 메시지 없이 수정모드로 바뀌지 않음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 모드에서만 하위 조회",
+  "screens": [
+   "SCP0120"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "상단 시트가 수정모드가 아닐 때만 더블클릭으로 하위 Lookup Values 조회. 수정모드에서는 무반응",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 불가 검증 항목 제외",
+  "screens": [
+   "SCP0039"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "PROCEDURE_NAME 이 '-' 인 검증 항목(예: Sales Site)은 조회하지 않고 건수 빈칸",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 시작월 고정",
+  "screens": [
+   "SCP0006"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Period 시작월을 기본 시작월로 고정(최소=최대)해 바꿀 수 없음, 종료월 기본값 = 시작월+11개월",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 시작일 계획 시작일로 보정",
+  "screens": [
+   "SCP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "기간 시작일이 Plan-date(계획 시작일)보다 앞이면 팝업 조회 시작일을 Plan-date 로 바꿔 넘김(메시지 없음)",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 시작일 계획시작일로 보정",
+  "screens": [
+   "SCP0057"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "기간 From 이 Plan 시작일보다 이르면 팝업에 넘기는 From 을 Plan 시작일로 바꿈(계획 구간만 조회). Plan-date 가 비었거나 Plant Site 값이 빈 문자열이면 메시지 없이 팝업을 열지 않음",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 원본과 다른 값만 저장(M 행 한정)",
+  "screens": [
+   "SCP0098"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "작업 표시가 M 인 행만 보고(I/D 제외), 조회 원본(dtOriginal)과 값이 다른 셀만 저장 대상으로 모음. 생산준비율은 Line 이 바뀌는 첫 수정 행만 보고 그 행 Measure 가 비조업일 때만 저장",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 전 Unfix 무반응",
+  "screens": [
+   "SCP0024",
+   "SCP0025"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "그리드 행이 0건이면 메시지 없이 종료",
+    "편집 제어",
+    ""
+   ],
+   [
+    "그리드 행이 0건이면 메시지 없이 종료",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 중 시트 전환 차단(메시지 없음)",
+  "screens": [
+   "SCP0125"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회 진행 중에는 탭 변경을 메시지 없이 되돌림",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 중 탭 전환 차단(메시지 없음)",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회 진행 중에는 탭 이동을 조용히 되돌림",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 직후 시트 전체 잠금",
+  "screens": [
+   "SSP0014",
+   "SSP0050"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "조회가 끝나면 모든 컬럼을 잠가 보기 전용으로 만들고, Edit(수정모드) 버튼을 눌러야 편집 가능 컬럼이 풀림",
+    "편집 제어",
+    ""
+   ],
+   [
+    "조회가 끝나면 모든 컬럼을 잠가 보기 전용으로 만들고, Edit(수정모드) 버튼을 눌러야 편집이 풀림",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 직후 전 컬럼 잠금(Edit 버튼으로 해제)",
+  "screens": [
+   "SCP0125"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회 후 시트 전 컬럼 잠금. Edit 버튼(수정 모드)을 눌러야 편집 가능",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회 직후 전체 잠금",
+  "screens": [
+   "SCP0041",
+   "SCP0054",
+   "SCP0055",
+   "SCP0056"
+  ],
+  "rows": 4,
+  "examples": [
+   [
+    "조회 결과가 있으면 Action 열 이후 전 컬럼 잠금(수정은 Pack 탭 Edit 로만)",
+    "편집 제어",
+    ""
+   ],
+   [
+    "조회 결과를 뿌린 뒤 모든 컬럼 잠금(Edit 를 눌러야 편집 가능)",
+    "편집 제어",
+    ""
+   ],
+   [
+    "조회 결과를 뿌린 뒤 모든 컬럼 잠금(Edit 를 눌러야 비고 편집 가능)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회모드에서만 재고 조회",
+  "screens": [
+   "SSP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Model(ITEM_ID) 더블클릭 시 조회모드(잠금)일 때만 재고 정보(SSP0013_GET_STOCK_INFOMATION) 조회",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회조건 값 고정",
+  "screens": [
+   "SSP0015"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Division 은 40(Mobility & IT)으로 고정하고 콤보를 비활성화해 다른 사업부를 고를 수 없음. 메모 권한(PgmAuthId SSP0015+그룹) 없으면 My Model·Part Leader·Team Leader·Delegatee 체크박스 항목을 숨기고",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회조건 값 고정(변경 불가)",
+  "screens": [
+   "SCP0112"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Division 은 82, To Site 는 KR32625300_82-P(Division 82·Operation P 공장 목록 중)로 고정하고 비활성화합니다. Period 도 Plan-date 기준 주간 기간으로 자동 설정 후 비활성화합니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회조건 고정(Division 비활성)",
+  "screens": [
+   "SSP0025"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "팝업의 Division 은 호출 화면 값으로 고정(비활성), From Site 는 후보가 1건이면 자동 선택, 버튼 종류에 따라 Material/Model 입력칸 중 하나만 표시",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회조건 고정(Division·Plant Site 비활성)",
+  "screens": [
+   "SSP0024"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "팝업의 Division·Plant Site 조건은 호출 화면 값으로 고정되고 변경 불가",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회조건 고정(비활성)",
+  "screens": [
+   "SCP0116"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Plan-type 항목은 비활성(Designer Enabled=false)이고 값은 FN 으로 고정",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회조건 고정값",
+  "screens": [
+   "SCP0034"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Division=EE, Operation Group=E 로 고정하고 두 콤보를 비활성, Unit 기본값=A",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회조건 고정값 잠금",
+  "screens": [
+   "SCP0055"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "화면 표시 시 Division=40, Operation Group=A, Bucket=MONTHLY, Cell Type GR=C(Cyl) 를 선택하고 네 콤보를 비활성화(사용자 변경 불가)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회조건 고정값(Division=40·비활성)",
+  "screens": [
+   "SSP0026"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Division 콤보를 40 으로 고정하고 변경 불가",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회조건 고정값(변경 불가)",
+  "screens": [
+   "SCP0038"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Division 은 40 으로 고정하고 콤보를 비활성화(다른 Division 조회 불가). Bucket 기본값 WEEKLY",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:조회조건 고정값(숨김 조건)",
+  "screens": [
+   "SCP0093"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Bucket 은 MONTHLY 로 고정되고 Bucket 콤보 숨김, Category 는 Cell Convert 체크로 고정(Category 체크박스 3개 숨김) — 사용자가 바꿀 수 없음",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:종료 처리 시 종료일·종료자 자동 입력",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "종료 상태가 종료/반려(CN/RT)인 행은 종료확인일=오늘(yyyyMMdd), 종료자=로그인 사용자로 채워 저장. 그 외 행은 화면 값 그대로",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:주 입력값 출하요일 자동 분배",
+  "screens": [
+   "SCP0010",
+   "SCP0059"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Ship Plan Amend 행의 주(W_) 셀에 값을 넣으면 그 주 일자 셀 중 출하요일(Dept_Day)과 같은 요일 1칸에 그 값을, 나머지 날은 0 을 자동으로 넣습니다.",
+    "B 보정",
+    ""
+   ],
+   [
+    "Ship Plan Amend 행의 주(W_) 셀에 값을 넣으면 그 주 일자 셀 중 출하요일(Dept_Day)과 같은 요일 1칸에 그 값을, 나머지 날은 0 을 자동으로 넣습니다.",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:주/월 수량 일자 자동 배분",
+  "screens": [
+   "SSP0046"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "WEEKLY 주 합계·MONTHLY 월 합계 입력 시 DB_ 버킷 플래그(Y) 일자 수로 나눠 일자 칸에 배분(나머지는 마지막 일자), 플래그가 없으면 기본 요일(DefaultBucketDay) 일자에 몰아 넣음. MONTHLY 는 이번 주 월요일 이전 일자 제외",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:첫 열 빈 행·헤더 반복 행 제외",
+  "screens": [
+   "SCP0099"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "1행은 항상 헤더로 건너뛰고, 2행부터 첫 열(Div)이 빈 행은 버리며 첫 열이 'DIV' 인 행은 헤더로 간주해 데이터에서 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:체크 행 검토필요 여부 반전",
+  "screens": [
+   "SSP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Checked 버튼: 선택 체크된 행만 CHECK_NEED_YN 을 Y↔N 반전해 SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM_CHECK 로 저장. 행 0건 또는 체크 0건이면 메시지 없이 무반응",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:체크 행만 삭제(체크 0건이면 무반응)",
+  "screens": [
+   "SSP0002"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Delete 는 체크한 행만 삭제 대상으로 모으며 체크가 하나도 없으면(기준행 조건 통과 시) 메시지 없이 아무 일도 하지 않음",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:체크한 행만 Confirm Remark 입력 가능",
+  "screens": [
+   "SCP0090"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Role 사용자가 수정모드가 아닐 때 체크한 행의 Confirm Remark 만 잠금 해제(체크 해제 시 다시 잠금), Confirm=Y·CutOff 지난 행은 제외",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:최신 Plan Date 로 자동 교체",
+  "screens": [
+   "SSP0021"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "최신 Plan Date 선택 상태로 조회할 때 DB 최신값과 다르면(MSG00313 표시 후) Plan Date 목록·Period·Shipment Date 기간을 DB 최신값으로 교체하고 조회 계속",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:추가 행의 비편집 Measure 0 수량 저장",
+  "screens": [
+   "SCP0009"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Daily 저장에서 추가(I)된 행 중 SHIP_PLAN_AMEND 가 아닌 Measure 행은 첫 일자 컬럼에 수량 0 으로 저장",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:출하계획 있는 품목만 조회(exists shipment plan)",
+  "screens": [
+   "SSP0001"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "'exists shipment plan' 체크(기본 체크됨)가 켜져 있으면, SHIP_PLAN Measure 행에서 'Plan-date + Ship Frozen 일' 이전 날짜 중 0 이 아닌 수량이 하나라도 있는 Division·From Site·Model 조합만 남",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:콤보 셀 붙여넣기 허용(텍스트 변환)",
+  "screens": [
+   "SCP0051"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "붙여넣기 직전 붙여넣을 행의 Line·Plant Site(EE 계열이면 Origin Div) 셀을 글자 칸으로 바꿔 값을 받을 수 있게 함. Line 값 '-' 는 공란 처리",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:콤보 셀 키보드 입력 차단",
+  "screens": [
+   "SCP0001",
+   "SCP0110"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "잠금 해제된 콤보 셀에서는 키보드 문자 입력을 막고 목록 선택만 허용(상단·하단 그리드 공통)",
+    "편집 제어",
+    ""
+   ],
+   [
+    "잠기지 않은 콤보 셀에서 키보드 문자 입력을 무시(e.Handled) — 목록에서 고르기만 가능",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:클릭만으로 저장 대상 표시",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Finish 컬럼 셀을 클릭하면 값 변경 없이도 글자를 빨간색으로 바꿔 저장 대상으로 표시",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:키 미입력 시 입력 수량 자동 삭제",
+  "screens": [
+   "SSP0046"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "키 항목 필수 메시지(MSG00002) 후 방금 입력한 수량 칸을 빈 값으로 되돌림",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:툴바 행추가·삭제 무반응",
+  "screens": [
+   "SCP0090"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "툴바 Insert/Delete 는 빈 구현 → 신규 입력은 New 버튼 팝업으로만, 행 삭제 기능 없음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:특정 주차 코드 치환",
+  "screens": [
+   "SCP0009"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "주 합계 저장 시 주차 코드 20230152 는 20220152 로 바꿔 전송",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:특정 컬럼 Ctrl+C/Ctrl+V 차단",
+  "screens": [
+   "SSP0023"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드에서 Remarks·Shipment No.(REMARKS2)·Change Reason Detail 셀을 클릭하면 Ctrl+C/Ctrl+V 키를 막고, 다른 셀을 클릭하면 다시 허용합니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:특정 컬럼 붙여넣기 차단(메시지 없음)",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Remarks·Building·Reason Detail 칸을 선택한 상태에서는 Ctrl+V/Ctrl+C 를 막고, 다른 칸을 클릭하면 숨김 컬럼 제외 붙여넣기로 되돌립니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:특정 컬럼 붙여넣기·복사 키 차단",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Remarks/Remarks2/Change Reason Detail 칸 클릭 시 Ctrl+V/Ctrl+C 를 막고 다른 칸 클릭 시 복원",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:팀명 공백 행 비고 회색 표시(잠금 아님)",
+  "screens": [
+   "SCP0055"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "팀명이 빈 행의 비고 칸을 회색으로만 표시(잠금 코드는 주석 처리돼 실제 편집은 가능, 저장 시 제외)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:팝업 조회조건 고정",
+  "screens": [
+   "SSP0046"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Model 팝업은 Division 항상 비활성, 셀 더블클릭 호출 시 Project·Sales Site·Team·End Customer 도 비활성(조회조건 Model 버튼 호출은 활성)",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Project 팝업은 Division·Team·End Customer·Sales Site 비활성, Project 코드만 입력 가능",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:팝업 호출 시 조회조건 고정·대상 항목 제한",
+  "screens": [
+   "SCP0039"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Plan Control 에서 팝업으로 열리면 Division·Plan Group 을 넘겨받은 값으로 고정·비활성, Model 입력 숨김, 별도 Search 버튼 표시, 넘겨받은 Division 이 최적화 대상(ATTRIBUTE2)에 포함된 검증 항목만 표시",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:편집 가능 기간 외 일자 셀 잠금",
+  "screens": [
+   "SCP0058"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "편집 가능한 행에서 시작일 이전 일자 셀은 잠급니다. Division 81/40 은 Plan-date 부터, 그 외는 Ship Frozen 날짜와 BOD 유효기간(From~To)을 비교해 Frozen 이후 또는 BOD From 부터 편집 가능하며, BOD To 가 화면",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:편집 가능 셀 제한(계획 수정 행·편집 시작일 이후)",
+  "screens": [
+   "SCP0011"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Line 그리드 수정모드에서 전체 셀을 잠근 뒤 Measure 가 PROD_PLAN_AMEND 인 행만, 서버 편집정보(is_editable=Y)이면서 선택 Plan-type 이 목록의 마지막 유형이고 해당 계획일에 FN 유형이 없고 Plan-type 이 TE 가 아닐",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:편집 가능 일자 구간 제한",
+  "screens": [
+   "SCP0009"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "행별 편집 가능 구간: Division 81계열/40 은 Plan Date 부터 끝까지, 그 외는 SHIP_FROZEN 과 BOD From/To 비교(3가지 경우)로 시작·끝 일자 결정 → 구간 밖 일자 셀 잠금",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:편집 가능 행·기간 제한",
+  "screens": [
+   "SCP0060"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Edit 시 Line 그리드 전체를 잠근 뒤 Measure 가 PROD_PLAN_AMEND 인 행만, 편집정보(SCP0011_GET_PLAN_EDIT_INFO)의 is_editable='Y' 이고 ① 선택한 Plan-type 이 그 Plan-date 의 마지막 Plan",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:편집 가능 행·시작일 제한",
+  "screens": [
+   "SCP0029"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Edit 시 전체 셀을 잠근 뒤, Measure=PROD_PLAN_AMEND 행 중 편집 가능(DB is_editable=Y. 단 선택 Plan-type 이 목록의 마지막이 아니거나 FN 플랜이 있으면 N, new_edit_mode=Y 면 Y 로 화면이 덮어씀) 행만 ",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:편집모드 중 더블클릭 하위 조회 무시",
+  "screens": [
+   "SCP0114"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Level1~4 그리드 행을 더블클릭하면 하위 레벨을 조회하지만, 그 그리드가 편집모드(Action 컬럼 표시)이거나 행이 0건이면 무시. Level5 더블클릭은 선택 값만 기억하고 조회하지 않음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:편집모드는 5개 그리드 중 1개만",
+  "screens": [
+   "SCP0114"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Site/Company/Plant/Building/Line 5개 그리드 중 이미 다른 그리드가 편집모드이면 Edit 를 눌러도 방금 바꾼 상태를 되돌리고 무시(메시지 없음). 동시에 두 그리드를 편집할 수 없음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:품목유형·소진방안 조합별 월별 수량 잠금",
+  "screens": [
+   "SCP0113"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "행의 Item Type 과 소진방안 조합이 '월별 수량 입력 예외' 목록에 있으면 그 행의 월별 소진 계획 수량 칸을 잠그고, 없으면 잠금을 풉니다. 수정모드 진입 시 전 행에, 소진방안을 바꾸거나 소진방안 셀을 벗어날 때 해당 행에 적용합니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:하단 Detail 활성 시 Measure 무반응",
+  "screens": [
+   "SSP0023"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "하단 Detail 그리드가 활성일 때 Measure 버튼은 메시지 없이 아무 동작도 하지 않습니다(상단 그리드 활성일 때만 측정치 설정 팝업).",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:하단 상세 조회 대상 제한",
+  "screens": [
+   "SCP0009"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "그리드 더블클릭 시 Measure=MKT_FCST 행의 일자(D_) 셀일 때만 Pegging Info·Plan Problem 하단 시트 조회(헤더·합계 컬럼·그 외 행 무시)",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:하단 초안 존재 시 수정모드 전환 무반응",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Edit 는 하단 Change Request 그리드가 0행일 때만 메인 그리드 잠금을 풂. 작성 중 초안이 있으면 메시지 없이 아무 일도 안 함",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:하위 그리드 비면 무반응",
+  "screens": [
+   "SSP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Cancel 은 하위 그리드에 행이 없으면 아무 반응이 없습니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:하위 그리드에 요청 건 있으면 수정모드 불가(메시지 없음)",
+  "screens": [
+   "SSP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Edit 버튼은 하위 그리드(Change Request)에 행이 하나라도 있으면 아무 반응 없이 수정모드로 바뀌지 않습니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:한글 파일명 자동 변환",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "파일명에 한글 등 문자가 있으면 GUID.확장자 로 바꿔 업로드하고, 원래 파일명은 매핑(MAPPING)으로 따로 저장해 목록·다운로드 때 원래 이름으로 보여줌",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:합계 셀 더블클릭만 상세 조회",
+  "screens": [
+   "SSP0030"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Main 그리드에서 합계(SUM, 8번째) 컬럼의 값이 있는 일반 행을 더블클릭할 때만 하단 Detail 을 조회. 다른 컬럼·'합계' 제목·물동량합계/물류비합계 행은 메시지 없이 무시",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:행 값 조건부 셀 잠금",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Division 에 EE_UC 포함 시 행별로 Operation=E2000 이면 Capa 잠금, 그 외 Coating Speed·Lane·Wide Y/N 잠금(키·감사 컬럼도 행 단위 잠금)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:행 삭제 무반응",
+  "screens": [
+   "SCP0003"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "DeleteButton 본문이 주석이라 삭제 버튼을 눌러도 아무 동작 없음(메시지 없음)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:행추가 기능 없음(무반응)",
+  "screens": [
+   "SCP0105"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Insert(F8) 를 눌러도 화면 처리가 비어 있어 행이 추가되지 않음(메시지 없음)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:행추가 무동작",
+  "screens": [
+   "SCP0106"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "행추가(F8) 버튼은 화면 처리 본문이 비어 있어 눌러도 행이 추가되지 않습니다(프레임워크 권한·수정모드 검사만 거침).",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:행추가 무반응",
+  "screens": [
+   "SCP0028",
+   "SCP0126",
+   "SSP0045"
+  ],
+  "rows": 3,
+  "examples": [
+   [
+    "InsertRow 본문이 비어 행이 추가되지 않음(메시지 없음)",
+    "편집 제어",
+    ""
+   ],
+   [
+    "Daily Capa 시트에서는 Insert 를 눌러도 행이 생기지 않음(메시지 없음)",
+    "편집 제어",
+    ""
+   ],
+   [
+    "InsertButton 본문이 주석(InsertRow 호출 주석)이라 행추가 버튼을 눌러도 아무 일도 없음",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:행추가 무반응(Excluded Item 시트 전용)",
+  "screens": [
+   "SCP0030"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Insert_Row 는 Excluded Item 시트일 때만 행 추가, BOD ITEM 시트는 메시지 없이 무반응",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:행추가 미지원(무반응)",
+  "screens": [
+   "SCP0050"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "행추가(F8)를 눌러도 화면 처리(InsertRow 호출)가 주석 처리되어 아무 행도 추가되지 않습니다(메시지 없음). 신규 담당자 지정 행은 화면에서 만들 수 없습니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:행추가·삭제 무반응",
+  "screens": [
+   "SCP0080",
+   "SSP0005",
+   "SSP0014",
+   "SSP0050"
+  ],
+  "rows": 4,
+  "examples": [
+   [
+    "InsertButton 은 바로 return, DeleteButton 은 빈 메서드 → 수정모드에서도 행 추가·삭제가 일어나지 않음(메시지 없음)",
+    "편집 제어",
+    ""
+   ],
+   [
+    "행추가·삭제 버튼 본문이 주석이라 눌러도 아무 동작이 없습니다.",
+    "편집 제어",
+    ""
+   ],
+   [
+    "InsertButton/DeleteButton 본문이 비어 있어 행 추가·삭제를 눌러도 아무 일도 일어나지 않음(메시지 없음). 저장은 기존 행 수정만 가능",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:행추가·삭제 무반응(수정 전용 시트)",
+  "screens": [
+   "SCP0019",
+   "SCP0022",
+   "SCP0023",
+   "SCP0026",
+   "SCP0029",
+   "SCP0047",
+   "SCP0053",
+   "SCP0076",
+   "SCP0087",
+   "SCP0096"
+  ],
+  "rows": 10,
+  "examples": [
+   [
+    "InsertButton/DeleteButton 이 비어 있어 수정모드에서도 행 추가·삭제가 일어나지 않음(메시지 없음)",
+    "편집 제어",
+    ""
+   ],
+   [
+    "상단 Formation 그리드는 Insert·Delete 를 눌러도 메시지 없이 아무 동작 없음",
+    "편집 제어",
+    ""
+   ],
+   [
+    "InsertButton/DeleteButton 본문이 비어 행 추가·삭제가 일어나지 않음(메시지 없음)",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:헤더 체크박스 일괄 선택 제한",
+  "screens": [
+   "SSP0023"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "체크박스형 컬럼 헤더를 클릭하면 조회 모드에서는 전체 선택/해제를 토글하지만, 수정모드에서는 항상 전체 해제만 합니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:형식 오류 값 자동 삭제(메시지 없음)",
+  "screens": [
+   "SCP0090"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "수정모드 일반 사용자가 입력한 To Month 가 6자리가 아니거나 숫자가 아니거나 월>12 이면 메시지 없이 칸을 비움",
+    "B 보정",
+    ""
+   ],
+   [
+    "신규 요청 팝업의 Month 가 6자리 숫자 yyyymm(월≤12)가 아니면 메시지 없이 칸을 비움",
+    "B 보정",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:확정 행 Confirmed Qty 잠금",
+  "screens": [
+   "SSP0001"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드에서 Confirm YN 이 Y(이미 확정)인 행은 Confirmed Qty 칸을 잠가 수정할 수 없습니다(메시지 없음). 확정 건은 변경요청 절차로 처리합니다.",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:확정 행 재확정 제외",
+  "screens": [
+   "SCP0051"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "체크된 행이라도 선택 칸이 잠긴 행(이미 확정된 행)은 확정 대상에서 조용히 제외",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:확정(C) 행 기준에서만 행 복사 추가",
+  "screens": [
+   "SSP0015"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택 행의 출하상태가 C 가 아니면 메시지 없이 행추가 무시. C 이면 선택 행 값을 복사(Qty 0, Remark·ERP_STATUS 빈값)한 새 행을 넣고 키 컬럼 잠금. 다른 하단 시트는 행추가 무반응",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:확정(C) 행 기준으로만 행추가",
+  "screens": [
+   "SSP0029"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "현재 선택 행의 출하상태가 C(확정)가 아니면 메시지 없이 행추가 안 함. 확정 행이면 그 행 값을 복사한 새 행(Shipment Qty 0, Remark 공란, ERP 상태 공란)을 추가하고 Division~FCST Type, Incoterms~끝 컬럼을 잠금",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:확정(C) 행 선택 시에만 행추가(메시지 없음)",
+  "screens": [
+   "SSP0021"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "행이 없거나 선택 행의 Shipment Status 가 C 가 아니면 메시지 없이 행추가 안 함",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:확정구간 이후 일자만 편집(R_SHIP_REQ_ETA)",
+  "screens": [
+   "SSP0022"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드에서 상단 그리드는 Plant~끝 컬럼을 모두 잠그고, Measure 가 R_SHIP_REQ_ETA 이며 From/To Site 가 '-' 가 아닌 행만 확정일(CONFIRM_DAY) 다음 날부터 Period 종료일까지의 일자 셀을 열어 줍니다(SUM 컬럼은 잠",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:활성 시트 1개만 조회",
+  "screens": [
+   "SCP0032"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회 시 현재 보고 있는 시트(1~14번 검증 항목 중 하나)의 이름을 SP 에 넘겨 그 시트 결과만 가져옴 — 다른 시트는 탭을 옮긴 뒤 다시 조회해야 함",
+    "C 필터",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ref",
+  "item": "NEW:휴일 일자·주/월 합계 컬럼 잠금",
+  "screens": [
+   "SSP0016"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "From Site 의 휴일 달력(SSP0016_GET_SHEET_HOLIDAY_CALENDAR)에 있는 일자 컬럼과 주(W_)·월(M_) 합계 컬럼을 잠급니다. 단 주/월 합계 잠금은 휴일이 1건 이상일 때만 실행되는 루프 안에 있어 휴일이 없으면 합계 컬럼이 잠기지 ",
+    "편집 제어",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:BOD 기준 LT 정확도·차이 화면 계산 표시",
+  "screens": [
+   "SCP0102"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회하면 화면이 SP 결과로 월별 기준 L/T(과거계획평균, DR12+DR3+DR45 합)와 실적 L/T 평균(TTL_AVG)을 비교해 정확도(%) = (1 - |기준LT - 실적평균| / 기준LT) × 100 (반올림)과 차이 = 실적평균 - 기준LT 를 직접 계산해",
+    "CONSISTENCY",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Bucket Day 선택 시 양식 다운로드 불가",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Bucket 값이 Day 로 시작하면 \"Day 체크를 해제해 주세요\" 를 띄우고 멈춥니다. Bucket 은 선택이 바뀔 때마다 Month 가 다시 체크되므로 실제로는 거의 발생하지 않습니다.",
+    "STATUS",
+    "MSG00329"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Cell 단위 선택 시 차질사유 입력 불가",
+  "screens": [
+   "SCP0056"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회조건의 수량 단위 라디오가 Cell 로 선택된 상태에서 Edit 를 누르면 \"Cell이 선택된 상태에서 차질사유 입력이 불가능 합니다.\" 를 띄우고 수정모드로 바꾸지 않습니다. UOM 을 선택한 뒤 다시 Edit 를 눌러야 합니다(메시지 ID 없는 하드코딩 문구, ",
+    "STATUS",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Confirm 가능 요일 외",
+  "screens": [
+   "SCP0090"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Confirm 은 금요일~월요일에만 가능합니다. 화·수·목요일에 누르면 \"금요일 ~ 월요일 까지 Confirm 가능 합니다.\" 를 띄우고 멈춥니다. Confirm 버튼은 SCM PI Admin·SCP Planner 에게만 보입니다.",
+    "STATUS",
+    "MSG00375"
+   ],
+   [
+    "화·수·목요일에 chk(Confirm 대상 체크) 칸이나 헤더를 클릭하면 \"금요일 ~ 월요일 까지 Confirm 가능 합니다.\" 를 띄우고 이후 처리(전체 선택, Confirm Remark 잠금 해제)를 하지 않습니다. 체크박스 셀은 CellClick(L1455-145",
+    "STATUS",
+    "MSG00375"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Daily Capa 요일 입력 불가",
+  "screens": [
+   "SCP0098"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Category 가 Daily Capa(월 단위 입력)인데 Day Type 이 EveryDay·SelectDay 가 아닌 요일(Mon~Sun)이면 \"Daily Capa 는 요일입력을 허용하지 않습니다.\" 를 띄우고 멈춥니다. 값 숫자 검사를 통과한 뒤에 검사합니다.",
+    "OTHER",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP PR 생성 실패",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP PR 생성이 성공(S) 또는 대상 없음(Z)이 아니면(앞의 ERP 오류 메시지 뒤에) \"PR 생성에 실패했습니다.\" 를 띄우고 PR PO Detail 을 다시 조회한 뒤 멈춥니다. DB 배분 저장은 이미 끝난 상태이므로 재조회 결과로 PR 상태를 확인해야 합니다",
+    "OTHER",
+    "MSG00340"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP PR 인터페이스 시스템 오류",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP PR 전송이 데이터 없음·예외(F)로 실패하면 \"시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. Request No : {IF 순번}\" 을 띄우고, 이어서 PR 생성 실패 안내(MSG00340) 후 재조회합니다.",
+    "OTHER",
+    "MSG00204"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP PR 인터페이스 오류",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "PR 생성 요청을 ERP 로 보냈을 때 ERP 오류(E)면 \"하기 ERP ISSUE로 인해 처리할 수 없습니다… {오류}\" 를, S/Z/F/C_E 외의 응답이면 같은 메시지에 \"{응답코드}-{오류}\" 를 띄웁니다. 이어서 PR 생성 실패 안내(MSG00340)가 나오고",
+    "OTHER",
+    "MSG00197"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP PR 인터페이스 전송 실패",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "SAP PI 호출 실패(C_E)면 \"데이터 전송 중 오류가 발생하였습니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요.\" 를 띄우고, 이어서 PR 생성 실패 안내(MSG00340) 후 재조회합니다.",
+    "OTHER",
+    "MSG00306"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 시스템 오류",
+  "screens": [
+   "SSP0060"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "ERP 웹서비스 전송이 실패(F: 데이터 없음·예외 / C_E: SAP PI 호출 실패)하면 해당 변경요청을 삭제 처리한 뒤 \"시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. Request No : {번호}\" 를 띄우고 저장을 멈춥니다. 화면을 캡처해 ",
+    "STATUS",
+    "MSG00204"
+   ],
+   [
+    "ERP 전송이 실패(F/C_E)하면 변경요청을 삭제 처리하고 \"시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. Request No : {번호}\" 를 띄운 뒤 저장을 멈춥니다.",
+    "STATUS",
+    "MSG00204"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 시스템 중단 기간",
+  "screens": [
+   "SSP0201",
+   "SSP0202"
+  ],
+  "rows": 4,
+  "examples": [
+   [
+    "저장(F7) 시 가장 먼저 ERP I/F 차단 설정을 조회해 BLOCK_YN='Y' 이면 \"하기 기간동안 ERP 시스템 중단으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. {기간}\" 을 띄우고 저장을 멈춥니다. 표시된 기간이 지난 뒤 다시 저장해야 합니",
+    "STATUS",
+    "MSG00267"
+   ],
+   [
+    "ERP I/F 차단 설정이 BLOCK_YN='Y' 이면 \"하기 기간동안 ERP 시스템 중단으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. {기간}\" 을 띄우고 멈춥니다.",
+    "STATUS",
+    "MSG00267"
+   ],
+   [
+    "ERP I/F 차단 설정이 BLOCK_YN='Y' 이면 \"하기 기간동안 ERP 시스템 중단으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. {기간}\" 을 띄우고 멈춥니다.",
+    "STATUS",
+    "MSG00267"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 연계 중단 기간",
+  "screens": [
+   "SSP0029"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP↔SSP 인터페이스 작업 기간으로 Block 여부가 Y 로 등록돼 있으면 \"하기 기간동안 ERP<>SSP간 인터페이스 변경적용으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. 기간 : {기간}\" 을 띄우고 저장을 멈춥니다. 표시된 기간이 지난 뒤 저",
+    "STATUS",
+    "MSG00267"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 연동 차단 기간",
+  "screens": [
+   "SSP0003"
+  ],
+  "rows": 3,
+  "examples": [
+   [
+    "상세 행이 있을 때(없으면 무반응) 먼저 ERP 인터페이스 차단 기간인지 확인합니다. 차단 설정(BLOCK_YN=Y)이면 \"하기 기간동안 ERP<>SSP간 인터페이스 변경적용으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. 기간 : {기간}\" 을 띄우고 ",
+    "STATUS",
+    "MSG00267"
+   ],
+   [
+    "상세 행이 있을 때(없으면 무반응) ERP 인터페이스 차단 기간이면 차단 기간을 안내하고 멈춥니다(Self Reject 와 동일).",
+    "STATUS",
+    "MSG00267"
+   ],
+   [
+    "ERP 인터페이스 차단 기간이면 차단 기간을 안내하고 멈춥니다.",
+    "STATUS",
+    "MSG00267"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 연동 처리 실패",
+  "screens": [
+   "SSP0003"
+  ],
+  "rows": 8,
+  "examples": [
+   [
+    "변경요청 유형(Change Type)이 Confirm(C)인 건은 상세 저장(SaveDraftingData) 직후 ERP 인터페이스 점검 SP 가 성공(S)이면 ERP 웹서비스를 호출합니다. ERP 가 오류(E)를 돌려주면 \"하기 ERP ISSUE로 인해 처리할 수 없",
+    "OTHER",
+    "MSG00197"
+   ],
+   [
+    "ERP 웹서비스가 F(데이터 없음·내부 오류)를 돌려주면 \"시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. Request No : {변경요청번호}\" 를 띄우고 확정 저장을 하지 않습니다.",
+    "OTHER",
+    "MSG00204"
+   ],
+   [
+    "SAP PI 호출 자체가 실패(C_E)하면 \"데이터 전송 중 오류가 발생하였습니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요.\" 를 띄우고 확정 저장을 하지 않습니다. 점검 SP 결과가 S 가 아니거나 예외가 나면 메시지 없이 확정 저장만 건너뜁니다(L1349, L1",
+    "OTHER",
+    "MSG00306"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 인터페이스 시스템 오류",
+  "screens": [
+   "SSP0021",
+   "SSP0027"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "ERP 변경요청 I/F 결과가 F(데이터 없음·내부 오류) 또는 C_E(SAP PI 호출 실패)이면 해당 요청의 Drafting 을 삭제(SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM)하고 ERP 취소 호출 후 \"시스템 오",
+    "OTHER",
+    "MSG00204"
+   ],
+   [
+    "ERP 전송 자체가 실패(데이터 없음·예외 F, SAP PI 호출 실패 C_E)하면 해당 변경요청을 삭제 처리하고 \"시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. Request No : {0}\" 을 띄운 뒤 저장을 멈춥니다.",
+    "OTHER",
+    "MSG00204"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 인터페이스 오류 건 존재",
+  "screens": [
+   "SSP0060"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "변경요청(Drafting) 생성 후 ERP 웹서비스 전송 결과가 오류(E/S_E)인 Confirm ID 가 있으면 그 건의 변경요청을 삭제하고 오류 내역을 기록(SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM)한 뒤 \"하기 ERP ISSUE로 인해 처리할",
+    "STATUS",
+    "MSG00197"
+   ],
+   [
+    "ERP 전송 결과 오류 건이 있으면 해당 변경요청을 삭제·오류 기록 후 \"하기 ERP ISSUE로 인해 처리할 수 없습니다... {오류목록}\" 을 띄웁니다. 정상 건이 있으면 오류 건을 빼고 Confirm 저장을 계속합니다.",
+    "STATUS",
+    "MSG00197"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 인터페이스 오류 반환",
+  "screens": [
+   "SSP0021"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP 변경요청 I/F(FN_ERP_UIWebService) 결과가 오류(S_E/E)로 돌아온 Confirm ID 가 있으면, 오류 내역을 ERP 오류 테이블에 기록(SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM)한 뒤 \"하기 ERP ISSUE로 인해 ",
+    "OTHER",
+    "MSG00197"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 인터페이스 오류 회신",
+  "screens": [
+   "SSP0015"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "변경요청(Drafting) 생성 후 ERP 로 보낸 결과가 오류(E) 또는 일부 오류(S_E)이면 오류 Confirm 의 변경요청을 삭제하고(SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM) 오류 내역을 기록(SCM_SSP_",
+    "STATUS",
+    "MSG00197"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 인터페이스 오류(일부 행)",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "변경요청을 ERP 로 전송했을 때 ERP 가 오류(E) 또는 일부 오류(S_E)를 돌려주면, 오류 Confirm 행의 변경요청을 삭제하고 오류 내역을 기록한 뒤 \"하기 ERP ISSUE로 인해 처리할 수 없습니다. ERP 해결 후 재처리 바랍니다. {Confirm ID",
+    "OTHER",
+    "MSG00197"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 인터페이스 중단 기간",
+  "screens": [
+   "SSP0013",
+   "SSP0023",
+   "SSP0027"
+  ],
+  "rows": 4,
+  "examples": [
+   [
+    "ERP 인터페이스 중단 설정(BLOCK_YN=Y)이 걸린 기간이면 \"하기 기간동안 ERP<>SSP간 인터페이스 변경적용으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. 기간 : {0}\" 을 띄우고 저장을 멈춥니다(수정모드 유지). 중단 기간이 끝난 뒤 다",
+    "STATUS",
+    "MSG00267"
+   ],
+   [
+    "저장 시 ERP-SSP 인터페이스 중단(Block) 설정을 조회해 BLOCK_YN='Y' 이면 \"하기 기간동안 ERP<>SSP간 인터페이스 변경적용으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. 기간 : {기간}\" 을 띄우고 저장을 멈춥니다. 안내된 기",
+    "STATUS",
+    "MSG00267"
+   ],
+   [
+    "ERP 인터페이스 중단 기간(공통 설정 BLOCK_YN=Y)에 저장하면 \"하기 기간동안 ERP<>SSP간 인터페이스 변경적용으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. 기간 : {기간}\" 을 띄우고 저장을 멈춥니다. 안내된 기간이 지난 뒤 다시 저장",
+    "STATUS",
+    "MSG00267"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 인터페이스 차단 기간",
+  "screens": [
+   "SSP0002",
+   "SSP0021"
+  ],
+  "rows": 3,
+  "examples": [
+   [
+    "상단 그리드 행을 더블클릭하면 먼저 ERP 차단 설정을 조회해 BLOCK_YN=Y 이면 \"하기 기간동안 ERP<>SSP간 인터페이스 변경적용으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. 기간 : {기간}\" 을 띄우고 멈춥니다. 차단 기간이 끝난 뒤 다",
+    "STATUS",
+    "MSG00267"
+   ],
+   [
+    "ERP 차단 기간(BLOCK_YN=Y)이면 \"...SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. 기간 : {기간}\" 을 띄우고 팝업을 열지 않습니다. 팝업에서 저장(OK)되면 조회조건을 비우고 Change Type=New 로 다시 조회한 뒤 새 행을 자동 ",
+    "STATUS",
+    "MSG00267"
+   ],
+   [
+    "저장 직전 ERP I/F 차단 설정(SSPBlockCheckIF, 화면 SSP0021)을 조회해 BLOCK_YN=Y 이면 \"하기 기간동안 ERP<>SSP간 인터페이스 변경적용으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. 기간 : {기간}\" 을 띄우고 ",
+    "STATUS",
+    "MSG00267"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 인터페이스 처리 실패",
+  "screens": [
+   "SSP0002"
+  ],
+  "rows": 12,
+  "examples": [
+   [
+    "변경 내용을 저장한 뒤 ERP 로 바로 전송(FN_ERP_UIWebService)하는데, ERP 가 오류(E)를 돌려주면 방금 저장한 Drafting 을 삭제 SP 로 되돌리고 \"하기 ERP ISSUE로 인해 처리할 수 없습니다. ERP 해결 후 재처리 바랍니다.\" +",
+    "OTHER",
+    "MSG00197"
+   ],
+   [
+    "ERP 전송 결과가 F(데이터 없음 또는 ERP 쪽 예외)이면 저장분을 되돌리고 \"시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. Request No : {요청번호}\" 를 띄웁니다. 확정(C) 행을 열어 자동 Drafting 저장이 성공했고 Change",
+    "OTHER",
+    "MSG00204"
+   ],
+   [
+    "ERP 로 보내는 SAP PI 호출 자체가 실패(C_E)하면 저장분을 되돌리고 \"데이터 전송 중 오류가 발생하였습니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요.\" 를 띄웁니다. 확정(C) 행을 열어 자동 Drafting 저장이 성공했고 Change Type 이 Pl",
+    "OTHER",
+    "MSG00306"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 인터페이스 호출 실패",
+  "screens": [
+   "SSP0023"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장 중 ERP 웹서비스 결과가 F(데이터 없음·내부 오류) 또는 C_E(SAP PI 호출 실패)이면 해당 변경요청 초안을 삭제(SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM)하고 ERP 취소를 호출한 뒤 \"시스템 오류입니",
+    "OTHER",
+    "MSG00204"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 전송 실패",
+  "screens": [
+   "SSP0029"
+  ],
+  "rows": 3,
+  "examples": [
+   [
+    "변경요청(Request Drafting)을 DB 에 만든 뒤 ERP 웹서비스로 전송했는데 ERP 가 오류(E)를 돌려주면, 방금 만든 변경요청을 삭제(SSP0029_DELETE_SHIPMENT_REQUEST_DRAFTING)하고 \"하기 ERP ISSUE로 인해 처리할 ",
+    "OTHER",
+    "MSG00197"
+   ],
+   [
+    "ERP 전송에서 데이터 없음/내부 오류(F)가 나면 변경요청을 삭제하고 \"시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. Request No : {0}\" 를 띄운 뒤 저장을 멈춥니다. {0} 에 넣는 _sRequestNo 변수는 어디서도 값을 넣지 않아",
+    "OTHER",
+    "MSG00204"
+   ],
+   [
+    "SAP PI 호출 자체가 실패(C_E)하면 변경요청을 삭제하고 \"데이터 전송 중 오류가 발생하였습니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요.\" 를 띄운 뒤 저장을 멈춥니다.",
+    "OTHER",
+    "MSG00306"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 중단 기간 저장 차단",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장(F7/Save) 시 ERP 시스템 중단 기간 설정(FUNCTION_BLOCK, 화면코드 SSP0200)의 BLOCK_YN 이 Y 면 \"하기 기간동안 ERP 시스템 중단으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다\"(기간 표시)를 띄우고 저장을 멈춥",
+    "STATUS",
+    "MSG00267"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 처리 오류",
+  "screens": [
+   "SSP0013"
+  ],
+  "rows": 3,
+  "examples": [
+   [
+    "작성중 변경요청(SSP0013_SAVE_SHIPMENT_REQUEST_DRAFTING) 생성 뒤 ERP 웹서비스로 보낸 결과가 ERP 오류(E)이면 방금 만든 작성중 요청을 삭제(SSP0013_DELETE_SHIPMENT_REQUEST_DRAFTING)하고 \"하기 ER",
+    "OTHER",
+    "MSG00197"
+   ],
+   [
+    "ERP 전송 결과가 데이터 없음/내부 오류(F)이면 작성중 요청을 삭제하고 \"시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. Request No : {0}\" 를 띄웁니다. {0} 에 쓰는 변수(_sRequestNo)가 어디서도 채워지지 않아 Reques",
+    "OTHER",
+    "MSG00204"
+   ],
+   [
+    "SAP PI 호출 자체가 실패(C_E)하면 작성중 요청을 삭제하고 \"데이터 전송 중 오류가 발생하였습니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요.\" 를 띄웁니다.",
+    "OTHER",
+    "MSG00306"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 처리 오류 회신",
+  "screens": [
+   "SSP0023"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장 중 ERP 변경요청(초안 생성 후 ERP 웹서비스 호출) 결과가 오류(E) 또는 일부 오류(S_E)이면 오류 Confirm 을 기록(SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM)한 뒤 \"하기 ERP ISSUE로 인해 처리할 수 없습니다. ERP ",
+    "OTHER",
+    "MSG00197"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ERP 호출 실패",
+  "screens": [
+   "SSP0015"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP 호출 결과가 데이터 없음·시스템 오류(F) 또는 SAP PI 호출 실패(C_E)이면 해당 변경요청을 삭제 처리한 뒤 \"시스템 오류입니다. 화면 캡쳐해서 시스템 담당자에게 전달하세요. Request No : …\" 를 띄우고 저장을 멈춥니다.",
+    "STATUS",
+    "MSG00204"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:ESS Prod Plan·In-house moving 수량 불일치 경고",
+  "screens": [
+   "SCP0111"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Division 82 에서 수정모드로 팩 Prod Plan 월 수량을 바꾸면, 화면이 같은 Model 의 Prod Plan 합계 × Cell 환산자(비어 있으면 1)와 그 Model 을 To Product 로 가진 Cell In-house moving(Valuation",
+    "CONSISTENCY",
+    ""
+   ],
+   [
+    "Division 82 에서 수정모드로 Cell 제품의 In-house moving 월 수량을 바꾸면, 같은 Cell·To Product 의 In-house moving 합계(Valuation Type ≠ '-')와 To Product 팩의 Prod Plan 합계 × C",
+    "CONSISTENCY",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:From Site=To Site",
+  "screens": [
+   "SCP0007"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장 대상 행을 다 모은 뒤 From Site 와 To Site 가 같으면 \"From Site와 To Site는 동일할 수 없습니다.\" 를 띄우고 저장을 멈춥니다. 원문은 행별 비교가 아니라 지금까지 모은 From 목록 문자열과 To 목록 문자열을 비교하므로, 실제로는",
+    "CONSISTENCY",
+    "MSG00253"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Gap 조회 시 Version 2개 필요",
+  "screens": [
+   "SCP0017"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Gap 을 체크한 상태에서 선택한 Version 값 문자열 길이가 27자(버전 코드 13자 2개 + 콤마)가 아니면, 즉 Version 을 정확히 2개 고르지 않았으면 \"Gap 체크 시 version(2) 선택해야 합니다.\" 를 띄우고 조회를 멈춥니다. Designer",
+    "COUNT",
+    "MSG00376"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:JV 등록 Plant 없음",
+  "screens": [
+   "SCP0060",
+   "SCP0061"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "이 화면은 JV Planner 로 등록된 플랜트만 조회합니다. 선택한 Division·Operation Group 에 대해 사용자에게 등록된 JV 플랜트가 하나도 없어 Plant Site 목록이 비어 있으면 \"Site가 선택되지 않았습니다.\" 를 띄우고 조회를 멈춥니다",
+    "EXISTS",
+    "MSG00352"
+   ],
+   [
+    "JV Planner 로 등록된 플랜트가 없어 Plant Site 목록이 비어 있으면 \"Site가 선택되지 않았습니다.\" 를 띄우고 조회를 멈춥니다(목록 항목 0건 L422-427, 목록 원본 행 0건 L428-440 — 같은 메시지). 선택값은 보지 않습니다.",
+    "EXISTS",
+    "MSG00352"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Master Validation Critical 위반 존재",
+  "screens": [
+   "SCP0123"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Master Validation 팝업에서 받은 Critical 위반 건수가 1건 이상이면 \"Master Validation Critical 위반 건수가 있습니다. 조치 후 진행해 주세요.\" 후 Confirm 하지 않습니다. 위반을 조치하고 다시 Validation 을 ",
+    "STATUS",
+    "MSG00470"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Master Validation 미수행",
+  "screens": [
+   "SCP0123"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "독립 실행 Activity 중 Confirm 대상(CONFIRM_YN=Y)인 Master Validation(A001)의 Confirm 버튼을 누를 때, 이 화면에서 A001 Link 로 Master Validation 팝업(SCP0039)을 열어 OK 로 닫은 적이 ",
+    "STATUS",
+    "MSG00469"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Plan Date 가 Gap Date 보다 이전",
+  "screens": [
+   "SCP0055"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회 시 Plan Date 가 Gap Date 보다 이전 날짜이면 \"Plan date 는 Gap date 보다 빠릅니다.\" 를 띄우고 조회를 멈춥니다. Plan Date 를 Gap Date 이후 날짜로 골라야 합니다.",
+    "RANGE",
+    "MSG00345"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Plan Date 와 Gap Date 동일",
+  "screens": [
+   "SCP0055"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회 시 Plan Date 와 Gap Date 가 같은 날이면 \"Gap date 와 Plan date 는 같을 수 없습니다.\" 를 띄우고 조회를 멈춥니다. 서로 다른 기준일을 골라야 합니다.",
+    "CONSISTENCY",
+    "MSG00348"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Plan date 가 Gap date 보다 이전",
+  "screens": [
+   "SCP0079"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택한 Plan-date 가 비교 대상 Gap-date 보다 이전 날짜이면 \"Plan date 는 Gap date 보다 빠릅니다.\" 를 띄우고 조회를 멈춥니다. Gap-date 는 Plan-date 보다 과거 주차를 골라야 합니다(기본값은 Plan-date 직전 주차로",
+    "RANGE",
+    "MSG00345"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Plan date 와 Gap date 동일",
+  "screens": [
+   "SCP0079"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Plan-date 와 Gap-date 가 같은 날짜이면 \"Gap date 와 Plan date 는 같을 수 없습니다.\" 를 띄우고 조회를 멈춥니다. 서로 다른 날짜를 골라야 비교 조회가 됩니다.",
+    "RANGE",
+    "MSG00348"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:Plant Total 수량 미입력",
+  "screens": [
+   "SCP0023"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장 대상 행(I/M/D)에 들어 있는 Plant 마다 같은 Plant 의 Model 이 'Total' 인 행을 찾아 Daily Capacity 가 비어 있으면 \"Plant의 Total이 입력되지 않았습니다.(Plant코드)\"를 띄우고 저장을 멈춥니다. Total 행에",
+    "REQUIRED",
+    "MSG00258"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:SO 번호 묶음 일부만 조회",
+  "screens": [
+   "SSP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP SO No 가 있는 작업 행은 DB 상 같은 SO 번호 건수(SSP0013_GET_ERP_SO_NO_CNT)와 화면에 조회된 같은 SO 번호 행 수가 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다. 변경은 SO번호기준으로 동일하게 변경해야 합니다. [ S",
+    "CONSISTENCY",
+    "MSG00247"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:SO 번호 묶음 일부만 조회됨",
+  "screens": [
+   "SSP0029"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP SO 번호가 있는 행은 같은 SO 번호로 만들어진 건이 화면에 모두 조회돼 있어야 합니다. DB 의 건수(SSP0029_GET_ERP_SO_NO_CNT)와 화면의 같은 SO 행 수가 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다. 변경은 SO번호기준으로 ",
+    "CONSISTENCY",
+    "MSG00247"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:[조회표시] 버전 간 값 차이 셀 색상 표시",
+  "screens": [
+   "SCP0052"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회 후 같은 기준 행 묶음(ROW_RANKING/SUM_COUNT 로 묶인 버전별 행) 안에서 월별 값(소수 2자리 반올림)이 버전마다 다르면 그 묶음의 해당 월 셀들을 연어색(LightSalmon)으로 칠해 버전 간 변경이 있음을 표시합니다. 메시지는 없고 표시만 ",
+    "CONSISTENCY",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:같은 SO 번호 건 일부만 조회됨",
+  "screens": [
+   "SSP0021"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장 시 ERP SO No 가 있는 변경 행마다 DB 의 해당 SO 확정건 수(SSP0021_GET_ERP_SO_NO_CNT)와 현재 Detail 그리드에 조회된 같은 SO 행 수를 비교해 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다. 변경은 SO번호기준으로 ",
+    "CONSISTENCY",
+    "MSG00247"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:같은 SO 번호 행 일부만 조회",
+  "screens": [
+   "SSP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "변경 행에 ERP SO 번호가 있으면 DB 의 같은 SO 번호 확정 건수(SSP0027_GET_ERP_SO_NO_CNT)와 화면에 조회된 같은 SO 번호 행 수를 비교해 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다. 변경은 SO번호기준으로 동일하게 변경해야 합",
+    "CONSISTENCY",
+    "MSG00247"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:같은 SO 번호 행 일부만 조회됨",
+  "screens": [
+   "SSP0023"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장 시 ERP SO 번호가 있는 변경 행마다 DB 의 같은 SO 번호 건수(SSP0023_GET_ERP_SO_NO_CNT)와 화면에 조회된 같은 SO 번호 행 수를 비교해 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다. 변경은 SO번호기준으로 동일하게 변경해야",
+    "CONSISTENCY",
+    "MSG00247"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:같은 셀 같은 값 재입력",
+  "screens": [
+   "SCP0093"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수량(QUANTITY) 또는 금액(AMOUNT) 셀을 연속으로 다시 바꿨는데 직전에 기록된 값과 같으면 \"변경된 사항이 없습니다.\" 를 띄우고 SUM/GAP 재계산을 하지 않습니다. SUM·GAP 행 셀 변경은 메시지 없이 무시합니다.",
+    "OTHER",
+    "MSG00017"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:검색어 최소 글자 수 미달",
+  "screens": [
+   "SCP0008"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Material ID/Name 이 5글자 미만이거나, 쉼표로 여러 개를 넣었을 때 그중 하나라도 5글자 미만(빈 항목 포함)이면 \"Material ID/Name 검색 조건은 5글자 이상입니다.\" 를 띄우고 조회를 멈춥니다.",
+    "FORMAT",
+    "MSG00246"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:국내 Plant 는 Cell Assy 만 등록",
+  "screens": [
+   "SCP0051"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Cell Type 과 Domestic 이 모두 채워진 행에서 Domestic 이 '국내 CELL = Y'(국내 Plant)인데 Cell Type 이 CA 로 시작하지 않으면(예: CP) \"[국내] Cell Assy 만 등록 가능 합니다.\" 를 띄우고 저장을 멈춥니다. ",
+    "CONSISTENCY",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:그리드 미선택",
+  "screens": [
+   "SCP0095"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Measure(컬럼 표시 설정) 버튼을 눌렀을 때 아직 그리드를 한 번도 선택(클릭)하지 않아 선택된 Spread 가 없으면 \"선택한 Spread 가 없습니다.\" 를 띄우고 설정 팝업을 열지 않습니다. 그리드를 한 번 클릭한 뒤 다시 누르면 됩니다.",
+    "COUNT",
+    "MSG00007"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:기간 공란 무음 차단",
+  "screens": [
+   "SCP0006"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Valid=Y 행 중 FROM 또는 TO(원본 날짜값)가 비어 있는 행을 만나면 FROM~TO 칸을 빨간 배경으로 칠하고 메시지 없이 저장을 멈춥니다. 보통은 앞의 필수값 검사에서 먼저 걸립니다. 색칠 위치는 정렬·필터 시 다른 행이 칠해질 수 있습니다(뷰 행 변환 없",
+    "REQUIRED",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:기간 불연속",
+  "screens": [
+   "SCP0006"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "가장 늦은 종료일을 가진 기간을 빼고, 각 기간의 종료일 다음 날로 시작하는 다른 행이 없으면(기간 사이에 빈 날이 있으면) FROM~TO 칸을 빨간 배경으로 표시하고 \"기간은 연속적으로 입력하여야 합니다.\" 를 띄운 뒤 저장을 멈춥니다.",
+    "RANGE",
+    "MSG00106"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:기간 연속성 위반",
+  "screens": [
+   "SCP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "같은 키에서 가장 늦은 종료일을 뺀 각 기간의 '종료일 다음날'이 다른 기간의 시작일로 존재하지 않으면(기간 사이 빈 날짜) \"기간은 연속적으로 입력하여야 합니다.\"를 띄우고 저장을 멈춥니다.",
+    "CONSISTENCY",
+    "MSG00217"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:기간별 Priority 1 없음",
+  "screens": [
+   "SCP0006",
+   "SCP0027"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "같은 기간(시작일·종료일 동일) 묶음 안에 Priority=1 이면서 Valid=Y 인 행이 하나도 없으면 그 기간의 FROM~TO 칸들을 빨간 배경으로 표시하고 \"해당 기간에 Priority 1이 없습니다.\" 를 띄운 뒤 저장을 멈춥니다.",
+    "CONSISTENCY",
+    "MSG00110"
+   ],
+   [
+    "변경한 행의 기간(같은 키·같은 시작/종료)에 Priority 1 인 행이 없고 자신도 1 이 아니면 \"해당 기간에 Priority 1이 없습니다.\"를 띄우고 저장을 멈춥니다(Operation Group=E 이면 Division 은 키에서 제외).",
+    "CONSISTENCY",
+    "MSG00220"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:기존 데이터와 키 중복",
+  "screens": [
+   "SCP0115"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "행추가(Insert) 버튼을 누른 뒤의 저장이면(isInsert=true) 저장 직전에 현재 조회조건으로 SP 를 다시 조회하고, 변경 행의 DIV·구분·발생사유·플랜트코드·아이템코드 5개가 조회 결과의 어떤 행과 모두 같으면 \"Data is existed\" 를 띄우고",
+    "DUP",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:기존 등록 키 중복",
+  "screens": [
+   "SCP0033"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "신규(I) 행의 Division+Model 조합이 이미 DB 에 등록돼 있으면(조회 때 함께 받아 둔 전체 등록 키 목록과 비교) \"동일한 {Model}이(가) 존재합니다.\" 를 띄우고 저장을 멈춥니다. 조회조건과 무관하게 전체 등록분과 비교합니다. 이미 있는 모델은 ",
+    "DUP",
+    "MSG00060"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:단계 상태별 완료일 개수·형식 오류",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "각 단계의 완료일 칸(완료예정일(최초)/완료예정일(변경)/완료일을 줄바꿈으로 입력)에 대해 ① 줄마다 날짜(yyyy-MM-dd 10자리 이상, 날짜 변환 가능)인지 ② 상태별 줄 수가 맞는지 검사합니다: 완료(FH)=3줄, 진행중(RN)·보류(HD)=1~2줄, 드롭(D",
+    "FORMAT",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:단계 시작일 순서 역전",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "두 시작일이 모두 입력돼 있을 때 개발 검토 시작일이 구체화 시작일보다 빠르거나, 개발 시작일이 개발 검토 시작일보다 빠르면 \"… [개발 검토] 단계 이전 단계 시작일 보다 빠릅니다.\" 를 띄우고 저장을 멈춥니다(날짜 해석 실패 시 통과). ⚠ 첫 번째 변경 행이 M ",
+    "RANGE",
+    ""
+   ],
+   [
+    "개발 검토 또는 개발 단계의 상태/완료일 칸을 바꿀 때 해당 단계 시작일이 앞 단계 시작일보다 빠르면 \"[구체화] 단계 시작일 보다 빠릅니다.\" 를 띄웁니다. 시작일 칸 자체를 고칠 때는 검사하지 않습니다(검사 대상 컬럼 목록에 시작일 없음).",
+    "RANGE",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:단계 완료일 순서 역전",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "구체화가 완료된 상태에서 단계 상태/완료일을 바꿀 때, 그 단계의 마지막 줄 완료일이 바로 앞 단계의 최종 완료일(3줄이면 3번째, 2줄이면 2번째)보다 빠르면 \"[구체화] 단계 완료일 보다 빠릅니다.\" 를 띄웁니다(앞 단계명이 아니라 항상 '구체화'로 표시됨). 상태",
+    "RANGE",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:대상 그리드 미선택",
+  "screens": [
+   "SCP0011",
+   "SCP0017",
+   "SCP0060",
+   "SCP0098",
+   "SSP0001",
+   "SSP0007",
+   "SSP0008",
+   "SSP0021"
+  ],
+  "rows": 8,
+  "examples": [
+   [
+    "Measure(표시 항목 설정) 버튼은 Model 또는 Line 그리드 중 하나를 먼저 클릭해 선택한 상태에서만 열립니다. 아무 그리드도 선택하지 않았으면 \"선택한 Spread 가 없습니다.\" 를 띄우고 멈춥니다.",
+    "REQUIRED",
+    "MSG00007"
+   ],
+   [
+    "그리드를 한 번도 클릭하지 않아 선택된 그리드가 없는 상태에서 Measure 버튼을 누르면 \"선택한 Spread 가 없습니다.\" 를 띄우고 Measure 설정 팝업을 열지 않습니다. 그리드를 먼저 클릭한 뒤 다시 눌러야 합니다.",
+    "REQUIRED",
+    "MSG00007"
+   ],
+   [
+    "Measure(표시 항목 설정) 버튼은 Model 또는 Line 그리드를 먼저 클릭해 선택한 상태에서만 열립니다. 아무 그리드도 선택하지 않았으면 \"선택한 Spread 가 없습니다.\" 를 띄우고 멈춥니다.",
+    "REQUIRED",
+    "MSG00007"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:대상 그리드(Spread) 미선택",
+  "screens": [
+   "SCP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Measure(표시 항목 설정) 버튼을 눌렀을 때 아직 그리드를 한 번도 선택(클릭)하지 않은 상태면 \"선택한 Spread 가 없습니다.\" 를 띄우고 멈춥니다. 그리드를 한 번 클릭한 뒤 다시 눌러야 합니다.",
+    "STATUS",
+    "MSG00007"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:대표(Rep) 중복 지정",
+  "screens": [
+   "SCP0001"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Customer 시트에서 Rep 값을 바꿨을 때 시트 안에 Rep=Y 인 행이 2개 이상이 되면 \"Rep Yn = Y 인 데이터 동일 Sales Site 기준으로 하나만 존재할 수 있습니다.\" 를 띄우고 방금 바꾼 셀을 N 으로 되돌립니다. 대표 거래처는 한 Site ",
+    "DUP",
+    "MSG00149"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:동일 Line 복수 Plan Group 시 All(-) 사용 불가",
+  "screens": [
+   "SCP0121"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "같은 Line·Operation·Building·Plant 에 Plan Group 이 지정된 행이 2행 이상인데 그중 Model 이 All('-' 또는 빈 값)인 행이 있으면 위 문장을 띄우고 저장을 멈춥니다. 한 라인에 Plan Group 을 여러 개 둘 때는 모델을",
+    "CONSISTENCY",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:동일 Line·Plan Group 에 All(-)과 모델 혼재",
+  "screens": [
+   "SCP0121"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "같은 Line·Operation·Building·Plant·Plan Group 행이 2행 이상인데 그중 Model 이 All('-' 또는 빈 값)인 행이 있으면 위 문장을 띄우고 저장을 멈춥니다. 한 Plan Group 에는 All 하나만 두거나 모델을 모두 지정해야 ",
+    "CONSISTENCY",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:동일 SO 번호 건 일부만 조회",
+  "screens": [
+   "SSP0060"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Detail 저장 시 ERP SO No 가 있는 변경 행마다 DB 의 같은 SO 확정 건수(SSP0060_GET_ERP_SO_NO_CNT)와 화면에 조회된 같은 SO 행 수를 비교해 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다. 변경은 SO번호기준으로 동일하게",
+    "COUNT",
+    "MSG00247"
+   ],
+   [
+    "저장 확인(MSG00012 Yes) 후 변경 행의 ERP SO No 별로 DB 건수와 팝업에 보이는 같은 SO 행 수가 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다...\" 를 띄우고 저장을 막습니다.",
+    "COUNT",
+    "MSG00247"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:동일 SO 번호 건 일부만 조회됨",
+  "screens": [
+   "SSP0015",
+   "SSP0201"
+  ],
+  "rows": 3,
+  "examples": [
+   [
+    "SO 번호가 있는 행은 같은 SO 로 만들어진 출하확정 건수(SSP0015_GET_ERP_SO_NO_CNT)와 화면에 조회된 같은 SO 건수가 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다. 변경은 SO번호기준으로 동일하게 변경해야 합니다.[ SO NO : … ",
+    "CONSISTENCY",
+    "MSG00247"
+   ],
+   [
+    "SO 번호가 있는 행은 같은 SO 로 만들어진 출하확정 건수(SSP0015_GET_ERP_SO_NO_CNT)와 화면에 조회된 같은 SO 건수가 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다. 변경은 SO번호기준으로 동일하게 변경해야 합니다.[ SO NO : … ",
+    "CONSISTENCY",
+    "MSG00247"
+   ],
+   [
+    "ERP SO 번호가 있는 행을 저장할 때 DB 의 같은 SO 번호 Confirm 건수와 화면에 조회된 같은 SO 행 수가 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다. 변경은 SO번호기준으로 동일하게 변경해야 합니다. [SO NO]\" 를 띄우고 \"변경 실패\" ",
+    "CONSISTENCY",
+    "MSG00247"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:동일 SO 일부만 조회됨",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "SO 번호가 있는 변경 행은 같은 SO 로 만들어진 확정 건이 모두 한 화면에 조회돼 있어야 합니다. DB 건수와 그리드 건수가 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다. 변경은 SO번호기준으로 동일하게 변경해야 합니다. [ SO NO : … ]\"를 띄우고",
+    "COUNT",
+    "MSG00247"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:동일 키 출하일은 Add Date 로만 추가",
+  "screens": [
+   "SSP0002"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "하단 시트에 이미 작성 중인 요청이 있고, SO No 가 없는 확정(C)/계획(P) 행을 더블클릭했는데 그 행이 작성 중 요청과 같은 키(Division·From/To Site·Model·BOD·Incoterms·Project·FCST Type·Trans Mode)이면",
+    "CONSISTENCY",
+    "MSG00186"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:미저장 셀 Fix 시도",
+  "screens": [
+   "SCP0009",
+   "SCP0013"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Fix 하려고 선택한 셀 중에 수정만 하고 아직 저장하지 않은 셀(빨간 글자)이 있으면 그 셀을 빨간 배경으로 표시하고 \"저장하지 않은 데이터가 있습니다.\" 를 띄운 뒤 멈춥니다. 먼저 저장한 뒤 Fix 해야 합니다.",
+    "STATUS",
+    "MSG00026"
+   ],
+   [
+    "Fix 하려는 셀 중 값을 바꾸고 아직 저장하지 않은 셀(빨간 글자)이 있으면 그 셀을 빨간 배경으로 표시하고 \"저장하지 않은 데이터가 있습니다.\" 를 띄운 뒤 Fix 를 멈춥니다(Fix 사유 입력 뒤에 검사). 먼저 저장한 다음 Fix 해야 합니다.",
+    "STATUS",
+    "MSG00026"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:미저장 수량 Fix 시도",
+  "screens": [
+   "SCP0058"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택 영역 안의 SHIP_PLAN_AMEND 행(화면에 보이는 행) 일자 셀 중 아직 저장하지 않은 값(빨간 글자)이 있으면 그 셀을 오류색으로 칠하고 \"저장하지 않은 데이터가 있습니다.\" 를 띄운 뒤 Fix 를 멈춥니다. 주 합계(W_) 셀을 선택한 경우 그 주의 일",
+    "STATUS",
+    "MSG00026"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:버킷 선택과 양식 종류 불일치",
+  "screens": [
+   "SCP0049"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "양식 종류 선택 팝업에서 Month 를 골랐는데 조회조건 Bucket 에 Day 가 포함돼 있으면 \"Day 체크를 해제해 주세요\" 를 띄우고 멈춥니다.",
+    "CONSISTENCY",
+    "MSG00329"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:변경 가능 출하일 범위 밖",
+  "screens": [
+   "SSP0015"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Action 이 M·I 인 행의 출하일이 허용 범위(Lookup SHIPMENT_PERIOD_DAY 의 최소~최대 일자) 밖이면 \"변경요청은 현재일 기준 D+{n} 출하일부터 가능합니다.\" 를 띄우고 저장을 멈춥니다. 메시지 숫자는 Lookup CHANGE_REQ_DA",
+    "RANGE",
+    "MSG00194"
+   ],
+   [
+    "출하일이 허용 범위(SHIPMENT_PERIOD_DAY 최소~최대) 밖이면 MSG00194 를 띄우고 저장을 멈춥니다(Mobility & IT 와 동일 로직).",
+    "RANGE",
+    "MSG00194"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:변경 없는 행에 Change Reason 입력",
+  "screens": [
+   "SSP0023"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장 시 수량·출하일·Trans Mode·Shipment No.(REMARKS2)·Remarks·Building·Package Type·Dom/Exp 중 바뀐 것이 없는데 Change Reason Code 만 입력된 행이 있으면(같은 SO 의 다른 행에 변경이 있으면 ",
+    "CONSISTENCY",
+    "MSG00286"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:변경 없는 행에 변경사유 입력",
+  "screens": [
+   "SSP0015",
+   "SSP0021",
+   "SSP0027",
+   "SSP0060",
+   "SSP0200"
+  ],
+  "rows": 6,
+  "examples": [
+   [
+    "수량·출하일·Trans Mode·Build(REMARKS2)·Remark·Ship to 중 바뀐 것이 없는데 변경사유 코드만 입력된 행(SO 번호 없는 행, 또는 같은 SO 묶음 전체가 변경 없는 행)이 있으면 그 행의 수정 표시를 지우고 \"출하 변경사항이 없습니다. ",
+    "CONSISTENCY",
+    "MSG00286"
+   ],
+   [
+    "변경 없는 행에 변경사유만 입력돼 있으면 MSG00286 을 띄우고 저장을 멈춥니다(Mobility & IT 와 동일).",
+    "CONSISTENCY",
+    "MSG00286"
+   ],
+   [
+    "저장 시 수정(M) 행이 조회 당시와 비교해 Shipment Qty·Shipment Date·Trans Mode·Remarks2·Remarks 가 하나도 바뀌지 않았는데 Change Reason Code 를 입력했다면(같은 SO 번호 행 중 실제 변경된 행이 있는 경우",
+    "CONSISTENCY",
+    "MSG00286"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:변경 없는 행에 사유 입력",
+  "screens": [
+   "SSP0013"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수량·출하일·Trans Mode·Building·Remarks 가 조회 당시와 같은데 Change Reason 만 입력한 행이 있으면(같은 SO No 묶음에 다른 변경 행이 있으면 예외) 그 행의 작업 표시를 지우고 \"{0}열 출하 변경사항이 없습니다. Change_R",
+    "CONSISTENCY",
+    "MSG00286"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:변경 후 2분 이내 재변경",
+  "screens": [
+   "SSP0015"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "저장할 Confirm ID 들을 SCM_SSP_CHECK_CONFIRM_CHANGETIME 으로 확인해 최근 변경요청 후 2분이 지나지 않았거나(결과 X) 확인 결과가 S 가 아니면 MSG00404 를 띄우고 저장을 멈춥니다. 잠시 후 다시 저장해야 합니다.",
+    "STATUS",
+    "MSG00404"
+   ],
+   [
+    "저장할 Confirm ID 들을 SCM_SSP_CHECK_CONFIRM_CHANGETIME 으로 확인해 최근 변경요청 후 2분이 지나지 않았거나(결과 X) 확인 결과가 S 가 아니면 MSG00404 를 띄우고 저장을 멈춥니다. 잠시 후 다시 저장해야 합니다.",
+    "STATUS",
+    "MSG00404"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:변경요청번호 없음",
+  "screens": [
+   "SSP0060"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "ERP 처리 단계에서 변경 행의 변경요청번호(CHANGE_REQ_NO)가 비어 있으면 \"실행중 에러가 발생했습니다.\" 를 띄우고 해당 건을 실패 처리합니다(일반 오류 문구라 원인을 알기 어렵습니다).",
+    "STATUS",
+    "MSG00284"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:비교 버전 선택 개수 제한",
+  "screens": [
+   "SCP0081"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Version 은 선택하지 않거나(전체) 정확히 2개를 골라 비교해야 합니다. 1개만 고르거나 3개 이상 고르면 \"버전은 2개까지만 가능함\" 을 띄우고 조회를 멈춥니다(문구와 달리 1개 선택도 막힘). Version 을 0개 또는 2개로 맞춰 다시 조회해야 합니다.",
+    "COUNT",
+    "MSG00255"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:상세 전체 선택 필요",
+  "screens": [
+   "SSP0003"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "상세 그리드에서 체크가 해제된 행이 하나라도 있으면 \"전체 체크 후 Self Reject 버튼 눌러주세요.\" 를 띄우고 멈춥니다. 자기반려는 요청 전체를 대상으로만 할 수 있습니다.",
+    "COUNT",
+    "MSG00422"
+   ],
+   [
+    "체크가 해제된 상세 행이 있으면 \"전체 체크 후 Reject 버튼 눌러 주세요. 부분 승인 필요 시, 승인 대상 체크 후 Approval 눌러주세요.\" 를 띄우고 멈춥니다. 일부만 반려하려면 Approval 버튼(부분 승인)을 써야 합니다.",
+    "COUNT",
+    "MSG00421"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:생성 개월수 범위(3~12) 밖 입력 경고",
+  "screens": [
+   "SCP0083"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Month 입력란 값이 바뀔 때 3~12 를 벗어나면 경고를 띄우도록 되어 있으나 값은 그대로 두고 진행을 막지 않습니다(실제 차단은 Version Create 의 MSG00384). 또한 현행 DB 문구(MSG00151)가 \"Manual Cutoff가 완료되었습니다.",
+    "RANGE",
+    "MSG00151"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:선택된 Spread 없음",
+  "screens": [
+   "SCP0103"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Measure 설정 버튼을 눌렀을 때 선택된 그리드가 없거나 메인 그리드(spdMain)가 아니면 \"선택한 Spread 가 없습니다.\" 를 띄우고 Measure 설정 팝업을 열지 않습니다. 그리드를 한 번 클릭한 뒤 다시 눌러야 합니다.",
+    "COUNT",
+    "MSG00007"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:선택된 그리드 없음",
+  "screens": [
+   "SSP0023",
+   "SSP0027"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Measure 버튼을 눌렀을 때 활성 그리드가 없거나 상단·하단 그리드가 아닌 경우(예: Excel Form 다운로드 후 활성 그리드가 엑셀 양식용 숨은 그리드로 바뀐 상태, L6554)에는 \"선택한 Spread 가 없습니다.\" 를 띄우고 멈춥니다. 상단 그리드를 한 ",
+    "STATUS",
+    "MSG00007"
+   ],
+   [
+    "Measure(측정항목 설정) 버튼을 눌렀을 때 선택된 그리드가 없거나 화면의 두 그리드가 아닌 경우 \"선택한 Spread 가 없습니다.\" 를 띄우고 멈춥니다. 화면 생성 시 상단 그리드가 기본 선택되므로 실사용에서는 드뭅니다. 하단 그리드가 선택된 상태에서는 메시지 ",
+    "STATUS",
+    "MSG00007"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:선택한 Spread 없음",
+  "screens": [
+   "SSP0016",
+   "SSP0017",
+   "SSP0022",
+   "SSP0026"
+  ],
+  "rows": 4,
+  "examples": [
+   [
+    "어떤 시트도 클릭하지 않은 상태(fps 없음)에서 Measure 설정 버튼을 누르면 \"선택한 Spread 가 없습니다.\" 를 띄우고 막습니다. 상단 시트를 먼저 클릭해야 합니다. (하단 상세 시트 선택 시에는 메시지 없이 무반응)",
+    "STATUS",
+    "MSG00007"
+   ],
+   [
+    "시트를 클릭하지 않은 상태(fps 없음)에서 Measure 설정 버튼을 누르면 \"선택한 Spread 가 없습니다.\" 를 띄우고 막습니다. (참고: 이 버튼은 이 화면이 아니라 SSP0001 의 'Shipment Plan Confirm' 메타 팝업을 엽니다)",
+    "STATUS",
+    "MSG00007"
+   ],
+   [
+    "Measure 버튼(측정항목 표시 설정)을 눌렀을 때 선택된 그리드가 없거나 상단/하단 그리드가 아닌 경우(예: Excel Form 다운로드 후 활성 그리드가 엑셀용 숨김 그리드로 바뀐 경우) \"선택한 Spread 가 없습니다.\" 를 띄우고 멈춥니다. 하단 그리드가 선",
+    "STATUS",
+    "MSG00007"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:선택한 그리드 없음",
+  "screens": [
+   "SCP0029",
+   "SSP0015",
+   "SSP0029"
+  ],
+  "rows": 3,
+  "examples": [
+   [
+    "Measure(표시 항목 설정) 버튼을 눌렀을 때 아직 그리드를 한 번도 클릭하지 않아 선택된 그리드가 없으면 \"선택한 Spread 가 없습니다.\" 를 띄우고 팝업을 열지 않습니다. 그리드를 한 번 클릭한 뒤 다시 눌러야 합니다.",
+    "STATUS",
+    "MSG00007"
+   ],
+   [
+    "Measure 버튼을 눌렀을 때 선택(포커스)된 그리드가 없으면 \"선택한 Spread 가 없습니다.\" 를 띄우고 멈춥니다. 하단 그리드가 선택된 상태면 메시지 없이 아무 동작도 하지 않습니다(L2032-2036). 위쪽 Shipment PSI 그리드를 한 번 클릭한 뒤",
+    "STATUS",
+    "MSG00007"
+   ],
+   [
+    "Measure(컬럼 설정) 버튼을 눌렀을 때 선택된 그리드가 없으면 \"선택한 Spread 가 없습니다.\" 를 띄우고 멈춥니다. 하단 그리드가 선택된 상태면 메시지 없이 아무 동작도 하지 않습니다(L1865-1868). 위쪽 메인 그리드를 한 번 클릭한 뒤 다시 눌러야 ",
+    "REQUIRED",
+    "MSG00007"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:선택한 그리드(Spread) 없음",
+  "screens": [
+   "SCP0057"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Measure(컬럼 표시 설정) 버튼 클릭 시 아직 그리드를 한 번도 선택(클릭)하지 않아 현재 Spread 가 없으면 \"선택한 Spread 가 없습니다.\" 를 띄우고 팝업을 열지 않습니다. 그리드를 한 번 클릭한 뒤 다시 누르면 됩니다.",
+    "STATUS",
+    "MSG00007"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:소수 자릿수 초과",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 5,
+  "examples": [
+   [
+    "Off Time 값에 소수점 아래가 10자리를 넘으면 \"Off Time(Day)* : 값 / 소수점 최대 10자리까지 입력가능합니다.\" (메시지 ID 가 아닌 문장 그대로) 를 띄우고 저장을 멈춥니다.",
+    "FORMAT",
+    ""
+   ],
+   [
+    "Week 모드에서 Off Time 소수점 아래가 10자리를 넘으면 문장 메시지를 띄우고 저장을 멈춥니다.",
+    "FORMAT",
+    ""
+   ],
+   [
+    "전극 행의 Coating Speed 소수점 아래가 10자리를 넘으면 문장 메시지(\"소수점 최대 10자리까지 입력가능합니다.\")를 띄우고 저장을 멈춥니다. 이 검사 직전 Lane 을 정수로 바꾸는데(L1911) 정수가 아니면 예외가 나 화면이 오류로 끝날 수 있습니다.",
+    "FORMAT",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:소수점 자릿수 초과",
+  "screens": [
+   "SCP0130"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "신규·수정 행의 Consume Qty 소수점 아래가 10자리를 넘으면 \"{라벨 : 값} 소수점 최대 10자리까지 입력가능합니다.\"(메시지 ID 가 아닌 문장 그대로 표시)를 띄우고 저장을 멈춥니다. 셀 자체는 소수 3자리 숫자칸으로 설정돼 있어(L420) 정상 입력에서",
+    "FORMAT",
+    ""
+   ],
+   [
+    "신규·수정 행의 Qty 소수점 아래가 10자리를 넘으면 \"{라벨 : 값} 소수점 최대 10자리까지 입력가능합니다.\" 를 띄우고 저장을 멈춥니다.",
+    "FORMAT",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:수임자 사용자 미존재",
+  "screens": [
+   "SSP0020"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "사용자 검색 결과가 0건이면 \"사용자를 찾지 못했습니다. 검색창을 여시겠습니까?\" 를 묻고, 답과 관계없이 저장을 중단합니다(예=사용자 검색창 열림). Delegatee 칸이 비어 있어도 이 검색이 먼저 실행됩니다.",
+    "EXISTS",
+    "MSG00301"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:수임자 이름 다건 일치",
+  "screens": [
+   "SSP0020"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "SAVE 를 누르면 먼저 Delegatee 칸의 문자열로 사용자를 검색(UP_FX_GetSSPUserUseInfoList)하고, 2명 이상 일치하면 \"다중검색된 User입니다. 검색창을 여시겠습니까?\" 를 묻습니다. 예/아니오와 관계없이 저장은 중단되며(예=사용자 검색",
+    "EXISTS",
+    "MSG00302"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:수정 불가 Valid 변경",
+  "screens": [
+   "SCP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "전극(E)이 아닌 행에서 원래 N 이던 Valid 를 Y 로 바꾸면 \"해당 Valid는 수정할 수 없습니다.\"를 띄우고 Valid 를 N 으로, 작업 표시를 빈 값으로 되돌립니다.",
+    "STATUS",
+    "MSG00211"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:수정 중 시트 전환 불가",
+  "screens": [
+   "SCP0001"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "하단 시트가 수정모드(잠금 해제)인 상태에서 다른 하단 시트 탭으로 바꾸려 하면 \"{시트명}를 수정 중이어서 시트를 변경 할 수 없습니다.\" 를 띄우고 탭 전환을 취소합니다. 저장하거나 수정모드를 해제한 뒤 바꿔야 합니다.",
+    "STATUS",
+    "MSG00129"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:수정모드 아님",
+  "screens": [
+   "SCP0058"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "조회 결과가 있고 Shipment Request 시트가 수정모드(Edit)가 아니면 \"수정모드가 아니므로 저장할 수 없습니다.\" 를 띄우고 멈춥니다. 조회 전(데이터셋 없음)이거나 선택된 Spread 가 없으면 메시지 없이 아무 동작도 하지 않습니다. Edit(F2) ",
+    "STATUS",
+    "MSG00010"
+   ],
+   [
+    "조회 결과가 있고 Shipment Request 시트가 수정모드(Edit)가 아니면 \"수정모드가 아니므로 저장할 수 없습니다.\" 를 띄우고 멈춥니다. 조회 전(데이터셋 없음)이거나 선택된 Spread 가 없으면 메시지 없이 아무 동작도 하지 않습니다. Edit(F2) ",
+    "STATUS",
+    "MSG00010"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:수정모드 아님(시트 잠금)",
+  "screens": [
+   "SCP0009"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "조회 결과가 있는데 Edit 로 수정모드를 켜지 않은 상태에서 Fix 를 누르면 \"수정모드가 아니므로 저장할 수 없습니다.\" 를 띄우고 아무것도 하지 않습니다. 조회 결과가 없으면 메시지 없이 끝납니다. 먼저 Edit 를 눌러야 합니다.",
+    "STATUS",
+    "MSG00010"
+   ],
+   [
+    "수정모드가 아닐 때 Unfix 를 누르면 \"수정모드가 아니므로 저장할 수 없습니다.\" 를 띄우고 아무것도 하지 않습니다.",
+    "STATUS",
+    "MSG00010"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:수정모드 아님(편집 전환 필요)",
+  "screens": [
+   "SCP0057"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "시트가 수정모드(F2 Edit)가 아니면 \"수정모드가 아니므로 저장할 수 없습니다.\" 를 띄우고 Fix 처리를 하지 않습니다. 먼저 Edit 로 수정모드로 바꾼 뒤 일자를 선택해야 합니다.",
+    "STATUS",
+    "MSG00010"
+   ],
+   [
+    "시트가 수정모드(F2 Edit)가 아니면 \"수정모드가 아니므로 저장할 수 없습니다.\" 를 띄우고 Unfix 처리를 하지 않습니다. 먼저 Edit 로 수정모드로 바꾼 뒤 일자를 선택해야 합니다.",
+    "STATUS",
+    "MSG00010"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:시작일 같은데 종료일이 다름(종료일 중첩)",
+  "screens": [
+   "SCP0006"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Valid 가 Y(또는 빈 값)인 행끼리 비교해 시작일(FROM)이 같은데 종료일(TO)이 다른 행이 있으면 해당 TO 칸을 빨간 배경으로 표시하고 \"중첩되는 종료일자가 있습니다.\" 를 띄운 뒤 저장을 멈춥니다. 변경 행만이 아니라 그리드 전체 행을 비교합니다.",
+    "RANGE",
+    "MSG00101"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:시작일 월요일 아님",
+  "screens": [
+   "SCP0126"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "No Work 일괄저장 팝업에서 Save 를 누를 때 기간 시작일이 월요일이 아니면 \"기간을 다시 선택하여 주십시오.(월요일)\" 를 띄우고 저장을 멈춥니다.",
+    "RANGE",
+    "MSG00330"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:시트 필수 컬럼 누락(사용자 컬럼 설정)",
+  "screens": [
+   "SCP0009"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "수정모드(Edit) 전환 시, 사용자가 Column 설정 팝업으로 저장에 꼭 필요한 컬럼을 시트에서 빼 버렸으면 \"필수 입력 컬럼이 없습니다\" 와 빠진 컬럼 ID 목록을 띄우고 수정모드 전환을 멈춥니다. Column 설정에서 해당 컬럼을 다시 넣어야 합니다.",
+    "REQUIRED",
+    "MSG00412"
+   ],
+   [
+    "저장 시에도 수정모드 전환과 같은 필수 컬럼 존재 검사를 한 번 더 합니다. 빠진 컬럼이 있으면 메시지 후 저장을 멈춥니다.",
+    "REQUIRED",
+    "MSG00412"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:신규 행 수량 미입력",
+  "screens": [
+   "SSP0016"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "새로 추가한 행에 입력(빨간 글자)된 일자별 수량이 하나도 없으면 \"신규추가 시 수량이 입력되지 않았습니다.\" 를 띄우고 저장을 막습니다. 최소 하루 이상 요청 수량을 입력해야 합니다.",
+    "QTY",
+    "MSG00271"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:업로드 금지 확장자",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "파일 확장자(마지막 '.' 뒤)가 금지 목록 문자열에 포함되면 \"[파일 확장자] 업로드 할 수 없는 확장자입니다.\" 를 띄우고 업로드를 멈춥니다. ⚠ 목록 문자열 '포함' 비교라 대소문자를 구분하고(.EXE 는 통과), 's'·'ja' 처럼 목록 일부와 겹치는 짧은 확",
+    "FORMAT",
+    "MSG00391"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:요청 입력 가능 기간 없음",
+  "screens": [
+   "SSP0016"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택한 계획일자에 대한 요청 입력 가능 기간(From/To)이 조회되지 않았으면 \"조회된 요청가능 기간이 없습니다.\" 를 띄우고 수정모드 전환을 막습니다.",
+    "REQUIRED",
+    "MSG00268"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:월별 수량 입력 불가 품목유형·소진방안 조합",
+  "screens": [
+   "SCP0113"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "발생사유·소진방안이 모두 올바른 행에서 월별 수량을 입력했는데, 그 행의 Item Type 과 소진방안 조합이 '월별 수량 입력 예외' 설정(SCP0113_GET_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION, 저장 시 다시 조회)에 있으면 \"월별 수량",
+    "CONSISTENCY",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:이전 단계 미완료 시 다음 단계 입력 불가",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정모드에서 개발 검토(PRIORITY)·개발·Test·완료 단계의 상태나 완료일을 바꾸는 중에 구체화 단계 상태가 완료(FH/완료)가 아니면 \"[구체화] 단계가 완료되지 않았습니다. 수정 할 수 없는 상태입니다.\" 를 띄웁니다. 바꾸던 칸이 상태 칸이면 값을 자동으로",
+    "STATUS",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:입력 가능 기간 아님",
+  "screens": [
+   "SSP0016"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "오늘 날짜가 요청 입력 가능 기간(From~To) 밖이면 \"입력 또는 수정할 수 있는 기간이 아닙니다.\" 를 띄우고 수정모드 전환을 막습니다. 입력 가능 기간에만 요청을 등록·수정할 수 있습니다.",
+    "RANGE",
+    "MSG00269"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:입력 길이 초과",
+  "screens": [
+   "SCP0080"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "81 계열 사업부에서 저장할 때 작업 표시가 있는 행의 End Customer 가 50자를 넘으면, 모든 행 검사가 끝난 뒤 해당 행 번호·Division·Operation·End Customer 를 나열한 \"50 Over Digits!\" 창을 띄우고 저장을 멈춥니다(",
+    "RANGE",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:입력·수정 가능 요일·시간 외",
+  "screens": [
+   "SCP0090"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Edit(수정모드) 는 금요일~월요일 오전(11:59:59 이전)에만 가능합니다. 화·수·목요일이거나 월요일 정오 이후이면 \"금요일~월요일 12시까지 입력 및 수정 가능 합니다.\" 를 띄우고 수정모드로 바꾸지 않습니다. 허용 시간에 다시 시도해야 합니다.",
+    "STATUS",
+    "MSG00371"
+   ],
+   [
+    "New(신규 요청) 버튼도 금요일~월요일 오전에만 쓸 수 있습니다. 그 외 시간이면 같은 메시지를 띄우고 신규 입력 팝업을 열지 않습니다. 팝업 OK 후에는 화면이 Edit 를 직접 호출해 같은 검사를 한 번 더 합니다(L1299 → L463).",
+    "STATUS",
+    "MSG00371"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:저장 건수 상한(10,000건) 초과",
+  "screens": [
+   "SCP0098"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "비조업·가동율·Ramp-up 일자 변경 건수가 10,000건을 넘으면 \"10000 건 이상의 데이터를 저장 할 수 없습니다.\" 를 띄웁니다. 저장을 멈추지는 않고 그 행의 나머지 일자만 건너뛴 뒤 계속하므로, 다음 행에서도 같은 메시지가 반복되고 이미 모은 건(10,0",
+    "COUNT",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:저장 작업월 불일치",
+  "screens": [
+   "SCP0093"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Copy 모드가 아닐 때, 저장 대상 첫 행의 작업월이 팝업을 연 작업월(Work Month)과 다르면(예: Search 버튼으로 다른 월 사유를 불러와 수정한 경우) \"[작업월],[저장 작업월] 이 일치하지 않습니다.\" 를 띄우고 저장을 막습니다. 다른 월로 저장하려",
+    "CONSISTENCY",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:저장하지 않은 값 Fix 불가",
+  "screens": [
+   "SCP0057"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Fix 할 선택 셀(또는 선택한 주합계에 속한 일자 셀, Weekly 조회면 주합계 셀) 중 아직 저장하지 않은 변경값(빨간 글자)이 있으면 그 셀을 오류색으로 칠하고 \"저장하지 않은 데이터가 있습니다.\" 를 띄운 뒤 Fix 를 멈춥니다. 먼저 저장(F7) 후 Fix ",
+    "STATUS",
+    "MSG00026"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:저장하지 않은 변경값 Fix 불가",
+  "screens": [
+   "SCP0029"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "선택한 셀 중 값을 바꾸고 아직 저장하지 않은(빨간 글자) 셀이 있으면 그 셀을 빨간 배경으로 표시하고 \"저장하지 않은 데이터가 있습니다.\" 를 띄운 뒤 Fix 를 멈춥니다. 먼저 저장한 뒤 Fix 해야 합니다. 이 검사를 통과하고 대상 일자가 1건 이상이면 Fix 사",
+    "STATUS",
+    "MSG00026"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:저장하지 않은 셀 Fix 시도",
+  "screens": [
+   "SCP0010",
+   "SCP0059"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "선택 영역의 Ship Plan Amend 행에서 수량을 바꾸고 아직 저장하지 않은(빨간 글자) 일자 셀이 있으면(주 합계 셀을 고르면 그 주의 일자 셀까지 확인) 그 셀을 빨간 배경으로 표시하고 \"저장하지 않은 데이터가 있습니다.\" 를 띄운 뒤 멈춥니다. 먼저 저장한 ",
+    "STATUS",
+    "MSG00026"
+   ],
+   [
+    "선택 영역의 Ship Plan Amend 행에서 아직 저장하지 않은(빨간 글자) 일자 셀이 있으면 그 셀을 오류 색으로 칠하고 \"저장하지 않은 데이터가 있습니다.\" 를 띄우고 멈춥니다. 주(W_) 셀을 선택한 경우 그 주의 일자 셀까지 확인합니다. 먼저 저장한 뒤 Fi",
+    "STATUS",
+    "MSG00026"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:정수 아닌 값",
+  "screens": [
+   "SCP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Line Assign 행에서 바꾼 월·일 값이 소수(정수가 아님)이면 \"Priority는 양의 정수입니다.\" 를 띄우고 그 셀로 이동한 뒤 저장을 멈춥니다.",
+    "FORMAT",
+    "MSG00107"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:조회 전 수정모드 진입",
+  "screens": [
+   "SCP0027"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "조회하지 않았거나 조회 결과의 전극 아이템 목록이 비어 있는데 Edit 를 누르면 \"조회 후 수정모드로 가능합니다.\"를 띄우고 수정모드로 바꾸지 않습니다. 먼저 조회해야 합니다.",
+    "STATUS",
+    "MSG00259"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:조회된 데이터 없음",
+  "screens": [
+   "SCP0090"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "그리드에 조회된 행이 하나도 없으면 \"조회된 데이터가 없습니다.\" 를 띄우고 멈춥니다. 먼저 조회해야 합니다.",
+    "COUNT",
+    "MSG00019"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:종료 상태 '진행중' 저장 불가",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "종료(발의자 Confirm) 단계 상태가 '진행중'(RU)인 행이 있으면 \"{과제명} [진행중] 저장 할 수 없는 값입니다.\" 를 띄우고 저장을 멈춥니다. 종료 상태는 종료/반려 등 다른 값으로 바꾸거나 비워야 합니다.",
+    "STATUS",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:종료일 같은데 시작일이 다름(시작일 중첩)",
+  "screens": [
+   "SCP0006"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "종료일(TO)이 같은데 시작일(FROM)이 다른 행이 있으면 FROM 칸을 빨간 배경으로 표시하고 \"중첩되는 시작일자가 있습니다.\" 를 띄운 뒤 저장을 멈춥니다.",
+    "RANGE",
+    "MSG00102"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:최소·최대 수량 둘 다 미입력",
+  "screens": [
+   "SCP0132"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Min Qty 와 Max Qty 가 둘 다 비어 있으면 \"MIN 와 MAX 둘 중에 하나는 필수 입력입니다.\" 를 띄우고 저장을 멈춥니다. 둘 중 하나만 넣어도 통과합니다.",
+    "REQUIRED",
+    "MSG00022"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:최신 Plan Date 변경 감지 → 메시지 후 자동 교체",
+  "screens": [
+   "SSP0021",
+   "SSP0023",
+   "SSP0027",
+   "SSP0060"
+  ],
+  "rows": 5,
+  "examples": [
+   [
+    "Plan Date 콤보에서 첫 번째(최신) 항목을 고른 채 조회하면, DB 의 최신 Plan Date 를 다시 읽어 화면의 값과 다르면 \"변경된 Plan Date가 존재 합니다.\" 를 띄웁니다. 그 뒤 Plan Date 목록·Period·Shipment Date 기간을",
+    "STATUS",
+    "MSG00313"
+   ],
+   [
+    "Plan-date 콤보에서 첫 번째(최신) Plan 을 고른 상태로 조회하면, DB 의 최신 Plan Date 를 다시 읽어 화면 값과 다르면 \"변경된 Plan Date가 존재 합니다.\" 를 띄운 뒤 Plan Date 목록·Period·상세 기간을 최신 값으로 자동으로",
+    "STATUS",
+    "MSG00313"
+   ],
+   [
+    "Plan-date 를 목록 첫 번째(최신)로 두고 조회하면, DB 의 최신 Plan Date 와 화면 콤보 값이 다를 때 \"변경된 Plan Date가 존재 합니다.\" 를 띄웁니다. 이어서 Plan-date 목록과 Period·하단 Shipment Date 기간을 DB ",
+    "STATUS",
+    "MSG00313"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:최신 Plan Date 변경 감지(메시지 후 자동 교체)",
+  "screens": [
+   "SSP0022"
+  ],
+  "rows": 4,
+  "examples": [
+   [
+    "Plan-date 를 첫 번째(최신) 항목으로 둔 채 조회할 때 DB 의 최신 Plan Date 가 화면 값과 다르면 \"변경된 Plan Date가 존재 합니다.\" 를 띄운 뒤 Plan-date 목록·Period·Shipment ETA 기간을 DB 최신값으로 다시 채우고",
+    "STATUS",
+    "MSG00313"
+   ],
+   [
+    "최신 Plan-date 상태에서 DB 최신 Plan Date 가 바뀌었으면 \"변경된 Plan Date가 존재 합니다.\" 후 Plan-date·기간을 최신값으로 바꾸고 조회를 계속합니다.",
+    "STATUS",
+    "MSG00313"
+   ],
+   [
+    "업로드 창을 닫은 뒤 \"다시 조회하시겠습니까?\" 에 Yes 를 고르면 요청상세 조회와 상단 조회를 연달아 실행하므로 최신 Plan Date 가 바뀌었으면 \"변경된 Plan Date가 존재 합니다.\" 가 표시되고 Plan-date·기간이 교체됩니다(두 조회 모두에서 검사",
+    "STATUS",
+    "MSG00313"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:최초 선택 항목 삭제 불가",
+  "screens": [
+   "SSP0002"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Delete(SO No 없는 요청에서만 보임)를 누르고 \"삭제 하시겠습니까?\" 에 Yes 하면, 체크하지 않고 남는 행 중에 최초 기준 확정행(NEW_BASE_CONFIRM_YN=Y)이 하나도 없고 하단 행이 2건 이상이면 \"최초 선택된 항목은 삭제할 수 없습니다. 삭",
+    "STATUS",
+    "MSG00198"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:추가 건수 1~50 밖",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Insert(Multi) 팝업에서 OK 를 누를 때 입력한 건수가 정수가 아니거나 1~50 범위 밖이면 \"유효한 숫자 형식이 아닙니다. {입력값}\"을 띄우고 팝업을 닫지 않습니다. 1~50 사이 숫자를 입력해야 합니다.",
+    "RANGE",
+    "MSG00050"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:출발 요일 미등록 Route 선택",
+  "screens": [
+   "SCP0007"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Route 선택 팝업에서 OK 또는 행 더블클릭으로 고른 Route 의 출발 요일(Departure Days)이 비어 있으면 \"선택할 수 없습니다. Departure Days를 확인하여 주십시오.\" 를 띄우고 팝업을 닫지 않습니다. 출발 요일이 등록된 Route 를 골",
+    "EXISTS",
+    "MSG00222"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:출하 변경 없는 행에 변경사유 입력",
+  "screens": [
+   "SSP0029"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수량·출하일·Trans Mode·Ship-to·Build·Remark 중 바뀐 것이 없는 행에 Change Reason Code 만 입력돼 있으면(같은 SO 번호 묶음에 다른 변경이 있는 경우는 제외) 그 행의 Action 표시를 지우고 \"{n}열 출하 변경사항이 없습",
+    "CONSISTENCY",
+    "MSG00286"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:출하 변경 없이 변경사유만 입력",
+  "screens": [
+   "SSP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정 표시된 행에서 실제 출하 정보(수량·출하일·Trans Mode·Incoterms·Ship-To·Remarks)는 조회 때와 같은데 Change Reason 만 넣었으면(같은 SO 의 다른 행에 변경이 있으면 예외) 그 행의 수정 표시를 지우고 \"출하 변경사항이 없",
+    "CONSISTENCY",
+    "MSG00286"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:출하일 변경 가능 기간 밖",
+  "screens": [
+   "SSP0023",
+   "SSP0029"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "저장 시 I/M 행의 출하일이 Lookup SHIPMENT_PERIOD_DAY 로 정한 허용 구간(최소~최대 출하일) 밖이면 \"변경요청은 현재일 기준 D+{일수} 출하일부터 가능합니다.\" 를 띄우고 저장을 멈춥니다. 주의: 메시지의 {일수}는 다른 Lookup(CHAN",
+    "RANGE",
+    "MSG00194"
+   ],
+   [
+    "수정·추가한 행의 Shipment Date 가 룩업 SHIPMENT_PERIOD_DAY 의 허용 범위(최소일~최대일)를 벗어나면 \"변경요청은 현재일 기준 D+{일수} 출하일부터 가능합니다.\" 를 띄우고 저장을 멈춥니다. 문구의 일수는 CHANGE_REQ_DAY 룩업 값",
+    "RANGE",
+    "MSG00194"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:출하일 입력 가능 기간 밖",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장 시 수정·추가 행의 Shipment Date 가 출하일 입력 가능 기간(lookup SHIPMENT_PERIOD_DAY 의 최대일·최소일) 밖이면 \"변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.\"를 띄우고 저장을 멈춥니다. {0} 에는 CHANGE_RE",
+    "RANGE",
+    "MSG00194"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:출하일 입력 허용 기간 밖",
+  "screens": [
+   "SSP0021"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장 시 추가·수정 행의 Shipment Date 가 룩업 SHIPMENT_PERIOD_DAY 로 정한 허용 범위(최소일~최대일)를 벗어나면 \"변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.\" 를 띄우고 저장을 멈춥니다. 주의: 범위는 SHIPMENT_PERI",
+    "RANGE",
+    "MSG00194"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:출하일 허용 기간 밖",
+  "screens": [
+   "SSP0027",
+   "SSP0060"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "I/M 행의 Shipment Date 가 공통 설정 SHIPMENT_PERIOD_DAY 의 최소~최대 출하일 범위를 벗어나면 \"변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.\" 를 띄우고 저장을 멈춥니다. {0} 은 CHANGE_REQ_DAY 설정값이라 실제 ",
+    "RANGE",
+    "MSG00194"
+   ],
+   [
+    "Detail 저장 시 I/M 행의 Shipment Date 가 출하 입력 가능 기간(SHIPMENT_PERIOD_DAY 룩업의 최소~최대일) 밖이면 \"변경요청은 현재일 기준 D+{n} 출하일부터 가능합니다.\" 를 띄우고 저장을 멈춥니다(값은 바꾸지 않음). 메시지의 {",
+    "RANGE",
+    "MSG00194"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:출하일이 변경 가능 기간 밖",
+  "screens": [
+   "SSP0201"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "수정·신규 행의 출하일이 SHIPMENT_PERIOD_DAY 기준정보의 허용 구간(최소~최대 출하일)을 벗어나면 \"변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.\" 를 띄우고 저장을 멈춥니다. {0} 에는 허용 구간이 아니라 CHANGE_REQ_DAY 값이 들",
+    "RANGE",
+    "MSG00194"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:출하일이 조회 기간 밖",
+  "screens": [
+   "SSP0200",
+   "SSP0201"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "저장 시 수정·추가 행의 Shipment Date 가 조회조건 Shipment Date 시작~종료 기간 밖이면 \"변경요청은 Shipment Date 조회 구간에서 가능합니다.\"를 띄우고 저장을 멈춥니다. 조회 기간을 넓혀 다시 조회한 뒤 변경해야 합니다.",
+    "RANGE",
+    "MSG00359"
+   ],
+   [
+    "수정·신규 행의 출하일이 조회조건 Shipment Date 기간(From~To) 밖이면 \"변경요청은 Shipmnet Date 조회 구간에서 가능합니다.\" 를 띄우고 저장을 멈춥니다. 조회 기간 안의 출하일로 고치거나 조회 기간을 넓혀 다시 조회해야 합니다.",
+    "RANGE",
+    "MSG00359"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:컬럼 설정 일부 시 사유 편집 불가",
+  "screens": [
+   "SCP0076",
+   "SCP0077"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Edit 시 그리드에 Division·Cell Type GR·Operation Group Name·Plant ID·Model Type GR 컬럼 중 하나라도 없으면(사용자 컬럼 설정에서 뺀 경우) \"사유 저장은 컬럼 설정을 전체로 해야 됩니다.\" 를 띄우고 수정모드로 ",
+    "STATUS",
+    "MSG00364"
+   ],
+   [
+    "Edit 시 조회 결과의 IS_EDITABLE 이 'N'(사용자 컬럼 설정이 전체 컬럼보다 적음)이거나 아직 Weekly 조회로 값을 받지 않았으면(기본 'N') \"사유 저장은 컬럼 설정을 전체로 해야 됩니다.\" 를 띄우고 수정모드로 바꾸지 않습니다. 컬럼 설정을 전체",
+    "STATUS",
+    "MSG00364"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:편집 중 시트 전환 차단",
+  "screens": [
+   "SCP0110"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Model List 그리드가 수정모드일 때 그 그리드의 다른 시트 탭으로 바꾸려 하면 \"Model List를 수정 중이어서 시트를 변경 할 수 없습니다.\" 를 띄우고 원래 시트로 되돌립니다. 이 그리드에 화면이 추가하는 시트는 'Model List' 1개뿐이라(L247",
+    "STATUS",
+    "MSG00129"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:편집 중 시트(탭) 전환 불가",
+  "screens": [
+   "SCP0022"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "하단 시트가 수정모드인 상태에서 다른 탭(Except ↔ Except LT)으로 바꾸려 하면 \"{시트명}를 수정 중이어서 시트를 변경할 수 없습니다.\" 를 띄우고 원래 탭에 머뭅니다. 저장하거나 재조회해 수정모드를 끝내야 합니다.",
+    "STATUS",
+    "MSG00129"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:한 그룹에 복수 Project 지정",
+  "screens": [
+   "SCP0110"
+  ],
+  "rows": 2,
+  "examples": [
+   [
+    "Model List 에서 Group 을 바꾼(M) 행끼리 비교해 같은 Group 에 서로 다른 Project 가 지정되면 \"복수의 Project를 같은 그룹으로 저장할 수 없습니다.\"(메시지 ID 아닌 문장 그대로) 를 띄우고 저장을 멈춥니다. Group 을 비운 행은",
+    "DUP",
+    ""
+   ],
+   [
+    "바꾼 Group 이 이미 다른 Project 의 모델에 쓰이고 있으면(화면 열 때·Model List 저장 후 받아 둔 해당 Division 전체 모델 목록 기준) 같은 메시지를 띄우고 저장을 멈춥니다.",
+    "DUP",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:행 삭제 기능 미제공(사용여부 수정 안내)",
+  "screens": [
+   "SCP0078"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "삭제 버튼(F9)을 누르면 프레임워크 공통 검사(권한·수정모드)를 통과한 뒤 항상 \"[사용여부]를 수정 해 주세요\" 를 띄우고 아무것도 지우지 않습니다. VOC 는 행 삭제가 불가하고 사용여부 칸을 N 으로 바꿔 저장하는 방식으로만 숨길 수 있습니다. 메시지 ID 가 ",
+    "STATUS",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:허용 값(Y/N) 아님",
+  "screens": [
+   "SCP0098"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Category 가 비조업일 때 Input Value 가 Y·N 이 아니면 \"비조업은 Y 혹은 N 을 입력하시오.\" 를 띄우고 입력란으로 커서를 옮깁니다. 빈 값은 N 으로 보고 통과시키지만 실제 셀에는 빈 값이 기록됩니다(L3831, L4048 등 strValue 사",
+    "FORMAT",
+    ""
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:허용 범위(1~9) 밖 값",
+  "screens": [
+   "SCP0049",
+   "SCP0201"
+  ],
+  "rows": 3,
+  "examples": [
+   [
+    "Line Assign(데이터 원천 SCM_ITEM_LINE_ASSIGN_M) 행에서 바뀐(빨간 글자) 기간 셀 값이 1~9 범위를 벗어나면 \"1~9 사이의 수를 입력하세요.\" 를 띄우고 해당 셀로 이동한 뒤 저장을 멈춥니다(Lane·Finish 컬럼은 제외).",
+    "RANGE",
+    "MSG00203"
+   ],
+   [
+    "New Model 팝업 저장 시 SAVE 체크된 행의 바뀐(빨간 글자) 기간 셀 값이 1~9 범위를 벗어나면 \"1~9 사이의 수를 입력하세요.\" 를 띄우고 해당 셀로 이동한 뒤 저장을 멈춥니다(Lane 컬럼 제외).",
+    "RANGE",
+    "MSG00203"
+   ],
+   [
+    "Line Assign 행에서 바꾼(빨간 글자) 월·일 우선순위 값이 1보다 작거나 9보다 크면 \"1~9 사이의 수를 입력하세요.\" 를 띄우고 그 셀로 이동한 뒤 저장을 멈춥니다. Lane·Finish 컬럼은 제외합니다.",
+    "RANGE",
+    "MSG00203"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:확정계획 삭제(Qty 0) Confirm 포함",
+  "screens": [
+   "SSP0200"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "저장 시 출하 상태 조회 결과 확정계획이 삭제된(수량 0) Confirm ID 가 있으면 \"확정계획이 삭제된(Qty:0) Confirm ID가 있습니다. 재 조회하여 최신정보 확인 후 다시 시도 바랍니다.\"를 띄우고 \"변경 실패\" 후 저장을 멈춥니다.",
+    "STATUS",
+    "MSG00249"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:확정계획 삭제됨(Qty 0)",
+  "screens": [
+   "SSP0029"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "확정계획이 삭제되어 수량이 0 이 된 Confirm ID 가 있으면 \"확정계획이 삭제된(Qty:0) Confirm ID가 있습니다. 재 조회하여 최신정보 확인 후 다시 시도 바랍니다.\" 를 띄우고 저장을 멈춥니다.",
+    "STATUS",
+    "MSG00249"
+   ]
+  ]
+ },
+ {
+  "t": "ui",
+  "item": "NEW:확정일(Confirm Day) 없음·형식 오류 시 무음 중단",
+  "screens": [
+   "SSP0022"
+  ],
+  "rows": 1,
+  "examples": [
+   [
+    "Confirm Day 가 비어 있거나(예: BOD 조회 결과 0건으로 채워지지 않음) 날짜로 해석되지 않으면 예외가 나서 메시지 없이 저장이 멈춥니다. 사용자는 이유를 알 수 없으므로 Material·From/To Site·Incoterms·Trans Mode 를 다시",
+    "EXISTS",
+    ""
+   ]
+  ]
+ }
+]

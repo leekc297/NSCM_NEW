@@ -1,0 +1,109 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-10-26T06:49:13.040Z",
+ "producer": "e2e-judge",
+ "id": "SCP0122",
+ "kind": "authcrud",
+ "round": 1,
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "1",
+   "class": "expectation",
+   "title": "[jaeuk.shin] 재조회 후 신규 행 존재",
+   "msg": "plan.json 에 keyColumns 가 없어서 crudCycle insert 모드가 마커를 0번 열(Division~Plan Group 범위)에 넣습니다. 이 범위는 AS-IS 에서 신규 행일 때 잠기는 범위라 마커가 들어가지 않고, 마커가 없는 행은 재조회에서 찾을 수 없습니다. AS-IS 는 ACTV_CD·ACTV_SEQ 가 PRE_* 값과 같으면 저장에서 빼고(신규 행은 둘 다 공란이므로 제외됨), TO-BE 도 필수 열(OPMZ_ACTV_SEQ/OPMZ_ACTV_NAME) 검증에서 막혀 저장 call-proc 이 0건입니다. 따라서 found=N 은 화면이나 DB 결함이 아니라 시험 입력이 잘못된 결과입니다.",
+   "repair_class": "c",
+   "evidence": [
+    {
+     "kind": "source",
+     "ref": "tools/E2E/lib/crud.ts:105",
+     "expect": "const targetCol = Math.max(keyCols.length ? headers.findIndex(h => h.toLowerCase() === keyCols[0].toLowerCase()) : 0, 0);",
+     "found_line": 105,
+     "verified": true,
+     "why": "확인 tools\\E2E\\lib\\crud.ts:105"
+    },
+    {
+     "kind": "source",
+     "ref": "tools/E2E/lib/crud.ts:116",
+     "expect": "await nscm.setCell(ri, targetCol, mark);",
+     "found_line": 116,
+     "verified": true,
+     "why": "확인 tools\\E2E\\lib\\crud.ts:116"
+    },
+    {
+     "kind": "source",
+     "ref": "tools/E2E/lib/crud.ts:123",
+     "expect": "out.found = (await findMark(mark)) >= 0;",
+     "found_line": 123,
+     "verified": true,
+     "why": "확인 tools\\E2E\\lib\\crud.ts:123"
+    },
+    {
+     "kind": "source",
+     "ref": "Doc/e2e/specs/SCP0122.authcrud.spec.ts:34",
+     "expect": "expect.soft(out.found, `[${acc.id}] 재조회 후 신규 행 존재`).toBeTruthy();",
+     "found_line": 34,
+     "verified": true,
+     "why": "확인 Doc\\e2e\\specs\\SCP0122.authcrud.spec.ts:34"
+    },
+    {
+     "kind": "source",
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0122_PlanActivityMgmt/SCP0122_PlanActivityMgmt.cs:381",
+     "expect": "siMain.LockRange(insCell, siMain.GetColumnIndex(DefColumns.DIVISION_ID), siMain.GetColumnIndex(DefColumns.OPMZ_PLAN_GR_NAME), true);",
+     "found_line": 381,
+     "verified": true,
+     "why": "확인 GSCM\\06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0122_PlanActivityMgmt\\SCP0122_PlanActivityMgmt.cs:381"
+    },
+    {
+     "kind": "source",
+     "ref": "GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0122_PlanActivityMgmt/SCP0122_PlanActivityMgmt.cs:429",
+     "expect": "if (action != CAppSetting.FlagD && actv_cd == pre_actv_cd && actv_seq == pre_actv_seq)",
+     "found_line": 429,
+     "verified": true,
+     "why": "확인 GSCM\\06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0122_PlanActivityMgmt\\SCP0122_PlanActivityMgmt.cs:429"
+    },
+    {
+     "kind": "source",
+     "ref": "nscm-fe/features/supply/src/pages/plan-activity-mgmt/PlanActivityMgmt.tsx:145",
+     "expect": "필수검증(useSaveWithValidation, INPUT_TP_CD=M: OPMZ_ACTV_SEQ/OPMZ_ACTV_NAME) 후 캐럿접기 저장.",
+     "found_line": 145,
+     "verified": true,
+     "why": "확인 nscm-fe\\features\\supply\\src\\pages\\plan-activity-mgmt\\PlanActivityMgmt.tsx:145"
+    }
+   ],
+   "grade": "hard",
+   "in_fail_list": true
+  }
+ ],
+ "repairClaim": {
+  "a": 0,
+  "b": 0,
+  "c": 1
+ },
+ "notes": "수선 기록의 (c) 판정은 맞다고 봅니다. 다만 수선 기록이 FE 근거로 든 'PlanActivityMgmt.tsx:156-165 + plan-activity-mgmt.util.ts:38-45 isUnchangedRow' 는 현재 소스에 없습니다. util.ts 의 38-45줄은 hasDuplicateNewRow 이고 isUnchangedRow 는 검색해도 나오지 않습니다. 현재 TO-BE 의 handleSave(PlanActivityMgmt.tsx:117-147)는 CRUD_TYPE 으로 고친 행을 모은 뒤 saveWithValidation 필수 검증을 거칩니다. 신규 행의 M 열이 공란이면 여기서 막혀 call-proc 이 나가지 않습니다. 경로는 다르지만 결과(saveCalls=0)와 판정 분류는 같습니다. 그리고 이 실행의 saved=Y 는 지금의 crud.ts:120(calls.length > 0 요구, 2026-10-22 주석)보다 앞선 헬퍼로 기록된 값으로 보입니다. sheet_columns.csv 는 검색 권한 오류로 열지 못해 메타 근거는 넣지 않았습니다. 이번 실패에서는 PKG_SCP0122 저장 경로가 실행되지 않았으므로 DB 쪽은 검증되지 않은 상태(PASS 아님)입니다.",
+ "evidence": [
+  {
+   "kind": "agent-judgment",
+   "ref": "claude -p 읽기 전용 독립 판정",
+   "verified": false,
+   "why": "AI 판단(근거 등급 soft)"
+  }
+ ],
+ "summary": {
+  "screen": 0,
+  "db": 0,
+  "expectation": 1,
+  "expectation_hard": 1,
+  "expectation_soft": 0,
+  "undetermined": 0,
+  "disagree": 0
+ },
+ "decision": {
+  "expectFix": [
+   "1"
+  ],
+  "human": [],
+  "retest": true
+ }
+}

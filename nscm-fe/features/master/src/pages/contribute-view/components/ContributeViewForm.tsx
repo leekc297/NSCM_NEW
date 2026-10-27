@@ -176,9 +176,8 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onOpenVersionPopup} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onOpenVersionPopup}
                       />
                     ),
                   }}

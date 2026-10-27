@@ -23,3 +23,14 @@
   min-height: 0;
   overflow: hidden;
 }
+
+// MEASURE 셀 배경(design 01 R18) — 그리드 formatItem 이 --sp-cell-bg 변수 + .sp-cell-bg 클래스로
+//   measure별 팔레트색을 넣는다. 선택된 셀엔 미적용(공통 selection 스타일이 그대로 이김) —
+//   DMF0045 ShipmentRequest.module.scss 와 동일 패턴.
+:global {
+  .wj-cell.sp-cell-bg:not(.wj-state-selected):not(.wj-state-multi-selected):not(
+      .wj-state-last-selected
+    ) {
+    background-color: var(--sp-cell-bg) !important;
+  }
+}

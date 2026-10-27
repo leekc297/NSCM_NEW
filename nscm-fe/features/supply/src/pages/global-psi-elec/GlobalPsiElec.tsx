@@ -1,18 +1,31 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ElecMaterialPopup } from 'features/supply/src/components';
+import { MaterialByDivisionModal, MeasureSelectModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
+import { IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { queryClient } from '@foundation/query-client';
 import { GridUtils, type EditTracker } from '@foundation/utils';
-import { MainTitle, SubTitle } from '@shared/components';
-import { useTabProcQuery } from '@shared/hooks';
+import { MainTitle, saveTitleSet, SubTitle } from '@shared/components';
+import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
+import {
+  GlobalPsiElecDrilldownModal,
+  type DrilldownParams,
+} from './components/GlobalPsiElecDrilldownModal';
 import { GlobalPsiElecForm } from './components/GlobalPsiElecForm';
 import { GlobalPsiElecGrid } from './components/GlobalPsiElecGrid';
-import { DRILLDOWN, MENU_ID, MSG, SHEETS } from './global-psi-elec.constants';
+import {
+  DRILLDOWN,
+  LBL,
+  MEASURE_SHEET_NAME,
+  MENU_ID,
+  MSG,
+  SHEETS,
+  TITLESET_MEASURE_TYPE,
+} from './global-psi-elec.constants';
 import type { GlobalPsiElecRow } from './global-psi-elec.types';
 import { useGlobalPsiElecStore } from './useGlobalPsiElecStore';
 
@@ -26,15 +39,21 @@ const s = (v: unknown): string =>
 //   편집모드 상태 신설 금지(convert-core §2.4, 근거는 __asis-mapping__ §5) — 순수조회, 권한은 조회영역 활성 여부로만.
 export const GlobalPsiElec = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const findMenuPath = useSessionStore(state => state.findMenuPath);
 
   const gridRef = useRef<FlexGrid>();
   const gridFilterRef = useRef<FlexGridFilter>();
   const editTrackerRef = useRef<EditTracker>();
 
-  // Model(Item) 팝업 — ElecMaterialPopup(선작성, AS-IS SCM0002_ItembyDivisionPopupEE = 전극 전용, 확인필요 #6 확정).
-  const [openModelPopup, setOpenModelPopup] = useState(false);
+  // Material 팝업 — 메1 MaterialByDivisionModal(COM0013, AS-IS SCM0002_MaterialByDivisionPopup).
+  //   사용자 지시 2026-10-14: 기존 ElecMaterialPopup → 메1 교체(자매 SCP0013/production-plan 동일 픽커).
+  const [openMaterialPopup, setOpenMaterialPopup] = useState(false);
+  // Measure 설정 팝업(사용자 지시 2026-10-15) — 자매 SCP0100 패턴. MEASURE_SELECT 버튼 권한 시 노출.
+  const [openMeasurePopup, setOpenMeasurePopup] = useState(false);
+  // Prod Plan (Engine) 드릴다운 → SCP0013 모달(사용자 지시 2026-10-15, AS-IS openSubMenu 파리티).
+  const [drilldownParams, setDrilldownParams] = useState<DrilldownParams | null>(null);
+
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
   const sc = useGlobalPsiElecStore(s => s.searchCondition);
   const set = useGlobalPsiElecStore(s => s.setSearchCondition);
@@ -45,6 +64,8 @@ export const GlobalPsiElec = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setOpenSearchArea = useGlobalPsiElecStore(s => s.setOpenSearchArea);
   const fetchStaticColumns = useGlobalPsiElecStore(s => s.fetchStaticColumns);
   const staticColumns = useGlobalPsiElecStore(s => s.staticColumns);
+  const staticMeasures = useGlobalPsiElecStore(s => s.staticMeasures);
+  const fetchStaticMeasures = useGlobalPsiElecStore(s => s.fetchStaticMeasures);
   const restoreSearchConditions = useGlobalPsiElecStore(s => s.restoreSearchConditions);
 
   // 메인 조회 — 명시 SEARCH 게이트(enabled=!!filters). 자동조회 금지(nscm-patterns §5-7).
@@ -86,12 +107,19 @@ export const GlobalPsiElec = ({ tabId, title }: PageProps<MENU_ID>) => {
     void restoreSearchConditions();
     clearFilters();
     void fetchStaticColumns();
+    void fetchStaticMeasures();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
   // 필수값 검증(design 02 §4) — Division*/Plan-date* + Period(from~to) 유효성. 미충족 시 조회 차단.
   const validateRequired = (): boolean => {
-    if (!sc.divisionId.trim() || !sc.planStartYyyymmdd.trim() || !sc.fromYyyymmdd.trim() || !sc.toYyyymmdd.trim()) {
+    if (
+      !sc.divisionId.trim() ||
+      !sc.planStartYyyymmdd.trim() ||
+      !sc.planType.trim() ||
+      !sc.fromYyyymmdd.trim() ||
+      !sc.toYyyymmdd.trim()
+    ) {
       void useMessageStore.getState().setAlert({
         type: 'alert',
         content: t(MSG.REQUIRE_CONDITION, '_Please enter the required fields.'),
@@ -122,9 +150,9 @@ export const GlobalPsiElec = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // 드릴다운(design 03 §3.1 buttonGuards 3중 가드 + hook #103) — MEASURE_NAME 열 & 현재행='Prod Plan (Engine)'
-  //   더블클릭 → SCP0013 이동. AS-IS 는 5조건(division/operationGroup='E'/plantSite=TO_SITE/itemId=ELEC_MODEL/
-  //   planDate)을 openSubMenu 로 전달하나, TO-BE MDI /view 네비게이션은 파라미터 포워딩 경로가 없어 화면만 연다
-  //   (확인필요 — 04_react-gap §확인필요, 자매 master-validation 네비게이션 선례 동일).
+  //   더블클릭 → SCP0013 모달 오픈(사용자 지시 2026-10-15, AS-IS openSubMenu 파리티). AS-IS 5조건을 현재행·조회조건
+  //   에서 수집해 모달 임베드 SCP0013 에 seeding 한다(cs L842~846): division=조회조건 / operationGroup='E' /
+  //   plantSite=현재행 TO_SITE / itemId=현재행 ELEC_MODEL / planDate=조회조건 Plan-date.
   const handleCellDblClick = (mouseEvent: MouseEvent) => {
     const g = gridRef.current;
     if (!g) return;
@@ -134,8 +162,61 @@ export const GlobalPsiElec = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (binding !== DRILLDOWN.TRIGGER_COLUMN) return; // 가드2 — MEASURE_NAME 열만
     const row = GridUtils.getRow(g, ht.row) as Record<string, unknown> | undefined;
     if (!row || s(row.MEASURE_NAME) !== DRILLDOWN.TRIGGER_MEASURE) return; // 가드3 — Prod Plan (Engine) 행만
-    if (!findMenuPath(DRILLDOWN.TARGET_MENU)) return; // 권한 있는 메뉴만
-    void navigate(`/view/${encodeURIComponent(DRILLDOWN.TARGET_MENU)}`);
+    if (!findMenuPath(DRILLDOWN.TARGET_MENU)) return; // SCP0013 메뉴 권한 없으면 미오픈(AS-IS openSubMenu 권한 동등)
+    setDrilldownParams({
+      divisionId: sc.divisionId,
+      plantSiteId: s(row.TO_SITE),
+      itemId: s(row.ELEC_MODEL),
+      nickName: s(row.NICK_NAME),
+      planStartYyyymmdd: sc.planStartYyyymmdd,
+    });
+  };
+
+  // SCP0013 드릴다운 모달 제목 — 메뉴 메타(findMenuPath 의 말단 = SCP0013)에서 해석해 페이지·브레드크럼과 동일
+  //   문자열(t(mnuMsgId, mnuDesc))로 맞춘다. 메뉴 미보유 계정은 핸들러 가드로 모달이 안 열리므로 폴백은 화면ID.
+  const drilldownTitle = useMemo(() => {
+    const path = findMenuPath(DRILLDOWN.TARGET_MENU);
+    const menu = path?.[path.length - 1];
+    return menu ? t(menu.mnuMsgId, menu.mnuDesc || DRILLDOWN.TARGET_MENU) : DRILLDOWN.TARGET_MENU;
+  }, [findMenuPath, t]);
+
+  // Measure 설정 커스텀버튼(사용자 지시 2026-10-15) — 자매 SCP0100 btnMeasure 동형. MNU_BTN MEASURE_SELECT 권한 시
+  //   icon-only 노출(표준 7버튼 밖 팝업이라 hotkey 공통집합과 별개). 클릭 → MeasureSelectModal.
+  const customButtons = hasButton('MEASURE_SELECT')
+    ? [
+        {
+          label: t(LBL.MEASURE, 'Measure'),
+          title: t(LBL.MEASURE, 'Measure'),
+          action: () => setOpenMeasurePopup(true),
+          iconComponent: <IcMeasureSelect />,
+          buttonLabel: '',
+        },
+      ]
+    : [];
+
+  // Measure 선택 저장 — titleSet 'M' 영구저장(sheetName='Global PSI Elec' 3점 일치). 저장 성공 시
+  //   ① measure 메타 refetch(팝업 재진입 복원) + ② 메인 쿼리 invalidate 로 그리드 즉시 재조회.
+  //   메인 SP(PKG_SCP0095)가 조회 시점에 SCM_MST_TITLESET_USER 를 읽어 USER_FLAG='Y' measure 만(+SUM) 반환하므로,
+  //   invalidate 없이는 다음 수동 Search 때까지 그리드가 안 바뀐다(자매 SCP0100 Column 저장과 동일 invalidate 패턴).
+  const handleMeasureApply = (codes: string[] | null) => {
+    const all = staticMeasures.map(m => m.colNm);
+    const selected = codes ?? all;
+    void saveTitleSet({
+      menuId: MENU_ID,
+      sheetName: MEASURE_SHEET_NAME,
+      columnType: TITLESET_MEASURE_TYPE,
+      rows: selected.map((name, i) => ({ name, sortOrderNo: i + 1 })),
+    }).then(ok => {
+      if (!ok) {
+        void useMessageStore
+          .getState()
+          .setAlert({ type: 'alert', content: t('MSG00618', '_An error occurred while saving.') });
+        return;
+      }
+      void fetchStaticMeasures();
+      // 활성 조회가 있으면 메인 SP 를 재실행 → 저장된 measure 선택이 그리드에 즉시 반영(조회 안 했으면 no-op).
+      void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+    });
   };
 
   return (
@@ -147,7 +228,7 @@ export const GlobalPsiElec = ({ tabId, title }: PageProps<MENU_ID>) => {
         toggleOpenSearchArea={setOpenSearchArea}
       />
 
-      <GlobalPsiElecForm onSearch={handleSearch} onModelSearch={() => setOpenModelPopup(true)} />
+      <GlobalPsiElecForm onSearch={handleSearch} onMaterialSearch={() => setOpenMaterialPopup(true)} />
 
       <SubTitle
         menuId={MENU_ID}
@@ -158,6 +239,7 @@ export const GlobalPsiElec = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
+        customButtons={customButtons}
       />
 
       <GlobalPsiElecGrid
@@ -171,13 +253,38 @@ export const GlobalPsiElec = ({ tabId, title }: PageProps<MENU_ID>) => {
         onCellDblClick={handleCellDblClick}
       />
 
-      {/* Model(Item) 팝업 — ElecMaterialPopup(전극 전용, division 81,82,40 내부 고정 = AS-IS SCM0002_...EE). 반환
-          ItemID → searchParams.itemId. 취소 시 기존값 유지(onSelect 미호출). division 은 표시용으로 현재값 전달. */}
-      <ElecMaterialPopup
-        open={openModelPopup}
-        onClose={() => setOpenModelPopup(false)}
-        onSelect={sel => set({ itemId: sel.itemId })}
-        params={{ divisionId: sc.divisionId, itemId: sc.itemId }}
+      {/* Material 팝업 — 메1 MaterialByDivisionModal(COM0013). 반환 ITEM_ID(csv) → searchCondition.itemId.
+          취소 시 기존값 유지(setSelectedValue 미호출). EE division 매핑(EE→81,82,40)은 모달 내부 처리.
+          preSearchParams = { divisionId, operationGroup(빈값), scpModuleType=화면ID, itemId(초기검색어) }. */}
+      <MaterialByDivisionModal
+        open={openMaterialPopup}
+        modalClose={() => setOpenMaterialPopup(false)}
+        setSelectedValue={items => set({ itemId: items })}
+        preSearchParams={{
+          divisionId: sc.divisionId,
+          operationGroup: '',
+          scpModuleType: MENU_ID,
+          itemId: sc.itemId,
+        }}
+      />
+
+      {/* Measure 설정 팝업 — 공용 MeasureSelectModal(자매 SCP0100 동형). titleSet 'M' 저장 후 measure 메타 refetch.
+          read-only 화면이라 visibleMeasures 로컬 상태 미보유 — null(전체 표시)로 진입, Default 는 defaultFlag 복원. */}
+      <MeasureSelectModal
+        open={openMeasurePopup}
+        modalClose={() => setOpenMeasurePopup(false)}
+        measures={staticMeasures}
+        visibleMeasures={null}
+        onApply={handleMeasureApply}
+      />
+
+      {/* Prod Plan (Engine) 드릴다운 — SCP0013(production-plan-line) 모달 임베드(AS-IS openSubMenu 파리티).
+          닫히면 임베드 언마운트(무거운 cascade 화면 — 열릴 때만 생성). 5조건 seeding 은 모달 내부 Seeder 가 담당. */}
+      <GlobalPsiElecDrilldownModal
+        open={!!drilldownParams}
+        onClose={() => setDrilldownParams(null)}
+        params={drilldownParams}
+        title={drilldownTitle}
       />
     </>
   );

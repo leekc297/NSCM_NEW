@@ -6,6 +6,7 @@ import {
   ADMIN_SHEET_NAME,
   MEASURE_SHEET_NAME,
   MENU_ID,
+  SAVE_DATE_ALIAS,
   SHEETS,
 } from './integration-psi.constants';
 import type { SearchCondition } from './integration-psi.types';
@@ -48,6 +49,8 @@ interface Action {
   reset: () => void;
   setSearchCondition: (p: Partial<SearchCondition>) => void;
   setDivision: (divisionId: string) => void;
+  // F10(Reset Condition) 화면 조회조건 값 초기화 — Division·filters(그리드)는 보존.
+  resetConditionValues: () => void;
   setFilter: () => void;
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
@@ -59,9 +62,15 @@ interface Action {
 
 // 개인화 조건 복원 역직렬화 키(SubTitle F6 저장은 배열=콤마join·불리언=String 평문화 — personalizeCondition).
 //   qtyYn = 체크박스(String(bool) → ==='true'). 그 외 조건(divisionId/nickName/cellItemId/itemId)은 문자열 → 그대로 patch.
-//   날짜 키(planStartYyyymmdd/from·toYyyymm)는 저장 측 EXCLUDED_DATE_PARAM(gridAction.ts)으로 저장 자체가
-//   제외 → 복원 응답에 없음(makeInitSearch 기본값 '' 유지). 배열(멀티셀렉트) 조건 없음 — divisionId 는 단일 콤보.
+//   날짜 키(planStartYyyymmdd/from·toYyyymm)는 공용 EXCLUDED_DATE_PARAM(gridAction.ts)이 저장에서 빼므로
+//   사용자 지시(2026-10-19)에 따라 별칭(...Ymd, SAVE_DATE_ALIAS)으로 저장/복원한다 — 아래 DATE_ALIAS_TO_FIELD 로
+//   별칭을 원래 키로 역매핑한 뒤 patch. 배열(멀티셀렉트) 조건 없음 — divisionId 는 단일 콤보.
 const RESTORE_BOOL_KEYS = new Set<string>(['qtyYn']);
+// F6 저장 시 날짜키는 별칭(...Ymd)으로 평문화돼 저장된다(IntegrationPsi savedParam, 공용 날짜 제외 정규식 회피).
+//   복원 측은 별칭→원래 키로 역매핑해 SearchCondition 에 되넣는다(SCP0031 Global PSI 선례 1:1).
+const DATE_ALIAS_TO_FIELD: Record<string, string> = Object.fromEntries(
+  Object.entries(SAVE_DATE_ALIAS).map(([field, alias]) => [alias, field])
+);
 // AS-IS ConditionNotUseList(design 02 §4.1 cs:InitControls) — cboPlanDate/cboPlanType 은 조회조건 저장/복원 제외.
 //   planStartYyyymmdd(cboPlanDate)는 날짜 키라 저장 측에서 이미 제외되고, planType(cboPlanType)은 비날짜라
 //   공용 저장 핸들러가 저장하므로 복원 측에서 명시 제외해 AS-IS 파리티를 맞춘다(cascade 하위 — 재진입 시 재도출).
@@ -128,6 +137,17 @@ export const useIntegrationPsiStore = createPersistedStoreWithTab<State & Action
           divisionId,
         };
         state.filters = {}; // 그리드 데이터 clear (design 02 §5.2 division 변경 = Grid 초기화)
+      }),
+    // F10(Reset Condition) 화면 조회조건 값 초기화 — 공용 SubTitle F10 은 2026-10-14 이후 서버 저장분만
+    //   지우고 화면 값은 건드리지 않는다(AS-IS 파리티). 사용자 지시(2026-10-19)로 이 화면은 F10 에 화면 값
+    //   초기화를 되살린다. **Division 을 포함한 전 조회조건을 초기값으로 되돌린다**(사용자 지시 2026-10-19 —
+    //   Division 조회조건도 초기화돼야 함). Division 은 cascade 최상위라 함께 그리드(filters)도 초기화한다
+    //   (Division 변경 = 그리드 초기화 규칙과 동일 — 조건만 리셋되고 그리드엔 이전 Division 데이터가 남는 불일치 방지).
+    //   초기화 후 divisionId='' → Form 의 Division 자동선택 effect 가 첫 Division 을, 이어 PlanDate/Period 를 재도출.
+    resetConditionValues: () =>
+      set(state => {
+        state.searchCondition = makeInitSearch();
+        state.filters = {};
       }),
     // 메인 GET 10-param 매핑 (design 02 §4.4 — SP IN 순번 주석). p_plan_type/p_seq "" 고정.
     setFilter: () => {
@@ -217,11 +237,13 @@ export const useIntegrationPsiStore = createPersistedStoreWithTab<State & Action
         const init = makeInitSearch();
         const patch: Record<string, unknown> = {};
         for (const { paramNm, paramCtn } of rows) {
-          if (!(paramNm in init)) continue; // SearchCondition 필드만 allowlist
-          if (RESTORE_SKIP_KEYS.has(paramNm)) continue; // AS-IS ConditionNotUseList 제외(planType)
+          // 날짜 별칭(...Ymd)은 원래 키(planStartYyyymmdd/from·toYyyymm)로 역매핑 후 적용. 그 외 키는 그대로.
+          const key = DATE_ALIAS_TO_FIELD[paramNm] ?? paramNm;
+          if (!(key in init)) continue; // SearchCondition 필드만 allowlist
+          if (RESTORE_SKIP_KEYS.has(key)) continue; // AS-IS ConditionNotUseList 제외(planType)
           const val = paramCtn ?? '';
-          if (RESTORE_BOOL_KEYS.has(paramNm)) patch[paramNm] = val === 'true';
-          else patch[paramNm] = val;
+          if (RESTORE_BOOL_KEYS.has(key)) patch[key] = val === 'true';
+          else patch[key] = val;
         }
         set(state => {
           state.searchCondition = { ...state.searchCondition, ...patch } as SearchCondition;

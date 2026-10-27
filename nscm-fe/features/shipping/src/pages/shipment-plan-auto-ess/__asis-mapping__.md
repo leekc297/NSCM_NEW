@@ -460,8 +460,10 @@
   OK → `saveTitleSet({ columnType: 'M' })` → `fetchStaticMeasures()`(MainGrid 의 `display` 게이트가
   따라간다) + `refetchMain`. 저장 proc `SCM0002_SET_TITLESET_POPUP` 의 DELETE 는 타입별이라
   (L91~95 `AND USER_INQUIRY_COLUMN_TYPE_CODE = P_COLUMN_TYPE`) 컬럼('C') 개인화는 보존된다.
-  모달을 화면 전용으로 둔 이유는 `modals/OrderDetailModal`·`modals/RequestorModal` 과 같다
-  (타 도메인 팝업 직접 import 금지 — 사용자 확정 2026-09-25).
+  MeasureSelectModal 을 화면 전용으로 둔 이유는 `modals/RequestorModal` 과 같다
+  (타 도메인 팝업 직접 import 금지 — 사용자 확정 2026-09-25). 주의: OrderDetailModal 은
+  2026-10-20 에 shipping 도메인 **공용** `features/shipping/src/components/order-detail-modal`
+  로 승격했다(같은 도메인 공용은 POP-01/02 허용 — 타 도메인 import 아님). SSP0060 과 공유한다.
 
 - **미해소(DB) — `PKG_SSP0021` 타이틀셋 타입 필터 부재**: `P_SSP0021_GET_...`(body L2004~2030)이
   `SCM_MST_TITLESET_USER` 를 `PROGRAM_ID`·`SHEET_NAME`·`USER_ID` 로만 읽고
@@ -507,7 +509,7 @@ SSP0060 에 있다는 이유만으로 옮긴 항목은 없다(SSP0060 커밋 `c5
 - **Drafting 3경로(NonSoNo/SoNo/NewNonSoNo) ERP IF 하위 SP 체인**: 미배포(goal.md ②) — 저장은 Confirm 경로만. convert-sp 후속.
 - **Hold stock / Hold stock Detail 편집**: AS-IS 임시 hold(표시전용), SAVE/Detail GET SP 미배포 — 표시전용 유지.
 - **CHANGE_REQ_NO 셀 팝업(SCM0002_ShipmentPlanRequestPopup)**: TO-BE 팝업 부재 — 미배선(확인필요). (ERP_SO_NO 는 아래에서 해소)
-- ~~**ERP_SO_NO(SSP0300 OrderDetail)**: TO-BE 팝업 부재 — 미배선~~ → **해소(2026-10-12)**. 조회 proc `P_SSP0300_GET_ORDER_DETAIL` 은 패키지가 아니라 **standalone PROCEDURE** 로 배포돼 있고(ALL_ARGUMENTS 4 IN + O_RC1 실측), `SCM_ADM_API_M` 에도 **화면 비종속 공용**으로 이미 등록돼 있다 — 종전 "부재" 는 패키지명으로만 찾아 생긴 오판이다. AS-IS cs L1591~1611(shtPlanDetail + ERP_SO_NO 셀 + 값 비공백 → `Form_Load(DIVISION_ID, ERP_SO_NO, CONFIRM_ID, ITEM_ID, "N")`)을 `components/modals/OrderDetailModal.tsx` 로 이식. 5번째 `electrode_yn` 은 상수 "N" 이고 TO-BE proc IN 은 4개라 보내지 않는다. **SO 없는 행은 공백이 아니라 `'-'`** 이므로(`PKG_SSP0021` L3880 `'-' AS ERP_SO_NO` 실측) 둘 다 거른다 — AS-IS 가드는 `""`·null 만 보지만 빈 팝업을 막기 위해 개선했다(자매 SSP0060 과 통일).
+- ~~**ERP_SO_NO(SSP0300 OrderDetail)**: TO-BE 팝업 부재 — 미배선~~ → **해소(2026-10-12)**. 조회 proc `P_SSP0300_GET_ORDER_DETAIL` 은 패키지가 아니라 **standalone PROCEDURE** 로 배포돼 있고(ALL_ARGUMENTS 4 IN + O_RC1 실측), `SCM_ADM_API_M` 에도 **화면 비종속 공용**으로 이미 등록돼 있다 — 종전 "부재" 는 패키지명으로만 찾아 생긴 오판이다. AS-IS cs L1591~1611(shtPlanDetail + ERP_SO_NO 셀 + 값 비공백 → `Form_Load(DIVISION_ID, ERP_SO_NO, CONFIRM_ID, ITEM_ID, "N")`)을 `features/shipping/src/components/order-detail-modal/OrderDetailModal.tsx`(공용, 2026-10-20 승격) 로 이식. 5번째 `electrode_yn` 은 상수 "N" 이고 TO-BE proc IN 은 4개라 보내지 않는다. **SO 없는 행은 공백이 아니라 `'-'`** 이므로(`PKG_SSP0021` L3880 `'-' AS ERP_SO_NO` 실측) 둘 다 거른다 — AS-IS 가드는 `""`·null 만 보지만 빈 팝업을 막기 위해 개선했다(자매 SSP0060 과 통일).
 - **Division/Company 콤보격차(design 02 §7-1)**: 후보콤보 대신 배포 GET SP 로 해소 — plan §0 B2 "전용 콤보 등록" 대비 방침 변경(04_react-gap §2, 사용자 확인 축).
 - **Requestor 콤보(`SSP0021_UserInfoList`)**: AS-IS UserInfoList SQL(SystemManager DB) 접근 불가 — 미등록(빈 목록). 메타 정비 대기.
 - **usrButton1**: dead/orphan 미이식.

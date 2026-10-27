@@ -7,6 +7,7 @@ import {
   type FlexGrid as FlexGridType,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import type { OrderDetailContext } from 'features/shipping/src/components';
 import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
 
 import type { ComboResponse, RawFlexGridColumnConfig } from '@foundation/models';
@@ -16,6 +17,7 @@ import { DataGrid, TabItem, TabWrapper } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
+import { attachDashDateFormat } from '../../../hooks/usePinDashDateFormat';
 import {
   ADMIN_SHEET_NAME,
   CELL_COMBO,
@@ -29,9 +31,12 @@ import {
 import { useShipmentPlanAutoEssStore } from '../useShipmentPlanAutoEssStore';
 import { createSameCellDblClickGuard } from '../utils/shipment-plan-auto-ess.dblClickGuard';
 import { DETAIL_SHEETS } from '../utils/shipment-plan-auto-ess.detailSheets';
-import { isDetailCellEditable } from '../utils/shipment-plan-auto-ess.editLock';
+import {
+  isDetailCellEditable,
+  isErpDoBlockedCell,
+} from '../utils/shipment-plan-auto-ess.editLock';
 
-import type { OrderDetailContext } from './modals/OrderDetailModal';
+import styles from './ShipmentPlanAutoEssDetailGrid.module.scss';
 
 interface Props {
   rowsBySheet: Partial<Record<SHEETS, WijmoRowItem[]>>;
@@ -44,11 +49,16 @@ interface Props {
   onItemCellSearch: (row: WijmoRowItem) => void; // ITEM_ID 더블클릭(신규행 한정)
   onProjectCellSearch: (row: WijmoRowItem) => void; // PROJECT_CODE 더블클릭(신규행 한정)
   onOrderDetail: (ctx: OrderDetailContext) => void; // ERP_SO_NO 더블클릭(SSP0300)
+  onConfirmDetail: (changeReqNo: string) => void; // CHANGE_REQ_NO 더블클릭(Request Info 팝업)
 }
 
 // 합계행 좌하단 라벨 — AS-IS `ColumnFooter.Cells[0,1].Value = "Sum"`(SSP0021_ShipmentPlan.cs L769).
 //   공용 setAggregationRow 기본값은 'Σ' 라 AS-IS 와 다르다. 자매 SSP0060(cs L803)과 같은 처방.
 const FOOTER_SUM_LABEL = 'Sum';
+
+// 가로 스크롤바 높이(px) — Sum 푸터를 바닥 고정할 때 이만큼 위로 올려 스크롤바 자리를 비운다.
+//   스크롤바가 안 떠 있을 땐 실측(offsetHeight-clientHeight)이 0 이라 이 표준값으로 예약한다(자매 SSP0060 동일).
+const HSCROLLBAR_HEIGHT = 17;
 
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
@@ -67,6 +77,7 @@ export const ShipmentPlanAutoEssDetailGrid = ({
   onItemCellSearch,
   onProjectCellSearch,
   onOrderDetail,
+  onConfirmDetail,
 }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -186,7 +197,9 @@ export const ShipmentPlanAutoEssDetailGrid = ({
         editableRef.current
       );
       e.cancel = !cellEditable;
-      if (!cellEditable && row && str(row.ERP_STATUS) === 'C' && editableRef.current) {
+      // ERP D/O 생성 행 편집차단 경고 — 편집 대상 셀(화이트리스트 + SHIPMENT_STATUS='C')에서만 띄운다.
+      //   SO_NO 등 읽기전용 셀 더블클릭(= OrderDetail 팝업 열기)에는 뜨지 않는다(과발동 제거, AS-IS 파리티).
+      if (!cellEditable && editableRef.current && isErpDoBlockedCell(SHEETS.PLAN_DETAIL, row, binding)) {
         void setAlert({
           type: 'alert',
           content: t(MSG.ERP_DO_BLOCK, {
@@ -222,6 +235,27 @@ export const ShipmentPlanAutoEssDetailGrid = ({
         'wj-cell-editable',
         isDetailCellEditable(SHEETS.PLAN_DETAIL, row, binding, editableRef.current)
       );
+      // 팝업 진입 어포던스 아이콘 — ERP_SO_NO(OrderDetail)·CHANGE_REQ_NO(ConfirmDetail) 는 읽기전용이라
+      //   공용 수정셀 아이콘 비대상(formatPopupIcon: isModalCtrl && isEditableCell)이므로 직접 그린다.
+      //   값 있는 셀만(ERP_SO_NO 는 '-' 플레이스홀더 제외). wijmo 셀 재활용이라 비대상은 반드시 원복.
+      const soNo = str(row?.ERP_SO_NO).trim();
+      const hasPopup =
+        binding === 'ERP_SO_NO'
+          ? soNo !== '' && soNo !== '-'
+          : binding === 'CHANGE_REQ_NO'
+            ? str(row?.CHANGE_REQ_NO).trim() !== ''
+            : false;
+      if (hasPopup) {
+        e.cell.style.paddingRight = '20px'; // OpenInNew 아이콘(right:5px, 16px) 자리
+        if (!e.cell.querySelector('.popup-icon')) {
+          const icon = document.createElement('span');
+          icon.className = `popup-icon ${styles.popupIcon}`;
+          e.cell.appendChild(icon);
+        }
+      } else if (e.cell.querySelector('.popup-icon')) {
+        e.cell.style.paddingRight = '';
+        e.cell.querySelector('.popup-icon')?.remove();
+      }
     };
     g.formatItem.addHandler(formatItemHandler);
 
@@ -285,8 +319,8 @@ export const ShipmentPlanAutoEssDetailGrid = ({
     g.pastedCell.addHandler(cellEditEndedHandler);
 
     // 더블클릭 — ITEM_ID·PROJECT_CODE(신규행 한정, 가드는 페이지 콜백에서 MSG00013) /
-    //   ERP_SO_NO(비공백 시 OrderDetail 팝업, SSP0300).
-    //   CHANGE_REQ_NO(SCM0002_ShipmentPlanRequestPopup) 팝업은 여전히 TO-BE 부재로 미배선이다.
+    //   ERP_SO_NO(비공백 시 OrderDetail 팝업, SSP0300) / CHANGE_REQ_NO(비공백 시 Request Info 팝업 —
+    //   공용 ConfirmDetailModal, SSP0060 팝업으로 커버. 2026-10-20 배선).
     //   가드: 직전 두 클릭이 **같은 셀**일 때만 더블클릭으로 인정한다(AS-IS FarPoint
     //   CellDoubleClick 등가). 셀을 바꿔 가며 연속 클릭하면 브라우저가 dblclick 을 두 셀의 최근접
     //   공통 조상(= hostElement)에 디스패치해 팝업이 임의로 열리던 것을 막는다
@@ -319,6 +353,13 @@ export const ShipmentPlanAutoEssDetailGrid = ({
           confirmId: str(row.CONFIRM_ID),
           itemId: str(row.ITEM_ID),
         });
+      } else if (binding === 'CHANGE_REQ_NO') {
+        // AS-IS cs L1856~1865: CHANGE_REQ_NO 셀 + 값 비공백이면 Request Info(Confirm Detail) 팝업.
+        //   SSP0021 은 AS-IS 가 SCM0002 공용 팝업을 썼지만, TO-BE 는 SSP0060 팝업(상위집합)으로 커버한다
+        //   (사용자 결정 2026-10-20). 조회 proc 은 SSP0021/confirmDetail 버튼매핑으로 등록(운영 메타).
+        const changeReqNo = str(row.CHANGE_REQ_NO).trim();
+        if (changeReqNo === '') return;
+        onConfirmDetail(changeReqNo);
       }
     };
     g.hostElement.addEventListener('dblclick', dblClickHandler);
@@ -375,8 +416,8 @@ export const ShipmentPlanAutoEssDetailGrid = ({
       const applyAggregates = () => {
         const sumSet = sumSetsRef.current.get(sheet);
         if (!sumSet) return;
-        // 합계행(= wijmo columnFooters GroupRow)은 공용 `useAggregationRow` prop 이 그리드 초기화
-        //   때 넣지만, 그 1회가 비어 있으면 Sum 행 자체가 안 보인다. 여기서 한 번 더 보장한다(no-op).
+        // 조회 전(데이터 0건)에도 Sum 합계행을 **항상** 바닥에 유지한다 — AS-IS InitSpreadFooterSum
+        //   파리티(사용자 지시 2026-10-20). 종전 "0건이면 숨김"(2026-10-16)을 되돌린다. 0건이면 합계는 0 표시.
         if (g.columnFooters.rows.length === 0) g.columnFooters.rows.push(new GroupRow());
         // 좌하단 'Sum' 라벨 — columnGroups 재대입으로 지워질 수 있어 레이아웃 갱신마다 되살린다.
         if (g.bottomLeftCells.getCellData(0, 0, false) !== FOOTER_SUM_LABEL) {
@@ -398,7 +439,15 @@ export const ShipmentPlanAutoEssDetailGrid = ({
         const scrollRoot = footerPanel?.parentElement;
         const footerHeight = g.columnFooters.height;
         if (!footerPanel || !scrollRoot || footerHeight <= 0) return;
-        const pinnedTop = scrollRoot.clientHeight - footerHeight;
+        // 가로 콘텐츠가 뷰포트보다 넓으면(가로 스크롤 필요) 바닥에 스크롤바 높이만큼 자리를 비운다 —
+        //   안 비우면 바닥 고정한 Sum 푸터가 가로 스크롤바를 덮어 스크롤이 사라진다(SSP0021 신고
+        //   2026-10-20 — planDetail Sum 추가 후 발생. 자매 SSP0060 과 동일 처방). 실측 스크롤바 높이
+        //   (0이면 숨은 상태)는 표준값 HSCROLLBAR_HEIGHT 로 폴백.
+        const hScrollReserve =
+          g.scrollSize.width > g.clientSize.width
+            ? scrollRoot.offsetHeight - scrollRoot.clientHeight || HSCROLLBAR_HEIGHT
+            : 0;
+        const pinnedTop = scrollRoot.clientHeight - footerHeight - hScrollReserve;
         if (pinnedTop <= footerPanel.offsetTop) return; // 내용이 더 길다 → 기본 위치 유지
         footerPanel.style.top = `${pinnedTop}px`;
         const bottomLeftPanel = g.bottomLeftCells.hostElement?.parentElement;
@@ -416,8 +465,21 @@ export const ShipmentPlanAutoEssDetailGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staticColumns, rowsBySheet, activeDetailSheet]);
 
-  // 읽기전용 6-sheet(Hold stock 포함) 는 isReadOnly — 편집 UI 미노출 (design 03 §1.4~1.10)
+  // 읽기전용 5-sheet(2~6탭) 는 isReadOnly — 편집 UI 미노출. PLAN_DETAIL(1탭)만 편집(화이트리스트).
+  //   2~6탭은 AS-IS 가 "수정 진입"만 되고 저장 SP 가 없어 실제 편집/저장 불가 → read-only(사용자 확인 2026-10-20,
+  //   2026-10-20 전컬럼 편집개방 롤백).
   const isReadOnlySheet = (sheet: SHEETS): boolean => sheet !== SHEETS.PLAN_DETAIL;
+
+  // 날짜 컬럼 형식을 조회값과 같은 대시(yyyy-MM-dd)로 고정 — 공용 getFormat 은 점 형식(yyyy.MM.dd)을 준다.
+  //   조회값은 문자열이라 대시로 보이지만, 달력으로 고친 셀은 Date 가 되어 점 형식으로 표시·커밋된다.
+  //   시트별 그리드가 여러 개라 단일 ref 훅 대신 전 시트에 한 번에 붙인다(SSP0015 Detail 과 같은 처방).
+  //   탭은 persist 로 전부 마운트되어 있어 비활성 탭도 함께 적용된다. 컬럼 재생성은 updatedLayout 이 따라간다.
+  useEffect(() => {
+    const cleanups = DETAIL_SHEETS.map(sheet => gridRefs[sheet]?.current)
+      .filter((g): g is FlexGridType => !!g)
+      .map(g => attachDashDateFormat(g));
+    return () => cleanups.forEach(fn => fn());
+  }, [gridRefs, staticColumns, activeDetailSheet]);
 
   return (
     <TabWrapper
@@ -439,9 +501,11 @@ export const ShipmentPlanAutoEssDetailGrid = ({
             //   자매 SSP0060 은 Detail 에 Cells 를 쓰지만 그 화면 AS-IS 는 병합 신호가 더 있다 —
             //   SSP0021 AS-IS 의 MergePolicy 는 `siMain` PSI 1건뿐(cs L624 실측)이라 여기는 None 유지.
             allowMerging={AllowMerging.None}
-            // AS-IS InitSpreadFooterSum(L730~819)이 Detail 전 시트에 ColumnFooter 를 켜고 'Sum' 행을
-            //   **조회 전부터** 보여준다 — 공용 합계행으로 동일 재현(자매 SSP0060 과 같은 축).
-            useAggregationRow
+            // 합계행은 **Sum 대상 구간이 있는 시트에만** 켠다(FOOTER_SUM_RANGE). 첫 탭 Shipment Plan
+            //   Detail 은 합산 컬럼이 없어 빈 Σ 헤더만 떠서 불필요하다는 사용자 요청(2026-10-16)으로 끈다.
+            //   구간이 있는 시트도 조회 전(데이터 0건)에는 숨긴다(위 applyAggregates). AS-IS 는 전 시트
+            //   0건에도 보였으나 그 동작을 뺀다.
+            useAggregationRow={!!FOOTER_SUM_RANGE[sheet]}
             gotFocus={() => setActiveGrid('detail')}
           />
         </TabItem>

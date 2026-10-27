@@ -10,4 +10,4 @@
  *       `pages/sales-plan/utils/sales-plan.comboContext.ts` quote()
  */
 export const q = (value: string | undefined): string =>
-  `'${(value && value.trim() !== '' ? value : 'ALL').replace(/'/g, "''")}'`;
+  `'${(value && value.trim() !== '' ? value : 'ALL').replace(/'/g, '\'\'')}'`;

@@ -1,0 +1,39 @@
+# [Harness] SSP0005 shipment-working-day — BLOCK 0 / WARN 37
+
+- WARN AC1 액션 대조표 미처리 149행: AC-04683230(상태 빈칸 CALL_EXT siMain.ActiveSheet.Columns.Get), AC-88c59c78(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-87f40917(상태 빈칸 RETURN return;), AC-90fa583e(상태 빈칸 RETURN return;), AC-89f27c0d(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-5a84c1ed(상태 빈칸 RETURN return;), AC-bd3c943f(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-740d6f0a(상태 빈칸 RETURN return;) … @Doc/asisfacts/screens/SSP0005/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 6행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-04683230(siMain.ActiveSheet.Columns.Get @SSP0005_ShipmentWorkingDay.cs:673), AC-3300fd73(spdMain.ActiveSheet.GetModelColumnFromVi @SSP0005_ShipmentWorkingDay.cs:742), AC-5042acab(spdMain.ActiveSheet.GetModelColumnFromVi @SSP0005_ShipmentWorkingDay.cs:743), AC-a8de86a0(row.SetAdded @SSP0005_ShipmentWorkingDay.cs:529), AC-2ff4b920(row.SetModified @SSP0005_ShipmentWorkingDay.cs:530), AC-483083d3(saveDS.GetChanges @SSP0005_ShipmentWorkingDay.cs:538) @Doc/asisfacts/screens/SSP0005/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SSP.SSP0005_GET_SHIPMENT_WORKING_DAY (SSP0005_GET_SHIPMENT_WORKING_DAY) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN (SCP0009_GET_SHEET_CALENDAR_3SPAN) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCM0001_GET_SCP_PERIOD (SCM0001_GET_SCP_PERIOD) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellDoubleClick → SpdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.TopChange → SpdMain_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDayWeek.SelectedIndexChanged → CboDayWeek_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnInput.Click → BtnInput_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → SpdMain_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdm.Changed → SpdMain_Changed 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 usrButton1 / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnInput / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDayWeek / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 drpPeriod / UsrDateRangePicker 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbDivision / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboInputValue / UsrComboBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboCompany / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN V01 As-is Validation 4건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- WARN VR2 MSG00719 — VALIDATION 취합 판정: 기타(ETC) — Input 버튼 SEQ1 AS-IS MSG00135 [메시지 불일치] — [메시지 불일치] 불일치 — "조회된 데이터가 없습니다."(조회 전) vs AS-IS "수정모드가 아니므로 입력할 수 없습니다." — 판정 조건 자체가 바뀜(co @shipment-working-day.constants.ts:120
+- WARN SC2 기준표가 BUTTON_AREA(조회조건 영역 → 버튼 영역) 로 정한 조회조건 'Day of the week' 가 Form 에 있음 — 기준표 반영 검토 @components/ShipmentWorkingDayForm.tsx:172
+- WARN SC2 기준표가 BUTTON_AREA(조회조건 영역 → 버튼 영역) 로 정한 조회조건 'Input Value' 가 Form 에 있음 — 기준표 반영 검토 @components/ShipmentWorkingDayForm.tsx:194
+- WARN SC2 기준표가 BUTTON_AREA(조회조건 영역 → 버튼 영역) 로 정한 조회조건 'Input' 가 Form 에 있음 — 기준표 반영 검토 @components/ShipmentWorkingDayForm.tsx:218
+- WARN BU1 조회영역 일괄 입력(기준표 Day of the week·Input Value·Input (SSP 970행~)) — SubTitle customButtons 에 Input 버튼 없음. hook #155: 조회영역에서 빼고 customButtons [{ label: t(LBL.INPUT, '_Input'), action: handleInputOpen }](편집 권한 게이트 · 조회 선행 가드) — 정본 SCP0096
+- WARN BU1 조회영역 일괄 입력(기준표 Day of the week·Input Value·Input (SSP 970행~)) — 입력 팝업 components/<Page>InputModal.tsx 없음. hook #155 정본 ShipmentWorkingDayOspInputModal(CustomDialog 520×280 modaless · FormItem · OK/Close · onConfirm boolean · EditTracker 경유 셀 기록)
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @ShipmentWorkingDay.tsx:143
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @utils/shipmentWorkingDaySave.ts:31
+- WARN R16 진입 Page 500 라인 > 400 — components/ 분리 (#9) @ShipmentWorkingDay.tsx
+- WARN B19 validation.md 4행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SSP0005/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0005/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0005/SSP0005_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0005/SSP0005_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: InitSpreadDateColumn:263 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpreadDateColumn / 263 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md

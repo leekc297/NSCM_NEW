@@ -22,17 +22,31 @@
 | **F4** | `filter` | `GridAction.toggleColumnFilter(grid, gridFilter)` | Filter(F4) | ⭐ **자동** (구현 0) |
 | **F5** | `search` | `alert('검색은 화면별로 구현하세요')` | Search(F5) | ⭐⭐ **화면 의무** |
 | **F6** | `condition` | `GridAction.personalizeCondition(menuId, searchParam).then(MSG00010)` | Condition(F6) | ⭐ **자동** (`searchParam` prop 의무) |
-| **F7** | `save` | `alert('저장은 화면별로 구현하세요')` | Save(F7) | ⭐⭐ **화면 의무** |
-| **F8** | `insert` | `GridAction.addRow(grid, {})` | Insert(F8) | ⭐ 자동 (default 값 주입 권장 — `{ DIVISION_ID: filters?.divisionId ?? '81' }` 등) |
-| **F9** | `delete` | `GridAction.removeRow(grid)` + 빈 선택 MSG00014 | Delete(F9) | ⭐ **자동** (구현 0) |
+| **F7** | `save` | **`false`(숨김)** — 2026-10-26 이전: no-op 노출 | Save(F7) | ⭐⭐ **화면 의무** — 저장 기능이 있을 때만 핸들러 |
+| **F8** | `insert` | **`false`(숨김)** — 2026-10-26 이전: `GridAction.addRow(grid, {})` | Insert(F8) | ⭐⭐ **화면 의무** — 행추가 기능이 있을 때만 핸들러(`GridAction.addRow(grid, {기본값})`) |
+| **F9** | `delete` | **`false`(숨김)** — 2026-10-26 이전: `GridAction.removeRow(grid)` + MSG00014 | Delete(F9) | ⭐⭐ **화면 의무** — 행삭제 기능이 있을 때만 핸들러(`GridAction.removeRow(grid)`) |
 | **F10** | `resetCondition` | confirm MSG00009 → `GridAction.resetPersonalizedCondition(menuId)` + storage reset → MSG00011 | Reset Condition(F10) | ⭐ **자동** (구현 0) |
 | (Hotkey 없음) | `excel` | `GridAction.excelDownload(grid, excelFileName, setProgress)` | (아이콘만) | ⭐ **자동** (`excelFileName` prop 의무) |
 | (Hotkey 없음) | `upload` | (default 없음) | (아이콘만) | 선택 (`upload: false` 또는 화면 구현) |
 
-### 1.1 자동 = 7 / 화면 의무 = 2 / 선택 = 2
+### 1.0 ⭐ 공통버튼 노출 룰 (TO-BE 확정 — 사용자 지시 2026-10-26, CR-070)
 
-- **자동 (7)**: `sort`/`filter`/`condition`/`resetCondition`/`delete`/`excel` + (default 값 미주입 시) `insert` — **화면이 아무것도 안 해도 작동**
-- **화면 의무 (2)**: `search` (F5) / `save` (F7) — default 가 alert 이므로 반드시 구현
+> **Insert(F8) / Delete(F9) / Save(F7) / Upload 는 "화면에 그 기능이 있고(핸들러 전달) × 사용자(선택 Division)에게 그 버튼 코드(INSERT/DELETE/SAVE/UPLOAD) 권한이 있을 때"만 보인다.**
+> AS-IS 는 기능이 없어도(override 본문 공백) 공통버튼을 일괄 노출했지만 TO-BE 는 **기능이 없으면 보이지 않는다** — 이 차이는 결함이 아니라 TO-BE 룰(정합검증 PASS).
+
+| 조건 | SubTitle 동작 | 구현 위치 |
+|---|---|---|
+| 화면이 `hotkeyConfig.insert/delete/save/upload` 에 **핸들러를 넘기지 않음**(`false`/키 생략) | 버튼·단축키 **숨김** (DefaultButtonActions F7/F8/F9 = `false`) | `SubTitle.tsx` DefaultButtonActions |
+| 핸들러를 넘겼지만 `useTabBtnPermissions(menuId, divisionId)` 결과에 그 **버튼 코드가 없음**(권한 응답 전 포함) | 버튼·단축키 **숨김** | `SubTitle.tsx` PERMISSION_BUTTON_CODE 게이트 |
+| 핸들러 + 권한 | 노출 | — |
+| **Division cascade** — 조회조건 `searchParam.divisionId` 가 단일 코드면 그 Division 의 단위권한(`SCM_ADM_USER_GR_UNIT_AUTH_MPG_M` UNIT_TP_CD='D') 그룹 기준으로 권한 재조회 → Division 선택이 바뀌면 노출도 바뀜. `ALL`/복수/없음 = 그룹 합집합 | `useTabBtnPermissions({ divisionId })` → `GET /admin/menu/{mnuId}/auth?divisionId=` → `PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV` | FE 훅 · BE MenuController · DB PKG |
+| AS-IS override 가 **NO-OP**(본문 공백) | `false` 로 적는다. `() => undefined`(무동작 핸들러 노출)는 **금지** — 하네스 `check.js` B08 역방향 검사 | 화면 hotkeyConfig |
+| 메타(`SCM_ADM_MNU_BTN_MPG_M`)에 INSERT/DELETE 코드가 없음 | 화면 코드를 SAVE 로 우회하지 말고 **메타를 등록**(권한은 같은 메뉴·시트 SAVE 권한 복사 — `_artifacts/_deploy_packages/COMMON_BTN_VISIBILITY_CLOUD_20261026/30_META`) | DB 메타 |
+
+### 1.1 자동 = 5 / 화면 의무 = 4 / 선택 = 2 (2026-10-26 개정)
+
+- **자동 (5)**: `sort`/`filter`/`condition`/`resetCondition`/`excel` — **화면이 아무것도 안 해도 작동**
+- **화면 의무 (4)**: `search` (F5) / `save` (F7) / `insert` (F8) / `delete` (F9) — default 가 `false`(숨김)이므로 **기능이 있는 화면만** 핸들러를 넘긴다(`GridAction.addRow`/`removeRow` 를 그대로 넘겨도 된다)
 - **선택 (2)**: `manual` / `upload` — 보통 `false` 로 비활성화
 
 ### 1.2 비활성화 vs 사용자 정의
@@ -63,11 +77,11 @@ const hotkeyConfig: HotkeyConfig = {
 
 | 값 | 버튼 표시 | 단축키 동작 |
 |---|---|---|
-| `() => void` | 표시 + onClick | 단축키 시 호출 |
+| `() => void` | 표시 + onClick (**단, insert/delete/save/upload 는 사용자·Division 버튼 권한이 있을 때만** — §1.0) | 단축키 시 호출 |
 | `false` | **비표시** | **무시** |
-| 생략 (`undefined`) | 표시 + DefaultButtonActions | 단축키 시 DefaultButtonActions |
+| 생략 (`undefined`) | sort/filter/condition/resetCondition/excel: 표시 + DefaultButtonActions · **save/insert/delete: 비표시**(2026-10-26 default `false`) | 전자는 DefaultButtonActions · 후자는 무시 |
 
-→ 화면에서 `manual: false` / `upload: false` 명시는 **비활성화** 의도. 생략은 default 동작 사용.
+→ 화면에서 `manual: false` / `upload: false` 명시는 **비활성화** 의도. 생략은 default 동작 사용(save/insert/delete 는 생략 = 숨김).
 
 ---
 

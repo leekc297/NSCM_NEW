@@ -29,7 +29,10 @@ import {
   MENU_ID,
   MSG,
   SHEETS,
+  TEMPLATE_BLANK_PLACEHOLDER,
   TEMPLATE_EXCEL_PREFIX,
+  UPLOAD_COLUMNS_DEFAULT,
+  UPLOAD_COLUMNS_DIV40,
   UPLOAD_FORM_ID,
   UPLOAD_HEADERS_DEFAULT,
   UPLOAD_HEADERS_DIV40,
@@ -67,6 +70,8 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // ⭐ 명시 조회 게이트 — persist 된 stale filters 자동 발사 차단 (DMF0014/0048 선례)
   const [hasSearched, setHasSearched] = useState(false);
+  // Excel Form 양식 조회 중 — 버튼 비활성(중복 클릭 방지 · 대기 표시). 양식 조회 SP 가 느렸던 기록이 있다.
+  const [templateLoading, setTemplateLoading] = useState(false);
 
   const [openPrjByDivisionModal, setOpenPrjByDivisionModal] = useState<boolean>(false);
   const [openModelByDivisionModal, setOpenModelByDivisionModal] = useState<boolean>(false);
@@ -198,11 +203,17 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   (DM.DMF0000_GET_COMMON_SPREAD_TITLE p_program_id='DMF0074')를 쓰고, Excel 버튼이 곧
   //   SimplexelService.ExportFpSpread(메인 Excel 버튼과 동일 export 경로)로 저장 = "템플릿 다운로드".
   //   그래서 정적 UPLOAD_COLUMNS_* 평탄 헤더로 별도 조립하지 않고, 메인 그리드(gridRef)를 그대로
-  //   GridAction.excelDownload 로 내보내되 그 순간만 데이터를 비운다.
+  //   GridAction.excelDownload 로 내보낸다.
+  //   [2026-10-16 갭 F-01] 그 순간 데이터를 비우던 것을 양식 조회(DMF0074 · template · SEARCH =
+  //   P_DMF0074_GET_METAL_LINK_TEMPLATE) 결과 행으로 채운다 — AS-IS 양식 창이 업로드 대상 조합을 채워 저장하던 것과 같다.
+  //   창은 띄우지 않는다(PI 106 「팝업 미호출, Excel Form 즉시 다운로드」 유지). 머리글은 지금의 2단 머리글 그대로다.
+  //   SP 의 측정값 자리표시 '-' 는 사용자가 채울 빈칸이라 업로드 칸에서는 비운다(값으로 올리면 검증에서 탈락 — 양식 창과 같은 규칙).
+  //   0건이면 MSG01015 만 알리고 내려받지 않는다 — "대상 데이터가 없다" 안내 뒤 빈 양식을 주면 어색하다(2026-10-16 사용자 의견).
   //   ⚠ 주의(잔존 격차) — SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT(DB 실측)는 여전히 평탄 토큰
   //   (Key_Ni/PeriodFr_Ni/...)이다. 이 2단 헤더 파일을 그대로 재업로드하면 메탈 42열이 BE 헤더명
   //   매핑에서 어긋날 수 있다(hook #135 §4) — 실제 재업로드 여부는 별도 검증 필요.
-  const handleExcelFormDownload = () => {
+  const handleExcelFormDownload = async () => {
+    if (templateLoading) return;
     if (!searchParams.divisionId) {
       void setAlert({
         type: 'alert',
@@ -213,16 +224,59 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     const grid = gridRef.current;
     if (!grid) return;
 
-    // 그리드 데이터만 순간적으로 비웠다 되돌린다 — excelDownload 내부에서 컬럼을 clear/rebuild 하는
-    //   기존 패턴과 동일 idiom(동기 구간에서 끝나 화면엔 보이지 않는다). 사용자가 걸어둔 정렬/필터는
-    //   itemsSource 교체로 끊기므로 캡처 후 복원한다.
+    let templateRows: Record<string, unknown>[] = [];
+    setTemplateLoading(true);
+    try {
+      const res = await apiClient.callProc(MENU_ID, SHEETS.TEMPLATE, 'SEARCH', {
+        divisionId: searchParams.divisionId,
+        sesUserId: useSessionStore.getState().session.userId ?? '',
+        mnuId: MENU_ID,
+      });
+      if (res.code !== '0') {
+        void setAlert({ type: 'alert', content: res.message ?? 'Excel Form search failed.' });
+        return;
+      }
+      templateRows = ((res.result as { o_rc1?: Record<string, unknown>[] })?.o_rc1 ?? []).slice();
+    } catch (error: unknown) {
+      void setAlert({
+        type: 'alert',
+        content: error instanceof Error ? error.message : 'Excel Form search failed.',
+      });
+      return;
+    } finally {
+      setTemplateLoading(false);
+    }
+
+    if (templateRows.length === 0) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.TEMPLATE_EMPTY, '_No template data to download.'),
+      });
+      return;
+    }
+    const uploadKeys = new Set(
+      (searchParams.divisionId === '40' ? UPLOAD_COLUMNS_DIV40 : UPLOAD_COLUMNS_DEFAULT).map(c => c.key)
+    );
+    const exportRows = templateRows.map(row =>
+      Object.fromEntries(
+        Object.entries(row).map(([key, value]) => [
+          key,
+          uploadKeys.has(key) && value === TEMPLATE_BLANK_PLACEHOLDER ? '' : value,
+        ])
+      )
+    );
+
+    // 그리드 데이터만 순간적으로 양식 행으로 바꿨다 되돌린다 — excelDownload 내부에서 컬럼을 clear/rebuild 하는
+    //   기존 패턴과 동일 idiom. 사용자가 걸어둔 정렬/필터는 itemsSource 교체로 끊기므로 캡처 후 복원한다.
+    //   필터는 내보내기 동안 풀어 둔다 — 걸려 있으면 양식 행 일부가 파일에서 빠진다.
     const originalItemsSource = grid.itemsSource;
     const sortSnapshot = captureGridSort(grid);
     const filterDefinition = captureGridFilter(gridFilterRef.current);
-    grid.itemsSource = [];
+    gridFilterRef.current?.clear();
+    grid.itemsSource = exportRows;
     // 헤더 셀 전 방향 테두리 + 배경 #E7E6E6(Excel "밝은회색 배경2" 표준 테마색) + 비볼드 —
     //   사용자 확정 2026-09-14, Excel Form 전용(공용 excelDownload 는 기본값 무변화).
-    void GridAction.excelDownload(
+    await GridAction.excelDownload(
       grid,
       TEMPLATE_EXCEL_PREFIX,
       useUIStore.getState().setProgress,
@@ -251,7 +305,8 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
               label: t('LBL00762', 'Excel Form'),
               // 팝업 방식(원본)은 아래처럼 열었다 — 참고용으로 남겨둔다.
               // setOpenTemplateModal(true);
-              action: handleExcelFormDownload,
+              action: () => void handleExcelFormDownload(),
+              disabled: templateLoading,
               // ⭐ Excel Download 아이콘 leading (FileExcelIcon 은 런타임 미표시 — 사용자 확인 2026-07-10 원복)
               // iconComponent: <FileExceldownloadIcon />,
               iconPosition: 'leading' as const,
@@ -259,7 +314,7 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           ]
         : undefined,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [searchParams.divisionId, hasButton, t]
+    [searchParams.divisionId, hasButton, t, templateLoading]
   );
 
   return (
@@ -325,7 +380,9 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           salesSite: searchParams.salesSite || 'ALL',
           projectCode: searchParams.project,
           itemId: searchParams.modelNickname,
-          activeFlag: 'Y',
+          // activeFlag 는 보내지 않는다 — 조회조건 팝업은 사용 중지 모델까지 전체(PI 211 조회조건 기준).
+          //   AS-IS 도 품목 팝업을 사용중지 구분값 빈 값(전체)으로 열었다. 'Y' 를 보내면 P_MDMACTIVE_SW 가
+          //   ACTIVE_FLAG = 'Y' 로 걸러 사용 중지 모델의 가격을 고를 수 없었다(갭분석 F-07 재검증, 2026-10-19).
         }}
         callFromCell={false}
       />

@@ -102,7 +102,12 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
   const findMark = async (m: string) => { const n = await rowsLoc().count(); for (let i = 0; i < n; i++) if ((await rowsLoc().nth(i).innerText().catch(() => '')).includes(m)) return i; return -1; };
   const headers = await nscm.gridHeaders(0);
   const keyCols: string[] = plan.keyColumns || [];
-  const targetCol = Math.max(keyCols.length ? headers.findIndex(h => h.toLowerCase() === keyCols[0].toLowerCase()) : 0, 0);
+  // 마커 컬럼: plan.keyColumns → 없으면 Remark/Comment/Desc 류 텍스트 컬럼 → 없으면 메타상 편집 가능한 첫 컬럼 → 0
+  //   (2026-10-26 SCP0007: 0번 컬럼 DIVISION_ID 가 Division 단일 조회 시 신규행에서 자동세팅+잠금이라 더블클릭이 5초 타임아웃 — 허위 FAIL)
+  const metaCols = await nscm.gridColumnsMeta(0);
+  const remarkCol = headers.findIndex(h => /remark|comment|desc|memo|비고/i.test(h));
+  const firstEditable = metaCols ? metaCols.findIndex(m => !m.readOnly) : -1;
+  const targetCol = Math.max(keyCols.length ? headers.findIndex(h => h.toLowerCase() === keyCols[0].toLowerCase()) : remarkCol >= 0 ? remarkCol : firstEditable, 0);
   try {
     const before = await rowsLoc().count();
     await nscm.subButton('Insert').click();
@@ -116,8 +121,9 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
       await nscm.setCell(ri, targetCol, mark);
       for (const kc of keyCols.slice(1)) { const ci = headers.findIndex(h => h.toLowerCase() === kc.toLowerCase()); if (ci >= 0) await nscm.setCell(ri, ci, mark); }
       const s1 = await nscm.save();
-      out.saved = !ERR.test(s1.message || '') && s1.calls.every(c => c.status < 400);
-      if (!out.saved) out.saveErrors.push(`SAVE: ${s1.message || s1.calls.map(c => `${c.btn} HTTP ${c.status}`).join(',')}`);
+      // 2026-10-22: 저장 call-proc 0건(화면이 '변경 없음' 으로 저장을 건너뜀)은 저장 성공이 아니다 — edit-save 모드와 같은 기준(SCP0122 saved=Y 오판)
+      out.saved = !ERR.test(s1.message || '') && s1.calls.every(c => c.status < 400) && s1.calls.length > 0;
+      if (!out.saved) out.saveErrors.push(`SAVE: ${s1.message || (s1.calls.length ? s1.calls.map(c => `${c.btn} HTTP ${c.status}`).join(',') : 'SAVE call-proc 없음')}`);
       await nscm.search();
       out.found = (await findMark(mark)) >= 0;
       // U

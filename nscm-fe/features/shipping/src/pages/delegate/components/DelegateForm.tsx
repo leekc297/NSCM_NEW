@@ -21,7 +21,8 @@ interface Props {
   onSave: () => void; // 위임 저장 (btnSave)
   onUnset: () => void; // 위임 해제 (btnUnSet)
   onDelegateeSearch: () => void; // UserInfoPopup(SsoUserModal) 오픈
-  showActions: boolean; // 권한(SAVE/UnSet) 보유 시 버튼 렌더 — 버튼그룹 폭 고정 위해 두 시트 모두 렌더
+  canSave: boolean; // AUTH-01 — hasButton('SAVE') 판정. 권한 없으면 Save 버튼을 그리지 않는다
+  canUnset: boolean; // AUTH-01 — hasButton('UNSET') 판정. 권한 없으면 UnSet 버튼을 그리지 않는다
   actionsActive: boolean; // R1/R2 — Delegate 시트에서만 활성. 그 외 시트는 visibility:hidden 로 자리만 유지
   disabled: boolean; // R3 — Division 무권한(EE 제외 0건) 시 헤더 폼 전체 disable
   divisionOptions: DivisionOption[];
@@ -43,7 +44,8 @@ export const DelegateForm = ({
   onSave,
   onUnset,
   onDelegateeSearch,
-  showActions,
+  canSave,
+  canUnset,
   actionsActive,
   disabled,
   divisionOptions,
@@ -57,32 +59,36 @@ export const DelegateForm = ({
 
   return (
     <SearchArea
-      searchButtonLabel={t(LBL.SEARCH, '_Search')}
+      searchButtonLabel={t(LBL.SEARCH, 'Search(F5)')}
       isHidden={!openSearchArea}
       onSearch={onSearch}
       extraButtons={
-        showActions ? (
+        canSave || canUnset ? (
           // 권한이 있으면 두 시트 모두에서 렌더해 버튼그룹 폭을 고정한다. Delegate 시트가 아니면
           //   visibility:hidden 으로 자리만 남기고 비활성(disabled) — 시트 전환 시 조회영역 폭 반동 방지.
           <div
             className={`${styles.actionButtons}${actionsActive ? '' : ` ${styles.actionButtonsHidden}`}`}
           >
-            <Button
-              appearance='contained'
-              priority='primary'
-              size='medium'
-              buttonLabel={t(LBL.SAVE, '_Save')}
-              disabled={disabled || !actionsActive}
-              onClick={onSave}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t(LBL.UNSET, '_UnSet')}
-              disabled={disabled || !actionsActive}
-              onClick={onUnset}
-            />
+            {canSave && (
+              <Button
+                appearance='contained'
+                priority='primary'
+                size='medium'
+                buttonLabel={t(LBL.SAVE, 'Save')}
+                disabled={disabled || !actionsActive}
+                onClick={onSave}
+              />
+            )}
+            {canUnset && (
+              <Button
+                appearance='outlined'
+                priority='normal'
+                size='medium'
+                buttonLabel={t(LBL.UNSET, 'UnSet')}
+                disabled={disabled || !actionsActive}
+                onClick={onUnset}
+              />
+            )}
           </div>
         ) : undefined
       }
@@ -92,7 +98,7 @@ export const DelegateForm = ({
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.DELEGATEE, '_Delegatee')}
+              label={t(LBL.DELEGATEE, 'Delegatee')}
               labelAlign='right'
               required
               render={() => (
@@ -125,7 +131,7 @@ export const DelegateForm = ({
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.DIVISION, '_Div')}
+              label={t(LBL.DIVISION, 'Div.')}
               labelAlign='right'
               required
               render={() => (
@@ -162,7 +168,7 @@ export const DelegateForm = ({
           <Grid size={4}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.PERIOD, '_Period')}
+              label={t(LBL.PERIOD, 'Period')}
               labelAlign='right'
               required
               render={() => (

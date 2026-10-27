@@ -17,6 +17,8 @@ interface Props {
   tabId: string;
   onSearch: () => void;
   onItemSearch: () => void; // btnItemId (1차 Model 팝업)
+  // 상단 조회 dirty 가드를 Main 그리드 단위로 좁히는 키(사용자 지시 2026-10-20). SearchArea 로 그대로 전달.
+  searchDirtyKey?: string;
 }
 
 interface Option {
@@ -84,7 +86,7 @@ const toOptions = (
 //   3단(extraConditions — hook #52 2단 초과 접기): Sum / Tot PSI 체크박스
 //   Division/Company = 전용 SP 2-cursor(P_SSP0060_GET_SHIPMENT_DIVISION — 콤보 레지스트리 아님, 02 §2-A),
 //   Company 는 O_RC2 를 선택 Division 으로 클라 필터(AS-IS LINQ L528-531 등가 — SP 결과에 DIVISION_ID 포함 실측).
-export const ShipmentPlanForm = ({ tabId, onSearch, onItemSearch }: Props) => {
+export const ShipmentPlanForm = ({ tabId, onSearch, onItemSearch, searchDirtyKey }: Props) => {
   const { t } = useTranslation();
   const session = useSessionStore(s => s.session);
 
@@ -215,6 +217,7 @@ export const ShipmentPlanForm = ({ tabId, onSearch, onItemSearch }: Props) => {
       searchButtonLabel={t(LBL.SEARCH, '_Search')}
       isHidden={!openSearchArea}
       onSearch={onSearch}
+      searchDirtyKey={searchDirtyKey}
       conditions={
         <>
           {/* Division* — 단일선택, 자동선택 없음(사용자 직접 선택 후 cascade 시작 — 02 §4.3) */}
@@ -409,20 +412,9 @@ export const ShipmentPlanForm = ({ tabId, onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* Tot PSI — chkTotPSI (SEQ<12/21 행 필터 + 재조회 트리거, 03 §2.3). LBL 신규(05_register.sql) */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.TOT_PSI, '_Tot PSI')}
-              labelAlign='right'
-              render={() => (
-                <Checkbox
-                  checked={sc.chkTotPsi}
-                  onChange={checked => set({ chkTotPsi: checked })}
-                />
-              )}
-            />
-          </Grid>
+          {/* Tot PSI(chkTotPSI)는 그리지 않는다 — AS-IS 디자이너가 숨김이다(SSP0060_ShipmentPlan.Designer.cs
+              L649 `chkTotPSI.Visible = false`, 런타임에 다시 보이게 하는 코드 없음). 종전엔 노출돼 있었다(결함 E2).
+              상태값 sc.chkTotPsi 는 기본값 그대로 남겨 조회 파라미터·행 필터 동작은 AS-IS 숨김 상태와 같다. */}
         </>
       }
     />

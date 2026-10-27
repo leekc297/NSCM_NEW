@@ -1,0 +1,6 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0124,SQL,SCP0124_GET_PLAN_GROUP_DASHBOARD,Doc\asisfacts\db\modules\dbo.SCP0124_GET_PLAN_GROUP_DASHBOARD.sql,86,if object_id('tempdb..#opmz_last_actv_cd') is not null drop table #opmz_last_actv_cd;,CASE,", row_number()  OVER (PARTITION BY a.PLAN_START_YYYYMMDD, a.OPMZ_PRS_CD, a.OPMZ_PLAN_GR_ID  ORDER BY CASE WHEN ISNULL(b.OPMZ_ACTV_RUN_STAT_CD, '') = '' THEN 'N' ELSE 'Y' END desc , a.OPMZ_ACTV_SEQ desc, b.LAST_UPDATE_DATE desc) AS rn",3,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SCP0124,SQL,SCP0121_GET_SEARCH_INFO,Doc\asisfacts\db\modules\dbo.SCP0121_GET_SEARCH_INFO.sql,124,,"SEQ,DIVISION_ID,CODE","ORDER BY SEQ, division_id, CODE",0,정적
+SCP0124,SQL,SCP0121_GET_SEARCH_INFO,Doc\asisfacts\db\modules\dbo.SCP0121_GET_SEARCH_INFO.sql,188,,"SEQ,DIVISION_ID,CODE","ORDER BY SEQ, division_id, CODE",0,정적
+SCP0124,SQL,SCP0121_GET_SEARCH_INFO,Doc\asisfacts\db\modules\dbo.SCP0121_GET_SEARCH_INFO.sql,200,,OPMZ_PLAN_GR_NAME,ORDER BY OPMZ_PLAN_GR_NAME,0,정적
+SCP0124,SQL,SCP0121_GET_SEARCH_INFO,Doc\asisfacts\db\modules\dbo.SCP0121_GET_SEARCH_INFO.sql,230,,"SEQ,DIVISION_ID,CODE","ORDER BY SEQ, division_id, CODE",0,정적

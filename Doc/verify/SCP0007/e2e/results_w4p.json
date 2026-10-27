@@ -1,0 +1,148 @@
+{
+  "config": {
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0007/e2e/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.49.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_trace.spec.ts",
+      "file": "_trace.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "검증엔진 SCP0007 @trace",
+          "file": "_trace.spec.ts",
+          "line": 72,
+          "column": 6,
+          "specs": [
+            {
+              "title": "W4d 잔여 판정필요 실측",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 290786,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T09:46:16.824Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-f34fa4853c38a6931ea9",
+              "file": "_trace.spec.ts",
+              "line": 1269,
+              "column": 7
+            },
+            {
+              "title": "W9 대조표 미구현 행 실측",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 74683,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T09:51:08.435Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-31969eb0ae61135cb93a",
+              "file": "_trace.spec.ts",
+              "line": 1595,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T09:46:13.545Z",
+    "duration": 371329.663,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

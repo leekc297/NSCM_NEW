@@ -61,13 +61,34 @@ export const isDetailCellEditable = (
   canEdit: boolean
 ): boolean => {
   if (!row) return false;
-  if (sheet !== SHEETS.PLAN_DETAIL) return false; // Hold stock 등 나머지 전면 잠금
+  // 시트 2~6(Stock Location/oWMS/MES Stock/MES Stock Detail/Shipment Result) — 전면 read-only.
+  //   AS-IS 는 Edit 시 SwitchLock 으로 셀이 노랗게 "수정 진입"은 되나 **저장 SP 가 없어 실제 편집/저장은
+  //   안 된다**(사용자 확인 2026-10-20). 2026-10-20 에 전컬럼 편집개방을 넣었다가 AS-IS 재확인 후 롤백한다.
+  if (sheet !== SHEETS.PLAN_DETAIL) return false;
   // 신규행 판정은 공통 CRUD_TYPE 전용(core §2.4 — 자체 행상태 필드 신설 금지)
   const isInsertedRow = str(row.CRUD_TYPE) === 'I';
   if (!PLAN_DETAIL_SET.has(binding)) return false;
   if (isInsertedRow) return true;
   if (!canEdit) return false;
   return str(row.SHIPMENT_STATUS) === 'C' && str(row.ERP_STATUS) !== 'C';
+};
+
+/**
+ * ERP D/O 편집차단 경고(MSG00189/MSG01401)를 띄울 셀인지 — "ERP_STATUS='C' 때문에만 막힌
+ * 편집 대상 셀"에서만 true. = Plan Detail 편집 화이트리스트 컬럼 + 기존 행 SHIPMENT_STATUS='C'
+ * + ERP_STATUS='C'. SO_NO 등 읽기전용 컬럼(화이트리스트 밖)과 신규행(ERP_STATUS 공백 강제)은
+ * 제외한다 — 읽기전용 셀 더블클릭(= OrderDetail 팝업 열기)에는 경고가 뜨지 않게 하기 위함.
+ *   AS-IS shtDetail_Change(cs L1064~1069)도 잠금해제 시트의 값 변경에만 MSG00189 를 띄운다.
+ *   자매 SSP0060 `shipment-plan.editLock.ts` 와 같은 판정이다.
+ */
+export const isErpDoBlockedCell = (
+  sheet: SHEETS,
+  row: Record<string, unknown> | undefined,
+  binding: string
+): boolean => {
+  if (!row || sheet !== SHEETS.PLAN_DETAIL) return false;
+  if (!PLAN_DETAIL_SET.has(binding)) return false;
+  return str(row.SHIPMENT_STATUS) === 'C' && str(row.ERP_STATUS) === 'C';
 };
 
 /**

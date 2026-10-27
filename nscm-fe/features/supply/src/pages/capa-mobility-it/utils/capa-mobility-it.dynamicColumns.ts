@@ -10,6 +10,9 @@ import type { CapaMobilityItRow } from '../capa-mobility-it.types';
 
 dayjs.extend(isoWeek);
 
+/** 월(M_) 컬럼의 소분류 헤더 — AS-IS strCapaDay_Header 리터럴(cs:83, SetSpreadColumn). */
+const CAPA_DAY_HEADER = 'Capa/일';
+
 /** 동적 pivot 기간 컬럼 종류 — PR_M_ 은 M_ 보다 먼저 판별해야 한다(접두 포함관계). */
 export type DynKind = 'PR' | 'M' | 'W' | 'D';
 
@@ -59,14 +62,14 @@ const metaOf = (binding: string, kind: DynKind): DynColMeta => {
       sort: Number(`${ym}21`),
     };
   }
-  // M / PR — 월 단위
+  // M / PR — 월 단위. M_ 소분류 헤더 = 'Capa/일'(AS-IS strCapaDay_Header), PR_M_ = 'PR'.
   const ym = binding.slice(kind === 'PR' ? 5 : 2, kind === 'PR' ? 11 : 8);
   return {
     binding,
     kind,
     large: `${ym.slice(0, 4)}-${ym.slice(4, 6)}`,
-    small: kind === 'PR' ? 'PR' : 'SUM',
-    leaf: kind === 'PR' ? 'PR' : 'SUM',
+    small: kind === 'PR' ? 'PR' : CAPA_DAY_HEADER,
+    leaf: kind === 'PR' ? 'PR' : CAPA_DAY_HEADER,
     sort: Number(`${ym}${kind === 'PR' ? '02' : '01'}`),
   };
 };
@@ -190,7 +193,12 @@ export class CapaHeaderMergeManager extends CustomMergeManager<CapaMobilityItRow
   }
 
   getMergedRange(panel: GridPanel, r: number, c: number): CellRange | null {
-    if (panel.cellType !== CellType.ColumnHeader) return super.getMergedRange(panel, r, c);
+    if (panel.cellType !== CellType.ColumnHeader) {
+      // PRODUCT_READY 는 동일 키(5축) 행끼리 Auto-Sync 로 값이 같아지지만 세로 병합하면 안 된다(셀 개별 유지).
+      //   공용 DataGrid 가 allowMerging=All 정적컬럼에 column.allowMerging=true 를 일괄 적용하므로 여기서 차단.
+      if (panel.cellType === CellType.Cell && panel.columns[c]?.binding === 'PRODUCT_READY') return null;
+      return super.getMergedRange(panel, r, c);
+    }
     const keys = this.getKeys();
     const bindingAt = (i: number): string => panel.columns[i]?.binding ?? '';
     const b = bindingAt(c);
@@ -221,14 +229,15 @@ export class CapaHeaderMergeManager extends CustomMergeManager<CapaMobilityItRow
   }
 }
 
-/** bucket → 표시할 동적 컬럼 종류 집합 (design 03 §2.3).
- *   Daily: D_(일)만. AS-IS Detail 체크 상태와 같다(월 M_ 는 숨김). Detail 체크박스는 삭제돼 상시 적용한다.
+/** bucket → 표시할 동적 컬럼 종류 집합 (design 03 §2.3, AS-IS SetLayout cs:3190~).
+ *   Daily(기본): 월 M_('Capa/일')만 표시. AS-IS Detail 미체크 기본값(D_=isDetail / M_=!isDetail,
+ *     chkDetail.InitValue='N') 재현 — Detail 체크박스는 미이식이라 기본(미체크=월) 상태로 고정(사용자 결정 2026-10-16).
  *   Weekly→W_ / Monthly→M_ (C2 기능적 해석, 스펙확정 대상).
- *   PR_M_ 은 항상 숨김(design: Daily 숨김, 그 외 미정 → 숨김 유지). */
+ *   D_·PR_M_ 은 숨김(Daily 미체크 기준). */
 export const visibleKinds = (bucketType: string): Set<DynKind> => {
   const b = (bucketType || 'DAILY').toUpperCase();
   if (b === 'WEEKLY') return new Set<DynKind>(['W']);
   if (b === 'MONTHLY') return new Set<DynKind>(['M']);
-  // DAILY
-  return new Set<DynKind>(['D']);
+  // DAILY — Detail 미체크 기본값 = 월(M_) 'Capa/일'.
+  return new Set<DynKind>(['M']);
 };

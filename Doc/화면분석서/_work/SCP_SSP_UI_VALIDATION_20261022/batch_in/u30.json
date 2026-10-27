@@ -1,0 +1,492 @@
+[
+ {
+  "screen": "SCP0096",
+  "title": "Shipment Working Day(OSP)",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.cs:852"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0096_Shipment_Working_Day_OSP/SCP0096_Shipment_Working_Day_OSP.Designer.cs:724"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/shipment-working-day-osp"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "394",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0096_Shipment_Working_Day_OSP\\SCP0096_Shipment_Working_Day_OSP.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0096_GET_SHIPMENT_WORKING_DAY_OSP",
+    "member": "FindData_Main",
+    "line": "457",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0096_Shipment_Working_Day_OSP\\SCP0096_Shipment_Working_Day_OSP.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "831",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0096_Shipment_Working_Day_OSP\\SCP0096_Shipment_Working_Day_OSP.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "394",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0096_Shipment_Working_Day_OSP\\SCP0096_Shipment_Working_Day_OSP.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0096_GET_SHIPMENT_WORKING_DAY_OSP",
+    "member": "FindData_Main",
+    "line": "457",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0096_Shipment_Working_Day_OSP\\SCP0096_Shipment_Working_Day_OSP.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP",
+    "member": "SaveData_Main",
+    "line": "608",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0096_Shipment_Working_Day_OSP\\SCP0096_Shipment_Working_Day_OSP.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "831",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0096_Shipment_Working_Day_OSP\\SCP0096_Shipment_Working_Day_OSP.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0096_GET_SHIPMENT_WORKING_DAY_OSP",
+   "SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP",
+    "sp": "SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 F 와 오류번호/메시지 반환",
+    "message": "ERROR_MESSAGE() 원문",
+    "on_fail": "INSERT scm_sys_log_batch 'ERROR'; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0097",
+  "title": "SCP BOM(Elec)",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0097_SCP_BOM_Elec/SCP0097_SCP_BOM_Elec.cs:594"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0097_SCP_BOM_Elec/SCP0097_SCP_BOM_Elec.Designer.cs:421"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/scp-bom-elec"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0097_GET_SCP_BOM_ELEC",
+    "member": "FindData_Main",
+    "line": "307",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0097_SCP_BOM_Elec\\SCP0097_SCP_BOM_Elec.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0097_SAVE_SCP_BOM_ELEC",
+    "member": "SaveData_Main",
+    "line": "401",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0097_SCP_BOM_Elec\\SCP0097_SCP_BOM_Elec.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0097_GET_SCP_BOM_ELEC",
+    "member": "FindData_Main",
+    "line": "307",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0097_SCP_BOM_Elec\\SCP0097_SCP_BOM_Elec.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0097_SAVE_SCP_BOM_ELEC",
+    "member": "SaveData_Main",
+    "line": "401",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0097_SCP_BOM_Elec\\SCP0097_SCP_BOM_Elec.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0097_GET_SCP_BOM_ELEC",
+   "SCP0097_SAVE_SCP_BOM_ELEC"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0097_SAVE_SCP_BOM_ELEC",
+    "sp": "SCP0097_SAVE_SCP_BOM_ELEC",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 후 F 와 [오류번호]메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch 'ERROR'; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0098",
+  "title": "CAPA (Mobility IT)",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0098_CAPAReprotSmall/POPUP/SCP0098_CopySelect_Popup.cs:146",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0098_CAPAReprotSmall/SCP0098_CAPAReprotSmall.cs:4201"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0098_CAPAReprotSmall/POPUP/SCP0098_CopySelect_Popup.Designer.cs:114",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0098_CAPAReprotSmall/SCP0098_CAPAReprotSmall.Designer.cs:1105"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/capa-mobility-it"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_GET_CAPA_MOBILITYIT",
+    "member": "FindData_Main",
+    "line": "702",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE",
+    "member": "SaveDataFull",
+    "line": "2219",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA",
+    "member": "SaveDataFull",
+    "line": "2275",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA_WORK",
+    "member": "SaveDataFull",
+    "line": "2332",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA",
+    "member": "SaveData_CAPA",
+    "line": "2764",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE",
+    "member": "SaveData_CAPA_PRODUCT_RATE",
+    "line": "2832",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE",
+    "member": "SaveData_CAPA_PRODUCT_RATE_OLD",
+    "line": "2900",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA_WORK",
+    "member": "SaveData_CAPA_WORK",
+    "line": "2969",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "3040",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+    "member": "GetLastRange",
+    "line": "3075",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "3095",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "3336",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM_SYS_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle2",
+    "line": "3363",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_COPY_MONTH_WEEK",
+    "member": "btnCopyData_Click",
+    "line": "3762",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_GET_CAPA_MOBILITYIT",
+    "member": "FindData_Main",
+    "line": "691",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE",
+    "member": "SaveDataFull",
+    "line": "2219",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA",
+    "member": "SaveDataFull",
+    "line": "2275",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA_WORK",
+    "member": "SaveDataFull",
+    "line": "2332",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA",
+    "member": "SaveData_CAPA",
+    "line": "2764",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE",
+    "member": "SaveData_CAPA_PRODUCT_RATE",
+    "line": "2832",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE",
+    "member": "SaveData_CAPA_PRODUCT_RATE_OLD",
+    "line": "2900",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0098_SAVE_SCP_CAPA_WORK",
+    "member": "SaveData_CAPA_WORK",
+    "line": "2969",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "3040",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+    "member": "GetLastRange",
+    "line": "3075",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "3095",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "3336",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM_SYS_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle2",
+    "line": "3363",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0098_CAPAReprotSmall\\SCP0098_CAPAReprotSmall.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCM_SYS_GET_SPREAD_TITLE",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0098_COPY_MONTH_WEEK",
+   "SCP0098_GET_CAPA_MOBILITYIT",
+   "SCP0098_SAVE_SCP_CAPA",
+   "SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE",
+   "SCP0098_SAVE_SCP_CAPA_WORK"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SCP0098_COPY_MONTH_WEEK",
+    "sp": "SCP0098_COPY_MONTH_WEEK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류번호/메시지 결과셋 반환",
+    "message": "ERROR_MESSAGE() 원문",
+    "on_fail": "INSERT scm_sys_log_batch 'ERROR'; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0098_SAVE_SCP_CAPA",
+    "sp": "SCP0098_SAVE_SCP_CAPA",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 메시지만 결과셋으로 반환",
+    "message": "ERROR_MESSAGE() 원문(result_code 없음)",
+    "on_fail": "select ERROR_MESSAGE(); INSERT scm_sys_log_batch 'ERROR'; IF @@TRANCOUNT > 0 COMMIT WORK"
+   },
+   {
+    "entry_sp": "SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE",
+    "sp": "SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 메시지만 반환",
+    "message": "ERROR_MESSAGE() 원문(result_code 없음)",
+    "on_fail": "select ERROR_MESSAGE(); INSERT scm_sys_log_batch 'ERROR'; IF @@TRANCOUNT > 0 COMMIT WORK"
+   },
+   {
+    "entry_sp": "SCP0098_SAVE_SCP_CAPA_WORK",
+    "sp": "SCP0098_SAVE_SCP_CAPA_WORK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 메시지만 반환",
+    "message": "ERROR_MESSAGE() 원문(result_code 없음)",
+    "on_fail": "select ERROR_MESSAGE(); INSERT scm_sys_log_batch 'ERROR'; IF @@TRANCOUNT > 0 COMMIT WORK"
+   }
+  ]
+ }
+]

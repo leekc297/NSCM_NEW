@@ -1,0 +1,27 @@
+// SCP0015 레이아웃 — AS-IS splitContainer1/2 상하 분할(design 01 §1) 대응
+.tableWrapper {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+}
+
+.splitBar {
+  flex: 0 0 5px; // AS-IS SplitterWidth=5(드래그 리사이즈 가능)
+}
+
+.engineSection {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.engineToolbarRow {
+  flex: 0 0 51px; // AS-IS splitContainer2.SplitterDistance=51(툴바 고정 높이)
+}
+
+.engineGrid {
+  flex: 1 1 auto;
+  min-height: 0;
+}

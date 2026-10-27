@@ -104,13 +104,13 @@ export const WaterfallShipmentPlanSemi = ({ tabId, title }: PageProps<MENU_ID>) 
     setFilters({ userId: session.userId });
   };
 
-  // 01_layout.md §2 트리거F~I — Delete/Save 순수 NO-OP(명시적 무동작, 키 생략·false 금지).
-  //   Insert/Upload/Manual 은 AS-IS 에 해당 컨트롤 자체가 없어(§1) false 유지.
+  // 01_layout.md §2 트리거F~I — Delete/Save 는 AS-IS 순수 NO-OP. TO-BE 룰(2026-10-26): 기능 없는 공통버튼은
+  //   노출하지 않는다 → false. Insert/Upload/Manual 은 AS-IS 에 해당 컨트롤 자체가 없어(§1) false 유지.
   const hotkeyConfig: HotkeyConfig = {
     search: handleSubmit,
     insert: false,
-    delete: () => undefined,
-    save: () => undefined,
+    delete: false,
+    save: false,
     upload: false,
     manual: false,
   };

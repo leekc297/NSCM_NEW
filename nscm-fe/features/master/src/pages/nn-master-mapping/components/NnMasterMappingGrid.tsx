@@ -20,6 +20,7 @@ import { LOOKUP, type MENU_ID, type SHEETS } from '../nn-master-mapping.constant
 import type { SearchCondition } from '../nn-master-mapping.types';
 import { useNnMasterMappingStore } from '../useNnMasterMappingStore';
 import { HierarchicalMergeManager } from '../utils/nn-master-mapping.merge';
+import { SEARCH_COMBO } from '../utils/searchCombos';
 
 interface NnMasterMappingGridProps {
   gridRef: MutableRefObject<FlexGrid<ResponseData<MENU_ID, SHEETS.MAIN>> | undefined>;
@@ -60,11 +61,21 @@ export const NnMasterMappingGrid = ({
   //   서버 재조회로는 걸러지지 않는다. AS-IS 와 동일하게 FE 에서 visible 을 가공한다.
   //   필수: col.visible 을 wijmo 인스턴스에 직접 세팅하면 DataGrid 가 매 렌더 컬럼을 재생성하며 리셋되므로
   //   staticColumns 소스의 visible 자체를 바꿔 재생성 뒤에도 유지되게 한다.
+  //   END_CUSTOMER 셀 콤보도 같은 분기다 — AS-IS InsertRow(cs567/572)는 40 이면 EndCustomerByDivision40
+  //   (프로젝트 코드 기준), 그 외는 UserEndCustomerByDivisionDeptAuth 를 쓴다. 메타는 한 행이라 사업부별로
+  //   나눌 수 없어(PK PROGRAM_ID·SHEET_NAME·COLUMN_NAME, 조회 SP 에 사업부 축 없음) 40 일 때만 FE 에서
+  //   콤보 ID 를 바꾼다. PARAM2(DIVISION_ID:divisionId)·PARAM10(D)은 그대로 둬 행 파라미터 경로를 유지한다.
+  //   40 콤보 본문에 @divisionId 가 없어 그 값은 무시된다. 비40 콤보는 메타(EndCustomerByDivisionDeptAuth,
+  //   _artifacts/_deploy_packages/DMF0072_END_CUSTOMER_DEPT_AUTH_20261016) 쪽에서 맞춘다 (2026-10-16).
   const staticColumns = useMemo(() => {
     if (searchCondition.divisionId !== '40') return rawStaticColumns;
-    return rawStaticColumns.map(col =>
-      col.colNm === 'PROJECT_CODE' ? { ...col, visible: false } : col
-    );
+    return rawStaticColumns.map(col => {
+      if (col.colNm === 'PROJECT_CODE') return { ...col, visible: false };
+      if (col.colNm === 'END_CUSTOMER') {
+        return { ...col, cellCboDataTp: SEARCH_COMBO.endCustomer40Requery };
+      }
+      return col;
+    });
   }, [rawStaticColumns, searchCondition.divisionId]);
 
   // COMPANY_ID 셀콤보 — AS-IS InsertRow cs:558 GetLookupValues("DM_EDI_COMPANY_LIST") 재현.
@@ -121,7 +132,8 @@ export const NnMasterMappingGrid = ({
     endCustomer: string;
     scmSiteId: string;
     projectCode: string;
-  }>({ endCustomer: '', scmSiteId: '', projectCode: '' });
+    itemId: string;
+  }>({ endCustomer: '', scmSiteId: '', projectCode: '', itemId: '' });
   const [openCustomerModal, setOpenCustomerModal] = useState(false);
   const [openProjectModal, setOpenProjectModal] = useState(false);
   const [openItemModal, setOpenItemModal] = useState(false);
@@ -280,6 +292,9 @@ export const NnMasterMappingGrid = ({
       endCustomer: (rowItem.END_CUSTOMER as string) || searchCondition.endCustomer,
       scmSiteId: (rowItem.SCM_SITE_ID as string) || '',
       projectCode: (rowItem.PROJECT_CODE as string) || '',
+      itemId: isMappingItem
+        ? (rowItem.MAPPING_ITEM_ID as string) || ''
+        : (rowItem.ITEM_ID as string) || '',
     });
 
     if (binding === 'SOLDTO_CODE' || binding === 'SHIPTO_CODE') {
@@ -319,7 +334,9 @@ export const NnMasterMappingGrid = ({
   };
 
   const handleItemSelect = (items: string) => {
-    if (clickedBinding) setRowCell(clickedBinding, items);
+    // 공용 Model 팝업은 여러 줄을 고르면 ITEM_ID 를 쉼표로 이어 보낸다. 이 셀은 Model 한 건만
+    //   받는 자리라 맨 위 행 하나만 쓴다 (DMF0005 와 같은 방식, 2026-10-14 사용자 요청).
+    if (clickedBinding) setRowCell(clickedBinding, items?.split(',')[0] ?? '');
     setOpenItemModal(false);
   };
 
@@ -369,7 +386,9 @@ export const NnMasterMappingGrid = ({
           endCustomer: clickedRowSeed.endCustomer,
           salesSite: clickedRowSeed.scmSiteId,
           projectCode: clickedRowSeed.projectCode,
-          itemId: '',
+          // 누른 칸(ITEM_ID / MAPPING_ITEM_ID)의 현재 Model 로 좁혀 연다 — 그리드 셀 Model 팝업 화면 간 통일
+          //   (2026-10-14 사용자 요청). 비어 있으면 종전대로 빈 값(전체 목록).
+          itemId: clickedRowSeed.itemId,
         }}
         callFromCell={true}
         headerTitle={

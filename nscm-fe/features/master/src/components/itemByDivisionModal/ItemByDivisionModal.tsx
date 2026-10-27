@@ -66,7 +66,12 @@ interface ItemByDivisionModalProps {
     // DMF0020 (2026-10-07) 신규 행 Currency 자동 채움 — AS-IS DMF0020 spdMain_CellClick 은 팝업의
     //   popItem.currency 를 묶음(메저) 4행 CURRENCY 에 넣었다(.cs L2735~2736). COM0008 응답(o_rc1)에
     //   CURRENCY 가 실려 있어 단건 선택일 때 그 값을 전달한다. additive → 미사용 호출부 회귀 없음.
-    currency?: string
+    currency?: string,
+    // DMF0003 (2026-10-22) 신규 행 Item Type 자동 채움 — AS-IS 는 popItem.ItemType(코드)을 ITEM_TYPE 칸에
+    //   넣었다. COM0008 응답(o_rc1)에 ITEM_TYPE 이 실려 있어 그 값을 전달한다. 4번째 itemType 자리에는
+    //   실제로 NICK_NAME 이 들어가고 기존 호출부가 그 순서에 기대고 있어 손대지 않고 맨 뒤에 따로 둔다.
+    //   additive → 미사용 호출부 회귀 없음.
+    itemTypeCode?: string
   ) => void;
   preSearchParams: ProcRequest<MODAL_ITEM_BY_DIVISION, MODAL_SHEET_ITEM_BY_DIVISION>;
   callFromCell: boolean;
@@ -372,7 +377,9 @@ export const ItemByDivisionModal = ({
       selections.length === 1 ? first?.SCM_SITE_ID : undefined,
       selections.length === 1 ? first?.PROJECT_CODE : undefined,
       // DMF0020 Currency 반환 — 단건 선택일 때만.
-      selections.length === 1 ? first?.CURRENCY : undefined
+      selections.length === 1 ? first?.CURRENCY : undefined,
+      // DMF0003 Item Type 코드 반환 — 단건 선택일 때만.
+      selections.length === 1 ? first?.ITEM_TYPE : undefined
     );
     modalClose();
   };
@@ -405,7 +412,9 @@ export const ItemByDivisionModal = ({
       dataItem.SCM_SITE_ID,
       dataItem.PROJECT_CODE,
       // DMF0020 Currency 반환.
-      dataItem.CURRENCY
+      dataItem.CURRENCY,
+      // DMF0003 Item Type 코드 반환.
+      dataItem.ITEM_TYPE
     );
     modalClose();
   };

@@ -29,8 +29,9 @@ export const validateFind = (
 ): ValidateResult => {
   if (!versionNo) return { ok: false, msgId: MSG.VERSION_REQUIRED };
   if (!periodFrom || !periodTo) return { ok: false, msgId: MSG.REQUIRED_FIELD, param: 'Period' };
+  // MSG01081 의 {0} 에는 형식이 틀린 값을 넣는다 (어느 칸이 틀렸는지 보이게).
   if (!isValidYm(periodFrom) || !isValidYm(periodTo))
-    return { ok: false, msgId: MSG.INVALID_DATE, param: '' };
+    return { ok: false, msgId: MSG.INVALID_DATE, param: !isValidYm(periodFrom) ? periodFrom : periodTo };
   if (periodFrom > periodTo) return { ok: false, msgId: MSG.PERIOD_ORDER };
   return OK;
 };
@@ -55,7 +56,8 @@ export const validateSaveRow = (row: DemandManagerRow): ValidateResult => {
   }
   if (intPart(approval) <= 0 || intPart(now) <= 0) return { ok: false, msgId: MSG.POSITIVE_INT };
 
-  if (!isValidYm(from) || !isValidYm(to)) return { ok: false, msgId: MSG.INVALID_DATE, param: '' };
+  if (!isValidYm(from) || !isValidYm(to))
+    return { ok: false, msgId: MSG.INVALID_DATE, param: !isValidYm(from) ? from : to };
   if (from > to) return { ok: false, msgId: MSG.PERIOD_ORDER };
   return OK;
 };

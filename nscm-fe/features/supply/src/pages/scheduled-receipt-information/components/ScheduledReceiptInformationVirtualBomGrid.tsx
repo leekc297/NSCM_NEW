@@ -1,21 +1,24 @@
 import { toggleClass } from '@mescius/wijmo';
 import {
   CellType,
+  DataMap,
   type CellRangeEventArgs,
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { MaterialByDivisionModal } from 'features/master/src/components';
-import { type MutableRefObject, useEffect, useRef, useState } from 'react';
+import { type MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { ComboResponse, RawFlexGridColumnConfig } from '@foundation/models';
 import { GridUtils, type EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
+import { useTabComboQueries } from '@shared/hooks';
 
-import { MENU_ID } from '../scheduled-receipt-information.constants';
+import { COMBO, MENU_ID } from '../scheduled-receipt-information.constants';
 import type { VirtualBomRow } from '../scheduled-receipt-information.types';
 import { isSheetCellEditable } from '../utils/scheduledReceiptInformationEditLock';
+import { pickSiteRowsForDivision } from '../utils/scheduledReceiptInformationSiteCascade';
 
 interface Props {
   gridRef: MutableRefObject<FlexGridType<VirtualBomRow> | undefined>;
@@ -57,6 +60,34 @@ export const ScheduledReceiptInformationVirtualBomGrid = ({
 }: Props) => {
   const dblClickRowRef = useRef<VirtualBomRow | undefined>(undefined);
   const [itemModalOpen, setItemModalOpen] = useState(false);
+
+  // Plant Site 셀 콤보 — EE 집계 사업부를 구성 사업부로 확장(EE→81/40/82, EE_xx→81_xx, AS-IS
+  //   RefreshSiteByDivision). 메타 attribute2='DIVISION_ID:DIVISION_ID' 단순일치로는 이 확장을 표현
+  //   못 해(공용 filterComboRowsByRowItem 은 정확일치 → EE 행이 0건) 화면이 직접 DataMap 을 만들어
+  //   덮는다(형제 SCP0129 demandExceptionSiteCascade 동형). PlantSiteSir 는 Form(검색조건 Site)과 같은
+  //   queryKey 라 react-query 가 조회를 1회로 합친다.
+  const [plantSitesAll] = useTabComboQueries({ filters: [COMBO.SITE] });
+  const plantSiteDataMap = useMemo(() => {
+    const rows = pickSiteRowsForDivision(plantSitesAll ?? [], divisionId);
+    return rows.length ? new DataMap(rows, 'CODE', 'NAME') : null;
+  }, [plantSitesAll, divisionId]);
+
+  // 공용 DataGrid 가 콤보 응답·컬럼 재생성마다 메타 dataMap(attribute2 행별 좁힘)으로 재대입하므로
+  //   updatedLayout 마다 EE-확장 DataMap 을 다시 붙인다(SCP0129/SCP0128 선례, wijmo columnGroups 대비).
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const apply = () => {
+      if (!plantSiteDataMap) return;
+      const col = g.getColumn('PLANT_SITE_ID');
+      if (col && col.dataMap !== plantSiteDataMap) col.dataMap = plantSiteDataMap;
+    };
+    g.updatedLayout.addHandler(apply);
+    apply();
+    return () => {
+      g.updatedLayout?.removeHandler(apply);
+    };
+  }, [gridRef, plantSiteDataMap]);
 
   useEffect(() => {
     const g = gridRef.current;

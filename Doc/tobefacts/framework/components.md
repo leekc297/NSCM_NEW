@@ -54,17 +54,17 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **PeriodField** | `features/master/src/components` | 60 | UsrDateRangePicker / UsrDateRangePicker3 / UsrDateRangePickerWtWeek / UsrMonthRangePicker / UsrDateRangePickerWtWeek2 / field:^(drp\|d\|mrp)Period\d*$\|^dCalendar$\|^drpDate$ |  |
+| **PeriodField** | `features/master/src/components` | 58 | UsrDateRangePicker / UsrDateRangePicker3 / UsrDateRangePickerWtWeek / UsrMonthRangePicker / UsrDateRangePickerWtWeek2 / field:^(drp\|d\|mrp)Period\d*$\|^dCalendar$\|^drpDate$ |  |
 | **ItemByDivisionModal** | `features/master/src/components` | 46 | button:^btn(Item\|Model\|Material)(Id)?$ |  |
-| **MaterialByDivisionModal** | `features/master/src/components` | 44 |  |  |
-| **MeasureSelectModal** | `features/master/src/components` | 29 | button:^btnMeasure$ |  |
+| **MaterialByDivisionModal** | `features/master/src/components` | 41 |  |  |
 | **ProjectByDivisionModal** | `features/master/src/components` | 29 | button:^btnProject$ |  |
+| **MeasureSelectModal** | `features/master/src/components` | 28 | button:^btnMeasure$ |  |
 | **ItemField** | `features/master/src/components` | 11 | field:^(txt\|usr)(Item\|ItemId\|Model\|ModelId\|Nickname\|Material\|MaterialId)$ / field:^(txt\|usr)NickName$ |  |
 | **ProjectField** | `features/master/src/components` | 11 | field:^(txt\|usr)Project(Code)?$ |  |
 | **OwnerField** | `features/master/src/components` | 9 | field:^(txt\|cbo\|usr)Owner$ |  |
 | **DivisionField** | `features/master/src/components` | 6 | field:^cboDivision$\|^cboDiv$ |  |
-| **ModelByDivisionPopup** | `features/master/src/components` | 6 |  |  |
 | **CustomerModal** | `features/master/src/components` | 5 | button:^btnCustomer$ |  |
+| **ModelByDivisionPopup** | `features/master/src/components` | 5 |  |  |
 | **SalesSiteField** | `features/master/src/components` | 5 | field:^clbSalesSite$\|^cboSalesSite$ | // 4. SalesSiteField (size=4, combo=SalesSite) // |
 | **ContributeVersionModal** | `features/master/src/components` | 4 |  |  |
 | **VersionField** | `features/master/src/components` | 4 | field:^cboVersion$\|^cboVer(sion)?No$ |  |
@@ -145,6 +145,21 @@ props/params:
 - `multiDivision?: boolean — Division 검색조건 멀티 표시 모드(옵션, default false). false 면 호출 화면의 단일 divisionId 를 disabled 로 고정 표시(AS-IS SCM0002 계약, 27개+ 화면 공용 기본값). true 면 호출 화면이 넘긴 콤마 결합 divisionId(`
 - `dialogSize?: number — 팝업 가로 폭(px, 옵션).`
 
+### ProjectByDivisionModal  <sub>features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx:48</sub>
+
+```ts
+({ open, modalClose, setSelectedValue, preSearchParams, callFromCell: _callFromCell, multiCheckbox, }: ProjectByDivisionModalProps): any
+```
+
+props/params:
+
+- `open: boolean`
+- `modalClose: () => void`
+- `setSelectedValue: (projects: string, projectsNames?: string, projectStatus?: string, bizTypeName?:`
+- `preSearchParams: ProcRequest<"COM0005", "projectByDivision">`
+- `callFromCell: boolean`
+- `multiCheckbox?: boolean`
+
 ### MeasureSelectModal  <sub>features/master/src/components/measureSelectModal/MeasureSelectModal.tsx:88</sub>
 
 ```ts
@@ -160,21 +175,6 @@ props/params:
 - `onApply: (measureCodes: string[]) => void — OK — 표시할 measure 코드 목록(전체 선택 시 null) 적용.`
 - `fallbackCodes?: readonly string[] — measures 0건(BE 미적재) 시 degrade 용 코드 목록. 미지정 시 빈 목록.`
 - `showMeasureCode?: boolean — Measure Code(colNm) 컬럼 노출 여부. 미지정(false) 이면 표시명만 노출. DMF0082 전용 — 통합테스트 1st No.40 "Measure Code, Measure Name만" 요구.`
-
-### ProjectByDivisionModal  <sub>features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx:48</sub>
-
-```ts
-({ open, modalClose, setSelectedValue, preSearchParams, callFromCell: _callFromCell, multiCheckbox, }: ProjectByDivisionModalProps): any
-```
-
-props/params:
-
-- `open: boolean`
-- `modalClose: () => void`
-- `setSelectedValue: (projects: string, projectsNames?: string, projectStatus?: string, bizTypeName?:`
-- `preSearchParams: ProcRequest<"COM0005", "projectByDivision">`
-- `callFromCell: boolean`
-- `multiCheckbox?: boolean`
 
 ### ItemField  <sub>features/master/src/components/searchFields/SearchFields.tsx:946</sub>
 
@@ -246,20 +246,6 @@ props/params:
 - `onChange: (v: string) => void`
 - `gridSize?: number`
 
-### ModelByDivisionPopup  <sub>features/master/src/components/modelByDivisionPopup/ModelByDivisionPopup.tsx:75</sub>
-
-```ts
-({ open, onClose, onSelect, params, multiSelect, }: ModelByDivisionPopupProps): any
-```
-
-props/params:
-
-- `open: boolean`
-- `onClose: () => void`
-- `onSelect?: (selected: ModelSelection) => void`
-- `params?: ModelByDivisionPopupParams`
-- `multiSelect?: boolean — 다중선택 opt-in (기본 false = 기존 단일선택). AS-IS `Form_Load` 첫 인자 bMultiSelect 자리다. true 면 체크박스 열이 생기고, OK 가 체크된 행들을 AS-IS 와 같은 규약으로 돌려준다 — `SetItem()`(SCM0002_ItembyDiv`
-
 ### CustomerModal  <sub>features/master/src/components/customerModal/CustomerModal.tsx:32</sub>
 
 ```ts
@@ -274,6 +260,20 @@ props/params:
 - `divisionId?: string`
 - `soldTo?: string`
 - `shipTo?: string`
+
+### ModelByDivisionPopup  <sub>features/master/src/components/modelByDivisionPopup/ModelByDivisionPopup.tsx:75</sub>
+
+```ts
+({ open, onClose, onSelect, params, multiSelect, }: ModelByDivisionPopupProps): any
+```
+
+props/params:
+
+- `open: boolean`
+- `onClose: () => void`
+- `onSelect?: (selected: ModelSelection) => void`
+- `params?: ModelByDivisionPopupParams`
+- `multiSelect?: boolean — 다중선택 opt-in (기본 false = 기존 단일선택). AS-IS `Form_Load` 첫 인자 bMultiSelect 자리다. true 면 체크박스 열이 생기고, OK 가 체크된 행들을 AS-IS 와 같은 규약으로 돌려준다 — `SetItem()`(SCM0002_ItembyDiv`
 
 ### SalesSiteField  <sub>features/master/src/components/searchFields/SearchFields.tsx:464</sub>
 
@@ -651,18 +651,18 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **DataGrid** | `@shared/components` | 262 | FpSpread |  |
-| **SearchArea** | `@shared/components` | 166 | UsrConditionPanel / button:^btn(Search\|Find\|Inquiry\|Retrieve)$ / button:^(FindButton\|btnQuery)$ |  |
-| **CustomDropdown** | `@shared/components` | 163 | UsrCombo / UsrComboBox / ComboBox / UsrCheckedList / UsrCheckedList2 / CheckedListBoxControl |  |
-| **MainTitle** | `@shared/components` | 136 |  |  |
-| **SubTitle** | `@shared/components` | 136 | button:^btnExcel(Down\|Download\|Export)?$ |  |
-| **CustomDialog** | `@shared/components` | 88 |  |  |
+| **DataGrid** | `@shared/components` | 257 | FpSpread |  |
+| **SearchArea** | `@shared/components` | 164 | UsrConditionPanel / button:^btn(Search\|Find\|Inquiry\|Retrieve)$ / button:^(FindButton\|btnQuery)$ |  |
+| **CustomDropdown** | `@shared/components` | 160 | UsrCombo / UsrComboBox / ComboBox / UsrCheckedList / UsrCheckedList2 / CheckedListBoxControl |  |
+| **MainTitle** | `@shared/components` | 134 |  |  |
+| **SubTitle** | `@shared/components` | 134 | button:^btnExcel(Down\|Download\|Export)?$ |  |
+| **CustomDialog** | `@shared/components` | 85 |  |  |
 | **ResultArea** | `@shared/components` | 48 |  |  |
-| **TabItem** | `@shared/components` | 28 | TabPage |  |
-| **TabWrapper** | `@shared/components` | 28 | TabControl |  |
 | **ColumnLayoutModal** | `@shared/components` | 26 | button:^btnColumn$ |  |
-| **PeriodRangePicker** | `@shared/components` | 17 |  |  |
-| **SsoUserModal** | `@shared/components` | 11 |  |  |
+| **TabItem** | `@shared/components` | 26 | TabPage |  |
+| **TabWrapper** | `@shared/components` | 26 | TabControl |  |
+| **PeriodRangePicker** | `@shared/components` | 16 |  |  |
+| **SsoUserModal** | `@shared/components` | 10 |  |  |
 | **ColumnSelectDualList** | `@shared/components` | 3 |  |  |
 | **MessageModal** | `@shared/components` | 2 |  |  |
 | **Alert** | `@shared/components` | 1 |  |  |
@@ -767,6 +767,28 @@ props/params:
 - `className?: string`
 - `style?: CSSProperties`
 
+### ColumnLayoutModal  <sub>packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx:94</sub>
+
+```ts
+({ open, modalClose, menuId, sheetName, columnType, divisionId, fallbackColumns, initialSettings, defaultSettings, onSave, title, leftTitle, rightTitle, }: Props): any
+```
+
+props/params:
+
+- `open: boolean`
+- `modalClose: () => void`
+- `menuId: string`
+- `sheetName: string`
+- `columnType?: string`
+- `divisionId?: string`
+- `fallbackColumns?: ColumnSettingFallback[]`
+- `initialSettings?: ColumnLayoutRow[] — 재진입 시 이전 저장 상태 복원 (visible+width+color+order)`
+- `defaultSettings?: ColumnLayoutRow[]`
+- `onSave: (settings: ColumnLayoutRow[]) => void — OK 시 전체 컬럼 반환 — 우측(USER_FLAG='Y')이 표시 순서대로 앞에 온다.`
+- `title?: string`
+- `leftTitle?: string — dual list 좌측 상단 라벨 (예: 'Invisible')`
+- `rightTitle?: string — dual list 우측 상단 라벨 (예: 'Visible')`
+
 ### TabItem  <sub>packages/shared/src/components/molecules/tab/Tab.tsx:97</sub>
 
 ```ts
@@ -795,28 +817,6 @@ props/params:
 - `children: any`
 - `activeTabIndex?: number`
 - `setActiveTabIndex?: (index: number) => void`
-
-### ColumnLayoutModal  <sub>packages/shared/src/components/templates/modals/column-layout-modal/ColumnLayoutModal.tsx:94</sub>
-
-```ts
-({ open, modalClose, menuId, sheetName, columnType, divisionId, fallbackColumns, initialSettings, defaultSettings, onSave, title, leftTitle, rightTitle, }: Props): any
-```
-
-props/params:
-
-- `open: boolean`
-- `modalClose: () => void`
-- `menuId: string`
-- `sheetName: string`
-- `columnType?: string`
-- `divisionId?: string`
-- `fallbackColumns?: ColumnSettingFallback[]`
-- `initialSettings?: ColumnLayoutRow[] — 재진입 시 이전 저장 상태 복원 (visible+width+color+order)`
-- `defaultSettings?: ColumnLayoutRow[]`
-- `onSave: (settings: ColumnLayoutRow[]) => void — OK 시 전체 컬럼 반환 — 우측(USER_FLAG='Y')이 표시 순서대로 앞에 온다.`
-- `title?: string`
-- `leftTitle?: string — dual list 좌측 상단 라벨 (예: 'Invisible')`
-- `rightTitle?: string — dual list 우측 상단 라벨 (예: 'Visible')`
 
 ### PeriodRangePicker  <sub>packages/shared/src/components/molecules/periodRangePicker/PeriodRangePicker.tsx:252</sub>
 

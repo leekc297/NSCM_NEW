@@ -8,9 +8,11 @@ export const LBL = {
   SEARCH_MODAL: 'LBL00664', // 'Search' — 모달 내부 SearchArea
   DIVISION: 'LBL00001', // 'Div.'
   PLANT_SITE: 'LBL00005', // 'Plant Site'
+  FROM_SITE: 'LBL00022', // 'From Site' — 팝업 조회조건(FromSiteByAssembly, ora.py 실측 KO/EN/CN)
   MATERIAL: 'LBL00021', // 'Material'
   NICK_NAME: 'LBL00767', // 'Nick Name'
   MODEL: 'LBL00669', // 'Model'
+  MODEL_NICKNAME: 'LBL00618', // 'Model/Nickname' (Model+NickName 합친 단일 조회조건 — 사용자 지시 2026-10-22, SSP0024 동일)
   NO: 'LBL00674', // 'No'
   ITEM_BY_DIVISION: 'LBL00343', // 'Item Popup'
   OK: 'LBL00716', // 'OK'
@@ -58,6 +60,10 @@ export const COMBO = {
   DIVISION: 'MyDivision',
   PLANT_SITE: 'PlantCell',
   VALID: 'YesOrNo',
+  // 팝업 From Site 조회조건 (AS-IS SSP0025_ItembyDivisionPopup clbFromSiteId, cs:206 FromSiteByAssembly).
+  //   ora.py 실측: SCM_ADM_CMBO_SQL_M SQL_ID='FromSiteByAssembly' USE_YN='Y', lookup ELECTRODE_SHIP_FROM_TO.
+  //   바인드 @segment5=to-division(=division) / @attribute1=to-site code(=plantSite). 반환 CODE/NAME/DIVISION_ID.
+  FROM_SITE: 'FromSiteByAssembly',
 } as const;
 
 // 기존행(조회행) 편집 가능 칸 (design 03 §3 R3): User/Part/Team(더블클릭 팝업) + VALID_YN(콤보).
@@ -91,7 +97,9 @@ export const REQUIRED_COLUMNS: readonly string[] = [
 // ITEM_ID = 셀 더블클릭 팝업 전용(키입력/인라인 편집 차단, design 03 §3 R12). 신규행 + PlantSite 있을 때만.
 export const ITEM_POPUP_COLUMN = 'ITEM_ID';
 
-// User/Part/Team = 더블클릭 UserInfoPopup(SsoUserModal) 전용 이미지셀 (design 03 §3 R16~R18). ID만 대입.
+// User/Part/Team = 더블클릭 UserInfoPopup(SsoUserModal)으로 ID 대입 (design 03 §3 R16~R18).
+//   AS-IS 는 돋보기 배경이미지가 붙은 TextCellType(cs:162~164)이라 키인도 가능 → 메타 FPTextModal,
+//   editLock isInlineEditable 이 키인 허용(더블클릭은 팝업). "이미지셀=팝업전용"이 아님.
 export const USER_POPUP_COLUMNS = ['USER_ID', 'PART_LEADER', 'TEAM_LEADER'] as const;
 
 // 이미지셀 팝업 컬럼 -> 짝 이름 컬럼. AS-IS UserInfoPopup 은 ID만 SetValue(*_NAME 미세팅, design 03 §3.1/§6-C3).

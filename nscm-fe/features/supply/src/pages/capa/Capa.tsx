@@ -9,7 +9,13 @@ import type { PageProps } from '@foundation/models';
 import type { HotkeyConfig } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
-import { ColumnLayoutModal, MainTitle, saveTitleSet, SubTitle } from '@shared/components';
+import {
+  ColumnLayoutModal,
+  MainTitle,
+  saveTitleSet,
+  SubTitle,
+  toColumnLayoutSettings,
+} from '@shared/components';
 import {
   useSaveWithValidation,
   useTabBtnPermissions,
@@ -23,9 +29,11 @@ import {
   ADMIN_SHEET_NAME,
   COMBO,
   DAY_RANGE_MONTH_PARAM,
+  FP_INSTANCE_ENDPOINT,
   LBL,
   MENU_ID,
   MSG,
+  MY_AUTH_LIST_ENDPOINTS,
   SHEETS,
   TITLESET_COLUMN_TYPE,
   VERSION_CURRENT,
@@ -36,7 +44,13 @@ import { CapaForm } from './components/CapaForm';
 import { CapaGrid } from './components/CapaGrid';
 import { VersionInfoModal } from './components/modals/VersionInfoModal';
 import { useCapaStore } from './useCapaStore';
-import type { EditContext } from './utils/capa.editLock';
+import {
+  buildPlannerAuth,
+  type EditContext,
+  type FpInstanceRow,
+  type MyAuthRow,
+  type PlannerAuth,
+} from './utils/capa.editLock';
 import { buildSaveElems, buildSavePayload, validateSave } from './utils/capa.save';
 
 /**
@@ -96,6 +110,41 @@ export const Capa = ({ tabId, title }: PageProps<MENU_ID>) => {
     },
     [setVersionOptions]
   );
+
+  // 승인 Planner 판정 원천(AS-IS LoadAuthority cs:563-656) — 내 승인 권한 목록 · FP 인스턴스 · 메인 공정 목록.
+  //   화면 진입 때 1회 조회. 실패(403 등)면 빈 배열 → 갈래 ① 만 남는다(AS-IS bPartAuthority=false 와 같다).
+  const [myAuthList, setMyAuthList] = useState<MyAuthRow[]>([]);
+  const [fpInstanceRows, setFpInstanceRows] = useState<FpInstanceRow[]>([]);
+  const [operGroupRows] = useTabComboQueries({ filters: [COMBO.OPER_GROUP_BY_CAPA] });
+  useEffect(() => {
+    const sesUserId = useSessionStore.getState().session.userId ?? '';
+    if (!sesUserId) return;
+    void (async () => {
+      for (const url of MY_AUTH_LIST_ENDPOINTS) {
+        try {
+          const res = await apiClient.post<{ o_rc?: MyAuthRow[] }>(url, { sesUserId });
+          setMyAuthList(res.data?.result?.o_rc ?? []);
+          return;
+        } catch {
+          // 다음 경로로(SYS0011 시트 권한이 없는 그룹은 403).
+        }
+      }
+      setMyAuthList([]);
+    })();
+    void (async () => {
+      try {
+        const res = await apiClient.post<{ o_rc?: FpInstanceRow[] }>(FP_INSTANCE_ENDPOINT, {
+          sysType: 'SELECT',
+          sysFlag: 'SELECT_MAIN',
+          sesUserId,
+          altUserId: sesUserId,
+        });
+        setFpInstanceRows(res.data?.result?.o_rc ?? []);
+      } catch {
+        setFpInstanceRows([]);
+      }
+    })();
+  }, [tabId]);
 
   // Division 콤보(기본선택용) — Form 과 동일 캐시 공유. 첫 항목(81) 기본선택(02 §2 #1·§4).
   const [divisionRows] = useTabComboQueries({ filters: [COMBO.DIVISION] });
@@ -323,27 +372,43 @@ export const Capa = ({ tabId, title }: PageProps<MENU_ID>) => {
   const isCurrentVersion = searchParams.versionId === VERSION_CURRENT;
   const canSave = hasButton('SAVE');
 
+  // 승인 Planner 판정 — 조회에 쓴 Division 기준(AS-IS FindData_Main 끝 PlannerTypeLogic(pDivisionId), cs:2083).
+  const searchedDivisionId = filters?.divisionId ?? '';
+  const planner = useMemo<PlannerAuth>(
+    () =>
+      buildPlannerAuth(
+        myAuthList,
+        fpInstanceRows,
+        useSessionStore.getState().session.groups ?? [],
+        (operGroupRows ?? []).map(r => String(r.CODE ?? '')),
+        searchedDivisionId
+      ),
+    [myAuthList, fpInstanceRows, operGroupRows, searchedDivisionId]
+  );
+
   const editContext = useMemo<EditContext>(
     () => ({
       isCurrentVersion,
       userId: useSessionStore.getState().session.userId ?? '',
-      groupId: useSessionStore.getState().session.groupId ?? '',
+      groups: useSessionStore.getState().session.groups ?? [],
+      planner,
       // LANE_QTY 후보 수 — AS-IS dtLaneQtyOfLineAssign.Select(7키)(cs:585-598)와 같은 값이다.
       //   공용 DataGrid 가 컬럼 메타(ATTRIBUTE2 7키)로 행별 좁힌 후보를 dataMap 에 싣는다. 콤보 미도착이면 0(잠금).
       laneQtyCandidateCountOf: (row: CapaRow) =>
         gridRef.current?.getColumn('LANE_QTY')?.dataMap?.getDisplayValues(row).length ?? 0,
     }),
-    [isCurrentVersion]
+    [isCurrentVersion, planner]
   );
 
-  // INSERT/DELETE = 명시적 무동작(R4·R5 — false·키생략 금지). EDIT 미등록(§11). SEARCH/SAVE 실핸들러.
+  // INSERT/DELETE = 명시적 무동작(R4·R5 — false·키생략 금지). => INSERT/DELETE 삭제 EDIT 미등록(§11). SEARCH/SAVE 실핸들러.
   //   EXCEL = 공용 기본 다운로드를 hasButton('EXCEL') 로 게이트(NEW-02, CLAUDE.md §2 체크3). 권한 있으면
   //   키 생략 → 공용 DefaultButtonActions 의 excelDownload 유지, 없으면 excel:false 로 숨김(값 undefined 금지).
+  
   const hotkeyConfig: HotkeyConfig = {
     search: () => void handleSearch(),
-    save: canSave ? () => void handleSave() : false,
-    insert: () => undefined,
-    delete: () => undefined,
+    save: false, 
+    insert: false,
+    delete: false,
     manual: false,
     upload: false,
     ...(hasButton('EXCEL') ? {} : { excel: false as const }),
@@ -359,6 +424,11 @@ export const Capa = ({ tabId, title }: PageProps<MENU_ID>) => {
       iconComponent?: ReactNode;
       buttonLabel?: string;
     }[] = [];
+    // AS-IS BtnVersionInfo_Click 은 CanUpdate 없으면 MSG00096 후 미오픈 — SAVE 권한 게이트로 등가(design/07 D5).
+    if (canSave) {
+      list.push({ label: t(LBL.VERSION_INFO, 'Version Info'), action: () => setVersionInfoOpen(true) });
+    }
+    // 컬럼설정(btnColumn, x=1602)은 AS-IS 에서도 가장 우측 — 아이콘 버튼은 항상 마지막(타 화면 공통 관례).
     list.push({
       label: t(LBL.COLUMN_SETTING, 'Column Setting'),
       title: t(LBL.COLUMN_SETTING, 'Column Setting'),
@@ -366,10 +436,6 @@ export const Capa = ({ tabId, title }: PageProps<MENU_ID>) => {
       iconComponent: <IcGridColumnSetup />,
       buttonLabel: '',
     });
-    // AS-IS BtnVersionInfo_Click 은 CanUpdate 없으면 MSG00096 후 미오픈 — SAVE 권한 게이트로 등가(design/07 D5).
-    if (canSave) {
-      list.push({ label: t(LBL.VERSION_INFO, 'Version Info'), action: () => setVersionInfoOpen(true) });
-    }
     return list;
   }, [canSave, t]);
 
@@ -393,16 +459,17 @@ export const Capa = ({ tabId, title }: PageProps<MENU_ID>) => {
         searchParam={searchParams}
         customButtons={customButtons}
       >
-        {/* 헤더 요약 5종(R14, ReadOnly) — Total/Auto/Small/Elec/PIC. 건수 배지 오른쪽, 버튼 그룹 왼쪽에 배치. */}
+        {/* 헤더 요약 5종(R14, ReadOnly) — Total/Small/Auto/Elec/PIC(정본 designer.cs 배치 x 1134·1231·1328·1425).
+            건수 배지 오른쪽, 버튼 그룹 왼쪽에 배치. */}
         <div className={styles.summaryBar}>
           <span>
             {t(LBL.TOTAL, '_Total')}: {summary.total}
           </span>
           <span>
-            {t(LBL.AUTO, 'Auto')}: {summary.auto}
+            {t(LBL.SMALL, 'Small')}: {summary.small}
           </span>
           <span>
-            {t(LBL.SMALL, 'Small')}: {summary.small}
+            {t(LBL.AUTO, 'Auto')}: {summary.auto}
           </span>
           <span>
             {t(LBL.ELEC, 'Elec')}: {summary.elec}
@@ -445,6 +512,10 @@ export const Capa = ({ tabId, title }: PageProps<MENU_ID>) => {
           header: c.colLblNm || c.colNm,
           width: c.colWth ?? 100,
         }))}
+        initialSettings={toColumnLayoutSettings(staticColumns)}
+        title={t(LBL.COLUMN_SETTING, 'Column Setting')}
+        leftTitle={t(LBL.INVISIBLE, 'Invisible')}
+        rightTitle={t(LBL.VISIBLE, 'Visible')}
         onSave={settings => {
           const visible = settings.filter(s => s.USER_FLAG === 'Y');
           void saveTitleSet({

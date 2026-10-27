@@ -19,6 +19,7 @@ import {
   BOD_COLUMN,
   BOD_GRID_COMBO_ID,
   DAY_OF_WEEK_COLUMNS,
+  DIVISION_AUTO_SET_FLAG,
   MENU_ID,
   resolveToSiteBucket,
   SHEETS,
@@ -99,9 +100,12 @@ const isSaveErrorColumn = (binding: string, errCode: string): boolean => {
 
 // AS-IS SetReNumerCellType(SCP0007_BOD.cs L279-280) 이식: PRIORITY 는 min 0 / 소수 0자리, SAFETY_STOCK 은
 // min 0 / 소수 1자리. 상한(PRIORITY max 99)은 numberRules 가 다루지 않는다.
+// AFTER_LEAD_TIME 은 정수만 — AS-IS 는 메타 DATA_SCALE_NUMBER 가 비면 소수 0자리 FPNumber 로 만든다
+// (SpreadInfo.cs L1323-1327). TO-BE 공용 편집기는 빈 scale 을 제한 없음으로 다뤄 소수가 들어갔다.
 const BOD_NUMBER_RULES = {
   [BOD_COLUMN.PRIORITY]: { positiveOnly: true, integerOnly: true },
   [BOD_COLUMN.SAFETY_STOCK]: { positiveOnly: true, decimalPlaces: 1 },
+  [BOD_COLUMN.AFTER_LEAD_TIME]: { integerOnly: true },
 };
 
 type CountryCityRow = ResponseData<MENU_ID, SHEETS.COUNTRY_CITY>;
@@ -145,6 +149,13 @@ export const BodGrid = ({
 }: BodGridProps) => {
   const staticColumn = useBodStore(state => state.staticColumn);
   const divisionId = useBodStore(state => state.searchParams.divisionId);
+  const gridComboParams = useMemo(
+    () => ({
+      divisionId: divisionId.toUpperCase() === 'ALL' ? '' : divisionId,
+      lookupType: 'INCOTERMS',
+    }),
+    [divisionId]
+  );
 
   // TO_SITE 셀 콤보 3분기 원천 + FROM_SITE 콤보(OSP_YN 포함) — AS-IS SCP0007_BOD.cs L60/62-64
   // Data_SCP.CommonAll(...) 1:1. 검색조건 콤보(BodForm)와 별개로 그리드가 자체 조회한다.
@@ -284,14 +295,29 @@ export const BodGrid = ({
     gridRef.current?.invalidate();
   }, [saveError, gridRef]);
 
-  /** dtCountryCity 캐시에서 SCM_SITE_ID 로 1건 lookup — AS-IS `dtCountryCity.Select("SCM_SITE_ID = ...")`. */
-  const findCountryCity = (scmSiteId: string): CountryCityRow | undefined =>
-    countryCityRowsRef.current.find(row => String(row.SCM_SITE_ID) === scmSiteId);
+  /** dtCountryCity 캐시에서 SCM_SITE_ID 로 1건 lookup — AS-IS `dtCountryCity.Select("SCM_SITE_ID = ...")`.
+   *  캐시는 전 Division 이라(Bod.tsx) 같은 Site 가 여러 Division 에 있으면 행의 DIVISION_ID 와 맞는 것을 먼저 쓴다
+   *  (예: Forsee_CN_ZSN 은 40/81 에 있고 VMI_YN 이 N/Y 로 다르다). Division 이 비었거나 맞는 행이 없으면 Site 만으로 찾는다. */
+  const findCountryCity = (scmSiteId: string, divisionId?: unknown): CountryCityRow | undefined => {
+    const rows = countryCityRowsRef.current;
+    const div =
+      typeof divisionId === 'string' || typeof divisionId === 'number'
+        ? String(divisionId).trim()
+        : '';
+    return (
+      (div
+        ? rows.find(row => String(row.SCM_SITE_ID) === scmSiteId && String(row.DIVISION_ID) === div)
+        : undefined) ?? rows.find(row => String(row.SCM_SITE_ID) === scmSiteId)
+    );
+  };
 
   // To Site 타입 — beginningEdit(편집 허용)과 formatItem(노란 바탕)이 같은 판정을 쓰도록 한 곳에 둔다.
   // 캐시에 없는 site 는 '' 이라 PLANT 가 아닌 것으로 취급한다.
   const getToSiteType = (dataItem: WijmoRowItem): string =>
-    findCountryCity(String(dataItem[BOD_COLUMN.TO_SITE_CODE] ?? ''))?.SITE_TYPE ?? '';
+    findCountryCity(
+      String(dataItem[BOD_COLUMN.TO_SITE_CODE] ?? ''),
+      dataItem[BOD_COLUMN.DIVISION_ID]
+    )?.SITE_TYPE ?? '';
 
   /**
    * From/To Site 확정 시 Country/City 자동 채움 + PLANT 조건부 Incoterms 잠금/기본값 +
@@ -311,11 +337,11 @@ export const BodGrid = ({
     const toSiteCode = String(dataItem[BOD_COLUMN.TO_SITE_CODE] ?? '');
     if (!fromSiteCode && !toSiteCode) return;
 
-    const fromMatch = findCountryCity(fromSiteCode);
+    const fromMatch = findCountryCity(fromSiteCode, dataItem[BOD_COLUMN.DIVISION_ID]);
     dataItem[BOD_COLUMN.FROM_COUNTRY] = fromMatch?.COUNTRY ?? '';
     dataItem[BOD_COLUMN.FROM_CITY] = fromMatch?.CITY ?? '';
 
-    const toMatch = findCountryCity(toSiteCode);
+    const toMatch = findCountryCity(toSiteCode, dataItem[BOD_COLUMN.DIVISION_ID]);
     dataItem[BOD_COLUMN.TO_COUNTRY] = toMatch?.COUNTRY ?? '';
     dataItem[BOD_COLUMN.TO_CITY] = toMatch?.CITY ?? '';
     dataItem[BOD_COLUMN.VMI_YN] = toMatch?.VMI_YN ?? '';
@@ -366,7 +392,8 @@ export const BodGrid = ({
    * DIVISION_ID 는 위 목록과 달리 항상 잠기지 않는다 — AS-IS L408-412 는 조회조건 Division 이
    * 정확히 1개(2자리 코드)만 선택돼 자동 세팅됐을 때만 잠근다(handleInsert 가 이미 이 조건으로
    * defaultRow[DIVISION_ID] 를 채운다, Bod.tsx L133-135). 자동세팅되지 않은 행(다중/미선택 Division)
-   * 은 DIVISION_ID 를 직접 입력해야 하므로 편집 가능해야 한다 — 행의 DIVISION_ID 값 유무로 판정한다.
+   * 은 DIVISION_ID 를 직접 입력·변경할 수 있어야 하므로 값 유무가 아니라 handleInsert 가 남긴
+   * DIVISION_AUTO_SET_FLAG 로 판정한다.
    */
   useEffect(() => {
     const grid = gridRef.current;
@@ -417,10 +444,10 @@ export const BodGrid = ({
       }
 
       if (binding === BOD_COLUMN.DIVISION_ID && dataItem.CRUD_TYPE === 'I') {
-        // 자동세팅된 행만 잠금(AS-IS L408-412) — handleInsert 가 division 단일선택일 때만
-        // DIVISION_ID 를 채우므로, 값이 있으면 자동세팅된 것으로 판정한다.
-        const divisionId = String(dataItem[BOD_COLUMN.DIVISION_ID] as string | number | undefined ?? '');
-        if (divisionId !== '') e.cancel = true;
+        // 자동세팅된 행만 잠금(AS-IS L406-410) — handleInsert 가 division 단일선택일 때만 DIVISION_ID 를
+        // 채우며 DIVISION_AUTO_SET_FLAG 를 남긴다. 값 유무로 판정하면 조회조건 ALL·다중에서 사용자가 한 번
+        // 고른 Div 까지 잠겨 다시 바꿀 수 없었다(QA: "Div 를 한번 선택하면 변경 불가").
+        if (dataItem[DIVISION_AUTO_SET_FLAG] === true) e.cancel = true;
         return;
       }
 
@@ -476,7 +503,8 @@ export const BodGrid = ({
 
     if (binding === BOD_COLUMN.INCOTERMS) {
       const toSiteCode = String(dataItem[BOD_COLUMN.TO_SITE_CODE] ?? '');
-      const toSiteType = findCountryCity(toSiteCode)?.SITE_TYPE ?? '';
+      const toSiteType =
+        findCountryCity(toSiteCode, dataItem[BOD_COLUMN.DIVISION_ID])?.SITE_TYPE ?? '';
       if (toSiteType !== 'PLANT') {
         dataItem[BOD_COLUMN.INCOTERMS_SSP] = dataItem[BOD_COLUMN.INCOTERMS];
         GridUtils.refreshRow(grid, e.row);
@@ -600,12 +628,13 @@ export const BodGrid = ({
       //   그룹) 도입 시 그룹 없는 일반 컬럼까지 라벨이 위/아래 행에 중복 표시된다(세로 병합 불능,
       //   2026-09-29 SCP0007 Period 그룹 실사고). RowHeaders 비트는 이 매니저가 처리하지 않아 무해.
       allowMerging={AllowMerging.All}
-      // 셀 메타 콤보(FROM_SITE_CODE = FromSiteByDivision1_SCP_ALL 등)의 @divisionId 해소 —
-      // 미전달 시 division 필터가 빈값이라 FROM_SITE 콤보 자체가 빈다. raw 값(quoteComboParams 자동 인용).
+      // 셀 메타 콤보(FROM_SITE_CODE = FromSiteByDivision1_SCP_ALL 등)의 @divisionId 해소 — raw 값(quoteComboParams 자동 인용).
       // INCOTERMS/INCOTERMS_SSP 의 기본 콤보 LookupCommon 은 @lookupType 이 필요하다. 미전달 시 BE 가
       // '' 로 치환해 0건이 되어, 기존행 드롭다운에 현재 값만 보인다(컬럼 메타 ATTRIBUTE1='INCOTERMS').
       // 이 그리드의 LookupCommon 컬럼은 이 두 개뿐이라 그리드 단위로 실어도 충돌하지 않는다.
-      comboParams={{ divisionId, lookupType: 'INCOTERMS' }}
+      // 'ALL' 은 빈값으로 보낸다 — TO_SITE 메타 콤보 ToSiteBOD1_SCP_ALL 은 'ALL' 분기가 없어 '-A' Site 27건만
+      //   온다(빈값이면 전체). 조회 전 Insert 처럼 위 자체 To Site DataMap 이 붙기 전에도 목록이 비지 않게 한다.
+      comboParams={gridComboParams}
       cellEditEnded={handleCellEdit}
       pastedCell={handleCellEdit}
       dblClick={handleDblClick}

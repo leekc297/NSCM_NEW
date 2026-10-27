@@ -10,5 +10,8 @@
   "rulesDir": "C:\\Projects\\NSCM\\tools\\Harness\\rules",
   "tobePkgDir": "C:\\Projects\\NSCM\\To-be_v2_converted\\06_Packages",
   "dbconnDir": "C:\\Projects\\NSCM\\tools\\DbConn",
-  "vibeRulesDir": "C:\\Projects\\NSCM\\tools\\VibeManager\\rules"
+  "vibeRulesDir": "C:\\Projects\\NSCM\\tools\\VibeManager\\rules",
+  "verifyDir": "C:\\Projects\\NSCM\\Doc\\verify",
+  "repairScope": "DB_FE",
+  "repairScopeNote": "보완 적용 범위 — 2026-10-26 사용자 지시: 'FE 는 가이드만' 룰 해제(기본 DB_FE). DB_ONLY 는 필요할 때만 사용. 공통 컴포넌트(@shared/@foundation)는 여전히 변경 전 확인."
 }

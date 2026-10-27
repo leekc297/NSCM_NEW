@@ -128,7 +128,7 @@ export const CustomerFcstMasterForm = ({ onSubmit }: CustomerFcstMasterFormProps
           </Grid>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00032', '_Bucket Type')}
+              label={t('LBL00710', '_Bucket Type')}
               labelAlign='right'
               required
               className={commonStyles.formItem}

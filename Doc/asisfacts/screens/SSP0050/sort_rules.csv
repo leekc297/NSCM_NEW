@@ -1,0 +1,4 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SSP0050,SQL,SSP0050_GET_SHIPMENT_APPORVAL,Doc\asisfacts\db\modules\dbo.SSP0050_GET_SHIPMENT_APPORVAL.sql,47,,"PERIOD_FROM DESC,PERIOD_TO DESC","ORDER BY A.PERIOD_FROM DESC, A.PERIOD_TO DESC",0,정적
+SSP0050,SQL,SSP0014_GET_USER_ID_CHECK,Doc\asisfacts\db\modules\dbo.SSP0014_GET_USER_ID_CHECK.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0050,SQL,SSP0014_SAVE_SHIPMENT_MODEL_PIC,Doc\asisfacts\db\modules\dbo.SSP0014_SAVE_SHIPMENT_MODEL_PIC.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

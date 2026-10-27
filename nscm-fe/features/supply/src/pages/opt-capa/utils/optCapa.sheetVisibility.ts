@@ -3,7 +3,6 @@ import {
   EE_UC_DIVISION_TOKEN,
   GRID_SHEETS,
   SHEETS,
-  SPD_SHEET_ORDER,
   type GridSheet,
 } from '../opt-capa.constants';
 import type { ExcludedSheetRow } from '../opt-capa.types';
@@ -38,36 +37,20 @@ export const buildExcludedSheetNames = (
 };
 
 /**
- * 노출 탭 순서 — AS-IS `ClbDivision_SelectedIndexChanged`(cs:3392-3460) 이식.
- * 제외 시트를 지우고, 제외 대상이 아닌데 없는 시트를 `SPD_SHEET_ORDER` 순서로 **맨 뒤에** 덧붙인다.
- * 그래서 결과 순서는 직전 순서(= Division 이동 이력)에 따라 달라진다.
- */
-export const nextTabOrder = (
-  prevOrder: readonly GridSheet[],
-  excluded: ReadonlySet<string>
-): GridSheet[] => {
-  const kept = prevOrder.filter(sheet => !excluded.has(ADMIN_SHEET_NAME[sheet]));
-  const missing = SPD_SHEET_ORDER.filter(
-    sheet => !excluded.has(ADMIN_SHEET_NAME[sheet]) && !kept.includes(sheet)
-  );
-  return [...kept, ...missing];
-};
-
-/**
- * 노출 탭 — 초기 로드와 Division 변경이 **같은 파생식 하나**를 쓴다(design 01 R14).
- * `prevOrder` 는 직전에 확정한 탭 순서이고, 진입 시 기본값은 AS-IS `CreateSpread` 순서(`GRID_SHEETS`)다.
+ * 노출 탭 — 운영 AS-IS 캡처는 Division 이동 이력과 **무관하게 항상 같은 순서**를 보여준다
+ * (사용자 지시 2026-10-20: 이미지=실화면 우선). `GRID_SHEETS`(= 실화면 탭 순서)에서 제외 탭만 뺀
+ * **정규 순서**를 쓴다 — 직전 순서에 의존하지 않아 "제외됐다 돌아온 탭이 맨 뒤로 밀리는" 드리프트가 없다.
  *
- * AS-IS `CreateSpread` 의 `division == "40"` 리터럴 분기(cs:587-593)는 제외목록 도입(2025-09-11)
- * 이전의 잔재이고, 같은 파일에 구버전 분기가 통째로 주석처리돼 남아 있다(cs:3465-3522).
- * 그 리터럴을 이식하면 7 division(`81_HD`/`81_HM`/`81_ST`/`EE_HD`/`EE_HG`/`EE_HM`/`EE_ST`)에서
- * "진입 직후 7탭 → Division 한 번 바꾸면 8탭" 이라는 AS-IS 결함이 그대로 복제된다(§5 V-1 FAIL).
- * 탭 **집합**은 제외목록 단일 원천이고, 탭 **순서**만 AS-IS 이동 이력 규칙을 따른다.
+ * (구 `nextTabOrder` 는 직전 순서 유지 + 미싱 탭 맨 뒤 append 로 이동 이력에 순서가 달라졌다(design 01
+ *  R14). 운영 AS-IS 는 고정 순서라 폐기한다. 탭 집합은 여전히 제외목록 단일 원천이다.)
  */
 export const buildVisibleSheets = (
   exclusionRows: readonly ExcludedSheetRow[],
-  divisionId: string,
-  prevOrder: readonly GridSheet[] = GRID_SHEETS
-): GridSheet[] => nextTabOrder(prevOrder, buildExcludedSheetNames(exclusionRows, divisionId));
+  divisionId: string
+): GridSheet[] => {
+  const excluded = buildExcludedSheetNames(exclusionRows, divisionId);
+  return GRID_SHEETS.filter(sheet => !excluded.has(ADMIN_SHEET_NAME[sheet]));
+};
 
 /**
  * 활성 탭 폴백 — 현재 탭이 제외되면 첫 탭으로 내린다(design 01 R13 마지막 문장 / L-13).

@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
+import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { ADMIN_SHEET_NAME, ALL, MENU_ID, SHEETS } from './plan-group-master.constants';
 import type { PlanGroupSearchParams } from './plan-group-master.types';
@@ -11,6 +11,8 @@ type SearchInfoFilter = ProcRequest<MENU_ID, SHEETS.SEARCH_INFO>;
 
 interface PlanGroupMasterState {
   initialized: boolean;
+  // F6 저장 조회조건 복원 1회 가드 (basic-check #3). 복원은 재진입/새로고침당 1회.
+  conditionsRestored: boolean;
   searchParams: PlanGroupSearchParams;
   // 그리드 조회(Search 게이트) — setMainFilters 로만 채워진다.
   filters: { [SHEETS.MAIN]?: MainFilter };
@@ -22,6 +24,8 @@ interface PlanGroupMasterState {
 
 interface PlanGroupMasterAction {
   reset: () => void;
+  // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchParams 패치(1회).
+  restoreSearchConditions: () => Promise<void>;
   setSearchParams: (params: Partial<PlanGroupSearchParams>) => void;
   setMainFilters: () => void;
   clearMainFilters: () => void;
@@ -30,10 +34,10 @@ interface PlanGroupMasterAction {
   setOpenSearchArea: (open?: boolean) => void;
 }
 
-// 상수가 아니라 함수 — 세션 division 은 스토어 생성(탭별) 시점에 읽어야 재로그인 후에도 현재 계정 기준이 된다
-//   (sales-site makeInitSearchParams 규약). fallback '40' 은 세션 미확립 대비. 권한 목록 밖이면 Form 보정 effect 가 교체.
+// AS-IS 기본 Division = 콤보 첫 행(권한내 첫 사업부, 02 §4) — 세션 div 강제선택 없음(GAP-10 해소).
+//   divisionId 는 빈값으로 두고 권한 콤보 도착 후 Form 보정 effect 가 첫 행으로 채운다. F6 복원값이 권한 내면 유지.
 const makeInitSearchParams = (): PlanGroupSearchParams => ({
-  divisionId: useSessionStore.getState().session.div ?? '40',
+  divisionId: '',
   operation: ALL,
   plant: ALL,
   building: ALL,
@@ -43,6 +47,7 @@ const makeInitSearchParams = (): PlanGroupSearchParams => ({
 
 const makeInitState = (): PlanGroupMasterState => ({
   initialized: false,
+  conditionsRestored: false,
   searchParams: makeInitSearchParams(),
   filters: {},
   searchInfoFilters: {},
@@ -55,6 +60,46 @@ export const usePlanGroupMasterStore = createPersistedStoreWithTab<
 >((set, get) => ({
   ...makeInitState(),
   reset: () => set(makeInitState()),
+
+  /**
+   * F6(조회조건 저장)로 저장한 개인화 조회조건을 재진입/새로고침 시 1회 복원한다(basic-check #3).
+   * 저장측은 SubTitle `searchParam={searchParams}` → `GridAction.personalizeCondition` 으로, 전 값을
+   * String coerce 해 보낸다(paramNm=searchParams 키). 이 화면 searchParams 6필드는 전부 string
+   * (divisionId + 체크리스트 5개는 'ALL' sentinel / CSV 문자열)이라 평문 allowlist patch 로 충분하다
+   * (날짜/불리언/enum 축 없음 → capa-loss-plan 류 타입 환원 불요).
+   *
+   * `searchParams` 만 patch 하고 `filters` 는 건드리지 않아 진입 자동조회 게이트(filters[MAIN] 미설정)를
+   * 유지한다. 복원은 `setSearchParams` 를 경유하지 않고 직접 병합한다 — setSearchParams 는 divisionId
+   * 변경 시 하위 5축을 ALL 로 cascade 리셋해 복원값을 지우기 때문. 권한 목록 밖 divisionId 는 Form 의
+   * 보정 effect(권한 콤보 도착 후)가 교체하므로 여기서 가드하지 않는다.
+   *
+   * 미저장/실패/미등록(SCM_ADM_MNU_M 라우트 없음)이면 런타임 no-op(기본값 유지) — 배선 자체가
+   * 파리티 요건이라 선적용한다.
+   */
+  restoreSearchConditions: async () => {
+    if (get().conditionsRestored) return;
+    set(state => {
+      state.conditionsRestored = true;
+    });
+    try {
+      const res = await apiClient.get<{ paramNm: string; paramCtn: string }[]>(
+        `/admin/menu/${MENU_ID}/search-conditions`
+      );
+      const rows = res.data.result ?? [];
+      if (rows.length === 0) return;
+      const allow = makeInitSearchParams(); // searchParams 키만 allowlist
+      const patch: Partial<PlanGroupSearchParams> = {};
+      for (const { paramNm, paramCtn } of rows) {
+        if (!(paramNm in allow)) continue;
+        patch[paramNm as keyof PlanGroupSearchParams] = paramCtn ?? '';
+      }
+      set(state => {
+        state.searchParams = { ...state.searchParams, ...patch };
+      });
+    } catch {
+      // 미저장/실패 = 기본값 유지 (console 금지 룰).
+    }
+  },
 
   setSearchParams: params => {
     set(state => {

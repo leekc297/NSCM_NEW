@@ -1,0 +1,30 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,MODEL_ID,CODE,SCPAnalysisAlloTargetRequestPopup,SCPAnalysisAlloTargetRequestPopup.cs:123,Model*,Text,,None,코드 선언 FPMerge.None,160,true,,,,
+,DEPT_NAME,CODE,SCPAnalysisAlloTargetRequestPopup,SCPAnalysisAlloTargetRequestPopup.cs:125,Dept*,Combo,"Data.UserTeamByDivision(UserInfoContext.Current[""NowGroupID""], UserInfoContext.Current.UserId, division)",None,코드 선언 FPMerge.None,160,true,Center,,,
+,MONTH,CODE,SCPAnalysisAlloTargetRequestPopup,SCPAnalysisAlloTargetRequestPopup.cs:126,Month*,Number,,None,코드 선언 FPMerge.None,80,true,,,,
+,ROW_COUNT,CODE,SCPAnalysisAlloTargetRequestPopup,SCPAnalysisAlloTargetRequestPopup.cs:127,Row*,Number,,None,코드 선언 FPMerge.None,60,true,,,,
+Allo Target Request,CHK,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:207,chk,Check,,None,코드 선언 FPMerge.None,30,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,SEQ,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:208,Seq,Text,,None,코드 선언 FPMerge.None,30,false,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,CUTOFF_YYYYMMDD,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:209,CutOff*,Number,,None,코드 선언 FPMerge.None,80,true,Center,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,FROM_ITEM_ID,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:211,Model*,Text,,None,코드 선언 FPMerge.None,150,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,FROM_NICK_NAME,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:212,NickName,Text,,None,코드 선언 FPMerge.None,130,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,FROM_DEPT_ID,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:213,Deptid,Text,,None,코드 선언 FPMerge.None,70,false,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,FROM_DEPT_NAME,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:214,Dept*,Text,,None,코드 선언 FPMerge.None,160,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,FROM_YYYYMM,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:215,Month*,Number,,None,코드 선언 FPMerge.None,60,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,FROM_QTY,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:216,Qty*,Number,,None,코드 선언 FPMerge.None,80,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,TO_ITEM_ID,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:218,Model*,Text,,None,코드 선언 FPMerge.None,150,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,TO_NICK_NAME,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:219,NickName,Text,,None,코드 선언 FPMerge.None,130,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,TO_DEPT_ID,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:220,Deptid,Text,,None,코드 선언 FPMerge.None,80,false,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,TO_DEPT_NAME,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:221,Dept*,Combo,"Data.UserTeamByDivision(UserInfoContext.Current[""NowGroupID""], UserInfoContext.Current.UserId, division)",None,코드 선언 FPMerge.None,160,true,Left,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,TO_YYYYMM,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:222,Month*,Number,,None,코드 선언 FPMerge.None,60,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,TO_QTY,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:223,Qty(AsIs),Number,,None,코드 선언 FPMerge.None,80,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,TO_QTY_TOBE,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:224,Qty(ToBe)*,Number,,None,코드 선언 FPMerge.None,80,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,COMMENTS,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:225,Remark,Text,,None,코드 선언 FPMerge.None,100,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,CONFIRM,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:226,Confirm,Text,,None,코드 선언 FPMerge.None,50,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,CONFIRM_COMMENTS,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:227,"Confirm
+Remark",Text,,None,코드 선언 FPMerge.None,100,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,REQUEST_USER,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:228,Request_User,Text,,None,코드 선언 FPMerge.None,100,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,REQUEST_DATE,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:229,Request_Date,Date,,None,코드 선언 FPMerge.None,140,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,CONFIRM_USER,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:230,Confirm_User,Text,,None,코드 선언 FPMerge.None,100,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,CONFIRM_DATE,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:231,Confirm_Date,Date,,None,코드 선언 FPMerge.None,140,true,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"
+Allo Target Request,INS_FLAG,CODE,SCP0090_Allo_Target_Request,SCP0090_Allo_Target_Request.cs:233,Ins_Flag,Text,,None,코드 선언 FPMerge.None,60,false,,,,"if(spdInfo.SheetName == ""Allo Target Request"")"

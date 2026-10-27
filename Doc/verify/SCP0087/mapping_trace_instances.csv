@@ -1,0 +1,168 @@
+﻿key,trace_row,check,layer,et,name,display,impl,result,why,rows,cs
+X-LOC|ROW:1,T-2453e7ce,X-LOC,GEN,ROW,1,1,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,3,
+G1|ROW:1,T-8429b272,G1,GEN,ROW,1,1,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),2,
+A1|ROW:1,T-9be155bd,A1,GEN,ROW,1,1,Y,REVIEW,행 집계 — A1 1요소: REVIEW:1,2,
+J2|SCREEN,T-13d3b737,J2,AUTH,SCREEN,SCP0087,SCP0087 화면,Y,NOT_RUN,검사기 있음(auth·authcrud spec) — 실행 필요: auth,30,
+X-LOC|ROW:2,T-6c899a5c,X-LOC,GEN,ROW,2,2,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,3,
+F1|SCREEN,T-f801cb74,F1,CRUD,SCREEN,SCP0087,SCP0087 화면,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) 실저장·crud spec) — 실행 필요: crud,83,SCP0087_MDMClassMaster.cs:183 SCP0087_MDMClassMaster.cs:184 SCP0087_MDMClassMaster.cs:260 SCP0087_MDMClassMaster.cs:262 SCP0087_MDMClassMaster.cs:267 SCP0087_MDMClassMaster.cs:270 SCP0087_MDMClassMaster.cs:273 SCP0087_MDMClassMaster.cs:275 SCP0087_MDMClassMaster.cs:276 SCP0087_MDMClassMaster.cs:277 
+F2|SCREEN,T-d9cc0fd7,F2,CRUD,SCREEN,SCP0087,SCP0087 화면,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),81,SCP0087_MDMClassMaster.cs:183 SCP0087_MDMClassMaster.cs:184 SCP0087_MDMClassMaster.cs:260 SCP0087_MDMClassMaster.cs:262 SCP0087_MDMClassMaster.cs:267 SCP0087_MDMClassMaster.cs:270 SCP0087_MDMClassMaster.cs:273 SCP0087_MDMClassMaster.cs:275 SCP0087_MDMClassMaster.cs:276 SCP0087_MDMClassMaster.cs:277 
+E3|ROW:2,T-5066e753,E3,EDIT,ROW,2,2,Y,PASS,행 집계 — E3 1요소: PASS:1,2,
+E4|ROW:2,T-77eec768,E4,EDIT,ROW,2,2,Y,REVIEW,행 집계 — E4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:3,T-5bd46064,X-LOC,GEN,ROW,3,3,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,3,
+F5|SCREEN,T-11bef36c,F5,CRUD,SCREEN,SCP0087,SCP0087 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4b CRUD 상태 — Insert 행 CRUD_TYPE=I·편집 행 M 표시) — 실행 필요: trace,2,
+X-LOC|ROW:4,T-bbea3d8c,X-LOC,GEN,ROW,4,4,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,3,
+A5|ROW:4,T-c2f32820,A5,DESIGN,ROW,4,4,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:4,T-1877cb0f,H5,DESIGN,ROW,4,4,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H2|ROW:4,T-a40f9516,H2,DESIGN,ROW,4,4,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D1|ROW:4,T-2423f77e,D1,EDIT,ROW,4,4,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:4,T-356de4ed,D3,EDIT,ROW,4,4,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:5,T-a4b56be4,X-LOC,GEN,ROW,5,5,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,3,
+D4|ROW:5,T-34642b3f,D4,EDIT,ROW,5,5,Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D6|SCREEN,T-232be6de,D6,EDIT,SCREEN,SCP0087,SCP0087 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) Insert 위치) — 실행 필요: trace,10,SCP0087_MDMClassMaster.cs:151
+X-LOC|ROW:EditButton `fps==null` return,T-a22eb194,X-LOC,GEN,ROW,EditButton `fps==null` return,EditButton `fps==null` return,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D4|ROW:EditButton `fps==null` return,T-8c26763c,D4,EDIT,ROW,EditButton `fps==null` return,EditButton `fps==null` return,Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D1|ROW:EditButton `fps==null` return,T-295dece8,D1,EDIT,ROW,EditButton `fps==null` return,EditButton `fps==null` return,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:EditButton `fps==null` return,T-cb42e583,D3,EDIT,ROW,EditButton `fps==null` return,EditButton `fps==null` return,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:EditButton `RowCount==0` return,T-0f85adca,X-LOC,GEN,ROW,EditButton `RowCount==0` return,EditButton `RowCount==0` return,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D4|ROW:EditButton `RowCount==0` return,T-b0993ad4,D4,EDIT,ROW,EditButton `RowCount==0` return,EditButton `RowCount==0` return,Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D1|ROW:EditButton `RowCount==0` return,T-208a3daa,D1,EDIT,ROW,EditButton `RowCount==0` return,EditButton `RowCount==0` return,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:EditButton `RowCount==0` return,T-fd6d3371,D3,EDIT,ROW,EditButton `RowCount==0` return,EditButton `RowCount==0` return,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:SaveButton `fps==null` return,T-ccad14dd,X-LOC,GEN,ROW,SaveButton `fps==null` return,SaveButton `fps==null` return,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D4|ROW:SaveButton `fps==null` return,T-3a3f4615,D4,EDIT,ROW,SaveButton `fps==null` return,SaveButton `fps==null` return,Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:SaveData_Main `RowCount==0` return,T-fad0ee55,X-LOC,GEN,ROW,SaveData_Main `RowCount==0` return,SaveData_Main `RowCount==0` return,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+F6|SCREEN,T-139dd010,F6,CRUD,SCREEN,SCP0087,SCP0087 화면,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),73,SCP0087_MDMClassMaster.cs:183 SCP0087_MDMClassMaster.cs:184 SCP0087_MDMClassMaster.cs:260 SCP0087_MDMClassMaster.cs:262 SCP0087_MDMClassMaster.cs:267 SCP0087_MDMClassMaster.cs:270 SCP0087_MDMClassMaster.cs:273 SCP0087_MDMClassMaster.cs:275 SCP0087_MDMClassMaster.cs:276 SCP0087_MDMClassMaster.cs:277 
+F4|ROW:SaveData_Main `RowCount==0` return,T-fc47b455,F4,DB,ROW,SaveData_Main `RowCount==0` return,SaveData_Main `RowCount==0` return,Y,REVIEW,행 집계 — F4 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+DB-SYN|ROW:SaveData_Main `RowCount==0` return,T-2680ce90,DB-SYN,DB,ROW,SaveData_Main `RowCount==0` return,SaveData_Main `RowCount==0` return,Y,PASS,행 집계 — DB-SYN 2요소: PASS:2,1,
+D4|ROW:SaveData_Main `RowCount==0` return,T-e1adf567,D4,EDIT,ROW,SaveData_Main `RowCount==0` return,SaveData_Main `RowCount==0` return,Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:SaveData_Main `IsLock==false` 일 때만 저장,T-ddeebaa6,X-LOC,GEN,ROW,SaveData_Main `IsLock==false` 일 때만 저장,SaveData_Main `IsLock==false` 일 때만 저장,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+F4|ROW:SaveData_Main `IsLock==false` 일 때만 저장,T-4a3564c7,F4,DB,ROW,SaveData_Main `IsLock==false` 일 때만 저장,SaveData_Main `IsLock==false` 일 때만 저장,Y,REVIEW,행 집계 — F4 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+DB-SYN|ROW:SaveData_Main `IsLock==false` 일 때만 저장,T-62aa044c,DB-SYN,DB,ROW,SaveData_Main `IsLock==false` 일 때만 저장,SaveData_Main `IsLock==false` 일 때만 저장,Y,PASS,행 집계 — DB-SYN 2요소: PASS:2,1,
+D4|ROW:SaveData_Main `IsLock==false` 일 때만 저장,T-98aae2be,D4,EDIT,ROW,SaveData_Main `IsLock==false` 일 때만 저장,SaveData_Main `IsLock==false` 일 때만 저장,Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D1|ROW:SaveData_Main `IsLock==false` 일 때만 저장,T-bfba1b03,D1,EDIT,ROW,SaveData_Main `IsLock==false` 일 때만 저장,SaveData_Main `IsLock==false` 일 때만 저장,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:SaveData_Main `IsLock==false` 일 때만 저장,T-2952f497,D3,EDIT,ROW,SaveData_Main `IsLock==false` 일 때만 저장,SaveData_Main `IsLock==false` 일 때만 저장,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:InsertButton `return` (삽입 비활성),T-09e67bf5,X-LOC,GEN,ROW,InsertButton `return` (삽입 비활성),InsertButton `return` (삽입 비활성),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D4|ROW:InsertButton `return` (삽입 비활성),T-73a587ee,D4,EDIT,ROW,InsertButton `return` (삽입 비활성),InsertButton `return` (삽입 비활성),Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:DeleteButton 빈 본문 (삭제 no-op),T-1b9f2e8a,X-LOC,GEN,ROW,DeleteButton 빈 본문 (삭제 no-op),DeleteButton 빈 본문 (삭제 no-op),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D4|ROW:DeleteButton 빈 본문 (삭제 no-op),T-033f161b,D4,EDIT,ROW,DeleteButton 빈 본문 (삭제 no-op),DeleteButton 빈 본문 (삭제 no-op),Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+A5|ROW:1,T-fecc5aea,A5,DESIGN,ROW,1,1,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:1,T-73327cd6,H5,DESIGN,ROW,1,1,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H2|ROW:1,T-5c648904,H2,DESIGN,ROW,1,1,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H3|ROW:1,T-76993ce8,H3,DESIGN,ROW,1,1,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D1|ROW:2,T-5de74380,D1,EDIT,ROW,2,2,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:2,T-63e2e2f7,D3,EDIT,ROW,2,2,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D1|ROW:3,T-30fc6011,D1,EDIT,ROW,3,3,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:3,T-d16260b3,D3,EDIT,ROW,3,3,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D1|COL:ITEM_TYPE,T-9468f79b,D1,EDIT,COL,ITEM_TYPE,ITEM_TYPE,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,3,SCP0087_MDMClassMaster.cs:156 SCP0087_MDMClassMaster.cs:158 SCP0087_MDMClassMaster.cs:159 SCP0087_MDMClassMaster.cs:172
+D1|COL:PROCESS_DETAIL,T-02e2f337,D1,EDIT,COL,PROCESS_DETAIL,PROCESS_DETAIL,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,2,SCP0087_MDMClassMaster.cs:172
+D3|COL:ITEM_TYPE,T-db2bca1d,D3,EDIT,COL,ITEM_TYPE,ITEM_TYPE,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,3,SCP0087_MDMClassMaster.cs:156 SCP0087_MDMClassMaster.cs:158 SCP0087_MDMClassMaster.cs:159 SCP0087_MDMClassMaster.cs:172
+D3|COL:PROCESS_DETAIL,T-4145037e,D3,EDIT,COL,PROCESS_DETAIL,PROCESS_DETAIL,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,2,SCP0087_MDMClassMaster.cs:172
+A5|ROW:5,T-2288b522,A5,DESIGN,ROW,5,5,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:5,T-b2db0429,H5,DESIGN,ROW,5,5,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H2|ROW:5,T-bc127594,H2,DESIGN,ROW,5,5,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:6,T-dcdcc6ac,X-LOC,GEN,ROW,6,6,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D1|ROW:6,T-375166c1,D1,EDIT,ROW,6,6,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:6,T-7a33a801,D3,EDIT,ROW,6,6,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+G1|ROW:6,T-cce8f79c,G1,GEN,ROW,6,6,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:6,T-a85c9861,A1,GEN,ROW,6,6,Y,REVIEW,행 집계 — A1 1요소: REVIEW:1,1,
+X-LOC|ROW:7,T-a5bb5614,X-LOC,GEN,ROW,7,7,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+E3|COL:CLASS_ID,T-06aa8aa3,E3,EDIT,COL,CLASS_ID,CLASS_ID,Y,PASS,필수 표시 AS-IS -('Class ID') ↔ TO-BE -('Class ID' INPUT_TP_CD=S),2,
+E4|COL:CLASS_ID,T-d2db3cc9,E4,EDIT,COL,CLASS_ID,CLASS_ID,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,
+E4|ROW:1,T-aafbc94c,E4,EDIT,ROW,1,1,Y,REVIEW,행 집계 — E4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+I1|SCREEN,T-01597b97,I1,DESIGN,SCREEN,SCP0087,SCP0087 화면,Y,NOT_RUN,검사기 있음(judge(DB 조회)·하네스 I18N1) — 실행 필요: meta,11,SCP0087_MDMClassMaster.cs:246 SCP0087_MDMClassMaster.cs:338 SCP0087_MDMClassMaster.cs:347 SCP0087_MDMClassMaster.cs:358 SCP0087_MDMClassMaster.cs:378
+H10|SCREEN,T-e2b5eab6,H10,DESIGN,SCREEN,SCP0087,SCP0087 화면,Y,PASS,브라우저 alert/confirm 직접 호출 0 · 공용 메시지 API 사용,9,
+E3|ROW:1,T-1d899684,E3,EDIT,ROW,1,1,Y,PASS,행 집계 — E3 1요소: PASS:1,1,
+G1|ROW:2,T-16553c95,G1,GEN,ROW,2,2,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:2,T-3b0b2b06,A1,GEN,ROW,2,2,Y,REVIEW,행 집계 — A1 1요소: REVIEW:1,1,
+E4|MSG:MSG00004,T-773d4963,E4,EDIT,MSG,MSG00004,MSG00004,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,3,SCP0087_MDMClassMaster.cs:338
+E4|MSG:MSG00002,T-a6abc21b,E4,EDIT,MSG,MSG00002,MSG00002,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,
+E4|MSG:MSG00003,T-c567c1dd,E4,EDIT,MSG,MSG00003,MSG00003,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,3,SCP0087_MDMClassMaster.cs:347
+E3|ROW:3,T-d4495a21,E3,EDIT,ROW,3,3,Y,PASS,행 집계 — E3 1요소: PASS:1,1,
+E4|ROW:4,T-a54b4987,E4,EDIT,ROW,4,4,Y,REVIEW,행 집계 — E4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+E3|ROW:4,T-e14f5be7,E3,EDIT,ROW,4,4,Y,PASS,행 집계 — E3 1요소: PASS:1,1,
+E4|ROW:5,T-b1330c4e,E4,EDIT,ROW,5,5,Y,REVIEW,행 집계 — E4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+E3|ROW:5,T-fdf0cca5,E3,EDIT,ROW,5,5,Y,PASS,행 집계 — E3 1요소: PASS:1,1,
+X-LOC|ROW:txtClassId → p_class_id (LIKE),T-ad7ee20a,X-LOC,GEN,ROW,txtClassId → p_class_id (LIKE),txtClassId → p_class_id (LIKE),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|COND:txtClassId,T-7246e5a9,G4,DESIGN,COND,txtClassId,txtClassId / Class ID / Class Id,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,1,
+SC1|SCREEN,T-175ae288,SC1,DESIGN,SCREEN,SCP0087,SCP0087 화면,Y,NOT_RUN,검사기 있음(check.js SC1·smoke 기준표 순서) — 실행 필요: smoke,5,
+G1|COND:txtClassId,T-1b63e6b2,G1,GEN,COND,txtClassId,txtClassId / Class ID / Class Id,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,3,SCP0087_MDMClassMaster.cs:193 SCP0087_MDMClassMaster.cs:196 SCP0087_MDMClassMaster.cs:198 SCP0087_MDMClassMaster.cs:200 SCP0087_MDMClassMaster.cs:201 SCP0087_MDMClassMaster.cs:203
+G6|COND:txtClassId,T-b8b11bc7,G6,GEN,COND,txtClassId,txtClassId / Class ID / Class Id,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,1,
+A1|ROW:txtClassId → p_class_id (LIKE),T-7f207ba0,A1,GEN,ROW,txtClassId → p_class_id (LIKE),txtClassId → p_class_id (LIKE),Y,REVIEW,행 집계 — A1 1요소: REVIEW:1,1,
+X-LOC|ROW:txtClassName → p_class_name (LIKE),T-8e067957,X-LOC,GEN,ROW,txtClassName → p_class_name (LIKE),txtClassName → p_class_name (LIKE),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|COND:txtClassName,T-dddf2725,G4,DESIGN,COND,txtClassName,txtClassName / Class Name,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,1,
+G1|COND:txtClassName,T-5ff56f57,G1,GEN,COND,txtClassName,txtClassName / Class Name,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,3,SCP0087_MDMClassMaster.cs:193 SCP0087_MDMClassMaster.cs:196 SCP0087_MDMClassMaster.cs:198 SCP0087_MDMClassMaster.cs:200 SCP0087_MDMClassMaster.cs:201 SCP0087_MDMClassMaster.cs:204
+G6|COND:txtClassName,T-657ef736,G6,GEN,COND,txtClassName,txtClassName / Class Name,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,1,
+A1|ROW:txtClassName → p_class_name (LIKE),T-6bf90e51,A1,GEN,ROW,txtClassName → p_class_name (LIKE),txtClassName → p_class_name (LIKE),Y,REVIEW,행 집계 — A1 1요소: REVIEW:1,1,
+"X-LOC|ROW:cboUseFlag DataBind(YesOrNo, isAddALL) 기본 'Y'",T-eed3170d,X-LOC,GEN,ROW,"cboUseFlag DataBind(YesOrNo, isAddALL) 기본 'Y'","cboUseFlag DataBind(YesOrNo, isAddALL) 기본 'Y'",Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|COND:cboUseFlag,T-9b46ce44,G4,DESIGN,COND,cboUseFlag,cboUseFlag / Use Flag / Active,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,5,SCP0087_MDMClassMaster.cs:107 SCP0087_MDMClassMaster.cs:112 SCP0087_MDMClassMaster.cs:113
+G1|COND:cboUseFlag,T-6263978a,G1,GEN,COND,cboUseFlag,cboUseFlag / Use Flag / Active,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,3,SCP0087_MDMClassMaster.cs:193 SCP0087_MDMClassMaster.cs:196 SCP0087_MDMClassMaster.cs:198 SCP0087_MDMClassMaster.cs:200 SCP0087_MDMClassMaster.cs:201 SCP0087_MDMClassMaster.cs:205
+G6|COND:cboUseFlag,T-3492c90a,G6,GEN,COND,cboUseFlag,cboUseFlag / Use Flag / Active,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,5,SCP0087_MDMClassMaster.cs:107 SCP0087_MDMClassMaster.cs:112 SCP0087_MDMClassMaster.cs:113
+"A1|ROW:cboUseFlag DataBind(YesOrNo, isAddALL) 기본 'Y'",T-d21f5daf,A1,GEN,ROW,"cboUseFlag DataBind(YesOrNo, isAddALL) 기본 'Y'","cboUseFlag DataBind(YesOrNo, isAddALL) 기본 'Y'",Y,REVIEW,행 집계 — A1 1요소: REVIEW:1,1,
+X-LOC|ROW:p_use_flag = ALL ? '' : value,T-1f2d831c,X-LOC,GEN,ROW,p_use_flag = ALL ? '' : value,p_use_flag = ALL ? '' : value,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|ROW:p_use_flag = ALL ? '' : value,T-ea210008,G4,DESIGN,ROW,p_use_flag = ALL ? '' : value,p_use_flag = ALL ? '' : value,Y,REVIEW,행 집계 — G4 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+G1|ROW:p_use_flag = ALL ? '' : value,T-a2c648a1,G1,GEN,ROW,p_use_flag = ALL ? '' : value,p_use_flag = ALL ? '' : value,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+G6|ROW:p_use_flag = ALL ? '' : value,T-8df456bb,G6,GEN,ROW,p_use_flag = ALL ? '' : value,p_use_flag = ALL ? '' : value,Y,REVIEW,행 집계 — G6 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:p_use_flag = ALL ? '' : value,T-772ebfe3,A1,GEN,ROW,p_use_flag = ALL ? '' : value,p_use_flag = ALL ? '' : value,Y,REVIEW,행 집계 — A1 1요소: REVIEW:1,1,
+X-LOC|ROW:Form_Load 자동조회 없음,T-d5d02a53,X-LOC,GEN,ROW,Form_Load 자동조회 없음,Form_Load 자동조회 없음,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|ROW:Form_Load 자동조회 없음,T-0acf4acf,G4,DESIGN,ROW,Form_Load 자동조회 없음,Form_Load 자동조회 없음,Y,REVIEW,행 집계 — G4 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+G1|ROW:Form_Load 자동조회 없음,T-04777791,G1,GEN,ROW,Form_Load 자동조회 없음,Form_Load 자동조회 없음,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+G6|ROW:Form_Load 자동조회 없음,T-50ae8564,G6,GEN,ROW,Form_Load 자동조회 없음,Form_Load 자동조회 없음,Y,REVIEW,행 집계 — G6 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:Form_Load 자동조회 없음,T-8a3c1c15,A1,GEN,ROW,Form_Load 자동조회 없음,Form_Load 자동조회 없음,Y,REVIEW,행 집계 — A1 1요소: REVIEW:1,1,
+X-REASON|ROW:COMMON:UC-01,T-dd45c3eb,X-REASON,DESIGN,ROW,COMMON:UC-01,COMMON:UC-01,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:COMMON:UC-02,T-c8de9dc3,X-LOC,GEN,ROW,COMMON:UC-02,COMMON:UC-02,Y,FAIL,구현 위치 실존 안 함: MdmClassMasterGrid.tsx:71-71 > 49줄,1,
+K4|SCREEN,T-5fcbb39c,K4,COMMON,SCREEN,SCP0087,SCP0087 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 버튼 구성) — 실행 필요: trace,4,
+G3|SCREEN,T-83f694c0,G3,COMMON,SCREEN,SCP0087,SCP0087 화면,Y,NOT_RUN,검사기 있음(smoke 공통 기능(Condition·Reset)) — 실행 필요: smoke,4,
+K-SA|SCREEN,T-8dd447e8,K-SA,COMMON,SCREEN,SCP0087,SCP0087 화면,Y,NOT_RUN,검사기 있음(smoke 공통 기능(Search Area)) — 실행 필요: smoke,1,
+A5|ROW:COMMON:UC-02,T-5355774d,A5,DESIGN,ROW,COMMON:UC-02,COMMON:UC-02,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:COMMON:UC-02,T-791d1259,H5,DESIGN,ROW,COMMON:UC-02,COMMON:UC-02,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H2|ROW:COMMON:UC-02,T-61dfcaec,H2,DESIGN,ROW,COMMON:UC-02,COMMON:UC-02,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D1|ROW:COMMON:UC-02,T-385c7e5c,D1,EDIT,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:COMMON:UC-02,T-96395579,D3,EDIT,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+G1|ROW:COMMON:UC-02,T-7786ff3c,G1,GEN,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:COMMON:UC-02,T-304c5110,A1,GEN,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,행 집계 — A1 1요소: REVIEW:1,1,
+X-REASON|ROW:COMMON:UC-03,T-aa36fdb2,X-REASON,DESIGN,ROW,COMMON:UC-03,COMMON:UC-03,Y,PASS,사유 있음: 컬럼 설정 저장 시 rows Reset/재조회 유도 부재는 전 화면 공유 `packages/shared` 공,1,
+X-LOC|ROW:COMMON:UC-04,T-8189e15c,X-LOC,GEN,ROW,COMMON:UC-04,COMMON:UC-04,Y,PASS,구현 위치 실존 1곳,1,
+X-LOC|ROW:COMMON:UC-05,T-931feea8,X-LOC,GEN,ROW,COMMON:UC-05,COMMON:UC-05,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:COMMON:UC-05,T-016e70f8,A5,DESIGN,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:COMMON:UC-05,T-9cd130f1,H5,DESIGN,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H2|ROW:COMMON:UC-05,T-e628bd82,H2,DESIGN,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+B1|ROW:COMMON:UC-05,T-f58ca587,B1,COMBO,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 B1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+B2|ROW:COMMON:UC-05,T-e6da0856,B2,COMBO,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 B2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+B4|ROW:COMMON:UC-05,T-bf2b97b0,B4,COMBO,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 B4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D5|ROW:COMMON:UC-05,T-7b48e27e,D5,EDIT,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 D5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E5|ROW:COMMON:UC-05,T-301eea11,E5,EDIT,ROW,COMMON:UC-05,COMMON:UC-05,Y,NA,검사 대상 아님 — 이 화면에 E5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+B3|ROW:COMMON:UC-05,T-f949e3a0,B3,COMBO,ROW,COMMON:UC-05,COMMON:UC-05,N,NA,검사 대상 아님 — 이 화면에 B3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-REASON|ROW:COMMON:UC-06,T-035187de,X-REASON,DESIGN,ROW,COMMON:UC-06,COMMON:UC-06,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:COMMON:UC-07,T-974a467b,X-LOC,GEN,ROW,COMMON:UC-07,COMMON:UC-07,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:COMMON:UC-07,T-9f1f247b,A5,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:COMMON:UC-07,T-322fc789,H5,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H2|ROW:COMMON:UC-07,T-12332e3e,H2,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+G1|ROW:COMMON:UC-07,T-eebc3620,G1,GEN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:COMMON:UC-07,T-1ddc6d27,A1,GEN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,행 집계 — A1 1요소: REVIEW:1,1,
+G03-WIRE|SCREEN,T-df8091a6,G03-WIRE,GEN,SCREEN,SCP0087,SCP0087 화면,Y,NOPATH,검사기(check.js G03)는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,SCP0087_MDMClassMaster.cs:86 SCP0087_MDMClassMaster.cs:89
+X-ROW|ENTRY:SCP0087_MDMClassMaster.CreateSpread,T-9fb67551,X-ROW,GEN,ENTRY,SCP0087_MDMClassMaster.CreateSpread,SCP0087_MDMClassMaster.CreateSpread,Y,REVIEW,진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요),4,SCP0087_MDMClassMaster.cs:118 SCP0087_MDMClassMaster.cs:119 SCP0087_MDMClassMaster.cs:121 SCP0087_MDMClassMaster.cs:122
+A5|ENTRY:SCP0087_MDMClassMaster.CreateSpread,T-4dd9dc85,A5,DESIGN,ENTRY,SCP0087_MDMClassMaster.CreateSpread,SCP0087_MDMClassMaster.CreateSpread,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,4,SCP0087_MDMClassMaster.cs:118 SCP0087_MDMClassMaster.cs:119 SCP0087_MDMClassMaster.cs:121 SCP0087_MDMClassMaster.cs:122
+H2|ENTRY:SCP0087_MDMClassMaster.CreateSpread,T-acf91e1c,H2,DESIGN,ENTRY,SCP0087_MDMClassMaster.CreateSpread,SCP0087_MDMClassMaster.CreateSpread,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,4,SCP0087_MDMClassMaster.cs:118 SCP0087_MDMClassMaster.cs:119 SCP0087_MDMClassMaster.cs:121 SCP0087_MDMClassMaster.cs:122
+H5|ENTRY:SCP0087_MDMClassMaster.CreateSpread,T-dc1b0582,H5,DESIGN,ENTRY,SCP0087_MDMClassMaster.CreateSpread,SCP0087_MDMClassMaster.CreateSpread,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,4,SCP0087_MDMClassMaster.cs:118 SCP0087_MDMClassMaster.cs:119 SCP0087_MDMClassMaster.cs:121 SCP0087_MDMClassMaster.cs:122
+D5|ENTRY:SCP0087_MDMClassMaster.CreateSpread,T-b9dbc393,D5,EDIT,ENTRY,SCP0087_MDMClassMaster.CreateSpread,SCP0087_MDMClassMaster.CreateSpread,Y,NA,검사 대상 아님 — 이 화면에 D5 를 적용할 요소(컬럼·조회조건·SP)가 없다,4,SCP0087_MDMClassMaster.cs:118 SCP0087_MDMClassMaster.cs:119 SCP0087_MDMClassMaster.cs:121 SCP0087_MDMClassMaster.cs:122
+A10|SCREEN,T-6a563be5,A10,GEN,SCREEN,SCP0087,SCP0087 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 조회 전 그리드) — 실행 필요: trace,15,SCP0087_MDMClassMaster.cs:107 SCP0087_MDMClassMaster.cs:94 SCP0087_MDMClassMaster.cs:95 SCP0087_MDMClassMaster.cs:96 SCP0087_MDMClassMaster.cs:97 SCP0087_MDMClassMaster.cs:98 SCP0087_MDMClassMaster.cs:112 SCP0087_MDMClassMaster.cs:113 SCP0087_MDMClassMaster.cs:128 SCP0087_MDMClassMaster.cs:129 SCP00
+X-ROW|ENTRY:SCP0087_MDMClassMaster.DefineProperty,T-7860b054,X-ROW,GEN,ENTRY,SCP0087_MDMClassMaster.DefineProperty,SCP0087_MDMClassMaster.DefineProperty,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요),1,SCP0087_MDMClassMaster.cs:107
+X-REOPEN|SCREEN,T-a6f3caa6,X-REOPEN,GEN,SCREEN,SCP0087,SCP0087 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 닫기·재오픈) — 실행 필요: trace,7,SCP0087_MDMClassMaster.designer.cs:16 SCP0087_MDMClassMaster.designer.cs:18 SCP0087_MDMClassMaster.designer.cs:20 SCP0087_MDMClassMaster.cs:214 SCP0087_MDMClassMaster.cs:393 SCP0087_MDMClassMaster.cs:323
+D1|ENTRY:SCP0087_MDMClassMaster.EditButton,T-242eeba5,D1,EDIT,ENTRY,SCP0087_MDMClassMaster.EditButton,SCP0087_MDMClassMaster.EditButton,Y,REVIEW,진입점 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),12,SCP0087_MDMClassMaster.cs:156 SCP0087_MDMClassMaster.cs:158 SCP0087_MDMClassMaster.cs:159 SCP0087_MDMClassMaster.cs:160 SCP0087_MDMClassMaster.cs:162 SCP0087_MDMClassMaster.cs:163 SCP0087_MDMClassMaster.cs:164 SCP0087_MDMClassMaster.cs:166 SCP0087_MDMClassMaster.cs:169
+D3|ENTRY:SCP0087_MDMClassMaster.EditButton,T-e3f88f51,D3,EDIT,ENTRY,SCP0087_MDMClassMaster.EditButton,SCP0087_MDMClassMaster.EditButton,Y,REVIEW,진입점 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),12,SCP0087_MDMClassMaster.cs:156 SCP0087_MDMClassMaster.cs:158 SCP0087_MDMClassMaster.cs:159 SCP0087_MDMClassMaster.cs:160 SCP0087_MDMClassMaster.cs:162 SCP0087_MDMClassMaster.cs:163 SCP0087_MDMClassMaster.cs:164 SCP0087_MDMClassMaster.cs:166 SCP0087_MDMClassMaster.cs:169
+X-ROW|ENTRY:SCP0087_MDMClassMaster.FindButton,T-30f94131,X-ROW,GEN,ENTRY,SCP0087_MDMClassMaster.FindButton,SCP0087_MDMClassMaster.FindButton,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:2 · REVIEW:1,1,SCP0087_MDMClassMaster.cs:146
+A1|SP:P_SCP0087_GET_MDM_CLASS_MASTER,T-5a969281,A1,GEN,SP,PKG_SCP0087.P_SCP0087_GET_MDM_CLASS_MASTER,PKG_SCP0087.P_SCP0087_GET_MDM_CLASS_MASTER,Y,REVIEW,골든 비교 케이스 없음(PKG_SCP0087.P_SCP0087_GET_MDM_CLASS_MASTER — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),34,SCP0087_MDMClassMaster.cs:146 SCP0087_MDMClassMaster.cs:193 SCP0087_MDMClassMaster.cs:196 SCP0087_MDMClassMaster.cs:198 SCP0087_MDMClassMaster.cs:200 SCP0087_MDMClassMaster.cs:201 SCP0087_MDMClassMaster.cs:203 SCP0087_MDMClassMaster.cs:204 SCP0087_MDMClassMaster.cs:205 SCP0087_MDMClassMaster.cs:208 
+A6|SP:P_SCP0087_GET_MDM_CLASS_MASTER,T-ff3a3957,A6,GEN,SP,PKG_SCP0087.P_SCP0087_GET_MDM_CLASS_MASTER,PKG_SCP0087.P_SCP0087_GET_MDM_CLASS_MASTER,Y,NOT_RUN,"검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) — 실행 필요: trace",34,SCP0087_MDMClassMaster.cs:146 SCP0087_MDMClassMaster.cs:193 SCP0087_MDMClassMaster.cs:196 SCP0087_MDMClassMaster.cs:198 SCP0087_MDMClassMaster.cs:200 SCP0087_MDMClassMaster.cs:201 SCP0087_MDMClassMaster.cs:203 SCP0087_MDMClassMaster.cs:204 SCP0087_MDMClassMaster.cs:205 SCP0087_MDMClassMaster.cs:208 
+F4|SP:P_SCP0087_GET_MDM_CLASS_MASTER,T-6a5a0e94,F4,DB,SP,PKG_SCP0087.P_SCP0087_GET_MDM_CLASS_MASTER,PKG_SCP0087.P_SCP0087_GET_MDM_CLASS_MASTER,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,103,SCP0087_MDMClassMaster.cs:146 SCP0087_MDMClassMaster.cs:193 SCP0087_MDMClassMaster.cs:196 SCP0087_MDMClassMaster.cs:198 SCP0087_MDMClassMaster.cs:200 SCP0087_MDMClassMaster.cs:201 SCP0087_MDMClassMaster.cs:203 SCP0087_MDMClassMaster.cs:204 SCP0087_MDMClassMaster.cs:205 SCP0087_MDMClassMaster.cs:208 
+X-ROW|ENTRY:SCP0087_MDMClassMaster.FindData_Main,T-f6157159,X-ROW,GEN,ENTRY,SCP0087_MDMClassMaster.FindData_Main,SCP0087_MDMClassMaster.FindData_Main,Y,REVIEW,진입점 집계 9검사 — NOT_RUN:7 · REVIEW:1 · PASS:1,13,SCP0087_MDMClassMaster.cs:193 SCP0087_MDMClassMaster.cs:198 SCP0087_MDMClassMaster.cs:201 SCP0087_MDMClassMaster.cs:211 SCP0087_MDMClassMaster.cs:217 SCP0087_MDMClassMaster.cs:234 SCP0087_MDMClassMaster.cs:246
+DB-SYN|SP:P_SCP0087_GET_MDM_CLASS_MASTER,T-473c1011,DB-SYN,DB,SP,PKG_SCP0087.P_SCP0087_GET_MDM_CLASS_MASTER,PKG_SCP0087.P_SCP0087_GET_MDM_CLASS_MASTER,Y,PASS,시노님검사 OK,4,SCP0087_MDMClassMaster.cs:212 SCP0087_MDMClassMaster.cs:216 SCP0087_MDMClassMaster.cs:223 SCP0087_MDMClassMaster.cs:330
+X-ROW|ENTRY:SCP0087_MDMClassMaster.Form_Load,T-cedd5dff,X-ROW,GEN,ENTRY,SCP0087_MDMClassMaster.Form_Load,SCP0087_MDMClassMaster.Form_Load,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),2,SCP0087_MDMClassMaster.cs:94 SCP0087_MDMClassMaster.cs:95 SCP0087_MDMClassMaster.cs:96 SCP0087_MDMClassMaster.cs:97 SCP0087_MDMClassMaster.cs:98
+C1|COND:cboUseFlag,T-42426558,C1,CASCADE,COND,cboUseFlag,cboUseFlag / Use Flag / Active,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,1,SCP0087_MDMClassMaster.cs:113
+X-ROW|ENTRY:SCP0087_MDMClassMaster.InitControls,T-3f36f0c2,X-ROW,GEN,ENTRY,SCP0087_MDMClassMaster.InitControls,SCP0087_MDMClassMaster.InitControls,Y,REVIEW,진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요),1,SCP0087_MDMClassMaster.cs:113
+X-ROW|ENTRY:SCP0087_MDMClassMaster.InitSpread,T-865e407f,X-ROW,GEN,ENTRY,SCP0087_MDMClassMaster.InitSpread,SCP0087_MDMClassMaster.InitSpread,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),6,SCP0087_MDMClassMaster.cs:128 SCP0087_MDMClassMaster.cs:129 SCP0087_MDMClassMaster.cs:130
+X-ROW|ENTRY:SCP0087_MDMClassMaster.InsertButton,T-2c7ad588,X-ROW,GEN,ENTRY,SCP0087_MDMClassMaster.InsertButton,SCP0087_MDMClassMaster.InsertButton,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),1,SCP0087_MDMClassMaster.cs:151
+X-ROW|ENTRY:SCP0087_MDMClassMaster.SCM_SYS_LOG_BATCH,T-8be42bfb,X-ROW,GEN,ENTRY,SCP0087_MDMClassMaster.SCM_SYS_LOG_BATCH,SCP0087_MDMClassMaster.SCM_SYS_LOG_BATCH,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:2 · NOPATH:1 (미실행 검사가 남아 판정필요),12,SCP0087_MDMClassMaster.cs:392 SCP0087_MDMClassMaster.cs:393 SCP0087_MDMClassMaster.cs:395 SCP0087_MDMClassMaster.cs:396 SCP0087_MDMClassMaster.cs:397 SCP0087_MDMClassMaster.cs:398 SCP0087_MDMClassMaster.cs:399 SCP0087_MDMClassMaster.cs:400 SCP0087_MDMClassMaster.cs:401 SCP0087_MDMClassMaster.cs:403 
+F4|ENTRY:SCP0087_MDMClassMaster.SCM_SYS_LOG_BATCH,T-72b3b4b7,F4,DB,ENTRY,SCP0087_MDMClassMaster.SCM_SYS_LOG_BATCH,SCP0087_MDMClassMaster.SCM_SYS_LOG_BATCH,Y,REVIEW,진입점 집계 — F4 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),2,SCP0087_MDMClassMaster.cs:395 SCP0087_MDMClassMaster.cs:403
+DB-SYN|ENTRY:SCP0087_MDMClassMaster.SCM_SYS_LOG_BATCH,T-7d18917c,DB-SYN,DB,ENTRY,SCP0087_MDMClassMaster.SCM_SYS_LOG_BATCH,SCP0087_MDMClassMaster.SCM_SYS_LOG_BATCH,Y,PASS,진입점 집계 — DB-SYN 2요소: PASS:2,2,SCP0087_MDMClassMaster.cs:395 SCP0087_MDMClassMaster.cs:403
+F4|SP:P_SCP0087_SAVE_MDM_CLASS_MASTER_ROW_DATASET,T-510dd89e,F4,DB,SP,PKG_SCP0087.P_SCP0087_SAVE_MDM_CLASS_MASTER_ROW_DATASET,PKG_SCP0087.P_SCP0087_SAVE_MDM_CLASS_MASTER_ROW_DATASET,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,71,SCP0087_MDMClassMaster.cs:183 SCP0087_MDMClassMaster.cs:184 SCP0087_MDMClassMaster.cs:260 SCP0087_MDMClassMaster.cs:262 SCP0087_MDMClassMaster.cs:267 SCP0087_MDMClassMaster.cs:270 SCP0087_MDMClassMaster.cs:273 SCP0087_MDMClassMaster.cs:275 SCP0087_MDMClassMaster.cs:276 SCP0087_MDMClassMaster.cs:277 
+X-ROW|ENTRY:SCP0087_MDMClassMaster.SaveData_Main,T-fa3cfc2a,X-ROW,GEN,ENTRY,SCP0087_MDMClassMaster.SaveData_Main,SCP0087_MDMClassMaster.SaveData_Main,Y,REVIEW,진입점 집계 11검사 — NOT_RUN:7 · NOPATH:2 · PASS:2 (미실행 검사가 남아 판정필요),6,SCP0087_MDMClassMaster.cs:262 SCP0087_MDMClassMaster.cs:319 SCP0087_MDMClassMaster.cs:358 SCP0087_MDMClassMaster.cs:378
+DB-SYN|SP:P_SCP0087_SAVE_MDM_CLASS_MASTER_ROW_DATASET,T-a025dab2,DB-SYN,DB,SP,PKG_SCP0087.P_SCP0087_SAVE_MDM_CLASS_MASTER_ROW_DATASET,PKG_SCP0087.P_SCP0087_SAVE_MDM_CLASS_MASTER_ROW_DATASET,Y,PASS,시노님검사 OK,1,SCP0087_MDMClassMaster.cs:330

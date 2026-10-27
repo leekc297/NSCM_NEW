@@ -1,0 +1,36 @@
+CHK | NAME | N
+V1 마커 | PKG_DMF0082 | 2
+V1 마커 | PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING | 3
+(2 rows)
+
+CHK | OBJECT_NAME | OBJECT_TYPE | STATUS | LAST_DDL | ERR
+V1 상태 | PKG_DMF0082 | PACKAGE | VALID | 2026-10-09 13:38:31 | 0
+V1 상태 | PKG_DMF0082 | PACKAGE BODY | INVALID | 2026-10-27 15:05:18 | 0
+V1 상태 | PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING | PROCEDURE | VALID | 2026-10-27 15:05:21 | 0
+(3 rows)
+
+== V3 테이블별 CELL_PROD_SITE_ID DEFAULT · '/'/공백 행 수
+   DM_PLN_CFM_MKT_DEMAND_PLAN           DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_CFM_MKT_DEMAND_PLAN_C         DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_CFM_MKT_DEMAND_PLAN_C_KEEP    DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_CFM_MKT_DEMAND_PLAN_H         DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_CFM_SELLING_PRICE             DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_CFM_SELLING_PRICE_C           DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_CFM_SELLING_PRICE_C_KEEP      DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_CFM_SELLING_PRICE_H           DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_DEMANDID_PEGGING              DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_DEMAND_CHANGE_STATUS          DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_MKT_FCST_RESULT               DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_MKT_FCST_RESULT_C             DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_MKT_FCST_RESULT_C_KEEP        DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_NET_DEMAND                    DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_SALES_PLAN                    DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_SALES_PLAN_C                  DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_SALES_PLAN_C_KEEP             DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_SALES_PLAN_H                  DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_SALES_PLAN_RESULT             DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_SALES_PLAN_RESULT_C           DEFAULT '-'    ON NULL YES · '/'행 0
+   DM_PLN_SALES_PLAN_RESULT_C_KEEP      DEFAULT '-'    ON NULL YES · '/'행 0
+   SCP_OPMZ_DMD_ADJ                     DEFAULT (없음) ON NULL NO  · '/'행 0
+   ZNERP_TARGET_HIST_DM                 DEFAULT (없음) ON NULL NO  · '/'행 0
+   합계 '/'행 0

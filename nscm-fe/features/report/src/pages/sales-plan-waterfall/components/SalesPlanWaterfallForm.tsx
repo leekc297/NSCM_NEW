@@ -150,12 +150,8 @@ export const SalesPlanWaterfallForm = ({ onSubmit }: SalesPlanWaterfallFormProps
                         <Button
                           appearance='outlined'
                           priority='normal'
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => setOpenVersionModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setOpenVersionModal(true)}
                         />
                       ),
                     }}
@@ -328,12 +324,8 @@ export const SalesPlanWaterfallForm = ({ onSubmit }: SalesPlanWaterfallFormProps
                         <Button
                           appearance='outlined'
                           priority='normal'
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => setOpenProjectModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setOpenProjectModal(true)}
                         />
                       ),
                     }}
@@ -428,12 +420,8 @@ export const SalesPlanWaterfallForm = ({ onSubmit }: SalesPlanWaterfallFormProps
                         <Button
                           appearance='outlined'
                           priority='normal'
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => setOpenOwnerModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setOpenOwnerModal(true)}
                         />
                       ),
                     }}
@@ -458,12 +446,8 @@ export const SalesPlanWaterfallForm = ({ onSubmit }: SalesPlanWaterfallFormProps
                         <Button
                           appearance='outlined'
                           priority='normal'
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => setOpenItemModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setOpenItemModal(true)}
                         />
                       ),
                     }}

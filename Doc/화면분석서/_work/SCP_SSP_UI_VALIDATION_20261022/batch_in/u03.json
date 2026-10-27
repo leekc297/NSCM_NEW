@@ -1,0 +1,312 @@
+[
+ {
+  "screen": "SCP0009",
+  "title": "Shipment Plan FG",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0009_Shipment_Plan_FG/SCP0009_Shipment_Plan_FG.cs:4749"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0009_Shipment_Plan_FG/SCP0009_Shipment_Plan_FG.Designer.cs:2005"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/shipment-plan-fg"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "537",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHIPMENT_PLAN_FG",
+    "member": "FindData_Main",
+    "line": "1438",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHIPMENT_PLAN_FG_TITLE_PARAL",
+    "member": "FindData_Main",
+    "line": "1486",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHIPMENT_PLAN_FG",
+    "member": "FindData_Main",
+    "line": "1529",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_WEEKLY",
+    "member": "SaveData_Main",
+    "line": "3364",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "member": "Get_IsSaveYn",
+    "line": "3682",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHIPMENT_PLAN_FG_PEGGING",
+    "member": "FindData_PeggingInfo",
+    "line": "3832",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHIPMENT_PLAN_FG_PROBLEM",
+    "member": "FindData_PlanProblem",
+    "line": "3900",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "4011",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+    "member": "GetLastRange",
+    "line": "4043",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "4057",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_FIX_DATASET",
+    "member": "SaveData_FixInfo",
+    "line": "4587",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "4707",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "537",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHIPMENT_PLAN_FG",
+    "member": "FindData_Main",
+    "line": "1438",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHIPMENT_PLAN_FG_TITLE_PARAL",
+    "member": "FindData_Main",
+    "line": "1486",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHIPMENT_PLAN_FG",
+    "member": "FindData_Main",
+    "line": "1529",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "member": "Get_IsSaveYn",
+    "line": "3682",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHIPMENT_PLAN_FG_PEGGING",
+    "member": "FindData_PeggingInfo",
+    "line": "3832",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHIPMENT_PLAN_FG_PROBLEM",
+    "member": "FindData_PlanProblem",
+    "line": "3900",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "4011",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+    "member": "GetLastRange",
+    "line": "4043",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "4057",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "4707",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0009_Shipment_Plan_FG\\SCP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCM0001_GET_SCP_DAY_PERIOD / SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_WEEKLY",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0009_GET_SHIPMENT_PLAN_FG",
+   "SCP0009_GET_SHIPMENT_PLAN_FG_PEGGING",
+   "SCP0009_GET_SHIPMENT_PLAN_FG_PROBLEM",
+   "SCP0009_GET_SHIPMENT_PLAN_FG_TITLE_PARAL",
+   "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_FIX_DATASET",
+   "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_FIX_DATASET / SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_WEEKLY",
+   "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_WEEKLY",
+   "SCP0013_GET_PLAN_TYPE_SAVE_YN"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_FIX_DATASET",
+    "sp": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_FIX_DATASET",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 F 와 오류메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE() AS err_message"
+   },
+   {
+    "entry_sp": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_WEEKLY",
+    "sp": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_WEEKLY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 롤백 후 F 와 오류메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR; SELECT 'F' AS result_code, '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE() AS err_message"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "해당 주차 최상위 플랜이 조회 플랜과 같고 그것이 Final(FN)이면 저장 불가",
+    "message": null,
+    "on_fail": "edit_yn='N' 반환"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "조회 플랜이 최상위(FN 아님)이거나, 바로 다음 상위 플랜이 생성됐지만 미수행(-1) 상태면 저장 가능",
+    "message": null,
+    "on_fail": "edit_yn='Y' 반환(저장 가능)"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "그 외(상위 플랜이 이미 수행됨, 해당 주차 플랜/LOOKUP 없음)는 저장 불가",
+    "message": null,
+    "on_fail": "edit_yn='N' 반환(상위 플랜 진행·미존재 등)"
+   }
+  ]
+ }
+]

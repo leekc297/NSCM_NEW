@@ -38,6 +38,7 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
   const sc = useShipmentPlanSemiStore(s => s.searchCondition);
   const set = useShipmentPlanSemiStore(s => s.setSearchCondition);
   const setDivision = useShipmentPlanSemiStore(s => s.setDivision);
+  const clearFilters = useShipmentPlanSemiStore(s => s.clearFilters);
   const openSearchArea = useShipmentPlanSemiStore(s => s.openSearchArea);
 
   const tabId = useTabid();
@@ -339,33 +340,95 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
               바뀐다(ShipmentPlanSemiGrid isDynVisible, dynamicColumns deps=bucketType). SCP0011
               (production-plan) 동일 구조 — 사용자 지시 2026-10-13(설계 §0.2/§2.4 '매번 재조회' 파리티 대신
               SCP0011 토글 방식 채택. chkSum 토글과 동일 경로). */}
-          {single(LBL.BUCKET, '_Bucket', sc.bucketType, bucketOptions, v =>
+          {/* {single(LBL.BUCKET, '_Bucket', sc.bucketType, bucketOptions, v =>
             set({ bucketType: v as BUCKET_TYPE })
-          )}
+          )} */}
+          {/* 편집중이면 Division 과 같이 confirm 후 변경(취소 시 이전 값 유지, 확인 시 편집분 되돌림). */}
+          {single(LBL.BUCKET, '_Bucket', sc.bucketType, bucketOptions, v => {
+            void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+              if (ok) set({ bucketType: v as BUCKET_TYPE });
+            });
+          })}
+          {/* Sum(chkSum) — To Site 바로 아래 칸(2행 4열)으로 이동(사용자 지시 2026-10-19).
+              SUM(M_) 컬럼 visible 토글 전용(design 03 §2.4, 재조회 불요).
+              체크박스를 To Site 라벨 글자 시작선(T)에 맞춘다 — 숨긴 To Site 텍스트로 라벨과 같은 폭을 잡고
+              그 왼쪽 끝에 둔다(SCP0011 Sum 동일 방식, 언어별 라벨 길이 대응). */}
+          {/* 이전: 라벨 칸에 체크박스+Sum 글자를 To Site 라벨 시작선에 맞춤(2026-10-19). 다른 조회조건처럼
+              Sum 을 라벨로, 체크박스를 입력 칸으로 옮겼다(사용자 지시 2026-10-19).
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label=''
+              labelAlign='right'
+              render={() => (
+                <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '0px' }}>
+                  <span style={{ position: 'relative', whiteSpace: 'nowrap' }}>
+                    <span style={{ visibility: 'hidden' }}>{t(LBL.TO_SITE, '_To Site')}</span>
+                    <span style={{ position: 'absolute', left: '4px', top: '50%', transform: 'translateY(-50%)' }}>
+                      <Checkbox
+                        labelText={t(LBL.SUM, '_Sum')}
+                        checked={sc.chkSum}
+                        onChange={checked => set({ chkSum: checked })}
+                      />
+                    </span>
+                  </span>
+                </div>
+              )}
+            />
+          </Grid> */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t(LBL.SUM, '_Sum')}
+              labelAlign='right'
+              render={() => (
+                <Checkbox checked={sc.chkSum} onChange={checked => set({ chkSum: checked })} />
+              )}
+            />
+          </Grid>
         </>
       }
       extraConditions={
         <>
           {/* Plan Date → Type → Seq — AS-IS UsrCombo 단일선택 필수 종속 콤보(design 02 §2.6). 공용
-              PlanVersionCascade(종속 콤보 + 공유 캐스케이더)로 교체 — 아무 필드나 눌러도 같은 컬럼 팝업이
-              열려 date→type→seq 경로를 고르고 상위 변경 시 하위 초기화. 자동선택(최신 type·최대 seq)은
-              위 effect 가 그대로 채운다. 3필드 = 기존 폭(size 3×3) 유지로 size=9 래퍼. */}
-          <Grid size={9}>
+              PlanVersionCascade(종속 콤보 + 공유 캐스케이더). combined 단일 입력칸(기본) — 클릭하면
+              date→type→seq 컬럼 팝업으로 경로 선택, 상위 변경 시 하위 초기화. 자동선택(최신 type·최대 seq)은
+              위 effect 가 그대로 채운다. 입력칸 고정폭 190px + 라벨(140) 수용 size=3 래퍼(SCP0013 동일,
+              사용자 지시 2026-10-21). */}
+          <Grid size={3}>
             <PlanVersionCascade
-              gridSize={4}
               variant='horizontal'
               labelAlign='right'
               formItemClassName={commonStyles.formItem}
+              label='Plan Date/Type/Seq'
+              inputWidth='190px'
               levels={planVersionLevels}
               divisionId={sc.divisionId}
               value={planVersionValue}
-              onChange={v =>
-                set({
+              onChange={v => {
+                const next = {
                   planStartYyyymmdd: v.planDate ?? '',
                   planType: v.planType ?? '',
                   planSeq: v.planSeq ?? '',
-                })
-              }
+                };
+                // Plan Date/Type/Seq 변경 시 그리드 초기화(AS-IS ClearDataSource .cs:596·4790·4808).
+                const changed =
+                  next.planStartYyyymmdd !== sc.planStartYyyymmdd ||
+                  next.planType !== sc.planType ||
+                  next.planSeq !== sc.planSeq;
+                // set(next);
+                // if (changed) clearFilters();
+                if (!changed) {
+                  set(next);
+                  return;
+                }
+                // 편집중이면 Division 과 같이 confirm 후 변경.
+                void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+                  if (!ok) return;
+                  set(next);
+                  clearFilters();
+                });
+              }}
             />
           </Grid>
           {/* Period* — SCP0013 과 동일 PeriodRangePicker(Today/W26/W52/W82 전부 클라 계산). Plan Date
@@ -380,10 +443,7 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* Sum(chkSum) — AS-IS row3 끝. SUM(M_) 컬럼 visible 토글 전용(design 03 §2.4, 재조회 불요).
-              Plan Date 라벨과 같은 선에 맞춘다(SCP0011 동일). @lges FormItem 은 label='' 이면 라벨 박스를
-              안 그려 체크박스가 1열 맨 왼쪽에 붙으므로, 라벨 컬럼 안에서 오른쪽 정렬(flex-end)하되 캡처처럼
-              Plan Date 라벨 글자 시작선에 오도록 우측선보다 ≈16px 안쪽으로 paddingRight 로 당긴다. */}
+          {/* 이전 위치: AS-IS row3 끝(Period 옆) — To Site 아래로 이동(2026-10-19).
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -399,7 +459,7 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
                 </div>
               )}
             />
-          </Grid>
+          </Grid> */}
         </>
       }
     />

@@ -34,12 +34,14 @@ interface MaterialByDivisionModalProps {
   /**
    * 선택 확정 콜백. AS-IS SetItem 이 넘기던 값과 같은 순서:
    * (Material Code, Description, Class Name, Nickname). 다건 선택 시 Code 는 콤마 결합, 나머지는 첫 행.
+   * 5번째 nickNames = 고른 행 전체의 Nickname 콤마 결합(중복·빈값 제외, 선택 인자 — 쓰지 않는 화면은 무시).
    */
   setSelectedValue: (
     items: string,
     itemName?: string,
     itemClassName?: string,
-    nickName?: string
+    nickName?: string,
+    nickNames?: string
   ) => void;
   /**
    * 열 때 넘기는 조회 파라미터.
@@ -147,6 +149,10 @@ export const MaterialByDivisionModal = ({
     setSearchParam(prev => ({ ...prev, itemId: itemId ?? '' }));
   };
 
+  // 고른 행들의 Nickname 콤마 결합(중복·빈값 제외) — setSelectedValue 5번째 인자.
+  const joinNickNames = (rows: { NICK_NAME?: string }[]) =>
+    [...new Set(rows.map(r => (r?.NICK_NAME ?? '').trim()).filter(Boolean))].join(',');
+
   const emit = (row?: {
     ITEM_ID?: string;
     ITEM_NAME?: string;
@@ -157,7 +163,8 @@ export const MaterialByDivisionModal = ({
       row?.ITEM_ID ?? '',
       row?.ITEM_NAME,
       row?.ITEM_CLASS_NAME,
-      row?.NICK_NAME
+      row?.NICK_NAME,
+      joinNickNames(row ? [row] : [])
     );
   };
 
@@ -177,7 +184,13 @@ export const MaterialByDivisionModal = ({
       }
       const items = selected.map(it => it.ITEM_ID).join(',');
       // Code 는 콤마 결합, 나머지 부가값은 첫 행 기준(AS-IS SetItem 다중선택 규약).
-      setSelectedValue(items, selected[0]?.ITEM_NAME, selected[0]?.ITEM_CLASS_NAME, selected[0]?.NICK_NAME);
+      setSelectedValue(
+        items,
+        selected[0]?.ITEM_NAME,
+        selected[0]?.ITEM_CLASS_NAME,
+        selected[0]?.NICK_NAME,
+        joinNickNames(selected)
+      );
       modalClose();
       return;
     }
@@ -190,7 +203,13 @@ export const MaterialByDivisionModal = ({
     if (!selections) return;
     const items = selections.map(item => item.ITEM_ID).join(',');
     const first = selections[0];
-    setSelectedValue(items, first?.ITEM_NAME, first?.ITEM_CLASS_NAME, first?.NICK_NAME);
+    setSelectedValue(
+      items,
+      first?.ITEM_NAME,
+      first?.ITEM_CLASS_NAME,
+      first?.NICK_NAME,
+      joinNickNames(selections)
+    );
     modalClose();
   };
 

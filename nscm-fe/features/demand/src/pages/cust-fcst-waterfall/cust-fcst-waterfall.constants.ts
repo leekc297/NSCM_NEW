@@ -56,10 +56,13 @@ export const kindOf = (binding: string): 'M' | 'W' | 'D' | null =>
 export const DYN_RANK = { M: 0, W: 1, D: 2 } as const;
 
 /**
- * UM-04 — 기간 컬럼 소수 자릿수 fallback. P_DMF0053_GET_SPREAD_TITLE 은 기간 컬럼에 `3 AS DATA_SCALE_NUMBER`
- * (BODY L91) → AS-IS SpreadInfo.cs L1433~1440 decimalPlaces=3·구분자 on. (DMF0040 은 '' → 0 — 화면별 상이)
+ * UM-04 — 기간 컬럼 소수 자릿수 fallback. AS-IS 공통 SpreadInfo 는 타이틀 SP 의 DATA_SCALE_NUMBER 가
+ * 양수일 때만 그 자릿수를 쓰고, 빈 값·0 이면 소수 0자리다(DMF0040 타이틀 SP 도 기간 컬럼을 '' 로 준다).
+ * 종전에는 P_DMF0053_GET_SPREAD_TITLE 이 기간 컬럼에 `3 AS DATA_SCALE_NUMBER` 를 줘서 fallback 도 3 이었는데,
+ * AS-IS 화면은 정수만 표시하고 조회 SP 도 수량을 정수로 절삭해 합산하므로(2026-10-15 파리티 수정) 타이틀 SP 를
+ * '' 로 되돌리고 fallback 도 AS-IS 와 같은 0 으로 맞춘다.
  */
-export const DEFAULT_DYN_SCALE = 3;
+export const DEFAULT_DYN_SCALE = 0;
 
 /** SP DATA_SCALE_NUMBER → 자릿수 (''/NULL/음수/NaN = fallback). AS-IS: `int > 0` 일 때만 채택 */
 export const scaleOf = (
@@ -78,8 +81,12 @@ export const widthOf = (raw: string | number | null | undefined, fallback: numbe
   return Number.isFinite(n) && n > 0 ? n : fallback;
 };
 
-/** AS-IS footer 집계 서식 `{0:#,##0.###}` (InitSpreadFooterSum L425) — 3자리 */
-export const FOOTER_FORMAT = 'n3';
+/**
+ * AS-IS footer 집계 서식 `{0:#,##0.###}` (InitSpreadFooterSum L425) — 소수는 있을 때만 최대 3자리.
+ * 조회 SP 가 수량을 정수로 절삭해 합산하므로(2026-10-15 파리티 수정) 합계도 항상 정수라 'n0' 과 같다.
+ * 기간 컬럼 자릿수(DEFAULT_DYN_SCALE)와 맞춰 둔다.
+ */
+export const FOOTER_FORMAT = 'n0';
 
 /**
  * UM-08 — bucket 전환 시 AS-IS `InitSpread()`(타이틀 재조회 + 시트 재생성 = 그리드 비움) 경계.

@@ -9,11 +9,13 @@ import type { EditTracker } from '@foundation/utils';
 import { GridAction, GridUtils } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import {
+  formatTotalCases,
   useProcMutation,
   useSaveWithValidation,
   useTabBtnPermissions,
   useTabComboQueries,
   useTabProcQuery,
+  useTitleAreaLanguage,
 } from '@shared/hooks';
 import { TitleArea } from '@shared/lges';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
@@ -47,6 +49,8 @@ import {
 
 export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
+  // 건수 표기 언어(총/건 ↔ Total/rows) — 공용 SubTitle · ResultArea 와 같은 규칙(useTitleAreaLanguage 주석).
+  const titleAreaLanguage = useTitleAreaLanguage();
   const setAlert = useMessageStore(state => state.setAlert);
   const setToast = useMessageStore(state => state.setToast);
   const queryClient = useQueryClient();
@@ -452,7 +456,8 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
               isSubTitle
               title={t(LBL.LOOKUP_VALUES, '_Lookup Values')}
               depth='h4'
-              totalCases={detailCount === 0 ? undefined : detailCount}
+              totalCases={formatTotalCases(detailCount === 0 ? undefined : detailCount)}
+              language={titleAreaLanguage}
             />
             <ConstraintMgmtDetailGrid
               gridRef={detailGridRef}

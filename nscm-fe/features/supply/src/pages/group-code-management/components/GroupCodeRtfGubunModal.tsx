@@ -103,7 +103,7 @@ export const GroupCodeRtfGubunModal = ({
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          <h2 className='headerTitle'>{t('LBL00669', '_Common Data')}</h2>
+          <h2 className='headerTitle'>{t('MNU00208', '_CommonPopup')}</h2>
         </div>
       }
       customContentArea={

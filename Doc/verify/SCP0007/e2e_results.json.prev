@@ -1,0 +1,4976 @@
+[
+ {
+  "row_id": "V-f1247911",
+  "result": "PASS",
+  "evidence": "진입 화면 '_' 폴백 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-bb3b5ec2",
+  "result": "PASS",
+  "evidence": "Status=Required(Required) 조회 178행 → Insert → 알림 'Input Status가 Completed일때만 입력이 가능합니다.\nConfirm' · 행 178→178 — AS-IS MSG00159 'Input Status가 Completed일때만 입력이 가능합니다'(TO-BE MSG01175) + 행 추가 없음 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-126bbe5d",
+  "result": "PASS",
+  "evidence": "기존행 r0 DIVISION_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-8d9077b4",
+  "result": "PASS",
+  "evidence": "기존행 r0 CUSTOMER 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-2604da15",
+  "result": "PASS",
+  "evidence": "기존행 r0 FROM_SITE_CODE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-a68bc49e",
+  "result": "PASS",
+  "evidence": "기존행 r0 FROM_CITY 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-2e38b7dc",
+  "result": "PASS",
+  "evidence": "기존행 r0 TO_SITE_CODE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-2e9475c4",
+  "result": "PASS",
+  "evidence": "기존행 r0 TO_CITY 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-64f38e3e",
+  "result": "PASS",
+  "evidence": "기존행 r0 VMI_YN 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-6879e026",
+  "result": "PASS",
+  "evidence": "신규행 INCOTERMS: TO_SITE PLANT 'KR04179400_40-E' → 편집=false(값 'DAP') / 비PLANT 'APRO_KR_ANY' → 편집=true(값 '') — AS-IS SetCityCode: PLANT 면 잠금(EXW/DAP 자동), 아니면 해제",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-57ca2b81",
+  "result": "PASS",
+  "evidence": "기존행 r1 TO_SITE 'Alte_KR_SEL'(SALES) → INCOTERMS_SSP 편집=false — AS-IS 기존행(EditButton) 기대 잠금(SSP Incoterms 만 To Site 가 PLANT 일 때 해제, EditButton:482) 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e7b1810b",
+  "result": "PASS",
+  "evidence": "기존행 r0 PRIORITY 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-13b579be",
+  "result": "PASS",
+  "evidence": "기존행 r0 ROUTE_CNT 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-e89087ef",
+  "result": "PASS",
+  "evidence": "기존행 r0 TRANSPORT_MODE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-f50ac698",
+  "result": "PASS",
+  "evidence": "기존행 r0 ROUTE_ID 직접 편집=false (AS-IS 직접 입력 차단·더블클릭 팝업으로만 입력 — 팝업 동작은 G5 행)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-da491280",
+  "result": "PASS",
+  "evidence": "기존행 r0 LT_TYPE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-88600a28",
+  "result": "PASS",
+  "evidence": "기존행 r0 DAYS_MON 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-27d38671",
+  "result": "PASS",
+  "evidence": "기존행 r0 DAYS_TUE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-ad8ed399",
+  "result": "PASS",
+  "evidence": "기존행 r0 DAYS_WED 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d5bff620",
+  "result": "PASS",
+  "evidence": "기존행 r0 DAYS_THU 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-24a3908d",
+  "result": "PASS",
+  "evidence": "기존행 r0 DAYS_FRI 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-cee6dff4",
+  "result": "PASS",
+  "evidence": "기존행 r0 DAYS_SAT 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-ca520ffa",
+  "result": "PASS",
+  "evidence": "기존행 r0 DAYS_SUN 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-a9f5ee58",
+  "result": "PASS",
+  "evidence": "기존행 r0 LEAD_TIME 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d87afc29",
+  "result": "PASS",
+  "evidence": "기존행 r0 DIS_TOTAL_LEAD_TIME 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-970cb5a6",
+  "result": "PASS",
+  "evidence": "기존행 r0 BOD_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-7204da78",
+  "result": "PASS",
+  "evidence": "기존행 r0 AFTER_LEAD_TIME 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-f0aa6acf",
+  "result": "PASS",
+  "evidence": "기존행 r0 FROM_YYYYMMDD 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-6fc71b43",
+  "result": "PASS",
+  "evidence": "기존행 r0 TO_YYYYMMDD 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d3a19ae4",
+  "result": "PASS",
+  "evidence": "기존행 r0 REMARKS 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-88ed38ae",
+  "result": "PASS",
+  "evidence": "기존행 r0 BOD_VALID 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-dadb820d",
+  "result": "PASS",
+  "evidence": "기존행 r0 ROUTE_VALID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-6819078a",
+  "result": "PASS",
+  "evidence": "기존행 r0 CREATED_BY 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-25f9e72a",
+  "result": "PASS",
+  "evidence": "기존행 r0 CREATION_DATE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-81ee1263",
+  "result": "PASS",
+  "evidence": "기존행 r0 LAST_UPDATED_BY 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-1f8e733e",
+  "result": "PASS",
+  "evidence": "기존행 r0 LAST_UPDATE_DATE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-dd1002b1",
+  "result": "PASS",
+  "evidence": "신규행 DIVISION_ID 편집=true · 조회 Div 'ALL' → AS-IS 편집 가능",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-6a47f3f3",
+  "result": "PASS",
+  "evidence": "신규행 r0 CUSTOMER 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-bcc52c0d",
+  "result": "PASS",
+  "evidence": "신규행 r0 FROM_SITE_CODE 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d24bec3a",
+  "result": "PASS",
+  "evidence": "신규행 r0 FROM_CITY 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-1889477b",
+  "result": "PASS",
+  "evidence": "신규행 r0 TO_SITE_CODE 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-54d6fc78",
+  "result": "PASS",
+  "evidence": "신규행 r0 TO_CITY 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-19d1af3b",
+  "result": "PASS",
+  "evidence": "신규행 r0 VMI_YN 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-ed4185e9",
+  "result": "PASS",
+  "evidence": "신규행 INCOTERMS: TO_SITE PLANT 'KR04179400_40-E' → 편집=false(값 'DAP') / 비PLANT 'APRO_KR_ANY' → 편집=true(값 '') — AS-IS SetCityCode: PLANT 면 잠금(EXW/DAP 자동), 아니면 해제",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-1eba3132",
+  "result": "PASS",
+  "evidence": "신규행 INCOTERMS_SSP: TO_SITE PLANT 'KR04179400_40-E' → 편집=true(값 'DAP') / 비PLANT 'APRO_KR_ANY' → 편집=false(값 '') — AS-IS SetCityCode: PLANT 면 해제(dtIncotermsEdit), 아니면 잠금",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-133989fb",
+  "result": "PASS",
+  "evidence": "신규행 r0 PRIORITY 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-579f88c9",
+  "result": "PASS",
+  "evidence": "신규행 r0 ROUTE_CNT 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-98735005",
+  "result": "PASS",
+  "evidence": "신규행 r0 TRANSPORT_MODE 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-dde703c0",
+  "result": "PASS",
+  "evidence": "신규행 r0 ROUTE_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-3e4eaf26",
+  "result": "PASS",
+  "evidence": "신규행 r0 LT_TYPE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-67047a63",
+  "result": "PASS",
+  "evidence": "신규행 r0 DAYS_MON 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-bd8eb2d6",
+  "result": "PASS",
+  "evidence": "신규행 r0 DAYS_TUE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-99945e73",
+  "result": "PASS",
+  "evidence": "신규행 r0 DAYS_WED 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-db16f077",
+  "result": "PASS",
+  "evidence": "신규행 r0 DAYS_THU 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-34eb3e53",
+  "result": "PASS",
+  "evidence": "신규행 r0 DAYS_FRI 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d3f9e85b",
+  "result": "PASS",
+  "evidence": "신규행 r0 DAYS_SAT 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-bcb4dce0",
+  "result": "PASS",
+  "evidence": "신규행 r0 DAYS_SUN 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-a8bd7cd1",
+  "result": "PASS",
+  "evidence": "신규행 r0 LEAD_TIME 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-fe0b86f7",
+  "result": "PASS",
+  "evidence": "신규행 r0 DIS_TOTAL_LEAD_TIME 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-4be70d81",
+  "result": "PASS",
+  "evidence": "신규행 r0 BOD_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-12542785",
+  "result": "PASS",
+  "evidence": "신규행 r0 AFTER_LEAD_TIME 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-760f7dc2",
+  "result": "PASS",
+  "evidence": "신규행 r0 FROM_YYYYMMDD 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d661ee8d",
+  "result": "PASS",
+  "evidence": "신규행 r0 TO_YYYYMMDD 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-9851bb4f",
+  "result": "PASS",
+  "evidence": "신규행 r0 REMARKS 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-860019a0",
+  "result": "PASS",
+  "evidence": "신규행 r0 BOD_VALID 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-7e7aaad5",
+  "result": "PASS",
+  "evidence": "신규행 r0 ROUTE_VALID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-a1e0b68c",
+  "result": "PASS",
+  "evidence": "신규행 r0 CREATED_BY 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-ab648ca9",
+  "result": "PASS",
+  "evidence": "신규행 r0 CREATION_DATE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-c3a7e99f",
+  "result": "PASS",
+  "evidence": "신규행 r0 LAST_UPDATED_BY 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-4b520566",
+  "result": "PASS",
+  "evidence": "신규행 r0 LAST_UPDATE_DATE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-fecc8323",
+  "result": "PASS",
+  "evidence": "DIVISION_ID 후보 8건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-7ffff22e",
+  "result": "PASS",
+  "evidence": "DIVISION_ID 후보 8건(신규행 Division='81' 기준) · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-472e593d",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE 후보 27건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-98517f56",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE 후보 27건(신규행 Division='81' 기준) · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-b25d7373",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE 후보 5362건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-e53c539d",
+  "result": "FAIL",
+  "evidence": "TO_SITE_CODE 후보 5362건(신규행 Division='81' 기준) · 중복 EG00×6, IL00×2, MI00×2, AU00×2, KR04179400_40-E×2, HQ07-A×3, WA00_81-W×2, HD00-P×2",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-3c4f7c69",
+  "result": "PASS",
+  "evidence": "VMI_YN 후보 2건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-3c1adaac",
+  "result": "PASS",
+  "evidence": "VMI_YN 후보 2건(신규행 Division='81' 기준) · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-0eb156be",
+  "result": "PASS",
+  "evidence": "INCOTERMS 후보 10건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-dcb28665",
+  "result": "PASS",
+  "evidence": "INCOTERMS 후보 10건(신규행 Division='81' 기준) · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-fd613b1b",
+  "result": "PASS",
+  "evidence": "INCOTERMS_SSP 후보 10건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-1b1c62b9",
+  "result": "PASS",
+  "evidence": "INCOTERMS_SSP 후보 10건(신규행 Division='81' 기준) · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-f414c7be",
+  "result": "PASS",
+  "evidence": "BOD_VALID 후보 2건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-5db3e6be",
+  "result": "PASS",
+  "evidence": "BOD_VALID 후보 2건(신규행 Division='81' 기준) · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-2c8e5f93",
+  "result": "FAIL",
+  "evidence": "PRIORITY: 소수 0자리 초과 입력 '1.5' → 값 '' OK · 문자(숫자 아님) 입력 'ab' → 값 '' OK · 최소 0 미만 입력 '-1' → 값 '' OK · 최대 99 초과 입력 '100' → 값 '100' NG",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-8edc4c4e",
+  "result": "PASS",
+  "evidence": "AFTER_LEAD_TIME: 소수 0자리 초과 입력 '1.5' → 값 '0' OK · 문자(숫자 아님) 입력 'ab' → 값 '0' OK",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-9a934f52",
+  "result": "FAIL",
+  "evidence": "FROM_YYYYMMDD: '2026-10-33' 입력 → 값 '2026-10-33' (입력 전 '2026-10-26') — 존재하지 않는 날짜가 그대로 저장 대상",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-cac6a100",
+  "result": "FAIL",
+  "evidence": "TO_YYYYMMDD: '2026-10-33' 입력 → 값 '2026-10-33' (입력 전 '2099-12-27') — 존재하지 않는 날짜가 그대로 저장 대상",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-6958b523",
+  "result": "PASS",
+  "evidence": "CREATION_DATE 신규행 편집 불가(입력 경로 없음) — 잘못된 날짜 입력 불가",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-f5e42a8b",
+  "result": "PASS",
+  "evidence": "LAST_UPDATE_DATE 신규행 편집 불가(입력 경로 없음) — 잘못된 날짜 입력 불가",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-6f31804a",
+  "result": "PASS",
+  "evidence": "TO_SITE PLANT 'KR04179400_40-E' → INCOTERMS='DAP' · INCOTERMS_SSP='DAP' — AS-IS: DAP 면 SSP 에 복사, EXW 면 SSP 미복사 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-d6804183",
+  "result": "PASS",
+  "evidence": "신규행 연쇄 FROM_SITE_CODE → FROM_CITY: FROM_SITE_CODE='E00L00300_40-P' → FROM_CITY='EGCAI' (AS-IS SCP0007_BOD.cs:1245 SCP0007_BOD.SpdMain_ClipboardPasted)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-207f05cc",
+  "result": "PASS",
+  "evidence": "신규행 연쇄 TO_SITE_CODE → TO_CITY: TO_SITE_CODE='IL00' → TO_CITY='INDEL' (AS-IS SCP0007_BOD.cs:1255 SCP0007_BOD.SpdMain_ClipboardPasted)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-c21de22c",
+  "result": "PASS",
+  "evidence": "신규행 연쇄 INCOTERMS → INCOTERMS_SSP: INCOTERMS='EXW' → INCOTERMS_SSP='EXW' (AS-IS SCP0007_BOD.cs:1269 SCP0007_BOD.SpdMain_ClipboardPasted)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-359b0363",
+  "result": "PASS",
+  "evidence": "신규행 연쇄 FROM_SITE_CODE → FROM_CITY: FROM_SITE_CODE='E00L00300_40-P' → FROM_CITY='EGCAI' (AS-IS SCP0007_BOD.cs:1165 SCP0007_BOD.SpdMain_ComboSelChange)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-3777a124",
+  "result": "PASS",
+  "evidence": "신규행 연쇄 TO_SITE_CODE → TO_CITY: TO_SITE_CODE='IL00' → TO_CITY='INDEL' (AS-IS SCP0007_BOD.cs:1176 SCP0007_BOD.SpdMain_ComboSelChange)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-b1d46bfe",
+  "result": "PASS",
+  "evidence": "신규행 연쇄 INCOTERMS → INCOTERMS_SSP: INCOTERMS='EXW' → INCOTERMS_SSP='EXW' (AS-IS SCP0007_BOD.cs:1348 SCP0007_BOD.SpdMain_EditChange)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-c20aefb3",
+  "result": "NA",
+  "evidence": "팝업 그리드에 LT_ARRIVAL_INLAND/LT_SUM 컬럼 없음 또는 행 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-23a28c42",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-5ce4f10f",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-62430455",
+  "result": "PASS",
+  "evidence": "VMI_YN: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-ed402f40",
+  "result": "PASS",
+  "evidence": "INCOTERMS: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-5e2682cd",
+  "result": "PASS",
+  "evidence": "INCOTERMS_SSP: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-92b6fd91",
+  "result": "PASS",
+  "evidence": "PRIORITY: AS-IS NUMBER ↔ TO-BE dataType=Number · dataMap=N",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-c121880a",
+  "result": "PASS",
+  "evidence": "AFTER_LEAD_TIME: AS-IS NUMBER ↔ TO-BE dataType=Number · dataMap=N",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-0b2aaf01",
+  "result": "PASS",
+  "evidence": "FROM_YYYYMMDD: AS-IS DATE ↔ TO-BE dataType=String · dataMap=N · format=yyyy.MM.dd",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-cc75c9e7",
+  "result": "PASS",
+  "evidence": "TO_YYYYMMDD: AS-IS DATE ↔ TO-BE dataType=String · dataMap=N · format=yyyy.MM.dd",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-b8ab0029",
+  "result": "PASS",
+  "evidence": "BOD_VALID: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-93f00c52",
+  "result": "PASS",
+  "evidence": "CREATION_DATE: AS-IS DATETIME ↔ TO-BE dataType=String · dataMap=N · editor · format=yyyy.MM.dd",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-76395cc5",
+  "result": "PASS",
+  "evidence": "LAST_UPDATE_DATE: AS-IS DATETIME ↔ TO-BE dataType=String · dataMap=N · editor · format=yyyy.MM.dd",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-2ae6f7ec",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: 기존행 편집=false 표시 일치 · 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d31b5803",
+  "result": "PASS",
+  "evidence": "CUSTOMER: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-09586d34",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE: 기존행 편집=false 표시 일치 · 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-8c879e9a",
+  "result": "PASS",
+  "evidence": "FROM_CITY: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-9ade02dd",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE: 기존행 편집=false 표시 일치 · 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-4aebb6d0",
+  "result": "PASS",
+  "evidence": "TO_CITY: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-018be546",
+  "result": "PASS",
+  "evidence": "VMI_YN: 기존행 편집=false 표시 일치 · 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-eb87959d",
+  "result": "PASS",
+  "evidence": "INCOTERMS: 기존행 편집=false 표시 일치 · 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-8aaa7d49",
+  "result": "PASS",
+  "evidence": "INCOTERMS_SSP: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-6a7df14d",
+  "result": "PASS",
+  "evidence": "PRIORITY: 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-47c210ea",
+  "result": "PASS",
+  "evidence": "ROUTE_CNT: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-9bae5031",
+  "result": "PASS",
+  "evidence": "TRANSPORT_MODE: 기존행 편집=false 표시 일치 · 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-49b2c42f",
+  "result": "PASS",
+  "evidence": "ROUTE_ID: 기존행 편집=true(팝업 입력 셀) 표시 일치 · 신규행 편집=true(팝업 입력 셀) 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-b1c5b554",
+  "result": "PASS",
+  "evidence": "LT_TYPE: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-89a12108",
+  "result": "PASS",
+  "evidence": "DAYS_MON: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-511775ee",
+  "result": "PASS",
+  "evidence": "DAYS_TUE: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d4c00c16",
+  "result": "PASS",
+  "evidence": "DAYS_WED: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-b8c9da97",
+  "result": "PASS",
+  "evidence": "DAYS_THU: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d5aca3d6",
+  "result": "PASS",
+  "evidence": "DAYS_FRI: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-ffeed275",
+  "result": "PASS",
+  "evidence": "DAYS_SAT: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-6575617a",
+  "result": "PASS",
+  "evidence": "DAYS_SUN: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-b79b8806",
+  "result": "PASS",
+  "evidence": "LEAD_TIME: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-9708bff0",
+  "result": "PASS",
+  "evidence": "DIS_TOTAL_LEAD_TIME: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-ddb4fff0",
+  "result": "PASS",
+  "evidence": "BOD_ID: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-70acd9b0",
+  "result": "PASS",
+  "evidence": "AFTER_LEAD_TIME: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-b7fa2674",
+  "result": "PASS",
+  "evidence": "FROM_YYYYMMDD: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-2519b5cf",
+  "result": "PASS",
+  "evidence": "TO_YYYYMMDD: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-e4b9d4bd",
+  "result": "PASS",
+  "evidence": "REMARKS: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-5bc4407a",
+  "result": "PASS",
+  "evidence": "BOD_VALID: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-806d2277",
+  "result": "PASS",
+  "evidence": "ROUTE_VALID: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-34f37e8c",
+  "result": "PASS",
+  "evidence": "CREATED_BY: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-31334bfc",
+  "result": "PASS",
+  "evidence": "CREATION_DATE: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-e2c715b9",
+  "result": "PASS",
+  "evidence": "LAST_UPDATED_BY: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-acd62342",
+  "result": "PASS",
+  "evidence": "LAST_UPDATE_DATE: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-be2a3742",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: 원값 '40' → 표시 '40 Mobility & IT Battery' (이름 '40 Mobility & IT Battery') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-bf5e057e",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE: 원값 'HQ06-A' → 표시 'HQ06-A' (이름 'HQ06-A') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-b56f1cd4",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE: 원값 'Alte_KR_SEL' → 표시 'Alte_KR_SEL' (이름 'Alte_KR_SEL') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-e043769f",
+  "result": "PASS",
+  "evidence": "VMI_YN: 원값 'N' → 표시 'N' (이름 'N') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-33566187",
+  "result": "PASS",
+  "evidence": "INCOTERMS: 원값 'A01' → 표시 'A01' (이름 'A01') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-824b15b3",
+  "result": "PASS",
+  "evidence": "INCOTERMS_SSP: 원값 'A01' → 표시 'A01' (이름 'A01') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-2f65232f",
+  "result": "PASS",
+  "evidence": "BOD_VALID: 원값 'N' → 표시 'N' (이름 'N') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-05550393",
+  "result": "PASS",
+  "evidence": "TO_SITE PLANT 'KR04179400_40-E' → INCOTERMS_SSP 후보 10·편집=true / SALES 'APRO_KR_ANY' → 후보 10·편집=false — AS-IS: PLANT 면 Edit 콤보(dtIncotermsEdit)·해제, 아니면 일반 콤보·잠금",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3fb6d815",
+  "result": "PASS",
+  "evidence": "TO_SITE PLANT 'KR04179400_40-E' → INCOTERMS_SSP 후보 10·편집=true / SALES 'APRO_KR_ANY' → 후보 10·편집=false — AS-IS: PLANT 면 Edit 콤보(dtIncotermsEdit)·해제, 아니면 일반 콤보·잠금",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-15c200be",
+  "result": "판정필요",
+  "evidence": "FROM_SITE_CODE='EG01_81-W' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-A' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-E' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-P' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='KR02239900_81-P' → TO_SITE_CODE 후보 2668건 — 원천 값과 무관하게 후보 동일(AS-IS 필터 분기 조건 확인 필요) (AS-IS SCP0007_BOD.cs:1224 SCP0007_BOD.SpdMain_ClipboardPasted)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-470d336f",
+  "result": "판정필요",
+  "evidence": "FROM_SITE_CODE='EG01_81-W' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-A' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-E' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-P' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='KR02239900_81-P' → TO_SITE_CODE 후보 2668건 — 원천 값과 무관하게 후보 동일(AS-IS 필터 분기 조건 확인 필요) (AS-IS SCP0007_BOD.cs:1232 SCP0007_BOD.SpdMain_ClipboardPasted)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-7eae2e92",
+  "result": "판정필요",
+  "evidence": "FROM_SITE_CODE='EG01_81-W' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-A' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-E' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-P' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='KR02239900_81-P' → TO_SITE_CODE 후보 2668건 — 원천 값과 무관하게 후보 동일(AS-IS 필터 분기 조건 확인 필요) (AS-IS SCP0007_BOD.cs:1240 SCP0007_BOD.SpdMain_ClipboardPasted)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-f2df19af",
+  "result": "판정필요",
+  "evidence": "FROM_SITE_CODE='EG01_81-W' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-A' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-E' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-P' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='KR02239900_81-P' → TO_SITE_CODE 후보 2668건 — 원천 값과 무관하게 후보 동일(AS-IS 필터 분기 조건 확인 필요) (AS-IS SCP0007_BOD.cs:1146 SCP0007_BOD.SpdMain_ComboSelChange)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-5f5b706c",
+  "result": "판정필요",
+  "evidence": "FROM_SITE_CODE='EG01_81-W' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-A' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-E' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-P' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='KR02239900_81-P' → TO_SITE_CODE 후보 2668건 — 원천 값과 무관하게 후보 동일(AS-IS 필터 분기 조건 확인 필요) (AS-IS SCP0007_BOD.cs:1154 SCP0007_BOD.SpdMain_ComboSelChange)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-329287e1",
+  "result": "판정필요",
+  "evidence": "FROM_SITE_CODE='EG01_81-W' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-A' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-E' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-P' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='KR02239900_81-P' → TO_SITE_CODE 후보 2668건 — 원천 값과 무관하게 후보 동일(AS-IS 필터 분기 조건 확인 필요) (AS-IS SCP0007_BOD.cs:1160 SCP0007_BOD.SpdMain_ComboSelChange)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-c667b133",
+  "result": "FAIL",
+  "evidence": "TO_SITE 더블클릭+Esc(값 변경 없음) → INCOTERMS 'DAP'→'' · INCOTERMS_SSP 'DAP'→'' — 변경 없이 연쇄 발동",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-21c28614",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE='KR02239900_81-P' 더블클릭+Esc(값 변경 없음) → FROM_CITY 'KROSN'→'KROSN'",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-54cb4e73",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE='KR02239900_81-P' 더블클릭+Esc(값 변경 없음) → FROM_CITY 'KROSN'→'KROSN'",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-1c76f13c",
+  "result": "PASS",
+  "evidence": "To Site='IL00' 선택 → To City 'INDEL' · To Site 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → To City 'INDEL' — 값 유지(정상)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-d433bae7",
+  "result": "PASS",
+  "evidence": "To Site='IL00' 선택 → To City 'INDEL' · To Site 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → To City 'INDEL' — 값 유지(정상)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3778a5ce",
+  "result": "PASS",
+  "evidence": "INCOTERMS='EXW' 더블클릭+Esc(값 변경 없음) → INCOTERMS_SSP 'EXW'→'EXW'",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-f1677353",
+  "result": "PASS",
+  "evidence": "INCOTERMS='EXW' 더블클릭+Esc(값 변경 없음) → INCOTERMS_SSP 'EXW'→'EXW'",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-12b5be32",
+  "result": "NA",
+  "evidence": "팝업 그리드에 LT_ARRIVAL_INLAND/LT_SUM 컬럼 없음 또는 행 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c5c42fac",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: 목록 밖 'ZZ_E2E_NOT_IN_LIST' 입력 → 값 '81'",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-52202dce",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE: 목록 밖 'ZZ_E2E_NOT_IN_LIST' 입력 → 값 'KR02239900_81-P'",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-742fd3ac",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE: 목록 밖 'ZZ_E2E_NOT_IN_LIST' 입력 → 값 ''",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-448a09b8",
+  "result": "PASS",
+  "evidence": "VMI_YN: 목록 밖 'ZZ_E2E_NOT_IN_LIST' 입력 → 값 ''",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-793ae738",
+  "result": "PASS",
+  "evidence": "INCOTERMS: 목록 밖 'ZZ_E2E_NOT_IN_LIST' 입력 → 값 ''",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-9e57c498",
+  "result": "PASS",
+  "evidence": "INCOTERMS_SSP 신규행 편집 불가 — 입력 경로 없음",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d2e96986",
+  "result": "PASS",
+  "evidence": "BOD_VALID: 목록 밖 'ZZ_E2E_NOT_IN_LIST' 입력 → 값 'Y'",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-e6710ef8",
+  "result": "PASS",
+  "evidence": "팝업 호출 route/SEARCH,route/SEARCH,region/SEARCH · AS-IS 인자 원천 FROM_COUNTRY,FROM_CITY,TO_COUNTRY,TO_CITY,TRANSPORT_MODE · 요청에 없음: 없음 · 요청 {\"fromCountry\":\"KR\",\"fromCity\":\"KRCOJ\",\"toCountry\":\"KR\",\"toCity\":\"KRSEL\",\"transportMode\":\"TRK\",\"validYn\":\"Y\"} {\"fromCountry\":\"\",\"fromCity\":\"\",\"toCountry\":\"\",\"toCity\":\"\",\"transportMode\":\"\",\"validYn\":\"Y",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-21d1149d",
+  "result": "PASS",
+  "evidence": "팝업 버튼 [Open, Search, OK, Close] · 첫 컬럼 'No' · 건수 Y",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-e243453d",
+  "result": "PASS",
+  "evidence": "팝업 호출 route/SEARCH,route/SEARCH · AS-IS 인자 원천 FROM_COUNTRY,FROM_CITY,TO_COUNTRY,TO_CITY,TRANSPORT_MODE · 요청에 없음: 없음 · 요청 {\"fromCountry\":\"KR\",\"fromCity\":\"KRCOJ\",\"toCountry\":\"KR\",\"toCity\":\"KRSEL\",\"transportMode\":\"TRK\",\"validYn\":\"Y\"} {\"fromCountry\":\"KR\",\"fromCity\":\"KRCOJ\",\"toCountry\":\"KR\",\"toCity\":\"KRSEL\",\"transportMode\":\"",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-7dc6239c",
+  "result": "PASS",
+  "evidence": "팝업 버튼 [Open, Search, OK, Close] · 첫 컬럼 'No' · 건수 Y",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-243df0bb",
+  "result": "PASS",
+  "evidence": "팝업 호출 route/SEARCH,route/SEARCH · AS-IS 인자 원천 FROM_COUNTRY,FROM_CITY,TO_COUNTRY,TO_CITY,TRANSPORT_MODE · 요청에 없음: 없음 · 요청 {\"fromCountry\":\"KR\",\"fromCity\":\"KRCOJ\",\"toCountry\":\"KR\",\"toCity\":\"KRSEL\",\"transportMode\":\"TRK\",\"validYn\":\"Y\"} {\"fromCountry\":\"KR\",\"fromCity\":\"KRCOJ\",\"toCountry\":\"KR\",\"toCity\":\"KRSEL\",\"transportMode\":\"",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-c19a57d9",
+  "result": "PASS",
+  "evidence": "팝업 버튼 [Open, Search, OK, Close] · 첫 컬럼 'No' · 건수 Y",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-96402574",
+  "result": "PASS",
+  "evidence": "저장 요청 없이 차단 · 메시지 '[Div] 값은 필수 입력 항목입니다. Confirm'",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-121ec75c",
+  "result": "PASS",
+  "evidence": "저장 요청 없이 차단 · 메시지 '[Div] 값은 필수 입력 항목입니다. Confirm'",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-5d86cb57",
+  "result": "PASS",
+  "evidence": "SQL 오류 없음 — 전송값 DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=FOB, PRIORITY=1, FROM_YYYYMMDD=2024-12-30, TO_YYYYMMDD=2100-01-03, BOD_VALID=Y, ROUTE_ID=740, REMARKS=E2E_10271459 · 입력 후 저장 전 변경 PRIORITY '97'→'1', BOD_VALID 'N'→'Y' · 팝업 ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 0 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' (외 5회) · 저장 요청 1건 · 메시지 '성공적으로 저장되었습니다. · 키 콤보 [FROM_SITE_CODE,TO_SITE_CODE,INCOTERMS,BOD_VALID] · 재시도 키 순서 [TO_SITE_CODE,INCOTERMS,FROM_SITE_CODE] (팝업 인자 ROUTE_ID) · 시도1: TO_SITE_CODE='CN00254300_40-P' → 팝업 후보 0행 — 저장 생략·원래 값 'Alte_KR_SEL' 복원 · 시도2: INCOTERMS='FOB' 저장 (이전 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다 Confirm')'",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-063068f4",
+  "result": "PASS",
+  "evidence": "Save 1회로 저장 성공 — 전송값 DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=FOB, PRIORITY=1, FROM_YYYYMMDD=2024-12-30, TO_YYYYMMDD=2100-01-03, BOD_VALID=Y, ROUTE_ID=740, REMARKS=E2E_10271459 · 입력 후 저장 전 변경 PRIORITY '97'→'1', BOD_VALID 'N'→'Y' · 팝업 ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 0 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' (외 5회) · 저장 요청 1건 · 메시지 '성공적으로 저장되었습니다. · 키 콤보 [FROM_SITE_CODE,TO_SITE_CODE,INCOTERMS,BOD_VALID] · 재시도 키 순서 [TO_SITE_CODE,INCOTERMS,FROM_SITE_CODE] (팝업 인자 ROUTE_ID) · 시도1: TO_SITE_CODE='CN00254300_40-P' → 팝업 후보 0행 — 저장 생략·원래 값 'Alte_KR_SEL' 복원 · 시도2: INCOTERMS='FOB' 저장 (이전 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다 Confirm')'",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-45c17570",
+  "result": "PASS",
+  "evidence": "저장 후 재조회에 마커 'E2E_10271459'(REMARKS) 행 존재 — DB 반영 확인 · 정리 완료(마커 행 삭제·저장·재조회 부재 확인)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-02cf9e09",
+  "result": "PASS",
+  "evidence": "저장 직전 값 10칸이 재조회에 그대로 (입력 후 저장 전 변경 PRIORITY '97'→'1', BOD_VALID 'N'→'Y' — 팝업·연쇄 결과, AS-IS 동일 여부는 ASIS 행 참조)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-dbf21cec",
+  "result": "PASS",
+  "evidence": "조회조건 Div: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-91d279c6",
+  "result": "PASS",
+  "evidence": "[멀티선택 Div] ALL 선택 조회 → 16301행 (개별 8121행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8984752c",
+  "result": "PASS",
+  "evidence": "조회조건 Div 후보 8건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-6fe1b5df",
+  "result": "PASS",
+  "evidence": "조회조건 Div 후보 8건 · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-ea0d3c71",
+  "result": "PASS",
+  "evidence": "조회조건 From Site: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-9066f84f",
+  "result": "PASS",
+  "evidence": "[멀티선택 From Site] ALL 선택 조회 → 16145행 (개별 518행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-5d5210dd",
+  "result": "PASS",
+  "evidence": "조회조건 From Site 후보 101건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-85e323af",
+  "result": "PASS",
+  "evidence": "조회조건 From Site 후보 101건 · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-7f43cda1",
+  "result": "PASS",
+  "evidence": "조회조건 To Site: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-2ecba37b",
+  "result": "FAIL",
+  "evidence": "[멀티선택 To Site] ALL 선택 조회 → 0행 (개별 1행) · 호출 오류 bod/SEARCH HTTP 500 · 알림 'Sql Error\nConfirm' — ALL 전체 선택 조회가 서버 오류(인자 길이 초과 등)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3658dbba",
+  "result": "PASS",
+  "evidence": "조회조건 To Site 후보 2603건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-09841a1f",
+  "result": "PASS",
+  "evidence": "조회조건 To Site 후보 2603건 · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-e0aae7cc",
+  "result": "PASS",
+  "evidence": "조회조건 Incoterms: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-4cdfbad1",
+  "result": "PASS",
+  "evidence": "[멀티선택 Incoterms] ALL 선택 조회 → 16278행 (개별 50행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8403f642",
+  "result": "PASS",
+  "evidence": "조회조건 Incoterms 후보 16건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-96afb38e",
+  "result": "PASS",
+  "evidence": "조회조건 Incoterms 후보 16건 · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-cbc1c037",
+  "result": "PASS",
+  "evidence": "조회조건 SSP Incoterms: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-67f4b088",
+  "result": "PASS",
+  "evidence": "[멀티선택 SSP Incoterms] ALL 선택 조회 → 16277행 (개별 50행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-97a77def",
+  "result": "PASS",
+  "evidence": "조회조건 SSP Incoterms 후보 16건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-78e530b2",
+  "result": "PASS",
+  "evidence": "조회조건 SSP Incoterms 후보 16건 · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-c61dd119",
+  "result": "PASS",
+  "evidence": "조회조건 Trans Mode: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-13c16ecc",
+  "result": "PASS",
+  "evidence": "[멀티선택 Trans Mode] ALL 선택 조회 → 16301행 (개별 43행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-1d917086",
+  "result": "PASS",
+  "evidence": "조회조건 Trans Mode 후보 5건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d833b0b0",
+  "result": "PASS",
+  "evidence": "조회조건 Trans Mode 후보 5건 · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-6fd48b99",
+  "result": "PASS",
+  "evidence": "조회조건 Status: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-00f9cb10",
+  "result": "PASS",
+  "evidence": "조회조건 Status 후보 2건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-385fe9d0",
+  "result": "PASS",
+  "evidence": "조회조건 Status 후보 2건 · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-d12635cc",
+  "result": "PASS",
+  "evidence": "조회조건 Active: 다중선택 기대 false/화면 false · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-442243f5",
+  "result": "PASS",
+  "evidence": "조회조건 Active 후보 2건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-77f9bb25",
+  "result": "PASS",
+  "evidence": "조회조건 Active 후보 2건 · 중복 0",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-58989d05",
+  "result": "PASS",
+  "evidence": "[멀티선택 Div] '40 Mobility & IT Battery' 1개 선택 조회 → 8121행 · DIVISION_ID 값 전부 일치 (기본 ALL 16301행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-234d6337",
+  "result": "PASS",
+  "evidence": "[멀티선택 From Site] 'WA00-P' 1개 선택 조회 → 518행 · FROM_SITE_CODE 값 전부 일치 (기본 ALL 16301행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-ef3f2f85",
+  "result": "PASS",
+  "evidence": "[멀티선택 To Site] 'Bmspow_TW_TPE' 1개 선택 조회 → 1행 · TO_SITE_CODE 값 전부 일치 (기본 ALL 16301행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-b873839f",
+  "result": "PASS",
+  "evidence": "[멀티선택 Incoterms] 'CFR' 1개 선택 조회 → 50행 · INCOTERMS 값 전부 일치 (기본 ALL 16301행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-9cb4d91c",
+  "result": "PASS",
+  "evidence": "[멀티선택 SSP Incoterms] 'CFR' 1개 선택 조회 → 50행 · INCOTERMS_SSP 값 전부 일치 (기본 ALL 16301행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4b6d23bd",
+  "result": "PASS",
+  "evidence": "[멀티선택 Trans Mode] 'RAIL' 1개 선택 조회 → 43행 · TRANSPORT_MODE 값 전부 일치 (기본 ALL 16301행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-abc31dcf",
+  "result": "PASS",
+  "evidence": "화면 진입 직후(조회 전) 그리드 0행 · 진입 시 호출 countryCity/SEARCH(3041행) — 기대 빈 그리드·조회 없음 (AS-IS 로드 중 조회 호출: Form_Load:167 FindDataMain() [if (isConditionReadOnly)] — 전부 조건부라 일반 진입은 조회 없음)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-557a2890",
+  "result": "PASS",
+  "evidence": "AS-IS 버튼 Search·Insert·Delete·Save → TO-BE 전부 노출 · 대조표 제외 결정 Edit(비교 제외) (보이는 버튼: KOR, Home, BOD, Scroll tabs left, Scroll tabs right, Close others, Close All, Open, Search(F5), Insert(F8), Delete(F9), Save(F7), Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10), Excel, Toggle Calendar, Toggle )",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-70774459",
+  "result": "PASS",
+  "evidence": "탭 닫기 → 재오픈: 치명 콘솔 0 · 5xx 0 · 재오픈 직후 행 0(최초 진입 0)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-00e52cb4",
+  "result": "FAIL",
+  "evidence": "AS-IS 초기값 코드 'C'(라벨 미확인(옵션·콤보 API 응답에 코드 없음)) ↔ TO-BE 초기 표시 'Completed' 불일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-afa0a9fb",
+  "result": "PASS",
+  "evidence": "AS-IS setListBox(…, true) = ALL 선택 ↔ TO-BE 초기 'ALL'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d97fd737",
+  "result": "PASS",
+  "evidence": "AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ce316fa9",
+  "result": "PASS",
+  "evidence": "AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e57d3d1b",
+  "result": "PASS",
+  "evidence": "AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3686e072",
+  "result": "PASS",
+  "evidence": "AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-63a17d2a",
+  "result": "PASS",
+  "evidence": "AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-407adbc8",
+  "result": "PASS",
+  "evidence": "AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-57d3f165",
+  "result": "NA",
+  "evidence": "대조표 행 D00-1-009() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b75b16ba",
+  "result": "NA",
+  "evidence": "대조표 행 D00-3-009(DIVISION_ID, dtMyDivision) 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-33840ff9",
+  "result": "NA",
+  "evidence": "대조표 행 D00-3-036(i,INCOTERMS_SSP, dtIncoterms) 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ccb51a34",
+  "result": "NA",
+  "evidence": "대조표 행 D00-4d-003() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-095912bd",
+  "result": "NA",
+  "evidence": "대조표 행 D00-4d-004() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8e14869a",
+  "result": "NA",
+  "evidence": "대조표 행 D00-4d-005() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-54956bd8",
+  "result": "NA",
+  "evidence": "대조표 행 D00-4d-009(INCOTERMS) 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b277eb82",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtFromCity: 값 'KRCOJ' ↔ 더블클릭 행 FROM_CITY='KRCOJ' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-baa7cbc2",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtFromCountry: 값 'KR' ↔ 더블클릭 행 FROM_COUNTRY='KR' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d205880e",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtToCountry: 값 'KR' ↔ 더블클릭 행 TO_COUNTRY='KR' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-aa7156e7",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtToCity: 값 'KRSEL' ↔ 더블클릭 행 TO_CITY='KRSEL' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0241040d",
+  "result": "NA",
+  "evidence": "행 D00-4e-001() 은 조회조건 칸이 아닌 데이터테이블/핸들러 행 — 조회조건 C1 는 COND 요소(Div/From Site/To Site)에서 판정, 이 행 자체는 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-09339010",
+  "result": "NA",
+  "evidence": "행 D00-4e-002() 은 조회조건 칸이 아닌 데이터테이블/핸들러 행 — 조회조건 C1 는 COND 요소(Div/From Site/To Site)에서 판정, 이 행 자체는 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-54f92558",
+  "result": "PASS",
+  "evidence": "AS-IS cboInputStatus 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5fd06670",
+  "result": "PASS",
+  "evidence": "AS-IS clbIncoterms 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-4fb900cf",
+  "result": "PASS",
+  "evidence": "AS-IS clbIncotermsSSP 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-fd5c38e5",
+  "result": "PASS",
+  "evidence": "AS-IS clbTransMode 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-09f6299d",
+  "result": "PASS",
+  "evidence": "AS-IS cboValidYN 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c84aff8c",
+  "result": "PASS",
+  "evidence": "AS-IS clbFromSite 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e2328b20",
+  "result": "PASS",
+  "evidence": "AS-IS clbToSite 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d8e292ff",
+  "result": "PASS",
+  "evidence": "조회 16301행 → 'Div' 변경('81 Automotive Battery') 후 16301행 · 자동 재조회 0건 — 기대 AS-IS 핸들러에 그리드 초기화 없음 → 유지",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-cb49993a",
+  "result": "NA",
+  "evidence": "행 D00-4e-001() 은 조회조건 칸이 아닌 데이터테이블/핸들러 행 — 조회조건 C4 는 COND 요소(Div/From Site/To Site)에서 판정, 이 행 자체는 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5a3775d3",
+  "result": "NA",
+  "evidence": "행 D00-4e-002() 은 조회조건 칸이 아닌 데이터테이블/핸들러 행 — 조회조건 C4 는 COND 요소(Div/From Site/To Site)에서 판정, 이 행 자체는 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f5bb630f",
+  "result": "FAIL",
+  "evidence": "조회 16301행 · r1 셀 클릭 후 Insert → 신규행 맨 위(0) · 행 16301→16302 — AS-IS SpreadInfo.Insert(): 활성 행 위치(r1)에 삽입 · TO-BE 룰 hook #144 도 '포커스 행 세트 바로 위'(맨 위 아님) — 신규행이 맨 위에 생겨 AS-IS·TO-BE 룰 모두와 다름",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f01e425e",
+  "result": "PASS",
+  "evidence": "'Div' → '81 Automotive Battery' 변경 · 콤보 재요청 6건 · 하위 clbFromSite '​'→'​', clbToSite '​'→'​' · AS-IS 핸들러 cboDivision_SelectedIndexChanged",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c72ffc7b",
+  "result": "NA",
+  "evidence": "팝업 그리드 VALID_YN 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 값 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a587c1b4",
+  "result": "NA",
+  "evidence": "팝업 그리드 VALID_YN 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 신규행 기본값 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-692b3775",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_SUM 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 값 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-19b56bb6",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_SUM 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 신규행 기본값 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a170096e",
+  "result": "PASS",
+  "evidence": "팝업 VALID_YN: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1ba3d352",
+  "result": "PASS",
+  "evidence": "팝업 FROM_CITY_NAME: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-cb61f801",
+  "result": "PASS",
+  "evidence": "팝업 DAYS: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-87d44b53",
+  "result": "PASS",
+  "evidence": "팝업 D_PORT_NAME: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-69257c47",
+  "result": "PASS",
+  "evidence": "팝업 D_COUNTRY: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9a4c771c",
+  "result": "PASS",
+  "evidence": "팝업 D_PORT_CODE: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-462a0e29",
+  "result": "PASS",
+  "evidence": "팝업 A_PORT_NAME: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e746875c",
+  "result": "PASS",
+  "evidence": "팝업 A_COUNTRY: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1bade32c",
+  "result": "PASS",
+  "evidence": "팝업 A_PORT_CODE: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e1881e3d",
+  "result": "PASS",
+  "evidence": "팝업 SHIPPING_COMPANY: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-61b2d9d2",
+  "result": "PASS",
+  "evidence": "팝업 TO_CITY_NAME: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-310695e7",
+  "result": "PASS",
+  "evidence": "팝업 SHIP_DOC_PREPARATION_DATE: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7202fa96",
+  "result": "PASS",
+  "evidence": "팝업 LT_DEPARTURE_INLAND: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e8f1b451",
+  "result": "PASS",
+  "evidence": "팝업 VALID_YN: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7c9ec69a",
+  "result": "PASS",
+  "evidence": "팝업 FROM_CITY_NAME: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e63e2981",
+  "result": "PASS",
+  "evidence": "팝업 DAYS: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b5118991",
+  "result": "PASS",
+  "evidence": "팝업 D_PORT_NAME: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e190011d",
+  "result": "PASS",
+  "evidence": "팝업 D_COUNTRY: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-daddc06f",
+  "result": "PASS",
+  "evidence": "팝업 D_PORT_CODE: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-00840437",
+  "result": "PASS",
+  "evidence": "팝업 A_PORT_NAME: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a5f353fa",
+  "result": "PASS",
+  "evidence": "팝업 A_COUNTRY: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-475b680d",
+  "result": "PASS",
+  "evidence": "팝업 A_PORT_CODE: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8eef6777",
+  "result": "PASS",
+  "evidence": "팝업 SHIPPING_COMPANY: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3ff4a5db",
+  "result": "PASS",
+  "evidence": "팝업 TO_CITY_NAME: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a64582fe",
+  "result": "PASS",
+  "evidence": "팝업 SHIP_DOC_PREPARATION_DATE: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-88737d8f",
+  "result": "PASS",
+  "evidence": "팝업 LT_DEPARTURE_INLAND: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-31f2e02f",
+  "result": "PASS",
+  "evidence": "팝업 VALID_YN: AS-IS 'Valid' ↔ TO-BE 헤더 'Valid'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-88e2aeab",
+  "result": "PASS",
+  "evidence": "팝업 FROM_CITY_NAME: AS-IS 'City Name' ↔ TO-BE 헤더 'City Name'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8047a3f3",
+  "result": "PASS",
+  "evidence": "팝업 DAYS: AS-IS 'Departure Days' ↔ TO-BE 헤더 'Departure Days'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-96b87278",
+  "result": "PASS",
+  "evidence": "팝업 D_PORT_NAME: AS-IS 'Port' ↔ TO-BE 헤더 'Port'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9629fddb",
+  "result": "PASS",
+  "evidence": "팝업 D_COUNTRY: AS-IS 'Country' ↔ TO-BE 헤더 'Country'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-00015c27",
+  "result": "PASS",
+  "evidence": "팝업 D_PORT_CODE: AS-IS 'Port Code' ↔ TO-BE 헤더 'Port Code'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f631ea18",
+  "result": "PASS",
+  "evidence": "팝업 A_PORT_NAME: AS-IS 'Port' ↔ TO-BE 헤더 'Port'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-770680be",
+  "result": "PASS",
+  "evidence": "팝업 A_COUNTRY: AS-IS 'Country' ↔ TO-BE 헤더 'Country'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d8012597",
+  "result": "PASS",
+  "evidence": "팝업 A_PORT_CODE: AS-IS 'Port Code' ↔ TO-BE 헤더 'Port Code'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7c865b2e",
+  "result": "PASS",
+  "evidence": "팝업 SHIPPING_COMPANY: AS-IS 'Shipping Company' ↔ TO-BE 헤더 'Shipping Company'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a9bfe232",
+  "result": "PASS",
+  "evidence": "팝업 TO_CITY_NAME: AS-IS 'City Name' ↔ TO-BE 헤더 'City Name'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f05e528e",
+  "result": "PASS",
+  "evidence": "팝업 SHIP_DOC_PREPARATION_DATE: AS-IS 'Shipping Document Preparation Data' ↔ TO-BE 헤더 'Shipping Document Preparation Data'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c85edac9",
+  "result": "PASS",
+  "evidence": "팝업 LT_DEPARTURE_INLAND: AS-IS 'Departure Inland' ↔ TO-BE 헤더 'Departure Inland'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-796600a2",
+  "result": "PASS",
+  "evidence": "팝업 VALID_YN: AS-IS COMBO(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=1 dataMap=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c14b8607",
+  "result": "PASS",
+  "evidence": "팝업 FROM_CITY_NAME: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=1 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e7b1a709",
+  "result": "PASS",
+  "evidence": "팝업 DAYS: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=1 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8310bfd7",
+  "result": "PASS",
+  "evidence": "팝업 D_PORT_NAME: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=1 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1e8ac419",
+  "result": "PASS",
+  "evidence": "팝업 D_COUNTRY: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=1 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ec730bbe",
+  "result": "PASS",
+  "evidence": "팝업 D_PORT_CODE: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=1 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ea466c39",
+  "result": "PASS",
+  "evidence": "팝업 A_PORT_NAME: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=1 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-524c13ea",
+  "result": "PASS",
+  "evidence": "팝업 A_COUNTRY: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=1 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c266b38c",
+  "result": "PASS",
+  "evidence": "팝업 A_PORT_CODE: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=1 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-55c91b99",
+  "result": "PASS",
+  "evidence": "팝업 SHIPPING_COMPANY: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=1 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ae536da5",
+  "result": "PASS",
+  "evidence": "팝업 TO_CITY_NAME: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=1 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-82b335a5",
+  "result": "PASS",
+  "evidence": "팝업 SHIP_DOC_PREPARATION_DATE: AS-IS DATE(cell_rules) ↔ TO-BE dataType=0 dataMap=N format=yyyy.MM.dd",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e722c68e",
+  "result": "PASS",
+  "evidence": "팝업 LT_DEPARTURE_INLAND: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=2 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c90e545e",
+  "result": "PASS",
+  "evidence": "팝업 LT_WAIT_SHIPPING: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0174ca62",
+  "result": "PASS",
+  "evidence": "팝업 LT_WAIT_SHIPPING: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3d5fa9b0",
+  "result": "PASS",
+  "evidence": "팝업 LT_WAIT_SHIPPING: AS-IS 'Waiting For Shipping' ↔ TO-BE 헤더 'Waiting For Shipping'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-fc29ea9b",
+  "result": "PASS",
+  "evidence": "팝업 LT_WAIT_SHIPPING: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=2 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e65abd78",
+  "result": "PASS",
+  "evidence": "팝업 LT_VOYAGE: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-39be4eb3",
+  "result": "PASS",
+  "evidence": "팝업 LT_VOYAGE: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-645576b2",
+  "result": "PASS",
+  "evidence": "팝업 LT_VOYAGE: AS-IS 'Sea/Air Ferry' ↔ TO-BE 헤더 'Sea/Air Ferry'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5a988fdb",
+  "result": "PASS",
+  "evidence": "팝업 LT_VOYAGE: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=2 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-36f1b2c2",
+  "result": "PASS",
+  "evidence": "팝업 LT_LAY_OFF_CLEARANCE: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0355e7d0",
+  "result": "PASS",
+  "evidence": "팝업 LT_LAY_OFF_CLEARANCE: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2e1cee4b",
+  "result": "PASS",
+  "evidence": "팝업 LT_LAY_OFF_CLEARANCE: AS-IS 'Lay Off/Customs Clearance' ↔ TO-BE 헤더 'Lay Off/Customs Clearance'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-480b4c8e",
+  "result": "PASS",
+  "evidence": "팝업 LT_LAY_OFF_CLEARANCE: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=2 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-4444d6c7",
+  "result": "PASS",
+  "evidence": "팝업 LT_ARRIVAL_INLAND: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-37a77a37",
+  "result": "PASS",
+  "evidence": "팝업 LT_ARRIVAL_INLAND: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3f092f58",
+  "result": "PASS",
+  "evidence": "팝업 LT_ARRIVAL_INLAND: AS-IS 'Arrival Inland' ↔ TO-BE 헤더 'Arrival Inland'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ccfd0e2e",
+  "result": "PASS",
+  "evidence": "팝업 LT_ARRIVAL_INLAND: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=2 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c722503e",
+  "result": "PASS",
+  "evidence": "팝업 LT_SUM: AS-IS '코드추가' ↔ TO-BE 표시=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2753fff8",
+  "result": "PASS",
+  "evidence": "팝업 LT_SUM: 편집=false · 노랑=false",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-552158f4",
+  "result": "PASS",
+  "evidence": "팝업 LT_SUM: AS-IS 'Sum' ↔ TO-BE 헤더 'Sum'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3f4cb6f5",
+  "result": "PASS",
+  "evidence": "팝업 LT_SUM: AS-IS TEXT(AS-IS 기본(TextCellType)/TO-BE 메타) ↔ TO-BE dataType=2 dataMap=N — AS-IS 는 셀 타입을 지정하지 않은 기본 텍스트 셀이라 TO-BE 메타 타입(숫자/날짜) 적용은 오류 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c9a3bb3e",
+  "result": "NA",
+  "evidence": "팝업 그리드 DAYS 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 값 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-23891fa5",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_DEPARTURE_INLAND 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 후보 재구성 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-4411a3ae",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_VOYAGE 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 후보 재구성 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ea39d7b2",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_LAY_OFF_CLEARANCE 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 후보 재구성 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8d54c2b8",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_ARRIVAL_INLAND 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 후보 재구성 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-82cd3d5c",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_SUM 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 후보 재구성 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8fffcce2",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_DEPARTURE_INLAND 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 값 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a44fbbe7",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_VOYAGE 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 값 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-99a7eaf9",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_LAY_OFF_CLEARANCE 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 값 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-aa637c0c",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_ARRIVAL_INLAND 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 값 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-77963acd",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_DEPARTURE_INLAND 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 무변경 편집 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2e65bdfe",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_VOYAGE 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 무변경 편집 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-81b9f6dd",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_LAY_OFF_CLEARANCE 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 무변경 편집 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a5857ba9",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_ARRIVAL_INLAND 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 무변경 편집 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d6850f89",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_SUM 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 무변경 편집 연쇄 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8ba3d01d",
+  "result": "PASS",
+  "evidence": "PKG_SCP0007.P_SCP0007_GET_BOD: bod/SEARCH HTTP 200 ?행",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bb1115d9",
+  "result": "PASS",
+  "evidence": "PKG_SCP0007.P_SCP0007_GET_COUNTRY_CITY: countryCity/SEARCH HTTP 200 3041행, countryCity/SEARCH HTTP 200 3041행",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-abce0e2e",
+  "result": "PASS",
+  "evidence": "PKG_SCP0007.P_SCP0007_SAVE_BOD: CRUD 실저장(@verify F1 PASS) — 저장 후 재조회에 마커 'E2E_10271101'(REMARKS) 행 존재 — DB 반영 확인 · 정리 완료(마커 행 삭제·저장·재조회 부재 확인)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-816d08a6",
+  "result": "PASS",
+  "evidence": "routeCnt/SEARCH 호출 2회 HTTP 200,200 — 셀 이벤트(To Site 변경) 경로",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7e2ba322",
+  "result": "FAIL",
+  "evidence": "ROUTE_CHK: (PROC_M 배선 없음) — 화면 진입·조회 중 호출 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f283af7c",
+  "result": "PASS",
+  "evidence": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE: 팝업 조회 호출 route/SEARCH HTTP 200, route/SEARCH HTTP 200, route/SEARCH HTTP 200",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e0b8f8b7",
+  "result": "PASS",
+  "evidence": "AS-IS 기본 표시 컬럼 3 ⊆ TO-BE 그리드 34: 누락 0 (AS-IS 숨김·코드추가 helper 컬럼은 비교 제외: BEFORE_LEAD_TIME, CREATED_BY, CREATION_DATE, CUSTOMER, DAYS_FRI, DAYS_MON, DAYS_SAT, DAYS_SUN, DAYS_THU, DAYS_TUE, DAYS_WED, DIS_TOTAL_LEAD_TIME, DIVISION_ID, FROM_CITY, FROM_COUNTRY, FROM_SITE_CODE, FROM_YYYYMMDD, INCOTERMS, INCOTERMS_SSP, LAST_UPDATED_BY, LAST_UPDATE_DATE, LEAD_TIME, LT_TYPE, PRIORITY, REMARKS, ROUTE_CHK, ROUTE_CNT, ROUTE_ID, ROUTE_VALID, SAFETY_STOCK, TO_CITY, TO_COUNTRY, TO_SITE_CODE, TO_YYYYMMDD, TRANSPORT_MODE, VMI_YN)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-6a436b07",
+  "result": "PASS",
+  "evidence": "AS-IS 기본 표시 컬럼 3 ⊆ TO-BE 그리드 34: 누락 0 (AS-IS 숨김·코드추가 helper 컬럼은 비교 제외: BEFORE_LEAD_TIME, CREATED_BY, CREATION_DATE, CUSTOMER, DAYS_FRI, DAYS_MON, DAYS_SAT, DAYS_SUN, DAYS_THU, DAYS_TUE, DAYS_WED, DIS_TOTAL_LEAD_TIME, DIVISION_ID, FROM_CITY, FROM_COUNTRY, FROM_SITE_CODE, FROM_YYYYMMDD, INCOTERMS, INCOTERMS_SSP, LAST_UPDATED_BY, LAST_UPDATE_DATE, LEAD_TIME, LT_TYPE, PRIORITY, REMARKS, ROUTE_CHK, ROUTE_CNT, ROUTE_ID, ROUTE_VALID, SAFETY_STOCK, TO_CITY, TO_COUNTRY, TO_SITE_CODE, TO_YYYYMMDD, TRANSPORT_MODE, VMI_YN)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1e2eea1b",
+  "result": "PASS",
+  "evidence": "ROUTE_ID: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f2fb444a",
+  "result": "PASS",
+  "evidence": "ROUTE_ID: AS-IS 'Route Id' = TO-BE 헤더 'Route Id'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b5a3627a",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3e954520",
+  "result": "PASS",
+  "evidence": "CUSTOMER: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-56cb169f",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-23a0e207",
+  "result": "PASS",
+  "evidence": "FROM_CITY: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-384d24dd",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f0b666ce",
+  "result": "PASS",
+  "evidence": "TO_CITY: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-6546e326",
+  "result": "PASS",
+  "evidence": "VMI_YN: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d170af0c",
+  "result": "PASS",
+  "evidence": "INCOTERMS: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ba9581ba",
+  "result": "PASS",
+  "evidence": "INCOTERMS_SSP: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bd1e420f",
+  "result": "PASS",
+  "evidence": "PRIORITY: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0cad23c6",
+  "result": "PASS",
+  "evidence": "ROUTE_CNT: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-19d594a2",
+  "result": "PASS",
+  "evidence": "TRANSPORT_MODE: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bccef4d1",
+  "result": "PASS",
+  "evidence": "LEAD_TIME: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d1a67457",
+  "result": "PASS",
+  "evidence": "BOD_ID: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1af2d76a",
+  "result": "PASS",
+  "evidence": "BOD_VALID: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-dc661d79",
+  "result": "PASS",
+  "evidence": "ROUTE_VALID: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-45d4517e",
+  "result": "PASS",
+  "evidence": "SAFETY_STOCK: AS-IS(Div ALL) '숨김 →숨김' ↔ TO-BE 표시=N (TO-BE 메타 VISIBLE=N)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c701bcf9",
+  "result": "PASS",
+  "evidence": "FROM_COUNTRY: AS-IS(Div ALL) '숨김' ↔ TO-BE 표시=N (TO-BE 메타 VISIBLE=N)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d82516ce",
+  "result": "PASS",
+  "evidence": "TO_COUNTRY: AS-IS(Div ALL) '숨김' ↔ TO-BE 표시=N (TO-BE 메타 VISIBLE=N)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0cb8594a",
+  "result": "PASS",
+  "evidence": "ROUTE_CHK: AS-IS(Div ALL) '숨김' ↔ TO-BE 표시=N (TO-BE 메타 VISIBLE=N)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f515f1b7",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: AS-IS 'Division' → TO-BE 헤더 'Div' = 메타 라벨(SHEET_COLUMNS 'Div') — TO-BE 룰(CR-071: 조회조건과 같은 컬럼은 기준표 라벨, 그 외는 메타 라벨이 정답) → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1a93d878",
+  "result": "PASS",
+  "evidence": "CUSTOMER: AS-IS 'Customer' = TO-BE 헤더 'Customer'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e8d3acdd",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE: AS-IS 'From Site' = TO-BE 헤더 'From Site'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-84aa006f",
+  "result": "PASS",
+  "evidence": "FROM_CITY: AS-IS 'From City' = TO-BE 헤더 'From City'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-98165e58",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE: AS-IS 'To Site' = TO-BE 헤더 'To Site'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-980754fb",
+  "result": "PASS",
+  "evidence": "TO_CITY: AS-IS 'To City' = TO-BE 헤더 'To City'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-86a608a4",
+  "result": "PASS",
+  "evidence": "VMI_YN: AS-IS 'To Site VMI' = TO-BE 헤더 'To Site VMI'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-fe22b141",
+  "result": "PASS",
+  "evidence": "INCOTERMS: AS-IS 'Incoterms' = TO-BE 헤더 'Incoterms'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1b5d4e68",
+  "result": "FAIL",
+  "evidence": "INCOTERMS_SSP: AS-IS 'Incoterms SSP' ↔ TO-BE 헤더 'SSP Incoterms' — 메타 라벨 'Incoterms SSP' 과도 다름",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-130ed248",
+  "result": "PASS",
+  "evidence": "PRIORITY: AS-IS 'Priority' = TO-BE 헤더 'Priority'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9f7fc6d1",
+  "result": "PASS",
+  "evidence": "ROUTE_CNT: AS-IS 'Route Count' = TO-BE 헤더 'Route Count'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-af84bbb7",
+  "result": "PASS",
+  "evidence": "TRANSPORT_MODE: AS-IS 'Trans Mode' = TO-BE 헤더 'Trans Mode'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3e2db605",
+  "result": "PASS",
+  "evidence": "LEAD_TIME: AS-IS 'Lead Time' = TO-BE 헤더 'Lead Time'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-31c80550",
+  "result": "PASS",
+  "evidence": "BOD_ID: AS-IS 'BOD_ID' = TO-BE 헤더 'BOD_ID'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3f2f7edc",
+  "result": "FAIL",
+  "evidence": "BOD_VALID: AS-IS 'BOD Valid' ↔ TO-BE 헤더 'Active' — 메타 라벨 'BOD Valid' 과도 다름",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-fcad62bc",
+  "result": "PASS",
+  "evidence": "ROUTE_VALID: AS-IS 'Route Valid' = TO-BE 헤더 'Route Valid'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8b029d0e",
+  "result": "NA",
+  "evidence": "SAFETY_STOCK: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='N' → 양쪽 숨김(표시 여부는 A5 PASS) — 라벨 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-23d9d382",
+  "result": "NA",
+  "evidence": "FROM_COUNTRY: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='N' → 양쪽 숨김(표시 여부는 A5 PASS) — 라벨 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0f52b448",
+  "result": "NA",
+  "evidence": "TO_COUNTRY: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='N' → 양쪽 숨김(표시 여부는 A5 PASS) — 라벨 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9b1ee926",
+  "result": "NA",
+  "evidence": "ROUTE_CHK: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='N' → 양쪽 숨김(표시 여부는 A5 PASS) — 라벨 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ed88dbbe",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: AS-IS COMBO(AS-IS 문장) ↔ TO-BE dataType=1 dataMap=Y",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0eb92170",
+  "result": "PASS",
+  "evidence": "ROUTE_ID: AS-IS TEXT(AS-IS 문장) ↔ TO-BE dataType=1 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5ceeab99",
+  "result": "NA",
+  "evidence": "SAFETY_STOCK 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-39082f3e",
+  "result": "PASS",
+  "evidence": "LT_TYPE: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-591289ff",
+  "result": "PASS",
+  "evidence": "DAYS_MON: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-4b605491",
+  "result": "PASS",
+  "evidence": "DAYS_TUE: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5c8b5d36",
+  "result": "PASS",
+  "evidence": "DAYS_WED: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-32155e17",
+  "result": "PASS",
+  "evidence": "DAYS_THU: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bddf9c01",
+  "result": "PASS",
+  "evidence": "DAYS_FRI: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-df246fe0",
+  "result": "PASS",
+  "evidence": "DAYS_SAT: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e02db3e7",
+  "result": "PASS",
+  "evidence": "DAYS_SUN: AS-IS(Div ALL) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-cf30f21e",
+  "result": "PASS",
+  "evidence": "LT_TYPE: AS-IS 'L/T Type' = TO-BE 헤더 'L/T Type'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-4e21eb42",
+  "result": "PASS",
+  "evidence": "DAYS_MON: AS-IS 'Mon' = TO-BE 헤더 'Mon'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9cf25c71",
+  "result": "PASS",
+  "evidence": "DAYS_TUE: AS-IS 'Tue' = TO-BE 헤더 'Tue'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-6a4423e7",
+  "result": "PASS",
+  "evidence": "DAYS_WED: AS-IS 'Wed' = TO-BE 헤더 'Wed'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8c180ea1",
+  "result": "PASS",
+  "evidence": "DAYS_THU: AS-IS 'Thu' = TO-BE 헤더 'Thu'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-33e34282",
+  "result": "PASS",
+  "evidence": "DAYS_FRI: AS-IS 'Fri' = TO-BE 헤더 'Fri'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3c756cb3",
+  "result": "PASS",
+  "evidence": "DAYS_SAT: AS-IS 'Sat' = TO-BE 헤더 'Sat'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-91a7cef3",
+  "result": "PASS",
+  "evidence": "DAYS_SUN: AS-IS 'Sun' = TO-BE 헤더 'Sun'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-178f9c83",
+  "result": "PASS",
+  "evidence": "FROM_CITY: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=1 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a32156f3",
+  "result": "PASS",
+  "evidence": "TO_CITY: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=1 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-91b8cfd5",
+  "result": "PASS",
+  "evidence": "TRANSPORT_MODE: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=1 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ea506673",
+  "result": "PASS",
+  "evidence": "LT_TYPE: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=1 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-91bea115",
+  "result": "PASS",
+  "evidence": "DAYS_MON: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=1 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-38844aa1",
+  "result": "PASS",
+  "evidence": "DAYS_TUE: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=1 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-517f1b47",
+  "result": "PASS",
+  "evidence": "DAYS_WED: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=1 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-38567623",
+  "result": "PASS",
+  "evidence": "DAYS_THU: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=1 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-166c5385",
+  "result": "PASS",
+  "evidence": "DAYS_FRI: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=1 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-cd5fb1c0",
+  "result": "PASS",
+  "evidence": "DAYS_SAT: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=0 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8e64f4a0",
+  "result": "PASS",
+  "evidence": "DAYS_SUN: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=0 dataMap=N",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-eb5aaf68",
+  "result": "NA",
+  "evidence": "FROM_COUNTRY 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-fc29bc9c",
+  "result": "NA",
+  "evidence": "TO_COUNTRY 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b3f6e8e6",
+  "result": "NA",
+  "evidence": "기존행 r0 SAFETY_STOCK: 현재 그리드에 없음 — 표시 여부는 A5 | 신규행 r0 SAFETY_STOCK: 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-45af1f90",
+  "result": "NA",
+  "evidence": "기존행 r0 FROM_COUNTRY: 현재 그리드에 없음 — 표시 여부는 A5 | 신규행 r0 FROM_COUNTRY: 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b87c79c9",
+  "result": "NA",
+  "evidence": "기존행 r0 TO_COUNTRY: 현재 그리드에 없음 — 표시 여부는 A5 | 신규행 r0 TO_COUNTRY: 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-89c7b353",
+  "result": "NA",
+  "evidence": "기존행 r0 ROUTE_CHK: 현재 그리드에 없음 — 표시 여부는 A5 | 신규행 r0 ROUTE_CHK: 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-55b74ce8",
+  "result": "PASS",
+  "evidence": "신규행 FROM_SITE_CODE='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-acdc84d1",
+  "result": "PASS",
+  "evidence": "신규행 TO_SITE_CODE='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a9803daa",
+  "result": "PASS",
+  "evidence": "신규행 PRIORITY='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-72e74efc",
+  "result": "PASS",
+  "evidence": "신규행 TRANSPORT_MODE='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-04a301b8",
+  "result": "PASS",
+  "evidence": "신규행 LEAD_TIME='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b8556d78",
+  "result": "PASS",
+  "evidence": "신규행 FROM_COUNTRY='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e4c7b28c",
+  "result": "PASS",
+  "evidence": "신규행 TO_COUNTRY='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-cd19e59b",
+  "result": "PASS",
+  "evidence": "신규행 ROUTE_CHK='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-badc7498",
+  "result": "PASS",
+  "evidence": "신규행 DAYS_MON='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-482061bd",
+  "result": "PASS",
+  "evidence": "신규행 DAYS_TUE='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d79b52a9",
+  "result": "PASS",
+  "evidence": "신규행 DAYS_WED='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a5ff602f",
+  "result": "PASS",
+  "evidence": "신규행 DAYS_THU='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-fb140d41",
+  "result": "PASS",
+  "evidence": "신규행 DAYS_FRI='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bd6eea81",
+  "result": "PASS",
+  "evidence": "신규행 DAYS_SAT='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-11fd2f1a",
+  "result": "PASS",
+  "evidence": "신규행 DAYS_SUN='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-dbcb37c2",
+  "result": "PASS",
+  "evidence": "신규행 DIS_TOTAL_LEAD_TIME='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-651084f0",
+  "result": "PASS",
+  "evidence": "신규행 LT_TYPE='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-53e114f5",
+  "result": "NA",
+  "evidence": "TO_SITE_CODE AS-IS 셀 규칙이 숫자 아님(COMBO) — 숫자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2e9ad5bd",
+  "result": "NA",
+  "evidence": "SAFETY_STOCK: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='N' → 양쪽 숨김(표시 여부는 A5 PASS) — 입력 검증 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2ac84046",
+  "result": "NA",
+  "evidence": "FROM_CITY AS-IS 셀 규칙이 숫자 아님(TEXT) — 숫자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-899e9e77",
+  "result": "NA",
+  "evidence": "INCOTERMS AS-IS 셀 규칙이 숫자 아님(COMBO) — 숫자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a2036a87",
+  "result": "NA",
+  "evidence": "INCOTERMS_SSP AS-IS 셀 규칙이 숫자 아님(COMBO) — 숫자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7d93cad7",
+  "result": "NA",
+  "evidence": "DIVISION_ID AS-IS 셀 규칙이 숫자 아님(TEXT) — 숫자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-aa74fb64",
+  "result": "NA",
+  "evidence": "FROM_SITE_CODE AS-IS 셀 규칙이 숫자 아님(COMBO) — 숫자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-21eea894",
+  "result": "NA",
+  "evidence": "TO_CITY AS-IS 셀 규칙이 숫자 아님(TEXT) — 숫자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a67329c7",
+  "result": "NA",
+  "evidence": "VMI_YN AS-IS 셀 규칙이 숫자 아님(COMBO) — 숫자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-356a8a34",
+  "result": "NA",
+  "evidence": "SAFETY_STOCK: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='N' → 양쪽 숨김(표시 여부는 A5 PASS) — 표시 색상 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-6581e397",
+  "result": "NA",
+  "evidence": "FROM_COUNTRY: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='N' → 양쪽 숨김(표시 여부는 A5 PASS) — 표시 색상 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5ae32cdc",
+  "result": "NA",
+  "evidence": "TO_COUNTRY: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='N' → 양쪽 숨김(표시 여부는 A5 PASS) — 표시 색상 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3c4b796a",
+  "result": "NA",
+  "evidence": "ROUTE_CHK: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='N' → 양쪽 숨김(표시 여부는 A5 PASS) — 표시 색상 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-137400d0",
+  "result": "PASS",
+  "evidence": "신규행 FROM_YYYYMMDD='2026-10-26' ↔ AS-IS InsertButton 기본값 sYYYYMMDD(이번주 월요일 20261026) 일치 (값 대입은 연쇄가 아니라 Insert 기본값 — D4 와 같은 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c6512236",
+  "result": "PASS",
+  "evidence": "신규행 TO_YYYYMMDD='2099-12-27' ↔ AS-IS InsertButton 기본값 \"2099-12-27\" 일치 (값 대입은 연쇄가 아니라 Insert 기본값 — D4 와 같은 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-80dd9479",
+  "result": "NA",
+  "evidence": "ROUTE_ID: AS-IS 문장은 셀 타입(이미지)·글자색 설정(ROUTE_CHK 기준) — 값 연쇄 아님(셀 유형 D5 · 색상 H2 에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2110e2a5",
+  "result": "PASS",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → TRANSPORT_MODE='TRUCK'→'TRUCK' · 선택 Route 의 TRANSPORT_MODE='TRK'(팝업 TRANSPORT_MODE_NAME='TRUCK' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 TRANSPORT_MODE 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5753c6f4",
+  "result": "PASS",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → PRIORITY='3'→'1' · 선택 Route 의 PRIORITY='1'(팝업 LT_SUM='1' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 PRIORITY 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5d7bb6a2",
+  "result": "PASS",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_MON='Y'→'Y' · 선택 Route 의 DAYS_MON='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 DAYS_MON 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a0be7964",
+  "result": "PASS",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_TUE='Y'→'Y' · 선택 Route 의 DAYS_TUE='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 DAYS_TUE 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-60c48e59",
+  "result": "PASS",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_WED='Y'→'Y' · 선택 Route 의 DAYS_WED='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 DAYS_WED 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2be80777",
+  "result": "PASS",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_THU='Y'→'Y' · 선택 Route 의 DAYS_THU='Y'(팝업 DAYS_TUE='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 DAYS_THU 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e7cb1553",
+  "result": "PASS",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_FRI='Y'→'Y' · 선택 Route 의 DAYS_FRI='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 DAYS_FRI 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-80f4fa64",
+  "result": "PASS",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_SAT=''→'' · 선택 Route 의 DAYS_SAT='' — AS-IS SetRoute 는 선택 Route 의 DAYS_SAT 을 행에 채움 (선택 Route 값도 빈값 → 채울 값 없음, 정상)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-fe0525a8",
+  "result": "PASS",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_SUN=''→'' · 선택 Route 의 DAYS_SUN='' — AS-IS SetRoute 는 선택 Route 의 DAYS_SUN 을 행에 채움 (선택 Route 값도 빈값 → 채울 값 없음, 정상)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-77ba311a",
+  "result": "NA",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → ROUTE_VALID=''→'' · 선택 Route 의 ROUTE_VALID=(팝업 데이터에 해당 항목 없음) — AS-IS SetRoute 는 선택 Route 의 ROUTE_VALID 을 행에 채움 — 팝업 데이터에 없는 항목이라 대조 불가",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-92c717b8",
+  "result": "NA",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DIS_TOTAL_LEAD_TIME=''→'' · 선택 Route 의 DIS_TOTAL_LEAD_TIME=(팝업 데이터에 해당 항목 없음) — AS-IS SetRoute 는 선택 Route 의 DIS_TOTAL_LEAD_TIME 을 행에 채움 — 팝업 데이터에 없는 항목이라 대조 불가",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-05cb921d",
+  "result": "PASS",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 신규행 L/T Type 직후 'AVERAGE' · 2초 뒤 'AVERAGE' · 팝업 첫 행의 LT_TYPE='AVERAGE' — AS-IS SetRoute 는 선택 Route 의 LT_TYPE 을 행에 채움(TO-BE Bod.tsx handleRouteSelect 도 route.LT_TYPE 대입) → 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a3602247",
+  "result": "NA",
+  "evidence": "SAFETY_STOCK: AS-IS 문장이 값 대입이 아님(잠금·셀 타입·스타일) — 연쇄 채움 대상 아님(D1/D3/H2 에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d14715f9",
+  "result": "NA",
+  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → BOD_VALID=''→'' · 선택 Route 의 BOD_VALID=(팝업 데이터에 해당 항목 없음) — AS-IS SetRoute 는 선택 Route 의 BOD_VALID 을 행에 채움 — 팝업 데이터에 없는 항목이라 대조 불가",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9924c200",
+  "result": "PASS",
+  "evidence": "신규행 BEFORE_LEAD_TIME='0' ↔ AS-IS InsertButton 기본값 0 일치 (값 대입은 연쇄가 아니라 Insert 기본값 — D4 와 같은 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-807b6fcf",
+  "result": "PASS",
+  "evidence": "신규행 AFTER_LEAD_TIME='0' ↔ AS-IS InsertButton 기본값 0 일치 (값 대입은 연쇄가 아니라 Insert 기본값 — D4 와 같은 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-54608ecf",
+  "result": "NA",
+  "evidence": "신규행 DIVISION_ID='' ↔ AS-IS InsertButton 기본값 strSel_Division(조회 Division) — 이번 조회 Division 이 복수(ALL)라 AS-IS 도 단일값 대입 불가 → 신규행 Division 은 콤보 선택(D4 에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9d5649ef",
+  "result": "PASS",
+  "evidence": "From/To City(EGCAI/KRANY) 입력 → ROUTE_CNT='0' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움 · 양쪽 City 로 ROUTE_CNT 조회 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-80ff8f6b",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE='E00L00300_40-P' 입력 → FROM_COUNTRY='EG' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d2841849",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE='APRO_KR_ANY' 입력 → TO_COUNTRY='KR' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-89ed1525",
+  "result": "NA",
+  "evidence": "ROUTE_CHK: AS-IS 문장은 셀 타입(이미지)·글자색 설정(ROUTE_CHK 기준) — 값 연쇄 아님(셀 유형 D5 · 색상 H2 에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-751cc7d9",
+  "result": "NA",
+  "evidence": "FROM_CITY: 콤보 후보(dataMap) 없음 · 편집=false — AS-IS SetCityCode 값 대입(From/To Site → City/Country/VMI) 컬럼이라 후보 재구성 대상 아님(값 채움은 C3 에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-07a4cc84",
+  "result": "PASS",
+  "evidence": "TO_SITE PLANT 'KR04179400_40-E' → INCOTERMS 후보 10·편집=false / SALES 'APRO_KR_ANY' → 후보 10·편집=true — AS-IS: PLANT 면 잠금, 아니면 해제",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-94768d46",
+  "result": "PASS",
+  "evidence": "신규행 DIVISION_ID 후보 8",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-886e7afe",
+  "result": "NA",
+  "evidence": "TO_CITY: 콤보 후보(dataMap) 없음 · 편집=false — AS-IS SetCityCode 값 대입(From/To Site → City/Country/VMI) 컬럼이라 후보 재구성 대상 아님(값 채움은 C3 에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8ffb271e",
+  "result": "PASS",
+  "evidence": "VMI_YN: 편집 가능한 콤보 후보 2건 — AS-IS 도 이 컬럼을 콤보로 선언(META FPComboBox YesOrNo (META SCM_MST_SHEET_COLUMNS(SCP0007/BOD)))하고 Site 선택 시 값을 대입함 → 사용자 선택 가능 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-fa2da7d9",
+  "result": "NA",
+  "evidence": "SAFETY_STOCK: 콤보 후보(dataMap) 없음 · 편집=null — AS-IS SetCityCode 값 대입(From/To Site → City/Country/VMI) 컬럼이라 후보 재구성 대상 아님(값 채움은 C3 에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e8c4af58",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → DIVISION_ID '81'→'81' — 값 유지(정상)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-19d1f726",
+  "result": "NA",
+  "evidence": "SAFETY_STOCK: 콤보 후보(dataMap) 없음 · 편집=null — AS-IS SetCityCode 값 대입(From/To Site → City/Country/VMI) 컬럼이라 무변경 편집종료 연쇄 대상 아님(값 채움은 C3 에서 판정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-31caab64",
+  "result": "판정필요",
+  "evidence": "신규행 DIVISION_ID='' — AS-IS 기본값이 식(if (strSel_Division!=null && strSel_Division.Length==2) { siMain.SetValue(siMain) — 사람 확인",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-afa87943",
+  "result": "PASS",
+  "evidence": "신규행 CUSTOMER='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-96cc47ef",
+  "result": "PASS",
+  "evidence": "신규행 FROM_CITY='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-57af219e",
+  "result": "PASS",
+  "evidence": "신규행 TO_CITY='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-32dbf43e",
+  "result": "PASS",
+  "evidence": "신규행 VMI_YN='N' (AS-IS 기본값 'N')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ec83c6d0",
+  "result": "PASS",
+  "evidence": "신규행 INCOTERMS='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-16a0d171",
+  "result": "PASS",
+  "evidence": "신규행 INCOTERMS_SSP='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0e889b5d",
+  "result": "PASS",
+  "evidence": "신규행 ROUTE_CNT='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-359650a5",
+  "result": "PASS",
+  "evidence": "신규행 ROUTE_ID='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7776a9d7",
+  "result": "PASS",
+  "evidence": "신규행 BOD_ID='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a1d3f01c",
+  "result": "PASS",
+  "evidence": "신규행 BOD_VALID='Y' (AS-IS 기본값 'Y')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-6564b7be",
+  "result": "PASS",
+  "evidence": "신규행 ROUTE_VALID='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8f27e9ef",
+  "result": "PASS",
+  "evidence": "신규행 SAFETY_STOCK='' — AS-IS InsertButton 은 이 컬럼에 값을 넣지 않음(기대 빈값)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0048d170",
+  "result": "PASS",
+  "evidence": "신규행 BEFORE_LEAD_TIME='0' (AS-IS 기본값 '0')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-72849258",
+  "result": "PASS",
+  "evidence": "신규행 AFTER_LEAD_TIME='0' (AS-IS 기본값 '0')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b777aed2",
+  "result": "판정필요",
+  "evidence": "신규행 FROM_YYYYMMDD='2026-10-26' — AS-IS 기본값이 식(siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.FROM_YYY) — 사람 확인",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-42c2f859",
+  "result": "PASS",
+  "evidence": "신규행 TO_YYYYMMDD='2099-12-27' (AS-IS 기본값 '2099-12-27')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-a457e667",
+  "result": "판정필요",
+  "evidence": "행 값으로 계산 불가(지역 변수·상태 플래그): if (drsTo.Length > 0) / if (strTO_SITE_TYPE == \"PLANT\") / if (boolEditChange == true) / else of (boolEditChange == true) / else of (strTO_SITE_TYPE == \"PLANT\") / if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\") / else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ad056bae",
+  "result": "판정필요",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음 · 계산 불가 절(사람 확인): if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (siMain.ActiveSheet.Cells[iRow, iCol].Text != \"\") / else of (iCol == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (iCol == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (iCol == siMain.GetColumnIndex(DefColumns.VMI_YN)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (e.Column == siMain.GetColumnIndex(DefColumns.VMI_YN)) / if (svmiYn == \"Y\") / else of (svmiYn == \"Y\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-cd892e67",
+  "result": "판정필요",
+  "evidence": "행 값으로 계산 불가(지역 변수·상태 플래그): if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\") / else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-942d72d3",
+  "result": "판정필요",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음 · 계산 불가 절(사람 확인): if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (siMain.ActiveSheet.Cells[iRow, iCol].Text != \"\") / else of (iCol == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (iCol == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (iCol == siMain.GetColumnIndex(DefColumns.VMI_YN)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (e.Column == siMain.GetColumnIndex(DefColumns.VMI_YN)) / if (svmiYn == \"Y\") / else of (svmiYn == \"Y\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-abc44845",
+  "result": "판정필요",
+  "evidence": "행 값으로 계산 불가(지역 변수·상태 플래그): if (drsTo.Length > 0) / if (strTO_SITE_TYPE == \"PLANT\") / if (boolEditChange == true) / else of (boolEditChange == true) / else of (strTO_SITE_TYPE == \"PLANT\") / if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\") / else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-051e2c8c",
+  "result": "판정필요",
+  "evidence": "행 값으로 계산 불가(지역 변수·상태 플래그): if (drsTo.Length > 0) / if (strTO_SITE_TYPE == \"PLANT\") / if (boolEditChange == true) / else of (boolEditChange == true) / else of (strTO_SITE_TYPE == \"PLANT\") / if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\") / else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8300a0fa",
+  "result": "판정필요",
+  "evidence": "행 값으로 계산 불가(지역 변수·상태 플래그): if (drsTo.Length > 0) / if (strTO_SITE_TYPE == \"PLANT\") / if (boolEditChange == true) / else of (boolEditChange == true) / else of (strTO_SITE_TYPE == \"PLANT\") / if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\") / else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-943eabe5",
+  "result": "판정필요",
+  "evidence": "행 값으로 계산 불가(지역 변수·상태 플래그): if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\") / else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-aa95f6d2",
+  "result": "판정필요",
+  "evidence": "행 값으로 계산 불가(지역 변수·상태 플래그): if (drsTo.Length > 0) / if (strTO_SITE_TYPE == \"PLANT\") / if (boolEditChange == true) / else of (boolEditChange == true) / else of (strTO_SITE_TYPE == \"PLANT\") / if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\") / else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f660d450",
+  "result": "판정필요",
+  "evidence": "행 값으로 계산 불가(지역 변수·상태 플래그): if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\") / else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0c3aaaf4",
+  "result": "판정필요",
+  "evidence": "행 값으로 계산 불가(지역 변수·상태 플래그): if (drsTo.Length > 0) / if (strTO_SITE_TYPE == \"PLANT\") / if (boolEditChange == true) / else of (boolEditChange == true) / else of (strTO_SITE_TYPE == \"PLANT\") / if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\") / else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == \"PLANT\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-cae6b37c",
+  "result": "판정필요",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음 · 계산 불가 절(사람 확인): if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (siMain.ActiveSheet.Cells[iRow, iCol].Text != \"\") / else of (iCol == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (iCol == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (iCol == siMain.GetColumnIndex(DefColumns.VMI_YN)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (e.Column == siMain.GetColumnIndex(DefColumns.VMI_YN)) / if (svmiYn == \"Y\") / else of (svmiYn == \"Y\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bbf7ef8b",
+  "result": "판정필요",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음 · 계산 불가 절(사람 확인): if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (siMain.ActiveSheet.Cells[iRow, iCol].Text != \"\") / else of (iCol == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (iCol == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (iCol == siMain.GetColumnIndex(DefColumns.VMI_YN)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (e.Column == siMain.GetColumnIndex(DefColumns.VMI_YN)) / if (svmiYn == \"Y\") / else of (svmiYn == \"Y\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e69cf917",
+  "result": "판정필요",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음 · 계산 불가 절(사람 확인): if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (siMain.ActiveSheet.Cells[iRow, iCol].Text != \"\") / else of (iCol == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (iCol == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (iCol == siMain.GetColumnIndex(DefColumns.VMI_YN)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (e.Column == siMain.GetColumnIndex(DefColumns.VMI_YN)) / if (svmiYn == \"Y\") / else of (svmiYn == \"Y\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f519f56c",
+  "result": "판정필요",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음 · 계산 불가 절(사람 확인): if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (siMain.ActiveSheet.Cells[iRow, iCol].Text != \"\") / else of (iCol == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (iCol == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (iCol == siMain.GetColumnIndex(DefColumns.VMI_YN)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (e.Column == siMain.GetColumnIndex(DefColumns.VMI_YN)) / if (svmiYn == \"Y\") / else of (svmiYn == \"Y\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-26d3b37d",
+  "result": "판정필요",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음 · 계산 불가 절(사람 확인): if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (siMain.ActiveSheet.Cells[iRow, iCol].Text != \"\") / else of (iCol == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (iCol == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (iCol == siMain.GetColumnIndex(DefColumns.VMI_YN)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (e.Column == siMain.GetColumnIndex(DefColumns.VMI_YN)) / if (svmiYn == \"Y\") / else of (svmiYn == \"Y\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b4b7a52d",
+  "result": "판정필요",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음 · 계산 불가 절(사람 확인): if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SI / if (siMain.ActiveSheet.Cells[iRow, iCol].Text != \"\") / else of (iCol == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (iCol == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (iCol == siMain.GetColumnIndex(DefColumns.VMI_YN)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.FROM_SITE_CODE)) / else of (e.Column == siMain.GetColumnIndex(DefColumns.TO_SITE_CODE)) / if (e.Column == siMain.GetColumnIndex(DefColumns.VMI_YN)) / if (svmiYn == \"Y\") / else of (svmiYn == \"Y\")",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-58b49478",
+  "result": "PASS",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-9a793d94",
+  "result": "NA",
+  "evidence": "조회 16301행 중 조건을 만족하는 행 없음 — 조건 데이터 없음(검사 대상 데이터 부재)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-eb4a5d7f",
+  "result": "NA",
+  "evidence": "조회 16301행 중 조건을 만족하는 행 없음 — 조건 데이터 없음(검사 대상 데이터 부재)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-69447e5a",
+  "result": "PASS",
+  "evidence": "r0 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.EditButton) OK · r1 TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.EditButton) OK",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-b30dd3c6",
+  "result": "NA",
+  "evidence": "조회 16301행 중 조건을 만족하는 행 없음 — 조건 데이터 없음(검사 대상 데이터 부재)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3b5c0b42",
+  "result": "NA",
+  "evidence": "조회 16301행 중 조건을 만족하는 행 없음 — 조건 데이터 없음(검사 대상 데이터 부재)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4dfc32a3",
+  "result": "PASS",
+  "evidence": "r0 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK · r1 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-004d10db",
+  "result": "PASS",
+  "evidence": "r0 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK · r1 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-df27b39b",
+  "result": "PASS",
+  "evidence": "r68 SAFETY_STOCK 그리드에 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-90f8f008",
+  "result": "PASS",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c16aafeb",
+  "result": "PASS",
+  "evidence": "r68 SAFETY_STOCK 그리드에 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-0746a4d0",
+  "result": "PASS",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-28803102",
+  "result": "PASS",
+  "evidence": "r68 SAFETY_STOCK 그리드에 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-15da4a34",
+  "result": "PASS",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8b803249",
+  "result": "PASS",
+  "evidence": "Status=Required(Required) 조회 178행 → Insert → 알림 'Input Status가 Completed일때만 입력이 가능합니다.\nConfirm' · 행 178→178 — AS-IS MSG00159 'Input Status가 Completed일때만 입력이 가능합니다'(TO-BE MSG01175) + 행 추가 없음 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-67b84cc3",
+  "result": "판정필요",
+  "evidence": "MSG00085: 위반 입력 자동 생성 불가 — guard 'if (sBeforeLeadTime == \"\" || Decimal.Parse(sBeforeLeadTime) < 0)' (변수→컬럼 {})",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-572f0c77",
+  "result": "판정필요",
+  "evidence": "MSG00165: 위반 입력 자동 생성 불가 — guard 'if (Encoding.Default.GetByteCount(sRemarks) >= 150)' (변수→컬럼 {})",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d74f2ea4",
+  "result": "판정필요",
+  "evidence": "MSG00219: 위반 입력 자동 생성 불가 — guard 'if (Convert.ToInt32(sFromYyyymmdd) > Convert.ToInt32(sToYyyymmdd))' (변수→컬럼 {})",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-87f54172",
+  "result": "판정필요",
+  "evidence": "MSG00355: 위반 입력 자동 생성 불가 — guard 'if (dtFromYyyymmdd.DayOfWeek != DayOfWeek.Monday)' (변수→컬럼 {})",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-65442968",
+  "result": "판정필요",
+  "evidence": "MSG00253: 위반 입력 자동 생성 불가 — guard 'if (iCount > 0 && !valid_chk)' (변수→컬럼 {})",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bfb551d1",
+  "result": "판정필요",
+  "evidence": "MSG00004: 위반 입력 자동 생성 불가 — guard 'if (response.DataSet.Tables[0].Rows[0][0].ToString() == \"S\")' (변수→컬럼 {})",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c831d0ca",
+  "result": "PASS",
+  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b37c85ee",
+  "result": "판정필요",
+  "evidence": "MSG00006: 위반 입력 자동 생성 불가 — guard 'else of (errCode == \"99010\" || errCode == \"99020\" || errCode == \"99030\" || errCode == \"99040\")' (변수→컬럼 {})",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f43f855f",
+  "result": "PASS",
+  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2743944c",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3033558e",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-19f1456d",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ccd89d63",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-575b8ff6",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b658c1cd",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-67066e18",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-abda0109",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1313f506",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-04bf74ed",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b5832e6f",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7d64aaba",
+  "result": "PASS",
+  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d6696f54",
+  "result": "PASS",
+  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-24fff771",
+  "result": "PASS",
+  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c2d7f5ab",
+  "result": "NA",
+  "evidence": "팝업 Route 1행 중 DAYS 빈 행 없음 — MSG00222 조건 데이터 부재(검사 대상 데이터 없음)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bc2385b9",
+  "result": "판정필요",
+  "evidence": "MSG00222 — SetRoute 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(SetRoute)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-94caf15a",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-71bf1a50",
+  "result": "판정필요",
+  "evidence": "(동적) — FindData_Main 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindData_Main)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-1ef184d2",
+  "result": "PASS",
+  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-9cce21be",
+  "result": "PASS",
+  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-02f5bdea",
+  "result": "PASS",
+  "evidence": "MSG00165 '' 위반 입력 REMARKS 150바이트 이상('XXXXXXXXXXXXXXXXXXXX' → 값 'XXXXXXXXXXXXXXXXXXXX') · Save → 알림 '입력할 수 있는 자리수를 초과하였습니다.\nConfirm' · 저장 요청 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-1aad7094",
+  "result": "PASS",
+  "evidence": "MSG00219 '' 위반 입력 FROM_YYYYMMDD > TO_YYYYMMDD('2100-12-27' → 값 '2100-12-27') · Save → 알림 '시작일자가 종료일자보다 늦을 수 없습니다.\n리스트 확인 후 입력하십시오.\nConfirm' · 저장 요청 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8b3a18c8",
+  "result": "PASS",
+  "evidence": "MSG00355 '' 위반 입력 FROM_YYYYMMDD 요일 ≠ Monday('2026-10-27' → 값 '2026-10-27') · Save → 알림 'FROM 기간을 다시 선택하여 주십시오.(Monday)\nConfirm' · 저장 요청 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-d4d933a2",
+  "result": "PASS",
+  "evidence": "MSG00355 '' 위반 입력 TO_YYYYMMDD 요일 ≠ Sunday('2099-12-28' → 값 '2099-12-28') · Save → 알림 'TO 기간을 다시 선택하여 주십시오.(Sunday)\nConfirm' · 저장 요청 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c4ca614f",
+  "result": "PASS",
+  "evidence": "MSG00253 '' 위반 입력 TO_SITE_CODE = FROM_SITE_CODE(동일 사이트)('E00L00300_40-P' → 값 'E00L00300_40-P') · Save → 알림 'From Site와 To Site는 동일할 수 없습니다.\nConfirm' · 저장 요청 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-54926c51",
+  "result": "PASS",
+  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 PASS: 저장 후 재조회에 마커 'E2E_10271101'(REMARKS) 행 존재 — DB 반영 확인 · 정리 완료(마커 행 삭제·저장·재조회 부재 확인)) 경로에서 성공 알림·재조회 확인",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-d85da172",
+  "result": "PASS",
+  "evidence": "저장 실패(중복) 응답 처리 실측(W9): 같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 셀 색 변화 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY (문제 행·셀 강조 구현됨) — AS-IS 는 errCode 99010/99020/99030/99040 별로 문제 행·셀을 InvalidColor 로 표시",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-bf8d5dd1",
+  "result": "PASS",
+  "evidence": "저장 실패(중복) 응답 처리 실측(W9): 같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 셀 색 변화 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY (문제 행·셀 강조 구현됨) — AS-IS 는 errCode 99010/99020/99030/99040 별로 문제 행·셀을 InvalidColor 로 표시",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-6b41b7c0",
+  "result": "NA",
+  "evidence": "(동적 메시지): catch 블록 예외 메시지(프레임워크 공통 오류 표시) — 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-b269936e",
+  "result": "NA",
+  "evidence": "팝업 Route 1행 중 DAYS 빈 행 없음 — MSG00222 조건 데이터 부재(검사 대상 데이터 없음)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-793ff670",
+  "result": "NA",
+  "evidence": "팝업 Route 1행 중 DAYS 빈 행 없음 — MSG00222 조건 데이터 부재(검사 대상 데이터 없음)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f712e982",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2a9efba4",
+  "result": "PASS",
+  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → ROUTE_ID='740'→'740' · 선택 Route 의 ROUTE_ID='740' — AS-IS SetRoute 가 선택 Route 의 ROUTE_ID 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c32845d9",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-134337c2",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ec1eeeda",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-4c8d511e",
+  "result": "판정필요",
+  "evidence": "ROUTE_ID 더블클릭 → 팝업(new SCP0007_DistributionRoutePopup) 행 없음(데이터 0) → 대상 14개 중 채워짐 12 · 변경 2: BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c1ecd092",
+  "result": "판정필요",
+  "evidence": "ROUTE_ID 더블클릭 → 팝업(new SCP0007_DistributionRoutePopup) 행 없음(데이터 0) → 대상 14개 중 채워짐 12 · 변경 2: BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b1b683aa",
+  "result": "판정필요",
+  "evidence": "ROUTE_ID 더블클릭 → 팝업(new SCP0007_DistributionRoutePopup) 행 없음(데이터 0) → 대상 14개 중 채워짐 12 · 변경 2: BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-11158f53",
+  "result": "판정필요",
+  "evidence": "ROUTE_ID 더블클릭 → 팝업(new SCP0007_DistributionRoutePopup) 행 없음(데이터 0) → 대상 14개 중 채워짐 12 · 변경 2: BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7921392e",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b13a2f93",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b04fa7d4",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-44e9a8c7",
+  "result": "PASS",
+  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → PRIORITY='3'→'1' · 선택 Route 의 PRIORITY='1'(팝업 LT_SUM='1' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 PRIORITY 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2ad3f7c8",
+  "result": "PASS",
+  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → TRANSPORT_MODE='TRUCK'→'TRUCK' · 선택 Route 의 TRANSPORT_MODE='TRK'(팝업 TRANSPORT_MODE_NAME='TRUCK' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 TRANSPORT_MODE 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e7bb73f2",
+  "result": "PASS",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 신규행 L/T Type 직후 'AVERAGE' · 2초 뒤 'AVERAGE' · 팝업 첫 행의 LT_TYPE='AVERAGE' — AS-IS SetRoute 는 선택 Route 의 LT_TYPE 을 행에 채움(TO-BE Bod.tsx handleRouteSelect 도 route.LT_TYPE 대입) → 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ed158135",
+  "result": "PASS",
+  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_MON='Y'→'Y' · 선택 Route 의 DAYS_MON='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 DAYS_MON 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-20aeb1b0",
+  "result": "PASS",
+  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_TUE='Y'→'Y' · 선택 Route 의 DAYS_TUE='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 DAYS_TUE 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bebb2931",
+  "result": "PASS",
+  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_WED='Y'→'Y' · 선택 Route 의 DAYS_WED='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 DAYS_WED 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3f05ad85",
+  "result": "PASS",
+  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_THU='Y'→'Y' · 선택 Route 의 DAYS_THU='Y'(팝업 DAYS_TUE='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 DAYS_THU 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-423aaa7b",
+  "result": "PASS",
+  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_FRI='Y'→'Y' · 선택 Route 의 DAYS_FRI='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 DAYS_FRI 을 행에 채움 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-cca6ef90",
+  "result": "PASS",
+  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_SAT=''→'' · 선택 Route 의 DAYS_SAT='' — AS-IS SetRoute 가 선택 Route 의 DAYS_SAT 을 행에 채움 (선택 Route 값도 빈값, 정상)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-cfae312d",
+  "result": "PASS",
+  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_SUN=''→'' · 선택 Route 의 DAYS_SUN='' — AS-IS SetRoute 가 선택 Route 의 DAYS_SUN 을 행에 채움 (선택 Route 값도 빈값, 정상)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d65cfaf5",
+  "result": "PASS",
+  "evidence": "DIS_TOTAL_LEAD_TIME: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3b27c86f",
+  "result": "PASS",
+  "evidence": "BOD_VALID: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-92d7a02d",
+  "result": "PASS",
+  "evidence": "ROUTE_VALID: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5966eec9",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-4d1bf3f7",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c8df6187",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5fa9894a",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8f68fe4d",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c455efae",
+  "result": "PASS",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3e4015b5",
+  "result": "PASS",
+  "evidence": "PKG_SCP0007.P_SCP0007_GET_BOD: 결과 2000행이 AS-IS 키 [DIVISION_ID,CUSTOMER,INCOTERMS,FROM_SITE_CODE,TO_SITE_CODE,FROM_YYYYMMDD,PRIORITY,ROUTE_ID,DAYS_MON,DAYS_TUE,DAYS_WED,DAYS_THU,DAYS_FRI,DAYS_SAT,DAYS_SUN] 순으로 정렬됨 (p_input_status='C' → 분기 C)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b690cf2b",
+  "result": "NA",
+  "evidence": "PKG_SCP0007.P_SCP0007_GET_COUNTRY_CITY: AS-IS ORDER BY 없음 — 결과 순서 미정(실측 비교 대상 아님, TO-BE 임의 정렬 여부는 정적 대조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-d5df8360",
+  "result": "NA",
+  "evidence": "PKG_SCP0007.P_SCP0007_SAVE_BOD: 저장 SP — 결과 정렬 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-49ee4fee",
+  "result": "NA",
+  "evidence": "AS-IS ROUTE_CNT SP ORDER BY 없음 · 결과 1행(집계) — 정렬 검사 대상 아님 (호출 2회 실측)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8e11e573",
+  "result": "PASS",
+  "evidence": "PKG_SCP0005.P_SCP0005_GET_DISTRIBUTION_ROUTE: 팝업 결과 1행 키 [FROM_COUNTRY,FROM_CITY,TO_COUNTRY,TO_CITY,PRIORITY] 정렬 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-530c9f74",
+  "result": "NA",
+  "evidence": "ROUTE_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e0d3fb7f",
+  "result": "NA",
+  "evidence": "DIVISION_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-80075697",
+  "result": "NA",
+  "evidence": "CUSTOMER: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3d71f234",
+  "result": "NA",
+  "evidence": "FROM_CITY: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1f511dd4",
+  "result": "NA",
+  "evidence": "TO_CITY: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-53980a93",
+  "result": "NA",
+  "evidence": "ROUTE_CNT: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-dce41557",
+  "result": "NA",
+  "evidence": "LT_TYPE: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-359b599a",
+  "result": "NA",
+  "evidence": "DAYS_MON: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-146b6ccc",
+  "result": "NA",
+  "evidence": "LEAD_TIME: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-46a2ee7e",
+  "result": "NA",
+  "evidence": "DIS_TOTAL_LEAD_TIME: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-765e88c2",
+  "result": "NA",
+  "evidence": "BOD_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8d52116d",
+  "result": "NA",
+  "evidence": "ROUTE_VALID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-521eab87",
+  "result": "NA",
+  "evidence": "CREATED_BY: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-98747bc0",
+  "result": "NA",
+  "evidence": "CREATION_DATE: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bb27e6e6",
+  "result": "NA",
+  "evidence": "LAST_UPDATED_BY: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f0e1fdcc",
+  "result": "NA",
+  "evidence": "LAST_UPDATE_DATE: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-34e7e34b",
+  "result": "NA",
+  "evidence": "FROM_COUNTRY: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bd5b1917",
+  "result": "NA",
+  "evidence": "TO_COUNTRY: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-95aea7ea",
+  "result": "NA",
+  "evidence": "ROUTE_CHK: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-da3e5478",
+  "result": "NA",
+  "evidence": "TRANSPORT_MODE: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-11fe11c8",
+  "result": "NA",
+  "evidence": "INCOTERMS_SSP: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-51fd7d76",
+  "result": "NA",
+  "evidence": "FROM_YYYYMMDD: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-26f9c75b",
+  "result": "NA",
+  "evidence": "DIVISION_ID: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-edfa1035",
+  "result": "NA",
+  "evidence": "INCOTERMS: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e2c99d1f",
+  "result": "NA",
+  "evidence": "BEFORE_LEAD_TIME: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-6f9646c7",
+  "result": "NA",
+  "evidence": "AFTER_LEAD_TIME: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-84f29996",
+  "result": "NA",
+  "evidence": "REMARKS: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7aae82e4",
+  "result": "NA",
+  "evidence": "SCP0007_BOD.SetChangeControl: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-759ace3c",
+  "result": "NA",
+  "evidence": "FROM_SITE_CODE: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-fbcbabbe",
+  "result": "NA",
+  "evidence": "FROM_CITY: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3e9e7354",
+  "result": "NA",
+  "evidence": "TO_SITE_CODE: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b48d0982",
+  "result": "NA",
+  "evidence": "TO_CITY: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2d33e348",
+  "result": "NA",
+  "evidence": "VMI_YN: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-feeb4888",
+  "result": "NA",
+  "evidence": "ROUTE_CNT: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-abf210d6",
+  "result": "NA",
+  "evidence": "SAFETY_STOCK: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e96da839",
+  "result": "NA",
+  "evidence": "FROM_COUNTRY: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2b8f91b4",
+  "result": "NA",
+  "evidence": "TO_COUNTRY: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f31c46fe",
+  "result": "NA",
+  "evidence": "SCP0007_BOD.SetCityCode: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0cfb7354",
+  "result": "NA",
+  "evidence": "ROUTE_ID: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-083a3f2e",
+  "result": "NA",
+  "evidence": "SCP0007_BOD.SetImageCell: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0fbd5df3",
+  "result": "NA",
+  "evidence": "TRANSPORT_MODE: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-cfc63890",
+  "result": "NA",
+  "evidence": "DIS_TOTAL_LEAD_TIME: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-dd21da28",
+  "result": "NA",
+  "evidence": "ROUTE_VALID: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-32d1b4d6",
+  "result": "NA",
+  "evidence": "ROUTE_CHK: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9bb510ed",
+  "result": "NA",
+  "evidence": "SCP0007_BOD.Set_ValidTextColor: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-fcff5817",
+  "result": "PASS",
+  "evidence": "Division 후보 8건 [81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-2592d0de",
+  "result": "PASS",
+  "evidence": "Division 후보 8건 [81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-39a4cfbb",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r0~r1 값 '40' 세로 병합됨(rowSpan=28) — 일치 · 이 컬럼의 병합 범위 1건(400행) · grid.allowMerging=7 · column.allowMerging=true",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-84484f94",
+  "result": "PASS",
+  "evidence": "CUSTOMER: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r0~r1 값 '-' 세로 병합됨(rowSpan=28) — 일치 · 이 컬럼의 병합 범위 1건(400행) · grid.allowMerging=7 · column.allowMerging=true",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-dcca6ca7",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r0~r1 값 'HQ06-A' 세로 병합됨(rowSpan=19) — 일치 · 이 컬럼의 병합 범위 2건(400행) · grid.allowMerging=7 · column.allowMerging=true",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-274077ab",
+  "result": "PASS",
+  "evidence": "FROM_CITY: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r0~r1 값 'KRCOJ' 세로 병합됨(rowSpan=19) — 일치 · 이 컬럼의 병합 범위 2건(400행) · grid.allowMerging=7 · column.allowMerging=true",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5b5676a4",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r20~r21 값 'Alte_KR_SEL' 세로 병합됨(rowSpan=2) — 일치 · 이 컬럼의 병합 범위 4건(400행) · grid.allowMerging=7 · column.allowMerging=true",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ba015dbd",
+  "result": "PASS",
+  "evidence": "TO_CITY: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r20~r21 값 'KRSEL' 세로 병합됨(rowSpan=2) — 일치 · 이 컬럼의 병합 범위 4건(400행) · grid.allowMerging=7 · column.allowMerging=true",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b3ee6173",
+  "result": "PASS",
+  "evidence": "VMI_YN: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r20~r21 값 'N' 세로 병합됨(rowSpan=2) — 일치 · 이 컬럼의 병합 범위 4건(400행) · grid.allowMerging=7 · column.allowMerging=true",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7a964579",
+  "result": "PASS",
+  "evidence": "INCOTERMS: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r20~r21 값 'A01' 세로 병합됨(rowSpan=2) — 일치 · 이 컬럼의 병합 범위 4건(400행) · grid.allowMerging=7 · column.allowMerging=true",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-da7e19e3",
+  "result": "PASS",
+  "evidence": "INCOTERMS_SSP: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-52d44f24",
+  "result": "PASS",
+  "evidence": "PRIORITY: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-97066f9e",
+  "result": "PASS",
+  "evidence": "ROUTE_CNT: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-720f9bc2",
+  "result": "PASS",
+  "evidence": "TRANSPORT_MODE: AS-IS FPMerge.Restricted(왼쪽 병합 컬럼 값이 같은 범위 안에서 동일 인접값 세로 병합) — 근거: 프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909) ↔ TO-BE 실측 r89~r90 값 'TRUCK' 병합 안 됨 — 병합 대상 컬럼이지만 왼쪽에 비병합 컬럼 [INCOTERMS_SSP, PRIORITY, ROUTE_CNT] 이 있어 계층 병합 구조상 병합되지 않음(TO-BE 룰 CR-073: 오류 아님 · MERGE_COLUMNS 위치 설계 확인 권고) · 이 컬럼의 병합 범위 0건(400행) · grid.allowMerging=7 · column.allowMerging=true — 병합 대상인데 안 됨: 두 행에서 값이 다른 왼쪽 컬럼 [없음] (공용 CustomMergeManager 병합 키 = 왼쪽 전 컬럼 값 누적이라 원인 추가 확인 필요)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e5ce8ba3",
+  "result": "PASS",
+  "evidence": "ROUTE_ID: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f61591f8",
+  "result": "PASS",
+  "evidence": "LEAD_TIME: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c30afba1",
+  "result": "PASS",
+  "evidence": "BOD_ID: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-157c8543",
+  "result": "PASS",
+  "evidence": "BOD_VALID: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7c5dcf08",
+  "result": "PASS",
+  "evidence": "ROUTE_VALID: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9b79f52c",
+  "result": "NA",
+  "evidence": "SAFETY_STOCK 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ae0bd2de",
+  "result": "NA",
+  "evidence": "FROM_COUNTRY 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c9f9f4ef",
+  "result": "NA",
+  "evidence": "TO_COUNTRY 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1a549876",
+  "result": "NA",
+  "evidence": "ROUTE_CHK 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-f4e5dbae",
+  "result": "판정필요",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭 비율(TO-BE/AS-IS) 평균 0.00 · 비율 이탈 0: 없음 (0컬럼 비교)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-a3521780",
+  "result": "PASS",
+  "evidence": "Insert → 신규행 CRUD_TYPE='I' · 기존행 PRIORITY 편집 → CRUD_TYPE='M' (AS-IS CRUD Status I/U 표시)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-36028f72",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE 'Alte_KR_SEL' Ctrl+C → 신규행 Ctrl+V → 'Alte_KR_SEL' · 연쇄 TO_CITY='KRSEL' (AS-IS SpdMain_ClipboardPasted: 붙여넣기에도 콤보·연쇄 적용)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-f8ab5f49",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE 'Alte_KR_SEL' Ctrl+C → 신규행 Ctrl+V → 'Alte_KR_SEL' · 연쇄 TO_CITY='KRSEL' (AS-IS SpdMain_ClipboardPasted: 붙여넣기에도 콤보·연쇄 적용)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4adcd8b4",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE 'Alte_KR_SEL' Ctrl+C → 신규행 Ctrl+V → 'Alte_KR_SEL' · 연쇄 TO_CITY='KRSEL' (AS-IS SpdMain_ClipboardPasted: 붙여넣기에도 콤보·연쇄 적용)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-b7bacac5",
+  "result": "PASS",
+  "evidence": "TO_SITE_CODE 'Alte_KR_SEL' Ctrl+C → 신규행 Ctrl+V → 'Alte_KR_SEL' · 연쇄 TO_CITY='KRSEL' (AS-IS SpdMain_ClipboardPasted: 붙여넣기에도 콤보·연쇄 적용)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3ca36147",
+  "result": "PASS",
+  "evidence": "팝업 SCP0007_DistributionRoutePopup 조회 → 행 17 · 호출 route/SEARCH 200, region/SEARCH 200, route/SEARCH 200",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f6a7c6d7",
+  "result": "NA",
+  "evidence": "팝업 btnFromSrch 비활성(AS-IS Enabled=false 동일) — 도시 검색 팝업(popCity) 호출 경로 없음: 팝업 내부 기능 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f16aef47",
+  "result": "NA",
+  "evidence": "팝업 btnToSrch 비활성(AS-IS Enabled=false 동일) — 도시 검색 팝업(popCity) 호출 경로 없음: 팝업 내부 기능 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-b093a04e",
+  "result": "NA",
+  "evidence": "필수 조회조건 없음(플랜 required 0) — 조회조건 필수 검증 대상 아님(AS-IS checkRequiredOfSearch 는 필수 컨트롤이 있을 때만 동작)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-52d01043",
+  "result": "PASS",
+  "evidence": "Status=Required(Required) 조회 178행 → Insert → 알림 'Input Status가 Completed일때만 입력이 가능합니다.\nConfirm' · 행 178→178 — AS-IS MSG00159 'Input Status가 Completed일때만 입력이 가능합니다'(TO-BE MSG01175) + 행 추가 없음 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-978e3dc7",
+  "result": "판정필요",
+  "evidence": "BOD_VALID Y/N 행이 함께 있는 조회 결과가 아님(Y 없음 · N 없음) — 두 상태 행으로 색 비교 필요",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-92c7eace",
+  "result": "판정필요",
+  "evidence": "BOD_VALID Y/N 행이 함께 있는 조회 결과가 아님(Y 없음 · N 없음) — 두 상태 행으로 색 비교 필요",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-590f4386",
+  "result": "NA",
+  "evidence": "팝업 그리드 VALID_YN 셀 더블클릭 → 대화상자 1→0 (AS-IS 이 셀 더블클릭 팝업 없음 — 대상 아님)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f5617dbe",
+  "result": "NA",
+  "evidence": "팝업 그리드에 LT_SUM 헤더 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-acf6211e",
+  "result": "NA",
+  "evidence": "팝업 그리드 VALID_YN 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 셀 팝업 호출 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e9c98714",
+  "result": "NA",
+  "evidence": "팝업 그리드 LT_SUM 읽기 전용(isReadOnly) — Route 목록 조회 전용 팝업이라 셀 팝업 호출 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b9db7241",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtFromCountry: 값 'KR' ↔ 더블클릭 행 FROM_COUNTRY='KR' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-676815dc",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtFromCity: 값 'KRCOJ' ↔ 더블클릭 행 FROM_CITY='KRCOJ' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2309213d",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtToCity: 값 'KRSEL' ↔ 더블클릭 행 TO_CITY='KRSEL' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5ac3cce2",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtFromCity: 값 'KRCOJ' ↔ 더블클릭 행 FROM_CITY='KRCOJ' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-582de7b2",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtFromCountry: 값 'KR' ↔ 더블클릭 행 FROM_COUNTRY='KR' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-4462e9e3",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtToCity: 값 'KRSEL' ↔ 더블클릭 행 TO_CITY='KRSEL' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e9b5dcde",
+  "result": "PASS",
+  "evidence": "팝업 btnFromSrch: 버튼 1개 · disabled 1 — AS-IS 더블클릭 컨텍스트 btn*Srch.Enabled=false 와 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f086d8c6",
+  "result": "PASS",
+  "evidence": "팝업 btnToSrch: 버튼 1개 · disabled 1 — AS-IS 더블클릭 컨텍스트 btn*Srch.Enabled=false 와 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-f09ac7a4",
+  "result": "NA",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭)의 조회조건 입력칸 txtFromCountry — 팝업 버튼 순서·No. 컬럼 규칙(H6)의 대상은 버튼/그리드이지 입력칸이 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-fb7d5067",
+  "result": "NA",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭)의 조회조건 입력칸 txtFromCity — 팝업 버튼 순서·No. 컬럼 규칙(H6)의 대상은 버튼/그리드이지 입력칸이 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-84f55649",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtFromCountry: 더블클릭한 행 값 'KR' 이 팝업에 'KR' 로 전달됨(disabled=true) — AS-IS popRoute.Form_Load 인자 전달과 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8ce58ba8",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtFromCity: 더블클릭한 행 값 'KRCOJ' 이 팝업에 'KRCOJ' 로 전달됨(disabled=true) — AS-IS popRoute.Form_Load 인자 전달과 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-36b6ecb9",
+  "result": "NA",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭)의 조회조건 입력칸 txtToCountry — 팝업 버튼 순서·No. 컬럼 규칙(H6)의 대상은 버튼/그리드이지 입력칸이 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e19ab5e7",
+  "result": "NA",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭)의 조회조건 입력칸 txtToCity — 팝업 버튼 순서·No. 컬럼 규칙(H6)의 대상은 버튼/그리드이지 입력칸이 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7621165a",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtToCountry: 더블클릭한 행 값 'KR' 이 팝업에 'KR' 로 전달됨(disabled=true) — AS-IS popRoute.Form_Load 인자 전달과 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-17f94ea3",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtToCity: 더블클릭한 행 값 'KRSEL' 이 팝업에 'KRSEL' 로 전달됨(disabled=true) — AS-IS popRoute.Form_Load 인자 전달과 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4b33942e",
+  "result": "NA",
+  "evidence": "popCity(도시 검색 팝업)는 City 검색 버튼이 disabled(AS-IS 더블클릭 컨텍스트 Enabled=false 동일)라 호출되지 않음 — 인자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-93b13c72",
+  "result": "판정필요",
+  "evidence": "팝업 안 도시 검색 팝업(popCity) H6 — 팝업 입력칸 [] · 2단 팝업 시나리오 수동",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-713a9536",
+  "result": "NA",
+  "evidence": "popCity(도시 검색 팝업)는 City 검색 버튼이 disabled(AS-IS 더블클릭 컨텍스트 Enabled=false 동일)라 호출되지 않음 — 인자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-20bf7980",
+  "result": "판정필요",
+  "evidence": "팝업 안 도시 검색 팝업(popCity) H6 — 팝업 입력칸 [] · 2단 팝업 시나리오 수동",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-688882aa",
+  "result": "NA",
+  "evidence": "popCity(도시 검색 팝업)는 City 검색 버튼이 disabled(AS-IS 더블클릭 컨텍스트 Enabled=false 동일)라 호출되지 않음 — 인자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-789090ba",
+  "result": "판정필요",
+  "evidence": "팝업 안 도시 검색 팝업(popCity) H6 — 팝업 입력칸 [] · 2단 팝업 시나리오 수동",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-24fb86ea",
+  "result": "NA",
+  "evidence": "popCity(도시 검색 팝업)는 City 검색 버튼이 disabled(AS-IS 더블클릭 컨텍스트 Enabled=false 동일)라 호출되지 않음 — 인자 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-21f544d2",
+  "result": "판정필요",
+  "evidence": "팝업 안 도시 검색 팝업(popCity) H6 — 팝업 입력칸 [] · 2단 팝업 시나리오 수동",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-03e9952a",
+  "result": "PASS",
+  "evidence": "Division 후보 8건 [81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-80075f7b",
+  "result": "PASS",
+  "evidence": "[단일선택 Status] 'Required' → 593행 · ROUTE_ID 빈값 500/500 OK | 'Completed' → 16301행 · ROUTE_ID 빈값 0/500 OK",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-09eb03c4",
+  "result": "NA",
+  "evidence": "Status 단일 선택 콤보 — ALL/다중 사양 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-56b38d5b",
+  "result": "PASS",
+  "evidence": "[단일선택 Active] 'ALL' → 16301행 | 'Y' → 14119행 · BOD_VALID 조건 밖 0 OK | 'N' → 2182행 · BOD_VALID 조건 밖 0 OK",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-d9b735e2",
+  "result": "NA",
+  "evidence": "Active 단일 선택 콤보 — ALL/다중 사양 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3cdb09f7",
+  "result": "PASS",
+  "evidence": "PRIORITY: AS-IS 소수 0자리·천단위 Y ↔ TO-BE format='' 표시 '3'(원값 '3')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-da446d7d",
+  "result": "PASS",
+  "evidence": "AFTER_LEAD_TIME: AS-IS 소수 0자리·천단위 Y ↔ TO-BE format='' 표시 '0'(원값 '0')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-72441ae4",
+  "result": "PASS",
+  "evidence": "조회 16301행 — 화면에 건수 '16301' 표시 있음(총 건수 표시 확정 규칙)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-5979255b",
+  "result": "PASS",
+  "evidence": "조회 16301행 — 화면에 건수 '16301' 표시 있음(총 건수 표시 확정 규칙)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3a5bbab7",
+  "result": "NA",
+  "evidence": "메타 COLUMN_WIDTH 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-2e2c39a0",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-5a0fda6c",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-45199a39",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e8af5c0b",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-fb305011",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e8828359",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-9ddf6f45",
+  "result": "PASS",
+  "evidence": "조회(Division ALL) 응답 4930ms · 16301행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-367adf82",
+  "result": "PASS",
+  "evidence": "조회(Division ALL) 응답 4930ms · 16301행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-64bfad42",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo, From Site=combo, To Site=combo, Incoterms=combo, SSP Incoterms=combo, Trans Mode=combo, Status=combo, Active=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c12cd175",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo, From Site=combo, To Site=combo, Incoterms=combo, SSP Incoterms=combo, Trans Mode=combo, Status=combo, Active=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-5ea70b77",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo, From Site=combo, To Site=combo, Incoterms=combo, SSP Incoterms=combo, Trans Mode=combo, Status=combo, Active=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-518f1d11",
+  "result": "NA",
+  "evidence": "Team·Sales Site·End Customer·Sold to·Plant Site 조회조건 없음(화면 조건: Div, From Site, To Site, Incoterms, SSP Incoterms, Trans Mode, Status, Active) — 원천 표준 규칙 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-80351b53",
+  "result": "NA",
+  "evidence": "Team·Sales Site·End Customer·Sold to·Plant Site 조회조건 없음(화면 조건: Div, From Site, To Site, Incoterms, SSP Incoterms, Trans Mode, Status, Active) — 원천 표준 규칙 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-97bafb79",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | Home | BOD | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e448d922",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | Home | BOD | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-623073ce",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | Home | BOD | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-f6e84dfd",
+  "result": "NA",
+  "evidence": "그리드 16301행에 Sum/Total/합계 행·컬럼 푸터 없음 — 합계행 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-36101f05",
+  "result": "NA",
+  "evidence": "결함 대상 'Home / Auth Request 메뉴' 은 SCP0007 화면 범위 밖(Home/메뉴 트리 결함) — 이 화면 대조표 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-2a920029",
+  "result": "NA",
+  "evidence": "명칭(_NAME/_NM) 컬럼 없음(표시 컬럼 34: DIVISION_ID,CUSTOMER,FROM_SITE_CODE,FROM_CITY,TO_SITE_CODE,TO_CITY,VMI_YN,INCOTERMS,INCOTERMS_SSP,PRIORITY,ROUTE_CNT,TRANSPORT_MODE…) — 데이터 다국어 규칙 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-813de38b",
+  "result": "PASS",
+  "evidence": "dataMap 컬럼 7: DIVISION_ID '40'→'40 Mobility & IT Battery'(AS-IS 코드) · FROM_SITE_CODE 'HQ06-A'→'HQ06-A'(AS-IS 코드) · TO_SITE_CODE 'Alte_KR_SEL'→'Alte_KR_SEL'(AS-IS 코드) · VMI_YN 'N'→'N'(AS-IS 코드) · INCOTERMS 'A01'→'A01'(AS-IS 코드) · INCOTERMS_SSP 'A01'→'A01'(AS-IS 코드) · BOD_VALID 'N'→'N'(AS-IS 코드) — AS-IS 표시 방식과 동일(코드 표시 컬럼은 AS-IS 도 코드 · NAME 추가 표시는 확정규칙 A2 허용)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-ff9260ba",
+  "result": "PASS",
+  "evidence": "CUSTOMER 5000행 공란 표기 센티널(-·/) — 단일 표기",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-f27b3187",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE 5000행 공란 표기 없음 — 단일 표기",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-2b134017",
+  "result": "NA",
+  "evidence": "'LBL/MSG/MENU 코드 사전' 은 코드 사전·마스터 전역 항목 — SCP0007 그리드 데이터로 측정할 공란 컬럼 아님(전역 N1 은 사전 점검 도구 대상)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-28615bf9",
+  "result": "판정필요",
+  "evidence": "SCP0007_GET_BOD: DIFF AS-IS 5000행 ↔ TO-BE 5001행 · SCP0007_GET_COUNTRY_CITY: DIFF AS-IS 1415행 ↔ TO-BE 1395행 · SCP0007_GET_ROUTE_CNT: PASS AS-IS 1행 ↔ TO-BE 2행 · SCP0005_GET_DISTRIBUTION_ROUTE: PASS AS-IS 1행 ↔ TO-BE 2행 — 같은 조건 건수·키 차이(AS-IS dev DB ≠ TO-BE DB): 사람 판단",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-5e9a1901",
+  "result": "PASS",
+  "evidence": "신규행 FROM_YYYYMMDD='2026-10-26' ↔ AS-IS 기본값 sYYYYMMDD(이번주 월요일 20261026) 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-46731c5a",
+  "result": "PASS",
+  "evidence": "신규행 DIVISION_ID 콤보 후보 8 [81 Automotive Battery,40 Mobility & IT Battery,82 ESS Battery,81_UC Automotive Battery(UC),81_HM Automotive Battery(HM),81_ST Automotive Battery(ST)] ↔ 내 Division 81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-f06fad8e",
+  "result": "PASS",
+  "evidence": "조회 Division 'ALL'(ALL/복수 → 빈값·편집 가능 기대) ↔ 신규행 DIVISION_ID='' 편집=true",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-cb1e55bf",
+  "result": "PASS",
+  "evidence": "조회 Division 'ALL'(ALL/복수 → 빈값·편집 가능 기대) ↔ 신규행 DIVISION_ID='' 편집=true",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-92236c36",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtFromCountry: 값 'KR' ↔ 더블클릭 행 FROM_COUNTRY='KR' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c7d02dfd",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtFromCity: 값 'KRCOJ' ↔ 더블클릭 행 FROM_CITY='KRCOJ' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9b0d1979",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtToCountry: 값 'KR' ↔ 더블클릭 행 TO_COUNTRY='KR' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b7a41633",
+  "result": "PASS",
+  "evidence": "Distribution Route 팝업(ROUTE_ID 더블클릭) 조회조건 txtToCity: 값 'KRSEL' ↔ 더블클릭 행 TO_CITY='KRSEL' · disabled=true — AS-IS popRoute.Form_Load(sFromCountry,sFromCity,sToCountry,sToCity) prefill + Enabled=false 동일",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-9d3c423c",
+  "result": "PASS",
+  "evidence": "Division ALL 16301행 조회 후 '81' 단일 재조회 → 2409행 · DIVISION_ID 다른 값 0 — 이전 결과 잔존 없음(시트 초기화 후 재채움)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-295af442",
+  "result": "PASS",
+  "evidence": "r0 ROUTE_ID 더블클릭 → 팝업 1행 · OK(현재 행 적용) → 변경 컬럼 PRIORITY · ROUTE_ID='740'",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-11ea0283",
+  "result": "NA",
+  "evidence": "조회 결과(16301행 · To Site 종류 886건 중 PLANT 유형 0건)에 To Site 가 PLANT 인 기존행을 찾지 못해 재현 불가 — AS-IS: 기존행도 To Site 가 PLANT 면 SSP Incoterms 를 편집 가능 콤보(dtIncotermsEdit)로 전환",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-4dbdc9d2",
+  "result": "NA",
+  "evidence": "조회 결과(16301행 · To Site 종류 886건 중 PLANT 유형 0건)에 To Site 가 PLANT 인 기존행을 찾지 못해 재현 불가 — AS-IS: 기존행도 To Site 가 PLANT 면 SSP Incoterms 를 편집 가능 콤보(dtIncotermsEdit)로 전환",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-154d6ff4",
+  "result": "PASS",
+  "evidence": "신규행 Division 콤보 후보 8건(81, 40, 82, 81_UC, 81_HM, 81_ST) ⊆ 조회조건 Div 목록 8건 — AS-IS dtMyDivision 콤보와 동일(대조표 상태와 다름)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1cabd8bc",
+  "result": "PASS",
+  "evidence": "신규행 From Site 콤보 후보 32건(E00L00300_40-P, US01983800_40-P, CN004481_40-P, AZ00-A, AZ00-E) · 후보 데이터 속성 [OSP_YN] — AS-IS FromSiteByDivision1 은 OSP_YN 을 함께 돌려 To Site 분기(From Site 'A'형 & OSP_YN='Y')에 쓴다 → OSP_YN 보유(일치)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5a9ef6d0",
+  "result": "PASS",
+  "evidence": "신규행 From Site 콤보 후보 32건(E00L00300_40-P, US01983800_40-P, CN004481_40-P, AZ00-A, AZ00-E) · 후보 데이터 속성 [OSP_YN] — AS-IS FromSiteByDivision1 은 OSP_YN 을 함께 돌려 To Site 분기(From Site 'A'형 & OSP_YN='Y')에 쓴다 → OSP_YN 보유(일치)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0c6e2ae6",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-e6a975ad",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-5327b6e2",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-58d205b9",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-6b502d41",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c11f26e5",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-83283aa0",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-86f34c05",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-92a8d453",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-2e1f22f0",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9155f997",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bb5e29e6",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0e366e1c",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-9ada0667",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0036ec3f",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-13bc201b",
+  "result": "PASS",
+  "evidence": "From Site 를 E형(-E) 'AZ00-E'(OSP_YN=N) / A형(-A)+OSP_YN=Y 'KR02149300_40-A'(OSP_YN=Y) / 그 외 'E00L00300_40-P'(OSP_YN=Y) 로 바꿔 To Site 후보를 읽음 → E형(-E) 2668건 ↔ AS-IS 원천 ToSiteBOD1_SCP_ALL 2603건 불일치 · A형(-A)+OSP_YN=Y 26건 ↔ AS-IS 원천 ToSiteByDivisionPlant1_SCP_ALL 26건 일치 · 그 외 2668건 ↔ AS-IS 원천 ToSiteByDivision1_SCP_ALL 2603건 불일치 — From Site 유형별 원천 전환(E→ToSiteBOD1 · A&OSP→ToSiteByDivisionPlant1 · 그 외→ToSiteByDivision1)이 TO-BE 에 구현됨(BodGrid resolveToSiteBucket · PLANT 분기 26건 = 원천 26건) — 대조표 '미구현' 상태는 낡음 · 단 ALL/기본 분기의 후보 수가 원천 SQL 과 다름(B4 행 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-1ec0a094",
+  "result": "PASS",
+  "evidence": "신규행 Route Id 셀에 키보드로 '999999' 직접 입력 → 편집기 열리지 않음 · 값 ''→'' — AS-IS 는 Route Id 직접 입력을 막고(KeyPress e.Handled · EditChange CancelCellEditing) 더블클릭 팝업으로만 설정 → 직접 입력 차단 일치(대조표 상태와 다름)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-6bab36a8",
+  "result": "PASS",
+  "evidence": "신규행 Route Id 셀에 키보드로 '999999' 직접 입력 → 편집기 열리지 않음 · 값 ''→'' — AS-IS 는 Route Id 직접 입력을 막고(KeyPress e.Handled · EditChange CancelCellEditing) 더블클릭 팝업으로만 설정 → 직접 입력 차단 일치(대조표 상태와 다름)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7e05a316",
+  "result": "PASS",
+  "evidence": "신규행 Route Id 셀에 키보드로 '999999' 직접 입력 → 편집기 열리지 않음 · 값 ''→'' — AS-IS 는 Route Id 직접 입력을 막고(KeyPress e.Handled · EditChange CancelCellEditing) 더블클릭 팝업으로만 설정 → 직접 입력 차단 일치(대조표 상태와 다름)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-ec0f1e97",
+  "result": "PASS",
+  "evidence": "신규행 Route Id 셀에 키보드로 '999999' 직접 입력 → 편집기 열리지 않음 · 값 ''→'' — AS-IS 는 Route Id 직접 입력을 막고(KeyPress e.Handled · EditChange CancelCellEditing) 더블클릭 팝업으로만 설정 → 직접 입력 차단 일치(대조표 상태와 다름)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c466f2eb",
+  "result": "PASS",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 선택·OK 후 그리드 커서(선택 셀) = r0/c12 (더블클릭한 셀 r0/c12) — AS-IS 는 선택 후 그 셀로 커서 이동(SetActiveCell) + 화면 중앙 스크롤(ShowCell) → 커서 위치 일치(스크롤 중앙 정렬은 미측정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-88757671",
+  "result": "PASS",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 선택·OK 후 그리드 커서(선택 셀) = r0/c12 (더블클릭한 셀 r0/c12) — AS-IS 는 선택 후 그 셀로 커서 이동(SetActiveCell) + 화면 중앙 스크롤(ShowCell) → 커서 위치 일치(스크롤 중앙 정렬은 미측정)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8f752189",
+  "result": "PASS",
+  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r0 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:rgb(255, 248, 205)→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-cd5119b3",
+  "result": "PASS",
+  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r0 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:rgb(255, 248, 205)→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0839df65",
+  "result": "PASS",
+  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r0 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:rgb(255, 248, 205)→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c4b491f6",
+  "result": "PASS",
+  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r0 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:rgb(255, 248, 205)→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b869945c",
+  "result": "PASS",
+  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' — AS-IS 는 오류코드별 구체 메시지(99010 BOD 중복 · 99020 Priority 중복 · 99030/99040 기간 중첩)를 띄움 → 메시지가 원인을 말함(일치)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e1d957be",
+  "result": "PASS",
+  "evidence": "copy PASS: 선택 0,9,0,9 · 0행 PRIORITY 표시값 '3' · Ctrl+C 클립보드 '3'(일치) · 우클릭 Copy '3'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(PRIORITY) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(PRIORITY) 클릭 → 선택 행 0~16300/16301 · 열 9~9(시험 열 9) — 열 전체 선택 | hide PASS: 헤더(PRIORITY) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-ad856a0b",
+  "result": "판정필요",
+  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회 · 미포함: 팝업 그리드(이 시험은 메인 그리드만), Sort/Filter·정렬 후 동작(K1 smoke 행)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-69b62cb7",
+  "result": "판정필요",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(PRIORITY) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 · 미포함: 팝업 그리드(이 시험은 메인 그리드만)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-5812909e",
+  "result": "PASS",
+  "evidence": "hdr PASS: 헤더(PRIORITY) 클릭 → 선택 행 0~16300/16301 · 열 9~9(시험 열 9) — 열 전체 선택",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-720652e9",
+  "result": "판정필요",
+  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,9,0,9 · 0행 PRIORITY 표시값 '3' · Ctrl+C 클립보드 '3'(일치) · 우클릭 Copy '3'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(PRIORITY) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(PRIORITY) 클릭 → 선택 행 0~16300/16301 · 열 9~9(시험 열 9) — 열 전체 선택 | hide PASS: 헤더(PRIORITY) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-3ce5c2f4",
+  "result": "판정필요",
+  "evidence": "hide PASS: 헤더(PRIORITY) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행), 동적 Bucket 컬럼",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-9c58202f",
+  "result": "판정필요",
+  "evidence": "copy PASS: 선택 0,9,0,9 · 0행 PRIORITY 표시값 '3' · Ctrl+C 클립보드 '3'(일치) · 우클릭 Copy '3'(일치) | hide PASS: 헤더(PRIORITY) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-324856ab",
+  "result": "판정필요",
+  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,9,0,9 · 0행 PRIORITY 표시값 '3' · Ctrl+C 클립보드 '3'(일치) · 우클릭 Copy '3'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(PRIORITY) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(PRIORITY) 클릭 → 선택 행 0~16300/16301 · 열 9~9(시험 열 9) — 열 전체 선택 | hide PASS: 헤더(PRIORITY) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-57eabe20",
+  "result": "PASS",
+  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-e9a768b2",
+  "result": "PASS",
+  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-e81168a1",
+  "result": "PASS",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(PRIORITY) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-3f3e2acc",
+  "result": "판정필요",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(PRIORITY) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 · 미포함: 팝업 그리드(이 시험은 메인 그리드만)",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-15b392da",
+  "result": "PASS",
+  "evidence": "hdr PASS: 헤더(PRIORITY) 클릭 → 선택 행 0~16300/16301 · 열 9~9(시험 열 9) — 열 전체 선택",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-3ac70eb4",
+  "result": "FAIL",
+  "evidence": "ime FAIL: 신규행 REMARKS 선택(편집기 닫힘·포커스 DIV.wj-cell wj-align-left cell-cha) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IME 모사 — OS IME 와 동일하지 않음) | auto PASS: 신규행 DIVISION_ID 에 '40' 입력 → 편집기 '40 Mobility & IT Battery' · Enter 후 셀 '40 Mobility & IT Battery' (기대 후보 '40 Mobility & IT Battery')",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-476fc6ca",
+  "result": "FAIL",
+  "evidence": "ime FAIL: 신규행 REMARKS 선택(편집기 닫힘·포커스 DIV.wj-cell wj-align-left cell-cha) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IME 모사 — OS IME 와 동일하지 않음) | auto PASS: 신규행 DIVISION_ID 에 '40' 입력 → 편집기 '40 Mobility & IT Battery' · Enter 후 셀 '40 Mobility & IT Battery' (기대 후보 '40 Mobility & IT Battery') · 미포함: 복사/붙여넣기(K3·F3 행), 붙여넣기 병합 셀(H3 행) [전체: ime FAIL: 신규행 REMARKS 선택(편집기 닫힘·포커스 DIV.wj-cell wj-align-left cell-cha) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (C]",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-50179dc4",
+  "result": "NA",
+  "evidence": "NA: (a) 저장 SP SCP0007_SAVE_BOD 대상 SCP_MST_BOD, SCP_MST_BOD_ITEM 와 콤보 원천 23종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-c5ec4141",
+  "result": "NA",
+  "evidence": "NA: (a) 저장 SP SCP0007_SAVE_BOD 대상 SCP_MST_BOD, SCP_MST_BOD_ITEM 와 콤보 원천 23종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-15957375",
+  "result": "NA",
+  "evidence": "NA: (a) 저장 SP SCP0007_SAVE_BOD 대상 SCP_MST_BOD, SCP_MST_BOD_ITEM 와 콤보 원천 23종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-6883f13c",
+  "result": "PASS",
+  "evidence": "PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 15건 재조회(새 마스터 반영 경로 있음) · 최초 진입 15건",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-74268fac",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP SCP0007_SAVE_BOD 대상 SCP_MST_BOD, SCP_MST_BOD_ITEM 와 콤보 원천 23종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 15건 재조회(새 마스터 반영 경로 있음) · 최초 진입 15건",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-55443491",
+  "result": "PASS",
+  "evidence": "PASS: (b-재조회) 조회 버튼 → admin/combo 0건 · AS-IS 조회 때 재바인딩 없음(초기화 때만 바인딩 — 재진입 기준으로 판정) | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 15건 재조회(새 마스터 반영 경로 있음) · 최초 진입 15건",
+  "tobe_ref": "E2E @verify"
+ },
+ {
+  "row_id": "V-34133cfd",
+  "result": "PASS",
+  "evidence": "PASS: (b-재조회) 조회 버튼 → admin/combo 0건 · AS-IS 조회 때 재바인딩 없음(초기화 때만 바인딩 — 재진입 기준으로 판정) | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 15건 재조회(새 마스터 반영 경로 있음) · 최초 진입 15건",
+  "tobe_ref": "E2E @verify"
+ }
+]

@@ -178,7 +178,8 @@ export const BodItemForm = ({ onSearch, onOpenItemSearch, showPlanGroup }: BodIt
                   <Button
                     appearance='outlined'
                     priority='normal'
-                    iconComponent={<FunctionSearchIcon appearance='lined' onClick={onOpenItemSearch} />}
+                    iconComponent={<FunctionSearchIcon appearance='lined' />}
+                    onClick={onOpenItemSearch}
                   />
                 </div>
               )}
@@ -187,7 +188,7 @@ export const BodItemForm = ({ onSearch, onOpenItemSearch, showPlanGroup }: BodIt
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.ACTIVE, '_Active')}
+              label={t(LBL.BOD_ITEM_ACTIVE, '_BOD Item Active')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown

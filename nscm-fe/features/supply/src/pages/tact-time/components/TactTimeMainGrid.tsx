@@ -1,4 +1,10 @@
-import { AllowMerging, CellType, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import { toggleClass } from '@mescius/wijmo';
+import {
+  AllowMerging,
+  CellType,
+  type FlexGrid as FlexGridType,
+  type FormatItemEventArgs,
+} from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
@@ -135,6 +141,16 @@ export const TactTimeMainGrid = ({
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);
 
+    // 예외 보유 행(EXCEPT_YN='Y')은 Model 컬럼부터 끝까지 하늘색 (AS-IS setExceptYnColor cs:2588).
+    const formatItemHandler = (sender: FlexGridType, e: FormatItemEventArgs) => {
+      if (e.panel.cellType !== CellType.Cell) return;
+      const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
+      const itemCol = sender.columns.indexOf('ITEM_ID');
+      const on = s(row?.EXCEPT_YN) === 'Y' && itemCol >= 0 && e.col >= itemCol;
+      toggleClass(e.cell, 'tact-except-row', on);
+    };
+    g.formatItem.addHandler(formatItemHandler);
+
     // 상단 그리드 셀 병합 — AS-IS siMain.SmartColMerge() 이식(cs:277 등).
     //   공용 CustomMergeManager(DataGrid 자동설치)가 좌측 누적 키로 선행 식별컬럼
     //   (Division/Site/Model/Nick Name)만 계층 병합하고, 신규행(CRUD_TYPE='I')은 병합에서 제외한다.
@@ -148,6 +164,7 @@ export const TactTimeMainGrid = ({
         g.cellEditEnded?.removeHandler(cellEditEndedHandler);
         g.pastedCell?.removeHandler(cellEditEndedHandler);
         g.hostElement?.removeEventListener('dblclick', dblclickHandler);
+        g.formatItem?.removeHandler(formatItemHandler);
       } catch {
         /* unmount race */
       }

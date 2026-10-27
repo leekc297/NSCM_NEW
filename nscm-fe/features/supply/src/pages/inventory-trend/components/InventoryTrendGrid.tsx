@@ -1,14 +1,16 @@
 import {
   AllowMerging,
+  type CellRange,
   CellType,
   type FlexGrid,
   type FormatItemEventArgs,
+  type GridPanel,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useMemo, type MutableRefObject } from 'react';
+import { useCallback, useEffect, useMemo, type MutableRefObject } from 'react';
 
 import dayjs from '@foundation/dayjs';
-import { GridUtils } from '@foundation/utils';
+import { CustomMergeManager, ensureTopLeftMergeManager, GridUtils } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import {
@@ -17,6 +19,7 @@ import {
   CHK_QTY_RED,
   CHK_QTY_RED_TEXT_BY_VALUE,
   COL,
+  DETAIL_COLUMNS,
   FOCUS_HEADER_COLOR,
   INV_STATUS_COLUMNS,
   INV_STATUS_GROUP_SUFFIX,
@@ -34,6 +37,8 @@ interface Props {
   data: InventoryTrendRow[];
   // monthPicker 선택월(YYYYMM) — 6개월 롤링 헤더 relabel 기준(focus 월, cs:407~412 GetYYMM).
   month: string;
+  // Detail 체크 — 상세 22컬럼 show/hide(chkDetail, cs:425~448). 기본 false=숨김.
+  detail: boolean;
 }
 
 // YYYYMM → yy.MM (AS-IS GetYYMM(today, n)) — n 개월 오프셋 적용.
@@ -44,8 +49,46 @@ const toYyMm = (yyyymm: string, offset: number): string => {
 
 const invStatusSet = new Set<string>(INV_STATUS_COLUMNS);
 
-export const InventoryTrendGrid = ({ gridRef, gridFilterRef, data, month }: Props) => {
+// 세로 병합 매니저 — AS-IS SmartColMerge 는 restricted(좌측 셀이 병합돼 있어야 자기도 병합) 라 공백 셀에서
+//   체인이 끊기고 그 뒤 컬럼은 값이 같아도 병합하지 않는다(사용자 확인 2026-10-20 — Detail 캡처: GPLM Cell
+//   Model 공백 뒤의 MDM Nick/class_Lv* 가 동일값이어도 미병합). 공용 CustomMergeManager 의 좌측 누적키는
+//   공백을 '' 로 담아 통과시켜 공백 뒤 동일값을 과병합하므로, 셀 병합 판정 앞에 "좌측 보이는 병합컬럼 경로에
+//   공백이 하나라도 있으면 이 셀부터 병합 안 함" 가드를 덧댄다. MERGE_COLUMNS(식별 5 + item 속성 6~22)가
+//   병합 후보를 정하고, 이 매니저가 공백 경계를 동적으로 끊는다(GPLM 이 채워진 행은 그 뒤 공백까지 병합).
+class InventoryTrendMergeManager extends CustomMergeManager<InventoryTrendRow> {
+  override getMergedRange(
+    panel: GridPanel,
+    currentRow: number,
+    currentCol: number
+  ): CellRange | null {
+    if (
+      panel.cellType === CellType.Cell &&
+      currentRow >= 0 &&
+      currentRow < panel.rows.length &&
+      currentCol >= 0 &&
+      currentCol < panel.columns.length
+    ) {
+      for (let c = 0; c <= currentCol; c++) {
+        const column = panel.columns[c];
+        if (!column?.visible || !column.allowMerging) continue;
+        const value = panel.getCellData(currentRow, c, false);
+        if (value === null || value === undefined || (typeof value === 'string' && value.trim() === ''))
+          return null;
+      }
+    }
+    return super.getMergedRange(panel, currentRow, currentCol);
+  }
+}
+
+export const InventoryTrendGrid = ({ gridRef, gridFilterRef, data, month, detail }: Props) => {
   const staticColumns = useInventoryTrendStore(state => state.staticColumns);
+
+  // 공백 경계에서 끊는 세로병합 매니저 주입 — DataGrid 내부 설정(기본 CustomMergeManager + TopLeft 래핑)이
+  //   끝난 뒤 1회 호출되므로(initialized), 여기서 커스텀으로 교체하고 No/Status 코너 병합을 다시 씌운다.
+  const handleInitialized = useCallback((grid: FlexGrid<InventoryTrendRow>) => {
+    grid.mergeManager = new InventoryTrendMergeManager(grid);
+    ensureTopLeftMergeManager(grid);
+  }, []);
 
   // 동적 6개월 롤링 헤더(leaf row) — 선택월 기준 QTY_MONTH1..5(-5..-1) + FOCUS(0) yy.MM +
   //   LONG_TERM_STOCK_AMOUNT(focus 월, 그룹 row0='Amount(KRW)' 유지). 컬럼 add/remove 없음(design 03 §2).
@@ -98,6 +141,31 @@ export const InventoryTrendGrid = ({ gridRef, gridFilterRef, data, month }: Prop
     };
   }, [gridRef, staticColumns, data]);
 
+  // Detail 토글 — 상세 22컬럼 show/hide(AS-IS chkDetail SetLayout VisibleColumns, cs:425~448). 공용 DataGrid 가
+  //   updatedLayout 마다 메타 visible 을 재적용하므로 그 뒤에 다시 씌운다(형제 ending-inventory 동형). 명시 컬럼만
+  //   건드리고 나머지는 메타 visible 유지. 변경 있을 때만 invalidate(루프 방지).
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const detailSet = new Set<string>(DETAIL_COLUMNS);
+    const apply = () => {
+      let changed = false;
+      for (const col of g.columns) {
+        if (!col.binding || !detailSet.has(col.binding)) continue;
+        if (col.visible !== detail) {
+          col.visible = detail;
+          changed = true;
+        }
+      }
+      if (changed) g.invalidate(true);
+    };
+    g.updatedLayout.addHandler(apply);
+    apply();
+    return () => {
+      g.updatedLayout?.removeHandler(apply);
+    };
+  }, [gridRef, staticColumns, data, detail]);
+
   // 헤더 강조/그룹 relabel(formatItem, ColumnHeader) — DataGrid 는 header prop 을 노출하지 않아 셀 DOM 에
   //   직접 세팅(forecast-price 선례). (a) QTY_MONTH_FOCUS leaf = Red + Bold(R3, cs:381~382).
   //   (b) INV_STATUS 그룹헤더(row0) = "{focus월} Inventory Status"(cs:834~843) — 메타 'Inventory Status' 를 덮어씀.
@@ -127,8 +195,9 @@ export const InventoryTrendGrid = ({ gridRef, gridFilterRef, data, month }: Prop
 
   // 조건부 셀 포맷 — DataGrid 는 formatItem prop 을 노출하지 않아 셀 DOM 에 직접 세팅(bod/ending-inventory
   //   선례). 셀 DOM 재사용 대비 미해당 시 반드시 '' 로 해제한다.
-  //     R1(cs:454~482): LongTerm 행(REPORT_TYPE≠'Ending') 전 컬럼 배경 음영. AS-IS SetBackColor 오버로드
-  //       버그로 실픽셀은 폼기본색이나 TO-BE 는 의도(행 음영) 재현(색상 확인필요 — 04).
+  //     R1(cs:454~469 SetBackColor): LongTerm 행(REPORT_TYPE≠'Ending') 배경 음영을 iColFocus=REPORT_TYPE
+  //       부터 iColMax(마지막 컬럼)까지만 칠한다 — 좌측 식별/item 속성 컬럼은 흰색(사용자 확인 2026-10-20).
+  //       Ending 행은 continue 로 제외. 음영색은 AS-IS 오버로드 버그로 폼기본색이나 TO-BE 는 #f2f2f2(04 유지확정).
   //     R2(cs:498~546): hidden CHK_QTY 값(40/30/20/10)에 따라 INV_STATUS 4컬럼 글자 Red(+40 은 배경 LightGreen).
   useEffect(() => {
     const g = gridRef.current;
@@ -140,9 +209,10 @@ export const InventoryTrendGrid = ({ gridRef, gridFilterRef, data, month }: Prop
       const dataItem = GridUtils.getRow(s, e.row) as WijmoRowItem | undefined;
       if (!dataItem) return;
 
-      // R1 — LongTerm 행 배경 음영(전 컬럼). Ending 행은 기본색.
+      // R1 — LongTerm 행 배경 음영. AS-IS 는 REPORT_TYPE 컬럼부터 우측만 음영(좌측 식별/item 속성은 흰색).
+      const rtIndex = s.columns.getColumn(COL.REPORT_TYPE)?.index ?? Infinity;
       const isLongTerm = String(dataItem[COL.REPORT_TYPE] ?? '') !== REPORT_TYPE_ENDING;
-      let bg = isLongTerm ? LONG_TERM_ROW_BG : '';
+      let bg = isLongTerm && e.col >= rtIndex ? LONG_TERM_ROW_BG : '';
       let fg = '';
 
       // R2 — CHK_QTY 조건포맷(INV_STATUS 컬럼 한정). 40 은 배경 LightGreen 우선.
@@ -165,6 +235,7 @@ export const InventoryTrendGrid = ({ gridRef, gridFilterRef, data, month }: Prop
     <DataGrid<InventoryTrendRow>
       gridRef={gridRef}
       gridFilterRef={gridFilterRef}
+      initialized={handleInitialized}
       itemsSource={data}
       staticColumns={staticColumns}
       // 전 컬럼 읽기전용 Report — 편집셀 없음(LockColumn cs:320, staticColumns INPUT_TP_CD 전건 'S').

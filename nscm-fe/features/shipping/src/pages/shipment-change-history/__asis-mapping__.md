@@ -137,14 +137,14 @@
 | SmartColMerge (440,536) | 세로 병합 + 스크롤 유지 | `allowMerging=All` + CustomMergeManager(hook69) | grid |
 | SetBGColor LightSkyBlue (471,487) | 'C' 행 강조 | `Grid.formatItem` LAST_SEQ='C' → CURRENT_ROW_BG | grid |
 | VisibleRow (472,476,482) | chkCurrent 행 표시 토글 | `Page.displayRows` 필터 | grid |
-| REQUEST_NO cellTypeImage (339) + 가드(201,205) | 값 존재 시 드릴다운 | `Grid` click(REQUEST_NO && 값존재) → 팝업 | grid |
+| REQUEST_NO cellTypeImage (339) + 가드(201,205) | 값 존재 시 드릴다운 + 돋보기 아이콘 표시 | `Grid` click(REQUEST_NO && 값존재) → 팝업 + formatItem 이 값 있는 셀에 표준 `wj-cell-popup` 토글(아이콘·pointer) | grid |
 | 셀콤보 dataMap (334) | 코드→명 표시 | `Grid` lookup 직접 fetch dataMap 주입 | grid |
 
 ## 4. 팝업 (popups 3)
 
 | AS-IS | TO-BE | 축 |
 |---|---|---|
-| SCM0002_ItembyDivisionPopup (Model, 221) | `components/modals/ItemByDivisionModal`(로컬 복사) | popup |
+| SCM0002_ItembyDivisionPopup (Model, 221) | 공용 `MaterialByDivisionModal`(COM0013) — **의도적 드리프트**, 아래 §7 | popup |
 | SCM0002_ShipmentPlanRequestPopup (REQUEST_NO 드릴다운, 207) | `components/modals/ShipmentPlanRequestModal`(로컬, SP 미배포로 상세 유예) | popup |
 | ProgressForm (376) | 공용 로딩(별도 팝업 불요) | - |
 
@@ -152,10 +152,29 @@
 
 | AS-IS SP | TO-BE | 상태 |
 |---|---|---|
-| SSP0019_GET_SHIPMENT_CHANGE_HISTORY (12파라미터, 47컬럼 반환) | `PKG_SSP0019.P_SSP0019_GET_SHIPMENT_CHANGE_HISTORY` | **미배포** — `store.setFilter` 12파라미터 배선 완비, 실행은 convert-sp 배포 후 |
+| SSP0019_GET_SHIPMENT_CHANGE_HISTORY (12파라미터, 47컬럼 반환) | `PKG_SSP0019.P_SSP0019_GET_SHIPMENT_CHANGE_HISTORY` | **배포됨** — ALL_PROCEDURES 실측 2026-10-14(종전 '미배포' 기록은 스테일) |
+| SCM0002_GET_ITEM_BY_DIVISION_POPUP (Model 팝업) | — 미사용. 팝업을 공용 `MaterialByDivisionModal`(`PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION`)로 교체 | **의도적 드리프트** — §7 |
 
 ## 6. 미이식/유예 (정직 보고)
 
 - REQUEST_NO 드릴다운 상세 데이터: SCM0002 별도 팝업 전환 + SP 배포 대상 — 트리거·가드·파라미터까지 구현, 상세 convert-sp 유예.
 - 셀콤보 코드→명 표시(FCST_TYPE/CHANGE_REASON_CODE): dataMap 주입 배선 완비, 런타임 표시는 SP 배포 후 브라우저 실검증(사용자 축).
 - 기본 조회기간 1개월 방향(from=오늘/to=오늘+1개월): GET_DATE_RANGE_1MONTH SP 미접근으로 브라우저 실검증 대상(사용자 축).
+
+## 7. 의도적 드리프트 — Model/Nickname 팝업 교체 (사용자 지시 2026-10-14)
+
+AS-IS `btnItemId_Click`(cs:214-233)은 `SCM0002_ItembyDivisionPopup` 을 열고 `SCM.SCM0002_GET_ITEM_BY_DIVISION_POPUP`
+(`p_division_id`/`p_project_code`/`p_scm_site_id`/`p_item_id`)로 조회한다. TO-BE 는 이를 공용
+`MaterialByDivisionModal`(COM0013, `PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION`)로 교체했다 —
+자매 SSP0003/SSP0026 이 2026-10-08 사용자 지시로 이미 같은 교체를 한 선례를 따른다.
+
+| 축 | AS-IS | TO-BE | 영향 |
+|---|---|---|---|
+| 조회 SP | `SCM0002_GET_ITEM_BY_DIVISION_POPUP` | `P_SCM0002_GET_MATERIAL_BY_DIVISION` | 후보 목록·컬럼이 달라진다 |
+| Division | `clbDivision` 콤마 결합 | 동일(`multiDivision`), 미체크 시 `'ALL'` 센티널 | 등가 |
+| From Site 사전필터 | `p_scm_site_id` 전달 | **전달 불가** — 모달 계약에 site 축 없음 | **기능 축소**(종전 scmSite 사전필터 소실) |
+| Project | `p_project_code=''` | `operationGroup=''` 로 대체 | 둘 다 빈값이라 무영향 |
+| `scpModuleType` | 없음 | 화면 ID `SSP0019` 전달 | SP 에 SSP ID 미열거 → 기본 ELSE 분기(기본 Material 목록) |
+
+라벨도 `LBL00669`('Model') → `LBL00618`('Model/Nickname')로 교체했다. 두 팝업 SP 모두 입력값을
+`ITEM_ID` 와 `NICK_NAME` 양쪽에 LIKE 매칭하므로(SP 본문 실측) 라벨이 실제 동작과 맞다.

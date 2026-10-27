@@ -1,3 +1,4 @@
+import { toggleClass } from '@mescius/wijmo';
 import { AllowMerging, CellType, DataMap, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo } from 'react';
@@ -90,12 +91,24 @@ export const ShipmentChangeHistoryGrid = ({
     //   체크/해제 공통으로 'C' 행을 강조(필터링은 페이지가 displayRows 로 처리). 셀 DOM 재사용 대비 항상 재설정.
     const formatItemHandler = (
       sender: FlexGridType,
-      e: { panel: unknown; row: number; cell: HTMLElement }
+      e: { panel: unknown; row: number; col: number; cell: HTMLElement }
     ) => {
       if (e.panel !== sender.cells) return;
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
       e.cell.style.backgroundColor =
         row && str(row[LAST_SEQ_COLUMN]) === LAST_SEQ_CURRENT ? CURRENT_ROW_BG : '';
+
+      // REQUEST_NO 이미지셀 어포던스(design 03 §3-4 — AS-IS cellTypeImage 돋보기 아이콘, cs:248-252/339).
+      //   공용 DataGrid 의 팝업 아이콘(wj-cell-popup)은 `!isReadOnly && isEditableCell` 게이트라 이 화면
+      //   (isReadOnly + INPUT_TP_CD 전건 'S')에서는 절대 안 붙는다. REQUEST_NO 를 admin 메타에 FPModal 로
+      //   등록해도 같은 게이트에 막힌다(실측) -> 화면에서 표준 클래스를 직접 토글한다. 값이 있는 셀만
+      //   아이콘·pointer 커서를 주어, 클릭 드릴다운 가드(값 존재)와 보이는 것이 일치한다.
+      const isRequestNoCell = sender.columns[e.col]?.binding === REQUEST_NO_COLUMN;
+      toggleClass(
+        e.cell,
+        'wj-cell-popup',
+        isRequestNoCell && !!str(row?.[REQUEST_NO_COLUMN]).trim()
+      );
     };
     g.formatItem.addHandler(formatItemHandler);
 

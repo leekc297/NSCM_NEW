@@ -117,7 +117,7 @@ export const LBL = {
   OPERATION_GROUP: 'LBL00027', // Operation group
   PLAN_DATE: 'LBL00039', // Plan Date
   PLAN_TYPE: 'LBL00040', // Plan Type
-  SEQ: 'LBL00768', // Seq
+  SEQ: 'LBL00041', // Seq
   PERIOD: 'LBL00013', // Period
   FROM_SITE: 'LBL00022', // From Site
   TO_SITE: 'LBL00023', // To Site

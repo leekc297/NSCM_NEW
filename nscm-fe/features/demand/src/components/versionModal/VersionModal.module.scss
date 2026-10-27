@@ -7,34 +7,6 @@
   gap: 8px;
 }
 
-/* 조회조건 4필드(Div / Type / Period / Description) 라벨 열을 글자 폭에 맞춘다.
-   FormItem(@lges/design-system) 기본 labelSize='short' = 라벨 열 100px 고정이라,
-   가장 좁은 Div 칸에서는 라벨 100px + 간격 8px 을 빼면 콤보에 남는 폭이 거의 없어
-   값이 '81 Aut...' 로 잘렸다. 라벨은 Div/Type/Period/Description 넉 자뿐이라
-   max-content 로 두면 각자 필요한 만큼만 쓰고 남는 폭이 전부 입력 칸으로 간다.
-   commonStyles.formItem 은 뷰포트 기준 미디어쿼리(HD 50px / FHD 140px)라
-   폭이 고정된 팝업에는 맞지 않아 여기서 따로 잡는다.
-   display:contents 라 레이아웃(SearchArea 의 Grid container 직계 자식 취급)에는 관여하지 않고
-   CSS 스코프용 DOM 조상만 제공한다 (정본: sales-plan SalesPlanForm.module.scss searchGrid). */
-.searchGrid {
-  display: contents;
-
-  /* .searchGrid > (MUI Grid 칼럼) > (FormItem 의 label+field 2열 grid) */
-  & > div > div {
-    grid-template-columns: max-content auto;
-
-    /* 라벨 Box 인라인 width(100px) 해제 - 안 풀면 max-content 트랙이 100px 로 굳는다 */
-    & > div:first-of-type {
-      width: auto;
-    }
-
-    /* 필드 열(auto 트랙)의 min-width:auto 해제 - 콘텐츠가 셀 폭을 밀어 옆 칼럼을 침범하지 않게 */
-    & > div:last-of-type {
-      min-width: 0;
-    }
-  }
-}
-
 .gridWrapper {
   display: flex;
   flex-direction: column;

@@ -29,6 +29,8 @@ interface ShipmentRequestElectrodeState {
   bohMode: 'rdButton1' | 'rdButton2' | 'rdButton3';
   staticColumns: Record<SHEETS.MAIN | SHEETS.REQUEST_DETAIL | SHEETS.STOCK_DETAIL | SHEETS.REQUEST_DETAIL_EXCEL, RawFlexGridColumnConfig[]>;
   staticMeasures: MeasureMeta[];
+  // Measure 설정(btnMeasure) 결과 — 표시 measure 코드 목록(null=전체). 그리드 행(MEASURE) 필터용.
+  visibleMeasures: string[] | null;
   // spdDetail 활성 탭(design 01 §2-R14 — 2차 조회조건 6항목 visible 토글 기준).
   activeDetailTab: 'requestDetail' | 'stockDetail';
   // 활성 그리드(design 01 R8/R5 — Save/btnMeasure 라우팅 기준. 없음(null)=포커스 이탈).
@@ -41,6 +43,11 @@ interface ShipmentRequestElectrodeAction {
   restoreSearchConditions: () => Promise<void>;
   setDivision: (divisionId: string) => void;
   setFilters: () => boolean;
+  // 하단 2차 Search 전용 — 활성 상세 탭(요청/재고)의 filter 만 재구성한다. 상단 main(filters)·spreadTitleFilters
+  //   와 비활성 상세 탭 filter 는 절대 건드리지 않는다(활성 탭 그리드만 재조회). 변경 여부를 반환해 활성 상세만 수동 refetch.
+  setDetailFilters: (
+    activeTab: ShipmentRequestElectrodeState['activeDetailTab']
+  ) => { sameReq: boolean; sameStock: boolean };
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   setBohMode: (mode: ShipmentRequestElectrodeState['bohMode']) => void;
@@ -48,6 +55,7 @@ interface ShipmentRequestElectrodeAction {
   setActiveGrid: (grid: ShipmentRequestElectrodeState['activeGrid']) => void;
   fetchStaticColumns: () => void;
   fetchStaticMeasures: () => void;
+  applyVisibleMeasures: (codes: string[] | null) => void;
 }
 
 // 세션 스코프 함수(모듈 상수 아님) — division 등 세션값을 스토어 생성 시점에 읽어야 재로그인 시 얼어붙지 않는다
@@ -91,7 +99,8 @@ const makeInitState = (): ShipmentRequestElectrodeState => ({
     [SHEETS.REQUEST_DETAIL_EXCEL]: [],
   },
   staticMeasures: [],
-  activeDetailTab: 'requestDetail',
+  visibleMeasures: null,
+  activeDetailTab: 'stockDetail', // AS-IS 기본 활성 시트 = Stock Detail(CreateSpread cs:595)
   activeGrid: null,
 });
 
@@ -246,19 +255,72 @@ export const useShipmentRequestElectrodeStore = createPersistedStoreWithTab<
         toYyyymmdd: sp.toYyyymmdd,
       };
 
-      const isSame =
-        JSON.stringify(get().filters) === JSON.stringify(newFilters) &&
-        JSON.stringify(get().requestDetailFilters) === JSON.stringify(newRequestDetailFilters) &&
-        JSON.stringify(get().stockDetailFilters) === JSON.stringify(newStockDetailFilters) &&
-        JSON.stringify(get().spreadTitleFilters) === JSON.stringify(newSpreadTitleFilters);
+      const cur = get();
+      const sameMain = JSON.stringify(cur.filters) === JSON.stringify(newFilters);
+      const sameReq =
+        JSON.stringify(cur.requestDetailFilters) === JSON.stringify(newRequestDetailFilters);
+      const sameStock =
+        JSON.stringify(cur.stockDetailFilters) === JSON.stringify(newStockDetailFilters);
+      const sameTitle =
+        JSON.stringify(cur.spreadTitleFilters) === JSON.stringify(newSpreadTitleFilters);
 
+      // 변경된 slice 만 재할당해 참조를 보존한다 — useTabProcQuery 는 filters '참조' 변경에 removeQueries→
+      //   재조회(useLayoutEffect, useCustomQueryClient). 매번 전부 새 객체로 덮으면 하단 Search(상세 조건만
+      //   바뀜)에도 main/spreadTitle 참조가 바뀌어 상단 그리드가 재조회되는 오동작이 난다(사용자 신고 2026-10-26).
       set(state => {
-        state.filters = newFilters;
-        state.requestDetailFilters = newRequestDetailFilters;
-        state.stockDetailFilters = newStockDetailFilters;
-        state.spreadTitleFilters = newSpreadTitleFilters;
+        if (!sameMain) state.filters = newFilters;
+        if (!sameReq) state.requestDetailFilters = newRequestDetailFilters;
+        if (!sameStock) state.stockDetailFilters = newStockDetailFilters;
+        if (!sameTitle) state.spreadTitleFilters = newSpreadTitleFilters;
       });
-      return isSame;
+      return sameMain && sameReq && sameStock && sameTitle;
+    },
+    // 하단 2차 Search(btnSearch, Lot Id 옆) — AS-IS BtnSearch_Click(cs:3785-3803)은 활성 상세 시트만 재조회.
+    //   상단 main(state.filters)·spreadTitleFilters 는 **절대 재할당하지 않는다** → useTabProcQuery 의 filters
+    //   참조가 불변이라 상단 pivot 그리드가 재조회되지 않는다(사용자 신고 2026-10-26, setFilters 전체 덮어쓰기 폐기).
+    //   비활성 상세 탭의 filter 도 재할당하지 않는다 — 두 상세 filter 가 Material/Model(itemId2/modelId2) 등
+    //   공용 필드를 공유해 둘 다 덮으면 비활성 탭 query 까지 참조가 바뀌어 자동 재조회되던 오동작 교정
+    //   (활성 탭 그리드만 조회, 사용자 신고 2026-10-26).
+    setDetailFilters: activeTab => {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
+      const sp: SearchParamProps = { ...makeInitSearchParams(), ...get().searchParams };
+      const cur = get();
+
+      if (activeTab === 'requestDetail') {
+        const newRequestDetailFilters: ProcRequest<MENU_ID, SHEETS.REQUEST_DETAIL> = {
+          divisionId: sp.divisionId,
+          companyId: sp.companyId,
+          modelId: sp.modelId2,
+          itemId: sp.itemId2,
+          nickName: sp.nickName2,
+          fromYyyymmdd: sp.fromYyyymmdd2,
+          toYyyymmdd: sp.toYyyymmdd2,
+          sesUserId,
+          mnuId: MENU_ID,
+        };
+        const sameReq =
+          JSON.stringify(cur.requestDetailFilters) === JSON.stringify(newRequestDetailFilters);
+        set(state => {
+          if (!sameReq) state.requestDetailFilters = newRequestDetailFilters;
+        });
+        return { sameReq, sameStock: true };
+      }
+
+      const newStockDetailFilters: ProcRequest<MENU_ID, SHEETS.STOCK_DETAIL> = {
+        divisionId: sp.divisionId,
+        companyId: sp.companyId,
+        modelId: sp.modelId2,
+        itemId: sp.itemId2,
+        lotId: sp.lotId,
+        sesUserId,
+        mnuId: MENU_ID,
+      };
+      const sameStock =
+        JSON.stringify(cur.stockDetailFilters) === JSON.stringify(newStockDetailFilters);
+      set(state => {
+        if (!sameStock) state.stockDetailFilters = newStockDetailFilters;
+      });
+      return { sameReq: true, sameStock };
     },
     // Division/Company 변경 = 그리드 초기화 의무(nscm-patterns.md §5-5) — 전 시트 filters 무효화.
     clearFilters: () => {
@@ -306,6 +368,11 @@ export const useShipmentRequestElectrodeStore = createPersistedStoreWithTab<
           /* SCM_MST_SHEET_MEASURE 10종 등록 확인(실측) — 실패 시 빈 배열 */
         }
       })();
+    },
+    applyVisibleMeasures: codes => {
+      set(state => {
+        state.visibleMeasures = codes;
+      });
     },
   }),
   'shipment-request-electrode'

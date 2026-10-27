@@ -81,11 +81,11 @@ export const MdmClassMasterForm = ({ onSearch }: Props) => {
             />
           </Grid>
 
-          {/* Use Flag (combo Y/N/ALL, default Y — design 02 §2.2/§4) */}
+          {/* Active (구 Use Flag — 조회조건 명칭 변경, 콤보 Y/N/ALL default Y 유지. design 02 §2.2/§4) */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.USE_FLAG, '_Use Flag')}
+              label={t(LBL.USE_FLAG, '_Active')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown

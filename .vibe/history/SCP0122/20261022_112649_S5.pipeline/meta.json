@@ -1,0 +1,43 @@
+{
+  "id": "SCP0122",
+  "task": "S5.pipeline",
+  "scope": "both",
+  "note": "pipeline.js SCP0122 --max 3 --phase 2",
+  "start": "2026-10-22T11:26:49+09:00",
+  "end": "2026-10-22T11:26:56+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\plan-activity-mgmt",
+      "files": 8
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0122",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0122",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-10-22T11:26:56+09:00",
+  "changed": [
+    {
+      "file": "db\\SCP0122_registration.sql",
+      "kind": "added"
+    },
+    {
+      "file": "db\\SCP0122_revert.sql",
+      "kind": "added"
+    }
+  ]
+}

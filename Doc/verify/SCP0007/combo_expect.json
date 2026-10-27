@@ -1,0 +1,140 @@
+{
+ "params": {
+  "divisionId": "",
+  "__GROUP__": "ADMIN",
+  "sesUserId": "minyonglee1"
+ },
+ "buckets": {
+  "TO_SITE_ALL": {
+   "sql_id": "ToSiteBOD1_SCP_ALL",
+   "count": 2603,
+   "codes_head": [
+    "1X Technologies_AG_FAM",
+    "1X Technologies_US_PAO",
+    "300MS 8ME SBS1_US_LAS",
+    "425LM 8ME SBS2_US_LAS",
+    "45MG 8ME_US_BJO",
+    "8minute Energy_KR_KUV",
+    "8minute Energy_US_BJO",
+    "8minute Energy_US_EFS",
+    "8minute Energy_US_LAX",
+    "8minute Energy_US_PQA",
+    "ABB CA_CA_SLA",
+    "ABB USA_CN_NJG",
+    "ABB USA_US_CFC",
+    "ABB USA_US_NYC",
+    "ABB_BE_JUM"
+   ],
+   "div_dist": {
+    "40": 1330,
+    "82": 787,
+    "81": 475,
+    "81_HM": 29,
+    "81_UC": 15,
+    "81_ST": 13,
+    "81_HD": 11,
+    "81_HG": 8
+   }
+  },
+  "TO_SITE_PLANT_NON_OSP": {
+   "sql_id": "ToSiteByDivisionPlant1_SCP_ALL",
+   "count": 26,
+   "codes_head": [
+    "AZ00-A",
+    "GM00-A",
+    "GM01-A",
+    "HD00-A",
+    "HG00-A",
+    "HM00-A",
+    "HQ06-A",
+    "HQ07-A",
+    "HQ08-A",
+    "HQ10-A",
+    "HQ11-A",
+    "MI00-A",
+    "MI01-A",
+    "MI02-A",
+    "NA00-A"
+   ],
+   "div_dist": {
+    "82": 9,
+    "81": 7,
+    "40": 4,
+    "81_UC": 2,
+    "81_HD": 1,
+    "81_HG": 1,
+    "81_HM": 1,
+    "81_ST": 1
+   }
+  },
+  "TO_SITE_DEFAULT": {
+   "sql_id": "ToSiteByDivision1_SCP_ALL",
+   "count": 2603,
+   "codes_head": [
+    "1X Technologies_AG_FAM",
+    "1X Technologies_US_PAO",
+    "300MS 8ME SBS1_US_LAS",
+    "425LM 8ME SBS2_US_LAS",
+    "45MG 8ME_US_BJO",
+    "8minute Energy_KR_KUV",
+    "8minute Energy_US_BJO",
+    "8minute Energy_US_EFS",
+    "8minute Energy_US_LAX",
+    "8minute Energy_US_PQA",
+    "ABB CA_CA_SLA",
+    "ABB USA_CN_NJG",
+    "ABB USA_US_CFC",
+    "ABB USA_US_NYC",
+    "ABB_BE_JUM"
+   ],
+   "div_dist": {
+    "40": 1330,
+    "82": 787,
+    "81": 475,
+    "81_HM": 29,
+    "81_UC": 15,
+    "81_ST": 13,
+    "81_HD": 11,
+    "81_HG": 8
+   }
+  },
+  "FROM_SITE": {
+   "sql_id": "FromSiteByDivision1_SCP_ALL",
+   "count": 101,
+   "codes_head": [
+    "AZ00-A",
+    "AZ00-E",
+    "CN00249500-P",
+    "CN00254300_40-P",
+    "CN004481_40-P",
+    "CN00732500_40-P",
+    "CN02072800_40-P",
+    "CN05104100_82-P",
+    "E00L00300_40-P",
+    "EG01_81-W",
+    "EG01_82-W",
+    "GM00-A",
+    "GM00-E",
+    "GM01-A",
+    "GM01-E"
+   ],
+   "div_dist": {
+    "40": 32,
+    "82": 28,
+    "81": 27,
+    "81_UC": 4,
+    "81_HD": 3,
+    "81_ST": 3,
+    "81_HG": 2,
+    "81_HM": 2
+   }
+  }
+ },
+ "from_site_osp_y_samples": [
+  [
+   "KR02149300_40-A",
+   "Y",
+   "40"
+  ]
+ ]
+}

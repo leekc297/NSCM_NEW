@@ -45,3 +45,8 @@
   min-height: 0;
   overflow: hidden;
 }
+
+// 상단 그리드 예외 보유 행(EXCEPT_YN='Y') 하늘색 — AS-IS setExceptYnColor (LightSkyBlue alpha 80).
+.tableWrapper :global(.wj-cell.tact-except-row:not(.wj-state-selected):not(.wj-state-multi-selected)) {
+  background-color: rgba(135, 206, 250, 0.31);
+}

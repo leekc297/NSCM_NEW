@@ -2,6 +2,7 @@ import { AllowMerging, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
@@ -37,7 +38,17 @@ export const TactTimeExceptGrid = ({
 }: Props) => {
   const { t } = useTranslation();
   const setToast = useMessageStore.getState().setToast;
-  const columns = useMemo(() => buildColumns(EXCEPT_COLUMNS, adminColumns), [adminColumns]);
+  // 모드별 계산 컬럼(Packer=TACT_TIME, Plant=DAILY_CAPACITY)은 메타가 O 여도 조회전용으로 표시한다.
+  const columns = useMemo(
+    () =>
+      buildColumns(EXCEPT_COLUMNS, adminColumns).map(c =>
+        (c.colNm === 'TACT_TIME' || c.colNm === 'DAILY_CAPACITY') &&
+        !isExceptCellEditable(c.colNm, parentMode)
+          ? { ...c, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY }
+          : c
+      ),
+    [adminColumns, parentMode]
+  );
 
   const editModeRef = useRef(editMode);
   editModeRef.current = editMode;
@@ -89,7 +100,16 @@ export const TactTimeExceptGrid = ({
     // 하단 Except 그리드 셀 병합 — AS-IS siExcept.SmartColMerge() 이식(cs:242 등).
     //   상단 그리드와 동일 규약: 공용 CustomMergeManager 가 좌측 누적 키로 선행 식별컬럼만
     //   계층 병합하고 신규행(CRUD_TYPE='I')은 제외. AllowMerging.All 은 DataGrid prop 로 지정.
-    for (let i = 0; i < g.columns.length; i++) g.columns[i].allowMerging = true;
+    // Start/End Date 표시 형식 = 편집기(InputDate) 'yyyy-MM-dd' 와 일치시킨다(이 화면 한정).
+    //   공용 getFormat 은 FPDate 표시를 'yyyy.MM.dd'(점)로 주는데, 달력 선택 후 점 형식으로 바뀌어
+    //   편집중(대시)과 어긋난다. 전역은 유지하고 여기서만 대시로 덮는다.
+    for (let i = 0; i < g.columns.length; i++) {
+      g.columns[i].allowMerging = true;
+      const binding = g.columns[i].binding;
+      if (binding === 'TACT_TIME_START_DATE' || binding === 'TACT_TIME_END_DATE') {
+        g.columns[i].format = 'yyyy-MM-dd';
+      }
+    }
     g.invalidate(true);
 
     return () => {
@@ -101,8 +121,9 @@ export const TactTimeExceptGrid = ({
         /* unmount race */
       }
     };
+    // rows 포함: 더블클릭 조회로 데이터가 들어올 때 현재 그리드에 핸들러를 다시 건다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns]);
+  }, [columns, rows]);
 
   return (
     <DataGrid

@@ -1,0 +1,1222 @@
+[
+ {
+  "screen": "SSP0024",
+  "title": "Shipment Master Electrode",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0024_ItembyDivisionPopup.cs:422",
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0024_ShipmentMasterElectrode.cs:902"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0024_ItembyDivisionPopup.Designer.cs:450",
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0024_ShipmentMasterElectrode.Designer.cs:556"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/shipping/src/pages/shipment-master-electrode"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+    "member": "FindData",
+    "line": "267",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0024_ItembyDivisionPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "405",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0024_ItembyDivisionPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0024_GET_SHIP_MASTER",
+    "member": "FindData",
+    "line": "316",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0024_ShipmentMasterElectrode.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0024_SAVE_SHIP_MASTER",
+    "member": "SaveData",
+    "line": "467",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0024_ShipmentMasterElectrode.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_USER_INFO_LIST",
+    "member": "GetSSPUserCheck",
+    "line": "883",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0024_ShipmentMasterElectrode.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+    "member": "FindData",
+    "line": "267",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0024_ItembyDivisionPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "405",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0024_ItembyDivisionPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0024_GET_SHIP_MASTER",
+    "member": "FindData",
+    "line": "316",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0024_ShipmentMasterElectrode.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0024_SAVE_SHIP_MASTER",
+    "member": "SaveData",
+    "line": "467",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0024_ShipmentMasterElectrode.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_USER_INFO_LIST",
+    "member": "GetSSPUserCheck",
+    "line": "883",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0024_ShipmentMasterElectrode.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCM0001_GET_DIVISION",
+   "SSP0002_GET_USER_INFO_LIST",
+   "SSP0024_GET_ITEM_BY_DIVISION_POPUP",
+   "SSP0024_GET_SHIP_MASTER",
+   "SSP0024_SAVE_SHIP_MASTER"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SSP0024_SAVE_SHIP_MASTER",
+    "sp": "SSP0024_SAVE_SHIP_MASTER",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외(CAST int/numeric 형변환 실패 포함) 시 롤백 후 'F' 와 오류 메시지 반환",
+    "message": "result_code 'F' + '[번호]메시지'",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; 로그 INSERT; IF @v_err_message 빈값 → SELECT 'F' AS result_code; SELECT '[번호]'+ERROR_MESSAGE() ELSE SELECT 'N' AS result_code;"
+   }
+  ]
+ },
+ {
+  "screen": "SSP0025",
+  "title": "Shipment Requestor PIC",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0025_ItembyDivisionPopup.cs:447",
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0025_ShipmentRequestorPIC.cs:742"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0025_ItembyDivisionPopup.Designer.cs:502",
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0025_ShipmentRequestorPIC.Designer.cs:587"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/shipping/src/pages/shipment-requestor-pic"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0025_GET_ITEM_BY_DIVISION_POPUP",
+    "member": "FindData",
+    "line": "296",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0025_ItembyDivisionPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0025_GET_SHIPMENT_REQUESTOR_PIC",
+    "member": "FindData_Main",
+    "line": "274",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0025_ShipmentRequestorPIC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC",
+    "member": "SaveData",
+    "line": "410",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0025_ShipmentRequestorPIC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0025_GET_USER_ID_CHECK",
+    "member": "GetUserIDChk",
+    "line": "458",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0025_ShipmentRequestorPIC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_USER_INFO_LIST",
+    "member": "GetSSPUserCheck",
+    "line": "511",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0025_ShipmentRequestorPIC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0025_GET_ITEM_BY_DIVISION_POPUP",
+    "member": "FindData",
+    "line": "296",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0025_ItembyDivisionPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0025_GET_SHIPMENT_REQUESTOR_PIC",
+    "member": "FindData_Main",
+    "line": "274",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0025_ShipmentRequestorPIC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC",
+    "member": "SaveData",
+    "line": "410",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0025_ShipmentRequestorPIC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0025_GET_USER_ID_CHECK",
+    "member": "GetUserIDChk",
+    "line": "458",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0025_ShipmentRequestorPIC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_USER_INFO_LIST",
+    "member": "GetSSPUserCheck",
+    "line": "511",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0025_ShipmentRequestorPIC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SSP0002_GET_USER_INFO_LIST",
+   "SSP0025_GET_ITEM_BY_DIVISION_POPUP",
+   "SSP0025_GET_SHIPMENT_REQUESTOR_PIC",
+   "SSP0025_GET_USER_ID_CHECK",
+   "SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SSP0025_GET_USER_ID_CHECK",
+    "sp": "SSP0025_GET_USER_ID_CHECK",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "입력한 사용자 ID 들이 사용자 마스터에 존재하는지 확인용 목록 반환",
+    "message": null,
+    "on_fail": "존재하는 USER_ID 목록만 반환(미존재 ID 는 결과에서 빠짐 — UI 가 비교 판정)"
+   },
+   {
+    "entry_sp": "SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC",
+    "sp": "SSP0025_SAVE_SHIPMENT_REQUESTOR_PIC",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 후 'F' 와 오류 메시지 반환",
+    "message": "result_code 'F' + '[번호]메시지'",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; 로그 INSERT; SELECT 'F' AS result_code; SELECT '[번호]'+ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SSP0026",
+  "title": "Shipment Request(Mobility & IT)",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0026_ShipmentRequestPack.UIL/SSP0026_ShipmentRequestPack.cs:4607",
+   "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0026_BodItemPopup.cs:416",
+   "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0026_ItembyDivisionPopup.cs:402"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Forms.UIL/Plan/SSP0026_ShipmentRequestPack.UIL/SSP0026_ShipmentRequestPack.Designer.cs:1887",
+   "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0026_BodItemPopup.Designer.cs:565",
+   "06.UIL/GSCM.SSP.Plan.UIL/Popup/SSP0026_ItembyDivisionPopup.Designer.cs:487"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/shipping/src/pages/shipment-request-pack"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SHIPMENT_REQUEST_PACK",
+    "member": "FindData",
+    "line": "787",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SHIPMENT_REQUEST_CELL",
+    "member": "FindData",
+    "line": "848",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_RESULT_DETAIL",
+    "member": "FindData_Result_Detail",
+    "line": "969",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "member": "FindData_Detail",
+    "line": "1071",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_CELL",
+    "member": "FindData_Detail",
+    "line": "1115",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "member": "FindData_Detail_DblClick",
+    "line": "1232",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_CELL",
+    "member": "FindData_Detail_DblClick",
+    "line": "1274",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_PACK",
+    "member": "SaveData",
+    "line": "1508",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_CELL",
+    "member": "SaveData",
+    "line": "1580",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_DETAIL_PACK",
+    "member": "SaveData_Detail",
+    "line": "1783",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_DETAIL_CELL",
+    "member": "SaveData_Detail",
+    "line": "1860",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "3027",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "3044",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+    "member": "GetBizTypebyDivision",
+    "line": "3056",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_BOD_VALID_CHECK",
+    "member": "BodValidChk_Main",
+    "line": "3794",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_BOD_VALID_CHECK",
+    "member": "BodValidChk",
+    "line": "3862",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_BOD_ITEM",
+    "member": "FindData_BOD_Main",
+    "line": "3930",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_BOD_ITEM",
+    "member": "FindData_BOD",
+    "line": "3982",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK_EXCEL_DOWN",
+    "member": "FindData_Request_Detail_DownLoad",
+    "line": "4309",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SHIPMENT_REQUEST_PACK",
+    "member": "FindData",
+    "line": "952",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SHIPMENT_REQUEST_CELL",
+    "member": "FindData",
+    "line": "1013",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_RESULT_DETAIL",
+    "member": "FindData_Result_Detail",
+    "line": "1134",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "member": "FindData_Detail",
+    "line": "1236",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_CELL",
+    "member": "FindData_Detail",
+    "line": "1280",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "member": "FindData_Detail_DblClick",
+    "line": "1397",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_CELL",
+    "member": "FindData_Detail_DblClick",
+    "line": "1439",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_PACK",
+    "member": "SaveData",
+    "line": "1673",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_CELL",
+    "member": "SaveData",
+    "line": "1745",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_DETAIL_PACK",
+    "member": "SaveData_Detail",
+    "line": "1948",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_DETAIL_CELL",
+    "member": "SaveData_Detail",
+    "line": "2025",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "3192",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "3209",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+    "member": "GetBizTypebyDivision",
+    "line": "3221",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_BOD_VALID_CHECK",
+    "member": "BodValidChk_Main",
+    "line": "3959",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_BOD_VALID_CHECK",
+    "member": "BodValidChk",
+    "line": "4027",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_BOD_ITEM",
+    "member": "FindData_BOD_Main",
+    "line": "4095",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_BOD_ITEM",
+    "member": "FindData_BOD",
+    "line": "4147",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK_EXCEL_DOWN",
+    "member": "FindData_Request_Detail_DownLoad",
+    "line": "4371",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_BOD_ITEM",
+    "member": "FindData",
+    "line": "254",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_BodItemPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "388",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_BodItemPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SITE_BY_DIVISION",
+    "member": "GetDivisionbyScmSite",
+    "line": "402",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_BodItemPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_ITEM_BY_DIVISION_POPUP",
+    "member": "FindData",
+    "line": "242",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_ItembyDivisionPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "374",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_ItembyDivisionPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SITE_BY_DIVISION",
+    "member": "GetDivisionbyScmSite",
+    "line": "388",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_ItembyDivisionPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SHIPMENT_REQUEST_PACK",
+    "member": "FindData",
+    "line": "787",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SHIPMENT_REQUEST_CELL",
+    "member": "FindData",
+    "line": "848",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_RESULT_DETAIL",
+    "member": "FindData_Result_Detail",
+    "line": "969",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "member": "FindData_Detail",
+    "line": "1071",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_CELL",
+    "member": "FindData_Detail",
+    "line": "1115",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "member": "FindData_Detail_DblClick",
+    "line": "1232",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_CELL",
+    "member": "FindData_Detail_DblClick",
+    "line": "1274",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_PACK",
+    "member": "SaveData",
+    "line": "1508",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_CELL",
+    "member": "SaveData",
+    "line": "1580",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_DETAIL_PACK",
+    "member": "SaveData_Detail",
+    "line": "1783",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_DETAIL_CELL",
+    "member": "SaveData_Detail",
+    "line": "1860",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "3027",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "3044",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+    "member": "GetBizTypebyDivision",
+    "line": "3056",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_BOD_VALID_CHECK",
+    "member": "BodValidChk_Main",
+    "line": "3794",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_BOD_VALID_CHECK",
+    "member": "BodValidChk",
+    "line": "3862",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_BOD_ITEM",
+    "member": "FindData_BOD_Main",
+    "line": "3930",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_BOD_ITEM",
+    "member": "FindData_BOD",
+    "line": "3982",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK_EXCEL_DOWN",
+    "member": "FindData_Request_Detail_DownLoad",
+    "line": "4309",
+    "file": "06.UIL\\GSCM.SSP.Forms.UIL\\Plan\\SSP0026_ShipmentRequestPack.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_BOD_ITEM",
+    "member": "FindData",
+    "line": "254",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_BodItemPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "388",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_BodItemPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SITE_BY_DIVISION",
+    "member": "GetDivisionbyScmSite",
+    "line": "402",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_BodItemPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_ITEM_BY_DIVISION_POPUP",
+    "member": "FindData",
+    "line": "242",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_ItembyDivisionPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "374",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_ItembyDivisionPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SITE_BY_DIVISION",
+    "member": "GetDivisionbyScmSite",
+    "line": "388",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\Popup\\SSP0026_ItembyDivisionPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SHIPMENT_REQUEST_PACK",
+    "member": "FindData",
+    "line": "952",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SHIPMENT_REQUEST_CELL",
+    "member": "FindData",
+    "line": "1013",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_RESULT_DETAIL",
+    "member": "FindData_Result_Detail",
+    "line": "1134",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "member": "FindData_Detail",
+    "line": "1236",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_CELL",
+    "member": "FindData_Detail",
+    "line": "1280",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "member": "FindData_Detail_DblClick",
+    "line": "1397",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_CELL",
+    "member": "FindData_Detail_DblClick",
+    "line": "1439",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_PACK",
+    "member": "SaveData",
+    "line": "1673",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_CELL",
+    "member": "SaveData",
+    "line": "1745",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_DETAIL_PACK",
+    "member": "SaveData_Detail",
+    "line": "1948",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_SAVE_SHIP_REQ_DETAIL_CELL",
+    "member": "SaveData_Detail",
+    "line": "2025",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "3192",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "3209",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+    "member": "GetBizTypebyDivision",
+    "line": "3221",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_BOD_VALID_CHECK",
+    "member": "BodValidChk_Main",
+    "line": "3959",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0002_GET_BOD_VALID_CHECK",
+    "member": "BodValidChk",
+    "line": "4027",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_BOD_ITEM",
+    "member": "FindData_BOD_Main",
+    "line": "4095",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_BOD_ITEM",
+    "member": "FindData_BOD",
+    "line": "4147",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0026_GET_REQUEST_DETAIL_PACK_EXCEL_DOWN",
+    "member": "FindData_Request_Detail_DownLoad",
+    "line": "4371",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0026_ShipmentRequestPack.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+   "SCM0001_GET_DIVISION",
+   "SCM0001_GET_SITE_BY_DIVISION",
+   "SSP0002_GET_BOD_VALID_CHECK",
+   "SSP0026_GET_BOD_ITEM",
+   "SSP0026_GET_ITEM_BY_DIVISION_POPUP",
+   "SSP0026_GET_REQUEST_DETAIL_CELL",
+   "SSP0026_GET_REQUEST_DETAIL_PACK",
+   "SSP0026_GET_REQUEST_DETAIL_PACK_EXCEL_DOWN",
+   "SSP0026_GET_RESULT_DETAIL",
+   "SSP0026_GET_RESULT_DETAIL / SSP0026_SAVE_SHIP_REQ_CELL / SSP0026_SAVE_SHIP_REQ_DETAIL_PACK / SSP0026_SAVE_SHIP_REQ_PACK",
+   "SSP0026_GET_SHIPMENT_REQUEST_CELL",
+   "SSP0026_GET_SHIPMENT_REQUEST_PACK",
+   "SSP0026_GET_SPREAD_TITLE",
+   "SSP0026_SAVE_SHIP_REQ_CELL",
+   "SSP0026_SAVE_SHIP_REQ_CELL / SSP0026_SAVE_SHIP_REQ_DETAIL_PACK / SSP0026_SAVE_SHIP_REQ_PACK",
+   "SSP0026_SAVE_SHIP_REQ_DETAIL_CELL",
+   "SSP0026_SAVE_SHIP_REQ_DETAIL_PACK",
+   "SSP0026_SAVE_SHIP_REQ_PACK"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SSP0002_GET_BOD_VALID_CHECK",
+    "sp": "SSP0002_GET_BOD_VALID_CHECK",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "Div·From·To·SSP Incoterms 조합에 입력한 Transport Mode 가 BOD 에 존재하는지 확인",
+    "message": null,
+    "on_fail": "결과셋 1 0행 반환 (UI 가 행 유무로 판정)"
+   },
+   {
+    "entry_sp": "SSP0002_GET_BOD_VALID_CHECK",
+    "sp": "SSP0002_GET_BOD_VALID_CHECK",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "입력한 Incoterms 가 해당 BOD_ID 의 유효 BOD 에 존재하는지 확인",
+    "message": null,
+    "on_fail": "결과셋 2 0행 반환 (UI 가 행 유무로 판정)"
+   },
+   {
+    "entry_sp": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "sp": "SSP0026_GET_REQUEST_DETAIL_PACK",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "RANGE",
+    "desc": "확정(CONFIRM_ID 존재)된 건 또는 출하일이 현재일+Ship Frozen 기간 이내인 건은 편집 불가 플래그 N",
+    "message": null,
+    "on_fail": "EDIT_FLAG='N' 반환(UI 편집 불가 판정용)"
+   },
+   {
+    "entry_sp": "SSP0026_SAVE_SHIP_REQ_CELL",
+    "sp": "SSP0026_SAVE_SHIP_REQ_CELL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "행별 From/To Site·Transport Mode·Incoterms·일자에 유효한 BOD(품목 BOD 포함)가 없거나 BOD 의 Route/Port/Country/LT/City 등 항목이 비어 있으면 'X' 반환 후 전체 중단",
+    "message": "result_code 'X'",
+    "on_fail": "SELECT 'X' AS result_code, NULL AS Request_no; (END 로그) RETURN;"
+   },
+   {
+    "entry_sp": "SSP0026_SAVE_SHIP_REQ_CELL",
+    "sp": "SSP0026_SAVE_SHIP_REQ_CELL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 로그 후 return -1",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그; return -1"
+   },
+   {
+    "entry_sp": "SSP0026_SAVE_SHIP_REQ_DETAIL_PACK",
+    "sp": "SSP0026_SAVE_SHIP_REQ_DETAIL_PACK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "행별 From/To Site·Transport Mode·Incoterms·일자에 유효한 BOD(Packer Item suffix 치환 후 품목 BOD 포함)가 없거나 BOD 항목이 비어 있으면 전체 롤백 후 'X' 반환",
+    "message": "result_code 'X'",
+    "on_fail": "THROW 60001, 'Unauthorized', 1; → CATCH: ROLLBACK TRAN TX_SH; SELECT 'X' AS result_code, NULL AS Request_no; return -1"
+   },
+   {
+    "entry_sp": "SSP0026_SAVE_SHIP_REQ_DETAIL_PACK",
+    "sp": "SSP0026_SAVE_SHIP_REQ_DETAIL_PACK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "RANGE",
+    "desc": "저장 대상 중 출하일이 From Site 의 현재일+Ship Frozen 일수 이전(확정 구간)인 행이 하나라도 있으면 전체 롤백 후 확정일(ConfirmDay)과 함께 'Y' 반환",
+    "message": "result_code 'Y' + ConfirmDay(yyyy-mm-dd)",
+    "on_fail": "THROW 60002, 'ConfirmDayCheck', 1; → CATCH: ROLLBACK; SELECT 'Y' AS result_code, CONVERT(CHAR(10), @v_confirm_day, 23) AS ConfirmDay; return -1"
+   },
+   {
+    "entry_sp": "SSP0026_SAVE_SHIP_REQ_DETAIL_PACK",
+    "sp": "SSP0026_SAVE_SHIP_REQ_DETAIL_PACK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백·오류 로그 후 return -1",
+    "message": null,
+    "on_fail": "ROLLBACK TRAN TX_SH; PR_SCP_SYS_LOG_BATCH ERROR 로그; return -1"
+   },
+   {
+    "entry_sp": "SSP0026_SAVE_SHIP_REQ_PACK",
+    "sp": "SSP0026_SAVE_SHIP_REQ_PACK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "행별 유효 BOD(품목 BOD 포함)가 없거나 BOD 항목이 비어 있으면 'X' 반환 후 중단(저장은 루프 이후라 부분 저장 없음)",
+    "message": "result_code 'X'",
+    "on_fail": "SELECT 'X' AS result_code, NULL AS Request_no; (END 로그) RETURN;"
+   },
+   {
+    "entry_sp": "SSP0026_SAVE_SHIP_REQ_PACK",
+    "sp": "SSP0026_SAVE_SHIP_REQ_PACK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 로그 후 RETURN -1",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그; RETURN -1;"
+   },
+   {
+    "entry_sp": "SSP0026_GET_RESULT_DETAIL / SSP0026_SAVE_SHIP_REQ_CELL / SSP0026_SAVE_SHIP_REQ_DETAIL_PACK / SSP0026_SAVE_SHIP_REQ_PACK",
+    "sp": "FN_NEXT_DAY",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "FORMAT",
+    "desc": "요일 코드가 SUN~SAT 이 아니면 NULL 반환(계산 중단)",
+    "message": null,
+    "on_fail": "RETURN NULL"
+   },
+   {
+    "entry_sp": "SSP0026_SAVE_SHIP_REQ_CELL / SSP0026_SAVE_SHIP_REQ_DETAIL_PACK / SSP0026_SAVE_SHIP_REQ_PACK",
+    "sp": "PR_SCP_SYS_LOG_BATCH",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백하고 오류 내용을 별도 트랜잭션으로 로그 테이블에 다시 기록",
+    "message": "ERROR_MESSAGE() (로그 테이블 기록)",
+    "on_fail": "ROLLBACK TRANSACTION PR_SCP_SYS_LOG_BATCH; BEGIN TRANSACTION PR_SCP_SYS_LOG_BATCH2; INSERT INTO scm_sys_log_batch VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_M"
+   }
+  ]
+ }
+]

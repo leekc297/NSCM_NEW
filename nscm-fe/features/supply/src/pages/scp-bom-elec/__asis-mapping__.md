@@ -115,7 +115,7 @@
 | AS-IS | TO-BE |
 |---|---|
 | `Data.Common(Type.MyDivision, false, NowGroupID, UserId)`(cs:36) | 콤보 `MyDivision`(SQL_ID, @sesUserId/@mnuId) — EE제외+unit권한 SQL 내장, 클라 필터 0 |
-| `SelectCombo(cboDivision,"CODE","81")`(cs:513~519) | Division 기본값 '81' 존재 시 선택·미존재 시 마지막 항목(R6b) — `ScpBomElecForm` effect |
+| `SelectCombo(cboDivision,"CODE","81")`(cs:513~519) | Division 기본값 = 권한 콤보 배열 첫 항목(사용자 지시 2026-10-22, AS-IS R6b '81'/마지막항목 폐기) — `ScpBomElecForm` effect |
 | txtParentID/txtChildID.Text(개행→콤마 UsrMultiLineEditor) | InputField multiline → `normalizeMulti`(개행→콤마, 공백줄 스킵, 미트림) |
 | P_DEBUG_MODE='F'(cs:309) | filters.debugMode='F' / save debugMode='F' |
 

@@ -131,7 +131,7 @@
 
 - **타입 사전검증 V2~V4(MSG01330/1331/1332)**: AS-IS 인라인 SQL 이나 TO-BE 체크 프로시저 미배포(goal.md ④·02 §7#4). FE 는 SQL 직접실행 금지 → 이번 회차 **미배선**(메시지 상수만 배선). 명세 이탈 — convert-sp 에서 체크 프로시저 신설 또는 검증 생략+0행 안내로 후속 결정.
 - **멀티라인 3종 다중값 갭**: v0.5 명세=다중 / SP·AS-IS 런타임=단일값. **권고(b) AS-IS 등가 단일값**으로 구현(02 §7#3). 사용자 합의 시 SP STRING_SPLIT 보완은 convert-sp 후속.
-- **Division '81' 고정+disabled**(R7): AS-IS OnShown 강제. '81' 후보 부재 시 AS-IS 폴백(마지막 행 선택)은 결함이라 미재현 — 빈 선택+조회 차단(R8)으로 처리.
+- **Division 권한 콤보 첫 항목 기본선택**(R7 '81' 고정+disabled 폐기 — 사용자 지시 2026-10-22): AS-IS OnShown 의 '81' 강제+disabled 는 쓰지 않는다. MyDivision(@mnuId 게이트) 배열 첫 항목(권한목록 최상위)을 기본 선택하고 사용자가 자유롭게 변경 가능. 후보 0건(권한 없음) 시 조회 차단(R8) 유지.
 - **EDIT 모드 토글 미이식**(R3): editMode/setEditMode store 미신설(convert-core §2.4). 조회 직후부터 M 3종 상시 편집(행 잠금 규칙 우선).
 - **다단 헤더**: AS-IS 는 1행 헤더였으나(design 03 §1.1.1) TO-BE 는 메타 LARGE/SMALL_CLASS_LABEL('Simulator' 그룹·PLANT_ID 상단 'Plant ID') 자동 소비 — 메타 정본 소비 결과(코드로 무력화 금지).
 - **전 플랜트 일괄 반영 사양**: SAVE UPDATE WHERE=(division,parent,child) 3키 → 같은 조합 타 플랜트 행 동반 갱신(AS-IS 사양, design 03 §4.2). 결함 아님.

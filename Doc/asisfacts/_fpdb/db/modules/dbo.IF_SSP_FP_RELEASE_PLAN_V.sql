@@ -1,0 +1,297 @@
+﻿
+
+
+
+CREATE VIEW [dbo].[IF_SSP_FP_RELEASE_PLAN_V]
+-- ================================================================================================
+-- Program ID          : IF_SSP_FP_RELEASE_PLAN_V
+--
+-- Program Name        : IF_SSP_FP_RELEASE_PLAN_V
+-- Param               :
+-- Batch Period        : 
+-- Description         : SSP 제공용 확정 Plan
+--
+-- Source System       : FP SDB
+-- Destination System  : SCP SDB
+-- Source Table        : FP_DAILY_PRODUCTIOIN_PLAN_H
+-- Destination Table   : 
+--
+-- Create(Update) Date : 2022.08.30
+-- Author              : PIYONG
+-- Version             : 2019-12-19 kimcd E2000 공정 TEST는 S-TEST로 임시 전환
+--                       2020-01-29 kimcd E2000 공정 TEST는 S-TEST로 임시 전환 복원
+--                       2020-07-22	kimcd 소형 ETW(F6200)은 Release 기반으로 계획 반영
+--                       2020-08-30	kimcd 실적 기간 8주로 변경
+--                       2024-03-15 chkim.68 하드코딩 전환 (ref scm_code_lookup_value )
+-- ================================================================================================
+
+AS
+
+SELECT [COMPANY_ID]
+      ,[DIVISION_ID]
+      ,[SITE_ID]
+      ,DPP.[PLANT_ID]
+      ,[FACTORY_ID]
+	  ,[OPERATION_ID]
+      ,[LOCATION]
+      ,[TOP_ITEM_ID]
+      ,[ITEM_ID]
+      ,DPP.[FP_PRODUCTION_TYPE]  -- 2019-12-19 kimcd E2000 공정 TEST는 S-TEST로 임시 전환 2020-01-29 kimcd 복원
+      ,[MARKET]
+      ,[LINE_ID]
+      ,[ELECTRODE_TYPE]
+      ,[PLAN_DATE]
+      ,[PLAN_QTY]
+      ,[PLAN_IN_QTY]
+      ,[EQUIPMENT_ID]
+ FROM FP_DAILY_PRODUCTIOIN_PLAN_H DPP WITH(NOLOCK)
+	  , (SELECT SLV.SEGMENT1
+	           ,SLP.SEGMENT1  AS PLANT_ID
+			   ,SLV.ATTRIBUTE1
+			   ,SLV.MODIFY_DATE
+	     FROM   [DBO].[SCM_SYS_LOOKUP_VALUE]  SLV WITH(NOLOCK)
+		       ,[DBO].[SCM_SYS_LOOKUP_VALUE]  SLP WITH(NOLOCK)
+			   ,[DBO].[SCM_PLANT_M]           PM  WITH(NOLOCK)
+		 WHERE  SLP.SEGMENT2         = SLV.SEGMENT2
+		 AND    PM.SITE_ID           = SLV.SEGMENT1
+		 AND    PM.PLANT_ID          = SLP.SEGMENT1
+		 AND    SLV.LOOKUP_TYPE_CODE = 'AUTO_PLAN_CALL_FLAG'
+         AND    SLV.ACTIVE_FLAG    = 'Y'
+		 AND    SLP.LOOKUP_TYPE_CODE = 'BASIS_START_TIME_PLANT'
+         AND    SLP.ACTIVE_FLAG    = 'Y'  )  SLV	-- 시업 시간별로 PLANT 조회하도록 수정
+WHERE DPP.SITE_ID = SLV.SEGMENT1
+  AND DPP.PLANT_ID  = SLV.PLANT_ID					-- 시업 시간별로 PLANT 조회하도록 수정
+  -- 하드코딩 전환
+  AND ( ( DPP.PLAN_TYPE = CASE WHEN DPP.PLANT_ID = (SELECT TOP 1 SEGMENT2 FROM SCM_CODE_LOOKUP_VALUE WITH(NOLOCK) WHERE LOOKUP_TYPE_CODE='IF_SSP_FP_RELEASE_PLAN_V' AND SEGMENT1  = '0' AND ACTIVE_FLAG='Y') THEN 'SSP' ELSE 'RELEASE' END 	-- 오창 소형만 SSP 적용
+						AND DPP.OPERATION_ID NOT IN ( 'F5300', 'F5400', 'F5500', 'F5600', 'F6200' ) )
+        OR (DPP.OPERATION_ID IN ( 'F5300', 'F5400', 'F5500', 'F5600'/*, 'F6200' 2020-07-22 제외 */) AND DPP.PLAN_TYPE = 'WPP')
+		OR (DPP.OPERATION_ID = 'F6200' AND ( (DPP.PLAN_TYPE = 'RELEASE' AND 
+		DPP.PLANT_ID not in (SELECT SEGMENT2 FROM SCM_CODE_LOOKUP_VALUE WITH(NOLOCK) WHERE LOOKUP_TYPE_CODE='IF_SSP_FP_RELEASE_PLAN_V' AND SEGMENT1  = '0' AND ACTIVE_FLAG='Y')) 
+		OR (DPP.PLAN_TYPE = 'WPP' 
+		AND DPP.PLANT_ID in (SELECT SEGMENT2 FROM SCM_CODE_LOOKUP_VALUE WITH(NOLOCK) WHERE LOOKUP_TYPE_CODE='IF_SSP_FP_RELEASE_PLAN_V' AND SEGMENT1  = '0' AND ACTIVE_FLAG='Y')) ) ) )-- 2020-07-22 kimcd 오창 소형 조립은 ETW(F6200) WPP 유지 -- 남경 특성 WPP 기준 전송. 소형 ETW(F6200)은 WPP 기반으로 계획 반영
+  AND ( ( DPP.PLAN_DATE >=  CONVERT(datetime,  ATTRIBUTE1 + ' 00:00:00', 120) AND DPP.OPERATION_ID NOT IN ( 'F5300', 'F5400', 'F5500', 'F5600', 'F6000') ) 
+        OR (DPP.PLAN_DATE >=  CASE WHEN DATEADD(HH, 3, SLV.MODIFY_DATE) < GETDATE() THEN CONVERT(datetime,  ATTRIBUTE1 + ' 00:00:00', 120) ELSE DATEADD( D, -1, CONVERT(datetime,  ATTRIBUTE1 + ' 00:00:00', 120) ) END AND DPP.OPERATION_ID IN ( 'F5300', 'F5400', 'F5500', 'F5600', 'F6000') ) )
+UNION ALL
+SELECT [COMPANY_ID]
+      ,[DIVISION_ID]
+      ,[SITE_ID]
+      ,DPR.[PLANT_ID]
+      ,[FACTORY_ID]
+	  ,[OPERATION_ID]
+      ,[LOCATION]
+      ,[TOP_ITEM_ID]
+      ,[ITEM_ID]
+      ,DPR.[FP_PRODUCTION_TYPE] -- 2019-12-19 kimcd E2000 공정 TEST는 S-TEST로 임시 전환 2020-01-29 kimcd 복원
+      ,[MARKET]
+      ,[LINE_ID]
+      ,[ELECTRODE_TYPE]
+      ,[PLAN_DATE]
+      ,[ACTUAL_GOOD_QTY]  -- OUT 수량
+      ,[ACTUAL_QTY]  -- IN 수량
+      ,[EQUIPMENT_ID]
+ FROM SCM_DAILY_PRODUCT_RESULT_H DPR WITH(NOLOCK)
+      ,( SELECT SLV.SEGMENT1
+	           ,SLP.SEGMENT1  AS PLANT_ID
+			   ,SLV.ATTRIBUTE1
+			   ,SLV.MODIFY_DATE
+	     FROM   [DBO].[SCM_SYS_LOOKUP_VALUE]  SLV WITH(NOLOCK)
+		       ,[DBO].[SCM_SYS_LOOKUP_VALUE]  SLP WITH(NOLOCK)
+			   ,[DBO].[SCM_PLANT_M]           PM  WITH(NOLOCK)
+		 WHERE  SLP.SEGMENT2         = SLV.SEGMENT2
+		 AND    PM.SITE_ID           = SLV.SEGMENT1
+		 AND    PM.PLANT_ID          = SLP.SEGMENT1
+		 AND    SLV.LOOKUP_TYPE_CODE = 'AUTO_PLAN_CALL_FLAG'
+         AND    SLV.ACTIVE_FLAG    = 'Y'
+		 AND    SLP.LOOKUP_TYPE_CODE = 'BASIS_START_TIME_PLANT'
+         AND    SLP.ACTIVE_FLAG    = 'Y'  ) SLV  -- 2019-10-02 kimcd 시업 시간별로 PLANT 조회하도록 수정
+WHERE DPR.SITE_ID =  SLV.SEGMENT1
+  AND SLV.PLANT_ID = DPR.PLANT_ID -- 2019-10-02 kimcd 시업 시간별로 PLANT 조회하도록 수정
+  AND ( ( DPR.PLAN_DATE <  CONVERT(datetime,  ATTRIBUTE1 + ' 00:00:00', 120) AND DPR.OPERATION_ID NOT IN ( 'F5300', 'F5400', 'F5500', 'F5600', 'F6000') ) 
+        OR (DPR.PLAN_DATE <  CASE WHEN DATEADD(HH, 3, SLV.MODIFY_DATE) < GETDATE() THEN CONVERT(datetime,  ATTRIBUTE1 + ' 00:00:00', 120) ELSE DATEADD( D, -1, CONVERT(datetime,  ATTRIBUTE1 + ' 00:00:00', 120) ) END AND DPR.OPERATION_ID IN ( 'F5300', 'F5400', 'F5500', 'F5600', 'F6000') ) )
+		-- 2019-06-03 kimcd 특성 실적 취합 조건 분리
+  AND PLAN_DATE >= DATEADD(wk, (DATEDIFF(d, 0, ATTRIBUTE1) -56) / 7 , 0)  -- 2022-08-30	kimcd 실적 기간 8주로 변경
+UNION ALL
+SELECT DPP.[COMPANY_ID]
+      ,DPP.[DIVISION_ID]
+      ,DPP.[SITE_ID]
+      ,DPP.[PLANT_ID]
+      ,DPP.[FACTORY_ID]
+	  ,RIGHT(SI.FORMATION_FLOW_ID, 5) AS [OPERATION_ID]
+      ,DPP.[LOCATION]
+      ,DPP.[TOP_ITEM_ID]
+      ,DPP.[ITEM_ID]
+      ,DPP.[FP_PRODUCTION_TYPE]
+      ,DPP.[MARKET]
+      ,(SELECT TOP 1 FL.SEGMENT2
+	    FROM   [DBO].[SCM_SYS_LOOKUP_VALUE]  FL WITH(NOLOCK)
+		WHERE  FL.LOOKUP_TYPE_CODE = 'FORMATION_LINE_MAPPING' 
+		AND    FL.ACTIVE_FLAG      = 'Y'
+		AND    FL.SEGMENT1         = DPP.SITE_ID
+		AND    FL.SEGMENT5         = DPP.LINE_ID) AS [LINE_ID]
+      ,'-' AS [ELECTRODE_TYPE]
+      ,DATEADD(DAY, ISNULL(( SELECT ST_SUM
+	                         FROM   ( SELECT ISNULL(AIF.ROUTE_TOTAL_TIME/14400.0,0.0) + ISNULL(AIF.REMAIN_TIME/1440.0, 0.0)  AS ST_SUM
+									       , ROW_NUMBER() OVER (ORDER BY AIF.OPERATION_SEQ, OPERATION_STEP) AS ROW_NUM
+                                      FROM   SCM_AGING_ITEM_FLOW_M  AIF WITH(NOLOCK)
+                                      WHERE  AIF.DEFAULT_ROUTE = 'Y'
+									  AND   AIF.DEFAULT_FLAG = 'B' -- 기본 Route
+                                      AND   AIF.COMPANY_ID   = DPP.COMPANY_ID
+                                      AND   AIF.DIVISION_ID  = DPP.DIVISION_ID
+                                      AND   AIF.SITE_ID      = DPP.SITE_ID
+                                      AND   AIF.PLANT_ID     = DPP.PLANT_ID
+                                      AND   AIF.FACTORY_ID   = DPP.FACTORY_ID
+                                      AND   AIF.ITEM_ID      = DPP.ITEM_ID
+                                      AND   AIF.LINE_ID      = (SELECT TOP 1 FL.SEGMENT2
+																FROM   [DBO].[SCM_SYS_LOOKUP_VALUE]  FL WITH(NOLOCK)
+																WHERE  FL.LOOKUP_TYPE_CODE = 'FORMATION_LINE_MAPPING' 
+																AND    FL.ACTIVE_FLAG = 'Y'
+																AND    FL.SEGMENT1 = DPP.SITE_ID
+																AND    FL.SEGMENT5 = DPP.LINE_ID)) AIF 
+							 WHERE ROW_NUM = 1), CONVERT(NUMERIC(20,10), FLO.ATTRIBUTE3) ) + 2 , DPP.[PLAN_DATE] ) AS PLAN_DATE -- GRADING, 특성 LEAD TIME으로 2일 추가
+      ,FLOOR(DPP.PLAN_QTY * ISNULL(( SELECT CASE WHEN D.FORMATION_TOTAL_YIELD = 0 THEN 1 ELSE D.FORMATION_TOTAL_YIELD END * CASE WHEN D.CHARACTERIZATION_YIELD = 0 THEN 1 ELSE D.CHARACTERIZATION_YIELD END
+	                                        -- 2018-11-20 kimcd 특성 yield 곱하기, 
+									 FROM   SCM_FORMATION_YIELD_M D WITH(NOLOCK)
+									 WHERE DPP.COMPANY_ID = D.COMPANY_ID
+									 AND DPP.DIVISION_ID  = D.DIVISION_ID
+									 AND DPP.SITE_ID      = D.SITE_ID
+									 AND DPP.PLANT_ID     = D.PLANT_ID
+									 AND DPP.FACTORY_ID   = D.FACTORY_ID
+									 AND DPP.ITEM_ID      = D.ITEM_ID
+									 AND DPP.LINE_ID      = D.LINE_ID
+									 ),1)) AS [PLAN_QTY]
+      ,DPP.PLAN_QTY AS [PLAN_IN_QTY]
+      ,'-' AS [EQUIPMENT_ID]
+ FROM FP_DAILY_PRODUCTIOIN_PLAN_H DPP WITH(NOLOCK)
+	, [DBO].[SCM_ITEM_M]            SI WITH(NOLOCK)
+	, (  SELECT SLV.SEGMENT1
+	           ,SLP.SEGMENT1  AS PLANT_ID
+			   ,SLV.ATTRIBUTE1
+	     FROM   [DBO].[SCM_SYS_LOOKUP_VALUE]  SLV WITH(NOLOCK)
+		       ,[DBO].[SCM_SYS_LOOKUP_VALUE]  SLP WITH(NOLOCK)
+			   ,[DBO].[SCM_PLANT_M]           PM  WITH(NOLOCK)
+		 WHERE  SLP.SEGMENT2         = SLV.SEGMENT2
+		 AND    PM.SITE_ID           = SLV.SEGMENT1
+		 AND    PM.PLANT_ID          = SLP.SEGMENT1
+		 AND    SLV.LOOKUP_TYPE_CODE = 'AUTO_PLAN_CALL_FLAG'
+         AND    SLV.ACTIVE_FLAG    = 'Y'
+		 AND    SLP.LOOKUP_TYPE_CODE = 'BASIS_START_TIME_PLANT'
+         AND    SLP.ACTIVE_FLAG    = 'Y'  )  SLV	-- 시업 시간별로 PLANT 조회하도록 수정
+	, [DBO].[SCM_SYS_LOOKUP_VALUE]  FLO WITH(NOLOCK)
+WHERE DPP.SITE_ID     = SI.SITE_ID
+  AND DPP.COMPANY_ID  = SI.COMPANY_ID
+  AND DPP.DIVISION_ID = SI.DIVISION_ID
+  AND DPP.ITEM_ID     = SI.ITEM_ID
+  AND DPP.SITE_ID     = SLV.SEGMENT1
+  AND DPP.PLANT_ID    = SLV.PLANT_ID				-- 시업 시간별로 PLANT 조회하도록 수정
+  AND DPP.SITE_ID     = FLO.SEGMENT1
+  AND DPP.DIVISION_ID = FLO.SEGMENT2
+  AND DPP.OPERATION_ID = FLO.SEGMENT3
+  AND DPP.COMPANY_ID   = FLO.SEGMENT4
+  AND FLO.LOOKUP_TYPE_CODE = 'FORMATION_MMD_ROUTE_CONVERT'
+  AND FLO.ACTIVE_FLAG = 'Y'
+  AND FLO.ATTRIBUTE2  = 'Y'
+  AND DPP.PLAN_TYPE   = CASE WHEN DPP.PLANT_ID in (SELECT SEGMENT2 FROM SCM_CODE_LOOKUP_VALUE WITH(NOLOCK) WHERE LOOKUP_TYPE_CODE='IF_SSP_FP_RELEASE_PLAN_V' AND SEGMENT1  = '0' AND ACTIVE_FLAG='Y') THEN 'SSP' ELSE 'RELEASE' END	-- 오창 소형만 SSP 적용
+  AND DPP.PLAN_DATE  >=  CONVERT(datetime,  SLV.ATTRIBUTE1 + ' 00:00:00', 120)
+ UNION ALL
+ SELECT DPP.[COMPANY_ID]
+      ,DPP.[DIVISION_ID]
+      ,DPP.[SITE_ID]
+      ,DPP.[PLANT_ID]
+      ,DPP.[FACTORY_ID]
+	  ,RIGHT(SI.FORMATION_FLOW_ID, 5) AS [OPERATION_ID]
+      ,DPP.[LOCATION]
+      ,DPP.[TOP_ITEM_ID]
+      ,DPP.[ITEM_ID]
+      ,DPP.[FP_PRODUCTION_TYPE]
+      ,DPP.[MARKET]
+      ,(SELECT TOP 1 FL.SEGMENT2
+	    FROM   [DBO].[SCM_SYS_LOOKUP_VALUE]  FL WITH(NOLOCK)
+		WHERE  FL.LOOKUP_TYPE_CODE = 'FORMATION_LINE_MAPPING' 
+		AND    FL.ACTIVE_FLAG      = 'Y'
+		AND    FL.SEGMENT1         = DPP.SITE_ID
+		AND    FL.SEGMENT5         = DPP.LINE_ID) AS [LINE_ID]
+      ,'-' AS [ELECTRODE_TYPE]
+      ,DATEADD(DAY, ISNULL(( SELECT ST_SUM
+	                         FROM   ( SELECT ISNULL(AIF.ROUTE_TOTAL_TIME/14400.0,0.0) + ISNULL(AIF.REMAIN_TIME/1440.0, 0.0)  AS ST_SUM
+									       , ROW_NUMBER() OVER (ORDER BY AIF.OPERATION_SEQ, OPERATION_STEP) AS ROW_NUM
+                                      FROM   SCM_AGING_ITEM_FLOW_M  AIF WITH(NOLOCK)
+                                      WHERE  AIF.DEFAULT_ROUTE = 'Y'
+									  AND   AIF.DEFAULT_FLAG = 'B' -- 기본 Route
+                                      AND   AIF.COMPANY_ID   = DPP.COMPANY_ID
+                                      AND   AIF.DIVISION_ID  = DPP.DIVISION_ID
+                                      AND   AIF.SITE_ID      = DPP.SITE_ID
+                                      AND   AIF.PLANT_ID     = DPP.PLANT_ID
+                                      AND   AIF.FACTORY_ID   = DPP.FACTORY_ID
+                                      AND   AIF.ITEM_ID      = DPP.ITEM_ID
+                                      AND   AIF.LINE_ID      = (SELECT TOP 1 FL.SEGMENT2
+																FROM   [DBO].[SCM_SYS_LOOKUP_VALUE]  FL WITH(NOLOCK)
+																WHERE  FL.LOOKUP_TYPE_CODE = 'FORMATION_LINE_MAPPING' 
+																AND    FL.ACTIVE_FLAG = 'Y'
+																AND    FL.SEGMENT1 = DPP.SITE_ID
+																AND    FL.SEGMENT5 = DPP.LINE_ID)) AIF 
+							 WHERE ROW_NUM = 1), CONVERT(NUMERIC(20,10), FLO.ATTRIBUTE3) ) + 2 , DPP.[PLAN_DATE] ) AS PLAN_DATE -- 2018-11-20 kimcd grading, 특성 lead time으로 2일 추가
+      ,FLOOR(DPP.ACTUAL_GOOD_QTY * ISNULL(( SELECT CASE WHEN D.FORMATION_TOTAL_YIELD = 0 THEN 1 ELSE D.FORMATION_TOTAL_YIELD END * CASE WHEN D.CHARACTERIZATION_YIELD = 0 THEN 1 ELSE D.CHARACTERIZATION_YIELD END
+													-- 2018-11-20 kimcd 특성 yield 곱하기, 
+											 FROM   SCM_FORMATION_YIELD_M D WITH(NOLOCK)
+											 WHERE DPP.COMPANY_ID = D.COMPANY_ID
+											 AND DPP.DIVISION_ID  = D.DIVISION_ID
+											 AND DPP.SITE_ID      = D.SITE_ID
+											 AND DPP.PLANT_ID     = D.PLANT_ID
+											 AND DPP.FACTORY_ID   = D.FACTORY_ID
+											 AND DPP.ITEM_ID      = D.ITEM_ID
+											 AND DPP.LINE_ID      = D.LINE_ID ),1)) AS [PLAN_QTY]
+      ,DPP.ACTUAL_GOOD_QTY AS [PLAN_IN_QTY]
+      ,'-' AS [EQUIPMENT_ID]
+ FROM SCM_DAILY_PRODUCT_RESULT_H    DPP WITH(NOLOCK)
+	, [DBO].[SCM_ITEM_M]            SI  WITH(NOLOCK)
+	, ( SELECT SLV.SEGMENT1
+	           ,SLP.SEGMENT1  AS PLANT_ID
+			   ,SLV.ATTRIBUTE1
+	     FROM   [DBO].[SCM_SYS_LOOKUP_VALUE]  SLV WITH(NOLOCK)
+		       ,[DBO].[SCM_SYS_LOOKUP_VALUE]  SLP WITH(NOLOCK)
+			   ,[DBO].[SCM_PLANT_M]           PM  WITH(NOLOCK)
+		 WHERE  SLP.SEGMENT2         = SLV.SEGMENT2
+		 AND    PM.SITE_ID           = SLV.SEGMENT1
+		 AND    PM.PLANT_ID          = SLP.SEGMENT1
+		 AND    SLV.LOOKUP_TYPE_CODE = 'AUTO_PLAN_CALL_FLAG'
+         AND    SLV.ACTIVE_FLAG    = 'Y'
+		 AND    SLP.LOOKUP_TYPE_CODE = 'BASIS_START_TIME_PLANT'
+         AND    SLP.ACTIVE_FLAG    = 'Y'  )  SLV -- 2019-10-02 kimcd 시업 시간별로 PLANT 조회하도록 수정
+	, [DBO].[SCM_SYS_LOOKUP_VALUE]  FLO WITH(NOLOCK)
+WHERE DPP.SITE_ID     = SI.SITE_ID
+  AND DPP.COMPANY_ID  = SI.COMPANY_ID
+  AND DPP.DIVISION_ID = SI.DIVISION_ID
+  AND DPP.ITEM_ID     = SI.ITEM_ID
+  AND DPP.SITE_ID     = SLV.SEGMENT1
+  AND SLV.PLANT_ID    = DPP.PLANT_ID  -- 2019-10-02 kimcd 시업 시간별로 PLANT 조회하도록 수정
+  AND DPP.SITE_ID     = FLO.SEGMENT1
+  AND DPP.DIVISION_ID = FLO.SEGMENT2
+  AND DPP.OPERATION_ID = FLO.SEGMENT3
+  AND DPP.COMPANY_ID   = FLO.SEGMENT4 -- 2019-08-29 kimcd COMPANY_ID 추가
+  AND FLO.LOOKUP_TYPE_CODE = 'FORMATION_MMD_ROUTE_CONVERT'
+  AND FLO.ACTIVE_FLAG = 'Y'
+  AND FLO.ATTRIBUTE2  = 'Y'
+  AND DPP.PLAN_DATE  >=  DATEADD(DAY, - ISNULL(( SELECT ST_SUM
+												 FROM   ( SELECT ISNULL(AIF.ROUTE_TOTAL_TIME/14400.0,0.0) + ISNULL(AIF.REMAIN_TIME/1440.0, 0.0)  AS ST_SUM
+															   , ROW_NUMBER() OVER (ORDER BY AIF.OPERATION_SEQ, OPERATION_STEP) AS ROW_NUM
+														  FROM   SCM_AGING_ITEM_FLOW_M  AIF WITH(NOLOCK)
+														  WHERE  AIF.DEFAULT_ROUTE = 'Y'
+														  AND   AIF.DEFAULT_FLAG = 'B' -- 기본 Route
+														  AND   AIF.COMPANY_ID   = DPP.COMPANY_ID
+														  AND   AIF.DIVISION_ID  = DPP.DIVISION_ID
+														  AND   AIF.SITE_ID      = DPP.SITE_ID
+														  AND   AIF.PLANT_ID     = DPP.PLANT_ID
+														  AND   AIF.FACTORY_ID   = DPP.FACTORY_ID
+														  AND   AIF.ITEM_ID      = DPP.ITEM_ID
+														  AND   AIF.LINE_ID      = (SELECT TOP 1 FL.SEGMENT2
+																					FROM   [DBO].[SCM_SYS_LOOKUP_VALUE]  FL WITH(NOLOCK)
+																					WHERE  FL.LOOKUP_TYPE_CODE = 'FORMATION_LINE_MAPPING' 
+																					AND    FL.ACTIVE_FLAG = 'Y'
+																					AND    FL.SEGMENT1 = DPP.SITE_ID
+																					AND    FL.SEGMENT5 = DPP.LINE_ID)) AIF 
+												 WHERE ROW_NUM = 1), CONVERT(NUMERIC(20,10), FLO.ATTRIBUTE3) ) - 2 , CONVERT(datetime,  SLV.ATTRIBUTE1 + ' 00:00:00', 120) )
+
+
+
+
+

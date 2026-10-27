@@ -96,13 +96,13 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **useTabComboQueries** | `@shared/hooks` | 211 |  |  |
-| **useTabProcQuery** | `@shared/hooks` | 202 |  | filters 는 매 렌더 새로 만들지 말 것 — 아래 useLayoutEffect 는 filters 참조가 바뀌면 값이 같아도 "사용자가 재조회했다"로 판정해 캐시를 비운다. store selector / useState 값 / useMemo / 모 |
-| **useTabBtnPermissions** | `@shared/hooks` | 107 |  | 메뉴 버튼 권한 동적 fetch — UI 동적 속성관리 master hook §3 (2026-06-15) BE: GET /admin/menu/{mnuId}/auth → MenuAuthDto.mnuBtnAuth: List<String> SCM_ADM_U |
-| **useTabid** | `@shared/stores` | 71 |  |  |
-| **useSaveWithValidation** | `@shared/hooks` | 65 |  |  |
-| **useTabLookupQueries** | `@shared/hooks` | 49 |  |  |
-| **useProcMutation** | `@shared/hooks` | 40 |  |  |
+| **useTabComboQueries** | `@shared/hooks` | 208 |  |  |
+| **useTabProcQuery** | `@shared/hooks` | 198 |  | filters 는 매 렌더 새로 만들지 말 것 — 아래 useLayoutEffect 는 filters 참조가 바뀌면 값이 같아도 "사용자가 재조회했다"로 판정해 캐시를 비운다. store selector / useState 값 / useMemo / 모 |
+| **useTabBtnPermissions** | `@shared/hooks` | 105 |  | 메뉴 버튼 권한 동적 fetch — UI 동적 속성관리 master hook §3 (2026-06-15) BE: GET /admin/menu/{mnuId}/auth → MenuAuthDto.mnuBtnAuth: List<String> SCM_ADM_U |
+| **useTabid** | `@shared/stores` | 69 |  |  |
+| **useSaveWithValidation** | `@shared/hooks` | 64 |  |  |
+| **useTabLookupQueries** | `@shared/hooks` | 47 |  |  |
+| **useProcMutation** | `@shared/hooks` | 39 |  |  |
 | **useTabComboQueryResults** | `@shared/hooks` | 8 |  | `useTabComboQueries` 와 같은 쿼리를 구독하되 `data` 뿐 아니라 `isPending`/`isError` 도 함께 돌려준다. 콤보 데이터가 아직 안 온 것(로딩 중)과 조회했지만 실패한 것을 구분해야 하는 호출부용 (예: DataG |
 | **useInvalidateCombos** | `@shared/hooks` | 3 |  | 콤보 캐시 무효화 — 콤보의 원천 마스터를 저장한 화면이 저장 성공 직후 호출한다. 콤보는 staleTime 0 이지만 그건 "화면을 새로 열 때 다시 받는다"는 뜻이다. MDI 는 keep-alive 라 저장한 그 화면은 리마운트되지 않으므로, 방금 |
 | **useStreamProcQuery** | `@shared/hooks` | 1 |  |  |

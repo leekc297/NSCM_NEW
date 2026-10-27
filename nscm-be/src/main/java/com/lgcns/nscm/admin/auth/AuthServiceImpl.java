@@ -57,11 +57,18 @@ public class AuthServiceImpl extends BaseService implements AuthService {
 
 	@Override
 	public List<String> retrieveMenuBtnAuth(String userId, String mnuId) throws Exception {
+		return retrieveMenuBtnAuth(userId, mnuId, null);
+	}
+
+	@Override
+	public List<String> retrieveMenuBtnAuth(String userId, String mnuId, String divisionId) throws Exception {
+		// divisionId: 단일 Division 이면 그 Division 단위권한 그룹 기준, NULL/'ALL'/복수(',')면 그룹 합집합 — SP 가 분기 (2026-10-26)
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("userId", userId);
 		params.put("mnuId", mnuId);
+		params.put("divisionId", divisionId);
 
-		Map<String, Object> result = selectList(nameSpace + "retrieveMenuBtnAuth", params);
+		Map<String, Object> result = selectList(nameSpace + "retrieveMenuBtnAuthDiv", params);
 		List<Map<String, Object>> data = ((List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT));
 
 		List<String> mnuBtnAuth = data.stream()

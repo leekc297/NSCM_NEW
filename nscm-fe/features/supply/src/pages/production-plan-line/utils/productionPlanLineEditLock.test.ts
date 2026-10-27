@@ -19,10 +19,11 @@ import {
   pivotKind,
 } from './productionPlanLineEditLock';
 
-// EDIT_INFO 맵 fixture — CP_KEY→엔트리 (M4c). NEW_EDIT_MODE 는 SP 상수 'Y'(비소비).
+// EDIT_INFO 맵 fixture — CP_KEY→엔트리 (M4c). NEW_EDIT_MODE='Y' 는 server IS_EDITABLE/(a)(b) override(c).
 const editInfo: EditInfoMap = new Map([
-  ['CP1', { isEditable: 'Y', newEditMode: 'Y', editStartDate: '' }],
-  ['CP0', { isEditable: 'N', newEditMode: 'Y', editStartDate: '' }],
+  ['CP1', { isEditable: 'Y', newEditMode: 'Y', editStartDate: '' }], // 서버 Y + override Y
+  ['CP0', { isEditable: 'N', newEditMode: 'Y', editStartDate: '' }], // 서버 N 이지만 new_edit_mode='Y'(SP 상수) → 편집가능
+  ['CPNN', { isEditable: 'N', newEditMode: 'N', editStartDate: '' }], // 둘 다 N → 편집불가(override 없음)
 ]);
 
 describe('productionPlanLineEditLock', () => {
@@ -95,23 +96,25 @@ describe('productionPlanLineEditLock', () => {
     ).toBe('EE01ES2I2L2O240ANODE');
   });
 
-  it('isRowEditable — EDIT_INFO(CP_KEY) is_editable + 화면 3규칙 (design 01 F2 / M4c)', () => {
+  it('isRowEditable — EDIT_INFO + new_edit_mode override + 화면규칙 (AS-IS EditButton cs:715~741)', () => {
     const ctx = { lastPlanType: 'MA', hasFn: false };
     // AMEND + is_editable=Y(CP1) + 마지막 PlanType(MA) → Y
     expect(isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CP1' }, ctx, editInfo)).toBe(true);
-    // 비 AMEND measure → N
+    // 비 AMEND measure → N (measure 게이트)
     expect(isRowEditable({ MEASURE: 'PROD_PLAN_ENGINE', PLAN_TYPE: 'MA', CP_KEY: 'CP1' }, ctx, editInfo)).toBe(false);
-    // EDIT_INFO 미반환(CP 없음) → N (서버 is_editable 원천 없음)
+    // EDIT_INFO 미반환(CP 없음) → N (서버 원천 없음, AS-IS drs.Length==0 continue)
     expect(isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'ZZZ' }, ctx, editInfo)).toBe(false);
-    // (a) 마지막 PlanType 아님 → N
-    expect(isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'PR', CP_KEY: 'CP1' }, ctx, editInfo)).toBe(false);
-    // (b) FN 존재 → N
+    // 서버 IS_EDITABLE='N'(CP0) 이라도 new_edit_mode='Y'(SP 상수) → Y (AS-IS cs:731~735 override) — 사용자신고 2026-10-14 회귀가드
+    expect(isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CP0' }, ctx, editInfo)).toBe(true);
+    // (a) 마지막 PlanType 아님(PR≠MA) 이라도 new_edit_mode='Y' 가 (a)를 덮어 → Y
+    expect(isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'PR', CP_KEY: 'CP1' }, ctx, editInfo)).toBe(true);
+    // (b) FN 존재해도 new_edit_mode='Y' 가 (b)를 덮어 → Y (다음단계 저장차단은 SAVE_YN 담당)
     expect(
       isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CP1' }, { lastPlanType: 'MA', hasFn: true }, editInfo)
-    ).toBe(false);
-    // is_editable=N(CP0) → N (NEW_EDIT_MODE 상수 'Y' 는 비소비 — IS_EDITABLE 게이트 유지)
-    expect(isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CP0' }, ctx, editInfo)).toBe(false);
-    // (d) TE → N
+    ).toBe(true);
+    // new_edit_mode='N' + 서버 N(CPNN) → N (override 없음)
+    expect(isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'MA', CP_KEY: 'CPNN' }, ctx, editInfo)).toBe(false);
+    // (d) TE → N (new_edit_mode='Y' 여도 TE 가 최종 override)
     expect(
       isRowEditable({ MEASURE: 'PROD_PLAN_AMEND', PLAN_TYPE: 'TE', CP_KEY: 'CP1' }, { lastPlanType: 'TE', hasFn: false }, editInfo)
     ).toBe(false);

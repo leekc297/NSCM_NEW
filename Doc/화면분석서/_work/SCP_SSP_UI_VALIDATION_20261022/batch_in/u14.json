@@ -1,0 +1,249 @@
+[
+ {
+  "screen": "SCP0050",
+  "title": "CAPA PIC",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0050_CAPA_PIC.UIL/SCP0050_CAPAPICUserInfoPopup.cs:280",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0050_CAPA_PIC.UIL/SCP0050_CAPA_PIC.cs:1192",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0050_CAPA_PIC.UIL/SCP0050_CAPA_PIC.designer.cs:864",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0050_CAPA_PIC.UIL/SCP0050_ColumnSet_Popup.cs:672",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0050_CAPA_PIC.UIL/SCP0050_ExcelPopup.cs:864",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0050_CAPA_PIC.UIL/SCP0050_ExcelPopup.designer.cs:719",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0050_CAPA_PIC.UIL/TestCode.cs:48",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0050_CAPA_PIC/POPUP/SCP0050_CAPAPICUserInfoPopup.cs:280",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0050_CAPA_PIC/SCP0050_CAPA_PIC.cs:1136",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0050_CAPA_PIC/SCP0050_CAPA_PIC.designer.cs:771"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0050_CAPA_PIC.UIL/SCP0050_CAPAPICUserInfoPopup.Designer.cs:294",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0050_CAPA_PIC.UIL/SCP0050_ColumnSet_Popup.Designer.cs:307",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0050_CAPA_PIC/POPUP/SCP0050_CAPAPICUserInfoPopup.Designer.cs:294"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC",
+    "member": "FindData_Main",
+    "line": "407",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_SAVE_CAPA_PIC",
+    "member": "SaveData_Main",
+    "line": "568",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_USER_ID_CHECK",
+    "member": "GetUserIDChk",
+    "line": "657",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+    "member": "FindData",
+    "line": "157",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_CAPAPICUserInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Capa_CAPA_PIC_delete_tmp_capa_pic.sql",
+    "member": "SaveToDB",
+    "line": "288",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_ExcelPopup.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Capa_CAPA_PIC_fill_capa_pic.sql",
+    "member": "SaveToDB",
+    "line": "290",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_ExcelPopup.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Capa_CAPA_PIC_merge_capa_pic.sql",
+    "member": "SaveToDB",
+    "line": "291",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_ExcelPopup.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+    "member": "FindData",
+    "line": "157",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0050_CAPA_PIC\\POPUP\\SCP0050_CAPAPICUserInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC",
+    "member": "FindData_Main",
+    "line": "397",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0050_CAPA_PIC\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_SAVE_CAPA_PIC",
+    "member": "SaveData_Main",
+    "line": "558",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0050_CAPA_PIC\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_USER_ID_CHECK",
+    "member": "GetUserIDChk",
+    "line": "647",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0050_CAPA_PIC\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+    "member": "FindData",
+    "line": "157",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_CAPAPICUserInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC",
+    "member": "FindData_Main",
+    "line": "407",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_SAVE_CAPA_PIC",
+    "member": "SaveData_Main",
+    "line": "568",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_USER_ID_CHECK",
+    "member": "GetUserIDChk",
+    "line": "657",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0002_SET_TITLESET_POPUP",
+    "member": "SaveColumnSet",
+    "line": "532",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0050_CAPA_PIC.UIL\\SCP0050_ColumnSet_Popup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+    "member": "FindData",
+    "line": "157",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0050_CAPA_PIC\\POPUP\\SCP0050_CAPAPICUserInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_CAPA_PIC",
+    "member": "FindData_Main",
+    "line": "397",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0050_CAPA_PIC\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_SAVE_CAPA_PIC",
+    "member": "SaveData_Main",
+    "line": "558",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0050_CAPA_PIC\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0050_GET_USER_ID_CHECK",
+    "member": "GetUserIDChk",
+    "line": "647",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0050_CAPA_PIC\\SCP0050_CAPA_PIC.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCM0002_SET_TITLESET_POPUP",
+   "SCP0050_GET_CAPA_PIC",
+   "SCP0050_GET_CAPA_PIC_USERINFO_POPUP",
+   "SCP0050_GET_USER_ID_CHECK",
+   "SCP0050_SAVE_CAPA_PIC",
+   "foxquery_sql\\FP_Capa_CAPA_PIC_delete_tmp_capa_pic.sql",
+   "foxquery_sql\\FP_Capa_CAPA_PIC_fill_capa_pic.sql",
+   "foxquery_sql\\FP_Capa_CAPA_PIC_merge_capa_pic.sql"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCM0002_SET_TITLESET_POPUP",
+    "sp": "SCM0002_SET_TITLESET_POPUP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 오류 로그만 남김",
+    "message": null,
+    "on_fail": "INSERT INTO scm_sys_log_batch(…'ERROR', ERROR_MESSAGE()…); IF @@TRANCOUNT > 0 COMMIT WORK"
+   },
+   {
+    "entry_sp": "SCP0050_GET_USER_ID_CHECK",
+    "sp": "SCP0050_GET_USER_ID_CHECK",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "입력한 담당자 USER_ID 목록('^' 구분) 중 SSO 사용자 마스터에 존재하는 ID 를 돌려주어 미등록 ID 검증에 사용",
+    "message": null,
+    "on_fail": "존재하는 USER_ID 만 반환(미존재 ID 는 결과에서 빠짐 — 판정은 UI 가 입력목록과 대조)"
+   },
+   {
+    "entry_sp": "SCP0050_SAVE_CAPA_PIC",
+    "sp": "SCP0050_SAVE_CAPA_PIC",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "담당자 MERGE 중 예외 시 전체 롤백 후 F 와 오류 메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT INTO scm_sys_log_batch(…); SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ER"
+   }
+  ]
+ }
+]

@@ -118,9 +118,10 @@ export const GRID_EDIT_COMBO: Record<string, EditComboConfig> = {
   //   주의: END_CUSTOMER / END_CUSTOMER40 / SCM_SITE_ID 의 편집 후보는 컬럼 메타 PARAM9 로 이관했다
   //   (META_DRIVEN_COMBO_COLUMNS). 여기에 다시 넣으면 공용 DataGrid 와 이중 구동이 된다.
   TEAM_ID: { comboId: 'TeambyDivisionAuth', sesUserIdParam: true },
-  // FCST_TYPE 은 편집 콤보 스왑을 두지 않는다 — 조회/편집 모두 컬럼 메타(cellCboDataTp =
-  //   'FCST_TYPE_DM')가 준 목록 그대로 쓴다(2026-09-11 요구: "메타대로만"). 신규행 편집을
-  //   'FCST_TYPE'(@sesUserId 권한 판정) 으로 바꿔치기하던 항목을 제거했다.
+  // FCST_TYPE 은 여기(화면 자체 편집 콤보)에 두지 않는다 — 신규행 후보는 컬럼 메타 PARAM9
+  //   (FCST_TYPE_DM)로 공용 DataGrid 가 구동한다(META_DRIVEN_COMBO_COLUMNS 에 등록, 2026-10-19).
+  //   조회행 표시는 cellCboDataTp(FCST_TYPE_NOT_ETC) 그대로. 2026-09-11 "메타대로만" 요구를
+  //   메타값대로 복원한 것이다(신규행 편집을 @sesUserId 권한 판정으로 바꿔치기하던 코드 경로는 제거).
 };
 
 /**
@@ -431,6 +432,11 @@ export const META_DRIVEN_COMBO_COLUMNS: ReadonlySet<string> = new Set([
   'SCM_SITE_ID',
   'SCM_SITE_ID40',
   'INCOTERMS',
+  // FCST_TYPE — 신규행 편집 후보를 컬럼 메타 PARAM9(FCST_TYPE_DM)로 구동한다(2026-10-19).
+  //   조회행 표시는 cellCboDataTp(FCST_TYPE_NOT_ETC) 그대로, 신규행만 PARAM9 로 스왑.
+  //   PARAM2 가 비어 있어 PARAM10='D' 는 재조회가 아니라 신규행 1회 후보 목록으로 동작한다
+  //   (isRowParamCombo=false → 필터 모드). 2026-09-11 "메타대로만" 결정을 메타값 그대로 복원.
+  'FCST_TYPE',
 ]);
 
 /**
@@ -460,7 +466,8 @@ export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
 const CASCADE_COMPANION_COLS: Record<string, readonly string[]> = {
   ITEM_ID: ['ITEM_NAME', 'ITEM_TYPE', 'NICK_NAME'],
   ITEM_ID40: ['ITEM_NAME', 'ITEM_TYPE', 'NICK_NAME'],
-  PROJECT_CODE: ['PROJECT_NAME', 'PROJECT_STATUS', 'PROJECT_OWNER'],
+  // BIZ_TYPE 은 콤보지만 Project 팝업이 채우는 값이다 — AS-IS 도 Project 변경 시 비운다(.cs L2253).
+  PROJECT_CODE: ['PROJECT_NAME', 'PROJECT_STATUS', 'PROJECT_OWNER', 'BIZ_TYPE'],
 };
 
 /**

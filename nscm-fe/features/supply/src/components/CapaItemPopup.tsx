@@ -23,6 +23,7 @@ import { GridUtils, buildNoColumn, withRowNo } from '@foundation/utils';
 import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
 import { useCapaItemPopupStore } from './capaItemPopupStore';
@@ -269,9 +270,11 @@ export const CapaItemPopup = ({
           <div className={styles.buttonWrapper}>
             <Button
               appearance='contained'
+              buttonLabel='OK'
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
               priority='primary'
               size='medium'
-              buttonLabel='OK'
               onClick={handleSubmit}
             />
             <Button

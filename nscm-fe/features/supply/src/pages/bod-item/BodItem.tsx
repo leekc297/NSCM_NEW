@@ -194,6 +194,11 @@ export const BodItem = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     // 숫자 범위 검증(PRIORITY 0~99 / SAFETY_STOCK 0~100, 03 §3-D).
     for (const row of dirty as WijmoRowItem[]) {
+      // PRIORITY 는 SAVE SP 에서 int 변환하므로 소수가 들어가면 ORA-20245 가 난다.
+      //   저장 전에 소수점 이하를 버려 정수로 보낸다(11.11 -> 11). 범위 검증보다 먼저 해야 99.5 -> 99 가 통과한다.
+      if (!isBlank(row[BOD_ITEM_COLUMN.PRIORITY])) {
+        row[BOD_ITEM_COLUMN.PRIORITY] = Math.trunc(Number(row[BOD_ITEM_COLUMN.PRIORITY]));
+      }
       const priority = row[BOD_ITEM_COLUMN.PRIORITY];
       if (!isBlank(priority) && (Number(priority) < 0 || Number(priority) > RANGE.PRIORITY_MAX)) {
         void setAlert({ type: 'alert', content: t('MSG00085', '_{0} 범위의 값만 입력 가능합니다.').replace('{0}', `Priority : 0 ~ ${RANGE.PRIORITY_MAX}`) });

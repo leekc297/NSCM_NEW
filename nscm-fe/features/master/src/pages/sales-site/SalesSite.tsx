@@ -2,6 +2,7 @@ import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { CRUD_MSG } from '@foundation/constants';
 import type { ComboResponse, HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
@@ -9,6 +10,7 @@ import {
   useInvalidateCombos,
   useProcMutation,
   useSaveWithValidation,
+  useTabBtnPermissions,
   useTabProcQuery,
 } from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
@@ -30,6 +32,7 @@ import {
   DUPLICATE_KEY_MSG_ID,
   findDuplicateKeyRow,
   formatDuplicateKeyMessage,
+  hasRepresentative,
   LOCATION_DUPLICATE_KEYS,
   resolveComboCodeByDivision,
 } from './utils/sales-site.util';
@@ -58,6 +61,7 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [openDetailGrid, setOpenDetailGrid] = useState<boolean>(true);
 
   const { saveWithValidation } = useSaveWithValidation();
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   const { setToast, setAlert } = useMessageStore.getState();
   const invalidateCombos = useInvalidateCombos();
 
@@ -152,13 +156,18 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
     // 신규행 division 은 조회조건에서 선택한 값(searchParams.divisionId)을 따른다. filters 는
     //   조회를 눌러야 채워지므로, 조회 전 행추가 때 filters 를 쓰면 undefined 로 빠져 하드코딩
     //   기본값(구 '81')이 들어가던 버그가 있었다 — 상/하단 그리드 공통 handleInsert 라 전 탭에 영향.
-    // Rep 기본값은 N. Y 로 바꿀 때의 중복 검사는 Customer 그리드 cellEditEnded 에서 처리한다.
+    // Customer 탭 Rep 기본값: 그 Sales Site 에 Rep Y 행이 없으면 Y, 1건 이상 있으면 N (2026-10-26 요청 —
+    //   AS-IS 는 항상 Y 후 MSG00149 로 되돌림). Y 로 바꿀 때의 중복 검사는 Customer 그리드 cellEditEnded 에서 처리한다.
+    const customerRows = (gridRefs[SHEET_INDEX.CUSTOMER].current?.collectionView?.sourceCollection ??
+      []) as ResponseData<MENU_ID, SHEETS.CUSTOMER, RESPONSE_SET.CUSTOMER>[];
+    const repYn =
+      activeTab === SHEET_INDEX.CUSTOMER && !hasRepresentative(customerRows, scmSiteId) ? 'Y' : 'N';
     GridAction.addRow(gridRefs[activeTab].current, {
       DIVISION_ID: searchParams.divisionId,
       SCM_SITE_ID: scmSiteId,
       VMI_YN: 'N',
       VALID_YN: 'Y',
-      REP_YN: 'N',
+      REP_YN: repYn,
       SHIP_PLAN_AUTO: 'N',
     });
   };
@@ -207,7 +216,9 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
       (grid?.collectionView?.sourceCollection ?? []) as { CRUD_TYPE?: string }[]
     ).filter(row => row.CRUD_TYPE);
     if (dirtyRows.length === 0) {
-      setToast({ type: 'error', message: t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.') });
+      // MSG_NO_CHANGE 는 SCM_ADM_MSG_M 미등록 코드라 EN/CN 화면에도 한글 fallback 이 떴다(갭분석 F-10).
+      //   같은 뜻으로 등록된 공통 코드 MSG00004(CRUD_MSG.NO_CHANGES)를 쓴다 (2026-10-16).
+      setToast({ type: 'error', message: t(CRUD_MSG.NO_CHANGES.id, CRUD_MSG.NO_CHANGES.fallback) });
       return;
     }
 
@@ -291,10 +302,15 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   };
 
+  // 버튼 노출은 그룹 버튼 권한(SCM_ADM_USER_GR_MNU_BTN_MPG_M)으로 정한다 — 공용 훅 표준 패턴(AUTH-02).
+  //   종전엔 핸들러를 조건 없이 넘겨 권한이 없는 그룹(DM Viewer 등)에도 저장·행추가·삭제 버튼이 보였다
+  //   (2026-10-14 리포트, DMF0005·DMF0007 2026-10-07 과 같은 조치). 조회는 종전대로 둔다(같은 두 화면과 동일).
+  //   INSERT/DELETE 는 버튼 메타가 함께 등록돼야 보인다 — 배포 SQL
+  //   _artifacts/_deploy_packages/DMF0004_BTN_INSERT_DELETE_20261014/ (site SAVE 보유 그룹에 동일 부여).
   const hotkeyConfig: HotkeyConfig = {
-    insert: handleInsert,
-    save: handleSave,
-    delete: handleDelete,
+    insert: hasButton('INSERT') ? handleInsert : false,
+    save: hasButton('SAVE') ? handleSave : false,
+    delete: hasButton('DELETE') ? handleDelete : false,
     search: () => {
       setSiteFilters();
       void fetchStaticColumns();

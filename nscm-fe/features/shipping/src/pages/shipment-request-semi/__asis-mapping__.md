@@ -40,10 +40,10 @@
 | C01 | `cboDivision` (UsrCombo) | Form F1 `CustomDropdown` + `MyDivision`(mnuId 전달) | 구현 |
 | C02 | `cboBizType` (UsrCombo) | Form F2 `CustomDropdown` + `OperationGroup_SCP` | 구현 |
 | C03 | `txtItem_Id` (UsrMultiLineEditor) | Form F3 `InputField`(콤마 다중) | 구현 |
-| C04 | `btnItem_Id` (UsrButton) | Form F4 `Button`+`FunctionSearchIcon` → Page `ModelByDivisionPopup` | 구현 |
+| C04 | `btnItem_Id` (UsrButton) | Form F4 `Button`+`FunctionSearchIcon` → Page `MaterialByDivisionModal`(COM0013, multiCheckbox) | 구현 |
 | C05 | `clbFromSite` (UsrCheckedList) | Form F5 `CustomDropdown multiple allOption` | 구현 |
 | C06 | `cboBucketType` (UsrCombo) | Form F6(extraConditions) `CustomDropdown` + `BucketType` | 구현 |
-| C07 | `drpPeriod` (UsrDateRangePicker, Enabled=false) | Form F7 로컬 read-only `InputField`(disabled) | 구현 |
+| C07 | `drpPeriod` (UsrDateRangePicker, Enabled=false) | Form F7 카탈로그 `PeriodField disabled`(DatePickerCalendar 2개 잠금 — 자매 ShipmentRequestForm 선례, design 02 §5.8 D3) | 구현 |
 | C08 | `chkSum` (UsrCheckBox) | Form F8(extraConditions) `Checkbox` | 구현 |
 | C09 | `usrConditionPanel1` (HidePanel) | `MainTitle.openSearchArea` + `SearchArea isHidden` | 구현 |
 | C10 | `usrLayoutControl2` | `SearchArea` 내부 12-column grid(별도 DOM 없음). 권한 0건 시 전 필드 disabled | 구현 |
@@ -69,7 +69,7 @@
 | # | AS-IS | TO-BE | 상태 |
 |---|---|---|---|
 | E01 | `CboDivision_SelectedIndexChanged` | Store `setDivision`(하위 From Site reset=CS1) + Page division 감시 effect(그리드 초기화) | 구현 |
-| E02 | `BtnItem_Id_Click` | Form `onModelSearch` → Page `ModelByDivisionPopup` | 구현 |
+| E02 | `BtnItem_Id_Click` | Form `onModelSearch` → Page `MaterialByDivisionModal`(COM0013, multiCheckbox) | 구현 |
 | E03 | `cboBucketType_SelectedIndexChanged` | Grid `isPivotVisible` 매트릭스 재평가(상태 변경 = 렌더) | 구현 |
 | E04 | `CboBizType_SelectedIndexChanged` | Store `setOperationGroup` → 콤보 파라미터 변화로 From Site 재조회 | 구현 |
 | E05 | `SpdMain_TopChange` (스크롤 병합 재적용) | 공용 `CustomMergeManager` 가 상시 유지 — 스크롤 훅 불필요 | 제외(공용 대체) |
@@ -187,10 +187,10 @@
 | # | AS-IS SP | TO-BE | 상태 |
 |---|---|---|---|
 | SP01 | `DM0003_GET_BUCKET_TYPE_CODE` | 콤보 `BucketType`(TO-BE 등록 실측, 동일 LOOKUP) | 구현 |
-| SP02 | `SCM0001_GET_SCP_DAY_PERIOD` | Store `makeInitPeriod`(오늘~+55일). **달력 clamp 는 SP 몫 — 미완** | 미완(SP 미배포) |
-| SP03 | `SSP0045_GET_SHIPMENT_REQUEST` | Page `useTabProcQuery(SHEETS.MAIN)` — 10 파라미터 배선 완비 | 미완(SP 미배포) |
-| SP04 | `SSP0045_SAVE_SHIPMENT_REQUEST` | Page `handleSave` → Save `buildSavePayload`(13×'^' + created_by + debug_mode) | 미완(SP 미배포) |
-| SP05 | `SCP0009_GET_SHEET_CALENDAR_3SPAN` | Page `useTabProcQuery(SHEETS.CALENDAR)` — 자매 SCP0100 배선 미러 | 미완(SP 미배포) |
+| SP02 | `SCM0001_GET_SCP_DAY_PERIOD` | Form `useTabComboQueries(COMBO.DAY_PERIOD)` → 서버 산출 `from:to` 로 기간 세팅(KST `FN_MULTY_TIME` + 달력 마스터 clamp). `makeInitPeriod`(dayjs)는 콤보 미도착/실패 폴백. **[2026-10-21 갱신]** 콤보가 전역 기등록(SCM_ADM_CMBO_SQL_M, ALL/USE_YN=Y)이라 PKG 배포와 무관 — call-proc 대신 콤보 배선(사용자 결정). | 구현 |
+| SP03 | `SSP0045_GET_SHIPMENT_REQUEST` | Page `useTabProcQuery(SHEETS.MAIN)` — 10 파라미터 배선 완비. **[2026-10-21 확인]** PKG 배포됨(VALID)·`SCM_ADM_PROC_M` 등록(12칸) 확인. 런타임 실측: `main/SEARCH/call-proc` → `o_rc1` 실데이터(PIVOT 포함)+`O_RESULT_CURSOR{MSG:SUCCESS}` | 구현 |
+| SP04 | `SSP0045_SAVE_SHIPMENT_REQUEST` | Page `handleSave` → Save `buildSavePayload`(13×'^' + created_by + debug_mode). **[2026-10-21 확인]** PKG 배포됨(VALID)·`SCM_ADM_PROC_M` 등록(17칸, 13×CLOB '^') 확인, 시그니처 1:1 일치. **저장 E2E는 사용자가 검증 완료** | 구현(사용자 검증) |
+| SP05 | `SCP0009_GET_SHEET_CALENDAR_3SPAN` | Page `useTabProcQuery(SHEETS.CALENDAR)` — 자매 SCP0100 배선 미러. **[2026-10-21 확인]** PKG 배포됨(VALID)·등록(4칸) 확인. 런타임 실측: `calendar/SEARCH/call-proc` → 3단 헤더 메타 반환 | 구현 |
 
 ## 6. comboCalls (5) — §4b
 
@@ -209,8 +209,8 @@
 | EP01 | `FindButton` | `hotkeyConfig.search = hasButton('SEARCH') ? handleSearch : false` | 구현 |
 | EP02 | `SaveButton` | `hotkeyConfig.save = hasButton('SAVE') ? handleSave : false` | 구현 |
 | EP03 | `EditButton` | **키 자체 없음** — `asis_to_tobe.md §11` 미이식(`HotkeyConfig` 에 `edit` 키 부재) | 제외(§11) |
-| EP04 | `InsertButton` | `hotkeyConfig.insert = () => undefined` — 명시적 NO-OP(K6) | 구현 |
-| EP05 | `DeleteButton` | `hotkeyConfig.delete = hasButton('DELETE') ? handleDelete : false` | 구현 |
+| EP04 | `InsertButton` | `hotkeyConfig.insert = false` — 버튼 숨김(2026-10-21 사용자 결정, Q1 신규행 생성 경로 부재). 복원 시 원형 `() => undefined`(명시적 NO-OP, K6) | 제외(사용자 결정 — 버튼 숨김) |
+| EP05 | `DeleteButton` | `hotkeyConfig.delete = false` — 버튼 숨김(2026-10-21 사용자 결정, Q1). `handleDelete` 는 보존, 복원 시 원형 `hasButton('DELETE') ? handleDelete : false` | 제외(사용자 결정 — 버튼 숨김) |
 | EP06 | `BtnItem_Id_Click` | Form `onModelSearch` | 구현 |
 | EP07 | `CboDivision_SelectedIndexChanged` | Store `setDivision` | 구현 |
 | EP08 | `CboBizType_SelectedIndexChanged` | Store `setOperationGroup` | 구현 |
@@ -249,11 +249,15 @@
 |---|---|---|---|
 | PU01 | `ProgressForm` (조회) | react-query `isFetching` — 로딩 중 그리드 언마운트 금지 | 구현(공용) |
 | PU02 | `ProgressForm` (저장) | `savingRef` 가드 + 공용 진행 표시 | 구현(공용) |
-| PU03 | `SCM0002_ItembyDivisionPopup` | `ModelByDivisionPopup`(features/master, AS-IS 1:1 대응 명시) | 구현 |
-| PU04 | `SCM0002_GetBODItemPrjRoutePopup` | Bod `BodItemRouteModal`(화면 로컬) | 미완(SP 미배포) |
+| PU03 | `SCM0002_ItembyDivisionPopup` (`bMultiSelect=true`) | `MaterialByDivisionModal`(features/master, COM0013, `multiCheckbox`) | 구현(컴포넌트 교체) |
+| PU04 | `SCM0002_GetBODItemPrjRoutePopup` | Bod `BodItemRouteModal`(화면 로컬) | 구현(미도달) — **[2026-10-21 확인]** PKG `P_SSP0045_GET_BOD_ITEM_PRJ_ROUTE` 배포됨(VALID)·등록(7칸) 확인. 단 신규행 생성이 사양상 비활성(Q1, Insert 숨김)이라 정상 흐름 미도달 — 결함 아님 |
 
-> PU03 다중선택(R2): AS-IS `bMultiSelect=true` 인데 `ModelByDivisionPopup` 은 단일 선택 전용이다.
-> `features/master` 수정은 Hard Boundary 밖이라 **이번 회차 미해결** — 업무 확인/분리 PR 대상(04 리포트).
+> PU03 다중선택(R2) **해결**(2026-10-20): 공용 `MaterialByDivisionModal`(COM0013) 의 `multiCheckbox`
+> 모드로 전환해 AS-IS `bMultiSelect=true`(다건 선택 → ITEM_ID 콤마 결합)를 복원했다. 기존
+> `ModelByDivisionPopup` 은 단일 선택 전용이라 미해결로 남았던 갭이다(사용자 지시, design 02 §5.7).
+> 단, 팝업 조회 SP 는 AS-IS `SCM0002_ItembyDivisionPopup` 과 다른 `PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION`
+> 이다 — **컴포넌트/SP 교체는 AS-IS 와 다른 결정**이고, COM0013 SP 의 `scpModuleType='SSP0045'` 분기
+> 처리는 런타임 확인이 필요하다(04 리포트 ERROR 축).
 
 ## 10. 백본 밖 (G01~G21)
 
@@ -310,5 +314,6 @@
 | extractionLimits | 2 | 2 | O |
 
 **공란 0.** iter-2 에서 C24 / S37 / S45 / G13 4건이 **미완 → 구현**으로 바뀌었다(react-gap-audit iter-1
-G-05 / G-23 / G-24 해소). 남은 미완은 **SP 미배포 축 전건**(PU04 조회 · SP03/04/05 실행체인)뿐이며,
+G-05 / G-23 / G-24 해소). ~~남은 미완은 **SP 미배포 축 전건**(PU04 조회 · SP03/04/05 실행체인)뿐~~이며,
 이는 `convert-sp` 소관이라 이 화면이 닫을 수 없다. 제외 전건의 사유는 본문에 명시했다.
+**[2026-10-21 해소]** `PKG_SSP0045` 배포됨(PACKAGE+BODY VALID)·`SCM_ADM_PROC_M` 4 proc 등록 **확인**으로 **SP 미배포 축 전건 해소**(배포 시점이 아니라 2026-10-21 확인·해소). SP03 GET·SP05 CALENDAR 는 런타임 실데이터 반환 실측, SP04 SAVE 는 배선·등록 완비 + **사용자 E2E 검증 완료**, PU04 는 배포됐으나 신규행 비활성(Q1)으로 미도달. 미완 0건.

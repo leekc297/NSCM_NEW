@@ -5,9 +5,15 @@ export const COMBO = {
   DIVISION: 'Division_SCP', // 조회 Division(+FE EE 필터). site.DIVISION_ID 셀은 메타 Division_SCP_NoEE(05_register [5])
   YES_OR_NO: 'YesOrNo', // 조회 OSP·Active / 다수 셀
   LOOKUP_COMMON: 'LookupCommon', // @lookupType 바인드 — 신규행 기본값 DEFAULT_PERIOD 조회(R-07)
-  // 조회 Plant/Vendor·Plant Site 는 AS-IS(txtPlantVendor/txtPlantSite TextBox) 그대로 자유 텍스트
-  //   입력이라 콤보 상수가 없다 — SP(PKG_SCP0001.GET_PLANT_SITE)가 UPPER LIKE 부분일치로 처리한다
-  //   (design 02 §2-3).
+  // 조회 Plant Site(다중선택) — Bod(SCP0007) From Site 조회조건과 동일 콤보(SITE_TYPE='PLANT') 재사용.
+  //   서버 재조회 없는 필터 방식(전체 1회 조회 + division 클라 필터, plant-site.util.filterPlantSiteByDivision).
+  //   SP(PKG_SCP0001.GET_PLANT_SITE)는 아직 단일 LIKE 계약이라 다중 선택값은 콤마로 합쳐 보내진다 — IN
+  //   리스트로 실제 필터되게 하려면 SP 쪽 보완이 별도로 필요하다.
+  PLANT_SITE: 'FromSiteByDivision1Ex_SCP_ALL',
+  // 조회 Plant/Vendor(다중선택) — SQL_ID 자체가 @divisionId 바인드를 받아 서버에서 IN-list/'ALL'
+  //   필터링한다(PLANT_SITE 와 달리 클라 필터 불요). useTabComboQueries 에 ComboParam 객체로
+  //   { comboId, divisionId: searchParams.divisionId } 형태로 전달한다. CODE=PLANT_ID.
+  PLANT_VENDOR: 'PlantVendorByDivision',
 } as const;
 
 // site 신규행 SHIP/PROD_FROZEN 기본값 원천 lookup(AS-IS dtPlanPeriod, cs:56·1439~1452).

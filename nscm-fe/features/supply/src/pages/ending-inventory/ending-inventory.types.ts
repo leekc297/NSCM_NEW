@@ -9,7 +9,8 @@ export interface SearchParams {
   divisionId: string; // 콤마 다중(전체=ALL) — cboDivision(MyDivision)
   plantId: string; // 콤마 다중(전체=ALL) — clbPlant(PlantByGroup_SCP, Division cascade)
   itemId: string; // Material 팝업 반환값(콤마 다중) — txtItem_Id
-  itemType: string; // 콤마 다중(전체=ALL) — Item Type 콤보. 현재 SP 파라미터 없음(확인 필요)
+  itemType: string; // 콤마 다중(전체=ALL) — Item Type(옵션·표시명 모두 DB LOOKUP 'ITEM_TYPE', 전송값 코드 E/H/P/Q/A/R/-). p_item_type
+  profitCenter: string; // 콤마 다중(전체=ALL) — Profit Center 콤보(ProfitCenter_SCP). p_profit_center
   devaluationAge: boolean; // Devaluation Age 체크 — 재고월령 39컬럼 표시 토글
 }
 

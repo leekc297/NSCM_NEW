@@ -17,7 +17,7 @@ import {
   AUX_SHEET,
   LBL,
   MENU_ID,
-  MSG,
+  normalizeDivision,
   POPUP_TARGET,
   SEARCH_MODE,
   SEARCH_LEVEL_CODE,
@@ -25,15 +25,16 @@ import {
   type PopupTarget,
 } from './global-psi-report.constants';
 import type { ReportRow, SearchLevelRow, SearchLevelDetailRow } from './global-psi-report.types';
-import { divisionParam, useGlobalPsiReportStore } from './useGlobalPsiReportStore';
-import { isStartAfterPlan } from './utils/globalPsiReportCalendar';
+import { useGlobalPsiReportStore } from './useGlobalPsiReportStore';
+import { applySearchLevelVisibility } from './utils/globalPsiReportColumns';
 
 // AS-IS GSCM.SCP.Forms.UIL/Report/SCP0100_Global_PSI_Report(2,056줄) — 조회조건 패널 + 3개 FpSpread 오버레이
 //   (spdDetail/spdSearchLevel/spdSearchLevelDetail) read-only Global PSI 리포트. 저장/입력 없음.
 //   설계: .atlas/gscm-design/SCP0100/design/00~03(DB 실측 PASS). 상세 매핑: __asis-mapping__.md.
 //   버튼 판정(design 01 §2 B1/B2): FindButton(SEARCH)/ExcelButton(EXCEL) 실동작 2종.
 //     - search = handleSearch (조회는 무해 → 항상 허용)
-//     - insert/save/delete/manual/upload = false (미배선 — read-only 리포트, 표준버튼 hasButton 미노출)
+//     - insert/save/delete = 사용자 지시(2026-10-14)로 노출(no-op, 기능 미구현). AS-IS read-only 대비 의도적 추가.
+//     - manual/upload = false (요청 범위 밖, 계속 미노출)
 //   NO-OP 4종(ChkCellQty/ChkAS/CboGraphType/CboPlanType)·usrButton1 dead 는 Form 에서 재현(design 01 §2).
 export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
   const gridFilterRef = useRef<FlexGridFilter>();
   const editTrackerRef = useRef<EditTracker>();
 
-  // SCM0002 팝업 대상 — btnItemId(MaterialByDivisionModal — 카탈로그 메1) / btnProject(ProjectByDivisionModal) (design 02 §4.6).
+  // SCM0002 팝업 대상 — btnItemId(ItemByDivisionModal) / btnProject(ProjectByDivisionModal) (design 02 §4.6).
   const [popupTarget, setPopupTarget] = useState<PopupTarget | null>(null);
 
   const sc = useGlobalPsiReportStore(s => s.searchCondition);
@@ -104,23 +105,32 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
   );
 
   // 활성 시트 데이터/고정컬럼 — 그리드에 1시트만 전달(design 01 R1~R3 오버레이). 나머지 미조회.
-  //   행 타입 = ResponseData(procedures.d.ts Base fallback = WijmoRowItem) — DataGrid itemsSource 계약 그대로(캐스팅 없음, #73).
-  const activeRows = useMemo<WijmoRowItem[]>(
-    () =>
+  const activeRows = useMemo<Record<string, unknown>[]>(() => {
+    const rows =
       activeSheet === SHEETS.REPORT
         ? reportRows
         : activeSheet === SHEETS.SEARCH_LEVEL_DETAIL
           ? levelDetailRows
-          : levelRows,
-    [activeSheet, reportRows, levelRows, levelDetailRows]
+          : levelRows;
+    return rows as unknown as Record<string, unknown>[];
+  }, [activeSheet, reportRows, levelRows, levelDetailRows]);
+  // design 01 §2 R5 (AS-IS SetLayout cs:1488~1543) — Search Level 모드에서 searchLevel 별 PRODUCT_LEVEL1/2/3
+  //   컬럼 show/hide. Detail(REPORT) 모드는 사용자정의 컬럼 기준이라 토글하지 않는다(AS-IS !_is_detail).
+  //   01→03/FE 미이관분 복원(2026-10-16 감사). searchLevel 변경 시 useMemo 가 재계산 → 그리드 컬럼 재구성.
+  const activeColumns = useMemo(
+    () =>
+      activeSheet === SHEETS.REPORT
+        ? staticColumns[activeSheet]
+        : applySearchLevelVisibility(staticColumns[activeSheet], sc.searchLevel),
+    [staticColumns, activeSheet, sc.searchLevel]
   );
-  const activeColumns = staticColumns[activeSheet];
 
   // 동적 pivot 기간칼럼 3단 헤더 원천 — GET_SHEET_CALENDAR_3SPAN(design 03 §2). 조회기간(from~to)으로 조회.
   //   기간 미입력이면 미조회(enabled) → 그리드가 데이터 행 union 으로 폴백(globalPsiReportColumns).
   //   필수: filters 는 useMemo 로 참조 고정 — 리터럴을 넘기면 useTabProcQuery 가 재조회로 오판해 무한 루프.
-  //   키 = 사내 PROC_M COL_NM(startYyyymmdd/endYyyymmdd, proc_params.csv) — BE 는 COL_NM 으로 매핑하므로 다르면 NULL 전달(DoD B22).
-  //   AS-IS SCP0100_Global_PSI_Report.cs:1327-1328 p_start_yyyymmdd/p_end_yyyymmdd.
+  // 파라미터명은 BE 변환규칙(camelCase → P_ + UPPER_SNAKE)에 맞춰 startYyyymmdd/endYyyymmdd 로 보낸다.
+  //   (pStartYyyymmdd 로 보내면 P_P_START_YYYYMMDD 로 변환돼 실제 P_START_YYYYMMDD 가 NULL → SP 가 o_rc1 공란
+  //   반환 → 피벗 컬럼이 데이터 폴백에만 의존해 최초 오픈 시 안 뜸. 2026-10-15 실측·수정. 카탈로그 canonical 과 동일.)
   const calendarFilters = useMemo(
     () => ({ startYyyymmdd: sc.fromYyyymmdd, endYyyymmdd: sc.toYyyymmdd }),
     [sc.fromYyyymmdd, sc.toYyyymmdd]
@@ -151,16 +161,20 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
-  // 조회 시작일 > Plan 시작일 검증(DCalendar_ValueChanged .cs:2006~2018). 1차 판정은 Form 의 Period 변경 시점(AS-IS 와
-  //   같은 ValueChanged 타이밍)이고, 여기서는 Plan Date 변경·조건 복원 뒤 남은 위반을 조회 직전에 한 번 더 막는다.
-  //   위반이면 alert(MSG01186, 사내 SCM_ADM_MSG_M 역조회) + 시작일을 Plan 시작일로 되돌린다(plan_start:end 복원 등가).
+  // 조회 시작일 > Plan 시작일 검증(design 02 §4.4 cs:2006~2018) — 위반이면 alert + range 를 plan_start:end 로
+  //   되돌린다. YYYYMMDD 문자열은 사전식 비교가 대소 비교와 일치. 둘 중 하나라도 미입력이면 검증 skip.
+  //   메시지: AS-IS 가 카탈로그 미사용 한국어 하드코딩(cs:2014 GMessageBox 문자열 리터럴)이라 TO-BE 도 AS-IS
+  //   원문 그대로 하드코딩한다. 다국어 DB 선례가 없는 AS-IS 하드코딩 메시지의 등가 재현(사용자 지시 2026-10-19).
   const validatePlanDateRange = (): boolean => {
-    if (!isStartAfterPlan(sc.fromYyyymmdd, sc.planStartYyyymmdd)) return true;
+    const from = sc.fromYyyymmdd.trim();
+    const plan = sc.planStartYyyymmdd.trim();
+    if (!from || !plan || from <= plan) return true;
     void useMessageStore.getState().setAlert({
       type: 'alert',
-      content: t(MSG.PLAN_DATE_RANGE, 'Begin Date is early or equal to Plan Date.'),
+      content: '[조회 시작일] Plan Date 이전으로 설정해야 합니다.',
     });
-    setSearchCondition({ fromYyyymmdd: sc.planStartYyyymmdd.trim() });
+    // range 되돌림 — 시작일을 Plan 시작일로 맞춘다(AS-IS plan_start:end 복원 등가).
+    setSearchCondition({ fromYyyymmdd: plan });
     return false;
   };
 
@@ -175,10 +189,12 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
   const hotkeyConfig: HotkeyConfig = {
     // 조회는 무해하므로 항상 허용(design 01 B1 FindButton=SEARCH).
     search: handleSearch,
-    // read-only 리포트 — 저장/입력/삭제/수동/업로드 미배선(design 01 §2). ExcelButton(EXCEL)은 SubTitle 내장.
+    // Insert/Delete/Save — 해당 화면에 기능·버튼 권한 없음(read-only 리포트) → 전부 미노출(사용자 지시 2026-10-23).
+    //   false = SubTitle 미렌더. (2026-10-14 의 no-op 노출 지시는 폐기됨.)
     insert: false,
     save: false,
     delete: false,
+    // Manual/Upload 는 요청 범위 밖 — 계속 미노출(read-only).
     manual: false,
     upload: false,
   };
@@ -247,8 +263,6 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
         rows={activeRows}
         adminColumns={activeColumns}
         calendarRows={calendarRows}
-        searchLevel={sc.searchLevel}
-        isDetail={searchMode === SEARCH_MODE.DETAIL}
         bucket={sc.bucket}
         planStartYyyymmdd={sc.planStartYyyymmdd}
         unitScaleIndex={unitScaleIndex}
@@ -258,40 +272,45 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
         onFocus={() => undefined}
       />
 
-      {/* Model/Nickname 팝업 — 조회조건 카탈로그 'Global PSI New' Model/Nickname = 메1(Material by Division Popup,
-          xlsx '팝업 비교' "Model/Material 팝업양식은 메1(SCP)") · 자매 global-psi(SCP0031) 동일 MaterialByDivisionModal.
-          반환 ItemID(1번째 인자)를 txtItemId 에 반영(AS-IS BtnItemId_Click .cs:1943-1947). division = 조회조건 Div.(AS-IS _division,
-          ALL→''). scpModuleType = 호출 화면 ID(SCP0100 은 SP 의 Operation Group 특수 분기 대상 아님 → 기본 경로). */}
+      {/* Model/Nick Name 팝업 — SCP0100.md 조회조건 #4 비고 지정 컴포넌트 = MaterialByDivisionModal(COM0013).
+          #4 유형 '텍스트/다중' → multiCheckbox(체크 다중선택, setSelectedValue 가 Material Code 를 ',' 결합 반환)
+          + 메인 SP P_ITEM_ID FN_SPLITSTRING 다건. Division 다중 전환에 맞춰 multiDivision(호출값 CSV 미러 표시).
+          divisionId 는 ALL 센티널 규약: 빈 선택/'ALL' 이면 'ALL' 을 넘겨야 모달 조회가 돈다(enabled !!divisionId,
+          SP P_DIVISION_ID='ALL' 전체 분기 — [[material-by-division-modal-all-sentinel]]). CSV 는 SP REGEXP_SUBSTR split. */}
       <MaterialByDivisionModal
         open={popupTarget === POPUP_TARGET.ITEM}
         modalClose={() => setPopupTarget(null)}
-        setSelectedValue={items => setSearchCondition({ itemId: items })}
+        multiCheckbox
+        multiDivision
+        setSelectedValue={items => setSearchCondition({ itemId: String(items ?? '') })}
         preSearchParams={{
-          divisionId: divisionParam(sc.divisionId),
+          divisionId: sc.divisionId || 'ALL',
           scpModuleType: MENU_ID,
           operationGroup: '',
           itemId: sc.itemId,
         }}
       />
 
-      {/* SCM0002 Project-by-Division 팝업 — btnProject 반환 Project(1번째 인자)를 txtProject 에 반영(design 02 §4.6).
-          preSearchParams 는 팝업 전용 MENU_ID(MODAL_PROJECT_BY_DIVISION) ProcRequest 계약이라 화면 필드로 직접
-          못 맞춘다 → PriceBatchInputModal 선례처럼 division 스코프만 싣고 as never 로 캐스팅한다. */}
+      {/* Project 팝업 — SCP0100.md 조회조건 #3 비고 지정 컴포넌트 = ProjectByDivisionModal(COM0005).
+          #3 유형 '다중' — multiCheckbox(체크 다중선택, setSelectedValue 가 Project Code 를 ',' 결합 CSV 반환)로
+          전환(2026-10-16 사용자 지시). 메인 SP P_PROJECT 가 CSV 다건을 받도록 SP 쪽을 별도 수정 예정
+          (WW/MM DATAONLY 의 VARIOUS_KEY LIKE 를 FN_SPLITSTRING 토큰별 OR LIKE 로 — 아래 보고 참조).
+          Model/Nick Name(MaterialByDivisionModal) 다중 전환과 동형. store 는 CSV 를 그대로 P_PROJECT 로 전달.
+          divisionId ALL 센티널 동일(빈값→'ALL'). 반환 ProjectCode(CSV)를 project 에 반영. */}
       <ProjectByDivisionModal
         open={popupTarget === POPUP_TARGET.PROJECT}
         modalClose={() => setPopupTarget(null)}
-        setSelectedValue={projects => setSearchCondition({ project: projects })}
-        preSearchParams={
-          {
-            divisionId: divisionParam(sc.divisionId),
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            salesSite: 'ALL',
-            projectCode: sc.project,
-            etc: 'N',
-          } as never
-        }
         callFromCell={false}
+        multiCheckbox
+        setSelectedValue={projects => setSearchCondition({ project: String(projects ?? '') })}
+        preSearchParams={{
+          deptId: 'ALL',
+          divisionId: sc.divisionId || 'ALL',
+          endCustomer: 'ALL',
+          etc: '',
+          projectCode: sc.project,
+          salesSite: 'ALL',
+        }}
       />
 
       {/* 개인화 팝업 2종 — btnColumn(ColumnLayoutModal) / btnMeasure(MeasureSelectModal) (design 02 §4.6 B3/B4).
@@ -299,7 +318,8 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
           반영(로컬 즉시적용 machinery 불필요) — 컴포넌트 분리(진입 slim). */}
       <GlobalPsiReportModals
         activeSheet={activeSheet}
-        divisionId={divisionParam(sc.divisionId)}
+        // ALL→'' 정규화 — ColumnLayoutModal 자체 조회(PR_GET_SHEET_COLUMN_LIST/titleSet)가 공통 메타를 받도록(메타 fetch 와 동일 규약).
+        divisionId={normalizeDivision(sc.divisionId)}
         openColumn={popupTarget === POPUP_TARGET.COLUMN}
         openMeasure={popupTarget === POPUP_TARGET.MEASURE}
         onClose={() => setPopupTarget(null)}

@@ -1,0 +1,37 @@
+﻿menu,code,fe_file,action,fe_handler
+DMF0008,DELETE,nscm-fe\features\master\src\pages\erp-edi-master\ErpEdiMaster.tsx,"ADD sspm,salesSite,repair,project",hasButton('DELETE') ? handleDelete : false
+DMF0013,INSERT,nscm-fe\features\demand\src\pages\cust-psi-upload\CustPsiUpload.tsx,SKIP — SAVE:Y+SEARCH:Y 시트 없음(권한 부여 근거 없음 → admin 결정 필요),hasButton('INSERT') ? handleInsert : false
+DMF0013,DELETE,nscm-fe\features\demand\src\pages\cust-psi-upload\CustPsiUpload.tsx,SKIP — SAVE:Y+SEARCH:Y 시트 없음(권한 부여 근거 없음 → admin 결정 필요),hasButton('DELETE') ? handleDelete : false
+DMF0082,DELETE,nscm-fe\features\demand\src\pages\forecast-price\ForecastPrice.tsx,"ADD fcstNPrice,FcstNPrice,futurePriceInfo",buttonAuth.delete ? () => void handleDelete() : (false as co
+SCP0007,INSERT,nscm-fe\features\supply\src\pages\bod\Bod.tsx,ADD bod,hasButton('SAVE') ? handleInsert : false
+SCP0007,DELETE,nscm-fe\features\supply\src\pages\bod\Bod.tsx,ADD bod,hasButton('SAVE') ? handleDelete : false
+SCP0020,INSERT,nscm-fe\features\supply\src\pages\tact-time\TactTime.tsx,"ADD plant,packer,except",handleInsert
+SCP0020,DELETE,nscm-fe\features\supply\src\pages\tact-time\TactTime.tsx,"ADD plant,packer,except",handleDelete
+SCP0022,INSERT,nscm-fe\features\supply\src\pages\formation\Formation.tsx,"ADD formation,except,exceptLt",handleInsert
+SCP0022,DELETE,nscm-fe\features\supply\src\pages\formation\Formation.tsx,"ADD formation,except,exceptLt",handleDelete
+SCP0030,INSERT,nscm-fe\features\supply\src\pages\bod-item\BodItem.tsx,"ADD bodItem,bodItemExcluded",canSave && activeTab === SHEET_INDEX.BOD_EXCLUDED ? handleIn
+SCP0030,DELETE,nscm-fe\features\supply\src\pages\bod-item\BodItem.tsx,"ADD bodItem,bodItemExcluded",canSave && activeTab === SHEET_INDEX.BOD_EXCLUDED ? handleDe
+SCP0110,INSERT,nscm-fe\features\supply\src\pages\demand-group-master\DemandGroupMaster.tsx,"ADD groupName,modelList",hasButton('SAVE') ? handleInsert : false
+SCP0110,DELETE,nscm-fe\features\supply\src\pages\demand-group-master\DemandGroupMaster.tsx,"ADD groupName,modelList",hasButton('SAVE') ? handleDelete : false
+SDM1010,INSERT,nscm-fe\features\sdm\src\pages\project-reg\ProjectReg.tsx,ADD project,isTab1 && hasButton('INSERT') ? handleInsert : false
+SDM1010,DELETE,nscm-fe\features\sdm\src\pages\project-reg\ProjectReg.tsx,ADD project,isTab1 && hasButton('DELETE') ? () => void handleDelete() : 
+SDM1010,INSERT,nscm-fe\features\spms-demand\src\pages\project-registration\ProjectRegistration.tsx,ADD project,handleInsert
+SDM1010,DELETE,nscm-fe\features\spms-demand\src\pages\project-registration\ProjectRegistration.tsx,ADD project,handleDelete
+SYS0001,INSERT,nscm-fe\features\admin\src\pages\message-management\MessageManagement.tsx,ADD msgMgmt,onInsert
+SYS0001,DELETE,nscm-fe\features\admin\src\pages\message-management\MessageManagement.tsx,ADD msgMgmt,onDelete
+SYS0002,INSERT,nscm-fe\features\admin\src\pages\user-management\UserManagement.tsx,ADD userMgmt,onInsert
+SYS0002,DELETE,nscm-fe\features\admin\src\pages\user-management\UserManagement.tsx,ADD userMgmt,onDelete
+SYS0003,INSERT,nscm-fe\features\admin\src\pages\menu-management\MenuManagement.tsx,"ADD levelOneMenu,levelTwoMenu,levelThreeMenu",onInsert
+SYS0003,DELETE,nscm-fe\features\admin\src\pages\menu-management\MenuManagement.tsx,"ADD levelOneMenu,levelTwoMenu,levelThreeMenu",onDelete
+SYS0004,DELETE,nscm-fe\features\admin\src\pages\ui-catrgory-setup\UICategorySetup.tsx,ADD column,handleDelete
+SYS0006,INSERT,nscm-fe\features\admin\src\pages\api-management\ApiManagement.tsx,ADD apiList,handleInsert
+SYS0006,DELETE,nscm-fe\features\admin\src\pages\api-management\ApiManagement.tsx,ADD apiList,handleDelete
+SYS0007,INSERT,nscm-fe\features\admin\src\pages\group-management\GroupManagement.tsx,ADD groupMgmt,onInsert
+SYS0007,DELETE,nscm-fe\features\admin\src\pages\group-management\GroupManagement.tsx,ADD groupMgmt,onDelete
+SYS0009,INSERT,nscm-fe\features\admin\src\pages\menu-button-management\MenuButtonManagement.tsx,ADD menuBtnList,handleInsert
+SYS0009,DELETE,nscm-fe\features\admin\src\pages\menu-button-management\MenuButtonManagement.tsx,ADD menuBtnList,handleDelete
+SYS0010,INSERT,nscm-fe\features\admin\src\pages\lookup\Lookup.tsx,"ADD lookupMaster,lookupDetail",onInsert
+SYS0010,DELETE,nscm-fe\features\admin\src\pages\lookup\Lookup.tsx,"ADD lookupMaster,lookupDetail",onDelete
+SYS0015,INSERT,nscm-fe\features\admin\src\pages\program\Program.tsx,ADD main,onInsert
+SYS0015,DELETE,nscm-fe\features\admin\src\pages\program\Program.tsx,ADD main,onDelete
+SYS0016,INSERT,nscm-fe\features\admin\src\pages\notice-setup\NoticeSetup.tsx,ADD main,openCreateEditor

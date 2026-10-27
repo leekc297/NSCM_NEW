@@ -1,0 +1,290 @@
+{
+ "version": 2,
+ "menu_id": "DMF0082",
+ "asis_id": "DMF0082",
+ "generated": "2026-10-26T17:31:35",
+ "mapping_file": "nscm-fe\\features\\demand\\src\\pages\\forecast-price\\__asis-mapping__.md",
+ "rows": 3754,
+ "fe_rows": 443,
+ "action_rows": 3311,
+ "fe_page": "nscm-fe\\features\\demand\\src\\pages\\forecast-price",
+ "fe_mapping_missing": false,
+ "verdict": {
+  "FAIL": 1739,
+  "미검증": 1790,
+  "해당없음": 50,
+  "검증완료": 175
+ },
+ "instances": 1833,
+ "instance_result": {
+  "PASS": 403,
+  "FAIL": 397,
+  "REVIEW": 918,
+  "NA": 109,
+  "WARN": 6
+ },
+ "by_layer": {
+  "동적 생성·조회": {
+   "PASS": 255,
+   "REVIEW": 230,
+   "FAIL": 146,
+   "NA": 9,
+   "WARN": 6
+  },
+  "Cascade": {
+   "FAIL": 9,
+   "REVIEW": 196,
+   "PASS": 13,
+   "NA": 11
+  },
+  "CRUD": {
+   "REVIEW": 3,
+   "FAIL": 7
+  },
+  "DB 실행·접근": {
+   "FAIL": 43,
+   "REVIEW": 51,
+   "PASS": 14
+  },
+  "권한": {
+   "REVIEW": 1
+  },
+  "편집·검증": {
+   "REVIEW": 134,
+   "FAIL": 134,
+   "NA": 45,
+   "PASS": 22
+  },
+  "팝업": {
+   "REVIEW": 161,
+   "NA": 21
+  },
+  "정적 디자인": {
+   "PASS": 76,
+   "REVIEW": 94,
+   "FAIL": 31,
+   "NA": 22
+  },
+  "콤보 후보": {
+   "FAIL": 27,
+   "REVIEW": 47,
+   "PASS": 22,
+   "NA": 1
+  },
+  "공통 기능": {
+   "PASS": 1,
+   "REVIEW": 1
+  }
+ },
+ "by_check": {
+  "A1": {
+   "REVIEW": 53
+  },
+  "A10": {
+   "PASS": 1
+  },
+  "A5": {
+   "FAIL": 12,
+   "REVIEW": 15,
+   "PASS": 13
+  },
+  "A6": {
+   "FAIL": 10,
+   "REVIEW": 9,
+   "PASS": 1
+  },
+  "B1": {
+   "FAIL": 3,
+   "REVIEW": 8,
+   "PASS": 6
+  },
+  "B2": {
+   "REVIEW": 10,
+   "PASS": 7
+  },
+  "B3": {
+   "FAIL": 11,
+   "REVIEW": 13,
+   "PASS": 3,
+   "NA": 1
+  },
+  "B4": {
+   "FAIL": 13,
+   "REVIEW": 16,
+   "PASS": 6
+  },
+  "C1": {
+   "PASS": 13
+  },
+  "C2": {
+   "FAIL": 9,
+   "REVIEW": 51
+  },
+  "C3": {
+   "REVIEW": 76,
+   "NA": 5
+  },
+  "C4": {
+   "NA": 6
+  },
+  "C6": {
+   "REVIEW": 69
+  },
+  "D1": {
+   "REVIEW": 26,
+   "FAIL": 14,
+   "NA": 3
+  },
+  "D3": {
+   "FAIL": 86,
+   "NA": 6
+  },
+  "D4": {
+   "FAIL": 15,
+   "REVIEW": 9,
+   "PASS": 8
+  },
+  "D5": {
+   "FAIL": 6,
+   "NA": 9,
+   "PASS": 5
+  },
+  "D6": {
+   "FAIL": 1
+  },
+  "DB-SYN": {
+   "REVIEW": 43,
+   "PASS": 11
+  },
+  "E1": {
+   "NA": 11
+  },
+  "E2": {
+   "REVIEW": 2
+  },
+  "E3": {
+   "REVIEW": 9,
+   "FAIL": 12,
+   "PASS": 2
+  },
+  "E4": {
+   "NA": 16,
+   "REVIEW": 82
+  },
+  "E5": {
+   "REVIEW": 6,
+   "PASS": 7
+  },
+  "F1": {
+   "REVIEW": 1
+  },
+  "F2": {
+   "REVIEW": 1
+  },
+  "F3": {
+   "FAIL": 6
+  },
+  "F4": {
+   "FAIL": 43,
+   "PASS": 3,
+   "REVIEW": 8
+  },
+  "F5": {
+   "FAIL": 1
+  },
+  "F6": {
+   "REVIEW": 1
+  },
+  "G03-WIRE": {
+   "WARN": 1
+  },
+  "G1": {
+   "FAIL": 53,
+   "REVIEW": 15,
+   "PASS": 1,
+   "NA": 2
+  },
+  "G3": {
+   "REVIEW": 1
+  },
+  "G4": {
+   "REVIEW": 19
+  },
+  "G5": {
+   "REVIEW": 60,
+   "NA": 9
+  },
+  "G6": {
+   "NA": 6,
+   "PASS": 2,
+   "FAIL": 7,
+   "REVIEW": 2
+  },
+  "H10": {
+   "PASS": 1
+  },
+  "H2": {
+   "FAIL": 19,
+   "NA": 16,
+   "REVIEW": 17,
+   "PASS": 2
+  },
+  "H3": {
+   "NA": 2
+  },
+  "H4": {
+   "PASS": 1
+  },
+  "H5": {
+   "REVIEW": 26,
+   "PASS": 8,
+   "NA": 4
+  },
+  "H6": {
+   "REVIEW": 57,
+   "NA": 12
+  },
+  "I1": {
+   "PASS": 1
+  },
+  "J2": {
+   "REVIEW": 1
+  },
+  "K4": {
+   "PASS": 1
+  },
+  "M3": {
+   "REVIEW": 1
+  },
+  "M4": {
+   "REVIEW": 43
+  },
+  "SC1": {
+   "REVIEW": 1
+  },
+  "X-LOC": {
+   "PASS": 244,
+   "FAIL": 52,
+   "REVIEW": 30
+  },
+  "X-REASON": {
+   "PASS": 50,
+   "REVIEW": 16
+  },
+  "X-REOPEN": {
+   "PASS": 1
+  },
+  "X-ROW": {
+   "REVIEW": 121,
+   "WARN": 5,
+   "FAIL": 24,
+   "PASS": 5,
+   "NA": 1
+  }
+ },
+ "todo_checks": {},
+ "unverified_reasons": {
+  "REVIEW": 3923,
+  "WARN": 42
+ }
+}

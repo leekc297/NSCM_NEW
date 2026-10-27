@@ -11,7 +11,11 @@ import { ADMIN_SHEET_NAME, MENU_ID } from '../capa-line-assign.constants';
 import type { GridRow } from '../capa-line-assign.types';
 import type { ColumnLayoutOverride } from '../useCapaLineAssignStore';
 import { isSopCellEditable } from '../utils/capaLineAssign.editLock';
-import { applyEditModeVisibility, applyLayoutToColumns } from '../utils/capaLineAssignColumns';
+import {
+  applyEditModeVisibility,
+  applyLayoutToColumns,
+  collapseStaticLargeTier,
+} from '../utils/capaLineAssignColumns';
 
 interface Props {
   sheet: SHEETS.SOP_ASSEMBLY | SHEETS.SOP_ELTR;
@@ -46,9 +50,15 @@ export const CapaLineSopGrid = ({
   editMode,
 }: Props) => {
   // SOP 분기는 8컬럼 토글만 있고 `ATTRIBUTE3='N'` 폭 복원 블록이 없다(cs:4374-4388) → isAssign=false.
+  // 정적 컬럼 1단은 AS-IS 가 숨겨 2단이다(collapseStaticLargeTier) — Assign 그리드와 동일(Site/Plant/
+  //   Building/Line/Operation 메타가 LARGE<>SMALL 이라 축소 없으면 상위 그룹 헤더가 뜬다, DB 실측).
   const columns = useMemo(
     () =>
-      applyEditModeVisibility(applyLayoutToColumns(adminColumns, userColumnLayout), editMode, false),
+      applyEditModeVisibility(
+        applyLayoutToColumns(collapseStaticLargeTier(adminColumns), userColumnLayout),
+        editMode,
+        false
+      ),
     [adminColumns, userColumnLayout, editMode]
   );
 

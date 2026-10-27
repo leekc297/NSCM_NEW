@@ -1,0 +1,193 @@
+{"_batch": "b01", "unit": "SCP0001_SAVE_PLANT_SITE", "line_from": 279, "decision": "keep", "rule": "", "new_class": "", "reason": "저장 입력(Frozen Type) 빈값이면 기존 ship_frozen 유지 — 파일럿 기준 \"빈값일 때 기존값 유지=B\", 기준 통일 1~4 비해당"}
+{"_batch": "b02", "unit": "SCP0009_GET_SHIPMENT_PLAN_FG_TITLE_PARAL", "line_from": 1449, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b02", "unit": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_WEEKLY", "line_from": 443, "decision": "drop", "rule": "1", "new_class": "", "reason": "Lot Size/출하요일 수 0 → 1 로 분배 분모 보호 — 계산 방어식(분배 계속, 차단·제외 없음)"}
+{"_batch": "b02", "unit": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_WEEKLY", "line_from": 427, "decision": "drop", "rule": "1", "new_class": "", "reason": "Lot Size/출하요일 수 0 → 1 로 분배 분모 보호 — 계산 방어식(분배 계속, 차단·제외 없음)"}
+{"_batch": "b02", "unit": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_WEEKLY", "line_from": 460, "decision": "drop", "rule": "4", "new_class": "", "reason": "Lot Size 기준 분배일수 재계산 — 분배 알고리즘 분기(원 판독도 \"판단 애매\")"}
+{"_batch": "b02", "unit": "SCP0010_GET_SHIPMENT_PLAN_SEMI", "line_from": 800, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b02", "unit": "SCP0010_GET_SHIPMENT_PLAN_SEMI", "line_from": 649, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b02", "unit": "SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_WEEKLY", "line_from": 657, "decision": "drop", "rule": "1", "new_class": "", "reason": "Lot Size/출하요일 수 0 → 1 로 분배 분모 보호 — 계산 방어식(분배 계속, 차단·제외 없음)"}
+{"_batch": "b02", "unit": "SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_WEEKLY", "line_from": 641, "decision": "drop", "rule": "1", "new_class": "", "reason": "Lot Size/출하요일 수 0 → 1 로 분배 분모 보호 — 계산 방어식(분배 계속, 차단·제외 없음)"}
+{"_batch": "b02", "unit": "SCP0010_SAVE_ANL_SHIPMENT_PLAN_SEMI_WEEKLY", "line_from": 674, "decision": "drop", "rule": "4", "new_class": "", "reason": "Lot Size 기준 분배일수 재계산 — 분배 알고리즘 분기(원 판독도 \"판단 애매\")"}
+{"_batch": "b02", "unit": "SCP0011_GET_PLAN_EDIT_INFO", "line_from": 53, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b02", "unit": "SCP0013_GET_PLAN_EDIT_INFO", "line_from": 73, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b02", "unit": "SCP0013_GET_PLAN_EDIT_INFO", "line_from": 77, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 편집가능 Y/N 플래그를 판정해 반환 — 기준 통일 3 단서에 따라 D 유지"}
+{"_batch": "b03", "unit": "SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL", "line_from": 217, "decision": "drop", "rule": "2", "new_class": "", "reason": "사용자 Measure/컬럼 설정이 없을 때 기본 설정으로 대체·자동 생성 — 화면 표시 설정 기본값"}
+{"_batch": "b04", "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET", "line_from": 267, "decision": "drop", "rule": "4", "new_class": "", "reason": "주 SUM Fix 행 수량을 계획 PROD_PLAN_AMEND 수량으로 채우는 저장 계산 분기 — 값 대체이며 검증 판정 아님"}
+{"_batch": "b06", "unit": "SCP0039_GET_VALIDATION_YIELD", "line_from": 265, "decision": "keep", "rule": "", "new_class": "", "reason": "SCP0039 VALIDATION 리포트 — 수율<50% 오류 목록 반환, D 유지"}
+{"_batch": "b06", "unit": "SCP0044_GET_GLOBAL_PSI_ESS", "line_from": 394, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b07", "unit": "SCP0049_GET_CAPA", "line_from": 4076, "decision": "drop", "rule": "4", "new_class": "", "reason": "Excel 조회 시 편집가능 Loss 항목만 조회 — 조회 SP 의 업무 범위 필터"}
+{"_batch": "b07", "unit": "SCP0049_GET_CAPA", "line_from": 4186, "decision": "drop", "rule": "4", "new_class": "", "reason": "확정 진행률(%) 집계 표시 — 오류 판정이 아닌 업무 통계 계산(분모 0 원문이슈는 별개)"}
+{"_batch": "b07", "unit": "SCP0049_GET_CAPA", "line_from": 4478, "decision": "drop", "rule": "4", "new_class": "", "reason": "확정 진행률(%) 집계 표시 — 오류 판정이 아닌 업무 통계 계산(분모 0 원문이슈는 별개)"}
+{"_batch": "b07", "unit": "SCP0049_GET_CAPA", "line_from": 7440, "decision": "drop", "rule": "4", "new_class": "", "reason": "확정 진행률(%) 집계 표시 — 오류 판정이 아닌 업무 통계 계산(분모 0 원문이슈는 별개)"}
+{"_batch": "b07", "unit": "SCP0049_SAVE_CAPA", "line_from": 1314, "decision": "drop", "rule": "1", "new_class": "", "reason": "Tact↔Daily Capa 환산 시 0 입력이면 0 저장 — 0 나눗셈 회피, 저장 차단 없음"}
+{"_batch": "b08", "unit": "SCP0049_SAVE_NEW_VERSION", "line_from": 952, "decision": "keep", "rule": "", "new_class": "", "reason": "0 나눗셈 등으로 NULL 이 된 계산값 행을 버전 LOSS 리포트 INSERT 에서 제외 — 기준 통일 1 단서(행 제외)로 C 유지; check_type 은 QTY 가 더 적합(원판독 REQUIRED)"}
+{"_batch": "b08", "unit": "SCP0052_GET_CAPA_REPORT_TOTAL_YIELD", "line_from": 351, "decision": "drop", "rule": "1", "new_class": "", "reason": "NULL/미등록 계산계수(수율·환산·LT 등)의 기본값 대체 — 계산 방어식, 차단·제외 없음"}
+{"_batch": "b09", "unit": "SCP0076_GET_PRODUCTION_RESULT_CHECK", "line_from": 430, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b09", "unit": "SCP0076_GET_PRODUCTION_RESULT_CHECK", "line_from": 483, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b09", "unit": "SCP0076_GET_PRODUCTION_RESULT_CHECK", "line_from": 576, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 편집가능 Y/N 플래그를 판정해 반환 — 기준 통일 3 단서에 따라 D 유지"}
+{"_batch": "b09", "unit": "SCP0077_GET_SHIPPING_RESULT_CHECK", "line_from": 659, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b09", "unit": "SCP0077_GET_SHIPPING_RESULT_CHECK", "line_from": 753, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 편집가능 Y/N 플래그를 판정해 반환 — 기준 통일 3 단서에 따라 D 유지"}
+{"_batch": "b09", "unit": "SCP0077_GET_SHIPPING_RESULT_CHECK_DAILY", "line_from": 148, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b10", "unit": "SCP0080_SAVE_GROUP_CODE_MANAGEMENT", "line_from": 190, "decision": "drop", "rule": "", "new_class": "", "reason": "Sales Priority 0/빈값→NULL 정규화 — 파일럿 기준 \"빈값→NULL 정규화는 기록하지 않음\"(기준 통일 1~4 직접 항목 없음). 숫자 변환 실패는 CATCH(EXCEPTION 행)로 별도 기록"}
+{"_batch": "b10", "unit": "SCP0083_GET_DIO_VERSION_INFO", "line_from": 53, "decision": "drop", "rule": "3", "new_class": "", "reason": "DIO 버전 0건이면 \"미생성\" 항목 반환 — 버튼 활성/Range 편집 판단은 UI(상태값 전달)"}
+{"_batch": "b10", "unit": "SCP0083_GET_PLAN_VERSION_INFO", "line_from": 44, "decision": "drop", "rule": "3", "new_class": "", "reason": "최신 DIO Report 버전 키를 전달, 편집 허용 비교는 UI — 상태값 전달"}
+{"_batch": "b11", "unit": "SCP0090_GET_ALLO_TARGET_INFO", "line_from": 43, "decision": "drop", "rule": "4", "new_class": "", "reason": "요청 Cutoff 데이터 없으면 직전 주 Cutoff 로 대체 조회 — 일반 조회 대체 분기"}
+{"_batch": "b11", "unit": "SCP0091_GET_VALIDATION_SHIPMENT_REPORT", "line_from": 789, "decision": "drop", "rule": "4", "new_class": "", "reason": "SHIPMENT_NO 컬럼 선택 여부에 따른 ORDER BY 대체 — 정렬 구성 분기(검증 아님)"}
+{"_batch": "b11", "unit": "SCP0092_GET_RTF_ARCHEIVEMENT_RATE_SUMMARY", "line_from": 292, "decision": "drop", "rule": "2", "new_class": "", "reason": "사용자 Measure/컬럼 설정이 없을 때 기본 설정으로 대체·자동 생성 — 화면 표시 설정 기본값"}
+{"_batch": "b11", "unit": "SCP0092_GET_RTF_ARCHEIVEMENT_RATE_SUMMARY", "line_from": 972, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b11", "unit": "SCP0092_GET_RTF_ARCHEIVEMENT_RATE_SUMMARY", "line_from": 1103, "decision": "drop", "rule": "4", "new_class": "", "reason": "달력 주차/월 없을 때 고정 피벗 컬럼 목록 대체 — 피벗 구성 분기(데이터 검증 아님)"}
+{"_batch": "b11", "unit": "SCP0092_GET_RTF_ARCHEIVEMENT_RATE_SUMMARY", "line_from": 1134, "decision": "drop", "rule": "4", "new_class": "", "reason": "달력 주차/월 없을 때 고정 피벗 컬럼 목록 대체 — 피벗 구성 분기(데이터 검증 아님)"}
+{"_batch": "b11", "unit": "SCP0092_GET_RTF_ARCHEIVEMENT_RATE_WEEKLY", "line_from": 239, "decision": "drop", "rule": "2", "new_class": "", "reason": "사용자 Measure/컬럼 설정이 없을 때 기본 설정으로 대체·자동 생성 — 화면 표시 설정 기본값"}
+{"_batch": "b11", "unit": "SCP0092_GET_RTF_ARCHEIVEMENT_RATE_WEEKLY", "line_from": 867, "decision": "drop", "rule": "2", "new_class": "", "reason": "사용자 Measure/컬럼 설정이 없을 때 기본 설정으로 대체·자동 생성 — 화면 표시 설정 기본값"}
+{"_batch": "b11", "unit": "SCP0092_GET_RTF_ARCHEIVEMENT_RATE_WEEKLY", "line_from": 962, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b11", "unit": "SCP0092_GET_RTF_ARCHEIVEMENT_RATE_WEEKLY", "line_from": 964, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b11", "unit": "SCP0092_GET_RTF_ARCHEIVEMENT_RATE_WEEKLY_TERM", "line_from": 146, "decision": "drop", "rule": "4", "new_class": "", "reason": "RTF 인터페이스 미수행 주는 가까운 RTF 수행 주를 기준주로 대체 — 기준주 산정 계산 분기"}
+{"_batch": "b11", "unit": "SCP0093_GET_DIO_TREND_DATA_MM", "line_from": 89, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b11", "unit": "SCP0093_GET_DIO_TREND_DATA_MM", "line_from": 120, "decision": "drop", "rule": "2", "new_class": "", "reason": "사용자 Measure/컬럼 설정이 없을 때 기본 설정으로 대체·자동 생성 — 화면 표시 설정 기본값"}
+{"_batch": "b11", "unit": "SCP0093_GET_DIO_TREND_DATA_MM", "line_from": 475, "decision": "drop", "rule": "1", "new_class": "", "reason": "DIO 산출 시 재고≤0·RTF 0/없음 → 0/180 고정값 — 0 나눗셈·산출불가 계산 방어식"}
+{"_batch": "b11", "unit": "SCP0093_GET_DIO_TREND_DATA_MM", "line_from": 754, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b11", "unit": "SCP0093_GET_DIO_TREND_DATA_PRICE", "line_from": 62, "decision": "drop", "rule": "4", "new_class": "", "reason": "해당 월 데이터 없으면 조건 완화해 대체 조회 — 일반 조회 대체 분기"}
+{"_batch": "b11", "unit": "SCP0093_GET_DIO_TREND_DATA_REASON", "line_from": 68, "decision": "drop", "rule": "4", "new_class": "", "reason": "해당 월 데이터 없으면 조건 완화해 대체 조회 — 일반 조회 대체 분기"}
+{"_batch": "b11", "unit": "SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL", "line_from": 94, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b11", "unit": "SCP0094_GET_GLOBAL_PSI_AUTO", "line_from": 59, "decision": "drop", "rule": "2", "new_class": "", "reason": "사용자 Measure/컬럼 설정이 없을 때 기본 설정으로 대체·자동 생성 — 화면 표시 설정 기본값"}
+{"_batch": "b11", "unit": "SCP0094_GET_GLOBAL_PSI_AUTO", "line_from": 416, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b12", "unit": "SCP0095_GET_GLOBAL_PSI_ELEC", "line_from": 461, "decision": "drop", "rule": "1", "new_class": "", "reason": "NULL/미등록 계산계수(수율·환산·LT 등)의 기본값 대체 — 계산 방어식, 차단·제외 없음"}
+{"_batch": "b12", "unit": "SCP0098_GET_CAPA_MOBILITYIT", "line_from": 826, "decision": "drop", "rule": "1", "new_class": "", "reason": "NULL/미등록 계산계수(수율·환산·LT 등)의 기본값 대체 — 계산 방어식, 차단·제외 없음"}
+{"_batch": "b13", "unit": "SCP0103_GET_MATERIAL_VISIBILITY", "line_from": 736, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b13", "unit": "SCP0103_GET_MATERIAL_VISIBILITY", "line_from": 672, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b13", "unit": "SCP0105_CHECK_CAPA_SPEED_PLAN_BY_ASSIGN_ASSEMBLY", "line_from": 218, "decision": "drop", "rule": "4", "new_class": "", "reason": "할당 우선순위 0(미할당) 월의 Speed Plan 수량 클리어 — Line Assign↔Speed Plan 동기화 업무 규칙(원문 L436 주석·L456 DELETE 확인, 입력 검증 아님)"}
+{"_batch": "b13", "unit": "SCP0105_CHECK_CAPA_SPEED_PLAN_BY_ASSIGN_ASSEMBLY", "line_from": 434, "decision": "drop", "rule": "4", "new_class": "", "reason": "할당 우선순위 0(미할당) 월의 Speed Plan 수량 클리어 — Line Assign↔Speed Plan 동기화 업무 규칙(원문 L436 주석·L456 DELETE 확인, 입력 검증 아님)"}
+{"_batch": "b14", "unit": "SCP0106_CHECK_CAPA_LOSS_PLAN_BY_ASSIGN_ASSEMBLY", "line_from": 1354, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b14", "unit": "SCP0106_CHECK_CAPA_LOSS_PLAN_BY_ASSIGN_ASSEMBLY", "line_from": 2619, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b15", "unit": "SCP0111_SAVE_INTEGRATION_PSI", "line_from": 687, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b15", "unit": "SCP0111_SAVE_INTEGRATION_PSI", "line_from": 766, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b15", "unit": "SCP0111_SAVE_INTEGRATION_PSI", "line_from": 1219, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b15", "unit": "SCP0111_SAVE_INTEGRATION_PSI", "line_from": 1288, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b17", "unit": "SCP0126_SAVE_NO_WORK_WEEK", "line_from": 429, "decision": "drop", "rule": "1", "new_class": "", "reason": "일자별 비조업 합계가 86400초를 넘지 않도록 잔여분만 배분·초과분 전일 이월 — 배분 계산 상한 보정(차단 없음)"}
+{"_batch": "b18", "unit": "SSP0007_GET_PLAN_EDIT_INFO", "line_from": 35, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 편집가능 Y/N 플래그를 판정해 반환 — 기준 통일 3 단서에 따라 D 유지"}
+{"_batch": "b18", "unit": "SSP0007_GET_PLAN_EDIT_INFO", "line_from": 35, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b18", "unit": "SSP0008_GET_PLAN_EDIT_INFO", "line_from": 45, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 편집가능 Y/N 플래그를 판정해 반환 — 기준 통일 3 단서에 따라 D 유지"}
+{"_batch": "b18", "unit": "SSP0008_GET_PLAN_EDIT_INFO", "line_from": 45, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b18", "unit": "SSP0008_GET_PRODUCTION_PLAN_LINEBY", "line_from": 342, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b19", "unit": "SSP0015_GET_SHIPMENT_CONFIRM_DETAIL", "line_from": 319, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 Frozen/편집경계로 행을 직접 제외 — 기준 통일 3 단서에 따라 C 유지"}
+{"_batch": "b19", "unit": "SSP0015_GET_SHIPMENT_CONFIRM_DETAIL_PACKER", "line_from": 316, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 Frozen/편집경계로 행을 직접 제외 — 기준 통일 3 단서에 따라 C 유지"}
+{"_batch": "b19", "unit": "SSP0015_GET_SHIPMENT_PSI", "line_from": 638, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 Frozen/편집경계로 행을 직접 제외 — 기준 통일 3 단서에 따라 C 유지"}
+{"_batch": "b19", "unit": "SSP0015_GET_SHIPMENT_PSI_PACKER", "line_from": 253, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 Frozen/편집경계로 행을 직접 제외 — 기준 통일 3 단서에 따라 C 유지"}
+{"_batch": "b21", "unit": "SSP0022_GET_ITEM_POPUP", "line_from": 225, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b21", "unit": "SSP0022_GET_REQUEST_DETAIL", "line_from": 62, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b21", "unit": "SSP0022_GET_REQUEST_DETAIL", "line_from": 70, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 편집가능 Y/N 플래그를 판정해 반환 — 기준 통일 3 단서에 따라 D 유지"}
+{"_batch": "b21", "unit": "SSP0022_GET_REQUEST_DETAIL_EXCEL_DOWN", "line_from": 56, "decision": "keep", "rule": "", "new_class": "", "reason": "EDIT_FLAG=N(확정구간) 행을 엑셀 다운로드에서 제외 — 기준 통일 3 단서(행 제외)로 C 유지"}
+{"_batch": "b21", "unit": "SSP0022_GET_SHIPMENT_PSI", "line_from": 1691, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b21", "unit": "SSP0022_GET_SHIPMENT_PSI", "line_from": 2194, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b21", "unit": "SSP0023_GET_SHIPMENT_PLAN", "line_from": 1590, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b21", "unit": "SSP0023_GET_SHIPMENT_PLAN", "line_from": 1951, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b21", "unit": "SSP0023_GET_SHIPMENT_PLAN_DETAIL", "line_from": 359, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 Frozen/편집경계로 행을 직접 제외 — 기준 통일 3 단서에 따라 C 유지"}
+{"_batch": "b22", "unit": "SSP0026_GET_REQUEST_DETAIL_PACK", "line_from": 63, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 편집가능 Y/N 플래그를 판정해 반환 — 기준 통일 3 단서에 따라 D 유지"}
+{"_batch": "b22", "unit": "SSP0026_GET_REQUEST_DETAIL_PACK_EXCEL_DOWN", "line_from": 55, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 Frozen/편집경계로 행을 직접 제외 — 기준 통일 3 단서에 따라 C 유지"}
+{"_batch": "b22", "unit": "SSP0026_GET_SHIPMENT_REQUEST_CELL", "line_from": 1429, "decision": "keep", "rule": "", "new_class": "", "reason": "Item·From Site 의 Measure 종류<10 이면 결과에서 제외 — 데이터 불완전 행 제외(룩업 업무 범위 필터 아님), C 유지"}
+{"_batch": "b22", "unit": "SSP0027_GET_SHIPMENT_PLAN_DETAIL", "line_from": 534, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 Frozen/편집경계로 행을 직접 제외 — 기준 통일 3 단서에 따라 C 유지"}
+{"_batch": "b23", "unit": "SSP0030_GET_LOGISTICS_SIMULATION", "line_from": 98, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b23", "unit": "SSP0030_GET_LOGISTICS_SIMULATION_DETAIL", "line_from": 84, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b23", "unit": "SSP0030_GET_LOGISTICS_SIMULATION_EXCEL", "line_from": 76, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b24", "unit": "SSP0045_GET_SHIPMENT_REQUEST", "line_from": 2277, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b24", "unit": "SSP0046_GET_BODITEM_FOR_PRJROUTE_POPUP", "line_from": 49, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b24", "unit": "SSP0046_GET_SHIPMENT_REQUEST", "line_from": 233, "decision": "drop", "rule": "2", "new_class": "", "reason": "사용자 Measure/컬럼 설정이 없을 때 기본 설정으로 대체·자동 생성 — 화면 표시 설정 기본값"}
+{"_batch": "b24", "unit": "SSP0046_GET_SHIPMENT_REQUEST", "line_from": 1904, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b24", "unit": "SSP0060_GET_SHIPMENT_PLAN", "line_from": 1216, "decision": "keep", "rule": "", "new_class": "", "reason": "SP 가 편집가능 Y/N 플래그를 판정해 반환 — 기준 통일 3 단서에 따라 D 유지"}
+{"_batch": "b24", "unit": "SSP0060_GET_SHIPMENT_PLAN", "line_from": 761, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b24", "unit": "SSP0060_GET_SHIPMENT_PLAN", "line_from": 2322, "decision": "drop", "rule": "3", "new_class": "", "reason": "경계일자/일수(SHIP_FROZEN·CONFIRM_DAY·EDIT_START_DATE 등)를 계산·전달만 하고 판정은 UI — SP 가 행 제외·저장 차단하지 않음"}
+{"_batch": "b26", "unit": "DM0004_GET_SALES_SITE_CUSTOMER_DATA", "line_from": 26, "decision": "keep", "rule": "", "new_class": "", "reason": "ADMIN/부서 권한으로 EDIT_FLAG Y/N 을 SP 가 판정해 반환 — D(AUTH) 유지(기준 통일 3 단서와 동일 원리)"}
+{"_batch": "b26", "unit": "FN_GET_REPORT_USER_COLUMNS", "line_from": 87, "decision": "drop", "rule": "2", "new_class": "", "reason": "사용자 Measure/컬럼 설정이 없을 때 기본 설정으로 대체·자동 생성 — 화면 표시 설정 기본값"}
+{"_batch": "b27", "unit": "FN_SCP0080_GET_GROUP_CODE_MANAGEMENT_TABLE", "line_from": 711, "decision": "drop", "rule": "1", "new_class": "", "reason": "NULL/미등록 계산계수(수율·환산·LT 등)의 기본값 대체 — 계산 방어식, 차단·제외 없음"}
+{"_batch": "b28", "unit": "PR_DM_PLN_MKT_FCST_C_QTY_BALANCE_CREATE", "line_from": 3950, "decision": "drop", "rule": "1", "new_class": "", "reason": "재고 소진일 산출 불가 시 VMI_DIO=999 센티널 — 산출불가 계산값 기본값"}
+{"_batch": "b28", "unit": "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE", "line_from": 2602, "decision": "drop", "rule": "1", "new_class": "", "reason": "재고 소진일 산출 불가 시 VMI_DIO=999 센티널 — 산출불가 계산값 기본값"}
+{"_batch": "b29", "unit": "PR_DM_SSP_CONFIRM_SYNC", "line_from": 675, "decision": "drop", "rule": "4", "new_class": "", "reason": "MF 수량과 SSP 확정수량 중 큰 값 채택 — 동기화 계산 규칙"}
+{"_batch": "b29", "unit": "PR_SCM_LGTM_INV_ALLOCATION", "line_from": 2698, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b29", "unit": "PR_SCM_LGTM_INV_ALLOCATION_CAL", "line_from": 419, "decision": "drop", "rule": "4", "new_class": "", "reason": "할당 후 남은 판매수량을 음수 EOH 로 기록 — 재고 할당 계산 로직(보정·차단 아님)"}
+{"_batch": "b29", "unit": "PR_SCM_LGTM_INV_ALLOCATION_CAL", "line_from": 758, "decision": "drop", "rule": "1", "new_class": "", "reason": "마감재고 가중평균 단가 0 나눗셈 회피; HAVING SUM(QUANTITY)!=0 으로 빠지는 것은 단가 산출 후보 집계행이며 저장 대상 데이터 행 제외 아님(후속 대체 단가 탐색) — 3개 SP 동일 패턴 통일"}
+{"_batch": "b29", "unit": "PR_SCM_LGTM_INV_ALLOCATION_CAL", "line_from": 846, "decision": "drop", "rule": "4", "new_class": "", "reason": "계획구간 0 단가를 NULL 로 바꿔 후순위 단가 탐색 — 단가 결정 계산 분기"}
+{"_batch": "b29", "unit": "PR_SCM_LGTM_INV_ALLOCATION_CAL", "line_from": 883, "decision": "drop", "rule": "4", "new_class": "", "reason": "단가 미존재 시 여러 원천에서 순차 대체 — 단가 결정 계산 분기"}
+{"_batch": "b29", "unit": "PR_SCM_LGTM_INV_ALLOCATION_GODS_CAL", "line_from": 448, "decision": "drop", "rule": "4", "new_class": "", "reason": "할당 후 남은 판매수량을 음수 EOH 로 기록 — 재고 할당 계산 로직(보정·차단 아님)"}
+{"_batch": "b29", "unit": "PR_SCM_LGTM_INV_ALLOCATION_GODS_CAL", "line_from": 683, "decision": "drop", "rule": "1", "new_class": "", "reason": "마감재고 가중평균 단가 0 나눗셈 회피; HAVING SUM(QUANTITY)!=0 으로 빠지는 것은 단가 산출 후보 집계행이며 저장 대상 데이터 행 제외 아님(후속 대체 단가 탐색) — 3개 SP 동일 패턴 통일"}
+{"_batch": "b29", "unit": "PR_SCM_LGTM_INV_ALLOCATION_GODS_CAL", "line_from": 717, "decision": "drop", "rule": "4", "new_class": "", "reason": "계획구간 0 단가를 NULL 로 바꿔 후순위 단가 탐색 — 단가 결정 계산 분기"}
+{"_batch": "b29", "unit": "PR_SCM_LGTM_INV_ALLOCATION_GODS_CAL", "line_from": 1065, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b29", "unit": "PR_SCM_LGTM_INV_ALLOCATION_IGR", "line_from": 508, "decision": "drop", "rule": "4", "new_class": "", "reason": "할당 후 남은 판매수량을 음수 EOH 로 기록 — 재고 할당 계산 로직(보정·차단 아님)"}
+{"_batch": "b29", "unit": "PR_SCM_LGTM_INV_ALLOCATION_IGR", "line_from": 747, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_RMTL", "line_from": 318, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_RMTL_CAL", "line_from": 300, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_RMTL_CAL", "line_from": 472, "decision": "drop", "rule": "4", "new_class": "", "reason": "할당 후 남은 판매수량을 음수 EOH 로 기록 — 재고 할당 계산 로직(보정·차단 아님)"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_RMTL_CAL", "line_from": 746, "decision": "drop", "rule": "1", "new_class": "", "reason": "마감재고 가중평균 단가 0 나눗셈 회피; HAVING SUM(QUANTITY)!=0 으로 빠지는 것은 단가 산출 후보 집계행이며 저장 대상 데이터 행 제외 아님(후속 대체 단가 탐색) — 3개 SP 동일 패턴 통일"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_RMTL_CAL", "line_from": 780, "decision": "drop", "rule": "4", "new_class": "", "reason": "계획구간 0 단가를 NULL 로 바꿔 후순위 단가 탐색 — 단가 결정 계산 분기"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_SPRD", "line_from": 1003, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 미존재 시 1 로 나눔 — 계산계수 기본값"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_SPRD_CAL", "line_from": 273, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_SPRD_CAL", "line_from": 708, "decision": "drop", "rule": "4", "new_class": "", "reason": "계획구간 0 단가를 NULL 로 바꿔 후순위 단가 탐색 — 단가 결정 계산 분기"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_SPRD_CAL", "line_from": 792, "decision": "drop", "rule": "4", "new_class": "", "reason": "단가 미존재 시 여러 원천에서 순차 대체 — 단가 결정 계산 분기"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_SPRD_CAL", "line_from": 1052, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_SPRD_IGR", "line_from": 357, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_SPRD_IGR", "line_from": 512, "decision": "drop", "rule": "4", "new_class": "", "reason": "할당 후 남은 판매수량을 음수 EOH 로 기록 — 재고 할당 계산 로직(보정·차단 아님)"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_SPRD_IGR", "line_from": 762, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_INV_ALLOCATION_SPRD_IGR", "line_from": 827, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b30", "unit": "PR_SCM_LGTM_MRP_P_RESULT", "line_from": 230, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b30", "unit": "PR_SCP_ANL_CAPA_BALANCE_40", "line_from": 759, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b30", "unit": "PR_SCP_ANL_CAPA_BALANCE_40", "line_from": 1315, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b31", "unit": "PR_SCP_ANL_CAPA_BALANCE_EE", "line_from": 156, "decision": "drop", "rule": "1", "new_class": "", "reason": "NULL/미등록 계산계수(수율·환산·LT 등)의 기본값 대체 — 계산 방어식, 차단·제외 없음"}
+{"_batch": "b31", "unit": "PR_SCP_ANL_CELL_TRAY_SIMULATION", "line_from": 597, "decision": "drop", "rule": "1", "new_class": "", "reason": "NULL/미등록 계산계수(수율·환산·LT 등)의 기본값 대체 — 계산 방어식, 차단·제외 없음"}
+{"_batch": "b31", "unit": "PR_SCP_ANL_CELL_TRAY_SIMULATION", "line_from": 685, "decision": "drop", "rule": "4", "new_class": "", "reason": "BOH/USAGE 미존재 Site 조합에 0 행 보충 INSERT — 시뮬레이션 적재 보충(검증 아님)"}
+{"_batch": "b31", "unit": "PR_SCP_ANL_CELL_TRAY_SIMULATION", "line_from": 722, "decision": "drop", "rule": "4", "new_class": "", "reason": "BOH/USAGE 미존재 Site 조합에 0 행 보충 INSERT — 시뮬레이션 적재 보충(검증 아님)"}
+{"_batch": "b31", "unit": "PR_SCP_ANL_DIO_REPORT", "line_from": 103, "decision": "keep", "rule": "", "new_class": "", "reason": "배치 버전 파라미터 NULL → 1 대체 — 입력 파라미터 대체(파일럿 B 기준), 기준 통일 1~4 비해당"}
+{"_batch": "b31", "unit": "PR_SCP_ANL_DIO_REPORT", "line_from": 470, "decision": "drop", "rule": "1", "new_class": "", "reason": "NULL/미등록 계산계수(수율·환산·LT 등)의 기본값 대체 — 계산 방어식, 차단·제외 없음"}
+{"_batch": "b31", "unit": "PR_SCP_ANL_DIO_REPORT", "line_from": 2157, "decision": "keep", "rule": "", "new_class": "A", "reason": "생성 데이터 0건이면 VER_STATUS 완료 대신 버전 행 삭제 후 RETURN — 처리를 중단/미완료 처리하는 차단형(A)으로 정정. 반환값 1 은 [원문이슈]"}
+{"_batch": "b31", "unit": "PR_SCP_ANL_PRODUCTION_PLAN_I", "line_from": 223, "decision": "drop", "rule": "1", "new_class": "", "reason": "NULL/미등록 계산계수(수율·환산·LT 등)의 기본값 대체 — 계산 방어식, 차단·제외 없음"}
+{"_batch": "b32", "unit": "PR_SCP_ANL_PSI_ELECTRODE", "line_from": 1424, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b32", "unit": "PR_SCP_ANL_PSI_ELECTRODE", "line_from": 1627, "decision": "drop", "rule": "1", "new_class": "", "reason": "NULL/미등록 계산계수(수율·환산·LT 등)의 기본값 대체 — 계산 방어식, 차단·제외 없음"}
+{"_batch": "b32", "unit": "PR_SCP_ANL_PSI_GLOBAL", "line_from": 1952, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b32", "unit": "PR_SCP_ANL_PSI_GLOBAL", "line_from": 2106, "decision": "drop", "rule": "4", "new_class": "", "reason": "사내 Cell Plant 간 이동 Balance 양수값 0 처리 — 사업부·공정 구분 업무 계산 규칙"}
+{"_batch": "b32", "unit": "PR_SCP_ANL_PSI_GLOBAL_ESS", "line_from": 1784, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b32", "unit": "PR_SCP_ANL_PSI_GLOBAL_ESS", "line_from": 1934, "decision": "drop", "rule": "4", "new_class": "", "reason": "사내 Cell Plant 간 이동 Balance 양수값 0 처리 — 사업부·공정 구분 업무 계산 규칙"}
+{"_batch": "b32", "unit": "PR_SCP_ANL_PSI_GLOBAL_ESS", "line_from": 1981, "decision": "drop", "rule": "1", "new_class": "", "reason": "NULL/미등록 계산계수(수율·환산·LT 등)의 기본값 대체 — 계산 방어식, 차단·제외 없음"}
+{"_batch": "b32", "unit": "PR_SCP_ANL_PSI_GLOBAL_SMALL", "line_from": 2074, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b32", "unit": "PR_SCP_ANL_PSI_GLOBAL_SMALL", "line_from": 2686, "decision": "drop", "rule": "4", "new_class": "", "reason": "0 수량 일자 행을 계획시작일 1행으로 압축 적재 — 적재 로직"}
+{"_batch": "b33", "unit": "PR_SCP_ANL_PSI_PRODUCTION", "line_from": 2235, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b33", "unit": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI", "line_from": 958, "decision": "drop", "rule": "1", "new_class": "", "reason": "NULL/미등록 계산계수(수율·환산·LT 등)의 기본값 대체 — 계산 방어식, 차단·제외 없음"}
+{"_batch": "b33", "unit": "PR_SCP_ANL_TACT_TIME", "line_from": 683, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b33", "unit": "PR_SCP_ANL_TACT_TIME", "line_from": 725, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b34", "unit": "PR_SCP_ENG_EE_FN_PROC_BOD", "line_from": 259, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b34", "unit": "PR_SCP_ENG_EE_FN_PROC_DEMAND_ATTRIBUTE", "line_from": 1647, "decision": "drop", "rule": "1", "new_class": "", "reason": "0 나눗셈 회피(분모 0/NULL→대체값) 계산 방어식 — 저장 차단·행 제외 없음"}
+{"_batch": "b34", "unit": "PR_SCP_ENG_EE_FN_PROC_DEMAND_ATTRIBUTE", "line_from": 1810, "decision": "keep", "rule": "", "new_class": "", "reason": "Tact Time 0/NULL 라인을 Daily Capa 산출에서 제외 → INNER JOIN 으로 해당 품목 Daily Capa 행 INSERT 자체가 빠짐(원문 L1795~1822 확인) — 기준 통일 1 단서(행 제외)로 C 유지"}
+{"_batch": "b34", "unit": "PR_SCP_ENG_EE_FN_PROC_DPP_DEMAND", "line_from": 595, "decision": "drop", "rule": "1", "new_class": "", "reason": "Daily Capa 없으면 기본 10000 — 계산 기본값"}
+{"_batch": "b34", "unit": "PR_SCP_ENG_EE_FN_PROC_DPP_DEMAND", "line_from": 676, "decision": "drop", "rule": "1", "new_class": "", "reason": "Capa 0 이면 분할 안 함 — 0 나눗셈 회피"}
+{"_batch": "b34", "unit": "PR_SCP_ENG_EE_FN_PROC_DPP_DEMAND", "line_from": 915, "decision": "drop", "rule": "1", "new_class": "", "reason": "0.5~1 미만 수량 1 올림 — 계산 결과 보정"}
+{"_batch": "b34", "unit": "PR_SCP_ENG_EE_FN_PROC_FIXED_PLAN", "line_from": 268, "decision": "drop", "rule": "1", "new_class": "", "reason": "SSP Frozen 을 Ship Frozen 상한으로 제한 — 계산값 상한 보정(행 제외 없음)"}
+{"_batch": "b34", "unit": "PR_SCP_ENG_EE_FN_PROC_FIXED_PLAN", "line_from": 522, "decision": "keep", "rule": "", "new_class": "", "reason": "원문 주석상 조인 중복건 DISTINCT 제거 후 Fixed Plan INSERT — 기준서 C 예시 \"중복 행 제거 후 저장\" 해당, C 유지"}
+{"_batch": "b34", "unit": "PR_SCP_ENG_EE_FN_PROC_FIXED_PLAN_PROD", "line_from": 338, "decision": "keep", "rule": "", "new_class": "", "reason": "수량 0 이하 생산계획을 확정 생산계획 적재에서 제외 — 저장 대상 행 제외, C 유지"}
+{"_batch": "b34", "unit": "PR_SCP_ENG_EE_FN_PROC_FIXED_PLAN_PROD", "line_from": 1667, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b34", "unit": "PR_SCP_ENG_EE_FN_PROC_FIX_MISMATCHING", "line_from": 876, "decision": "drop", "rule": "1", "new_class": "", "reason": "초 환산 작업시간 86400 초과 시 UOM 을 DAY 로 보정 — 계산 단위 보정(차단·제외 없음)"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_ITEM_BOD_CAL", "line_from": 2155, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP", "line_from": 269, "decision": "drop", "rule": "1", "new_class": "", "reason": "소형(40) 전극 EA UOM 환산값 0/NULL → 1 — 0 나눗셈 회피 계산 방어식"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP", "line_from": 355, "decision": "drop", "rule": "1", "new_class": "", "reason": "소형(40) 전극 EA UOM 환산값 0/NULL → 1 — 0 나눗셈 회피 계산 방어식"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP", "line_from": 744, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP", "line_from": 866, "decision": "keep", "rule": "", "new_class": "", "reason": "일 Capa≤0 행 제외로 INNER JOIN 결과 OSP Map 자체가 생성 안 됨 — 기준 통일 1 단서(행 제외)로 C 유지"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP", "line_from": 971, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP", "line_from": 1192, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP", "line_from": 1247, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP", "line_from": 1365, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP", "line_from": 1422, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 382, "decision": "drop", "rule": "1", "new_class": "", "reason": "소형(40) 전극 EA UOM 환산값 0/NULL → 1 — 0 나눗셈 회피 계산 방어식"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 469, "decision": "drop", "rule": "1", "new_class": "", "reason": "소형(40) 전극 EA UOM 환산값 0/NULL → 1 — 0 나눗셈 회피 계산 방어식"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 647, "decision": "drop", "rule": "4", "new_class": "", "reason": "당월·차월 중 누락 월을 tact 0 행으로 보충 — 적재 보충 로직"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 811, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 931, "decision": "keep", "rule": "", "new_class": "C", "reason": "tact_time 0 구간을 is_use=N 으로 적재 → 엔진 Capa 사용에서 제외 — 기준 통일 1 단서(판정으로 행 제외)에 해당, B→C 정정"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 1359, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 1506, "decision": "drop", "rule": "4", "new_class": "", "reason": "당월·차월 중 누락 월을 tact 0 행으로 보충 — 적재 보충 로직"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 1658, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 2222, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 2794, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 3007, "decision": "keep", "rule": "", "new_class": "C", "reason": "tact_time 0 구간을 is_use=N 으로 적재 → 엔진 Capa 사용에서 제외 — 기준 통일 1 단서(판정으로 행 제외)에 해당, B→C 정정"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 3296, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 3499, "decision": "keep", "rule": "", "new_class": "C", "reason": "tact_time 0 구간을 is_use=N 으로 적재 → 엔진 Capa 사용에서 제외 — 기준 통일 1 단서(판정으로 행 제외)에 해당, B→C 정정"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL", "line_from": 3634, "decision": "drop", "rule": "1", "new_class": "", "reason": "수율 이상값(0·음수·1초과·NULL)→1 계산 보정 — 저장 차단·행 제외 없음"}
+{"_batch": "b35", "unit": "PR_SCP_ENG_EE_FN_PROC_PLAN_BOM", "line_from": 160, "decision": "drop", "rule": "1", "new_class": "", "reason": "BOM 소요율 계산 시 0 나눗셈·음수·0 비율 보정 — 계산 방어식"}
+{"_batch": "b36", "unit": "PR_SCP_ENG_EE_FN_SET_BOMCOMPONENTS", "line_from": 87, "decision": "drop", "rule": "4", "new_class": "", "reason": "유효기간·활성 BOM·SCP 적용 대치BOM 선별 — 엔진 대상 업무 범위 필터"}
+{"_batch": "b36", "unit": "PR_SCP_ENG_EE_FN_SET_SITE_ENG", "line_from": 289, "decision": "keep", "rule": "", "new_class": "", "reason": "attr7 Y/N 외·attr8 0 이하 Garbage 값을 NULL 로 정리(원문 주석: 오류 방지) — 형식 검증 보정 B(FORMAT) 유지"}
+{"_batch": "b36", "unit": "PR_SCP_ENG_EE_PRE_PROC_BOD", "line_from": 142, "decision": "keep", "rule": "", "new_class": "", "reason": "원문 주석 \"frozen(TE) 변수 Validation Check\" — 미등록/규격 외 값을 Y 로 보정, B 유지"}
+{"_batch": "b36", "unit": "PR_SCP_ENG_EE_PRE_PROC_BOD", "line_from": 316, "decision": "drop", "rule": "1", "new_class": "", "reason": "음수→0·상한 등 계산 결과 보정 — 저장 차단·행 제외 없음"}

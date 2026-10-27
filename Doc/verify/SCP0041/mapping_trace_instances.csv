@@ -1,0 +1,383 @@
+﻿key,trace_row,check,layer,et,name,display,impl,result,why,rows,cs
+X-LOC|ROW:D00-1-001,T-468b2701,X-LOC,GEN,ROW,D00-1-001,D00-1-001,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-001,T-a7523c22,X-ROW,GEN,ENTRY,D00-1-001,D00-1-001,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-002,T-c5fd8c8d,X-LOC,GEN,ROW,D00-1-002,D00-1-002,Y,PASS,구현 위치 실존 1곳,1,
+G4|COND:cboDivision,T-6bc41d8c,G4,DESIGN,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,6,SCP0041_StockOSP.cs:140 SCP0041_StockOSP.cs:142 SCP0041_StockOSP.cs:143 SCP0041_StockOSP.cs:145 SCP0041_StockOSP.cs:146 SCP0041_StockOSP.cs:219 SCP0041_StockOSP.cs:220 SCP0041_StockOSP.cs:221 SCP0041_StockOSP.cs:223 SCP0041_StockOSP.cs:224
+SC1|SCREEN,T-f8fe4af2,SC1,DESIGN,SCREEN,SCP0041,SCP0041 화면,Y,NOT_RUN,검사기 있음(check.js SC1·smoke 기준표 순서) — 실행 필요: smoke,16,
+G1|COND:cboDivision,T-2d4269fa,G1,GEN,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,6,SCP0041_StockOSP.cs:631 SCP0041_StockOSP.cs:633 SCP0041_StockOSP.cs:636 SCP0041_StockOSP.cs:639 SCP0041_StockOSP.cs:704 SCP0041_StockOSP.cs:706 SCP0041_StockOSP.cs:709 SCP0041_StockOSP.cs:712
+G6|COND:cboDivision,T-f769e7dd,G6,GEN,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,6,SCP0041_StockOSP.cs:140 SCP0041_StockOSP.cs:142 SCP0041_StockOSP.cs:143 SCP0041_StockOSP.cs:145 SCP0041_StockOSP.cs:146 SCP0041_StockOSP.cs:219 SCP0041_StockOSP.cs:220 SCP0041_StockOSP.cs:221 SCP0041_StockOSP.cs:223 SCP0041_StockOSP.cs:224
+B1|COND:cboDivision,T-dc1b0208,B1,COMBO,COND,cboDivision,cboDivision / Division,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B2|COND:cboDivision,T-96c2875b,B2,COMBO,COND,cboDivision,cboDivision / Division,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B4|COND:cboDivision,T-3896dbe8,B4,COMBO,COND,cboDivision,cboDivision / Division,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
+B6|COND:cboDivision,T-293faa9a,B6,COMBO,COND,cboDivision,cboDivision / Division,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+X-LOC|ROW:D00-1-003,T-1915f5f9,X-LOC,GEN,ROW,D00-1-003,D00-1-003,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-003,T-5e32279d,X-ROW,GEN,ENTRY,D00-1-003,D00-1-003,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-004,T-c6c68b24,X-LOC,GEN,ROW,D00-1-004,D00-1-004,Y,PASS,구현 위치 실존 1곳,1,
+G4|COND:clbPlantSite,T-c63b763a,G4,DESIGN,COND,clbPlantSite,clbPlantSite / Plant Site,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,3,
+G1|COND:clbPlantSite,T-99d0bd72,G1,GEN,COND,clbPlantSite,clbPlantSite / Plant Site,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,7,SCP0041_StockOSP.cs:631 SCP0041_StockOSP.cs:633 SCP0041_StockOSP.cs:636 SCP0041_StockOSP.cs:639 SCP0041_StockOSP.cs:640 SCP0041_StockOSP.cs:704 SCP0041_StockOSP.cs:706 SCP0041_StockOSP.cs:709 SCP0041_StockOSP.cs:712 SCP0041_StockOSP.cs:713
+G6|COND:clbPlantSite,T-cbe5d6dd,G6,GEN,COND,clbPlantSite,clbPlantSite / Plant Site,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,3,
+B1|COND:clbPlantSite,T-563fe2b1,B1,COMBO,COND,clbPlantSite,clbPlantSite / Plant Site,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B2|COND:clbPlantSite,T-e399db7b,B2,COMBO,COND,clbPlantSite,clbPlantSite / Plant Site,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B4|COND:clbPlantSite,T-9075f864,B4,COMBO,COND,clbPlantSite,clbPlantSite / Plant Site,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B6|COND:clbPlantSite,T-7b082acd,B6,COMBO,COND,clbPlantSite,clbPlantSite / Plant Site,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+X-LOC|ROW:D00-1-005,T-5e722602,X-LOC,GEN,ROW,D00-1-005,D00-1-005,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-005,T-5f67c374,X-ROW,GEN,ENTRY,D00-1-005,D00-1-005,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-006,T-612f6f2b,X-LOC,GEN,ROW,D00-1-006,D00-1-006,Y,PASS,구현 위치 실존 1곳,1,
+G4|COND:txtItemId,T-6e680cf0,G4,DESIGN,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,2,
+G1|COND:txtItemId,T-de59ec02,G1,GEN,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,7,SCP0041_StockOSP.cs:631 SCP0041_StockOSP.cs:633 SCP0041_StockOSP.cs:636 SCP0041_StockOSP.cs:639 SCP0041_StockOSP.cs:641 SCP0041_StockOSP.cs:704 SCP0041_StockOSP.cs:706 SCP0041_StockOSP.cs:709 SCP0041_StockOSP.cs:712 SCP0041_StockOSP.cs:714
+G6|COND:txtItemId,T-d6bcccd1,G6,GEN,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,2,
+X-LOC|ROW:D00-1-007,T-f42efed3,X-LOC,GEN,ROW,D00-1-007,D00-1-007,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-007,T-8d0a6262,X-ROW,GEN,ENTRY,D00-1-007,D00-1-007,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-008,T-1534cfd9,X-LOC,GEN,ROW,D00-1-008,D00-1-008,Y,PASS,구현 위치 실존 1곳,1,
+G1|ROW:D00-1-008,T-cb84ccc0,G1,GEN,ROW,D00-1-008,D00-1-008,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:D00-1-008,T-42678a0a,A1,GEN,ROW,D00-1-008,D00-1-008,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+J2|SCREEN,T-876d1b78,J2,AUTH,SCREEN,SCP0041,SCP0041 화면,Y,NOT_RUN,검사기 있음(auth·authcrud spec) — 실행 필요: auth,47,SCP0041_StockOSP.cs:867 SCP0041_StockOSP.cs:868 SCP0041_StockOSP.cs:869 SCP0041_StockOSP.cs:870 SCP0041_StockOSP.cs:872 SCP0041_StockOSP.cs:874 SCP0041_StockOSP.cs:875 SCP0041_StockOSP.cs:876 SCP0041_StockOSP.cs:878 SCP0041_StockOSP.cs:880 SCP0041_StockOSP.cs:882 SCP0041_StockOSP.cs:896 SCP0041_Stoc
+X-LOC|ROW:D00-1-009,T-7ea1cc2c,X-LOC,GEN,ROW,D00-1-009,D00-1-009,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-009,T-4082aee5,X-ROW,GEN,ENTRY,D00-1-009,D00-1-009,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-010,T-a44ee8a1,X-LOC,GEN,ROW,D00-1-010,D00-1-010,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-010,T-e1e801f9,X-ROW,GEN,ENTRY,D00-1-010,D00-1-010,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-011,T-9de1683c,X-LOC,GEN,ROW,D00-1-011,D00-1-011,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-011,T-4e2ab7a5,X-ROW,GEN,ENTRY,D00-1-011,D00-1-011,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-012,T-6751687a,X-LOC,GEN,ROW,D00-1-012,D00-1-012,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-012,T-2f557d4b,X-ROW,GEN,ENTRY,D00-1-012,D00-1-012,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-013,T-f64291c8,X-LOC,GEN,ROW,D00-1-013,D00-1-013,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:D00-1-013,T-f31db9b8,X-ROW,GEN,ENTRY,D00-1-013,D00-1-013,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-014,T-9184b397,X-LOC,GEN,ROW,D00-1-014,D00-1-014,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:D00-1-014,T-11588249,X-ROW,GEN,ENTRY,D00-1-014,D00-1-014,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-015,T-5eb904c9,X-LOC,GEN,ROW,D00-1-015,D00-1-015,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-015,T-35be2182,X-ROW,GEN,ENTRY,D00-1-015,D00-1-015,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-016,T-6aa9be6a,X-LOC,GEN,ROW,D00-1-016,D00-1-016,Y,PASS,구현 위치 실존 1곳,1,
+G4|COND:txtInspection,T-c3ff004a,G4,DESIGN,COND,txtInspection,txtInspection / DefPackLabel.INSEPECTION_ID / Inspection,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,2,
+G1|COND:txtInspection,T-bed9db56,G1,GEN,COND,txtInspection,txtInspection / DefPackLabel.INSEPECTION_ID / Inspection,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,4,SCP0041_StockOSP.cs:704 SCP0041_StockOSP.cs:706 SCP0041_StockOSP.cs:709 SCP0041_StockOSP.cs:712 SCP0041_StockOSP.cs:717
+G6|COND:txtInspection,T-692e4dfb,G6,GEN,COND,txtInspection,txtInspection / DefPackLabel.INSEPECTION_ID / Inspection,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,2,
+X-LOC|ROW:D00-1-017,T-b4caea48,X-LOC,GEN,ROW,D00-1-017,D00-1-017,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-017,T-6fdf4dc8,X-ROW,GEN,ENTRY,D00-1-017,D00-1-017,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-018,T-0bc3e30c,X-LOC,GEN,ROW,D00-1-018,D00-1-018,Y,PASS,구현 위치 실존 1곳,1,
+G4|COND:cboStatus,T-a01fd148,G4,DESIGN,COND,cboStatus,cboStatus / Status,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,4,SCP0041_StockOSP.cs:140 SCP0041_StockOSP.cs:142 SCP0041_StockOSP.cs:143 SCP0041_StockOSP.cs:145 SCP0041_StockOSP.cs:146 SCP0041_StockOSP.cs:150
+G1|COND:cboStatus,T-e2cbab6a,G1,GEN,COND,cboStatus,cboStatus / Status,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,4,SCP0041_StockOSP.cs:704 SCP0041_StockOSP.cs:706 SCP0041_StockOSP.cs:709 SCP0041_StockOSP.cs:712 SCP0041_StockOSP.cs:718
+G6|COND:cboStatus,T-7ab57daf,G6,GEN,COND,cboStatus,cboStatus / Status,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,4,SCP0041_StockOSP.cs:140 SCP0041_StockOSP.cs:142 SCP0041_StockOSP.cs:143 SCP0041_StockOSP.cs:145 SCP0041_StockOSP.cs:146 SCP0041_StockOSP.cs:150
+B1|COND:cboStatus,T-11ed7808,B1,COMBO,COND,cboStatus,cboStatus / Status,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B2|COND:cboStatus,T-3192a3dd,B2,COMBO,COND,cboStatus,cboStatus / Status,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B4|COND:cboStatus,T-0edd256f,B4,COMBO,COND,cboStatus,cboStatus / Status,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
+B6|COND:cboStatus,T-87b43b6c,B6,COMBO,COND,cboStatus,cboStatus / Status,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+X-LOC|ROW:D00-1-019,T-1ae06d28,X-LOC,GEN,ROW,D00-1-019,D00-1-019,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-019,T-e7c5b73d,X-ROW,GEN,ENTRY,D00-1-019,D00-1-019,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-1-020,T-e12cdb73,X-LOC,GEN,ROW,D00-1-020,D00-1-020,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-020,T-c072b804,X-ROW,GEN,ENTRY,D00-1-020,D00-1-020,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-REASON|ROW:D00-1-021,T-de6555fe,X-REASON,DESIGN,ROW,D00-1-021,D00-1-021,Y,PASS,"사유 있음: Designer 여백 아이템 — 시각 스페이서, TO-BE Grid 레이아웃에 상응 UI 없음(순수 여백)",1,
+X-LOC|ROW:D00-1-022,T-4bdb8c30,X-LOC,GEN,ROW,D00-1-022,D00-1-022,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-1-022,T-6f951256,A5,DESIGN,ROW,D00-1-022,D00-1-022,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:D00-1-022,T-016a44fd,H5,DESIGN,ROW,D00-1-022,D00-1-022,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H2|ROW:D00-1-022,T-d875784d,H2,DESIGN,ROW,D00-1-022,D00-1-022,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-1-023,T-67d86ec8,X-LOC,GEN,ROW,D00-1-023,D00-1-023,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-1-023,T-830aaeb5,A5,DESIGN,ROW,D00-1-023,D00-1-023,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:D00-1-023,T-60c24eac,H5,DESIGN,ROW,D00-1-023,D00-1-023,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H2|ROW:D00-1-023,T-d9ec4352,H2,DESIGN,ROW,D00-1-023,D00-1-023,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-1-024,T-eb925786,X-LOC,GEN,ROW,D00-1-024,D00-1-024,Y,PASS,구현 위치 실존 1곳,1,
+K-SA|SCREEN,T-ba201a4e,K-SA,COMMON,SCREEN,SCP0041,SCP0041 화면,Y,NOT_RUN,검사기 있음(smoke 공통 기능(Search Area)) — 실행 필요: smoke,2,
+G3|SCREEN,T-e1240052,G3,COMMON,SCREEN,SCP0041,SCP0041 화면,Y,NOT_RUN,검사기 있음(smoke 공통 기능(Condition·Reset)) — 실행 필요: smoke,4,
+G4|ROW:D00-1-024,T-9a047e95,G4,DESIGN,ROW,D00-1-024,D00-1-024,Y,REVIEW,행 집계 — G4 6요소: NOT_RUN:5 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+G1|ROW:D00-1-024,T-1d586a19,G1,GEN,ROW,D00-1-024,D00-1-024,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+G6|ROW:D00-1-024,T-7d3e9557,G6,GEN,ROW,D00-1-024,D00-1-024,Y,REVIEW,행 집계 — G6 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:D00-1-025,T-05022515,X-LOC,GEN,ROW,D00-1-025,D00-1-025,Y,PASS,구현 위치 실존 1곳,1,
+G4|ROW:D00-1-025,T-50abbf2a,G4,DESIGN,ROW,D00-1-025,D00-1-025,Y,REVIEW,행 집계 — G4 6요소: NOT_RUN:5 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+G1|ROW:D00-1-025,T-606158bb,G1,GEN,ROW,D00-1-025,D00-1-025,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+G6|ROW:D00-1-025,T-9f73752f,G6,GEN,ROW,D00-1-025,D00-1-025,Y,REVIEW,행 집계 — G6 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:D00-1-026,T-b98eba39,X-LOC,GEN,ROW,D00-1-026,D00-1-026,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-1-026,T-54df679f,X-ROW,GEN,ENTRY,D00-1-026,D00-1-026,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-REASON|ROW:D00-1-027,T-02f5bf82,X-REASON,DESIGN,ROW,D00-1-027,D00-1-027,Y,PASS,사유 있음: 어떤 Controls 컬렉션에도 add 안 된 dead control(01_layout §5-D) — 미표시,1,
+X-REASON|ROW:D00-1-028,T-491212df,X-REASON,DESIGN,ROW,D00-1-028,D00-1-028,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:D00-2-001,T-8cdfda55,X-LOC,GEN,ROW,D00-2-001,D00-2-001,Y,PASS,구현 위치 실존 1곳,1,
+G1|ROW:D00-2-001,T-7dd3262c,G1,GEN,ROW,D00-2-001,D00-2-001,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:D00-2-001,T-e71914c9,A1,GEN,ROW,D00-2-001,D00-2-001,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+E3|ROW:D00-2-001,T-f5af715d,E3,EDIT,ROW,D00-2-001,D00-2-001,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E4|ROW:D00-2-001,T-5dc970be,E4,EDIT,ROW,D00-2-001,D00-2-001,Y,REVIEW,행 집계 — E4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:D00-2-002,T-5982042c,X-LOC,GEN,ROW,D00-2-002,D00-2-002,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-2-002,T-a198a551,X-ROW,GEN,ENTRY,D00-2-002,D00-2-002,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-2-003,T-5c3884db,X-LOC,GEN,ROW,D00-2-003,D00-2-003,Y,PASS,구현 위치 실존 1곳,1,
+G1|ROW:D00-2-003,T-ab54318b,G1,GEN,ROW,D00-2-003,D00-2-003,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:D00-2-003,T-f0de3224,A1,GEN,ROW,D00-2-003,D00-2-003,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:D00-2-004,T-665da789,X-LOC,GEN,ROW,D00-2-004,D00-2-004,Y,PASS,구현 위치 실존 1곳,1,
+C1|COND:cboDivision,T-b863b3b2,C1,CASCADE,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,2,SCP0041_StockOSP.cs:146
+C4|COND:cboDivision,T-4cbfc9ad,C4,CASCADE,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 조건 변경→그리드 상태) — 실행 필요: trace,1,
+X-LOC|ROW:D00-2-005,T-5d2737f9,X-LOC,GEN,ROW,D00-2-005,D00-2-005,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:D00-2-005,T-e1bf1fd1,X-ROW,GEN,ENTRY,D00-2-005,D00-2-005,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-2-006,T-a6153223,X-LOC,GEN,ROW,D00-2-006,D00-2-006,Y,PASS,구현 위치 실존 1곳,1,
+C2|ROW:D00-2-006,T-242a107a,C2,CASCADE,ROW,D00-2-006,D00-2-006,Y,NA,검사 대상 아님 — 이 화면에 C2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+C3|ROW:D00-2-006,T-34c152f2,C3,CASCADE,ROW,D00-2-006,D00-2-006,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+C6|ROW:D00-2-006,T-28a3d263,C6,CASCADE,ROW,D00-2-006,D00-2-006,Y,NA,검사 대상 아님 — 이 화면에 C6 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D1|ROW:D00-2-006,T-278b53f2,D1,EDIT,ROW,D00-2-006,D00-2-006,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:D00-2-006,T-caff59d5,D3,EDIT,ROW,D00-2-006,D00-2-006,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-2-007,T-c316a065,X-LOC,GEN,ROW,D00-2-007,D00-2-007,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-2-007,T-5fd63a2a,X-ROW,GEN,ENTRY,D00-2-007,D00-2-007,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-001,T-d4f20818,X-LOC,GEN,ROW,D00-3-001,D00-3-001,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-001,T-9a39da0d,X-ROW,GEN,ENTRY,D00-3-001,D00-3-001,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-3-002,T-9b543dac,X-LOC,GEN,ROW,D00-3-002,D00-3-002,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-3-002,T-dca5dca8,X-ROW,GEN,ENTRY,D00-3-002,D00-3-002,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-REASON|ROW:D00-3-003,T-f8d9b739,X-REASON,DESIGN,ROW,D00-3-003,D00-3-003,Y,PASS,"사유 있음: EditButton 토글 어포던스 자체는 전 화면 미이식 결정(asis_to_tobe.md §11, 2026",1,
+X-LOC|ROW:D00-3-004,T-ac719ce8,X-LOC,GEN,ROW,D00-3-004,D00-3-004,Y,PASS,구현 위치 실존 1곳,1,
+A5|ROW:D00-3-004,T-9e525deb,A5,DESIGN,ROW,D00-3-004,D00-3-004,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:D00-3-004,T-5d3cb381,H5,DESIGN,ROW,D00-3-004,D00-3-004,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H2|ROW:D00-3-004,T-652adfe5,H2,DESIGN,ROW,D00-3-004,D00-3-004,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D1|ROW:D00-3-004,T-7c8dc4e3,D1,EDIT,ROW,D00-3-004,D00-3-004,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:D00-3-004,T-fecb3d44,D3,EDIT,ROW,D00-3-004,D00-3-004,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-005,T-3facb886,X-LOC,GEN,ROW,D00-3-005,D00-3-005,Y,PASS,구현 위치 실존 2곳,1,
+D1|ROW:D00-3-005,T-7d263c99,D1,EDIT,ROW,D00-3-005,D00-3-005,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:D00-3-005,T-1cbdcdd2,D3,EDIT,ROW,D00-3-005,D00-3-005,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-006,T-6e8b0a0b,X-LOC,GEN,ROW,D00-3-006,D00-3-006,Y,PASS,구현 위치 실존 1곳,1,
+D1|ROW:D00-3-006,T-59426873,D1,EDIT,ROW,D00-3-006,D00-3-006,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:D00-3-006,T-12dc34ca,D3,EDIT,ROW,D00-3-006,D00-3-006,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-007,T-9cc8c2ca,X-LOC,GEN,ROW,D00-3-007,D00-3-007,Y,PASS,구현 위치 실존 1곳,1,
+D1|ROW:D00-3-007,T-8742a529,D1,EDIT,ROW,D00-3-007,D00-3-007,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:D00-3-007,T-229b3202,D3,EDIT,ROW,D00-3-007,D00-3-007,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-008,T-957edc84,X-LOC,GEN,ROW,D00-3-008,D00-3-008,Y,PASS,구현 위치 실존 1곳,1,
+D1|ROW:D00-3-008,T-5fde00e3,D1,EDIT,ROW,D00-3-008,D00-3-008,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:D00-3-008,T-d4360bb5,D3,EDIT,ROW,D00-3-008,D00-3-008,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-009,T-7f243a7c,X-LOC,GEN,ROW,D00-3-009,D00-3-009,Y,PASS,구현 위치 실존 1곳,1,
+D1|ROW:D00-3-009,T-d4405a59,D1,EDIT,ROW,D00-3-009,D00-3-009,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:D00-3-009,T-f0a3fc48,D3,EDIT,ROW,D00-3-009,D00-3-009,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-010,T-0c0f398c,X-LOC,GEN,ROW,D00-3-010,D00-3-010,Y,PASS,구현 위치 실존 1곳,1,
+D1|ROW:D00-3-010,T-7eaf8fc7,D1,EDIT,ROW,D00-3-010,D00-3-010,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:D00-3-010,T-94f05728,D3,EDIT,ROW,D00-3-010,D00-3-010,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-011,T-e0e2d88d,X-LOC,GEN,ROW,D00-3-011,D00-3-011,Y,PASS,구현 위치 실존 1곳,1,
+H2|ROW:D00-3-011,T-c0fc10ee,H2,DESIGN,ROW,D00-3-011,D00-3-011,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-012,T-74cad748,X-LOC,GEN,ROW,D00-3-012,D00-3-012,Y,PASS,구현 위치 실존 1곳,1,
+H2|ROW:D00-3-012,T-6738593c,H2,DESIGN,ROW,D00-3-012,D00-3-012,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-013,T-f8f4f74b,X-LOC,GEN,ROW,D00-3-013,D00-3-013,Y,PASS,구현 위치 실존 1곳,1,
+A1|ROW:D00-3-013,T-a4fe85a1,A1,GEN,ROW,D00-3-013,D00-3-013,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+A6|ROW:D00-3-013,T-98535c14,A6,GEN,ROW,D00-3-013,D00-3-013,Y,REVIEW,행 집계 — A6 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+F4|ROW:D00-3-013,T-49b2d5d7,F4,DB,ROW,D00-3-013,D00-3-013,Y,REVIEW,행 집계 — F4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+DB-SYN|ROW:D00-3-013,T-115a0c3a,DB-SYN,DB,ROW,D00-3-013,D00-3-013,Y,REVIEW,행 집계 — DB-SYN 5요소: PASS:3 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+X-REASON|ROW:D00-3-014,T-a14566fa,X-REASON,DESIGN,ROW,D00-3-014,D00-3-014,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:D00-3-015,T-3c77760e,X-LOC,GEN,ROW,D00-3-015,D00-3-015,Y,PASS,구현 위치 실존 1곳,1,
+A1|ROW:D00-3-015,T-7f64cf61,A1,GEN,ROW,D00-3-015,D00-3-015,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+A6|ROW:D00-3-015,T-8cda1005,A6,GEN,ROW,D00-3-015,D00-3-015,Y,REVIEW,행 집계 — A6 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+F4|ROW:D00-3-015,T-fa58307a,F4,DB,ROW,D00-3-015,D00-3-015,Y,REVIEW,행 집계 — F4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+DB-SYN|ROW:D00-3-015,T-55e60fba,DB-SYN,DB,ROW,D00-3-015,D00-3-015,Y,REVIEW,행 집계 — DB-SYN 5요소: PASS:3 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+X-REASON|ROW:D00-3-016,T-dd1020f5,X-REASON,DESIGN,ROW,D00-3-016,D00-3-016,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:D00-3-017,T-8f65d828,X-LOC,GEN,ROW,D00-3-017,D00-3-017,Y,PASS,구현 위치 실존 1곳,1,
+C3|ROW:D00-3-017,T-1812d075,C3,CASCADE,ROW,D00-3-017,D00-3-017,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D4|ROW:D00-3-017,T-0f063873,D4,EDIT,ROW,D00-3-017,D00-3-017,Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-3-018,T-2cc352a5,X-LOC,GEN,ROW,D00-3-018,D00-3-018,Y,PASS,구현 위치 실존 1곳,1,
+C3|ROW:D00-3-018,T-b15e325b,C3,CASCADE,ROW,D00-3-018,D00-3-018,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D4|ROW:D00-3-018,T-8ff1dc1a,D4,EDIT,ROW,D00-3-018,D00-3-018,Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D1|ROW:D00-3-018,T-1b22145a,D1,EDIT,ROW,D00-3-018,D00-3-018,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:D00-3-018,T-3b30f9b4,D3,EDIT,ROW,D00-3-018,D00-3-018,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-4b-001,T-0598fd29,X-LOC,GEN,ROW,D00-4b-001,D00-4b-001,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-4b-001,T-0e9ca110,X-ROW,GEN,ENTRY,D00-4b-001,D00-4b-001,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-4b-002,T-8add47b2,X-LOC,GEN,ROW,D00-4b-002,D00-4b-002,Y,PASS,구현 위치 실존 1곳,1,
+B4|ROW:D00-4b-002,T-516c9667,B4,COMBO,ROW,D00-4b-002,D00-4b-002,Y,REVIEW,행 집계 — B4 3요소: NOPATH:3 (미실행 요소가 남아 판정필요),1,
+B3|ROW:D00-4b-002,T-5e12440f,B3,COMBO,ROW,D00-4b-002,D00-4b-002,N,REVIEW,행 집계 — B3 2요소: TODO:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:D00-4b-003,T-ba122b25,X-LOC,GEN,ROW,D00-4b-003,D00-4b-003,Y,PASS,구현 위치 실존 1곳,1,
+B4|ROW:D00-4b-003,T-d4e47723,B4,COMBO,ROW,D00-4b-003,D00-4b-003,Y,REVIEW,행 집계 — B4 3요소: NOPATH:3 (미실행 요소가 남아 판정필요),1,
+B3|ROW:D00-4b-003,T-4a701cff,B3,COMBO,ROW,D00-4b-003,D00-4b-003,N,REVIEW,행 집계 — B3 2요소: TODO:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:D00-4b-004,T-84a9abbd,X-LOC,GEN,ROW,D00-4b-004,D00-4b-004,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-4b-004,T-9de1f013,X-ROW,GEN,ENTRY,D00-4b-004,D00-4b-004,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-REASON|ROW:D00-4b-005,T-5f7427af,X-REASON,DESIGN,ROW,D00-4b-005,D00-4b-005,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:D00-4c-001,T-27d48763,X-LOC,GEN,ROW,D00-4c-001,D00-4c-001,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-4c-001,T-8bf0f27f,X-ROW,GEN,ENTRY,D00-4c-001,D00-4c-001,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D00-4c-002,T-0199deb1,X-LOC,GEN,ROW,D00-4c-002,D00-4c-002,Y,PASS,구현 위치 실존 1곳,1,
+H3|ROW:D00-4c-002,T-526ba441,H3,DESIGN,ROW,D00-4c-002,D00-4c-002,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:D00-4c-003,T-ff2f0e9e,X-LOC,GEN,ROW,D00-4c-003,D00-4c-003,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:D00-4c-003,T-ca49a098,X-ROW,GEN,ENTRY,D00-4c-003,D00-4c-003,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-REASON|ROW:D00-4d-001,T-9ccf6e49,X-REASON,DESIGN,ROW,D00-4d-001,D00-4d-001,Y,PASS,"사유 있음: EditButton 토글 어포던스 자체는 전 화면 미이식 결정(asis_to_tobe.md §11, 2026",1,
+X-REASON|ROW:D00-4d-002,T-5aaf1581,X-REASON,DESIGN,ROW,D00-4d-002,D00-4d-002,Y,PASS,"사유 있음: EditButton 토글 어포던스 자체는 전 화면 미이식 결정(asis_to_tobe.md §11, 2026",1,
+X-REASON|ROW:D00-4d-003,T-cca9e2ff,X-REASON,DESIGN,ROW,D00-4d-003,D00-4d-003,Y,PASS,"사유 있음: EditButton 토글 어포던스 자체는 전 화면 미이식 결정(asis_to_tobe.md §11, 2026",1,
+X-REASON|ROW:D00-4d-004,T-08e33295,X-REASON,DESIGN,ROW,D00-4d-004,D00-4d-004,Y,PASS,"사유 있음: EditButton 토글 어포던스 자체는 전 화면 미이식 결정(asis_to_tobe.md §11, 2026",1,
+X-REASON|ROW:D00-4d-005,T-ed42d0d2,X-REASON,DESIGN,ROW,D00-4d-005,D00-4d-005,Y,PASS,"사유 있음: EditButton 토글 어포던스 자체는 전 화면 미이식 결정(asis_to_tobe.md §11, 2026",1,
+X-LOC|ROW:D00-4d-006,T-4b4e31a2,X-LOC,GEN,ROW,D00-4d-006,D00-4d-006,Y,PASS,구현 위치 실존 2곳,1,
+C2|ROW:D00-4d-006,T-7e54cefb,C2,CASCADE,ROW,D00-4d-006,D00-4d-006,Y,NA,검사 대상 아님 — 이 화면에 C2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+C3|ROW:D00-4d-006,T-453c6f11,C3,CASCADE,ROW,D00-4d-006,D00-4d-006,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+C6|ROW:D00-4d-006,T-263a5ce4,C6,CASCADE,ROW,D00-4d-006,D00-4d-006,Y,NA,검사 대상 아님 — 이 화면에 C6 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E3|ROW:D00-4d-006,T-1fc9332d,E3,EDIT,ROW,D00-4d-006,D00-4d-006,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E4|ROW:D00-4d-006,T-502adf1f,E4,EDIT,ROW,D00-4d-006,D00-4d-006,Y,REVIEW,행 집계 — E4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:D00-4d-007,T-1b7702f6,X-LOC,GEN,ROW,D00-4d-007,D00-4d-007,Y,PASS,구현 위치 실존 1곳,1,
+F1|SCREEN,T-afd83c25,F1,CRUD,SCREEN,SCP0041,SCP0041 화면,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) 실저장·crud spec) — 실행 필요: crud,133,SCP0041_StockOSP.cs:313 SCP0041_StockOSP.cs:315 SCP0041_StockOSP.cs:318 SCP0041_StockOSP.cs:325 SCP0041_StockOSP.cs:326 SCP0041_StockOSP.cs:327 SCP0041_StockOSP.cs:328 SCP0041_StockOSP.cs:329 SCP0041_StockOSP.cs:330 SCP0041_StockOSP.cs:331 SCP0041_StockOSP.cs:332 SCP0041_StockOSP.cs:334 SCP0041_Stoc
+F2|SCREEN,T-4875b264,F2,CRUD,SCREEN,SCP0041,SCP0041 화면,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),132,SCP0041_StockOSP.cs:313 SCP0041_StockOSP.cs:315 SCP0041_StockOSP.cs:318 SCP0041_StockOSP.cs:325 SCP0041_StockOSP.cs:326 SCP0041_StockOSP.cs:327 SCP0041_StockOSP.cs:328 SCP0041_StockOSP.cs:329 SCP0041_StockOSP.cs:330 SCP0041_StockOSP.cs:331 SCP0041_StockOSP.cs:332 SCP0041_StockOSP.cs:334 SCP0041_Stoc
+E3|ROW:D00-4d-007,T-b98b4319,E3,EDIT,ROW,D00-4d-007,D00-4d-007,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E4|ROW:D00-4d-007,T-c4eac1d5,E4,EDIT,ROW,D00-4d-007,D00-4d-007,Y,REVIEW,행 집계 — E4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:D00-4d-008,T-09d230bd,X-LOC,GEN,ROW,D00-4d-008,D00-4d-008,Y,PASS,구현 위치 실존 1곳,1,
+E3|ROW:D00-4d-008,T-cff153b8,E3,EDIT,ROW,D00-4d-008,D00-4d-008,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E4|ROW:D00-4d-008,T-e21aee3d,E4,EDIT,ROW,D00-4d-008,D00-4d-008,Y,REVIEW,행 집계 — E4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:MODAL:ExcelUploadModal,T-a715809b,X-LOC,GEN,ROW,MODAL:ExcelUploadModal,MODAL:ExcelUploadModal,Y,PASS,구현 위치 실존 2곳,1,
+H6|BTN:btnExcel,T-680a633c,H6,POPUP,BTN,btnExcel,btnExcel,Y,NOPATH,검사기(_verify.spec(@verify)·smoke popup)는 있으나 이 대상(BTN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+G5|BTN:btnExcel,T-7048d08b,G5,POPUP,BTN,btnExcel,btnExcel,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(BTN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+M4|BTN:btnExcel,T-2c7de68c,M4,POPUP,BTN,btnExcel,btnExcel,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace,1,
+X-REASON|ROW:MODAL:FPModal,T-c0820293,X-REASON,DESIGN,ROW,MODAL:FPModal,MODAL:FPModal,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:MODAL:ItemByDivisionModal,T-ad78804b,X-LOC,GEN,ROW,MODAL:ItemByDivisionModal,MODAL:ItemByDivisionModal,Y,PASS,구현 위치 실존 1곳,1,
+H6|COND:txtItemId,T-45f3970a,H6,POPUP,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke,2,
+H6|BTN:btnItemId,T-0e079132,H6,POPUP,BTN,btnItemId,btnItemId,Y,NOPATH,검사기(_verify.spec(@verify)·smoke popup)는 있으나 이 대상(BTN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
+G5|COND:txtItemId,T-01bb2ed4,G5,POPUP,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
+G5|BTN:btnItemId,T-75ae647c,G5,POPUP,BTN,btnItemId,btnItemId,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(BTN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,
+M4|COND:txtItemId,T-7cc4a7a4,M4,POPUP,COND,txtItemId,txtItemId / Model / Item Id / Model/Nickname,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace,2,
+M4|BTN:btnItemId,T-e79a709d,M4,POPUP,BTN,btnItemId,btnItemId,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace,2,
+A1|ROW:MODAL:ItemByDivisionModal,T-a6c2fbce,A1,GEN,ROW,MODAL:ItemByDivisionModal,MODAL:ItemByDivisionModal,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-REASON|ROW:COMMON:UC-01,T-1c7bdfd9,X-REASON,DESIGN,ROW,COMMON:UC-01,COMMON:UC-01,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:COMMON:UC-02,T-7ac7c71f,X-REASON,DESIGN,ROW,COMMON:UC-02,COMMON:UC-02,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:COMMON:UC-03,T-c12b6013,X-REASON,DESIGN,ROW,COMMON:UC-03,COMMON:UC-03,Y,PASS,사유 있음: PIVOT/Measure 설정 없는 정적 컬럼 그리드(SCM_MST_SHEET_COLUMNS staticCo,1,
+X-LOC|ROW:COMMON:UC-04,T-2a9b1f60,X-LOC,GEN,ROW,COMMON:UC-04,COMMON:UC-04,Y,PASS,구현 위치 실존 1곳,1,
+K4|SCREEN,T-40608825,K4,COMMON,SCREEN,SCP0041,SCP0041 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 버튼 구성) — 실행 필요: trace,21,SCP0041_StockOSP.cs:867 SCP0041_StockOSP.cs:868 SCP0041_StockOSP.cs:869 SCP0041_StockOSP.cs:870 SCP0041_StockOSP.cs:872 SCP0041_StockOSP.cs:874 SCP0041_StockOSP.cs:875 SCP0041_StockOSP.cs:876 SCP0041_StockOSP.cs:878 SCP0041_StockOSP.cs:880 SCP0041_StockOSP.cs:882 SCP0041_StockOSP.cs:896 SCP0041_Stoc
+H10|SCREEN,T-f6cb941a,H10,DESIGN,SCREEN,SCP0041,SCP0041 화면,Y,PASS,브라우저 alert/confirm 직접 호출 0 · 공용 메시지 API 사용,2,
+X-REASON|ROW:COMMON:UC-05,T-2f677d6a,X-REASON,DESIGN,ROW,COMMON:UC-05,COMMON:UC-05,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:COMMON:UC-06,T-74ed3753,X-LOC,GEN,ROW,COMMON:UC-06,COMMON:UC-06,Y,PASS,구현 위치 실존 1곳,1,
+G4|ROW:COMMON:UC-06,T-5d67715e,G4,DESIGN,ROW,COMMON:UC-06,COMMON:UC-06,Y,REVIEW,행 집계 — G4 6요소: NOT_RUN:5 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+G1|ROW:COMMON:UC-06,T-3311be84,G1,GEN,ROW,COMMON:UC-06,COMMON:UC-06,Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+G6|ROW:COMMON:UC-06,T-82a649eb,G6,GEN,ROW,COMMON:UC-06,COMMON:UC-06,Y,REVIEW,행 집계 — G6 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:COMMON:UC-06,T-83c94d7b,A1,GEN,ROW,COMMON:UC-06,COMMON:UC-06,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-REASON|ROW:COMMON:UC-07,T-a0154940,X-REASON,DESIGN,ROW,COMMON:UC-07,COMMON:UC-07,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:`SCP0041_StockOSP` Form,T-95dd309f,X-LOC,GEN,ROW,`SCP0041_StockOSP` Form,`SCP0041_StockOSP` Form,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:`SCP0041_StockOSP` Form,T-c0b06b7e,X-ROW,GEN,ENTRY,`SCP0041_StockOSP` Form,`SCP0041_StockOSP` Form,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:`usrConditionPanel1` (조건 패널),T-07b97e2c,X-LOC,GEN,ROW,`usrConditionPanel1` (조건 패널),`usrConditionPanel1` (조건 패널),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-LOC|ROW:`spdMain` FpSpread 2시트,T-1cc226ab,X-LOC,GEN,ROW,`spdMain` FpSpread 2시트,`spdMain` FpSpread 2시트,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:`spdMain` FpSpread 2시트,T-56b68080,A5,DESIGN,ROW,`spdMain` FpSpread 2시트,`spdMain` FpSpread 2시트,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H5|ROW:`spdMain` FpSpread 2시트,T-135a0b55,H5,DESIGN,ROW,`spdMain` FpSpread 2시트,`spdMain` FpSpread 2시트,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H2|ROW:`spdMain` FpSpread 2시트,T-a87e33b4,H2,DESIGN,ROW,`spdMain` FpSpread 2시트,`spdMain` FpSpread 2시트,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+"X-LOC|ROW:`sheet[0] shtMain ""Osp Stock""`",T-d02e5917,X-LOC,GEN,ROW,"`sheet[0] shtMain ""Osp Stock""`","`sheet[0] shtMain ""Osp Stock""`",Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+"G1|ROW:`sheet[0] shtMain ""Osp Stock""`",T-242bd440,G1,GEN,ROW,"`sheet[0] shtMain ""Osp Stock""`","`sheet[0] shtMain ""Osp Stock""`",Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+"A1|ROW:`sheet[0] shtMain ""Osp Stock""`",T-4e2e7387,A1,GEN,ROW,"`sheet[0] shtMain ""Osp Stock""`","`sheet[0] shtMain ""Osp Stock""`",Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+"X-LOC|ROW:`sheet[1] shtPacker ""Pack Hold Stock""`",T-94ededb1,X-LOC,GEN,ROW,"`sheet[1] shtPacker ""Pack Hold Stock""`","`sheet[1] shtPacker ""Pack Hold Stock""`",Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+"D1|ROW:`sheet[1] shtPacker ""Pack Hold Stock""`",T-edf1f06d,D1,EDIT,ROW,"`sheet[1] shtPacker ""Pack Hold Stock""`","`sheet[1] shtPacker ""Pack Hold Stock""`",Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+"D3|ROW:`sheet[1] shtPacker ""Pack Hold Stock""`",T-e6015a34,D3,EDIT,ROW,"`sheet[1] shtPacker ""Pack Hold Stock""`","`sheet[1] shtPacker ""Pack Hold Stock""`",Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:cboDivision (필수),T-b467383b,X-LOC,GEN,ROW,cboDivision (필수),cboDivision (필수),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A1|ROW:cboDivision (필수),T-d4121d0e,A1,GEN,ROW,cboDivision (필수),cboDivision (필수),Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+B3|COND:cboDivision,T-2945952e,B3,COMBO,COND,cboDivision,cboDivision / Division,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,1,
+X-LOC|ROW:clbPlantSite (Osp),T-8f23580e,X-LOC,GEN,ROW,clbPlantSite (Osp),clbPlantSite (Osp),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A1|ROW:clbPlantSite (Osp),T-397479b6,A1,GEN,ROW,clbPlantSite (Osp),clbPlantSite (Osp),Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:clbPlantSite (Pack),T-bc028b16,X-LOC,GEN,ROW,clbPlantSite (Pack),clbPlantSite (Pack),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A1|ROW:clbPlantSite (Pack),T-f23c64c5,A1,GEN,ROW,clbPlantSite (Pack),clbPlantSite (Pack),Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:txtItemId + btnItemId,T-2446db32,X-LOC,GEN,ROW,txtItemId + btnItemId,txtItemId + btnItemId,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|BTN:btnItemId,T-6a291e5c,G4,DESIGN,BTN,btnItemId,btnItemId,Y,NOPATH,검사기(smoke 화면 열림(labels)·_verify)는 있으나 이 대상(BTN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,SCP0041_StockOSP.cs:219 SCP0041_StockOSP.cs:220 SCP0041_StockOSP.cs:221 SCP0041_StockOSP.cs:223 SCP0041_StockOSP.cs:224
+A1|ROW:txtItemId + btnItemId,T-32266b1d,A1,GEN,ROW,txtItemId + btnItemId,txtItemId + btnItemId,Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:dCalendar (필수),T-4ad7833f,X-LOC,GEN,ROW,dCalendar (필수),dCalendar (필수),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|ROW:dCalendar (필수),T-ad9ab0a3,G4,DESIGN,ROW,dCalendar (필수),dCalendar (필수),Y,REVIEW,행 집계 — G4 6요소: NOT_RUN:5 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+G1|ROW:dCalendar (필수),T-0081f9bc,G1,GEN,ROW,dCalendar (필수),dCalendar (필수),Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+G6|ROW:dCalendar (필수),T-c98165d2,G6,GEN,ROW,dCalendar (필수),dCalendar (필수),Y,REVIEW,행 집계 — G6 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:dCalendar (필수),T-96eb40e4,A1,GEN,ROW,dCalendar (필수),dCalendar (필수),Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:txtInspection (Pack),T-f9de5889,X-LOC,GEN,ROW,txtInspection (Pack),txtInspection (Pack),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A1|ROW:txtInspection (Pack),T-948a70a7,A1,GEN,ROW,txtInspection (Pack),txtInspection (Pack),Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:cboStatus (Pack),T-46740cd2,X-LOC,GEN,ROW,cboStatus (Pack),cboStatus (Pack),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A1|ROW:cboStatus (Pack),T-b0cca294,A1,GEN,ROW,cboStatus (Pack),cboStatus (Pack),Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+B3|COND:cboStatus,T-1ec25383,B3,COMBO,COND,cboStatus,cboStatus / Status,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,1,
+X-LOC|ROW:dCalendarCutoff (Pack),T-df9f7b1c,X-LOC,GEN,ROW,dCalendarCutoff (Pack),dCalendarCutoff (Pack),Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|ROW:dCalendarCutoff (Pack),T-60b1b7ac,G4,DESIGN,ROW,dCalendarCutoff (Pack),dCalendarCutoff (Pack),Y,REVIEW,행 집계 — G4 6요소: NOT_RUN:5 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+G1|ROW:dCalendarCutoff (Pack),T-725420ad,G1,GEN,ROW,dCalendarCutoff (Pack),dCalendarCutoff (Pack),Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+G6|ROW:dCalendarCutoff (Pack),T-ed1baa95,G6,GEN,ROW,dCalendarCutoff (Pack),dCalendarCutoff (Pack),Y,REVIEW,행 집계 — G6 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:dCalendarCutoff (Pack),T-5c14857d,A1,GEN,ROW,dCalendarCutoff (Pack),dCalendarCutoff (Pack),Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:[R1],T-e771ecdc,X-LOC,GEN,ROW,[R1],[R1],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D1|ROW:[R1],T-34e0b84b,D1,EDIT,ROW,[R1],[R1],Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:[R1],T-a4730e6a,D3,EDIT,ROW,[R1],[R1],Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+G1|ROW:[R1],T-6471e108,G1,GEN,ROW,[R1],[R1],Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:[R1],T-bc13bc44,A1,GEN,ROW,[R1],[R1],Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:[R2],T-6d699089,X-LOC,GEN,ROW,[R2],[R2],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+G1|ROW:[R2],T-4df77591,G1,GEN,ROW,[R2],[R2],Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:[R2],T-4fe7203e,A1,GEN,ROW,[R2],[R2],Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:[R3],T-4e652469,X-LOC,GEN,ROW,[R3],[R3],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+F6|SCREEN,T-222cda4f,F6,CRUD,SCREEN,SCP0041,SCP0041 화면,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),131,SCP0041_StockOSP.cs:313 SCP0041_StockOSP.cs:315 SCP0041_StockOSP.cs:318 SCP0041_StockOSP.cs:325 SCP0041_StockOSP.cs:326 SCP0041_StockOSP.cs:327 SCP0041_StockOSP.cs:328 SCP0041_StockOSP.cs:329 SCP0041_StockOSP.cs:330 SCP0041_StockOSP.cs:331 SCP0041_StockOSP.cs:332 SCP0041_StockOSP.cs:334 SCP0041_Stoc
+F4|ROW:[R3],T-dd2a4b65,F4,DB,ROW,[R3],[R3],Y,REVIEW,행 집계 — F4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+DB-SYN|ROW:[R3],T-0f39eb62,DB-SYN,DB,ROW,[R3],[R3],Y,REVIEW,행 집계 — DB-SYN 5요소: PASS:3 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:[R4],T-3ec469cc,X-LOC,GEN,ROW,[R4],[R4],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D4|ROW:[R4],T-43c25d07,D4,EDIT,ROW,[R4],[R4],Y,NA,검사 대상 아님 — 이 화면에 D4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D6|SCREEN,T-ca66a7db,D6,EDIT,SCREEN,SCP0041,SCP0041 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) Insert 위치) — 실행 필요: trace,1,
+X-LOC|ROW:[R5],T-4927d8bb,X-LOC,GEN,ROW,[R5],[R5],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+F5|SCREEN,T-3ad7427a,F5,CRUD,SCREEN,SCP0041,SCP0041 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4b CRUD 상태 — Insert 행 CRUD_TYPE=I·편집 행 M 표시) — 실행 필요: trace,1,
+X-LOC|ROW:[R6],T-cdf497d6,X-LOC,GEN,ROW,[R6],[R6],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D1|ROW:[R6],T-3aa597cd,D1,EDIT,ROW,[R6],[R6],Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:[R6],T-3ae73d0e,D3,EDIT,ROW,[R6],[R6],Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:[R7],T-4fd83418,X-LOC,GEN,ROW,[R7],[R7],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+E3|ROW:[R7],T-499306cc,E3,EDIT,ROW,[R7],[R7],Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E4|ROW:[R7],T-3a2ce3b1,E4,EDIT,ROW,[R7],[R7],Y,REVIEW,행 집계 — E4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:[R8],T-f510d39e,X-LOC,GEN,ROW,[R8],[R8],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+A5|ROW:[R8],T-25e0cfb3,A5,DESIGN,ROW,[R8],[R8],Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:[R9],T-c5c04966,X-LOC,GEN,ROW,[R9],[R9],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+A5|ROW:[R9],T-084a57a9,A5,DESIGN,ROW,[R9],[R9],Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:[R10],T-90166e3b,X-LOC,GEN,ROW,[R10],[R10],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D1|ROW:[R10],T-046ec443,D1,EDIT,ROW,[R10],[R10],Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:[R10],T-1d7e5258,D3,EDIT,ROW,[R10],[R10],Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+G1|ROW:[R10],T-ca273e42,G1,GEN,ROW,[R10],[R10],Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:[R10],T-cb767239,A1,GEN,ROW,[R10],[R10],Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+X-LOC|ROW:[R11],T-b889c0eb,X-LOC,GEN,ROW,[R11],[R11],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D1|ROW:[R11],T-2400ac03,D1,EDIT,ROW,[R11],[R11],Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:[R11],T-de2dba70,D3,EDIT,ROW,[R11],[R11],Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:[R12/R13],T-d9fed692,X-LOC,GEN,ROW,[R12/R13],[R12/R13],Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D1|ROW:[R12/R13],T-1b6baac3,D1,EDIT,ROW,[R12/R13],[R12/R13],Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+D3|ROW:[R12/R13],T-e16954f8,D3,EDIT,ROW,[R12/R13],[R12/R13],Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+G1|ROW:[R12/R13],T-afd8bcf6,G1,GEN,ROW,[R12/R13],[R12/R13],Y,REVIEW,행 집계 — G1 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:[R12/R13],T-65c2157f,A1,GEN,ROW,[R12/R13],[R12/R13],Y,REVIEW,행 집계 — A1 2요소: REVIEW:2,1,
+G03-WIRE|SCREEN,T-9a9813fe,G03-WIRE,GEN,SCREEN,SCP0041,SCP0041 화면,Y,NOPATH,검사기(check.js G03)는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),9,SCP0041_StockOSP.cs:114 SCP0041_StockOSP.cs:117 SCP0041_StockOSP.cs:219 SCP0041_StockOSP.cs:220 SCP0041_StockOSP.cs:221 SCP0041_StockOSP.cs:223 SCP0041_StockOSP.cs:224
+X-ROW|ENTRY:SCP0041_StockOSP.ActiveSheet_CellChanged,T-b414e651,X-ROW,GEN,ENTRY,SCP0041_StockOSP.ActiveSheet_CellChanged,SCP0041_StockOSP.ActiveSheet_CellChanged,Y,REVIEW,진입점 집계 5검사 — NOT_RUN:5 (미실행 검사가 남아 판정필요),6,SCP0041_StockOSP.cs:805 SCP0041_StockOSP.cs:806 SCP0041_StockOSP.cs:807 SCP0041_StockOSP.cs:808 SCP0041_StockOSP.cs:809 SCP0041_StockOSP.cs:834 SCP0041_StockOSP.cs:838 SCP0041_StockOSP.cs:848
+C2|ENTRY:SCP0041_StockOSP.ActiveSheet_CellChanged,T-4fa793d3,C2,CASCADE,ENTRY,SCP0041_StockOSP.ActiveSheet_CellChanged,SCP0041_StockOSP.ActiveSheet_CellChanged,Y,NA,검사 대상 아님 — 이 화면에 C2 를 적용할 요소(컬럼·조회조건·SP)가 없다,20,SCP0041_StockOSP.cs:805 SCP0041_StockOSP.cs:806 SCP0041_StockOSP.cs:807 SCP0041_StockOSP.cs:808 SCP0041_StockOSP.cs:809 SCP0041_StockOSP.cs:810 SCP0041_StockOSP.cs:811 SCP0041_StockOSP.cs:813 SCP0041_StockOSP.cs:816 SCP0041_StockOSP.cs:817 SCP0041_StockOSP.cs:819 SCP0041_StockOSP.cs:821 SCP0041_Stoc
+C3|ENTRY:SCP0041_StockOSP.ActiveSheet_CellChanged,T-2b3d7862,C3,CASCADE,ENTRY,SCP0041_StockOSP.ActiveSheet_CellChanged,SCP0041_StockOSP.ActiveSheet_CellChanged,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,20,SCP0041_StockOSP.cs:805 SCP0041_StockOSP.cs:806 SCP0041_StockOSP.cs:807 SCP0041_StockOSP.cs:808 SCP0041_StockOSP.cs:809 SCP0041_StockOSP.cs:810 SCP0041_StockOSP.cs:811 SCP0041_StockOSP.cs:813 SCP0041_StockOSP.cs:816 SCP0041_StockOSP.cs:817 SCP0041_StockOSP.cs:819 SCP0041_StockOSP.cs:821 SCP0041_Stoc
+C6|ENTRY:SCP0041_StockOSP.ActiveSheet_CellChanged,T-9d09bb3a,C6,CASCADE,ENTRY,SCP0041_StockOSP.ActiveSheet_CellChanged,SCP0041_StockOSP.ActiveSheet_CellChanged,Y,NA,검사 대상 아님 — 이 화면에 C6 를 적용할 요소(컬럼·조회조건·SP)가 없다,20,SCP0041_StockOSP.cs:805 SCP0041_StockOSP.cs:806 SCP0041_StockOSP.cs:807 SCP0041_StockOSP.cs:808 SCP0041_StockOSP.cs:809 SCP0041_StockOSP.cs:810 SCP0041_StockOSP.cs:811 SCP0041_StockOSP.cs:813 SCP0041_StockOSP.cs:816 SCP0041_StockOSP.cs:817 SCP0041_StockOSP.cs:819 SCP0041_StockOSP.cs:821 SCP0041_Stoc
+E4|MSG:MSG00108,T-221e8255,E4,EDIT,MSG,MSG00108,MSG00108,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,SCP0041_StockOSP.cs:830 SCP0041_StockOSP.cs:463
+I1|SCREEN,T-ef12f5c8,I1,DESIGN,SCREEN,SCP0041,SCP0041 화면,Y,NOT_RUN,검사기 있음(judge(DB 조회)·하네스 I18N1) — 실행 필요: meta,10,SCP0041_StockOSP.cs:830 SCP0041_StockOSP.cs:848 SCP0041_StockOSP.cs:689 SCP0041_StockOSP.cs:773 SCP0041_StockOSP.cs:315 SCP0041_StockOSP.cs:373 SCP0041_StockOSP.cs:463 SCP0041_StockOSP.cs:492 SCP0041_StockOSP.cs:500 SCP0041_StockOSP.cs:508
+X-ROW|ENTRY:SCP0041_StockOSP.BtnItemId_Click,T-dde860d4,X-ROW,GEN,ENTRY,SCP0041_StockOSP.BtnItemId_Click,SCP0041_StockOSP.BtnItemId_Click,Y,REVIEW,진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요),9,SCP0041_StockOSP.cs:872 SCP0041_StockOSP.cs:874 SCP0041_StockOSP.cs:875 SCP0041_StockOSP.cs:876 SCP0041_StockOSP.cs:882
+X-ROW|ENTRY:SCP0041_StockOSP.CboDivision_SelectedIndexChanged,T-e6cd9d65,X-ROW,GEN,ENTRY,SCP0041_StockOSP.CboDivision_SelectedIndexChanged,SCP0041_StockOSP.CboDivision_SelectedIndexChanged,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요),3,SCP0041_StockOSP.cs:889
+C2|ENTRY:SCP0041_StockOSP.CboDivision_SelectedIndexChanged,T-efe72cfa,C2,CASCADE,ENTRY,SCP0041_StockOSP.CboDivision_SelectedIndexChanged,SCP0041_StockOSP.CboDivision_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,SCP0041_StockOSP.cs:889
+C3|ENTRY:SCP0041_StockOSP.CboDivision_SelectedIndexChanged,T-99fd1005,C3,CASCADE,ENTRY,SCP0041_StockOSP.CboDivision_SelectedIndexChanged,SCP0041_StockOSP.CboDivision_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,SCP0041_StockOSP.cs:889
+C6|ENTRY:SCP0041_StockOSP.CboDivision_SelectedIndexChanged,T-3211b8c4,C6,CASCADE,ENTRY,SCP0041_StockOSP.CboDivision_SelectedIndexChanged,SCP0041_StockOSP.CboDivision_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C6 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,SCP0041_StockOSP.cs:889
+X-ROW|ENTRY:SCP0041_StockOSP.CreateSpread,T-fe5a9b32,X-ROW,GEN,ENTRY,SCP0041_StockOSP.CreateSpread,SCP0041_StockOSP.CreateSpread,Y,REVIEW,진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요),4,SCP0041_StockOSP.cs:174 SCP0041_StockOSP.cs:175 SCP0041_StockOSP.cs:177 SCP0041_StockOSP.cs:178 SCP0041_StockOSP.cs:180
+A5|ENTRY:SCP0041_StockOSP.CreateSpread,T-bc187fb7,A5,DESIGN,ENTRY,SCP0041_StockOSP.CreateSpread,SCP0041_StockOSP.CreateSpread,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,6,SCP0041_StockOSP.cs:174 SCP0041_StockOSP.cs:175 SCP0041_StockOSP.cs:177 SCP0041_StockOSP.cs:178 SCP0041_StockOSP.cs:180 SCP0041_StockOSP.cs:181
+H2|ENTRY:SCP0041_StockOSP.CreateSpread,T-0ab0e894,H2,DESIGN,ENTRY,SCP0041_StockOSP.CreateSpread,SCP0041_StockOSP.CreateSpread,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,6,SCP0041_StockOSP.cs:174 SCP0041_StockOSP.cs:175 SCP0041_StockOSP.cs:177 SCP0041_StockOSP.cs:178 SCP0041_StockOSP.cs:180 SCP0041_StockOSP.cs:181
+H5|ENTRY:SCP0041_StockOSP.CreateSpread,T-eb73781d,H5,DESIGN,ENTRY,SCP0041_StockOSP.CreateSpread,SCP0041_StockOSP.CreateSpread,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,6,SCP0041_StockOSP.cs:174 SCP0041_StockOSP.cs:175 SCP0041_StockOSP.cs:177 SCP0041_StockOSP.cs:178 SCP0041_StockOSP.cs:180 SCP0041_StockOSP.cs:181
+D5|ENTRY:SCP0041_StockOSP.CreateSpread,T-180e322d,D5,EDIT,ENTRY,SCP0041_StockOSP.CreateSpread,SCP0041_StockOSP.CreateSpread,Y,NA,검사 대상 아님 — 이 화면에 D5 를 적용할 요소(컬럼·조회조건·SP)가 없다,6,SCP0041_StockOSP.cs:174 SCP0041_StockOSP.cs:175 SCP0041_StockOSP.cs:177 SCP0041_StockOSP.cs:178 SCP0041_StockOSP.cs:180 SCP0041_StockOSP.cs:181
+X-ROW|ENTRY:SCP0041_StockOSP.DefineProperty,T-4b2b20c8,X-ROW,GEN,ENTRY,SCP0041_StockOSP.DefineProperty,SCP0041_StockOSP.DefineProperty,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),3,SCP0041_StockOSP.cs:135
+A10|SCREEN,T-6a29f050,A10,GEN,SCREEN,SCP0041,SCP0041 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 조회 전 그리드) — 실행 필요: trace,32,SCP0041_StockOSP.cs:135 SCP0041_StockOSP.cs:122 SCP0041_StockOSP.cs:124 SCP0041_StockOSP.cs:125 SCP0041_StockOSP.cs:126 SCP0041_StockOSP.cs:127 SCP0041_StockOSP.cs:140 SCP0041_StockOSP.cs:142 SCP0041_StockOSP.cs:143 SCP0041_StockOSP.cs:145 SCP0041_StockOSP.cs:146 SCP0041_StockOSP.cs:148 SCP0041_Stoc
+X-REOPEN|SCREEN,T-95b60a61,X-REOPEN,GEN,SCREEN,SCP0041,SCP0041 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 닫기·재오픈) — 실행 필요: trace,9,SCP0041_StockOSP.Designer.cs:16 SCP0041_StockOSP.Designer.cs:18 SCP0041_StockOSP.Designer.cs:20 SCP0041_StockOSP.cs:661 SCP0041_StockOSP.cs:738 SCP0041_StockOSP.cs:163 SCP0041_StockOSP.cs:359 SCP0041_StockOSP.cs:474
+X-ROW|ENTRY:SCP0041_StockOSP.EditButton,T-2c00db80,X-ROW,GEN,ENTRY,SCP0041_StockOSP.EditButton,SCP0041_StockOSP.EditButton,Y,REVIEW,진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요),2,SCP0041_StockOSP.cs:259 SCP0041_StockOSP.cs:261 SCP0041_StockOSP.cs:263 SCP0041_StockOSP.cs:266 SCP0041_StockOSP.cs:268
+D1|ENTRY:SCP0041_StockOSP.EditButton,T-ad7da4bc,D1,EDIT,ENTRY,SCP0041_StockOSP.EditButton,SCP0041_StockOSP.EditButton,Y,NA,검사 대상 아님 — 이 화면에 D1 를 적용할 요소(컬럼·조회조건·SP)가 없다,26,SCP0041_StockOSP.cs:259 SCP0041_StockOSP.cs:261 SCP0041_StockOSP.cs:263 SCP0041_StockOSP.cs:266 SCP0041_StockOSP.cs:268 SCP0041_StockOSP.cs:269 SCP0041_StockOSP.cs:271 SCP0041_StockOSP.cs:272 SCP0041_StockOSP.cs:273 SCP0041_StockOSP.cs:274 SCP0041_StockOSP.cs:275 SCP0041_StockOSP.cs:276 SCP0041_Stoc
+D3|ENTRY:SCP0041_StockOSP.EditButton,T-b076e248,D3,EDIT,ENTRY,SCP0041_StockOSP.EditButton,SCP0041_StockOSP.EditButton,Y,NA,검사 대상 아님 — 이 화면에 D3 를 적용할 요소(컬럼·조회조건·SP)가 없다,26,SCP0041_StockOSP.cs:259 SCP0041_StockOSP.cs:261 SCP0041_StockOSP.cs:263 SCP0041_StockOSP.cs:266 SCP0041_StockOSP.cs:268 SCP0041_StockOSP.cs:269 SCP0041_StockOSP.cs:271 SCP0041_StockOSP.cs:272 SCP0041_StockOSP.cs:273 SCP0041_StockOSP.cs:274 SCP0041_StockOSP.cs:275 SCP0041_StockOSP.cs:276 SCP0041_Stoc
+X-ROW|ENTRY:SCP0041_StockOSP.FindButton,T-7c94a720,X-ROW,GEN,ENTRY,SCP0041_StockOSP.FindButton,SCP0041_StockOSP.FindButton,Y,REVIEW,진입점 집계 6검사 — NOT_RUN:4 · REVIEW:2,1,SCP0041_StockOSP.cs:234 SCP0041_StockOSP.cs:236 SCP0041_StockOSP.cs:239 SCP0041_StockOSP.cs:244
+A1|SP:P_SCP0041_GET_PACK_HOLD_STOCK,T-154162fb,A1,GEN,SP,PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK,PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK,Y,REVIEW,골든 비교 케이스 없음(PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),52,SCP0041_StockOSP.cs:234 SCP0041_StockOSP.cs:236 SCP0041_StockOSP.cs:239 SCP0041_StockOSP.cs:244 SCP0041_StockOSP.cs:704 SCP0041_StockOSP.cs:706 SCP0041_StockOSP.cs:709 SCP0041_StockOSP.cs:712 SCP0041_StockOSP.cs:713 SCP0041_StockOSP.cs:714 SCP0041_StockOSP.cs:715 SCP0041_StockOSP.cs:716 SCP0041_Stoc
+A1|SP:P_SCP0041_GET_STOCK_OSP,T-dca7a722,A1,GEN,SP,PKG_SCP0041.P_SCP0041_GET_STOCK_OSP,PKG_SCP0041.P_SCP0041_GET_STOCK_OSP,Y,REVIEW,골든 비교 케이스 없음(PKG_SCP0041.P_SCP0041_GET_STOCK_OSP — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),44,SCP0041_StockOSP.cs:234 SCP0041_StockOSP.cs:236 SCP0041_StockOSP.cs:239 SCP0041_StockOSP.cs:244 SCP0041_StockOSP.cs:631 SCP0041_StockOSP.cs:633 SCP0041_StockOSP.cs:636 SCP0041_StockOSP.cs:639 SCP0041_StockOSP.cs:640 SCP0041_StockOSP.cs:641 SCP0041_StockOSP.cs:642 SCP0041_StockOSP.cs:643 SCP0041_Stoc
+A6|SP:P_SCP0041_GET_PACK_HOLD_STOCK,T-f527876e,A6,GEN,SP,PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK,PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK,Y,NOT_RUN,"검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) — 실행 필요: trace",52,SCP0041_StockOSP.cs:234 SCP0041_StockOSP.cs:236 SCP0041_StockOSP.cs:239 SCP0041_StockOSP.cs:244 SCP0041_StockOSP.cs:704 SCP0041_StockOSP.cs:706 SCP0041_StockOSP.cs:709 SCP0041_StockOSP.cs:712 SCP0041_StockOSP.cs:713 SCP0041_StockOSP.cs:714 SCP0041_StockOSP.cs:715 SCP0041_StockOSP.cs:716 SCP0041_Stoc
+A6|SP:P_SCP0041_GET_STOCK_OSP,T-bc8c4c6d,A6,GEN,SP,PKG_SCP0041.P_SCP0041_GET_STOCK_OSP,PKG_SCP0041.P_SCP0041_GET_STOCK_OSP,Y,NOT_RUN,"검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) — 실행 필요: trace",44,SCP0041_StockOSP.cs:234 SCP0041_StockOSP.cs:236 SCP0041_StockOSP.cs:239 SCP0041_StockOSP.cs:244 SCP0041_StockOSP.cs:631 SCP0041_StockOSP.cs:633 SCP0041_StockOSP.cs:636 SCP0041_StockOSP.cs:639 SCP0041_StockOSP.cs:640 SCP0041_StockOSP.cs:641 SCP0041_StockOSP.cs:642 SCP0041_StockOSP.cs:643 SCP0041_Stoc
+F4|SP:P_SCP0041_GET_PACK_HOLD_STOCK,T-6d061dde,F4,DB,SP,PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK,PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,143,SCP0041_StockOSP.cs:234 SCP0041_StockOSP.cs:236 SCP0041_StockOSP.cs:239 SCP0041_StockOSP.cs:244 SCP0041_StockOSP.cs:704 SCP0041_StockOSP.cs:706 SCP0041_StockOSP.cs:709 SCP0041_StockOSP.cs:712 SCP0041_StockOSP.cs:713 SCP0041_StockOSP.cs:714 SCP0041_StockOSP.cs:715 SCP0041_StockOSP.cs:716 SCP0041_Stoc
+F4|SP:P_SCP0041_GET_STOCK_OSP,T-4673888c,F4,DB,SP,PKG_SCP0041.P_SCP0041_GET_STOCK_OSP,PKG_SCP0041.P_SCP0041_GET_STOCK_OSP,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,80,SCP0041_StockOSP.cs:234 SCP0041_StockOSP.cs:236 SCP0041_StockOSP.cs:239 SCP0041_StockOSP.cs:244 SCP0041_StockOSP.cs:631 SCP0041_StockOSP.cs:633 SCP0041_StockOSP.cs:636 SCP0041_StockOSP.cs:639 SCP0041_StockOSP.cs:640 SCP0041_StockOSP.cs:641 SCP0041_StockOSP.cs:642 SCP0041_StockOSP.cs:643 SCP0041_Stoc
+X-ROW|ENTRY:SCP0041_StockOSP.FindData_Main,T-3b61f15f,X-ROW,GEN,ENTRY,SCP0041_StockOSP.FindData_Main,SCP0041_StockOSP.FindData_Main,Y,REVIEW,진입점 집계 9검사 — NOT_RUN:7 · REVIEW:1 · PASS:1,13,SCP0041_StockOSP.cs:631 SCP0041_StockOSP.cs:651 SCP0041_StockOSP.cs:653 SCP0041_StockOSP.cs:658 SCP0041_StockOSP.cs:663 SCP0041_StockOSP.cs:682 SCP0041_StockOSP.cs:689
+DB-SYN|SP:P_SCP0041_GET_STOCK_OSP,T-7ce0595e,DB-SYN,DB,SP,PKG_SCP0041.P_SCP0041_GET_STOCK_OSP,PKG_SCP0041.P_SCP0041_GET_STOCK_OSP,Y,PASS,시노님검사 OK,5,SCP0041_StockOSP.cs:660 SCP0041_StockOSP.cs:662 SCP0041_StockOSP.cs:670 SCP0041_StockOSP.cs:358 SCP0041_StockOSP.cs:368
+X-ROW|ENTRY:SCP0041_StockOSP.FindData_Pack,T-ddbb0ff3,X-ROW,GEN,ENTRY,SCP0041_StockOSP.FindData_Pack,SCP0041_StockOSP.FindData_Pack,Y,REVIEW,진입점 집계 11검사 — NOT_RUN:9 · REVIEW:1 · PASS:1,13,SCP0041_StockOSP.cs:704 SCP0041_StockOSP.cs:727 SCP0041_StockOSP.cs:730 SCP0041_StockOSP.cs:735 SCP0041_StockOSP.cs:741 SCP0041_StockOSP.cs:765 SCP0041_StockOSP.cs:773
+DB-SYN|SP:P_SCP0041_GET_PACK_HOLD_STOCK,T-a181824c,DB-SYN,DB,SP,PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK,PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK,Y,PASS,시노님검사 OK,5,SCP0041_StockOSP.cs:737 SCP0041_StockOSP.cs:740 SCP0041_StockOSP.cs:752 SCP0041_StockOSP.cs:473 SCP0041_StockOSP.cs:486
+X-ROW|ENTRY:SCP0041_StockOSP.Form_Load,T-3b6cbce5,X-ROW,GEN,ENTRY,SCP0041_StockOSP.Form_Load,SCP0041_StockOSP.Form_Load,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),2,SCP0041_StockOSP.cs:122 SCP0041_StockOSP.cs:124 SCP0041_StockOSP.cs:125 SCP0041_StockOSP.cs:126 SCP0041_StockOSP.cs:127
+X-ROW|ENTRY:SCP0041_StockOSP.GetDayRange,T-7432d1d6,X-ROW,GEN,ENTRY,SCP0041_StockOSP.GetDayRange,SCP0041_StockOSP.GetDayRange,Y,REVIEW,진입점 집계 2검사 — NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요),2,SCP0041_StockOSP.cs:571 SCP0041_StockOSP.cs:572 SCP0041_StockOSP.cs:573 SCP0041_StockOSP.cs:575 SCP0041_StockOSP.cs:578
+B4|ENTRY:SCP0041_StockOSP.GetDayRange,T-45615a16,B4,COMBO,ENTRY,SCP0041_StockOSP.GetDayRange,SCP0041_StockOSP.GetDayRange,Y,REVIEW,진입점 집계 — B4 3요소: NOPATH:3 (미실행 요소가 남아 판정필요),12,SCP0041_StockOSP.cs:571 SCP0041_StockOSP.cs:572 SCP0041_StockOSP.cs:573 SCP0041_StockOSP.cs:575 SCP0041_StockOSP.cs:578 SCP0041_StockOSP.cs:579 SCP0041_StockOSP.cs:580 SCP0041_StockOSP.cs:582 SCP0041_StockOSP.cs:583 SCP0041_StockOSP.cs:584 SCP0041_StockOSP.cs:587 SCP0041_StockOSP.cs:588
+B3|ENTRY:SCP0041_StockOSP.GetDayRange,T-9edd6b03,B3,COMBO,ENTRY,SCP0041_StockOSP.GetDayRange,SCP0041_StockOSP.GetDayRange,N,REVIEW,진입점 집계 — B3 2요소: TODO:2 (미실행 요소가 남아 판정필요),12,SCP0041_StockOSP.cs:571 SCP0041_StockOSP.cs:572 SCP0041_StockOSP.cs:573 SCP0041_StockOSP.cs:575 SCP0041_StockOSP.cs:578 SCP0041_StockOSP.cs:579 SCP0041_StockOSP.cs:580 SCP0041_StockOSP.cs:582 SCP0041_StockOSP.cs:583 SCP0041_StockOSP.cs:584 SCP0041_StockOSP.cs:587 SCP0041_StockOSP.cs:588
+X-ROW|ENTRY:SCP0041_StockOSP.GetLookupData,T-9ba0b6b6,X-ROW,GEN,ENTRY,SCP0041_StockOSP.GetLookupData,SCP0041_StockOSP.GetLookupData,Y,REVIEW,진입점 집계 5검사 — NOPATH:2 · NOT_RUN:2 · TODO:1 (미실행 검사가 남아 판정필요),2,SCP0041_StockOSP.cs:161 SCP0041_StockOSP.cs:163 SCP0041_StockOSP.cs:165 SCP0041_StockOSP.cs:166 SCP0041_StockOSP.cs:167
+B4|ENTRY:SCP0041_StockOSP.GetLookupData,T-32dc1841,B4,COMBO,ENTRY,SCP0041_StockOSP.GetLookupData,SCP0041_StockOSP.GetLookupData,Y,REVIEW,진입점 집계 — B4 3요소: NOPATH:3 (미실행 요소가 남아 판정필요),4,SCP0041_StockOSP.cs:161 SCP0041_StockOSP.cs:166 SCP0041_StockOSP.cs:167 SCP0041_StockOSP.cs:169
+B3|ENTRY:SCP0041_StockOSP.GetLookupData,T-68deb480,B3,COMBO,ENTRY,SCP0041_StockOSP.GetLookupData,SCP0041_StockOSP.GetLookupData,N,REVIEW,진입점 집계 — B3 2요소: TODO:2 (미실행 요소가 남아 판정필요),4,SCP0041_StockOSP.cs:161 SCP0041_StockOSP.cs:166 SCP0041_StockOSP.cs:167 SCP0041_StockOSP.cs:169
+F4|SP:SCM0001_GET_LOOKUP_VALUES,T-7bc3bb35,F4,DB,SP,SCM0001_GET_LOOKUP_VALUES,SCM0001_GET_LOOKUP_VALUES,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,2,SCP0041_StockOSP.cs:165 SCP0041_StockOSP.cs:167
+DB-SYN|SP:SCM0001_GET_LOOKUP_VALUES,T-8c3e39f4,DB-SYN,DB,SP,SCM0001_GET_LOOKUP_VALUES,SCM0001_GET_LOOKUP_VALUES,Y,NOPATH,검사기(syn_check.py·fixture dberr)는 있으나 이 대상(SP)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,SCP0041_StockOSP.cs:165 SCP0041_StockOSP.cs:167
+X-ROW|ENTRY:SCP0041_StockOSP.InitControls,T-955703b7,X-ROW,GEN,ENTRY,SCP0041_StockOSP.InitControls,SCP0041_StockOSP.InitControls,Y,REVIEW,진입점 집계 7검사 — NOT_RUN:7 (미실행 검사가 남아 판정필요),5,SCP0041_StockOSP.cs:143 SCP0041_StockOSP.cs:146 SCP0041_StockOSP.cs:150 SCP0041_StockOSP.cs:156
+C1|COND:cboStatus,T-7748c467,C1,CASCADE,COND,cboStatus,cboStatus / Status,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,1,SCP0041_StockOSP.cs:150
+X-ROW|ENTRY:SCP0041_StockOSP.InitSpread,T-a7d95ab9,X-ROW,GEN,ENTRY,SCP0041_StockOSP.InitSpread,SCP0041_StockOSP.InitSpread,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),6,SCP0041_StockOSP.cs:192 SCP0041_StockOSP.cs:193 SCP0041_StockOSP.cs:195 SCP0041_StockOSP.cs:196
+F4|SP:P_SCP0041_SAVE_PACKER_HOLD_STOCK,T-b5884b17,F4,DB,SP,PKG_SCP0041.P_SCP0041_SAVE_PACKER_HOLD_STOCK,PKG_SCP0041.P_SCP0041_SAVE_PACKER_HOLD_STOCK,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,92,SCP0041_StockOSP.cs:313 SCP0041_StockOSP.cs:315 SCP0041_StockOSP.cs:318 SCP0041_StockOSP.cs:383 SCP0041_StockOSP.cs:384 SCP0041_StockOSP.cs:385 SCP0041_StockOSP.cs:386 SCP0041_StockOSP.cs:387 SCP0041_StockOSP.cs:388 SCP0041_StockOSP.cs:389 SCP0041_StockOSP.cs:390 SCP0041_StockOSP.cs:391 SCP0041_Stoc
+E4|MSG:MSG00012,T-00ebea61,E4,EDIT,MSG,MSG00012,MSG00012,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,1,SCP0041_StockOSP.cs:315
+F4|SP:SCP0040_SAVE_CHARACTERISTIC_CAPA,T-18becd50,F4,DB,SP,SCP0040_SAVE_CHARACTERISTIC_CAPA,SCP0040_SAVE_CHARACTERISTIC_CAPA,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,38,SCP0041_StockOSP.cs:325 SCP0041_StockOSP.cs:326 SCP0041_StockOSP.cs:327 SCP0041_StockOSP.cs:328 SCP0041_StockOSP.cs:329 SCP0041_StockOSP.cs:330 SCP0041_StockOSP.cs:331 SCP0041_StockOSP.cs:332 SCP0041_StockOSP.cs:334 SCP0041_StockOSP.cs:337 SCP0041_StockOSP.cs:338 SCP0041_StockOSP.cs:340 SCP0041_Stoc
+DB-SYN|SP:SCP0040_SAVE_CHARACTERISTIC_CAPA,T-2e93d5af,DB-SYN,DB,SP,SCP0040_SAVE_CHARACTERISTIC_CAPA,SCP0040_SAVE_CHARACTERISTIC_CAPA,Y,NOPATH,검사기(syn_check.py·fixture dberr)는 있으나 이 대상(SP)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,SCP0041_StockOSP.cs:354 SCP0041_StockOSP.cs:358 SCP0041_StockOSP.cs:368
+X-ROW|ENTRY:SCP0041_StockOSP.SaveData,T-6bec78df,X-ROW,GEN,ENTRY,SCP0041_StockOSP.SaveData,SCP0041_StockOSP.SaveData,Y,REVIEW,진입점 집계 10검사 — NOT_RUN:6 · NOPATH:3 · PASS:1 (미실행 검사가 남아 판정필요),2,SCP0041_StockOSP.cs:356
+E4|MSG:MSG00020,T-08fad59b,E4,EDIT,MSG,MSG00020,MSG00020,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,SCP0041_StockOSP.cs:373 SCP0041_StockOSP.cs:492
+X-ROW|ENTRY:SCP0041_StockOSP.SaveDataPacker,T-a5512685,X-ROW,GEN,ENTRY,SCP0041_StockOSP.SaveDataPacker,SCP0041_StockOSP.SaveDataPacker,Y,REVIEW,진입점 집계 11검사 — NOT_RUN:7 · NOPATH:2 · PASS:2 (미실행 검사가 남아 판정필요),8,SCP0041_StockOSP.cs:449 SCP0041_StockOSP.cs:450 SCP0041_StockOSP.cs:471 SCP0041_StockOSP.cs:500 SCP0041_StockOSP.cs:508
+DB-SYN|SP:P_SCP0041_SAVE_PACKER_HOLD_STOCK,T-4bc1284c,DB-SYN,DB,SP,PKG_SCP0041.P_SCP0041_SAVE_PACKER_HOLD_STOCK,PKG_SCP0041.P_SCP0041_SAVE_PACKER_HOLD_STOCK,Y,PASS,시노님검사 OK,3,SCP0041_StockOSP.cs:469 SCP0041_StockOSP.cs:473 SCP0041_StockOSP.cs:486
+X-ROW|ENTRY:SCP0041_StockOSP.SetChangedControl,T-9a302222,X-ROW,GEN,ENTRY,SCP0041_StockOSP.SetChangedControl,SCP0041_StockOSP.SetChangedControl,Y,REVIEW,진입점 집계 5검사 — NOT_RUN:5 (미실행 검사가 남아 판정필요),2,SCP0041_StockOSP.cs:520 SCP0041_StockOSP.cs:521 SCP0041_StockOSP.cs:522 SCP0041_StockOSP.cs:524 SCP0041_StockOSP.cs:535
+E4|COND:cboDivision,T-0abc8d6d,E4,EDIT,COND,cboDivision,cboDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,SCP0041_StockOSP.cs:520 SCP0041_StockOSP.cs:521 SCP0041_StockOSP.cs:522 SCP0041_StockOSP.cs:524
+E4|COND:clbPlantSite,T-d04a77c6,E4,EDIT,COND,clbPlantSite,clbPlantSite / Plant Site,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,SCP0041_StockOSP.cs:520 SCP0041_StockOSP.cs:521 SCP0041_StockOSP.cs:522 SCP0041_StockOSP.cs:524 SCP0041_StockOSP.cs:535
+C3|ENTRY:SCP0041_StockOSP.SetChangedControl,T-d3b7a24c,C3,CASCADE,ENTRY,SCP0041_StockOSP.SetChangedControl,SCP0041_StockOSP.SetChangedControl,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,10,SCP0041_StockOSP.cs:521 SCP0041_StockOSP.cs:522 SCP0041_StockOSP.cs:524 SCP0041_StockOSP.cs:526 SCP0041_StockOSP.cs:528 SCP0041_StockOSP.cs:530 SCP0041_StockOSP.cs:532
+E4|ENTRY:SCP0041_StockOSP.SetChangedControl,T-276ac6f1,E4,EDIT,ENTRY,SCP0041_StockOSP.SetChangedControl,SCP0041_StockOSP.SetChangedControl,Y,REVIEW,진입점 집계 — E4 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),10,SCP0041_StockOSP.cs:521 SCP0041_StockOSP.cs:522 SCP0041_StockOSP.cs:524 SCP0041_StockOSP.cs:526 SCP0041_StockOSP.cs:528 SCP0041_StockOSP.cs:530 SCP0041_StockOSP.cs:532
+C1|COND:clbPlantSite,T-9887f912,C1,CASCADE,COND,clbPlantSite,clbPlantSite / Plant Site,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,1,SCP0041_StockOSP.cs:535
+X-ROW|ENTRY:SCP0041_StockOSP.SetSelectMenu,T-d11fac9d,X-ROW,GEN,ENTRY,SCP0041_StockOSP.SetSelectMenu,SCP0041_StockOSP.SetSelectMenu,Y,REVIEW,진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요),32,SCP0041_StockOSP.cs:597 SCP0041_StockOSP.cs:598 SCP0041_StockOSP.cs:600 SCP0041_StockOSP.cs:603 SCP0041_StockOSP.cs:604 SCP0041_StockOSP.cs:605 SCP0041_StockOSP.cs:606 SCP0041_StockOSP.cs:607 SCP0041_StockOSP.cs:615 SCP0041_StockOSP.cs:616 SCP0041_StockOSP.cs:617 SCP0041_StockOSP.cs:618 SCP0041_Stoc
+C3|ENTRY:SCP0041_StockOSP.SetSelectMenu,T-a7929ba3,C3,CASCADE,ENTRY,SCP0041_StockOSP.SetSelectMenu,SCP0041_StockOSP.SetSelectMenu,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,2,SCP0041_StockOSP.cs:600 SCP0041_StockOSP.cs:625
+E4|ENTRY:SCP0041_StockOSP.SetSelectMenu,T-347f5ff7,E4,EDIT,ENTRY,SCP0041_StockOSP.SetSelectMenu,SCP0041_StockOSP.SetSelectMenu,Y,REVIEW,진입점 집계 — E4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),2,SCP0041_StockOSP.cs:600 SCP0041_StockOSP.cs:625
+X-ROW|ENTRY:SCP0041_StockOSP.SetSpreadInit,T-0a4ab797,X-ROW,GEN,ENTRY,SCP0041_StockOSP.SetSpreadInit,SCP0041_StockOSP.SetSpreadInit,Y,REVIEW,진입점 집계 6검사 — NOT_RUN:6 (미실행 검사가 남아 판정필요),6,SCP0041_StockOSP.cs:201 SCP0041_StockOSP.cs:203 SCP0041_StockOSP.cs:204 SCP0041_StockOSP.cs:208 SCP0041_StockOSP.cs:209
+A5|ENTRY:SCP0041_StockOSP.SetSpreadInit,T-f1a17ce0,A5,DESIGN,ENTRY,SCP0041_StockOSP.SetSpreadInit,SCP0041_StockOSP.SetSpreadInit,Y,NA,검사 대상 아님 — 이 화면에 A5 를 적용할 요소(컬럼·조회조건·SP)가 없다,7,SCP0041_StockOSP.cs:201 SCP0041_StockOSP.cs:203 SCP0041_StockOSP.cs:204 SCP0041_StockOSP.cs:208 SCP0041_StockOSP.cs:209 SCP0041_StockOSP.cs:211 SCP0041_StockOSP.cs:213
+H2|ENTRY:SCP0041_StockOSP.SetSpreadInit,T-14452754,H2,DESIGN,ENTRY,SCP0041_StockOSP.SetSpreadInit,SCP0041_StockOSP.SetSpreadInit,Y,NA,검사 대상 아님 — 이 화면에 H2 를 적용할 요소(컬럼·조회조건·SP)가 없다,7,SCP0041_StockOSP.cs:201 SCP0041_StockOSP.cs:203 SCP0041_StockOSP.cs:204 SCP0041_StockOSP.cs:208 SCP0041_StockOSP.cs:209 SCP0041_StockOSP.cs:211 SCP0041_StockOSP.cs:213
+H5|ENTRY:SCP0041_StockOSP.SetSpreadInit,T-b1fe4aea,H5,DESIGN,ENTRY,SCP0041_StockOSP.SetSpreadInit,SCP0041_StockOSP.SetSpreadInit,Y,NA,검사 대상 아님 — 이 화면에 H5 를 적용할 요소(컬럼·조회조건·SP)가 없다,7,SCP0041_StockOSP.cs:201 SCP0041_StockOSP.cs:203 SCP0041_StockOSP.cs:204 SCP0041_StockOSP.cs:208 SCP0041_StockOSP.cs:209 SCP0041_StockOSP.cs:211 SCP0041_StockOSP.cs:213
+D5|ENTRY:SCP0041_StockOSP.SetSpreadInit,T-051e56ca,D5,EDIT,ENTRY,SCP0041_StockOSP.SetSpreadInit,SCP0041_StockOSP.SetSpreadInit,Y,NA,검사 대상 아님 — 이 화면에 D5 를 적용할 요소(컬럼·조회조건·SP)가 없다,7,SCP0041_StockOSP.cs:201 SCP0041_StockOSP.cs:203 SCP0041_StockOSP.cs:204 SCP0041_StockOSP.cs:208 SCP0041_StockOSP.cs:209 SCP0041_StockOSP.cs:211 SCP0041_StockOSP.cs:213
+C3|ENTRY:SCP0041_StockOSP.SetSpreadInit,T-200ae8bd,C3,CASCADE,ENTRY,SCP0041_StockOSP.SetSpreadInit,SCP0041_StockOSP.SetSpreadInit,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,7,SCP0041_StockOSP.cs:201 SCP0041_StockOSP.cs:203 SCP0041_StockOSP.cs:204 SCP0041_StockOSP.cs:208 SCP0041_StockOSP.cs:209 SCP0041_StockOSP.cs:211 SCP0041_StockOSP.cs:213
+E4|ENTRY:SCP0041_StockOSP.SetSpreadInit,T-0be4828f,E4,EDIT,ENTRY,SCP0041_StockOSP.SetSpreadInit,SCP0041_StockOSP.SetSpreadInit,Y,REVIEW,진입점 집계 — E4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),7,SCP0041_StockOSP.cs:201 SCP0041_StockOSP.cs:203 SCP0041_StockOSP.cs:204 SCP0041_StockOSP.cs:208 SCP0041_StockOSP.cs:209 SCP0041_StockOSP.cs:211 SCP0041_StockOSP.cs:213
+X-ROW|ENTRY:SCP0041_StockOSP.SetTabIndex,T-6b68ea30,X-ROW,GEN,ENTRY,SCP0041_StockOSP.SetTabIndex,SCP0041_StockOSP.SetTabIndex,Y,REVIEW,진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요),2,SCP0041_StockOSP.cs:516
+C3|ENTRY:SCP0041_StockOSP.SetTabIndex,T-de14c673,C3,CASCADE,ENTRY,SCP0041_StockOSP.SetTabIndex,SCP0041_StockOSP.SetTabIndex,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,SCP0041_StockOSP.cs:516
+E4|ENTRY:SCP0041_StockOSP.SetTabIndex,T-1ba93e93,E4,EDIT,ENTRY,SCP0041_StockOSP.SetTabIndex,SCP0041_StockOSP.SetTabIndex,Y,REVIEW,진입점 집계 — E4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,SCP0041_StockOSP.cs:516
+X-ROW|ENTRY:SCP0041_StockOSP.SpdMain_SheetTabClick,T-1f785799,X-ROW,GEN,ENTRY,SCP0041_StockOSP.SpdMain_SheetTabClick,SCP0041_StockOSP.SpdMain_SheetTabClick,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 CALL_LOCAL/ENTRY, 연결된 요소 검사 없음",4,SCP0041_StockOSP.cs:855 SCP0041_StockOSP.cs:856 SCP0041_StockOSP.cs:857
+X-ROW|ENTRY:SCP0041_StockOSP.btnExcelUpload_Click,T-2561c938,X-ROW,GEN,ENTRY,SCP0041_StockOSP.btnExcelUpload_Click,SCP0041_StockOSP.btnExcelUpload_Click,Y,REVIEW,진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요),8,SCP0041_StockOSP.cs:792 SCP0041_StockOSP.cs:793 SCP0041_StockOSP.cs:794 SCP0041_StockOSP.cs:795
+X-ROW|ENTRY:SCP0041_StockOSP.setPeriod,T-38e00f26,X-ROW,GEN,ENTRY,SCP0041_StockOSP.setPeriod,SCP0041_StockOSP.setPeriod,Y,REVIEW,진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요),4,SCP0041_StockOSP.cs:540 SCP0041_StockOSP.cs:543 SCP0041_StockOSP.cs:544 SCP0041_StockOSP.cs:549
+C3|ENTRY:SCP0041_StockOSP.setPeriod,T-926a5f8f,C3,CASCADE,ENTRY,SCP0041_StockOSP.setPeriod,SCP0041_StockOSP.setPeriod,Y,NA,검사 대상 아님 — 이 화면에 C3 를 적용할 요소(컬럼·조회조건·SP)가 없다,17,SCP0041_StockOSP.cs:540 SCP0041_StockOSP.cs:543 SCP0041_StockOSP.cs:544 SCP0041_StockOSP.cs:545 SCP0041_StockOSP.cs:550 SCP0041_StockOSP.cs:551 SCP0041_StockOSP.cs:553 SCP0041_StockOSP.cs:554 SCP0041_StockOSP.cs:556 SCP0041_StockOSP.cs:558 SCP0041_StockOSP.cs:559 SCP0041_StockOSP.cs:562 SCP0041_Stoc
+E4|ENTRY:SCP0041_StockOSP.setPeriod,T-59946519,E4,EDIT,ENTRY,SCP0041_StockOSP.setPeriod,SCP0041_StockOSP.setPeriod,Y,REVIEW,진입점 집계 — E4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),17,SCP0041_StockOSP.cs:540 SCP0041_StockOSP.cs:543 SCP0041_StockOSP.cs:544 SCP0041_StockOSP.cs:545 SCP0041_StockOSP.cs:550 SCP0041_StockOSP.cs:551 SCP0041_StockOSP.cs:553 SCP0041_StockOSP.cs:554 SCP0041_StockOSP.cs:556 SCP0041_StockOSP.cs:558 SCP0041_StockOSP.cs:559 SCP0041_StockOSP.cs:562 SCP0041_Stoc

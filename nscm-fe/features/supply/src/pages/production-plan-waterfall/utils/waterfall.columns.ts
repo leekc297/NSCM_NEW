@@ -1,7 +1,7 @@
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 
 import {
-  type BUCKET_TYPE,
+  BUCKET_TYPE,
   EE_ONLY_COLUMNS,
   FORCED_AXIS,
   PERIOD_COLUMN_REGEX,
@@ -37,6 +37,7 @@ export interface DynColMeta {
   large: string; // 1단 라벨 (LARGE_CLASS_LABEL_NAME)
   small: string; // 2단 라벨 (SMALL_CLASS_LABEL_NAME)
   leaf: string; // 3단 라벨 (COLUMN_LABEL_NAME)
+  mmdd: string; // WeeklyISO 1단 라벨 (MMDD_LABEL_NAME '01.01 ~ 01.04')
   dayCode: string; // 주말 헤더색 판정용 ('SAT'/'SUN'/'')
   sort: number;
   seq: number;
@@ -130,6 +131,7 @@ export const buildDynColMetas = (periodRows: WaterfallTitleRow[]): DynColMeta[] 
         large: str(row.LARGE_CLASS_LABEL_NAME),
         small: str(row.SMALL_CLASS_LABEL_NAME),
         leaf: str(row.COLUMN_LABEL_NAME),
+        mmdd: str(row.MMDD_LABEL_NAME),
         dayCode: str(row.DAY_CODE),
         sort: num(row.SORT_ORDER_NO),
         seq,
@@ -167,6 +169,43 @@ export const buildDynamicColumns = ({
 
   const largeMap = new Map<string, LargeBucket>();
   const format = scale > 0 ? `#,##0.${'0'.repeat(scale)}` : '#,##0';
+
+  // WeeklyISO(= 'Only Weekly') — AS-IS InitSpreadDateColumnISO 와 1:1: 컬럼마다 3단을 개별 셀로
+  //   (1단 MMDD '01.01 ~ 01.04' / 2단 COLUMN_LABEL 'W01' / 3단 'SUM'), 월 묶음·가로병합 없음.
+  //   비-ISO 의 월 롤업(largeKey 병합)과 달리 ISO 는 각 W 컬럼이 자기 1단 그룹을 가진다. D_/M_ 은
+  //   SetSpreadColumn Visible=isWeeklyISO 로 숨김(binding 보존 — 데이터 바인딩·토글 안정성). 가로병합은
+  //   WaterfallMergeManager 가 bucket 으로 추가 억제한다(헤더 라벨이 전부 달라 값 병합도 발생 안 함).
+  if (bucket === BUCKET_TYPE.WEEKLY_ISO) {
+    return metas.map(m => {
+      const visible = baseVisibleOf(bucket, chkSum, m.kind); // W 만 true
+      const leaf: LeafCol = {
+        binding: m.binding,
+        header: 'SUM', // 3단 (AS-IS row2 리터럴 'SUM')
+        align: 'right',
+        format,
+        width: 90,
+        allowDragging: false,
+        allowMerging: false,
+        allowResizing: true,
+        allowSorting: false,
+        visible,
+        _display: true,
+      };
+      return {
+        header: m.mmdd || m.large || largeKeyOf(m.binding), // 1단 (AS-IS row0 MMDD_LABEL_NAME)
+        align: 'center',
+        visible,
+        columns: [
+          {
+            header: m.leaf || m.small || 'SUM', // 2단 (AS-IS row1 COLUMN_LABEL_NAME 'W01')
+            align: 'center',
+            visible,
+            columns: [leaf],
+          },
+        ],
+      };
+    });
+  }
 
   metas.forEach((m, idx) => {
     const largeKey = largeKeyOf(m.binding);

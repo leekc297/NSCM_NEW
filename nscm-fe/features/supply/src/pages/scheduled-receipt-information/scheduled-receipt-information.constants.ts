@@ -37,58 +37,91 @@ export const COLUMN_SHEET_NAME: Record<SHEETS, string> = {
 /**
  * 조회조건 콤보 SQL_ID.
  *
- * DIVISION: design/02_search-combo.md §2.1 — comboCalls#1(`BLUtils.GetDivision(false,"")`,
- *   target=dtMyDivision)이 `MyDivision`(WithoutEE 필터 포함) 사용을 강하게 시사(변수명 일치).
- *   `Division_SCP`(WithoutEE 필터 없음)와는 다른 콤보 — §2.6 5층 대조 중 target 변수명 근거로
- *   `MyDivision` 채택, 나머지 근거(BLUtils 소스·AS-IS DB)는 이 세션에서도 확보 불가(§2.7 확인 필요
- *   승계) — EE 노출 여부는 사용자 QA 축.
- * PLAN_GROUP: design 02 §2.2 — `PlanGroup_SCP_ALL`(전량 로드 후 클라 필터, AS-IS dtPlanGroupAll과
- *   동일 패턴) 채택. 5층 완전 대조 미완(AS-IS 소스 부재) — 확인 필요 승계.
- * SITE / CHILD_MATERIAL: design 02 §2.3/§2.4 — TO-BE 미등록(Site 계열은 이름 유사 다건 존재하나
- *   의미 대조 불가, ChildMaterial 은 0건) — §2.3 예외(b) 원천(AS-IS DB)이 ERROR 라 신규 등록 불가.
- *   UI 골격만 노출(SafetyStock/DemandException 선례와 동일 처리).
+ * DIVISION: `Division_SCP` 채택(2026-10-21 AS-IS 재대조로 `MyDivision`에서 교정). AS-IS
+ *   `BLUtils.GetDivision(false,"")`(BLUtils.cs:133-146, company='' → EE 필터 없는 기본 호출)은
+ *   `Data_SCP.Common(Type.Division)` → SP 분기 `@Code='Division'` → **함수 `FN_GET_DIVISION`**
+ *   (asis.py 원문: 설명 "권한에 해당하는 사업부 조회(**EE 포함**)", WHERE 권한사업부 + VALID_YN='Y',
+ *   ATTRIBUTE3 필터 없음). TO-BE `Division_SCP`(ora.py 실측)가 이 함수와 동형 — 동일 컬럼셋·동일
+ *   NAME 포맷(DIVISION_ID||' '||DIVISION_NAME)·동일 권한필터·**EE 미제외**. 이전 `MyDivision`은
+ *   `ATTRIBUTE3<>'EE'`로 EE 6개(EE/EE_UC/EE_HM/EE_ST/EE_HD/EE_HG)를 숨겨 AS-IS 와 달랐다(변수명
+ *   dtMyDivision 에 오인). EE 집계 사업부 선택 시 Site 콤보의 구성사업부 확장은 Form 에서 재현
+ *   (GetDivisionChecked .cs:257-291 / RefreshSiteByDivision .cs:354-362).
+ * PLAN_GROUP / PLAN_GROUP_VBOM: AS-IS 는 활성 시트별로 Plan Group 조회콤보 원천이 다르다
+ *   (SCP0130_GET_SEARCH_INFO, asis.py proc 원문 확인 — SpdMain_ActiveSheetChanged .cs:1479/1500):
+ *     · Virtual Bom 시트       = 결과셋1(C# Tables[0]) 전체 Plan Group → `PlanGroup_SCP_ALL`
+ *     · Scheduled Receipt 시트 = 결과셋9(C# Tables[8]) 가상BOM 등록분만 → `PlanGroupVirtualBom`
+ *       (ora.py 실측: 가상BOM 등록 5건 vs 전체 45건 — 실제로 좁다). Form 이 isVirtualBom 으로 분기.
+ * SITE / CHILD_MATERIAL(SCP0130-03): 등록 콤보 `PlantSiteSir`/`ItemIdChild` 를 조회콤보로 재사용.
+ *   AS-IS MSSQL 재접속 성공으로 §2.6 모집단 대조 완료 — GET_SEARCH_INFO 결과셋8(Tables[7],
+ *   PLANT_SITE_BY_DIVISION)·결과셋6(Tables[5], Child ID)의 SQL 이 두 Oracle 콤보 SQL 과 동일
+ *   (Oracle `(+)`=SQL Server LEFT JOIN). Form 에서 AS-IS RefreshSiteByDivision/RefreshDivisionByItem
+ *   처럼 Division 필터 + CODE 중복제거(buildDivisionOptions). Division 이 EE 를 포함하므로(Division_SCP)
+ *   Site 는 EE 집계 사업부를 구성 사업부로 확장한다(siteDivisionFilter, AS-IS .cs:354-362).
  */
 export const COMBO = {
-  DIVISION: 'MyDivision',
+  DIVISION: 'Division_SCP',
   PLAN_GROUP: 'PlanGroup_SCP_ALL',
+  PLAN_GROUP_VBOM: 'PlanGroupVirtualBom',
+  SITE: 'PlantSiteSir',
+  CHILD_MATERIAL: 'ItemIdChild',
 } as const;
 
 // AS-IS validations(00_checklist.md §3a, design 03 §3.1) MSG ID → TO-BE 실측 매핑(Hook #114).
-//   MSG00046/050/160/193 은 TO-BE SCM_ADM_MSG_M 미등록(0 rows, design 03 §3.1 i18n 갭 요약) —
-//   등록된 근접 코드로 대체하고 확인 필요로 __asis-mapping__.md 에 남긴다(safety-stock 선례).
+//   규약(2026-10-21): AS-IS 와 같은 MSG 코드가 TO-BE 에 없으면 새로 등록하지 않고, 문구가 똑같은
+//   기존 TO-BE 코드를 찾아 매핑한다. MSG00050("유효한 숫자 형식이 아닙니다. {0}")은 TO-BE 에
+//   MSG00050 으로는 없으나 문구 완전 동일한 MSG01082(KO/EN/CN, ora.py 실측)가 있어 그걸 쓴다.
+//   MSG00046 은 AS-IS 코드가 날짜형식검증에 호출(.cs:835/873)하나 실제 등록문구가 "삭제할 데이터가
+//   없습니다"(AS-IS 버그 — 주석과 불일치)이고 TO-BE 는 TO_YYYYMMDD 가 FPDate picker 라 형식오류 자체가
+//   없어 재현 불필요 → 매핑 제거(dead 상수 정리, SCP0130-06c).
 export const MSG = {
-  // AS-IS MSG00001(7개 필수값 공백) — TO-BE MSG00001 은 "저장하시겠습니까?"로 의미가 다르므로
-  //   (message-id.ts CRUD_MSG.SAVE_CONFIRM) 근접 필수값 코드로 대체.
-  REQUIRED_FIELDS: 'MSG00013', // "_필수값을 입력하세요." (CRUD_MSG.REQUIRED_INPUT)
-  // AS-IS MSG00046(Valid To/Arrival Date 필수) — TO-BE 미등록. 확인 필요(design 03 §3.1).
-  ARRIVAL_DATE_REQUIRED: 'MSG00046',
+  // AS-IS MSG00001("모든 항목은 필수 입력입니다."/"All entries are mandatory.") — TO-BE MSG00001 은
+  //   "저장하시겠습니까?"로 의미가 다르나, 문구 완전 동일한 기존 코드 MSG01039(KO/EN/CN, ora.py 실측)가
+  //   있어 그걸 쓴다(규약: 같은 코드 없으면 같은 문구 기존 코드 매핑). 이전 MSG00013("필수 입력란을
+  //   입력해 주세요.")은 문구가 달라 교체.
+  REQUIRED_FIELDS: 'MSG01039',
   // AS-IS MSG00085(수량 0 미만 금지) — TO-BE 등록됐으나 본문 TODO(design 03 §3.1 #4).
   QTY_NEGATIVE: 'MSG00085',
-  // AS-IS MSG00050(숫자 형식 아님) — TO-BE 미등록. 확인 필요.
-  QTY_NOT_NUMBER: 'MSG00050',
+  // AS-IS 날짜형식 유효성(.cs:831-837/869-875 ParseExact). AS-IS 가 호출한 MSG00046 은 실문구가
+  //   "삭제할 데이터 없음"(AS-IS 버그)이라, 의도 문구("유효한 날짜 형식이 아닙니다. {0}")와 동일한
+  //   기존 코드 MSG01081(KO/EN/CN, ora.py 실측)로 매핑. {0}=필드명('Valid To').
+  INVALID_DATE: 'MSG01081',
+  // AS-IS MSG00050(숫자 형식 아님) ↔ 문구 동일 기존 코드 MSG01082("유효한 숫자 형식이 아닙니다. {0}").
+  QTY_NOT_NUMBER: 'MSG01082',
   // 소수 10자리 초과(AS-IS literal 메시지, msgId 없음) — TO-BE 근접 등록 코드 재사용
   //   (MSG00165 "자리수를 초과했습니다", ora.py 실측).
   QTY_DECIMAL_OVERFLOW: 'MSG00165',
   // AS-IS MSG00260(Division/PlanGroup/Site/ItemChild/ValidTo 조합 중복) — TO-BE 등록·본문 존재.
   DUPLICATE_EXISTS: 'MSG00260',
   NO_CHANGE: 'MSG00004',
-  // AS-IS MSG00129(.cs:1516 spdSub_ActiveSheetChanging) — 편집 중 시트전환 차단 안내. TO-BE 등록
-  //   본문("시트 별 편집 모드 안내.")이 AS-IS 사용 문구("{0}를 수정 중이어서...")와 달라 `{0}` 치환이
-  //   무의미할 수 있음(gap-resolve/iter-1 G12) — 문구 자체 확정은 사용자 협의 대상으로 남기고, 코드는
-  //   등록된 키를 그대로 쓰되 defaultValue 에 AS-IS 원문 의미를 넣어 등록본문 교정 시 자연히 반영되게 한다.
-  SHEET_EDIT_LOCK: 'MSG00129',
+  // AS-IS MSG00129(.cs:1515 spdSub_ActiveSheetChanging, "{0}를 수정 중이어서 시트를 변경 할 수
+  //   없습니다.") — TO-BE MSG00129 는 문구가 다르나("시트 별 편집 모드 안내."), 문구 완전 동일한
+  //   기존 코드 MSG01149(KO·EN "You are modifying {0} and can not change the sheet."·CN, ora.py
+  //   실측)가 있어 그걸 쓴다(규약: 같은 코드 없으면 같은 문구 기존 코드 매핑).
+  SHEET_EDIT_LOCK: 'MSG01149',
 } as const;
 
 /** 수량 저장 검증 — 소수 10자리 초과 금지(design 03 §3.1 #5/#16 literal 메시지). */
 export const QTY_DECIMAL_MAX_DIGITS = 10;
 
-// 조회조건 다국어 라벨 — design 02 §4.5 DB 실측(SCM_ADM_MSG_M 7종 전건 존재, ora.py 재조회 확인).
+// 조회조건 다국어 라벨 — AS-IS 실화면/Designer 라벨 텍스트와 1:1 일치시킨다(2026-10-21, SCP0130-15).
+//   AS-IS Designer/런타임: Division 필드='Div*'(lblCombo1) · Site 필드='Plant Site'(lblSite) ·
+//   Item 필드='Parent Model'(lblItemId) · Plan Group/Valid/From Date/Child Material 동일. 기존 LBL
+//   코드 중 문구가 같은 것을 매핑(새 등록 없음, 규약). 그리드 컬럼 메타(COLUMN_LABEL_NAME)도 이미
+//   'Div*'/'Plant Site*'/'Parent Item*'라 조회영역만 어긋나 있었다.
+//   - DIVISION: LBL00641('Division')→LBL00001('Div', KO='Div'·EN/CN='Div.') — AS-IS 'Div' 복원
+//     (design 02 §4.5 의 LBL00641 지정은 AS-IS 표시와 불일치 — AS-IS 우선).
+//   - SITE: LBL00015('Site')→LBL00005('Plant Site', 3언어 완비. LBL00509 는 KO 누락이라 제외).
+//   - ITEM_ID: LBL01142('Item')→LBL01100('Parent Model', 3언어). 조회 라벨은 'Parent Model',
+//     그리드 컬럼은 'Parent Item'(메타)으로 AS-IS 가 서로 다름 — 각자 원문 유지.
 export const LABEL = {
   DIVISION: 'LBL00001',
   PLAN_GROUP: 'LBL00002',
-  SITE: 'LBL00015',
+  SITE: 'LBL00005',
   CHILD_MATERIAL: 'LBL01062',
   VALID: 'LBL00639',
   FROM_DATE: 'LBL00062',
-  ITEM_ID: 'LBL01142',
+  ITEM_ID: 'LBL01100',
+  // Child Material 필드 라벨은 활성 시트로 스왑(SCP0130-08, AS-IS .cs:1477/1493): Virtual Bom =
+  //   'Child Material'(LBL01062) / Scheduled Receipt = 'Material'(LBL00021, ora.py 실측).
+  MATERIAL: 'LBL00021',
 } as const;

@@ -142,6 +142,9 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
     GridAction.addRow(gridRefs[activeTab].current, {
       DIVISION_ID: searchParams.divisionId,
       VALID_YN: 'Y',
+      // Division 82 신규행은 Partial Plan YN 기본값 'Y' (사용자 요청 2026-10-14). 칸은 82 시트에만 있고
+      //   편집 가능하므로 사용자가 N 으로 바꿀 수 있다. 다른 division 은 값을 싣지 않아 저장 SP 기본값(N)을 따른다.
+      ...(searchParams.divisionId === '82' ? { PARTIAL_PLAN_YN: 'Y' } : {}),
     });
   };
 
@@ -158,7 +161,7 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
     ).filter(row => row.CRUD_TYPE);
     if (dirtyRows.length === 0) {
       // 다른 화면(useProcMutation onError)과 동일하게 toast 로 알린다(변경 없음 = toast, 검증 실패 = alert).
-      setToast({ type: 'error', message: t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.') });
+      setToast({ type: 'error', message: t('MSG00004', '_수정한 내용이 없습니다.') });
       return;
     }
 
@@ -191,11 +194,12 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
       if (noProjectRow) {
         void setAlert({
           type: 'alert',
-          // 백엔드 메시지 코드가 아직 없어 임시 키 + 기본문구로 둔다(MSG_NO_CHANGE 와 같은 방식).
+          // 갭분석 F-23(2026-10-16): 임시 키(MSG_END_CUSTOMER_REQUIRED · MSG_PROJECT_REQUIRED)는 SCM_ADM_MSG_M 미등록이라
+          //   EN/CN 에도 한글이 떴다. 같은 뜻으로 KO/EN/CN 등록된 MSG00613 · MSG00614({0}=Project Code)를 쓴다.
           content:
             noProjectRow.DIVISION_ID === '40'
-              ? t('MSG_END_CUSTOMER_REQUIRED', 'End Customer 를 입력하세요.')
-              : t('MSG_PROJECT_REQUIRED', 'Project 를 선택하세요.'),
+              ? t('MSG00613', '_End Customer 값은 필수 입력입니다.')
+              : t('MSG00614', '_{0} 값은 필수 입력입니다.').replace('{0}', 'Project Code'),
         });
         return;
       }
@@ -256,7 +260,9 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
     hasButton(MODEL_CHANGE_BTN_CD) && searchParams.divisionId === MODEL_CHANGE_DIVISION
       ? [
           {
-            label: t('LBL_MODEL_CODE_CHANGE', 'Model Code Change'),
+            // AS-IS Designer.cs:742 btnModelChange.Text = "Model Code change" — 다국어 없는 고정 영어라
+            //   공통 버튼(SubTitle 'Save(F7)' 등)과 같이 고정 문자열로 둔다. 메시지 코드는 쓰지 않는다.
+            label: 'Model Code Change',
             action: () => setOpenModelChange(true),
           },
         ]

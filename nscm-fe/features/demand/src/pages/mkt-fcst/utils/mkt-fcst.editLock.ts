@@ -73,12 +73,17 @@ export const isPartialWeekPartnerOfCurrent = (
   return !!w && !!tw && isSamePartialWeek(w, tw);
 };
 
-// 이번 주 월요일 — AS-IS L857 (Sunday=0 → -6, 그 외 -(d-1)). JS getDay(Sun=0) ≡ .NET DayOfWeek.
+// AS-IS cutoff 기준일 — DMF0003_MktFcst.cs:953
+//   `DateTime.Today.AddDays(Convert.ToInt32(DayOfWeek.Monday) - Convert.ToInt32(Today.DayOfWeek))`
+//   = Today + (1 - dow). .NET DayOfWeek(일=0..토=6) ≡ JS getDay() 이므로 그 식을 그대로 옮긴다.
+//   월~토는 당주 월요일이지만 일요일(dow=0)만 +1일 = 차주 월요일이 된다(AS-IS 특성 — ISO 월요일이
+//   아니다). 일요일엔 당주가 전부 잠기고 차주 월요일부터 입력 가능해지는 동작을 등가로 재현한다.
+//   (이전엔 dow===0 → -6(ISO 당주 월요일)이라 AS-IS 와 일요일 하루 엇갈렸다. 2026-10-16 AS-IS 정합.)
 export const thisWeekMondayYmd = (today = new Date()): string => {
   const d = new Date(today);
   d.setHours(0, 0, 0, 0);
   const dow = d.getDay();
-  d.setDate(d.getDate() + (dow === 0 ? -6 : -(dow - 1)));
+  d.setDate(d.getDate() + (1 - dow));
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
 };
 
@@ -115,6 +120,11 @@ export interface EditCutoff {
   thisWeekBinding: string | null; // 'W_yyyymm+ISO_WEEK' 원문 (O_RC3 THIS_YYYYMMWW)
   weekBindings: readonly string[]; // 화면에 그려진 W_ 컬럼 시간순 목록 (SP SORT_ORDER_NO 정렬)
   thisWeekIndex: number; // weekBindings 내 현재 주 위치 (-1 = 미상 → Weekly 잠금 미적용)
+  // ⭐ 오늘이 일요일(dow=0)인가 — Daily 의 월요일 cutoff 가 일요일에 차주 월요일로 롤오버(thisWeekMondayYmd
+  //   L80~87)해 당주 전체를 잠그는 것과 등가로, Weekly 도 일요일엔 현재 주 컬럼까지 잠가 차주부터
+  //   입력 가능하게 한다. Daily 와 달리 Weekly 는 날짜 cutoff 가 아니라 현재 주 index 로 과거를
+  //   판정하므로, 일요일 롤오버를 index 비교(당주 포함)로 별도 적용해야 Daily 와 동작이 일치한다.
+  isSunday: boolean;
 }
 
 export const buildEditCutoff = (
@@ -138,6 +148,8 @@ export const buildEditCutoff = (
     // 현재 주 컬럼 위치 = 초록 강조가 켜지는 그 컬럼. 못 찾으면 -1 → 과거 판정 자체를 하지 않는다
     //   (SP 미응답/조회구간 밖 등에서 전 주차를 잘못 잠그는 것보다 열어두는 편이 안전 — AS-IS 기본 개방).
     thisWeekIndex: thisWeekBinding ? weekBindings.indexOf(thisWeekBinding) : -1,
+    // 일요일 = Daily 월요일 cutoff 가 차주로 넘어가는 그 날. getDay() 0=일 ≡ .NET DayOfWeek.Sunday.
+    isSunday: new Date(now).getDay() === 0,
   };
 };
 
@@ -187,8 +199,10 @@ export const isPastDynColumn = (params: {
     const tw = cutoff.thisWeekBinding ? parseWeekTag(cutoff.thisWeekBinding) : null;
     if (w && tw && isSamePartialWeek(w, tw)) return false;
     const idx = weekIndexOf(binding, cutoff.weekBindings);
-    // 목록에 없는 W_ 컬럼(-1)은 판정 불가 -> 실적 아님(안전측 개방).
-    return idx >= 0 && idx < cutoff.thisWeekIndex;
+    if (idx < 0) return false; // 목록에 없는 W_ 컬럼은 판정 불가 -> 실적 아님(안전측 개방).
+    // 일요일엔 현재 주 컬럼까지 과거로 본다 (Daily 월요일 cutoff 롤오버와 등가 — 차주부터 입력).
+    //   월~토는 기존대로 현재 주 앞(<)만 과거. 파셜주차 앞달 조각은 위에서 이미 제외됨.
+    return cutoff.isSunday ? idx <= cutoff.thisWeekIndex : idx < cutoff.thisWeekIndex;
   }
 
   const isPastMonth = tag < cutoff.month;

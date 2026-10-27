@@ -14,11 +14,11 @@
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **RawFlexGridColumnConfig** | `@foundation/models` | 383 |  |  |
-| **PageProps** | `@foundation/models` | 145 |  |  |
-| **HotkeyConfig** | `@foundation/models` | 134 |  |  |
+| **RawFlexGridColumnConfig** | `@foundation/models` | 375 |  |  |
+| **PageProps** | `@foundation/models` | 143 |  |  |
+| **HotkeyConfig** | `@foundation/models` | 132 |  |  |
 | **ComboResponse** | `@foundation/models` | 95 |  |  |
-| **FlexGridColumnConfig** | `@foundation/models` | 71 |  |  |
+| **FlexGridColumnConfig** | `@foundation/models` | 70 |  |  |
 | **ComboParam** | `@foundation/models` | 27 |  |  |
 | **LookupResponse** | `@foundation/models` | 6 |  |  |
 | **SalesSite** | `@foundation/models` | 1 |  |  |

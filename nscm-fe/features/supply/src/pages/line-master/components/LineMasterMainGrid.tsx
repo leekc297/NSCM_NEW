@@ -1,6 +1,6 @@
 import { AllowMerging, DataMap, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
+import { type MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
@@ -45,6 +45,11 @@ export const LineMasterMainGrid = ({
   const isPlant = mode === LINE_MODE.PLANT;
   const isPlantRef = useRef(isPlant);
   isPlantRef.current = isPlant;
+
+  // 준비된 그리드 인스턴스 — Wijmo 는 initialized 를 setTimeout 으로 늦게 호출하고, 탭 전환 시 이전 그리드의
+  //   정리 단계가 gridRef 를 비운다. 콤보·컬럼 메타가 이미 캐시돼 있으면 아래 effect 가 다시 돌 계기가 없어
+  //   신규행 SCM_SITE_ID 콤보·파생·Freeze 가 미부착되므로, 그리드를 state 로 받아 effect 의존값으로 쓴다.
+  const [grid, setGrid] = useState<FlexGridType>();
 
   const columns = useMemo(
     () => buildColumns(isPlant ? PLANT_COLUMNS : PACKER_COLUMNS, adminColumns),
@@ -104,7 +109,7 @@ export const LineMasterMainGrid = ({
   const editingCellRef = useRef<{ binding: string; oldVal: unknown } | null>(null);
 
   useEffect(() => {
-    const g = gridRef.current;
+    const g = grid;
     if (!g) return;
 
     // wijmo 는 columnGroups 재대입마다 Column 을 새로 만들어 dataMap 이 날아가므로 updatedLayout 에서 재부착.
@@ -192,11 +197,12 @@ export const LineMasterMainGrid = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns, insertOnlyDataMaps, staticBindingSet, frozenCols]);
+  }, [grid, columns, insertOnlyDataMaps, staticBindingSet, frozenCols]);
 
   return (
     <DataGrid
       gridRef={gridRef}
+      initialized={g => setGrid(g as unknown as FlexGridType)}
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
       itemsSource={rows as unknown as WijmoRowItem[]}

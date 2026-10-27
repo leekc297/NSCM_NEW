@@ -1,6 +1,6 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ItemByDivisionModal } from 'features/master/src/components';
+import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { IcMeasureSelect } from '@foundation/assets';
@@ -51,7 +51,15 @@ export const InventoryRaw = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters,
   });
 
-  const rows = useMemo<InventoryRawRow[]>(() => data?.o_rc1 ?? [], [data]);
+  // Expiration Qty 는 값이 없으면 0 으로 표기한다(사용자 지시 2026-10-15).
+  //   원천 `SSP_ANL_INVENTORY_RAW.EXPIRATION_QTY` 는 NULLABLE 이고 실제로 전체 803,818행 중
+  //   194,935행이 NULL 이다(ora.py 실측 2026-10-15). BE(BaseService.call_proc2)는 NULL 컬럼을
+  //   응답 맵에 아예 담지 않아 FE 에서 키가 없는 상태(undefined)로 와 셀이 빈칸으로 렌더됐다.
+  //   표시용 보정이라 행 단위로 채운다 — Footer 합계(0 가산이라 값 불변)·엑셀 내려받기도 함께 맞는다.
+  const rows = useMemo<InventoryRawRow[]>(
+    () => (data?.o_rc1 ?? []).map(row => ({ ...row, EXPIRATION_QTY: row.EXPIRATION_QTY ?? 0 })),
+    [data]
+  );
 
   useEffect(() => {
     // 진입 자동조회 금지 — keep-alive 잔여 filters 무효화(nscm-patterns §5-7) + 컬럼메타 1회 fetch.
@@ -67,10 +75,13 @@ export const InventoryRaw = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!sc.planStartYyyymmdd) {
       void setAlert({
         type: 'alert',
-        content: t(MSG.REQUIRE_PLAN_DATE, {
-          defaultValue: '_The {0} value is required.',
-          0: 'Plan Date',
-        }),
+        // DB 메시지(MSG00614)의 자리표시는 `{0}` 형식이라 i18next 보간(`{{var}}`)이 채우지 않는다.
+        //   호출부에서 .replace 로 치환한다(messaging-i18n.md MSG-03). 치환값은 Form 의
+        //   Plan Date 라벨과 같은 코드를 써 화면 표기와 어긋나지 않게 한다.
+        content: t(MSG.REQUIRE_PLAN_DATE, '_The {0} value is required.').replace(
+          '{0}',
+          t(LBL.PLAN_DATE, '_Plan Date')
+        ),
       });
       return;
     }
@@ -82,11 +93,12 @@ export const InventoryRaw = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   CLAUDE.md §2 체크4 / convert-core §2.4). Edit 은 TO-BE Hotkeys 자체에 대응 키가 없다
   //   (F2 는 `_F2_Unused` 로 예약 — asis_to_tobe.md §11 "AS-IS UI 모드토글(EditButton 등) 미이식
   //   결정"과 동일 처리, 이 화면 그리드도 편집모드 전환 없이 처음부터 전 컬럼 잠금이라 정합).
+  //   2026-10-26 TO-BE 룰: 기능이 없는 공통버튼은 노출하지 않는다 — AS-IS NO-OP 버튼(Insert/Delete/Save)은 false.
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    insert: () => undefined,
-    delete: () => undefined,
-    save: () => undefined,
+    insert: false,
+    delete: false,
+    save: false,
     manual: false,
     upload: false,
   };
@@ -139,13 +151,24 @@ export const InventoryRaw = ({ tabId, title }: PageProps<MENU_ID>) => {
         staticColumns={staticColumns}
       />
 
-      {/* Model 검색 — 공용 ItemByDivisionModal(AS-IS SCM0002_ItembyDivisionPopup, design 02 §4.6). */}
-      <ItemByDivisionModal
+      {/* Model/Nickname 검색 — 공용 `MaterialByDivisionModal`(COM0013,
+          PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION)로 교체(사용자 지시 2026-10-14).
+          AS-IS 는 `SCM0002_ItembyDivisionPopup`(SSP0017_InventoryRaw.cs:291)이라 **조회 SP 가
+          달라지는 의도적 드리프트**다 — 자매 SSP0003/SSP0019/SSP0026 의 교체 선례와 같은 규약.
+          `scpModuleType` 에 SSP 화면 ID 는 SP 에 열거돼 있지 않아 기본 ELSE 분기를 타
+          기본 Material 목록을 돌려준다(자매 화면 실측).
+          Division 은 '40' 고정 단일이라 `multiDivision` 불요 — 모달이 단일값을 disabled 로 미러한다
+          (빈값이면 모달이 `enabled: !!divisionId` 로 조회를 막으므로 센티널도 불필요). */}
+      <MaterialByDivisionModal
         open={openItemModal}
         modalClose={() => setOpenItemModal(false)}
-        setSelectedValue={itemId => setSearchParams({ itemId })}
-        preSearchParams={{ divisionId: sc.divisionId, itemId: sc.itemId }}
-        callFromCell={false}
+        setSelectedValue={items => setSearchParams({ itemId: items })}
+        preSearchParams={{
+          divisionId: sc.divisionId,
+          scpModuleType: MENU_ID,
+          operationGroup: '',
+          itemId: sc.itemId,
+        }}
       />
     </>
   );

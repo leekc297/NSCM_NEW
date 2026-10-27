@@ -1,0 +1,14 @@
+CHK | TBL | DIVISION_ID | CUTOFF_TYPE | CUTOFF_YYYYMMDD | CREATED_BY | N | CREATED_FROM | CREATED_TO
+(0 rows)
+
+CHK | TABLE_NAME | DEFAULT_ON_NULL | DATA_DEFAULT
+D0 DEFAULT | DM_PLN_MKT_FCST_RESULT | YES | '-'
+D0 DEFAULT | DM_PLN_MKT_FCST_RESULT_C | YES | '-'
+D0 DEFAULT | DM_PLN_SALES_PLAN_RESULT | YES | '-'
+D0 DEFAULT | DM_PLN_SALES_PLAN_RESULT_C | YES | '-'
+(4 rows)
+
+== D1 _C 중복 정리 [실행] · ZIOUI1 · 2026-10-27 17:31:11
+   DM_PLN_MKT_FCST_RESULT_C       '/'행 0 · 중복(QTY 같음 → 삭제 대상) 0 · QTY 다름(유지·회신) 0 · 충돌 없음 0
+   DM_PLN_SALES_PLAN_RESULT_C     '/'행 0 · 중복(QTY 같음 → 삭제 대상) 0 · QTY 다름(유지·회신) 0 · 충돌 없음 0
+== 완료 2026-10-27 17:31:16 — 다음: 30_DATA_SLASH_TO_DASH 재실행 (남은 '/' 행 → '-') → 90_VERIFY

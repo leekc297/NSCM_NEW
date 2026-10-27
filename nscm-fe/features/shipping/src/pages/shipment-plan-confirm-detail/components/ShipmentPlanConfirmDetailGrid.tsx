@@ -20,6 +20,8 @@ import {
 } from '../shipment-plan-confirm-detail.constants';
 import type { DrilldownParams, MainRow } from '../shipment-plan-confirm-detail.types';
 
+import styles from './ShipmentPlanConfirmDetailGrid.module.scss';
+
 interface Props {
   rows: MainRow[];
   gridRef: MutableRefObject<FlexGridType | undefined>;
@@ -50,23 +52,41 @@ export const ShipmentPlanConfirmDetailGrid = ({
     const g = gridRef.current;
     if (!g) return;
 
-    // W8: INCOTERMS/CHANGE_REQ_NO 셀에 드릴다운 어포던스(포인터 + 밑줄). CHANGE_REQ_NO 는 값 있을 때만.
+    // W8: INCOTERMS/CHANGE_REQ_NO 셀에 드릴다운 어포던스 — DMF0020/DMF0003 표준(전용 span .popup-icon +
+    //   OpenInNew SVG). 읽기전용이라 공용 FPModal 자동 아이콘(wj-cell-popup)은 안 붙으므로 직접 그린다.
+    //   CHANGE_REQ_NO 는 값 있을 때만. Wijmo 셀 재활용이라 미해당 셀은 반드시 원복(span 제거·padding/cursor 초기화).
+    const clearPopupAffordance = (cell: HTMLElement) => {
+      cell.classList.remove('drilldown-cell');
+      cell.style.cursor = '';
+      cell.style.paddingRight = '';
+      cell.querySelector('.popup-icon')?.remove();
+    };
     const formatItemHandler = (
       sender: FlexGridType,
       e: { panel: unknown; row: number; col: number; cell: HTMLElement }
     ) => {
       if (e.panel !== sender.cells) return;
       const binding = sender.columns[e.col]?.binding ?? '';
+
       if (!DRILLDOWN_COLUMNS.has(binding)) {
-        e.cell.classList.remove('drilldown-cell');
-        e.cell.style.cursor = '';
+        clearPopupAffordance(e.cell);
         return;
       }
       const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
       const hasTarget =
         binding === DRILLDOWN.CHANGE_REQ_NO ? str(row?.[DRILLDOWN.CHANGE_REQ_NO]).trim() !== '' : true;
-      e.cell.classList.toggle('drilldown-cell', hasTarget);
-      e.cell.style.cursor = hasTarget ? 'pointer' : '';
+      if (!hasTarget) {
+        clearPopupAffordance(e.cell);
+        return;
+      }
+      e.cell.classList.add('drilldown-cell');
+      e.cell.style.cursor = 'pointer';
+      e.cell.style.paddingRight = '20px'; // OpenInNew 아이콘(right:5px, 16px) 자리 확보
+      if (!e.cell.querySelector('.popup-icon')) {
+        const icon = document.createElement('span');
+        icon.className = `popup-icon ${styles.popupIcon}`;
+        e.cell.appendChild(icon);
+      }
     };
     g.formatItem.addHandler(formatItemHandler);
 
@@ -81,9 +101,11 @@ export const ShipmentPlanConfirmDetailGrid = ({
       if (!row) return;
 
       if (binding === DRILLDOWN.INCOTERMS) {
-        // BOD 상세 — EE 분기면 ORIGIN_FROM_DIVISION_ID, 아니면 DIVISION_ID (design 03 §4 드릴다운).
+        // BOD 상세 — DIVISION_ID 가 정확히 'EE' 일 때만 ORIGIN_FROM_DIVISION_ID, 아니면 DIVISION_ID.
+        //   AS-IS cs:513 `if (sDivisionID == "EE")` 는 정확 일치다 — 'EE_HD' 등 부분문자열 코드는 DIVISION_ID
+        //   를 그대로 쓴다(.includes('EE') 로 쓰면 'EE_HD' 가 오판돼 BOD divisionId 파라미터가 틀어진다).
         const divisionRaw = str(row[DIVISION_ID_COLUMN]);
-        const divisionId = divisionRaw.includes(EE_DIVISION)
+        const divisionId = divisionRaw === EE_DIVISION
           ? str(row[ORIGIN_FROM_DIVISION_ID_COLUMN])
           : divisionRaw;
         onDrilldown({ kind: 'BOD', divisionId, bodId: str(row[BOD_ID_COLUMN]) });

@@ -1,9 +1,10 @@
+import type { MeasureMeta } from 'features/master/src/components';
+
 import { apiClient } from '@foundation/apis';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
-import type { MeasureMeta } from './components/modals/MeasureSelectModal';
 import {
   ADMIN_SHEET_NAME,
   BUCKET_TYPE,
@@ -15,7 +16,6 @@ import {
 } from './shipment-plan.constants';
 import type { ActiveGrid, SearchCondition } from './shipment-plan.types';
 import { fieldSetOf, INITIAL_FIELDSET, type DetailFieldSet } from './utils/shipment-plan.detailSheets';
-import { clampPeriod2 } from './utils/shipment-plan.editLock';
 
 type FiltersBySheet = {
   [S in SHEETS]?: ProcRequest<MENU_ID, S>;
@@ -54,16 +54,30 @@ interface Action {
   setCompany: (companyId: string) => void;
   // PlanDate 선택 → drpPeriod/drpPeriod2 파생 + realFlag (AS-IS L7232~7268)
   setPlanDate: (code: string, fromDate: string, toDate1: string, isLatest: boolean) => void;
-  // drpPeriod2 — 범위 이탈 시 무메시지 clamp (buttonGuard #37)
+  // drpPeriod2(Shipment Date) — SSP0005 참조 자유 입력(Plan 기간 clamp 제거, 사용자 지시 2026-10-16)
   setPeriod2: (from: string, to: string) => void;
   setActiveGrid: (grid: ActiveGrid) => void;
   setActiveDetailSheet: (sheet: SHEETS) => void;
   setMainFilters: () => void;
-  // overrides: Main 드릴다운(P_DBL_FLAG='Y') 시 클릭 행의 item/fromSite 로 좁힘 (03 §3-D)
+  // overrides: Main 드릴다운(P_DBL_FLAG='Y') 시 클릭 행/셀 값으로 좁힘 (03 §3-D).
+  //   PlanDetail 드릴다운은 AS-IS FindData_Detail(bolDoubleClick=true, cs L5606~5622)가 행의
+  //   route 전체(division/toSite/transportMode/incoterms/fcstType/productLevel1) + 클릭 일자
+  //   (from=to=컬럼 일자)로 조회를 하루·한 route 로 고정한다 — 그 파라미터 세트.
   setDetailFilter: (
     sheet: SHEETS,
     dblFlag: 'Y' | 'N',
-    overrides?: { itemId?: string; fromSite?: string }
+    overrides?: {
+      itemId?: string;
+      fromSite?: string;
+      divisionId?: string;
+      productLevel1?: string;
+      toSite?: string;
+      transportMode?: string;
+      incoterms?: string;
+      fcstType?: string;
+      fromYyyymmdd?: string;
+      toYyyymmdd?: string;
+    }
   ) => void;
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
@@ -225,9 +239,11 @@ export const useShipmentPlanStore = createPersistedStoreWithTab<State & Action>(
     setPeriod2: (from, to) =>
       set(state => {
         const c = state.searchCondition;
-        const clamped = clampPeriod2(from, to, c.periodFrom, c.periodTo);
-        c.period2From = clamped.from;
-        c.period2To = clamped.to;
+        // SSP0005 조회조건 Period 참조 — Shipment Date 는 Plan 기간에 묶지 않고 자유 입력(사용자 지시
+        //   2026-10-16). 종전 clampPeriod2(buttonGuard #37)는 Plan 기간 밖 선택을 무메시지로 경계에
+        //   되돌려 "입력이 잘 안됨" 증상의 원인이었다 — AS-IS clamp 이탈로 확정.
+        c.period2From = from;
+        c.period2To = to;
       }),
 
     setActiveGrid: grid =>
@@ -276,12 +292,12 @@ export const useShipmentPlanStore = createPersistedStoreWithTab<State & Action>(
         const language = session.langCd ?? '';
         const userId = session.userId ?? '';
         const common = {
-          divisionId: c.divisionId,
+          divisionId: overrides?.divisionId ?? c.divisionId,
           companyId: c.companyId,
           fromSite: overrides?.fromSite ?? joinOrEmpty(c.plantSiteIds),
           // 2차 Model = txtModel2 (01 §1 좌표 실측). 드릴다운은 클릭 행 ITEM_ID 로 좁힘.
           itemId: overrides?.itemId ?? multiLine(c.model),
-          productLevel1: joinOrEmpty(c.productLevel12),
+          productLevel1: overrides?.productLevel1 ?? joinOrEmpty(c.productLevel12),
           planStartYyyymmdd: c.planDate,
           dblFlag,
           language,
@@ -290,15 +306,17 @@ export const useShipmentPlanStore = createPersistedStoreWithTab<State & Action>(
           debugMode: 'F',
         };
         if (sheet === SHEETS.PLAN_DETAIL) {
+          // 드릴다운(dblFlag='Y')은 AS-IS cs L5606~5622 그대로 — 행 route 전체 + 클릭 일자 하루 고정,
+          //   requestor 는 공백(L5622). Search 버튼 경로는 종전과 동일(route 공백 = 전체, period2 범위).
           state.filters[SHEETS.PLAN_DETAIL] = {
             ...common,
-            requestor: c.requestorId, // 6 P_REQUESTOR
-            toSite: '', // 7 P_TO_SITE (조회조건 없음 — 전체)
-            transportMode: '', // 8 P_TRANSPORT_MODE
-            incoterms: '', // 9 P_INCOTERMS
-            fcstType: '', // 10 P_FCST_TYPE
-            fromYyyymmdd: c.period2From, // 12 P_FROM_YYYYMMDD
-            toYyyymmdd: c.period2To, // 13 P_TO_YYYYMMDD
+            requestor: dblFlag === 'Y' ? '' : c.requestorId, // 6 P_REQUESTOR
+            toSite: overrides?.toSite ?? '', // 7 P_TO_SITE
+            transportMode: overrides?.transportMode ?? '', // 8 P_TRANSPORT_MODE
+            incoterms: overrides?.incoterms ?? '', // 9 P_INCOTERMS
+            fcstType: overrides?.fcstType ?? '', // 10 P_FCST_TYPE
+            fromYyyymmdd: overrides?.fromYyyymmdd ?? c.period2From, // 12 P_FROM_YYYYMMDD
+            toYyyymmdd: overrides?.toYyyymmdd ?? c.period2To, // 13 P_TO_YYYYMMDD
             realFlag: state.realFlag ? 'Y' : 'N', // 15 P_REAL_FLAG
           };
         } else if (sheet === SHEETS.HOLD_STOCK) {

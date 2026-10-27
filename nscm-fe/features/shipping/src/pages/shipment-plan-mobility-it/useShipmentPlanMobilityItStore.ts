@@ -52,6 +52,8 @@ interface State {
   conditionsRestored: boolean;
   searchCondition: SearchCondition;
   filters: FiltersBySheet;
+  // 탭별 캘린더(기간 헤더) 조회조건 — 탭 전환 시 filters[CALENDAR] 를 해당 탭 값으로 교체한다.
+  calendarFilters: Partial<Record<MainSheet, ProcRequest<MENU_ID, SHEETS.CALENDAR>>>;
   openSearchArea: boolean;
   // 활성 master 시트 — Plant Site/PlanDate/ResultType cascade 트리거(searchParams 바깥, design 02 §3).
   mainSheet: MainSheet;
@@ -134,6 +136,7 @@ const initState: State = {
   conditionsRestored: false,
   searchCondition: initSearch,
   filters: {},
+  calendarFilters: {},
   openSearchArea: true,
   mainSheet: 'main',
   activeGrid: 'main',
@@ -172,11 +175,15 @@ export const useShipmentPlanMobilityItStore = createPersistedStoreWithTab<State 
         //   Detail 은 AS-IS 가 InitSpread 로 "초기화"하고 재조회는 하지 않는다(드릴/Detail Search 전까지 빈
         //   상태) — Detail SP 가 탭별로 다르기도 하므로 탭 전환 시 Detail filter 만 비운다(사용자 지시
         //   2026-10-01: "탭 이동 시 초기화만, 재조회 금지"). 상단은 그대로(2026-09-30 지시 유지).
-        const KEEP = new Set<string>([SHEETS.MAIN, SHEETS.MAIN_PACKER, SHEETS.CALENDAR]);
+        // const KEEP = new Set<string>([SHEETS.MAIN, SHEETS.MAIN_PACKER, SHEETS.CALENDAR]);
+        const KEEP = new Set<string>([SHEETS.MAIN, SHEETS.MAIN_PACKER]);
         const f = state.filters as Record<string, unknown>;
         for (const key of Object.keys(f)) {
           if (!KEEP.has(key)) delete f[key];
         }
+        // 기간 헤더는 탭별 — 전환한 탭이 조회했던 캘린더로 교체(미조회 탭이면 비움).
+        const cal = state.calendarFilters[sheet];
+        if (cal) state.filters[SHEETS.CALENDAR] = cal;
         state.searchCondition.plantSiteIds = [];
         state.searchCondition.planDate = '';
         state.searchCondition.resultTypes = defaultResultTypes(sheet);
@@ -236,6 +243,7 @@ export const useShipmentPlanMobilityItStore = createPersistedStoreWithTab<State 
           startYyyymmdd: c.periodFrom,
           endYyyymmdd: c.periodTo,
         };
+        state.calendarFilters[state.mainSheet] = state.filters[SHEETS.CALENDAR];
       });
     },
 
@@ -397,6 +405,7 @@ export const useShipmentPlanMobilityItStore = createPersistedStoreWithTab<State 
     clearFilters: () =>
       set(state => {
         state.filters = {};
+        state.calendarFilters = {};
       }),
 
     setOpenSearchArea: open =>
@@ -474,6 +483,7 @@ export const useShipmentPlanMobilityItStore = createPersistedStoreWithTab<State 
         const patch: Record<string, unknown> = {};
         for (const { paramNm, paramCtn } of rows) {
           if (!(paramNm in initSearch)) continue; // 모르는 키(구버전 잔재) 제외
+          if (paramNm === 'bucketType') continue; // Bucket 은 진입 시 항상 Daily(F6 저장분 무시)
           const val = paramCtn ?? '';
           if (ARRAY_KEYS.has(paramNm)) patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
           else if (BOOL_KEYS.has(paramNm)) patch[paramNm] = val === 'true';

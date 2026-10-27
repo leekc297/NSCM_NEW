@@ -1,0 +1,9 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0116,SQL,SCP0116_GET_PLAN_DATE,Doc\asisfacts\db\modules\dbo.SCP0116_GET_PLAN_DATE.sql,64,,CODE DESC,ORDER BY CODE DESC,0,정적
+SCP0116,SQL,SCP0116_GET_PLAN_DATE,Doc\asisfacts\db\modules\dbo.SCP0116_GET_PLAN_DATE.sql,71,,CODE DESC,ORDER BY CODE DESC,0,정적
+SCP0116,SQL,SCP0116_GET_SITE,Doc\asisfacts\db\modules\dbo.SCP0116_GET_SITE.sql,36,,FROM_SITE,ORDER BY FROM_SITE,0,정적
+SCP0116,SQL,SCP0116_GET_SITE,Doc\asisfacts\db\modules\dbo.SCP0116_GET_SITE.sql,50,,FROM_SITE,ORDER BY FROM_SITE,0,정적
+SCP0116,SQL,SCP0116_GET_SITE,Doc\asisfacts\db\modules\dbo.SCP0116_GET_SITE.sql,72,,TO_SITE,ORDER BY TO_SITE,0,정적
+SCP0116,SQL,SCP0116_GET_SITE,Doc\asisfacts\db\modules\dbo.SCP0116_GET_SITE.sql,86,,TO_SITE,ORDER BY TO_SITE,0,정적
+SCP0116,SQL,SCP0116_GET_SHEET_CALENDAR_3SPAN,Doc\asisfacts\db\modules\dbo.SCP0116_GET_SHEET_CALENDAR_3SPAN.sql,131,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적
+SCP0116,CODE,,06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0116_Global_PSI_Report_New_ESS\SCP0116_Global_PSI_Report_New_ESS.cs,579,,CODE,"tmpDivision.DefaultView.Sort = ""CODE Asc"";",0,화면 코드 정렬

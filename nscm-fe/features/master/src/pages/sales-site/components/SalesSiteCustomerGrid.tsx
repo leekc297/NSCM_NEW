@@ -13,6 +13,11 @@ import type { MENU_ID } from '../sales-site.constants';
 import { SHEETS, RESPONSE_SET, SHEET_INDEX } from '../sales-site.constants';
 import { useSalesSiteStore } from '../useSalesSiteStore';
 import {
+  CUSTOMER_DUPLICATE_KEYS,
+  DUPLICATE_KEY_MSG,
+  DUPLICATE_KEY_MSG_ID,
+  formatDuplicateKeyMessage,
+  hasActiveCustomerDuplicate,
   hasRepresentative,
   isRepresentative,
   REP_YN_DUPLICATE_MSG,
@@ -55,8 +60,31 @@ export const SalesSiteCustomerGrid = ({
     shipToRegion?: string,
     shipToCity?: string
   ) => {
-    const dataItem = GridUtils.getRow(gridRef.current, clickedRow);
+    const grid = gridRef.current;
+    const dataItem = GridUtils.getRow(grid, clickedRow);
     if (!dataItem || dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT) return;
+
+    // 같은 Sold-To · Ship-To 의 사용 중 행이 이미 있으면 MSG00060 알림 후 거래처 칸을 비운다 —
+    //   AS-IS shtSubCustomerDataModel_Changed(.cs:2296~2331) 1:1. AS-IS 는 코드 · 설명 4칸을 비웠고,
+    //   TO-BE 는 같은 팝업 선택으로 함께 채우는 Region · City 도 비운다. 이 칸은 팝업으로만 입력되므로
+    //   (컬럼 메타 FPModal) 선택 직후 여기서 막으면 된다.
+    const rows = grid?.collectionView?.sourceCollection ?? [];
+    if (hasActiveCustomerDuplicate(rows, dataItem, soldTo, shipTo)) {
+      void setAlert({
+        type: 'alert',
+        content: formatDuplicateKeyMessage(
+          t(DUPLICATE_KEY_MSG_ID, DUPLICATE_KEY_MSG),
+          CUSTOMER_DUPLICATE_KEYS,
+          key => grid?.columns.getColumn(key)?.header
+        ),
+      });
+      soldTo = '';
+      soldToDesc = '';
+      shipTo = '';
+      shipToDesc = '';
+      shipToRegion = '';
+      shipToCity = '';
+    }
 
     editTrackerRef.current?.storeChange(dataItem, 'SOLDTO_CODE', dataItem.SOLDTO_CODE, soldTo);
     editTrackerRef.current?.storeChange(

@@ -1,6 +1,6 @@
 # NSCM UI-MANDATORY CHECKLIST (T01 신규 / T01M 수정 — PRE-WRITE 통과 의무)
 
-> ⚙️ **자동 추출본** — 정본 = `Doc/_rules_consolidation/RULESET_MASTER.md`. 직접 편집 금지. MASTER 수정 후 `python scripts/rules/build_router.py` 재실행. (추출일 2026-10-12)
+> ⚙️ **자동 추출본** — 정본 = `Doc/_rules_consolidation/RULESET_MASTER.md`. 직접 편집 금지. MASTER 수정 후 `python scripts/rules/build_router.py` 재실행. (추출일 2026-10-21)
 
 ## §3. ⭐ UI-MANDATORY 통합 체크리스트 (TO-BE UI 누락 0 핵심) / UI Mandatory Checklist
 
@@ -22,7 +22,7 @@
   - [ ] Measure Code/Label/Sort/Valid → SYS0004
 - [ ] **Grid = 공용 DataGrid 만** 사용, FlexGrid JSX 직접 금지 (datagrid-shared-component-mandatory)
 - [ ] **Form = SearchArea/FormItem/CustomDropdown**, 2단(6필드) 초과 시 `extraConditions` 분리 (screen-shell-composition-mandatory / search-area-extra-conditions)
-- [ ] ⭐⭐ **폼 스타일 = 공용 common-styles 클래스만** (form-common-styles-mandatory #121): 모든 `<FormItem>` 에 `className={commonStyles.formItem}`(`@foundation/styles/common-styles.module.scss` — HD 50/FHD 140 라벨 칼럼+min-width:0) + 체크박스 셀=`customGrid`/`customCheckbox` + 팝업 검색 InputField=`popupSearchField`. **페이지 로컬 scss 에 폼/인풋 레이아웃 신설 금지**(대체 후 dead 파일 삭제 — 그리드/모달/셀 컬러링 등 화면 고유 스타일만 로컬 유지). 정본 SalesSiteForm.tsx. ⚠️ SearchFields 카탈로그 필드는 미부착 — 인라인 FormItem 혼용 행 라벨 폭 확인
+- [ ] ⭐⭐ **폼 스타일 = 공용 common-styles 클래스만** (form-common-styles-mandatory #121): 모든 `<FormItem>` 에 `className={commonStyles.formItem}`(`@foundation/styles/common-styles.module.scss` — HD 50/FHD 140 라벨 칼럼+min-width:0) + 조회조건 체크박스 셀=`customGrid`+`FormItem(label=조건명)`+`customCheckbox`(#154 v2) + 팝업 검색 InputField=`popupSearchField`. **페이지 로컬 scss 에 폼/인풋 레이아웃 신설 금지**(대체 후 dead 파일 삭제 — 그리드/모달/셀 컬러링 등 화면 고유 스타일만 로컬 유지). 정본 SalesSiteForm.tsx. ⚠️ SearchFields 카탈로그 필드는 미부착 — 인라인 FormItem 혼용 행 라벨 폭 확인
 - [ ] ⭐⭐ **SCP·DM 조회조건 = AS-IS↔TO-BE 카탈로그 전 행 대조** (search-condition-asis-tobe-catalog #112): `_rules_v2/_mapping/search_conditions_scp_dm.md`(953행/99화면) 에서 해당 화면 표 확인 — To-Be 명칭·유형·기능·팝업 그대로(명칭 표준: Div→**Div.**/Valid→**Active**/Project→**PJT** 등 13쌍) + 다중선택=**검색+ALL버튼** + 공통기능화 검토 행 SearchArea 승계 금지 + Sun-Set 8화면 사전 보고 + 카운트 일치 보고
 - [ ] **SubTitle hotkeyConfig 1 객체**로 11 버튼 자동 매핑 (subtitle-button-actions-mandatory)
 - [ ] **권한 분기**: `useTabBtnPermissions` + `hasButton(BTN_CD)` 각 액션 (screen-meta-and-permissions-mandatory)
@@ -51,6 +51,8 @@
   - [ ] admin 메타 INSERT 작성 전 `desc TABLE_NAME` 으로 NULLABLE='N' 컬럼 인벤토리 확인 + INSERT column list 매핑 (`VALID_YN` 등 누락 방지)
   - [ ] dynamicColumns 의 group + 모든 leaf 객체에 **`height`** 명시 — `HEIGHT_BY_COLUMN_DEPTH` 캐노니컬 정합 (1단=48 / **2단=24** / 3단=16). DataGrid wrapper 가 staticColumns 만 자동 처리 → dynamicColumns 누락 시 wijmo default 48 × N (cell 96 rowspan 사고). DMF0007 wrapper 동작 정합. (`packages/foundation/src/utils/columnMapping.ts:27-29`)
   - [ ] ⭐⭐⭐ **디자인 필수 — 조회조건 객체 높이 36px 동일화** (search-condition-height-uniformity #94): Dropdown/Popup InputField/Text/DatePicker/Date input **모든** 조회조건 객체 높이 = **36px** (Main UI + Popup 동일). Main UI=표준 searchFields/CustomDropdown(자동) / Popup raw `<select>`·`<input type=date>`=`height:36px; box-sizing:border-box` / **DatePicker=`.datePickerFix` wrapper 로 전 레벨(MuiBox/FormControl/OutlinedInput) 36 강제** (design-system small 28px overflow 보정 — `sx` forward 안 됨). 조회조건은 **Figma 기준 1단 4개** = 카탈로그 필드 `gridSize` additive prop(default 보존)로 `gridSize={3}`.
+  - [ ] ⭐⭐⭐ **디자인 필수 — 조회조건 Radio/CheckBox = 좌측 라벨 열(조건명) + 입력 열 시작선(컨트롤)** (search-condition-labelless-toggle-input-column #154 **v2**, 2026-10-23 사용자 지시 · 10-21 v1 개정): CheckBox = `Grid size={3} className={commonStyles.customGrid}` + `FormItem className={commonStyles.formItem} label={조건명} labelAlign='right'` + `customCheckbox` 안 `<Checkbox checked onChange />`(**박스 옆 `labelText` 금지 · 조건마다 1칸**). Radio = FormItem `label={그룹명}`(예: Search Mode) + `<RadioGroup row>` + `<Radio labelText={선택지}>`. 라벨 원천 = 조회조건 기준표 To-Be 명칭 → AS-IS 레이아웃 라벨 → AS-IS 글자(임의 작명 금지). 정본 = SCP0100 `GlobalPsiReportForm` `checkbox()`/`radio()`. ⛔ v1 NBSP/공백 라벨 · 한 FormItem 에 체크박스 묶음 · `label=''`/미지정 · FormItem 없는 `customGrid` 직접 배치 · inline paddingRight 맞춤
+  - [ ] ⭐⭐⭐ **조회영역 일괄 입력(Input 버튼) = 버튼 영역 버튼 + 입력 팝업** (search-area-bulk-input-button-popup #155, 2026-10-23 사용자 지시): AS-IS 조회영역의 대상 선택(Day of the week/Day Type/Category)+Input Value+Input 버튼은 조회영역에서 빼고 SubTitle `customButtons`(LBL 라벨·편집 권한 게이트·조회 선행 가드) → `components/<Page>InputModal.tsx`(정본 SCP0096 모양) → onConfirm boolean · EditTracker 경유 셀 기록(저장은 Save). ⛔ 조회영역 잔존 · 팝업에서 저장 SP 호출 · 라벨 리터럴
   - [ ] **동적 컬럼 편집 의도** + BE 응답 row 의 `EDIT_FLAG='N'` 환경 → 화면 측 `beginningEdit` 핸들러 등록 의무 (`useEffect` mount + dependency `[staticColumns, dynamicColumns]` + cleanup) + 의도 binding 만 `e.cancel = false` 강제 override. wrapper 의 `setEditableColumns` 가 `isEditableCell` (OPTIONAL/MANDATORY 분기 = `editFlag !== 'N'`) 결과로 cancel 처리 → 동적 컬럼 readonly 사고 (DMF0043 master)
   - [ ] ⭐⭐ **P9 상호배타 prop 함정** (2026-08-06 SYS0017 감사): `CustomDialog customContentArea` 지정 = 공통 OK/Cancel footer **미렌더**(CustomDialogContent 삼항) → **자체 footer 구현 의무** (정본 forecast-price ExchangeRateModal). 공용 컴포넌트 낯선 prop 지정 전 소스 조건 분기 확인 + §8C.4 함정 표 전수 확인
 

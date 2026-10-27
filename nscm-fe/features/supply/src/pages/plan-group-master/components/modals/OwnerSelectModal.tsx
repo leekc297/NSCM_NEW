@@ -209,7 +209,7 @@ export const OwnerSelectModal = ({
   return (
     <CustomDialog
       open={open}
-      size={850}
+      size={720}
       type='modal'
       position='basic'
       handleClose={modalClose}
@@ -252,7 +252,7 @@ export const OwnerSelectModal = ({
                 placement='parent'
               />
               <ResultArea
-                title={t('LBL_OWNER_BASE', 'Owner Base')}
+                title=''
                 count={candidateCount}
                 gridRef={baseGridRef}
                 gridFilterRef={baseFilterRef}
@@ -287,7 +287,7 @@ export const OwnerSelectModal = ({
             </div>
             <div className={styles.gridPane}>
               <ResultArea
-                title={t('LBL_OWNER_USER', 'Owner User')}
+                title=''
                 count={selectedCount}
                 gridRef={userGridRef}
                 gridFilterRef={userFilterRef}

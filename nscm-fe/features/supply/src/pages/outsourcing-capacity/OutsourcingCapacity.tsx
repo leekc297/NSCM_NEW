@@ -19,7 +19,7 @@ import { useOutsourcingCapacityStore } from './useOutsourcingCapacityStore';
 
 // AS-IS GSCM.SCP.Master.UIL SCP0023_OutsourcingCapacity — 단일 그리드(spdMain "Outsourcing Capacity").
 //   설계: .atlas/gscm-design/SCP0023/design/00~03 + 07. 상세 매핑: __asis-mapping__.md.
-//   편집제어: AS-IS SwitchLock 뷰/편집 토글은 NSCM 표준(상시편집 + 셀 화이트리스트 daily_capa_qty)으로 재현.
+//   편집제어: AS-IS SwitchLock 뷰/편집 토글은 NSCM 표준(상시편집 + 셀 화이트리스트 DAILY_CAPA_QTY)으로 재현.
 //   Insert/Delete = AS-IS NO-OP → 툴바 미노출(Search·Save 만).
 export const OutsourcingCapacity = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
@@ -99,7 +99,7 @@ export const OutsourcingCapacity = ({ tabId, title }: PageProps<MENU_ID>) => {
       ),
     });
     if (!ok) return;
-    // 저장 전 검증 — daily_capa_qty 필수·최소1 + Plant Total 필수(MSG00258) (design 03 §4.2).
+    // 저장 전 검증 — DAILY_CAPA_QTY 필수·최소1 + Plant Total 필수(MSG00258) (design 03 §4.2).
     if (!validateMainRows(dirty, all).ok) return;
     // 필수 컬럼(메타 M/IM) 검증 통과 시 mutate — 미입력이면 alert 후 차단(전 화면 공통).
     saveWithValidation(dirty as unknown as MainRow[], staticColumns[SHEETS.MAIN], mutate);

@@ -73,3 +73,26 @@ export const hasOtherYInPeriod = (
   }
   return count > 1;
 };
+
+/**
+ * ② 를 행의 모든 날짜 칸에 대해 본다 — 그 행이 Y 인 날짜 칸 중 하나라도 같은 4키 다른 행과 겹치면 true.
+ *   신규 행은 날짜 칸 기본값이 전부 Y 라(F-05) 날짜 칸 편집 이벤트를 거치지 않고 저장될 수 있다.
+ *   그래서 키 4칸이 정해지는 시점과 저장 직전에 이 함수로 한 번 더 본다(갭분석 F-03, 2026-10-21).
+ */
+export const hasOtherYInAnyPeriod = (rows: readonly KeyRow[], row: KeyRow): boolean =>
+  Object.keys(row).some(
+    binding =>
+      isDateBinding(binding) &&
+      cellText(row[binding]) === 'Y' &&
+      hasOtherYInPeriod(rows, row, binding)
+  );
+
+/**
+ * 저장 직전 검사 — 신규·수정 행 중 ① 또는 ② 에 걸리는 행이 하나라도 있으면 true.
+ *   변경 없는 행끼리의 겹침(원장에 이미 있던 중복)은 보지 않는다. 그 때문에 무관한 저장까지 막지 않기 위해서다.
+ */
+export const hasUniqueViolation = (
+  rows: readonly KeyRow[],
+  dirtyRows: readonly KeyRow[]
+): boolean =>
+  dirtyRows.some(row => hasDuplicateRowKey(rows, row) || hasOtherYInAnyPeriod(rows, row));

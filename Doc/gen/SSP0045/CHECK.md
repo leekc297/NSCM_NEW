@@ -1,0 +1,47 @@
+# [Harness] SSP0045 shipment-request-semi — BLOCK 2 / WARN 43
+
+- BLOCK H01 headerRowHeight 를 주고 동적 컬럼을 쓰는데 updatedLayout 재적용이 없음 — columnGroups 재대입 뒤 헤더 행 높이가 기본(48px)으로 돌아간다. 그리드 initialized 에서 grid.updatedLayout.addHandler(() => { const r = grid.columnHeaders.rows; if (Math.round(r.defaultSize) !== HEADER_ROW_HEIGHT) r.defaultSize = HEADER_ROW_HEIGHT; }) 를 등록할 것 @components/ShipmentRequestSemiGrid.tsx
+- WARN H05 동적 그룹 헤더(columnGroups)인데 헤더 가로 병합이 켜져 있음(allowMerging 기본/All) — 리터럴 leaf(Qty) 칸이 인접 월에 걸쳐 1칸으로 합쳐진다. allowMerging={AllowMerging.Cells}(본문 병합만) 로 넘기거나 mergeManager 에서 ColumnHeader 패널 제외. 행 높이는 그룹 행 20 / leaf 행 40(As-is ColumnHeaderSpan) @components/ShipmentRequestSemiGrid.tsx
+- WARN G02 As-is 엔드포인트 SSP.SSP0045_GET_SHIPMENT_REQUEST (SSP0045_GET_SHIPMENT_REQUEST) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCM0001_GET_SCP_DAY_PERIOD (SCM0001_GET_SCP_DAY_PERIOD) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SSP.SSP0045_SAVE_SHIPMENT_REQUEST (SSP0045_SAVE_SHIPMENT_REQUEST) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN (SCP0009_GET_SHEET_CALENDAR_3SPAN) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 chkSum.CheckedChanged → chkSum_CheckedChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDivision.SelectedIndexChanged → CboDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItem_Id.Click → BtnItem_Id_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboBucketType.SelectedIndexChanged → cboBucketType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboBizType.SelectedIndexChanged → CboBizType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.TopChange → SpdMain_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellDoubleClick → SpdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellClick → SpdMain_CellClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ComboSelChange → SpdMain_ComboSelChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ComboSelChange → SpdMain_ComboSelChange 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 usrButton1 / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkSum / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItem_Id / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItem_Id / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboBizType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboBucketType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 drpPeriod / UsrDateRangePicker 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbFromSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/BodItemRouteModal.tsx
+- BLOCK V01 Validation 마커 누락 4/4: V-001(Lundefined) V-002(Lundefined) V-003(Lundefined) V-004(Lundefined) @hooks/useShipmentRequestSemiValidation.ts
+- WARN VR2 MSG00429 — VALIDATION 취합 판정: 조회(SEARCH) SEQ1 AS-IS MSG00097 [메시지 불일치] — [메시지 불일치] 불일치 — 조회 시 권한 0건이면 Division 공란 → '[Div] 값은 필수 입력 항목입니다.'(필수 입력 안내)로 표시. AS-IS '권 @hooks/useShipmentRequestSemiValidation.ts:14
+- WARN VR2 MSG00665 — VALIDATION 취합 판정: 조회(SEARCH) SEQ4 AS-IS MSG00049 [메시지 불일치] — [메시지 불일치] 불일치 — AS-IS '유효한 날짜 형식이 아닙니다.'(형식 오류) ↔ TO-BE '조회 기간을 입력하세요.'(기간 미입력). 공란 분기만 있고 @hooks/useShipmentRequestSemiValidation.ts:15
+- WARN VR2 MSG00429 — VALIDATION 취합 판정: 조회(SEARCH) SEQ1 AS-IS MSG00097 [메시지 불일치] — [메시지 불일치] 불일치 — 조회 시 권한 0건이면 Division 공란 → '[Div] 값은 필수 입력 항목입니다.'(필수 입력 안내)로 표시. AS-IS '권 @shipment-request-semi.constants.ts:204
+- WARN VR2 MSG00665 — VALIDATION 취합 판정: 조회(SEARCH) SEQ4 AS-IS MSG00049 [메시지 불일치] — [메시지 불일치] 불일치 — AS-IS '유효한 날짜 형식이 아닙니다.'(형식 오류) ↔ TO-BE '조회 기간을 입력하세요.'(기간 미입력). 공란 분기만 있고 @shipment-request-semi.constants.ts:205
+- WARN SC1 조회조건 순서가 기준표(SSP SCP_DM_SSP 화면별 조회조건 정리_260731_(1차 완료).xlsx 958~966행)와 다를 수 있음(라벨 대조): 'From Site' 이 'Model' 보다 앞 — 기준 순서: Div → Operation group → From Site → To Site → Model/Nickname → Bucket → Period (40_SEARCH_COND.md #### SSP0045) @components/ShipmentRequestSemiForm.tsx:227
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/modals/BodItemRouteModal.tsx:79
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ShipmentRequestSemiGrid.tsx:387
+- WARN R03 window.alert/confirm → useMessageStore (#26 messaging-api) @hooks/useShipmentRequestSemiValidation.ts:23
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @ShipmentRequestSemi.tsx:252
+- WARN B07 hotkeyConfig.insert 명시(function 또는 false) — 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1)
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SSP0045/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0045/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0045/SSP0045_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SSP0045/SSP0045_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: InitSpreadDateColumn:354, InitSpreadDateColumn:358 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpreadDateColumn / 354 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md

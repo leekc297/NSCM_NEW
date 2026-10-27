@@ -204,7 +204,8 @@ export const ShipmentLotSizeForm = ({ onSearch, onItemSearch }: Props) => {
                         appearance='outlined'
                         priority='normal'
                         disabled={noAuth}
-                        iconComponent={<FunctionSearchIcon appearance='lined' onClick={onItemSearch} />}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}

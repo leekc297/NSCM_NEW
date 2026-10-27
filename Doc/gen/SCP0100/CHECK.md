@@ -1,3 +1,68 @@
-# [Harness] SCP0100 global-psi-report — BLOCK 0 / WARN 0
+# [Harness] SCP0100 global-psi-report — BLOCK 0 / WARN 66
 
-
+- WARN AC1 액션 대조표 미처리 278행: AC-1fc01430(상태 빈칸 GRID_BIND _SI.Query), AC-3e4f95ca(상태 빈칸 GRID_LOCK _SI.LockColumn), AC-76acb473(상태 빈칸 UI_MISC SetSearchCount), AC-4cd1132a(상태 빈칸 GRID_INIT _SI.SmartColMerge), AC-2ae59b85(상태 빈칸 POPUP new SCM0002_TitleSetForm_Popup), AC-948c0e9d(상태 빈칸 UI_PROP frm.StartPosition), AC-dec72cd6(상태 빈칸 POPUP frm.ShowDialog), AC-ba104f09(상태 빈칸 POPUP new SCM0002_ItembyDivisionPopu) … @Doc/asisfacts/screens/SCP0100/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 17행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-6cb86fee(EditButton @SCP0100_Global_PSI_Report.cs:1809), AC-726b79d5(ScpUtils.GetPlanDateYearMonth @SCP0100_Global_PSI_Report.cs:1787), AC-fddfa5a5(SimplexelService.ExportFpSpread @SCP0100_Global_PSI_Report.cs:1204), AC-9a377bae(this.QueryDics[DIC_GLOBAL_PSI_NEW].Clear @SCP0100_Global_PSI_Report.cs:1231), AC-b4c1edb2(ScpUtils.GetPlanDateYear @SCP0100_Global_PSI_Report.cs:1403), AC-99359548(ScpUtils.GetYearFirstDay @SCP0100_Global_PSI_Report.cs:1404), AC-1617e2bd(ScpUtils.GetPlanDateYearMonth @SCP0100_Global_PSI_Report.cs:1410), AC-fd02b095(ScpUtils.GetCurrentTimeZone @SCP0100_Global_PSI_Report.cs:577) … @Doc/asisfacts/screens/SCP0100/__asis-actions__.md
+- WARN M07 커밋본에 있던 파일이 삭제됨: __tests__/GlobalPsiReport.spec.ts — 골격 재생성으로 기능 유실 의심(git checkout -- 로 복원 후 병합, 저장소 C:\Projects\NSCM) @__tests__/GlobalPsiReport.spec.ts
+- WARN M07 커밋본에 있던 파일이 삭제됨: utils/globalPsiReportCalendar.ts — 골격 재생성으로 기능 유실 의심(git checkout -- 로 복원 후 병합, 저장소 C:\Projects\NSCM) @utils/globalPsiReportCalendar.ts
+- WARN M06 대조표 후퇴: 행 69→0 · 구현 61→0 (커밋본 대비) — 기존 대조표를 재생성하지 말고 커밋본 위에 행을 추가 @__asis-mapping__.md
+- WARN G02 As-is 엔드포인트 SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN (SCP0100_GET_SHEET_CALENDAR_3SPAN) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0100_GET_SITE (SCP0100_GET_SITE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0100_GET_PLAN_DATE (SCP0100_GET_PLAN_DATE) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Shown → SCP0100_Global_PSI_Report_Shown 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbDivision.SelectedIndexChanged → ClbDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboGraphType.SelectedIndexChanged → CboGraphType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanDate.SelectedIndexChanged → CboPlanDate_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboBucketType.SelectedIndexChanged → CboBucketType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDisplay.SelectedIndexChanged → CboDisplay_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboSearchLevel.SelectedIndexChanged → CboSearchLevel_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboUnitQty.SelectedIndexChanged → CboUnitQty_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 rgrpSearchLevel.SelectedIndexChanged → rgrpSearchLevel_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → BtnItemId_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnMeasure.Click → btnMeasure_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnProject.Click → BtnProject_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanType.SelectedIndexChanged → CboPlanType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnColumn.Click → BtnColumn_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dCalendar.ValueChanged → DCalendar_ValueChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 chkCellQty.CheckedChanged → ChkCellQty_CheckedChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 chkAS.CheckedChanged → ChkAS_CheckedChanged 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 usrButton1 / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 rgrpSearchLevel / RadioGroup 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkCellQty / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanDate / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboBucketType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 dCalendar / UsrDateRangePicker3 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboGraphType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnMeasure / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrTextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDisplay / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtProject / UsrTextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbFromSite / UsrCheckedList2 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbToSite / UsrCheckedList2 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtCellGroup / UsrTextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnProject / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnColumn / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboSearchLevel / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkAS / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboUnitQty / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbDivision / UsrCheckedList2 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chartMain / ChartControl 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdSearchLevel / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdDetail / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdSearchLevelDetail / FpSpread 매핑표 §1 에 없음
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 3건 — 조회(SEARCH) SEQ1 [MSG00002] Plan date* 값은 필수 입력 / 기타(ETC) — Bucket 변경 SEQ1 [MSG00002] Plan date* 값은 필수 입력 / 기타(ETC) — Search Level 변경 SEQ1 [MSG00002] Plan date* 값은 필수 입력 → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0100.md
+- WARN VR2 MSG00097 — VALIDATION 취합 판정: 화면 열기(OPEN) SEQ1 AS-IS MSG00097 [메시지 불일치] — [메시지 불일치] 불일치 — 같은 ID 다른 뜻: AS-IS "권한을 가진 Division이 없습니다." <-> TO-BE MSG00097 "Division 을  @global-psi-report.constants.ts:160
+- WARN I18N2 다국어 미적용(영문 고정 'Search Mode'): 코드 '' (빈 키) — 언어 전환 시 번역되지 않음 (msg_master 스냅샷 102시간 전 — python tools/DbConn/export_tobe_meta.py msg_master 로 새로고침 후 재판정) @components/GlobalPsiReportForm.tsx:440
+- WARN I18N2 다국어 미적용(영문 고정 'A/S'): 코드 LBL01167 가 msg_master 에 없음 — 언어 전환 시 번역되지 않음 (msg_master 스냅샷 102시간 전 — python tools/DbConn/export_tobe_meta.py msg_master 로 새로고침 후 재판정) @components/GlobalPsiReportForm.tsx:507
+- WARN I18N2 다국어 미적용(영문 고정 'Model / Nick Name'): 코드 '' (빈 키) — 언어 전환 시 번역되지 않음 (msg_master 스냅샷 102시간 전 — python tools/DbConn/export_tobe_meta.py msg_master 로 새로고침 후 재판정) @components/GlobalPsiReportForm.tsx:527
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/GlobalPsiReportForm.tsx:416
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/GlobalPsiReportGrid.tsx:223
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @GlobalPsiReport.tsx:110
+- WARN B07 hotkeyConfig.save 명시(function 또는 false) — 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1)
+- WARN B07 hotkeyConfig.insert 명시(function 또는 false) — 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1)
+- WARN B07 hotkeyConfig.delete 명시(function 또는 false) — 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1)
+- WARN B16 Form: 라벨 리터럴 직접 입력 없음(t('LBL…')) — 룰 13 i18n — 라벨은 LBL 코드
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: InitSpreadDateColumn:755, InitSpreadDateColumn:760 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpreadDateColumn / 755 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md

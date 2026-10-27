@@ -35,7 +35,7 @@ TO-BE: `nscm-fe/features/supply/src/pages/ending-inventory/`
 | AS-IS 동작 | TO-BE | 근거 |
 |---|---|---|
 | siMain.Query + LockColumn(0,max,true) | DataGrid staticColumns(SCM_MST_SHEET_COLUMNS 99행) 전 컬럼 읽기전용(INPUT_TP_CD 전건 S) | cs:355~356 |
-| siMain.SmartColMerge() | `allowMerging=Cells` + MERGE_COLUMNS(YYYYMM/YYYYMMDD/DIVISION_ID/PLANT_NAME/PLANT_ID) 만 병합 | cs:362 |
+| siMain.SmartColMerge() | `allowMerging=Cells` + 전 컬럼 allowMerging=true(AS-IS 전 일반 컬럼 MergePolicy.Restricted = SpreadInfo.cs:1295 과 등가 — CustomMergeManager 좌측 누적키라 선두 동일값 구간만 병합) | cs:362 / SpreadInfo.cs:1295 |
 | SetHeaderViewDetail (QUANTITY 헤더 더블클릭) | dblClick(ColumnHeader==QUANTITY) → toggleHeaderViewDetail → UNRESTRICTED_QTY/BLOCKED_STOCK/IN_TRANSIT show/hide(초기 숨김) | cs:456~497 |
 | SetHeaderDaily (YYYYMMDD) | 가시성 effect: YYYYMMDD = (mode==DAILY) | cs:563~576 |
 | SetHeaderDivision (CELL_TYPE_GR) | 가시성 effect: CELL_TYPE_GR = div∋'40'\|\|ALL | cs:578~596 |

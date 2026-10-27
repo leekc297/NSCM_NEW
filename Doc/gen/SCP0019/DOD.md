@@ -1,4 +1,4 @@
-# 완료 정의(DoD) — SCP0019 2026-10-20 04:44
+# 완료 정의(DoD) — SCP0019 2026-10-23 07:39
 
 21/30 충족
 
@@ -33,4 +33,4 @@
 | B21 | ❌ | Doc/gen/SCP0019/SCP0019_PKG.sql — Oracle PKG 골격(gen-pkg.js) | 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②) |
 | B22 | ✅ | 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0019_GET_WORKING_TIME · 시트 'Working Time') | IN 7개 일치 |
 | B24 | ✅ | As-is Form_Load 초기 조회기간(InitValue/GetDayRange) → store 초기값 | As-is: dCalendar.InitValue = GetDayRange(); — 프레임워크 유틸 호출은 flow.csv 에 없으므로 .cs 를 직접 읽어 채운다(DateUtil.GetDayRange = SCM0001_GET_SCP_MONTH_PERIOD, Doc/tobefacts/db/proc_meta.csv 의 dayRange 배선 참조) |
-| B26 | ❌ | RESPONSE_SET 응답 키 = 사내 PROC_M OUT COL_NM(proc_params.csv) | DYN_COLUMNS='o_rc1_columns' → 사내 PROC_M OUT 어디에도 없음(ResultSetMetaData 사이드카 = SYS0013 DynamicQuery 전용, 일반 call-proc 응답에 없음) — 이 키로 읽는 데이터는 항상 undefined(조회 0건·동적 컬럼 0). 동적 헤더 원천은 사내 배선 타이틀 SP 시트(B27) |
+| B26 | ❌ | RESPONSE_SET 응답 키 = 사내 PROC_M OUT COL_NM(proc_params.csv) | DYN_COLUMNS='o_rc1_columns' → 사내 PROC_M OUT 어디에도 없음(ResultSetMetaData 사이드카 = SYS0013 DynamicQuery 전용, 일반 call-proc 응답에 없음) — 이 키로 읽는 값은 항상 undefined(빈 그리드·빈 팝업으로 보이고 오류는 안 남). 동적 헤더 원천은 사내 배선 타이틀 SP 시트(B27) 또는 Object.keys(rows[0])(mybatis callSettersOnNulls=true) |

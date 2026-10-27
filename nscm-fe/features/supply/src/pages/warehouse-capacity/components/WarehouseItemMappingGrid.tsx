@@ -16,18 +16,19 @@ interface Props {
   editTrackerRef: MutableRefObject<EditTracker | undefined>;
   adminColumns?: RawFlexGridColumnConfig[];
   divisionId: string;
+  // WH Name 선택 시 숨김 필수 SCM_SITE_ID/STAGE 를 채우는 조회원 — key `DIVISION_ID|OPMZ_PLAN_GR_ID|WH_NM`.
+  warehouseSiteStage: Map<string, { site: string; stage: string }>;
   onFocus: () => void;
 }
 
 /**
  * Warehouse Item Mapping 시트(design 03 §1.2, 16컬럼) — DataGrid.
  *
- * 확인 필요(design 03 §6-9, §4.2): 이 시트는 전용 GET SP 가 없다(`SCP.SCP0133_GET_WAREHOUSE_CAPACITY`
- * 는 Warehouse Capacity 시트 전용). `Query(ds)` 가 멀티 결과셋을 두 시트에 분배하는지, 이 시트가
- * 순수 입력전용(조회 없음)인지 GSCM 원본 미확보로 확정하지 못했다 — 추측으로 조회 계약을 만들지
- * 않는다(anti-simplification §1, §2.3). 따라서 이 컴포넌트는 `useTabProcQuery` 를 배선하지 않고
- * 페이지가 로컬로 관리하는 행 배열(`rows`, Insert 로만 채워짐)만 렌더한다. SP 계약이 확정되면
- * (convert-sp 후속) 조회 배선을 추가한다.
+ * 조회(A2): 이 시트는 전용 GET SP(`PKG_SCP0133.P_SCP0133_GET_WAREHOUSE_ITEM_MAPPING`, 9 IN +
+ * O_RC1 16컬럼)가 배포돼 있다(gap-resolve iter-2 ALL_ARGUMENTS 실측). 페이지가 `useTabProcQuery`
+ * (SHEETS.ITEM_MAPPING)로 조회한 행을 `rows` prop 으로 받아 렌더하며, Insert 신규행도 같은
+ * CollectionView 에서 관리된다. 저장(A3)은 페이지 handleSave 가 activeSheet===1 에서
+ * `P_SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING` 으로 전송한다.
  *
  * 컬럼은 admin `SCM_MST_SHEET_COLUMNS`(SHEET_NAME='Warehouse Item Mapping', 16행 실측)를 그대로
  * 쓴다. 편집잠금은 WhCapa 시트와 동일 `isCellEditable`(ALWAYS_LOCKED_COLUMNS 공유) — 단
@@ -45,10 +46,14 @@ export const WarehouseItemMappingGrid = ({
   editTrackerRef,
   adminColumns,
   divisionId,
+  warehouseSiteStage,
   onFocus,
 }: Props) => {
   const dblClickRowRef = useRef<WijmoRowItem | undefined>(undefined);
   const [itemModalOpen, setItemModalOpen] = useState(false);
+  // 핸들러가 항상 최신 조회원을 보도록 ref 로 들고 있는다(effect dep 은 adminColumns 로 고정).
+  const warehouseSiteStageRef = useRef(warehouseSiteStage);
+  warehouseSiteStageRef.current = warehouseSiteStage;
 
   const columns = useMemo(() => {
     const cols = adminColumns ?? [];
@@ -97,12 +102,35 @@ export const WarehouseItemMappingGrid = ({
     g.cellEditEnded.addHandler(storLocDeriveHandler as never);
     g.pastedCell.addHandler(storLocDeriveHandler as never);
 
+    // WH Name 변경 → 숨김 필수 SCM_SITE_ID/STAGE 자동파생(AS-IS SpdMain_ComboSelChange .cs:1298-1314).
+    //   창고(DIVISION_ID+OPMZ_PLAN_GR_ID+WH_NM)를 'Warehose' 콤보로 조회해 Site/Stage 를 채운다 —
+    //   두 컬럼은 NOT NULL+필수인데 VISIBLE_FLAG=N(숨김)이라 안 채우면 저장 시 ORA-01400.
+    //   매치 없으면(그 조합의 창고 미존재) 비워 둔다 — 공통 필수검증이 저장 전에 막는다.
+    const whDeriveHandler = (sender: FlexGridType, e: { row: number; col: number }) => {
+      const binding = sender.columns[e.col]?.binding ?? '';
+      if (binding !== 'WH_NM') return;
+      const row = GridUtils.getRow(sender, e.row) as WijmoRowItem | undefined;
+      if (!row) return;
+      const key = `${String(row.DIVISION_ID ?? '')}|${String(row.OPMZ_PLAN_GR_ID ?? '')}|${String(row.WH_NM ?? '')}`;
+      const hit = warehouseSiteStageRef.current.get(key);
+      if (!hit) return;
+      editTrackerRef.current?.storeChange(row as never, 'SCM_SITE_ID' as never, row.SCM_SITE_ID as never, hit.site as never);
+      editTrackerRef.current?.storeChange(row as never, 'STAGE' as never, row.STAGE as never, hit.stage as never);
+      row.SCM_SITE_ID = hit.site;
+      row.STAGE = hit.stage;
+      sender.invalidate();
+    };
+    g.cellEditEnded.addHandler(whDeriveHandler as never);
+    g.pastedCell.addHandler(whDeriveHandler as never);
+
     return () => {
       try {
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.pastingCell?.removeHandler(beginningEditHandler as never);
         g.cellEditEnded?.removeHandler(storLocDeriveHandler as never);
         g.pastedCell?.removeHandler(storLocDeriveHandler as never);
+        g.cellEditEnded?.removeHandler(whDeriveHandler as never);
+        g.pastedCell?.removeHandler(whDeriveHandler as never);
       } catch {
         /* unmount race */
       }

@@ -1,0 +1,3 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0033,SQL,SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY,Doc\asisfacts\db\modules\dbo.SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY.sql,46,,"DIVISION_ID,ITEM_ID","ORDER BY A.DIVISION_ID, A.ITEM_ID",0,정적
+SCP0033,SQL,SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY,Doc\asisfacts\db\modules\dbo.SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

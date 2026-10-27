@@ -1,0 +1,21 @@
+'use strict';
+// AS-IS 액션 대조표 생성/갱신 (사용자 지시 2026-10-23) — 기존 화면은 커밋본 페이지를 건드리지 않고 Doc/gen/<ID>/__asis-actions__.md 에 만든다.
+//   사용: node tools/Harness/actions-checklist.js <화면ID> [--out <파일>] [--config harness.json]
+//   재실행 = 같은 ID 행의 상태·구현 위치·사유·의미 보존(merge). 원천 = Doc/asisfacts/screens/<AS-IS ID>/actions.csv (AsisFacts pack)
+const fs = require('fs'); const path = require('path');
+const a = process.argv.slice(2); const opt = (k, d) => { const i = a.indexOf(k); return i >= 0 ? a[i + 1] : d; };
+const cfg = JSON.parse(fs.readFileSync(opt('--config', path.join(__dirname, 'harness.json')), 'utf8').replace(/^\uFEFF/, ''));
+const ids = a.filter((x, i) => !x.startsWith('--') && !(i > 0 && a[i - 1].startsWith('--')));
+if (!ids.length) { console.error('화면ID 를 지정하세요'); process.exit(2); }
+const AC = require('./lib/actions');
+let fail = 0;
+for (const raw of ids) {
+  const id = raw.toUpperCase();
+  const out = opt('--out', path.join(cfg.genOutDir, id, AC.FILE));
+  const prev = fs.existsSync(out) ? fs.readFileSync(out, 'utf8') : '';
+  const r = AC.render(cfg, id, prev);
+  if (!r) { console.error(`${id}: actions.csv 없음 — tools/AsisFacts pack 먼저`); fail++; continue; }
+  fs.mkdirSync(path.dirname(out), { recursive: true }); fs.writeFileSync(out, r.md, 'utf8');
+  console.log(`${id}${r.AID !== id ? `(AS-IS ${r.AID})` : ''} → ${out}  ${r.rows}행 · 의미 확인 필요 ${r.unknown}${prev ? ' (기존 상태 보존)' : ''}`);
+}
+process.exit(fail ? 1 : 0);

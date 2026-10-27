@@ -1,0 +1,8 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SSP0018,SQL,SSP0018_GET_PRODUCTION_PLAN_OSP,Doc\asisfacts\db\modules\dbo.SSP0018_GET_PRODUCTION_PLAN_OSP.sql,55,,SORT_ORDER_NO,ORDER BY sort_order_no  ;,0,정적
+SSP0018,SQL,SSP0018_GET_PRODUCTION_PLAN_OSP,Doc\asisfacts\db\modules\dbo.SSP0018_GET_PRODUCTION_PLAN_OSP.sql,83,iF ( @p_division_id IS NOT NULL AND @p_division_id    != '') SET @mEXEC = @mEXEC + '	AND T2.DIVISION_ID IN (''' + @p_division_id + ''')'+char(10); ▸ IF ( @p_from_site   IS NOT NULL AND @p_from_site    != '') SET @mEXEC = @mEXEC + '	AND  T2.FROM_SITE IN (''' + @p_from_site + ''')'+char(10); ▸ IF ( @p_item_id     IS NOT NULL AND @p_item_id    != ''  ) SET @mEXEC = @mEXEC + ' 	AND  T2.ITEM_ID IN (''' + @p_item_id + ''')'+char(10);,"DIVISION_ID,SCM_SITE_ID,ITEM_ID","SET @mEXEC = @mEXEC + '		ORDER BY T0.DIVISION_ID, T0.SCM_SITE_ID, T0.ITEM_ID ' + CHAR(10);",0,동적 SQL
+SSP0018,SQL,DM0003_GET_BUCKET_TYPE_CODE,Doc\asisfacts\db\modules\dbo.DM0003_GET_BUCKET_TYPE_CODE.sql,41,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+SSP0018,SQL,SCM0001_GET_SCP_DAY_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAY_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0018,SQL,SCM0001_GET_DIVISION,Doc\asisfacts\db\modules\dbo.SCM0001_GET_DIVISION.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0018,SQL,SCP0009_GET_SHEET_CALENDAR_3SPAN,Doc\asisfacts\db\modules\dbo.SCP0009_GET_SHEET_CALENDAR_3SPAN.sql,57,,SORT_ORDER_NO,ORDER BY sort_order_no,0,정적
+SSP0018,SQL,SSP0018_SAVE_PRODUCTION_PLAN_OSP,Doc\asisfacts\db\modules\dbo.SSP0018_SAVE_PRODUCTION_PLAN_OSP.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

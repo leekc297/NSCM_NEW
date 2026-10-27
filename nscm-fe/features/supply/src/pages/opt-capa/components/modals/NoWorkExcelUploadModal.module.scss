@@ -46,3 +46,10 @@
     border: none !important;
   }
 }
+
+// AS-IS Error Detail 그리드(오류행 상세).
+.resultGridWrap {
+  height: 220px;
+  min-height: 220px;
+  border: 1px solid $commonBorderBasic;
+}

@@ -1,0 +1,1550 @@
+[
+ {
+  "screen": "SCP0049",
+  "title": "CAPA",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/CapaExcelUploadForm.cs:262",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/CapaExcelUploadForm.designer.cs:250",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/SCP0049_CAPA.cs:5605",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/SCP0049_CAPA.designer.cs:2324",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/SCP0049_CAPANewModelPopup.cs:1660",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/SCP0049_CAPANewVersionConfirmPopup.cs:174",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/SCP0049_CAPANewVersionInfoPopup.cs:276",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/SCP0049_ExcelSelect_Popup.cs:146",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/TestCode.cs:48",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0049_CAPA/SCP0049_CAPA.cs:2779",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0049_CAPA/SCP0049_CAPA.designer.cs:2278"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/SCP0049_CAPANewModelPopup.Designer.cs:897",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/SCP0049_CAPANewVersionConfirmPopup.Designer.cs:301",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/SCP0049_CAPANewVersionInfoPopup.Designer.cs:530",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0049_CAPA.UIL/SCP0049_ExcelSelect_Popup.Designer.cs:111"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/capa"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Capa_CAPA_validate_excel_upload.sql",
+    "member": "ValidateUpload",
+    "line": "82",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\CapaExcelUploadForm.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\SCM_Common_BigFilter_MyDivision.sql",
+    "member": "GetDivision",
+    "line": "467",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP01886_AUTHORITY_REQUEST",
+    "member": "LoadAuthority",
+    "line": "621",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETREQAUTHMYLISTADDED",
+    "member": "FindData_MyAddedAuthList",
+    "line": "1701",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Main",
+    "line": "1911",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_CAPA",
+    "member": "SaveData_Main",
+    "line": "2445",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "2507",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "2571",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "2623",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_USER_TITLE",
+    "member": "GetUserTitle",
+    "line": "2642",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "2721",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange_Day",
+    "line": "2734",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetTactTime",
+    "line": "2768",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetLossNoRun",
+    "line": "2825",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetExcelDown",
+    "line": "2882",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Common_BigFilter_FP_list_release_building.sql",
+    "member": "cblPlant_changed",
+    "line": "4835",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Common_BigFilter_LineByShop.sql",
+    "member": "clbBuilding_changed",
+    "line": "4842",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Common_BigFilter_FP_OperationByShop.sql",
+    "member": "cboLine_changed",
+    "line": "4882",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP03033_MODEL_MEASURECONVERSION",
+    "member": "EXECUTE_GENERATE",
+    "line": "5208",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "5348",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "5435",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Common_BigFilter_FP_list_release_building.sql",
+    "member": "SetChangeControl",
+    "line": "5563",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Common_BigFilter_LineByShop.sql",
+    "member": "SetChangeControl",
+    "line": "5572",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Common_BigFilter_FP_OperationByShop.sql",
+    "member": "SetChangeControl",
+    "line": "5581",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP01886_AUTHORITY_REQUEST",
+    "member": "LoadAuthority",
+    "line": "364",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETREQAUTHMYLISTADDED",
+    "member": "FindData_MyAddedAuthList",
+    "line": "411",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_MODEL",
+    "member": "FindData",
+    "line": "945",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_MODEL",
+    "member": "SaveData",
+    "line": "1278",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "1385",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR_POPUP",
+    "member": "GetSpdTitle",
+    "line": "1609",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_VERSION",
+    "member": "SaveData",
+    "line": "145",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewVersionConfirmPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_VERSION_INFO",
+    "member": "FindData",
+    "line": "215",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewVersionInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Main",
+    "line": "844",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_CAPA",
+    "member": "SaveData_Main",
+    "line": "1210",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P2_unresolved_dbo",
+    "status": "UNRESOLVED"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1272",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "1336",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "1388",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_USER_TITLE",
+    "member": "GetUserTitle",
+    "line": "1407",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "1485",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "2717",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_MODEL",
+    "member": "FindData",
+    "line": "552",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_MODEL",
+    "member": "SaveData",
+    "line": "768",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "875",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR_POPUP",
+    "member": "GetSpdTitle",
+    "line": "1099",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_VERSION",
+    "member": "SaveData",
+    "line": "145",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewVersionConfirmPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_VERSION_INFO",
+    "member": "FindData",
+    "line": "215",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewVersionInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_MODEL",
+    "member": "FindData",
+    "line": "552",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_MODEL",
+    "member": "SaveData",
+    "line": "768",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "875",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR_POPUP",
+    "member": "GetSpdTitle",
+    "line": "1099",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_VERSION",
+    "member": "SaveData",
+    "line": "145",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewVersionConfirmPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_VERSION_INFO",
+    "member": "FindData",
+    "line": "215",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewVersionInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP01886_AUTHORITY_REQUEST",
+    "member": "LoadAuthority",
+    "line": "583",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETREQAUTHMYLISTADDED",
+    "member": "FindData_MyAddedAuthList",
+    "line": "1599",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Main",
+    "line": "1807",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_CAPA",
+    "member": "SaveData_Main",
+    "line": "2317",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P2_unresolved_dbo",
+    "status": "UNRESOLVED"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "2379",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "2443",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "2495",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_USER_TITLE",
+    "member": "GetUserTitle",
+    "line": "2514",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "2593",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange_Day",
+    "line": "2606",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetTactTime",
+    "line": "2640",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetLossNoRun",
+    "line": "2697",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetExcelDown",
+    "line": "2754",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP03033_MODEL_MEASURECONVERSION",
+    "member": "EXECUTE_GENERATE",
+    "line": "5120",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "5260",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "5347",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP01886_AUTHORITY_REQUEST",
+    "member": "LoadAuthority",
+    "line": "361",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETREQAUTHMYLISTADDED",
+    "member": "FindData_MyAddedAuthList",
+    "line": "408",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_MODEL",
+    "member": "FindData",
+    "line": "931",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_MODEL",
+    "member": "SaveData",
+    "line": "1261",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "1368",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR_POPUP",
+    "member": "GetSpdTitle",
+    "line": "1592",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_VERSION",
+    "member": "SaveData",
+    "line": "145",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewVersionConfirmPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_VERSION_INFO",
+    "member": "FindData",
+    "line": "215",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewVersionInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP01886_AUTHORITY_REQUEST",
+    "member": "LoadAuthority",
+    "line": "364",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETREQAUTHMYLISTADDED",
+    "member": "FindData_MyAddedAuthList",
+    "line": "411",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_MODEL",
+    "member": "FindData",
+    "line": "878",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_MODEL",
+    "member": "SaveData",
+    "line": "1177",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "1284",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR_POPUP",
+    "member": "GetSpdTitle",
+    "line": "1508",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_VERSION",
+    "member": "SaveData",
+    "line": "145",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewVersionConfirmPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_VERSION_INFO",
+    "member": "FindData",
+    "line": "215",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewVersionInfoPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP01886_AUTHORITY_REQUEST",
+    "member": "LoadAuthority",
+    "line": "364",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETREQAUTHMYLISTADDED",
+    "member": "FindData_MyAddedAuthList",
+    "line": "411",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_MODEL",
+    "member": "FindData",
+    "line": "878",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_MODEL",
+    "member": "SaveData",
+    "line": "1177",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "1284",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR_POPUP",
+    "member": "GetSpdTitle",
+    "line": "1508",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_VERSION",
+    "member": "SaveData",
+    "line": "145",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewVersionConfirmPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_VERSION_INFO",
+    "member": "FindData",
+    "line": "215",
+    "file": "06.UIL\\GSCM.SCP.Master.UIL\\POPUP\\SCP0049_CAPANewVersionInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_MODEL",
+    "member": "FindData",
+    "line": "552",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_MODEL",
+    "member": "SaveData",
+    "line": "768",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "875",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR_POPUP",
+    "member": "GetSpdTitle",
+    "line": "1099",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_VERSION",
+    "member": "SaveData",
+    "line": "145",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewVersionConfirmPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_VERSION_INFO",
+    "member": "FindData",
+    "line": "215",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\FPXXXXX_INSTAUTH.UIL\\SCP0049_CAPANewVersionInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP01886_AUTHORITY_REQUEST",
+    "member": "LoadAuthority",
+    "line": "621",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETREQAUTHMYLISTADDED",
+    "member": "FindData_MyAddedAuthList",
+    "line": "1701",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Main",
+    "line": "1911",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "2507",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "2571",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "2623",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_USER_TITLE",
+    "member": "GetUserTitle",
+    "line": "2642",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "2721",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange_Day",
+    "line": "2734",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetTactTime",
+    "line": "2768",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetLossNoRun",
+    "line": "2825",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetExcelDown",
+    "line": "2882",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP03033_MODEL_MEASURECONVERSION",
+    "member": "EXECUTE_GENERATE",
+    "line": "5208",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "5348",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "5435",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP01886_AUTHORITY_REQUEST",
+    "member": "LoadAuthority",
+    "line": "364",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETREQAUTHMYLISTADDED",
+    "member": "FindData_MyAddedAuthList",
+    "line": "411",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_MODEL",
+    "member": "FindData",
+    "line": "945",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_MODEL",
+    "member": "SaveData",
+    "line": "1278",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "1385",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR_POPUP",
+    "member": "GetSpdTitle",
+    "line": "1609",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_VERSION",
+    "member": "SaveData",
+    "line": "145",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewVersionConfirmPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_VERSION_INFO",
+    "member": "FindData",
+    "line": "215",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0049_CAPA.UIL\\SCP0049_CAPANewVersionInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_MODEL",
+    "member": "FindData",
+    "line": "552",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_MODEL",
+    "member": "SaveData",
+    "line": "768",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "875",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR_POPUP",
+    "member": "GetSpdTitle",
+    "line": "1099",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_VERSION",
+    "member": "SaveData",
+    "line": "145",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewVersionConfirmPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_VERSION_INFO",
+    "member": "FindData",
+    "line": "215",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0049_CAPANewVersionInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP01886_AUTHORITY_REQUEST",
+    "member": "LoadAuthority",
+    "line": "583",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETREQAUTHMYLISTADDED",
+    "member": "FindData_MyAddedAuthList",
+    "line": "1599",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Main",
+    "line": "1807",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "2379",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "2443",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "2495",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_USER_TITLE",
+    "member": "GetUserTitle",
+    "line": "2514",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "2593",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange_Day",
+    "line": "2606",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetTactTime",
+    "line": "2640",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetLossNoRun",
+    "line": "2697",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_SCP0049_FIND",
+    "member": "GetExcelDown",
+    "line": "2754",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP03033_MODEL_MEASURECONVERSION",
+    "member": "EXECUTE_GENERATE",
+    "line": "5120",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "5260",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "5347",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_UI_FP01886_AUTHORITY_REQUEST",
+    "member": "LoadAuthority",
+    "line": "361",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETREQAUTHMYLISTADDED",
+    "member": "FindData_MyAddedAuthList",
+    "line": "408",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_MODEL",
+    "member": "FindData",
+    "line": "931",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_MODEL",
+    "member": "SaveData",
+    "line": "1261",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "1368",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR_POPUP",
+    "member": "GetSpdTitle",
+    "line": "1592",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewModelPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_NEW_VERSION",
+    "member": "SaveData",
+    "line": "145",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewVersionConfirmPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_NEW_VERSION_INFO",
+    "member": "FindData",
+    "line": "215",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCX0049_CAPA.UIL\\SCP0049_CAPANewVersionInfoPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Main",
+    "line": "844",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1272",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "1336",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "1388",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_USER_TITLE",
+    "member": "GetUserTitle",
+    "line": "1407",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "1485",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "2717",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0049_CAPA\\SCP0049_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_SCM_SYS_LOG_BATCH",
+   "PR_UI_FP01886_AUTHORITY_REQUEST",
+   "PR_UI_FP03033_MODEL_MEASURECONVERSION",
+   "PR_UI_SCP0049_FIND",
+   "SCP0049_GET_CAPA",
+   "SCP0049_GET_DAY_RANGE",
+   "SCP0049_GET_NEW_MODEL",
+   "SCP0049_GET_NEW_VERSION_INFO",
+   "SCP0049_GET_SHEET_CALENDAR",
+   "SCP0049_GET_SHEET_CALENDAR_POPUP",
+   "SCP0049_GET_SHEET_USER_TITLE",
+   "SCP0049_SAVE_CAPA",
+   "SCP0049_SAVE_CAPA / SCP0049_SAVE_NEW_MODEL",
+   "SCP0049_SAVE_MAIL_SEND_REQUEST",
+   "SCP0049_SAVE_NEW_MODEL",
+   "SCP0049_SAVE_NEW_VERSION",
+   "UP_FX_GETREQAUTHMYLISTADDED",
+   "foxquery_sql\\FP_Capa_CAPA_validate_excel_upload.sql",
+   "foxquery_sql\\FP_Common_BigFilter_FP_OperationByShop.sql",
+   "foxquery_sql\\FP_Common_BigFilter_FP_list_release_building.sql",
+   "foxquery_sql\\FP_Common_BigFilter_LineByShop.sql",
+   "foxquery_sql\\SCM_Common_BigFilter_MyDivision.sql"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SCP0049_GET_CAPA",
+    "sp": "SCP0049_GET_CAPA",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "REQUIRED",
+    "desc": "Tact/Yield Needed 모드: 조회 전 월에 Tact Time(또는 Yield) 값이 있거나 전 월이 우선순위 9 인 품목을 빼고, 값이 비어 있는 월이 있는 품목만 표시",
+    "message": null,
+    "on_fail": "NOT EXISTS(#TMP_SCP0049_NOT_LA) 인 행만 #TMP_SCP0049_LTY_RESULT 에 적재 → 모든 월 값이 채워진(또는 전월 우선순위 9) 품목 제외"
+   },
+   {
+    "entry_sp": "SCP0049_GET_CAPA",
+    "sp": "SCP0049_GET_CAPA",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "REQUIRED",
+    "desc": "비Current(버전) 조회에서도 Tact/Yield Needed 모드로 값이 비어 있는 품목만 표시",
+    "message": null,
+    "on_fail": "NOT EXISTS(#TMP_SCP0049_NOT_LA_VER) 인 행만 결과 적재"
+   },
+   {
+    "entry_sp": "SCP0049_GET_CAPA",
+    "sp": "SCP0049_GET_CAPA",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "버전 조회 결과 중 본인 정담당 항목 확정 비율 표시",
+    "message": null,
+    "on_fail": "세 번째 결과셋으로 본인 담당 확정률 반환"
+   },
+   {
+    "entry_sp": "SCP0049_SAVE_CAPA",
+    "sp": "SCP0049_SAVE_CAPA",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 중 예외 발생 시 전체 롤백 후 실패코드와 DB 오류 메시지 반환",
+    "message": "[<ERROR_NUMBER>]<ERROR_MESSAGE>",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code, '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE() as err_message"
+   },
+   {
+    "entry_sp": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "sp": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 오류 로그만 남기고 화면에는 결과를 반환하지 않음",
+    "message": null,
+    "on_fail": "scm_sys_log_batch ERROR 로그 INSERT; IF @@TRANCOUNT > 0 COMMIT WORK (결과셋 반환 없음)"
+   },
+   {
+    "entry_sp": "SCP0049_SAVE_NEW_MODEL",
+    "sp": "SCP0049_SAVE_NEW_MODEL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 중 예외 시 롤백 후 실패코드 반환",
+    "message": "[<ERROR_NUMBER>]<ERROR_MESSAGE>",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0049_SAVE_NEW_VERSION",
+    "sp": "SCP0049_SAVE_NEW_VERSION",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "버전 생성 중 예외 시 전체 롤백 후 실패코드 F 와 오류 메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT INTO scm_sys_log_batch(…ERROR…); SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']"
+   }
+  ]
+ }
+]

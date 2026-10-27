@@ -204,13 +204,29 @@ export const ProductionPlanWaterfallGrid = ({
     };
   }, [gridRef, staticColumns, dynamicColumns, headerRowHeight]);
 
-  // ── 계층 병합 (AS-IS SmartColMerge + 헤더 스팬) — binding 키 기준 ──
+  // ── 계층 병합 (AS-IS RightColMerge2) — 실제 그리드 표시 컬럼 순서(좌→우) 기준 ──
+  //   병합 축(fixedBindings)은 staticColumns 배열 순서가 아니라 g.columns 의 "실제 표시 순서"로 잡는다.
+  //   staticColumns(admin 메타 25행)와 그리드 실 컬럼은 집합·순서가 다르다(실측): staticColumns 는
+  //   CELL_NICKNAME·PRODUCT_LEVEL1~3 등 그리드에 렌더되지 않는 컬럼을 포함하고 순서도 DIVISION_ID 가
+  //   5번째지만, g.columns 는 DIVISION_ID 가 col 0 이다. fixedBindings 를 staticColumns 순서로 잡으면
+  //   DIVISION_ID 의 leftBindings(slice(0,idx+1))에 그리드에 없는 CELL_NICKNAME 등이 끼어 좌측 누적
+  //   sameRow 가 블록마다 false → Div 가 measure 수만큼 쪼개진다. AS-IS RightColMerge2 는 스프레드의
+  //   실제 좌→우 컬럼을 누적 병합하므로 g.columns(보이는 정적=비기간) 순서가 정확한 등가다.
+  //   주의: 기간 컬럼(D_/W_/M_)은 축이 아니다 — PERIOD_COLUMN_REGEX 로 제외.
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
-    g.mergeManager = new WaterfallMergeManager(staticColumns.map(column => column.colNm));
+    const fixedBindings = g.columns
+      .filter(
+        column =>
+          column.visible !== false &&
+          !!column.binding &&
+          !PERIOD_COLUMN_REGEX.test(column.binding)
+      )
+      .map(column => column.binding as string);
+    g.mergeManager = new WaterfallMergeManager(fixedBindings, bucket);
     g.invalidate(true);
-  }, [gridRef, staticColumns, dynamicColumns]);
+  }, [gridRef, staticColumns, dynamicColumns, bucket]);
 
   // ── 스크롤 시 세로 병합 재계산 (AS-IS spdMain_TopChange → SmartColMerge 재호출) ──
   useEffect(() => {

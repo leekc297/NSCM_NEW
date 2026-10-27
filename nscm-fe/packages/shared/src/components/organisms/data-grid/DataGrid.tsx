@@ -18,6 +18,7 @@ import {
   type CellRangeEventArgs,
   type FlexGrid as TFlexGrid,
 } from '@mescius/wijmo.grid';
+import type { ColumnFilter} from '@mescius/wijmo.grid.filter';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { FlexGrid, type FlexGridProps } from '@mescius/wijmo.react.grid';
 import {
@@ -537,6 +538,12 @@ interface DataGridProps<T extends WijmoRowItem = WijmoRowItem> extends FlexGridP
    * (편집 불가 그리드는 CRUD_TYPE 이 생기지 않아 원칙적으로 지정할 필요가 없다.)
    */
   excludeFromDirtyCheck?: boolean;
+  /**
+   * 수정상태(CRUD) 표시용 rowHeader status 컬럼을 숨긴다(기본 false).
+   * 저장이 없어 수정상태 표시가 무의미한데도 셀 편집(콤보 선택 등)이 필요해
+   *   isReadOnly 로 만들 수 없는 그리드에만 사용(SCP0134 Plan Management).
+   */
+  hideStatusColumn?: boolean;
   /** 공통 컨텍스트(우클릭) 메뉴 사용 여부 (기본 true) */
   useContextMenu?: boolean;
   /**
@@ -571,13 +578,20 @@ interface DataGridProps<T extends WijmoRowItem = WijmoRowItem> extends FlexGridP
 //   columnGroups 참조 안정이 콤보 dataMap 을 구조에서 분리한 설계의 전제다 — 그 전제를 여기서 지킨다.
 const EMPTY_DYNAMIC_COLUMNS: FlexGridColumnConfig[] = [];
 const EMPTY_COMBO_PARAMS: Record<string, string> = {};
+// staticColumns 도 같은 이유로 모듈 상수 — 파라미터 기본값 `= []` 는 렌더마다 새 참조라,
+//   staticColumns 를 생략한 동적전용 그리드(dynamicColumns 만 쓰는 저장 팝업 등)에서
+//   `useEffect(() => setHiddenColumns(new Set()), [staticColumns])` 가 매 렌더 재실행 →
+//   setHiddenColumns 가 매번 새 Set 을 넣어 무한 setState 루프("Maximum update depth exceeded")가
+//   돈다. 콤보 dataMap 사후 주입도 이 재렌더 폭풍에 묻혀 드롭다운이 텍스트박스로 떨어진다
+//   (2026-10-22 SSP0060 Shipment Request 팝업 Change Reason 콤보 실사고).
+const EMPTY_STATIC_COLUMNS: RawFlexGridColumnConfig[] = [];
 
 const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   gridFilterRef,
   gridRef,
   editTrackerRef,
   itemsSource = [],
-  staticColumns = [],
+  staticColumns = EMPTY_STATIC_COLUMNS,
   dynamicColumns = EMPTY_DYNAMIC_COLUMNS,
   useSummaryTooltip = true,
   useCellTooptip = true,
@@ -589,6 +603,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   negativeCellAsZero,
   numberRules,
   excludeFromDirtyCheck = false,
+  hideStatusColumn = false,
   useContextMenu = true,
   contextMenuItems,
   excelFileName,
@@ -601,6 +616,11 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   headerRowHeight,
   dblClick,
   click,
+  // MergeManager 는 Wijmo 가 그리드 생성 시 deep-copy 하는 prop 경로(copy)로 넘기면 안 된다 —
+  //   서브클래스의 own 속성(예: DivisionNameMergeManager.binding)을 기본 MergeManager 에 복사하려다
+  //   "Unknown property binding" assertion 으로 그리드가 아예 안 뜬다(SCP0015 실사고). prop 에서 빼내
+  //   initialized 핸들러에서 grid.mergeManager 로 직접 할당한다(아래).
+  mergeManager,
   ...gridProps
 }: DataGridProps<T>) => {
   const dblClickRef = useRef(dblClick);
@@ -714,10 +734,17 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
 
   const layoutAppliedColumns = useMemo(() => {
     const applied = applyGridLayout(staticColumns, layoutKey ? gridLayout : null);
-    if (hiddenColumns.size === 0) return applied;
-    return applied.map(column =>
-      hiddenColumns.has(column.colNm) ? { ...column, visible: false } : column
-    );
+    // 폭 0(또는 음수) 컬럼은 렌더하지 않는다. AS-IS(GSCM)에서 폭 0은 숨김 의도인데,
+    //   표시한 채 폭만 0이면 셀이 겹쳐 보인다. VISIBLE_FLAG=N 으로 정비되지 못한 메타
+    //   (개발 DB 다수)를 공용 단에서 숨김으로 흡수한다. display:false 로 접어 모든 렌더
+    //   필터(column.display)에서 빠지게 한다. colWth 미지정(undefined)은 기본폭이므로 건드리지 않고,
+    //   개인화(applyGridLayout)로 폭이 양수로 복원된 컬럼은 applied 반영 후라 그대로 표시된다.
+    return applied.map(column => {
+      if (typeof column.colWth === 'number' && column.colWth <= 0)
+        return { ...column, display: false };
+      if (hiddenColumns.has(column.colNm)) return { ...column, visible: false };
+      return column;
+    });
   }, [staticColumns, gridLayout, layoutKey, hiddenColumns]);
   const layoutAppliedRef = useRef(layoutAppliedColumns);
   layoutAppliedRef.current = layoutAppliedColumns;
@@ -1218,6 +1245,9 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     const getGridFilter = () => gridFilterRef?.current ?? internalFilterRef.current;
     const gridWithAddedRows = grid as TFlexGrid<T> & { _newAddedRowsSet?: WeakSet<object> | null };
     let filterBeforeReload: string | null = null;
+    // 재조회 직후(1회) 스테일 값필터 정리를 돌릴지 표식 — itemsSourceChanged 에서 켜고,
+    //   dataMap 재부착이 끝나는 updatedLayout 에서 소비한다(표시명 대조는 재부착 뒤라야 정확).
+    let staleValueFilterCheckPending = false;
     // 필터 예외로 등록된 신규행 집합(keepRowVisibleUnderFilter)도 함께 뜬다.
     //   wijmo 의 clear()/apply() 가 이 집합을 null 로 비우는데, 아래 복원이 곧 apply() 라
     //   되돌려 놓지 않으면 "필터는 살아났는데 방금 추가한 신규행만 사라지는" 상태가 된다.
@@ -1300,6 +1330,8 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     // wijmo 가 비운 필터를 새로 실린 데이터 위에 되돌린다 (위 캡처 핸들러 주석 참고).
     grid.itemsSourceChanged.addHandler(() => {
       const restored = restoreGridFilter(grid, getGridFilter(), filterBeforeReload);
+      // 보존된 필터가 있으면, 재부착 뒤 1회 스테일 값필터 정리를 예약한다(아래 updatedLayout).
+      if (restored) staleValueFilterCheckPending = true;
       // 복원(=apply)이 비운 신규행 예외 집합을 되돌리고 판정만 다시 시킨다.
       if (restored && addedRowsBeforeReload) {
         gridWithAddedRows._newAddedRowsSet = addedRowsBeforeReload;
@@ -1545,8 +1577,9 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     grid.selectionMode = selectionMode as SelectionMode;
     // 세로 병합 셀 복사/붙여넣기 보정
     grid.expandSelectionOnCopyPaste = false;
-    if (allowMerging !== AllowMerging.None && !gridProps.mergeManager)
-      grid.mergeManager = new CustomMergeManager(grid);
+    // 커스텀 MergeManager 는 여기서 직접 할당한다(prop copy 경로 금지 — 위 destructure 주석).
+    if (mergeManager) grid.mergeManager = mergeManager;
+    else if (allowMerging !== AllowMerging.None) grid.mergeManager = new CustomMergeManager(grid);
     // ⭐ rowHeader corner(No/Status) 세로병합 — 화면이 mergeManager 를 커스텀으로 덮어써도
     //   기존 매니저를 감싸 TopLeft 병합만 보강(위임 데코레이터). 공통 grid 전체 corner 병합 일관.
     ensureTopLeftMergeManager(grid);
@@ -1563,10 +1596,43 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     grid.formatItem.addHandler((_sender, e) => formatTextTypeColumns(grid, e));
 
     // 포커스 행 표시(No 컬럼) 갱신 - selection 만 바뀌면 RowHeader 셀의 바인딩 데이터는
-    //   안 바뀌므로 Wijmo 가 formatItem 을 자동 재호출하지 않는다. refresh(false) 로 강제
-    //   재도색해 formatItem 을 다시 태운다. invalidate() 는 레이아웃까지 재계산해 여기엔
-    //   과함(행 높이/컬럼폭 변화가 없으므로) - refresh(false) 가 더 가볍고 즉시 반영된다.
-    grid.selectionChanged.addHandler(sender => sender.refresh(false));
+    //   안 바뀌므로 Wijmo 가 formatItem(paintRowNoSelectionStyle)을 자동 재호출하지 않는다.
+    //   종전엔 refresh(false) 로 전체 패널(넓은 데이터 셀 포함)을 다시 그렸는데, 넓은 그리드
+    //   (예: SCP0005 39컬럼·셀콤보 10)에서 방향키를 누르고 있으면 매 선택 이동마다 전체 리페인트가
+    //   나 버벅였다(2026-10-21 리포트). 선택에 따라 바뀌는 건 No 표시가 걸리는 '행'들뿐이므로,
+    //   직전·현재 선택 행을 덮는 범위의 RowHeader 패널만 refreshRange 로 다시 그린다 — 넓은
+    //   데이터 셀은 건드리지 않는다. 같은 행 내 좌우 이동(선택 행 집합 불변)은 다시 그릴 게 없어
+    //   건너뛴다. 데이터 셀의 네이티브 선택 하이라이트(wj-state-selected)는 wijmo 가 따로 관리하므로
+    //   이 축소와 무관하다.
+    const selectedRowBounds = (): { min: number; max: number } | null => {
+      let min = Infinity;
+      let max = -Infinity;
+      for (const range of grid.selectedRanges) {
+        if (!range.isValid) continue;
+        min = Math.min(min, range.topRow);
+        max = Math.max(max, range.bottomRow);
+      }
+      return max < 0 ? null : { min, max };
+    };
+    let prevSelectedRowBounds: { min: number; max: number } | null = null;
+    grid.selectionChanged.addHandler(() => {
+      const curr = selectedRowBounds();
+      const prev = prevSelectedRowBounds;
+      prevSelectedRowBounds = curr;
+      // 선택 행 집합이 그대로면(같은 행 내 좌우 이동) No 표시가 안 바뀌므로 건너뛴다.
+      if (curr && prev && curr.min === prev.min && curr.max === prev.max) return;
+      // 직전 행(해제) + 현재 행(강조)을 모두 덮는 범위. 화면에 렌더된 행만 DOM 이 있으므로
+      //   뷰포트로 클램프해 점프 선택(Ctrl+End 등)에도 비용을 고정한다.
+      let lo = Math.min(prev?.min ?? Infinity, curr?.min ?? Infinity);
+      let hi = Math.max(prev?.max ?? -Infinity, curr?.max ?? -Infinity);
+      if (!Number.isFinite(lo) || !Number.isFinite(hi)) return;
+      const vr = grid.viewRange;
+      lo = Math.max(lo, vr.topRow);
+      hi = Math.min(hi, vr.bottomRow);
+      if (hi < lo) return;
+      const rightCol = Math.max(0, grid.rowHeaders.columns.length - 1);
+      grid.refreshRange(new CellRange(lo, 0, hi, rightCol), grid.rowHeaders);
+    });
 
     setEditableColumns(grid);
     // 위 setEditableColumns 뒤에 걸어야 한다 — wijmo Event 는 등록 순서대로 부르므로 앞에 걸면
@@ -1595,7 +1661,8 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     }
     if (useResultColumns) setResultColumn(grid);
 
-    if (!gridProps.isReadOnly) grid.rowHeaders.columns.push(new Column({ align: 'center' }));
+    if (!gridProps.isReadOnly && !hideStatusColumn)
+      grid.rowHeaders.columns.push(new Column({ align: 'center' }));
     grid.rowHeaders.columns[0].width = initialIndexRowHeaderWidth;
     /**
      * TODO: wijmo 객체와 hostElement의 렌더링 시점 차이로 인해 hostElement 등에 핸들러를 추가하는 경우 다음과 같이 ref로 적용하였음.
@@ -1684,6 +1751,56 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     //   같은 비율로 함께 줄어들게 한다 (기본은 드래그한 컬럼 하나만 바뀜).
     setMultiColumnResize(grid, userColumnWidthsRef);
 
+    /**
+     * 재조회로 데이터가 다시 실린 뒤, **값 필터(체크박스)**의 체크값이 **단 하나도 현재 데이터에
+     * 없으면(전부 사라짐)** 그 컬럼 필터를 **통째로 해제**한다. 하나라도 남아 있으면 유지한다
+     * (사용자 지시 2026-10-27).
+     *
+     * 왜 — 보존 필터(restoreGridFilter)는 재조회해도 유지되는데, 조회 축(division 등)이 바뀌어
+     * 체크값이 **전부** 새 데이터에 없으면 ① 전 행이 걸러져 그리드가 빈 채로 뜨고(SubTitle 건수도 0)
+     * ② wijmo 드롭다운은 현재 데이터의 값만 나열해 사용자가 그 체크값을 해제할 길이 없다(막다른
+     * 상태). 이 "전부 사라진" 경우만 깨진 필터로 보고 컬럼 단위로 리셋한다. 일부라도 남으면 그
+     * 행들이 보여 막다름이 아니므로 유지한다(부분 prune 아님 — 통째 clear 하되 트리거는 "전부 부재").
+     *
+     * dataMap 컬럼은 체크값이 **표시명**으로 저장되므로(판정 시 CODE→표시명 환산) 현재 데이터의
+     * CODE 를 dataMap 으로 표시명으로 바꿔 유효값 집합을 만든다 → dataMap 재부착 **뒤**에 호출해야
+     * 정확하다(updatedLayout 의 재부착 직후 1회). 조건 필터(contains/≥ 등)는 '목록'이 없어 제외.
+     * dataMap 없이 format 만 있는 컬럼은 wijmo 가 체크값을 **서식 문자열**로 저장해 원시값 대조가
+     * 어긋날 수 있어(오해제 위험) 보수적으로 건너뛴다 — 그 경우는 사용자가 Clear 버튼으로 해제한다.
+     */
+    const clearStaleValueFilters = () => {
+      const gridFilter = getGridFilter();
+      const source = grid.collectionView?.sourceCollection as readonly unknown[] | undefined;
+      // 데이터가 없으면(빈 조회) 판정 보류 — 어차피 빈 화면이고 전건 비교가 무의미하다.
+      if (!gridFilter || !source || source.length === 0) return;
+      const toClear: ColumnFilter[] = [];
+      // wijmo FlexGridFilter 는 활성 필터 배열을 공개하지 않는다 — 컬럼을 순회하며
+      //   getColumnFilter(col, false)로 기존 필터만 집어온다(create=false 면 없을 때 null).
+      for (let i = 0; i < grid.columns.length; i++) {
+        const column = grid.columns[i];
+        const binding = column?.binding;
+        if (!binding) continue;
+        const columnFilter = gridFilter.getColumnFilter(column, false) as ColumnFilter | null;
+        const valueFilter = columnFilter?.valueFilter;
+        if (!columnFilter || !valueFilter?.isActive) continue; // 값 필터만 (조건 필터 제외)
+        const checked = Object.keys(valueFilter.showValues as Record<string, unknown>);
+        if (checked.length === 0) continue;
+        if (!column.dataMap && column.format) continue; // 서식 컬럼은 보수적 제외(위 주석)
+        const valid = new Set<string>();
+        for (const item of source) {
+          const raw = (item as Record<string, unknown>)[binding];
+          const display = column.dataMap ? column.dataMap.getDisplayValue(raw) : raw;
+          valid.add(safeString(display));
+        }
+        // 체크값이 하나라도 현재 데이터에 있으면 유지(일부라도 보이면 막다름 아님), 단 하나도
+        //   없으면(전부 사라짐) 그 컬럼 필터를 통째로 해제한다 — 사용자 결정 2026-10-27.
+        if (!checked.some(value => valid.has(value))) toClear.push(columnFilter);
+      }
+      if (toClear.length === 0) return;
+      toClear.forEach(columnFilter => columnFilter.clear());
+      gridFilter.apply();
+    };
+
     // ⭐ 다단 헤더 행 높이 — columnGroups 재적용으로 헤더 row 높이가 리셋되므로
     //   updatedLayout(매 layout refresh 후)에 재적용. 미지정(undefined) 화면은 무영향(회귀 0).
     //   guard: 이미 목표 높이면 skip → 무한 루프 방지.
@@ -1700,6 +1817,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
       //   없어 콤보 컬럼이 통째로 텍스트로 떨어진다 (2026-09-02 행추가 리포트 — 행추가 렌더에서
       //   staticColumns 참조가 바뀌는 화면이 그 경우다).
       //   guard: 캐시한 인스턴스와 같으면 skip → updatedLayout 무한 루프 방지.
+      let dataMapReattached = false;
       appliedDataMapsRef.current.forEach((dataMap, binding) => {
         const column = grid.getColumn(binding);
         if (!column || column.dataMap === dataMap) return;
@@ -1714,7 +1832,25 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
           return;
         }
         column.dataMap = dataMap;
+        dataMapReattached = true;
       });
+
+      // dataMap 컬럼의 값필터(ValueFilter)는 판정 시 행의 원시 CODE 를 dataMap 으로 표시명으로
+      //   바꿔 체크값(표시명으로 저장됨)과 비교한다 → 판정 시점에 dataMap 이 붙어 있어야 매칭된다.
+      //   그런데 재조회(columnGroups 재대입)로 dataMap 이 지워진 상태에서 보존 필터가 먼저
+      //   재적용되면(위 rebindFilterColumns / itemsSourceChanged 의 restoreGridFilter) CODE↔표시명
+      //   불일치로 전 행이 제외돼 "데이터는 왔는데 0건" 이 된다(DMF0082 Measure 필터 실사고).
+      //   dataMap 을 방금 다시 붙였고 활성 필터가 있으면 필터를 한 번 다시 평가한다. 재부착은 위
+      //   가드(이미 같은 맵이면 skip)로 1회성이라 다음 패스에서 반복되지 않는다(무한 루프 없음).
+      if (dataMapReattached && grid.collectionView?.filter) grid.collectionView.refresh();
+
+      // 재조회 직후 1회 — 현재 데이터에 없는 체크값이 남은 값필터를 정리한다(dataMap 재부착 뒤라야
+      //   표시명 대조가 정확). one-shot 플래그라 매 updatedLayout 마다 돌지 않고, 플래그를 먼저
+      //   끈 뒤 호출하므로 apply()→invalidate→재진입이 있어도 루프가 없다.
+      if (staleValueFilterCheckPending) {
+        staleValueFilterCheckPending = false;
+        clearStaleValueFilters();
+      }
 
       // columnGroups 재대입으로 되돌아간 폭을 사용자가 조정한 값으로 복원.
       //   guard: 이미 목표 폭이면 skip → updatedLayout 무한 루프 방지.

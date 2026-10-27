@@ -1,24 +1,61 @@
-/* splitContainer1 — Main(상) / Detail(하) 수직 분할 (design 01 §1) */
+/* splitContainer1 — Main(상) / Detail(하) 수직 드래그 분할 (design 01 §1).
+   DMF0004(SalesSite) PanelGroup 패턴 참조 — 상/하 그리드 높이를 .splitBar 드래그로 조절. */
 .gridArea {
+  flex: 1 1 0;
+  min-height: 0;
+
+  // react-resizable-panels v4 Panel 은 자식을 2중 div 로 감싼다(바깥 div[data-panel] + 안쪽 콘텐츠
+  //   래퍼 div, display 미지정=block). 콘텐츠 래퍼를 flex column 으로 바꿔야 자식(.mainGrid/.detailArea,
+  //   height:100%)이 정확히 채워진다(DMF0004 SalesSite.module.scss 동일 처방). Separator(.splitBar)는
+  //   자식 div 가 없어 `> div > div` 에 매칭되지 않으므로 무영향. 라이브러리 major 업그레이드 시 재확인.
+  > div > div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Panel 직속 자식 — Panel 이 높이를 관리하므로 height:100% 로 채운다(flex-grow 아님). */
+.mainGrid {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  height: 100%;
   min-height: 0;
 }
 
-.mainGrid {
-  flex: 1 1 55%;
-  min-height: 200px;
+.detailArea {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
-.detailArea {
-  flex: 1 1 45%;
-  min-height: 180px;
-  display: flex;
-  flex-direction: column;
-  border-top: 1px solid var(--color-border, #d9d9d9);
+/* 상하 드래그 바(Separator) — DMF0004 .splitBar 동일. react-resizable-panels v4 Separator 는 기본
+   높이 0 + 커서 없음이라 잡을 영역이 없다 → 두께/리사이즈 커서/중앙 구분선을 직접 부여해야 드래그가
+   동작한다(inline flexGrow/Shrink:0 이 걸리므로 두께는 flex-basis 가 아닌 height 로 지정). */
+.splitBar {
+  height: 16px;
+  cursor: row-resize;
+  position: relative;
+  flex-shrink: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
 }
 
 /* 2차 조회조건 (usrLayoutControl3) — Detail 그리드 상단 */

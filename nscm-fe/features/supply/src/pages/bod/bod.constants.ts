@@ -53,6 +53,13 @@ export const BOD_COLUMN = {
   REMARKS: 'REMARKS',
 } as const;
 
+/**
+ * 신규 행 Div 자동세팅 표시(화면 전용 필드, 저장 SP 파라미터 아님) — AS-IS InsertButton(SCP0007_BOD.cs L406-410)은
+ *   조회조건 Division 이 단일일 때만 DIVISION_ID 를 채우고 그 칸을 잠근다. 조회조건이 ALL·다중이라 비워 둔 행은
+ *   사용자가 Div 를 몇 번이든 바꿀 수 있어야 하므로, 잠금 판정은 값 유무가 아니라 이 표시로 한다.
+ */
+export const DIVISION_AUTO_SET_FLAG = '_DIVISION_AUTO_SET';
+
 /** 요일별 운송가능 Y/N 7컬럼 — Route 선택 팝업이 주입(AS-IS DAYS_MON~DAYS_SUN). */
 export const DAY_OF_WEEK_COLUMNS = [
   'DAYS_MON',

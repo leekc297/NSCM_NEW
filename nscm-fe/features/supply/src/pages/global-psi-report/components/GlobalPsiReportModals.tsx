@@ -45,6 +45,7 @@ export const GlobalPsiReportModals = ({
   const setAlert = useMessageStore.getState().setAlert;
 
   const staticMeasures = useGlobalPsiReportStore(s => s.staticMeasures);
+  const staticColumns = useGlobalPsiReportStore(s => s.staticColumns);
   const fetchStaticColumns = useGlobalPsiReportStore(s => s.fetchStaticColumns);
   const fetchStaticMeasures = useGlobalPsiReportStore(s => s.fetchStaticMeasures);
 
@@ -66,6 +67,16 @@ export const GlobalPsiReportModals = ({
         sheetName={sheetName}
         columnType={TITLESET_COLUMN_TYPE}
         divisionId={divisionId}
+        // 저장된 개인화(titleSet)가 없으면 ColumnLayoutModal 의 beRows 가 0건이라 리스트가 빈다 —
+        //   admin 컬럼메타(staticColumns)를 fallbackColumns 로 넘겨 기본 컬럼을 표시한다(형제 SalesPlanModals 동형).
+        //   /column 메타는 모달 내부에선 라벨/플래그 보정용일 뿐 베이스 리스트가 아니다(2026-10-14 미표시 버그 해소).
+        fallbackColumns={(staticColumns[activeSheet] ?? []).map(c => ({
+          key: c.colNm,
+          header: c.colLblNm ?? c.colNm,
+          width: c.colWth ?? 100,
+          display: c.display,
+          personalizable: c.personalizable,
+        }))}
         title={t(LBL.COLUMN, 'Column Setting')}
         onSave={settings => {
           // 표시 컬럼만(USER_FLAG='Y') sortOrderNo 1..n 으로 저장 — 행 존재 = 표시(titleSetApi 계약).
@@ -98,6 +109,9 @@ export const GlobalPsiReportModals = ({
         open={openMeasure}
         modalClose={onClose}
         measures={staticMeasures}
+        // AS-IS SCM0002 가 SMALL_CLASS_LABEL_NAME 을 세로 병합해 앞에 보여줬다 — measure 36종이
+        //   Sales/Pack/Cell/AS Sales/Total PSI 소분류로 묶임(LARGE_CLASS 는 전 행 공란, DB 실측 2026-10-23).
+        showSmallClass
         // SCP0100 store 는 visibleMeasures 상태를 두지 않는다(read-only) — null(전체 표시)로 진입, display 기본 복원.
         visibleMeasures={null}
         onApply={codes => {

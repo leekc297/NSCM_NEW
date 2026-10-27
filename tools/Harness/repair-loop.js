@@ -35,14 +35,16 @@ function gate(id, pageDir) {
   try { return JSON.parse(line); } catch { return { block: 1, warn: 0, findings: [{ level: 'BLOCK', code: 'X00', msg: 'check.js 출력 해석 실패: ' + r.out.slice(0, 300) }] }; }
 }
 function claudeFill(id, pg, round, findings) {
+  // 2026-10-23 사용자 지시: SCP·SSP 는 화면 VALIDATION 취합 화면 파일을 검증 대조 원천으로(new_screen.md 6-2 · port_pkg.md 3-2 · 게이트 VR1~VR3)
+  const vr = require('./lib/valref').find(cfg, id); const vrNote = vr && vr.screen ? ` VALIDATION reference (SCP/SSP AS-IS validation census + TO-BE verdict/TAG): ${vr.screen} — use it as the validation checklist (${PKG ? 'port_pkg.md 3-2, DB rows' : 'new_screen.md 6-2, UI rows'}).` : '';
   const fl = findings.length ? `\n\nPrevious gate findings to fix FIRST (round ${round}):\n` + findings.map(f => `- [${f.level}] ${f.code} ${f.msg}${f.where ? ' @' + f.where : ''}`).join('\n') : '';
   if (PKG) {
-    const pp = `Read tools/Harness/prompts/port_pkg.md and follow it for screen ${id}. Package file: Doc/gen/${id}/${id}_PKG.sql, notes: Doc/gen/${id}/${id}_PKG_NOTES.md. Port every /* ===== ASIS ... ===== */ block to Oracle PL/SQL in place, delete the ASIS blocks, keep signatures and the EXCEPTION skeleton, then run \`node tools/Harness/check-pkg.js ${id}\` and fix every BLOCK. Summarize remaining items in Korean.${fl}`;
+    const pp = `Read tools/Harness/prompts/port_pkg.md and follow it for screen ${id}. Package file: Doc/gen/${id}/${id}_PKG.sql, notes: Doc/gen/${id}/${id}_PKG_NOTES.md.${vrNote} Port every /* ===== ASIS ... ===== */ block to Oracle PL/SQL in place, delete the ASIS blocks, keep signatures and the EXCEPTION skeleton, then run \`node tools/Harness/check-pkg.js ${id}\` and fix every BLOCK. Summarize remaining items in Korean.${fl}`;
     if (DRY) return { code: 0, out: '(dry) ' + pp };
     return claudeRun(pp); // 프롬프트는 stdin 으로 — Windows shell 인용 문제(본문 속 --page 가 옵션으로 해석) 회피
   }
   const designNote = DESIGN ? ` DESIGN DOC FIRST: read ${DESIGN.replace(/\\/g, '/')} (and tobe_design.md next to it if present) — where it differs from the Fact Pack (fields, sheets, buttons, popups, labels), the design doc wins; record each such override as a row in __asis-mapping__.md with reason '설계서 우선'.` : '';
-  const prompt = `Read tools/Harness/prompts/new_screen.md and follow it for screen ${id} (To-Be MENU_ID ${pg.menuId}). Skeleton: ${pg.rel}. Notes: Doc/gen/${id}/GEN_NOTES.md. Fill only the spots marked TODO, keep generator-owned parts, then update __asis-mapping__.md statuses (no empty cells). Run \`node tools/Harness/check.js --page ${pg.rel.replace(/^nscm-fe\//, 'nscm-fe/')} --id ${id} --final\` yourself before finishing and fix every BLOCK. Summarize remaining items with reasons in Korean.${fl}${designNote}`;
+  const prompt = `Read tools/Harness/prompts/new_screen.md and follow it for screen ${id} (To-Be MENU_ID ${pg.menuId}). Skeleton: ${pg.rel}. Notes: Doc/gen/${id}/GEN_NOTES.md.${vrNote} Fill only the spots marked TODO, keep generator-owned parts, then update __asis-mapping__.md statuses (no empty cells). Run \`node tools/Harness/check.js --page ${pg.rel.replace(/^nscm-fe\//, 'nscm-fe/')} --id ${id} --final\` yourself before finishing and fix every BLOCK. Summarize remaining items with reasons in Korean.${fl}${designNote}`;
   if (DRY) return { code: 0, out: '(dry) ' + prompt };
   return claudeRun(prompt);
 }

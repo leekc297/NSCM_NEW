@@ -39,6 +39,13 @@ export const MEASURE = {
   INV: 'INV', // Inventory (BOH 편집 대상)
 } as const;
 
+// ADMIN 권한 그룹명 — AS-IS NowGroupID=='ADMIN' 재현 (design 03 §3-Value V1 cs:967 / 01_layout §5-B).
+//   TO-BE 는 session.groups(USER_GR_NM 배열, nscm-be User.xml retrieveUserGroups)로 판정한다.
+//   DB 실측(SCM_ADM_USER_GR_M): USER_GR_ID='ADMIN' 의 USER_GR_NM='System Administrator'(ID≠NM)이므로
+//   ID 'ADMIN' 이 아니라 NM 으로 비교해야 매칭된다(plan-control.constants OWNER_BYPASS_GROUP_NAMES 와 동일 규약).
+//   SCP0111 은 GET_ADMIN_GROUP_MEASURE 미등록이라 sales-plan 식 AuthGroup CMBO 대신 session.groups 직접 판정을 쓴다.
+export const ADMIN_GROUP_NAME = 'System Administrator';
+
 // division 특수 코드 (design 03 §3-Lock / §1-M).
 export const DIVISION_ESS = '82'; // ESS — 파생검증(D1/D2) + 신규행 LINE_ID 분기 A + 조건색 C1/C2
 export const DIVISION_SMALL = '40'; // 소형 — L10~L13 편집잠금 분기
@@ -70,6 +77,13 @@ export const PERIOD_LIST_FALLBACK_MONTHS = 12;
 // LINE_ID 신규행 기본값 sentinel (design 03 §3-Value V2 / §2-D). 저장 시 "-" 이면 확인(MSG00453→MSG01434).
 export const LINE_ID_EMPTY = '-';
 
+// admin 신규행에서 **Item 팝업으로만** 입력하는 컬럼 — Model(ITEM_ID) / Nick Name(NICK_NAME).
+//   AS-IS 는 그리드 셀이 FPText(타이핑)지만, TO-BE 는 조회영역·타 화면(operation-lt / sales-site-project-model)과
+//   동일하게 품목을 **팝업 선택**으로 받아 두 컬럼을 함께 채운다(자유 타이핑 금지 — 품목 식별자 정합).
+//   이 두 컬럼은 인라인 편집을 막고(IntegrationPsiGrid applyEditGate) 셀 더블클릭이 팝업을 연다.
+//   Cell Model(CELL_ITEM_ID)·Cell CF 는 이 Model 팝업 반환 범위 밖 → 후속 단계(별도 원천 필요).
+export const INSERT_POPUP_COLS: ReadonlySet<string> = new Set(['ITEM_ID', 'NICK_NAME']);
+
 // L7 모듈 반제품 편집 예외 lookup — AS-IS Data.Common(LookupCommon,"MULTI_CHILD_ITEM") (design 03 §1-L cs:622-643).
 //   SCM_ADM_LOOKUP_MASTER_DETAIL(LOOKUP_TYPE='MULTI_CHILD_ITEM') SEGMENT2(=Data.Common NAME)와 ITEM_ID 를 대조.
 //   VALID 2행 실측(SEGMENT1=AMRSAEV20-A2/B2, SEGMENT2=AMDAU0630D/AMDAU0629D). useTabLookupQueries 로 조회.
@@ -93,6 +107,28 @@ export const DIVISION_EE_EXCLUDE = 'EE';
 // cboPlanDate 노출 대상 PlanType 코드 (design 02 §3.1 — SE/FN PlanType 의 PLANDATE 교집합만 노출).
 export const PLAN_DATE_ALLOWED_PLAN_TYPES = ['SE', 'FN'] as const;
 
+// F6 개인화 저장 날짜키 별칭 — 공용 personalizeCondition 의 EXCLUDED_DATE_PARAM
+//   (/(yyyymmdd|yyyymm|^yyyy$|^period(from|to)?$|date(fr|to))$/i, gridAction.ts L650)이
+//   planStartYyyymmdd/fromYyyymm/toYyyymm 을 전부 날짜로 보고 저장에서 제외한다("날짜는 개인화 대상 아님" 공용 규약).
+//   사용자 지시(2026-10-19)로 이 화면은 PlanDate·Period 도 F6 저장/복원 대상이 되어야 해서, 정규식에 안 걸리는
+//   별칭(...Ymd)으로 투영해 저장하고 복원 시 원래 키로 역매핑한다(SCP0031 Global PSI 선례 1:1 — 공용 정규식은
+//   타 화면 회귀 위험이 커 건드리지 않는다). 실제 SearchCondition 필드명·SP 매핑·Form 배선은 불변.
+export const SAVE_DATE_ALIAS = {
+  planStartYyyymmdd: 'planStartYmd',
+  fromYyyymm: 'fromYmd',
+  toYyyymm: 'toYmd',
+} as const;
+
+// 신규행 셀콤보 원천 lookup (Wave1, 사용자 지시 2026-10-19 — 코드성 컬럼을 드롭다운으로 제한해 오입력 차단).
+//   SCM_ADM_LOOKUP_MASTER_DETAIL 실측: OPERATION_GROUP(SEG1=코드 P/A/E, SEG2=명 Pack/Cell/Electrode) /
+//   INCOTERMS(SEG1=SEG2=코드 DAP/CIF… 16) / PLAN_TYPE(SEG1=코드 FN/MA/PR/SE/TE, SEG2=명). MEASURE 는 lookup 이
+//   아니라 SCM_MST_SHEET_MEASURE(7행, colLblNm↔colNm) 가 원천이라 여기 없음(store staticMeasures 사용).
+export const CELL_COMBO_LOOKUP = {
+  OPERATION_GROUP: 'OPERATION_GROUP',
+  INCOTERMS: 'INCOTERMS',
+  PLAN_TYPE: 'PLAN_TYPE',
+} as const;
+
 // 그리드 셀콤보(LINE_ID) SQL_ID — 신규행 'I' 전용, 분기 B(비ESS) 원천 (design 03 §2-D 실측).
 //   분기 A(ESS div82·Pack)는 P_SCP0111_GET_ESS_PACK_LINE 결과를 COMPANY_ID 필터 — 단일 PARAM 표현 불가.
 export const LINE_COMBO = {
@@ -103,7 +139,11 @@ export const LINE_COMBO = {
 //   번호가 다른 문구로 등록돼 오표시된다 → 의도한 의미의 TO-BE MSG_NM 으로 재매핑(자매화면 검증코드 정합).
 //   주의: TO-BE 메시지의 {0} 자리표시자는 i18next 가 자동 치환하지 않으므로 호출부에서 .replace 로 넣는다.
 export const MSG = {
-  REQUIRED_FIELD: 'MSG00013', // 필수값 공백 (design 03 §4-저장 cs:1233-1239 필수 15건). EN="Please enter the required fields." (DB 실측 2026-09-23)
+  // 필수값 공백 — **필드명 포함** 메시지("{0} 값은 필수 입력 항목입니다 / {0} value is required", MSG00429 DB 실측).
+  //   AS-IS 15필수 공백검증(roslyn L1237 MSG00001; TO-BE MSG00001 은 "저장?" 라 의미 불일치 → hook#114)을
+  //   TO-BE 에서 **어느 필드가 비었는지** 로 안내한다(business-plan/cust-psi-upload 선례 동일 코드).
+  //   종전 MSG00013(제네릭 "필수 입력란…")은 무엇이 비었는지 못 알려 교체.
+  REQUIRED_FIELD: 'MSG00429',
   PERIOD_RANGE: 'MSG00219', // 조회기간 from>to (design 03 §5). AS-IS MSG00344 는 TO-BE 부재 → 등가 MSG00219 EN="Invalid period (start > end)."
   DUPLICATE_ROW: 'MSG00260', // 신규행 중복 (design 03 §5). EN="Duplicate combination (Division/Project/Item/Date/Measure)."
   LINE_REQUIRED: 'MSG01434', // Line 없이("-") 저장 시 확인 (design 03 §5 / §3-Value). AS-IS MSG00453 부재 → 등가 MSG01434("Line 항목 미입력, 저장?")
@@ -115,12 +155,38 @@ export const MSG = {
   //   대응 메시지가 없다 → SCM_ADM_MSG_M 역조회로 **기존 코드 재사용**(2026-10-13 ora.py 실측,
   //   KO/EN/CN 3언어 USE_YN='Y'). KO="신규 입력 (Insert) 한 행만 삭제할 수 있습니다."
   DELETE_ONLY_NEW: 'MSG00608', // EN="Only newly inserted rows can be deleted."
-  OP_GROUP_LOOKUP_MISSING: 'MSG00013', // OPERATION_GROUP NAME→CODE lookup 부재 (design 03 §4). 필수입력 계열 → MSG00013
+  // OPERATION_GROUP 가 Pack/Cell/Electrode 가 아님(NAME→CODE 역변환 실패) — **값은 있으나 무효**라
+  //   "필수"가 아니라 "유효값 안내"가 맞다. AS-IS 전용 리터럴("OPERATION_GROUP이 Lookup에 없는 값입니다",
+  //   roslyn L1217) 등가. DB 코드 부재라 비카탈로그 key + 한글 fallback(DERIV_MISMATCH 선례)으로 유효값을 직접 안내.
+  OP_GROUP_INVALID: 'SCP0111_OP_GROUP_INVALID',
   // 파생검증 D1/D2 불일치 경고 (design 03 §3-Deriv). AS-IS 는 리터럴 "수량 불일치"(catalog MSG 코드 아님) —
   //   TO-BE MSG_M 등가 코드 미확정(확인필요). 실 MSG 코드를 재사용하면 hook#114 오표시 위험이 있어
   //   비카탈로그 key 로 두고 t() defaultValue 로만 표시(경고, 저장 미차단). 코드 확정 시 여기만 교체.
   DERIV_MISMATCH: 'SCP0111_DERIV_MISMATCH',
 } as const;
+
+// 저장 시 공백검증 대상 15필수 (AS-IS roslyn L1237 조건식 1:1 — division_id/company_id/plant_id/
+//   operation_group/cellitem_id/item_id/measure/line_id/valuation_type/to_product/to_site/incoterms/
+//   boh_qty/seq_flag/plan_type). label = 그리드 헤더 표기(= MSG00429 {0} 치환값). 신규행(I)에만 적용한다
+//   — 저장행(M)의 식별필드는 조회결과라 비지 않는다. LINE_ID 는 공백만 필수대상이고 sentinel '-' 은
+//   별도 확인(MSG01434)이 담당한다(여기선 통과).
+export const REQUIRED_SAVE_FIELDS: ReadonlyArray<{ binding: string; label: string }> = [
+  { binding: 'PLAN_TYPE', label: 'Plan Type' },
+  { binding: 'DIVISION_ID', label: 'Division' },
+  { binding: 'OPERATION_GROUP', label: 'Operation' },
+  { binding: 'CELL_ITEM_ID', label: 'Cell Model' },
+  { binding: 'ITEM_ID', label: 'Model' },
+  { binding: 'COMPANY_ID', label: 'Company' },
+  { binding: 'PLANT_ID', label: 'Plant' },
+  { binding: 'MEASURE', label: 'Measure' },
+  { binding: 'LINE_ID', label: 'Line' },
+  { binding: 'VALUE_TYPE', label: 'Valuation Type' },
+  { binding: 'TO_PRODUCT', label: 'To Product' },
+  { binding: 'TO_SITE', label: 'To Site' },
+  { binding: 'INCOTERMS', label: 'Incoterms' },
+  { binding: 'BOH_QTY', label: 'BOH' },
+  { binding: 'SEQ_FLAG', label: 'SEQ_FLAG' },
+];
 
 // i18n 라벨 코드 — SCM_ADM_MSG_M(MSG_TP_CD='LBL') 역조회로 확정한 TO-BE 코드(hook#114).
 //   호출부는 t(LBL.KEY, '_Fallback') 로만 표기. AS-IS Designer 문구는 fallback 으로만 남긴다.

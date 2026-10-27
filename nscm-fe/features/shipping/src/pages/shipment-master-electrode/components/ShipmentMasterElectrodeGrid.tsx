@@ -1,8 +1,9 @@
 import { CellType, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, useEffect, useMemo } from 'react';
+import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
-import type { RawFlexGridColumnConfig } from '@foundation/models';
+import { apiClient } from '@foundation/apis';
+import type { ComboResponse, RawFlexGridColumnConfig } from '@foundation/models';
 import { GridUtils } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
@@ -10,7 +11,9 @@ import { useTabLookupQueries } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import {
+  COMBO,
   DIVISION_CASCADE_CLEAR,
+  LBL,
   LOOKUP,
   MAIN_COLUMNS,
   MENU_ID,
@@ -41,8 +44,10 @@ interface Props {
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
 
-// 편집 가능 셀 배경(자매 shipment-requestor-pic 과 동일 값).
-const EDITABLE_CELL_BG = '#FFFDE7';
+// 편집 가능 셀 배경 — 표준 토큰 $wj-editable-cell(packages/foundation styles/wijmo/misc/_variables.scss)
+//   과 동일한 값. 공용 .wj-cell-editable 은 INPUT_TP_CD 기준이라 전건 'S' 인 이 화면에서 안 켜져
+//   formatItem 으로 직접 칠하되, 색은 표준과 일치시킨다(비표준 #FFFDE7 사용 금지).
+const EDITABLE_CELL_BG = '#fff8cd';
 
 // AS-IS spdMain "Ship Master Elec" (단일 그리드 25열). 조회=전체 lock, Edit/Insert=지정칸만 편집(editLock).
 //   셀 콤보 5종은 공용 DataGrid 가 admin 메타(cellCboDataTp + PARAM2/9/10)로 자동 배선(useRowParamCombos).
@@ -82,6 +87,10 @@ export const ShipmentMasterElectrodeGrid = ({
     return m;
   }, [postOperLookup]);
 
+  // Division cascade clear 가드용 — beginningEdit 에서 편집 시작 시점의 DIVISION_ID 값을 담아, 값이 실제로
+  //   바뀐 경우에만 종속칸을 비운다(열었다 그대로 닫기·Esc·같은값 재선택 시 clear 금지, GRID-09).
+  const editOldDivisionRef = useRef<unknown>(undefined);
+
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
@@ -106,6 +115,8 @@ export const ShipmentMasterElectrodeGrid = ({
         });
         return;
       }
+      // Division cascade clear 가드용 — 편집 시작 시점 값 보관(applyDerivations 에서 실제 변경 여부 비교).
+      if (binding === 'DIVISION_ID') editOldDivisionRef.current = row?.DIVISION_ID;
       e.cancel = !editable;
     };
     g.beginningEdit.addHandler(beginningEditHandler);
@@ -143,24 +154,31 @@ export const ShipmentMasterElectrodeGrid = ({
     };
     g.formatItem.addHandler(formatItemHandler);
 
-    // 파생·cascade — 콤보/값 변경 종료 시 (design 03 §3.2 SetValue 규칙).
+    const setRowCell = (row: Record<string, unknown>, key: string, value: string): void => {
+      const prev = row[key];
+      if (str(prev) === value) return;
+      editTrackerRef.current?.storeChange(row as never, key, prev as never, value as never);
+      row[key] = value;
+    };
+
+    // 파생·cascade — 콤보/값 변경 종료 시 (design 03 §3.2 SetValue 규칙). 편집 취소(Esc·검증 실패=e.cancel) 시 skip.
+    //   DIVISION 종속 7칸 클리어는 **값이 실제로 바뀐 경우에만**(GRID-09) — cellEditEnded 는 값 변경·취소·같은값
+    //   커밋과 무관하게 발생하므로, 콤보를 열었다 그대로 닫았을 때 7칸이 지워지는 것을 막는다(자매 SSP0025 동형).
     const applyDerivations = (
       sender: FlexGridType,
-      e: { row: number; col: number }
+      e: { row: number; col: number; cancel?: boolean }
     ): void => {
+      if (e.cancel) return;
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
       if (!row) return;
-      const setCell = (key: string, value: string): void => {
-        const prev = row[key];
-        if (str(prev) === value) return;
-        editTrackerRef.current?.storeChange(row as never, key, prev as never, value as never);
-        row[key] = value;
-      };
+      const setCell = (key: string, value: string): void => setRowCell(row, key, value);
 
       if (binding === 'DIVISION_ID' && isInsertRow(row)) {
-        // 신규행 DIVISION 변경 -> 종속 7칸 클리어(cs:630~636).
-        DIVISION_CASCADE_CLEAR.forEach(k => setCell(k, ''));
+        // 신규행 DIVISION 변경 -> 종속 7칸 클리어(cs:630~636). 값이 실제로 바뀐 경우에만(GRID-09).
+        if (str(row.DIVISION_ID) !== str(editOldDivisionRef.current)) {
+          DIVISION_CASCADE_CLEAR.forEach(k => setCell(k, ''));
+        }
       } else if (binding === 'PLANT_SITE_ID') {
         // PLANT_SITE_ID -> PLANT_SITE_CODE 동기(cs:640).
         setCell('PLANT_SITE_CODE', str(row.PLANT_SITE_ID));
@@ -176,8 +194,54 @@ export const ShipmentMasterElectrodeGrid = ({
       }
       sender.invalidate();
     };
+    // 신규행 PLANT_SITE_ID 붙여넣기 — AS-IS ClipboardPasted(cs:701~722): Plant Site Code 를 먼저 비우고
+    //   행 Division 의 Plant Site 후보에 붙여넣은 값이 있으면 Code/Id 둘 다 그 값으로, 없으면 Plant Site 를
+    //   비운다. 공용 DataGrid 의 재조회형 콤보 재검증은 상위(DIVISION_ID)가 바뀐 경우의 하위만 보므로
+    //   PLANT_SITE_ID 자신에 붙여넣은 값은 여기서 직접 확인한다. 후보는 셀 콤보와 같은 조회
+    //   (메타 PARAM2 'DIVISION_ID:divisionId', src='grid')로 받는다.
+    const validatePastedPlantSite = (sender: FlexGridType, row: Record<string, unknown>): void => {
+      const pasted = str(row.PLANT_SITE_ID);
+      setRowCell(row, 'PLANT_SITE_CODE', '');
+      sender.invalidate();
+      if (!pasted) return;
+      const divisionId = str(row.DIVISION_ID);
+      void (async () => {
+        let candidates: ComboResponse[] = [];
+        if (divisionId) {
+          try {
+            candidates =
+              (await apiClient.getCombo(
+                { comboId: COMBO.CELL_PLANT_SITE, divisionId },
+                'grid'
+              )) ?? [];
+          } catch {
+            // 후보 조회 실패 — 값을 지우지 않고 Code 만 동기화한다(조회 실패를 무효값으로 오인하지 않음).
+            setRowCell(row, 'PLANT_SITE_CODE', pasted);
+            sender.invalidate();
+            return;
+          }
+        }
+        if (candidates.some(c => str(c.CODE) === pasted)) {
+          setRowCell(row, 'PLANT_SITE_CODE', pasted);
+        } else {
+          setRowCell(row, 'PLANT_SITE_ID', '');
+        }
+        sender.invalidate();
+      })();
+    };
+
+    const pastedCellHandler = (sender: FlexGridType, e: { row: number; col: number }): void => {
+      const binding = sender.columns[e.col]?.binding ?? '';
+      const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
+      if (binding === 'PLANT_SITE_ID' && row && isInsertRow(row)) {
+        validatePastedPlantSite(sender, row);
+        return;
+      }
+      applyDerivations(sender, e);
+    };
+
     g.cellEditEnded.addHandler(applyDerivations);
-    g.pastedCell.addHandler(applyDerivations);
+    g.pastedCell.addHandler(pastedCellHandler);
 
     return () => {
       try {
@@ -185,7 +249,7 @@ export const ShipmentMasterElectrodeGrid = ({
         g.pastingCell?.removeHandler(pastingCellHandler);
         g.formatItem?.removeHandler(formatItemHandler);
         g.cellEditEnded?.removeHandler(applyDerivations);
-        g.pastedCell?.removeHandler(applyDerivations);
+        g.pastedCell?.removeHandler(pastedCellHandler);
       } catch {
         /* unmount race */
       }
@@ -214,7 +278,10 @@ export const ShipmentMasterElectrodeGrid = ({
     if (!str(row.PLANT_SITE_CODE)) {
       void setAlert({
         type: 'alert',
-        content: t(MSG.REQUIRED_FIELD, '_{0} value is required.\', 0: \'Plant Site'),
+        content: t(MSG.REQUIRED_FIELD, '_{0} value is required.').replace(
+          '{0}',
+          t(LBL.PLANT_SITE, '_Plant Site')
+        ),
       });
       return;
     }

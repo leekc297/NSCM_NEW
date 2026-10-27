@@ -12,9 +12,10 @@ import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { WorkingTimeForm } from './components/WorkingTimeForm';
 import { WorkingTimeGrid } from './components/WorkingTimeGrid';
+import { WorkingTimeInputModal } from './components/WorkingTimeInputModal';
 import { useWorkingTimeStore } from './useWorkingTimeStore';
 import {
-  DAY_WEEK_SELECT_DAY,
+  DAY_WEEK,
   MENU_ID,
   MSG,
   RESPONSE_SET,
@@ -22,7 +23,11 @@ import {
   SHEETS,
   WORKING_TIME_RANGE,
 } from './working-time.constants';
-import { buildDynDayColumns } from './working-time.dynamic-columns';
+import {
+  buildDynDayColumns,
+  buildPeriodDayColumnMeta,
+  deriveDayColumnMeta,
+} from './working-time.dynamic-columns';
 import type { DynColumnMeta, DynDayColumn, SaveEntry, WorkingTimeRow } from './working-time.types';
 
 // AS-IS GSCM.SCP.Forms.UIL Master SCP0019_WorkingTime (Supply > Supply Master > Work Calendar(OSP)).
@@ -58,6 +63,8 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [hasSearched, setHasSearched] = useState(false);
   // 저장 in-flight — 재진입(더블클릭) 차단. SalesPlan(DMF0021) isPending 표준 1:1.
   const [isPending, setIsPending] = useState(false);
+  // 값입력 팝업(WorkingTimeInputModal) — 버튼영역 '입력' 버튼이 연다(2026-10-15 사용자 지시, 자매 SCP0096).
+  const [inputModalOpen, setInputModalOpen] = useState(false);
 
   // 메인 그리드 SP — PKG_SCP0019.P_SCP0019_GET_WORKING_TIME (7 IN + 세션 2 + O_RC1 데이터 + O_RESULT_CURSOR 상태).
   //   단일 호출로 데이터(o_rc1)와 그 컬럼 메타(o_rc1_columns)를 반환하므로 rows·동적컬럼을 이 응답에서 도출한다.
@@ -76,15 +83,21 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
     () => (data as Record<string, WorkingTimeRow[]>)?.[RESPONSE_SET.MAIN] ?? [],
     [data]
   );
-  // 동적 D_ 컬럼 — o_rc1_columns(BE ResultSetMetaData)의 D_yyyymmdd 이름에서 파생. 요일 그룹은 커서가
-  //   주지 않으므로 yyyymmdd 로 클라이언트 계산(SP "칸 펼치기" 원리). 데이터 커서에 타이틀 메타 없음.
-  const dynColumns = useMemo<DynDayColumn[]>(
-    () =>
-      buildDynDayColumns(
-        (data as unknown as Record<string, DynColumnMeta[]>)?.[RESPONSE_SET.DYN_COLUMNS] ?? []
-      ),
-    [data]
-  );
+  // 동적 D_ 컬럼 — D_yyyymmdd 이름에서 파생. 요일 그룹은 커서가 주지 않으므로 yyyymmdd 로 클라이언트
+  //   계산(SP "칸 펼치기" 원리). 표준 call-proc 응답에는 o_rc1_columns 사이드카가 없으므로(DynamicQuery
+  //   경로 전용) 데이터 행(o_rc1)의 키에서 직접 컬럼명을 수집한다. 사이드카가 있으면 그것을 우선 사용.
+  const dynColumns = useMemo<DynDayColumn[]>(() => {
+    const sidecar = (data as unknown as Record<string, DynColumnMeta[]>)?.[RESPONSE_SET.DYN_COLUMNS];
+    // return buildDynDayColumns(sidecar?.length ? sidecar : deriveDayColumnMeta(rows));
+    // 데이터 키만 쓰면 빈 기간은 날짜 칸이 없어 입력 불가. 조회한 기간 전체 날짜와 합친다(중복은 이름으로 제거)
+    const dataMeta = sidecar?.length ? sidecar : deriveDayColumnMeta(rows);
+    const f = filters[SHEETS.MAIN] as Record<string, string | undefined> | undefined;
+    const periodMeta =
+      data && f ? buildPeriodDayColumnMeta(f.fromYyyymmdd ?? '', f.toYyyymmdd ?? '') : [];
+    const seen = new Set<string>();
+    const merged = [...periodMeta, ...dataMeta].filter(m => !seen.has(m.name) && !!seen.add(m.name));
+    return buildDynDayColumns(merged);
+  }, [data, rows, filters]);
 
   // mount 시 1회 admin 메타 fetch + persist 된 이전 filters 무효화 (NULL payload SP 자동호출 방지)
   //   F6 저장 조회조건 복원도 mount 1회(store conditionsRestored 가드). 새로고침=새 store 라 재복원,
@@ -102,7 +115,7 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (isFetching) return false;
     // Division 필수 (cboDivision 단일 필수, 02_search-combo §1)
     if (!searchParams.divisionId) {
-      void setAlert({ type: 'alert', content: t(MSG.NOT_SEARCHED, '_Please select Division.') });
+      void setAlert({ type: 'alert', content: t(MSG.DIVISION_REQUIRED, '_Please select Division.') });
       return false;
     }
     // 기간 역전 차단 (from > to)
@@ -163,6 +176,20 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
           if (!isDay && !isDefault) continue;
           const rawValue = toStr(rec[binding]).replace(/,/g, '');
           const value = rawValue === '' ? '0' : rawValue;
+          // 저장 범위검증 — AS-IS SaveData_Main(cs:832-852) 파리티. WORKING_TIME_DEFAULT 0~7 / D_ 일자셀 0~1440.
+          //   AS-IS 는 입력·편집 시점이 아니라 저장 시점에만 범위를 본다(D_ 셀 타입에 max 없음, cs:330) → 범위초과값은
+          //   셀엔 들어가되 저장에서 차단. 첫 위반에서 MSG00203 표시 후 저장 중단(AS-IS GMessageBox+return 파리티).
+          const num = Number(value);
+          const max = isDefault ? WORKING_TIME_RANGE.DEFAULT_MAX : WORKING_TIME_RANGE.DAY_MAX;
+          if (Number.isNaN(num) || num < WORKING_TIME_RANGE.DEFAULT_MIN || num > max) {
+            void setAlert({
+              type: 'alert',
+              content: t(MSG.OUT_OF_RANGE, '_Please enter a number between {0} and {1}.')
+                .replace('{0}', '0')
+                .replace('{1}', isDefault ? '7.0' : '1440'),
+            });
+            return;
+          }
           entries.push({
             activeFlag: 'M', // 편집 = Modify (03_grid-columns §4 SAVE)
             divisionId: toStr(item.DIVISION_ID),
@@ -185,12 +212,17 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     // 저장 confirm 없음(표준화) — 저장은 되돌릴 수 있고 결과는 Toast 로 알린다. DMF0014/DMF0021 동일.
     const sesUserId = useSessionStore.getState().session.userId ?? '';
-    // userIdList — BE 가 가로채지 않는 키명. userId 는 BE 세션 단일값으로 덮여 '^'×N 배열이 1토큰으로
-    //   붕괴 → SP split 2행째부터 NULL. List 접미로 배열 붕괴 방지(DMF0014 createdByList 선례).
-    const arr = entries.map(e => ({ ...e, userIdList: sesUserId }));
-    const payload = Object.fromEntries(
-      SAVE_KEYS.map(k => [k, arr.map(r => r[k]).join('^')])
+    // '^' delim CLOB 배열 param(1~10). userId(param 11)는 스칼라라 아래에서 따로 싣는다.
+    const payload: Record<string, string> = Object.fromEntries(
+      SAVE_KEYS.map(k => [k, entries.map(r => r[k]).join('^')])
     );
+    // P_USER_ID(PROC_M COL_NM='userId', VARCHAR 단일) — 저장은 /call-proc(makeProcedure) 경로라 BE 가
+    //   세션사용자를 주입하지 않는다(GeneralController.callProc 은 mnuId/shtNm/mnuBtnCd/sesSystemCd 만 주입).
+    //   따라서 FE 가 PROC_M COL_NM 과 같은 'userId' 키로 단일값을 보내야 CREATED_BY/LAST_UPDATED_BY(NOT NULL)
+    //   가 채워진다('^' 배열로 보내면 스칼라 바인드라 "u^u^u" 1토큰이 되므로 배열 join 대상에서 제외).
+    payload.userId = sesUserId;
+    // PROC_M COL_NM 이 userIdList 로 등록돼 userId 만 보내면 P_USER_ID 가 NULL(ORA-01400 CREATED_BY). 둘 다 보낸다
+    payload.userIdList = sesUserId;
 
     setIsPending(true);
     try {
@@ -203,6 +235,21 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
           (res.data as { message?: string })?.message?.trim() ||
           t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
         void setAlert({ type: 'alert', content: reason });
+        return;
+      }
+      // SP 는 예외 시 롤백 후 O_RESULT_CURSOR 에 RESULT_CODE='F' + ERR_MESSAGE 를 주고 code 0 으로 끝난다. 'S' 만 성공
+      const body = res.data?.result as Record<string, unknown> | undefined;
+      const firstSet = body
+        ? (Object.values(body).find(Array.isArray) as Record<string, unknown>[] | undefined)
+        : undefined;
+      const head = firstSet?.[0];
+      const resultCode = head ? toStr(head.result_code ?? head.RESULT_CODE) : '';
+      if (resultCode && resultCode !== 'S') {
+        const errMsg = head ? toStr(head.err_message ?? head.ERR_MESSAGE) : '';
+        void setAlert({
+          type: 'alert',
+          content: errMsg || t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.'),
+        });
         return;
       }
       void setToast({ message: t(MSG.SAVED, '_성공적으로 저장되었습니다.'), type: 'success' });
@@ -229,69 +276,103 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
-  // btnInput(값입력) — txtInpuValue 를 선택 D_ 셀(OSP_YN='Y' 행)에 일괄 써넣는다(01_layout §1·§2-c).
-  //   gridRef 를 이 컴포넌트가 이미 보유하므로 imperative handle 없이 여기서 선택영역을 읽고 EditTracker
-  //   를 경유해 setCellData 로 write 한다(저장 payload 는 EditTracker 단일 출처 그대로 도출).
-  //   가드 순서(AS-IS btnInput_Click): #1 조회 전(MSG00135) → #3 SelectDay(무시) → #4 셀 미선택
-  //   (MSG00134) → 형식/범위(MSG00050/00203). SelectDay 는 Form 버튼 disabled 로 1차 차단.
-  const handleInputValue = useCallback((): void => {
-    // #1 조회 전 차단 — persist 된 stale 화면에 값입력 금지.
+  // '입력' 버튼(버튼영역) 클릭 — 값입력 팝업 오픈 가드. 조회 전이면 차단(persist 된 stale 화면 값입력 금지,
+  //   AS-IS BtnInput_Click 가드 #1 MSG00135). 편집 권한(hasButton('SAVE'))은 버튼 노출 자체를 막으므로
+  //   여기선 조회 여부만 본다. 실제 Day of the week·Input Value 는 팝업(WorkingTimeInputModal)이 받는다.
+  const handleInputOpen = useCallback((): void => {
     if (!hasSearched) {
-      void setAlert({ type: 'alert', content: t(MSG.NOT_SEARCHED, '_Please search first.') });
+      void setAlert({ type: 'alert', content: t(MSG.NOT_SEARCHED, '_Edit mode is available after search.') });
       return;
     }
-    // #3 SelectDay — 대상 요일 미지정이면 무시(Form 이 이미 disabled 하나 방어적 재확인).
-    if (searchParams.dayWeekCode === DAY_WEEK_SELECT_DAY) return;
+    setInputModalOpen(true);
+  }, [hasSearched, setAlert, t]);
 
-    const g = gridRef.current;
-    const sel = g?.selectedRanges;
-    // #4 셀 미선택 — 선택영역이 없으면 대상 없음.
-    if (!g || !sel || sel.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_CELL_SELECTED, '_Please select cell(s).') });
-      return;
-    }
+  // 값입력 확정(팝업 OK) — Day of the week + Input Value 를 선택/요일 D_ 셀에 일괄 써넣는다. AS-IS
+  //   BtnInput_Click(SCP0019_WorkingTime.cs:1231~) SetText 3분기 그대로: SelectDay=선택영역 D_ 셀 /
+  //   EveryDay=전행×전 D_ / Mon~Sun=전행×해당 요일 D_ 컬럼(DynDayColumn.weekday 매칭). OSP_YN='Y' 행만
+  //   대상(화면 편집잠금 규약 — 비OSP 행은 저장에서도 제외). 값 검증은 AS-IS 와 동일하게 형식(int)만 —
+  //   빈 값은 공란 write(셀 비움), 범위(0~1440)는 입력이 아니라 저장 시점(handleSave)에서 검사. setCellData 는 cellEditEnded 를
+  //   발화하지 않으므로 원본을 먼저 읽어 storeChange 로 명시 기록한다(EditTracker 단일 출처). true=성공(팝업
+  //   닫기)/false=가드 실패(팝업 유지). 자매 SCP0096 shipment-working-day-osp handleInputConfirm 동형.
+  const handleInputConfirm = useCallback(
+    (dayWeekCode: string, inputValue: string): boolean => {
+      // 편집 권한 없으면 값입력 금지(방어 — 버튼이 숨겨져 정상경로 미도달).
+      if (!hasButton('SAVE')) return false;
 
-    // 형식 검증 — 정수만(Form 이 숫자만 수용하나 빈값·형식 재확인, MSG00050).
-    const raw = searchParams.inputValue.trim();
-    if (raw === '' || !/^\d+$/.test(raw)) {
-      void setAlert({ type: 'alert', content: t(MSG.INVALID_FORMAT, '_Invalid input value.') });
-      return;
-    }
-    const num = Number(raw);
-    // 범위 검증 — btnInput 은 동적 D_ 일자 셀에만 쓴다(아래 write 루프가 D_ 컬럼으로 한정). 따라서
-    //   D_ 셀 범위 0~1440(분, AS-IS SCP0019_WorkingTime.cs:890)을 적용한다. WORKING_TIME_DEFAULT
-    //   (0~7)는 셀 직접 편집 경로라 이 값입력 대상이 아니다(MSG00203).
-    if (num < WORKING_TIME_RANGE.DAY_MIN || num > WORKING_TIME_RANGE.DAY_MAX) {
-      void setAlert({ type: 'alert', content: t(MSG.OUT_OF_RANGE, '_Value out of range.') });
-      return;
-    }
+      // 형식 검증 — 정수만. 빈 값은 공란 write 로 허용(AS-IS int.Parse 공란→"0" 통과 후 strValue 공란 write 파리티).
+      const raw = inputValue.trim();
+      if (raw !== '' && !/^\d+$/.test(raw)) {
+        // AS-IS BtnInput_Click MSG00050("유효한 숫자 형식이 아닙니다. {0}") 파리티 — {0}=입력값(raw) 치환.
+        void setAlert({
+          type: 'alert',
+          content: t(MSG.INVALID_INPUT_VALUE, '_This is not a valid numeric format. {0}').replace('{0}', raw),
+        });
+        return false;
+      }
+      // 범위검증 없음 — AS-IS BtnInput_Click(cs:1230~)은 형식(MSG00050)만 보고 SetText 로 바로 쓴다(0~1440
+      //   상한 미검사). D_ 셀은 셀 타입에도 max 가 없어(cs:330 SetReNumerCellType min=0,dec=0) 2222 같은 값이
+      //   셀에 들어가고, 범위는 저장 시점(handleSave)에만 MSG00203 으로 차단한다 — AS-IS SaveData_Main(cs:845) 파리티.
+      const writeVal: WijmoPrimitive = raw === '' ? '' : Number(raw);
 
-    // 선택 영역의 편집 가능 셀(D_ 컬럼 × OSP_YN='Y' 행)에만 write. setCellData 는 프로그램적 쓰기라
-    //   grid 편집 이벤트(cellEditEnded)를 발화하지 않으므로 EditTracker 가 자동 추적하지 못한다 —
-    //   원본값을 먼저 읽어 storeChange 로 명시 기록해야 저장 payload·M 표기에 반영된다(editTracker 규약).
-    const tracker = editTrackerRef.current;
-    let wrote = 0;
-    for (const range of sel) {
-      const r = range;
-      for (let row = r.topRow; row <= r.bottomRow; row++) {
+      const g = gridRef.current;
+      if (!g) {
+        void setAlert({ type: 'alert', content: t(MSG.NO_CELL_SELECTED, '_Please select cell(s).') });
+        return false;
+      }
+
+      const isSelectDay = dayWeekCode === DAY_WEEK.SELECT_DAY;
+      const isEveryDay = dayWeekCode === DAY_WEEK.EVERY_DAY;
+      const targetWeekday = dayWeekCode.toUpperCase(); // Mon~Sun → MON~SUN (DynDayColumn.weekday 매칭, AS-IS ToUpper 비교)
+      const dayByBinding = new Map<string, DynDayColumn>(dynColumns.map(d => [d.binding, d]));
+      const tracker = editTrackerRef.current;
+      let wrote = 0;
+
+      // D_ 일자 셀 × OSP_YN='Y' 행만 write(비OSP 행은 그리드 잠금·저장 제외).
+      const writeCell = (row: number, col: number): void => {
         const item = (g.rows[row] as { dataItem?: WorkingTimeRow } | undefined)?.dataItem;
-        if (!item || String(item.OSP_YN ?? '').toUpperCase() !== 'Y') continue;
-        for (let col = r.leftCol; col <= r.rightCol; col++) {
-          const binding = g.columns[col]?.binding ?? '';
-          if (!/^D_\d{8}$/.test(binding)) continue;
-          const original = g.getCellData(row, col, false) as WijmoPrimitive;
-          g.setCellData(row, col, num, true);
-          tracker?.storeChange(item, binding, original, num);
-          wrote += 1;
+        if (!item || String(item.OSP_YN ?? '').toUpperCase() !== 'Y') return;
+        const binding = g.columns[col]?.binding ?? '';
+        if (!/^D_\d{8}$/.test(binding)) return;
+        const original = g.getCellData(row, col, false) as WijmoPrimitive;
+        g.setCellData(row, col, writeVal, true);
+        tracker?.storeChange(item, binding, original, writeVal);
+        wrote += 1;
+      };
+
+      if (isSelectDay) {
+        // SelectDay — 선택영역의 D_ 셀만. 선택영역이 없으면 대상 없음(AS-IS 가드 #4 MSG00134).
+        const sel = g.selectedRanges;
+        if (!sel || sel.length === 0) {
+          void setAlert({ type: 'alert', content: t(MSG.NO_CELL_SELECTED, '_Please select cell(s).') });
+          return false;
+        }
+        for (const range of sel) {
+          for (let row = range.topRow; row <= range.bottomRow; row++) {
+            for (let col = range.leftCol; col <= range.rightCol; col++) writeCell(row, col);
+          }
+        }
+      } else {
+        // EveryDay=전행×전 D_ / Mon~Sun=전행×해당 요일 D_ 컬럼.
+        for (let row = 0; row < g.rows.length; row++) {
+          for (let col = 0; col < g.columns.length; col++) {
+            const binding = g.columns[col]?.binding ?? '';
+            const dayCol = dayByBinding.get(binding);
+            if (!dayCol) continue;
+            if (!isEveryDay && dayCol.weekday.toUpperCase() !== targetWeekday) continue;
+            writeCell(row, col);
+          }
         }
       }
-    }
-    if (wrote === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_CELL_SELECTED, '_Please select editable cell(s).') });
-      return;
-    }
-    g.invalidate(true);
-  }, [hasSearched, searchParams.dayWeekCode, searchParams.inputValue, gridRef, editTrackerRef, setAlert, t]);
+
+      if (wrote === 0) {
+        void setAlert({ type: 'alert', content: t(MSG.NO_CELL_SELECTED, '_Please select editable cell(s).') });
+        return false;
+      }
+      g.invalidate(true);
+      return true;
+    },
+    [hasButton, dynColumns, gridRef, editTrackerRef, setAlert, t]
+  );
 
   return (
     <>
@@ -304,7 +385,6 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
       <WorkingTimeForm
         onSubmit={handleSearch}
         onDivisionChange={resetGrid}
-        onInput={handleInputValue}
       />
       <SubTitle
         menuId={MENU_ID}
@@ -315,6 +395,10 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
+        // 'Bulk Update'(btnInput) — AS-IS 조회조건의 Input 버튼을 버튼영역으로 이동(2026-10-15 사용자 지시, 자매 SCP0096).
+        //   라벨은 자매 SCP0098(capa-mobility-it) 과 동일하게 평문 'Bulk Update'(LBL 코드 미등록 — 평문 라벨 재사용).
+        //   SAVE 권한일 때만 노출(SCP0019 는 EDIT 메타 미등록 — SAVE 가 편집권한 축). 클릭 → 조회 가드 후 팝업 오픈.
+        customButtons={hasButton('SAVE') ? [{ label: 'Bulk Update', action: handleInputOpen }] : []}
       />
       <WorkingTimeGrid
         gridRef={gridRef}
@@ -322,6 +406,11 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
         editTrackerRef={editTrackerRef}
         data={rows}
         dynColumns={dynColumns}
+      />
+      <WorkingTimeInputModal
+        open={inputModalOpen}
+        onClose={() => setInputModalOpen(false)}
+        onConfirm={handleInputConfirm}
       />
     </>
   );

@@ -1,0 +1,211 @@
+--------------------------------------------------------------------------------
+-- C01 · DMF0082 FCST Type 콤보 수정 [E20261012-FCSTTYPEADM] 이 클라우드에서 "언제·누가" 원복됐는지 추적
+--   작성 2026-10-26 · 계정 SCM_MGR · SELECT 전용(DB 변경 없음) · 전체 F5 · 치환 변수 없음 · QA / DEV 각각
+--   대상 : SCM_ADM_CMBO_SQL_M 의 SQL_ID 'FcstTypeEditDMF0082' · 'FcstTypeByUserGroupDMF0082'
+--   상태 판정 : 원문에 'E20261012-FCSTTYPEADM' 이 있으면 FIXED, 없으면 REVERTED
+--   ⚠ 콤보 SQL 은 "테이블 행"이라 DDL 감사에 안 잡힌다 → 근거 5축을 모두 본다
+--     §1 현재 행 (마지막 수정자·시각·ROWSCN)       §2 ⭐ 보관 테이블 시점별 상태 (FIXED→REVERTED 전환 구간)
+--     §3 ⭐ 같은 시각에 함께 바뀐 콤보 (어느 일괄 반영인지)   §4 Flashback 버전 이력 (UNDO 보존 범위 내)
+--     §5 DML 원문 (공유풀·AWR 8일 + 세션)            §6 감사 로그 원문
+--   출력이 길면 SPOOL 로 파일 저장 후 경로만 회신 (붙여넣기 50,000자 한도)
+--------------------------------------------------------------------------------
+SET DEFINE OFF
+SET LINESIZE 300
+SET PAGESIZE 500
+SET TRIMSPOOL ON
+SET TRIMOUT ON
+SET SERVEROUTPUT ON SIZE UNLIMITED FORMAT WRAPPED
+COLUMN DB_NAME   FORMAT A14
+COLUMN SQL_ID    FORMAT A28
+COLUMN STATE     FORMAT A9
+COLUMN UPD_BY    FORMAT A16
+COLUMN UPD_AT    FORMAT A19
+COLUMN CRT_BY    FORMAT A16
+COLUMN CRT_AT    FORMAT A19
+
+PROMPT ================= §0 환경 =================
+SELECT SYS_CONTEXT('USERENV','DB_NAME') AS DB_NAME, USER AS CONNECTED_AS
+     , TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS') AS RUN_AT FROM DUAL;
+
+PROMPT ================= §1 현재 행 — 상태 · 마지막 수정자 · 수정 시각 =================
+SELECT /*TRACE_SELF*/ M.SQL_ID
+     , CASE WHEN INSTR(M.SQL_DTL_CTN,'E20261012-FCSTTYPEADM') > 0 THEN 'FIXED' ELSE 'REVERTED' END AS STATE
+     , SUBSTR(M.LAST_UPDATED_BY,1,16) AS UPD_BY, TO_CHAR(M.LAST_UPDATE_DATE,'YYYY-MM-DD HH24:MI:SS') AS UPD_AT
+     , SUBSTR(M.CREATED_BY,1,16) AS CRT_BY, TO_CHAR(M.CREATION_DATE,'YYYY-MM-DD HH24:MI:SS') AS CRT_AT
+     , LENGTHB(M.SQL_DTL_CTN) AS BYTES, M.ORA_ROWSCN AS ROW_SCN
+  FROM SCM_ADM_CMBO_SQL_M M
+ WHERE M.SQL_ID IN ('FcstTypeEditDMF0082','FcstTypeByUserGroupDMF0082')
+ ORDER BY M.SQL_ID;
+
+DECLARE /*TRACE_SELF*/
+  V_TS VARCHAR2(30);
+BEGIN
+  FOR R IN (SELECT SQL_ID, ORA_ROWSCN AS SCN FROM SCM_ADM_CMBO_SQL_M
+             WHERE SQL_ID IN ('FcstTypeEditDMF0082','FcstTypeByUserGroupDMF0082') ORDER BY SQL_ID) LOOP
+    BEGIN
+      V_TS := TO_CHAR(SCN_TO_TIMESTAMP(R.SCN),'YYYY-MM-DD HH24:MI:SS');
+    EXCEPTION WHEN OTHERS THEN V_TS := '(SCN 너무 오래됨 — 변환 불가)';
+    END;
+    DBMS_OUTPUT.PUT_LINE('    ROWSCN 시각 ' || RPAD(R.SQL_ID,28) || ' = ' || V_TS || '  (블록 단위 근사 — 마지막 물리 변경 시각)');
+  END LOOP;
+END;
+/
+
+PROMPT ================= §2 ⭐ 보관 테이블(SCM_ADM_CMBO_SQL_M_*) 시점별 상태 — FIXED→REVERTED 전환 구간 =================
+PROMPT  보관 테이블은 각 배포·보완 스크립트가 "그 작업 직전" 상태를 떠 둔 스냅숏. 생성 시각 순으로 상태가 바뀌는 두 행 사이가 원복 구간
+DECLARE /*TRACE_SELF*/
+  V_E VARCHAR2(12); V_G VARCHAR2(12); V_EU VARCHAR2(40); V_GU VARCHAR2(40);
+  V_PREV VARCHAR2(30);
+  FUNCTION ST(P_TAB VARCHAR2, P_ID VARCHAR2, O_UPD OUT VARCHAR2) RETURN VARCHAR2 IS
+    V_TXT VARCHAR2(4000); V_BY VARCHAR2(100); V_AT DATE;
+  BEGIN
+    EXECUTE IMMEDIATE 'SELECT SQL_DTL_CTN, LAST_UPDATED_BY, LAST_UPDATE_DATE FROM ' || DBMS_ASSERT.ENQUOTE_NAME(P_TAB, FALSE)
+                   || ' WHERE SQL_ID = :1' INTO V_TXT, V_BY, V_AT USING P_ID;
+    O_UPD := SUBSTR(V_BY,1,12) || ' ' || TO_CHAR(V_AT,'MM-DD HH24:MI');
+    RETURN CASE WHEN INSTR(V_TXT,'E20261012-FCSTTYPEADM') > 0 THEN 'FIXED' ELSE 'REVERTED' END;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN O_UPD := '-'; RETURN '(행없음)';
+    WHEN OTHERS THEN O_UPD := SUBSTR(SQLERRM,1,30); RETURN '(오류)';
+  END;
+BEGIN
+  DBMS_OUTPUT.PUT_LINE(RPAD('보관 테이블',44) || ' | ' || RPAD('생성 시각',19) || ' | ' || RPAD('Edit 상태',9) || ' | ' || RPAD('Edit 행 수정',22)
+                    || ' | ' || RPAD('Group 상태',9) || ' | ' || RPAD('Group 행 수정',22) || ' | 전환');
+  DBMS_OUTPUT.PUT_LINE(RPAD('-',170,'-'));
+  FOR T IN (SELECT O.OBJECT_NAME, O.CREATED FROM USER_OBJECTS O
+             WHERE O.OBJECT_TYPE = 'TABLE' AND O.OBJECT_NAME LIKE 'SCM\_ADM\_CMBO\_SQL\_M\_%' ESCAPE '\'
+             ORDER BY O.CREATED, O.OBJECT_NAME) LOOP
+    V_E := ST(T.OBJECT_NAME, 'FcstTypeEditDMF0082', V_EU);
+    V_G := ST(T.OBJECT_NAME, 'FcstTypeByUserGroupDMF0082', V_GU);
+    DBMS_OUTPUT.PUT_LINE(RPAD(T.OBJECT_NAME,44) || ' | ' || TO_CHAR(T.CREATED,'YYYY-MM-DD HH24:MI:SS') || ' | ' || RPAD(V_E,9) || ' | ' || RPAD(V_EU,22)
+                      || ' | ' || RPAD(V_G,9) || ' | ' || RPAD(V_GU,22) || ' | '
+                      || CASE WHEN V_PREV = 'FIXED' AND V_E = 'REVERTED' THEN '★ 직전 보관 이후 ~ 이 보관 이전에 원복'
+                              WHEN V_PREV = 'REVERTED' AND V_E = 'FIXED' THEN '수정 반영 구간' END);
+    IF V_E IN ('FIXED','REVERTED') THEN V_PREV := V_E; END IF;
+  END LOOP;
+END;
+/
+
+PROMPT ================= §3 ⭐ 현재 행과 같은 시각(±5분)에 함께 수정된 콤보 — 어느 일괄 반영이었는지 =================
+SELECT /*TRACE_SELF*/ C.SQL_ID, SUBSTR(C.LAST_UPDATED_BY,1,16) AS UPD_BY, TO_CHAR(C.LAST_UPDATE_DATE,'YYYY-MM-DD HH24:MI:SS') AS UPD_AT
+  FROM SCM_ADM_CMBO_SQL_M C
+ WHERE EXISTS (SELECT 1 FROM SCM_ADM_CMBO_SQL_M M
+                WHERE M.SQL_ID IN ('FcstTypeEditDMF0082','FcstTypeByUserGroupDMF0082')
+                  AND C.LAST_UPDATE_DATE BETWEEN M.LAST_UPDATE_DATE - 5/1440 AND M.LAST_UPDATE_DATE + 5/1440)
+ ORDER BY C.LAST_UPDATE_DATE, C.SQL_ID;
+
+PROMPT ================= §4 Flashback 버전 이력 (UNDO 보존 범위 안에서만 — 범위 밖이면 그 사실을 출력) =================
+SELECT NAME, VALUE FROM V$PARAMETER WHERE NAME IN ('undo_retention');
+DECLARE /*TRACE_SELF*/
+  TYPE T_CUR IS REF CURSOR;
+  C T_CUR;
+  V_ID VARCHAR2(60); V_ST VARCHAR2(10); V_OP VARCHAR2(2); V_T1 VARCHAR2(20); V_T2 VARCHAR2(20); V_BY VARCHAR2(60); V_AT VARCHAR2(20); V_XID VARCHAR2(40);
+  V_N PLS_INTEGER := 0;
+  V_SQL VARCHAR2(2000) :=
+    'SELECT SQL_ID, CASE WHEN INSTR(SQL_DTL_CTN,''E20261012-FCSTTYPEADM'') > 0 THEN ''FIXED'' ELSE ''REVERTED'' END,'
+ || ' VERSIONS_OPERATION, TO_CHAR(VERSIONS_STARTTIME,''YYYY-MM-DD HH24:MI:SS''), TO_CHAR(VERSIONS_ENDTIME,''YYYY-MM-DD HH24:MI:SS''),'
+ || ' SUBSTR(LAST_UPDATED_BY,1,16), TO_CHAR(LAST_UPDATE_DATE,''YYYY-MM-DD HH24:MI:SS''), RAWTOHEX(VERSIONS_XID)'
+ || ' FROM SCM_ADM_CMBO_SQL_M VERSIONS BETWEEN TIMESTAMP MINVALUE AND MAXVALUE'
+ || ' WHERE SQL_ID IN (''FcstTypeEditDMF0082'',''FcstTypeByUserGroupDMF0082'')'
+ || ' ORDER BY SQL_ID, VERSIONS_STARTTIME NULLS FIRST';
+BEGIN
+  OPEN C FOR V_SQL;
+  LOOP
+    FETCH C INTO V_ID, V_ST, V_OP, V_T1, V_T2, V_BY, V_AT, V_XID;
+    EXIT WHEN C%NOTFOUND;
+    V_N := V_N + 1;
+    DBMS_OUTPUT.PUT_LINE('    ' || RPAD(V_ID,28) || ' ' || RPAD(V_ST,9) || ' op=' || NVL(V_OP,'-') || ' 시작=' || NVL(V_T1,'(보존범위 이전)')
+                      || ' 끝=' || NVL(V_T2,'(현재)') || ' 수정자=' || V_BY || ' ' || V_AT || ' XID=' || NVL(V_XID,'-'));
+  END LOOP;
+  CLOSE C;
+  IF V_N = 0 THEN DBMS_OUTPUT.PUT_LINE('    (버전 없음)'); END IF;
+  DBMS_OUTPUT.PUT_LINE('    ※ 시작이 "(보존범위 이전)" 인 행만 있으면 UNDO 에 변경 기록이 남아 있지 않은 것 — §2·§5 로 판정');
+EXCEPTION
+  WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('    §4 조회 불가: ' || SQLERRM);
+END;
+/
+
+PROMPT ================= §5 DML 원문 — SCM_ADM_CMBO_SQL_M 을 바꾼 SQL (공유풀 + AWR 8일) + 실행 세션 =================
+PROMPT  HIT = 원문에 대상 SQL_ID 직접 포함(Y) / 대상 미포함 일괄 갱신(N — MERGE·전체 동기화 가능성)
+DECLARE /*TRACE_SELF*/
+  V_N PLS_INTEGER := 0;
+  V_SKIP PLS_INTEGER := 0;
+BEGIN
+  FOR R IN (
+    WITH S AS (
+      SELECT SQL_ID, SQL_FULLTEXT AS TXT, PARSING_SCHEMA_NAME AS PSCHEMA, MODULE, COMMAND_TYPE
+           , TO_CHAR(LAST_ACTIVE_TIME,'YYYY-MM-DD HH24:MI:SS') AS LAST_ACT, 'GV$SQL' AS SRC
+        FROM GV$SQL
+       WHERE COMMAND_TYPE IN (2, 6, 7, 189, 47)
+         AND DBMS_LOB.INSTR(UPPER(SQL_FULLTEXT), 'SCM_ADM_CMBO_SQL_M') > 0
+         AND DBMS_LOB.INSTR(SQL_FULLTEXT, 'TRACE_SELF') = 0
+      UNION ALL
+      SELECT T.SQL_ID, T.SQL_TEXT, NULL, NULL, T.COMMAND_TYPE, NULL, 'AWR'
+        FROM DBA_HIST_SQLTEXT T
+       WHERE T.COMMAND_TYPE IN (2, 6, 7, 189, 47)
+         AND DBMS_LOB.INSTR(UPPER(T.SQL_TEXT), 'SCM_ADM_CMBO_SQL_M') > 0
+         AND DBMS_LOB.INSTR(T.SQL_TEXT, 'TRACE_SELF') = 0
+    ), H AS (
+      SELECT SQL_ID, MIN(SAMPLE_TIME) AS T1, MAX(SAMPLE_TIME) AS T2, MAX(USER_ID) AS USER_ID
+           , MAX(MACHINE) AS MACHINE, MAX(PROGRAM) AS PROGRAM
+        FROM (SELECT SQL_ID, SAMPLE_TIME, USER_ID, MACHINE, PROGRAM FROM GV$ACTIVE_SESSION_HISTORY
+              UNION ALL
+              SELECT SQL_ID, SAMPLE_TIME, USER_ID, MACHINE, PROGRAM FROM DBA_HIST_ACTIVE_SESS_HISTORY)
+       WHERE SQL_ID IN (SELECT SQL_ID FROM S)
+       GROUP BY SQL_ID
+    )
+    SELECT S.SRC, S.SQL_ID, S.COMMAND_TYPE, S.PSCHEMA, S.MODULE, S.LAST_ACT
+         , TO_CHAR(H.T1,'YYYY-MM-DD HH24:MI:SS') AS T1, U.USERNAME, H.MACHINE, SUBSTR(H.PROGRAM,1,40) AS PROGRAM
+         , CASE WHEN DBMS_LOB.INSTR(S.TXT,'FcstType') > 0 THEN 'Y' ELSE 'N' END AS HIT
+         , CASE WHEN DBMS_LOB.INSTR(S.TXT,'E20261012-FCSTTYPEADM') > 0 THEN 'Y' ELSE 'N' END AS HAS_FIX
+         , REPLACE(REPLACE(DBMS_LOB.SUBSTR(S.TXT, 160, 1), CHR(10), ' '), CHR(13), ' ') AS HEAD
+      FROM S
+      LEFT JOIN H ON H.SQL_ID = S.SQL_ID
+      LEFT JOIN DBA_USERS U ON U.USER_ID = H.USER_ID
+     ORDER BY NVL(TO_CHAR(H.T1,'YYYY-MM-DD HH24:MI:SS'), S.LAST_ACT)
+  ) LOOP
+    -- 상세 출력 대상 = 대상 콤보 직접 언급(HIT=Y) · MERGE(189) · 바인드(:) 사용 일괄 동기화형(어떤 SQL_ID 든 덮어쓸 수 있음). 그 외는 건수만
+    IF R.HIT = 'N' AND R.COMMAND_TYPE <> 189 AND NOT REGEXP_LIKE(R.HEAD, ':[A-Za-z]?[0-9]+') THEN
+      V_SKIP := V_SKIP + 1;
+      CONTINUE;
+    END IF;
+    V_N := V_N + 1;
+    DBMS_OUTPUT.PUT_LINE('#' || V_N || ' [' || R.SRC || '] ' || R.SQL_ID || ' cmd=' || R.COMMAND_TYPE || ' HIT=' || R.HIT || ' 수정마커=' || R.HAS_FIX
+                      || ' | 세션시각=' || NVL(R.T1,'-') || ' 공유풀최근=' || NVL(R.LAST_ACT,'-')
+                      || ' | 계정=' || NVL(R.USERNAME, R.PSCHEMA) || ' PC=' || NVL(R.MACHINE,'-') || ' 프로그램=' || NVL(R.PROGRAM, R.MODULE));
+    DBMS_OUTPUT.PUT_LINE('     ' || R.HEAD);
+  END LOOP;
+  IF V_N = 0 THEN DBMS_OUTPUT.PUT_LINE('    (대상 콤보 언급·일괄 동기화형 변경 SQL 없음 — 8일 이전이거나 캐시에서 밀려남)'); END IF;
+  DBMS_OUTPUT.PUT_LINE('    ※ 다른 특정 콤보만 바꾼 SQL ' || V_SKIP || '건은 생략 (대상 콤보와 무관)');
+EXCEPTION
+  WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('    §5 조회 불가: ' || SQLERRM);
+END;
+/
+
+PROMPT ================= §6 감사 로그 원문 — SCM_ADM_CMBO_SQL_M 언급 (SYSTEM 등 감사 대상 계정 실행분) =================
+DECLARE /*TRACE_SELF*/
+  V_N PLS_INTEGER := 0;
+BEGIN
+  FOR R IN (
+    SELECT TO_CHAR(EVENT_TIMESTAMP,'YYYY-MM-DD HH24:MI:SS') AS T, DBUSERNAME, OS_USERNAME, USERHOST
+         , SUBSTR(CLIENT_PROGRAM_NAME,1,40) AS PROG, ACTION_NAME, RETURN_CODE
+         , CASE WHEN DBMS_LOB.INSTR(SQL_TEXT,'FcstType') > 0 THEN 'Y' ELSE 'N' END AS HIT
+         , CASE WHEN DBMS_LOB.INSTR(SQL_TEXT,'E20261012-FCSTTYPEADM') > 0 THEN 'Y' ELSE 'N' END AS HAS_FIX
+         , REPLACE(REPLACE(DBMS_LOB.SUBSTR(SQL_TEXT, 160, 1), CHR(10), ' '), CHR(13), ' ') AS HEAD
+      FROM UNIFIED_AUDIT_TRAIL
+     WHERE EVENT_TIMESTAMP >= TIMESTAMP '2026-10-01 00:00:00'
+       AND DBMS_LOB.INSTR(UPPER(SQL_TEXT), 'SCM_ADM_CMBO_SQL_M') > 0
+       AND DBMS_LOB.INSTR(SQL_TEXT, 'TRACE_SELF') = 0
+     ORDER BY EVENT_TIMESTAMP
+  ) LOOP
+    V_N := V_N + 1;
+    DBMS_OUTPUT.PUT_LINE('#' || V_N || ' ' || R.T || ' ' || R.DBUSERNAME || ' OS=' || R.OS_USERNAME || ' PC=' || R.USERHOST || ' ' || R.PROG
+                      || ' ' || R.ACTION_NAME || ' RC=' || R.RETURN_CODE || ' HIT=' || R.HIT || ' 수정마커=' || R.HAS_FIX);
+    DBMS_OUTPUT.PUT_LINE('     ' || R.HEAD);
+  END LOOP;
+  IF V_N = 0 THEN DBMS_OUTPUT.PUT_LINE('    (10-01 이후 감사 로그에 SCM_ADM_CMBO_SQL_M 언급 없음 — SCM_MGR 직접 DML 은 감사 대상 아님)'); END IF;
+EXCEPTION
+  WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('    §6 조회 불가: ' || SQLERRM);
+END;
+/
+
+PROMPT ================= 끝 =================

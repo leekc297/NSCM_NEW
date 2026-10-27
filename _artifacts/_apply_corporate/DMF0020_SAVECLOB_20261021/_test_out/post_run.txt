@@ -1,0 +1,35 @@
+== post == DB=ZIOUI1 applied=True 2026-10-21 19:30:40
+T4a _ALL edge 290행 → result=None rc1=None 0.45s err=ORA-03120: two-task conversion routine: integer overflow
+T4a GT_FCSV_RESULTS_MST rows=0 sample=None
+T4a 동등성 pre rows=300 post rows=0 → FAIL 불일치
+  diff sample []
+T4b _POPUP 분할구간 블록(적용본) 0.03s rows=290 sample=['M', '82', 'ZZPRJ_REPRO', 'ZZSITE', '-', 'ZZITEM00000\t', '20270104', 'USD', 'LOC', 'E', 'MPS', '/', '12.5', 'repro', 'repro', None]
+T4b 동등성 pre rows=290 post rows=290 → PASS 완전 일치
+T2 _ALL 3000행 max param 56,999자 → result=None 0.46s err=ORA-03120: two-task conversion routine: integer overflow
+T2 _ALL 15000행 max param 284,999자 → result=None 0.73s err=ORA-03138: connection terminated due to security policy violation
+Traceback (most recent call last):
+  File "src/oracledb/impl/thin/transport.pyx", line 348, in oracledb.thin_impl.Transport.read_packet
+ConnectionResetError: [WinError 10054] 현재 연결은 원격 호스트에 의해 강제로 끊겼습니다
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Projects\NSCM\_artifacts\_apply_corporate\DMF0020_SAVECLOB_20261021\test_saveclob.py", line 206, in <module>
+    main()
+  File "C:\Projects\NSCM\_artifacts\_apply_corporate\DMF0020_SAVECLOB_20261021\test_saveclob.py", line 169, in main
+    con.rollback()
+  File "C:\Python3.11.5\Lib\site-packages\oracledb\connection.py", line 1327, in rollback
+    self._impl.rollback()
+  File "src/oracledb/impl/thin/connection.pyx", line 663, in oracledb.thin_impl.ThinConnImpl.rollback
+  File "src/oracledb/impl/thin/protocol.pyx", line 501, in oracledb.thin_impl.Protocol._process_single_message
+  File "src/oracledb/impl/thin/protocol.pyx", line 502, in oracledb.thin_impl.Protocol._process_single_message
+  File "src/oracledb/impl/thin/protocol.pyx", line 470, in oracledb.thin_impl.Protocol._process_message
+  File "src/oracledb/impl/thin/protocol.pyx", line 445, in oracledb.thin_impl.Protocol._process_message
+  File "src/oracledb/impl/thin/protocol.pyx", line 518, in oracledb.thin_impl.Protocol._receive_packet
+  File "src/oracledb/impl/thin/packet.pyx", line 728, in oracledb.thin_impl.ReadBuffer.wait_for_packets_sync
+  File "src/oracledb/impl/thin/transport.pyx", line 353, in oracledb.thin_impl.Transport.read_packet
+  File "C:\Python3.11.5\Lib\site-packages\oracledb\errors.py", line 199, in _raise_err
+    raise error.exc_type(error) from cause
+oracledb.exceptions.DatabaseError: DPY-4011: the database or network closed the connection
+[WinError 10054] 현재 연결은 원격 호스트에 의해 강제로 끊겼습니다
+Help: https://python-oracledb.readthedocs.io/en/latest/user_guide/troubleshooting.html#dpy-4011

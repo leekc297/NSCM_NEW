@@ -135,7 +135,7 @@ export const ShipmentRequestorPicForm = ({ onSearch, onItemSearch, onModelSearch
             />
           </Grid>
 
-          {/* Material — 입력 + 돋보기(SSP0025 전용 ItemByDivisionModal, ITEM 모드), 다건(콤마). design 02 §4.6. */}
+          {/* Material — 입력 + 돋보기(SSP0025 전용 RequestorPicItemByDivisionModal, ITEM 모드), 다건(콤마). design 02 §4.6. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -164,28 +164,14 @@ export const ShipmentRequestorPicForm = ({ onSearch, onItemSearch, onModelSearch
             />
           </Grid>
 
-          {/* Nick Name — 단일 입력(직접입력, design 02 §1 #5). */}
+          {/* Model/NickName — Nick Name + Model 조회조건 통합(사용자 지시 2026-10-22, SSP0024 동일). 입력 +
+              돋보기(MaterialByDivisionModal COM0013), 다건(콤마). 팝업 선택 시 품번(ITEM_ID)→modelId,
+              닉네임(NICK_NAME)→nickName 둘 다 세팅(page handleModelSelected)해 GET SP p_model_id + p_nick_name
+              양쪽을 채운다. 직접입력은 품번 기준이라 modelId 만 쓰고 nickName 은 비운다(이전 팝업 nickName 잔존 방지). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.NICK_NAME, '_Nick Name')}
-              labelAlign='right'
-              render={() => (
-                <InputField
-                  fullWidth
-                  value={sc.nickName}
-                  onChange={e => set({ nickName: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
-                />
-              )}
-            />
-          </Grid>
-
-          {/* Model — 입력 + 돋보기(SSP0025 전용 ItemByDivisionModal, MODEL 모드), 다건(콤마). design 02 §4.6. */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.MODEL, '_Model')}
+              label={t(LBL.MODEL_NICKNAME, '_Model/Nickname')}
               labelAlign='right'
               render={() => (
                 <InputField
@@ -203,7 +189,8 @@ export const ShipmentRequestorPicForm = ({ onSearch, onItemSearch, onModelSearch
                       />
                     ),
                   }}
-                  onChange={e => set({ modelId: e.target.value })}
+                  // 직접입력은 품번(modelId) 기준 — 이전 팝업에서 세팅된 nickName 보조조건을 지운다.
+                  onChange={e => set({ modelId: e.target.value, nickName: '' })}
                   onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}

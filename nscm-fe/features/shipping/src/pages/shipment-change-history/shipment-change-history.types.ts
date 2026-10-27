@@ -22,11 +22,3 @@ export interface SearchCondition {
   confirmId: string; // txtConfirmId 텍스트 (콤마 다중입력)
   chkCurrent: boolean; // Current 체크박스 — 그리드 행표시 토글(클라, 서버 재조회 없음)
 }
-
-// SCM0002 Item by Division 팝업 반환 행 (design 02 §4.6 — Model 선택). ItemID -> Model 텍스트.
-export interface PopupRow {
-  ITEM_ID?: string;
-  NICK_NAME?: string;
-  MODEL_ID?: string;
-  DIVISION_ID?: string;
-}

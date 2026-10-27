@@ -2,18 +2,19 @@ import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
 
+import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import {
-  useProcMutation,
   useSaveWithValidation,
   useTabBtnPermissions,
   useTabComboQueries,
   useTabProcQuery,
 } from '@shared/hooks';
-import { useMessageStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ScheduledReceiptInformationForm } from './components/ScheduledReceiptInformationForm';
 import { ScheduledReceiptInformationMainGrid } from './components/ScheduledReceiptInformationMainGrid';
@@ -27,11 +28,14 @@ import {
 } from './scheduled-receipt-information.constants';
 import type { ScheduledReceiptRow, VirtualBomRow } from './scheduled-receipt-information.types';
 import { useScheduledReceiptInformationStore } from './useScheduledReceiptInformationStore';
+import { toDisplayYmd } from './utils/scheduledReceiptInformationDate';
 import {
   scheduledReceiptInsertDefaults,
   virtualBomInsertDefaults,
 } from './utils/scheduledReceiptInformationEditLock';
 import {
+  buildScheduledReceiptSavePayload,
+  buildVirtualBomSavePayload,
   findDuplicateScheduledReceiptRows,
   validateScheduledReceiptRow,
 } from './utils/scheduledReceiptInformationSaveValidation';
@@ -89,12 +93,16 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
     state => state.restoreSearchConditions
   );
 
+  // 컬럼 메타는 진입 즉시 fetch — AS-IS(GSCM SCP0130)는 화면을 열면 데이터 없이 컬럼 헤더가 모두
+  //   보인다("컬럼은 진입 즉시, 데이터는 조회 후"). 검색(onSearch)에서만 부르면 첫 진입에 "No" 컬럼만
+  //   남으므로 마운트에서도 호출한다(형제 working-time 파리티).
   // F6(조회조건 저장)분 복원 — 재진입/새로고침 시 저장한 조회조건을 1회 되불러온다(store 1회 가드).
   //   저장측은 SubTitle searchParam prop(아래) 로 이미 동작하나 복원측 배선이 없어 재진입 시 조건이
   //   소실됐다(basic-check #3, 형제 SCP0053 파리티).
   useEffect(() => {
+    void fetchStaticColumns();
     void restoreSearchConditions();
-  }, [restoreSearchConditions]);
+  }, [fetchStaticColumns, restoreSearchConditions]);
 
   // ClipboardPasted(OPMZ_PLAN_GR_ID NAME→CODE 변환, SCP0130-10) — ScheduledReceiptInformationForm
   //   이 조회조건 PlanGroup 드롭다운에 쓰는 것과 같은 콤보를 공유(react-query 캐시 재사용, 중복 호출
@@ -109,6 +117,19 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
   const canEdit = hasButton('EDIT');
   const { saveWithValidation } = useSaveWithValidation();
   const { setToast, setAlert } = useMessageStore.getState();
+  const queryClient = useQueryClient();
+  // SAVE proc 의 P_USER_ID(감사컬럼 CREATED_BY/LAST_UPDATED_BY) — /call-proc 은 세션 미주입이라 FE 가 싣는다.
+  const sessionUserId = useSessionStore(s => s.session.userId);
+
+  // 저장 성공 후처리 — 기본 useProcMutation onSuccess(invalidate+toast)는 editTracker 를 비우지
+  //   않아, 저장 뒤에도 그리드가 dirty(신규행 CRUD_TYPE='I')로 남고 재조회 시 수정중 확인(MSG00703)이
+  //   뜬다(형제 demand-exception/group-code-management 선례). 저장 시트의 editTracker 를 clearChanges
+  //   하고 두 시트를 재조회한다.
+  const handleSaveSuccess = (sheetIndex: SHEET_INDEX) => {
+    setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });
+    editTrackerRefs[sheetIndex].current?.clearChanges();
+    void queryClient.invalidateQueries({ queryKey: [tabId] });
+  };
 
   const { data: virtualBomData } = useTabProcQuery<MENU_ID, SHEETS.VIRTUAL_BOM>({
     menuId: MENU_ID,
@@ -125,24 +146,55 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
     enabled: !!filters[SHEETS.SCHEDULED_RECEIPT],
   });
 
-  const { mutate: mutateVirtualBom } = useProcMutation<MENU_ID, SHEETS.VIRTUAL_BOM>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.VIRTUAL_BOM,
-    tabId,
-  });
-  const { mutate: mutateScheduledReceipt } = useProcMutation<MENU_ID, SHEETS.SCHEDULED_RECEIPT>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.SCHEDULED_RECEIPT,
-    tabId,
-  });
+  // 저장 제출 — BE call-proc(execBtn/makeProcedure)는 proc 파라미터를 요청 본문 최상위 flat 키로
+  //   읽으므로, {data:[행]} 가 아니라 '^'-조인 컬럼배열 payload 를 직접 POST 한다(빌더 주석 참조).
+  //   useProcMutation/callMutationProc 의 {data} 형태로는 proc 가 빈 입력을 받아 무DML 로 "성공"만
+  //   돌려주고 실제 반영이 안 됐다. 성공/실패 후처리는 기존 handleSaveSuccess 와 동일.
+  const submitSave = async (
+    sheetIndex: SHEET_INDEX,
+    sheetName: SHEETS,
+    payload: Record<string, string>
+  ) => {
+    try {
+      const res = await apiClient.post<{
+        o_result_cursor?: { RESULT_CODE?: string; RESULT_MESSAGE?: string }[];
+      }>(`/${MENU_ID}/${sheetName}/SAVE/call-proc`, payload);
+      // false-success 판별 — 인터셉터가 HTTP 성공이면 resolve 하고, proc 는 에러 시 HTTP code 0 에도
+      //   o_result_cursor.RESULT_CODE 로 실패('0'/'S' 외, 예: ORA 에러 '1'/'F')를 알린다.
+      const rc = res.data?.result?.o_result_cursor?.[0];
+      const resultCode = rc?.RESULT_CODE;
+      const failed =
+        res.status >= 400 ||
+        Number(res.data?.code) > 0 ||
+        (resultCode != null && resultCode !== '0' && resultCode !== 'S');
+      if (failed) {
+        throw new Error(
+          (rc?.RESULT_MESSAGE ?? res.data?.message ?? '').trim() ||
+            t('MSG00003', '_저장에 실패하였습니다.')
+        );
+      }
+      handleSaveSuccess(sheetIndex);
+    } catch (error) {
+      void setAlert({
+        type: 'alert',
+        content: (error as Error)?.message || t('MSG00003', '_저장에 실패하였습니다.'),
+      });
+    }
+  };
 
   const virtualBomRows = useMemo(
     () => virtualBomData?.o_rc1 ?? [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [virtualBomData, searchParams.divisionId]
   );
+  // Arrival Date(TO_YYYYMMDD)는 조회 proc 이 날짜형("2026-10-19 00:00:00")으로 돌려주므로 날짜-only 로
+  //   정규화한다(toDisplayYmd — 표시·재저장 round-trip 동시 교정, 주석 참조).
   const scheduledReceiptRows = useMemo(
-    () => scheduledReceiptData?.o_rc1 ?? [],
+    () =>
+      (scheduledReceiptData?.o_rc1 ?? []).map(row => ({
+        ...row,
+        TO_YYYYMMDD: toDisplayYmd((row as WijmoRowItem).TO_YYYYMMDD),
+      })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [scheduledReceiptData, searchParams.divisionId]
   );
@@ -196,34 +248,65 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
       return;
     }
 
-    // design/03_grid-columns.md §3.1/§4 저장 게이트 — 중복(MSG00260)은 행 조합 대사,
-    //   나머지(필수값/수량 3중검증)는 행별 가드. 두 시트 공통 재현(§1 상단 각주).
-    const duplicate = findDuplicateScheduledReceiptRows(dirtyRows as WijmoRowItem[]);
-    if (duplicate) {
-      void setAlert({ type: 'alert', content: t(duplicate.msgId, duplicate.message) });
-      return;
+    const isVirtualBom = activeTab === SHEET_INDEX.VIRTUAL_BOM;
+
+    // design/03_grid-columns.md §3.1/§4 저장 게이트 — 중복체크(MSG00260)는 AS-IS(.cs:1083-1100)대로
+    //   Scheduled Receipt 시트 전용(Virtual Bom 은 .cs:796 주석처리)이며, 신규행을 기존 로드행과도
+    //   대조한다(전체 sourceCollection 전달). 필수값·수량·날짜 검증은 행별 가드(두 시트).
+    if (!isVirtualBom) {
+      const source = (grid?.collectionView?.sourceCollection ?? []) as WijmoRowItem[];
+      const duplicate = findDuplicateScheduledReceiptRows(source);
+      if (duplicate) {
+        void setAlert({ type: 'alert', content: t(duplicate.msgId, duplicate.message) });
+        return;
+      }
     }
     for (const row of dirtyRows) {
-      const violation = validateScheduledReceiptRow(row as WijmoRowItem);
+      const violation = validateScheduledReceiptRow(row as WijmoRowItem, isVirtualBom);
       if (violation) {
-        void setAlert({ type: 'alert', content: t(violation.msgId, violation.message) });
+        void setAlert({
+          type: 'alert',
+          content: t(violation.msgId, violation.message).replace('{0}', violation.arg ?? ''),
+        });
         return;
       }
     }
 
+    // 저장 payload 는 flat '^'-조인 컬럼배열로 보낸다(submitSave/빌더 주석 참조). 날짜 정규화·pre-image
+    //   (수정/삭제 매칭용 원본 키값)는 빌더가 editTracker 원본값으로 처리한다.
+    if (!sessionUserId) {
+      void setAlert({ type: 'alert', content: t('MSG00003', '_저장에 실패하였습니다.') });
+      return;
+    }
     if (activeTab === SHEET_INDEX.VIRTUAL_BOM) {
       const src = (grid?.collectionView?.sourceCollection ?? []) as VirtualBomRow[];
+      const originals = editTrackerRefs[SHEET_INDEX.VIRTUAL_BOM].current?.getOriginalValues() as unknown as
+        | Map<WijmoRowItem, Record<string, WijmoPrimitive>>
+        | undefined;
       saveWithValidation(
         src.filter(item => item.CRUD_TYPE),
         staticColumns[SHEETS.VIRTUAL_BOM],
-        mutateVirtualBom
+        rows =>
+          void submitSave(
+            SHEET_INDEX.VIRTUAL_BOM,
+            SHEETS.VIRTUAL_BOM,
+            buildVirtualBomSavePayload(rows as WijmoRowItem[], originals, sessionUserId)
+          )
       );
     } else {
       const src = (grid?.collectionView?.sourceCollection ?? []) as ScheduledReceiptRow[];
+      const originals = editTrackerRefs[SHEET_INDEX.SCHEDULED_RECEIPT].current?.getOriginalValues() as unknown as
+        | Map<WijmoRowItem, Record<string, WijmoPrimitive>>
+        | undefined;
       saveWithValidation(
         src.filter(item => item.CRUD_TYPE),
         staticColumns[SHEETS.SCHEDULED_RECEIPT],
-        mutateScheduledReceipt
+        rows =>
+          void submitSave(
+            SHEET_INDEX.SCHEDULED_RECEIPT,
+            SHEETS.SCHEDULED_RECEIPT,
+            buildScheduledReceiptSavePayload(rows as WijmoRowItem[], originals, sessionUserId)
+          )
       );
     }
   };
@@ -243,7 +326,7 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
       setToast({
         type: 'error',
         message: t(MSG.SHEET_EDIT_LOCK, {
-          defaultValue: '{0} is being edited, so you cannot change sheets.',
+          defaultValue: 'You are modifying {0} and can not change the sheet.',
         }).replace('{0}', SHEET_LABEL[activeTab]),
       });
       return;
@@ -268,7 +351,7 @@ export const ScheduledReceiptInformation = ({ tabId, title }: PageProps<MENU_ID>
         openSearchArea={isOpenSearchArea}
         toggleOpenSearchArea={setOpenSearchArea}
       />
-      <ScheduledReceiptInformationForm />
+      <ScheduledReceiptInformationForm isVirtualBom={activeTab === SHEET_INDEX.VIRTUAL_BOM} />
       <SubTitle
         menuId={MENU_ID}
         grid={gridRefs[activeTab]}

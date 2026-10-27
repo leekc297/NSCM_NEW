@@ -1,12 +1,18 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { queryClient } from '@foundation/query-client';
 import { GridAction, GridUtils } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
-import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import {
+  formatTotalCases,
+  useProcMutation,
+  useTabBtnPermissions,
+  useTabProcQuery,
+  useTitleAreaLanguage,
+} from '@shared/hooks';
 import { TitleArea } from '@shared/lges';
 import { PanelGroup, Panel, PanelSeparator } from '@shared/panel';
 import { useMessageStore } from '@shared/stores';
@@ -61,6 +67,8 @@ const MAX_PERIOD_MONTHS_BY_REPORT: Record<
 export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
   // i18n
   const { t } = useTranslation();
+  // 건수 표기 언어(총/건 ↔ Total/rows) — 공용 SubTitle · ResultArea 와 같은 규칙(useTitleAreaLanguage 주석).
+  const titleAreaLanguage = useTitleAreaLanguage();
   const setAlert = useMessageStore(s => s.setAlert);
 
   // 버튼 권한 조회
@@ -74,6 +82,14 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
   const columnsGridRef = useRef<FlexGrid>();
   const parametersGridRef = useRef<FlexGrid>();
   const resultGridRef = useRef<FlexGrid>();
+  // View 탭 그리드는 필터를 쓰지 않으므로 SubTitle 에는 비어 있는 필터 ref 를 넘긴다.
+  const viewGridFilterRef = useRef<FlexGridFilter>();
+
+  // View 탭에서 마지막으로 포커스된 그리드. SubTitle 툴바(Excel 다운로드 등)의 대상이 된다.
+  //   기본값은 실행 결과(Result) 그리드.
+  const [focusedViewSheet, setFocusedViewSheet] = useState<
+    SHEETS.COLUMNS | SHEETS.PARAMETERS | SHEETS.RESULT
+  >(SHEETS.RESULT);
 
   // 검색 폼 오픈 여부 구분 값
   const openSearchArea = useDynamicQueryStore(s => s.openSearchArea);
@@ -629,6 +645,19 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
   const parametersCount = parametersData?.o_rc1?.length ?? 0;
   const resultCount = resultData?.o_rc1?.length ?? 0;
 
+  // SubTitle 툴바 대상 그리드: Register 탭은 Register 그리드, View 탭은 마지막 포커스 그리드.
+  //   종전에는 Register 그리드로 고정되어 View 탭에서 Excel 다운로드가 결과 그리드에 동작하지 않았다.
+  const focusedGridRef =
+    activePage === SHEET_INDEX.REGISTER
+      ? gridRef
+      : focusedViewSheet === SHEETS.COLUMNS
+        ? columnsGridRef
+        : focusedViewSheet === SHEETS.PARAMETERS
+          ? parametersGridRef
+          : resultGridRef;
+  const focusedGridFilterRef =
+    activePage === SHEET_INDEX.REGISTER ? gridFilterRef : viewGridFilterRef;
+
   return (
     <>
       <MainTitle
@@ -642,8 +671,8 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
 
       <SubTitle
         menuId={MENU_ID}
-        grid={gridRef}
-        gridFilter={gridFilterRef}
+        grid={focusedGridRef}
+        gridFilter={focusedGridFilterRef}
         dataCount={getCount()}
         // Register 탭은 상단 건수가 곧 이 그리드 건수라 그대로 두고, View 탭(Columns/Condition/
         // Result 4 그리드 동시 표시)에서는 Register 건수와 무관해지므로 숨기고 각 영역에서 표시한다.
@@ -676,12 +705,14 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
                         isSubTitle
                         title={t('LBL00646', 'Columns')}
                         depth='h4'
-                        totalCases={columnsCount === 0 ? undefined : columnsCount}
+                        totalCases={formatTotalCases(columnsCount === 0 ? undefined : columnsCount)}
+                        language={titleAreaLanguage}
                       />
                       {/* <div className={styles.gridFill}> */}
                       <DynamicQueryColumnsGrid
                         gridRef={columnsGridRef}
                         data={columnsData?.o_rc1 ?? []}
+                        gotFocus={() => setFocusedViewSheet(SHEETS.COLUMNS)}
                       />
                       {/* </div> */}
                     </div>
@@ -695,12 +726,16 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
                         isSubTitle
                         title={t('LBL00726', 'Condition')}
                         depth='h4'
-                        totalCases={parametersCount === 0 ? undefined : parametersCount}
+                        totalCases={formatTotalCases(
+                          parametersCount === 0 ? undefined : parametersCount
+                        )}
+                        language={titleAreaLanguage}
                       />
                       {/* <div className={styles.gridFill}> */}
                       <DynamicQueryParametersGrid
                         gridRef={parametersGridRef}
                         data={parametersData?.o_rc1 ?? []}
+                        gotFocus={() => setFocusedViewSheet(SHEETS.PARAMETERS)}
                       />
                       {/* </div> */}
                     </div>
@@ -727,9 +762,14 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
                     isSubTitle
                     title={t('LBL00645', 'Result')}
                     depth='h4'
-                    totalCases={resultCount === 0 ? undefined : resultCount}
+                    totalCases={formatTotalCases(resultCount === 0 ? undefined : resultCount)}
+                    language={titleAreaLanguage}
                   />
-                  <DynamicQueryResultGrid gridRef={resultGridRef} data={resultData?.o_rc1 ?? []} />
+                  <DynamicQueryResultGrid
+                    gridRef={resultGridRef}
+                    data={resultData?.o_rc1 ?? []}
+                    gotFocus={() => setFocusedViewSheet(SHEETS.RESULT)}
+                  />
                 </div>
               </Panel>
             </PanelGroup>

@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { useMessageStore } from '@shared/stores';
 
 import { DATE_FINISH_COLUMN, DATE_START_COLUMN, MSG } from '../stock-osp.constants';
@@ -17,12 +19,14 @@ export const useStockOspValidation = () => {
   const setAlert = useMessageStore.getState().setAlert;
 
   // 한 행의 start/finish 역전 여부(둘 다 값이 있고 start>finish 일 때만 true). 빈 값은 위반 아님.
-  const isReversed = (row: Row): boolean => {
+  //   useCallback 으로 참조 고정(순수 함수, 외부 의존 없음) — Pack 그리드 formatItem effect(g.invalidate)
+  //   deps 에 들어가므로, 미고정이면 조회조건 타이핑마다 재렌더→effect 재실행→그리드 깜박임(2026-10-14 수정).
+  const isReversed = useCallback((row: Row): boolean => {
     const start = ymd(row[DATE_START_COLUMN]);
     const finish = ymd(row[DATE_FINISH_COLUMN]);
     if (!start || !finish) return false;
     return start > finish;
-  };
+  }, []);
 
   // R4 — 저장 직전 재검증. 위반행이 하나라도 있으면 alert 후 false(저장 중단).
   const validateBeforeSave = (dirty: Row[]): boolean => {

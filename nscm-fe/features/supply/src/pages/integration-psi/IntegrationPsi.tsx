@@ -19,12 +19,15 @@ import { useMessageStore, useSessionStore } from '@shared/stores';
 import { IntegrationPsiForm } from './components/IntegrationPsiForm';
 import { IntegrationPsiGrid } from './components/IntegrationPsiGrid';
 import {
+  ADMIN_GROUP_NAME,
   COMBO,
   LINE_ID_EMPTY,
   MEASURE,
   MENU_ID,
   MSG,
   MULTI_CHILD_ITEM_LOOKUP,
+  REQUIRED_SAVE_FIELDS,
+  SAVE_DATE_ALIAS,
   SHEETS,
 } from './integration-psi.constants';
 import type { MainRow, SaveMode } from './integration-psi.types';
@@ -148,9 +151,12 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchStaticColumns = useIntegrationPsiStore(s => s.fetchStaticColumns);
   const fetchStaticMeasures = useIntegrationPsiStore(s => s.fetchStaticMeasures);
   const restoreSearchConditions = useIntegrationPsiStore(s => s.restoreSearchConditions);
+  const resetConditionValues = useIntegrationPsiStore(s => s.resetConditionValues);
   const initialized = useIntegrationPsiStore(s => s.initialized);
   // 고정 24열 admin 메타(SCM_MST_SHEET_COLUMNS 'Integration PSI') — 그리드 staticColumns 원천.
   const staticColumns = useIntegrationPsiStore(s => s.staticColumns[SHEETS.MAIN]);
+  // SCM_MST_SHEET_MEASURE 7행 — MEASURE_LABEL 셀콤보 원천(label↔code). 신규행 MEASURE 선택용(Wave1).
+  const staticMeasures = useIntegrationPsiStore(s => s.staticMeasures);
 
   const { data } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
@@ -164,13 +170,19 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
   const rows = useMemo<MainRow[]>(() => (data as { o_rc1?: MainRow[] })?.o_rc1 ?? [], [data]);
 
   // 권한(ADMIN / SCM PI Admin / SCP Planner) = AS-IS NowGroupID 3분기. TO-BE 는 USER_ID 기준이어야 하며
-  //   (hook#128 auth-by-userid-not-groupid), session.groupId 는 유령 필드라 참조 금지(sales-plan 정본).
-  //   확인필요: SCP0111 전용 권한 CMBO(sales-plan 의 'SalesPlanUserAuthGroup' 등가)가 미정·미등록이다.
-  //   원천 콤보가 확정될 때까지 안전 기본값(전부 false = BOH 편집 잠금·정보열 잠금 유지)로 주입한다.
-  //   BOH_QTY 편집(L8/L12/L17)·ADMIN 정보열(L3/L5/L20)은 이 auth 확정 후 활성화된다(design 03 §3 / 05_register).
+  //   (hook#128 auth-by-userid-not-groupid), session.groupId(단일 유령 필드) 는 참조 금지. 대신 session.groups
+  //   (USER_GR_NM 배열, nscm-be User.xml retrieveUserGroups)로 보유 그룹을 판정한다 — plan-control /
+  //   sales-site-project-model 등 전환 선례와 동일 규약(그룹 "이름"으로 비교, ID 아님).
+  //   isAdmin = NowGroupID=='ADMIN' 재현 → 신규행 Insert V1(빈행·DIVISION_ID만) + BOH/정보열 편집 + ADMIN 저장.
+  //   isPiAdmin/isPlanner(SCM PI Admin / SCP Planner)는 BOH 편집 파리티 축이라 별도 검증 전까지 false 유지.
+  const sessionGroups = useSessionStore(s => s.session.groups);
   const auth = useMemo<AuthContext>(
-    () => ({ isAdmin: false, isPiAdmin: false, isPlanner: false }),
-    []
+    () => ({
+      isAdmin: (sessionGroups ?? []).includes(ADMIN_GROUP_NAME),
+      isPiAdmin: false,
+      isPlanner: false,
+    }),
+    [sessionGroups]
   );
 
   // MULTI_CHILD_ITEM lookup NAME 목록(design 03 §1-L / L7 모듈 반제품 편집 예외).
@@ -207,6 +219,21 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticMeasures();
   };
 
+  // Reset Condition(F10) — 공용 SubTitle F10 은 2026-10-14 이후 서버 저장분만 초기화하고 화면 조회조건은
+  //   건드리지 않는다(AS-IS 파리티). 사용자 지시(2026-10-19)로 이 화면은 화면 조회조건 값 초기화를 되살린다.
+  //   서버 저장분 삭제(resetPersonalizedCondition) + 화면 값 초기화(resetConditionValues)를 함께 수행하되
+  //   MSG00009 확인 → MSG00011 안내의 공용 F10 UX 를 유지한다. Division·그리드(filters)는 보존한다.
+  const handleResetCondition = async () => {
+    const ok = await setAlert({
+      type: 'confirm',
+      content: t('MSG00009', '_저장된 검색조건을 초기화 하겠습니까?'),
+    });
+    if (!ok) return;
+    await GridAction.resetPersonalizedCondition(MENU_ID);
+    resetConditionValues();
+    void setAlert({ type: 'alert', content: t('MSG00011', '_검색조건이 초기화 되었습니다.') });
+  };
+
   // Plan HORIZON_END — 신규행(I) 삽입 월 범위의 **상한**. AS-IS SetChangedPeriod(cs:267~278)가 읽는 값과 같고,
   //   저장 시 AS-IS 가 `Data.Common(CalendarMonth, plan_start월, _toDate월)`(cs:1510~1511)로 월 전체를 뽑는 근거다.
   //   `SCPPlanPeriod_SCP` 등록 SQL 실측: `SELECT HORIZON_START_DATE, HORIZON_END_DATE, PLAN_CYCLE, ...
@@ -236,17 +263,33 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
     g.finishEditing();
     const source = (g.collectionView?.sourceCollection ?? []) as Record<string, unknown>[];
 
-    const { cells, opGroupLookupMissing, hasEmptyLineInsert } = unfoldSaveCells({
-      source,
-      tracker: editTrackerRef.current,
-      fixedBindings: fixedBindingSet(staticColumns),
-      planStartYyyymmdd: sc.planStartYyyymmdd,
-      horizonEndYyyymmdd,
-    });
+    const { cells, opGroupLookupMissing, hasEmptyLineInsert, missingRequiredField } =
+      unfoldSaveCells({
+        source,
+        tracker: editTrackerRef.current,
+        fixedBindings: fixedBindingSet(staticColumns),
+        planStartYyyymmdd: sc.planStartYyyymmdd,
+        horizonEndYyyymmdd,
+      });
 
     // OPERATION_GROUP NAME->CODE 역변환 실패 = 저장 차단(추측 코드 저장 금지, design 03 §4 cs:1207-1219).
+    //   값은 있으나 무효 → 유효값(Pack/Cell/Electrode)을 직접 안내한다(AS-IS 전용 리터럴 등가 roslyn L1217).
     if (opGroupLookupMissing) {
-      void setAlert({ type: 'alert', content: t(MSG.OP_GROUP_LOOKUP_MISSING, 'OPERATION_GROUP') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.OP_GROUP_INVALID, 'Operation 은 Pack / Cell / Electrode 중 하나로 입력하세요.'),
+      });
+      return;
+    }
+    // 15필수 공백검증 (AS-IS roslyn L1237) — 어느 필드가 비었는지 이름으로 안내(MSG00429 "{0} 값은 필수 입력 항목").
+    if (missingRequiredField) {
+      const label =
+        REQUIRED_SAVE_FIELDS.find(f => f.binding === missingRequiredField)?.label ??
+        missingRequiredField;
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRED_FIELD, '_{0} value is required.').replace('{0}', label),
+      });
       return;
     }
     if (cells.length === 0) {
@@ -280,18 +323,32 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
 
-    const res = await callSaveIntegrationPsi(mode, payload);
-    if (res.ok) {
-      setToast({ type: 'success', message: t(MSG.SAVE_SUCCESS, '_Saved.') });
-      setFilter(); // 저장 후 FindData_Main 재조회 (design 03 §4 — filters 재생성으로 refetch)
-      return;
+    // 저장 실행은 반드시 try/catch 로 감싼다 — apiClient 인터셉터(axios-interceptors)는 403/500 만
+    //   resolve 하고 그 외(401/404/연결오류 등)는 reject 한다. try/catch 가 없으면 이 reject 가 통째로
+    //   삼켜져 **성공·실패 어떤 피드백도 안 뜬다**(사용자 신고 2026-10-19: Confirm 후 네트워크는 가는데 화면 무반응).
+    try {
+      const res = await callSaveIntegrationPsi(mode, payload);
+      if (res.ok) {
+        setToast({ type: 'success', message: t(MSG.SAVE_SUCCESS, '_Saved.') });
+        setFilter(); // 저장 후 FindData_Main 재조회 (design 03 §4 — filters 재생성으로 refetch)
+        return;
+      }
+      void setAlert({
+        type: 'alert',
+        content: res.msgCode
+          ? [t(res.msgCode, res.msgCode), res.addMessage].filter(Boolean).join('\n')
+          : (res.addMessage ?? t(MSG.SAVE_FAIL, '_Save failed.')),
+      });
+    } catch (e) {
+      const detail =
+        (e as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        (e as Error)?.message ??
+        '';
+      void setAlert({
+        type: 'alert',
+        content: [t(MSG.SAVE_FAIL, '_Save failed.'), detail].filter(Boolean).join('\n'),
+      });
     }
-    void setAlert({
-      type: 'alert',
-      content: res.msgCode
-        ? [t(res.msgCode, res.msgCode), res.addMessage].filter(Boolean).join('\n')
-        : (res.addMessage ?? t(MSG.SAVE_FAIL, '_Save failed.')),
-    });
   };
 
   // 신규행 삽입 (design 03 §3-Value V1/V2). 삽입 자체는 SAVE 권한(hotkeyConfig)으로 게이트한다 —
@@ -361,15 +418,30 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
     GridAction.removeRow(grid, true);
   };
 
+  // F6 개인화 저장 payload — 공용 personalizeCondition 이 날짜키(planStartYyyymmdd/from·toYyyymm)를
+  //   EXCLUDED_DATE_PARAM(gridAction.ts L650)으로 저장에서 제외하므로, 날짜 3종만 정규식을 피하는 별칭
+  //   (...Ymd)으로 투영해 넘긴다. 복원은 useIntegrationPsiStore.restoreSearchConditions 가 같은 별칭을
+  //   원래 키로 역매핑한다. 사용자 지시(2026-10-19): PlanDate·Period 도 F6 저장/복원 대상(SCP0031 선례 1:1).
+  const savedParam = useMemo(() => {
+    const { planStartYyyymmdd, fromYyyymm, toYyyymm, ...rest } = sc;
+    return {
+      ...rest,
+      [SAVE_DATE_ALIAS.planStartYyyymmdd]: planStartYyyymmdd,
+      [SAVE_DATE_ALIAS.fromYyyymm]: fromYyyymm,
+      [SAVE_DATE_ALIAS.toYyyymm]: toYyyymm,
+    };
+  }, [sc]);
+
   const hotkeyConfig: HotkeyConfig = {
     // 조회는 무해하므로 항상 허용(design 01 R13).
     search: handleSearch,
-    // 신규/저장 = 화면 update 권한(SAVE)으로 게이트(design 01 R11/R14).
-    insert: hasButton('SAVE') ? handleInsert : false,
+    // Reset Condition(F10) — 화면 조회조건 값 초기화(공용 F10 은 서버 저장분만 지움, 2026-10-14~).
+    resetCondition: handleResetCondition,
+    // 신규/저장/삭제 = 버튼 코드별 권한으로 게이트(TO-BE 룰 2026-10-26 — 기능 있음 × 권한 있음 일 때만 노출; design 01 R11/R14).
+    insert: hasButton('INSERT') ? handleInsert : false,
     save: hasButton('SAVE') ? handleSave : false,
     // Delete — AS-IS 는 NO-OP(본문 공백 cs:536~539)지만 사용자 지시로 "미저장 신규행 삭제"만 허용한다.
-    //   Insert 와 같은 SAVE 권한으로 게이트한다(권한 없는 사용자는 Insert 자체가 불가 → 지울 신규행도 없다).
-    delete: hasButton('SAVE') ? handleDelete : false,
+    delete: hasButton('DELETE') ? handleDelete : false,
     manual: false,
     upload: false,
   };
@@ -396,7 +468,7 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='IntegrationPsi'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
-        searchParam={sc}
+        searchParam={savedParam}
       />
 
       {/* 영역3 그리드 — 고정 24열(admin 메타) + 서버측 동적 YYYYMM PIVOT + 편집잠금 L1~L23 + 조건색 C1/C2 +
@@ -422,6 +494,7 @@ export const IntegrationPsi = ({ tabId, title }: PageProps<MENU_ID>) => {
         toYyyymm={sc.toYyyymm}
         auth={auth}
         multiChildItems={multiChildItems}
+        measures={staticMeasures}
         essPackLineRows={[]}
         onDerivMismatch={() =>
           setToast({

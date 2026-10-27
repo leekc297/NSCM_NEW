@@ -23,6 +23,14 @@ export const COMBO = {
   // Plant Site 는 Division 값의 'EE' 포함 여부로 SQL_ID 2종 상호배타 스위칭(design 02 §3#1).
   PLANT_SITE_NON_EE: 'ShipmentRequestPlantSite_SCP',
   PLANT_SITE_EE: 'ShipmentPlanPlantSite_SCP',
+  // Plan Date — AS-IS `Data.Common(Data.Type.PlanDateShip, false, pDivisionID)`
+  //   (SSP0017_InventoryRaw.cs:365, param2=shipPlanType 미전달)와 **동일 SQL_ID**.
+  //   SCM_ADM_CMBO_SQL_M 실측(ora.py, 2026-10-14): SQL_ID='PlanDateShip', USE_YN='Y',
+  //   바인드 @shipPlanType·@divisionId — 'P' 면 SSP_ANL_SHIP_PLAN_P(Packer), 그 외면
+  //   SSP_PLAN_VERSION_V 를 @divisionId 토큰으로 걸러 PLAN_START_YYYYMMDD 를 내린다.
+  //   AS-IS 가 param2 를 안 넘기므로 비-'P' 분기가 정답 — 자매 SSP0015/shipment-plan-mobility-it
+  //   의 Main 분기와 같은 'A' 를 명시한다(convert-core §2.6 이름유사 재사용 아님, 동명 실측).
+  PLAN_DATE: 'PlanDateShip',
 } as const;
 
 export const LOOKUP = {
@@ -31,12 +39,12 @@ export const LOOKUP = {
   INVENTORY_TYPE: 'INV_TYPE',
 } as const;
 
-// 확인 필요(FAIL 후보, design/02_search-combo.md §2 주1 · §7 요약): AS-IS `PlanDateShip` 콤보와
-// 의미가 일치하는 TO-BE SQL_ID 가 SCM_ADM_CMBO_SQL_M 에 없다. 이름이 비슷한 `PlanDateShipReq40_SCP`
-// 는 호출 계열(_SCP 접미)·원천 테이블(SSP_MST_SHIP_REQ)이 달라 재사용 금지(convert-core §2.6).
-// AS-IS MSSQL(asis.py) 접속도 이번 세션 ERROR(로그인 타임아웃)라 원본 SQL 대조 불가 — 신규 등록
-// 전까지 목록 데이터 없이 빈 슬롯만 렌더한다(임의 SQL_ID 대체 금지, anti-simplification §1).
-export const PLAN_DATE_COMBO_UNRESOLVED = true;
+// Plan Date 콤보 미결(design/02_search-combo.md §2 주1 · §7)은 **해소됨**(ora.py 실측 2026-10-14):
+//   SCM_ADM_CMBO_SQL_M 에 AS-IS 와 동명인 `PlanDateShip`(USE_YN='Y')이 실재하고 본문도
+//   PLAN_START_YYYYMMDD 를 @divisionId 로 거르는 AS-IS 등가다 → COMBO.PLAN_DATE 로 배선했다.
+//   설계 당시 "없음" 판정은 `PlanDateShipReq40_SCP`(원천 SSP_MST_SHIP_REQ, 별개 콤보)만 보고
+//   내린 것으로, 동명 SQL_ID 를 놓친 오판이었다. 그 사이 화면은 콤보가 빈 목록·disabled 라
+//   Plan Date 필수검증(handleSearch)에 걸려 조회 자체가 불가능했다.
 
 // Footer 합계 대상 5컬럼(design/03_grid-columns.md §3 규칙#9 — SPECIAL_YN 다음 ~ CUSTOMER 이전).
 //   SCM_MST_SHEET_COLUMNS 에는 집계 여부 자체가 없어(DB 메타는 컬럼 정의만) 화면에서 후처리로 얹는다.
@@ -54,7 +62,10 @@ export const LBL = {
   DIVISION: 'LBL00001', // Div.
   PLANT_SITE: 'LBL00005', // Plant Site
   INVENTORY_TYPE: 'LBL01087', // Inventory Type
-  MODEL: 'LBL00669', // Model(=Item ID 라벨)
+  // Model/Nickname — 입력값이 ITEM_ID 와 NICK_NAME 양쪽에 매칭되므로 라벨도 둘을 모두 알린다.
+  //   LBL00618 'Model/Nickname' — SCM_ADM_MSG_M KO/EN/CN 전건 등록·USE_YN='Y' 실측(ora.py 2026-10-14)
+  //   이라 등록 요청 불요. 기존 LBL00669 는 'Model' 단독이라 교체(SSP0019 2026-10-14 선례와 동일 규약).
+  MODEL_NICKNAME: 'LBL00618',
   PLAN_DATE: 'LBL00039', // Plan Date
   SEARCH: 'LBL00112', // 메인 상단 SearchArea 검색 버튼
   MEASURE: 'LBL00310', // Measure 버튼

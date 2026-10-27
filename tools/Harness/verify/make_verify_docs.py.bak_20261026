@@ -1,0 +1,293 @@
+"""화면 정합검증서 + 보완대상목록 xlsx 생성
+
+  python tools/Harness/verify/make_verify_docs.py <MENU_ID> [--scope DB_ONLY|DB_FE]
+
+입력  Doc/verify/<ID>/verify_ledger.csv (ledger.py → judge.py 판정 반영본)
+산출  Doc/화면분석서/<ID>_<화면명>_정합검증서_v<N>.xlsx
+      Doc/화면분석서/<ID>_<화면명>_보완대상_v<N>.xlsx     ← 보완 적용(P6) 전에 사용자가 확인하는 목록
+      Doc/verify/<ID>/fixlist.csv                         ← 보완 실행기(Vibe_Manager 🩹·🛠️·🧯)가 읽는 기계용 사본
+버전 N 은 기존 파일 다음 번호(덮어쓰지 않음). 보완 범위 = --scope 또는 tools/Harness/harness.json repairScope(기본 DB_ONLY).
+
+보완 계층(fix_layer) 결정 — 원장 행에 값이 있으면 그대로, 없으면 아래 규칙(제안값, '근거' 열에 사유):
+  DB_META   라벨·메시지 미등록(I1·I4), 컬럼 표시·편집 메타(A5, D1 에서 TO-BE INPUT_TP_CD 가 AS-IS 와 어긋날 때), 기준정보(B8·N1·H9), 콤보 원천 SQL(B4·B5·B7)
+  DB_OBJECT 저장·조회 SP 결과(A1·A6·A7·E4·F1·F4·F6·F7·F8)
+  FE        셀 편집·검증·연쇄·전제조건·팝업 인자(D1·D3·D4·D5·D6·E1·E2·E3·E5·C1~C5·G1·G2·G5·G6·G7·H2·H3·H8)
+  COMMON    공통 컴포넌트(K1~K5·G3·B6·H6·H7·H10·L2·I2 의 공통 폴백) — 어느 범위에서도 직접 수정 금지, 가이드만
+  HUMAN     판정필요·조건부 기대
+"""
+import argparse
+import csv
+import json
+import os
+import re
+import sys
+from collections import Counter
+
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from openpyxl.utils import get_column_letter
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+P = lambda *a: os.path.join(ROOT, *a)
+OUTDIR = P('Doc', '화면분석서')
+
+LAYER_BY_RULE = {}
+for _r in ('I1', 'I4', 'A5', 'B8', 'N1', 'H9', 'B4', 'B5', 'B7', 'H5'):
+    LAYER_BY_RULE[_r] = 'DB_META'
+for _r in ('A1', 'A2', 'A3', 'A6', 'A7', 'A8', 'E4', 'F1', 'F4', 'F6', 'F7', 'F8', 'M1', 'M2', 'J1', 'J2', 'J3', 'J4'):
+    LAYER_BY_RULE[_r] = 'DB_OBJECT'
+for _r in ('K1', 'K2', 'K3', 'K4', 'K5', 'G3', 'B6', 'H6', 'H7', 'H10', 'L2', 'E6', 'H4'):
+    LAYER_BY_RULE[_r] = 'COMMON'
+LAYER_NAME = {'DB_META': 'DB 메타', 'DB_OBJECT': 'DB 객체(PKG/SP)', 'FE': '화면 FE', 'COMMON': '공통 컴포넌트', 'HUMAN': '사람판정'}
+AXIS_NAME = {'1': '1 디자인·다국어', '2': '2 AS-IS 로직', '3': '3 SMOKE', '4': '4 CRUD', '5': '5 권한별 CRUD'}
+RESULT_NAME = {'PASS': 'PASS', 'FAIL': 'FAIL', '판정필요': '판정필요', 'ERROR': '미검증(ERROR)', 'NOT_RUN': '미검증', 'WARN': 'WARN', 'NA': '해당없음'}
+
+HFILL = PatternFill('solid', fgColor='F2E1D9')
+FILLS = {'FAIL': 'F8CBAD', 'PASS': 'E2EFDA', '판정필요': 'FFF2CC', 'ERROR': 'D9D9D9', 'NOT_RUN': 'EDEDED'}
+THIN = Side(style='thin', color='BFBFBF')
+BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
+
+
+def read_csv(p):
+    if not os.path.exists(p):
+        return []
+    with open(p, encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+
+def screen_name(mid):
+    for r in read_csv(P('Doc', 'tobefacts', 'db', 'menu.csv')):
+        if r['mnu_id'].upper() == mid:
+            return re.sub(r'[^\w가-힣]+', '', r['mnu_desc'].title()) or mid
+    return mid
+
+
+def next_path(mid, name, kind):
+    os.makedirs(OUTDIR, exist_ok=True)
+    pat = re.compile(rf'^{re.escape(mid)}_{re.escape(name)}_{kind}_v(\d+)\.xlsx$')
+    n = max([int(m.group(1)) for f in os.listdir(OUTDIR) for m in [pat.match(f)] if m] or [0]) + 1
+    return os.path.join(OUTDIR, f'{mid}_{name}_{kind}_v{n}.xlsx'), n
+
+
+def scope_setting(cli):
+    if cli:
+        return cli
+    try:
+        with open(P('tools', 'Harness', 'harness.json'), encoding='utf-8-sig') as f:
+            return json.load(f).get('repairScope', 'DB_ONLY')
+    except (OSError, ValueError):
+        return 'DB_ONLY'
+
+
+def decide_layer(r):
+    if r.get('fix_layer'):
+        return r['fix_layer'], '원장 지정'
+    if r['result'] == '판정필요':
+        return 'HUMAN', '기대가 조건부·정답 확정 필요'
+    rid = r['rule_id']
+    if rid == 'D1' and 'INPUT_TP_CD' in r.get('asis_ref', ''):
+        m = re.search(r"INPUT_TP_CD=(\w+)", r['asis_ref'])
+        itp = m.group(1) if m else ''
+        want_edit = r['expected'].startswith('편집 가능')
+        meta_edit = itp in ('O', 'M') or (itp in ('IO', 'IM') and r['condition'] == '신규행')
+        if itp and want_edit != meta_edit:
+            return 'DB_META', f"TO-BE SHEET_COLUMNS.INPUT_TP_CD={itp} 가 AS-IS 기대와 반대 → 메타 수정 우선"
+        return 'FE', f'메타(INPUT_TP_CD={itp or "-"})는 기대와 같음 → 화면 편집 제어(beginningEdit) 결함'
+    if rid in LAYER_BY_RULE:
+        return LAYER_BY_RULE[rid], f'규칙 {rid} 기본 계층'
+    if rid == 'I2' and "'_'" in r.get('evidence', ''):
+        return 'DB_META', '화면 폴백 노출 = 코드 미등록(I1 과 동일 조치)'
+    return 'FE', f'규칙 {rid} 기본 계층(화면 동작)'
+
+
+def apply_status(layer, scope):
+    if layer in ('DB_META', 'DB_OBJECT'):
+        return '적용 예정'
+    if layer == 'FE':
+        return '적용 예정' if scope == 'DB_FE' else '범위 밖(가이드만)'
+    if layer == 'COMMON':
+        return '범위 밖(가이드만 · 공통 컴포넌트)'
+    return '사람판정 대기'
+
+
+def write_sheet(wb, title, header, rows, widths, result_col=None):
+    ws = wb.create_sheet(title[:31])
+    ws.append(header)
+    for c in ws[1]:
+        c.fill, c.font, c.alignment, c.border = HFILL, Font(bold=True, size=11), Alignment(horizontal='center', vertical='center', wrap_text=True), BORDER
+    for r in rows:
+        ws.append(r)
+    for row in ws.iter_rows(min_row=2):
+        for c in row:
+            c.alignment, c.border, c.font = Alignment(vertical='top', wrap_text=True), BORDER, Font(size=10)
+        if result_col is not None:
+            v = str(row[result_col].value or '')
+            key = next((k for k in FILLS if v.startswith(RESULT_NAME.get(k, k)) or v == k), None)
+            if key:
+                row[result_col].fill = PatternFill('solid', fgColor=FILLS[key])
+    for i, w in enumerate(widths, 1):
+        ws.column_dimensions[get_column_letter(i)].width = w
+    ws.freeze_panes = 'A2'
+    ws.auto_filter.ref = ws.dimensions
+    ws.sheet_view.showGridLines = False
+    return ws
+
+
+LH = ['No', '검증 ID', '출처', '유형', '규칙', '영역', '대상', '조건', '정답', '기대(AS-IS·규칙)', 'AS-IS 근거', '판정 방법', '결과', '증거(실측)', 'TO-BE 위치', '결함 원장', '사용자판정']
+LW = [5, 12, 11, 6, 7, 10, 30, 22, 7, 50, 40, 10, 11, 60, 22, 14, 30]
+
+
+USER_VERDICT = {}
+
+
+def load_user_verdicts(mid):
+    # 이전 정합검증서들의 '사용자판정' 열 — 새 버전으로 그대로 이어 넘긴다(사용자 기입 보존, 2026-10-26)
+    import glob
+    try:
+        from openpyxl import load_workbook
+    except Exception:
+        return
+    for f in sorted(glob.glob(P('Doc', '화면분석서', f'{mid}_*_정합검증서_v*.xlsx')), key=os.path.getmtime):
+        try: wb = load_workbook(f, read_only=True, data_only=True)
+        except Exception: continue
+        for ws in wb.worksheets:
+            rws = list(ws.iter_rows(values_only=True))
+            hi = next((i for i, rr in enumerate(rws[:5]) if any(c and '사용자판정' in str(c) for c in rr)), None)
+            if hi is None: continue
+            ci = [k for k, c in enumerate(rws[hi]) if c and '사용자판정' in str(c)][0]
+            for rr in rws[hi + 1:]:
+                if ci < len(rr) and rr[ci] and rr[1]: USER_VERDICT[str(rr[1])] = str(rr[ci]).strip()
+
+
+def lrow(i, r):
+    return [i, r['row_id'], r['source'], r['family'], r['rule_id'], r['area'], r['target'], r['condition'], r['oracle'], r['expected'], r['asis_ref'],
+            r['method'], RESULT_NAME.get(r['result'], r['result']), r['evidence'], r['tobe_ref'], r['defect_ref'], USER_VERDICT.get(r['row_id'], '')]
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('menu_id')
+    ap.add_argument('--scope', choices=['DB_ONLY', 'DB_FE'])
+    a = ap.parse_args()
+    mid = a.menu_id.upper()
+    rows = read_csv(P('Doc', 'verify', mid, 'verify_ledger.csv'))
+    if not rows:
+        print(f'[ERROR] 원장 없음 — ledger.py·judge.py 먼저 ({mid})')
+        return 2
+    scope = scope_setting(a.scope)
+    name = screen_name(mid)
+    load_user_verdicts(mid)
+    rules = {r['rule_id']: r for r in read_csv(P('tools', 'Harness', 'verify', 'detect_rules.csv'))}
+
+    # ── 정합검증서 ──
+    wb = Workbook()
+    ws0 = wb.active
+    ws0.title = '요약'
+    cnt = Counter(r['result'] for r in rows)
+    ws0.append([f'{mid} {name} — 화면 정합검증서 (AS-IS vs TO-BE)'])
+    ws0['A1'].font = Font(bold=True, size=14)
+    ws0.append(['정답 기준: O1 AS-IS 동작 · O2 확정 규칙(디자인·공통·고객 확정 요구) · O3 기능 무결성(오류·무반응·허위 성공)'])
+    ws0.append(['미검증(NOT_RUN·ERROR)은 PASS 가 아니다 — 미검증 시트에 사유와 함께 남긴다.'])
+    ws0.append([])
+    ws0.append(['축', '전체', 'PASS', 'FAIL', '판정필요', '미검증', '해당없음'])
+    for ax in ('1', '2', '3', '4', '5'):
+        sub = [r for r in rows if r['axis'] == ax]
+        c = Counter(r['result'] for r in sub)
+        ws0.append([AXIS_NAME[ax], len(sub), c['PASS'], c['FAIL'], c['판정필요'], c['NOT_RUN'] + c['ERROR'], c['NA']])
+    ws0.append(['합계', len(rows), cnt['PASS'], cnt['FAIL'], cnt['판정필요'], cnt['NOT_RUN'] + cnt['ERROR'], cnt['NA']])
+    ws0.append([])
+    ws0.append(['출처', '행 수'])
+    for k, v in Counter(r['source'] for r in rows).items():
+        ws0.append([k, v])
+    ws0.append([])
+    dref = sorted({r['defect_ref'] for r in rows if r['defect_ref']})
+    dfail = sorted({r['defect_ref'] for r in rows if r['defect_ref'] and r['result'] == 'FAIL'})
+    ws0.append(['결함 원장 대상', len(dref), '현재 FAIL(재현)', len(dfail)])
+    for row in ws0.iter_rows(min_row=5, max_row=5):
+        for c in row:
+            c.fill, c.font = HFILL, Font(bold=True)
+    for i, w in enumerate([22, 10, 14, 10, 10, 10, 10], 1):
+        ws0.column_dimensions[get_column_letter(i)].width = w
+
+    for ax in ('1', '2', '3', '4', '5'):
+        sub = [r for r in rows if r['axis'] == ax]
+        write_sheet(wb, AXIS_NAME[ax], LH, [lrow(i, r) for i, r in enumerate(sub, 1)], LW, result_col=12)
+    fails = [r for r in rows if r['result'] == 'FAIL']
+    write_sheet(wb, '조치 필요', LH, [lrow(i, r) for i, r in enumerate(fails, 1)], LW, result_col=12)
+    write_sheet(wb, '판정 필요', LH, [lrow(i, r) for i, r in enumerate([r for r in rows if r['result'] == '판정필요'], 1)], LW, result_col=12)
+    base = {(d['src'] + '-' + d['no']): d for d in read_csv(P('Doc', 'verify', 'defects_baseline.csv'))}
+    drows = []
+    for i, ref in enumerate(dref, 1):
+        rs = [r for r in rows if r['defect_ref'] == ref]
+        d = base.get(ref, {})
+        res = 'FAIL' if any(r['result'] == 'FAIL' for r in rs) else ('판정필요' if any(r['result'] == '판정필요' for r in rs) else ('PASS' if all(r['result'] == 'PASS' for r in rs) else '미검증'))
+        drows.append([i, ref, d.get('ui_name', ''), d.get('div', ''), d.get('test_content', ''), d.get('test_result', ''), '미조치' if d.get('open') == 'Y' else '조치완료',
+                      ';'.join(r['rule_id'] for r in rs), ', '.join(r['row_id'] for r in rs), res, ' | '.join(r['evidence'][:160] for r in rs if r['evidence'])[:900]])
+    write_sheet(wb, '결함 원장 대조', ['No', '결함 원장', 'UI명', 'Div', '테스트 내용', '테스트 결과(사람)', '원장 조치상태', '검출 규칙', '검증 ID', '시스템 결과', '증거'],
+                drows, [5, 12, 18, 8, 30, 50, 10, 14, 24, 11, 60], result_col=9)
+    unv = [r for r in rows if r['result'] in ('NOT_RUN', 'ERROR', '')]
+    write_sheet(wb, '미검증', LH + ['사유'], [lrow(i, r) + [r['evidence'] or ('E2E 미구현 규칙 — 판정기 확장 대상' if 'E2E' in r['method'] else '판정기 미구현')] for i, r in enumerate(unv, 1)],
+                LW + [40], result_col=12)
+    write_sheet(wb, '검출 규칙', ['규칙', '유형', '명칭', '정답', '방법', '기대 원천', '판정 방법'],
+                [[k, v['family'], v['name'], v['oracle'], v['method'], v['expected_source'], v['how']] for k, v in rules.items()], [7, 6, 30, 8, 12, 40, 60])
+    p1, n1 = next_path(mid, name, '정합검증서')
+    wb.save(p1)
+
+    # ── 보완대상목록 ──
+    targets = [r for r in rows if r['result'] in ('FAIL', '판정필요')]
+    fx = []
+    for i, r in enumerate(targets, 1):
+        layer, why = decide_layer(r)
+        fx.append({'fix_id': f'FX-{mid}-{i:03d}', 'row_id': r['row_id'], 'defect_ref': r['defect_ref'], 'family': r['family'], 'rule_id': r['rule_id'],
+                   'axis': AXIS_NAME.get(r['axis'], r['axis']), 'target': r['target'], 'symptom': r['evidence'], 'expected': f"[{r['oracle']}] {r['expected']}",
+                   'asis_ref': r['asis_ref'], 'layer': layer, 'layer_name': LAYER_NAME[layer], 'layer_reason': why, 'object': r['tobe_ref'],
+                   'change': '', 'verify': f"재판정: judge.py {mid} + @verify 해당 행({r['row_id']})", 'apply': apply_status(layer, scope),
+                   'status': '대기', 'scope_at': scope})
+    FH = ['No', '보완 ID', '검증 ID', '결함 원장', '유형', '규칙', '축', '대상', '현상(실측)', '기대(정답·근거)', 'AS-IS 근거', '보완 계층', '계층 판단 근거',
+          '대상 객체(TO-BE)', '변경 요지(보완 시 기입)', '검증 방법', f'적용 여부(설정 {scope})', '상태']
+    FW = [5, 15, 12, 12, 6, 6, 12, 28, 50, 45, 38, 12, 30, 24, 30, 30, 16, 8]
+    to_row = lambda i, f: [i, f['fix_id'], f['row_id'], f['defect_ref'], f['family'], f['rule_id'], f['axis'], f['target'], f['symptom'], f['expected'], f['asis_ref'],
+                           f['layer_name'], f['layer_reason'], f['object'], f['change'], f['verify'], f['apply'], f['status']]
+    wb2 = Workbook()
+    s0 = wb2.active
+    s0.title = '요약'
+    s0.append([f'{mid} {name} — 보완대상목록 (보완 적용 전 확인용)'])
+    s0['A1'].font = Font(bold=True, size=14)
+    s0.append([f'보완 범위 설정 repairScope = {scope}  (tools/Harness/harness.json · Vibe_Manager 설정에서 변경)'])
+    s0.append(['DB_ONLY: DB 객체·메타만 적용, 화면 FE 는 가이드 / DB_FE: 화면 FE 까지 적용 / 공통 컴포넌트는 항상 가이드만'])
+    s0.append([])
+    s0.append(['보완 계층', '건수', '적용 예정', '범위 밖(가이드)', '사람판정'])
+    for lay in ('DB_META', 'DB_OBJECT', 'FE', 'COMMON', 'HUMAN'):
+        sub = [f for f in fx if f['layer'] == lay]
+        s0.append([LAYER_NAME[lay], len(sub), sum(f['apply'] == '적용 예정' for f in sub), sum(f['apply'].startswith('범위 밖') for f in sub), sum(f['apply'] == '사람판정 대기' for f in sub)])
+    s0.append(['합계', len(fx)])
+    s0.append([])
+    s0.append(['유형', '건수'])
+    for k, v in sorted(Counter(f['family'] for f in fx).items()):
+        s0.append([k, v])
+    for row in s0.iter_rows(min_row=5, max_row=5):
+        for c in row:
+            c.fill, c.font = HFILL, Font(bold=True)
+    for i, w in enumerate([20, 8, 12, 16, 10], 1):
+        s0.column_dimensions[get_column_letter(i)].width = w
+    write_sheet(wb2, '보완 대상 전체', FH, [to_row(i, f) for i, f in enumerate(fx, 1)], FW)
+    write_sheet(wb2, 'DB 적용분', FH, [to_row(i, f) for i, f in enumerate([f for f in fx if f['layer'] in ('DB_META', 'DB_OBJECT')], 1)], FW)
+    write_sheet(wb2, 'FE 적용분', FH, [to_row(i, f) for i, f in enumerate([f for f in fx if f['layer'] == 'FE'], 1)], FW)
+    write_sheet(wb2, '공통 컴포넌트 가이드', FH, [to_row(i, f) for i, f in enumerate([f for f in fx if f['layer'] == 'COMMON'], 1)], FW)
+    write_sheet(wb2, '사람판정', FH, [to_row(i, f) for i, f in enumerate([f for f in fx if f['layer'] == 'HUMAN'], 1)], FW)
+    p2, n2 = next_path(mid, name, '보완대상')
+    wb2.save(p2)
+    fl = P('Doc', 'verify', mid, 'fixlist.csv')
+    with open(fl, 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=list(fx[0].keys()) if fx else ['fix_id'])
+        w.writeheader()
+        w.writerows(fx)
+    print(f'정합검증서 v{n1}: {p1}')
+    print(f'  결과 ' + ' · '.join(f'{k} {v}' for k, v in sorted(cnt.items())) + f' · 결함 원장 {len(dref)}건 중 FAIL {len(dfail)}')
+    print(f'보완대상 v{n2}: {p2} (설정 {scope})')
+    print('  ' + ' · '.join(f"{LAYER_NAME[k]} {v}" for k, v in Counter(f['layer'] for f in fx).items()) + f' · 기계용 {fl}')
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

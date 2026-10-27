@@ -53,6 +53,7 @@ const initState: State = {
     plantId: 'ALL', // PlantByGroup_SCP 기본 ALL
     itemId: '',
     itemType: 'ALL', // Item Type 기본 ALL
+    profitCenter: 'ALL', // Profit Center 기본 ALL
     devaluationAge: false, // 재고월령 컬럼 기본 숨김
   },
   filters: {},
@@ -87,8 +88,9 @@ export const useEndingInventoryStore = createPersistedStoreWithTab<State & Actio
         state.searchParams = next;
       }),
     // F6 개인화 조회조건 복원(SubTitle personalizeCondition 저장분 되불러오기 — 탭 수명 내 1회).
-    //   저장분 없으면 기본값 유지. 저장은 값을 평문화(String coerce)하는데 SCP0085 조회조건
-    //   (mode/month/date/divisionId/plantId/itemId/itemType)은 문자열이라 그대로, devaluationAge 만 boolean 으로 되돌린다
+    //   저장분 없으면 기본값 유지. 날짜(month/date)는 저장 제외라(page 가 searchParam 에서 빼서 넘김,
+    //   사용자 결정 2026-10-21) 복원 대상에도 없음 → month/date 는 항상 기본값(당월/오늘) 유지.
+    //   나머지(mode/divisionId/plantId/itemId/itemType/profitCenter)는 문자열 그대로, devaluationAge 만 boolean 으로 되돌린다
     //   (divisionId/plantId 는 콤마 다중이지만 store 표현이 이미 콤마 문자열). setSearchParams 를 거치면
     //   divisionId 복원이 plantId 를 ALL 로 리셋하므로 여기서는 searchParams 를 직접 merge 한다(cascade 우회).
     restoreSearchParams: async () => {
@@ -124,8 +126,9 @@ export const useEndingInventoryStore = createPersistedStoreWithTab<State & Actio
           divisionId: c.divisionId, // p_division_id
           plantId: c.plantId, // p_plant_id
           itemId: c.itemId, // p_item_id
-          // p_item_type — SP 는 'ALL' 을 코드로 비교해 0행이 되므로 전체(ALL)는 빈값(NULL=조건 없음)으로 보낸다.
+          // p_item_type / p_profit_center — SP 는 'ALL' 을 코드로 비교해 0행이 되므로 전체(ALL)는 빈값(조건 없음)으로 보낸다.
           itemType: c.itemType === 'ALL' ? '' : c.itemType,
+          profitCenter: c.profitCenter === 'ALL' ? '' : c.profitCenter,
           debugMode: 'F', // debug_mode
         };
         state.filters =

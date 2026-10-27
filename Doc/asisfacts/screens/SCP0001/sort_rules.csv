@@ -1,0 +1,9 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0001,SQL,SCP0001_GET_LOCATION_OSP,Doc\asisfacts\db\modules\dbo.SCP0001_GET_LOCATION_OSP.sql,37,,"DIVISION_ID,PLANT_ID,SCM_SITE_ID","ORDER BY A.division_id, A.plant_id, A.scm_site_id",0,정적
+SCP0001,SQL,SCP0001_GET_PLANT_SITE,Doc\asisfacts\db\modules\dbo.SCP0001_GET_PLANT_SITE.sql,99,,"DIVISION_NAME,PLANT_ID,SCM_SITE_ID","ORDER BY A.division_name, A.plant_id, A.scm_site_id",0,정적
+SCP0001,SQL,SCP0001_GET_LOCATION,Doc\asisfacts\db\modules\dbo.SCP0001_GET_LOCATION.sql,52,,"DISPLAY_SEQ,LOCATION_CODE,FACTORY_ID,OPERATION_ID","ORDER BY LMD.DISPLAY_SEQ, l.location_code, l.factory_id, l.operation_id",0,정적
+SCP0001,SQL,DM0004_GET_SALES_SITE_CUSTOMER_DATA,Doc\asisfacts\db\modules\dbo.DM0004_GET_SALES_SITE_CUSTOMER_DATA.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0001,SQL,SCP0001_SAVE_PLANT_SITE,Doc\asisfacts\db\modules\dbo.SCP0001_SAVE_PLANT_SITE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0001,SQL,SCP0001_SAVE_LOCATION,Doc\asisfacts\db\modules\dbo.SCP0001_SAVE_LOCATION.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0001,SQL,SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA,Doc\asisfacts\db\modules\dbo.SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0001,SQL,SCP0001_SAVE_LOCATION_OSP,Doc\asisfacts\db\modules\dbo.SCP0001_SAVE_LOCATION_OSP.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

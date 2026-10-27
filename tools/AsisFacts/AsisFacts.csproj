@@ -20,5 +20,6 @@
   <ItemGroup>
     <Compile Remove="tests/**;out/**" />
     <None Include="asisfacts.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="actions_dict.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

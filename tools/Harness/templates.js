@@ -25,6 +25,8 @@ ${[...new Set(c.divisionCols.map(d => d.split('_')[0]))].filter(d => /^\d+$|^[A-
 ` : ''}`;
 }
 
+// 조회조건 기준표 표지(lib/searchcond — 게이트 SC1 이 Doc/gen/<ID>/search_cond.json 과 대조)
+const scTag = f => f.sc && f.sc.row ? ` · 기준표 #${f.sc.order} '${f.sc.row.tobe_name}'${f.asisLabel ? ` (AS-IS '${f.asisLabel}')` : ''}` : f.sc ? ' · 기준표에 없음' : '';
 // 조회조건 종류 판정 — store/form 공용
 const kindOfField = f => f.cat ? f.cat.kind : f.kindHint ? f.kindHint : (f.r.tobe_component === 'Checkbox' ? 'check' : (f.r.tobe_component === 'CustomDropdown' && /multiple/.test(f.r.props_template)) ? 'multi' : f.r.tobe_component === 'PeriodField' ? 'period' : 'single');
 // division 필수 카탈로그 필드(ItemField/ProjectField/OwnerField 는 division: string 필수)
@@ -334,12 +336,13 @@ function form(c) {
   const catalogImports = new Set(c.fields.filter(f => f.cat).map(f => f.cat.field));
   const imports = new Set(plain.length ? ['FormItem'] : []);
   for (const f of plain) if (['InputField', 'Checkbox', 'TextField', 'RadioGroup', 'Radio'].includes(f.r.tobe_component)) imports.add(f.r.tobe_component);
+  if (plain.some(f => f.r.tobe_component === 'RadioGroup')) imports.add('Radio');  // 선택지 <Radio labelText> (hook #154 v2)
   const sharedImports = new Set(['SearchArea']);
   for (const f of plain) if (['CustomDropdown', 'DatePickerCalendar', 'FunctionSearchIcon'].includes(f.r.tobe_component)) sharedImports.add(f.r.tobe_component);
   if (plain.some(f => f.popup)) sharedImports.add('FunctionSearchIcon');
   if (plain.some(f => f.r.tobe_component === 'PeriodField')) catalogImports.add('PeriodField');
   const catalog = f => {
-    const asis = `{/* AS-IS ${f.c.name} / ${f.c.type.split('.').pop()} (${f.c.file.split('\\').pop()}:${f.c.line})${f.popup ? ` + ${f.popup.c.name} 팝업(필드 내장)` : ''} — 카탈로그 ${f.cat.field}${f.cat.combo_id ? ' · 콤보 ' + f.cat.combo_id : ''} */}`;
+    const asis = `{/* AS-IS ${f.c.name} / ${f.c.type.split('.').pop()} (${f.c.file.split('\\').pop()}:${f.c.line})${f.popup ? ` + ${f.popup.c.name} 팝업(필드 내장)` : ''} — 카탈로그 ${f.cat.field}${f.cat.combo_id ? ' · 콤보 ' + f.cat.combo_id : ''}${scTag(f)} */}`;
     switch (f.cat.kind) {
       case 'period': return `          ${asis}
           <PeriodField
@@ -365,7 +368,7 @@ function form(c) {
   const field = f => {
     if (f.cat) return catalog(f);
     const v = `searchParams.${f.key}`, set = `setSearchParams({ ${f.key}: __V__ })`;
-    const asis = `{/* AS-IS ${f.c.name} / ${f.c.type.split('.').pop()} (${f.c.file.split('\\').pop()}:${f.c.line})${f.popup ? ` + ${f.popup.c.name} 팝업 → ${f.popup.b.modal}` : ''} */}`;
+    const asis = `{/* AS-IS ${f.c.name} / ${f.c.type.split('.').pop()} (${f.c.file.split('\\').pop()}:${f.c.line})${f.popup ? ` + ${f.popup.c.name} 팝업 → ${f.popup.b.modal}` : ''}${scTag(f)} */}`;
     let inner;
     switch (f.r.tobe_component) {
       case 'CustomDropdown': { const multi = /multiple/.test(f.r.props_template); inner = multi ? `<CustomDropdown
@@ -386,8 +389,13 @@ function form(c) {
       case 'PeriodField': return `          ${asis}
           <PeriodField start={searchParams.${f.key}From} end={searchParams.${f.key}To} onChange={(start, end) => setSearchParams({ ${f.key}From: start, ${f.key}To: end })} gridSize={3} />`;
       case 'DatePickerCalendar': inner = `<DatePickerCalendar ${f.r.props_template} value={${v}} onChange={value => ${set.replace('__V__', 'value')}} />`; break;
-      case 'Checkbox': inner = `<Checkbox checked={${v}} onChange={checked => ${set.replace('__V__', 'checked')}} />`; break;
-      case 'RadioGroup': inner = `<RadioGroup value={${v}} onChange={event => ${set.replace('__V__', 'event.target.value')}}>{/* TODO(이식): As-is 라디오 항목 */}</RadioGroup>`; break;
+      // hook #154 v2(2026-10-23): 조건명 = FormItem 좌측 라벨 · Checkbox 박스만(labelText 금지)·조건마다 1칸 · Radio 그룹명 라벨 + 선택지 가로 (정본 GlobalPsiReportForm checkbox()/radio())
+      case 'Checkbox': inner = `<div className={commonStyles.customCheckbox}>
+                  <Checkbox checked={${v}} onChange={checked => ${set.replace('__V__', 'checked')}} />
+                </div>`; break;
+      case 'RadioGroup': inner = `<RadioGroup row value={${v}} onChange={(_, value) => ${set.replace('__V__', "String(value ?? '')")}}>
+                  {/* TODO(이식): As-is 라디오 항목 → <Radio value='코드' labelText={t('LBL…', '선택지')} /> (선택지 글자는 원 오른쪽 · 그룹명은 FormItem label) */}
+                </RadioGroup>`; break;
       case 'TextField': inner = `<TextField ${f.r.props_template} value={${v}} onChange={event => ${set.replace('__V__', 'event.target.value')}} />`; break;
       default: inner = `<InputField
                   fullWidth
@@ -396,7 +404,7 @@ function form(c) {
                   slotProps={{ input: { endAdornment: <FunctionSearchIcon onClick={() => setOpen${f.popup.modalName}Modal(true)} /> } }}` : ''}
                 />`;
     }
-    return `          <Grid size={3}>
+    return `          <Grid size={3}${f.r.tobe_component === 'Checkbox' ? ' className={commonStyles.customGrid}' : ''}>
             ${asis}
             <FormItem
               label={t('${f.lbl || 'LBL?????'}', '_${f.label}')}
@@ -718,9 +726,24 @@ As-is grid_mode: ${c.idx.grid_mode || '?'} · 시트 ${c.mainSheets.length} (+�
 7. 검증/표현식: hooks/use${c.Page}Validation.ts V-마커 ${c.validations.filter(v => !v.popup).length}건(+팝업 ${c.validations.filter(v => v.popup).length}) · use${c.Page}Expression.ts E-마커 ${c.expressions.filter(v => !v.popup).length}건 — apply 본문 채우기 (마커 수 = validation.md 행 수, 게이트 V01)
 8. register.json → P_REGISTER_SCREEN (클라우드) → \`pnpm gen:procedures\` → procedures.d.ts 반영 후 타입 느슨 구간 제거
 9. 동적 헤더(기간 컬럼): ${(c.titleSheets || []).length ? c.titleSheets.map(t => `${t.sp}(As-is ${t.members.join('/')}) → 시트 '${t.name}'${t.corpProc ? ` = 사내 ${t.corpProc}` : t.via === 'family' ? ' — 같은 화면 타이틀 계열 사내 시트(인자 대조 필요)' : ' — 사내 배선 없음: DB 메타 등록 먼저'}`).join(' · ') + `${(c.titleLoops || []).length ? ` · As-is DB루프 ${c.titleLoops.slice(0, 3).join(', ')}` : ''} — 조회기간으로 타이틀 시트를 **반드시 조회**하고 o_rc1(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)로 헤더를 만든다. 응답 키는 proc_params.csv OUT COL_NM 만(o_rc1_columns 금지 — SYS0013 전용). 게이트 B26·B27` : '없음'}
-
+10. 메시지 ID: AS-IS ID 를 그대로 쓰지 않는다(같은 ID 가 TO-BE 에서 다른 문구) — 문구로 찾은 TO-BE ID 를 쓴다(Doc/gen/${c.ID}/msg_map.json). ${(c.msgMap || []).length ? (c.msgMap || []).map(r => `${r.asis}→${r.tobe}`).join(', ') : '해당 없음'}${(c.msgMap || []).some(r => r.tobe === 'MSG?????') ? ` — **MSG????? ${(c.msgMap || []).filter(r => r.tobe === 'MSG?????').length}건은 TO-BE 에 같은 문구가 없음**: msg_master 에 신규 등록(MSG01001+ 채번, KO/EN/CN) 후 그 코드로 기입` : ''}. 이벤트·SP 결과 메시지 등 검증 표 밖에서 쓰는 AS-IS MSG 도 같은 방법으로 찾는다
+${c.valRef ? `11. VALIDATION 취합 대조(SCP·SSP — 2026-10-23): ${c.valRefSummary}. 차단 시트의 이 화면 행 = 검증 이식 체크리스트(validation.md 와 합집합) — 미적용 행 이식 · [메시지 불일치]/[메시지 미등록] 행은 '(참고) 메시지 의미 대조' 의 같은 의미 ID 로 · [판정 결과 차이] 행은 '[적용 TAG 사유]' 확인 · [AS-IS 결함 교정] 은 되돌리지 않음 · DB 행은 PKG 이식(port_pkg.md 3-2). 판정 기준 = ${c.valRef.full} "작성기준" (prompts/new_screen.md 6-2, 게이트 VR1·VR2)
+` : ''}${c.scRes ? `12. 조회조건 기준표(SCP·SSP — 2026-10-23, 참고자료 tools/VibeManager/rules/40_SEARCH_COND.md \`#### ${c.ID}\`): ${c.scSummary}. 순서는 ${c.scRes.ref.domain === 'SCP' ? '정렬원칙 RULE' : '시트 확정 순서'}로 **이미 재배치됨** — 손으로 바꾸지 말 것(게이트 SC1)
+${c.scRes.matched.filter(x => x.f.asisLabel).map(x => `   - 명칭 변경: '${x.f.asisLabel}' → '${x.f.label}'${x.f.cat ? ` (카탈로그 ${x.f.cat.field} 내장 라벨 — 다르면 label prop 확인)` : x.f.lbl ? ` (${x.f.lbl})` : ' (LBL????? — 기존 코드 재사용·없으면 신규 채번)'}`).join('\n')}${c.scRes.matched.filter(x => x.r.tobe_type2 && x.r.asis_type2 && x.r.tobe_type2 !== x.r.asis_type2 || x.r.tobe_popup_code && x.r.tobe_popup_code !== x.r.asis_popup_code || x.r.tobe_note === 'ALL버튼' || x.r.div_reset === 'N').map(x => `
+   - ${x.f.label}: ${[x.r.tobe_type2 !== x.r.asis_type2 && x.r.tobe_type2 ? `유형 ${x.r.asis_type2 || '?'}→${x.r.tobe_type2}` : '', x.r.tobe_popup_code && x.r.tobe_popup_code !== x.r.asis_popup_code ? `팝업 ${x.r.asis_popup_code || '-'}→${x.r.tobe_popup_code}` : '', x.r.tobe_note === 'ALL버튼' ? 'ALL 버튼(다중)' : '', x.r.div_reset === 'N' ? 'Div. 변경 시 값 유지' : ''].filter(Boolean).join(' · ')}`).join('')}
+${c.scRes.excluded.map(x => `   - 제외: ${x.f.c.name} '${x.f.asisLabel || x.f.label}' — ${x.r.usage} ${x.r.usage_reason || x.r.change}${x.r.usage === 'BUTTON_AREA' ? (/Bulk Update/i.test(`${x.r.review} ${x.r.change}`) ? ' → **hook #155 일괄 입력 팝업**: SubTitle customButtons [t(LBL.INPUT, \'_Input\')] + components/<Page>InputModal.tsx (정본 SCP0096 shipment-working-day-osp · EditTracker 경유 셀 기록 · 저장은 Save · 게이트 BU1)' : ' → 버튼 영역(화면/공통 버튼)으로 이식') : ''}`).join('\n')}
+${c.scRes.merged.filter(x => !x.into).map(x => `   - 통합: ${x.f.c.name} '${x.f.label}' → '${x.r.tobe_name}' (SP 인자는 통합 필드 값으로 — PKG 인자 대조)`).join('\n')}
+${c.scRes.combined.map(x => `   - TODO(이식) 합침: ${x.ctls.join(' + ')} → '${x.r.tobe_name}' 하나(${x.r.tobe_type1}/${x.r.tobe_type2}${x.r.tobe_note ? ' ' + x.r.tobe_note : ''}) — 생성본은 대표 필드 ${x.ctls[0]} 의 AS-IS 컴포넌트 그대로이므로 To-Be 유형으로 바꾸고, 선택값 → SP 인자(${x.ctls.join('/')}) 분해 매핑`).join('\n')}
+${c.scRes.hold.map(x => `   - 검토중(AS-IS 그대로 생성): ${x.f.c.name} '${x.f.label}' — ${x.r.usage} ${x.r.change}${x.r.review ? ' · ' + x.r.review : ''}`).join('\n')}
+${c.scRes.unmatched.map(f => `   - 기준표에 없음(AS-IS 상대 위치 유지): ${f.c.name} '${f.label}' — 기준표 담당 확인`).join('\n')}
+${c.scRes.missing.map(r => `   - AS-IS 컨트롤 없음: '${r.tobe_name}' (${r.tobe_type1}/${r.tobe_type2} ${r.tobe_func}) ${r.change || ''} ${r.review || ''} — 신규 추가 검토(사람 판단, 임의 추가 금지)`).join('\n')}${c.scRes.planVersion ? `
+   - To-Do 3(검토 과제): Plan Date/Plan Type/Seq. 세트 화면 — 'Plan Version' 콤보 1개 통합 검토 대상(확정 전이므로 3개 그대로)` : ''}
+`.replace(/\n\s*\n/g, '\n') : ''}
+${(() => { const tg = c.fields.filter(f => !f.cat && /^(Checkbox|RadioGroup)$/.test(f.r.tobe_component)); return tg.length ? `13. 조회조건 Checkbox/Radio 디자인(hook #154 v2 — 2026-10-23): 조건명 = FormItem 좌측 라벨 · Checkbox 박스만(labelText 금지)·조건마다 Grid 칸 1개 · Radio 그룹명 라벨 + <Radio labelText> 선택지 가로. 정본 supply/global-psi-report GlobalPsiReportForm checkbox()/radio() · 게이트 H03
+${tg.map(f => `   - ${f.c.name}(${f.r.tobe_component}) 라벨 '${f.label}'${f.sc && f.sc.row ? ' — 기준표 명칭' : f.labelSrc === 'designer' ? ' — AS-IS 레이아웃 라벨' : ' — **컨트롤 이름에서 만든 라벨: 조건명/그룹명 확인 필요**(기준표 → AS-IS 레이아웃 라벨 → AS-IS 글자, 없으면 사람 확인 · 임의 작명 금지)'}${f.r.tobe_component === 'RadioGroup' ? ' · 선택지 <Radio> 채우기(AS-IS 항목 순서·문구)' : ''}`).join('\n')}
+` : ''; })()}
 ## 사전에 없던 것 (룰 보완 후보 — rules/*.csv 에 추가)
-${c.todos.map(t => `- ${t.c.name} / ${t.c.type.split('.').pop()} : ${t.r.note}`).join('\n') || '- 없음'}
+${c.todos.filter(t => !/hook #155/.test(t.r.note || '')).map(t => `- ${t.c.name} / ${t.c.type.split('.').pop()} : ${t.r.note}`).join('\n') || '- 없음'}
 ${c.handlers.filter(h => /사전 없음/.test(h.r.tobe_pattern)).map(h => `- 이벤트 ${h.e.target}.${h.e.event} : map_event.csv 추가`).join('\n')}
 `;
 }
@@ -728,7 +751,7 @@ ${c.handlers.filter(h => /사전 없음/.test(h.r.tobe_pattern)).map(h => `- 이
 
 function validationHook(c) {
   const main = c.validations.filter(v => !v.popup), pop = c.validations.filter(v => v.popup);
-  const row = v => `  // V-${String(v.no).padStart(3, '0')} [${v.category}${v.kind ? '/' + v.kind : ''}] L${v.line}${v.handler ? ' ' + v.handler : ''}${v.msg ? ' ' + v.msg : ''}${v.column ? ' col=' + v.column : ''}
+  const row = v => `  // V-${String(v.no).padStart(3, '0')} [${v.category}${v.kind ? '/' + v.kind : ''}] L${v.line}${v.handler ? ' ' + v.handler : ''}${v.msg ? ' ' + (v.asisMsg && v.asisMsg !== v.msg ? `${v.msg}(AS-IS ${v.asisMsg} — ${v.msgHow})` : v.msg) : ''}${v.column ? ' col=' + v.column : ''}
   //   As-is: ${(v.cond || '').replace(/\*\//g, '* /').slice(0, 140)} → ${v.action}${v.msgText ? ' "' + v.msgText.slice(0, 60) + '"' : ''}
   { id: 'V-${String(v.no).padStart(3, '0')}', asisLine: ${Number(v.line) || 0}, msg: ${v.msg ? `'${v.msg}'` : 'undefined'}, apply: () => { /* TODO(이식): ${v.category} — ${v.action} */ } },`;
   return `${H(c, '// As-is Validation 100% 적용 (룰 09) — Doc/_analysis/.../' + (main[0] ? main[0].src : ID_src(c)) + '/validation.md ' + main.length + '건' + (pop.length ? ' + 팝업 ' + pop.length + '건(모달에서 구현)' : '') + '.\n//   V-nnn 마커는 게이트(check.js V01)가 센다 — 삭제·병합 금지. 적용이 끝나면 apply 본문을 채우고 마커는 유지.')}
@@ -737,7 +760,7 @@ import { useCallback } from 'react';
 export interface AsisValidationRule {
   id: string;        // V-nnn (validation.md #)
   asisLine: number;  // As-is .cs 줄
-  msg?: string;      // MSG 코드 → t('msg.MSGxxxxx')
+  msg?: string;      // TO-BE MSG 코드(AS-IS ID 를 문구로 재매핑 — Doc/gen/<ID>/msg_map.json). MSG????? = TO-BE 에 같은 문구 없음 → 신규 등록 후 기입
   apply: () => void; // TODO(이식): 조건·차단 로직
 }
 

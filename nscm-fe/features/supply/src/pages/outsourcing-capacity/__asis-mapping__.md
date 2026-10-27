@@ -22,7 +22,8 @@ TO-BE: `features/supply/src/pages/outsourcing-capacity/`. 설계: `.atlas/gscm-d
 | LockColumn(1,max) 조회후 전체 lock (뷰) | 상시편집 + 셀 화이트리스트(daily_capa_qty만) | NSCM 표준(tact-time), 뷰/편집 토글 subsumed |
 | SwitchLock EditButton (편집 진입) | (미노출) 상시편집 | daily_capa_qty 외 전부 잠금이라 뷰모드와 동치 |
 | LockColumn(0,nick_name)+(created_by,last_update_date) 편집시 lock | isCellEditable = daily_capa_qty only + INPUT_TP_CD 'S' | 식별·감사셀 잠금 |
-| CheckDigitValueEntered (Daily<1→1, MSG00085) | coerceDailyCapa (정수 min1) + cellEditEnded/pastedCell | MSG00085 |
+| CheckDigitValueEntered (Daily<1→1, MSG00085) | coerceDailyCapa (정수 min1) + cellEditEnded/pastedCell | MSG00085. (2026-10-14) binding 대소문자 불일치로 핸들러 미발동 버그 수정 — 'daily_capa_qty'→'DAILY_CAPA_QTY' |
+| (AS-IS 없음) | coerceDailyCapa max8자리(99,999,999) clamp, 알림 없음 | TO-BE 보강 — distribution-route clampIntRange 선례, DB DATA_MAX_LENGTH 미등록 fallback |
 | SaveData (action I/M/D, daily_capa_qty·valid_yn) | CRUD_TYPE dirty + saveWithValidation + useProcMutation | created_by/updated_by 스칼라 |
 | checkValidN (Plant Total 필수, MSG00258) | validateMainRows Total 검증 (MSG00258 영문 fallback) | |
 | SaveButton 확인(MSG00012)→성공(MSG00020)→재조회 | handleSave confirm(MSG00617)→mutate→react-query refetch | tran.Success = useProcMutation false-success 처리 |

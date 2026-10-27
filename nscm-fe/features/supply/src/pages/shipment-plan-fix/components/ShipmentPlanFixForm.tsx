@@ -194,7 +194,8 @@ export const ShipmentPlanFixForm = ({ onSearch, onItemSearch }: Props) => {
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' onClick={onItemSearch} />}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
@@ -214,12 +215,6 @@ export const ShipmentPlanFixForm = ({ onSearch, onItemSearch }: Props) => {
             //   setDivision 이 electrodeTypes 를 비우므로 값 잔존이 없고, 여기선 비활성만 재현한다.
             !isEe
           )}
-          {single(
-            t(LBL.BUCKET, '_Bucket'),
-            sc.bucket,
-            bucketOptions,
-            v => set({ bucket: v as BUCKET_TYPE })
-          )}
           {/* 기간 — 공용 PeriodRangePicker(2개월 달력 팝업 + W26/W52 프리셋 내장). 값 형식 YYYYMMDD. */}
           <Grid size={3}>
             <PeriodRangePicker
@@ -231,6 +226,12 @@ export const ShipmentPlanFixForm = ({ onSearch, onItemSearch }: Props) => {
               className={commonStyles.formItem}
             />
           </Grid>
+          {single(
+            t(LBL.BUCKET, '_Bucket'),
+            sc.bucket,
+            bucketOptions,
+            v => set({ bucket: v as BUCKET_TYPE })
+          )}
           {/* SUM 체크박스 — W_/M_ SUM 롤업 컬럼 가시성 토글(design 03 §2.6, 재조회 없음).
               FormItem 라벨 컬럼(140px)에 라벨을 올려 다른 필드와 동일한 간격 확보 —
               바로 앞 Period 와 붙어 보이던 문제 해소(자매 ShipmentPsiForm Sum 과 동형). */}

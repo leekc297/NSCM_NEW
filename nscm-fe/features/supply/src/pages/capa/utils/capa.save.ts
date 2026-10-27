@@ -6,7 +6,7 @@ import type { CapaRow } from '../capa.types';
 /**
  * P_SAVE_CAPA 저장 payload(03 §4.3 — AS-IS SaveData_Main cs:943~1260 1:1).
  * 저장 단위 = dirty 셀 1건 = 배열 1원소. 17 IN 을 '^' bulk 로 연결(SAVE SP 분해자, 조회 콤마와 다름).
- * dirty = 행 CRUD_TYPE(EditTracker) ∈ I/M/D ∧ 변경 셀(LANE_QTY/CONFIRM_FLAG/기간 D_/M_/Y_) ∧ 비공백 ∧ col≠REQUEST_CHK.
+ * dirty = 행 CRUD_TYPE(EditTracker) ∈ I/M/D ∧ 변경 셀(LANE_QTY/CONFIRM_FLAG/기간 D_/M_/Y_) ∧ 비공백(YIELD D_ 빈 값은 0) ∧ col≠REQUEST_CHK.
  * confirmFlag = 'True'→'Y' 변환(cs:1162), dataTable = 축약(C/L/LA/T/Y), 저장 성공 후 재조회 없음(dirty 리셋만).
  */
 export interface CapaSaveElem {
@@ -38,6 +38,16 @@ const str = (v: unknown): string =>
 
 const periodKind = (b: string): 'D' | 'M' | 'Y' | null =>
   /^D_\d{8}$/.test(b) ? 'D' : /^M_\d{6}$/.test(b) ? 'M' : /^Y_\d{4}$/.test(b) ? 'Y' : null;
+
+/**
+ * 저장·검증 공용 셀 값 — 콤마 제거 후, YIELD 행 D_ 칸이 빈 값이면 '0' 으로 보정한다
+ * (cs:2215-2220 [E20240927-001617] Daily Yield 삭제 기능 — 검사 cs:2327 보다 먼저 적용).
+ */
+const cellQty = (row: CapaRow, binding: string): string => {
+  const raw = str(row[binding]).replace(/,/g, '').trim();
+  if (raw === '' && str(row.CATEGORY_ID) === 'YIELD' && binding.startsWith('D_')) return '0';
+  return raw;
+};
 
 const keyOf = (
   row: CapaRow,
@@ -87,8 +97,10 @@ export const buildSaveElems = (
       }
       const kind = periodKind(binding);
       if (!kind) continue; // 기간 셀만 저장 대상
-      if (raw === '') continue;
-      elems.push({ ...base, dataType: kind, dayName: binding.replace(/^[DMY]_/, ''), dayQty: raw });
+      // 변경 셀 중 빈 값은 건너뜀 — 단 YIELD 행 D_ 빈 값은 0 으로 저장(cs:2215-2223).
+      const qty = cellQty(row, binding);
+      if (qty === '') continue;
+      elems.push({ ...base, dataType: kind, dayName: binding.replace(/^[DMY]_/, ''), dayQty: qty });
     }
   }
   return elems;
@@ -98,7 +110,7 @@ export const buildSaveElems = (
  * 저장 전 셀 값검증(03 §3.1·§5-5 — GAP-01). 실패 시 첫 위반 1건 반환(null=통과).
  *   - E2000 공정 LINE ASSIGN 행 LANE_QTY 공백 → MSG00337 (cs:1020~1025)
  *   - LINE ASSIGN(LA001) 행 dirty priority(기간) 셀: 정수 아님 → MSG00107 / 1~9 범위 밖 → MSG00203
- *   - YIELD(LA003) 행 dirty 셀: ≤1 → MSG00193 / >100 → MSG00072
+ *   - YIELD(LA003) 행 dirty 셀: 0 초과 1 이하 → MSG00193 / >100 → MSG00072 (0 허용)
  * MSG00107 만 TO-BE 실재(재사용), 나머지는 t() fallback(convert-core §2.3 — 임의 INSERT 금지).
  */
 export interface CapaSaveViolation {
@@ -140,7 +152,7 @@ export const validateSave = (
     }
     for (const binding of Object.keys(bindings)) {
       if (binding === 'REQUEST_CHK' || !periodKindV(binding)) continue;
-      const raw = str(row[binding]).replace(/,/g, '').trim();
+      const raw = cellQty(row, binding); // YIELD D_ 빈 값 → '0' 보정 후 검사(cs:2215 → cs:2327 순서)
       if (raw === '') continue;
       const val = Number(raw);
       if (!Number.isFinite(val)) continue;
@@ -150,10 +162,11 @@ export const validateSave = (
         if (val < 1 || val > 9)
           return { code: MSG.PRIORITY_RANGE, fallback: '_Enter a number between {0} and {1}.', args: ['1', '9'], binding, row };
       } else if (loss === 'LA003') {
-        if (val <= 1)
-          return { code: MSG.YIELD_MIN, fallback: '_Only values greater than {1} can be entered.', args: ['', '1'], binding, row };
+        // 0 < 값 ≤ 1 만 차단 — 0 은 일 Yield 삭제값이라 허용(cs:2333-2334). 인자는 AS-IS 그대로 "Yield : 1"/"Yield : 100".
+        if (val > 0 && val <= 1)
+          return { code: MSG.YIELD_MIN, fallback: '_Only values greater than {0} can be entered.', args: ['Yield : 1'], binding, row };
         if (val > 100)
-          return { code: MSG.YIELD_MAX, fallback: '_Only values less than or equal to {0}.', args: ['100'], binding, row };
+          return { code: MSG.YIELD_MAX, fallback: '_Only values less than or equal to {0}.', args: ['Yield : 100'], binding, row };
       }
     }
   }

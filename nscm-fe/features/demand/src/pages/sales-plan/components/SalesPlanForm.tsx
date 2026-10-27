@@ -5,7 +5,6 @@ import {
   ProjectField,
   buildComboOptions,
 } from 'features/master/src/components';
-import type { KeyboardEvent } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -25,8 +24,6 @@ import {
   resolveSalesSiteDeptIds,
 } from '../utils/sales-plan.searchCombos';
 import type { useSalesPlanValidation } from '../utils/sales-plan.validate';
-
-import styles from './SalesPlanForm.module.scss';
 
 interface SalesPlanFormProps {
   onSearch: () => void;
@@ -237,34 +234,6 @@ export const SalesPlanForm = ({
       .split(',')
       .filter(Boolean);
 
-  // Project / Model(Nickname) 입력창에서 Enter를 누르면 기존 검색 버튼과 동일하게 모달을 연다.
-  // 검색 버튼의 기존 click 로직을 재사용하므로 입력 중인 값도 그대로 모달 검색조건에 전달된다.
-  const openFieldModalOnEnter = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== 'Enter' || event.nativeEvent.isComposing) return;
-    if (!(event.target instanceof HTMLInputElement)) return;
-
-    const searchButton = event.currentTarget.querySelector<HTMLButtonElement>(
-      'button[aria-label*="search" i], button[title*="search" i], ' +
-        'button[aria-label*="조회"], button[title*="조회"]'
-    );
-    const searchIconButton = event.currentTarget
-      .querySelector<SVGElement>(
-        'svg[data-testid="SearchIcon"], svg[data-testid="ManageSearchIcon"], ' +
-          'svg[data-testid="FindInPageIcon"]'
-      )
-      ?.closest('button') as HTMLButtonElement | null;
-    const buttons =
-      event.currentTarget.querySelectorAll<HTMLButtonElement>('button:not(:disabled)');
-    const fallbackButton = buttons.length > 0 ? buttons[buttons.length - 1] : null;
-    const modalOpenButton = searchButton ?? searchIconButton ?? fallbackButton;
-
-    if (!modalOpenButton) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-    modalOpenButton.click();
-  };
-
   return (
     <SearchArea
       isHidden={!openSearchArea}
@@ -313,33 +282,30 @@ export const SalesPlanForm = ({
               )}
             />
           </Grid>
-          {/* searchGrid — 칩 다중선택(Team)이 컬럼 min-content 폭을 밀어 옆 필드를 침범하는 것 방지 */}
-          <div className={styles.searchGrid}>
-            {multiField(
-              'LBL00044',
-              'Team',
-              sc.deptIds,
-              teamOptions,
-              v =>
-                set(
-                  {
-                    deptIds: v,
-                    endCustomers: [],
-                    scmSiteIds: [],
-                    plantSiteIds: [],
-                    bizTypes: [],
-                    projectCodes: [],
-                    itemIds: [],
-                    owners: [],
-                    itemTypes: [],
-                    bucketType: BUCKET_TYPE.MONTHLY,
-                    sumYn: false,
-                  },
-                  'team'
-                ),
-              { sortBy: 'label' }
-            )}
-          </div>
+          {multiField(
+            'LBL00044',
+            'Team',
+            sc.deptIds,
+            teamOptions,
+            v =>
+              set(
+                {
+                  deptIds: v,
+                  endCustomers: [],
+                  scmSiteIds: [],
+                  plantSiteIds: [],
+                  bizTypes: [],
+                  projectCodes: [],
+                  itemIds: [],
+                  owners: [],
+                  itemTypes: [],
+                  bucketType: BUCKET_TYPE.MONTHLY,
+                  sumYn: false,
+                },
+                'team'
+              ),
+            { sortBy: 'label' }
+          )}
           {/* 40 사업부는 이 칸의 실제 값이 Project Code 다 - FilterEndCustomerByDivision(#2)의
               40 분기가 PROJECT_CODE 를 CODE 로 쓴다(문서 §4-1). FilterSiteByEndCustomer(#4)의
               40 분기도 END_CUSTOMER 자리에 PROJECT_CODE 를 넣으므로 두 콤보는 맞물린다.
@@ -427,34 +393,30 @@ export const SalesPlanForm = ({
       extraConditions={
         <>
           {/* Row 3 (2단) — Project🔍(40 비활성) / Model🔍(Nickname) / Plant Site */}
-          <div style={{ display: 'contents' }} onKeyDownCapture={openFieldModalOnEnter}>
-            <ProjectField
-              gridSize={3}
-              value={sc.projectCodes}
-              onChange={v => set({ projectCodes: v })}
-              division={sc.divisionId}
-              deptIds={sc.deptIds}
-              endCustomers={sc.endCustomers}
-              scmSiteIds={sc.scmSiteIds}
-              projectCodes={sc.projectCodes}
-              disabled={div40}
-              multiCheckbox
-            />
-          </div>
-          <div style={{ display: 'contents' }} onKeyDownCapture={openFieldModalOnEnter}>
-            <ItemField
-              gridSize={3}
-              value={sc.itemIds}
-              onChange={v => set({ itemIds: v })}
-              division={sc.divisionId}
-              deptIds={sc.deptIds}
-              endCustomers={sc.endCustomers}
-              scmSiteIds={sc.scmSiteIds}
-              projectCodes={sc.projectCodes}
-              itemIds={sc.itemIds}
-              multiCheckbox
-            />
-          </div>
+          <ProjectField
+            gridSize={3}
+            value={sc.projectCodes}
+            onChange={v => set({ projectCodes: v })}
+            division={sc.divisionId}
+            deptIds={sc.deptIds}
+            endCustomers={sc.endCustomers}
+            scmSiteIds={sc.scmSiteIds}
+            projectCodes={sc.projectCodes}
+            disabled={div40}
+            multiCheckbox
+          />
+          <ItemField
+            gridSize={3}
+            value={sc.itemIds}
+            onChange={v => set({ itemIds: v })}
+            division={sc.divisionId}
+            deptIds={sc.deptIds}
+            endCustomers={sc.endCustomers}
+            scmSiteIds={sc.scmSiteIds}
+            projectCodes={sc.projectCodes}
+            itemIds={sc.itemIds}
+            multiCheckbox
+          />
           {/* Plant Site — 40 만 비활성이다 (AS-IS :5178 vs :5200. 82 는 활성).
               원천은 진입/Division 변경으로 갈린다 - 위 plantSiteOptions 주석 참조. */}
           {multiField(

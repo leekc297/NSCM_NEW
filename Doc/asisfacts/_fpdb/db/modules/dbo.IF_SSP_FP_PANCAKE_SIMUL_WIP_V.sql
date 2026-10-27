@@ -1,0 +1,411 @@
+﻿
+
+
+
+
+
+
+CREATE VIEW [dbo].[IF_SSP_FP_PANCAKE_SIMUL_WIP_V]
+-- ================================================================================================
+-- Program ID          : IF_SSP_FP_PANCAKE_SIMUL_WIP_V
+--
+-- Program Name        : IF_SSP_FP_PANCAKE_SIMUL_WIP_V
+-- Param               :
+-- Batch Period        : 
+-- Description         : SSP 제공용 Pancake Simulation 재공 View
+--
+-- Source System       : FP SDB
+-- Destination System  : SCP SDB
+-- Source Table        : SCM_STOCK_H
+-- Destination Table   : ITEM_ID : Pancake 품목. 계획 또는 필요
+--                       MODEL_ID : NPC_ITEM_ID 값 있는 경우 노칭 계획의 수요 Model, 없으면 전극 적용 모델
+--                       NPC_ITEM_ID : 노칭 계획 품목
+--                       BOH_QTY : Snapshot 재고
+--                       POST_BOH_QTY : 전극 후 공정 수율 감안한 재고
+--                       JR_BOH_QTY : Roll Press 전 재고
+--                       JR_AFTER_BOH_QTY : Roll Press된 재고
+--                       PC_BOH_QTY : Pancake으로 Slitting된 재고
+--                       HOLD_QTY : 보류 재고
+--                       JR_HOLD_QTY : Roll Press 전 보류 재고
+--                       JR_AFTER_HOLD_QTY : Roll Press된 보류 재고
+--                       PC_HOLD_QTY : Pancake으로 Slitting된 보류 재고
+--                       ROLL_BOH_QTY : Snapshot 재고. Pancake Meter 환산
+--                       ROLL_POST_BOH_QTY : 전극 후 공정 수율 감안한 재고. Pancake Meter 환산
+--                       ROLL_JR_BOH_QTY : Roll Press 전 재고. Pancake Meter 환산
+--                       ROLL_JR_AFTER_BOH_QTY : Roll Press된 재고. Pancake Meter 환산
+--                       ROLL_PC_BOH_QTY : Pancake으로 Slitting된 재고. Pancake Meter 환산
+--                       ROLL_HOLD_QTY : 보류 재고. Pancake Meter 환산
+--                       ROLL_JR_HOLD_QTY : Roll Press 전 보류 재고. Pancake Meter 환산
+--                       ROLL_JR_AFTER_HOLD_QTY : Roll Press된 보류 재고. Pancake Meter 환산
+--                       ROLL_PC_HOLD_QTY : Pancake으로 Slitting된 보류 재고. Pancake Meter 환산
+--                       CELL_BOH_QTY : Snapshot 재고. Cell 환산
+--                       CELL_POST_BOH_QTY : 전극 후 공정 수율 감안한 재고. Cell 환산
+--                       CELL_JR_BOH_QTY : Roll Press 전 재고. Cell 환산
+--                       CELL_JR_AFTER_BOH_QTY : Roll Press된 재고. Cell 환산
+--                       CELL_PC_BOH_QTY : Pancake으로 Slitting된 재고. Cell 환산
+--                       CELL_HOLD_QTY : 보류 재고. Cell 환산
+--                       CELL_JR_HOLD_QTY : Roll Press 전 보류 재고. Cell 환산
+--                       CELL_JR_AFTER_HOLD_QTY : Roll Press된 보류 재고. Cell 환산
+--                       CELL_PC_HOLD_QTY : Pancake으로 Slitting된 보류 재고. Cell 환산
+--                       LT : Coating 이후 노칭 투입 Lead Time. Cell 환산
+--    ORDER BY COMPANY_ID, DIVISION_ID, SITE_ID, MODEL_ID, ITEM_ID
+--           , FACTORY_ID
+--
+-- Create(Update) Date : 2020.05.26
+-- Author              : kimcd
+-- Version             : 2020-03-14 kimcd 최초 형성
+--                       2020-04-23 kimcd 소형사업부 정보 추가. Pancake Meter 환산 수량 추가
+--                                        노칭 품목 찾는 로직을 동 구분 없이 Plant 기준으로 찾도록 수정
+--                       2020-05-26 kimcd BOM 소요량 추출에서 Primary 품목인 경우만 추출
+--                       2024-03-15 chkim.68 하드코딩 전환 (ref scm_code_lookup_value )
+-- ================================================================================================
+AS
+      WITH CO_DATE AS ( SELECT P.COMPANY_ID, P.DIVISION_ID, P.SITE_ID, P.PLANT_ID, CONVERT(DATE,C.ATTRIBUTE1, 112) AS PLAN_START_DATE
+	                    FROM   SCM_PLANT_M P (NOLOCK)
+					          ,SCM_SYS_LOOKUP_VALUE S (NOLOCK)
+						      ,SCM_SYS_LOOKUP_VALUE C (NOLOCK)
+				        WHERE  P.PLANT_ID    = S.SEGMENT1 
+					    AND    S.LOOKUP_TYPE_CODE = 'BASIS_START_TIME_PLANT'
+					    AND    S.ACTIVE_FLAG = 'Y'
+					    AND    P.SITE_ID     = C.SEGMENT1
+					    AND    S.SEGMENT2    = C.SEGMENT2
+					    AND    C.LOOKUP_TYPE_CODE = 'AUTO_PLAN_CALL_FLAG'
+					    AND    C.ACTIVE_FLAG = 'Y' ) 
+		, FACTORY_LINK AS (	SELECT SEGMENT1 AS ASSY_FACTORY_ID, F.COMPANY_ID AS ASSY_COMPANY_ID, F.DIVISION_ID AS ASSY_DIVISION_ID, F.SITE_ID AS ASSY_SITE_ID, F.PLANT_ID AS ASSY_PLANT_ID
+		                          ,SEGMENT2 AS ELEC_FACTORY_ID
+            				FROM   SCM_SYS_LOOKUP_VALUE L WITH(NOLOCK)
+								  ,SCM_FACTORY_M        F WITH(NOLOCK)
+            				WHERE  1=1
+							AND    L.SEGMENT1    = F.FACTORY_ID
+            				AND    L.LOOKUP_TYPE_CODE = 'ELEC_ASSY_FACTORY_MAP'
+							AND    L.ACTIVE_FLAG = 'Y')
+	     ,OPERATION_YIELD AS (
+          SELECT COMPANY_ID , DIVISION_ID , SITE_ID , PLANT_ID , FACTORY_ID  , ITEM_ID , MONTH
+              , (CASE WHEN A.Y3 IS NULL OR A.Y3 = 0 THEN 1 ELSE A.Y3 END) AS Y3
+              , (CASE WHEN A.Y4 IS NULL OR A.Y4 = 0 THEN 1 ELSE A.Y4 END) AS Y4
+          FROM (
+      				SELECT COMPANY_ID , DIVISION_ID , SITE_ID , PLANT_ID , FACTORY_ID  , ITEM_ID , MONTH
+      						 , MIN(CASE WHEN OPERATION_ID = 'E3000' THEN YIELD ELSE 1 END) AS Y3
+      						 , MIN(CASE WHEN OPERATION_ID = 'E4000' THEN YIELD ELSE 1 END) AS Y4
+      				FROM	(
+      							SELECT A.COMPANY_ID , A.DIVISION_ID , A.SITE_ID , A.PLANT_ID , A.FACTORY_ID, A.ITEM_ID , A.MONTH , A.OPERATION_ID,  MIN(A.YIELD) AS YIELD
+      							FROM 	 SCM_YIELD_M A WITH(NOLOCK)
+								        ,CO_DATE     C
+      							WHERE   A.COMPANY_ID  = C.COMPANY_ID
+								AND     A.DIVISION_ID = C.DIVISION_ID
+								AND     A.SITE_ID     = C.SITE_ID
+								AND     A.PLANT_ID    = C.PLANT_ID
+								AND     A.OPERATION_ID IN ('E3000', 'E4000') -- ROLL PRESSING / SLITTING
+      							AND 	A.MONTH = CONVERT(VARCHAR(6),C.PLAN_START_DATE, 112)
+      							GROUP BY A.COMPANY_ID , A.DIVISION_ID , A.SITE_ID , A.PLANT_ID , A.FACTORY_ID, A.ITEM_ID , A.MONTH , A.OPERATION_ID
+      				) A
+      				WHERE 1=1
+      				GROUP BY COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, FACTORY_ID, ITEM_ID, MONTH
+      	  ) A
+      )
+    , STOCK_T AS (
+				SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID
+				     , SUBSTRING(ISNULL(REPLACE(REPLACE(FP_APPLY_OPERATION_ID,'A2','A5'),'A1', 'A5'),99999),2,4) AS OPERATION_ID, A.WIPHOLD_YN, A.ITEM_ID
+				     , A.CUTOFF_DATE  AS CUTOFF_DATE
+					 , CASE WHEN CONVERT(VARCHAR,A.AVAILABLE_DATE,112) <= CONVERT(VARCHAR,A.CUTOFF_DATE,112) THEN  ISNULL(ISNULL(A.MODIFY_FP_APPLY_WIPQTY,A.QTY2),0) + ISNULL(A.MOVING_QTY,0) ELSE 0 END AS BOH_QTY
+					 , CASE WHEN WIPHOLD_YN = 'Y' THEN  ISNULL(ISNULL(A.MODIFY_FP_APPLY_WIPQTY,A.QTY2),0) + ISNULL(A.MOVING_QTY,0) ELSE 0 END AS HOLD_QTY
+					 , A.STOCK_TYPE
+				FROM 	SCM_STOCK_H    A WITH(NOLOCK)
+				        /* IF_FP_SCM_STOCK_V */
+				       ,CO_DATE B
+				WHERE   A.COMPANY_ID  = B.COMPANY_ID
+				AND 	A.DIVISION_ID = B.DIVISION_ID
+				AND 	A.SITE_ID     = B.SITE_ID
+				AND 	A.PLANT_ID    = B.PLANT_ID
+				AND 	A.CUTOFF_DATE = B.PLAN_START_DATE
+				AND 	A.ITEM_ID LIKE 'APC%'
+				-- 하드코딩 전환
+				AND 	A.STORAGE_ID in (SELECT SEGMENT2 FROM SCM_CODE_LOOKUP_VALUE WITH(NOLOCK) WHERE LOOKUP_TYPE_CODE='IF_SSP_FP_PANCAKE_SIMUL_WIP_V' AND SEGMENT1  = '0' AND ACTIVE_FLAG = 'Y')
+				AND 	ISNULL(ISNULL(A.MODIFY_FP_APPLY_WIPQTY,A.QTY2),0) + ISNULL(A.MOVING_QTY,0) > 0
+		)
+		, SCM_BOM AS (
+      		SELECT *
+      		FROM (
+      		   SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.PARENT_ITEM_ID, A.PARENT_QTY, A.PARENT_UOM, A.CHILD_ITEM_ID, A.CHILD_QTY, A.CHILD_UOM,
+      			      A.ALT_ID, A.ALT_PRIORITY, A.EFF_START_DATE, A.EFF_END_DATE, B.FACTORY_ID, B.ASSY_FACTORY_ID, B.MONTH, B.PRIORITY, CC.APPLIED_MODEL AS NPC_APPLIED_MODEL, EE.APPLIED_MODEL AS PC_APPLIED_MODEL,
+      			      RANK() OVER ( PARTITION BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.PARENT_ITEM_ID
+      			                               , A.EFF_START_DATE, A.EFF_END_DATE, B.FACTORY_ID, B.ASSY_FACTORY_ID, B.MONTH, A.ALT_ID
+      				                  ORDER BY CASE WHEN B.PRIORITY IS NULL THEN 9 ELSE 1 END, ISNULL(A.ALT_PRIORITY, 1), ISNULL(B.PRIORITY, 9) ) AS RNK
+      		   FROM   SCM_BOM_M A WITH(NOLOCK)
+      		   LEFT OUTER JOIN (
+          				SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.FACTORY_ID, A.ITEM_ID,  A.MONTH, MIN(A.PRIORITY) AS PRIORITY
+						     , B.ASSY_FACTORY_ID, MAX(B.ASSY_COMPANY_ID) AS ASSY_COMPANY_ID, MAX(B.ASSY_DIVISION_ID) AS ASSY_DIVISION_ID, MAX(B.ASSY_SITE_ID) AS ASSY_SITE_ID, B.ASSY_PLANT_ID
+          				FROM   SCM_ITEM_LINE_ASSIGN_M A WITH(NOLOCK)
+          						INNER HASH JOIN FACTORY_LINK B
+          						ON    1=1
+          						AND   A.FACTORY_ID = B.ELEC_FACTORY_ID
+							,  CO_DATE C
+          				WHERE 1=1
+						AND   A.COMPANY_ID  = C.COMPANY_ID
+						AND   A.DIVISION_ID = C.DIVISION_ID
+						AND   A.SITE_ID     = C.SITE_ID
+						AND   A.PLANT_ID    = C.PLANT_ID
+          				AND   A.ACTIVE_FLAG = 'Y'
+						AND   A.OPERATION_ID  = 'E2000'
+          				AND   A.MONTH = CONVERT(VARCHAR(6),C.PLAN_START_DATE, 112)
+          				AND   A.PRIORITY NOT IN (0,9)
+						GROUP BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.FACTORY_ID, A.ITEM_ID,  A.MONTH, B.ASSY_PLANT_ID, B.ASSY_FACTORY_ID
+      			 ) B
+      			 ON    1=1
+      			 AND   A.COMPANY_ID     = B.ASSY_COMPANY_ID
+      			 AND   A.DIVISION_ID    = B.ASSY_DIVISION_ID
+      			 AND   A.SITE_ID        = B.ASSY_SITE_ID
+				 AND   A.PLANT_ID       = B.ASSY_PLANT_ID
+      			 AND   A.CHILD_ITEM_ID  = B.ITEM_ID
+       			 AND   CONVERT(VARCHAR(6), A.EFF_START_DATE,112) <= B.MONTH
+      			 AND   B.MONTH <= CONVERT(VARCHAR(6),A.EFF_END_DATE,112)
+      			 , SCM_ITEM_M CC WITH(NOLOCK)
+      			 , SCM_ITEM_CLASS_M DD WITH(NOLOCK)
+      			 , SCM_ITEM_M EE WITH(NOLOCK)
+      			 , SCM_ITEM_CLASS_M FF WITH(NOLOCK)
+      			 WHERE 1=1
+      			 AND  A.ACTIVE_FLAG    = 'Y'
+      			 AND  A.COMPANY_ID     = CC.COMPANY_ID
+      			 AND  A.DIVISION_ID    = CC.DIVISION_ID
+      			 AND  A.SITE_ID        = CC.SITE_ID
+      			 AND  A.PARENT_ITEM_ID = CC.ITEM_ID
+      			 AND  CC.ITEM_CLASS    = DD.CLASS_ID
+      			 AND  DD.LEVEL_2_NAME IN ('Notched Pancake', 'Jelly Roll')
+      			 AND  A.COMPANY_ID     = EE.COMPANY_ID
+      			 AND  A.DIVISION_ID    = EE.DIVISION_ID
+      			 AND  A.SITE_ID        = EE.SITE_ID
+      			 AND  A.CHILD_ITEM_ID  = EE.ITEM_ID
+      			 AND  EE.ITEM_CLASS    = FF.CLASS_ID
+      			 AND  FF.LEVEL_2_NAME  = 'Pancake'
+      			 AND  A.EFF_END_DATE   > GETDATE()
+      		) A
+      		WHERE 1=1
+      		AND   A.RNK = 1
+		)
+		-- 전극의 model, np item 정보 조회 : 조립계획 bom 및 수량큰 품번 기준
+	  , ASSY_MODEL_2 AS (
+				SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.ITEM_ID, A.PLANT_ID, A.NPC_ITEM_ID, A.TOP_ITEM_ID, A.QTY, A.NPC_APPLIED_MODEL, A.PC_APPLIED_MODEL
+				FROM  ( SELECT ISNULL(E.COMPANY_ID,FM.COMPANY_ID) AS COMPANY_ID, ISNULL(E.DIVISION_ID,FM.DIVISION_ID) AS DIVISION_ID, ISNULL(E.SITE_ID,FM.SITE_ID) AS SITE_ID, A.ITEM_ID
+							 , ISNULL(E.PLANT_ID,FM.PLANT_ID) AS PLANT_ID, A.NPC_ITEM_ID, A.TOP_ITEM_ID, A.QTY, A.NPC_APPLIED_MODEL, A.PC_APPLIED_MODEL, A.ELEC_FACTORY_ID
+							 , ROW_NUMBER() OVER( PARTITION BY  ISNULL(E.COMPANY_ID,FM.COMPANY_ID), ISNULL(E.DIVISION_ID,FM.DIVISION_ID), ISNULL(E.SITE_ID,FM.SITE_ID), A.ITEM_ID, ISNULL(E.PLANT_ID,FM.PLANT_ID)
+												  ORDER BY A.QTY DESC
+														 , CASE WHEN A.TOP_ITEM_ID = A.NPC_APPLIED_MODEL THEN 1
+																WHEN A.TOP_ITEM_ID = A.PC_APPLIED_MODEL THEN 2
+																ELSE 3 END
+												  ) AS RNK
+						FROM	(
+								SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, B.CHILD_ITEM_ID AS ITEM_ID
+										 , A.PLANT_ID
+							 			 , A.ITEM_ID AS NPC_ITEM_ID
+										 , A.TOP_ITEM_ID
+							 			 , A.QTY
+										 , B.NPC_APPLIED_MODEL
+										 , B.PC_APPLIED_MODEL
+										 , B.FACTORY_ID AS ELEC_FACTORY_ID
+										 , ROW_NUMBER() OVER(
+														PARTITION BY  B.FACTORY_ID, B.CHILD_ITEM_ID
+														ORDER BY QTY DESC
+																   , CASE WHEN A.TOP_ITEM_ID = B.NPC_APPLIED_MODEL THEN 1
+																		  WHEN A.TOP_ITEM_ID = B.PC_APPLIED_MODEL THEN 2
+																		  ELSE 3 END
+														) AS RNK
+								FROM 	(
+										SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.TOP_ITEM_ID, A.ITEM_ID
+											   , SUM(A.PLAN_IN_QTY) AS QTY, C.PLAN_START_DATE AS PLAN_DATE, A.FACTORY_ID
+										FROM   FP_DAILY_PRODUCTIOIN_PLAN_H A WITH(NOLOCK)
+											  ,CO_DATE C
+          								WHERE 1=1
+										AND   A.COMPANY_ID  = C.COMPANY_ID
+										AND   A.DIVISION_ID = C.DIVISION_ID
+										AND   A.SITE_ID     = C.SITE_ID
+										AND   A.PLANT_ID    = C.PLANT_ID
+										AND   A.PLAN_DATE  >= C.PLAN_START_DATE    --> MES 정보 수신한 이후
+										AND   A.PLAN_TYPE   = 'RELEASE'
+										AND   A.PLAN_IN_QTY > 0
+										AND   A.OPERATION_ID IN ( 'A2000','A5000' )
+										GROUP BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.TOP_ITEM_ID, A.ITEM_ID, A.FACTORY_ID, C.PLAN_START_DATE
+										) A
+      								  , SCM_BOM B WITH(NOLOCK)
+								WHERE 1=1
+								AND		A.COMPANY_ID     = B.COMPANY_ID
+								AND		A.DIVISION_ID    = B.DIVISION_ID
+								AND 	A.SITE_ID        = B.SITE_ID
+								AND     A.PLANT_ID       = B.PLANT_ID
+								AND     A.ITEM_ID        = B.PARENT_ITEM_ID
+   			        			AND  	A.FACTORY_ID     = ISNULL(B.ASSY_FACTORY_ID, A.FACTORY_ID)
+								AND  	CONVERT(VARCHAR(6),A.PLAN_DATE,112) = ISNULL(B.MONTH, CONVERT(VARCHAR(6),A.PLAN_DATE,112))
+						) A
+						LEFT OUTER JOIN SCM_FACTORY_M E (NOLOCK) ON A.ELEC_FACTORY_ID = E.FACTORY_ID
+						LEFT OUTER JOIN (SELECT COMPANY_ID, DIVISION_ID, SITE_ID, MIN(PLANT_ID) AS PLANT_ID
+										 FROM   SCM_FACTORY_M FM (NOLOCK)
+										 WHERE  SHOP_GROUP_ID = 'E'
+										 AND    ACTIVE_FLAG = 'Y'
+										 GROUP BY COMPANY_ID, DIVISION_ID, SITE_ID) FM
+						ON FM.COMPANY_ID = A.COMPANY_ID AND FM.DIVISION_ID = A.DIVISION_ID AND FM.SITE_ID = A.SITE_ID
+						WHERE RNK = 1 ) A
+				WHERE RNK = 1
+	  )
+      SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID
+           , A.MODEL_ID, A.NPC_ITEM_ID
+		   , A.BOH_QTY, A.POST_BOH_QTY, A.JR_BOH_QTY, A.JR_AFTER_BOH_QTY, A.PC_BOH_QTY
+		   , A.HOLD_QTY, A.JR_HOLD_QTY, A.JR_AFTER_HOLD_QTY, A.PC_HOLD_QTY
+           , A.BOH_QTY / A.ROLL_RATE           AS ROLL_BOH_QTY
+           , A.POST_BOH_QTY / A.ROLL_RATE      AS ROLL_POST_BOH_QTY
+           , A.JR_BOH_QTY / A.ROLL_RATE        AS ROLL_JR_BOH_QTY
+           , A.JR_AFTER_BOH_QTY / A.ROLL_RATE  AS ROLL_JR_AFTER_BOH_QTY
+           , A.PC_BOH_QTY / A.ROLL_RATE        AS ROLL_PC_BOH_QTY
+           , A.HOLD_QTY / A.ROLL_RATE          AS ROLL_HOLD_QTY
+           , A.JR_HOLD_QTY / A.ROLL_RATE       AS ROLL_JR_HOLD_QTY
+           , A.JR_AFTER_HOLD_QTY / A.ROLL_RATE AS ROLL_JR_AFTER_HOLD_QTY
+           , A.PC_HOLD_QTY / A.ROLL_RATE       AS ROLL_PC_HOLD_QTY
+		   , CEILING( A.BOH_QTY / A.REQ_QTY ) AS CELL_BOH_QTY 
+		   , CEILING( A.POST_BOH_QTY / A.REQ_QTY ) AS CELL_POST_BOH_QTY 
+		   , CEILING( A.JR_BOH_QTY / A.REQ_QTY ) AS CELL_JR_BOH_QTY 
+		   , CEILING( A.JR_AFTER_BOH_QTY / A.REQ_QTY ) AS CELL_JR_AFTER_BOH_QTY 
+		   , CEILING( A.PC_BOH_QTY / A.REQ_QTY ) AS CELL_PC_BOH_QTY 
+		   , CEILING( A.HOLD_QTY / A.REQ_QTY ) AS CELL_HOLD_QTY 
+		   , CEILING( A.JR_HOLD_QTY / A.REQ_QTY ) AS CELL_JR_HOLD_QTY 
+		   , CEILING( A.JR_AFTER_HOLD_QTY / A.REQ_QTY ) AS CELL_JR_AFTER_HOLD_QTY 
+		   , CEILING( A.PC_HOLD_QTY / A.REQ_QTY ) AS CELL_PC_HOLD_QTY 
+           , ISNULL(A.LT,1) AS LT
+      FROM   (
+				SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID
+					 , ISNULL(B.TOP_ITEM_ID,SI.APPLIED_MODEL) AS MODEL_ID, B.NPC_ITEM_ID
+					 , A.BOH_QTY, A.POST_BOH_QTY, A.PC_BOH_QTY, A.JR_BOH_QTY, A.JR_AFTER_BOH_QTY, A.HOLD_QTY, A.JR_HOLD_QTY, A.JR_AFTER_HOLD_QTY, A.PC_HOLD_QTY
+					 , ( SELECT TOP 1 ACCUM_QTY
+						 FROM (	SELECT PLANT_ID, MODEL_ID, CHILD_ITEM_ID, SUM(MCT.ACCUMULATED_CHILD_QTY) AS ACCUM_QTY
+								FROM  SCM_MODEL_COMP_EFFECTIVE_DATE MCT WITH(NOLOCK) 
+								WHERE MCT.MODEL_ID        = ISNULL(B.TOP_ITEM_ID,SI.APPLIED_MODEL) 
+								AND   MCT.CHILD_ITEM_ID   = A.ITEM_ID
+								AND   MCT.EFF_START_DATE <= GETDATE()
+								AND   MCT.EFF_END_DATE    > GETDATE()
+								AND   MCT.ALT_PRIORITY    = 'Y'  -- 2020-05-26 kimcd BOM 소요량 추출에서 Primary 품목인 경우만 추출
+								GROUP BY  PLANT_ID, MODEL_ID, CHILD_ITEM_ID	) A ) AS REQ_QTY
+					 , CASE WHEN SI.ITEM_UOM = 'EA' THEN 
+								( SELECT TOP 1 VALUE AS CELL_M
+								  FROM   SCM_ITEM_CONV_CALC_M C WITH(NOLOCK)
+								  WHERE  C.MAX_VER_FLAG = 'Y'
+								  AND    ISNULL(C.VALUE, 0) > 0
+								  AND    C.CATEGORY     = 'Pancake (cell/m)'
+								  AND    C.OPERATION    = 'E2000'
+								  AND    C.ITEM_ID      = A.ITEM_ID
+								  ORDER  BY CASE WHEN C.MODEL_ID = SI.APPLIED_MODEL THEN 1 ELSE 2 END
+										  , CASE WHEN C.PROD_VERSION_TYPE = 'WIDE' THEN 1
+												 WHEN C.PROD_VERSION_TYPE = 'GENERAL' THEN 2
+												 ELSE 3
+												 END
+										  , VALUE )
+					   ELSE 1.0000 END AS ROLL_RATE
+					 , CASE WHEN CEILING( ( ISNULL(F.LT,0) + ISNULL( ISNULL(G.LT, E.LT) , 0 ) ) / 1440 ) < 1 THEN 1 ELSE CEILING( ( ISNULL(F.LT,0) + ISNULL( ISNULL(G.LT, E.LT) , 0 ) ) / 1440 ) END AS LT
+				FROM (SELECT F.COMPANY_ID, F.DIVISION_ID, F.SITE_ID, F.PLANT_ID, D.FACTORY_ID, D.ITEM_ID
+							, D.BOH_QTY, D.POST_BOH_QTY, D.PC_BOH_QTY, D.JR_BOH_QTY, D.JR_AFTER_BOH_QTY, D.HOLD_QTY, D.JR_HOLD_QTY, D.JR_AFTER_HOLD_QTY, D.PC_HOLD_QTY
+				      FROM ( SELECT ISNULL(B.ELEC_FACTORY_ID, CASE WHEN F.SHOP_GROUP_ID = 'E' THEN A.FACTORY_ID ELSE FM.FACTORY_ID END) AS FACTORY_ID, A.ITEM_ID
+									 , SUM(BOH_QTY) AS BOH_QTY
+									 , SUM(POST_BOH_QTY) AS POST_BOH_QTY
+									 , SUM(JR_BOH_QTY) AS JR_BOH_QTY
+									 , SUM(JR_AFTER_BOH_QTY) AS JR_AFTER_BOH_QTY
+									 , SUM(PC_BOH_QTY) AS PC_BOH_QTY
+									 , SUM(HOLD_QTY) AS HOLD_QTY
+									 , SUM(JR_HOLD_QTY) AS JR_HOLD_QTY
+									 , SUM(JR_AFTER_HOLD_QTY) AS JR_AFTER_HOLD_QTY
+									 , SUM(PC_HOLD_QTY) AS PC_HOLD_QTY
+							 FROM	(
+										SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID
+										     , A.OPERATION_ID
+										     , ISNULL(SUM(A.BOH_QTY),0) AS BOH_QTY
+											 , CASE WHEN A.OPERATION_ID = 2000 THEN  ISNULL(SUM(A.BOH_QTY),0) * ISNULL(C.Y3,1) * ISNULL(C.Y4,1)
+											 		WHEN A.OPERATION_ID = 3000 THEN  ISNULL(SUM(A.BOH_QTY),0) * ISNULL(C.Y4,1)
+											 		ELSE ISNULL(SUM(A.BOH_QTY),0) END POST_BOH_QTY
+											 , CASE WHEN A.OPERATION_ID < 3000 THEN  ISNULL(SUM(A.BOH_QTY),0) ELSE 0 END AS JR_BOH_QTY
+											 , CASE WHEN A.OPERATION_ID = 3000 THEN  ISNULL(SUM(A.BOH_QTY),0) ELSE 0 END AS JR_AFTER_BOH_QTY
+											 , CASE WHEN A.OPERATION_ID > 3000 THEN  ISNULL(SUM(A.BOH_QTY),0) ELSE 0 END AS PC_BOH_QTY
+											 , CASE WHEN A.WIPHOLD_YN = 'Y' THEN  ISNULL(SUM(A.HOLD_QTY),0) ELSE 0 END AS HOLD_QTY
+											 , CASE WHEN A.WIPHOLD_YN = 'Y' AND A.OPERATION_ID < 3000 THEN  ISNULL(SUM(A.HOLD_QTY),0) ELSE 0 END AS JR_HOLD_QTY
+											 , CASE WHEN A.WIPHOLD_YN = 'Y' AND A.OPERATION_ID = 3000 THEN  ISNULL(SUM(A.HOLD_QTY),0) ELSE 0 END AS JR_AFTER_HOLD_QTY
+											 , CASE WHEN A.WIPHOLD_YN = 'Y' AND A.OPERATION_ID > 3000 THEN  ISNULL(SUM(A.HOLD_QTY),0) ELSE 0 END AS PC_HOLD_QTY
+										FROM 	STOCK_T A
+										LEFT OUTER /*HASH*/ JOIN (
+												SELECT COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, ITEM_ID, MONTH, MIN(Y3) AS Y3, MIN(Y4) AS Y4
+												FROM   OPERATION_YIELD
+												GROUP BY COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, ITEM_ID, MONTH
+										) C
+										ON  A.COMPANY_ID  = C.COMPANY_ID
+										AND A.DIVISION_ID = C.DIVISION_ID
+										AND A.SITE_ID     = C.SITE_ID
+										AND A.PLANT_ID    = C.PLANT_ID
+										AND	A.ITEM_ID     = C.ITEM_ID
+										AND A.STOCK_TYPE  = 'WIP'
+										AND CONVERT(VARCHAR(6), A.CUTOFF_DATE, 112) = C.MONTH
+										GROUP BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID, A.OPERATION_ID, A.WIPHOLD_YN, C.Y3, C.Y4
+									) A
+									LEFT OUTER JOIN FACTORY_LINK B
+										ON  A.FACTORY_ID = B.ASSY_FACTORY_ID
+									LEFT OUTER JOIN SCM_FACTORY_M F
+										ON A.FACTORY_ID = F.FACTORY_ID
+									LEFT OUTER JOIN (SELECT COMPANY_ID, DIVISION_ID, SITE_ID, MIN(PLANT_ID) AS PLANT_ID, MIN(FACTORY_ID) AS FACTORY_ID
+													 FROM   SCM_FACTORY_M FM (NOLOCK)
+													 WHERE  SHOP_GROUP_ID = 'E'
+													 AND    ACTIVE_FLAG = 'Y'
+													 GROUP BY COMPANY_ID, DIVISION_ID, SITE_ID) FM
+										ON FM.COMPANY_ID = A.COMPANY_ID AND FM.DIVISION_ID = A.DIVISION_ID AND FM.SITE_ID = A.SITE_ID
+							WHERE 1=1
+							GROUP BY ISNULL(B.ELEC_FACTORY_ID, CASE WHEN F.SHOP_GROUP_ID = 'E' THEN A.FACTORY_ID ELSE FM.FACTORY_ID END), A.ITEM_ID
+				           ) D
+					INNER JOIN SCM_FACTORY_M F (NOLOCK)
+							ON  F.FACTORY_ID = D.FACTORY_ID
+					) A
+				LEFT OUTER /*HASH*/ JOIN ASSY_MODEL_2 B
+					ON  1=1
+					AND A.COMPANY_ID  = B.COMPANY_ID
+					AND A.DIVISION_ID = B.DIVISION_ID
+					AND A.SITE_ID     = B.SITE_ID
+					AND A.PLANT_ID    = B.PLANT_ID
+					AND A.ITEM_ID     = B.ITEM_ID
+				LEFT OUTER /*HASH*/ JOIN SCM_ITEM_M SI
+					ON  1=1
+					AND A.COMPANY_ID  = SI.COMPANY_ID
+					AND A.DIVISION_ID = SI.DIVISION_ID
+					AND A.SITE_ID     = SI.SITE_ID
+					AND A.ITEM_ID     = SI.ITEM_ID
+				LEFT OUTER /*HASH*/ JOIN (
+								SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, MAX(A.TRANSPORT_TIME) AS LT
+								FROM	 SCM_BOD_M A WITH(NOLOCK)
+								WHERE	 A.FROM_OPERATION_ID = 'E4000' 
+								AND	   A.TO_OPERATION_ID   = 'A5000'
+								GROUP BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID
+				) F
+				ON	A.COMPANY_ID  = F.COMPANY_ID
+				AND A.DIVISION_ID = F.DIVISION_ID
+				AND A.SITE_ID     = F.SITE_ID
+				LEFT OUTER /*HASH*/ JOIN (
+								SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID
+										 , MAX( CASE WHEN A.OPERATION_LEAD_TIME_UOM = 'DAY' THEN ISNULL(OPERATION_LEAD_TIME,0) * 24 * 60
+													       WHEN A.OPERATION_LEAD_TIME_UOM = 'HOUR' THEN ISNULL(OPERATION_LEAD_TIME,0) * 60
+														     ELSE ISNULL(OPERATION_LEAD_TIME,0) END ) AS LT
+								FROM   SCM_OPERATION_MOVE_M A WITH(NOLOCK)
+								WHERE  A.OPERATION_ID IN ('E2000', 'E3000')
+								AND	   A.OPERATION_LEAD_TIME IS NOT NULL
+								GROUP BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID 
+				) E
+				ON	A.COMPANY_ID  = F.COMPANY_ID
+				AND A.DIVISION_ID = E.DIVISION_ID
+				AND A.SITE_ID     = E.SITE_ID
+				LEFT OUTER /*HASH*/ JOIN (
+								SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.ITEM_ID
+										 , MAX( CASE WHEN A.OPERATION_LEAD_TIME_UOM = 'DAY' THEN ISNULL(OPERATION_LEAD_TIME,0) * 24 * 60
+															   WHEN A.OPERATION_LEAD_TIME_UOM = 'HOUR' THEN ISNULL(OPERATION_LEAD_TIME,0) * 60
+															   ELSE ISNULL(OPERATION_LEAD_TIME,0) END ) AS LT
+								FROM   SCM_ITEM_FLOW_EXCEPT_M A WITH(NOLOCK)
+								WHERE  A.OPERATION_LEAD_TIME IS NOT NULL
+								AND    A.OPERATION_ID IN ('E2000', 'E3000')
+								GROUP BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.ITEM_ID 
+				) G
+				ON	A.COMPANY_ID  = G.COMPANY_ID
+				AND A.DIVISION_ID = G.DIVISION_ID
+				AND A.SITE_ID     = G.SITE_ID
+				AND A.ITEM_ID     = G.ITEM_ID
+				WHERE 1=1
+			) A
+
+
+

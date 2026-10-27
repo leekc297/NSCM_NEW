@@ -6,8 +6,9 @@
 const fs = require('fs'); const path = require('path');
 const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, 'e2e.config.json'), 'utf8').replace(/^﻿/, ''));
 const a = process.argv.slice(2);
-// 2026-10-20 테스트 모드(화면 성격별 계정 축) — --mode admin|division|auto. 명시하면 users.json screens[<메뉴>].mode 에 저장돼 다음 기본값이 된다
-const MODE_ARG = (() => { const i = a.indexOf('--mode'); const v = i >= 0 ? String(a[i + 1] || '').toLowerCase() : (a.find(x => x.startsWith('--mode=')) || '').slice(7).toLowerCase(); return /^(admin|division|auto)$/.test(v) ? v : ''; })();
+// 2026-10-20 테스트 모드(화면 성격별 계정 축) — --mode single|admin|division|auto. 명시하면 users.json screens[<메뉴>].mode 에 저장돼 다음 기본값이 된다
+// 2026-10-27 사용자 지시: 기본 = single(ADMIN 또는 PLANNER 계정 1개). admin·division 은 사용자가 화면을 지정할 때만(명부 = 필요 시점에 쓰는 계정 풀)
+const MODE_ARG = (() => { const i = a.indexOf('--mode'); const v = i >= 0 ? String(a[i + 1] || '').toLowerCase() : (a.find(x => x.startsWith('--mode=')) || '').slice(7).toLowerCase(); return /^(single|admin|division|auto)$/.test(v) ? v : ''; })();
 const ids = a.filter((x, i) => !x.startsWith('--') && a[i - 1] !== '--mode').map(x => x.toUpperCase());
 const specs = cfg.specsDir; fs.mkdirSync(specs, { recursive: true });
 const readCsv = f => { if (!fs.existsSync(f)) return []; const t = fs.readFileSync(f, 'utf8').replace(/^﻿/, ''); const lines = []; let cur = '', q = false, row = []; for (let i = 0; i < t.length; i++) { const ch = t[i]; if (q) { if (ch === '"') { if (t[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; } else if (ch === '"') q = true; else if (ch === ',') { row.push(cur); cur = ''; } else if (ch === '\n' || ch === '\r') { if (ch === '\r' && t[i + 1] === '\n') i++; row.push(cur); lines.push(row); row = []; cur = ''; } else cur += ch; } if (cur || row.length) { row.push(cur); lines.push(row); } const h = lines.shift() || []; return lines.filter(r => r.length > 1 || r[0]).map(r => Object.fromEntries(h.map((k, i) => [k, r[i] ?? '']))); };
@@ -21,16 +22,69 @@ const menu = readCsv(path.join(cfg.tobeOutDir, 'db', 'menu.csv'));
 const msgMaster = readCsv(path.join(cfg.tobeOutDir, 'db', 'msg_master.csv'));
 const lblText = code => { if (!code) return ''; const rows = msgMaster.filter(r => up(r.msg_id) === up(code) && (r.use_yn || 'Y') !== 'N'); const r = rows.find(x => up(x.lang_cd) === 'EN') || rows[0]; return r ? String(r.msg_nm || '').trim() : ''; };
 const feRoot = cfg.feRoot || path.resolve(cfg.genOutDir, '..', '..', 'nscm-fe');
+// 2026-10-21(SCP0100 🩹 수선 1차 "(c) 기대값 결함" 4건 → 생성기 보정): 기대 라벨·컬럼의 권위 원천 3종을 더 읽는다.
+//   ① 조회조건 카탈로그 Doc/_rules_v2/_mapping/search_conditions*.md — To-Be 화면명 섹션(### <이름>  (N행 …)) 표의 As-Is 명칭→To-Be 명칭(명칭 변경: Project→PJT, Unit (Qty)→Unit)·'조회조건 삭제'
+//   ② As-is designer.cs 의 `this.<layout>.Visibility = LayoutVisibility.Never` + Fact Pack props.csv 의 layout→Control 연결 → As-is 에서도 안 보이는 조회조건(Display·Graph) 은 검사 제외
+//   ③ Fact Pack grid_code.csv 의 SetLayout/VisibleColumns 행 → 조회조건에 따라 숨는 컬럼(Product Level1~3) 은 '누락' 으로 세지 않는다
+const normLbl = s => String(s || '').toLowerCase().replace(/^\s*\*+|\*+\s*$/g, '').replace(/[^a-z0-9가-힣]/g, '');
+const CATALOG = (() => {
+  const dir = path.join(path.dirname(cfg.genOutDir), '_rules_v2', '_mapping'); const out = {};
+  if (!fs.existsSync(dir)) return out;
+  for (const f of fs.readdirSync(dir).filter(x => /^search_conditions.*\.md$/i.test(x))) {
+    const lines = fs.readFileSync(path.join(dir, f), 'utf8').split(/\r?\n/); let cur = null;
+    for (const l of lines) {
+      const h = /^###\s+(.+?)\s*(\(\d+행.*)?$/.exec(l); if (h) { cur = normLbl(h[1]); out[cur] = out[cur] || []; continue; }
+      if (!cur || !/^\|/.test(l) || /^\|\s*-/.test(l) || /As-Is 명칭/.test(l)) continue;
+      const c = l.split('|').slice(1, -1).map(x => x.trim()); if (c.length < 13) continue;
+      out[cur].push({ asis: c[0], tobe: c[6], change: c[11], changeWhat: c[12] });
+    }
+  }
+  return out;
+})();
+const HARNESS = (() => { try { return JSON.parse(fs.readFileSync(path.join(path.dirname(cfg.genOutDir), '..', 'tools', 'Harness', 'harness.json'), 'utf8').replace(/^\uFEFF/, '')); } catch { return {}; } })();
+const asisHiddenControls = sd => { // designer.cs Visibility.Never → props.csv (target,prop='Control',value='this.<ctrl>') → 컨트롤명 집합
+  try {
+    const files = readCsv(path.join(sd, 'files.csv')).filter(r => r.variant === 'current' && /designer\.cs$/i.test(r.file));
+    const hiddenLayouts = new Set();
+    for (const r of files) { const fp = path.join(HARNESS.asisSrcRoot || '', r.file); if (!fs.existsSync(fp)) continue; for (const m of fs.readFileSync(fp, 'utf8').matchAll(/this\.(\w+)\.Visibility\s*=\s*[\w.]*LayoutVisibility\.Never/g)) hiddenLayouts.add(m[1]); }
+    if (!hiddenLayouts.size) return {};
+    const out = {};
+    for (const r of readCsv(path.join(sd, 'props.csv'))) if (r.prop === 'Control' && hiddenLayouts.has(r.target)) { const c = String(r.value || '').replace(/^this\./, ''); if (c) out[c] = r.target; }
+    return out;
+  } catch { return {}; }
+};
+// 2026-10-21: As-is 헤더 사양 — .cs 의 SetSheetHeaderColumn(_SI, N)(헤더 행 수)·ColumnHeaderSpan(…, "리터럴")(병합 헤더 글자, 예 "Qty") → smoke 가 To-Be 헤더 행 수·리터럴·높이를 대조
+const asisHeaderSpec = sd => {
+  try {
+    const files = readCsv(path.join(sd, 'files.csv')).filter(r => r.variant === 'current' && /\.cs$/i.test(r.file) && !/designer\.cs$/i.test(r.file));
+    let rows = 0; const literals = new Set(); let spans = 0;
+    for (const r of files) {
+      const fp = path.join(HARNESS.asisSrcRoot || '', r.file); if (!fs.existsSync(fp)) continue; const t = fs.readFileSync(fp, 'utf8');
+      for (const m of t.matchAll(/SetSheetHeaderColumn\s*\([^,]+,\s*(\d+)\s*\)/g)) rows = Math.max(rows, Number(m[1]));
+      for (const m of t.matchAll(/ColumnHeaderSpan\s*\(([^;]*?)\)\s*;/g)) { spans++; for (const q of m[1].matchAll(/"([^"\\]{1,40})"/g)) literals.add(q[1]); }
+    }
+    return rows > 1 || spans ? { rows: rows || 1, spans, literals: [...literals], maxRowPx: 32 } : null;
+  } catch { return null; }
+};
+const asisConditionalColumns = sd => { try { return [...new Set(readCsv(path.join(sd, 'grid_code.csv')).filter(r => /SetLayout/i.test(r.member || '') || /VisibleColumns/i.test(r.api || '')).map(r => up(r.columns || '')).filter(c => /^[A-Z0-9_]+$/.test(c)))]; } catch { return []; } };
 // 2026-10-20 auth별 CRUD: 계정별 기대 권한의 원천 = To-Be 메타(사용자→그룹 user_group_user · 그룹→메뉴 user_group_menu · 그룹×메뉴×버튼 btn_auth). 데이터셋(accounts.json) 의 그룹은 참고 표기만
 const ugUser = readCsv(path.join(cfg.tobeOutDir, 'db', 'user_group_user.csv'));
+// 2026-10-27: 계정별 Division 권한(unit_auth D) — division 모드 CASCADE 기대값(Division 후보 ⊆ 권한 Division)
+const unitAuth = readCsv(path.join(cfg.tobeOutDir, 'db', 'unit_auth.csv')).filter(r => r.unit_tp_cd === 'D' && (r.use_yn || 'Y') !== 'N');
 const ugMenu = readCsv(path.join(cfg.tobeOutDir, 'db', 'user_group_menu.csv'));
 // 사용자 관리 명부 users.json → 계정 목록(역할·Division 배정은 표기/범위용, 기대 권한은 To-Be 메타로 계산)
 const USERS = (() => { const f = path.join(__dirname, 'users.json'); if (!fs.existsSync(f)) return null; try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch (e) { console.error(`users.json 해석 실패: ${e.message}`); return null; } })();
-function rosterAccounts(u, okIds) {
-  const byId = new Map(); const allDivs = Object.keys(u.divisions || {});
-  const get = id => { if (!byId.has(id)) byId.set(id, { id, name: (u.names || {})[id] || '', groups: [], divisions: [], roles: {}, adminAlso: false, adminOf: [], usable: true, screens: {}, loginOk: okIds ? okIds.includes(id) : true, source: 'users.json' }); return byId.get(id); };
-  for (const [div, roles] of Object.entries(u.divisions || {})) for (const [role, id] of Object.entries(roles || {})) { if (!id) continue; const a = get(id); if (!a.divisions.includes(div)) a.divisions.push(div); a.roles[div] = role; if (!a.groups.includes(role)) a.groups.push(role); }
-  for (const [adm, ids] of Object.entries(u.admins || {})) for (const id of ids || []) { const a = get(id); a.adminAlso = true; a.adminOf.push(adm); if (!a.groups.includes(adm)) a.groups.push(adm); if (!a.groups.includes('SYSTEM ADMIN')) a.groups.push('SYSTEM ADMIN'); for (const d of allDivs) if (!a.divisions.includes(d)) a.divisions.push(d); }
+// 2026-10-27 사용자 지시: 명부를 영역별로 분리 — areas.DM(DM UI·공통 UI, 기존 등록분) · areas.SCP · areas.SSP(권한 × Division 대표 사용자)
+const rosterArea = menu => /^SCP/i.test(menu) ? 'SCP' : /^SSP/i.test(menu) ? 'SSP' : 'DM';
+function rosterAccounts(u, okIds, area) {
+  const A = (u.areas && (u.areas[area] || u.areas.DM)) || u;   // 구 구조(최상위 divisions/admins)도 읽는다
+  const byId = new Map(); const allDivs = Object.keys(A.divisions || {});
+  const get = id => { if (!byId.has(id)) byId.set(id, { id, name: (u.names || {})[id] || '', groups: [], divisions: [], roles: {}, adminAlso: false, adminOf: [], usable: true, screens: {}, loginOk: okIds ? okIds.includes(id) : true, source: `users.json areas.${u.areas ? (u.areas[area] ? area : 'DM') : '-'}` }); return byId.get(id); };
+  for (const [div, roles] of Object.entries(A.divisions || {})) for (const [role, id] of Object.entries(roles || {})) {
+    if (!id) continue; const a = get(id); if (!a.divisions.includes(div)) a.divisions.push(div); a.roles[div] = role; if (!a.groups.includes(role)) a.groups.push(role);
+    if (area !== 'DM' && /^(ADMIN|SSP ADMIN|SCP ADMIN)$/i.test(role)) { a.adminAlso = true; if (!a.adminOf.includes(`${area} ADMIN`)) a.adminOf.push(`${area} ADMIN`); }   // SCP·SSP 목록의 ADMIN 역할 = 영역 ADMIN
+  }
+  for (const [adm, ids] of Object.entries(A.admins || {})) for (const id of ids || []) { const a = get(id); a.adminAlso = true; a.adminOf.push(adm); if (!a.groups.includes(adm)) a.groups.push(adm); if (!a.groups.includes('SYSTEM ADMIN')) a.groups.push('SYSTEM ADMIN'); for (const d of allDivs) if (!a.divisions.includes(d)) a.divisions.push(d); }
   const list = [...byId.values()];
   const noLogin = list.filter(a => !a.loginOk).map(a => a.id); if (noLogin.length) console.error(`  ⚠ users.json 계정 중 로그인 불가(BE 사용자 없음): ${noLogin.join(', ')} — 스펙에서 제외`);
   return list.filter(a => a.loginOk);
@@ -61,12 +115,29 @@ for (const id0 of planDirs) {
   const excludedRows = mapMd && fs.existsSync(mapMd) ? fs.readFileSync(mapMd, 'utf8').split(/\r?\n/).filter(l => /^\|/.test(l) && /\|\s*제외\s*\|\s*$/.test(l)) : [];
   //   컨트롤 행(§1 …)만 본다 — §2 이벤트 행의 '제외'(핸들러 본문 공백 등)는 컨트롤 자체는 살아 있으므로 라벨 검사 대상(SCP0100 chkCellQty·cboDisplay 오판 방지)
   const excludedReason = asis => { if (!asis) return ''; const re = new RegExp(`\\b${asis}\\b`, 'i'); const row = excludedRows.find(l => { const cells = l.split('|').map(x => x.trim()).filter(Boolean); return !!cells[1] && /^§1\b/.test(cells[1]) && re.test(cells[1]); }); if (!row) return ''; const cells = row.split('|').map(x => x.trim()).filter(Boolean); return `${cells[0] || ''} ${cells[1] || ''}`.trim().slice(0, 120); };
+  const sdPack = path.join(cfg.asisOutDir, 'screens', id);
+  const hidden = asisHiddenControls(sdPack);
+  const menuRow = menu.find(r => up(r.mnu_id) === MENU); const tobeName = menuRow ? (menuRow.mnu_desc || '') : '';
+  const catRows = CATALOG[normLbl(tobeName)] || CATALOG[normLbl(P.asisName)] || [];
+  const condCols = asisConditionalColumns(sdPack);
+  const headerSpec = asisHeaderSpec(sdPack);
+  const condLabels = [...new Set(sheetCols.filter(r => up(r.program_id) === MENU && condCols.includes(up(r.column_name))).map(r => r.column_label_name).filter(Boolean))];
+  const SCref = (() => { try { return require(path.join(__dirname, '..', 'Harness', 'lib', 'searchcond')).forScreen(path.join(__dirname, '..', 'Harness', 'rules'), MENU); } catch { return null; } })();
+  // 하네스와 같은 매칭(tools/Harness/lib/searchcond.apply — 유형 호환·라디오 NoName 보완·중복 컨트롤)으로 조회조건 ↔ 기준표 행
+  const scRowOf = new Map();
+  if (SCref) { try { const SCm = require(path.join(__dirname, '..', 'Harness', 'lib', 'searchcond')); const pseudo = (P.fields || []).map(f => ({ c: { name: f.asis || f.key || '', type: f.component || '', file: '' }, r: { tobe_component: f.component || '' }, label: String(f.label || '').replace(/^\s*\*+\s*|\s*\*+\s*$/g, '').trim(), key: f.key || '', src: f })); SCm.apply(SCref, pseudo.slice(), [], () => ''); for (const x of pseudo) if (x.sc && x.sc.row) scRowOf.set(x.src, x.sc.row); } catch (e) { console.error(`  ${id}: 기준표 매칭 실패 — ${e.message}`); } }
   const fieldsPlan = (P.fields || []).map(f => {
     const asisLabel = String(f.label || '').replace(/^\s*\*+\s*|\s*\*+\s*$/g, '').trim(); const tobe = lblText(f.lbl);
     const cands = [tobe, asisLabel, ...asisLabel.split('/').map(x => x.trim()).filter(x => x.length >= 2)];
     if (f.kind === 'period' || /Period/i.test(f.component || '')) cands.push('From', 'To', 'Period', '기간');
-    const ex = excludedReason(f.asis);
-    return Object.assign({}, f, { tobeLabel: tobe, labels: [...new Set(cands.filter(Boolean))], excluded: ex ? true : false, excludedWhy: ex });
+    let ex = excludedReason(f.asis); let catalog = '';
+    const cat = catRows.find(r => normLbl(r.asis) === normLbl(asisLabel));
+    // 조회조건 기준표 To-Be 명칭(예: Unit (Qty) → Scale, Project → PJT) 을 첫 후보로
+    if (cat) { catalog = `${cat.asis} → ${cat.tobe || '(없음)'}${cat.changeWhat ? ' · ' + cat.changeWhat : ''}`; if (cat.tobe) cands.unshift(cat.tobe); if (!ex && /삭제/.test(cat.changeWhat || '')) ex = `조회조건 카탈로그: ${cat.asis} → ${cat.changeWhat}`; }
+    // 조회조건 기준표 To-Be 명칭(예: Unit (Qty) → Scale, 라디오 NoName → Search Mode) 을 최우선 후보로 — 구 카탈로그(v0.4)보다 앞
+    { const scr = scRowOf.get(f); if (scr && scr.tobe_name && scr.tobe_name !== '-') cands.unshift(scr.tobe_name); }
+    if (!ex && f.asis && hidden[f.asis]) ex = `As-is 숨김: ${hidden[f.asis]}.Visibility = Never (designer.cs)`;
+    return Object.assign({}, f, { tobeLabel: tobe, catalog, labels: [...new Set(cands.filter(Boolean))], excluded: ex ? true : false, excludedWhy: ex });
   });
   // 메타 기대 컬럼(화면×시트×DIV) — 없으면 Fact Pack 라벨
   const metaFor = (sheet, div) => sheetCols.filter(r => up(r.program_id) === MENU && r.sheet_name.toLowerCase() === sheet.toLowerCase() && (r.visible_flag || 'Y') !== 'N' && (r.valid_yn || 'Y') !== 'N' && (!r.division_id || !div || r.division_id === div || r.division_id.split('_')[0] === div)).sort((x, y) => Number(x.sort_order_no) - Number(y.sort_order_no)).map(r => r.column_label_name || r.column_name);
@@ -106,7 +177,7 @@ for (const id0 of planDirs) {
   // 2026-10-20: 계정 원천 = users.json(사용자 관리 명부) 이 있으면 그것(Division 별 역할 계정 + ADMIN 계정 전부), 없으면 데이터셋 accounts.json.
   //   로그인 가능 여부는 probe-accounts.js 결과(loginProbe.ok)로 거른다 — 명부에 있지만 BE 에 없는 계정은 '로그인 불가' 로 목록에만 남긴다
   const okIds = (accounts.loginProbe && accounts.loginProbe.ok) || null;
-  const accsAll = USERS ? rosterAccounts(USERS, okIds) : accounts.accounts.filter(x => (x.usable || x.adminAlso) && (okIds ? x.loginOk : true));
+  const accsAll = USERS ? rosterAccounts(USERS, okIds, rosterArea(MENU)) : accounts.accounts.filter(x => (x.usable || x.adminAlso) && (okIds ? x.loginOk : true));
   // 메뉴에 등록된 버튼 코드 전체(어느 그룹이든) — 이 메뉴에 INSERT/DELETE 코드 자체가 없으면 그 버튼은 비교하지 않는다
   const menuBtnCodes = [...new Set(authRows.filter(r => (r.use_yn || 'Y') !== 'N').map(r => up(r[btnCol] || '')).filter(Boolean))];
   const accountTruth = x => {
@@ -118,23 +189,33 @@ for (const id0 of planDirs) {
     const menuAccess = !ugMenu.length ? '' : (tgMenu.length ? 'Y' : 'N');
     const btns = grpCol && btnCol ? [...new Set(authRows.filter(r => tgMenu.includes(r[grpCol]) && (r.use_yn || 'Y') !== 'N').map(r => up(r[btnCol])))] : null;
     const matrix = (accounts.authMatrix || []).filter(m => up(m.screen) === MENU && x.groups.includes(m.group)).map(m => `${m.group}/${m.div}:${m.editMeasure || '-'}${m.editDay ? '@' + m.editDay : ''}`);
-    return { tobeGroups: tg, menuAccess, expectedBtns: btns && authRows.length ? btns : null, matrix };
+    const expectedDivs = unitAuth.length ? [...new Set(unitAuth.filter(r => up(r.user_id) === up(x.id) && tgMenu.includes(r.user_gr_id)).map(r => r.unit_id))] : null;
+    return { tobeGroups: tg, menuAccess, expectedBtns: btns && authRows.length ? btns : null, matrix, expectedDivs };
   };
   // ── 테스트 모드 → 계정 축 ──
   //   admin   : 영역 ADMIN(SYSTEM ADMIN 겸, DMF→DM ADMIN / SCP→SCP ADMIN / SSP→SSP ADMIN) + 메뉴 권한 없는 사용자 1명, Division 반복 없음(마스터 화면)
   //   division: Division 별 역할 계정 전부 + 영역 ADMIN (Division 데이터 범위가 있는 화면)
-  //   auto    : users.json screens[<메뉴>].mode → 없으면 화면 메타(Division 조회조건 유무)로 추정. 사용자가 실행 시 지정하는 것이 원칙
+  //   single  : (기본) 영역 ADMIN 1명, 없으면 영역 PLANNER 1명 — Division·권한 반복 없음 (2026-10-27)
+  //   auto    : users.json screens[<메뉴>].mode → 없으면 single. Division 조회조건 유무로 division 을 추정하지 않는다(사용자 지정 시만)
   const SCREENS = (USERS && USERS.screens) || {};
   const area = /^DM/i.test(MENU) ? 'DM ADMIN' : /^SCP/i.test(MENU) ? 'SCP ADMIN' : /^SSP/i.test(MENU) ? 'SSP ADMIN' : '';
   const hasDivField = (P.fields || []).some(f => /division/i.test(f.label || '') || /division/i.test(f.component || '')) || (P.handlers || []).some(h => /division/i.test(JSON.stringify(h)));
   const saved = SCREENS[MENU] || SCREENS[id] || null;
-  const mode = MODE_ARG && MODE_ARG !== 'auto' ? MODE_ARG : (saved && saved.mode) || (hasDivField ? 'division' : 'admin');
-  const modeSource = MODE_ARG && MODE_ARG !== 'auto' ? '--mode' : (saved && saved.mode) ? 'users.json screens' : `auto(Division 조회조건 ${hasDivField ? '있음' : '없음'})`;
+  const mode = MODE_ARG && MODE_ARG !== 'auto' ? MODE_ARG : (saved && saved.mode) || 'single';
+  const modeSource = MODE_ARG && MODE_ARG !== 'auto' ? '--mode' : (saved && saved.mode) ? 'users.json screens' : `기본 single(사용자 미지정 · Division 조회조건 ${hasDivField ? '있음' : '없음'})`;
   if (MODE_ARG && MODE_ARG !== 'auto' && USERS) { try { USERS.screens = USERS.screens || {}; USERS.screens[MENU] = Object.assign({}, USERS.screens[MENU] || {}, { mode: MODE_ARG, updated: new Date().toISOString().slice(0, 10) }); fs.writeFileSync(path.join(__dirname, 'users.json'), JSON.stringify(USERS, null, 2) + '\n', 'utf8'); } catch (e) { console.error(`  users.json screens 저장 실패: ${e.message}`); } }
   const truthAll = new Map(accsAll.map(x => [x.id, accountTruth(x)]));
   const isAreaAdmin = x => x.adminAlso && (!area || (x.adminOf || []).includes(area) || (x.adminOf || []).length >= 3);
   let accs;
-  if (mode === 'admin') {
+  if (mode === 'single') {
+    const admins = accsAll.filter(isAreaAdmin);
+    const admin1 = admins.find(x => (x.adminOf || []).length === 1 && (!area || x.adminOf[0] === area)) || admins.find(x => (x.adminOf || []).includes(area)) || admins[0] || null;
+    const planRe = area === 'DM ADMIN' ? /^DM Planner$/i : area === 'SCP ADMIN' ? /^SCP Planner$/i : area === 'SSP ADMIN' ? /^SSP Planner$/i : /Planner/i;
+    const planner1 = admin1 ? null : accsAll.find(x => !x.adminAlso && Object.values(x.roles || {}).some(r => planRe.test(r))) || null;
+    const one = admin1 || planner1;
+    accs = one ? [Object.assign({}, one, { divisions: admin1 ? [sample['DIV'] || cfg.defaultDivision] : (one.divisions || []).slice(0, 1), roleNote: admin1 ? 'ADMIN' : 'PLANNER' })] : [];
+    if (!one) console.error(`  ⚠ ${MENU}: 명부(users.json)에 ${area || 'ADMIN'} 또는 PLANNER 계정이 없음 — 계정 검증 생략`);
+  } else if (mode === 'admin') {
     // 2026-10-20 사용자 지시: ADMIN 계정 하나 + 메뉴 권한 없는 사용자 1명. ADMIN 은 그 영역 '전용' ADMIN(예: SCP → jaeuk.shin) 우선, 없으면 공통(minyonglee1)
     const admins = accsAll.filter(isAreaAdmin);
     const admin1 = admins.find(x => (x.adminOf || []).length === 1 && (!area || x.adminOf[0] === area)) || admins.find(x => (x.adminOf || []).includes(area)) || admins[0] || null;
@@ -144,7 +225,8 @@ for (const id0 of planDirs) {
     if (!noAuth) console.error(`  ⚠ ${MENU}: 메뉴 권한 없는 계정을 명부에서 찾지 못해 ADMIN 만 검증`);
   } else {
     // division 모드도 '필요한 계정만'(2026-10-20 사용자: 명부 = 계정 풀, 전수 테스트 아님): 화면 영역의 역할만 Division 별로 + 영역 ADMIN 1 + 메뉴 권한 없는 사용자 1
-    const roleRe = area === 'DM ADMIN' ? /^DM\b/i : area === 'SCP ADMIN' ? /^SCP\b/i : area === 'SSP ADMIN' ? /^SSP\b/i : /./;
+    // 2026-10-27: SCP 표준 권한 = SCP Planner·SCP Tester·SCM Viewer·ADMIN·SCM PI Admin (ADMIN 은 영역 ADMIN 으로 따로 1명)
+    const roleRe = area === 'DM ADMIN' ? /^DM\b/i : area === 'SCP ADMIN' ? /^(SCP|SCM)\b/i : area === 'SSP ADMIN' ? /^SSP\b/i : /./;
     const roleAccs = accsAll.filter(x => !x.adminAlso && Object.values(x.roles || {}).some(r => roleRe.test(r)));
     const admins = accsAll.filter(isAreaAdmin);
     const admin1 = admins.find(x => (x.adminOf || []).length === 1 && (!area || x.adminOf[0] === area)) || admins.find(x => (x.adminOf || []).includes(area)) || admins[0] || null;
@@ -153,14 +235,25 @@ for (const id0 of planDirs) {
     if (!roleAccs.length) console.error(`  ⚠ ${MENU}: 명부(users.json divisions)에 ${area ? area.replace(' ADMIN', '') + ' 계열' : ''} 역할 계정이 없음 — ADMIN/권한없음만 검증`);
   }
   console.log(`  ${id} 테스트 모드 ${mode} (${modeSource}) → 계정 ${accs.length}: ${accs.map(x => x.id).join(', ')}`);
-  const plan = { id, mode, modeSource, menuId: MENU, page: P.page, routePath: P.routePath, asisName: P.asisName, fields: fieldsPlan, sheetMap, asisMapping: mapMd && fs.existsSync(mapMd) ? path.relative(feRoot, mapMd) : '', buttons: P.buttons, mainSheets: mainSheets.map(s => ({ name: s.name, key: s.key, labels: s.labels.slice(0, 40) })), popupSheets: P.sheets.filter(s => s.popup).map(s => s.name), hasSave: P.hasSave, hasSpreadTitle: P.hasSpreadTitle, procs: P.procs, expectedCols, hasMeta, dynamicHeader, sample: { div: sample['DIV'] || cfg.defaultDivision, item: sample['ITEM_ID'] || '', site: sample['SCM_SITE_ID'] || '', project: sample['PROJECT_CODE'] || '', account: sample.account || sample['테스트계정'] || cfg.defaultAccount }, accounts: accs.map(x => Object.assign({ id: x.id, name: x.name || '', groups: x.groups, divisions: x.divisions, roles: x.roles || {}, roleNote: x.roleNote || '', admin: x.adminAlso, adminOf: x.adminOf || [], screenGroup: (x.screens || {})[MENU] || (x.screens || {})[id] || '', source: x.source || 'accounts.json' }, accountTruth(x))), accountSource: USERS ? 'users.json' : 'accounts.json', expectedBtnsByGroup: Object.fromEntries(Object.entries(expectedBtnsByGroup).map(([k, v]) => [k, [...v]])), menuBtnCodes, menuAuth: menu.length ? 'menu.csv' : '', authSource: { groups: ugUser.length ? 'user_group_user.csv' : '', menus: ugMenu.length ? 'user_group_menu.csv' : '', buttons: authRows.length ? 'btn_auth.csv' : '' } };
+  // 2026-10-23 조회조건 동작 검사: 조회조건 기준표(tools/Harness/rules/search_cond.csv — 룰 E11) 의 MAIN 영역 To-Be 순서 · 제외(삭제/Sun-Set/버튼영역 이동 등) 조건
+  const condOrder = SCref ? [...new Map(SCref.main.filter(r => r.usage === 'USE' && r.tobe_order).sort((x, y) => Number(x.tobe_order) - Number(y.tobe_order)).map(r => [r.tobe_name, r.tobe_name])).values()] : [];
+  const condGone = SCref ? SCref.main.filter(r => ['DROP', 'SUNSET', 'NOT_MIGRATED', 'BUTTON_AREA', 'IN_CALENDAR', 'COLUMN_PERSONAL', 'COMMON_BUTTON'].includes(r.usage) && r.asis_name && r.asis_name !== '-' && !SCref.main.some(u => u.usage === 'USE' && normLbl(u.tobe_name) === normLbl(r.asis_name))).map(r => ({ name: r.asis_name, usage: r.usage })) : [];
+  // 2026-10-27: Division 연동 조회조건(CASCADE) — AS-IS 콤보 원천이 DIVISION_ID 로 거르는 조회조건 → 계획 fields 의 라벨로
+  const comboSrc = readCsv(path.join(sdPack, 'combo_src.csv')).filter(r => r.target_kind === 'SEARCH');
+  const nrmL = t => String(t || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
+  const divCascade = [...new Set(comboSrc.filter(r => /DIVISION_ID/i.test(r.filters || '') && !/division/i.test(r.target)).map(r => r.label))]
+    .map(l => { const f = fieldsPlan.find(f => [f.label].concat(f.labels || []).some(x => nrmL(x) === nrmL(l))); return f ? (f.labels && f.labels.length ? f.labels : [f.label]) : [l]; });
+  const divLabels = (fieldsPlan.find(f => /^div/i.test(String(f.label || '').trim())) || {}).labels || ['Div', 'Division', 'Div.'];
+  const plan = { id, mode, modeSource, menuId: MENU, divCascade, divLabels, condOrder, condGone, page: P.page, routePath: P.routePath, asisName: P.asisName, fields: fieldsPlan, sheetMap, condCols, condLabels, headerSpec, catalogScreen: catRows.length ? (tobeName || P.asisName) : '', asisMapping: mapMd && fs.existsSync(mapMd) ? path.relative(feRoot, mapMd) : '', buttons: P.buttons, mainSheets: mainSheets.map(s => ({ name: s.name, key: s.key, labels: s.labels.slice(0, 40) })), popupSheets: P.sheets.filter(s => s.popup).map(s => s.name), hasSave: P.hasSave, hasSpreadTitle: P.hasSpreadTitle, procs: P.procs, expectedCols, hasMeta, dynamicHeader, sample: { div: sample['DIV'] || cfg.defaultDivision, item: sample['ITEM_ID'] || '', site: sample['SCM_SITE_ID'] || '', project: sample['PROJECT_CODE'] || '', account: sample.account || sample['테스트계정'] || cfg.defaultAccount }, accounts: accs.map(x => Object.assign({ id: x.id, name: x.name || '', groups: x.groups, divisions: x.divisions, roles: x.roles || {}, roleNote: x.roleNote || '', admin: x.adminAlso, adminOf: x.adminOf || [], screenGroup: (x.screens || {})[MENU] || (x.screens || {})[id] || '', source: x.source || 'accounts.json' }, accountTruth(x))), accountSource: USERS ? 'users.json' : 'accounts.json', expectedBtnsByGroup: Object.fromEntries(Object.entries(expectedBtnsByGroup).map(([k, v]) => [k, [...v]])), menuBtnCodes, menuAuth: menu.length ? 'menu.csv' : '', authSource: { groups: ugUser.length ? 'user_group_user.csv' : '', menus: ugMenu.length ? 'user_group_menu.csv' : '', buttons: authRows.length ? 'btn_auth.csv' : '' } };
   fs.writeFileSync(path.join(specs, `${id}.plan.json`), JSON.stringify(plan, null, 2), 'utf8');
   const relLib = path.relative(specs, path.join(__dirname, 'lib', 'crud')).replace(/\\/g, '/');
   const head = `// 자동 생성 — tools/E2E/gen-e2e.js (${new Date().toISOString().slice(0, 10)}) · 원천: Doc/gen/${id}/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것\nimport { test, expect } from '${path.relative(specs, path.join(__dirname, 'fixtures', 'test')).replace(/\\/g, '/')}';\nimport * as fs from 'node:fs';\nconst PLAN = JSON.parse(fs.readFileSync(__dirname + '/${id}.plan.json', 'utf8'));\nconst MENU = ${J(MENU)};\n`;
-  const headCrud = head + `import { crudCycle } from '${relLib}';\n`;
+  const headCrud = head + `import { crudCycle } from '${relLib}';\nimport { divisionCascade } from '${relLib.replace(/crud$/, 'cascade')}';\n`;
 
   // ── smoke
-  fs.writeFileSync(path.join(specs, `${id}.smoke.spec.ts`), head + `
+  const relSmoke = path.relative(specs, path.join(__dirname, 'lib', 'smoke-extra')).replace(/\\/g, '/');
+  fs.writeFileSync(path.join(specs, `${id}.smoke.spec.ts`), head + `import { conditionCycle, commonCycle, record } from '${relSmoke}';
+` + `
 test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
   test.use({ account: PLAN.sample.account || undefined });
   test('화면 열림 · 조회조건 · 조회 · 그리드 컬럼', async ({ nscm, page }) => {
@@ -168,6 +261,10 @@ test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
     expect(r.notFound, '404 아님').toBeFalsy();
     expect(r.authorized, '권한 안내 없이 열림').toBeTruthy();
     await nscm.snapshot(\`\${MENU}_open\`);
+    // 2026-10-21: 화면 열자마자 콘솔 치명 오류를 먼저 확인 — 그리드 생성이 Wijmo 단언으로 죽으면(SCP0100 "Unknown property inner") 뒤의 라벨/그리드 검사는 전부 부수 증상이다
+    { await page.waitForTimeout(800); const errs0 = nscm.consoleErrors; const fatal0 = errs0.filter(e => /Assertion failed|Uncaught|is not a function|Cannot read propert|Unknown property/i.test(e));
+      if (errs0.length) test.info().annotations.push({ type: 'console', description: \`열림 직후 오류 \${errs0.length}(치명 \${fatal0.length}): \${[...fatal0, ...errs0.filter(e => !fatal0.includes(e))].slice(0, 3).join(' || ')}\` });
+      expect.soft(fatal0.length, \`화면 열림 직후 브라우저 콘솔 치명 오류 0 — \${fatal0[0] || ''}\`).toBe(0); }
     // 조회조건 라벨 존재(soft) — 2026-10-21: 접힌 조건(extraConditions) 펼친 뒤, To-Be LBL 문구 → As-is 라벨('*' 제거) → '/' 분할 후보 순으로 찾는다.
     //   __asis-mapping__.md 에서 '제외' 로 닫힌 As-is 컨트롤(dead control·NO-OP)은 검사하지 않고 어노테이션만 남긴다.
     const expanded = await nscm.expandSearchArea();
@@ -188,6 +285,10 @@ test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
     for (const c of calls) expect.soft(c.status, \`call-proc \${c.sheet}/\${c.btn} HTTP\`).toBeLessThan(400);
+    // 2026-10-21: 브라우저 콘솔 오류/페이지 예외 — Wijmo 단언(그리드 생성 실패)·Uncaught 는 화면 결함으로 FAIL, 나머지는 기록만
+    { const errs = nscm.consoleErrors; const fatal = errs.filter(e => /Assertion failed|Uncaught|is not a function|Cannot read propert|Unknown property/i.test(e));
+      test.info().annotations.push({ type: 'console', description: errs.length ? \`오류 \${errs.length}(치명 \${fatal.length}): \${[...fatal, ...errs.filter(e => !fatal.includes(e))].slice(0, 3).join(' || ')}\` : '오류 0' });
+      expect.soft(fatal.length, \`브라우저 콘솔 치명 오류 0 — \${fatal[0] || ''}\`).toBe(0); }
     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
     // 컬럼 대사: 메타(sheet_columns) 있으면 메타, 없으면 As-is 라벨(soft)
@@ -199,10 +300,35 @@ test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
     const sheetName = mappedSheet && PLAN.mainSheets.some((s: { name: string }) => s.name === mappedSheet) ? mappedSheet : PLAN.mainSheets[0]?.name;
     const expectCols = PLAN.hasMeta ? (PLAN.expectedCols[sheetName]?.[PLAN.sample.div] || []) : (PLAN.mainSheets.find((s: { name: string }) => s.name === sheetName)?.labels || []);
     const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
-    const missing = expectCols.filter((c: string) => c && !headers.some(h => norm(h) === norm(c) || norm(h).includes(norm(c))));
-    test.info().annotations.push({ type: 'columns', description: \`시트 \${sheetName}(\${firstSearch ? firstSearch.sheet : '-'}) 헤더 \${headers.length} / 기대 \${expectCols.length} / 누락 \${missing.length}: \${missing.slice(0, 10).join(', ')}\` });
+    // 2026-10-21: As-is SetLayout(조회조건에 따라 표시/숨김)이 다루는 컬럼은 기본 조회에서 안 보여도 '누락' 이 아니다(SCP0100 Product Level1~3)
+    const condSet = new Set(((PLAN.condLabels || []) as string[]).map(norm));
+    const missingAll = expectCols.filter((c: string) => c && !headers.some(h => norm(h) === norm(c) || norm(h).includes(norm(c))));
+    const condHidden = missingAll.filter((c: string) => condSet.has(norm(c)));
+    const missing = missingAll.filter((c: string) => !condSet.has(norm(c)));
+    test.info().annotations.push({ type: 'columns', description: \`시트 \${sheetName}(\${firstSearch ? firstSearch.sheet : '-'}) 헤더 \${headers.length} / 기대 \${expectCols.length} / 누락 \${missing.length}: \${missing.slice(0, 10).join(', ')}\${condHidden.length ? ' / 조건부 표시(SetLayout) 제외 ' + condHidden.length + ': ' + condHidden.join(', ') : ''}\` });
     expect.soft(missing.length, \`그리드 컬럼 누락 (\${PLAN.hasMeta ? '메타' : 'As-is 라벨'} 기준)\`).toBeLessThanOrEqual(Math.ceil(expectCols.length * 0.2));
     // 동적 헤더(기간 컬럼) — As-is 타이틀 SP/DB루프가 있으면 정적 메타 밖 컬럼 ≥1 + 사내 배선 타이틀 시트 조회(2026-10-20 SCP0096)
+    // As-is 헤더 사양 대조(2026-10-21 SCP0100: 대조표 '구현' 인데 3단 헤더가 144px 한 칸으로 병합되고 "Qty" 행이 없었다) — 행 수·병합 리터럴·행 높이
+    if (PLAN.headerSpec && PLAN.headerSpec.rows > 1) {
+      const HS = PLAN.headerSpec; const hr = await nscm.gridHeaderRows(0);
+      const texts = new Set(hr.rows.flatMap(r => r.texts));
+      const missLit = (HS.literals || []).filter((l: string) => !texts.has(l));
+      test.info().annotations.push({ type: 'header', description: \`As-is 헤더 \${HS.rows}행(병합 리터럴 \${(HS.literals || []).join('/') || '-'}) ↔ To-Be 행 \${hr.rows.length}(높이 \${hr.rows.map(r => r.h).join('+')}=\${hr.height}px)\${missLit.length ? ' · 리터럴 누락 ' + missLit.join(',') : ''}\` });
+      // 행 수는 '시각적 단' 기준 — As-is 월간은 3행이어도 Qty 가 1~2행을 병합해 2단으로 보인다. 따라서 2단 이상이면 통과(리터럴·분리·높이 검사가 실질 판정)
+      expect.soft(hr.rows.length, \`헤더 시각적 단 수 ≥ 2 (As-is SetSheetHeaderColumn \${HS.rows}행 · 월간은 Qty 2행 병합 = 2단) — 1단이면 columnGroups leaf 라벨 점검\`).toBeGreaterThanOrEqual(Math.min(HS.rows, 2));
+      expect.soft(missLit.length, \`As-is 병합 헤더 리터럴 노출 [\${(HS.literals || []).join(', ')}]\`).toBe(0);
+      expect.soft(hr.height, \`헤더 총 높이 ≤ \${HS.maxRowPx}px × \${HS.rows}행 (headerRowHeight 재적용 — check.js H01)\`).toBeLessThanOrEqual(HS.maxRowPx * HS.rows);
+      // 2026-10-21 사용자 지적: ① 리터럴(Qty) 칸은 상단 월 칸이 분리돼 있으면 하단도 분리(가로 병합 1칸 금지) ② leaf(Qty) 행이 그룹(월) 행보다 낮으면 As-is 와 역전
+      if (HS.literals && HS.literals.length && hr.rows.length >= 2) {
+        const top = hr.rows[0]; const litRow = hr.rows.find(r => (HS.literals as string[]).some((l: string) => r.texts.includes(l)));
+        if (litRow) {
+          const topDyn = top.cells.filter(c => !/^[A-Za-z가-힣 .\/()]+$/.test(c)).length; // 상단 행에서 문자 라벨(고정 컬럼)이 아닌 칸(연월·주차) 수
+          test.info().annotations.push({ type: 'header', description: \`리터럴 행 칸 \${litRow.n} / 상단 동적 칸 \${topDyn} · 높이 상단 \${top.h} vs 리터럴 행 \${litRow.h}\` });
+          if (topDyn >= 2) expect.soft(litRow.n, \`리터럴(\${HS.literals.join('/')}) 칸이 월마다 분리(상단 동적 칸 \${topDyn}) — 1칸이면 헤더 가로 병합(check.js H05)\`).toBeGreaterThanOrEqual(Math.min(topDyn, 2));
+          expect.soft(litRow.h >= top.h, \`leaf(\${HS.literals.join('/')}) 행 높이(\${litRow.h}) ≥ 상단 그룹 행(\${top.h}) — As-is 는 Qty 영역이 더 높다(1~2행 병합)\`).toBeTruthy();
+        }
+      }
+    }
     if (PLAN.dynamicHeader) {
       const DH = PLAN.dynamicHeader;
       const binds = await nscm.gridBindings(0);
@@ -216,6 +342,28 @@ test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
     }
     await nscm.snapshot(\`\${MENU}_searched\`);
     test.info().annotations.push({ type: 'calls', description: JSON.stringify(calls.map(c => [c.sheet, c.btn, c.status, c.rows, c.ms])) });
+    // 2026-10-23 사용자 지시: 다국어 미적용(코드 미등록 → '_기본문구' 노출) = 오류 — 조회조건 펼침·조회 후 보이는 글자 전체
+    { const u = await nscm.untranslatedTexts();
+      test.info().annotations.push({ type: 'i18n', description: u.length ? \`'_' 노출 \${u.length}: \${u.slice(0, 15).join(' | ')}\` : "'_' 노출 0" });
+      expect.soft(u.length, \`다국어 미적용 '_' 노출 0 — \${u.slice(0, 8).join(' | ')} (SCM_ADM_MSG_M 에 코드 등록 또는 기존 LBL/MSG 재사용 · 하네스 I18N1)\`).toBe(0); }
+  });
+  // 2026-10-23 사용자 지시: 조회조건 각각의 동작 · 공통 기능 동작 (lib/smoke-extra.ts) — 결과는 cond:/common: 어노테이션 → _summary · 대조표(recon) 열
+  test('조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인', async ({ nscm }) => {
+    test.setTimeout(1_200_000);
+    const r = await nscm.openScreen(MENU); expect(r.authorized, '권한 안내 없이 열림').toBeTruthy();
+    const items = await conditionCycle(nscm, test.info(), PLAN);
+    const s = record(test.info(), 'cond', items);
+    await nscm.snapshot(\`\${MENU}_cond\`);
+    expect.soft(s.fail, \`조회조건 동작 FAIL \${s.fail}: \${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}\`).toBe(0);
+    expect.soft(s.error, \`조회조건 판정 불가(ERROR) \${s.error}: \${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}\`).toBe(0);
+  });
+  test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {
+    test.setTimeout(600_000);
+    const r = await nscm.openScreen(MENU); expect(r.authorized, '권한 안내 없이 열림').toBeTruthy();
+    const items = await commonCycle(nscm, test.info(), PLAN);
+    const s = record(test.info(), 'common', items);
+    await nscm.snapshot(\`\${MENU}_common\`);
+    expect.soft(s.fail, \`공통 기능 FAIL \${s.fail}: \${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}\`).toBe(0);
   });
 });
 `, 'utf8');
@@ -314,9 +462,24 @@ for (const acc of PLAN.accounts) {
       if (!r.authorized || r.notFound) { expect.soft(acc.menuAccess, \`[\${acc.id}] 메뉴 권한 있음(user_group_menu) 인데 접근 불가 (authorized=\${r.authorized} notFound=\${r.notFound})\`).not.toBe('Y'); return; }
       // 메뉴 권한 없는 계정도 URL 직접 접근으로는 열린다(To-Be FE 라우트 가드 없음) → 기록하고, 버튼·편집은 '없어야 함' 으로 계속 검증
       if (acc.menuAccess === 'N') test.info().annotations.push({ type: 'gap', description: \`메뉴 권한(user_group_menu) 없는 계정이 /view/\${MENU} 직접 접근으로 열림\` });
-      const div = (acc.divisions && acc.divisions[0]) || PLAN.sample.div; if (div) await nscm.setDivision(div);
-      const calls = await nscm.search(); for (const c of calls) expect.soft(c.status, \`[\${acc.id}] call-proc \${c.sheet}/\${c.btn}\`).toBeLessThan(400);
-      const out = await crudCycle(nscm, test.info(), PLAN, MARK);
+      // 2026-10-27: division 모드(사용자가 화면 지정) = 계정이 대표하는 Division 마다 CASCADE → 조회 → CRUD. 그 외 모드 = 첫 Division 1회(CASCADE 확인 포함)
+      const divs: string[] = (PLAN.mode === 'division' ? (acc.divisions && acc.divisions.length ? acc.divisions : [PLAN.sample.div]) : [(acc.divisions && acc.divisions[0]) || PLAN.sample.div]).filter(Boolean);
+      test.setTimeout(120_000 + Math.max(1, divs.length) * 420_000);
+      let out: any = null;
+      for (const div of divs) {
+        const cas = await divisionCascade(nscm, test.info(), PLAN, acc, div);
+        if (acc.expectedDivs) expect.soft(cas.leak, \`[\${acc.id} \${div}] Division 후보 ⊆ 계정 Division 권한(unit_auth) — 권한 밖 Division 노출 0\`).toEqual([]);
+        if (cas.divListed !== null) expect.soft(cas.divListed, \`[\${acc.id}] 대표 Division \${div} 가 Division 후보에 있음\`).toBeTruthy();
+        for (const d of cas.deps) expect.soft(d.count, \`[\${acc.id} \${div}] Division 연동 조회조건 [\${d.label}] 후보 1건 이상(CASCADE)\`).toBeGreaterThan(0);
+        const calls = await nscm.search(); for (const c of calls) expect.soft(c.status, \`[\${acc.id} \${div}] call-proc \${c.sheet}/\${c.btn}\`).toBeLessThan(400);
+        const alert = await nscm.alertText(); if (alert) await nscm.closeAlert();
+        const divVals = (await nscm.gridColumnValues('DIVISION')).concat(await nscm.gridColumnValues('DIVISION_ID')).concat(await nscm.gridColumnValues('Division'));
+        if (divVals.length) expect.soft(divVals.every(v => !v || v.startsWith(div)), \`[\${acc.id} \${div}] 조회 결과 DIVISION 값 = 선택 Division\`).toBeTruthy();
+        const o = await crudCycle(nscm, test.info(), PLAN, MARK + (divs.length > 1 ? div.replace(/[^A-Za-z0-9]/g, '') : ''));
+        test.info().annotations.push({ type: 'authcrud', description: \`\${acc.id} div=\${div} mode=\${o.mode} save=\${o.saveVisible} insert=\${o.insertVisible} delete=\${o.deleteVisible} editable=\${o.editable} saved=\${o.saved} found=\${o.found} cleaned=\${o.cleaned} restored=\${o.restored}\` });
+        out = out ? Object.assign({}, out, { saved: out.saved && o.saved, found: out.found && o.found, cleaned: out.cleaned && o.cleaned, restored: out.restored && o.restored, saveCalls: out.saveCalls + o.saveCalls, saveErrors: out.saveErrors.concat(o.saveErrors) }) : o;
+      }
+      if (!out) return;
       // 버튼 노출 ↔ 기대
       if (expSave != null) expect.soft(out.saveVisible, \`[\${acc.id} \${G.join('/')}] btn_auth SAVE=\${expSave ? 'Y' : 'N'} → Save 버튼 \${expSave ? '노출' : '비노출'}\`).toBe(expSave);
       if (expIns != null) expect.soft(out.insertVisible, \`[\${acc.id}] btn_auth INSERT=\${expIns ? 'Y' : 'N'} → Insert 버튼\`).toBe(expIns);

@@ -131,8 +131,10 @@ export const DemandManager = ({ tabId, title }: PageProps<MENU_ID>) => {
   // ⭐ 편집 가능 판정 = 버튼 권한(SAVE) + 행의 EDIT_YN(서버 판정).
   //   세션에는 그룹 ID 가 없고(groupId 는 빈 값) groups 는 표시명이라 화면에서 그룹명을 비교하지 않는다.
   const canEdit = hasButton('SAVE');
+  // {0} 치환은 param 이 정의돼 있으면 빈 문자열이라도 한다. MSG01081(유효한 날짜 형식이 아닙니다. {0})처럼
+  //   자리표시가 있는 문구에 param: '' 를 넘기면 종전 truthy 판정으로는 '{0}' 이 그대로 노출됐다(2026-10-16).
   const msgText = (msgId: string, fallback: string, param?: string) =>
-    param ? t(msgId, fallback).replace('{0}', param) : t(msgId, fallback);
+    param !== undefined ? t(msgId, fallback).replace('{0}', param) : t(msgId, fallback);
   const alert = (msgId: string, fallback: string, param?: string) =>
     void setAlert({ type: 'alert', content: msgText(msgId, fallback, param) });
 

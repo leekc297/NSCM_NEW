@@ -1,0 +1,18 @@
+﻿CREATE  FUNCTION [dbo].[FN_ENCRYPT] (@pInString VARCHAR)
+RETURNS VARCHAR
+AS
+BEGIN
+
+DECLARE @TMPSTR VARCHAR
+
+    IF @pInString = '' OR @pInString IS NULL
+      BEGIN
+       SET @TMPSTR = NULL
+      END
+    ELSE
+    	--RETURN pInString;
+      BEGIN
+        SET @TMPSTR = CRYPTO_AES256.ENC_AES(@pInString)
+      END
+   RETURN (@TMPSTR)
+END

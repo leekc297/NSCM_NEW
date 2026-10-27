@@ -2,7 +2,7 @@
   "name": "vibe-manager",
   "displayName": "Vibe_Manager",
   "description": "NSCM 전환(As-is C#.NET → To-Be React/Oracle) 6단계 작업을 VS Code 에서 실행·판정하는 관리 패널 — 프로그램 ID 하나로 단계별 작업, 룰·Hook·하네스 관리, 환경설정, 실행 이력",
-  "version": "1.9.9",
+  "version": "1.9.28",
   "publisher": "marisoft",
   "license": "UNLICENSED",
   "private": true,
@@ -181,27 +181,27 @@
         {
           "command": "vibeManager.openWorkbench",
           "when": "view == vibeManager.menu",
-          "group": "navigation@1"
+          "group": "navigation@0"
         },
         {
           "command": "vibeManager.quickScreen",
           "when": "view == vibeManager.menu",
-          "group": "navigation@0"
+          "group": "navigation@3"
         },
         {
           "command": "vibeManager.openDashboard",
           "when": "view == vibeManager.menu",
-          "group": "navigation@1"
+          "group": "navigation@4"
         },
         {
           "command": "vibeManager.refresh",
           "when": "view == vibeManager.menu",
-          "group": "navigation@2"
+          "group": "navigation@6"
         },
         {
           "command": "vibeManager.gateReport",
           "when": "view == vibeManager.menu",
-          "group": "navigation@3"
+          "group": "navigation@7"
         },
         {
           "command": "vibeManager.openOutputFolder",
@@ -226,17 +226,17 @@
         {
           "command": "vibeManager.checkEnv",
           "when": "view == vibeManager.menu",
-          "group": "navigation@1"
+          "group": "navigation@5"
         },
         {
           "command": "vibeManager.openFlow",
           "when": "view == vibeManager.menu",
-          "group": "navigation"
+          "group": "navigation@1"
         },
         {
           "command": "vibeManager.openHistory",
           "when": "view == vibeManager.menu",
-          "group": "navigation"
+          "group": "navigation@2"
         }
       ],
       "view/item/context": [

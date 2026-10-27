@@ -17,12 +17,19 @@ import { ProductionPlanLineLoadModal } from './components/modals/ProductionPlanL
 import { ProductionPlanLineForm } from './components/ProductionPlanLineForm';
 import { ProductionPlanLineGrid } from './components/ProductionPlanLineGrid';
 import { useProductionPlanLineValidation } from './hooks/useProductionPlanLineValidation';
-import { LBL, LINE_TOTAL_MEASURE_PREFIX, MENU_ID, MSG, SHEETS } from './production-plan-line.constants';
+import {
+  LBL,
+  LINE_TOTAL_MEASURE_PREFIX,
+  MEASURE_ROW_ORDER,
+  MENU_ID,
+  MSG,
+  SHEETS,
+} from './production-plan-line.constants';
 import { MOCK_EDIT_INFO_DATA, MOCK_MAIN_DATA, MOCK_MAIN_ENABLED } from './production-plan-line.mock'; // ⚠ 임시 개발용 목데이터
 import type { EditInfoRow, FixMode, FixRow, MainRow } from './production-plan-line.types';
 import styles from './ProductionPlanLine.module.scss';
 import { deriveEditContext, useProductionPlanLineStore } from './useProductionPlanLineStore';
-import { applyRatio } from './utils/productionPlanLineDerive';
+import { applyRatio, orderRowsByMeasure } from './utils/productionPlanLineDerive';
 import {
   buildFixKey,
   canFixUnfixNew,
@@ -112,8 +119,13 @@ export const ProductionPlanLine = ({ tabId, title }: PageProps<MENU_ID>) => {
       | { o_rc1?: MainRow[]; o_rc3?: Record<string, unknown>[]; o_rc4?: Record<string, unknown>[] }
       | undefined;
     const rc1 = (d?.o_rc1 ?? []) as unknown as Record<string, unknown>[];
-    return applyRatio(rc1, d?.o_rc3 ?? [], d?.o_rc4 ?? [], LINE_TOTAL_MEASURE_PREFIX) as unknown as MainRow[];
-  }, [data]);
+    const ratioed = applyRatio(rc1, d?.o_rc3 ?? [], d?.o_rc4 ?? [], LINE_TOTAL_MEASURE_PREFIX);
+    // measure 행 순서 교정 — 등록 SORT(staticMeasures, 동일 원천/정렬) 순으로 line 블록 안에서 재배치해
+    //   % measure(LINE_TOTAL_*)를 각 Plant site 행그룹 맨 아래로 보낸다. staticMeasures 미로드 시 상수 fallback.
+    const measureOrder =
+      staticMeasures.length > 0 ? staticMeasures.map(m => m.colNm) : MEASURE_ROW_ORDER;
+    return orderRowsByMeasure(ratioed, measureOrder) as unknown as MainRow[];
+  }, [data, staticMeasures]);
 
   // fix 확정 셀 집합 (M4a/M2) — O_RC2(dtFix) 8필드 FIX_KEY + 기간키(D_/W_). Grid formatHandler 가 녹색 판정.
   //   O_RC2 는 Daily 행에 YYYYMMDD, 그 외 주행에 BASIS_YYYYMM/ISO_WEEK 반환(PKG body LINE 3294~3339 실측).

@@ -7,16 +7,41 @@
   min-height: 0;
 }
 
+// 상하 드래그 분할(react-resizable-panels). basis 0 이어야 그룹이 남은 높이를 채운다.
+.panelGroup {
+  flex: 1 1 0;
+  min-height: 0;
+
+  // 그리드가 Panel 높이를 넘지 않고 내부 스크롤되게 한다.
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+
+  // Panel 내부 래퍼를 flex column 으로 두어 높이를 mainGrid/detailArea 로 전달한다.
+  > div > div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.splitBar {
+  height: 6px;
+  cursor: row-resize;
+}
+
+// 크기는 Panel(defaultSize 55%/45%, minSize 15%)이 정한다.
 .mainGrid {
-  flex: 1 1 55%;
-  min-height: 200px;
+  flex: 1 1 0;
+  height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
 
 .detailArea {
-  flex: 1 1 45%;
-  min-height: 180px;
+  flex: 1 1 0;
+  height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   border-top: 1px solid var(--color-border, #d9d9d9);
@@ -42,6 +67,11 @@
 .detailBarField {
   flex: 0 1 auto;
   min-width: 180px;
+}
+
+/* 팝업 돋보기 버튼은 입력칸 밖 오른쪽에 붙어 다음 칸 라벨을 덮으므로 버튼 폭만큼 비운다(2026-10-19). */
+.detailBarPopupField {
+  margin-right: 44px;
 }
 
 /* 날짜 range(Shipment Date)는 피커 2개+구분자라 더 넓은 최소폭이 필요. */

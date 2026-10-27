@@ -1,0 +1,51 @@
+[
+ {
+  "name": "1 FE 골격 생성 + nscm-fe 적용(gen --apply)",
+  "code": 0,
+  "sec": 1,
+  "tail": "To-Be 메뉴 메타: SCP0122 → feature=supply pageDir=plan-activity-mgmt 상위=Supply_Master USE_YN=Y (Plan Activity Mgmt)\nSCP0122 → C:\\Projects\\NSCM\\Doc\\gen\\SCP0122  (11 files)  page=features\\supply\\src\\pages\\plan-activity-mgmt  fields=3 buttons=0 sheets=1+0popup procs=4 handlers=5 tcs=28 V=0 E=0\n적용: C:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\plan-activity-mgmt",
+  "at": "2026-10-22T02:26:43.198Z"
+ },
+ {
+  "name": "2 Oracle 메타 등록 SQL(gen-register-sql)",
+  "code": 0,
+  "sec": 2,
+  "tail": "SCP0122_registration.sql → C:\\Projects\\NSCM\\Doc\\gen\\SCP0122  (PROC 4 · 시트컬럼 15+0 · 그룹 3 · 상위메뉴 확정)",
+  "at": "2026-10-22T02:26:55.690Z"
+ },
+ {
+  "name": "3 Oracle PKG 골격(gen-pkg)",
+  "code": 0,
+  "sec": 1,
+  "tail": "SCP0122_PKG.sql → C:\\Projects\\NSCM\\Doc\\gen\\SCP0122  (PROC 3, 메모 3)",
+  "at": "2026-10-22T02:27:00.251Z"
+ },
+ {
+  "name": "4 FE 수선 루프(Claude ×3 + 게이트 --final)",
+  "code": 0,
+  "sec": 1464,
+  "tail": "SCP0122 round 1: BLOCK 0 / WARN 0\n[PASS] SCP0122  rounds=1 BLOCK=0 WARN=0\n요약 → C:\\Projects\\NSCM\\Doc\\gen\\_repair_summary.csv",
+  "at": "2026-10-22T02:51:28.182Z"
+ },
+ {
+  "name": "5 PKG 이식 루프(Claude ×3 + check-pkg)",
+  "code": 0,
+  "sec": 623,
+  "tail": "SCP0122 round 1: BLOCK 0 / WARN 0\n[PASS] SCP0122  rounds=1 BLOCK=0 WARN=0\n요약 → C:\\Projects\\NSCM\\Doc\\gen\\_repair_summary.csv",
+  "at": "2026-10-22T03:01:53.296Z"
+ },
+ {
+  "name": "6 E2E 스펙 생성(gen-e2e)",
+  "code": 0,
+  "sec": 1,
+  "tail": "SCP0122 테스트 모드 division (auto(Division 조회조건 있음)) → 계정 5: dodae, bottle, coeogus, jaeuk.shin, hongjae.kim\n  SCP0122 → SCP0122  smoke/crud(save)/auth(5계정)/authcrud(기대 있음 5계정)  메타컬럼 Y\n스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs  (계정×DIV 매트릭스 7행)",
+  "at": "2026-10-22T03:01:56.291Z"
+ },
+ {
+  "name": "7 대조표 갱신(recon)",
+  "code": 0,
+  "sec": 15,
+  "tail": "대사표: 화면 455 (대상외 315 · 대상외-구현됨 86 · OK 34 · ToBe신규 8 · 누락-ToBe 6 · 재확인 3 · 누락-파싱 3)\n       SP 2017 (대상외 / 목록외 965 · 공통(제외) 375 · OK / 목록외 371 · OK 192 · 누락-ToBe 74 · 누락-ToBe / 파싱미검출(타화면 검출) 13 · OK / 파싱미검출(타화면 검출) 11 · 누락-ToBe / 목록외 7 · 누락-ToBe / 파싱미검출(전체 미검출) 5 · 공통(제외) / 파싱미검출(타화면 검출) 3 · OK / 파싱미검출(전체 미검출) 1)\n       시트 951 (OK 710 · 대상외 126 · 누락-시트 93 · 누락-ToBe화면 22)\n→ C:\\Projects\\NSCM\\Doc\\recon\\대사표.md / index.html",
+  "at": "2026-10-22T03:02:13.398Z"
+ }
+]

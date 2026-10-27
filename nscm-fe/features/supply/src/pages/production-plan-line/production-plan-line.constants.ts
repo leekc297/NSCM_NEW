@@ -68,6 +68,19 @@ export const LINE_TOTAL_MEASURE_PREFIX = 'LINE_TOTAL';
 //   Wijmo 컬럼 format 은 컬럼단위라 행별 스케일 불가 → 그리드 formatItem 에서 이 행만 소수 2자리 렌더.
 export const LINE_TOTAL_DECIMALS = 2;
 
+// Measure 행 표시 순서 fallback — SCM_MST_SHEET_MEASURE(SHEET_NAME='LINE') SORT_ORDER_NO 정본(design 03 §1
+//   Measure 표, 활성 6). % measure(LINE_TOTAL_*)가 맨 아래 — 각 Plant site 행그룹 안에서 %는 하단(사용자 지시
+//   2026-10-13). 런타임은 staticMeasures(동적 fetch, 동일 원천·동일 SORT)가 있으면 그 순서를 쓰고, 비었을 때만
+//   이 상수를 쓴다(고정컬럼 FIXED_COLUMNS fallback 과 동형 — 동적이 우선, 하드코딩 아님).
+export const MEASURE_ROW_ORDER = [
+  'PROD_PLAN_ENGINE',
+  'PROD_PLAN_AMEND',
+  'PROD_PLAN_ENGINE_CELL_QTY',
+  'PROD_PLAN_ENGINE_STD_JR',
+  'LINE_TOTAL_LOAD_ENGINE',
+  'LINE_TOTAL_LOAD_AMEND',
+] as const;
+
 // division 특수 코드 (design 01 §2 B1/B3/B5, 02 §2.3).
 export const DIVISION_CELL_TYPE = '40'; // div=40 → CellTypeGr/ExtraSpec enable + 관련 컬럼 표시
 export const DIVISION_EE_PREFIX = 'EE'; // div 앞2자 EE → OperationGroup 코드셋 EE 전용 + EE 컬럼 표시
@@ -126,7 +139,7 @@ export const MSG = {
   REQUIRED_FIELD: 'MSG00429', // {0} value is required. (구 MSG00002=TO-BE "Saved successfully." 오표시 — 자매 검증코드)
   NO_PERMISSION: 'MSG00096', // No permission. (TO-BE 동일 — 유지)
   NOT_EDIT_MODE: 'MSG00135', // This function is locked in edit mode. (구 MSG00010=TO-BE "search criteria saved" 오표시)
-  SAVE_YN_NO: 'MSG00182', // 저장 불가(서버 SAVE_YN=N) — TO-BE 미등록, 영문 fallback. 서버 SAVE_YN(M5) 축
+  SAVE_YN_NO: 'MSG01196', // 저장 불가(서버 SAVE_YN=N) (AS-IS MSG00182 는 TO-BE 미등록 → 같은 문구 MSG01196, KO/EN/CN). 서버 SAVE_YN(M5) 축
   CONFIRM_RESEARCH: 'MSG01273', // Do you want to re-search? (구 MSG00265=Excel 재로드 오표시). 번들 미포함→영문 fallback
   QTY_NEGATIVE: 'MSG00225', // Quantity must be 0 or greater. (구 MSG00084 미등록)
   QTY_OVERFLOW: 'MSG00165', // You have exceeded the number of digits you can enter. (구 MSG00317 미등록). 번들 미포함
@@ -134,7 +147,7 @@ export const MSG = {
   SELECT_CELL: 'MSG01262', // No date selected. Select Fix/Unfix date. (SCP0013 전용, 구 MSG00134 미등록). 번들 미포함
   CONFIRM_UNFIX: 'MSG00683', // 삭제 하시겠습니까? / Do you want to delete it? — AS-IS Unfix 확인(MSG00016='삭제하시겠습니까?')과 동일 문구. TO-BE MSG00016 은 'page not found' 오표시라, 동일 문구 MSG00683(KO/EN/CN USE_YN=Y 실측 2026-10-07)으로 재사용
   SELECT_TARGET: 'MSG00014', // No row selected. (구 MSG00007="This data cannot be modified" 부정확)
-  LINE_ASSIGN_ITEM: 'MSG00290', // Line Assign 체크 시 Material 필수 — TO-BE 미등록, 영문 fallback
+  LINE_ASSIGN_ITEM: 'MSG01293', // Line Assign 체크 시 Material 필수 (AS-IS MSG00290 는 TO-BE 미등록 → 같은 문구 MSG01293, KO/EN/CN)
   SAVE_SUCCESS: 'MSG00004', // No changes to save. (변경없음 토스트로 사용 — 의미 일치, 유지)
   SAVE_FAIL: 'MSG00003', // Failed to save. (TO-BE 동일 — 유지)
   PLAN_PERIOD_RANGE: 'MSG00108', // Invalid period (start > end). (구 MSG00252 미등록 — 자매 START_END_ORDER 정합)
@@ -159,7 +172,7 @@ export const LBL = {
   MODEL_NICKNAME: 'LBL00618', // Model/Nickname (메1 MaterialByDivisionModal 픽커 통합 필드)
   PLAN_DATE: 'LBL00039', // Plan Date
   PLAN_TYPE: 'LBL00040', // Plan Type
-  SEQ: 'LBL00768', // Seq
+  SEQ: 'LBL00041', // Seq
   PERIOD: 'LBL00013', // Period (구 LBL00505 = DB 미등록 교정)
   BUCKET: 'LBL00710', // Bucket
   ALL: 'LBL00632', // All
@@ -186,6 +199,11 @@ export const QTY_MAX = 99999999;
 export const CELL_COLOR = {
   PAST_GRAY: 'rgb(234,234,234)', // 실적/과거(편집불가) 구간 배경
   FIX_GREEN: 'rgb(188,229,92)', // fix 확정 셀 배경 (O_RC2 매칭 후)
+  // 편집가능 pivot 셀 표시색 — NSCM 공통 editable 색 토큰($wj-editable-cell=#fff8cd, _variables.scss)과 동일.
+  //   AS-IS 는 편집밴드를 회색(234,234,234, Set_FPOperationColor cs:3574)으로 칠했으나 TO-BE 는 플랫폼
+  //   공통 editable 노랑으로 통일한다. 고정/동적컬럼 전건 INPUT_TP_CD='S' 라 공용 formatEditableColumns
+  //   (wj-cell-editable)이 안 걸리므로 그리드 formatItem 에서 직접 칠한다(design 03 §3.8 #61 TO-BE 치환).
+  EDIT_YELLOW: '#fff8cd', // 편집가능(PROD_PLAN_AMEND 편집kind·미래·행편집가능) 셀 배경
   UNDER_100: '#d32f2f', // LINE_TOTAL(%) < 100 강조 텍스트
 } as const;
 // LINE_TOTAL(%) 강조 임계 (design 03 §3.8 #65 — 부하율 100% 미만 강조).

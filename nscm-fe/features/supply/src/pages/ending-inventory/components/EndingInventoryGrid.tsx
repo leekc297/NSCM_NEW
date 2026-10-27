@@ -16,7 +16,6 @@ import {
   CELL_CF_YELLOW_COLUMNS,
   COL,
   DETAIL_COLUMNS,
-  MERGE_COLUMNS,
   SEARCH_MODE,
   type SearchMode,
 } from '../ending-inventory.constants';
@@ -89,15 +88,32 @@ export const EndingInventoryGrid = ({
     };
   }, [gridRef, staticColumns, data, isHeaderViewDetail, isDaily, showCellTypeGr, devaluationAge]);
 
-  // 컬럼별 병합(allowMerging) — 공용 DataGrid 는 allowMerging prop 이 켜지면 전 컬럼에 true 를 씌우므로,
-  //   선두 그룹 컬럼(MERGE_COLUMNS)만 남기고 나머지는 updatedLayout 마다 false 로 되돌린다(bod 처방).
+  // 세로 병합(allowMerging) — AS-IS 관측(사용자 2026-10-21):
+  //   월마감 모드 = YY.MM(YYYYMM) 만.
+  //   일별 모드   = YY.MM(YYYYMM)·YY.MM.DD(YYYYMMDD)·DIV(DIVISION_ID)·Plant Site(PLANT_NAME)·
+  //                 Plant(PLANT_ID)·Material(ITEM_ID)·Description(ITEM_DESCRIPTION)·Unit(ITEM_UOM) 까지.
+  //   CustomMergeManager 가 좌측 누적키(col 0..n 동일값 연쇄) + 빈 셀 미병합이라, 선두 식별 컬럼이
+  //   위→아래 계층으로 묶이고 데이터 없는(빈) 셀은 병합되지 않는다("데이터 없으면 병합안함" 충족).
+  //   프레임워크 정책은 전 컬럼 MergePolicy.Restricted(SpreadInfo.cs:1295)지만 관측 기준 컬럼으로 고정.
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
+    const mergeBindings: ReadonlySet<string> = isDaily
+      ? new Set([
+          COL.YYYYMM,
+          COL.YYYYMMDD,
+          COL.DIVISION_ID,
+          COL.PLANT_NAME,
+          COL.PLANT_ID,
+          COL.ITEM_ID,
+          COL.ITEM_DESCRIPTION,
+          COL.ITEM_UOM,
+        ])
+      : new Set([COL.YYYYMM]);
     const apply = () => {
       for (const col of g.columns) {
         if (!col.binding) continue;
-        col.allowMerging = MERGE_COLUMNS.has(col.binding);
+        col.allowMerging = mergeBindings.has(col.binding);
       }
     };
     g.updatedLayout.addHandler(apply);
@@ -105,7 +121,7 @@ export const EndingInventoryGrid = ({
     return () => {
       g.updatedLayout?.removeHandler(apply);
     };
-  }, [gridRef, staticColumns, data]);
+  }, [gridRef, staticColumns, data, isDaily]);
 
   // 조건부 셀 배경색 — USE_CELL_CF_BOM='Y' 행의 CELL_CONVER_FACTOR/QUANTITY 셀 Yellow(cs:256/257).
   //   DataGrid 는 formatItem prop 을 노출하지 않아 셀 DOM 에 직접 style 을 세팅한다(bod 선례).

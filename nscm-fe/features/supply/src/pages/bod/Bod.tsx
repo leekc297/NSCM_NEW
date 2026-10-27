@@ -11,7 +11,13 @@ import { MainTitle, SubTitle } from '@shared/components';
 import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
-import { BOD_COLUMN, DAY_OF_WEEK_COLUMNS, MENU_ID, SHEETS } from './bod.constants';
+import {
+  BOD_COLUMN,
+  DAY_OF_WEEK_COLUMNS,
+  DIVISION_AUTO_SET_FLAG,
+  MENU_ID,
+  SHEETS,
+} from './bod.constants';
 import type { BodSaveErrorRow } from './bod.types';
 import { validateBodRows } from './bod.util';
 import { BodForm } from './components/BodForm';
@@ -57,22 +63,28 @@ export const Bod = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // Country/City 캐시 — AS-IS GetData_Country()(SCP0007_BOD.cs L604-638) 는 조회조건 division 으로
   // p_scm_site_id='' 를 넘겨 전 SITE 를 1회 캐시(dtCountryCity)한다. SetCityCode 가 이 캐시로
-  // From/To Site 셀 변경마다 client-side lookup 한다(서버 재조회 없음). BOD 조회와 같은 시점에
-  // 함께 트리거(같은 filters/enabled 게이트) — division 없이는 캐시도 무의미하다.
-  // 확인필요(DB 접속 불가): SCM_ADM_MNU_BTN_MPG_M 에 SCP0007/countryCity/SEARCH 버튼 배선이
-  // 05_register.sql 로 작성됐으나 이번 세션에서 DB 미적용 — 적용 전에는 -9997 No Permission.
-  const countryCityFilters = useMemo(
-    () => (filters ? { divisionId: filters.divisionId, scmSiteId: '' } : undefined),
-    [filters]
-  );
-  const { data: countryCityData } = useTabProcQuery<MENU_ID, SHEETS.COUNTRY_CITY>({
+  // From/To Site 셀 변경마다 client-side lookup 한다(서버 재조회 없음).
+  // 화면 진입 때 전 Division 으로 1회 불러온다 — AS-IS 는 Find 때 조회조건 Division 으로만 캐시를 채워
+  //   조회 전 Insert 행은 Site 를 골라도 City 가 비고 Route 를 고를 수 없었다(QA 결함: 조회 전 Insert 저장 불가).
+  //   조회조건 Division 을 따르면 조건만 바꾸고 재조회하지 않은 상태에서 다른 Division 행의 Site 를 고칠 때
+  //   City 를 못 찾으므로 전체를 받는다. SP 는 'ALL' 이면 전 Division 을 돌려준다(PKG_SCP0007.P_SCP0007_GET_COUNTRY_CITY).
+  const countryCityFilters = useMemo(() => ({ divisionId: 'ALL', scmSiteId: '' }), []);
+  const { data: countryCityData, refetch: refetchCountryCity } = useTabProcQuery<
+    MENU_ID,
+    SHEETS.COUNTRY_CITY
+  >({
     menuId: MENU_ID,
     sheetName: SHEETS.COUNTRY_CITY,
     tabId,
     filters: countryCityFilters,
-    enabled: !!countryCityFilters,
+    enabled: true,
   });
   const countryCityRows = useMemo(() => countryCityData?.o_rc1 ?? [], [countryCityData]);
+  // 조회(Search)할 때마다 캐시를 새로 받는다 — AS-IS FindButton 이 매번 GetData_Country 를 부르는 것과 같다.
+  //   조회 조건이 고정값이라 그대로 두면 탭을 연 뒤 추가된 Site 가 반영되지 않는다.
+  useEffect(() => {
+    if (filters) void refetchCountryCity();
+  }, [filters, refetchCountryCity]);
 
   // 저장 SP 호출 — apiClient.post 를 useMutation 으로 감싼다. 두 가지 이유:
   //   1) AS-IS SaveData_Main(L811 p_input_status) 이 조회조건 Input Status 를 저장 SP 로도 함께
@@ -145,7 +157,8 @@ export const Bod = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (searchParams.inputStatus === 'R') {
       void setAlert({
         type: 'alert',
-        content: t('MSG00159', '_Input Status가 Completed일때만 입력이 가능합니다.'),
+        // AS-IS MSG00159 는 TO-BE 미등록 — 같은 문구로 등록된 MSG01175 를 쓴다(KO/EN/CN 실재).
+        content: t('MSG01175', '_Input Status가 Completed일때만 입력이 가능합니다.'),
       });
       return;
     }
@@ -165,6 +178,8 @@ export const Bod = ({ tabId, title }: PageProps<MENU_ID>) => {
     };
     if (searchParams.divisionId.length === 2) {
       defaultRow[BOD_COLUMN.DIVISION_ID] = searchParams.divisionId;
+      // 자동세팅한 행만 Div 잠금 대상(BodGrid beginningEdit) — 사용자가 고른 Div 와 구분한다.
+      defaultRow[DIVISION_AUTO_SET_FLAG] = true;
     }
 
     GridAction.addRow(gridRef.current, defaultRow as Partial<ResponseData<MENU_ID, SHEETS>>);
@@ -243,14 +258,13 @@ export const Bod = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // 버튼권한 게이트 — AS-IS Insert/Delete/Edit 는 별도 SP 호출 없는 순수 로컬 그리드 액션이고
   // 저장은 SaveButton 이 일괄 처리한다(00_checklist.md §4d entryPoints 집계, buttonGuards #1·#2).
-  // 별도 CanInsert/CanDelete AS-IS 권한이 없어 화면 update 권한(=SAVE)로 통일한다 — INSERT/DELETE
-  // MNU_BTN_CD 는 SCM_ADM_MNU_BTN_MPG_M 에 등록된 적이 없어(97_SCP0007_main_proc_api_registration.sql
-  // 은 SEARCH/SAVE 2건만 등록) hasButton('INSERT')/hasButton('DELETE') 로 게이트하면 상시 차단된다
-  // (ProductionPlanLine H1 사고와 동일 유형, gap-resolve iter-1 G11 고위험). SEARCH 는 이미 등록돼
-  // 있어(동일 SQL BLOCK4) hasButton('SEARCH')로 게이트한다(project-route.tsx 표준 패턴).
+  // 공통버튼은 버튼 코드별 권한으로 게이트한다(TO-BE 룰 2026-10-26: 기능 있음 × 사용자·Division 권한 있음 일 때만 노출).
+  //   INSERT/DELETE MNU_BTN_CD 는 2026-10-26 SCM_ADM_MNU_BTN_MPG_M(bod) 에 등록 + 그룹 권한은 SAVE 권한을 복사했다
+  //   (_artifacts/_deploy_packages/COMMON_BTN_VISIBILITY_CLOUD_20261026/30_META). 종전 'SAVE 로 통일' 은 메타 부재 때문이었다.
+  //   Division 선택에 따른 권한 변화(cascade)는 공용 SubTitle 이 searchParam.divisionId 로 처리한다.
   const hotkeyConfig: HotkeyConfig = {
-    insert: hasButton('SAVE') ? handleInsert : false,
-    delete: hasButton('SAVE') ? handleDelete : false,
+    insert: hasButton('INSERT') ? handleInsert : false,
+    delete: hasButton('DELETE') ? handleDelete : false,
     search: hasButton('SEARCH') ? setFilters : false,
     save: hasButton('SAVE') ? handleSave : false,
     manual: false,

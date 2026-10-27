@@ -1,0 +1,21 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+DMF0052,SQL,DMF0052_GET_ERP_DATA,Doc\asisfacts\db\modules\dbo.DMF0052_GET_ERP_DATA.sql,95,ELSE ▸ ELSE,,"ORDER BY 1, 2, CASE WHEN A.ATTRIBUTE7 IN ( 'UNKNOWN') THEN 0 ELSE 1 END, 3",0,동적 SQL · 키 해석 실패(사람 확인)
+DMF0052,SQL,DMF0052_GET_DETAIL_DATA,Doc\asisfacts\db\modules\dbo.DMF0052_GET_DETAIL_DATA.sql,109,,,"ORDER BY 1, 2",0,정적 · 키 해석 실패(사람 확인)
+DMF0052,SQL,DMF0052_GET_SUMMARY_DATA,Doc\asisfacts\db\modules\dbo.DMF0052_GET_SUMMARY_DATA.sql,62,,"ISNULL,YYYYMMDD","ORDER BY ISNULL(A.YYYYMMDD,B.YYYYMMDD) DESC",0,정적
+DMF0052,SQL,DMF0052_GET_PJT_DATA,Doc\asisfacts\db\modules\dbo.DMF0052_GET_PJT_DATA.sql,233,,"SENDER_NAME,SORT_ORDER","ORDER BY A.SENDER_NAME, SORT_ORDER",0,정적
+DMF0052,SQL,DMF0052_GET_STATUS_DATA,Doc\asisfacts\db\modules\dbo.DMF0052_GET_STATUS_DATA.sql,51,,,"ORDER BY 1 DESC, 2",0,정적 · 키 해석 실패(사람 확인)
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,65,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,78,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,101,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,134,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,181,,"SORT_ORDER,CODE","ORDER BY SORT_ORDER, CODE",0,정적
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,232,,"SORT_ORDER,CODE","ORDER BY SORT_ORDER, CODE",0,정적
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,245,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,254,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,284,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,295,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,418,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0052,SQL,UP_FX_GetCommonDataList_DM,Doc\asisfacts\db\modules\dbo.UP_FX_GetCommonDataList_DM.sql,564,,DISPLAY_SEQ,ORDER BY DISPLAY_SEQ,0,정적
+DMF0052,SQL,DMF0052_GET_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0052_GET_SPREAD_TITLE.sql,107,,SORT_ORDER_NO,ORDER BY A.SORT_ORDER_NO ;,0,정적
+DMF0052,SQL,DMF0052_GET_SPREAD_TITLE,Doc\asisfacts\db\modules\dbo.DMF0052_GET_SPREAD_TITLE.sql,173,,SORT_ORDER_NO,ORDER BY C.SORT_ORDER_NO   ;,0,정적
+DMF0052,SQL,DMF0052_GET_SITE_POPUP,Doc\asisfacts\db\modules\dbo.DMF0052_GET_SITE_POPUP.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

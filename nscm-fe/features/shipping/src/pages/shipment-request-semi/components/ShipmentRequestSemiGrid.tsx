@@ -8,7 +8,7 @@ import {
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
+import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
 import type {
   FlexGridColumnConfig,
@@ -27,6 +27,7 @@ import {
   COMBO,
   GROUP_HEAD_MEASURE,
   HEADER_ROW_HEIGHT,
+  HEADER_TOTAL_HEIGHT,
   MEASURE_BG_FROM_TO_SITE,
   MENU_ID,
   PIVOT_PREFIX,
@@ -130,29 +131,31 @@ export const ShipmentRequestSemiGrid = ({
   onModelChanged,
   onFocus,
 }: Props) => {
-  // 드릴다운 오버라이드(binding → visible). Bucket/Sum/조회 변경 시 전체 초기화한다
-  //   — AS-IS `SetSpreadColumn` 재실행이 드릴다운 상태를 덮는 것과 동일 우선순위(design 03 §2.6).
-  const [drillVis, setDrillVis] = useState<ReadonlyMap<string, boolean>>(new Map());
-
-  useEffect(() => {
-    setDrillVis(new Map());
-  }, [bucketType, showSum, pivotCols]);
-
-  // 가시성 = Bucket×Sum 매트릭스(1벌) 위에 드릴다운 오버라이드를 얹는다.
-  const isVisible = useMemo(() => {
+  // 동적 기간칼럼 base 가시성(Bucket×Sum 매트릭스, 1벌 — design 03 §2.5 R07).
+  //   드릴다운 override 는 여기(config)에 넣지 않는다 — config 가 바뀌면 Wijmo 가 columnGroups 를
+  //   재대입하며 전 컬럼을 clear/재생성해 그리드가 깜빡인다. config 는 base 로만 만들고, 드릴 override 는
+  //   아래 applyDrillVisibility 가 살아있는 col.visible 을 토글해 반영한다(자매 ProductionPlanWaterfallGrid 동형).
+  const baseVisible = useMemo(() => {
     const kindOf = new Map(pivotCols.map(c => [c.binding, c.kind]));
     return (binding: string): boolean => {
       const kind = kindOf.get(binding);
-      if (!kind) return false;
-      if (!isPivotVisible(kind, bucketType, showSum)) return false;
-      return drillVis.get(binding) ?? true;
+      return kind ? isPivotVisible(kind, bucketType, showSum) : false;
     };
-  }, [pivotCols, bucketType, showSum, drillVis]);
+  }, [pivotCols, bucketType, showSum]);
 
   const dynamicColumns = useMemo<FlexGridColumnConfig[]>(
-    () => buildPivotColumns(pivotCols, isVisible),
-    [pivotCols, isVisible]
+    () => buildPivotColumns(pivotCols, baseVisible),
+    [pivotCols, baseVisible]
   );
+
+  // 드릴다운 override(binding → visible). Bucket/Sum/조회 변경 시 초기화 = base 로 복귀(design 03 §2.6
+  //   "SetSpreadColumn 재실행이 드릴다운을 덮는다"). State 가 아니라 Ref 다 — setState 로 바꾸면
+  //   dynamicColumns 가 재생성돼 깜빡이므로, override 는 렌더 밖에서 들고 col.visible 로만 반영한다.
+  const drillVisRef = useRef<Map<string, boolean>>(new Map());
+  const applyDrillVisibilityRef = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    drillVisRef.current.clear();
+  }, [bucketType, showSum, pivotCols]);
 
   // ── 셀 콤보 (design 03 §1.4) ──
   //   FROM_SITE / TO_SITE / FCST_TYPE 3건은 **admin 컬럼 메타가 단일 원천**이다(dev-manual 04 §4).
@@ -185,8 +188,8 @@ export const ShipmentRequestSemiGrid = ({
   onModelChangedRef.current = onModelChanged;
   const pivotColsRef = useRef(pivotCols);
   pivotColsRef.current = pivotCols;
-  const isVisibleRef = useRef(isVisible);
-  isVisibleRef.current = isVisible;
+  const baseVisibleRef = useRef(baseVisible);
+  baseVisibleRef.current = baseVisible;
   // 토/일 헤더 글자색(R04) — binding → DAY_CODE.
   const dayCodeRef = useRef<Map<string, string>>(new Map());
   dayCodeRef.current = useMemo(
@@ -261,6 +264,7 @@ export const ShipmentRequestSemiGrid = ({
       // R14 — measure 배경. 시작열은 기본 `MEASURE_LABEL`, measure 6종은 `TO_SITE` 부터 `MEASURE_LABEL` 까지.
       //   `MEASURE_LABEL` 은 서버 반환값 그대로 쓴다(division 40 CASE 는 SP 몫 — FE 재계산 금지).
       //   RGB 가 행마다 달라 클래스로 표현할 수 없는 유일한 배경이다(SCSS Module 로는 불가).
+      //   설계 U6(AS-IS RGB ↔ hook #95 3색 규약) 해소: AS-IS 원본 RGB 유지(사용자 결정 2026-10-20).
       const bg = toRgb(str(row[COLUMN.MEASURE_COLOR]));
       if (bg) {
         const startIndex = MEASURE_BG_FROM_TO_SITE.includes(str(row[COLUMN.MEASURE]))
@@ -368,18 +372,19 @@ export const ShipmentRequestSemiGrid = ({
     g.hostElement.addEventListener('click', clickHandler);
 
     // ── 헤더 더블클릭 드릴다운(R06 / S15) — 컬럼 add/remove 없이 표시 rank 만 바꾼다(hook #103) ──
+    //   override 를 drillVisRef 에 쌓고 applyDrillVisibility 가 살아있는 col.visible 만 토글한다
+    //   — setState/config 재생성이 없어 columnGroups 가 유지되므로 펼칠 때 그리드가 깜빡이지 않는다.
     const dblClickHandler = (mouseEvent: MouseEvent) => {
       const ht = g.hitTest(mouseEvent);
       if (ht.cellType !== CellType.ColumnHeader) return;
       const binding = g.columns[ht.col]?.binding ?? '';
       if (!isSumBinding(binding)) return; // SUM 헤더(M_/W_)에서만 동작
-      const patch = buildDrilldownPatch(pivotColsRef.current, binding, isVisibleRef.current);
+      const currentVisible = (b: string): boolean =>
+        drillVisRef.current.get(b) ?? baseVisibleRef.current(b);
+      const patch = buildDrilldownPatch(pivotColsRef.current, binding, currentVisible);
       if (patch.size === 0) return;
-      setDrillVis(prev => {
-        const next = new Map(prev);
-        patch.forEach((v, k) => next.set(k, v));
-        return next;
-      });
+      patch.forEach((v, k) => drillVisRef.current.set(k, v));
+      applyDrillVisibilityRef.current?.();
     };
     g.hostElement.addEventListener('dblclick', dblClickHandler);
 
@@ -409,6 +414,76 @@ export const ShipmentRequestSemiGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adminColumns, dynamicColumns]);
 
+  // ── 드릴다운 가시성 반영 — config 재생성 없이 살아있는 col.visible 만 토글(깜빡임 제거) ──
+  //   updatedLayout 마다 재적용해 columnGroups 재대입(조회·버킷·Sum 변경) 후에도 override 를 유지한다.
+  //   want = drillVisRef(override) ?? baseVisible. 목표값과 같으면 skip → invalidate 루프 방지.
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const applyDrillVisibility = () => {
+      let changed = false;
+      for (let i = 0; i < g.columns.length; i += 1) {
+        const col = g.columns[i];
+        const binding = col.binding ?? '';
+        if (!isPivotBinding(binding)) continue;
+        const want = drillVisRef.current.get(binding) ?? baseVisibleRef.current(binding);
+        if (col.visible !== want) {
+          col.visible = want;
+          changed = true;
+        }
+      }
+      if (changed) g.invalidate(true);
+    };
+    applyDrillVisibilityRef.current = applyDrillVisibility;
+    g.updatedLayout.addHandler(applyDrillVisibility);
+    applyDrillVisibility();
+    return () => {
+      try {
+        g.updatedLayout?.removeHandler(applyDrillVisibility);
+        applyDrillVisibilityRef.current = null;
+      } catch {
+        /* unmount race */
+      }
+    };
+  }, [gridRef, pivotCols, bucketType, showSum]);
+
+  // ── 헤더 높이 자급 (#93 총 48px) ──
+  //   공용 DataGrid 의 `headerRowHeight` prop 은 `columnHeaders.rows.defaultSize` 만 세팅하는데,
+  //   공용 컬럼 매퍼가 정적 컬럼을 1단으로 판정해 각 헤더 row 에 명시 `height:48` 을 박아 넣어
+  //   defaultSize 를 무시한다 → 조회 후 동적 기간칼럼으로 3단 헤더가 생기면 48×3=144px 로 벌어진다.
+  //   자매 DemandPlanWaterfallGrid 와 동일하게 updatedLayout 에서 "실제 렌더된 tier 수"로 나눠
+  //   각 row.height 를 직접 강제한다(예측 tier 가 아닌 rows.length 로 나눠야 전이 중 어긋남을 흡수).
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const applyHeaderHeight = () => {
+      const headerRows = g.columnHeaders?.rows;
+      if (!headerRows || headerRows.length === 0) return;
+      const targetHeight = HEADER_TOTAL_HEIGHT / headerRows.length;
+      let changed = false;
+      for (let i = 0; i < headerRows.length; i += 1) {
+        if (Math.round(headerRows[i].height ?? headerRows.defaultSize) !== targetHeight) {
+          headerRows[i].height = targetHeight;
+          changed = true;
+        }
+      }
+      if (Math.round(headerRows.defaultSize) !== targetHeight) {
+        headerRows.defaultSize = targetHeight;
+        changed = true;
+      }
+      if (changed) g.invalidate(true);
+    };
+    applyHeaderHeight();
+    g.updatedLayout.addHandler(applyHeaderHeight);
+    return () => {
+      try {
+        g.updatedLayout?.removeHandler(applyHeaderHeight);
+      } catch {
+        /* unmount race */
+      }
+    };
+  }, [gridRef, adminColumns, dynamicColumns]);
+
   return (
     <DataGrid
       gridRef={gridRef}
@@ -426,7 +501,9 @@ export const ShipmentRequestSemiGrid = ({
       comboParams={COMBO_PARAMS}
       sheetName={ADMIN_SHEET_NAME}
       allowMerging={AllowMerging.All}
-      headerRowHeight={HEADER_ROW_HEIGHT}
+      // 동적 기간칼럼이 붙으면 3단(각 16), 조회 전엔 1단(48). 실제 강제는 위 updatedLayout 핸들러가
+      //   rows.length 로 나눠 수행하며, 이 prop 은 초기 defaultSize 를 맞춰 첫 렌더 깜빡임을 줄인다.
+      headerRowHeight={dynamicColumns.length === 0 ? HEADER_TOTAL_HEIGHT : HEADER_ROW_HEIGHT}
       gotFocus={onFocus}
     />
   );

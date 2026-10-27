@@ -1,0 +1,413 @@
+﻿key,trace_row,check,layer,et,name,display,impl,result,why,rows,cs
+X-LOC|ROW:C01,T-022380a0,X-LOC,GEN,ROW,C01,C01,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+K-SA|SCREEN,T-02b027b6,K-SA,COMMON,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(smoke 공통 기능(Search Area)) — 실행 필요: smoke,2,
+G3|SCREEN,T-8d6e8011,G3,COMMON,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(smoke 공통 기능(Condition·Reset)) — 실행 필요: smoke,2,
+A5|ROW:C01,T-56612db6,A5,DESIGN,ROW,C01,C01,Y,REVIEW,행 집계 — A5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:C02,T-9feaa62d,X-LOC,GEN,ROW,C02,C02,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-LOC|ROW:C03,T-f1330269,X-LOC,GEN,ROW,C03,C03,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:C03,T-40037ff1,X-ROW,GEN,ENTRY,C03,C03,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:C04,T-fbaf038f,X-LOC,GEN,ROW,C04,C04,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:C04,T-77386c67,X-ROW,GEN,ENTRY,C04,C04,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:C05,T-8e4c5774,X-LOC,GEN,ROW,C05,C05,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:C05,T-69485b86,X-ROW,GEN,ENTRY,C05,C05,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:C06,T-fcdf530a,X-LOC,GEN,ROW,C06,C06,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:C06,T-ef2c3459,X-ROW,GEN,ENTRY,C06,C06,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:C07,T-ee70a5a5,X-LOC,GEN,ROW,C07,C07,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:C07,T-cee8cda4,X-ROW,GEN,ENTRY,C07,C07,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:C08,T-a74370c6,X-LOC,GEN,ROW,C08,C08,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+E4|ROW:C08,T-d0627780,E4,EDIT,ROW,C08,C08,Y,REVIEW,행 집계 — E4 14요소: NOT_RUN:14 (미실행 요소가 남아 판정필요),1,
+I1|SCREEN,T-bab902eb,I1,DESIGN,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(judge(DB 조회)·하네스 I18N1) — 실행 필요: meta,20,SSP0005_ShipmentWorkingDay.cs:676 SSP0005_ShipmentWorkingDay.cs:688 SSP0005_ShipmentWorkingDay.cs:699 SSP0005_ShipmentWorkingDay.cs:714 SSP0005_ShipmentWorkingDay.cs:555 SSP0005_ShipmentWorkingDay.cs:563 SSP0005_ShipmentWorkingDay.cs:635
+H10|SCREEN,T-1ccd87bf,H10,DESIGN,SCREEN,SSP0005,SSP0005 화면,Y,PASS,브라우저 alert/confirm 직접 호출 0 · 공용 메시지 API 사용,13,
+X-LOC|ROW:C09,T-a42fe654,X-LOC,GEN,ROW,C09,C09,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|ROW:C09,T-5f6db60d,G4,DESIGN,ROW,C09,C09,Y,REVIEW,행 집계 — G4 6요소: NOT_RUN:5 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+SC1|SCREEN,T-66fffcdb,SC1,DESIGN,SCREEN,SSP0005,SSP0005 화면,Y,WARN,게이트 SC2 기준표가 BUTTON_AREA(조회조건 영역 → 버튼 영역) 로 정한 조,4,
+G1|ROW:C09,T-13baf5a1,G1,GEN,ROW,C09,C09,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+G6|ROW:C09,T-bd9b7b34,G6,GEN,ROW,C09,C09,Y,REVIEW,행 집계 — G6 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A5|ROW:C09,T-e86c8b91,A5,DESIGN,ROW,C09,C09,Y,REVIEW,행 집계 — A5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+A1|ROW:C09,T-a5619ed7,A1,GEN,ROW,C09,C09,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+J2|SCREEN,T-857d3692,J2,AUTH,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(auth·authcrud spec) — 실행 필요: auth,96,SSP0005_ShipmentWorkingDay.cs:673 SSP0005_ShipmentWorkingDay.cs:676 SSP0005_ShipmentWorkingDay.cs:677 SSP0005_ShipmentWorkingDay.cs:681 SSP0005_ShipmentWorkingDay.cs:682 SSP0005_ShipmentWorkingDay.cs:684 SSP0005_ShipmentWorkingDay.cs:686 SSP0005_ShipmentWorkingDay.cs:688 SSP0005_ShipmentWorkingDay.c
+X-REASON|ROW:C10,T-bf54ef48,X-REASON,DESIGN,ROW,C10,C10,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:C11,T-ba42a5a9,X-REASON,DESIGN,ROW,C11,C11,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:C12,T-4c8eeb5d,X-LOC,GEN,ROW,C12,C12,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G4|BTN:btnInput,T-a9a4a551,G4,DESIGN,BTN,btnInput,btnInput,Y,NOPATH,검사기(smoke 화면 열림(labels)·_verify)는 있으나 이 대상(BTN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),3,SSP0005_ShipmentWorkingDay.cs:311 SSP0005_ShipmentWorkingDay.cs:312 SSP0005_ShipmentWorkingDay.cs:314 SSP0005_ShipmentWorkingDay.cs:316
+G1|ROW:C12,T-091637e9,G1,GEN,ROW,C12,C12,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+G6|ROW:C12,T-485b5ce9,G6,GEN,ROW,C12,C12,Y,REVIEW,행 집계 — G6 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:C12,T-12b8f55f,A1,GEN,ROW,C12,C12,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+X-LOC|ROW:C13,T-80358d67,X-LOC,GEN,ROW,C13,C13,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:C13,T-92e76eed,X-ROW,GEN,ENTRY,C13,C13,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:C14,T-e8d70e5e,X-LOC,GEN,ROW,C14,C14,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:C14,T-5d9e8b25,X-ROW,GEN,ENTRY,C14,C14,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:C15,T-0ad2ed10,X-LOC,GEN,ROW,C15,C15,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+E2|ROW:C15,T-3dff4604,E2,EDIT,ROW,C15,C15,Y,NA,검사 대상 아님 — 이 화면에 E2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:C16,T-8d32a78e,X-LOC,GEN,ROW,C16,C16,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+B4|COND:cboDayWeek,T-85013eae,B4,COMBO,COND,cboDayWeek,cboDayWeek / Day of the week / Day Week,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+B3|COND:cboDayWeek,T-ff291a6c,B3,COMBO,COND,cboDayWeek,cboDayWeek / Day of the week / Day Week,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,1,
+X-LOC|ROW:C17,T-f7b3b1c7,X-LOC,GEN,ROW,C17,C17,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:C17,T-859b20d5,X-ROW,GEN,ENTRY,C17,C17,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:C18,T-fa19dc98,X-LOC,GEN,ROW,C18,C18,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:C18,T-02d8264b,A5,DESIGN,ROW,C18,C18,Y,REVIEW,행 집계 — A5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H5|ROW:C18,T-61437017,H5,DESIGN,ROW,C18,C18,Y,REVIEW,행 집계 — H5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H2|ROW:C18,T-2a933b66,H2,DESIGN,ROW,C18,C18,Y,REVIEW,행 집계 — H2 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:C19,T-3be0c613,X-LOC,GEN,ROW,C19,C19,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:C19,T-73d84f46,A5,DESIGN,ROW,C19,C19,Y,REVIEW,행 집계 — A5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H5|ROW:C19,T-73a0f0ac,H5,DESIGN,ROW,C19,C19,Y,REVIEW,행 집계 — H5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H2|ROW:C19,T-2562c1fc,H2,DESIGN,ROW,C19,C19,Y,REVIEW,행 집계 — H2 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+X-REASON|ROW:C20,T-3cba11de,X-REASON,DESIGN,ROW,C20,C20,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:C21,T-0d2cf255,X-REASON,DESIGN,ROW,C21,C21,Y,PASS,사유 있음: ,1,
+X-LOC|ROW:E01,T-ea0733b4,X-LOC,GEN,ROW,E01,E01,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+C1|ROW:E01,T-270be947,C1,CASCADE,ROW,E01,E01,Y,REVIEW,행 집계 — C1 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+C4|ROW:E01,T-670a2d2b,C4,CASCADE,ROW,E01,E01,Y,NA,검사 대상 아님 — 이 화면에 C4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:E02,T-b6dad14b,X-LOC,GEN,ROW,E02,E02,Y,PASS,구현 위치 실존 1곳,1,
+X-ROW|ENTRY:E02,T-b7387e71,X-ROW,GEN,ENTRY,E02,E02,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-REASON|ROW:E03,T-d5086b80,X-REASON,DESIGN,ROW,E03,E03,Y,PASS,사유 있음: ,1,
+X-REASON|ROW:E04,T-916fbc3b,X-REASON,DESIGN,ROW,E04,E04,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:E05,T-ae00226d,X-LOC,GEN,ROW,E05,E05,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+H2|ROW:E05,T-b250dd5c,H2,DESIGN,ROW,E05,E05,Y,REVIEW,행 집계 — H2 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H4|SCREEN,T-786cbaa7,H4,DESIGN,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4b 레이아웃 — 가로 스크롤·그리드 높이·컬럼 폭 실측(기대 = AS-IS 폭 메타)) — 실행 필요: trace,7,SSP0005_ShipmentWorkingDay.cs:321 SSP0005_ShipmentWorkingDay.cs:322 SSP0005_ShipmentWorkingDay.cs:323
+H3|ROW:E05,T-ab1f2232,H3,DESIGN,ROW,E05,E05,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:V01,T-bae2167a,X-LOC,GEN,ROW,V01,V01,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+F1|SCREEN,T-ee85b761,F1,CRUD,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) 실저장·crud spec) — 실행 필요: crud,100,SSP0005_ShipmentWorkingDay.cs:362 SSP0005_ShipmentWorkingDay.cs:438 SSP0005_ShipmentWorkingDay.cs:441 SSP0005_ShipmentWorkingDay.cs:444 SSP0005_ShipmentWorkingDay.cs:446 SSP0005_ShipmentWorkingDay.cs:448 SSP0005_ShipmentWorkingDay.cs:449 SSP0005_ShipmentWorkingDay.cs:451 SSP0005_ShipmentWorkingDay.c
+F2|SCREEN,T-39a93b00,F2,CRUD,SCREEN,SSP0005,SSP0005 화면,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),97,SSP0005_ShipmentWorkingDay.cs:362 SSP0005_ShipmentWorkingDay.cs:438 SSP0005_ShipmentWorkingDay.cs:441 SSP0005_ShipmentWorkingDay.cs:444 SSP0005_ShipmentWorkingDay.cs:446 SSP0005_ShipmentWorkingDay.cs:448 SSP0005_ShipmentWorkingDay.cs:449 SSP0005_ShipmentWorkingDay.cs:451 SSP0005_ShipmentWorkingDay.c
+E4|MSG:MSG00004,T-cd6386c9,E4,EDIT,MSG,MSG00004,MSG00004,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,SSP0005_ShipmentWorkingDay.cs:555
+E4|MSG:MSG00672,T-78e5f7bd,E4,EDIT,MSG,MSG00672,MSG00672,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,1,
+E3|ROW:V01,T-f5bf72f2,E3,EDIT,ROW,V01,V01,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:V02,T-dcff3b2c,X-LOC,GEN,ROW,V02,V02,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+E4|MSG:MSG00618,T-6bb51613,E4,EDIT,MSG,MSG00618,MSG00618,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,1,
+E3|ROW:V02,T-35885c5c,E3,EDIT,ROW,V02,V02,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:V03,T-6beeb472,X-LOC,GEN,ROW,V03,V03,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+E4|ROW:V03,T-8379129e,E4,EDIT,ROW,V03,V03,Y,REVIEW,행 집계 — E4 14요소: NOT_RUN:14 (미실행 요소가 남아 판정필요),1,
+E3|ROW:V03,T-380e4da0,E3,EDIT,ROW,V03,V03,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:V04,T-61984e7a,X-LOC,GEN,ROW,V04,V04,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D1|ROW:V04,T-fd719f66,D1,EDIT,ROW,V04,V04,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:V04,T-8af7f375,D3,EDIT,ROW,V04,V04,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+G1|ROW:V04,T-0dd5c195,G1,GEN,ROW,V04,V04,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:V04,T-b355dd5a,A1,GEN,ROW,V04,V04,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+E4|MSG:MSG00135,T-57fe96b8,E4,EDIT,MSG,MSG00135,MSG00135,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,SSP0005_ShipmentWorkingDay.cs:676
+E4|MSG:MSG00719,T-526f0502,E4,EDIT,MSG,MSG00719,MSG00719,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,
+E3|ROW:V04,T-05614873,E3,EDIT,ROW,V04,V04,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:V05,T-34d9853a,X-LOC,GEN,ROW,V05,V05,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+E4|MSG:MSG00093,T-f5e2b116,E4,EDIT,MSG,MSG00093,MSG00093,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,SSP0005_ShipmentWorkingDay.cs:688
+E4|MSG:MSG01122,T-f940fd4d,E4,EDIT,MSG,MSG01122,MSG01122,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,
+E3|ROW:V05,T-98c8f640,E3,EDIT,ROW,V05,V05,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:V06,T-ab78868a,X-LOC,GEN,ROW,V06,V06,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+E2|ROW:V06,T-041391d9,E2,EDIT,ROW,V06,V06,Y,NA,검사 대상 아님 — 이 화면에 E2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E4|MSG:MSG00134,T-59de933f,E4,EDIT,MSG,MSG00134,MSG00134,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,3,SSP0005_ShipmentWorkingDay.cs:699
+E4|MSG:MSG01153,T-6a36644b,E4,EDIT,MSG,MSG01153,MSG01153,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,
+E3|ROW:V06,T-b1d67b1e,E3,EDIT,ROW,V06,V06,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-REASON|ROW:V07,T-a0874f0d,X-REASON,DESIGN,ROW,V07,V07,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:S01,T-1fe23ed8,X-LOC,GEN,ROW,S01,S01,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A1|SP:P_SSP0005_GET_SHIPMENT_WORKING_DAY,T-7407a2ae,A1,GEN,SP,PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY,PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY,Y,REVIEW,골든 비교 케이스 없음(PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),36,SSP0005_ShipmentWorkingDay.cs:332 SSP0005_ShipmentWorkingDay.cs:372 SSP0005_ShipmentWorkingDay.cs:377 SSP0005_ShipmentWorkingDay.cs:379 SSP0005_ShipmentWorkingDay.cs:381 SSP0005_ShipmentWorkingDay.cs:382 SSP0005_ShipmentWorkingDay.cs:387 SSP0005_ShipmentWorkingDay.cs:388 SSP0005_ShipmentWorkingDay.c
+A1|SP:P_SSP0005_GET,T-85585e48,A1,GEN,SP,P_SSP0005_GET,P_SSP0005_GET,Y,REVIEW,골든 비교 케이스 없음(P_SSP0005_GET — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),1,
+A6|SP:P_SSP0005_GET_SHIPMENT_WORKING_DAY,T-267333fd,A6,GEN,SP,PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY,PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY,Y,NOT_RUN,"검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) — 실행 필요: trace",36,SSP0005_ShipmentWorkingDay.cs:332 SSP0005_ShipmentWorkingDay.cs:372 SSP0005_ShipmentWorkingDay.cs:377 SSP0005_ShipmentWorkingDay.cs:379 SSP0005_ShipmentWorkingDay.cs:381 SSP0005_ShipmentWorkingDay.cs:382 SSP0005_ShipmentWorkingDay.cs:387 SSP0005_ShipmentWorkingDay.cs:388 SSP0005_ShipmentWorkingDay.c
+A6|SP:P_SSP0005_GET,T-09965270,A6,GEN,SP,P_SSP0005_GET,P_SSP0005_GET,Y,NOT_RUN,"검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) — 실행 필요: trace",1,
+F4|SP:P_SSP0005_GET_SHIPMENT_WORKING_DAY,T-50365a11,F4,DB,SP,PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY,PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,120,SSP0005_ShipmentWorkingDay.cs:332 SSP0005_ShipmentWorkingDay.cs:372 SSP0005_ShipmentWorkingDay.cs:377 SSP0005_ShipmentWorkingDay.cs:379 SSP0005_ShipmentWorkingDay.cs:381 SSP0005_ShipmentWorkingDay.cs:382 SSP0005_ShipmentWorkingDay.cs:387 SSP0005_ShipmentWorkingDay.cs:388 SSP0005_ShipmentWorkingDay.c
+F4|SP:P_SSP0005_GET,T-a9bbcb00,F4,DB,SP,P_SSP0005_GET,P_SSP0005_GET,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,1,
+DB-SYN|SP:P_SSP0005_GET_SHIPMENT_WORKING_DAY,T-a7f4d7bd,DB-SYN,DB,SP,PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY,PKG_SSP0005.P_SSP0005_GET_SHIPMENT_WORKING_DAY,Y,PASS,시노님검사 OK,6,SSP0005_ShipmentWorkingDay.cs:399 SSP0005_ShipmentWorkingDay.cs:403 SSP0005_ShipmentWorkingDay.cs:410 SSP0005_ShipmentWorkingDay.cs:542 SSP0005_ShipmentWorkingDay.cs:547
+DB-SYN|SP:P_SSP0005_GET,T-df72c12c,DB-SYN,DB,SP,P_SSP0005_GET,P_SSP0005_GET,Y,NOPATH,검사기(syn_check.py·fixture dberr)는 있으나 이 대상(SP)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),1,
+X-LOC|ROW:S02,T-a0f8962e,X-LOC,GEN,ROW,S02,S02,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-LOC|ROW:S03,T-f38b51b3,X-LOC,GEN,ROW,S03,S03,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A1|SP:P_SCP0009_GET_SHEET_CALENDAR_3SPAN,T-7a9fa861,A1,GEN,SP,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,Y,REVIEW,골든 비교 케이스 없음(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),34,SSP0005_ShipmentWorkingDay.cs:332 SSP0005_ShipmentWorkingDay.cs:372 SSP0005_ShipmentWorkingDay.cs:377 SSP0005_ShipmentWorkingDay.cs:379 SSP0005_ShipmentWorkingDay.cs:381 SSP0005_ShipmentWorkingDay.cs:382 SSP0005_ShipmentWorkingDay.cs:387 SSP0005_ShipmentWorkingDay.cs:388 SSP0005_ShipmentWorkingDay.c
+A6|SP:P_SCP0009_GET_SHEET_CALENDAR_3SPAN,T-29626914,A6,GEN,SP,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,Y,NOT_RUN,"검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) — 실행 필요: trace",34,SSP0005_ShipmentWorkingDay.cs:332 SSP0005_ShipmentWorkingDay.cs:372 SSP0005_ShipmentWorkingDay.cs:377 SSP0005_ShipmentWorkingDay.cs:379 SSP0005_ShipmentWorkingDay.cs:381 SSP0005_ShipmentWorkingDay.cs:382 SSP0005_ShipmentWorkingDay.cs:387 SSP0005_ShipmentWorkingDay.cs:388 SSP0005_ShipmentWorkingDay.c
+F4|SP:P_SCP0009_GET_SHEET_CALENDAR_3SPAN,T-686bcc89,F4,DB,SP,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,120,SSP0005_ShipmentWorkingDay.cs:332 SSP0005_ShipmentWorkingDay.cs:372 SSP0005_ShipmentWorkingDay.cs:377 SSP0005_ShipmentWorkingDay.cs:379 SSP0005_ShipmentWorkingDay.cs:381 SSP0005_ShipmentWorkingDay.cs:382 SSP0005_ShipmentWorkingDay.cs:387 SSP0005_ShipmentWorkingDay.cs:388 SSP0005_ShipmentWorkingDay.c
+DB-SYN|SP:P_SCP0009_GET_SHEET_CALENDAR_3SPAN,T-68dc3d78,DB-SYN,DB,SP,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN,Y,PASS,시노님검사 OK,7,SSP0005_ShipmentWorkingDay.cs:399 SSP0005_ShipmentWorkingDay.cs:410 SSP0005_ShipmentWorkingDay.cs:925 SSP0005_ShipmentWorkingDay.cs:933 SSP0005_ShipmentWorkingDay.cs:542 SSP0005_ShipmentWorkingDay.cs:547
+X-LOC|ROW:S04,T-39c5e9e8,X-LOC,GEN,ROW,S04,S04,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A1|SP:P_SCM0001_GET_SCP_PERIOD,T-fac1fd11,A1,GEN,SP,PKG_COM0000.P_SCM0001_GET_SCP_PERIOD,PKG_COM0000.P_SCM0001_GET_SCP_PERIOD,Y,REVIEW,골든 비교 케이스 없음(PKG_COM0000.P_SCM0001_GET_SCP_PERIOD — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),1,
+A6|SP:P_SCM0001_GET_SCP_PERIOD,T-c7d508e6,A6,GEN,SP,PKG_COM0000.P_SCM0001_GET_SCP_PERIOD,PKG_COM0000.P_SCM0001_GET_SCP_PERIOD,Y,NOT_RUN,"검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@trace) A6 조회 결과 행 순서 실측) — 실행 필요: trace",1,
+F4|SP:P_SCM0001_GET_SCP_PERIOD,T-cbcf7784,F4,DB,SP,PKG_COM0000.P_SCM0001_GET_SCP_PERIOD,PKG_COM0000.P_SCM0001_GET_SCP_PERIOD,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,3,SSP0005_ShipmentWorkingDay.cs:941 SSP0005_ShipmentWorkingDay.cs:945
+DB-SYN|SP:P_SCM0001_GET_SCP_PERIOD,T-06f72a8f,DB-SYN,DB,SP,PKG_COM0000.P_SCM0001_GET_SCP_PERIOD,PKG_COM0000.P_SCM0001_GET_SCP_PERIOD,Y,PASS,시노님검사 OK,3,SSP0005_ShipmentWorkingDay.cs:941 SSP0005_ShipmentWorkingDay.cs:945
+X-LOC|ROW:B01,T-aafa4e7b,X-LOC,GEN,ROW,B01,B01,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+B4|ROW:B01,T-8c26f7ad,B4,COMBO,ROW,B01,B01,Y,REVIEW,행 집계 — B4 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
+B3|ROW:B01,T-e2a970c2,B3,COMBO,ROW,B01,B01,N,REVIEW,행 집계 — B3 4요소: TODO:4 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:B02,T-db00f2c9,X-LOC,GEN,ROW,B02,B02,Y,PASS,구현 위치 실존 1곳,1,
+B4|ROW:B02,T-dd615fcb,B4,COMBO,ROW,B02,B02,Y,REVIEW,행 집계 — B4 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
+B3|ROW:B02,T-98a81557,B3,COMBO,ROW,B02,B02,N,REVIEW,행 집계 — B3 4요소: TODO:4 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:B03,T-5e13e061,X-LOC,GEN,ROW,B03,B03,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+A1|ROW:B03,T-946840b0,A1,GEN,ROW,B03,B03,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+A6|ROW:B03,T-3b42e295,A6,GEN,ROW,B03,B03,Y,REVIEW,행 집계 — A6 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+F4|ROW:B03,T-4faa3a7c,F4,DB,ROW,B03,B03,Y,REVIEW,행 집계 — F4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+DB-SYN|ROW:B03,T-bee0587c,DB-SYN,DB,ROW,B03,B03,Y,REVIEW,행 집계 — DB-SYN 5요소: PASS:3 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+B4|ROW:B03,T-47ee589a,B4,COMBO,ROW,B03,B03,Y,REVIEW,행 집계 — B4 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
+B3|ROW:B03,T-a65ef304,B3,COMBO,ROW,B03,B03,N,REVIEW,행 집계 — B3 4요소: TODO:4 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:B04,T-c4b09730,X-LOC,GEN,ROW,B04,B04,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+G4|ROW:B04,T-8eec25b8,G4,DESIGN,ROW,B04,B04,Y,REVIEW,행 집계 — G4 6요소: NOT_RUN:5 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+G1|ROW:B04,T-5a5739c8,G1,GEN,ROW,B04,B04,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+G6|ROW:B04,T-4ca17d7e,G6,GEN,ROW,B04,B04,Y,REVIEW,행 집계 — G6 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A5|ROW:B04,T-37b95498,A5,DESIGN,ROW,B04,B04,Y,REVIEW,행 집계 — A5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H5|ROW:B04,T-2d08ec7c,H5,DESIGN,ROW,B04,B04,Y,REVIEW,행 집계 — H5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H2|ROW:B04,T-ae1ca29a,H2,DESIGN,ROW,B04,B04,Y,REVIEW,행 집계 — H2 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+B1|ROW:B04,T-b11580fd,B1,COMBO,ROW,B04,B04,Y,NA,검사 대상 아님 — 이 화면에 B1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+B2|ROW:B04,T-fa193de8,B2,COMBO,ROW,B04,B04,Y,NA,검사 대상 아님 — 이 화면에 B2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+B4|ROW:B04,T-bc504487,B4,COMBO,ROW,B04,B04,Y,REVIEW,행 집계 — B4 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
+D5|ROW:B04,T-a585db54,D5,EDIT,ROW,B04,B04,Y,REVIEW,행 집계 — D5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+E5|ROW:B04,T-51ae8606,E5,EDIT,ROW,B04,B04,Y,NA,검사 대상 아님 — 이 화면에 E5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+A1|ROW:B04,T-68cec5a7,A1,GEN,ROW,B04,B04,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+B3|ROW:B04,T-60360d2c,B3,COMBO,ROW,B04,B04,N,REVIEW,행 집계 — B3 4요소: TODO:4 (미실행 요소가 남아 판정필요),1,
+X-REASON|ROW:B05,T-7ea79ab6,X-REASON,DESIGN,ROW,B05,B05,Y,PASS,사유 있음: ,1,
+X-LOC|ROW:—,T-9c47fb04,X-LOC,GEN,ROW,—,—,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+X-ROW|ENTRY:—,T-079a6135,X-ROW,GEN,ENTRY,—,—,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D01,T-04b5df4f,X-LOC,GEN,ROW,D01,D01,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:D01,T-55fe1078,A5,DESIGN,ROW,D01,D01,Y,REVIEW,행 집계 — A5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+D1|ROW:D01,T-663ca880,D1,EDIT,ROW,D01,D01,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:D01,T-2e6c3e63,D3,EDIT,ROW,D01,D01,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+G1|ROW:D01,T-127c883d,G1,GEN,ROW,D01,D01,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:D01,T-9de5d04a,A1,GEN,ROW,D01,D01,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+X-LOC|ROW:D02,T-65ae5c93,X-LOC,GEN,ROW,D02,D02,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:D02,T-54fd8879,X-ROW,GEN,ENTRY,D02,D02,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D03,T-d2b7ba99,X-LOC,GEN,ROW,D03,D03,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+E4|COND:cboInputValue,T-bc60d5c7,E4,EDIT,COND,cboInputValue,cboInputValue / Input Value,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,2,SSP0005_ShipmentWorkingDay.cs:688
+X-LOC|ROW:D04,T-459c0be0,X-LOC,GEN,ROW,D04,D04,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:D04,T-07631c1f,X-ROW,GEN,ENTRY,D04,D04,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D05,T-e690d79e,X-LOC,GEN,ROW,D05,D05,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-LOC|ROW:D06,T-da3e7a8e,X-LOC,GEN,ROW,D06,D06,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:D06,T-6e9ffc36,X-ROW,GEN,ENTRY,D06,D06,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:D07,T-12d8740b,X-LOC,GEN,ROW,D07,D07,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:D07,T-17e0deca,X-ROW,GEN,ENTRY,D07,D07,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-REASON|ROW:D08,T-42a775ce,X-REASON,DESIGN,ROW,D08,D08,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:D09,T-d232213e,X-REASON,DESIGN,ROW,D09,D09,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:D10,T-3f48cc71,X-REASON,DESIGN,ROW,D10,D10,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:G01,T-07f9f918,X-LOC,GEN,ROW,G01,G01,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+H3|ROW:G01,T-c1a9ff48,H3,DESIGN,ROW,G01,G01,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:G02,T-92f40529,X-LOC,GEN,ROW,G02,G02,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+H2|COL:DAY_CODE,T-89492970,H2,DESIGN,COL,DAY_CODE,DAY_CODE,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace,1,
+X-LOC|ROW:G03,T-8c3760e1,X-LOC,GEN,ROW,G03,G03,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:G03,T-692d66a3,X-ROW,GEN,ENTRY,G03,G03,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:G04,T-03cc1164,X-LOC,GEN,ROW,G04,G04,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:G04,T-cbacf94a,X-ROW,GEN,ENTRY,G04,G04,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:G05,T-f80e4350,X-LOC,GEN,ROW,G05,G05,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:G05,T-88531e02,X-ROW,GEN,ENTRY,G05,G05,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:G06,T-79776186,X-LOC,GEN,ROW,G06,G06,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:G06,T-440eb1aa,X-ROW,GEN,ENTRY,G06,G06,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:G07,T-81113939,X-LOC,GEN,ROW,G07,G07,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:G07,T-1ba6708c,X-ROW,GEN,ENTRY,G07,G07,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:G08,T-f3d68304,X-LOC,GEN,ROW,G08,G08,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+H2|ROW:G08,T-4b3ca2fa,H2,DESIGN,ROW,G08,G08,Y,REVIEW,행 집계 — H2 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H3|ROW:G08,T-6f8b1c02,H3,DESIGN,ROW,G08,G08,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-REASON|ROW:G09,T-2f480fc2,X-REASON,DESIGN,ROW,G09,G09,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:G10,T-681dc70d,X-LOC,GEN,ROW,G10,G10,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D1|COL:COMPANY,T-a70c25ab,D1,EDIT,COL,COMPANY,COMPANY,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,5,SSP0005_ShipmentWorkingDay.cs:348 SSP0005_ShipmentWorkingDay.cs:350 SSP0005_ShipmentWorkingDay.cs:352 SSP0005_ShipmentWorkingDay.cs:353 SSP0005_ShipmentWorkingDay.cs:355
+D1|COL:DIVISION,T-bbab90dd,D1,EDIT,COL,DIVISION,DIVISION,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace,2,SSP0005_ShipmentWorkingDay.cs:355
+D3|COL:COMPANY,T-3ba36206,D3,EDIT,COL,COMPANY,COMPANY,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,5,SSP0005_ShipmentWorkingDay.cs:348 SSP0005_ShipmentWorkingDay.cs:350 SSP0005_ShipmentWorkingDay.cs:352 SSP0005_ShipmentWorkingDay.cs:353 SSP0005_ShipmentWorkingDay.cs:355
+D3|COL:DIVISION,T-661b63bd,D3,EDIT,COL,DIVISION,DIVISION,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace,2,SSP0005_ShipmentWorkingDay.cs:355
+X-LOC|ROW:G11,T-78c4f539,X-LOC,GEN,ROW,G11,G11,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:G11,T-f66bc362,X-ROW,GEN,ENTRY,G11,G11,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-REASON|ROW:G12,T-2c52b78f,X-REASON,DESIGN,ROW,G12,G12,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:G13,T-0a4851ee,X-LOC,GEN,ROW,G13,G13,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+H3|ROW:G13,T-3942bb5e,H3,DESIGN,ROW,G13,G13,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+G1|ROW:G13,T-ddb765d3,G1,GEN,ROW,G13,G13,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:G13,T-0617b6ff,A1,GEN,ROW,G13,G13,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+X-LOC|ROW:G14,T-2d99ea07,X-LOC,GEN,ROW,G14,G14,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:G14,T-c8e5ad57,X-ROW,GEN,ENTRY,G14,G14,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-REASON|ROW:G15,T-1ea37b47,X-REASON,DESIGN,ROW,G15,G15,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:G16,T-6fdb34a4,X-REASON,DESIGN,ROW,G16,G16,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:G17,T-b26734f5,X-LOC,GEN,ROW,G17,G17,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D4|ROW:G17,T-d9e9814b,D4,EDIT,ROW,G17,G17,Y,REVIEW,행 집계 — D4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:G18,T-78a0e5ab,X-LOC,GEN,ROW,G18,G18,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D4|ROW:G18,T-83667d6f,D4,EDIT,ROW,G18,G18,Y,REVIEW,행 집계 — D4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:G19,T-9bb9aa1e,X-LOC,GEN,ROW,G19,G19,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D4|ROW:G19,T-d714489c,D4,EDIT,ROW,G19,G19,Y,REVIEW,행 집계 — D4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:G20,T-2693cee1,X-LOC,GEN,ROW,G20,G20,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D4|ROW:G20,T-28e22dd5,D4,EDIT,ROW,G20,G20,Y,REVIEW,행 집계 — D4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:G21,T-ed59c7d0,X-LOC,GEN,ROW,G21,G21,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D4|COL:DAY_CODE,T-c38775b6,D4,EDIT,COL,DAY_CODE,DAY_CODE,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace,1,
+X-REASON|ROW:G22,T-af31c210,X-REASON,DESIGN,ROW,G22,G22,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:G23,T-fb78b761,X-REASON,DESIGN,ROW,G23,G23,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:G24,T-3e1a8559,X-REASON,DESIGN,ROW,G24,G24,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:GC01,T-63e65287,X-LOC,GEN,ROW,GC01,GC01,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+B1|ROW:GC01,T-389c3347,B1,COMBO,ROW,GC01,GC01,Y,NA,검사 대상 아님 — 이 화면에 B1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+B2|ROW:GC01,T-7bb1cd5b,B2,COMBO,ROW,GC01,GC01,Y,NA,검사 대상 아님 — 이 화면에 B2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+B4|ROW:GC01,T-8dfb6772,B4,COMBO,ROW,GC01,GC01,Y,REVIEW,행 집계 — B4 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),1,
+D5|ROW:GC01,T-1296e85c,D5,EDIT,ROW,GC01,GC01,Y,REVIEW,행 집계 — D5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+E5|ROW:GC01,T-ff18bd73,E5,EDIT,ROW,GC01,GC01,Y,NA,검사 대상 아님 — 이 화면에 E5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+H3|ROW:GC01,T-72d3d7bd,H3,DESIGN,ROW,GC01,GC01,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:P01,T-481f84d6,X-LOC,GEN,ROW,P01,P01,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G1|ROW:P01,T-d194141f,G1,GEN,ROW,P01,P01,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:P01,T-ceb6464b,A1,GEN,ROW,P01,P01,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+X-LOC|ROW:P02,T-ec0e7b1a,X-LOC,GEN,ROW,P02,P02,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:P02,T-10782a8a,A5,DESIGN,ROW,P02,P02,Y,REVIEW,행 집계 — A5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+D4|ROW:P02,T-de6a70ec,D4,EDIT,ROW,P02,P02,Y,REVIEW,행 집계 — D4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+D6|SCREEN,T-19ecf1cd,D6,EDIT,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) Insert 위치) — 실행 필요: trace,4,
+X-LOC|ROW:P03,T-5647b8f2,X-LOC,GEN,ROW,P03,P03,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+F5|SCREEN,T-3c282728,F5,CRUD,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4b CRUD 상태 — Insert 행 CRUD_TYPE=I·편집 행 M 표시) — 실행 필요: trace,2,
+X-LOC|ROW:P04,T-3ee66717,X-LOC,GEN,ROW,P04,P04,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D1|ROW:P04,T-17118e14,D1,EDIT,ROW,P04,P04,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:P04,T-90f0831a,D3,EDIT,ROW,P04,P04,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:P05,T-913d22c6,X-LOC,GEN,ROW,P05,P05,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+D1|ROW:P05,T-d45ddbb8,D1,EDIT,ROW,P05,P05,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:P05,T-5a056b57,D3,EDIT,ROW,P05,P05,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+E3|ROW:P05,T-fa50d12f,E3,EDIT,ROW,P05,P05,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E4|ROW:P05,T-70f04acc,E4,EDIT,ROW,P05,P05,Y,REVIEW,행 집계 — E4 14요소: NOT_RUN:14 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:P06,T-eacc263c,X-LOC,GEN,ROW,P06,P06,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:P06,T-4dec2b6f,X-ROW,GEN,ENTRY,P06,P06,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:P07,T-78ccf03c,X-LOC,GEN,ROW,P07,P07,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+C1|ROW:P07,T-32e05fd2,C1,CASCADE,ROW,P07,P07,Y,REVIEW,행 집계 — C1 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+C4|ROW:P07,T-64e04f79,C4,CASCADE,ROW,P07,P07,Y,NA,검사 대상 아님 — 이 화면에 C4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-REASON|ROW:P08,T-28ecf992,X-REASON,DESIGN,ROW,P08,P08,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:P09,T-bce780ad,X-REASON,DESIGN,ROW,P09,P09,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:P10,T-b0be96f1,X-LOC,GEN,ROW,P10,P10,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+H2|ROW:P10,T-3a85b21b,H2,DESIGN,ROW,P10,P10,Y,REVIEW,행 집계 — H2 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H3|ROW:P10,T-34f05db6,H3,DESIGN,ROW,P10,P10,Y,NA,검사 대상 아님 — 이 화면에 H3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:U01,T-3f117273,X-LOC,GEN,ROW,U01,U01,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+H6|ROW:U01,T-7e9678ff,H6,POPUP,ROW,U01,U01,Y,NA,검사 대상 아님 — 이 화면에 H6 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+G5|ROW:U01,T-c5d89f45,G5,POPUP,ROW,U01,U01,Y,NA,검사 대상 아님 — 이 화면에 G5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+M4|ROW:U01,T-841bc1de,M4,POPUP,ROW,U01,U01,Y,NA,검사 대상 아님 — 이 화면에 M4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+A1|ROW:U01,T-c3c967c7,A1,GEN,ROW,U01,U01,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+A6|ROW:U01,T-36da53a5,A6,GEN,ROW,U01,U01,Y,REVIEW,행 집계 — A6 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요),1,
+F4|ROW:U01,T-5bdd95b9,F4,DB,ROW,U01,U01,Y,REVIEW,행 집계 — F4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+DB-SYN|ROW:U01,T-478f9e93,DB-SYN,DB,ROW,U01,U01,Y,REVIEW,행 집계 — DB-SYN 5요소: PASS:3 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:U02,T-f0cc8c80,X-LOC,GEN,ROW,U02,U02,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+H6|ROW:U02,T-84dcab63,H6,POPUP,ROW,U02,U02,Y,NA,검사 대상 아님 — 이 화면에 H6 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+G5|ROW:U02,T-638b3727,G5,POPUP,ROW,U02,U02,Y,NA,검사 대상 아님 — 이 화면에 G5 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+M4|ROW:U02,T-cdc1bd05,M4,POPUP,ROW,U02,U02,Y,NA,검사 대상 아님 — 이 화면에 M4 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+F6|SCREEN,T-8a76eced,F6,CRUD,SCREEN,SSP0005,SSP0005 화면,Y,NOPATH,검사기(_verify.spec(@verify))는 있으나 이 대상(SCREEN)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),89,SSP0005_ShipmentWorkingDay.cs:362 SSP0005_ShipmentWorkingDay.cs:438 SSP0005_ShipmentWorkingDay.cs:441 SSP0005_ShipmentWorkingDay.cs:444 SSP0005_ShipmentWorkingDay.cs:446 SSP0005_ShipmentWorkingDay.cs:448 SSP0005_ShipmentWorkingDay.cs:449 SSP0005_ShipmentWorkingDay.cs:451 SSP0005_ShipmentWorkingDay.c
+F4|ROW:U02,T-43fb34dd,F4,DB,ROW,U02,U02,Y,REVIEW,행 집계 — F4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+DB-SYN|ROW:U02,T-3444931c,DB-SYN,DB,ROW,U02,U02,Y,REVIEW,행 집계 — DB-SYN 5요소: PASS:3 · NOPATH:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:A01,T-6d5a5829,X-LOC,GEN,ROW,A01,A01,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-LOC|ROW:A02,T-55d98f89,X-LOC,GEN,ROW,A02,A02,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G1|ROW:A02,T-a2fe0c60,G1,GEN,ROW,A02,A02,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:A02,T-47149aaf,A1,GEN,ROW,A02,A02,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+E3|ROW:A02,T-f1fd1ab3,E3,EDIT,ROW,A02,A02,Y,NA,검사 대상 아님 — 이 화면에 E3 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+E4|ROW:A02,T-2d2a01e5,E4,EDIT,ROW,A02,A02,Y,REVIEW,행 집계 — E4 14요소: NOT_RUN:14 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:A03,T-25663a52,X-LOC,GEN,ROW,A03,A03,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:A03,T-0f927332,X-ROW,GEN,ENTRY,A03,A03,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:A04,T-388b74cb,X-LOC,GEN,ROW,A04,A04,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+G1|ROW:A04,T-6ca621f1,G1,GEN,ROW,A04,A04,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:A04,T-7455bcc0,A1,GEN,ROW,A04,A04,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+E4|MSG:MSG00667,T-35bab764,E4,EDIT,MSG,MSG00667,MSG00667,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,1,
+X-REASON|ROW:A05,T-ff77fdcd,X-REASON,DESIGN,ROW,A05,A05,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:A06,T-5517ef41,X-REASON,DESIGN,ROW,A06,A06,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:A07,T-f47d7b61,X-REASON,DESIGN,ROW,A07,A07,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-REASON|ROW:A08,T-af8fd3fa,X-REASON,DESIGN,ROW,A08,A08,Y,PASS,사유 있음: ,1,
+X-REASON|ROW:A09,T-c4b14de7,X-REASON,DESIGN,ROW,A09,A09,Y,REVIEW,제외·해당없음 사유·근거(룰·지시·AS-IS 원문·이동 위치)가 서술에 없음 — 사람 확인,1,
+X-LOC|ROW:A10,T-1d55c1aa,X-LOC,GEN,ROW,A10,A10,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:A10,T-17c0a09b,X-ROW,GEN,ENTRY,A10,A10,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:A11,T-3b3a5916,X-LOC,GEN,ROW,A11,A11,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:A11,T-13d3c047,X-ROW,GEN,ENTRY,A11,A11,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-REASON|ROW:A12,T-c4d5e42e,X-REASON,DESIGN,ROW,A12,A12,Y,PASS,사유 있음: ,1,
+X-LOC|ROW:A13,T-cfb4f407,X-LOC,GEN,ROW,A13,A13,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-ROW|ENTRY:A13,T-8de9eb10,X-ROW,GEN,ENTRY,A13,A13,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:A14,T-c47fcb90,X-LOC,GEN,ROW,A14,A14,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+X-LOC|ROW:A15,T-bb40e623,X-LOC,GEN,ROW,A15,A15,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+C3|COL:DAY_CODE,T-3e579fb8,C3,CASCADE,COL,DAY_CODE,DAY_CODE,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace,1,
+G1|ROW:A15,T-cb76e19d,G1,GEN,ROW,A15,A15,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:A15,T-27f42536,A1,GEN,ROW,A15,A15,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+X-LOC|ROW:A16,T-f7b97437,X-LOC,GEN,ROW,A16,A16,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+E2|ROW:A16,T-6ee3b40c,E2,EDIT,ROW,A16,A16,Y,NA,검사 대상 아님 — 이 화면에 E2 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+X-LOC|ROW:A17,T-1c9830af,X-LOC,GEN,ROW,A17,A17,Y,FAIL,상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인,1,
+A5|ROW:A17,T-0725172a,A5,DESIGN,ROW,A17,A17,Y,REVIEW,행 집계 — A5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H5|ROW:A17,T-b968750e,H5,DESIGN,ROW,A17,A17,Y,REVIEW,행 집계 — H5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H2|ROW:A17,T-ed8b4b87,H2,DESIGN,ROW,A17,A17,Y,REVIEW,행 집계 — H2 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:Δ1,T-760d7ff6,X-LOC,GEN,ROW,Δ1,Δ1,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D4|ROW:Δ1,T-7d4622d9,D4,EDIT,ROW,Δ1,Δ1,Y,REVIEW,행 집계 — D4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+G1|ROW:Δ1,T-0ed1bf5b,G1,GEN,ROW,Δ1,Δ1,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:Δ1,T-60f035c4,A1,GEN,ROW,Δ1,Δ1,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+X-LOC|ROW:Δ2,T-c02b5322,X-LOC,GEN,ROW,Δ2,Δ2,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D1|ROW:Δ2,T-fd593e58,D1,EDIT,ROW,Δ2,Δ2,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:Δ2,T-39793869,D3,EDIT,ROW,Δ2,Δ2,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:Δ3,T-32c098b6,X-LOC,GEN,ROW,Δ3,Δ3,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+X-LOC|ROW:Δ4,T-08e69799,X-LOC,GEN,ROW,Δ4,Δ4,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D4|ROW:Δ4,T-b92f867f,D4,EDIT,ROW,Δ4,Δ4,Y,REVIEW,행 집계 — D4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:Δ5,T-c6a24b87,X-LOC,GEN,ROW,Δ5,Δ5,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+X-ROW|ENTRY:Δ5,T-432200b0,X-ROW,GEN,ENTRY,Δ5,Δ5,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음",1,
+X-LOC|ROW:Δ6,T-9ef5b653,X-LOC,GEN,ROW,Δ6,Δ6,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+G4|ROW:Δ6,T-f7d7f4f6,G4,DESIGN,ROW,Δ6,Δ6,Y,REVIEW,행 집계 — G4 6요소: NOT_RUN:5 · NOPATH:1 (미실행 요소가 남아 판정필요),1,
+G1|ROW:Δ6,T-59a7f9dd,G1,GEN,ROW,Δ6,Δ6,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+G6|ROW:Δ6,T-3033cfc8,G6,GEN,ROW,Δ6,Δ6,Y,REVIEW,행 집계 — G6 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요),1,
+A1|ROW:Δ6,T-0bfd42f8,A1,GEN,ROW,Δ6,Δ6,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+E4|MSG:MSG00614,T-ff56d71b,E4,EDIT,MSG,MSG00614,MSG00614,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,1,
+X-LOC|ROW:Δ7,T-cf3d5424,X-LOC,GEN,ROW,Δ7,Δ7,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D4|ROW:Δ7,T-6f678b7d,D4,EDIT,ROW,Δ7,Δ7,Y,REVIEW,행 집계 — D4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:Δ11,T-a3037747,X-LOC,GEN,ROW,Δ11,Δ11,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+A5|ROW:Δ11,T-5fea0218,A5,DESIGN,ROW,Δ11,Δ11,Y,REVIEW,행 집계 — A5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H5|ROW:Δ11,T-59e48f9c,H5,DESIGN,ROW,Δ11,Δ11,Y,REVIEW,행 집계 — H5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+H2|ROW:Δ11,T-efc53cd7,H2,DESIGN,ROW,Δ11,Δ11,Y,REVIEW,행 집계 — H2 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+F3|SCREEN,T-f1230888,F3,CRUD,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4b 붙여넣기 — Ctrl+C/Ctrl+V 로 셀 값 복사 후 값·연쇄) — 실행 필요: trace,1,
+E1|ROW:Δ11,T-6b64dc4e,E1,EDIT,ROW,Δ11,Δ11,Y,NA,검사 대상 아님 — 이 화면에 E1 를 적용할 요소(컬럼·조회조건·SP)가 없다,1,
+C3|ROW:Δ11,T-a76983da,C3,CASCADE,ROW,Δ11,Δ11,Y,REVIEW,행 집계 — C3 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+D1|ROW:Δ11,T-e08fb747,D1,EDIT,ROW,Δ11,Δ11,Y,REVIEW,행 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+D3|ROW:Δ11,T-4def2d25,D3,EDIT,ROW,Δ11,Δ11,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+G1|ROW:Δ11,T-88160cf1,G1,GEN,ROW,Δ11,Δ11,Y,REVIEW,행 집계 — G1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),1,
+A1|ROW:Δ11,T-7ba62a27,A1,GEN,ROW,Δ11,Δ11,Y,REVIEW,행 집계 — A1 5요소: REVIEW:5,1,
+X-LOC|ROW:Δ9,T-9959122f,X-LOC,GEN,ROW,Δ9,Δ9,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D4|ROW:Δ9,T-a12223b5,D4,EDIT,ROW,Δ9,Δ9,Y,REVIEW,행 집계 — D4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+G1|COND:cboCompany,T-6aac674b,G1,GEN,COND,cboCompany,cboCompany / Company,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,3,SSP0005_ShipmentWorkingDay.cs:372 SSP0005_ShipmentWorkingDay.cs:377 SSP0005_ShipmentWorkingDay.cs:379 SSP0005_ShipmentWorkingDay.cs:381 SSP0005_ShipmentWorkingDay.cs:388
+A1|SP:PKG_SSP0005,T-eea804a3,A1,GEN,SP,PKG_SSP0005,PKG_SSP0005,Y,REVIEW,골든 비교 케이스 없음(PKG_SSP0005 — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요),1,
+X-LOC|ROW:Δ10,T-14fa5a8d,X-LOC,GEN,ROW,Δ10,Δ10,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+D4|ROW:Δ10,T-28eb77cd,D4,EDIT,ROW,Δ10,Δ10,Y,REVIEW,행 집계 — D4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),1,
+D3|ROW:Δ10,T-119be376,D3,EDIT,ROW,Δ10,Δ10,Y,REVIEW,행 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+H2|ROW:Δ10,T-3316478f,H2,DESIGN,ROW,Δ10,Δ10,Y,REVIEW,행 집계 — H2 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),1,
+X-LOC|ROW:Δ8,T-88c2baaa,X-LOC,GEN,ROW,Δ8,Δ8,Y,REVIEW,이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요,1,
+G03-WIRE|SCREEN,T-f322facc,G03-WIRE,GEN,SCREEN,SSP0005,SSP0005 화면,Y,WARN,게이트 G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 / 게이트 G03 As-is 이벤트 spdMain.CellDoubleClick → SpdM / 게이트 G03 As-is 이벤트 spdMain.TopChange → SpdMain_To / 게이트 G03 As-is 이벤트 cboDayWeek.SelectedIndexChang,13,SSP0005_ShipmentWorkingDay.cs:120 SSP0005_ShipmentWorkingDay.cs:123 SSP0005_ShipmentWorkingDay.cs:124 SSP0005_ShipmentWorkingDay.cs:725 SSP0005_ShipmentWorkingDay.cs:821 SSP0005_ShipmentWorkingDay.cs:311 SSP0005_ShipmentWorkingDay.cs:312 SSP0005_ShipmentWorkingDay.cs:314 SSP0005_ShipmentWorkingDay.c
+K4|SCREEN,T-ddc05b78,K4,COMMON,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 버튼 구성) — 실행 필요: trace,68,SSP0005_ShipmentWorkingDay.cs:673 SSP0005_ShipmentWorkingDay.cs:676 SSP0005_ShipmentWorkingDay.cs:677 SSP0005_ShipmentWorkingDay.cs:681 SSP0005_ShipmentWorkingDay.cs:682 SSP0005_ShipmentWorkingDay.cs:684 SSP0005_ShipmentWorkingDay.cs:686 SSP0005_ShipmentWorkingDay.cs:688 SSP0005_ShipmentWorkingDay.c
+E4|MSG:MSG00050,T-a05684ff,E4,EDIT,MSG,MSG00050,MSG00050,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,1,SSP0005_ShipmentWorkingDay.cs:714
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.BtnInput_Click,T-f612087f,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.BtnInput_Click,SSP0005_ShipmentWorkingDay.BtnInput_Click,Y,WARN,진입점 집계 9검사 — NOT_RUN:8 · WARN:1,10,SSP0005_ShipmentWorkingDay.cs:752 SSP0005_ShipmentWorkingDay.cs:766 SSP0005_ShipmentWorkingDay.cs:780 SSP0005_ShipmentWorkingDay.cs:802 SSP0005_ShipmentWorkingDay.cs:810
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,T-a9ea136e,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,Y,REVIEW,진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요),3,SSP0005_ShipmentWorkingDay.cs:660 SSP0005_ShipmentWorkingDay.cs:661 SSP0005_ShipmentWorkingDay.cs:663 SSP0005_ShipmentWorkingDay.cs:666 SSP0005_ShipmentWorkingDay.cs:669
+C2|ENTRY:SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,T-d6496580,C2,CASCADE,ENTRY,SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C2 를 적용할 요소(컬럼·조회조건·SP)가 없다,5,SSP0005_ShipmentWorkingDay.cs:660 SSP0005_ShipmentWorkingDay.cs:661 SSP0005_ShipmentWorkingDay.cs:663 SSP0005_ShipmentWorkingDay.cs:666 SSP0005_ShipmentWorkingDay.cs:669
+C3|ENTRY:SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,T-1ffdf93b,C3,CASCADE,ENTRY,SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,Y,REVIEW,진입점 집계 — C3 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),5,SSP0005_ShipmentWorkingDay.cs:660 SSP0005_ShipmentWorkingDay.cs:661 SSP0005_ShipmentWorkingDay.cs:663 SSP0005_ShipmentWorkingDay.cs:666 SSP0005_ShipmentWorkingDay.cs:669
+C6|ENTRY:SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,T-90d3212e,C6,CASCADE,ENTRY,SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,SSP0005_ShipmentWorkingDay.CboDayWeek_SelectedIndexChanged,Y,NA,검사 대상 아님 — 이 화면에 C6 를 적용할 요소(컬럼·조회조건·SP)가 없다,5,SSP0005_ShipmentWorkingDay.cs:660 SSP0005_ShipmentWorkingDay.cs:661 SSP0005_ShipmentWorkingDay.cs:663 SSP0005_ShipmentWorkingDay.cs:666 SSP0005_ShipmentWorkingDay.cs:669
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.ClearUsrCheckedList,T-281614cd,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.ClearUsrCheckedList,SSP0005_ShipmentWorkingDay.ClearUsrCheckedList,Y,REVIEW,"진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/ENTRY/LIST_REBIND/STATE_RESET, 연결된 요소 검사 없음",6,SSP0005_ShipmentWorkingDay.cs:150 SSP0005_ShipmentWorkingDay.cs:152 SSP0005_ShipmentWorkingDay.cs:153
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.CreateSpread,T-d19901cb,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.CreateSpread,SSP0005_ShipmentWorkingDay.CreateSpread,Y,REVIEW,진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요),4,SSP0005_ShipmentWorkingDay.cs:179 SSP0005_ShipmentWorkingDay.cs:180 SSP0005_ShipmentWorkingDay.cs:182 SSP0005_ShipmentWorkingDay.cs:183
+A5|ENTRY:SSP0005_ShipmentWorkingDay.CreateSpread,T-85bad504,A5,DESIGN,ENTRY,SSP0005_ShipmentWorkingDay.CreateSpread,SSP0005_ShipmentWorkingDay.CreateSpread,Y,REVIEW,진입점 집계 — A5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),4,SSP0005_ShipmentWorkingDay.cs:179 SSP0005_ShipmentWorkingDay.cs:180 SSP0005_ShipmentWorkingDay.cs:182 SSP0005_ShipmentWorkingDay.cs:183
+H2|ENTRY:SSP0005_ShipmentWorkingDay.CreateSpread,T-bcf3733d,H2,DESIGN,ENTRY,SSP0005_ShipmentWorkingDay.CreateSpread,SSP0005_ShipmentWorkingDay.CreateSpread,Y,REVIEW,진입점 집계 — H2 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),4,SSP0005_ShipmentWorkingDay.cs:179 SSP0005_ShipmentWorkingDay.cs:180 SSP0005_ShipmentWorkingDay.cs:182 SSP0005_ShipmentWorkingDay.cs:183
+H5|ENTRY:SSP0005_ShipmentWorkingDay.CreateSpread,T-718b53b5,H5,DESIGN,ENTRY,SSP0005_ShipmentWorkingDay.CreateSpread,SSP0005_ShipmentWorkingDay.CreateSpread,Y,REVIEW,진입점 집계 — H5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),4,SSP0005_ShipmentWorkingDay.cs:179 SSP0005_ShipmentWorkingDay.cs:180 SSP0005_ShipmentWorkingDay.cs:182 SSP0005_ShipmentWorkingDay.cs:183
+D5|ENTRY:SSP0005_ShipmentWorkingDay.CreateSpread,T-9115285b,D5,EDIT,ENTRY,SSP0005_ShipmentWorkingDay.CreateSpread,SSP0005_ShipmentWorkingDay.CreateSpread,Y,REVIEW,진입점 집계 — D5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),4,SSP0005_ShipmentWorkingDay.cs:179 SSP0005_ShipmentWorkingDay.cs:180 SSP0005_ShipmentWorkingDay.cs:182 SSP0005_ShipmentWorkingDay.cs:183
+X-REOPEN|SCREEN,T-411ddf36,X-REOPEN,GEN,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 닫기·재오픈) — 실행 필요: trace,8,SSP0005_ShipmentWorkingDay.Designer.cs:16 SSP0005_ShipmentWorkingDay.Designer.cs:18 SSP0005_ShipmentWorkingDay.Designer.cs:20 SSP0005_ShipmentWorkingDay.cs:401 SSP0005_ShipmentWorkingDay.cs:939 SSP0005_ShipmentWorkingDay.cs:924 SSP0005_ShipmentWorkingDay.cs:545
+D1|ENTRY:SSP0005_ShipmentWorkingDay.EditButton,T-8ae004d7,D1,EDIT,ENTRY,SSP0005_ShipmentWorkingDay.EditButton,SSP0005_ShipmentWorkingDay.EditButton,Y,REVIEW,진입점 집계 — D1 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),2,SSP0005_ShipmentWorkingDay.cs:352 SSP0005_ShipmentWorkingDay.cs:353
+D3|ENTRY:SSP0005_ShipmentWorkingDay.EditButton,T-2f947727,D3,EDIT,ENTRY,SSP0005_ShipmentWorkingDay.EditButton,SSP0005_ShipmentWorkingDay.EditButton,Y,REVIEW,진입점 집계 — D3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요),2,SSP0005_ShipmentWorkingDay.cs:352 SSP0005_ShipmentWorkingDay.cs:353
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.FindButton,T-be9ce0aa,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.FindButton,SSP0005_ShipmentWorkingDay.FindButton,Y,REVIEW,진입점 집계 6검사 — NOT_RUN:4 · REVIEW:2,1,SSP0005_ShipmentWorkingDay.cs:332
+G1|COND:clbDivision,T-4b1032aa,G1,GEN,COND,clbDivision,clbDivision / Division,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,2,SSP0005_ShipmentWorkingDay.cs:372 SSP0005_ShipmentWorkingDay.cs:377 SSP0005_ShipmentWorkingDay.cs:379 SSP0005_ShipmentWorkingDay.cs:381 SSP0005_ShipmentWorkingDay.cs:387
+G1|COND:drpPeriod,T-c29b59ec,G1,GEN,COND,drpPeriod,drpPeriod / Period,Y,NOT_RUN,검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke,3,SSP0005_ShipmentWorkingDay.cs:372 SSP0005_ShipmentWorkingDay.cs:377 SSP0005_ShipmentWorkingDay.cs:379 SSP0005_ShipmentWorkingDay.cs:381 SSP0005_ShipmentWorkingDay.cs:389 SSP0005_ShipmentWorkingDay.cs:390
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.FindData_Main,T-70e65c81,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.FindData_Main,SSP0005_ShipmentWorkingDay.FindData_Main,Y,REVIEW,진입점 집계 12검사 — NOT_RUN:8 · REVIEW:2 · PASS:2,14,SSP0005_ShipmentWorkingDay.cs:372 SSP0005_ShipmentWorkingDay.cs:377 SSP0005_ShipmentWorkingDay.cs:381 SSP0005_ShipmentWorkingDay.cs:398 SSP0005_ShipmentWorkingDay.cs:404 SSP0005_ShipmentWorkingDay.cs:420 SSP0005_ShipmentWorkingDay.cs:424
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.Form_Load,T-8e5e0b55,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.Form_Load,SSP0005_ShipmentWorkingDay.Form_Load,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),2,SSP0005_ShipmentWorkingDay.cs:129 SSP0005_ShipmentWorkingDay.cs:131 SSP0005_ShipmentWorkingDay.cs:132 SSP0005_ShipmentWorkingDay.cs:133 SSP0005_ShipmentWorkingDay.cs:134
+A10|SCREEN,T-b297258d,A10,GEN,SCREEN,SSP0005,SSP0005 화면,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 조회 전 그리드) — 실행 필요: trace,70,SSP0005_ShipmentWorkingDay.cs:129 SSP0005_ShipmentWorkingDay.cs:131 SSP0005_ShipmentWorkingDay.cs:132 SSP0005_ShipmentWorkingDay.cs:133 SSP0005_ShipmentWorkingDay.cs:134 SSP0005_ShipmentWorkingDay.cs:159 SSP0005_ShipmentWorkingDay.cs:161 SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.c
+B4|COL:COLUMN_NAME,T-a1833ad5,B4,COMBO,COL,COLUMN_NAME,COLUMN_NAME,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,SSP0005_ShipmentWorkingDay.cs:825 SSP0005_ShipmentWorkingDay.cs:826 SSP0005_ShipmentWorkingDay.cs:827 SSP0005_ShipmentWorkingDay.cs:828
+B4|COL:DAY_CODE,T-b88ea9e6,B4,COMBO,COL,DAY_CODE,DAY_CODE,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COL)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,SSP0005_ShipmentWorkingDay.cs:825 SSP0005_ShipmentWorkingDay.cs:826 SSP0005_ShipmentWorkingDay.cs:827 SSP0005_ShipmentWorkingDay.cs:828
+B3|COL:COLUMN_NAME,T-4ce273bc,B3,COMBO,COL,COLUMN_NAME,COLUMN_NAME,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,2,SSP0005_ShipmentWorkingDay.cs:825 SSP0005_ShipmentWorkingDay.cs:826 SSP0005_ShipmentWorkingDay.cs:827 SSP0005_ShipmentWorkingDay.cs:828
+B3|COL:DAY_CODE,T-ae78b597,B3,COMBO,COL,DAY_CODE,DAY_CODE,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,2,SSP0005_ShipmentWorkingDay.cs:825 SSP0005_ShipmentWorkingDay.cs:826 SSP0005_ShipmentWorkingDay.cs:827 SSP0005_ShipmentWorkingDay.cs:828
+B4|ENTRY:SSP0005_ShipmentWorkingDay.GetDayOfWeek,T-3643ab8d,B4,COMBO,ENTRY,SSP0005_ShipmentWorkingDay.GetDayOfWeek,SSP0005_ShipmentWorkingDay.GetDayOfWeek,Y,REVIEW,진입점 집계 — B4 2요소: NOPATH:2 (미실행 요소가 남아 판정필요),4,SSP0005_ShipmentWorkingDay.cs:825 SSP0005_ShipmentWorkingDay.cs:826 SSP0005_ShipmentWorkingDay.cs:827 SSP0005_ShipmentWorkingDay.cs:829
+B3|ENTRY:SSP0005_ShipmentWorkingDay.GetDayOfWeek,T-b3afa453,B3,COMBO,ENTRY,SSP0005_ShipmentWorkingDay.GetDayOfWeek,SSP0005_ShipmentWorkingDay.GetDayOfWeek,N,REVIEW,진입점 집계 — B3 2요소: TODO:2 (미실행 요소가 남아 판정필요),4,SSP0005_ShipmentWorkingDay.cs:825 SSP0005_ShipmentWorkingDay.cs:826 SSP0005_ShipmentWorkingDay.cs:827 SSP0005_ShipmentWorkingDay.cs:829
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.GetDayRange,T-8e7c6673,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.GetDayRange,SSP0005_ShipmentWorkingDay.GetDayRange,Y,REVIEW,진입점 집계 5검사 — NOT_RUN:2 · NOPATH:1 · TODO:1 · PASS:1 (미실행 검사가 남아 판정필요),2,SSP0005_ShipmentWorkingDay.cs:937 SSP0005_ShipmentWorkingDay.cs:939 SSP0005_ShipmentWorkingDay.cs:941 SSP0005_ShipmentWorkingDay.cs:942 SSP0005_ShipmentWorkingDay.cs:943
+B4|ENTRY:SSP0005_ShipmentWorkingDay.GetDayRange,T-1705c051,B4,COMBO,ENTRY,SSP0005_ShipmentWorkingDay.GetDayRange,SSP0005_ShipmentWorkingDay.GetDayRange,Y,REVIEW,진입점 집계 — B4 4요소: NOPATH:4 (미실행 요소가 남아 판정필요),6,SSP0005_ShipmentWorkingDay.cs:937 SSP0005_ShipmentWorkingDay.cs:942 SSP0005_ShipmentWorkingDay.cs:943 SSP0005_ShipmentWorkingDay.cs:944 SSP0005_ShipmentWorkingDay.cs:945 SSP0005_ShipmentWorkingDay.cs:948
+B3|ENTRY:SSP0005_ShipmentWorkingDay.GetDayRange,T-295cccf2,B3,COMBO,ENTRY,SSP0005_ShipmentWorkingDay.GetDayRange,SSP0005_ShipmentWorkingDay.GetDayRange,N,REVIEW,진입점 집계 — B3 4요소: TODO:4 (미실행 요소가 남아 판정필요),6,SSP0005_ShipmentWorkingDay.cs:937 SSP0005_ShipmentWorkingDay.cs:942 SSP0005_ShipmentWorkingDay.cs:943 SSP0005_ShipmentWorkingDay.cs:944 SSP0005_ShipmentWorkingDay.cs:945 SSP0005_ShipmentWorkingDay.cs:948
+B4|COND:drpPeriod,T-56c5681c,B4,COMBO,COND,drpPeriod,drpPeriod / Period,Y,NOPATH,검사기(combo_oracle.py(W1))는 있으나 이 대상(COND)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),4,SSP0005_ShipmentWorkingDay.cs:922 SSP0005_ShipmentWorkingDay.cs:924 SSP0005_ShipmentWorkingDay.cs:925 SSP0005_ShipmentWorkingDay.cs:930 SSP0005_ShipmentWorkingDay.cs:931
+B3|COND:drpPeriod,T-f6001a4c,B3,COMBO,COND,drpPeriod,drpPeriod / Period,N,TODO,검사기 미구현 — 검증 엔진 구현 대상: 콤보 후보 정렬 = AS-IS,4,SSP0005_ShipmentWorkingDay.cs:922 SSP0005_ShipmentWorkingDay.cs:924 SSP0005_ShipmentWorkingDay.cs:925 SSP0005_ShipmentWorkingDay.cs:930 SSP0005_ShipmentWorkingDay.cs:931
+B4|ENTRY:SSP0005_ShipmentWorkingDay.GetSpdTitle,T-38c09127,B4,COMBO,ENTRY,SSP0005_ShipmentWorkingDay.GetSpdTitle,SSP0005_ShipmentWorkingDay.GetSpdTitle,Y,REVIEW,진입점 집계 — B4 1요소: NOPATH:1 (미실행 요소가 남아 판정필요),1,SSP0005_ShipmentWorkingDay.cs:933
+B3|ENTRY:SSP0005_ShipmentWorkingDay.GetSpdTitle,T-3334c6dc,B3,COMBO,ENTRY,SSP0005_ShipmentWorkingDay.GetSpdTitle,SSP0005_ShipmentWorkingDay.GetSpdTitle,N,REVIEW,진입점 집계 — B3 1요소: TODO:1 (미실행 요소가 남아 판정필요),1,SSP0005_ShipmentWorkingDay.cs:933
+G6|COND:clbDivision,T-cc61811c,G6,GEN,COND,clbDivision,clbDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,2,SSP0005_ShipmentWorkingDay.cs:159 SSP0005_ShipmentWorkingDay.cs:161 SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.cs:164 SSP0005_ShipmentWorkingDay.cs:166
+G6|COND:cboCompany,T-5436b9c0,G6,GEN,COND,cboCompany,cboCompany / Company,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,2,SSP0005_ShipmentWorkingDay.cs:159 SSP0005_ShipmentWorkingDay.cs:161 SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.cs:164 SSP0005_ShipmentWorkingDay.cs:166
+G6|COND:cboInputValue,T-3fcc372a,G6,GEN,COND,cboInputValue,cboInputValue / Input Value,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,3,SSP0005_ShipmentWorkingDay.cs:159 SSP0005_ShipmentWorkingDay.cs:161 SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.cs:164 SSP0005_ShipmentWorkingDay.cs:166 SSP0005_ShipmentWorkingDay.cs:168 SSP0005_ShipmentWorkingDay.cs:174
+G6|COND:drpPeriod,T-b4703e42,G6,GEN,COND,drpPeriod,drpPeriod / Period,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,2,SSP0005_ShipmentWorkingDay.cs:159 SSP0005_ShipmentWorkingDay.cs:161 SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.cs:164 SSP0005_ShipmentWorkingDay.cs:166 SSP0005_ShipmentWorkingDay.cs:170
+G6|COND:cboDayWeek,T-d4a25387,G6,GEN,COND,cboDayWeek,cboDayWeek / Day of the week / Day Week,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace,4,SSP0005_ShipmentWorkingDay.cs:159 SSP0005_ShipmentWorkingDay.cs:161 SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.cs:164 SSP0005_ShipmentWorkingDay.cs:166 SSP0005_ShipmentWorkingDay.cs:172 SSP0005_ShipmentWorkingDay.cs:311 SSP0005_ShipmentWorkingDay.cs:312 SSP0005_ShipmentWorkingDay.c
+G4|COND:clbDivision,T-3aad36da,G4,DESIGN,COND,clbDivision,clbDivision / Division,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,2,SSP0005_ShipmentWorkingDay.cs:159 SSP0005_ShipmentWorkingDay.cs:161 SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.cs:164 SSP0005_ShipmentWorkingDay.cs:166
+G4|COND:cboCompany,T-66cc2de0,G4,DESIGN,COND,cboCompany,cboCompany / Company,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,2,SSP0005_ShipmentWorkingDay.cs:159 SSP0005_ShipmentWorkingDay.cs:161 SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.cs:164 SSP0005_ShipmentWorkingDay.cs:166
+G4|COND:cboInputValue,T-9b811234,G4,DESIGN,COND,cboInputValue,cboInputValue / Input Value,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,3,SSP0005_ShipmentWorkingDay.cs:159 SSP0005_ShipmentWorkingDay.cs:161 SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.cs:164 SSP0005_ShipmentWorkingDay.cs:166 SSP0005_ShipmentWorkingDay.cs:168 SSP0005_ShipmentWorkingDay.cs:174
+G4|COND:drpPeriod,T-74020467,G4,DESIGN,COND,drpPeriod,drpPeriod / Period,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,4,SSP0005_ShipmentWorkingDay.cs:159 SSP0005_ShipmentWorkingDay.cs:161 SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.cs:164 SSP0005_ShipmentWorkingDay.cs:166 SSP0005_ShipmentWorkingDay.cs:170 SSP0005_ShipmentWorkingDay.cs:916 SSP0005_ShipmentWorkingDay.cs:917
+G4|COND:cboDayWeek,T-49b6eb63,G4,DESIGN,COND,cboDayWeek,cboDayWeek / Day of the week / Day Week,Y,NOT_RUN,검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke,4,SSP0005_ShipmentWorkingDay.cs:159 SSP0005_ShipmentWorkingDay.cs:161 SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.cs:164 SSP0005_ShipmentWorkingDay.cs:166 SSP0005_ShipmentWorkingDay.cs:172 SSP0005_ShipmentWorkingDay.cs:311 SSP0005_ShipmentWorkingDay.cs:312 SSP0005_ShipmentWorkingDay.c
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.InitControls,T-3535dd59,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.InitControls,SSP0005_ShipmentWorkingDay.InitControls,Y,REVIEW,진입점 집계 15검사 — NOT_RUN:15 (미실행 검사가 남아 판정필요),7,SSP0005_ShipmentWorkingDay.cs:162 SSP0005_ShipmentWorkingDay.cs:164 SSP0005_ShipmentWorkingDay.cs:166 SSP0005_ShipmentWorkingDay.cs:168 SSP0005_ShipmentWorkingDay.cs:170 SSP0005_ShipmentWorkingDay.cs:172
+C1|COND:clbDivision,T-e92a5ea5,C1,CASCADE,COND,clbDivision,clbDivision / Division,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,1,SSP0005_ShipmentWorkingDay.cs:164
+C1|COND:cboCompany,T-e35a08b8,C1,CASCADE,COND,cboCompany,cboCompany / Company,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,1,SSP0005_ShipmentWorkingDay.cs:166
+C1|COND:cboInputValue,T-bc93c313,C1,CASCADE,COND,cboInputValue,cboInputValue / Input Value,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,1,SSP0005_ShipmentWorkingDay.cs:168
+C1|COND:cboDayWeek,T-619b8db9,C1,CASCADE,COND,cboDayWeek,cboDayWeek / Day of the week / Day Week,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace,1,SSP0005_ShipmentWorkingDay.cs:172
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.InitSpread,T-ddd4e063,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.InitSpread,SSP0005_ShipmentWorkingDay.InitSpread,Y,REVIEW,진입점 집계 5검사 — NOT_RUN:5 (미실행 검사가 남아 판정필요),2,SSP0005_ShipmentWorkingDay.cs:190 SSP0005_ShipmentWorkingDay.cs:192 SSP0005_ShipmentWorkingDay.cs:194 SSP0005_ShipmentWorkingDay.cs:196 SSP0005_ShipmentWorkingDay.cs:197
+A5|COL:DIVISION,T-cf1c437a,A5,DESIGN,COL,DIVISION,DIVISION,Y,NOT_RUN,검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Division 별)) — 실행 필요: smoke·trace,3,SSP0005_ShipmentWorkingDay.cs:190 SSP0005_ShipmentWorkingDay.cs:192 SSP0005_ShipmentWorkingDay.cs:194 SSP0005_ShipmentWorkingDay.cs:196 SSP0005_ShipmentWorkingDay.cs:197
+H2|COL:DIVISION,T-4147891b,H2,DESIGN,COL,DIVISION,DIVISION,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace,3,SSP0005_ShipmentWorkingDay.cs:190 SSP0005_ShipmentWorkingDay.cs:192 SSP0005_ShipmentWorkingDay.cs:194 SSP0005_ShipmentWorkingDay.cs:196 SSP0005_ShipmentWorkingDay.cs:197
+H5|COL:DIVISION,T-52caa56a,H5,DESIGN,COL,DIVISION,DIVISION,Y,NOT_RUN,검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace,3,SSP0005_ShipmentWorkingDay.cs:190 SSP0005_ShipmentWorkingDay.cs:192 SSP0005_ShipmentWorkingDay.cs:194 SSP0005_ShipmentWorkingDay.cs:196 SSP0005_ShipmentWorkingDay.cs:197
+D5|COL:DIVISION,T-c6a37ad5,D5,EDIT,COL,DIVISION,DIVISION,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace,3,SSP0005_ShipmentWorkingDay.cs:190 SSP0005_ShipmentWorkingDay.cs:192 SSP0005_ShipmentWorkingDay.cs:194 SSP0005_ShipmentWorkingDay.cs:196 SSP0005_ShipmentWorkingDay.cs:197
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.InitSpreadDateColumn,T-962cff00,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.InitSpreadDateColumn,SSP0005_ShipmentWorkingDay.InitSpreadDateColumn,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),16,SSP0005_ShipmentWorkingDay.cs:227 SSP0005_ShipmentWorkingDay.cs:228 SSP0005_ShipmentWorkingDay.cs:230 SSP0005_ShipmentWorkingDay.cs:231 SSP0005_ShipmentWorkingDay.cs:239 SSP0005_ShipmentWorkingDay.cs:263 SSP0005_ShipmentWorkingDay.cs:267 SSP0005_ShipmentWorkingDay.cs:274 SSP0005_ShipmentWorkingDay.c
+F4|SP:SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW,T-16740de1,F4,DB,SP,SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW,SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW,Y,NOT_RUN,검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace,88,SSP0005_ShipmentWorkingDay.cs:362 SSP0005_ShipmentWorkingDay.cs:438 SSP0005_ShipmentWorkingDay.cs:441 SSP0005_ShipmentWorkingDay.cs:444 SSP0005_ShipmentWorkingDay.cs:446 SSP0005_ShipmentWorkingDay.cs:448 SSP0005_ShipmentWorkingDay.cs:449 SSP0005_ShipmentWorkingDay.cs:451 SSP0005_ShipmentWorkingDay.c
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.SaveData_Main,T-ce645cc0,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.SaveData_Main,SSP0005_ShipmentWorkingDay.SaveData_Main,Y,REVIEW,진입점 집계 14검사 — NOT_RUN:9 · NOPATH:3 · PASS:2 (미실행 검사가 남아 판정필요),20,SSP0005_ShipmentWorkingDay.cs:438 SSP0005_ShipmentWorkingDay.cs:451 SSP0005_ShipmentWorkingDay.cs:456 SSP0005_ShipmentWorkingDay.cs:514 SSP0005_ShipmentWorkingDay.cs:515 SSP0005_ShipmentWorkingDay.cs:535 SSP0005_ShipmentWorkingDay.cs:536 SSP0005_ShipmentWorkingDay.cs:537 SSP0005_ShipmentWorkingDay.c
+C3|COL:P_FIRST_ROW,T-94eb5239,C3,CASCADE,COL,P_FIRST_ROW,P_FIRST_ROW,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace,1,SSP0005_ShipmentWorkingDay.cs:514
+C3|COL:P_LAST_ROW,T-542b856c,C3,CASCADE,COL,P_LAST_ROW,P_LAST_ROW,Y,NOT_RUN,검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace,1,SSP0005_ShipmentWorkingDay.cs:515
+DB-SYN|SP:SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW,T-6f1c508f,DB-SYN,DB,SP,SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW,SSP0005_SAVE_SHIPMENT_WORKING_DAY_ROW,Y,NOPATH,검사기(syn_check.py·fixture dberr)는 있으나 이 대상(SP)을 실행하는 경로 없음 — 검증 엔진 연결 필요(@trace 또는 ledger.py 항목 생성),2,SSP0005_ShipmentWorkingDay.cs:542 SSP0005_ShipmentWorkingDay.cs:547
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.SetChangedPeriod,T-cca778f7,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.SetChangedPeriod,SSP0005_ShipmentWorkingDay.SetChangedPeriod,Y,REVIEW,진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요),5,SSP0005_ShipmentWorkingDay.cs:910 SSP0005_ShipmentWorkingDay.cs:912 SSP0005_ShipmentWorkingDay.cs:913 SSP0005_ShipmentWorkingDay.cs:915 SSP0005_ShipmentWorkingDay.cs:916 SSP0005_ShipmentWorkingDay.cs:917
+E4|COND:drpPeriod,T-bd3cd7a1,E4,EDIT,COND,drpPeriod,drpPeriod / Period,Y,NOT_RUN,검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요: trace,4,SSP0005_ShipmentWorkingDay.cs:910 SSP0005_ShipmentWorkingDay.cs:912 SSP0005_ShipmentWorkingDay.cs:913 SSP0005_ShipmentWorkingDay.cs:915 SSP0005_ShipmentWorkingDay.cs:916 SSP0005_ShipmentWorkingDay.cs:917
+C3|ENTRY:SSP0005_ShipmentWorkingDay.SetChangedPeriod,T-8c30e924,C3,CASCADE,ENTRY,SSP0005_ShipmentWorkingDay.SetChangedPeriod,SSP0005_ShipmentWorkingDay.SetChangedPeriod,Y,REVIEW,진입점 집계 — C3 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),2,SSP0005_ShipmentWorkingDay.cs:912 SSP0005_ShipmentWorkingDay.cs:913
+E4|ENTRY:SSP0005_ShipmentWorkingDay.SetChangedPeriod,T-ce9e8ca9,E4,EDIT,ENTRY,SSP0005_ShipmentWorkingDay.SetChangedPeriod,SSP0005_ShipmentWorkingDay.SetChangedPeriod,Y,REVIEW,진입점 집계 — E4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요),2,SSP0005_ShipmentWorkingDay.cs:912 SSP0005_ShipmentWorkingDay.cs:913
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,T-9926ca4f,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,Y,REVIEW,진입점 집계 3검사 — NOPATH:2 · NOT_RUN:1 (미실행 검사가 남아 판정필요),9,SSP0005_ShipmentWorkingDay.cs:836 SSP0005_ShipmentWorkingDay.cs:837 SSP0005_ShipmentWorkingDay.cs:838 SSP0005_ShipmentWorkingDay.cs:839 SSP0005_ShipmentWorkingDay.cs:840 SSP0005_ShipmentWorkingDay.cs:843 SSP0005_ShipmentWorkingDay.cs:854
+H6|ENTRY:SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,T-423e205f,H6,POPUP,ENTRY,SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,Y,NA,검사 대상 아님 — 이 화면에 H6 를 적용할 요소(컬럼·조회조건·SP)가 없다,13,SSP0005_ShipmentWorkingDay.cs:836 SSP0005_ShipmentWorkingDay.cs:837 SSP0005_ShipmentWorkingDay.cs:838 SSP0005_ShipmentWorkingDay.cs:839 SSP0005_ShipmentWorkingDay.cs:841 SSP0005_ShipmentWorkingDay.cs:842 SSP0005_ShipmentWorkingDay.cs:847 SSP0005_ShipmentWorkingDay.cs:848 SSP0005_ShipmentWorkingDay.c
+G5|ENTRY:SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,T-b2e5d1f9,G5,POPUP,ENTRY,SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,Y,NA,검사 대상 아님 — 이 화면에 G5 를 적용할 요소(컬럼·조회조건·SP)가 없다,13,SSP0005_ShipmentWorkingDay.cs:836 SSP0005_ShipmentWorkingDay.cs:837 SSP0005_ShipmentWorkingDay.cs:838 SSP0005_ShipmentWorkingDay.cs:839 SSP0005_ShipmentWorkingDay.cs:841 SSP0005_ShipmentWorkingDay.cs:842 SSP0005_ShipmentWorkingDay.cs:847 SSP0005_ShipmentWorkingDay.cs:848 SSP0005_ShipmentWorkingDay.c
+M4|ENTRY:SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,T-0aa13662,M4,POPUP,ENTRY,SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,SSP0005_ShipmentWorkingDay.SpdMain_CellDoubleClick,Y,NA,검사 대상 아님 — 이 화면에 M4 를 적용할 요소(컬럼·조회조건·SP)가 없다,13,SSP0005_ShipmentWorkingDay.cs:836 SSP0005_ShipmentWorkingDay.cs:837 SSP0005_ShipmentWorkingDay.cs:838 SSP0005_ShipmentWorkingDay.cs:839 SSP0005_ShipmentWorkingDay.cs:841 SSP0005_ShipmentWorkingDay.cs:842 SSP0005_ShipmentWorkingDay.cs:847 SSP0005_ShipmentWorkingDay.cs:848 SSP0005_ShipmentWorkingDay.c
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.SpdMain_Changed,T-8ce79c17,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.SpdMain_Changed,SSP0005_ShipmentWorkingDay.SpdMain_Changed,Y,WARN,진입점 집계 4검사 — NOT_RUN:3 · WARN:1,4,SSP0005_ShipmentWorkingDay.cs:873 SSP0005_ShipmentWorkingDay.cs:876 SSP0005_ShipmentWorkingDay.cs:878 SSP0005_ShipmentWorkingDay.cs:879 SSP0005_ShipmentWorkingDay.cs:898
+C2|ENTRY:SSP0005_ShipmentWorkingDay.SpdMain_Changed,T-c39d86be,C2,CASCADE,ENTRY,SSP0005_ShipmentWorkingDay.SpdMain_Changed,SSP0005_ShipmentWorkingDay.SpdMain_Changed,Y,NA,검사 대상 아님 — 이 화면에 C2 를 적용할 요소(컬럼·조회조건·SP)가 없다,12,SSP0005_ShipmentWorkingDay.cs:873 SSP0005_ShipmentWorkingDay.cs:876 SSP0005_ShipmentWorkingDay.cs:879 SSP0005_ShipmentWorkingDay.cs:880 SSP0005_ShipmentWorkingDay.cs:884 SSP0005_ShipmentWorkingDay.cs:885 SSP0005_ShipmentWorkingDay.cs:886 SSP0005_ShipmentWorkingDay.cs:888 SSP0005_ShipmentWorkingDay.c
+C3|ENTRY:SSP0005_ShipmentWorkingDay.SpdMain_Changed,T-dff0a06b,C3,CASCADE,ENTRY,SSP0005_ShipmentWorkingDay.SpdMain_Changed,SSP0005_ShipmentWorkingDay.SpdMain_Changed,Y,REVIEW,진입점 집계 — C3 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요),12,SSP0005_ShipmentWorkingDay.cs:873 SSP0005_ShipmentWorkingDay.cs:876 SSP0005_ShipmentWorkingDay.cs:879 SSP0005_ShipmentWorkingDay.cs:880 SSP0005_ShipmentWorkingDay.cs:884 SSP0005_ShipmentWorkingDay.cs:885 SSP0005_ShipmentWorkingDay.cs:886 SSP0005_ShipmentWorkingDay.cs:888 SSP0005_ShipmentWorkingDay.c
+C6|ENTRY:SSP0005_ShipmentWorkingDay.SpdMain_Changed,T-9765492f,C6,CASCADE,ENTRY,SSP0005_ShipmentWorkingDay.SpdMain_Changed,SSP0005_ShipmentWorkingDay.SpdMain_Changed,Y,NA,검사 대상 아님 — 이 화면에 C6 를 적용할 요소(컬럼·조회조건·SP)가 없다,12,SSP0005_ShipmentWorkingDay.cs:873 SSP0005_ShipmentWorkingDay.cs:876 SSP0005_ShipmentWorkingDay.cs:879 SSP0005_ShipmentWorkingDay.cs:880 SSP0005_ShipmentWorkingDay.cs:884 SSP0005_ShipmentWorkingDay.cs:885 SSP0005_ShipmentWorkingDay.cs:886 SSP0005_ShipmentWorkingDay.cs:888 SSP0005_ShipmentWorkingDay.c
+X-ROW|ENTRY:SSP0005_ShipmentWorkingDay.SpdMain_TopChange,T-f727c20b,X-ROW,GEN,ENTRY,SSP0005_ShipmentWorkingDay.SpdMain_TopChange,SSP0005_ShipmentWorkingDay.SpdMain_TopChange,Y,REVIEW,진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요),3,SSP0005_ShipmentWorkingDay.cs:321 SSP0005_ShipmentWorkingDay.cs:322 SSP0005_ShipmentWorkingDay.cs:323

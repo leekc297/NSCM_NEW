@@ -8,7 +8,8 @@ import { hasEndCustomer } from '../sales-site.constants';
  * AS-IS(DMF0004_SalesSite.cs)는 조건에 따라 목록 원천을 통째로 갈아끼운다. 화면에 보이는
  * 칸은 하나지만 그 뒤의 SQL 은 셋이다.
  *
- *   division 이 81 접두 또는 82  -> UserSiteByEndCustomer  (division + End Customer, Active Y + AS 사이트)
+ *   division 이 81 접두 또는 82  -> UserSiteByEndCustomer  (division + End Customer, AS-IS 는 Active Y + AS 사이트,
+ *                                  TO-BE 는 PI 211 로 Active 무관 전체 + AS 사이트)
  *   그 외 division (40 등)        -> ScmSitebyEndCustomer40 (division)
  *   Sold-To Customer 변경         -> SiteByEndCustomerSold  (division + Sold-To)
  *
@@ -99,16 +100,19 @@ export const buildSalesSiteComboParam = (
   // 재조회다 - 목록 구성 조건을 전부 파라미터로 실으므로 그중 하나라도 바뀌면 react-query 키가
   //   달라져 SQL 이 다시 나간다(refetch 를 직접 부르지 않는다).
   if (hasEndCustomer(divisionId)) {
-    // 필수: validYn / asYn 을 함께 싣는다. 공용 SQL(SiteByEndCustomer_DM)은 두 값이 비면
-    //   Active 조건을 끄고(사용 중지 사이트 포함) 운영 그룹 W(AS 사이트) 분기를 아예 타지 않는다.
-    //   AS-IS UserSiteByEndCustomer 는 사용 중(Active Y) 사이트 전체 + AS 사이트였다
-    //   (실측 2026-10-06: 미전송 81 526 / 82 966 -> 전송 81 447 / 82 756).
+    // 필수: validYn / asYn 을 함께 싣는다.
+    //   asYn 'Y' — 공용 SQL(SiteByEndCustomer_DM)은 이 값이 없으면 AS 사이트(AS_SITE_PLANT) 분기를
+    //   DM Planner (W/S) 그룹에게만 연다. AS-IS UserSiteByEndCustomer 는 AS 사이트를 늘 포함했다.
+    //   validYn 'N' — 사용 중지 사이트도 목록에 넣는다. PI 211(의도 변경)이 Active 로 관리하는 데이터의
+    //   조회조건을 Active 와 무관한 전체 표시로 정했고, 40 목록(SiteByEndCustomer40_DM)도 그렇게
+    //   보여 준다(2026-10-16 재검증 F-06). SQL 은 2026-10-12 개정 후 validYn 이 비면 'Y'(사용 중만)로
+    //   보므로 'N' 을 명시해야 한다. 실측 2026-10-19: 'Y' 81 447 / 82 756 -> 'N' 81 531 / 82 969.
     //   SQL 본문은 DMF0003 등과 공용이라 손대지 않고 이 화면의 전달값만 바꾼다.
     return {
       comboId: SALES_SITE_COMBO.byEndCustomer,
       divisionId,
       endCustomer: blank(endCustomer),
-      validYn: 'Y',
+      validYn: 'N',
       asYn: 'Y',
     };
   }

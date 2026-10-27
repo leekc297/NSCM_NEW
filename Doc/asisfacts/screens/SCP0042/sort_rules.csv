@@ -1,0 +1,5 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0042,SQL,SCP0020_GET_TACT_TIME_EXCEPT,Doc\asisfacts\db\modules\dbo.SCP0020_GET_TACT_TIME_EXCEPT.sql,77,,"DIVISION_ID,PLANT_SITE_ID,OPERATION_ID,ITEM_ID,LINE_ID,TACT_TIME_START_DATE,TACT_TIME_END_DATE","ORDER BY division_id, plant_site_id, operation_id,item_id , line_id, tact_time_start_date, tact_time_end_date",0,정적
+SCP0042,SQL,SCP0020_GET_TACT_TIME,Doc\asisfacts\db\modules\dbo.SCP0020_GET_TACT_TIME.sql,342,,"LINE_ORDER,DIVISION_ID,PLANT_SITE_ID,OPERATION_ID,LINE_ID,MODEL_SITE,ITEM_ID","ORDER BY line_order, m.division_id, m.plant_site_id, m.operation_id, m.line_id,m.model_site, m.item_id",0,정적
+SCP0042,SQL,SCP0020_SAVE_TACT_TIME_EXCEPT,Doc\asisfacts\db\modules\dbo.SCP0020_SAVE_TACT_TIME_EXCEPT.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0042,SQL,SCP0020_SAVE_TACT_TIME,Doc\asisfacts\db\modules\dbo.SCP0020_SAVE_TACT_TIME.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

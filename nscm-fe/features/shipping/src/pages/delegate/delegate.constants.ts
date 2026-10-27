@@ -35,35 +35,51 @@ export const ADMIN_SHEET_NAME: Record<SHEETS, string> = {
 //   따라서 렌더 컬럼에서 CHK 메타는 제외한다(선택 UI 는 Selector 가 대체 — 이중 체크박스 방지).
 export const CHK_COLUMN = 'CHK';
 
-// TO-BE MSG 코드 — SCM_ADM_MSG_M 문구 역조회로 확정(Hook #114). AS-IS 번호를 그대로 쓰지 않는다.
-//   실측(2026-09-22, ora.py SCM_ADM_MSG_M LANG_CD KO/EN):
-//     MSG00672 = "{0}개의 데이터가 저장되었습니다." / "{0} data saved."      (건수 플레이스홀더 — 저장/해제 성공)
-//     MSG00004 = "수정한 내용이 없습니다." / "No changes to save."           (변경 없음)  ※ AS-IS 는 성공용이나 TO-BE 문구는 다름 → 성공에 쓰지 않음
-//     MSG00284 = "Grid 가 준비되지 않았습니다." / "The grid is not ready."   ※ AS-IS 는 '완료'용이나 TO-BE 문구 상이 → 사용하지 않음
-//     MSG00003 = "저장에 실패하였습니다." / "Failed to save."
-//     MSG00097 = "Division 을 선택하세요." / "Please select Division."       (무권한 R3 + division 미체크 MSG00299 등가)
-//     MSG00105 = "중첩된 기간이 있습니다." / "There are overlapping periods." (중첩 기간)
-//   아래 8종은 TO-BE SCM_ADM_MSG_M 에 미존재(2026-09-22 실측 0건) → AS-IS 코드를 key 로 두되
-//     영문 defaultValue fallback 으로 노출한다(엉뚱한 기존 코드 재사용 금지). 정식 등록은 후속(Top11 #11).
+// TO-BE MSG 코드 — **AS-IS 번호를 그대로 쓰지 않는다**(convert-core Hook #114 / memory
+//   asis-msg-number-must-be-remapped-to-registered-tobe-code). AS-IS 번호는 TO-BE 에서
+//   다른 문구를 점유하거나 비어 있어, 그대로 쓰면 화면에 영문 fallback 이 그대로 노출된다.
+//
+// 2026-10-15 전건 재실측으로 확정 — AS-IS `TB_FX_MessageInfo`(asis.py) 문구를 TO-BE
+//   `SCM_ADM_MSG_M`(ora.py) 에서 **문구 1:1 역조회**해 찾은 TO-BE 코드다. 전건 KO/EN/CN 3언어
+//   USE_YN='Y' 등록 확인. (이전 회차의 "9종 미등록" 판정은 번호로만 조회한 오진이었다.)
+//
+//   AS-IS → TO-BE        | 문구(KO)
+//   MSG00097 → MSG00667  | 권한을 가진 Division이 없습니다.        ← 무권한(R3)
+//   MSG00299 → MSG01302  | 선택된 Division ID가 없습니다.         ← Division 미체크
+//   MSG00105 → MSG00700  | 중첩된 기간이 있습니다.
+//   MSG00296 → MSG01299  | 수임자의 다른 위임 현황이 있습니다.
+//   MSG00297 → MSG01300  | 중첩된 기간에 수임받은 현황이 있습니다.
+//   MSG00298 → MSG01301  | Delegatee를 입력해 주세요.
+//   MSG00300 → MSG01303  | 리스트에서 선택 후 설정해제 해주세요.
+//   MSG00301 → MSG01304  | 사용자를 찾지 못했습니다. 검색창을 여시겠습니까?
+//   MSG00302 → MSG01305  | 다중검색된 User입니다. 검색창을 여시겠습니까?
+//   MSG00305 → MSG01308  | 위임자와 수임자가 동일 합니다.
+//   MSG00134 → MSG01153  | 날짜 선택 후 입력하세요.
+//   MSG00004 → MSG00672  | {0}개의 데이터가 저장되었습니다.        ← TO-BE MSG00004 는 "수정한 내용이 없습니다"
+//   MSG00284 → MSG01288  | 실행중 에러가 발생했습니다.             ← TO-BE MSG00284 는 "Grid 가 준비되지 않았습니다"
+//   MSG00219 → MSG00219  | (동일 번호에 동일 문구 등록 — 유일한 번호 일치 건)
+//
+//   주의: **MSG00097 을 Division 미체크에 쓰면 안 된다.** TO-BE MSG00097 문구는
+//   "Division 을 선택하세요"(= AS-IS MSG00299 의미)라서, 무권한 사용자에게 선택할 Division 이
+//   아예 없는데 "선택하세요" 라고 안내하게 된다. 두 용도를 MSG00667/MSG01302 로 분리한다.
+//   defaultValue 는 카탈로그 로드 실패용 폴백이며 위 실측 EN 문구와 동일하게 맞춘다.
 export const MSG = {
-  SAVE_SUCCESS: 'MSG00672', // 저장/해제 성공 (건수)
-  NO_CHANGES: 'MSG00004', // 변경 없음
-  SAVE_FAIL: 'MSG00003', // 저장 실패
-  REQUIRE_DIVISION: 'MSG00097', // Division 무권한/미체크 (R3 + MSG00299 등가)
-  OVERLAP_PERIOD: 'MSG00105', // 중첩 기간 (위임)
-  DELEGATEE_REQUIRED: 'MSG00298', // 위임자명 공백 (TO-BE 미존재 — fallback)
-  DELEGATEE_SELF: 'MSG00305', // 위임자==본인 (TO-BE 미존재 — fallback)
-  PERIOD_REQUIRED: 'MSG00134', // 기간 공백 (TO-BE 미존재 — fallback)
-  PERIOD_REVERSED: 'MSG00219', // From>To (TO-BE 미존재 — fallback)
-  DELEGATEE_OTHER: 'MSG00296', // 수임자 타 위임 현황 (TO-BE 미존재 — fallback)
-  OVERLAP_RECEIVED: 'MSG00297', // 중첩 기간 수임 현황 (TO-BE 미존재 — fallback)
-  UNSET_NONE_SELECTED: 'MSG00300', // 해제 대상 미선택 (TO-BE 미존재 — fallback)
-  // MSG00302/00301 은 AS-IS UserName_Search(cs:799-816)의 위임자 검색 프롬프트다 —
-  //   302=다중검색 "검색창 여시겠습니까?"(cs:802) / 301=미검색 "검색창 여시겠습니까?"(cs:811).
-  //   설계 00 §4f 가 저장/해제 confirm 으로 오독했으나 AS-IS BtnSave/BtnUnSet 은 확인 다이얼로그 없이
-  //   직접 실행한다(cs:352/564) → 저장/해제 confirm 미사용, 검색 프롬프트 용도로 정정(gap-resolve iter-1).
-  DELEGATEE_MULTI: 'MSG00302', // 위임자 다중검색 → 검색창 열기? (TO-BE 미존재 — fallback)
-  DELEGATEE_NOTFOUND: 'MSG00301', // 위임자 미검색 → 검색창 열기? (TO-BE 미존재 — fallback)
+  SAVE_SUCCESS: 'MSG00672', // {0}개의 데이터가 저장되었습니다 (저장/해제 성공, 건수) ← AS-IS MSG00004
+  EXEC_ERROR: 'MSG01288', // 실행중 에러가 발생했습니다 (저장/해제 실패) ← AS-IS MSG00284
+  NO_DIVISION_AUTH: 'MSG00667', // 권한을 가진 Division이 없습니다 (R3 무권한) ← AS-IS MSG00097
+  REQUIRE_DIVISION: 'MSG01302', // 선택된 Division ID가 없습니다 (미체크) ← AS-IS MSG00299
+  OVERLAP_PERIOD: 'MSG00700', // 중첩된 기간이 있습니다 ← AS-IS MSG00105
+  DELEGATEE_REQUIRED: 'MSG01301', // Delegatee를 입력해 주세요 ← AS-IS MSG00298
+  DELEGATEE_SELF: 'MSG01308', // 위임자와 수임자가 동일 합니다 ← AS-IS MSG00305
+  PERIOD_REQUIRED: 'MSG01153', // 날짜 선택 후 입력하세요 ← AS-IS MSG00134
+  PERIOD_REVERSED: 'MSG00219', // 시작일자가 종료일자보다 늦을 수 없습니다 ← AS-IS 동일번호
+  DELEGATEE_OTHER: 'MSG01299', // 수임자의 다른 위임 현황이 있습니다 ← AS-IS MSG00296
+  OVERLAP_RECEIVED: 'MSG01300', // 중첩된 기간에 수임받은 현황이 있습니다 ← AS-IS MSG00297
+  UNSET_NONE_SELECTED: 'MSG01303', // 리스트에서 선택 후 설정해제 해주세요 ← AS-IS MSG00300
+  // AS-IS UserName_Search(cs:799-816) 의 위임자 검색 프롬프트(Yes/No) — 저장/해제 confirm 이 아니다
+  //   (AS-IS BtnSave/BtnUnSet 은 확인창 없이 직접 실행, cs:352/564 — gap-resolve iter-1 정정).
+  DELEGATEE_MULTI: 'MSG01305', // 다중검색된 User입니다. 검색창을 여시겠습니까? ← AS-IS MSG00302
+  DELEGATEE_NOTFOUND: 'MSG01304', // 사용자를 찾지 못했습니다. 검색창을 여시겠습니까? ← AS-IS MSG00301
 } as const;
 
 // 공통버튼/커스텀버튼 코드 — 05_register.sql 의 SCM_ADM_MNU_BTN_MPG_M 과 1:1.

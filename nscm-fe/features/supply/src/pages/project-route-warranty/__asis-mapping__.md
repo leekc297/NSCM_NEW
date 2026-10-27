@@ -34,7 +34,7 @@ AS-IS 정본: `GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0048_ProjectRoute_Warran
 | R-C1 DIVISION_ID 신규행만 MyDivision | beginningEdit: DIVISION_ID 는 CRUD_TYPE='I' 만 편집 허용 |
 | R-D1 PLANT_SITE_ID → TACT_TIME_FLAG(표시 마지막문자) | cellEditEnded `deriveTactTimeFlag` |
 | R-D3 VALID_YN 되돌림(opGroup≠W & Y & orgN → N + AS-IS MSG00211→TO-BE MSG01222) | cellEditEnded VALID_YN 분기(storeChange 'N' + refreshRow + alert) |
-| R-D4 DIVISION_ID 변경 → PLANT_SITE_ID/ITEM_ID/NICK_NAME clear, 비-81 SCM_SITE_ID/PROJECT_CODE='-'(R-D5) | cellEditEnded DIVISION_ID 분기 |
+| R-D4 DIVISION_ID 변경 → PLANT_SITE_ID/ITEM_ID/NICK_NAME clear, 비-81 SCM_SITE_ID/PROJECT_CODE='-'(R-D5) | cellEditEnded DIVISION_ID 분기. **TO-BE "없는 값" 표식은 '/'(NO_VALUE_PLACEHOLDER)** — AS-IS '-' 를 TO-BE PKG_SCP0048 GET SP 가 NVL(NULLIF(..,'-'),'/')/NVL(..,'/') 로 '/' 변환해 내려줌(2026-10-19 ora.py 실측). FE 신규행 기본값·clear·저장 payload 전부 '/' |
 | R-D8 ITEM_ID 셀 더블클릭 → Item 팝업 | dblClick hitTest → `onItemCellDblClick` → `ItemByDivisionModal`(callFromCell=true) |
 | R-D6 div=81 SCM_SITE_ID/PROJECT_CODE 셀 → SalesSite 팝업 | dblClick → `onSalesSiteCellDblClick`(tsx:228 mode='salesSite') → base `ItemByDivisionModal` 재사용. 반환은 setSelectedValue(...,scmSiteId,projectCode) 로 SCM_SITE_ID/PROJECT_CODE 한 쌍 write-back(tsx:253~271). 별도 Ex 팝업 없이 COM0008 o_rc1 의 두 컬럼으로 GAP-1 해소(2026-09-25) |
 | R-L1 Edit 토글 off → 전셀 잠금 | beginningEdit `!editMode → cancel` |
@@ -56,7 +56,7 @@ AS-IS 정본: `GSCM/06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0048_ProjectRoute_Warran
 | MSG00107 | N7 Priority 양의 정수 | N7 |
 | MSG00048/MSG00219 | N8 날짜 형식·범위(<17530101)·from>to. 공백은 silent(무알림) 차단 | N8 |
 | MSG00220 | N9 기간별 Priority=1 존재(Warranty 행 제외) | N9 |
-| MSG00002 | N10 div=81 SCM_SITE_ID/PROJECT_CODE 필수(공백·'-' 불가) | N10 |
+| AS-IS MSG00002→TO-BE MSG00429 | N10 div=81 SCM_SITE_ID/PROJECT_CODE 필수 | N10. AS-IS MSG00002 는 "{0} 필수" 템플릿이나 TO-BE MSG00002 는 "저장되었습니다"(성공) 라 ID 충돌 — 문구기준 MSG00429("{0} 값은 필수 입력 항목입니다") 로 remap + 필드명({0}=Sales Site Code, Project) 치환. isSalesSiteBlank 는 ''·'-' 만 빈값; '/'(NO_VALUE_PLACEHOLDER) 는 **유효값**(null 회피 기본값, 사용자 확정 2026-10-19) |
 | AS-IS MSG00322→TO-BE MSG01319 | N11 Warranty PRIORITY≥11 | N11 |
 
 group-by 키 = `DIVISION_ID^ITEM_ID^SCM_SITE_ID^PROJECT_CODE`(SCP0048 은 자매와 달리 DIVISION_ID 포함, design/03 §4.3).
@@ -66,7 +66,7 @@ group-by 키 = `DIVISION_ID^ITEM_ID^SCM_SITE_ID^PROJECT_CODE`(SCP0048 은 자매
 | AS-IS | TO-BE(`submitWarrantySaveRequest`) |
 |---|---|
 | P_SCP0048_SAVE_PROJECTROUTE_WARRANTY(18 args = 14 CLOB + P_DEBUG_MODE + O_* 3) | 14 CLOB `^`-delim 병렬배열 payload + debugMode='F' → POST `/SCP0048/main/SAVE/call-proc` |
-| PLANT_SITE_ID 저장 = 원본 PLANT_SITE_ID_B(표시 합성값 아님) | `acc.plantSiteId.push(PLANT_SITE_ID_B)` |
+| PLANT_SITE_ID 저장 = 원본 PLANT_SITE_ID_B 우선, 비면 PLANT_SITE_ID(콤보 선택 코드) 폴백 | `acc.plantSiteId.push(PLANT_SITE_ID_B \|\| PLANT_SITE_ID)`. AS-IS cs:566~570 동일 폴백. PLANT_SITE_ID_B 는 GET 조회행에만 존재(신규행 공백) → 폴백 없으면 신규행 plantSiteId 공백저장. 콤보 ElecRoutePlantByOperation_SCP 의 CODE=SCM_SITE_ID 라 PLANT_SITE_ID 바인딩값이 실제 코드(합성 표시값 아님) |
 | ITEM_ID `.ToUpper()` | `acc.itemId.push(...toUpperCase())` |
 | PRIORITY_SEQ 빈값 → 'M'→'I' 승격 | CRUD_TYPE='I' → activeFlag 'I' |
 

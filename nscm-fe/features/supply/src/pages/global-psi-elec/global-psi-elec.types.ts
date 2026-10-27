@@ -10,8 +10,9 @@ export type GlobalPsiElecRow = ResponseData<MENU_ID, SHEETS.MAIN>;
 export interface SearchCondition {
   divisionId: string; // cboDivision — EE 전극 사업부(FE ATTRIBUTE3='EE' 필터). 다중선택 콤마구분. p_division_id
   company: string; // cboCompany — COMPANY_EE 다중선택. 값=COMPANY_NAME. p_company
-  itemId: string; // txtItem_Id — ElecMaterialPopup 이 채움. p_item_id
+  itemId: string; // txtItem_Id — 메1 MaterialByDivisionModal 이 채움(ITEM_ID). p_item_id
   planStartYyyymmdd: string; // cboPlanDate — DATE_WEEKLY(division cascade). p_yyyymmdd. 단일선택
+  planType: string; // Report Type* — PLAN_TYPE lookup(FN/MA/…, 기본 FN). p_plan_type. SP 가 A.PLAN_TYPE=p_plan_type 로 필터(필수)
   fromYyyymmdd: string; // dCalendar From — Period(기본 W52). p_from_yyyymmdd
   toYyyymmdd: string; // dCalendar To — Period(기본 W52). p_to_yyyymmdd
   bucket: string; // cboBucketType — DAILY/WEEKLY(기본)/MONTHLY. D_/W_/M_ pivot visible 토글(조회 파라미터 아님)

@@ -1,5 +1,5 @@
 // 조회조건 — AS-IS 9 컨트롤 1:1 (콤보 CMBO 0 화면 — 목록성 콤보는 useTabComboQueries 공용 콤보 사용).
-//   멀티 콤보 값은 CustomDropdown 콤마 문자열. Version 기본 'Current' (Division 변경 시 clear — .cs L574).
+//   멀티 콤보 값은 CustomDropdown 콤마 문자열. Version 기본 'Current' (Division/Team 변경 시 'Current' 로 복귀).
 export interface SearchParamProps {
   divisionId: string;
   team: string;

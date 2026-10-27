@@ -1,0 +1,7 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0039,SQL,SCP0121_GET_SEARCH_INFO,Doc\asisfacts\db\modules\dbo.SCP0121_GET_SEARCH_INFO.sql,124,,"SEQ,DIVISION_ID,CODE","ORDER BY SEQ, division_id, CODE",0,정적
+SCP0039,SQL,SCP0121_GET_SEARCH_INFO,Doc\asisfacts\db\modules\dbo.SCP0121_GET_SEARCH_INFO.sql,188,,"SEQ,DIVISION_ID,CODE","ORDER BY SEQ, division_id, CODE",0,정적
+SCP0039,SQL,SCP0121_GET_SEARCH_INFO,Doc\asisfacts\db\modules\dbo.SCP0121_GET_SEARCH_INFO.sql,200,,OPMZ_PLAN_GR_NAME,ORDER BY OPMZ_PLAN_GR_NAME,0,정적
+SCP0039,SQL,SCP0121_GET_SEARCH_INFO,Doc\asisfacts\db\modules\dbo.SCP0121_GET_SEARCH_INFO.sql,230,,"SEQ,DIVISION_ID,CODE","ORDER BY SEQ, division_id, CODE",0,정적
+SCP0039,SQL,UP_FX_GetGSCMAuthenticationMenuList,Doc\asisfacts\db\modules\dbo.UP_FX_GetGSCMAuthenticationMenuList.sql,324,,"MENUID,SORT","ORDER BY MenuID, SORT",0,정적
+SCP0039,SQL,SCM0003_GET_LOOKUP_MASTER_DETAIL,Doc\asisfacts\db\modules\dbo.SCM0003_GET_LOOKUP_MASTER_DETAIL.sql,60,,DISPLAY_SEQ,order by display_seq,0,정적

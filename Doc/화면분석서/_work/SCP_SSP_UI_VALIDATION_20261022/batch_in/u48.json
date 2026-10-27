@@ -1,0 +1,400 @@
+[
+ {
+  "screen": "SSP0008",
+  "title": "Production Plan Line(SSP)",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0008_ProductionPlanLine.cs:2570"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0008_ProductionPlanLine.Designer.cs:1172"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1182",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP_GET_LAST_PLAN_VERSION",
+    "member": "GetLastPlanVersion",
+    "line": "1281",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0008_GET_PRODUCTION_PLAN_LINEBY",
+    "member": "FindData_Main",
+    "line": "1375",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0007_SAVE_PRODUCTION_PLAN_LINE",
+    "member": "SaveData_Line",
+    "line": "1580",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "member": "SaveData_FixInfo",
+    "line": "2051",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0008_GET_PLAN_EDIT_INFO",
+    "member": "Get_IsEditInfo",
+    "line": "2165",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2530",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "2552",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1182",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP_GET_LAST_PLAN_VERSION",
+    "member": "GetLastPlanVersion",
+    "line": "1281",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0008_GET_PRODUCTION_PLAN_LINEBY",
+    "member": "FindData_Main",
+    "line": "1375",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0007_SAVE_PRODUCTION_PLAN_LINE",
+    "member": "SaveData_Line",
+    "line": "1580",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0008_SAVE_PRODUCTION_PLAN_LINE_ROW",
+    "member": "SaveData_Line_DT",
+    "line": "1791",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0008_SAVE_PRODUCTION_PLAN_LINE_ROW",
+    "member": "SaveData_Line_DT",
+    "line": "1792",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0008_SAVE_PRODUCTION_PLAN_LINE_ROW",
+    "member": "SaveData_Line_DT",
+    "line": "1793",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "member": "SaveData_FixInfo",
+    "line": "2051",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0008_GET_PLAN_EDIT_INFO",
+    "member": "Get_IsEditInfo",
+    "line": "2165",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2530",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "2552",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0008_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+   "SSP0007_SAVE_PRODUCTION_PLAN_LINE",
+   "SSP0008_GET_PLAN_EDIT_INFO",
+   "SSP0008_GET_PRODUCTION_PLAN_LINEBY",
+   "SSP0008_SAVE_PRODUCTION_PLAN_LINE_ROW",
+   "SSP_GET_LAST_PLAN_VERSION"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 F 결과코드와 오류번호·메시지 1결과셋 반환",
+    "message": "[ERROR_NUMBER()]ERROR_MESSAGE()",
+    "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS ERR_MESSAGE"
+   }
+  ]
+ },
+ {
+  "screen": "SSP0009",
+  "title": "Shipment Plan FG(SSP)",
+  "domain": "SSP",
+  "logic_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0009_Shipment_Plan_FG.cs:2754"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SSP.Plan.UIL/SSP0009_Shipment_Plan_FG.Designer.cs:1328"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "278",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0009_GET_SHIPMENT_PLAN_FG",
+    "member": "FindData_Main",
+    "line": "971",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0009_GET_SHIPMENT_PLAN_FG_TITLE_PARAL",
+    "member": "FindData_Main",
+    "line": "1008",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0009_GET_SHIPMENT_PLAN_FG_PEGGING",
+    "member": "FindData_PeggingInfo",
+    "line": "2287",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0009_GET_SHIPMENT_PLAN_FG_PROBLEM",
+    "member": "FindData_PlanProblem",
+    "line": "2352",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2446",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "2474",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "278",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0009_GET_SHIPMENT_PLAN_FG",
+    "member": "FindData_Main",
+    "line": "971",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0009_GET_SHIPMENT_PLAN_FG_TITLE_PARAL",
+    "member": "FindData_Main",
+    "line": "1008",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG",
+    "member": "SaveData_Main",
+    "line": "2076",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG",
+    "member": "SaveData_Main",
+    "line": "2077",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG",
+    "member": "SaveData_Main",
+    "line": "2078",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0009_GET_SHIPMENT_PLAN_FG_PEGGING",
+    "member": "FindData_PeggingInfo",
+    "line": "2287",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0009_GET_SHIPMENT_PLAN_FG_PROBLEM",
+    "member": "FindData_PlanProblem",
+    "line": "2352",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2446",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "2474",
+    "file": "06.UIL\\GSCM.SSP.Plan.UIL\\SSP0009_Shipment_Plan_FG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCM0001_GET_SCP_DAY_PERIOD / SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG",
+   "SSP0009_GET_SHIPMENT_PLAN_FG",
+   "SSP0009_GET_SHIPMENT_PLAN_FG_PEGGING",
+   "SSP0009_GET_SHIPMENT_PLAN_FG_PROBLEM",
+   "SSP0009_GET_SHIPMENT_PLAN_FG_TITLE_PARAL"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG",
+    "sp": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 중 예외 발생 시 롤백 후 F 결과와 오류메시지·오류행 키값을 반환",
+    "message": "result_code='F' + err_message=ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code , 0 as result_cnt; SELECT err_code, err_message, 키값, qty, error_line"
+   }
+  ]
+ }
+]

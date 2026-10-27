@@ -1,0 +1,3079 @@
+{
+  "menuId": "SSP0015",
+  "page": "ShipmentPlanMobilityIt",
+  "feature": "shipping",
+  "routePath": "shipping/shipment-plan-mobility-it",
+  "asisName": "ShipmentPSI",
+  "fields": [
+    {
+      "key": "planDate",
+      "label": "Plan-date*",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanDate"
+    },
+    {
+      "key": "sumYn",
+      "label": "Change Qty",
+      "lbl": "",
+      "kind": "check",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkSum"
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlantSite"
+    },
+    {
+      "key": "period",
+      "label": "Period*",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "bucketType",
+      "label": "Bucket",
+      "lbl": "LBL00710",
+      "kind": "single",
+      "component": "BucketField",
+      "comboId": "BucketType",
+      "popup": false,
+      "asis": "cboBucketType"
+    },
+    {
+      "key": "divisionIds",
+      "label": "Division*",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision"
+    },
+    {
+      "key": "myModel",
+      "label": "My Model",
+      "lbl": "LBL01093",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkMyModel"
+    },
+    {
+      "key": "partLeader",
+      "label": "Part Leader",
+      "lbl": "LBL01101",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkPartLeader"
+    },
+    {
+      "key": "teamLeader",
+      "label": "Team Leader",
+      "lbl": "LBL01124",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkTeamLeader"
+    },
+    {
+      "key": "delegateeModel",
+      "label": "Delegatee Model",
+      "lbl": "LBL01070",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkDelegateeModel"
+    },
+    {
+      "key": "resultType",
+      "label": "Result Type",
+      "lbl": "LBL01109",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbResultType"
+    },
+    {
+      "key": "requestor",
+      "label": "item.UserName",
+      "lbl": "",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtRequestor"
+    },
+    {
+      "key": "model2",
+      "label": "Model",
+      "lbl": "LBL00669",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtModel2"
+    },
+    {
+      "key": "period",
+      "label": "Shipment Date",
+      "lbl": "LBL01115",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod2"
+    },
+    {
+      "key": "period",
+      "label": "Shipment Date",
+      "lbl": "LBL01115",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod3"
+    },
+    {
+      "key": "lotId",
+      "label": "Lot ID",
+      "lbl": "LBL01090",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtLotID"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "measure",
+      "label": "Div*",
+      "lbl": "LBL00001",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    },
+    {
+      "key": "requestor",
+      "label": "Requestor",
+      "lbl": "LBL01108",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnRequestor"
+    },
+    {
+      "key": "search",
+      "label": "Search",
+      "lbl": "LBL00112",
+      "kind": "search",
+      "tobe": "SearchArea.onSearch",
+      "asis": "btnSearch"
+    },
+    {
+      "key": "itemId2",
+      "label": "Item ID2",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnItemID2"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Hold stock",
+      "key": "HOLD_STOCK",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "SHIPTO_DESCRIPTION",
+        "DIVISION_ID",
+        "FROM_SITE",
+        "FROM_SITE_NM",
+        "HOLD_ID",
+        "HOLD_QTY",
+        "HOLD_YYYYMMDD",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "NICK_NAME",
+        "RELEASE_YYYYMMDD",
+        "REMARKS"
+      ],
+      "labels": [
+        "",
+        "",
+        "Div",
+        "Site",
+        "From Site",
+        "HOLD_ID",
+        "Amend Qty*",
+        "Start Date",
+        "Model",
+        "Last Updated Date",
+        "Last Updated By",
+        "Nick Name",
+        "End Date*",
+        "Remarks"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Hold stock Detail",
+      "key": "HOLD_STOCK_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "SHIPTO_DESCRIPTION",
+        "DIVISION_ID",
+        "FROM_SITE",
+        "FROM_SITE_NM",
+        "HOLD_ID",
+        "HOLD_QTY",
+        "HOLD_YYYYMMDD",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "NICK_NAME",
+        "RELEASE_YYYYMMDD",
+        "REMARKS"
+      ],
+      "labels": [
+        "",
+        "",
+        "Div",
+        "Site",
+        "From Site",
+        "HOLD_ID",
+        "Amend Qty",
+        "Start Date",
+        "Model",
+        "Last Updated Date",
+        "Last Updated By",
+        "Nick Name",
+        "End Date",
+        "Remarks"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "MES Stock Detail",
+      "key": "MES_STOCK_DETAIL",
+      "popup": false,
+      "rule": "메타 정의만, 코드 미참조(미사용 가능)",
+      "columns": [
+        "AVAILABLE_YN",
+        "DIVISION_ID",
+        "FCS_HOLD_YN",
+        "FCS_SPECIAL_QTY",
+        "FROM_SITE",
+        "ITEM_ID",
+        "JUDG_VLD_DATE",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LOT_ID",
+        "LOT_QTY_FCS",
+        "LOT_QTY_MES",
+        "LOT_QTY_TOT",
+        "LOT_TYPE",
+        "MES_CHANGE_STATUS",
+        "MES_HOLD_RELEASE",
+        "MES_HOLD_YN",
+        "NICK_NAME",
+        "OWMS_STOCK_QTY",
+        "QMS_HOLD_RELEASE",
+        "QMS_HOLD_YN",
+        "REMARKS",
+        "USER_MOD_RELEASE_DATE",
+        "YYYYMMDD_LOT_ID_APPLIED_LT"
+      ],
+      "labels": [
+        "Available stock YN",
+        "Div",
+        "FCS Hold YN",
+        "Special Lot Qty",
+        "Site",
+        "Model",
+        "Judge Vaild Date",
+        "Last Updated Date",
+        "Last Updated by",
+        "Lot ID",
+        "FCS Lot Qty",
+        "GMES Lot Qty",
+        "Total Qty(GMES+FCS)",
+        "Lot Type",
+        "Change Status",
+        "MES Unhold Sched Date",
+        "MES Hold YN",
+        "Nick Name",
+        "oWMS Stock Qty",
+        "QMS Unhold Sched Date",
+        "QMS Hold YN",
+        "Remarks",
+        "User Modified Release Date*",
+        "D Day(Expected)"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "SCS Stock Detail",
+      "key": "SCS_STOCK_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "SHIPTO_DESCRIPTION",
+        "CUTOFF_DATE",
+        "DIVISION_ID",
+        "HOLD_YN",
+        "LAST_UPDATE_DATE",
+        "MODEL_ID",
+        "PLANT_ID",
+        "PLANT_NAME",
+        "PROD_DATE",
+        "QTY"
+      ],
+      "labels": [
+        "",
+        "",
+        "Cutoff Date",
+        "Div",
+        "Hold Y/N",
+        "Update Date",
+        "Model",
+        "Plant",
+        "Plant Name",
+        "Production Date",
+        "Qty"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment Confirm Detail",
+      "key": "SHIPMENT_CONFIRM_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "ATTRIBUTE10",
+        "attribute3",
+        "attribute6",
+        "BEFORE_QTY",
+        "BOD_ID",
+        "CHANGE_REASON_CODE",
+        "CHANGE_REASON_DETAIL",
+        "CHANGE_REQ_NO",
+        "CHANGE_TYPE",
+        "CHECK_NEED_YN",
+        "CHK",
+        "CONFIRM_ID",
+        "DIVISION_ID",
+        "EDIT_MAIN",
+        "EDIT_REMARKS",
+        "ELECTRODE_TYPE",
+        "ELECTRODE_YN",
+        "END_CUSTOMER",
+        "ERP_SO_NO",
+        "ERP_STATUS",
+        "ETA",
+        "ETD",
+        "Expected_Shipping_Date",
+        "FCST_TYPE",
+        "FROM_SITE",
+        "FROM_SITE_DESCRIPTION",
+        "INCOTERMS",
+        "ITEM_ID",
+        "LT_DAY",
+        "MODEL_USER",
+        "MTK_OWNER",
+        "NEW_A_COUNTRY",
+        "NEW_A_PORT_CODE",
+        "NEW_BOD_ID",
+        "NEW_CUSTOMER_LT",
+        "NEW_D_COUNTRY",
+        "NEW_D_PORT_CODE",
+        "NEW_ETA",
+        "NEW_ETD",
+        "NEW_INCOTERMS",
+        "NEW_LT_DAY",
+        "NEW_ROUTE_ID",
+        "NEW_SHIPMENT_DATE",
+        "NEW_TO_CITY",
+        "NEW_TO_COUNTRY",
+        "NEW_TRANSPORT_MODE",
+        "NICK_NAME",
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_TO_DIVISION_ID",
+        "PROJECT_CODE",
+        "PROJECT_NAME",
+        "REMARKS",
+        "REMARKS2",
+        "REMARKS3",
+        "REQUESTOR",
+        "RTF3",
+        "RTF4",
+        "RTF5",
+        "RTF6",
+        "SHIPMENT_CONFIRM_QTY",
+        "SHIPMENT_DATE",
+        "SHIPMENT_STATUS",
+        "SHIPTO_DESCRIPTION",
+        "SOLDTO_DESCRIPTION",
+        "TEAM",
+        "TO_SITE",
+        "TO_SITE_DESCRIPTION",
+        "TO_SITE_SHIPTO_CODE",
+        "TO_SITE_SOLDTO_CODE",
+        "TRANSPORT_MODE",
+        "UPDATED_BY",
+        "UPDATED_DATE"
+      ],
+      "labels": [
+        "",
+        "ATTRIBUTE10",
+        "PLM status",
+        "OQC Result",
+        "Before Qty",
+        "bod_id",
+        "Change Reason",
+        "Reason Detail",
+        "Change Request No",
+        "CHANGE_TYPE",
+        "Checked",
+        "ALL",
+        "Confirm/Plan ID",
+        "Division",
+        "EDIT_MAIN",
+        "EDIT_REMARKS",
+        "ELECTRODE_TYPE",
+        "ELECTRODE_YN",
+        "End Customer",
+        "SO No",
+        "erp_status",
+        "ETA",
+        "ETD",
+        "Expected Shipping Date",
+        "FCST Type",
+        "From Site Code",
+        "From Site",
+        "Incoterms",
+        "Model",
+        "L/T(Day)",
+        "Model PIC",
+        "MKT Owner",
+        "A Country",
+        "A Port",
+        "new bod",
+        "Customer LT",
+        "D Country",
+        "D Port",
+        "ETA",
+        "ETD",
+        "new incoterms",
+        "L/T(Day)",
+        "Route",
+        "Shipment Date*",
+        "To City",
+        "To Country",
+        "Trans Mode",
+        "Nick Name",
+        "ORIGIN_FROM_DIVISION_ID",
+        "ORIGIN_TO_DIVISION_ID",
+        "Project Code",
+        "Project Name",
+        "Remarks",
+        "Building",
+        "Customer Requirement",
+        "Shipment Requestor",
+        "RTF",
+        "RTF ETD",
+        "RTF QTY",
+        "RTF Detail",
+        "Shipment Qty",
+        "Shipment Date",
+        "Status",
+        "Ship To Party",
+        "Sold To Party",
+        "Team",
+        "To Site Code",
+        "To Site",
+        "Ship to",
+        "Sold to",
+        "Trans Mode",
+        "Updated By",
+        "Updated Date"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment PSI(IT & Mobile)",
+      "key": "SHIPMENT_PSI_IT_MOBILE",
+      "popup": false,
+      "rule": "메타 정의만, 코드 미참조(미사용 가능)",
+      "columns": [
+        "DIVISION_ID",
+        "FIGURE",
+        "FROM_SITE",
+        "FROM_SITE_NM",
+        "ITEM_ID",
+        "LT_DAY",
+        "LT_UPDATE_YN",
+        "MEASURE",
+        "MEASURE_NAME",
+        "NICK_NAME",
+        "PLAN_START_YYYYMMDD",
+        "PLAN_TYPE",
+        "PSI_NAME",
+        "SEQ",
+        "SHIP_FROZEN",
+        "TYPE",
+        "YEILD"
+      ],
+      "labels": [
+        "Div",
+        "Figure",
+        "Site",
+        "From Site",
+        "Model",
+        "Aging L/T",
+        "LT_UPDATE_YN",
+        "Measure",
+        "Measure",
+        "Nick Name",
+        "PLAN_START_YYYYMMDD",
+        "PLAN_TYPE",
+        "PSI",
+        "SEQ",
+        "ship_frozen",
+        "TYPE",
+        "Yeild(%)"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment PSI(Mobility & IT)",
+      "key": "SHIPMENT_PSI_MOBILITY_IT",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "SHIPTO_DESCRIPTION",
+        "DIVISION_ID",
+        "FIGURE",
+        "FROM_SITE",
+        "FROM_SITE_NM",
+        "ITEM_ID",
+        "LT_DAY",
+        "LT_UPDATE_YN",
+        "MEASURE",
+        "MEASURE_NAME",
+        "NICK_NAME",
+        "PLAN_START_YYYYMMDD",
+        "PLAN_TYPE",
+        "PSI_NAME",
+        "SEQ",
+        "SHIP_FROZEN",
+        "TYPE",
+        "YEILD"
+      ],
+      "labels": [
+        "",
+        "",
+        "Div",
+        "Figure",
+        "Site",
+        "From Site",
+        "Model",
+        "Aging L/T",
+        "LT_UPDATE_YN",
+        "Measure",
+        "Measure",
+        "Nick Name",
+        "PLAN_START_YYYYMMDD",
+        "PLAN_TYPE",
+        "PSI",
+        "SEQ",
+        "ship_frozen",
+        "TYPE",
+        "Yield(%)"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment PSI(Packer)",
+      "key": "SHIPMENT_PSI_PACKER",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "SHIPTO_DESCRIPTION",
+        "DIVISION_ID",
+        "FIGURE",
+        "FROM_SITE",
+        "FROM_SITE_NM",
+        "ITEM_ID",
+        "LT_DAY",
+        "LT_UPDATE_YN",
+        "MEASURE",
+        "MEASURE_NAME",
+        "NICK_NAME",
+        "PLAN_START_YYYYMMDD",
+        "PLAN_TYPE",
+        "PSI_NAME",
+        "SEQ",
+        "SHIP_FROZEN",
+        "TYPE",
+        "YEILD"
+      ],
+      "labels": [
+        "",
+        "",
+        "Div",
+        "Figure",
+        "Site",
+        "From Site",
+        "Model",
+        "Aging L/T",
+        "LT_UPDATE_YN",
+        "Measure",
+        "Measure",
+        "Nick Name",
+        "PLAN_START_YYYYMMDD",
+        "PLAN_TYPE",
+        "PSI",
+        "SEQ",
+        "ship_frozen",
+        "TYPE",
+        "Yeild(%)"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment Request Detail",
+      "key": "SHIPMENT_REQUEST_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "SHIPTO_DESCRIPTION",
+        "ATTRIBUTE3",
+        "ATTRIBUTE4",
+        "ATTRIBUTE5",
+        "ATTRIBUTE6",
+        "BOD_ID",
+        "CHANGE_REQUEST_NO",
+        "DIVISION_ID",
+        "EDIT_FLAG",
+        "END_CUSTOMER",
+        "ETA_DATE",
+        "ETD_DATE",
+        "EXPECTED_SHIP_DATE",
+        "FCST_TYPE",
+        "FROM_SITE",
+        "INCOTERMS",
+        "LAST_UPDATED_BY",
+        "LAST_UPDATED_DATE",
+        "LT_TOTAL",
+        "MKT_OWMER",
+        "MODEL_ID",
+        "MODEL_PIC",
+        "NICK_NAME",
+        "ORDER_TYPE_DETAIL",
+        "QTY",
+        "REMARK",
+        "REQUEST_ID",
+        "SHIPTO_CODE",
+        "SHIPTO_NAME",
+        "SITE_DESCRIPTION",
+        "SOLDTO_CODE",
+        "STATUS",
+        "TO_SITE",
+        "TR_MODE",
+        "YYYYMMDD"
+      ],
+      "labels": [
+        "",
+        "",
+        "RTF",
+        "RTF ETD",
+        "RTF QTY",
+        "RTF Detail",
+        "BOD_ID",
+        "Change Request No",
+        "Div*",
+        "EDIT_FLAG",
+        "End Customer",
+        "ETA",
+        "ETD",
+        "Expected Shipping Date",
+        "FCST Type*",
+        "From Site*",
+        "Incoterms*",
+        "Requestor",
+        "Request Date",
+        "L/T(Day)",
+        "MKT Owner",
+        "Model*",
+        "Model PIC",
+        "Nick Name",
+        "Order Type Detail",
+        "Qty*",
+        "Remark",
+        "Confrim/Plan ID",
+        "Ship to*",
+        "Ship to Name",
+        "Plant Site",
+        "Sold to",
+        "Status",
+        "To Site*",
+        "Trans Mode*",
+        "Shipment Date*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Shipment Result",
+      "key": "SHIPMENT_RESULT",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CONFIRM_ID",
+        "DIVISION_ID",
+        "END_CUSTOMER",
+        "ERP_SO_NO",
+        "ETA_DATE",
+        "ETD_DATE",
+        "FROM_SITE",
+        "INCOTERMS",
+        "ITEM_ID",
+        "NICK_NAME",
+        "QTY",
+        "SHIP_TO",
+        "SHIP_TYPE",
+        "SHIPTO_DESCRIPTION",
+        "TEAM",
+        "TO_SITE",
+        "TRANSPORT_MODE",
+        "TYPE",
+        "YYYYMMDD"
+      ],
+      "labels": [
+        "Confirm/Plan ID",
+        "Div",
+        "End Customer",
+        "SO No",
+        "ETA",
+        "ETD",
+        "From Site",
+        "Incoterms",
+        "Model",
+        "Nick Name",
+        "Shipment Qty",
+        "Ship to",
+        "Ship Type",
+        "Ship to Name",
+        "Team",
+        "To Site",
+        "Trans Mode",
+        "Status",
+        "Shipment Date"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Stock Detail",
+      "key": "STOCK_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "SHIPTO_DESCRIPTION",
+        "AVAILABLE_YN",
+        "DIVISION_ID",
+        "FCS_HOLD_YN",
+        "FCS_SPECIAL_QTY",
+        "FROM_SITE",
+        "ITEM_ID",
+        "JUDG_VLD_DATE",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LONGTERM_HOLD_YN",
+        "LOT_ID",
+        "LOT_QTY_FCS",
+        "LOT_QTY_MES",
+        "LOT_QTY_MES_NG",
+        "LOT_QTY_TOT",
+        "LOT_TYPE",
+        "MES_CHANGE_STATUS",
+        "MES_HOLD_RELEASE",
+        "MES_HOLD_YN",
+        "NICK_NAME",
+        "OWMS_STOCK_QTY",
+        "QMS_HOLD_RELEASE",
+        "QMS_HOLD_YN",
+        "REMARKS",
+        "USER_MOD_RELEASE_DATE",
+        "YYYYMMDD_LOT_ID_APPLIED_LT"
+      ],
+      "labels": [
+        "",
+        "",
+        "Available stock YN",
+        "Div",
+        "FCS Hold YN",
+        "Special Lot Qty",
+        "Site",
+        "Model",
+        "Judge Vaild Date",
+        "Last Updated Date",
+        "Last Updated by",
+        "Long term Hold YN",
+        "Lot ID",
+        "FCS Lot Qty",
+        "GMES Lot Qty",
+        "GMES NG Qty",
+        "Total Qty(GMES+FCS)",
+        "Lot Type",
+        "Change Status",
+        "MES Unhold Sched Date",
+        "MES Hold YN",
+        "Nick Name",
+        "oWMS Stock Qty",
+        "QMS Unhold Sched Date",
+        "QMS Hold YN",
+        "Remarks",
+        "User Modified Release Date*",
+        "D Day(Expected)"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Stock Location Detail",
+      "key": "STOCK_LOCATION_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "SHIPTO_DESCRIPTION",
+        "AVAILABLE_DATE",
+        "AVAILABLE_QTY",
+        "COMPANY_ID",
+        "CUTOFF_DATE",
+        "DEFECT_QTY",
+        "DIVISION_ID",
+        "FROM_SITE",
+        "HOLDING_DATE",
+        "ITEM_ID",
+        "MOVING_QTY",
+        "NICK_NAME",
+        "OUTSOURCING_FACTORY",
+        "OUTSOURCING_FLAG",
+        "PLANT_ID",
+        "QTY_UOM",
+        "STOCK_TYPE",
+        "STORAGE_DESCRIPTION",
+        "STORAGE_ID",
+        "TOTAL_QTY",
+        "WIPHOLD_YN"
+      ],
+      "labels": [
+        "",
+        "",
+        "Available Date",
+        "Available Qty",
+        "Company",
+        "Cutoff Date",
+        "Deffect Qty",
+        "Div",
+        "From Site",
+        "Holding Date",
+        "Model",
+        "Moving Qty",
+        "Nick Name",
+        "Outsourcing Factory",
+        "Outsourcing Flag",
+        "Plant",
+        "Qty Uom",
+        "Stock Type",
+        "Storage",
+        "Storage ID",
+        "Total Qty",
+        "Wiphold Yn"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "W/H stock",
+      "key": "W_H_STOCK",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "SHIPTO_DESCRIPTION",
+        "ALLOCATION_QTY",
+        "AVAILABLE_QTY",
+        "CAPA_GRADE",
+        "DIVISION_ID",
+        "EXPIRATION_QTY",
+        "GRADE",
+        "HOLD_QTY",
+        "ITEM_ID",
+        "LONG_TERM_QTY",
+        "MOVING_QTY",
+        "NICK_NAME",
+        "PACKING_QTY",
+        "PLANT_ID",
+        "RECEIVING_QTY",
+        "SOC",
+        "STOCK_QTY",
+        "STOCK_STATUS",
+        "STORAGE_ID",
+        "UNDECIDED_QTY"
+      ],
+      "labels": [
+        "",
+        "",
+        "Allocation Qty",
+        "Available Qty",
+        "Capa. Grade",
+        "Division",
+        "Expiration Qty",
+        "Grade",
+        "Hold Qty",
+        "Model",
+        "Long-term Qty",
+        "Moving Qty",
+        "Nick Name",
+        "Packing Qty",
+        "Plant ID",
+        "Reciving Qty",
+        "SOC",
+        "Stock Qty",
+        "Inventory Status",
+        "Storage",
+        "Undecided Qty"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "W/H stock Detail",
+      "key": "W_H_STOCK_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "SHIPTO_DESCRIPTION",
+        "ALLOCATION_QTY",
+        "AVAILABLE_QTY",
+        "CAPA_GRADE",
+        "CUSTOMER_CODE",
+        "CUSTOMER_NAME",
+        "DIVISION_ID",
+        "EXPIRATION_QTY",
+        "GRADE",
+        "HOLD_QTY",
+        "ITEM_ID",
+        "LONG_TERM_QTY",
+        "LOT_ID",
+        "LOT_ISSUE_DATE",
+        "MOVING_QTY",
+        "NICK_NAME",
+        "PACKING_QTY",
+        "PACKING_STATUS",
+        "PALLET_ID",
+        "PLANT_ID",
+        "RECEIVING_QTY",
+        "SOC",
+        "STOCK_QTY",
+        "STOCK_STATUS",
+        "STORAGE_ID",
+        "UNDECIDED_QTY"
+      ],
+      "labels": [
+        "",
+        "",
+        "Allocation Qty",
+        "Available Qty",
+        "Capa. Grade",
+        "Customer Code",
+        "Customer Name",
+        "Division",
+        "Expiration Qty",
+        "Grade",
+        "Hold Qty",
+        "Model",
+        "Long-term Qty",
+        "Lot ID",
+        "Lot Issue Date",
+        "Moving Qty",
+        "Nick Name",
+        "Packing Qty",
+        "Packing Status",
+        "Pallet ID",
+        "Plant ID",
+        "Reciving Qty",
+        "SOC",
+        "Stock Qty",
+        "Inventory Status",
+        "Storage",
+        "Undecided Qty"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "WH In Plan Detail",
+      "key": "WH_IN_PLAN_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "SHIP_TO",
+        "SHIPTO_DESCRIPTION",
+        "BEFORE_QTY",
+        "COMMENTS",
+        "DIVISION_ID",
+        "FROM_SITE",
+        "FROM_SITE_NM",
+        "GAP",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "NICK_NAME",
+        "QTY",
+        "USER_ADD_QTY",
+        "YYYYMMDD"
+      ],
+      "labels": [
+        "",
+        "",
+        "Before Qty",
+        "Comments",
+        "Div",
+        "Site",
+        "From Site",
+        "GAP",
+        "Model",
+        "Last Updated Date",
+        "Last Updated By",
+        "Nick Name",
+        "Qty",
+        "Before Input Qty",
+        "Date"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SSP0015.P_",
+      "entries": []
+    },
+    {
+      "sp": "DM0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "Hold stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_DM0003_GET_BUCKET_TYPE_CODE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_SHIPMENT_PSI_PACKER_PAST",
+      "sheet": "Shipment Confirm Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_SHIPMENT_PSI_PACKER_PAST",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_SHIPMENT_PSI_PACKER",
+      "sheet": "Shipment Confirm Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_SHIPMENT_PSI_PACKER",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_SHIPMENT_PSI",
+      "sheet": "Shipment Confirm Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_SHIPMENT_PSI",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0002_GET_NERP_CODE",
+      "sheet": "Hold stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0002_GET_NERP_CODE",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnSearch.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_SHIPMENT_CONFIRM_DETAIL",
+      "sheet": "Shipment Confirm Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_SHIPMENT_CONFIRM_DETAIL",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnSearch.Click",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_SHIPMENT_CONFIRM_DETAIL_PACKER",
+      "sheet": "Shipment Confirm Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_SHIPMENT_CONFIRM_DETAIL_PACKER",
+      "entries": [
+        "event:this.btnSearch.Click",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_WH_STOCK",
+      "sheet": "Stock Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_WH_STOCK",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnSearch.Click"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_MES_STOCK",
+      "sheet": "Stock Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_MES_STOCK",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnSearch.Click",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_BLOCK_STOCK",
+      "sheet": "Stock Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_BLOCK_STOCK",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnSearch.Click"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_STOCK_LOCATION_DETAIL",
+      "sheet": "Hold stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_STOCK_LOCATION_DETAIL",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnSearch.Click"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_SCS_STOCK",
+      "sheet": "SCS Stock Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_SCS_STOCK",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnSearch.Click"
+      ]
+    },
+    {
+      "sp": "SSP0026_GET_REQUEST_DETAIL_PACK",
+      "sheet": "Shipment Request Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0026_GET_REQUEST_DETAIL_PACK",
+      "entries": [
+        "event:this.btnSearch.Click"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_SHIPMENT_PSI_COMMENTS",
+      "sheet": "Shipment Confirm Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_SHIPMENT_PSI_COMMENTS",
+      "entries": [
+        "event:this.btnSearch.Click"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_SHIPMENT_RESULT_PACKER",
+      "sheet": "Shipment Confirm Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_SHIPMENT_RESULT_PACKER",
+      "entries": [
+        "event:this.btnSearch.Click"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_SHIPMENT_RESULT",
+      "sheet": "Shipment Confirm Detail",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_SHIPMENT_RESULT",
+      "entries": [
+        "event:this.btnSearch.Click"
+      ]
+    },
+    {
+      "sp": "SSP0015_SAVE_SHIPMENT_PSI",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_PSI",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_SAVE_BLOCK_STOCK_DATA",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_SAVE_BLOCK_STOCK_DATA",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_SAVE_MES_STOCK",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_SAVE_MES_STOCK",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING",
+      "entries": [
+        "button:SaveButton",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER",
+      "entries": [
+        "button:SaveButton",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_ERP_SO_NO_CNT",
+      "sheet": "Hold stock",
+      "btn": "ERP_SO_NO_CNT",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_ERP_SO_NO_CNT",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_GET_SHIPMENT_STATUS",
+      "sheet": "Shipment Confirm Detail",
+      "btn": "SHIPMENT_STATUS",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_GET_SHIPMENT_STATUS",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_DELETE_SHIPMENT_REQUEST_DRAFTING",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "PR_SCM_SYS_LOG_BATCH",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_PR_SCM_SYS_LOG_BATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+      "sheet": "Hold stock",
+      "btn": "SSP_PLAN_PROCESSING_CHECK",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0003_GET_SSP_PLAN_PROCESSING_CHECK",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_DIVISION",
+      "sheet": "Hold stock",
+      "btn": "DIVISION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SCM0001_GET_DIVISION",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "calendar",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "entries": [
+        "event:this.Load",
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnMeasure.Click",
+        "event:this.btnSearch.Click",
+        "event:this.spdMain.ActiveSheetChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_SCP_DAY_PERIOD",
+      "sheet": "Hold stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SCM0001_GET_SCP_DAY_PERIOD",
+      "entries": [
+        "event:this.Load",
+        "event:this.spdMain.ActiveSheetChanged",
+        "event:clbDivision.SelectedIndexChanged",
+        "event:cboPlanDate.SelectedIndexChanged"
+      ]
+    },
+    {
+      "sp": "SSP0202_GET_SCS_CONFIRM_ID_CHECK",
+      "sheet": "SCS Stock Detail",
+      "btn": "SCS_CONFIRM_ID_CHECK",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0202_GET_SCS_CONFIRM_ID_CHECK",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+      "sheet": "Hold stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SCM_SSP_CHECK_CONFIRM_CHANGETIME",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SSP0002_GET_USER_INFO_LIST",
+      "sheet": "Hold stock",
+      "btn": "USER_INFO_LIST",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0002_GET_USER_INFO_LIST",
+      "entries": [
+        "button:EditButton"
+      ]
+    },
+    {
+      "sp": "SSP0015_SAVE_SHIPMENT_PSI_COMMENTS",
+      "sheet": "Hold stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SSP0015.P_SSP0015_SAVE_SHIPMENT_PSI_COMMENTS",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": true,
+  "handlers": [
+    {
+      "name": "handleMainTextTipFetch",
+      "target": "this.spdMain",
+      "event": "TextTipFetch",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "biz:CommonData.CommonDataList [code=PlanDateShip]",
+        "DM.DM0003_GET_BUCKET_TYPE_CODE",
+        "SCP.SCM0001_GET_SCP_DAY_PERIOD"
+      ]
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "this.spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": [
+        "SSP.SSP0015_GET_STOCK_LOCATION_DETAIL",
+        "SSP.SSP0002_GET_NERP_CODE",
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "SSP.SSP0015_GET_SCS_STOCK",
+        "SSP.SSP0015_GET_SHIPMENT_PSI",
+        "SSP.SSP0015_GET_MES_STOCK",
+        "SSP.SSP0015_GET_BLOCK_STOCK",
+        "SSP.SSP0015_GET_WH_STOCK",
+        "SSP.SSP0015_GET_SHIPMENT_CONFIRM_DETAIL"
+      ]
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "this.spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailTopChange",
+      "target": "this.spdDetail",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMeasure",
+      "target": "this.btnMeasure",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleBucketType",
+      "target": "this.cboBucketType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSum",
+      "target": "this.chkSum",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleItemID2",
+      "target": "this.btnItemID2",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSearch",
+      "target": "this.btnSearch",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SSP.SSP0015_GET_SHIPMENT_RESULT_PACKER",
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "SSP.SSP0015_GET_SHIPMENT_RESULT",
+        "SSP.SSP0015_GET_SHIPMENT_PSI_COMMENTS",
+        "SSP.SSP0015_GET_STOCK_LOCATION_DETAIL",
+        "SSP.SSP0002_GET_NERP_CODE",
+        "SSP.SSP0015_GET_SCS_STOCK",
+        "SSP.SSP0015_GET_MES_STOCK",
+        "SSP.SSP0015_GET_BLOCK_STOCK",
+        "SSP.SSP0015_GET_WH_STOCK",
+        "SSP.SSP0026_GET_REQUEST_DETAIL_PACK",
+        "SSP.SSP0015_GET_SHIPMENT_CONFIRM_DETAIL_PACKER",
+        "SSP.SSP0015_GET_SHIPMENT_CONFIRM_DETAIL"
+      ]
+    },
+    {
+      "name": "handleRequestor",
+      "target": "this.btnRequestor",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailCell",
+      "target": "this.spdDetail",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=TransMode]",
+        "biz:CommonData.CommonDataList [code=ShipToCodeByDivision]"
+      ]
+    },
+    {
+      "name": "handleDetailComboSelChange",
+      "target": "this.spdDetail",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailSheetTab",
+      "target": "this.spdDetail",
+      "event": "SheetTabClick",
+      "slot": "state",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetail",
+      "target": "this.spdDetail",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainActiveSheet",
+      "target": "this.spdMain",
+      "event": "ActiveSheetChanged",
+      "slot": "state",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=LookupCommon]",
+        "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+        "biz:CommonData.CommonDataList [code=PlanDateShip]",
+        "SCP.SCM0001_GET_SCP_DAY_PERIOD"
+      ]
+    },
+    {
+      "name": "handleDivision",
+      "target": "clbDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=PlanDateShip]",
+        "SCP.SCM0001_GET_SCP_DAY_PERIOD"
+      ]
+    },
+    {
+      "name": "handleCboPlanDate",
+      "target": "cboPlanDate",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCM0001_GET_SCP_DAY_PERIOD"
+      ]
+    },
+    {
+      "name": "handleSpdDetailActiveSheet",
+      "target": "spdDetail",
+      "event": "ActiveSheetChanged",
+      "slot": "state",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailEditChange",
+      "target": "spdDetail",
+      "event": "EditChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdDetailClipboardPasted",
+      "target": "spdDetail",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=TransMode]"
+      ]
+    },
+    {
+      "name": "handleSpdMainEditModeOn",
+      "target": "spdMain",
+      "event": "EditModeOn",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainCell",
+      "target": "spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleshtDetailChange",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [
+    {
+      "id": "TC-ID",
+      "kind": "구분",
+      "pre": "사전조건",
+      "step": "절차",
+      "input": "입력값",
+      "expect": "기대결과",
+      "basis": "근거"
+    },
+    {
+      "id": "TC-SSP0015-001",
+      "kind": "초기화",
+      "pre": "로그인, SSP0015 메뉴 권한 있음",
+      "step": "화면을 연다",
+      "input": "—",
+      "expect": "cboPlanDate에 PlanDateShip 코드 목록이 채워짐",
+      "basis": "`Form_Load` > InitControls:568 `biz:CommonData.CommonDataList` [code=PlanDateShip]"
+    },
+    {
+      "id": "TC-SSP0015-002",
+      "kind": "초기화",
+      "pre": "001과 같음",
+      "step": "화면을 열고 cboBucketType 목록을 확인",
+      "input": "—",
+      "expect": "DAILY / WEEKLY / MONTHLY 코드가 표시됨",
+      "basis": "`Form_Load` > GetBucketType `DM.DM0003_GET_BUCKET_TYPE_CODE` / SP DM0003_GET_BUCKET_TYPE_CODE"
+    },
+    {
+      "id": "TC-SSP0015-003",
+      "kind": "초기화",
+      "pre": "001과 같음",
+      "step": "화면을 열고 drpPeriod 기본값을 확인",
+      "input": "—",
+      "expect": "SP가 돌려준 기간이 drpPeriod에 세팅됨",
+      "basis": "`Form_Load` > GetDayRange `SCP.SCM0001_GET_SCP_DAY_PERIOD` / SP SCM0001_GET_SCP_DAY_PERIOD"
+    },
+    {
+      "id": "TC-SSP0015-004",
+      "kind": "초기화",
+      "pre": "001과 같음",
+      "step": "화면을 열고 spdMain 헤더를 확인",
+      "input": "—",
+      "expect": "3단 헤더 + SUM. `B_` 컬럼은 너비 0, 그 외 너비 70. SAT 헤더 파랑, SUN 헤더 빨강",
+      "basis": "`Form_Load` > CreateSpread > InitSpread > GetSpdTitle `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` / SP SCP0009_GET_SHEET_CALENDAR_3SPAN, 시트 `Shipment PSI(Mobility & IT)`"
+    },
+    {
+      "id": "TC-SSP0015-005",
+      "kind": "초기화",
+      "pre": "001과 같음",
+      "step": "spdMain 시트 탭을 확인",
+      "input": "—",
+      "expect": "탭 2개: Shipment PSI(Mobility & IT), Shipment PSI(Packer). Shipment PSI(IT & Mobile)는 만들어지지 않음",
+      "basis": "`Form_Load` CreateSpread:656/660, 시트 `Shipment PSI(Mobility & IT)`, `Shipment PSI(Packer)`, `Shipment PSI(IT & Mobile)`"
+    },
+    {
+      "id": "TC-SSP0015-006",
+      "kind": "초기화",
+      "pre": "drPgmAuthId 있는 사용자",
+      "step": "spdDetail 시트 탭을 확인",
+      "input": "—",
+      "expect": "Shipment Confirm Detail, Shipment Request Detail, W/H stock, W/H stock Detail, Hold stock, Hold stock Detail, Stock Detail, SCS Stock Detail, Stock Location Detail, WH In Plan Detail, Shipment Result가 만들어짐. MES Stock Detail은 만들어지지 않음",
+      "basis": "`Form_Load` CreateSpread:665~683, 시트 `MES Stock Detail`"
+    },
+    {
+      "id": "TC-SSP0015-007",
+      "kind": "초기화",
+      "pre": "001과 같음",
+      "step": "조회조건 영역에서 chkMyModel, chkPartLeader, chkTeamLeader, chkDelegateeModel을 찾는다",
+      "input": "—",
+      "expect": "4개 모두 화면에 보이지 않음. chkMyModel 값은 Checked=true",
+      "basis": "props(Visible=false), `Form_Load`"
+    },
+    {
+      "id": "TC-SSP0015-008",
+      "kind": "초기화",
+      "pre": "상단 PSI 조회 완료",
+      "step": "Comments 팝업을 연다 (여는 경로 확인 필요)",
+      "input": "—",
+      "expect": "팝업이 뜨고 txtDivision_ID ~ rtxComments, btnButtonList가 표시됨",
+      "basis": "팝업 `Form_Load` (.ctor:207)"
+    },
+    {
+      "id": "TC-SSP0015-009",
+      "kind": "이벤트",
+      "pre": "화면 로드 완료",
+      "step": "clbDivision 값을 바꾼다",
+      "input": "Division: 40 → 81",
+      "expect": "PlanDateShip 재조회 → cboPlanDate 갱신, drpPeriod 재설정",
+      "basis": "`clbDivision_SelectedIndexChanged` > SetChangedControl `biz:CommonData.CommonDataList` [PlanDateShip] > GetDayRange `SCP.SCM0001_GET_SCP_DAY_PERIOD`"
+    },
+    {
+      "id": "TC-SSP0015-010",
+      "kind": "이벤트",
+      "pre": "화면 로드 완료",
+      "step": "cboPlanDate 값을 바꾼다",
+      "input": "다른 Plan-date",
+      "expect": "drpPeriod 재설정",
+      "basis": "`CboPlanDate_SelectedIndexChanged` > GetDayRange `SCP.SCM0001_GET_SCP_DAY_PERIOD`"
+    },
+    {
+      "id": "TC-SSP0015-011",
+      "kind": "이벤트",
+      "pre": "화면 로드 완료",
+      "step": "spdMain 시트를 Shipment PSI(Packer)로 바꾼다",
+      "input": "—",
+      "expect": "LookupCommon·PlanDateShip·DayRange를 다시 호출하고 헤더를 다시 구성함",
+      "basis": "`SpdMain_ActiveSheetChanged` `biz:CommonData.CommonDataList` [LookupCommon] (1400/1452), SetChangedControl, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`, 시트 `Shipment PSI(Packer)`"
+    },
+    {
+      "id": "TC-SSP0015-012",
+      "kind": "이벤트",
+      "pre": "011 수행",
+      "step": "spdMain 시트를 Shipment PSI(Mobility & IT)로 되돌린다",
+      "input": "—",
+      "expect": "011과 같은 호출. Mobility 컬럼 구성 복원",
+      "basis": "`SpdMain_ActiveSheetChanged`, 시트 `Shipment PSI(Mobility & IT)`"
+    },
+    {
+      "id": "TC-SSP0015-013",
+      "kind": "이벤트",
+      "pre": "화면 로드 완료",
+      "step": "btnMeasure를 누른다",
+      "input": "—",
+      "expect": "spdMain이 다시 구성됨 (Measure 선택 팝업 여부 확인 필요)",
+      "basis": "`btnMeasure_Click` > InitSpread > GetSpdTitle `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`"
+    },
+    {
+      "id": "TC-SSP0015-014",
+      "kind": "이벤트",
+      "pre": "상단 조회 완료",
+      "step": "cboBucketType을 DAILY로 선택",
+      "input": "DAILY",
+      "expect": "D_·W_ 컬럼 Visible=true, M_ Sum 계열은 chkSum 값을 따름",
+      "basis": "`cboBucketType_SelectedIndexChanged`, SetSpreadColumn:2116/2121"
+    },
+    {
+      "id": "TC-SSP0015-015",
+      "kind": "이벤트",
+      "pre": "상단 조회 완료",
+      "step": "cboBucketType을 WEEKLY로 선택",
+      "input": "WEEKLY",
+      "expect": "D_ 숨김, W_ 표시, M_는 chkSum 값을 따름",
+      "basis": "`cboBucketType_SelectedIndexChanged`, SetSpreadColumn:2128/2132/2137"
+    },
+    {
+      "id": "TC-SSP0015-016",
+      "kind": "이벤트",
+      "pre": "상단 조회 완료",
+      "step": "cboBucketType을 MONTHLY로 선택",
+      "input": "MONTHLY",
+      "expect": "D_·W_ 숨김, M_ 표시",
+      "basis": "`cboBucketType_SelectedIndexChanged`, SetSpreadColumn:2144/2148"
+    },
+    {
+      "id": "TC-SSP0015-017",
+      "kind": "이벤트",
+      "pre": "Bucket=DAILY",
+      "step": "chkSum을 체크",
+      "input": "Checked=true",
+      "expect": "Sum 계열 컬럼 표시",
+      "basis": "`chkSum_CheckedChanged`, SetSpreadColumn:2121"
+    },
+    {
+      "id": "TC-SSP0015-018",
+      "kind": "이벤트",
+      "pre": "017 수행",
+      "step": "chkSum을 해제",
+      "input": "Checked=false",
+      "expect": "Sum 계열 컬럼 숨김",
+      "basis": "`chkSum_CheckedChanged`"
+    },
+    {
+      "id": "TC-SSP0015-019",
+      "kind": "이벤트",
+      "pre": "화면 로드 완료",
+      "step": "btnItemId를 누른다",
+      "input": "—",
+      "expect": "Model 선택 동작 (팝업 여부와 선택값 반영 위치 확인 필요). 엔드포인트 호출 없음",
+      "basis": "`btnItemId_Click`"
+    },
+    {
+      "id": "TC-SSP0015-020",
+      "kind": "이벤트",
+      "pre": "화면 로드 완료",
+      "step": "btnItemID2를 누른다",
+      "input": "—",
+      "expect": "하단 Model 선택 동작 (확인 필요). 엔드포인트 호출 없음",
+      "basis": "`BtnItemID2_Click`"
+    },
+    {
+      "id": "TC-SSP0015-021",
+      "kind": "이벤트",
+      "pre": "화면 로드 완료",
+      "step": "btnRequestor를 누른다",
+      "input": "—",
+      "expect": "Requestor 선택 동작, txtRequestor 반영 (확인 필요)",
+      "basis": "`BtnRequestor_Click`"
+    },
+    {
+      "id": "TC-SSP0015-022",
+      "kind": "이벤트",
+      "pre": "상단 조회 완료",
+      "step": "spdMain 셀에 마우스를 올린다",
+      "input": "—",
+      "expect": "TextTip 표시 (내용 확인 필요)",
+      "basis": "`spdMain_TextTipFetch`"
+    },
+    {
+      "id": "TC-SSP0015-023",
+      "kind": "이벤트",
+      "pre": "상단 조회 완료(행 다수)",
+      "step": "spdMain을 세로 스크롤",
+      "input": "—",
+      "expect": "As-is와 같은 동작 (내부 동작 확인 필요). 오류 없음",
+      "basis": "`SpdMain_TopChange`"
+    },
+    {
+      "id": "TC-SSP0015-024",
+      "kind": "이벤트",
+      "pre": "하단 조회 완료(행 다수)",
+      "step": "spdDetail을 세로 스크롤",
+      "input": "—",
+      "expect": "As-is와 같은 동작 (확인 필요). 오류 없음",
+      "basis": "`SpdDetail_TopChange`"
+    },
+    {
+      "id": "TC-SSP0015-025",
+      "kind": "이벤트",
+      "pre": "편집 진입 완료",
+      "step": "spdMain 셀 편집을 시작한다",
+      "input": "—",
+      "expect": "편집모드 진입 처리 (허용 셀 조건 확인 필요)",
+      "basis": "`SpdMain_EditModeOn`"
+    },
+    {
+      "id": "TC-SSP0015-026",
+      "kind": "이벤트",
+      "pre": "상단 조회 완료",
+      "step": "spdMain 셀을 한 번 클릭",
+      "input": "—",
+      "expect": "As-is와 같은 동작 (확인 필요). 엔드포인트 호출 없음",
+      "basis": "`SpdMain_CellClick`"
+    },
+    {
+      "id": "TC-SSP0015-027",
+      "kind": "이벤트",
+      "pre": "Shipment Confirm Detail 조회 완료",
+      "step": "spdDetail 콤보 셀 값을 고른다",
+      "input": "Trans Mode 값",
+      "expect": "선택값 반영 (연동 처리 확인 필요)",
+      "basis": "`spdDetail_ComboSelChange`, 시트 `Shipment Confirm Detail`"
+    },
+    {
+      "id": "TC-SSP0015-028",
+      "kind": "이벤트",
+      "pre": "화면 로드 완료",
+      "step": "spdDetail 시트 탭을 누른다",
+      "input": "Hold stock 탭",
+      "expect": "시트 전환 처리 (확인 필요)",
+      "basis": "`SpdDetail_SheetTabClick`, 시트 `Hold stock`"
+    },
+    {
+      "id": "TC-SSP0015-029",
+      "kind": "이벤트",
+      "pre": "하단 조회 완료",
+      "step": "spdDetail 셀을 더블클릭",
+      "input": "—",
+      "expect": "As-is와 같은 동작 (확인 필요)",
+      "basis": "`SpdDetail_CellDoubleClick`"
+    },
+    {
+      "id": "TC-SSP0015-030",
+      "kind": "이벤트",
+      "pre": "화면 로드 완료",
+      "step": "spdDetail 활성 시트를 Stock Detail로 바꾼다",
+      "input": "—",
+      "expect": "하단 조회 바 상태 전환 (확인 필요)",
+      "basis": "`SpdDetail_ActiveSheetChanged`, 시트 `Stock Detail`"
+    },
+    {
+      "id": "TC-SSP0015-031",
+      "kind": "이벤트",
+      "pre": "편집 가능한 Detail 시트",
+      "step": "spdDetail 셀 값을 고친다",
+      "input": "수량 변경",
+      "expect": "변경 표시 처리 (확인 필요)",
+      "basis": "`SpdDetail_EditChange`"
+    },
+    {
+      "id": "TC-SSP0015-032",
+      "kind": "이벤트",
+      "pre": "031 수행",
+      "step": "dsdm 데이터 변경 이벤트 발생을 확인",
+      "input": "—",
+      "expect": "변경 상태 반영 (확인 필요)",
+      "basis": "`shtDetail_Change` (dsdm.Changed)"
+    },
+    {
+      "id": "TC-SSP0015-033",
+      "kind": "이벤트",
+      "pre": "Shipment Confirm Detail 조회 완료",
+      "step": "TRANSPORT_MODE 셀을 클릭",
+      "input": "—",
+      "expect": "TransMode 코드로 셀 콤보 목록이 채워짐(NAME 표시)",
+      "basis": "`SpdDetail_CellClick`:8583 `biz:CommonData.CommonDataList` [code=TransMode]"
+    },
+    {
+      "id": "TC-SSP0015-034",
+      "kind": "이벤트",
+      "pre": "033과 같음",
+      "step": "TO_SITE_SHIPTO_CODE 셀을 클릭",
+      "input": "—",
+      "expect": "ShipToCodeByDivision 목록이 채워짐",
+      "basis": "`SpdDetail_CellClick`:8604 `biz:CommonData.CommonDataList` [code=ShipToCodeByDivision]"
+    },
+    {
+      "id": "TC-SSP0015-035",
+      "kind": "이벤트",
+      "pre": "Detail 시트 잠금 아님, 행 1개 이상",
+      "step": "컬럼헤더 CheckBox(CHK `ALL`)를 두 번 누른다",
+      "input": "—",
+      "expect": "1번째 클릭에서 전체 체크, 2번째 클릭에서 전체 해제 (값 토글)",
+      "basis": "`SpdDetail_CellClick`:8618/8653/8657, 시트 `Shipment Confirm Detail`"
+    },
+    {
+      "id": "TC-SSP0015-036",
+      "kind": "이벤트",
+      "pre": "`siDetail.IsLock(SheetName)==true`",
+      "step": "컬럼헤더 CheckBox를 누른다",
+      "input": "—",
+      "expect": "토글되지 않음",
+      "basis": "`SpdDetail_CellClick` (IsLock 분기)"
+    },
+    {
+      "id": "TC-SSP0015-037",
+      "kind": "이벤트",
+      "pre": "Shipment Confirm Detail 편집 가능",
+      "step": "Trans Mode 열에 값을 붙여넣는다",
+      "input": "클립보드 Trans Mode 값",
+      "expect": "TransMode CODE 목록과 대조 (불일치 처리 확인 필요)",
+      "basis": "`SpdDetail_ClipboardPasted`:8954 `biz:CommonData.CommonDataList` [code=TransMode]"
+    },
+    {
+      "id": "TC-SSP0015-038",
+      "kind": "조회",
+      "pre": "시트 Mobility & IT, 필수조건 입력",
+      "step": "툴바 조회",
+      "input": "Division=40, Plan-date, Period",
+      "expect": "상단 PSI 데이터 표시",
+      "basis": "FindButton > FindData_Main `SSP.SSP0015_GET_SHIPMENT_PSI` / SP SSP0015_GET_SHIPMENT_PSI, 시트 `Shipment PSI(Mobility & IT)`"
+    },
+    {
+      "id": "TC-SSP0015-039",
+      "kind": "조회",
+      "pre": "시트 Packer",
+      "step": "툴바 조회",
+      "input": "Packer 조건",
+      "expect": "Packer PSI 표시",
+      "basis": "FindButton > FindData_Main_Packer `SSP.SSP0015_GET_SHIPMENT_PSI_PACKER` / SP SSP0015_GET_SHIPMENT_PSI_PACKER"
+    },
+    {
+      "id": "TC-SSP0015-040",
+      "kind": "조회",
+      "pre": "Packer, 과거 조건 (분기 조건 확인 필요)",
+      "step": "툴바 조회",
+      "input": "과거 Plan-date",
+      "expect": "Past PSI 표시. NERP 코드 반영, 헤더 재구성",
+      "basis": "FindButton > FindData_Main_Packer_Past `SSP.SSP0015_GET_SHIPMENT_PSI_PACKER_PAST`, Re_Design > `SSP.SSP0002_GET_NERP_CODE` (SEGMENT2), `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`"
+    },
+    {
+      "id": "TC-SSP0015-041",
+      "kind": "조회",
+      "pre": "데이터 없는 조건",
+      "step": "툴바 조회",
+      "input": "데이터 없는 Model",
+      "expect": "빈 그리드. 오류 없음 (안내 메시지 확인 필요)",
+      "basis": "`SSP.SSP0015_GET_SHIPMENT_PSI` 빈 결과"
+    },
+    {
+      "id": "TC-SSP0015-042",
+      "kind": "조회",
+      "pre": "SP 오류 유발(테스트 DB)",
+      "step": "툴바 조회",
+      "input": "—",
+      "expect": "오류 메시지 표시, 그리드 유지 (문구 확인 필요)",
+      "basis": "`SSP.SSP0015_GET_SHIPMENT_PSI_PACKER` 오류 응답"
+    },
+    {
+      "id": "TC-SSP0015-043",
+      "kind": "조회",
+      "pre": "상단 조회 완료",
+      "step": "spdMain 셀 더블클릭 (Confirm 관련 Measure)",
+      "input": "행 DIVISION_ID/SITE/ITEM_ID/YYYYMMDD",
+      "expect": "Shipment Confirm Detail 조회 결과 표시",
+      "basis": "`SpdMain_CellDoubleClick` > FindData_Detail `SSP.SSP0015_GET_SHIPMENT_CONFIRM_DETAIL`"
+    },
+    {
+      "id": "TC-SSP0015-044",
+      "kind": "조회",
+      "pre": "043과 같음",
+      "step": "W/H 재고 관련 셀 더블클릭",
+      "input": "행 키",
+      "expect": "W/H stock 조회 결과",
+      "basis": "`SpdMain_CellDoubleClick` > FindData_WHstock `SSP.SSP0015_GET_WH_STOCK`, 시트 `W/H stock`"
+    },
+    {
+      "id": "TC-SSP0015-045",
+      "kind": "조회",
+      "pre": "043과 같음",
+      "step": "MES 재고 관련 셀 더블클릭",
+      "input": "행 키",
+      "expect": "Stock Detail 조회 결과",
+      "basis": "`SpdMain_CellDoubleClick` > FindData_mes_stock `SSP.SSP0015_GET_MES_STOCK`"
+    },
+    {
+      "id": "TC-SSP0015-046",
+      "kind": "조회",
+      "pre": "043과 같음",
+      "step": "Hold 재고 관련 셀 더블클릭",
+      "input": "행 키",
+      "expect": "Hold stock 조회 결과",
+      "basis": "`SpdMain_CellDoubleClick` > FindData_block_stock `SSP.SSP0015_GET_BLOCK_STOCK`"
+    },
+    {
+      "id": "TC-SSP0015-047",
+      "kind": "조회",
+      "pre": "043과 같음",
+      "step": "재고 위치 관련 셀 더블클릭",
+      "input": "행 키",
+      "expect": "Stock Location Detail 조회 결과, NERP 코드 반영",
+      "basis": "`SpdMain_CellDoubleClick` > FindData_shtStockLocationDetail_btnSearch `SSP.SSP0015_GET_STOCK_LOCATION_DETAIL`, `SSP.SSP0002_GET_NERP_CODE`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`"
+    },
+    {
+      "id": "TC-SSP0015-048",
+      "kind": "조회",
+      "pre": "043과 같음",
+      "step": "SCS 재고 관련 셀 더블클릭",
+      "input": "행 키",
+      "expect": "SCS Stock Detail 조회 결과",
+      "basis": "`SpdMain_CellDoubleClick` > FindData_ScsStock_btnSearch `SSP.SSP0015_GET_SCS_STOCK`"
+    },
+    {
+      "id": "TC-SSP0015-049",
+      "kind": "조회",
+      "pre": "043과 같음",
+      "step": "상단 재조회가 일어나는 셀 더블클릭 (조건 확인 필요)",
+      "input": "행 키",
+      "expect": "상단 PSI 재조회",
+      "basis": "`SpdMain_CellDoubleClick` > FindData_Main `SSP.SSP0015_GET_SHIPMENT_PSI`"
+    },
+    {
+      "id": "TC-SSP0015-050",
+      "kind": "조회",
+      "pre": "Comments가 있는 셀",
+      "step": "spdMain 셀 더블클릭",
+      "input": "—",
+      "expect": "Comments의 GAP / BEFORE_QTY / USER_ADD_QTY를 읽음 (팝업 전달 여부 확인 필요)",
+      "basis": "`SpdMain_CellDoubleClick` (8290~8306)"
+    },
+    {
+      "id": "TC-SSP0015-051",
+      "kind": "조회",
+      "pre": "활성 시트 Shipment Confirm Detail(40 계열)",
+      "step": "drpPeriod2 입력 후 btnSearch 클릭",
+      "input": "Shipment Date 기간",
+      "expect": "Confirm Detail 표시. 일부 컬럼 숨김",
+      "basis": "`BtnSearch_Click` > FindData_Detail_btnSearch `SSP.SSP0015_GET_SHIPMENT_CONFIRM_DETAIL` / SP SSP0015_GET_SHIPMENT_CONFIRM_DETAIL, 시트 `Shipment Confirm Detail`"
+    },
+    {
+      "id": "TC-SSP0015-052",
+      "kind": "조회",
+      "pre": "활성 시트 Shipment Confirm Detail(Packer 계열)",
+      "step": "btnSearch 클릭",
+      "input": "Shipment Date 기간",
+      "expect": "Packer Confirm Detail 표시",
+      "basis": "`BtnSearch_Click` > FindData_Detail_Packer_btnSearch `SSP.SSP0015_GET_SHIPMENT_CONFIRM_DETAIL_PACKER`"
+    },
+    {
+      "id": "TC-SSP0015-053",
+      "kind": "조회",
+      "pre": "활성 시트 Shipment Request Detail",
+      "step": "txtRequestor 입력 후 btnSearch 클릭",
+      "input": "Requestor",
+      "expect": "요청 상세 표시",
+      "basis": "`BtnSearch_Click` > FindData_Request_Detail `SSP.SSP0026_GET_REQUEST_DETAIL_PACK` / SP SSP0026_GET_REQUEST_DETAIL_PACK, 시트 `Shipment Request Detail`"
+    },
+    {
+      "id": "TC-SSP0015-054",
+      "kind": "조회",
+      "pre": "활성 시트 W/H stock",
+      "step": "btnSearch 클릭",
+      "input": "txtModel2",
+      "expect": "창고 재고 표시",
+      "basis": "`BtnSearch_Click` > FindData_WHstock `SSP.SSP0015_GET_WH_STOCK`"
+    },
+    {
+      "id": "TC-SSP0015-055",
+      "kind": "조회",
+      "pre": "활성 시트 Hold stock Detail",
+      "step": "btnSearch 클릭",
+      "input": "drpPeriod3 (매핑 확인 필요)",
+      "expect": "Hold 재고 상세 표시",
+      "basis": "`BtnSearch_Click` > FindData_BolckStockDetail_btnSearch `SSP.SSP0015_GET_BLOCK_STOCK`, 시트 `Hold stock Detail`"
+    },
+    {
+      "id": "TC-SSP0015-056",
+      "kind": "조회",
+      "pre": "활성 시트 Stock Detail",
+      "step": "txtLotID 입력 후 btnSearch 클릭",
+      "input": "Lot ID",
+      "expect": "MES 재고 상세 표시",
+      "basis": "`BtnSearch_Click` > FindData_MesStock_btnSearch `SSP.SSP0015_GET_MES_STOCK`"
+    },
+    {
+      "id": "TC-SSP0015-057",
+      "kind": "조회",
+      "pre": "활성 시트 SCS Stock Detail",
+      "step": "btnSearch 클릭",
+      "input": "txtModel2",
+      "expect": "SCS 재고 표시",
+      "basis": "`BtnSearch_Click` > FindData_ScsStock_btnSearch `SSP.SSP0015_GET_SCS_STOCK`, 시트 `SCS Stock Detail`"
+    },
+    {
+      "id": "TC-SSP0015-058",
+      "kind": "조회",
+      "pre": "활성 시트 Stock Location Detail",
+      "step": "btnSearch 클릭",
+      "input": "txtModel2",
+      "expect": "재고 위치 표시, NERP 반영",
+      "basis": "`BtnSearch_Click` > FindData_shtStockLocationDetail_btnSearch `SSP.SSP0015_GET_STOCK_LOCATION_DETAIL`, `SSP.SSP0002_GET_NERP_CODE`"
+    },
+    {
+      "id": "TC-SSP0015-059",
+      "kind": "조회",
+      "pre": "활성 시트 WH In Plan Detail (권한 있음)",
+      "step": "btnSearch 클릭",
+      "input": "—",
+      "expect": "입고계획 Comments 표시",
+      "basis": "`BtnSearch_Click` > FindData_WHinPlanDetail_btnSearch `SSP.SSP0015_GET_SHIPMENT_PSI_COMMENTS` / SP SSP0015_GET_SHIPMENT_PSI_COMMENTS"
+    },
+    {
+      "id": "TC-SSP0015-060",
+      "kind": "조회",
+      "pre": "활성 시트 Shipment Result (ERP 실적)",
+      "step": "clbResultType 선택 후 btnSearch 클릭",
+      "input": "Result Type",
+      "expect": "실적 표시. SHIP_TO, SHIPTO_DESCRIPTION 숨김",
+      "basis": "`BtnSearch_Click` > FindData_ShipmentResult_btnSearch `SSP.SSP0015_GET_SHIPMENT_RESULT`:4991/4992"
+    },
+    {
+      "id": "TC-SSP0015-061",
+      "kind": "조회",
+      "pre": "활성 시트 Shipment Result (SCS 실적, 분기 조건 확인 필요)",
+      "step": "btnSearch 클릭",
+      "input": "Result Type",
+      "expect": "SCS 실적 표시, 헤더 재구성",
+      "basis": "`BtnSearch_Click` > FindData_ShipmentSCSResult_btnSearch `SSP.SSP0015_GET_SHIPMENT_RESULT_PACKER`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`"
+    },
+    {
+      "id": "TC-SSP0015-062",
+      "kind": "조회",
+      "pre": "활성 Detail 시트 아무거나",
+      "step": "데이터 없는 조건으로 btnSearch 클릭",
+      "input": "데이터 없는 Lot",
+      "expect": "빈 그리드, 오류 없음",
+      "basis": "`BtnSearch_Click` 빈 결과 (`SSP.SSP0015_GET_MES_STOCK`)"
+    },
+    {
+      "id": "TC-SSP0015-063",
+      "kind": "권한",
+      "pre": "편집 권한 있는 사용자",
+      "step": "툴바 Edit",
+      "input": "—",
+      "expect": "PlanDateShip 확인, 사용자 정보 조회 뒤 편집 가능 상태",
+      "basis": "EditButton:1753/1757 `biz:CommonData.CommonDataList` [PlanDateShip], GetSSPUserCheck `SSP.SSP0002_GET_USER_INFO_LIST` / SP SSP0002_GET_USER_INFO_LIST"
+    },
+    {
+      "id": "TC-SSP0015-064",
+      "kind": "권한",
+      "pre": "사용자 그룹 정보 없음",
+      "step": "툴바 Edit",
+      "input": "—",
+      "expect": "사용자 조회 결과가 비었을 때 처리 (차단·메시지 확인 필요)",
+      "basis": "`SSP.SSP0002_GET_USER_INFO_LIST` 빈 결과"
+    },
+    {
+      "id": "TC-SSP0015-065",
+      "kind": "저장",
+      "pre": "상단 PSI 편집 완료",
+      "step": "툴바 저장",
+      "input": "입고 수량·Comment 변경",
+      "expect": "SSP_ANL_SHIP_PLAN_40 / _WH_IN_CMT 갱신, 이력(_WH_IN_H, _WH_IN_CMT_H)과 SCM_SYS_LOG_BATCH 기록",
+      "basis": "SaveButton > SaveData_Main `SSP.SSP0015_SAVE_SHIPMENT_PSI` / SP SSP0015_SAVE_SHIPMENT_PSI"
+    },
+    {
+      "id": "TC-SSP0015-066",
+      "kind": "저장",
+      "pre": "Shipment Confirm Detail(40) 편집, 필수항목 입력",
+      "step": "툴바 저장",
+      "input": "Shipment Qty, Shipment Date, Trans Mode, Ship to",
+      "expect": "SSP_ANL_SHIP_CONFIRM 반영, XIF_ERP_SHIP_PLAN_CONFIRM_S_SN 적재, DM_PLN_MKT_FCST_CONFIRM 반영. 저장 후 상단·Detail 재조회",
+      "basis": "SaveButton > SaveData_Detail `SSP.SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40` / SP SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40, 재조회 `SSP.SSP0015_GET_SHIPMENT_PSI`, `SSP.SSP0015_GET_SHIPMENT_CONFIRM_DETAIL`"
+    },
+    {
+      "id": "TC-SSP0015-067",
+      "kind": "저장",
+      "pre": "066과 같지만 Trans Mode 빈칸",
+      "step": "툴바 저장",
+      "input": "TRANSPORT_MODE=''",
+      "expect": "검증에 걸려 저장 SP를 호출하지 않음 (메시지 확인 필요)",
+      "basis": "SaveData_Detail > Validation_Check (shipment_confirm_qty, shipment_date, TRANSPORT_MODE, remarks2, remarks, TO_SITE_SHIPTO_CODE)"
+    },
+    {
+      "id": "TC-SSP0015-068",
+      "kind": "저장",
+      "pre": "Hold stock 시트에서 행 편집",
+      "step": "툴바 저장",
+      "input": "Amend Qty, End Date",
+      "expect": "SSP_ANL_HOLD_STOCK UPDATE/INSERT, 로그 기록",
+      "basis": "SaveButton > SaveData_Detail:6011 `SSP.SSP0015_SAVE_BLOCK_STOCK_DATA` / SP SSP0015_SAVE_BLOCK_STOCK_DATA, 시트 `Hold stock`"
+    },
+    {
+      "id": "TC-SSP0015-069",
+      "kind": "저장",
+      "pre": "Stock Detail 편집",
+      "step": "툴바 저장",
+      "input": "User Modified Release Date",
+      "expect": "SSP_ANL_MES_FCS_STOCK_40_C, SSP_ANL_SHIP_PLAN_40 MERGE. MES 재고 재조회",
+      "basis": "SaveButton > SaveData_Detail:6112/6219 `SSP.SSP0015_SAVE_MES_STOCK` / SP SSP0015_SAVE_MES_STOCK, 재조회 `SSP.SSP0015_GET_MES_STOCK`"
+    },
+    {
+      "id": "TC-SSP0015-070",
+      "kind": "저장",
+      "pre": "Packer Confirm Detail 편집",
+      "step": "툴바 저장",
+      "input": "Confirm ID",
+      "expect": "SCS Confirm ID 체크(CNT) 결과에 따라 진행 또는 중단 (기준 확인 필요)",
+      "basis": "SaveData_Detail_Packer > chkSaveYN `SSP.SSP0202_GET_SCS_CONFIRM_ID_CHECK` / SP SSP0202_GET_SCS_CONFIRM_ID_CHECK"
+    },
+    {
+      "id": "TC-SSP0015-071",
+      "kind": "저장",
+      "pre": "070 통과",
+      "step": "저장 계속",
+      "input": "—",
+      "expect": "계획 진행 중 여부 체크 (진행 중일 때 동작 확인 필요)",
+      "basis": "SaveData_Detail_Packer > EngProcessingChk `SSP.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK` / SP SSP0003_GET_SSP_PLAN_PROCESSING_CHECK"
+    },
+    {
+      "id": "TC-SSP0015-072",
+      "kind": "저장",
+      "pre": "071 통과",
+      "step": "저장 계속",
+      "input": "—",
+      "expect": "SSP_ANL_SHIP_CONFIRM 반영, XIF_ERP_PACK_SHIP_PLAN_S_SN·XIF_SCS_PACK_SHIP_PLAN_S_SN·SSP_MST_SEND_MAIL_REQ 적재",
+      "basis": "SaveData_Detail_Packer:5602 `SSP.SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER` / SP SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER"
+    },
+    {
+      "id": "TC-SSP0015-073",
+      "kind": "저장",
+      "pre": "072 수행, 변경 요청 있음",
+      "step": "ERP 인터페이스 단계",
+      "input": "—",
+      "expect": "확정 변경시각 체크 수행",
+      "basis": "GetERPInterface > ChkConfirmChangeTime `SSP.SCM_SSP_CHECK_CONFIRM_CHANGETIME` / SP SCM_SSP_CHECK_CONFIRM_CHANGETIME"
+    },
+    {
+      "id": "TC-SSP0015-074",
+      "kind": "저장",
+      "pre": "073과 같음",
+      "step": "ERP 인터페이스 단계",
+      "input": "—",
+      "expect": "SO 건수(CNT) 조회 결과로 SoNo/NonSoNo 경로가 결정됨 (기준 확인 필요)",
+      "basis": "GetERPInterface > GetErpSoNoCnt `SSP.SSP0015_GET_ERP_SO_NO_CNT` / SP SSP0015_GET_ERP_SO_NO_CNT"
+    },
+    {
+      "id": "TC-SSP0015-075",
+      "kind": "저장",
+      "pre": "073과 같음",
+      "step": "ERP 인터페이스 단계",
+      "input": "—",
+      "expect": "출하 상태 Tables[0..2].CONFIRM_ID 확인",
+      "basis": "GetERPInterface > GetShipmentStatusChk `SSP.SSP0015_GET_SHIPMENT_STATUS` / SP SSP0015_GET_SHIPMENT_STATUS"
+    },
+    {
+      "id": "TC-SSP0015-076",
+      "kind": "저장",
+      "pre": "ERP 오류 건 존재",
+      "step": "ERP 인터페이스 단계",
+      "input": "—",
+      "expect": "SSP_ANL_SHIP_ERP_ERROR_CONFIRM INSERT, CHG_REQ / CHG_REQ_DE UPDATE",
+      "basis": "GetERPInterface:6665 `SSP.SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM` / SP SCM_SSP_ANL_SHIP_ERP_ERROR_CONFIRM"
+    },
+    {
+      "id": "TC-SSP0015-077",
+      "kind": "저장",
+      "pre": "확정 삭제 대상 존재",
+      "step": "ERP 인터페이스 단계",
+      "input": "—",
+      "expect": "SSP_ANL_SHIP_CONFIRM UPDATE/DELETE, XIF_ERP_SHIP_PLAN_CONFIRM_S_SN INSERT",
+      "basis": "GetERPInterface:6706 `SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM` / SP SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM"
+    },
+    {
+      "id": "TC-SSP0015-078",
+      "kind": "저장",
+      "pre": "SO No 없음",
+      "step": "ERP 인터페이스 NonSoNo 경로",
+      "input": "—",
+      "expect": "CHG_REQ / CHG_REQ_DE INSERT. 40은 XIF_ERP_SHIP_PLAN_CONFIRM_S_SN, Packer는 XIF_ERP_PACK / XIF_SCS_PACK 적재",
+      "basis": "NonSoNo:6843 `SSP.SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING` / SP SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING, :6847 `SSP.SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER` / SP SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER"
+    },
+    {
+      "id": "TC-SSP0015-079",
+      "kind": "저장",
+      "pre": "SO No 있음",
+      "step": "ERP 인터페이스 SoNo 경로",
+      "input": "—",
+      "expect": "078과 같은 Drafting SP 호출",
+      "basis": "SoNo:7076 `SSP.SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING`, :7080 `SSP.SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER`"
+    },
+    {
+      "id": "TC-SSP0015-080",
+      "kind": "저장",
+      "pre": "079 수행",
+      "step": "GetErpIFCheckNew 단계",
+      "input": "—",
+      "expect": "확정 삭제 처리 후 CHG 배치. XIF_ERP_SHIP_PLAN_CONFIRM_S_SN INSERT, CHG_REQ_DE UPDATE",
+      "basis": "GetErpIFCheckNew:7363 `SSP.SCM_SSP_DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM`, :7389/7419 `SSP.PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH` / SP PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH"
+    },
+    {
+      "id": "TC-SSP0015-081",
+      "kind": "저장",
+      "pre": "072~080 완료",
+      "step": "저장 완료 후 확인",
+      "input": "—",
+      "expect": "Packer Confirm Detail 재조회, 헤더 재구성",
+      "basis": "SaveData_Detail_Packer > FindData_Detail_Packer_btnSearch `SSP.SSP0015_GET_SHIPMENT_CONFIRM_DETAIL_PACKER`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`"
+    },
+    {
+      "id": "TC-SSP0015-082",
+      "kind": "저장",
+      "pre": "SP 오류 유발(테스트 DB)",
+      "step": "툴바 저장",
+      "input": "—",
+      "expect": "오류 메시지 표시, 부분 반영 없음 (트랜잭션 범위 확인 필요)",
+      "basis": "`SSP.SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40` 오류 응답"
+    },
+    {
+      "id": "TC-SSP0015-083",
+      "kind": "저장",
+      "pre": "ERP I/F 차단 데이터(BLOCK_YN) 존재",
+      "step": "Packer 저장",
+      "input": "—",
+      "expect": "차단 여부 판정 (원천과 동작 확인 필요)",
+      "basis": "chkERPIFBlockYn (BLOCK_YN, PERIOD)"
+    },
+    {
+      "id": "TC-SSP0015-084",
+      "kind": "이벤트",
+      "pre": "팝업 열림",
+      "step": "txtGap_Qty 값을 바꾼다",
+      "input": "숫자",
+      "expect": "연동 처리 (확인 필요)",
+      "basis": "`txtGap_Qty_TextChanged`"
+    },
+    {
+      "id": "TC-SSP0015-085",
+      "kind": "이벤트",
+      "pre": "팝업 열림",
+      "step": "txtBefore_Qty 값을 바꾼다",
+      "input": "숫자",
+      "expect": "연동 처리 (확인 필요)",
+      "basis": "`txtBefore_Qty_TextChanged`"
+    },
+    {
+      "id": "TC-SSP0015-086",
+      "kind": "이벤트",
+      "pre": "팝업 열림",
+      "step": "txtProd_Qty 값을 바꾼다",
+      "input": "숫자",
+      "expect": "연동 처리 (확인 필요)",
+      "basis": "`txtProd_Qty_TextChanged`"
+    },
+    {
+      "id": "TC-SSP0015-087",
+      "kind": "이벤트",
+      "pre": "팝업 열림",
+      "step": "txtWHin_Qty 값을 바꾼다",
+      "input": "숫자",
+      "expect": "연동 처리 (확인 필요)",
+      "basis": "`txtWHin_Qty_TextChanged`"
+    },
+    {
+      "id": "TC-SSP0015-088",
+      "kind": "이벤트",
+      "pre": "팝업 열림",
+      "step": "txtCurrent_Qty 값을 바꾼다",
+      "input": "숫자",
+      "expect": "연동 처리 (확인 필요)",
+      "basis": "`txtCurrent_Qty_TextChanged`"
+    },
+    {
+      "id": "TC-SSP0015-089",
+      "kind": "이벤트",
+      "pre": "팝업 열림",
+      "step": "txtChange_Qty 값을 바꾼다",
+      "input": "숫자",
+      "expect": "연동 처리 (확인 필요)",
+      "basis": "`txtChange_Qty_TextChanged`"
+    },
+    {
+      "id": "TC-SSP0015-090",
+      "kind": "이벤트",
+      "pre": "팝업 열림",
+      "step": "txtChange_Qty에 문자를 입력",
+      "input": "`abc`",
+      "expect": "입력 제한 여부 (확인 필요)",
+      "basis": "`txtChange_Qty_KeyPress`"
+    },
+    {
+      "id": "TC-SSP0015-091",
+      "kind": "저장",
+      "pre": "팝업에 rtxComments 입력",
+      "step": "btnButtonList 저장 클릭",
+      "input": "Comment, 변경수량",
+      "expect": "SSP_ANL_SHIP_PLAN_40 UPDATE, _WH_IN_CMT UPDATE/INSERT, 이력·로그 기록",
+      "basis": "`btnButtonList_UsrButtonList_Click_Detected` > SaveData:333 `SSP.SSP0015_SAVE_SHIPMENT_PSI_COMMENTS` / SP SSP0015_SAVE_SHIPMENT_PSI_COMMENTS"
+    },
+    {
+      "id": "TC-SSP0015-092",
+      "kind": "저장",
+      "pre": "SP 오류 유발",
+      "step": "팝업 btnButtonList 저장",
+      "input": "—",
+      "expect": "오류 메시지, 팝업 유지 (확인 필요)",
+      "basis": "`SSP.SSP0015_SAVE_SHIPMENT_PSI_COMMENTS` 오류 응답"
+    },
+    {
+      "id": "TC-SSP0015-093",
+      "kind": "저장",
+      "pre": "진입점 미연결 확인용",
+      "step": "런타임 추적(SQL 로그)으로 호출 여부 확인",
+      "input": "Packer/40 저장 전체 시나리오",
+      "expect": "호출 0건이면 미사용으로 확정. 호출되면 CHG_REQ / CHG_REQ_DE UPDATE 검증",
+      "basis": "GetErpIFCheck:7285, GetErpIFCheckNew_:9731 `SSP.SSP0015_DELETE_SHIPMENT_REQUEST_DRAFTING` / SP SSP0015_DELETE_SHIPMENT_REQUEST_DRAFTING"
+    },
+    {
+      "id": "TC-SSP0015-094",
+      "kind": "저장",
+      "pre": "093과 같음",
+      "step": "런타임 추적",
+      "input": "저장 시나리오",
+      "expect": "호출 여부 확정. 호출되면 SCM_SYS_LOG_BATCH INSERT",
+      "basis": "SCM_SYS_LOG_BATCH:7876 `SCP.PR_SCM_SYS_LOG_BATCH` / SP PR_SCM_SYS_LOG_BATCH"
+    },
+    {
+      "id": "TC-SSP0015-095",
+      "kind": "조회",
+      "pre": "093과 같음",
+      "step": "런타임 추적",
+      "input": "화면 로드·Division 변경",
+      "expect": "호출 여부 확정. 호출되면 SCM_MST_DIVISION 결과가 clbDivision에 반영되는지 확인",
+      "basis": "GetDivision:9192 `SCM.SCM0001_GET_DIVISION` / SP SCM0001_GET_DIVISION"
+    },
+    {
+      "id": "TC-SSP0015-096",
+      "kind": "조회",
+      "pre": "093과 같음",
+      "step": "런타임 추적",
+      "input": "—",
+      "expect": "호출 여부 확정. FROM_VALUE / TO_VALUE 사용처 확인",
+      "basis": "SetChangedPeriod:9207/9211 `biz:CommonData.CommonDataList` [PERIOD_{p:value}], [PERIOD2_{p:value}]"
+    },
+    {
+      "id": "TC-SSP0015-097",
+      "kind": "저장",
+      "pre": "093과 같음",
+      "step": "런타임 추적",
+      "input": "—",
+      "expect": "NewNonSoNo 호출 여부 확정",
+      "basis": "NewNonSoNo:9611/9615 `SSP.SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING`, `SSP.SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING_PACKER`"
+    },
+    {
+      "id": "TC-SSP0015-098",
+      "kind": "그리드",
+      "pre": "상단 조회 완료",
+      "step": "Shipment PSI(Mobility & IT) 컬럼 확인",
+      "input": "—",
+      "expect": "표시 10: Div, Figure, From Site, Model, Aging L/T, Measure, Nick Name, PSI, TYPE, Yield(%). 셀 병합(Always)",
+      "basis": "시트 `Shipment PSI(Mobility & IT)`, SetSheetHeaderColumn InitSpread:759, MergePolicy 776/778"
+    },
+    {
+      "id": "TC-SSP0015-099",
+      "kind": "그리드",
+      "pre": "Packer 조회 완료",
+      "step": "Shipment PSI(Packer) 컬럼 확인",
+      "input": "—",
+      "expect": "표시 8: Div, Figure, From Site, Model, Measure(MEASURE), Nick Name, PSI, TYPE. LT_DAY / YEILD 숨김",
+      "basis": "시트 `Shipment PSI(Packer)`, InitSpread:786, MergePolicy 803/805"
+    },
+    {
+      "id": "TC-SSP0015-100",
+      "kind": "그리드",
+      "pre": "ichkbtn==1 상태 (조건 확인 필요)",
+      "step": "Packer 시트와 Mobility 시트의 SO No 계열 컬럼 폭 비교",
+      "input": "—",
+      "expect": "Packer 시트 Width 80, 다른 시트 0. ichkbtn≠1이면 반대",
+      "basis": "SetSoNoColumnVisible:9778~9793, 시트 `Shipment PSI(Packer)`"
+    },
+    {
+      "id": "TC-SSP0015-101",
+      "kind": "그리드",
+      "pre": "화면 로드",
+      "step": "메타 전용 시트 확인",
+      "input": "—",
+      "expect": "Shipment PSI(IT & Mobile) 탭이 없음 (이관 여부 결정 후 확정)",
+      "basis": "시트 `Shipment PSI(IT & Mobile)` (메타 정의만, 코드 미참조)"
+    },
+    {
+      "id": "TC-SSP0015-102",
+      "kind": "그리드",
+      "pre": "Confirm Detail 조회 완료",
+      "step": "컬럼 확인",
+      "input": "—",
+      "expect": "표시 40 (§4-3 목록). SHIPTO_DESCRIPTION 숨김. 메타 39와 1컬럼 차이 원인 확인",
+      "basis": "시트 `Shipment Confirm Detail`, FindData_Detail Visible 3218~3221"
+    },
+    {
+      "id": "TC-SSP0015-103",
+      "kind": "그리드",
+      "pre": "Request Detail 조회 완료",
+      "step": "컬럼 확인",
+      "input": "—",
+      "expect": "표시 34 (§4-4 목록)",
+      "basis": "시트 `Shipment Request Detail`"
+    },
+    {
+      "id": "TC-SSP0015-104",
+      "kind": "그리드",
+      "pre": "W/H stock 조회 완료",
+      "step": "컬럼 확인",
+      "input": "—",
+      "expect": "메타 19컬럼 표시 (목록은 메타 원문으로 확정)",
+      "basis": "시트 `W/H stock`"
+    },
+    {
+      "id": "TC-SSP0015-105",
+      "kind": "그리드",
+      "pre": "W/H stock Detail 탭 선택",
+      "step": "컬럼 확인",
+      "input": "—",
+      "expect": "메타 25컬럼 표시 (목록·원천 SP 확인 필요)",
+      "basis": "시트 `W/H stock Detail`"
+    },
+    {
+      "id": "TC-SSP0015-106",
+      "kind": "그리드",
+      "pre": "Hold stock 조회 완료",
+      "step": "컬럼 확인",
+      "input": "—",
+      "expect": "표시 10. 라벨 Amend Qty*, End Date*. FROM_SITE, HOLD_ID 숨김",
+      "basis": "시트 `Hold stock`"
+    },
+    {
+      "id": "TC-SSP0015-107",
+      "kind": "그리드",
+      "pre": "Hold stock Detail 조회 완료",
+      "step": "컬럼 확인",
+      "input": "—",
+      "expect": "표시 10. 라벨 Amend Qty, End Date (`*` 없음)",
+      "basis": "시트 `Hold stock Detail`"
+    },
+    {
+      "id": "TC-SSP0015-108",
+      "kind": "그리드",
+      "pre": "Stock Detail 조회 완료",
+      "step": "컬럼 확인",
+      "input": "—",
+      "expect": "표시 26. LONGTERM_HOLD_YN, LOT_QTY_MES_NG 포함",
+      "basis": "시트 `Stock Detail`"
+    },
+    {
+      "id": "TC-SSP0015-109",
+      "kind": "그리드",
+      "pre": "화면 로드",
+      "step": "메타 전용 시트 확인",
+      "input": "—",
+      "expect": "MES Stock Detail 탭이 없음 (이관 여부 결정 후 확정)",
+      "basis": "시트 `MES Stock Detail` (메타 정의만)"
+    },
+    {
+      "id": "TC-SSP0015-110",
+      "kind": "그리드",
+      "pre": "SCS Stock Detail 조회 완료",
+      "step": "컬럼 확인",
+      "input": "—",
+      "expect": "표시 9: CUTOFF_DATE, DIVISION_ID, Hold Y/N, Update Date, Model, PLANT_ID, PLANT_NAME, Production Date, QTY",
+      "basis": "시트 `SCS Stock Detail`"
+    },
+    {
+      "id": "TC-SSP0015-111",
+      "kind": "그리드",
+      "pre": "Stock Location Detail 조회 완료",
+      "step": "컬럼 확인",
+      "input": "—",
+      "expect": "메타 20컬럼. 라벨 `Deffect Qty` 원문 유지",
+      "basis": "시트 `Stock Location Detail`"
+    },
+    {
+      "id": "TC-SSP0015-112",
+      "kind": "그리드",
+      "pre": "WH In Plan Detail 조회 완료",
+      "step": "컬럼 확인",
+      "input": "—",
+      "expect": "메타 11컬럼 표시 (목록 확인 필요)",
+      "basis": "시트 `WH In Plan Detail`"
+    },
+    {
+      "id": "TC-SSP0015-113",
+      "kind": "그리드",
+      "pre": "Shipment Result 조회 완료",
+      "step": "컬럼 확인",
+      "input": "—",
+      "expect": "표시 17. SHIP_TO `Ship to`, SHIPTO_DESCRIPTION `Ship to Name` 숨김",
+      "basis": "시트 `Shipment Result`, FindData_ShipmentResult_btnSearch:4991/4992"
+    },
+    {
+      "id": "TC-SSP0015-114",
+      "kind": "권한",
+      "pre": "drPgmAuthId == null 사용자",
+      "step": "화면 열기",
+      "input": "—",
+      "expect": "WH In Plan Detail 탭이 만들어지지 않음",
+      "basis": "CreateSpread:680, 시트 `WH In Plan Detail`"
+    },
+    {
+      "id": "TC-SSP0015-115",
+      "kind": "권한",
+      "pre": "메뉴 권한 없는 그룹",
+      "step": "메뉴 접근",
+      "input": "—",
+      "expect": "접근·버튼 제한 (TB_FX_GroupMenuAuth 값으로 기대값 확정 필요)",
+      "basis": "TB_FX_GroupMenuAuth 14행, `Form_Load`"
+    },
+    {
+      "id": "TC-SSP0015-116",
+      "kind": "division",
+      "pre": "Division=40",
+      "step": "모든 Detail 시트를 조회",
+      "input": "40",
+      "expect": "시트별 표시 컬럼 수가 §12 집계와 같음 (예: Shipment Confirm Detail 40, Shipment Result 17)",
+      "basis": "grid_rule/grid_effective 40열, 시트 `Shipment Confirm Detail`, `Shipment Result`"
+    },
+    {
+      "id": "TC-SSP0015-117",
+      "kind": "division",
+      "pre": "Division=81",
+      "step": "116과 같은 절차",
+      "input": "81",
+      "expect": "컬럼 수가 40과 같음",
+      "basis": "grid_effective 81열, `SpdDetail_CellClick` [ShipToCodeByDivision]"
+    },
+    {
+      "id": "TC-SSP0015-118",
+      "kind": "division",
+      "pre": "Division=82",
+      "step": "116과 같은 절차",
+      "input": "82",
+      "expect": "컬럼 수가 40과 같음",
+      "basis": "grid_effective 82열"
+    },
+    {
+      "id": "TC-SSP0015-119",
+      "kind": "division",
+      "pre": "Division=EE",
+      "step": "116과 같은 절차",
+      "input": "EE",
+      "expect": "컬럼 수가 40과 같음",
+      "basis": "grid_effective EE열"
+    },
+    {
+      "id": "TC-SSP0015-120",
+      "kind": "division",
+      "pre": "Division 81_HD / EE_UC 등 하위 division",
+      "step": "116과 같은 절차",
+      "input": "81_HD, EE_UC",
+      "expect": "컬럼 수가 40과 같음 (Packer / 40 저장 분기와의 관계는 확인 필요)",
+      "basis": "grid_effective 81_HD·EE_UC열, `SSP.SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_PACKER` / `SSP.SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40`"
+    }
+  ],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

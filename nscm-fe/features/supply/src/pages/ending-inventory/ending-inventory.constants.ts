@@ -35,7 +35,19 @@ export type SearchMode = (typeof SEARCH_MODE)[keyof typeof SEARCH_MODE];
 export const COMBO = {
   DIVISION: 'MyDivision', // 다중선택, EE 제외 + user-group unit-auth 권한필터 SQL 내장. 값 전체=ALL
   PLANT: 'PlantByGroup_SCP', // 다중선택, @divisionId(콤마 다중 INSTR) 재조회형 cascade
-  ITEM_TYPE: 'ItemType', // 다중선택, 전체=ALL (demand 화면 공용 콤보 ID)
+  // Item Type 은 콤보(ITEM_MASTER_ITEM_TYPE)가 아니라 DB LOOKUP 'ITEM_TYPE'에서 옵션을 가져온다(아래 LOOKUP).
+  //   사유: 품목데이터 DISTINCT 는 실재 코드만이라 '기타'·'저장품' 등 미사용 코드가 빠짐(사용자 결정 2026-10-21).
+  // Profit Center — AS-IS SCP0085_GET_SEARCH_INFO SELECT 를 CMBO_SQL 로 이관한 콤보(공통 function 미생성
+  //   규약 — 콤보 관련 SP 는 SCM_ADM_CMBO_SQL_M 로 이관). @yyyymmdd 기간 스코프(월 _R / 일 _R_D).
+  //   CODE=ATTRIBUTE3, NAME=ATTRIBUTE3+' '+ATTRIBUTE4. p_profit_center 로 전송.
+  PROFIT_CENTER: 'SCP0085_GET_SEARCH_INFO',
+} as const;
+
+// 조회조건 LOOKUP ID (SCM_ADM_LOOKUP_MASTER_DETAIL) — Item Type 콤보의 옵션 출처.
+//   LOOKUP 'ITEM_TYPE': CODE(SEGMENT1 코드 E/H/P/Q/A/R/-) / NAME(SEGMENT2 한글: 기타/반제품/상품/
+//   원부자재/저장품/제품/(Blanks)). 옵션집합·표시명 모두 이 LOOKUP 에서 가져온다(전송값은 CODE).
+export const LOOKUP = {
+  ITEM_TYPE: 'ITEM_TYPE',
 } as const;
 
 // monthPicker 범위 하한 — AS-IS `monthPicker.MonthMin = "2021-12"`(cs:404). 상한/기본값은 AS-IS 가
@@ -53,7 +65,12 @@ export const MONTH_MIN_YEAR = 2021;
 export const MSG = {
   REQUIRE_DIVISION: 'MSG00097',
   EXCEL_NO_DATA: 'MSG00719',
-  DAILY_ERP_NOTICE: 'MSG00378',
+  // ERP 집계 안내문(SCM_ADM_MSG_M 실측 — 조회조건 아래 한 줄). 모드별로 문구가 다르다.
+  //   월마감: MSG01371 '월마감 기준 데이터는 매월 본사 4 영업일에 집계하며, ERP(ZMMCMR6014) 전월말 재고를 가져옵니다.'
+  //   일별  : MSG01370 '일별 기준 데이터는 매일 각 법인별 시업시간 기준 ERP(ZMMCMR6014) 재고를 가져옵니다.'
+  //   (구 MSG00378 은 미등록 오코드였음 — 실측으로 교정)
+  MONTH_ERP_NOTICE: 'MSG01371',
+  DAILY_ERP_NOTICE: 'MSG01370',
 } as const;
 
 // UI 라벨 코드 — SCM_ADM_MSG_M(MSG_TP_CD='LBL') 문구 역조회(#114). AS-IS 번호 그대로 쓰지 않는다.
@@ -65,13 +82,12 @@ export const LBL = {
   MONTH: 'LBL00066', // Month (MONTH 모드 기간 라벨)
   DIVISION: 'LBL00001', // Division (표준 LBL00001)
   PLANT: 'LBL00030', // Plant
-  MATERIAL: 'LBL00021', // Material (Item ID 라벨)
+  MATERIAL: 'LBL00021', // Material (Item ID 라벨 — AS-IS 실화면 라벨 "Material")
   ITEM_TYPE: 'LBL00068', // Item Type
+  PROFIT_CENTER: 'LBL01103', // Profit Center
+  MONTHLY_BASIS: 'LBL01137', // 월마감 기준 (조회모드 라디오)
+  DAILY_BASIS: 'LBL01138', // 일별 기준 (조회모드 라디오)
 } as const;
-
-// AS-IS 일별 안내문(cs:544 주석) — TO-BE MSG 미등록 fallback 문안.
-export const DAILY_ERP_NOTICE_FALLBACK =
-  'Daily-based data reflects ERP (ZMMB0180) inventory as of 07:30 AM KST each day.';
 
 // Devaluation Age 라벨은 TO-BE LBL 코드 미확인 — 코드 확정 전까지 문구를 직접 쓴다(확인 필요).
 export const DEVALUATION_AGE_LABEL = 'Devaluation Age';
@@ -80,9 +96,12 @@ export const DEVALUATION_AGE_LABEL = 'Devaluation Age';
 export const COL = {
   YYYYMM: 'YYYYMM',
   YYYYMMDD: 'YYYYMMDD',
-  DIVISION_ID: 'DIVISION_ID',
-  PLANT_NAME: 'PLANT_NAME',
-  PLANT_ID: 'PLANT_ID',
+  DIVISION_ID: 'DIVISION_ID', // Div
+  PLANT_NAME: 'PLANT_NAME', // Plant Site
+  PLANT_ID: 'PLANT_ID', // Plant
+  ITEM_ID: 'ITEM_ID', // Material
+  ITEM_DESCRIPTION: 'ITEM_DESCRIPTION', // Description
+  ITEM_UOM: 'ITEM_UOM', // Unit
   QUANTITY: 'QUANTITY', // 상세토글 트리거 헤더(더블클릭)
   UNRESTRICTED_QTY: 'UNRESTRICTED_QTY',
   BLOCKED_STOCK: 'BLOCKED_STOCK',
@@ -107,18 +126,10 @@ export const AGING_COLUMNS: readonly string[] = Array.from({ length: 13 }, (_, i
   n => AGING_SUFFIXES.map(sfx => `M${n}_${sfx}`)
 );
 
-// 선두 그룹 컬럼 세로 병합(SmartColMerge, design 03 §3 #8 / cs:362). AS-IS SmartColMerge 는 인자 없이
-//   호출되고 per-column 병합 정책은 FarPoint 스프레드 템플릿에 있어 .cs/designer/메타에서 추출 불가
-//   (SCM_MST_SHEET_COLUMNS 에도 merge 플래그 없음 — FIXED_FLAG 만 존재) → 설계가 명시한 선두 그룹
-//   (DIVISION_ID/PLANT_NAME/PLANT_ID …)에 선두 기간 컬럼(YYYYMM/YYYYMMDD)을 더해 적용한다.
-//   공용 CustomMergeManager 는 좌측 누적 키 방식이라 선두 연속 컬럼에만 유효(grid-behavior-parity §1.3).
-export const MERGE_COLUMNS: ReadonlySet<string> = new Set([
-  COL.YYYYMM,
-  COL.YYYYMMDD,
-  COL.DIVISION_ID,
-  COL.PLANT_NAME,
-  COL.PLANT_ID,
-]);
+// 세로 병합(SmartColMerge) — AS-IS 관측(사용자 2026-10-21): 월마감=YY.MM(YYYYMM)만 /
+//   일별=YY.MM·YY.MM.DD·DIV·Plant Site·Plant·Material·Description·Unit 까지
+//        (YYYYMM/YYYYMMDD/DIVISION_ID/PLANT_NAME/PLANT_ID/ITEM_ID/ITEM_DESCRIPTION/ITEM_UOM).
+//   병합 세트는 그리드(EndingInventoryGrid)에 둔다. 빈 셀은 미병합(데이터 없으면 병합안함, CustomMergeManager 기본).
 
 // 조건부 셀 배경색(Yellow) 대상 — USE_CELL_CF_BOM='Y' 행의 두 컬럼(design 03 §3 #4/5, cs:256/257).
 export const CELL_CF_YELLOW_COLUMNS: readonly string[] = [

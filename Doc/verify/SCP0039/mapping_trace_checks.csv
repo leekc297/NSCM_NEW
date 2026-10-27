@@ -1,0 +1,695 @@
+﻿row_id,source,check,instance,result
+`FindButton()` → `FindDataAll()`,FE 대조표,X-LOC,X-LOC|ROW:`FindButton()` → `FindDataAll()`,FAIL
+`FindButton()` → `FindDataAll()`,FE 대조표,A1,A1|ROW:`FindButton()` → `FindDataAll()`,REVIEW
+`FindButton()` → `FindDataAll()`,FE 대조표,A6,A6|ROW:`FindButton()` → `FindDataAll()`,REVIEW
+`FindButton()` → `FindDataAll()`,FE 대조표,F4,F4|ROW:`FindButton()` → `FindDataAll()`,REVIEW
+`FindButton()` → `FindDataAll()`,FE 대조표,DB-SYN,DB-SYN|ROW:`FindButton()` → `FindDataAll()`,REVIEW
+`FindButton()` → `FindDataAll()`,FE 대조표,G1,G1|ROW:`FindButton()` → `FindDataAll()`,REVIEW
+`FindButton()` → `FindDataAll()`,FE 대조표,J2,J2|SCREEN,NOT_RUN
+`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),FE 대조표,X-LOC,X-LOC|ROW:`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),FAIL
+`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),FE 대조표,F1,F1|SCREEN,NOT_RUN
+`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),FE 대조표,F2,F2|SCREEN,NOPATH
+`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),FE 대조표,J2,J2|SCREEN,NOT_RUN
+`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),FE 대조표,D4,D4|ROW:`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),NA
+`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),FE 대조표,D6,D6|SCREEN,NOT_RUN
+`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),FE 대조표,F5,F5|SCREEN,NOT_RUN
+`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),FE 대조표,D1,D1|ROW:`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),REVIEW
+`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),FE 대조표,D3,D3|ROW:`InsertButton/EditButton/DeleteButton/SaveButton`(본문 공백),REVIEW
+`cboDivision` (`BLUtils.GetDivisionWithoutEE`),FE 대조표,X-LOC,X-LOC|ROW:`cboDivision` (`BLUtils.GetDivisionWithoutEE`),FAIL
+`cboDivision` (`BLUtils.GetDivisionWithoutEE`),FE 대조표,B4,B4|COND:cboDivision,NOPATH
+`cboDivision` (`BLUtils.GetDivisionWithoutEE`),FE 대조표,B3,B3|COND:cboDivision,TODO
+"`clbPlanGroup` (SCP0121 Tables[3], `DBUtils.Filter`)",FE 대조표,X-LOC,"X-LOC|ROW:`clbPlanGroup` (SCP0121 Tables[3], `DBUtils.Filter`)",FAIL
+"`clbPlanGroup` (SCP0121 Tables[3], `DBUtils.Filter`)",FE 대조표,G1,G1|COND:clbPlanGroup,NOT_RUN
+"`clbPlanGroup` (SCP0121 Tables[3], `DBUtils.Filter`)",FE 대조표,A1,"A1|ROW:`clbPlanGroup` (SCP0121 Tables[3], `DBUtils.Filter`)",REVIEW
+"`clbPlanGroup` (SCP0121 Tables[3], `DBUtils.Filter`)",FE 대조표,J2,J2|SCREEN,NOT_RUN
+`ClbDivision_SelectedIndexChanged` → `ClearSheet + RefreshPl,FE 대조표,X-LOC,X-LOC|ROW:`ClbDivision_SelectedIndexChanged` → `ClearSheet + RefreshPl,FAIL
+`ClbDivision_SelectedIndexChanged` → `ClearSheet + RefreshPl,FE 대조표,C1,C1|ROW:`ClbDivision_SelectedIndexChanged` → `ClearSheet + RefreshPl,REVIEW
+`ClbDivision_SelectedIndexChanged` → `ClearSheet + RefreshPl,FE 대조표,C4,C4|ROW:`ClbDivision_SelectedIndexChanged` → `ClearSheet + RefreshPl,NA
+`txtItemId + btnItemId` → `DM0002_ItembyDivisionPopupEx`,FE 대조표,X-LOC,X-LOC|ROW:`txtItemId + btnItemId` → `DM0002_ItembyDivisionPopupEx`,FAIL
+`txtItemId + btnItemId` → `DM0002_ItembyDivisionPopupEx`,FE 대조표,H6,H6|COND:txtItemId,NOT_RUN
+`txtItemId + btnItemId` → `DM0002_ItembyDivisionPopupEx`,FE 대조표,H6,H6|BTN:btnItemId,NOPATH
+`txtItemId + btnItemId` → `DM0002_ItembyDivisionPopupEx`,FE 대조표,G5,G5|COND:txtItemId,NOPATH
+`txtItemId + btnItemId` → `DM0002_ItembyDivisionPopupEx`,FE 대조표,G5,G5|BTN:btnItemId,NOPATH
+`txtItemId + btnItemId` → `DM0002_ItembyDivisionPopupEx`,FE 대조표,M4,M4|COND:txtItemId,NOT_RUN
+`txtItemId + btnItemId` → `DM0002_ItembyDivisionPopupEx`,FE 대조표,M4,M4|BTN:btnItemId,NOT_RUN
+`InsertBaseRow()` (lookup MASTER_VALIDATION seed),FE 대조표,X-LOC,X-LOC|ROW:`InsertBaseRow()` (lookup MASTER_VALIDATION seed),FAIL
+`InsertBaseRow()` (lookup MASTER_VALIDATION seed),FE 대조표,B4,B4|ROW:`InsertBaseRow()` (lookup MASTER_VALIDATION seed),REVIEW
+`InsertBaseRow()` (lookup MASTER_VALIDATION seed),FE 대조표,B3,B3|ROW:`InsertBaseRow()` (lookup MASTER_VALIDATION seed),REVIEW
+`InsertBaseRow()` (lookup MASTER_VALIDATION seed),FE 대조표,E3,E3|ROW:`InsertBaseRow()` (lookup MASTER_VALIDATION seed),NA
+`InsertBaseRow()` (lookup MASTER_VALIDATION seed),FE 대조표,E4,E4|ROW:`InsertBaseRow()` (lookup MASTER_VALIDATION seed),REVIEW
+`SpdMain_CellClick` QUERY 컬럼 → `FindData`,FE 대조표,X-LOC,X-LOC|ROW:`SpdMain_CellClick` QUERY 컬럼 → `FindData`,FAIL
+`SpdMain_CellClick` QUERY 컬럼 → `FindData`,FE 대조표,A1,A1|SP:PKG_SCP0039,REVIEW
+`SpdMain_CellClick` QUERY 컬럼 → `FindData`,FE 대조표,A6,A6|SP:PKG_SCP0039,NOT_RUN
+`SpdMain_CellClick` QUERY 컬럼 → `FindData`,FE 대조표,F4,F4|SP:PKG_SCP0039,NOT_RUN
+`SpdMain_CellClick` QUERY 컬럼 → `FindData`,FE 대조표,DB-SYN,DB-SYN|SP:PKG_SCP0039,NOPATH
+`SpdMain_CellClick` OPEN 컬럼 → `GoPage`,FE 대조표,X-LOC,X-LOC|ROW:`SpdMain_CellClick` OPEN 컬럼 → `GoPage`,FAIL
+`SpdMain_CellClick` OPEN 컬럼 → `GoPage`,FE 대조표,X-ROW,X-ROW|ENTRY:`SpdMain_CellClick` OPEN 컬럼 → `GoPage`,REVIEW
+`SpdMain_CellClick` 기타 → `ChangeActiveSheet`,FE 대조표,X-LOC,X-LOC|ROW:`SpdMain_CellClick` 기타 → `ChangeActiveSheet`,FAIL
+`SpdMain_CellClick` 기타 → `ChangeActiveSheet`,FE 대조표,D1,D1|COL:CONSTRAINTS01,NOT_RUN
+`SpdMain_CellClick` 기타 → `ChangeActiveSheet`,FE 대조표,D3,D3|COL:CONSTRAINTS01,NOT_RUN
+`CONSTRAINTS01` `Const:...^PlanGroup` 파싱,FE 대조표,X-LOC,X-LOC|ROW:`CONSTRAINTS01` `Const:...^PlanGroup` 파싱,FAIL
+`CONSTRAINTS01` `Const:...^PlanGroup` 파싱,FE 대조표,X-ROW,X-ROW|ENTRY:`CONSTRAINTS01` `Const:...^PlanGroup` 파싱,REVIEW
+`FindDataAll` `Div:xx` 행 skip,FE 대조표,X-LOC,X-LOC|ROW:`FindDataAll` `Div:xx` 행 skip,FAIL
+`FindDataAll` `Div:xx` 행 skip,FE 대조표,A1,A1|ROW:`FindDataAll` `Div:xx` 행 skip,REVIEW
+`FindDataAll` `Div:xx` 행 skip,FE 대조표,A6,A6|ROW:`FindDataAll` `Div:xx` 행 skip,REVIEW
+`FindDataAll` `Div:xx` 행 skip,FE 대조표,F4,F4|ROW:`FindDataAll` `Div:xx` 행 skip,REVIEW
+`FindDataAll` `Div:xx` 행 skip,FE 대조표,DB-SYN,DB-SYN|ROW:`FindDataAll` `Div:xx` 행 skip,REVIEW
+`FindDataAll` `Div:xx` 행 skip,FE 대조표,G1,G1|ROW:`FindDataAll` `Div:xx` 행 skip,REVIEW
+`FindDataAll` `Div:xx` 행 skip,FE 대조표,J2,J2|SCREEN,NOT_RUN
+`LockColumn(0..max)` siMain/siProjectRoute,FE 대조표,X-LOC,X-LOC|ROW:`LockColumn(0..max)` siMain/siProjectRoute,FAIL
+`LockColumn(0..max)` siMain/siProjectRoute,FE 대조표,A5,A5|COL:QUERY,NOT_RUN
+`LockColumn(0..max)` siMain/siProjectRoute,FE 대조표,A5,A5|COL:OPEN,NOT_RUN
+`LockColumn(0..max)` siMain/siProjectRoute,FE 대조표,H5,H5|COL:QUERY,NOT_RUN
+`LockColumn(0..max)` siMain/siProjectRoute,FE 대조표,H5,H5|COL:OPEN,NOT_RUN
+`LockColumn(0..max)` siMain/siProjectRoute,FE 대조표,H2,H2|COL:QUERY,NOT_RUN
+`LockColumn(0..max)` siMain/siProjectRoute,FE 대조표,H2,H2|COL:OPEN,NOT_RUN
+`LockColumn(0..max)` siMain/siProjectRoute,FE 대조표,D1,D1|COL:QUERY,NOT_RUN
+`LockColumn(0..max)` siMain/siProjectRoute,FE 대조표,D1,D1|COL:OPEN,NOT_RUN
+`LockColumn(0..max)` siMain/siProjectRoute,FE 대조표,D3,D3|COL:QUERY,NOT_RUN
+`LockColumn(0..max)` siMain/siProjectRoute,FE 대조표,D3,D3|COL:OPEN,NOT_RUN
+`SetCalendar`/`AddNumColumn`(동적 월컬럼),FE 대조표,X-NOTIMPL,X-NOTIMPL|ROW:`SetCalendar`/`AddNumColumn`(동적 월컬럼),FAIL
+`SetCalendar`/`AddNumColumn`(동적 월컬럼),FE 대조표,X-ROW,X-ROW|ENTRY:`SetCalendar`/`AddNumColumn`(동적 월컬럼),BLOCKED
+`IsPopup` 임베드 변형(Plan Control 호출),FE 대조표,X-NOTIMPL,X-NOTIMPL|ROW:`IsPopup` 임베드 변형(Plan Control 호출),FAIL
+`IsPopup` 임베드 변형(Plan Control 호출),FE 대조표,H6,H6|ROW:`IsPopup` 임베드 변형(Plan Control 호출),BLOCKED
+`IsPopup` 임베드 변형(Plan Control 호출),FE 대조표,G5,G5|ROW:`IsPopup` 임베드 변형(Plan Control 호출),BLOCKED
+`IsPopup` 임베드 변형(Plan Control 호출),FE 대조표,M4,M4|ROW:`IsPopup` 임베드 변형(Plan Control 호출),BLOCKED
+COMMON:UC-01,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-01,REVIEW
+COMMON:UC-02,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-02,REVIEW
+COMMON:UC-03,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-03,PASS
+COMMON:UC-04,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-04,REVIEW
+COMMON:UC-05,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-05,REVIEW
+COMMON:UC-06,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-06,REVIEW
+COMMON:UC-07,FE 대조표,X-REASON,X-REASON|ROW:COMMON:UC-07,REVIEW
+ACT:SCP0039_ValidationMaster..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster..ctor:143:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster..ctor:146:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster..ctor:152:3,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster..ctor:154:4,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster..ctor:154:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster..ctor,REVIEW
+ACT:SCP0039_ValidationMaster..ctor:155:5,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster..ctor:157:6,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster..ctor:158:7,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster..ctor:161:8,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster.BtnSearch_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.BtnSearch_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.BtnSearch_Click:1340:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.BtnSearch_Click:1340:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.BtnSearch_Click:1342:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.BtnSearch_Click:1342:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged,REVIEW
+ACT:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged:1270:1,AS-IS 액션,C2,C2|ENTRY:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged,NA
+ACT:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged:1270:1,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged,REVIEW
+ACT:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged:1270:1,AS-IS 액션,C6,C6|ENTRY:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged,NA
+ACT:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged:1271:2,AS-IS 액션,C2,C2|ENTRY:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged,NA
+ACT:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged:1271:2,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged,REVIEW
+ACT:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged:1271:2,AS-IS 액션,C6,C6|ENTRY:SCP0039_ValidationMaster.ClbDivision_SelectedIndexChanged,NA
+ACT:SCP0039_ValidationMaster.ClbPlanGroup_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.ClbPlanGroup_SelectedIndexChanged,REVIEW
+ACT:SCP0039_ValidationMaster.ClbPlanGroup_SelectedIndexChanged:1282:1,AS-IS 액션,C2,C2|ENTRY:SCP0039_ValidationMaster.ClbPlanGroup_SelectedIndexChanged,NA
+ACT:SCP0039_ValidationMaster.ClbPlanGroup_SelectedIndexChanged:1282:1,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.ClbPlanGroup_SelectedIndexChanged,REVIEW
+ACT:SCP0039_ValidationMaster.ClbPlanGroup_SelectedIndexChanged:1282:1,AS-IS 액션,C6,C6|ENTRY:SCP0039_ValidationMaster.ClbPlanGroup_SelectedIndexChanged,NA
+ACT:SCP0039_ValidationMaster.ClearSheet,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.ClearSheet,REVIEW
+ACT:SCP0039_ValidationMaster.ClearSheet:1222:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.ClearSheet,REVIEW
+ACT:SCP0039_ValidationMaster.ClearSheet:1224:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.ClearSheet,REVIEW
+ACT:SCP0039_ValidationMaster.ClearSheet:1224:2,AS-IS 액션,C3,C3|COL:COUNT,NOT_RUN
+ACT:SCP0039_ValidationMaster.ClearSheet:1226:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.ClearSheet,REVIEW
+ACT:SCP0039_ValidationMaster.ClearSheet:1227:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.ClearSheet,REVIEW
+ACT:SCP0039_ValidationMaster.ClearSheet:1229:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.ClearSheet,REVIEW
+ACT:SCP0039_ValidationMaster.ClearSheet:1232:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.ClearSheet,REVIEW
+ACT:SCP0039_ValidationMaster.CreateSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.CreateSpread,REVIEW
+ACT:SCP0039_ValidationMaster.CreateSpread:269:1,AS-IS 액션,A5,A5|ENTRY:SCP0039_ValidationMaster.CreateSpread,REVIEW
+ACT:SCP0039_ValidationMaster.CreateSpread:269:1,AS-IS 액션,H2,H2|ENTRY:SCP0039_ValidationMaster.CreateSpread,REVIEW
+ACT:SCP0039_ValidationMaster.CreateSpread:269:1,AS-IS 액션,H5,H5|ENTRY:SCP0039_ValidationMaster.CreateSpread,REVIEW
+ACT:SCP0039_ValidationMaster.CreateSpread:269:1,AS-IS 액션,D5,D5|ENTRY:SCP0039_ValidationMaster.CreateSpread,NA
+ACT:SCP0039_ValidationMaster.CreateSpread:270:2,AS-IS 액션,A5,A5|ENTRY:SCP0039_ValidationMaster.CreateSpread,REVIEW
+ACT:SCP0039_ValidationMaster.CreateSpread:270:2,AS-IS 액션,H2,H2|ENTRY:SCP0039_ValidationMaster.CreateSpread,REVIEW
+ACT:SCP0039_ValidationMaster.CreateSpread:270:2,AS-IS 액션,H5,H5|ENTRY:SCP0039_ValidationMaster.CreateSpread,REVIEW
+ACT:SCP0039_ValidationMaster.CreateSpread:270:2,AS-IS 액션,D5,D5|ENTRY:SCP0039_ValidationMaster.CreateSpread,NA
+ACT:SCP0039_ValidationMaster.CreateSpread:272:3,AS-IS 액션,A5,A5|ENTRY:SCP0039_ValidationMaster.CreateSpread,REVIEW
+ACT:SCP0039_ValidationMaster.CreateSpread:272:3,AS-IS 액션,H2,H2|ENTRY:SCP0039_ValidationMaster.CreateSpread,REVIEW
+ACT:SCP0039_ValidationMaster.CreateSpread:272:3,AS-IS 액션,H5,H5|ENTRY:SCP0039_ValidationMaster.CreateSpread,REVIEW
+ACT:SCP0039_ValidationMaster.CreateSpread:272:3,AS-IS 액션,D5,D5|ENTRY:SCP0039_ValidationMaster.CreateSpread,NA
+ACT:SCP0039_ValidationMaster.Dispose,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.Dispose:16:1,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.Dispose:18:2,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.Dispose:20:3,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.FindButton,REVIEW
+ACT:SCP0039_ValidationMaster.FindButton,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindButton,REVIEW
+ACT:SCP0039_ValidationMaster.FindButton,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindButton,REVIEW
+ACT:SCP0039_ValidationMaster.FindButton,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindButton,REVIEW
+ACT:SCP0039_ValidationMaster.FindButton:484:1,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindButton,REVIEW
+ACT:SCP0039_ValidationMaster.FindButton:484:1,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindButton,REVIEW
+ACT:SCP0039_ValidationMaster.FindButton:484:1,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindButton,REVIEW
+ACT:SCP0039_ValidationMaster.FindButton:484:1,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindButton,REVIEW
+ACT:SCP0039_ValidationMaster.FindData,AS-IS 액션,G1,G1|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindData,AS-IS 액션,G1,G1|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindData,AS-IS 액션,G1,G1|COND:txtItemId,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindData,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:589:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:592:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:594:3,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:594:3,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:594:3,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:594:3,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:595:4,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:595:4,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:595:4,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:595:4,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:596:5,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:596:5,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:596:5,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:596:5,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:598:6,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:598:6,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:598:6,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:598:6,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:600:7,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:600:7,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:600:7,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:600:7,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:601:8,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:601:8,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:601:8,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:601:8,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:606:9,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:606:9,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:606:9,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:606:9,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:609:10,AS-IS 액션,G1,G1|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindData:612:11,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:612:11,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:612:11,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:612:11,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:617:12,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:617:12,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:617:12,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:617:12,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:618:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:619:14,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:621:15,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindData:623:16,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:625:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:626:18,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:626:18,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:626:18,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:626:18,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:627:19,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:627:19,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:627:19,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:627:19,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:629:20,AS-IS 액션,G1,G1|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindData:630:21,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:630:21,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:630:21,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:630:21,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:632:22,AS-IS 액션,G1,G1|COND:txtItemId,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindData:633:23,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:633:23,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:633:23,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:633:23,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:635:24,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:637:25,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:637:25,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:637:25,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:637:25,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:642:26,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:642:26,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:642:26,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:642:26,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:644:27,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:644:27,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:644:27,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:644:27,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:646:28,AS-IS 액션,C3,C3|COL:COUNT,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindData:646:28,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:648:29,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:649:30,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:651:31,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:651:31,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:651:31,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:651:31,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:652:32,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:779:33,AS-IS 액션,C3,C3|COL:COUNT,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindData:779:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:783:34,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:783:34,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:783:34,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:783:34,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:785:35,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:785:35,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:785:35,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:785:35,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:788:36,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:788:36,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:788:36,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:788:36,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:789:37,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:789:37,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:789:37,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:789:37,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:794:38,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:794:38,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:794:38,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindData:794:38,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindData,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll,AS-IS 액션,G1,G1|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindDataAll,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:537:1,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:537:1,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:537:1,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:537:1,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:539:2,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:539:2,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:539:2,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:539:2,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:540:3,AS-IS 액션,C3,C3|COL:COUNT,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindDataAll:540:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:544:4,AS-IS 액션,G1,G1|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.FindDataAll:545:5,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:545:5,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:545:5,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:545:5,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:546:6,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:546:6,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:546:6,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:546:6,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:548:7,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:548:7,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:548:7,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:548:7,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:550:8,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:550:8,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:550:8,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:550:8,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:552:9,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:552:9,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:552:9,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:552:9,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:556:10,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:556:10,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:556:10,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:556:10,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:557:11,AS-IS 액션,G1,G1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:557:11,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:557:11,AS-IS 액션,A6,A6|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.FindDataAll:557:11,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.FindDataAll,REVIEW
+ACT:SCP0039_ValidationMaster.Form_Load,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.Form_Load,REVIEW
+ACT:SCP0039_ValidationMaster.Form_Load,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.Form_Load:167:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.Form_Load:168:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.Form_Load:169:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.Form_Load:171:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.Form_Load:173:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.Form_Load:175:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.Form_Load:179:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.GetDicToValue,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:564:1,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:564:1,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:565:2,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:565:2,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:567:3,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:567:3,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:569:4,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:569:4,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:570:5,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:570:5,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:572:6,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:572:6,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:581:7,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:581:7,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:583:8,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetDicToValue:583:8,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetDicToValue,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:241:1,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:241:1,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:242:2,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:242:2,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:244:3,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:244:3,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:246:4,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.GetSearchInfo:248:5,AS-IS 액션,F4,F4|SP:P_SCP0121_GET_SEARCH_INFO,NOT_RUN
+ACT:SCP0039_ValidationMaster.GetSearchInfo:248:5,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0121_GET_SEARCH_INFO,PASS
+ACT:SCP0039_ValidationMaster.GetSearchInfo:250:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:251:7,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:251:7,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:254:8,AS-IS 액션,F4,F4|SP:P_SCP0121_GET_SEARCH_INFO,NOT_RUN
+ACT:SCP0039_ValidationMaster.GetSearchInfo:254:8,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0121_GET_SEARCH_INFO,PASS
+ACT:SCP0039_ValidationMaster.GetSearchInfo:255:9,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:255:9,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:258:10,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GetSearchInfo:258:10,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.GetSearchInfo,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1138:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1139:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1140:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1140:3,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1140:3,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1142:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1142:4,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.GoPage:1144:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1144:5,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1144:5,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1145:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1146:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1147:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1148:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1150:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1150:10,AS-IS 액션,F4,F4|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1150:10,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1152:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1159:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1161:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.GoPage:1165:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.GoPage,REVIEW
+ACT:SCP0039_ValidationMaster.InitControls,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls,AS-IS 액션,G6,G6|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls,AS-IS 액션,G4,G4|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:193:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:195:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:196:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:196:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InitControls,REVIEW
+ACT:SCP0039_ValidationMaster.InitControls:198:4,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:198:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:198:4,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:198:4,AS-IS 액션,C1,C1|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:198:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InitControls,REVIEW
+ACT:SCP0039_ValidationMaster.InitControls:201:5,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:201:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:201:5,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:203:6,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:203:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:203:6,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:203:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InitControls,REVIEW
+ACT:SCP0039_ValidationMaster.InitControls:206:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:207:8,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:208:9,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:210:10,AS-IS 액션,G6,G6|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:210:10,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:210:10,AS-IS 액션,G4,G4|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:212:11,AS-IS 액션,G6,G6|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:212:11,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:212:11,AS-IS 액션,G4,G4|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:212:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InitControls,REVIEW
+ACT:SCP0039_ValidationMaster.InitControls:214:12,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:215:13,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:216:14,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:216:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InitControls,REVIEW
+ACT:SCP0039_ValidationMaster.InitControls:217:15,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:217:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InitControls,REVIEW
+ACT:SCP0039_ValidationMaster.InitControls:219:16,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:219:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InitControls,REVIEW
+ACT:SCP0039_ValidationMaster.InitControls:223:17,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:224:18,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:225:19,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:225:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InitControls,REVIEW
+ACT:SCP0039_ValidationMaster.InitControls:226:20,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:226:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InitControls,REVIEW
+ACT:SCP0039_ValidationMaster.InitControls:228:21,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitControls:228:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InitControls,REVIEW
+ACT:SCP0039_ValidationMaster.InitEvent,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster.InitEvent,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent,AS-IS 액션,G6,G6|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent,AS-IS 액션,G4,G4|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent,AS-IS 액션,G4,G4|BTN:btnSearch,NOPATH
+ACT:SCP0039_ValidationMaster.InitEvent:437:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster.InitEvent:437:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent:444:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster.InitEvent:444:2,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent:444:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent:444:2,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent:445:3,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster.InitEvent:445:3,AS-IS 액션,G6,G6|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent:445:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent:445:3,AS-IS 액션,G4,G4|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent:446:4,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster.InitEvent:446:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitEvent:446:4,AS-IS 액션,G4,G4|BTN:btnSearch,NOPATH
+ACT:SCP0039_ValidationMaster.InitEvent:447:5,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0039_ValidationMaster.InitEvent:447:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InitSpread,REVIEW
+ACT:SCP0039_ValidationMaster.InitSpread,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitSpread:380:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitSpread:382:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitSpread:383:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitSpread:384:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitSpread:386:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitSpread:426:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitSpread:427:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InitSpread:428:8,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.InsertBaseRow,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:801:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:804:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:805:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:807:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:808:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:809:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:810:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:811:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:812:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:813:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:814:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:815:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:817:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:818:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:820:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:823:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:825:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:827:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:828:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:829:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:830:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:831:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:832:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:833:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:834:25,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:839:26,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:840:27,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:840:28,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:842:29,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:844:30,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:845:31,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:846:32,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:847:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:848:34,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:849:35,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:850:36,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:851:37,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:852:38,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:859:39,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:861:40,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:861:40,AS-IS 액션,A1,A1|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:862:41,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:865:42,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:867:43,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:867:43,AS-IS 액션,C3,C3|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.InsertBaseRow:872:44,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:874:45,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:874:45,AS-IS 액션,C3,C3|COL:COUNT,NOT_RUN
+ACT:SCP0039_ValidationMaster.InsertBaseRow:875:46,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:876:47,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:878:48,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:879:49,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:880:50,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.InsertBaseRow:971:51,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.InsertBaseRow,REVIEW
+ACT:SCP0039_ValidationMaster.RefreshPlanGroupByDivision,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.RefreshPlanGroupByDivision,REVIEW
+ACT:SCP0039_ValidationMaster.RefreshPlanGroupByDivision:452:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.RefreshPlanGroupByDivision,REVIEW
+ACT:SCP0039_ValidationMaster.RefreshPlanGroupByDivision:453:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.RefreshPlanGroupByDivision,REVIEW
+ACT:SCP0039_ValidationMaster.RefreshPlanGroupByDivision:455:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.RefreshPlanGroupByDivision,REVIEW
+ACT:SCP0039_ValidationMaster.RefreshPlanGroupByDivision:455:3,AS-IS 액션,C1,C1|COND:clbPlanGroup,NOT_RUN
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1347:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1349:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1350:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1352:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1354:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1355:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1356:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1356:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1358:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1360:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1362:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1366:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing:1370:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SCP0039_ValidationMaster_FormClosing,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar,AS-IS 액션,C3,C3|COL:YYYYMM,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetCalendar,AS-IS 액션,C3,C3|COL:YYYYMM_NAME,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetCalendar,AS-IS 액션,E4,E4|COL:YYYYMM,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetCalendar,AS-IS 액션,E4,E4|COL:YYYYMM_NAME,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetCalendar:1238:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1239:2,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1239:2,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1240:3,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1240:3,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1242:4,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1242:4,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1243:5,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1243:5,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1245:6,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1245:6,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1247:7,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1247:7,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1248:8,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1248:8,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1251:9,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1251:9,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1252:10,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1252:10,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1253:11,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1253:11,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1255:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1257:13,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1257:13,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1259:14,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1259:14,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetCalendar:1261:15,AS-IS 액션,C3,C3|COL:YYYYMM,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetCalendar:1261:15,AS-IS 액션,E4,E4|COL:YYYYMM,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetCalendar:1262:16,AS-IS 액션,C3,C3|COL:YYYYMM_NAME,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetCalendar:1262:16,AS-IS 액션,E4,E4|COL:YYYYMM_NAME,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetCalendar:1264:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SetCalendar,REVIEW
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns,AS-IS 액션,C3,C3|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns,AS-IS 액션,C3,C3|COL:IMPACT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns,AS-IS 액션,C3,C3|COL:OPEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns,AS-IS 액션,E4,E4|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns,AS-IS 액션,E4,E4|COL:IMPACT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns,AS-IS 액션,E4,E4|COL:OPEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:461:1,AS-IS 액션,C3,C3|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:461:1,AS-IS 액션,C3,C3|COL:IMPACT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:461:1,AS-IS 액션,E4,E4|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:461:1,AS-IS 액션,E4,E4|COL:IMPACT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:463:2,AS-IS 액션,C3,C3|COL:IMPACT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:463:2,AS-IS 액션,E4,E4|COL:IMPACT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:464:3,AS-IS 액션,C3,C3|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:464:3,AS-IS 액션,E4,E4|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:465:4,AS-IS 액션,C3,C3|COL:OPEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:465:4,AS-IS 액션,E4,E4|COL:OPEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:469:5,AS-IS 액션,C3,C3|COL:IMPACT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:469:5,AS-IS 액션,E4,E4|COL:IMPACT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:470:6,AS-IS 액션,C3,C3|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:470:6,AS-IS 액션,E4,E4|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:471:7,AS-IS 액션,C3,C3|COL:OPEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:471:7,AS-IS 액션,E4,E4|COL:OPEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:474:8,AS-IS 액션,C3,C3|ENTRY:SCP0039_ValidationMaster.SetVisibleSheetColumns,REVIEW
+ACT:SCP0039_ValidationMaster.SetVisibleSheetColumns:474:8,AS-IS 액션,E4,E4|ENTRY:SCP0039_ValidationMaster.SetVisibleSheetColumns,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:984:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:985:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:987:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:989:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:989:4,AS-IS 액션,C3,C3|COL:COUNT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:989:4,AS-IS 액션,C3,C3|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:990:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:993:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:995:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:999:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1000:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1000:9,AS-IS 액션,A5,A5|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1000:9,AS-IS 액션,A5,A5|COL:OPEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1000:9,AS-IS 액션,H5,H5|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1000:9,AS-IS 액션,H5,H5|COL:OPEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1001:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1001:10,AS-IS 액션,A5,A5|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1001:10,AS-IS 액션,A5,A5|COL:OPEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1001:10,AS-IS 액션,H5,H5|COL:QUERY,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1001:10,AS-IS 액션,H5,H5|COL:OPEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1011:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1012:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1013:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1014:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1016:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1017:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1019:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1021:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1023:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1025:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1027:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1030:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1032:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1034:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1036:25,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellClick:1037:26,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.SpdMain_CellDoubleClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick,AS-IS 액션,M4,M4|COL:COUNT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick,AS-IS 액션,M4,M4|COL:SHEET_NAME,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick:1048:1,AS-IS 액션,H6,H6|ENTRY:SCP0039_ValidationMaster.SpdMain_CellDoubleClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick:1048:1,AS-IS 액션,G5,G5|ENTRY:SCP0039_ValidationMaster.SpdMain_CellDoubleClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick:1048:1,AS-IS 액션,M4,M4|ENTRY:SCP0039_ValidationMaster.SpdMain_CellDoubleClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick:1049:2,AS-IS 액션,H6,H6|ENTRY:SCP0039_ValidationMaster.SpdMain_CellDoubleClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick:1049:2,AS-IS 액션,G5,G5|ENTRY:SCP0039_ValidationMaster.SpdMain_CellDoubleClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick:1049:2,AS-IS 액션,M4,M4|ENTRY:SCP0039_ValidationMaster.SpdMain_CellDoubleClick,REVIEW
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick:1051:3,AS-IS 액션,M4,M4|COL:COUNT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick:1053:4,AS-IS 액션,M4,M4|COL:COUNT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick:1054:5,AS-IS 액션,M4,M4|COL:COUNT,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick:1054:5,AS-IS 액션,M4,M4|COL:SHEET_NAME,NOT_RUN
+ACT:SCP0039_ValidationMaster.SpdMain_CellDoubleClick:1056:6,AS-IS 액션,M4,M4|COL:COUNT,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1289:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1289:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1290:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1290:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1291:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1291:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1292:4,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1292:4,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1293:5,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1293:5,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1294:6,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1294:6,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1297:7,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1297:7,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1297:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1299:8,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1299:8,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1299:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1300:9,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1300:9,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1300:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1301:10,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1301:10,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1301:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1303:11,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1303:11,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1305:12,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1305:12,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1307:13,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1307:13,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.btnItemId_Click:1307:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1315:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1316:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1317:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1318:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1319:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1320:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1323:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1325:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1326:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1327:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1329:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1331:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.btnItemId_Click_1:1333:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.btnItemId_Click_1,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:512:1,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:512:1,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:513:2,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:513:2,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:514:3,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:514:3,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:516:4,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:516:4,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:518:5,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:520:6,AS-IS 액션,F4,F4|SP:SCM0003_GET_LOOKUP_MASTER_DETAIL,NOT_RUN
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:520:6,AS-IS 액션,DB-SYN,DB-SYN|SP:SCM0003_GET_LOOKUP_MASTER_DETAIL,NOPATH
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:522:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:523:8,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:523:8,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:526:9,AS-IS 액션,F4,F4|SP:SCM0003_GET_LOOKUP_MASTER_DETAIL,NOT_RUN
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:526:9,AS-IS 액션,DB-SYN,DB-SYN|SP:SCM0003_GET_LOOKUP_MASTER_DETAIL,NOPATH
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:527:10,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:527:10,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:530:11,AS-IS 액션,B4,B4|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW
+ACT:SCP0039_ValidationMaster.getLookupMasterValidation:530:11,AS-IS 액션,B3,B3|ENTRY:SCP0039_ValidationMaster.getLookupMasterValidation,REVIEW

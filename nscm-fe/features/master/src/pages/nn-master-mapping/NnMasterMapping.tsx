@@ -316,7 +316,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     void (async () => {
       try {
-        await apiClient.post(`/${MENU_ID}/main/SAVE/call-proc`, {
+        const res = await apiClient.post(`/${MENU_ID}/main/SAVE/call-proc`, {
           divisionId: searchCondition.divisionId,
           companyId: join('COMPANY_ID'),
           actType,
@@ -339,6 +339,16 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
           validFrom: join('VALID_START_DATE'),
           validTo: join('VALID_END_DATE'),
         });
+        // 500/403 은 공통 오류 인터셉터가 정상 응답으로 되돌리므로 status 를 직접 본다. code 는 200 으로
+        //   내려오는 실패까지 거르는 보조 판정(ErpEdiMaster · useSalesSiteProjectModelSave 와 같은 판정).
+        //   종전엔 응답을 보지 않아 같은 키 신규 행 ORA-00001(500 -9994 Sql Error)도 성공 알림이 떴다(갭분석 F-11, 2026-10-19).
+        if (res.status >= 400 || Number(res.data?.code)) {
+          void setAlert({
+            type: 'alert',
+            content: res.data?.message?.trim() || t('MSG00003', '_저장에 실패하였습니다.'),
+          });
+          return; // 편집/신규행 유지 — 사용자가 수정 후 재저장
+        }
         setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });
         clearInsertedRows();
         await refetch?.();

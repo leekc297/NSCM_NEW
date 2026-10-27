@@ -7,6 +7,7 @@ import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { ProgressIndicator } from '@shared/lges';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -128,6 +129,8 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [focusedSheet, setFocusedSheet] = useState<SHEETS>(SHEETS.SUMMARY);
 
   const [ssRefreshNonce, setSsRefreshNonce] = useState(0);
+  // Status Update 배치 실행 중 — 스피너 표시 + 재클릭 방지.
+  const [statusUpdating, setStatusUpdating] = useState(false);
   const [sspmRefreshNonce, setSspmRefreshNonce] = useState(0);
 
   const { data: summaryData, refetch: refetchSummary } = useTabProcQuery<MENU_ID, SHEETS.SUMMARY>({
@@ -236,7 +239,17 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   refetch() 직접 호출 — setSummaryFilters 는 filter 내용 동일(캐시) → 최신 미반영이므로.
   //   주의: refetch() 는 enabled 를 무시하고 실행되므로 Repair 는 filter 가 있을 때만 부른다.
   //   조회 직후(Summary 더블클릭 전)에는 filters[REPAIR] 가 없어 파라미터 없이 SP 가 나간다.
+  //   실행 전 확인창 + 실행 중 스피너 (통합테스트 요청 2026-10-14 — 배치가 길어 눌러도 반응이 없어 보였다).
+  //   AS-IS 는 확인창 없이 ProgressForm 만 띄운다(.cs ProgressForm L3004). 확인창은 TO-BE 추가 요청분이다.
+  //   문구는 등록된 MSG00033(실행하시겠습니까?) — 배치 실행이라 저장 확인(MSG00001)보다 뜻이 맞다.
   const handleStatusUpdate = async () => {
+    if (statusUpdating) return; // 실행 중 재클릭 방지
+    const confirmed = await setAlert({
+      type: 'confirm',
+      content: t('MSG00033', '_실행하시겠습니까?'),
+    });
+    if (!confirmed) return;
+    setStatusUpdating(true);
     try {
       await apiClient.post(`/${MENU_ID}/main/STATUS_UPDATE/call-proc`, {});
       void setToast({ type: 'success', message: 'Status Update 완료. 재조회합니다.' });
@@ -248,6 +261,8 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Status Update 실패';
       void setAlert({ type: 'alert', content: msg });
+    } finally {
+      setStatusUpdating(false);
     }
   };
 
@@ -670,6 +685,8 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
           </div>
         </Panel>
       </PanelGroup>
+      {/* Status Update 배치 실행 중 스피너 (AS-IS ProgressForm 대응). */}
+      <ProgressIndicator shape='circular' placement='parent' open={statusUpdating} />
     </>
   );
 };

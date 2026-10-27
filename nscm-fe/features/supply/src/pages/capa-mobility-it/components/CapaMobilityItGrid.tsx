@@ -60,7 +60,6 @@ export const CapaMobilityItGrid = ({
   bucketType,
   canEdit,
 }: Props) => {
-  const { t } = useTranslation();
   const { setAlert } = useMessageStore();
 
   const staticBindingSet = useMemo(() => new Set(staticColumns.map(c => c.colNm)), [staticColumns]);
@@ -73,7 +72,22 @@ export const CapaMobilityItGrid = ({
   const dataRef = useRef(data);
   dataRef.current = data;
 
-  const dynColMetas = useMemo(() => buildDynColMetas(data), [data]);
+  // 동적 컬럼 구조는 행의 동적 binding 키 집합에서만 나온다(셀 값과 무관). 저장→재조회처럼
+  //   값만 바뀌고 컬럼 구조가 같을 때 data 참조가 새로 와도 컬럼을 재생성하지 않도록, binding 키
+  //   시그니처가 바뀔 때만 메타를 새로 만든다. 재생성하면 columnGroups 가 새 배열이 되어 wijmo 가
+  //   컬럼을 통째로 다시 만들고, 그때 다단 헤더가 기본 높이로 부풀었다가 48px(아래 #93 effect)로
+  //   줄어 '그리드가 커졌다 줄어드는' 깜빡임이 저장마다 생긴다.
+  const dynBindingSig = useMemo(() => {
+    const set = new Set<string>();
+    for (const r of data) for (const k of Object.keys(r)) if (kindOf(k)) set.add(k);
+    return [...set].sort().join(',');
+  }, [data]);
+  const dynColMetas = useMemo(
+    () => buildDynColMetas(data),
+    // data 는 시그니처(컬럼 구조)로 대표한다 — 값만 바뀌면 메타는 참조를 그대로 유지한다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dynBindingSig]
+  );
   const hasDaily = useMemo(() => dynColMetas.some(m => m.kind === 'D'), [dynColMetas]);
   const dynamicColumns = useMemo<FlexGridColumnConfig[]>(
     () => buildDynamicColumns(dynColMetas, hasDaily),
@@ -136,7 +150,8 @@ export const CapaMobilityItGrid = ({
         const v = asStr((row as Record<string, unknown>)[binding]).trim().toUpperCase();
         if (v !== 'Y' && v !== 'N') {
           (row as Record<string, unknown>)[binding] = 'N';
-          void setAlert({ type: 'alert', content: t('MSG00000', '_[Y,N] only.') });
+          // AS-IS 하드코딩 리터럴(.cs:3621, 다국어 아님).
+          void setAlert({ type: 'alert', content: '[Y,N] 만 입력 가능합니다.' });
           sender.invalidate();
         } else if (v !== (row as Record<string, unknown>)[binding]) {
           (row as Record<string, unknown>)[binding] = v;

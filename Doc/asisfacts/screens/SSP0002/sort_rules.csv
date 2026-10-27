@@ -1,0 +1,13 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SSP0002,SQL,SSP0002_DELETE_SHIPMENT_REQUEST_DRAFTING,Doc\asisfacts\db\modules\dbo.SSP0002_DELETE_SHIPMENT_REQUEST_DRAFTING.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0002,SQL,SSP0002_GET_SHIPMENT_CHANGE_REQUEST_ADD,Doc\asisfacts\db\modules\dbo.SSP0002_GET_SHIPMENT_CHANGE_REQUEST_ADD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0002,SQL,SSP0002_GET_SHIPMENT_CHANGE_REQUEST,Doc\asisfacts\db\modules\dbo.SSP0002_GET_SHIPMENT_CHANGE_REQUEST.sql,129,IF ( @v_status   IS NOT NULL AND @v_status    != '') SET @mDQry = @mDQry + ' 					AND  a.shipment_status     IN ('+ @v_status   +')'+char(10);,"DIVISION_ID,ERP_SO_NO,ITEM_ID,PROJECT_CODE,FCST_TYPE,YYYYMMDD","SET @mDqry = @mDQry + ' ORDER BY a.division_id, a.erp_so_no, a.item_id, a.project_code, a.fcst_type, a.yyyymmdd     ' + char(10);",0,동적 SQL
+SSP0002,SQL,SSP0002_GET_SHIPMENT_REQUEST_DRAFTING,Doc\asisfacts\db\modules\dbo.SSP0002_GET_SHIPMENT_REQUEST_DRAFTING.sql,159,ELSE,"DIVISION_ID,ERP_SO_NO,SHIPMENT_STATUS,ITEM_ID,ETD","SET @mDqry = @mDQry + ' ORDER BY a.division_id, a.erp_so_no, a.shipment_status, a.item_id, etd	;                                         ' + char(10)",0,동적 SQL
+SSP0002,SQL,SSP0002_GET_SHIPMENT_REQUEST_DRAFTING,Doc\asisfacts\db\modules\dbo.SSP0002_GET_SHIPMENT_REQUEST_DRAFTING.sql,230,,NEW_SHIPMENT_DATE,ORDER BY new_shipment_date;,0,정적
+SSP0002,SQL,SCM0001_GET_SCP_DAY_PERIOD,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SCP_DAY_PERIOD.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0002,SQL,SSP0002_SAVE_SHIPMENT_REQUEST_DRAFTING,Doc\asisfacts\db\modules\dbo.SSP0002_SAVE_SHIPMENT_REQUEST_DRAFTING.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0002,SQL,SSP0002_GET_BOD_VALID_CHECK,Doc\asisfacts\db\modules\dbo.SSP0002_GET_BOD_VALID_CHECK.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0002,SQL,GET_DATE_RANGE_1MONTH,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SSP0002,SQL,SSP0002_GET_PLANT_SITE_CHECK,Doc\asisfacts\db\modules\dbo.SSP0002_GET_PLANT_SITE_CHECK.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0002,SQL,SSP0002_SAVE_SHIPMENT_CONFIRM_NEW,Doc\asisfacts\db\modules\dbo.SSP0002_SAVE_SHIPMENT_CONFIRM_NEW.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0002,SQL,SSP0002_GET_USER_INFO_LIST,Doc\asisfacts\db\modules\dbo.SSP0002_GET_USER_INFO_LIST.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

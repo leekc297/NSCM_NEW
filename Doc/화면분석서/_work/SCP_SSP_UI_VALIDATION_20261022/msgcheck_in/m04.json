@@ -1,0 +1,1333 @@
+[
+ {
+  "uid": "u62.jsonl:24",
+  "screen": "SSP0200",
+  "event": "화면 열기(OPEN)",
+  "seq": 1,
+  "item": "권한을 가진 Division 없음",
+  "asis_msg_id": "MSG00097",
+  "asis_msg_ko": "권한을 가진 Division이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "화면을 열 때 권한 Division 목록(MyDivision)이 0건이면 \"권한을 가진 Division이 없습니다.\"를 띄우고 조회조건 영역 전체를 잠근 뒤 나머지 초기화(콤보·기간·요청자 정보)를 모두 건너뜁니다. 권한 담당자에게 Division 권한을 요청해야 합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanForm.tsx L103, L138-317 — Division 후보 0건이면 조회조건 컨트롤을 비활성화(잠금)하지만 화면 열 때 메시지는 없음. 메시지는 Search 클릭 시 divisionId 공란이면 MSG00667('No authority assigned.') — ShipmentChangeRequestPlan.tsx L284-289. Shipment Date(PeriodField)는 비활성 prop 이 없어 잠기지 않음(Form L215-218 주석)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:25",
+  "screen": "SSP0200",
+  "event": "저장(SAVE)",
+  "seq": 1,
+  "item": "NEW:ERP 중단 기간 저장 차단",
+  "asis_msg_id": "MSG00267",
+  "asis_msg_ko": "하기 기간동안  ERP<>SSP간 인터페이스 변경적용으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다. \\n\\r기간 : {0}",
+  "asis_msg_args": [
+   "PERIOD(차단 기간)"
+  ],
+  "asis_msg_text": "",
+  "remark": "저장(F7/Save) 시 ERP 시스템 중단 기간 설정(FUNCTION_BLOCK, 화면코드 SSP0200)의 BLOCK_YN 이 Y 면 \"하기 기간동안 ERP 시스템 중단으로 SSP 출하요청 변경 및 승인 화면을 사용하실수 없습니다\"(기간 표시)를 띄우고 저장을 멈춥니다. 중단 기간이 끝난 뒤 다시 저장해야 합니다. Request Complete·Cancel 버튼에는 이 검사가 없습니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanSaveActions.ts L160-173, L275 — 같은 조건으로 차단(MSG00267 영문 fallback). 차이: 콤보 조회 실패/0행이면 'unknown' 안내 후 진행. TO-BE 는 Request Complete(L452)에도 이 게이트를 추가(AS-IS 에 없음)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:26",
+  "screen": "SSP0200",
+  "event": "저장(SAVE)",
+  "seq": 2,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "컬럼 라벨"
+  ],
+  "asis_msg_text": "",
+  "remark": "저장 시 추가(I)·수정(M) 행에서 라벨에 * 가 붙은 컬럼이 비어 있으면 \"{컬럼} 값은 필수 입력입니다\"를 띄우고 저장을 멈춥니다(첫 1건). Division 에 따라 숨긴 End Customer/Project Code 도 검사 대상인데, 행추가·New 경로가 숨는 쪽에 '-' 를 넣어 통과시킵니다(L2738-2748, L3398-3406). Shipment Qty 라벨은 조회 시 GetTerm(\"Shipment Confirm Qty*\")로 바뀌므로 Term 번역문에 * 가 없으면 필수 검사에서 빠질 수 있습니다(원문 확인 불",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanSaveActions.ts L294-380 — saveWithValidation(메타 기준 INPUT_TP_CD M/IM 또는 라벨 *)을 변경행(CRUD_TYPE 또는 EDIT_MAIN='Y') 전체에 적용. 차이: 숨긴 컬럼(division 토글 visible=false, utils/shipmentChangeRequestPlanColumns.ts L312-313)과 편집 불가 셀은 제외(packages/shared useSaveWithValidation.ts L25-60), 확인창(MSG00001) 뒤에 실행, 메시지 MSG00429 계열",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:30",
+  "screen": "SSP0200",
+  "event": "저장(SAVE)",
+  "seq": 6,
+  "item": "저장(처리) 대상 없음",
+  "asis_msg_id": "MSG00133",
+  "asis_msg_ko": "수정한 내용이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "프레임워크 검사(Action 표시 유무)를 통과해도, 화면이 조회 원본과 값을 직접 비교해 수정·추가된 행이 하나도 없다고 판단하면 \"수정한 내용이 없습니다.\"를 띄우고 저장을 멈춥니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanSaveActions.ts L260-272 — 같은 메시지(MSG00133)로 차단하나 판정 기준이 CRUD_TYPE/EDIT_MAIN 표시(값 원복 시 M 해제)이고 AS-IS 처럼 원본 6개 항목 값 비교는 하지 않음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:31",
+  "screen": "SSP0200",
+  "event": "저장(SAVE)",
+  "seq": 7,
+  "item": "상태·버전 제약(확정/마감/진행중)",
+  "asis_msg_id": "MSG00248",
+  "asis_msg_ko": "다른 사용자가 출하 계획 변경 요청을 한 ConfirmID가 존재합니다.\\n\\r[ CONFIRM ID : {0} ]",
+  "asis_msg_args": [
+   "Confirm ID 목록"
+  ],
+  "asis_msg_text": "",
+  "remark": "저장 시 추가·수정·삭제 표시 행마다 출하 상태를 조회해, 다른 사용자가 이미 변경요청한 Confirm ID 가 있으면 \"다른 사용자가 출하 계획 변경 요청을 한 ConfirmID가 존재합니다. [CONFIRM ID : …]\"를 띄우고 이어서 \"변경 실패\"를 띄운 뒤 저장을 멈춥니다. 같은 조회에서 아래 8·9번 조건도 함께 걸리면 메시지가 연달아 모두 뜹니다. 재조회해 최신 상태를 확인해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanPreChecks.ts L77-88, L137-145 — 같은 조건으로 차단(MSG01258). 차이: 첫 위반 1건만 안내, '변경 실패' 후속 안내 없음, 행마다 confirmId 를 초기화(AS-IS 는 EDIT_MAIN≠Y 행에서 직전 행 confirmId 가 남음)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:32",
+  "screen": "SSP0200",
+  "event": "저장(SAVE)",
+  "seq": 8,
+  "item": "NEW:확정계획 삭제(Qty 0) Confirm 포함",
+  "asis_msg_id": "MSG00249",
+  "asis_msg_ko": "확정계획이 삭제된(Qty:0) Confirm ID가 있습니다.\\n\\r재 조회하여 최신정보 확인 후 다시 시도 바랍니다.\\n\\r[ Confirm ID : {0} ]",
+  "asis_msg_args": [
+   "Confirm ID 목록"
+  ],
+  "asis_msg_text": "",
+  "remark": "저장 시 출하 상태 조회 결과 확정계획이 삭제된(수량 0) Confirm ID 가 있으면 \"확정계획이 삭제된(Qty:0) Confirm ID가 있습니다. 재 조회하여 최신정보 확인 후 다시 시도 바랍니다.\"를 띄우고 \"변경 실패\" 후 저장을 멈춥니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanPreChecks.ts L89-96 — 같은 조건으로 차단(MSG01259), 첫 위반 1건만 안내",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:33",
+  "screen": "SSP0200",
+  "event": "저장(SAVE)",
+  "seq": 9,
+  "item": "상태·버전 제약(확정/마감/진행중)",
+  "asis_msg_id": "MSG00189",
+  "asis_msg_ko": "In ERP, DO is created and can not request change. \\n\\rPlease cancel the generated DO and request a change.",
+  "asis_msg_args": [
+   "Confirm ID 목록"
+  ],
+  "asis_msg_text": "",
+  "remark": "저장 시 ERP 에서 DO 가 이미 생성된 Confirm ID 가 있으면 \"ERP에서 DO가 생성되어 변경요청 할수 없습니다. 생성된 DO를 취소하고 변경요청 해주시기 바랍니다.\"를 띄우고 \"변경 실패\" 후 저장을 멈춥니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanPreChecks.ts L97-104 — 같은 조건으로 차단(MSG01202), 첫 위반 1건만 안내",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:34",
+  "screen": "SSP0200",
+  "event": "저장(SAVE)",
+  "seq": 10,
+  "item": "NEW:동일 SO 일부만 조회됨",
+  "asis_msg_id": "MSG00247",
+  "asis_msg_ko": "동일 SO번호로 생성된 다른 건이 존재합니다.\\n\\r변경은 SO번호기준으로 동일하게 변경해야 합니다.\\n\\r[ SO NO : {0} ]",
+  "asis_msg_args": [
+   "SO No"
+  ],
+  "asis_msg_text": "",
+  "remark": "SO 번호가 있는 변경 행은 같은 SO 로 만들어진 확정 건이 모두 한 화면에 조회돼 있어야 합니다. DB 건수와 그리드 건수가 다르면 \"동일 SO번호로 생성된 다른 건이 존재합니다. 변경은 SO번호기준으로 동일하게 변경해야 합니다. [ SO NO : … ]\"를 띄우고 \"변경 실패\" 후 저장을 멈춥니다. 조회 조건을 넓혀 같은 SO 전체를 조회한 뒤 저장해야 합니다. 건수 조회가 실패해도 0건으로 보아 같은 메시지가 뜹니다(L4173).",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanPreChecks.ts L146-157 — 같은 조건으로 차단(MSG00247 영문 fallback). 조회 실패는 -1 로 보아 같은 차단",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:38",
+  "screen": "SSP0200",
+  "event": "실행(RUN) — Request Complete 버튼",
+  "seq": 1,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "GetTerm(\"Approval*\")"
+  ],
+  "asis_msg_text": "",
+  "remark": "Request Complete 버튼을 누르면 요청정보의 Approval 이(가) 비어 있으면 \"{항목} 값은 필수 입력입니다\"를 띄우고 요청을 멈춥니다. 검사 순서는 Approval → Title → Change Reason → Reason Detail 이며 첫 위반에서 멈춥니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanValidation.ts L33-53 · hooks/useShipmentChangeRequestPlanSaveActions.ts L413-418 — 같은 순서로 차단(MSG00614, Change Reason 은 MSG00429). ''/ALL/'-' 를 미선택으로 봄",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:39",
+  "screen": "SSP0200",
+  "event": "실행(RUN) — Request Complete 버튼",
+  "seq": 2,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "GetTerm(\"Title*\")"
+  ],
+  "asis_msg_text": "",
+  "remark": "Request Complete 버튼을 누르면 요청정보의 Title 이(가) 비어 있으면 \"{항목} 값은 필수 입력입니다\"를 띄우고 요청을 멈춥니다. 검사 순서는 Approval → Title → Change Reason → Reason Detail 이며 첫 위반에서 멈춥니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanValidation.ts L33-53 · hooks/useShipmentChangeRequestPlanSaveActions.ts L413-418 — 같은 순서로 차단(MSG00614, Change Reason 은 MSG00429). ''/ALL/'-' 를 미선택으로 봄",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:40",
+  "screen": "SSP0200",
+  "event": "실행(RUN) — Request Complete 버튼",
+  "seq": 3,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "GetTerm(\"Change Reason*\")"
+  ],
+  "asis_msg_text": "",
+  "remark": "Request Complete 버튼을 누르면 요청정보의 Change Reason 이(가) 첫 항목(ALL, 미선택)이면 \"{항목} 값은 필수 입력입니다\"를 띄우고 요청을 멈춥니다. 검사 순서는 Approval → Title → Change Reason → Reason Detail 이며 첫 위반에서 멈춥니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanValidation.ts L33-53 · hooks/useShipmentChangeRequestPlanSaveActions.ts L413-418 — 같은 순서로 차단(MSG00614, Change Reason 은 MSG00429). ''/ALL/'-' 를 미선택으로 봄",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:41",
+  "screen": "SSP0200",
+  "event": "실행(RUN) — Request Complete 버튼",
+  "seq": 4,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "GetTerm(\"Reason Detail*\")"
+  ],
+  "asis_msg_text": "",
+  "remark": "Request Complete 버튼을 누르면 요청정보의 Reason Detail 이(가) 비어 있으면 \"{항목} 값은 필수 입력입니다\"를 띄우고 요청을 멈춥니다. 검사 순서는 Approval → Title → Change Reason → Reason Detail 이며 첫 위반에서 멈춥니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanValidation.ts L33-53 · hooks/useShipmentChangeRequestPlanSaveActions.ts L413-418 — 같은 순서로 차단(MSG00614, Change Reason 은 MSG00429). ''/ALL/'-' 를 미선택으로 봄",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:42",
+  "screen": "SSP0200",
+  "event": "실행(RUN) — Request Complete 버튼",
+  "seq": 5,
+  "item": "0 초과 값만 허용",
+  "asis_msg_id": "MSG00202",
+  "asis_msg_ko": "0보다 큰 수를 입력하십시오.",
+  "asis_msg_args": [
+   "0"
+  ],
+  "asis_msg_text": "",
+  "remark": "Change Type 이 Plan 이 아닐 때(화면 고정값 Confirm) 하단 Change Request 그리드에서 새로 추가된 행(NEW_YN='Y')의 Qty 가 0 이하이면 \"0보다 큰 수를 입력하십시오.\"를 띄우고 요청을 멈춥니다. Qty 가 비어 있으면 숫자 변환 예외가 납니다(미처리).",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanValidation.ts L66-82 · SaveActions L435-438 — 같은 조건으로 차단(MSG01213). 빈 값은 건너뜀(예외 없음)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:43",
+  "screen": "SSP0200",
+  "event": "실행(RUN) — Request Complete 버튼",
+  "seq": 6,
+  "item": "하한값 미만",
+  "asis_msg_id": "MSG00201",
+  "asis_msg_ko": "현재일 기준 D+{0} 이전은 요청 할 수 없습니다. \\n\\r삭제 후 다시 요청하시기 바랍니다.",
+  "asis_msg_args": [
+   "CHANGE_REQ_DAY 일수"
+  ],
+  "asis_msg_text": "",
+  "remark": "하단 Change Request 각 행의 변경 출하일이 기준일(오늘 + CHANGE_REQ_DAY 일수, 현재 -56 이면 56일 전)보다 이전이면 \"현재일 기준 D+{0} 이전은 요청 할 수 없습니다. 삭제 후 다시 요청하시기 바랍니다.\"를 띄우고 요청을 멈춥니다. 날짜가 비어 있으면 변환 예외(미처리)가 납니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanValidation.ts L132-157 · SaveActions L440-444 — 같은 조건으로 차단(MSG01212). 날짜 해석 불가면 MSG01081 로 명시 차단(AS-IS 는 예외)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:44",
+  "screen": "SSP0200",
+  "event": "실행(RUN) — Request Complete 버튼",
+  "seq": 7,
+  "item": "상한값 초과",
+  "asis_msg_id": "MSG00194",
+  "asis_msg_ko": "변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.",
+  "asis_msg_args": [
+   "CHANGE_REQ_DAY 일수"
+  ],
+  "asis_msg_text": "",
+  "remark": "하단 각 행의 변경 출하일이 현재시각 + |CHANGE_REQ_DAY|일(예 56일 후)보다 늦으면 \"변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.\"를 띄우고 요청을 멈춥니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanValidation.ts L158-163 — 같은 조건으로 차단(MSG01206). 기준이 오늘 0시(startOf day)라 시각 단위 경계가 약간 다름",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:45",
+  "screen": "SSP0200",
+  "event": "실행(RUN) — Request Complete 버튼",
+  "seq": 8,
+  "item": "날짜 형식 오류",
+  "asis_msg_id": "MSG00049",
+  "asis_msg_ko": "유효한 날짜 형식이 아닙니다. {0}",
+  "asis_msg_args": [
+   ""
+  ],
+  "asis_msg_text": "",
+  "remark": "요청 저장 직전 하단 각 행의 변경 출하일이 날짜로 해석되지 않으면 \"유효한 날짜 형식이 아닙니다.\"를 띄우고 멈춥니다. 앞 단계(7번)에서 이미 날짜 변환을 거치므로 실제로는 거의 도달하지 않습니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/hooks/useShipmentChangeRequestPlanValidation.ts L141-150 — 날짜 해석 불가 시 MSG01081 로 차단",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:46",
+  "screen": "SSP0200",
+  "event": "팝업(POPUP) — SSP0200_ShipmentChangeRequestInsertPopup",
+  "seq": 1,
+  "item": "NEW:추가 건수 1~50 밖",
+  "asis_msg_id": "MSG00050",
+  "asis_msg_ko": "유효한 숫자 형식이 아닙니다. {0}",
+  "asis_msg_args": [
+   "입력값"
+  ],
+  "asis_msg_text": "",
+  "remark": "Insert(Multi) 팝업에서 OK 를 누를 때 입력한 건수가 정수가 아니거나 1~50 범위 밖이면 \"유효한 숫자 형식이 아닙니다. {입력값}\"을 띄우고 팝업을 닫지 않습니다. 1~50 사이 숫자를 입력해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/components/modals/InsertMultipleModal.tsx L40-57 — 같은 조건으로 차단(MSG00050), 입력란은 숫자만 받음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:48",
+  "screen": "SSP0200",
+  "event": "셀 클릭(CLICK) — Shipment Change Request",
+  "seq": 2,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "GetTerm(\"Incoterms\")"
+  ],
+  "asis_msg_text": "",
+  "remark": "수정모드에서 Trans Mode 칸을 클릭하면 운송모드 후보를 그 행의 Div·From·To·Incoterms 기준으로 다시 불러오는데, Incoterms 가 비어 있으면 \"Incoterms 값은 필수 입력입니다\"를 안내만 하고 진행은 막지 않습니다(후보는 이미 설정됨). Incoterms 를 먼저 골라야 맞는 운송모드가 나옵니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanMainGrid.tsx L213-221 — Incoterms 공란이면 MSG00098('Please select the Incoterms first.')을 띄우고 편집 진입 자체를 막음(AS-IS 는 안내만)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:49",
+  "screen": "SSP0200",
+  "event": "셀 클릭(CLICK) — Shipment Change Request(더블클릭)",
+  "seq": 1,
+  "item": "선행 입력값 미선택",
+  "asis_msg_id": "MSG00098",
+  "asis_msg_ko": "먼저 {0}을(를) 선택하십시오.",
+  "asis_msg_args": [
+   "GetTerm(\"Div\") / GetTerm(\"From Site\") / GetTerm(\"To Site\")"
+  ],
+  "asis_msg_text": "",
+  "remark": "새로 추가한 행의 Model 칸을 더블클릭하면 Div·From Site·To Site 를 순서대로 확인해 비어 있는 첫 항목에 대해 \"먼저 {항목}을(를) 선택하십시오.\"를 띄우고 Model 팝업을 열지 않습니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanMainGrid.tsx L507-520 — 같은 순서로 차단(MSG00098 영문 fallback). TO-BE 는 편집 가능 행(isRowEditable)일 때만 열림",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:52",
+  "screen": "SSP0200",
+  "event": "셀 입력(CHANGE) — 콤보 선택",
+  "seq": 2,
+  "item": "선행 입력값 미선택",
+  "asis_msg_id": "MSG00098",
+  "asis_msg_ko": "먼저 {0}을(를) 선택하십시오.",
+  "asis_msg_args": [
+   "GetTerm(\"Div*\") / GetTerm(\"From Site\") / GetTerm(\"To Site\") / GetTerm(\"Model*\")"
+  ],
+  "asis_msg_text": "",
+  "remark": "Incoterms 를 고를 때 Div·From Site·To Site·Model 중 비어 있는 첫 항목이 있으면 \"먼저 {항목}을(를) 선택하십시오.\"를 띄우고 방금 고른 Incoterms 를 지웁니다. 앞 항목을 먼저 채워야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanMainGrid.tsx L297-306 · utils/shipmentChangeRequestPlanDerive.ts L148-154 — 같은 순서로 차단 후 값 비움(라벨 'Div','Model' 에 * 없음)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:53",
+  "screen": "SSP0200",
+  "event": "셀 입력(CHANGE) — 콤보 선택",
+  "seq": 3,
+  "item": "참조 마스터 데이터 없음",
+  "asis_msg_id": "MSG00293",
+  "asis_msg_ko": "Div, From Site, To Site 에 해당되는 BOD(Trans mode, Incoterms) 정보가 유효하지 않습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Trans Mode 를 고를 때 이 행의 Div·From·To 에 해당하는 BOD 운송모드 정보가 조회되지 않은 상태(dtTransMode 없음)면 \"Div, From Site, To Site 에 해당되는 BOD(Trans mode, Incoterms) 정보가 유효하지 않습니다.\"를 띄우고 후속 처리를 하지 않습니다. 기준정보(BOD) 등록이 필요합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanMainGrid.tsx L222-231 — 후보 조회 결과 0건이면 편집 진입 시 MSG01296 로 차단(선택 후가 아니라 진입 시점), 미조회면 조용히 조회만",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:54",
+  "screen": "SSP0200",
+  "event": "셀 입력(CHANGE) — 콤보 선택",
+  "seq": 4,
+  "item": "선행 입력값 미선택",
+  "asis_msg_id": "MSG00098",
+  "asis_msg_ko": "먼저 {0}을(를) 선택하십시오.",
+  "asis_msg_args": [
+   "GetTerm(\"Shipmente Date\") / GetTerm(\"Incoterms\")"
+  ],
+  "asis_msg_text": "",
+  "remark": "Trans Mode 를 고를 때 Shipment Date 가 비어 있으면 \"먼저 Shipmente Date을(를) 선택하십시오.\"(원문 오타), Incoterms 가 비어 있으면 \"먼저 Incoterms을(를) 선택하십시오.\"를 띄우고 Trans Mode·BOD 를 지웁니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanMainGrid.tsx L313-322 · utils/shipmentChangeRequestPlanDerive.ts L157-161 — 같은 순서로 차단 후 값 비움(라벨 'Shipment Date' 로 오타 교정)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:55",
+  "screen": "SSP0200",
+  "event": "셀 입력(CHANGE) — 직접 입력",
+  "seq": 1,
+  "item": "하한값 미만",
+  "asis_msg_id": "MSG00194",
+  "asis_msg_ko": "변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.",
+  "asis_msg_args": [
+   "CHANGE_REQ_DAY 일수"
+  ],
+  "asis_msg_text": "",
+  "remark": "Shipment Date 를 입력할 때 기준일(오늘 + CHANGE_REQ_DAY 일수, 현재 -56 이면 56일 전)보다 이전이면 \"변경요청은 현재일 기준 D+{0} 출하일부터 가능합니다.\"를 띄우고 입력한 날짜를 지웁니다. 기준일 이후 날짜를 다시 입력해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanMainGrid.tsx L327-339 · hooks/useShipmentChangeRequestPlanValidation.ts L111-117 — 같은 조건으로 값 비움 + MSG01206. 기준일수 미조회면 검사 생략",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:56",
+  "screen": "SSP0200",
+  "event": "셀 입력(CHANGE) — 직접 입력",
+  "seq": 2,
+  "item": "선행 입력값 미선택",
+  "asis_msg_id": "MSG00287",
+  "asis_msg_ko": "Reason Code를 입력 해주세요",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Change Reason Detail 을 입력했는데 그 행의 Change Reason Code 가 '-' 이거나 비어 있으면 입력한 Detail 을 지우고 \"Reason Code를 먼저 입력해 주세요\" 취지의 메시지를 띄웁니다. Reason Code 를 먼저 골라야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanMainGrid.tsx L355-361 · utils/shipmentChangeRequestPlanDerive.ts L207-210 — 같은 조건으로 값 비움 + MSG00287(영문 fallback)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u62.jsonl:57",
+  "screen": "SSP0200",
+  "event": "셀 입력(CHANGE) — 직접 입력",
+  "seq": 3,
+  "item": "상태·버전 제약(확정/마감/진행중)",
+  "asis_msg_id": "MSG00189",
+  "asis_msg_ko": "In ERP, DO is created and can not request change. \\n\\rPlease cancel the generated DO and request a change.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "셀 값이 바뀐 행(같은 SO 전파로 바뀐 행 포함)의 ERP 상태가 'C'(DO 생성)면 \"ERP에서 DO가 생성되어 변경요청 할수 없습니다.\"를 안내합니다. 값은 되돌리지 않고 수정 표시(EDIT_MAIN) 처리만 건너뜁니다. 최종 차단은 저장 시 출하상태 검사(저장 9번)가 합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-request-plan/components/ShipmentChangeRequestPlanMainGrid.tsx L233-239 · utils/shipmentChangeRequestPlanEditLock.ts L23-36 — ERP 확정행은 편집 진입 자체를 MSG01202 로 막음. 같은 SO 전파로 값이 바뀌는 경우는 확인 없음(L374-402)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-request-plan"
+ },
+ {
+  "uid": "u61.jsonl:2",
+  "screen": "SSP0060",
+  "event": "조회(SEARCH)",
+  "seq": 1,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "항목명(Division 은 'Bucket' 으로 표시)"
+  ],
+  "asis_msg_text": "",
+  "remark": "조회(F5) 시 라벨에 * 가 붙은 Division·Company·Plan-date 콤보 중 비어 있거나 ALL 인 항목이 있으면 \"{항목} 값은 필수 입력입니다\" 를 띄우고 그 콤보로 커서를 옮긴 뒤 조회를 멈춥니다. Division 항목은 Designer 의 CustomizationFormText 가 'Bucket' 으로 잘못 들어가 있어 메시지에 'Bucket' 으로 표시됩니다. Period* 는 날짜 컨트롤이라 * 가 있어도 이 검사 대상이 아닙니다(아래 기간 검사가 별도). Division 컨트롤 이름이 clbDivisio",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L427-435 — Division/Company/Plan Date/Period 중 하나라도 비면 MSG00013(필수 입력) 알림 후 조회 중단. 메시지가 항목명 없는 공통 문구이고 커서 이동 없음, AS-IS 에 없는 Period 공란 차단 추가",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:4",
+  "screen": "SSP0060",
+  "event": "조회(SEARCH)",
+  "seq": 3,
+  "item": "날짜 형식 오류",
+  "asis_msg_id": "MSG00049",
+  "asis_msg_ko": "유효한 날짜 형식이 아닙니다. {0}",
+  "asis_msg_args": [
+   ""
+  ],
+  "asis_msg_text": "",
+  "remark": "조회 시 Period 시작/종료일이 비었거나 날짜 형식이 아니면 \"유효한 날짜 형식이 아닙니다.\" 를 띄우고 조회를 멈춥니다. Period 는 Plan-date 선택 시 자동 세팅되므로 보통은 Company 변경 직후 Plan-date 가 비어 있을 때 발생합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L429 — Period 시작일 공란만 필수 알림(MSG00013)으로 차단, 종료일 공란·형식 검사 없음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:7",
+  "screen": "SSP0060",
+  "event": "편집(EDIT)",
+  "seq": 1,
+  "item": "사용자 권한·담당자 제약",
+  "asis_msg_id": "MSG00251",
+  "asis_msg_ko": "SSP Planner 권한이 없는 사용자 입니다 .\\n\\rUser ID : {0}",
+  "asis_msg_args": [
+   "User ID"
+  ],
+  "asis_msg_text": "",
+  "remark": "Edit(F2) 버튼을 누르면 로그인 사용자가 SSP 사용자 목록(SSP0002_GET_USER_INFO_LIST)에 없을 때 \"SSP Planner 권한이 없는 사용자 입니다. User ID : {사용자ID}\" 를 띄우고 수정모드 전환을 막습니다(Main·Detail 공통). SSP 사용자 등록을 요청해야 합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L124-174 — 화면 진입 시 USER_CHECK(PKG_SSP0002) 조회 0행이면 MSG01261 알림 1회 + 편집 전면 차단(canEdit=false). Edit 버튼 개념이 없어 시점이 진입 시로 바뀌었고, 403·통신오류는 편집 허용(낙관)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:8",
+  "screen": "SSP0060",
+  "event": "편집(EDIT)",
+  "seq": 2,
+  "item": "상태·버전 제약(확정/마감/진행중)",
+  "asis_msg_id": "MSG00170",
+  "asis_msg_ko": "이전 Plan은 편집할 수 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Edit 버튼을 눌렀을 때 선택한 Plan-date 가 최신(목록 최대값)이 아니면 \"이전 Plan은 편집할 수 없습니다.\" 를 띄우고 수정모드 전환을 막습니다. 최신 Plan 을 선택해 재조회해야 합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L174-176, L399-412 — 최신 Plan 이 아니면(realFlag=false) 편집을 조용히 막고 조회 결과가 있을 때 경고 토스트(MSG01185) 1회. 차단 시점이 Edit 클릭이 아니라 조회 후",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:10",
+  "screen": "SSP0060",
+  "event": "편집(EDIT) — Shipment Plan Detail",
+  "seq": 1,
+  "item": "상태·버전 제약(확정/마감/진행중)",
+  "asis_msg_id": "MSG00312",
+  "asis_msg_ko": "실시간 Data가 아닙니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Detail 그리드에서 Edit 를 누를 때 최신 Plan(Plan-date 첫 항목)이 아니면 \"실시간 Data가 아닙니다.\" 를 띄우고 수정모드 전환을 막습니다(CutOff 데이터는 수정 불가). 앞의 MSG00170 과 조건이 거의 같아 보통은 MSG00170 에서 먼저 막힙니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L176 — detailEditable = canEdit && realFlag 로 조용히 읽기전용, 안내는 L399-412 토스트(MSG01185) 공용",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:11",
+  "screen": "SSP0060",
+  "event": "저장(SAVE) — Shipment Plan",
+  "seq": 1,
+  "item": "0 이상 값만 허용",
+  "asis_msg_id": "MSG00084",
+  "asis_msg_ko": "0보다 큰 정수를 입력하십시오.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Main 그리드 저장 시 SHIP_PLAN_DETAIL 행 중 바꾼(빨간 글자) 일자 셀이나 빈 셀의 수량이 음수이면 그 셀을 강조색으로 칠하고 \"0보다 큰 정수를 입력하십시오.\" 를 띄운 뒤 저장을 멈춥니다(첫 위반에서 중단). 빈 셀은 0 으로 저장됩니다. 값을 0 이상으로 고쳐 다시 저장해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L493-527 + utils/shipment-plan.save.ts L66-74 — 원본과 다른 음수 셀 전체를 강조색(#5CD1E5)으로 표시하고 MSG00225 알림 후 저장 중단. 빈 셀 0 저장 규칙은 없음(변경 셀만 대상)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:12",
+  "screen": "SSP0060",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "seq": 1,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "컬럼 라벨(* 포함)"
+  ],
+  "asis_msg_text": "",
+  "remark": "Detail 저장 시 작업표시가 I(신규)·M(수정)인 행에서 라벨에 * 가 있는 10개 컬럼 중 빈 값이 있으면 \"{컬럼} 값은 필수 입력입니다\" 를 띄우고 저장을 멈춥니다(첫 1건). 숨김 컬럼도 검사합니다. 비고만 바꾼 행이라도 Reason Detail 이 비어 있으면 걸립니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L559-581 — 변경 행의 Trans Mode 공란(MSG00429)·Change Reason 미선택(MSG01289)만 차단. 나머지 8개 필수 컬럼(Reason Detail 포함) 검사 없음, useSaveWithValidation 미사용",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:15",
+  "screen": "SSP0060",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "seq": 4,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00285",
+  "asis_msg_ko": "{0}열 출하 변경사항이 있습니다.\\n\\rChange_Reason을 입력해 주세요.",
+  "asis_msg_args": [
+   "행 번호"
+  ],
+  "asis_msg_text": "",
+  "remark": "Detail 저장 시 수정(M) 행의 수량·Shipment Date·Trans Mode 가 조회 원본과 다른데 Change Reason 이 '-' 또는 공란이면 \"{n}열 출하 변경사항이 있습니다. Change_Reason을 입력해 주세요.\" 를 띄우고 저장을 멈춥니다. 해당 행의 Change Reason 을 선택해야 합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L571-580 — 변경(dirty) 행 전부에 Change Reason '-'/공란이면 MSG01289 로 차단. AS-IS 는 수량·날짜·운송모드 변경 행만 검사하는데 TO-BE 는 비고만 바꾼 행도 막고, 행 번호 표시 없음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:17",
+  "screen": "SSP0060",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "seq": 6,
+  "item": "저장(처리) 대상 없음",
+  "asis_msg_id": "MSG00133",
+  "asis_msg_ko": "수정한 내용이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Detail 저장 시 원본 대비 실제로 바뀐 행(수량·날짜·Trans Mode·비고)이나 신규 행이 하나도 없으면 \"수정한 내용이 없습니다.\" 를 띄우고 저장을 멈춥니다(화면 자체 판정 — 프레임워크 MSG00133 과 별개).",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L547-558 — EDIT_MAIN='Y' 또는 CRUD_TYPE 행이 0건이면 MSG00133 토스트. 값을 바꿨다 되돌린 행도 dirty 로 남아 저장이 진행될 수 있음(원본 비교 없음)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:20",
+  "screen": "SSP0060",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "seq": 9,
+  "item": "상태·버전 제약(확정/마감/진행중)",
+  "asis_msg_id": "MSG00189",
+  "asis_msg_ko": "In ERP, DO is created and can not request change. \\n\\rPlease cancel the generated DO and request a change.",
+  "asis_msg_args": [
+   "Confirm ID 목록"
+  ],
+  "asis_msg_text": "",
+  "remark": "같은 출하상태 조회에서 ERP 에 DO 가 생성되어(ERP 상태 C) 수정할 수 없는 Confirm ID 가 있으면 \"In ERP, DO is created and can not request change. Please cancel the generated DO and request a change.\" 를 띄우고 저장을 막습니다. ERP 에서 DO 를 취소한 뒤 변경요청해야 합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx L146-171 — ERP_STATUS='C' 행은 편집 자체를 막고 편집 시도 시 MSG01401 알림(조회 시점 값 기준). 저장 시점 DB 재확인은 없음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:25",
+  "screen": "SSP0060",
+  "event": "셀 입력(CHANGE) — Shipment Plan Detail",
+  "seq": 1,
+  "item": "상태·버전 제약(확정/마감/진행중)",
+  "asis_msg_id": "MSG00189",
+  "asis_msg_ko": "In ERP, DO is created and can not request change. \\n\\rPlease cancel the generated DO and request a change.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "수정모드에서 셀 값이 바뀐 행의 ERP 상태가 C(DO 생성)이면 \"In ERP, DO is created and can not request change...\" 를 띄우고 후속 처리(같은 SO 그룹 전파·EDIT_MAIN 표시)를 하지 않습니다. 입력한 값은 되돌리지 않습니다. ERP 상태 C 행은 수정모드에서 잠겨 있어 주로 같은 SO 그룹의 다른 행을 고칠 때 전파되며 발생합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx L146-171 — ERP_STATUS='C' 행 셀 편집 시작 시 MSG01401 알림 + 편집 취소. SO 그룹 전파 시에는 검사·메시지 없이 값이 전파됨(L257-274)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:26",
+  "screen": "SSP0060",
+  "event": "셀 입력(CHANGE) — Shipment Plan Detail",
+  "seq": 2,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00278",
+  "asis_msg_ko": "Trans Mode를 선택해 주세요.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Trans Mode 셀 값을 지우거나 콤보에서 빈 값을 고르면 \"Trans Mode를 선택해 주세요.\" 를 띄웁니다(값 변경 이벤트와 콤보 선택 이벤트 두 곳에서 검사 — 메시지가 두 번 표시될 수 있음). 값은 되돌리지 않고 후속 처리만 건너뜁니다. 운송모드를 다시 선택해야 합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L560-570 — 입력 시점이 아니라 저장 시 Trans Mode 공란이면 MSG00429('Trans Mode' 값 필수)로 차단",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:27",
+  "screen": "SSP0060",
+  "event": "셀 입력(CHANGE) — Shipment Plan Detail",
+  "seq": 3,
+  "item": "선행 입력값 미선택",
+  "asis_msg_id": "MSG00287",
+  "asis_msg_ko": "Reason Code를 입력 해주세요",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Change Reason 이 '-' 또는 공란인 상태에서 Reason Detail 을 입력하면 입력값을 지우고 커서를 SO No 열로 옮긴 뒤 \"Reason Code를 입력 해주세요\" 를 띄웁니다. Change Reason 을 먼저 선택해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx L233-244 — 편집 종료 시 Change Reason '-'/공란이면 Reason Detail 비우고 MSG01291 알림. 커서 이동 없음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:30",
+  "screen": "SSP0060",
+  "event": "셀 클릭(CLICK) — Shipment Plan Detail",
+  "seq": 1,
+  "item": "선행 입력값 미선택",
+  "asis_msg_id": "MSG00098",
+  "asis_msg_ko": "먼저 {0}을(를) 선택하십시오.",
+  "asis_msg_args": [
+   "Div | From Site | To Site"
+  ],
+  "asis_msg_text": "",
+  "remark": "신규(I) 행의 Model 셀을 더블클릭해 Model 팝업을 열 때 Division, From Site(FROM_SITE_DESCRIPTION), To Site(TO_SITE_DESCRIPTION) 중 비어 있는 첫 항목에 대해 \"먼저 {항목}을(를) 선택하십시오.\" 를 띄우고 팝업을 열지 않습니다. 앞 항목을 먼저 선택해야 합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L718-732 — DIVISION_ID/FROM_SITE/TO_SITE 중 공란이면 공통 MSG00013(필수 입력) 알림. 항목명 미표시, 검사 컬럼이 *_DESCRIPTION 이 아니라 FROM_SITE/TO_SITE",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u61.jsonl:31",
+  "screen": "SSP0060",
+  "event": "셀 클릭(CLICK) — Shipment Plan Detail",
+  "seq": 2,
+  "item": "선행 입력값 미선택",
+  "asis_msg_id": "MSG00098",
+  "asis_msg_ko": "먼저 {0}을(를) 선택하십시오.",
+  "asis_msg_args": [
+   "Div | From Site | To Site | Model"
+  ],
+  "asis_msg_text": "",
+  "remark": "신규(I) 행의 Project Code 셀을 더블클릭할 때 Division, From Site, To Site, Model 중 비어 있는 첫 항목에 대해 \"먼저 {항목}을(를) 선택하십시오.\" 를 띄우고 Project 팝업을 열지 않습니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx L718-732 — 4항목 공란이면 MSG00013 공통 알림(항목명 없음)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan"
+ },
+ {
+  "uid": "u55.jsonl:2",
+  "screen": "SSP0023",
+  "event": "조회(SEARCH)",
+  "seq": 1,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "항목명"
+  ],
+  "asis_msg_text": "",
+  "remark": "조회(F5) 시 라벨에 * 가 붙은 조회조건 중 콤보(UsrCombo)인 Division·Company·Plan-date 가 비어 있거나 ALL 이면 \"{항목} 값은 필수 입력입니다\" 를 띄우고 해당 칸으로 커서를 옮긴 뒤 조회를 멈춥니다. 주의: Division 칸의 항목명 원천(CustomizationFormText)이 'Bucket' 으로 잘못 들어가 있어 Division 이 비면 \"Bucket 값은 필수 입력입니다\" 로 표시됩니다. Period* 는 날짜 컨트롤이라 이 검사 대상이 아니며(아래 기간 검사가 대신함), Divi",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx L209-217 — Division/Company/Plan Date/Period(시작일) 중 하나라도 비면 MSG00013(\"Please enter the required fields.\") 알림 후 조회 중단. 항목명 개별 안내·커서 이동은 없고, AS-IS 에 없던 Period 시작일 공란 검사가 함께 들어 있음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan-electrode"
+ },
+ {
+  "uid": "u55.jsonl:4",
+  "screen": "SSP0023",
+  "event": "조회(SEARCH)",
+  "seq": 3,
+  "item": "날짜 형식 오류",
+  "asis_msg_id": "MSG00049",
+  "asis_msg_ko": "유효한 날짜 형식이 아닙니다. {0}",
+  "asis_msg_args": [
+   ""
+  ],
+  "asis_msg_text": "",
+  "remark": "조회 시 Period 시작·종료일이 비었거나 날짜 형식이 아니면 \"유효한 날짜 형식이 아닙니다.\" 를 띄우고 조회를 멈춥니다. Period 칸은 화면에서 직접 입력할 수 없고(Enabled=false) Plan Date 를 고르면 자동으로 채워지므로, 보통은 Plan Date 를 다시 선택하면 해결됩니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx L211 — Period 시작일(periodFrom) 공란만 MSG00013 으로 차단. 종료일 공란·형식 오류 검사는 없음. TO-BE 는 Period 를 사용자가 직접 바꿀 수 있음(features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeForm.tsx L238-244)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan-electrode"
+ },
+ {
+  "uid": "u55.jsonl:8",
+  "screen": "SSP0023",
+  "event": "편집(EDIT) — Shipment Plan(Electrode)",
+  "seq": 2,
+  "item": "상태·버전 제약(확정/마감/진행중)",
+  "asis_msg_id": "MSG00312",
+  "asis_msg_ko": "실시간 Data가 아닙니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "상단 그리드가 활성인 상태에서 Edit 을 누를 때 Plan-date 콤보가 첫 번째(최신 Plan)가 아니면 \"실시간 Data가 아닙니다.\" 를 띄우고 수정모드 전환을 막습니다(과거 Cutoff 데이터는 수정 불가). 최신 Plan Date 를 선택해 다시 조회해야 합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx L94 mainEditable = canEdit && realFlag, features/shipping/src/pages/shipment-plan-electrode/utils/shipment-plan-electrode.editLock.ts L75-92 — 과거 Plan 이면 셀 편집이 조용히 막힘(안내 메시지 없음). MSG.OLD_PLAN_EDIT_BLOCK(features/shipping/src/pages/shipment-plan-electrode/shipment-plan-electrode.constants.ts L231-232)은 정의만 있고 사용처 없음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan-electrode"
+ },
+ {
+  "uid": "u55.jsonl:10",
+  "screen": "SSP0023",
+  "event": "편집(EDIT) — 하단 Detail",
+  "seq": 2,
+  "item": "읽기 전용 시트 편집 시도",
+  "asis_msg_id": "MSG00109",
+  "asis_msg_ko": "읽기 전용입니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "하단 시트가 Stock Detail 또는 Shipment Result 인 상태에서 Edit 을 누르면 \"읽기 전용입니다.\" 를 띄우고 멈춥니다. 수정은 Shipment Plan Detail 시트에서만 가능합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx L225-240 — 두 시트는 isReadOnly 로 편집 자체가 안 되지만 안내 메시지는 없음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan-electrode"
+ },
+ {
+  "uid": "u55.jsonl:11",
+  "screen": "SSP0023",
+  "event": "편집(EDIT) — 하단 Detail",
+  "seq": 3,
+  "item": "상태·버전 제약(확정/마감/진행중)",
+  "asis_msg_id": "MSG00312",
+  "asis_msg_ko": "실시간 Data가 아닙니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Shipment Plan Detail 시트에서 Edit 을 누를 때 최신 Plan Date 가 아니면 \"실시간 Data가 아닙니다.\" 를 띄우고 수정모드 전환을 막습니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx L95 detailEditable = canEdit && realFlag — 과거 Plan 이면 편집이 조용히 막힘(메시지 없음). 단 신규행(CRUD_TYPE='I')은 isDetailCellEditable 이 canEdit 무관 편집 허용(features/shipping/src/pages/shipment-plan-electrode/utils/shipment-plan-electrode.editLock.ts L112)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan-electrode"
+ },
+ {
+  "uid": "u55.jsonl:12",
+  "screen": "SSP0023",
+  "event": "셀 입력(CHANGE) — Shipment Plan Detail",
+  "seq": 1,
+  "item": "상태·버전 제약(확정/마감/진행중)",
+  "asis_msg_id": "MSG00189",
+  "asis_msg_ko": "In ERP, DO is created and can not request change. \\n\\rPlease cancel the generated DO and request a change.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "수정모드에서 Shipment Plan Detail 셀 값이 바뀌었는데 그 행의 ERP 상태가 C(ERP 에서 D/O 생성)이면 \"In ERP, DO is created and can not request change...\" 를 띄우고 이후 자동 처리(같은 SO 행 연동 등)를 하지 않습니다. 바뀐 값을 되돌리지는 않습니다. 단 Edit 시 ERP_STATUS=C 행은 행 전체가 잠기므로(L2280-2293) 일반 입력으로는 거의 발생하지 않습니다. ERP 의 D/O 를 취소한 뒤 변경해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx L83-100 — ERP_STATUS='C' 행은 편집 시작 자체를 막고 MSG01401 알림(AS-IS 는 변경 후 알림·값 유지, TO-BE 는 편집 전 차단 — 시점 차이)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan-electrode"
+ },
+ {
+  "uid": "u55.jsonl:13",
+  "screen": "SSP0023",
+  "event": "셀 입력(CHANGE) — Shipment Plan Detail",
+  "seq": 2,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00278",
+  "asis_msg_ko": "Trans Mode를 선택해 주세요.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Shipment Plan Detail 의 Trans Mode 콤보를 빈 값으로 바꾸면 \"Trans Mode를 선택해 주세요.\" 를 띄우고 같은 SO 행 연동 처리를 하지 않습니다(값은 빈 채로 남음). 콤보 선택 이벤트(L969-973)와 데이터 변경 이벤트(L6195-6201)가 각각 같은 검사를 해 메시지가 두 번 표시될 수 있습니다. 빈 채로 저장하면 저장 시 필수값 검사(Trans Mode*)에서 막힙니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx L313-323 — 입력 즉시 안내는 없고 저장 시 PLAN_DETAIL_REQUIRED_COLUMNS(TRANSPORT_MODE 포함, features/shipping/src/pages/shipment-plan-electrode/shipment-plan-electrode.constants.ts L142-148) 공란 검사로만 막음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan-electrode"
+ },
+ {
+  "uid": "u55.jsonl:14",
+  "screen": "SSP0023",
+  "event": "셀 입력(CHANGE) — Shipment Plan Detail",
+  "seq": 3,
+  "item": "선행 입력값 미선택",
+  "asis_msg_id": "MSG00287",
+  "asis_msg_ko": "Reason Code를 입력 해주세요",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "수정모드에서 Change Reason Detail 을 입력하는데 같은 행의 Change Reason Code 가 비어 있거나 '-' 이면 입력한 Detail 값을 지우고 커서를 SO No 칸으로 옮긴 뒤 \"Reason Code를 입력 해주세요\" 를 띄웁니다. Reason Code 를 먼저 고른 다음 Detail 을 입력해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan-electrode/components/ShipmentPlanElectrodeDetailGrid.tsx L142-153 — Reason Code 가 '-'/공란이면 Detail 을 비우고 MSG01291(\"Please enter Reason Code.\") 알림. 커서 이동은 없음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan-electrode"
+ },
+ {
+  "uid": "u55.jsonl:16",
+  "screen": "SSP0023",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "seq": 1,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "컬럼 라벨"
+  ],
+  "asis_msg_text": "",
+  "remark": "저장(F7) 시 Shipment Plan Detail 에서 작업표시가 I(신규)·M(수정)인 행만 대상으로 라벨에 * 가 붙은 컬럼 값이 비어 있으면 \"{컬럼라벨} 값은 필수 입력입니다\" 를 띄우고 저장을 멈춥니다(첫 1건). 숨김 컬럼인 NEW_SHIPMENT_DATE(Shipment Date*)도 검사됩니다. 빈 칸을 채운 뒤 다시 저장해야 합니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx L313-323 — 변경행(EDIT_MAIN='Y' 또는 CRUD_TYPE 존재)의 PLAN_DETAIL_REQUIRED_COLUMNS 5개(SHIPMENT_DATE, SHIPMENT_CONFIRM_QTY, PACKAGE_TYPE, FACTORY_ID, TRANSPORT_MODE) 공란 시 MSG00429 알림. NEW_SHIPMENT_DATE 는 검사 안 함, 안내 문구에 라벨 대신 컬럼ID 표시. 이어서 AS-IS 에 없는(주석 처리된 L2999-3004) '행별 Change Reason 필수' 검사를 추가(L324-333). 저장 SP 미배포라 검사 통과 후에도 실제 저장은 안 됨(L350-355)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan-electrode"
+ },
+ {
+  "uid": "u55.jsonl:20",
+  "screen": "SSP0023",
+  "event": "저장(SAVE) — Shipment Plan Detail",
+  "seq": 5,
+  "item": "저장(처리) 대상 없음",
+  "asis_msg_id": "MSG00133",
+  "asis_msg_ko": "수정한 내용이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "저장 시 I/M 행을 조회 당시 원본과 비교해 수량·출하일·Trans Mode·Shipment No.·Remarks·Building·Package Type·Dom/Exp 중 실제로 바뀐 값이 하나도 없으면 \"수정한 내용이 없습니다.\" 를 띄우고 저장을 멈춥니다(프레임워크의 작업표시 개수 검사와 별도로 화면이 값 비교로 다시 판정).",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx L304-312 — EDIT_MAIN='Y' 또는 CRUD_TYPE 이 있는 행이 0건이면 MSG00133 토스트. 원본 값 비교가 아니라 변경표시 기준",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan-electrode"
+ },
+ {
+  "uid": "u55.jsonl:25",
+  "screen": "SSP0023",
+  "event": "실행(RUN) — Simulation 버튼",
+  "seq": 1,
+  "item": "저장(처리) 대상 없음",
+  "asis_msg_id": "MSG00005",
+  "asis_msg_ko": "변경/추가된 데이터가 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Simulation 버튼을 누르면 상단 그리드에서 측정치가 P_SHIP_PLAN_SIMU_ETD 이고 작업표시가 I/M 이며 빨간 글자(변경)인 일자 셀만 모아 저장하는데, 그런 셀이 하나도 없으면 \"변경/추가된 데이터가 없습니다.\" 를 띄우고 멈춥니다. Edit 후 Shipment Plan(ETD) 행의 일자 수량을 바꾼 다음 실행해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx L243-275 — 별도 Simulation 버튼 대신 상단 그리드 활성 상태의 저장(F7)이 같은 SP 를 호출하며, 변경 셀 0건이면 MSG00133 토스트로 중단. TO-BE 는 AS-IS 에 없는 음수 수량 차단(MSG00225, L261-268)을 추가",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-plan-electrode"
+ },
+ {
+  "uid": "u50.jsonl:1",
+  "screen": "SSP0014",
+  "event": "화면 열기(OPEN)",
+  "seq": 1,
+  "item": "권한을 가진 Division 없음",
+  "asis_msg_id": "MSG00097",
+  "asis_msg_ko": "권한을 가진 Division이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "화면을 열 때 로그인 사용자에게 권한 있는 사업부(Division) 목록이 한 건도 없으면 \"권한을 가진 Division이 없습니다.\" 를 띄우고 조회조건 영역 전체를 비활성화합니다(조회조건 입력·변경 불가). 권한 담당자에게 Division 권한을 요청해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx L106-121(권한 Division 0건이면 MSG00667 \"권한을 가진 Division이 없습니다.\" 1회 알림), L508 + components/ShipmentModelPicForm.tsx L118·L149·L167·L195·L215·L245(조회조건 전체 disabled). 메시지 번호만 다름(TO-BE MSG00097 은 다른 문구라 MSG00667 사용). 콤보 요청 자체 실패 시에는 MSG01052 로 구분 안내(L153-161)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-model-pic"
+ },
+ {
+  "uid": "u50.jsonl:2",
+  "screen": "SSP0014",
+  "event": "조회(SEARCH)",
+  "seq": 1,
+  "item": "권한을 가진 Division 없음",
+  "asis_msg_id": "MSG00097",
+  "asis_msg_ko": "권한을 가진 Division이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "조회 시 Division 콤보에 후보가 하나도 없으면(권한 Division 0건) \"권한을 가진 Division이 없습니다.\" 를 띄우고 조회를 멈춥니다. 저장 성공 후 자동 재조회(L525)에서도 같은 검사가 실행됩니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx L200-206 — 권한 Division 0건(noAuth)이면 MSG00667 알림 후 조회 중단. 자동조회(enabled, L170-171)도 noAuth 면 실행 안 함",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-model-pic"
+ },
+ {
+  "uid": "u50.jsonl:3",
+  "screen": "SSP0014",
+  "event": "조회(SEARCH)",
+  "seq": 2,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "Division"
+  ],
+  "asis_msg_text": "",
+  "remark": "조회조건 중 라벨에 * 가 붙은 Division 이 비어 있거나 ALL 이면 \"Division 값은 필수 입력입니다\" 를 띄우고 Division 콤보로 커서를 옮긴 뒤 조회를 멈춥니다. 나머지 조회조건(Operation Group·From Site·Valid·Model·User ID(Name))은 * 가 없어 검사하지 않습니다. Division 콤보는 ALL 항목 없이 권한 Division 만 채워지므로(L189 setListBox false) 실제로는 후보가 없을 때만 걸립니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx L218-225 — Division 공란이면 MSG00097(TO-BE 문구 \"Division 을 선택하세요.\") 알림 후 조회 중단. 커서 이동 없음. TO-BE 는 추가로 권한 목록에 없는 Division 값으로 조회하면 같은 메시지로 차단(L211-217)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-model-pic"
+ },
+ {
+  "uid": "u50.jsonl:4",
+  "screen": "SSP0014",
+  "event": "저장(SAVE)",
+  "seq": 1,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "컬럼명"
+  ],
+  "asis_msg_text": "",
+  "remark": "저장할 때 작업 표시가 I(추가) 또는 M(수정)인 행에서 라벨에 * 가 붙은 컬럼(User ID, Valid)이 비어 있으면 \"{컬럼명} 값은 필수 입력입니다\" 를 띄우고 저장을 멈춥니다(첫 1건만 안내). 담당자(User ID)와 사용 여부(Valid)를 입력한 뒤 다시 저장해야 합니다. 이 화면은 행추가가 막혀 있어 실제 대상은 수정(M) 행입니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx L458-465 — 변경 행 중 User ID 공백이 있으면 MSG00429({0}=[User ID]) 후 중단(화면 독립 가드). L469 useSaveWithValidation 은 컬럼 메타(INPUT_TP_CD M/IM 또는 라벨 *) 기준 — Valid 필수 여부는 메타 기준으로만 정해짐(화면 fallback 상수 shipment-model-pic.constants.ts L91 은 Valid 를 'O'·라벨 'Valid' 로 둬 필수 아님). User ID 는 확실히 막지만 Valid 공란 차단은 메타 등록값에 달려 있음",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-model-pic"
+ },
+ {
+  "uid": "u50.jsonl:5",
+  "screen": "SSP0014",
+  "event": "저장(SAVE)",
+  "seq": 2,
+  "item": "사용자 권한·담당자 제약",
+  "asis_msg_id": "MSG00251",
+  "asis_msg_ko": "SSP Planner 권한이 없는 사용자 입니다 .\\n\\rUser ID : {0}",
+  "asis_msg_args": [
+   "미통과 사용자 ID 목록(콤마 구분)"
+  ],
+  "asis_msg_text": "",
+  "remark": "저장 대상 행들의 User ID 를 모아 DB(SSP0014_GET_USER_ID_CHECK)에 사용자 마스터 존재 + SSP Planner/ADMIN/SCM PI Admin 그룹 소속 여부를 묻고, 돌려받은 목록에 없는 ID 가 하나라도 있으면 \"SSP Planner 권한이 없는 사용자 입니다. User ID : {목록}\" 을 띄우고 저장을 멈춥니다. 해당 사용자를 권한 그룹에 등록하거나 담당자를 바꿔야 합니다. 비교는 대소문자를 구분합니다(C# 문자열 비교). 검증 호출 중 예외가 나면 메시지 없이 저장만 중단됩니다(L604).",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-model-pic/hooks/useShipmentModelPicValidation.ts L31-63 + ShipmentModelPic.tsx L266-279 — 저장 전 같은 검증(USER_CHECK call-proc)으로 미통과 ID 를 모아 MSG01261(AS-IS MSG00251 과 같은 문구) 표시 후 중단. 차이: User ID·Part/Team Leader·Mail User1~5 를 한 번에 중복 제거·대문자로 비교해 목록을 \", \" 로 이어 표시. 호출 실패 시 MSG00003 알림 후 중단(L280-286 — AS-IS 는 무음 중단)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-model-pic"
+ },
+ {
+  "uid": "u50.jsonl:6",
+  "screen": "SSP0014",
+  "event": "저장(SAVE)",
+  "seq": 3,
+  "item": "사용자 권한·담당자 제약",
+  "asis_msg_id": "MSG00251",
+  "asis_msg_ko": "SSP Planner 권한이 없는 사용자 입니다 .\\n\\rUser ID : {0}",
+  "asis_msg_args": [
+   "미통과 사용자 ID 목록(콤마 구분)"
+  ],
+  "asis_msg_text": "",
+  "remark": "변경 행 중 Part Leader 값이 하나라도 있으면 Part Leader 들을 같은 방식으로 검증해 권한 그룹에 없는 ID 가 있으면 같은 메시지로 저장을 멈춥니다. 주의: 행별 값을 ^ 로 이은 문자열을 통째로 검사하므로, 변경 행 중 일부만 Part Leader 가 비어 있으면 빈 값도 '없는 사용자' 로 세어 저장이 막힙니다(메시지의 User ID 자리에 빈 값·쉼표만 표시).",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-model-pic/hooks/useShipmentModelPicValidation.ts L34-41(PART_LEADER 포함, 빈 값은 제외) + ShipmentModelPic.tsx L266-279(MSG01261). AS-IS 의 빈 값 오탐 차단은 TO-BE 에 없음(빈 값 건너뜀)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-model-pic"
+ },
+ {
+  "uid": "u50.jsonl:7",
+  "screen": "SSP0014",
+  "event": "저장(SAVE)",
+  "seq": 4,
+  "item": "사용자 권한·담당자 제약",
+  "asis_msg_id": "MSG00251",
+  "asis_msg_ko": "SSP Planner 권한이 없는 사용자 입니다 .\\n\\rUser ID : {0}",
+  "asis_msg_args": [
+   "미통과 사용자 ID 목록(콤마 구분)"
+  ],
+  "asis_msg_text": "",
+  "remark": "변경 행 중 Team Leader 값이 하나라도 있으면 Team Leader 들을 같은 방식으로 검증해 권한 그룹에 없는 ID 가 있으면 같은 메시지로 저장을 멈춥니다. Part Leader 와 마찬가지로 일부 행만 비어 있으면 빈 값 때문에 저장이 막힙니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-model-pic/hooks/useShipmentModelPicValidation.ts L34-41(TEAM_LEADER 포함, 빈 값 제외) + ShipmentModelPic.tsx L266-279(MSG01261)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-model-pic"
+ },
+ {
+  "uid": "u50.jsonl:8",
+  "screen": "SSP0014",
+  "event": "저장(SAVE)",
+  "seq": 5,
+  "item": "사용자 권한·담당자 제약",
+  "asis_msg_id": "MSG00251",
+  "asis_msg_ko": "SSP Planner 권한이 없는 사용자 입니다 .\\n\\rUser ID : {0}",
+  "asis_msg_args": [
+   "미통과 사용자 ID"
+  ],
+  "asis_msg_text": "",
+  "remark": "메일 수신자(Mail User1~5)는 비어 있지 않은 ID 를 하나씩 따로 DB 에 검증하며, 권한 그룹에 없는 ID 를 처음 만나는 순간 그 ID 로 같은 메시지를 띄우고 저장을 멈춥니다(빈 칸은 건너뜀). Mail User1 → 5 순서로 검사합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-model-pic/hooks/useShipmentModelPicValidation.ts L34-41(MAIL_USER1~5 포함) + ShipmentModelPic.tsx L266-279 — 다른 사용자 컬럼과 한 번에 검증해 미통과 ID 전체를 한 메시지로 표시(AS-IS 는 첫 1건)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-model-pic"
+ },
+ {
+  "uid": "u10.jsonl:103",
+  "screen": "SCP0031",
+  "event": "화면 열기(OPEN)",
+  "seq": 1,
+  "item": "권한을 가진 Division 없음",
+  "asis_msg_id": "MSG00097",
+  "asis_msg_ko": "권한을 가진 Division이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "로그인 사용자에게 권한 있는 사업부(Division) 중 전극(EE)·소형(40)을 뺀 목록이 0건이면 화면을 열 때 \"권한을 가진 Division이 없습니다.\" 를 띄우고 조회조건 영역 전체를 잠급니다(입력·조회 불가). 권한 담당자에게 Division 권한을 요청해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "components/GlobalPsiForm.tsx L226-239 — EE·40 제외 결과 0건이면 MSG00097 알림 1회 + 조회조건 컨트롤 비활성(disabled). TO-BE MSG00097 문구는 'Please select Division.' 로 다름. Search 버튼 자체는 막지 않음(조회 시 필수 검사에서 차단)",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/global-psi"
+ },
+ {
+  "uid": "u10.jsonl:104",
+  "screen": "SCP0031",
+  "event": "조회(SEARCH)",
+  "seq": 1,
+  "item": "권한을 가진 Division 없음",
+  "asis_msg_id": "MSG00097",
+  "asis_msg_ko": "권한을 가진 Division이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "조회 시 Division 콤보에 후보가 없으면(권한 Division 0건) \"권한을 가진 Division이 없습니다.\" 를 띄우고 조회를 멈춥니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "GlobalPsi.tsx validateRequired L119-135 — Division 빈값이면 MSG00013(필수 입력 일반 안내)으로 차단. '권한 Division 없음' 전용 안내는 화면 열기 때만(GlobalPsiForm.tsx L226-239)",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/global-psi"
+ },
+ {
+  "uid": "u10.jsonl:105",
+  "screen": "SCP0031",
+  "event": "조회(SEARCH)",
+  "seq": 2,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "항목명(CustomizationFormText)"
+  ],
+  "asis_msg_text": "",
+  "remark": "라벨에 * 가 붙은 콤보(Division, Plan-date, Plan-type, Seq) 중 하나라도 비어 있으면 \"{항목명} 값은 필수 입력입니다\" 를 띄우고 해당 콤보로 커서를 옮긴 뒤 조회를 멈춥니다. 항목명은 Designer 의 CustomizationFormText 로 표시되는데 Division 항목은 'Bucket' 으로 등록돼 있어(Designer L691) Division 이 비면 'Bucket 값은 필수 입력입니다' 처럼 엉뚱한 이름이 나올 수 있습니다. Period* 는 날짜 컨트롤이라 이 검사 대상이 아니고 아",
+  "tobe_apply": "적용",
+  "tobe_basis": "GlobalPsi.tsx validateRequired L119-135 — Division/Plan Date/Plan Type/Seq(+Period From·To) 중 빈값이 있으면 MSG00013 일반 문구('필수 항목을 입력하세요')로 차단. 차이: 항목명 미표시·커서 이동 없음",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/global-psi"
+ },
+ {
+  "uid": "u10.jsonl:106",
+  "screen": "SCP0031",
+  "event": "조회(SEARCH)",
+  "seq": 3,
+  "item": "날짜 형식 오류",
+  "asis_msg_id": "MSG00049",
+  "asis_msg_ko": "유효한 날짜 형식이 아닙니다. {0}",
+  "asis_msg_args": [
+   ""
+  ],
+  "asis_msg_text": "",
+  "remark": "조회 기간(Period) 시작일 또는 종료일이 비어 있거나 날짜로 변환되지 않으면 \"유효한 날짜 형식이 아닙니다.\" 를 띄우고 조회를 멈춥니다. 화면 전용 기간 검사(SCPPlan.Check_PeriodDate)로, 프레임워크 검사와 달리 1년 최대 조회 제한은 없습니다(주석 처리됨).",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "GlobalPsi.tsx validateRequired L125-126 — From/To 빈값이면 MSG00013(필수 안내)로 차단. 형식은 날짜 선택기(PeriodField)가 보장. 메시지 의미가 '날짜 형식'이 아닌 '필수 입력'",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/global-psi"
+ },
+ {
+  "uid": "u10.jsonl:107",
+  "screen": "SCP0031",
+  "event": "조회(SEARCH)",
+  "seq": 4,
+  "item": "기간 시작일 > 종료일",
+  "asis_msg_id": "MSG00108",
+  "asis_msg_ko": "시작일자가 종료일자보다 늦을 수 없습니다.",
+  "asis_msg_args": [
+   "null"
+  ],
+  "asis_msg_text": "",
+  "remark": "조회 기간의 시작일이 종료일보다 늦으면 \"시작일자가 종료일자보다 늦을 수 없습니다.\" 를 띄우고 조회를 멈춥니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "조회 시 검사 없음. 종료일 달력만 시작일 이전 날짜를 고를 수 없게 막음(features/master/src/components/searchFields/SearchFields.tsx PeriodField mindate=start) — 종료일을 먼저 정한 뒤 시작일을 더 늦게 바꾸면 역전된 채 조회됨",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/global-psi"
+ },
+ {
+  "uid": "u10.jsonl:108",
+  "screen": "SCP0031",
+  "event": "조회(SEARCH)",
+  "seq": 5,
+  "item": "조회 기간 범위 초과",
+  "asis_msg_id": "MSG00402",
+  "asis_msg_ko": "SCP구간 내 Plan 조회가 가능합니다\\r\\n(~계획수립주차 + {0}주 = {1})",
+  "asis_msg_args": [
+   "DIFF_WEEK(주)",
+   "HORIZON_END_DATE"
+  ],
+  "asis_msg_text": "",
+  "remark": "선택한 Division·Plan-date·Bucket 의 SCP 계획 구간 종료일(HORIZON_END_DATE)보다 조회 종료일이 늦으면 \"SCP구간 내 Plan 조회가 가능합니다 (~계획수립주차 + {주}주 = {종료일})\" 를 띄우고 조회 종료일을 그 구간 종료일로 바꾼 뒤 조회를 멈춥니다. 다시 조회를 눌러야 합니다. 구간 정보 조회가 실패하면 검사 없이 진행합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "GlobalPsi.tsx clampPeriodToHorizon L142-170 (호출 L175) — SCPPlanPeriod_SCP 조회 후 To > HORIZON_END_DATE 면 To 를 되돌리고 MSG00402 알림 후 중단, 조회 실패 시 그대로 진행. 차이: MSG00402 가 TO-BE 메시지 테이블 미등록이라 영문 기본 문구 표시(global-psi.constants.ts L133-137)",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/global-psi"
+ },
+ {
+  "uid": "u29.jsonl:71",
+  "screen": "SCP0095",
+  "event": "화면 열기(OPEN)",
+  "seq": 1,
+  "item": "권한을 가진 Division 없음",
+  "asis_msg_id": "MSG00097",
+  "asis_msg_ko": "권한을 가진 Division이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "화면을 열 때 권한 있는 EE(전극) Division 이 하나도 없으면 \"권한을 가진 Division이 없습니다.\" 를 띄우고 조회조건 영역 전체를 잠급니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx L94-107 — EE Division 0건이면 MSG00097 알림 1회 + Division/Company/Model/Plan-date/Bucket 비활성(L193, L201, L213, L239, L257). Period 입력칸은 비활성 대상에서 빠짐",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/global-psi-elec"
+ },
+ {
+  "uid": "u29.jsonl:72",
+  "screen": "SCP0095",
+  "event": "조회(SEARCH)",
+  "seq": 1,
+  "item": "권한을 가진 Division 없음",
+  "asis_msg_id": "MSG00097",
+  "asis_msg_ko": "권한을 가진 Division이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "조회 시 Division 콤보에 후보가 없으면 \"권한을 가진 Division이 없습니다.\" 를 띄우고 조회를 멈춥니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx L93-101 — 조회 시 권한 Division 검사는 없고 Division 공란이면 필수 안내(MSG00013)로 막음. 권한 0건이면 열기 시 조회조건을 비활성(Form L94-107)하므로 결과적으로 조회 불가",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/global-psi-elec"
+ },
+ {
+  "uid": "u29.jsonl:73",
+  "screen": "SCP0095",
+  "event": "조회(SEARCH)",
+  "seq": 2,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "항목명(Bucket / Plan-date / Report Type)"
+  ],
+  "asis_msg_text": "",
+  "remark": "라벨에 * 가 붙은 Division·Plan-date·Report Type 콤보가 비어 있거나 ALL 이면 \"{항목명} 값은 필수 입력입니다\" 를 띄우고 해당 콤보로 커서를 옮긴 뒤 조회를 멈춥니다. Division 은 숨은 설정명(CustomizationFormText)이 'Bucket' 이라 \"Bucket 값은 필수 입력입니다\" 로 표시됩니다. Period 는 * 가 없어 이 검사 대상이 아닙니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx L93-101 — Division·Plan Date(·Period From/To) 공란이면 MSG00013 '필수 입력' 알림 후 조회 중단. Report Type 조회조건 자체가 없음(useGlobalPsiElecStore.ts L103 planType='' 고정 전송), 커서 이동 없음, 메시지 번호 다름",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/global-psi-elec"
+ },
+ {
+  "uid": "u29.jsonl:74",
+  "screen": "SCP0095",
+  "event": "조회(SEARCH)",
+  "seq": 3,
+  "item": "날짜 형식 오류",
+  "asis_msg_id": "MSG00049",
+  "asis_msg_ko": "유효한 날짜 형식이 아닙니다. {0}",
+  "asis_msg_args": [
+   ""
+  ],
+  "asis_msg_text": "",
+  "remark": "기간 From/To 가 비었거나 날짜로 해석되지 않으면 \"유효한 날짜 형식이 아닙니다.\" 를 띄우고 조회를 멈춥니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx L94-100 — From/To 공란이면 MSG00013 필수 안내로 막음. 달력 선택 입력이라 형식 오류 자체는 생기지 않음(SearchFields.tsx PeriodField)",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/global-psi-elec"
+ },
+ {
+  "uid": "u29.jsonl:75",
+  "screen": "SCP0095",
+  "event": "조회(SEARCH)",
+  "seq": 4,
+  "item": "기간 시작일 > 종료일",
+  "asis_msg_id": "MSG00108",
+  "asis_msg_ko": "시작일자가 종료일자보다 늦을 수 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "기간 From 이 To 보다 늦으면 \"시작일자가 종료일자보다 늦을 수 없습니다.\" 를 띄우고 조회를 멈춥니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/master/src/components/searchFields/SearchFields.tsx PeriodField — To 달력이 From 이후만 고를 수 있게 제한(mindate)할 뿐 조회 시 검사 없음. To 를 고른 뒤 From 을 To 보다 늦게 바꾸면 그대로 조회됨, 메시지 없음",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/global-psi-elec"
+ },
+ {
+  "uid": "u01.jsonl:71",
+  "screen": "SCP0002",
+  "event": "화면 열기(OPEN)",
+  "seq": 1,
+  "item": "권한을 가진 Division 없음",
+  "asis_msg_id": "MSG00097",
+  "asis_msg_ko": "권한을 가진 Division이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "로그인 사용자에게 권한 있는 사업부(Division, EE 제외)가 하나도 없으면 화면을 열 때 \"권한을 가진 Division이 없습니다.\" 를 띄우고 조회조건 영역 전체를 잠급니다. 권한 담당자에게 Division 권한을 요청해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/supply/src/pages/line-master/components/LineMasterForm.tsx L113-124 — 권한 Division 0건이면 MSG00097 안내 1회 + 조회영역 비활성(L194)",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/line-master"
+ },
+ {
+  "uid": "u01.jsonl:72",
+  "screen": "SCP0002",
+  "event": "조회(SEARCH)",
+  "seq": 1,
+  "item": "권한을 가진 Division 없음",
+  "asis_msg_id": "MSG00097",
+  "asis_msg_ko": "권한을 가진 Division이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Plant 시트·Packer 시트 어느 쪽에서 조회해도, Division 콤보에 후보가 없으면(권한 Division 0건) \"권한을 가진 Division이 없습니다.\" 를 띄우고 조회를 멈춥니다. 조회조건 라벨에 * 표시 항목이 없어 필수값 검사(MSG00002)는 일어나지 않습니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/supply/src/pages/line-master/LineMaster.tsx L112 — 권한 0건이면 조회를 메시지 없이 막음(안내는 잠금 전환 시 1회만, LineMasterForm.tsx L118-123). TO-BE 는 AS-IS 에 없는 Division 공란 차단(MSG00429, L114-117)을 추가",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/line-master"
+ },
+ {
+  "uid": "u01.jsonl:73",
+  "screen": "SCP0002",
+  "event": "편집(EDIT) — Plant",
+  "seq": 1,
+  "item": "읽기 전용 시트 편집 시도",
+  "asis_msg_id": "MSG00109",
+  "asis_msg_ko": "읽기 전용입니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "Plant 시트는 조회 전용입니다. Plant 시트가 활성인 상태에서 Edit 를 누르면 \"읽기 전용입니다.\" 를 띄우고 수정모드로 바꾸지 않습니다. 등록·수정은 Packer 시트에서만 할 수 있습니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx L208(Plant 시트 isReadOnly — 편집 자체가 불가, 메시지 없음) · LineMaster.tsx L124-128, L136-139, L153-156(Insert/Delete/Save 시 MSG00109). TO-BE 는 Edit 버튼이 없어 편집 시도 시점의 안내는 없음",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/line-master"
+ },
+ {
+  "uid": "u01.jsonl:74",
+  "screen": "SCP0002",
+  "event": "저장(SAVE) — Packer",
+  "seq": 1,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "컬럼 라벨"
+  ],
+  "asis_msg_text": "",
+  "remark": "Packer 시트에서 추가·수정한 행 중 * 표시 컬럼이 비어 있으면 \"{컬럼명} 값은 필수 입력입니다\" 를 띄우고 저장을 멈춥니다(첫 1건). 시트에 행이 0건이면 메시지 없이 끝나고, 변경 행이 없어도 메시지 없이 끝납니다(L718-721 빈 else).",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/supply/src/pages/line-master/LineMaster.tsx L167-169 saveWithValidation(메타 기준 필수). 변경 0건은 MSG00004 토스트(L160-164)",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/line-master"
+ },
+ {
+  "uid": "u40.jsonl:19",
+  "screen": "SCP0120",
+  "event": "저장(SAVE) — Lookup Type",
+  "seq": 1,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "컬럼 라벨"
+  ],
+  "asis_msg_text": "",
+  "remark": "상단 Lookup Type 그리드에서 추가·수정한 행(I/M) 중 라벨에 * 가 붙은 칸(Lookup Type, Description, System, Segment1~9, Admin)이 하나라도 비어 있으면 \"{컬럼명} 값은 필수 입력입니다\" 를 띄우고 저장을 멈춥니다(첫 1건). Segment1~9 는 하위 Lookup Values 의 컬럼 이름 정의라 쓰지 않는 칸도 '-' 등으로 채워야 저장됩니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx L321-337 — useSaveWithValidation(masterStaticColumns) 필수검증(메타 기준, MSG00429 계열). 필수 대상은 컬럼 메타(INPUT_TP_CD/라벨 *) 기준이라 이번 범위에서 실등록값 미대조",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/constraint-mgmt"
+ },
+ {
+  "uid": "u40.jsonl:20",
+  "screen": "SCP0120",
+  "event": "저장(SAVE) — Lookup Type",
+  "seq": 2,
+  "item": "화면 내 키 중복",
+  "asis_msg_id": "MSG00060",
+  "asis_msg_ko": "동일한 {0}이(가) 존재합니다.",
+  "asis_msg_args": [
+   "LOOKUP_TYPE_SEGMENT1_…_SEGMENT10 (용어 결합)"
+  ],
+  "asis_msg_text": "",
+  "remark": "필수 검사를 통과하면, 변경 행(I/M/D) 각각을 그리드의 다른 모든 행과 비교해 Lookup Type 과 Segment1~10 이 모두 같은(대소문자 무시) 행이 있으면 \"동일한 {키 목록}이(가) 존재합니다.\" 후 저장을 멈춥니다. 상단 시트에서는 Lookup Type 이 같아도 Segment 정의가 다르면 통과합니다(중복 Lookup Type 은 DB 제약 오류로만 막힘). 삭제(D) 표시 행도 검사 대상입니다.",
+  "tobe_apply": "부분적용",
+  "tobe_basis": "features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx L330-333 + constraint-mgmt.constants.ts L128-129 — TO-BE 상단은 Lookup Type 1개 키만 비교(MSG01092 \"The same Lookup Type exists.\"). AS-IS 는 Lookup Type+Segment1~10 11키라 판정 범위가 다름(TO-BE 가 더 엄격)",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/constraint-mgmt"
+ },
+ {
+  "uid": "u40.jsonl:21",
+  "screen": "SCP0120",
+  "event": "저장(SAVE) — Lookup Values",
+  "seq": 1,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "컬럼 라벨"
+  ],
+  "asis_msg_text": "",
+  "remark": "하단 Lookup Values 그리드의 추가·수정 행(I/M) 중 Lookup Type* 와, 상단에서 고른 Lookup Type 행의 Segment 정의값으로 이름이 바뀌고 * 가 붙은 Segment 컬럼이 비어 있으면 \"{컬럼명} 값은 필수 입력입니다\" 후 저장을 멈춥니다. 정의가 '-'/'*'/빈 값인 Segment 컬럼은 숨겨지고 * 가 붙지 않아 검사하지 않습니다. 상단 행을 더블클릭하지 않고 행을 추가하면 Lookup Type 이 빈 채 잠겨 이 메시지로 저장이 막히고 고칠 수 없습니다(상단 Lookup Type 을 더블",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx L339-345 + utils/constraintMgmt.utils.ts L231-248 + useConstraintMgmtStore.ts L230-247 — 동적 라벨 * 를 얹은 컬럼셋으로 useSaveWithValidation(MSG00429 계열). 차이: TO-BE 는 숨긴 컬럼을 검사에서 제외(AS-IS 는 폭 0 Segment10 도 'Y*'/'N*' 라벨로 검사 — 기본값 '-' 라 실제 영향 적음). 상단 미선택 시 행추가 자체를 MSG00624 로 막음(ConstraintMgmt.tsx L257-268, AS-IS 에 없는 가드)",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/constraint-mgmt"
+ },
+ {
+  "uid": "u40.jsonl:22",
+  "screen": "SCP0120",
+  "event": "저장(SAVE) — Lookup Values",
+  "seq": 2,
+  "item": "화면 내 키 중복",
+  "asis_msg_id": "MSG00060",
+  "asis_msg_ko": "동일한 {0}이(가) 존재합니다.",
+  "asis_msg_args": [
+   "LOOKUP_TYPE_SEGMENT1_…_SEGMENT10 (용어 결합)"
+  ],
+  "asis_msg_text": "",
+  "remark": "필수 검사 통과 후, 변경 행(I/M/D) 각각을 하단 그리드의 다른 모든 행과 비교해 Lookup Type 과 Segment1~10 이 모두 같은(대소문자 무시) 행이 있으면 \"동일한 {키 목록}이(가) 존재합니다.\" 후 저장을 멈춥니다. 같은 Segment 조합을 두 번 입력하지 않도록 값을 바꿔야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx L344-347 + utils/constraintMgmt.utils.ts L140-157 + constraint-mgmt.constants.ts L114-126 — 11키 대소문자 무시, 모집단=하단 그리드 전 행. 메시지 MSG00060(인자 없이 \"Duplicate key exists.\" 계열). TO-BE 는 이어서 Display Seq 정수 검사(MSG00460, L349-355)를 추가(AS-IS 없음)",
+  "tobe_folders": "nscm-fe/features/supply/src/pages/constraint-mgmt"
+ },
+ {
+  "uid": "u52.jsonl:111",
+  "screen": "SSP0019",
+  "event": "화면 열기(OPEN)",
+  "seq": 1,
+  "item": "권한을 가진 Division 없음",
+  "asis_msg_id": "MSG00097",
+  "asis_msg_ko": "권한을 가진 Division이 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "화면을 열 때 권한 Division(MyDivision) 목록이 0건이면 \"권한을 가진 Division이 없습니다.\" 를 띄우고 조회조건 영역 전체를 잠급니다. (직후 L273 EE 제외 처리에서 0건 CopyToDataTable 예외가 날 수 있음 — notes [위험])",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-history/components/ShipmentChangeHistoryForm.tsx L85-96 — 권한 Division(EE 제외 후) 0건이면 MSG00667(\"No authority assigned.\") 1회 알림 + 조회조건 전부 disabled. 문구가 AS-IS MSG00097 과 다름(번호·문구 차이)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-history"
+ },
+ {
+  "uid": "u52.jsonl:112",
+  "screen": "SSP0019",
+  "event": "조회(SEARCH)",
+  "seq": 1,
+  "item": "날짜 형식 오류",
+  "asis_msg_id": "MSG00049",
+  "asis_msg_ko": "유효한 날짜 형식이 아닙니다. {0}",
+  "asis_msg_args": [
+   ""
+  ],
+  "asis_msg_text": "",
+  "remark": "Shipment Date From/To 가 비었거나 날짜 형식이 아니면 \"유효한 날짜 형식이 아닙니다.\" 를 띄우고 조회를 막습니다. (이 화면은 조회조건 필수 검사(checkRequiredOfSearch)를 호출하지 않음)",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-history/ShipmentChangeHistory.tsx L119-131 — From/To 공백이면 CRUD_MSG.REQUIRED_FIELD('[Shipment Date] 값 필수') 후 중단. 형식 오류는 DatePicker 라 입력 불가. 메시지 번호·문구 다름",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-history"
+ },
+ {
+  "uid": "u52.jsonl:113",
+  "screen": "SSP0019",
+  "event": "조회(SEARCH)",
+  "seq": 2,
+  "item": "기간 시작일 > 종료일",
+  "asis_msg_id": "MSG00108",
+  "asis_msg_ko": "시작일자가 종료일자보다 늦을 수 없습니다.",
+  "asis_msg_args": [],
+  "asis_msg_text": "",
+  "remark": "시작일이 종료일보다 늦으면 \"시작일자가 종료일자보다 늦을 수 없습니다.\" 를 띄우고 조회를 막습니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/shipment-change-history/ShipmentChangeHistory.tsx L132-139 — from > to 이면 MSG00219(\"Invalid period (start > end).\") 후 중단. To DatePicker 에 mindate 도 지정(components/ShipmentChangeHistoryForm.tsx L269)",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/shipment-change-history"
+ },
+ {
+  "uid": "u52.jsonl:72",
+  "screen": "SSP0017",
+  "event": "조회(SEARCH)",
+  "seq": 2,
+  "item": "필수값 누락",
+  "asis_msg_id": "MSG00002",
+  "asis_msg_ko": "{0} 값은 필수 입력입니다",
+  "asis_msg_args": [
+   "Plan-date"
+  ],
+  "asis_msg_text": "",
+  "remark": "Plan-date* 콤보가 비어 있거나 ALL 이면 \"{0} 값은 필수 입력입니다\" 를 띄우고 포커스를 옮긴 뒤 조회를 막습니다. 계획일자를 선택해야 합니다.",
+  "tobe_apply": "적용",
+  "tobe_basis": "features/shipping/src/pages/inventory-raw/InventoryRaw.tsx L65-78 — planStartYyyymmdd 공백이면 MSG00614(\"The {0} value is required.\", {0}='Plan Date') 후 중단. 단 Plan Date 콤보는 데이터 소스 미확정으로 disabled·빈 목록(components/InventoryRawForm.tsx L139-156, inventory-raw.constants.ts L34-39)이라 현재는 값 선택이 불가해 조회가 항상 이 검사에서 막힘",
+  "tobe_folders": "nscm-fe/features/shipping/src/pages/inventory-raw"
+ }
+]

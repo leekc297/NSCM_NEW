@@ -2,44 +2,56 @@ export const MENU_ID = 'SCP0096' as const;
 export type MENU_ID = typeof MENU_ID;
 
 // AS-IS GSCM.SCP.Forms.UIL Master SCP0096_Shipment_Working_Day_OSP (Supply > Supply Master > Shipment Working Day(OSP)).
-//   - 정적 좌측 6컬럼(SHEET_COLUMNS 메타) + 동적 기간 컬럼(3SPAN 타이틀 SP 응답 행으로 생성 — AS-IS InitSpreadDateColumn 1:1).
+//   - 정적 좌측 6컬럼(SHEET_COLUMNS 메타) + GET SP O_RC1 동적 D_/W_/M_ pivot 기간 컬럼(3SPAN 헤더).
 //     편집 대상 = WORKING_TIME_DEFAULT(FPNumber, scale2) + 동적 D_ 일자셀(Y/N 셀콤보 dtValidYN).
 //   - 편집은 행 게이트가 아니라 EditButton(SwitchLock) 편집모드 진입 후 두 대상만 개방(01_layout §2, 03 §3-a).
 //   - GET SP : PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP (4 IN + O_RC1 데이터 + O_RESULT_CURSOR 상태).
-//     실측(all_arguments + body): O_RC1 = 동적 PIVOT(SELECT IA.* FROM GT_SCP0096_PIVOT — 'D_'||YYYYMMDD 열), O_RESULT_CURSOR = '0'/'SUCCESS'.
+//     실측(all_arguments + body): O_RC1 = 동적 PIVOT(SELECT IA.* FROM GT_SCP0096_PIVOT), O_RESULT_CURSOR = '0'/'SUCCESS'.
 //   - SAVE SP: PKG_SCP0096.P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP (7 CLOB '^' 배열 + P_USER_ID + O_RESULT_CURSOR).
-//   - 3SPAN 헤더: PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN(공용, 조회기간→대/소/일 헤더 컬럼셋) — SHEETS.CALENDAR 로 조회.
+//   - 3SPAN 헤더: PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN(공용, 조회기간→대/소/일 헤더 컬럼셋).
 //   - 설계 : .atlas/gscm-design/SCP0096/design/01_layout.md / 02_search-combo.md / 03_grid-columns.md
 export enum SHEETS {
   // 메인 그리드 — DB 실측 SCM_MST_SHEET_COLUMNS.SHEET_NAME (PROGRAM_ID='SCP0096') = 'Shipment Working Day OSP'.
   //   admin `/column` 조회 키이자 그리드 데이터 sheetName.
   MAIN = 'Shipment Working Day OSP',
-  // 동적 기간 헤더 컬럼셋 전용(데이터 시트 아님) — 사내 현행 배선 SCM_ADM_MNU_BTN_MPG_M(SCP0096 / calendar / SEARCH →
-  //   API SCP0009_SHEET_CALENDAR_3SPAN_GET → PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN, proc_meta.csv).
-  //   AS-IS InitSpread → GetSpdTitle(.cs:151,825-838 SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN) 1:1.
-  //   IN 2개(startYyyymmdd/endYyyymmdd = 사내 PROC_M COL_NM, proc_params.csv)는 Store 의 calendarFilters 가 채운다.
-  //   자매 SCP0095 shipment-working-day / SCP0010·SCP0031·SSP0015 와 동일 명명.
+  // 동적 pivot 헤더 컬럼셋 SP 전용 시트 — PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN(공용, VALID).
+  //   AS-IS GetSpdTitle(3SPAN)의 TO-BE 2콜 재현(03 §4): 조회기간으로 D_/W_/M_ 컬럼명·3단 라벨을 먼저 받아
+  //   그리드 동적 컬럼을 구성한다. 데이터 커서(O_RC1)는 컬럼 메타를 함께 주지 않으므로(call-proc 경로는
+  //   o_rc1_columns 사이드카 미발행) 컬럼 목록의 단일 원천이다. DB 등록: SCM_ADM_MNU_BTN_MPG_M
+  //   (SCP0096/calendar/SEARCH → 공용 API 'SCP0009_SHEET_CALENDAR_3SPAN_GET'), 자매 SCP0010 동형.
   CALENDAR = 'calendar',
-  // 기본 조회기간 전용(데이터 시트 아님) — 사내 현행 배선 SCM_ADM_MNU_BTN_MPG_M(SCP0096 / dayRange / SEARCH →
-  //   API SCM0001_SCP_MONTH_PERIOD_GET → PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD, 2026-10-20 ZIOUI1 실측).
-  //   AS-IS InitControls `dCalendar.InitValue = GetDayRange()`(.cs:137,840-846) = DateUtil.GetDayRange(cboDivision,'DAILY')
-  //   (DateUtil.cs:330-359 → SCP.SCM0001_GET_SCP_MONTH_PERIOD) 1:1. 응답 o_rc1[0].PERIOD = 'yyyymmdd:yyyymmdd'.
-  //   IN 5개(divisionId/planCycle/fromDate/offsetMonth/timeZone = 사내 PROC_M COL_NM)는 Page 의 dayRangeFilters 가 채운다.
-  DAY_RANGE = 'dayRange',
+  // 조회기간 기본값 산정 SP 전용 시트 — PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD(공용, VALID).
+  //   AS-IS DateUtil.GetDayRange(division,"DAILY") 재현(SCP0096.cs:837 → DateUtil.cs:156 → SP). 서버가
+  //   SCM_MST_PLAN 기준으로 PERIOD 를 산정: 계획 있으면 계획일~계획일+363일(52주), 없으면 timezone 기준
+  //   오늘~+offsetMonth. 반환 O_RC1.PERIOD = 'YYYYMMDD:YYYYMMDD'. DB 등록:
+  //   SCM_ADM_MNU_BTN_MPG_M(SCP0096/dayRange/SEARCH → 공용 API 'SCM0001_SCP_MONTH_PERIOD_GET').
+  PERIOD = 'dayRange',
 }
 
-// 응답 키 = 사내 PROC_M OUT COL_NM 그대로(Doc/tobefacts/db/proc_params.csv, 대소문자 그대로).
-//   BE 규약(BaseService.java:84/128/164): OUT 커서는 '@'+COL_NM 로 바인딩하고 응답 키는 '@' 만 뗀 COL_NM(재라벨·소문자화 없음).
-//   ResultSetMetaData 사이드카(o_rc1_columns)는 SYS0013 DynamicQuery(DynamicQueryServiceImpl.java:46,73) 전용이라
-//   일반 call-proc 응답에는 없다 — 동적 헤더는 CALENDAR 시트(3SPAN) 응답 행으로 만든다(2026-10-20 정정, DoD B26/B27).
+// GET SP 는 단일 호출로 데이터(O_RC1) + 상태(O_RESULT_CURSOR) 2커서를 반환한다.
+//   BE 규약(BaseService.java:503): 오라클 OUT 커서명을 소문자화해 응답 키로 쓴다(재라벨 없음).
+//   실측(all_source PKG_SCP0096 BODY): O_RC1 = 동적 PIVOT 데이터, O_RESULT_CURSOR = 상태('0'/'SUCCESS').
 export const RESPONSE_SET = {
-  // 데이터 rows — GET SP OUT COL_NM 'o_rc1' (PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP pos5)
+  // 데이터 rows — SP OUT O_RC1 (BE 표준 매핑 o_rc1)
   MAIN: 'o_rc1',
-  // 동적 기간 헤더 컬럼셋 rows — 3SPAN OUT COL_NM 'o_rc1' (PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN pos3).
-  //   행 = COLUMN_NAME·COLUMN_LABEL_NAME·SMALL_CLASS_LABEL_NAME·LARGE_CLASS_LABEL_NAME·DAY_CODE·SORT_ORDER_NO (사내 실측 2026-10-20).
+  // 동적 D_/W_/M_ 컬럼셋 — CALENDAR(3SPAN) SP OUT O_RC1. call-proc 경로는 데이터 커서의
+  //   ResultSetMetaData 사이드카(o_rc1_columns)를 발행하지 않으므로, 동적 컬럼 목록은 이 커서가 정본이다.
   CALENDAR: 'o_rc1',
-  // 상태 커서 — GET/SAVE SP OUT COL_NM 'o_result_cursor' (CODE/MSG). 데이터 아님(저장/오류 확인용).
+  // 조회기간 산정 커서 — dayRange(GetDayRange) SP OUT O_RC1. 1행 1컬럼 PERIOD='YYYYMMDD:YYYYMMDD'.
+  PERIOD: 'o_rc1',
+  // 상태 커서 — SP OUT O_RESULT_CURSOR (CODE/MSG). 데이터 아님(저장/오류 확인용).
   STATUS: 'o_result_cursor',
+} as const;
+
+// GetDayRange(dayRange) SP 고정 파라미터 — AS-IS SCP0096.cs:837 GetDayRange() 호출 인자 1:1.
+//   planCycle='DAILY'(BucketType.Daily, cs:86·134) / fromDate=''(plan date 미전달) /
+//   offsetMonth='12'(DateUtil.cs:156 sOffsetMonth 기본) / timeZone='AS054'(UserInfoContext.TimeZone 기본
+//   = Asia/Seoul, UserInfo.cs:435). TO-BE 세션에 타임존 필드가 없어 AS-IS 기본값 그대로 고정 전달.
+export const DAY_RANGE_PARAMS = {
+  planCycle: 'DAILY',
+  fromDate: '',
+  offsetMonth: '12',
+  timeZone: 'AS054',
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
@@ -75,56 +87,41 @@ export const DAY_WEEK = {
   SELECT_DAY: 'SelectDay', // 기본. 선택 셀에만 기입(선택셀 0 이면 MSG00134).
 } as const;
 
-// 3SPAN 응답 DAY_CODE — SCM_SYS_CALENDAR_M.DAYOFWEEK 실측 대문자(MON~SUN, 사내 2026-10-20).
-//   AS-IS DefColumnsLabel Saturday="SAT"/Sunday="SUN"(.cs:81-85) — 헤더 요일색(.cs:206-208) 판정 원천.
-//   btnInput 요일별 분기는 AS-IS GetDayOfWeek(.cs:811-818)처럼 cboDayWeek 코드(Mon~Sun).toUpperCase() 와 DAY_CODE 를
-//   그대로 비교한다(.cs:798) — dayjs 요일 재계산 금지(서버 달력이 진실, 2026-10-20 정정: 이전 WEEKDAY_CODE_TO_INDEX 폐기).
-export const DAY_CODE = { SAT: 'SAT', SUN: 'SUN' } as const;
+// 요일코드(Mon~Sun) → dayjs day() 인덱스(0=일 ~ 6=토). btnInput 요일별 분기(GetDayOfWeek 매칭, 03 §3-b :797).
+export const WEEKDAY_CODE_TO_INDEX: Record<string, number> = {
+  Sun: 0,
+  Mon: 1,
+  Tue: 2,
+  Wed: 3,
+  Thu: 4,
+  Fri: 5,
+  Sat: 6,
+} as const;
 
-// 주말 헤더 색 — AS-IS .cs:208 (SAT=Blue / SUN=Red). 자매 SCP0095 동일 팔레트.
-export const WEEKEND_HEADER_COLOR = { SAT: '#1e56c8', SUN: '#c0392b' } as const;
-
-// 동적 일자 컬럼 binding 규약 — 3SPAN COLUMN_NAME / GET SP alias 'D_' || BASIS_YYYYMMDD.
-//   AS-IS Tag.IndexOf("D_")==0(.cs:542,745,759,772,788) 등가이면서 형식(8자리)까지 강제한다.
-export const DAY_BINDING_RE = /^D_\d{8}$/;
-// 합계 컬럼 binding — 3SPAN 'W_'||BASIS_YYYYMM||ISO_WEEK(주) / 'M_'||BASIS_YYYYMM(월). AS-IS SetSpreadColumn(.cs:353)·SetLockSumColumn(.cs:406).
-export const SUM_BINDING_RE = /^[WM]_\d+$/;
-
-// 동적 일자 컬럼 폭 — AS-IS AddComboColumn(sColumnLabelname, sColumnName, FPMerge.None, 50, …) .cs:203 리터럴.
-export const DAY_COLUMN_WIDTH = 50;
-
-// 다단 헤더 총높이 — 48px 고정(hook #93 단일 출처 = foundation HEIGHT_BY_COLUMN_DEPTH, 10_RULES_KEEP D3).
-//   AS-IS ColumnHeaderSpan 의 20 을 3배(60)로 옮기면 위반이다(2026-10-20 정정: 이전 TOTAL=60, 자매 SCP0095 :98-99 지적).
-//   per-tier 높이는 실제 렌더된 columnHeaders.rows.length 로 나눈다(3SPAN 응답 전 1단 → 수신 후 3단 전이에도 총합 유지).
-export const HEADER_TOTAL_HEIGHT = 48;
-
-// AS-IS Validation MSG — TO-BE SCM_ADM_MSG_M 실측(Doc/tobefacts/db/msg_master.csv 2026-10-19 추출) 기준 코드.
-//   ⚠ AS-IS 코드 번호를 그대로 쓰면 안 된다 — TO-BE 는 재채번돼 본문이 다르다(2026-10-20 정정, 원장 S96-10~12):
-//   AS-IS MSG00004 "{0}개의 데이터가 저장되었습니다" → TO-BE MSG00004 는 "수정한 내용이 없습니다" / AS-IS MSG00135 "수정모드가 아니므로
-//   입력할 수 없습니다" → TO-BE MSG00135 는 "편집 모드에서는 이 기능을 사용할 수 없습니다" / AS-IS MSG00134·MSG00050 은 TO-BE 미등록.
-//   원문 동일 코드가 있으면 그것(MSG01154·MSG01153·MSG00672), 없으면 의미 동일 공통 코드를 쓴다. 호출부는 t(MSG.KEY, '_Fallback').
+// Validation MSG — 다국어 정본은 DB(SCM_ADM_MSG_M)다. 전 코드 DB 실재 확인(2026-10-13 ora.py).
+//   JSON(public/locales)은 DB 동기본일 뿐 직접 수정 금지. 아래는 모두 DB 등록 코드로 교정했다.
 export const MSG = {
-  // btnInput 가드 #1 — 조회 전(AS-IS Columns.Get(0).Visible==false .cs:686 → MSG00135 "수정모드가 아니므로…").
-  //   TO-BE 는 편집모드 토글이 없어 '조회 전' 이 이 가드의 실체 → "조회 후 수정모드로 가능합니다."
-  NOT_SEARCHED: 'MSG00662',
-  // btnInput 가드 — 편집 권한 없음(AS-IS 같은 MSG00135 분기). TO-BE 원문 동일 코드 "수정모드가 아니므로 입력할 수 없습니다."
-  NOT_EDIT_MODE: 'MSG01154',
-  // btnInput 가드 #4 — SelectDay 인데 선택셀 0(AS-IS MSG00134 "날짜 선택 후 입력하세요." .cs:703). TO-BE 원문 동일 코드.
+  // btnInput 조회 전 차단 — MSG00662("조회 후 수정모드로 가능합니다", DB 실재). AS-IS 는 MSG00135 였으나
+  //   TO-BE MSG00135 문구가 "편집 모드에서는 이 기능을 사용할 수 없습니다"로 의미가 달라 용도에 맞게 교정.
+  SEARCH_FIRST: 'MSG00662',
+  // 조회조건 필수(Division) — MSG00013("필수 입력란을 입력해 주세요", DB 실재). (MSG00135 오사용 교정)
+  REQUIRED: 'MSG00013',
+  // SelectDay 선택셀 0 — MSG01153("날짜 선택 후 입력하세요", DB 실재). AS-IS MSG00134 문구와 동일하나
+  //   TO-BE DB 에는 MSG00134 가 없고 같은 문구가 MSG01153 으로 등록돼 있어 그 코드를 쓴다.
   NO_CELL_SELECTED: 'MSG01153',
-  // 필수값 — "{0} 값은 필수 입력 항목입니다." ({0}=라벨). 조회 Period 빈값(AS-IS Designer "Period*" :532 +
-  //   DataUtil.checkRequiredOfSearch .cs:432) · btnInput Input Value 빈값/오염(cboInputValue 미선택) 공용.
-  REQUIRED_VALUE: 'MSG00429',
-  // 조회 Division 필수(AS-IS Designer "Division*" :545 + checkRequiredOfSearch) — "Division 을 선택하세요."
-  DIVISION_REQUIRED: 'MSG00097',
-  // 조회기간 역전(from > to) — "조회 기간이 잘못되었습니다 (시작일 > 종료일)."
+  // 조회기간 역전(start>end) — MSG00108("조회 기간이 잘못되었습니다 (시작일 > 종료일)", DB 실재).
   INVALID_PERIOD: 'MSG00108',
-  // WORKING_TIME_DEFAULT 범위 — AS-IS SetReNumerCellType(…, 0, 0, 7) .cs:163 (최소 0 · 최대 7). "{0}~{1} 사이의 수를 입력하세요."
-  WTD_RANGE: 'MSG01037',
-  // WORKING_TIME_DEFAULT 정수 — AS-IS SetReNumerCellType 소수 0자리 .cs:163. "정수값만 입력가능합니다!"
-  WTD_INTEGER: 'MSG00460',
-  // 저장 성공 건수 — AS-IS MSG00004 "{0}개의 데이터가 저장되었습니다"(.cs:622 iCount) = TO-BE MSG00672 "{0}개의 데이터가 저장되었습니다."
-  //   {0} = SAVE SP O_RESULT_CURSOR.RESULT_CNT (선례 SavePricePeriodModal / demand-manager SAVED_COUNT).
-  SAVED_COUNT: 'MSG00672',
+  // InputValue 형식(Y/N) 방어검증 — cboInputValue(YesOrNo)라 정상경로 미도달(사실상 unreachable).
+  //   TODO(다국어 등록 대기): MSG00050 은 AS-IS(TB_FX_MessageInfo) 에서 "This is not a valid numeric
+  //   format.{0}"(숫자형식 오류)라 Y/N 검증과 의미 불일치이고, 그 숫자-형식 메시지는 TO-BE 에 MSG01082 로
+  //   이미 이관됨 → MSG00050 코드는 TO-BE DB 에 없다. Y/N 전용 문구는 신규 등록 요청 중(사용자 seq 채번).
+  //   등록 코드 확정되면 이 값을 그 코드로 교체한다(그 전까지 EN fallback 표시).
+  INVALID_FORMAT: 'MSG00050',
+  // 저장 성공 토스트 — 'MSG00002'="성공적으로 저장되었습니다." (TO-BE 실측). AS-IS 는 MSG00004("N건 저장",
+  //   cs:622)였으나 TO-BE 로케일에서 MSG00004 는 "수정한 내용이 없습니다"(의미 drift)라 성공 메시지로 쓰면
+  //   저장 성공인데 "수정한 내용이 없습니다" 토스트가 뜬다 — 형제 SCP0019/shipment-plan-semi 와 동일 교정.
+  //   [[new-alert-msg-code-reuse-collision]]
+  SAVED: 'MSG00002',
   // 재진입 가드 — 저장 in-flight 중 재클릭 차단(공통 표준)
   WORK_IN_PROGRESS: 'MSG00137',
   // 저장 대상 없음 — "No data to save."
@@ -152,6 +149,8 @@ export const GRID_COMBO_PARAMS: Record<string, string> = { mnuId: `'${MENU_ID}'`
 //   7 CLOB(pos1~7) 는 전부 '^' delim 다건 배열. P_USER_ID(pos8)는 BE 세션 자동이나 배열 붕괴 방지 List 접미.
 //   AS-IS SaveData_Main DataTable A(action)열은 별도 P_ACTION 없음 → M-only 전송이므로 미편입(03 §6-1 확정:
 //   SetModified 만 전송, I/D 는 AS-IS 주석처리 cs:602~604). is_save_defalut 로 D_/DEFAULT 분기.
+// '^' 구분 다건 배열로 보내는 7 CLOB 파라미터(SCM_ADM_PROC_M COL_NM 실측, 전부 CLOB IN).
+//   P_USER_ID 는 여기 없다 — VARCHAR 단일 파라미터(COL_NM='userId')로 payload 에 따로 싣는다(handleSave).
 export const SAVE_KEYS = [
   'divisionId', //          P_DIVISION_ID
   'plantSiteId', //         P_PLANT_SITE_ID
@@ -160,26 +159,25 @@ export const SAVE_KEYS = [
   'shipmentYn', //          P_SHIPMENT_YN (D_ 셀 Y/N)
   'workingTimeDefault', //  P_WORKING_TIME_DEFAULT
   'isSaveDefault', //       P_IS_SAVE_DEFAULT ('Y'=WORKING_TIME_DEFAULT 저장 / 'N'=D_ 일자셀)
-  'userIdList', //          P_USER_ID (BE 세션 자동 — 배열 붕괴 방지 List 접미, WorkingTime 선례)
 ] as const;
 
 // MEASURE 고정값 — GET 이 O_RC1 에 'SHIPMENT WORKING DAY' 문자열 상수로 채움(03 §1 SEQ6 / §4 GET SELECT).
 //   저장 시에도 이 값을 P_MEASURE 로 전송(고정칼럼).
 export const MEASURE_CONST = 'SHIPMENT WORKING DAY' as const;
 
-// WORKING_TIME_DEFAULT 입력 제약 — AS-IS InitSpread `SetReNumerCellType(spdInfo, col(WORKING_TIME_DEFAULT), 0, 0, 7)`(.cs:163):
-//   소수 0자리 · 최소 0 · 최대 7(주당 출하 가능 일수). 사내 SAVE SP(F_TO_NUM)는 범위 검사가 없으므로 저장 직전 FE 가 판정한다.
-//   빈값은 AS-IS 가 "0" 으로 치환(.cs:567) = 사내 SP F_TO_NUM(NULL)=0 과 동등이라 FE 는 '' 그대로 보낸다.
-export const WTD_RANGE = { MIN: 0, MAX: 7 } as const;
-
 // UI 라벨 코드 — SCM_ADM_MSG_M(MSG_TP_CD='LBL') DB 실측. 호출부는 t(LBL.KEY, '_Fallback').
-//   (Sum 라벨 LBL00687 은 2026-10-20 제거 — AS-IS chkSum 은 Designer Visible=false(:346)라 사용자에게 보이지 않는 컨트롤.)
 export const LBL = {
   SEARCH: 'LBL00112', //         Search
-  DIVISION: 'LBL00641', //       Division (DB 실측 EN/KO='Division'. LBL00001='Div.' 는 다른 라벨)
+  // Division 라벨은 기본 Div(LBL00001)로 통일(사용자 정책 2026-10-13 [[division-label-default-div-not-division]]).
+  //   AS-IS 설계(02_search-combo §1·§4.5)는 LBL00641='Division'이나, 전사 기본값 Div 정책을 우선 적용.
+  DIVISION: 'LBL00001', //       Div (KO 'Div' / EN·CN 'Div.')
+
   PLANT_SITE: 'LBL00005', //     Plant Site
   PERIOD: 'LBL00013', //         Period
   DAY_OF_THE_WEEK: 'LBL01067', // Day of the week
   INPUT_VALUE: 'LBL01084', //    Input Value
   INPUT: 'LBL00872', //          Input
+  SUM: 'LBL00687', //            Sum
+  OK: 'LBL00716', //             OK (팝업 확인 버튼)
+  CLOSE: 'LBL00627', //          Close (팝업 닫기 버튼)
 } as const;

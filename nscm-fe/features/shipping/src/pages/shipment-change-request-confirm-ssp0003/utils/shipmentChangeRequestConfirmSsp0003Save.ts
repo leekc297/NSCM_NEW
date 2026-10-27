@@ -13,6 +13,23 @@ import {
 
 type Row = Record<string, unknown>;
 
+// 다행 CLOB 인자의 행 구분자. 쉼표가 아니라 '^' 다 — 바꾸면 다행 저장이 조용히 깨진다.
+//   근거 1(TO-BE): PKG_SSP0003 BODY 16 `C_DELIMITER CONSTANT VARCHAR2(1 CHAR) := '^'`.
+//     F_SPL_CNT/P_SPL_ARR 가 이 문자로만 토큰을 자르므로 "C1,C2" 는 토큰 1개가 된다
+//     → P_SSP0003_SAVE_REQ_DE_CONFIRM 의 DE UPDATE 0건 → P_SSP0003_SAVE_REQ_CONFIRM(_40) 의
+//     ATTRIBUTE2='A' 건수 0 → V_CHANGE_STATUS:='R'(BODY 893~935). 화면은 성공 토스트인데
+//     헤더는 반려로 저장되고 XIF 에는 승인행이 쌓인다(2026-10-26 결함).
+//   근거 2(AS-IS): CString.AppendString 의 기본 delimiter 가 "^" 다
+//     (GSCM/01.Framework/GSCM.Windows.Forms/Utility/CString.cs:617) — SSP0003_ShipmentChangeRequestConfirm.cs
+//     L879~884 가 이 함수로 p_confirm_id/p_new_confirm_id/p_status_detail 을 조립한다.
+//   어느 인자가 CLOB(=행 결합)인지는 ALL_ARGUMENTS 실측이다 — VARCHAR2 스칼라(p_item_id·p_from_site·
+//     p_yyyymmdd·p_delegatee·p_last_updated_by 등)는 결합하지 않는다. 자매 화면 SSP0200
+//     (shipmentChangeRequestPlanSave.ts) 도 같은 규칙으로 '^' 를 쓴다.
+const PROC_ROW_DELIMITER = '^';
+
+/** 다행 CLOB 인자 1건 조립 — 1행이면 구분자 없이 값 그대로. */
+const joinRows = (values: string[]): string => values.join(PROC_ROW_DELIMITER);
+
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' || typeof v === 'boolean' ? String(v) : '';
 
@@ -114,15 +131,15 @@ export const buildDeConfirmPayload = (
     changeRequestNo: ctx.changeReqNo,
     changeStatus,
     rejectReason: ctx.rejectReason,
-    confirmId: confirmId.join(','),
-    newConfirmId: newConfirmId.join(','),
+    confirmId: joinRows(confirmId),
+    newConfirmId: joinRows(newConfirmId),
     lastUpdatedBy: ctx.userId,
-    statusDetail: statusDetail.join(','),
+    statusDetail: joinRows(statusDetail),
   };
 };
 
 // AS-IS SaveData(L972-1230) → PKG_SSP0003.P_SSP0003_SAVE_REQ_CONFIRM(_40) (36 IN, ALL_ARGUMENTS 실측).
-//   A: 체크행만 NEW_* CLOB 콤마 누적(미체크 continue) / R·S·O: NEW_* 공란 + p_division_id=행0.
+//   A: 체크행만 NEW_* CLOB 에 '^' 누적(미체크 continue) / R·S·O: NEW_* 공란 + p_division_id=행0.
 //   반환 is40 = p_division_id 앞2 '40'(L1125) → SAVE_40 라우팅.
 export const buildConfirmPayload = (
   rows: Row[],
@@ -136,6 +153,11 @@ export const buildConfirmPayload = (
     delegatee: string;
     delegateeDept: string;
     userId: string;
+    /**
+     * 사용자 TZ 코드(`sessionTimeZone(session)` = SCM_ADM_USER_M.TMZ_CD).
+     *   이 화면에서는 전달만 한다 — PKG_SSP0003 의 FN_MULTY_TIME 호출이 전부 주석 처리돼 있어
+     *   현재 동작 영향이 없다(APPROVAL_TIME·LAST_UPDATE_DATE = SYSDATE).
+     */
     timeZone: string;
   }
 ): { payload: Record<string, string>; is40: boolean } => {
@@ -210,14 +232,15 @@ export const buildConfirmPayload = (
     }
   }
 
-  // p_division_id: A 이고 체크행 있으면 체크행 콤마목록, 아니면 행0 단일(L1119-1122).
-  let divisionId = acc.divisionId.join(',');
+  // p_division_id: A 이고 체크행 있으면 체크행 '^' 목록, 아니면 행0 단일(L1119-1122).
+  let divisionId = joinRows(acc.divisionId);
   if (action !== SAVE_STATUS.APPROVED || (count.checked === 0 && count.unchecked > 0)) {
     divisionId = str(rows[0]?.[SUB_COL.DIVISION_ID]);
   }
   const is40 = divisionId.slice(0, 2) === '40';
 
   const payload: Record<string, string> = {
+    // VARCHAR2 스칼라 인자(ALL_ARGUMENTS 실측 position 1~3·5~7·26~28·32~33) — 행 결합하지 않는다.
     changeRequestNo: ctx.changeReqNo,
     changeStatus,
     rejectReason: ctx.rejectReason,
@@ -225,35 +248,36 @@ export const buildConfirmPayload = (
     itemId,
     fromSite,
     yyyymmdd,
-    confirmId: acc.confirmId.join(','),
-    newConfirmId: acc.newConfirmId.join(','),
-    newEtdDate: acc.newEtdDate.join(','),
-    newEtaDate: acc.newEtaDate.join(','),
-    newQty: acc.newQty.join(','),
-    newShipDate: acc.newShipDate.join(','),
-    newYn: acc.newYn.join(','),
-    newBodId: acc.newBodId.join(','),
-    newRouteId: acc.newRouteId.join(','),
-    newIncoterms: acc.newIncoterms.join(','),
-    newDContry: acc.newDContry.join(','),
-    newDPortCode: acc.newDPortCode.join(','),
-    newACountry: acc.newACountry.join(','),
-    newAPortCode: acc.newAPortCode.join(','),
-    newToCountry: acc.newToCountry.join(','),
-    newToCity: acc.newToCity.join(','),
-    newLtDay: acc.newLtDay.join(','),
-    newTransportMode: acc.newTransportMode.join(','),
+    // 이하 CLOB 인자 — 전부 PROC_ROW_DELIMITER('^') 결합이다.
+    confirmId: joinRows(acc.confirmId),
+    newConfirmId: joinRows(acc.newConfirmId),
+    newEtdDate: joinRows(acc.newEtdDate),
+    newEtaDate: joinRows(acc.newEtaDate),
+    newQty: joinRows(acc.newQty),
+    newShipDate: joinRows(acc.newShipDate),
+    newYn: joinRows(acc.newYn),
+    newBodId: joinRows(acc.newBodId),
+    newRouteId: joinRows(acc.newRouteId),
+    newIncoterms: joinRows(acc.newIncoterms),
+    newDContry: joinRows(acc.newDContry),
+    newDPortCode: joinRows(acc.newDPortCode),
+    newACountry: joinRows(acc.newACountry),
+    newAPortCode: joinRows(acc.newAPortCode),
+    newToCountry: joinRows(acc.newToCountry),
+    newToCity: joinRows(acc.newToCity),
+    newLtDay: joinRows(acc.newLtDay),
+    newTransportMode: joinRows(acc.newTransportMode),
     lastUpdatedBy: ctx.userId,
     timeZone: ctx.timeZone,
     changeType: ctx.changeType,
-    remarks: acc.remarks.join(','),
-    remarks2: acc.remarks2.join(','),
-    remarks3: acc.remarks3.join(','),
+    remarks: joinRows(acc.remarks),
+    remarks2: joinRows(acc.remarks2),
+    remarks3: joinRows(acc.remarks3),
     delegatee: ctx.delegatee,
     delegateeDept: ctx.delegateeDept,
-    erpAttr1: acc.erpAttr1.join(','),
-    erpAttr2: acc.erpAttr2.join(','),
-    erpAttr3: acc.erpAttr3.join(','),
+    erpAttr1: joinRows(acc.erpAttr1),
+    erpAttr2: joinRows(acc.erpAttr2),
+    erpAttr3: joinRows(acc.erpAttr3),
   };
   return { payload, is40 };
 };

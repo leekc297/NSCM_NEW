@@ -1,7 +1,8 @@
+import { CRUD_MSG } from '@foundation/constants';
 import { safeString } from '@foundation/utils';
 import { useMessageStore } from '@shared/stores';
 
-import { ALL_MODEL, COLUMNS, MSG } from '../plan-group-master.constants';
+import { ALL_MODEL, COLUMNS, LABELS, MSG } from '../plan-group-master.constants';
 import type { PlanGroupRow } from '../plan-group-master.types';
 import type { ActionRow } from '../utils/plan-group-master.save';
 
@@ -59,10 +60,16 @@ export const usePlanGroupMasterValidation = () => {
     // 변경행 중 'D' 가 아닌 것만 검증 trigger (AS-IS: action != D 인 경우만 중복/제약 체크).
     const triggers = actionRows.filter(a => a.action !== 'D');
 
-    // W9 신규행 Plan Group 필수 (TO-BE MSG00013 — AS-IS MSG00001 은 TO-BE 문구 불일치로 미사용, GAP-11).
+    // W9 신규행 Plan Group 필수 — 공용(useSaveWithValidation)·SCP0002 와 동일한 per-column 문구
+    //   MSG00429 "[{컬럼}] 값은 필수 입력 항목입니다."({0}=`[라벨]`). 라벨은 조회조건과 같은 LBL00002(Plan Group).
     for (const a of triggers) {
       if (a.action === 'I' && str(a.row[COLUMNS.OPMZ_PLAN_GR_ID]) === '') {
-        return fail(t(MSG.REQUIRE_PLAN_GROUP, '_Plan Group is required.'));
+        return fail(
+          t(CRUD_MSG.REQUIRED_FIELD.id, CRUD_MSG.REQUIRED_FIELD.fallback).replace(
+            '{0}',
+            `[${t(LABELS.PLAN_GROUP, '_Plan Group')}]`
+          )
+        );
       }
     }
 

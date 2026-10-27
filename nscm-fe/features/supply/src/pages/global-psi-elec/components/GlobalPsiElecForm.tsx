@@ -7,7 +7,7 @@ import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
-import { Grid } from '@shared/mui';
+import { Grid, Typography } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shared/stores';
 
 import {
@@ -17,13 +17,14 @@ import {
   LBL,
   MSG,
   PERIOD_W52_OFFSET_DAYS,
+  PLAN_TYPE_DEFAULT,
 } from '../global-psi-elec.constants';
 import { useGlobalPsiElecStore } from '../useGlobalPsiElecStore';
 
 interface Props {
   onSearch: () => void;
-  // Model 팝업(ElecMaterialPopup) 오픈 — 페이지가 open state 소유(design 02 §4.6).
-  onModelSearch: () => void;
+  // Material 팝업(메1 MaterialByDivisionModal) 오픈 — 페이지가 open state 소유(design 02 §4.6).
+  onMaterialSearch: () => void;
 }
 
 interface Option {
@@ -58,7 +59,7 @@ const addDaysYmd = (ymd: string, days: number): string => {
 //     Company·Model(ELEC_MODEL) = `IN (STRING_SPLIT(@p_company/@p_item_id, ','))` → Company 는 다중선택(콤마조인) 유지.
 //   두 콤보 모두 isAddALL=false(AS-IS BLUtils.GetDivisionEE(false)/Data.Common(...,false)) → allOption 미추가
 //     (iter-3 A1): 'ALL' 센티널은 등식/IN 어느 쪽도 매치 0 이라 빈 그리드. Company 미선택('')은 SP 가 전체로 우회.
-export const GlobalPsiElecForm = ({ onSearch, onModelSearch }: Props) => {
+export const GlobalPsiElecForm = ({ onSearch, onMaterialSearch }: Props) => {
   const { t } = useTranslation();
 
   const sc = useGlobalPsiElecStore(s => s.searchCondition);
@@ -76,6 +77,20 @@ export const GlobalPsiElecForm = ({ onSearch, onModelSearch }: Props) => {
   const [planDates] = useTabComboQueries({
     filters: [{ comboId: COMBO.PLAN_DATE, divisionId: sc.divisionId }],
   });
+  // Report Type* — PlanType 콤보(AS-IS 전극 Report Type 이관, SCP_PLAN_VERSION_V.plan_type). division + plan_start 종속.
+  //   등록 SQL 실측(SCM_ADM_CMBO_SQL_M): WHERE division_id=@divisionId AND (@planStartYyyymmdd IS NULL OR
+  //   plan_start_yyyymmdd=@planStartYyyymmdd) — plan_type 목록이 날짜마다 다르다(예 div40: 최신주=PR/MA/FN,
+  //   그 이전=TE/PR/MA/FN). @planStartYyyymmdd 미전달 시 '' → Oracle '' IS NULL=TRUE → 전 날짜 합집합이 되어
+  //   Plan Date 를 바꿔도 목록이 안 좁혀진다. 두 토큰 모두 전달해 AS-IS 날짜 종속 재바인딩 재현.
+  const [reportTypes] = useTabComboQueries({
+    filters: [
+      {
+        comboId: COMBO.REPORT_TYPE,
+        divisionId: sc.divisionId,
+        planStartYyyymmdd: sc.planStartYyyymmdd,
+      },
+    ],
+  });
 
   // EE 전극만 유지(design 02 §2-1) — Division_SCP 가 ATTRIBUTE3 를 반환하므로 관대 가드 아님(no-op 회피).
   const divisionOptions = useMemo<Option[]>(
@@ -84,6 +99,7 @@ export const GlobalPsiElecForm = ({ onSearch, onModelSearch }: Props) => {
   );
   const companyOptions = toOptions(companies);
   const planDateOptions = toOptions(planDates);
+  const reportTypeOptions = toOptions(reportTypes);
 
   const bucketOptions: Option[] = [
     { label: t(LBL.BUCKET_DAILY, 'Daily'), value: BUCKET_CODE.DAILY },
@@ -114,6 +130,33 @@ export const GlobalPsiElecForm = ({ onSearch, onModelSearch }: Props) => {
       toYyyymmdd: addDaysYmd(v, PERIOD_W52_OFFSET_DAYS),
     });
   };
+
+  // 기본값 자동선택 — AS-IS 콤보 바인딩 후 첫 행 선택 재현(자매 SCP0100 firstDivision/firstPlanDate 선례).
+  //   현재 값이 옵션에 없으면 첫 옵션(=제일 위 값)을 선택한다. Division→Plan-date→Period cascade 로 파생.
+  const firstDivision = divisionOptions[0]?.value ?? '';
+  const hasDivision = divisionOptions.some(o => o.value === sc.divisionId);
+  useEffect(() => {
+    if (firstDivision && !hasDivision) setDivision(firstDivision);
+  }, [firstDivision, hasDivision, setDivision]);
+
+  // Plan-date 기본값 — 목록 첫 항목(AS-IS setListBox index0). 선택 시 Period(W52)도 applyPlanDate 로 파생.
+  const firstPlanDate = planDateOptions[0]?.value ?? '';
+  const hasPlanDate = planDateOptions.some(o => o.value === sc.planStartYyyymmdd);
+  useEffect(() => {
+    if (firstPlanDate && !hasPlanDate) applyPlanDate(firstPlanDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstPlanDate, hasPlanDate]);
+
+  // Report Type 기본값 — AS-IS 는 첫 값이 아니라 'FN'(반영 09주 기준). 옵션(division 종속)에 현재 값이 없으면
+  //   FN 으로, FN 조차 없는 division 이면 첫 옵션으로 보정(빈값=SP 결과 0 방지).
+  useEffect(() => {
+    if (reportTypeOptions.length === 0) return;
+    const has = (v: string) => reportTypeOptions.some(o => o.value === v);
+    if (!has(sc.planType)) {
+      set({ planType: has(PLAN_TYPE_DEFAULT) ? PLAN_TYPE_DEFAULT : reportTypeOptions[0].value });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportTypeOptions, sc.planType]);
 
   const single = (
     labelText: string,
@@ -203,7 +246,7 @@ export const GlobalPsiElecForm = ({ onSearch, onModelSearch }: Props) => {
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.MODEL, 'Model')}
+              label={t(LBL.MATERIAL, 'Material')}
               labelAlign='right'
               render={() => (
                 <InputField
@@ -217,7 +260,7 @@ export const GlobalPsiElecForm = ({ onSearch, onModelSearch }: Props) => {
                         appearance='outlined'
                         priority='normal'
                         iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onModelSearch} />
+                          <FunctionSearchIcon appearance='lined' onClick={onMaterialSearch} />
                         }
                       />
                     ),
@@ -229,12 +272,22 @@ export const GlobalPsiElecForm = ({ onSearch, onModelSearch }: Props) => {
             />
           </Grid>
 
-          {/* Row2 — Plan-date*(cascade) / Period(from~to YYYYMMDD) / Bucket */}
+          {/* Row2 — Plan-date*(cascade) / Report Type*(plan_type) / Period(from~to YYYYMMDD) / Bucket */}
           {single(
             t(LBL.PLAN_DATE, 'Plan Date'),
             sc.planStartYyyymmdd,
             planDateOptions,
             applyPlanDate,
+            true,
+            noDivisionAuth
+          )}
+          {/* Plan Type*(필수) — p_plan_type. SP 가 A.PLAN_TYPE=UPPER(P_PLAN_TYPE) 필터라 빈값이면 결과 0.
+              기본 FN. 빈 선택이면 FN 으로 되돌려 결과 소실 방지(Bucket 동형 가드). */}
+          {single(
+            t(LBL.PLAN_TYPE, 'Plan Type'),
+            sc.planType,
+            reportTypeOptions,
+            v => set({ planType: v || PLAN_TYPE_DEFAULT }),
             true,
             noDivisionAuth
           )}
@@ -256,6 +309,15 @@ export const GlobalPsiElecForm = ({ onSearch, onModelSearch }: Props) => {
             false,
             noDivisionAuth
           )}
+
+          {/* Plan Type 안내 문구(MSG01399) — plan_type(MA/FN)별 산출물 설명. AS-IS 처럼 윗줄 Plan Type '라벨 글자'
+              시작 위치에 맞춘다. 라벨은 우측정렬(labelAlign='right')이라 140px 라벨열 안에서 글자가 오른쪽에 붙어
+              대략 열폭(140) - 라벨글자폭('Plan Type' ~63px) ≈ 77px 지점에서 시작한다 → pl 77px. */}
+          <Grid size={12}>
+            <Typography variant='caption' color='text.secondary' sx={{ pl: '77px' }}>
+              {t(MSG.REPORT_TYPE_GUIDE)}
+            </Typography>
+          </Grid>
         </>
       }
     />

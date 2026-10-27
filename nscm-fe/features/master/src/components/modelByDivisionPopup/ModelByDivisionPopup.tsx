@@ -107,6 +107,22 @@ export const ModelByDivisionPopup = ({
     ],
   });
 
+  // Site 드롭다운 표시용 옵션 — 호출 화면이 넘긴 scmSiteId 가 SCM0001_GET_SITE_BY_DIVISION 목록에
+  //   없으면(예: SSP0026 Request Detail 의 From Site 는 plant-site 코드라 이 콤보에 없음) 드롭다운이
+  //   값을 못 찾아 'ALL'로 떨어진다. 실제 조회 필터(scmSiteId)에는 들어가지만 칸이 비어 보이므로,
+  //   넘어온 코드를 옵션에 보강해 **전달된 Site 가 그대로 표시**되게 한다(값이 목록에 있으면 변화 없음).
+  const siteOptions = useMemo(() => {
+    const base = sites?.map(item => ({ label: String(item.NAME), value: String(item.CODE) })) ?? [];
+    const passed = params?.scmSiteId;
+    if (!passed || passed === 'ALL') return base;
+    return passed
+      .split(',')
+      .map(c => c.trim())
+      .filter(c => c && !base.some(o => o.value === c))
+      .map(c => ({ label: c, value: c }))
+      .concat(base);
+  }, [sites, params?.scmSiteId]);
+
   // 팝업이 열릴 때마다 호출 화면 파라미터로 초기화한다.
   //   division/scmSite 빈값은 'ALL' 센티널로 보정(빈 문자열이면 SP 가 0건).
   useEffect(() => {
@@ -125,6 +141,15 @@ export const ModelByDivisionPopup = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
+  // EE(Electrode)는 논리 division이라 아이템 마스터(SCM_MST_SITE_ITEM)에 'EE' 행이 없고 물리 division
+  //   81/82/40 밑에 있다. AS-IS SCM0002_ItembyDivisionPopup.cs:245-251 과 동일하게 조회 파라미터만
+  //   '81,82,40' 으로 치환한다(표시용 Div 필드는 원래 값 'EE' 유지). 그 외 division 은 그대로.
+  const queryFilters = useMemo<ModelFilters>(
+    () =>
+      searchParam.divisionId === 'EE' ? { ...searchParam, divisionId: '81,82,40' } : searchParam,
+    [searchParam]
+  );
+
   const {
     data,
     isLoading,
@@ -133,7 +158,7 @@ export const ModelByDivisionPopup = ({
     menuId: MODEL_MENU,
     sheetName: MODEL_SHEET,
     tabId: 'ModelByDivisionPopup',
-    filters: searchParam,
+    filters: queryFilters,
     enabled: open,
   });
   const loading = isLoading || isFetching;
@@ -249,7 +274,7 @@ export const ModelByDivisionPopup = ({
                         disabled
                         limitTags={1}
                         value={params?.scmSiteId ?? ''}
-                        options={sites?.map(item => ({ label: item.NAME, value: String(item.CODE) })) ?? []}
+                        options={siteOptions}
                       />
                     )}
                   />

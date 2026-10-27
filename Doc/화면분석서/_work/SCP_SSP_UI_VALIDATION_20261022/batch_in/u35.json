@@ -1,0 +1,42 @@
+[
+ {
+  "screen": "SCP0106",
+  "title": "Loss Plan",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0106_CAPA_Loss_Plan/AssemblyUtils.cs:1733",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0106_CAPA_Loss_Plan/EltrUtils.cs:2490",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0106_CAPA_Loss_Plan/SCP0106_CAPA_Loss_Plan.cs:4373"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0106_CAPA_Loss_Plan/SCP0106_CAPA_Loss_Plan.Designer.cs:1203"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/capa-loss-plan"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "1601",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0106_CAPA_Loss_Plan\\SCP0106_CAPA_Loss_Plan.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "1601",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0106_CAPA_Loss_Plan\\SCP0106_CAPA_Loss_Plan.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0104_GET_SPREAD_TITLE"
+  ],
+  "db_validation_brief": []
+ }
+]

@@ -1,0 +1,110 @@
+{
+  "id": "SSP0015",
+  "task": "S5.pipeline",
+  "scope": "both",
+  "note": "pipeline.js SSP0015 --max 3 --phase 1",
+  "start": "2026-10-21T23:43:03+09:00",
+  "end": "2026-10-21T23:43:07+09:00",
+  "exit": 1,
+  "sources": [
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SSP0015",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SSP0015",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-10-21T23:43:07+09:00",
+  "changed": [
+    {
+      "file": "fe\\components\\ShipmentChangeRequestDraftingModal.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\components\\ShipmentOrderDetailModal.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\components\\ShipmentPsiDetailBar.module.scss",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\components\\ShipmentPsiDetailBar.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\components\\ShipmentPsiDetailGrid.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\components\\ShipmentPsiForm.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\components\\ShipmentPsiMainGrid.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\components\\ShipmentPsiMemoModal.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\index.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\shipment-plan-mobility-it.constants.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\shipment-plan-mobility-it.types.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\ShipmentPlanMobilityIt.module.scss",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\ShipmentPlanMobilityIt.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\useShipmentPlanMobilityItStore.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\utils\\shipment-plan-mobility-it.detailSheets.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\utils\\shipment-plan-mobility-it.editLock.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\utils\\shipment-plan-mobility-it.merge.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\utils\\shipment-plan-mobility-it.save.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\utils\\shipment-plan-mobility-it.sum.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\__asis-mapping__.md",
+      "kind": "added"
+    }
+  ]
+}

@@ -1,0 +1,348 @@
+﻿CREATE PROCEDURE [dbo].[PR_UI_FP00770_FIND_FP00770]
+  @p_sys_type			nvarchar(MAX),  
+  @p_sys_flag			nvarchar(MAX),
+  @p_sys_gubun			nvarchar(MAX),  
+  @p_user_id			nvarchar(MAX),
+  @in_columns nvarchar(MAX),
+  @in_row nvarchar(MAX),
+  @opt_none nvarchar(5) = 'N'
+WITH EXEC AS CALLER
+AS
+/***********************************************************************************************/
+/** 프로그램 ID   : PR_UI_FP00770_FIND_FP00770                                                            **/
+/** 프로그램 명   : Procedure PR_UI_FP00770_FIND_FP00770                                                                          **/
+/** 설 명         :                                                                           **/
+/** Version       : 1.5.0(Auto)                                                                     **/
+/**                                                                                           **/
+/** Argument                                                                                  **/
+/**                                                                                           **/
+/** [검색 조건]                                                                              **/
+/**                                                                                           **/
+/** [Biz Logic]                                                                               **/
+/**                                                                                           **/
+/**-------------------------------------------------------------------------------------------**/
+/** 작 성 일 자    작 성 자      사     유                                                    **/
+/**===========================================================================================**/
+/** 2022-05-11     KSI      Auto Generated With Initial Setting                                                      **/
+/***********************************************************************************************/
+/*
+  EXEC PR_UI_FP00770_FIND_FP00770
+*/
+
+BEGIN
+  SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+  SET NOCOUNT ON; 
+  SET XACT_ABORT ON;
+  
+  --DECLARE BASE PARAMETER START
+  DECLARE @STRLEN nvarchar(max)
+  DECLARE @runstart datetime
+  DECLARE @runend datetime
+  DECLARE @v_dSql nvarchar(max)
+  DECLARE @v_Err nvarchar(max)
+  DECLARE @v_Log nvarchar(max) 
+  DECLARE @v_proc_name nvarchar(100) = 'PR_UI_FP00770_FIND_FP00770'
+  DECLARE @v_delimiter          NVARCHAR(1)
+  DECLARE @max_loop_cnt	        INTEGER = 0
+  DECLARE @mst_loop_cnt	        INTEGER = 0
+  DECLARE @p_shop_group_id nvarchar(max) = ''
+  DECLARE @p_site_id nvarchar(max) = ''
+  DECLARE @p_operation_id nvarchar(max) = ''
+  DECLARE @p_line_id nvarchar(max) = ''
+  DECLARE @p_start_date nvarchar(max) = ''
+  DECLARE @p_item_id nvarchar(max) = ''
+  DECLARE @p_division_lt nvarchar(max) = ''
+  DECLARE @p_plant_lt nvarchar(max) = ''
+  DECLARE @p_factory_lt nvarchar(max) = ''
+  DECLARE @p_param nvarchar(max) = ''
+  DECLARE @p_queryset1 nvarchar(max) = ''
+
+
+  DECLARE @v_shop_group_id nvarchar(max)
+  DECLARE @v_user_id nvarchar(max)
+  DECLARE @v_site_id nvarchar(max)
+  DECLARE @v_operation_id nvarchar(max)
+  DECLARE @v_line_id nvarchar(max)
+  DECLARE @v_start_date nvarchar(max)
+  DECLARE @v_item_id nvarchar(max)
+  DECLARE @v_division_lt nvarchar(max)
+  DECLARE @v_plant_lt nvarchar(max)
+  DECLARE @v_factory_lt nvarchar(max)
+  DECLARE @v_param nvarchar(max)
+  DECLARE @v_queryset1 nvarchar(max)
+
+  --DECLARE BASE PARAMETER START END
+
+  --Optional Parameter Part START
+  DECLARE @opt_0shop_group_id nvarchar(max)
+  DECLARE @opt_1site_id nvarchar(max)
+  DECLARE @opt_2operation_id nvarchar(max)
+  DECLARE @opt_3line_id nvarchar(max)
+  DECLARE @opt_4item_id nvarchar(max)
+  DECLARE @opt_5shop_group_id nvarchar(max)
+  DECLARE @opt_6site_id nvarchar(max)
+  DECLARE @opt_7operation_id nvarchar(max)
+  DECLARE @opt_8line_id nvarchar(max)
+  DECLARE @opt_9item_id nvarchar(max)
+
+  --Optional Parameter Part END
+
+  SET @v_delimiter            = '^'  -- 데이터 구분자
+  SET @max_loop_cnt           = [dbo].[SCM_ARR_SPL_CNT](@in_columns, @v_delimiter) -- 프로시저 LOOP 길이를 판단
+  DECLARE @tmp_column nvarchar(MAX) = ''
+  WHILE @mst_loop_cnt < @max_loop_cnt
+  BEGIN -- 각 컬럼들에 대한 스플릿처리로직 스타트	
+	SET @mst_loop_cnt = @mst_loop_cnt + 1;	-- @mst_loop_cnt 1증가
+
+	SET @tmp_column			    = [dbo].[SCM_ARR_SPL_VAL]( @in_columns			    ,@v_delimiter, @mst_loop_cnt);
+	IF @tmp_column = '_SAVE_AUTH' BEGIN
+		SET @tmp_column =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+    END ELSE IF @tmp_column = 'SHOP_GROUP_ID' BEGIN
+      SET @p_shop_group_id =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+    END ELSE IF @tmp_column = 'SITE_ID' BEGIN
+      SET @p_site_id =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+    END ELSE IF @tmp_column = 'OPERATION_ID' BEGIN
+      SET @p_operation_id =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+    END ELSE IF @tmp_column = 'LINE_ID' BEGIN
+      SET @p_line_id =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+    END ELSE IF @tmp_column = 'START_DATE' BEGIN
+      SET @p_start_date =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+    END ELSE IF @tmp_column = 'ITEM_ID' BEGIN
+      SET @p_item_id =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+    END ELSE IF @tmp_column = 'DIVISION_ID' BEGIN
+      SET @p_division_lt =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+    END ELSE IF @tmp_column = 'PLANT_ID' BEGIN
+      SET @p_plant_lt =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+    END ELSE IF @tmp_column = 'FACTORY_ID' BEGIN
+      SET @p_factory_lt =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+    END ELSE IF @tmp_column = 'PARAM' BEGIN
+      SET @p_param =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+    END ELSE IF @tmp_column = 'QUERYSET1' BEGIN
+      SET @p_queryset1 =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+	END ELSE IF @tmp_column = '_NON_AUTH' BEGIN
+		SET @tmp_column =  [dbo].[SCM_ARR_SPL_VAL]( @in_row			    ,@v_delimiter, @mst_loop_cnt);
+	END
+  END
+  --SET @p_user_id = dbo.FN_deCRYPT_AES128(@p_user_id)
+  
+  SET @v_shop_group_id ='''' + @p_shop_group_id + ''''
+  SET @v_user_id ='''' + @p_user_id + ''''
+  SET @v_site_id ='''' + @p_site_id + ''''
+  SET @v_operation_id ='''' + @p_operation_id + ''''
+  SET @v_line_id ='''' + @p_line_id + ''''
+  SET @v_start_date ='''' + @p_start_date + ''''
+  SET @v_item_id ='''' + @p_item_id + ''''
+  SET @v_division_lt ='''' + @p_division_lt + ''''
+  SET @v_plant_lt ='''' + @p_plant_lt + ''''
+  SET @v_factory_lt ='''' + @p_factory_lt + ''''
+  SET @v_param ='''' + @p_param + ''''
+  SET @v_queryset1 ='''' + @p_queryset1 + ''''
+
+  SET @STRLEN = LEN(@p_shop_group_id)
+  IF @STRLEN< 1  BEGIN
+    SET @opt_0shop_group_id = ''
+  END ELSE BEGIN
+    SET @opt_0shop_group_id = 'AND  B.SHOP_GROUP_ID = ' + @v_shop_group_id+''
+  END
+  SET @STRLEN = LEN(@p_site_id)
+  IF @STRLEN< 1  BEGIN
+    SET @opt_1site_id = ''
+  END ELSE BEGIN
+    SET @opt_1site_id = 'AND  A.SITE_ID = ' + @v_site_id+''
+  END
+  SET @STRLEN = LEN(@p_operation_id)
+  IF @STRLEN< 1  BEGIN
+    SET @opt_2operation_id = ''
+  END ELSE BEGIN
+    SET @opt_2operation_id = 'AND  A.OPERATION_ID = ' + @v_operation_id+''
+  END
+  SET @STRLEN = LEN(@p_line_id)
+  IF @STRLEN< 1  BEGIN
+    SET @opt_3line_id = ''
+  END ELSE BEGIN
+    SET @opt_3line_id = 'AND  A.LINE_ID = ' + @v_line_id+''
+  END
+  SET @STRLEN = LEN(@p_item_id)
+  IF @STRLEN< 1  BEGIN
+    SET @opt_4item_id = ''
+  END ELSE BEGIN
+    SET @opt_4item_id = 'AND   UPPER(A.ITEM_ID) LIKE ''%'' + UPPER(' + @v_item_id+') + ''%'''
+  END
+  SET @STRLEN = LEN(@p_shop_group_id)
+  IF @STRLEN< 1  BEGIN
+    SET @opt_5shop_group_id = ''
+  END ELSE BEGIN
+    SET @opt_5shop_group_id = 'AND  B.SHOP_GROUP_ID = ' + @v_shop_group_id+''
+  END
+  SET @STRLEN = LEN(@p_site_id)
+  IF @STRLEN< 1  BEGIN
+    SET @opt_6site_id = ''
+  END ELSE BEGIN
+    SET @opt_6site_id = 'AND  A.SITE_ID = ' + @v_site_id+''
+  END
+  SET @STRLEN = LEN(@p_operation_id)
+  IF @STRLEN< 1  BEGIN
+    SET @opt_7operation_id = ''
+  END ELSE BEGIN
+    SET @opt_7operation_id = 'AND  A.OPERATION_ID = ' + @v_operation_id+''
+  END
+  SET @STRLEN = LEN(@p_line_id)
+  IF @STRLEN< 1  BEGIN
+    SET @opt_8line_id = ''
+  END ELSE BEGIN
+    SET @opt_8line_id = 'AND  A.LINE_ID = ' + @v_line_id+''
+  END
+  SET @STRLEN = LEN(@p_item_id)
+  IF @STRLEN< 1  BEGIN
+    SET @opt_9item_id = ''
+  END ELSE BEGIN
+    SET @opt_9item_id = 'AND   UPPER(A.ITEM_ID) LIKE ''%'' + UPPER(' + @v_item_id+') + ''%'''
+  END
+
+
+  --FIND_FP00770  
+  SET @v_dSql = ''
+  SET @v_dSql += '      SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, ' + char(10)
+  SET @v_dSql += '      CONVERT(VARCHAR, A.CUTOFF_DATE, 112) AS CUTOFF_DATE, ' + char(10)
+  SET @v_dSql += '      A.WORK_ORDER_ID, A.ORDER_TYPE, A.ITEM_ID, A.TOP_ITEM_ID, ISNULL(C.NICK_NAME, ''-'') AS NICK_NAME,' + char(10)
+  SET @v_dSql += '      A.OPERATION_ID, A.LINE_ID, A.WORK_CENTER_ID, ' + char(10)
+  SET @v_dSql += '      CONVERT(VARCHAR, A.PLAN_DATE, 112) AS PLAN_DATE, ' + char(10)
+  SET @v_dSql += '      CONVERT(VARCHAR, A.PLAN_START_TIME, 120) AS PLAN_START_TIME, ' + char(10)
+  SET @v_dSql += '      CONVERT(VARCHAR, A.PLAN_END_TIME, 120) AS PLAN_END_TIME, ' + char(10)
+  SET @v_dSql += '      A.PLAN_QTY, ' + char(10)
+  SET @v_dSql += '      CONVERT(VARCHAR, A.ACTUAL_START_TIME, 120) AS ACTUAL_START_TIME, ' + char(10)
+  SET @v_dSql += '      CONVERT(VARCHAR, A.ACTUAL_END_TIME, 120) AS ACTUAL_END_TIME, ' + char(10)
+  SET @v_dSql += '      A.ACTUAL_QTY, A.BOM_VERSION_ID, A.WO_STATUS, B.SHOP_GROUP_ID,' + char(10)
+  SET @v_dSql += '        A.PLAN_QTY - ISNULL(A.ACTUAL_QTY,0) AS REMAIN_QTY, A.INSERT_ID, CONVERT(VARCHAR, A.INSERT_TIME, 120) INSERT_TIME, ' + char(10)
+  SET @v_dSql += '        B.OPERATION_NAME, ' + char(10)
+  SET @v_dSql += '      (SELECT TOP 1 X.LINE_NAME ' + char(10)
+  SET @v_dSql += '         FROM   SCM_LINE_M  X WITH(NOLOCK) ' + char(10)
+  SET @v_dSql += '         WHERE  X.COMPANY_ID   = A.COMPANY_ID ' + char(10)
+  SET @v_dSql += '         AND    X.DIVISION_ID  = A.DIVISION_ID ' + char(10)
+  SET @v_dSql += '         AND    X.SITE_ID      = A.SITE_ID ' + char(10)
+  SET @v_dSql += '         AND    X.PLANT_ID     = A.PLANT_ID ' + char(10)
+  SET @v_dSql += '         AND    X.FACTORY_ID   = A.FACTORY_ID ' + char(10)
+  SET @v_dSql += '         AND    X.OPERATION_ID = A.OPERATION_ID ' + char(10)
+  SET @v_dSql += '         AND    X.LINE_ID      = A.LINE_ID ' + char(10)
+  SET @v_dSql += '         ORDER BY X.OPERATION_ID DESC) AS LINE_NAME  ' + char(10)
+  SET @v_dSql += '      , V.WORK_REQUEST_MODEL_ID, V.VERSION ' + char(10) -- version 추가... 20231121
+  SET @v_dSql += '      , V.PLM_EC_NO ' + char(10) -- PDS 2차 고도화
+  SET @v_dSql += '      FROM FP_ERP_WORK_ORDER_STATUS_H A WITH(NOLOCK)  ' + char(10)
+  SET @v_dSql += '      LEFT HASH JOIN SCM_OPERATION_M B WITH(NOLOCK) ' + char(10)
+  SET @v_dSql += '      ON    A.COMPANY_ID    = B.COMPANY_ID ' + char(10)
+  SET @v_dSql += '      AND   A.DIVISION_ID   = B.DIVISION_ID ' + char(10)
+  SET @v_dSql += '      AND   A.SITE_ID       = B.SITE_ID ' + char(10)
+  SET @v_dSql += '      AND   A.OPERATION_ID  = B.OPERATION_ID ' + char(10)
+  SET @v_dSql += ' ' +@opt_0shop_group_id +' '+''+char(10)--AND  B.SHOP_GROUP_ID = #SHOP_GROUP_ID#
+  SET @v_dSql += '      INNER HASH JOIN SCM_ITEM_M C WITH(NOLOCK)'+char(10)
+  SET @v_dSql += '      ON    A.COMPANY_ID       = C.COMPANY_ID'+char(10)
+  SET @v_dSql += '      AND   A.DIVISION_ID   = C.DIVISION_ID'+char(10)
+  SET @v_dSql += '      AND   A.SITE_ID       = C.SITE_ID'+char(10)
+  SET @v_dSql += '      AND   A.ITEM_ID       = C.ITEM_ID'+char(10)
+  SET @v_dSql += '      LEFT OUTER JOIN ( '+char(10) -- version 추가... 20231121
+  SET @v_dSql += '      	SELECT RR.WORK_ORDER_ID, MAX(RR.WORK_REQUEST_MODEL_ID) AS WORK_REQUEST_MODEL_ID '+char(10)
+  --SET @v_dSql += '      		 , MAX(CASE WHEN B.INSTANCE_ID LIKE ''%CELL%'' THEN PLM_EC_NO '+char(10)
+  --SET @v_dSql += '      			        WHEN B.INSTANCE_ID LIKE ''%E_PRE%'' THEN VERSION '+char(10)
+  --SET @v_dSql += '      			        ELSE RR.VERSION END) AS VERSION '+char(10)
+  SET @v_dSql += '      		 , MAX(VERSION) AS VERSION, MAX(PLM_EC_NO) AS PLM_EC_NO '+char(10) -- PDS 2차 고도화
+  SET @v_dSql += '      	FROM   FP_PRODUCTION_PLAN_R RR WITH(NOLOCK) '+char(10)
+  SET @v_dSql += '      	INNER JOIN  ( '+char(10)
+  SET @v_dSql += '      		SELECT V.COMPANY_ID, V.DIVISION_ID, V.SITE_ID, V.PLANT_ID, V.FACTORY_ID, V.OPERATION_ID, V.LINE_ID, MAX(V.INSTANCE_ID) AS INSTANCE_ID '+char(10)
+  SET @v_dSql += '      		FROM   FP_INSTANCE_LINE_V V WITH(NOLOCK) '+char(10)
+  SET @v_dSql += '      		WHERE  1=1 '+char(10)
+  SET @v_dSql += '      		' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('V.DIVISION_ID' , 'EQ', @p_division_lt))
+  SET @v_dSql += '      		' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('V.SITE_ID' , 'EQ', @p_site_id))
+  SET @v_dSql += '      		' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('V.PLANT_ID' , 'EQ', @p_plant_lt))
+  SET @v_dSql += '      		' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('V.FACTORY_ID' , 'EQ', @p_factory_lt))
+  SET @v_dSql += '      		' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('V.OPERATION_ID' , 'EQ', @p_operation_id))
+  SET @v_dSql += '      		' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('V.LINE_ID' , 'EQ', @p_line_id))
+  SET @v_dSql += '      		GROUP BY V.COMPANY_ID, V.DIVISION_ID, V.SITE_ID, V.PLANT_ID, V.FACTORY_ID, V.OPERATION_ID, V.LINE_ID '+char(10)
+  SET @v_dSql += '      	) B '+char(10)
+  SET @v_dSql += '      	ON  1=1 '+char(10)
+  SET @v_dSql += '      	AND RR.COMPANY_ID   = B.COMPANY_ID '+char(10)
+  SET @v_dSql += '      	AND RR.DIVISION_ID  = B.DIVISION_ID '+char(10)
+  SET @v_dSql += '      	AND RR.SITE_ID      = B.SITE_ID '+char(10)
+  SET @v_dSql += '      	AND RR.PLANT_ID     = B.PLANT_ID '+char(10)
+  SET @v_dSql += '      	AND RR.FACTORY_ID   = B.FACTORY_ID '+char(10)
+  SET @v_dSql += '      	AND RR.OPERATION_ID = B.OPERATION_ID '+char(10)
+  SET @v_dSql += '      	AND RR.LINE_ID      = B.LINE_ID '+char(10)
+  SET @v_dSql += '      	WHERE  1=1 '+char(10)
+  SET @v_dSql += '      	' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('RR.DIVISION_ID' , 'EQ', @p_division_lt))
+  SET @v_dSql += '      	' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('RR.SITE_ID' , 'EQ', @p_site_id))
+  SET @v_dSql += '      	' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('RR.PLANT_ID' , 'EQ', @p_plant_lt))
+  SET @v_dSql += '      	' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('RR.FACTORY_ID' , 'EQ', @p_factory_lt))
+  SET @v_dSql += '      	' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('RR.OPERATION_ID' , 'EQ', @p_operation_id))
+  SET @v_dSql += '      	' + (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('RR.LINE_ID' , 'EQ', @p_line_id)) + char(10)
+  SET @v_dSql += '      	AND RR.PLAN_DATE >= ' + @v_start_date + ' '+char(10)
+  SET @v_dSql += '      	GROUP BY RR.WORK_ORDER_ID '+char(10)
+  SET @v_dSql += '      ) V '+char(10)
+  SET @v_dSql += '      ON  A.WORK_ORDER_ID = V.WORK_ORDER_ID '+char(10)
+  SET @v_dSql += '      WHERE C.ACTIVE_FLAG   = ''Y'''+char(10)
+/*
+  SET @v_dSql += '      AND   EXISTS ('+char(10)
+  SET @v_dSql += '            SELECT 1'+char(10)
+  SET @v_dSql += '            FROM   FP_USER_ROLE_INFO_V B WITH(NOLOCK)'+char(10)
+  SET @v_dSql += '            WHERE  A.COMPANY_ID   = B.COMPANY_ID'+char(10)
+  SET @v_dSql += '            AND    A.DIVISION_ID  = B.DIVISION_ID'+char(10)
+  SET @v_dSql += '            AND    A.SITE_ID      = B.SITE_ID'+char(10)
+  SET @v_dSql += '            AND    A.PLANT_ID     = B.PLANT_ID'+char(10)
+  SET @v_dSql += '            AND    A.FACTORY_ID   = B.FACTORY_ID'+char(10)
+  SET @v_dSql += '            AND    A.OPERATION_ID = B.OPERATION_ID'+char(10)
+  SET @v_dSql += '            AND    A.LINE_ID      = B.LINE_ID'+char(10)
+  SET @v_dSql += '            AND    B.USER_ID      ='+char(10)
+  SET @v_dSql += '' + @v_user_id+''+char(10)
+  SET @v_dSql += '      )'+char(10)
+*/
+  SET @v_dSql += (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('A.SITE_ID' , 'EQ', @p_site_id)) + char(10)
+  SET @v_dSql += (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('A.OPERATION_ID' , 'EQ', @p_operation_id)) + char(10)
+  SET @v_dSql += (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('A.LINE_ID' , 'EQ', @p_line_id)) + char(10)
+
+    SET @v_dSql += '      AND   CONVERT(VARCHAR, A.CUTOFF_DATE, 112) ='+char(10)
+  SET @v_dSql += '' + @v_start_date+''+char(10)
+
+  --SET @v_dSql += ' ' +@opt_1site_id +' '+''+char(10)--AND  A.SITE_ID = #SITE_ID#
+  --SET @v_dSql += ' ' +@opt_2operation_id +' '+''+char(10)--AND  A.OPERATION_ID = #OPERATION_ID#
+  --SET @v_dSql += ' ' +@opt_3line_id +' '+''+char(10)--AND  A.LINE_ID = #LINE_ID#
+
+  SET @v_dSql += ' ' +@opt_4item_id +' '+''+char(10)
+  
+  --AND   UPPER(A.ITEM_ID) LIKE '%' + UPPER(#ITEM_ID#) + '%'
+  ---- REMAINED SCRIPT (PLEASE CONVERT THIS MANUALLY----
+ 
+ 
+
+
+
+   SET @v_dSql += (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('A.DIVISION_ID' , 'EQ', @p_division_lt)) + char(10)
+  SET @v_dSql += (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('A.PLANT_ID' , 'EQ', @p_plant_lt)) + char(10)
+   SET @v_dSql += (SELECT  [DBO].[FN_SCM_GET_WHERE_SQL]('A.FACTORY_ID' , 'EQ', @p_factory_lt)) + char(10)
+  SET @v_dSql += '      ORDER BY DIVISION_ID, SITE_ID, PLANT_ID, FACTORY_ID, SHOP_GROUP_ID, WORK_ORDER_ID, ITEM_ID, OPERATION_ID, LINE_ID'+char(10)
+
+
+
+  IF @p_sys_type = 'SQL'
+  BEGIN
+    -- return SQL Query Source
+    select @v_dSql as [QUERY_VALUE]
+  END ELSE BEGIN
+    SET @runstart = GetDate()
+
+    BEGIN TRY
+      BEGIN TRAN
+        -- run dynamic sql
+        exec sp_executesql @v_dSql
+      COMMIT TRAN
+    END TRY
+    BEGIN CATCH
+      ROLLBACK
+      SET @runend = GetDate()
+      exec PR_UI_SQL_LOG @v_proc_name,  @p_user_id,'','',@v_dSql,'rollback error',@runstart, @runend
+    END CATCH
+
+    SET @runend = GetDate()
+    -- Record sql query
+    exec PR_UI_SQL_LOG @v_proc_name,  @p_user_id,'','',@v_dSql,'select',@runstart, @runend
+  END
+
+
+END

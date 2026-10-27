@@ -7,15 +7,16 @@
 
 // PeriodField(features/master/src/components/searchFields)의 DatePickerCalendar
 // 입력 박스와 동일한 높이(36px)·아이콘+텍스트 구성.
+// 배경/테두리/글자색은 테마 토큰(commonBgBasic/commonBorderBasic/commonTextBasic)을
+//   컴포넌트가 inline style(dateBoxStyle)로 주입한다 — 라이트/다크 자동 대응.
 .dateBox {
   display: flex;
   align-items: center;
   gap: 6px;
   height: 36px;
   padding: 0 10px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid;
   border-radius: 4px;
-  background: #fff;
   cursor: pointer;
   font-size: 13px;
   white-space: nowrap;

@@ -17,6 +17,8 @@ interface Props {
   tabId: string;
   onSearch: () => void;
   onItemSearch: () => void; // btnItemId (1차 Model 팝업)
+  // 상단 조회 dirty 가드를 Main 그리드 단위로 좁히는 키(사용자 지시 2026-10-20). SearchArea 로 그대로 전달.
+  searchDirtyKey?: string;
 }
 
 interface Option {
@@ -91,7 +93,12 @@ const planPeriodOf = (code: string): { from: string; to: string } => {
 //   3단(extraConditions — hook #52 2단 초과 접기): Sum 체크박스
 //   Division/Company = 전용 SP 2-cursor(P_SSP0021_GET_SHIPMENT_DIVISION — 콤보 레지스트리 아님, 02 §2-A).
 //   Company 는 O_RC2 를 선택 Division 으로 클라 필터(AS-IS dtCompany LINQ 등가 — SP 결과에 DIVISION_ID 포함).
-export const ShipmentPlanAutoEssForm = ({ tabId, onSearch, onItemSearch }: Props) => {
+export const ShipmentPlanAutoEssForm = ({
+  tabId,
+  onSearch,
+  onItemSearch,
+  searchDirtyKey,
+}: Props) => {
   const { t } = useTranslation();
   const session = useSessionStore(s => s.session);
 
@@ -178,13 +185,14 @@ export const ShipmentPlanAutoEssForm = ({ tabId, onSearch, onItemSearch }: Props
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sc.divisionId, divisionOptions]);
 
-  // Company 기본값 — 세션에 company 필드 부재(groupId/langCd/userId/div 뿐)라 첫 행 선택만 재현(02 §4.1-3).
-  //   사용자 회사 매칭 재현 수단(세션 확장/전용 콤보)은 확인필요(04_react-gap §확인필요).
-  const companyDefaulted = useRef(false);
+  // Company 기본값 — division 의 첫 회사 자동선택. **1회 ref 가드를 두지 않는다(의도)**: Division 을
+  //   바꾸면 그 division 의 첫 회사로 다시 기본값이 잡혀 PlanDate·Period cascade 가 재개돼야 한다.
+  //   종전 companyDefaulted ref 는 div 변경 시 재선택을 막아 company/planDate/period 가 빈 채로 남아
+  //   "삭제"처럼 보였다(사용자 신고 2026-10-16). companyOptions 는 divisionData.o_rc2 의 클라 필터라
+  //   div 변경 즉시 갱신돼 stale 선택 위험이 없고, companyId 가 차면 `sc.companyId` 게이트로 더는
+  //   발화하지 않아 무한 루프·사용자 수동변경 덮어쓰기가 없다.
   useEffect(() => {
-    if (companyDefaulted.current) return;
     if (!sc.divisionId || sc.companyId || companyOptions.length === 0) return;
-    companyDefaulted.current = true;
     setCompany(companyOptions[0].value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sc.divisionId, sc.companyId, companyOptions]);
@@ -198,6 +206,20 @@ export const ShipmentPlanAutoEssForm = ({ tabId, onSearch, onItemSearch }: Props
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sc.companyId, sc.planDate, planDates]);
 
+  // Period 파생 (저장 조회조건 복원 보완) — period(periodFrom/To)는 저장측 EXCLUDED_DATE_PARAM 라
+  //   복원되지 않아, 새로고침 후 planDate 는 돌아오는데 period 만 비어 있었다(사용자 신고 2026-10-16).
+  //   planDate 는 있는데 period 가 비면 planDate 에서 파생해 채운다(planPeriodOf). planDate 가 현재
+  //   콤보 목록에 있을 때만(복원값 유효성) 수행하며, idx===0 으로 최신 Plan 여부(realFlag)도 맞춘다.
+  //   위 기본값 effect 와는 조건이 상호배타다(저쪽은 planDate 가 빌 때, 이쪽은 planDate 가 찼고 period 가 빌 때).
+  useEffect(() => {
+    if (!sc.planDate || sc.periodFrom || !planDates || planDates.length === 0) return;
+    const idx = planDates.findIndex(r => str(r?.CODE) === sc.planDate);
+    if (idx < 0) return;
+    const { from, to } = planPeriodOf(sc.planDate);
+    setPlanDate(sc.planDate, from, to, idx === 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sc.planDate, sc.periodFrom, planDates]);
+
   const handlePlanDateChange = (code: string) => {
     const idx = (planDates ?? []).findIndex(r => str(r.CODE) === code);
     const { from, to } = planPeriodOf(code);
@@ -209,6 +231,7 @@ export const ShipmentPlanAutoEssForm = ({ tabId, onSearch, onItemSearch }: Props
       searchButtonLabel={t(LBL.SEARCH, '_Search')}
       isHidden={!openSearchArea}
       onSearch={onSearch}
+      searchDirtyKey={searchDirtyKey}
       conditions={
         <>
           {/* Division* — 단일선택, 자동선택 없음(사용자 직접 선택 후 cascade 시작 — 02 §4.3) */}
@@ -312,23 +335,21 @@ export const ShipmentPlanAutoEssForm = ({ tabId, onSearch, onItemSearch }: Props
             />
           </Grid>
 
-          {/* Period* — 자매 SSP0060 과 동일하게 공용 PeriodField 로 표시한다(사용자 지시 2026-10-12).
-              종전에는 disabled InputField 에 `20260919 ~ 20261113` 처럼 YYYYMMDD 원문을 이어 붙여
-              보여줬다 — AS-IS drpPeriod 는 날짜 피커라 `2026-09-19` 대시 표기다. PeriodField 가
-              store 의 8자 값을 받아 그 표기로 렌더하므로 변환 없이 주고받는다.
-
-              다만 **편집은 막는다(`disabled`)** — AS-IS 가 두 화면에서 다르다:
-                SSP0021 `Designer.cs:428` `this.drpPeriod.Enabled = false;`  → 표시전용
-                SSP0060 Designer 에는 해당 줄이 없다(기본 enabled)           → 편집 가능
-              그래서 SSP0060 Form 은 editable PeriodField 를 쓰지만 여기서는 disabled 를 준다.
-              (`disabled` 는 SSP0015 Packer 시트 선례가 있는 공용 prop — SearchFields.tsx L1120.) */}
+          {/* Period* — 표시전용(비활성). AS-IS 파리티: SSP0021 `Designer.cs:428 drpPeriod.Enabled=false`
+              (상단 period 는 항상 비활성이고, cboPlanDate 변경 핸들러가 FROM_DATE/TO_DATE 로 값만 자동
+              세팅한다 — cs:5934~). Plan Date 선택 시 planPeriodOf 로 periodFrom/To 가 파생돼 채워지고,
+              사용자는 직접 수정하지 못한다(disabled 라 onChange 는 발화하지 않음 — 유지).
+              이력: 2026-10-16 에 'SSP0005 기준 자유편집'으로 열어 뒀으나(SSP0060 과 통일 명목), SSP0021
+              AS-IS 는 비활성이 맞아 2026-10-20 사용자 지시로 AS-IS 파리티(disabled)로 되돌린다. 자매
+              SSP0060 AS-IS 는 drpPeriod.Enabled=false 가 없어(편집가능) 그대로 둔다 — 두 화면은 각자의
+              AS-IS 에 맞게 달라진다. store periodFrom/To 는 YYYYMMDD 8자 네이티브. */}
           <PeriodField
             gridSize={3}
             label={t(LBL.PERIOD, '_Period')}
             start={sc.periodFrom}
             end={sc.periodTo}
-            onChange={(s, e) => set({ periodFrom: s, periodTo: e })}
             disabled
+            onChange={(s, e) => set({ periodFrom: s, periodTo: e })}
           />
 
           {/* Model — txtItemId + btnItemId (SCM0002_ItembyDivisionPopup, Main 조회 P_ITEM_ID) */}

@@ -60,9 +60,11 @@ const RESTORE_ARRAY_KEYS = new Set<string>(['scmSiteIds']);
 const RESTORE_BOOL_KEYS = new Set<string>(['showSum']);
 
 /**
- * 기간 기본값 — AS-IS SP02 `SCM0001_GET_SCP_DAY_PERIOD(p_from_date='', p_offset_day='55', p_timezone='AS054')`
- * 의 등가(오늘 ~ 오늘+55일). **달력 마스터(`SCM_SYS_CALENDAR_M`) 존재일로 clamp 하는 부분은 서버 몫**이며
- * `PKG_SSP0045` 미배포 상태라 지금은 반영되지 않는다(04 리포트 ERROR). SP 배선 시 이 값만 교체한다.
+ * 기간 기본값(폴백) — dayjs 근사(오늘 ~ 오늘+55일).
+ * 정상 경로는 Form 이 콤보 `SCM0001_GET_SCP_DAY_PERIOD`(@offsetDay=55, @timeZone='AS054')로 서버 산출값을
+ * 받아 이 시드를 덮어쓴다(ShipmentRequestSemiForm 의 dayPeriod effect). 서버는 '오늘(KST)~오늘+55일'을
+ * 달력 마스터(`SCM_SYS_CALENDAR_M`) 존재일로 clamp 한다 — dayjs 는 그 clamp·타임존을 재현하지 못하므로
+ * 콤보 미도착/실패 시에만 이 근사가 남는다(design 02 §5.4, 사용자 결정 2026-10-21).
  * 주의: 날짜는 dayjs 로컬 — `toISOString()`(UTC) 금지(nscm-patterns §5-12).
  */
 const makeInitPeriod = (): { fromYyyymmdd: string; toYyyymmdd: string } => ({

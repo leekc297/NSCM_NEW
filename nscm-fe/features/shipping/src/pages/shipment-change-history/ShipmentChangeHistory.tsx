@@ -1,6 +1,7 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import dayjs from 'dayjs';
+import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CRUD_MSG } from '@foundation/constants';
@@ -9,12 +10,19 @@ import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
-import { ItemByDivisionModal } from './components/modals/ItemByDivisionModal';
 import { ShipmentPlanRequestModal } from './components/modals/ShipmentPlanRequestModal';
 import { ShipmentChangeHistoryForm } from './components/ShipmentChangeHistoryForm';
 import { ShipmentChangeHistoryGrid } from './components/ShipmentChangeHistoryGrid';
-import { LAST_SEQ_COLUMN, LAST_SEQ_CURRENT, LBL, MENU_ID, MSG, SHEETS } from './shipment-change-history.constants';
-import type { MainRow, PopupRow } from './shipment-change-history.types';
+import {
+  DIVISION_ALL,
+  LAST_SEQ_COLUMN,
+  LAST_SEQ_CURRENT,
+  LBL,
+  MENU_ID,
+  MSG,
+  SHEETS,
+} from './shipment-change-history.constants';
+import type { MainRow } from './shipment-change-history.types';
 import styles from './ShipmentChangeHistory.module.scss';
 import { useShipmentChangeHistoryStore } from './useShipmentChangeHistoryStore';
 
@@ -25,7 +33,10 @@ const str = (v: unknown): string =>
 //   설계: .atlas/gscm-design/SSP0019/design/00~03 + convert-flow goal/plan. 도메인 SSP(features/shipping).
 //   읽기전용 조회(inquiry): 전열 LockColumn, 편집 4버튼(Insert/Delete/Edit/Save) AS-IS NO-OP -> admin 메타 SEARCH 한정
 //     등록(design 01 §4d) -> hotkeyConfig 편집키 false(미노출, __asis-mapping__ 근거). 저장/편집 데이터 계약 없음.
-//   SP 미배포(goal.md ②): PKG_SSP0019 -> 조회 런타임 미완(convert-sp 후속). FE 는 47컬럼 계약으로 구현.
+//   읽기전용의 근거는 코드 + DB 양쪽이다: AS-IS 가 Insert/Delete/Edit/SaveButton 을 빈 override 로 두고
+//     spdMain 을 ReadOnlySheetList 에 넣으며(cs:268, 352-367), TB_FX_GROUPMENUAUTH 실측(2026-10-14)상
+//     SSP0019 등록 15개 그룹 전부 BASICACLR 만 Y 이고 C/U/D 는 0건이다(= 편집권한 보유 그룹 자체가 없음).
+//   GET SP PKG_SSP0019.P_SSP0019_GET_SHIPMENT_CHANGE_HISTORY 는 배포됨(ALL_PROCEDURES 실측 2026-10-14).
 export const ShipmentChangeHistory = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -141,10 +152,11 @@ export const ShipmentChangeHistory = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticColumns();
   };
 
-  // Model 팝업(design 02 §4.6) — 조회조건 Division/From Site/Model 사전필터로 오픈.
-  const handleModelSelected = (picked: PopupRow[]) => {
-    const ids = picked.map(r => str(r.ITEM_ID)).filter(Boolean);
-    if (ids.length > 0) setSearchCondition({ itemId: ids.join(',') });
+  // Model/Nickname 팝업 선택 확정 — master 계약 positional 1번째가 ITEM_ID(다건은 콤마 결합).
+  //   빈 반환(선택 없이 닫기)이면 기존 조회조건을 유지한다(AS-IS btnItemId_Click 의 `if (ItemID != "")` 등가).
+  const handleModelSelected = (itemId: string) => {
+    const picked = str(itemId);
+    if (picked) setSearchCondition({ itemId: picked });
     setModelPopupOpen(false);
   };
 
@@ -195,14 +207,26 @@ export const ShipmentChangeHistory = ({ tabId, title }: PageProps<MENU_ID>) => {
         />
       </div>
 
-      {/* Model 조회조건 팝업 — SCM0002 Item by Division(로컬, division/scmSite 사전필터). */}
-      <ItemByDivisionModal
+      {/* Model/Nickname 조회조건 팝업 — 공용 `MaterialByDivisionModal`(COM0013,
+          PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION)로 교체(사용자 지시 2026-10-14, 자매 SSP0003/0026 공통).
+          AS-IS 는 `SCM0002_ItembyDivisionPopup`(= SCM.SCM0002_GET_ITEM_BY_DIVISION_POPUP)이라
+          **조회 SP 가 달라지는 의도적 드리프트**다. `scpModuleType` 에 SSP 화면 ID 는 SP 에 열거돼 있지
+          않아 기본 ELSE 분기를 타 기본 Material 목록을 돌려준다(자매 화면 실측).
+          `multiDivision` — 이 화면 Division 은 다중체크라 콤마 결합해 그대로 넘긴다(SP 가 P_DIVISION_ID 를
+          콤마 split → IN 처리). 미체크(=권한범위 전체)면 'ALL' 센티널 — 빈 문자열이면 모달이
+          `enabled: !!divisionId` 로 조회를 막아 검색이 안 된다.
+          한계: AS-IS 가 함께 넘기던 scmSite(From Site) 사전필터는 이 모달 계약에 site 축이 없어 전달
+          불가다 — 종전 `scmSite` 전달분이 사라진다(자매 SSP0003 §Q-5 와 동일 한계). */}
+      <MaterialByDivisionModal
         open={modelPopupOpen}
         modalClose={() => setModelPopupOpen(false)}
+        multiDivision
+        multiCheckbox
         setSelectedValue={handleModelSelected}
         preSearchParams={{
-          divisionId: sc.divisionIds.join(','),
-          scmSite: sc.fromSiteIds.join(','),
+          divisionId: sc.divisionIds.length ? sc.divisionIds.join(',') : DIVISION_ALL,
+          scpModuleType: MENU_ID,
+          operationGroup: '',
           itemId: sc.itemId,
         }}
       />

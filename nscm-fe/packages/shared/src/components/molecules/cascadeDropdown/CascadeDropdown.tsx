@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { type CSSProperties, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
@@ -43,11 +43,54 @@ export interface CascadeDropdownProps {
   variant?: 'horizontal' | 'vertical';
   labelAlign?: 'left' | 'right';
   formItemClassName?: string;
+  // 단일 입력칸(combined) — 모든 단계를 하나의 필드로 합치고 선택 경로를 separator 로 이어 보여준다.
+  //   기본 true(참조 Bootstrap Cascader 형: 라벨 1개 + 입력칸 1개, 선택값 'A / B / C'). false 면 단계별
+  //   개별 필드(종전 N-필드 레이아웃).
+  combined?: boolean;
+  // combined 단일 라벨. 미지정 시 각 단계 label 을 separator 로 이어 만든다.
+  label?: string;
+  // 선택 경로·단일 라벨 결합 구분자(기본 ' / ').
+  separator?: string;
+  // combined 입력칸 고정폭. formItem 필드 열이 auto(내용폭 상한)라 Grid size 만으론 폭을 못 정하므로,
+  //   단일 필드 폭을 이 값으로 고정한다(예: '190px'). 선택값이 이보다 길면 … 로 잘리고 전체값은 hover
+  //   title 로 보인다. 바깥 Grid size 는 이 폭 + 라벨(140px)을 담을 만큼 충분해야 한다.
+  inputWidth?: number | string;
 }
 
 const DEFAULT_GRID_SIZE = 3;
 const DEFAULT_COLUMN_SPACING = '24px';
 const DEFAULT_ROW_SPACING = '8px';
+const DEFAULT_SEPARATOR = ' / ';
+
+// 필드 버튼 공통 스타일(combined/개별 공용) — 표준 CustomDropdown 필드와 높이(36px)·폰트를 맞춘다.
+//   네이티브 button 은 폰트를 상속하지 않으므로 디자인시스템 폰트(body = Spoqa Han Sans Neo)·사이즈를 명시한다.
+const FIELD_BUTTON_STYLE: CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  width: '100%',
+  height: '36px',
+  boxSizing: 'border-box',
+  padding: '0 10px',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  background: '#fff',
+  fontFamily: 'inherit',
+  fontSize: '13px',
+  fontWeight: 400,
+  lineHeight: 'normal',
+  overflow: 'hidden',
+  cursor: 'pointer',
+};
+// 표준 콤보처럼 단일 행·좌측정렬, 넘치면 … 로 자른다(줄바꿈 금지).
+const FIELD_LABEL_SPAN_STYLE: CSSProperties = {
+  flex: 1,
+  minWidth: 0,
+  textAlign: 'left',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+};
 
 /**
  * 종속 콤보(공유 캐스케이더) — 1~N단계 필드를 항상 나란히 보여주되, 어느 필드를 누르든 같은
@@ -69,6 +112,10 @@ export const CascadeDropdown = ({
   variant = 'vertical',
   labelAlign,
   formItemClassName,
+  combined = true,
+  label,
+  separator = DEFAULT_SEPARATOR,
+  inputWidth,
 }: CascadeDropdownProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   // 각 단계 필드 버튼(라벨 제외한 박스)의 ref — 팝업 열을 그 박스 바로 아래에 같은 폭으로 맞추기
@@ -139,7 +186,7 @@ export const CascadeDropdown = ({
   // 팝업을 열 때 각 필드 박스의 실제 위치(rootRef 기준)·폭을 측정해 팝업 열에 반영한다. paint 전에
   //   실행(useLayoutEffect)되므로 깜빡임 없이 버튼 바로 아래에 같은 폭으로 뜬다. 라벨폭을 가정하지 않는다.
   useLayoutEffect(() => {
-    if (!open || !rootRef.current) return;
+    if (!open || combined || !rootRef.current) return;
     const rootLeft = rootRef.current.getBoundingClientRect().left;
     setPopupCols(
       levels.map((_, i) => {
@@ -149,7 +196,7 @@ export const CascadeDropdown = ({
         return { left: r.left - rootLeft, width: r.width };
       })
     );
-  }, [open, levels]);
+  }, [open, combined, levels]);
 
   // 어느 단계 필드를 눌러도 같은 액션 — 현재 확정값에서 시작해 팝업을 연다.
   const openPicker = () => {
@@ -170,6 +217,94 @@ export const CascadeDropdown = ({
     // 잎이면 닫고, 자식이 있으면 다음 열을 펼친 채 선택을 더 받는다.
     if (!node.children?.length) setOpen(false);
   };
+
+  // 팝업 한 열(column) 렌더 — combined/개별 공용.
+  const renderColumn = (nodes: CascadeNode[], colIndex: number) => (
+    <ul className={styles.list}>
+      {nodes.map(node => {
+        const active = activePath[colIndex] === node.value;
+        return (
+          <li key={node.value}>
+            <button
+              type='button'
+              onClick={() => handlePick(colIndex, node)}
+              className={[styles.item, active && styles.itemActive].filter(Boolean).join(' ')}
+            >
+              <span className={styles.itemLabel}>{node.label}</span>
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+
+  // combined — 라벨 1개 + 입력칸 1개. 선택된 각 단계 라벨을 separator 로 이어 보여주고(미선택은 건너뜀),
+  //   클릭하면 종전과 동일한 캐스케이드 컬럼 팝업이 열린다. 컬럼들은 입력칸 아래에 가로로 나란히 뜬다.
+  if (combined) {
+    const combinedLabel = label ?? levels.map(level => level.label).join(separator);
+    const combinedRequired = levels.some(level => level.required);
+    const selectedLabels = levels
+      .map(
+        (level, index) =>
+          optionsByLevel[index]?.find(opt => opt.value === value[level.name])?.label
+      )
+      .filter((lbl): lbl is string => !!lbl);
+    const display = selectedLabels.join(separator);
+
+    return (
+      <div ref={rootRef} style={{ position: 'relative' }}>
+        <FormItem
+          variant={variant}
+          labelAlign={labelAlign}
+          className={formItemClassName}
+          label={combinedLabel}
+          required={combinedRequired}
+          render={() => (
+            <button
+              type='button'
+              onClick={openPicker}
+              title={display || undefined}
+              style={{
+                ...FIELD_BUTTON_STYLE,
+                color: display ? '#1f1f1f' : '#999',
+                // 고정폭 지정 시 width:100%(FIELD_BUTTON_STYLE) 를 덮어 정확히 그 폭으로 고정한다.
+                //   길면 span 의 ellipsis 로 잘리고 전체값은 title 로 본다.
+                ...(inputWidth ? { width: inputWidth, minWidth: inputWidth, flexShrink: 0 } : {}),
+              }}
+            >
+              <span style={FIELD_LABEL_SPAN_STYLE}>{display || placeholder}</span>
+              <span style={{ color: '#aaa', flexShrink: 0, marginLeft: 4 }}>▾</span>
+            </button>
+          )}
+        />
+        {open && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 'calc(100% + 4px)',
+              left: 0,
+              zIndex: 10,
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '4px',
+            }}
+          >
+            {columns.map((nodes, colIndex) => (
+              <div
+                key={levels[colIndex]?.name ?? colIndex}
+                className={styles.menu}
+                // 단일 필드엔 열별 기준 폭(개별 모드의 fieldBtn 폭)이 없어, 내용이 짧은 Type/Seq 열이 글자폭까지
+                //   쪼그라든다. 표준 콤보 최소폭(140px)을 하한으로 줘 짧은 라벨 열도 편히 클릭되게 한다.
+                style={{ minWidth: '140px', width: 'max-content', maxWidth: 'min(420px, 90vw)' }}
+              >
+                {renderColumn(nodes, colIndex)}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div ref={rootRef} style={{ position: 'relative' }}>
@@ -195,41 +330,9 @@ export const CascadeDropdown = ({
                     }}
                     type='button'
                     onClick={openPicker}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      width: '100%',
-                      // 표준 CustomDropdown 필드와 높이(36px)·폰트를 맞춘다. 네이티브 button 은 폰트를
-                      //   상속하지 않으므로 디자인시스템 폰트(body = Spoqa Han Sans Neo)·사이즈를 명시한다.
-                      height: '36px',
-                      boxSizing: 'border-box',
-                      padding: '0 10px',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      background: '#fff',
-                      fontFamily: 'inherit',
-                      fontSize: '13px',
-                      fontWeight: 400,
-                      lineHeight: 'normal',
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      color: selectedLabel ? '#1f1f1f' : '#999',
-                    }}
+                    style={{ ...FIELD_BUTTON_STYLE, color: selectedLabel ? '#1f1f1f' : '#999' }}
                   >
-                    {/* 표준 콤보처럼 단일 행·좌측정렬, 넘치면 … 로 자른다(줄바꿈 금지). */}
-                    <span
-                      style={{
-                        flex: 1,
-                        minWidth: 0,
-                        textAlign: 'left',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {selectedLabel ?? placeholder}
-                    </span>
+                    <span style={FIELD_LABEL_SPAN_STYLE}>{selectedLabel ?? placeholder}</span>
                     <span style={{ color: '#aaa', flexShrink: 0, marginLeft: 4 }}>▾</span>
                   </button>
                 )}
@@ -268,24 +371,7 @@ export const CascadeDropdown = ({
                   maxWidth: 'min(420px, 90vw)',
                 }}
               >
-                <ul className={styles.list}>
-                  {nodes.map(node => {
-                    const active = activePath[colIndex] === node.value;
-                    return (
-                      <li key={node.value}>
-                        <button
-                          type='button'
-                          onClick={() => handlePick(colIndex, node)}
-                          className={[styles.item, active && styles.itemActive]
-                            .filter(Boolean)
-                            .join(' ')}
-                        >
-                          <span className={styles.itemLabel}>{node.label}</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
+                {renderColumn(nodes, colIndex)}
               </div>
             );
           })}

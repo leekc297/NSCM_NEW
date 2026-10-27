@@ -210,8 +210,8 @@ export const SAVE_BTN = {
 // ====================================================================================
 // TO-BE MSG 코드 (SCM_ADM_MSG_M 문구 역조회 — Hook #114. AS-IS 번호 그대로 쓰지 않는다).
 //   자매 SSP0202 가 동일 AS-IS 메시지를 ora.py 로 역조회해 확정한 TO-BE 코드를 승계(같은 화면군 동일 메시지).
-//   AS-IS 원 번호는 주석 병기. SSP0003 고유(ChkDraftingData 계열 MSG00420/421/422, D/O MSG00413)는
-//   등가 TO-BE 코드 미확정 -> 영문 defaultValue fallback 유지(Hook #114 규약: 등가 없으면 fallback).
+//   AS-IS 원 번호는 주석 병기. SSP0003 고유(ChkDraftingData 계열 MSG00420/421/422, D/O MSG00413)도
+//   2026-10-23 문구 대조로 같은 문구의 TO-BE 코드(MSG01407/01408/01409/01401)를 확인해 바꿨다.
 // ====================================================================================
 export const MSG = {
   READ_ONLY: 'MSG00109', // "Read-only mode." (AS-IS MSG00109) — EditButton NO-OP 안내
@@ -223,12 +223,30 @@ export const MSG = {
   ENGINE_PROCESSING: 'MSG01294', // "SSP Daily Plan Processing now. Please, Try again ..." (AS-IS MSG00291)
   SAVE_SUCCESS: 'MSG00002', // "Saved successfully."
   SAVE_FAIL: 'MSG00003', // "Failed to save." (AS-IS MSG00284 보안조치 실패 — 오매핑 회피)
-  // 아래 4종은 TO-BE SCM_ADM_MSG_M 에 등가 코드 미존재(ora.py 실측: MSG00420/421/422/413 EN 0행) →
-  //   Hook #114 규약대로 AS-IS 코드 키 + 영문 defaultValue fallback(등가 채번 시 교체). 오매핑 아님(코드 부재).
-  APPROVE_TARGET_REQUIRED: 'MSG00420', // AS-IS: "승인 대상을 체크해주세요."
-  REJECT_ALL_REQUIRED: 'MSG00421', // AS-IS: "전체 체크 후 Reject ... 부분 승인 필요 시 승인 대상 체크 후 Approval"
-  SELF_REJECT_ALL_REQUIRED: 'MSG00422', // AS-IS: "전체 체크 후 Self Reject 버튼 눌러주세요."
-  DO_BLOCK: 'MSG00413', // AS-IS: "ERP D/O(Delivery Order) 생성되어 SSP 계획 변경 불가"
+  // 아래 4종은 AS-IS 번호(MSG00420/421/422/413)가 TO-BE 미등록이라 같은 문구로 등록된 코드로 바꿨다
+  //   (2026-10-23 SCM_ADM_MSG_M ↔ AS-IS TB_FX_MessageInfo 문구 대조, KO/EN/CN 실재).
+  APPROVE_TARGET_REQUIRED: 'MSG01407', // AS-IS MSG00420 // AS-IS: "승인 대상을 체크해주세요."
+  REJECT_ALL_REQUIRED: 'MSG01408', // AS-IS MSG00421 // AS-IS: "전체 체크 후 Reject ... 부분 승인 필요 시 승인 대상 체크 후 Approval"
+  SELF_REJECT_ALL_REQUIRED: 'MSG01409', // AS-IS MSG00422 // AS-IS: "전체 체크 후 Self Reject 버튼 눌러주세요."
+  DO_BLOCK: 'MSG01401', // AS-IS MSG00413 // AS-IS: "ERP D/O(Delivery Order) 생성되어 SSP 계획 변경 불가"
   // ERP 인터페이스 적재 실패 경고 — 확정 자체는 저장됨. TO-BE 등가 코드 미채번 → 영문 fallback(Hook #114).
   ERP_IF_FAIL: '_ssp0003.erpIfFail',
+  // ERP 실시간 송신 결과 분기(07_validation-audit §6 V16~V18 — SCM_ADM_MSG_M 등록 실측 ✓).
+  ERP_ISSUE: 'MSG01208', // V17 / AS-IS MSG00197 — RtFlag='E'(ERP ISSUE), {0}=에러메시지
+  ERP_SYSTEM_ERROR: 'MSG01215', // V16 / AS-IS MSG00204 — RtFlag='F'(데이터 없음·서버오류), {0}=Request No
+  ERP_PI_FAIL: 'MSG01309', // V18 / AS-IS MSG00306 — RtFlag='C_E'(SAP PI 호출 실패)
 } as const;
+
+// ====================================================================================
+// ERP I/F (SAP PI) 실시간 송신 — AS-IS GetErpIFCheck(cs:1243)·GetErpIFCheckNew(cs:1314) 의 TO-BE 등가
+// ====================================================================================
+// AS-IS `CallClient.FN_ERP_UIWebService(changeReqNo, sChangeType, _sStatus)` 자리. TO-BE 는 BE 공통 창구
+//   (framework/webservice/WebServiceCommonController `POST /common/web-service/{serviceKey}/call`)를 거치고,
+//   BE 가 serviceKey=erpIf 를 nscm-if `POST /api/if/send/NSD0100` 으로 라우팅한다(config.nscm-if.routes).
+//   응답은 AS-IS 와 같은 `{ E_TYPE, E_MESSAGE }` — E_TYPE = AS-IS RtFlag,
+//   E_MESSAGE = AS-IS ReErrorMsg('^' 구분 `confirmId:msg`). 자매 SSP0200/SSP0015 와 같은 축이다.
+export const ERP_IF_PATH = '/common/web-service/erpIf/call';
+export const ERP_IF_SUCCESS = 'S'; // E_TYPE 정상 — AS-IS else 분기(cs:1301)
+
+// AS-IS 마스터 CHANGE_TYPE 원값 — cs:85~90 struct ChangeType.
+export const CHANGE_TYPE = { NEW: 'N', CONFIRM: 'C', PLAN: 'P' } as const;

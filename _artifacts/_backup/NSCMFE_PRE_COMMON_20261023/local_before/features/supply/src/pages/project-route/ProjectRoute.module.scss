@@ -1,0 +1,71 @@
+// 3그리드 분할(Main 상 / BOM 좌·Plant 우) — formation .tableWrapper 패턴 1:1(design/01 §1).
+.tableWrapper {
+  flex: 1 1 0;
+  min-height: 0;
+
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+
+  > div > div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// 그리드별 건수 타이틀(TitleArea) + 그리드 묶음 — Main/BOM Explosion/Plant Assign 공통.
+//   중첩 PanelGroup(BOM/Plant, horizontal) 안쪽은 .tableWrapper 의 `> div > div` 규칙이
+//   닿지 않는 깊이라, 타이틀 추가로 그리드가 넘쳐 스크롤이 생기지 않도록 여기서 직접
+//   flex-column + min-height:0 을 준다(GroupUser.module.scss .module 과 동일 패턴).
+.gridSection {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+// 드래그 바(Separator) 공통 — ResultArea.module.scss splitBar/splitBarRow/splitBarCol 과 동일 패턴.
+//   방향별로 두께·커서·중앙 구분선 축이 달라 Row(상하 분할)/Col(좌우 분할) 를 나눈다.
+.splitBar {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
+}
+
+// Main(상) / BOM·Plant(하) 상하 분할.
+.splitBarRow {
+  height: 16px;
+  cursor: row-resize;
+
+  &::before {
+    inset-inline: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+  }
+}
+
+// BOM Explosion(좌) / Plant Assign(우) 좌우 분할.
+.splitBarCol {
+  width: 16px;
+  cursor: col-resize;
+
+  &::before {
+    inset-block: 0;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+  }
+}

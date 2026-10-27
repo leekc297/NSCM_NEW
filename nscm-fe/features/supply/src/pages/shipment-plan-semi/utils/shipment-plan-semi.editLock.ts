@@ -80,22 +80,36 @@ export const computeEditableRange = (params: {
   planStartYyyymmdd: string; // 조회조건 cboPlanDate 선택값
   queryToYyyymmdd: string; // 조회기간 종료(blockEndLast 패턴의 끝)
 }): EditableRange | null => {
-  const { division, shipFrozen, bodToYyyymmdd, planStartYyyymmdd, queryToYyyymmdd } = params;
+  // const { division, shipFrozen, bodToYyyymmdd, planStartYyyymmdd, queryToYyyymmdd } = params;
+  const { division, bodFromYyyymmdd, bodToYyyymmdd, planStartYyyymmdd, queryToYyyymmdd } = params;
+  // SP 가 SHIP_FROZEN 을 YYYY-MM-DD 로 준다. yyyymmdd 와 문자열 비교하므로 하이픈 제거.
+  const shipFrozen = params.shipFrozen.replace(/-/g, '');
 
   if (!shipFrozen) return null; // SHIP_FROZEN 비면 전체 잠금
 
-  const blockStartDate = division === '40' || division === '81' || isDivision81Series(division)
-    ? planStartYyyymmdd
-    : shipFrozen;
-  if (!blockStartDate) return null;
+  // const blockStartDate = division === '40' || division === '81' || isDivision81Series(division)
+  //   ? planStartYyyymmdd
+  //   : shipFrozen;
+  // if (!blockStartDate) return null;
+  //
+  // const bodTo = bodToYyyymmdd || queryToYyyymmdd;
+  //
+  // // blockStartDate > bodTo 면 blockEndLast(blockStartDate~조회종료), 그 외는 blockFromTo(blockStartDate~bodTo).
+  // if (blockStartDate > bodTo) {
+  //   return { from: blockStartDate, to: queryToYyyymmdd };
+  // }
+  // return { from: blockStartDate, to: bodTo };
 
-  const bodTo = bodToYyyymmdd || queryToYyyymmdd;
-
-  // blockStartDate > bodTo 면 blockEndLast(blockStartDate~조회종료), 그 외는 blockFromTo(blockStartDate~bodTo).
-  if (blockStartDate > bodTo) {
-    return { from: blockStartDate, to: queryToYyyymmdd };
+  // AS-IS .cs:3135-3168 그대로. 40, 81 만 Plan Date 부터 끝까지(81_UC 제외, BOD 무관).
+  if (division === '40' || division === '81') {
+    return planStartYyyymmdd ? { from: planStartYyyymmdd, to: queryToYyyymmdd } : null;
   }
-  return { from: blockStartDate, to: bodTo };
+  // BOD 기간이 없으면 시작은 Plan Date, 끝은 조회 종료일(.cs:3090-3106).
+  const bodFrom = bodFromYyyymmdd.length === 8 ? bodFromYyyymmdd : planStartYyyymmdd;
+  const bodTo = bodToYyyymmdd.length === 8 ? bodToYyyymmdd : queryToYyyymmdd;
+  if (shipFrozen >= bodTo) return null; // SHIP_FROZEN 이 BOD 종료 이후면 행 전체 잠금
+  if (bodFrom >= shipFrozen) return { from: bodFrom, to: bodTo };
+  return { from: shipFrozen, to: bodTo };
 };
 
 export interface MainEditContext {
@@ -169,13 +183,22 @@ export const isMainCellEditable = (
 
   // Weekly 동일 주차 반복 컬럼 방어(design 03 §3.1 BlockCellsChecking, .cs:3218-3243) — 81/81_UC
   //   전용. 월 경계에 걸친 ISO 주가 W_ 컬럼 2개로 쪼개질 때 두 번째(및 이후 전체 컬럼)를 잠근다.
-  if (kind === 'W' && is81 && ctx.weekBindingsAsc && ctx.weekBindingsAsc.length > 0) {
-    const lockStart = findDuplicateWeekLockStart(ctx.weekBindingsAsc);
-    if (lockStart) {
-      const lockStartIdx = ctx.weekBindingsAsc.indexOf(lockStart);
-      const thisIdx = ctx.weekBindingsAsc.indexOf(binding);
-      if (thisIdx >= 0 && thisIdx >= lockStartIdx) return false;
-    }
+  // if (kind === 'W' && is81 && ctx.weekBindingsAsc && ctx.weekBindingsAsc.length > 0) {
+  //   const lockStart = findDuplicateWeekLockStart(ctx.weekBindingsAsc);
+  //   if (lockStart) {
+  //     const lockStartIdx = ctx.weekBindingsAsc.indexOf(lockStart);
+  //     const thisIdx = ctx.weekBindingsAsc.indexOf(binding);
+  //     if (thisIdx >= 0 && thisIdx >= lockStartIdx) return false;
+  //   }
+  // }
+  // AS-IS 는 중복 주 칸에서 끝까지 잠근 뒤 다음 W_ 칸에서 끝까지 다시 풀어(.cs:3230·3240) 결과적으로
+  //   직전 W_ 와 주차가 같은 칸만 잠긴다. 이후 주 전체를 잠그면 9월부터 입력이 막힌다.
+  // 비81 도 같은 규칙(.cs:3478 partial week 뒷주차 EDIT 불가)이라 division 조건을 뺀다.
+  // if (kind === 'W' && is81 && ctx.weekBindingsAsc && ctx.weekBindingsAsc.length > 0) {
+  if (kind === 'W' && ctx.weekBindingsAsc && ctx.weekBindingsAsc.length > 0) {
+    const thisIdx = ctx.weekBindingsAsc.indexOf(binding);
+    const prev = thisIdx > 0 ? ctx.weekBindingsAsc[thisIdx - 1] : '';
+    if (prev && prev.slice(-2) === binding.slice(-2)) return false;
   }
 
   return true;

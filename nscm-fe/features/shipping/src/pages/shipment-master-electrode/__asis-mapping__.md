@@ -31,8 +31,8 @@
 | D00-1-022 | §1 spdMain_Sheet1 / SheetView | shipment-master-electrode.constants.ts:27 ADMIN_SHEET_NAME = 'Ship Master Elec' |  | 구현 |
 | D00-1-023 | §1 components / Container |  | WinForms IContainer(비시각 컴포넌트 컨테이너) — React 대응 개념 없음 | 해당없음 |
 | D00-2-001 | §2 cboDivision / SelectedIndexChanged | components/ShipmentMasterElectrodeForm.tsx:100~110 Division onChange (PlantSite 재조회 + Material/Model clear + clearFilters) |  | 구현 |
-| D00-2-002 | §2 btnMaterialId / Click | ShipmentMasterElectrode.tsx:435 ItemByDivisionModal(조회조건 Material) + :229 handleMaterialSelected |  | 구현 |
-| D00-2-003 | §2 btnModelId / Click | ShipmentMasterElectrode.tsx:448 ItemByDivisionModal(조회조건 Model) + :233 handleModelSelected |  | 구현 |
+| D00-2-002 | §2 btnMaterialId / Click | ShipmentMasterElectrode.tsx:435 ElectrodeItemByDivisionModal(조회조건 Material) + :229 handleMaterialSelected |  | 구현 |
+| D00-2-003 | §2 btnModelId / Click | ShipmentMasterElectrode.tsx:448 ElectrodeItemByDivisionModal(조회조건 Model) + :233 handleModelSelected |  | 구현 |
 | D00-2-004 | §2 spdMain / CellClick | components/ShipmentMasterElectrodeGrid.tsx:159 handleDblClick + :194 DataGrid dblClick |  | 구현 |
 | D00-2-005 | §2 spdMain / ComboSelChange | components/ShipmentMasterElectrodeGrid.tsx:110 applyDerivations + :142 cellEditEnded |  | 구현 |
 | D00-2-006 | §2 spdMain / KeyPress | components/ShipmentMasterElectrodeGrid.tsx:87 beginningEditHandler + utils/shipmentMasterElectrodeEditLock.ts:41 isInlineEditable(MATERIAL_ID 인라인 편집 취소 = 키입력 차단) |  | 구현 |
@@ -121,17 +121,19 @@
 | D00-4e-005 | §4e MSG00093 / IsNullOrEmpty(sDivisionId) && col!=DIVISION_ID | components/ShipmentMasterElectrodeGrid.tsx:101 beginningEdit MSG.REQUIRE_DIVISION(MSG00097) |  | 구현 |
 | D00-4e-006 | §4e MSG00093 / IsNullOrEmpty(sPlantSiteCode) | components/ShipmentMasterElectrodeGrid.tsx:178 handleDblClick MSG.REQUIRED_FIELD(MSG00429, 0=Plant Site) |  | 구현 |
 | D00-4e-007 | §4e MSG00060 / !isPass | ShipmentMasterElectrode.tsx:266 findDuplicateKey -> :269 MSG.DUP_KEY(MSG00060) |  | 구현 |
-| D00-4f-001 | §4f ProgressForm / Show | ShipmentMasterElectrode.tsx:427 ProgressIndicator(open=isFetching) — 조회 중 로딩(AS-IS ProgressForm cs:291,298,349 등가) / 팝업은 components/modals/ItemByDivisionModal.tsx:196 ProgressIndicator |  | 구현 |
-| D00-4f-002 | §4f SSP0024_ItembyDivisionPopup / ShowDialog | ShipmentMasterElectrode.tsx:474 ItemByDivisionModal(callFromCell, 행 division/plantSiteCode/materialId 선조회) + :254 handleMaterialCellDblClick |  | 구현 |
-| D00-4f-003 | §4f SSP0024_ItembyDivisionPopup / ShowDialog | ShipmentMasterElectrode.tsx:435 ItemByDivisionModal(조회조건 Material) |  | 구현 |
-| D00-4f-004 | §4f SSP0024_ItembyDivisionPopup / ShowDialog | ShipmentMasterElectrode.tsx:448 ItemByDivisionModal(조회조건 Model) |  | 구현 |
+| D00-4f-001 | §4f ProgressForm / Show | ShipmentMasterElectrode.tsx:427 ProgressIndicator(open=isFetching) — 조회 중 로딩(AS-IS ProgressForm cs:291,298,349 등가) / 팝업은 components/modals/ElectrodeItemByDivisionModal.tsx:196 ProgressIndicator |  | 구현 |
+| D00-4f-002 | §4f SSP0024_ItembyDivisionPopup / ShowDialog | ShipmentMasterElectrode.tsx:474 ElectrodeItemByDivisionModal(callFromCell, 행 division/plantSiteCode/materialId 선조회) + :254 handleMaterialCellDblClick |  | 구현 |
+| D00-4f-003 | §4f SSP0024_ItembyDivisionPopup / ShowDialog | ShipmentMasterElectrode.tsx:435 ElectrodeItemByDivisionModal(조회조건 Material) |  | 구현 |
+| D00-4f-004 | §4f SSP0024_ItembyDivisionPopup / ShowDialog | ShipmentMasterElectrode.tsx:448 ElectrodeItemByDivisionModal(조회조건 Model) |  | 구현 |
 
 ## CRUD·모달 매트릭스 (2026-08-07 축 — MAIN UI 와 모달의 CRUD 누락 0)
 
 | ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
 |---|---|---|---|---|
-| MODAL:ItemByDivisionModal | FE 실존 모달 (components/modals/ItemByDivisionModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/modals/ItemByDivisionModal.tsx:60 SSP0024 전용 모달 — AS-IS 팝업 노출 10컬럼 동일(:47~58), 결과 1건 자동확정·닫기(:107~118, AS-IS popup cs:284~298), Division/Plant Site 읽기전용(AS-IS Enabled=false popup cs:190~191) |  | 구현 |
+| MODAL:ElectrodeItemByDivisionModal | FE 실존 모달 (components/modals/ElectrodeItemByDivisionModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/modals/ElectrodeItemByDivisionModal.tsx:60 SSP0024 전용 모달 — AS-IS 팝업 노출 10컬럼 동일(:47~58), 결과 1건 자동확정·닫기(:107~118, AS-IS popup cs:284~298), Division/Plant Site 읽기전용(AS-IS Enabled=false popup cs:190~191) |  | 구현 |
 | MODAL:ShowDialog | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 | AS-IS SSP0024_ItembyDivisionPopup 3경로 전부 이 모달로 대응 — ShipmentMasterElectrode.tsx:435(Material) / :448(Model) / :461(MATERIAL 셀) |  | 구현 |
+
+> **전용 팝업 주의 (2026-10-16)**: 이 모달은 공용 `ItemByDivisionModal`(COM0008 / AS-IS `DM0002_ItembyDivisionPopup`)과 **다른 전용 팝업**이다. 호출 SP `P_SSP0024_GET_ITEM_BY_DIVISION_POPUP`(원천 `SCP_MST_FINAL_ITEM`)·반환 10컬럼(PLANT_SITE_CODE/PLANT_SITE_ID/CELL_TYPE/ELECTRODE_TYPE/ITEM_UOM/Pancake 등)이 공용(ITEM_ID 기반)과 달라 **공용으로 합칠 수 없다**(POP-01 재사용 대상 아님). AS-IS 가 `new` 하는 클래스도 `SSP0024_ItembyDivisionPopup`(≠ DM0002). 공용·SSP0025 팝업과 **이름이 겹쳐 혼동**되던 것을 `ElectrodeItemByDivisionModal` 로 개명(POP-01 동명 로컬 사본 금지·POP-03 모달 식별자 고유). 단일 화면 전용이라 페이지 폴더 유지(POP-02 도메인 이동은 사용자 결정으로 미적용). 파일: `components/modals/ElectrodeItemByDivisionModal.tsx`.
 
 ## UI 공통(통합테스트) 체크 축 (2026-08-12 — 전 화면 상시 6항목)
 
@@ -157,8 +159,8 @@
 | EditButton (cs:240) | Edit | **버튼 없음**(2026-09-23 사용자 결정 — 진입이 곧 편집 모드). AS-IS 가 Edit 클릭 시 하던 `GetSSPUserCheck`(SSP0002)는 마운트 effect 로 이동(`ShipmentMasterElectrode.tsx:124~141`), 실패 시 편집 차단 |
 | DeleteButton (cs:262) | Delete | `handleDelete` (신규행 'I'만 제거) |
 | SaveButton (cs:280) | Save | `handleSave` → Edit 모드 선행 가드(cs:397) → `findMissingRequired` → `saveWithValidation` → `doSave`(16파라미터 ^-delim) |
-| BtnMaterialId_Click (cs:730) | 팝업 | `onMaterialSearch` → `<ItemByDivisionModal callFromCell=false>` → `handleMaterialSelected` |
-| BtnModelId_Click (cs:750) | 팝업 | `onModelSearch` → `<ItemByDivisionModal callFromCell=false>` → `handleModelSelected` |
+| BtnMaterialId_Click (cs:730) | 팝업 | `onMaterialSearch` → `<ElectrodeItemByDivisionModal callFromCell=false>` → `handleMaterialSelected` |
+| BtnModelId_Click (cs:750) | 팝업 | `onModelSearch` → `<ElectrodeItemByDivisionModal callFromCell=false>` → `handleModelSelected` |
 | ClbDivision_SelectedIndexChanged (cs:771) | cascade | Form `onChange` → `set({divisionId, scmSiteIds:[], materialId:'', modelId:''})` → PlantSite 재조회 |
 | SpdMain_CellClick (cs:530) | 셀팝업 | Grid `handleDblClick`(MATERIAL_ID) → `onMaterialCellDblClick` → 셀팝업 |
 | SpdMain_ComboSelChange (cs:596) | 파생 | Grid `applyDerivations`(cellEditEnded) |

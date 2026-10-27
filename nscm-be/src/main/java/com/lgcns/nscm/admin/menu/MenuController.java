@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lgcns.nscm.admin.auth.AuthService;
@@ -62,11 +63,13 @@ public class MenuController extends BaseController {
 		return successResponseEntity();
     }
 
-	@Operation(summary = "메뉴 권한 조회", description = "해당 메뉴에 대한 사용자의 버튼 및 단위 권한을 조회합니다.")
+	@Operation(summary = "메뉴 권한 조회", description = "해당 메뉴에 대한 사용자의 버튼 및 단위 권한을 조회합니다. divisionId(단일 Division)를 주면 그 Division 권한 그룹 기준의 버튼만 돌려준다(없음/ALL/복수 = 그룹 합집합).")
 	@GetMapping(value="/admin/menu/{mnuId}/auth", produces = "application/json; charset=UTF-8")
-    public ResponseEntity<BaseResponse<MenuAuthDto>> retrieveMenuAuth(@LoginUser UserSession userSession, @PathVariable String mnuId) throws Exception {
+    public ResponseEntity<BaseResponse<MenuAuthDto>> retrieveMenuAuth(@LoginUser UserSession userSession, @PathVariable String mnuId,
+    		@RequestParam(required = false) String divisionId) throws Exception {
 
-		List<String> mnuBtnAuth = authService.retrieveMenuBtnAuth(userSession.getUserId(), mnuId);
+		// 공통버튼 노출 = 사용자 × 선택 Division 권한 (2026-10-26) — PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV
+		List<String> mnuBtnAuth = authService.retrieveMenuBtnAuth(userSession.getUserId(), mnuId, divisionId);
 		List<UnitDto> unitAuth = authService.retrieveUnitAuth(userSession.getUserId(), mnuId);
 		MenuAuthDto mnuAuthDto = MenuAuthDto.builder()
 			.mnuBtnAuth(mnuBtnAuth)

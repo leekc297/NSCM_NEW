@@ -3,7 +3,7 @@ import type { MeasureMeta } from 'features/master/src/components';
 import { apiClient } from '@foundation/apis';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
+import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { ADMIN_SHEET_NAME, BUCKET_TYPE, MENU_ID, SHEETS } from './production-plan-line.constants';
 import type { MainRow, SearchCondition } from './production-plan-line.types';
@@ -62,8 +62,10 @@ interface Action {
 const thisMonday = dayjs().add(1 - dayjs().day(), 'day');
 
 const initSearch: SearchCondition = {
-  // 기본 division = 세션 division(권한 division 첫 행 근사). Form 이 콤보 옵션과 대조해 교정.
-  divisionId: useSessionStore.getState().session.div ?? '40',
+  // 기본 division = 미선택('') → Form 이 콤보 로드 후 첫 옵션(= 81 Automotive Battery)으로 교정한다.
+  //   형제 화면 공통 패턴과 동일(SCP0025 등 divisionId:'' → 첫 옵션). 세션 div 시드는 사용자마다 81 이 아닌
+  //   값으로 떠 다른 화면과 어긋나 제거(사용자 지시 2026-10-13).
+  divisionId: '',
   operationGroupId: '',
   plantSiteIds: [],
   lineIds: [],

@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 
 import {
   ALL,
   COMBO,
-  GRID_SHEETS,
   MENU_ID,
   SHEETS,
   type GridSheet,
@@ -132,17 +131,13 @@ export const useOptCapaSheets = ({ tabId, divisionId, plantIds, activeSheet }: A
   );
 
   // ── 탭 집합 (Division 축) ────────────────────────────────────────────────────────────
-  //   탭 순서는 AS-IS 처럼 Division 이동 이력에 따라 달라진다(`nextTabOrder`) — 직전에 확정한 순서를
-  //   ref 로 들고, `init` 응답이 온 뒤에만 확정한다(응답 전의 빈 제외목록으로 순서를 굳히지 않는다).
-  const committedOrderRef = useRef<readonly GridSheet[]>(GRID_SHEETS);
+  //   노출 탭·순서 모두 제외목록 단일 원천에서 파생한다 — Division 이동 이력에 의존하지 않는 **정규
+  //   순서**(`buildVisibleSheets` = `GRID_SHEETS` 에서 제외만 뺌). `init` 응답 전엔 exclusionRows 가
+  //   빈 배열이라 8탭이 뜨고, 응답이 오면 제외가 반영돼 재파생된다(ref·effect 불필요).
   const visibleSheets = useMemo(
-    () => buildVisibleSheets(exclusionRows, divisionId, committedOrderRef.current),
+    () => buildVisibleSheets(exclusionRows, divisionId),
     [exclusionRows, divisionId]
   );
-  const isInitLoaded = initData !== undefined;
-  useEffect(() => {
-    if (isInitLoaded) committedOrderRef.current = visibleSheets;
-  }, [isInitLoaded, visibleSheets]);
   const effectiveSheet = useMemo(
     () => resolveActiveSheet(visibleSheets, activeSheet),
     [visibleSheets, activeSheet]

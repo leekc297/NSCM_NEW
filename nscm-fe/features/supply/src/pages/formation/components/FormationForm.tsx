@@ -136,12 +136,8 @@ export const FormationForm = () => {
                         <Button
                           appearance='outlined'
                           priority='normal'
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => setOpenItemModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setOpenItemModal(true)}
                         />
                       ),
                     }}

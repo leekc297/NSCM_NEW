@@ -1,11 +1,14 @@
 import { apiClient } from '@foundation/apis';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
+import { sessionTimeZone } from '@foundation/utils';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import {
   ADMIN_SHEET_NAME,
   ALL,
+  BTN_DAY_PERIOD,
+  COMBO,
   DEFAULT_PLAN_TYPE,
   DEFAULT_STATUS,
   FIXED_DIVISION,
@@ -43,20 +46,49 @@ interface Action {
   setPeriod: (fromYyyymmdd: string, toYyyymmdd: string) => void;
   // GAP-08: mount 시 Period 기본값(30일) 세팅. Plan Type 변경 시 재계산 + 그리드 clear.
   initPeriodDefault: () => void;
+  /** AS-IS GetDayRange 등가 — 캘린더(영업일/타임존) 기준 SP 산출. dayjs 근사 금지(design 02 §5.4). */
+  fetchDayRange: (fromDate: string) => Promise<void>;
   changePlanType: (changeType: string) => void;
   setFilter: () => void;
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   setRequestInfo: (p: Partial<RequestInfo>) => void;
   clearRequestInfo: () => void;
+  /** 요청자명(세션) 주입 — AS-IS SetUserInfo(cs:517~526)의 이름 축. */
+  initSessionFields: () => void;
+  /**
+   * 요청부서(세션 축) 보완 — AS-IS 는 `UserInfoContext["Dept_ID"]/["Dept_Name"]`(cs:521~526)를 쓴다.
+   *   TO-BE UserSession 에 부서 필드가 없어 **로그인 사용자 부서를 주는 콤보**로 대체한다.
+   *   금지: 서브 조회 o_rc2 로 채우기 — 그 커서는 모델 담당자(승인자 후보)라 남의 부서가 저장된다.
+   */
+  fetchRequestorDept: () => Promise<void>;
   fetchStaticColumns: () => Promise<void>;
 }
+
+// AS-IS cs:517~526 SetUserInfo 는 세션에서 이름·부서명·부서ID 를 모두 주입하지만, TO-BE UserSession
+//   에는 부서 필드가 없다(실측: groupId/langCd/userId/userEngNm/userNm/div/menus 뿐).
+//   -> 이름만 세션에서 채우고 부서는 `fetchRequestorDept()`(로그인 사용자 부서 콤보)로 보완한다.
+//   종전엔 `requestor` 에 **userId** 를 넣어 Requestor 칸에 ID 가 보였다(자매 SSP0200 은 이름).
+const sessionUserName = (): string => {
+  const session = useSessionStore.getState().session;
+  const name = session.langCd === 'KO' ? session.userNm : (session.userEngNm ?? session.userNm);
+  return String(name ?? session.userId ?? '');
+};
+
+// R9 ClearRequestInfo / Plan Type 변경 시 **유지**할 세션 축 3필드(AS-IS 는 clear 직후 SetUserInfo 로
+//   다시 채운다 — cs:517~526). 요청부서는 콤보 1회 조회분이라 비우면 재조회 없이 빈칸으로 남는다.
+const sessionRequestFields = (prev: RequestInfo): Partial<RequestInfo> => ({
+  requestor: sessionUserName(),
+  requestDeptName: prev.requestDeptName,
+  requestDeptId: prev.requestDeptId,
+});
 
 const emptyRequestInfo: RequestInfo = {
   requestNo: '',
   title: '',
-  requestor: useSessionStore.getState().session.userId ?? '',
+  requestor: '',
   requestDeptName: '',
+  requestDeptId: '',
   approval: '',
   approvalId: '',
   appDeptName: '',
@@ -92,15 +124,13 @@ const initState: State = {
   staticColumns: emptyStaticColumns,
 };
 
-// design 02 §2-3/§3: Period 기본 = GetDayRange(base) = [base, base+PERIOD_OFFSET_DAY(30)].
-//   base = Plan Type 'P' 이면 오늘+9D(design 02 §3 cascade#2), 그 외 오늘.
-//   주의: AS-IS 는 SCM0001_GET_SCP_DAY_PERIOD(타임존/영업일 반영) 서버계산 — TO-BE 는 클라 근사(dayjs,
-//     business-plan 동일 패턴). 정밀 영업일 계산은 convert-sp(SP 배포) 후 대조.
-const OFFSET_DAY = Number(PERIOD_OFFSET_DAY);
-const periodByPlanType = (changeType: string): { from: string; to: string } => {
-  const base = changeType === PLAN_TYPE_PLAN ? dayjs().add(PLAN_TYPE_P_FROM_OFFSET, 'day') : dayjs();
-  return { from: base.format('YYYYMMDD'), to: base.add(OFFSET_DAY, 'day').format('YYYYMMDD') };
-};
+// design 02 §2-3/§3: Period 기본 = GetDayRange(base) = SCM0001_GET_SCP_DAY_PERIOD(base, offset=30, TZ).
+//   30일 범위 산출은 SP 몫이다(SCM_SYS_CALENDAR_M 기준 영업일/타임존) — dayjs 근사 금지(design 02 §5.4,
+//   자매 SSP0200 fetchDayRange 동일). 아래 fetchDayRange 가 /GET_SCP_DAY_PERIOD/call-proc 로 호출한다.
+// SP 에 넘길 base(p_from_date): Plan Type 'P' 는 오늘+9D(cs:3096, design 02 §3 cascade#2), 그 외 '' →
+//   SP 가 세션 타임존 기준 '오늘'을 잡는다. +9 캘린더 가산만 dayjs 로 한다(AS-IS 도 C# 클라 계산).
+const periodFromBase = (changeType: string): string =>
+  changeType === PLAN_TYPE_PLAN ? dayjs().add(PLAN_TYPE_P_FROM_OFFSET, 'day').format('YYYYMMDD') : '';
 
 // 다중/단일/다건 -> SP 파라미터 문자열. ALL/빈값 = '' (전체, GET SP TRIM 무시).
 const joinOrEmpty = (arr: string[]): string => (arr.length === 0 ? '' : arr.join(','));
@@ -127,7 +157,7 @@ export const useShipmentChangeRequestStore = createPersistedStoreWithTab<State &
     reset: () => {
       const { filters, staticColumns, initialized } = get();
       set({ ...initState, filters, staticColumns, initialized });
-      // Plan Type 기준 30일 기본값 재산출(dayjs 근사 — GET_SCP_DAY_PERIOD 메타 미등록, 아래 주석 참조).
+      // Plan Type 기준 30일 기본값 재산출(SCM0001_GET_SCP_DAY_PERIOD SP — fetchDayRange, 아래 참조).
       get().initPeriodDefault();
     },
     setSearchCondition: p =>
@@ -139,26 +169,49 @@ export const useShipmentChangeRequestStore = createPersistedStoreWithTab<State &
         state.searchCondition.fromYyyymmdd = fromYyyymmdd;
         state.searchCondition.toYyyymmdd = toYyyymmdd;
       }),
-    // GAP-08: mount 최초 진입 시 Period 기본값(현 Plan Type 기준 30일 범위) 세팅.
-    initPeriodDefault: () =>
-      set(state => {
-        const { from, to } = periodByPlanType(get().searchCondition.changeType);
-        state.searchCondition.fromYyyymmdd = from;
-        state.searchCondition.toYyyymmdd = to;
-      }),
+    // GAP-08: mount 최초 진입 시 Period 기본값(현 Plan Type 기준 30일 범위) SP 산출.
+    initPeriodDefault: () => {
+      void get().fetchDayRange(periodFromBase(get().searchCondition.changeType));
+    },
+    // AS-IS GetDayRange 등가 — PKG_COM0000.P_SCM0001_GET_SCP_DAY_PERIOD(IN fromDate/offsetDay/timeZone,
+    //   OUT o_rc1 1행 1열 "YYYYMMDD:YYYYMMDD"). SCM_SYS_CALENDAR_M 기준이라 dayjs 근사로는 경계가 어긋난다.
+    //   timeZone: 세션 TZ 를 보낸다 — SP 가 fromDate 공란이면 FN_MULTY_TIME(P_TIMEZONE) 으로 '오늘'을 잡는다.
+    //   자매 SSP0200 useShipmentChangeRequestPlanStore.fetchDayRange 와 동일 배선(design 02 §5.4).
+    fetchDayRange: async fromDate => {
+      try {
+        const res = await apiClient.post<Record<string, Record<string, string>[]>>(
+          `/${MENU_ID}/${SHEETS.MAIN}/${BTN_DAY_PERIOD}/call-proc`,
+          {
+            fromDate,
+            offsetDay: PERIOD_OFFSET_DAY,
+            timeZone: sessionTimeZone(useSessionStore.getState().session),
+          }
+        );
+        if (res.status >= 400 || Number(res.data.code)) return;
+        const first = res.data.result?.o_rc1?.[0];
+        const raw = first ? String(Object.values(first)[0] ?? '') : '';
+        const [from, to] = raw.split(':');
+        if (!from || !to) return;
+        set(state => {
+          state.searchCondition.fromYyyymmdd = from;
+          state.searchCondition.toYyyymmdd = to;
+        });
+      } catch {
+        // SP/권한 미배포 시 기간 기본값 없음 — 사용자가 직접 지정한다. 클라 근사로 대체하지 않는다.
+      }
+    },
     // GAP-08: Plan Type 변경(design 02 §3 cascade#2) — Period 재계산 + 그리드/요청정보 clear(InitSpread).
-    changePlanType: changeType =>
+    changePlanType: changeType => {
       set(state => {
-        const { from, to } = periodByPlanType(changeType);
         state.searchCondition.changeType = changeType;
-        state.searchCondition.fromYyyymmdd = from;
-        state.searchCondition.toYyyymmdd = to;
         state.filters = {};
-        state.requestInfo = {
-          ...emptyRequestInfo,
-          requestor: useSessionStore.getState().session.userId ?? '',
-        };
-      }),
+        // 세션 축 3필드(요청자·요청부서)는 유지한다 — 비우면 Plan Type 을 바꾼 뒤 Dept Name 이
+        //   빈칸이 되고, 저장 payload 의 요청부서까지 빈 값으로 나간다.
+        state.requestInfo = { ...emptyRequestInfo, ...sessionRequestFields(get().requestInfo) };
+      });
+      // Period 기본값 SP 재산출 — 'P' 면 fromDate=오늘+9D, 그 외 ''(SP 가 세션TZ '오늘'). set() 이후 비동기 갱신.
+      void get().fetchDayRange(periodFromBase(changeType));
+    },
     setFilter: () => {
       set(state => {
         const c = state.searchCondition;
@@ -201,11 +254,43 @@ export const useShipmentChangeRequestStore = createPersistedStoreWithTab<State &
     clearRequestInfo: () =>
       set(state => {
         // R9 ClearRequestInfo — Requestor/Dept 세션값은 유지, 편집필드만 초기화.
-        state.requestInfo = {
-          ...emptyRequestInfo,
-          requestor: useSessionStore.getState().session.userId ?? '',
-        };
+        state.requestInfo = { ...emptyRequestInfo, ...sessionRequestFields(get().requestInfo) };
       }),
+
+    initSessionFields: () =>
+      set(state => {
+        state.requestInfo.requestor = sessionUserName();
+      }),
+
+    fetchRequestorDept: async () => {
+      // 1) 로그인 사용자 부서ID — @sesUserId 는 BE 가 주입한다(화면이 싣지 않는다).
+      //    조회 실패·0행이면 빈 값으로 남긴다. 임의 대체값(모델 담당자 부서 등)으로 채우지 않는다 —
+      //    그 값이 요청확정 payload 의 요청부서로 그대로 저장된다.
+      try {
+        const deptRows = await apiClient.getCombo({ comboId: COMBO.REQUESTOR_DEPT });
+        const deptId = String(deptRows?.[0]?.CODE ?? '');
+        if (!deptId) return;
+        // 2) 표시용 부서명. 본문 WHERE 가 LIKE '%값%' OR 체인이라 과다 매칭될 수 있어 완전일치로 좁힌다.
+        //    이름을 못 찾으면 공백으로 둔다(부서ID 를 부서명 칸에 넣지 않는다).
+        let deptName = '';
+        try {
+          const nameRows = await apiClient.getCombo({
+            comboId: COMBO.DEPT_NAME,
+            deptId,
+            param1: String(useSessionStore.getState().session.langCd ?? ''),
+          });
+          deptName = String((nameRows ?? []).find(r => String(r.CODE) === deptId)?.NAME ?? '');
+        } catch {
+          // 부서명 조회 실패는 표시 축만 비운다 — 부서ID(저장 축)는 유지한다.
+        }
+        set(state => {
+          state.requestInfo.requestDeptId = deptId;
+          state.requestInfo.requestDeptName = deptName;
+        });
+      } catch {
+        // 콤보 미등록/권한 오류 — 요청부서는 빈 값으로 남는다.
+      }
+    },
 
     fetchStaticColumns: async () => {
       // 메인/서브 2 시트 컬럼메타 각각 fetch (design 03 §4.1). 미등록/실패 시 빈 배열 유지.

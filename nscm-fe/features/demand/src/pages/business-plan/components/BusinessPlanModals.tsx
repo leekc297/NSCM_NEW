@@ -157,7 +157,7 @@ export const BusinessPlanModals = ({
         open={openItem}
         modalClose={() => onClose('ITEM')}
         setSelectedValue={(
-          itemId: string,
+          itemIds: string,
           itemName?: string,
           _itemClassName?: string,
           nickName?: string,
@@ -166,6 +166,9 @@ export const BusinessPlanModals = ({
           _deptName?: string,
           endCustomer?: string
         ) => {
+          // 공용 Model 팝업은 여러 줄을 고르면 ITEM_ID 를 쉼표로 이어 보낸다. 이 셀은 Model 한 건만
+          //   받는 자리라 맨 위 행 하나만 쓴다 (DMF0005 와 같은 방식, 2026-10-14 사용자 요청).
+          const itemId = itemIds?.split(',')[0] ?? '';
           applyToInsertBlock(
             div40
               ? {

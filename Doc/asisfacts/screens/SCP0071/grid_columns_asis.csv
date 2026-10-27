@@ -1,0 +1,7 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,dr[DefMain.COLUMN_NAME],CODE,SCP0071_CAPA_Balance_Small,SCP0071_CAPA_Balance_Small.cs:256,dr[DefMain.COLUMN_LABEL_NAME],Number,,None,코드 선언 FPMerge.None,70,true,,,,foreach(dr in dsSpdTitle.Tables[0].Rows)
+CAPA Balance Small,MATERIAL_CLASS_NAME,META,,META SCM_MST_SHEET_COLUMNS(SCP0071/CAPA Balance Small),Material Class Name,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,Y,C,,,
+CAPA Balance Small,MEASURE_COLOR,META,,META SCM_MST_SHEET_COLUMNS(SCP0071/CAPA Balance Small),MEASURE_COLOR,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,N,C,,,
+CAPA Balance Small,TYPE,META,,META SCM_MST_SHEET_COLUMNS(SCP0071/CAPA Balance Small),Type,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),70,Y,C,,,
+CAPA Balance Small,measure,META,,META SCM_MST_SHEET_COLUMNS(SCP0071/CAPA Balance Small),Measure,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,N,C,,,
+CAPA Balance Small,measure_label,META,,META SCM_MST_SHEET_COLUMNS(SCP0071/CAPA Balance Small),Measure,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),250,Y,L,,,

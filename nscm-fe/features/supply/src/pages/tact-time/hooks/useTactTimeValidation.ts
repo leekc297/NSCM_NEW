@@ -9,7 +9,7 @@ import {
   YIELD_MAX,
   YIELD_MIN,
 } from '../tact-time.constants';
-import { toNum } from '../utils/tactTimeDerive';
+import { toNum, toYmd } from '../utils/tactTimeDerive';
 
 type Row = Record<string, unknown>;
 interface Result {
@@ -77,8 +77,9 @@ export const useTactTimeValidation = () => {
   );
 
   // 예외(Except) 저장 검증 — LINE_ID 필수 / 날짜 형식·범위·순서·중첩 / Tact Time>0 / Yield 1~100.
+  // allRows: 기간 중복 검사 대상(삭제행 제외 하단 전체). AS-IS checkValidN5 는 시트 전체를 본다.
   const validateExceptRows = useCallback(
-    (rows: Row[]): Result => {
+    (rows: Row[], allRows?: Row[]): Result => {
       const dirty = rows.filter(r => s(r.CRUD_TYPE));
       for (const r of dirty) {
         // LINE_ID 필수 (design 03 §1.3 #7 — MSG00002)
@@ -94,26 +95,26 @@ export const useTactTimeValidation = () => {
           return alert(MSG.DATE_RANGE, `Date must be >= ${EXCEPT_DATE_MIN}.`);
         // 시작 <= 종료 (checkValidN8 — MSG00108)
         if (startStr > endStr) return alert(MSG.START_END_ORDER, 'Start date must be <= end date.');
-        // Tact Time > 0 (AS-IS 예외 저장 양수체크 cs:1921/2128, 체크리스트 #29·#35 — MSG00193 "Tact Time : 0").
-        //   입력값이 음수/0 일 때만 차단(빈값은 필수검증 소관). 메인그리드 패턴과 동일.
-        const tact = toNum(r.TACT_TIME);
-        if (tact !== null && tact <= 0)
+        // Tact Time > 0 (AS-IS 예외 저장 양수체크 cs:1921/2128 — MSG00193 "Tact Time : 0").
+        //   AS-IS 는 빈값을 0 으로 보고 차단한다(SP 는 빈값을 NULL 로 저장하므로 화면에서 막아야 함).
+        const tact = toNum(r.TACT_TIME) ?? 0;
+        if (tact <= 0)
           return alert(MSG.REQUIRED_POSITIVE, 'You can only enter values above {0}', 'Tact Time : 0');
-        const yieldVal = toNum(r.YIELD);
-        if (yieldVal !== null) {
-          if (yieldVal < YIELD_MIN)
-            return alert(MSG.RANGE_MIN, 'Only values greater than or equal to {0} are allowed.', `Yield : ${YIELD_MIN}`);
-          if (yieldVal > YIELD_MAX)
-            return alert(MSG.RANGE_MAX, 'You can only enter values equal to or below {0}', `Yield : ${YIELD_MAX}`);
-        }
+        // Yield 1~100 — 빈값도 0 으로 보고 하한 차단(AS-IS 동일).
+        const yieldVal = toNum(r.YIELD) ?? 0;
+        if (yieldVal < YIELD_MIN)
+          return alert(MSG.RANGE_MIN, 'Only values greater than or equal to {0} are allowed.', `Yield : ${YIELD_MIN}`);
+        if (yieldVal > YIELD_MAX)
+          return alert(MSG.RANGE_MAX, 'You can only enter values equal to or below {0}', `Yield : ${YIELD_MAX}`);
       }
       // 중첩 기간 검증 (checkValidN5 — MSG00105) — 같은 복합키 행끼리 기간 겹침 금지.
       const keyOf = (r: Row): string =>
         [r.DIVISION_ID, r.PLANT_SITE_ID, r.ITEM_ID, r.OPERATION_ID, r.LINE_ID].map(s).join('|');
       const groups = new Map<string, { start: string; end: string }[]>();
-      for (const r of rows) {
-        const start = s(r.TACT_TIME_START_DATE).trim();
-        const end = s(r.TACT_TIME_END_DATE).trim();
+      for (const r of allRows ?? rows) {
+        if (s(r.CRUD_TYPE) === 'D') continue;
+        const start = toYmd(r.TACT_TIME_START_DATE);
+        const end = toYmd(r.TACT_TIME_END_DATE);
         if (!/^\d{8}$/.test(start) || !/^\d{8}$/.test(end)) continue;
         const k = keyOf(r);
         const list = groups.get(k) ?? [];

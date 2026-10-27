@@ -47,6 +47,10 @@ export const COMBO = {
   OPERATION_GROUP: 'OperationGroup_SCP',
   FROM_SITE: 'PlantByDivisionOperation',
   BUCKET: 'BucketType',
+  // F7 Period 서버 산출 — 전역 기등록 콤보(SCM_ADM_CMBO_SQL_M, MDU_DIVS_CD='ALL', USE_YN='Y').
+  //   AS-IS GetDayRange(SP02)와 같은 본문(달력 마스터 clamp + FN_MULTY_TIME 타임존)이라 DB 신규 등록 0건이다.
+  //   call-proc(SSP0200 방식) 대신 콤보를 쓴 근거는 Form 의 dayPeriod 주석 참조(사용자 결정 2026-10-21).
+  DAY_PERIOD: 'SCM0001_GET_SCP_DAY_PERIOD',
   CELL_PLANT_SITE: 'PlantSiteByDivision',
   CELL_FCST_TYPE: 'FcstType',
   CELL_BOD_ITEM: 'BODItemProjectRoute_SCP',
@@ -69,7 +73,10 @@ export const DEFAULT_BUCKET_TYPE = BUCKET_TYPE.DAILY;
 
 // AS-IS GetDayRange — SP02 `SCM0001_GET_SCP_DAY_PERIOD(p_from_date='', p_offset_day='55', p_timezone='AS054')`.
 //   결과는 '오늘(KST) ~ 오늘+55일' 을 달력 마스터 존재일로 clamp 한 값이다(design 02 §2.5).
+//   COMBO.DAY_PERIOD 의 @offsetDay(문자열화해 전달) / makeInitPeriod 의 dayjs add(number) 양쪽이 쓴다.
 export const PERIOD_OFFSET_DAY = 55;
+// COMBO.DAY_PERIOD 의 @timeZone — FN_MULTY_TIME 기준 KST. 빈 시작일을 서버 '오늘(KST)'로 산출한다.
+export const PERIOD_TIMEZONE = 'AS054';
 
 // 동적 기간칼럼 접두 (design 03 §2.2). `B_` 는 판정식이 `IndexOf("B_") > 0` 이라 도달 불가 — 구현하지 않는다.
 export const PIVOT_PREFIX = {
@@ -157,8 +164,14 @@ export const DUP_KEY_COLUMNS: readonly string[] = [
   COLUMN.FCST_TYPE,
 ];
 
-// 3단 헤더 총높이 48px 규약(hook #93) — 1단 16 × 3. AS-IS 20/30px 는 FarPoint 좌표라 이식하지 않는다.
-export const HEADER_ROW_HEIGHT = 16;
+// 3단 헤더 1단 높이(hook #93) — 18 × 3 = 총 54px. AS-IS 20/30px 는 FarPoint 좌표라 이식하지 않는다.
+//   16→18: 3단 헤더가 너무 좁아 상향(사용자 지시 2026-10-15, 자매 SSP0060/SSP0005 동일).
+export const HEADER_ROW_HEIGHT = 18;
+// 헤더 총높이(hook #93). 공용 DataGrid 의 `headerRowHeight` prop(= rows.defaultSize)은 정적 컬럼에
+//   박힌 명시 height(48)에 눌려 무효가 되므로, 이 값을 "실제 렌더된 tier 수"로 나눠 각 헤더 row 높이를
+//   updatedLayout 에서 직접 강제한다(자매 SSP0060 ShipmentPlanAutoEssMainGrid 와 동일 패턴).
+//   48→54(18px/tier): 자매 화면과 동일 기준으로 맞춤(사용자 지시 2026-10-15).
+export const HEADER_TOTAL_HEIGHT = 54;
 // AS-IS AddNumColumn width 70 (design 03 §2.2).
 export const PIVOT_COLUMN_WIDTH = 70;
 
@@ -175,7 +188,10 @@ export const PIVOT_QTY_MIN = -9_999_999_999;
 export const LBL = {
   DIVISION: 'LBL00001',
   OPERATION_GROUP: 'LBL00027',
-  MODEL: 'LBL00669',
+  // 조회조건 Model 필드 라벨 = "Model/Nickname"(SSP0202 등 자매 화면과 통일, 사용자 지시 2026-10-23).
+  //   LBL00618: SCM_ADM_MSG_M(KO/EN/CN 전건 'Model/Nickname', USE_YN='Y') + 번들 양쪽 실측 — 등록 불요.
+  //   종전 LBL00669('Model')에서 교체.
+  MODEL: 'LBL00618',
   FROM_SITE: 'LBL00022',
   BUCKET: 'LBL00710',
   PERIOD: 'LBL00013',

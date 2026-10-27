@@ -185,12 +185,14 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
       setDescription('');
       setFilters(undefined);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   // popup open 시 기본 조건으로 자동 조회
   useEffect(() => {
     if (!open) return;
     onSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   // AS-IS L331~353 SetItem: 선택 row 의 VERSION_NO 만 sVersions 로 전달
@@ -199,8 +201,10 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
     if (!g) return;
     const selected = (g.selectedItems[0] ?? null) as VersionPopupRow | null;
     if (!selected) {
-      // AS-IS MSG00279 (.cs L340): 버전은 1개만 선택해 주세요
-      void setAlert({ type: 'alert', content: '버전은 1개만 선택해 주세요. (MSG00279)' });
+      // AS-IS MSG00279 (.cs L340): 버전은 1개만 선택해 주세요.
+      //   MSG00279 는 TO-BE 다국어 테이블에 없어 한국어 고정 문자열로 떠 있었다(갭분석 F-11). 같은 문구가 KO/EN/CN
+      //   으로 등록된 MSG00701 을 쓴다 (2026-10-16).
+      void setAlert({ type: 'alert', content: t('MSG00701', '_버전은 1개만 선택해 주세요.') });
       return;
     }
     // ⛔ NUMBER → String cast 의무 (메모: feedback_no_type_cast_around_runtime)

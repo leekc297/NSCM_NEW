@@ -5,10 +5,20 @@ import {
   applyRatio,
   distributeWeeklyToDaily,
   isoWeek,
+  orderRowsByMeasure,
   roundQty,
   sumValues,
   toNum,
 } from './productionPlanLineDerive';
+
+const MEASURE_ORDER = [
+  'PROD_PLAN_ENGINE',
+  'PROD_PLAN_AMEND',
+  'PROD_PLAN_ENGINE_CELL_QTY',
+  'PROD_PLAN_ENGINE_STD_JR',
+  'LINE_TOTAL_LOAD_ENGINE',
+  'LINE_TOTAL_LOAD_AMEND',
+];
 
 describe('productionPlanLineDerive', () => {
   it('toNum — 콤마/공백/빈값 처리', () => {
@@ -73,5 +83,56 @@ describe('productionPlanLineDerive', () => {
   it('applyRatio — ratio 커서 비면 원본 반환(참조 동일)', () => {
     const rows = [{ MEASURE: 'LINE_TOTAL_LOAD_ENGINE', W_202602: 1 }];
     expect(applyRatio(rows, [], [], 'LINE_TOTAL')).toBe(rows);
+  });
+
+  it('orderRowsByMeasure — line 블록 안에서 % measure 를 맨 아래로(등록 SORT 순)', () => {
+    const key = { DIVISION_ID: '81', SCM_SITE_ID: 'S1', OPERATION_ID: 'O1', LINE_ID: 'L1' };
+    // SP 가 % measure 를 앞/중간에 섞어 반환한 경우(현상 재현).
+    const rows = [
+      { ...key, MEASURE: 'LINE_TOTAL_LOAD_ENGINE' },
+      { ...key, MEASURE: 'PROD_PLAN_ENGINE' },
+      { ...key, MEASURE: 'LINE_TOTAL_LOAD_AMEND' },
+      { ...key, MEASURE: 'PROD_PLAN_AMEND' },
+      { ...key, MEASURE: 'PROD_PLAN_ENGINE_CELL_QTY' },
+      { ...key, MEASURE: 'PROD_PLAN_ENGINE_STD_JR' },
+    ];
+    const out = orderRowsByMeasure(rows, MEASURE_ORDER);
+    expect(out.map(r => r.MEASURE)).toEqual([
+      'PROD_PLAN_ENGINE',
+      'PROD_PLAN_AMEND',
+      'PROD_PLAN_ENGINE_CELL_QTY',
+      'PROD_PLAN_ENGINE_STD_JR',
+      'LINE_TOTAL_LOAD_ENGINE',
+      'LINE_TOTAL_LOAD_AMEND',
+    ]);
+  });
+
+  it('orderRowsByMeasure — 서로 다른 line 블록 순서는 보존, 각 블록 안에서만 재정렬', () => {
+    const l1 = { DIVISION_ID: '81', SCM_SITE_ID: 'S1', OPERATION_ID: 'O1', LINE_ID: 'L1' };
+    const l2 = { DIVISION_ID: '81', SCM_SITE_ID: 'S1', OPERATION_ID: 'O1', LINE_ID: 'L2' };
+    const rows = [
+      { ...l1, MEASURE: 'LINE_TOTAL_LOAD_ENGINE' },
+      { ...l1, MEASURE: 'PROD_PLAN_ENGINE' },
+      { ...l2, MEASURE: 'LINE_TOTAL_LOAD_AMEND' },
+      { ...l2, MEASURE: 'PROD_PLAN_AMEND' },
+    ];
+    const out = orderRowsByMeasure(rows, MEASURE_ORDER);
+    expect(out.map(r => `${String(r.LINE_ID)}:${String(r.MEASURE)}`)).toEqual([
+      'L1:PROD_PLAN_ENGINE',
+      'L1:LINE_TOTAL_LOAD_ENGINE',
+      'L2:PROD_PLAN_AMEND',
+      'L2:LINE_TOTAL_LOAD_AMEND',
+    ]);
+  });
+
+  it('orderRowsByMeasure — 이미 올바른 순서면 멱등', () => {
+    const key = { DIVISION_ID: '81', SCM_SITE_ID: 'S1', OPERATION_ID: 'O1', LINE_ID: 'L1' };
+    const rows = MEASURE_ORDER.map(m => ({ ...key, MEASURE: m }));
+    expect(orderRowsByMeasure(rows, MEASURE_ORDER).map(r => r.MEASURE)).toEqual(MEASURE_ORDER);
+  });
+
+  it('orderRowsByMeasure — measureOrder 비면 원본 반환(참조 동일)', () => {
+    const rows = [{ MEASURE: 'PROD_PLAN_ENGINE' }];
+    expect(orderRowsByMeasure(rows, [])).toBe(rows);
   });
 });

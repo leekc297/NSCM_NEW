@@ -1,7 +1,9 @@
-# [Harness] DMF0042 business-plan — BLOCK 16 / WARN 95 (final)
+# [Harness] DMF0042 business-plan — BLOCK 21 / WARN 102 (final)
 
 - WARN F15 onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5) @components/modals/ReplaceByCutoffModal.tsx:233
 - WARN F15 onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5) @components/modals/VersionCutoffModal.tsx:255
+- WARN AC1 액션 대조표 미처리 3192행: AC-f1f24fa7(상태 빈칸 POPUP new DM0002_TitleSetForm_Popup), AC-a06a02ce(상태 빈칸 UI_PROP frm.StartPosition), AC-d3231209(상태 빈칸 POPUP frm.ShowDialog), AC-85a42280(상태 빈칸 MESSAGE MessageBox.Show), AC-c41c697d(상태 빈칸 RETURN return;), AC-30745a5c(상태 빈칸 POPUP new GSCM.DM.Plan.UIL.POPUP.Ver), AC-e8b88695(상태 빈칸 CALL_EXT popup.LoadDataDiv), AC-47b19397(상태 빈칸 UI_PROP popup.StartPosition) … @Doc/asisfacts/screens/DMF0042/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 110행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-e8b88695(popup.LoadDataDiv @DMF0042_1_BizPlan.cs:2857), AC-ef3c99be(popup.LoadData @DMF0042_1_BizPlan.cs:2994), AC-30b42898(spdMain.Sheets[0].GetSelection @DMF0042_1_BizPlan.cs:3400), AC-ac8e0617(popup.LoadDataDiv @DMF0042_1_BizPlan.cs:3465), AC-cce746df(toolTip1.SetToolTip @DMF0042_1_BizPlan.cs:1497), AC-26f2c58d(toolTip1.SetToolTip @DMF0042_1_BizPlan.cs:1498), AC-c5f16aa4(drpPeriod.Value1.CompareTo @DMF0042_1_BizPlan.cs:718), AC-92408a7a(drpPeriod.Value2.CompareTo @DMF0042_1_BizPlan.cs:720) … @Doc/asisfacts/screens/DMF0042/__asis-actions__.md
 - WARN G02 As-is 엔드포인트 DM.DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA (DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA) 매핑표 §4 에 없음
 - WARN G02 As-is 엔드포인트 DM.DMF0042_SAVE_DM_PLN_BP_FCST (DMF0042_SAVE_DM_PLN_BP_FCST) 매핑표 §4 에 없음
 - WARN G02 As-is 엔드포인트 DM.PR_GET_DAY_RANGE (PR_GET_DAY_RANGE) 매핑표 §4 에 없음
@@ -68,11 +70,22 @@
 - WARN G04 As-is 컨트롤 btnCutOff / UsrButton 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 cboClosed / UsrCombo 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 cboQty / UsrCheckBox 매핑표 §1 에 없음
+- BLOCK H03 조회조건 <Checkbox> 디자인(hook #154 v2): v1 무라벨(NBSP/공백 라벨) — 조건명을 FormItem label 로. 정본 GlobalPsiReportForm checkbox()/radio() — Grid(customGrid)+FormItem(formItem, label=조건명, labelAlign='right')+customCheckbox+<Checkbox checked onChange/> · Radio = FormItem label=그룹명 + <RadioGroup row><Radio labelText/> @components/BusinessPlanForm.tsx:407
+- BLOCK H03 조회조건 <Checkbox> 디자인(hook #154 v2): v1 무라벨(NBSP/공백 라벨) — 조건명을 FormItem label 로. 정본 GlobalPsiReportForm checkbox()/radio() — Grid(customGrid)+FormItem(formItem, label=조건명, labelAlign='right')+customCheckbox+<Checkbox checked onChange/> · Radio = FormItem label=그룹명 + <RadioGroup row><Radio labelText/> @components/BusinessPlanForm.tsx:412
 - WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/MeasureSelectModal.tsx
 - WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/VersionCutoffModal.tsx
 - WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useBusinessPlanStore.test.tsx
 - BLOCK V01 As-is Validation 421건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
 - BLOCK V01 As-is Expression 269건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00097 — AS-IS '권한을 가진 Division이 없습니다.' / TO-BE MSG00097 = 'Division 을 선택하세요.' → 문구로 찾은 TO-BE ID MSG00667 @business-plan.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00108 — AS-IS '시작일자가 종료일자보다 늦을 수 없습니다.' / TO-BE MSG00108 = '조회 기간이 잘못되었습니다 (시작일 > 종료일).' → 문구로 찾은 TO-BE ID MSG01135 @business-plan.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00227 — AS-IS 'INSERT 모드에서는 저장 후 Bucket 변경이 가능합니다.' / TO-BE MSG00227 = 'Insert 된 행이 있어 Bucket 을 변경할 수 없습니다.' → 문구로 찾은 TO-BE ID MSG01237 @business-plan.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00002 — AS-IS '{0} 값은 필수 입력입니다' / TO-BE MSG00002 = '성공적으로 저장되었습니다.' → 문구로 찾은 TO-BE ID MSG00614 @business-plan.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @business-plan.constants.ts
+- BLOCK VC1 대조표 FAIL 27행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)
+- BLOCK VC1 대조표 미검증 9467행 — 검사 사유 REVIEW 10248 · NOT_RUN 13129 · NOPATH 4784 · TODO 146 · WARN 120 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- BLOCK VC1 작업 원장 미완료 1235건 / 검사 인스턴스 1275 — W2 15 · W3 1 · W4 8 · W5 96 · W6 476 · W7 639 · 구현 의심 10 (Doc/verify/DMF0042/work_ledger.md)
+- WARN VC1 대조표 검증 추적이 36시간 전 결과 — 재실행 후 판정
 - BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @BusinessPlan.tsx:270
 - WARN R10 감사키 빈문자열 (#99 §0.1) @BusinessPlan.tsx:76
 - BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/BusinessPlanGrid.tsx:149
@@ -94,8 +107,7 @@
 - BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_DM_MDF_VERSION · 시트 'mdfVersion') — 누락 versionDescription, versionType, sesUserId — 현재 키: divisionId, fromYyyymmdd, toYyyymmdd, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감
 - BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_SPREAD_TITLE · 시트 'spreadTitle') — 누락 sesUserId — 현재 키: startYyyymmdd, endYyyymmdd, divisionId, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감
 - BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (DMF0002_GET_TITLESET_POPUP · 시트 'titleSet') — 누락 programId, sesUserId — 현재 키: sheetName, columnType, divisionId, mnuId · BE positional 매핑이라 값이 NULL 로 감
-- WARN M08 대사표에 As-is DB루프 컬럼 생성 행 없음: InitSpread_X:184, InitSpread:254 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpread_X / 184 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md
-- WARN T02 tsc 가 다른 파일에서 오류를 보고(페이지 범위 밖) — exit 1
+- WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: InitSpread_X:184, InitSpread:254 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpread_X / 184 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md
 - WARN L02 import/no-relative-parent-imports: Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `BusinessPlanGrid.tsx` to same directory as `../BusinessPlan.module.scss` or consider making `../BusinessPlan.module.scss` a package. @components\BusinessPlanGrid.tsx:35
 - WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:287
 - WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:305

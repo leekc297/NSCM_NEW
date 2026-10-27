@@ -20,7 +20,7 @@ interface Props {
   staticColumns: RawFlexGridColumnConfig[];
   siteKey: SiteKey | null;
   bomKey: BomKey | null;
-  // CELL_TYPE 'CA*' 는 편집불가(design/03 R-EDIT). BOM 더블클릭으로 넘어온 cellType 로 판정.
+  // CELL_TYPE 이 'CA' 로 시작하면 편집 불가.
   readOnly: boolean;
   // A5 spdPlant_CellDoubleClick → CAPA New Model 팝업(design/03, 2026-09-22 신규 배선). AS-IS 는
   //   그리드 전체 잠금 토글("Action" 컬럼 비표시=편집모드 아님)로 더블클릭의 의미를 가른다 —
@@ -70,7 +70,7 @@ export const ProjectRoutePlantGrid = ({
   );
 
   // 편집 가능 컬럼 화이트리스트 강제(R-EDIT/R-INS-LOCK). admin 메타가 관대해도 5개 외 편집 차단.
-  //   CELL_TYPE 'CA*'(readOnly) 면 전 컬럼 편집 차단.
+  //   CELL_TYPE CA*(readOnly) 이면 전 컬럼 편집 차단.
   // handleInitialized 로 이관(useEffect 는 gridRef 미준비로 첫 로드 시 미부착).
   // useEffect(() => {
   //   const grid = gridRef.current;
@@ -227,6 +227,8 @@ export const ProjectRoutePlantGrid = ({
       editTrackerRef={editTrackerRef}
       itemsSource={data}
       staticColumns={staticColumns}
+      // CELL_TYPE CA* 이면 그리드 자체를 잠근다. 붙여넣기(setClipString)는 beginningEdit 를 거치지 않는다.
+      isReadOnly={readOnly}
       comboParams={comboParams}
       numberRules={PLANT_NUMBER_RULES}
       initialized={handleInitialized}

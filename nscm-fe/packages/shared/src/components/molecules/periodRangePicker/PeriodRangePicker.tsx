@@ -1,4 +1,4 @@
-import { ClickAwayListener, IconButton, Menu, MenuItem, Popper } from '@mui/material';
+import { ClickAwayListener, IconButton, Menu, MenuItem, Popper, useTheme } from '@mui/material';
 import dayjs, { type Dayjs } from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -17,10 +17,13 @@ import styles from './PeriodRangePicker.module.scss';
 dayjs.extend(isoWeek);
 
 const VALUE_FORMAT = 'YYYYMMDD';
-const DISPLAY_FORMAT = 'YYYY-MM-DD';
-// 월 단위 기간 화면(monthOnly)의 표기. AS-IS 가 월 콤보 2개로 'yyyy-MM' 만 보여주던 화면용
-//   (예: SCP0111 통합PSI — cs L841 `ParseExact(cmbFromMonth.Text, "yyyy-MM", ...)`).
-const DISPLAY_FORMAT_MONTH = 'YYYY-MM';
+// 표시 포맷은 점 구분(YYYY.MM.DD) — 앱 표준 단일 DatePicker(design-system format='YYYY.MM.DD')와 통일
+//   (사용자 지시 2026-10-27). 값 계약(start/end/onChange = YYYYMMDD)은 불변이고, 키인 커밋은 숫자 8자리만
+//   뽑아 정규화하므로 구분자와 무관하게 동작한다.
+const DISPLAY_FORMAT = 'YYYY.MM.DD';
+// 월 단위 기간 화면(monthOnly)의 표기. AS-IS 가 월 콤보 2개로 'yyyy.MM' 만 보여주던 화면용
+//   (예: SCP0111 통합PSI — cs L841 `ParseExact(cmbFromMonth.Text, "yyyy.MM", ...)`).
+const DISPLAY_FORMAT_MONTH = 'YYYY.MM';
 
 // 월~일 순서(isoWeek 기준). AS-IS Period 캘린더와 동일하게 영문 고정(MON~SUN) — 언어 무관.
 // 다국어가 필요해지면 SCM_ADM_MSG_M 에 정식 LBL 코드 등록 후 치환할 것(과거 로컬 json 최댓값만 보고
@@ -44,22 +47,18 @@ interface PeriodRangePickerProps {
   //   AS-IS 화면 중 서버 GetDayRange(p_from_date="") 처럼 항상 오늘 기준으로 계산하는 화면은 이 플래그로
   //   오늘 기준을 강제한다(SCP0024 — cs:1184-1197, p_from_date 를 아예 비워 보내 서버가 오늘로 계산).
   quickWeeksFromToday?: boolean;
-  // From/To 직접 키인 허용(opt-in). AS-IS UsrDateRangePicker3 의 txtStart/txtEnd MaskedTextBox 복원.
-  //   기본 false — 미지정 화면은 종전 달력 전용 동작 그대로(공용 컴포넌트 회귀 방지, Hard Boundary).
-  //   true 면 날짜 박스가 편집 input 이 되고(YYYY-MM-DD, 하이픈 유무 무관) blur/Enter 시 YYYYMMDD 로
-  //   커밋한다. 달력 아이콘 클릭은 종전처럼 팝업을 연다.
+  // From/To 직접 키인 허용. AS-IS UsrDateRangePicker3 의 txtStart/txtEnd MaskedTextBox 복원.
+  //   기본 true(공용 기본값, 2026-10-19) — 날짜 박스가 편집 input 이 되고(YYYY-MM-DD, 하이픈 유무 무관)
+  //   blur/Enter 시 YYYYMMDD 로 커밋한다. 달력 아이콘 클릭은 종전처럼 팝업을 연다.
+  //   달력 전용으로 되돌리려면 allowTextInput={false} 를 명시한다. monthOnly 화면은 아래 사유로 자동 달력 전용.
   allowTextInput?: boolean;
   // 월 단위 기간 — 표기를 'YYYY-MM' 로 줄이고, 확정값을 월 경계(시작월 1일 ~ 종료월 말일)로 정규화한다.
   //   값 계약(start/end/onChange = YYYYMMDD)은 그대로다 — 소비자가 YYYYMM 으로 쓰려면 앞 6자리만 취하면 된다.
   //   조회 param 이 월 단위인 화면이 쓴다(SCP0111 p_from_yyyymm/p_to_yyyymm). 기본값 false 라 기존 화면 영향 없음.
-  //   주의: allowTextInput 과 함께 쓰는 소비자는 없다 — 월 표기 칸에 일 단위 키인을 허용하면 표기와
-  //   입력 단위가 어긋난다. 필요해지면 monthOnly 쪽 파서를 YYYY-MM 로 따로 맞춰야 한다.
+  //   주의: 월 표기 칸에 일 단위 키인을 허용하면 표기(YYYY-MM)와 입력 단위가 어긋나므로, monthOnly 면
+  //   키인 기본값과 무관하게 항상 달력 전용이다. 필요해지면 monthOnly 쪽 파서를 YYYY-MM 로 따로 맞춰야 한다.
   monthOnly?: boolean;
 }
-
-// 고정 프리셋 기본 세트. 모듈 상수로 둬 미전달 소비자의 렌더마다 새 배열 생성을 막는다.
-
-const DEFAULT_QUICK_WEEKS = [26, 52, 82];
 
 const parseValue = (value: string): Dayjs | null => {
   if (!value || value.length !== 8) return null;
@@ -261,11 +260,26 @@ export const PeriodRangePicker = ({
   monthOnly,
 }: PeriodRangePickerProps) => {
   const anchorRef = useRef<HTMLDivElement>(null);
+  // 트리거 날짜 박스 색상은 테마 토큰에서 끌어온다(라이트/다크 자동). .dateBox 에 #fff/#d9d9d9 를
+  //   하드코딩하면 다크 테마 조회영역(commonBgDeep)에서 혼자 흰색으로 튄다 — DMF0003 PeriodField 가
+  //   쓰는 design-system DatePickerCalendar 처럼 테마를 따르게 한다. (레이아웃은 .dateBox scss 가 담당)
+  const {
+    palette: { semantic },
+  } = useTheme();
+  const dateBoxStyle = {
+    background: semantic.color.commonBgBasic,
+    borderColor: semantic.color.commonBorderBasic,
+    color: semantic.color.commonTextBasic,
+  };
   const [open, setOpen] = useState(false);
   const [draftStart, setDraftStart] = useState<Dayjs | null>(null);
   const [draftEnd, setDraftEnd] = useState<Dayjs | null>(null);
   const [leftCursor, setLeftCursor] = useState(dayjs());
   const [rightCursor, setRightCursor] = useState(dayjs().add(1, 'month'));
+
+  // 키인 기본 활성. 명시적으로 allowTextInput={false} 를 준 소비자만 달력 전용.
+  //   monthOnly 는 표기(YYYY-MM)와 일 단위 키인이 어긋나므로 항상 달력 전용으로 강제한다.
+  const textInputEnabled = (allowTextInput ?? true) && !monthOnly;
 
   const displayFormat = monthOnly ? DISPLAY_FORMAT_MONTH : DISPLAY_FORMAT;
   const startDisplay = useMemo(
@@ -366,8 +380,8 @@ export const PeriodRangePicker = ({
       required={required}
       render={() => (
         <div ref={anchorRef} className={styles.trigger}>
-          {allowTextInput ? (
-            <div className={styles.dateBox}>
+          {textInputEnabled ? (
+            <div className={styles.dateBox} style={dateBoxStyle}>
               <span
                 style={{ cursor: 'pointer', display: 'inline-flex' }}
                 onClick={handleOpen}
@@ -396,14 +410,14 @@ export const PeriodRangePicker = ({
               />
             </div>
           ) : (
-            <div className={styles.dateBox} onClick={handleOpen}>
+            <div className={styles.dateBox} style={dateBoxStyle} onClick={handleOpen}>
               <FunctionCalendarIcon appearance='lined' />
               <span>{startDisplay}</span>
             </div>
           )}
           <span className={styles.periodSep}>~</span>
-          {allowTextInput ? (
-            <div className={styles.dateBox}>
+          {textInputEnabled ? (
+            <div className={styles.dateBox} style={dateBoxStyle}>
               <span
                 style={{ cursor: 'pointer', display: 'inline-flex' }}
                 onClick={handleOpen}
@@ -432,7 +446,7 @@ export const PeriodRangePicker = ({
               />
             </div>
           ) : (
-            <div className={styles.dateBox} onClick={handleOpen}>
+            <div className={styles.dateBox} style={dateBoxStyle} onClick={handleOpen}>
               <FunctionCalendarIcon appearance='lined' />
               <span>{endDisplay}</span>
             </div>

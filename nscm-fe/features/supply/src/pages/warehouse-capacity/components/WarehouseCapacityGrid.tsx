@@ -1,14 +1,15 @@
-import { AllowMerging, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import { AllowMerging, DataMap, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, useEffect } from 'react';
+import { type MutableRefObject, useEffect, useMemo } from 'react';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { GridUtils, type EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
+import { useTabComboQueries } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
-import { clampNonNegative, isCellEditable } from '../utils/warehouseCapacityEditLock';
-import { MSG } from '../warehouse-capacity.constants';
+import { clampNonNegative, isCellEditable, matchSiteByDivision } from '../utils/warehouseCapacityEditLock';
+import { COMBO, MSG } from '../warehouse-capacity.constants';
 import type { MainRow } from '../warehouse-capacity.types';
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   editTrackerRef: MutableRefObject<EditTracker<MainRow> | undefined>;
   adminColumns?: RawFlexGridColumnConfig[];
+  divisionId: string;
   onFocus: () => void;
 }
 
@@ -37,6 +39,11 @@ interface Props {
  * SmartColMerge(design 03 §3 #18, line1180) — 병합 대상 컬럼이 detail 공란이라 미확정
  * (`guides/grid-behavior-parity.md` §1.1). 확인 필요로 명시하고 `allowMerging` 은 None 유지 —
  * 추측 병합 적용 금지.
+ *
+ * 셀 콤보 Division cascade(A4) — OPMZ_PLAN_GR_ID/STAGE 는 admin 메타 ATTRIBUTE2='DIVISION_ID:
+ * DIVISION_ID'(05_register.sql)로 공용 DataGrid 가 행 DIVISION_ID 기준 자동 좁힘(화면 코드 없음,
+ * SCP0127/0128 동형). SCM_SITE_ID 는 AS-IS RefreshSiteByDivision EE 분기(EE→81/40/82)가 단순일치로
+ * 표현 불가라 화면 코드(matchSiteByDivision + siteDataMap)로 처리한다(memory scp-site-combo-ee-branch).
  */
 export const WarehouseCapacityGrid = ({
   rows,
@@ -44,10 +51,35 @@ export const WarehouseCapacityGrid = ({
   gridFilterRef,
   editTrackerRef,
   adminColumns,
+  divisionId,
   onFocus,
 }: Props) => {
   const { t } = useTranslation();
   const setToast = useMessageStore.getState().setToast;
+
+  // SCM_SITE_ID 셀 콤보 — 'Site' 콤보(DIVISION_ID 반환)를 matchSiteByDivision 으로 좁혀 DataMap 을
+  //   SCM_SITE_ID 컬럼에 덮어쓴다. 공용 DataGrid 가 레이아웃 재계산마다 메타 dataMap 으로 재대입하므로
+  //   updatedLayout 마다 재부착한다(SafetyStockGrid SCM_SITE_ID 선례와 동형).
+  const [sites] = useTabComboQueries({ filters: [COMBO.SITE] });
+  const siteDataMap = useMemo(() => {
+    const filtered = (sites ?? []).filter(r => matchSiteByDivision(r.DIVISION_ID, divisionId));
+    return filtered.length ? new DataMap(filtered, 'CODE', 'NAME') : null;
+  }, [sites, divisionId]);
+
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const apply = () => {
+      if (!siteDataMap) return;
+      const col = g.getColumn('SCM_SITE_ID');
+      if (col && col.dataMap !== siteDataMap) col.dataMap = siteDataMap;
+    };
+    g.updatedLayout.addHandler(apply);
+    apply();
+    return () => {
+      g.updatedLayout?.removeHandler(apply);
+    };
+  }, [gridRef, siteDataMap]);
 
   useEffect(() => {
     const g = gridRef.current;
@@ -120,6 +152,9 @@ export const WarehouseCapacityGrid = ({
       itemsSource={rows}
       staticColumns={adminColumns ?? []}
       allowMerging={AllowMerging.None}
+      // MAX_CAPA 는 정수만 — 소수점 입력 자체를 막는다(사용자 요청 2026-10-22, COL-11 numberRules).
+      //   음수는 기존 clampNonNegative(커밋 시 0 클램프, MSG00085)가 별도로 처리한다.
+      numberRules={{ MAX_CAPA: { integerOnly: true } }}
       gotFocus={onFocus}
     />
   );

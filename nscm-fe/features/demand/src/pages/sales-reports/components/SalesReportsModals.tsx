@@ -108,12 +108,15 @@ export const SalesReportsModals = ({
           open={openKey === 'ITEM'}
           modalClose={onClose}
           setSelectedValue={(
-            itemId: string,
+            itemIds: string,
             itemName?: string,
             _itemType?: string,
             nickName?: string
           ) => {
             if (!itemTargetRow) return;
+            // 공용 Model 팝업은 여러 줄을 고르면 ITEM_ID 를 쉼표로 이어 보낸다. 이 셀은 Model 한 건만
+            //   받는 자리라 맨 위 행 하나만 쓴다 (DMF0005 와 같은 방식, 2026-10-14 사용자 요청).
+            const itemId = itemIds?.split(',')[0] ?? '';
             onItemSelect(itemTargetRow, {
               ITEM_ID: itemId,
               NICK_NAME: nickName ?? itemName ?? '',
@@ -129,7 +132,8 @@ export const SalesReportsModals = ({
                 toCellStr((itemTargetRow as Record<string, unknown>)?.DEPT_ID).trim() || 'ALL',
               endCustomer: 'ALL',
               salesSite: 'ALL',
-              itemId: '',
+              // 그 행의 현재 Model 로 좁혀 연다 — 그리드 셀 Model 팝업 화면 간 통일 (2026-10-14 사용자 요청).
+              itemId: toCellStr((itemTargetRow as Record<string, unknown>)?.ITEM_ID).trim(),
             } as never
           }
           callFromCell={true}

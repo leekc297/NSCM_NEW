@@ -17,8 +17,10 @@ import styles from './ShipmentPlanElectrodeForm.module.scss';
 
 interface Props {
   onSearch: () => void;
-  // btnItemId → ItemByDivisionModal(page 소유). AS-IS btnItemId_Click(cs:2273~2292).
+  // btnItemId → MaterialByDivisionModal(page 소유). AS-IS btnItemId_Click(cs:2273~2292).
   onItemSearch: () => void;
+  // Model/Nickname 돋보기 → MaterialByDivisionModal(page 소유, 사용자 지시 2026-10-22).
+  onModelSearch: () => void;
 }
 
 interface Option {
@@ -28,6 +30,11 @@ interface Option {
 
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+
+// Plan_InforElectrode 콤보의 FROM_DATE/TO_DATE1 은 YYYY-MM-DD(하이픈 10자리)로 온다.
+//   Period 필드(PeriodField.toDayjs)는 길이 8(YYYYMMDD)만 해석하므로 하이픈을 제거해 8자리로 정규화한다.
+//   미정규화 시 Plan Date 선택에도 Period 가 채워지지 않는다(실측 2026-10-14).
+const ymd8 = (v: unknown): string => str(v).replace(/-/g, '');
 
 const toOptions = (rows: { CODE?: unknown; NAME?: unknown }[] | undefined): Option[] =>
   (rows ?? []).map(r => ({ label: str(r.NAME) || str(r.CODE), value: str(r.CODE) }));
@@ -46,7 +53,7 @@ const toOptions = (rows: { CODE?: unknown; NAME?: unknown }[] | undefined): Opti
 //   레이아웃: 1~3줄(Division/Company/FromSite/Bucket · PlanDate/Period/Model/Material · NickName/UOM Type)은
 //     항상 표시, 4줄(체크박스 6종)만 접이식 extraConditions 로 둬 펼침/접힘 토글
 //     (SearchArea 가 chevron 버튼 자동 노출, 사용자 지시 2026-10-12). 토글은 모두 재조회 없음(03 §2.2).
-export const ShipmentPlanElectrodeForm = ({ onSearch, onItemSearch }: Props) => {
+export const ShipmentPlanElectrodeForm = ({ onSearch, onItemSearch, onModelSearch }: Props) => {
   const { t } = useTranslation();
 
   const sc = useShipmentPlanElectrodeStore(s => s.searchCondition);
@@ -116,14 +123,14 @@ export const ShipmentPlanElectrodeForm = ({ onSearch, onItemSearch }: Props) => 
   useEffect(() => {
     if (!sc.companyId || sc.planDateYyyymmdd || !planDates || planDates.length === 0) return;
     const first = planDates[0];
-    setPlanDate(str(first.CODE), str(first.FROM_DATE), str(first.TO_DATE1), true);
+    setPlanDate(str(first.CODE), ymd8(first.FROM_DATE), ymd8(first.TO_DATE1), true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sc.companyId, sc.planDateYyyymmdd, planDates]);
 
   const handlePlanDateChange = (code: string) => {
     const idx = (planDates ?? []).findIndex(r => str(r.CODE) === code);
     const row = (planDates ?? [])[idx] as ComboResponse | undefined;
-    setPlanDate(code, str(row?.FROM_DATE), str(row?.TO_DATE1), idx === 0);
+    setPlanDate(code, ymd8(row?.FROM_DATE), ymd8(row?.TO_DATE1), idx === 0);
   };
 
   return (
@@ -158,8 +165,15 @@ export const ShipmentPlanElectrodeForm = ({ onSearch, onItemSearch }: Props) => 
             />
           </Grid>
 
-          {/* Company* — Div_Company, Division 클라 필터 + 첫 행 기본값 */}
-          <Grid size={3}>
+          {/* Company* — Div_Company, Division 클라 필터 + 첫 행 기본값.
+              폭 고정: 바로 아래 같은 2번째 열에 Period(날짜범위, min-width 388)가 있어, 공용 SearchArea 의
+              '같은 세로열=같은 폭' 정렬 때문에 Company 까지 388 로 넓어지던 것(사용자 신고 2026-10-22)을 막는다.
+              이 칸만 콤보 기본폭(290px = CONDITIONS_GRID_ITEM_MIN)으로 묶고 왼쪽 정렬 — 트랙은 388 유지되나
+              입력칸은 다른 콤보와 같은 크기가 된다(오른쪽에 약간 여백이 생기는 것은 의도된 트레이드오프). */}
+          <Grid
+            size={3}
+            sx={{ width: '290px !important', maxWidth: '290px !important', justifySelf: 'start' }}
+          >
             <FormItem
               className={commonStyles.formItem}
               label={t(LBL.COMPANY, '_Company')}
@@ -234,33 +248,20 @@ export const ShipmentPlanElectrodeForm = ({ onSearch, onItemSearch }: Props) => 
 
           {/* Period* — 분리형 날짜 range(drpPeriod). PlanDate 선택 시 FROM_DATE~TO_DATE1 로 자동채움
               (02 §4, handlePlanDateChange → setPlanDate). 자매 Shipment Plan(Mobility & IT) 동일 패턴.
-              PeriodField 는 자체 Grid·required·label 포함(바깥 Grid/FormItem 불필요). */}
+              PeriodField 는 자체 Grid·required·label 포함(바깥 Grid/FormItem 불필요).
+              직접 편집 불가(disabled): AS-IS drpPeriod.Enabled=false(Designer:954) — 값은 Plan Date
+              파생(cboPlanDate_SelectedIndexChanged .cs:5763~5764)으로만 채워지는 읽기전용 필드다.
+              상세영역 Shipment Date(drpPeriod2/3)는 AS-IS 가 Enabled 를 끄지 않아 편집 가능 유지. */}
           <PeriodField
             gridSize={3}
             label={t(LBL.PERIOD, '_Period')}
             start={sc.periodFrom}
             end={sc.periodTo}
+            disabled
             onChange={(start, end) => set({ periodFrom: start, periodTo: end })}
           />
 
-          {/* Model — txtModelId. P_MODEL_ID(저장 시 store 에서 ToUpper). */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.MODEL, '_Model')}
-              labelAlign='right'
-              render={() => (
-                <InputField
-                  fullWidth
-                  value={sc.modelId}
-                  onChange={e => set({ modelId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
-                />
-              )}
-            />
-          </Grid>
-
-          {/* Material — txtItemId + btnItemId 팝업(ItemByDivisionModal, page 소유). 빈 반환 시 기존값 유지
+          {/* Material — txtItemId + btnItemId 팝업(MaterialByDivisionModal, page 소유). 빈 반환 시 기존값 유지
               (AS-IS btnItemId_Click cs:2273~2292). 메인조회 SP P_ITEM_ID 로 전달(저장 시 store 조립). */}
           <Grid size={3}>
             <FormItem
@@ -290,17 +291,40 @@ export const ShipmentPlanElectrodeForm = ({ onSearch, onItemSearch }: Props) => 
             />
           </Grid>
 
-          {/* Nick Name — textNickName. P_NICK_NAME(저장 시 store 에서 ToUpper). */}
+          {/* Model/Nickname — Model + NickName 조회조건 통합(사용자 지시 2026-10-22). txtModelId + 돋보기
+              (MaterialByDivisionModal COM0013, page 소유). 팝업 선택 시 품번(ITEM_ID)→modelId, 닉네임(NICK_NAME)
+              →nickName 둘 다 세팅(page onModelSearch)해 메인 GET SP p_model_id + p_nick_name 양쪽을 채운다.
+              직접입력은 품번 기준이라 modelId 만, nickName 은 비운다. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.NICK_NAME, '_Nick Name')}
+              label={t(LBL.MODEL, '_Model/Nickname')}
               labelAlign='right'
               render={() => (
                 <InputField
                   fullWidth
-                  value={sc.nickName}
-                  onChange={e => set({ nickName: e.target.value })}
+                  className={commonStyles.popupSearchField}
+                  value={sc.modelId}
+                  InputProps={{
+                    endAdornment: (
+                      // 클릭을 아이콘이 아닌 버튼 전체에 건다(2026-10-23).
+                      // <Button
+                      //   appearance='outlined'
+                      //   priority='normal'
+                      //   iconComponent={
+                      //     <FunctionSearchIcon appearance='lined' onClick={onModelSearch} />
+                      //   }
+                      // />
+                      <Button
+                        appearance='outlined'
+                        priority='normal'
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onModelSearch}
+                      />
+                    ),
+                  }}
+                  // 직접입력은 품번(modelId) 기준 — 이전 팝업에서 세팅된 nickName 보조조건을 지운다.
+                  onChange={e => set({ modelId: e.target.value, nickName: '' })}
                   onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
@@ -334,34 +358,38 @@ export const ShipmentPlanElectrodeForm = ({ onSearch, onItemSearch }: Props) => 
             />
           </Grid>
 
-          {/* Sum · Including Past Period — 3줄 UOM Type 다음 남는 칸(size 6)에 둔다. 가로 중앙보다
-              조금 앞(왼쪽)에 오도록 flex-start + 왼쪽 패딩으로 배치(항상 표시, 사용자 지시 2026-10-12).
-              둘 다 표시규칙 전환(재조회 없음 — 03 §2.2). */}
-          <Grid size={6}>
-            <Stack
-              direction='row'
-              alignItems='center'
-              justifyContent='flex-start'
-              spacing={2}
-              sx={{
-                minHeight: '36px',
-                flexWrap: 'nowrap',
-                pl: '80px',
-                '& .MuiFormControlLabel-label': { whiteSpace: 'nowrap' },
-              }}
-            >
-              <Checkbox
-                labelText={t(LBL.SUM, '_Sum')}
-                checked={sc.chkSum}
-                onChange={checked => setChkSum(checked)}
-              />
-              <Checkbox
-                labelText={t(LBL.PAST_PERIOD, 'Including Past Period')}
-                checked={sc.chkPastPeriod}
-                onChange={checked => setChkPastPeriod(checked)}
-              />
-            </Stack>
-          </Grid>
+          {
+            // 기존 로직 주석 보존 (2026-10-19) 시작 - Sum/Past Period 를 4줄 체크박스 행으로 이동
+            // {/* Sum · Including Past Period — 3줄 UOM Type 다음 남는 칸(size 6)에 둔다. 가로 중앙보다
+            //     조금 앞(왼쪽)에 오도록 flex-start + 왼쪽 패딩으로 배치(항상 표시, 사용자 지시 2026-10-12).
+            //     둘 다 표시규칙 전환(재조회 없음 — 03 §2.2). */}
+            // <Grid size={6}>
+            //   <Stack
+            //     direction='row'
+            //     alignItems='center'
+            //     justifyContent='flex-start'
+            //     spacing={2}
+            //     sx={{
+            //       minHeight: '36px',
+            //       flexWrap: 'nowrap',
+            //       pl: '80px',
+            //       '& .MuiFormControlLabel-label': { whiteSpace: 'nowrap' },
+            //     }}
+            //   >
+            //     <Checkbox
+            //       labelText={t(LBL.SUM, '_Sum')}
+            //       checked={sc.chkSum}
+            //       onChange={checked => setChkSum(checked)}
+            //     />
+            //     <Checkbox
+            //       labelText={t(LBL.PAST_PERIOD, 'Including Past Period')}
+            //       checked={sc.chkPastPeriod}
+            //       onChange={checked => setChkPastPeriod(checked)}
+            //     />
+            //   </Stack>
+            // </Grid>
+            // 기존 로직 주석 보존 (2026-10-19) 끝
+          }
         </>
       }
       extraConditions={
@@ -384,6 +412,17 @@ export const ShipmentPlanElectrodeForm = ({ onSearch, onItemSearch }: Props) => 
                 '& .MuiFormControlLabel-label': { whiteSpace: 'nowrap' },
               }}
             >
+              {/* Sum · Including Past Period — 3줄에서 이 행으로 이동(2026-10-19). 표시규칙 전환만(재조회 없음). */}
+              <Checkbox
+                labelText={t(LBL.SUM, '_Sum')}
+                checked={sc.chkSum}
+                onChange={checked => setChkSum(checked)}
+              />
+              <Checkbox
+                labelText={t(LBL.PAST_PERIOD, 'Including Past Period')}
+                checked={sc.chkPastPeriod}
+                onChange={checked => setChkPastPeriod(checked)}
+              />
               <Checkbox
                 labelText={t(LBL.MY_MODEL, '_My Model')}
                 checked={sc.chkMyModel}

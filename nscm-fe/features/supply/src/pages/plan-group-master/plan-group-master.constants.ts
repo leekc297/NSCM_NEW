@@ -42,12 +42,6 @@ export const INSERT_COPY_COLUMNS: readonly string[] = [
   COLUMNS.OPERATION_ID,
 ];
 
-// convert-react 가 canEdit 시 editable 로 보정하는 컬럼(메타는 전건 INPUT_TP_CD='S' — 03_grid §6-1 확인필요 해소).
-export const EDITABLE_COLUMNS: readonly string[] = [
-  COLUMNS.OPMZ_PLAN_GR_ID,
-  COLUMNS.OPMZ_PLAN_GR_ITEM_ID,
-];
-
 // 전체선택 sentinel (SRCH-06). 체크리스트 미선택/전체 → 조회 파라미터 공백.
 export const ALL = 'ALL' as const;
 
@@ -71,9 +65,6 @@ export const MSG = {
   // Division 권한 0건 → SearchArea disable + 경고 (01_layout R2, SetDivisionAuthCheck 등가).
   //   MSG00097 = "Please select Division." / "Division 을 선택하세요." (문구 일치 — 유지).
   REQUIRE_DIVISION: 'MSG00097',
-  // 신규행 Plan Group 필수 (W9). MSG00013 = "Please enter the required fields." / "필수 입력란을 입력해 주세요."
-  //   AS-IS MSG00001 은 TO-BE 에서 "Would you like to save it?" 라 재사용 금지.
-  REQUIRE_PLAN_GROUP: 'MSG00013',
   // 동일 키 중복 (W10). MSG00060 = "Duplicate key exists." / "중복된 키가 존재합니다."
   //   AS-IS MSG00443 은 TO-BE 미등록(0행)이라 재사용 불가.
   DUPLICATE_KEY: 'MSG00060',
@@ -96,7 +87,7 @@ export const MSG = {
 
 // 조회조건 라벨 (02 §4.5 — 전건 기존 LBL, 신규채번 0).
 export const LABELS = {
-  DIVISION: 'LBL00641',
+  DIVISION: 'LBL00001',
   OPERATION: 'LBL00009',
   PLANT: 'LBL00030',
   BUILDING: 'LBL00008',

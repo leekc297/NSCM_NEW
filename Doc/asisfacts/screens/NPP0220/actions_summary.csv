@@ -1,0 +1,8 @@
+﻿"screen_id","class","entry_kind","entry","handler","methods","statements","rows","classified","other","call_ext","classified_pct","by_kind"
+"NPP0220","NPP0220","unreached","(진입점 미연결)","FN_NPP0220","1","4","5","4","0","1","100","LOCAL:2 LOG:1 CALL_EXT:1 RETURN:1"
+"NPP0220","NPP0220_GSCM_SOCompletedEventArgs","ctor",".ctor",".ctor","1","4","4","4","0","0","100","FLAG:4"
+"NPP0220","NPP0220_GSCM_SOService","ctor",".ctor",".ctor","2","44","44","44","0","0","100","FLAG:16 RETURN:12 CALL_LOCAL:4 BRANCH:4 LOCAL:4 EXPR:4"
+"NPP0220","NPP0220_GSCM_SOService","unreached","(진입점 미연결)","CancelAsync","1","4","4","4","0","0","100","CALL_LOCAL:4"
+"NPP0220","NPP0220_GSCM_SOService","unreached","(진입점 미연결)","NPP0220_GSCM_SO","1","8","8","8","0","4","100","CALL_BASE:4 RETURN:4"
+"NPP0220","NPP0220_GSCM_SOService","unreached","(진입점 미연결)","NPP0220_GSCM_SOAsync","1","16","16","16","0","4","100","CALL_LOCAL:4 BRANCH:4 FLAG:4 CALL_BASE:4"
+"NPP0220","NPP0220_GSCM_SOService","unreached","(진입점 미연결)","OnNPP0220_GSCM_SOOperationCompleted","1","12","12","12","0","4","100","BRANCH:4 LOCAL:4 CALL_BASE:4"

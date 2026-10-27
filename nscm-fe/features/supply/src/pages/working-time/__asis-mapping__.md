@@ -2,7 +2,8 @@
 
 > 원천: `00_checklist.md` · 생성: asis_mapping_gate.py --init · 대사: convert-gap-resolve (2026-09-25)
 > 상태 허용값: 미구현(초기) / 구현(구현 위치 필수) / 제외(사유 필수) / 해당없음(사유 필수 — 조회 전용 화면의 CRUD 행 등). 빈 칸 1개 = 게이트 실패.
-> TO-BE 경로 약칭: Page=`WorkingTime.tsx` · Form=`components/WorkingTimeForm.tsx` · Grid=`components/WorkingTimeGrid.tsx` · Store=`useWorkingTimeStore.ts` · Dyn=`working-time.dynamic-columns.ts` · Const=`working-time.constants.ts`.
+> TO-BE 경로 약칭: Page=`WorkingTime.tsx` · Form=`components/WorkingTimeForm.tsx` · Grid=`components/WorkingTimeGrid.tsx` · Modal=`components/WorkingTimeInputModal.tsx` · Store=`useWorkingTimeStore.ts` · Dyn=`working-time.dynamic-columns.ts` · Const=`working-time.constants.ts`.
+> 값입력 이동(2026-10-15 사용자 지시, 자매 SCP0096 shipment-working-day-osp 선례): AS-IS 조회조건의 btnInput/cboDayWeek/txtInpuValue 를 조회조건에서 분리 → 버튼영역 '입력' 버튼(SubTitle customButtons)이 여는 WorkingTimeInputModal(Day of the week + Input Value)로 통합. 실제 셀 write 는 Page handleInputConfirm(AS-IS BtnInput_Click 3분기 그대로).
 > AS-IS 정본: `SCP0019_WorkingTime.cs`(읽기전용) — 라인은 00_checklist / 01_layout / 03_grid-columns 실측.
 > 화면 노출 실태(01_layout §3): Building/Bucket/Sum 3종은 AS-IS 도 `Visibility=Never`(정적 hidden) — TO-BE 는 hidden 상태 그대로 이식(렌더 안 함). 관련 컨트롤/이벤트/SUM 토글 신호는 이 실태 근거로 제외.
 
@@ -10,9 +11,9 @@
 
 | ID | 요지 (원천 md 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |
 |---|---|---|---|---|
-| D00-1-001 | §1 btnInput / UsrButton | Form:211-221 (Input Button, onClick=onInput, disabled={dayWeekCode===SelectDay}) |  | 구현 |
+| D00-1-001 | §1 btnInput / UsrButton | Page:352 (SubTitle customButtons '입력' — hasButton('SAVE') 게이트, action=handleInputOpen) + Modal(WorkingTimeInputModal) — 조회조건에서 버튼영역+팝업으로 이동(2026-10-15) |  | 구현 |
 | D00-1-002 | §1 cboBucketType / UsrCombo | — | AS-IS `Visibility=Never` 정적 hidden(01_layout §3 lblBucket/cboBucketType, Designer 695) — 버킷 콤보 화면 비노출. TO-BE 는 hidden 실태 그대로 이식(렌더 안 함, Form:34 주석) — UI 신호 아님 | 제외 |
-| D00-1-003 | §1 cboDayWeek / UsrCombo | Form:164-180 (Day of the week CustomDropdown, lookup WEEK_WORK_TIME :48,75-78) |  | 구현 |
+| D00-1-003 | §1 cboDayWeek / UsrCombo | Modal:82-90 (Day of the week CustomDropdown, lookup WEEK_WORK_TIME :41-47) — 조회조건 Form 에서 '입력' 팝업으로 이동(2026-10-15) |  | 구현 |
 | D00-1-004 | §1 cboDivision / UsrCombo | Form:126-153 (Division CustomDropdown, MyDivision :45-46,50 + cascade 초기화) |  | 구현 |
 | D00-1-005 | §1 chkSum / UsrCheckBox | — | AS-IS `Visible=false`+`Visibility=Never` 정적 hidden(01_layout §3, Designer 434/668) — SUM 토글 컨트롤 화면 비노출, 실 SUM 표시는 기본값 고정. TO-BE hidden 그대로 이식(Form:34 미렌더) — UI 신호 아님 | 제외 |
 | D00-1-006 | §1 clbBuilding / UsrCheckedList | Form:45-46,60-71,81 (COMBO.BUILDING 데이터소스 로드 — Line 다중키 필터축(FACTORY_ID)으로만 사용, UI 는 hidden 미렌더) | AS-IS `Visibility=Never` 정적 hidden(01_layout §3, Designer 398/658) — 컨트롤 자체는 미렌더, 데이터소스만 Line cascade 필터용으로 보존 | 구현 |
@@ -43,13 +44,13 @@
 | D00-1-031 | §1 lblBucket / LayoutControlItem | — | DevExpress 레이아웃 라벨 래퍼(Bucket, 정적 hidden) — 표현 전용 | 제외 |
 | D00-1-032 | §1 spdMain / FpSpread | Grid:305-314 (공용 DataGrid — FlexGrid 직접 금지 hook#10) |  | 구현 |
 | D00-1-033 | §1 spdMain_Sheet1 / SheetView | Grid:305-314 (DataGrid 단일 시트 itemsSource=data) |  | 구현 |
-| D00-1-034 | §1 txtInpuValue / TextBox | Form:192-210 (Input Value InputField, maxLength 4, 숫자만 수용 → searchParams.inputValue) |  | 구현 |
+| D00-1-034 | §1 txtInpuValue / TextBox | Modal:100-108 (Input Value InputField, maxLength 4, 숫자만 수용 → 로컬 inputValue) — 조회조건 Form 에서 '입력' 팝업으로 이동(2026-10-15) |  | 구현 |
 | D00-1-035 | §1 usrButton1 / UsrButton | — | Designer 좌표 0/0·tab0·배선/표시 흔적 없는 미사용 버튼 — AS-IS 도 유령 노드(01_layout §4 #201: TO-BE 미이관, 이식 시 유령 버튼 발생) | 제외 |
 | D00-1-036 | §1 usrConditionPanel1 / UsrConditionPanel | Form:119-224 (SearchArea 조회조건 패널, isHidden 토글 :122) |  | 구현 |
 | D00-1-037 | §1 usrLayoutControl2 / UsrLayoutControl | — | DevExpress 레이아웃 컨트롤 루트 컨테이너 = TO-BE SearchArea/Grid 로 대체(레이아웃 프리미티브는 화면 요소 아님) | 제외 |
-| D00-2-001 | §2 btnInput / Click | Page:233-290 (handleInputValue — 4가드 + 선택 D_ 셀 setCellData + tracker.storeChange) |  | 구현 |
+| D00-2-001 | §2 btnInput / Click | Page:256-330 (handleInputConfirm — 팝업 OK. AS-IS BtnInput_Click 3분기 그대로: SelectDay=선택영역 / EveryDay=전행×전 D_ / Mon~Sun=요일 D_. 형식검사만(공란 허용·범위검사 없음) + OSP_YN='Y' + tracker.storeChange) + Page:241 handleInputOpen(조회 가드 MSG00135) |  | 구현 |
 | D00-2-002 | §2 cboBucketType / SelectedIndexChanged | — | cboBucketType 정적 hidden(D00-1-002) — 화면 비노출이라 사용자 변경 이벤트 도달 불가. 버킷은 Daily 고정(01_layout §3), TO-BE 미이식 | 제외 |
-| D00-2-003 | §2 cboDayWeek / SelectedIndexChanged | Form:174-176 (onChange → dayWeekCode) → Form:216 btnInput disabled 토글 + Page:240 값입력 가드 |  | 구현 |
+| D00-2-003 | §2 cboDayWeek / SelectedIndexChanged | Modal:87 (onChange → 로컬 dayWeekCode) → Page:256 handleInputConfirm 일괄입력 분기 키(SelectDay/EveryDay/Mon~Sun). AS-IS 조회조건 토글이 아니라 팝업 로컬 상태(2026-10-15) |  | 구현 |
 | D00-2-004 | §2 cboDivision / SelectedIndexChanged | Form:137-149 (onChange → setSearchParams{divisionId, 하위 cascade 초기화} + onDivisionChange resetGrid) |  | 구현 |
 | D00-2-005 | §2 chkSum / CheckedChanged | — | chkSum 정적 hidden(D00-1-005) — 화면 비노출이라 토글 이벤트 도달 불가. SUM 표시는 기본값 고정(01_layout §3), TO-BE 미이식 | 제외 |
 | D00-2-006 | §2 clbBuilding / SelectedIndexChanged | — | clbBuilding 정적 hidden(D00-1-006) — 화면 비노출이라 사용자 변경 이벤트 없음. Building 은 Line 필터축 데이터소스로만 존재(Form:60-71 client 필터로 대체) | 제외 |
@@ -83,9 +84,9 @@
 | D00-3-024 | §3 Query / (dsBinding) 데이터 바인딩 | Page:63-69,114-121 (useTabProcQuery GET SP + handleSearch invalidateQueries) → Grid:312 itemsSource |  | 구현 |
 | D00-3-025 | §3 LockColumn / (0, GetMaxColumnIndex, true) 전 컬럼 잠금 | Grid:200-212 (조회 직후 편집모드 아님 — 전 편집형 셀 beginningEdit e.cancel) + Page:129 resetGrid hasSearched=false |  | 구현 |
 | D00-3-026 | §3 SmartColMerge / () | Grid:230-278 (조회 후 updatedLayout rAF 로 머지헤더 재적용) |  | 구현 |
-| D00-3-027 | §3 SetBGColor / (i,j,i,j, InvalidColor) 검증 실패 셀 색(0~7) | — | AS-IS 셀 검증실패 배경색 표기 — TO-BE 는 범위 검증을 값입력 시점 alert(MSG00203 OUT_OF_RANGE, Page:260-263)로 선차단해 잘못된 값이 셀에 기입되지 않음. 사후 셀-색 검증 경로 불필요(무해 미이식) | 제외 |
-| D00-3-028 | §3 SetBGColor / (i,j,i,j, InvalidColor) 검증 실패 셀 색(0~1440) | — | AS-IS 셀 검증실패 배경색 표기(분 단위 0~1440) — TO-BE 는 값입력 시점 범위 alert(Page:260-263 DAY_MIN~DAY_MAX)로 선차단. 사후 셀-색 검증 경로 불필요(무해 미이식) | 제외 |
-| D00-3-029 | §3 Get / (0) Columns.Get(0) — btnInput 가드용 컬럼 참조 | Page:235-238 (handleInputValue 가드 #1 !hasSearched → MSG.NOT_SEARCHED — 조회 전 컬럼0 숨김 등가 판정) |  | 구현 |
+| D00-3-027 | §3 SetBGColor / (i,j,i,j, InvalidColor) 검증 실패 셀 색(0~7) | — | AS-IS 는 저장 범위검증 실패 셀을 InvalidColor 로 표기(cs:839) — TO-BE 는 저장시점 범위검증(Page:167-180)에서 MSG.OUT_OF_RANGE alert + 저장 중단만 하고 셀 배경색은 미표기(무해 미이식, 저위험 잔여) | 제외 |
+| D00-3-028 | §3 SetBGColor / (i,j,i,j, InvalidColor) 검증 실패 셀 색(0~1440) | — | AS-IS 저장 범위검증 실패 셀 InvalidColor 표기(cs:848, 분 단위 0~1440) — TO-BE 저장시점 alert(Page:167-180)로 대응, 셀 배경색 미표기(무해 미이식, 저위험 잔여) | 제외 |
+| D00-3-029 | §3 Get / (0) Columns.Get(0) — btnInput 가드용 컬럼 참조 | Page:241-247 (handleInputOpen 가드 !hasSearched → MSG.NOT_SEARCHED — 조회 전 컬럼0 숨김 등가 판정, '입력' 팝업 오픈 전 차단) |  | 구현 |
 | D00-3-030 | §3 GetModelColumnFromViewColumn / (row) 값입력 시 뷰→모델 행 인덱스 변환 | Page:272-274 (g.rows[row].dataItem 로 뷰행→모델 데이터아이템 변환) |  | 구현 |
 | D00-3-031 | §3 GetModelColumnFromViewColumn / (col) 값입력 시 뷰→모델 열 인덱스 변환 | Page:275-277 (g.columns[col].binding 로 뷰열→모델 binding 변환) |  | 구현 |
 | D00-3-032 | §3 SetText / (i,j,strValue) 선택셀 값 입력 | Page:278-281 (setCellData + tracker.storeChange — 선택 D_ 셀 write) |  | 구현 |
@@ -106,7 +107,7 @@
 | D00-4b-010 | §4b Data_SCP.Common / LocationGroupByCapaWT / dtOperation | Form:45-46,57 (Operation 데이터소스 — clbBuilding cascade 경로에서도 동일 소스, 필터 없이 전체) | AS-IS cascade 재조회 = TO-BE 전량로드 후 전체 유지(§4c). Building 은 hidden 이라 사용자 cascade 트리거 없음 | 구현 |
 | D00-4b-011 | §4b Data_SCP.Common / LineByOperationAddOSP / dtLine | Form:45-46,60-71 (Line 데이터소스 — clbBuilding cascade 경로 재필터, buildingIds client 필터 :65-66) | AS-IS cascade 재조회 = TO-BE 다중키 client 필터로 통합(§4c). Building hidden 이나 필터축은 보존 | 구현 |
 | D00-4b-012 | §4b Data_SCP.Common / LineByOperationAddOSP / dtLine | Form:45-46,60-71 (Line 데이터소스 — clbOperation cascade 경로 재필터, operationIds client 필터 :67-68) | AS-IS cascade 재조회(pFactoryID 포함 param) = TO-BE 다중키 client 필터로 통합(§4c 필터형) | 구현 |
-| D00-4b-013 | §4b Data.CallBizCommonData / ("PERIOD_"+value) / dt | Store:38-41 (dCalendar 기본기간 클라 프리셋 — 당월1일~익월말일) | AS-IS PERIOD_* BIZ 콤보 = TO-BE 클라 기본값으로 개통(PERIOD_* SP 연동은 04_react-gap 확인필요 이월, Store:36-37) — 기본 기간 산출 대체 | 구현 |
+| D00-4b-013 | §4b dCalendar.InitValue = GetDayRange() (DateUtil → SP SCM0001_GET_SCP_MONTH_PERIOD, from_date=공란·offset_month=12) | Store (dCalendar 기본기간 — start=오늘, end=오늘+12개월을 그 주 일요일로 align) | AS-IS GetDayRange SP 반환 1:1 재현(DB 실측 2026-10-15: 오늘 20261015 → 20261015:20271010). 기본 호출은 ELSE 분기라 division/bucket 무관(SCM_SYS_CALENDAR_M 달력만). PERIOD_* 콤보(SetChangedPeriod/CallBizCommonData "PERIOD_"+value)는 AS-IS cboPeriod 주석처리로 dead | 구현 |
 | D00-4c-001 | §4c RefreshPlantSiteByDivision / dtPlantSiteByDivisionAll (PlantByDivisionOperOsp4) | Form:52-55 (PlantByDivisionOperOsp4_SCP_ALL 전량로드 + DIVISION_ID client 필터 재현) |  | 구현 |
 | D00-4c-002 | §4c RefreshBuilding / dtBuildingAll (BuildingByDivision1) | Form:60-71,81 (BuildingByDivision1_SCP_ALL 전량로드 — Line FACTORY_ID 필터축, Building UI hidden) | AS-IS RefreshBuilding 클라필터 = TO-BE Line 다중키 client 필터의 FACTORY_ID 축으로 흡수(Building 컨트롤 hidden 01_layout §3) | 구현 |
 | D00-4c-003 | §4c RefreshLine / dtLineAll (LineByOperationAddOSP2) | Form:60-71 (LineByOperationAddOSP2_SCP_ALL 전량로드 + division/plant/building/operation 다중키 client 필터 — RefreshLine 조건식 1:1) |  | 구현 |
@@ -118,14 +119,14 @@
 | D00-4d-006 | §4d BtnInput_Click / Input (!CanModelChange 재확인, 무메시지) | Page:274 (write 루프 OSP_YN!=='Y' 행 skip — #2 와 동일 권한/편집대상 게이트, 다른 지점) | AS-IS CanModelChange 재확인 = TO-BE write 시점 편집 대상 행 판정으로 흡수(D00-4d-002 동일 게이트) | 구현 |
 | D00-4d-007 | §4d BtnInput_Click / Input (ds==null 데이터셋 null 차단, 무메시지) | Page:235-238 (!hasSearched → 조회 전 데이터 없음 차단, MSG.NOT_SEARCHED) | AS-IS ds==null 순수가드 = TO-BE 미조회 게이트로 흡수(조회 전엔 rows 없음, hasSearched=false) | 구현 |
 | D00-4e-001 | §4e (예외) / GMessageBoxForException | Page:209-211 (handleSave catch → setAlert 예외 메시지) |  | 구현 |
-| D00-4e-002 | §4e MSG00203 / GMessageBox | Page:260-263 (값입력 범위검증 num 이 DAY_MIN~DAY_MAX 벗어나면 → MSG.OUT_OF_RANGE) + Const:80-81 |  | 구현 |
-| D00-4e-003 | §4e MSG00203 / GMessageBox | Page:257-263 (D_ 셀 0~1440 범위검증 → MSG.OUT_OF_RANGE, Const:61-66 DAY_MIN/DAY_MAX) |  | 구현 |
+| D00-4e-002 | §4e MSG00203 / GMessageBox (WORKING_TIME_DEFAULT 0~7, cs:840) | Page:167-180 (handleSave 저장시점 범위검증 — isDefault 면 0~7, 위반 시 MSG.OUT_OF_RANGE + 저장 중단) | AS-IS 는 저장(SaveData_Main)에서만 범위 검사 — TO-BE 도 저장 시점. 번호 remap: AS-IS MSG00203 미등록 → TO-BE 동일문구 MSG01037(ora.py 실측 2026-10-19) | 구현 |
+| D00-4e-003 | §4e MSG00203 / GMessageBox (D_ 일자셀 0~1440, cs:849) | Page:167-180 (handleSave 저장시점 범위검증 — D_ 셀이면 0~1440, 위반 시 MSG.OUT_OF_RANGE + 저장 중단) | AS-IS D_ 셀 타입에 max 없음(cs:330) → 입력·편집·일괄입력은 범위 미검사, 저장에서만 차단. TO-BE 동형. 번호 remap MSG00203→MSG01037 | 구현 |
 | D00-4e-004 | §4e MSG00004 / GMessageBox | Page:178-180 (저장 대상 없음 → MSG.NO_SAVE_DATA "No data to save") | AS-IS MSG00004 저장건수/무변경 안내 = TO-BE NO_SAVE_DATA(변경 0건) alert 로 대응(Const:88-89) | 구현 |
 | D00-4e-005 | §4e (예외) / GMessageBoxForException | Page:197-202 (저장 응답 오류코드 → message 추출 후 setAlert SAVE_ERROR) |  | 구현 |
 | D00-4e-006 | §4e (예외) / GMessageBoxForException | Page:209-211 (handleSave catch(e) → 예외 메시지 setAlert) |  | 구현 |
-| D00-4e-007 | §4e MSG00135 / GMessageBox | Page:235-238 (btnInput 조회 전 차단 → MSG.NOT_SEARCHED=MSG00135, Const:72-73) |  | 구현 |
-| D00-4e-008 | §4e MSG00134 / GMessageBox | Page:245-247 (셀 미선택 → MSG.NO_CELL_SELECTED=MSG00134, Const:76-77) |  | 구현 |
-| D00-4e-009 | §4e MSG00050 / GMessageBox | Page:251-254 (입력값 형식검증 빈값/비숫자 → MSG.INVALID_FORMAT=MSG00050, Const:78-79) |  | 구현 |
+| D00-4e-007 | §4e MSG00135 / GMessageBox | Page:255 (btnInput 조회 전 차단 → MSG.NOT_SEARCHED=MSG00662) | AS-IS MSG00135("수정모드가 아니므로 입력할 수 없습니다")는 이 화면에 '수정모드' 토글이 없어 오해 소지 → 자매 SCP0096 과 동일하게 MSG00662("조회 후 수정모드로 가능합니다")로 통일(2026-10-16 사용자 지시). TO-BE MSG00135 은 "This function is locked in edit mode."로 등록돼 AS-IS 와 어긋나 미사용 | 구현 |
+| D00-4e-008 | §4e MSG00134 / GMessageBox | Page (셀 미선택 → MSG.NO_CELL_SELECTED=MSG01153) | AS-IS MSG00134("날짜 선택 후 입력하세요")를 문구로 이관 — TO-BE 동일 문구 코드 MSG01153 재사용(KO/EN/CN exact match, DB 실측 2026-10-15). AS-IS 번호 MSG00134 는 TO-BE 미등록 | 구현 |
+| D00-4e-009 | §4e MSG00050 / GMessageBox | Page (입력값 숫자형식검증 → MSG.INVALID_INPUT_VALUE=MSG01082, {0}=입력값) | AS-IS MSG00050("유효한 숫자 형식이 아닙니다. {0}")를 문구로 이관 — TO-BE 동일 문구 코드 MSG01082 재사용(KO/EN/CN exact match, DB 실측 2026-10-15). AS-IS 번호 MSG00050 은 TO-BE 미등록 | 구현 |
 
 ## CRUD·모달 매트릭스 (2026-08-07 축 — MAIN UI 와 모달의 CRUD 누락 0)
 

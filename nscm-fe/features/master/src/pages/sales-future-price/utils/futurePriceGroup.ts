@@ -17,3 +17,15 @@ export const toStr = (v: unknown): string => (v == null ? '' : String(v as strin
 
 export const groupKeyOf = (r: Record<string, unknown>): string =>
   KEY_COLS.map(k => toStr(r[k])).join('|');
+
+// 편집 전(조회 시점) 통화 기준 묶음 키. originals = EditTracker 가 그 행에 보관한 원본값.
+//   기존 행 Currency 를 바꾸면 저장 전까지 현재 통화가 이웃 묶음과 같아질 수 있다(JPY 묶음을 USD 로 바꾸면
+//   원래 USD 묶음과 groupKeyOf 가 같아진다). 그 상태에서 현재 값으로 형제를 찾으면 두 묶음이 섞여
+//   KRW·USD 가 두 번씩 전송되고 저장 SP 가 통화 중복으로 거부한다. 원래 통화로 묶음을 가른다.
+export const originalGroupKeyOf = (
+  r: Record<string, unknown>,
+  originals?: Record<string, unknown>
+): string =>
+  KEY_COLS.map(k =>
+    toStr(k === 'CURRENCY' && originals && 'CURRENCY' in originals ? originals.CURRENCY : r[k])
+  ).join('|');

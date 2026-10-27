@@ -82,8 +82,8 @@ export const isPastPivot = (binding: string, cutoffYmd: string): boolean => {
 //   서버 is_editable 는 메인 GET O_RC1 이 아니라 전용 SP(editInfo/SEARCH)가 CP_KEY 로 반환한다
 //   (O_RC1 은 IS_EDITABLE 미반환 — ora.py 2026-10-03 PKG body 실측). 페이지가 CP_KEY→엔트리 맵을 만들어 주입.
 export interface EditInfoEntry {
-  isEditable: string; // Y/N (MA+confirm+날짜 / SE+날짜 / PR+날짜 → Y, else N)
-  newEditMode: string; // SP 리터럴 'Y' 고정 — 비소비
+  isEditable: string; // Y/N (MA+confirm+날짜 / SE+날짜 / PR+날짜 → Y, else N) — SP IS_EDITABLE
+  newEditMode: string; // Y/N — SP 리터럴 'Y' 고정(AS-IS·TO-BE 동일). 'Y'면 isRowEditable 이 server N 을 override(c)
   editStartDate: string; // YYYYMMDD
 }
 export type EditInfoMap = Map<string, EditInfoEntry>;
@@ -120,12 +120,18 @@ export const isRowEditable = (row: Row, ctx: EditContext, editInfo: EditInfoMap)
   if (!info) return false; // EDIT_INFO 미반환 버전 = 편집불가(서버 is_editable 원천 없음)
   let editable = info.isEditable === 'Y'; // 서버 base (GET_PLAN_EDIT_INFO, CP_KEY 조인)
   const planType = s(row.PLAN_TYPE);
-  if (ctx.lastPlanType && planType !== ctx.lastPlanType) editable = false; // (a)
-  if (ctx.hasFn) editable = false; // (b)
-  // (c) new_edit_mode: AS-IS 는 '플랜 실행오류 재편집' 예외(new_edit_mode='Y'→허용)지만, TO-BE SP 가
-  //   NEW_EDIT_MODE 를 리터럴 'Y' 로 고정 반환(PKG body LINE 862, ora.py 2026-10-03)해 그대로 적용하면
-  //   IS_EDITABLE 게이트가 전부 무력화된다 → 상수 'Y' 는 비소비하고 IS_EDITABLE 을 유지한다(04_react-gap 정직보고).
-  if (planType === 'TE') editable = false; // (d)
+  if (ctx.lastPlanType && planType !== ctx.lastPlanType) editable = false; // (a) 마지막 PlanType 아니면 N
+  if (ctx.hasFn) editable = false; // (b) FN 존재하면 N
+  // (c) new_edit_mode='Y' → 편집가능 (AS-IS EditButton cs:731~735 / Set_FPOperationColor cs:3530~3534).
+  //   AS-IS·TO-BE SP 공히 NEW_EDIT_MODE 를 리터럴 'Y' 로 반환한다 — AS-IS MSSQL SCP0013_GET_PLAN_EDIT_INFO
+  //   본문 `, 'Y' AS new_edit_mode`(계산식 2종은 주석처리), TO-BE PKG_SCP0013 body line 862
+  //   `, 'Y' AS NEW_EDIT_MODE`(ora.py·asis.py 2026-10-14 양DB 재실측). AS-IS 는 이 'Y' 로 server IS_EDITABLE
+  //   과 (a)(b) 를 덮어 PROD_PLAN_AMEND 행을 편집가능하게 연다(실행오류 전단계 재편집 예외가 상수화된 결과).
+  //   실제 편집 제약은 셀단위 편집시작일 창(isPivotCellEditable EDIT_START_DATE)과 저장시 SAVE_YN
+  //   (checkServerSaveYn, '다음단계 생성 시 저장불가')이 담당한다 — 종전엔 이 'Y' 를 비소비해 server
+  //   IS_EDITABLE='N' 인 SE 플랜(다음단계 없음)이 편집 전건 잠겼다(사용자 신고 2026-10-14, AS-IS 1:1 복원).
+  if (info.newEditMode === 'Y') editable = true; // (c)
+  if (planType === 'TE') editable = false; // (d) TE PLAN은 수정 불가
   return editable;
 };
 

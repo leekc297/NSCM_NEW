@@ -1,7 +1,8 @@
-import { ItemByDivisionModal } from 'features/master/src/components';
+import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
+import { safeString } from '@foundation/utils';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
@@ -98,7 +99,7 @@ export const ProjectRouteElectrodeForm = ({ onSearch }: Props) => {
       { label: t(LBL.ALL, '_ALL'), value: ALL_SENTINEL },
       ...(operationGroupsRaw?.map(row => {
         const rec = row as Record<string, unknown>;
-        return { label: String(rec.NAME ?? ''), value: String(rec.CODE ?? '') };
+        return { label: safeString(rec.NAME), value: safeString(rec.CODE) };
       }) ?? []),
     ],
     [operationGroupsRaw, t]
@@ -189,7 +190,7 @@ export const ProjectRouteElectrodeForm = ({ onSearch }: Props) => {
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.MODEL, '_Model')}
+                label={t(LBL.MODEL, '_Model/Nickname')}
                 labelAlign='right'
                 render={() => (
                   <InputField
@@ -220,7 +221,7 @@ export const ProjectRouteElectrodeForm = ({ onSearch }: Props) => {
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.VALID, '_Valid')}
+                label={t(LBL.ACTIVE, '_Active')}
                 labelAlign='right'
                 render={() => (
                   <CustomDropdown
@@ -238,17 +239,22 @@ export const ProjectRouteElectrodeForm = ({ onSearch }: Props) => {
         }
       />
 
-      {/* Model 픽커(btnItemId, design/02 §2-6) — SCM0002_ItembyDivisionPopup = base ItemByDivisionModal.
-          조회조건 Model 은 품번만 필요하므로 base 팝업으로 충분(div=81 Ex 반환 불요, 이 화면은 전극 전용). */}
-      <ItemByDivisionModal
+      {/* Model 픽커(btnItemId) — AS-IS "Model by Division" 팝업 = MaterialByDivisionModal
+          (SCM0002_MaterialByDivisionPopup). 반환 Material Code = 팝업의 Model Code(=조회 품번 ITEM_ID).
+          To-Be 조회조건 변경(SCP0027.md #4): Model/Nickname 다중 — multiCheckbox 로 다건 CSV,
+          multiDivision 으로 division CSV(plantSiteDivisionFilter=ALL→권한 CSV 펼침) 전달. [F-12a] */}
+      <MaterialByDivisionModal
         open={openItemModal}
         modalClose={() => setOpenItemModal(false)}
         setSelectedValue={items => setSearchParams({ itemId: items })}
         preSearchParams={{
-          divisionId: searchParams.divisionId,
+          divisionId: plantSiteDivisionFilter,
+          scpModuleType: MENU_ID,
+          operationGroup: '',
           itemId: searchParams.itemId ?? '',
         }}
-        callFromCell={false}
+        multiCheckbox
+        multiDivision
       />
     </>
   );

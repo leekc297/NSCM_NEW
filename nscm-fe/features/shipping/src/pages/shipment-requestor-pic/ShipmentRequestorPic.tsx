@@ -1,5 +1,6 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
@@ -11,9 +12,9 @@ import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@s
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import {
-  ItemByDivisionModal,
+  RequestorPicItemByDivisionModal,
   type ItemPopupMode,
-} from './components/modals/ItemByDivisionModal';
+} from './components/modals/RequestorPicItemByDivisionModal';
 import { ShipmentRequestorPicForm } from './components/ShipmentRequestorPicForm';
 import { ShipmentRequestorPicGrid } from './components/ShipmentRequestorPicGrid';
 import { useShipmentRequestorPicValidation } from './hooks/useShipmentRequestorPicValidation';
@@ -111,7 +112,11 @@ export const ShipmentRequestorPic = ({ tabId, title }: PageProps<MENU_ID>) => {
   const initialized = useShipmentRequestorPicStore(s => s.initialized);
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+  // 그리드 신규행 셀(CELL 모드) 팝업 — 다컬럼 반환(6칸 채움)이 필요해 SSP0025 전용 RequestorPicItemByDivisionModal 유지.
   const [itemPopup, setItemPopup] = useState<ItemPopupState | null>(null);
+  // 조회조건 Material / Model(NickName) 팝업 — 공용 MaterialByDivisionModal(사용자 지시 2026-10-22).
+  const [openMaterial, setOpenMaterial] = useState(false);
+  const [openModel, setOpenModel] = useState(false);
   const [openUser, setOpenUser] = useState(false);
 
   // 편집권한 = **화면 Load 시점 1회 판정**(사용자 결정 2026-09-23). 권한이 있으면 진입 즉시 편집 가능하고,
@@ -182,29 +187,11 @@ export const ShipmentRequestorPic = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticColumns();
   };
 
-  // 조회조건 Item 팝업(ITEM 모드) — divisionId/plantSite/item 컨텍스트, 반환 ItemId 만 채움.
-  const handleItemSearch = () => {
-    setItemPopup({
-      mode: 'ITEM',
-      preSearchParams: {
-        divisionId: sc.divisionId,
-        plantSite: sc.plantSiteIds.join(','),
-        itemId: sc.itemId,
-      },
-    });
-  };
+  // 조회조건 Material 팝업 — 공용 MaterialByDivisionModal(COM0013). 반환 ITEM_ID csv → itemId.
+  const handleItemSearch = () => setOpenMaterial(true);
 
-  // 조회조건 Model 팝업(MODEL 모드) — 반환 ModelId 만 채움.
-  const handleModelSearch = () => {
-    setItemPopup({
-      mode: 'MODEL',
-      preSearchParams: {
-        divisionId: sc.divisionId,
-        plantSite: sc.plantSiteIds.join(','),
-        modelId: sc.modelId,
-      },
-    });
-  };
+  // 조회조건 Model/NickName 팝업 — 공용 MaterialByDivisionModal(COM0013). 품번·닉네임 둘 다 채움(handleModelSelected).
+  const handleModelSearch = () => setOpenModel(true);
 
   // 그리드 셀 Item 팝업(CELL 모드, 신규행 R12) — 행의 division/plantSite 컨텍스트, 6칸 일괄 채움.
   const handleItemCellDblClick = (row: Record<string, unknown>) => {
@@ -227,33 +214,40 @@ export const ShipmentRequestorPic = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
-  // Item 팝업 확정 — 모드별 처리(버튼=id 채움 / 셀=6칸 일괄, design 03 §3 R12).
-  const handleItemSelected = (picked: PopupRow[]) => {
+  // 조회조건 Material 팝업 확정 — 공용 MaterialByDivisionModal setSelectedValue(items=ITEM_ID csv, ...).
+  const handleMaterialSelected = (items: string) => {
+    if (items) setSearchCondition({ itemId: items });
+  };
+
+  // 조회조건 Model/NickName 팝업 확정 — 품번(ITEM_ID csv)→modelId, 첫 행 NICK_NAME→nickName 둘 다 세팅해
+  //   GET SP p_model_id + p_nick_name 양쪽을 채운다(다건 선택 시 nickName 은 첫 행 기준 — 모달 규약). 사용자 지시 2026-10-22.
+  const handleModelSelected = (
+    items: string,
+    _itemName?: string,
+    _itemClassName?: string,
+    nickName?: string
+  ) => {
+    if (!items) return;
+    setSearchCondition({ modelId: items, nickName: nickName ?? '' });
+  };
+
+  // 그리드 셀(CELL 모드) 팝업 확정 — 신규행 6칸 일괄 대입(DIVISION_ID/ITEM_ID/ELECTRODE_TYPE/MODEL_ID/NICK_NAME/CELL_TYPE).
+  //   화면전용 RequestorPicItemByDivisionModal 의 다컬럼 반환(PopupRow[])이 필요한 경로라 공용 모달로 교체하지 않는다.
+  const handleItemCellSelected = (picked: PopupRow[]) => {
     const ctx = itemPopup;
-    if (!ctx) return;
-    if (ctx.mode === 'ITEM') {
-      setSearchCondition({
-        itemId: picked.map(r => str(r.ITEM_ID)).filter(Boolean).join(','),
-      });
-    } else if (ctx.mode === 'MODEL') {
-      setSearchCondition({
-        modelId: picked.map(r => str(r.MODEL_ID)).filter(Boolean).join(','),
-      });
-    } else if (ctx.row) {
-      // CELL — 신규행 6칸 일괄 대입(DIVISION_ID/ITEM_ID/ELECTRODE_TYPE/MODEL_ID/NICK_NAME/CELL_TYPE).
-      const target = ctx.row;
-      const first = picked[0] as Record<string, unknown> | undefined;
-      if (first) {
-        for (const key of POPUP_FILL_COLUMNS) {
-          const value = str(first[key]);
-          const prev = target[key];
-          if (prev !== value) {
-            editTrackerRef.current?.storeChange(target as never, key, prev as never, value as never);
-            target[key] = value;
-          }
+    if (!ctx?.row) return;
+    const target = ctx.row;
+    const first = picked[0] as Record<string, unknown> | undefined;
+    if (first) {
+      for (const key of POPUP_FILL_COLUMNS) {
+        const value = str(first[key]);
+        const prev = target[key];
+        if (prev !== value) {
+          editTrackerRef.current?.storeChange(target as never, key, prev as never, value as never);
+          target[key] = value;
         }
-        gridRef.current?.invalidate();
       }
+      gridRef.current?.invalidate();
     }
   };
 
@@ -284,37 +278,42 @@ export const ShipmentRequestorPic = ({ tabId, title }: PageProps<MENU_ID>) => {
     userTargetRef.current = null;
   };
 
-  // 신규행 추가 — 빈 행 + 기본값(상위행 복사 아님, design 03 §5.2). DIVISION_ID=확정 searchParams(CommonCheckList).
+  // 확정(조회된) division — Insert 신규행 기본값 기준(CommonCheckList "Insert 확정 searchParams").
+  //   조회 입력(sc.divisionId)이 아니라 **조회 완료된 filters 의 division** 을 쓴다(자매 SSP0024 동형):
+  //   (a) 조회 후 Division 을 바꿔도 신규행이 그리드 데이터와 어긋나지 않고(변경 시엔 grid-reset effect 가 비움)
+  //   (b) 조회 전 빈 그리드 삽입을 막는다(design 03 §143 "빈 그리드 addRow 금지", AS-IS InsertRow IsLock 가드 등가).
+  const confirmedDivision = str(
+    (filters[SHEETS.MAIN] as { divisionId?: string } | undefined)?.divisionId
+  );
+
+  // 신규행 추가 — 빈 행 + 기본값(상위행 복사 아님, design 03 §5.2). DIVISION_ID=확정 division(위 주석).
   //   VALID_YN='Y'(R7). AS-IS 신규행은 콤보/팝업으로 채운다 — 여기선 division·valid 만 초기 세팅.
   const handleInsert = () => {
     const grid = gridRef.current;
     if (!grid) return;
     if (!canEdit) return; // 편집권한 없음 — 버튼도 안 뜨지만 단축키 경로까지 막는다.
+    if (!confirmedDivision) {
+      // 조회 전/division 미확정 삽입 차단 — AS-IS InsertRow(IsLock==false 필요) + SSP0024 가드 등가.
+      void setAlert({ type: 'alert', content: msg(MSG.REQUIRE_DIVISION, '_Please select Division.') });
+      return;
+    }
     GridAction.addRow(grid, {
-      DIVISION_ID: sc.divisionId,
+      DIVISION_ID: confirmedDivision,
       VALID_YN: INSERT_DEFAULT_VALID_YN,
     } as unknown as Partial<MainRow>);
   };
 
-  // 삭제(R19, active-flag #138) — 신규행('I')만 removeRow, 기존행은 VALID_YN='N'+저장('M')로 비활성화.
+  // 삭제 — 신규행('I')만 그리드에서 제거, 기존행은 조용히 no-op (AS-IS Delete() cs:332~344 파리티).
+  //   AS-IS 는 action=='I'(신규행)일 때만 Rows.Remove 하고 기존행엔 아무 동작도 하지 않는다 — Delete 버튼이
+  //   기존행 VALID_YN 을 건드리지 않는다. 자매 SSP0024 동형(GridAction.removeRow(deleteOnlyNew=true), 기존행 no-op).
+  //   기존행 비활성화는 Delete 가 아니라 **VALID_YN 콤보 셀을 'N' 으로 편집 후 저장**하는 경로다(AS-IS SAVE
+  //   cs:390 이 편집된 VALID_YN 을 그대로 전송). 종전 구현이 Delete 에서 기존행 VALID_YN='N' 을 자동 세팅한 것은
+  //   hook #138 과잉 적용 — AS-IS·SSP0024 와 어긋나 제거한다(기존행 삭제 버튼 무효화).
   const handleDelete = () => {
     const grid = gridRef.current;
     if (!grid) return;
     if (!canEdit) return; // 편집권한 없음 — 단축키 경로 차단.
-    const selected = (grid.selectedItems ?? []) as Record<string, unknown>[];
-    if (selected.length === 0) return;
-    const tracker = editTrackerRef.current;
-    for (const row of selected) {
-      if (row.CRUD_TYPE === 'I') continue; // 신규행은 아래 removeRow 로 제거
-      const prev = row.VALID_YN;
-      if (prev !== 'N') {
-        tracker?.storeChange(row as never, 'VALID_YN', prev as never, 'N' as never);
-        row.VALID_YN = 'N';
-      }
-    }
-    // deleteOnlyNew=true — 신규행('I')만 제거, 기존행은 'D' 마킹 안 함(물리삭제 없음, 07 보완6).
-    GridAction.removeRow(grid, true);
-    grid.invalidate();
+    GridAction.removeRow(grid, true); // deleteOnlyNew=true — 신규행만 제거
   };
 
   // 변경행만 ^-delim 조립 -> SAVE SP (design 03 §4.3, DMF0020 handleSave 경로).
@@ -487,14 +486,47 @@ export const ShipmentRequestorPic = ({ tabId, title }: PageProps<MENU_ID>) => {
         ssoUserYn='N'
       />
 
-      {/* Material/Model 검색 — 화면전용 ItemByDivisionModal(SSP0025 전용 SP). 버튼(ITEM/MODEL) + 셀(CELL). */}
-      <ItemByDivisionModal
+      {/* 조회조건 Material 검색 — 공용 MaterialByDivisionModal(COM0013, 사용자 지시 2026-10-22, Model/NickName 과
+          동일 팝업). 다건(multiCheckbox) → ITEM_ID csv 를 itemId 로. Division 단일이라 multiDivision 불요.
+          한계: 이 모달엔 Plant Site 축이 없어 기존 RequestorPic 팝업이 넘기던 plantSite 사전필터는 빠진다
+          (SSP0003 전환과 동일 기록). 그리드 신규행 '셀' 팝업은 6칸 채움(다컬럼 반환)이 필요해 아래
+          RequestorPicItemByDivisionModal(CELL 모드)로 유지한다. */}
+      <MaterialByDivisionModal
+        open={openMaterial}
+        modalClose={() => setOpenMaterial(false)}
+        setSelectedValue={handleMaterialSelected}
+        multiCheckbox
+        preSearchParams={{
+          divisionId: sc.divisionId,
+          operationGroup: '',
+          scpModuleType: MENU_ID,
+          itemId: sc.itemId,
+        }}
+      />
+
+      {/* 조회조건 Model/NickName 검색 — 공용 MaterialByDivisionModal. 다건 선택 → 품번(ITEM_ID) csv 를 modelId 로,
+          첫 행 NICK_NAME 을 nickName 으로(handleModelSelected). */}
+      <MaterialByDivisionModal
+        open={openModel}
+        modalClose={() => setOpenModel(false)}
+        setSelectedValue={handleModelSelected}
+        multiCheckbox
+        preSearchParams={{
+          divisionId: sc.divisionId,
+          operationGroup: '',
+          scpModuleType: MENU_ID,
+          itemId: sc.modelId,
+        }}
+      />
+
+      {/* 그리드 신규행 Item 셀 팝업 — SSP0025 전용 RequestorPicItemByDivisionModal(CELL 모드, 신규행 6칸 일괄 채움). */}
+      <RequestorPicItemByDivisionModal
         open={!!itemPopup}
         modalClose={() => setItemPopup(null)}
-        setSelectedValue={handleItemSelected}
+        setSelectedValue={handleItemCellSelected}
         preSearchParams={itemPopup?.preSearchParams ?? {}}
-        callFromCell={itemPopup?.mode === 'CELL'}
-        mode={itemPopup?.mode ?? 'ITEM'}
+        callFromCell
+        mode='CELL'
       />
     </>
   );

@@ -92,6 +92,11 @@
     box-shadow: inset 1px 0 0 0 #eef0ef;
   }
 
+  // 세로 병합(rowspan) 셀 — 라벨을 묶음 가운데에 정렬(AS-IS FPMerge.Always 모양).
+  tbody td.mergedCell {
+    vertical-align: middle;
+  }
+
   // 우측 grid D&D 드롭 위치 표시(행 상단 보라 라인) — 컬럼 구분선 규칙보다 뒤/우선.
   tbody tr.dragOver td {
     box-shadow: inset 0 2px 0 0 #6a5acd;

@@ -1,0 +1,810 @@
+[
+ {
+  "screen": "SCP0029",
+  "title": "",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0029_ProductionPlanLine_SMALL/SCP0029_ProductionPlanLine_SMALL.cs:2687"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0029_ProductionPlanLine_SMALL/SCP0029_ProductionPlanLine_SMALL.Designer.cs:1187"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1245",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0011_GET_LAST_PLAN_VERSION",
+    "member": "GetLastPlanVersion",
+    "line": "1334",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PRODUCTION_PLAN_LINEBY",
+    "member": "FindData_Main",
+    "line": "1431",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0011_SAVE_PRODUCTION_PLAN_LINE",
+    "member": "SaveData_Line",
+    "line": "1633",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "member": "SaveData_FixInfo",
+    "line": "2117",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PLAN_EDIT_INFO",
+    "member": "Get_IsEditInfo",
+    "line": "2229",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2623",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_BUCKET_FIX",
+    "member": "GetBucketSet",
+    "line": "2647",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1245",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0011_GET_LAST_PLAN_VERSION",
+    "member": "GetLastPlanVersion",
+    "line": "1334",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PRODUCTION_PLAN_LINEBY",
+    "member": "FindData_Main",
+    "line": "1431",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0011_SAVE_PRODUCTION_PLAN_LINE",
+    "member": "SaveData_Line",
+    "line": "1633",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW",
+    "member": "SaveData_Line_DT",
+    "line": "1847",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW",
+    "member": "SaveData_Line_DT",
+    "line": "1848",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW",
+    "member": "SaveData_Line_DT",
+    "line": "1849",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "member": "SaveData_FixInfo",
+    "line": "2117",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PLAN_EDIT_INFO",
+    "member": "Get_IsEditInfo",
+    "line": "2229",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2623",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_BUCKET_FIX",
+    "member": "GetBucketSet",
+    "line": "2647",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0029_ProductionPlanLine_SMALL\\SCP0029_ProductionPlanLine_SMALL.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCP0009_GET_SHEET_BUCKET_FIX",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0011_GET_LAST_PLAN_VERSION",
+   "SCP0011_SAVE_PRODUCTION_PLAN_LINE",
+   "SCP0013_GET_PLAN_EDIT_INFO",
+   "SCP0013_GET_PRODUCTION_PLAN_LINEBY",
+   "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW",
+   "SCP0024_SAVE_PRODUCTION_PLAN_FIX"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0011_SAVE_PRODUCTION_PLAN_LINE",
+    "sp": "SCP0011_SAVE_PRODUCTION_PLAN_LINE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 롤백 후 F 와 오류코드·메시지 반환",
+    "message": "err_message=ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PLAN_EDIT_INFO",
+    "sp": "SCP0013_GET_PLAN_EDIT_INFO",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "RANGE",
+    "desc": "계획시작일이 이번 주 이전이면 날짜체크 N",
+    "message": null,
+    "on_fail": "date_chk='N' 반환"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PLAN_EDIT_INFO",
+    "sp": "SCP0013_GET_PLAN_EDIT_INFO",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "MA 는 확정(Y)·당주 이후, SE·PR 은 당주 이후일 때만 편집 가능, FN 및 과거 플랜은 불가",
+    "message": null,
+    "on_fail": "is_editable='N' 반환"
+   },
+   {
+    "entry_sp": "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW",
+    "sp": "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 중 오류 발생 시 롤백 후 실패코드 F 와 오류번호·메시지 반환",
+    "message": "ERROR_NUMBER() / ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT INTO scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_mes"
+   },
+   {
+    "entry_sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 F 결과코드와 오류번호·메시지 1결과셋 반환",
+    "message": "[ERROR_NUMBER()]ERROR_MESSAGE()",
+    "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS ERR_MESSAGE"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PRODUCTION_PLAN_LINEBY",
+    "sp": "FN_NEXT_DAY",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "FORMAT",
+    "desc": "요일 코드가 SUN~SAT 이 아니면 NULL 반환(계산 중단)",
+    "message": null,
+    "on_fail": "RETURN NULL"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0030",
+  "title": "BOD ITEM",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0030_BOD_ITEM/SCP0030_BOD_ITEM.cs:1931"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0030_BOD_ITEM/SCP0030_BOD_ITEM.Designer.cs:793"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/bod-item"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0030_GET_BOD_ITEM",
+    "member": "FindData_Main",
+    "line": "674",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0030_BOD_ITEM\\SCP0030_BOD_ITEM.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0030_GET_BOD_EXCLUDED_ITEM",
+    "member": "FindData_Sub",
+    "line": "771",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0030_BOD_ITEM\\SCP0030_BOD_ITEM.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "836",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0030_BOD_ITEM\\SCP0030_BOD_ITEM.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0030_SAVE_BOD_ITEM",
+    "member": "SaveData_Main",
+    "line": "987",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0030_BOD_ITEM\\SCP0030_BOD_ITEM.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0030_SAVE_BOD_EXCLUDED_ITEM",
+    "member": "SaveData_Sub",
+    "line": "1168",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0030_BOD_ITEM\\SCP0030_BOD_ITEM.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0030_GET_BOD_ITEM",
+    "member": "FindData_Main",
+    "line": "674",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0030_BOD_ITEM\\SCP0030_BOD_ITEM.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0030_GET_BOD_EXCLUDED_ITEM",
+    "member": "FindData_Sub",
+    "line": "771",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0030_BOD_ITEM\\SCP0030_BOD_ITEM.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0130_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "836",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0030_BOD_ITEM\\SCP0030_BOD_ITEM.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0030_SAVE_BOD_ITEM",
+    "member": "SaveData_Main",
+    "line": "987",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0030_BOD_ITEM\\SCP0030_BOD_ITEM.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0030_SAVE_BOD_EXCLUDED_ITEM",
+    "member": "SaveData_Sub",
+    "line": "1168",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0030_BOD_ITEM\\SCP0030_BOD_ITEM.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0030_GET_BOD_EXCLUDED_ITEM",
+   "SCP0030_GET_BOD_ITEM",
+   "SCP0030_SAVE_BOD_EXCLUDED_ITEM",
+   "SCP0030_SAVE_BOD_ITEM",
+   "SCP0130_GET_SEARCH_INFO"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0030_SAVE_BOD_EXCLUDED_ITEM",
+    "sp": "SCP0030_SAVE_BOD_EXCLUDED_ITEM",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "삭제가 아닌 행이 기존 제외 Item 과 키(Division·Item·BOD·제외 From/To)가 같으면(수정 전 자기 자신 제외) 중복 오류로 전체 롤백",
+    "message": " 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code=99010; THROW → CATCH ROLLBACK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0030_SAVE_BOD_EXCLUDED_ITEM",
+    "sp": "SCP0030_SAVE_BOD_EXCLUDED_ITEM",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "같은 Division·Item·BOD 의 기존 제외 기간과 겹치면(수정 전 원래 기간 제외) 오류로 전체 롤백",
+    "message": " 입력 데이터 중 날짜가 중복되는 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code=99010; THROW → CATCH ROLLBACK; SELECT 'F'; SELECT '[99010]' + 메시지"
+   },
+   {
+    "entry_sp": "SCP0030_SAVE_BOD_EXCLUDED_ITEM",
+    "sp": "SCP0030_SAVE_BOD_EXCLUDED_ITEM",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 롤백 후 F 결과셋과 오류번호·메시지(무명 컬럼) 반환",
+    "message": "[ERROR_NUMBER()]ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0030_SAVE_BOD_ITEM",
+    "sp": "SCP0030_SAVE_BOD_ITEM",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 롤백 후 F 결과코드만 반환(메시지 없음)",
+    "message": null,
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0031",
+  "title": "Global PSI",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0031_GlobalPSI/SCP0031_GlobalPSI.cs:1181"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0031_GlobalPSI/SCP0031_GlobalPSI.Designer.cs:1008"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/global-psi"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0031_GET_GLOBAL_PSI",
+    "member": "FindData_Main",
+    "line": "575",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0031_GlobalPSI\\SCP0031_GlobalPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "805",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0031_GlobalPSI\\SCP0031_GlobalPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "827",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0031_GlobalPSI\\SCP0031_GlobalPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0031_GET_GLOBAL_PSI",
+    "member": "FindData_Main",
+    "line": "575",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0031_GlobalPSI\\SCP0031_GlobalPSI.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "805",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0031_GlobalPSI\\SCP0031_GlobalPSI.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "827",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0031_GlobalPSI\\SCP0031_GlobalPSI.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0031_GET_GLOBAL_PSI"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0032",
+  "title": "Unplan List",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCM.Validation.UIL/SCP0032_Unplan_List.cs:454"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCM.Validation.UIL/SCP0032_Unplan_List.Designer.cs:522"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0032_GET_UNPLAN_LIST",
+    "member": "FindData",
+    "line": "337",
+    "file": "06.UIL\\GSCM.SCM.Validation.UIL\\SCP0032_Unplan_List.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0032_GET_UNPLAN_LIST",
+    "member": "FindData",
+    "line": "337",
+    "file": "06.UIL\\GSCM.SCM.Validation.UIL\\SCP0032_Unplan_List.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0032_GET_UNPLAN_LIST"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "Unplan 수요 모델 중 BOM 자체가 없는(또는 불완전 BOM) 모델 목록",
+    "message": null,
+    "on_fail": "DEMAND_ID, MODEL_ID 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "Prefer Site 로 지정된 Site 에 BOM 이 미등록된 모델 목록",
+    "message": null,
+    "on_fail": "DEMAND_ID, MODEL_ID, SCM_SITE, SCM_SITE_DESCRIPTION, OPERATION_GROUP, ITEM_ID 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "엔진 Item 마스터에 없는 수요 Item 목록 (Project Route/BOM 없음)",
+    "message": null,
+    "on_fail": "DEMAND_ID, ITEM_ID 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "CONSISTENCY",
+    "desc": "Prefer Site 는 지정됐으나 Prefer Product 가 등록되지 않은 모델 목록",
+    "message": null,
+    "on_fail": "DEMAND_ID, MODEL_ID, SCM_SITE, SCM_SITE_DESCRIPTION, OPERATION_GROUP, ITEM_ID 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "CONSISTENCY",
+    "desc": "Prefer Product 는 등록됐으나 해당 공정 Prefer Site 가 지정되지 않은 모델 목록",
+    "message": null,
+    "on_fail": "DEMAND_ID, MODEL_ID, SCM_SITE, SCM_SITE_DESCRIPTION, ROUTE_TYPE/OPERATION_GROUP, ITEM_ID 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "전극 음극·양극 중 하나라도 Site 간 BOD 가 없는 수요 목록",
+    "message": null,
+    "on_fail": "DEMAND_ID, MODEL_ID 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "Prefer Site 로 지정된 Site 간 이동 BOD 가 미등록된 경로 목록 (자동차·소형·ESS)",
+    "message": null,
+    "on_fail": "DEMAND_ID, MODEL_ID, OPERATION_GROUP, ITEM_ID, FROM_SITE(+DESC), TO_SITE(+DESC) 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "Prefer Site 전극 음·양극 중 하나라도 조립 Prefer Site 로의 BOD 가 없는 수요 목록",
+    "message": null,
+    "on_fail": "DEMAND_ID, MODEL_ID 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "Prefer Site 간 BOD Calendar 가 Due Date 이후 Horizon 끝까지 모두 막혀 있는 수요 목록",
+    "message": null,
+    "on_fail": "DEMAND_ID, MODEL_ID, DUE_DATE 목록 반환 (리포트 매칭분 + #NO_BOD_CAL 전체 UNION ALL)"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "모델 기준으로 공정 설비(Resource)가 없는 Item·Site 목록",
+    "message": null,
+    "on_fail": "DEMAND_ID, MODEL_ID, SCM_SITE(+DESC), OPERATION_GROUP, ITEM_ID 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "Prefer Site 에 공정 설비가 등록되지 않은 Item·Site 목록",
+    "message": null,
+    "on_fail": "DEMAND_ID, MODEL_ID, SCM_SITE(+DESC), OPERATION_GROUP, ITEM_ID 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "RANGE",
+    "desc": "Due Date 가 계획 시작일보다 이른(Past Due) 수요 목록",
+    "message": null,
+    "on_fail": "DEMAND_ID, ITEM_ID, SCM_SITE(+DESC), INCOTERMS, QTY, DUE_DATE, PLAN_START_DATE 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0032_GET_UNPLAN_LIST",
+    "sp": "SCP0032_GET_UNPLAN_LIST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "RANGE",
+    "desc": "Due Date 가 계획 Horizon 종료일보다 늦은(Out of Horizon) 수요 목록",
+    "message": null,
+    "on_fail": "DEMAND_ID, ITEM_ID, SCM_SITE(+DESC), INCOTERMS, QTY, DUE_DATE, PLAN_END_DATE 목록 반환"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0033",
+  "title": "Shipment Semi Dept Day",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0033_Shipment_semi_dept_day/SCP0033_Shipment_semi_dept_day.cs:584"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0033_Shipment_semi_dept_day/SCP0033_Shipment_semi_dept_day.Designer.cs:351"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/shipping/src/pages/shipment-semi-dept-day"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+    "member": "FindData_Main",
+    "line": "258",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0033_Shipment_semi_dept_day\\SCP0033_Shipment_semi_dept_day.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+    "member": "SaveData_Main",
+    "line": "380",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0033_Shipment_semi_dept_day\\SCP0033_Shipment_semi_dept_day.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+    "member": "FindData_Main",
+    "line": "258",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0033_Shipment_semi_dept_day\\SCP0033_Shipment_semi_dept_day.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+    "member": "SaveData_Main",
+    "line": "380",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0033_Shipment_semi_dept_day\\SCP0033_Shipment_semi_dept_day.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+   "SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+    "sp": "SCP0033_GET_SHIPMENT_SEMI_DEPT_DAY",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "DUP",
+    "desc": "UI 측 중복 입력 검증용으로 전체 Division·Item 키 목록을 별도 결과셋으로 제공",
+    "message": null,
+    "on_fail": "필터 없는 전체 키 목록을 두 번째 결과셋으로 반환(UI 가 신규 행 키 중복 판정에 사용)"
+   },
+   {
+    "entry_sp": "SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+    "sp": "SCP0033_SAVE_SHIPMENT_SEMI_DEPT_DAY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외(PK 중복 INSERT 포함) 발생 시 롤백 후 F 결과셋과 오류번호·메시지 반환",
+    "message": "[ERROR_NUMBER()]ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0034",
+  "title": "PSI Electrode",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0034_PSI_Electrode/SCP0034_PSI_Electrode.cs:829"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0034_PSI_Electrode/SCP0034_PSI_Electrode.Designer.cs:1033"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "225",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0034_PSI_Electrode\\SCP0034_PSI_Electrode.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0034_GET_ELECTRODE_PSI",
+    "member": "FindData_Main",
+    "line": "586",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0034_PSI_Electrode\\SCP0034_PSI_Electrode.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "811",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0034_PSI_Electrode\\SCP0034_PSI_Electrode.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "225",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0034_PSI_Electrode\\SCP0034_PSI_Electrode.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0034_GET_ELECTRODE_PSI",
+    "member": "FindData_Main",
+    "line": "586",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0034_PSI_Electrode\\SCP0034_PSI_Electrode.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "811",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0034_PSI_Electrode\\SCP0034_PSI_Electrode.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0034_GET_ELECTRODE_PSI"
+  ],
+  "db_validation_brief": []
+ }
+]

@@ -1,0 +1,482 @@
+﻿당신은 LG에너지솔루션 GSCM(C#.NET WinForms) → NSCM(React + Wijmo + Oracle) 전환 프로젝트의 산출물 작성자입니다.
+아래에는 정적 파서가 추출한 '사실 묶음(Fact Pack)'과, 그것을 근거로 작성된 1차 분석서가 있습니다. **여기에 있는 사실만** 사용하고 없는 것은 '확인 필요'로 표기하세요. 추측으로 업무 규칙을 지어내지 마세요.
+출력은 한국어 Markdown 문서 3개이며, 각 문서는 정확히 다음 구분자로 시작합니다: `=== FILE: 파일명 ===`
+
+필수 조건 (프로그램이 기계적으로 검사합니다. 하나라도 빠지면 반려):
+1. business_analysis.md 에 엔드포인트 4개 전부 원문 등장: `biz:CommonData.CommonDataList`, `SCP.SCP0121_GET_SEARCH_INFO`, `SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT`, `SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT`
+2. business_analysis.md 에 SP 3개 전부 등장: `SCP0121_GET_SEARCH_INFO`, `SCP0122_GET_PLAN_ACTIVITY_MGMT`, `SCP0122_SAVE_PLAN_ACTIVITY_MGMT`
+3. screen_design.md 에 컨트롤 8개 전부 등장: `usrLayoutControl1`, `usrConditionPanel1`, `usrLayoutControl2`, `cboPlanGroup`, `cboProcess`, `cboDivision`, `spdMain`, `spdMain_Sheet1`
+4. screen_design.md 에 시트 1개 전부 등장: `Plan Activity Mgmt`
+5. screen_design.md 에 이벤트 핸들러 5개와 엔드포인트 전부 등장: `Form_Load`, `ClbDivision_SelectedIndexChanged`, `CboPlanGroup_SelectedIndexChanged`, `SpdMain_ComboSelChange`, `spdMain_CellClick`
+6. unit_test.md 에 이벤트 핸들러 전부, 엔드포인트 전부, 시트 전부가 '근거' 열에 등장 (각각 최소 1개 테스트 케이스).
+7. 주석 처리된 호출(commented_calls)은 현행 기능으로 쓰지 말 것. 테스트 케이스로도 만들지 말 것.
+
+문서별 내용:
+- business_analysis.md (업무분석서): 1 업무 목적·범위, 2 사용자 시나리오(행위→시스템 처리→결과), 3 업무 흐름도(텍스트 단계), 4 업무 규칙(SP 분기 조건·필수값·검증·날짜/버킷 규칙 — 사실에 근거), 5 데이터 흐름 표(엔드포인트 → SP → 읽기/쓰기 테이블), 6 division·권한별 변형, 7 외부 인터페이스(사실에 있을 때만), 8 미확정·확인 필요.
+- screen_design.md (화면설계서): 1 화면 개요(ID, 명칭, 메뉴 위치는 확인 필요), 2 화면 레이아웃 — **props.csv 의 SplitContainer(Orientation·SplitterDistance·Size) 와 controls.csv 의 parent 체인으로 분할 트리를 그대로 그린 텍스트 와이어프레임**(상/하·좌/우, 비율 %), 영역: 조회조건·버튼·그리드·팝업, 3 컨트롤 명세 표(컨트롤명·타입·**라벨=props.csv Text 원문**·초기값·필수여부·연결 이벤트·To-Be 컴포넌트), 4 그리드 명세(시트별 컬럼 표: 컬럼·헤더·타입·출처 META/HARDCODED·division별 표시·편집 가능 여부), 5 액션 명세 표(버튼/이벤트 → 핸들러 → 처리 → 엔드포인트 → 결과 반영), 6 검증·메시지, 7 권한(C/R/U/D) 사실, 8 To-Be 전환 메모(Wijmo·Oracle 관점에서 바뀌는 점), 9 미확정.
+- 세 문서는 서로 참조한다: 업무분석서 §5 데이터 흐름의 엔드포인트 ↔ 화면설계서 §5 액션 명세 ↔ 단위테스트 근거 열이 같은 이름을 쓴다. 화면설계서 §3 컨트롤명은 단위테스트 절차 열에서 그대로 쓴다.
+- unit_test.md (단위테스트): 테스트 케이스 표 — 열: TC-ID(TC-SCP0122-001 형식), 구분(초기화/조회/저장/이벤트/그리드/권한/division), 사전조건, 절차, 입력값, 기대결과, 근거(엔드포인트·SP·핸들러·시트 이름 원문). 이벤트 핸들러마다 1건 이상, 엔드포인트마다 1건 이상, 시트별 컬럼 표시 1건 이상, division 변형이 있으면 division별 1건 이상, 빈 결과·오류 응답 케이스 포함.
+
+# 1차 분석서 — analysis.md
+# SCP0122 Plan Activity Mgmt — As-is 분석서
+
+> 근거: AsisFacts 정적 추출 Fact Pack (SCP0122). Fact Pack에 없는 내용은 **확인 필요**로 표기했습니다.
+
+## 1. 화면 개요
+
+| 항목 | 내용 |
+|---|---|
+| 화면 ID | SCP0122 |
+| 화면명(Form Text) | `SCP0122_PlanActivityMgmt` (Designer.cs:293) |
+| 도메인 | SCP (`06.UIL\GSCM.SCP.Forms.UIL\Master\`) |
+| 클래스 | `SCP0122_PlanActivityMgmt` |
+| 프로젝트 | `06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.csproj` (sln 미등록) |
+
+### 1-1. 파일 구성
+
+| 구분 | 파일 | 줄수 |
+|---|---|---:|
+| current(sln미등록) | `SCP0122_PlanActivityMgmt.cs` | 587 |
+| current(sln미등록) | `SCP0122_PlanActivityMgmt.Designer.cs` | 336 |
+| current(sln미등록) | `Properties\AssemblyInfo.cs` | 37 |
+| current(sln미등록) | `Properties\Resources.Designer.cs` | 72 |
+| current(sln미등록) | `Properties\Settings.Designer.cs` | 31 |
+| shared | 없음 (Fact Pack에 기재되지 않음) | — |
+| legacy | 없음 (Fact Pack에 기재되지 않음) | — |
+
+> 모든 파일이 **sln 미등록**입니다. 운영 빌드에 포함되는지는 **확인 필요**입니다.
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP |
+|---|---|---:|---|---|---|
+| button:FindButton | FindButton > FindData_Main | 321 | `SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT` | MATCH | SCP0122_GET_PLAN_ACTIVITY_MGMT |
+| button:SaveButton | SaveButton > Save_Data | 480 | `SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT` | MATCH | SCP0122_SAVE_PLAN_ACTIVITY_MGMT |
+| button:SaveButton | SaveButton > Save_Data > FindData_Main | 321 | `SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT` | MATCH | SCP0122_GET_PLAN_ACTIVITY_MGMT (저장 후 재조회) |
+| (진입점 미연결) | GetPlanGroupByUserID | 155 | `SCP.SCP0121_GET_SEARCH_INFO` | MATCH | SCP0121_GET_SEARCH_INFO |
+| (진입점 미연결) | `<field:dtProcessCdAll>` | 47 | `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | (Biz 공통: UP_FX_GetCommonDataList) |
+
+- **진입점 미연결 2건**: 정적 파서가 호출 진입점(Form_Load/이벤트/버튼)까지 추적하지 못했습니다. `GetPlanGroupByUserID`는 Plan Group 콤보를 채우는 메서드로 보이며 `Form_Load`나 `ClbDivision_SelectedIndexChanged` → `RefreshPlanGroupByDivision`(171)에서 호출될 가능성이 있지만, 정적 사실로 확인되지 않아 **확인 필요**입니다.
+- `dtProcessCdAll`은 필드 초기화식(47행)에서 LookupCommon 공통코드를 조회합니다. 따라서 클래스 생성 시점에 실행된다고 봅니다. 소비처(cboProcess 바인딩 여부)는 **확인 필요**입니다.
+- 그 밖의 메서드: `Insert_Row`(367, GetCheckedListValue 호출), `EditButton`(275, GetSheetInfo)는 엔드포인트를 호출하지 않습니다.
+
+## 3. 엔드포인트 전체 표
+
+| 엔드포인트 | 상태 | 호출 수 | SP | 참조 테이블/객체 |
+|---|---|---:|---|---|
+| `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | 1 | — | 코드분기 UP_FX_GetCommonDataList: SELECT SCM_ADM_LOOKUP_MASTER, SCM_ADM_LOOKUP_MASTER_DETAIL |
+| `SCP.SCP0121_GET_SEARCH_INFO` | MATCH | 1 | SCP0121_GET_SEARCH_INFO | INSERT #DIVISION_INFO / #LINE_MASTER / #OSP_PLANT_INFO; SELECT SCM_MST_DIVISION, SCM_MST_LINE_SN, SCM_MST_FACTORY_SN, SCM_ADM_LOOKUP_MASTER_DETAIL, SCM_MST_LINE_OSP, SCM_MST_SITE, SCM_MST_VENDOR, SCP_MST_CAPA_LINE, SCP_OPMZ_PLAN_GR_M, SCM_ADM_LOOKUP_MASTER, SCM_OPERATION_M_SN |
+| `SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT` | MATCH | 1 | SCP0122_GET_PLAN_ACTIVITY_MGMT | SELECT SCP_OPMZ_PLAN_GR_ACTV_M, SCP_OPMZ_PLAN_GR_M, SCM_ADM_LOOKUP_MASTER_DETAIL |
+| `SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT` | MATCH | 1 | SCP0122_SAVE_PLAN_ACTIVITY_MGMT | EXEC PR_SCM_SYS_LOG_BATCH, SCP0122_SCP_OPMZ_PLAN_GR_ACTV_HIST; REF SCM_ARR_SPL_CNT, SCM_ARR_SPL_VAL; INSERT/UPDATE/DELETE SCP_OPMZ_PLAN_GR_ACTV_M; INSERT SCM_SYS_LOG_BATCH, SCP_OPMZ_PLAN_GR_ACTV_H |
+
+> 주석 처리된 호출(commented_calls): **0건**
+
+## 4. 이벤트 배선
+
+| 대상 | 이벤트 | 핸들러 | 배선 위치 |
+|---|---|---|---|
+| this | Load | `Form_Load` | .ctor:98 |
+| cboDivision | SelectedIndexChanged | `ClbDivision_SelectedIndexChanged` | InitEvent:217 |
+| cboPlanGroup | SelectedIndexChanged | `CboPlanGroup_SelectedIndexChanged` | InitEvent:218 |
+| this.spdMain | ComboSelChange | `SpdMain_ComboSelChange` | InitEvent:220 |
+| this.spdMain | CellClick | `spdMain_CellClick` | InitEvent:221 |
+
+- `SpdMain_ClipboardPasted`(574행) 메서드는 `dtPlanGroup`에서 셀 Text와 `NAME`이 같은 행을 찾아 `CODE`를 읽습니다. 그런데 events.csv에 배선 기록이 없어 연결 방식(InitEvent:219 등 누락 여부)은 **확인 필요**입니다.
+- 각 핸들러의 본문 동작(호출 메서드)은 Fact Pack에 없어 **확인 필요**입니다.
+
+## 5. Grid 구성 방식
+
+- 구성 방식: **`META(프레임워크) (+코드 표시/라벨 변경)`**
+- 시트: `Plan Activity Mgmt` 1개 (CreateSpread:185 `AddSheet`, 인자 원문 `spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 30`)
+- 메타 컬럼 생성: `SetSheetHeaderColumnSCP(siObj, 1, false, "")` @ SetSpreadInit:212. `sheetName.Equals("Plan Activity Mgmt")` 분기 안에서 실행됩니다. SCM_MST_SHEET_COLUMNS의 COLUMN_NAME, COLUMN_LABEL_NAME, COLUMN_WIDTH, VISIBLE_FLAG, VALID_YN, FIXED_FLAG, CELL_CONTROL_OBJECT_TYPE_CODE, CELL_COMBO_DATA_TYPE, HORIZONTAL_ALIGN_CODE, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, UPPERCASE_APPLY_FLAG, ATTRIBUTE1~5 등을 읽습니다.
+- 코드 표시 변경: Designer.cs 252~255행의 ColumnHeader 스타일(정렬 General, NoteIndicatorColor Red, Parent ColumnHeaderDefaultEnhanced)만 있습니다. 컬럼을 추가하거나 숨기는 코드는 없습니다.
+- 연결 규칙: `META+코드연결`
+
+### 5-1. Division별 차이
+
+| 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Plan Activity Mgmt | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 |
+
+→ 모든 division에서 15컬럼(전부 '기본')이며 **division별 차이는 없습니다**. 분기 조건을 판단하지 못한 건은 0건입니다.
+
+## 6. 확인 필요 항목
+
+1. `GetPlanGroupByUserID`(155, SCP0121_GET_SEARCH_INFO)의 호출 진입점: Form_Load인지 Division 변경인지 확인해야 합니다. 143행에서 `FoxUserInfoContext.Current.NowGroupID`를 사용합니다.
+2. `dtProcessCdAll`(47, LookupCommon)의 LOOKUP 코드값과 cboProcess 바인딩 여부.
+3. `SpdMain_ClipboardPasted`의 이벤트 배선 여부.
+4. `Insert_Row`(367)를 부르는 버튼 진입점(InsertButton 등).
+5. `FindData_Main` 308~310행의 `GetCheckedListValue` 3회 호출이 어느 컨트롤을 대상으로 하는지 (Division/Plan Group/Process로 추정되지만 정적 사실로 미확정).
+6. `Division` LayoutControlItem의 Text 원문 (props.csv에 Text 속성 없음).
+7. 실제 SP 실행 결과와 매칭되는 시트가 없습니다. SP 결과 컬럼과 메타 15컬럼이 일치하는지 실행 검증이 필요합니다.
+8. `usrLayoutControl1`(657×184, parent 미기재)의 화면 내 실제 사용 여부.
+9. 모든 파일이 sln 미등록이므로 운영 배포 대상인지 확인해야 합니다.
+
+
+# 1차 분석서 — web_components.md
+# SCP0122 Web 컴포넌트 매핑
+
+## 1. 컨트롤 → React/Wijmo 매핑
+
+| As-is 컨트롤 | 유형 | 라벨(원문) | 크기 | TO-BE 후보 |
+|---|---|---|---|---|
+| usrConditionPanel1 | UsrConditionPanel (Dock Top, HidePanel) | — | 1561×98 | 조회조건 패널 (접기 가능) |
+| usrLayoutControl2 | UsrLayoutControl (Dock Fill, 조건패널 내부) | — | 1561×98 | 조회조건 Form 레이아웃 |
+| cboDivision | UsrCombo | (LayoutControlItem `Division`, Text 원문 미기재 — **확인 필요**) | 311×26 | Division 콤보 (멀티선택 여부는 GetCheckedListValue 사용으로 추정, **확인 필요**) |
+| cboPlanGroup | UsrComboBox | `Plan Group` | 285×26 | Plan Group 콤보 |
+| cboProcess | UsrComboBox | `Process` | 332×26 | Process 콤보 |
+| emptySpaceItem1 | EmptySpaceItem | — | 383×68 | 여백 |
+| spdMain / spdMain_Sheet1 | FpSpread / SheetView (Dock Fill) | — | 1561×766 | Wijmo FlexGrid |
+| usrLayoutControl1 | UsrLayoutControl (Dock Fill, parent 미기재) | — | 657×184 | 사용 여부 **확인 필요** |
+| imageList1 | ImageList | — | — | 대응 불필요 여부 **확인 필요** |
+
+## 2. 화면 배치
+
+- props.csv에 **SplitContainer가 없습니다**. Dock으로만 배치합니다.
+- 상/하 분할: 조회조건 `usrConditionPanel1` (Dock Top, 높이 98) / 그리드 `spdMain` (Dock Fill, 높이 766)
+  - 비율 ≈ **상 11% : 하 89%** (98 : 766)
+- 좌/우 분할: 없음
+- 조회조건 행 (LayoutControlItem 폭 383/383/382, 높이 68): Division, Plan Group, Process, emptySpaceItem1. 항목 간 정확한 좌우 순서는 Location 값이 없어 **확인 필요**입니다.
+
+## 3. 시트별 Grid 컬럼 — `Plan Activity Mgmt`
+
+- 연결 규칙: `META+코드연결` (AddSheet → SetSheetHeaderColumnSCP)
+- 코드 하드코딩 컬럼: 없음 (코드 변경은 ColumnHeader 스타일 4건뿐)
+- Division별 표시: 14개 division 모두 15컬럼이 '기본'으로 표시되어 차이가 없습니다.
+
+| # | COLUMN_NAME | 라벨 | 출처 | 40 | 81 계열 | 82 | EE 계열 |
+|---:|---|---|---|---|---|---|---|
+| 1 | AUTO_YN | Auto Flag | META | 기본 | 기본 | 기본 | 기본 |
+| 2 | CONFIRM_YN | Confirm Flag | META | 기본 | 기본 | 기본 | 기본 |
+| 3 | DIVISION_ID | Div. | META | 기본 | 기본 | 기본 | 기본 |
+| 4 | LINK_UI_TYPE | Link UI Type | META | 기본 | 기본 | 기본 | 기본 |
+| 5 | OPMZ_ACTV_CD | Activity Code | META | 기본 | 기본 | 기본 | 기본 |
+| 6 | OPMZ_ACTV_NAME | Activity Name | META | 기본 | 기본 | 기본 | 기본 |
+| 7 | OPMZ_ACTV_SEQ | Act. Seq | META | 기본 | 기본 | 기본 | 기본 |
+| 8 | OPMZ_PLAN_GR_ID | Plan Group ID | META | 기본 | 기본 | 기본 | 기본 |
+| 9 | OPMZ_PLAN_GR_NAME | Plan Group | META | 기본 | 기본 | 기본 | 기본 |
+| 10 | OPMZ_PRS_CD | Process CD | META | 기본 | 기본 | 기본 | 기본 |
+| 11 | OPMZ_PRS_NAME | Process | META | 기본 | 기본 | 기본 | 기본 |
+| 12 | OPTION_YN | Option Flag | META | 기본 | 기본 | 기본 | 기본 |
+| 13 | PRE_OPMZ_ACTV_CD | PRE_OPMZ_ACTV_CD | META | 기본 | 기본 | 기본 | 기본 |
+| 14 | PRE_OPMZ_ACTV_SEQ | PRE_OPMZ_ACTV_SEQ | META | 기본 | 기본 | 기본 | 기본 |
+| 15 | PROGRAM_NAME | Program Name | META | 기본 | 기본 | 기본 | 기본 |
+
+> 81 계열 = 81, 81_HD, 81_HG, 81_HM, 81_ST, 81_UC / EE 계열 = EE, EE_HD, EE_HG, EE_HM, EE_ST, EE_UC — 모두 동일합니다.
+> 컬럼 순서는 grid_effective.csv 기재 순서(알파벳)를 따랐습니다. 실제 표시 순서(SORT 메타)·폭·셀 유형(콤보 등)은 SCM_MST_SHEET_COLUMNS 원문을 봐야 하므로 **확인 필요**입니다.
+> 셀 콤보: `SpdMain_ComboSelChange` 배선과 ClipboardPasted의 Plan Group NAME→CODE 변환으로 보아 Plan Group 셀은 콤보로 추정됩니다. 확정하려면 메타 CELL_CONTROL_OBJECT_TYPE_CODE를 **확인**해야 합니다.
+
+## 4. 시트 연결 규칙
+
+| 시트 | 규칙 | 생성 | 메타 빌드 | 활성화 |
+|---|---|---|---|---|
+| Plan Activity Mgmt | META+코드연결 | CreateSpread:185 AddSheet | SetSpreadInit:212 SetSheetHeaderColumnSCP | InitSpread:198 ChangeActiveSheet, FindData_Main:306 ChangeSheet |
+
+- 단일 시트이므로 시트 간 마스터-디테일 연결은 없습니다.
+
+
+# 1차 분석서 — tobe_design.md
+# SCP0122 TO-BE 설계 입력
+
+## 1. 조회조건 (컨트롤 기준)
+
+| 순번 | As-is 컨트롤 | 라벨(원문) | 데이터 원천 | 연동 |
+|---:|---|---|---|---|
+| 1 | cboDivision (UsrCombo) | (Division — Text 원문 **확인 필요**) | 확인 필요 (SCP0121_GET_SEARCH_INFO가 SCM_MST_DIVISION을 참조하므로 후보) | 변경 시 `ClbDivision_SelectedIndexChanged` → `RefreshPlanGroupByDivision`(171)으로 Plan Group 갱신 추정 (**확인 필요**) |
+| 2 | cboPlanGroup (UsrComboBox) | Plan Group | `GetPlanGroupByUserID` → `SCP.SCP0121_GET_SEARCH_INFO` (NowGroupID 사용) | 변경 시 `CboPlanGroup_SelectedIndexChanged` (동작 **확인 필요**) |
+| 3 | cboProcess (UsrComboBox) | Process | `dtProcessCdAll` → `biz:CommonData.CommonDataList` [LookupCommon] 추정 (**확인 필요**) | — |
+
+- 조회 시 `FindData_Main` 308~310행에서 `GetCheckedListValue`(CODE)를 3번 호출합니다. 조건 3개를 CODE 목록으로 전달하는 것으로 추정되지만 **확인 필요**입니다.
+- 조회조건 패널: HidePanel 유형 (접기 가능)
+
+## 2. 액션별 호출 API 후보
+
+| 액션 | As-is | 호출 SP | TO-BE API 후보 |
+|---|---|---|---|
+| 화면 로드 | `Form_Load` | 확인 필요 (GetPlanGroupByUserID 호출 여부) | 조회조건 콤보 API (SCP0121_GET_SEARCH_INFO) |
+| Division 변경 | `ClbDivision_SelectedIndexChanged` | 확인 필요 | Plan Group 콤보 재조회 |
+| Plan Group 변경 | `CboPlanGroup_SelectedIndexChanged` | 확인 필요 | 확인 필요 |
+| 조회 | FindButton → FindData_Main:321 | SCP0122_GET_PLAN_ACTIVITY_MGMT | call-proc 조회 |
+| 저장 | SaveButton → Save_Data:480 → FindData_Main:321 | SCP0122_SAVE_PLAN_ACTIVITY_MGMT → 재조회 SCP0122_GET_PLAN_ACTIVITY_MGMT | call-proc 저장 + 성공 시 재조회 |
+| 행 추가 | Insert_Row:367 (진입 버튼 **확인 필요**) | 없음 (조건 콤보 CODE를 읽음) | FE 행 추가. 조건값을 기본값으로 채우는지 **확인 필요** |
+| 편집 | EditButton:275 (GetSheetInfo) | 없음 | 확인 필요 |
+| 그리드 콤보 변경 | `SpdMain_ComboSelChange` | 확인 필요 | 확인 필요 |
+| 그리드 셀 클릭 | `spdMain_CellClick` | 확인 필요 | 확인 필요 |
+| 붙여넣기 | `SpdMain_ClipboardPasted`:574 (배선 **확인 필요**) | 없음 | Plan Group NAME → CODE 변환 (dtPlanGroup 기준) |
+
+## 3. Division별 Grid 변형 요약
+
+| 시트 | 구성 | Division 차이 |
+|---|---|---|
+| Plan Activity Mgmt | META 15컬럼 (SCM_MST_SHEET_COLUMNS) + 헤더 스타일 코드 | **없음** — 14개 division 모두 15컬럼 '기본' 표시 |
+
+## 4. 권한(C/R/U/D) 관련 사실
+
+| 구분 | 사실 |
+|---|---|
+| R | FindButton → SCP0122_GET_PLAN_ACTIVITY_MGMT |
+| C | Insert_Row 메서드 있음. 저장 SP가 SCP_OPMZ_PLAN_GR_ACTV_M에 INSERT |
+| U | SaveButton. 저장 SP가 SCP_OPMZ_PLAN_GR_ACTV_M에 UPDATE. EditButton 있음 |
+| D | 저장 SP가 SCP_OPMZ_PLAN_GR_ACTV_M에 DELETE. 삭제 버튼 진입점은 Fact Pack에 없음 (**확인 필요**) |
+| 메타 | TB_FX_GroupMenuAuth 3행, TB_FX_MenuItemInfo 1행, TB_FX_ProgramInfo 1행, TB_FX_SearchCondition 3행 존재. 행 내용(그룹·버튼 권한값)은 **확인 필요** |
+| 사용자 컨텍스트 | GetPlanGroupByUserID에서 `FoxUserInfoContext.Current.NowGroupID` 사용 → Plan Group 목록이 사용자 그룹에 따라 달라질 가능성 |
+
+## 5. 미확정 사항
+
+1. 진입점 미연결 2건(SCP0121_GET_SEARCH_INFO, CommonDataList LookupCommon)의 실제 호출 시점
+2. 5개 이벤트 핸들러의 본문 동작
+3. Insert/Delete/Edit 버튼의 실제 노출 여부와 권한 메타값 (TB_FX_GroupMenuAuth 3행)
+4. TB_FX_SearchCondition 3행이 조회조건 3개와 1:1로 대응하는지
+5. 메인 조회 SP 결과 컬럼과 메타 15컬럼의 일치 여부 (SP 실행 결과 매칭 시트 없음)
+6. 메타 컬럼별 편집 가능 여부·셀 유형·표시 순서 (SCM_MST_SHEET_COLUMNS 원문 확인 필요)
+7. 저장 페이로드 형식 (SCM_ARR_SPL_CNT/VAL로 보아 구분자 문자열 가능성)
+8. sln 미등록 프로젝트가 운영 대상인지
+
+
+# Fact Pack — SCP0122
+# SCP0122 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.csproj | 37 |
+| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\Properties\Resources.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.csproj | 72 |
+| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\Properties\Settings.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.csproj | 31 |
+| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.csproj | 587 |
+| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.csproj | 336 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| button:FindButton | FindButton > FindData_Main | 321 | SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT | MATCH | SP SCP0122_GET_PLAN_ACTIVITY_MGMT |
+| button:SaveButton | SaveButton > Save_Data > FindData_Main | 321 | SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT | MATCH | SP SCP0122_GET_PLAN_ACTIVITY_MGMT |
+| button:SaveButton | SaveButton > Save_Data | 480 | SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT | MATCH | SP SCP0122_SAVE_PLAN_ACTIVITY_MGMT |
+| unreached:(진입점 미연결) | <field:dtProcessCdAll> | 47 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | GetPlanGroupByUserID | 155 | SCP.SCP0121_GET_SEARCH_INFO | MATCH | SP SCP0121_GET_SEARCH_INFO |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| SCP.SCP0121_GET_SEARCH_INFO | MATCH | 1 | SP SCP0121_GET_SEARCH_INFO | EXEC:SCP0121_GET_SEARCH_INFO, INSERT:#DIVISION_INFO, SELECT:SCM_MST_DIVISION, INSERT:#LINE_MASTER, SELECT:SCM_MST_LINE_SN, SELECT:SCM_MST_FACTORY_SN, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, INSERT:#OSP_PLANT_INFO, SELECT:SCM_MST_LINE_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_MST_VENDOR, SELECT:#LINE_MASTER, SELECT:#DIVISION_INFO, SELECT:SCP_MST_CAPA_LINE, SELECT:#OSP_PLANT_INFO, SELECT:SCP_OPMZ_PLAN_GR_M, SELECT:SCM_ADM_LOOKUP_MASTER, SELECT:SCM_OPERATION_M_SN |  |
+| SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT | MATCH | 1 | SP SCP0122_GET_PLAN_ACTIVITY_MGMT | EXEC:SCP0122_GET_PLAN_ACTIVITY_MGMT, SELECT:SCP_OPMZ_PLAN_GR_ACTV_M, SELECT:SCP_OPMZ_PLAN_GR_M, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
+| SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT | MATCH | 1 | SP SCP0122_SAVE_PLAN_ACTIVITY_MGMT | EXEC:SCP0122_SAVE_PLAN_ACTIVITY_MGMT, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:SCP0122_SCP_OPMZ_PLAN_GR_ACTV_HIST, INSERT:SCP_OPMZ_PLAN_GR_ACTV_M, UPDATE:SCP_OPMZ_PLAN_GR_ACTV_M, DELETE:SCP_OPMZ_PLAN_GR_ACTV_M, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_OPMZ_PLAN_GR_ACTV_H |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| GetPlanGroupByUserID | TheOne.Security.FoxUserInfoContext.Current | NowGroupID |
+| SpdMain_ClipboardPasted | dtPlanGroup.Select().Where(c => c["NAME"].ToString() == siMain.ActiveSheet.Cells[iRow, iCol].Text).FirstOrDefault() | CODE |
+| SpdMain_ClipboardPasted | c | NAME |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| GetCheckedListValue | RefreshPlanGroupByDivision:171, FindData_Main:308, FindData_Main:309, FindData_Main:310, Insert_Row:367 | CString.GetCheckedListValue | CODE |
+| SetSheetHeaderColumnSCP | SetSpreadInit:212 | SpreadInfo.SetSheetHeaderColumnSCP | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this | Load | Form_Load | .ctor:98 |
+| cboDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitEvent:217 |
+| cboPlanGroup | SelectedIndexChanged | CboPlanGroup_SelectedIndexChanged | InitEvent:218 |
+| this.spdMain | ComboSelChange | SpdMain_ComboSelChange | InitEvent:220 |
+| this.spdMain | CellClick | spdMain_CellClick | InitEvent:221 |
+
+## 6. 컨트롤 (15개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 3 | layoutControlItem2, layoutControlItem9, Division |
+| UsrLayoutControl | 2 | usrLayoutControl1, usrLayoutControl2 |
+| LayoutControlGroup | 2 | layoutControlGroup1, layoutControlGroup2 |
+| UsrComboBox | 2 | cboPlanGroup, cboProcess |
+| UsrConditionPanel | 1 | usrConditionPanel1 |
+| UsrCombo | 1 | cboDivision |
+| EmptySpaceItem | 1 | emptySpaceItem1 |
+| FpSpread | 1 | spdMain |
+| SheetView | 1 | spdMain_Sheet1 |
+| ImageList | 1 | imageList1 |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 15 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 15 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.TB_FX_GroupMenuAuth | 3 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 3 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (0건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SCP0122 | Plan Activity Mgmt | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Plan Activity Mgmt
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumnSCP@SetSpreadInit:212
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitializeComponent |  | 252 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 253 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 254 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 255 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Plan Activity Mgmt | META+코드연결 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (4 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","<field:dtProcessCdAll>","47","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","GetPlanGroupByUserID","155","ctor","fox","SCP.SCP0121_GET_SEARCH_INFO","SCP.SCP0121_GET_SEARCH_INFO","MATCH","SP SCP0121_GET_SEARCH_INFO","EXEC:SCP0121_GET_SEARCH_INFO, INSERT:#DIVISION_INFO, SELECT:SCM_MST_DIVISION, INSERT:#LINE_MASTER, SELECT:SCM_MST_LINE_SN, SELECT:SCM_MST_FACTORY_SN, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, INSERT:#OSP_PLANT_INFO, SELECT:SCM_MST_LINE_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_MST_VENDOR, SELECT:#LINE_MASTER, SELECT:#DIVISION_INFO, SELECT:SCP_MST_CAPA_LINE, SELECT:#OSP_PLANT_INFO, SELECT:SCP_OPMZ_PLAN_GR_M, SELECT:SCM_ADM_LOOKUP_MASTER, SELECT:SCM_OPERATION_M_SN","",""
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","FindData_Main","321","ctor","fox","SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT","SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT","MATCH","SP SCP0122_GET_PLAN_ACTIVITY_MGMT","EXEC:SCP0122_GET_PLAN_ACTIVITY_MGMT, SELECT:SCP_OPMZ_PLAN_GR_ACTV_M, SELECT:SCP_OPMZ_PLAN_GR_M, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL","",""
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","Save_Data","480","ctor","fox","SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT","SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT","MATCH","SP SCP0122_SAVE_PLAN_ACTIVITY_MGMT","EXEC:SCP0122_SAVE_PLAN_ACTIVITY_MGMT, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:SCP0122_SCP_OPMZ_PLAN_GR_ACTV_HIST, INSERT:SCP_OPMZ_PLAN_GR_ACTV_M, UPDATE:SCP_OPMZ_PLAN_GR_ACTV_M, DELETE:SCP_OPMZ_PLAN_GR_ACTV_M, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_OPMZ_PLAN_GR_ACTV_H","",""
+```
+
+### FILE flow.csv (5 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","button","FindButton","FindButton > FindData_Main","FindData_Main","321","SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT","MATCH","SP SCP0122_GET_PLAN_ACTIVITY_MGMT","EXEC:SCP0122_GET_PLAN_ACTIVITY_MGMT, SELECT:SCP_OPMZ_PLAN_GR_ACTV_M, SELECT:SCP_OPMZ_PLAN_GR_M, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","button","SaveButton","SaveButton > Save_Data","Save_Data","480","SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT","MATCH","SP SCP0122_SAVE_PLAN_ACTIVITY_MGMT","EXEC:SCP0122_SAVE_PLAN_ACTIVITY_MGMT, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:SCP0122_SCP_OPMZ_PLAN_GR_ACTV_HIST, INSERT:SCP_OPMZ_PLAN_GR_ACTV_M, UPDATE:SCP_OPMZ_PLAN_GR_ACTV_M, DELETE:SCP_OPMZ_PLAN_GR_ACTV_M, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_OPMZ_PLAN_GR_ACTV_H"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","button","SaveButton","SaveButton > Save_Data > FindData_Main","FindData_Main","321","SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT","MATCH","SP SCP0122_GET_PLAN_ACTIVITY_MGMT","EXEC:SCP0122_GET_PLAN_ACTIVITY_MGMT, SELECT:SCP_OPMZ_PLAN_GR_ACTV_M, SELECT:SCP_OPMZ_PLAN_GR_M, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","unreached","(진입점 미연결)","GetPlanGroupByUserID","GetPlanGroupByUserID","155","SCP.SCP0121_GET_SEARCH_INFO","MATCH","SP SCP0121_GET_SEARCH_INFO","EXEC:SCP0121_GET_SEARCH_INFO, INSERT:#DIVISION_INFO, SELECT:SCM_MST_DIVISION, INSERT:#LINE_MASTER, SELECT:SCM_MST_LINE_SN, SELECT:SCM_MST_FACTORY_SN, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, INSERT:#OSP_PLANT_INFO, SELECT:SCM_MST_LINE_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_MST_VENDOR, SELECT:#LINE_MASTER, SELECT:#DIVISION_INFO, SELECT:SCP_MST_CAPA_LINE, SELECT:#OSP_PLANT_INFO, SELECT:SCP_OPMZ_PLAN_GR_M, SELECT:SCM_ADM_LOOKUP_MASTER, SELECT:SCM_OPERATION_M_SN"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","unreached","(진입점 미연결)","<field:dtProcessCdAll>","<field:dtProcessCdAll>","47","biz:CommonData.CommonDataList [code=LookupCommon]","BIZ_MATCH","",""
+```
+
+### FILE events.csv (5 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt",".ctor","98","this","Load","Form_Load","+="
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","InitEvent","217","cboDivision","SelectedIndexChanged","ClbDivision_SelectedIndexChanged","+="
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","InitEvent","218","cboPlanGroup","SelectedIndexChanged","CboPlanGroup_SelectedIndexChanged","+="
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","InitEvent","220","this.spdMain","ComboSelChange","SpdMain_ComboSelChange","+="
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","InitEvent","221","this.spdMain","CellClick","spdMain_CellClick","+="
+```
+
+### FILE controls.csv (15 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","usrLayoutControl1","GSCM.Windows.Forms.Controls.UsrLayoutControl","","33"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","layoutControlGroup1","DevExpress.XtraLayout.LayoutControlGroup","","34"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","35"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","36"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","cboPlanGroup","GSCM.Windows.Forms.Controls.UsrComboBox","usrLayoutControl2","37"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","cboProcess","GSCM.Windows.Forms.Controls.UsrComboBox","usrLayoutControl2","38"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","cboDivision","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","39"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","40"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","41"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","layoutControlItem2","DevExpress.XtraLayout.LayoutControlItem","","42"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","layoutControlItem9","DevExpress.XtraLayout.LayoutControlItem","","43"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","Division","DevExpress.XtraLayout.LayoutControlItem","","44"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","spdMain","FarPoint.Win.Spread.FpSpread","this","45"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","46"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","imageList1","System.Windows.Forms.ImageList","","47"
+```
+
+### FILE props.csv (25 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","69","usrLayoutControl1","Dock","System.Windows.Forms.DockStyle.Fill"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","73","usrLayoutControl1","Size","new System.Drawing.Size(657, 184)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","82","layoutControlGroup1","Size","new System.Drawing.Size(657, 184)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","87","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","91","usrConditionPanel1","Size","new System.Drawing.Size(1561, 98)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","93","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","102","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","107","usrLayoutControl2","Size","new System.Drawing.Size(1561, 98)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","109","usrLayoutControl2","Text","""usrLayoutControl2"""
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","119","cboPlanGroup","Size","new System.Drawing.Size(285, 26)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","130","cboProcess","Size","new System.Drawing.Size(332, 26)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","166","cboDivision","Size","new System.Drawing.Size(311, 26)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","181","layoutControlGroup2","Size","new System.Drawing.Size(1561, 98)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","189","emptySpaceItem1","Size","new System.Drawing.Size(383, 68)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","194","layoutControlItem2","Control","this.cboProcess"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","198","layoutControlItem2","Size","new System.Drawing.Size(382, 68)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","199","layoutControlItem2","Text","""Process"""
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","206","layoutControlItem9","Control","this.cboPlanGroup"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","209","layoutControlItem9","Size","new System.Drawing.Size(383, 68)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","210","layoutControlItem9","Text","""Plan Group"""
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","217","Division","Control","this.cboDivision"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","221","Division","Size","new System.Drawing.Size(383, 68)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","229","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","235","spdMain","Size","new System.Drawing.Size(1561, 766)"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","293","this","Text","""SCP0122_PlanActivityMgmt"""
+```
+
+### FILE grid_effective.csv (15 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Plan Activity Mgmt","META+코드연결","AUTO_YN","Auto Flag","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","CONFIRM_YN","Confirm Flag","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","DIVISION_ID","Div.","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","LINK_UI_TYPE","Link UI Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","OPMZ_ACTV_CD","Activity Code","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","OPMZ_ACTV_NAME","Activity Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","OPMZ_ACTV_SEQ","Act. Seq","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","OPMZ_PLAN_GR_ID","Plan Group ID","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","OPMZ_PLAN_GR_NAME","Plan Group","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","OPMZ_PRS_CD","Process CD","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","OPMZ_PRS_NAME","Process","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","OPTION_YN","Option Flag","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","PRE_OPMZ_ACTV_CD","PRE_OPMZ_ACTV_CD","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","PRE_OPMZ_ACTV_SEQ","PRE_OPMZ_ACTV_SEQ","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Plan Activity Mgmt","META+코드연결","PROGRAM_NAME","Program Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (14 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","CreateSpread","185","Plan Activity Mgmt","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Plan Activity Mgmt ¦ Plan Activity Mgmt ¦ 1 ¦ 1 ¦ 30","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 30"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","CreateSpread","186","Plan Activity Mgmt","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","CreateSpread","188","Plan Activity Mgmt","SHEET","ChangeSheet","EXPR","","","","","","",""
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","InitSpread","197","0","SHEET","ChangeSheet","EXPR","","","","0","","","0"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","InitSpread","198","Plan Activity Mgmt","SHEET","ChangeActiveSheet","HARDCODED","","","","Plan Activity Mgmt","sSheetName","","SpdSheet.shtMain"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","SetSpreadInit","205","0","SHEET","ChangeSheet","EXPR","","","","0","","if(sheetName.Equals(""Plan Activity Mgmt""))","0"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","SetSpreadInit","206","0","SHEET","InitSheet","EXPR","","","","0","","if(sheetName.Equals(""Plan Activity Mgmt""))","0"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","SetSpreadInit","212","0","META_BUILD","SetSheetHeaderColumnSCP","EXPR","","","","{p:siObj} ¦ 1 ¦ {?false} ¦ ","siObj,iColumnHeaderRowCount,chkAll,datePreColumnName","","siObj ¦ 1 ¦ false ¦ """""
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","EditButton","275","","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","if(spdMain != null)","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","FindData_Main","306","Plan Activity Mgmt","SHEET","ChangeSheet","HARDCODED","","","","Plan Activity Mgmt","","","SpdSheet.shtMain"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","252","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","253","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","254","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.Designer.cs","SCP0122_PlanActivityMgmt","InitializeComponent","255","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (3 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","GetPlanGroupByUserID","143","TheOne.Security.FoxUserInfoContext.Current","NowGroupID","[]"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","SpdMain_ClipboardPasted","574","dtPlanGroup.Select().Where(c => c[""NAME""].ToString() == siMain.ActiveSheet.Cells[iRow, iCol].Text).FirstOrDefault()","CODE","[]"
+"current(sln미등록)","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0122_PlanActivityMgmt\SCP0122_PlanActivityMgmt.cs","SCP0122_PlanActivityMgmt","SpdMain_ClipboardPasted","574","c","NAME","[]"
+```
+
+### FILE commented_calls.csv (0 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+```

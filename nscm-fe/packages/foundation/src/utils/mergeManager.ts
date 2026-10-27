@@ -138,6 +138,22 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
     return key;
   }
 
+  // 두 컬럼이 상위(부모) 헤더까지 동일한가 — 현재 행보다 위의 모든 헤더 행 값이 colA/colB 에서 같아야 한다.
+  //   가로 헤더 병합이 부모 그룹 경계를 넘지 않게 하는 가드. 예: 월 경계에 걸친 주(W40 이 9월 조각·10월
+  //   조각으로 쪼개진 경우)는 leaf/주 라벨이 같은 'W40' 이어도 상위 월(2026-09 / 2026-10)이 달라 별도 칼럼이어야
+  //   한다(AS-IS ColumnHeaderSpan 파리티). 네이티브 그룹 span 을 값기반 병합으로 대체했기에 필요한 보정.
+  private _sameAncestorHeaders(
+    panel: GridPanel,
+    row: number,
+    colA: number,
+    colB: number
+  ): boolean {
+    for (let r = 0; r < row; r++) {
+      if (panel.getCellData(r, colA, false) !== panel.getCellData(r, colB, false)) return false;
+    }
+    return true;
+  }
+
   private _isSameHorizontalRange(
     panel: GridPanel,
     row: number,
@@ -149,8 +165,23 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
     let l = col,
       r = col;
 
-    while (l > 0 && panel.getCellData(row, l - 1, false) === val) l--;
-    while (r < panel.columns.length - 1 && panel.getCellData(row, r + 1, false) === val) r++;
+    // 세로 스팬(월 SUM 2×1 등)을 판정할 때 쓰는 가로 범위 — 가로 병합(_getColumnHeaderMergedRange)이
+    //   상위 그룹 경계(_sameAncestorHeaders)를 지키도록 바뀐 뒤에도 여기만 '값만' 비교하면 비대칭이 생긴다.
+    //   예: 월 SUM 'SUM'(월 직속)과 주 SUM 'SUM'(주 'W43' 하위)이 하단 행에서 인접하면, 값만 보는 확장은
+    //   둘을 한 범위로 잡아 월 SUM 의 세로 스팬을 깨고 하단 셀이 사라진다(헤더가 '붕 떠' 보이는 회귀).
+    //   가로와 동일하게 상위 그룹까지 같은 칸만 같은 범위로 본다.
+    while (
+      l > 0 &&
+      panel.getCellData(row, l - 1, false) === val &&
+      this._sameAncestorHeaders(panel, row, l - 1, col)
+    )
+      l--;
+    while (
+      r < panel.columns.length - 1 &&
+      panel.getCellData(row, r + 1, false) === val &&
+      this._sameAncestorHeaders(panel, row, r + 1, col)
+    )
+      r++;
 
     return l === left && r === right;
   }
@@ -171,12 +202,17 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
     )
       return null;
 
-    while (rng.col > 0 && panel.getCellData(currentRow, rng.col - 1, false) === cellValue)
+    while (
+      rng.col > 0 &&
+      panel.getCellData(currentRow, rng.col - 1, false) === cellValue &&
+      this._sameAncestorHeaders(panel, currentRow, rng.col - 1, currentCol)
+    )
       rng.col--;
 
     while (
       rng.col2 < panel.columns.length - 1 &&
-      panel.getCellData(currentRow, rng.col2 + 1, false) === cellValue
+      panel.getCellData(currentRow, rng.col2 + 1, false) === cellValue &&
+      this._sameAncestorHeaders(panel, currentRow, rng.col2 + 1, currentCol)
     )
       rng.col2++;
 

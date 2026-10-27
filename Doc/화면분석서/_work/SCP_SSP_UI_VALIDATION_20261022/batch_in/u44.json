@@ -1,0 +1,243 @@
+[
+ {
+  "screen": "SCP0201",
+  "title": "CAPA(Test)",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0201_CAPA.UIL/SCP0201_CAPA.cs:2807",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0201_CAPA.UIL/SCP0201_CAPA.designer.cs:2425",
+   "06.UIL/GSCM.FP.Forms.UIL/CAPA/SCP0201_CAPA.UIL/TestCode.cs:48"
+  ],
+  "designer_files": [],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Capa_CAPA_PIC_get_line_by_operation.sql",
+    "member": "InitControls",
+    "line": "383",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\FP_Capa_CAPA_PIC_get_instance_authority.sql",
+    "member": "InitControls",
+    "line": "389",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA_CHOOL",
+    "member": "FindData_Main",
+    "line": "877",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_CAPA",
+    "member": "SaveData_Main",
+    "line": "1241",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P2_unresolved_dbo",
+    "status": "UNRESOLVED"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1303",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "1367",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "1419",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_USER_TITLE",
+    "member": "GetUserTitle",
+    "line": "1438",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "1516",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "2745",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA_CHOOL",
+    "member": "FindData_Main",
+    "line": "877",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1303",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "member": "RequestData",
+    "line": "1367",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_CALENDAR",
+    "member": "GetSpdTitle",
+    "line": "1419",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_SHEET_USER_TITLE",
+    "member": "GetUserTitle",
+    "line": "1438",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_DAY_RANGE",
+    "member": "GetDayRange",
+    "line": "1516",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0049_GET_CAPA",
+    "member": "FindData_Excel_DownLoad",
+    "line": "2745",
+    "file": "06.UIL\\GSCM.FP.Forms.UIL\\CAPA\\SCP0201_CAPA.UIL\\SCP0201_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCP0049_GET_CAPA",
+   "SCP0049_GET_CAPA_CHOOL",
+   "SCP0049_GET_DAY_RANGE",
+   "SCP0049_GET_SHEET_CALENDAR",
+   "SCP0049_GET_SHEET_USER_TITLE",
+   "SCP0049_SAVE_CAPA",
+   "SCP0049_SAVE_MAIL_SEND_REQUEST",
+   "foxquery_sql\\FP_Capa_CAPA_PIC_get_instance_authority.sql",
+   "foxquery_sql\\FP_Capa_CAPA_PIC_get_line_by_operation.sql"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SCP0049_GET_CAPA",
+    "sp": "SCP0049_GET_CAPA",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "REQUIRED",
+    "desc": "Tact/Yield Needed 모드: 조회 전 월에 Tact Time(또는 Yield) 값이 있거나 전 월이 우선순위 9 인 품목을 빼고, 값이 비어 있는 월이 있는 품목만 표시",
+    "message": null,
+    "on_fail": "NOT EXISTS(#TMP_SCP0049_NOT_LA) 인 행만 #TMP_SCP0049_LTY_RESULT 에 적재 → 모든 월 값이 채워진(또는 전월 우선순위 9) 품목 제외"
+   },
+   {
+    "entry_sp": "SCP0049_GET_CAPA",
+    "sp": "SCP0049_GET_CAPA",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "REQUIRED",
+    "desc": "비Current(버전) 조회에서도 Tact/Yield Needed 모드로 값이 비어 있는 품목만 표시",
+    "message": null,
+    "on_fail": "NOT EXISTS(#TMP_SCP0049_NOT_LA_VER) 인 행만 결과 적재"
+   },
+   {
+    "entry_sp": "SCP0049_GET_CAPA",
+    "sp": "SCP0049_GET_CAPA",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "버전 조회 결과 중 본인 정담당 항목 확정 비율 표시",
+    "message": null,
+    "on_fail": "세 번째 결과셋으로 본인 담당 확정률 반환"
+   },
+   {
+    "entry_sp": "SCP0049_SAVE_CAPA",
+    "sp": "SCP0049_SAVE_CAPA",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 중 예외 발생 시 전체 롤백 후 실패코드와 DB 오류 메시지 반환",
+    "message": "[<ERROR_NUMBER>]<ERROR_MESSAGE>",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code, '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE() as err_message"
+   },
+   {
+    "entry_sp": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "sp": "SCP0049_SAVE_MAIL_SEND_REQUEST",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 오류 로그만 남기고 화면에는 결과를 반환하지 않음",
+    "message": null,
+    "on_fail": "scm_sys_log_batch ERROR 로그 INSERT; IF @@TRANCOUNT > 0 COMMIT WORK (결과셋 반환 없음)"
+   }
+  ]
+ }
+]

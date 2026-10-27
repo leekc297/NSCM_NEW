@@ -2,8 +2,26 @@ import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
-import { ADMIN_SHEET_NAME, BUCKET_DEFAULT, MENU_ID, SHEETS } from './global-psi-elec.constants';
+import {
+  ADMIN_SHEET_NAME,
+  BUCKET_DEFAULT,
+  MEASURE_SHEET_NAME,
+  MENU_ID,
+  PLAN_TYPE_DEFAULT,
+  SHEETS,
+} from './global-psi-elec.constants';
 import type { SearchCondition } from './global-psi-elec.types';
+
+// SCM_MST_SHEET_MEASURE 동적 fetch row — /admin/menu/{MENU_ID}/measure (camelCase, 자매 SCP0100 1:1).
+//   주의: BE GridMeasure DTO 는 display/personalizable 를 boolean 으로 직렬화한다(string 'Y' 오선언 금지).
+export interface MeasureMeta {
+  colNm: string;
+  colLblNm?: string;
+  sClsLblNm?: string;
+  display?: boolean;
+  personalizable?: boolean;
+  sortOrd?: number;
+}
 
 type FiltersBySheet = {
   [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
@@ -19,10 +37,10 @@ interface State {
   // admin SCM_MST_SHEET_COLUMNS 동적 fetch(convert-core §2.4 하드코딩 금지). 미등록/실패 시 빈 배열.
   //   design 03 §1 실측 14행(전열 INPUT_TP_CD='S' 잠금, PLANT_ID 숨김, VALUE2 고정열).
   staticColumns: RawFlexGridColumnConfig[];
-  // 주의: staticMeasures/fetchStaticMeasures 는 두지 않는다 — AS-IS SCP0095 는 measure 표시선택 UI 가 없고
-  //   (SubTitle SEARCH 단일), 표시 measure 는 메인 SP 가 서버측에서 SCM_MST_SHEET_MEASURE.VALID_YN='Y' 로
-  //   확정한다(AS-IS SP L129 실측). FE measure 메타 fetch 는 소비처 0 인 dead wiring 이라 제거(iter-1 gap-audit G6,
-  //   convert-core §4.2 util 참조 0건 게이트). measure 개인화가 있는 자매 SCP0100(global-psi-report)과 다르다.
+  // SCM_MST_SHEET_MEASURE 동적 fetch(SHEET_NAME='Global PSI Elec' 10행, DB 실측). measure 개인화 팝업 원천.
+  //   사용자 지시 2026-10-15: AS-IS/자매 SCP0100 처럼 measure 설정 팝업을 노출 — iter-1 G6 의 "measure UI 無"
+  //   판정을 뒤집는다(DB MNU_BTN 에 MEASURE_SELECT 등록 필요, 05_register.sql). 자매 SCP0100 패턴 이식.
+  staticMeasures: MeasureMeta[];
 }
 
 interface Action {
@@ -33,6 +51,8 @@ interface Action {
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   fetchStaticColumns: () => Promise<void>;
+  // measure 메타 동적 fetch — 개인화 팝업 저장(titleSet 'M') 후 refetch 로 반영(자매 SCP0100 동형).
+  fetchStaticMeasures: () => Promise<void>;
   // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchCondition 패치(1회).
   restoreSearchConditions: () => Promise<void>;
 }
@@ -46,10 +66,11 @@ const RESTORE_BOOL_KEYS = new Set<string>(['chkSum']);
 // 주의: 상수가 아니라 함수 — 모듈 최상위로 굳히면 청크 최초 로드 시점 session.div 로 얼어붙어
 //   재로그인 시 앞 계정 division 이 고정된다(global-psi-report makeInitSearch 규약 동일).
 const makeInitSearch = (): SearchCondition => ({
-  divisionId: '', // Division 기본선택 없음(design 02 §4). Form 이 권한 목록 로드 후 첫 EE division 으로 교정.
+  divisionId: '', // Division 기본선택 없음. Form 이 권한 목록 로드 후 첫 EE division 자동선택(firstDivision effect).
   company: '',
   itemId: '',
-  planStartYyyymmdd: '',
+  planStartYyyymmdd: '', // Form 이 목록 로드 후 첫 Plan-date 자동선택(firstPlanDate effect) + Period 파생.
+  planType: PLAN_TYPE_DEFAULT, // Report Type* 기본 'FN'(AS-IS). p_plan_type 로 실림(SP 필터, 빈값이면 결과 0).
   fromYyyymmdd: '',
   toYyyymmdd: '',
   bucket: BUCKET_DEFAULT, // design 02 §4.2 cboBucketType.SelectedValue=Weekly
@@ -63,6 +84,7 @@ const makeInitState = (): State => ({
   filters: {},
   openSearchArea: true,
   staticColumns: [],
+  staticMeasures: [],
 });
 
 const str = (v: unknown): string =>
@@ -100,7 +122,7 @@ export const useGlobalPsiElecStore = createPersistedStoreWithTab<State & Action>
             yyyymmdd: orEmpty(c.planStartYyyymmdd), //  4 yyyymmdd (Plan-date)
             fromYyyymmdd: orEmpty(c.fromYyyymmdd), //  5 fromYyyymmdd (Period)
             toYyyymmdd: orEmpty(c.toYyyymmdd), //  6 toYyyymmdd (Period)
-            planType: '', //  7 planType (AS-IS FE 미전달 기본 '', design 03 §4.1)
+            planType: orEmpty(c.planType), //  7 planType (Report Type* — SP 가 A.PLAN_TYPE=UPPER(P_PLAN_TYPE) 필터)
             programId: MENU_ID, //  8 programId = 'SCP0095'
             sheetName: ADMIN_SHEET_NAME[SHEETS.MAIN], //  9 sheetName = 'Global PSI Elec'
             userId: str(useSessionStore.getState().session.userId), // 10 userId(BE @LoginUser 도 주입)
@@ -138,6 +160,23 @@ export const useGlobalPsiElecStore = createPersistedStoreWithTab<State & Action>
         set(state => {
           state.initialized = true;
         });
+      }
+    },
+    // measure 메타 동적 fetch — SCM_MST_SHEET_MEASURE(SHEET_NAME='Global PSI Elec'). 미등록/실패 시 빈 배열.
+    //   저장(titleSet 'M') 후 재조회로 개인화 표시/순서 반영(자매 SCP0100 fetchStaticMeasures 동형).
+    fetchStaticMeasures: async () => {
+      try {
+        const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {
+          sheetNm: MEASURE_SHEET_NAME,
+          // divisionId: get().searchCondition.divisionId,
+          // measure 시트는 Division 무관 1벌. Division 을 실으면 저장 후 재조회가 0건이라 빈값 고정(2026-10-21)
+          divisionId: '',
+        });
+        set(state => {
+          state.staticMeasures = res.data.result ?? [];
+        });
+      } catch {
+        // SCM_MST_SHEET_MEASURE 미등록/실패 시 빈 배열 (console 금지 룰)
       }
     },
     // 개인화 조회조건 복원 (SubTitle F6 저장분 되불러오기, 1회) — 정본 scp-bom(SCP0053)·shipment-plan-fix 파리티.

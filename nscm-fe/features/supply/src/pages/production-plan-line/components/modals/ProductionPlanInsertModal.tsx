@@ -1,10 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { DataMap, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
-import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { CustomDialog, CustomDropdown } from '@shared/components';
-import { Button, FormItem } from '@shared/lges';
-import { Grid, Stack } from '@shared/mui';
+import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import type { RawFlexGridColumnConfig } from '@foundation/models';
+import type { EditTracker } from '@foundation/utils';
+import { CustomDialog, DataGrid } from '@shared/components';
+import { useTabLookupQueries } from '@shared/hooks';
+import { Button } from '@shared/lges';
 import { useMessageStore } from '@shared/stores';
 
 import { LBL, MENU_ID, MSG, SHEETS } from '../../production-plan-line.constants';
@@ -13,23 +17,21 @@ import { isEeDivision } from '../../utils/productionPlanLineEditLock';
 
 import styles from './ProductionPlanInsertModal.module.scss';
 
-// AS-IS SCM0002_ProductionPlanInsertPopup(공통 라인배정 팝업) 을 화면 전용 모달로 재현(design 01 R5, M1).
-//   흐름: Model→Plant Site→Line 캐스케이드로 신규 라인을 배정(EE 는 Origin Div 선행) → 행 추가(다건) →
-//   저장 시 행별 newCheck(중복/TactTime 검증 S/L/T) 통과 후 savePopup 저장 → 부모 재조회.
-//   데이터 원천(ora.py 실측 2026-10-02):
-//     - Item 후보  : combo ItemProdPlanLinePopup_SCP(@divisionId,@operationGroup,@originDivisionId)
-//                    → CODE(itemId)/NAME/PLANT_SITE_ID/SITE_DESCRIPTION/NICK_NAME/ITEM_TYPE/OPERATION_ID/DIVISION_ID/OSP_YN
-//     - Line 후보  : combo LineProdPlanLinePopup_SCP(@divisionId,@operationGroup,@plantSiteId,@operationId,@originDivisionId,@itemId)
-//     - Origin Div : combo OriginDivFromFinalItem_SCP(@itemId) (EE 전용)
-//     - 검증 SP    : newCheck=P_SCP0013_GET_LINE_NEW_CHECK(9 IN) / 저장 SP=savePopup=P_SCP0013_SAVE_LINE_POPUP(sesUserId BE 주입)
-//   PROC_M 파라미터 키(COL_NM) 실측: divisionId·planDate·planType·seq·itemId·lineId·operationGroup·scmSiteId·originDivisionId.
+// AS-IS SCM0002_ProductionPlanInsertPopup(FpSpread 편집 그리드) 를 공용 DataGrid 셀 콤보로 재현
+//   (design 01 R5 / 사용자 지시 2026-10-15 — SCP0005 식 그리드 내부 콤보, 행별 캐스케이드 유지).
+//   버전키(Plan date/type/seq/div/opGroup)는 locked 텍스트, Material(ITEM_ID)·Plant Site·Line(+EE Origin
+//   Div)만 셀 콤보로 편집한다. Material 은 고정 콤보(전 행 동일), Plant/Line/OriginDiv 은 그 행의 상위
+//   선택에 따라 후보가 달라지는 행별 캐스케이드 — DataMap superset + getDisplayValues(rowItem) override 로
+//   구현한다(column.dataMap 을 beginningEdit 에서 갈아끼우면 DMF0049 실사고, gridCombos 금지규약).
+//   데이터 원천(ora.py 실측): Item 후보=ItemProdPlanLinePopup_SCP(div/opGroup) / Line=LineProdPlanLinePopup_SCP
+//   (div/opGroup/plant/operation/originDiv/item) / Origin Div(EE)=OriginDivFromFinalItem_SCP(item).
+//   저장: 행별 newCheck(P_SCP0013_GET_LINE_NEW_CHECK)→savePopup(P_SCP0013_SAVE_LINE_POPUP).
 
 interface Option {
-  label: string;
   value: string;
+  label: string;
 }
 
-// ItemProdPlanLinePopup_SCP 반환 행(= AS-IS dtItemPlant).
 interface ItemPlantRow {
   CODE?: string; // ITEM_ID
   NAME?: string;
@@ -42,23 +44,28 @@ interface ItemPlantRow {
   OSP_YN?: string;
 }
 
-// 저장 대기 라인 행(화면에 추가된 신규 라인). _key = 리스트 안정 key(중복 행 허용 대비).
-interface StagedRow {
-  _key?: number;
-  originDivisionId: string;
-  itemId: string;
-  nickName: string;
-  itemType?: string; // 스테이징 표 Item Type 컬럼(화면설계서 R37). 추가 시 선택 Item 행에서 채운다.
-  plantSiteId: string;
-  plantSiteName: string;
-  operationId: string;
-  lineId: string;
+// DataGrid itemsSource 행(신규 — CRUD_TYPE='I'). 버전키 포함(그리드가 locked 셀로 표시).
+//   WijmoRowItem(=Record<string,WijmoPrimitive>) 확장 — DataGrid<T> 제약 충족.
+interface InsertRow extends WijmoRowItem {
+  _key: number;
+  CRUD_TYPE: 'I';
+  PLAN_DATE: string;
+  PLAN_TYPE: string;
+  PLAN_SEQ: string;
+  DIVISION_ID: string;
+  ORIGIN_DIVISION_ID: string;
+  OPERATION_GROUP: string; // 표시명(Pack/Cell/Electrode)
+  ITEM_ID: string;
+  NICK_NAME: string;
+  ITEM_TYPE: string;
+  PLANT_SITE_ID: string;
+  LINE_ID: string;
+  OPERATION_ID: string; // 파생(hidden) — Line 조회·저장용
 }
 
 interface Props {
   open: boolean;
   modalClose: () => void;
-  // newCheck/savePopup 공통 파라미터 원천 — 부모 조회조건(design 01 R5 cs:866-871).
   params: {
     divisionId: string;
     operationGroupId: string;
@@ -66,12 +73,30 @@ interface Props {
     planType: string;
     planSeq: string;
   };
-  // 저장 성공 후 부모 재조회(AS-IS FindData_Main). 취소(modalClose)는 저장 없이 닫는다.
   onSaved: () => void;
 }
 
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+
+const lineKey = (itemId: string, plantSiteId: string): string => `${itemId}|${plantSiteId}`;
+
+// 콤보 컬럼 1건 정의(FPComboBox + 편집). 버전키/파생은 _inputEditType='S' 텍스트.
+const col = (
+  colNm: string,
+  colLblNm: string,
+  width: number,
+  opts?: { combo?: boolean; align?: 'L' | 'C' }
+): RawFlexGridColumnConfig => ({
+  colNm,
+  colLblNm,
+  horzAlgnCd: opts?.align ?? (opts?.combo ? 'L' : 'C'),
+  colWth: width,
+  visible: true,
+  display: true,
+  inputTpCd: opts?.combo ? CELL_INPUT_EDIT_TYPE.OPTIONAL : CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
+  cellCtrlObjTpCd: opts?.combo ? CELL_CONTROL_TYPE.COMBO : undefined,
+});
 
 export const ProductionPlanInsertModal = ({ open, modalClose, params, onSaved }: Props) => {
   const { t } = useTranslation();
@@ -79,210 +104,346 @@ export const ProductionPlanInsertModal = ({ open, modalClose, params, onSaved }:
   const setToast = useMessageStore.getState().setToast;
 
   const isEe = isEeDivision(params.divisionId);
-
   const requiredMsg = (label: string): string =>
     t(MSG.REQUIRED_FIELD, '_{0} is required.').replace('{0}', label);
 
+  const gridRef = useRef<FlexGridType<InsertRow>>();
+  const gridFilterRef = useRef<FlexGridFilter>();
+  const editTrackerRef = useRef<EditTracker<InsertRow>>();
+
+  // Operation Group 코드→명(Pack/Cell/Electrode) — AS-IS 런타임 동일.
+  const [operationGroupData] = useTabLookupQueries({ filters: [{ lookupType: 'OPERATION_GROUP' }] });
+  const operationGroupName = useMemo(() => {
+    const m = new Map<string, string>();
+    (operationGroupData ?? []).forEach(r => m.set(str(r.CODE), str(r.NAME)));
+    return m.get(params.operationGroupId) || params.operationGroupId;
+  }, [operationGroupData, params.operationGroupId]);
+
   const [itemPlantRows, setItemPlantRows] = useState<ItemPlantRow[]>([]);
-  const [originDivOptions, setOriginDivOptions] = useState<Option[]>([]);
-  const [lineOptions, setLineOptions] = useState<Option[]>([]);
-  // 편집 중 행(캐스케이드 단일 행) — 추가 버튼으로 staged 로 승격.
-  const [draft, setDraft] = useState<StagedRow>({
-    originDivisionId: isEe ? '' : params.divisionId,
-    itemId: '',
-    nickName: '',
-    plantSiteId: '',
-    plantSiteName: '',
-    operationId: '',
-    lineId: '',
-  });
-  const [staged, setStaged] = useState<StagedRow[]>([]);
+  const [originDivByItem, setOriginDivByItem] = useState<Record<string, Option[]>>({}); // EE
+  const [linesByKey, setLinesByKey] = useState<Record<string, Option[]>>({}); // `${item}|${plant}`
+  const [rows, setRows] = useState<InsertRow[]>([]);
   const [saving, setSaving] = useState(false);
   const keyRef = useRef(0);
 
-  // 팝업 오픈 시 Item 후보 조회(division/opGroup). originDivisionId 는 빈값(전체) — 행별 origin div 로 좁힌다.
+  const makeRow = useCallback(
+    (): InsertRow => ({
+      _key: keyRef.current++,
+      CRUD_TYPE: 'I',
+      PLAN_DATE: params.planStartYyyymmdd,
+      PLAN_TYPE: params.planType,
+      PLAN_SEQ: params.planSeq,
+      DIVISION_ID: params.divisionId,
+      ORIGIN_DIVISION_ID: isEe ? '' : params.divisionId,
+      OPERATION_GROUP: operationGroupName,
+      ITEM_ID: '',
+      NICK_NAME: '',
+      ITEM_TYPE: '',
+      PLANT_SITE_ID: '',
+      LINE_ID: '',
+      OPERATION_ID: '',
+    }),
+    [params, isEe, operationGroupName]
+  );
+
+  // 오픈 시 Item 후보 조회 + 사전채움 행 1개(AS-IS InsertRow on load).
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
-    const load = async () => {
+    void (async () => {
       try {
-        const rows = await apiClient.getCombo({
+        const res = await apiClient.getCombo({
           comboId: 'ItemProdPlanLinePopup_SCP',
           divisionId: params.divisionId,
           operationGroup: params.operationGroupId,
           originDivisionId: '',
         });
-        if (!cancelled) setItemPlantRows(rows as unknown as ItemPlantRow[]);
+        if (!cancelled) setItemPlantRows(res as unknown as ItemPlantRow[]);
       } catch {
         if (!cancelled) setItemPlantRows([]);
       }
-    };
-    void load();
+    })();
+    setRows([makeRow()]);
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, params.divisionId, params.operationGroupId]);
 
-  // 팝업 재오픈/닫힘 시 상태 초기화.
   useEffect(() => {
     if (open) return;
-    setStaged([]);
-    setLineOptions([]);
-    setOriginDivOptions([]);
-    setDraft({
-      originDivisionId: isEe ? '' : params.divisionId,
-      itemId: '',
-      nickName: '',
-      plantSiteId: '',
-      plantSiteName: '',
-      operationId: '',
-      lineId: '',
-    });
-  }, [open, isEe, params.divisionId]);
+    setRows([]);
+    setItemPlantRows([]);
+    setOriginDivByItem({});
+    setLinesByKey({});
+  }, [open]);
 
-  const itemOptions = useMemo<Option[]>(() => {
+  // ===== 컬럼 =====
+  const columns = useMemo<RawFlexGridColumnConfig[]>(() => {
+    const base: RawFlexGridColumnConfig[] = [
+      col('PLAN_DATE', t(LBL.PLAN_DATE, '_Plan Date'), 90),
+      col('PLAN_TYPE', t(LBL.PLAN_TYPE, '_Plan Type'), 70),
+      col('PLAN_SEQ', t(LBL.SEQ, '_Seq'), 55),
+      col('DIVISION_ID', t(LBL.DIVISION, '_Div'), 55),
+      col('ORIGIN_DIVISION_ID', `Origin Div${isEe ? '*' : ''}`, 80, { combo: isEe }),
+      col('OPERATION_GROUP', t(LBL.OPERATION_GROUP, '_Operation Group'), 90),
+      col('ITEM_ID', `${t(LBL.MATERIAL, '_Material')}*`, 150, { combo: true }),
+      col('NICK_NAME', t(LBL.NICK_NAME, '_Nick Name'), 110, { align: 'L' }),
+      col('ITEM_TYPE', 'Item Type', 70),
+      col('PLANT_SITE_ID', `${t(LBL.PLANT_SITE, '_Plant Site')}*`, 150, { combo: true }),
+      col('LINE_ID', `${t(LBL.LINE, '_Line')}*`, 130, { combo: true }),
+    ];
+    return base;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEe]);
+
+  // ===== 콤보 DataMap (superset + getDisplayValues(rowItem) override) =====
+  //   display(getDisplayValue)는 superset 전체로, 드롭다운 후보(getDisplayValues)는 행 컨텍스트로 좁힌다.
+  const itemDataMap = useMemo(() => {
     const seen = new Set<string>();
-    const opts: Option[] = [];
+    const items: Option[] = [];
     for (const r of itemPlantRows) {
-      const code = str(r.CODE);
-      if (!code || seen.has(code)) continue;
-      seen.add(code);
-      opts.push({ value: code, label: str(r.NAME) || code });
+      const v = str(r.CODE);
+      if (!v || seen.has(v)) continue;
+      seen.add(v);
+      items.push({ value: v, label: str(r.NAME) || v });
     }
-    return opts;
+    return new DataMap(items, 'value', 'label');
   }, [itemPlantRows]);
 
-  // 선택 Item(+EE 면 originDiv) 기준 Plant Site 후보 — AS-IS dtItemPlant.Select(CODE=item[ AND DIVISION_ID=originDiv]).
-  const plantOptions = useMemo<Option[]>(() => {
-    if (!draft.itemId) return [];
-    const opts: Option[] = [];
+  const plantDataMap = useMemo(() => {
+    // superset = 전 Plant(코드→명). 후보는 행의 ITEM_ID(+EE originDiv)로 좁힌다.
     const seen = new Set<string>();
+    const all: Option[] = [];
     for (const r of itemPlantRows) {
-      if (str(r.CODE) !== draft.itemId) continue;
-      if (isEe && draft.originDivisionId && str(r.DIVISION_ID) !== draft.originDivisionId) continue;
-      const code = str(r.PLANT_SITE_ID);
-      if (!code || seen.has(code)) continue;
-      seen.add(code);
-      opts.push({ value: code, label: str(r.SITE_DESCRIPTION) || code });
+      const v = str(r.PLANT_SITE_ID);
+      if (!v || seen.has(v)) continue;
+      seen.add(v);
+      all.push({ value: v, label: str(r.SITE_DESCRIPTION) || v });
     }
-    return opts;
-  }, [itemPlantRows, draft.itemId, draft.originDivisionId, isEe]);
+    const dm = new DataMap(all, 'value', 'label');
+    dm.getDisplayValues = (rowItem?: unknown): string[] => {
+      const row = (rowItem ?? {}) as InsertRow;
+      const itemId = str(row.ITEM_ID);
+      if (!itemId) return [];
+      const s = new Set<string>();
+      const out: string[] = [];
+      for (const r of itemPlantRows) {
+        if (str(r.CODE) !== itemId) continue;
+        if (isEe && str(row.ORIGIN_DIVISION_ID) && str(r.DIVISION_ID) !== str(row.ORIGIN_DIVISION_ID))
+          continue;
+        const code = str(r.PLANT_SITE_ID);
+        if (!code || s.has(code)) continue;
+        s.add(code);
+        out.push(str(r.SITE_DESCRIPTION) || code);
+      }
+      return out;
+    };
+    return dm;
+  }, [itemPlantRows, isEe]);
 
-  // Item 선택 — nick/itemType 세팅, plant/line 초기화. EE 면 Origin Div 후보 조회.
-  const onItemChange = async (itemId: string) => {
-    const row = itemPlantRows.find(r => str(r.CODE) === itemId);
-    setDraft(d => ({
-      ...d,
-      itemId,
-      nickName: str(row?.NICK_NAME),
-      plantSiteId: '',
-      plantSiteName: '',
-      operationId: '',
-      lineId: '',
-      ...(isEe ? { originDivisionId: '' } : {}),
-    }));
-    setLineOptions([]);
-    if (isEe && itemId) {
-      try {
-        const rows = await apiClient.getCombo({ comboId: 'OriginDivFromFinalItem_SCP', itemId });
-        setOriginDivOptions((rows as unknown as { CODE?: string; NAME?: string }[]).map(r => ({ value: str(r.CODE), label: str(r.NAME) || str(r.CODE) })));
-      } catch {
-        setOriginDivOptions([]);
+  const lineDataMap = useMemo(() => {
+    // superset = 로드된 전 Line(코드→명). 후보는 행의 (item,plant) 로드분으로 좁힌다.
+    const seen = new Set<string>();
+    const all: Option[] = [];
+    for (const opts of Object.values(linesByKey)) {
+      for (const o of opts) {
+        if (seen.has(o.value)) continue;
+        seen.add(o.value);
+        all.push(o);
       }
     }
-  };
+    const dm = new DataMap(all, 'value', 'label');
+    dm.getDisplayValues = (rowItem?: unknown): string[] => {
+      const row = (rowItem ?? {}) as InsertRow;
+      const opts = linesByKey[lineKey(str(row.ITEM_ID), str(row.PLANT_SITE_ID))] ?? [];
+      return opts.map(o => o.label);
+    };
+    return dm;
+  }, [linesByKey]);
 
-  const onOriginDivChange = (originDivisionId: string) => {
-    setDraft(d => ({ ...d, originDivisionId, plantSiteId: '', plantSiteName: '', operationId: '', lineId: '' }));
-    setLineOptions([]);
-  };
+  const originDivDataMap = useMemo(() => {
+    const seen = new Set<string>();
+    const all: Option[] = [];
+    for (const opts of Object.values(originDivByItem)) {
+      for (const o of opts) {
+        if (seen.has(o.value)) continue;
+        seen.add(o.value);
+        all.push(o);
+      }
+    }
+    const dm = new DataMap(all, 'value', 'label');
+    dm.getDisplayValues = (rowItem?: unknown): string[] => {
+      const row = (rowItem ?? {}) as InsertRow;
+      return (originDivByItem[str(row.ITEM_ID)] ?? []).map(o => o.label);
+    };
+    return dm;
+  }, [originDivByItem]);
 
-  // Plant Site 선택 — operationId 파생 후 Line 후보 조회. AS-IS(SCM0002_ProductionPlanInsertPopup.cs:683-706)
-  //   는 OSP·비OSP 를 구분하지 않고 둘 다 LineProdPlanLinePopup 로 실제 라인을 로드한다. OSP 의 '-' 단일
-  //   세팅은 2007-02-07(소스 주석 '200207') 에 주석처리된 死코드다 — 이전 포팅이 그 死코드를 되살려 OSP
-  //   품목(div82/Pack 257/340)의 Line 을 '-' 로 막았던 것을 제거한다. OSP 품도 실제 라인이 있다(함수
-  //   FN_SCP_LINE_PROD_PLAN_LINE_POPUP 가 K2P11 등 반환). 이제 OSP·비OSP 동일 경로로 실제 라인을 조회한다.
-  const onPlantChange = async (plantSiteId: string) => {
-    const row = itemPlantRows.find(
-      r => str(r.CODE) === draft.itemId && str(r.PLANT_SITE_ID) === plantSiteId
-    );
-    const operationId = str(row?.OPERATION_ID);
-    setDraft(d => ({ ...d, plantSiteId, plantSiteName: str(row?.SITE_DESCRIPTION) || plantSiteId, operationId, lineId: '' }));
+  // 콤보 dataMap 을 컬럼에 적용 — columnGroups 재대입마다(updatedLayout) 다시 건다(공용 패턴).
+  const dataMapByBinding = useMemo<Record<string, DataMap>>(
+    () => ({
+      ITEM_ID: itemDataMap,
+      PLANT_SITE_ID: plantDataMap,
+      LINE_ID: lineDataMap,
+      ...(isEe ? { ORIGIN_DIVISION_ID: originDivDataMap } : {}),
+    }),
+    [itemDataMap, plantDataMap, lineDataMap, originDivDataMap, isEe]
+  );
+
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const apply = () => {
+      for (const [binding, dm] of Object.entries(dataMapByBinding)) {
+        const c = g.columns.getColumn(binding);
+        if (c && c.dataMap !== dm) c.dataMap = dm;
+      }
+    };
+    apply();
+    g.updatedLayout.addHandler(apply);
+    return () => {
+      g.updatedLayout?.removeHandler(apply);
+    };
+  }, [dataMapByBinding, rows]);
+
+  // ===== 캐스케이드 (cellEditEnded) =====
+  const loadLines = useCallback(
+    async (row: InsertRow) => {
+      const key = lineKey(row.ITEM_ID, row.PLANT_SITE_ID);
+      if (!row.ITEM_ID || !row.PLANT_SITE_ID || linesByKey[key]) return;
+      try {
+        const res = await apiClient.getCombo({
+          comboId: 'LineProdPlanLinePopup_SCP',
+          divisionId: params.divisionId,
+          operationGroup: params.operationGroupId,
+          plantSiteId: row.PLANT_SITE_ID,
+          operationId: row.OPERATION_ID,
+          originDivisionId: row.ORIGIN_DIVISION_ID,
+          itemId: row.ITEM_ID,
+        });
+        const opts = (res as unknown as { CODE?: string; NAME?: string }[]).map(r => ({
+          value: str(r.CODE),
+          label: str(r.NAME) || str(r.CODE),
+        }));
+        setLinesByKey(prev => ({ ...prev, [key]: opts }));
+      } catch {
+        setLinesByKey(prev => ({ ...prev, [key]: [] }));
+      }
+    },
+    [linesByKey, params.divisionId, params.operationGroupId]
+  );
+
+  const loadOriginDiv = useCallback(async (itemId: string) => {
+    if (!itemId) return;
     try {
-      const rows = await apiClient.getCombo({
-        comboId: 'LineProdPlanLinePopup_SCP',
-        divisionId: params.divisionId,
-        operationGroup: params.operationGroupId,
-        plantSiteId,
-        operationId,
-        originDivisionId: draft.originDivisionId,
-        itemId: draft.itemId,
-      });
-      setLineOptions((rows as unknown as { CODE?: string; NAME?: string }[]).map(r => ({ value: str(r.CODE), label: str(r.NAME) || str(r.CODE) })));
+      const res = await apiClient.getCombo({ comboId: 'OriginDivFromFinalItem_SCP', itemId });
+      const opts = (res as unknown as { CODE?: string; NAME?: string }[]).map(r => ({
+        value: str(r.CODE),
+        label: str(r.NAME) || str(r.CODE),
+      }));
+      setOriginDivByItem(prev => ({ ...prev, [itemId]: opts }));
     } catch {
-      setLineOptions([]);
+      setOriginDivByItem(prev => ({ ...prev, [itemId]: [] }));
     }
+  }, []);
+
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const onEdit = (sender: FlexGridType<InsertRow>, e: { row: number; col: number }) => {
+      const binding = sender.columns[e.col]?.binding ?? '';
+      const row = sender.rows[e.row]?.dataItem as InsertRow | undefined;
+      if (!row) return;
+      if (binding === 'ITEM_ID') {
+        const itemRow = itemPlantRows.find(r => str(r.CODE) === str(row.ITEM_ID));
+        row.NICK_NAME = str(itemRow?.NICK_NAME);
+        row.ITEM_TYPE = str(itemRow?.ITEM_TYPE);
+        row.PLANT_SITE_ID = '';
+        row.LINE_ID = '';
+        row.OPERATION_ID = '';
+        if (isEe) {
+          row.ORIGIN_DIVISION_ID = '';
+          void loadOriginDiv(str(row.ITEM_ID));
+        }
+        sender.invalidate();
+      } else if (binding === 'ORIGIN_DIVISION_ID') {
+        row.PLANT_SITE_ID = '';
+        row.LINE_ID = '';
+        row.OPERATION_ID = '';
+        sender.invalidate();
+      } else if (binding === 'PLANT_SITE_ID') {
+        const itemRow = itemPlantRows.find(
+          r => str(r.CODE) === str(row.ITEM_ID) && str(r.PLANT_SITE_ID) === str(row.PLANT_SITE_ID)
+        );
+        row.OPERATION_ID = str(itemRow?.OPERATION_ID);
+        row.LINE_ID = '';
+        void loadLines(row);
+        sender.invalidate();
+      }
+    };
+    g.cellEditEnded.addHandler(onEdit as never);
+    return () => {
+      g.cellEditEnded?.removeHandler(onEdit as never);
+    };
+  }, [itemPlantRows, isEe, loadLines, loadOriginDiv]);
+
+  // ===== 툴바 =====
+  const handleInsert = () => setRows(rs => [...rs, makeRow()]);
+
+  const handleDelete = () => {
+    const g = gridRef.current;
+    const sel = g?.selection;
+    const idx = sel && sel.row >= 0 ? sel.row : rows.length - 1;
+    if (idx < 0) return;
+    setRows(rs => rs.filter((_, i) => i !== idx));
   };
 
-  // 행 추가 — 필수(Origin Div[EE]/Model/Plant Site/Line) 검증 후 staged 로 승격, draft 리셋.
-  const handleAdd = () => {
-    if (isEe && !draft.originDivisionId) {
-      void setAlert({ type: 'alert', content: requiredMsg(t(LBL.DIVISION, '_Origin Div')) });
-      return;
-    }
-    if (!draft.itemId) {
-      void setAlert({ type: 'alert', content: requiredMsg(t(LBL.MODEL, '_Model')) });
-      return;
-    }
-    if (!draft.plantSiteId) {
-      void setAlert({ type: 'alert', content: requiredMsg(t(LBL.PLANT_SITE, '_Plant Site')) });
-      return;
-    }
-    if (!draft.lineId) {
-      void setAlert({ type: 'alert', content: requiredMsg(t(LBL.LINE, '_Line')) });
-      return;
-    }
-    const itemRow = itemPlantRows.find(r => str(r.CODE) === draft.itemId);
-    setStaged(rows => [
-      ...rows,
-      { ...draft, itemType: str(itemRow?.ITEM_TYPE), _key: keyRef.current++ },
-    ]);
-    setDraft({
-      originDivisionId: isEe ? '' : params.divisionId,
-      itemId: '',
-      nickName: '',
-      plantSiteId: '',
-      plantSiteName: '',
-      operationId: '',
-      lineId: '',
-    });
-    setLineOptions([]);
+  const dirtyRows = (): InsertRow[] => {
+    const g = gridRef.current;
+    g?.finishEditing();
+    return g?.collectionView?.sourceCollection ?? rows;
   };
 
-  const handleRemove = (idx: number) => setStaged(rows => rows.filter((_, i) => i !== idx));
-
-  // 저장 — 행별 newCheck(S=정상/L=이미등록/T=TactTime없음) 통과 후 savePopup. 하나라도 실패 시 중단.
   const handleSave = async () => {
-    if (staged.length === 0) {
+    const list = dirtyRows();
+    if (list.length === 0) {
       void setAlert({ type: 'alert', content: t(MSG.SELECT_TARGET, '_No row to save.') });
       return;
     }
+    for (const row of list) {
+      if (isEe && !str(row.ORIGIN_DIVISION_ID)) {
+        void setAlert({ type: 'alert', content: requiredMsg(t(LBL.DIVISION, '_Origin Div')) });
+        return;
+      }
+      if (!str(row.ITEM_ID)) {
+        void setAlert({ type: 'alert', content: requiredMsg(t(LBL.MATERIAL, '_Material')) });
+        return;
+      }
+      if (!str(row.PLANT_SITE_ID)) {
+        void setAlert({ type: 'alert', content: requiredMsg(t(LBL.PLANT_SITE, '_Plant Site')) });
+        return;
+      }
+      if (!str(row.LINE_ID)) {
+        void setAlert({ type: 'alert', content: requiredMsg(t(LBL.LINE, '_Line')) });
+        return;
+      }
+    }
     setSaving(true);
     try {
-      for (const row of staged) {
-        if (MOCK_MAIN_ENABLED) continue; // ⚠ 임시: mock 시 newCheck/savePopup SP 생략, 전부 정상(S) 저장으로 간주
+      for (const row of list) {
+        if (MOCK_MAIN_ENABLED) continue;
         const common = {
           divisionId: params.divisionId,
           planDate: params.planStartYyyymmdd,
           planType: params.planType,
           seq: params.planSeq,
-          itemId: row.itemId,
-          lineId: row.lineId,
+          itemId: str(row.ITEM_ID),
+          lineId: str(row.LINE_ID),
           operationGroup: params.operationGroupId,
-          scmSiteId: row.plantSiteId,
-          originDivisionId: row.originDivisionId,
+          scmSiteId: str(row.PLANT_SITE_ID),
+          originDivisionId: str(row.ORIGIN_DIVISION_ID),
         };
-        // 1) newCheck — O_RC1 첫 컬럼 상태코드(AS-IS Rows[0][0]): S 정상 / L 이미등록 / T TactTime 없음.
         const checkRes = await apiClient.callProc<MENU_ID, SHEETS.NEW_CHECK>(
           MENU_ID,
           SHEETS.NEW_CHECK,
@@ -295,19 +456,17 @@ export const ProductionPlanInsertModal = ({ open, modalClose, params, onSaved }:
         }
         const checkRow = ((checkRes.result as { o_rc1?: Record<string, unknown>[] })?.o_rc1 ?? [])[0];
         const status = checkRow ? str(Object.values(checkRow)[0]) : '';
-        const detail = checkRow ? str(Object.values(checkRow)[1]) : `${row.plantSiteId}/${row.lineId}/${row.itemId}`;
+        const detail = checkRow ? str(Object.values(checkRow)[1]) : `${str(row.PLANT_SITE_ID)}/${str(row.LINE_ID)}/${str(row.ITEM_ID)}`;
         if (status !== 'S') {
-          // L=이미 등록 / T=Tact Time 미등록 / 그 외=시스템오류 (AS-IS MSG00263/00264/00042).
           const content =
             status === 'L'
-              ? t('MSG00263', '_Production plan already registered.\n{0}').replace('{0}', detail)
+              ? t('MSG01271', '_Production plan already registered.\n{0}').replace('{0}', detail)
               : status === 'T'
-                ? t('MSG00264', '_Tact Time is not registered.\n{0}').replace('{0}', detail)
+                ? t('MSG01272', '_Tact Time is not registered.\n{0}').replace('{0}', detail)
                 : t(MSG.SAVE_FAIL, '_Failed to save.');
           void setAlert({ type: 'alert', content });
           return;
         }
-        // 2) savePopup — 저장(sesUserId 는 BE @LoginUser 주입이라 미전달).
         const saveRes = await apiClient.callProc<MENU_ID, SHEETS.SAVE_POPUP>(
           MENU_ID,
           SHEETS.SAVE_POPUP,
@@ -319,7 +478,6 @@ export const ProductionPlanInsertModal = ({ open, modalClose, params, onSaved }:
           return;
         }
       }
-      // 저장 성공(TO-BE MSG00002 "Saved successfully." — constants MSG 역매핑 주석 참조).
       setToast({ type: 'success', message: t('MSG00002', '_Saved successfully.') });
       onSaved();
       modalClose();
@@ -333,8 +491,8 @@ export const ProductionPlanInsertModal = ({ open, modalClose, params, onSaved }:
   return (
     <CustomDialog
       open={open}
-      size={900}
-      height={400}
+      size={980}
+      height={440}
       type='modal'
       position='basic'
       handleClose={modalClose}
@@ -343,149 +501,41 @@ export const ProductionPlanInsertModal = ({ open, modalClose, params, onSaved }:
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          <h2 className='headerTitle'>{t(LBL.NEW, '_New')}</h2>
+          <h2 className='headerTitle'>Production Plan Insert</h2>
         </div>
       }
       customContentArea={
         <div className={styles.contentWrap}>
-          {/* 고정 컨텍스트(부모 조회조건) + 캐스케이드 입력 행 */}
-          <Grid container spacing={1} alignItems='flex-end'>
-            {isEe && (
-              <Grid size={2}>
-                <FormItem
-                  className={commonStyles.formItem}
-                  label={t(LBL.DIVISION, '_Origin Div')}
-                  labelAlign='right'
-                  required
-                  render={() => (
-                    <CustomDropdown
-                      value={draft.originDivisionId}
-                      options={originDivOptions}
-                      onChange={(_, picked) => onOriginDivChange(str(picked))}
-                    />
-                  )}
-                />
-              </Grid>
-            )}
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LBL.MODEL, '_Model')}
-                labelAlign='right'
-                required
-                render={() => (
-                  <CustomDropdown
-                    value={draft.itemId}
-                    options={itemOptions}
-                    onChange={(_, picked) => void onItemChange(str(picked))}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LBL.PLANT_SITE, '_Plant Site')}
-                labelAlign='right'
-                required
-                render={() => (
-                  <CustomDropdown
-                    value={draft.plantSiteId}
-                    options={plantOptions}
-                    disabled={!draft.itemId || (isEe && !draft.originDivisionId)}
-                    onChange={(_, picked) => void onPlantChange(str(picked))}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LBL.LINE, '_Line')}
-                labelAlign='right'
-                required
-                render={() => (
-                  <CustomDropdown
-                    value={draft.lineId}
-                    options={lineOptions}
-                    disabled={!draft.plantSiteId}
-                    onChange={(_, picked) => setDraft(d => ({ ...d, lineId: str(picked) }))}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid size={1}>
-              <Button appearance='outlined' priority='normal' size='medium' buttonLabel='＋' onClick={handleAdd} />
-            </Grid>
-          </Grid>
-
-          {/* 추가된 라인 목록(저장 대기) — 화면설계서 R37 컬럼 규정의 표(AS-IS SCM0002 FpSpread 복원). */}
-          <div className={styles.stagedWrap}>
-            <table className={styles.stagedTable}>
-              <thead>
-                <tr>
-                  <th className={styles.numCell}>No</th>
-                  <th>{t(LBL.PLAN_DATE, '_Plan Date')}</th>
-                  <th>{t(LBL.PLAN_TYPE, '_Plan Type')}</th>
-                  <th>{t(LBL.SEQ, '_Seq')}</th>
-                  <th>{t(LBL.DIVISION, '_Div')}</th>
-                  {isEe && <th>Origin Div</th>}
-                  <th>{t(LBL.OPERATION_GROUP, '_Operation Group')}</th>
-                  <th>{t(LBL.MODEL, '_Model')}</th>
-                  <th>{t(LBL.NICK_NAME, '_Nick Name')}</th>
-                  <th>Item Type</th>
-                  <th>{t(LBL.PLANT_SITE, '_Plant Site')}</th>
-                  <th>{t(LBL.LINE, '_Line')}</th>
-                  <th className={styles.actionCell} />
-                </tr>
-              </thead>
-              <tbody>
-                {staged.map((row, idx) => (
-                  <tr key={row._key}>
-                    <td className={styles.numCell}>{idx + 1}</td>
-                    <td>{params.planStartYyyymmdd}</td>
-                    <td>{params.planType}</td>
-                    <td>{params.planSeq}</td>
-                    <td>{params.divisionId}</td>
-                    {isEe && <td>{row.originDivisionId}</td>}
-                    <td>{params.operationGroupId}</td>
-                    <td>{row.itemId}</td>
-                    <td>{row.nickName}</td>
-                    <td>{row.itemType}</td>
-                    <td>{row.plantSiteName}</td>
-                    <td>{row.lineId}</td>
-                    <td className={styles.actionCell}>
-                      <Button
-                        appearance='outlined'
-                        priority='normal'
-                        size='small'
-                        buttonLabel='×'
-                        onClick={() => handleRemove(idx)}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <Stack direction='row' spacing={1} justifyContent='flex-end' marginTop={1}>
-            <Button
-              appearance='contained'
-              priority='primary'
-              size='medium'
-              buttonLabel={t(LBL.OK, '_Save')}
-              disabled={saving || staged.length === 0}
-              onClick={() => void handleSave()}
-            />
+          <div className={styles.toolbar}>
+            <Button appearance='outlined' priority='normal' size='small' buttonLabel='＋ Insert' onClick={handleInsert} />
             <Button
               appearance='outlined'
               priority='normal'
-              size='medium'
-              buttonLabel={t(LBL.CLOSE, '_Close')}
-              onClick={modalClose}
+              size='small'
+              buttonLabel='－ Delete'
+              disabled={rows.length === 0}
+              onClick={handleDelete}
             />
-          </Stack>
+            <Button
+              appearance='contained'
+              priority='primary'
+              size='small'
+              buttonLabel={t(LBL.OK, '_Save')}
+              disabled={saving || rows.length === 0}
+              onClick={() => void handleSave()}
+            />
+            <Button appearance='outlined' priority='normal' size='small' buttonLabel={t(LBL.CLOSE, '_Cancel')} onClick={modalClose} />
+          </div>
+
+          <div className={styles.gridWrap}>
+            <DataGrid<InsertRow>
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+              editTrackerRef={editTrackerRef}
+              itemsSource={rows}
+              staticColumns={columns}
+            />
+          </div>
         </div>
       }
     />

@@ -1,0 +1,299 @@
+{
+  "id": "SCP0122",
+  "mode": "admin",
+  "modeSource": "users.json screens",
+  "menuId": "SCP0122",
+  "page": "PlanActivityMgmt",
+  "routePath": "supply/plan-activity-mgmt",
+  "asisName": "PlanActivityMgmt",
+  "fields": [
+    {
+      "key": "planGroups",
+      "label": "Plan Group",
+      "lbl": "LBL00002",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanGroup",
+      "tobeLabel": "Plan Group",
+      "catalog": "Plan Group → Plan Group",
+      "labels": [
+        "Plan Group"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "process",
+      "label": "Process",
+      "lbl": "LBL00059",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboProcess",
+      "tobeLabel": "Process",
+      "catalog": "Process → Process",
+      "labels": [
+        "Process"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "divisionId",
+      "label": "Division",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div.",
+        "Division"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "Plan Activity Mgmt",
+  "asisMapping": "features\\supply\\src\\pages\\plan-activity-mgmt\\__asis-mapping__.md",
+  "buttons": [],
+  "mainSheets": [
+    {
+      "name": "Plan Activity Mgmt",
+      "key": "PLAN_ACTIVITY_MGMT",
+      "labels": [
+        "Auto Flag",
+        "Confirm Flag",
+        "Div.",
+        "Link UI Type",
+        "Activity Code",
+        "Activity Name",
+        "Act. Seq",
+        "Plan Group ID",
+        "Plan Group",
+        "Process CD",
+        "Process",
+        "Option Flag",
+        "PRE_OPMZ_ACTV_CD",
+        "PRE_OPMZ_ACTV_SEQ",
+        "Program Name"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Plan Activity Mgmt",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0122.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0121_GET_SEARCH_INFO",
+      "sheet": "Plan Activity Mgmt",
+      "btn": "SEARCH_INFO",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0122.P_SCP0121_GET_SEARCH_INFO",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0122_GET_PLAN_ACTIVITY_MGMT",
+      "sheet": "Plan Activity Mgmt",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0122.P_SCP0122_GET_PLAN_ACTIVITY_MGMT",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
+      "sheet": "Plan Activity Mgmt",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0122.P_SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Plan Activity Mgmt": {
+      "40": [
+        "Div.",
+        "Process",
+        "Plan Group",
+        "Act. Seq",
+        "Activity Code",
+        "Activity Name",
+        "Link UI Type",
+        "Program Name",
+        "Confirm Flag",
+        "Auto Flag",
+        "Option Flag"
+      ],
+      "81": [
+        "Div.",
+        "Process",
+        "Plan Group",
+        "Act. Seq",
+        "Activity Code",
+        "Activity Name",
+        "Link UI Type",
+        "Program Name",
+        "Confirm Flag",
+        "Auto Flag",
+        "Option Flag"
+      ],
+      "82": [
+        "Div.",
+        "Process",
+        "Plan Group",
+        "Act. Seq",
+        "Activity Code",
+        "Activity Name",
+        "Link UI Type",
+        "Program Name",
+        "Confirm Flag",
+        "Auto Flag",
+        "Option Flag"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jaeuk.shin",
+      "name": "",
+      "groups": [
+        "SCP ADMIN",
+        "SYSTEM ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {},
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
+        "ADMIN",
+        "DM ADMIN",
+        "FP Planner",
+        "FP Viewer",
+        "GUEST",
+        "JV Planner",
+        "SCM PI Admin",
+        "SCM Viewer",
+        "SCP Planner",
+        "SCP Tester",
+        "SSP Planner",
+        "SSP Viewer"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SAVE",
+        "EDIT",
+        "SEARCH",
+        "INSERT",
+        "DELETE"
+      ],
+      "matrix": []
+    },
+    {
+      "id": "hongjae.kim",
+      "name": "김홍재 선임",
+      "groups": [
+        "DM Admin"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "DM Admin"
+      },
+      "roleNote": "권한 없음 대표",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
+        "DM ADMIN",
+        "DM Planner",
+        "GUEST"
+      ],
+      "menuAccess": "N",
+      "expectedBtns": [],
+      "matrix": []
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SAVE",
+      "EDIT",
+      "SEARCH",
+      "INSERT",
+      "DELETE"
+    ],
+    "FP Planner": [
+      "DELETE",
+      "EDIT",
+      "SEARCH",
+      "SAVE",
+      "INSERT"
+    ],
+    "SCM PI Admin": [
+      "INSERT",
+      "EDIT",
+      "SAVE",
+      "DELETE",
+      "SEARCH"
+    ],
+    "SCP Planner": [
+      "SEARCH"
+    ]
+  },
+  "menuBtnCodes": [
+    "SAVE",
+    "EDIT",
+    "SEARCH",
+    "INSERT",
+    "DELETE"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

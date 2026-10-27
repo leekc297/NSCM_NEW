@@ -119,5 +119,22 @@ Demand Grouping · Characteristic Capacity · Outsourcing Capacity · Model Allo
 3. 팝업 코드(모1/메1 등)의 팝업명 매핑은 List·팝업 비교 시트 **개수 정합 기반 실측** — 원본에 명시적 범례 시트는 없음.
 4. 카탈로그는 **SCP·DM 한정**. 조회조건 명칭 표준(§2.1)은 타 도메인 신규 화면에도 준용 권장.
 
+## §4.5 ⭐ TO-BE 판정 룰 — SCP·SSP 조회조건 = 기준표 정의 항목·순서·라벨 (CR-071, 사용자 지시 2026-10-26)
+
+> SCP·SSP 화면은 **조회조건 기준표**(`tools/Harness/rules/search_cond.csv` · `tools/VibeManager/rules/40_SEARCH_COND.md`, 룰 E11)에 `USE` 로 정의된 조건만, `tobe_order` 순서대로, `tobe_name` 라벨로 구현한다.
+> 이것은 TO-BE 룰이므로 **기준표 라벨이 AS-IS 명칭과 달라도 정합검증은 PASS** 다(예 Division→Div. · Input Status→Status · Valid→Active). 기준표가 제외·이동(DROP/SUNSET/MERGED/BUTTON_AREA/IN_CALENDAR/COLUMN_PERSONAL/COMMON_BUTTON)한 AS-IS 조건이 조회영역에 없는 것도 결함이 아니다(NA).
+> **결함**은 ① 기준표 조건 누락 ② 기준표에 없는 조건 노출 ③ 순서 다름 ④ 라벨이 기준표와 다름(AS-IS 명칭 그대로 쓴 경우 포함) 뿐이다.
+
+| 하네스 | 판정 |
+|---|---|
+| `judge.py` STATIC H5(라벨)·G4(순서) | 원장 SEARCH 행 ↔ `search_cond.csv` (`tobe_name`·`tobe_order`). 증거에 AS-IS 명칭 병기(`AS-IS 'Valid' → 기준표 명칭(TO-BE 룰 CR-071)`) |
+| `check.js` SC1·SC2 | 순서 다름 / 기준표 제외 조건 잔존 → 생성본 BLOCK·기존 WARN |
+| `mapping_trace.py` `sc_excl` | 기준표가 제외한 AS-IS 조회조건 컨트롤의 COND 검사(G4·G1·G6·SC1·C1·C4·B*) = NA(정적) — 검증 엔진이 '칸 없음' FAIL 로 덮지 않음(judge 보존) |
+| `confirmed_requirements.csv` | CR-071 (scope SCP;SSP) |
+| `_trace.spec.ts` H5 COL(그리드 헤더) | **그리드 컬럼 라벨 확장(2026-10-27 사용자 의견)**: 조회조건으로도 쓰이는 컬럼의 헤더가 기준표 라벨과 같거나(예 SSP Incoterms), 그 외 컬럼 헤더가 SHEET_COLUMNS 메타 라벨과 같으면 AS-IS 명칭과 달라도 **PASS**(종전 '판정필요' 폐지) |
+| DM 화면 | 기준표 대상 아님 — 본 hook §0 카탈로그(v0.4) 그대로 |
+
 ## §5. 변경 이력
 - **2026-07-13** 신설 — 사용자 요청 "차후 UI 수정, 개발 시 사용할 수 있도록 rule 로 정리". 원본 xlsx List 시트 953행 전수 변환 + 패턴 집계(명칭 rename 13쌍 / 유형 4패턴 / 팝업 3패턴) + 카운트 1:1 검증.
+| 2026-10-27 | §4.5 확장 — 그리드 컬럼 헤더 라벨 = 기준표/메타 라벨이면 PASS(CR-071 확장, `_trace.spec.ts` H5 COL) |
+| 2026-10-26 | §4.5 신설 — SCP·SSP 조회조건 기준표 = TO-BE 판정 룰(CR-071): 기준표 라벨·순서·구성이 AS-IS 와 달라도 PASS · 기준표 제외 조건 NA · 하네스(judge H5/G4 · check.js SC1/SC2 · mapping_trace sc_excl) 등록 |

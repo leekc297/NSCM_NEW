@@ -1,0 +1,375 @@
+[
+ {
+  "screen": "SCP0107",
+  "title": "TEEP Report",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0107_CAPA_TEEP_Report/POPUP/SCP0107_CAPAReportPopup.cs:480",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0107_CAPA_TEEP_Report/POPUP/SCP0107_CAPAReportPopup.designer.cs:317",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0107_CAPA_TEEP_Report/SCP0107_CAPA_TEEP_Report.cs:1781"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0107_CAPA_TEEP_Report/SCP0107_CAPA_TEEP_Report.Designer.cs:950"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/capa-teep-report"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0002_GET_TITLESET_POPUP",
+    "member": "GetTitleSet",
+    "line": "410",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0107_CAPA_TEEP_Report\\POPUP\\SCP0107_CAPAReportPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_REPORT_H",
+    "member": "FindData",
+    "line": "445",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0107_CAPA_TEEP_Report\\POPUP\\SCP0107_CAPAReportPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "1204",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0107_CAPA_TEEP_Report\\SCP0107_CAPA_TEEP_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0002_GET_TITLESET_POPUP",
+    "member": "GetTitleSet",
+    "line": "410",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0107_CAPA_TEEP_Report\\POPUP\\SCP0107_CAPAReportPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_REPORT_H",
+    "member": "FindData",
+    "line": "445",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0107_CAPA_TEEP_Report\\POPUP\\SCP0107_CAPAReportPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "1204",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0107_CAPA_TEEP_Report\\SCP0107_CAPA_TEEP_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCM0002_GET_TITLESET_POPUP",
+   "SCP0083_GET_DIO_REPORT_H",
+   "SCP0104_GET_SPREAD_TITLE"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0108",
+  "title": "LOB Report",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0108_CAPA_LOB_Report/SCP0108_CAPA_LOB_Report.cs:1626"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0108_CAPA_LOB_Report/SCP0108_CAPA_LOB_Report.Designer.cs:1119"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/capa-lob-report"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "1179",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0108_CAPA_LOB_Report\\SCP0108_CAPA_LOB_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "1179",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0108_CAPA_LOB_Report\\SCP0108_CAPA_LOB_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0108_GET_CAPA_LOB_CURRENT",
+    "member": "SetQueryInfoGet",
+    "line": "1448",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0108_CAPA_LOB_Report\\SCP0108_CAPA_LOB_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0108_GET_CAPA_LOB",
+    "member": "SetQueryInfoGet",
+    "line": "1452",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0108_CAPA_LOB_Report\\SCP0108_CAPA_LOB_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0104_GET_SPREAD_TITLE",
+   "SCP0108_GET_CAPA_LOB",
+   "SCP0108_GET_CAPA_LOB_CURRENT"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0109",
+  "title": "",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0109_CAPA_Version/SCP0109_CAPA_Version.cs:736"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0109_CAPA_Version/SCP0109_CAPA_Version.Designer.cs:387"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+    "member": "CheckNameOnDummyCodeDB",
+    "line": "353",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0109_CAPA_Version\\SCP0109_CAPA_Version.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+    "member": "CheckNameOnDummyCodeDB",
+    "line": "353",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0109_CAPA_Version\\SCP0109_CAPA_Version.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0104_CHECK_NAME_ON_DUMMY_CODE"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+    "sp": "SCP0104_CHECK_NAME_ON_DUMMY_CODE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 롤백·로그 후 F 와 오류메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT SCM_SYS_LOG_BATCH(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0110",
+  "title": "Demand Group Master",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0110_GroupModelMapping/SCP0110_GroupModelMapping.cs:1104"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0110_GroupModelMapping/SCP0110_GroupModelMapping.Designer.cs:631"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/demand-group-master"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_GET_MODEL_LIST",
+    "member": "RefreshModelList",
+    "line": "219",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_GET_GROUP_MASTER",
+    "member": "FindData_Main_Sub",
+    "line": "397",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_GET_MODEL_LIST",
+    "member": "FindData_Main_Sub",
+    "line": "434",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_GET_GROUP_MASTER",
+    "member": "FindData_Main",
+    "line": "498",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_GET_MODEL_LIST",
+    "member": "FindData_Sub",
+    "line": "573",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_SAVE_GROUP_MASTER",
+    "member": "SaveData",
+    "line": "733",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_SAVE_MODEL_LIST",
+    "member": "SaveData",
+    "line": "884",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_GET_MODEL_LIST",
+    "member": "RefreshModelList",
+    "line": "219",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_GET_GROUP_MASTER",
+    "member": "FindData_Main_Sub",
+    "line": "397",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_GET_MODEL_LIST",
+    "member": "FindData_Main_Sub",
+    "line": "434",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_GET_GROUP_MASTER",
+    "member": "FindData_Main",
+    "line": "498",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_GET_MODEL_LIST",
+    "member": "FindData_Sub",
+    "line": "573",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_SAVE_GROUP_MASTER",
+    "member": "SaveData",
+    "line": "733",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0110_SAVE_MODEL_LIST",
+    "member": "SaveData",
+    "line": "884",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0110_GroupModelMapping\\SCP0110_GroupModelMapping.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0110_GET_GROUP_MASTER",
+   "SCP0110_GET_MODEL_LIST",
+   "SCP0110_SAVE_GROUP_MASTER",
+   "SCP0110_SAVE_MODEL_LIST"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0110_SAVE_GROUP_MASTER",
+    "sp": "SCP0110_SAVE_GROUP_MASTER",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "추가/수정 시 같은 사업부 내 다른 그룹에 동일 Group Name 이 있으면 저장 중단",
+    "message": "이미 존재하는 Group Name 입니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW @v_err_code, @v_err_message, 1 → CATCH SELECT 'F' AS result_code; SELECT '[99010]' + 메시지"
+   },
+   {
+    "entry_sp": "SCP0110_SAVE_GROUP_MASTER",
+    "sp": "SCP0110_SAVE_GROUP_MASTER",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 기록 후 실패코드와 오류메시지 반환",
+    "message": "'F' + [오류번호]오류메시지",
+    "on_fail": "INSERT scm_sys_log_batch; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0110_SAVE_MODEL_LIST",
+    "sp": "SCP0110_SAVE_MODEL_LIST",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "지정하려는 GROUP_ID 가 같은 사업부의 다른 Project 품목에 이미 쓰이고 있으면 저장 중단(한 그룹에 복수 Project 지정 불가)",
+    "message": "복수의 Project를 같은 그룹으로 지정 할 수 없습니다. ",
+    "on_fail": "SET @v_err_code=99010; THROW @v_err_code, @v_err_message, 1 → CATCH: SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER()+']'+ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0110_SAVE_MODEL_LIST",
+    "sp": "SCP0110_SAVE_MODEL_LIST",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 로그 후 실패코드 F 와 오류메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "scm_sys_log_batch ERROR 로그 INSERT; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER()+']'+ERROR_MESSAGE()"
+   }
+  ]
+ }
+]

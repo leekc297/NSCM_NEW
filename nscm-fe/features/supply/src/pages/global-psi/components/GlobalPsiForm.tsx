@@ -62,11 +62,12 @@ const withSiteSentinel = (rows: ComboResponse[] | undefined): Option[] => [
 ];
 
 // AS-IS SCP0031_GlobalPSI 조회조건 패널(design 01 §1 2행 + design 02 §5 매핑).
-//   상시(conditions, 2단 8칸): Division*(단일) / Material(+팝업) / Nick Name / From Site(다중) / To Site(다중)
-//     / Plan Date*(cascade) / Plan Type*(cascade) / Seq*(cascade)
-//   접힘(extraConditions): Bucket / All / Period* / Sum
-//   13필드>8 → extraConditions 분리(hook #52). 필수(*)는 상시 노출(§2.2 1순위)이라 cascade 3종을 상단에 둔다
-//     (Period* 는 PeriodField 로 폭이 커 상단 8칸을 넘겨 접힘 유지). 필수 5 = Division/Plan Date/Plan Type/Seq/Period.
+//   상시(conditions, 2단 8칸): Division*(단일) / Material(+팝업) / Nick Name / From Site(다중)
+//     / To Site(다중) / Bucket / Sum
+//   접힘(extraConditions): Plan Date*(cascade) / Plan Type*(cascade) / Seq*(cascade) / Period*
+//   자매 SCP0010(Shipment Plan SEMI) 배열과 정렬(사용자 지시 2026-10-19) — Plan Date/Type/Seq 는
+//     Period 와 같은 줄로 내리고, Bucket/Sum 은 To Site 다음 줄로 올린다. 필수(*)가 접힘행에 있어도
+//     기본 선택 effect 가 항상 채우므로 기능 영향 없음(§2.2 1순위 예외 — 사용자 명시 배치 지시 우선).
 //   cascade(design 02 §3): Division→FromSite/ToSite 재조회 + PlanDate/Type/Seq _ALL 1회 로드 후 FE 클라 필터.
 //     좁힘 주체 단일화(CLAUDE.local §5): _ALL 3콤보는 divisionId 미전송(전체 로드) + FE 필터로만 좁힌다.
 export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Props) => {
@@ -95,13 +96,14 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
   });
 
   // Division — EE(전극)·40(소형) 제외(design 02 §2.2 ①②). Division_SCP 가 ATTRIBUTE3/CODE 반환하므로 no-op 아님.
+  //   AS-IS 는 40 을 뺀 뒤 코드 오름차순으로 다시 정렬(81 · 81_HD · 81_HG · 81_HM · 81_ST · 81_UC · 82) — 갭분석 F-04.
   const divisionOptions = useMemo<Option[]>(
     () =>
       toOptions(
         (divisions ?? []).filter(
           r => str(r.ATTRIBUTE3) !== DIVISION_EE_EXCLUDE && str(r.CODE) !== DIVISION_EXCLUDE_CODE
         )
-      ),
+      ).sort((a, b) => (a.value < b.value ? -1 : a.value > b.value ? 1 : 0)),
     [divisions]
   );
 
@@ -277,8 +279,10 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
         label={labelText}
         labelAlign='right'
         render={() => (
+          // From/To Site 목록 맨 위 SELECT ALL(조회조건 표준 v0.5 「ALL버튼」). 'ALL' 은 store siteParam 이 빈값으로 바꾼다.
           <CustomDropdown
             multiple
+            allOption
             useClearIcon
             limitTags={1}
             value={value}
@@ -316,7 +320,7 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
       onSearch={onSearch}
       conditions={
         <>
-          {/* Row1(main) — Division*(단일) / Material(+팝업) / Nick Name / From Site(다중) / To Site(다중) */}
+          {/* Row1 — Division*(단일) / Material(+팝업) / Nick Name / From Site(다중) */}
           {single(
             t(LBL.DIVISION, '_Div'),
             sc.divisionId,
@@ -364,7 +368,7 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.NICK_NAME, '_Nick Name')}
+              label={t(LBL.MODEL, '_Model')}
               labelAlign='right'
               render={() => (
                 <InputField
@@ -396,6 +400,7 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
             v => set({ fromSite: v }),
             noDivisionAuth
           )}
+          {/* Row2 — To Site(다중) / Bucket / Sum (SEMI 배열 정렬, 사용자 지시 2026-10-19) */}
           {multi(
             t(LBL.TO_SITE, '_To Site'),
             sc.toSite,
@@ -403,21 +408,37 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
             v => set({ toSite: v }),
             noDivisionAuth
           )}
-          {/* 필수(*) 조건은 상시 노출(hook #52 §2.2 1순위) — Plan Date/Type/Seq 는 자매 SCP0013 과 동일하게
-              공용 CascadeDropdown(종속 콤보 트리)로 묶는다. 아무 필드나 눌러도 같은 컬럼 팝업이 열려 date→type→seq
-              경로를 고르고, 상위 변경 시 하위 초기화. 3필드 = 기존 폭(size 3×3) 유지로 size=9 래퍼. 자동선택
-              (첫 date·첫 type·첫 seq)·Period W52 재계산은 기존 effect(selectPlanDate 포함)가 그대로 처리한다. */}
-          <Grid size={9}>
+          {single(
+            t(LBL.BUCKET, '_Bucket'),
+            sc.bucket,
+            bucketOptions,
+            // Bucket 변경 = D_/W_/M_ pivot visible 토글(design 03 §2.2) — 서버 재조회 없는 클라 전환.
+            v => set({ bucket: v || BUCKET_CODE.DAILY }),
+            false,
+            noDivisionAuth
+          )}
+         
+        </>
+      }
+      extraConditions={
+        <>
+          {/* Row3(extra) — Plan Date / Plan Type / Seq(cascade, 모두 필수) / Period(필수) — SEMI 배열 정렬(사용자 지시 2026-10-19).
+              공용 CascadeDropdown(종속 콤보 트리) — 자매 SCP0013 과 동일. combined 단일 입력칸(기본) — 클릭하면
+              date→type→seq 컬럼 팝업으로 경로 선택, 상위 변경 시 하위 초기화. 입력칸 고정폭 190px + 라벨(140)
+              수용 size=3 래퍼(SCP0013 동일, 사용자 지시 2026-10-21).
+              자동선택(첫 date, 첫 type, 첫 seq), Period W52 재계산은 기존 effect(selectPlanDate 포함)가 그대로 처리한다. */}
+          <Grid size={3}>
             <CascadeDropdown
-              gridSize={4}
               variant='horizontal'
               labelAlign='right'
               formItemClassName={commonStyles.formItem}
+              label='Plan Date/Type/Seq'
+              inputWidth='190px'
               tree={planVersionTree}
               levels={[
                 { name: 'planDate', label: t(LBL.PLAN_DATE, '_Plan Date'), required: true },
                 { name: 'planType', label: t(LBL.PLAN_TYPE, '_Plan Type'), required: true },
-                { name: 'planSeq', label: t(LBL.SEQ, '_Seq'), required: true },
+                { name: 'planSeq', label: t(LBL.SEQ, '_Seq.'), required: true },
               ]}
               value={planVersionValue}
               // planDate 가 바뀌면 selectPlanDate(Period W52 재계산 + planType 리셋)로, 그 외엔 해당 필드만 반영.
@@ -431,23 +452,8 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
               }}
             />
           </Grid>
-        </>
-      }
-      extraConditions={
-        <>
-          {/* Row3(extra) — Bucket / All / Period* / Sum (표시 토글·고급 조건, hook #52 §2.2 3~4순위) */}
-          {single(
-            t(LBL.BUCKET, '_Bucket'),
-            sc.bucket,
-            bucketOptions,
-            // Bucket 변경 = D_/W_/M_ pivot visible 토글(design 03 §2.2) — 서버 재조회 없는 클라 전환.
-            v => set({ bucket: v || BUCKET_CODE.DAILY }),
-            false,
-            noDivisionAuth
-          )}
-          {/* ALL 체크박스 숨김 — 조회 시 항상 chkAll='Y'(전체) 고정. store 기본값에서 처리(useGlobalPsiStore makeInitSearch) */}
-          {/* {checkbox(t(LBL.ALL, '_All'), sc.chkAll, v => set({ chkAll: v }))} */}
-          {/* Period(from~to) — 공용 PeriodField. 기본값은 Plan-date 변경 시 selectPlanDate 가 W52 산식으로 채운다. */}
+          {/* Period(from~to) — 공용 PeriodField. 기본값은 Plan-date 변경 시 selectPlanDate 가 W52 산식으로 채운다.
+              PeriodRangePicker 교체(2026-10-19)는 사용자 지시로 원복 — PeriodField 유지. */}
           <PeriodField
             gridSize={3}
             start={sc.fromYyyymmdd}
@@ -455,7 +461,9 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
             onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
             label={t(LBL.PERIOD, '_Period')}
           />
-          {/* Sum(chkSum) — SUM 컬럼(주계·월계) 표시 토글(design 03 §2.2). 서버 재조회 없는 그리드 가시성 전환. */}
+          {/* ALL 체크박스 숨김 — 조회 시 항상 chkAll='Y'(전체) 고정. store 기본값에서 처리(useGlobalPsiStore makeInitSearch) */}
+          {/* {checkbox(t(LBL.ALL, '_All'), sc.chkAll, v => set({ chkAll: v }))} */}
+           {/* Sum(chkSum) — SUM 컬럼(주계·월계) 표시 토글(design 03 §2.2). 서버 재조회 없는 그리드 가시성 전환. */}
           {checkbox(t(LBL.SUM, '_Sum'), sc.chkSum, v => set({ chkSum: v }))}
         </>
       }

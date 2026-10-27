@@ -1,8 +1,9 @@
 import { apiClient } from '@foundation/apis';
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
-import { ADMIN_SHEET_NAME, DEFAULT_DIVISION, MENU_ID, SHEETS } from './scp-bom.constants';
+import { ADMIN_SHEET_NAME, MENU_ID, ROW_LOCK_COLUMN, SHEETS } from './scp-bom.constants';
 import type { SearchCondition } from './scp-bom.types';
 
 type FiltersBySheet = {
@@ -39,7 +40,7 @@ const RESTORE_ARRAY_KEYS = new Set<string>(['plantSiteIds']);
 const RESTORE_BOOL_KEYS = new Set<string>(['alterBom']);
 
 const initSearch: SearchCondition = {
-  divisionId: DEFAULT_DIVISION, // '81' 고정 (design 01 R7)
+  divisionId: '', // 콤보 로드 후 배열 첫 항목 기본선택(ScpBomForm) — 사용자 지시 2026-10-22, AS-IS R7 '81' 고정 폐기
   plantSiteIds: [],
   modelId: '',
   parentId: '',
@@ -83,7 +84,7 @@ export const useScpBomStore = createPersistedStoreWithTab<State & Action>(
         state.filters = {}; // 그리드 초기화 — 재조회(Search) 전까지 빈 상태
       }),
     // GET SP 파라미터 매핑 (PROC_M COL_NM 실측, design 03 §4.1 — PKG_SCP0053.P_SCP0053_GET_SCP_BOM):
-    //   1 divisionId  ('81' 고정)
+    //   1 divisionId  (콤보 배열 첫 항목 기본선택)
     //   2 plantSiteId (콤마 다중, 빈=전체)
     //   3 modelId / 4 parentId / 5 childId (각 단일값)
     //   6 alterBom    ('ALTER' | 'ALL')
@@ -119,7 +120,10 @@ export const useScpBomStore = createPersistedStoreWithTab<State & Action>(
           `/admin/menu/${MENU_ID}/column`,
           { sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] }
         );
-        const next = res.data.result ?? [];
+        // SCP_PLAN_YN 은 메타가 'S' 여도 편집 가능하게 'M' 으로 고정 (사용자 요청 2026-10-14, DB 미변경).
+        const next = (res.data.result ?? []).map(c =>
+          c.colNm === ROW_LOCK_COLUMN ? { ...c, inputTpCd: CELL_INPUT_EDIT_TYPE.MANDATORY } : c
+        );
         if (next.length > 0) {
           set(state => {
             if (JSON.stringify(state.staticColumns) !== JSON.stringify(next)) {

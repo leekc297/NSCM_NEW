@@ -17,6 +17,7 @@
       "popup": false,
       "asis": "dCalendar",
       "tobeLabel": "Period",
+      "catalog": "Period → Period",
       "labels": [
         "Period",
         "From",
@@ -36,6 +37,7 @@
       "popup": false,
       "asis": "cboDivision",
       "tobeLabel": "Division",
+      "catalog": "",
       "labels": [
         "Division"
       ],
@@ -52,6 +54,7 @@
       "popup": false,
       "asis": "clbPlantSite",
       "tobeLabel": "Plant Site",
+      "catalog": "Plant Site → Plant Site",
       "labels": [
         "Plant Site"
       ],
@@ -68,7 +71,9 @@
       "popup": false,
       "asis": "cboInputValue",
       "tobeLabel": "Input Value",
+      "catalog": "Input Value → - · 공통기능화 검토",
       "labels": [
+        "-",
         "Input Value"
       ],
       "excluded": false,
@@ -84,7 +89,9 @@
       "popup": false,
       "asis": "cboDayWeek",
       "tobeLabel": "Day of the week",
+      "catalog": "Day of the week → - · 공통기능화 검토",
       "labels": [
+        "-",
         "Day of the week"
       ],
       "excluded": false,
@@ -92,6 +99,17 @@
     }
   ],
   "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": {
+    "rows": 3,
+    "spans": 10,
+    "literals": [
+      "SUM"
+    ],
+    "maxRowPx": 32
+  },
+  "catalogScreen": "Shipment Working Day (OSP)",
   "asisMapping": "features\\supply\\src\\pages\\shipment-working-day-osp\\__asis-mapping__.md",
   "buttons": [
     {
@@ -280,9 +298,9 @@
       ],
       "menuAccess": "Y",
       "expectedBtns": [
-        "EDIT",
         "SEARCH",
-        "SAVE"
+        "SAVE",
+        "EDIT"
       ],
       "matrix": []
     },
@@ -316,28 +334,28 @@
   "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
+      "SEARCH",
+      "SAVE",
+      "EDIT"
+    ],
+    "SCM PI Admin": [
       "EDIT",
       "SEARCH",
       "SAVE"
-    ],
-    "SCM PI Admin": [
-      "SAVE",
-      "SEARCH",
-      "EDIT"
     ],
     "SCM Viewer": [
       "SEARCH"
     ],
     "SCP Planner": [
-      "SAVE",
       "EDIT",
+      "SAVE",
       "SEARCH"
     ]
   },
   "menuBtnCodes": [
-    "EDIT",
     "SEARCH",
-    "SAVE"
+    "SAVE",
+    "EDIT"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

@@ -1,0 +1,110 @@
+# [Harness] SCP0098 capa-mobility-it — BLOCK 1 / WARN 107
+
+- WARN F13 native HTML 폼 요소 금지 — LGES 디자인 시스템(FormItem/InputField/Button) 사용 (룰 06 §3.1/§3.7) @components/modals/CopySelectModal.tsx:60
+- WARN F13 native HTML 폼 요소 금지 — LGES 디자인 시스템(FormItem/InputField/Button) 사용 (룰 06 §3.1/§3.7) @components/modals/CopySelectModal.tsx:61
+- WARN F15 onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5) @CapaMobilityIt.tsx:297
+- WARN M05 구현 위치 파일 없음: D00-1-001 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-004 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- BLOCK M02 구현인데 위치 없음: D00-1-005 §1 btnMeasure / UsrButton @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-009 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-011 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-012 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-014 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-023 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-025 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-027 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-030 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-034 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-037 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-1-040 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-2-003 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-2-008 → CapaMobilityItForm.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-2-009 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-2-012 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-2-013 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-003 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-004 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-005 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-006 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-007 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-008 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-009 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-010 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-011 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-012 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-014 → capa-mobility-it.editLock.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-015 → capa-mobility-it.editLock.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-016 → capa-mobility-it.editLock.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-017 → capa-mobility-it.editLock.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-018 → capa-mobility-it.editLock.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-019 → capa-mobility-it.editLock.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-020 → capa-mobility-it.editLock.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-021 → capa-mobility-it.editLock.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-022 → capa-mobility-it.editLock.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-023 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-024 → capa-mobility-it.editLock.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-025 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-028 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-029 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-030 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-031 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-034 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-035 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-036 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-037 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-038 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-039 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-040 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-041 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-042 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-044 → capa-mobility-it.bulkInput.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-045 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-046 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-047 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-048 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-049 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-050 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-051 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-052 → capa-mobility-it.dynamicColumns.ts @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-053 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-054 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-055 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-056 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN M05 구현 위치 파일 없음: D00-3-057 → CapaMobilityItGrid.tsx @__asis-mapping__.md
+- WARN AC1 액션 대조표 미처리 910행: AC-7e123e19(상태 빈칸 POPUP new SCP0098_CopySelect_Popup), AC-4af3d70b(상태 빈칸 VALUE_SET select_popup.Text), AC-4b55de14(상태 빈칸 CALL_EXT select_popup.SetOption), AC-90756181(상태 빈칸 CALL_EXT select_popup.SetOption), AC-b510bf0e(상태 빈칸 POPUP select_popup.ShowDialog), AC-4242ac9e(상태 빈칸 POPUP new GSCM.Windows.Forms.UI.Prog), AC-79120bdf(상태 빈칸 POPUP prg.Show), AC-c22583fc(상태 빈칸 CALL_EXT sql.AddParameter) … @Doc/asisfacts/screens/SCP0098/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 56행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-4b55de14(select_popup.SetOption @SCP0098_CAPAReprotSmall.cs:3734), AC-90756181(select_popup.SetOption @SCP0098_CAPAReprotSmall.cs:3735), AC-c22583fc(sql.AddParameter @SCP0098_CAPAReprotSmall.cs:3758), AC-b8f4a2b8(sql.AddParameter @SCP0098_CAPAReprotSmall.cs:3759), AC-fc8e7b12(sql.AddParameter @SCP0098_CAPAReprotSmall.cs:3760), AC-a81ba257(siMain.ActiveSheet.Columns.Get @SCP0098_CAPAReprotSmall.cs:3800), AC-2745b0c7(spdMain.ActiveSheet.GetModelColumnFromVi @SCP0098_CAPAReprotSmall.cs:3943), AC-118220d5(spdMain.ActiveSheet.GetModelColumnFromVi @SCP0098_CAPAReprotSmall.cs:3944) … @Doc/asisfacts/screens/SCP0098/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SCP.SCP0098_GET_CAPA_MobilityIT (SCP0098_GET_CAPA_MobilityIT) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE (SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0098_SAVE_SCP_CAPA (SCP0098_SAVE_SCP_CAPA) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0098_SAVE_SCP_CAPA_WORK (SCP0098_SAVE_SCP_CAPA_WORK) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN (SCP0009_GET_SHEET_CALENDAR_3SPAN) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCM0001_GET_SCP_DAILY_PLAN_PERIOD (SCM0001_GET_SCP_DAILY_PLAN_PERIOD) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCM0001_GET_SCP_DAY_PERIOD (SCM0001_GET_SCP_DAY_PERIOD) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 biz:AppService.GeneralRunProcedureCustomTable () 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP\Master\SCP0098_CAPAReprotSmall#SCP0098_COPY_MONTH_WEEK (SCP0098_COPY_MONTH_WEEK) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @capa-mobility-it.constants.ts
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 15건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ2 [MSG00002] Div 값은 필수 입력입니다 / 저장(SAVE) SEQ2 [ {0} ] 생산준비율 값이 없습니다. / 저장(SAVE) SEQ4 [ {0} ] 생산준비율 값 허용 범위 오류 (0 ~  / 저장(SAVE) SEQ5 [ {0} {1} {2} ] 값에 숫자(양수)를 입력해 … → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0098.md
+- WARN VR2 MSG00000 — VALIDATION 취합 판정: 셀 입력(CHANGE) — 비조업 일자 셀 SEQ1 AS-IS - [메시지 미등록] — [메시지 미등록] TO-BE 미등록 — MSG00000 마스터 없음 → fallback "_[Y,N] only." (뜻 동일) / TO-BE 마스터에 같은 의미  @CapaMobilityIt.tsx:169
+- WARN VR2 MSG00000 — VALIDATION 취합 판정: 셀 입력(CHANGE) — 비조업 일자 셀 SEQ1 AS-IS - [메시지 미등록] — [메시지 미등록] TO-BE 미등록 — MSG00000 마스터 없음 → fallback "_[Y,N] only." (뜻 동일) / TO-BE 마스터에 같은 의미  @components/CapaMobilityItGrid.tsx:139
+- WARN BU1 일괄 입력 버튼 라벨이 리터럴 — t(LBL.INPUT, '_Input') 로(다국어 E13·hook #155 X3) @CapaMobilityIt.tsx
+- WARN I18N1 다국어 미적용 — 화면에 '_Cannot save more than 10,000 rows.' 가 그대로 보임: 코드 MSG00000 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @CapaMobilityIt.tsx:169
+- WARN I18N1 다국어 미적용 — 화면에 '_Select a measure row first.' 가 그대로 보임: 코드 MSG00000 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @CapaMobilityIt.tsx:239
+- WARN I18N1 다국어 미적용 — 화면에 '_Daily Capa does not allow weekday input.' 가 그대로 보임: 코드 MSG00000 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @CapaMobilityIt.tsx:252
+- WARN I18N1 다국어 미적용 — 화면에 '_Select cells first.' 가 그대로 보임: 코드 MSG00000 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @CapaMobilityIt.tsx:256
+- WARN I18N1 다국어 미적용 — 화면에 '_Invalid input value.' 가 그대로 보임: 코드 MSG00000 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @CapaMobilityIt.tsx:260
+- WARN I18N1 다국어 미적용 — 화면에 '_No cells to update.' 가 그대로 보임: 코드 MSG00000 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @CapaMobilityIt.tsx:272
+- WARN I18N1 다국어 미적용 — 화면에 '_[Y,N] only.' 가 그대로 보임: 코드 MSG00000 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @components/CapaMobilityItGrid.tsx:139
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/CapaMobilityItGrid.tsx:104
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @utils/capa-mobility-it.save.ts:40
+- WARN B06 SubTitle hotkeyConfig 에 search 지정 — F5 조회 배선(룰 25 §1.5.1)
+- WARN B11 __asis-mapping__.md 에 POPUP 매핑 섹션 — 룰 25 §3.3.1 — button/SP/event/validation 4축
+- WARN B13 AS-IS 파일:라인 주석(// AS-IS …:L) — 이벤트 20건 대비 AS-IS 참조 주석 2건 — 1:1 추적 근거
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0098/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0098/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0098/SCP0098_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0098/SCP0098_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (DMF0002_GET_TITLESET_POPUP · 시트 'titleSet') — 누락 programId, columnType, sesUserId, mnuId — 현재 키: sheetName, divisionId · BE positional 매핑이라 값이 NULL 로 감
+- WARN B27 As-is GetSpdTitle → SCP0009_GET_SHEET_CALENDAR_3SPAN [sp명+메서드 + grid_code DB루프 InitSpreadDateColumn:336] · 사내 정확 배선 없음 — 동적 컬럼 원천을 확인: 배선 등록(DB 메타) 후 FE 조회 또는 대조표에 대체 근거(BE/메타 원문 확인)를 적고 '제외' @grid
+- WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: InitSpreadDateColumn:336 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpreadDateColumn / 336 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md

@@ -144,13 +144,9 @@ export const ProjectRouteForm = ({ onSearch }: Props) => {
                           appearance='outlined'
                           priority='normal'
                           disabled={projectDisabled || noDivisionAuth}
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() =>
-                                !projectDisabled && !noDivisionAuth && setOpenProjectModal(true)
-                              }
-                            />
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() =>
+                            !projectDisabled && !noDivisionAuth && setOpenProjectModal(true)
                           }
                         />
                       ),
@@ -177,12 +173,8 @@ export const ProjectRouteForm = ({ onSearch }: Props) => {
                           appearance='outlined'
                           priority='normal'
                           disabled={noDivisionAuth}
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => !noDivisionAuth && setOpenItemModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => !noDivisionAuth && setOpenItemModal(true)}
                         />
                       ),
                     }}

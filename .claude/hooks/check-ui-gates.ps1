@@ -17,6 +17,7 @@
 #   G-F 콤보 호출의 빈 .catch (2026-08-08 신설 — hook #117 §5.8)                [BLOCK]
 #   G-G 콤보 파라미터 quoting 누락 (2026-08-08 신설 — hook #117 §5.7)           [BLOCK]
 #       BE makeComboQuery 는 @토큰 raw 치환 → 미따옴표 = ORA-00904/01722.
+#   G-H 조회조건 Radio/Checkbox 디자인 = 좌측 라벨 열(조건명) + 입력 열(컨트롤) (2026-10-21 신설 · 10-23 v2 — hook #154) [WARN]
 
 $ErrorActionPreference = 'Stop'
 try {
@@ -138,6 +139,37 @@ foreach ($m in [regex]::Matches($body, "getCombo\s*\(\s*\{([^}]*)\}")) {
           [regex]::IsMatch($v, "^``[^``]*'\`$\{")
     if (-not $ok) {
       $violations += "  -> G-G: combo param '$k' passed unquoted ($v) — BE substitutes raw text, so this becomes an identifier in SQL (ORA-00904/01722). Wrap with q() or ``'`${...}'`` (hook #117 §5.7)."
+    }
+  }
+}
+
+# ── G-H: 조회조건 Radio/Checkbox 디자인 (hook #154 v2, 2026-10-23) [WARN] ───────────
+#   v2 = 조건명은 FormItem 좌측 라벨 열(label=조건명/그룹명) · Checkbox 는 박스만(labelText 없음) · 조건마다 한 칸.
+#   ①FormItem 없음/label 빈값·미지정 → 라벨 트랙 없음(라벨 열부터 시작) ②label=NBSP/공백(v1 무라벨 패턴)
+#   ③Checkbox labelText(박스 옆 글자). 정본 = supply/global-psi-report GlobalPsiReportForm checkbox()/radio().
+#   기존 위반 파일 편집을 막지 않도록 비차단. 전수 스캔 = scripts/rules/scan_labelless_toggle.py
+if ($body -match '<SearchArea\b|conditions=\{') {
+  foreach ($m in [regex]::Matches($body, '<(Checkbox|RadioGroup)\b')) {
+    $g = $body.LastIndexOf('<Grid', $m.Index)
+    if ($g -lt 0) { continue }
+    $seg = $body.Substring($g, $m.Index - $g)
+    $fi = $seg.LastIndexOf('<FormItem')
+    $why = $null
+    if ($fi -lt 0) {
+      $why = 'no FormItem wrapper'
+    } else {
+      $tail = $seg.Substring($fi)
+      if ([regex]::IsMatch($tail, "\blabel=\{?(''|`"`")\}?")) { $why = "FormItem label=''" }
+      elseif (-not [regex]::IsMatch($tail, '\blabel=')) { $why = 'FormItem without label' }
+      elseif ([regex]::IsMatch($tail, "\blabel=\{?['`"](\\u00[Aa]0|\u00A0| )['`"]\}?")) { $why = 'v1 blank/NBSP label (condition name must be the FormItem label)' }
+    }
+    if (-not $why -and $m.Groups[1].Value -eq 'Checkbox') {
+      $end = $body.IndexOf('>', $m.Index)
+      if ($end -gt 0 -and [regex]::IsMatch($body.Substring($m.Index, $end - $m.Index + 1), '\blabelText=')) { $why = 'Checkbox labelText next to the box' }
+    }
+    if ($why) {
+      $ln = Get-LineNo $body $m.Index
+      $warnings += "  -> G-H: line $ln <$($m.Groups[1].Value)> in search conditions ($why). Design v2: condition name in the left label column, control at the input column start — <Grid size={3} className={commonStyles.customGrid}><FormItem className={commonStyles.formItem} label={t(LBL.X,'Name')} labelAlign='right' render={() => <div className={commonStyles.customCheckbox}><Checkbox checked onChange /></div>} /></Grid>; Radio = FormItem label=group name + <RadioGroup row><Radio labelText=option/>. One checkbox per cell (hook #154 v2, GlobalPsiReportForm)."
     }
   }
 }

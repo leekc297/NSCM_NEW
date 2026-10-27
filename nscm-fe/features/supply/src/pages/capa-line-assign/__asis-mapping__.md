@@ -43,7 +43,7 @@
 | R-02·R-03 | cs:2117-2154 `Sheets[i].Visible` | 4시트 중 모드별 1시트만 표시 | `ASSIGN_SHEET_BY_DIVISION_TYPE` / `SOP_SHEET_BY_DIVISION_TYPE` — 시트를 동시에 만들지 않는다 | 구현 |
 | R-04 | cs:5556-5566 `SetVisibleOperation` | **Cell·Module-Pack 만 Operation 노출**(ELTR 은 Never 로 숨김) | `CapaLineAssignForm.tsx:242` `{!isEltr && multiField(Operation…)}` (iter-2 정정 — iter-1 은 방향이 반대였다, GAP-03) | 구현 |
 | R-05 | cs:5568-5584 `SetVisibleElectrodeType` | Line Type 도 **R-04 과 같은 방향**(ELTR 에서 둘 다 숨김. design 01 R-05 2026-09-23 정정본) | 동 파일 `{!isEltr && multiField(Line Type…)}` — 별 FormItem 2개. 숨겨질 때 값도 비운다(U-3 / store `changeDivisionType`) | 구현 |
-| R-06 | cs:5572·5579 / ScpCapa.cs:50-54 | Item 라벨 `Basic Nickname`↔`Model` | 동 파일 `t(isEltr ? LBL.MODEL : LBL.BASIC_NICKNAME)` (LBL00669/LBL00054 실측) | 구현 |
+| R-06 | cs:5572·5579 / ScpCapa.cs:50-54 | Item 라벨 `Basic Nickname`↔`Material`(ELTR) | 동 파일 `t(isEltr ? LBL.MODEL : LBL.BASIC_NICKNAME)` — ELTR 라벨은 DB 실측으로 LBL00021 'Material' 로 교체(이전 LBL00669 'Model'), Basic Nickname 은 LBL00054 유지 | 구현 |
 | R-07 | cs:1523-1524·1717·1732 | 표시/라벨 재평가 트리거가 조건변경 전반 | React 파생 렌더라 자동 충족(재평가 관리 불필요) — React 파생 렌더라 자동 충족(별도 재평가 관리 불필요) | 구현 |
 | R-08 | cs:197-210 `isPageSOP` | 5액션·고정컬럼이 탭으로 갈림 | `activeTab` 로컬 state + 전 핸들러 분기 + SubTitle `grid/gridFilter/dataCount` 삼항 | 구현 |
 | R-09 | Designer:949-1020 | 탭 2개, SOP 만 상단 panel1 | `TabWrapper persist` + `TabItem` ×2 (panel1/btnSopNew 는 R-13 으로 흡수) | 구현 |
@@ -54,7 +54,7 @@
 | R-14·R-15 | cs:4093·4115 `SwitchLock` | 시트 잠금 토글 + 행별 차등 | `capaLineAssign.editLock.ts` — `beginningEdit`(e.cancel)와 `formatItem`(배경) 둘 다 같은 판정 함수 | 구현 |
 | R-16·R-17 | cs:4495-4553 | 조회 직후 전 컬럼 잠금 + 편집모드 해제 | `CapaLineAssign.tsx` query.data effect → `clearChanges()` + `setEditMode(false)` | 구현 |
 | R-18 | cs:4082·4103 | ref 미준비 시 조용한 return | `handleEdit` 첫 줄 `if (!grid) return;` | 구현 |
-| R-19·R-20·R-21 | cs:4085-4111 / 1568-1608 | 컷오프(`PROG_STAT` 1·2) 편집 차단 + `'-'` 승격 | `handleEdit` 앞단 `CUTOFF_PROG_STATS.includes(progStat)` → `MSG00109`. 승격은 **재현하지 않는다**(차단목록 등가) | 구현 |
+| R-19·R-20·R-21 | cs:4085-4111 / 1568-1608 | 컷오프(`PROG_STAT` 1·2) 편집 차단 + `'-'` 승격 | `CapaLineAssign.tsx` `isCutoffVersion = CUTOFF_PROG_STATS.includes(cascade.progStat)` → ① grid `editMode={editable}`(=`canEdit && !isCutoffVersion`)로 전 셀 잠금 ② `handleInsert`/`handleSave` 진입부 `blockIfCutoff()` 가 `MSG00109`(=`MSG.CUTOFF_READONLY`) 안내 후 차단. AS-IS 는 Edit 버튼 클릭 시 안내했으나 TO-BE 는 Edit 버튼이 없어(§2.4) 편집 진입점(insert/save)으로 옮김. `'-'` 승격은 **재현하지 않는다**(차단목록 등가, `useCapaLineCascade` progStat fallback 과 무관) | 구현 |
 | R-22 | cs:1965-1966 `SetDivisionAuthCheck` | Division 0건 → 조회조건 100% 비활성 + 안내 | `useCapaLineCascade.hasDivisionAuth` → Form 전 필드 `disabled` + 1회 `MSG00667`. **`MSG00097` 재사용 금지**(TO-BE 문구가 다름) | 구현 |
 | R-23 | BaseForm:3603-3849 ACL | 5액션 사전 ACL 검사 후 MSG00096 | `useTabBtnPermissions().hasButton()` 곱셈 — 버튼 숨김 구조 대응(메시지 불필요) — 메시지형 ACL 을 버튼 숨김 구조로 대응(hook #63) | 구현 |
 | R-24·R-25 | BaseForm:3675-3710 / 5271-5656 | Sort 중 편집 금지 3종 메시지 | **의도적 미이식** — FarPoint 인덱스 회피용 제약이고 Wijmo 는 공존 가능. 화면이 공용 F3/F4 를 무력화하면 hook #63 위반 | 미이식(규범 판단) |
@@ -76,7 +76,7 @@
 | `cboVersion`(S02) | Plan Month / LBL00053 | `CapaVersion_SCP_ALL` 1회 조회의 클라 파생(`useCapaLineCascade.verIdOptions`) | `p_version` | 구현 |
 | `cboVersionSeq`(S03) | Version / LBL00606 | 동일 rows 재사용(추가 조회 없음) | `p_version_seq` | 구현 |
 | `txtPlanType`(S04) | Plan Type / LBL00040 | readOnly `InputField` + `BIZ_PLAN_USE_YN==='Y'?'BP':'RP'` | — | 구현 |
-| `rgrpDivisionType`(S05) | (라벨 없음) | `CustomDropdown` 3옵션(RadioGroup 부재, SCP0114 선례). `Module/Pack` 은 LBL 미등록 → 영문 defaultValue | — (`p_sheet_name` 파생) | 구현 |
+| `rgrpDivisionType`(S05) | Operation group / LBL00027(DB 실측) | `CustomDropdown` 3옵션(RadioGroup 부재, SCP0114 선례). `Module/Pack` 은 LBL 미등록 → 영문 defaultValue | — (`p_sheet_name` 파생) | 구현 |
 | `clbSite`(S06) | Site / LBL00015 | 마스터 파생 distinct + `DIVISION_ID IN && CODE<>'-'` + `DMY_` 후순위 | `p_site_id` | 구현 |
 | `clbPlant`(S07) | Plant / LBL00030 | `+SITE_ID IN && SHOP_GROUP_ID IN` | `p_plant_id` | 구현 |
 | `clbFactory`(S08) | Building / LBL00008 | `+PLANT_ID IN` — **SITE 조건 없음**(간접 종속) | `p_factory_id` | 구현 |
@@ -85,7 +85,7 @@
 | `clbElectrodeType`(S11) | Line Type / LBL00056 | `OperationElectrodeType_SCP_ALL` + 모드 선필터 + `OPERATION_ID IN` | `p_electrode_type` | 구현 |
 | `txtItem`(S12)+`btnItemId`(S13) | LBL00054/LBL00669 | `InputField` + `...` 버튼 → 공용 `CapaItemPopup` **`multiSelect` + `operationGroup`** 배선(iter-3). 다중선택 결과는 distinct 후 `','` 결합해 한 칸에 누적(=`GetSelectedValuesText`) | `p_item_id`(SP 가 콤마 IN) | 구현 |
 | (조회조건 Reset) | — | `SearchArea.onResetCondition` → `handleResetCondition` — §4.2 기본값 복원(Division/Plan Month/Version 첫 행, 다중 5축 `ALL`(ELTR 의 Operation·Line Type 은 `[]`), Item 공백, Valid `ALL`). Division Type 은 모드 스위치라 제외 | — | 구현(iter-3, CP-16) |
-| `cboValid`(S14) | Valid / LBL00639 | `YesOrNo` + ALL 선행 → `''` 변환 | `p_valid_flag` | 구현 |
+| `cboValid`(S14) | Active / LBL00007(DB 실측, 이전 Valid/LBL00639) | `YesOrNo` + ALL 선행 → `''` 변환 | `p_valid_flag` | 구현 |
 | `btnColumn`(S15) | — | SubTitle 공용 `IcGridColumnSetup` 아이콘 → `ColumnLayoutModal` | — | 구현 |
 
 콤보 의미 패리티(convert-core §2.6): 접미 `EE` 2쌍(마스터·Operation)을 **SQL_ID 전환**으로 분리했다.
@@ -100,9 +100,9 @@
 | 컬럼셋 | `SetSheetHeaderColumnSetInfo`/`SCP` | admin `SCM_MST_SHEET_COLUMNS` fetch(`fetchStaticColumns` 8 라우팅시트→7 메타시트). 하드코딩 fallback 없음 | 구현 |
 | 동적 기간컬럼 | `RefreshSpreadDateColumn`(cs:2165-2180) | `capaLineAssignColumns.buildDateColumns` — `M_01YYYYMM`/`Y_YYYY`, 3단 헤더, 1단 공백, `DUMMY_YN` 뒤 | 구현 |
 | 헤더 단수 | Assign **3단**(`SetSheetHeaderColumnSCP(_siAssign, 3, …)` cs:2163) / SOP **1단**(동 `_siSop, 1` cs:2187) / 팝업 P03·P02 **1단**(`SCP0104_CAPA_Line.cs:538`·`..._Model.cs:667-668`) | Assign = `headerRowHeight={16}`(48px 고정, hook #93). **SOP·팝업 2종은 1단으로 강제할 경로가 없다** — 공용 `getColumnDepth`(`packages/foundation/src/utils/columnMapping.ts:630-648`)가 단수를 **메타 class 라벨에서만** 파생하고 공용 DataGrid 에 단수 override prop 이 없다. ora.py 실측: 7시트 전건 `SMALL_CLASS_LABEL_NAME <> LARGE_CLASS_LABEL_NAME` 행이 있다(ASSEMBLY 5 / ELTR 5 / LINE 4 / SOP_* 각 5 / SOP_MODEL_* 각 5 — `SITE_NAME`·`PLANT_NAME`·`FACTORY_NAME`·`LINE_NAME`·`OPERATION_NAME`) → **THREE_DEPTH 로 파생**된다. AS-IS 는 프레임워크에 `iColumnHeaderRowCount=1` 을 넘겨 class 라벨을 **무시**시키므로(`SpreadInfo.cs:2093-2096`) 같은 메타로도 1단이 나온다 | **미구현(설계 C-8 대비 불일치)** — gap-resolve iter-1 A02. 해소는 메타 조정(승인) 또는 공용 prop 신설(별건 PR) 중 하나이며 둘 다 자기 화면 폴더 밖 |
-| 편집잠금 | `LockRange2` 7건 | `capaLineAssign.editLock.ts` — 컬럼명 판정(인덱스 배열 이식 금지, hook #130) | 구현 |
+| 편집잠금 | `LockRange2` 7건 + ELTR `NICK_NAME` 경로잠금(cs:5419-5422, 2025-03-31) | `capaLineAssign.editLock.ts` — 컬럼명 판정(인덱스 배열 이식 금지, hook #130). **G43**: ELTR 신규행 `NICK_NAME` 은 Insert 버튼 경로만 잠그고 P03 팝업 경로는 열어둔다 — AS-IS `Insert_Row_Assign`(cs:5399, Insert 버튼)만 `LockRange` 를 걸고 `Insert_Row_Assign_Line`(cs:5438, P03 팝업)은 걸지 않는 차이를 1:1 재현. 팝업 행에 `ROW_SOURCE_LINE_POPUP` 마커(`_fromLinePopup`, 저장 whitelist 밖)를 심어 editLock 이 분기 | 구현 |
 | 셀 콤보 16종 | `SheetUtils.SetComboDataRow` 60+ 런타임 주입 | `capaLineAssign.gridCombos.buildCellComboCandidates` — 마스터 콤보에서 행 컨텍스트별 후보 계산 → `beginningEdit` 에서 `col.dataMap` 주입 | 구현 |
-| 코드↔명칭 동기 | `CheckValidId`/`CheckValidName`(cs:3160-3699) | `syncCodeAndName` (cellEditEnded) | 구현 |
+| 코드↔명칭 동기 | `CheckValidId`/`CheckValidName`(cs:3160-3699) | `syncCodeAndName` (cellEditEnded). `ID_NAME_PAIRS` 6쌍 — Site/Company/Plant/Factory/Line 은 `masterRows`, **OPERATION 은 `operationRows`(CODE/NAME) 별도 소스**로 동기한다(AS-IS cs:2803-2820 `dtOperationSpread` 과 동일 축) | 구현 |
 | 하위 cascade 클리어 | `ClearCurrRowSubCodes`(cs:3702-3820) | `clearSubCodes` — §3.2.1 매트릭스 그대로 | 구현 |
 | Dummy 마킹 | `CheckDummyYN`(cs:3290-3300) | `markDummyYn` — `CapaDummyCode_SCP_ALL` + `DMY_` 접두. **OPERATION 미검사**(AS-IS 동일) | 구현 |
 | Dummy 코드 채번 | `CHECK_NAME_ON_DUMMY_CODE` get-or-create(cs:3658-3690) | `utils/capaLineAssign.dummyCode.ts` + `CapaLineAssign.handleUnknownItemName`(iter-2 신설) | 구현(정적) / 런타임은 SP 미배포 |
@@ -120,7 +120,7 @@
 
 | ID | 요지 (AS-IS 근거) | 구현 위치 (파일:라인) | 사유 / MSG 매핑 (AS-IS → TO-BE) | 상태 |
 |---|---|---|---|:--:|
-| V01 | `EditButton` SOP 분기 컷오프(cs:4085-4090) | `CapaLineAssign.tsx:355-361` `handleEdit` 컷오프 게이트 | MSG00109 → **MSG00109**(동번호·동의미 실측 확인) | 구현 |
+| V01 | `EditButton` SOP 분기 컷오프(cs:4085-4090) | `CapaLineAssign.tsx` `handleInsert`/`handleSave` 진입부 `blockIfCutoff()` 컷오프 게이트(SOP·Assign 공통) | MSG00109 → **MSG00109**(동번호·동의미 실측 확인) | 구현 |
 | V02 | `EditButton` Assign 분기 컷오프(cs:4106-4111) | 동상 — 공통 가드 1개(`CapaLineAssign.tsx:355-361`)로 통합 | MSG00109 → **MSG00109** | 구현 |
 | V03 | 저장 성공 건수(cs:4585-) | `CapaLineAssign.tsx:477` `doSave` 성공 분기 toast | MSG00004 → **MSG00672** `{0} data saved.` (번호 겹침 주의 — 아래 각주) | 구현 |
 | V04 | 저장 실패(else 분기 — 체크리스트 오기 정정) | `CapaLineAssign.tsx:494·533` `doSave` 실패 분기 ×2 alert | MSG00006 → **MSG00003** `Failed to save.` | 구현 |
@@ -202,7 +202,7 @@
 | ID | 요지 | 구현 위치 (파일:라인) | 사유 | 상태 |
 |---|---|---|---|:--:|
 | MODAL:CapaLineAssignModelModal | P02 SOP Model 팝업 — AS-IS `SCP0104_CAPA_Line_Assign_Model.cs` | `CapaLineAssign.tsx:835` (JSX) · `components/modals/CapaLineAssignModelModal.tsx` · confirm 경로 `handleSopModelConfirm` | CRUD 축: R(조회 `LINE_ASSIGN_MDL_*`) + 선택결과가 부모 SOP 그리드에 **행 추가(C)**. U/D 는 AS-IS 도 없음 | 구현 |
-| MODAL:CapaLineModal | P03 CAPA Line 팝업 — AS-IS `SCP0104_CAPA_Line.cs` | `CapaLineAssign.tsx:825` (JSX) · `components/modals/CapaLineModal.tsx` | CRUD 축: R(조회 `LINE_ASSEMBLY`/`LINE_ELTR`) + 선택결과 행 추가(C). U/D 없음 | 구현 |
+| MODAL:CapaLineModal | P03 CAPA Line 팝업 — AS-IS `SCP0104_CAPA_Line.cs` | `CapaLineAssign.tsx:825` (JSX) · `components/modals/CapaLineModal.tsx` | CRUD 축: R(조회 `LINE_ASSEMBLY`/`LINE_ELTR`) + 선택결과 행 추가(C). U/D 없음. **조회조건 Division(`cboDivision`)은 부모값으로 초기화하되 편집 가능**(AS-IS cs:409 세팅만·비활성 아님 / `cboDivision_SelectedIndexChanged` cs:856 → `RefreshAll`). 변경 시 Site/Plant/Building/Line 후보·선택을 `[ALL]` 로 리셋(`localDivisionId` 로컬 state). Division Type(`rgrpDivisionType`)은 `sheet`(ASSEMBLY/ELTR) 분기 원천이라 현행 disabled 유지 | 구현 |
 | MODAL:CustomDialog | P01 Item 팝업(AS-IS `ShowItem` → `SCM0002_CAPAItemPopup`) — 도구가 AS-IS 범용 다이얼로그 API 명으로 잡은 항목 | 그리드 셀 경로 `CapaLineAssign.tsx:853` `<CapaItemPopup multiSelect …>` + `handleItemPopupSelect`(:602-655) / 조회조건 경로 `components/CapaLineAssignForm.tsx:333-351` | **공용 컴포넌트 재사용**(`features/supply/src/components/CapaItemPopup.tsx`, 사본 금지). 조회 전용 팝업이라 C/U/D 해당없음 — 선택결과의 행추가는 부모 그리드 책임 | 구현 |
 | MODAL:ShowDialog | P04 컬럼 표시설정 + alert/toast 계열 범용 다이얼로그 | P04 = `CapaLineAssign.tsx:874` `<ColumnLayoutModal>` (공용 재사용, hook #132) · alert = `useMessageStore.setAlert`(:276·356·453·469·494·533·911) · toast = `setToast`(:477·525) | 개인화 설정 모달이라 업무 CRUD 없음(해당없음). 저장 성공/실패 알림은 §9 UC-04 축에서 판정 | 구현 |
 

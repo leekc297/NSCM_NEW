@@ -5,7 +5,7 @@ import { safeString } from '@foundation/utils';
  * 신규 매핑 중복 검사 — AS-IS DMF0006_CustomerModelMapping.cs L518~535 1:1.
  *
  * AS-IS 는 저장 전 신규(I) 행마다 DM_MST_CUSTOMER_MODEL 을 DIVISION_ID, CUSTOMER_PROJECT_CODE,
- * CUSTOMER_MODEL, SCM_SITE_ID 4키로 조회해 1건이라도 있으면 MSG00060 에
+ * CUSTOMER_MODEL, SCM_SITE_ID 4키로 조회해 1건이라도 있으면 MSG00060(TO-BE MSG01092) 에
  * "[Division], [Sales Site], [Customer PJT], [Customer MODEL]" 을 넣어 안내하고 저장을 중단했다.
  * 4키는 원장 PK(PK_DM_MST_CUSTOMER_MODEL)와 같다.
  *
@@ -18,7 +18,7 @@ import { safeString } from '@foundation/utils';
  *   ① 그리드 안: 신규 행의 4키가 그리드의 다른 행(조회된 기존 행, 다른 신규 행)과 같으면 중복.
  *      AS-IS 는 원장만 봤지만, 같은 키 신규 2행을 함께 저장하면 SP 안에서 뒤 행이 앞 행을 덮는다.
  *   ② 원장: 신규 행의 키마다 조회 SP 로 원장을 읽어 4키 정확 일치 행이 있으면 중복. 조회 SP 는
- *      Customer PJT / Model 을 UPPER LIKE 부분일치로 거르므로 결과를 여기서 정확 일치로 다시 거른다.
+ *      Customer PJT / Model 을 UPPER LIKE 부분일치로 거르므로 결과를 여기서 4키 일치(대소문자 무시)로 다시 거른다.
  */
 
 export const MAPPING_KEY_BINDINGS = [
@@ -36,9 +36,14 @@ type KeyRow = Partial<Record<MappingKeyBinding, unknown>> & { CRUD_TYPE?: unknow
 
 const cellText = (value: unknown): string => safeString(value).trim();
 
-/** 4키 결합 문자열. 한 키라도 비어 있으면 '' — 필수값 검증이 따로 맡고, 여기서 비교하지 않는다. */
+/**
+ * 4키 결합 문자열. 한 키라도 비어 있으면 '' — 필수값 검증이 따로 맡고, 여기서 비교하지 않는다.
+ *   대문자로 바꿔 비교한다 — AS-IS 중복 조회(.cs L518~528)는 대소문자를 가리지 않는 DB 에서 돌아
+ *   'indego 50' 도 기존 'Indego 50' 과 같은 키로 막았다(2026-10-16 재검증). 철자 그대로 비교하면
+ *   대소문자만 다른 매핑이 안내 없이 한 줄 더 생긴다.
+ */
 export const mappingKeyOf = (row: KeyRow): string => {
-  const parts = MAPPING_KEY_BINDINGS.map(binding => cellText(row[binding]));
+  const parts = MAPPING_KEY_BINDINGS.map(binding => cellText(row[binding]).toUpperCase());
   if (parts.some(part => part === '')) return '';
   return parts.join('\u0001');
 };
@@ -87,7 +92,7 @@ export const newRowKeys = <T extends KeyRow>(rows: readonly T[]): Map<string, T>
 
 /**
  * ② 원장 중복 — 조회 결과(부분일치 포함)에서 4키가 정확히 같은 행이 있는가.
- *   조회 SP 가 UPPER LIKE 로 거르므로 여기서 정확 일치로 좁힌다(AS-IS 는 = 비교).
+ *   조회 SP 가 UPPER LIKE 로 거르므로 여기서 4키 일치(대소문자 무시)로 좁힌다.
  */
 export const ledgerHasKey = (ledgerRows: readonly KeyRow[], key: string): boolean =>
   key !== '' && ledgerRows.some(row => mappingKeyOf(row) === key);
@@ -95,7 +100,7 @@ export const ledgerHasKey = (ledgerRows: readonly KeyRow[], key: string): boolea
 /**
  * 원장 조회 결과 상태.
  *   - 'clear'     : 모든 신규 키가 원장에 없음 → 저장 진행
- *   - 'duplicate' : 원장에 같은 키 존재 → MSG00060 후 중단
+ *   - 'duplicate' : 원장에 같은 키 존재 → MSG01092 후 중단
  *   - 'error'     : 조회 자체 실패 → 판단할 수 없으므로 저장을 보내지 않는다(SP 가 덮어쓰기 때문)
  */
 export type LedgerCheck<T> =
@@ -123,8 +128,14 @@ export const findLedgerDuplicate = async <T extends KeyRow>(
   return { status: 'clear' };
 };
 
-/** MSG00060 알림 본문 — 메시지 뒤에 AS-IS 키 이름 나열과 해당 행의 키 값을 붙인다. */
+/**
+ * 중복 안내 코드. AS-IS MSG00060 문구 「동일한 {0}이(가) 존재합니다.」는 TO-BE 에서 MSG01092 이고,
+ *   TO-BE MSG00060 은 「중복된 키가 존재합니다.」라 {0} 이 없다(SCM_ADM_MSG_M 2026-10-19 조회).
+ */
+export const DUPLICATE_MSG_CODE = 'MSG01092';
+
+/** MSG01092 알림 본문 — {0} 에 AS-IS 키 이름 나열을 넣고, 다음 줄에 해당 행의 키 값을 붙인다. */
 export const duplicateAlertContent = (message: string, row: KeyRow): string => {
   const values = MAPPING_KEY_BINDINGS.map(binding => cellText(row[binding])).join(' / ');
-  return `${message}\n${DUPLICATE_KEY_LABELS}\n${values}`;
+  return `${message.replace('{0}', DUPLICATE_KEY_LABELS)}\n${values}`;
 };

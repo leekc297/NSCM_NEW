@@ -30,10 +30,22 @@ interface Props {
   // R3 — 셀 편집 종료 시 날짜역전 판정(true=역전, 호출부는 값 원복 없이 alert 만; 원복은 여기서 수행).
   isReversed: (row: Record<string, unknown>) => boolean;
   onReversed: (row: Record<string, unknown>) => void;
+  // 날짜 입력형식 무효(달력에 없는 날짜) 시 alert — 커밋 취소는 그리드에서 수행(MSG00611).
+  onInvalidDate: () => void;
 }
 
 const EDITABLE = EDITABLE_COLUMNS as readonly string[];
 const DATE_COLS = [DATE_START_COLUMN, DATE_FINISH_COLUMN];
+
+// 달력에 실재하는 날짜인지 판정(YYYYMMDD 8자리). Date UTC 왕복으로 월·일 범위를 검증한다
+//   — '20112222'(월22/일22)는 false. Formation/project-route 선례와 동일 구현(dayjs 플러그인 불요).
+const isValidYmd8 = (ymd8: string): boolean => {
+  const y = Number(ymd8.slice(0, 4));
+  const m = Number(ymd8.slice(4, 6));
+  const d = Number(ymd8.slice(6, 8));
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+};
 
 // SCP0041 Pack Hold Stock 시트 — 15컬럼(design 03 §1-B). DIR='HOLD' 행만 편집(R2),
 //   편집 컬럼은 QTY/DATE_FORECAST_START/DATE_FORECAST_FINISH 로 한정. 날짜역전 검증+원복(R3),
@@ -46,6 +58,7 @@ export const PackHoldStockGrid = ({
   staticColumns,
   isReversed,
   onReversed,
+  onInvalidDate,
 }: Props) => {
   const comboParams = useMemo(() => ({ mnuId: `'${MENU_ID}'` }), []);
 
@@ -78,6 +91,15 @@ export const PackHoldStockGrid = ({
     const onEnding = (sender: FlexGrid, e: CellRangeEventArgs) => {
       const binding = sender.columns[e.col]?.binding ?? '';
       if (!DATE_COLS.includes(binding)) return;
+      // 입력형식 차단(사용자 지시 2026-10-14) — FPDateText 마스크는 자릿수만 강제하고 달력 유효성을
+      //   검사하지 않아 '2011-22-22' 가 통과한다. 커밋 직전 편집기 입력값을 검증해, 비공백이고
+      //   달력에 없는 날짜면 e.cancel=true 로 커밋을 취소(값은 편집 전으로 되돌아감)하고 alert.
+      const pending = (sender.activeEditor?.value ?? '').replace(/\D/g, '');
+      if (pending && (pending.length !== 8 || !isValidYmd8(pending))) {
+        e.cancel = true;
+        onInvalidDate();
+        return;
+      }
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
       prevValue = row ? row[binding] : undefined;
     };
@@ -98,7 +120,7 @@ export const PackHoldStockGrid = ({
       g.cellEditEnding?.removeHandler(onEnding);
       g.cellEditEnded?.removeHandler(onEnded);
     };
-  }, [gridRef, rows, isReversed, onReversed]);
+  }, [gridRef, rows, isReversed, onReversed, onInvalidDate]);
 
   // R4 표기 보조 — 저장 재검증 실패행 LightPink. AS-IS BackColor(cs BackColor=LightPink).
   //   DataGrid 는 formatItem prop 미노출이라 셀 DOM 에 직접 세팅(scp-bom/long-term-stock 선례).

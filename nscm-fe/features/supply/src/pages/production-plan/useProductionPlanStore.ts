@@ -3,7 +3,7 @@ import type { MeasureMeta } from 'features/master/src/components';
 import { apiClient } from '@foundation/apis';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
+import { createPersistedStoreWithTab } from '@shared/stores';
 
 import {
   ADMIN_SHEET_NAME,
@@ -48,7 +48,7 @@ interface Action {
   restoreSearchConditions: () => Promise<void>; // F6 저장 조회조건을 마운트 시 1회 복원
   setSearchCondition: (p: Partial<SearchCondition>) => void;
   setDivision: (divisionId: string) => void;
-  setFilter: () => void; // 모델 그리드 조회(Find)
+  setFilter: (reloadLine?: boolean) => void; // 모델 그리드 조회(Find). reloadLine=true 면 drill 된 LINE 도 재조회
   setLineFilter: (masterRow: Record<string, unknown>) => void; // master 더블클릭 → line drill
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
@@ -61,7 +61,9 @@ interface Action {
 const thisMonday = dayjs().add(1 - dayjs().day(), 'day');
 
 const initSearch: SearchCondition = {
-  divisionId: useSessionStore.getState().session.div ?? '',
+  // divisionId: useSessionStore.getState().session.div ?? '',
+  // 빈값 시작 → Form 이 콤보 첫 옵션으로 채운다(세션 div 시드가 첫 행을 가림, 자매 SCP0013 동일).
+  divisionId: '',
   operationGroupId: '',
   plantSiteIds: [],
   electrodeTypes: [],
@@ -170,7 +172,8 @@ export const useProductionPlanStore = createPersistedStoreWithTab<State & Action
         state.filters = {};
       }),
     // 모델 그리드 조회 — MODEL GET + EDIT_INFO(행별 편집판정). design 02 §5.2 / 03 §4.2.
-    setFilter: () => {
+    setFilter: reloadLine => {
+      const prev = get().filters;
       set(state => {
         const c = state.searchCondition;
         const common = {
@@ -199,6 +202,13 @@ export const useProductionPlanStore = createPersistedStoreWithTab<State & Action
         state.filters = {
           [SHEETS.MAIN]: { ...common, sheetName: ADMIN_SHEET_NAME[SHEETS.MAIN] },
         };
+        // AS-IS FindData_Model_Parallel(isReload=true) → FindData_Line(nSelRowOfMain, true) 패리티.
+        //   LINE 은 새 참조로 넣어 재조회하고, EDIT_INFO 는 AS-IS 처럼 재호출 없이 유지한다.
+        const prevLine = prev[SHEETS.LINE];
+        if (reloadLine && prevLine) {
+          state.filters[SHEETS.LINE] = { ...prevLine };
+          if (prev[SHEETS.EDIT_INFO]) state.filters[SHEETS.EDIT_INFO] = prev[SHEETS.EDIT_INFO];
+        }
       });
     },
     // master(MODEL) 더블클릭 → line drill. 선택 모델행의 식별값 + plan 컨텍스트로 LINE GET. design 03 §4.2.

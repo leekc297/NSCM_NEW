@@ -1,0 +1,19 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,dr[DefMain.COLUMN_NAME],CODE,SCP0095_GlobalPSI_Elec,SCP0095_GlobalPSI_Elec.cs:462,dr[DefMain.COLUMN_LABEL_NAME],Text,,None,코드 선언 FPMerge.None,0,false,,,,"foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sColumnName.IndexOf(""B_"") > 0)"
+,dr[DefMain.COLUMN_NAME],CODE,SCP0095_GlobalPSI_Elec,SCP0095_GlobalPSI_Elec.cs:467,dr[DefMain.COLUMN_LABEL_NAME],Number,,None,코드 선언 FPMerge.None,70,true,,,,"foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0)"
+Global PSI Elec,CELL_MODEL,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),Cell Material,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),130,Y,L,,,
+Global PSI Elec,COMPANY_ID,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),Company,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,C,,,
+Global PSI Elec,ELECTRODE_TYPE,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),Elec Type,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Global PSI Elec,ELEC_MODEL,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),Elec Material,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Global PSI Elec,FROM_SITE,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),From Site,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Global PSI Elec,MEASURE_NAME,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),Measure,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),130,Y,L,,,
+Global PSI Elec,NICK_NAME,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),Nick Name,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,Y,L,,,
+Global PSI Elec,ORG_DIVISION_ID,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),Org.Div,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,C,,,
+Global PSI Elec,PLANT_ID,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),plant,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),60,N,C,,,
+Global PSI Elec,PSI,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),PSI,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),40,Y,C,,,
+Global PSI Elec,TO_SITE,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),To Site,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Global PSI Elec,UNIT,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),Unit,Text(기본),,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),40,Y,C,,,
+Global PSI Elec,VALUE1,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),"Elec Stock
+(Pancake)",FPNumber,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,R,,,
+Global PSI Elec,VALUE2,META,,META SCM_MST_SHEET_COLUMNS(SCP0095/Global PSI Elec),"Elec Stock
+(Assy)",FPNumber,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,R,,,

@@ -1,0 +1,14 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+1,KEY_IDX,CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:216,KEY_IDX,Text,,Always,코드 선언 FPMerge.Always,80,false,,,,
+1,DIVISION_ID,CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:217,Division,Combo,"BLUtils.GetDivisionWithoutEE(false, """")",Restricted,코드 선언 FPMerge.Restricted,60,true,Left,,,
+1,SCM_SITE_ID,CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:218,Plant Site,Combo,"Data.Common(Data.Type.PlantSiteByDivision, false, division)",Restricted,코드 선언 FPMerge.Restricted,90,true,Left,,,
+1,FACTORY_ID,CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:219,Building,Combo,"Data.Common(Data.Type.BuildingByDivision, false, division)",Restricted,코드 선언 FPMerge.Restricted,60,true,Left,,,
+1,OPERATION_ID,CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:220,Operation,Combo,"Data.Common(Data.Type.OperationByBuilding, false, division, """", """")} || {?Data.Common(Data.Type.OperationByBuilding, false, division, pPlantSiteID, pFactoryID)",Restricted,코드 선언 FPMerge.Restricted,60,true,Left,,,
+1,LINE_ID,CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:221,Line,Combo,"Data.Common(Data.Type.LineByOperation, false, division, pPlantSiteID, """", pOperationID)} || {?Data.Common(Data.Type.LineByOperation, false, division, pPlantSiteID, pFactoryID, pOperationID)",Restricted,코드 선언 FPMerge.Restricted,90,true,,,,
+1,PROJECT_ID,CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:222,Project,Text,,Restricted,코드 선언 FPMerge.Restricted,80,true,,,,
+1,ITEM_ID,CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:223,Model,Text,,Always,코드 선언 FPMerge.Always,120,true,,,,
+1,USER_SORT_ORDER_NO,CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:224,Sort,Text,,Always,코드 선언 FPMerge.Always,120,false,,,,
+1,MEASURE,CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:225,Measure,Text,,None,코드 선언 FPMerge.None,120,true,,,,
+,dr[DefColumns.COLUMN_NAME],CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:283,dr[DefColumns.COLUMN_LABEL_NAME],Text,,None,코드 선언 FPMerge.None,0,false,,,,"foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sColumnName.IndexOf(""B_"") > 0)"
+,dr[DefColumns.COLUMN_NAME],CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:287,dr[DefColumns.COLUMN_LABEL_NAME],Number,,None,코드 선언 FPMerge.None,75,true,Right,,,"foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0)"
+,a.Field<string>(DefColumns.WEEK).Split('|')[1],CODE,SCP0003_ProductionCapacity,SCP0003_ProductionCapacity.cs:360,a.Field<string>(DefColumns.WEEK).Split('|')[1],Number,,None,코드 선언 FPMerge.None,75,true,Right,,,foreach(a in dtCalendar.AsEnumerable())

@@ -10,9 +10,7 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {
-      "actualWorkers": 1
-    },
+    "metadata": {},
     "preserveOutput": "always",
     "reporter": [
       [
@@ -62,204 +60,170 @@
   },
   "suites": [
     {
-      "title": "SCP0100.smoke.spec.ts",
-      "file": "SCP0100.smoke.spec.ts",
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "SCP0100 Global_PSI_Report 스모크 @smoke",
-          "file": "SCP0100.smoke.spec.ts",
-          "line": 7,
+          "title": "정합검증 SCP0007 @verify",
+          "file": "_verify.spec.ts",
+          "line": 129,
           "column": 6,
           "specs": [
             {
-              "title": "화면 열림 · 조회조건 · 조회 · 그리드 컬럼",
-              "ok": false,
+              "title": "조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)",
+              "ok": true,
               "tags": [
-                "smoke"
+                "verify"
               ],
               "tests": [
                 {
                   "timeout": 180000,
-                  "annotations": [
-                    {
-                      "type": "labels",
-                      "description": "펼침=true 일치 13 / 누락 3: Display, Project, Unit (Qty) / 제외 1: Graph(cboGraphType: D00-1-007 §1 cboGraphType / UsrCombo)"
-                    },
-                    {
-                      "type": "columns",
-                      "description": "시트 SEARCH_LEVEL(searchLevel) 헤더 17 / 기대 8 / 누락 3: Product Level1, Product Level2, Product Level3"
-                    },
-                    {
-                      "type": "dynamic",
-                      "description": "As-is SCP0100_GET_SHEET_CALENDAR_3SPAN · DB루프 InitSpreadDateColumn:755,InitSpreadDateColumn:760 · 컬럼정의 18 / 정적밖 13 (M_202609,M_202610,M_202611,M_202612,M_202701) · 타이틀 시트 calendar 호출 1"
-                    },
-                    {
-                      "type": "calls",
-                      "description": "[[\"searchLevel\",\"SEARCH\",200,1897,1747]]"
-                    }
-                  ],
+                  "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "status": "failed",
-                      "duration": 95743,
-                      "error": {
-                        "message": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110",
-                        "matcherResult": {
-                          "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                          "pass": false
-                        },
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                          "column": 110,
-                          "line": 22
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 110,
-                            "line": 22
-                          },
-                          "message": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 110,
-                            "line": 22
-                          },
-                          "message": "Error: 조회조건 'Project' (ProjectField) — 후보 [Project]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 110,
-                            "line": 22
-                          },
-                          "message": "Error: 조회조건 'Unit (Qty)' (CustomDropdown) — 후보 [Unit (Qty)]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 87,
-                            "line": 47
-                          },
-                          "message": "Error: 그리드 컬럼 누락 (메타 기준)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m2\u001b[39m\nReceived:    \u001b[31m3\u001b[39m\n\n\u001b[0m \u001b[90m 45 |\u001b[39m     \u001b[36mconst\u001b[39m missing \u001b[33m=\u001b[39m expectCols\u001b[33m.\u001b[39mfilter((c\u001b[33m:\u001b[39m string) \u001b[33m=>\u001b[39m c \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39mheaders\u001b[33m.\u001b[39msome(h \u001b[33m=>\u001b[39m norm(h) \u001b[33m===\u001b[39m norm(c) \u001b[33m||\u001b[39m norm(h)\u001b[33m.\u001b[39mincludes(norm(c))))\u001b[33m;\u001b[39m\n \u001b[90m 46 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'columns'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`시트 ${sheetName}(${firstSearch ? firstSearch.sheet : '-'}) 헤더 ${headers.length} / 기대 ${expectCols.length} / 누락 ${missing.length}: ${missing.slice(0, 10).join(', ')}`\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(missing\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`그리드 컬럼 누락 (${PLAN.hasMeta ? '메타' : 'As-is 라벨'} 기준)`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mceil(expectCols\u001b[33m.\u001b[39mlength \u001b[33m*\u001b[39m \u001b[35m0.2\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 48 |\u001b[39m     \u001b[90m// 동적 헤더(기간 컬럼) — As-is 타이틀 SP/DB루프가 있으면 정적 메타 밖 컬럼 ≥1 + 사내 배선 타이틀 시트 조회(2026-10-20 SCP0096)\u001b[39m\n \u001b[90m 49 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader) {\n \u001b[90m 50 |\u001b[39m       \u001b[36mconst\u001b[39m \u001b[33mDH\u001b[39m \u001b[33m=\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:47:87"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-10-21T00:26:35.483Z",
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\artifacts\\SCP0100.smoke-SCP0100-Glob-53735--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\artifacts\\SCP0100.smoke-SCP0100-Glob-53735--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                        "column": 110,
-                        "line": 22
-                      }
-                    },
-                    {
-                      "workerIndex": 1,
-                      "status": "failed",
-                      "duration": 53061,
-                      "error": {
-                        "message": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110",
-                        "matcherResult": {
-                          "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                          "pass": false
-                        },
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                          "column": 110,
-                          "line": 22
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 110,
-                            "line": 22
-                          },
-                          "message": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 110,
-                            "line": 22
-                          },
-                          "message": "Error: 조회조건 'Project' (ProjectField) — 후보 [Project]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 110,
-                            "line": 22
-                          },
-                          "message": "Error: 조회조건 'Unit (Qty)' (CustomDropdown) — 후보 [Unit (Qty)]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 87,
-                            "line": 47
-                          },
-                          "message": "Error: 그리드 컬럼 누락 (메타 기준)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m2\u001b[39m\nReceived:    \u001b[31m3\u001b[39m\n\n\u001b[0m \u001b[90m 45 |\u001b[39m     \u001b[36mconst\u001b[39m missing \u001b[33m=\u001b[39m expectCols\u001b[33m.\u001b[39mfilter((c\u001b[33m:\u001b[39m string) \u001b[33m=>\u001b[39m c \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39mheaders\u001b[33m.\u001b[39msome(h \u001b[33m=>\u001b[39m norm(h) \u001b[33m===\u001b[39m norm(c) \u001b[33m||\u001b[39m norm(h)\u001b[33m.\u001b[39mincludes(norm(c))))\u001b[33m;\u001b[39m\n \u001b[90m 46 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'columns'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`시트 ${sheetName}(${firstSearch ? firstSearch.sheet : '-'}) 헤더 ${headers.length} / 기대 ${expectCols.length} / 누락 ${missing.length}: ${missing.slice(0, 10).join(', ')}`\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(missing\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`그리드 컬럼 누락 (${PLAN.hasMeta ? '메타' : 'As-is 라벨'} 기준)`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mceil(expectCols\u001b[33m.\u001b[39mlength \u001b[33m*\u001b[39m \u001b[35m0.2\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 48 |\u001b[39m     \u001b[90m// 동적 헤더(기간 컬럼) — As-is 타이틀 SP/DB루프가 있으면 정적 메타 밖 컬럼 ≥1 + 사내 배선 타이틀 시트 조회(2026-10-20 SCP0096)\u001b[39m\n \u001b[90m 49 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader) {\n \u001b[90m 50 |\u001b[39m       \u001b[36mconst\u001b[39m \u001b[33mDH\u001b[39m \u001b[33m=\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:47:87"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-10-21T00:28:19.268Z",
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\artifacts\\SCP0100.smoke-SCP0100-Glob-53735--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\\test-failed-1.png"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\artifacts\\SCP0100.smoke-SCP0100-Glob-53735--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                        "column": 110,
-                        "line": 22
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
-              "id": "4a50afd561d7cec820df-906a6bf3967035be75ab",
-              "file": "SCP0100.smoke.spec.ts",
-              "line": 9,
+              "id": "d557cdbda6ec1bc6afb1-9885c521afe3244feed5",
+              "file": "_verify.spec.ts",
+              "line": 134,
+              "column": 7
+            },
+            {
+              "title": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-4144bfd339445d8e1aae",
+              "file": "_verify.spec.ts",
+              "line": 155,
+              "column": 7
+            },
+            {
+              "title": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-e08f6491f3a25e14f176",
+              "file": "_verify.spec.ts",
+              "line": 423,
+              "column": 7
+            },
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-3844d8e9f2ef1ab78472",
+              "file": "_verify.spec.ts",
+              "line": 486,
+              "column": 7
+            },
+            {
+              "title": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-2bbd7aaae5a95141e4a0",
+              "file": "_verify.spec.ts",
+              "line": 968,
+              "column": 7
+            },
+            {
+              "title": "셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-3a09c8ec5b3928222b43",
+              "file": "_verify.spec.ts",
+              "line": 1104,
+              "column": 7
+            },
+            {
+              "title": "조회조건 콤보 후보 품질(B1·B2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-a66397cc15113e0dccb4",
+              "file": "_verify.spec.ts",
+              "line": 1182,
               "column": 7
             }
           ]
@@ -269,11 +233,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-21T00:26:29.689Z",
-    "duration": 165374.362,
+    "startTime": "2026-10-27T16:45:26.569Z",
+    "duration": 1205.6229999999996,
     "expected": 0,
-    "skipped": 0,
-    "unexpected": 1,
+    "skipped": 7,
+    "unexpected": 0,
     "flaky": 0
   }
 }

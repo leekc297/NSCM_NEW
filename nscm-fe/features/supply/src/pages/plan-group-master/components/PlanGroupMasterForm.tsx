@@ -9,7 +9,6 @@ import {
   confirmIfDirtyKey,
   tabDirtyKey,
   useMessageStore,
-  useSessionStore,
   useTabid,
 } from '@shared/stores';
 
@@ -54,7 +53,6 @@ export const PlanGroupMasterForm = ({
   const initialized = usePlanGroupMasterStore(state => state.initialized);
   const searchParams = usePlanGroupMasterStore(state => state.searchParams);
   const setSearchParams = usePlanGroupMasterStore(state => state.setSearchParams);
-  const clearMainFilters = usePlanGroupMasterStore(state => state.clearMainFilters);
 
   // Division 콤보 — Division_SCP (권한필터, EE 포함). Division_SCP_NoEE/MyDivision 오매핑 금지(02 §2-A).
   const [divisions] = useTabComboQueries({
@@ -62,7 +60,6 @@ export const PlanGroupMasterForm = ({
   });
 
   const { setToast } = useMessageStore.getState();
-  const sessionDiv = useSessionStore(state => state.session.div);
   const tabId = useTabid();
 
   // 권한 Division 0건 → SearchArea 비활성 + MSG00097 1회 (R2, SetDivisionAuthCheck 등가).
@@ -75,15 +72,13 @@ export const PlanGroupMasterForm = ({
     if (noDivision) void setToast({ type: 'error', message: t(MSG.REQUIRE_DIVISION, '_No authorized Division.') });
   }, [noDivision, setToast, t]);
 
-  // 권한 목록 밖 Division 보정 (sales-site/MktFcst 규약). 세션 div 가 목록에 있으면 그것, 없으면 첫 행.
+  // AS-IS 기본 Division = 권한 콤보 첫 행(02 §4, 세션 div 강제선택 없음 — GAP-10 해소).
+  //   현재 선택이 권한 목록 밖(초기 빈값·F6 복원 실패 포함)이면 첫 행으로 채운다. F6 복원값이 권한 내면 유지.
   useEffect(() => {
     if (!initialized || divisionCodes.length === 0) return;
     if (divisionCodes.includes(searchParams.divisionId)) return;
-    const picked = divisionCodes.includes(String(sessionDiv ?? ''))
-      ? String(sessionDiv)
-      : divisionCodes[0];
-    setSearchParams({ divisionId: picked });
-  }, [initialized, divisionCodes, searchParams.divisionId, sessionDiv, setSearchParams]);
+    setSearchParams({ divisionId: divisionCodes[0] });
+  }, [initialized, divisionCodes, searchParams.divisionId, setSearchParams]);
 
   const division = searchParams.divisionId;
 
@@ -116,15 +111,11 @@ export const PlanGroupMasterForm = ({
     [lineRows, division, searchParams.operation, searchParams.plant, searchParams.building]
   );
 
-  // 조회조건 변경은 전건 그리드 즉시 clear (SRCH-07 / §3 ClearDataSource).
-  //   편집가능 그리드라 미저장 편집(dirty)이 있으면 clear 전 MSG00704 confirm(GAP-01, 커밋 51d4e9fa 패턴).
-  //   취소 시 controlled 콤보가 이전 값으로 복귀(setSearchParams 미실행). 조회(Search) 와 동일 'search' 가드.
+  // Division 외 조회조건(Operation/Plant/Building/Line/Plan Group) 변경은 조건만 갱신하고 그리드는 보존한다.
+  //   그리드 초기화는 cascade root 인 Division 변경에서만(store setSearchParams 가 filters 를 비움, SRCH-07).
+  //   비-Division 변경은 결과를 지우지 않으므로 dirty 가드 불필요(조회(Search) 전까지 편집분 유지).
   const changeCondition = (patch: Partial<typeof searchParams>) => {
-    void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
-      if (!ok) return;
-      setSearchParams(patch);
-      clearMainFilters();
-    });
+    setSearchParams(patch);
   };
 
   // 상위축(Op/Plant/Building) 변경 → Line 재필터 + Line 선택 prune (02 §3).

@@ -1,0 +1,61 @@
+﻿영역,권한,Division 계열,순위,USER_ID,이름,DEPT_ID,최근 로그인,보유 계열(해당 권한),해당 계열 편집권한,같은 영역 다른 그룹 수,같은 영역 다른 그룹,후보 수,권한 그룹 USE_YN
+SCP,SCP Planner,40,1,dana.robot,Dana,LESIB,2026-09-17 12:04,"40,82",Y,0,,12,Y
+SCP,SCP Planner,40,2,minchae,신민채,71059518,2026-09-16 09:21,"40,81,82,EE",Y,0,,12,Y
+SCP,SCP Planner,40,3,minjukim_04,김민주,70228765,2026-09-10 16:21,40,Y,1,SCM Viewer,12,Y
+SCP,SCP Planner,81,1,jsh96,정승환,71059518,2026-10-14 13:58,"81,82",Y,0,,31,Y
+SCP,SCP Planner,81,2,minchae,신민채,71059518,2026-09-16 09:21,"40,81,82,EE",Y,0,,31,Y
+SCP,SCP Planner,81,3,edge_c,Chonghee Edge,30424596,2026-10-15 07:06,81,Y,1,FP Planner,31,Y
+SCP,SCP Planner,82,1,jsh96,정승환,71059518,2026-10-14 13:58,"81,82",Y,0,,29,Y
+SCP,SCP Planner,82,2,dana.robot,Dana,LESIB,2026-09-17 12:04,"40,82",Y,0,,29,Y
+SCP,SCP Planner,82,3,minchae,신민채,71059518,2026-09-16 09:21,"40,81,82,EE",Y,0,,29,Y
+SCP,SCP Tester,40,1,lucky-alex,박현철,70010540,2026-09-30 16:18,"40,81,82,EE",Y,6,DM Viewer / FP Viewer / SCM Viewer / SSP ADMIN / SSP Planner / SSP Viewer,1,Y
+SCP,SCP Tester,81,1,lucky-alex,박현철,70010540,2026-09-30 16:18,"40,81,82,EE",Y,6,DM Viewer / FP Viewer / SCM Viewer / SSP ADMIN / SSP Planner / SSP Viewer,1,Y
+SCP,SCP Tester,82,1,lucky-alex,박현철,70010540,2026-09-30 16:18,"40,81,82,EE",Y,6,DM Viewer / FP Viewer / SCM Viewer / SSP ADMIN / SSP Planner / SSP Viewer,1,Y
+SCP,SCM Viewer,40,1,zhangjiali,장가력,30289340,2026-10-13 16:39,40,N,0,,375,Y
+SCP,SCM Viewer,40,2,yangyin,양은,30430009,2026-10-08 08:54,40,N,0,,375,Y
+SCP,SCM Viewer,40,3,shixiuyun,사수운,71074353,2026-09-22 17:00,40,N,0,,375,Y
+SCP,SCM Viewer,81,1,popiel,KRZYSZTOF POPIEL,30226813,2026-10-15 15:55,81,N,0,,540,Y
+SCP,SCM Viewer,81,2,vega.pradana,Amal Vega Pradana,30414981,2026-10-13 17:21,81,N,0,,540,Y
+SCP,SCM Viewer,81,3,yujeong.shin,Shin Yu Jeong,30428960,2026-10-09 11:26,81,N,0,,540,Y
+SCP,SCM Viewer,82,1,kang_huichan,강희찬,71063493,2026-09-18 08:34,82,N,0,,432,Y
+SCP,SCM Viewer,82,2,edenjung,정이든,71077828,2026-08-06 09:29,82,N,0,,432,Y
+SCP,SCM Viewer,82,3,yuseonuk,유선욱,70021367,2026-07-15 13:42,82,N,0,,432,Y
+SCP,ADMIN,40,1,jooyong026,강주용,LESHD,2026-10-15 10:19,"40,81,82,EE",Y,1,SSP Planner,11,Y
+SCP,ADMIN,40,2,yokejacob,서용선,LESHD,2026-10-15 09:41,"40,81,82,EE",Y,1,FP Planner,11,Y
+SCP,ADMIN,40,3,jungyu9.kim,김준규,LESHD,2026-10-07 09:34,"40,81,82,EE",Y,2,FP Viewer / SCM PI Admin,11,Y
+SCP,ADMIN,81,1,jooyong026,강주용,LESHD,2026-10-15 10:19,"40,81,82,EE",Y,1,SSP Planner,11,Y
+SCP,ADMIN,81,2,yokejacob,서용선,LESHD,2026-10-15 09:41,"40,81,82,EE",Y,1,FP Planner,11,Y
+SCP,ADMIN,81,3,jungyu9.kim,김준규,LESHD,2026-10-07 09:34,"40,81,82,EE",Y,2,FP Viewer / SCM PI Admin,11,Y
+SCP,ADMIN,82,1,jooyong026,강주용,LESHD,2026-10-15 10:19,"40,81,82,EE",Y,1,SSP Planner,11,Y
+SCP,ADMIN,82,2,yokejacob,서용선,LESHD,2026-10-15 09:41,"40,81,82,EE",Y,1,FP Planner,11,Y
+SCP,ADMIN,82,3,jungyu9.kim,김준규,LESHD,2026-10-07 09:34,"40,81,82,EE",Y,2,FP Viewer / SCM PI Admin,11,Y
+SCP,SCM PI Admin,40,1,jinseon_ahn,안진선,LESHD,2026-08-12 16:01,"40,81,82,EE",Y,0,,18,Y
+SCP,SCM PI Admin,40,2,jiyeon_min,민지연,70137276,2026-04-01 06:36,"40,81,82,EE",Y,0,,18,Y
+SCP,SCM PI Admin,40,3,kbkwon,권기범,70021414,2025-11-14 15:53,"40,81,82,EE",Y,0,,18,Y
+SCP,SCM PI Admin,81,1,wangyucnb,왕우,30254491,2026-01-30 17:58,"81,82,EE",Y,0,,19,Y
+SCP,SCM PI Admin,81,2,jinseon_ahn,안진선,LESHD,2026-08-12 16:01,"40,81,82,EE",Y,0,,19,Y
+SCP,SCM PI Admin,81,3,jiyeon_min,민지연,70137276,2026-04-01 06:36,"40,81,82,EE",Y,0,,19,Y
+SCP,SCM PI Admin,82,1,wangyucnb,왕우,30254491,2026-01-30 17:58,"81,82,EE",Y,0,,19,Y
+SCP,SCM PI Admin,82,2,jinseon_ahn,안진선,LESHD,2026-08-12 16:01,"40,81,82,EE",Y,0,,19,Y
+SCP,SCM PI Admin,82,3,jiyeon_min,민지연,70137276,2026-04-01 06:36,"40,81,82,EE",Y,0,,19,Y
+SSP,SSP ADMIN,40,0,,,,,,,,,0,N
+SSP,SSP ADMIN,81,0,,,,,,,,,0,N
+SSP,SSP ADMIN,82,0,,,,,,,,,0,N
+SSP,SSP Planner,40,1,jinhuannj,근환,30436542,2026-10-14 12:07,40,Y,0,,44,Y
+SSP,SSP Planner,40,2,chris.yi,Christopher Yi,30434559,2026-08-13 01:07,"40,EE",Y,0,,44,Y
+SSP,SSP Planner,40,3,kimsimon1,Simon Kim,30270175,2026-07-22 05:49,"40,81",Y,0,,44,Y
+SSP,SSP Planner,81,1,iqromoh,Iqro Mohammad,30414982,2026-10-15 12:59,81,Y,0,,64,Y
+SSP,SSP Planner,81,2,cliftonc,Courtney Clifton,30270175,2026-10-14 22:19,81,Y,0,,64,Y
+SSP,SSP Planner,81,3,zhangqianyu1,장청옥,71061668,2026-10-13 17:47,81,Y,0,,64,Y
+SSP,SSP Planner,82,1,hoseoknam,Hoseok Nam,71076609,2026-10-15 01:00,82,Y,0,,60,Y
+SSP,SSP Planner,82,2,dingkaijuan,정개연,30436541,2026-10-14 17:24,82,Y,0,,60,Y
+SSP,SSP Planner,82,3,jimins,Jimin Shin,71064976,2026-10-13 01:52,82,Y,0,,60,Y
+SSP,SSP Viewer,40,1,kijung03.kim,김기정,LESIL,2026-10-02 12:01,40,N,0,,79,Y
+SSP,SSP Viewer,40,2,namki.jeon,전남기,70052676,2026-08-24 07:36,40,N,0,,79,Y
+SSP,SSP Viewer,40,3,bumil.choi,최범일,LESIL,2026-07-10 13:09,40,N,0,,79,Y
+SSP,SSP Viewer,81,1,caizedan,ZeDan Cai,30360354,2026-09-16 00:12,"40,81,82,EE",N,0,,78,Y
+SSP,SSP Viewer,81,2,trustlee,이신,70020622,2026-01-07 10:10,"40,81,82,EE",N,0,,78,Y
+SSP,SSP Viewer,81,3,alexpark,박기웅,70090872,2026-10-15 08:16,81,N,1,DM Viewer,78,Y
+SSP,SSP Viewer,82,1,caizedan,ZeDan Cai,30360354,2026-09-16 00:12,"40,81,82,EE",N,0,,73,Y
+SSP,SSP Viewer,82,2,trustlee,이신,70020622,2026-01-07 10:10,"40,81,82,EE",N,0,,73,Y
+SSP,SSP Viewer,82,3,gmarkiewicz,Grzegorz Markiewicz,LESLGCWA,2026-10-12 19:14,82,N,1,FP Viewer,73,Y

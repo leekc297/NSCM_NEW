@@ -55,24 +55,28 @@ export const OutsourcingCapacityGrid = ({
     };
     g.beginningEdit.addHandler(beginningEditHandler);
 
-    // Daily Capacity 하한 보정 — 정수·최소 1, 미달/비숫자면 1 강제 + MSG00085 (design 03 §3 #6).
+    // Daily Capacity 하한/상한 보정 — 정수·최소 1(+MSG00085)·최대 8자리(알림 없음) (design 03 §3 #6).
+    //   binding 은 DB SHEET_COLUMNS COLUMN_NAME 그대로 대문자 'DAILY_CAPA_QTY'(2026-10-14 ora.py 실측).
+    //   종전 lowercase 비교/필드 접근은 실제 바인딩과 불일치해 이 핸들러가 전혀 발동하지 않던 버그.
     const cellEditEndedHandler = (sender: FlexGridType, e: { row: number; col: number }) => {
       const binding = sender.columns[e.col]?.binding ?? '';
-      if (binding !== 'daily_capa_qty') return;
+      if (binding !== 'DAILY_CAPA_QTY') return;
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
       if (!row) return;
-      const { value, coerced } = coerceDailyCapa(row.daily_capa_qty);
+      const { value, coerced, reason } = coerceDailyCapa(row.DAILY_CAPA_QTY);
       if (coerced) {
         const tracker = editTrackerRef.current;
-        tracker?.storeChange(row as never, 'daily_capa_qty', row.daily_capa_qty as never, value as never);
-        row.daily_capa_qty = value;
-        void setAlert({
-          type: 'alert',
-          content: t(MSG.DAILY_CAPA_MIN, '_Only values greater than or equal to {0} are allowed.').replace(
-            '{0}',
-            '1'
-          ),
-        });
+        tracker?.storeChange(row as never, 'DAILY_CAPA_QTY', row.DAILY_CAPA_QTY as never, value as never);
+        row.DAILY_CAPA_QTY = value;
+        if (reason === 'min') {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.DAILY_CAPA_MIN, '_Only values greater than or equal to {0} are allowed.').replace(
+              '{0}',
+              '1'
+            ),
+          });
+        }
         sender.invalidate();
       }
     };

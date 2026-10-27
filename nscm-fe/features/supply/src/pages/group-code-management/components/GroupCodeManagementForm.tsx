@@ -179,9 +179,9 @@ export const GroupCodeManagementForm = ({ onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* Model Attribute — FCST/Production/Active/BOM 4 Y/N 플래그를 묶은 단일 select.
-              allOption=기본 'ALL'(미선택, value ''). ALL 선택/미선택 시 4종 전부 false(=전부 'N').
-              SP 계약(4 Y/N)은 그대로 유지. */}
+          {/* Model Attribute — FCST/Production/Active/BOM 4 Y/N 플래그를 묶은 다중 select.
+              고른 플래그를 그대로 Y 로 전송(전체 선택 시 4개 전부 Y — 공용이 'ALL' 로 뭉개지 않고 열거).
+              전체 해제(빈 선택)만 공용이 'ALL' 로 보내므로 그 경우 전부 false. SP 계약(4 Y/N)은 그대로 유지. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -197,7 +197,7 @@ export const GroupCodeManagementForm = ({ onSearch, onItemSearch }: Props) => {
                   value={attrValue}
                   options={attrOptions}
                   onChange={(_, picked) => {
-                    // CustomDropdown 전체해제/전체선택 = 'ALL' sentinel → 빈 선택으로 정규화(전부 false).
+                    // 고른 플래그를 그대로 반영. 빈 선택은 공용이 'ALL' 로 보내므로 전부 false 로 정규화.
                     const sel = new Set(
                       String(picked ?? '')
                         .split(',')

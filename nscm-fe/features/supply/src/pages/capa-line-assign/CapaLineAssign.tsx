@@ -30,6 +30,7 @@ import {
   ASSIGN_SHEET_BY_DIVISION_TYPE,
   COLUMN,
   COMBO,
+  CUTOFF_PROG_STATS,
   DIVISION_TYPE,
   EXCEL_FILE_NAME,
   FALLBACK_LABEL,
@@ -38,12 +39,14 @@ import {
   MENU_ID,
   MSG,
   NEW_ROW_DATE_CELL_VALUE,
+  ROW_SOURCE_LINE_POPUP,
   SHEET_PARAM_NAME,
   SHEETS,
   SHOP_GROUP_BY_DIVISION_TYPE,
   SOP_MODEL_SHEET_BY_DIVISION_TYPE,
   SOP_SHEET_BY_DIVISION_TYPE,
   TAB,
+  TAB_MODE_SUFFIX,
   TITLESET_COLUMN_TYPE,
   type TabIndex,
 } from './capa-line-assign.constants';
@@ -154,6 +157,8 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const divisionType = sc.divisionType;
   const isEltr = divisionType === DIVISION_TYPE.ELTR;
+  // 탭 라벨 모드 접미 — 시트명 2분류(Electrode→-ELTR, Cell·Module-Pack→-ASSEMBLY). 표시 전용.
+  const tabModeSuffix = isEltr ? TAB_MODE_SUFFIX.ELTR : TAB_MODE_SUFFIX.ASSEMBLY;
   const assignSheet = ASSIGN_SHEET_BY_DIVISION_TYPE[divisionType];
   const sopSheet = SOP_SHEET_BY_DIVISION_TYPE[divisionType];
   const linePopupSheet = LINE_SHEET_BY_DIVISION_TYPE[divisionType];
@@ -334,6 +339,16 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
     sopTrackerRef.current?.clearChanges();
   }, [sopQuery.data]);
 
+  // AS-IS Layer 1 — 컷오프 버전(PROG_STAT 1차/2차)이면 편집 진입을 막는다(cs:4085-4111, R-19~R-21).
+  //   editable(아래) 로 셀을 잠그고, 편집 시도 시 insert/save 핸들러가 이 가드로 MSG00109 를 띄운다.
+  const isCutoffVersion = CUTOFF_PROG_STATS.includes(cascade.progStat);
+  // 컷오프면 MSG00109 안내 후 true 반환(= 편집 차단). 핸들러 진입부에서 `if (blockIfCutoff()) return;`.
+  const blockIfCutoff = (): boolean => {
+    if (!isCutoffVersion) return false;
+    void setAlert({ type: 'alert', content: t(MSG.CUTOFF_READONLY, '_Read-only mode.') });
+    return true;
+  };
+
   // ── 액션 ────────────────────────────────────────────────────────────────────────────
   // 주의: `*` 필수 조회조건 검증은 구현하지 않는다 — Designer 라벨 중 `*` 로 끝나는 것이 0건이라
   //   AS-IS 에서 사문화된 분기다(R-27 / V-21). 없는 검증을 새로 만들지 않는다.
@@ -353,6 +368,7 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
    * 전부 메시지 없이 조용히 return 하는 것도 AS-IS 그대로다(CP-13).
    */
   const handleInsert = () => {
+    if (blockIfCutoff()) return; // AS-IS Layer 1 — 컷오프 버전은 MSG00109 안내 후 편집 차단(R-19~R-21).
     if (activeTab === TAB.SOP) {
       if (!sopGridRef.current) return; // ① `_siSop == null`
       if (!canEdit) return; // ②③ `IsLock(sheet)` / `!IsEditModes[SOP]` — 편집권한 게이트
@@ -490,6 +506,7 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!grid) return;
     grid.finishEditing();
     if (!canEdit) return;
+    if (blockIfCutoff()) return; // AS-IS Layer 1 — 컷오프 버전은 MSG00109 안내 후 저장 차단(R-19~R-21).
     const source = (grid.collectionView?.sourceCollection ?? []) as GridRow[];
     const dirty = source.filter(row => row.CRUD_TYPE === 'I' || row.CRUD_TYPE === 'M');
     if (dirty.length === 0) {
@@ -515,12 +532,19 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // AS-IS 툴바 override 는 5종뿐이다(Search/Insert/Edit/Delete/Save) — Excel/Upload/Manual 없음.
   //   `hasButton` 을 곱해 admin 권한 메타로 노출을 가른다(R-23 / CP-03, hook #63).
-  const editable = canEdit;
+  //
+  // AS-IS Layer 1 — 컷오프 버전(PROG_STAT 1차/2차)은 권한과 무관하게 전 셀 읽기전용이다.
+  //   cs:4085-4111 `EditButton` 이 `_1ST_CUTOFF`/`_2ND_CUTOFF` 면 MSG00109 안내 후 편집모드 진입을
+  //   막는다(R-19~R-21). TO-BE 는 Edit 버튼이 없으므로(§2.4) Edit-진입 차단이 아니라 편집셀 활성
+  //   자체를 끈다 — editable(=권한 ∧ 비컷오프)을 grid editMode 에 물려 셀을 잠근다.
+  //   핫키 노출은 권한(canEdit)만으로 가르고, 컷오프 안내(MSG00109)는 insert/save 핸들러 진입부에서
+  //   띄운다 — AS-IS 가 Edit 시도 시점에 안내하던 거동을 TO-BE 의 편집 진입점(insert/save)으로 옮긴 것.
+  const editable = canEdit && !isCutoffVersion;
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    insert: hasButton('INSERT') && editable ? handleInsert : false,
-    delete: hasButton('DELETE') && editable ? handleDelete : false,
-    save: hasButton('SAVE') && editable ? handleSave : false,
+    insert: hasButton('INSERT') && canEdit ? handleInsert : false,
+    delete: hasButton('DELETE') && canEdit ? handleDelete : false,
+    save: hasButton('SAVE') && canEdit ? handleSave : false,
     manual: false,
     upload: false,
   };
@@ -672,6 +696,9 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
         [COLUMN.LINE_NAME]: str(source.LINE_NAME),
         [COLUMN.VALID_YN]: 'Y',
         [COLUMN.DUMMY_YN]: 'N',
+        // AS-IS `Insert_Row_Assign_Line`(cs:5438) 은 NICK_NAME 을 잠그지 않는다(Insert 버튼 경로만 잠금).
+        //   editLock 이 이 마커를 보고 ELTR 신규행이어도 NICK_NAME 을 열어둔다(G43 경로 분기).
+        [ROW_SOURCE_LINE_POPUP]: true,
       };
       // AS-IS `Edit_Row_Assign_Line` 은 Operation·ELTR_LN_TP_CD·Item 계열을 채우지 않는다(G40).
       // AS-IS `InsertAssignLine` 은 중복체크 **앞에서** 6키 전건을 두 번 건다 —
@@ -756,7 +783,7 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
           activeTabIndex={activeTab}
           setActiveTabIndex={index => setActiveTab(index as TabIndex)}
         >
-          <TabItem label={t(LBL.TAB_LINE_ASSIGN, '_Line Assign')}>
+          <TabItem label={`${t(LBL.TAB_LINE_ASSIGN, '_Line Assign')}${tabModeSuffix}`}>
             <CapaLineAssignGrid
               sheet={assignSheet}
               data={assignRows}
@@ -766,7 +793,7 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
               adminColumns={staticColumns[assignSheet]}
               userColumnLayout={userColumnLayout[assignSheet]}
               dateColumns={dateColumns}
-              editMode={canEdit}
+              editMode={editable}
               comboSources={comboSources}
               dummyCodes={dummyCodes}
               onCellDblClick={handleAssignCellDblClick}
@@ -774,7 +801,7 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
             />
           </TabItem>
           {/* SOP 탭 라벨은 `SCM_ADM_MSG_M` 에 등가 LBL 이 없다 — 임의 등록 금지, 영문 fallback 유지. */}
-          <TabItem label={FALLBACK_LABEL.TAB_SOP}>
+          <TabItem label={`${FALLBACK_LABEL.TAB_SOP}${tabModeSuffix}`}>
             <CapaLineSopGrid
               sheet={sopSheet}
               data={sopRows}
@@ -783,7 +810,7 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
               editTrackerRef={sopTrackerRef}
               adminColumns={staticColumns[sopSheet]}
               userColumnLayout={userColumnLayout[sopSheet]}
-              editMode={canEdit}
+              editMode={editable}
             />
           </TabItem>
         </TabWrapper>
@@ -793,8 +820,11 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
       <CapaLineModal
         open={openLinePopup}
         sheet={linePopupSheet}
+        divisionType={divisionType}
         tabId={tabId}
         divisionId={applied?.divisionId ?? sc.divisionId}
+        divisionOptions={cascade.divisionOptions}
+        masterRows={cascade.masterRows}
         onClose={() => setOpenLinePopup(false)}
         onConfirm={handleLinePopupConfirm}
       />

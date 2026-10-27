@@ -143,12 +143,27 @@ export const LBL = {
   END_CUSTOMER: 'LBL00080',
   SALES_SITE: 'LBL00011',
   PLANT_SITE: 'LBL00005',
-  PROJECT: 'LBL00617',
+  PROJECT: 'LBL00012', // 사용자 지시 2026-10-22 (기존 LBL00617 에서 변경)
   MODEL: 'LBL00669',
+  MODEL_NICKNAME: 'LBL00618', // Model/Nickname (사용자 지시 2026-10-22, SSP0024/0025 동일 코드)
   SHIPMENT_DATE: 'LBL01115',
   LOT_ID: 'LBL01090',
   NICK_NAME: 'LBL00767',
   REQUESTOR: 'LBL01108',
   SEARCH_MAIN: 'LBL00112',
   SEARCH_GRID: 'LBL00664',
+  MEASURE: 'LBL00310', // Measure 설정 버튼(btnMeasure)
+  EXCEL_FORM: 'LBL00762', // Excel Form 양식 다운로드(formDown)
+  EXCEL_UPLOAD: 'LBL00346', // Excel Upload 버튼(btnExcelUpload)
 } as const;
+
+// 조회 기간 검증(AS-IS DateUtil.Check_PeriodDate) — From>To, 기간 미입력, 최대기간(From+1년+7일) 초과.
+//   AS-IS MSG 번호(MSG00049/MSG00172)는 TO-BE 에서 뜻이 다르거나 미등록이라, 문구 역조회로 확정한
+//   TO-BE 코드를 쓴다(shipment-request-semi 선례): 미입력 MSG00665 / from>to MSG00108 / 초과 MSG01187.
+export const PERIOD_MSG = {
+  EMPTY: 'MSG00665', // "조회 기간을 입력하세요."
+  ORDER: 'MSG00108', // "조회 기간이 잘못되었습니다 (시작일 > 종료일)."
+  MAX: 'MSG01187', // "최대 조회일은 From Date + {0} 입니다."
+} as const;
+// MSG01187 의 {0} 표시용 라벨 일수(AS-IS 메시지 인자 364+7). 실제 경계는 From+1캘린더년+7일로 계산.
+export const MAX_PERIOD_LABEL_DAYS = 371;

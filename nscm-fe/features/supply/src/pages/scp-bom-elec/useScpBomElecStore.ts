@@ -34,7 +34,7 @@ interface Action {
 }
 
 const initSearch: SearchCondition = {
-  divisionId: '', // 콤보 로드 후 '81' 존재 시 선택·미존재 시 마지막 항목 (design 01 R6b — Form effect)
+  divisionId: '', // 콤보 로드 후 배열 첫 항목 기본선택 (Form effect) — 사용자 지시 2026-10-22, AS-IS R6b 폐기
   parentId: '',
   childId: '',
 };

@@ -1,0 +1,62 @@
+// New(라인배정) 팝업 — 추가된 라인 스테이징 표. 화면설계서(SCP0013 human-doc R36~37) 컬럼 규정 반영:
+//   No / Plan Date / Plan Type / Seq / Div / Origin Div / Operation Group / Model / Nick Name / Item Type / Plant Site / Line.
+//   AS-IS SCM0002 는 FpSpread 그리드였다(텍스트 나열 → 표로 복원).
+// 모달 콘텐츠 = 세로 flex. 입력행(상) + 스테이징 그리드(flex 채움) + 버튼(하).
+.contentWrap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.stagedWrap {
+  flex: 1; // 남는 높이를 그리드가 채운다(팝업 높이↓ 해도 그리드 영역은 최대 확보).
+  min-height: 0; // flex 자식 overflow 허용
+  margin-top: 8px;
+  overflow: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.stagedTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+
+  th,
+  td {
+    border-bottom: 1px solid #ededed;
+    border-right: 1px solid #ededed;
+    padding: 5px 8px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  th:last-child,
+  td:last-child {
+    border-right: 0;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #f5f6f8;
+    font-weight: 600;
+    color: #333;
+  }
+
+  tbody tr:hover {
+    background: #fafbfc;
+  }
+
+  .numCell {
+    text-align: center;
+    color: #888;
+    width: 40px;
+  }
+
+  .actionCell {
+    text-align: center;
+    width: 48px;
+  }
+}

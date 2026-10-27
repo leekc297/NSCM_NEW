@@ -1,0 +1,15 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SSP0013,SQL,SSP0003_GET_SSP_PLAN_PROCESSING_CHECK,Doc\asisfacts\db\modules\dbo.SSP0003_GET_SSP_PLAN_PROCESSING_CHECK.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0013,SQL,SSP0013_GET_SHIPMENT_PLAN_CHANGE,Doc\asisfacts\db\modules\dbo.SSP0013_GET_SHIPMENT_PLAN_CHANGE.sql,114,,PROJECT_CODE,"SET @mDqry = @mDQry + ' 	  							  ,ROW_NUMBER() over(partition by DIVISION_ID, SCM_SITE_ID, ITEM_ID order by PROJECT_CODE) num	' + char(10);",3,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SSP0013,SQL,SSP0013_GET_SHIPMENT_PLAN_CHANGE,Doc\asisfacts\db\modules\dbo.SSP0013_GET_SHIPMENT_PLAN_CHANGE.sql,120,,CHANGE_REQ_NO DESC,"SET @mDqry = @mDQry + ' 	  		  ,ROW_NUMBER() OVER(PARTITION BY CONFIRM_ID ORDER BY CHANGE_REQ_NO DESC) NUM								' + char(10);",3,동적 SQL · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SSP0013,SQL,SSP0013_GET_SHIPMENT_PLAN_CHANGE,Doc\asisfacts\db\modules\dbo.SSP0013_GET_SHIPMENT_PLAN_CHANGE.sql,156,IF ( @v_status   IS NOT NULL AND @v_status    != '') SET @mDQry = @mDQry + ' 					AND  a.shipment_status     IN ('+ @v_status   +')'+char(10); ▸ IF ( @v_change_type   IS NOT NULL AND @v_change_type    != '') SET @mDQry = @mDQry + ' 					AND  a.change_type     IN ('+ @v_change_type   +')'+char(10); ▸ IF @p_myModelChk = 'Y',"CHANGE_TYPE,DIVISION_ID,YYYYMMDD,ITEM_ID,FROM_SITE,TO_SITE,ERP_SO_NO,PROJECT_CODE,FCST_TYPE","SET @mDqry = @mDQry + ' ORDER BY a.change_type,a.division_id, a.yyyymmdd,  a.item_id, a.from_site, a.to_site, a.erp_so_no, a.project_code, a.fcst_type     ' + char(10);",0,동적 SQL
+SSP0013,SQL,SSP0013_GET_STOCK_INFOMATION,Doc\asisfacts\db\modules\dbo.SSP0013_GET_STOCK_INFOMATION.sql,96,,DIVISION_ID,ORDER BY a.division_id,0,정적
+SSP0013,SQL,GET_DATE_RANGE_1MONTH,,,,,,,AS-IS SP 원문 없음(Doc/asisfacts/db/modules)
+SSP0013,SQL,SSP0013_DELETE_SHIPMENT_REQUEST_DRAFTING,Doc\asisfacts\db\modules\dbo.SSP0013_DELETE_SHIPMENT_REQUEST_DRAFTING.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0013,SQL,SSP0013_GET_ERP_SO_NO_CNT,Doc\asisfacts\db\modules\dbo.SSP0013_GET_ERP_SO_NO_CNT.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0013,SQL,SSP0013_GET_SHIPMENT_STATUS,Doc\asisfacts\db\modules\dbo.SSP0013_GET_SHIPMENT_STATUS.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0013,SQL,SSP0013_SAVE_SHIPMENT_REQUEST_DRAFTING,Doc\asisfacts\db\modules\dbo.SSP0013_SAVE_SHIPMENT_REQUEST_DRAFTING.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0013,SQL,SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM,Doc\asisfacts\db\modules\dbo.SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM.sql,360,,LAST_UPDATE_DATE DESC,ORDER BY LAST_UPDATE_DATE desc;,0,정적
+SSP0013,SQL,SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM,Doc\asisfacts\db\modules\dbo.SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM.sql,706,,"YYYYMMDD,NEW_YYYYMMDD","ORDER BY YYYYMMDD, NEW_YYYYMMDD",1,정적 · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SSP0013,SQL,SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM_CHECK,Doc\asisfacts\db\modules\dbo.SSP0013_SAVE_SHIPMENT_REQUEST_CONFIRM_CHECK.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SSP0013,CODE,,06.UIL\GSCM.SSP.Plan.UIL\SSP0013_ShipmentPlanAdjustment.cs,344,,CODE,"dtDivision.DefaultView.Sort = ""CODE Asc"";",0,화면 코드 정렬

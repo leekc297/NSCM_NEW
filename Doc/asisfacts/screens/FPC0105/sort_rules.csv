@@ -1,0 +1,7 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+FPC0105,SQL,SCM0002_GET_TITLESET_POPUP,Doc\asisfacts\db\modules\dbo.SCM0002_GET_TITLESET_POPUP.sql,54,,SORT_ORDER_NO,ORDER BY b.sort_order_no;,0,정적
+FPC0105,SQL,SCM0002_GET_TITLESET_POPUP,Doc\asisfacts\db\modules\dbo.SCM0002_GET_TITLESET_POPUP.sql,86,,SORT_ORDER_NO,ORDER BY b.sort_order_no;,0,정적
+FPC0105,SQL,SCM0002_GET_TITLESET_POPUP,Doc\asisfacts\db\modules\dbo.SCM0002_GET_TITLESET_POPUP.sql,115,,SORT_ORDER_NO,ORDER BY b.sort_order_no;,0,정적
+FPC0105,SQL,SCM0002_SET_TITLESET_POPUP,Doc\asisfacts\db\modules\dbo.SCM0002_SET_TITLESET_POPUP.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+FPC0105,CODE,,06.UIL\GSCM.FP.Common.UIL\Popup\FPC0105_ReportConfig_Popup.cs,117,,USER_SORT_ORDER_NO,"_dtColumnSet.DefaultView.Sort = ""USER_SORT_ORDER_NO ASC"";",0,화면 코드 정렬
+FPC0105,CODE,,06.UIL\GSCM.FP.Common.UIL\Popup\FPC0105_ReportConfig_Popup.cs,472,,USER_SORT_ORDER_NO,"sample.DefaultView.Sort = ""USER_SORT_ORDER_NO ASC"";",0,화면 코드 정렬

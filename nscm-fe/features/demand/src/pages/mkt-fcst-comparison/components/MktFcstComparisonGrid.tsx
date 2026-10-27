@@ -5,8 +5,6 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { MutableRefObject } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import dayjs from '@foundation/dayjs';
-import isoWeek from '@foundation/isoWeek';
 import type { FlexGridColumnConfig } from '@foundation/models';
 import { CustomMergeManager, toGridNumber } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
@@ -22,11 +20,9 @@ import {
 import type { ComparisonRow, SpreadTitleRow } from '../mkt-fcst-comparison.types';
 import { useMktFcstComparisonStore } from '../useMktFcstComparisonStore';
 
-dayjs.extend(isoWeek);
-
 // ⭐ DMF0040 메인 그리드 — AS-IS spdMain(버전×Measure 비교 단일 시트) 1:1 조회 전용.
 //   동적 시간축 = DMF0040_GET_SPREAD_TITLE (월>주>일 3단 + SUM — forecast-price 패턴 이식) /
-//   실적 구간 회색(행별 VERSION_NO 경계, FindData L774~886) / Difference 행 파랑(L889~893) /
+//   Difference 행 파랑(L889~893) / 실적 구간 회색(FindData L774~886)은 PI 119 확정으로 미적용 /
 //   헤더 더블클릭 드릴다운(M_→W_→D_, CellDoubleClick L1179~1216) / footer 합계(InitSpreadFooterSum L406~424) /
 //   QTY 표시 스케일(SetAmountCalculating L1756~1830 — 표시 사본 변환).
 
@@ -99,45 +95,6 @@ interface MktFcstComparisonGridProps {
   data: ComparisonRow[];
   spreadTitle: SpreadTitleRow[];
 }
-
-/** 이번 주 월요일 YYYYMMDD (AS-IS GetThisWeekMonday L1675 — G-02) */
-const thisWeekMondayYmd = (): string => {
-  const today = dayjs();
-  return today.subtract((today.day() + 6) % 7, 'day').format('YYYYMMDD');
-};
-
-/** 기준일의 전주 일요일 (AS-IS GetLastWeekSunDayByDate L1697 — 기준일 이전 월요일의 -1일, G-03) */
-const lastWeekSundayYmd = (yyyymmdd: string): string => {
-  const d = dayjs(yyyymmdd, 'YYYYMMDD');
-  if (!d.isValid()) return '';
-  return d
-    .subtract((d.day() + 6) % 7, 'day')
-    .subtract(1, 'day')
-    .format('YYYYMMDD');
-};
-
-/** 동적 binding 의 대표 구간 [시작일, 종료일] — 실적 회색 경계 비교용 */
-const bindingRange = (binding: string): { from: string; to: string } | null => {
-  const kind = kindOf(binding);
-  if (kind === 'D') {
-    const d = binding.slice(2);
-    return { from: d, to: d };
-  }
-  if (kind === 'M') {
-    const ym = binding.slice(2);
-    const start = dayjs(`${ym}01`, 'YYYYMMDD');
-    return { from: start.format('YYYYMMDD'), to: start.endOf('month').format('YYYYMMDD') };
-  }
-  if (kind === 'W') {
-    // W_yyyymmWW — 해당 연도 ISO 주차의 월~일 (AS-IS GetWeekOfYear FirstFourDayWeek/Monday 대응)
-    const year = Number(binding.slice(2, 6));
-    const week = Number(binding.slice(8, 10));
-    if (!year || !week) return null;
-    const start = dayjs().year(year).isoWeek(week).startOf('isoWeek');
-    return { from: start.format('YYYYMMDD'), to: start.add(6, 'day').format('YYYYMMDD') };
-  }
-  return null;
-};
 
 export const MktFcstComparisonGrid = ({
   gridRef,
@@ -431,34 +388,6 @@ export const MktFcstComparisonGrid = ({
     return m;
   }, [dynColMetas]);
 
-  // ── 행별 실적 회색 경계 (FindData L774~886 1:1) — VERSION_NO → {boundaryYmd, unlockMonth} ──
-  //   Current/'' : min(전주 일요일, 조회 종료일) / Cutoff: 버전명[5..13] 날짜의 전주 일요일 vs 조회말일 min.
-  const boundaryRef = useRef<Map<string, { ymd: string; unlockMonth: string }>>(new Map());
-  boundaryRef.current = useMemo(() => {
-    const m = new Map<string, { ymd: string; unlockMonth: string }>();
-    const periodTo = searchParams.endYyyymmdd;
-    const currentSunday = dayjs(thisWeekMondayYmd(), 'YYYYMMDD')
-      .subtract(1, 'day')
-      .format('YYYYMMDD');
-    const versions = new Set(gridRows.map(r => String(r.VERSION_NO ?? '')));
-    versions.forEach(v => {
-      let ref: string;
-      if (!v || v.toUpperCase() === 'CURRENT') {
-        ref = currentSunday < periodTo ? currentSunday : periodTo;
-      } else {
-        const inDate = v.length >= 13 ? v.slice(5, 13) : '';
-        const cutoffSunday = inDate ? lastWeekSundayYmd(inDate) : '';
-        if (!cutoffSunday) {
-          ref = currentSunday < periodTo ? currentSunday : periodTo;
-        } else {
-          ref = cutoffSunday < periodTo ? cutoffSunday : periodTo;
-        }
-      }
-      m.set(v, { ymd: ref, unlockMonth: `M_${ref.slice(0, 6)}` });
-    });
-    return m;
-  }, [gridRows, searchParams.endYyyymmdd]);
-
   // ── 가시성 적용 (요약=Sum 토글 / 드릴=오버라이드) — AS-IS SetSpreadColumn ──
   const applyDynVisibility = () => {
     const g = gridRef.current;
@@ -567,7 +496,7 @@ export const MktFcstComparisonGrid = ({
     };
     g.hostElement?.addEventListener('dblclick', onDblClick);
 
-    // formatItem — 실적 회색 / Difference 파랑 / SAT·SUN 헤더 글자색
+    // formatItem — Difference 파랑 / SAT·SUN 헤더 글자색 (실적 회색은 PI 119 로 미적용)
     const formatHandler = (
       sender: FlexGrid,
       e: { panel: GridPanel; row: number; col: number; cell: HTMLElement }
@@ -602,18 +531,10 @@ export const MktFcstComparisonGrid = ({
       } else if (String(item.MEASURE ?? '') === 'Difference') {
         e.cell.style.color = '#1565c0';
       }
-      // 실적 구간 회색 — 행 VERSION_NO 경계 이하 기간 컬럼 (해당 월 SUM 은 White 예외, L858~872)
-      const boundary = boundaryRef.current.get(String(item.VERSION_NO ?? ''));
-      if (boundary) {
-        const range = bindingRange(binding);
-        if (range) {
-          if (binding === boundary.unlockMonth) {
-            // 경계월 M_ SUM = White 예외
-          } else if (range.to <= boundary.ymd) {
-            e.cell.style.backgroundColor = '#dcdcdc'; // Gainsboro
-          }
-        }
-      }
+      // 실적 구간 회색 바탕(AS-IS FindData L774~886 SetBGColor Gainsboro)은 적용하지 않는다.
+      // 근거: PI 119(의도 변경, 상태 완료, 4.최종확인) 확정 TO-BE = 실적·계획 구간 무관 흰색 배경.
+      // 금지: AS-IS 파리티를 이유로 회색 바탕을 복원하지 않는다. 2026-10-09 복원 커밋(a6f44a5f1)을 되돌린 것이며
+      //   행별 VERSION_NO 경계 역산과 bindingRange 로직은 해당 커밋 이력에 남아 있다.
     };
     g.formatItem.addHandler(formatHandler);
 

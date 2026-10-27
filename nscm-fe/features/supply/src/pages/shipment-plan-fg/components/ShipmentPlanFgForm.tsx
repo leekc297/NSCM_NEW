@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
+import { PlanVersionCascade, type PlanVersionLevel } from 'features/supply/src/components';
+import { useEffect, useMemo } from 'react';
 
 import dayjs from '@foundation/dayjs';
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, PeriodRangePicker, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField, Label } from '@shared/lges';
+import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
@@ -235,6 +236,34 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
     setLatestPlanSeq(latestPlanSeq);
   }, [latestPlanSeq, setLatestPlanSeq]);
 
+  // Plan Date → Type → Seq 종속 콤보를 공유 PlanVersionCascade(SCP0031/SCP0010 자매 화면과 동일 캐스케이더)로
+  //   재구성(2026-10-21) — 반환컬럼(PLANDATE/PLANTYPE)으로 date→type→seq 를 잇는다(division 필터·트리화는
+  //   컴포넌트가 수행). 위 자동선택 effect(firstPlanDate/latestPlanType/firstPlanSeq)는 그대로 둔다.
+  const planVersionLevels = useMemo<PlanVersionLevel[]>(
+    () => [
+      { name: 'planDate', label: t(LBL.PLAN_DATE, '_Plan Date'), rows: planDates, required: true },
+      {
+        name: 'planType',
+        label: t(LBL.PLAN_TYPE, '_Plan Type'),
+        rows: planTypes,
+        parentKeys: ['PLANDATE'],
+        required: true,
+      },
+      {
+        name: 'planSeq',
+        label: t(LBL.SEQ, '_Seq.'),
+        rows: planSeqs,
+        parentKeys: ['PLANDATE', 'PLANTYPE'],
+        required: true,
+      },
+    ],
+    [t, planDates, planTypes, planSeqs]
+  );
+  const planVersionValue = useMemo(
+    () => ({ planDate: sc.planStartYyyymmdd, planType: sc.planType, planSeq: sc.planSeq }),
+    [sc.planStartYyyymmdd, sc.planType, sc.planSeq]
+  );
+
   const multi = (
     labelCode: string,
     labelEn: string,
@@ -299,9 +328,8 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
       searchButtonLabel={t(LBL.SEARCH, '_Search')}
       isHidden={!openSearchArea}
       onSearch={onSearch}
-      // 필드 12건, Grid size 합계(3*10+4+2=36)가 2단(24) 초과 — hook #52(search-area-extra-conditions)
-      //   기준 우선순위대로 필수(*)+Period 만 conditions 에 두고, 나머지(cascade 종속/보조 필터)는
-      //   extraConditions 로 분리한다(nscm-patterns.md §6 조회조건 "2줄+ 접기/펼치기").
+      // 배치(사용자 지시 2026-10-21): conditions(상시 노출, 2줄) = Div/OpGroup/FromSite/Team/ToSite +
+      //   PJT/Model/Electrode. extraConditions(접기/펼치기) = Bucket/Sum + PlanDate/Type/Seq(cascade)/Period.
       conditions={
         <>
           {/* Division* — 무필터, EE 제외 없음(design 02 §2.1) */}
@@ -347,70 +375,11 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
           {single(LBL.OPERATION_GROUP, '_Operation Group', sc.operationGroupId, operationGroupOptions, v =>
             set({ operationGroupId: v })
           , true)}
-          {single(LBL.PLAN_DATE, '_Plan Date', sc.planStartYyyymmdd, planDateOptions, v =>
-            // PlanDate 변경 = PlanType/Seq 리셋 + Period(dCalendar) W52 재설정(design 02 §3 cascade,
-            //   AS-IS CboPlanDate_SelectedIndexChanged → GetDayRange(W52) anchor=선택 PlanDate).
-            set({
-              planStartYyyymmdd: v,
-              planType: '',
-              planSeq: '',
-              ...(v ? getDayRange(dayjs(v, 'YYYYMMDD'), 52) : {}),
-            })
-          , true)}
-          {single(LBL.PLAN_TYPE, '_Plan Type', sc.planType, planTypeOptions, v =>
-            set({ planType: v, planSeq: '' })
-          , true)}
-          {single(LBL.SEQ, '_Seq', sc.planSeq, planSeqOptions, v => set({ planSeq: v }), true)}
-
-          {/* Period(dCalendar)* — design 02 §2.9. 기간 프리셋(W26/W52/W82)은 PeriodRangePicker 팝업에 내장돼 있다. */}
-          <Grid size={3}>
-            <PeriodRangePicker
-              start={sc.fromYyyymmdd}
-              end={sc.toYyyymmdd}
-              onChange={(from, end) => set({ fromYyyymmdd: from, toYyyymmdd: end })}
-              label={t(LBL.PERIOD, '_Period')}
-              required
-              className={commonStyles.formItem}
-              quickWeeks={[26, 52, 82]}
-            />
-          </Grid>
-
-          {/* Bucket(cboBucketType)->ALL(chkAll)->Sum(chkSum) — Period 오른쪽 배치(AS-IS 조회조건 영역). AS-IS 에는
-              chkAll 의 CheckedChanged 핸들러가 없어 ALL 체크와 무관하게 Bucket 을 바꿀 수 있다(Daily 강제는 조회 시 서버 SP 가 수행). */}
-          {single(LBL.BUCKET, '_Bucket', sc.bucketType, bucketOptions, v => onChangeBucketType(v as BUCKET_TYPE))}
-          {/* ALL(chkAll)은 화면에 노출하지 않는다 — 스토어 기본값(true) 고정으로 서버에 P_CHK_ALL='Y' 를 보낸다. */}
-          {/* Sum 은 Plan Type 입력칸과 같은 x 에서 시작해야 한다. 빈 라벨 FormItem 으로 라벨 트랙을 확보한다
-              (label='' 은 falsy 라 트랙이 생기지 않아 NBSP 를 쓴다 — business-plan 폼 동일 패턴). */}
-          <Grid size={3}>
-            <FormItem
-              label={' '}
-              labelAlign='right'
-              className={commonStyles.formItem}
-              render={() => (
-                <div className={commonStyles.customCheckbox}>
-                  <Checkbox checked={sc.chkSum} onChange={checked => set({ chkSum: checked })} />
-                  <Label labelText={t(LBL.SUM, '_Sum')} depth='sub' />
-                </div>
-              )}
-            />
-          </Grid>
-        </>
-      }
-      extraConditions={
-        <>
           {multi(LBL.FROM_SITE, '_From Site', sc.fromSiteIds, fromSiteOptions, fromSiteIds => set({ fromSiteIds }))}
           {multi(LBL.TO_SITE, '_To Site', sc.toSiteIds, toSiteOptions, toSiteIds => set({ toSiteIds }))}
           {multi(LBL.TEAM, '_Team', sc.teamIds, teamOptions, teamIds =>
             // Team 변경 = ToSite 2차 재조회 트리거(design 02 §2.6)
             set({ teamIds })
-          )}
-          {multi(
-            LBL.ELECTRODE,
-            '_Electrode',
-            sc.electrodeTypeIds,
-            electrodeOptions,
-            electrodeTypeIds => set({ electrodeTypeIds }),
-            !isEE // division EE 여부로 Enabled 만 토글(design 02 §2.7) — 비활성 시 선택값 유지 안 함
           )}
 
           {/* Project — txtProject + btnProject -> ProjectByDivisionModal(design 02 §4.6) */}
@@ -463,6 +432,79 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
                   onChange={e => set({ itemId: e.target.value })}
                   onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
+              )}
+            />
+          </Grid>
+
+          {multi(
+            LBL.ELECTRODE,
+            '_Electrode',
+            sc.electrodeTypeIds,
+            electrodeOptions,
+            electrodeTypeIds => set({ electrodeTypeIds }),
+            !isEE // division EE 여부로 Enabled 만 토글(design 02 §2.7) — 비활성 시 선택값 유지 안 함
+          )}
+        </>
+      }
+      extraConditions={
+        <>
+          {/* Plan Date → Type → Seq — 공유 PlanVersionCascade(SCP0013 자매 화면과 동일). combined 단일 입력칸
+              (기본) — 클릭하면 date→type→seq 컬럼 팝업으로 경로 선택. 입력칸 고정폭 190px + 라벨(140) 수용
+              size=3 래퍼(SCP0013 동일, 사용자 지시 2026-10-21). PlanDate 변경 시 Period(dCalendar) W52 재설정
+              (AS-IS GetDayRange(W52) 파리티). */}
+          <Grid size={3}>
+            <PlanVersionCascade
+              variant='horizontal'
+              labelAlign='right'
+              formItemClassName={commonStyles.formItem}
+              label='Plan Date/Type/Seq'
+              inputWidth='190px'
+              levels={planVersionLevels}
+              divisionId={sc.divisionId}
+              value={planVersionValue}
+              onChange={v => {
+                const nextPlanDate = v.planDate ?? '';
+                set({
+                  planStartYyyymmdd: nextPlanDate,
+                  planType: v.planType ?? '',
+                  planSeq: v.planSeq ?? '',
+                  ...(nextPlanDate && nextPlanDate !== sc.planStartYyyymmdd
+                    ? getDayRange(dayjs(nextPlanDate, 'YYYYMMDD'), 52)
+                    : {}),
+                });
+              }}
+            />
+          </Grid>
+
+          {/* Bucket(cboBucketType)->ALL(chkAll)->Sum(chkSum). AS-IS 에는 chkAll 의 CheckedChanged 핸들러가
+              없어 ALL 체크와 무관하게 Bucket 을 바꿀 수 있다(Daily 강제는 조회 시 서버 SP 가 수행).
+              Bucket↔Period 순서 교체(사용자 지시 2026-10-21) — Bucket 을 Period 앞으로. */}
+          {single(LBL.BUCKET, '_Bucket', sc.bucketType, bucketOptions, v => onChangeBucketType(v as BUCKET_TYPE))}
+
+          {/* Period(dCalendar)* — design 02 §2.9. 기간 프리셋(W26/W52/W82)은 PeriodRangePicker 팝업에 내장돼 있다. */}
+          <Grid size={3}>
+            <PeriodRangePicker
+              start={sc.fromYyyymmdd}
+              end={sc.toYyyymmdd}
+              onChange={(from, end) => set({ fromYyyymmdd: from, toYyyymmdd: end })}
+              label={t(LBL.PERIOD, '_Period')}
+              required
+              className={commonStyles.formItem}
+              quickWeeks={[26, 52, 82]}
+            />
+          </Grid>
+          {/* ALL(chkAll)은 화면에 노출하지 않는다 — 스토어 기본값(true) 고정으로 서버에 P_CHK_ALL='Y' 를 보낸다. */}
+          {/* Sum — SCP0031(GlobalPsiForm) 과 동일 스타일: FormItem label 에 실제 라벨을 넣고 customGrid 로
+              체크박스를 행 높이 기준 세로 중앙 정렬한다(2026-10-21). */}
+          <Grid size={3} className={commonStyles.customGrid}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t(LBL.SUM, '_Sum')}
+              labelAlign='right'
+              render={() => (
+                <div className={commonStyles.customCheckbox}>
+                  <Checkbox checked={sc.chkSum} onChange={checked => set({ chkSum: checked })} />
+                </div>
               )}
             />
           </Grid>

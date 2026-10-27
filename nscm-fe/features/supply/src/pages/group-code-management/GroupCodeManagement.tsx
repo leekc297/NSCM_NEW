@@ -1,11 +1,11 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useMutation } from '@tanstack/react-query';
 import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useMutation } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SsoUserModal, SubTitle } from '@shared/components';
 import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
@@ -147,6 +147,17 @@ export const GroupCodeManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
     saveMutation.mutate(payload);
   };
 
+  // PIC 미등록 알럿(§3-4 R-PIC-CHECK) — 키인/팝업/저장-재검증 세 경로 공통.
+  const showPicNoPermissionAlert = (userId: string) => {
+    void setAlert({
+      type: 'alert',
+      content: t(
+        MSG.PIC_NO_PERMISSION,
+        'This user does not have permission to the SSP Planner.\n\rUser ID : {0}'
+      ).replace('{0}', userId),
+    });
+  };
+
   const handleSave = () => {
     if (!canEdit) return; // 편집권한 없음 — 버튼도 안 뜨지만 단축키 경로까지 막는다.
     const grid = gridRef.current;
@@ -159,8 +170,31 @@ export const GroupCodeManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_수정한 내용이 없습니다.') });
       return;
     }
-    // 공통 필수검증(useSaveWithValidation) 배선 후 doSave — 메타 M/IM 컬럼 자동 차단(convert-core §2.4).
-    saveWithValidation(dirtyRows, staticColumns[RESPONSE_SET.MAIN], doSave);
+    void (async () => {
+      // 저장 직전 PIC_ID 재검증(R-PIC-CHECK 레이스 가드) — cellEditEnded/handleUserSelected 의 검증은
+      //   비동기(fire-and-forget)라 "키인 즉시 저장" 처럼 응답 전에 Save 가 눌리면 미검증 값이 그대로
+      //   저장될 수 있다(2026-10-22 실사고: chae9999 같은 미등록 ID 가 알럿 없이 저장됨). Save 가 그
+      //   완료를 직접 기다려 막는다.
+      const picIds = new Set(
+        dirtyRows.map(row => String(row[PIC_ID_COLUMN] ?? '').trim()).filter(Boolean)
+      );
+      for (const picId of picIds) {
+        // eslint-disable-next-line no-await-in-loop -- 순차 검증(동일 picId 재확인 중복요청 방지 목적 Set)
+        const ok = await checkPicRegistered(picId);
+        if (ok) continue;
+        for (const row of dirtyRows) {
+          if (String(row[PIC_ID_COLUMN] ?? '').trim() === picId) {
+            row[PIC_ID_COLUMN] = '';
+            row[PIC_NAME_COLUMN] = '';
+          }
+        }
+        grid?.invalidate();
+        showPicNoPermissionAlert(picId);
+        return;
+      }
+      // 공통 필수검증(useSaveWithValidation) 배선 후 doSave — 메타 M/IM 컬럼 자동 차단(convert-core §2.4).
+      saveWithValidation(dirtyRows, staticColumns[RESPONSE_SET.MAIN], doSave);
+    })();
   };
 
   // PIC_ID 셀 더블클릭(편집모드) -> UserInfoPopup 오픈. 대상 행 기억(§3-3 R-POPUP-PIC).
@@ -191,13 +225,7 @@ export const GroupCodeManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
       target[PIC_ID_COLUMN] = '';
       target[PIC_NAME_COLUMN] = '';
       grid?.invalidate();
-      void setAlert({
-        type: 'alert',
-        content: t(
-          MSG.PIC_NO_PERMISSION,
-          'This user does not have permission to the SSP Planner.\n\rUser ID : {0}'
-        ).replace('{0}', userId),
-      });
+      showPicNoPermissionAlert(userId);
     })();
   };
 
@@ -220,13 +248,7 @@ export const GroupCodeManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
       row[PIC_ID_COLUMN] = '';
       grid?.invalidate();
-      void setAlert({
-        type: 'alert',
-        content: t(
-          MSG.PIC_NO_PERMISSION,
-          'This user does not have permission to the SSP Planner.\n\rUser ID : {0}'
-        ).replace('{0}', userId),
-      });
+      showPicNoPermissionAlert(userId);
     })();
   };
 
@@ -260,8 +282,8 @@ export const GroupCodeManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
     save: canEdit && hasButton('SAVE') ? handleSave : false,
     // AS-IS 는 INSERT/DELETE 버튼이 있으나 클릭 시 아무 동작도 하지 않는다(공용 addRow/removeRow 미연결).
     //   NO-OP 은 false 로 숨기지 않고 무동작 함수로 재현한다(01_layout.md §2 B-2/B-4, §6 V-7~V-9).
-    insert: hasButton('INSERT') ? () => undefined : false,
-    delete: hasButton('DELETE') ? () => undefined : false,
+    insert: false,
+    delete: false,
     manual: false,
     upload: false,
   };

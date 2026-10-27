@@ -7,7 +7,13 @@ import type { HotkeyConfig, PageProps, RawFlexGridColumnConfig } from '@foundati
 import { useQueryClient } from '@foundation/query-client';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SsoUserModal, type SsoUserRow, SubTitle } from '@shared/components';
-import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import {
+  formatTotalCases,
+  useProcMutation,
+  useTabBtnPermissions,
+  useTabProcQuery,
+  useTitleAreaLanguage,
+} from '@shared/hooks';
 import { TitleArea } from '@shared/lges';
 import { useMessageStore } from '@shared/stores';
 
@@ -57,6 +63,9 @@ const findMissingUserRequired = (
   columns: RawFlexGridColumnConfig[] | undefined
 ): string | undefined => {
   for (const row of rows) {
+    // 삭제 행은 검사하지 않는다 — 지울 행에 이름을 요구할 이유가 없다. 사용자 원장에 없는 사용자는
+    //   조회 SP 가 User Name 을 빈 칸으로 돌려주므로(AS-IS 바깥 결합, 2026-10-16) 이 검사에 걸려 삭제가 막혔을 것이다.
+    if (row.CRUD_TYPE === 'D') continue;
     const missing = USER_INFO_REQUIRED.find(c => isBlank(row[c.colNm]));
     if (missing) {
       return columns?.find(c => c.colNm === missing.colNm)?.colLblNm || missing.fallbackLabel;
@@ -67,6 +76,8 @@ const findMissingUserRequired = (
 
 export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
+  // 건수 표기 언어(총/건 ↔ Total/rows) — 공용 SubTitle · ResultArea 와 같은 규칙(useTitleAreaLanguage 주석).
+  const titleAreaLanguage = useTitleAreaLanguage();
   const queryClient = useQueryClient();
   const setAlert = useMessageStore(state => state.setAlert);
   const setToast = useMessageStore(state => state.setToast);
@@ -382,7 +393,8 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
             isSubTitle
             title={t('LBL00357', 'Group Info')}
             depth='h4'
-            totalCases={groupCount === 0 ? undefined : groupCount}
+            totalCases={formatTotalCases(groupCount === 0 ? undefined : groupCount)}
+            language={titleAreaLanguage}
           />
           {GroupGrid}
         </div>
@@ -392,7 +404,8 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
               isSubTitle
               title={t('LBL00658', 'User Info')}
               depth='h4'
-              totalCases={userCount === 0 ? undefined : userCount}
+              totalCases={formatTotalCases(userCount === 0 ? undefined : userCount)}
+              language={titleAreaLanguage}
             />
             {UserGrid}
           </div>
@@ -402,7 +415,8 @@ export const GroupUser = ({ tabId, title }: PageProps<MENU_ID>) => {
                 isSubTitle
                 title={t('LBL00641', 'Division')}
                 depth='h4'
-                totalCases={divisionCount === 0 ? undefined : divisionCount}
+                totalCases={formatTotalCases(divisionCount === 0 ? undefined : divisionCount)}
+                language={titleAreaLanguage}
               />
               {DivisionGrid}
             </div>

@@ -476,6 +476,7 @@
       "tasks": [
         {
           "id": "S5.pipeline",
+          "newScreen": true,
           "title": "★ ID 하나로 끝까지 — 화면ID (pipeline.js: 골격→등록SQL→PKG→FE수선→PKG이식→E2E스펙→대조표)",
           "kind": "node",
           "script": "${harnessDir}/pipeline.js",
@@ -501,6 +502,7 @@
         },
         {
           "id": "S5.pipelinedesign",
+          "newScreen": true,
           "title": "★ 새 화면 — 화면설계서 우선(from 설계서: pipeline --design Doc/asisfacts/agent/<ID>/screen_design.md)",
           "kind": "node",
           "script": "${harnessDir}/pipeline.js",
@@ -566,6 +568,7 @@
         },
         {
           "id": "S5.new",
+          "newScreen": true,
           "title": "신규 화면 생성 — 화면ID (new-screen.ps1)",
           "kind": "powershell",
           "script": "${harnessDir}/new-screen.ps1",
@@ -807,31 +810,12 @@
           "title_en": "PKG gate — ID (check-pkg.js)"
         },
         {
-          "id": "S5.pkgdeploy",
-          "title": "PKG 컴파일 배포 — 화면ID (run_sql.py --commit, USER_ERRORS)",
-          "kind": "python",
-          "script": "${dbconnDir}/run_sql.py",
-          "args": [
-            "${genDir}/${input:id}/${input:id}_PKG.sql",
-            "--commit"
-          ],
-          "inputs": [
-            {
-              "name": "id",
-              "prompt": "화면ID",
-              "default": "DMF0052"
-            }
-          ],
-          "confirm": "To-Be Oracle 에 PACKAGE 를 CREATE OR REPLACE 합니다. 진행할까요?",
-          "title_en": "Compile & deploy PKG — ID (run_sql.py --commit, USER_ERRORS)"
-        },
-        {
           "id": "S5.regrun",
-          "title": "등록 SQL 미리보기 실행 — 화면ID (run_sql.py, ROLLBACK)",
+          "title": "META 미리보기 — 화면ID (meta_apply.py: PKG 사내 비교 → registration.sql ROLLBACK)",
           "kind": "python",
-          "script": "${dbconnDir}/run_sql.py",
+          "script": "${dbconnDir}/meta_apply.py",
           "args": [
-            "${genDir}/${input:id}/${input:id}_registration.sql"
+            "${input:id}"
           ],
           "inputs": [
             {
@@ -840,15 +824,15 @@
               "default": "DMF0052"
             }
           ],
-          "title_en": "Preview registration SQL — ID (run_sql.py, ROLLBACK)"
+          "title_en": "META preview — ID (meta_apply.py: PKG compare → registration.sql ROLLBACK)"
         },
         {
           "id": "S5.regcommit",
-          "title": "등록 SQL 확정 — 화면ID (run_sql.py --commit)",
+          "title": "META 커밋 — 화면ID (meta_apply.py --commit: PKG 컴파일(사내 덮어쓰기 안전 판정) → registration.sql COMMIT)",
           "kind": "python",
-          "script": "${dbconnDir}/run_sql.py",
+          "script": "${dbconnDir}/meta_apply.py",
           "args": [
-            "${genDir}/${input:id}/${input:id}_registration.sql",
+            "${input:id}",
             "--commit"
           ],
           "inputs": [
@@ -858,8 +842,8 @@
               "default": "DMF0052"
             }
           ],
-          "confirm": "To-Be Oracle 메타(메뉴·PROC·시트컬럼·API·권한)를 COMMIT 합니다. 미리보기 BLOCK 8 결과를 확인했나요?",
-          "title_en": "Commit registration SQL — ID (run_sql.py --commit)"
+          "confirm": "사내 오라클에 PROCEDURE(PKG — 사내가 이 파일로 마지막 적용한 상태일 때만) 와 META(메뉴·PROC·시트컬럼·API·권한)를 적용·COMMIT 합니다. META 미리보기 결과를 확인했나요?",
+          "title_en": "META commit — ID (meta_apply.py --commit: PKG compile (safe-overwrite check) → registration.sql COMMIT)"
         },
         {
           "id": "S5.revert",
@@ -1233,6 +1217,8 @@
           "kind": "cmd",
           "script": "${e2eDir}/run-e2e.cmd",
           "splitArgs": true,
+          "splitKinds": ["smoke", "crud", "auth", "authcrud"],
+          "splitTitles": { "smoke": "스모크 (화면·조회·컬럼)", "crud": "CRUD (실제 저장·원복 / 마커 행)", "auth": "권한 (접근·버튼·Division)", "authcrud": "권한별 CRUD" },
           "args": [
             "all",
             "${input:ids}",
@@ -1296,6 +1282,87 @@
         }
       ],
       "title_en": "7. Tests (E2E: Smoke · CRUD · Auth · Auth×CRUD)"
+    },
+    {
+      "id": "S8",
+      "title": "8. 화면 정합검증 (AS-IS vs TO-BE → 정합검증서 · 보완대상목록)",
+      "tasks": [
+        {
+          "id": "S8.verify",
+          "requireServers": [
+            8080,
+            5173
+          ],
+          "title": "화면 정합검증 전체 — 사실 보강→원장→E2E(@verify)→판정→정합검증서·보완대상 xlsx (보완 적용은 안 함)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/run_verify.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Screen verification — facts→ledger→E2E(@verify)→judge→verification sheet·fix list xlsx (no repair applied)"
+        },
+        {
+          "id": "S8.verifyStatic",
+          "title": "화면 정합검증 (E2E 없이) — 서버 없이 정적·메타 판정만, E2E 행은 미검증으로 표시",
+          "kind": "python",
+          "script": "${harnessDir}/verify/run_verify.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--skip-e2e"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Screen verification without E2E (static·meta only)"
+        },
+        {
+          "id": "S8.scope",
+          "title": "보완 범위 설정 (repairScope: DB_ONLY = DB 만 / DB_FE = DB + 화면 FE · 공통 컴포넌트는 항상 가이드만)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/set_scope.py",
+          "splitArgs": true,
+          "args": [
+            "${input:scope}"
+          ],
+          "inputs": [
+            {
+              "name": "scope",
+              "prompt": "보완 범위 DB_ONLY 또는 DB_FE (비우면 현재 값만 표시)",
+              "default": "DB_ONLY"
+            }
+          ],
+          "title_en": "Set repair scope (repairScope: DB_ONLY / DB_FE)"
+        },
+        {
+          "id": "S8.defects",
+          "title": "결함 원장(사람 단위테스트 결과) 재반입 — C:\\TRANFILE\\RECEIVE 원장 xlsx → Doc/verify/defects_baseline.csv",
+          "kind": "python",
+          "script": "${harnessDir}/verify/defects_import.py",
+          "args": [],
+          "title_en": "Re-import human unit-test defect ledgers → Doc/verify/defects_baseline.csv"
+        },
+        {
+          "id": "S8.folder",
+          "title": "정합검증서·보완대상 폴더 열기 (Doc/화면분석서)",
+          "kind": "open",
+          "path": "${root}/Doc/화면분석서",
+          "title_en": "Open verification documents folder"
+        }
+      ],
+      "title_en": "8. Screen verification (AS-IS vs TO-BE → verification sheet · fix list)"
     }
   ]
 }

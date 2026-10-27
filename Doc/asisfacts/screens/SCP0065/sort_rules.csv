@@ -1,0 +1,7 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0065,SQL,UP_FX_GetUserGroupAuthExtentionList,Doc\asisfacts\db\modules\dbo.UP_FX_GetUserGroupAuthExtentionList.sql,34,,DIVISION_ID,ORDER BY DIVISION_ID,0,정적
+SCP0065,SQL,UP_FX_GetUserGroupAuthExtentionList,Doc\asisfacts\db\modules\dbo.UP_FX_GetUserGroupAuthExtentionList.sql,56,,CODE,ORDER BY S.Code,0,정적
+SCP0065,SQL,UP_FX_GetUserGroupAuthExtentionList,Doc\asisfacts\db\modules\dbo.UP_FX_GetUserGroupAuthExtentionList.sql,103,,DIVISION_ID,ORDER BY DIVISION_ID,0,정적
+SCP0065,SQL,SCP0051_GET_PRODUCTION_PLAN_TARGET,Doc\asisfacts\db\modules\dbo.SCP0051_GET_PRODUCTION_PLAN_TARGET.sql,80,,"CONFIRM_YN,CONFIRM_DATE DESC,INPUT_DATE DESC","ORDER BY CONFIRM_YN ,  CONFIRM_DATE DESC ,INPUT_DATE DESC",0,정적
+SCP0065,SQL,SCP0051_SAVE_PRODUCTION_PLAN_TARGET,Doc\asisfacts\db\modules\dbo.SCP0051_SAVE_PRODUCTION_PLAN_TARGET.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0065,SQL,SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM,Doc\asisfacts\db\modules\dbo.SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

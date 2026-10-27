@@ -88,24 +88,24 @@ export const useScheduledReceiptInformationStore = createPersistedStoreWithTab<
         state.filters = {};
       });
     },
-    // SP 파라미터(design 03 §4 spCalls#2, GET_VIRTUAL_BOM 7파라미터) — 두 시트가 동일 조회조건을
-    //   공유한다(design 02 §1 comboCalls/spCalls 근거, 시트별 별도 조회조건 없음).
+    // SP 파라미터(design 03 §4 spCalls#2, GET_VIRTUAL_BOM 7파라미터) — 조회조건은 두 시트가 공유하되,
+    //   itemId(품목) 는 AS-IS FindData_Main(.cs:581,589)이 Virtual Bom 조회에만 싣고 Scheduled Receipt
+    //   에는 ''로 비운다(Scheduled Receipt 는 Item ID 조회조건 자체가 숨김, SCP0130-08). 시트별 분리.
     setFilters: () => {
       set(state => {
         const { divisionId, planGroupIds, siteIds, childMaterialIds, valid, fromDate, itemId } =
           state.searchParams;
-        const payload = {
+        const base = {
           divisionId,
           planGroupId: planGroupIds === 'ALL' ? '' : planGroupIds,
           siteId: siteIds === 'ALL' ? '' : siteIds,
           itemIdChild: childMaterialIds === 'ALL' ? '' : childMaterialIds,
           validYn: valid === 'All' ? '' : valid,
           fromDate,
-          itemId,
         };
         state.filters = {
-          [SHEETS.VIRTUAL_BOM]: payload,
-          [SHEETS.SCHEDULED_RECEIPT]: payload,
+          [SHEETS.VIRTUAL_BOM]: { ...base, itemId },
+          [SHEETS.SCHEDULED_RECEIPT]: { ...base, itemId: '' },
         };
       });
     },

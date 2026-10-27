@@ -26,6 +26,16 @@ export const isPeriodColumn = (columnName: string): boolean =>
   columnName.startsWith(PERIOD_PREFIX.MONTH) || columnName.startsWith(PERIOD_PREFIX.YEAR);
 
 /**
+ * 3단 헤더 라벨 포맷 — AS-IS `RefreshSpreadDateColumn(..., HeaderDateFormatType.MM, ...)`(cs:1221)
+ * 재현. `SheetUtils.cs:691-697` 이 `HeaderDateFormatType.MM` 일 때 `COLUMN_LABEL_NAME.Length >= 7`
+ * 이면 `Substring(5, 2)` 로 **월 2자리만** 남긴다(`"2025-11"` -> `"11"`). 연도는 2단에 이미 있다.
+ * 연 컬럼 라벨(`"2028"`, 길이 4)은 조건을 못 넘겨 **원본 그대로** 표시된다.
+ * SP 가 준 `COLUMN_LABEL_NAME`(`YYYY-MM`)을 그대로 쓰면 3단이 `2025-11` 로 나와 AS-IS 와 어긋난다.
+ */
+export const formatPeriodHeaderLabel = (columnLabel: string): string =>
+  columnLabel.length >= 7 ? columnLabel.slice(5, 7) : columnLabel;
+
+/**
  * `p_from_yyyymm` — 선택한 Plan Month(`VER_ID`, yyyyMM) **+1개월**(AS-IS `_from_yyyymm` cs:291~312).
  *
  * AS-IS 는 파싱 실패를 빈 `catch` 로 삼켜 `_version` 기본값 `"-"` 를 그대로 SP 로 보낸다 —
@@ -77,7 +87,8 @@ export const toPeriodColumnNames = (rows: readonly SpreadTitleRow[] | undefined)
 
 /**
  * 3단 동적 컬럼 그룹 — 1단 `LARGE_CLASS_LABEL_NAME`(`Operation Plan`) > 2단
- * `SMALL_CLASS_LABEL_NAME`(연도) > 3단 `COLUMN_LABEL_NAME`(`2025-11` / `2028`).
+ * `SMALL_CLASS_LABEL_NAME`(연도) > 3단은 `COLUMN_LABEL_NAME` 을 `formatPeriodHeaderLabel` 로
+ * 변환(월 컬럼 `2025-11` -> `11` / 연 컬럼 `2028` 은 그대로). AS-IS `HeaderDateFormatType.MM`.
  *
  * 숫자 축이라 `align:'right'` 다 — 메타 `HORIZONTAL_ALIGN_CODE`('L')는 정적 컬럼용이고 기간컬럼에는
  * 행이 없다(03 §1.0 / V-08). 포맷은 `n1`(소수 1자리 + 천단위, 03 R-08).
@@ -115,7 +126,7 @@ export const buildPeriodColumns = (
     }
     sub.columns.push({
       binding: row.COLUMN_NAME,
-      header: String(row.COLUMN_LABEL_NAME ?? row.COLUMN_NAME),
+      header: formatPeriodHeaderLabel(String(row.COLUMN_LABEL_NAME ?? row.COLUMN_NAME)),
       align: 'right',
       format: PERIOD_NUMBER_FORMAT,
       width: columnWidth,
@@ -123,8 +134,11 @@ export const buildPeriodColumns = (
       // 수치가 세로로 묶이면 안 된다. 병합은 좌측 고정영역 전용이다(03 R-13).
       allowMerging: false,
       allowResizing: true,
-      // 정렬·필터·숨김은 기간컬럼에서도 동작해야 한다(03 V-38 — 공통 QA "우측 동적영역 포함").
-      allowSorting: true,
+      // 정렬 affordance(미정렬 ▽ 아이콘)를 기간컬럼에 상시 노출하지 않는다 — AS-IS
+      // `RefreshSpreadDateColumn`(SheetUtils.cs:645~786)이 동적 날짜컬럼에 정렬을 설정하지 않는다
+      // (세 bool 인자는 헤더 3단 표시 여부일 뿐, AllowSort 아님). V-38 의 Sort 는 우클릭
+      // 컨텍스트 메뉴 경로이지 헤더 상시 아이콘이 아니다. `allowSorting:false` 로 끈다.
+      allowSorting: false,
       isReadOnly: true,
       visible: true,
       _display: true,

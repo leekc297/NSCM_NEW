@@ -27,7 +27,15 @@ export const ADMIN_SHEET_NAME: Record<SHEETS, string> = {
 export const COMBO = {
   DIVISION: 'Division_SCP', // 다중선택, 권한필터 SQL 내장. EE 제외는 FE 클라 필터로 재현
   PLANT: 'PlantByGroup_SCP', // 다중선택, @divisionId(콤마 다중 INSTR) 재조회형 cascade
+  // Month min/max 범위·기본값 — AS-IS SCP0084_GET_MONTH_RANGE(cs:150~151 GetMonthRange/SetMonthRange,
+  //   p_month=12)를 CMBO_SQL_M 에 이관(USE_YN='Y' 실측). 단일 행(MIN_YYYYMM/MAX_YYYYMM) — 목록이 아니라
+  //   월 경계·기본값(최신월=MAX) 계산용. 형제 long-term-stock(SCP0084) 동일 콤보 재사용.
+  MONTH_RANGE: 'SCP0084_GET_MONTH_RANGE',
 } as const;
+
+// monthPicker 범위 하한 폴백 — 통상은 COMBO.MONTH_RANGE 의 MIN_YYYYMM 연도를 쓴다. 콤보 결과가 아직
+//   없거나(로딩/빈값) 비정상일 때만 이 값으로 폴백한다(long-term-stock 선례).
+export const MONTH_MIN_YEAR = 2021;
 
 // EE(전극) 사업부 제외 클라 필터 — AS-IS BLUtils.GetDivisionWithoutEE 의 "ATTRIBUTE3 <> 'EE'"
 //   (design 02 §2-1). Division_SCP 는 ATTRIBUTE3 컬럼을 반환하므로 row.ATTRIBUTE3 로 걸러 등가 재현.
@@ -53,7 +61,45 @@ export const LBL = {
   DIVISION: 'LBL00001',
   PLANT: 'LBL00030',
   MATERIAL: 'LBL00021',
+  COLUMN: 'LBL00605', // Column Setting — 컬럼 설정 팝업 버튼(SCP0100 선례 동일 코드)
 } as const;
+
+// Detail 체크박스 라벨 — AS-IS chkDetail.Text='Detail'(.designer:364). i18n 코드 아닌 리터럴
+//   (형제 ending-inventory DEVALUATION_AGE_LABEL 선례 동형).
+export const DETAIL_LABEL = 'Detail';
+
+// 컬럼 설정 팝업(ColumnLayoutModal) titleSet 컬럼 타입 — 'C'=컬럼(SCP0100 동일).
+export const TITLESET_COLUMN_TYPE = 'C';
+
+// Detail 토글 대상 상세 컬럼 — AS-IS SetLayout VisibleColumns(isDetail) (cs:425~448).
+//   체크 해제(기본) 시 숨김, 체크 시 표시. 컬럼명은 TO-BE 메타 실측(SCM_MST_SHEET_COLUMNS, SCP0101).
+//   INV_STATUS_AVAILABLE 은 상세 아님(AS-IS 도 토글 비대상) — 항상 표시 유지.
+//   INV_STATUS_HOLDING 도 제외(항상 표시) — AS-IS 토글(cs:439)은 오타 'INV_STATUS_HOLD'(ING 누락)를
+//   참조해 GetColumnIndex=-1 → VisibleColumns no-op 이므로 Holding 은 Detail 무관 항상 표시된다.
+//   실제 데이터 컬럼명은 'INV_STATUS_HOLDING'(cs:391/504/585). AS-IS 관측 동작과 일치시키기 위해 제외.
+export const DETAIL_COLUMNS: readonly string[] = [
+  'ITEM_NAME',
+  'PROCESS_DETAIL',
+  'GPLM_CELL_MODEL',
+  'MDM_NICK_NAME',
+  'SCP_EXTRA_SPEC',
+  'GPLM_CELL_CONVERSION_FACTOR',
+  'LEVEL_1_NAME',
+  'LEVEL_2_NAME',
+  'LEVEL_3_NAME',
+  'LEVEL_4_NAME',
+  'VALUATION_CLASS',
+  'UNIT_PRICE_KRW',
+  'INV_STATUS_QT',
+  'INV_STATUS_BLOCKED',
+  'CURRENCY',
+  'AMOUNT',
+  'UNIT_PRICE',
+  'EX_TO_BAMT',
+  'CELL_TYPE_GR',
+  'CELL_GROUP',
+  'PACK_GROUP',
+];
 
 // 컬럼명 상수 — 동적 헤더/조건포맷/행배경/병합 판정에서 참조하는 binding (design 03 §1~§3).
 export const COL = {
@@ -105,17 +151,37 @@ export const INV_STATUS_COLUMNS: readonly string[] = [
 ];
 export const INV_STATUS_GROUP_SUFFIX = ' Inventory Status';
 
-// 선두 그룹 컬럼 세로 병합(SmartColMerge, design 03 §3 R4 / cs:325). AS-IS SmartColMerge 는 인자 없이
-//   호출되고 per-column 병합 정책은 FarPoint 스프레드 템플릿에 있어 .cs/designer/메타에서 추출 불가
-//   (SCM_MST_SHEET_COLUMNS 에도 merge 플래그 없음 — FIXED_FLAG 만 존재) → 설계가 명시한 선두 식별 그룹
-//   (기간/사업부/Plant/Item)에 적용한다. 공용 CustomMergeManager 는 좌측 누적 키라 선두 연속 컬럼에만
-//   유효(grid-behavior-parity §1.3) — ITEM_ID 이후는 REPORT_TYPE/INVENTORY_TYPE 이 달라 자연 종료.
+// 세로 병합(SmartColMerge, design 03 §3 R4 / cs:325). AS-IS SmartColMerge 는 인자 없이 호출되고
+//   per-column 정책이 FarPoint 템플릿에 있어 추출 불가 → 데이터 의미로 재현한다: 행 분기는 REPORT_TYPE×
+//   INVENTORY_TYPE(SORT_ORDER 31~)에서만 생기고, 그 앞 컬럼(식별 5 + item 속성, SORT_ORDER 1~22)은
+//   Material 단위로 값이 일정하므로 Material 과 같은 span 으로 병합돼야 한다(= AS-IS 반복셀 세로병합).
+//   공용 CustomMergeManager 는 좌측 누적 키(col 0..col 셀값 연결)라 REPORT_TYPE 직전까지 연속인 이 집합에
+//   유효하고, 서로 다른 Material 은 ITEM_ID 가 키에 들어가 병합되지 않는다(과병합 안전, grid-behavior-parity
+//   §1.3). Detail 체크 시 끼어드는 상세 item 속성(ITEM_NAME/Levels/… )도 이 집합에 포함해 함께 병합한다
+//   (갭감사 SCP0101-A3-MERGE 확정 — 2026-10-20 사용자 확인). REPORT_TYPE/INVENTORY_TYPE 이후는 행마다 달라
+//   자연 종료. 비Detail 모드는 6·12~22 가 숨김이라 시각 대상은 식별 5 + Unit/ItemType/ProcessGroup.
 export const MERGE_COLUMNS: ReadonlySet<string> = new Set([
+  // 식별 그룹(기간/사업부/Plant/Item)
   COL.YYYYMM,
   COL.DIVISION_ID,
   COL.PLANT_DESCRIPTION,
   COL.PLANT_ID,
   COL.ITEM_ID,
+  // item 속성(Material 단위 고정 — REPORT_TYPE 직전까지, SORT_ORDER 6~22). Detail 모드에서 노출.
+  'ITEM_NAME',
+  'ITEM_UOM',
+  'ITEM_TYPE',
+  'PROCESS_GROUP',
+  'PROCESS_DETAIL',
+  'GPLM_CELL_MODEL',
+  'MDM_NICK_NAME',
+  'SCP_EXTRA_SPEC',
+  'GPLM_CELL_CONVERSION_FACTOR',
+  'LEVEL_1_NAME',
+  'LEVEL_2_NAME',
+  'LEVEL_3_NAME',
+  'LEVEL_4_NAME',
+  'VALUATION_CLASS',
 ]);
 
 // 조건부 셀 포맷 R2 — hidden CHK_QTY 값(40/30/20/10)에 따라 INV_STATUS 4컬럼 배경/글자색(cs:498~546).

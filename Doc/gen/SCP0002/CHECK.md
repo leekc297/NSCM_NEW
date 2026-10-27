@@ -1,0 +1,40 @@
+# [Harness] SCP0002 line-master — BLOCK 1 / WARN 37
+
+- WARN AC1 액션 대조표 미처리 161행: AC-41972312(상태 빈칸 STATE_RESET dt.Clear), AC-5de0253f(상태 빈칸 LIST_REBIND clsCtrl.setListBox), AC-c609d2bf(상태 빈칸 GRID_INIT this.AddSheet), AC-80f7fce1(상태 빈칸 FLAG siMain), AC-e5805cbf(상태 빈칸 GRID_INIT this.AddSheet), AC-04a51401(상태 빈칸 FLAG siMain), AC-178fc14f(상태 빈칸 GRID_INIT siMain.ChangeSheet), AC-e0c686e0(상태 빈칸 FLAG dtPlantSiteByDivisionPacker) … @Doc/asisfacts/screens/SCP0002/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SCP.SCP0002_GET_LINE_MASTER (SCP0002_GET_LINE_MASTER) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0002_GET_LINE_MASTER_OSP (SCP0002_GET_LINE_MASTER_OSP) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0002_SAVE_LINE_MASTER_OSP (SCP0002_SAVE_LINE_MASTER_OSP) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDivision.SelectedIndexChanged → ClbDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbPlantSite.SelectedIndexChanged → ClbPlantSite_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbBuilding.SelectedIndexChanged → ClbBuilding_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbOperation.SelectedIndexChanged → ClbOperation_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ActiveSheetChanged → SpdMain_ActiveSheetChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ComboSelChange → SpdMain_ComboSelChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ClipboardPasted → SpdMain_ClipboardPasted 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 cboValid / UsrComboBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbLine / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbOperation / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbBuilding / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbPlantSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN V01 As-is Validation 2건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- WARN V01 As-is Expression 29건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- BLOCK MS1 AS-IS 메시지 ID 그대로 사용: MSG00109 — AS-IS '읽기 전용입니다.' / TO-BE MSG00109 = '읽기전용 상태입니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+) @line-master.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @line-master.constants.ts
+- WARN VR2 MSG00109 — VALIDATION 취합 판정: 편집(EDIT) — Plant SEQ1 AS-IS MSG00109 [메시지 불일치] — 일치 — 편집 시도 자체는 isReadOnly 로 무음(LineMasterMainGrid.tsx L208), 문구는 Insert/Delete/Save 시 표시 — @line-master.constants.ts:98
+- WARN VR2 MSG00097 — VALIDATION 취합 판정: 화면 열기(OPEN) SEQ1 AS-IS MSG00097 [메시지 불일치] — [메시지 불일치] 불일치 — 같은 ID 다른 뜻: constants 주석은 "권한을 가진 Division이 없습니다"라 적었으나 TO-BE 마스터 KO="Divi @line-master.constants.ts:100
+- WARN VC1 대조표 FAIL 15행 (Doc/verify/SCP0002/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미검증 137행 — 사유 R6 147 · WARN 21 · R6k 55 (R6 = 이 행을 검증하는 항목 없음 → 검사기 연결 · NOT_RUN = 미실행). 미검증은 PASS 가 아니다
+- WARN VC2 BE 계정 시노님·권한 문제 6건 — [SYN_MISSING] PROC Packer/SAVE PKG_SCP0002.P_SCP0002_SAVE_LINE_MASTER_OSP · [SYN_MISSING] PROC Packer/SEARCH PKG_SCP0002.P_SCP0002_GET_LINE_MASTER_OSP · [SYN_MISSING] PROC Plant/SEARCH PKG_SCP0002.P_SCP0002_GET_LINE_MASTER · [SYN_MISSING] COMBO BuildingByDivision SCM_MST_FACTORY_SN (호출 시 PLS-00201 / ORA-06550) · Doc/verify/SCP0002/syn_check.csv
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/LineMasterMainGrid.tsx:70
+- WARN R06 DataGrid initialized prop deprecated → useEffect+gridRef (#70 runtime-pitfalls) @components/LineMasterMainGrid.tsx:195
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @LineMaster.tsx:161
+- WARN B19 validation.md 2행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
+- WARN B19 expressions.md 29행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0002/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0002/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0002/SCP0002_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0002/SCP0002_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)

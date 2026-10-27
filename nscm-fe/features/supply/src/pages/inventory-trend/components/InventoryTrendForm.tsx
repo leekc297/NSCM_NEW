@@ -1,21 +1,28 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import dayjs from '@foundation/dayjs';
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
+import { Button, Checkbox, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
-import { COMBO, EE_ATTRIBUTE, LBL, MSG } from '../inventory-trend.constants';
+import {
+  COMBO,
+  DETAIL_LABEL,
+  EE_ATTRIBUTE,
+  LBL,
+  MONTH_MIN_YEAR,
+  MSG,
+} from '../inventory-trend.constants';
 import { useInventoryTrendStore } from '../useInventoryTrendStore';
 
 interface Props {
   onSearch: () => void;
-  // btnItem_Id → ItemByDivisionModal(page 소유). AS-IS BtnItem_Id_Click(cs:970~989).
+  // btnItem_Id → MaterialByDivisionModal(메1, COM0013, page 소유). AS-IS BtnItem_Id_Click(cs:970~989).
   onItemSearch: () => void;
 }
 
@@ -41,9 +48,68 @@ export const InventoryTrendForm = ({ onSearch, onItemSearch }: Props) => {
   // Division=ALL 이면 Plant 콤보에 빈값 전달 → @divisionId IS NULL → 전체(design 02 §2-2).
   const divisionParam = sc.divisionId === 'ALL' ? '' : sc.divisionId;
 
-  const [divisions, plants] = useTabComboQueries({
-    filters: [COMBO.DIVISION, { comboId: COMBO.PLANT, divisionId: divisionParam }],
+  const [divisions, plants, monthRangeRaw] = useTabComboQueries({
+    filters: [COMBO.DIVISION, { comboId: COMBO.PLANT, divisionId: divisionParam }, COMBO.MONTH_RANGE],
   });
+
+  // Month 범위·기본값 — COMBO.MONTH_RANGE 단일 행(MIN_YYYYMM/MAX_YYYYMM, AS-IS GetMonthRange/SetMonthRange
+  //   cs:150~151, p_month=12). 연 경계(minYear/maxYear)는 picker prop 으로, 월 경계는 아래 DOM 비활성화
+  //   effect + onChange 클램프로 건다(MonthPicker 가 월 단위 비활성 prop 미노출). 형제 long-term-stock 동일 처방.
+  const monthRange = useMemo(() => {
+    const row = ((monthRangeRaw ?? []) as Array<Record<string, unknown>>)[0];
+    const min = str(row?.MIN_YYYYMM);
+    const max = str(row?.MAX_YYYYMM);
+    const yearOf = (ym: string): number | undefined =>
+      /^\d{6}$/.test(ym) ? Number(ym.slice(0, 4)) : undefined;
+    return {
+      minYear: yearOf(min),
+      maxYear: yearOf(max),
+      minMonth: /^\d{6}$/.test(min) ? min : undefined,
+      maxMonth: /^\d{6}$/.test(max) ? max : undefined,
+    };
+  }, [monthRangeRaw]);
+
+  // 기본값 = 최신월(MAX_YYYYMM) — AS-IS InitValue=MAX(cs:645). 범위 최초 도착 시 1회 적용(사용자 변경 전 초기화).
+  const appliedMaxMonthRef = useRef(false);
+  useEffect(() => {
+    if (appliedMaxMonthRef.current || !monthRange.maxMonth) return;
+    appliedMaxMonthRef.current = true;
+    set({ month: monthRange.maxMonth });
+  }, [monthRange.maxMonth, set]);
+
+  // 범위밖 월 '선택 불가' — 디자인시스템 MonthPicker 는 연 단위(minYear/maxYear)만 비활성화하고 월 그리드엔
+  //   min/max 를 안 넘겨, 경계 연의 범위밖 월이 클릭된다. 노출 prop 이 없어 팝오버 월 버튼을 DOM 으로
+  //   비활성화한다(portal + 연 이동 재렌더라 MutationObserver 로 재적용). onChange 클램프는 안전망으로 유지.
+  useEffect(() => {
+    const { minMonth, maxMonth } = monthRange;
+    if (!minMonth && !maxMonth) return;
+    const lo = minMonth ? Number(minMonth) : -Infinity; // YYYYMM 숫자 비교
+    const hi = maxMonth ? Number(maxMonth) : Infinity;
+
+    const applyDisable = () => {
+      const buttons = Array.from(
+        document.querySelectorAll<HTMLButtonElement>('.MuiPickersMonth-monthButton')
+      );
+      if (buttons.length === 0) return;
+      // 표시 연도 — 팝오버 텍스트의 유일한 4자리(헤더 'YYYY년'/'YYYY'). 월 라벨('N월')은 4자리 아님.
+      const paper = buttons[0].closest('[class*="MuiPaper-root"]') ?? document.body;
+      const year = Number((paper.textContent ?? '').match(/\d{4}/)?.[0]);
+      if (!Number.isInteger(year)) return;
+      // MUI MonthCalendar 는 1월..12월 순서 렌더 → index + 1 = 월(locale 무관).
+      buttons.forEach((btn, i) => {
+        const ym = year * 100 + (i + 1);
+        const out = ym < lo || ym > hi;
+        btn.disabled = out;
+        btn.style.opacity = out ? '0.3' : '';
+        btn.style.pointerEvents = out ? 'none' : '';
+      });
+    };
+
+    const observer = new MutationObserver(applyDisable);
+    observer.observe(document.body, { childList: true, subtree: true });
+    applyDisable();
+    return () => observer.disconnect();
+  }, [monthRange]);
 
   // EE(전극) 사업부 제외 — AS-IS BLUtils.GetDivisionWithoutEE 의 "ATTRIBUTE3 <> 'EE'" 클라 재현
   //   (design 02 §2-1). Division_SCP 는 ATTRIBUTE3 를 반환하므로 여기서 걸러 후보 범위를 AS-IS 와 일치시킨다.
@@ -83,11 +149,22 @@ export const InventoryTrendForm = ({ onSearch, onItemSearch }: Props) => {
                   usecase='month'
                   size='small'
                   elevation
+                  minYear={monthRange.minYear ?? MONTH_MIN_YEAR}
+                  maxYear={monthRange.maxYear}
                   value={ymToDayjs(sc.month)}
                   disabled={noDivisionAuth}
                   onChange={
                     ((date: ReturnType<typeof dayjs>) => {
-                      set({ month: date?.format('YYYYMM') ?? '' });
+                      const ym = date?.format('YYYYMM') ?? '';
+                      // MonthPicker 는 연 경계만 지원 → 경계 연의 범위밖 월이 선택 가능. MIN/MAX_YYYYMM 로
+                      //   월 단위 클램프(YYYYMM 문자열 비교 = 시간순). 범위 밖이면 경계월로 보정.
+                      const clamped =
+                        ym && monthRange.minMonth && ym < monthRange.minMonth
+                          ? monthRange.minMonth
+                          : ym && monthRange.maxMonth && ym > monthRange.maxMonth
+                            ? monthRange.maxMonth
+                            : ym;
+                      set({ month: clamped });
                     }) as never
                   }
                 />
@@ -133,7 +210,7 @@ export const InventoryTrendForm = ({ onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* Material(Item ID) — 텍스트 + 팝업버튼(ItemByDivisionModal). 빈 반환 시 기존값 유지. AS-IS 캡션 'Material' */}
+          {/* Material(Item ID) — 텍스트 + 팝업버튼(메1 MaterialByDivisionModal, COM0013). 빈 반환 시 기존값 유지. AS-IS 캡션 'Material' */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -159,6 +236,24 @@ export const InventoryTrendForm = ({ onSearch, onItemSearch }: Props) => {
                   }}
                   onChange={e => set({ itemId: e.target.value })}
                   onKeyDown={e => e.key === 'Enter' && onSearch()}
+                />
+              )}
+            />
+          </Grid>
+
+          {/* Detail — 상세 22컬럼 표시 토글(AS-IS chkDetail, cs:425~448 / .designer:364). 기본 해제=숨김.
+              조회조건이 아니라 그리드 컬럼 show/hide 트리거(SP 미전달) — 형제 ending-inventory 동형.
+              라벨을 Month 처럼 우측정렬 FormItem 으로 두어 체크박스를 필드 컬럼에 맞춘다. */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={DETAIL_LABEL}
+              labelAlign='right'
+              render={() => (
+                <Checkbox
+                  checked={sc.detail}
+                  disabled={noDivisionAuth}
+                  onChange={checked => set({ detail: checked })}
                 />
               )}
             />

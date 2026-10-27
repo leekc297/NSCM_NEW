@@ -1,0 +1,16 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0015,SQL,SCP0015_SAVE_PLAN_MST_CANCEL,Doc\asisfacts\db\modules\dbo.SCP0015_SAVE_PLAN_MST_CANCEL.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0015,SQL,SCP0015_GET_PLAN_MST_COMFIRM,Doc\asisfacts\db\modules\dbo.SCP0015_GET_PLAN_MST_COMFIRM.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0015,SQL,SCP0015_GET_PLAN_ENGINE_RUN,Doc\asisfacts\db\modules\dbo.SCP0015_GET_PLAN_ENGINE_RUN.sql,113,,CODE,ORDER BY a.code;,0,정적
+SCP0015,SQL,SCP0015_GET_PLAN_MST,Doc\asisfacts\db\modules\dbo.SCP0015_GET_PLAN_MST.sql,114,,PLAN_VERSION_ID DESC,",RANK() OVER(PARTITION BY a.plan_type ORDER BY A.plan_version_id DESC) AS rank",3,정적 · 서브쿼리 안(TOP 용) — 결과 순서 규칙 아님
+SCP0015,SQL,SCP0015_GET_PLAN_MST,Doc\asisfacts\db\modules\dbo.SCP0015_GET_PLAN_MST.sql,171,,DISPLAY_SEQ,ORDER BY T.display_seq,0,정적
+SCP0015,SQL,SCP0015_GET_PLAN_MST,Doc\asisfacts\db\modules\dbo.SCP0015_GET_PLAN_MST.sql,188,,"PLAN_TYPE_ORDER,CODE DESC","ORDER BY a.plan_type_order , code desc;",0,정적
+SCP0015,SQL,SCP0015_GET_PLAN_MST,Doc\asisfacts\db\modules\dbo.SCP0015_GET_PLAN_MST.sql,203,,"PLAN_TYPE_ORDER,CODE DESC","ORDER BY a.plan_type_order , code desc;",0,정적
+SCP0015,SQL,SCP0015_GET_PLAN_MST,Doc\asisfacts\db\modules\dbo.SCP0015_GET_PLAN_MST.sql,219,,"PLAN_TYPE_ORDER,CODE DESC","ORDER BY a.plan_type_order , code desc;",0,정적
+SCP0015,SQL,SCP0015_GET_PLAN_MST,Doc\asisfacts\db\modules\dbo.SCP0015_GET_PLAN_MST.sql,234,,"PLAN_TYPE_ORDER,CODE DESC","ORDER BY a.plan_type_order , code desc;",0,정적
+SCP0015,SQL,SCP0015_GET_PLAN_MST,Doc\asisfacts\db\modules\dbo.SCP0015_GET_PLAN_MST.sql,249,,"PLAN_TYPE_ORDER,CODE DESC","ORDER BY a.plan_type_order , code desc;",0,정적
+SCP0015,SQL,SCP0015_GET_PLAN_MST,Doc\asisfacts\db\modules\dbo.SCP0015_GET_PLAN_MST.sql,264,,"PLAN_TYPE_ORDER,CODE DESC","ORDER BY a.plan_type_order , code desc;",0,정적
+SCP0015,SQL,SCP0015_GET_PLAN_MST,Doc\asisfacts\db\modules\dbo.SCP0015_GET_PLAN_MST.sql,279,,"PLAN_TYPE_ORDER,CODE DESC","ORDER BY a.plan_type_order , code desc;",0,정적
+SCP0015,SQL,SCP0015_SAVE_PLAN_MST_COMFIRM,Doc\asisfacts\db\modules\dbo.SCP0015_SAVE_PLAN_MST_COMFIRM.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0015,SQL,SCP0015_SAVE_PLAN_MST_RUN,Doc\asisfacts\db\modules\dbo.SCP0015_SAVE_PLAN_MST_RUN.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0015,SQL,SCP0015_SAVE_PLAN_MST_STOP,Doc\asisfacts\db\modules\dbo.SCP0015_SAVE_PLAN_MST_STOP.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

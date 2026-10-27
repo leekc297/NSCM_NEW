@@ -37,24 +37,31 @@ export const PlanManagementForm = ({ onSearch, disabled, onDivisionRows }: Props
 
   const sc = usePlanManagementStore(s => s.searchParams);
   const set = usePlanManagementStore(s => s.setSearchParams);
-  const setPlanWeekFirst = usePlanManagementStore(s => s.setPlanWeekFirst);
   const openSearchArea = usePlanManagementStore(s => s.openSearchArea);
 
   // 값 인용은 apiClient.getCombo 가 자동 처리(raw 전달) — mnuId 는 BE 가 인용 주체(nscm-patterns §3.3).
   //   Division: @mnuId 미전달 시 메뉴권한 조건이 통째로 스킵되는 방향으로 조용히 느슨해짐(design 02 §2 #1) — 필수.
-  //   PlanWeek: 연도 토큰명은 param2 가 아니라 calendarYyyy(design 02 §2 함정) — param2 로 보내면
-  //   조용히 '' 치환되어 전체 연도 주차가 섞여 반환된다.
-  const [divisions, planYears, planWeeks] = useTabComboQueries({
+  //   Year 는 DB 콤보가 아니라 클라 당해년도 고정(사용자 2026-10-14). PlanWeek(PlanWeekDate_SCP)는
+  //   그 당해년도를 @planYear 토큰으로 받는 standalone 콤보 — division/year cascade 없음(design 02 의
+  //   PlanWeek cascade 를 교체). AS-IS PlanWeek(division+year 종속)와 다름.
+  const currentYear = String(new Date().getFullYear());
+
+  const [divisions, planWeeks] = useTabComboQueries({
     filters: [
       { comboId: COMBO.DIVISION, mnuId: MENU_ID },
-      { comboId: COMBO.PLAN_YEAR, param1: sc.divisionId },
-      { comboId: COMBO.PLAN_WEEK, param1: sc.divisionId, calendarYyyy: sc.planYear },
+      { comboId: COMBO.PLAN_WEEK, planYear: currentYear },
     ],
   });
 
   const divisionOptions = toOptions(divisions);
-  const planYearOptions = toOptions(planYears);
-  const planWeekOptions = toOptions(planWeeks);
+  // Year 는 당해년도 한 건만 노출(사용자 2026-10-14)
+  const yearOptions: Option[] = [{ label: currentYear, value: currentYear }];
+  // PlanWeekDate_SCP 응답은 CODE/NAME 이 아니라 WEEK_LIST(라벨)/PLAN_WEEK(값=WEEK_NAME) —
+  //   AS-IS PlanWeek 의 CODE=WEEK_NAME·NAME=날짜-주차와 의미 동일, 컬럼명만 다르다.
+  const planWeekOptions: Option[] = (planWeeks ?? []).map(r => ({
+    label: str(r.WEEK_LIST) || str(r.PLAN_WEEK),
+    value: str(r.PLAN_WEEK),
+  }));
 
   // 권한 0건 판정(alert 1회 + Engine 툴바 disabled)은 페이지가 담당 — 응답만 올린다
   useEffect(() => {
@@ -68,22 +75,17 @@ export const PlanManagementForm = ({ onSearch, disabled, onDivisionRows }: Props
     if (firstDivision && !hasDivision) set({ divisionId: firstDivision });
   }, [firstDivision, hasDivision, set]);
 
-  const firstPlanYear = planYearOptions[0]?.value ?? '';
-  const hasPlanYear = planYearOptions.some(o => o.value === sc.planYear);
+  // Year 당해년도 고정 — 비었거나(최초·Division 변경 리셋 후) 다른 값이면 당해년도로 복원
+  const hasYear = sc.planYear === currentYear;
   useEffect(() => {
-    if (firstPlanYear && !hasPlanYear) set({ planYear: firstPlanYear });
-  }, [firstPlanYear, hasPlanYear, set]);
+    if (!hasYear) set({ planYear: currentYear });
+  }, [hasYear, currentYear, set]);
 
   const firstPlanWeek = planWeekOptions[0]?.value ?? '';
   const hasPlanWeek = planWeekOptions.some(o => o.value === sc.planWeek);
   useEffect(() => {
     if (firstPlanWeek && !hasPlanWeek) set({ planWeek: firstPlanWeek });
   }, [firstPlanWeek, hasPlanWeek, set]);
-
-  // R9(현재 주차 판정) 입력 — 콤보 첫 값(최신 주차)을 스토어로 승격(AS-IS nSelPlanWeek==0 등가)
-  useEffect(() => {
-    setPlanWeekFirst(firstPlanWeek);
-  }, [firstPlanWeek, setPlanWeekFirst]);
 
   const single = (
     labelText: string,
@@ -114,12 +116,14 @@ export const PlanManagementForm = ({ onSearch, disabled, onDivisionRows }: Props
     <SearchArea
       isHidden={!openSearchArea}
       onSearch={onSearch}
+      // 표준 조회 버튼 라벨 'Search(F5)' (LBL00112) — 미지정 시 SearchArea 기본값 '조회' 가 떠 비표준으로 보임
+      searchButtonLabel={t('LBL00112', '_Search')}
       conditions={
         <>
           {/* 캡션·LBL = SCM_ADM_MSG_M 실측(design 02 §4.5). PlanWeek 캡션은 AS-IS 그대로
               "Plan Date*"(필수 표시)이나 실제 필수검증에서는 제외(ConditionNotUseList — design 02 §4 순서1) */}
           {single(t(LBL.DIVISION, '_Div'), sc.divisionId, divisionOptions, v => set({ divisionId: v }), true)}
-          {single(t(LBL.YEAR, '_Year'), sc.planYear, planYearOptions, v => set({ planYear: v }), true)}
+          {single(t(LBL.YEAR, '_Year'), sc.planYear, yearOptions, v => set({ planYear: v }), true)}
           {single(t(LBL.PLAN_DATE, '_Plan Date'), sc.planWeek, planWeekOptions, v => set({ planWeek: v }), true)}
         </>
       }

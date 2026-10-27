@@ -3,7 +3,7 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import {
   MaterialByDivisionModal,
   MeasureSelectModal,
-  ModelByDivisionPopup,
+  // ModelByDivisionPopup,
 } from 'features/master/src/components';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -14,9 +14,14 @@ import dayjs from '@foundation/dayjs';
 import type { HotkeyConfig, PageProps, RawFlexGridColumnConfig } from '@foundation/models';
 import { useMutation, useQuery } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
-import { GridAction, GridUtils } from '@foundation/utils';
+import { GridAction, GridUtils, sessionTimeZone } from '@foundation/utils';
 import { MainTitle, saveTitleSet, SsoUserModal, SubTitle, TabItem, TabWrapper } from '@shared/components';
-import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import {
+  useProcMutation,
+  useTabBtnPermissions,
+  useTabLookupQueries,
+  useTabProcQuery,
+} from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -36,12 +41,30 @@ import {
 } from './components/ShipmentPsiMemoModal';
 import {
   ADMIN_SHEET_NAME,
+  BTN_DELETE_DRAFTING_BY_CONFIRM,
+  BTN_ERP_ERROR_CONFIRM,
+  BTN_IF_CHECK,
+  BTN_SAVE_DRAFTING,
+  BTN_SAVE_DRAFTING_PACKER,
   COMMENTS_BTN,
+  ERP_DELETE_FLAG,
+  ERP_ERROR_E_TYPE,
+  ERP_IF_CHANGE_TYPE,
+  ERP_IF_ERROR,
+  ERP_IF_PARTIAL_ERROR,
+  ERP_IF_PATH,
+  ERP_IF_PI_FAIL,
+  ERP_IF_SEND_ON,
+  ERP_IF_SUCCESS,
   FIXED_DIVISION,
+  IF_CHECK_PARTIAL_OFF,
+  IF_CHECK_STATUS_APPLY,
   LBL,
+  LOOKUP,
   MAX_PERIOD_LABEL_DAYS,
   MENU_ID,
   MSG,
+  MSG_ERP,
   RESULT_TYPE_BY_SHEET,
   SHEETS,
   TITLESET_MEASURE_TYPE,
@@ -53,6 +76,7 @@ import { useShipmentPlanMobilityItStore } from './useShipmentPlanMobilityItStore
 import { figureDrilldownOf, measureDrilldownOf } from './utils/shipment-plan-mobility-it.detailSheets';
 import {
   collectConfirmSaveRows,
+  collectDraftingSaveRows,
   collectHoldSaveRows,
   collectMainSaveRows,
   toValidYmd,
@@ -126,7 +150,7 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
 
   // R7a(편집 진입 가드, I06) — AS-IS EditButton(cs L1737) GetSSPUserCheck()==false → MSG00251 차단.
   //   USER_CHECK(=SSP0002_GET_USER_INFO_LIST) 호출: o_rc1 0행 or 403(비SSP 권한) 이면 SSP 등록 사용자 아님.
-  //   체크 전(undefined)엔 낙관적 허용(sspUserCheck!==false), 완료 후 비SSP면 편집 비활성(canEdit=false)+1회 알럿.
+  //   체크 전(undefined)엔 낙관적 허용(sspUserCheck!==false), 완료 후 비SSP면 편집 비활성(canEdit=false).
   const { data: sspUserCheck } = useQuery({
     queryKey: [tabId, 'sspUserCheck', session.userId],
     queryFn: async () => {
@@ -146,20 +170,12 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
     enabled: !!session.userId,
     staleTime: Infinity,
   });
+  // 편집 가드만 유지하고 진입 알럿(MSG01261)은 띄우지 않는다 — 비SSP(예: SSP Viewer)는 EDIT 버튼
+  //   권한도 없어 버튼 자체가 뜨지 않으므로(canEdit=false) 진입 즉시 알럿을 띄울 필요가 없다
+  //   (사용자 지시 2026-10-21). AS-IS 도 알럿은 Edit 버튼 클릭 시에만 떴고 열람만 하는 사용자에겐
+  //   뜨지 않았다(SSP0015_ShipmentPSI.cs EditButton L1736 → GetSSPUserCheck). 가드는 그대로 유지해
+  //   EDIT 버튼은 있으나 SSP 미등록인 사용자의 편집은 계속 차단한다.
   const isSspUser = sspUserCheck !== false;
-  const sspAlertShownRef = useRef(false);
-  useEffect(() => {
-    if (sspUserCheck === false && !sspAlertShownRef.current) {
-      sspAlertShownRef.current = true;
-      void setAlert({
-        type: 'alert',
-        content: t(MSG.NO_AUTHORITY, '__You are not a registered SSP Planner. [User ID : {0}]').replace(
-          '{0}',
-          session.userId ?? ''
-        ),
-      });
-    }
-  }, [sspUserCheck, t, session.userId]);
 
   // 편집 기본 ON — canEdit = hasButton('EDIT') (AS-IS EditButton 토글 미이식, convert-core §2.4) + R7a(SSP 사용자).
   const canEdit = hasButton('EDIT') && isSspUser;
@@ -187,6 +203,34 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
   const [reqDraftingNo, setReqDraftingNo] = useState('');
   // ERP_SO_NO 더블클릭 → OrderDetail(SSP0300) 팝업 컨텍스트
   const [orderDetailCtx, setOrderDetailCtx] = useState<OrderDetailContext | null>(null);
+
+  // Confirm 저장 출하일 범위 (AS-IS Validation_Check MSG00194). 상한 오늘+1D+, 하한 오늘-2D-, 메시지 인자 dDay.
+  //   lookup 미도착·비수치면 범위 검사 생략(임의 기본값으로 전건 차단 방지)
+  const [shipPeriodDay, changeReqDay] = useTabLookupQueries({
+    filters: [LOOKUP.SHIPMENT_PERIOD_DAY, LOOKUP.CHANGE_REQ_DAY],
+  });
+  const shipDateRange = useMemo(() => {
+    const num = (v: unknown): number | undefined => {
+      const s = str(v).trim();
+      const n = Number(s);
+      return s !== '' && Number.isFinite(n) ? n : undefined;
+    };
+    const rows = (shipPeriodDay ?? []) as Record<string, unknown>[];
+    const dayOf = (code: string) => {
+      const r = rows.find(x => str(x.CODE ?? x.SEGMENT1).trim() === code);
+      return r ? num(r.NAME ?? r.SEGMENT2) : undefined;
+    };
+    const plus = dayOf('1D+');
+    const minus = dayOf('2D-');
+    if (plus === undefined || minus === undefined) return undefined;
+    const today = dayjs().startOf('day');
+    const first = (changeReqDay ?? [])[0] as Record<string, unknown> | undefined;
+    return {
+      max: today.add(plus, 'day'),
+      min: today.subtract(minus, 'day'),
+      dDay: first ? str(first.NAME ?? first.SEGMENT2).trim() : '',
+    };
+  }, [shipPeriodDay, changeReqDay]);
 
   // ── 조회 (React Query) ──
   const { data: mainData, refetch: refetchMain } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
@@ -226,7 +270,7 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
   // Confirm Detail 은 상단 탭에 따라 데이터 SP 가 다르다(AS-IS FindData_Detail vs FindData_Detail_Packer):
   //   Mobility&IT → GET_SHIPMENT_CONFIRM_DETAIL, Packer → GET_SHIPMENT_CONFIRM_DETAIL_PACKER.
   //   시트(72열)는 공유 superset, IN 파라미터 17개 동일 — 라우팅만 분기한다.
-  const { data: confirmData } = useTabProcQuery<MENU_ID, SHEETS.CONFIRM_DETAIL>({
+  const { data: confirmData, refetch: refetchConfirm } = useTabProcQuery<MENU_ID, SHEETS.CONFIRM_DETAIL>({
     menuId: MENU_ID,
     sheetName: SHEETS.CONFIRM_DETAIL,
     tabId,
@@ -234,7 +278,7 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
     enabled: !!filters[SHEETS.CONFIRM_DETAIL] && mainSheet !== 'packer',
   });
   // Packer Confirm Detail — GET_SHIPMENT_CONFIRM_DETAIL_PACKER (btn 매핑 shtNm='main'). filter 는 동일.
-  const { data: confirmPackerData } = useQuery({
+  const { data: confirmPackerData, refetch: refetchConfirmPacker } = useQuery({
     queryKey: [tabId, 'confirmPacker', filters[SHEETS.CONFIRM_DETAIL]],
     queryFn: async () => {
       const r = await apiClient.post(
@@ -259,7 +303,7 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
     filters: filters[SHEETS.HOLD_STOCK],
     enabled: !!filters[SHEETS.HOLD_STOCK],
   });
-  const { data: mesStockData } = useTabProcQuery<MENU_ID, SHEETS.MES_STOCK>({
+  const { data: mesStockData, refetch: refetchMesStock } = useTabProcQuery<MENU_ID, SHEETS.MES_STOCK>({
     menuId: MENU_ID,
     sheetName: SHEETS.MES_STOCK,
     tabId,
@@ -313,13 +357,35 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
     [calendarRows]
   );
   // Main 시트만 화면에서 주/월 합계를 계산한다(AS-IS FindData_Main 의 CalculateSum). Packer 는 SP 값 그대로.
-  const mainRows = useMemo<MainRow[]>(
-    () =>
-      mainSheet === 'packer'
-        ? ((isPackerPast ? (packerPastData?.o_rc1 ?? []) : (packerData?.o_rc1 ?? [])) as MainRow[])
-        : applyMainSums((mainData?.o_rc1 ?? []), periodBindings),
-    [mainSheet, isPackerPast, mainData, packerData, packerPastData, periodBindings]
-  );
+  // const mainRows = useMemo<MainRow[]>(
+  //   () =>
+  //     mainSheet === 'packer'
+  //       ? ((isPackerPast ? (packerPastData?.o_rc1 ?? []) : (packerData?.o_rc1 ?? [])) as MainRow[])
+  //       : applyMainSums((mainData?.o_rc1 ?? []), periodBindings),
+  //   [mainSheet, isPackerPast, mainData, packerData, packerPastData, periodBindings]
+  // );
+  // 합계 행은 복사본이라 탭 전환마다 다시 만들면 미저장 수정분이 사라진다.
+  //   같은 조회 결과·기간 컬럼이면 만들어 둔 행을 재사용한다(전환 중 캘린더 재조회로 기간이 잠깐 비는 경우 포함)
+  const mainSumRowsCacheRef = useRef<{ data: unknown; byKey: Map<string, MainRow[]> }>({
+    data: undefined,
+    byKey: new Map(),
+  });
+  const mainRows = useMemo<MainRow[]>(() => {
+    if (mainSheet === 'packer')
+      return (isPackerPast ? (packerPastData?.o_rc1 ?? []) : (packerData?.o_rc1 ?? [])) as MainRow[];
+    const cache = mainSumRowsCacheRef.current;
+    if (cache.data !== mainData) {
+      cache.data = mainData;
+      cache.byKey = new Map();
+    }
+    const key = periodBindings.join(',');
+    let rows = cache.byKey.get(key);
+    if (!rows) {
+      rows = applyMainSums(mainData?.o_rc1 ?? [], periodBindings);
+      cache.byKey.set(key, rows);
+    }
+    return rows;
+  }, [mainSheet, isPackerPast, mainData, packerData, packerPastData, periodBindings]);
   // 합계 미적용 원본(pull 버전) 보존
   // const mainRows = useMemo<MainRow[]>(
   //   () =>
@@ -469,7 +535,10 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
     onSuccess: () => {
       confirmEditTrackerRef.current?.clearChanges();
       setToast({ type: 'success', message: t(MSG.SAVED, '__Saved successfully.') });
-      setDetailFilter(SHEETS.CONFIRM_DETAIL, 'N');
+      // setDetailFilter(SHEETS.CONFIRM_DETAIL, 'N');
+      // 조회조건이 그대로면 필터를 다시 넣어도 재조회되지 않아 직접 다시 읽는다(I/D/M 표시 해제).
+      if (!filters[SHEETS.CONFIRM_DETAIL]) setDetailFilter(SHEETS.CONFIRM_DETAIL, 'N');
+      else void (mainSheet === 'packer' ? refetchConfirmPacker() : refetchConfirm());
     },
     onError: (error: Error) => {
       void setAlert({ type: 'alert', content: error.message || t(MSG.SAVE_FAILED, '__Save failed.') });
@@ -524,7 +593,10 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
     onSuccess: () => {
       mesStockEditTrackerRef.current?.clearChanges();
       setToast({ type: 'success', message: t(MSG.SAVED, '__Saved successfully.') });
-      setDetailFilter(SHEETS.MES_STOCK, 'N');
+      // setDetailFilter(SHEETS.MES_STOCK, 'N');
+      // 조회조건이 그대로면 필터를 다시 넣어도 재조회되지 않아 직접 다시 읽는다(I/D/M 표시 해제).
+      if (filters[SHEETS.MES_STOCK]) void refetchMesStock();
+      else setDetailFilter(SHEETS.MES_STOCK, 'N');
     },
   });
 
@@ -623,7 +695,8 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
     if (hasUnsaved) {
       void setAlert({
         type: 'confirm',
-        content: t(MSG.NO_MODIFICATION, '__There are unsaved changes. Search again?'),
+        // content: t(MSG.NO_MODIFICATION, '__There are unsaved changes. Search again?'),
+        content: t(MSG.UNSAVED_SEARCH, '_작업중인 데이터가 있습니다. 조회 하시겠습니까?'),
         onConfirm: runMainSearch,
       });
       return;
@@ -676,6 +749,153 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
   };
 
   // ── Save (F7 — 활성 그리드/시트 분기, 01 R8 / 03 §4) ──
+  /**
+   * ERP 송신 + 실패 보상 — AS-IS GetErpIFCheckNew(cs:7262~7374).
+   * 반환값은 "확정(CONFIRM_40) 단계로 진행해도 되는가" 다. 성공(S)은 알리지 않는다(AS-IS else 분기).
+   *   E · S_E → ReErrorMsg(`confirmId:msg^…`) 파싱 → 실패 CONFIRM 만 초안 되돌림(cs:7298)
+   *             → 오류 적재(ERP_ERROR_CONFIRM) → MSG01208. 진행 중단.
+   *   F · C_E → 변경행 전건 초안 되돌림 → MSG01215. 진행 중단.
+   * 보상은 ERP 가 거절했을 때만 돈다 — 연계 미구성 환경(BE stub)은 항상 'S' 라 발동하지 않는다.
+   */
+  const sendErpAndCompensate = async (
+    changeReqNo: string,
+    rows: Record<string, unknown>[]
+  ): Promise<boolean> => {
+    let eType = '';
+    let eMessage = '';
+    try {
+      // AS-IS UIC0001.asmx 자리 — BE 가 serviceKey=erpIf 를 nscm-if `POST /api/if/send/NSD0100` 으로
+      //   라우팅한다(config.nscm-if.routes). 응답은 AS-IS 와 같은 { E_TYPE, E_MESSAGE }.
+      const erp = await apiClient.post(ERP_IF_PATH, {
+        CHANGE_REQ_NO: changeReqNo,
+        CHANGE_TYPE: ERP_IF_CHANGE_TYPE,
+        SHIPMENT_STATUS: '',
+      });
+      if (erp.status >= 400 || Number(erp.data?.code)) {
+        eType = ERP_IF_PI_FAIL;
+      } else {
+        const r = erp.data?.result as { E_TYPE?: unknown; E_MESSAGE?: unknown } | null;
+        eType = str(r?.E_TYPE);
+        eMessage = str(r?.E_MESSAGE);
+      }
+    } catch {
+      eType = ERP_IF_PI_FAIL; // AS-IS CallClient catch 와 동일
+    }
+    /**
+     * ③ 2차 적재 + ③' 2차 송신 — AS-IS cs:7317~7334.
+     *   AS-IS 는 CHG_BATCH('B', REQ_NO) 로 XIF 'A' 행(NEW_* 적용값)을 쌓고 한 번 더 송신한다.
+     *   TO-BE 는 전용 SP 를 만들지 않고 PKG_SSP0003.P_SSP0003_SAVE_REQ_IF_CHECK 를 빌려 쓴다
+     *   (SSP0015 가 GET_REQ_DRAFTING 에 P_SSP0003_GET_DRAFTING 을 빌려 쓰는 선례와 같은 방식).
+     *   그 SP 는 changeStatus='A' + changeType='C' 면 V_STATUS='B' 로 CHG_BATCH 만 하고 COMMIT 한다
+     *   (DB 실측: BODY 1850 분기 · 1852 `V_STATUS := 'B'` · 1858 CHG_BATCH(V_STATUS,…) · 1882 COMMIT).
+     *   내부 COMMIT 이므로 이 단계 뒤 ④ 가 실패해도 'B' 행은 남는다 — AS-IS 도 같다.
+     */
+    const stageAndResend = async (): Promise<void> => {
+      try {
+        await apiClient.post(`/${MENU_ID}/${SHEETS.MAIN}/${BTN_IF_CHECK}/call-proc`, {
+          changeRequestNo: changeReqNo,
+          changeStatus: IF_CHECK_STATUS_APPLY, // 'A' — 이 값에서만 CHG_BATCH 가 돈다
+          timeZone: sessionTimeZone(session), // IF_CHECK 은 받기만 하고 미사용(AS-IS 와 동일하게 전달)
+          changeType: ERP_IF_CHANGE_TYPE, // 'C' → V_STATUS='B'
+          partialApproval: IF_CHECK_PARTIAL_OFF, // 'F' — IFSEQ merge 안 함
+        });
+      } catch {
+        return; // 적재가 안 됐으면 2차 송신은 의미가 없다
+      }
+      try {
+        await apiClient.post(ERP_IF_PATH, {
+          CHANGE_REQ_NO: changeReqNo,
+          CHANGE_TYPE: ERP_IF_CHANGE_TYPE,
+          SHIPMENT_STATUS: '',
+        });
+      } catch {
+        /* 2차 송신 실패는 XIF 행이 남아 있으니 1분 배치가 다시 집는다 */
+      }
+    };
+
+    if (!eType || eType === ERP_IF_SUCCESS) {
+      await stageAndResend();
+      return true;
+    }
+
+    const compensate = async (confirmIds: string[]): Promise<void> => {
+      if (confirmIds.length === 0) return;
+      try {
+        await apiClient.post(
+          `/${MENU_ID}/${SHEETS.MAIN}/${BTN_DELETE_DRAFTING_BY_CONFIRM}/call-proc`,
+          {
+            confirmId: confirmIds.join('^'),
+            changeRequestNo: changeReqNo,
+            delFlag: ERP_DELETE_FLAG,
+            userId: session.userId ?? '', // PROC 메타 키는 userId 다(lastUpdatedBy 는 SP 에 안 닿아 NULL → ORA-01407 롤백, 결함 D-1).
+            timeZone: sessionTimeZone(session), // 이 SP 는 받기만 하고 미사용(SYSDATE)
+            ifSendFlag: ERP_IF_SEND_ON,
+            changeType: ERP_IF_CHANGE_TYPE,
+          }
+        );
+      } catch {
+        /* 보상 실패는 아래 안내로 대체한다(원본도 결과를 보지 않는다) */
+      }
+    };
+
+    if (eType === ERP_IF_ERROR || eType === ERP_IF_PARTIAL_ERROR) {
+      // cs:7277~7291 — 끝 '^' 제거, '^' 분리, 첫 ':' 앞이 CONFIRM_ID.
+      const body = eMessage.endsWith('^') ? eMessage.slice(0, -1) : eMessage;
+      const parsed = body
+        .split('^')
+        .map(part => {
+          const at = part.indexOf(':');
+          return at < 0
+            ? { confirmId: part.trim(), message: '' }
+            : { confirmId: part.slice(0, at).trim(), message: part.slice(at + 1).trim() };
+        })
+        .filter(e => e.confirmId !== '');
+      await compensate(parsed.map(e => e.confirmId));
+      if (parsed.length > 0) {
+        try {
+          await apiClient.post(
+            `/${MENU_ID}/${SHEETS.MAIN}/${BTN_ERP_ERROR_CONFIRM}/call-proc`,
+            {
+              changeRequestNo: parsed.map(() => changeReqNo).join('^'),
+              confirmId: parsed.map(e => e.confirmId).join('^'),
+              eType: ERP_ERROR_E_TYPE,
+              eMessage: parsed.map(e => e.message).join('^'),
+              userId: session.userId ?? '', // PROC 메타 키는 userId 다(lastUpdatedBy 는 SP 에 안 닿아 NULL → ORA-01407 롤백, 결함 D-1).
+            }
+          );
+        } catch {
+          /* 적재 실패는 안내로 대체 */
+        }
+      }
+      void setAlert({
+        type: 'alert',
+        content: t(MSG_ERP.ISSUE, '__ERP cannot be processed due to an ISSUE. {0}').replace(
+          '{0}',
+          parsed.map(e => `${e.confirmId}:${e.message}`).join('\n') || eMessage
+        ),
+      });
+      // S_E(일부 성공)는 AS-IS 가 bFlag=true 로 **진행한다**(cs:7317~7319) — 실패분을 초안에서 뺀 뒤
+      //   남은 성공분으로 ③ 2차 적재 + ③' 2차 송신을 하고 ④ 확정까지 간다.
+      //   E(전건 실패)는 bFlag=false 로 중단한다(cs:7313~7315).
+      if (eType === ERP_IF_PARTIAL_ERROR) {
+        await stageAndResend();
+        return true;
+      }
+      return false;
+    }
+
+    // F · C_E — 변경행 전건 되돌림 후 시스템 오류 안내(cs:7343~7346 + 뒤처리).
+    await compensate(rows.map(r => str(r.CONFIRM_ID)).filter(id => id !== ''));
+    void setAlert({
+      type: 'alert',
+      content: t(MSG_ERP.SYSTEM_ERROR, '__System error. Request No : {0}').replace(
+        '{0}',
+        changeReqNo
+      ),
+    });
+    return false;
+  };
+
   const handleSave = async () => {
     // R7b — 비최신(이전) Plan 이면 저장 차단 + MSG01185 (AS-IS EditButton MSG00170 cs L1767). canEdit=false(R7a/권한)
     //   인 경우는 이미 읽기전용 + MSG01261 안내라 여기선 old-plan 만 명시 안내한다(셀 편집은 읽기전용으로 조용히 차단).
@@ -712,7 +932,8 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       if (!payload) {
         setToast({
           type: 'error',
-          message: t(MSG.NO_MODIFICATION, '__No modifications have been made.'),
+          // message: t(MSG.NO_MODIFICATION, '__No modifications have been made.'),
+          message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.'),
         });
         return;
       }
@@ -732,7 +953,8 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       if (dirty.length === 0) {
         setToast({
           type: 'error',
-          message: t(MSG.NO_MODIFICATION, '__No modifications have been made.'),
+          // message: t(MSG.NO_MODIFICATION, '__No modifications have been made.'),
+          message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.'),
         });
         return;
       }
@@ -774,6 +996,21 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
           });
           return;
         }
+        // 출하일 입력 가능 기간 (AS-IS Validation_Check L6300~6312, M/I 행) — 범위 밖이면 저장 차단
+        if (shipDateRange) {
+          const ymd = toValidYmd(row.SHIPMENT_DATE);
+          const d = ymd ? dayjs(`${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`) : undefined;
+          if (d && (d.isAfter(shipDateRange.max, 'day') || d.isBefore(shipDateRange.min, 'day'))) {
+            void setAlert({
+              type: 'alert',
+              content: t(
+                MSG.SHIP_DATE_OUT_OF_RANGE,
+                '__Change requests are possible from the current D + {0} ship date.'
+              ).replace('{0}', shipDateRange.dDay),
+            });
+            return;
+          }
+        }
         // Change Reason 미입력 → AS-IS([C20200630-000480], Validation_Check L6277~6289)는 블로킹 얼럿을
         //   주석처리하고 'T07'(외부 요인) 기본값으로 자동 설정한 뒤 진행한다. 얼럿 미이식(그대로 저장).
         const reason = str(row.CHANGE_REASON_CODE).trim();
@@ -787,7 +1024,8 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       //   proc 는 컬럼별 '^'-폴딩 단일 객체를 받는다(배열 전송은 전건 null → 미저장, 2026-10-01 실측).
       const confirmPayload = collectConfirmSaveRows(dirty, session.userId ?? '');
       if (!confirmPayload) {
-        setToast({ type: 'error', message: t(MSG.NO_MODIFICATION, '__No modifications have been made.') });
+        // setToast({ type: 'error', message: t(MSG.NO_MODIFICATION, '__No modifications have been made.') });
+        setToast({ type: 'error', message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
         return;
       }
       // AS-IS GetERPInterface 첫 게이트 — GetShipmentStatusChk(SSP0015.cs L6541). 변경행의 기존 CONFIRM_ID
@@ -923,43 +1161,77 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
           return;
         }
       }
-      // 저장 → (성공 시) ERP I/F 호출. AS-IS GetERPInterface→SoNo/NonSoNo→GetErpIFCheck 흐름의 TO-BE 배선.
-      //   저장 proc O_RC1 이 성공 시 RESULT_CODE='S' + CHANGE_REQ_NO 반환(PKG_SSP0015 L7350) → 그 번호로 IF 호출.
-      //   현재는 mock(/call-test) — 실서비스(UIC0001.asmx) 완성 시 '/call' 로 교체(코드 동일).
-      let saveData: unknown;
+      // ── 수정행 저장: AS-IS 순서를 그대로 따른다(cs:7005~7077) ─────────────────────────
+      //   ① DRAFTING → 변경요청 초안 INSERT + XIF 'C' 적재 + CHANGE_REQ_NO 채번
+      //   ② ERP 송신(REQ_NO, 'C', '')
+      //   ③ (미배선) CHG_BATCH('B', REQ_NO) 2차 적재 + 2차 송신 — 아래 TODO
+      //   ④ 성공일 때만 CONFIRM_40 → SSP_ANL_SHIP_CONFIRM UPDATE·PLAN_40·이력·메일
+      //   ⑤ 실패면 보상 후 ④ 를 하지 않는다
+      //   종전 TO-BE 는 ④ 만 불렀다. CONFIRM_40 의 O_RC1 은 V_CHANGE_REQ_NO 를 돌려주는데 그 변수는
+      //   선언(BODY 6074)만 있고 대입이 0건이라 **항상 NULL** 이다 → 요청번호를 못 받아 송신이 아예
+      //   일어나지 않았다. 요청번호를 채번·반환하는 쪽은 DRAFTING 이다(BODY L9679 `V_MAX_REQ_NO AS REQUEST_NO`).
+      //   두 proc 은 쓰는 표가 달라 중복 저장이 아니다 —
+      //     DRAFTING    : CHG_REQ, CHG_REQ_DE, XIF_ERP_SHIP_PLAN_CONFIRM_S_SN (BODY L9667 CHG_BATCH('C'))
+      //     CONFIRM_40  : SSP_ANL_SHIP_CONFIRM, SSP_ANL_SHIP_PLAN_40, 이력, 메일 (XIF INSERT 없음)
+      const draftingPayload = collectDraftingSaveRows(dirty, {
+        userId: session.userId ?? '',
+        // AS-IS 는 UserInfoContext[Dept_ID] 를 보낸다(cs:6943). TO-BE 세션에 부서가 없어 공란이다(잔여).
+        userDeptId: '',
+        title: activeDetailSheet,
+        programId: MENU_ID,
+      });
+      if (!draftingPayload) return;
+
+      // ① 초안 저장 — 상단 시트에 따라 proc 분기(AS-IS cs:7011/7015).
+      let changeReqNo = '';
       try {
-        saveData = await mutateConfirmAsync(confirmPayload); // 실패 시 throw → onError alert
+        const draftBtn = mainSheet === 'packer' ? BTN_SAVE_DRAFTING_PACKER : BTN_SAVE_DRAFTING;
+        const resDraft = await apiClient.post(
+          `/${MENU_ID}/${SHEETS.MAIN}/${draftBtn}/call-proc`,
+          draftingPayload
+        );
+        if (resDraft.status >= 400 || Number(resDraft.data?.code)) {
+          void setAlert({ type: 'alert', content: t(MSG.SAVE_FAILED, '__Save failed.') });
+          return;
+        }
+        const d1 = (
+          resDraft.data?.result as {
+            o_rc1?: { RESULT_CODE?: unknown; REQUEST_NO?: unknown; ERR_MESSAGE?: unknown }[];
+          }
+        )?.o_rc1?.[0];
+        // AS-IS cs:7059 `ds.Tables[0].Rows[0][0] == "S"` · cs:7061 `[0][1]` = sRequestNo
+        if (str(d1?.RESULT_CODE) !== 'S') {
+          void setAlert({
+            type: 'alert',
+            content: str(d1?.ERR_MESSAGE) || t(MSG.SAVE_FAILED, '__Save failed.'),
+          });
+          return;
+        }
+        changeReqNo = str(d1?.REQUEST_NO);
       } catch {
+        void setAlert({ type: 'alert', content: t(MSG.SAVE_FAILED, '__Save failed.') });
         return;
       }
-      const o1 = (
-        saveData as { result?: { o_rc1?: { RESULT_CODE?: unknown; CHANGE_REQ_NO?: unknown }[] } }
-      )?.result?.o_rc1?.[0];
-      if (str(o1?.RESULT_CODE) === 'X') return; // 저장 결과 'X'(업무 실패)면 IF 생략.
-      // CHANGE_REQ_NO — 저장 proc 가 반환하면 사용. 현 success 경로는 RESULT_CODE/RESULT_CNT 만 반환하므로
-      //   실서비스 연계 전까지는 변경행 CONFIRM_ID 로 대체(mock 은 번호값 무시). 실서비스 시 proc 가
-      //   CHANGE_REQ_NO 를 반환하도록 BE 보강 필요(I02).
-      const changeReqNo = str(o1?.CHANGE_REQ_NO) || confirmIds[0] || str(dirty[0]?.CONFIRM_ID);
+      // AS-IS cs:7063 — 요청번호가 비면 송신하지 않는다(대체값 없음).
       if (!changeReqNo) return;
+
+      // ② ERP 송신. Packer 시트는 AS-IS 가 송신하지 않고 통과시킨다(cs:7072~7075).
+      let erpOk = true;
+      if (mainSheet !== 'packer') {
+        erpOk = await sendErpAndCompensate(changeReqNo, dirty);
+      }
+      // ③·③' 2차 적재(CHG_BATCH('B'))와 2차 송신은 sendErpAndCompensate 안에서 끝낸다 —
+      //    S 면 바로, S_E 면 실패분을 뺀 뒤 성공분으로. 상세는 그 함수 주석 참고.
+      if (!erpOk) return; // ⑤ 실패 — 보상은 sendErpAndCompensate 안에서 끝냈다. ④ 를 하지 않는다.
+
+      // ④ 확정 반영
       try {
-        // TODO: 실서비스 완성 시 '/common/web-service/erpIf/call' 로 교체
-        const erp = await apiClient.post('/common/web-service/erpIf/call-test', {
-          CHANGE_REQ_NO: changeReqNo,
-          CHANGE_TYPE: 'C',
-          SHIPMENT_STATUS: '',
-        });
-        // BE 가 XML 을 파싱해 { E_TYPE, E_MESSAGE } Map 으로 돌려준다(result).
-        //   AS-IS GetErpIFCheck: 성공(S)은 별도 메시지 없이 진행(저장완료 토스트로 충분) — 에러만 알린다.
-        //   E/F/C_E → AS-IS MSG00197/204/306(ReErrorMsg 포함). 현재는 전달된 E_MESSAGE 를 노출(코드 매핑은 후속).
-        const erpResult = erp.data?.result as { E_TYPE?: unknown; E_MESSAGE?: unknown } | null;
-        const eType = str(erpResult?.E_TYPE);
-        const eMsg = str(erpResult?.E_MESSAGE);
-        if (eType && eType !== 'S') {
-          void setAlert({ type: 'alert', content: eMsg || t(MSG.SAVE_FAILED, '__ERP interface failed.') });
-        }
+        const saveData = await mutateConfirmAsync(confirmPayload); // 실패 시 throw → onError alert
+        const o1 = (saveData as { result?: { o_rc1?: { RESULT_CODE?: unknown }[] } })?.result
+          ?.o_rc1?.[0];
+        if (str(o1?.RESULT_CODE) === 'X') return; // 업무 실패
       } catch {
-        // IF 호출 실패 — 저장은 이미 완료됨. 안내만(후속 재전송/배치 처리는 I02 오케스트레이션 범위).
-        void setAlert({ type: 'alert', content: t(MSG.SAVE_FAILED, '__ERP interface call failed.') });
+        return;
       }
       return;
     }
@@ -972,7 +1244,8 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       if (dirty.length === 0) {
         setToast({
           type: 'error',
-          message: t(MSG.NO_MODIFICATION, '__No modifications have been made.'),
+          // message: t(MSG.NO_MODIFICATION, '__No modifications have been made.'),
+          message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.'),
         });
         return;
       }
@@ -1021,7 +1294,8 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       if (dirty.length === 0) {
         setToast({
           type: 'error',
-          message: t(MSG.NO_MODIFICATION, '__No modifications have been made.'),
+          // message: t(MSG.NO_MODIFICATION, '__No modifications have been made.'),
+          message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.'),
         });
         return;
       }
@@ -1035,8 +1309,14 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
   //   AS-IS: spdDetail + shtBolckStock + 신규행일 때만 동작. 그 외 무동작(가드).
   const handleInsert = () => {
     if (!canEditPlan) return; // 이전 Plan(비최신)·EDIT 권한 없음 → Detail 편집 차단(R7b 확장)
-    // Confirm Detail - 선택한 확정(Status C) 행을 복사한 분할 행 추가 (AS-IS InsertRow L7651~7801).
-    //   수량은 0, Remarks 와 ERP Status 는 빈 값, 나머지는 원본 행 그대로다.
+    // Confirm Detail - 선택한 확정(Status C) 행을 복사한 분할 행 추가 (AS-IS InsertRow cs:7623~7801).
+    //   AS-IS 는 defaultData 49건으로 새 행을 만든다(실측 2026-10-25). 원본과 다른 것만 적는다:
+    //     SHIPMENT_CONFIRM_QTY = 0 (cs:7742)  ·  REMARKS = "" (cs:7681)  ·  ERP_STATUS = "" (cs:7704)
+    //     ERP_SO_NO 는 **defaultData 에 없다**(49건 중 0건) — 원본 값을 읽기만 하고(cs:7660) 새 행에
+    //       넣지 않으므로 빈 값이어야 한다. 복사해 두면 저장 시 GET_ERP_SO_NO_CNT 가 같은 SO 행 수를
+    //       원본+분할행으로 세어 불일치가 나고 MSG00247 로 막힌다.
+    //     CONFIRM_ID 는 **유지한다**(cs:7760 defaultData.Add(CONFIRM_ID, CONFIRM_ID)) — 분할 행은 같은
+    //       확정 건에 속하므로 AS-IS 가 일부러 남긴다. 비우면 AS-IS 와 어긋난다.
     if (activeDetailSheet === SHEETS.CONFIRM_DETAIL) {
       const cg = confirmGridRef.current;
       if (!cg || cg.rows.length === 0) return;
@@ -1050,6 +1330,7 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
           SHIPMENT_CONFIRM_QTY: 0,
           REMARKS: '',
           ERP_STATUS: '',
+          ERP_SO_NO: '',
         } as WijmoRowItem,
         'above',
         true
@@ -1428,13 +1709,26 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
       />
       */}
 
-      {/* 2차 Model 팝업 (btnItemID2 — ModelByDivisionPopup) */}
+      {/* 2차 Model/Nickname 팝업 (btnItemID2) — 1차와 같은 MaterialByDivisionModal 로 교체(사용자 지시 2026-10-14). */}
+      <MaterialByDivisionModal
+        open={openItemDetail}
+        modalClose={() => setOpenItemDetail(false)}
+        setSelectedValue={itemId => set({ model: str(itemId) })}
+        preSearchParams={{
+          divisionId: FIXED_DIVISION,
+          scpModuleType: MENU_ID,
+          operationGroup: '',
+          itemId: sc.model,
+        }}
+      />
+      {/* 종전 2차 Model 팝업(ModelByDivisionPopup)
       <ModelByDivisionPopup
         open={openItemDetail}
         onClose={() => setOpenItemDetail(false)}
         onSelect={selected => set({ model: str(selected.itemId) })}
         params={{ divisionId: FIXED_DIVISION, itemId: sc.model }}
       />
+      */}
 
       {/* Measure 선택 (R3 — btnMeasure) — MeasureSelectModal + titleSet 'M' 저장 → 활성시트 재조회 */}
       <MeasureSelectModal

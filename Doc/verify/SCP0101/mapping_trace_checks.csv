@@ -1,0 +1,957 @@
+﻿row_id,source,check,instance,result
+usrConditionPanel1 (HidePanel),FE 대조표,X-LOC,X-LOC|ROW:usrConditionPanel1 (HidePanel),FAIL
+usrConditionPanel1 (HidePanel),FE 대조표,K-SA,K-SA|SCREEN,NOT_RUN
+usrConditionPanel1 (HidePanel),FE 대조표,G3,G3|SCREEN,NOT_RUN
+layoutControlGroup2 / usrLayoutControl2,FE 대조표,X-LOC,X-LOC|ROW:layoutControlGroup2 / usrLayoutControl2,FAIL
+layoutControlGroup2 / usrLayoutControl2,FE 대조표,K-SA,K-SA|SCREEN,NOT_RUN
+layoutControlGroup2 / usrLayoutControl2,FE 대조표,G3,G3|SCREEN,NOT_RUN
+monthPicker (UsrMonthPicker),FE 대조표,X-LOC,X-LOC|ROW:monthPicker (UsrMonthPicker),FAIL
+monthPicker (UsrMonthPicker),FE 대조표,X-ROW,X-ROW|ENTRY:monthPicker (UsrMonthPicker),REVIEW
+cboDivision (UsrCheckedList2),FE 대조표,X-LOC,X-LOC|ROW:cboDivision (UsrCheckedList2),FAIL
+cboDivision (UsrCheckedList2),FE 대조표,X-ROW,X-ROW|ENTRY:cboDivision (UsrCheckedList2),REVIEW
+clbPlant (UsrCheckedList2),FE 대조표,X-LOC,X-LOC|ROW:clbPlant (UsrCheckedList2),FAIL
+clbPlant (UsrCheckedList2),FE 대조표,X-ROW,X-ROW|ENTRY:clbPlant (UsrCheckedList2),REVIEW
+txtItem_Id (UsrMultiLineEditor),FE 대조표,X-LOC,X-LOC|ROW:txtItem_Id (UsrMultiLineEditor),FAIL
+txtItem_Id (UsrMultiLineEditor),FE 대조표,H6,H6|COND:txtItem_Id,NOT_RUN
+txtItem_Id (UsrMultiLineEditor),FE 대조표,G5,G5|COND:txtItem_Id,NOPATH
+txtItem_Id (UsrMultiLineEditor),FE 대조표,M4,M4|COND:txtItem_Id,NOT_RUN
+btnItem_Id (UsrButton),FE 대조표,X-LOC,X-LOC|ROW:btnItem_Id (UsrButton),FAIL
+btnItem_Id (UsrButton),FE 대조표,X-ROW,X-ROW|ENTRY:btnItem_Id (UsrButton),REVIEW
+btnColumn (Column 설정),FE 대조표,X-LOC,X-LOC|ROW:btnColumn (Column 설정),FAIL
+btnColumn (Column 설정),FE 대조표,A5,A5|ROW:btnColumn (Column 설정),NA
+btnColumn (Column 설정),FE 대조표,H5,H5|ROW:btnColumn (Column 설정),NA
+btnColumn (Column 설정),FE 대조표,H2,H2|ROW:btnColumn (Column 설정),NA
+chkDetail (상세토글),FE 대조표,X-LOC,X-LOC|ROW:chkDetail (상세토글),FAIL
+chkDetail (상세토글),FE 대조표,A5,A5|ROW:chkDetail (상세토글),NA
+spdMain (FpSpread),FE 대조표,X-LOC,X-LOC|ROW:spdMain (FpSpread),FAIL
+spdMain (FpSpread),FE 대조표,A5,A5|ROW:spdMain (FpSpread),NA
+spdMain (FpSpread),FE 대조표,H5,H5|ROW:spdMain (FpSpread),NA
+spdMain (FpSpread),FE 대조표,H2,H2|ROW:spdMain (FpSpread),NA
+emptySpaceItem1/2,FE 대조표,X-LOC,X-LOC|ROW:emptySpaceItem1/2,FAIL
+emptySpaceItem1/2,FE 대조표,X-ROW,X-ROW|ENTRY:emptySpaceItem1/2,REVIEW
+emptySpaceItem6,FE 대조표,X-LOC,X-LOC|ROW:emptySpaceItem6,FAIL
+emptySpaceItem6,FE 대조표,X-ROW,X-ROW|ENTRY:emptySpaceItem6,REVIEW
+CboDivision_SelectedIndexChanged → SetChangedControl,FE 대조표,X-LOC,X-LOC|ROW:CboDivision_SelectedIndexChanged → SetChangedControl,FAIL
+CboDivision_SelectedIndexChanged → SetChangedControl,FE 대조표,C1,C1|ROW:CboDivision_SelectedIndexChanged → SetChangedControl,REVIEW
+CboDivision_SelectedIndexChanged → SetChangedControl,FE 대조표,C4,C4|ROW:CboDivision_SelectedIndexChanged → SetChangedControl,REVIEW
+CboDivision_SelectedIndexChanged → SetChangedControl,FE 대조표,G1,G1|ROW:CboDivision_SelectedIndexChanged → SetChangedControl,NA
+CboDivision_SelectedIndexChanged → SetChangedControl,FE 대조표,A1,A1|ROW:CboDivision_SelectedIndexChanged → SetChangedControl,REVIEW
+CboDivision_SelectedIndexChanged → SetChangedControl,FE 대조표,J2,J2|SCREEN,NOT_RUN
+MonthPicker_ValueChanged → SetSpreadHeader,FE 대조표,X-LOC,X-LOC|ROW:MonthPicker_ValueChanged → SetSpreadHeader,FAIL
+MonthPicker_ValueChanged → SetSpreadHeader,FE 대조표,C1,C1|ROW:MonthPicker_ValueChanged → SetSpreadHeader,REVIEW
+MonthPicker_ValueChanged → SetSpreadHeader,FE 대조표,C4,C4|ROW:MonthPicker_ValueChanged → SetSpreadHeader,REVIEW
+MonthPicker_ValueChanged → SetSpreadHeader,FE 대조표,G1,G1|ROW:MonthPicker_ValueChanged → SetSpreadHeader,NA
+MonthPicker_ValueChanged → SetSpreadHeader,FE 대조표,A1,A1|ROW:MonthPicker_ValueChanged → SetSpreadHeader,REVIEW
+MonthPicker_ValueChanged → SetSpreadHeader,FE 대조표,J2,J2|SCREEN,NOT_RUN
+ChkDetail_CheckedChanged → SetLayout,FE 대조표,X-LOC,X-LOC|ROW:ChkDetail_CheckedChanged → SetLayout,FAIL
+ChkDetail_CheckedChanged → SetLayout,FE 대조표,C1,C1|COND:chkDetail,NOT_RUN
+ChkDetail_CheckedChanged → SetLayout,FE 대조표,C4,C4|COND:chkDetail,NOT_RUN
+ChkDetail_CheckedChanged → SetLayout,FE 대조표,A5,A5|ROW:ChkDetail_CheckedChanged → SetLayout,NA
+BtnItem_Id_Click → ItembyDivisionPopup,FE 대조표,X-LOC,X-LOC|ROW:BtnItem_Id_Click → ItembyDivisionPopup,FAIL
+BtnItem_Id_Click → ItembyDivisionPopup,FE 대조표,H6,H6|ROW:BtnItem_Id_Click → ItembyDivisionPopup,REVIEW
+BtnItem_Id_Click → ItembyDivisionPopup,FE 대조표,G5,G5|ROW:BtnItem_Id_Click → ItembyDivisionPopup,REVIEW
+BtnItem_Id_Click → ItembyDivisionPopup,FE 대조표,M4,M4|ROW:BtnItem_Id_Click → ItembyDivisionPopup,REVIEW
+BtnItem_Id_Click → ItembyDivisionPopup,FE 대조표,G1,G1|ROW:BtnItem_Id_Click → ItembyDivisionPopup,NA
+BtnItem_Id_Click → ItembyDivisionPopup,FE 대조표,A1,A1|ROW:BtnItem_Id_Click → ItembyDivisionPopup,REVIEW
+BtnItem_Id_Click → ItembyDivisionPopup,FE 대조표,J2,J2|SCREEN,NOT_RUN
+BtnColumn_Click → InitSpread(TitleSet),FE 대조표,X-LOC,X-LOC|ROW:BtnColumn_Click → InitSpread(TitleSet),FAIL
+BtnColumn_Click → InitSpread(TitleSet),FE 대조표,A5,A5|ROW:BtnColumn_Click → InitSpread(TitleSet),NA
+BtnColumn_Click → InitSpread(TitleSet),FE 대조표,H5,H5|ROW:BtnColumn_Click → InitSpread(TitleSet),NA
+BtnColumn_Click → InitSpread(TitleSet),FE 대조표,H2,H2|ROW:BtnColumn_Click → InitSpread(TitleSet),NA
+checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FE 대조표,X-LOC,X-LOC|ROW:checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FAIL
+checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FE 대조표,K-SA,K-SA|SCREEN,NOT_RUN
+checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FE 대조표,G3,G3|SCREEN,NOT_RUN
+checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FE 대조표,G1,G1|ROW:checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,NA
+checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FE 대조표,A1,A1|ROW:checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,REVIEW
+checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FE 대조표,J2,J2|SCREEN,NOT_RUN
+checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FE 대조표,E4,E4|MSG:MSG00667,NOT_RUN
+checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FE 대조표,E4,E4|MSG:MSG00097,NOT_RUN
+checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FE 대조표,I1,I1|SCREEN,NOT_RUN
+checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FE 대조표,H10,H10|SCREEN,PASS
+checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,FE 대조표,E3,E3|ROW:checkRequiredOfSearch — 권한 Division 0건 → 권한없음 조회차단,NA
+`*` 접미 필수필드(MSG00002),FE 대조표,X-LOC,X-LOC|ROW:`*` 접미 필수필드(MSG00002),FAIL
+`*` 접미 필수필드(MSG00002),FE 대조표,E4,E4|MSG:MSG00002,NOT_RUN
+`*` 접미 필수필드(MSG00002),FE 대조표,I1,I1|SCREEN,NOT_RUN
+`*` 접미 필수필드(MSG00002),FE 대조표,H10,H10|SCREEN,PASS
+`*` 접미 필수필드(MSG00002),FE 대조표,E3,E3|ROW:`*` 접미 필수필드(MSG00002),NA
+ExcelButton 조회 0건 확인(MSG00100),FE 대조표,X-LOC,X-LOC|ROW:ExcelButton 조회 0건 확인(MSG00100),FAIL
+ExcelButton 조회 0건 확인(MSG00100),FE 대조표,G1,G1|ROW:ExcelButton 조회 0건 확인(MSG00100),NA
+ExcelButton 조회 0건 확인(MSG00100),FE 대조표,A1,A1|ROW:ExcelButton 조회 0건 확인(MSG00100),REVIEW
+ExcelButton 조회 0건 확인(MSG00100),FE 대조표,J2,J2|SCREEN,NOT_RUN
+ExcelButton 조회 0건 확인(MSG00100),FE 대조표,E4,E4|MSG:MSG00100,NOT_RUN
+ExcelButton 조회 0건 확인(MSG00100),FE 대조표,E4,E4|MSG:MSG00719,NOT_RUN
+ExcelButton 조회 0건 확인(MSG00100),FE 대조표,I1,I1|SCREEN,NOT_RUN
+ExcelButton 조회 0건 확인(MSG00100),FE 대조표,H10,H10|SCREEN,PASS
+ExcelButton 조회 0건 확인(MSG00100),FE 대조표,E3,E3|ROW:ExcelButton 조회 0건 확인(MSG00100),NA
+SCP0101_GET_INVENTORY_TREND(Find),FE 대조표,X-LOC,X-LOC|ROW:SCP0101_GET_INVENTORY_TREND(Find),FAIL
+SCP0101_GET_INVENTORY_TREND(Find),FE 대조표,A1,A1|SP:P_SCP0101_GET_INVENTORY_TREND,REVIEW
+SCP0101_GET_INVENTORY_TREND(Find),FE 대조표,A1,A1|SP:PKG_SCP0101,REVIEW
+SCP0101_GET_INVENTORY_TREND(Find),FE 대조표,A6,A6|SP:P_SCP0101_GET_INVENTORY_TREND,NOT_RUN
+SCP0101_GET_INVENTORY_TREND(Find),FE 대조표,A6,A6|SP:PKG_SCP0101,NOT_RUN
+SCP0101_GET_INVENTORY_TREND(Find),FE 대조표,F4,F4|SP:P_SCP0101_GET_INVENTORY_TREND,NOT_RUN
+SCP0101_GET_INVENTORY_TREND(Find),FE 대조표,F4,F4|SP:PKG_SCP0101,NOT_RUN
+SCP0101_GET_INVENTORY_TREND(Find),FE 대조표,DB-SYN,DB-SYN|SP:P_SCP0101_GET_INVENTORY_TREND,PASS
+SCP0101_GET_INVENTORY_TREND(Find),FE 대조표,DB-SYN,DB-SYN|SP:PKG_SCP0101,NOPATH
+SCP0084_GET_MONTH_RANGE(월범위 초기화),FE 대조표,X-LOC,X-LOC|ROW:SCP0084_GET_MONTH_RANGE(월범위 초기화),FAIL
+SCP0084_GET_MONTH_RANGE(월범위 초기화),FE 대조표,A1,A1|SP:SCP0084_GET_MONTH_RANGE,REVIEW
+SCP0084_GET_MONTH_RANGE(월범위 초기화),FE 대조표,A6,A6|SP:SCP0084_GET_MONTH_RANGE,NOT_RUN
+SCP0084_GET_MONTH_RANGE(월범위 초기화),FE 대조표,F4,F4|SP:SCP0084_GET_MONTH_RANGE,NOT_RUN
+SCP0084_GET_MONTH_RANGE(월범위 초기화),FE 대조표,DB-SYN,DB-SYN|SP:SCP0084_GET_MONTH_RANGE,NOPATH
+(조회 로그성 호출),FE 대조표,X-LOC,X-LOC|ROW:(조회 로그성 호출),FAIL
+(조회 로그성 호출),FE 대조표,G1,G1|ROW:(조회 로그성 호출),NA
+(조회 로그성 호출),FE 대조표,A1,A1|ROW:(조회 로그성 호출),REVIEW
+(조회 로그성 호출),FE 대조표,J2,J2|SCREEN,NOT_RUN
+FindButton → Find_Data,FE 대조표,X-LOC,X-LOC|ROW:FindButton → Find_Data,REVIEW
+FindButton → Find_Data,FE 대조표,G1,G1|ROW:FindButton → Find_Data,NA
+FindButton → Find_Data,FE 대조표,A1,A1|ROW:FindButton → Find_Data,REVIEW
+FindButton → Find_Data,FE 대조표,J2,J2|SCREEN,NOT_RUN
+ExcelButton → ExportExcelData,FE 대조표,X-LOC,X-LOC|ROW:ExcelButton → ExportExcelData,REVIEW
+ExcelButton → ExportExcelData,FE 대조표,X-ROW,X-ROW|ENTRY:ExcelButton → ExportExcelData,REVIEW
+SaveButton (빈 본문 NO-OP),FE 대조표,X-LOC,X-LOC|ROW:SaveButton (빈 본문 NO-OP),REVIEW
+SaveButton (빈 본문 NO-OP),FE 대조표,F1,F1|SCREEN,NOT_RUN
+SaveButton (빈 본문 NO-OP),FE 대조표,F2,F2|SCREEN,NOPATH
+SaveButton (빈 본문 NO-OP),FE 대조표,J2,J2|SCREEN,NOT_RUN
+SaveButton (빈 본문 NO-OP),FE 대조표,D4,D4|ROW:SaveButton (빈 본문 NO-OP),NA
+SaveButton (빈 본문 NO-OP),FE 대조표,D6,D6|SCREEN,NOT_RUN
+EditButton (SwitchLock→전체잠금→MEMO unlock),FE 대조표,X-LOC,X-LOC|ROW:EditButton (SwitchLock→전체잠금→MEMO unlock),REVIEW
+EditButton (SwitchLock→전체잠금→MEMO unlock),FE 대조표,D1,D1|COL:MEMO,NOT_RUN
+EditButton (SwitchLock→전체잠금→MEMO unlock),FE 대조표,D3,D3|COL:MEMO,NOT_RUN
+EditButton (SwitchLock→전체잠금→MEMO unlock),FE 대조표,J2,J2|SCREEN,NOT_RUN
+insert/delete/manual/upload,FE 대조표,X-LOC,X-LOC|ROW:insert/delete/manual/upload,REVIEW
+insert/delete/manual/upload,FE 대조표,D4,D4|ROW:insert/delete/manual/upload,NA
+insert/delete/manual/upload,FE 대조표,D6,D6|SCREEN,NOT_RUN
+insert/delete/manual/upload,FE 대조표,J2,J2|SCREEN,NOT_RUN
+insert/delete/manual/upload,FE 대조표,F1,F1|SCREEN,NOT_RUN
+insert/delete/manual/upload,FE 대조표,F5,F5|SCREEN,NOT_RUN
+SetSpreadHeader — QTY_MONTH1..5 = -5..-1개월 yy.MM,FE 대조표,X-LOC,X-LOC|ROW:SetSpreadHeader — QTY_MONTH1..5 = -5..-1개월 yy.MM,FAIL
+SetSpreadHeader — QTY_MONTH1..5 = -5..-1개월 yy.MM,FE 대조표,X-ROW,X-ROW|ENTRY:SetSpreadHeader — QTY_MONTH1..5 = -5..-1개월 yy.MM,REVIEW
+SetSpreadHeader — QTY_MONTH_FOCUS = 선택월 yy.MM + Red/Bold,FE 대조표,X-LOC,X-LOC|ROW:SetSpreadHeader — QTY_MONTH_FOCUS = 선택월 yy.MM + Red/Bold,FAIL
+SetSpreadHeader — QTY_MONTH_FOCUS = 선택월 yy.MM + Red/Bold,FE 대조표,X-ROW,X-ROW|ENTRY:SetSpreadHeader — QTY_MONTH_FOCUS = 선택월 yy.MM + Red/Bold,REVIEW
+SetSpreadHeader — LONG_TERM_STOCK_AMOUNT row1=focus월,FE 대조표,X-LOC,X-LOC|ROW:SetSpreadHeader — LONG_TERM_STOCK_AMOUNT row1=focus월,FAIL
+SetSpreadHeader — LONG_TERM_STOCK_AMOUNT row1=focus월,FE 대조표,X-ROW,X-ROW|ENTRY:SetSpreadHeader — LONG_TERM_STOCK_AMOUNT row1=focus월,REVIEW
+"SetSpreadHeader — INV_STATUS row0=""{focus월} Inventory Status",FE 대조표,X-LOC,"X-LOC|ROW:SetSpreadHeader — INV_STATUS row0=""{focus월} Inventory Status",FAIL
+"SetSpreadHeader — INV_STATUS row0=""{focus월} Inventory Status",FE 대조표,X-ROW,"X-ROW|ENTRY:SetSpreadHeader — INV_STATUS row0=""{focus월} Inventory Status",REVIEW
+SetBackColor — LongTerm 행 음영(R1),FE 대조표,X-LOC,X-LOC|ROW:SetBackColor — LongTerm 행 음영(R1),FAIL
+SetBackColor — LongTerm 행 음영(R1),FE 대조표,H2,H2|ROW:SetBackColor — LongTerm 행 음영(R1),NA
+SetCellColor — CHK_QTY 40/30/20/10 → INV_STATUS 색(R2),FE 대조표,X-LOC,X-LOC|ROW:SetCellColor — CHK_QTY 40/30/20/10 → INV_STATUS 색(R2),FAIL
+SetCellColor — CHK_QTY 40/30/20/10 → INV_STATUS 색(R2),FE 대조표,H2,H2|ROW:SetCellColor — CHK_QTY 40/30/20/10 → INV_STATUS 색(R2),NA
+SmartColMerge — 반복 셀 세로 병합(R4),FE 대조표,X-LOC,X-LOC|ROW:SmartColMerge — 반복 셀 세로 병합(R4),FAIL
+SmartColMerge — 반복 셀 세로 병합(R4),FE 대조표,H3,H3|ROW:SmartColMerge — 반복 셀 세로 병합(R4),NA
+LockColumn 조회후 전 컬럼 잠금(R7),FE 대조표,X-LOC,X-LOC|ROW:LockColumn 조회후 전 컬럼 잠금(R7),FAIL
+LockColumn 조회후 전 컬럼 잠금(R7),FE 대조표,D1,D1|ROW:LockColumn 조회후 전 컬럼 잠금(R7),REVIEW
+LockColumn 조회후 전 컬럼 잠금(R7),FE 대조표,D3,D3|ROW:LockColumn 조회후 전 컬럼 잠금(R7),REVIEW
+LockColumn 조회후 전 컬럼 잠금(R7),FE 대조표,J2,J2|SCREEN,NOT_RUN
+LockColumn 조회후 전 컬럼 잠금(R7),FE 대조표,G1,G1|ROW:LockColumn 조회후 전 컬럼 잠금(R7),NA
+LockColumn 조회후 전 컬럼 잠금(R7),FE 대조표,A1,A1|ROW:LockColumn 조회후 전 컬럼 잠금(R7),REVIEW
+셀 콤보 0 / measure 0 / lookup 바인딩 0,FE 대조표,X-LOC,X-LOC|ROW:셀 콤보 0 / measure 0 / lookup 바인딩 0,FAIL
+셀 콤보 0 / measure 0 / lookup 바인딩 0,FE 대조표,B1,B1|ROW:셀 콤보 0 / measure 0 / lookup 바인딩 0,NA
+셀 콤보 0 / measure 0 / lookup 바인딩 0,FE 대조표,B2,B2|ROW:셀 콤보 0 / measure 0 / lookup 바인딩 0,NA
+셀 콤보 0 / measure 0 / lookup 바인딩 0,FE 대조표,B4,B4|ROW:셀 콤보 0 / measure 0 / lookup 바인딩 0,NA
+셀 콤보 0 / measure 0 / lookup 바인딩 0,FE 대조표,D5,D5|ROW:셀 콤보 0 / measure 0 / lookup 바인딩 0,NA
+셀 콤보 0 / measure 0 / lookup 바인딩 0,FE 대조표,E5,E5|ROW:셀 콤보 0 / measure 0 / lookup 바인딩 0,NA
+셀 콤보 0 / measure 0 / lookup 바인딩 0,FE 대조표,B3,B3|ROW:셀 콤보 0 / measure 0 / lookup 바인딩 0,NA
+ACT:SCP0101_InventoryTrend..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0101_InventoryTrend..ctor:122:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0101_InventoryTrend..ctor:125:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0101_InventoryTrend.BtnColumn_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:959:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:959:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:961:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:961:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:961:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.BtnColumn_Click,REVIEW
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:962:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:962:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:962:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.BtnColumn_Click,REVIEW
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:963:4,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:963:4,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:963:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.BtnColumn_Click,REVIEW
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:965:5,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:965:5,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:967:6,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnColumn_Click:967:6,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:972:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:972:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:973:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:973:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:974:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:974:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:975:4,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:975:4,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:977:5,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:977:5,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:977:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.BtnItem_Id_Click,REVIEW
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:979:6,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:979:6,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:979:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.BtnItem_Id_Click,REVIEW
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:980:7,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:980:7,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:980:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.BtnItem_Id_Click,REVIEW
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:981:8,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:981:8,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:981:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.BtnItem_Id_Click,REVIEW
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:983:9,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:983:9,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:985:10,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:985:10,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:987:11,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:987:11,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.BtnItem_Id_Click:987:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.BtnItem_Id_Click,REVIEW
+ACT:SCP0101_InventoryTrend.CboDivision_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.CboDivision_SelectedIndexChanged,REVIEW
+ACT:SCP0101_InventoryTrend.CboDivision_SelectedIndexChanged:955:1,AS-IS 액션,C2,C2|ENTRY:SCP0101_InventoryTrend.CboDivision_SelectedIndexChanged,NA
+ACT:SCP0101_InventoryTrend.CboDivision_SelectedIndexChanged:955:1,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.CboDivision_SelectedIndexChanged,NA
+ACT:SCP0101_InventoryTrend.CboDivision_SelectedIndexChanged:955:1,AS-IS 액션,C6,C6|ENTRY:SCP0101_InventoryTrend.CboDivision_SelectedIndexChanged,NA
+ACT:SCP0101_InventoryTrend.ChkDetail_CheckedChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ChkDetail_CheckedChanged,REVIEW
+ACT:SCP0101_InventoryTrend.ChkDetail_CheckedChanged:1017:1,AS-IS 액션,C2,C2|ENTRY:SCP0101_InventoryTrend.ChkDetail_CheckedChanged,NA
+ACT:SCP0101_InventoryTrend.ChkDetail_CheckedChanged:1017:1,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.ChkDetail_CheckedChanged,NA
+ACT:SCP0101_InventoryTrend.ChkDetail_CheckedChanged:1017:1,AS-IS 액션,C6,C6|ENTRY:SCP0101_InventoryTrend.ChkDetail_CheckedChanged,NA
+ACT:SCP0101_InventoryTrend.CreateSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.CreateSpread,REVIEW
+ACT:SCP0101_InventoryTrend.CreateSpread:170:1,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:170:1,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:170:1,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:170:1,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:171:2,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:171:2,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:171:2,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:171:2,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:173:3,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:173:3,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:173:3,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:173:3,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:174:4,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:174:4,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:174:4,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.CreateSpread:174:4,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.CreateSpread,NA
+ACT:SCP0101_InventoryTrend.Dispose,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.Dispose:16:1,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.Dispose:18:2,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.Dispose:20:3,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.EditButton,AS-IS 액션,D1,D1|COL:MEMO,NOT_RUN
+ACT:SCP0101_InventoryTrend.EditButton,AS-IS 액션,D3,D3|COL:MEMO,NOT_RUN
+ACT:SCP0101_InventoryTrend.EditButton:224:1,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:224:1,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:224:2,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:224:2,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:226:3,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:226:3,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:226:4,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:226:4,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:227:5,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:227:5,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:228:6,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:228:6,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:230:7,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:230:7,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:231:8,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:231:8,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:232:9,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:232:9,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:234:10,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:234:10,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:237:11,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:237:11,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:239:12,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:239:12,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:241:13,AS-IS 액션,D1,D1|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:241:13,AS-IS 액션,D3,D3|ENTRY:SCP0101_InventoryTrend.EditButton,REVIEW
+ACT:SCP0101_InventoryTrend.EditButton:244:14,AS-IS 액션,D1,D1|COL:MEMO,NOT_RUN
+ACT:SCP0101_InventoryTrend.EditButton:244:14,AS-IS 액션,D3,D3|COL:MEMO,NOT_RUN
+ACT:SCP0101_InventoryTrend.ExcelButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExcelButton,REVIEW
+ACT:SCP0101_InventoryTrend.ExcelButton:256:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExcelButton,REVIEW
+ACT:SCP0101_InventoryTrend.ExcelButton:256:1,AS-IS 액션,E4,E4|MSG:MSG00100,NOT_RUN
+ACT:SCP0101_InventoryTrend.ExcelButton:256:1,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.ExcelButton:258:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExcelButton,REVIEW
+ACT:SCP0101_InventoryTrend.ExcelButton:259:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExcelButton,REVIEW
+ACT:SCP0101_InventoryTrend.ExcelButton:260:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExcelButton,REVIEW
+ACT:SCP0101_InventoryTrend.ExcelButton:261:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExcelButton,REVIEW
+ACT:SCP0101_InventoryTrend.ExcelButton:263:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExcelButton,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:680:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:680:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:681:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:682:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:684:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:686:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:687:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:691:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:692:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:694:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:697:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:698:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:700:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:700:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:702:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:703:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:705:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:706:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:707:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:710:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:711:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:712:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:714:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:716:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:718:25,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:722:26,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:725:27,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:727:28,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:729:29,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:729:30,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:730:31,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:732:32,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:734:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:736:34,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:739:35,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:740:36,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:743:37,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:744:38,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:774:39,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:776:40,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:778:41,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:783:42,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:785:43,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:787:44,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:791:45,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:793:46,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:795:47,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:797:48,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:799:49,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:800:50,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:803:51,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:805:52,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:807:53,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:809:54,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:810:55,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:815:56,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:816:57,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:823:58,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:825:59,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:827:60,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:829:61,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:830:62,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:831:63,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:836:64,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:838:65,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:839:66,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:840:67,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:845:68,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:848:69,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:850:70,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:852:71,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:854:72,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:856:73,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:858:74,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:860:75,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:862:76,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:865:77,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:866:78,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:868:79,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:871:80,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:873:81,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:876:82,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:877:83,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:880:84,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:883:85,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:885:86,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:887:87,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:889:88,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:893:89,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:894:90,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:895:91,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:896:92,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:897:93,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:900:94,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:902:95,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:904:96,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:906:97,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:909:98,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:913:99,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:919:100,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:919:100,AS-IS 액션,E4,E4|MSG:MSG00003,NOT_RUN
+ACT:SCP0101_InventoryTrend.ExportExcelData:919:100,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.ExportExcelData:920:101,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:924:102,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:925:103,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.ExportExcelData:927:104,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.ExportExcelData,REVIEW
+ACT:SCP0101_InventoryTrend.FindButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.FindButton,REVIEW
+ACT:SCP0101_InventoryTrend.FindButton,AS-IS 액션,A1,A1|SP:P_SCP0101_GET_INVENTORY_TREND,REVIEW
+ACT:SCP0101_InventoryTrend.FindButton,AS-IS 액션,A6,A6|SP:P_SCP0101_GET_INVENTORY_TREND,NOT_RUN
+ACT:SCP0101_InventoryTrend.FindButton,AS-IS 액션,F4,F4|SP:P_SCP0101_GET_INVENTORY_TREND,NOT_RUN
+ACT:SCP0101_InventoryTrend.FindButton:219:1,AS-IS 액션,A1,A1|SP:P_SCP0101_GET_INVENTORY_TREND,REVIEW
+ACT:SCP0101_InventoryTrend.FindButton:219:1,AS-IS 액션,A6,A6|SP:P_SCP0101_GET_INVENTORY_TREND,NOT_RUN
+ACT:SCP0101_InventoryTrend.FindButton:219:1,AS-IS 액션,F4,F4|SP:P_SCP0101_GET_INVENTORY_TREND,NOT_RUN
+ACT:SCP0101_InventoryTrend.Find_Data,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:275:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:278:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:278:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:280:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:282:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:284:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:286:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:287:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:288:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:289:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:290:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:293:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:295:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:296:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:297:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:297:15,AS-IS 액션,F4,F4|SP:P_SCP0101_GET_INVENTORY_TREND,NOT_RUN
+ACT:SCP0101_InventoryTrend.Find_Data:297:15,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0101_GET_INVENTORY_TREND,PASS
+ACT:SCP0101_InventoryTrend.Find_Data:299:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:299:16,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.Find_Data:301:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:301:17,AS-IS 액션,F4,F4|SP:P_SCP0101_GET_INVENTORY_TREND,NOT_RUN
+ACT:SCP0101_InventoryTrend.Find_Data:301:17,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0101_GET_INVENTORY_TREND,PASS
+ACT:SCP0101_InventoryTrend.Find_Data:302:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:303:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:304:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:305:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:306:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:307:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:309:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:309:24,AS-IS 액션,F4,F4|SP:P_SCP0101_GET_INVENTORY_TREND,NOT_RUN
+ACT:SCP0101_InventoryTrend.Find_Data:309:24,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0101_GET_INVENTORY_TREND,PASS
+ACT:SCP0101_InventoryTrend.Find_Data:311:25,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:316:26,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:318:27,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:318:27,AS-IS 액션,A1,A1|SP:P_SCP0101_GET_INVENTORY_TREND,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:320:28,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:322:29,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:323:30,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:325:31,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:327:32,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:330:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:333:34,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:337:35,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:338:36,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Find_Data:338:36,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.Find_Data:342:37,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Find_Data,REVIEW
+ACT:SCP0101_InventoryTrend.Form_Load,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.Form_Load,REVIEW
+ACT:SCP0101_InventoryTrend.Form_Load,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.Form_Load:131:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.Form_Load:132:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.Form_Load:133:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.Form_Load:134:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.Form_Load:135:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.GetMonthRange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.GetMonthRange,REVIEW
+ACT:SCP0101_InventoryTrend.GetMonthRange:632:1,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.GetMonthRange:634:2,AS-IS 액션,F4,F4|SP:SCP0084_GET_MONTH_RANGE,NOT_RUN
+ACT:SCP0101_InventoryTrend.GetMonthRange:634:2,AS-IS 액션,DB-SYN,DB-SYN|SP:SCP0084_GET_MONTH_RANGE,NOPATH
+ACT:SCP0101_InventoryTrend.GetMonthRange:635:3,AS-IS 액션,B4,B4|ENTRY:SCP0101_InventoryTrend.GetMonthRange,NA
+ACT:SCP0101_InventoryTrend.GetMonthRange:635:3,AS-IS 액션,B3,B3|ENTRY:SCP0101_InventoryTrend.GetMonthRange,NA
+ACT:SCP0101_InventoryTrend.GetMonthRange:637:4,AS-IS 액션,B4,B4|ENTRY:SCP0101_InventoryTrend.GetMonthRange,NA
+ACT:SCP0101_InventoryTrend.GetMonthRange:637:4,AS-IS 액션,B3,B3|ENTRY:SCP0101_InventoryTrend.GetMonthRange,NA
+ACT:SCP0101_InventoryTrend.GetToday,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.GetToday,REVIEW
+ACT:SCP0101_InventoryTrend.GetToday:409:1,AS-IS 액션,B4,B4|ENTRY:SCP0101_InventoryTrend.GetToday,NA
+ACT:SCP0101_InventoryTrend.GetToday:409:1,AS-IS 액션,B3,B3|ENTRY:SCP0101_InventoryTrend.GetToday,NA
+ACT:SCP0101_InventoryTrend.GetToday:410:2,AS-IS 액션,B4,B4|ENTRY:SCP0101_InventoryTrend.GetToday,NA
+ACT:SCP0101_InventoryTrend.GetToday:410:2,AS-IS 액션,B3,B3|ENTRY:SCP0101_InventoryTrend.GetToday,NA
+ACT:SCP0101_InventoryTrend.GetToday:411:3,AS-IS 액션,B4,B4|ENTRY:SCP0101_InventoryTrend.GetToday,NA
+ACT:SCP0101_InventoryTrend.GetToday:411:3,AS-IS 액션,B3,B3|ENTRY:SCP0101_InventoryTrend.GetToday,NA
+ACT:SCP0101_InventoryTrend.GetYYMM,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.GetYYMM,REVIEW
+ACT:SCP0101_InventoryTrend.GetYYMM:402:1,AS-IS 액션,B4,B4|ENTRY:SCP0101_InventoryTrend.GetYYMM,NA
+ACT:SCP0101_InventoryTrend.GetYYMM:402:1,AS-IS 액션,B3,B3|ENTRY:SCP0101_InventoryTrend.GetYYMM,NA
+ACT:SCP0101_InventoryTrend.GetYYMM:403:2,AS-IS 액션,B4,B4|ENTRY:SCP0101_InventoryTrend.GetYYMM,NA
+ACT:SCP0101_InventoryTrend.GetYYMM:403:2,AS-IS 액션,B3,B3|ENTRY:SCP0101_InventoryTrend.GetYYMM,NA
+ACT:SCP0101_InventoryTrend.GetYYMM:404:3,AS-IS 액션,B4,B4|ENTRY:SCP0101_InventoryTrend.GetYYMM,NA
+ACT:SCP0101_InventoryTrend.GetYYMM:404:3,AS-IS 액션,B3,B3|ENTRY:SCP0101_InventoryTrend.GetYYMM,NA
+ACT:SCP0101_InventoryTrend.GetYYMM:405:4,AS-IS 액션,B4,B4|ENTRY:SCP0101_InventoryTrend.GetYYMM,NA
+ACT:SCP0101_InventoryTrend.GetYYMM:405:4,AS-IS 액션,B3,B3|ENTRY:SCP0101_InventoryTrend.GetYYMM,NA
+ACT:SCP0101_InventoryTrend.InitControls,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls:148:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls:150:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls:151:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls:153:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls:154:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls:154:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.InitControls,REVIEW
+ACT:SCP0101_InventoryTrend.InitControls:156:6,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls:156:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls:156:6,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls:156:6,AS-IS 액션,C1,C1|COND:cboDivision,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitControls:156:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.InitControls,REVIEW
+ACT:SCP0101_InventoryTrend.InitControls:157:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0101_InventoryTrend.InitEvent,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent,AS-IS 액션,G6,G6|COND:chkDetail,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent,AS-IS 액션,G4,G4|COND:chkDetail,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent,AS-IS 액션,G4,G4|BTN:btnColumn,NOPATH
+ACT:SCP0101_InventoryTrend.InitEvent,AS-IS 액션,G4,G4|BTN:btnItem,NOPATH
+ACT:SCP0101_InventoryTrend.InitEvent:204:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0101_InventoryTrend.InitEvent:204:1,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent:204:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent:204:1,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent:205:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0101_InventoryTrend.InitEvent:205:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent:205:2,AS-IS 액션,G4,G4|BTN:btnColumn,NOPATH
+ACT:SCP0101_InventoryTrend.InitEvent:206:3,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0101_InventoryTrend.InitEvent:206:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent:206:3,AS-IS 액션,G4,G4|BTN:btnItem,NOPATH
+ACT:SCP0101_InventoryTrend.InitEvent:207:4,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0101_InventoryTrend.InitEvent:207:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent:208:5,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SCP0101_InventoryTrend.InitEvent:208:5,AS-IS 액션,G6,G6|COND:chkDetail,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent:208:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitEvent:208:5,AS-IS 액션,G4,G4|COND:chkDetail,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.InitSpread,REVIEW
+ACT:SCP0101_InventoryTrend.InitSpread,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitSpread:180:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitSpread:182:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitSpread:183:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.InitSpread:185:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.MonthPicker_ValueChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.MonthPicker_ValueChanged,REVIEW
+ACT:SCP0101_InventoryTrend.MonthPicker_ValueChanged:1012:1,AS-IS 액션,C2,C2|ENTRY:SCP0101_InventoryTrend.MonthPicker_ValueChanged,NA
+ACT:SCP0101_InventoryTrend.MonthPicker_ValueChanged:1012:1,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.MonthPicker_ValueChanged,NA
+ACT:SCP0101_InventoryTrend.MonthPicker_ValueChanged:1012:1,AS-IS 액션,C6,C6|ENTRY:SCP0101_InventoryTrend.MonthPicker_ValueChanged,NA
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:656:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:657:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:657:2,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:659:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:659:3,AS-IS 액션,F4,F4|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:659:3,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:660:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:661:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:662:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:663:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:664:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:665:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:667:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:667:10,AS-IS 액션,F4,F4|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:667:10,AS-IS 액션,DB-SYN,DB-SYN|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH:673:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SCM_SYS_LOG_BATCH,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:456:1,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:456:1,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:456:1,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:457:2,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:457:2,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:457:2,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:459:3,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:459:3,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:459:3,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:461:4,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:461:4,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:461:4,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:463:5,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:463:5,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:463:5,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:465:6,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:465:6,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:465:6,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:466:7,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:466:7,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:466:7,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:468:8,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:468:8,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:468:8,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:475:9,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:475:9,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:475:9,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:476:10,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:476:10,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:476:10,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:478:11,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:478:11,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:478:11,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:479:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetBackColor:481:13,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:481:13,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetBackColor,NA
+ACT:SCP0101_InventoryTrend.SetBackColor:481:13,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetBackColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:501:1,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:501:1,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:501:1,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:502:2,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:502:2,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:502:2,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:503:3,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:503:3,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:503:3,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:504:4,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:504:4,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:504:4,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:505:5,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:505:5,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:505:5,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:506:6,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:506:6,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:506:6,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:507:7,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:507:7,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:507:7,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:508:8,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:508:8,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:508:8,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:510:9,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:510:9,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:510:9,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:511:10,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:511:10,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:511:10,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:513:11,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:513:11,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:513:11,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:514:12,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:514:12,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:514:12,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:517:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:518:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:519:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:520:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:522:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:523:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:524:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:525:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:526:21,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:526:21,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:526:21,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:529:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:530:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:531:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:532:25,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:532:25,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:532:25,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:535:26,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:536:27,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:537:28,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:538:29,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:538:29,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:538:29,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:541:30,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:542:31,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:542:31,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:542:31,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColor:545:32,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:545:32,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColor,NA
+ACT:SCP0101_InventoryTrend.SetCellColor:545:32,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColor,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:550:1,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:550:1,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:550:1,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:551:2,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:551:2,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:551:2,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:552:3,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:552:3,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:552:3,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:553:4,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:553:4,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:553:4,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:555:5,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:555:5,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:555:5,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:556:6,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:556:6,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:556:6,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:557:7,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:557:7,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:557:7,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:558:8,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:558:8,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:558:8,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:559:9,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:559:9,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:559:9,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:561:10,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:561:10,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:561:10,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:562:11,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:562:11,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:562:11,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:564:12,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:564:12,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:564:12,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:565:13,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:565:13,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:565:13,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:567:14,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:567:14,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:567:14,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:568:15,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:568:15,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:568:15,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:571:16,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:571:16,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:571:16,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:572:17,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:572:17,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:572:17,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:573:18,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:573:18,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:573:18,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:575:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:576:20,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:576:20,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:576:20,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:578:21,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:578:21,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:578:21,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:579:22,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:579:22,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:579:22,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:581:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:584:24,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:584:24,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:584:24,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:586:25,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:586:25,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:586:25,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:588:26,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:588:26,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:588:26,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:590:27,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:590:27,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:590:27,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:592:28,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:592:28,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:592:28,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:594:29,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:594:29,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:594:29,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:596:30,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:596:30,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:596:30,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:598:31,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:598:31,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:598:31,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:602:32,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:604:33,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:604:33,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:604:33,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:606:34,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:606:34,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:606:34,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:608:35,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:608:35,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:608:35,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:610:36,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:610:36,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:610:36,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:612:37,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:612:37,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:612:37,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:614:38,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:614:38,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:614:38,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:616:39,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:616:39,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:616:39,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:618:40,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:618:40,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:618:40,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:622:41,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:624:42,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:624:42,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:624:42,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:628:43,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:628:43,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,NA
+ACT:SCP0101_InventoryTrend.SetCellColorOLD:628:43,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetCellColorOLD,REVIEW
+ACT:SCP0101_InventoryTrend.SetChangedControl,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetChangedControl,REVIEW
+ACT:SCP0101_InventoryTrend.SetChangedControl,AS-IS 액션,E4,E4|COND:cboDivision,NOT_RUN
+ACT:SCP0101_InventoryTrend.SetChangedControl,AS-IS 액션,E4,E4|COND:clbPlant,NOT_RUN
+ACT:SCP0101_InventoryTrend.SetChangedControl:163:1,AS-IS 액션,E4,E4|COND:cboDivision,NOT_RUN
+ACT:SCP0101_InventoryTrend.SetChangedControl:164:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetChangedControl,REVIEW
+ACT:SCP0101_InventoryTrend.SetChangedControl:165:3,AS-IS 액션,E4,E4|COND:clbPlant,NOT_RUN
+ACT:SCP0101_InventoryTrend.SetChangedControl:165:3,AS-IS 액션,C1,C1|COND:clbPlant,NOT_RUN
+ACT:SCP0101_InventoryTrend.SetChangedControl:165:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetChangedControl,REVIEW
+ACT:SCP0101_InventoryTrend.SetColumnFooterData,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,REVIEW
+ACT:SCP0101_InventoryTrend.SetColumnFooterData:936:1,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,NA
+ACT:SCP0101_InventoryTrend.SetColumnFooterData:936:1,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,REVIEW
+ACT:SCP0101_InventoryTrend.SetColumnFooterData:937:2,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,NA
+ACT:SCP0101_InventoryTrend.SetColumnFooterData:937:2,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,REVIEW
+ACT:SCP0101_InventoryTrend.SetColumnFooterData:939:3,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,NA
+ACT:SCP0101_InventoryTrend.SetColumnFooterData:939:3,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,REVIEW
+ACT:SCP0101_InventoryTrend.SetColumnFooterData:941:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,REVIEW
+ACT:SCP0101_InventoryTrend.SetColumnFooterData:942:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,REVIEW
+ACT:SCP0101_InventoryTrend.SetColumnFooterData:943:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,REVIEW
+ACT:SCP0101_InventoryTrend.SetColumnFooterData:944:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,REVIEW
+ACT:SCP0101_InventoryTrend.SetColumnFooterData:946:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetColumnFooterData,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout,AS-IS 액션,E4,E4|COND:chkDetail,NOT_RUN
+ACT:SCP0101_InventoryTrend.SetLayout:421:1,AS-IS 액션,E4,E4|COND:chkDetail,NOT_RUN
+ACT:SCP0101_InventoryTrend.SetLayout:425:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:426:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:427:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:428:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:429:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:430:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:431:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:432:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:433:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:434:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:435:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:436:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:438:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:439:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:440:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:442:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:443:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:444:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:445:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:446:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:447:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetLayout:448:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetLayout,REVIEW
+ACT:SCP0101_InventoryTrend.SetMonthRange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetMonthRange,REVIEW
+ACT:SCP0101_InventoryTrend.SetMonthRange:643:1,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetMonthRange,NA
+ACT:SCP0101_InventoryTrend.SetMonthRange:643:1,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetMonthRange,REVIEW
+ACT:SCP0101_InventoryTrend.SetMonthRange:645:2,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetMonthRange,NA
+ACT:SCP0101_InventoryTrend.SetMonthRange:645:2,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetMonthRange,REVIEW
+ACT:SCP0101_InventoryTrend.SetMonthRange:646:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetMonthRange,REVIEW
+ACT:SCP0101_InventoryTrend.SetMonthRange:647:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetMonthRange,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:349:1,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:349:1,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:349:1,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:349:1,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:349:1,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:349:1,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:350:2,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:350:2,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:350:2,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:350:2,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:350:2,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:350:2,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:351:3,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:351:3,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:351:3,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:351:3,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:351:3,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:351:3,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:352:4,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:352:4,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:352:4,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:352:4,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:352:4,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:352:4,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:353:5,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:353:5,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:353:5,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:353:5,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:353:5,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:353:5,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:354:6,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:354:6,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:354:6,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:354:6,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:354:6,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:354:6,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:355:7,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:355:7,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:355:7,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:355:7,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:355:7,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:355:7,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:357:8,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:357:8,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:357:8,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:357:8,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:357:8,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:357:8,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:358:9,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:358:9,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:358:9,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:358:9,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:358:9,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:358:9,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:360:10,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:360:10,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:360:10,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:360:10,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:360:10,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:360:10,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:362:11,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:362:11,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:362:11,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:362:11,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:362:11,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:362:11,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:365:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:366:13,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:366:13,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:366:13,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:366:13,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:366:13,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:366:13,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:368:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:369:15,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:369:15,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:369:15,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:369:15,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:369:15,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:369:15,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:371:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:372:17,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:372:17,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:372:17,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:372:17,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:372:17,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:372:17,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:374:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:375:19,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:375:19,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:375:19,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:375:19,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:375:19,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:375:19,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:377:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:378:21,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:378:21,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:378:21,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:378:21,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:378:21,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:378:21,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:380:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:381:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:382:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:383:25,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:383:25,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:383:25,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:383:25,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:383:25,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:383:25,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:385:26,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:386:27,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:389:28,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:389:28,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:389:28,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:389:28,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:389:28,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:389:28,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:394:29,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:395:30,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:395:30,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:395:30,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:395:30,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:395:30,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,NA
+ACT:SCP0101_InventoryTrend.SetSpreadHeader:395:30,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadHeader,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadInit,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadInit:190:1,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:190:1,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:190:1,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:190:1,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:190:1,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:190:1,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadInit:191:2,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:191:2,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:191:2,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:191:2,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:191:2,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:191:2,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadInit:192:3,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:192:3,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:192:3,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:192:3,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:192:3,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:192:3,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,REVIEW
+ACT:SCP0101_InventoryTrend.SetSpreadInit:194:4,AS-IS 액션,A5,A5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:194:4,AS-IS 액션,H2,H2|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:194:4,AS-IS 액션,H5,H5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:194:4,AS-IS 액션,D5,D5|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:194:4,AS-IS 액션,C3,C3|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,NA
+ACT:SCP0101_InventoryTrend.SetSpreadInit:194:4,AS-IS 액션,E4,E4|ENTRY:SCP0101_InventoryTrend.SetSpreadInit,REVIEW

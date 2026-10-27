@@ -5,7 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { Button, FormItem, InputField } from '@shared/lges';
-import { Grid } from '@shared/mui';
+import { FunctionSearchIcon } from '@shared/lges-icons';
+import { Box, Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
 import {
@@ -19,8 +20,6 @@ import {
 import type { ComboOption } from '../capa-line-assign.types';
 import type { useCapaLineCascade } from '../hooks/useCapaLineCascade';
 import { useCapaLineAssignStore } from '../useCapaLineAssignStore';
-
-import styles from './CapaLineAssignForm.module.scss';
 
 interface Props {
   cascade: ReturnType<typeof useCapaLineCascade>;
@@ -205,6 +204,14 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
         onResetCondition={handleResetCondition}
         conditions={
           <>
+            {/* 사용자 확정 배치(2026-10-19, Version/Plan Type 합병 2026-10-26) — 3줄 고정(접힘 영역
+                extraConditions 제거), 줄당 4필드.
+                1줄 Division · Plan Month · Version(콤보+Plan Type 회색칸 50:50) · Operation group
+                2줄 Site · Plant · Building · Line
+                3줄 (Operation·Line Type — Cell/Module.Pack 모드에서만 끼어든다) · Material · Active
+                Plan Type 은 AS-IS Designer 좌표대로 Version 콤보 뒤 라벨없는 회색칸으로 묶여 독립 칸을
+                쓰지 않는다(V-05). Operation/Line Type 은 Electrode 모드에서 숨으므로 기본 화면은 정확히
+                3줄이고, Cell/Module.Pack 모드에서만 2필드가 늘어 4줄째로 자연 흐른다(R-04/R-05 보존). */}
             {/* S01 Division — 단일선택, ALL 없음. 기본 포커스(AS-IS TabIndex 0).
                 Division 변경 = TO-BE 공통 요건: Division 을 제외한 검색조건 전부 초기화 + 두 그리드
                 초기화(store `setDivision`). AS-IS `cboDivision_SelectedIndexChanged`(cs:5510-5519)는
@@ -229,25 +236,41 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
             {singleField(LBL.PLAN_MONTH, 'Plan Month', sc.verId, cascade.verIdOptions, code =>
               setSearchParams({ verId: code, verSeq: '' })
             )}
-            {singleField(LBL.VERSION, 'Version', sc.verSeq, cascade.verSeqOptions, code =>
-              setSearchParams({ verSeq: code })
-            )}
-            {/* S04 Plan Type — 읽기전용 파생 표시(`txtPlanType.Enabled=false`, V-05). store 불필요. */}
+            {/* S03 Version(VER_SEQ) + S04 Plan Type — AS-IS Designer 좌표상 `cboVersionSeq`(Version,
+                X=600 폭155) 바로 뒤에 `txtPlanType`(X=755 폭45, `TextVisible=false`=라벨없음,
+                `Enabled=false`=읽기전용)이 붙어 한 칸처럼 보인다. 사용자 요청(2026-10-26, LOB Report
+                SCP0108 Version 패턴)으로 Version 라벨 하나 아래 콤보+회색칸을 `Box flex 50:50` 으로
+                가로로 묶는다. Plan Type 은 조회 파라미터가 아니라 파생 표시다(V-05). */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.PLAN_TYPE, '_Plan Type')}
+                label={t(LBL.VERSION, '_Version')}
                 labelAlign='right'
-                render={() => <InputField fullWidth readOnly disabled value={cascade.planType} />}
+                render={() => (
+                  <Box sx={{ display: 'flex', gap: 0.5, width: '100%', minWidth: 0 }}>
+                    <Box sx={{ flex: '1 1 0', minWidth: 0 }}>
+                      <CustomDropdown
+                        disabled={locked}
+                        value={sc.verSeq}
+                        options={cascade.verSeqOptions}
+                        onChange={(_, picked) => setSearchParams({ verSeq: String(picked ?? '') })}
+                      />
+                    </Box>
+                    {/* Plan Type — 라벨없는 readonly 파생 표시(`txtPlanType.Enabled=false`, V-05). */}
+                    <Box sx={{ flex: '1 1 0', minWidth: 0 }}>
+                      <InputField fullWidth readOnly disabled value={cascade.planType} />
+                    </Box>
+                  </Box>
+                )}
               />
             </Grid>
             {/* S05 Division Type — 화면 모드 스위치. 변경 시 두 탭 전면 초기화(R-01).
-                AS-IS `lciDivisionType` 은 `TextVisible=false` = 라벨 없는 라디오 3택이므로
-                라벨을 새로 만들지 않는다(임의 문구 추가 = AS-IS 와 달라짐). */}
+                AS-IS `lciDivisionType` 은 `TextVisible=false` = 라벨 없는 라디오 3택이었으나,
+                사용자 확정(DB 실측)으로 LBL00027 'Operation group' 라벨을 붙인다. */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label=''
+                label={t(LBL.OPERATION_GROUP, { defaultValue: 'Operation group' })}
                 labelAlign='right'
                 render={() => (
                   <CustomDropdown
@@ -271,10 +294,6 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
                 lineIds: [ALL],
               })
             )}
-          </>
-        }
-        extraConditions={
-          <>
             {/* S07 Plant */}
             {multiField(LBL.PLANT, 'Plant', sc.plantIds, cascade.plantOptions, codes =>
               setSearchParams({ plantIds: codes, factoryIds: [ALL], lineIds: [ALL] })
@@ -307,38 +326,39 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
                 cascade.electrodeTypeOptions,
                 codes => setSearchParams({ electrodeTypes: codes })
               )}
-            {/* S12+S13 Item — 라벨이 모드로 바뀐다(Basic Nickname ↔ Model, R-06). 버튼이 P01 팝업. */}
+            {/* S12+S13 Item — 라벨이 모드로 바뀐다(Basic Nickname ↔ Material, R-06). 버튼이 P01 팝업. */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
                 label={t(isEltr ? LBL.MODEL : LBL.BASIC_NICKNAME, {
-                  defaultValue: isEltr ? 'Model' : 'Basic Nickname',
+                  defaultValue: isEltr ? 'Material' : 'Basic Nickname',
                 })}
                 labelAlign='right'
                 render={() => (
-                  <div className={styles.itemField}>
-                    <InputField
-                      fullWidth
-                      disabled={locked}
-                      value={sc.itemId}
-                      onChange={event => setSearchParams({ itemId: event.target.value })}
-                      onKeyDown={event => event.key === 'Enter' && onSearch()}
-                    />
-                    <Button
-                      className={styles.itemPopupButton}
-                      appearance='outlined'
-                      priority='normal'
-                      size='small'
-                      buttonLabel='...'
-                      disabled={locked}
-                      onClick={() => setOpenItemPopup(true)}
-                    />
-                  </div>
+                  <InputField
+                    fullWidth
+                    className={commonStyles.popupSearchField}
+                    disabled={locked}
+                    value={sc.itemId}
+                    InputProps={{
+                      endAdornment: (
+                        <Button
+                          appearance='outlined'
+                          priority='normal'
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          disabled={locked}
+                          onClick={() => setOpenItemPopup(true)}
+                        />
+                      ),
+                    }}
+                    onChange={event => setSearchParams({ itemId: event.target.value })}
+                    onKeyDown={event => event.key === 'Enter' && onSearch()}
+                  />
                 )}
               />
             </Grid>
-            {/* S14 Valid — 'ALL' 은 SP 로 '' 로 나간다(V-18). */}
-            {singleField(LBL.VALID, 'Valid', sc.validYn, validOptions, code =>
+            {/* S14 Valid(라벨 'Active', LBL00007 — DB 실측) — 'ALL' 은 SP 로 '' 로 나간다(V-18). */}
+            {singleField(LBL.VALID, 'Active', sc.validYn, validOptions, code =>
               setSearchParams({ validYn: code || ALL })
             )}
           </>

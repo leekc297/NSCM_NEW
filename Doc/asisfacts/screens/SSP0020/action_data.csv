@@ -1,0 +1,6 @@
+﻿"screen_id","class","method","line","action_kind","action_target","run_id","kind","db","name","division","status","resultsets"
+"SSP0020","SSP0020_Delegate","FindData_Main","268","ENDPOINT","new FoxDataRequest","c2cbb58835df","SP","LGCE_SCMDEV","SSP0020_GET_DELEGATE","","EMPTY","[{""rs"": 1, ""cols"": 9, ""rows"": 0, ""saved"": 0, ""file"": ""datasets\\LGCE_SCMDEV\\SSP0020_GET_DELEGATE\\c2cbb58835df_rs1.csv""}, {""rs"": 2, ""cols"": 7, ""rows"": 0, ""saved"": 0, ""file"": ""datasets\\LGCE_SCMDEV\\SSP0020_GET_DELEGATE\\c2cbb58835df_rs2.csv""}]"
+"SSP0020","SSP0020_Delegate","SaveData","507","ENDPOINT","new FoxDataRequest","42e296b4be9f","SP","LGCE_SCMDEV","SSP0020_SAVE_DELEGATE","","UNSAFE",""
+"SSP0020","SSP0020_Delegate","UnSet","657","ENDPOINT","new FoxDataRequest","46f2555dc155","SP","LGCE_SCMDEV","SSP0020_SAVE_UNSET","","UNSAFE",""
+"SSP0020","SSP0020_Delegate","UnSet","715","ENDPOINT","new FoxDataRequest","46f2555dc155","SP","LGCE_SCMDEV","SSP0020_SAVE_UNSET","","UNSAFE",""
+"SSP0020","SSP0020_Delegate","UserName_Search","781","ENDPOINT","new FoxDataRequest","700cd8c5eb2c","SP","LGCE_SCMDEV","UP_FX_GETSSPUSERUSEINFOLIST","","OK","[{""rs"": 1, ""cols"": 25, ""rows"": 7327, ""saved"": 1000, ""file"": ""datasets\\LGCE_SCMDEV\\UP_FX_GETSSPUSERUSEINFOLIST\\700cd8c5eb2c_rs1.csv""}]"

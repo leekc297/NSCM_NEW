@@ -55,7 +55,7 @@ import {
 import { normalizeVersionIds, useSalesFuturePriceStore } from './useSalesFuturePriceStore';
 import { isEditableDivision } from './utils/editableDivision';
 import { thisWeekMonday, yyyymmddOf } from './utils/futurePriceDate';
-import { groupKeyOf, toStr } from './utils/futurePriceGroup';
+import { groupKeyOf, originalGroupKeyOf, toStr } from './utils/futurePriceGroup';
 import { type PeriodAxisRow, periodBindingsOf, weeklyDatesByMonthOf } from './utils/periodAxis';
 import { buildSiteEndCustomerMap } from './utils/salesPriceAutoMap';
 
@@ -576,10 +576,15 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         const gid = locRow.INSERT_GROUP_ID;
         return insertedRows.filter(r => r.INSERT_GROUP_ID === gid && (r.MEASURE ?? '') !== 'LOC');
       }
-      const key = groupKeyOf(locRow as Record<string, unknown>);
-      return spRowsAll.filter(
-        r => (r.MEASURE ?? '') !== 'LOC' && groupKeyOf(r as Record<string, unknown>) === key
-      );
+      // 묶음은 조회 시점 통화로 가른다 — Currency 를 바꿔 현재 통화가 이웃 묶음과 같아진 경우
+      //   현재 값(groupKeyOf)으로 찾으면 두 묶음의 KRW·USD 가 함께 잡혀 같은 주차가 두 번 전송된다.
+      const origKey = (r: FuturePriceRow): string =>
+        originalGroupKeyOf(
+          r as Record<string, unknown>,
+          changedMap?.get(r as never) as Record<string, unknown> | undefined
+        );
+      const key = origKey(locRow);
+      return spRowsAll.filter(r => (r.MEASURE ?? '') !== 'LOC' && origKey(r) === key);
     };
 
     // 저장 대상 동적 셀 키 추출 — 현재 조회 Bucket 의 컬럼만.
@@ -858,6 +863,12 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         // itemsSource = [...insertedRows(저장 후 빈 배열), ...spRows] → grid row index == idx.
         g.select(idx, 0);
         g.scrollIntoView(idx, 0);
+        // 전체 다시 그리기를 다시 건다 — select/scrollIntoView 의 부분 다시 그리기가 재조회 뒤 예약돼 있던
+        //   전체 다시 그리기를 덮어 updatedLayout 이 돌지 않았다. 그러면 헤더 높이 정리(applyHeaderHeight)와
+        //   공용 DataGrid 의 TopLeft 머지 보강이 빠져 헤더가 48×3 으로 남고 고정 칸 이름이 안 보였다
+        //   (사용자 실측 2026-10-14 — 깨진 상태 heights 48/48/48 · HierarchicalMergeManager,
+        //   휠 후 16/16/16 · TopLeftMergeManager). 휠 스크롤이 고치던 것과 같은 invalidate 다.
+        g.invalidate();
       } catch {
         /* grid rebuild race */
       }
@@ -1093,7 +1104,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={openItem}
         modalClose={() => setOpenItem(false)}
         setSelectedValue={(
-          itemId,
+          itemIds,
           itemName,
           itemClass,
           nickName,
@@ -1106,6 +1117,10 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           currency
         ) => {
           if (!popupGroupId) return;
+          // 공용 Model 팝업은 여러 줄을 고르면 ITEM_ID 를 쉼표로 이어 보낸다. 이 셀은 Model 한 건만
+          //   받는 자리라 맨 위 행 하나만 쓴다 (DMF0005 와 같은 방식, 2026-10-14 사용자 요청).
+          //   주의: 팝업은 여러 줄 선택이면 Team·Currency 를 넘기지 않으므로 그 두 칸은 빈 값이 된다.
+          const itemId = itemIds?.split(',')[0] ?? '';
           // ⭐ Team 자동 매핑 — Sales Site + Project + Item(Model) 이 모두 결정된 시점.
           //   ItemByDivisionModal(COM0008) 이 선택 행의 SCM_MST_SITE_ITEM.DEPT_ID 를 반환한다(인자 6).
           //   팝업은 클릭 행의 Sales Site + Project 로 이미 필터되어 있어 (Site+Project+Item) 기준 Team 이다.

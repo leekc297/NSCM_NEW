@@ -99,6 +99,31 @@ export const MODEL_POPUP_WIDTH = 600;
  */
 export const MAX_OWNER_COUNT = 10;
 
+/**
+ * 40 DM Planner 칸 잠금 (갭분석 F-26, 2026-10-16) — 조회 SP 가 행마다 내려주는 둘째 편집 표시 EDIT_FLAG3 이 'Y' 이면
+ *   아래 칸을 편집할 수 없다. AS-IS DMF0005 EditButton 이 EDIT_FLAG3 로 잠그던 17칸 중 TO-BE production_40
+ *   그리드에 편집 칸으로 있는 10칸이다(Production Process 는 TO-BE 에서 ATTRIBUTE9 로 바인딩). 나머지 7칸(Liability ·
+ *   Currency · Report Group 5개)은 production_40 편집 칸에 없다. EDIT_FLAG3 판정은 PKG_DMF0005 조회 SP 몫이다
+ *   (_artifacts/_deploy_packages/DMF0005_DM_PLANNER_EDIT_FLAG3_20261016).
+ *   주의: AS-IS 원본은 두 벌이다. 정본은 GSCM.DM.Forms.UIL 판(.cs 786 PROJECT_INFO 잠금, 2023-08-21 추가 —
+ *   .atlas/gscm-design/DMF0005/roslyn/DMF0005_SaleSite_PjtModelMapping__GSCM.DM.Forms.UIL.json)이고,
+ *   저장소 GSCM/06.UIL/GSCM.DM.Master.UIL 판(.cs 539~557)은 그 이전 본이라 PROJECT_INFO 가 없다.
+ *   2026-10-16 최초 반영은 옛 본을 보고 9칸으로 잡아 Project 를 빠뜨렸다(갭 판정 2026-10-19).
+ */
+export const DM_PLANNER_LOCKED_BINDINGS_40: ReadonlySet<string> = new Set([
+  'CUST_GROUP',
+  'SALES_COMPANY',
+  'SALES_PLANT',
+  'ATTRIBUTE9',
+  'ATTRIBUTE1',
+  'ATTRIBUTE2',
+  'CUST_GROUP_DTL',
+  'APPLICATION',
+  'ROUTE',
+  // production_40 「Project」 칸(INPUT_TP_CD O, 콤보 ProjectModelMapping). AS-IS 2023-08-21 잠금 추가분.
+  'PROJECT_INFO',
+]);
+
 export const SINGLE_OWNER_DIVISIONS = {
   [SHEETS.PRODUCTION]: ['82'],
   [SHEETS.PURCHASE]: ['82'],

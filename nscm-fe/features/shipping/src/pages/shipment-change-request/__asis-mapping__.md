@@ -31,11 +31,12 @@
 |---|---|---|
 | EditButton (toolbarOverride, R1 SwitchLock) | `handleEdit` → setGridEditable(true), 가드 subRows.length===0 | R1 |
 | FindButton (R13) | `handleSearch` → setFilter + 뷰복귀 | R13/R2 |
-| InsertButton (R11) / BtnNew_Click (R10) | `handleInsert` → GridAction.addRow (division 40 고정) | R10/R11 |
-| DeleteButton (R12 NO-OP) | hotkeyConfig.delete = `() => undefined` | R12 |
+| InsertButton (R11) | `handleInsert` → `buildCopiedRow`(선택행 14키 복사) + `RowCount>0` 가드 | R11 |
+| BtnNew_Click (R10) | `handleNew` → `buildNewRow`(DIVISION_ID + div 분기 `'-'`, **가드 없음**) | R10 |
+| DeleteButton (R12 NO-OP) | `handleDelete` → `removeRow(deleteOnlyNew=true)` — **저장 전 신규행만** 제거. AS-IS 빈 본문 대비 의도적 드리프트(사용자 지시 2026-10-07, 자매 SSP0200 과 동일) | R12 |
 | SaveButton/BtnSave_Click (R8/R14) | `handleSave` → ERP게이트+필수검증+mutate+뷰복귀 | R8/R14 |
 | BtnChangeRe_Click (R14 checkRequired) | `handleChangeRequest` → 필수4항목+ERP게이트 | R14 |
-| BtnCancel_Click (R9) | `handleCancel` → subRows 가드+confirm+clearRequestInfo | R9 |
+| BtnCancel_Click (R9) | `handleCancel` → subRows 가드 + confirm(MSG00684) + **`submitCancelDrafting`**(= AS-IS `DeleteDataDrafting("C")`, `SSP0201_main_CANCEL` → `P_SSP0201_DELETE_SHIPMENT_REQUEST_DRAFTING`) + clearRequestInfo + 재조회. 2026-10-13 까지 서버 호출이 누락돼 폼만 비웠다 | R9 |
 | BtnApprovalUser_Click (R7) | `handleApprovalSelected` (KO/EN 분기) | R7 |
 | clbDivision_ID_SelectedIndexChanged | Division 40 고정이라 실효 없음(R3) — 콤보 payload divisionId 재조회형 배선 | R3, 02 §3 |
 | CboChangeType_SelectedIndexChanged | Period 재계산 파생(P=오늘+9D) — setPeriod(페이지/Form) | 02 §3 cascade#2 |
@@ -46,7 +47,7 @@
 | AS-IS guard | TO-BE | 상태 |
 |---|---|---|
 | SaveButton !IsLock (편집모드) | `hotkeyConfig.save = hasButton('SAVE') ? handleSave : false` — 편집모드 조건 제거(§B P-1, 편집 기본 ON) | 배선 |
-| chkERPIFBlockYn (R8, SSPBlockCheckIF_SCP BLOCK_YN='Y') | `checkErpBlock` (getCombo) → MSG_ERP_BLOCK 차단 | 배선 |
+| chkERPIFBlockYn (R8, SSPBlockCheckIF_SCP BLOCK_YN='Y') | `checkErpBlock` (getCombo `segment1=MENU_ID`) → 3값(clear/blocked/unknown). blocked=MSG_ERP_BLOCK 차단 / unknown=고지 후 진행 / clear=진행. `passErpBlockGate` 가 저장·완료 공용(GAP-ERP-BIND 교정 2026-10-23 — 종전 divisionId 전달로 상시 무매치였다) | 배선 |
 | checkRequiredOfSpread(siMain) 메타 필수 | `saveWithValidation(dirty, staticColumns)` | 배선(INPUT_TP_CD 전건 'S' → 라벨* 매핑) |
 | bolChang_Flag==false (MSG00133 수정없음) | dirty.length===0 → MSG_NO_CHANGES | 배선 |
 | SHIPMENT_STATUS=='R' (MSG00174 요청완료) | dirty.some(status==='R') 차단 | 배선 |
@@ -64,10 +65,10 @@
 
 | category(건수) | TO-BE | 파일 |
 |---|---|---|
-| lock (39) | `isCellEditable`(화이트리스트: 기존 status='C'&erp!='C' / 신규 'I' / 40·EE 배타) + 서브 전량 읽기전용 | shipmentChangeRequestEditLock.ts |
-| value (108) | `setEditMain`/`soGroupRows`/`applyChangeReasonCode`(EDIT_MAIN+SO전파+Reason 가드). **NEW_* route/BOD/LT 파생은 AS-IS도 주석→SP 이관(convert-sp)** | shipmentChangeRequestDerive.ts + MainGrid cellEditEnded |
+| lock (39) | **열 축 = 메타 `INPUT_TP_CD`**(IM/IO/M/O, design/31_fix SQL) → 공용 `GridUtils.isEditableCell`. **행 축 = `isRowEditable`**(신규 'I' / 기존 status='C' / erp!='C'). 40·EE 배타는 컬럼 visible 토글. 서브 전량 읽기전용. (표준 COL-02 — 종전 컬럼명 화이트리스트 제거) | shipmentChangeRequestEditLock.ts + 31_fix_main_input-tp-cd_standard-parity.sql |
+| value (108) | `setEditMain`/`soGroupRows`/`applyChangeReasonCode` + **동일 SO 값 전파**(§3.2): 값=SHIPMENT_DATE(NEW_ETD/ETA 파생)·TRANSPORT_MODE·CHANGE_REASON → `trackedWriter`(값 복사+CRUD='M'), 행상태만=REMARKS/REMARKS2/SHIPMENT_CONFIRM_QTY → `markPropagated`. **TRANSPORT_MODE NEW_* route/BOD/LT 파생은 AS-IS도 주석→SP 이관** | shipmentChangeRequestDerive.ts + MainGrid cellEditEnded |
 | color (30) | formatItem wj-cell-editable / wj-cell-locked (hook #95 3색) | MainGrid formatItem |
-| cellType (19) | 셀콤보 A(메타 자동) + B(6종 재조회, admin 메타 구동 useRowParamCombos). **PARAM2/9/10 미이관 → CN-3** | comboParams + 05_register(확인필요) |
+| cellType (19) | 셀콤보 A(메타 자동) + B 재조회: TRANSPORT_MODE/TO_SITE_SHIPTO=admin 메타(PARAM10='D') / From·To Site·END_CUSTOMER=FE dataMap 주입. **END_CUSTOMER 는 행별 재조회(div/toSite/item+param5='P')·1건 자동확정**(GAP-02 해소 2026-10-23, setEndCustomer cs:5731 등가, SSP0200 미러) | comboParams + useShipmentChangeRequestCellCombos(loadEndCustomer) |
 | span (28) | 서브 2단헤더 Confirmed/Change(SMALL_CLASS_LABEL_NAME, hook #93 48px) | SubGrid buildColumns(twoTier) |
 | visible (18) | 동적 컬럼 토글: changeType='P'(ERP_SO_NO/CONFIRM_ID) + Division 40/EE(END_CUSTOMER↔PROJECT_CODE) | MainGrid useEffect + editLock |
 | merge (5) | DataGrid allowMerging(공용, SmartColMerge 등가) — **본 화면 기본값, 병합정책 대조 CN** | DataGrid |
@@ -76,7 +77,7 @@
 
 ## 5. 인계(확인필요) 요약 — goal ⑤ CN-1~6
 
-- CN-1 From Site 콤보(OSP팩 의미) / CN-2 TransMode 동명이의 / CN-3 셀콤보 B PARAM2/9/10 미이관 / CN-4 dead UI 5버튼·R6 read-only / CN-5 InsertButton vs BtnNew 통합·Validation_Check 정독 / CN-6 PKG_SSP0201 미배포.
+- CN-1 From Site 콤보(OSP팩 의미) / CN-2 TransMode 동명이의 / CN-3 셀콤보 B PARAM2/9/10 미이관(TRANSPORT_MODE/TO_SITE_SHIPTO 메타 2종 + From/To Site·END_CUSTOMER FE dataMap 로 해소, 잔여는 메타 applied-state DB 확인) / CN-4 dead UI 5버튼·R6 read-only / ~~CN-5 InsertButton vs BtnNew 통합~~(해소 2026-10-13 — 2경로 분리, SSP0200 패리티)·Validation_Check 정독 / ~~CN-6 PKG_SSP0201 미배포~~(해소 — ora.py 실측 VALID).
 - 상세·상태는 `.atlas/gscm-design/SSP0201/design/04_react-gap.md` 정직보고 표.
 
 ## UI 공통(통합테스트) 체크 축 (2026-08-12 — 전 화면 상시 6항목)
@@ -126,6 +127,7 @@
 |---|---|---|---|
 | **Insert Multiple 팝업** | 있음(btnInsertMultiple cs:2924 + `InsertMultipleModal`) | **NOT FOUND** — `btnInsertMultiple`/`InsertPopup` grep 0건 | **미이식**(구현하면 AS-IS 초과) |
 | **SO 주문상세 드릴다운** | 있음(ERP_SO_NO 더블클릭 → `SSP0300_OrderDetailPopup`, cs:4858~4878) | **NOT FOUND** — `SpdMain_CellDoubleClick`(cs:4283)은 ITEM_ID/PROJECT_CODE 만 처리, ERP_SO_NO/SSP0300 참조 0건 | **미이식**(동일) |
+| **변경요청 상세 드릴다운** (§4e #8, CHANGE_REQ_NO 셀클릭 → `SCM0002_ShipmentPlanRequestPopup`) | 있음(cs:5570, 동일하게 미구현) | 있음 but **도달 불가**: `SpdMain_CellClick`→CHANGE_REQ_NO(cs:4757)가 유일 트리거인데 **메인 CHANGE_REQ_NO 가 숨김**(03_grid-columns:66, 메타 VISIBLE_FLAG='N'). 서브 셀클릭 핸들러 없음(`spdMain.CellClick`만, cs:378) | **미이식(의도적 제외 — AS-IS 비기능/dead)**. AS-IS 에서도 열 수 없던 경로라 구현 시 AS-IS 초과(2026-10-26 롤백). 팝업 자체는 자매 SSP0012/0019 에서 동작 — proc=`P_SSP0003_GET_DRAFTING`(공용), 선례 컴포넌트 SSP0012 `ShipmentRequestDetailModal`. 신규 추가 시 트리거는 **서브 그리드**에. (memory: ssp0201-change-req-popup-asis-unreachable) |
 | **조회조건 콤보 `'ALL'` 전송** | 8c440da7 에서 `''` → `'ALL'` 로 교정 | — | **미이식(이식하면 결함)**. `PKG_SSP0201` body 는 `V_x_YN := CASE WHEN V_x IS NULL OR UPPER(TRIM(V_x))='ALL' THEN 'N' ELSE 'Y' END`(line 264~287) — Oracle 에서 빈 문자열 = NULL 이라 **현 `''` 전송이 이미 등가**다. 바꿔야 할 이유가 없다 |
 | 레이아웃 순서 | Grid1 / 폼 / Grid2 | Grid1 / Grid2 / 폼 | **SSP0200 과 맞추지 않는다** — Designer 가 다르다(위 P-5) |
 
@@ -134,7 +136,7 @@
 1. **저장 실행체인** — 수정저장(`SAVE_DRAFTING`, AS-IS `GetERPInterface` 2번 루프 축) · 신규 2단계(`SEARCH_NEW`→`SAVE_DRAFTING`) · 요청완료(`SAVE_COMPLETE`). 현재 `handleSave` 는 단일 `useProcMutation`, `handleChangeRequest` 는 **toast 만** 띄우는 stub 이다(실제 저장 없음 — 사용자에게 성공으로 보인다. 메타 등록과 함께 최우선 해소 대상).
 2. **SP 반환코드 이름기반 읽기**(`readResultCode`/`resultCodeOf`) — ①의 실행체인과 세트.
 3. **승인자 권한 제한 팝업** — `ApprovalUserModal`(`PKG_SSP0002.P_SSP0002_GET_USER_INFO_LIST` 직호출). `USER_CHECK` 메타 필요. 현재는 공용 `SsoUserModal`(SCM_ADM_USER_M 전건, 권한필터 없음).
-4. **Period 기본값 SP** — AS-IS 는 `GetDayRange("")` = `SCM0001_GET_SCP_DAY_PERIOD`(p_offset_day=30, cs:2712~2727). 현재 TO-BE 는 **dayjs 근사**(`periodByPlanType`). `GET_SCP_DAY_PERIOD` 메타 필요. SSP0200 은 실 SP 를 쓴다.
+4. **Period 기본값 SP** — AS-IS 는 `GetDayRange("")` = `SCM0001_GET_SCP_DAY_PERIOD`(p_offset_day=30, cs:2712~2727). **해소(2026-10-26)**: TO-BE 도 실 SP 를 쓴다 — `store.fetchDayRange` 가 `/SSP0201/main/GET_SCP_DAY_PERIOD/call-proc`(공용 API `SCM0001_SCP_DAY_PERIOD_GET`) 호출(자매 SSP0200 동일). 버튼맵/권한은 `design/32_register_day_period_btn_auth.sql`. dayjs 는 Plan Type 'P' 의 fromDate=오늘+9D 가산 1곳만(AS-IS 도 C# 클라 계산). 30일 영업일·타임존 범위는 SP 몫.
 5. **Excel 버튼** — `EXCEL` 메타 미등록이라 현재 `excel: false` 로 명시 차단(기본 핸들러 부활 방지). 등록 시 키를 빼면 자동 노출.
 6. **Cancel 버튼 권한축** — SSP0200 은 `hasButton('DELETE')`. SSP0201 은 DELETE 미등록이라 `canEdit`(EDIT)로 잠정 게이트했다. DELETE 등록 회차에 SSP0200 과 맞춘다.
 

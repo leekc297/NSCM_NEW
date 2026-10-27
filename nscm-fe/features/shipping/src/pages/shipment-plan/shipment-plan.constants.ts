@@ -68,6 +68,10 @@ export const COMBO = {
 
 export const LOOKUP = {
   SHIPMENT_RESULT_TYPE: 'SSP_SHIPMENT_RESULT_TYPE', // clbResultType (6코드 실측 — 02 §2-D)
+  // 하단 저장 출하일 허용범위 — CODE '1D+'(상한 일수)·'2D-'(하한 일수). AS-IS dtShipmentInputPeriod(SHIPMENT_PERIOD_DAY).
+  SHIPMENT_PERIOD_DAY: 'SHIPMENT_PERIOD_DAY',
+  // 범위 밖 안내 문구의 {0}(dDay) — NAME 열. AS-IS dtBaseDay(CHANGE_REQ_DAY).
+  CHANGE_REQ_DAY: 'CHANGE_REQ_DAY',
 } as const;
 
 // Bucket Type — AS-IS cboBucketType (DM0003_GET_BUCKET_TYPE_CODE 3코드). PSI 화면 기본 Daily.
@@ -186,12 +190,17 @@ export const MSG = {
   ERP_DO_BLOCK: 'MSG01401',
   // (MSG00278) 운송수단 필수 → "{0} value is required."
   REQUIRED_VALUE: 'MSG00429',
+  // 출하일 입력 가능 기간 밖 (AS-IS MSG00194 "변경요청은 현재일 기준 D+{0} 출하일부터..." → TO-BE MSG01206)
+  SHIP_DATE_OUT_OF_RANGE: 'MSG01206',
   // (MSG00287) 변경사유코드 미선택 시 상세 입력 차단 → "Please enter Reason Code."
   REASON_CODE_FIRST: 'MSG01291',
   // (MSG00285/00286) 행별 변경사유 필수 → "There is a shipment change in {0} row.\n\rPlease enter Change_Reason."
   ROW_REASON_REQUIRED: 'MSG01289',
   // (MSG00098) 팝업 오픈 전 필수값 → "Please enter the required fields."
   REQUIRED_FIELDS: 'MSG00013',
+  // (MSG00098) 셀 팝업 전제 미입력 — 어느 항목인지 명시 → "First, select {0}." (KO "먼저 {0}을(를) 선택하십시오.")
+  //   AS-IS 번호 답습 금지(convert-core §4.1 문구 역조회): MSG00098 TO-BE 미존재 → MSG01126 재매핑(자매 shipment-request-semi 선례).
+  SELECT_FIRST: 'MSG01126',
   // (MSG00047) 조회결과 없음 가드 → "No data has been inquired for this item."
   NO_DATA: 'MSG01244',
   // (MSG00007) Measure 설정 활성 그리드 없음 → "The grid is not ready."
@@ -216,14 +225,27 @@ export const MSG = {
   SIMULATION_NOT_REAL: 'MSG01295',
   // (MSG00313) PlanDate 최신 불일치 → "The changed Plan Date exists."
   PLAN_DATE_CHANGED: 'MSG01315',
-  // (MSG00324) Detail Confirm 저장 확인창 → "Are you sure you want to confirm the shipping plan change requests?"
+  // Detail Confirm 저장 확인창 → "Are you sure you want to confirm the shipping plan change requests?"
+  //   주의: AS-IS MSG00324 는 이 저장확인이 아니라 'route 미등록' 메시지다(→ STD_INFO_NOT_REGISTERED).
   CONFIRM_SAVE: 'MSG01201',
-  // (MSG00133) 변경 없음 → "No modifications have been made." (TO-BE 동일 문구 존재)
-  NO_MODIFICATION: 'MSG00133',
+  // (MSG00133) 변경 없음 → "No modifications have been made." (AS-IS MSG00133 는 TO-BE 미등록 → 같은 문구 MSG00004, KO/EN/CN)
+  NO_MODIFICATION: 'MSG00004',
   // 저장 성공/실패 — 공용 훅 표준값
   SAVED: 'MSG00002',
   SAVE_FAILED: 'MSG00003',
+  // (AS-IS MSG00324 route 미등록) 저장결과 'X'(기준정보/BOD 미등록) 안내 — 문구 역조회 MSG01321
+  //   "기준정보가 등록되어 있지 않습니다. 참고자료를 열람하시겠습니까?"(KO/EN/CN 등록 실측). AS-IS
+  //   SaveData_Detail(cs L2736) 의 MSG00324(route 미등록) + 매뉴얼 열람 분기의 TO-BE 대응.
+  STD_INFO_NOT_REGISTERED: 'MSG01321',
 } as const;
+
+// AS-IS AddHelpButton(BaseForm.cs L3501→FileDownLoad L3406) 는 사내 Help 웹서버(App.config
+//   addr=gscm-battery.lgensol.com / path=GSCM_HELP)에서 'Standard Information SSP Manual.pptx' 를
+//   HTTP GET 으로 내려받는다. TO-BE 도 같은 서버 URL 을 그대로 새 탭으로 열어 브라우저가 바로 내려받게
+//   한다 — 저장결과 'X' → MSG01321 '예' 시(사내망 접근 가능 확인, 2026-10-21). 정적 호스팅 불요.
+export const STANDARD_MANUAL_URL = encodeURI(
+  'http://gscm-battery.lgensol.com/GSCM_HELP/Standard Information SSP Manual.pptx'
+);
 
 // ====================================================================================
 // LBL — DB 실측 10건 + 신규 2건(05_register.sql 로 등록: LBL01144 Product Level1 / LBL01145 Tot PSI)
@@ -232,6 +254,7 @@ export const LBL = {
   DIVISION: 'LBL00001',
   COMPANY: 'LBL00047',
   FROM_SITE: 'LBL00022',
+  TO_SITE: 'LBL00023',
   // 사용자 요청(2026-10-10): 1차·2차 Model 조회조건 라벨을 'Model' → 'Model/Nickname' 으로 교체.
   //   팝업이 Model 뿐 아니라 Nickname 으로도 검색되는 것을 라벨에 드러낸다. LBL00618 은 DB 기등록
   //   (SCM_ADM_MSG_M KO/EN/CN 3행 USE_YN='Y', ora.py 실측) → 등록 SQL 불요. 종전 LBL00669='Model'.
@@ -247,6 +270,9 @@ export const LBL = {
   MEASURE: 'LBL00310',
   NEW: 'LBL01028',
   SEARCH: 'LBL00112',
+  // 하단(2차) Detail Search 버튼 — Detail 그리드는 F5 로 조회하지 않으므로 (F5) 없는 평문 'Search'.
+  //   LBL00112 는 "Search(F5)"(전 언어 실측)라 상단 Main 검색(F5 바인딩) 전용. LBL00664="Search".
+  DETAIL_SEARCH: 'LBL00664',
   EDIT: 'LBL00783',
   CLOSE: 'LBL00627',
   OK: 'LBL00716',
@@ -273,3 +299,78 @@ export const USER_CHECK_BTN = 'USER_CHECK';
 //   조회 proc P_SSP0300_GET_ORDER_DETAIL 은 VALID 배포 + API_M 등록 상태(2026-10-08 ora.py 실측).
 //   SHT_NM='main' 으로 호출한다(자매 SSP0015·SSP0200 통일) — 19_register_order_detail_btn_auth.sql.
 export const ORDER_DETAIL_BTN = 'GET_ORDER_DETAIL';
+
+// ====================================================================================
+// ERP 송신 연쇄 — AS-IS SSP0060_ShipmentPlan.cs SaveData_Detail(3109~3406)·GetERPInterface(3840~4065)
+//   ·NonSoNo/SoNo(4066~4475)·GetErpIFCheckNew(4628~4726), 팝업 SSP0060_ShipmentPlanRequestPopup.cs
+//   GetERPInterface(894~1108)·SoNo/NonSoNo(1108~1440)·GetErpIFCheckNew(1489~1605) 의 TO-BE 등가.
+//   선례: SSP0015(shipment-plan-mobility-it) sendErpAndCompensate. 버튼코드·본문 키는
+//   GSCM/DOC/Test/_DB의뢰/00_README.md "적용 후 FE 쪽에서 쓰는 키" 표가 계약이다(01 SQL).
+// ====================================================================================
+// BE 공통 창구 `POST /common/web-service/{serviceKey}/call` — serviceKey=erpIf 는 nscm-if NSD0100 으로
+//   라우팅된다. 응답은 AS-IS CallClient 와 같은 { E_TYPE(=RtFlag), E_MESSAGE(=ReErrorMsg) }.
+export const ERP_IF_PATH = '/common/web-service/erpIf/call';
+export const ERP_IF = {
+  CHANGE_TYPE: 'C', // AS-IS FN_ERP_UIWebService(RequestNo, "C", "") 2번째 인자
+  SUCCESS: 'S',
+  ERROR: 'E', // 전건 거절
+  PARTIAL_ERROR: 'S_E', // 일부 거절
+  NO_DATA: 'F', // 데이터 없음·서버오류
+  PI_FAIL: 'C_E', // SAP PI 호출 실패(CallClient catch)
+} as const;
+
+// 연쇄 단계 버튼(SHT_NM='main'). [01] 표시는 01 SQL 적용 전까지 403 이 정상이다.
+export const ERP_CHAIN_BTN = {
+  GET_SHIPMENT_STATUS: 'GET_SHIPMENT_STATUS', // [01] P_SSP0060_GET_SHIPMENT_STATUS (cs:4506)
+  GET_ERP_SO_NO_CNT: 'GET_ERP_SO_NO_CNT', // [01] P_SSP0060_GET_ERP_SO_NO_CNT (cs:4481)
+  // [01] 단독 SCM_SSP_CHECK_CONFIRM_CHANGETIME — AS-IS 하단(cs:7962)·팝업(RP:1731)이 부르는 실제 2분 잠금 SP.
+  //   등록돼 있던 _DE(PKG_SSP0060.P_SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE, BODY L8450~8473)는 조건 없이 'S' 만
+  //   돌려주는 빈 껍데기라 잠금이 걸리지 않는다(gscm-3c 본문 확인 2026-10-27). 01 SQL 에 라우팅 1행 추가됨.
+  CHECK_CONFIRM_CHANGETIME: 'CHECK_CONFIRM_CHANGETIME',
+  SAVE_DRAFTING: 'SAVE_SHIPMENT_REQUEST_DRAFTING', // [01] P_SSP0060_SAVE_SHIPMENT_REQUEST_DRAFTING (cs:4159/4380)
+  IF_CHECK: 'IF_CHECK', // [01] PKG_SSP0003.P_SSP0003_SAVE_REQ_IF_CHECK — CHG_BATCH('B') 대용(SSP0015 선례)
+  DELETE_DRAFTING_BY_CONFIRM: 'DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM', // 등록됨
+  ERP_ERROR_CONFIRM: 'ERP_ERROR_CONFIRM', // 등록됨
+  CHG_BATCH_NEW_C: 'SHIP_CONFIRM_CHG_BATCH_NEW_C', // 등록됨 — 팝업 Non-SO 행 C/B 적재(RP:1408/1551/1582)
+} as const;
+
+export const ERP_DELETE_FLAG = 'D'; // p_del_flag (cs:4661)
+export const ERP_IF_SEND_ON = 'Y'; // p_if_send_flag (cs:4664)
+export const ERP_ERROR_E_TYPE = 'E'; // p_e_type 고정 (cs:3994)
+export const IF_CHECK_STATUS_APPLY = 'A'; // IF_CHECK changeStatus — 'A'+changeType 'C' 에서 CHG_BATCH('B') (PKG_SSP0003 BODY 1850~1858)
+export const IF_CHECK_PARTIAL_OFF = 'F'; // IF_CHECK partialApproval — IFSEQ merge 안 함
+export const CHG_BATCH_TYPE = { REQUEST: 'C', CONFIRM: 'B' } as const; // PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH p_change_type
+// AS-IS GetERPInterface 2번째 루프 `if (sChangeType == ChangeType.ChangeType_P) continue;` (cs:3920, SoNo 4326)
+export const CHANGE_TYPE_SKIP = 'P';
+// DRAFTING p_title — AS-IS siDetail/siMain.ActiveSheet.SheetName (cs:4104, RP:59 SpdSheet.shtMain)
+export const DRAFTING_TITLE = { DETAIL: 'Shipment Plan Detail', REQUEST_POPUP: 'Request Info' } as const;
+
+// ERP 송신 결과 안내 — SSP0015 MSG_ERP 와 같은 코드(SCM_ADM_MSG_M 실측 2026-10-25).
+export const MSG_ERP = {
+  ISSUE: 'MSG01208', // AS-IS MSG00197 — E/S_E, {0}=`confirmId:msg` 목록
+  SYSTEM_ERROR: 'MSG01215', // AS-IS MSG00204 — F·C_E 공통(cs:4052), {0}=Request No
+} as const;
+
+// 연쇄 사전검사 안내 — AS-IS → TO-BE 역매핑은 SSP0015 shipment-plan-mobility-it.constants 와 동일.
+export const MSG_CHAIN = {
+  // 연쇄 단계 버튼 라우팅·권한 미등록(HTTP 403) — "사용 권한이 없습니다." + 호출 경로. 세 화면 공통.
+  NO_AUTH: 'MSG01125',
+  STATUS_OTHER_USER_REQUEST: 'MSG01258', // AS-IS MSG00248 (GET_SHIPMENT_STATUS o_rc1)
+  STATUS_DELETED_QTY0: 'MSG01259', // AS-IS MSG00249 (o_rc2)
+  STATUS_ERP_DO_CREATED: 'MSG01202', // AS-IS MSG00189 (o_rc3)
+  SO_NO_COUNT_MISMATCH: 'MSG00247', // AS-IS MSG00247 (TO-BE 미등록 — 영문 fallback)
+  INVALID_DATE_FORMAT: 'MSG01081', // AS-IS MSG00049
+  CONFIRM_CHANGETIME_LOCK: 'MSG01395', // AS-IS MSG00404 (2분 잠금)
+  ERP_BLOCK_PERIOD: 'MSG01275', // AS-IS MSG00267 (ERP 중단기간), {0}=PERIOD — SSP0200 선례
+} as const;
+
+// AS-IS chkERPIFBlockYn — Data_SCP.Common(SSPBlockCheckIF, "SSP0060") (cs:3565). SSP0200 checkErpBlock 과 같은 콤보.
+export const ERP_BLOCK_COMBO = 'SSPBlockCheckIF_SCP';
+
+// 화면 전용 안내(메시지 코드 미등록 — t() 기본문구로 표시). 키 형식은 SSP0200 SCREEN_TEXT 선례.
+export const SCREEN_TEXT = {
+  // 팝업 SO 행 보류 — SO 행의 CHG_BATCH('C')(RP:1253) 를 부를 TO-BE 라우팅이 없다. {0}=SO 번호 목록.
+  SO_ROW_HOLD: '_ssp0060.soRowHold',
+  SO_ROW_HOLD_ALL: '_ssp0060.soRowHoldAll',
+  // ERP 2차 적재('B') 실패는 별도 문구 없이 F 와 같이 되돌리고 MSG01215 로 안내한다(erpChain sendAndJudge).
+} as const;

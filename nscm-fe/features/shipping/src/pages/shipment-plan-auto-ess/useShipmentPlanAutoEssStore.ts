@@ -18,7 +18,6 @@ import {
   INITIAL_FIELDSET,
   type DetailFieldSet,
 } from './utils/shipment-plan-auto-ess.detailSheets';
-import { clampPeriod2 } from './utils/shipment-plan-auto-ess.editLock';
 
 type FiltersBySheet = {
   [S in SHEETS]?: ProcRequest<MENU_ID, S>;
@@ -70,16 +69,24 @@ interface Action {
   setCompany: (companyId: string) => void;
   // PlanDate 선택 → drpPeriod/drpPeriod2 파생 + realFlag (design 02 §3/§4)
   setPlanDate: (code: string, fromDate: string, toDate1: string, isLatest: boolean) => void;
-  // drpPeriod2 — 범위 이탈 시 무메시지 clamp (buttonGuard #37)
+  // drpPeriod2(Shipment Date) — SSP0005 참조 자유 입력(Plan 기간 clamp 제거, 사용자 지시 2026-10-16)
   setPeriod2: (from: string, to: string) => void;
   setActiveGrid: (grid: ActiveGrid) => void;
   setActiveDetailSheet: (sheet: SHEETS) => void;
   setMainFilters: () => void;
-  // overrides: Main 드릴다운(dblFlag='Y') 시 클릭 행의 item/fromSite 로 좁힘 (design 03 §3.7)
+  // overrides: Main 드릴다운(dblFlag='Y') 시 클릭 행의 item/fromSite 로 좁힘 (design 03 §3.7).
+  //   PLAN_DETAIL 드릴다운은 클릭 행 division·클릭 일자 하루·요청자 공란까지 덮는다(AS-IS cs:4837~4848, 결함 B4).
   setDetailFilter: (
     sheet: SHEETS,
     dblFlag: 'Y' | 'N',
-    overrides?: { itemId?: string; fromSite?: string }
+    overrides?: {
+      itemId?: string;
+      fromSite?: string;
+      divisionId?: string;
+      fromYyyymmdd?: string;
+      toYyyymmdd?: string;
+      requestor?: string;
+    }
   ) => void;
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
@@ -217,9 +224,11 @@ export const useShipmentPlanAutoEssStore = createPersistedStoreWithTab<State & A
     setPeriod2: (from, to) =>
       set(state => {
         const c = state.searchCondition;
-        const clamped = clampPeriod2(from, to, c.periodFrom, c.periodTo);
-        c.period2From = clamped.from;
-        c.period2To = clamped.to;
+        // SSP0005 조회조건 Period 참조 — Shipment Date 는 Plan 기간에 묶지 않고 자유 입력(사용자 지시
+        //   2026-10-16). 종전 clampPeriod2(buttonGuard #37)는 Plan 기간 밖 선택을 무메시지로 경계에
+        //   되돌려 "입력이 잘 안됨" 증상의 원인이었다 — AS-IS clamp 이탈로 확정(자매 SSP0060 동일).
+        c.period2From = from;
+        c.period2To = to;
       }),
 
     setActiveGrid: grid =>
@@ -283,14 +292,15 @@ export const useShipmentPlanAutoEssStore = createPersistedStoreWithTab<State & A
         if (sheet === SHEETS.PLAN_DETAIL) {
           // P_SSP0021_GET_SHIPMENT_PLAN_DETAIL 14 IN
           state.filters[SHEETS.PLAN_DETAIL] = {
-            divisionId: c.divisionId, // 1
+            divisionId: overrides?.divisionId ?? c.divisionId, // 1
             companyId: c.companyId, // 2
             fromSite: overrides?.fromSite ?? joinOrEmpty(c.plantSiteIds), // 3
             itemId: overrides?.itemId ?? multiLine(c.model), // 4
-            requestor: c.requestorId, // 5 P_REQUESTOR
+            requestor: overrides?.requestor ?? c.requestorId, // 5 P_REQUESTOR (드릴다운은 공란)
             planStartYyyymmdd: c.planDate, // 6
-            fromYyyymmdd: c.period2From, // 7 P_FROM_YYYYMMDD (drpPeriod2 — Shipment Date)
-            toYyyymmdd: c.period2To, // 8 P_TO_YYYYMMDD
+            // 7·8 P_FROM/TO_YYYYMMDD — 일반 조회는 drpPeriod2(Shipment Date), 드릴다운은 클릭 일자 하루.
+            fromYyyymmdd: overrides?.fromYyyymmdd ?? c.period2From, // 7
+            toYyyymmdd: overrides?.toYyyymmdd ?? c.period2To, // 8
             dblFlag, // 9 P_DBL_FLAG
             realFlag: state.realFlag ? 'Y' : 'N', // 10 P_REAL_FLAG
             language, // 11

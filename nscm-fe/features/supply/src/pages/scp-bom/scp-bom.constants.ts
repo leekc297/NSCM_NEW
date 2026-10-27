@@ -2,7 +2,7 @@
 //   설계 근거: .atlas/gscm-design/SCP0053/design/00_checklist.md ~ 03_grid-columns.md · convert-flow/{goal,plan}.md
 //   - GET  SP : PKG_SCP0053.P_SCP0053_GET_SCP_BOM  (IN 7, 커서 o_rc 20필드) — 배포 VALID
 //   - SAVE SP : PKG_SCP0053.P_SCP0053_SAVE_SCP_BOM (IN 15, '^' bulk 파싱, 'S'/'F' + 에러행) — 배포 VALID
-//   - Division 은 OnShown 강제 '81'(Automotive Battery) + disabled 고정(design 01 R7)
+//   - Division 은 권한 콤보(MyDivision) 배열 첫 항목을 기본선택(사용자 지시 2026-10-22 — AS-IS R7 '81' 고정 폐기)
 //   - 편집 3컬럼(SCP_PLAN_YN/SI_ALT_PRIORITY/SI_SCP_YN, INPUT_TP_CD='M') 외 잠금. SCP_PLAN_YN 이 'Y'/'N'
 //     아닌 행은 행 전체 편집 차단 + Gray(design 03 §3 W6/W7). INSERT/DELETE 는 노출 + NO-OP(R4/R5).
 export const MENU_ID = 'SCP0053' as const;
@@ -30,10 +30,6 @@ export const COMBO = {
   DIVISION: 'MyDivision',
   PLANT_SITE: 'PlantByDivisionAll_SCP',
 } as const;
-
-// Division 고정값 — AS-IS OnShown SelectCombo(cboDivision,"CODE","81") + Enabled=false(design 01 R7, cs:736).
-//   '81' = Automotive Battery (ora 실측 2026-09-26). 후보에 '81' 없으면(권한 없음) 조회 차단(R8).
-export const DEFAULT_DIVISION = '81';
 
 // 편집 컬럼(INPUT_TP_CD='M', design 03 §1.1 SORT16~18). 상수 이식이 아니라 잠금행 판정용 참조.
 export const EDITABLE_COLUMNS = ['SCP_PLAN_YN', 'SI_ALT_PRIORITY', 'SI_SCP_YN'] as const;
@@ -83,6 +79,6 @@ export const MSG = {
   CHILD_NOT_CELL: 'MSG01332', // Inputed Child ID is not Cell Type (V4)
   REQUIRE_DIVISION: 'MSG00097', // Please select Division. (R8 권한 0건 게이트)
   SAVE_SUCCESS: 'MSG00672', // {0}개의 데이터가 저장되었습니다. (AS-IS MSG00004 등가 — 저장 건수 V6)
-  SAVE_FAIL: 'MSG00006', // Failed to save. (AS-IS MSG00006 등가 — 저장 실패 V7)
+  SAVE_FAIL: 'MSG00003', // Failed to save. (저장 실패 V7) (AS-IS MSG00006 는 TO-BE 미등록 → 같은 문구 MSG00003, KO/EN/CN)
   NO_CHANGE: 'MSG00004', // No changes to save. (저장 대상 0건)
 } as const;

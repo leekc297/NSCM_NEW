@@ -1139,6 +1139,9 @@ export const PeriodField = ({
   const startValue = start ? parse(start) : null;
   const endValue = end ? parse(end) : null;
   return (
+    // Period 칸 최소폭(날짜범위 겹침 방지, ~388px)은 PeriodField 전역이 아니라 '조회조건 Grid'
+    //   (SearchArea·MUI-Grid 하단바)에서 :has 로 스코프해 건다(CONDITIONS_GRID_LAYOUT_SX 주석 참조).
+    //   전역으로 걸면 bespoke flex 하단바(SSP0023 electrode 등)의 세밀 레이아웃이 깨져서다.
     <Grid size={gridSize ?? 8}>
       <FormItem
         className={commonStyles.formItem}

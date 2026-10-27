@@ -1,0 +1,943 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-10-28T02:51:44+09:00",
+ "producer": "run_verify",
+ "id": "SCP0007",
+ "skip_e2e": false,
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-3ac70eb4",
+   "class": "E6",
+   "msg": "SCP0007 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-28 02:48"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2ecba37b",
+   "class": "G2",
+   "msg": "조회조건 To Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-28 02:48"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9a934f52",
+   "class": "E2",
+   "msg": "bod.FROM_YYYYMMDD (FROM*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-28 02:48"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-cac6a100",
+   "class": "E2",
+   "msg": "bod.TO_YYYYMMDD (TO*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-28 02:48"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9a793d94",
+   "class": "D3",
+   "msg": "INCOTERMS_SSP,INCOTERMS_SSP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-28 02:48"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-eb4a5d7f",
+   "class": "D3",
+   "msg": "INCOTERMS_SSP,INCOTERMS_SSP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-28 02:48"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-54926c51",
+   "class": "E4",
+   "msg": "MSG00004",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-28 02:48"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b30dd3c6",
+   "class": "D3",
+   "msg": "INCOTERMS,INCOTERMS",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-28 02:48"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3b5c0b42",
+   "class": "D3",
+   "msg": "INCOTERMS_SSP,INCOTERMS_SSP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-28 02:48"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-978e3dc7",
+   "class": "H2",
+   "msg": "siMain.SetFGColor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "수동 사용자판정(정합검증서)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-92c7eace",
+   "class": "H2",
+   "msg": "siMain.SetFGColor",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "수동 사용자판정(정합검증서)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-62191731",
+   "class": "G2",
+   "msg": "Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-47def325",
+   "class": "G2",
+   "msg": "멀티선택 조회조건 Select ALL",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-12111d37",
+   "class": "E2",
+   "msg": "Period 날짜",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c348db52",
+   "class": "G2",
+   "msg": "[DMF0043_01 결함 유형] 조회조건 Product Group·Biz Type",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-60ca29ec",
+   "class": "H2",
+   "msg": "[DMF0068 결함 일반화] 입력 불가 컬럼 배경색",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5c020e6e",
+   "class": "D3",
+   "msg": "[DMF0003 결함 유형] Measure 콤보(입력 가능 Measure)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9fd2f90c",
+   "class": "H2",
+   "msg": "[DMF0003 결함 일반화] 실적 구간 배경색",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-845df179",
+   "class": "E4",
+   "msg": "[DMF0082 결함 유형] Biz Type 미존재 검증 팝업 메시지",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-35d14b3f",
+   "class": "E4",
+   "msg": "[DMF0082 결함 유형] MKT FCST 수량 입력 시 Unit Price 필수",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-41bb1062",
+   "class": "E4",
+   "msg": "[DMF0005 결함 일반화] Sales Company·Sales Plant 셀",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ecdfb706",
+   "class": "E4",
+   "msg": "[DMF0044 결함 유형] 저장 자릿수 · 계산값(RTF×Unit Price) 초과 메시지",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-79f166e4",
+   "class": "E4",
+   "msg": "[DMF0005 결함 유형] 하단 Grid Owner 다건 · 상단 더블클릭 하단 조회",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d08f7873",
+   "class": "G2",
+   "msg": "[DMF0042 결함 일반화] 조회조건 Item Type",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9b32c3f9",
+   "class": "E4",
+   "msg": "[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-bd52a240",
+   "class": "E4",
+   "msg": "[DMF0044 결함 유형] BP Version 팝업 Version Create",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e0428ecf",
+   "class": "G2",
+   "msg": "[DMF0020 결함 유형] Price Batch Input 팝업 Sales Site 조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-476fc6ca",
+   "class": "E6",
+   "msg": "[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-28 02:48"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-54576ec3",
+   "class": "H2",
+   "msg": "[DMF0040 결함 유형] 실적 구간 배경색",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0b943b5c",
+   "class": "H2",
+   "msg": "[DMF0021 결함 유형] Partial 주차 편집 구간·실적 구분선",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-59880963",
+   "class": "E4",
+   "msg": "[DMF0082 결함 유형] Unit Price(LOC) 52주 Validation",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-03b4cacc",
+   "class": "D3",
+   "msg": "[DMF0003 결함 유형] 신규 행 Measure 후보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d5318e9b",
+   "class": "G2",
+   "msg": "[DMF0040 결함 유형] End Customer 다중 선택 조회조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0627d272",
+   "class": "E4",
+   "msg": "[DMF0082 결함 유형] 신규 데이터셋 수량·판가 저장",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f40a557f",
+   "class": "E4",
+   "msg": "[DMF0021 결함 유형] RTF[R+P] 편집 가능 조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-34d9170b",
+   "class": "E4",
+   "msg": "[DMF0021 결함 유형] Text 필수 Validation·ETC 수정 저장",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9d4493fd",
+   "class": "E4",
+   "msg": "[DMF0021 결함 유형] RTF 저장 판가 검증 / Sales Plan Waterfall 동기화",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5125e3d3",
+   "class": "G2",
+   "msg": "[SYS0005 결함 유형] Schema 조회조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0f55a2b0",
+   "class": "G2",
+   "msg": "[DMF0005 결함 유형] Project 팝업(그리드)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f51c0928",
+   "class": "E4",
+   "msg": "[DMF0004 결함 유형] Customer 탭 Sold to/Ship to 저장 검증",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-110fa8af",
+   "class": "E4",
+   "msg": "[DMF0005 결함 유형] Project 컬럼 필수 검증",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-194eeb6f",
+   "class": "G2",
+   "msg": "[SCP0028 결함 유형] From Site 조회조건",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5098f63e",
+   "class": "E4",
+   "msg": "[SCP0028 결함 유형] Lot Size<Increment 검증 메시지",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-49d4492d",
+   "class": "E4",
+   "msg": "[SCP0005 결함 유형] 키 중복 저장 오류 메시지",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-bc3eddf3",
+   "class": "D3",
+   "msg": "[SCP0006 결함 유형] Plant Assign 그리드 색상",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9515e0d7",
+   "class": "H2",
+   "msg": "[SCP0006 결함 유형] Plant Assign 그리드 색상",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-267fbf02",
+   "class": "H2",
+   "msg": "[SCP0006 결함 유형] Main Grid 배경색",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5766472d",
+   "class": "H2",
+   "msg": "입력 불가 컬럼 배경색",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7e3330fd",
+   "class": "H2",
+   "msg": "실적 구간 배경색",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6c7a22d6",
+   "class": "G2",
+   "msg": "Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8e9bbf8d",
+   "class": "G2",
+   "msg": "멀티선택 조회조건 Select ALL",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-70218ba2",
+   "class": "H2",
+   "msg": "D00-1-026 · §1 spdMain / FpSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4b9d59d6",
+   "class": "H2",
+   "msg": "D00-1-027 · §1 spdMain_Sheet1 / SheetView",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f478b82f",
+   "class": "D1",
+   "msg": "D00-2-004 · §2 spdMain / ClipboardPasted",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0cfa87ef",
+   "class": "D3",
+   "msg": "D00-2-004 · §2 spdMain / ClipboardPasted",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5ab515d4",
+   "class": "H2",
+   "msg": "D00-2-008 · §2 this / Load → Form_Load (InitForm·InitControls·CreateSpread·DefineP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-197db1ce",
+   "class": "H2",
+   "msg": "D00-2-009 · §2 spdMain / TopChange → SpdMain_TopChange (`siMain.SmartColMerge()` 스",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-005d8747",
+   "class": "D1",
+   "msg": "D00-2-005 · §2 spdMain / ComboSelChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d90a27da",
+   "class": "D3",
+   "msg": "D00-2-005 · §2 spdMain / ComboSelChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f1cd77d3",
+   "class": "H2",
+   "msg": "D00-3-038 · §3 Query / (ds)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e251b20b",
+   "class": "D1",
+   "msg": "D00-3-040 · §3 SmartColMerge / ()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-86da3f3a",
+   "class": "D3",
+   "msg": "D00-3-040 · §3 SmartColMerge / ()",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8da85062",
+   "class": "H2",
+   "msg": "D00-3-047 · §3 SetFGColor / (nStartColIdx..nEndColIdx,InvalidFGColor)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-134953fa",
+   "class": "H2",
+   "msg": "D00-3-048 · §3 SetFGColor / (nStartColIdx..nEndColIdx,DefaultForeColor)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-0972ab37",
+   "class": "H2",
+   "msg": "D00-4b-011 · §4b SpdMain_TopChange / event / spdMain.TopChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f9644978",
+   "class": "H2",
+   "msg": "D00-4e-005 · §4e dtFromSiteOfSpdAll / FindData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-48ad65e2",
+   "class": "X-ROW",
+   "msg": "SCP0007_BOD.CreateSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-509c1186",
+   "class": "H2",
+   "msg": "SCP0007_BOD.CreateSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-416534c0",
+   "class": "X-ROW",
+   "msg": "SCP0007_BOD.SaveData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6eec79f1",
+   "class": "X-ROW",
+   "msg": "SCP0007_BOD.SetCityCode",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a08bf57b",
+   "class": "X-ROW",
+   "msg": "SCP0007_BOD.SpdMain_ComboSelChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f1af76ac",
+   "class": "X-ROW",
+   "msg": "SCP0007_DistributionRoutePopup.InitSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1ef63e86",
+   "class": "X-ROW",
+   "msg": "SCP0007_DistributionRoutePopup.btnButtonList_UsrButtonList_Click_Detected",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-1ad18cc7",
+   "class": "X-ROW",
+   "msg": "SCP0007_DistributionRoutePopup.btnFromSrch_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-cd587e1e",
+   "class": "X-ROW",
+   "msg": "SCP0007_DistributionRoutePopup.btnToSrch_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "summary": {
+  "rows": 1953,
+  "PASS": 1448,
+  "FAIL": 75,
+  "판정필요": 92,
+  "미검증": 0,
+  "해당없음": 338,
+  "AI판단만_강등": 0,
+  "grade": {
+   "없음(판정 대기)": 92,
+   "기계": 1153,
+   "사람": 37,
+   "기계(상속·집계)": 665,
+   "출처 미기록": 6
+  },
+  "fail_listed": 75
+ },
+ "docs": {
+  "정합검증서": "Doc/화면분석서/SCP0007_Bod_정합검증서_v70.xlsx",
+  "보완대상": "Doc/화면분석서/SCP0007_Bod_보완대상_v70.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0007/e2e_results.json"
+  }
+ ],
+ "note": ""
+}

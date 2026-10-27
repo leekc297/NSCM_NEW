@@ -6,6 +6,7 @@ import {
   type FlexGrid as FlexGridType,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import type { OrderDetailContext } from 'features/shipping/src/components';
 import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
@@ -14,6 +15,7 @@ import { GridUtils, paintNegativeText, toGridNumber } from '@foundation/utils';
 import { DataGrid, TabItem, TabWrapper } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
+import { attachDashDateFormat } from '../../../hooks/usePinDashDateFormat';
 import {
   ADMIN_SHEET_NAME,
   FOOTER_SUM_RANGE,
@@ -28,14 +30,17 @@ import { DETAIL_SHEETS } from '../utils/shipment-plan.detailSheets';
 import {
   buildBtnNewLockedBindings,
   isDetailCellEditable,
+  isErpDoBlockedCell,
 } from '../utils/shipment-plan.editLock';
 import {
   LOOKUP_COLUMN,
+  SITE_CELL_COLUMN,
   stripComboMeta,
   useShipmentPlanLookups,
+  useShipmentPlanSiteCombos,
 } from '../utils/shipment-plan.lookups';
 
-import type { OrderDetailContext } from './modals/OrderDetailModal';
+import styles from './ShipmentPlanDetailGrid.module.scss';
 
 interface Props {
   rowsBySheet: Partial<Record<SHEETS, WijmoRowItem[]>>;
@@ -89,19 +94,28 @@ export const ShipmentPlanDetailGrid = ({
   const activeDetailSheet = useShipmentPlanStore(s => s.activeDetailSheet);
   const setActiveDetailSheet = useShipmentPlanStore(s => s.setActiveDetailSheet);
   const setActiveGrid = useShipmentPlanStore(s => s.setActiveGrid);
+  const setActiveGridRef = useRef(setActiveGrid);
+  setActiveGridRef.current = setActiveGrid;
 
   const editableRef = useRef(editable);
   editableRef.current = editable;
 
   // 셀 콤보 lookup code->name (runtime-parity §3.2 H2) — 표시 3종 formatItem, 편집 CHANGE_REASON_CODE 는 DataMap.
-  const { fcstTypeMap, shipmentStatusMap, stockStatusMap, changeReasonDataMap } =
+  const { fcstTypeMap, shipmentStatusMap, changeReasonDataMap, stockStatusDataMap } =
     useShipmentPlanLookups();
+
+  // 신규행 From/To Site 셀 콤보(gap-resolve iter-4) — 조회조건 division/company 축으로 조회.
+  //   AS-IS BtnNew_Click dtFromSite/dtToSite 와 동일 스코프. 값=코드/표시=명은 dataMap 이 만든다.
+  const siteDivisionId = useShipmentPlanStore(s => s.searchCondition.divisionId);
+  const siteCompanyId = useShipmentPlanStore(s => s.searchCondition.companyId);
+  const { fromSiteDataMap, toSiteDataMap } = useShipmentPlanSiteCombos(
+    siteDivisionId,
+    siteCompanyId
+  );
   const fcstTypeMapRef = useRef(fcstTypeMap);
   fcstTypeMapRef.current = fcstTypeMap;
   const shipmentStatusMapRef = useRef(shipmentStatusMap);
   shipmentStatusMapRef.current = shipmentStatusMap;
-  const stockStatusMapRef = useRef(stockStatusMap);
-  stockStatusMapRef.current = stockStatusMap;
 
   // lookup 주입 컬럼의 자동 콤보 메타를 벗긴다 — 빈 dataMap(@lookupType 미해소)이 화면 주입
   //   formatItem/DataMap 과 충돌(로딩 중 공백 깜빡임 등)하는 것을 막는다. PlanDetail 3종 + oWMS 1종.
@@ -113,6 +127,9 @@ export const ShipmentPlanDetailGrid = ({
         LOOKUP_COLUMN.FCST_TYPE,
         LOOKUP_COLUMN.SHIPMENT_STATUS,
         LOOKUP_COLUMN.CHANGE_REASON_CODE,
+        // 신규행 From/To Site 는 화면 주입 dataMap 을 쓰므로 자동 콤보 메타가 있으면 벗긴다(현재 메타 NULL).
+        SITE_CELL_COLUMN.FROM_SITE_DESCRIPTION,
+        SITE_CELL_COLUMN.TO_SITE_DESCRIPTION,
       ])
     );
     out[SHEETS.OWMS_DETAIL] = stripComboMeta(
@@ -157,16 +174,16 @@ export const ShipmentPlanDetailGrid = ({
         btnNewLocked
       );
       e.cancel = !cellEditable;
-      if (!cellEditable) {
-        if (row && str(row.ERP_STATUS) === 'C' && editableRef.current) {
-          void setAlert({
-            type: 'alert',
-            content: t(MSG.ERP_DO_BLOCK, {
-              defaultValue:
-                '_ERP D/O (Delivery Order) has been created for the plan, so the SSP plan cannot be changed.',
-            }),
-          });
-        }
+      // ERP D/O 생성 행 편집차단 경고 — 편집 대상 셀(화이트리스트 + SHIPMENT_STATUS='C')에서만 띄운다.
+      //   SO_NO 등 읽기전용 셀 더블클릭(= OrderDetail 팝업 열기)에는 뜨지 않는다(과발동 제거, AS-IS 파리티).
+      if (!cellEditable && editableRef.current && isErpDoBlockedCell(SHEETS.PLAN_DETAIL, row, binding)) {
+        void setAlert({
+          type: 'alert',
+          content: t(MSG.ERP_DO_BLOCK, {
+            defaultValue:
+              '_ERP D/O (Delivery Order) has been created for the plan, so the SSP plan cannot be changed.',
+          }),
+        });
       }
     };
     g.beginningEdit.addHandler(beginningEditHandler);
@@ -215,6 +232,27 @@ export const ShipmentPlanDetailGrid = ({
         'wj-cell-editable',
         isDetailCellEditable(SHEETS.PLAN_DETAIL, row, binding, editableRef.current, btnNewLocked)
       );
+      // 팝업 진입 어포던스 아이콘 — ERP_SO_NO(OrderDetail)·CHANGE_REQ_NO(ConfirmDetail) 는 읽기전용이라
+      //   공용 수정셀 아이콘 비대상(formatPopupIcon: isModalCtrl && isEditableCell)이므로 직접 그린다.
+      //   값 있는 셀만(ERP_SO_NO 는 '-' 플레이스홀더 제외). wijmo 셀 재활용이라 비대상은 반드시 원복.
+      const soNo = str(row?.ERP_SO_NO).trim();
+      const hasPopup =
+        binding === 'ERP_SO_NO'
+          ? soNo !== '' && soNo !== '-'
+          : binding === 'CHANGE_REQ_NO'
+            ? str(row?.CHANGE_REQ_NO).trim() !== ''
+            : false;
+      if (hasPopup) {
+        e.cell.style.paddingRight = '20px'; // OpenInNew 아이콘(right:5px, 16px) 자리
+        if (!e.cell.querySelector('.popup-icon')) {
+          const icon = document.createElement('span');
+          icon.className = `popup-icon ${styles.popupIcon}`;
+          e.cell.appendChild(icon);
+        }
+      } else if (e.cell.querySelector('.popup-icon')) {
+        e.cell.style.paddingRight = '';
+        e.cell.querySelector('.popup-icon')?.remove();
+      }
     };
     g.formatItem.addHandler(formatItemHandler);
 
@@ -397,11 +435,41 @@ export const ShipmentPlanDetailGrid = ({
   useEffect(() => {
     const g = planDetailGridRef?.current;
     if (!g) return;
-    const col = g.columns.getColumn(LOOKUP_COLUMN.CHANGE_REASON_CODE);
-    if (col) col.dataMap = changeReasonDataMap;
+    // 콤보 dataMap 은 columnGroups 재대입마다 null 로 지워진다 — 공용 DataGrid 의 self-heal
+    //   (appliedDataMapsRef)은 자동 콤보 메타 컬럼만 되살리고 **화면 주입분은 건드리지 않으므로**
+    //   (CHANGE_REASON_CODE 는 stripComboMeta 로 메타를 벗긴 화면 주입 콤보다), oWMS STOCK_STATUS 와
+    //   동일하게 updatedLayout 마다 직접 재적용한다. 1회성 대입은 레이아웃 갱신 뒤 사라져 드롭다운이
+    //   텍스트박스로 되돌아갔다(2026-10-22 신고 — footer Sum/header 높이 updatedLayout 재적용 도입
+    //   이후 회귀). 목표 인스턴스와 같으면 skip — dataMap 대입→invalidate→updatedLayout 루프 방지.
+    const apply = () => {
+      const col = g.columns.getColumn(LOOKUP_COLUMN.CHANGE_REASON_CODE);
+      if (col && col.dataMap !== changeReasonDataMap) col.dataMap = changeReasonDataMap;
+      // 신규행 From/To Site 셀 콤보(iter-4) — code->name dataMap 주입. 편집가능 여부는 isDetailCellEditable
+      //   (신규행 잠금 스팬 밖)이 판정하고, 여기서는 드롭다운 목록·표시만 얹는다.
+      const fromCol = g.columns.getColumn(SITE_CELL_COLUMN.FROM_SITE_DESCRIPTION);
+      if (fromCol && fromCol.dataMap !== fromSiteDataMap) fromCol.dataMap = fromSiteDataMap;
+      const toCol = g.columns.getColumn(SITE_CELL_COLUMN.TO_SITE_DESCRIPTION);
+      if (toCol && toCol.dataMap !== toSiteDataMap) toCol.dataMap = toSiteDataMap;
+    };
+    g.updatedLayout.addHandler(apply);
+    apply();
     g.invalidate();
+    return () => {
+      try {
+        g.updatedLayout?.removeHandler(apply);
+      } catch {
+        // unmount race
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [planDetailColumns, changeReasonDataMap, fcstTypeMap, shipmentStatusMap]);
+  }, [
+    planDetailColumns,
+    changeReasonDataMap,
+    fcstTypeMap,
+    shipmentStatusMap,
+    fromSiteDataMap,
+    toSiteDataMap,
+  ]);
 
   // 음수 = 빨간 글자 — Detail 7시트 **전체**에 배선한다.
   //   AS-IS 는 화면 코드가 아니라 프레임워크가 전역으로 한다:
@@ -438,33 +506,55 @@ export const ShipmentPlanDetailGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staticColumns]);
 
-  // oWMS Detail STOCK_STATUS code->name 표시(OWMS_STOCK_STATUS lookup, 읽기전용).
+  // 활성 그리드 전환 (F7 저장 라우팅·Measure 게이팅의 단일 근거) — Detail 그리드의 **모든 셀 클릭**에서
+  //   activeGrid='detail' 로 바꾼다. AS-IS SpdDetail_CellClick(cs L1966~1973)이 잠금 아닌 Detail
+  //   스프레드 클릭마다 fps=siDetail 로 전환하는 것과 등가다. 종전엔 DataGrid `gotFocus`(포커스 진입)
+  //   prop 하나로만 배선해, 포커스가 이미 Detail 에 있거나 Model/Project 팝업을 거쳐 돌아오는 흐름에서
+  //   activeGrid 가 기본값 'main' 에 머물렀다 → F7 이 handleSave 의 Main 분기로 가 하단 그리드가
+  //   저장되지 않았다(사용자 신고 2026-10-16). Main 그리드(ShipmentPlanMainGrid clickHandler)와 동일하게
+  //   hostElement click 으로 직접 배선한다. gotFocus 는 키보드 포커스 보강으로 남겨 둔다.
+  useEffect(() => {
+    const onDetailClick = () => setActiveGridRef.current('detail');
+    const attached = DETAIL_SHEETS.map(sheet => gridRefs[sheet]?.current).filter(
+      (g): g is FlexGridType => !!g
+    );
+    attached.forEach(g => g.hostElement?.addEventListener('click', onDetailClick));
+    return () => {
+      attached.forEach(g => {
+        try {
+          g.hostElement?.removeEventListener('click', onDetailClick);
+        } catch {
+          // unmount race
+        }
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [staticColumns, activeDetailSheet]);
+
+  // oWMS Detail Inventory Status(STOCK_STATUS) 편집 콤보 — DataMap 주입(드롭다운 + 'CODE : 명' 표시).
+  //   사용자 지시(2026-10-20): 자매 SSP0021 처럼 콤보 선택 가능해야 한다. 종전엔 formatItem 표시전용이라
+  //   드롭다운이 없었다(읽기전용 시트였던 잔재). 이제 시트 2~6 가 편집 가능해졌으므로 DataMap 으로 교체한다.
+  //   columnGroups 재생성으로 dataMap 이 지워질 수 있어 updatedLayout 마다 재적용한다(PLAN_DETAIL 과 동일 처방).
   const owmsGridRef = gridRefs[SHEETS.OWMS_DETAIL];
   const owmsColumns = staticColumns[SHEETS.OWMS_DETAIL];
   useEffect(() => {
     const g = owmsGridRef?.current;
-    if (!g) return;
-    const fmt = (
-      sender: FlexGridType,
-      e: { panel: unknown; row: number; col: number; cell: HTMLElement }
-    ) => {
-      if (e.panel !== sender.cells) return;
-      if ((sender.columns[e.col]?.binding ?? '') !== LOOKUP_COLUMN.STOCK_STATUS) return;
-      const row = GridUtils.getRow(sender, e.row) as Record<string, unknown> | undefined;
-      const code = str(row?.[LOOKUP_COLUMN.STOCK_STATUS]);
-      if (code) e.cell.textContent = stockStatusMapRef.current[code] ?? code;
+    if (!g || !stockStatusDataMap) return;
+    const apply = () => {
+      const col = g.columns.getColumn(LOOKUP_COLUMN.STOCK_STATUS);
+      if (col && col.dataMap !== stockStatusDataMap) col.dataMap = stockStatusDataMap;
     };
-    g.formatItem.addHandler(fmt);
-    g.invalidate();
+    g.updatedLayout.addHandler(apply);
+    apply();
     return () => {
       try {
-        g.formatItem?.removeHandler(fmt);
+        g.updatedLayout?.removeHandler(apply);
       } catch {
         // unmount race
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [owmsColumns, stockStatusMap, rowsBySheet[SHEETS.OWMS_DETAIL]]);
+  }, [owmsColumns, stockStatusDataMap, rowsBySheet[SHEETS.OWMS_DETAIL]]);
 
   // Detail ColumnFooter 합계 (I16 — AS-IS InitSpreadFooterSum L764~853): 시트별 수치 구간에
   //   Sum 집계(SumIgnoreHidden 등가 — wijmo Aggregate 는 visible 무관 소스 집계라 hidden 컬럼도
@@ -495,11 +585,8 @@ export const ShipmentPlanDetailGrid = ({
       const applyAggregates = () => {
         const sumSet = sumSetsRef.current.get(sheet);
         if (!sumSet) return;
-        // 합계행(= wijmo columnFooters GroupRow)은 공용 `useAggregationRow` prop 이 그리드 초기화
-        //   때 넣지만, 그 1회가 어떤 이유로든 비어 있으면 Sum 행 자체가 안 보인다. 여기서 한 번 더
-        //   보장한다(이미 있으면 no-op). columnFooters 는 wijmo 가 그리드 하단에 고정 배치하는
-        //   패널이라(`footer.top = clientBottom - columnFooters.height`, 행이 적어도 바닥에 붙는다)
-        //   AS-IS FarPoint `ColumnFooter.Visible=true`(cs L802)와 같은 자리다.
+        // 조회 전(데이터 0건)에도 Sum 합계행을 **항상** 바닥에 유지한다 — AS-IS InitSpreadFooterSum
+        //   파리티(사용자 지시 2026-10-20, 자매 SSP0021 동일). 종전 "0건 숨김"(2026-10-16)을 되돌린다.
         if (g.columnFooters.rows.length === 0) g.columnFooters.rows.push(new GroupRow());
         // 합계행 라벨 — 공용 setAggregationRow 는 'Σ' 를 쓰지만 AS-IS 는 "Sum" 이다
         //   (cs L803 `ColumnFooter.Cells[0,1].Value = "Sum"`, 사용자 요청 2026-10-06).
@@ -612,9 +699,22 @@ export const ShipmentPlanDetailGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staticColumns, activeDetailSheet]);
 
-  // 읽기전용 5-sheet 는 isReadOnly — 어떤 액션으로도 편집 UI 미노출 (03 §5-8)
+  // 읽기전용 5-sheet(2~6탭) 는 isReadOnly — 어떤 액션으로도 편집 UI 미노출. PLAN_DETAIL·HOLD_STOCK 만 편집.
+  //   2~6탭은 AS-IS 가 "수정 진입"만 되고 저장 SP 가 없어 실제 편집/저장 불가 → read-only(사용자 확인 2026-10-20,
+  //   2026-10-20 전컬럼 편집개방 롤백).
   const isReadOnlySheet = (sheet: SHEETS): boolean =>
     sheet !== SHEETS.PLAN_DETAIL && sheet !== SHEETS.HOLD_STOCK;
+
+  // 날짜 컬럼 형식을 조회값과 같은 대시(yyyy-MM-dd)로 고정 — 공용 getFormat 은 점 형식(yyyy.MM.dd)을 준다.
+  //   조회값은 문자열이라 대시로 보이지만, 달력으로 고친 셀은 Date 가 되어 점 형식으로 표시·커밋된다.
+  //   시트별 그리드가 여러 개라 단일 ref 훅 대신 전 시트에 한 번에 붙인다(SSP0015 Detail 과 같은 처방).
+  //   탭은 persist 로 전부 마운트되어 있어 비활성 탭도 함께 적용된다. 컬럼 재생성은 updatedLayout 이 따라간다.
+  useEffect(() => {
+    const cleanups = DETAIL_SHEETS.map(sheet => gridRefs[sheet]?.current)
+      .filter((g): g is FlexGridType => !!g)
+      .map(g => attachDashDateFormat(g));
+    return () => cleanups.forEach(fn => fn());
+  }, [gridRefs, staticColumns, activeDetailSheet]);
 
   return (
     <TabWrapper
@@ -633,9 +733,10 @@ export const ShipmentPlanDetailGrid = ({
             staticColumns={columnsBySheet[sheet] ?? []}
             comboParams={{ mnuId: `'${MENU_ID}'` }}
             allowMerging={AllowMerging.Cells}
-            // AS-IS InitSpreadFooterSum(L764~853)이 Detail 8시트 전부에 ColumnFooter 를 켜고
-            //   'Sum' 행을 조회 전부터 보여준다(AS-IS 캡처 하단 Sum 행) — 공용 합계행으로 동일 재현.
-            useAggregationRow
+            // 합계행은 **Sum 대상 구간이 있는 시트에만** 켠다(FOOTER_SUM_RANGE). 첫 탭 Shipment Plan
+            //   Detail 은 합산 컬럼이 없어 빈 Σ 헤더만 떠서 불필요하다는 사용자 요청(2026-10-16, 자매
+            //   SSP0021 동일)으로 끈다. 구간이 있는 시트도 조회 전(0건)에는 숨긴다(위 applyAggregates).
+            useAggregationRow={!!FOOTER_SUM_RANGE[sheet]}
             gotFocus={() => {
               // 활성 그리드 전환 — AS-IS 프레임워크 BaseForm.FpSpread_CellClick(L2303~2305)이
               //   모든 스프레드 클릭에서 fps 를 무조건 전환한다(iter-2 실측 — 01 R5 "sticky" 는

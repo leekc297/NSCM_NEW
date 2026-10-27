@@ -2,6 +2,8 @@ import type { BUCKET_TYPE, MENU_ID, SHEETS } from './shipment-plan.constants';
 
 // Main(PSI) 행 — 서버 wide pivot (base + D_/W_/M_ 동적 키)
 export type MainRow = ResponseData<MENU_ID, SHEETS.MAIN, 'o_rc1'>;
+// NOTE 행 — Main 조회 o_rc2(P_SSP0060_GET_SHIPMENT_PSI_COMMENTS). SHIP_PLAN_DETAIL 일자셀 파란 StickyNote(■) 원천.
+export type NoteRow = ResponseData<MENU_ID, SHEETS.MAIN, 'o_rc2'>;
 // 3단 헤더 캘린더 메타 행
 export type CalendarRow = ResponseData<MENU_ID, SHEETS.CALENDAR, 'o_rc1'>;
 // Shipment Plan Detail 행

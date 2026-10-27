@@ -1,0 +1,6 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+ESS Channel PSI,DIVISION_ID,META,,META SCM_MST_SHEET_COLUMNS(DM0026/ESS Channel PSI),Div*,FPComboBox,Division,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),30,Y,C,,,
+ESS Channel PSI,ITEM_ID,META,,META SCM_MST_SHEET_COLUMNS(DM0026/ESS Channel PSI),Model,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,Y,L,,,
+ESS Channel PSI,ITEM_NAME,META,,META SCM_MST_SHEET_COLUMNS(DM0026/ESS Channel PSI),Model Name,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,Y,L,,,
+ESS Channel PSI,MEASURE,META,,META SCM_MST_SHEET_COLUMNS(DM0026/ESS Channel PSI),Measure,FPComboBox,ESS_PSI_TYPE,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,N,L,,,
+ESS Channel PSI,SCM_SITE_ID,META,,META SCM_MST_SHEET_COLUMNS(DM0026/ESS Channel PSI),Sales Site,FPComboBox,ESS_SCM_SITE_ID,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,

@@ -1,6 +1,6 @@
 import { CellType, type CellRangeEventArgs, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ItemByDivisionModal } from 'features/master/src/components';
+import { ModelByDivisionPopup } from 'features/master/src/components';
 import { useMemo, useRef, useState, type MutableRefObject } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
@@ -9,7 +9,7 @@ import type { EditTracker } from '@foundation/utils';
 import { GridUtils, parseComboFilterBindings } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
-import { COLUMNS, EDITABLE_COLUMNS, MENU_ID } from '../plan-group-master.constants';
+import { COLUMNS, MENU_ID } from '../plan-group-master.constants';
 import type { PlanGroupRow } from '../plan-group-master.types';
 import { resolvePlanGroupCode } from '../utils/plan-group-master.save';
 
@@ -34,18 +34,18 @@ export const PlanGroupMasterGrid = ({
   const [openItemModal, setOpenItemModal] = useState<boolean>(false);
   const clickedDivisionRef = useRef<string>('');
 
-  // 컬럼 메타 보정(화면 로컬 — DB 메타 무수정, Hard Boundary 준수):
-  //   1) 편집칼럼 보정(03_grid §6-1): 메타 11컬럼 전부 INPUT_TP_CD='S' 라 OPMZ_PLAN_GR_ID·ITEM_ID 가
-  //      읽기전용이 된다(AS-IS 불일치). canEdit 일 때 두 컬럼만 editable('O')로 연다. 키 1~7 은 'S' 유지.
-  //   2) 셀콤보 division 좁힘(03_grid §6-3): PlanGroup CMBO 는 division 필터 없이 DIVISION_ID 만 반환하므로,
-  //      sales-site END_CUSTOMER 선례처럼 attribute2 에 'DIVISION_ID:DIVISION_ID' 를 더해 행 division 으로 좁힌다.
+  // 컬럼 메타 보정:
+  //   1) EDIT 권한 게이트: canEdit 아니면 전 컬럼 INPUT_TP_CD='S'(읽기전용)로 일괄 내린다(특정 컬럼
+  //      하드코딩 아님 — 메타 전건 잠금). 그리드 자체를 isReadOnly 로 두지 않아 수정상태 status(rowHeader
+  //      col1)는 유지된다. canEdit 면 DB 메타 INPUT_TP_CD 가 그대로 편집가부를 구동(화이트리스트 금지).
+  //   2) 셀콤보 division 좁힘(03_grid §6-3): PlanGroup CMBO 는 division 필터 없이 DIVISION_ID 만 반환 →
+  //      attribute2 에 'DIVISION_ID:DIVISION_ID' 를 더해 행 division 으로 좁힌다.
   const columns = useMemo<RawFlexGridColumnConfig[]>(
     () =>
       staticColumns.map(column => {
-        let next = column;
-        if (canEdit && EDITABLE_COLUMNS.includes(next.colNm)) {
-          next = { ...next, inputTpCd: CELL_INPUT_EDIT_TYPE.OPTIONAL };
-        }
+        let next = canEdit
+          ? column
+          : { ...column, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY };
         if (
           next.colNm === COLUMNS.OPMZ_PLAN_GR_ID &&
           !parseComboFilterBindings(next.attribute2).DIVISION_ID
@@ -122,20 +122,15 @@ export const PlanGroupMasterGrid = ({
         initialized={handleInitialized}
         dblClick={handleGridDblClick}
       />
-      {/* Item by Division 공용 팝업(AS-IS SCM0002_ItembyDivisionPopup = COM0008, 03_grid §3-c W7).
-          division = 클릭한 행의 DIVISION_ID. callFromCell → 셀 호출 모드. */}
-      <ItemByDivisionModal
+      {/* Model by Division 공용 팝업 — AS-IS SCM0002_ItembyDivisionPopup(cs:922-933)의 TO-BE(SCM0002).
+          AS-IS Form_Load(true, division, "", "", "") 1:1: multiSelect + division=클릭 행 DIVISION_ID.
+          OK 반환 itemId 를 그 행 Model 셀에 반영(setItemId → editTracker 'M' 마킹). */}
+      <ModelByDivisionPopup
         open={openItemModal}
-        modalClose={() => setOpenItemModal(false)}
-        setSelectedValue={itemId => setItemId(itemId)}
-        preSearchParams={{
-          divisionId: clickedDivisionRef.current,
-          deptId: 'ALL',
-          endCustomer: 'ALL',
-          salesSite: 'ALL',
-          projectCode: '',
-        }}
-        callFromCell={true}
+        onClose={() => setOpenItemModal(false)}
+        onSelect={selected => setItemId(selected.itemId)}
+        params={{ divisionId: clickedDivisionRef.current }}
+        multiSelect
       />
     </>
   );

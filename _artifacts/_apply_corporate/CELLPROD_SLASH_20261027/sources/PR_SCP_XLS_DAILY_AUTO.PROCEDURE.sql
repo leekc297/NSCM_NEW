@@ -1,0 +1,360 @@
+PROCEDURE PR_SCP_XLS_DAILY_AUTO
+(
+      P_DIVISION_ID          IN  VARCHAR2         DEFAULT '81'
+    , P_PLAN_START_YYYYMMDD  IN  VARCHAR2         DEFAULT NULL
+    , P_ITEM_LIST            IN  VARCHAR2         DEFAULT NULL
+    , O_RESULT_CURSOR        OUT SYS_REFCURSOR
+)
+/*
+ * Program ID   : PR_SCP_XLS_DAILY_AUTO
+ * Description  : SCP SIMULATION EXCEL SHEET BODY QUERY(Daily)
+ * OutTable     :
+ * Execute      :
+
+  EXEC PR_SCP_XLS_DAILY_AUTO   '81' , '20250512',   'ACEN4069I-A1-320'
+
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2025.03.25  KSK         Initial Release
+ * 2025.08.18  KSK         E20250722-000632 자동차 시뮬레이터 주간LT 오류 보완
+ * 2026.07.31  ZIONEX  [PJ202650304] NextSCM Migration
+ */
+AS
+
+    V_BP_FLAG                CHAR(1 CHAR);
+    V_CREATE_FROM_YYYYMMDD2  VARCHAR2(10 CHAR);
+BEGIN
+
+    BEGIN
+        SELECT (CASE WHEN HORIZON_END_DATE >  FN_XLS_DATE(PLAN_NAME, 363) THEN 'Y' ELSE 'N' END)
+          INTO V_BP_FLAG
+          FROM SCM_MST_PLAN A
+         WHERE PLAN_CYCLE = 'WEEKLY'
+           AND PLAN_NAME = P_PLAN_START_YYYYMMDD
+           AND ROWNUM = 1;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            V_BP_FLAG := NULL;
+    END;
+
+    V_CREATE_FROM_YYYYMMDD2 := FN_XLS_DATE(P_PLAN_START_YYYYMMDD, 364);
+
+    OPEN O_RESULT_CURSOR FOR
+    SELECT Y.DIVISION_ID AS DIVISION
+         , PLAN_START_YYYYMMDD
+         , PLAN_TYPE AS "PLAN TYPE"
+         , SEQ
+         , Y.OPERATION_GROUP AS OPERATION_GROUP
+         , Y.OPERATION_GROUP_NAME AS OPERATION
+         , Y.CELL_ITEM_ID AS "CELL ITEM ID"
+         , Y.ITEM_ID AS "ITEM ID"
+         , Y.NICK_NAME AS "NICK"
+         , CELL_QTY_PACK AS "CELL QTY"
+         , TO_SITE
+         , TO_SITE_DESCRIPTION AS "TO SITE"
+         , PROJECT_CODE AS PROJECT
+         , FROM_BOH_QTY AS "FROM BOH QTY"
+         , TO_BOH_QTY AS "TO BOH QTY"
+         , INCOTERMS
+         , FROM_SITE
+         , FROM_SITE_DESCRIPTION AS "FROM SITE"
+         , TRANSPORT_MODE AS TRANS
+         , CASE WHEN Y.MEASURE IN ('SHIP_PLAN', 'CELL_PROD', 'SEMI_SHIP_PLAN', 'PACK_BOH') THEN TO_CHAR(LT_DAY)
+                WHEN LT_DAY = 0 THEN '-'
+                ELSE TO_CHAR(LT_DAY)
+                END AS LT   /* LT 로직이상 */
+         , YIELD
+         , PROD_LINE AS LINE
+         , BOD_ID AS "BOD ID"
+         , GRO_STD_DIO AS "GRO_STD_DIO"
+         , MIN_STD_DIO AS "MIN_STD_DIO"
+         , MEASURE
+         , MEASURE_LABEL AS "MEASURE LABEL"
+
+         , CASE WHEN Y.ATTRIBUTE3 IS NULL THEN NULL ELSE '''' || Y.ATTRIBUTE3 END AS ATTRIBUTE3
+         , XLS_KEY1   /* -순서의 유의(시뮬레이터의 카테고리는 SORT_ORDER_NO까지만 해당함) */
+         , SORT_ORDER_NO
+         , QTY001, QTY002, QTY003, QTY004, QTY005, QTY006, QTY007, QTY008, QTY009, QTY010
+         , QTY011, QTY012, QTY013, QTY014, QTY015, QTY016, QTY017, QTY018, QTY019, QTY020
+         , QTY021, QTY022, QTY023, QTY024, QTY025, QTY026, QTY027, QTY028, QTY029, QTY030
+         , QTY031, QTY032, QTY033, QTY034, QTY035, QTY036, QTY037, QTY038, QTY039, QTY040
+         , QTY041, QTY042, QTY043, QTY044, QTY045, QTY046, QTY047, QTY048, QTY049, QTY050
+         , QTY051, QTY052, QTY053, QTY054, QTY055, QTY056, QTY057, QTY058, QTY059, QTY060
+         , QTY061, QTY062, QTY063, QTY064, QTY065, QTY066, QTY067, QTY068, QTY069, QTY070
+         , QTY071, QTY072, QTY073, QTY074, QTY075, QTY076, QTY077, QTY078, QTY079, QTY080
+         , QTY081, QTY082, QTY083, QTY084, QTY085, QTY086, QTY087, QTY088, QTY089, QTY090
+         , QTY091, QTY092, QTY093, QTY094, QTY095, QTY096, QTY097, QTY098, QTY099, QTY100
+         , QTY101, QTY102, QTY103, QTY104, QTY105, QTY106, QTY107, QTY108, QTY109, QTY110
+         , QTY111, QTY112, QTY113, QTY114, QTY115, QTY116, QTY117, QTY118, QTY119, QTY120
+         , QTY121, QTY122, QTY123, QTY124, QTY125, QTY126, QTY127, QTY128, QTY129, QTY130
+         , QTY131, QTY132, QTY133, QTY134, QTY135, QTY136, QTY137, QTY138, QTY139, QTY140
+         , QTY141, QTY142, QTY143, QTY144, QTY145, QTY146, QTY147, QTY148, QTY149, QTY150
+         , QTY151, QTY152, QTY153, QTY154, QTY155, QTY156, QTY157, QTY158, QTY159, QTY160
+         , QTY161, QTY162, QTY163, QTY164, QTY165, QTY166, QTY167, QTY168, QTY169, QTY170
+         , QTY171, QTY172, QTY173, QTY174, QTY175, QTY176, QTY177, QTY178, QTY179, QTY180
+         , QTY181, QTY182, QTY183, QTY184, QTY185, QTY186, QTY187, QTY188, QTY189, QTY190
+         , QTY191, QTY192, QTY193, QTY194, QTY195, QTY196, QTY197, QTY198, QTY199, QTY200
+         , QTY201, QTY202, QTY203, QTY204, QTY205, QTY206, QTY207, QTY208, QTY209, QTY210
+         , QTY211, QTY212, QTY213, QTY214, QTY215, QTY216, QTY217, QTY218, QTY219, QTY220
+         , QTY221, QTY222, QTY223, QTY224, QTY225, QTY226, QTY227, QTY228, QTY229, QTY230
+         , QTY231, QTY232, QTY233, QTY234, QTY235, QTY236, QTY237, QTY238, QTY239, QTY240
+         , QTY241, QTY242, QTY243, QTY244, QTY245, QTY246, QTY247, QTY248, QTY249, QTY250
+         , QTY251, QTY252, QTY253, QTY254, QTY255, QTY256, QTY257, QTY258, QTY259, QTY260
+         , QTY261, QTY262, QTY263, QTY264, QTY265, QTY266, QTY267, QTY268, QTY269, QTY270
+         , QTY271, QTY272, QTY273, QTY274, QTY275, QTY276, QTY277, QTY278, QTY279, QTY280
+         , QTY281, QTY282, QTY283, QTY284, QTY285, QTY286, QTY287, QTY288, QTY289, QTY290
+         , QTY291, QTY292, QTY293, QTY294, QTY295, QTY296, QTY297, QTY298, QTY299, QTY300
+         , QTY301, QTY302, QTY303, QTY304, QTY305, QTY306, QTY307, QTY308, QTY309, QTY310
+         , QTY311, QTY312, QTY313, QTY314, QTY315, QTY316, QTY317, QTY318, QTY319, QTY320
+         , QTY321, QTY322, QTY323, QTY324, QTY325, QTY326, QTY327, QTY328, QTY329, QTY330
+         , QTY331, QTY332, QTY333, QTY334, QTY335, QTY336, QTY337, QTY338, QTY339, QTY340
+         , QTY341, QTY342, QTY343, QTY344, QTY345, QTY346, QTY347, QTY348, QTY349, QTY350
+         , QTY351, QTY352, QTY353, QTY354, QTY355, QTY356, QTY357, QTY358, QTY359, QTY360
+         , QTY361, QTY362, QTY363, QTY364
+         /* ,WQTY01,WQTY02,WQTY03,WQTY04,WQTY05,WQTY06,WQTY07,WQTY08,WQTY09,WQTY10,WQTY11,WQTY12,WQTY13,WQTY14,WQTY15,WQTY16,WQTY17,WQTY18,WQTY19,WQTY20,WQTY21,WQTY22,WQTY23,WQTY24,WQTY25,WQTY26,WQTY27,WQTY28,WQTY29,WQTY30,WQTY31,WQTY32,WQTY33,WQTY34,WQTY35,WQTY36,WQTY37,WQTY38,WQTY39,WQTY40,WQTY41,WQTY42,WQTY43,WQTY44,WQTY45,WQTY46,WQTY47,WQTY48,WQTY49,WQTY50,WQTY51,WQTY52 */
+         , Y.CREATED_BY
+         , Y.CREATION_DATE
+         , Y.LAST_UPDATED_BY
+         , Y.LAST_UPDATE_DATE
+         , Y.ATTRIBUTE1
+         , Y.ATTRIBUTE9
+         , CREATE_FROM_YYYYMMDD
+         , LT_WEEK
+         , XLS_KEY2
+         , SORT_KEY AS XLS_KEY3
+         , XLS_KEY4
+         , XLS_KEY5
+         , XLS_KEY1 AS XLS_KEY6   /* 레코드키 */
+         , COALESCE(YEAR1_KEY, YEAR2_KEY) AS XLS_KEY7   /* 레코드키 */
+         , SORT_KEY
+      FROM ( SELECT Y.CREATE_FROM_YYYYMMDD
+                  , CASE WHEN Y.CREATE_FROM_YYYYMMDD <> P_PLAN_START_YYYYMMDD THEN
+                         ( SELECT X.XLS_KEY1
+                             FROM SCP_XLS_PSI_GLOBAL X
+                            WHERE Y.PLAN_START_YYYYMMDD = X.PLAN_START_YYYYMMDD
+                              AND Y.PLAN_TYPE = X.PLAN_TYPE
+                              AND Y.SEQ = X.SEQ
+                              AND Y.DIVISION_ID = X.DIVISION_ID   /* 2022.03.21   KSW		       GM JV 반영 */
+                              AND Y.OPERATION_GROUP = X.OPERATION_GROUP
+                              AND Y.CELL_ITEM_ID = X.CELL_ITEM_ID
+                              AND Y.ITEM_ID = X.ITEM_ID
+                              AND Y.TO_SITE = X.TO_SITE
+                              AND Y.PROJECT_CODE = X.PROJECT_CODE
+                              AND Y.INCOTERMS = X.INCOTERMS
+                              AND Y.FROM_SITE = X.FROM_SITE
+                              AND Y.TRANSPORT_MODE = X.TRANSPORT_MODE
+                              AND Y.PROD_LINE = X.PROD_LINE
+                              AND Y.BOD_ID = X.BOD_ID
+                              AND Y.MEASURE = X.MEASURE
+                              AND X.CREATE_FROM_YYYYMMDD = P_PLAN_START_YYYYMMDD )
+                         END AS YEAR1_KEY
+                  , CASE WHEN Y.CREATE_FROM_YYYYMMDD = P_PLAN_START_YYYYMMDD THEN
+                         ( SELECT X.XLS_KEY1
+                             FROM SCP_XLS_PSI_GLOBAL X
+                            WHERE Y.PLAN_START_YYYYMMDD = X.PLAN_START_YYYYMMDD
+                              AND Y.PLAN_TYPE = X.PLAN_TYPE
+                              AND Y.SEQ = X.SEQ
+                              AND Y.DIVISION_ID = X.DIVISION_ID   /* 2022.03.21   KSW		       GM JV 반영 */
+                              AND Y.OPERATION_GROUP = X.OPERATION_GROUP
+                              AND Y.CELL_ITEM_ID = X.CELL_ITEM_ID
+                              AND Y.ITEM_ID = X.ITEM_ID
+                              AND Y.TO_SITE = X.TO_SITE
+                              AND Y.PROJECT_CODE = X.PROJECT_CODE
+                              AND Y.INCOTERMS = X.INCOTERMS
+                              AND Y.FROM_SITE = X.FROM_SITE
+                              AND Y.TRANSPORT_MODE = X.TRANSPORT_MODE
+                              AND Y.PROD_LINE = X.PROD_LINE
+                              AND Y.BOD_ID = X.BOD_ID
+                              AND Y.MEASURE = X.MEASURE
+                              AND X.CREATE_FROM_YYYYMMDD = V_CREATE_FROM_YYYYMMDD2 )
+                         END AS YEAR2_KEY
+                  , MEASURE_LABEL
+                  , Y.DIVISION_ID
+                  , Y.OPERATION_GROUP
+                  , Y.CELL_ITEM_ID
+                  , Y.ITEM_ID
+                    /* 정렬 가중치 조정(10000, 10010, 100020=> 1, 10000, 10000000, 240925) */
+                  , (CASE WHEN Y.MEASURE IN ('PACK_CELL_BOH', 'PACK_CELL_EOH', 'PACK_CELL_BOH_HOLD') THEN
+                          ( SELECT CAST(MAX(X.XLS_KEY1) AS NUMBER(19)) * 10000 -
+                                   (CASE WHEN Y.MEASURE = 'PACK_CELL_BOH' THEN 15
+                                         WHEN Y.MEASURE = 'PACK_CELL_BOH_HOLD' THEN 10
+                                         ELSE 0
+                                         END)   /* 2022.08.30   KSW	Cell 재고 개선건 - PACK_CELL_BOH_HOLD 추가 */
+                              FROM SCP_XLS_PSI_GLOBAL X
+                             WHERE X.DIVISION_ID = Y.DIVISION_ID   /* 2022.03.21 GM JV 반영	'81' --> @p_division_id */
+                               AND X.PLAN_START_YYYYMMDD = Y.PLAN_START_YYYYMMDD
+                               AND X.OPERATION_GROUP = 'P'
+                               AND X.CELL_ITEM_ID = Y.CELL_ITEM_ID
+                               AND X.FROM_SITE = Y.FROM_SITE
+                               AND X.MEASURE = 'PACK_CELL_EOH'
+                               AND X.PLAN_START_YYYYMMDD = P_PLAN_START_YYYYMMDD
+                               AND X.DIVISION_ID = P_DIVISION_ID )
+                          ELSE (CASE WHEN Y.OPERATION_GROUP = 'P' THEN CAST(XLS_KEY1 AS NUMBER(10)) * 1
+                                     ELSE CAST(XLS_KEY1 AS NUMBER(19)) * 1000000
+                                     END)
+                          END) AS SORT_KEY
+                  , MEASURE
+                  , LT_DAY AS LT_WEEK
+                    /* - E20250722-000632  일간LT에는 맞지 않는 케이스문 제거(KSK, 250723) */
+                  , CASE   /* WHEN ISNULL(Y.LT_DAY,  0) = 0 THEN  0 */
+                         WHEN Y.MEASURE = 'CELL_PROD' THEN
+                              ( SELECT LT_FORMATION + TO_NUMBER(NVL(F.ATTRIBUTE1, 0))
+                                  FROM SCP_MST_FORMATION F
+                                 WHERE F.DIVISION_ID = Y.DIVISION_ID
+                                   AND F.PLANT_SITE_ID = Y.FROM_SITE
+                                   AND F.ITEM_ID = Y.ITEM_ID
+                                   AND Y.MEASURE = 'CELL_PROD'
+                                   AND ROWNUM = 1 )
+                         WHEN EXISTS ( SELECT 1
+                                         FROM SCM_ADM_LOOKUP_MASTER_DETAIL MD
+                                            , SCM_MST_SITE_ITEM S
+                                        WHERE S.DIVISION_ID = MD.SEGMENT1
+                                          AND S.SCM_SITE_ID = MD.SEGMENT2
+                                          AND MD.LOOKUP_TYPE = 'VMI_LT_SITE'
+                                          AND S.VALID_YN = 'Y'
+                                          AND MD.VALID_YN = 'Y'
+                                          AND S.DIVISION_ID = Y.DIVISION_ID
+                                          AND S.SCM_SITE_ID = Y.FROM_SITE ) THEN
+                              ( SELECT MAX(NVL(S.SCP_VMI_LT, 0))
+                                  FROM SCM_MST_SITE_ITEM S
+                                 WHERE S.DIVISION_ID = Y.DIVISION_ID
+                                   AND S.SCM_SITE_ID = Y.FROM_SITE )
+                         WHEN EXISTS ( SELECT 1
+                                         FROM SCP_MST_OPERATION_LT OP
+                                        WHERE Y.MEASURE = 'PACK_BOH'
+                                          AND OP.DIVISION_ID = Y.DIVISION_ID
+                                          AND OP.ITEM_ID = Y.ITEM_ID
+                                          AND OP.SCM_SITE_ID = Y.FROM_SITE
+                                          AND OP.LT_OPERATION = 'PRE_INSP' ) THEN
+                              ( SELECT LT_DAY
+                                  FROM SCP_MST_OPERATION_LT OP
+                                 WHERE OP.DIVISION_ID = Y.DIVISION_ID
+                                   AND OP.ITEM_ID = Y.ITEM_ID
+                                   AND OP.SCM_SITE_ID = Y.FROM_SITE
+                                   AND LT_OPERATION = 'PRE_INSP' )
+                         ELSE NVL(B.LT_TOTAL, 0)
+                         END AS LT_DAY
+                  , PLAN_START_YYYYMMDD
+                  , PLAN_TYPE
+                  , SEQ
+                  , OPERATION_GROUP_NAME
+                  , Y.NICK_NAME
+                  , Y.CELL_QTY_PACK
+                  , Y.TO_SITE
+                  , TO_SITE_DESCRIPTION
+                  , PROJECT_CODE
+                  , FROM_BOH_QTY
+                  , TO_BOH_QTY
+                  , Y.INCOTERMS
+                  , Y.FROM_SITE
+                  , FROM_SITE_DESCRIPTION
+                  , Y.TRANSPORT_MODE
+                  , CASE WHEN Y.MEASURE = 'PACK_PROD' THEN NVL(YIELD, 1) ELSE YIELD END AS YIELD
+                  , PROD_LINE
+                  , Y.BOD_ID
+                  , SORT_ORDER_NO
+                  , XLS_KEY1
+                  , XLS_KEY2
+                  , XLS_KEY3
+                  , XLS_KEY4
+                  , XLS_KEY5
+                  , QTY001, QTY002, QTY003, QTY004, QTY005, QTY006, QTY007, QTY008, QTY009, QTY010
+                  , QTY011, QTY012, QTY013, QTY014, QTY015, QTY016, QTY017, QTY018, QTY019, QTY020
+                  , QTY021, QTY022, QTY023, QTY024, QTY025, QTY026, QTY027, QTY028, QTY029, QTY030
+                  , QTY031, QTY032, QTY033, QTY034, QTY035, QTY036, QTY037, QTY038, QTY039, QTY040
+                  , QTY041, QTY042, QTY043, QTY044, QTY045, QTY046, QTY047, QTY048, QTY049, QTY050
+                  , QTY051, QTY052, QTY053, QTY054, QTY055, QTY056, QTY057, QTY058, QTY059, QTY060
+                  , QTY061, QTY062, QTY063, QTY064, QTY065, QTY066, QTY067, QTY068, QTY069, QTY070
+                  , QTY071, QTY072, QTY073, QTY074, QTY075, QTY076, QTY077, QTY078, QTY079, QTY080
+                  , QTY081, QTY082, QTY083, QTY084, QTY085, QTY086, QTY087, QTY088, QTY089, QTY090
+                  , QTY091, QTY092, QTY093, QTY094, QTY095, QTY096, QTY097, QTY098, QTY099, QTY100
+                  , QTY101, QTY102, QTY103, QTY104, QTY105, QTY106, QTY107, QTY108, QTY109, QTY110
+                  , QTY111, QTY112, QTY113, QTY114, QTY115, QTY116, QTY117, QTY118, QTY119, QTY120
+                  , QTY121, QTY122, QTY123, QTY124, QTY125, QTY126, QTY127, QTY128, QTY129, QTY130
+                  , QTY131, QTY132, QTY133, QTY134, QTY135, QTY136, QTY137, QTY138, QTY139, QTY140
+                  , QTY141, QTY142, QTY143, QTY144, QTY145, QTY146, QTY147, QTY148, QTY149, QTY150
+                  , QTY151, QTY152, QTY153, QTY154, QTY155, QTY156, QTY157, QTY158, QTY159, QTY160
+                  , QTY161, QTY162, QTY163, QTY164, QTY165, QTY166, QTY167, QTY168, QTY169, QTY170
+                  , QTY171, QTY172, QTY173, QTY174, QTY175, QTY176, QTY177, QTY178, QTY179, QTY180
+                  , QTY181, QTY182, QTY183, QTY184, QTY185, QTY186, QTY187, QTY188, QTY189, QTY190
+                  , QTY191, QTY192, QTY193, QTY194, QTY195, QTY196, QTY197, QTY198, QTY199, QTY200
+                  , QTY201, QTY202, QTY203, QTY204, QTY205, QTY206, QTY207, QTY208, QTY209, QTY210
+                  , QTY211, QTY212, QTY213, QTY214, QTY215, QTY216, QTY217, QTY218, QTY219, QTY220
+                  , QTY221, QTY222, QTY223, QTY224, QTY225, QTY226, QTY227, QTY228, QTY229, QTY230
+                  , QTY231, QTY232, QTY233, QTY234, QTY235, QTY236, QTY237, QTY238, QTY239, QTY240
+                  , QTY241, QTY242, QTY243, QTY244, QTY245, QTY246, QTY247, QTY248, QTY249, QTY250
+                  , QTY251, QTY252, QTY253, QTY254, QTY255, QTY256, QTY257, QTY258, QTY259, QTY260
+                  , QTY261, QTY262, QTY263, QTY264, QTY265, QTY266, QTY267, QTY268, QTY269, QTY270
+                  , QTY271, QTY272, QTY273, QTY274, QTY275, QTY276, QTY277, QTY278, QTY279, QTY280
+                  , QTY281, QTY282, QTY283, QTY284, QTY285, QTY286, QTY287, QTY288, QTY289, QTY290
+                  , QTY291, QTY292, QTY293, QTY294, QTY295, QTY296, QTY297, QTY298, QTY299, QTY300
+                  , QTY301, QTY302, QTY303, QTY304, QTY305, QTY306, QTY307, QTY308, QTY309, QTY310
+                  , QTY311, QTY312, QTY313, QTY314, QTY315, QTY316, QTY317, QTY318, QTY319, QTY320
+                  , QTY321, QTY322, QTY323, QTY324, QTY325, QTY326, QTY327, QTY328, QTY329, QTY330
+                  , QTY331, QTY332, QTY333, QTY334, QTY335, QTY336, QTY337, QTY338, QTY339, QTY340
+                  , QTY341, QTY342, QTY343, QTY344, QTY345, QTY346, QTY347, QTY348, QTY349, QTY350
+                  , QTY351, QTY352, QTY353, QTY354, QTY355, QTY356, QTY357, QTY358, QTY359, QTY360
+                  , QTY361, QTY362, QTY363, QTY364
+                  , WQTY01, WQTY02, WQTY03, WQTY04, WQTY05, WQTY06, WQTY07, WQTY08, WQTY09, WQTY10
+                  , WQTY11, WQTY12, WQTY13, WQTY14, WQTY15, WQTY16, WQTY17, WQTY18, WQTY19, WQTY20
+                  , WQTY21, WQTY22, WQTY23, WQTY24, WQTY25, WQTY26, WQTY27, WQTY28, WQTY29, WQTY30
+                  , WQTY31, WQTY32, WQTY33, WQTY34, WQTY35, WQTY36, WQTY37, WQTY38, WQTY39, WQTY40
+                  , WQTY41, WQTY42, WQTY43, WQTY44, WQTY45, WQTY46, WQTY47, WQTY48, WQTY49, WQTY50
+                  , WQTY51, WQTY52
+                  , ATTRIBUTE1
+                  , ATTRIBUTE3
+                  , Y.ATTRIBUTE4 AS GRO_STD_DIO   /* DIO 수정 관련 (기준 컬럼추가) */
+                  , Y.ATTRIBUTE5 AS MIN_STD_DIO   /* DIO 수정 관련 (최소 컬럼추가) */
+                  , Y.ATTRIBUTE9
+                  , Y.CREATED_BY
+                  , Y.CREATION_DATE
+                  , Y.LAST_UPDATED_BY
+                  , Y.LAST_UPDATE_DATE
+               FROM SCP_XLS_PSI_GLOBAL Y
+                  , SCP_MST_BOD_N_V B
+              WHERE 0 = 0
+                AND B.DIVISION_ID(+) = Y.DIVISION_ID
+                AND B.BOD_ID(+) = Y.BOD_ID
+                AND Y.DIVISION_ID = P_DIVISION_ID
+                AND PLAN_START_YYYYMMDD = P_PLAN_START_YYYYMMDD
+                AND MEASURE NOT IN ('PACK_PROD_LOAD', 'CELL_PROD_LOAD', 'PACK_PROD_TOTAL')   /* Load Ratio 조회안되게 변경 - 2022.09.30 */
+                AND NOT (OPERATION_GROUP = 'A' AND Y.TO_SITE = '-'   /* AND FROM_SITE = 'A040-A' */
+                         AND NVL((SELECT FN_GET_FINAL_ITEM('81', ITEM_ID, 'CELL_TYPE') FROM DUAL), ' ') = 'CP')
+                AND EXISTS ( SELECT 1
+                               FROM TABLE(STRING_SPLIT(P_ITEM_LIST, ','))
+                              WHERE COLUMN_VALUE = Y.CELL_ITEM_ID
+                             UNION ALL
+                             SELECT 1
+                               FROM DUAL
+                              WHERE P_ITEM_LIST IS NULL )
+           ) Y
+         , SCP_MST_FINAL_ITEM B
+     WHERE Y.ITEM_ID = B.ITEM_ID(+)
+       AND Y.DIVISION_ID = B.DIVISION_ID(+)
+       AND EXISTS ( SELECT 1
+                      FROM DUAL
+                     WHERE V_BP_FLAG = 'N'
+                       AND P_PLAN_START_YYYYMMDD = Y.CREATE_FROM_YYYYMMDD
+                    UNION ALL
+                    SELECT 1
+                      FROM DUAL
+                     WHERE V_BP_FLAG = 'Y'
+                       AND P_PLAN_START_YYYYMMDD = Y.CREATE_FROM_YYYYMMDD
+                       AND Y.YEAR2_KEY IS NOT NULL
+                    UNION ALL
+                    SELECT 1
+                      FROM DUAL
+                     WHERE V_BP_FLAG = 'Y'
+                       AND P_PLAN_START_YYYYMMDD < Y.CREATE_FROM_YYYYMMDD
+                       AND Y.YEAR1_KEY IS NOT NULL )
+       /* 미사용 7개메저 제외 */
+       AND Y.MEASURE NOT IN ('MKT_FCST_CELL_TOTAL', 'MKT_FCST_TOTAL', 'ALLOCATION_TOTAL', 'EOH_TOTAL'
+                           , 'MKT_FCST_DIO', 'ALLOCATION_DIO', 'ALLOCATION_GAP_STD_DIO', 'ALLOCATION_GAP_MIN_DIO')
+     ORDER BY Y.CREATE_FROM_YYYYMMDD
+            , Y.CELL_ITEM_ID
+            , Y.SORT_KEY
+            , B.OPERATION_GROUP DESC;
+
+END;

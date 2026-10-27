@@ -9,7 +9,7 @@ import {
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
-import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useCallback, useEffect, useMemo, useRef, type Ref } from 'react';
 
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
@@ -34,7 +34,7 @@ import {
 } from '../salesPriceExchange';
 import type { MeasureMeta } from '../useSalesFuturePriceStore';
 import { applyStaticCellBackground } from '../utils/cellBackground';
-import { groupKeyOf, KEY_COLS, toStr } from '../utils/futurePriceGroup';
+import { groupKeyOf, originalGroupKeyOf } from '../utils/futurePriceGroup';
 import { isOverRangeCell } from '../utils/overRange';
 import {
   deriveEndCustomer,
@@ -45,8 +45,7 @@ import {
 interface Props {
   rows: FuturePriceRow[];
   gridRef: Ref<FlexGridType<FuturePriceRow>>;
-  // ⭐ F4 Filter — 피처가 FlexGridFilter 를 직접 소유(공용 DataGrid 의 filterColumns:[''] 기본 생성 회피).
-  //   3단 머지 동적(W_/M_) 컬럼은 필터 대상 제외(filterChanging cancel + 영속 sanitize) + filterApplied 시
+  // ⭐ F4 Filter — 공용 DataGrid 가 만든 FlexGridFilter 를 받는 ref. filterApplied 시
   //   헤더높이/LOC backcolor 재적용(invalidate(true)→updatedLayout) → 머지헤더/높이 충돌 없이 활성 (2026-06-28).
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   // F7 Save(편집행 'U') — 변경 셀 추적 (EditTracker.getOriginalValues()). 비-insert 행 자동 CRUD_TYPE='M' 마킹.
@@ -272,7 +271,12 @@ export const SalesFuturePriceGrid = ({
   const comboParams = useMemo(() => ({ divisionId: `'${divisionId ?? ''}'` }), [divisionId]);
 
   // 편집 시작 셀의 (binding, oldVal) — cellEditEnded 에서 실제 값 변경 여부 판정(불필요 clear 방지).
-  const editingCellRef = useRef<{ binding: string; oldVal: unknown } | null>(null);
+  // block = 기존 행 Currency 편집을 시작한 시점의 묶음 행(편집값이 머지 범위에 퍼지기 전에 잡아 둔다).
+  const editingCellRef = useRef<{
+    binding: string;
+    oldVal: unknown;
+    block?: FuturePriceRow[];
+  } | null>(null);
   // 기존 행 Currency 변경 안내(MSG01429)를 이미 본 묶음(groupKeyOf) — 같은 묶음에서 안내가 반복되지 않게 한다.
   //   조회 결과가 바뀌면(rows) 비운다. AS-IS 는 칸을 누를 때마다 띄우지만(.cs L3686~3691) 편집기와 alert 가
   //   한 번의 동작에 겹치면 콤보가 닫히므로, 첫 진입은 안내만 띄우고 다음 진입부터 편집기를 연다.
@@ -542,11 +546,14 @@ export const SalesFuturePriceGrid = ({
         //   FPModal/FPTextModal 팝업셀(MODEL/PROJECT)은 insert 시 팝업으로 편집 가능하므로 _inputEditType 무관 색칠.
         //   Team(DEPT_ID) / End Customer(END_CUSTOMER) 는 자동 매핑 컬럼이라 편집 불가 —
         //   노랑(편집가능)으로 표시하지 않는다 (Business Plan insertStaticEditable=false 대응).
+        //   입력 구분 M/O(어느 행이든 편집)도 신규 행에서 노랑 — beginningEdit 은 신규 행의 M/O 칸 편집을 이미
+        //   허용하는데 여기서 IM/IO 만 보아, M 으로 바뀐 Currency 가 신규 행에서 입력은 되고 노랑이 빠졌다.
         const insertEditable =
           isInsert &&
           !isAutoMappedColumn(col.binding) &&
           (meta._inputEditType === 'IM' ||
             meta._inputEditType === 'IO' ||
+            isAlwaysEditableMeta(meta) ||
             meta._ctrlType === 'FPModal' ||
             meta._ctrlType === 'FPTextModal');
         // 기존 행 — UI Category Setup 입력 구분이 M(필수)/O(선택)인 칸은 조회된 행에서도 편집 가능하다.
@@ -592,6 +599,29 @@ export const SalesFuturePriceGrid = ({
       }
     };
     g.formatItem.addHandler(formatHandler);
+
+    // 기존 행의 묶음 식별 — 조회 시점 통화 기준 키(originalGroupKeyOf). 저장 전 Currency 를 바꿔
+    //   현재 통화가 이웃 묶음과 같아져도 두 묶음을 섞지 않는다 (저장 siblingsOf 와 같은 키).
+    const origKeyOf = (item: FuturePriceRow): string =>
+      originalGroupKeyOf(
+        item as Record<string, unknown>,
+        editTrackerRef?.current?.getOriginalValues().get(item as never) as
+          | Record<string, unknown>
+          | undefined
+      );
+    // row 가 속한 묶음 = 같은 origKeyOf 로 화면에서 이어진 기존 행.
+    const origBlockOf = (items: FuturePriceRow[], row: FuturePriceRow): FuturePriceRow[] => {
+      const at = items.indexOf(row);
+      if (at < 0) return [row];
+      const key = origKeyOf(row);
+      const same = (item: FuturePriceRow | undefined): boolean =>
+        !!item && item.CRUD_TYPE !== 'I' && origKeyOf(item) === key;
+      let top = at;
+      let bottom = at;
+      while (top > 0 && same(items[top - 1])) top--;
+      while (bottom < items.length - 1 && same(items[bottom + 1])) bottom++;
+      return items.slice(top, bottom + 1);
+    };
 
     // 편집 시작 시 row 단위 제어 — Insert row 만 fixed cols 편집 허용
     //   FPModal popup cell 은 직접 입력 차단 (dblClick popup 만 허용)
@@ -667,7 +697,11 @@ export const SalesFuturePriceGrid = ({
               return;
             }
           }
-          editingCellRef.current = { binding, oldVal: (row as Record<string, unknown>)[binding] };
+          editingCellRef.current = {
+            binding,
+            oldVal: (row as Record<string, unknown>)[binding],
+            block: binding === 'CURRENCY' ? origBlockOf(s.collectionView.items, row) : undefined,
+          };
           e.cancel = false;
           return;
         }
@@ -771,12 +805,12 @@ export const SalesFuturePriceGrid = ({
         const currencyCodes = currencyCodesFromRateMap(erMap);
         const isInsert = row.CRUD_TYPE === 'I';
         const gid = row.INSERT_GROUP_ID;
-        const gkey = isInsert ? '' : groupKeyOf(row as Record<string, unknown>);
+        const gkey = isInsert ? '' : origKeyOf(row);
         for (const item of items) {
           if ((item.MEASURE ?? '') === 'LOC' || item === row) continue;
           const isSibling = isInsert
             ? item.CRUD_TYPE === 'I' && item.INSERT_GROUP_ID === gid
-            : item.CRUD_TYPE !== 'I' && groupKeyOf(item as Record<string, unknown>) === gkey;
+            : item.CRUD_TYPE !== 'I' && origKeyOf(item) === gkey;
           if (!isSibling) continue;
           const sm = String(item.MEASURE ?? '');
           if (!isExchangeTargetMeasure(currencyCodes, sm, baseCur)) continue; // RTF 등 비통화 measure 미변경
@@ -807,28 +841,13 @@ export const SalesFuturePriceGrid = ({
         const tracker = editTrackerRef?.current;
         const track = (item: FuturePriceRow, from: string, to: string) =>
           tracker?.storeChange(item as never, 'CURRENCY', from as never, to as never);
-        // 묶음 = 통화를 뺀 나머지 키가 같고 화면에서 이어져 있는 기존 행.
-        //   주의: 통화 값으로 묶음을 찾으면 안 된다. Currency 칸은 묶음 4행이 머지된 한 칸이라 그리드가
-        //   편집값을 머지 범위의 모든 행에 써 넣는다 — 이 시점에 형제 행은 이미 새 통화다. 종전에는
-        //   "옛 통화 키가 같은 행"으로 찾아 LOC 행을 놓쳤고, 변경 기록이 안 남아 저장 때 아무것도 안 갔다
-        //   (사용자 보고 2026-10-13). 통화만 다른 이웃 묶음을 삼키지 않도록 이어진 행만, 통화가
-        //   옛 값이거나 새 값인 행만 받는다.
-        const keyNoCur = (item: FuturePriceRow): string =>
-          KEY_COLS.filter(k => k !== 'CURRENCY')
-            .map(k => toStr((item as Record<string, unknown>)[k]))
-            .join('|');
-        const rowKey = keyNoCur(row);
-        const inBlock = (item: FuturePriceRow | undefined): item is FuturePriceRow => {
-          if (!item || item.CRUD_TYPE === 'I' || keyNoCur(item) !== rowKey) return false;
-          const cur = cellStr((item as Record<string, unknown>).CURRENCY).trim();
-          return item === row || cur === oldCur || cur === newCur;
-        };
-        const at = items.indexOf(row);
-        let top = at;
-        let bottom = at;
-        while (top > 0 && inBlock(items[top - 1])) top--;
-        while (bottom < items.length - 1 && inBlock(items[bottom + 1])) bottom++;
-        const block = at < 0 ? [row] : items.slice(top, bottom + 1);
+        // 묶음 = 편집을 시작할 때 잡아 둔 행(beginningEdit 의 origBlockOf).
+        //   주의: 이 시점의 통화 값으로 묶음을 찾으면 안 된다. Currency 칸은 묶음 4행이 머지된 한 칸이라
+        //   그리드가 편집값을 머지 범위의 모든 행에 써 넣는다 — 형제 행은 이미 새 통화다. 종전에는
+        //   "통화가 옛 값이거나 새 값인 이어진 행"으로 찾았는데, 새 통화가 바로 옆 묶음의 통화와 같으면
+        //   (JPY 묶음을 USD 로 되돌릴 때 옆의 원래 USD 묶음) 그 묶음까지 삼켜 엉뚱한 LOC 행을 대표로
+        //   잡았다 (사용자 보고 2026-10-14).
+        const block = prev.block ?? [row];
         // 빈 통화로는 바꾸지 않는다 — 통화는 가격 행의 키라 비우면 저장할 수 없다. 묶음 전체를 원래 값으로 되돌린다.
         if (newCur === '') {
           for (const item of block) {
@@ -845,7 +864,10 @@ export const SalesFuturePriceGrid = ({
           //   (AS-IS 도 묶음 전 행 Currency 를 Red 로 칠한다, .cs L2791~2798). 종전에는 LOC 행에만 남겨
           //   한 행만 수정으로 보였다(사용자 보고 2026-10-13). 저장은 그대로 LOC 행이 묶음 대표다 —
           //   handleSave 는 M 행 중 LOC 만 골라 보내므로 형제 행의 M 은 전송량에 영향이 없다.
-          track(item, oldCur, newCur);
+          //   주의: 편집한 행(row)은 여기서 다시 기록하지 않는다. 공용 EditTracker 가 이 핸들러보다 먼저
+          //   그 행을 처리했다 — 원래 통화로 되돌린 경우 이미 기록을 지웠는데, 여기서 직전 값(oldCur)을
+          //   원본으로 다시 넘기면 그 값이 새 원본으로 잡혀 묶음 맨 위 행만 M 이 남는다.
+          if (item !== row) track(item, oldCur, newCur);
           (item as Record<string, unknown>).CURRENCY = newCur;
         }
         if (loc) {
@@ -1027,6 +1049,15 @@ export const SalesFuturePriceGrid = ({
             if (!ra || !rb) return false;
             // 기존행이 신규행으로 확장/신규행과 병합 방지 (신규행은 위 분기에서 그룹 머지).
             if (ra.CRUD_TYPE === 'I' || rb.CRUD_TYPE === 'I') return false;
+            // 조회 당시 통화가 다른 묶음끼리는 합치지 않는다 — 저장 전에 통화를 바꿔 지금 값이 같아져도
+            //   (예: JPY 로 분리된 묶음을 USD 로 되돌림) 아직 별개의 묶음이다. 합쳐 그리면 Currency 칸이
+            //   두 묶음에 걸친 한 칸이 되어 한쪽만 고를 수 없고, 편집이 맨 윗행(원래 묶음)으로 잡혀 엉뚱한
+            //   묶음의 통화가 바뀌었다(사용자 보고 2026-10-14). 기준은 저장·묶음 찾기와 같은 origKeyOf.
+            if (
+              origKeyOf(ra as unknown as FuturePriceRow) !==
+              origKeyOf(rb as unknown as FuturePriceRow)
+            )
+              return false;
             return leftBindings.every(
               k =>
                 ((ra as Record<string, string>)[k] ?? '') ===
@@ -1160,10 +1191,13 @@ export const SalesFuturePriceGrid = ({
       if (!headerRows || headerRows.length === 0) return;
       const rowCount = headerRows.length; // 실제 rowCount (1/2/3) — dynBindings 파생 추정 금지
       const per = Math.round(48 / rowCount); // 1단 48 / 2단 24 / 3단 16
-      // guard: 이미 목표면 skip (무한루프 방지)
+      // guard: 이미 목표면 skip (무한루프 방지). 모든 단을 본다 — 첫 단만 보면 일부 단만 되돌아간 경우를
+      //   놓친다. 형제 PriceBatchInputModal normalizeHeader 와 같은 판정(2026-10-14 보강).
       if (
         Math.round(headerRows.defaultSize) === per &&
-        Math.round(headerRows[0]?.height ?? 0) === per
+        Array.from({ length: rowCount }).every(
+          (_, i) => Math.round(headerRows[i]?.height ?? 0) === per
+        )
       ) {
         return;
       }
@@ -1183,26 +1217,20 @@ export const SalesFuturePriceGrid = ({
     };
   }, [dynBindings, visibleColumns, measureDataMap, gridRef]);
 
-  // ⭐ F4 Filter — 피처 소유 FlexGridFilter (공용 DataGrid 의 filterColumns:[''] 기본 생성 회피).
+  // ⭐ F4 Filter — FlexGridFilter 는 공용 DataGrid 가 만든다(아래 JSX 의 gridFilterRef). 여기서는 핸들러만 얹는다.
+  //   금지: 여기서 new FlexGridFilter 를 만들지 말 것. DataGrid 밖에서 만든 필터에는 재조회 시 필터 유지
+  //   (itemsSourceChanged 캡처/복원 · 끊긴 컬럼 재바인딩)가 걸리지 않아, 조회할 때마다 필터가 풀렸다
+  //   (2026-10-27 DM 필터 유지 점검). 필터 대상 [''](F4 로 켠 컬럼만)·Clear 즉시 반영도 DataGrid 기본값이다.
   //   filterApplied: g.invalidate(true) → updatedLayout(applyHeaderHeight: 헤더48/dataMap) + formatItem(LOC backcolor) 재적용
-  //   deps 에 dynBindings/visibleColumns 포함 → grid ready(데이터 로드) 후 실행. key prop re-mount 시 grid 교체 감지 후 재생성.
+  //   deps 에 dynBindings/visibleColumns 포함 → grid ready(데이터 로드) 후 실행.
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<FuturePriceRow> | null } | null)?.current;
-    if (!g || !gridFilterRef) return;
+    const f = gridFilterRef?.current;
+    if (!g || f?.grid !== g) return;
 
     const onFilterApplied = () => {
       g.invalidate(true); // 헤더높이/LOC backcolor 재적용 (updatedLayout + formatItem)
     };
-
-    // 기존 filter 가 다른(re-mount 된) grid 에 붙어있으면 폐기 후 재생성.
-    let f = gridFilterRef.current;
-    if (!f || f.grid !== g) {
-      f = new FlexGridFilter(g);
-      // 초기 none filterable — SubTitle F4(toggleColumnFilter)로 정적 컬럼만 추가. 동적 글리프 방지.
-      //   공용 DataGrid 와 동일하게 [''] 사용(빈배열=전체 필터러블 wijmo 모호성 회피).
-      f.filterColumns = [''];
-      gridFilterRef.current = f;
-    }
     f.filterApplied.addHandler(onFilterApplied);
 
     return () => {
@@ -1243,8 +1271,8 @@ export const SalesFuturePriceGrid = ({
       //   visibleColumns 포함)가 핸들러 재등록을 이미 전담하므로 remount 불필요.
       className={styles.grid}
       gridRef={gridRef as never}
-      // ⚠️ gridFilterRef 는 공용 DataGrid 에 전달하지 않음 — 피처가 FlexGridFilter 직접 소유(위 effect)해
-      //   filterColumns/이벤트 완전 제어(동적 머지컬럼 제외 + 필터후 재적용). DataGrid 의 filterColumns:[''] 기본 회피.
+      // 필수: gridFilterRef 를 넘겨 FlexGridFilter 를 DataGrid 가 만들게 한다 — 재조회 시 필터 유지가 여기 걸려 있다.
+      gridFilterRef={gridFilterRef}
       // ⭐ F7 Save(편집행 'U') — EditTracker 로 변경 셀 추적 + 비-insert 행 자동 CRUD_TYPE='M' 마킹.
       editTrackerRef={editTrackerRef as never}
       staticColumns={mainStaticColumns}

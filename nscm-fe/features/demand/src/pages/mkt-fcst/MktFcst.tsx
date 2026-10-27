@@ -950,7 +950,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
                 type: 'alert',
                 content: t(
                   MSG.ESS_ITEM_SEARCH,
-                  'ESS 혹은 ESS를 포함할 때 프로젝트 코드나 모델 코드는 3자리 이상이어야 합니다.'
+                  '_ESS 혹은 ESS를 포함할 때 프로젝트 코드나 모델 코드는 3자리 이상이어야 합니다.'
                 ),
               });
               return;
@@ -974,11 +974,16 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
           projectName,
           projectStatus,
           _bizTypeName,
-          projectOwner
+          projectOwner,
+          _deptId,
+          _deptName,
+          bizType
         ) => {
           // ⭐ Project 선택 시 Project Name + Project Status + Project Owner 자동 입력
           //   (AS-IS SetText L2736/L2741/L2749 1:1 — popProject.ProjectName/ProjectStatus/ProjectOwner).
           //   sales-plan(DMF0021) SalesPlanModals 와 동일하게 PROJECT_STATUS/PROJECT_OWNER 세팅.
+          //   Biz Type 도 채운다(AS-IS Plan.UIL .cs L2490/L2509 popProject.BizType). BIZ_TYPE 칸은 코드
+          //   콤보(BizTypeByDivision)라 명칭(_bizTypeName)이 아니라 코드(bizType)를 넣는다.
           if (!popupGroupId) return;
           // 신규행은 이제 grid.collectionView.sourceCollection(=spRows)에 직접 물려 있으므로
           //   객체를 새로 만들지 않고 그 자리에서 갱신한다 — 새 객체로 바꾸면 그 행을 앵커로
@@ -991,12 +996,13 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
             rec.PROJECT_NAME = projectName ?? '';
             rec.PROJECT_STATUS = projectStatus ?? '';
             rec.PROJECT_OWNER = projectOwner ?? '';
+            rec.BIZ_TYPE = bizType ?? '';
             // 같은 값 재선택이면 하위 초기화도 하지 않는다(그리드 changed 게이트와 동일).
             // 상위 값 변경 = 하위 값 초기화(2026-08-14 스펙: Project Code 변경 -> Model).
             //   필수: 팝업 선택은 cellEditEnded 를 타지 않으므로 여기서 직접 부른다 —
             //   빼먹으면 Project 만 바뀌고 이전 Project 의 Model 이 그대로 남아 저장된다.
             //   수량(D_/W_/M_)은 건드리지 않는다 — 이 파일 handleSave 위의 A-08 [CG-05] 주석 참조.
-            //   방금 세팅한 Project 동반값(Name/Status/Owner)은 keepCols 로 보호한다 —
+            //   방금 세팅한 Project 동반값(Name/Status/Owner/Biz Type)은 keepCols 로 보호한다 —
             //   applyCascadeClear 가 PROJECT_CODE 자신의 동반 컬럼까지 지우므로(코드 직접 변경·삭제
             //   경로용) 보호하지 않으면 팝업이 채운 값이 곧바로 날아간다.
             if (!sameCode)
@@ -1004,6 +1010,7 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
                 'PROJECT_NAME',
                 'PROJECT_STATUS',
                 'PROJECT_OWNER',
+                'BIZ_TYPE',
               ]);
             gridRef.current?.invalidate();
           }
@@ -1037,18 +1044,34 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={openItem}
         modalClose={() => setOpenItem(false)}
         setSelectedValue={(
-          itemId: string,
+          itemIds: string,
           itemName?: string,
-          _itemType?: string,
-          nickName?: string
+          _itemClassName?: string,
+          nickName?: string,
+          // 5~11번째(Team·End Customer·Sales Site·Project·Currency 등)는 이 화면에서 쓰지 않는다.
+          //   5번째는 공용 팝업이 늘 undefined 를 보내는 자리다.
+          _unusedSlot5?: string,
+          _deptId?: string,
+          _deptName?: string,
+          _endCustomer?: string,
+          _scmSiteId?: string,
+          _projectCode?: string,
+          _currency?: string,
+          itemTypeCode?: string
         ) => {
           if (!popupGroupId) return;
+          // 공용 Model 팝업은 여러 줄을 고르면 ITEM_ID 를 쉼표로 이어 보낸다. 이 셀은 Model 한 건만
+          //   받는 자리라 맨 위 행 하나만 쓴다 (DMF0005 와 같은 방식, 2026-10-14 사용자 요청).
+          const itemId = itemIds?.split(',')[0] ?? '';
           const target = spRows.find(r => r.INSERT_GROUP_ID === popupGroupId);
           if (target) {
             const rec = target as Record<string, unknown>;
             rec.ITEM_ID = itemId;
             rec.ITEM_NAME = itemName ?? '';
             rec.NICK_NAME = nickName ?? '';
+            // Item Type 자동 입력 — AS-IS Plan.UIL .cs L2557/L2568 popItem.ItemType(코드). ITEM_TYPE 칸은
+            //   코드 콤보(ItemType)라 코드를 넣는다.
+            rec.ITEM_TYPE = itemTypeCode ?? '';
             // Item(Model) 은 키 컬럼이지만 수량(D_/W_/M_)은 그대로 둔다 —
             //   이 파일 handleSave 위의 A-08 [CG-05] 주석 참조.
             gridRef.current?.invalidate();
@@ -1062,7 +1085,9 @@ export const MktFcst = ({ tabId, title }: PageProps<MENU_ID>) => {
             endCustomer: rowValue('END_CUSTOMER'),
             salesSite: rowValue('SCM_SITE_ID'),
             projectCode: rowValue('PROJECT_CODE', ''),
-            itemId: '',
+            // 그 행의 현재 Model 로 좁혀 연다(Div40 은 ITEM_ID40) — 그리드 셀 Model 팝업 화면 간 통일
+            //   (2026-10-14 사용자 요청). 비어 있으면 종전대로 빈 값(전체 목록).
+            itemId: rowValue('ITEM_ID40', '') || rowValue('ITEM_ID', ''),
             activeFlag: itemModalActiveFlag,
           } as never
         }

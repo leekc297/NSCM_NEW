@@ -200,7 +200,7 @@ const sortGroupOf = (label: string): number => {
 const toSortText = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
 
-const sortOptionsBy = <T extends { value: string; label?: unknown }>(
+export const sortOptionsBy = <T extends { value: string; label?: unknown }>(
   opts: T[],
   sortBy?: DropdownSortKey
 ): T[] => {
@@ -264,9 +264,6 @@ export const CustomDropdown = ({
   const optionIndexMapRef = useRef<Map<string, number>>(new Map());
   const lastIndexRef = useRef<number | null>(null);
 
-  const [selectAllChecked, setSelectAllChecked] = useState(false);
-  const isAllSentinel = value?.trim() === 'ALL';
-
   const [listSearch, setListSearch] = useState('');
   const isSearchControlled = !!props.multiple;
 
@@ -321,27 +318,6 @@ export const CustomDropdown = ({
     };
   }, []);
 
-  // 부모가 특정 값으로 바꾸면(cascade 초기화, 개별 선택 등) 전체 체크 표시는 버린다.
-  useEffect(() => {
-    if (!isAllSentinel) setSelectAllChecked(false);
-  }, [isAllSentinel]);
-
-  // 부모가 넘긴 옵션 목록 자체가 바뀌면(cascade 상위 단계 변경 등) 전체 체크 표시는 버린다.
-  //   위 효과만으로는 부족하다: cascade 하위 초기화 값도 'ALL' 이라 전체선택('ALL' sentinel)
-  //   상태에서 상위를 바꾸면 값이 'ALL' -> 'ALL' 로 그대로여서 isAllSentinel 이 변하지 않는다.
-  //   그래서 전체 체크가 남아 새 상위에 딸린 항목들이 통째로 선택된 것처럼 보였다
-  //   (2026-08-24 사용자 신고 - End Customer / Sales Site 전체선택 후 Div 변경).
-  //   비교는 참조가 아니라 옵션 값 '내용'으로 한다 - 호출부가 매 렌더 새 배열을 넘긴다.
-  //   또한 value 로 좁히기 전인 rawOptions 로 센다 - 선택값에 따라 센티널 항목이 붙었다
-  //   떨어졌다 하는 options 로 세면 SELECT ALL 을 누른 그 순간에 스스로 꺼질 수 있다.
-  const rawOptionsSignature = rawOptions.map((opt: DropdownOption) => opt?.value ?? '').join(',');
-  const prevOptionsSignature = useRef(rawOptionsSignature);
-  useEffect(() => {
-    if (prevOptionsSignature.current === rawOptionsSignature) return;
-    prevOptionsSignature.current = rawOptionsSignature;
-    setSelectAllChecked(false);
-  }, [rawOptionsSignature]);
-
   // const splitValueSet = new Set(value?.trim().split(',') ?? []);
   const splitValueSet = new Set(value?.trim().split(',').filter(Boolean) ?? []);
 
@@ -370,8 +346,10 @@ export const CustomDropdown = ({
       ? SINGLE_ALL_OPTION
       : optionsWithAll.find(opt => opt.value === value);
 
-  // 전 항목 체크로 보여야 하는 상태 - 값을 전부 열거한 경우와 'ALL' sentinel + SELECT ALL 선택 이력 둘 다.
-  const allEntriesSelected = !!allOption && (isAllSelected || (isAllSentinel && selectAllChecked));
+  // 전 항목 체크로 보여야 하는 상태 - 값이 모든 옵션을 실제로 열거한 경우.
+  //   SELECT ALL 도 'ALL' sentinel 이 아니라 선택값을 전부 열거해 내보내므로(아래 handleMultipleChange)
+  //   isAllSelected 하나로 잡힌다.
+  const allEntriesSelected = !!allOption && isAllSelected;
 
   const multipleValue = allEntriesSelected ? optionsWithAll : selectedOptions;
 
@@ -556,39 +534,21 @@ export const CustomDropdown = ({
     const searchText = props.multiple && allOption ? listSearch : '';
 
     if (value.length === 0) {
-      setSelectAllChecked(false);
       onChange?.(event, 'ALL');
       return;
     }
     if (allOption) {
       const nextValue = handleSelectAll(value, reason, searchText, details);
-      // ⭐ [2026-08-18 사용자 요구] 전체 선택은 **열거가 아니라 'ALL' sentinel** 로 내보낸다.
-      //   종전엔 보이는 옵션 value 를 콤마로 나열해 필터로 보냈다. 그 방식이면 위에서 화면 표시상
-      //   제외한 센티널 값(' '/''/'-'/'--')이 **필터 목록에서도 빠져 조회 대상이 줄어든다.**
-      //   'ALL' 은 스토어 규약(빈 배열 → 'ALL')과 동일한 "필터 없음"이라 센티널 행도 조회에 포함된다.
-      //   (SELECT ALL 클릭 + 보이는 항목을 손으로 전부 고른 경우 둘 다 해당)
       const picked = nextValue.filter(item => item.value !== SELECT_ALL_OPTION.value);
-      // 검색 중 SELECT ALL 은 '보이는 것 전체'라서 'ALL'(필터 없음)이 아니다 - 값을 열거해 내보낸다.
-      const clickedSelectAll =
-        !searchText &&
-        reason === 'selectOption' &&
-        details?.option.value === SELECT_ALL_OPTION.value;
-      const pickedEveryVisible = picked.length > 0 && picked.length >= options.length;
-      // 주의: 옵션이 1개뿐이면 '보이는 것을 전부 골랐다'와 '그 하나를 지정했다'가 구분되지 않는다.
-      //   그 경우까지 'ALL'(필터 없음)로 뭉개면 단일 지정이 필터 해제로 뒤집혀 cascade 가 풀린다
-      //   옵션이 1개일 때는 SELECT ALL 을 직접 누른 경우에만 'ALL', 그 외에는 값을 그대로 열거한다.
-      if (clickedSelectAll || (pickedEveryVisible && options.length > 1)) {
-        setSelectAllChecked(true);
-        onChange?.(event, 'ALL');
-        return;
-      }
-      // SELECT ALL 체크 해제. 필터로는 'ALL'(필터 없음)과 같고 화면만 비운다.
+      // 선택 0개(SELECT ALL 체크 해제 등)는 빈 선택과 같은 '필터 없음'이라 'ALL' sentinel 로 내보낸다.
+      //   (스토어 규약: 빈 배열 → 'ALL'. 프로시저 무필터 가드 IS NULL OR ='ALL' OR IN(...)와 호환)
       if (picked.length === 0) {
-        setSelectAllChecked(false);
         onChange?.(event, 'ALL');
         return;
       }
-      setSelectAllChecked(false);
+      // [2026-10-23 사용자 요구] 전체 선택도 'ALL' 로 뭉개지 않고 고른 값을 그대로 열거해 내보낸다
+      //   (SELECT ALL 클릭/개별 전체 선택 모두). value 가 모든 옵션을 열거하면 위 isAllSelected 가
+      //   참이 되어 전체 칩 표시는 그대로 유지된다. 빈 선택만 'ALL'(필터 없음).
       onChange?.(event, picked.map(item => item.value).toString());
     } else onChange?.(event, value.map(item => item.value).toString());
   };

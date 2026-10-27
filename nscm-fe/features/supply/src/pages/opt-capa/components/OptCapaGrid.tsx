@@ -8,6 +8,7 @@ import { DataGrid } from '@shared/components';
 
 import {
   ADMIN_SHEET_NAME,
+  BUCKET,
   COLUMN,
   DAY_OF_WEEK_LABELS,
   EXCEL_FILE_NAME,
@@ -54,10 +55,14 @@ export interface CellComboSources {
   /** 조회조건 Plant/Line 후보 — `LINE_ID`→`OPERATION_ID` 2단 조회의 원천이다(R-09). */
   plantCandidates: PlantRow[];
   lineCandidates: LineRow[];
+  /** Week 모드 `WEEK_NAME` 셀 콤보 후보 — 조회 Period 가 걸치는 ISO 주차 라벨('2026-W40'). */
+  weekCandidates: string[];
 }
 
 interface Props {
   sheet: GridSheet;
+  /** No Work 탭 Bucket — Week 면 `WEEK_NAME` 이 편집 셀 콤보, Day 면 `NO_WORK_DATE`(기본)가 편집 셀. */
+  bucket: BUCKET;
   data: GridRow[];
   gridRef: MutableRefObject<FlexGridType | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
@@ -88,7 +93,9 @@ const toggleClass = (element: HTMLElement, className: string, on: boolean): void
 
 /** `YYYY-MM-DD` 표시값 → 요일 3글자 대문자. locale 의존 금지(AS-IS `InvariantCulture`, cs:3630). */
 const dayOfWeekOf = (displayDate: string): string | undefined => {
-  const stored = displayDate.replace(/-/g, '');
+  // 날짜 셀 표시 포맷이 'yyyy.MM.dd'(점)라 편집 시 점 구분자가 섞인다 — 숫자만 추려 8자리로 본다
+  //   (저장 {@link toStoredDateValue} 와 동일 규약).
+  const stored = displayDate.replace(/\D/g, '');
   if (!/^\d{8}$/.test(stored)) return undefined;
   const probe = new Date(
     Number(stored.slice(0, 4)),
@@ -117,6 +124,7 @@ const dayOfWeekOf = (displayDate: string): string | undefined => {
  */
 export const OptCapaGrid = ({
   sheet,
+  bucket,
   data,
   gridRef,
   gridFilterRef,
@@ -135,6 +143,8 @@ export const OptCapaGrid = ({
   editModeRef.current = editMode;
   const divisionIdRef = useRef(divisionId);
   divisionIdRef.current = divisionId;
+  const bucketRef = useRef(bucket);
+  bucketRef.current = bucket;
   const sourcesRef = useRef(comboSources);
   sourcesRef.current = comboSources;
   const itemDblClickRef = useRef(onItemCellDblClick);
@@ -235,6 +245,11 @@ export const OptCapaGrid = ({
           // No Work 시트 한정. lookup 은 CODE 와 NAME 이 같은 값이라 CODE 를 표시·저장한다.
           if (sheet !== SHEETS.NO_WORK) return undefined;
           return sources.noWorkTypeAll.map(row => str(row.CODE)).filter(Boolean);
+        case COLUMN.WEEK_NAME:
+          // Week 모드(No Work)에서만 편집 셀 콤보다 — 조회 Period 가 걸치는 ISO 주차 라벨('2026-W40').
+          //   Day 모드의 `WEEK_NAME` 은 날짜 파생 표시값(static)이라 콤보를 주입하지 않는다.
+          if (sheet !== SHEETS.NO_WORK || bucketRef.current !== BUCKET.WEEK) return undefined;
+          return sources.weekCandidates;
         default:
           return undefined;
       }

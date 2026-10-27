@@ -6,16 +6,16 @@ import {
   ADMIN_SHEET_NAME,
   BUCKET_DEFAULT,
   DISPLAY_CODE,
+  DIVISION_ALL,
   MEASURE_SHEET_NAME,
   MENU_ID,
-  PLAN_TYPE_DEFAULT,
+  normalizeDivision,
   SEARCH_LEVEL_CODE,
   SEARCH_MODE,
   SHEETS,
   type SearchMode,
 } from './global-psi-report.constants';
 import type { SearchCondition } from './global-psi-report.types';
-import { planDayRange } from './utils/globalPsiReportCalendar';
 
 // SCM_MST_SHEET_MEASURE 동적 fetch row — /admin/menu/{MENU_ID}/measure (camelCase, ForecastPrice 선례 1:1).
 //   주의: BE GridMeasure DTO 는 DISPLAY_FLAG/USER_SELECTABLE_FLAG 를 boolean 으로 직렬화한다
@@ -24,6 +24,7 @@ export interface MeasureMeta {
   colNm: string;
   colLblNm?: string;
   sClsLblNm?: string;
+  lClsLblNm?: string;
   display?: boolean;
   personalizable?: boolean;
   sortOrd?: number;
@@ -57,9 +58,6 @@ interface State {
   staticColumns: StaticColumnsBySheet;
   // SCM_MST_SHEET_MEASURE 동적 fetch ('Global PSI New' 36행, design 03 §1). PIVOT measure 세로축.
   staticMeasures: MeasureMeta[];
-  // 조회기간(SetCalendar)을 마지막으로 시드한 Plan Date. AS-IS 는 Load·PlanDate 변경 때만 기간을 다시 세팅하므로
-  //   (SCP0100_Global_PSI_Report.cs:600·1788) 같은 Plan Date 로 리마운트될 때 사용자가 고친 기간을 덮지 않게 가드한다.
-  calendarSeedPlan: string;
 }
 
 interface Action {
@@ -70,7 +68,6 @@ interface Action {
   setUnitScaleIndex: (index: number) => void;
   setFilter: () => void;
   clearFilters: () => void;
-  seedCalendar: (planStartYyyymmdd: string, planEndYyyymmdd: string) => void;
   setOpenSearchArea: (open?: boolean) => void;
   fetchStaticColumns: () => Promise<void>;
   fetchStaticMeasures: () => Promise<void>;
@@ -80,30 +77,32 @@ interface Action {
 
 // 개인화 조건 복원 역직렬화 키(SubTitle F6 저장은 배열=콤마join·불리언=String 평문화 — personalizeCondition).
 //   chkCellQty/chkAs = 체크박스(String(bool) → ==='true'). 그 외 조회조건은 전부 문자열(divisionId/planType/
-//   bucket/display/searchLevel/from·toSite/itemId/project/cellGroup) → 역직렬화 불요(그대로 patch).
+//   bucket/display/searchLevel/from·toSite/itemId/nickName/project/cellGroup) → 역직렬화 불요(그대로 patch).
 //   날짜 키(from·toYyyymmdd/planStartYyyymmdd)는 저장 측 EXCLUDED_DATE_PARAM(gridAction.ts)으로 저장 자체가
-//   제외 → 복원 응답에 없음(초기값 유지). 다중선택(Division/From·To Site/Model/PJT)은 콤마 CSV 문자열로 보관.
+//   제외 → 복원 응답에 없음(초기값 유지). 멀티셀렉트 배열 조건 없음(From/To Site 는 단일 문자열).
 const RESTORE_BOOL_KEYS = new Set<string>(['chkCellQty', 'chkAs']);
 
-// 주의: 상수가 아니라 함수다 — 매 호출 새 객체(초기화·Division 변경 리셋이 같은 기본값을 새로 만든다).
+// 주의: 상수가 아니라 함수다 — 모듈 최상위 상수로 굳히면 청크 최초 로드 시점의 session.div 로 얼어붙어
+//   재로그인 시 앞 계정 division 이 고정된다(ForecastPrice makeInitSearchParams 규약 동일).
 const makeInitSearch = (): SearchCondition => ({
-  // AS-IS clbDivision(UsrCheckedList2) 은 진입 시 체크 0건 = ValueList 'ALL' → getDivision '' (.cs:464-471, 전 Division).
-  //   카탈로그 Div. = 선택·다중 + ALL버튼. 기본 미선택('') = ALL.
-  divisionId: '',
+  // Division 기본값 = ALL(전체) — AS-IS clbDivision setListBox(...,true) 전체선택 기본(cs:586),
+  //   getDivision() 이 ALL→"" 정규화해 전체 division 조회. 특정 division 은 사용자가 콤보에서 선택.
+  divisionId: DIVISION_ALL,
   fromYyyymmdd: '',
   toYyyymmdd: '',
   planStartYyyymmdd: '',
-  planType: PLAN_TYPE_DEFAULT, // design 02 §4.2 cboPlanType.SelectedValue="FN"
+  planType: '', // Division/Plan Date 종속 콤보(COMBO.PLAN_TYPE)라 기본값은 Form effect 가 필터 첫 항목으로 세팅(2026-10-26, FN 고정 폐기)
   bucket: BUCKET_DEFAULT, // design 02 §4.2 Monthly 기본
   display: DISPLAY_CODE.GRID, // design 01 D4 cboDisplay.SelectedIndex=2 (OnlyGrid)
   searchLevel: SEARCH_LEVEL_CODE.CELL_GROUP, // design 02 §4.2 cboSearchLevel idx0
   fromSite: '',
   toSite: '',
   itemId: '',
+  nickName: '',
   project: '',
   cellGroup: '',
-  chkCellQty: true, // AS-IS designer:248 chkCellQty.Checked=true(CheckState.Checked) — 진입 기본 체크
-  chkAs: false, // AS-IS chkAS 기본 미체크(designer Checked 지정 없음)
+  chkCellQty: true, // AS-IS 화면 스크린샷 기준 기본 체크(2026-10-14 사용자 확인). 값만 Y(NO-OP — 조회 P_CHK_CELL_QTY 로만 반영)
+  chkAs: false, // AS-IS 화면 스크린샷 기준 기본 미체크(NO-OP — 조회 P_CHK_AS 로만 반영)
 });
 
 const emptyStaticColumns: StaticColumnsBySheet = {
@@ -122,7 +121,6 @@ const makeInitState = (): State => ({
   unitScaleIndex: 0,
   staticColumns: emptyStaticColumns,
   staticMeasures: [],
-  calendarSeedPlan: '',
 });
 
 const str = (v: unknown): string =>
@@ -140,9 +138,6 @@ const siteParam = (v: string): string =>
     .map(c => c.trim())
     .filter(c => c && !SITE_SENTINELS.has(c) && c.toUpperCase() !== 'ALL')
     .join(',');
-// Division 다중선택도 같은 정규화 — AS-IS GetCheckedListValue(dt, v, true)(CString.cs:584-600): 빈값·'ALL' → ''.
-//   SP P_DIVISION_ID 는 FN_SPLITSTRING(',') 다중 / TRIM IS NULL = 전 Division(PKG_SCP0100 BODY).
-export const divisionParam = siteParam;
 
 // 3시트 공통 admin 컬럼 fetch — divisionId + 시트별 sheetNm 으로 SCM_MST_SHEET_COLUMNS 조회.
 const fetchColumnsFor = async (
@@ -170,10 +165,10 @@ export const useGlobalPsiReportStore = createPersistedStoreWithTab<State & Actio
       set(state => {
         state.searchCondition = { ...get().searchCondition, ...p };
       }),
-    // Division 변경(다중 콤보) = TO-BE 공통 요건: Division·조회기간(from/to)을 제외한 검색조건을 전부 초기화하고
+    // Division 변경(싱글 콤보) = TO-BE 공통 요건: Division·조회기간(from/to)을 제외한 검색조건을 전부 초기화하고
     //   그리드도 초기화(filters clear)한다(사용자 지시 2026-10-02 — TO-BE 공통 요건이 AS-IS cascade 보다 넓다).
-    //   조회기간(from/to YYYYMMDD)은 division 무관 기간이라 유지. Plan Date 도 초기화 대상이라 Form useEffect 가
-    //   목록 첫 Plan Date 로 재시드한다(목록 자체는 AS-IS 처럼 division '' 1회 조회라 바뀌지 않는다).
+    //   조회기간(from/to YYYYMMDD)은 division 무관 기간이라 유지. Plan Date(planStartYyyymmdd)는 division cascade
+    //   콤보(P_SCP0100_GET_PLAN_DATE)라 초기화 — Form useEffect 가 새 division 첫 Plan Date 로 재시드한다.
     //   편집중(dirty) 가드(MSG00704)는 Form 의 onChange 가 confirmIfDirtyKey 로 처리(commit 51d4e9fa 패턴) —
     //   read-only 리포트라 실제 dirty 는 없지만 공통 패턴을 동일하게 둔다(SCP0025 선례).
     setDivision: divisionId =>
@@ -199,13 +194,12 @@ export const useGlobalPsiReportStore = createPersistedStoreWithTab<State & Actio
     setFilter: () => {
       set(state => {
         const c = state.searchCondition;
-        const isDetail = state.searchMode === SEARCH_MODE.DETAIL;
         const req = {
           fromYyyymmdd: orEmpty(c.fromYyyymmdd), //  1 P_FROM_YYYYMMDD
           toYyyymmdd: orEmpty(c.toYyyymmdd), //  2 P_TO_YYYYMMDD
-          divisionId: divisionParam(c.divisionId), //  3 P_DIVISION_ID (다중 CSV, ALL→'' 전 Division)
+          divisionId: normalizeDivision(c.divisionId), //  3 P_DIVISION_ID (ALL→'' 전체, AS-IS getDivision cs:468)
           itemId: str(c.itemId), //  4 P_ITEM_ID
-          nickName: '', //  5 P_NICK_NAME — AS-IS FindDataMain(.cs:1245) 고정 "" (입력 컨트롤 없음)
+          nickName: str(c.nickName), //  5 P_NICK_NAME (AS-IS Roslyn: txtNickName 컨트롤 부재 — UI 미노출, 항상 '')
           fromSite: siteParam(c.fromSite), //  6 P_FROM_SITE (ALL/'-'→'' 무필터 정규화, 기본점검 #5)
           toSite: siteParam(c.toSite), //  7 P_TO_SITE (ALL/'-'→'' 무필터 정규화, 기본점검 #5)
           planStartYyyymmdd: orEmpty(c.planStartYyyymmdd), //  8 P_PLAN_START_YYYYMMDD
@@ -214,15 +208,14 @@ export const useGlobalPsiReportStore = createPersistedStoreWithTab<State & Actio
           bucket: orEmpty(c.bucket), // 11 P_BUCKET
           cellGroup: str(c.cellGroup), // 12 P_CELL_GROUP
           project: str(c.project), // 13 P_PROJECT
-          // 14 P_SEARCH_LEVEL — Detail 모드면 콤보값 대신 'DETAIL'(AS-IS getSearchLevel .cs:414-417 → SP DETAIL 분기)
-          searchLevel: isDetail ? SEARCH_LEVEL_CODE.DETAIL : orEmpty(c.searchLevel),
+          searchLevel: orEmpty(c.searchLevel), // 14 P_SEARCH_LEVEL
           chkCellQty: c.chkCellQty ? 'Y' : 'N', // 15 P_CHK_CELL_QTY
           chkAs: c.chkAs ? 'Y' : 'N', // 16 P_CHK_AS
           debugMode: 'N', // 17 DEBUG_MODE
         };
         // searchMode + searchLevel 조합으로 활성 그리드 1개만 조회(design 01 R1~R3). 나머지는 미조회.
         state.filters = {};
-        if (isDetail) {
+        if (state.searchMode === SEARCH_MODE.DETAIL) {
           state.filters[SHEETS.REPORT] = req;
         } else if (c.searchLevel === SEARCH_LEVEL_CODE.CELL_GROUP_DETAIL) {
           state.filters[SHEETS.SEARCH_LEVEL_DETAIL] = req;
@@ -236,24 +229,18 @@ export const useGlobalPsiReportStore = createPersistedStoreWithTab<State & Actio
       set(state => {
         state.filters = {};
       }),
-    // AS-IS SetCalendar(.cs:1317) → GetDayRange "MONTH"(.cs:1409~1423) — 계산은 planDayRange(utils).
-    //   종료일이 비면 null → 기간 유지(UsrDateRangePicker3.InitValue('') 무변경 파리티).
-    //   어느 쪽이든 이 Plan Date 는 시드 완료로 표시해 재시드하지 않는다.
-    seedCalendar: (planStartYyyymmdd, planEndYyyymmdd) =>
-      set(state => {
-        const range = planDayRange(planStartYyyymmdd, planEndYyyymmdd);
-        if (range) state.searchCondition = { ...get().searchCondition, ...range };
-        state.calendarSeedPlan = planStartYyyymmdd;
-      }),
     setOpenSearchArea: open =>
       set(state => {
         state.openSearchArea = open ?? !state.openSearchArea;
       }),
     // admin SCM_MST_SHEET_COLUMNS 3시트 동적 fetch — 미등록/실패 시 빈 배열(메타 주도, console 금지 룰).
     fetchStaticColumns: async () => {
-      // 다중 Division 은 PR_GET_SHEET_COLUMN_LIST 의 DIVISION_ID 토큰 비교 대상이 아니므로 ALL→'' 정규화 값으로 보낸다
-      //   (SCP0100 3시트 메타 DIVISION_ID 전건 공란 = 전 Division 공통, 사내 sheet_columns 실측).
-      const divisionId = divisionParam(get().searchCondition.divisionId);
+      // ALL(전체)/빈값은 '' 로 정규화 → PR_GET_SHEET_COLUMN_LIST 의 P_DIVISION_ID IS NULL 분기로 공통(DIVISION_ID
+      //   NULL) 메타 반환. 'ALL' 그대로 넘기면 division-specific 조인에서 매칭 실패(메인 SP getDivision 과 동일 규약).
+      // Division 다중(CSV)이면 공통 메타('')로 fetch — SCP0100 컬럼/measure 메타는 전부 DIVISION_ID NULL(공통,
+      //   DB 실측 2026-10-15). CSV/특정 division 을 넘기면 division-specific 조인에서 0건이 될 수 있다. 단일은 종전대로.
+      const rawDiv = normalizeDivision(get().searchCondition.divisionId);
+      const divisionId = rawDiv.includes(',') ? '' : rawDiv;
       const [report, level, levelDetail] = await Promise.all([
         fetchColumnsFor(SHEETS.REPORT, divisionId),
         fetchColumnsFor(SHEETS.SEARCH_LEVEL, divisionId),
@@ -275,9 +262,14 @@ export const useGlobalPsiReportStore = createPersistedStoreWithTab<State & Actio
     // SCM_MST_SHEET_MEASURE('Global PSI New') 동적 fetch — measure 36종(design 03 §1). 실패 시 빈 배열.
     fetchStaticMeasures: async () => {
       try {
+        // ALL→'' 정규화 필수 — PR_GET_SHEET_MEASURE_LIST 는 measure 의 DIVISION_ID 가 NULL 일 때
+        //   P_DIVISION_ID IS NULL 분기로만 반환한다(columns 와 달리 M.DIVISION_ID IS NULL 분기 없음).
+        //   'ALL' 그대로면 split(NULL) IN 매칭 실패 → 0건(measure 팝업 빈값 원인, 2026-10-14).
+        //   Division 다중(CSV)도 공통 메타('')로 — SCP0100 measure 전부 DIVISION_ID NULL(DB 실측 2026-10-15).
+        const rawDiv = normalizeDivision(get().searchCondition.divisionId);
         const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {
           sheetNm: MEASURE_SHEET_NAME,
-          divisionId: divisionParam(get().searchCondition.divisionId),
+          divisionId: rawDiv.includes(',') ? '' : rawDiv,
         });
         set(state => {
           state.staticMeasures = res.data.result ?? [];

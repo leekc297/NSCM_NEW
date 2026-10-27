@@ -1,0 +1,648 @@
+[
+ {
+  "screen": "SCP0001",
+  "title": "Plant Site",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0001_PlantSite/SCP0001_PlantSite.cs:2274"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0001_PlantSite/SCP0001_PlantSite.Designer.cs:458"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/plant-site"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_GET_PLANT_SITE",
+    "member": "FindData_Main",
+    "line": "652",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_GET_LOCATION",
+    "member": "FindData_Sub",
+    "line": "747",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0004_GET_SALES_SITE_CUSTOMER_DATA",
+    "member": "FindData_SubCustomer",
+    "line": "803",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_GET_LOCATION_OSP",
+    "member": "FindData_LocationOSP",
+    "line": "864",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_SAVE_PLANT_SITE",
+    "member": "SaveData",
+    "line": "1001",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_SAVE_LOCATION",
+    "member": "SaveData",
+    "line": "1167",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA",
+    "member": "SaveData",
+    "line": "1294",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_SAVE_LOCATION_OSP",
+    "member": "SaveData",
+    "line": "1383",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_GET_PLANT_SITE",
+    "member": "FindData_Main",
+    "line": "652",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_GET_LOCATION",
+    "member": "FindData_Sub",
+    "line": "747",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0004_GET_SALES_SITE_CUSTOMER_DATA",
+    "member": "FindData_SubCustomer",
+    "line": "803",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_GET_LOCATION_OSP",
+    "member": "FindData_LocationOSP",
+    "line": "864",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_SAVE_PLANT_SITE",
+    "member": "SaveData",
+    "line": "1001",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_SAVE_LOCATION",
+    "member": "SaveData",
+    "line": "1167",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA",
+    "member": "SaveData",
+    "line": "1222",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0001_SAVE_LOCATION_OSP",
+    "member": "SaveData",
+    "line": "1383",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0001_PlantSite\\SCP0001_PlantSite.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0004_GET_SALES_SITE_CUSTOMER_DATA",
+   "SCP0001_GET_LOCATION",
+   "SCP0001_GET_LOCATION_OSP",
+   "SCP0001_GET_PLANT_SITE",
+   "SCP0001_SAVE_LOCATION",
+   "SCP0001_SAVE_LOCATION_OSP",
+   "SCP0001_SAVE_PLANT_SITE",
+   "SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "DM0004_GET_SALES_SITE_CUSTOMER_DATA",
+    "sp": "DM0004_GET_SALES_SITE_CUSTOMER_DATA",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "AUTH",
+    "desc": "ADMIN/DM ADMIN 이거나 사용자 부서(또는 PM_TEAM_MAPPING 매핑팀)가 Site 담당 부서와 같으면 편집 가능(Y), 아니면 N",
+    "message": null,
+    "on_fail": "EDIT_FLAG = 'N' 반환 (편집 불가 표시)"
+   },
+   {
+    "entry_sp": "SCP0001_SAVE_LOCATION",
+    "sp": "SCP0001_SAVE_LOCATION",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 에러 로그 기록 후 'F' 와 에러 메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "INSERT INTO scm_sys_log_batch(...ERROR_MESSAGE()...); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER"
+   },
+   {
+    "entry_sp": "SCP0001_SAVE_LOCATION_OSP",
+    "sp": "SCP0001_SAVE_LOCATION_OSP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 로그 후 'F' 와 에러 메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "INSERT INTO scm_sys_log_batch(...); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE();"
+   },
+   {
+    "entry_sp": "SCP0001_SAVE_PLANT_SITE",
+    "sp": "SCP0001_SAVE_PLANT_SITE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 로그 후 'F' 와 에러 메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "INSERT INTO scm_sys_log_batch(...); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE();"
+   },
+   {
+    "entry_sp": "SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA",
+    "sp": "SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 전체 롤백 후 에러 메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "ROLLBACK TRAN; EXEC PR_SCM_SYS_LOG_BATCH(ERROR); SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE();"
+   },
+   {
+    "entry_sp": "DM0004_GET_SALES_SITE_CUSTOMER_DATA",
+    "sp": "FN_GET_DEPT_LIST",
+    "depth": 1,
+    "cls": "D 검증리포트형",
+    "check_type": "AUTH",
+    "desc": "사용자 부서 또는 PM_TEAM_MAPPING 으로 매핑된 팀이 대상 부서(@p_dept_id)와 일치하면 Y(권한 있음), 아니면 N",
+    "message": null,
+    "on_fail": "'N' 반환"
+   },
+   {
+    "entry_sp": "SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA",
+    "sp": "PR_DM_MST_SITE_CUSTOMER_HIST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "이력 INSERT 실패 시 롤백 후 오류 결과셋",
+    "message": "'[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()",
+    "on_fail": "ROLLBACK TRANSACTION PR_DM_MST_SITE_CUSTOMER_HIST; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE(); ERROR 로그"
+   },
+   {
+    "entry_sp": "SCP0001_SAVE_LOCATION",
+    "sp": "PR_SCM_MST_LOCATION_HIST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "이력 적재 오류 시 오류 로그만 남기고 커밋",
+    "message": null,
+    "on_fail": "INSERT INTO scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE(),...); IF @@TRANCOUNT > 0 COMMIT WORK"
+   },
+   {
+    "entry_sp": "SCP0001_SAVE_LOCATION_OSP",
+    "sp": "PR_SCM_MST_LOCATION_OSP_HIST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "이력 적재 오류 시 오류 로그만 남기고 커밋",
+    "message": null,
+    "on_fail": "INSERT INTO scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE(),...); IF @@TRANCOUNT > 0 COMMIT WORK"
+   },
+   {
+    "entry_sp": "SCP0001_SAVE_PLANT_SITE",
+    "sp": "PR_SCM_MST_SITE_HIST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "이력 적재 오류 시 오류 로그만 남기고 커밋",
+    "message": null,
+    "on_fail": "INSERT INTO scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE(),...); IF @@TRANCOUNT > 0 COMMIT WORK"
+   },
+   {
+    "entry_sp": "SCP0001_SAVE_PLANT_SITE",
+    "sp": "SCP0001_SAVE_SCM_MST_VENDOR",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Vendor 명 갱신 중 예외 시 로그 후 'F' 결과셋 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "INSERT scm_sys_log_batch; IF @@TRANCOUNT > 0 COMMIT WORK; IF(@v_err_message IS NULL OR ='') SELECT 'F' AS result_code, '[번호]'+ERROR_MESSAGE() AS ERR_MESSAGE ELS"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0002",
+  "title": "Line Master",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0002_LineMaster/SCP0002_LineMaster.cs:1027"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0002_LineMaster/SCP0002_LineMaster.Designer.cs:539"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/line-master"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0002_GET_LINE_MASTER",
+    "member": "FindData_Plant",
+    "line": "468",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0002_LineMaster\\SCP0002_LineMaster.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0002_GET_LINE_MASTER_OSP",
+    "member": "Find_Packer",
+    "line": "544",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0002_LineMaster\\SCP0002_LineMaster.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0002_SAVE_LINE_MASTER_OSP",
+    "member": "Save_Data",
+    "line": "674",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0002_LineMaster\\SCP0002_LineMaster.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0002_GET_LINE_MASTER",
+    "member": "FindData_Plant",
+    "line": "468",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0002_LineMaster\\SCP0002_LineMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0002_GET_LINE_MASTER_OSP",
+    "member": "Find_Packer",
+    "line": "544",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0002_LineMaster\\SCP0002_LineMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0002_SAVE_LINE_MASTER_OSP",
+    "member": "Save_Data",
+    "line": "674",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0002_LineMaster\\SCP0002_LineMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0002_GET_LINE_MASTER",
+   "SCP0002_GET_LINE_MASTER_OSP",
+   "SCP0002_SAVE_LINE_MASTER_OSP"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0002_SAVE_LINE_MASTER_OSP",
+    "sp": "SCP0002_SAVE_LINE_MASTER_OSP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 전체 롤백 후 'F' 와 에러 메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE();"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0003",
+  "title": "",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0003_ProductionCapacity/SCP0003_ProductionCapacity.cs:1094"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0003_ProductionCapacity/SCP0003_ProductionCapacity.Designer.cs:713"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0003_GET_PRODUCTION_CAPACITY",
+    "member": "FindData_ProductionCapacity",
+    "line": "463",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0003_ProductionCapacity\\SCP0003_ProductionCapacity.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0003_GET_PRODUCTION_CAPACITY_OSP",
+    "member": "FindData_OutsoucingCapacity",
+    "line": "519",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0003_ProductionCapacity\\SCP0003_ProductionCapacity.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0003_SAVE_PRODUCTION_CAPACITY_OSP",
+    "member": "SaveData",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0003_ProductionCapacity\\SCP0003_ProductionCapacity.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0003_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1055",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0003_ProductionCapacity\\SCP0003_ProductionCapacity.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0003_GET_PRODUCTION_CAPACITY",
+    "member": "FindData_ProductionCapacity",
+    "line": "463",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0003_ProductionCapacity\\SCP0003_ProductionCapacity.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0003_GET_PRODUCTION_CAPACITY_OSP",
+    "member": "FindData_OutsoucingCapacity",
+    "line": "519",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0003_ProductionCapacity\\SCP0003_ProductionCapacity.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0003_SAVE_PRODUCTION_CAPACITY_OSP",
+    "member": "SaveData",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0003_ProductionCapacity\\SCP0003_ProductionCapacity.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0003_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1055",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0003_ProductionCapacity\\SCP0003_ProductionCapacity.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0003_GET_PRODUCTION_CAPACITY",
+   "SCP0003_GET_PRODUCTION_CAPACITY_OSP",
+   "SCP0003_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0003_SAVE_PRODUCTION_CAPACITY_OSP"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0004",
+  "title": "",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0004_SetupMatrix/SCP0004_SetupMatrix.cs:357"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0004_SetupMatrix/SCP0004_SetupMatrix.Designer.cs:604"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0004_GET_SETUP_MATRIX",
+    "member": "FindData",
+    "line": "213",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0004_SetupMatrix\\SCP0004_SetupMatrix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0004_GET_SETUP_MATRIX",
+    "member": "FindData",
+    "line": "213",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0004_SetupMatrix\\SCP0004_SetupMatrix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0004_GET_SETUP_MATRIX"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0005",
+  "title": "Distribution Route",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCM.Popup.UIL/SCP0005_DistributionRoutePopup.cs:192",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.cs:1389"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCM.Popup.UIL/SCP0005_DistributionRoutePopup.Designer.cs:115",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0005_DistributionRoute/SCP0005_DistributionRoute.Designer.cs:619"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/shipping/src/pages/distribution-route",
+   "nscm-fe/features/supply/src/pages/bod/components/modals"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_GET_DISTRIBUTION_ROUTE",
+    "member": "FindDataMain",
+    "line": "424",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0005_DistributionRoute\\SCP0005_DistributionRoute.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_GET_DISTRIBUTION_ROUTEID",
+    "member": "FindDataReceive",
+    "line": "499",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0005_DistributionRoute\\SCP0005_DistributionRoute.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+    "member": "SaveData",
+    "line": "752",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0005_DistributionRoute\\SCP0005_DistributionRoute.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_GET_COUNTRY_CITY",
+    "member": "GetData_Country",
+    "line": "916",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0005_DistributionRoute\\SCP0005_DistributionRoute.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+    "member": "FindData",
+    "line": "171",
+    "file": "06.UIL\\GSCM.SCM.Popup.UIL\\SCP0005_DistributionRoutePopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+    "member": "FindData",
+    "line": "171",
+    "file": "06.UIL\\GSCM.SCM.Popup.UIL\\SCP0005_DistributionRoutePopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_GET_DISTRIBUTION_ROUTE",
+    "member": "FindDataMain",
+    "line": "424",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0005_DistributionRoute\\SCP0005_DistributionRoute.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_GET_DISTRIBUTION_ROUTEID",
+    "member": "FindDataReceive",
+    "line": "499",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0005_DistributionRoute\\SCP0005_DistributionRoute.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+    "member": "SaveData",
+    "line": "752",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0005_DistributionRoute\\SCP0005_DistributionRoute.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_GET_COUNTRY_CITY",
+    "member": "GetData_Country",
+    "line": "916",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0005_DistributionRoute\\SCP0005_DistributionRoute.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0005_GET_COUNTRY_CITY",
+   "SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID",
+   "SCP0005_GET_DISTRIBUTION_ROUTE",
+   "SCP0005_GET_DISTRIBUTION_ROUTEID",
+   "SCP0005_SAVE_DISTRIBUTION_ROUTE"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+    "sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "동일 From 국가·도시/To 국가·도시 구간에 같은 Priority 가 2건 이상이면 저장 전체 취소",
+    "message": "DUP PRIORITY.",
+    "on_fail": "SET @v_err_code=99020; SET @v_err_message='DUP PRIORITY.'; THROW → CATCH ROLLBACK, 'F' + err_code/err_message/행 데이터 결과셋"
+   },
+   {
+    "entry_sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+    "sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "구간·운송모드·출발/도착 항구·선사·LT Type 이 모두 같은 Route 가 2건 이상이면 저장 전체 취소",
+    "message": "DUP DATA.",
+    "on_fail": "SET @v_err_code=99010; SET @v_err_message='DUP DATA.'; THROW → CATCH ROLLBACK, 'F' + 에러 데이터 결과셋"
+   },
+   {
+    "entry_sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+    "sp": "SCP0005_SAVE_DISTRIBUTION_ROUTE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 전체 롤백 후 'F' 와 오류코드·메시지·마지막 처리 행 값을 반환",
+    "message": "err_code/err_message (99010/99020 또는 ERROR_NUMBER/ERROR_MESSAGE)",
+    "on_fail": "ROLLBACK; INSERT scm_sys_log_batch; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message, @v_route_id, @v_from_country ... ("
+   }
+  ]
+ }
+]

@@ -1,0 +1,7 @@
+﻿"screen_id","class","entry_kind","entry","handler","methods","statements","rows","classified","other","call_ext","classified_pct","by_kind"
+"SCP0008","SCP0008_ItemMaster","event","this.Load","Form_Load","6","24","25","24","0","0","100","CALL_LOCAL:5 LIST_REBIND:4 GRID_INIT:4 FLAG:3 EXPR:3 DATA_OP:2 UI_MISC:1 BRANCH:1 VALIDATE:1 EVENT_WIRE:1"
+"SCP0008","SCP0008_ItemMaster","event","clbClass1.SelectedIndexChanged","ClbClass1_SelectedIndexChanged","2","6","7","6","0","0","100","EXPR:3 CALL_LOCAL:1 FLAG:1 DATA_OP:1 LIST_REBIND:1"
+"SCP0008","SCP0008_ItemMaster","override","Dispose","Dispose","1","3","3","3","0","0","100","BRANCH:1 UI_MISC:1 CALL_LOCAL:1"
+"SCP0008","SCP0008_ItemMaster","button","FindButton","FindButton","4","54","54","54","0","0","100","LOCAL:10 DATA_OP:8 EXPR:7 RETURN:4 CALL_LOCAL:3 LOG:3 ENDPOINT:3 BRANCH:3 POPUP:2 UI_PROP:2 UI_MISC:2 GRID_INIT:2 VALIDATE:1 RESOURCE:1 GRID_BIND:1 GRID_LOCK:1 MESSAGE:1"
+"SCP0008","SCP0008_ItemMaster","button","EditButton","EditButton","1","2","2","2","0","0","100","MESSAGE:1 RETURN:1"
+"SCP0008","SCP0008_ItemMaster","ctor",".ctor",".ctor","1","2","2","2","0","0","100","CALL_LOCAL:1 EVENT_WIRE:1"

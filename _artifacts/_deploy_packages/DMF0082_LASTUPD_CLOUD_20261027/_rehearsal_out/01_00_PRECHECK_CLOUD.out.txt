@@ -1,0 +1,26 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-27 13:42:44
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL
+L0 | PACKAGE | VALID | 2026-10-09 13:38:31
+L0 | PACKAGE BODY | VALID | 2026-10-27 13:42:37
+(2 rows)
+
+CHK | N | LINE_1 | JUDGE
+L1 앵커GET | 1 | 5217 | PASS (최종 판정은 10 이 3줄 전체로 한다)
+(1 rows)
+
+CHK | N | LINE_1 | LINE_2 | JUDGE
+L1 앵커CUR | 2 | 5035 | 10562 | 2건 기대 (GET · CURRENT 각 1 — 10 은 CURRENT 범위의 4줄 묶음 1건으로 판정)
+(1 rows)
+
+CHK | N | JUDGE
+L2 마커 | 0 | 미적용 (기대)
+(1 rows)
+
+CHK | COLUMN_NAME | USERS
+(0 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

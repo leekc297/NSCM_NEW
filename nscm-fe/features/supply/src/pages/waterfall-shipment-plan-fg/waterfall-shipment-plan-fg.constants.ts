@@ -76,11 +76,11 @@ export const LBL = {
   DIVISION: 'LBL00001', // Division (표준 LBL00001)
   OPERATION_GROUP: 'LBL00027', // Operation group
   ELECTRODE: 'LBL00038', // Electrode
-  VERSION: 'LBL00606', // Version
+  VERSION: 'LBL00606', // Version (참조용 — 화면 표기는 'Ver.' 하드코딩. DB/번들 'Ver.' 미등록, 사용자 지시 2026-10-20)
   BUCKET: 'LBL00710', // Bucket
   PERIOD: 'LBL00013', // Period
-  MODEL: 'LBL00669', // Model
-  PROJECT: 'LBL00617', // Project
+  MODEL: 'LBL00618', // Model/Nickname (메1 MaterialByDivisionModal 통합 픽커 — 사용자 지시. DB KO/EN/CN USE_YN='Y' 실측)
+  PROJECT: 'LBL00012', // PJT (사용자 지시. DB KO/EN/CN USE_YN='Y' 실측. 구 LBL00617 'Project')
   SUM: 'LBL00687', // Sum
   SEARCH: 'LBL00112', // Search (searchButtonLabel)
   COLUMN_SET: 'LBL00605', // Column Setting (표시 'Column Set' — 확인필요)

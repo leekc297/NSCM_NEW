@@ -117,7 +117,24 @@ export const buildPivotColumns = (
   }
 
   return [...months.values()].map<FlexGridColumnConfig>(month => {
-    const weekGroups = [...month.weeks.values()];
+    // SUM 을 블록의 시작에 둔다(AS-IS iLargeStartCol/iSmallStartCol, 자매 SCP0025 동형):
+    //   (1) 월 SUM(M_) 그룹을 월 맨 앞으로, (2) 각 주 그룹 안에서 주 SUM(W_)·월 SUM(M_) leaf 를 일(D_) 앞으로.
+    //   Weekly 는 이미 M_('SUM' 그룹)이 앞(정렬상 M_<W_)이라 동작 불변 — Daily 에서 W_ 주합계가 일자 뒤에,
+    //   M_ 월합계 그룹이 월 끝에 붙던 것(sorted 순 D_<M_<W_)을 교정해 두 버킷을 '합계-앞' 정렬로 통일한다
+    //   (사용자 지시 2026-10-13 — Daily+Sum 의 SUM 컬럼을 Weekly 처럼 합계대상 앞쪽으로).
+    const weekGroups = [
+      ...[...month.weeks.values()].filter(w => w.label === 'SUM'),
+      ...[...month.weeks.values()].filter(w => w.label !== 'SUM'),
+    ];
+    for (const w of weekGroups) {
+      w.leaves.sort((a, b) => {
+        const ba = a.binding ?? '';
+        const bb = b.binding ?? '';
+        const ra = pivotKind(ba) === 'D' ? 1 : 0; // D_(일)는 뒤, W_/M_ SUM 은 앞
+        const rb = pivotKind(bb) === 'D' ? 1 : 0;
+        return ra - rb || ba.localeCompare(bb);
+      });
+    }
     // 월 아래 주가 'SUM' 1개뿐이면(= Monthly: M_ 만, 또는 월합계 전용) 월>SUM 2단으로 접는다. Weekly 는 leaf
     //   가 'SUM'(≠ 주라벨 'Wxx')이라 이 조건이 성립하지 않아 접히지 않는다 → 전월 3단 균일(AS-IS 패리티).
     const allLeaves = weekGroups.flatMap(w => w.leaves);

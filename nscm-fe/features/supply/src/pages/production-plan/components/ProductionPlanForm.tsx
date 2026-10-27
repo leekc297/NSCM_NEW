@@ -274,7 +274,8 @@ export const ProductionPlanForm = ({ onSearch, onItemSearch }: Props) => {
                 <Button
                   appearance='outlined'
                   priority='normal'
-                  iconComponent={<FunctionSearchIcon appearance='lined' onClick={onIconClick} />}
+                  iconComponent={<FunctionSearchIcon appearance='lined' />}
+                  onClick={onIconClick}
                 />
               ),
             }}
@@ -333,21 +334,46 @@ export const ProductionPlanForm = ({ onSearch, onItemSearch }: Props) => {
             () => onItemSearch('modelNick')
           )}
 
+          {/* Row1 우측 — Sum. Bucket 바로 아래, 체크박스를 Bucket 라벨 글자 시작선(B)에 맞춘다.
+              숨긴 Bucket 텍스트로 라벨과 같은 폭을 잡고 그 왼쪽 끝에 체크박스를 둔다(언어별 라벨 길이 대응). */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label=''
+              labelAlign='right'
+              render={() => (
+                <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '0px' }}>
+                  <span style={{ position: 'relative', whiteSpace: 'nowrap' }}>
+                    <span style={{ visibility: 'hidden' }}>{t(LBL.BUCKET, '_Bucket')}</span>
+                    <span style={{ position: 'absolute', left: '4px', top: '50%', transform: 'translateY(-50%)' }}>
+                      <Checkbox
+                        labelText={t(LBL.SUM, '_Sum')}
+                        checked={sc.chkSum}
+                        onChange={checked => set({ chkSum: checked })}
+                      />
+                    </span>
+                  </span>
+                </div>
+              )}
+            />
+          </Grid>
         </>
       }
-      // 조회조건 2줄 초과분(Plan 버전/Period·Sum)은 접고펼침으로 분리 — DMF0014 동일 패턴(SearchArea
+      // 조회조건 2줄 초과분(Plan 버전/Period)은 접고펼침으로 분리 — DMF0014 동일 패턴(SearchArea
       //   extraConditions = 접힘 기본, Search 옆 ^ 버튼으로 토글). 필드 순서는 AS-IS 그대로 유지한다.
       extraConditions={
         <>
-          {/* Row2 — Plan-date* / Plan-type* / Seq* — 자매 SCP0013 과 동일 공유 PlanVersionCascade(아무 필드나
-              눌러도 같은 컬럼 팝업으로 date→type→seq 경로 선택, 상위 변경 시 하위 초기화). 선택값은 기존과
-              동일하게 1-요소 배열로 store 에 보존(기본값 effect·filters 호환). size 3×3 → size=9 래퍼. */}
-          <Grid size={9}>
+          {/* Row2 — Plan-date* / Plan-type* / Seq* — 자매 SCP0013 과 동일 공유 PlanVersionCascade. combined
+              단일 입력칸(기본) — 클릭하면 date→type→seq 컬럼 팝업으로 경로 선택, 상위 변경 시 하위 초기화.
+              선택값은 기존과 동일하게 1-요소 배열로 store 에 보존(기본값 effect·filters 호환). 입력칸 고정폭
+              190px + 라벨(140) 수용 size=3 래퍼(SCP0013 동일, 사용자 지시 2026-10-21). */}
+          <Grid size={3}>
             <PlanVersionCascade
-              gridSize={4}
               variant='horizontal'
               labelAlign='right'
               formItemClassName={commonStyles.formItem}
+              label='Plan Date/Type/Seq'
+              inputWidth='190px'
               levels={planVersionLevels}
               divisionId={sc.divisionId}
               value={planVersionValue}
@@ -373,13 +399,7 @@ export const ProductionPlanForm = ({ onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* Row3 — Sum. Plan-date 바로 아래 줄, Plan Date 라벨과 같은 선에 맞춘다. 디자인: 체크박스 +
-              바로 오른쪽 'Sum' 라벨(Checkbox labelText — 박스 다음에 글자). @lges FormItem 은 label=''
-              이면 라벨 박스를 아예 안 그려 유일한 자식인 체크박스가 1열(라벨 컬럼) 맨 왼쪽에 붙는다
-              — 그래서 Plan Date 라벨보다 왼쪽으로 삐져나왔다. 체크박스를 라벨 컬럼 안에서 오른쪽
-              정렬(flex-end)하되, 캡처(목표)는 완전 우측선 정렬이 아니라 체크박스가 Plan Date 라벨
-              글자 시작선에 오도록 라벨 컬럼 우측선보다 약간(≈16px) 안쪽이라, paddingRight 로 그만큼
-              당겨 맞춘다. ALL(전체보기) 체크박스는 제거 — 항상 ALL 조회(chkAll=true). (사용자 지시 2026-10-07) */}
+          {/* Sum 은 Row1 우측(Bucket 아래)으로 이동(사용자 지시 2026-10-19). 기존 Row3 배치:
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -396,6 +416,7 @@ export const ProductionPlanForm = ({ onSearch, onItemSearch }: Props) => {
               )}
             />
           </Grid>
+          */}
         </>
       }
     />

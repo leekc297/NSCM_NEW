@@ -1,0 +1,36 @@
+{
+ "menu_id": "SCP0007",
+ "generated": "2026-10-28 02:48:43",
+ "F8": {
+  "verdict": "PASS",
+  "note": "감사 컬럼 = 저장 계정·저장 시각 (CREATED_BY=minyonglee1 · CREATION_DATE=2026-10-28 02:42:41 · LAST_UPDATED_BY=minyonglee1 · LAST_UPDATE_DATE=2026-10-28 02:42:41) · SCP_MST_BOD 1행"
+ },
+ "F7": {
+  "verdict": "PASS",
+  "asis_sp": "SCP0007_SAVE_BOD",
+  "asis_insert_tables": [
+   "SCP_MST_BOD"
+  ],
+  "asis_update_only": [
+   "SCP_MST_BOD_ITEM"
+  ],
+  "tobe_written": [
+   "SCP_MST_BOD",
+   "SCP_MST_BOD_H"
+  ],
+  "tobe_extra": [
+   "SCP_MST_BOD_H"
+  ],
+  "note": "AS-IS 신규행 경로 테이블 SCP_MST_BOD 모두 기록 · UPDATE 만(신규 1건 시험 대상 아님): SCP_MST_BOD_ITEM · TO-BE 에만 기록(참고 — AS-IS 트리거·다른 경로 여부 확인): SCP_MST_BOD_H"
+ },
+ "run": {
+  "cleanup_sql": "Doc\\verify\\SCP0007\\cleanup\\cleanup_20261028_024842.sql",
+  "account": "minyonglee1",
+  "saved_at": "2026-10-28 02:42:41",
+  "tables": {
+   "SCP_MST_BOD": 1,
+   "SCP_MST_BOD_H": 1,
+   "SCP_MST_BOD_ITEM": 0
+  }
+ }
+}

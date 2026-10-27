@@ -1,0 +1,578 @@
+[
+ {
+  "screen": "SCP0013",
+  "title": "Production Plan Line",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCM.Popup.UIL/SCP0013_ProductionPlanLineLoadPopup.cs:580",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0013_ProductionPlanLine/SCP0013_ProductionPlanLine.cs:4172"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCM.Popup.UIL/SCP0013_ProductionPlanLineLoadPopup.Designer.cs:291",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0013_ProductionPlanLine/SCP0013_ProductionPlanLine.Designer.cs:1812"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/production-plan-line"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_EXTRA_SPEC",
+    "member": "GetExtraSpecAll",
+    "line": "469",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1760",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0011_GET_LAST_PLAN_VERSION",
+    "member": "GetLastPlanVersion",
+    "line": "1922",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PRODUCTION_PLAN_LINEBY",
+    "member": "FindData_Main",
+    "line": "2051",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW_DATASET",
+    "member": "SaveData_Line_DT",
+    "line": "2699",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET",
+    "member": "SaveData_FixInfo",
+    "line": "3170",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET",
+    "member": "SaveData_FixInfo",
+    "line": "3170",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PLAN_EDIT_INFO",
+    "member": "Get_IsEditInfo",
+    "line": "3360",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "member": "Get_IsSaveYn",
+    "line": "3442",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "3693",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM_SYS_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle2",
+    "line": "3759",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "4061",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+    "member": "GetLastRange",
+    "line": "4101",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "4116",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_LINE_LIST",
+    "member": "GetLineList",
+    "line": "4152",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_PRODUCTION_PLAN_LINE_LOAD_POPUP",
+    "member": "FindDataMain",
+    "line": "240",
+    "file": "06.UIL\\GSCM.SCM.Popup.UIL\\SCP0013_ProductionPlanLineLoadPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "568",
+    "file": "06.UIL\\GSCM.SCM.Popup.UIL\\SCP0013_ProductionPlanLineLoadPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_PRODUCTION_PLAN_LINE_LOAD_POPUP",
+    "member": "FindDataMain",
+    "line": "240",
+    "file": "06.UIL\\GSCM.SCM.Popup.UIL\\SCP0013_ProductionPlanLineLoadPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "568",
+    "file": "06.UIL\\GSCM.SCM.Popup.UIL\\SCP0013_ProductionPlanLineLoadPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_EXTRA_SPEC",
+    "member": "GetExtraSpecAll",
+    "line": "469",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1760",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0011_GET_LAST_PLAN_VERSION",
+    "member": "GetLastPlanVersion",
+    "line": "1922",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PRODUCTION_PLAN_LINEBY",
+    "member": "FindData_Main",
+    "line": "2051",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PLAN_EDIT_INFO",
+    "member": "Get_IsEditInfo",
+    "line": "3360",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "member": "Get_IsSaveYn",
+    "line": "3442",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "3693",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM_SYS_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle2",
+    "line": "3759",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "4061",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+    "member": "GetLastRange",
+    "line": "4101",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "4116",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0013_GET_LINE_LIST",
+    "member": "GetLineList",
+    "line": "4152",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0013_ProductionPlanLine\\SCP0013_ProductionPlanLine.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCM_SYS_GET_SPREAD_TITLE",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0011_GET_LAST_PLAN_VERSION",
+   "SCP0013_GET_EXTRA_SPEC",
+   "SCP0013_GET_LINE_LIST",
+   "SCP0013_GET_PLAN_EDIT_INFO",
+   "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+   "SCP0013_GET_PRODUCTION_PLAN_LINEBY",
+   "SCP0013_PRODUCTION_PLAN_LINE_LOAD_POPUP",
+   "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW_DATASET",
+   "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW_DATASET / SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET",
+   "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PLAN_EDIT_INFO",
+    "sp": "SCP0013_GET_PLAN_EDIT_INFO",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "RANGE",
+    "desc": "계획시작일이 이번 주 이전이면 날짜체크 N",
+    "message": null,
+    "on_fail": "date_chk='N' 반환"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PLAN_EDIT_INFO",
+    "sp": "SCP0013_GET_PLAN_EDIT_INFO",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "MA 는 확정(Y)·당주 이후, SE·PR 은 당주 이후일 때만 편집 가능, FN 및 과거 플랜은 불가",
+    "message": null,
+    "on_fail": "is_editable='N' 반환"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "해당 주차 최상위 플랜이 조회 플랜과 같고 그것이 Final(FN)이면 저장 불가",
+    "message": null,
+    "on_fail": "edit_yn='N' 반환"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "조회 플랜이 최상위(FN 아님)이거나, 바로 다음 상위 플랜이 생성됐지만 미수행(-1) 상태면 저장 가능",
+    "message": null,
+    "on_fail": "edit_yn='Y' 반환(저장 가능)"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "sp": "SCP0013_GET_PLAN_TYPE_SAVE_YN",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "그 외(상위 플랜이 이미 수행됨, 해당 주차 플랜/LOOKUP 없음)는 저장 불가",
+    "message": null,
+    "on_fail": "edit_yn='N' 반환(상위 플랜 진행·미존재 등)"
+   },
+   {
+    "entry_sp": "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW_DATASET",
+    "sp": "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW_DATASET",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 중 오류 발생 시 오류 로그 기록 후 오류번호·메시지 반환",
+    "message": "ERROR_NUMBER() / ERROR_MESSAGE()",
+    "on_fail": "INSERT INTO scm_sys_log_batch(ERROR); SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   },
+   {
+    "entry_sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET",
+    "sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 F 결과코드와 오류번호·메시지 반환",
+    "message": "[ERROR_NUMBER()]ERROR_MESSAGE()",
+    "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS err_message"
+   },
+   {
+    "entry_sp": "SCP0013_GET_PRODUCTION_PLAN_LINEBY",
+    "sp": "FN_NEXT_DAY",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "FORMAT",
+    "desc": "요일 코드가 SUN~SAT 이 아니면 NULL 반환(계산 중단)",
+    "message": null,
+    "on_fail": "RETURN NULL"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0014",
+  "title": "Plan Problem",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0014_Problem_Report/SCP0014_Problem_Report.cs:1471"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0014_Problem_Report/SCP0014_Problem_Report.Designer.cs:1220"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCM_SYS_GET_SITE_BY_DIVISION",
+    "member": "GetSalesSitebyDivision",
+    "line": "380",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0011_GET_LAST_PLAN_VERSION",
+    "member": "GetLastPlanVersion",
+    "line": "882",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0014_GET_PROBLEM_REPORT",
+    "member": "FindData_Main",
+    "line": "963",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0014_GET_PEGGING_INFO",
+    "member": "FindData_PeggingInfo",
+    "line": "1113",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0014_GET_PLAN_PROBLEM",
+    "member": "FindData_PlanProblem",
+    "line": "1171",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1211",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "1389",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1410",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM_SYS_GET_SITE_BY_DIVISION",
+    "member": "GetSalesSitebyDivision",
+    "line": "380",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0011_GET_LAST_PLAN_VERSION",
+    "member": "GetLastPlanVersion",
+    "line": "882",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0014_GET_PROBLEM_REPORT",
+    "member": "FindData_Main",
+    "line": "963",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0014_GET_PEGGING_INFO",
+    "member": "FindData_PeggingInfo",
+    "line": "1113",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0014_GET_PLAN_PROBLEM",
+    "member": "FindData_PlanProblem",
+    "line": "1171",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "1211",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "1389",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1410",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0014_Problem_Report\\SCP0014_Problem_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCM0001_GET_DIVISION",
+   "SCM_SYS_GET_SITE_BY_DIVISION",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0011_GET_LAST_PLAN_VERSION",
+   "SCP0014_GET_PEGGING_INFO",
+   "SCP0014_GET_PLAN_PROBLEM",
+   "SCP0014_GET_PROBLEM_REPORT"
+  ],
+  "db_validation_brief": []
+ }
+]

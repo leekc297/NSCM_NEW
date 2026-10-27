@@ -1,0 +1,29 @@
+-- 99_ROLLBACK_0_DEDUP — 25 원복: 백업 테이블의 '/' 중복 행을 원 테이블에 되돌려 넣는다 (전체 F5 · 멱등)
+-- ⚠ 30 재실행으로 같은 키의 '/' 행이 '-' 로 바뀌었거나 다시 적재됐으면 PK 충돌 행은 건너뛴다(NOT EXISTS) — 건수 출력.
+-- 원복 순서: 99_ROLLBACK_1_DATA(30 원복) → 99_ROLLBACK_0_DEDUP(25 원복) → 99_ROLLBACK_2_DEFAULT → 99_ROLLBACK_3_LOGIC
+SET SERVEROUTPUT ON SIZE UNLIMITED
+SET DEFINE OFF
+DECLARE
+    PROCEDURE one(p_tab VARCHAR2, p_bak VARCHAR2) IS
+        v_n NUMBER; v_cols VARCHAR2(4000);
+    BEGIN
+        SELECT COUNT(*) INTO v_n FROM USER_TABLES WHERE TABLE_NAME = p_bak;
+        IF v_n = 0 THEN DBMS_OUTPUT.PUT_LINE('   SKIP ' || p_tab || ' — 백업 테이블 없음 (25 미실행)'); RETURN; END IF;
+        -- 가상컬럼(CUTOFF_YYYYMMDD_DATE 등)은 INSERT 대상에서 뺀다
+        SELECT LISTAGG(COLUMN_NAME, ', ') WITHIN GROUP (ORDER BY COLUMN_ID) INTO v_cols
+          FROM USER_TAB_COLS WHERE TABLE_NAME = p_tab AND VIRTUAL_COLUMN = 'NO' AND HIDDEN_COLUMN = 'NO';
+        EXECUTE IMMEDIATE 'INSERT INTO SCM_MGR.' || p_tab || ' (' || v_cols || ') SELECT ' || v_cols || ' FROM SCM_MGR.' || p_bak || ' Z'
+                       || ' WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.' || p_tab || ' A WHERE A.ROWID IS NOT NULL'
+                       || ' AND A.DIVISION_ID = Z.DIVISION_ID AND A.VERSION_NO = Z.VERSION_NO AND A.CUTOFF_TYPE = Z.CUTOFF_TYPE AND A.CUTOFF_YYYYMMDD = Z.CUTOFF_YYYYMMDD'
+                       || ' AND A.PROJECT_CODE = Z.PROJECT_CODE AND A.SCM_SITE_ID = Z.SCM_SITE_ID AND A.ITEM_ID = Z.ITEM_ID AND A.DOM_EXP = Z.DOM_EXP AND A.FCST_TYPE = Z.FCST_TYPE'
+                       || ' AND A.INCOTERMS = Z.INCOTERMS AND A.MEASURE = Z.MEASURE AND A.PLANT_SITE_ID = Z.PLANT_SITE_ID AND A.YYYYMMDD = Z.YYYYMMDD AND A.CELL_PROD_SITE_ID = Z.CELL_PROD_SITE_ID'
+                       || CASE WHEN p_tab = 'DM_PLN_SALES_PLAN_RESULT_C' THEN ' AND A.CURRENCY = Z.CURRENCY AND A.COMPANY_ID = Z.COMPANY_ID' END || ')';
+        v_n := SQL%ROWCOUNT;
+        COMMIT;
+        DBMS_OUTPUT.PUT_LINE('   RESTORED ' || RPAD(p_tab, 30) || ' ' || v_n || '행 (백업 ' || p_bak || ' 은 남겨 둠)');
+    END;
+BEGIN
+    one('DM_PLN_MKT_FCST_RESULT_C',   'ZZ_CPD_MFRC_DUP_20261027');
+    one('DM_PLN_SALES_PLAN_RESULT_C', 'ZZ_CPD_SPRC_DUP_20261027');
+END;
+/

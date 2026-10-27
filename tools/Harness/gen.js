@@ -96,6 +96,17 @@ for (const b of buttons.filter(b => b.b && b.b.kind === 'field-popup')) {
   const f = fields.find(f => new RegExp('^(txt|usr)' + suffix + '$', 'i').test(f.c.name) || f.c.name.toLowerCase() === 'txt' + suffix.toLowerCase());
   if (f) { f.popup = b; b.merged = f; if (f.cat && f.cat.kind === 'popup') b.absorbed = true; }
 }
+// 조회조건 기준표(2026-10-23 사용자 지시 — SCP·SSP): 순서·사용여부·To-Be 명칭을 rules/search_cond.csv 로 확정
+//   SCP = 정렬원칙 RULE 순서 · SSP = 시트 확정 순서. 제외 조건은 skipped(__asis-mapping__ '해당없음' + 사유) — 참고자료 tools/VibeManager/rules/40_SEARCH_COND.md
+const SC = require('./lib/searchcond');
+const scRef = SC.forScreen(R, ID); let scRes = null;
+if (scRef) {
+  for (const f of fields) f.nameLabel = label(f.c.name);
+  scRes = SC.apply(scRef, fields, skipped, lblFor, todos);
+  // 제외·통합된 필드의 짝 팝업 버튼도 같은 사유로 제외(버튼만 남아 빈 모달 배선이 생기지 않게)
+  for (const { f } of scRes.merged.concat(scRes.excluded)) if (f.popup) { const bi = buttons.indexOf(f.popup); if (bi >= 0) buttons.splice(bi, 1); skipped.push({ c: f.popup.c, reason: `조회조건 기준표: 짝 필드 ${f.c.name} 제외/통합에 따름` }); }
+  console.log(`조회조건 기준표: ${SC.summary(scRes)}`);
+}
 // ── 2) 시트 ──
 const sheetRows = {}; for (const g of grid) (sheetRows[g.sheet] = sheetRows[g.sheet] || []).push(g);
 const sheets = Object.keys(sheetRows).filter(s => s !== '(시트 미상)').map(s => ({ name: s, key: upperSnake(s), rule: sheetRows[s][0].sheet_rule, rows: sheetRows[s], popup: /popup/i.test(s), used: !/미참조/.test(sheetRows[s][0].sheet_rule || '') }));  // used=false: 메타 정의만 있고 As-is 코드가 참조하지 않는 시트(등록·배선 생략)
@@ -186,14 +197,36 @@ if (primary) { const i = mainSheets.findIndex(s => s.name === primary.sheet); if
 for (const b of buttons) b.modalName = b.b && b.b.modal && !b.absorbed ? pascal(b.merged ? b.merged.label : b.label) : '';
 const AN = require('./lib/analysis');
 const validations = AN.load(cfg.analysisRoot, AID, 'V'), expressions = AN.load(cfg.analysisRoot, AID, 'E');
+// 2026-10-22 사용자 지시: AS-IS 와 TO-BE 는 같은 MSG ID 를 다른 문구에 쓴다(MSG00001 AS-IS '모든 항목은 필수 입력입니다.' / TO-BE '저장 하시겠습니까?').
+//   AS-IS ID 를 그대로 쓰지 않고 메시지 문구로 TO-BE ID 를 찾는다(lib/msgmap — KO→EN 문구 일치, 없으면 MSG????? = 신규 등록 대상)
+const MM = require('./lib/msgmap'); const msgM = MM.load(cfg); const msgMap = [];
+for (const v of validations) {
+  const code = String(v.msg || '').trim(); if (!code || !/^(MSG\d+|\d+)$/i.test(code)) continue;
+  const r = MM.map(msgM, code, v.msgText); v.asisMsg = code.toUpperCase(); v.msg = r.tobe; v.msgHow = r.how; v.tobeText = r.tobeText;
+  if (!msgMap.some(x => x.asis === r.asis)) msgMap.push(r);
+}
 for (const h of handlers) { const tgt = h.e.target.replace(/^this\./, '').split('.')[0]; const gp = gridPlan.find(g => g.name === tgt); if (gp) gp.events.push(h); }
 if (gridPlan.length === 1) { for (const h of handlers) if (h.r.tobe_slot === 'grid-event' && !gridPlan[0].events.includes(h)) gridPlan[0].events.push(h); }
-const ctx = { controlsAll: controls, eventsAll: events, endpointsAll: endpoints, menuMeta, commonButtons, hasConditionPanel, members, pascal, ID, Page, validations, expressions, gridPlan, layout, props, kebab, feature, asisName, mainClass, popupClasses, fields, buttons, grids, skipped, todos, sheets, mainSheets, popupSheets, divisionCols, hasSpreadTitle, titleSheets, titleLoops, procs, handlers, tcs, idx, rules, label };
+// 2026-10-23 사용자 지시: SCP·SSP 는 화면 VALIDATION 취합(Doc/화면분석서/*_화면_VALIDATION_취합_<최신>) 을 검증 이식의 대조 원천으로 쓴다 — GEN_NOTES §11
+const VR = require('./lib/valref'); const valRef = VR.find(cfg, ID);
+if (valRef) console.log(`VALIDATION 취합: ${VR.summary(valRef)}`);
+const ctx = { scRes, scSummary: SC.summary(scRes), valRef, valRefSummary: VR.summary(valRef), msgMap, controlsAll: controls, eventsAll: events, endpointsAll: endpoints, menuMeta, commonButtons, hasConditionPanel, members, pascal, ID, Page, validations, expressions, gridPlan, layout, props, kebab, feature, asisName, mainClass, popupClasses, fields, buttons, grids, skipped, todos, sheets, mainSheets, popupSheets, divisionCols, hasSpreadTitle, titleSheets, titleLoops, procs, handlers, tcs, idx, rules, label };
 const outRoot = path.join(cfg.genOutDir, ID);
 const pageRel = path.join('features', feature, 'src', 'pages', kebab);
 const files = T.render(ctx);
+// 2026-10-23 사용자 지시: AS-IS 액션 대조표(핸들러 본문의 구체 액션 전수 — 사전 미등록 외부 호출 포함) — 게이트 AC1/AC2. 기존 FE 페이지에 있으면 상태 보존(merge)
+//   상태 원천 우선순위: FE 페이지 대조표 → AS-IS 자료 폴더 문서(Doc/asisfacts/screens/<AID>/__asis-actions__.md — 문서 보강 단계에서 채운 의미·상태)
+{ const AC = require('./lib/actions'); const feAc = path.join(cfg.feRoot, pageRel, AC.FILE); const docAc = AC.docPath(cfg, AID);
+  const acr = AC.render(cfg, AID, fs.existsSync(feAc) ? fs.readFileSync(feAc, 'utf8') : fs.existsSync(docAc) ? fs.readFileSync(docAc, 'utf8') : '');
+  if (acr) { files[AC.FILE] = acr.md; console.log(`액션 대조표: ${acr.rows}행 · 의미 확인 필요 ${acr.unknown}`); } }
 fs.rmSync(outRoot, { recursive: true, force: true });
 for (const [rel, body] of Object.entries(files)) { const p = path.join(outRoot, rel.startsWith('@') ? rel.slice(1) : path.join(pageRel, rel)); fs.mkdirSync(path.dirname(p), { recursive: true }); fs.writeFileSync(p, body, 'utf8'); }
+if (scRes) fs.writeFileSync(path.join(outRoot, 'search_cond.json'), JSON.stringify({ note: '조회조건 기준표 적용 결과 — check.js SC1(순서)·SC2(제외 조건 잔존)가 Form.tsx 의 AS-IS 표지와 대조', domain: scRef.domain, screen: scRef.screen, src: scRef.src,
+  order: fields.map((f, i) => ({ ctl: f.c.name, label: f.label, tobe: f.sc && f.sc.row ? f.sc.row.tobe_name : '', seq: i + 1, usage: f.sc && f.sc.row ? f.sc.row.usage : '(기준표 없음)' })),
+  excluded: scRes.excluded.map(x => ({ ctl: x.f.c.name, usage: x.r.usage, reason: x.r.usage_reason || x.r.change })).concat(scRes.merged.map(x => ({ ctl: x.f.c.name, usage: 'MERGED', reason: x.r.tobe_name }))),
+  missing: scRes.missing.map(r => r.tobe_name) }, null, 1), 'utf8');
+fs.writeFileSync(path.join(outRoot, 'msg_map.json'), JSON.stringify({ note: 'AS-IS 메시지 ID → TO-BE 메시지 ID (문구로 찾음). tobe=MSG????? 는 TO-BE 에 같은 문구가 없어 신규 등록 대상(MSG01001+)', map: msgMap }, null, 1), 'utf8');
+if (msgMap.length) console.log(`메시지 ID: AS-IS ${msgMap.length}건 → TO-BE 매핑 ${msgMap.filter(r => r.tobe !== 'MSG?????').length} · 신규 등록 대상 ${msgMap.filter(r => r.tobe === 'MSG?????').length} · AS-IS ID 를 그대로 쓰면 뜻이 달라지는 것 ${msgMap.filter(r => MM.collides(msgM, r.asis)).length}`);
 console.log(`${ID} → ${outRoot}  (${Object.keys(files).length} files)  page=${pageRel}  fields=${fields.length} buttons=${buttons.length} sheets=${mainSheets.length}+${popupSheets.length}popup procs=${procs.length} handlers=${handlers.length} tcs=${tcs.length} V=${validations.length} E=${expressions.length}`);
 if (a.includes('--apply')) {
   const target = path.join(cfg.feRoot, pageRel);

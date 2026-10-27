@@ -1,0 +1,373 @@
+﻿GroupID,Level1MenuID,Level1Title,PrntMenuID,Level2Title,MenuID,Title,BasicACLC,BasicACLR,BasicACLU,BasicACLD,ExtendedACL,UseYN,RegtUserID,Level1SortOrder,Level2SortOrder,Level3SortOrder
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0004,Sales Site,True,True,True,True,0,Y,lges_anhnv,1,1,20
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0005,Sales Site Project Model,True,True,True,True,0,Y,20140001,1,1,32
+ADMIN,Master,Master,Demand Master,Demand Master,DMF4001,Customer Model Mapping,True,True,True,True,0,Y,20140001,1,1,40
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0007,Customer FCST Master,True,True,True,True,0,Y,20140001,1,1,50
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0020,Sales Price,True,True,True,True,0,Y,greenzun,1,1,62
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0043,해외법인 기여율 등록,True,True,True,True,0,Y,murim,1,1,80
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0043_01,해외법인 기여매출,False,True,False,False,0,Y,murim,1,1,90
+ADMIN,Master,Master,Demand Master,Demand Master,DM0004,Sales Site_bk,False,False,False,False,0,Y,greenzun,1,1,510
+ADMIN,Master,Master,Demand Master,Demand Master,DM0005,Sales Site Project Model_bk,False,False,False,False,0,Y,greenzun,1,1,530
+ADMIN,Master,Master,Demand Master,Demand Master,DM0020,Sales Price_bk,False,False,False,False,0,Y,greenzun,1,1,560
+ADMIN,Master,Master,Demand Master,Demand Master,DM0036,Capacity Allocation,True,True,True,True,0,Y,hwwoonins,1,1,561
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0039,ESS Shipment Priority,True,True,True,True,0,Y,greenzun,1,1,570
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0008,ERP EDI MASTER 정비,True,True,True,True,0,Y,kjj0070,1,1,571
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0009,Biz Plan Price(Master),True,True,True,True,0,Y,ilovu1,1,1,572
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0010,Biz Plan Price,True,True,True,True,0,Y,ilovu1,1,1,573
+ADMIN,Master,Master,Demand Master,Demand Master,DMX0010,BPP (Opt),False,False,False,False,0,Y,chkim.68,1,1,573
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0005_T,Sales Site Project Model T,True,True,True,True,0,Y,dev125812,1,1,574
+ADMIN,Master,Master,Demand Master,Demand Master,DMF0072,N: N Master Mapping,True,True,True,True,0,Y,kjj0070,1,1,575
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0039,Master Validation,True,True,True,True,0,Y,hwwoonins,1,2,1
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0001,Plant Site,True,True,True,True,0,Y,20140001,1,2,10
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0002,Line Master,True,True,True,True,0,Y,20140001,1,2,20
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0006,Project Route,True,True,True,True,0,Y,20140001,1,2,30
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0008,Item Master,True,True,True,True,0,Y,20140001,1,2,40
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0080,Model Code Master,True,True,True,True,0,Y,mimars99_ens,1,2,41
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0026,Demand Grouping,True,True,True,True,0,Y,byunghunjung,1,2,50
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0007,BOD,True,True,True,True,0,Y,20140001,1,2,70
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0030,BOD ITEM,True,True,True,True,0,Y,addio777,1,2,80
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0019,Work Calendar(OSP),True,True,True,True,0,Y,20140001,1,2,90
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0096,Shipment Working Day(OSP),True,True,True,True,0,Y,wonyeoulb,1,2,91
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0021,Loss Time,True,True,True,True,0,Y,20140001,1,2,100
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0022,Formation,True,True,True,True,0,Y,20140001,1,2,110
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0020,Tact Time(OSP),True,True,True,True,0,Y,20140001,1,2,120
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0040,Characteristic Capacity,True,True,True,True,0,Y,hwwoonins,1,2,130
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0023,Outsourcing Capacity,True,True,True,True,0,Y,byunghunjung,1,2,140
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0027,ProjectRoute (Electrode),True,True,True,True,0,Y,addio777,1,2,150
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0048,ProjectRoute (Warranty),True,True,True,True,0,Y,kimyh8848,1,2,151
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0035,JIG,True,True,True,True,0,Y,hwwoonins,1,2,160
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0036,JIG Item,True,True,True,True,0,Y,hwwoonins,1,2,170
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0041,Stock OSP,True,True,True,True,0,Y,hwwoonins,1,2,180
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0046,Model Allocation,True,True,True,True,0,Y,hwwoonins,1,2,190
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0037,Operation LT,True,True,True,True,0,Y,hwwoonins,1,2,191
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0047,KPI Target,True,True,True,True,0,Y,hwwoonins,1,2,192
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0049,CAPA,True,True,True,True,0,Y,khj79,1,2,193
+ADMIN,Master,Master,Supply Master,Supply Master,SCX0049,CAPA(fixed),True,True,True,True,0,Y,chkim.68,1,2,193
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0050,CAPA PIC,True,True,True,True,0,Y,khj79,1,2,194
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0052,CAPA Report,True,True,True,True,0,Y,khj79,1,2,195
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0054,CAPA Simulation,True,True,True,True,0,Y,khj79,1,2,196
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0053,SCP BOM (Cell~Pack),True,True,True,True,0,Y,khj79,1,2,197
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0201,CAPA(Test),True,True,True,True,0,Y,khj79,1,2,198
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0087,MDM Class Master,True,True,True,True,0,Y,mimars99_ens,1,2,199
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0097,SCP BOM(Elec),True,True,True,True,0,Y,vadabi3,1,2,200
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0098,CAPA (Mobility IT),True,True,True,True,0,Y,vadabi3,1,2,210
+ADMIN,Master,Master,Supply Master,Supply Master,SCP0110,Demand Group Master,True,True,True,True,0,Y,mrchois,1,2,211
+ADMIN,Master,Master,Factory Master,Factory Master,FP55555,NERP Work Test,False,False,False,False,0,Y,chkim.68,1,3,9
+ADMIN,Master,Master,Factory Master,Factory Master,FP02510,Model Routing,True,True,True,True,0,Y,yschoithira,1,3,10
+ADMIN,Master,Master,Factory Master,Factory Master,FP00180,Material,True,True,True,True,0,Y,yschoithira,1,3,20
+ADMIN,Master,Master,Factory Master,Factory Master,FP02320,Pancake Master,True,True,True,True,0,Y,yschoithira,1,3,30
+ADMIN,Master,Master,Factory Master,Factory Master,FP00210,BOM,True,True,True,True,0,Y,yschoithira,1,3,40
+ADMIN,Master,Master,Factory Master,Factory Master,FP02800,BOM Explosion,True,True,True,True,0,Y,yschoithira,1,3,50
+ADMIN,Master,Master,Factory Master,Factory Master,FP00212,BOM Explosion 1 Level,True,True,True,True,0,Y,yschoithira,1,3,60
+ADMIN,Master,Master,Factory Master,Factory Master,FP00020,Site & Plant,True,True,True,True,0,Y,yschoithira,1,3,70
+ADMIN,Master,Master,Factory Master,Factory Master,FP00070,Operation,True,True,True,True,0,Y,yschoithira,1,3,80
+ADMIN,Master,Master,Factory Master,Factory Master,FP02670,Slurry Batch Master,True,True,True,True,0,Y,yschoithira,1,3,110
+ADMIN,Master,Master,Factory Master,Factory Master,FP00461,Pack Worker Master,True,True,True,True,0,Y,yschoithira,1,3,130
+ADMIN,Master,Master,Factory Master,Factory Master,FP00100,Line,True,True,True,True,0,Y,yschoithira,1,3,170
+ADMIN,Master,Master,Factory Master,Factory Master,FP00130,Equipment,True,True,True,True,0,Y,yschoithira,1,3,180
+ADMIN,Master,Master,Factory Master,Factory Master,FP00310,Formation Yield,True,True,True,True,0,Y,yschoithira,1,3,190
+ADMIN,Master,Master,Factory Master,Factory Master,FP02550,Operation(BOD),True,True,True,True,0,Y,yschoithira,1,3,210
+ADMIN,Master,Master,Factory Master,Factory Master,FP00410,FCS Aging Routing,True,True,True,True,0,Y,yschoithira,1,3,215
+ADMIN,Master,Master,Factory Master,Factory Master,FP00411,FCS Shorter Aging Routing,True,True,True,True,0,Y,yschoithira,1,3,220
+ADMIN,Master,Master,Factory Master,Factory Master,FP02560,Site(BOD),True,True,True,True,0,Y,yschoithira,1,3,230
+ADMIN,Master,Master,Factory Master,Factory Master,FP00450,Setup Condition,True,True,True,True,0,Y,yschoithira,1,3,250
+ADMIN,Master,Master,Factory Master,Factory Master,FP03033,Model Measure Conversion,False,True,False,False,0,Y,yschoithira,1,3,270
+ADMIN,Master,Master,Factory Master,Factory Master,FP00413,Formation Tray Master,True,True,True,True,0,Y,yschoithira,1,3,280
+ADMIN,Master,Master,Factory Master,Factory Master,FP00414,Formation Tray for Model,True,True,True,True,0,Y,yschoithira,1,3,290
+ADMIN,Master,Master,Factory Master,Factory Master,FP02650,Slurry Batch Group Master,True,True,True,True,0,Y,yschoithira,1,3,300
+ADMIN,Master,Master,Factory Master,Factory Master,FPC0623,DIO,True,True,True,True,0,Y,chkim.68,1,3,301
+ADMIN,Master,Master,Factory Master,Factory Master,FP00160,Building(BOD),True,True,True,True,0,Y,yschoithira,1,3,310
+ADMIN,Master,Master,Factory Master,Factory Master,FP00460,Setup Group,True,True,True,True,0,Y,yschoithira,1,3,320
+ADMIN,Master,Master,Factory Master,Factory Master,FP02843,Electrode WH CAPA,True,True,True,True,0,Y,yschoithira,1,3,330
+ADMIN,Master,Master,Factory Master,Factory Master,FP02846,Electrode M ROLL,True,True,True,True,0,Y,yschoithira,1,3,340
+ADMIN,Master,Master,Factory Master,Factory Master,FP00644,Group Cell Mgmt,True,True,True,True,0,Y,yschoithira,1,3,341
+ADMIN,Master,Master,Factory Master,Factory Master,FP00460B,Setup Group (instance),True,True,True,True,0,Y,chkim.68,1,3,342
+ADMIN,Master,Master,Factory Master,Factory Master,FP00902,Item Setup Attr (instance),True,True,True,True,0,Y,chkim.68,1,3,343
+ADMIN,Master,Master,Factory Master,Factory Master,FP00903,Setup Matrix (instance),True,True,True,True,0,Y,chkim.68,1,3,344
+ADMIN,Master,Master,Shipping Master,Shipping Master,SSP0005,Shipment Working Day,True,True,True,True,0,Y,addio777,1,4,1
+ADMIN,Master,Master,Shipping Master,Shipping Master,SCP0033,Shipment Semi Dept Day,True,True,True,True,0,Y,hwwoonins,1,4,2
+ADMIN,Master,Master,Shipping Master,Shipping Master,SCP0028,Shipment Lot Size,True,True,True,True,0,Y,addio777,1,4,3
+ADMIN,Master,Master,Shipping Master,Shipping Master,SCP0005,Distribution Route,True,True,True,True,0,Y,20140001,1,4,4
+ADMIN,Master,Master,Shipping Master,Shipping Master,SSP0014,Shipment Model PIC,True,True,True,True,0,Y,addio777,1,4,5
+ADMIN,Master,Master,Shipping Master,Shipping Master,SSP0020,Delegate,True,True,True,True,0,Y,kahonmalu,1,4,7
+ADMIN,Master,Master,Shipping Master,Shipping Master,SSP0024,Shipment Master Electrode,True,True,True,True,0,Y,kimyh8848,1,4,8
+ADMIN,Master,Master,Shipping Master,Shipping Master,SSP0025,Shipment Requestor PIC,True,True,True,True,0,Y,khj79,1,4,9
+ADMIN,Master,Master,Shipping Master,Shipping Master,SSP0050,Shipment Change Request Integration,False,False,False,False,0,Y,jungilsetup,1,4,10
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0003,MKT FCST,True,True,True,True,0,Y,20140001,2,1,20
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0021,Sales Plan,True,True,True,True,0,Y,greenzun,2,1,32
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0048,Sales Monitoring,True,True,True,True,0,Y,hwi1993,2,1,34
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0014,Customer FCST Upload,True,True,True,True,0,Y,20140001,2,1,40
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0013,Customer PSI Upload,True,True,True,True,0,Y,20140001,2,1,50
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0026,ESS Channel PSI,True,True,True,True,0,Y,20140001,2,1,60
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0041,MDF Simulator,True,True,True,True,0,Y,greenzun,2,1,70
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0042,Business Plan,True,True,True,True,0,Y,greenzun,2,1,80
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0044,Sales Reports,True,True,True,True,0,Y,murim,2,1,90
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0045,Shipment Request,True,True,True,True,0,Y,hwi1993,2,1,91
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0049,ETC Sales Reports,True,True,True,True,0,Y,hwi1993,2,1,91
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DM0003,MKT FCST_bk,False,False,False,False,0,Y,greenzun,2,1,510
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DM0021,Sales Plan_bk,False,False,False,False,0,Y,greenzun,2,1,530
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,SSP0046,Shipment Request,True,True,True,True,0,Y,skxogkr1,2,1,531
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0003_1,MKT FCST (Auto),False,False,False,False,,Y,,2,1,532
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0081,MKT FCST (Auto),True,True,True,True,0,Y,kjj0070,2,1,532
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0042_3,Business Plan New,True,True,True,True,0,Y,ilovu1,2,1,533
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0003_T,MKT FCST T,True,True,True,True,0,Y,dev125812,2,1,534
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0070,Auto PR Check,True,True,True,True,0,Y,kjj0070,2,1,535
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0074,Metal Link Price,True,True,True,True,0,Y,kjj0070,2,1,536
+ADMIN,Demand,Demand,Demand Plan,Demand Plan,DMF0082,Fcst&Price MGMT,True,True,True,True,0,Y,dsiol,2,1,537
+ADMIN,Demand,Demand,Demand JV Plant,Demand JV Plant,DMF0066,Shipment Request JV,True,True,True,True,0,Y,lgda106,2,2,1
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0015,Plan Management,True,True,True,True,0,Y,20140001,3,1,10
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0014,Plan Problem,True,True,True,True,0,Y,20140001,3,1,20
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0011,Production Plan,True,True,True,True,0,Y,20140001,3,1,30
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0013,Production Plan Line,True,True,True,True,0,Y,byunghunjung,3,1,40
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0024,Production Plan Fix,True,True,True,True,0,Y,byunghunjung,3,1,45
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0009,Shipment Plan FG,True,True,True,True,0,Y,20140001,3,1,50
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0010,Shipment Plan SEMI,True,True,True,True,0,Y,20140001,3,1,60
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0025,Shipment Plan Fix,True,True,True,True,0,Y,kaiser99,3,1,65
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0045,Shipment Request SEMI,True,True,True,True,0,Y,hwwoonins,3,1,66
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SSP0045,Shipment Request SEMI,True,True,True,True,0,Y,kimyh8848,3,1,67
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0012,PSI,True,True,True,True,0,Y,20140001,3,1,70
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0031,Global PSI,True,True,True,True,0,Y,hwwoonins,3,1,71
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0034,PSI Electrode,True,True,True,True,0,Y,hwwoonins,3,1,72
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0038,Global PSI(Mobility & IT),True,True,True,True,0,Y,hwwoonins,3,1,73
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0044,Global PSI(ESS),True,True,True,True,0,Y,hwwoonins,3,1,74
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0051,Production Plan Target,True,True,True,True,0,Y,khj79,3,1,75
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0056,MPP Mgmt.,True,True,True,True,0,Y,moonli0816,3,1,76
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0200,Shipment Plan FG(Test),True,True,True,True,0,Y,khj79,3,1,77
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0067,Global PSI(xls),True,True,True,True,0,Y,khj79,3,1,78
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0069,Global PSI_EE,True,True,True,True,0,Y,khj79,3,1,79
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0075,Allo Target,True,True,True,True,0,Y,wonyeoulb,3,1,80
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0090,Allo Target Request,True,True,True,True,0,Y,wonyeoulb,3,1,81
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0094,Global PSI Auto,False,False,False,False,0,Y,iamarock,3,1,82
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0095,Global PSI Elec,True,True,True,True,0,Y,iamarock,3,1,83
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0116,Global PSI New ESS,True,True,True,True,0,Y,yangsh2,3,1,84
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0100,Global PSI New,True,True,True,True,0,Y,vadabi3,3,1,84
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0103,Material Visibility,True,True,True,True,0,Y,iamarock,3,1,85
+ADMIN,Supply,Supply,Supply Plan,Supply Plan,SCP0111,Integration PSI,True,True,True,True,0,Y,mrchois,3,1,86
+ADMIN,Supply,Supply,Business Plan,Business Plan,SCP0099,Business Plan LongTerm,True,True,True,True,0,Y,blueeos,3,2,1
+ADMIN,Supply,Supply,Validation,Validation,SCM0014,Intransit Inventory,True,True,True,True,0,Y,20140001,3,3,1
+ADMIN,Supply,Supply,Validation,Validation,SCM0017,Validation BOM,False,True,False,False,0,Y,byunghunjung,3,3,2
+ADMIN,Supply,Supply,Validation,Validation,SCP0032,Unplan List,True,True,True,True,0,Y,hwwoonins,3,3,3
+ADMIN,Supply,Supply,Validation,Validation,SCP0091,Intransit Inventory Report,True,True,True,True,0,Y,vadabi3,3,3,4
+ADMIN,Supply,Supply,Supply JV Plant,Supply JV Plant,SCP0057,Production Plan Line JV,True,True,True,True,0,Y,blueeos,3,4,1
+ADMIN,Supply,Supply,Supply JV Plant,Supply JV Plant,SCP0058,Shipment Plan FG JV,True,True,True,True,0,Y,blueeos,3,4,2
+ADMIN,Supply,Supply,Supply JV Plant,Supply JV Plant,SCP0059,Shipment Plan SEMI JV,True,True,True,True,0,Y,blueeos,3,4,3
+ADMIN,Supply,Supply,Supply JV Plant,Supply JV Plant,SCP0060,Production Plan JV,True,True,True,True,0,Y,blueeos,3,4,4
+ADMIN,Supply,Supply,Supply JV Plant,Supply JV Plant,SCP0061,Production Plan Fix JV,True,True,True,True,0,Y,blueeos,3,4,5
+ADMIN,Supply,Supply,Supply JV Plant,Supply JV Plant,SCP0062,Shipment Plan Fix JV,True,True,True,True,0,Y,blueeos,3,4,6
+ADMIN,Supply,Supply,Supply JV Plant,Supply JV Plant,SCP0063,PSI JV,True,True,True,True,0,Y,blueeos,3,4,7
+ADMIN,Supply,Supply,Supply JV Plant,Supply JV Plant,SCP0064,Global PSI JV,True,True,True,True,0,Y,blueeos,3,4,8
+ADMIN,Supply,Supply,Supply JV Plant,Supply JV Plant,SCP0065,Production Plan Target JV,True,True,True,True,0,Y,blueeos,3,4,9
+ADMIN,Supply,Supply,Capa Plan,Capa Plan,SCP0114,CAPA LineMaster,True,True,True,True,0,Y,jahn1502,3,5,1
+ADMIN,Supply,Supply,Capa Plan,Capa Plan,SCP0104,Line Assign,True,True,True,True,0,Y,iamarock,3,5,2
+ADMIN,Supply,Supply,Capa Plan,Capa Plan,SCP0105,Speed Plan,True,True,True,True,0,Y,iamarock,3,5,3
+ADMIN,Supply,Supply,Capa Plan,Capa Plan,SCP0106,Loss Plan,True,True,True,True,0,Y,iamarock,3,5,4
+ADMIN,Supply,Supply,Capa Plan,Capa Plan,SCP0108,LOB Report,True,True,True,True,0,Y,iamarock,3,5,5
+ADMIN,Supply,Supply,Capa Plan,Capa Plan,SCP0107,TEEP Report,True,True,True,True,0,Y,iamarock,3,5,6
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0120,Constraint Mgmt,True,True,True,True,0,Y,mrchois,3,6,1
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0123,Plan Control,True,True,True,True,0,Y,mrchois,3,6,2
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0124,Plan Group Dashboard,True,True,True,True,0,Y,mrchois,3,6,3
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0121,Plan Group Master,True,True,True,True,0,Y,mrchois,3,6,4
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0122,Plan Activity Mgmt,True,True,True,True,0,Y,mrchois,3,6,5
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0125,Workbench,True,True,True,True,0,Y,mrchois,3,6,6
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0126,OPT CAPA,True,True,True,True,0,Y,mrchois,3,6,7
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0127,Precede/Safety Stock Day,True,True,True,True,0,Y,twinlove,3,6,8
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0128,Precede/Safety Stock Qty,True,True,True,True,0,Y,twinlove,3,6,9
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0129,Demand Exception,True,True,True,True,0,Y,twinlove,3,6,10
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0130,Scheduled Reciept Information,True,True,True,True,0,Y,twinlove,3,6,11
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0131,Sales Site Priority,True,True,True,True,0,Y,twinlove,3,6,12
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0132,Constraint Of Shipment Qty,True,True,True,True,0,Y,twinlove,3,6,13
+ADMIN,Supply,Supply,OPT Plan,OPT Plan,SCP0133,Warehouse Capacity,True,True,True,True,0,Y,twinlove,3,6,14
+ADMIN,Factory,Factory,Demand_FP,Demand,FP00510,SCP Target,True,True,True,True,0,Y,yschoithira,4,1,1
+ADMIN,Factory,Factory,Demand_FP,Demand,FP00514,Test Target,True,True,True,True,0,Y,yschoithira,4,1,2
+ADMIN,Factory,Factory,Demand_FP,Demand,FP03590,PDS Target,True,True,True,True,0,Y,leejsthira,4,1,3
+ADMIN,Factory,Factory,Demand_FP,Demand,FP00517,Domestic Model Master,True,True,True,True,0,Y,yschoithira,4,1,4
+ADMIN,Factory,Factory,Demand_FP,Demand,FP00540,SSP Shipping Plan,True,True,True,True,0,Y,yschoithira,4,1,5
+ADMIN,Factory,Factory,Demand_FP,Demand,FP00518,Shipping Plan,True,True,True,True,0,Y,yschoithira,4,1,6
+ADMIN,Factory,Factory,Demand_FP,Demand,FP00519,PJT Status & Production Type,True,True,True,True,0,Y,yschoithira,4,1,7
+ADMIN,Factory,Factory,Demand_FP,Demand,FP00521,Demand Waterfall,True,True,True,True,0,Y,yschoithira,4,1,8
+ADMIN,Factory,Factory,Inventory,Inventory,FP00731,Stock,True,True,True,True,0,Y,yschoithira,4,2,10
+ADMIN,Factory,Factory,Inventory,Inventory,FP00960,Aging Inventory,True,True,True,True,0,Y,yschoithira,4,2,20
+ADMIN,Factory,Factory,Inventory,Inventory,FP00740,Theory Stock,True,True,True,True,0,Y,leejsthira,4,2,30
+ADMIN,Factory,Factory,Plan Control,Plan Control,FP00590,Plan Control,True,True,True,True,0,Y,yschoithira,4,3,10
+ADMIN,Factory,Factory,Plan Control,Plan Control,FP01570,Plan ID History,True,True,True,True,0,Y,yschoithira,4,3,20
+ADMIN,Factory,Factory,Plan Control,Plan Control,FP00470,Master Data Validation,True,True,True,True,0,Y,yschoithira,4,3,30
+ADMIN,Factory,Factory,Plan Control,Plan Control,FP00591,Plan Control(Integration),True,True,True,True,0,Y,leejsthira,4,3,40
+ADMIN,Factory,Factory,Planning,Planning,FP00596,Plan Amend by Line(PreMix),True,True,True,True,0,Y,leejsthira2,4,4,10
+ADMIN,Factory,Factory,Planning,Planning,FP00597,Plan Amend by Model(PreMix),True,True,True,True,0,Y,leejsthira2,4,4,20
+ADMIN,Factory,Factory,Planning,Planning,FP00595,Plan Amend by Line(Elec),True,True,True,True,0,Y,leejsthira2,4,4,30
+ADMIN,Factory,Factory,Planning,Planning,FP00643,"Plan Amend by Line, PSI(Elec)",True,True,True,True,0,Y,leejsthira2,4,4,35
+ADMIN,Factory,Factory,Planning,Planning,FP00598,Plan Amend by Model(Elec),True,True,True,True,0,Y,leejsthira2,4,4,40
+ADMIN,Factory,Factory,Planning,Planning,FP00622,Plan Amend by Line(NJ_Pouch),True,True,True,True,0,Y,yschoithira,4,4,60
+ADMIN,Factory,Factory,Planning,Planning,FP00594,Plan Amend by Model(NJ_Pouch),True,True,True,True,0,Y,yschoithira,4,4,70
+ADMIN,Factory,Factory,Planning,Planning,FP00602,Plan Amend by Line(Assy),True,True,True,True,0,Y,yschoithira,4,4,80
+ADMIN,Factory,Factory,Planning,Planning,FP00602MK2,Plan Amend by Line(Assy_OC/NB/WA),True,True,True,True,0,Y,leejsthira2,4,4,85
+ADMIN,Factory,Factory,Planning,Planning,FP00599,Plan Amend by Model(Assy),True,True,True,True,0,Y,yschoithira,4,4,90
+ADMIN,Factory,Factory,Planning,Planning,FP00599MK2F,Plan Amend by Model(Assy_OC/NB/WA),True,True,True,True,0,Y,leejsthira2,4,4,95
+ADMIN,Factory,Factory,Planning,Planning,FP00621,Plan Amend by Line(Formation),True,True,True,True,0,Y,yschoithira,4,4,100
+ADMIN,Factory,Factory,Planning,Planning,FP00607,Plan Amend by Model(Formation),True,True,True,True,0,Y,yschoithira,4,4,110
+ADMIN,Factory,Factory,Planning,Planning,FP00601,Plan Amend by Line(Pack),True,True,True,True,0,Y,yschoithira,4,4,140
+ADMIN,Factory,Factory,Planning,Planning,FP00600,Plan Amend by Model(Pack),True,True,True,True,0,Y,yschoithira,4,4,150
+ADMIN,Factory,Factory,Planning,Planning,FP01551,In-house Request Plan(Pack),True,True,True,True,0,Y,yschoithira,4,4,160
+ADMIN,Factory,Factory,Planning,Planning,FP01552,In-house Moving Plan(Pack),True,True,True,True,0,Y,yschoithira,4,4,170
+ADMIN,Factory,Factory,Planning,Planning,FP01559,In-house Request/Moving Plan,True,True,True,True,0,Y,yschoithira,4,4,180
+ADMIN,Factory,Factory,Planning,Planning,FP00608,Plan Amend Memo,True,True,True,True,0,Y,yschoithira,4,4,190
+ADMIN,Factory,Factory,Planning,Planning,FP01624,Mpp Wpp,True,True,True,True,0,Y,yschoithira,4,4,220
+ADMIN,Factory,Factory,Planning,Planning,FP02842,Plan Amend (Elec Post Shift),True,True,True,True,0,Y,yschoithira,4,4,227
+ADMIN,Factory,Factory,Planning,Planning,FP02841,Plan Amend (Elec Post),True,True,True,True,0,Y,yschoithira,4,4,228
+ADMIN,Factory,Factory,Planning,Planning,FP00640,ILT Module,True,True,True,True,0,Y,leejsthira2,4,4,229
+ADMIN,Factory,Factory,Simulation,Simulation,FP00623,Pancake Simulation(Elec.),True,True,True,True,0,Y,leejsthira2,4,5,10
+ADMIN,Factory,Factory,Simulation,Simulation,FP00626,Pancake Simulation(Assy),True,True,True,True,0,Y,yschoithira,4,5,20
+ADMIN,Factory,Factory,Simulation,Simulation,FP00609,Pancake Simul By Bld(Elec.),True,True,True,True,0,Y,leejsthira2,4,5,35
+ADMIN,Factory,Factory,Simulation,Simulation,FP00627,Cell Simulation(Pack),True,True,True,True,0,Y,yschoithira,4,5,40
+ADMIN,Factory,Factory,Simulation,Simulation,FP00631,Cell Simulation(Cell~Pack),True,True,True,True,0,Y,yschoithira,4,5,50
+ADMIN,Factory,Factory,Simulation,Simulation,FP00634,Tray Simulation,True,True,True,True,0,Y,yschoithira,4,5,60
+ADMIN,Factory,Factory,Simulation,Simulation,FP00629,Material Demand Supply Simul,True,True,True,True,0,Y,yschoithira,4,5,70
+ADMIN,Factory,Factory,Simulation,Simulation,FP00637,Material Cell Simulation(Pack),True,True,True,True,0,Y,yschoithira,4,5,80
+ADMIN,Factory,Factory,Simulation,Simulation,FP00641,Integration PSI Simulation,True,True,True,True,0,Y,yschoithira,4,5,90
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP00617,Plan by Line(PreMix),False,True,False,False,0,Y,leejsthira2,4,6,10
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP00618,Plan by Model(PreMix),False,True,False,False,0,Y,leejsthira2,4,6,20
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP00614,Plan by Line(Elec),False,True,False,False,0,Y,leejsthira2,4,6,30
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP00620,Plan by Line(Elec) Production,True,True,True,True,0,Y,leejsthira2,4,6,40
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP00606,Plan by Model(Elec),False,True,False,False,0,Y,leejsthira2,4,6,50
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP00611,Plan By Line(Assy),True,True,True,True,0,Y,yschoithira,4,6,60
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP00603,Plan By Model(Assy),True,True,True,True,0,Y,yschoithira,4,6,70
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP00619,Plan by Line(Formation),True,True,True,True,0,Y,yschoithira,4,6,80
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP00605,Plan by Model(Formation),True,True,True,True,0,Y,yschoithira,4,6,90
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP00612,Plan By Line(Pack),True,True,True,True,0,Y,yschoithira,4,6,100
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP00604,Plan By Model(Pack),True,True,True,True,0,Y,yschoithira,4,6,110
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP02845,Plan Result (Elec Post Shift),True,True,True,True,0,Y,leejsthira2,4,6,120
+ADMIN,Factory,Factory,Plan Result,Plan Result,FP02844,Plan Graph (Elec Post),True,True,True,True,0,Y,chkim.68,4,6,130
+ADMIN,Factory,Factory,Work Order,Work Order,FP01620,W/O Create,True,True,True,True,0,Y,yschoithira,4,7,10
+ADMIN,Factory,Factory,Work Order,Work Order,FP02641,W/O Status,True,True,True,True,0,Y,yschoithira,4,7,20
+ADMIN,Factory,Factory,Work Order,Work Order,FP02642,W/O History,True,True,True,True,0,Y,yschoithira,4,7,30
+ADMIN,Factory,Factory,Work Order,Work Order,FP01630,Close Work Order,True,True,True,True,0,Y,yschoithira,4,7,40
+ADMIN,Factory,Factory,Tracking & Analysis,Tracking & Analysis,FP01470,Order Tracking,True,True,True,True,0,Y,lgda106,4,8,1
+ADMIN,Factory,Factory,Tracking & Analysis,Tracking & Analysis,FP00610,Plan Result Validation,True,True,True,True,0,Y,lgda106,4,8,2
+ADMIN,Factory,Factory,Actual Data,Actual Data,FP02602,Production Result,True,True,True,True,0,Y,yschoithira,4,9,10
+ADMIN,Factory,Factory,Actual Data,Actual Data,FP00920,Shipping Result,True,True,True,True,0,Y,lgda106,4,9,11
+ADMIN,Factory,Factory,Actual Data,Actual Data,FP02600,Production Result WO MES,True,True,True,True,0,Y,chkim.68,4,9,20
+ADMIN,Factory,Factory,Actual Data,Actual Data,FP00770,Production Result WO ERP,True,True,True,True,0,Y,lgda106,4,9,21
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0021,Shipment Plan(Auto & ESS),True,True,True,True,0,Y,kahonmalu,5,1,1
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0060,Shipment Plan(Auto & ESS)-WA_UC,True,True,True,True,0,Y,kahonmalu,5,1,2
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0001,Shipment Plan,False,False,False,False,0,Y,juhlee,5,1,2
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0002,Shipment Change Request,False,False,False,False,0,Y,juhlee,5,1,3
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0200,Shipment Change Request,True,True,True,True,0,Y,kimyh8848,5,1,3
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0003,Shipment Change Request Confirm,True,True,True,True,0,Y,juhlee,5,1,4
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0012,Shipment Plan Detail,True,True,True,True,0,Y,addio777,5,1,5
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0019,Shipment Change History,False,True,False,False,0,Y,kahonmalu,5,1,6
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0013,Shipment Plan Adjustment,True,True,True,True,0,Y,addio777,5,1,7
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0006,Plan Problem (SSP),False,False,False,False,0,Y,byunghunjung,5,1,8
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0007,Production Plan(SSP),False,False,False,False,0,Y,byunghunjung,5,1,9
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0008,Production Plan Line(SSP),False,False,False,False,0,Y,byunghunjung,5,1,10
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0009,Shipment Plan FG(SSP),True,True,True,True,0,Y,byunghunjung,5,1,11
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0010,Shipment Plan SEMI (SSP),False,False,False,False,0,Y,byunghunjung,5,1,12
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0011,PSI (SSP),False,False,False,False,0,Y,byunghunjung,5,1,13
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0015,Shipment Plan(Mobility & IT),True,True,True,True,0,Y,juhlee,5,1,14
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0016,Shipment Request(Mobility & IT),False,False,False,False,0,Y,juhlee,5,1,15
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0017,Inventory Raw(Mobility  & IT),True,True,True,True,0,Y,juhlee,5,1,16
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0018,Production Plan(OSP),True,True,True,True,0,Y,kahonmalu,5,1,17
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0022,Shipment Request(Electrode),True,True,True,True,0,Y,kimyh8848,5,1,18
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0023,Shipment Plan(Electrode),True,True,True,True,0,Y,kimyh8848,5,1,19
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0026,Shipment Request(Mobility & IT),True,True,True,True,0,Y,kimyh8848,5,1,20
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0027,Purchasing PSI(ESS),True,True,True,True,0,Y,kimyh8848,5,1,21
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0201,Shipment Change Request(Packer),True,True,True,True,0,Y,kimyh8848,5,1,22
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0202,Shipment Change Request Confirm(Packer),True,True,True,True,0,Y,kimyh8848,5,1,23
+ADMIN,Shipping,Shipping,Shipping Schedule,Shipping Schedule,SSP0000,Test,True,True,True,True,0,Y,jooyong026,5,1,24
+ADMIN,Shipping,Shipping,Auto & ESS,Auto＆ESS,SSP0021_8182,Shipment Plan(Auto＆ESS),False,False,False,False,0,Y,jungilsetup,5,2,1
+ADMIN,Shipping,Shipping,Auto & ESS,Auto＆ESS,SSP0027_8182,Purchasing PSI(ESS),False,False,False,False,0,Y,jungilsetup,5,2,2
+ADMIN,Shipping,Shipping,Auto & ESS,Auto＆ESS,SSP0200_8182,Shipment Change Request,False,False,False,False,0,Y,jungilsetup,5,2,3
+ADMIN,Shipping,Shipping,Auto & ESS,Auto＆ESS,SSP0003_8182,Shipment Change Request Confirm,False,False,False,False,0,Y,jungilsetup,5,2,4
+ADMIN,Shipping,Shipping,Auto & ESS,Auto＆ESS,SSP0012_8182,Shipment Plan Detail,False,False,False,False,0,Y,jungilsetup,5,2,5
+ADMIN,Shipping,Shipping,Auto & ESS,Auto＆ESS,SSP0019_8182,Shipment Change History,False,False,False,False,0,Y,jungilsetup,5,2,6
+ADMIN,Shipping,Shipping,Auto & ESS,Auto＆ESS,SSP0018_8182,Production Plan(OSP),False,False,False,False,0,Y,jungilsetup,5,2,7
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0015_40,Shipment Plan(Cell),False,False,False,False,0,Y,jungilsetup,5,3,1
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0029_40,Shipment Plan(Pack),False,False,False,False,0,Y,jungilsetup,5,3,2
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0016_40,Shipment Request(IT＆Mobile),False,False,False,False,0,Y,jungilsetup,5,3,3
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0017_40,Inventory Raw(Mobility＆IT),False,False,False,False,0,Y,jungilsetup,5,3,4
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0201_40,Shipment Change Request(Packer),False,False,False,False,0,Y,jungilsetup,5,3,5
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0202_40,Shipment Change Request Confirm(Packer),False,False,False,False,0,Y,jungilsetup,5,3,6
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0026_40,Shipment Request(Mobility＆IT),False,False,False,False,0,Y,jungilsetup,5,3,7
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0018_40,Production Plan(OSP),False,False,False,False,0,Y,jungilsetup,5,3,8
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0200_40,Shipment Change Request,False,False,False,False,0,Y,jungilsetup,5,3,9
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0003_40,Shipment Change Request Confirm,False,False,False,False,0,Y,jungilsetup,5,3,10
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0012_40,Shipment Plan Detail,False,False,False,False,0,Y,jungilsetup,5,3,11
+ADMIN,Shipping,Shipping,Mobility & IT,Mobility＆IT,SSP0019_40,Shipment Change History,False,False,False,False,0,Y,jungilsetup,5,3,12
+ADMIN,Shipping,Shipping,Electrode,Electrode,SSP0022_EE,Shipment Request(Electrode),False,False,False,False,0,Y,jungilsetup,5,4,1
+ADMIN,Shipping,Shipping,Electrode,Electrode,SSP0023_EE,Shipment Plan(Electrode),False,False,False,False,0,Y,jungilsetup,5,4,2
+ADMIN,Shipping,Shipping,Electrode,Electrode,SSP0200_EE,Shipment Change Request,False,False,False,False,0,Y,jungilsetup,5,4,3
+ADMIN,Shipping,Shipping,Electrode,Electrode,SSP0003_EE,Shipment Change Request Confirm,False,False,False,False,0,Y,jungilsetup,5,4,4
+ADMIN,Shipping,Shipping,Electrode,Electrode,SSP0012_EE,Shipment Plan Detail,False,False,False,False,0,Y,jungilsetup,5,4,5
+ADMIN,Shipping,Shipping,Electrode,Electrode,SSP0019_EE,Shipment Change History,False,False,False,False,0,Y,jungilsetup,5,4,6
+ADMIN,Report,Report,Waterfall,Waterfall,DMF0035,MKT FCST Waterfall,True,True,True,True,0,Y,20140001,6,1,12
+ADMIN,Report,Report,Waterfall,Waterfall,DMF0022,Sales Plan Waterfall,True,True,True,True,0,Y,greenzun,6,1,22
+ADMIN,Report,Report,Waterfall,Waterfall,SCP0017,Production Plan Waterfall,True,True,True,True,0,Y,20140001,6,1,30
+ADMIN,Report,Report,Waterfall,Waterfall,SCP0016,Shipment Plan FG Waterfall,True,True,True,True,0,Y,20140001,6,1,40
+ADMIN,Report,Report,Waterfall,Waterfall,SCP0018,Shipment Plan Semi Waterfall,True,True,True,True,0,Y,20140001,6,1,50
+ADMIN,Report,Report,Waterfall,Waterfall,DMF0050,EDI Waterfall,True,True,True,True,0,Y,kdw2819,6,1,92
+ADMIN,Report,Report,Waterfall,Waterfall,DMF0051,Biz Plan Waterfall,False,True,False,False,0,Y,rosia27,6,1,94
+ADMIN,Report,Report,Waterfall,Waterfall,DMF0051_1,Business Plan Confirm,True,True,True,True,0,Y,leetw85,6,1,94
+ADMIN,Report,Report,Waterfall,Waterfall,DM0035,MKT FCST Waterfall_bk,False,False,False,False,0,Y,greenzun,6,1,510
+ADMIN,Report,Report,Waterfall,Waterfall,DM0022,Sales Plan Waterfall_bk,False,False,False,False,0,Y,greenzun,6,1,520
+ADMIN,Report,Report,Waterfall,Waterfall,DMF0068,Demand Manager,True,True,True,True,0,Y,chano0612,6,1,521
+ADMIN,Report,Report,Waterfall,Waterfall,DMF0040,MKT FCST Comparison,True,True,True,True,0,Y,hmyong,6,1,522
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0055,Shipment(Allo) Report,True,True,True,True,0,Y,moonli0816,6,2,1
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0070,Demand RTF Balance,True,True,True,True,0,Y,herokwon2,6,2,2
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0071,CAPA Balance Small,True,True,True,True,0,Y,herokwon2,6,2,3
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0072,CAPA Balance,True,True,True,True,0,Y,herokwon2,6,2,4
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0073,CAPA Balance Electrode,True,True,True,True,0,Y,herokwon2,6,2,5
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0074,PSI RTF Balance,True,True,True,True,0,Y,herokwon2,6,2,6
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0081,Production Plan Report,True,True,True,True,0,Y,mimars99_ens,6,2,15
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0084,Long-term stock,True,True,True,True,0,Y,mimars99_ens,6,2,16
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0113,Long Term Stock MGMT,True,True,True,True,0,Y,yangsh2,6,2,16
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0115,Policy-based Inv. Mgmt.,True,True,True,True,0,Y,yangsh2,6,2,16
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0101,Inventory Trend,True,True,True,True,0,Y,vadabi3,6,2,16
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0076,Production Result Check,True,True,True,True,0,Y,herokwon2,6,2,17
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0077,Shipping Result Check,True,True,True,True,0,Y,herokwon2,6,2,18
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0083,DIO Report,True,True,True,True,0,Y,khj79,6,2,19
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0093,DIO Trend Report,True,True,True,True,0,Y,vadabi3,6,2,20
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0078,SCP system VOC,True,True,True,True,0,Y,khj79,6,2,21
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0079,ESS RTF Analysis Report,True,True,True,True,0,Y,khj79,6,2,22
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0085,Ending Inventory,True,True,True,True,0,Y,khj79,6,2,23
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0092,RTF Achievement Rate,True,True,True,True,0,Y,iamarock,6,2,24
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0102,BOD Validation Report,True,True,True,True,0,Y,vadabi3,6,2,25
+ADMIN,Report,Report,SCM Supply,SCM Supply,SSP0028,BOD Validation Report_S,True,True,True,True,0,Y,skxogkr1,6,2,25
+ADMIN,Report,Report,SCM Supply,SCM Supply,SSP0030,Logistics Simulation,True,True,True,True,0,Y,skxogkr1,6,2,26
+ADMIN,Report,Report,SCM Supply,SCM Supply,SCP0112,Cell Tray Simulation,True,True,True,True,0,Y,mrchois,6,2,27
+ADMIN,Report,Report,Customer Forecast,Customer Forecast,DMF0052,EDI Summary,False,True,False,False,0,Y,rosia27,6,3,1
+ADMIN,Report,Report,Customer Forecast,Customer Forecast,DMF0053,Customer FCST Waterfall,True,True,True,True,0,Y,chano0612,6,3,2
+ADMIN,Report,Report,Customer Forecast,Customer Forecast,DMF0069,History Data Managing Board,True,True,True,True,0,Y,jssbae,6,3,3
+ADMIN,Authority,Authority,Auth Mgmt,Auth Mgmt,SCM0008,Auth Request,True,True,True,True,0,Y,20140001,7,1,1
+ADMIN,Authority,Authority,Auth Mgmt,Auth Mgmt,SCM0009,Auth Approval,True,True,True,True,0,Y,20140001,7,1,2
+ADMIN,Authority,Authority,FP Auth Mgt,FP Auth Mgmt,FP01886,FP Auth Request,True,True,True,True,0,Y,yschoithira,7,2,10
+ADMIN,Authority,Authority,FP Auth Mgt,FP Auth Mgmt,FP01887,FP Auth Approval,True,True,True,True,0,Y,yschoithira,7,2,20
+ADMIN,Admin,Admin,Admin Menu,Admin,SY0103,User,True,True,True,True,0,Y,20140001,8,1,0
+ADMIN,Admin,Admin,Admin Menu,Admin,SY0105,Group User,True,True,True,True,0,Y,20140001,8,1,1
+ADMIN,Admin,Admin,Admin Menu,Admin,SY0202,Lookup,True,True,True,True,0,Y,20140001,8,1,2
+ADMIN,Admin,Admin,Admin Menu,Admin,XP06970,Hard Code Lookup,True,True,True,True,0,Y,chkim.68,8,1,3
+ADMIN,Admin,Admin,Admin Menu,Admin,SY0205,Dynamic Query List,True,True,True,True,0,Y,20140001,8,1,4
+ADMIN,Admin,Admin,System,System,SY0101,Program,True,True,True,True,0,Y,20140001,8,2,1
+ADMIN,Admin,Admin,System,System,SY0102,Menu,True,True,True,True,0,Y,20140001,8,2,2
+ADMIN,Admin,Admin,System,System,SY0104,Group,True,True,True,True,0,Y,20140001,8,2,3
+ADMIN,Admin,Admin,System,System,SY0106,Group Menu,True,True,True,True,0,Y,20140001,8,2,4
+ADMIN,Admin,Admin,System,System,SY0107,Code,True,True,True,True,0,Y,20140001,8,2,5
+ADMIN,Admin,Admin,System,System,SY0108,Message,True,True,True,True,0,Y,20140001,8,2,6
+ADMIN,Admin,Admin,System,System,SY0109,Term,True,True,True,True,0,Y,20140001,8,2,7
+ADMIN,Admin,Admin,System,System,SY0203,UI Category Setup,True,True,True,True,0,Y,20140001,8,2,8
+ADMIN,Admin,Admin,System,System,SY0206,Mail Setup,True,True,True,True,0,Y,20140001,8,2,9
+ADMIN,Admin,Admin,System,System,SY0210,Notice Setup,True,True,True,True,0,Y,20140001,8,2,10
+ADMIN,Admin,Admin,System,System,SY0207,Batch Log,True,True,True,True,0,Y,20140001,8,2,11
+ADMIN,Admin,Admin,System,System,SY0208,SMS Setup,True,True,True,True,0,Y,20140001,8,2,12
+ADMIN,Admin,Admin,System,System,SCM0019,SCP IF Blocking,True,True,True,True,0,Y,hwwoonins,8,2,14
+ADMIN,Admin,Admin,System,System,FP8888,User Log,False,False,False,False,0,Y,chkim.68,8,2,15
+ADMIN,Admin,Admin,Fp Admin,FP Admin,FP01990,Look Up(FP),True,True,True,True,0,Y,lgda106,8,3,1
+ADMIN,Admin,Admin,Fp Admin,FP Admin,FP01820,Net Job,True,True,True,True,0,Y,leejsthira2,8,3,2
+ADMIN,Admin,Admin,Fp Admin,FP Admin,FP01883,Instance Authority,True,True,True,True,0,Y,leejsthira2,8,3,3
+ADMIN,Admin,Admin,Fp Admin,FP Admin,FP01950,Manual Create WO,True,True,True,True,0,Y,leejsthira2,8,3,4
+ADMIN,Admin,Admin,Fp Admin,FP Admin,FP01991,Config Setting,True,True,True,True,0,Y,lgda106,8,3,5
+ADMIN,Admin,Admin,Fp Admin,FP Admin,FP88888,Log Trace,True,True,True,True,0,Y,leejsthira,8,3,6
+ADMIN,Admin,Admin,Fp Admin,FP Admin,FP02002,Job Monitor,True,True,True,True,0,Y,lgda106,8,3,7
+ADMIN,Admin,Admin,Fp Admin,FP Admin,XP06969,File Manager,True,True,True,True,0,Y,chkim.68,8,3,8
+ADMIN,Admin,Admin,Fp Admin,FP Admin,FP00592,Initial Setup Validation,True,True,True,True,0,Y,chkim.68,8,3,9
+ADMIN,Admin,Admin,Fp Admin,FP Admin,QA00001,NERP Work Test,True,True,True,True,0,Y,chkim.68,8,3,9
+ADMIN,Admin,Admin,Fp Admin,FP Admin,FP06970,Code Alias,True,True,True,True,0,Y,chkim.68,8,3,10
+ADMIN,Admin,Admin,Fp Admin,FP Admin,Test1,Test1,False,False,False,False,,Y,,8,3,11

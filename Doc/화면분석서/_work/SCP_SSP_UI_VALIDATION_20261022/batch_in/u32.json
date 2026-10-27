@@ -1,0 +1,374 @@
+[
+ {
+  "screen": "SCP0101",
+  "title": "Inventory Trend",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0101_InventoryTrend/SCP0101_InventoryTrend.cs:1023",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0101_InventoryTrend/SCP0101_InventoryTrend.designer.cs:622"
+  ],
+  "designer_files": [],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/inventory-trend"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0101_GET_INVENTORY_TREND",
+    "member": "Find_Data",
+    "line": "301",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0101_InventoryTrend\\SCP0101_InventoryTrend.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_MONTH_RANGE",
+    "member": "GetMonthRange",
+    "line": "634",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0101_InventoryTrend\\SCP0101_InventoryTrend.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0101_InventoryTrend\\SCP0101_InventoryTrend.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0101_GET_INVENTORY_TREND",
+    "member": "Find_Data",
+    "line": "301",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0101_InventoryTrend\\SCP0101_InventoryTrend.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_MONTH_RANGE",
+    "member": "GetMonthRange",
+    "line": "634",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0101_InventoryTrend\\SCP0101_InventoryTrend.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0101_InventoryTrend\\SCP0101_InventoryTrend.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCP0084_GET_MONTH_RANGE",
+   "SCP0101_GET_INVENTORY_TREND"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SCP0101_GET_INVENTORY_TREND",
+    "sp": "SCP0101_GET_INVENTORY_TREND",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "QTY",
+    "desc": "기말재고 수량이 가용+품질+보류 합과 불일치면 40, 품질재고 있으면 30, 보류재고 있으면 20, 총량≠가용이면 10 으로 재고상태 점검 플래그 표시",
+    "message": null,
+    "on_fail": "CHK_QTY 코드(40/30/20/10/0) 를 Ending 재고 행에 반환 (LongTerm 행은 NULL)"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0102",
+  "title": "BOD Validation Report",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0102_BOD_Validation_Report/SCP0102_BOD_Validation_Report.cs:1853",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0102_BOD_Validation_Report/SCP0102_BOD_Validation_Report.designer.cs:1657"
+  ],
+  "designer_files": [],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\SSP.SSP0028_GET_COUNTRY.sql",
+    "member": "Set_Country_ComboBox",
+    "line": "169",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0028_GET_CITY",
+    "member": "Set_City_ComboBox",
+    "line": "188",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\SSP.SSP0028_GET_AREA.sql",
+    "member": "Make_Area_ComboBox",
+    "line": "473",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "559",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0102_GET_BOD_VALIDATION_REPORT",
+    "member": "FindData_Main",
+    "line": "609",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+    "member": "spdMain_CellDoubleClick",
+    "line": "1593",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+    "member": "btn_Search_Click",
+    "line": "1764",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\SSP.SSP0028_GET_COUNTRY.sql",
+    "member": "Set_Country_ComboBox",
+    "line": "169",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SSP0028_GET_CITY",
+    "member": "Set_City_ComboBox",
+    "line": "188",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\SSP.SSP0028_GET_AREA.sql",
+    "member": "Make_Area_ComboBox",
+    "line": "473",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "559",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0102_GET_BOD_VALIDATION_REPORT",
+    "member": "FindData_Main",
+    "line": "609",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+    "member": "spdMain_CellDoubleClick",
+    "line": "1593",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+    "member": "btn_Search_Click",
+    "line": "1764",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0102_BOD_Validation_Report\\SCP0102_BOD_Validation_Report.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCP0102_GET_BOD_VALIDATION_REPORT",
+   "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+   "SSP0028_GET_CITY",
+   "foxquery_sql\\SSP.SSP0028_GET_AREA.sql",
+   "foxquery_sql\\SSP.SSP0028_GET_COUNTRY.sql"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+    "sp": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "CONSISTENCY",
+    "desc": "컨테이너별 실제 운송 구간 LT 와 계획시점 기준 LT(DR)·현재 기준 LT(NDR)의 차이를 계산해 BOD 기준 LT 적정성 검증용으로 표시",
+    "message": null,
+    "on_fail": "차이 일수를 컬럼(GAP1~5, GAP, GAP*_NDR)으로 반환"
+   },
+   {
+    "entry_sp": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+    "sp": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "REQUIRED",
+    "desc": "인코텀즈별 책임 구간의 실적이 하나라도 없으면 GAP 을 NULL 로 표시하고, 모두 있으면 책임구간 GAP 합을 표시",
+    "message": null,
+    "on_fail": "필수 구간 실적 누락 시 GAP_INCOTERMS = NULL(판정불가), 아니면 해당 구간 GAP 합"
+   },
+   {
+    "entry_sp": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+    "sp": "SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "REQUIRED",
+    "desc": "인코텀즈 책임 구간에 실적 또는 현재 기준 LT 가 없으면 NDR 대비 GAP 을 NULL 로 표시",
+    "message": null,
+    "on_fail": "필수 구간 실적/기준 누락 시 NULL, 아니면 (TTL-NDR) 책임구간 합"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0103",
+  "title": "Material Visibility",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0103_MaterialVisibility/Popup/SCP0103_SemiStockPopup.cs:197",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0103_MaterialVisibility/SCP0103_MaterialVisibility.cs:2599"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0103_MaterialVisibility/Popup/SCP0103_SemiStockPopup.Designer.cs:254",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0103_MaterialVisibility/SCP0103_MaterialVisibility.Designer.cs:1372"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "2371",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0103_MaterialVisibility\\SCP0103_MaterialVisibility.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+    "member": "GetSpdTitle",
+    "line": "2435",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0103_MaterialVisibility\\SCP0103_MaterialVisibility.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2435",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0103_MaterialVisibility\\SCP0103_MaterialVisibility.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0103_GET_MATERIAL_VISIBILITY",
+    "member": "SetQueryInfoGetModel",
+    "line": "1618",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0103_MaterialVisibility\\SCP0103_MaterialVisibility.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "2371",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0103_MaterialVisibility\\SCP0103_MaterialVisibility.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+    "member": "GetSpdTitle",
+    "line": "2428",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0103_MaterialVisibility\\SCP0103_MaterialVisibility.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2432",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0103_MaterialVisibility\\SCP0103_MaterialVisibility.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCM0001_GET_DIVISION",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+   "SCP0103_GET_MATERIAL_VISIBILITY"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0103_GET_MATERIAL_VISIBILITY",
+    "sp": "SCP0103_GET_MATERIAL_VISIBILITY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "조회 중 예외 발생 시 메시지를 PRINT 만 하고 종료",
+    "message": null,
+    "on_fail": "PRINT @v_log_type/@v_log_message(ERROR_MESSAGE)/ERROR_LINE 만 수행"
+   }
+  ]
+ }
+]

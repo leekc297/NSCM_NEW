@@ -4,7 +4,8 @@ import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
+import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
@@ -13,6 +14,8 @@ import { useShipmentSemiDeptDayStore } from '../useShipmentSemiDeptDayStore';
 
 interface Props {
   onSearch: () => void;
+  // 조회조건 Model 팝업(MaterialByDivisionModal) 오픈 — 페이지가 open state 소유.
+  onModelSearch: () => void;
 }
 
 interface Option {
@@ -29,7 +32,7 @@ const toOptions = (rows: ComboResponse[] | undefined): Option[] =>
 // design 02 (02_search-combo.md) 조회조건 1단 3필드(좌->우, 동일 y=12행):
 //   Division*(다중 체크리스트 Division_SCP, mnuId 필수·EE 미제외) / Model(단일 텍스트 prefix, 팝업 없음) /
 //   Valid(단일 드롭다운 YesOrNo + ALL). cascade 없음. 기본포커스 = Division. 3필드(2단 미만)라 extraConditions 미배선(#52).
-export const ShipmentSemiDeptDayForm = ({ onSearch }: Props) => {
+export const ShipmentSemiDeptDayForm = ({ onSearch, onModelSearch }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
 
@@ -130,7 +133,11 @@ export const ShipmentSemiDeptDayForm = ({ onSearch }: Props) => {
             />
           </Grid>
 
-          {/* Model (단일 텍스트 직접입력, 팝업 없음 — design 02 §1 #2). prefix 검색. LBL00669(라벨 "Model", 키 ITEM_ID). */}
+          {/* Model — 텍스트 직접입력 + Material 팝업(MaterialByDivisionModal COM0013) 버튼. 사용자 지시
+              2026-10-22: AS-IS 는 텍스트 전용(팝업 없음, design 02 §1 #2)이나 TO-BE 는 자매 shipment-plan-semi
+              (SCP0013)·global-psi 와 동일하게 팝업 선택을 추가한다. 선택 결과(ITEM_ID)를 그대로 itemId 로 —
+              GET SP p_item_id 는 prefix 매칭이라 단건 코드면 정확 매칭된다. prefix 직접입력(Enter 조회)도 유지.
+              LBL00669(라벨 "Model", 키 ITEM_ID). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -139,8 +146,20 @@ export const ShipmentSemiDeptDayForm = ({ onSearch }: Props) => {
               render={() => (
                 <InputField
                   fullWidth
+                  className={commonStyles.popupSearchField}
                   disabled={noDivisionAuth}
                   value={sc.itemId}
+                  InputProps={{
+                    endAdornment: (
+                      <Button
+                        appearance='outlined'
+                        priority='normal'
+                        iconComponent={
+                          <FunctionSearchIcon appearance='lined' onClick={onModelSearch} />
+                        }
+                      />
+                    ),
+                  }}
                   onChange={e => set({ itemId: e.target.value })}
                   onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />

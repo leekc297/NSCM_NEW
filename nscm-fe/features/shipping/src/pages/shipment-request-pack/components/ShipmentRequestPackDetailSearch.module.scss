@@ -1,0 +1,44 @@
+/* 2차 조회조건 (usrLayoutControl3) — Detail 그리드 상단 가로 바. SSP0023 ShipmentPlanElectrodeDetailBar 참고. */
+.detailBar {
+  gap: 8px;
+  padding: 4px 8px;
+}
+
+/* Detail 필드 영역 — MUI 12칸 Grid(size 합 > 12 → 2줄 접힘)를 쓰지 않고 flex 한 줄로 깐다.
+   필드는 내용 폭 기준으로 가로 배치되고, 공간이 부족하면 wrap 한다(크기 안 깨짐). */
+.detailBarFields {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+
+.detailBarField {
+  flex: 0 1 auto;
+  min-width: 180px;
+}
+
+/* 날짜 range(Shipment Date)는 피커 2개+구분자라 더 넓은 최소폭이 필요. */
+.detailBarDateField {
+  min-width: 300px;
+
+  /* PeriodRangePicker(공용)는 전달한 className 을 내부 FormItem 에 쓴다. detailBarFieldItem 라벨축소가
+     닿도록 이 wrapper 안의 .formItem 라벨 컬럼만 좁혀(minmax) 'Shipment Date' 라벨칸을 맞춘다.
+     commonStyles.formItem 은 CSS module 해시명이라 부분일치 global 선택자로 잡는다. */
+  :global([class*='formItem']) {
+    grid-template-columns: minmax(48px, 72px) auto !important;
+  }
+}
+
+/* 라벨 컬럼 — 내용 폭(auto)으로 둔다. 고정 72px 로 좁히면 'Model/Nickname' 같은 긴 라벨이
+   labelAlign=right 때문에 왼쪽으로 넘쳐(overflow) 바로 옆 Shipment Date 필드와 겹친다
+   (사용자 신고 2026-10-22). auto 면 라벨 길이에 맞춰 칸이 잡혀 overflow 가 생기지 않는다. */
+.detailBarFieldItem {
+  grid-template-columns: auto minmax(0, 1fr) !important;
+}
+
+.detailBarButtons {
+  gap: 4px;
+  align-items: center;
+}

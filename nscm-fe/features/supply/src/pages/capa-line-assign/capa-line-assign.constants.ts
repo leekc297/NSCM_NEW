@@ -205,8 +205,16 @@ export const MONTH_COLUMN_PREFIX = 'M_01';
 export const YEAR_COLUMN_PREFIX = 'Y_';
 /** 신규행의 동적 기간셀 기본값 — 전건 `"1"`(cs:5306-5309·5376-5380). */
 export const NEW_ROW_DATE_CELL_VALUE = '1';
-/** 3단 헤더 총높이 48px 고정(hook #93) → 단당 16px. */
-export const ASSIGN_HEADER_ROW_HEIGHT = 16;
+/**
+ * 헤더 총높이 48px 고정(hook #93 — 형제 SCP 화면 capa-lob-report·capa-loss-plan 과 동일 출처).
+ *
+ * AS-IS 는 최상위 1단을 숨겨(cs:2173 isVisibleRow0=false, 정적은 collapseStaticLargeTier) 표시상
+ * 2단이지만, 보이는 tier 수와 무관하게 헤더 총높이는 48px 로 맞춘다(다른 화면과 시각 정합). 실제
+ * 렌더된 tier 수로 48 을 균등배분해 각 헤더 row 에 강제한다 — 2단이면 row 당 24px. `headerRowHeight`
+ * prop(defaultSize 만 세팅)으로는 공용 mapRawColumnsToWijmoColumns 가 정적 컬럼에 박는 명시 height 를
+ * 이기지 못해 tier 마다 48 로 벌어지므로, 컴포넌트가 updatedLayout 에서 직접 각 row.height 를 박는다.
+ */
+export const ASSIGN_HEADER_TOTAL_HEIGHT = 48;
 /**
  * 저장 차단 alert 의 `{0}` 자리에 넣는 축 이름 — 특정 컬럼 1개가 아니라 동적 기간컬럼 **축 전체**가
  * 비어 있다는 뜻이다(design 03 §4.3-d `YYYYMM` 공백). 컬럼명이 실행마다 달라 고정 라벨을 쓴다.
@@ -249,6 +257,14 @@ export const SOP_FIXED_COLUMN = COLUMN.ELTR_LN_TP_CD;
 
 /** ELTR 신규행에서만 잠기는 컬럼 — G43(2025-03-31 개정, cs:5419-5422). */
 export const ELTR_INSERT_LOCKED_COLUMN = COLUMN.NICK_NAME;
+
+/**
+ * 행 출처 마커 — P03 CAPA Line 팝업(`Insert_Row_Assign_Line`)으로 추가된 행만 `true`.
+ * AS-IS 는 NICK_NAME 잠금을 Insert 버튼 경로(`Insert_Row_Assign`, cs:5419-5422)**에만** 걸고
+ * 팝업 경로에는 걸지 않는다 — 팝업 행은 NICK_NAME 을 열어둔다. editLock 이 이 마커로 두 경로를
+ * 가른다. `_` 접두라 저장 payload 화이트리스트(capaLineAssign.save.ts)에 섞이지 않는다.
+ */
+export const ROW_SOURCE_LINE_POPUP = '_fromLinePopup';
 
 /** 편집모드·기존행에서도 편집 가능한 Assign 컬럼(G19·G20). ELTR 의 `LANE_QTY` 는 그 시트에만 있다. */
 export const ASSIGN_ALWAYS_EDITABLE_COLUMNS: readonly string[] = [COLUMN.VALID_YN, COLUMN.LANE_QTY];
@@ -394,24 +410,43 @@ export const CASCADE_CLEAR_COLUMNS: Record<string, readonly string[]> = {
 };
 
 /** `*_ID` ↔ `*_NAME` 짝 — 코드↔명칭 양방향 동기(G06·G08~G13·G16). */
-export const ID_NAME_PAIRS: readonly { id: string; name: string; masterId: string; masterName: string }[] =
-  [
-    { id: COLUMN.SITE_ID, name: COLUMN.SITE_NAME, masterId: 'SITE_ID', masterName: 'SITE_NAME' },
-    {
-      id: COLUMN.COMPANY_ID,
-      name: COLUMN.COMPANY_NAME,
-      masterId: 'COMPANY_ID',
-      masterName: 'COMPANY_NAME',
-    },
-    { id: COLUMN.PLANT_ID, name: COLUMN.PLANT_NAME, masterId: 'PLANT_ID', masterName: 'PLANT_NAME' },
-    {
-      id: COLUMN.FACTORY_ID,
-      name: COLUMN.FACTORY_NAME,
-      masterId: 'FACTORY_ID',
-      masterName: 'FACTORY_NAME',
-    },
-    { id: COLUMN.LINE_ID, name: COLUMN.LINE_NAME, masterId: 'LINE_ID', masterName: 'LINE_NAME' },
-  ];
+/** 코드↔명칭 동기 쌍의 마스터 출처. 대부분 location 마스터(`masterRows`)지만
+ *  OPERATION 은 AS-IS `dtOperationSpread`(cs:2817) 처럼 별도 `operationRows`(`CODE`/`NAME`)를 쓴다. */
+export type IdNameSource = 'master' | 'operation';
+
+export const ID_NAME_PAIRS: readonly {
+  id: string;
+  name: string;
+  masterId: string;
+  masterName: string;
+  source: IdNameSource;
+}[] = [
+  { id: COLUMN.SITE_ID, name: COLUMN.SITE_NAME, masterId: 'SITE_ID', masterName: 'SITE_NAME', source: 'master' },
+  {
+    id: COLUMN.COMPANY_ID,
+    name: COLUMN.COMPANY_NAME,
+    masterId: 'COMPANY_ID',
+    masterName: 'COMPANY_NAME',
+    source: 'master',
+  },
+  { id: COLUMN.PLANT_ID, name: COLUMN.PLANT_NAME, masterId: 'PLANT_ID', masterName: 'PLANT_NAME', source: 'master' },
+  {
+    id: COLUMN.FACTORY_ID,
+    name: COLUMN.FACTORY_NAME,
+    masterId: 'FACTORY_ID',
+    masterName: 'FACTORY_NAME',
+    source: 'master',
+  },
+  { id: COLUMN.LINE_ID, name: COLUMN.LINE_NAME, masterId: 'LINE_ID', masterName: 'LINE_NAME', source: 'master' },
+  // OPERATION 은 `operationRows` 를 `CODE`/`NAME` 으로 조회한다(AS-IS cs:2803-2820, `CheckValidId`).
+  {
+    id: COLUMN.OPERATION_ID,
+    name: COLUMN.OPERATION_NAME,
+    masterId: 'CODE',
+    masterName: 'NAME',
+    source: 'operation',
+  },
+];
 
 // ====================================================================================
 // 저장 (design 03 §4.3)
@@ -454,8 +489,9 @@ export const LBL = {
   OPERATION: 'LBL00009',
   LINE_TYPE: 'LBL00056',
   BASIC_NICKNAME: 'LBL00054',
-  MODEL: 'LBL00669',
-  VALID: 'LBL00639',
+  MODEL: 'LBL00021', // "Material" — DB 실측 교체(이전 LBL00669 'Model')
+  VALID: 'LBL00007', // "Active" — DB 실측 교체(이전 LBL00639 'Valid')
+  OPERATION_GROUP: 'LBL00027', // "Operation group" — Division Type(모드 스위치) 라벨, DB 실측
   ALL: 'LBL00632',
   TAB_LINE_ASSIGN: 'LBL00769',
   SEARCH: 'LBL00112',
@@ -472,6 +508,19 @@ export const LBL = {
 export const FALLBACK_LABEL = {
   MODULE_PACK: 'Module/Pack',
   TAB_SOP: 'SOP',
+} as const;
+
+/**
+ * 탭 라벨 끝에 붙이는 현재 Division 모드 접미 (사용자 지시 2026-10-21).
+ *
+ * AS-IS 는 탭이 `Line Assign`/`SOP` 2개뿐이고 Division Type(Electrode/Cell/Module-Pack)은 조회조건
+ * 라디오(`rgrpDivisionType`)로만 전환해, 탭 라벨만으로는 지금 어느 모드인지 알 수 없다. TO-BE 도 같은
+ * 구조라 **시트명 2분류**(Electrode→`ELTR`, Cell·Module-Pack→`ASSEMBLY`)를 접미로 붙여 구별한다 —
+ * 조회·저장 라우팅에는 영향이 없는 표시 전용이다.
+ */
+export const TAB_MODE_SUFFIX = {
+  ELTR: '-ELTR',
+  ASSEMBLY: '-ASSEMBLY',
 } as const;
 
 /** Plan Type 파생 표시(design 02 §5.2 S04) — `BIZ_PLAN_USE_YN='Y' ? 'BP' : 'RP'`, 기본 `'RP'`. */

@@ -27,6 +27,9 @@ const N = process.execPath; const H = f => path.join(__dirname, f); const C = ['
 // 1 FE 골격(없을 때만 --apply)
 const reg = path.join(genDir, 'register.json');
 const pageOf = () => { if (!fs.existsSync(reg)) return null; const r = JSON.parse(fs.readFileSync(reg, 'utf8')); return path.join(cfg.feRoot, 'features', r.feature, 'src', 'pages', r.pageDir); };
+// 2026-10-22 SSP0015 사고: register.json 은 gen.js 가 만든다 — Doc/gen/<ID> 가 비어 있으면 pageDir=null 로 "페이지 없음" 오판 → 보호 분기를 건너뛰고
+//   gen --apply → 커밋본 폴더 앞에서 exit 3. 판정 전에 Doc/gen 만 생성(--apply 없음)해 페이지 위치를 확정한다(실패하면 아래 1단계가 같은 오류를 기록)
+if (want(1) && !fs.existsSync(reg)) spawnSync(process.execPath, [path.join(__dirname, 'gen.js'), ID, '--config', cfgPath], { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 });
 let pageDir = pageOf();
 // 페이지 보호(lib/applied.touchReason): git 추적(커밋본)·매니페스트 없음·적용 후 변경·REPAIR.md 중 하나면 Doc/gen 에만 생성한다 — 파이프라인은 절대 --force 하지 않는다
 const why = pageDir && fs.existsSync(pageDir) ? require('./lib/applied').touchReason(pageDir, genDir) : null;

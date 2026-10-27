@@ -608,7 +608,7 @@
 | 67 | SaveData | - | Division | 2230 | requiredFieldsFor 13종 division×measure 분기 (V-V1) |
 | 68 | SaveData | - | Division | 2232 | requiredFieldsFor 13종 division×measure 분기 (V-V1) |
 | 69 | SaveData | - | Division | 2234 | requiredFieldsFor 13종 division×measure 분기 (V-V1) |
-| 70 | SaveData | MSG00002 | - | 2239 | validateSaveRows MSG00429 {필드} + 행번호 병기 (V-V1) |
+| 70 | SaveData | MSG00002 | - | 2239 | validateSaveRows MSG00429 {필드} (V-V1 — AS-IS 동일, 행번호 미병기 2026-10-14) |
 | 71 | SaveData | MSG00043 | - | 2267 | SP 위임 — SAVE 결과 messageCode^addmessage alert (callSaveSalesPlan. 중복검증 SP 내장) |
 | 72 | SaveData | - | Division | 2344 | sales-plan.save readProjectSlot — 40=END_CUSTOMER40 슬롯 (p_project_code) |
 | 73 | SaveData | - | Division | 2380 | sales-plan.save identityOf — plantSiteId (81 소스 유지) |

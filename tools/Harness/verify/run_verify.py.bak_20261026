@@ -1,0 +1,116 @@
+"""화면 정합검증 한 번에 실행 — Vibe_Manager '🔎 화면 정합검증' 이 부르는 진입점
+
+  python tools/Harness/verify/run_verify.py <MENU_ID> [--asis <AS-IS ID>] [--skip-e2e] [--scope DB_ONLY|DB_FE]
+
+순서 (실패 단계에서 멈추고 exit≠0 — 미실행을 완료로 보고하지 않는다):
+  1 AS-IS 사실 보강   facts_cellrules.py · facts_lockrules.py · facts_combosrc.py → Doc/asisfacts/screens/<AS-IS>/cell_rules.csv · lock_rules.csv · edit_expect.csv · combo_src.csv
+  2 검증 항목 원장     ledger.py                                 → Doc/verify/<ID>/verify_ledger.csv
+  3 동적 판정(E2E)    Playwright Doc/e2e/specs/_verify.spec.ts @verify (VERIFY_ID=<ID>) → Doc/verify/<ID>/e2e_results.json
+                      FE(5173)/BE(8080) 미기동이면 exit 5 · 다른 E2E 실행 중이면 exit 4 (tools/E2E/runlock.js 공용 잠금)
+  4 판정              judge.py (E2E 반입 · META I1 · STATIC H5/G4 · 결함 원장 상속)
+  5 문서              make_verify_docs.py → 정합검증서 + 보완대상목록 xlsx (보완 적용은 하지 않는다 — 목록 확인 후 🛠️/🧯/🩹)
+"""
+import argparse
+import csv
+import json
+import os
+import subprocess
+import sys
+import urllib.request
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+HERE = os.path.dirname(os.path.abspath(__file__))
+E2E = os.path.join(ROOT, 'tools', 'E2E')
+
+
+def run(cmd, env=None, cwd=None):
+    print(f"\n$ {' '.join(cmd)}", flush=True)
+    return subprocess.call(cmd, cwd=cwd or ROOT, env=env)
+
+
+def asis_of(mid):
+    p = os.path.join(ROOT, 'tools', 'Harness', 'rules', 'map_screen.csv')
+    if os.path.exists(p):
+        with open(p, encoding='utf-8-sig') as f:
+            for r in csv.DictReader(f):
+                if r.get('tobe_id', '').upper() == mid:
+                    return r['asis_id'].upper()
+    return mid
+
+
+def reachable(url):
+    try:
+        urllib.request.urlopen(url, timeout=5)
+        return True
+    except urllib.error.HTTPError:
+        return True  # 401 등 = 응답함(기동됨)
+    except OSError:
+        return False
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('menu_id')
+    ap.add_argument('--asis', default='')
+    ap.add_argument('--skip-e2e', action='store_true')
+    ap.add_argument('--scope', choices=['DB_ONLY', 'DB_FE'])
+    a = ap.parse_args()
+    mid = a.menu_id.upper()
+    asis = (a.asis or asis_of(mid)).upper()
+    py = sys.executable
+    print(f'== 화면 정합검증 {mid} (AS-IS {asis}) ==')
+
+    if not os.path.isdir(os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', asis)):
+        print(f'[FAIL] AS-IS Fact Pack 없음: Doc/asisfacts/screens/{asis} — 🔬 AS-IS 파싱 먼저')
+        return 6
+    for s in ('facts_cellrules.py', 'facts_lockrules.py', 'facts_combosrc.py'):
+        if run([py, os.path.join(HERE, s), asis]):
+            return 6
+    if run([py, os.path.join(HERE, 'ledger.py'), mid, '--asis', asis]):
+        return 6
+
+    if not a.skip_e2e:
+        with open(os.path.join(E2E, 'e2e.config.json'), encoding='utf-8-sig') as f:
+            cfg = json.load(f)
+        if not (reachable(cfg['feUrl']) and reachable(cfg['beUrl'])):
+            print(f"[FAIL] FE({cfg['feUrl']}) 또는 BE({cfg['beUrl']}) 미응답 — 서버 기동 후 다시 실행(☕ BE Start / 🎨 FE Start). E2E 판정 없이 문서를 만들려면 --skip-e2e")
+            return 5
+        lock = subprocess.run(['node', 'runlock.js', 'acquire', 'verify', mid], cwd=E2E, capture_output=True, text=True, encoding='utf-8')
+        if lock.returncode:
+            print(lock.stderr.strip())
+            return 4
+        try:
+            out_dir = os.path.join(ROOT, 'Doc', 'verify', mid)
+            res_json = os.path.join(out_dir, 'e2e_results.json')
+            if os.path.exists(res_json):
+                os.replace(res_json, res_json + '.prev')  # 이전 실행 결과가 이번 판정에 섞이지 않게
+            env = dict(os.environ, VERIFY_ID=mid, E2E_RESULTS=os.path.join(out_dir, 'e2e'),
+                       PLAYWRIGHT_JSON_OUTPUT_NAME=os.path.join(out_dir, 'e2e', 'results.json'))
+            rc = run(['node', os.path.join('node_modules', '@playwright', 'test', 'cli.js'), 'test', '_verify', '--grep', '@verify', '--workers', '1',
+                      '--reporter=list,json'], env=env, cwd=E2E)
+            if not os.path.exists(res_json):
+                print(f'[FAIL] E2E 결과 파일 없음({res_json}) — Playwright 가 판정 없이 끝남(rc={rc}). 로그 확인')
+                return 3
+            print(f'E2E 종료 rc={rc} (테스트 실패는 판정 결과로 원장에 반영된다)')
+        finally:
+            subprocess.run(['node', 'runlock.js', 'release'], cwd=E2E, capture_output=True)
+    else:
+        print('\n[INFO] --skip-e2e — E2E 판정 행은 미검증(NOT_RUN)으로 남는다')
+
+    # W1 콤보 AS-IS 원천 비교 — E2E 덤프(combo_runtime.json)가 있으면 AS-IS DB 에서 원천을 실행해 B4·B3 판정 근거를 만든다(실패해도 다음 단계 진행 = 판정필요로 남음)
+    if os.path.exists(os.path.join(ROOT, 'Doc', 'verify', mid, 'combo_runtime.json')):
+        run([py, os.path.join(HERE, 'combo_oracle.py'), mid, '--asis', asis])
+    # CRUD 실제 저장 마커 행 정리(사내 DB) — 백업·건수 단언·SQL 기록. 정의 없는 화면은 SKIP(2026-10-24 BOD 잔존 행 사고 재발 방지)
+    if not a.skip_e2e:
+        run([py, os.path.join(HERE, 'cleanup_marker.py'), mid])
+    if run([py, os.path.join(HERE, 'judge.py'), mid]):
+        return 7
+    cmd = [py, os.path.join(HERE, 'make_verify_docs.py'), mid] + (['--scope', a.scope] if a.scope else [])
+    if run(cmd):
+        return 8
+    print('\n다음: 보완대상목록 xlsx 를 확인한 뒤 보완 범위(🧭 보완 범위 설정)를 정하고 🛠️/🧯 로 보완을 적용한다.')
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

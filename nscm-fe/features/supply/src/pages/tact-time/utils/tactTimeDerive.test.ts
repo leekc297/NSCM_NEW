@@ -6,6 +6,7 @@ import {
   deriveTactTimeFromDaily,
   round5,
   toNum,
+  toYmd,
 } from './tactTimeDerive';
 
 describe('tactTimeDerive', () => {
@@ -39,5 +40,18 @@ describe('tactTimeDerive', () => {
     expect(clampTactTime(0, 50000)).toEqual({ value: 0.01, clamped: true }); // < MIN
     expect(clampTactTime(60000, 50000)).toEqual({ value: 0.01, clamped: true }); // > max
     expect(clampTactTime('x', 50000)).toEqual({ value: 0.01, clamped: true }); // parse fail
+  });
+
+  it('toYmd normalizes Date / string to yyyyMMdd', () => {
+    const today = new Date();
+    const ymd = toYmd(today);
+    expect(ymd).toMatch(/^\d{8}$/);
+    // yyyyMMdd 를 다시 Date 로 만들면 원래 날짜와 같아야 한다
+    const back = new Date(+ymd.slice(0, 4), +ymd.slice(4, 6) - 1, +ymd.slice(6, 8));
+    expect(back.toDateString()).toBe(today.toDateString());
+    expect(toYmd(`${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`)).toBe(ymd);
+    expect(toYmd(ymd)).toBe(ymd);
+    expect(toYmd(new Date('x'))).toBe('');
+    expect(toYmd(undefined)).toBe('');
   });
 });

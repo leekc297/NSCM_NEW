@@ -76,9 +76,9 @@ export const ShipmentPsiDetailBar = ({ onDetailSearch, onModelSearch, onRequesto
           />
         )}
         {fieldSet.model && (
-          <Grid size={4}>
+          <Grid size={3}>
             <FormItem
-              className={`${commonStyles.formItem} ${styles.modelNicknameField}`}
+              className={commonStyles.formItem}
               label={t(LBL.MODEL_NICKNAME, '_Model/Nickname')}
               labelAlign='right'
               render={() => (
@@ -91,7 +91,8 @@ export const ShipmentPsiDetailBar = ({ onDetailSearch, onModelSearch, onRequesto
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' onClick={onModelSearch} />}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onModelSearch}
                       />
                     ),
                   }}
@@ -135,7 +136,8 @@ export const ShipmentPsiDetailBar = ({ onDetailSearch, onModelSearch, onRequesto
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' onClick={onRequestorSearch} />}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onRequestorSearch}
                       />
                     ),
                   }}

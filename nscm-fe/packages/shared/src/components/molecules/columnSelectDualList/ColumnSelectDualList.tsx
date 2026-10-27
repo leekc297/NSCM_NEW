@@ -20,6 +20,11 @@ export interface DualListColumn<T> {
   width?: number;
   align?: 'left' | 'center' | 'right';
   render?: (row: T, rowKey: string) => ReactNode;
+  /**
+   * 연속 동일 값 세로 병합(rowspan) — AS-IS FPMerge.Always 대응. 기본 false.
+   * 현재 items 순서 기준으로 같은 값이 연속하는 구간을 한 셀로 묶어 보여준다(우측 D&D 재정렬 시 재계산).
+   */
+  merge?: boolean;
 }
 
 // 컬럼 너비 조정(header 경계 드래그) 상수 — 체크/No 는 고정폭, 데이터 컬럼만 resize 대상.
@@ -183,6 +188,22 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
   ) => {
     const allChecked = items.length > 0 && items.every(r => checked.has(String(r[itemKey] ?? '')));
     const widths = colWidths[side];
+    // 병합 컬럼(merge:true) — 연속 동일 값을 rowspan 으로 묶는다(AS-IS FPMerge.Always).
+    //   `${colKey}#${rowIndex}` -> head 행=묶음 행수(span), 묶음 내 나머지 행=null(셀 미출력).
+    const mergeSpan = new Map<string, number | null>();
+    columns.forEach(col => {
+      if (!col.merge) return;
+      const key = String(col.key);
+      let start = 0;
+      while (start < items.length) {
+        const value = String(items[start][col.key] ?? '');
+        let end = start + 1;
+        while (end < items.length && String(items[end][col.key] ?? '') === value) end += 1;
+        mergeSpan.set(`${key}#${start}`, end - start);
+        for (let r = start + 1; r < end; r += 1) mergeSpan.set(`${key}#${r}`, null);
+        start = end;
+      }
+    });
     // 조정 후에는 table 을 px 합계로 고정 — 컨테이너보다 넓어지면 가로 스크롤.
     const minWidth = widths ? FIXED_COL_WIDTH + widths.reduce((sum, w) => sum + w, 0) : undefined;
     return (
@@ -272,12 +293,24 @@ export const ColumnSelectDualList = <T extends Record<string, string | number>>(
                     />
                   </td>
                   <td className={styles.noCell}>{i + 1}</td>
-                  {columns.map((col, colIndex) => (
-                    <td key={String(col.key)} style={{ textAlign: col.align ?? 'left' }}>
-                      {col.render ? col.render(row, rowKey) : String(row[col.key] ?? '')}
-                      {resizeHandles(side, colIndex, columns.length)}
-                    </td>
-                  ))}
+                  {columns.map((col, colIndex) => {
+                    const span = col.merge
+                      ? mergeSpan.get(`${String(col.key)}#${i}`)
+                      : undefined;
+                    // 병합 묶음의 head 가 아닌 행은 셀을 내지 않는다(위 head 셀에 흡수).
+                    if (span === null) return null;
+                    return (
+                      <td
+                        key={String(col.key)}
+                        rowSpan={span ?? undefined}
+                        className={col.merge ? styles.mergedCell : undefined}
+                        style={{ textAlign: col.align ?? 'left' }}
+                      >
+                        {col.render ? col.render(row, rowKey) : String(row[col.key] ?? '')}
+                        {resizeHandles(side, colIndex, columns.length)}
+                      </td>
+                    );
+                  })}
                   {widths && <td aria-hidden='true' />}
                 </tr>
               );

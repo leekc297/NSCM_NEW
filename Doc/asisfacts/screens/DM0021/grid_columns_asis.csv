@@ -1,0 +1,14 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,"M_{?dt.Rows[i][""BASIS_YYYYMM""]}",CODE,DM0021_SalesPlan,DM0021_SalesPlan.cs:468,"M_{?dt.Rows[i][""BASIS_YYYYMM""]}",Number,,None,코드 선언 FPMerge.None,100,true,Right,,,"for(i < dt.Rows.Count) ⟫ if(""0""== 0)"
+,"W_{?dt.Rows[i][""COL_WEEK_NAME""]}",CODE,DM0021_SalesPlan,DM0021_SalesPlan.cs:482,SUM,Number,,None,코드 선언 FPMerge.None,100,true,Right,,,"for(i < dt.Rows.Count) ⟫ if(""0""== 0)"
+,"M_{?dt.Rows[i][""BASIS_YYYYMM""]}",CODE,DM0021_SalesPlan,DM0021_SalesPlan.cs:498,"M_{?dt.Rows[i][""BASIS_YYYYMM""]}",Number,,None,코드 선언 FPMerge.None,100,true,Right,,,"for(i < dt.Rows.Count) ⟫ if(sFYear != dt.Rows[""0""][""BASIS_YYYYMM""].ToString())"
+,"W_{?dt.Rows[i][""COL_WEEK_NAME""]}",CODE,DM0021_SalesPlan,DM0021_SalesPlan.cs:515,SUM,Number,,None,코드 선언 FPMerge.None,100,true,Right,,,"for(i < dt.Rows.Count) ⟫ if(sFWeek != dt.Rows[""0""][""COL_WEEK_NAME""].ToString())"
+,"dt.Rows[i][""BASIS_YYYYMMDD""]",CODE,DM0021_SalesPlan,DM0021_SalesPlan.cs:523,"dt.Rows[i][""CALENDAR_DAY""]",Number,,None,코드 선언 FPMerge.None,50,true,Right,,,for(i < dt.Rows.Count)
+,DIVISION_ID,CODE,DM0021_SalesPlanVersionCutOffPopUp,DM0021_SalesPlanVersionCutOffPopUp.cs:168,Division,Combo,"Data.Common(Data.Type.MyDivision, false, UserInfoContext.Current[""NowGroupID""], UserInfoContext.Current.UserId)",Restricted,코드 선언 FPMerge.Restricted,120,true,Center,,,
+,VERSION_NO,CODE,DM0021_SalesPlanVersionCutOffPopUp,DM0021_SalesPlanVersionCutOffPopUp.cs:169,Version NO,Text,,Restricted,코드 선언 FPMerge.Restricted,120,true,Center,,,
+,VERSION_TYPE,CODE,DM0021_SalesPlanVersionCutOffPopUp,DM0021_SalesPlanVersionCutOffPopUp.cs:170,Type,Text,,Restricted,코드 선언 FPMerge.Restricted,120,true,,,,
+,VERSION_DESCRIPTION,CODE,DM0021_SalesPlanVersionCutOffPopUp,DM0021_SalesPlanVersionCutOffPopUp.cs:172,Description,Text,,Restricted,코드 선언 FPMerge.Restricted,120,true,,,,
+,YYYYMMDD,CODE,DM0021_SalesPlanVersionCutOffPopUp,DM0021_SalesPlanVersionCutOffPopUp.cs:173,yyyyMMdd,Text,,Restricted,코드 선언 FPMerge.Restricted,120,true,,,,
+,VER_CRE_SEQ,CODE,DM0021_SalesPlanVersionCutOffPopUp,DM0021_SalesPlanVersionCutOffPopUp.cs:175,Ver Seq,Text,,Restricted,코드 선언 FPMerge.Restricted,120,true,,,,
+,LAST_UPDATED_BY,CODE,DM0021_SalesPlanVersionCutOffPopUp,DM0021_SalesPlanVersionCutOffPopUp.cs:176,Update By,Text,,Restricted,코드 선언 FPMerge.Restricted,120,true,,,,
+,LAST_UPDATE_DATE,CODE,DM0021_SalesPlanVersionCutOffPopUp,DM0021_SalesPlanVersionCutOffPopUp.cs:177,Update Date,Text,,Restricted,코드 선언 FPMerge.Restricted,120,true,,,,

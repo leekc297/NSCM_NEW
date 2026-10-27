@@ -1,6 +1,6 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
@@ -15,6 +15,7 @@ import {
 } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
+import { ShipmentWorkingDayBulkModal } from './components/ShipmentWorkingDayBulkModal';
 import { ShipmentWorkingDayForm } from './components/ShipmentWorkingDayForm';
 import { ShipmentWorkingDayGrid } from './components/ShipmentWorkingDayGrid';
 import {
@@ -65,6 +66,8 @@ export const ShipmentWorkingDay = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   1회로 합쳤다(두 지점 사이에 플래그를 바꾸는 코드가 없어 두 번째 검사는 항상 같은 결과다).
   const inputRunningRef = useRef(false);
   const noAuthAlertedRef = useRef(false);
+  // Bulk Update 팝업 열림 상태 — AS-IS 조회조건 Input 버튼을 팝업으로 통합(SCP0098 동형).
+  const [bulkOpen, setBulkOpen] = useState(false);
 
   const sc = useShipmentWorkingDayStore(s => s.searchCondition);
   const filters = useShipmentWorkingDayStore(s => s.filters);
@@ -371,8 +374,10 @@ export const ShipmentWorkingDay = ({ tabId, title }: PageProps<MENU_ID>) => {
     );
   };
 
-  // ----- btnInput 일괄입력 (AS-IS BtnInput_Click cs:671-822) -----
-  const handleInputValue = () => {
+  // ----- Bulk Update 팝업 확인 — btnInput 일괄입력 (AS-IS BtnInput_Click cs:671-822) -----
+  //   dayWeekCode/value 는 조회조건이 아니라 팝업 로컬 상태라 인자로 받는다(모달 onConfirm).
+  //   성공(셀 1개 이상 write)이면 true 를 돌려 팝업을 닫고, 검증 실패면 false 로 열어 둔다.
+  const handleBulkConfirm = (dayWeekCode: string, value: string): boolean => {
     // 가드 #1 — AS-IS 는 Action 컬럼 표시여부로 "편집모드인가" 를 봤으나(cs:673) 그 축은 폐기됐다.
     //   TO-BE 의 실제 전제는 "조회했는가" 다(사용자 확정 2026-09-29, Q1 -> MSG00719).
     if (rows.length === 0) {
@@ -380,14 +385,14 @@ export const ShipmentWorkingDay = ({ tabId, title }: PageProps<MENU_ID>) => {
         type: 'alert',
         content: t(MSG.NOT_SEARCHED, '_No data have been retrieved.'),
       });
-      return;
+      return false;
     }
     // 가드 #2 — 재진입(cs:681 / cs:720 중복 CanModelChange 를 1회로 합침).
-    if (inputRunningRef.current) return;
-    // 권한축 치환 — 버튼도 disabled 지만 클릭 경로에도 게이트를 둔다(01 R08).
-    if (!canEdit) return;
+    if (inputRunningRef.current) return false;
+    // 권한축 치환 — Bulk Update 버튼도 canEdit 게이트지만 확인 경로에도 게이트를 둔다(01 R08).
+    if (!canEdit) return false;
     // 가드 #3 — Input Value 미선택(cs:684-690). 인자는 화면 라벨과 같은 LBL 키를 쓴다.
-    if (!sc.inputValue) {
+    if (!value) {
       void setAlert({
         type: 'alert',
         content: t(MSG.SELECT_REQUIRED, '_Select {0}.').replace(
@@ -395,32 +400,31 @@ export const ShipmentWorkingDay = ({ tabId, title }: PageProps<MENU_ID>) => {
           t(LBL.INPUT_VALUE, '_Input Value')
         ),
       });
-      return;
+      return false;
     }
     const grid = gridRef.current;
-    if (!grid) return;
-    // 가드 #4 — SelectDay 인데 셀 범위 선택이 없다(cs:696-701).
-    //   selectedRanges.length 로 판정하면 안 된다 — Wijmo 는 현재 셀 하나만 있어도 범위 1개를
-    //   돌려주므로 그 조건은 영구 false 다. AS-IS FarPoint GetSelections() 는 드래그/헤더 선택만
-    //   돌려주고 단일 셀 클릭은 빈 배열이었으므로, 2셀 이상 덮는 범위를 요구해 등가를 만든다.
-    if (sc.dayWeekCode === DAY_WEEK.SELECT_DAY && !hasCellRangeSelection(grid)) {
+    if (!grid) return false;
+    // 가드 #4 — SelectDay 인데 선택 영역이 없다(cs:696-701). 팝업이 모달리스라 사용자는 팝업을
+    //   연 채로 그리드에서 셀을 드래그 또는 Ctrl+클릭(MultiRange)으로 고를 수 있다. 판정 기준은
+    //   hasCellRangeSelection 참고(유효 범위 1개 이상 — SCP0098 동형).
+    if (dayWeekCode === DAY_WEEK.SELECT_DAY && !hasCellRangeSelection(grid)) {
       void setAlert({
         type: 'alert',
         content: t(MSG.NO_CELL_SELECTED, '_Select a date and enter it.'),
       });
-      return;
+      return false;
     }
-    // 가드 #5 — 요일 미선택이면 조용히 return(cs:703-706). 요일 콤보는 빈값이 될 수 없어
+    // 가드 #5 — 요일 미선택이면 조용히 막는다(cs:703-706). 요일 콤보는 빈값이 될 수 없어
     //   실사용상 도달하지 않지만, 제거하면 요일을 비울 수 있게 바뀔 때 구멍이 된다.
-    if (!sc.dayWeekCode) return;
+    if (!dayWeekCode) return false;
 
     inputRunningRef.current = true;
     try {
       const written = applyBulkInput({
         grid,
         tracker: editTrackerRef.current,
-        dayWeekCode: sc.dayWeekCode,
-        value: sc.inputValue,
+        dayWeekCode,
+        value,
         dayCodeByBinding,
       });
       if (written === 0) {
@@ -428,9 +432,10 @@ export const ShipmentWorkingDay = ({ tabId, title }: PageProps<MENU_ID>) => {
           type: 'alert',
           content: t(MSG.NO_CELL_SELECTED, '_Select a date and enter it.'),
         });
-        return;
+        return false;
       }
       grid.invalidate(true);
+      return true;
     } finally {
       inputRunningRef.current = false;
     }
@@ -446,8 +451,9 @@ export const ShipmentWorkingDay = ({ tabId, title }: PageProps<MENU_ID>) => {
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     save: hasButton('SAVE') && canEdit ? handleSave : false,
-    insert: hasButton('INSERT') ? () => undefined : false,
-    delete: hasButton('DELETE') ? () => undefined : false,
+    // Insert/Delete = 동작 없는 no-op 버튼이라 제거(false, 사용자 결정 2026-10-20: 무동작 버튼 미노출).
+    insert: false,
+    delete: false,
     manual: false,
     upload: false,
     // excel 은 공용 SubTitle 기본 핸들러가 채우므로 키를 주지 않으면 무조건 노출된다.
@@ -465,14 +471,7 @@ export const ShipmentWorkingDay = ({ tabId, title }: PageProps<MENU_ID>) => {
         openSearchArea={openSearchArea}
         toggleOpenSearchArea={setOpenSearchArea}
       />
-      {openSearchArea && (
-        <ShipmentWorkingDayForm
-          onSearch={handleSearch}
-          onInput={handleInputValue}
-          disabled={noAuth}
-          canEdit={canEdit}
-        />
-      )}
+      {openSearchArea && <ShipmentWorkingDayForm onSearch={handleSearch} disabled={noAuth} />}
       <SubTitle
         menuId={MENU_ID}
         grid={gridRef}
@@ -482,6 +481,11 @@ export const ShipmentWorkingDay = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
+        customButtons={
+          // Bulk Update — AS-IS 조회조건의 Day of the week/Input Value/Input 을 팝업으로 통합(SCP0098
+          //   동형). EDIT 권한 게이트(canEdit). 라벨은 고정 영문(SCP0098 결정 2026-10-16 동일).
+          canEdit ? [{ label: 'Bulk Update', action: () => setBulkOpen(true) }] : []
+        }
       />
       <div className={styles.gridWrapper}>
         <ShipmentWorkingDayGrid
@@ -494,6 +498,11 @@ export const ShipmentWorkingDay = ({ tabId, title }: PageProps<MENU_ID>) => {
           canEdit={canEdit}
         />
       </div>
+      <ShipmentWorkingDayBulkModal
+        open={bulkOpen}
+        onClose={() => setBulkOpen(false)}
+        onConfirm={handleBulkConfirm}
+      />
     </>
   );
 };

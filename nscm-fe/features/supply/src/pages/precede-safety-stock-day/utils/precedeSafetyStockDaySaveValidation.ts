@@ -49,11 +49,11 @@ export const validatePrecedeSafetyStockDayRow = (
     return { msgId: MSG.NO_WORK_DATE, message: '_No Work Date' };
   }
 
-  // #4/#11 MSG00219 — From > To 역전. 8자리 정규화 후 문자열 비교(YYYYMMDD 는 사전순=시간순).
+  // #4/#11 MSG01230 — From > To 역전. 8자리 정규화 후 문자열 비교(YYYYMMDD 는 사전순=시간순).
   const from = toYmd8(row.FROM_YYYYMMDD);
   const to = toYmd8(row.TO_YYYYMMDD);
   if (from && to && from > to) {
-    return { msgId: MSG.DATE_RANGE_INVALID, message: '_Valid From 이 Valid To 보다 클 수 없습니다.' };
+    return { msgId: MSG.DATE_RANGE_INVALID, message: '_시작일자가 종료일자보다 늦을 수 없습니다.' };
   }
 
   // #5/#13 MSG00085 — TYPE_APPLY_DAY 음수.

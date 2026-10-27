@@ -36,3 +36,16 @@ export interface MasterValidationResult {
   criticalCnt: number;
   warningCnt: number;
 }
+
+// A002 Create Plan ID 팝업(SCP0123_PlanIDCreatePopup) 오픈 컨텍스트. AS-IS 생성자 7인자와 1:1
+//   (division_id/prs_cd/plan_group_id/plan_group_name/plan_start_yyyymmdd/plan_id/tgt_divs_cd).
+//   planId 가 비면 생성 모드, 값이 있으면 기생성 Plan ID 조회(읽기전용) 모드다.
+export interface PlanIdCreateContext {
+  divisionId: string;
+  prsCd: string;
+  planGroupId: string;
+  planGroupName: string;
+  planStartYyyymmdd: string;
+  planId: string;
+  tgtDivsCd: string;
+}

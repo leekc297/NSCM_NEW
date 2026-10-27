@@ -94,6 +94,42 @@ export const ACTION = { APPROVAL: 'A', REJECT: 'R', SELF_REJECT: 'S' } as const;
 export type ACTION = (typeof ACTION)[keyof typeof ACTION];
 
 // ====================================================================================
+// 하위 그리드(Confirm Detail) 컬럼 — 승인 저장 payload 의 행단위 CLOB 원천.
+//   조회 SP(`P_SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING`) 응답 키 실측(2026-10-14)으로 확정.
+//   시트 메타에 없는 `NEW_CONFIRM_ID`·`YYYYMMDD` 는 **응답에도 없다** — AS-IS 가 그 자리에 무엇을
+//   넣는지는 `utils/shipmentChangeRequestConfirmSave.ts` 의 매핑 주석 참조.
+// ====================================================================================
+export const SUB_COLUMN = {
+  DIVISION_ID: 'DIVISION_ID',
+  ITEM_ID: 'ITEM_ID',
+  FROM_SITE: 'FROM_SITE',
+  CONFIRM_ID: 'CONFIRM_ID',
+  NEW_BASE_CONFIRM_YN: 'NEW_BASE_CONFIRM_YN',
+  NEW_ETD: 'NEW_ETD',
+  NEW_ETA: 'NEW_ETA',
+  NEW_SHIPMENT_DATE: 'NEW_SHIPMENT_DATE',
+  NEW_SHIPMENT_CONFIRM_QTY: 'NEW_SHIPMENT_CONFIRM_QTY',
+  NEW_YN: 'NEW_YN',
+  NEW_BOD_ID: 'NEW_BOD_ID',
+  /** 주의: `NEW_ROUTE_ID` 가 아니라 `NEW_ROUTE` 다(AS-IS L842 / 메타·응답 실측). */
+  NEW_ROUTE: 'NEW_ROUTE',
+  NEW_INCOTERMS: 'NEW_INCOTERMS',
+  NEW_D_COUNTRY: 'NEW_D_COUNTRY',
+  NEW_D_PORT_CODE: 'NEW_D_PORT_CODE',
+  NEW_A_COUNTRY: 'NEW_A_COUNTRY',
+  NEW_A_PORT_CODE: 'NEW_A_PORT_CODE',
+  NEW_TO_COUNTRY: 'NEW_TO_COUNTRY',
+  NEW_TO_CITY: 'NEW_TO_CITY',
+  NEW_LT_DAY: 'NEW_LT_DAY',
+  NEW_TRANSPORT_MODE: 'NEW_TRANSPORT_MODE',
+  /** AS-IS 가 `GetColumnIndex(NEW_SHIPMENT_DATE)+2` 로 읽는 자리(L858). 메타 SORT 20→22 실측. */
+  NEW_SHIPTO_CODE: 'NEW_SHIPTO_CODE',
+  REMARKS: 'REMARKS',
+  REMARKS2: 'REMARKS2',
+  REMARKS3: 'REMARKS3',
+} as const;
+
+// ====================================================================================
 // UI 라벨 코드 (SCM_ADM_MSG_M MSG_TP_CD='LBL' 실측 — Hook #114. t(LBL.KEY, '_Fallback') 경유).
 // ====================================================================================
 export const LBL = {

@@ -1,5 +1,6 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import dayjs from 'dayjs';
 import { MaterialByDivisionModal, MeasureSelectModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -16,6 +17,7 @@ import { ProductionPlanGrid } from './components/ProductionPlanGrid';
 import {
   LBL,
   LINE_FIXED_COLUMNS,
+  MAX_PERIOD_YEARS,
   MEASURE_SHEET_NAME,
   MENU_ID,
   MODEL_FIXED_COLUMNS,
@@ -120,7 +122,8 @@ export const ProductionPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
       // onSuccess 를 넘겨 useProcMutation 기본 성공 toast(MSG00002)를 대체 — Amend 는 완료 메시지 없이
       //   조용히 모델만 재조회한다(AS-IS SaveChage_CalData 완료 메시지 주석처리 + FindData_Model_Parallel 패리티).
       //   저장 성공 후 연쇄(runAmend)로 불릴 때도 저장 toast 와 toast 가 중복되지 않는다.
-      setFilter();
+      //   drill 된 LINE 도 같이 재조회한다(AS-IS FindData_Line(nSelRowOfMain, true)).
+      setFilter(true);
     },
   });
 
@@ -229,6 +232,18 @@ export const ProductionPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     if (sc.fromYyyymmdd && sc.toYyyymmdd && sc.fromYyyymmdd > sc.toYyyymmdd) {
       void setAlert({ type: 'alert', content: t(MSG.PLAN_PERIOD_RANGE, '_Invalid period.') });
+      return false;
+    }
+    // 최대 조회기간: to >= from + 2년 이면 차단.
+    const maxToExclusive = dayjs(sc.fromYyyymmdd, 'YYYYMMDD').add(MAX_PERIOD_YEARS, 'year');
+    if (sc.toYyyymmdd && maxToExclusive.isValid() && sc.toYyyymmdd >= maxToExclusive.format('YYYYMMDD')) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_MAX, '_Maximum Period is From Date + {0}.').replace(
+          '{0}',
+          `${MAX_PERIOD_YEARS} years`
+        ),
+      });
       return false;
     }
     return true;
@@ -440,7 +455,8 @@ export const ProductionPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
         }
         preSearchParams={{
           divisionId: sc.divisionId,
-          operationGroup: '',
+          // AS-IS Form_Load(_division, _operationGroup) — 선택 Operation Group 전달.
+          operationGroup: sc.operationGroupId,
           scpModuleType: MENU_ID,
           itemId: sc.itemId,
         }}

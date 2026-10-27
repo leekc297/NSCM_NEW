@@ -19,6 +19,8 @@ import {
   LBL,
   MENU_ID,
   MSG,
+  UOM_OPTIONS,
+  UOM_VISIBLE_OPERATION_GROUP,
 } from '../production-plan-waterfall.constants';
 import { useProductionPlanWaterfallStore } from '../useProductionPlanWaterfallStore';
 
@@ -49,8 +51,10 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
   const sc = useProductionPlanWaterfallStore(s => s.searchParams);
   const set = useProductionPlanWaterfallStore(s => s.setSearchParams);
   const setDivision = useProductionPlanWaterfallStore(s => s.setDivision);
+  const setOperationGroup = useProductionPlanWaterfallStore(s => s.setOperationGroup);
   const setVersions = useProductionPlanWaterfallStore(s => s.setVersions);
   const setChkAll = useProductionPlanWaterfallStore(s => s.setChkAll);
+  const setBucket = useProductionPlanWaterfallStore(s => s.setBucket);
   const openSearchArea = useProductionPlanWaterfallStore(s => s.openSearchArea);
   const setNoDivisionAuth = useProductionPlanWaterfallStore(s => s.setNoDivisionAuth);
   const setAlert = useMessageStore.getState().setAlert;
@@ -113,23 +117,36 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
   }, [firstDivision, hasDivision, setDivision]);
 
   // operationGroup 기본값 — 옵션 로드 후 미선택이면 첫 옵션(AS-IS SetChangedControl 기본 구성).
+  //   setOperationGroup 경유로 설정해 RefreshUOM(EE+E→'M', 그 외 'EA') 기본이 이 경로에서도 함께 적용되게 한다.
   const firstOpGroup = operationGroupOptions[0]?.value ?? '';
   const hasOpGroup = operationGroupOptions.some(o => o.value === sc.operationGroupId);
   useEffect(() => {
-    if (firstOpGroup && !hasOpGroup) set({ operationGroupId: firstOpGroup });
-  }, [firstOpGroup, hasOpGroup, set]);
+    if (firstOpGroup && !hasOpGroup) setOperationGroup(firstOpGroup);
+  }, [firstOpGroup, hasOpGroup, setOperationGroup]);
 
   // 비EE division → Electrode 값 clear + disable (design 01 L8 / 02 §4.5).
   useEffect(() => {
     if (!isEe && sc.electrodeTypes.length > 0) set({ electrodeTypes: [] });
   }, [isEe, sc.electrodeTypes.length, set]);
 
+  // UOM 가시성 — AS-IS RefreshUOM(cs:474~510): EE Division + OperationGroup='E' 일 때만 clbUOM 노출(체크 'M'),
+  //   그 외는 숨김(암묵 체크 'EA'). 노출 시 기본 'M' 전환은 setOperationGroup 이 담당(OperationGroup 변경 핸들러).
+  //   여기선 숨김일 때 UOM 값을 'EA' 로 고정만 한다 — 노출→숨김 전환(Division 비EE화 등) 시 잔류 'M' 을 되돌린다.
+  const uomVisible = isEe && sc.operationGroupId === UOM_VISIBLE_OPERATION_GROUP;
+  useEffect(() => {
+    if (!uomVisible && sc.uom !== 'EA') set({ uom: 'EA' });
+  }, [uomVisible, sc.uom, set]);
+
+  // allOption=false 면 목록에 SELECT ALL 항목을 빼 다중선택만 허용한다(기본 true).
+  //   빈 선택을 'ALL' sentinel 로 내보내는 것은 스토어 규약(빈 배열 → 필터 없음)이라 유지한다 —
+  //   이는 선택 가능한 항목이 아니라 미선택 표현이므로 SELECT ALL 노출과 무관하다.
   const multi = (
     labelText: string,
     value: string[],
     options: Option[],
     onPick: (codes: string[]) => void,
-    disabled?: boolean
+    disabled?: boolean,
+    allOption = true
   ) => (
     <Grid size={3}>
       <FormItem
@@ -139,7 +156,7 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
         render={() => (
           <CustomDropdown
             multiple
-            allOption
+            allOption={allOption}
             useClearIcon
             limitTags={1}
             sortBy='label'
@@ -202,11 +219,13 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
             },
             true
           )}
+          {/* OperationGroup 변경 = 하위(plantSite/line) 초기화 + 그리드 clear(store setOperationGroup,
+              AS-IS cboOperationGroup_SelectedIndexChanged → RefreshPlantSite/Line + InitSpread). */}
           {single(
             t(LBL.OPERATION_GROUP, '_Operation Group'),
             sc.operationGroupId,
             operationGroupOptions,
-            v => set({ operationGroupId: v }),
+            v => setOperationGroup(v),
             true
           )}
           {multi(t(LBL.PLANT_SITE, '_Plant Site'), sc.plantSiteIds, plantSiteOptions, v =>
@@ -279,8 +298,9 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
             />
           </Grid>
           {/* Version — AS-IS 체크리스트 단일 UI 이나 Gap 시 2건 필요(design 02 §7-3) → 다중 허용.
+              단, AS-IS Version 콤보는 ALL 없음(setListBox blnAllFlag=false, SCP0017.cs L1302) → allOption=false.
               변경 시 Period 재산정(AS-IS CboVersion_SelectedIndexChanged → GetDayRange, G2) — setVersions 경유. */}
-          {multi(t(LBL.VERSION, '_Version'), sc.versionNos, versionOptions, setVersions)}
+          {multi(t(LBL.VERSION, '_Version'), sc.versionNos, versionOptions, setVersions, undefined, false)}
           <PeriodField
             gridSize={3}
             start={sc.fromYyyymmdd}
@@ -290,16 +310,23 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
           />
 
           {/* Row2 — Bucket / Line / 체크박스(Sum / All / Gap) (사용자 지정 배치) */}
+          {/* Bucket 변경 = AS-IS InitSpread_2 → InitSheet: 그리드(데이터+헤더) 비우고 재조회 요구(setBucket). */}
           {single(t(LBL.BUCKET, '_Bucket'), sc.bucket, bucketOptions, v =>
-            set({ bucket: v as BUCKET_TYPE })
+            setBucket(v as BUCKET_TYPE)
           )}
           {multi(t(LBL.LINE, '_Line'), sc.lineIds, lineOptions, v =>
             set({ lineIds: v })
           )}
-          <Grid size={6} className={commonStyles.customGrid}>
-            <div className={commonStyles.customCheckbox}>
-              {/* 체크박스를 Line 에서 떨어뜨리기 위해 좌측 여백(사용자 지정). */}
-              <Stack direction='row' spacing={2} alignItems='center' sx={{ ml: '100px' }}>
+          <Grid size={3} className={commonStyles.customGrid}>
+            <div className={commonStyles.customCheckbox} style={{ width: '100%' }}>
+              {/* 체크박스를 size=3 셀 가로 중앙에 배치(사용자 지정). */}
+              <Stack
+                direction='row'
+                spacing={2}
+                alignItems='center'
+                justifyContent='center'
+                sx={{ width: '100%' }}
+              >
                 <Checkbox
                   labelText={t(LBL.SUM, '_Sum')}
                   checked={sc.chkSum}
@@ -319,6 +346,12 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
               </Stack>
             </div>
           </Grid>
+
+          {/* UOM(조건부) — AS-IS RefreshUOM: EE Division + OperationGroup='E' 일 때만 노출(lciUOM.Visibility).
+              clbUOM(CheckedListBox 단일선택) → single 콤보. 선택값은 조회결과 UOM 컬럼 클라 필터(ApplyUOM, 재조회 없음).
+              Row2 에 Bucket/Line/체크박스와 같은 Grid size={3} 셀로 정렬(사용자 지정 — 체크박스 size 3 축소로 자리 확보). */}
+          {uomVisible &&
+            single(t(LBL.UOM, '_UOM'), sc.uom, [...UOM_OPTIONS], v => set({ uom: v }))}
         </>
       }
     />

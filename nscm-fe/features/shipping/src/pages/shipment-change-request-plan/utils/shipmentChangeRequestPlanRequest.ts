@@ -31,7 +31,7 @@ import { str, type GridRowData } from './shipmentChangeRequestPlanDerive';
 
 export interface RequestChainSession {
   userId: string;
-  /** TO-BE UserSession 에 타임존 필드가 없다(실측) — 빈 값으로 보내 SP 기본 처리에 맡긴다. */
+  /** 사용자 TZ 코드(`sessionTimeZone(session)` = SCM_ADM_USER_M.TMZ_CD). 빈 값이면 SP 가 AS054(한국). */
   timeZone: string;
   /** AS-IS `UserInfoContext.Current["NowGroupID"]` = p_auth(45번). */
   groupId: string;

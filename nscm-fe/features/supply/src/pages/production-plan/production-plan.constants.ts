@@ -72,7 +72,9 @@ export const PLAN_TYPE_EXCLUDE_EDIT = ['FN', 'TE'] as const;
 //   단 Plan Date→Type→Seq 는 자매 SCP0013 과 동일하게 _SCP_ALL(전량) 콤보 + 클라 필터로 전환했다(아래 주).
 //   EE 분기 콤보는 이름 재사용 금지(별개 코드셋, convert-core §2.6).
 export const COMBO = {
-  DIVISION: 'MyDivisionInEE_SCP', // 권한 division (@mnuId 자동주입). CODE=DIVISION_ID / NAME=ID+NAME
+  // DIVISION: 'MyDivisionInEE_SCP', // 권한 division (@mnuId 자동주입). CODE=DIVISION_ID / NAME=ID+NAME
+  // 자매 SCP0013 과 같은 권한 division 콤보로 통일(81 선두 정렬, 사용자 지시 2026-10-19).
+  DIVISION: 'Division_SCP',
   OP_GROUP: 'OperationGroup_SCP', // 비EE (SEGMENT1 IN ('P','A')), 파라미터 없음
   OP_GROUP_EE: 'OperationGroupEE_SCP', // EE (SEGMENT1 IN ('A','E'))
   PLANT_SITE: 'PlantByDivisionOperation', // 비EE — @divisionId/@operationGroup
@@ -109,9 +111,13 @@ export const MSG = {
   //   AS-IS MSG00206 은 TO-BE SCM_ADM_MSG_M 미등록(0행)이라 MSG_NM 의미가 일치하는 코드로 remap(L1 해소).
   NO_CHANGES: 'MSG00004', // "No changes to save." (무변경 전용). 성공·무변경에 재사용하지 않는다(M2 해소).
   SAVE_SUCCESS: 'MSG00002', // "Saved successfully." (저장 성공 toast — 직접 POST 경로라 화면이 직접 노출).
-  SAVE_FAIL: 'MSG00006', // Failed to save.
+  SAVE_FAIL: 'MSG00003', // Failed to save. (AS-IS MSG00006 는 TO-BE 미등록 → 같은 문구 MSG00003, KO/EN/CN)
   PLAN_PERIOD_RANGE: 'MSG00108', // Invalid period (start > end).
+  PERIOD_MAX: 'MSG01187', // Maximum Period is From Date + {0}.
 } as const;
+
+// 최대 조회기간(년). AS-IS 는 from+1년+7일(371일)이나 2년으로 확장(사용자 지시 2026-10-19).
+export const MAX_PERIOD_YEARS = 2;
 
 // i18n 라벨 코드 — SCM_ADM_MSG_M LBL 실측 역매핑(design 02 §4.5). 값=LBL 코드, 호출부는 t(LBL.KEY, '_Fallback').
 export const LBL = {

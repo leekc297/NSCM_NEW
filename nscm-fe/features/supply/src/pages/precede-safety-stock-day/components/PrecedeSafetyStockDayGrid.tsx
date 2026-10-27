@@ -144,11 +144,9 @@ export const PrecedeSafetyStockDayGrid = ({
         e.cancel = true;
         return;
       }
-      // ITEM_ID 는 팝업 셀 — 인라인 편집이 아니라 더블클릭 팝업으로만 채운다(nscm-patterns.md
-      //   §5-16 팝업 셀 편집취소 의무). beginningEdit 을 취소해 기본 텍스트 편집을 막는다.
-      if (binding === 'ITEM_ID') {
-        e.cancel = true;
-      }
+      // ITEM_ID 는 FPTextModal 셀(DB 메타 INPUT_TP_CD='M' + CELL_CONTROL_OBJECT_TYPE_CODE=FPTextModal
+      //   실측 2026-10-21) — 키인 + 더블클릭 팝업 동시 허용이라 beginningEdit 을 취소하지 않는다.
+      //   팝업은 handleDblClick 이, 키인은 기본 텍스트 편집이 담당한다([[grid-modal-cell-type-keyin-mapping]]).
     };
     g.beginningEdit.addHandler(beginningEditHandler);
     g.pastingCell.addHandler(beginningEditHandler as never);

@@ -39,7 +39,7 @@ import {
   SHEETS,
   TITLESET_MEASURE_TYPE,
 } from './shipment-plan-fg.constants';
-import type { FixInfoRow, MainRow } from './shipment-plan-fg.types';
+import type { FixInfoRow, MainRow, PlanStatusRow } from './shipment-plan-fg.types';
 import { useShipmentPlanFgStore } from './useShipmentPlanFgStore';
 import { collectFixCells, type FixCell, type FixedCellSet, hasUnsavedCell } from './utils/shipment-plan-fg.fix';
 import { buildFixRows, buildSavePayload, buildSaveRows, isSaveResultFailure } from './utils/shipment-plan-fg.save';
@@ -103,6 +103,11 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
   const mainRows = useMemo<MainRow[]>(() => (mainData as { o_rc1?: MainRow[] })?.o_rc1 ?? [], [mainData]);
   const fixInfoRows = useMemo<FixInfoRow[]>(
     () => (mainData as { o_rc3?: FixInfoRow[] })?.o_rc3 ?? [],
+    [mainData]
+  );
+  // Plan 상태(O_RC2) — computeIsEditable(AS-IS GetIsEditable) 입력. Weekly/Monthly 조회일 때만 non-empty.
+  const planStatusRows = useMemo<PlanStatusRow[]>(
+    () => (mainData as { o_rc2?: PlanStatusRow[] })?.o_rc2 ?? [],
     [mainData]
   );
   const spreadTitle = useMemo<SpreadTitleRow[]>(
@@ -353,7 +358,12 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   EE 는 아무 동작도 하지 않는다(AS-IS 에서 SetChangedControlPart 호출이 주석 처리돼 있다).
   const handleNewPlanSaved = (itemIds: string[]) => {
     if (sc.divisionId.startsWith('EE')) return;
-    set({ itemId: itemIds.join(',') });
+    // 중복 제거 — buildSavedItemIds 는 저장행 그대로(중복 포함)를 반환한다(newPlan.test.ts
+    //   "저장 Item 목록은 중복을 제거하지 않는다"). 같은 모델을 여러 Site/BOD 로 다건 생성하면
+    //   itemId 가 N번 중복돼 P_ITEM_ID 로 전달되고, FN_GET_ITEM_LIKE_CONDITION(LIKE '%...%' 전체
+    //   스캔)이 토큰 수만큼 반복돼 재조회가 느려진다(DB 실측, 2026-10-21) — 재조회 결과는 동일하므로
+    //   여기서만 dedupe 한다.
+    set({ itemId: [...new Set(itemIds)].join(',') });
     void setAlert({
       type: 'confirm',
       content: t(MSG.CONFIRM_RESEARCH, '_Do you want to re-search?'),
@@ -501,6 +511,7 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
         rows={mainRows}
         spreadTitle={spreadTitle}
         fixInfoRows={fixInfoRows}
+        planStatusRows={planStatusRows}
         gridRef={mainGridRef}
         gridFilterRef={mainFilterRef}
         editTrackerRef={mainTrackerRef}
@@ -512,6 +523,8 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
         toYyyymmdd={appliedToYyyymmdd}
         bucketType={sc.bucketType}
         chkSum={sc.chkSum}
+        planType={sc.planType}
+        planSeq={sc.planSeq}
         onFocus={() => undefined}
       />
 
@@ -552,6 +565,8 @@ export const ShipmentPlanFg = ({ tabId, title }: PageProps<MENU_ID>) => {
           fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}
           initialSettings={toColumnLayoutSettings(staticColumns[SHEETS.MAIN])}
           onSave={handleSaveColumnLayout}
+          leftTitle={t(LBL.INVISIBLE, '_Invisible')}
+          rightTitle={t(LBL.VISIBLE, '_Visible')}
         />
       )}
       {/* Measure 커스텀 설정(btnMeasure) — Column 과 동일 SCM0002_TitleSetForm_Popup 대응, measure

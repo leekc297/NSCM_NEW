@@ -7,14 +7,19 @@
 2. **이관 Oracle 룰** `tools/VibeManager/rules/10_RULES_KEEP.md §H`(H1~H13: MSSQL 키워드 0, **센티널 '/'(2026-10-15 개정 — 아래 §센티널)**, NVL(x,NULL)·NVL(x,'-') 금지, NLS 마스크, dual cursor, 예외 전파, GTT DELETE, 성능 순서, 가짜 구현 금지) — check-pkg P01~P38 이 이를 판정한다.
 2-1. 변환 규칙: `Doc/_dev_rules/` 의 DB 변환 규칙 문서(ISNULL→NVL, GETDATE→SYSDATE, TOP→FETCH FIRST, +→||, CONVERT→TO_CHAR/TO_DATE, #temp→GTT(03_GTT)/WITH, @@ROWCOUNT→SQL%ROWCOUNT, 커서→FOR LOOP, sp_executesql→EXECUTE IMMEDIATE)
 3. 선례: `To-be_v2_converted/06_Packages/04_Package_PKG_DMF0004.sql`(GET/SAVE 표준형), `PKG_DMF0003.sql`(다중 O_RC), `03_GTT/`(임시테이블 대체), `05_Functions/`(FN_SPLITSTRING 등 공통 함수)
+3-1. (SCP·SSP) VALIDATION 취합 화면 파일 `Doc/화면분석서/{SCP|SSP}_화면_VALIDATION_취합_<최신>/<ID>.md` — DB 검증 대조 원천(아래 '해야 할 것' 3-2)
 4. 분할 파라미터(콤마 리스트)는 `TABLE(SCM_MGR.FN_SPLITSTRING(P_X, ','))`, 'ALL' 처리는 `(P_X = 'ALL' OR col IN (…))` 선례대로
 
 ## 해야 할 것
 1. 결과셋 컬럼명·순서는 As-is 와 **동일**(FE 그리드 바인딩이 컬럼명으로 붙는다). 별칭 대소문자는 대문자.
 2. SAVE 류: `P_DATA` JSON 배열을 `JSON_TABLE` 로 전개(컬럼 키는 camelCase — FE sendRows), `rowStatus` I/U/D 분기, `V_ROW_CNT` 누적.
 3. 하위 SP 호출은 해당 To-Be PKG.PROC 로. 공통 SP(UP_FX_*, SCM0001_GET_*)는 PKG_COM0000/PKG_DM0000 에서 찾고 없으면 NOTES 에 "공통 PKG 필요" 로 남긴다(임의 구현 금지).
-4. 끝나면 `node tools/Harness/check-pkg.js <ID>` 를 실행해 BLOCK 0 을 만든다(T-SQL 잔재·TODO·ASIS 블록 검사).
-5. 컴파일은 Oracle 에서: `tools/DbConn` 접속으로 `@<ID>_PKG.sql` 후 `USER_ERRORS` 확인 → 이어서 `<ID>_registration.sql` 재실행(PROC_M 확정).
+3-1. **SP 가 돌려주는 메시지 ID(결과 커서 MSG·RAISE 메시지 코드 등)는 AS-IS ID 를 그대로 쓰지 않는다**(룰 E5 · 사용자 지시 2026-10-22) — AS-IS ID → `Doc/asisfacts/db/meta/dbo.TB_FX_MessageInfo.csv` 문구 → `Doc/tobefacts/db/msg_master.csv` 에서 같은 문구(KO, 없으면 EN)의 TO-BE ID. 같은 문구가 없으면 NOTES 에 신규 등록 요청(MSG01001+). check-pkg **P41** 이 AS-IS ID 그대로 사용을 BLOCK 한다.
+3-2. **VALIDATION 취합 대조**(SCP·SSP 화면 — 사용자 지시 2026-10-23): `Doc/화면분석서/{SCP|SSP}_화면_VALIDATION_취합_<최신>/<ID>.md` 의 `UI / DB = DB` 행(차단 시트)과 `UI별VALIDATION_보정_필터` 의 DB 행(B 보정·C 필터)이 이 화면 SP 체인의 AS-IS DB 검증 전수다(판정 기준 = 전체본 "작성기준" 시트). 이식한 PROC 마다 해당 행의 조건·실패 반환(코드·메시지)·보정값·제외 조건이 빠짐없이 있는지 대조한다. `TO-BE 적용여부 = 미적용` 은 이식 누락, `[판정 결과 차이]`·`[예외 전파 변경]`·`[반환값 상실·영향 없음]` 은 `(참고) TO-BE 근거` 의 `[적용 TAG 사유]` 를 읽고 AS-IS 와 같게 맞추거나 의도된 변경이면 NOTES 에 근거, `[AS-IS 결함 교정]` 은 AS-IS 결함으로 되돌리지 않는다. check-pkg **VR3** 이 이 화면의 DB 미적용 행 수를 WARN 으로 알려 준다.
+4. 끝나면 `node tools/Harness/check-pkg.js <ID>` 를 실행해 BLOCK 0 을 만든다(T-SQL 잔재·TODO·ASIS 블록·메시지 ID 검사).
+5. 사내 Oracle 적용은 **`python tools/DbConn/meta_apply.py <ID> --commit` 로만** 한다(2026-10-22 — `@<ID>_PKG.sql` 직접 실행 금지). 이 명령이 ① PKG 를 사내 `ALL_SOURCE` 와 비교해 덮어써도 되는지 판정(사내에 없음 → 컴파일 · 같음 → 생략 · 사내 = 이 파일로 마지막 적용한 상태 → 컴파일)하고 컴파일 후 `USER_ERRORS` 를 보여 준 뒤 ② `<ID>_registration.sql` 을 커밋한다(PROC_M 확정). 적용 전 `--check` 로 판정만 볼 수 있다.
+   - **exit 2(중단)** = 사내에 이미 다른 PKG(다른 작업자·사내 현행본·직접 수정)가 있다 → 덮어쓰지 말고: 사내 `ALL_SOURCE` 를 새로 조회해 사내에만 있는 변경분을 `<ID>_PKG.sql` 에 병합(룰 H14)하고 NOTES 에 근거를 남긴 뒤 다시 실행. `--force-pkg` 는 사용자가 명시 승인한 경우에만.
+   - 공용 PKG(PKG_COM0000 등) 멤버를 고쳐야 하면 그 PKG 전체를 다시 만들지 말고 해당 멤버만 패치하고 `Doc/gen/<ID>/<공용PKG>_<멤버>_<ID>.sql` 로 남긴다.
 
 ## 센티널 규칙 (⭐ 사용자 상시 지시 2026-10-15 — 별도 개정 대상이 아니라 이식과 동시에 적용)
 - MSSQL `ISNULL(x,'')` 의 빈값 초기값·비교 정규화는 **`NVL(x,'/')`** 로 쓴다. `NVL(x,'-')`·`DEFAULT '-'` 는 check-pkg **P39 BLOCK**.

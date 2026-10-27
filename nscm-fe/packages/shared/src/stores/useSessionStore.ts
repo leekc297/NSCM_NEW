@@ -16,6 +16,7 @@ interface SessionAction {
   fetchSession: () => Promise<void>;
   findMenuPath: (menuId: string) => Menu[] | null;
   changeLanguage: (langCd: string) => void;
+  changeTimeZone: (tmzCd: string) => Promise<void>;
   toggleFavorite: (menuId: string, favorite: boolean) => void;
 }
 
@@ -115,6 +116,12 @@ export const useSessionStore = createPersistedStore<SessionState & SessionAction
       void apiClient
         .post('/user/session/lang-cd', { langCd: langCd })
         .then(() => get().fetchSession());
+    },
+    // 타임존 저장(SCM_ADM_USER_M.TMZ_CD). 언어와 달리 저장 성공 토스트를 호출부에서 띄워야 하므로
+    // Promise 를 반환한다. 저장 후 세션을 재조회해 session.tmzCd 를 최신값으로 맞춘다.
+    changeTimeZone: async tmzCd => {
+      await apiClient.post('/user/session/tmz-cd', { tmzCd: tmzCd });
+      await get().fetchSession();
     },
     toggleFavorite: (menuId, favorite) => {
       void apiClient

@@ -800,7 +800,10 @@ const SalesReportsGridComponent = ({
 
   return (
     <DataGrid
-      key={mainStaticColumns.map(c => c.colNm).join(',')}
+      // 금지: key={mainStaticColumns...} 로 재마운트하지 말 것. 정적 컬럼 메타를 divisionId 로 받아와
+      //   division 전환으로 컬럼 목록이 바뀌면 key 가 바뀌어 DataGrid 가 통째로 재마운트되고, 새로 생긴
+      //   FlexGridFilter 에는 사용자가 건 필터가 없어 그대로 사라진다(2026-10-27 DM 필터 유지 점검 —
+      //   DMF0021 8fef47623 과 같은 원인). 컬럼 변경은 공용 DataGrid 가 columnGroups 재대입으로 처리한다.
       className={styles.grid}
       gridRef={gridRef as never}
       gridFilterRef={gridFilterRef}

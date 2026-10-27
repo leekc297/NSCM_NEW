@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 
-import { MENU_ID, type GridSheet } from '../opt-capa.constants';
+import { MENU_ID, type GridSheet, type SHEETS } from '../opt-capa.constants';
 
 export interface OptCapaSaveResult {
   ok: boolean;
@@ -46,7 +46,8 @@ export interface OptCapaSaveResult {
  * 이 화면은 CURSOR(`PROC_RESULT`)라 그 memory 의 적용 범위 밖이다.
  */
 export const submitOptCapaSave = async (
-  sheet: GridSheet,
+  // No Work Week 모드는 `noWorkWeek`(GridSheet 밖)로 라우팅한다 — URL sheet 세그먼트로만 쓰인다.
+  sheet: GridSheet | SHEETS.NO_WORK_WEEK,
   payload: Record<string, string>
 ): Promise<OptCapaSaveResult> => {
   try {

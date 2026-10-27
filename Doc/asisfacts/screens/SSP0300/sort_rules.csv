@@ -1,0 +1,2 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SSP0300,SQL,SSP0300_GET_ORDER_DETAIL,Doc\asisfacts\db\modules\dbo.SSP0300_GET_ORDER_DETAIL.sql,41,,"SO_NO,DO_NO,CONFIRM_ID","ORDER BY S.SO_NO, D.DO_NO, S.CONFIRM_ID",0,정적

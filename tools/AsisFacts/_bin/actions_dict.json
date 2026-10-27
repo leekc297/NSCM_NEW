@@ -1,0 +1,260 @@
+{
+  "_note": "액션 추출(actions.csv) 분류 사전 — 2026-10-23 사용자 지시: 파싱 단계에서 핸들러 본문의 구체 액션까지 추출. 순서대로 첫 일치 적용. name/recv = 정규식(대소문자 무시). 사전에 없는 외부 호출은 CALL_EXT 로 남긴다(버리지 않음) — 반복 등장하는 CALL_EXT 를 여기에 추가해 분류율을 올린다.",
+  "invoke": [
+    {
+      "kind": "MESSAGE",
+      "name": "^(GMessageBox|GMessageBoxForException|FoxMessageBox|ShowMessage)$",
+      "meaning": "메시지 표시(확인창이면 결과로 분기)"
+    },
+    {
+      "kind": "MESSAGE",
+      "name": "^Show$",
+      "recv": "(^|\\.)MessageBox$",
+      "meaning": "메시지 표시"
+    },
+    {
+      "kind": "VALIDATE",
+      "name": "^(checkRequiredOfSearch|checkRequiredOfSpread|checkRequired|InitCheck|Check_PeriodDate\\w*|CheckValidation\\w*|IsValid\\w*)$",
+      "meaning": "프레임워크 검증"
+    },
+    {
+      "kind": "GRID_INIT",
+      "name": "^(InitSpread|InitSheet|InitGrid|InitSpreadSheet|SetSpread\\w*|CreateSheet\\w*|SetSheetColumn\\w*|SetColumnHeader\\w*|SetSheetHeader\\w*)$",
+      "meaning": "그리드 재구성/초기화"
+    },
+    {
+      "kind": "GRID_CLEAR",
+      "name": "^(ClearDataSource|ClearContents\\w*|ClearRange|ClearSelection|ClearSheet\\w*|ClearGrid\\w*|ClearSpread\\w*)$",
+      "meaning": "그리드 데이터/선택 비움"
+    },
+    {
+      "kind": "GRID_CLEAR",
+      "name": "^Clear$",
+      "recv": "(Rows|ActiveSheet|Sheets\\[[^\\]]*\\]|Spread\\w*|spd\\w*|fp\\w*)$",
+      "meaning": "그리드 행 비움"
+    },
+    {
+      "kind": "EXPR",
+      "name": "^(Clear|Append\\w*|Insert|Remove|Replace|ToString)$",
+      "recv": "(sb\\w*|\\w*Builder|\\w*Sb|strSql\\w*|sSql\\w*|sql\\w*)$",
+      "meaning": "문자열 조립 버퍼 조작(부수효과 없음)"
+    },
+    {
+      "kind": "STATE_RESET",
+      "name": "^(InitSaveDataTable|InitDataTable\\w*|InitData\\w*|InitVariable\\w*|InitValue\\w*|ResetData\\w*|Reset)$",
+      "meaning": "저장/작업 상태 초기화"
+    },
+    {
+      "kind": "STATE_RESET",
+      "name": "^(Clear|Reset|RejectChanges)$",
+      "recv": "(dt\\w*|ds\\w*|_dt\\w*|_ds\\w*|\\w*Table\\w*|\\w*DataSet\\w*|\\w*List\\w*|\\w*Dic\\w*|Tables\\[[^\\]]*\\])$",
+      "meaning": "데이터 버퍼/목록 비움"
+    },
+    {
+      "kind": "LIST_REBIND",
+      "name": "^(setListBox|SetListBox|SetComboBox\\w*|setComboBox\\w*|SetCombo\\w*|SetCheckedList\\w*|DataBind|BindData\\w*|Bind\\w*Combo\\w*|LoadCombo\\w*|SetLookUp\\w*)$",
+      "meaning": "목록 컨트롤 재구성"
+    },
+    {
+      "kind": "LIST_CLEAR",
+      "name": "^Clear$",
+      "recv": "(\\.Items|\\.Properties\\.Items|\\.Nodes)$",
+      "meaning": "목록 항목 비움"
+    },
+    {
+      "kind": "GRID_LOCK",
+      "name": "^(LockColumn|LockRange|LockCell\\w*|LockRow\\w*|UnLock\\w*|Unlock\\w*|SetLock\\w*|SetEditable\\w*)$",
+      "meaning": "그리드 편집 잠금/해제"
+    },
+    {
+      "kind": "GRID_SET",
+      "name": "^(SetValue|SetText|SetFormula|SetCellValue\\w*|SetTag)$",
+      "meaning": "그리드 값 설정"
+    },
+    {
+      "kind": "GRID_STYLE",
+      "name": "^(SetBackColor\\w*|SetForeColor\\w*|SetCellStyle\\w*|SetStyle\\w*|SetColumnVisible\\w*|SetColumnWidth\\w*|SetRowHeight\\w*|AddSpanCell|SetColumnMerge\\w*|SetRowMerge\\w*|SetActiveCell|SetFrozen\\w*)$",
+      "meaning": "그리드 표시 설정"
+    },
+    {
+      "kind": "ENDPOINT",
+      "name": "^(ExecuteSQL|ExecuteSQLAsync|ExecuteDataSet\\w*|ExecuteNonQuery\\w*|ExecuteScalar\\w*|Execute|ExecuteAsync|FindData\\w*|GetData\\w*|SaveData\\w*)$",
+      "meaning": "데이터 조회/저장 호출(엔드포인트는 endpoint 열)"
+    },
+    {
+      "kind": "POPUP",
+      "name": "^(ShowDialog|Show)$",
+      "meaning": "팝업/폼 열기"
+    },
+    {
+      "kind": "FOCUS",
+      "name": "^Focus$",
+      "meaning": "포커스 이동"
+    },
+    {
+      "kind": "UI_MISC",
+      "name": "^(Refresh|Invalidate|SuspendLayout|ResumeLayout|PerformLayout|BeginUpdate|EndUpdate|BeginInit|EndInit|DoEvents|SetWaitDialog\\w*|ShowWaitForm|CloseWaitForm|WaitForm\\w*)$",
+      "meaning": "화면 갱신/대기창"
+    },
+    {
+      "kind": "EXTERNAL_IF",
+      "name": "^Invoke$",
+      "recv": "(function|rfc\\w*|\\w*Function)$",
+      "meaning": "외부 시스템 인터페이스 호출(SAP RFC 등)"
+    },
+    {
+      "kind": "ENDPOINT",
+      "name": "^(FP_ExecuteProcedure\\w*|CallGeneralProcedure\\w*|CommonExecuteQuery\\w*|FP_ExecuteQuery\\w*|ExecuteProcedure\\w*)$",
+      "meaning": "프레임워크 경유 SP/쿼리 실행(첫 인자 = SP·쿼리 ID)"
+    },
+    {
+      "kind": "COMBO_DATA",
+      "name": ".+",
+      "recv": "^(Data|Data_\\w+|DataCommon)$",
+      "meaning": "콤보/조회조건 데이터 조회(Data.* 프레임워크 — 코드별 SP 분기)"
+    },
+    {
+      "kind": "COMBO_DATA",
+      "name": "^GetMeasure$",
+      "meaning": "Measure 목록 조회"
+    },
+    {
+      "kind": "GRID_BIND",
+      "name": "^(Query|BindDataSource\\w*|SetDataSource\\w*)$",
+      "recv": "(si\\w*|spreadInfo|\\w*Spread\\w*|spd\\w*|SpreadInfo)$",
+      "meaning": "그리드에 조회 결과 바인딩"
+    },
+    {
+      "kind": "GRID_COMBO",
+      "name": "^(SetCellTypeCombo\\w*|SetComboCellType\\w*|SetCellCombo\\w*)$",
+      "meaning": "그리드 셀을 콤보로 바꾸고 목록 설정"
+    },
+    {
+      "kind": "GRID_INIT",
+      "name": "^(AddSheet|ChangeActiveSheet|VisibleTab|VisibleColumns|VisibleColumn|Freeze\\w*|VisibleAlternatingRow|SetReNumerCellType|Set\\w*CellType\\w*|AddActionTextBox|AddAction\\w*)$",
+      "meaning": "그리드 시트/컬럼 구성·표시"
+    },
+    {
+      "kind": "GRID_LOCK",
+      "name": "^(SwitchLock|LockRange\\d*|LockColumn\\d*)$",
+      "meaning": "그리드 편집 잠금 전환"
+    },
+    {
+      "kind": "GRID_STYLE",
+      "name": "^(SetBGColor\\d*|SetFGColor\\d*|ResetForeColor|ResetBackColor|SetViewportTopRow|SetViewportLeftColumn)$",
+      "meaning": "그리드 표시 설정"
+    },
+    {
+      "kind": "VALIDATE",
+      "name": "^(SetDivisionAuthCheck|CheckAuth\\w*|AuthCheck\\w*)$",
+      "meaning": "권한 검사/설정"
+    },
+    {
+      "kind": "POPUP",
+      "name": "^Form_Load$",
+      "recv": ".+",
+      "meaning": "팝업 초기화(인자 전달)"
+    },
+    {
+      "kind": "LOG",
+      "name": "^(SearchStartTime|SearchEndTime|UIEndTime|UIStartTime|WriteLine)$",
+      "meaning": "로그/수행시간 기록"
+    },
+    {
+      "kind": "UI_MISC",
+      "name": "^(ShowProgress|CloseProgress|SetSearchCount|RestoreView|SaveView|InitForm)$",
+      "meaning": "진행창·조회건수·화면 보기 상태"
+    },
+    {
+      "kind": "EXCEL",
+      "name": "^(ExportExcel\\w*|ImportExcel\\w*|ExcelExport\\w*|ExcelUpload\\w*)$",
+      "meaning": "엑셀 내보내기/올리기"
+    },
+    {
+      "kind": "DATA_OP",
+      "name": "^(Filter|SetFirst|getColumn|GetBindingRow)$",
+      "meaning": "데이터 필터/행 값 설정·조회"
+    },
+    {
+      "kind": "COMBO_DATA",
+      "name": "^(Get\\w*InnerTable|GetCommonData\\w*|GetComboData\\w*|GetCodeData\\w*)$",
+      "meaning": "콤보/조회조건 데이터 조회(프레임워크 — 큰 데이터 1회 조회 후 코드별 필터 또는 SP 코드 분기)"
+    },
+    {
+      "kind": "GRID_INIT",
+      "name": "^(ColumnHeaderSpan|ColumnHeaderHeight|AddTextColumn|Add\\w*Column|SmartColMerge|ChangeSheet|SetKeyName|SetHeader\\w*)$",
+      "meaning": "그리드 컬럼/헤더 구성"
+    },
+    {
+      "kind": "GRID_STYLE",
+      "name": "^(SetBGColor|SetFGColor|SetCellColor\\w*|SetFont\\w*)$",
+      "meaning": "그리드 표시 설정"
+    },
+    {
+      "kind": "LOG",
+      "name": "^(FP_Log\\w*|WriteLog\\w*|Log|LogWrite\\w*|Trace\\w*)$",
+      "meaning": "로그 기록"
+    },
+    {
+      "kind": "UI_MISC",
+      "name": "^(Close|Dispose|Hide)$",
+      "meaning": "창 닫기/해제"
+    },
+    {
+      "kind": "DATA_OP",
+      "name": "^(Add|AddRange|Remove|RemoveAt|Insert|NewRow|ImportRow|Merge|AcceptChanges|Copy|Clone|Select|SafeAdd|Compute|Find|Contains|ContainsKey|Sort|ToTable|CopyToDataTable|SetField|Field|IsNull|BeginEdit|EndEdit|Delete)$",
+      "meaning": "데이터 객체 조작/조회"
+    },
+    {
+      "kind": "EXPR",
+      "name": "^(ToString|Trim|TrimStart|TrimEnd|ToUpper|ToLower|Format|Concat|Join|Split|Substring|Replace|Equals|StartsWith|EndsWith|IndexOf|Parse|TryParse|ToInt32|ToDecimal|ToDouble|ToDateTime|ToBoolean|IsNullOrEmpty|IsNullOrWhiteSpace|AddDays|AddMonths|AddYears|GetType|Any|All|Count|First|FirstOrDefault|Where|Distinct|ToList|ToArray|OrderBy|Max|Min|Sum|Length|Abs|Round|Ceiling|Floor|GetColumnIndex|GetValue|GetCheckedListValue|GetColumnTag|Good|GetObject|GetMaxColumnIndex|GetMaxRowIndex|SafeString|SafeDouble|SafeInt\\w*|SafeDecimal|SafeDate\\w*|GetText|FromArgb|AppendString|AsEnumerable|GetString|GetInt\\w*|GetDecimal|GetDouble|GetDate\\w*|GetRowCount|GetColumnCount|GetCellValue\\w*|GetSheetInfo|IsLock|Sheet|ParseExact|GetTerm|GetColumnValue|GetSelections|ElementAt|Compare|CheckDataEmpty|SafeZeroDouble|SafeZeroInt|SafeZero\\w*|AppendStringEx|MakeDelimeterStringAsDataTable|ToLoopParam|LtTool|Append|AppendLine)$",
+      "meaning": "값 계산(부수효과 없음)"
+    }
+  ],
+  "assignValueProps": [
+    "ControlValues",
+    "Text",
+    "EditValue",
+    "Value",
+    "SelectedIndex",
+    "SelectedValue",
+    "SelectedItem",
+    "Checked",
+    "CheckState",
+    "DateTime",
+    "InitValue",
+    "SelectedText",
+    "StartDate",
+    "EndDate",
+    "FromDate",
+    "ToDate"
+  ],
+  "assignListProps": [
+    "DataSource",
+    "DataMember",
+    "DisplayMember",
+    "ValueMember"
+  ],
+  "assignStateProps": [
+    "Enabled",
+    "Visible",
+    "ReadOnly",
+    "Locked",
+    "AllowEdit",
+    "Editable",
+    "TabStop",
+    "Collapsed",
+    "PanelVisibility"
+  ],
+  "assignGridHints": [
+    "Cells",
+    "ActiveSheet",
+    "Sheets",
+    "RowCount",
+    "ColumnCount",
+    "ColumnHeader",
+    "RowHeader",
+    "Columns",
+    "Rows"
+  ]
+}

@@ -140,6 +140,24 @@ grep -nE 'case "(ADMIN|DM ADMIN|DM Planner|SCP Planner|DM Viewer)"' "$CS" "$POPU
 TO-BE 메타(`SCM_ADM_USER_GR_MNU_BTN_MPG_M`)는 **시트(`SHT_NM`) 단위**이고 `useTabBtnPermissions` 는 **메뉴 단위로 평면화**한다 —
 같은 BTN_CD 가 메인 시트와 팝업 시트에 함께 있으면 팝업만 조이려는 축소가 메인에 영향을 줄 수 있으니 시트별로 대조할 것.
 
+## §0.6 ⭐ 정합검증용 AS-IS facts 축 — "비교할 AS-IS 정보가 없어 NA·FAIL·판단불가가 되면 안 된다" (2026-10-27 신설, 사용자 요청)
+
+> 정합검증(`tools/Harness/verify`)이 AS-IS 와 비교하려면 **실행되는 원문의 사실**이 facts 로 있어야 한다. 없으면 검사기가 추정·우회하거나 NA/FAIL 로 흘러가 근본 문제가 된다.
+> 원칙: ① **주석·#if 비활성 코드는 사실이 아니다**(Roslyn 트리비아 기준 — `tools/AsisFacts` CsExtractor · Python 리더는 `facts_combosrc.strip_comments`) ② 코드에 없는 동작은 **메타(DB) + 프레임워크 기본값**으로 채우되 **원문 라인을 인용**한다 ③ 추출 건수를 원문 grep·메타 행수와 대조한다.
+
+| facts 파일 | 내용 | 원천 · 근거 | 쓰는 검사 |
+|---|---|---|---|
+| `screens/<ID>/grid_columns_asis.csv` (**신설** `facts_gridcols.py`) | 그리드 컬럼 선언 1행/컬럼: source(CODE·META) · cell_type · combo_data_type · **merge_policy + merge_src** · width · visible · halign · decimals | CODE = `grid_code.csv` Add*Column(주석 제외) · META = `dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv` · 메타 컬럼 병합 = **FPMerge.Restricted 고정**(`SpreadInfo.cs:1909`, 체크 컬럼 None :2090) | H3 병합 · C2/C3/C6 콤보 여부(`asisCombo`) · D5 셀 타입 · H4 폭 · A5 표시 |
+| `framework/spreadinfo_defaults.csv` (**신설**) | 프레임워크 기본값 7종(메타 컬럼 병합 Restricted · MergeOption SmartMerge · SmartColMergeOld 시작 컬럼 · 셀 타입 기본 Text · FPComboBox→CELL_COMBO_DATA_TYPE · 체크리스트 선택없음=ALL) | `SpreadInfo.cs` · `UsrCheckedList.cs` 라인 인용 | 위 + G6 초기값 |
+| `grid_code.csv` / `grid_rule.csv` / `grid_effective.csv` | 코드 컬럼 선언 · 메타 규칙 · division 별 최종 표시 | tools/AsisFacts(Roslyn) | A5 · H5 |
+| `cell_rules.csv` · `lock_rules.csv` · `edit_expect.csv` · `sort_rules.csv` · `combo_src.csv` | 숫자 입력 범위 · 잠금 · 편집 기대 · 정렬 · 콤보 원천 | facts_*.py | E1 · D1/D3 · A6 · B1~B4 |
+| `actions.csv` · `actions_entries.csv` | 메서드 문장 전수(kind) · 진입점 | tools/AsisFacts | 대조표 행 검사 전반 |
+| 동적(실행 시) | 콤보 code↔name(API 응답 `nscm.combos`) · 팝업 선택 행 dataItem 필드 → **`Doc/verify/<ID>/dyn_facts.json`**(`_trace.spec` afterEach 덤프) · 사이트 유형(`site_types.json`) · 골든 결과셋(`Doc/golden`) | E2E 실행 중 수집 | G6 코드→라벨 · D1/D3 사이트 타입 · A1 · M4/C3(팝업 데이터에 없는 항목 = NA 근거) |
+
+**선례(2026-10-27 SCP0007)**: 메인 그리드 Add*Column 31줄이 `/* */` 안이라 실행되지 않는 코드였는데, 원문을 직접 읽은 함수가 이를 선언으로 읽어 H3 기대값(FPMerge.None)과 C2 콤보 근거를 **주석 코드**에서 가져왔다 → 실제 컬럼은 메타 생성이고 병합 정책은 전부 Restricted. 교정 = 주석 제거 + 메타/프레임워크 기본값 인용(`grid_columns_asis.csv`).
+
+**남는 사각지대(명시)**: SmartColMergeOld 의 실제 병합 결과(빈 값 제외·COLMERGE 보조열)는 정적 사실로만 적고 AS-IS 화면 실측은 하지 않음 · 메타 컬럼의 콤보 데이터(CELL_COMBO_DATA_TYPE 코드 목록)는 `combo_oracle` 로 AS-IS DB 에서 뽑을 때만 값 비교 가능.
+
 ## §1 격차 식별 + 보고
 
 > 4 축 cross-check 실패 시 격차 list 작성:

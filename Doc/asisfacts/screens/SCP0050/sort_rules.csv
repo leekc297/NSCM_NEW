@@ -1,0 +1,7 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCP0050,SQL,SCP0050_GET_CAPA_PIC_USERINFO_POPUP,Doc\asisfacts\db\modules\dbo.SCP0050_GET_CAPA_PIC_USERINFO_POPUP.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0050,SQL,SCP0050_GET_CAPA_PIC,Doc\asisfacts\db\modules\dbo.SCP0050_GET_CAPA_PIC.sql,311,,PLANT_ID,ORDER BY A.PLANT_ID,0,정적
+SCP0050,SQL,SCP0050_GET_USER_ID_CHECK,Doc\asisfacts\db\modules\dbo.SCP0050_GET_USER_ID_CHECK.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0050,SQL,SCP0050_SAVE_CAPA_PIC,Doc\asisfacts\db\modules\dbo.SCP0050_SAVE_CAPA_PIC.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCP0050,CODE,,06.UIL\GSCM.FP.Forms.UIL\CAPA\SCP0050_CAPA_PIC.UIL\SCP0050_CAPA_PIC.cs,190,,SORT_ORDER,"tmpDivision.DefaultView.Sort	= ""SORT_ORDER Asc"";",0,화면 코드 정렬
+SCP0050,CODE,,06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0050_CAPA_PIC\SCP0050_CAPA_PIC.cs,180,,SORT_ORDER,"tmpDivision.DefaultView.Sort	= ""SORT_ORDER Asc"";",0,화면 코드 정렬

@@ -1,0 +1,448 @@
+{
+  "menuId": "SCP0122",
+  "page": "PlanActivityMgmt",
+  "feature": "supply",
+  "routePath": "supply/plan-activity-mgmt",
+  "asisName": "PlanActivityMgmt",
+  "fields": [
+    {
+      "key": "planGroups",
+      "label": "Plan Group",
+      "lbl": "LBL00002",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanGroup"
+    },
+    {
+      "key": "process",
+      "label": "Process",
+      "lbl": "LBL00059",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboProcess"
+    },
+    {
+      "key": "divisionId",
+      "label": "Division",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    }
+  ],
+  "buttons": [],
+  "sheets": [
+    {
+      "name": "Plan Activity Mgmt",
+      "key": "PLAN_ACTIVITY_MGMT",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "AUTO_YN",
+        "CONFIRM_YN",
+        "DIVISION_ID",
+        "LINK_UI_TYPE",
+        "OPMZ_ACTV_CD",
+        "OPMZ_ACTV_NAME",
+        "OPMZ_ACTV_SEQ",
+        "OPMZ_PLAN_GR_ID",
+        "OPMZ_PLAN_GR_NAME",
+        "OPMZ_PRS_CD",
+        "OPMZ_PRS_NAME",
+        "OPTION_YN",
+        "PRE_OPMZ_ACTV_CD",
+        "PRE_OPMZ_ACTV_SEQ",
+        "PROGRAM_NAME"
+      ],
+      "labels": [
+        "Auto Flag",
+        "Confirm Flag",
+        "Div.",
+        "Link UI Type",
+        "Activity Code",
+        "Activity Name",
+        "Act. Seq",
+        "Plan Group ID",
+        "Plan Group",
+        "Process CD",
+        "Process",
+        "Option Flag",
+        "PRE_OPMZ_ACTV_CD",
+        "PRE_OPMZ_ACTV_SEQ",
+        "Program Name"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Plan Activity Mgmt",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0122.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0121_GET_SEARCH_INFO",
+      "sheet": "Plan Activity Mgmt",
+      "btn": "SEARCH_INFO",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0122.P_SCP0121_GET_SEARCH_INFO",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0122_GET_PLAN_ACTIVITY_MGMT",
+      "sheet": "Plan Activity Mgmt",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0122.P_SCP0122_GET_PLAN_ACTIVITY_MGMT",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
+      "sheet": "Plan Activity Mgmt",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0122.P_SCP0122_SAVE_PLAN_ACTIVITY_MGMT",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": []
+    },
+    {
+      "name": "handleClbDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCboPlanGroup",
+      "target": "cboPlanGroup",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainComboSelChange",
+      "target": "this.spdMain",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMainCell",
+      "target": "this.spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": []
+    }
+  ],
+  "tcs": [
+    {
+      "id": "TC-ID",
+      "kind": "구분",
+      "pre": "사전조건",
+      "step": "절차",
+      "input": "입력값",
+      "expect": "기대결과",
+      "basis": "근거"
+    },
+    {
+      "id": "TC-SCP0122-001",
+      "kind": "초기화",
+      "pre": "SCP0122 메뉴 권한이 있는 사용자로 로그인",
+      "step": "1) SCP0122 화면을 연다 2) usrConditionPanel1, spdMain을 확인한다",
+      "input": "없음",
+      "expect": "`Form_Load`가 실행됩니다. usrConditionPanel1(상단, 접기 가능) 안에 cboDivision / cboPlanGroup / cboProcess가 보이고, spdMain에 시트 `Plan Activity Mgmt`가 활성 상태로 표시됩니다. 조회 전 그리드는 빈 상태(**확인 필요**)",
+      "basis": "`Form_Load`, `Plan Activity Mgmt` (CreateSpread:185, InitSpread:198)"
+    },
+    {
+      "id": "TC-SCP0122-002",
+      "kind": "초기화",
+      "pre": "SCM_ADM_LOOKUP_MASTER / _DETAIL에 LookupCommon 대상 코드 존재(코드값 **확인 필요**)",
+      "step": "1) 화면을 연다 2) 공통코드 호출 여부를 확인한다 3) cboProcess 목록을 확인한다",
+      "input": "LookupCommon",
+      "expect": "클래스 생성 시 `biz:CommonData.CommonDataList` [code=LookupCommon]이 1회 호출되어 dtProcessCdAll에 적재됩니다. cboProcess에 바인딩되는지는 **확인 필요**",
+      "basis": "`biz:CommonData.CommonDataList` (`<field:dtProcessCdAll>`:47, UP_FX_GetCommonDataList)"
+    },
+    {
+      "id": "TC-SCP0122-003",
+      "kind": "초기화",
+      "pre": "로그인 사용자 NowGroupID에 해당하는 SCP_OPMZ_PLAN_GR_M 데이터 존재",
+      "step": "1) 화면을 연다(또는 cboDivision을 변경한다 — 호출 시점 **확인 필요**) 2) cboPlanGroup 목록을 확인한다",
+      "input": "NowGroupID = 로그인 사용자 그룹",
+      "expect": "`SCP.SCP0121_GET_SEARCH_INFO` → SP `SCP0121_GET_SEARCH_INFO`가 호출되고 cboPlanGroup에 Plan Group 목록이 채워집니다",
+      "basis": "`SCP.SCP0121_GET_SEARCH_INFO`, `SCP0121_GET_SEARCH_INFO` (GetPlanGroupByUserID:155·143)"
+    },
+    {
+      "id": "TC-SCP0122-004",
+      "kind": "초기화",
+      "pre": "사용자 그룹에 해당하는 Plan Group 데이터 없음",
+      "step": "1) 화면을 연다 2) cboPlanGroup을 펼친다",
+      "input": "NowGroupID = 데이터 없는 그룹",
+      "expect": "빈 결과에서도 오류 없이 cboPlanGroup이 비어 있습니다(빈 목록 처리 방식 **확인 필요**)",
+      "basis": "`SCP.SCP0121_GET_SEARCH_INFO` (빈 결과)"
+    },
+    {
+      "id": "TC-SCP0122-005",
+      "kind": "이벤트",
+      "pre": "TC-001 완료",
+      "step": "1) cboDivision 선택값을 바꾼다",
+      "input": "Division 값 1개 이상",
+      "expect": "`ClbDivision_SelectedIndexChanged`가 실행됩니다. cboPlanGroup이 선택 Division 기준으로 갱신되는지(RefreshPlanGroupByDivision:171) **확인 필요**",
+      "basis": "`ClbDivision_SelectedIndexChanged` (InitEvent:217)"
+    },
+    {
+      "id": "TC-SCP0122-006",
+      "kind": "이벤트",
+      "pre": "cboPlanGroup 목록 적재됨",
+      "step": "1) cboPlanGroup 선택값을 바꾼다",
+      "input": "Plan Group 1건",
+      "expect": "`CboPlanGroup_SelectedIndexChanged`가 실행됩니다. 연동 처리(cboProcess 갱신 등)는 **확인 필요**",
+      "basis": "`CboPlanGroup_SelectedIndexChanged` (InitEvent:218)"
+    },
+    {
+      "id": "TC-SCP0122-007",
+      "kind": "조회",
+      "pre": "SCP_OPMZ_PLAN_GR_ACTV_M에 조건에 맞는 데이터 존재",
+      "step": "1) cboDivision, cboPlanGroup, cboProcess를 선택한다 2) 조회(FindButton)를 누른다",
+      "input": "Division / Plan Group / Process 각 CODE",
+      "expect": "시트가 `Plan Activity Mgmt`로 전환(306)되고, 조건 3개가 GetCheckedListValue(CODE)로 전달(308~310)된 뒤 `SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT`가 호출(321)되어 spdMain에 결과가 표시됩니다",
+      "basis": "`SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT`, `SCP0122_GET_PLAN_ACTIVITY_MGMT`, `Plan Activity Mgmt`"
+    },
+    {
+      "id": "TC-SCP0122-008",
+      "kind": "조회",
+      "pre": "조건에 맞는 데이터 없음",
+      "step": "1) 데이터가 없는 조합을 선택한다 2) 조회(FindButton)를 누른다",
+      "input": "데이터 없는 Plan Group/Process",
+      "expect": "오류 없이 spdMain이 0행이고 헤더 15컬럼은 유지됩니다(조회 결과 없음 메시지 여부 **확인 필요**)",
+      "basis": "`SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT` (빈 결과)"
+    },
+    {
+      "id": "TC-SCP0122-009",
+      "kind": "조회",
+      "pre": "SP 오류 유발 환경(예: SP 권한 회수·DB 연결 차단)",
+      "step": "1) 조회(FindButton)를 누른다",
+      "input": "정상 조건",
+      "expect": "오류 응답 시 오류 메시지가 표시되고 기존 그리드가 깨지지 않습니다(메시지 문구 **확인 필요**)",
+      "basis": "`SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT` (오류 응답)"
+    },
+    {
+      "id": "TC-SCP0122-010",
+      "kind": "그리드",
+      "pre": "SCM_MST_SHEET_COLUMNS SCP0122 15행 존재",
+      "step": "1) 화면을 연다 2) spdMain 헤더를 확인한다",
+      "input": "없음",
+      "expect": "시트 `Plan Activity Mgmt`에 15컬럼 헤더 Auto Flag, Confirm Flag, Div., Link UI Type, Activity Code, Activity Name, Act. Seq, Plan Group ID, Plan Group, Process CD, Process, Option Flag, PRE_OPMZ_ACTV_CD, PRE_OPMZ_ACTV_SEQ, Program Name이 표시됩니다(표시 순서는 메타 원문 **확인 필요**)",
+      "basis": "`Plan Activity Mgmt` (SetSheetHeaderColumnSCP@SetSpreadInit:212, grid_effective.csv)"
+    },
+    {
+      "id": "TC-SCP0122-011",
+      "kind": "그리드",
+      "pre": "TC-010 완료",
+      "step": "1) 각 컬럼의 폭·정렬·고정·최대길이·대문자 적용을 메타 값과 비교한다",
+      "input": "SCM_MST_SHEET_COLUMNS 원문",
+      "expect": "COLUMN_WIDTH, HORIZONTAL_ALIGN_CODE, FIXED_FLAG, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, UPPERCASE_APPLY_FLAG, CELL_CONTROL_OBJECT_TYPE_CODE가 메타대로 적용됩니다",
+      "basis": "`Plan Activity Mgmt` (SetSheetHeaderColumnSCP)"
+    },
+    {
+      "id": "TC-SCP0122-012",
+      "kind": "그리드",
+      "pre": "TC-001 완료",
+      "step": "1) 컬럼 헤더 스타일을 확인한다",
+      "input": "없음",
+      "expect": "헤더 정렬은 General, NoteIndicatorColor는 Red(Designer.cs:252~255)입니다",
+      "basis": "`Plan Activity Mgmt` (InitializeComponent:252~255)"
+    },
+    {
+      "id": "TC-SCP0122-013",
+      "kind": "이벤트",
+      "pre": "TC-007 조회 완료, 콤보 셀 존재(셀 유형 메타 **확인 필요**)",
+      "step": "1) spdMain의 콤보 셀에서 값을 선택한다",
+      "input": "콤보 항목 1건",
+      "expect": "`SpdMain_ComboSelChange`가 실행됩니다. 연동 셀 갱신 등 처리 내용은 **확인 필요**",
+      "basis": "`SpdMain_ComboSelChange` (InitEvent:220), `Plan Activity Mgmt`"
+    },
+    {
+      "id": "TC-SCP0122-014",
+      "kind": "이벤트",
+      "pre": "TC-007 조회 완료",
+      "step": "1) spdMain 임의 셀을 클릭한다",
+      "input": "셀 위치(행/열)",
+      "expect": "`spdMain_CellClick`이 실행됩니다. 처리 내용은 **확인 필요**",
+      "basis": "`spdMain_CellClick` (InitEvent:221), `Plan Activity Mgmt`"
+    },
+    {
+      "id": "TC-SCP0122-015",
+      "kind": "저장",
+      "pre": "조회조건 선택됨, 원장에 없는 Activity 키 준비",
+      "step": "1) 행 추가(Insert_Row — 진입 버튼 **확인 필요**) 2) 필수 셀을 입력한다 3) 저장(SaveButton)을 누른다",
+      "input": "신규 OPMZ_ACTV_CD 등",
+      "expect": "`SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT`로 SCP_OPMZ_PLAN_GR_ACTV_M에 INSERT된 뒤 `SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT`로 재조회되어 신규 행이 표시됩니다",
+      "basis": "`SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT`, `SCP0122_SAVE_PLAN_ACTIVITY_MGMT`, `SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT`"
+    },
+    {
+      "id": "TC-SCP0122-016",
+      "kind": "저장",
+      "pre": "TC-007 조회 완료",
+      "step": "1) 기존 행의 편집 가능 셀을 수정한다 2) 저장(SaveButton)을 누른다",
+      "input": "예: Activity Name 변경",
+      "expect": "SCP_OPMZ_PLAN_GR_ACTV_M에 UPDATE되고 재조회 결과에 변경값이 반영됩니다",
+      "basis": "`SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT`, `SCP0122_SAVE_PLAN_ACTIVITY_MGMT`"
+    },
+    {
+      "id": "TC-SCP0122-017",
+      "kind": "저장",
+      "pre": "TC-007 조회 완료, 삭제 진입점 확인됨(**확인 필요**)",
+      "step": "1) 행 삭제 표시를 한다 2) 저장(SaveButton)을 누른다",
+      "input": "삭제 대상 1행",
+      "expect": "SCP_OPMZ_PLAN_GR_ACTV_M에서 DELETE되고 재조회 결과에서 사라집니다",
+      "basis": "`SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT`, `SCP0122_SAVE_PLAN_ACTIVITY_MGMT`"
+    },
+    {
+      "id": "TC-SCP0122-018",
+      "kind": "저장",
+      "pre": "TC-015~017 중 1건 수행",
+      "step": "1) 저장 후 이력·로그 테이블을 조회한다",
+      "input": "저장한 키",
+      "expect": "SCP_OPMZ_PLAN_GR_ACTV_H(SCP0122_SCP_OPMZ_PLAN_GR_ACTV_HIST 경유)와 SCM_SYS_LOG_BATCH(PR_SCM_SYS_LOG_BATCH 경유)에 행이 적재됩니다(적재 조건 **확인 필요**)",
+      "basis": "`SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT`, `SCP0122_SAVE_PLAN_ACTIVITY_MGMT`"
+    },
+    {
+      "id": "TC-SCP0122-019",
+      "kind": "저장",
+      "pre": "SP 오류 유발 데이터(예: 중복 키 — 원장 실존 키) 준비",
+      "step": "1) 오류를 유발하는 행으로 저장(SaveButton)을 누른다",
+      "input": "오류 유발 값",
+      "expect": "오류 응답 시 메시지가 표시되고 원장이 변경되지 않습니다. 재조회 수행 여부는 **확인 필요**",
+      "basis": "`SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT` (오류 응답)"
+    },
+    {
+      "id": "TC-SCP0122-020",
+      "kind": "저장",
+      "pre": "TC-007 조회 완료, 변경 없음",
+      "step": "1) 아무것도 수정하지 않고 저장(SaveButton)을 누른다",
+      "input": "없음",
+      "expect": "변경 없음 처리(메시지 또는 무동작)는 **확인 필요**. 원장 변경 0건",
+      "basis": "`SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT` (빈 페이로드)"
+    },
+    {
+      "id": "TC-SCP0122-021",
+      "kind": "division",
+      "pre": "Division 40 사용자/조건",
+      "step": "1) cboDivision = 40으로 조회(FindButton)한다",
+      "input": "Division 40",
+      "expect": "`Plan Activity Mgmt` 15컬럼 전부 표시(기본 15/선택 0)",
+      "basis": "`Plan Activity Mgmt`, `SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT` (grid_effective.csv 40)"
+    },
+    {
+      "id": "TC-SCP0122-022",
+      "kind": "division",
+      "pre": "Division 81 계열 사용자/조건",
+      "step": "1) cboDivision = 81(및 81_HD/81_HG/81_HM/81_ST/81_UC)로 조회(FindButton)한다",
+      "input": "81 계열",
+      "expect": "15컬럼 전부 표시, 40과 동일",
+      "basis": "`Plan Activity Mgmt`, `SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT` (grid_effective.csv 81 계열)"
+    },
+    {
+      "id": "TC-SCP0122-023",
+      "kind": "division",
+      "pre": "Division 82 사용자/조건",
+      "step": "1) cboDivision = 82로 조회(FindButton)한다",
+      "input": "Division 82",
+      "expect": "15컬럼 전부 표시, 40과 동일",
+      "basis": "`Plan Activity Mgmt`, `SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT` (grid_effective.csv 82)"
+    },
+    {
+      "id": "TC-SCP0122-024",
+      "kind": "division",
+      "pre": "Division EE 계열 사용자/조건",
+      "step": "1) cboDivision = EE(및 EE_HD/EE_HG/EE_HM/EE_ST/EE_UC)로 조회(FindButton)한다",
+      "input": "EE 계열",
+      "expect": "15컬럼 전부 표시, 40과 동일",
+      "basis": "`Plan Activity Mgmt`, `SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT` (grid_effective.csv EE 계열)"
+    },
+    {
+      "id": "TC-SCP0122-025",
+      "kind": "권한",
+      "pre": "조회 권한만 있는 그룹(TB_FX_GroupMenuAuth 값 **확인 필요**)",
+      "step": "1) 화면을 연다 2) 조회·저장 버튼 노출을 확인한다",
+      "input": "권한 그룹 A",
+      "expect": "조회(FindButton)는 가능하고, 저장(SaveButton)·행추가의 노출·비활성 여부는 권한 메타에 따릅니다(**확인 필요**)",
+      "basis": "`SCP.SCP0122_GET_PLAN_ACTIVITY_MGMT`, `Form_Load` (TB_FX_GroupMenuAuth 3행)"
+    },
+    {
+      "id": "TC-SCP0122-026",
+      "kind": "권한",
+      "pre": "저장 권한 그룹 / 권한 없는 그룹 각 1계정",
+      "step": "1) 각 계정으로 행 추가·수정 후 저장(SaveButton)을 시도한다",
+      "input": "권한 그룹 B / 권한 없음",
+      "expect": "저장 권한 그룹은 `SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT` 호출에 성공합니다. 권한이 없으면 저장이 차단됩니다(차단 방식 **확인 필요**)",
+      "basis": "`SCP.SCP0122_SAVE_PLAN_ACTIVITY_MGMT`"
+    },
+    {
+      "id": "TC-SCP0122-027",
+      "kind": "권한",
+      "pre": "서로 다른 NowGroupID 사용자 2명",
+      "step": "1) 각 계정으로 화면을 열어 cboPlanGroup 목록을 비교한다",
+      "input": "그룹 X / 그룹 Y",
+      "expect": "`SCP.SCP0121_GET_SEARCH_INFO` 결과가 그룹별로 다를 수 있습니다(차이 규칙은 SP 원문 **확인 필요**)",
+      "basis": "`SCP.SCP0121_GET_SEARCH_INFO`, `SCP0121_GET_SEARCH_INFO` (NowGroupID:143)"
+    }
+  ],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

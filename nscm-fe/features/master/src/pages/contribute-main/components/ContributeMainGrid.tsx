@@ -1,10 +1,7 @@
 import { DataType, toggleClass } from '@mescius/wijmo';
-import type { GridPanel } from '@mescius/wijmo.grid';
 import {
   AllowMerging,
-  CellRange,
   CellType,
-  MergeManager,
   type CellEditEndingEventArgs,
   type CellRangeEventArgs,
   type FlexGrid as FlexGridType,
@@ -227,89 +224,6 @@ export const ContributeMainGrid = ({
     [titleRows, data, chkYear]
   );
 
-  const fixedBindings = ['DEPARTMENT_ID', 'DEPT_ID', 'END_CUST_REPORT', 'SOLDTO_CUST_REPORT'];
-
-  class HierarchicalMergeManager extends MergeManager {
-    getMergedRange(panel: GridPanel, r: number, c: number, _clip = true): CellRange | null {
-      const col = panel.columns[c];
-      if (!col) return null;
-      const binding = col.binding ?? '';
-
-      // 2줄 고정이라 일단 하드코딩으로 세팅
-      if (panel.cellType === CellType.TopLeft) {
-        return new CellRange(0, c, 1, c + 1);
-      }
-
-      if (panel.cellType === CellType.ColumnHeader) {
-        const rg = new CellRange(r, c);
-
-        if (staticColumns?.some(col => col.colNm === binding)) {
-          // 위쪽 방향으로 헤더 텍스트가 같은 행이 있는지 탐색
-          for (let i = r; i > 0; i--) {
-            if (panel.getCellData(i, c, false) === panel.getCellData(i - 1, c, false)) {
-              rg.row = i - 1;
-            } else {
-              break;
-            }
-          }
-          // 아래쪽 방향으로 헤더 텍스트가 같은 행이 있는지 탐색
-          for (let i = r; i < panel.rows.length - 1; i++) {
-            if (panel.getCellData(i, c, false) === panel.getCellData(i + 1, c, false)) {
-              rg.row2 = i + 1;
-            } else {
-              break;
-            }
-          }
-        } else {
-          for (let i = c; i > 0; i--) {
-            if (panel.getCellData(r, i, false) === panel.getCellData(r, i - 1, false)) {
-              rg.col = i - 1;
-            } else {
-              break;
-            }
-          }
-          // 💡 오른쪽 방향으로 헤더 텍스트가 같은 열이 있는지 탐색
-          for (let i = c; i < panel.columns.length - 1; i++) {
-            if (panel.getCellData(r, i, false) === panel.getCellData(r, i + 1, false)) {
-              rg.col2 = i + 1;
-            } else {
-              break;
-            }
-          }
-        }
-        return rg;
-      }
-
-      if (panel.cellType === CellType.Cell && fixedBindings.includes(binding)) {
-        const view = panel.rows;
-        const rowItem = (i: number): Record<string, unknown> | undefined =>
-          (view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;
-        const cur = rowItem(r);
-        if (!cur) return null;
-        const fixedIdx = fixedBindings.indexOf(binding);
-        const leftBindings = fixedBindings.slice(0, fixedIdx + 1);
-        const sameRow = (a: number, b: number): boolean => {
-          const ra = rowItem(a);
-          const rb = rowItem(b);
-          if (!ra || !rb) return false;
-          return leftBindings.every(
-            k =>
-              ((ra as Record<string, string>)[k] ?? '') ===
-              ((rb as Record<string, string>)[k] ?? '')
-          );
-        };
-        const minRow = panel.viewRange.row;
-        const maxRow = panel.viewRange.row2;
-        let r1 = r,
-          r2 = r;
-        while (r1 > minRow && sameRow(r1 - 1, r)) r1--;
-        while (r2 < maxRow && sameRow(r2 + 1, r)) r2++;
-        if (r1 === r2) return null;
-        return new CellRange(r1, c, r2, c);
-      }
-      return new CellRange(r, c);
-    }
-  }
   // 동적 PIVOT 컬럼 cell coloring — 동적 컬럼 (admin 메타 없음) 에서 wrapper 의
   // formatEditableColumns 가 isEditableCell=false 로 판정해 wj-cell-editable 을 제거.
   // 따라서 wrapper 가 등록한 이후(=mount 시점) 핸들러를 다시 등록 → FIFO 호출 순서에서
@@ -451,8 +365,10 @@ export const ContributeMainGrid = ({
       //   빠져 저장 SP 의 키 단위 DELETE 로 사라진다 — 결과는 같지만 사용자가 0 을 보지 못한다).
       //   구분(RBU_0999) 컬럼은 문자 컬럼이라 제외. 화면 cellEditEnded 에 직접 붙이지 않는 이유는 DataGrid prop 주석 참조.
       emptyCellAsZero={isRatioBinding}
+      // 병합은 mergeManager 를 넘기지 않아 공용 CustomMergeManager 가 맡는다(AS-IS SmartColMerge 의
+      //   전 컬럼 Restricted 병합 = 왼쪽 컬럼까지 같은 값일 때만 세로 병합). 화면 전용 매니저를 넘기면
+      //   기본 컬럼(부문~형태)의 2단 헤더 세로 병합이 깨진다(2026-10-20).
       allowMerging={AllowMerging.All}
-      mergeManager={new HierarchicalMergeManager()}
       alternatingRowStep={0}
     />
   );

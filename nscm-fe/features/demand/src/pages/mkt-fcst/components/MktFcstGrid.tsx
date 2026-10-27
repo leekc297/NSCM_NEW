@@ -106,24 +106,24 @@ const toNumber = (v: unknown): number => {
 //     POINT3  : 소수 3자리 고정(단 정확히 0 은 '0') — #,##0.000
 //     POINT/그 외 : 소수 있을 때만 최대 3자리(끝자리 0 트림), 0 은 '0' — #,##0.###
 //   천단위 콤마는 AS-IS ###,### 와 동일하게 넣는다. 빈 값은 AS-IS 처럼 공란 유지.
-// const NOTATION_FIXED3 = new Intl.NumberFormat('en-US', {
-//   minimumFractionDigits: 3,
-//   maximumFractionDigits: 3,
-// });
-// const NOTATION_TRIM3 = new Intl.NumberFormat('en-US', {
-//   minimumFractionDigits: 0,
-//   maximumFractionDigits: 3,
-// });
-// const NOTATION_INT = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
-// const formatQtyByNotation = (raw: unknown, notation: unknown): string => {
-//   if (raw == null || raw === '') return '';
-//   const n = toNumber(raw);
-//   const nt = toCellStr(notation).trim().toUpperCase();
-//   if (nt === 'INTEGER') return NOTATION_INT.format(Math.round(n));
-//   if (nt === 'POINT3') return n === 0 ? '0' : NOTATION_FIXED3.format(n);
-//   // POINT / DEFAULT / 미지정 — 끝자리 0 트림(기존 #,##0.### 과 동일)
-//   return NOTATION_TRIM3.format(n);
-// };
+const NOTATION_FIXED3 = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 3,
+  maximumFractionDigits: 3,
+});
+const NOTATION_TRIM3 = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 3,
+});
+const NOTATION_INT = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+const formatQtyByNotation = (raw: unknown, notation: unknown): string => {
+  if (raw == null || raw === '') return '';
+  const n = toNumber(raw);
+  const nt = toCellStr(notation).trim().toUpperCase();
+  if (nt === 'INTEGER') return NOTATION_INT.format(Math.round(n));
+  if (nt === 'POINT3') return n === 0 ? '0' : NOTATION_FIXED3.format(n);
+  // POINT / DEFAULT / 미지정 — 끝자리 0 트림(기존 #,##0.### 과 동일)
+  return NOTATION_TRIM3.format(n);
+};
 
 // FCST Type 은 화면단에서 후보를 강제로 좁히지 않는다 — 조회/편집 모두 컬럼 메타가 준 목록
 //   그대로 쓴다(2026-09-11 요구: "메타대로만"). 이전의 Div82 WS·WSF 강제 제외(filterFcstTypeRows
@@ -1049,9 +1049,17 @@ export const MktFcstGrid = ({
         paintNegative(e.cell, toNumber(dynVal));
         // 행별 NOTATION 자릿수 서식 — AS-IS SetRowFormat 재현(컬럼 format 대체). 빈 값은 공란 유지.
         //   아래 분기들이 각자 return 하지만 셀 textContent 는 보존하므로 여기서 한 번만 적는다.
-        // if (dynVal != null && dynVal !== '') {
-        //   e.cell.textContent = formatQtyByNotation(dynVal, rowItem?.NOTATION);
-        // }
+        //   필수: editRange 가드 — formatItem 은 편집 중인 셀에도 발생한다(Wijmo 가 편집기 <input>
+        //   을 셀에 넣은 뒤 셀을 다시 그림). 가드 없이 textContent 를 대입하면 방금 삽입된 <input>
+        //   이 지워져 "셀 입력이 안 되는" 상태가 된다(2026-10-15 실사고로 이 블록을 주석 처리했던 원인).
+        //   자매 SalesReportsGrid.tsx:481 과 동일 가드.
+        if (
+          dynVal != null &&
+          dynVal !== '' &&
+          !s.editRange?.contains(e.row, e.col)
+        ) {
+          e.cell.textContent = formatQtyByNotation(dynVal, rowItem?.NOTATION);
+        }
 
         const state = evalDynCell({
           binding: col.binding,

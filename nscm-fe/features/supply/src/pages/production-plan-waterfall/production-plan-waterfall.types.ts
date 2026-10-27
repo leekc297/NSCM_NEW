@@ -18,6 +18,7 @@ export interface SearchParams {
   toYyyymmdd: string; // date range to
   modelId: string; // 팝업 결과(ItemByDivisionModal) → p_item_id
   nickName: string; // 텍스트
+  uom: string; // UOM 클라 필터(AS-IS clbUOM/ApplyUOM) — 'M'|'EA'|''(전체). SP 파라미터 아님(조회결과 클라 필터).
   chkGap: boolean; // Gap 체크 → p_gap + version 2건 검증
   chkAll: boolean; // 전체기간 토글(그리드 재구성)
   chkSum: boolean; // W_/M_ 합계칼럼 표시 토글

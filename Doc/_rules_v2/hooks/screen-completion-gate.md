@@ -10,7 +10,7 @@
 
 ---
 
-## §0 게이트 매트릭스 (10 게이트 — 전부 의무. **G9 = 2026-08-11 · G10 = 2026-08-20 신설**)
+## §0 게이트 매트릭스 (11 게이트 — 전부 의무. **G9 = 2026-08-11 · G10 = 2026-08-20 · G11 = 2026-10-26 신설**)
 
 | # | 게이트 | 판정 기준 | 근거 룰/Hook |
 |---|---|---|---|
@@ -24,6 +24,7 @@
 | G8 | 이관 완전성 | deploy package 5종 인벤토리 (DDL/META/SP body/GRANT/i18n) + 멱등 SQL + 공용/wrapper SP 포함 | deploy-package-completeness |
 | **G9** | ⭐⭐⭐ **메타 실소비 · 셀 컨트롤 3요소 · 저장 경로 전수** | **§0.4 G9-A~G9-D 전수 판정** — ①컬럼명 하드코딩 0건 + 메타↔실동작 모순 질문 ②팝업/콤보 3요소(메타·트리거·파라미터) ③저장 SP 수 = 왕복 수(신규행 C·조회 R 독립) + 원장 delta ④harness = FE 실 payload·다행. **G1~G8 을 전부 통과하고도 터진 3종을 막는 게이트** | ⭐⭐⭐ **#130 ui-meta-consumption-and-crud-path-coverage** (2026-08-11 사용자 지정) |
 | **G10** | ⭐⭐⭐ **지정 보완요청 원장 축 (미적용 전제)** | `보완요청_원장.md` 의 이 화면 대상 행 전수 — 러너 **섹션 10** (`asis_mapping_gate --check --requests-only --menu`) PASS: 원장 미편입 0 / **PENDING 0** / 비-PENDING 근거 공란 0 / 판정신호 실측 불일치 0 / 원장↔대사표 상태 정합. **보류(USER-DECISION/VISUAL)·클라우드 N 목록을 완료 보고에 전기** (PASS 여도 생략 금지). 하위문구 단위 판정 — 행 단위 "완료" 금지 | ⭐⭐⭐ **#139 request-ledger-and-subclause-mapping** (2026-08-20 사용자 지정 "미적용 전제") + #126 §2 (F) |
+| **G11** | ⭐⭐⭐ **대조표 전 행 검증 커버리지 + DB 접근(시노님·권한)** | 대조표 2종(FE `__asis-mapping__.md` 전 행 + AS-IS 액션 대조표 `Doc/asisfacts/screens/<AS-IS>/actions.csv` 진입점·검증 가능 액션)의 **행마다 필요한 검증 층**(정적 디자인 · 동적 생성·조회 · 콤보 · Cascade · 편집·검증 · CRUD · 팝업 · 공통 · 권한 · DB 실행·접근)에 **검증 결과**가 있어야 한다. `Doc/verify/<ID>/mapping_trace.md`(v2 — 대조표 전 행 × 검사 카탈로그 `mapping_checks.csv`, **검증 불필요 분류 없음**: 제외·해당없음 행 = 사유 근거 검사 X-REASON) 판정 **FAIL 0 · 미구현 0 · 미검증 0**(인스턴스 사유 NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현 · BLOCKED = 대조표 미구현 행) · **작업 원장 `work_ledger.md` 0건**(PASS·NA 외 검사 인스턴스 전부 = 할 일 W1 기능 구현·W2 구현 위치·W3 동작 수정·W4 검사기 구현·W5 검사기 연결·W6 검증 실행·W7 기대값 확정·W8 구현 후 검증·W9 도구 오류 — 별도 대기열 없음) · FE 대조표 없음 = 미통과 · `Doc/verify/<ID>/syn_check.csv`(BE 계정 SCMP_APP 이 부르는 PKG·콤보 SQL 객체의 시노님/권한) 문제 0 · E2E 테스트 구간 BE 로그 DB 오류(ORA-00942·PLS-00201 등) 0. **미검증은 PASS 가 아니다** | 사용자 지시 2026-10-26 · 🔎 화면 정합검증(`run_verify.py` → `syn_check.py` → `mapping_trace.py --to-ledger` → E2E `@verify`+검증 엔진 `@trace` → `mapping_trace.py` → 구현 엔진 `impl_engine.py`) · 하네스 게이트 **VC1·VC2** · E2E fixture `dberr` · 전 화면 `trace_all.py` → `Doc/verify/_trace_all.md` · 대사표 열 `verify_cov`·`syn_issue` |
 
 ## §0.4 ⭐⭐⭐ G9 신설 — 메타 실소비 · 셀 컨트롤 3요소 · 저장 경로 전수 (2026-08-11 사용자 지정, hook #130)
 
@@ -142,6 +143,7 @@
 | G6 런타임 smoke | PASS | §0.5 5항: 모달 3/3 footer OK, SQL_LOG SAVE 1건, SELECT 3 row+감사키 OK, 콤보 NAME OK, cascade 1회 OK, 콘솔 0 |
 | G7 표준 정합 | PASS | 자매 DMF0007 대비 구조 동일 |
 | G8 이관 완전성 | PASS | 5종 인벤토리 (zip 경로) |
+| G11 대조표 검증 커버리지 | PASS | 대조표 1108행(FE 203·액션 진입점 49+문장 856) 검사 인스턴스 1160 전부 PASS/NA · FAIL 0 · 미구현 0 · 미검증 0(NOT_RUN·NOPATH·TODO·BLOCKED 0) · 시노님 문제 0 · BE DB 오류 0 · 작업 원장 0건 (Doc/verify/<ID>/mapping_trace.md · work_ledger.md) |
 ```
 
 ## §3 부분 수정 작업 시 축소 적용

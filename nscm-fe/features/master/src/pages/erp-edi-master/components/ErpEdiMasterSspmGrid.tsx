@@ -140,7 +140,9 @@ export const ErpEdiMasterSspmGrid = ({
   const setItem = (items: string, itemName?: string, itemType?: string) => {
     const dataItem = GridUtils.getRow(gridRef.current, clickedRow);
     if (!dataItem) return;
-    dataItem.ITEM_ID = items;
+    // 공용 Model 팝업은 여러 줄을 고르면 ITEM_ID 를 쉼표로 이어 보낸다. 이 셀은 Model 한 건만
+    //   받는 자리라 맨 위 행 하나만 쓴다 (DMF0005 와 같은 방식, 2026-10-14 사용자 요청).
+    dataItem.ITEM_ID = items?.split(',')[0] ?? '';
     dataItem.ITEM_NAME = itemName ?? '';
     dataItem.ITEM_TYPE = itemType ?? '';
     gridRef.current?.refresh();
@@ -197,7 +199,9 @@ export const ErpEdiMasterSspmGrid = ({
             salesSite: cascadeSalesSite,
             projectCode: dataItem?.PROJECT_CODE || 'ALL',
             activeFlag: 'ALL',
-            itemId: '',
+            // 그 행의 현재 Model 로 좁혀 연다 — 그리드 셀 Model 팝업 화면 간 통일 (2026-10-14 사용자 요청).
+            //   비어 있으면 팝업이 와일드카드로 바꿔 전체 목록을 보인다(좁은 조회 규약).
+            itemId: dataItem?.ITEM_ID ?? '',
           }}
           callFromCell
           // 그리드 셀 호출은 좁은 조회를 쓴다 - AS-IS 가 셀 팝업만 DM0002_ItembySmallDivPopup

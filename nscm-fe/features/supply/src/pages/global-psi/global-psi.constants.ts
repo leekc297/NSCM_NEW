@@ -94,17 +94,19 @@ export const PIVOT_PREFIX = {
 //   horizon 상한이 강제되므로 저위험 잔여로 둔다(04 N4).
 export const PERIOD_W52_OFFSET_DAYS = 363;
 
-// F6 개인화 저장용 날짜키 별칭 — 공용 personalizeCondition 은 EXCLUDED_DATE_PARAM(/...yyyymmdd$/i)으로
-//   날짜 파라미터를 저장 payload 에서 제외한다(날짜는 개인화 대상 아님이라는 공용 규약). 그 결과 이 화면의
-//   단수 키 planStartYyyymmdd/fromYyyymmdd/toYyyymmdd 가 전부 F6 저장에서 빠진다(자매 SCP0013 PPL 은
-//   복수형 planStartYyyymmdds 라 's' 로 끝나 정규식을 자연히 피해 저장됨). 공용 정규식을 건드리면 타 화면
-//   회귀 위험이 커, 이 화면만 SubTitle searchParam 에서 날짜키를 정규식에 안 걸리는 별칭(...Ymd)으로 투영해
-//   저장하고 복원 때 되읽는다. 실제 SearchCondition 필드명은 그대로 둔다(SP 매핑·Form 배선 불변).
-export const SAVE_DATE_ALIAS = {
-  planStartYyyymmdd: 'planStartYmd',
-  fromYyyymmdd: 'fromYmd',
-  toYyyymmdd: 'toYmd',
-} as const;
+// F6 개인화 저장 제외 조건 — AS-IS ConditionNotUseList(Plan Date · Plan Type · Seq) + 공통 기준(Period 는
+//   저장 대상 아님). 화면을 다시 열면 항상 최신 계획·그 계획 기준 Period 로 시작해야 한다(갭분석 C-11).
+//   날짜 키는 공용 personalizeCondition 의 EXCLUDED_DATE_PARAM 이 빼지만, planType/planSeq 는 걸리지 않아
+//   SubTitle searchParam 에서 직접 뺀다. 복원도 같은 키를 무시한다.
+export const CONDITION_NOT_SAVED = [
+  'planStartYyyymmdd',
+  'planType',
+  'planSeq',
+  'fromYyyymmdd',
+  'toYyyymmdd',
+] as const;
+// 2026-10-20 이전 판이 날짜 키를 별칭(...Ymd)으로 저장해 둔 행 — 복원 시 무시한다.
+export const LEGACY_SAVED_DATE_ALIAS = ['planStartYmd', 'fromYmd', 'toYmd'] as const;
 
 // C9 SCP 구간(Plan horizon) 초과 검증 — AS-IS FindData_Main → SCPPlan.CheckPlanPeriodRange(GetPeriodRange)
 //   (GSCM SCP0031_GlobalPSI.cs:537~542 / 979~1075). SCPPlanPeriod_SCP 콤보 SQL 을 조회해(등록 실측:
@@ -135,6 +137,8 @@ export const MSG = {
   //   defaultValue 로 병기해 i18n fallback 으로 표시한다(코드베이스 {0}/{1} .replace 규약, 예 MSG.PERIOD_MAX
   //   WaterfallShipmentPlanFg). DB 등록은 공유 메시지 후속(04 명시) — 미등록이어도 기능 정상.
   PERIOD_EXCEEDS: 'MSG00402',
+  // 기간 시작 > 종료 — AS-IS FindData_Main 기간 검사(MSG00108) 후 조회 중단(갭분석 F-02).
+  PERIOD_INVALID: 'MSG00108',
 } as const;
 
 // i18n 라벨 — SCM_ADM_MSG_M(MSG_TP_CD='LBL') 실측 LBL ID(design 02 §4.5, 전건 존재·신규 추가 불요).
@@ -142,12 +146,12 @@ export const LBL = {
   SEARCH: 'LBL00112', // Search (표준 LBL00112)
   DIVISION: 'LBL00001', // Division (표준 LBL00001)
   MATERIAL: 'LBL00021',
-  NICK_NAME: 'LBL00767',
+  MODEL: 'LBL00618', // NICK NAME -> MODEL/NICKNAME (LBL00618 실측) 
   FROM_SITE: 'LBL00022',
   TO_SITE: 'LBL00023',
   PLAN_DATE: 'LBL00039',
   PLAN_TYPE: 'LBL00040',
-  SEQ: 'LBL00768',
+  SEQ: 'LBL00041',
   BUCKET: 'LBL00710',
   PERIOD: 'LBL00013',
   ALL: 'LBL00632', // chkAll

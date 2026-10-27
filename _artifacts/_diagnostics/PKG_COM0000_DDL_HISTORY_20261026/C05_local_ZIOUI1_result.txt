@@ -1,0 +1,246 @@
+================= §0 환경 =================
+
+DB_NAME        CONNECTED_AS                                                                                                                     RUN_AT
+-------------- -------------------------------------------------------------------------------------------------------------------------------- -------------------
+ZIOUI1         SCM_MGR                                                                                                                          2026-10-26 15:43:47
+
+================= §1 신원 정보 — OS 계정 · PC · 접속 IP · DB 계정 · 프로그램 =================
+WORK_TYPE : 사람(GUI 도구) / AI·자동화 추정(스크립트 런타임) / 구분 불가
+
+OS_USERNAME    USERHOST             CLIENT_IP        TERMINAL         DBUSERNAME   PROGRAM                                                        WORK_TYPE                  T_FIRST             T_LAST                     CNT
+-------------- -------------------- ---------------- ---------------- ------------ -------------------------------------------------------------- -------------------------- ------------------- ------------------- ----------
+jumdae         P2605LN0047          222.110.191.243  unknown          SYSTEM       C:\Users\LG15\AppData\Local\Programs\Python\Python312\python.e AI·자동화 추정(스크립트)   2026-10-13 15:54:29 2026-10-16 16:46:03        145
+jumdae         P2605LN0047          222.110.191.243  unknown          SCM_MGR      DBeaver 26?0?5 ? Metadata                                      사람(GUI 도구)             2026-10-13 18:13:33 2026-10-26 14:08:53         16
+jumdae         P2605LN0047          222.110.191.243  unknown          SYS          C:\Users\LG15\AppData\Local\Programs\Python\Python312\python.e AI·자동화 추정(스크립트)   2026-10-14 06:58:54 2026-10-26 07:38:19        364
+jumdae         P2605LN0047          222.110.191.243  unknown          SCMC         C:\Users\LG15\AppData\Local\Programs\Python\Python312\python.e AI·자동화 추정(스크립트)   2026-10-20 08:57:56 2026-10-20 08:57:56          1
+
+================= §2 같은 PC 를 쓴 다른 OS 계정 / 같은 OS 계정이 쓴 다른 PC =================
+
+OS_USERNAME    USERHOST             T_FIRST             T_LAST                     CNT
+-------------- -------------------- ------------------- ------------------- ----------
+jumdae         P2605LN0047          2026-10-13 15:54:29 2026-10-26 14:08:53        526
+
+================= §3 일자별 활동 (언제 무엇을 몇 건) =================
+
+DAY        DBUSERNAME   ACTION_NAME            WORK_TYPE                  T_FIRST                    CNT    OBJ_CNT   FAIL_CNT
+---------- ------------ ---------------------- -------------------------- ------------------- ---------- ---------- ----------
+2026-10-13 SYSTEM       CREATE TABLE           AI·자동화 추정(python)     15:54:29~15:54:32           14         14          0
+2026-10-13 SYSTEM       GRANT                  AI·자동화 추정(python)     15:54:30~15:54:31           68         10          0
+2026-10-13 SCM_MGR      SELECT                 사람(GUI 도구)             18:13:33~18:13:38            2          1          0
+2026-10-14 SYS          ALTER SYSTEM           AI·자동화 추정(python)     06:58:54~06:58:55           60          0          0
+2026-10-15 SCM_MGR      SELECT                 사람(GUI 도구)             16:38:13~16:38:22            3          1          0
+2026-10-16 SCM_MGR      SELECT                 사람(GUI 도구)             13:37:36~13:37:36            3          1          0
+2026-10-16 SYSTEM       ALTER TABLE            AI·자동화 추정(python)     16:45:57~16:46:03           63         63          0
+2026-10-19 SCM_MGR      SELECT                 사람(GUI 도구)             00:57:40~00:57:40            3          1          0
+2026-10-20 SYS          ALTER SYSTEM           AI·자동화 추정(python)     07:08:26~07:08:27           87          0          1
+2026-10-20 SCMC         LOGON                  AI·자동화 추정(python)     08:57:56~08:57:56            1          0          1
+2026-10-21 SYS          ALTER SYSTEM           AI·자동화 추정(python)     19:27:34~19:27:38          170          0          0
+2026-10-22 SCM_MGR      SELECT                 사람(GUI 도구)             12:52:01~12:52:01            3          1          0
+2026-10-26 SYS          ALTER SYSTEM           AI·자동화 추정(python)     07:38:18~07:38:19           47          0          0
+2026-10-26 SCM_MGR      SELECT                 사람(GUI 도구)             14:08:53~14:08:53            2          1          0
+
+14 행이 선택되었습니다.
+
+================= §4 작업한 객체 (DDL 대상 · 같은 배포 묶음 파악) =================
+
+OBJ                                  ACTION_NAME            T_FIRST             T_LAST                     CNT
+------------------------------------ ---------------------- ------------------- ------------------- ----------
+INF_MGR.XIF_ERP_ATR_R                CREATE TABLE           2026-10-13 15:54:29 2026-10-13 15:54:29          1
+INF_MGR.XIF_ERP_EDI_CALL_OFF_SCHEDUL CREATE TABLE           2026-10-13 15:54:29 2026-10-13 15:54:29          1
+E_R
+
+INF_MGR.XIF_ERP_EDI_CUST_MATERIAL_IN CREATE TABLE           2026-10-13 15:54:29 2026-10-13 15:54:29          1
+FO_R
+
+INF_MGR.XIF_ERP_EDI_MST_CUST_MAT_R   CREATE TABLE           2026-10-13 15:54:29 2026-10-13 15:54:29          1
+INF_MGR.XIF_ERP_EDI_MST_MODEL_R      CREATE TABLE           2026-10-13 15:54:29 2026-10-13 15:54:29          1
+INF_MGR.XIF_ERP_EDI_UNLOADING_POINT_ CREATE TABLE           2026-10-13 15:54:29 2026-10-13 15:54:29          1
+R
+
+INF_MGR.XIF_ERP_PO_INFO_IN_R         CREATE TABLE           2026-10-13 15:54:29 2026-10-13 15:54:29          1
+INF_MGR.XIF_ERP_PO_INFO_R            CREATE TABLE           2026-10-13 15:54:30 2026-10-13 15:54:30          1
+ENG_SCP.TH_ENG_BUCKET_INFO           CREATE TABLE           2026-10-13 15:54:30 2026-10-13 15:54:30          1
+ENG_SCP.TH_EXP_DELIVERY              CREATE TABLE           2026-10-13 15:54:30 2026-10-13 15:54:30          1
+INF_MGR.XIF_ERP_ATR_R                GRANT                  2026-10-13 15:54:30 2026-10-13 15:54:30          8
+INF_MGR.XIF_ERP_EDI_CALL_OFF_SCHEDUL GRANT                  2026-10-13 15:54:30 2026-10-13 15:54:30          8
+E_R
+
+INF_MGR.XIF_ERP_EDI_CUST_MATERIAL_IN GRANT                  2026-10-13 15:54:30 2026-10-13 15:54:30          8
+FO_R
+
+INF_MGR.XIF_ERP_EDI_MST_CUST_MAT_R   GRANT                  2026-10-13 15:54:30 2026-10-13 15:54:30          8
+INF_MGR.XIF_ERP_EDI_MST_MODEL_R      GRANT                  2026-10-13 15:54:30 2026-10-13 15:54:30          8
+INF_MGR.XIF_ERP_EDI_UNLOADING_POINT_ GRANT                  2026-10-13 15:54:30 2026-10-13 15:54:30          8
+R
+
+INF_MGR.XIF_ERP_PO_INFO_IN_R         GRANT                  2026-10-13 15:54:30 2026-10-13 15:54:30          8
+INF_MGR.XIF_ERP_PO_INFO_R            GRANT                  2026-10-13 15:54:31 2026-10-13 15:54:31          8
+ENG_SCP.TH_ENG_BUCKET_INFO           GRANT                  2026-10-13 15:54:31 2026-10-13 15:54:31          2
+ENG_SCP.TH_EXP_DELIVERY              GRANT                  2026-10-13 15:54:31 2026-10-13 15:54:31          2
+SCM_MGR.GT_F021_DATA_DUP             CREATE TABLE           2026-10-13 15:54:31 2026-10-13 15:54:31          1
+SCM_MGR.GT_F021_SALES_PLAN           CREATE TABLE           2026-10-13 15:54:32 2026-10-13 15:54:32          1
+SCM_MGR.GT_F021_SALES_PLAN_LOC       CREATE TABLE           2026-10-13 15:54:32 2026-10-13 15:54:32          1
+SCM_MGR.GT_F021_SALES_PLAN_RTF       CREATE TABLE           2026-10-13 15:54:32 2026-10-13 15:54:32          1
+FP_MGR.BUF_AMEND_DAILY_PLAN_R        ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.BUF_AMEND_PLAN_CELL_R         ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.BUF_AMEND_PLAN_FORM_R         ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.BUF_AMEND_PLAN_PACK_R         ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.BUF_AMEND_PLAN_POST_R         ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.BUF_DEMAND_PACK_REQUIRE_CELL_ ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+H
+
+FP_MGR.BUF_ELECTRODE_POST_PLAN_H     ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.BUF_FCS_TRAY_M                ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.BUF_MPP_WPP_BASE_PLAN_LINEASS ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+IGN_M
+
+FP_MGR.BUF_MPP_WPP_BASE_PLAN_M       ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.FP_DYNAMIC_QUERY_SETUP_ITEM   ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_AMEND_DAILY_PLAN_R        ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_AMEND_MEMO_M              ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_AMEND_PLAN_CELL_R         ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_AMEND_PLAN_FORM_R         ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_AMEND_PLAN_PACK_R         ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_AMEND_PLAN_POST_R         ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_AMEND_PLAN_P_FORM_R       ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_DEMAND_PACK_REQUIRE_CELL_ ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+H
+
+FP_MGR.HIS_ELECTRODE_POST_PLAN_H     ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_EQUIPMENT_M               ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_FCS_TRAY_M                ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_FCS_TRAY_MODEL_M          ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_FORMATION_SHORTER_LT_M    ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_FP_ITEM_SETUP_GROUP_M     ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_FP_LINE_SETUP_GROUP_M     ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_FP_PLAN_DETAIL_H          ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_FP_PLAN_GROUP_DETAIL_H    ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_FP_PLAN_H                 ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_FP_SETUP_MATRIX_M         ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_GROUP_CELL_M              ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_ITEM_CONV_CALC_USE_M      ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_ITEM_LANE_M               ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_ITEM_LINE_ASSIGN_M        ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_LINE_CAPA_SYNC_H          ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_LINE_M                    ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_MANUAL_WO_CREATE          ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_MODEL_MARKET_M            ALTER TABLE            2026-10-16 16:45:57 2026-10-16 16:45:57          1
+FP_MGR.HIS_MPP_WPP_BASE_PLAN_M       ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+FP_MGR.HIS_OPERATION_MOVE_M          ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+FP_MGR.HIS_PLAN_STATUS_H             ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+FP_MGR.HIS_PRODUCTION_PLAN_BATCH_H   ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+FP_MGR.HIS_PRODUCTION_PLAN_EQUIPMENT ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+_EPOST_R
+
+FP_MGR.HIS_SCP_CHANGE_MEMO_M         ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+FP_MGR.HIS_SIM_MATERIAL_PACK_R       ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+FP_MGR.HIS_TACT_TIME_M               ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+FP_MGR.HIS_WEEKLY_DEMAND_PRODUCT_H   ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+FP_MGR.HIS_WEEKLY_DEMAND_PRODUCT_PDS ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+_H
+
+FP_MGR.HIS_WEEKLY_DEMAND_PRODUCT_TES ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+T_H
+
+FP_MGR.HIS_YIELD_M                   ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+FP_MGR.JOB_SCHEDULE_HISTORY          ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+FP_MGR.SCM_CAPA_MAIL_SEND_H          ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+INF_MGR.XIF_BPS_METAL_LINK_PRICE_S   ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+INF_MGR.XIF_BPS_SALES_ETC_PLAN_S     ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+INF_MGR.XIF_BPS_SALES_PLAN_S         ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+INF_MGR.XIF_IFS_MMS_DATA             ALTER TABLE            2026-10-16 16:45:58 2026-10-16 16:45:58          1
+INF_MGR.XIF_IFS_SMS_DATA             ALTER TABLE            2026-10-16 16:46:02 2026-10-16 16:46:02          1
+INF_MGR.ZNERP_TOBE_CODE_INFO         ALTER TABLE            2026-10-16 16:46:02 2026-10-16 16:46:02          1
+SCM_MGR.DM_CUST_DEMAND_ANL_DETAIL    ALTER TABLE            2026-10-16 16:46:02 2026-10-16 16:46:02          1
+SCM_MGR.DM_CUST_ITEM_MAPPING_DTL_H   ALTER TABLE            2026-10-16 16:46:02 2026-10-16 16:46:02          1
+SCM_MGR.DM_PLN_SALES_ETC_PLAN_H      ALTER TABLE            2026-10-16 16:46:02 2026-10-16 16:46:02          1
+SCM_MGR.SCM_COM_SQL_LOG              ALTER TABLE            2026-10-16 16:46:02 2026-10-16 16:46:02          1
+SCM_MGR.SCP_ANL_LONG_TERM_STOCK      ALTER TABLE            2026-10-16 16:46:03 2026-10-16 16:46:03          1
+
+87 행이 선택되었습니다.
+
+================= §5 ⭐ AI 작업 흔적 — DDL 원문 속 AI 작업 마커 / 생성기 표식 =================
+AI_MARKER : [E2026xxxx-...] 작업 마커 · SOURCE-FRESH/FRESH-GATE 스탬프 · Claude/Generated/AUTO 표기
+
+T_FIRST             DBUSERNAME   ACTION_NAME            OBJ                                  AI_MARKER
+------------------- ------------ ---------------------- ------------------------------------ ------------------------------------------------------------
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            BUF_AMEND_DAILY_PLAN_R               GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            BUF_AMEND_PLAN_CELL_R                GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            BUF_AMEND_PLAN_FORM_R                GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            BUF_AMEND_PLAN_PACK_R                GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            BUF_AMEND_PLAN_POST_R                GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            BUF_DEMAND_PACK_REQUIRE_CELL_H       GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            BUF_ELECTRODE_POST_PLAN_H            GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            BUF_FCS_TRAY_M                       GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            BUF_MPP_WPP_BASE_PLAN_LINEASSIGN_M   GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            BUF_MPP_WPP_BASE_PLAN_M              GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            FP_DYNAMIC_QUERY_SETUP_ITEM          GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_AMEND_DAILY_PLAN_R               GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_AMEND_MEMO_M                     GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_AMEND_PLAN_CELL_R                GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_AMEND_PLAN_FORM_R                GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_AMEND_PLAN_PACK_R                GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_AMEND_PLAN_POST_R                GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_AMEND_PLAN_P_FORM_R              GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_DEMAND_PACK_REQUIRE_CELL_H       GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_ELECTRODE_POST_PLAN_H            GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_EQUIPMENT_M                      GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_FCS_TRAY_M                       GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_FCS_TRAY_MODEL_M                 GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_FORMATION_SHORTER_LT_M           GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_FP_ITEM_SETUP_GROUP_M            GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_FP_LINE_SETUP_GROUP_M            GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_FP_PLAN_DETAIL_H                 GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_FP_PLAN_GROUP_DETAIL_H           GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_FP_PLAN_H                        GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_FP_SETUP_MATRIX_M                GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_GROUP_CELL_M                     GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_ITEM_CONV_CALC_USE_M             GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_ITEM_LANE_M                      GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_ITEM_LINE_ASSIGN_M               GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_LINE_CAPA_SYNC_H                 GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_LINE_M                           GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_MANUAL_WO_CREATE                 GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:57 SYSTEM       ALTER TABLE            HIS_MODEL_MARKET_M                   GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_MPP_WPP_BASE_PLAN_M              GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_OPERATION_MOVE_M                 GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_PLAN_STATUS_H                    GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_PRODUCTION_PLAN_BATCH_H          GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_PRODUCTION_PLAN_EQUIPMENT_EPOST_ GENERATED BY DEFAULT AS IDENTITY (START WI
+                                                        R
+
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_SCP_CHANGE_MEMO_M                GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_SIM_MATERIAL_PACK_R              GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_TACT_TIME_M                      GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_WEEKLY_DEMAND_PRODUCT_H          GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_WEEKLY_DEMAND_PRODUCT_PDS_H      GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_WEEKLY_DEMAND_PRODUCT_TEST_H     GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            HIS_YIELD_M                          GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            JOB_SCHEDULE_HISTORY                 GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            SCM_CAPA_MAIL_SEND_H                 GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            XIF_BPS_METAL_LINK_PRICE_S           GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            XIF_BPS_SALES_ETC_PLAN_S             GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            XIF_BPS_SALES_PLAN_S                 GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:45:58 SYSTEM       ALTER TABLE            XIF_IFS_MMS_DATA                     GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:46:02 SYSTEM       ALTER TABLE            XIF_IFS_SMS_DATA                     GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:46:02 SYSTEM       ALTER TABLE            ZNERP_TOBE_CODE_INFO                 GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:46:02 SYSTEM       ALTER TABLE            DM_CUST_DEMAND_ANL_DETAIL            GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:46:02 SYSTEM       ALTER TABLE            DM_CUST_ITEM_MAPPING_DTL_H           GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:46:02 SYSTEM       ALTER TABLE            DM_PLN_SALES_ETC_PLAN_H              GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:46:02 SYSTEM       ALTER TABLE            SCM_COM_SQL_LOG                      GENERATED BY DEFAULT AS IDENTITY (START WI
+2026-10-16 16:46:03 SYSTEM       ALTER TABLE            SCP_ANL_LONG_TERM_STOCK              GENERATED BY DEFAULT AS IDENTITY (START WI
+
+63 행이 선택되었습니다.
+
+-- 5-2 PKG_COM0000 재배포(10-13 등) DDL 원문 머리 300자 (작성자·생성기 주석 확인용)
+
+선택된 레코드가 없습니다.
+
+================= §6 현재 접속 중인 세션 (있으면 실시간 확인 가능) =================
+
+   INST_ID        SID    SERIAL# DBUSERNAME   OSUSER         MACHINE              PROGRAM                                                        LOGON_TIME
+---------- ---------- ---------- ------------ -------------- -------------------- -------------------------------------------------------------- -------------------
+         1        857      18096 SCM_MGR      jumdae         P2605LN0047          DBeaver 26?0?5 ? Main                                          2026-10-26 14:08:36
+         1        153      14000 SCM_MGR      jumdae         P2605LN0047          DBeaver 26?0?5 ? SQLEditor ?Script?3?sql?                      2026-10-26 15:39:59
+
+================= 끝 =================

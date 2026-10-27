@@ -18,11 +18,14 @@ interface BulkInputArgs {
 }
 
 // AS-IS 가드 #4(.cs:694-701) 등가 — "SelectDay 인데 선택영역이 없다" 판정.
-//   AS-IS FarPoint GetSelections() 는 드래그·행헤더·열헤더로 만든 선택영역만 돌려주고 단일 셀
-//   클릭에는 빈 배열이었다. Wijmo selectedRanges 는 현재 셀 하나만 있어도 1x1 범위를 돌려주므로
-//   length 로 판정하면 이 가드가 영구 false 가 된다 — 2셀 이상 덮는 범위를 요구해 등가를 만든다.
+//   공용 DataGrid 는 SelectionMode.MultiRange 라 Ctrl+클릭으로 흩어진 셀을 고르면 selectedRanges 에
+//   1x1 범위가 여러 개 쌓이고, 드래그는 span>1 범위 하나가 된다. 종전엔 "2셀 이상 덮는 범위"만
+//   선택으로 쳤는데(rowSpan/columnSpan>1), 그러면 Ctrl 다중선택(1x1 여러 개)이 전부 탈락해 영구
+//   차단된다(사용자 신고 2026-10-20). 그래서 유효한 선택 범위가 하나라도 있으면 통과로 바꾼다 —
+//   SelectDay 가 동작하는 형제 SCP0098(hasBulkSelection = selectedRanges.some(isValid))과 동형이다.
+//   applyBulkInput 은 선택 범위를 모두 순회하므로 Ctrl 로 찍은 셀이 전부 채워진다.
 export const hasCellRangeSelection = (grid: FlexGrid<ShipmentWorkingDayRow>): boolean =>
-  (grid.selectedRanges ?? []).some(range => range.rowSpan > 1 || range.columnSpan > 1);
+  (grid.selectedRanges ?? []).some(range => range.isValid);
 
 // AS-IS BtnInput_Click(.cs:671-822)의 일괄 입력 5분기.
 //

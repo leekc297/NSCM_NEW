@@ -38,6 +38,8 @@ export const COMBO = {
   OPERATION: 'OperationByLine',
   VERSION: 'MDMVersionId_SCP',
   LANE_QTY: 'LaneQtyOfLineAssign_SCP',
+  /** 승인 Planner 메인 공정 목록(cs:589 Data.Common(LocationGroupByCapa, "")) — Division 인자 없이 전체. */
+  OPER_GROUP_BY_CAPA: 'LocationGroupByCapa',
 } as const;
 
 /** Version 콤보 초기 정적 옵션 — 'Current' 단일(02 §4). 클릭 시 lazy fetch 로 대체. */
@@ -51,6 +53,7 @@ export const BUCKET_OPTIONS = [
 
 /**
  * 체크박스 5종 기본값(02 §4 실측): Loss=N / Line=Y / Tact=Y / Yield=Y / Empty=N.
+ * Loss 는 조회조건 체크박스로 사용자 값 전송(cs:352 기본 N), Line/Tact/Yield 는 UI 없이 이 값 고정 전송.
  * GET_CAPA IN 파라미터 전용('Y'/'N') — 클라 행 토글 없음(03 Vis1~4 dead code 확정).
  */
 export const CHECK_DEFAULTS = {
@@ -70,6 +73,45 @@ export const DAY_RANGE_MONTH_PARAM = 13 as const;
  */
 export const EDIT_AUTH_GROUP = 'SCM PI Admin' as const;
 
+/**
+ * 승인 Planner 그룹 이름(AS-IS PlannerTypeLogic cs:499-561 — group_id 비교값).
+ *   CAPA Planner 는 TO-BE SCM_ADM_USER_GR_M 에 없으나 승인 목록에 오면 SCP Planner 와 같게 본다(AS-IS 동일).
+ */
+export const PLANNER_GROUP = {
+  SCP: 'SCP Planner',
+  CAPA: 'CAPA Planner',
+  FP: 'FP Planner',
+} as const;
+
+/** LANE_QTY 편집 공정(cs:961·1036·1290 — LINE ASSIGN 행 중 E2000·E3000·E4000). */
+export const LANE_QTY_OPERATIONS = ['E2000', 'E3000', 'E4000'] as const;
+
+/**
+ * 승인 Planner 판정 원천 조회 경로(call-proc — 세션 미주입이라 sesUserId 직접 전달).
+ *   내 승인 권한 목록 = PKG_SYS0011.P_SYS0011_GET_MY_AUTH_DATA. SYS0011 시트 버튼 권한이 없는 그룹(FP Planner 단독 등)은
+ *   403 이므로 SCP0049 시트 등록분으로 한 번 더 부른다(미등록이면 역시 실패 → 갈래 ① 만).
+ *   FP 인스턴스 = PR_UI_FP01886_AUTHORITY_REQUEST SELECT_MAIN(SCP0049/fpInstance — New Model 창과 같은 등록).
+ */
+export const MY_AUTH_LIST_ENDPOINTS = [
+  '/SYS0011/myAuthorityList/SEARCH/call-proc',
+  '/SCP0049/myAuthorityList/SEARCH/call-proc',
+] as const;
+export const FP_INSTANCE_ENDPOINT = '/SCP0049/fpInstance/SEARCH/call-proc' as const;
+
+/**
+ * 조회 인자 userAuth 우선 그룹 — GET_CAPA 가 UPPER(P_USER_AUTH) NOT IN ('ADMIN','SCP PLANNER','SCM PI ADMIN')
+ *   이면 손실 코드 XC031 행을 숨긴다. AS-IS 는 로그인 그룹 하나(NowGroupID)를 보냈다.
+ *   TO-BE 세션에는 현재 그룹이 없고 보유 그룹 이름(USER_GR_NM) 목록(session.groups)만 있으므로
+ *   보유 그룹 중 아래 하나라도 있으면 그 값을 보낸다. ADMIN 의 USER_GR_NM 은 'System Administrator'.
+ *   [이름(대문자 비교), 보낼 값] 쌍.
+ */
+export const USER_AUTH_PRIORITY_GROUPS: readonly (readonly [string, string])[] = [
+  ['SYSTEM ADMINISTRATOR', 'ADMIN'],
+  ['ADMIN', 'ADMIN'],
+  ['SCP PLANNER', 'SCP Planner'],
+  ['SCM PI ADMIN', 'SCM PI Admin'],
+];
+
 /** 계산행(파생 산식 대상, 03 §3 V — arrayCalLoss). */
 export const CAL_LOSS_CODES = ['XB020', 'XB021', 'XC041', 'XC042', 'XE500', 'M08', 'XD101'] as const;
 
@@ -82,9 +124,9 @@ export const DATA_TABLE_ABBR: Readonly<Record<string, string>> = {
   SCM_YIELD_M: 'Y',
 };
 
-/** REQUEST_CHK 편집 허용 행(03 §3 L4 cs:563-566). */
+/** REQUEST_CHK 편집 허용 행(03 §3 L4 cs:563-566). 26.10.19 TO -BE MailReq 안쓰는다고 해서 false 처리. 
 export const REQUEST_CHK_LOSS_CODES = ['LA001', 'LA002', 'LA003'] as const;
-
+*/
 /**
  * AS-IS MSG ↔ TO-BE i18n 코드 (01 §2.6 실측, hook #114 — AS-IS 번호 복사 금지).
  * 확정: 동번호 등가 = MSG00096/00265/00133/00108. 이관대역 = MSG01314/01335/01327/01326/01348/01323.
@@ -95,7 +137,7 @@ export const MSG = {
   NOT_REAL_TIME: 'MSG01314', // It is not real time data. (AS-IS MSG00312)
   SAVE_COUNT: 'MSG00672', // {0} data saved. (AS-IS MSG00004 — 후보 병존)
   SAVE_FAIL: 'MSG00003', // Failed to save. (AS-IS MSG00003 동번호)
-  NO_CHANGES: 'MSG00133', // No modifications have been made. (AS-IS MSG00133 동번호 등가)
+  NO_CHANGES: 'MSG00004', // No modifications have been made. (AS-IS MSG00133 는 TO-BE 미등록 → 같은 문구 MSG00004, KO/EN/CN)
   MAIL_SUCCESS: 'MSG01335', // Success to send requestion e-mail. (AS-IS MSG00339)
   MAIL_ERROR: 'MSG01288', // Error occurred during execution. (AS-IS MSG00284 — 후보 병존)
   NO_ROW_CHECKED: 'MSG01054', // No rows are checked. (AS-IS MSG00021 — 후보 병존)
@@ -110,13 +152,13 @@ export const MSG = {
   UPLOAD_NO_FILE: 'MSG01385', // There is no selected file information. (업로드 팝업 — DB 실측)
   UPLOAD_ERROR: 'MSG01288', // Error occurred during execution. (MAIL_ERROR 동일 코드 재사용 — 범용 오류)
   EXCEL_FORM_EMPTY: 'MSG01023', // No data found for the search conditions. (양식 다운로드 — 조회결과 없음, DB 실측)
-  // 저장 셀 값검증(03 §3.1·§5-5). MSG00107 만 TO-BE 실재(재사용) — 나머지는 미등록이라
-  //   t() fallback(AS-IS 소스 문구)로 배선하고 신규 등록은 admin 요청 항목(convert-core §2.3 — 임의 INSERT 금지).
-  LANE_QTY_REQUIRED: 'MSG00337', // Lane QTY value required (E2000 공정). (AS-IS MSG00337 — TO-BE 미등록)
-  PRIORITY_RANGE: 'MSG00203', // Enter a number between {0} and {1}. (AS-IS MSG00203 — TO-BE 미등록)
-  PRIORITY_INTEGER: 'MSG00107', // Priority is a positive integer. (AS-IS MSG00107 동번호 실재 — 재사용)
-  YIELD_MIN: 'MSG00193', // Only values greater than {1} can be entered. (AS-IS MSG00193 — TO-BE 미등록)
-  YIELD_MAX: 'MSG00072', // Only values less than or equal to {0}. (AS-IS MSG00072 — TO-BE 미등록)
+  // 저장 셀 값검증(03 §3.1·§5-5). AS-IS 번호는 TO-BE 미등록이라 같은 문구로 등록된 TO-BE 코드로 바꿨다
+  //   (2026-10-23 SCM_ADM_MSG_M ↔ AS-IS TB_FX_MessageInfo 문구 대조, MSG-06).
+  LANE_QTY_REQUIRED: 'MSG01333', // Lane QTY value required (E2000 공정). (AS-IS MSG00337)
+  PRIORITY_RANGE: 'MSG01037', // Enter a number between {0} and {1}. (AS-IS MSG00203)
+  PRIORITY_INTEGER: 'MSG01134', // Priority is a positive integer. (AS-IS MSG00107)
+  YIELD_MIN: 'MSG01035', // Only values greater than {0} can be entered. (AS-IS MSG00193)
+  YIELD_MAX: 'MSG01036', // Only values less than or equal to {0}. (AS-IS MSG00072)
 } as const;
 
 /**
@@ -155,6 +197,9 @@ export const LBL = {
   MAIL_REQUEST: 'LBL01091', // Mail Request
   // 팝업/컬럼설정 UI 라벨(SCM_ADM_MSG_M LBL 실측 2026-09-26).
   COLUMN_SETTING: 'LBL00605', // Column Setting (R6 컬럼설정 팝업 버튼)
+  // ColumnLayoutModal dual list 제목(타 화면 공통 재사용 — shipment-plan-fg/business-plan 동일 코드).
+  INVISIBLE: 'LBL00764', // Invisible
+  VISIBLE: 'LBL00765', // Visible
   CONFIRM: 'LBL01034', // Confirm (New Version 저장 버튼)
   NAME: 'LBL01094', // Name (Version Name 입력 라벨 — 'Version Name' 정확 미등록 → Name 사용)
   // 엑셀 업로드/양식 다운로드(GAP-04/05 해소 — DB 실측 LBL, stock-osp 동일 코드 재사용).

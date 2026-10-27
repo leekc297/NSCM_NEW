@@ -1,0 +1,295 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-10-27T15:48:33.130Z",
+ "producer": "check.js",
+ "id": "DMF0042",
+ "final": true,
+ "page": "nscm-fe/features/demand/src/pages/business-plan",
+ "state": "completed",
+ "verdict": "fail",
+ "summary": {
+  "block": 21,
+  "warn": 102
+ },
+ "issues": [
+  {
+   "id": "H03",
+   "class": "BLOCK",
+   "msg": "조회조건 <Checkbox> 디자인(hook #154 v2): v1 무라벨(NBSP/공백 라벨) — 조건명을 FormItem label 로. 정본 GlobalPsiReportForm checkbox()/radio() — Grid(customGrid)+FormItem(formItem, label=조건명, labelAlign='right')+customCheckbox+<Checkbox checked onChange/> · Radio = FormItem label=그룹명 + <RadioGroup row><Radio labelText/>",
+   "where": "components/BusinessPlanForm.tsx:407",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js H03"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "H03",
+   "class": "BLOCK",
+   "msg": "조회조건 <Checkbox> 디자인(hook #154 v2): v1 무라벨(NBSP/공백 라벨) — 조건명을 FormItem label 로. 정본 GlobalPsiReportForm checkbox()/radio() — Grid(customGrid)+FormItem(formItem, label=조건명, labelAlign='right')+customCheckbox+<Checkbox checked onChange/> · Radio = FormItem label=그룹명 + <RadioGroup row><Radio labelText/>",
+   "where": "components/BusinessPlanForm.tsx:412",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js H03"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V01",
+   "class": "BLOCK",
+   "msg": "As-is Validation 421건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js V01"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V01",
+   "class": "BLOCK",
+   "msg": "As-is Expression 269건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js V01"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "VC1",
+   "class": "BLOCK",
+   "msg": "대조표 FAIL 27행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js VC1"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "VC1",
+   "class": "BLOCK",
+   "msg": "대조표 미검증 9467행 — 검사 사유 REVIEW 10248 · NOT_RUN 13129 · NOPATH 4784 · TODO 146 · WARN 120 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js VC1"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "VC1",
+   "class": "BLOCK",
+   "msg": "작업 원장 미완료 1235건 / 검사 인스턴스 1275 — W2 15 · W3 1 · W4 8 · W5 96 · W6 476 · W7 639 · 구현 의심 10 (Doc/verify/DMF0042/work_ledger.md)",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js VC1"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "R05",
+   "class": "BLOCK",
+   "msg": "`any` / `as unknown as` 금지 (#73 procedure-dts-ssot)",
+   "where": "BusinessPlan.tsx:270",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js R05"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "R05",
+   "class": "BLOCK",
+   "msg": "`any` / `as unknown as` 금지 (#73 procedure-dts-ssot)",
+   "where": "components/BusinessPlanGrid.tsx:149",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js R05"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "R05",
+   "class": "BLOCK",
+   "msg": "`any` / `as unknown as` 금지 (#73 procedure-dts-ssot)",
+   "where": "useBusinessPlanStore.ts:267",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js R05"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "R05",
+   "class": "BLOCK",
+   "msg": "`any` / `as unknown as` 금지 (#73 procedure-dts-ssot)",
+   "where": "utils/business-plan.merge.ts:38",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js R05"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "B11",
+   "class": "BLOCK",
+   "msg": "__asis-mapping__.md 에 POPUP 매핑 섹션 — 룰 25 §3.3.1 — button/SP/event/validation 4축",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js B11"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "B19",
+   "class": "BLOCK",
+   "msg": "validation.md 434행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js B19"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "B19",
+   "class": "BLOCK",
+   "msg": "expressions.md 288행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js B19"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "B22",
+   "class": "BLOCK",
+   "msg": "조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA · 시트 'Biz Plan') — 누락 sesUserId, userGroup — 현재 키: divisionId, deptId, endCustomer, scmSiteId, projectCode, itemId, itemType, fromYyyymmdd, nowYyyymmdd, toYyyymmdd, plantSiteId, bizType, owner, qtyYn · BE positional 매핑이라 값이 NULL 로 감",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js B22"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "B22",
+   "class": "BLOCK",
+   "msg": "조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION · 시트 'cutoffVersion') — 누락 yyyymmFrom, yyyymmTo, versionType — 현재 키: divisionId, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js B22"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "B22",
+   "class": "BLOCK",
+   "msg": "조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP · 시트 'futurePrice') — 누락 sesUserId, cate — 현재 키: divisionId, fromYyyymmdd, toYyyymmdd, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js B22"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "B22",
+   "class": "BLOCK",
+   "msg": "조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA · 시트 'futurePriceData') — 누락 sesUserId, cate — 현재 키: divisionId, fromYyyymmdd, toYyyymmdd, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js B22"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "B22",
+   "class": "BLOCK",
+   "msg": "조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_DM_MDF_VERSION · 시트 'mdfVersion') — 누락 versionDescription, versionType, sesUserId — 현재 키: divisionId, fromYyyymmdd, toYyyymmdd, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js B22"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "B22",
+   "class": "BLOCK",
+   "msg": "조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_SPREAD_TITLE · 시트 'spreadTitle') — 누락 sesUserId — 현재 키: startYyyymmdd, endYyyymmdd, divisionId, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js B22"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "B22",
+   "class": "BLOCK",
+   "msg": "조회 filter 키 = 사내 PROC_M COL_NM (DMF0002_GET_TITLESET_POPUP · 시트 'titleSet') — 누락 programId, sesUserId — 현재 키: sheetName, columnType, divisionId, mnuId · BE positional 매핑이라 값이 NULL 로 감",
+   "where": "",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js B22"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "check.js --final"
+  }
+ ]
+}

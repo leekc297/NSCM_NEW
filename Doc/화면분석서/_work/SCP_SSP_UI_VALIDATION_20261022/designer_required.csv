@@ -1,0 +1,401 @@
+﻿screen,file,item_var,text,customization_text,control
+SCP0003,SCP0003_ProductionCapacity.Designer.cs,layoutControlItem1,Division*,,clbDivision
+SCP0003,SCP0003_ProductionCapacity.Designer.cs,layoutControlItem2,Plant Site*,,clbPlantSite
+SCP0003,SCP0003_ProductionCapacity.Designer.cs,layoutControlItem3,Building*,,clbBuilding
+SCP0003,SCP0003_ProductionCapacity.Designer.cs,layoutControlItem4,Operation*,,clbOperation
+SCP0003,SCP0003_ProductionCapacity.Designer.cs,layoutControlItem5,Line*,,clbLine
+SCP0003,SCP0003_ProductionCapacity.Designer.cs,layoutControlItem6,Period*,,dateRangePeriod
+SCP0006,SCP0006_ProjectRoute.Designer.cs,layoutControlItem1,Division*,,cboDivision
+SCP0008,SCP0008_ItemMaster.Designer.cs,layoutControlItem1,Material ID/Name*,Material ID/Name,txtMaterial
+SCP0009,SCP0009_Shipment_Plan_FG.Designer.cs,lblCombo,Operation Group*,Bucket,cboBizType
+SCP0009,SCP0009_Shipment_Plan_FG.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0009,SCP0009_Shipment_Plan_FG.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0009,SCP0009_Shipment_Plan_FG.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0009,SCP0009_Shipment_Plan_FG.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0009,SCP0009_Shipment_Plan_FG.Designer.cs,layoutControlItem14,Period*,,dCalendar
+SCP0010,SCP0010_Shipment_Plan_SEMI.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0010,SCP0010_Shipment_Plan_SEMI.Designer.cs,layoutControlItem1,Operation Group*,,cboOperGroup
+SCP0010,SCP0010_Shipment_Plan_SEMI.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0010,SCP0010_Shipment_Plan_SEMI.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0010,SCP0010_Shipment_Plan_SEMI.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0010,SCP0010_Shipment_Plan_SEMI.Designer.cs,layoutControlItem13,Period*,,dCalendar
+SCP0011,SCP0011_ProductionPlan.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0011,SCP0011_ProductionPlan.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SCP0011,SCP0011_ProductionPlan.Designer.cs,Division,Division*,,cboDivision
+SCP0011,SCP0011_ProductionPlan.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SCP0011,SCP0011_ProductionPlan.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SCP0011,SCP0011_ProductionPlan.Designer.cs,layoutControlItem6,Period*,,dCalendar
+SCP0012,SCP0012_PSI.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SCP0012,SCP0012_PSI.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0012,SCP0012_PSI.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0012,SCP0012_PSI.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SCP0012,SCP0012_PSI.Designer.cs,layoutControlItem6,Period*,,dCalendar
+SCP0013,SCP0013_ProductionPlanLine.Designer.cs,Division,Division*,,cboDivision
+SCP0013,SCP0013_ProductionPlanLine.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SCP0013,SCP0013_ProductionPlanLine.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SCP0013,SCP0013_ProductionPlanLine.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0013,SCP0013_ProductionPlanLine.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SCP0013,SCP0013_ProductionPlanLine.Designer.cs,layoutControlItem19,Period*,,dCalendar
+SCP0014,SCP0014_Problem_Report.Designer.cs,Division,Division*,,cboDivision
+SCP0014,SCP0014_Problem_Report.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SCP0014,SCP0014_Problem_Report.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SCP0014,SCP0014_Problem_Report.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0014,SCP0014_Problem_Report.Designer.cs,layoutControlItem10,Period*,,dCalendar
+SCP0015,SCP0015_PlanManagement.Designer.cs,Division,Division*,,cboDivision
+SCP0015,SCP0015_PlanManagement.Designer.cs,PlanType,Plan Date*,,cboPlanWeek
+SCP0015,SCP0015_PlanManagement.Designer.cs,PlanDate,Year*,,cboPlanYear
+SCP0016,SCP0016_WaterfallShipmentPlanFG.Designer.cs,lblCombo,Operation Group*,Bucket,cboBizType
+SCP0016,SCP0016_WaterfallShipmentPlanFG.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0016,SCP0016_WaterfallShipmentPlanFG.Designer.cs,layoutControlItem3,Version*,Version,clbVersion
+SCP0016,SCP0016_WaterfallShipmentPlanFG.Designer.cs,layoutControlItem6,Period*,,dCalendar
+SCP0017,SCP0017_WaterfallProductionPlan.Designer.cs,Division,Division*,,cboDivision
+SCP0017,SCP0017_WaterfallProductionPlan.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SCP0017,SCP0017_WaterfallProductionPlan.Designer.cs,layoutControlItem3,Version*,,clbVersion
+SCP0017,SCP0017_WaterfallProductionPlan.Designer.cs,layoutControlItem5,Period*,,dCalendar
+SCP0018,SCP0018_WaterfallShipmentPlanSemi.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0018,SCP0018_WaterfallShipmentPlanSemi.Designer.cs,layoutControlItem1,Operation Group*,,cboOperGroup
+SCP0018,SCP0018_WaterfallShipmentPlanSemi.Designer.cs,layoutControlItem2,Version*,Version,clbVersion
+SCP0018,SCP0018_WaterfallShipmentPlanSemi.Designer.cs,layoutControlItem6,Period*,,dCalendar
+SCP0019,SCP0019_WorkingTime.Designer.cs,layoutControlItem4,Division*,,cboDivision
+SCP0019,SCP0019_WorkingTime.Designer.cs,layoutControlItem2,Period*,,dCalendar
+SCP0020,SCP0020_TactTime.Designer.cs,layoutControlItem1,Division*,,cboDivision
+SCP0020,SCP0020_TactTime.Designer.cs,layoutControlItem5,Operation Group*,,cboOperationGroup
+SCP0022,SCP0022_Formation.Designer.cs,Division,Division*,Division,cboDivision
+SCP0023,SCP0023_OutsourcingCapacity.Designer.cs,Division,Division*,Division,cboDivision
+SCP0024,SCP0024_ProductionPlanFix.Designer.cs,Division,Division*,,cboDivision
+SCP0024,SCP0024_ProductionPlanFix.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SCP0024,SCP0024_ProductionPlanFix.Designer.cs,layoutControlItem13,Period*,,dCalendar
+SCP0025,SCP0025_ShipmentPlanFix.Designer.cs,lblCombo,Operation Group*,Bucket,cboBizType
+SCP0025,SCP0025_ShipmentPlanFix.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0025,SCP0025_ShipmentPlanFix.Designer.cs,layoutControlItem8,Period*,,dCalendar
+SCP0026,SCP0026_DemandGrouping.Designer.cs,Division,Division*,,cboDivision
+SCP0026,SCP0026_DemandGrouping.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SCP0028,SCP0028_Shipment_Lot_Size.Designer.cs,Division,Division*,Division,cboDivision
+SCP0029,SCP0029_ProductionPlanLine_SMALL.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0029,SCP0029_ProductionPlanLine_SMALL.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SCP0029,SCP0029_ProductionPlanLine_SMALL.Designer.cs,Division,Division*,,cboDivision
+SCP0029,SCP0029_ProductionPlanLine_SMALL.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SCP0029,SCP0029_ProductionPlanLine_SMALL.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SCP0029,SCP0029_ProductionPlanLine_SMALL.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SCP0031,SCP0031_GlobalPSI.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0031,SCP0031_GlobalPSI.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0031,SCP0031_GlobalPSI.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0031,SCP0031_GlobalPSI.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0031,SCP0031_GlobalPSI.Designer.cs,layoutControlItem7,Period*,,dCalendar
+SCP0032,SCP0032_Unplan_List.Designer.cs,Division,Division*,,cboDivision
+SCP0032,SCP0032_Unplan_List.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SCP0032,SCP0032_Unplan_List.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0032,SCP0032_Unplan_List.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SCP0034,SCP0034_PSI_Electrode.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SCP0034,SCP0034_PSI_Electrode.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0034,SCP0034_PSI_Electrode.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0034,SCP0034_PSI_Electrode.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SCP0034,SCP0034_PSI_Electrode.Designer.cs,layoutControlItem6,Period*,,dCalendar
+SCP0038,SCP0038_GlobalPSI_small.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0038,SCP0038_GlobalPSI_small.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0038,SCP0038_GlobalPSI_small.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0038,SCP0038_GlobalPSI_small.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0038,SCP0038_GlobalPSI_small.Designer.cs,layoutControlItem5,Period*,,dCalendar
+SCP0038,SCP0038_GlobalPSI_small.Designer.cs,lblItemId,Material*,Material,txtItemId
+SCP0040,SCP0040_CharacteristicCapacity.Designer.cs,Division,Division*,Division,cboDivision
+SCP0041,SCP0041_StockOSP.Designer.cs,Division,Division*,Division,cboDivision
+SCP0041,SCP0041_StockOSP.Designer.cs,layoutControlItem5,Period*,,dCalendar
+SCP0042,SCP0042_TactTime_Test.Designer.cs,layoutControlItem1,Division*,,cboDivision
+SCP0042,SCP0042_TactTime_Test.Designer.cs,layoutControlItem5,Operation Group*,,cboOperationGroup
+SCP0043,SCP0043_WOCreate.Designer.cs,PlanDate,PlanDate*,,drpPlanDate
+SCP0043,SCP0043_WOCreate.Designer.cs,PlanID,FP Plan ID*,FP Plan ID*,cboPlanID
+SCP0043,SCP0043_WOCreate.Designer.cs,layoutControlItem10,Plan Group*,Plan Group*,cboInstance
+SCP0043,SCP0043_WOCreate.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SCP0044,SCP0044_GlobalPSI_ESS.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0044,SCP0044_GlobalPSI_ESS.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0044,SCP0044_GlobalPSI_ESS.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0044,SCP0044_GlobalPSI_ESS.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0044,SCP0044_GlobalPSI_ESS.Designer.cs,layoutControlItem5,Period*,,dCalendar
+SCP0045,SCP0045_ShipmentRequest.Designer.cs,lblCombo,Operation Group*,Bucket,cboBizType
+SCP0045,SCP0045_ShipmentRequest.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0045,SCP0045_ShipmentRequest.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SCP0046,SCP0046_ModelAllocation.Designer.cs,Division,Division*,Division*,clbDivision
+SCP0046,SCP0046_ModelAllocation.Designer.cs,layoutControlItem10,Period*,Period*,drpPeriod
+SCP0047,SCP0047_KPI_Target.Designer.cs,Period,Period*,Period*,drpPeriod
+SCP0051,SCP0051_ProductionPlanTarget.Designer.cs,Division,Division*,,cboDivision
+SCP0051,SCP0051_ProductionPlanTarget.Designer.cs,layoutControlItem2,Period*,,dCalendar
+SCP0053,SCP0053_SCPBOM.Designer.cs,layoutControlItem1,Division*,,cboDivision
+SCP0054,SCP0054_CAPA_SIMULATION.designer.cs,layoutVersionId,Version*,,cboVersionId
+SCP0054,SCP0054_CAPA_SIMULATION.designer.cs,layoutPlanDate,Plan date*,,cboPlanDate
+SCP0054,SCP0054_CAPA_SIMULATION.designer.cs,layoutPlanType,Plan type*,,cboPlanType
+SCP0054,SCP0054_CAPA_SIMULATION.designer.cs,layoutSeq,Seq*,,cboPlanSeq
+SCP0054,SCP0054_CAPA_SIMULATION.designer.cs,layoutVersionId,Version*,,cboVersionId
+SCP0054,SCP0054_CAPA_SIMULATION.designer.cs,layoutPlanDate,Plan date*,,cboPlanDate
+SCP0054,SCP0054_CAPA_SIMULATION.designer.cs,layoutPlanType,Plan type*,,cboPlanType
+SCP0054,SCP0054_CAPA_SIMULATION.designer.cs,layoutSeq,Seq*,,cboPlanSeq
+SCP0055,SCP0055_Shipment_Allo_Report.Designer.cs,lblCombo,Operation Group*,Bucket,cboOperationGroup
+SCP0055,SCP0055_Shipment_Allo_Report.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0055,SCP0055_Shipment_Allo_Report.Designer.cs,PlanDate,Plan Date*,Plan-date,cboPlanDate
+SCP0055,SCP0055_Shipment_Allo_Report.Designer.cs,layoutControlItem3,Gap Date*,,cboGapDate
+SCP0055,SCP0055_Shipment_Allo_Report.Designer.cs,layoutControlItem7,Period*,,umpMonthFrom
+SCP0056,SCP0056_MPP_Result_Mgmt.Designer.cs,layoutControlItem1,Division*,,cboDivision
+SCP0056,SCP0056_MPP_Result_Mgmt.Designer.cs,layoutControlItem10,Period*,,dCalendar
+SCP0057,SCP0057_ProductionPlanLine_JV.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0057,SCP0057_ProductionPlanLine_JV.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SCP0057,SCP0057_ProductionPlanLine_JV.Designer.cs,Division,Division*,,cboDivision
+SCP0057,SCP0057_ProductionPlanLine_JV.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SCP0057,SCP0057_ProductionPlanLine_JV.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SCP0057,SCP0057_ProductionPlanLine_JV.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SCP0058,SCP0058_Shipment_Plan_FG_JV.Designer.cs,lblCombo,Operation Group*,Bucket,cboBizType
+SCP0058,SCP0058_Shipment_Plan_FG_JV.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0058,SCP0058_Shipment_Plan_FG_JV.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0058,SCP0058_Shipment_Plan_FG_JV.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0058,SCP0058_Shipment_Plan_FG_JV.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0058,SCP0058_Shipment_Plan_FG_JV.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SCP0059,SCP0059_Shipment_Plan_SEMI_JV.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0059,SCP0059_Shipment_Plan_SEMI_JV.Designer.cs,layoutControlItem1,Operation Group*,,cboOperGroup
+SCP0059,SCP0059_Shipment_Plan_SEMI_JV.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0059,SCP0059_Shipment_Plan_SEMI_JV.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0059,SCP0059_Shipment_Plan_SEMI_JV.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0059,SCP0059_Shipment_Plan_SEMI_JV.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SCP0060,SCP0060_ProductionPlan_JV.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0060,SCP0060_ProductionPlan_JV.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SCP0060,SCP0060_ProductionPlan_JV.Designer.cs,Division,Division*,,cboDivision
+SCP0060,SCP0060_ProductionPlan_JV.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SCP0060,SCP0060_ProductionPlan_JV.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SCP0060,SCP0060_ProductionPlan_JV.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SCP0061,SCP0061_ProductionPlanFix_JV.Designer.cs,Division,Division*,,cboDivision
+SCP0061,SCP0061_ProductionPlanFix_JV.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SCP0061,SCP0061_ProductionPlanFix_JV.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SCP0062,SCP0062_ShipmentPlanFix_JV.Designer.cs,lblCombo,Operation Group*,Bucket,cboBizType
+SCP0062,SCP0062_ShipmentPlanFix_JV.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0062,SCP0062_ShipmentPlanFix_JV.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SCP0063,SCP0063_PSI_JV.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SCP0063,SCP0063_PSI_JV.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0063,SCP0063_PSI_JV.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0063,SCP0063_PSI_JV.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SCP0063,SCP0063_PSI_JV.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SCP0064,SCP0064_GlobalPSI_JV.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0064,SCP0064_GlobalPSI_JV.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0064,SCP0064_GlobalPSI_JV.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0064,SCP0064_GlobalPSI_JV.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0064,SCP0064_GlobalPSI_JV.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SCP0065,SCP0065_ProductionPlanTarget_JV.Designer.cs,Division,Division*,,cboDivision
+SCP0065,SCP0065_ProductionPlanTarget_JV.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SCP0067,SCP0067_GlobalPSI.designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0067,SCP0067_GlobalPSI.designer.cs,lbPlanDate,Plan Date*,,cboPlanDate
+SCP0067,SCP0067_GlobalPSI.designer.cs,lbPlanType,Plan Type*,,cboPlanType
+SCP0067,SCP0067_GlobalPSI.designer.cs,lbSeq,Seq*,,cboPlanSeq
+SCP0067,SCP0067_GlobalPSI.designer.cs,layoutControlItem2,Period*,,dCalendar
+SCP0069,SCP0069_GlobalPSI_EE.designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0069,SCP0069_GlobalPSI_EE.designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0069,SCP0069_GlobalPSI_EE.designer.cs,layoutControlItem6,Period*,,dCalendar
+SCP0070,SCP0070_DemandRTF_Balance.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0070,SCP0070_DemandRTF_Balance.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0070,SCP0070_DemandRTF_Balance.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0070,SCP0070_DemandRTF_Balance.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0070,SCP0070_DemandRTF_Balance.Designer.cs,layoutControlItem2,Period*,,dCalendar
+SCP0071,SCP0071_CAPA_Balance_Small.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0071,SCP0071_CAPA_Balance_Small.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0071,SCP0071_CAPA_Balance_Small.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0071,SCP0071_CAPA_Balance_Small.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0071,SCP0071_CAPA_Balance_Small.Designer.cs,layoutControlItem1,Period*,,dCalendar
+SCP0072,SCP0072_CAPA_Balance.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0072,SCP0072_CAPA_Balance.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0072,SCP0072_CAPA_Balance.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0072,SCP0072_CAPA_Balance.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0072,SCP0072_CAPA_Balance.Designer.cs,layoutControlItem1,Period*,,dCalendar
+SCP0073,SCP0073_CAPA_Balance_Electrode.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0073,SCP0073_CAPA_Balance_Electrode.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0073,SCP0073_CAPA_Balance_Electrode.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0073,SCP0073_CAPA_Balance_Electrode.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0073,SCP0073_CAPA_Balance_Electrode.Designer.cs,layoutControlItem1,Operation Group*,Operation Group*,cboOperationGroup
+SCP0073,SCP0073_CAPA_Balance_Electrode.Designer.cs,layoutControlItem2,Period*,,dCalendar
+SCP0074,SCP0074_PSI_RTF_Balance.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0074,SCP0074_PSI_RTF_Balance.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0074,SCP0074_PSI_RTF_Balance.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0074,SCP0074_PSI_RTF_Balance.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0074,SCP0074_PSI_RTF_Balance.Designer.cs,layoutControlItem2,Period*,,dCalendar
+SCP0075,SCP0075_Allo_Target.Designer.cs,lblCombo,Operation Group*,Bucket,cboOperationGroup
+SCP0075,SCP0075_Allo_Target.Designer.cs,PlanDate,Plan Date*,Plan-date,cboPlanDate
+SCP0075,SCP0075_Allo_Target.Designer.cs,layoutControlItem7,Period*,,umpMonthFrom
+SCP0076,SCP0076_Production_Result_Check.Designer.cs,layoutControlItem1,Division*,,cboDivision
+SCP0077,SCP0077_Shipping_Result_Check.designer.cs,layoutPlanDate,Target Week*,,cboPlanDate
+SCP0078,SCP0078_GSCM_VOC.designer.cs,layoutControlItem1,Period*,,dCalendar
+SCP0079,SCP0079_RTF_Analysis_Report.designer.cs,lblCombo,Operation Group*,Bucket,cboBizType
+SCP0079,SCP0079_RTF_Analysis_Report.designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0079,SCP0079_RTF_Analysis_Report.designer.cs,PlanDate,Plan-date*,Bucket,cboPlanDate
+SCP0079,SCP0079_RTF_Analysis_Report.designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0079,SCP0079_RTF_Analysis_Report.designer.cs,GapDate,Gap-date*,,cboGapDate
+SCP0079,SCP0079_RTF_Analysis_Report.designer.cs,GapPlanType,Plan-type*,,cboGapType
+SCP0079,SCP0079_RTF_Analysis_Report.designer.cs,SEQ,Seq*,,cboPlanSeq
+SCP0079,SCP0079_RTF_Analysis_Report.designer.cs,GapSeq,Seq*,,cboGapSeq
+SCP0079,SCP0079_RTF_Analysis_Report.designer.cs,layoutControlItem5,Period*,Period*,dCalendar
+SCP0080,SCP0080_GroupCodeManagement.designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0081,SCP0081_ProductionPlanReport.designer.cs,Division,Division*,Division,cmbDivision
+SCP0081,SCP0081_ProductionPlanReport.designer.cs,layoutControlItem3,Period*,,dCalendar
+SCP0093,SCP0093_DIO_Trend_Report.designer.cs,layoutPlanDate,Plan date*,Plan date*,cboPlanDate
+SCP0093,SCP0093_DIO_Trend_Report.designer.cs,Division,Division*,,cboDivision
+SCP0093,SCP0093_DIO_Trend_Report.designer.cs,layPeriod,Period*,Period*,dCalendar
+SCP0094,SCP0094_GlobalPSI_Auto.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0094,SCP0094_GlobalPSI_Auto.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0094,SCP0094_GlobalPSI_Auto.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SCP0094,SCP0094_GlobalPSI_Auto.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SCP0094,SCP0094_GlobalPSI_Auto.Designer.cs,layoutControlItem7,Period*,,dCalendar
+SCP0095,SCP0095_GlobalPSI_Elec.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0095,SCP0095_GlobalPSI_Elec.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0095,SCP0095_GlobalPSI_Elec.Designer.cs,lblCombo2,Report Type*,Report Type,cboPlanType
+SCP0096,SCP0096_Shipment_Working_Day_OSP.Designer.cs,layoutControlItem2,Period*,,dCalendar
+SCP0096,SCP0096_Shipment_Working_Day_OSP.Designer.cs,layoutControlItem4,Division*,,cboDivision
+SCP0097,SCP0097_SCP_BOM_Elec.Designer.cs,layoutControlItem1,Division*,,cboDivision
+SCP0098,SCP0098_CAPAReprotSmall.Designer.cs,Division,Div *,,cboDivision
+SCP0098,SCP0098_CAPAReprotSmall.Designer.cs,layoutControlItem19,Period*,,dCalendar
+SCP0099,SCP0099_Business_Plan_LongTerm.Designer.cs,Division,Division*,,cboDivision
+SCP0099,SCP0099_Business_Plan_LongTerm.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SCP0099,SCP0099_CreatePlanPopup.Designer.cs,layoutControlItem1,Division*,Division*,cboDivision
+SCP0099,SCP0099_PlanCopyPopup.Designer.cs,layoutControlItem1,Division*,Division*,cboDivision
+SCP0099,SCP0099_PlanCopyPopup.Designer.cs,PlanDate,Plan-date*,Plan-date*,cboPlanDate
+SCP0099,SCP0099_PlanCopyPopup.Designer.cs,PlanType,Plan-type*,Plan-type*,cboPlanType
+SCP0099,SCP0099_PlanCopyPopup.Designer.cs,SEQ,Seq*,Seq*,cboPlanSeq
+SCP0100,SCP0100_Global_PSI_Report.designer.cs,layPeriod,Period*,Period*,dCalendar
+SCP0100,SCP0100_Global_PSI_Report.designer.cs,layoutControlItem4,Div*,Div*,clbDivision
+SCP0100,SCP0100_Global_PSI_Report.designer.cs,layoutPlanDate,Plan date*,Plan date*,cboPlanDate
+SCP0102,SCP0102_BOD_Validation_Report.designer.cs,lblCombo1,Division*,Bucket,clbDivision_ID
+SCP0102,SCP0102_BOD_Validation_Report.designer.cs,layoutControlItem14,Period*,Period*,usrDateRangePicker1
+SCP0103,SCP0103_MaterialVisibility.Designer.cs,Division,Division*,,cboDivision
+SCP0103,SCP0103_MaterialVisibility.Designer.cs,layoutControlItem5,Period*,,dCalendar
+SCP0111,SCP0111_IntegrationPSI.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0111,SCP0111_IntegrationPSI.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SCP0112,SCP0112_CellTraySimulation.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0112,SCP0112_CellTraySimulation.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SCP0112,SCP0112_CellTraySimulation.Designer.cs,layoutControlItem6,Period*,,dCalendar
+SCP0112,SCP0112_CellTraySimulation.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SCP0112,SCP0112_CellTraySimulation.Designer.cs,ToSite,To Site*,To Site*,cboToSite
+SCP0113,SCP0113_LongTermStockMgmt.Designer.cs,layoutControlItem1,Plan date*,,cboPlanDate
+SCP0115,SCP0115_PolicyInvMgmt.designer.cs,layoutControlItem1,Plant Date*,,cboPlanDate
+SCP0115,SCP0115_PolicyInvMgmt.designer.cs,layoutControlItem7,Period*,,dCalendar
+SCP0116,SCP0116_Global_PSI_Report_New_ESS.designer.cs,Division,Division*,,cboDivision
+SCP0116,SCP0116_Global_PSI_Report_New_ESS.designer.cs,layoutPlanDate,Plan date*,Plan date*,cboPlanDate
+SCP0116,SCP0116_Global_PSI_Report_New_ESS.designer.cs,layPeriod,Period*,Period*,dCalendar
+SCP0124,SCP0124_PlanGroupDashboard.Designer.cs,layoutControlItem6,Period*,,dCalendar
+SCP0127,SCP0127_PrecedeSafetyStockDay.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0127,SCP0127_PrecedeSafetyStockDay.Designer.cs,lblPeriod,Period*,Period*,dCalendar
+SCP0128,SCP0128_SafetyStock.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0128,SCP0128_SafetyStock.Designer.cs,lblPeriod,Period*,Period*,dCalendar
+SCP0129,SCP0129_DemandException.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0129,SCP0129_DemandException.Designer.cs,lblPeriod,Period*,Period*,dCalendar
+SCP0130,SCP0130_ScheduledRecieptInformation.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0131,SCP0131_SalesSitePriority.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0131,SCP0131_SalesSitePriority.Designer.cs,lblPeriod,Period*,Period*,dCalendar
+SCP0132,SCP0132_ConstraintOfShipmentQty.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0132,SCP0132_ConstraintOfShipmentQty.Designer.cs,lblPeriod,Period*,Period*,dCalendar
+SCP0133,SCP0133_WarehouseCapacity.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SCP0133,SCP0133_WarehouseCapacity.Designer.cs,lblPeriod,Period*,Period*,dCalendar
+SSP0001,SSP0001_ShipmentPlanConfirm.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SSP0001,SSP0001_ShipmentPlanConfirm.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0002,SSP0002_ShipmentChangeRequest.Designer.cs,lcReasonDetail,Reason Detail*,Reason Detail,txtReasonDetail
+SSP0002,SSP0002_ShipmentChangeRequest.Designer.cs,lcTitle,Title*,Title,txtTitle
+SSP0002,SSP0002_ShipmentChangeRequest.Designer.cs,lcChangeReason,Change Reason*,Change Reason,cboChangeReason
+SSP0002,SSP0002_ShipmentChangeRequest.Designer.cs,lcApproval,Approval*,Approval*,txtApproval
+SSP0002,SSP0002_ShipmentChangeRequest_Backup.Designer.cs,lcReasonDetail,Reason Detail*,Reason Detail,txtReasonDetail
+SSP0002,SSP0002_ShipmentChangeRequest_Backup.Designer.cs,lcTitle,Title*,Title,txtTitle
+SSP0002,SSP0002_ShipmentChangeRequest_Backup.Designer.cs,lcChangeReason,Change Reason*,Change Reason,cboChangeReason
+SSP0002,SSP0002_ShipmentChangeRequest_Backup.Designer.cs,lcApproval,Approval*,Approval*,txtApproval
+SSP0005,SSP0005_ShipmentWorkingDay.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0006,SSP0006_Plan_Problem.Designer.cs,Division,Division*,,cboDivision
+SSP0006,SSP0006_Plan_Problem.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SSP0006,SSP0006_Plan_Problem.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SSP0006,SSP0006_Plan_Problem.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SSP0006,SSP0006_Plan_Problem.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SSP0007,SSP0007_ProductionPlan.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SSP0007,SSP0007_ProductionPlan.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SSP0007,SSP0007_ProductionPlan.Designer.cs,Division,Division*,,cboDivision
+SSP0007,SSP0007_ProductionPlan.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SSP0007,SSP0007_ProductionPlan.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0007,SSP0007_ProductionPlan.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SSP0008,SSP0008_ProductionPlanLine.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SSP0008,SSP0008_ProductionPlanLine.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SSP0008,SSP0008_ProductionPlanLine.Designer.cs,Division,Division*,,cboDivision
+SSP0008,SSP0008_ProductionPlanLine.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SSP0008,SSP0008_ProductionPlanLine.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0008,SSP0008_ProductionPlanLine.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SSP0009,SSP0009_Shipment_Plan_FG.Designer.cs,lblCombo,Operation Group*,Bucket,cboBizType
+SSP0009,SSP0009_Shipment_Plan_FG.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SSP0009,SSP0009_Shipment_Plan_FG.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SSP0009,SSP0009_Shipment_Plan_FG.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SSP0009,SSP0009_Shipment_Plan_FG.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SSP0009,SSP0009_Shipment_Plan_FG.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SSP0010,SSP0010_Shipment_Plan_SEMI.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SSP0010,SSP0010_Shipment_Plan_SEMI.Designer.cs,layoutControlItem1,Operation Group*,,cboOperGroup
+SSP0010,SSP0010_Shipment_Plan_SEMI.Designer.cs,PlanDate,Plan-date*,Plan-date,cboPlanDate
+SSP0010,SSP0010_Shipment_Plan_SEMI.Designer.cs,PlanType,Plan-type*,Plan-type,cboPlanType
+SSP0010,SSP0010_Shipment_Plan_SEMI.Designer.cs,SEQ,Seq*,SEQ,cboPlanSeq
+SSP0010,SSP0010_Shipment_Plan_SEMI.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SSP0011,SSP0011_PSI.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SSP0011,SSP0011_PSI.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SSP0011,SSP0011_PSI.Designer.cs,PlanType,Plan-type*,,cboPlanType
+SSP0011,SSP0011_PSI.Designer.cs,SEQ,Seq*,,cboPlanSeq
+SSP0011,SSP0011_PSI.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SSP0012,SSP0012_ShipmentPlanConfirmDetail.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0013,SSP0013_ShipmentPlanAdjustment.Designer.cs,Division,Division*,Division*,cboDivision
+SSP0014,SSP0014_ShipmentModelPIC.Designer.cs,Division,Division*,Division*,cboDivision
+SSP0015,SSP0015_ShipmentPSI.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SSP0015,SSP0015_ShipmentPSI.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0015,SSP0015_ShipmentPSI.Designer.cs,lblCombo1,Division*,Bucket,clbDivision
+SSP0015,SSP0015_ShipmentPSICommentsPopup.Designer.cs,layoutControlItem5,Medel*,,txtItem_ID
+SSP0015,SSP0015_ShipmentPSICommentsPopup.Designer.cs,layoutControlItem6,Date*,,txtDate
+SSP0015,SSP0015_ShipmentPSICommentsPopup.Designer.cs,layoutControlItem4,Plan Date*,,txtPlan_Date
+SSP0015,SSP0015_ShipmentPSICommentsPopup.Designer.cs,layoutControlItem10,Div*,,txtDivision_ID
+SSP0015,SSP0015_ShipmentPSICommentsPopup.Designer.cs,layoutControlItem1,From Site*,,txtFrom_Site
+SSP0015,SSP0015_ShipmentPSICommentsPopup.Designer.cs,layoutControlItem2,Measure*,,txtMeasure
+SSP0016,SSP0016_ShipmentRequest.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SSP0016,SSP0016_ShipmentRequest.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0017,SSP0017_InventoryRaw.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SSP0018,SSP0018_ProductionPlanOSP.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SSP0020,SSP0020_Delegate.Designer.cs,lblDelegatee,Delegatee*,Delegatee,txtDelegatee
+SSP0020,SSP0020_Delegate.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SSP0021,SSP0021_ShipmentPlan.Designer.cs,lblCombo1,Division*,Bucket,clbDivision_ID
+SSP0021,SSP0021_ShipmentPlan.Designer.cs,layoutControlItem1,Company*,Company*,clbCompany_ID
+SSP0021,SSP0021_ShipmentPlan.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0021,SSP0021_ShipmentPlan.Designer.cs,PlanDate,Plan-date*,Plan-date*,cboPlanDate
+SSP0022,SSP0022_ShipmentRequestElectrode.Designer.cs,lblCombo1,Division*,Bucket,clbDivision_ID
+SSP0022,SSP0022_ShipmentRequestElectrode.Designer.cs,layoutControlItem1,Company*,Company*,clbCompany_ID
+SSP0022,SSP0022_ShipmentRequestElectrode.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0022,SSP0022_ShipmentRequestElectrode.Designer.cs,PlanDate,Plan-date*,Plan-date*,cboPlanDate
+SSP0023,SSP0023_ShipmentPlanElectrode.Designer.cs,lblCombo1,Division*,Bucket,clbDivision_ID
+SSP0023,SSP0023_ShipmentPlanElectrode.Designer.cs,layoutControlItem1,Company*,Company*,clbCompany_ID
+SSP0023,SSP0023_ShipmentPlanElectrode.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0023,SSP0023_ShipmentPlanElectrode.Designer.cs,PlanDate,Plan-date*,Plan-date*,cboPlanDate
+SSP0025,SSP0025_ShipmentRequestorPIC.Designer.cs,Division,Div*,Division*,cboDivision
+SSP0027,SSP0027_ShipmentPlanEss.Designer.cs,lblCombo1,Division*,Bucket,clbDivision_ID
+SSP0027,SSP0027_ShipmentPlanEss.Designer.cs,layoutControlItem1,Company*,Company*,clbCompany_ID
+SSP0027,SSP0027_ShipmentPlanEss.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0027,SSP0027_ShipmentPlanEss.Designer.cs,PlanDate,Plan-date*,Plan-date*,cboPlanDate
+SSP0027,SSP0027_ShipmentPlanEss.Designer.cs,PlanDate21,Plan-date*,,cboPlanDate21
+SSP0028,SSP0028_Delivery_Tracking_LT.Designer.cs,lblCombo1,Division*,Bucket,clbDivision_ID
+SSP0028,SSP0028_Delivery_Tracking_LT.Designer.cs,layoutControlItem14,Period*,Period*,usrDateRangePicker1
+SSP0029,SSP0029_ShipmentPlanPackPopup.Designer.cs,layoutControlItem5,Medel*,,txtItem_ID
+SSP0029,SSP0029_ShipmentPlanPackPopup.Designer.cs,layoutControlItem6,Date*,,txtDate
+SSP0029,SSP0029_ShipmentPlanPackPopup.Designer.cs,layoutControlItem4,Plan Date*,,txtPlan_Date
+SSP0029,SSP0029_ShipmentPlanPackPopup.Designer.cs,layoutControlItem10,Div*,,txtDivision_ID
+SSP0029,SSP0029_ShipmentPlanPackPopup.Designer.cs,layoutControlItem1,From Site*,,txtFrom_Site
+SSP0029,SSP0029_ShipmentPlanPackPopup.Designer.cs,layoutControlItem2,Measure*,,txtMeasure
+SSP0029,SSP0029_ShipmentPlanPack.Designer.cs,PlanDate,Plan-date*,,cboPlanDate
+SSP0029,SSP0029_ShipmentPlanPack.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0029,SSP0029_ShipmentPlanPack.Designer.cs,lblCombo1,Division*,Bucket,clbDivision
+SSP0030,SSP0030_Logistics_Simulation.Designer.cs,layoutControlItem14,Period*,Period*,usrDateRangePicker1
+SSP0045,SSP0045_ShipmentRequest.Designer.cs,lblCombo,Operation Group*,Bucket,cboBizType
+SSP0045,SSP0045_ShipmentRequest.Designer.cs,lblCombo1,Division*,Bucket,cboDivision
+SSP0045,SSP0045_ShipmentRequest.Designer.cs,layoutControlItem6,Period*,Period*,drpPeriod
+SSP0050,SSP0050_ShipmentChangeRequestIntegration.Designer.cs,Division,Division*,Division*,cboDivision
+SSP0060,SSP0060_ShipmentPlanRequestPopup.Designer.cs,lcChangeReason,Change Reason*,Change Reason,cboChangeReason
+SSP0060,SSP0060_ShipmentPlanRequestPopup.Designer.cs,lcReasonDetail,Reason Detail*,Reason Detail,txtReasonDetail
+SSP0060,SSP0060_ShipmentPlan.Designer.cs,lblCombo1,Division*,Bucket,clbDivision_ID
+SSP0060,SSP0060_ShipmentPlan.Designer.cs,layoutControlItem1,Company*,Company*,clbCompany_ID
+SSP0060,SSP0060_ShipmentPlan.Designer.cs,layoutControlItem6,Period*,,drpPeriod
+SSP0060,SSP0060_ShipmentPlan.Designer.cs,PlanDate,Plan-date*,Plan-date*,cboPlanDate
+SSP0100,SSP0100_LTManagement.Designer.cs,Division,Division*,,cboDivision
+SSP0100,SSP0100_LTManagement.Designer.cs,layoutControlItem1,Operation Group*,,cboOperationGroup
+SSP0200,SSP0200_ShipmentChangeRequest.Designer.cs,lcReasonDetail,Reason Detail*,Reason Detail,txtReasonDetail
+SSP0200,SSP0200_ShipmentChangeRequest.Designer.cs,lcTitle,Title*,Title,txtTitle
+SSP0200,SSP0200_ShipmentChangeRequest.Designer.cs,lcChangeReason,Change Reason*,Change Reason,cboChangeReason
+SSP0200,SSP0200_ShipmentChangeRequest.Designer.cs,lcApproval,Approval*,Approval*,txtApproval
+SSP0201,SSP0201_ShipmentChangeRequest.Designer.cs,lcReasonDetail,Reason Detail*,Reason Detail,txtReasonDetail
+SSP0201,SSP0201_ShipmentChangeRequest.Designer.cs,lcTitle,Title*,Title,txtTitle
+SSP0201,SSP0201_ShipmentChangeRequest.Designer.cs,lcChangeReason,Change Reason*,Change Reason,cboChangeReason
+SSP0201,SSP0201_ShipmentChangeRequest.Designer.cs,lcApproval,Approval*,Approval*,txtApproval

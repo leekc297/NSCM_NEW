@@ -470,19 +470,18 @@ export const ShipmentModelPic = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   // Edit 토글 제거 — 그리드는 조회 직후부터 기본 편집 가능(별도 Edit 진입 없음, 사용자 지시).
-  //   Insert/Delete = AS-IS override 공란(no-op) 재현 — 버튼은 노출하되 클릭 시 아무 동작 안 함.
-  //     AS-IS: protected override void InsertButton() { //InsertRow(); } / DeleteButton 동일(첨부).
-  //   주의: hotkeyConfig 에서 insert/delete 를 생략하면 공용 SubTitle 기본값(addRow/removeRow)이
-  //     그대로 살아 버튼이 실제 동작한다 — no-op 로 만들려면 반드시 () => undefined 를 명시한다
-  //     (false 로 두면 버튼 자체가 숨는다 — AS-IS 는 버튼 노출 + 무동작이라 no-op 이 정답).
+  //   Insert/Delete = BTN_MPG_M(권한) 미등록 버튼이라 숨긴다(false). 사용자 결정 2026-10-20:
+  //     권한 정의 없이 노출되던 no-op 버튼 제거(과거 'no-op 노출'에서 전환). AS-IS InsertButton/
+  //     DeleteButton override 공란은 참고용. 주의: 키 생략 시 공용 SubTitle addRow/removeRow 가
+  //     부활해 실동작하므로 반드시 false 로 명시한다.
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     // A-2 — 편집 권한이 없거나 아직 권한 응답이 안 왔거나 메타를 못 읽었으면 Save 를 숨긴다.
     //   `canEditNow` 대신 `canEdit`(+메타)만 본다 — 저장 중에는 버튼이 사라지는 대신 handleSave 가
     //   재진입을 막는다(버튼이 깜빡이며 사라지면 사용자가 상태를 오해한다).
     save: hasButton('SAVE') && canEdit && !staticColumnsError ? handleSave : false,
-    insert: () => undefined,
-    delete: () => undefined,
+    insert: false,
+    delete: false,
     manual: false,
     upload: false,
   };

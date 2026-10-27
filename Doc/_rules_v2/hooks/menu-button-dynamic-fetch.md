@@ -39,8 +39,11 @@ SYS0009 Menu Button (`menu-button-management`) admin 화면 + 두 테이블이 �
 | admin 이 button 비활성 | USE_YN='N' | (관계없음) | ❌ | - |
 | 권한 없음 (사용자 그룹 미부여) | USE_YN='Y' | row 없음 | ✅ | ❌ disabled |
 | 정의 자체 없음 | row 없음 | - | ❌ | - |
+| **화면에 기능 없음**(hotkeyConfig 핸들러 없음·AS-IS NO-OP) — 2026-10-26 | (관계없음) | (관계없음) | ❌ | - |
+| **선택 Division 에 권한 없음** — 단일 Division 조회조건 × `SCM_ADM_USER_GR_UNIT_AUTH_MPG_M`(UNIT_TP_CD='D') 그룹에 버튼 권한 없음 — 2026-10-26 | USE_YN='Y' | 그 Division 그룹에 row 없음 | ❌ (Division 바꾸면 재평가) | - |
 
 → **하드코딩 `hotkeyConfig: { search: handleSearch }` 만 작성** = admin 의 모든 변경 무시 → SCM0008 사고 family.
+→ 2026-10-26 (사용자 지시): Insert/Delete/Save/Upload 노출 = **기능 있음 × 사용자(선택 Division) 권한 있음**. 공용 `SubTitle` 이 `useTabBtnPermissions({ menuId, divisionId: searchParam.divisionId(단일) })` 로 중앙 게이트 — BE `GET /admin/menu/{mnuId}/auth?divisionId=` → `PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV`(`ALL`/복수/없음 = 그룹 합집합 = 종전 동작). 화면별 `hasButton(코드)` 게이트는 **버튼 코드별**로 둔다(INSERT/DELETE 를 SAVE 로 우회 금지 — 메타가 없으면 메타를 등록). 상세 `subtitle-button-actions-mandatory.md §1.0`.
 
 ---
 

@@ -16,7 +16,12 @@ import { memo, type ReactNode, type RefObject, useContext, useEffect, useRef } f
 import { IcSave } from '@foundation/assets';
 import { type HotkeyConfig, Hotkeys } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
-import { useFilteredGridCount } from '@shared/hooks';
+import {
+  formatTotalCases,
+  useFilteredGridCount,
+  useTabBtnPermissions,
+  useTitleAreaLanguage,
+} from '@shared/hooks';
 import type { ButtonProps } from '@shared/lges';
 import { Button, TitleArea, Tooltip } from '@shared/lges';
 import {
@@ -28,7 +33,6 @@ import {
   unregisterViewActions,
   useDialogStore,
   useMessageStore,
-  useMotherStore,
   useTabid,
   useUIStore,
 } from '@shared/stores';
@@ -39,6 +43,30 @@ const BRIDGE_ENABLED = import.meta.env.DEV || import.meta.env.VITE_ATLAS_BRIDGE 
 
 const isHotKeyName = (key: string): key is keyof typeof Hotkeys => {
   return key in Hotkeys;
+};
+
+/**
+ * 권한 코드가 있는 공통버튼(SYS0009 MNU_BTN_CD) — 화면이 핸들러를 넘겼더라도 사용자(선택 Division)에게
+ * 이 코드의 권한이 없으면 버튼·단축키를 숨긴다. 기능이 없는 화면(`false`/키 생략)은 권한과 무관하게 숨긴다.
+ * (TO-BE 룰 2026-10-26: AS-IS 는 기능 없는 버튼도 일괄 노출했지만 TO-BE 는 "기능 있음 × 권한 있음" 일 때만 노출)
+ */
+const PERMISSION_BUTTON_CODE: Partial<Record<Hotkeys, string>> = {
+  [Hotkeys.F8]: 'INSERT',
+  [Hotkeys.F9]: 'DELETE',
+  [Hotkeys.F7]: 'SAVE',
+  [Hotkeys._Upload]: 'UPLOAD',
+};
+
+/**
+ * 조회조건 중 Division 값(단일 코드일 때만) — 사용자·Division 별 권한이 다르면 Division 선택이 공통버튼 노출을
+ * 바꾸도록(cascade) useTabBtnPermissions 에 넘긴다. 'ALL'·복수 선택·없음은 undefined(그룹 합집합).
+ */
+const singleDivisionOf = (searchParam?: Record<string, unknown>): string | undefined => {
+  if (!searchParam) return undefined;
+  const entry = Object.entries(searchParam).find(([key]) => /^division(id|code)?$/i.test(key));
+  const value = entry ? String(entry[1] ?? '').trim() : '';
+  if (!value || /^all$/i.test(value) || value.includes(',')) return undefined;
+  return value;
 };
 
 // @lges/design-system 의 SubTitleDepthType 과 동일하나 @shared/lges 에서 re-export 되지 않아 로컬 정의.
@@ -86,6 +114,9 @@ interface SubTitleProps {
   conditionIncludeKeys?: string[];
   customButtons?: CustomButtonProps[];
   searchAction?: () => void;
+  // 조회(F5) 미저장 변경 가드의 dirty 키 override(옵션). 미지정 시 tab 전역 키(현행). 상단/하단 그리드가
+  //   독립적인 화면이 "조회 대상 그리드만" 확인하도록 그리드 단위 키를 넘긴다(SSP0060/SSP0021).
+  searchDirtyKey?: string;
   /** 건수 배지와 우측 버튼 그룹 사이에 표시할 내용(예: 헤더 요약). */
   children?: ReactNode;
 }
@@ -107,6 +138,7 @@ const SubTitleComp = ({
   conditionIncludeKeys,
   customButtons,
   searchAction,
+  searchDirtyKey,
   children,
 }: SubTitleProps) => {
   const { t } = useTranslation();
@@ -115,14 +147,22 @@ const SubTitleComp = ({
   const setAlert = useMessageStore.getState().setAlert;
   const setProgress = useUIStore.getState().setProgress;
   const tabId = useTabid();
-  const resetSearchCondition = useMotherStore().resetSearchCondition;
 
   // 건수 기준 그리드 — 미지정이면 툴바 대상 그리드와 동일(종전 동작).
   const countGridRef = countGrid ?? grid;
 
   // 필터 적용 시 collectionView 기준 필터된 건수, 미적용 시 dataCount 그대로 반환.
   const totalCasesValue = useFilteredGridCount(countGridRef, gridFilter, dataCount);
-  const displayTotalCases = hideTotalCases ? undefined : totalCasesValue;
+  // 건수는 천 단위 쉼표로 표기한다(formatTotalCases 주석).
+  const displayTotalCases = hideTotalCases ? undefined : formatTotalCases(totalCasesValue);
+  // 건수 표기 언어(총/건 ↔ Total/rows) — 화면 언어를 따른다(useTitleAreaLanguage 주석).
+  const titleAreaLanguage = useTitleAreaLanguage();
+
+  // 공통버튼 권한 — 메뉴 × 사용자 × (조회조건 Division). Division 이 바뀌면 queryKey 가 바뀌어 다시 조회된다.
+  const { hasButton, isLoading: isButtonAuthLoading } = useTabBtnPermissions({
+    menuId,
+    divisionId: singleDivisionOf(searchParam),
+  });
 
   const DefaultButtonActions: HotkeyConfig = {
     [Hotkeys.F1]: () => GridAction.getManual(menuId),
@@ -153,24 +193,12 @@ const SubTitleComp = ({
           })
         ),
     //[Hotkeys.F7]: () => alert('저장은 화면별로 구현하세요.'),
-    [Hotkeys.F7]: () => undefined, // save 미구현 화면 — no-op (F5 와 동일한 이유)
-    // 주의: addRow 의 반환값(신규행)을 그대로 돌려주지 말 것. grid prop 이 FlexGrid<any> 라
-    //   제네릭 T 가 any 로 추론되고, 핸들러 계약(HotkeyConfig = () => void)상 버려질 값이
-    //   any 로 새어 no-unsafe-return 이 걸린다.
-    [Hotkeys.F8]: () => {
-      if (grid.current) GridAction.addRow(grid.current, {});
-    },
-    [Hotkeys.F9]: () =>
-      new Proxy(() => grid.current && GridAction.removeRow(grid.current), {
-        apply: target => {
-          const result = target();
-          if (!result)
-            void setAlert({
-              type: 'alert',
-              content: t('MSG00014', '_No selection'),
-            });
-        },
-      })(),
+    // Save(F7)/Insert(F8)/Delete(F9) 기본값 = 숨김(false). 화면이 저장·행추가·행삭제 기능을 실제로 구현해
+    //   핸들러를 넘길 때만 버튼·단축키가 생긴다. (종전: F7 no-op 노출 · F8/F9 공용 addRow/removeRow 노출 —
+    //   기능 없는 화면에도 버튼이 보였다. TO-BE 룰 2026-10-26: 기능 없으면 보이지 않는다)
+    [Hotkeys.F7]: false,
+    [Hotkeys.F8]: false,
+    [Hotkeys.F9]: false,
     [Hotkeys.F10]: () => {
       void (async () => {
         if (
@@ -184,8 +212,8 @@ const SubTitleComp = ({
               type: 'alert',
               content: t('MSG00011', '_검색조건이 초기화 되었습니다.'),
             });
-            //if (storageReset) storageReset();
-            resetSearchCondition(tabId);
+            // AS-IS 파리티: F10 은 서버 저장(개인화) 검색조건만 초기화하고 현재 화면(조회조건/그리드)은
+            //   건드리지 않는다. (TO-BE 가 추가했던 클라 resetSearchCondition(tabId) 제거 — 2026-10-14)
           });
       })();
     },
@@ -197,10 +225,20 @@ const SubTitleComp = ({
   const buttonActions = { ...DefaultButtonActions, ...hotkeyConfig };
   if (searchAction) buttonActions[Hotkeys.F5] = searchAction;
 
+  // 권한 게이트 — 화면이 핸들러를 넘긴 Insert/Delete/Save/Upload 도 사용자(선택 Division)에게 그 버튼 코드 권한이
+  //   없으면 숨긴다(버튼·단축키 모두). 권한 응답 전에는 숨겨 두어 권한 없는 버튼이 잠깐 보이는 일이 없게 한다.
+  //   화면별 `hasButton(...) ? handler : false` 게이트는 그대로 두되(이중 안전), Division cascade 는 여기서만 처리된다.
+  for (const [key, code] of Object.entries(PERMISSION_BUTTON_CODE) as [Hotkeys, string][]) {
+    if (typeof buttonActions[key] === 'function' && (isButtonAuthLoading || !hasButton(code))) {
+      buttonActions[key] = false;
+    }
+  }
+
   // 조회(F5/Search 버튼) 미저장 변경 가드 — 조회는 그리드 데이터를 통째로 덮어쓰므로
   //   dirty 면 confirm 후 실행한다. 화면이 주입한 search 액션을 여기서 공통으로 감싼다
   //   (화면 코드 무수정). 다이얼로그 안 SubTitle 은 그 다이얼로그의 그리드만 검사한다.
-  const dirtyKey = scopeId === null ? tabDirtyKey(tabId) : scopeDirtyKey(scopeId);
+  const dirtyKey =
+    searchDirtyKey ?? (scopeId === null ? tabDirtyKey(tabId) : scopeDirtyKey(scopeId));
   const rawSearch = buttonActions[Hotkeys.F5];
   if (typeof rawSearch === 'function' && rawSearch !== DefaultButtonActions[Hotkeys.F5]) {
     buttonActions[Hotkeys.F5] = () => {
@@ -278,7 +316,7 @@ const SubTitleComp = ({
     return () => {
       globalThis.window.removeEventListener('keydown', hotkeyHandler, true);
     };
-  }, [grid.current, gridFilter.current, hotkeyConfig, useHotkey, searchAction, scopeId]);
+  }, [grid.current, gridFilter.current, hotkeyConfig, useHotkey, searchAction, scopeId, hasButton, isButtonAuthLoading]);
 
   if (!useHotkey) {
     return (
@@ -289,6 +327,7 @@ const SubTitleComp = ({
         title={title}
         depth={depth}
         totalCases={displayTotalCases}
+        language={titleAreaLanguage}
         isSubTitle
       />
     );
@@ -303,6 +342,7 @@ const SubTitleComp = ({
         title={title}
         depth={depth}
         totalCases={displayTotalCases}
+        language={titleAreaLanguage}
         isSubTitle
         rightButtons={
           <>

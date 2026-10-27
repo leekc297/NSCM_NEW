@@ -11,6 +11,7 @@ import { useMessageStore } from '@shared/stores';
 import type { MENU_ID, SHEET_NAME } from '../customer-fcst-master.constants';
 import {
   hasDuplicateRowKey,
+  hasOtherYInAnyPeriod,
   hasOtherYInPeriod,
   isDateBinding,
   isRowKeyBinding,
@@ -45,16 +46,20 @@ export const CustomerFcstMasterFcstGrid = ({
 
   // 중복 검사 위반 — MSG00136 안내 후 방금 들어온 값을 되돌린다(AS-IS SetText ""). 기존 행은
   //   EditTracker 에 되돌림을 기록해 수정상태(M) 판정이 어긋나지 않게 한다. 신규 행은 I 그대로다.
+  const alertDuplicate = () => {
+    void useMessageStore.getState().setAlert({
+      type: 'alert',
+      content: t('MSG00136', '_동일 구간에 하나의 Y만 가능합니다.'),
+    });
+  };
+
   const rejectCell = (
     sender: FlexGrid<ResponseData<MENU_ID, SHEET_NAME>>,
     dataItem: ResponseData<MENU_ID, SHEET_NAME>,
     binding: string,
     revertTo: string
   ) => {
-    void useMessageStore.getState().setAlert({
-      type: 'alert',
-      content: t('MSG00136', '_동일 구간에 하나의 Y만 가능합니다.'),
-    });
+    alertDuplicate();
     if (dataItem.CRUD_TYPE !== CRUD_TYPE.INSERT && dataItem.CRUD_TYPE !== CRUD_TYPE.DELETE) {
       editTrackerRef.current?.storeChange(dataItem, binding, dataItem[binding], revertTo);
     }
@@ -84,7 +89,16 @@ export const CustomerFcstMasterFcstGrid = ({
 
     // ② 신규 행 키 셀(Division / End Customer / Sales Site / Group / Measure) — 5키 같은 행이 또 있으면 취소
     if (isRowKeyBinding(binding)) {
-      if (hasDuplicateRowKey(allRows, dataItem)) rejectCell(sender, dataItem, binding, '');
+      if (hasDuplicateRowKey(allRows, dataItem)) {
+        rejectCell(sender, dataItem, binding, '');
+        return;
+      }
+      // 신규 행은 날짜 칸이 전부 Y 로 들어가 ③ 이 돌지 않는다. 키가 정해지는 이 시점에 같은 구간 Y 가
+      //   겹치면 안내만 하고 값은 둔다 — 사용자가 겹친 주를 N 으로 고치게 한다. 고치지 않으면 저장 직전
+      //   검사(CustomerFcstMaster handleSave)가 막는다(갭분석 F-03, 사용자 결정 2026-10-21).
+      if (dataItem.CRUD_TYPE === CRUD_TYPE.INSERT && hasOtherYInAnyPeriod(allRows, dataItem)) {
+        alertDuplicate();
+      }
       return;
     }
 

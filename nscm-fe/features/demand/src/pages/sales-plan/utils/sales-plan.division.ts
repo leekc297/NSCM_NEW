@@ -38,7 +38,7 @@ export const readTextSlot = (row: Record<string, unknown>, divisionId: string): 
 
 // ============================================================================
 // 저장 필수 13종 — division × measure 분기 (AS-IS SaveData L2198~2234 + UI분석서 시트 6 #12 전수):
-//   ① Division ② Project(≠40) ③ EndCustomer40(40) ④ Team(40 & ≠Catch_Up) ⑤ TEXT(81)
+//   ① Division ② Project(≠40) ③ EndCustomer40(40) ④ Team(전 Div, 2026-10-14 Insert Mandatory) ⑤ TEXT(81)
 //   ⑥ Sales Site ⑦ Model ⑧ Measure ⑨ Currency
 //   ⑩ DomExp(40+Catch_Up) ⑪ FcstType(40+Catch_Up) ⑫ Incoterms(40+Catch_Up) ⑬ CellProdSite(40)
 //   labelKey 는 MSG00429 {0} 치환용 — 사내 기존 LBL 정확 일치분만 재사용, 그 외 영문 리터럴 fallback
@@ -64,10 +64,10 @@ export const requiredFieldsFor = (
   fields.push({ col: 'DIVISION_ID', fallback: 'Division' });
   if (!d40) fields.push({ col: 'PROJECT_CODE', fallback: 'Project' });
   if (d40) fields.push({ col: 'END_CUSTOMER40', lblKey: 'LBL00080', fallback: 'End Customer' });
-  // ⭐ [통합테스트 1st No.61-④ 2026-08-12] Team 필수 해제 — 전 Div 입력 불가로 전환(마스터 파생 표시).
-  //   AS-IS L2227(40 & ≠Catch_Up 필수)은 40 이 Team 을 직접 입력하던 시절 계약. 입력 불가 컬럼을
-  //   필수로 두면 신규 행 저장이 항상 실패한다.
-  void catchUp;
+  // ⭐ [2026-10-14 사용자 확정] Team(DEPT_ID) 전 Division 필수 — 컬럼 메타가 Insert Mandatory 로
+  //   설정되어 CA-132 제외 전제(전 Div 입력 불가)가 무효. 신규 행만 검증(validateSaveRows I 한정)이라
+  //   Insert Mandatory 와 의미 일치. Catch_Up 예외 없음(AS-IS L2227 의 ≠Catch_Up 조건은 미적용).
+  fields.push({ col: 'DEPT_ID', lblKey: 'LBL00044', fallback: 'Team' });
   // ⭐ [통합테스트 1st No.59 2026-08-12] 81 TEXT 필수 = FCST_TYPE='ETC'(DM_PLN_SALES_ETC_PLAN 경로) 행만.
   //   AS-IS L2228 은 81 무조건이었으나 E20260331 로 RTF 행(DM_PLN_SALES_PLAN 경로)도 저장 대상이 되며
   //   과검증이 됨 — RTF 수정 시 TEXT 필수 팝업 오발동(결함 원문 명시 요구).

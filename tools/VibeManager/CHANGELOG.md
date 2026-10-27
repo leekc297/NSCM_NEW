@@ -1,3 +1,80 @@
+## 1.9.28 + UI Status 문서 = 같은 문서는 마지막 버전만 (2026-10-27 · workbench.js 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자 지시: "UI STATUS TAB 문서에는 동일 문서의 경우 제일 마지막에 생성된 버전의 문서만 표기". 📚 문서 카드의 Excel(화면설계서·화면분석서·단위테스트·documents/<ID>)을 **폴더 + 끝 버전 토큰들을 뗀 이름(대소문자 무시)** 으로 묶어 1건만 표시.
+- 최신 판정: 두 파일 모두 날짜(_YYYYMMDD)가 있으면 날짜 우선 → 버전 숫자(_v1.0 · _v28 · TestCases4.1 · _v1.2_20260827) → 같으면 수정 시각 최신. 화면 ID 숫자는 버전으로 떼지 않음. 실측(전 30화면): DMF0005 56→2 · SCP0007 63→8(종류별 1) · DMF0014 ValidationCases 6→1 · Validation_Rules 3→1(v3_20260923).
+- 백업: workbench.js.bak_20261027 · CHANGELOG.md.bak_20261027 · 설치 폴더 workbench.js.bak_20261027
+## 1.9.28 + 독립 판정·근거 등급·결과 봉투 (2026-10-26 · workbench.js 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+Atlas Studio 내장 규약(검토자 분리 · 통과 근거 등급 · 결과 봉투)을 이식(사용자 지시 2026-10-26: "1·2번을 적용해 정합검증서를 생성하고 차후 보완에 도움이 되게 · 4번은 추천 범위에서").
+- **🩹 독립 판정(검토자 분리)**: 수선 세션이 기대값 결함(c)을 주장하거나 판정요약이 없으면 `tools/Harness/e2e-judge.js` 가 **새 Claude 세션**(이전 대화 이어받지 않음)·**읽기 전용 도구**(Read·Glob·Grep, 수정·실행 차단)로 실패 원인을 다시 분류. 실패 원문(요약 FAIL 행·로그 Error 블록)은 스크립트가 직접 실어 준다. 판정 항목이 실제 실패 목록에 없으면 보정 허용에서 뺀다.
+- **근거 등급**: 판정 근거 = `경로:줄` + 그 줄 원문 인용 → `tools/Harness/verify/evidence_check.py` 가 실제로 있는지 기계 확인(hard) / 확인 안 됨·설명만(soft). **시험 기준 보정은 근거가 확인된 기대값 결함만**(`${xids}`), 근거 미확인·판정 불가는 `Doc/e2e/_human_review.md` 사람 확인 큐.
+- **테스트 약화 검사**: 시험 기준 보정 전후 `verify/weaken_check.py --snapshot/--compare` — 검사(expect) 감소·skip/N/A 증가·예외 삼키기·파일 삭제. 걸리면 재시험이 통과해도 통과로 인정하지 않음.
+- **단계 상태 HOLD(⏸ 사람 확인)**: 종전 '(c) 만 남으면 WARN 으로 계속' → 근거 확인된 경우만 WARN, 근거 미확인·약화 의심·판정 불가는 HOLD. 체인은 멈추지 않지만(10-21 지시 "E2E 오류로 멈추지 말 것") 요약이 '✅ 체인 완료' 가 아니라 '⏸ 체인 종료(사람 확인 필요)'.
+- **정합검증서 근거 등급**: 각 행 '근거 등급' 열(기계 · 기계(상속·집계) · 사람 · AI 작성·인용 확인 · AI 판단만 · 출처 미기록 · 없음) + 요약 시트 '근거 등급 × 결과' 표. **AI 판단만으로 PASS·해당없음인 행은 판정필요로 셈**(원장 값은 보존). 보완대상목록에 '현재 판정 근거 등급'·'종결 근거(해결로 인정하는 조건)' 열 — fixlist.csv 에도 `grade`·`close_evidence`.
+- **결정표(decisions.py) 작성자·근거**: `by`(답한 사람, 필수) · AI 답의 P·N 은 `evidence_ref`+`evidence_quote` 가 기계 확인될 때만 반영(아니면 판정필요 유지) · AI 의 F 는 보수적으로 반영. 원장 tobe_ref = `수동 결정(사람:…)` / `수동 결정(AI·근거 확인)` / `수동 결정(AI·근거 없음)`.
+- **결과 봉투 vibe-result/1**(추천 범위 3곳): `Doc/gen/<ID>/E2E_REPAIR.result.json`(독립 판정) · `Doc/gen/<ID>/CHECK.result.json`(check.js) · `Doc/verify/<ID>/run_verify.result.json`(정합검증 실행 — 실패 단계 포함). 짝 모듈 `tools/Harness/lib/envelope.js` ↔ `verify/envelope.py`. 파일 없음·깨짐 = state error(통과 아님). 사람이 읽는 md·xlsx 는 그대로.
+- 지시문: 🩹 [4 보고] — (c) 근거는 경로:줄 + 원문 인용 · 🩹 expectPrompt [범위] — 보정 대상 = decision.expectFix 만, 약화 검사 안내 · 🛠️·🧯·🩹 — fixlist status 는 '적용·보류' 까지만(‘검증완료’ 자기 보고 금지), 종결 = close_evidence 의 기계 재판정 또는 사람 판정.
+- 백업: workbench.js.bak_20261026 · quick.json.bak_20261026j · 설치 폴더 workbench.js.bak_20261026_pre_judge · verify/*.bak_20261026* · check.js.bak_20261026c
+## 1.9.28 (2026-10-23)
+- **🔎 화면 정합검증 (AS-IS vs TO-BE → 정합검증서·보완대상목록)**(사용자 지시: 사람이 단위테스트에서 찾은 오류를 시스템이 전부 도출 · 보완 전 목록 Excel · 보완 범위는 환경설정). 정답지 = 결함 원장 310건(공통·DM 285 + SCP·SSP 25, `Doc/verify/defects_baseline.csv`). 오류 정의 = 정답 3종(O1 AS-IS 동작 · O2 확정 규칙 · O3 기능 무결성). 검출 규칙 81(`tools/Harness/verify/detect_rules.csv`) · 확정 규칙 69(`tools/Harness/rules/confirmed_requirements.csv`). 실행기 `tools/Harness/verify/run_verify.py <ID>` = AS-IS 사실 보강(셀 규칙·잠금 전개) → 검증 항목 원장 → E2E `@verify`(원장 구동 · 저장 안 함) → 판정 → `Doc/화면분석서/<ID>_<명>_정합검증서_v<N>.xlsx` + `_보완대상_v<N>.xlsx`. 미검증은 PASS 아님(미검증 시트). 가이드 `Doc/verify/README.md`.
+- **🧭 보완 범위 (repairScope)** 환경설정: `DB_ONLY`(기본 — DB 메타·객체만, 화면 FE 는 가이드) / `DB_FE`(화면 FE 까지). 단일 원천 `tools/Harness/harness.json`. 공통 컴포넌트(@shared·@foundation)는 항상 가이드만.
+- **🛠️·🧯·🩹 보완 = 보완대상목록 기준**: `Doc/verify/<ID>/fixlist.csv` 를 보완 기준으로 읽고 실행 시점 repairScope 를 따른다(🧯·🩹 의 FE 수정 승인은 DB_FE 일 때만 유효). 🛠️ 는 보완 요청이 비면 fixlist 를 요청으로 삼는다. 처리 결과를 fixlist status·change 에 기록 후 재판정.
+- steps.json `S8`(verify · verifyStatic · scope · defects · folder).
+## 1.9.27 (2026-10-23)
+- **액션 대조표 = 문서 보강 단계**(사용자 지시: 개발된 UI·흐름 무영향): 기존 화면 문서 위치 Doc/gen → `Doc/asisfacts/screens/<AS-IS ID>/__asis-actions__.md`(445화면 생성). 이 문서의 게이트 AC0~AC2 = WARN, BLOCK 은 생성기가 만든 신규 화면 페이지 폴더 대조표만. 작업 컨텍스트 첨부 경로도 변경.
+## 1.9.26 (2026-10-23)
+- **AS-IS 액션 대조표 연결**(사용자 지시): AsisFacts 액션 추출(actions.csv) → `__asis-actions__.md`(신규 화면 페이지 폴더 / 기존 화면 Doc/gen/<ID>/ — `node tools/Harness/actions-checklist.js <ID>`). 사전 미등록 외부/상속 호출도 행으로(⚠ 의미 확인 필요). 게이트 AC0(없음 WARN)·AC1(미처리 --final BLOCK)·AC2(의미 미기입 --final BLOCK). 작업 컨텍스트에 Doc/gen/<ID>/__asis-actions__.md 자동 첨부. 룰 E11.
+## 1.9.25 (2026-10-23)
+- **참고자료: SCP·SSP 화면 VALIDATION 취합**(사용자 지시): `Doc/화면분석서/{SCP|SSP}_화면_VALIDATION_취합_<최신>.md`(엑셀 전 시트 텍스트본) + 화면별 `<ID>.md`·`_INDEX.md`. 룰 트리 '룰 문서 · 색인 · 참고자료' 에 전체본·화면별 인덱스 노출(최신 STAMP 자동).
+- **검증 작업에 자동 참고**: 작업 컨텍스트(화면 ID 있을 때)와 Claude 프롬프트 작업 지시에 그 화면의 VALIDATION 취합 파일을 첨부. 하네스 — GEN_NOTES §11 · new_screen.md 6-1/6-2 · port_pkg.md 3-1/3-2 · repair-loop/new-screen 지시문 · 게이트 VR1(UI 미적용)/VR2(메시지 TAG 판정 ID 잔존)/VR3(PKG DB 미적용·TAG) — 모두 WARN. 룰 10_RULES_KEEP E10.
+## 1.9.24 (2026-10-22)
+- **☁️ 클라우드 이관 패키지 2종**(사용자 지시): (전체: FE·BE·PKG·META·MENU) · **(DB)**(PKG·META·MENU, 폴더 `_CLOUD_DB_<날짜>`). 이관 대상 = 이번 작업에서 새로 만들었거나 수정한 것만(수정 없이 쓰는 기존 파일·객체 제외, BE 는 수정된 경우만). 공용 PKG 멤버·standalone PROCEDURE·공용 FE/BE 파일은 이 화면 몫만 추출하고 **파일명 끝 `_<ID>`**(다른 화면 패키지의 공통 파일 덮어쓰기 방지).
+- **META 작업에 PROCEDURE 포함**(사용자 지시): 👀 META 미리보기 / ✅ META 커밋 = `tools/DbConn/meta_apply.py` — ① `<ID>_PKG.sql` 을 사내 ALL_SOURCE 와 비교(같으면 생략 · 사내에 없으면 컴파일 · 사내 = 이 파일로 마지막 적용한 상태(`Doc/gen/<ID>/_pkg_applied.json` 지문)면 컴파일 · 그 밖(다른 작업자·직접 수정·사내 현행본)은 **중단**, `--force-pkg` 로만 덮어씀) → ② `registration.sql`(미리보기 ROLLBACK / 커밋 COMMIT). 미리보기는 PKG 를 실행하지 않음(DDL 되돌림 불가). 실측: SCP0122 생성 파일이 사내(10-09)보다 '최신'이지만 740줄 다름 → 시각 비교만으로는 사내 현행본을 덮을 뻔 → 지문 기준으로 강화.
+- **파일 = 사내 적용본**(룰 H14): 보완 중 사내 PKG/SP·META 를 고치면 Doc/gen 의 PKG.sql·registration.sql 도 같은 작업 안에서 갱신 — 10_RULES_KEEP.md H14 · 🛠️ 프롬프트.
+## 1.9.23 (2026-10-22)
+- **메뉴 이름**(사용자 지시): 👀 등록 미리보기 → **META 미리보기** · ✅ 등록 커밋 → **META 커밋** · ↩️ 되돌리기 → **되돌리기(PKG,META,MENU)**.
+- **🚚 PKG 배포 삭제 → ☁️ 클라우드 이관 패키지 (PKG·META·FE)**(사용자 승인): PKG 는 작업 중(PKG 이식·🩹/🧯/🛠️ 보완) 사내 ZIOUI1 에 즉시 적용되므로 사내 재컴파일 메뉴는 의미가 작고, 클라우드 이관 묶음을 만드는 메뉴가 없었다. ☁️ = Claude 가 사내 최신 원문(SOURCE-FRESH)으로 PKG·참조 GTT/TYPE·권한·META 7영역·MSG/LBL·콤보·FE 를 추출 → `_artifacts/_deploy_packages/<ID>_…_CLOUD_<날짜>/`(00 점검 → 10 DDL → 20 PKG → 30 META → 40 권한 → 90 검증 → 99 롤백 · B_FE · README) → 사내 리허설(적용 2회·검증·롤백·재적용). 클라우드에 이미 있는 객체는 자기 USER_SOURCE 패치 방식(전체본 교체 금지). 클라우드에는 실행하지 않음. steps.json `S5.pkgdeploy` 도 삭제.
+## 1.9.22 (2026-10-22)
+- **📝 문서 생성 = MD + Excel 한 번에**(사용자 지시): 📗 문서 Excel 메뉴를 흡수(삭제). 체인(chainId docs) — AS-IS 파싱(없을 때만) → 문서 MD(Agent) → GAP 분석(없거나 비었을 때만) → 대조표 갱신(이 화면 행 없을 때만) → 문서 Excel.
+- **체인 단계 `ifMissing`**: 자료가 이미 있으면 그 단계를 ⏭ SKIP, 없으면 "자료 부족(…) → 실행". 항목 = 경로(존재) 또는 { file, minLines, has }.
+- **메뉴 이름**: 🧩 새 화면 (from AS-IS) · 📏 새 화면 (from 설계서) → "개발부터 테스트까지".
+## 1.9.21 (2026-10-22)
+- **FLOW ★ 끝까지**(사용자 지시): 종전엔 `S5.pipeline`(새 화면 생성 7단계)이라 이미 만든 화면에서 '기존 생성분 삭제/중지' 확인창이 떴다. 이제 페이지가 있으면 **🚒 자동 보완 → 테스트·문서까지**, 없으면 **🚀 ID 하나로 전체**(Workbench `flowEnd` · FLOW 독립 패널도 같은 판정 `runFlowEnd`). 버튼 툴팁에 동작 표시.
+## 1.9.20 (2026-10-22)
+- **🩹 E2E 오류 보완 = 한 번에 끝까지**(사용자 지시: 🔧 기대값 보정 기능을 🩹 에 포함 · 사용자는 오류 상세를 알 필요 없음). 🔧 메뉴 삭제 → 그 지시문은 🩹 의 `expectPrompt`.
+  - 메뉴: 종류를 묻지 않고 최근 결과에서 실패한 첫 단계(smoke→crud→auth→authcrud) 자동 선택. Flow 보드 3단계 ① 화면·DB 점검·보완 ② 시험 기준 보정(판정에 기대값 결함이 있을 때만 — 없으면 ⏭) ③ 재시험(통과하면 의존 단계 — CRUD 뒤 권한별 CRUD — 도 이어서). 결과 알림은 "✅ 보완 완료 · 재시험 통과" / "⚠ 보완 후에도 실패 — 한 번 더" 만.
+  - 체인: 수선 뒤 판정에 기대값 결함이 있으면(화면·DB 수정 여부와 무관) 시험 기준 보정 → 재실행. 그래도 실패하고 판정이 기대값 결함뿐이면 WARN 으로 계속.
+  - 모의 시험 3경우(기대값 결함만 / 화면만 수정 / 보완 후에도 실패) 보드·재시험 순서 확인.
+## 1.9.19 (2026-10-22)
+- **사고(SCP0122 15:25~15:58)**: 🩹 E2E 오류 보완 → Claude 판정 a=0 b=0 c=1(화면·DB 결함 없음, E2E 기대값 결함) → 고친 것 없이 메뉴가 판정을 무시하고 authcrud 재실행 → 같은 실패 → "보완했는데 오류로 종료". (c) 큐(`Doc/e2e/_expectation_issues.md`)는 쌓이기만 하고 처리 경로가 없었다.
+- **🩹 판정 분기**(메뉴): 이번 회차 `판정요약` 을 읽어 a·b 수정이 있으면 재실행 / (c) 만이면 재실행 생략 + ⚠ 안내(🔧 버튼) / 판정요약 없음·회차 불일치면 재실행 생략 + 오류 안내. 공용 `readRepairVerdict`.
+- **🔧 E2E 기대값 보정 (Claude)** 신설: (c) 큐를 읽어 tools/E2E 생성기·헬퍼를 일반 규칙으로 보정(화면 FE·DB 수정 금지 · 테스트 약화 금지 · 수행 불가 사이클은 근거 있는 skip/N/A 또는 원천 기반 대체 사이클) → 스펙 재생성 → 끝나면 그 E2E 종류 재실행. 큐 끝 `## 처리 이력` 기록 · `보정요약: fixed= pending=`.
+- **체인**: E2E 단계 수선 판정이 (c) 만이면 🔧 를 1회 실행 후 재실행(성공 시 OK) · 그래도 실패면 WARN 으로 계속(16개 단계에 `repair.expectFixOf`).
+- **E2E 헬퍼**: `lib/crud.ts` insert 모드 저장 성공 = call-proc 1건 이상(종전 0건도 saved=Y — 판정 오도).
+## 1.9.18 (2026-10-22)
+- **CRUD 실패 → 권한별 CRUD SKIP**(사용자 지시): 같은 저장 경로라 CRUD 가 실패하면 권한별 CRUD 결과는 의미가 없다. 의존표 `E2E_DEPENDS = { authcrud: 'crud' }`.
+  - 🎬 E2E 전체 4단계(runSplitKinds): CRUD 단계가 OK 가 아니면 4단계를 실행하지 않고 ⏭ SKIP(Flow 보드 새 상태 '건너뜀') · 요약에 SKIP 수.
+  - 체인(🚀·🧩·📏·🚒): S7.crud 단계가 OK 가 아니면(실패·기대값 결함 WARN 포함) S7.authcrud 단계 SKIP 후 다음 단계(문서)로 진행 · FULLRUN.md 에 사유.
+  - `run-e2e.cmd all`: Playwright 1회 전체 실행 → smoke·crud·auth 순차 후 crud exit 0 일 때만 authcrud(아니면 [SKIP] 기록). 파일을 CRLF 로 정리(call 라벨 탐색 안정).
+  - 모의 시험: crud 실패 → smoke·crud·auth 실행·authcrud SKIP / crud 성공 → 4단계 모두 실행(Workbench 메서드·배치 둘 다).
+## 1.9.17 (2026-10-22)
+- **🎬 E2E 전체 4단계 = Flow 보드 4단계**(사용자 지시 "4단계 중 어느 단계인지·무슨 작업인지 안 보임"): 종전엔 `run-e2e.cmd all` 1회 = 1/1 Step 이라 진행이 보이지 않았다. steps.json `S7.all` 에 `splitKinds`(smoke·crud·auth·authcrud)·`splitTitles` → `runSplitKinds` 가 kind 별로 순차 실행(단계 = `E2E n/4 …`). 테스트 실패(exit 1)는 다음 단계 계속, 실행 환경 실패(2 node_modules · 4 다른 E2E 실행 중 · 5 BE/FE 미기동)는 나머지 미실행. kind 마다 계정 확인·권한 메타·스펙 생성이 다시 돌아 단계당 수십 초 더 걸린다.
+- **E2E 로그 실시간 표시**: run-e2e.cmd 는 Playwright 출력을 실행별 로그(`Doc/e2e/logs/run_<RUNID>_<kind>.log`)로만 써 화면에 "output goes to the log file" 뿐이었다. stdout 의 `RUNID … - log <path>` 로 파일을 찾아 1초 간격으로 이어 읽어 Task Log(`│` 접두)·단계 카드로 흘린다(UTF-8 청크 경계·ANSI 처리). 체인(🚀·🚒)의 E2E 단계에도 적용.
+- **단계 카드 = 테스트별 결과**: 카드 머리 `🧪 완료/전체 · ✅ · ⚠(재시도 후 성공) · ✖`, 카드를 펼치면 테스트 목록(계정·제목·소요시간·재시도 횟수). 진행바도 테스트 완료 비율만큼 진행. 재시도 줄 `(retry #N)`·분 단위 소요시간 `(2.7m)` 처리 — 10-22 SCP0122 실행 로그(12건·재시도 5)로 집계 12/12 · ✅7 · ✖5 · 재시도 5 일치 확인(모의 검증, 웹뷰 실화면 미확인).
+- **⬇️🔀 Source Download & Merge**(사용자 지시): ⬇️ Source Download · 🔀 Source Merge 2항목을 1개로. 종전 Merge 는 `git merge --no-ff common/main` 이라 미커밋 566파일·이력 분기(1,207/1,823 커밋) 상태에서 동작 불가였다. 공통소스 다운로드 규칙(메모리 §2 · 회차 README 08-25~10-14)을 `tools/CommonSync/common_sync.py` 로 고정 — 미리보기(파일별 판정) → 확인 → 적용(같은 커밋일 때만) · 백업 · README · 기준선(state.json).
+  - 내가 안 고친 파일(공통 이력본과 내용 일치) = 공통 원문 / 내 편집본 = 유지 또는 내 수정분 + 공통 수정분 3-way / 충돌 = 내 소스 유지(결정 대기) / d.ts = 메뉴 키 블록 단위 / locales = 키 단위.
+  - 10-14 회차(2dc843467→965d11de5) 재현: 채택 611·신규 146·삭제 26·d.ts 블록 처리·3-way 충돌 수가 README 와 일치. 재현 중 찾은 결함 3건 정정(블록 앞 빈 줄 오판 · 이력 색인의 이전 판본 라벨 · base 선택 기준 — 기준선 base 로는 공통 주석 블록 18줄 유실).
+- **📤 Source Upload(UI) — 파일별 '내 작업분'만**(사용자 지시): 종전엔 로컬 파일 전체를 공통 트리에 얹어 공통의 다른 사람 수정분을 덮을 수 있었고, 공통 트리 경로 접두(`nscm-fe/`)도 빠져 루트 `features/` 로 올라가는 결함이 있었다(실제 업로드 이력 없음). 이제 공통 최신을 받은 뒤 파일마다 판정: 신규·공통 무변경 = 전체 / 공통도 바뀜 = 내 수정분만 3-way / `procedures.d.ts` = 이 화면 메뉴 키 블록만 / 동일·내 편집 없음(옛 판본)·충돌 = 제외. 판정표 UPLOAD_PREP.md 탭 · 커밋 트리의 변경 파일 = 준비 파일뿐인지 확인 후 푸시.
+  - 업로드 내용 정리: 주석 속 생성기·도구 경로 표기 제거(코드 줄에 남으면 그 파일 제외) · md 는 중립어 치환(줄 유지) · 커밋 메시지·브랜치명 검사.
+- 다운로드 적용 안전: 백업을 전부 끝낸 뒤 적용(백업 실패 시 무변경) · Windows 260자 경로 한도 회피.
+## 1.9.16 (2026-10-22)
+- **메뉴 창 상단 아이콘 순서**(사용자 지시): Workbench 를 맨 앞으로. order 가 없어 앞에 붙던 FLOW·History 포함 전 아이콘에 명시 순서 — Workbench → FLOW → History → 화면 빠른 메뉴 → 대시보드 → 환경 점검 → 새로고침 → 게이트 리포트.
+## 1.9.15 (2026-10-22)
+- **탭 자동 전환 제거**(사용자 지시): Claude 창을 보는 중 작업 실행·BE/FE 기동·종료·체인 시작·소스 업로드 이벤트가 Log / Task Log / Claude 탭으로 화면을 강제로 옮기던 동작을 없앰. 자동 이벤트(showTab auto:true · Claude 메시지 · Flow 보드)는 보고 있는 탭을 유지.
+- **새 내용 표시 'N'**: 보고 있지 않은 탭에 출력·메시지가 생기면 그 탭 헤더에 N 배지(Log = BE/FE 출력 · Task Log = 작업 출력 · Claude = 응답·Flow 보드). 그 탭을 열면 사라짐.
+- 사용자가 직접 누른 이동(서버 실패 알림의 'Log 보기' · 히스토리 명령 · 파일/FLOW 탭 열기 · 전송 · 프롬프트 채우기)은 그대로 이동.
+## 1.9.14 (2026-10-22)
+- **사고(10-21 SSP0015)**: 이미 구현·커밋된 화면(10-14 커밋본 20파일)에 🚀 ID 하나로 전체 를 실행 → 파싱·Agent(18분)·GAP 뒤 `pipeline --phase 1` 이 `gen --apply` 로 가서 "이미 존재" exit 3 으로 중단.
+- **원인 ①(pipeline.js)**: 페이지 존재 판정이 `Doc/gen/<ID>/register.json` 기준인데 이 파일은 gen.js 가 만든다 — Doc/gen 이 비어 있으면 "페이지 없음"으로 오판해 보호 분기(touchReason)를 건너뜀. → 판정 전에 Doc/gen 만 생성(--apply 없음)해 위치를 확정. 같은 조건 재현 시 `Doc/gen 만 — 페이지 보존` exit 0, 페이지 무변경 확인.
+- **원인 ②(체인)**: 새 화면 체인이 시작 전에 기존 생성분을 확인하지 않음. → **기존 생성분 확인창**(사용자 지시): quick.json 체인 `newScreen:true`(🚀 전체 · 🧩 from AS-IS · 📏 from 설계서) · steps.json `S5.pipeline`/`S5.pipelinedesign`/`S5.new` 실행 시 페이지(register.json ∪ To-Be 메뉴 MNU_URL ∪ __asis-mapping__.md 의 ID)가 있으면 **[⏹ 중지 / 🗑 기존 삭제 후 신규 생성]**. Esc·닫기 = 중지. 삭제는 페이지 + Doc/gen/<ID> 를 `Doc/gen/_backup/<ID>/<시각>/` 에 백업 후 수행. 체인은 첫 단계 전에 묻는다. 워크벤치 없는 터미널 fallback 에서는 새 화면 작업 실행 차단.
 ## 1.7.7 + 하네스 보강 3 (2026-10-20 오후 · 확장 재빌드 불필요 — tools/Harness · tools/E2E · quick.json · rules 만)
 - **질문**: "파싱에 있었는데 왜 대사표·GAP·E2E 어디서도 안 나왔나" — 파싱(Fact Pack)은 정상(endpoints/flow 3SPAN · grid_code DB_DRIVEN 196/203). 하류가 전부 정적 grid_effective(6컬럼)를 정답으로 썼다: 대사표 생성기 §5 '6컬럼' 자동 구현·DB루프 행 미생성, 수작업이 3SPAN 행을 근거 없는 '구현'으로 닫음, E2E 기대 헤더 = sheet_columns 6 → '헤더 6/기대 6' PASS.
 - **결함 정정**: `lib/dyncol.asisDbLoop` 가 `/DB루프/` 로 걸러 항상 0건(실제 source 값 `DB_DRIVEN`) → `DB_DRIVEN` + kind COLUMN/Add*Column.
@@ -21,6 +98,23 @@
 - **게이트(check.js)**: `M07` 커밋본 파일 삭제 · `M06` 커밋본 대비 대사표 행/구현 수 축소 · `DoD B22` 조회 filter 키 = 사내 PROC_M COL_NM(`Doc/tobefacts/db/proc_params.csv`) · `B23` registration.sql API 배선 = 사내 현행(`proc_meta.csv`, 프로시저명 공란 BLOCK) · `B24` As-is Form_Load 초기 조회기간(InitValue/DateUtil.GetDayRange — flow.csv 미수록) ↔ store 초기값 공란 · `B25` hotkeyConfig save/insert/delete/upload 핸들러 본문 공란(TODO 스텁). `harness.json` 에 `asisSrcRoot` 추가(.cs 원문 대조)
 - **메뉴**: 분석·문서 그룹에 `🛠️ 기존 화면 보완 (Claude · 골격 재생성 금지)` 추가 — 기존 화면은 이 항목 또는 💬 프롬프트로만 보완, ✨ 새 화면/★ 파이프라인/🔄 수선 루프는 신규 화면 전용
 - **룰셋**: `10_RULES_KEEP.md` B11(커밋본 덮어쓰기 금지)·C6(filter 키↔COL_NM·등록 SQL↔사내 배선)·E9(신설: Form_Load 초기값 보존)·F1(빈 핸들러)·J ③⑤⑥ 갱신, `prompts/new_screen.md` 입력 2-1/2-2·하지 말 것 추가
+## 1.9.13 (2026-10-21 밤)
+- **🛠️ 기존 화면 보완(Claude · 골격 재생성 금지) — 입력 전에 실행되던 문제**(사용자 신고): 종전엔 메뉴 선택 즉시 준비 턴이 Claude 로 전송되고 그 뒤 채팅으로 요청을 받는 2단 구조라 수정 내용을 적을 틈이 없었다. 이제 quick.json `prefill: true` 항목은 **전송하지 않고 채팅 입력창에 프롬프트를 채워 두며**(웹뷰 `prefill` 메시지 → textarea·커서 끝), 사용자가 맨 아래 `[보완 요청]` 에 내용을 적고 보내야 실행된다. 프롬프트도 "[보완 요청] 이 비어 있으면 작업하지 않는다" 로 정리. 모의 테스트 4/4(Claude 미실행·입력창 채움).
+## 1.9.12 (2026-10-21 밤)
+- **E2E 전체 진단**(사용자: "E2E 에서 계속 오류가 나며 멈춘다"): 10-21 smoke 14회 중 실패 원인은 ① 생성기 기대값(조회조건 카탈로그·As-is 숨김·조건부 컬럼) ② 헤더 사양 검사 신설 직후 측정 결함(행 높이·총 높이) ③ 수선이 만든 런타임 단언 1건. 🩹 판정 12건 중 **(c) 기대값/측정 결함 9건** — 즉 체인이 멈춘 주원인은 화면이 아니라 **도구 기대값**이었고, 체인은 (c) 를 고칠 수 없어 FAIL 로 끝났다.
+- **보완**: 🩹 프롬프트가 섹션 끝에 `판정요약: a= b= c=` 를 쓰고 (c) 항목을 `Doc/e2e/_expectation_issues.md`(도구 보정 큐)에 append. 체인은 수선 뒤 이 줄을 읽어 **(c)만 남으면 재실행을 생략하고 단계를 WARN 으로 넘겨 계속 진행**(FULLRUN 행에 사유 · Task Log/Claude 탭 안내). (a)/(b) 가 남아 실패하면 종전대로 FAIL 중단. 모의 테스트 27/27.
+- **E2E 헬퍼 측정 정정**: `gridHeaderRows` 행 높이 = 그 행의 가장 낮은 셀(고정 컬럼 세로 병합 셀 제외) · 총 높이 = 셀 top~bottom 실측. SCP0100 smoke **12/12 PASS**(월 20 / Qty 40 · Qty 월별 분리 · 콘솔 치명 0).
+## 1.9.11 (2026-10-21 저녁)
+- **체인이 E2E smoke 단계에서 조용히 종료된 사고(19:28 SCP0100 🚒)**: smoke FAIL → 🩹 수선 2 호출 시점에 Claude 가 사용자의 채팅 질문("진행중인가요?", 19:26)에 응답 중이라 `askClaude` 가 null → 단계 CANCEL → 체인 종료. 수정: 체인의 Claude 단계·수선은 **Claude 가 빌 때까지 기다렸다가 진행**(`askClaudeWhenIdle`, 최대 60분, Task Log/Claude 탭에 ⏳ 대기·▶ 재개 안내) · CANCEL 사유를 FULLRUN 에 기록. 모의 테스트(Claude 점유 3초 뒤 해제 → 7단계 완료) 포함 24/24.
+- **🩹 수선 1 이 화면을 깨뜨린 사고(Wijmo "Unknown property inner")**: 수선이 만든 커스텀 MergeManager 에 인스턴스 필드(`private inner = null`)가 있어 DataGrid `mergeManager` prop → Wijmo `copy()` 재귀 복사 단언 → 그리드 생성 실패(화면 빈 화면, smoke 라벨 0/15). 게이트 없음이 원인 → check.js **H06**(props 로 넘기는 MergeManager 클래스에 인스턴스 필드 → BLOCK, WeakMap/클로저 지침) · 룰 D4 보강 · E2E smoke **브라우저 콘솔 오류 수집**(`console` 어노테이션, Assertion/Uncaught 는 FAIL) · 🧯 프롬프트 "FE 고친 뒤 화면 열어 콘솔 오류 0 확인". SCP0100 대조표 D00-6-005 에 원인·처리 지침 추가. check.js --final: H06 BLOCK 1 → 🧯 처리 대상.
+## 1.9.10 + 하네스/E2E 보강 (2026-10-21 오후 · tools/Harness·tools/E2E·quick.json 프롬프트·rules — 확장 재빌드 불필요)
+- **SCP0100 "그리드 헤더 다단·높이, 라디오→드롭다운, Plan Type 비활성, 체크박스 묶음, Column Setting 모달 빈 목록" 대조표 등록/구현 확인 요청** 결과: 헤더(D00-6-005)·모달(D00-1-018/D00-2-015/MODAL) 행이 '구현' 인데 라이브 실측과 불일치(헤더 144px 한 칸·'Qty' 행 없음 / 모달 "No Column" — fallbackColumns 미전달), 체크박스 묶음 배치는 미등록. 사용자 지시 "사전 조치 2개(대조표 정정·처리 지침)를 앞으로는 자동 적용 + 지금 적용".
+- **자동 적용(앞으로)**: check.js **H01**(headerRowHeight + 동적 컬럼인데 `updatedLayout` 재적용 없음 → BLOCK, 지침 포함) · **H02**(ColumnLayoutModal fallbackColumns 없음 → BLOCK) · **M06 보정**(비고에 'YYYY-MM-DD 실측 정정' 표식이 있는 구현→부분 하향은 후퇴로 세지 않음 — 정정 때문에 🧯 가 멈추지 않게) · gen-e2e `headerSpec`(As-is `SetSheetHeaderColumn N`·`ColumnHeaderSpan "리터럴"` 추출) + smoke `header` 어노테이션(행 수 ≥ N · 리터럴 노출 · 높이 ≤ 32px×N, nscm.gridHeaderRows) · 10_RULES_KEEP 헤더/모달 파리티 규칙 · 🧯/🩹 프롬프트 진단 항목 추가.
+- **지금 적용(SCP0100)**: 대조표 D00-6-005·D00-1-018·D00-2-015·MODAL 행 '구현'→'부분' + 처리 지침(leaf 'Qty' 고정 · updatedLayout 재적용 · fallbackColumns) · 신규 행 D00-7-017(체크박스 한 영역 배치)·D00-7-018(라디오 RadioGroup 복원, 카탈로그 삭제 결정 시 제외) · D00-1-002 '규칙 정정'(부분). check.js --final: H01·H02·H03·H04·M04×2 BLOCK 6 → 🧯 실행 시 처리 대상.
+- **헤더 Qty 분리·행 높이 역전**(사용자 지적, 🧯 1차 보완 뒤 실측: 월 칸 h48(행 0~1 병합) / Qty 행 h24 · Qty 가 전 월에 걸쳐 1칸(w910) 가로 병합 — As-is 는 월 행 20 / Qty 1~2행 병합 40~50 · 월마다 Qty 분리): 룰(상단 그룹 칸이 분리되면 하단 리터럴 칸도 분리 · 그룹 행 20 / leaf 행 40 · 월간 2행·주간 3행) · check.js **H05**(동적 그룹 헤더인데 allowMerging 기본/All → 최종 BLOCK, AllowMerging.Cells 또는 mergeManager 헤더 제외 지침) · E2E smoke header 검사 확장(리터럴 칸 수 ≥ 상단 동적 칸, leaf 행 높이 ≥ 상단 행) · SCP0100 D00-6-005 '규칙 정정' 부분 + 지침. 체크박스/라디오 배치는 Box 영역(FormItem 라벨 공란) — 사용자 결정.
+- **체크박스·라디오 디자인 룰**(사용자 지시): 10_RULES_KEEP — ① 조회조건 체크박스는 한 Grid 칸의 customCheckbox 컨테이너에 모아 나란히(기준 DMF0082 MktFcstForm:424-440) `G:H03` ② As-is RadioGroup/UsrRadio/RadioButton 은 `@shared/lges` `RadioGroup`+`Radio(labelText)` 로(lges.ts 가 design-system radio 를 재export — "공용 RadioGroup 부재" 는 오판) 드롭다운 대체 금지, 카탈로그 '조회조건 삭제' 만 매핑표 '제외' `G:H04`. check.js H03/H04(최종 BLOCK) · M06 정정 표식 '실측|규칙 정정' · 🧯 진단 항목. 기준 화면 DMF0082 에 H01~H04 오탐 0.
+## 1.9.10 (2026-10-21)
+- **"🩹 E2E 오류 보완을 지시했는데 오류 지속" 원인 2가지 보완**: ① 메뉴에서 직접 실행하면 `${kind}/${round}/${step}` 이 치환되지 않은 채 Claude 에 전달됐고(수선 기록 15:38), 끝나도 E2E 를 다시 돌리지 않아 결과가 그대로였다 → 종류 QuickPick(기본 = 최근 FAIL 종류) · round = E2E_REPAIR.md 수선 수+1 · 수선 뒤 `S7.<kind>` 자동 재실행(mode auto, 입력 없음, quick.json `afterTask`). ② 수선 세션이 실패 4건을 전부 "(c) 기대값 결함" 으로 판정했는데 실제로 생성기 원천이 부족했다 → gen-e2e 에 권위 원천 3종 추가: 조회조건 카탈로그(`Doc/_rules_v2/_mapping/search_conditions*.md` To-Be 명칭 Project→PJT·Unit (Qty)→Unit·'조회조건 삭제'=제외) · As-is designer `Visibility = Never`(Display 등) = 검사 제외 · Fact Pack grid_code SetLayout/VisibleColumns 컬럼(Product Level1~3) = 조건부 표시로 누락 제외. SCP0100 smoke 재실행 PASS(일치 15/누락 0, 12/12 전체 PASS).
 ## 1.9.9 (2026-10-21)
 - **⬆️ Source Backup 자동화**(사용자 지시): 커밋 메시지 입력창·확인창 없이 `git add -A → commit -m "BACKUP_YYYYMMDD_HH24MISS"(로컬 시각) → push origin main`(leekc297 자격증명) 을 바로 실행. quick.json `autoMessage: "BACKUP_${ts}"` 로 지정(다른 git-upload 항목은 종전대로 입력). 모의 테스트 4/4.
 ## 1.9.8 + 하네스 보강 (2026-10-21 · tools/Harness 만, 확장 재빌드 불필요)

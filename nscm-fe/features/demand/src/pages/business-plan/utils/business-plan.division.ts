@@ -116,7 +116,11 @@ export const buildCellPopupSearch = (
     salesSite: readScmSiteSlot(row, divisionId) || 'ALL',
     projectCode,
   };
-  return target === 'ITEM' ? { ...base, itemId: '' } : { ...base, etc: 'N' };
+  // Model 팝업은 그 행의 현재 Model(40=ITEM_ID40, 그 외 ITEM_ID)로 좁혀 연다 — 그리드 셀 Model 팝업
+  //   화면 간 통일 (2026-10-14 사용자 요청). 비어 있으면 종전대로 빈 값(전체 목록).
+  return target === 'ITEM'
+    ? { ...base, itemId: readItemSlot(row, divisionId) }
+    : { ...base, etc: 'N' };
 };
 
 // ============================================================================

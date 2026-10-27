@@ -28,7 +28,7 @@ const plantRow = (patch: Partial<PlantRow>): PlantRow =>
   }) as unknown as PlantRow;
 
 describe('toSavePlantPayload — replace-set 벌크 1건', () => {
-  it("전 행을 '^' 조인하고 빈 요청법인은 ' ' 센티널로 자리를 지킨다 (dpjtKey 는 SP 해석 — 미전송)", () => {
+  it('전 행을 \'^\' 조인하고 빈 요청법인은 \' \' 센티널로 자리를 지킨다 (dpjtKey 는 SP 해석 — 미전송)', () => {
     const rows = [
       plantRow({}),
       plantRow({ OPERATION_ID: 'SP_E3000', PLANT_ID: '', CONFIRM_FLAG: 'UNCHECKED' }),

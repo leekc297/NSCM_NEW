@@ -6,7 +6,7 @@ export type MENU_ID = typeof MENU_ID;
 //   - GET SP : SCP.SCP0023_GET_OUTSOURCING_CAPA (조회) — TO-BE PKG_SCP0023 미배포(convert-sp 후속)
 //   - SAVE SP: SCP.SCP0023_SAVE_OUTSOURCING_CAPA (저장, action I/M/D 다행 UPSERT)
 //   - 조회조건: cboDivision(EE 제외) -> clbPlantSite(다중, OSP cascade), Model(팝업)/Nick Name(LIKE)
-//   - 편집셀 = daily_capa_qty 만(정수, 최소 1). Insert/Delete = AS-IS NO-OP.
+//   - 편집셀 = DAILY_CAPA_QTY 만(정수, 최소 1). Insert/Delete = AS-IS NO-OP.
 export enum SHEETS {
   MAIN = 'main', // spdMain 단일 시트 (SCM_MST_SHEET_COLUMNS SHEET_NAME='Outsourcing Capacity', 13컬럼)
 }
@@ -26,6 +26,10 @@ export const ADMIN_SHEET_NAME: Record<SHEETS, string> = {
 // Daily Capacity 하한 (design 03 §3 #6 / 07 §1.5 — 정수, 음수 불가, 최소 1, MSG00085).
 export const DAILY_CAPA_MIN = 1;
 
+// Daily Capacity 상한 — 9자리 이상 입력 방지(8자리 정수). DB DATA_MAX_LENGTH 미등록이라 distribution-route
+//   clampIntRange 선례와 동일하게 FE 클램프로 대체(하한과 달리 알림 없이 조용히 보정).
+export const DAILY_CAPA_MAX = 99_999_999;
+
 // 조회조건 콤보 ID (design 02 §5 — DB 실측 SCM_ADM_CMBO_SQL_M 등록 확정).
 export const COMBO = {
   // Division_SCP = 권한 division(@sesUserId·@mnuId), ATTRIBUTE3 반환 → FE 에서 전극(EE) 제외 재현.
@@ -39,7 +43,7 @@ export const COMBO = {
 // 전극(Electrode) 제외 필터값 — Division 콤보 ATTRIBUTE3<>'EE' (design 02 §2.1, AGENT.md §3 화면 재구현).
 export const DIVISION_EXCLUDE_ATTRIBUTE3 = 'EE';
 
-// item_id '-' 집계행의 표시 라벨 — GET SP 가 '-'→'Total' 로 변환해 반환(design 03 §4.1). Plant별 Total 행.
+// ITEM_ID '-' 집계행의 표시 라벨 — GET SP 가 '-'→'Total' 로 변환해 반환(design 03 §4.1). Plant별 Total 행.
 export const TOTAL_ITEM_LABEL = 'Total';
 
 // UI 라벨 -> SCM_ADM_MSG_M(MSG_TP_CD='LBL') 코드 매핑. 값 = LBL 코드, 호출부는 t(LBL.KEY, '_Fallback').
@@ -62,5 +66,5 @@ export const MSG = {
   SAVE_SUCCESS: 'MSG00002', // Saved successfully. (AS-IS MSG00020)
   NO_CHANGE: 'MSG00004', // No changes to save.
   DAILY_CAPA_MIN: 'MSG00085', // Only values greater than or equal to {0} are allowed. (AS-IS MSG00085 하한)
-  PLANT_TOTAL_REQUIRED: 'MSG00258', // Plant's Total is not entered.({0}) — TO-BE 등록완료(2026-09-22, AS-IS TB_FX_MessageInfo 복사). design 03 §4.2
+  PLANT_TOTAL_REQUIRED: 'MSG01268', // Plant's Total is not entered.({0}) (AS-IS MSG00258 는 TO-BE 미등록 → 같은 문구 MSG01268, KO/EN/CN). design 03 §4.2
 } as const;

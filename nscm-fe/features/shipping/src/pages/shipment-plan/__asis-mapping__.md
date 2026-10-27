@@ -112,7 +112,7 @@
 | D00-2b-006~008 | MSG00098 Item 팝업 필수 3종 | ShipmentPlan.tsx openCellPopup('item') → MSG00013 | | 구현 |
 | D00-2b-009~012 | MSG00098 Project 팝업 필수 4종 | ShipmentPlan.tsx openCellPopup('project') → MSG00013 | | 구현 |
 | D00-2b-013 | MSG00278 (ComboSelChange 경로) | | TRANSPORT_MODE 셀콤보 [META-GAP] 갭#2 — 메타 정비 후 자동 배선 | 제외 |
-| D00-2b-014 | MSG00425 하한 위반 경고 | | dNoEditQty 산정식이 03 미규정 — AS-IS 재확인 필요(04 확인필요) | 제외 |
+| D00-2b-014 | MSG00425 하한 위반 경고 | MainGrid recalcCell·Delete키 DO 하한 가드 → MSG00666 + QTY 원복 | 산정식 확정(2026-10-22): AS-IS EditByChange(cs L2101~2126)가 o_rc2 note 행의 NOEDIT_QTY(DO 발행분)를 입력 하한으로 비교, 위반 시 MSG00425 + QTY(원 확정수량) 원복. 파란 ■ = 하한 표시(완전 잠금 아님 — 증가·하한 이상 감소는 허용). TO-BE 게이트 = note 존재(NOEDIT_QTY>0, EDIT_YN 부재 G15 등가) | 구현 |
 | D00-2b-015~016 | MSG00007 Measure sheet 제한 | handleMeasure(detail 이면 조용히 no-op / 기본 main 고정) | null 그리드 상황은 TO-BE 미발생 | 구현 |
 | D00-2b-017 | MSG00251 SSP 사용자 체크 | ShipmentPlan.tsx sspUserCheck useQuery(USER_CHECK call-proc) → canEdit 합산 + MSG01261 1회 알럿 | R7a 이식(2026-10-08). PKG_SSP0002 는 PACKAGE/BODY 모두 **VALID**(ora.py 실측) — 04 A01 의 "0건 미배포" 는 낡은 기술. 버튼·권한 = design/18_register_user_check_btn_auth.sql(사용자 실행 대기) | 구현 |
 | D00-2b-018 | MSG00170 이전 Plan 편집차단 | handleEdit 가드② → MSG01185 | | 구현 |
@@ -157,7 +157,7 @@
 | D00-3-020 | ChangeActiveSheet 8-sheet 전환 | DetailGrid TabWrapper + handleMainDrilldown | | 구현 |
 | D00-3-021 | SmartColMerge 재적용 | 공용 병합 매니저 자동 | 공용 DataGrid 병합 매니저가 자동 재적용 — 화면 코드 불요 | 해당없음 |
 | D00-3-022 | Insert 신규행 삽입·파생·잠금 | handleInsert(HoldStock/PlanDetail 2원천) + editLock | | 구현 |
-| D00-3-023 | SwitchLock/LockRange 편집 잠금 28건 | utils/shipment-plan.editLock.ts(beginningEdit+formatItem) | LockRange 상수 이식 금지(hook #130) — 화이트리스트 판정 함수로 재현. **Main D_ 편집창은 AS-IS 와 반대** — 아래 §확정구간 참조 | 구현 |
+| D00-3-023 | SwitchLock/LockRange 편집 잠금 28건 | utils/shipment-plan.editLock.ts(beginningEdit+formatItem) | LockRange 상수 이식 금지(hook #130) — 화이트리스트 판정 함수로 재현. **Main D_ 편집창은 AS-IS 그대로**(확정구간 `curPlanDate~CONFIRM_DAY`) — 아래 §확정구간 참조 | 구현 |
 | D00-3-024 | 저장 실패 셀 InvalidColor | | Main 저장 음수는 저장 전 차단(MSG00225)이라 실패색 경로 미발생 — 셀 단위 표기는 04 확인필요 | 제외 |
 | D00-3-025 | GetViewRowFromModelRow | | Wijmo collectionView 인덱스 공용 처리 | 해당없음 |
 | D00-3-026 | Sum 체크 연동 Visible 7건 | MainGrid isDynVisible(bucket×chkSum 표) | | 구현 |
@@ -248,7 +248,7 @@
 | D00-4e-001 | ItembyDivision(조회조건 2차) | ItemByDivisionModal(openItemDetailBar) | plantSite 사전필터는 공용 모달 계약(COM0008) 밖 — 04 확인필요 | 구현 |
 | D00-4e-002 | ItembyDivision(Detail 셀) | ItemByDivisionModal(cellPopupKind='item') | | 구현 |
 | D00-4e-003 | ProjectbyDivision(Detail 셀) | ProjectByDivisionModal(cellPopupKind='project') | | 구현 |
-| D00-4e-004 | SSP0300_OrderDetailPopup | components/modals/OrderDetailModal.tsx(GET_ORDER_DETAIL) | 이식(2026-10-08, I13). "PKG_SSP0300 미배포" 는 **패키지 이름으로만 찾아 생긴 오판** — 실체는 standalone PROCEDURE `P_SSP0300_GET_ORDER_DETAIL`(VALID, IN 4개 + O_RC1, ora.py 실측)이고 API_M 등록도 있다. 버튼·권한 = design/19_register_order_detail_btn_auth.sql(사용자 실행 대기) | 구현 |
+| D00-4e-004 | SSP0300_OrderDetailPopup | features/shipping/src/components/order-detail-modal/OrderDetailModal.tsx(공용, GET_ORDER_DETAIL) | 이식(2026-10-08, I13). 2026-10-20 shipping 도메인 공용 컴포넌트로 승격(menuId/shtNm/btnId/electrode props) — SSP0021 과 공유. "PKG_SSP0300 미배포" 는 **패키지 이름으로만 찾아 생긴 오판** — 실체는 standalone PROCEDURE `P_SSP0300_GET_ORDER_DETAIL`(VALID, IN 4개 + O_RC1, ora.py 실측)이고 API_M 등록도 있다. 버튼·권한 = design/19_register_order_detail_btn_auth.sql(사용자 실행 대기) | 구현 |
 | D00-4e-005 | ShipmentPlanConfirmDetailPopup | components/modals/ConfirmDetailModal.tsx(GET_CFM_DRAFTING) | | 구현 |
 | D00-4e-006 | TitleSetForm(Measure) | ColumnSettingModal(TITLESET_MEASURE_TYPE='M') | | 구현 |
 | D00-4e-007 | UserInfoPopup(Requestor) | components/modals/RequestorModal.tsx(SSP0060 전용 신규 — 사용자 확정) | 목록 콤보 SQL 등록 보류(AS-IS SystemManager 접근 불가) | 구현 |
@@ -268,9 +268,9 @@
 | MODAL:ProjectByDivisionModal | 공용 재사용 | ShipmentPlan.tsx | | 구현 |
 | MODAL:RequestorModal | 화면 전용 신규 | components/modals/RequestorModal.tsx | 목록 콤보(SSP0060_UserInfoList) 미등록 — 직접입력 동작, 목록은 R3(사용자/SP 축) | 구현 |
 | MODAL:ConfirmDetailModal | 화면 전용 신규 | components/modals/ConfirmDetailModal.tsx | | 구현 |
-| MODAL:ShipmentRequestModal | 화면 전용 신규(R8) | components/modals/ShipmentRequestModal.tsx | | 구현 |
+| MODAL:ShipmentRequestModal | AS-IS SSP0060_ShipmentPlanRequestPopup 재구축(R8) | components/modals/ShipmentRequestModal.tsx | 2026-10-21 재구축 — 아래 §Request 팝업 참조 | 구현 |
 | MODAL:ColumnSettingModal | 공용(Measure) | ShipmentPlan.tsx | | 구현 |
-| MODAL:OrderDetailPopup | ERP_SO_NO dblClick(SSP0300) | components/modals/OrderDetailModal.tsx | 이식(2026-10-08) — D00-4e-004 참조 | 구현 |
+| MODAL:OrderDetailPopup | ERP_SO_NO dblClick(SSP0300) | features/shipping/src/components/order-detail-modal/OrderDetailModal.tsx(공용) | 이식(2026-10-08), 2026-10-20 공용 승격 — D00-4e-004 참조 | 구현 |
 
 ## 잔여(제외/확인필요) 총괄 — 완료 조건 아님, 04_react-gap.md "확인 필요/SP 후속" 과 1:1
 
@@ -285,9 +285,10 @@
    - 잔여: END_CUSTOMER(CTRL 공란 — 콤보 SQL `EndCustomerByItemForSSP_SCP` 는 등록됨, 컬럼 배선만 결여),
      INPUT_TP_CD 전건 'S'. 둘 다 빈 리스트/코드 화이트리스트 재현이 정답 — admin 정비 대기.
 4. HoldStock 저장 SP 미존재(AS-IS DB 에도 없음 — 실측).
-5. Simulation 재계산 본체(03 §6-9 미확정)·MSG00425 하한식·MSG00313 재대조·Footer 합계·StickyNote·
-   헤더 체크박스·splitter 리사이즈·R5 IsLock 부가조건 — 04 확인필요(사용자 축).
-   OrderDetail 팝업은 해소(D00-4e-004).
+5. Simulation 재계산 본체(03 §6-9 미확정)·MSG00313 재대조·헤더 체크박스·splitter 리사이즈·
+   R5 IsLock 부가조건 — 04 확인필요(사용자 축).
+   해소: OrderDetail 팝업(D00-4e-004) · StickyNote(■, 01684a35) · Footer 합계(I16) ·
+   MSG00425 하한식(D00-2b-014, 2026-10-22 — NOEDIT_QTY 하한 가드 이식).
 
 ## 자매 SSP0015 갭감사 I-항목 이식 (2026-10-08)
 
@@ -331,20 +332,24 @@ SSP0060 과 SSP0015(ShipmentPSI)는 같은 베이스에서 나온 자매 폼이�
 | WH_IN 기간셀 → Comments 팝업 | 해당없음 | `WH_IN` 0 hit · `CommentsPopup` 0 hit |
 | WH In Plan Detail 검색조건 | 해당없음 | 해당 시트 자체가 없다(CreateSpread 6시트) |
 
-### 미처리로 남긴 AS-IS Re_Design 표시규칙 4건 (사용자 결정 대기)
+### AS-IS Re_Design measure 행 표시규칙 (색 규칙 반영 완료 2026-10-14)
 
-위 2차 대조 중 `Re_Design`(cs L5422~5562) 전문을 읽다가 **SSP0015 커밋과 무관하게** SSP0060
-자체적으로 미구현인 표시규칙을 추가로 발견했다. 이번 범위(=update 누락분)에 넣지 않고 보고만 한다.
+`Re_Design`(cs L5440~5570) 전문의 measure 행 표시규칙. 색 규칙(Rb·Rc·Rd색·Re)은 사용자 지시
+(2026-10-14 "as-is 기준에 맞춰서 구현")로 반영했다 — `ShipmentPlanMainGrid.tsx` `formatItem` 의
+`measureRowBackground()`. 값 규칙(Ra, Rd 0→공백)은 표시값을 바꾸므로 분리해 남긴다.
+설계 근거: `.atlas/gscm-design/SSP0060/design/03_grid-columns.md` §3-I.
 
 | # | AS-IS 근거 | 규칙 | TO-BE |
 |---|---|---|---|
-| Ra | L5486~5492 | `CONTAINER` measure 행에서 `LOT_YN=='N'` 이면 FCST_TYPE+1~끝 값 전부 null | 미구현 |
-| Rb | L5494~5498 | `SHIP_PLAN`·`TOT_SHIP_PLAN` 행 → MEASURE_NAME~끝 배경 `#A7D5FF`(167,213,255) | 미구현 |
-| Rc | L5500~5503 | `SHIP_PLAN_DETAIL`·`SHIP_RESULT` 행 → TO_SITE~끝 배경 LightSkyBlue α80 | 미구현 |
-| Rd | L5520~5543 | 위 3종 **아닌** measure 의 과거 일자셀(D_ < planDate) → 배경 `#A9A9A9`, 그리고 measure 가 `TOT` 로 시작하지 않으면 값 0 → 공백 | 미구현 |
-| Re | L5547~5551 | `TOT_SHIP_REQ`·`TOT_SHIP_AVAL`·`TOT_SHIP_AVAL_GAP`·`TOT_INTN_MOVEMENT`·`TOT_CONTAINER`·`TOT_PROD_PLAN`·`TOT_WH_STOCK`·`TOT_BALANCE` 행 → MEASURE_NAME~끝 배경 Yellow α80 | 미구현 |
+| Ra | L5503~5510 | `CONTAINER` measure 행에서 `LOT_YN=='N'` 이면 FCST_TYPE+1~끝 값 전부 null | 미구현(값 규칙) |
+| Rb | L5512~5516 | `SHIP_PLAN`·`TOT_SHIP_PLAN` 행 → MEASURE_NAME~끝 배경 `#A7D5FF`(167,213,255) | **구현**(2026-10-14) |
+| Rc | L5518~5521 | `SHIP_PLAN_DETAIL`·`SHIP_RESULT` 행 → TO_SITE~끝 배경 LightSkyBlue α80 | **구현**(2026-10-14) |
+| Rd | L5543~5563 | 위 3종 **아닌** measure 의 과거 일자셀(D_ < planDate) → 배경 `#A9A9A9`, 그리고 measure 가 `TOT` 로 시작하지 않으면 값 0 → 공백 | 색 **구현** / 값(0→공백) 미구현(2026-10-14) |
+| Re | L5565~5570 | `TOT_SHIP_REQ`·`TOT_SHIP_AVAL`·`TOT_SHIP_AVAL_GAP`·`TOT_INTN_MOVEMENT`·`TOT_CONTAINER`·`TOT_PROD_PLAN`·`TOT_WH_STOCK`·`TOT_BALANCE` 행 → MEASURE_NAME~끝 배경 Yellow α80 | **구현**(2026-10-14) |
 
 Rb·Rc·Re 는 measure 행 종류를 색으로 구분하는 것이라 **그리드 가독성에 직접 영향**한다.
+편집색(노랑 wj-cell-editable) > Rc 하늘색, 음수 invalid(`#5CD1E5`) > 편집색의 계층을 유지한다
+(편집 가능 셀은 Re_Design 색칠에서 제외).
 
 ### Simulation 버튼 제거 — AS-IS 에서도 노출되지 않는다 (사용자 지시 2026-10-12)
 
@@ -485,14 +490,17 @@ DIVISION_ID·FROM_SITE·ITEM_ID·TO_SITE 등으로 실제 SP 를 호출한다. `
 **AS-IS 대비**: AS-IS 가드(cs L1800)는 `GetText(ERP_SO_NO) != "" && != null` 뿐이라 `'-'` 에서도
 팝업이 열렸다. 즉 이 수정은 파리티 복원이 아니라 **사용자 지시에 따른 개선**이다.
 
-### 확정구간은 조회전용 — AS-IS 의도적 이탈 (사용자 결정 2026-10-12)
+### 확정구간 = 편집창 — AS-IS 복원 (사용자 결정 2026-10-21, 종전 2026-10-12 반전을 되돌림)
 
-Main(PSI) 그리드의 `D_` 셀 편집창을 **AS-IS 와 반대로** 뒤집었다. 사용자 지시다.
+Main(PSI) 그리드의 `D_` 셀 편집창을 **AS-IS 그대로** 되돌렸다. 종전(2026-10-12)에 "확정구간은
+조회전용"으로 반전했으나, 사용자 지시(2026-10-21 "수정 가능 셀 노란색·수정 불가 셀 하늘색, 수정
+가능 여부는 AS-IS 로직")로 복원했다.
 
-| 축 | AS-IS / design 03 §3-F | TO-BE(현재) |
-|---|---|---|
-| 편집 가능 일자 | `curPlanDate <= 일자 <= CONFIRM_DAY` (확정구간 **안**) | `일자 > CONFIRM_DAY` (확정구간 **밖**) |
-| 확정구간 스타일 | `Re_Design` L5467~5478 이 measure별 `BACK_COLOR` 로 칠함(미이식) | 편집 불가 → 일반스타일(노랑 미적용) |
+| 축 | AS-IS / design 03 §3-F = TO-BE(현재) |
+|---|---|
+| 편집 가능 일자(노랑) | `curPlanDate <= 일자 <= CONFIRM_DAY` (확정구간 **안**). CONFIRM_DAY 공백이면 창 없음 |
+| 편집 불가(하늘색 Rc) | 확정구간 이전·이후 — `measureRowBackground` Rc(SHIP_PLAN_DETAIL LightSkyBlue) |
+| 확정구간 스타일 | `Re_Design` L5468~5478: measure 색이 없는 행의 확정구간을 행별 `BACK_COLOR`(=SCM_MST_SHEET_MEASURE.ATTRIBUTE3, DB 실측 `242,242,242` #F2F2F2)로. `confirmWindowBackground`(MainGrid)에 **이식**(2026-10-21) — measure 색이 없을 때만 적용 |
 
 **AS-IS 근거**: `EditButton`(cs L2763~2807)이 `LockColumn(DIVISION_ID..Max, true)` 로 전 컬럼을 잠근 뒤,
 `MEASURE=='SHIP_PLAN_DETAIL' && TO_SITE!=''` 행의 비SUM `D_` 셀 중 `curPlanDate ≤ 일자 ≤ CONFIRM_DAY`
@@ -501,9 +509,10 @@ Main(PSI) 그리드의 `D_` 셀 편집창을 **AS-IS 와 반대로** 뒤집었�
 즉 AS-IS 는 편집가능 셀에 색을 주지 않는다(TO-BE 노랑은 NSCM 공통 규약
 `.atlas/wiki/grid-editable-commonization.md`).
 
-**이탈 사유**: 확정(frozen)된 구간을 편집 표면으로 두는 것이 업무 의도와 어긋난다는 사용자 판단.
-확정구간은 잠그고 편집은 그 구간을 지난 일자에서만 허용한다. design 03 §3-F·§3 기술과 배치되므로
-그 문서를 정본으로 재대조할 때 이 결정을 먼저 본다(convert-core §2.4 이탈 기록).
+**결정 이력**: 2026-10-12 에 "확정구간은 조회전용, 편집은 그 구간을 지난 일자만" 으로 반전했다가,
+2026-10-21 사용자 지시("수정 가능 셀 노란색·수정 불가 셀 하늘색, 수정 가능 여부는 AS-IS 로직")로
+**AS-IS 그대로 복원**했다 — 확정구간(`curPlanDate ≤ 일자 ≤ CONFIRM_DAY`)만 편집(노랑), 그 밖은 조회전용
+(하늘색 Rc). design 03 §3-F·§3 과 재일치.
 
 **확정구간 정의(DB 실측 2026-10-12)** — `PKG_SSP0060.P_SSP0060_GET_SHIPMENT_PLAN` L2645·L3889:
 
@@ -515,10 +524,43 @@ CONFIRM_DAY = planStart + MAX(FN_GET_ANL_SHIP_FROZEN_DAY_CNT('SSP', DIVISION_ID,
 `SCM_MST_SITE(DIVISION_ID, SCM_SITE_ID=FROM_SITE).SHIP_FROZEN` 을 읽고, `ATTRIBUTE6` 가 `W` 로
 시작하면 주 단위로 환산한다(`(N+1)*7 - 요일오프셋`). `SHIP_FROZEN` 실측은 56(81/NA00-E·NB01-E)·
 28(82/KR·PL 4개)·21(40 계열·82/US02182600_82-P)·14(다수)로 **플랜트별로 다르다.** 그래서 경계를
-화면 상수로 굳히지 않고 서버가 내려준 행별 `CONFIRM_DAY` 로만 판정한다. 일부 measure 는 이 값이
-NULL 이라(L3720) 공백이면 확정구간 없음으로 보고 `curPlanDate` 이후를 편집 허용한다.
+화면 상수로 굳히지 않고 서버가 내려준 행별 `CONFIRM_DAY` 로만 판정한다. `CONFIRM_DAY` 는
+`NVL(A.CONFIRM_DAY, 0)` 로 항상 채워지지만(offset null 이면 planStart 자신), 공백으로 내려오면
+창이 성립하지 않아 조회전용으로 본다(AS-IS `GetDateFromYYYYMMDD("")` 가 MinValue 라 창 밖).
 
-검증: `utils/shipment-plan.editLock.test.ts` 11건(경계 포함·플랜트별 차등·공백 폴백·기존 가드 유지).
+검증: `utils/shipment-plan.editLock.test.ts` 11건(경계 포함·플랜트별 차등·공백=조회전용·기존 가드 유지).
+
+### Request 팝업(Shipment Request Popup) — AS-IS 재구축 (2026-10-21)
+
+**증상**: Main Shipment Plan 수정 후 저장 시 (1) AS-IS 와 다른 팝업(Title/No 만 있는 Drafting)이 뜨고
+(2) "저장 성공" 토스트가 뜨는데 재조회하면 변화가 없다(사용자 신고 2026-10-21).
+
+**근본 원인(DB 실측)**: Main 저장 SP `P_SSP0060_SAVE_SHIPMENT_PLAN` 은 확정 plan 을 직접 바꾸지 않고
+**변경요청 draft** 를 `SSP_ANL_SHIP_CONFIRM_CHG_REQ(_DETAIL)` 에 INSERT 만 한다(본문 L5703·5768·5827).
+즉 바로 재조회 시 원값 그대로인 것은 워크플로상 정상이고, 진짜 저장은 그다음 Request 팝업에서
+Change Reason 을 넣고 **확정**(`SAVE_SHIPMENT_REQUEST_CONFIRM`)하는 단계다.
+
+**AS-IS 흐름**(`SSP0060_ShipmentPlan.cs` `SaveData_Main` L2933 → `SSP0060_ShipmentPlanRequestPopup`):
+1. 수정 D_셀(action='M') 수집 → `SAVE_SHIPMENT_PLAN`(draft 생성) → MSG00004 "저장되었습니다"
+2. `SSP0060_ShipmentPlanRequestPopup` 오픈 — Confirmed vs Change 짝 컬럼 + Diff Qty + Change Reason(콤보)
+   + Reason Detail + Auto Set. 조회 `GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING('')`, 저장
+   `SAVE_SHIPMENT_REQUEST_CONFIRM`(38 IN). 수량/일자 변경 행은 Change Reason 필수(Validation_Check L777).
+3. 팝업 닫히면 `FindData_Main(true)` 재조회.
+
+**TO-BE 재구축**: `ShipmentRequestModal.tsx` 를 위 팝업으로 재작성(Confirmed/Change 2단 그룹 그리드 +
+편집 NEW 수량/일자·Change Reason/Reason Detail + Auto Set 툴바). 저장 수집 =
+`collectRequestConfirmSaveRows`(save.ts — Detail Confirm 과 키는 같되 `shipmentQty←NEW_QTY`,
+`shipmentDate←NEW_DATE`, `changeRequestNo←행`, `topFlag←NEW_YN`). 저장 SP·엔드포인트는 하단 Plan Detail
+Confirm 과 동일(`planDetail/SAVE` = `SAVE_SHIPMENT_REQUEST_CONFIRM`)이라 검증됨. 닫힘 시 Main 재조회(R8).
+
+**배포(DB 실측)**: 관련 SP(`SAVE_SHIPMENT_PLAN`·`GET/SAVE_SHIPMENT_REQUEST_CONFIRM`·`DRAFTING`)는
+PKG_SSP0060 에 전부 배포. **caveat**: AS-IS 확정 시 함께 도는 ERP Drafting IF 체인(`GetERPInterface`→
+NonSoNo/SoNo→`PR_SSP_ANL_*`·`SSP0202_*`·ERP WebService)은 TO-BE 미배포([SP-CHAIN], convert-sp 후속)
+— 변경요청 DB 확정까지 수행하고, 그 뒤 ERP D/O 발행·엔진 재반영으로 상단 "Shipment Plan[R+P]" 숫자가
+바뀌어 보이는 것까지는 이 범위 밖이다.
+
+**종전 오구현**: 재구축 전 TO-BE 는 `SAVE_SHIPMENT_REQUEST_DRAFTING_MAIN`(Title/No Drafting) 으로 배선돼
+AS-IS 와 팝업·저장 SP 가 모두 달랐다 — Change Reason 확정 단계가 없어 변경요청이 확정되지 않았다.
 
 ### 검증 한계 (CORE-03 — 통과로 보고하지 않는다)
 

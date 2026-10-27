@@ -19,6 +19,10 @@ export const isPivotBinding = (binding: string): boolean =>
   binding.startsWith(PIVOT_PREFIX.WEEKLY) ||
   binding.startsWith(PIVOT_PREFIX.MONTHLY);
 
+// 집계(주/월) pivot 컬럼 판정 — W_/M_ 만. AS-IS 3단(leaf) 헤더가 "SUM" 인 대상(D_ 일별은 일자 라벨 유지).
+export const isPivotAgg = (binding: string): boolean =>
+  binding.startsWith(PIVOT_PREFIX.WEEKLY) || binding.startsWith(PIVOT_PREFIX.MONTHLY);
+
 // 고정 차원 컬럼 빌드 — admin(SCM_MST_SHEET_COLUMNS) 등록본이 유일 원천(design 03 §1, convert-core §2.4 하드코딩 금지).
 //   read-only 화면이라 전 컬럼 잠금(메타 INPUT_TP_CD='S') — 편집 override 없음. VISIBLE/FIXED 속성은 그대로 둔다
 //   (속성 단위 덮어쓰기 금지 — PLANT_ID 숨김·VALUE2 고정열은 메타가 이미 표현). 미등록/실패 시 빈 배열.
@@ -93,7 +97,10 @@ export const buildPivotColumns = (
   if (visible.length === 0) return [];
 
   const leafOf = (c: CalendarCol): FlexGridColumnConfig => ({
-    header: c.columnLabel || 'Qty',
+    // leaf(3단) 헤더 — AS-IS InitSpreadDateColumn(L420·L429·L440) 은 주/월 집계 컬럼의 3단을 리터럴 "SUM" 으로
+    //   덮어쓴다(월/주/SUM). W_·M_ 는 SP COLUMN_LABEL_NAME(=WEEK_NAME/MONTH_NAME)이 small 라벨과 같아 그대로 쓰면
+    //   세로병합(AllowMerging.All)으로 3단이 2단으로 접힌다 → "SUM" 고정으로 AS-IS 3단 재현. D_ 는 일자(CALENDAR_DAY) 유지.
+    header: isPivotAgg(c.columnName) ? 'SUM' : c.columnLabel || 'Qty',
     binding: c.columnName,
     align: 'right',
     format: 'n0', // 기본 정수(design 03 §3 R3). Yield_A/Yield_E 행만 grid formatItem 이 소수 2자리로 덮음(R30)

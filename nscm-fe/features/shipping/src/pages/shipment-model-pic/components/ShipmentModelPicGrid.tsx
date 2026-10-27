@@ -1,4 +1,4 @@
-import { AllowMerging, CellType, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import { AllowMerging, CellType, Column, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo } from 'react';
 
@@ -175,6 +175,23 @@ export const ShipmentModelPicGrid = ({
     //   확실히 붙는다(formatItem effect 와 동일 신호). langCd 만 두면 마운트 1회로 끝나 미부착된다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columns, langCd]);
+
+  // 수정상태(M/I/D) 행헤더 컬럼 보강 — 공용 DataGrid 는 grid init 시점에 isReadOnly=false 일 때만
+  //   상태컬럼(rowHeaders 2번째 컬럼)을 push 한다(DataGrid.tsx:1611, initialized 1회). 이 화면은
+  //   isReadOnly={!canEdit} 라 EDIT 권한이 그리드 마운트보다 늦게 로드되면 init 때 isReadOnly=true →
+  //   상태컬럼이 끝내 안 생긴다(SCP0005/SCP0013 은 isReadOnly 미지정이라 항상 생긴다). canEdit 이
+  //   참이 되는 시점에 누락분만 보강한다 — isReadOnly·편집가드·노랑표시는 그대로 둔다(동작 보존, 사용자
+  //   지시 2026-10-15 "EDIT 잠금·노랑 유지 + 상태컬럼만"). 이미 있으면(length>=2) 중복 push 안 함.
+  //   deps=[columns, canEdit]: columns 는 adminColumns 로드(= 그리드 준비) 신호, canEdit 는 권한 확정 신호.
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g || !canEdit) return;
+    if (g.rowHeaders.columns.length < 2) {
+      g.rowHeaders.columns.push(new Column({ align: 'center' }));
+      g.invalidate(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columns, canEdit]);
 
   // 이미지셀(USER 계열 8) 더블클릭 -> UserInfoPopup(AS-IS cs:626~831). 그리드가 기본 편집 가능이라
   //   조회 직후 바로 동작한다.

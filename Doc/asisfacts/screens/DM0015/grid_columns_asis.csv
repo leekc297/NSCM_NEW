@@ -1,0 +1,84 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+Bod,BOD_ID,CODE,DM0015_BOD,DM0015_BOD.cs:300,BOD,Text,,None,코드 선언 FPMerge.None,120,false,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,DIVISION_ID,CODE,DM0015_BOD,DM0015_BOD.cs:301,Division,Combo,GetDivision(),None,코드 선언 FPMerge.None,80,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,BOD_TYPE,CODE,DM0015_BOD,DM0015_BOD.cs:302,BOD Type,Combo,GetBodType(),None,코드 선언 FPMerge.None,120,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,END_CUSTOMER,CODE,DM0015_BOD,DM0015_BOD.cs:303,End Customer,Combo,"Data.UserEndCustomerByDivisionDept(UserInfoContext.Current[""NowGroupID""], UserInfoContext.Current.UserId, clbDivision.Co…",None,코드 선언 FPMerge.None,220,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,TO_SITE,CODE,DM0015_BOD,DM0015_BOD.cs:304,To Site,Combo,GetToSitebyDivision(clbDivision.ControlValues)} || {?GetFromSitebyDivision( clbDivision.ControlValues.ToString()),None,코드 선언 FPMerge.None,220,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,HUB_SLOC,CODE,DM0015_BOD,DM0015_BOD.cs:305,Hub Sloc,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,INCOTERMS,CODE,DM0015_BOD,DM0015_BOD.cs:306,Incoterms,Combo,GetIncoterms(),None,코드 선언 FPMerge.None,120,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,FROM_SITE,CODE,DM0015_BOD,DM0015_BOD.cs:307,From Site,Combo,GetFromSitebyDivision(clbDivision.ControlValues)} || {?GetFromSitebyDivision(clbDivision.ControlValues.ToString()),None,코드 선언 FPMerge.None,220,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,PRIORITY,CODE,DM0015_BOD,DM0015_BOD.cs:308,Priority,Number,,None,코드 선언 FPMerge.None,60,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,TRANSPORT_MODE,CODE,DM0015_BOD,DM0015_BOD.cs:309,Ship Method,Combo,GetTransMode(),None,코드 선언 FPMerge.None,120,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,PERIOD_SHIPSCH_MON,CODE,DM0015_BOD,DM0015_BOD.cs:310,Mon,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,40,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,PERIOD_SHIPSCH_TUE,CODE,DM0015_BOD,DM0015_BOD.cs:311,Tue,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,40,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,PERIOD_SHIPSCH_WED,CODE,DM0015_BOD,DM0015_BOD.cs:312,Wed,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,40,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,PERIOD_SHIPSCH_THU,CODE,DM0015_BOD,DM0015_BOD.cs:313,Thu,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,40,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,PERIOD_SHIPSCH_FRI,CODE,DM0015_BOD,DM0015_BOD.cs:314,Fri,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,40,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,PERIOD_SHIPSCH_SAT,CODE,DM0015_BOD,DM0015_BOD.cs:315,Sat,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,40,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,PERIOD_SHIPSCH_SUN,CODE,DM0015_BOD,DM0015_BOD.cs:316,Sun,Combo,Data.Common(Data.Type.YesOrNo),None,코드 선언 FPMerge.None,40,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,POL,CODE,DM0015_BOD,DM0015_BOD.cs:317,From Port,Combo,"GetPortBySite(""All"")",None,코드 선언 FPMerge.None,60,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,POD,CODE,DM0015_BOD,DM0015_BOD.cs:318,To Port,Combo,"GetPortBySite(""All"")",None,코드 선언 FPMerge.None,60,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,FREIGHT_FORWARDER,CODE,DM0015_BOD,DM0015_BOD.cs:319,Freight Forwarder,Text,,None,코드 선언 FPMerge.None,80,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,SAFETY_STOCK,CODE,DM0015_BOD,DM0015_BOD.cs:320,Safety Stock,Number,,None,코드 선언 FPMerge.None,80,true,Center,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,PERIOD1_LT,CODE,DM0015_BOD,DM0015_BOD.cs:321,Plant to CY,Number,,None,코드 선언 FPMerge.None,80,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,POL_CLEARANCE_LT,CODE,DM0015_BOD,DM0015_BOD.cs:322,Pol Clearance,Number,,None,코드 선언 FPMerge.None,80,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,PERIOD2_LT,CODE,DM0015_BOD,DM0015_BOD.cs:323,CY to CY,Number,,None,코드 선언 FPMerge.None,80,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,POD_CLEARANCE_LT,CODE,DM0015_BOD,DM0015_BOD.cs:324,Pod Clearance,Number,,None,코드 선언 FPMerge.None,80,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,PERIOD3_LT,CODE,DM0015_BOD,DM0015_BOD.cs:325,CY to Dest.,Number,,None,코드 선언 FPMerge.None,80,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,LT_TOTAL,CODE,DM0015_BOD,DM0015_BOD.cs:326,Total,Number,,None,코드 선언 FPMerge.None,80,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,CUSTOMER_LT,CODE,DM0015_BOD,DM0015_BOD.cs:327,Customer L/T,Number,,None,코드 선언 FPMerge.None,80,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,VALID_YN,CODE,DM0015_BOD,DM0015_BOD.cs:328,Active,Text,,None,코드 선언 FPMerge.None,80,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,LAST_UPDATE_DATE,CODE,DM0015_BOD,DM0015_BOD.cs:329,Update Date,Text,,None,코드 선언 FPMerge.None,80,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod,LAST_UPDATED_BY,CODE,DM0015_BOD,DM0015_BOD.cs:330,Updated By,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(spreadInfo.SheetName == ""Bod"")"
+Bod Item,BOD_ID,CODE,DM0015_BOD,DM0015_BOD.cs:398,BOD,Text,,None,코드 선언 FPMerge.None,120,false,,,,"if(spreadInfo.SheetName == ""Bod Item"")"
+Bod Item,DIVISION_ID,CODE,DM0015_BOD,DM0015_BOD.cs:399,Division,Combo,GetDivision(),None,코드 선언 FPMerge.None,80,true,,,,"if(spreadInfo.SheetName == ""Bod Item"")"
+Bod Item,ITEM_ID,CODE,DM0015_BOD,DM0015_BOD.cs:400,Item ID,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(spreadInfo.SheetName == ""Bod Item"")"
+Bod Item,LOT_SIZE,CODE,DM0015_BOD,DM0015_BOD.cs:401,Lot Size,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(spreadInfo.SheetName == ""Bod Item"")"
+Bod Item,FROZEN_PERIOD,CODE,DM0015_BOD,DM0015_BOD.cs:402,Frozen Period,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(spreadInfo.SheetName == ""Bod Item"")"
+Bod Item,EFF_START_DATE,CODE,DM0015_BOD,DM0015_BOD.cs:403,EFF Start Date,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(spreadInfo.SheetName == ""Bod Item"")"
+Bod Item,EFF_END_DATE,CODE,DM0015_BOD,DM0015_BOD.cs:404,EFF End Date,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(spreadInfo.SheetName == ""Bod Item"")"
+Bod Item,VALID_YN,CODE,DM0015_BOD,DM0015_BOD.cs:405,Active,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(spreadInfo.SheetName == ""Bod Item"")"
+Bod Item,LAST_UPDATE_DATE,CODE,DM0015_BOD,DM0015_BOD.cs:407,Update Date,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(spreadInfo.SheetName == ""Bod Item"")"
+Bod Item,LAST_UPDATED_BY,CODE,DM0015_BOD,DM0015_BOD.cs:408,Updated By,Text,,None,코드 선언 FPMerge.None,120,true,,,,"if(spreadInfo.SheetName == ""Bod Item"")"
+Bod,"BOD_ID
+",META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),"BOD ID",FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Bod,BOD_TYPE,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),BOD Type,FPComboBox,BodType,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Bod,CUSTOMER_LT,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Customer L/T,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Bod,DIVISION_ID,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Div*,FPComboBox,Division,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),30,Y,C,,,
+Bod,END_CUSTOMER,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),End Customer,FPComboBox,EndCustomerByDivisionDept,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Bod,FREIGHT_FORWARDER,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Freight Forwarder,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Bod,FROM_SITE,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),From Site,FPComboBox,FromSiteByDivision,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Bod,HUB_SLOC,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Hub Sloc,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Bod,INCOTERMS,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Incoterms,FPComboBox,Incoterms,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),40,Y,L,,,
+Bod,LAST_UPDATED_BY,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Updated By,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,C,,,
+Bod,LAST_UPDATE_DATE,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Update Date,FPDateTime,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,C,,,
+Bod,LT_TOTAL,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Total,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Bod,PERIOD1_LT,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Plant to CY,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Bod,PERIOD2_LT,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),CY to CY,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Bod,PERIOD3_LT,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),CY to Dest.,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Bod,PERIOD_SHIPSCH_FRI,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Fri,FPComboBox,YesOrNo,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),40,Y,C,,,
+Bod,PERIOD_SHIPSCH_MON,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Mon,FPComboBox,YesOrNo,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),40,Y,C,,,
+Bod,PERIOD_SHIPSCH_SAT,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Sat,FPComboBox,YesOrNo,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),40,Y,C,,,
+Bod,PERIOD_SHIPSCH_SUN,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Sun,FPComboBox,YesOrNo,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),40,Y,C,,,
+Bod,PERIOD_SHIPSCH_THU,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Thu,FPComboBox,YesOrNo,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),40,Y,C,,,
+Bod,PERIOD_SHIPSCH_TUE,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Tue,FPComboBox,YesOrNo,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),40,Y,C,,,
+Bod,PERIOD_SHIPSCH_WED,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Wed,FPComboBox,YesOrNo,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),40,Y,C,,,
+Bod,POD,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),To Port,FPComboBox,PortBySite,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),60,Y,L,,,
+Bod,POD_CLEARANCE_LT,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Pod Clearance,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Bod,POL,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),From Port,FPComboBox,PortBySite,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),60,Y,L,,,
+Bod,POL_CLEARANCE_LT,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Pol Clearance,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Bod,PRIORITY,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Priority,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),60,Y,L,,,
+Bod,SAFETY_STOCK,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Safety Stock,FPNumber,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,R,1,,
+Bod,TO_SITE,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),To Site,FPComboBox,SiteByEndCustomer,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Bod,TRANSPORT_MODE,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Ship Method,FPComboBox,TransportMode,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Bod,VALID_YN,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod),Active,FPComboBox,YesOrNo,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),45,Y,C,,,
+Bod Item,BOD_ID,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod Item),BOD ID,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Bod Item,DIVISION_ID,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod Item),Div*,FPComboBox,Division,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),30,Y,C,,,
+Bod Item,EFF_END_DATE,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod Item),EFF End Date,FPDate,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,Y,C,,,
+Bod Item,EFF_START_DATE,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod Item),EFF Start Date,FPDate,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,Y,C,,,
+Bod Item,FROZEN_PERIOD,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod Item),Frozen Period,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,L,,,
+Bod Item,ITEM_ID,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod Item),Model,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),100,Y,L,,,
+Bod Item,LAST_UPDATED_BY,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod Item),Updated By,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,C,,,
+Bod Item,LAST_UPDATE_DATE,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod Item),Update Date,FPDateTime,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),120,Y,C,,,
+Bod Item,LOT_SIZE,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod Item),Lot Size,FPText,,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),80,Y,L,,,
+Bod Item,VALID_YN,META,,META SCM_MST_SHEET_COLUMNS(DM0015/Bod Item),Active,FPComboBox,YesOrNo,Restricted,프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909),45,Y,C,,,

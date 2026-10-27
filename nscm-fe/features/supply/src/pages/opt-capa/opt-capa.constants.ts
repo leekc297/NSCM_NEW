@@ -53,32 +53,32 @@ export type GridSheet =
   | SHEETS.YLD_ELEC;
 
 /**
- * 탭 순서 = AS-IS `CreateSpread` 의 `AddSheet` 순서(cs:565-599).
- * 주의: Division 변경 시 복원 목록 `_spdSheets`(cs:269-277)는 idx 5·6 이 뒤바뀐 별개 배열이지만,
- *   제외목록 단일 원천으로 파생하면 순서는 이 배열 하나로 통일된다(design 01 R13·R14).
+ * 탭 순서 — **운영 AS-IS 화면 캡처 기준**(사용자 지시 2026-10-20: 스테일 소스보다 실화면 우선).
+ * 구 소스 `CreateSpread` AddSheet 순서(Daily Capa 2번째)와 달리, 운영 AS-IS 는
+ *   No Work · SOP/EOP · Ramp-up(From/To) · Ramp-up(Interval) · Daily Capa · Utilization Rate ·
+ *   Preparation Rate · Yield(Elec.) 순이다(전체 노출 div 캡처 EE_HD/EE_HG/81_HD/EE_HM/81_ST/EE_ST).
  */
 export const GRID_SHEETS: readonly GridSheet[] = [
   SHEETS.NO_WORK,
-  SHEETS.DAILY_CAPA,
   SHEETS.SOP_EOP,
   SHEETS.RAMP_UP,
   SHEETS.RAMP_UP_ITVL,
-  SHEETS.PREP_RT,
+  SHEETS.DAILY_CAPA,
   SHEETS.UTIL_RT,
+  SHEETS.PREP_RT,
   SHEETS.YLD_ELEC,
 ];
 
 /**
- * Division 변경 시 빠진 탭을 다시 붙이는 순서 — AS-IS `_spdSheets`(cs:269-277).
- * `GRID_SHEETS`(진입 시 `CreateSpread` 순서)와 달리 Utilization Rate 가 Preparation Rate 보다 앞이다.
- * AS-IS 는 제외됐다가 돌아온 탭을 이 순서로 **맨 뒤에** 덧붙여, 탭 순서가 Division 이동 이력에 따라 달라진다.
+ * Division 변경 시 빠진 탭을 다시 붙이는 순서 — 탭 순서는 운영 AS-IS 캡처 기준으로 `GRID_SHEETS` 와 통일.
+ * 제외됐다가 돌아온 탭도 같은 순서로 끼워 탭 위치가 Division 이동과 무관하게 일정하다(design 01 R13·R14).
  */
 export const SPD_SHEET_ORDER: readonly GridSheet[] = [
   SHEETS.NO_WORK,
-  SHEETS.DAILY_CAPA,
   SHEETS.SOP_EOP,
   SHEETS.RAMP_UP,
   SHEETS.RAMP_UP_ITVL,
+  SHEETS.DAILY_CAPA,
   SHEETS.UTIL_RT,
   SHEETS.PREP_RT,
   SHEETS.YLD_ELEC,
@@ -256,6 +256,38 @@ export const COLUMN = {
   PRE_KEY_VALUES: 'PRE_KEY_VALUES',
 } as const;
 
+// ====================================================================================
+// No Work 탭 Bucket(Day/Week) 모드 — AS-IS 조회조건 Bucket 콤보
+// ====================================================================================
+/**
+ * No Work 탭 전용 조회조건 Bucket — AS-IS 는 활성 시트가 No Work 일 때만 노출한다(스크린샷 2종 실측).
+ * Day: `noWork` GET/SAVE SP + 전체 컬럼. Week: `noWorkWeek` GET/SAVE SP + 서브셋 컬럼.
+ * Week 백엔드는 이미 배포·등록됨(`PKG_SCP0126.P_SCP0126_GET/SAVE_NO_WORK_WEEK`, PROC_M 10/12,
+ * `SCM_ADM_MNU_BTN_MPG_M` noWorkWeek 2버튼 — ora.py 실측 2026-10-20).
+ */
+export enum BUCKET {
+  DAY = 'Day',
+  WEEK = 'Week',
+}
+
+/** Bucket 콤보 옵션 — AS-IS 콤보 표시값 'Day'/'Week' 리터럴(LBL 미존재). */
+export const BUCKET_OPTIONS: { value: string; label: string }[] = [
+  { value: BUCKET.DAY, label: 'Day' },
+  { value: BUCKET.WEEK, label: 'Week' },
+];
+
+/**
+ * Week 모드에서 숨기는 No Work 컬럼(`colNm` 기준) — AS-IS Week 레이아웃(스크린샷) 실측.
+ * Day 는 Date·Day of Week·Week·…·Valid·Fix 전부 노출. Week 는 Date·Day of Week·Valid·Fix 를 빼고
+ * Week 컬럼만 유지한다. `noWorkWeek` 전용 컬럼 메타가 DB 에 없어(No Work 메타만 존재) 클라에서 숨긴다.
+ */
+export const NO_WORK_WEEK_HIDDEN_COLUMNS: readonly string[] = [
+  COLUMN.NO_WORK_DATE,
+  COLUMN.DAY_OF_WEEK,
+  COLUMN.VALID_YN,
+  COLUMN.FIX,
+];
+
 /**
  * `PRE_KEY_VALUES` 파이프 결합 순서 — **GET SP 본문 실측**(`ALL_SOURCE` PACKAGE BODY
  * 628·801·1199·1404·1605·1784·1964·2184). SAVE SP 의 `pre*` 파라미터 순서와 1:1 이라
@@ -396,6 +428,30 @@ export const DECIMAL_SCALE_COLUMNS: readonly string[] = [
 ];
 
 /**
+ * 숫자형(parse) 검증 컬럼 — AS-IS `CheckDouble`(cs:3312, `double.TryParse` 실패 시 MSG00050) 전수 이식.
+ * AS-IS 호출처: `PRDN_OPER_RT`(1642·1678)·`EFCY`(2179)·`EFCY1~4`(2430·2439·2448·2457)·`PREP_RT`(2736)·
+ * `UTIL_RT`(2992)·`ELEC_POST`(3196)·`ASSY`(3205) + `M_MIN` 인라인 TryParse(1629, 전극분기).
+ *
+ * **비숫자("abc") 입력을 저장 전 차단**한다 — `NON_NEGATIVE_COLUMNS`(OFF_TIME/LANE/CAPA)는 parse+음수를
+ * 함께 보지만 수율·효율 칸은 이 목록에서 빠져 있어 "abc" 가 그대로 저장되던 결함(ELEC_POST/ASSY 는
+ * DB 가 VARCHAR 라 2차 방어도 없음). **음수는 통과**시킨다(AS-IS CheckDouble 도 음수는 허용 — 추가
+ * 차단 금지). `M_MIN` 은 Daily Capa 전극분기 한정(`isRowConditionalLock` 축과 동일 — 호출부 `inAsisBranch`).
+ */
+export const NUMERIC_PARSE_COLUMNS: readonly string[] = [
+  COLUMN.M_MIN,
+  COLUMN.PRDN_OPER_RT,
+  COLUMN.EFCY,
+  COLUMN.EFCY1,
+  COLUMN.EFCY2,
+  COLUMN.EFCY3,
+  COLUMN.EFCY4,
+  COLUMN.PREP_RT,
+  COLUMN.UTIL_RT,
+  COLUMN.ELEC_POST,
+  COLUMN.ASSY,
+];
+
+/**
  * 셀 콤보 6종 — **FE 주입** 대상(`beginningEdit` 에서 `column.dataMap` 을 세운다).
  *
  * AS-IS 는 이 콤보들을 메타가 아니라 `SheetUtils.SetComboDataRow`(cs:3782-3828)로 **행 클릭
@@ -517,7 +573,13 @@ export const MSG = {
   INVALID_DATE: 'MSG01081',
   /** AS-IS MSG00050 → TO-BE 동일번호 미등록. 문구 등가. */
   INVALID_NUMBER: 'MSG01082',
-  PERIOD_OVERLAP: 'MSG00105',
+  /**
+   * AS-IS MSG00105("중첩된 기간이 있습니다." / "There are overlapping periods.") → TO-BE MSG00700 재매핑.
+   * MSG00105 는 TO-BE `SCM_ADM_MSG_M`·`public/locales` 양쪽 미등록이라 그대로 쓰면 빈 알럿이 뜬다
+   * (07_validation-audit V-12). MSG00700 은 3언어(KO/EN/CN) 등록된 대체 코드로, KO 문구는 AS-IS 와 동일.
+   * 형제 화면 project-route·demand-manager·delegate 가 모두 같은 재매핑을 쓴다.
+   */
+  PERIOD_OVERLAP: 'MSG00700',
   PERIOD_REVERSED: 'MSG00108',
   /** AS-IS 하드코딩 한글(소수 11자리 초과) → 등가 문구 존재. */
   DIGIT_EXCEEDED: 'MSG00165',
@@ -540,6 +602,8 @@ export const LBL = {
   LINE: 'LBL00010',
   NICK_NAME: 'LBL00767',
   MODEL: 'LBL00669',
+  /** 갭분석 C-06 — 조회조건 표준(SCP v0.5) : Nick Name · Model → Model/Nickname 한 칸 + 메1 팝업. */
+  MODEL_NICKNAME: 'LBL00618',
   SEARCH: 'LBL00112',
   EDIT: 'LBL00414',
   EXCEL_UPLOAD: 'LBL00346',

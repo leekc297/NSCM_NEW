@@ -7,6 +7,7 @@
 //   canEdit 인자로 흘러든다. ALWAYS_LOCKED_COLUMNS 는 권한 무관 항상 잠금 유지.
 
 import { CRUD_TYPE } from '@foundation/constants';
+import dayjs from '@foundation/dayjs';
 
 import {
   ALWAYS_LOCKED_COLUMNS,
@@ -18,6 +19,16 @@ type Row = Record<string, unknown>;
 
 export const s = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+
+// 저장/비교용 — FPDate 셀값(Date·'YYYY-MM-DD'·'YYYYMMDD'·시각포함)을 DB 저장형태인 'YYYYMMDD' 8자리로
+//   되돌린다. 조회 GET SP 는 FROM/TO_YYYYMMDD 를 TO_CHAR(..., 'YYYY-MM-DD') 로 반환하고(.body:164/167)
+//   FPDate 편집은 Date 객체를 쓸 수 있으나, SAVE SP 는 받은 문자열을 변환 없이 컬럼에 넣으므로(.body:337
+//   SCM_ARR_SPL_VAL → INSERT/UPDATE) 반드시 8자리로 접어야 한다 — 하이픈째 보내면 DB 오염 + pre-image
+//   WHERE(원본 8자리와 불일치)로 UPDATE/DELETE 가 0건이 된다. 자매 SCP0127 toYmd8 과 동일 로직.
+export const toYmd8 = (v: unknown): string => {
+  if (v instanceof Date) return dayjs(v).format('YYYYMMDD');
+  return s(v).replace(/\D/g, '').slice(0, 8);
+};
 
 // 신규행 판정 — GridAction.addRow 가 붙이는 CRUD_TYPE='I'.
 export const isNewRow = (row: Row): boolean => s(row.CRUD_TYPE) === CRUD_TYPE.INSERT;
@@ -42,7 +53,9 @@ export const isCellEditable = (binding: string, row: Row, isEditMode: boolean): 
 // ITEM_ID 팝업 오픈 대상 셀 — 신규행/편집모드 공통.
 export const isItemPopupCell = (binding: string): boolean => binding === 'ITEM_ID';
 
-// 신규행 기본값(design 01 §2#6 / 03 §1 #1각주,#3.2) — DIVISION_ID=확정 조회조건 division(항상잠금).
+// 신규행 기본값(AS-IS Insert_Row .cs:566~568 SetValue defaultData) — DIVISION_ID=확정 조회조건 division(항상잠금),
+//   VALID_YN="Y"·VAL_TP_CD="A" 자동 세팅. VAL_TP_CD 는 신규행 잠금 컬럼(NEW_ROW_LOCKED_COLUMNS)이라
+//   자동세팅 전용(사용자 변경 불가) — 이후 수량 셀 편집 시 applyValTpCdDerivation 이 일반쌍="A"/주말쌍="B"로 덮는다.
 //   나머지 EDITABLE_COLUMNS 는 공란(사용자 입력), 감사4칸/PRE_KEY_VALUES 는 서버/시스템 처리 영역.
 export const insertDefaults = (division: string): Row => ({
   DIVISION_ID: division,
@@ -61,7 +74,8 @@ export const insertDefaults = (division: string): Row => ({
   SUN_SIPM_MIN_QTY: '',
   SUN_SIPM_MAX_QTY: '',
   VALUE_DESCRIPTION: '',
-  VALID_YN: '',
+  VALID_YN: 'Y',
+  VAL_TP_CD: 'A',
 });
 
 // 파생: ITEM 팝업 선택 -> ITEM_ID 동기(design 03 §3 #13 SetText).

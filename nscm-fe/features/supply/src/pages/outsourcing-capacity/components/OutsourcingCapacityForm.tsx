@@ -148,9 +148,8 @@ export const OutsourcingCapacityForm = ({ onSearch, onItemSearch }: Props) => {
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}

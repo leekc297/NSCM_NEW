@@ -14,6 +14,24 @@
   min-height: 0;
 }
 
+.popupSearchRow {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: 4px;
+  width: 100%;
+
+  // 입력칸은 남은 폭을 채우고, 버튼은 줄바꿈 없이 오른쪽에 고정
+  & > :first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  & > button {
+    flex: 0 0 auto;
+  }
+}
+
 .buttonWrapper {
   display: flex;
   justify-content: flex-end;

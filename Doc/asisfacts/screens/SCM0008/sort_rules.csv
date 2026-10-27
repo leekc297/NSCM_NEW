@@ -1,0 +1,10 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCM0008,SQL,UP_FX_SaveReqAuthAddMyList,Doc\asisfacts\db\modules\dbo.UP_FX_SaveReqAuthAddMyList.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0008,SQL,UP_FX_DeleteReqAuthAddedMyList,Doc\asisfacts\db\modules\dbo.UP_FX_DeleteReqAuthAddedMyList.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0008,SQL,UP_FX_GetReqAuthGroupInfo,Doc\asisfacts\db\modules\dbo.UP_FX_GetReqAuthGroupInfo.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0008,SQL,UP_FX_GetNewUserAuthRequestList,Doc\asisfacts\db\modules\dbo.UP_FX_GetNewUserAuthRequestList.sql,33,,DIVISION_ID,ORDER BY DIVISION_ID,0,정적
+SCM0008,SQL,UP_FX_GetNewUserAuthRequestList,Doc\asisfacts\db\modules\dbo.UP_FX_GetNewUserAuthRequestList.sql,72,,PLANT_ID,ORDER BY S.PLANT_ID,0,정적
+SCM0008,SQL,UP_FX_GetNewUserAuthRequestList,Doc\asisfacts\db\modules\dbo.UP_FX_GetNewUserAuthRequestList.sql,88,,END_CUSTOMER,ORDER BY END_CUSTOMER ASC,0,정적
+SCM0008,SQL,UP_FX_GetReqAuthMyListAdded,Doc\asisfacts\db\modules\dbo.UP_FX_GetReqAuthMyListAdded.sql,147,,"GROUP_ID,DIVISION_ID,PLANT_ID","Order by a.group_id, a.division_id, a.plant_id",0,정적
+SCM0008,SQL,UP_FX_GetReqAuthCurrentUser,Doc\asisfacts\db\modules\dbo.UP_FX_GetReqAuthCurrentUser.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0008,SQL,UP_FX_SaveReqAuthRequestMyList,Doc\asisfacts\db\modules\dbo.UP_FX_SaveReqAuthRequestMyList.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

@@ -1,0 +1,117 @@
+﻿
+
+CREATE VIEW [dbo].[IF_SSP_ERP_EXFACTORY_RESULT_V]
+-- ================================================================================================
+-- Program ID          : IF_SSP_ERP_EXFACTORY_RESULT_V
+--
+-- Program Name        : IF_SSP_ERP_EXFACTORY_RESULT_V
+-- Param               :
+-- Batch Period        : 
+-- Description         : SSP의 ERP 출하 실적 조회
+--
+-- Source System       : SCP SDB
+-- Destination System  : FP SDB
+-- Source Table        : [dbo].[SCM_DNM_EXFACTORY_RESULT]
+-- Destination Table   : 
+--
+-- Create(Update) Date : 2022.10.11
+-- Author              : kimcd
+-- Version             : 2022-10-11	kimcd SSP에서 관리하는 ERP 출하 실적 조회
+--                       2024-03-15 chkim.68 하드코딩 전환 (ref scm_code_lookup_value )
+-- ================================================================================================
+AS
+
+-- ERP 출하실적에서 CONFIRM_ID 존재, SSP_TYPE 대상 
+SELECT  E.COMPANY_ID
+      , E.DIVISION_ID
+	  , E.SITE_ID
+	  , E.PLANT_ID
+	  , E.ITEM_ID
+	  , E.EXFACTORY_QTY     AS QTY
+	  , E.EXFACTORY_DATE    AS YYYYMMDD
+	  , TS.SITE_ID          AS TO_SITE_ID
+	  , TS.PLANT_ID         AS TO_PLANT_ID
+	  , E.SOLDTO_CODE       AS CUSTOMER_ID
+	  , E.EXFACTORY_STATUS  AS DOC_TYPE
+      , E.ORDER_NO          AS SO_NO
+	  , E.ORDER_ITEM_SEQ    AS SO_ITEM_SEQ
+	  , E.DELIVERY_NO       AS DELIVERY_NO
+	  , E.DELIVERY_ITEM_SEQ AS DELIVERY_PARTNO 
+	  , E.SYSTEM_EXFACTORY_DATE
+FROM [LGCE_SCMDEV].[DBO].[SCM_DNM_EXFACTORY_RESULT] E WITH(NOLOCK)
+     JOIN [LGCE_SCMDEV].[DBO].[SCM_ADM_LOOKUP_MASTER_DETAIL] L WITH(NOLOCK)
+         ON  L.LOOKUP_TYPE = 'ERP_SSP_TYPE' -- LOOKUP에 등록된 공정만 
+         AND L.VALID_YN    = 'Y'
+         AND L.SEGMENT1    = E.SSP_TYPE
+     JOIN [LGCE_SCMDEV].[DBO].[SCM_MST_SITE] AS S WITH(NOLOCK)
+         ON  E.FROM_SCM_SITE_ID = S.SCM_SITE_ID  
+         AND E.DIVISION_ID      = S.DIVISION_ID  
+         AND S.SITE_TYPE        = 'PLANT'  
+     LEFT OUTER JOIN [LGCE_SCMDEV].[DBO].[SCM_MST_SITE] AS TS WITH(NOLOCK)
+         ON  E.TO_SCM_SITE_ID = TS.SCM_SITE_ID  
+         AND E.DIVISION_ID    = TS.DIVISION_ID  
+         AND TS.SITE_TYPE     = 'PLANT'
+     JOIN [DBO].[SCM_ITEM_M] AS T WITH(NOLOCK)
+         ON  E.ITEM_ID     = T.ITEM_ID  
+         AND E.DIVISION_ID = T.DIVISION_ID  
+         AND S.COMPANY_ID  = T.COMPANY_ID  
+         AND T.ITEM_TYPE NOT IN ('Q','R')
+WHERE 1=1
+AND   ISNULL(E.EXFACTORY_STATUS,'D90') NOT IN ('D90' ,'D10') -- D90: DO삭제 , D10:DO생성 
+AND   E.CONFIRM_ID LIKE 'C%'
+UNION ALL
+-- ERP 출하실적에서 CONFIRM_ID 없는 실적 
+SELECT  E.COMPANY_ID
+      , E.DIVISION_ID
+	  , E.SITE_ID
+	  , E.PLANT_ID
+	  , E.ITEM_ID
+	  , E.EXFACTORY_QTY     AS QTY
+	  , E.EXFACTORY_DATE    AS YYYYMMDD
+	  , TS.SITE_ID          AS TO_SITE_ID
+	  , TS.PLANT_ID         AS TO_PLANT_ID
+	  , E.SOLDTO_CODE       AS CUSTOMER_ID
+	  , E.EXFACTORY_STATUS  AS DOC_TYPE
+      , E.ORDER_NO          AS SO_NO
+	  , E.ORDER_ITEM_SEQ    AS SO_ITEM_SEQ
+	  , E.DELIVERY_NO       AS DELIVERY_NO
+	  , E.DELIVERY_ITEM_SEQ AS DELIVERY_PARTNO 
+	  , E.SYSTEM_EXFACTORY_DATE 
+FROM [LGCE_SCMDEV].[DBO].[SCM_DNM_EXFACTORY_RESULT] E WITH(NOLOCK)
+     JOIN [LGCE_SCMDEV].[DBO].[SCM_MST_SITE] AS S WITH(NOLOCK)
+         ON  E.FROM_SCM_SITE_ID = S.SCM_SITE_ID  
+         AND E.DIVISION_ID      = S.DIVISION_ID  
+         AND S.SITE_TYPE        = 'PLANT'  
+     LEFT OUTER JOIN [LGCE_SCMDEV].[DBO].[SCM_MST_SITE] AS TS WITH(NOLOCK)
+         ON  E.TO_SCM_SITE_ID = TS.SCM_SITE_ID  
+         AND E.DIVISION_ID    = TS.DIVISION_ID  
+         AND TS.SITE_TYPE     = 'PLANT'
+     JOIN [DBO].[SCM_ITEM_M] AS T WITH(NOLOCK)
+         ON  E.ITEM_ID     = T.ITEM_ID  
+         AND E.DIVISION_ID = T.DIVISION_ID  
+         AND S.COMPANY_ID  = T.COMPANY_ID  
+         AND T.ITEM_TYPE NOT IN ('Q','R')
+     JOIN [LGCE_SCMDEV].[DBO].[SCP_MST_FINAL_ITEM] F WITH(NOLOCK) -- SCP 대상 ITEM만 
+         ON  F.ITEM_ID     = E.ITEM_ID 
+         AND F.DIVISION_ID = E.DIVISION_ID
+     JOIN [LGCE_SCMDEV].[DBO].[SCM_MST_SITE] FS WITH(NOLOCK)
+         ON  FS.SCM_SITE_ID = E.FROM_SCM_SITE_ID 
+         AND FS.DIVISION_ID = E.DIVISION_ID 
+     JOIN [LGCE_SCMDEV].[DBO].[SCM_ADM_LOOKUP_MASTER_DETAIL] L WITH(NOLOCK)
+         ON  L.LOOKUP_TYPE = 'ERP_ORDER_TYPE' -- LOOKUP에 등록된 ORDER_TYPE만 대상으로 함 
+         AND L.VALID_YN    = 'Y'
+         AND L.SEGMENT1    = E.ORDER_TYPE_CODE 
+     LEFT OUTER JOIN [LGCE_SCMDEV].[DBO].[SCM_ADM_LOOKUP_MASTER_DETAIL] L3 WITH(NOLOCK)
+         ON  L3.LOOKUP_TYPE = 'SHIP_RESULT_TO_SITE_MAPPING' --SOLDTO, SHIPTO 과 MAPPING되는 TO_SITE 
+         AND L3.SEGMENT1    = E.DIVISION_ID
+         AND L3.SEGMENT2    = E.SOLDTO_CODE
+         AND L3.SEGMENT3    = E.SHIPTO_CODE
+WHERE 1=1
+AND   ISNULL(E.EXFACTORY_STATUS,'D90') NOT IN ('D90' ,'D10') -- D90: DO삭제 , D10:DO생성 
+AND   ISNULL(E.CONFIRM_ID,'')          NOT LIKE  'C%'
+-- 하드코딩 전환
+AND   E.STORAGE_ID NOT in (SELECT SEGMENT2 FROM SCM_CODE_LOOKUP_VALUE WITH(NOLOCK) WHERE LOOKUP_TYPE_CODE='IF_SSP_ERP_EXFACTORY_RESULT_V' AND SEGMENT1  = '0' AND ACTIVE_FLAG = 'Y')--상품창고제외 
+AND   E.STORAGE_ID NOT IN (SELECT SEGMENT1 
+                           FROM   [LGCE_SCMDEV].[DBO].[SCM_ADM_LOOKUP_MASTER_DETAIL]
+                           WHERE  LOOKUP_TYPE = 'SSP_SHIP_RESULT_EXCEPT_STORAGE'
+                           AND    VALID_YN = 'Y' ) -- 사외 창고 제외 LOOKUP 관리

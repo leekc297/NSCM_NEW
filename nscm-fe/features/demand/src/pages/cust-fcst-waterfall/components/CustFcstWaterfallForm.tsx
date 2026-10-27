@@ -179,7 +179,18 @@ export const CustFcstWaterfallForm = ({
       searchButtonLabel={t('LBL00112', '_Search')}
       isHidden={!isOpenSearchArea}
       onSearch={onSubmit}
-      sx={{ flexShrink: 0 }}
+      sx={{
+        flexShrink: 0,
+        // 기간이 아닌 칸의 최소폭(공통 290px) 해제 — 이 화면은 2행에 기간 필드가 둘(Input Date / Period)이라
+        //   공통 조회조건 그리드의 칸 최소폭 합(290+388+388+290 + 간격 + 버튼)이 페이지 최소폭 1460px 을
+        //   넘어, 전체화면이 아닐 때 조회조건만 오른쪽으로 튀어나와 아래 그리드와 끝선이 어긋났다(2026-10-27).
+        //   기간 칸은 공통 388px 바닥(:has periodSplit)을 그대로 두어 날짜 겹침을 막고, 나머지 칸만 남는 폭에
+        //   맞춰 줄게 한다. 넓은 화면에서는 칸 배분(각 3칸)이 그대로라 모양이 바뀌지 않는다.
+        //   공통 규칙(.css-xxx > .MuiGrid-root)보다 특이도가 높아 !important 없이 이긴다.
+        //   주의: 근본 원인은 공통 SearchArea(cf8a4526f)의 칸 최소폭 + min-content 설정이다. 공통 쪽에서
+        //   콘텐츠 영역이 조회조건 폭만큼 넓어지게 고쳐지면 이 덮어쓰기는 지워도 된다.
+        '& .MuiGrid-container > .MuiGrid-root:not(:has([class*="periodSplit"]))': { minWidth: 0 },
+      }}
       conditions={
         <>
           {/* Row 1 — Div.* / Team / End Customer / Sales Site */}

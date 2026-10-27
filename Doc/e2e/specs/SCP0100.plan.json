@@ -3,6 +3,24 @@
   "mode": "admin",
   "modeSource": "users.json screens",
   "menuId": "SCP0100",
+  "condOrder": [
+    "Div",
+    "Cell Group",
+    "Plan Date",
+    "Plan Type",
+    "Scale",
+    "Cell Qty",
+    "A/S",
+    "From Site",
+    "To Site",
+    "Search Mode",
+    "PJT",
+    "Model/Nickname",
+    "Period",
+    "Bucket",
+    "Search Level"
+  ],
+  "condGone": [],
   "page": "GlobalPsiReport",
   "routePath": "supply/global-psi-report",
   "asisName": "Global_PSI_Report",
@@ -17,7 +35,9 @@
       "popup": false,
       "asis": "rgrpSearchLevel",
       "tobeLabel": "Search Level",
+      "catalog": "Search Level → Search Level",
       "labels": [
+        "Search Mode",
         "Search Level"
       ],
       "excluded": false,
@@ -33,6 +53,7 @@
       "popup": false,
       "asis": "chkCellQty",
       "tobeLabel": "Cell Qty",
+      "catalog": "Cell Qty → (없음) · 공통기능화 검토",
       "labels": [
         "Cell Qty"
       ],
@@ -49,6 +70,7 @@
       "popup": false,
       "asis": "cboPlanDate",
       "tobeLabel": "Plan Date",
+      "catalog": "Plan date → Plan Date",
       "labels": [
         "Plan Date",
         "Plan date"
@@ -66,6 +88,7 @@
       "popup": false,
       "asis": "cboBucketType",
       "tobeLabel": "Bucket",
+      "catalog": "Bucket → Bucket",
       "labels": [
         "Bucket"
       ],
@@ -82,6 +105,7 @@
       "popup": false,
       "asis": "dCalendar",
       "tobeLabel": "Period",
+      "catalog": "Period → Period",
       "labels": [
         "Period",
         "From",
@@ -101,11 +125,12 @@
       "popup": false,
       "asis": "cboGraphType",
       "tobeLabel": "Graph",
+      "catalog": "",
       "labels": [
         "Graph"
       ],
       "excluded": true,
-      "excludedWhy": "D00-1-007 §1 cboGraphType / UsrCombo"
+      "excludedWhy": "As-is 숨김: lblGraphType.Visibility = Never (designer.cs)"
     },
     {
       "key": "itemIds",
@@ -117,6 +142,7 @@
       "popup": true,
       "asis": "txtItemId",
       "tobeLabel": "Model/Nickname",
+      "catalog": "Model / Nick Name → Model/Nickname · 명칭/유형/팝업",
       "labels": [
         "Model/Nickname",
         "Model / Nick Name",
@@ -136,11 +162,12 @@
       "popup": false,
       "asis": "cboDisplay",
       "tobeLabel": "Display",
+      "catalog": "",
       "labels": [
         "Display"
       ],
-      "excluded": false,
-      "excludedWhy": ""
+      "excluded": true,
+      "excludedWhy": "As-is 숨김: layDisplay.Visibility = Never (designer.cs)"
     },
     {
       "key": "projectCodes",
@@ -152,7 +179,9 @@
       "popup": true,
       "asis": "txtProject",
       "tobeLabel": "Project",
+      "catalog": "Project → PJT · 명칭/유형/팝업",
       "labels": [
+        "PJT",
         "Project"
       ],
       "excluded": false,
@@ -168,6 +197,7 @@
       "popup": false,
       "asis": "clbFromSite",
       "tobeLabel": "From Site",
+      "catalog": "From Site → From Site",
       "labels": [
         "From Site"
       ],
@@ -184,6 +214,7 @@
       "popup": false,
       "asis": "clbToSite",
       "tobeLabel": "To Site",
+      "catalog": "To Site → To Site",
       "labels": [
         "To Site"
       ],
@@ -200,6 +231,7 @@
       "popup": false,
       "asis": "txtCellGroup",
       "tobeLabel": "Cell Group",
+      "catalog": "Cell Group → Cell Group",
       "labels": [
         "Cell Group"
       ],
@@ -216,6 +248,7 @@
       "popup": false,
       "asis": "cboPlanType",
       "tobeLabel": "Plan Type",
+      "catalog": "Plan type → Plan Type",
       "labels": [
         "Plan Type",
         "Plan-type"
@@ -233,6 +266,7 @@
       "popup": false,
       "asis": "cboSearchLevel",
       "tobeLabel": "Search Level",
+      "catalog": "Search Level → Search Level",
       "labels": [
         "Search Level"
       ],
@@ -249,9 +283,10 @@
       "popup": false,
       "asis": "chkAS",
       "tobeLabel": "AS",
+      "catalog": "A/S → (없음) · 공통기능화 검토",
       "labels": [
-        "AS",
-        "A/S"
+        "A/S",
+        "AS"
       ],
       "excluded": false,
       "excludedWhy": ""
@@ -266,7 +301,10 @@
       "popup": false,
       "asis": "cboUnitQty",
       "tobeLabel": "Unit (Qty)",
+      "catalog": "Unit (Qty) → Unit · 명칭",
       "labels": [
+        "Scale",
+        "Unit",
         "Unit (Qty)"
       ],
       "excluded": false,
@@ -282,9 +320,10 @@
       "popup": false,
       "asis": "clbDivision",
       "tobeLabel": "Div.",
+      "catalog": "Div → Div. · 명칭",
       "labels": [
-        "Div.",
-        "Div"
+        "Div",
+        "Div."
       ],
       "excluded": false,
       "excludedWhy": ""
@@ -295,6 +334,25 @@
     "searchLevel": "SEARCH_LEVEL",
     "searchLevelDetail": "SEARCH_LEVEL_DETAIL"
   },
+  "condCols": [
+    "PRODUCT_LEVEL1",
+    "PRODUCT_LEVEL2",
+    "PRODUCT_LEVEL3"
+  ],
+  "condLabels": [
+    "Product Level1",
+    "Product Level2",
+    "Product Level3"
+  ],
+  "headerSpec": {
+    "rows": 3,
+    "spans": 10,
+    "literals": [
+      "Qty"
+    ],
+    "maxRowPx": 32
+  },
+  "catalogScreen": "Global PSI New",
   "asisMapping": "features\\supply\\src\\pages\\global-psi-report\\__asis-mapping__.md",
   "buttons": [
     {
@@ -630,9 +688,9 @@
       "menuAccess": "Y",
       "expectedBtns": [
         "SEARCH",
-        "COLUMN_SETUP",
+        "EXCEL",
         "MEASURE_SELECT",
-        "EXCEL"
+        "COLUMN_SETUP"
       ],
       "matrix": []
     },
@@ -667,9 +725,9 @@
   "expectedBtnsByGroup": {
     "ADMIN": [
       "SEARCH",
-      "COLUMN_SETUP",
+      "EXCEL",
       "MEASURE_SELECT",
-      "EXCEL"
+      "COLUMN_SETUP"
     ],
     "SCM PI Admin": [
       "SEARCH",
@@ -685,22 +743,22 @@
     ],
     "SCP Planner": [
       "SEARCH",
-      "EXCEL",
       "MEASURE_SELECT",
-      "COLUMN_SETUP"
+      "COLUMN_SETUP",
+      "EXCEL"
     ],
     "SCP Tester": [
       "SEARCH",
-      "COLUMN_SETUP",
       "EXCEL",
+      "COLUMN_SETUP",
       "MEASURE_SELECT"
     ]
   },
   "menuBtnCodes": [
     "SEARCH",
-    "COLUMN_SETUP",
+    "EXCEL",
     "MEASURE_SELECT",
-    "EXCEL"
+    "COLUMN_SETUP"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

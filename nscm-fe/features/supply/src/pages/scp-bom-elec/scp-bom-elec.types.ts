@@ -5,7 +5,7 @@ import type { MENU_ID, SHEETS } from './scp-bom-elec.constants';
 export type ScpBomElecRow = ResponseData<MENU_ID, SHEETS.MAIN>;
 
 // 조회조건 (Form 입력 상태 — searchParams). design 02 §1 인벤토리 3행:
-//   Division(단일, 필수, 기본 '81') / Parent Item / Child Item(멀티라인 텍스트, 콤마 다중).
+//   Division(단일, 필수, 권한 콤보 첫 항목 기본선택) / Parent Item / Child Item(멀티라인 텍스트, 콤마 다중).
 export interface SearchCondition {
   divisionId: string; // 단일·필수 (R1)
   parentId: string; // 멀티라인 → 콤마 다중, 공백=전체

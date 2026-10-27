@@ -36,6 +36,7 @@ import {
   AUTH_MEASURES,
   MENU_ID,
   MSG,
+  NON_GROUPING_BINDINGS,
   SHEETS,
   UPLOAD_HEADERS,
   UPLOAD_SHEET,
@@ -352,8 +353,15 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
     }
 
+    // 수정자·수정일(NON_GROUPING_BINDINGS)은 정렬 키에서 뺀다 — 같은 그룹의 Measure 행을 갈라 놓는다.
     const sortCols = staticColumns
-      .filter(c => c.visible !== false && !!c.colNm && c.colNm !== 'NO')
+      .filter(
+        c =>
+          c.visible !== false &&
+          !!c.colNm &&
+          c.colNm !== 'NO' &&
+          !NON_GROUPING_BINDINGS.has(c.colNm)
+      )
       .map(c => c.colNm);
     const measureOrder = new Map<string, number>(staticMeasures.map((m, i) => [m.colNm, i]));
 
@@ -948,11 +956,14 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={openItem}
         modalClose={() => setOpenItem(false)}
         setSelectedValue={(
-          itemId: string,
+          itemIds: string,
           itemName?: string,
           _itemType?: string,
           nickName?: string
         ) => {
+          // 공용 Model 팝업은 여러 줄을 고르면 ITEM_ID 를 쉼표로 이어 보낸다. 이 셀은 Model 한 건만
+          //   받는 자리라 맨 위 행 하나만 쓴다 (DMF0005 와 같은 방식, 2026-10-14 사용자 요청).
+          const itemId = itemIds?.split(',')[0] ?? '';
           const target = popupRow as unknown as WijmoRowItem | null;
           if (target) {
             target['ITEM_ID'] = itemId;

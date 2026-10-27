@@ -3,14 +3,13 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import { MENU_ID, SHEETS } from './plant-site.constants';
-import { comboAllToNull, expandDivisionAll, textToNull } from './utils/plant-site.util';
+import { comboAllToNull, expandDivisionAll } from './utils/plant-site.util';
 
-// 조회조건(UI) — Division 다중('ALL' sentinel), Plant/Vendor·Plant Site 텍스트(AS-IS 패리티),
-//   OSP·Active 콤보.
+// 조회조건(UI) — Division·Plant Site 다중('ALL' sentinel), Plant/Vendor 텍스트, OSP·Active 콤보.
 interface SearchParamProps {
   divisionId: string; // 다중 콤마 or 'ALL'
-  plantVendor: string; // 자유 텍스트 — SP 가 PLANT_ID+PLANT_NAME UPPER LIKE 부분일치(design 02 §2-3)
-  plantSite: string; // 자유 텍스트 — SP 가 SCM_SITE_ID+SITE_DESCRIPTION UPPER LIKE 부분일치(design 02 §2-3)
+  plantVendor: string; // 다중 콤마 or 'ALL' — PlantVendorByDivision 콤보 선택값(CODE=PLANT_ID)
+  plantSite: string; // 다중 콤마 or 'ALL' — SP 는 아직 단일 LIKE 계약(plant-site.plantSiteCombo.ts COMBO.PLANT_SITE 주석)
   ospYn: string; // 'ALL'/'Y'/'N' — 기본 ALL
   validYn: string; // 'ALL'/'Y'/'N' — 기본 Y
 }
@@ -57,8 +56,8 @@ interface PlantSiteAction {
 
 const initSearchParams: SearchParamProps = {
   divisionId: 'ALL',
-  plantVendor: '',
-  plantSite: '',
+  plantVendor: 'ALL',
+  plantSite: 'ALL',
   ospYn: 'ALL',
   validYn: 'Y',
 };
@@ -115,9 +114,9 @@ export const usePlantSiteStore = createPersistedStoreWithTab<PlantSiteState & Pl
           //   GET SP 에 권한필터(@sesUserId)가 없어 'ALL'(UPPER(TRIM)='ALL') 이면 권한 무관 전체
           //   division 을 반환한다 → 제한 계정에서 권한 우회(design 02 §2-1, 실측 2026-10-06).
           divisionId: expandDivisionAll(sc.divisionId, auth),
-          // 텍스트 조회조건 — 빈 입력은 null(SP IS NULL=전체), 입력값은 그대로(SP UPPER LIKE).
-          plantId: textToNull(sc.plantVendor),
-          scmSiteId: textToNull(sc.plantSite),
+          // 멀티 콤보 조회조건 — 'ALL' sentinel 은 null(SP 전체), 선택값은 콤마 코드 그대로.
+          plantId: comboAllToNull(sc.plantVendor),
+          scmSiteId: comboAllToNull(sc.plantSite),
           // OSP/Active 는 'ALL' 을 그대로 보낸다 — SP 가 UPPER(TRIM)='ALL' 을 '필터 없음'으로 처리해
           //   null 과 결과 동일(실측 2026-10-06). 화면 표시(ALL)와 전송값을 일치시킨다(사용자 지시).
           ospYn: sc.ospYn || 'ALL',

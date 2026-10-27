@@ -1,0 +1,829 @@
+[
+ {
+  "screen": "SCP0126",
+  "title": "OPT CAPA",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0126_CAPA/SCP0126_CAPA.cs:4222",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0126_CAPA/SCP0126_NoWork_BatchPopup.cs:536",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0126_CAPA/SCP0126_SingleDatePopup.cs:748",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0126_CAPA/SCP0126_SingleDatePopup.designer.cs:427"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0126_CAPA/SCP0126_CAPA.Designer.cs:828",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0126_CAPA/SCP0126_NoWork_BatchPopup.Designer.cs:590"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/opt-capa"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_CAPA_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "324",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetPlanGroupByUserID",
+    "line": "358",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_DAILY_CAPA",
+    "member": "FindData_Main",
+    "line": "1257",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_NO_WORK_WEEK",
+    "member": "FindData_Main",
+    "line": "1257",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_NO_WORK",
+    "member": "FindData_Main",
+    "line": "1257",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_SOP_EOP",
+    "member": "FindData_Main",
+    "line": "1257",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_RAMP_UP",
+    "member": "FindData_Main",
+    "line": "1257",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_RAMP_UP_ITVL",
+    "member": "FindData_Main",
+    "line": "1257",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_PREP_RT",
+    "member": "FindData_Main",
+    "line": "1257",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_UTIL_RT",
+    "member": "FindData_Main",
+    "line": "1257",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_YLD_ELEC",
+    "member": "FindData_Main",
+    "line": "1257",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_NO_WORK",
+    "member": "Save_NoWork",
+    "line": "1550",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_NO_WORK_WEEK",
+    "member": "Save_NoWork_Week",
+    "line": "1736",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_DAILY_CAPA",
+    "member": "Save_DailyCapa",
+    "line": "2041",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_SOP_EOP",
+    "member": "Save_SopEop",
+    "line": "2263",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_RAMP_UP",
+    "member": "Save_Rampup",
+    "line": "2546",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_RAMP_UP_ITVL",
+    "member": "Save_Rampup_Itvl",
+    "line": "2827",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_PREP_RT",
+    "member": "Save_PrepRt",
+    "line": "3096",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_UTIL_RT",
+    "member": "Save_UtilRt",
+    "line": "3352",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_YLD_ELEC",
+    "member": "Save_YieldElec",
+    "line": "3559",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_CAPA_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "152",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_NoWork_BatchPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_NO_WORK_BATCH",
+    "member": "SaveData",
+    "line": "411",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_NoWork_BatchPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "526",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_NoWork_BatchPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_CAPA_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "324",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0121_GET_SEARCH_INFO",
+    "member": "GetPlanGroupByUserID",
+    "line": "358",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_DAILY_CAPA",
+    "member": "FindData_Main",
+    "line": "1171",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_NO_WORK_WEEK",
+    "member": "FindData_Main",
+    "line": "1184",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_NO_WORK",
+    "member": "FindData_Main",
+    "line": "1188",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_SOP_EOP",
+    "member": "FindData_Main",
+    "line": "1200",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_RAMP_UP",
+    "member": "FindData_Main",
+    "line": "1207",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_RAMP_UP_ITVL",
+    "member": "FindData_Main",
+    "line": "1214",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_PREP_RT",
+    "member": "FindData_Main",
+    "line": "1221",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_UTIL_RT",
+    "member": "FindData_Main",
+    "line": "1228",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_YLD_ELEC",
+    "member": "FindData_Main",
+    "line": "1235",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_NO_WORK",
+    "member": "Save_NoWork",
+    "line": "1550",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_NO_WORK_WEEK",
+    "member": "Save_NoWork_Week",
+    "line": "1736",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_DAILY_CAPA",
+    "member": "Save_DailyCapa",
+    "line": "2041",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_SOP_EOP",
+    "member": "Save_SopEop",
+    "line": "2263",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_RAMP_UP",
+    "member": "Save_Rampup",
+    "line": "2546",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_RAMP_UP_ITVL",
+    "member": "Save_Rampup_Itvl",
+    "line": "2827",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_PREP_RT",
+    "member": "Save_PrepRt",
+    "line": "3096",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_UTIL_RT",
+    "member": "Save_UtilRt",
+    "line": "3352",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_YLD_ELEC",
+    "member": "Save_YieldElec",
+    "line": "3559",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_CAPA.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_GET_CAPA_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "152",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_NoWork_BatchPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0126_SAVE_NO_WORK_BATCH",
+    "member": "SaveData",
+    "line": "411",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_NoWork_BatchPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "526",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0126_CAPA\\SCP0126_NoWork_BatchPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCM0001_GET_DIVISION",
+   "SCP0121_GET_SEARCH_INFO",
+   "SCP0126_GET_CAPA_SEARCH_INFO",
+   "SCP0126_GET_DAILY_CAPA",
+   "SCP0126_GET_NO_WORK",
+   "SCP0126_GET_NO_WORK_WEEK",
+   "SCP0126_GET_PREP_RT",
+   "SCP0126_GET_RAMP_UP",
+   "SCP0126_GET_RAMP_UP_ITVL",
+   "SCP0126_GET_SOP_EOP",
+   "SCP0126_GET_UTIL_RT",
+   "SCP0126_GET_YLD_ELEC",
+   "SCP0126_SAVE_DAILY_CAPA",
+   "SCP0126_SAVE_NO_WORK",
+   "SCP0126_SAVE_NO_WORK_BATCH",
+   "SCP0126_SAVE_NO_WORK_WEEK",
+   "SCP0126_SAVE_PREP_RT",
+   "SCP0126_SAVE_RAMP_UP",
+   "SCP0126_SAVE_RAMP_UP_ITVL",
+   "SCP0126_SAVE_SOP_EOP",
+   "SCP0126_SAVE_UTIL_RT",
+   "SCP0126_SAVE_YLD_ELEC"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0126_SAVE_DAILY_CAPA",
+    "sp": "SCP0126_SAVE_DAILY_CAPA",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규(I) 행의 키가 Daily Capa 표에 이미 있으면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_DAILY_CAPA",
+    "sp": "SCP0126_SAVE_DAILY_CAPA",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외(CONVERT(numeric,@v_capa) 형변환 실패 포함) 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_NO_WORK",
+    "sp": "SCP0126_SAVE_NO_WORK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규(I) 비조업 행의 키(사업부·Plant·Line·Operation·Line Type·사유 TYPE·일자)가 이미 있으면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_NO_WORK",
+    "sp": "SCP0126_SAVE_NO_WORK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "수정(M) 시 키 값을 변경했고 변경 후 키가 이미 존재하면 중복 오류로 전체 저장 중단(키 미변경 수정은 통과)",
+    "message": "수정한 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_NO_WORK",
+    "sp": "SCP0126_SAVE_NO_WORK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "QTY",
+    "desc": "저장 반영 후 입력된 각 행의 (라인·일자) 기준 TYPE 합산 Off Time 이 하루(86400초)를 넘으면 전체 롤백",
+    "message": "입력 데이터의 Off Time이 하루(1)를 초과합니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK(전체 저장 취소), SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_NO_WORK",
+    "sp": "SCP0126_SAVE_NO_WORK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외(OFF_TIME 숫자 변환 실패 포함) 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_NO_WORK_BATCH",
+    "sp": "SCP0126_SAVE_NO_WORK_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외(PK 중복 INSERT·형변환 실패 포함) 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_NO_WORK_WEEK",
+    "sp": "SCP0126_SAVE_NO_WORK_WEEK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "입력 Week Name(ISO_YYYYWW)이 달력 마스터에 없으면 오류로 전체 저장 중단(있으면 주 시작·종료일 산출)",
+    "message": "유효한 Week Name이 아닙니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_NO_WORK_WEEK",
+    "sp": "SCP0126_SAVE_NO_WORK_WEEK",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외(Off Time 숫자 변환 실패·PK 중복 포함) 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_PREP_RT",
+    "sp": "SCP0126_SAVE_PREP_RT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규(I) Preparation Rate 행 키가 이미 있으면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_PREP_RT",
+    "sp": "SCP0126_SAVE_PREP_RT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "수정(M) 시 키를 바꿨고 바뀐 키가 이미 존재하면 중복 오류",
+    "message": "수정한 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, 'F'"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_PREP_RT",
+    "sp": "SCP0126_SAVE_PREP_RT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_RAMP_UP",
+    "sp": "SCP0126_SAVE_RAMP_UP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규(I) Ramp-up 행 키가 이미 있으면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_RAMP_UP",
+    "sp": "SCP0126_SAVE_RAMP_UP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "수정(M) 시 키를 바꿨고 바뀐 키가 이미 존재하면 중복 오류",
+    "message": "수정한 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, 'F'"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_RAMP_UP",
+    "sp": "SCP0126_SAVE_RAMP_UP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_RAMP_UP_ITVL",
+    "sp": "SCP0126_SAVE_RAMP_UP_ITVL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규(I) Ramp-up Interval 행 키가 이미 있으면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_RAMP_UP_ITVL",
+    "sp": "SCP0126_SAVE_RAMP_UP_ITVL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "수정(M) 시 키를 바꿨고 바뀐 키가 이미 존재하면 중복 오류",
+    "message": "수정한 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, 'F'"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_RAMP_UP_ITVL",
+    "sp": "SCP0126_SAVE_RAMP_UP_ITVL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_SOP_EOP",
+    "sp": "SCP0126_SAVE_SOP_EOP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규(I) SOP/EOP 행 키가 이미 있으면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_SOP_EOP",
+    "sp": "SCP0126_SAVE_SOP_EOP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "수정(M) 시 키를 바꿨고 바뀐 키가 이미 존재하면 중복 오류",
+    "message": "수정한 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, 'F'"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_SOP_EOP",
+    "sp": "SCP0126_SAVE_SOP_EOP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_UTIL_RT",
+    "sp": "SCP0126_SAVE_UTIL_RT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규(I) Utilization Rate 행 키가 이미 있으면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_UTIL_RT",
+    "sp": "SCP0126_SAVE_UTIL_RT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "수정(M) 시 키를 바꿨고 바뀐 키가 이미 존재하면 중복 오류",
+    "message": "수정한 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, 'F'"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_UTIL_RT",
+    "sp": "SCP0126_SAVE_UTIL_RT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_YLD_ELEC",
+    "sp": "SCP0126_SAVE_YLD_ELEC",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규(I) Yield(Elec) 행 키가 이미 있으면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0126_SAVE_YLD_ELEC",
+    "sp": "SCP0126_SAVE_YLD_ELEC",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0127",
+  "title": "Precede/Safety Stock Day",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0127_PrecedeSafetyStockDay/SCP0127_PrecedeSafetyStockDay.cs:1138"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0127_PrecedeSafetyStockDay/SCP0127_PrecedeSafetyStockDay.Designer.cs:746"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/precede-safety-stock-day"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0127_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "207",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0127_PrecedeSafetyStockDay\\SCP0127_PrecedeSafetyStockDay.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY",
+    "member": "FindData_Main",
+    "line": "434",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0127_PrecedeSafetyStockDay\\SCP0127_PrecedeSafetyStockDay.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+    "member": "SaveData",
+    "line": "786",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0127_PrecedeSafetyStockDay\\SCP0127_PrecedeSafetyStockDay.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0127_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "207",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0127_PrecedeSafetyStockDay\\SCP0127_PrecedeSafetyStockDay.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY",
+    "member": "FindData_Main",
+    "line": "434",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0127_PrecedeSafetyStockDay\\SCP0127_PrecedeSafetyStockDay.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+    "member": "SaveData",
+    "line": "786",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0127_PrecedeSafetyStockDay\\SCP0127_PrecedeSafetyStockDay.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY",
+   "SCP0127_GET_SEARCH_INFO",
+   "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+    "sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규·수정 행의 키가 (자기 자신 이전 키 행을 제외하고) 이미 존재하면 중복 오류로 전체 저장 중단",
+    "message": "신규 입력 데이터 중 중복된 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, SELECT 'F' AS result_code; '[99010]'+메시지"
+   },
+   {
+    "entry_sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+    "sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "RANGE",
+    "desc": "같은 키 조합에서 입력 기간(From~To)이 기존 기간과 하루라도 겹치면(자기 이전 기간 제외) 기간 중복 오류",
+    "message": "입력 데이터 중 날짜가 중복되는 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code = 99010; THROW → CATCH: ROLLBACK, 'F'"
+   },
+   {
+    "entry_sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+    "sp": "SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 발생 시 롤백 후 'F' 와 오류번호·메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   }
+  ]
+ }
+]

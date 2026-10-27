@@ -1,0 +1,4464 @@
+[
+ {
+  "screen": "SCP0015",
+  "title": "Plan Management",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0015_PlanManagement/SCP0015_PlanManagement.cs:1962"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0015_PlanManagement/SCP0015_PlanManagement.Designer.cs:608"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/plan-management"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_SAVE_PLAN_MST_CANCEL",
+    "member": "CallEnginCancel",
+    "line": "600",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P3_not_in_foxquery",
+    "status": "NOT_IN_FOXQUERY"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_GET_PLAN_MST",
+    "member": "FindData_Plan",
+    "line": "998",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_GET_PLAN_ENGINE_RUN",
+    "member": "FindData_Engin",
+    "line": "1170",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_GET_PLAN_MST_COMFIRM",
+    "member": "FindData_Confirm",
+    "line": "1339",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_SAVE_PLAN_MST_COMFIRM",
+    "member": "SaveData_PlanConfirm",
+    "line": "1416",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_SAVE_PLAN_MST_STOP",
+    "member": "SaveData_PlanStop",
+    "line": "1483",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_SAVE_PLAN_MST_RUN",
+    "member": "SaveData_PlanRun",
+    "line": "1558",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_GET_PLAN_MST",
+    "member": "FindData_Plan",
+    "line": "998",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_GET_PLAN_ENGINE_RUN",
+    "member": "FindData_Engin",
+    "line": "1170",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_GET_PLAN_MST_COMFIRM",
+    "member": "FindData_Confirm",
+    "line": "1339",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_SAVE_PLAN_MST_COMFIRM",
+    "member": "SaveData_PlanConfirm",
+    "line": "1416",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_SAVE_PLAN_MST_STOP",
+    "member": "SaveData_PlanStop",
+    "line": "1483",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0015_SAVE_PLAN_MST_RUN",
+    "member": "SaveData_PlanRun",
+    "line": "1558",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0015_PlanManagement\\SCP0015_PlanManagement.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW",
+   "PR_DM_DNM_CREATE_C_WS_RTF",
+   "PR_DM_DNM_CREATE_WS_RTF",
+   "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE",
+   "PR_SCP_ANL_PSI_ELECTRODE",
+   "PR_SCP_ANL_PSI_GLOBAL",
+   "PR_SCP_ANL_PSI_GLOBAL_ESS",
+   "PR_SCP_ANL_PSI_PRODUCTION",
+   "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+   "SCP0015_GET_PLAN_ENGINE_RUN",
+   "SCP0015_GET_PLAN_MST",
+   "SCP0015_GET_PLAN_MST / SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+   "SCP0015_GET_PLAN_MST_COMFIRM",
+   "SCP0015_SAVE_PLAN_MST_CANCEL",
+   "SCP0015_SAVE_PLAN_MST_COMFIRM",
+   "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+   "SCP0015_SAVE_PLAN_MST_RUN",
+   "SCP0015_SAVE_PLAN_MST_STOP"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0015_GET_PLAN_MST",
+    "sp": "SCP0015_GET_PLAN_MST",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "AUTH",
+    "desc": "사용자가 SCP0015 메뉴 수정권한 그룹이고 해당 사업부 권한(AuthType D)이 있으면 Confirm/Run/Cancel 권한 Y, 아니면 N 반환",
+    "message": null,
+    "on_fail": "ISNULL(v.confirm_auth,'N') / ISNULL(v.run_auth,'N') / ISNULL(v.CANCEL_AUTH,'N') — 조건 불충족 시 'N' 반환"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_CANCEL",
+    "sp": "SCP0015_SAVE_PLAN_MST_CANCEL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Cancel 처리 중 오류 시 롤백 후 F 와 [오류번호]메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM",
+    "sp": "SCP0015_SAVE_PLAN_MST_COMFIRM",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Confirm·인터페이스 처리 중 오류 시 롤백 후 F 와 [오류번호]메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "같은 modeling_id·plan_type 엔진이 5분 이내 시작되어 아직 종료/오류 로그가 없으면 재실행을 막고 E 반환",
+    "message": "해당 엔진이 이미 실행 되었습니다.",
+    "on_fail": "ELSE SELECT 'E' AS result_code, 0 result_cnt; SELECT '해당 엔진이 이미 실행 되었습니다.'"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "엔진 실행 중 오류 시 오류 로그 후 F 와 [오류번호]메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_STOP",
+    "sp": "SCP0015_SAVE_PLAN_MST_STOP",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Stop 처리 중 오류 시 오류 로그 후 F 와 [오류번호]메시지 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_CONTROL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "엔진 Input/Output 생성 하위 프로시저가 음수(-1)를 반환하면 계획을 오류 종료 처리",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE(L896-931): ERROR 로그, scm_mst_plan_detail SET plan_status='-1', normal_complete_yn='N'; SMS 20 전송(SCM_ADM_SMS_SEND_BATCH 20); RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_CONTROL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "사용자가 계획 중지(Stop)한 경우 각 단계 사이에서 계획을 중단",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE (plan_status='-1', SMS 20, RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_CONTROL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "Input 생성 후 20분(1200초) 내에 엔진이 시작(P)되지 않으면 오류 종료",
+    "message": "Engine Not Started... ",
+    "on_fail": "ERROR 로그 'Engine Not Started... '; SET @rows = -1; GOTO _RETURN_ERR_CODE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_CONTROL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "엔진 시작 후 누적 180분(10800초) 내에 완료(C)되지 않으면 오류 종료",
+    "message": "Engine Not Completed... ",
+    "on_fail": "ERROR 로그 'Engine Not Completed... '; SET @rows = -1; GOTO _RETURN_ERR_CODE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_CONTROL",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "실행 중 예외 발생 시 계획 상태를 오류로 기록하고 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그; scm_mst_plan_detail plan_status='-1', normal_complete_yn='N'; SMS 20; RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_INTERFACE_PLAN",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "유효한(전지) 사업부가 아니면 외부 인터페이스 처리를 하지 않음",
+    "message": null,
+    "on_fail": "RETURN; (반환값 0, 로그 없음)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_INTERFACE_PLAN",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "하위 인터페이스 SP 중 하나라도 음수 반환 시 나머지는 계속 수행한 뒤 최종적으로 -1 반환",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: RETURN -1 (오류 로그 없음)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_INTERFACE_PLAN",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그(PR_SCM_SYS_LOG_BATCH_CALL_TRAN) 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "FN_NEXT_DAY",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "FORMAT",
+    "desc": "요일 코드가 SUN~SAT 이 아니면 NULL 반환(계산 중단)",
+    "message": null,
+    "on_fail": "RETURN NULL"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "전극(EE) 사업부 RTF 는 반영하지 않으므로 즉시 종료",
+    "message": "EE는 반영하지 않으므로 프로시져 수행하지 않고 종료함",
+    "on_fail": "SET @v_log_type = 'INVALID'; SELECT N'EE는 반영하지 않으므로 프로시져 수행하지 않고 종료함'; GOTO ERR_RTN"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "사업부 마스터에 없거나 PLAN_ID 를 확보하지 못하면 처리 중단(로그만)",
+    "message": null,
+    "on_fail": "SET @v_log_type = 'INVALID'; @v_description 세팅; GOTO ERR_RTN"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 결과셋 반환·로그",
+    "message": "'[[[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()",
+    "on_fail": "SELECT '[[[' + ERROR_NUMBER + ']' + ERROR_MESSAGE(); ERROR 로그 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "GOTO ERR_RTN(L175 EE, L775 사업부/PLAN_ID 무효) 도착 시 INVALID 종료 로그",
+    "message": null,
+    "on_fail": "INVALID 로그 + END 로그(ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "81/82 사업부는 기타매출 추가 룩업(DM_SALES_PLAN_WATERFALL_SP_W_ADD)이 없으면 컷오프 전체를 중단",
+    "message": "MODEL : (CHAR(10))DM_SALES_PLAN_WATERFALL_SP_W_ADD IS NOT",
+    "on_fail": "SET @V_LOG_TYPE='INVALID'; SELECT 'MODEL : ' + @S_BLOCK_MODEL + CHAR(10) + N'DM_SALES_PLAN_WATERFALL_SP_W_ADD IS NOT'; GOTO ERR_RTN (INVALID 로그 후 종료, 컷오프 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 메시지 결과셋 반환 후 로그",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE(); PR_SCM_SYS_LOG_BATCH 'ERROR' (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCM_MST_PLAN_FP_RELEASE_ID",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 후 로그(결과셋 없음)",
+    "message": null,
+    "on_fail": "IF @@TRANCOUNT > 0 ROLLBACK; EXEC PR_SCM_SYS_LOG_BATCH(ERROR, 'ERROR_LINE : ...' + @p_plan_name)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_BOD_N_V_PLAN_H",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 기록 후 F 결과코드와 오류 메시지 결과셋 반환",
+    "message": "F / [ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CELL_TRAY_SIMULATION",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "회수포장재 시뮬레이션 생성 중 예외 시 오류 메시지 결과셋 2개 출력·로그 후 -1 반환",
+    "message": null,
+    "on_fail": "select 'ERROR JJG-Catch'; select @jjgv_log_message; PR_SCP_SYS_LOG_BATCH ERROR(@V_STATUS_DESC 포함) 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "Plan Type 이 'SP' 이면 ANL(UI) 데이터 생성을 수행하지 않고 -1 반환",
+    "message": null,
+    "on_fail": "return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "시작 시점 계획 상태가 -2(중단/오류 상태)이면 즉시 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(출하계획/요청(SEMI)) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(생산계획 Requirement) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(생산계획) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(생산계획 수율/EOH) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(PSI) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(PRODUCTION AMEND(소형·PR 플랜만)) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(Problem Report Demand) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(Problem Report Pegging) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(출하계획/요청(FG)) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(Global PSI(SCM_MST_DIVISION.ATTRIBUTE3 IN ('81','82'))) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(Global PSI 소형) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(Global PSI ESS) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(Problem Report Desc) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(Tact Time) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(Working Time) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(PSI 전극(ATTRIBUTE3='EE')) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(전극 UI 조회 데이터(ATTRIBUTE3='EE')) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP(SCP Simulator 데이터) 가 음수 반환하거나 계획 상태가 -2 로 바뀌면 ANL 생성 중단 후 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (이후 단계 미수행)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "ANL 생성 전체 흐름에서 예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PRODUCTION_PLAN_CUTOFF",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Cutoff 생성 중 예외 시 롤백·오류메시지 결과셋·로그(반환코드 없음)",
+    "message": null,
+    "on_fail": "SELECT '['+ERROR_NUMBER()+']'+ERROR_MESSAGE(); ROLLBACK TRANSACTION PR_SCP_PRODUCTION_PLAN_CUTOFF; ERROR 로그 (RETURN 없음)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG_CUTOFF",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 메시지 결과셋 반환 후 롤백·로그",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE(); ROLLBACK TRANSACTION PR_SCP_SHIPMENT_PLAN_FG_CUTOFF; ERROR 로그"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI_CUTOFF",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 메시지 결과셋 반환 후 롤백·로그",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE(); ROLLBACK TRANSACTION PR_SHIPMENT_PLAN_SEMI_CUTOFF; ERROR 로그"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "기준이 될 이전 단계 계획(Confirm 또는 정상종료)이 없으면 Input 생성을 중단",
+    "message": "데이터가 존재하지 않습니다 / CONFIRM FLAG = [Y], DIVISION_ID = [..], PLAN_ID = [..], PLAN_TYPE = [..]인 데이터가 존재하지 않습니다. (plan_type 이 MA/SE/FN/TM 이 아니면 '…PLAN_TYPE는 [MA, SE, FN, TM]중 하나의 값으로 입력해야 합니다.')",
+    "on_fail": "ERROR 로그(PR_SCM_SYS_LOG_BATCH) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "사용자가 계획 중지한 경우 Input 생성 단계 사이에서 중단",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE (th_mst_eng_plan_flag_sn.inbound_flag='E', plan_detail plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "엔진 Input 생성 하위 프로시저가 음수를 반환하면 Input 생성 실패 처리",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE(L702-743): th_mst_eng_plan_flag_sn.inbound_flag='E', scm_mst_plan_detail plan_status='-1', ERROR 로그, RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 엔진 Flag/계획 상태를 오류로 기록하고 -1 반환",
+    "message": null,
+    "on_fail": "inbound_flag='E', plan_detail plan_status='-1', ERROR 로그, RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "사용자가 계획을 중지(상태<0)하면 Pre 단계 진행을 중단하고 오류 처리",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: th_mst_eng_plan_flag_sn.inbound_flag='E', scm_mst_plan_detail.plan_status='-1', ERROR 로그, RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "하위 Pre 처리 SP 가 음수를 반환하면 이후 단계를 건너뛰고 실패 플래그 세팅 후 -1 반환",
+    "message": "ERROR_MESSAGE() (CATCH 밖이라 NULL)",
+    "on_fail": "_RETURN_ERR_CODE(L539~578): inbound_flag='E', plan_status='-1', ERROR 로그, RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 엔진 플래그·Plan Detail 상태를 실패로 갱신 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "inbound_flag='E', plan_status='-1' UPDATE, ERROR 로그, RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "REQUIRED",
+    "desc": "직전 Plan Type/Seq(또는 Plan ID) 를 못 찾으면 실행 중단",
+    "message": "데이터가 존재하지 않습니다 / CONFIRM FLAG = [Y], DIVISION_ID = [..], PLAN_ID = [..], PLAN_TYPE = [..]인 데이터가 존재하지 않습니다. 또는 PLAN_TYPE는 [MA, SE, FN, TM]중 하나의 값으로 입력해야 합니다.",
+    "on_fail": "ERROR 로그(PR_SCM_SYS_LOG_BATCH) 후 RETURN -1 (plan_detail/flag 생성 전 종료)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "사용자가 Plan 을 중지하면 Input 생성 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: th_mst_eng_plan_flag_sn.inbound_flag='E', scm_mst_plan_detail.plan_status='-1', ERROR 로그, RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "하위 Input 생성 SP 중 하나라도 -1 반환 시 전체 중단·실패 표시",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE(L791~830): inbound_flag='E', plan_status='-1', ERROR 로그, RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 Plan 실패 상태 기록 후 -1",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "inbound_flag='E', plan_status='-1' UPDATE, ERROR 로그, RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "사용자가 계획 중지 시(Plan Status<0) 시작 전 중단",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패(-1) 시 이후 단계 중단·실패 플래그 처리",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: th_mst_eng_plan_flag_sn.inbound_flag='E', scm_mst_plan_detail.plan_status='-1', ERROR 로그, RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "사용자 중지 여부 재확인(BOM 생성 후)",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "사용자 중지 여부 재확인(Site/BOD/재고 SET 후)",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "사용자 중지 여부 재확인(BOD_PATTERN 후)",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "사용자 중지 여부 재확인(SALES_PRODUCT_MAP 후)",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "사용자 중지 여부 재확인(ITEM_BOD_CAL 후)",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "사용자 중지 여부 재확인(BUCKET_RES_CAPA 후)",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "사용자 중지 여부 재확인(OP_RES_GROUP_MAP_CAL 후)",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "사용자 중지 여부 재확인(FIXED_PLAN_PROD 후)",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "소형 Setup Matrix 생성 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "하위 SP 실패 시 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "사용자 중지 여부 재확인(CUSTOM 후, 완료 Flag 갱신 직전)",
+    "message": null,
+    "on_fail": "SET @rows = -1; GOTO _RETURN_ERR_CODE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 엔진 Flag 오류·계획 상태 -1 처리 후 -1 반환 → 부모 PR_SCP_ENG_CONTROL 이 IF @rows<0 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "th_mst_eng_plan_flag_sn.inbound_flag='E', scm_mst_plan_detail.plan_status='-1', ERROR 로그, RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "엔진 후처리 SP 가 음수를 반환하면 Output 이관을 중단하고 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → IF @rows < 0 RETURN -1 (이후 Transfer·plan_detail UPDATE·COMMIT 생략)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "Output 이관 하위 SP 중 하나라도 -1(CATCH) 을 반환하면 이후 이관을 중단하고 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (남은 하위 SP 미실행, plan_output_end_date UPDATE·COMMIT 생략)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_ALL",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_IF_SCS_PROD_TARGET",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCP_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_IF_SCS_SHIP_TARGET",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCP_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_MST_CAPA_PROD_PLAN_APPLY",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RANGE",
+    "desc": "자동 실행은 해당 월 기준 목요일이 포함된 주의 화~금에만 SCP FN 생산계획을 Capa 에 반영하고 그 외 날짜는 아무 것도 하지 않음",
+    "message": null,
+    "on_fail": "조건 불충족 시 본 처리(L149-1270) 전체 미수행 후 정상 종료(오류 아님)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_MST_CAPA_PROD_PLAN_APPLY",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 현재 버전 트랜잭션 롤백·오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; 커서 CLOSE/DEALLOCATE; PR_SCP_SYS_LOG_BATCH 'ERROR' 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_MST_CAPA_PROD_PLAN_APPLY_ELTR",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RANGE",
+    "desc": "수동실행이 아니면 '마지막 주 목요일(또는 lookup CPS_BATCH_CRTN_THURSDAY 지정일)이 포함된 주의 화~금' 기간에만 SCP FN 생산계획 반영을 수행하고, 기간 밖이면 아무 것도 하지 않음",
+    "message": null,
+    "on_fail": "본 처리 블록(L151~L1404) 전체 미실행 → 임시테이블 정리 후 END 로그, RETURN 1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_MST_CAPA_PROD_PLAN_APPLY_ELTR",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 시 트랜잭션 롤백·커서 정리·오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블에만 기록)",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; 커서 CLOSE/DEALLOCATE; PR_SCP_SYS_LOG_BATCH ERROR 로그; RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_MST_LOSS_TIME_COPY_FROM_FP",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Loss Time 복사 중 예외 시 롤백 후 오류 로그만 남김",
+    "message": "ERROR_MESSAGE() (로그 테이블에만 기록)",
+    "on_fail": "IF @@TRANCOUNT > 0 ROLLBACK; PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE, ERROR_LINE) 후 END 로그로 정상 종료"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_MST_TACT_TIME_EXCEPT_COPY_FROM_FP",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블에만 기록)",
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 은 주석 L1135-1138)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_MST_WORKING_TIME_COPY_FROM_FP",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Working Time 복사 중 예외 시 롤백 후 오류 로그만 남김",
+    "message": "ERROR_MESSAGE() (로그 테이블에만 기록)",
+    "on_fail": "IF @@TRANCOUNT > 0 ROLLBACK; PR_SCM_SYS_LOG_BATCH ERROR 로그 후 END 로그로 정상 종료"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_ASSEMBLY_YIELD_AVG",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그; return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "Plan Type 이 SP 이면 PLN 데이터 반영을 수행하지 않고 -1 반환",
+    "message": null,
+    "on_fail": "return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "착수 시점 계획 상태가 -2(중단/오류 상태)이면 하위 반영 SP 를 호출하지 않고 오류 종료",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: ERROR 로그(PR_SCP_SYS_LOG_BATCH) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "ENG OUT TEMP 적재 SP 실패(-1) 또는 계획 상태 -2 이면 이후 단계 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "엔진 Stock Plan 보관 SP 실패 또는 계획 상태 -2 이면 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "출하계획 반영 SP 실패 또는 계획 상태 -2 이면 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "생산계획 반영 SP 실패 또는 계획 상태 -2 이면 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "Material Plan 호출은 주석(2018.06.12 임시중지)이나 상태 재확인·분기 판정은 실행됨",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "Plant On-hand 반영 SP 실패 또는 계획 상태 -2 이면 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "BOH Assign SP 실패 또는 계획 상태 -2 이면 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "Sales On-hand 반영 SP 실패 또는 계획 상태 -2 이면 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "Allocation SP 실패 또는 계획 상태 -2 이면 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_CREATE_DATA",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그(PR_SCP_SYS_LOG_BATCH, ERROR_MESSAGE/ERROR_LINE) 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_ELEC_DEMAND_CELL_PLAN",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그(PR_SCP_SYS_LOG_BATCH) 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_ELEC_YIELD_AVG",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_FP_PROD_TARGET",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "해당 주차 인터페이스 여부가 N 으로 설정되어 있으면 FP 생산 Target 전송 생략",
+    "message": null,
+    "on_fail": "RETURN; (반환값 0, 로그 없음)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_FP_PROD_TARGET",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그(PR_SCM_SYS_LOG_BATCH_CALL_TRAN) 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_FP_SHIP_TARGET",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "해당 주차 FP Target 인터페이스 여부 N 이면 출하 Target 전송 생략",
+    "message": null,
+    "on_fail": "RETURN; (반환값 0, 로그 없음)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_FP_SHIP_TARGET",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_MRP_PROD_TARGET_NERP_CREATE",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "해당 주차 MRP Target 인터페이스 여부가 N 이면 생성 생략",
+    "message": "SCP_PLN_INTERFACE_YN에 N으로 셋팅시 수행안함",
+    "on_fail": "END 로그 후 RETURN;"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_MRP_PROD_TARGET_NERP_CREATE",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "REQUIRED",
+    "desc": "필수 파라미터(사업부·시작일·Plan Type·Seq) 누락 시 처리 중단",
+    "message": "PARAM ERROR",
+    "on_fail": "PARAM 로그 후 RETURN;"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_PEGGING_PLAN",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_RPT_DIO_TREND_MM",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 시 트랜잭션 롤백 후 배치 로그 기록하고 -1 반환",
+    "message": null,
+    "on_fail": "ROLLBACK + PR_SCP_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE, ERROR_LINE) + PRINT + RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_RPT_GLOBAL_PSI_MD_MM",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 시 롤백 후 배치 오류 로그 기록, -1 반환",
+    "message": null,
+    "on_fail": "ROLLBACK + PR_SCP_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE, ERROR_LINE) + PRINT + RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_RPT_GLOBAL_PSI_MD_WW",
+    "depth": 2,
+    "cls": "D 검증리포트형",
+    "check_type": "CONSISTENCY",
+    "desc": "월말재고 SLOC→measure 매핑 규칙 불일치 재고를 MISMATCH_INV(미매칭 재고)로 표시",
+    "message": null,
+    "on_fail": "시뮬레이터 measure·공정·제품구분 조합이 규칙에 맞지 않는 월말재고는 'MISMATCH_INV' 측정값으로 분리 적재"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_RPT_GLOBAL_PSI_MD_WW",
+    "depth": 2,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "Plant·SLOC 가 SLOC_ADD_INFO 룩업에 미등록된 반제품/제품 재고를 미매칭 재고로 별도 표시",
+    "message": null,
+    "on_fail": "SLOC 룩업 미등록 재고를 OPERATION/SITE '-' 의 'MISMATCH_INV' 행으로 INSERT"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_RPT_GLOBAL_PSI_MD_WW",
+    "depth": 2,
+    "cls": "D 검증리포트형",
+    "check_type": "CONSISTENCY",
+    "desc": "저장위치 정보 없는 재고의 품목유형 판별 불가 시 미매칭 재고로 표시",
+    "message": null,
+    "on_fail": "SLOC·DESC 공백 재고 중 품목유형이 제품/반제품이 아니면 'MISMATCH_INV' 로 분류"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_RPT_GLOBAL_PSI_MD_WW",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 및 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() / 'ERROR_LINE : ' + STR(ERROR_LINE())",
+    "on_fail": "트랜잭션 롤백 후 ERROR 로그(ERROR_MESSAGE, ERROR_LINE) 기록, RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_RPT_GLOBAL_PSI_STD_DIO",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "MERGE 중 예외 발생 시 트랜잭션 롤백 후 배치 로그에 오류 기록하고 -1 반환",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; EXEC PR_SCP_SYS_LOG_BATCH (ERROR, ERROR_MESSAGE, ERROR_LINE); RETURN -1;"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SSP_ANL_SHIP_REQ_FG",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "81_UC(UC) 사업부는 FG Shipment Request 생성 제외 (2024.11 FP Pjt.)",
+    "message": null,
+    "on_fail": "return 0"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SSP_ANL_SHIP_REQ_FG",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "SCP I/F Blocking(FP Target YN='N') 등록 주차는 Shipment Request 자동 생성 안 함",
+    "message": null,
+    "on_fail": "차단 건이 있으면 전체 생성 로직 skip(조용히 COMMIT)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SSP_ANL_SHIP_REQ_FG",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "RUNNING",
+    "desc": "같은 계획주차 재실행 방지(하루 여러 번 호출되므로 완료 이력 확인), 완료 시 L681 에서 SEGMENT2 갱신",
+    "message": null,
+    "on_fail": "이미 해당 Plan Start 로 실행 완료 이력이 있으면 skip"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SSP_ANL_SHIP_REQ_FG",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "REQUIRED",
+    "desc": "해당 plan_id 의 WEEKLY FN Plan 버전이 없으면 생성하지 않음",
+    "message": null,
+    "on_fail": "FN 확정 Plan(SCP_PLAN_VERSION_V, plan_id) 이 없으면 skip"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SSP_ANL_SHIP_REQ_FG",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "유효한 40/81/82 계열 사업부만 처리",
+    "message": null,
+    "on_fail": "유효 대상 사업부가 아니면 skip"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SSP_ANL_SHIP_REQ_FG",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 롤백 후 F 결과셋 반환",
+    "message": "'[' + CONVERT(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "ROLLBACK TRANSACTION; SCM_SYS_LOG_BATCH ERROR INSERT; SELECT 'F' AS RESULT_CODE, '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE() AS ERR_MESSAGE"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SSP_ANL_SHIP_REQ_P",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "SCP I/F Blocking 주차는 Packer Ship Req 생성 안 함",
+    "message": null,
+    "on_fail": "차단 건 있으면 생성 로직 skip"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SSP_ANL_SHIP_REQ_P",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 롤백·로그",
+    "message": "ERROR_MESSAGE() (로그만)",
+    "on_fail": "ROLLBACK TRANSACTION; PR_SCP_SYS_LOG_BATCH ERROR"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SSP_ANL_SHIP_REQ_SEMI",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "Final(FN) 계획이 아니면 처리하지 않음",
+    "message": null,
+    "on_fail": "RETURN;"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SSP_ANL_SHIP_REQ_SEMI",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "SCP I/F Blocking(FP Target N) 주차는 SEMI Ship Req 생성 중단",
+    "message": null,
+    "on_fail": "RETURN;"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SSP_ANL_SHIP_REQ_SEMI",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환(부모가 @rows_c=-1 로 인지)",
+    "message": "ERROR_MESSAGE() (로그만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH_CALL_TRAN ERROR; return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "SCM_ADM_SMS_SEND_BATCH",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SMS 발송 처리 중 오류 시 오류 로그·발송로그('ERROR') 저장 후 F 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "CLOSE/DEALLOCATE CUR_SEND; INSERT scm_sys_log_batch(ERROR); COMMIT; EXEC SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG 'ERROR',…,'MAIN ERROR',…,@v_error_message; SELECT 'F' "
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "SCP0049_SAVE_NEW_VERSION",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "버전 생성 중 예외 시 전체 롤백 후 실패코드 F 와 오류 메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT INTO scm_sys_log_batch(…ERROR…); SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 시 전체 롤백 후 오류 메시지 결과셋 반환·배치 로그 기록",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "ROLLBACK TRANSACTION SALES_PLAN_AMT_CREATE_LOCAL_KRW; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE(); EXEC PR_SCM_SYS_LOG_BATCH … 'E"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_DNM_CREATE_WS_RTF",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 전체 롤백 후 오류 결과셋 반환",
+    "message": "'[' + ERROR_LINE + ']' + ERROR_MESSAGE()",
+    "on_fail": "ROLLBACK TRAN; ERROR 로그; SELECT '[' + CONVERT(NVARCHAR(10), ERROR_LINE()) + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_IRREGULAR_SALES_PLAN_CUTOFF_MAIL_SEND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 메시지 결과셋 반환 후 로그",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "SELECT @v_log_message(ERROR_MESSAGE); ERROR 로그"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_MST_EXCHANGE_RATE_CUTOFF",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 롤백 후 오류 결과셋, 정상 시 'success' 결과셋",
+    "message": "'[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()",
+    "on_fail": "ROLLBACK TRANSACTION PR_DM_MST_EXCHANGE_RATE_CUTOFF; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_PLN_MKT_FCST_C_QTY_BALANCE_CREATE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 결과셋 반환·로그",
+    "message": "'[' + ERROR_NUMBER + ']' + ERROR_MESSAGE()",
+    "on_fail": "SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE(); ERROR 로그 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_PLN_VERSION_CREATE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "버전 INSERT 오류 시 롤백·메시지 결과셋·로그",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "ROLLBACK TRANSACTION PR_DM_PLN_VERSION_CREATE; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE(); ERROR 로그"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCM_MST_FUTURE_PRICE_CUTOFF",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 롤백 후 오류 메시지 결과셋, 정상 시 success 결과셋",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE / success",
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_MST_FUTURE_PRICE_CUTOFF; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE(); (성공 시 SELECT 'success')"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CAPA_BALANCE_40",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "EXEC PR_SCP_SYS_LOG_BATCH(ERROR); return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CAPA_BALANCE_8182",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "CAPA Balance(자동차/ESS) 생성 중 예외 시 오류 로그 기록 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_CAPA_BALANCE_EE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "전극 CAPA Balance 생성 중 예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PLAN_N",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "최신 Plan(_N) 이관 중 예외 시 트랜잭션 롤백·오류 메시지 결과셋·로그 후 -1 반환",
+    "message": null,
+    "on_fail": "SELECT '['+ERROR_NUMBER()+']'+ERROR_MESSAGE(); ROLLBACK TRANSACTION PR_SCP_ANL_PLAN_N; ERROR 로그; return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PROBLEM_REPORT_DEMAND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Problem Report Demand 생성 중 예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PROBLEM_REPORT_DESC",
+    "depth": 3,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "엔진 Problem Report 를 Demand 단위로 집계해 미계획(UNPLAN)·납기지연(LATE/WEEKLATE) 문제유형을 판정",
+    "message": null,
+    "on_fail": "Demand 별 문제유형 UPDATE (UNPLAN 우선, LATE/WEEKLATE → 'LATE', 그 외 NULL)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PROBLEM_REPORT_DESC",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Problem Report Desc 생성 중 예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PROBLEM_REPORT_PEGGING",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Problem Report Pegging 생성 중 예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PRODUCTION_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "생산계획 ANL 적재 중 예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PRODUCTION_PLAN_I",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "수율·EOH 적재 중 예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PRODUCTION_PLAN_S",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Requirement 적재 중 예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 주석)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PSI_ELECTRODE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 배치 로그에 ERROR 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "SET @v_log_type = N'ERROR'; SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000)); EXEC PR_SCP_SYS_LOG_BATCH …; return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PSI_GLOBAL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 배치 로그 ERROR 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "SET @v_log_type = N'ERROR'; SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000)); EXEC PR_SCP_SYS_LOG_BATCH …; return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PSI_GLOBAL_ESS",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 배치 로그 ERROR 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "SET @v_log_type = N'ERROR'; SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000)); EXEC PR_SCP_SYS_LOG_BATCH …; return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PSI_GLOBAL_SMALL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 배치 로그 ERROR 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "SET @v_log_type = N'ERROR'; SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000)); EXEC PR_SCP_SYS_LOG_BATCH …; return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PSI_PRODUCTION",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "실행 중 예외 시 오류 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블에만 기록)",
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "PR Plan 이 아니거나 Plan SEQ 가 0(대상 버전 없음)이면 처리 중단하고 -1 반환",
+    "message": null,
+    "on_fail": "return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_SUPPLY_PSI_BY_MODEL_82",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_TACT_TIME",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "전극(EE) 계열 사업부는 Tact Time 기준정보 미관리로 처리 생략",
+    "message": null,
+    "on_fail": "RETURN (반환값 0)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_TACT_TIME",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ANL_WORKING_TIME",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 롤백·오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블)",
+    "on_fail": "IF @@TRANCOUNT > 0 ROLLBACK; ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_BOD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환(부모 EE_FN_ALL 이 오류 종료 처리)",
+    "message": null,
+    "on_fail": "BEGIN CATCH: PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_BOD_PATTERN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "BEGIN CATCH: PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_BUCKET_INFO",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "BEGIN CATCH: PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_BUCKET_RES_CAPA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "BEGIN CATCH: PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_CUSTOM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "BEGIN CATCH: PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_DEMAND_ATTRIBUTE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "BEGIN CATCH: PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_DPP_DEMAND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "BEGIN CATCH: PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_FIXED_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "BEGIN CATCH: PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_FIXED_PLAN_PROD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "BEGIN CATCH: PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_FIX_MISMATCHING",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "BEGIN CATCH: PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_ITEM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "BEGIN CATCH: PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_ITEM_BOD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_FN_ALL 이 IF @rows < 0 GOTO _RETURN_ERR_CODE (inbound_flag='E', plan_status='-1', RETURN -1)",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그(PR_SCM_SYS_LOG_BATCH) 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_ITEM_BOD_CAL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_ITEM_ROUTE_SITE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_OP_RES_GROUP_MAP_CAL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_PLAN_BOM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_PLAN_INFO",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_PRODUCT_MIX",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_PRODUCT_MIX_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_RESOURCE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_ROUTE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_SALES_MODEL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_SALES_PRODUCT_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_SITE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_PROC_STOCK_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "SQL 예외 시 오류 로그 후 -1 반환 → 부모가 @rows<0 으로 오류 처리",
+    "message": "ERROR_MESSAGE() → 배치 로그",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_SET_BOD_ENG",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 오류 로그 기록 후 -1 반환(부모 @rows<0 → _RETURN_ERR_CODE)",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_SET_BOMCOMPONENTS",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환(부모 @rows<0 → _RETURN_ERR_CODE)",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_SET_INTRANSITSHIPMENTS",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_SET_INVENTORY",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_SET_ITEMSITEMSTR",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_FN_SET_SITE_ENG",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_BOD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환(부모 PR_SCP_ENG_EE_PRE_ALL @rows<0 → _RETURN_ERR_CODE)",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_BOD_PATTERN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_BUCKET_INFO",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_BUCKET_RES_CAPA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_CUSTOM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_DEMAND_ATTRIBUTE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_DPP_DEMAND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_FIXED_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_FIXED_PLAN_PROD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_FIX_MISMATCHING",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_ITEM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_ITEM_BOD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 발생 시 오류 로그 기록 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 _RETURN_ERR_CODE 로 이동해 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_ITEM_BOD_CAL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 발생 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_ITEM_ROUTE_SITE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 발생 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_NET_DEMAND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Demand 우선순위 UPDATE 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_OP_RES_GROUP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_OP_RES_GROUP_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_OP_RES_GROUP_MAP_CAL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_PLAN_BOM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_PLAN_INFO",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_PRODUCT_MIX",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_PRODUCT_MIX_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_RESOURCE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_ROUTE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_SALES_MODEL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_SALES_PRODUCT_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_SITE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "적재 중 예외 시 오류 로그 후 -1 반환 → 부모 PR_SCP_ENG_EE_PRE_ALL 이 plan_status=-1, inbound_flag='E' 처리",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_PROC_STOCK_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 배치 로그 남기고 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "ERROR 로그(PR_SCM_SYS_LOG_BATCH, ERROR_MESSAGE/ERROR_LINE) 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_SET_BOD_ENG",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_SET_BOMCOMPONENTS",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_SET_INTRANSITSHIPMENTS",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_SET_INVENTORY",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_SET_ITEMSITEMSTR",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_EE_PRE_SET_SITE_ENG",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_BOD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_BOD_PATTERN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_BUCKET_INFO",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_BUCKET_RES_CAPA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_CUSTOM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_DEMAND_ATTRIBUTE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_DPP_DEMAND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "오류 시 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (배치 로그)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_FIXED_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 로그 후 -1 반환, 부모가 @rows < 0 으로 중단",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' (ERROR_MESSAGE/ERROR_LINE) 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_FIXED_PLAN_PROD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 로그 후 -1 반환, 부모가 중단",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_FIX_MISMATCHING",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 로그 후 -1 반환, 부모가 중단",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_ITEM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 로그 후 -1 반환, 부모가 중단",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_ITEM_BOD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 로그 후 -1 반환, 부모가 중단",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_ITEM_BOD_CAL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 로그 후 -1 반환, 부모가 중단",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_ITEM_ROUTE_SITE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 로그 후 -1 반환, 부모가 중단",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_NET_DEMAND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 오류 로그 후 -1 반환, 부모가 중단",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_OFFTIME",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "OSP OFF Calendar 생성 중 예외 발생 시 에러 로그 기록 후 -1 반환 → 부모 PR_SCP_ENG_IN_FN_ALL 이 IF @rows < 0 GOTO _RETURN_ERR_CODE 로 중단",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그(ERROR_MESSAGE, ERROR_LINE) 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_OP_RES_GROUP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Op Res Group 생성 중 예외 시 에러 로그 후 -1 반환 → 부모 PR_SCP_ENG_IN_FN_ALL 이 L630 IF @rows < 0 GOTO _RETURN_ERR_CODE 로 중단",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_OP_RES_GROUP_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Op Res Group Map 생성 중 예외 시 -1 반환 → 부모 L633-635 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_OP_RES_GROUP_MAP_CAL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "BOR CAL 생성 중 예외 시 -1 반환 → 부모 L638-640 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_PLAN_BOM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "엔진 BOM 생성 중 예외 시 -1 반환 → 부모 L540-542 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_PLAN_INFO",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Plan Info 복사 중 예외 시 -1 반환 → 부모 L504-506 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_PRODUCT_MIX",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "P-MIX 생성 중 예외 시 -1 반환 → 부모 L681-683 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_PRODUCT_MIX_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "P-MIX MAP 생성 중 예외 시 -1 반환 → 부모 L686-688 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_RESOURCE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Resource 생성 중 예외 시 -1 반환 → 부모 L607-609 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_ROUTE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Route 생성 중 예외 시 -1 반환 → 부모 L602-604 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_SALES_MODEL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Sales Model 생성 중 예외 시 -1 반환 → 부모 L560-562 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_SALES_PRODUCT_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Sales-Product Map 생성 중 예외 시 -1 반환 → 부모 L565-567 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_SETUP_MATRIX_40",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Setup Matrix 생성 중 예외 시 -1 반환 → 부모 L713-715 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_SITE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Site 생성 중 예외 시 -1 반환 → 부모 L514-516 GOTO _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (배치 로그에만 기록)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_PROC_STOCK_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 시 오류 로그 기록 후 -1 반환 → 부모 FN_ALL 이 @rows<0 로 받아 _RETURN_ERR_CODE",
+    "message": "ERROR_MESSAGE() (로그 테이블 기록만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH ERROR 로그(ERROR_MESSAGE/ERROR_LINE) 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_SET_BOD_ENG",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 FN_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_SET_BOMCOMPONENTS",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "SCP 제외 품목 BOM 전개 깊이가 7단계를 넘으면 오류로 중단",
+    "message": null,
+    "on_fail": "재귀 7단계 초과 시 SQL 오류 → BEGIN CATCH → return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_SET_BOMCOMPONENTS",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 FN_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_SET_INTRANSITSHIPMENTS",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 FN_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_SET_INVENTORY",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 FN_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_SET_ITEMSITEMSTR",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 FN_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_FN_SET_SITE_ENG",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 FN_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_BOD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 PRE_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_BOD_PATTERN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 PRE_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_BUCKET_INFO",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 PRE_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_BUCKET_RES_CAPA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 PRE_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_CUSTOM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 PRE_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_DEMAND_ATTRIBUTE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 PRE_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_DPP_DEMAND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환 → 부모 PRE_ALL 전파",
+    "message": "ERROR_MESSAGE() (로그 기록만)",
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_FIXED_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 발생 시 배치 오류 로그를 남기고 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' (ERROR_MESSAGE/ERROR_LINE) 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_FIXED_PLAN_PROD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 발생 시 배치 오류 로그를 남기고 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_FIX_MISMATCHING",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 발생 시 배치 오류 로그를 남기고 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_ITEM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 발생 시 배치 오류 로그를 남기고 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_ITEM_BOD",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 발생 시 배치 오류 로그를 남기고 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_ITEM_BOD_CAL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 발생 시 배치 오류 로그를 남기고 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_ITEM_ROUTE_SITE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 발생 시 배치 오류 로그를 남기고 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_NET_DEMAND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 발생 시 배치 오류 로그를 남기고 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_OFFTIME",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 발생 시 배치 오류 로그를 남기고 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_OP_RES_GROUP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "처리 중 예외 발생 시 배치 오류 로그를 남기고 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 기록 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_OP_RES_GROUP_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_OP_RES_GROUP_MAP_CAL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_PLAN_BOM",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_PLAN_INFO",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_PRODUCT_MIX",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_PRODUCT_MIX_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_RESOURCE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_ROUTE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_SALES_MODEL",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_SALES_PRODUCT_MAP",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_SETUP_MATRIX_40",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_SITE",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_PROC_STOCK_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블만)",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_SET_BOD_ENG",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 배치 로그에 오류 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그(ERROR_MESSAGE, ERROR_LINE) 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_SET_BOMCOMPONENTS",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_SET_INTRANSITSHIPMENTS",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_SET_INVENTORY",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_SET_ITEMSITEMSTR",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_IN_PRE_SET_SITE_ENG",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_DELIVERY",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "엔진 Plan 상태가 ERROR 이면 Output 이관을 오류로 종료(-1)",
+    "message": "ENGINE ERROR / N'ENGINE ERROR 종료'",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_DELIVERY",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "Delivery Output 이 0건인데 당주 이후 Demand 가 있으면 오류(-1), Demand 도 없으면 SMS 통보만 하고 정상 종료",
+    "message": "N'Output Data 0건' / N'NO DEMAND 엔진 수행 '",
+    "on_fail": "수요 있음: ERROR 로그 'Output Data' 후 return -1 / 수요 없음: EXEC SCM_ADM_SMS_SEND_BATCH 60, N'NO DEMAND 엔진 수행 …' 후 정상 진행"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_DELIVERY",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_ITEM_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_MATERIAL_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_PEGGING_INFO",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "Pegging Output 이 0건인데 당주 이후 Demand 가 있으면 오류(-1) 처리",
+    "message": "N'Output Data 0건'",
+    "on_fail": "ERROR 로그 'Output Data' 후 return -1 (Demand 없으면 통과)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_PEGGING_INFO",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_PROBLEMREPORT",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_PROBLEM_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_PRODUCTION_PSI",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "Production PSI Output 이 0건인데 당주 이후 Demand 가 있으면 오류(-1)",
+    "message": "N'Output Data 0건'",
+    "on_fail": "ERROR 로그 'Output Data' 후 return -1 (Demand 없으면 통과)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_PRODUCTION_PSI",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_SALES_PSI",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "Sales PSI Output 이 0건인데 당주 이후 Demand 가 있으면 오류(-1)",
+    "message": "N'Output Data 0건'",
+    "on_fail": "ERROR 로그 'Output Data' 후 return -1 (Demand 없으면 통과)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_SALES_PSI",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_UNPEGGING_INFO",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_UTILIZATION",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_ENG_OUT_WORK_ORDER",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_ALLOCATION",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그; return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_BOH_ASSIGN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그; return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_ENG_OUTPUT_TEMP_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_IF_CHECK_SMS_SEND",
+    "depth": 3,
+    "cls": "D 검증리포트형",
+    "check_type": "COUNT",
+    "desc": "MA 계획 FP 생산 Target 최근 4주 내 전송 건이 전혀 없으면 이상으로 보고 담당자 SMS 발송",
+    "message": "FP Prod Target I/F Check",
+    "on_fail": "IF(@rs='false') EXEC SCM_ADM_SMS_SEND_BATCH 60, @message"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_IF_CHECK_SMS_SEND",
+    "depth": 3,
+    "cls": "D 검증리포트형",
+    "check_type": "COUNT",
+    "desc": "최신 전송 차수 건수가 직전 차수 건수의 80% 미만이면 이상으로 SMS 발송(직전 차수 없으면 정상)",
+    "message": "FP Prod Target I/F Check",
+    "on_fail": "EXEC SCM_ADM_SMS_SEND_BATCH 60, N'FP Prod Target I/F Check'"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_IF_CHECK_SMS_SEND",
+    "depth": 3,
+    "cls": "D 검증리포트형",
+    "check_type": "COUNT",
+    "desc": "MA 계획 FP 출하 Target 최근 4주 내 전송 건이 없으면 SMS 발송",
+    "message": "FP Ship Target I/F Check",
+    "on_fail": "EXEC SCM_ADM_SMS_SEND_BATCH 60, @message"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_IF_CHECK_SMS_SEND",
+    "depth": 3,
+    "cls": "D 검증리포트형",
+    "check_type": "COUNT",
+    "desc": "FP 출하 Target 최신 차수 건수가 직전 차수의 80% 미만이면 SMS 발송",
+    "message": "FP Ship Target I/F Check",
+    "on_fail": "EXEC SCM_ADM_SMS_SEND_BATCH 60, N'FP Ship Target I/F Check'"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_IF_CHECK_SMS_SEND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외가 나도 호출한 원 Proc 가 정상 수행되도록 1(정상) 반환",
+    "message": null,
+    "on_fail": "scm_sys_log_batch 에 ERROR INSERT 후 return 1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_PLANT_ONHAND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_PRODUCTION_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_SALES_ONHAND",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_SHIPMENT_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_PLN_TH_ENG_STOCK_PLAN",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_SYS_LOG_BATCH",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백하고 오류 내용을 별도 트랜잭션으로 로그 테이블에 다시 기록",
+    "message": "ERROR_MESSAGE() (로그 테이블 기록)",
+    "on_fail": "ROLLBACK TRANSACTION PR_SCP_SYS_LOG_BATCH; BEGIN TRANSACTION PR_SCP_SYS_LOG_BATCH2; INSERT INTO scm_sys_log_batch VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_M"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "Plan Type 이 PR/MA/SE/FN/TE 가 아니면 시뮬레이터 데이터 생성 없이 -1 반환",
+    "message": null,
+    "on_fail": "return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "계획 상태 함수가 -2 이면 하위 생성 SP 를 호출하지 않고 -1 반환",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (L414~417)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "BOH 생성 SP 가 음수를 반환하거나 계획 상태가 -2 로 바뀌면 이후 단계 중단",
+    "message": null,
+    "on_fail": "RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "자동차(81 및 81 JV) PSI 시뮬레이션 데이터 생성 실패/계획 상태 -2 시 중단",
+    "message": null,
+    "on_fail": "RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "소형 CELL BOH 생성 실패/계획 상태 -2 시 중단",
+    "message": null,
+    "on_fail": "RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "소형 PACK 시뮬레이션 데이터 생성 실패/계획 상태 -2 시 중단",
+    "message": null,
+    "on_fail": "RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "소형 CELL 시뮬레이션 데이터 생성 실패/계획 상태 -2 시 중단",
+    "message": null,
+    "on_fail": "RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "소형 출하 시뮬레이션 데이터 생성 실패/계획 상태 -2 시 중단",
+    "message": null,
+    "on_fail": "RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "ESS 시뮬레이션 데이터 생성 실패/계획 상태 -2 시 중단",
+    "message": null,
+    "on_fail": "RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "전극(EE 및 JV) PR 계획일 때만 BOM 재고 생성, 실패/계획 상태 -2 시 중단",
+    "message": null,
+    "on_fail": "RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "전극 시뮬레이션 데이터 생성 실패/계획 상태 -2 시 중단",
+    "message": null,
+    "on_fail": "RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_CREATE_DATA",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "EXEC PR_SCP_SYS_LOG_BATCH (ERROR); return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+    "depth": 3,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "발송 로그 저장 실패 시 오류 로그 후 F 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER+']'+ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_DM_DNM_CREATE_C_WS_RTF",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 전체 롤백 후 오류 라인·메시지 결과셋 반환",
+    "message": "'[[' + ERROR_LINE + ']' + ERROR_MESSAGE()",
+    "on_fail": "ROLLBACK TRAN; PR_SCM_SYS_LOG_BATCH ERROR 로그; SELECT '[[' + CONVERT(NVARCHAR(10), ERROR_LINE()) + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_BOH",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환 (부모가 @rows<0 으로 중단)",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "EXEC PR_SCP_SYS_LOG_BATCH (ERROR); return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_BOH_SMALL_CELL",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환 (부모가 @rows<0 으로 중단)",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "EXEC PR_SCP_SYS_LOG_BATCH (ERROR); return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "PIVOT 데이터 생성 하위 SP 가 음수 반환 시 -1 로 중단",
+    "message": null,
+    "on_fail": "GOTO _RETURN_ERR_CODE → RETURN -1 (L4794~4797)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환 (부모 CREATE_DATA 가 중단)",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "IF @p_is_debug = 0 EXEC PR_SCP_SYS_LOG_BATCH (ERROR); return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_ELECTRODE",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "STATUS",
+    "desc": "PIVOT 생성 하위 SP 가 음수 반환 시 -1 로 중단",
+    "message": null,
+    "on_fail": "RETURN -1 (L2818~2821)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_ELECTRODE",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "EXEC PR_SCP_SYS_LOG_BATCH (ERROR); return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_ELECTRODE_BOM",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 오류 로그 기록 후 -1 반환 (부모 CREATE_DATA 가 중단)",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "EXEC PR_SCP_SYS_LOG_BATCH (ERROR); return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "자식(1년차 PIVOT 생성) 실패 시 -1 반환해 부모로 전파",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "사업계획 2년차 PIVOT 생성 실패 시 -1 반환",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 배치 로그 기록 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그(@p_is_debug=0 일 때) 후 return -1 (ROLLBACK 없음)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "1년차 PIVOT 생성 하위 SP 가 음수(-1) 반환 시 즉시 -1 반환하여 실패 전파",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "중장기(플랜 기간 364일 초과) 2년차 PIVOT 생성 하위 SP 실패 시 -1 반환",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "(@p_is_debug=0 이면) PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL_CELL",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "1년차 PIVOT 하위 SP 실패 시 -1 반환",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL_CELL",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "중장기 2년차 PIVOT 하위 SP 실패 시 -1 반환",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL_CELL",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL_PACK",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "1년차 PIVOT 생성 하위 SP 가 음수(-1)를 반환하면 즉시 -1 반환으로 중단",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL_PACK",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "OTHER",
+    "desc": "계획 Horizon 이 364일 초과(BP)일 때 2년차 PIVOT 생성 하위 SP 실패 시 -1 반환",
+    "message": null,
+    "on_fail": "_RETURN_ERR_CODE: RETURN -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL_PACK",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 배치 로그에 에러 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블에만 기록)",
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그(IF @p_is_debug = 0) 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_COMFIRM / SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "SCM_ADM_MAIL_SEND",
+    "depth": 4,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "메일 발송 실패 시 오류 로그 후 F 결과 반환",
+    "message": "'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()",
+    "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER+']'+ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_ELECTRODE_S",
+    "depth": 5,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 배치 로그 기록 후 -1 반환",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 없음)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "depth": 5,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 로그 후 -1 반환 -> 부모 PR_SCP_XLS_PSI_GLOBAL_ESS L4620/L4661 에서 GOTO _RETURN_ERR_CODE",
+    "message": null,
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 없음)"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_S",
+    "depth": 5,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL_CELL_S",
+    "depth": 5,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 배치 로그 기록 후 -1 반환(부모가 @rows < 0 으로 실패 전파)",
+    "message": "ERROR_MESSAGE() (SCM_SYS_LOG_BATCH 기록)",
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL_PACK_S",
+    "depth": 5,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블에만 기록)",
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1"
+   },
+   {
+    "entry_sp": "SCP0015_SAVE_PLAN_MST_RUN",
+    "sp": "PR_SCP_XLS_PSI_GLOBAL_SMALL_S",
+    "depth": 5,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그 기록 후 -1 반환",
+    "message": "ERROR_MESSAGE() (로그 테이블에만 기록)",
+    "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그(IF @P_IS_DEBUG = 0) 후 return -1"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0016",
+  "title": "Shipment Plan FG Waterfall",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0016_WaterfallShipmentPlanFG/SCP0016_WaterfallShipmentPlanFG.cs:1359"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0016_WaterfallShipmentPlanFG/SCP0016_WaterfallShipmentPlanFG.Designer.cs:975"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/waterfall-shipment-plan-fg"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+    "member": "FindData_Main",
+    "line": "739",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0016_WaterfallShipmentPlanFG\\SCP0016_WaterfallShipmentPlanFG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+    "member": "FindData_Main",
+    "line": "782",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0016_WaterfallShipmentPlanFG\\SCP0016_WaterfallShipmentPlanFG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+    "member": "GetSpdTitle",
+    "line": "1123",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0016_WaterfallShipmentPlanFG\\SCP0016_WaterfallShipmentPlanFG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1123",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0016_WaterfallShipmentPlanFG\\SCP0016_WaterfallShipmentPlanFG.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+    "member": "FindData_Main",
+    "line": "739",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0016_WaterfallShipmentPlanFG\\SCP0016_WaterfallShipmentPlanFG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+    "member": "FindData_Main",
+    "line": "782",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0016_WaterfallShipmentPlanFG\\SCP0016_WaterfallShipmentPlanFG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+    "member": "GetSpdTitle",
+    "line": "1116",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0016_WaterfallShipmentPlanFG\\SCP0016_WaterfallShipmentPlanFG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1120",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0016_WaterfallShipmentPlanFG\\SCP0016_WaterfallShipmentPlanFG.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+   "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+   "SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0017",
+  "title": "Production Plan Waterfall",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0017_WaterfallProductionPlan/SCP0017_WaterfallProductionPlan.cs:2560"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0017_WaterfallProductionPlan/SCP0017_WaterfallProductionPlan.Designer.cs:1346"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/production-plan-waterfall"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0017_GET_PRODUCTION_PLAN_LINE_WATERFALL",
+    "member": "FindData_Line",
+    "line": "1498",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0017_WaterfallProductionPlan\\SCP0017_WaterfallProductionPlan.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "2441",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0017_WaterfallProductionPlan\\SCP0017_WaterfallProductionPlan.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+    "member": "GetSpdTitle",
+    "line": "2518",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0017_WaterfallProductionPlan\\SCP0017_WaterfallProductionPlan.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2518",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0017_WaterfallProductionPlan\\SCP0017_WaterfallProductionPlan.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL",
+    "member": "SetQueryInfoGetModel",
+    "line": "1381",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0017_WaterfallProductionPlan\\SCP0017_WaterfallProductionPlan.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0017_GET_PRODUCTION_PLAN_LINE_WATERFALL",
+    "member": "FindData_Line",
+    "line": "1498",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0017_WaterfallProductionPlan\\SCP0017_WaterfallProductionPlan.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_DIVISION",
+    "member": "GetDivision",
+    "line": "2441",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0017_WaterfallProductionPlan\\SCP0017_WaterfallProductionPlan.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+    "member": "GetSpdTitle",
+    "line": "2511",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0017_WaterfallProductionPlan\\SCP0017_WaterfallProductionPlan.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "2515",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0017_WaterfallProductionPlan\\SCP0017_WaterfallProductionPlan.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCM0001_GET_DIVISION",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+   "SCP0017_GET_PRODUCTION_PLAN_LINE_WATERFALL",
+   "SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL",
+    "sp": "SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "조회 중 오류 시 오류 내용을 PRINT 만 하고 종료",
+    "message": null,
+    "on_fail": "SET @v_log_type='ERROR', @v_log_message=ERROR_MESSAGE(), @v_description='ERROR_LINE : '+ERROR_LINE(); PRINT 만 수행"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0018",
+  "title": "Shipment Plan Semi Waterfall",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0018_WaterfallShipmentPlanSemi/SCP0018_WaterfallShipmentPlanSemi.cs:1161"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0018_WaterfallShipmentPlanSemi/SCP0018_WaterfallShipmentPlanSemi.Designer.cs:825"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/waterfall-shipment-plan-semi"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL",
+    "member": "FindData_Main",
+    "line": "680",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0018_WaterfallShipmentPlanSemi\\SCP0018_WaterfallShipmentPlanSemi.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+    "member": "GetSpdTitle",
+    "line": "999",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0018_WaterfallShipmentPlanSemi\\SCP0018_WaterfallShipmentPlanSemi.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "999",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0018_WaterfallShipmentPlanSemi\\SCP0018_WaterfallShipmentPlanSemi.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL",
+    "member": "FindData_Main",
+    "line": "680",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0018_WaterfallShipmentPlanSemi\\SCP0018_WaterfallShipmentPlanSemi.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+    "member": "GetSpdTitle",
+    "line": "992",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0018_WaterfallShipmentPlanSemi\\SCP0018_WaterfallShipmentPlanSemi.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "996",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0018_WaterfallShipmentPlanSemi\\SCP0018_WaterfallShipmentPlanSemi.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO",
+   "SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL"
+  ],
+  "db_validation_brief": []
+ }
+]

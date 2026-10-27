@@ -1,0 +1,15 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,DIVISION_ID,CODE,DMF0000_ExchangeRatePopup,DMF0000_ExchangeRatePopup.cs:158,Division,Combo,Data.Common(Data.Type.Division),Restricted,코드 선언 FPMerge.Restricted,35,true,Left,,,
+,CURRENCY,CODE,DMF0000_ExchangeRatePopup,DMF0000_ExchangeRatePopup.cs:159,Currency,Text,,Restricted,코드 선언 FPMerge.Restricted,60,true,Left,,,
+,UNIT_CURRENCY,CODE,DMF0000_ExchangeRatePopup,DMF0000_ExchangeRatePopup.cs:160,Unit,Combo,"Data.Common(Data.Type.CURRENCY_LIST, false, UserInfoContext.Current[""NowGroupID""], UserInfoContext.Current.UserId)",None,코드 선언 FPMerge.None,45,true,Left,,,
+,LAST_UPDATE_DATE,CODE,DMF0000_ExchangeRatePopup,DMF0000_ExchangeRatePopup.cs:161,Last Update Date,Text,,Restricted,코드 선언 FPMerge.Restricted,45,true,,,,
+,LAST_UPDATED_BY,CODE,DMF0000_ExchangeRatePopup,DMF0000_ExchangeRatePopup.cs:162,Last Updated By,Text,,Restricted,코드 선언 FPMerge.Restricted,110,true,,,,
+,"D{?dt.Rows[i][""BASIS_START_DATE""]}",CODE,DMF0000_ExchangeRatePopup,DMF0000_ExchangeRatePopup.cs:186,"dt.Rows[i][""CALENDAR_MONTH""]",Number,,None,코드 선언 FPMerge.None,70,true,Right,,,for(i < dt.Rows.Count)
+,DIVISION_ID,CODE,DMF0000_VersionByWaterfallPopup,DMF0000_VersionByWaterfallPopup.cs:152,Divison,Text,,None,코드 선언 FPMerge.None,60,false,,,,
+,VERSION_NO,CODE,DMF0000_VersionByWaterfallPopup,DMF0000_VersionByWaterfallPopup.cs:153,Version,Text,,None,코드 선언 FPMerge.None,200,true,,,,
+,VERSION_DESCRIPTION,CODE,DMF0000_VersionByWaterfallPopup,DMF0000_VersionByWaterfallPopup.cs:154,Description,Text,,None,코드 선언 FPMerge.None,300,true,,,,
+,VERSION_TYPE,CODE,DMF0000_VersionByWaterfallPopup,DMF0000_VersionByWaterfallPopup.cs:155,Type,Text,,None,코드 선언 FPMerge.None,60,true,,,,
+,VER_CRE_SEQ,CODE,DMF0000_VersionByWaterfallPopup,DMF0000_VersionByWaterfallPopup.cs:156,Seq,Text,,None,코드 선언 FPMerge.None,60,false,,,,
+,YYYYMMDD,CODE,DMF0000_VersionByWaterfallPopup,DMF0000_VersionByWaterfallPopup.cs:157,Date,Text,,None,코드 선언 FPMerge.None,60,false,,,,
+,CREATED_BY,CODE,DMF0000_VersionByWaterfallPopup,DMF0000_VersionByWaterfallPopup.cs:158,Create By,Text,,None,코드 선언 FPMerge.None,100,true,,,,
+,CREATION_DATE,CODE,DMF0000_VersionByWaterfallPopup,DMF0000_VersionByWaterfallPopup.cs:159,Create Date,Text,,None,코드 선언 FPMerge.None,150,true,Center,,,

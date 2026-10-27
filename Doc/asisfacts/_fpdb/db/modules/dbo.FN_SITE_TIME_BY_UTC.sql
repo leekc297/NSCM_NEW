@@ -1,0 +1,67 @@
+﻿
+CREATE FUNCTION [dbo].[FN_SITE_TIME_BY_UTC] (@site_id nvarchar(max), @time_value datetime)
+RETURNS datetime
+BEGIN
+
+  DECLARE @site_time datetime;
+  
+  SELECT @site_id = ISNULL(MAX(SITE_ID), 'A001')
+  FROM   SCM_SITE_M
+  WHERE  SITE_ID = @site_id
+
+  SELECT @time_value = ISNULL(DATEADD(HH, -9, @time_value), GETUTCDATE())
+
+
+          SELECT @site_time = CASE  WHEN STANDARD_TIME >= FromDay AND STANDARD_TIME <= ToDay 
+                                    THEN DATEADD(HOUR, ISNULL(ISNULL(SUMMER_TIME, INTERVAL), 0), STANDARD_TIME)
+                                    ELSE DATEADD(HOUR, ISNULL(INTERVAL, 0), STANDARD_TIME)
+                              END
+        FROM   SCM_SITE_M A,
+               (
+                SELECT @time_value AS STANDARD_TIME
+               ) B,
+               (
+                SELECT CASE WHEN @site_id IN ('A003','A004') THEN
+				       DATEADD( HH, +2, CASE WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))=1 THEN DATEADD(DD,0,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))=2 THEN DATEADD(DD,6,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))=3 THEN DATEADD(DD,5,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))=4 THEN DATEADD(DD,4,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))=5 THEN DATEADD(DD,3,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))=6 THEN DATEADD(DD,2,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25'))=7 THEN DATEADD(DD,1,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-25')) END
+                       )
+					   ELSE
+                       DATEADD( HH, +7, CASE WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))=2 THEN DATEADD(DD,13,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))=3 THEN DATEADD(DD,12,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))=4 THEN DATEADD(DD,11,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))=5 THEN DATEADD(DD,10,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))=6 THEN DATEADD(DD,9 ,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))=7 THEN DATEADD(DD,8 ,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01'))=1 THEN DATEADD(DD,7 ,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-03-01')) END
+                       ) END AS FromDay     
+                     , 
+                       CASE WHEN @site_id IN ('A003','A004') THEN
+					   DATEADD( HH, +3, CASE WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))=1 THEN DATEADD(DD,0,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))=2 THEN DATEADD(DD,6,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))=3 THEN DATEADD(DD,5,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))=4 THEN DATEADD(DD,4,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))=5 THEN DATEADD(DD,3,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))=6 THEN DATEADD(DD,2,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25'))=7 THEN DATEADD(DD,1,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-10-25')) END
+                       )
+					   ELSE
+					   DATEADD( HH, +7, CASE WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))=2 THEN DATEADD(DD,6,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))=3 THEN DATEADD(DD,5,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))=4 THEN DATEADD(DD,4,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))=5 THEN DATEADD(DD,3,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))=6 THEN DATEADD(DD,2,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))=7 THEN DATEADD(DD,1,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))
+                                             WHEN DATEPART(DW,CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01'))=1 THEN CONCAT(SUBSTRING(CONVERT( NVARCHAR(12), @time_value, 112),1,4),'-11-01') END
+                       ) END AS ToDay
+               ) C
+        WHERE  SITE_ID = @site_id
+
+
+  RETURN @site_time;
+END;
+

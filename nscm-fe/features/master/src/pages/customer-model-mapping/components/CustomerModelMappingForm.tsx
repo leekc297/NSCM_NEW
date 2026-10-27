@@ -234,12 +234,8 @@ export const CustomerModelMappingForm = () => {
                           appearance='outlined'
                           priority='normal'
                           disabled={isProjectDisabled}
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => !isProjectDisabled && setOpenPrjByDivisionModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => !isProjectDisabled && setOpenPrjByDivisionModal(true)}
                         />
                       ),
                     }}
@@ -264,12 +260,8 @@ export const CustomerModelMappingForm = () => {
                         <Button
                           appearance='outlined'
                           priority='normal'
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => setOpenModelByDivisionModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setOpenModelByDivisionModal(true)}
                         />
                       ),
                     }}

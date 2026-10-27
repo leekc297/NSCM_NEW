@@ -1,14 +1,17 @@
 // 같은 feature(supply) 밖의 공용 팝업 — baseUrl 기준 비상대 경로(상대경로 import 금지, Top11 #1).
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ItemByDivisionModal } from 'features/master/src/components';
-import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
+import { MaterialByDivisionModal, ModelByDivisionPopup } from 'features/master/src/components';
+import { useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 
+import { apiClient } from '@foundation/apis';
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
+import { useSessionStore } from '@shared/stores';
 
 import { NoWorkBatchModal } from './components/modals/NoWorkBatchModal';
 import { NoWorkExcelUploadModal } from './components/modals/NoWorkExcelUploadModal';
@@ -16,19 +19,23 @@ import { OptCapaForm } from './components/OptCapaForm';
 import { OptCapaGrid } from './components/OptCapaGrid';
 import { useOptCapaActions } from './hooks/useOptCapaActions';
 import { useOptCapaSheets } from './hooks/useOptCapaSheets';
-// `SHEETS` 는 `useTabProcQuery` 제네릭 인자에만 쓰여 type-only import 다(no-import-type-side-effects).
-import type { SHEETS } from './opt-capa.constants';
 import {
+  ADMIN_SHEET_NAME,
+  BUCKET,
+  COLUMN,
   EXCEL_FILE_NAME,
   GRID_SHEETS,
   MENU_ID,
+  NO_WORK_WEEK_HIDDEN_COLUMNS,
   SHEET_LABEL,
+  SHEETS,
   type GridSheet,
 } from './opt-capa.constants';
 import type { GridRow } from './opt-capa.types';
 import styles from './OptCapa.module.scss';
 import { useOptCapaStore } from './useOptCapaStore';
 import { str } from './utils/optCapa.candidates';
+import { buildWeekCandidates } from './utils/optCapa.week';
 
 /**
  * 시트별 ref 저장소 — 8탭 각각의 `DataGrid` 인스턴스를 따로 가리킨다.
@@ -75,6 +82,7 @@ const createSheetRefs = <T,>(): Record<GridSheet, MutableRefObject<T | undefined
  * Day 모드 No Work 시트에 이미 반영했다(`OptCapaGrid` `candidatesFor`).
  */
 export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
+  const userId = useSessionStore(state => state.session.userId);
   const queryClient = useQueryClient();
 
   // 시트별 ref 8벌 — 단일 ref 공유 금지({@link createSheetRefs} 주석).
@@ -83,6 +91,9 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
   const editTrackerRefs = useRef(createSheetRefs<EditTracker>()).current;
 
   const sc = useOptCapaStore(s => s.searchParams);
+  // 갭분석 C-06 — Model/Nickname 돋보기(메1 = Material by Division 창) open 상태.
+  const [openModelPopup, setOpenModelPopup] = useState(false);
+  const setSearchParams = useOptCapaStore(s => s.setSearchParams);
   const filters = useOptCapaStore(s => s.filters);
   const activeSheet = useOptCapaStore(s => s.activeSheet);
   const staticColumns = useOptCapaStore(s => s.staticColumns);
@@ -114,11 +125,16 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
    */
   const refSheet = sheet ?? activeSheet;
 
+  // No Work + Bucket=Week → `noWorkWeek` GET SP 로 라우팅한다(요청 payload 는 noWork 와 동형이라
+  //   `filters[noWork]` 를 그대로 싣는다). 그 외 시트·Day 모드는 활성 시트 그대로.
+  const querySheet =
+    refSheet === SHEETS.NO_WORK && sc.bucket === BUCKET.WEEK ? SHEETS.NO_WORK_WEEK : refSheet;
+
   // ── 그리드 조회 ──────────────────────────────────────────────────────────────────────
   //   비활성 시트는 `filters` 키가 없어 `enabled:false` 로 발사되지 않는다(탭 전환 자동조회 금지).
   const gridQuery = useTabProcQuery<MENU_ID, SHEETS.NO_WORK>({
     menuId: MENU_ID,
-    sheetName: refSheet as SHEETS.NO_WORK,
+    sheetName: querySheet as SHEETS.NO_WORK,
     tabId,
     filters: sheet ? filters[sheet] : undefined,
     enabled: !!sheet && !!filters[sheet],
@@ -128,6 +144,29 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
   const rows = useMemo<GridRow[]>(
     () => (gridQuery.data?.o_rc1 ?? []) as unknown as GridRow[],
     [gridQuery.data]
+  );
+
+  // No Work 탭 컬럼 — Bucket=Week 면 Date·Day of Week·Valid·Fix 를 숨긴 서브셋을 렌더한다(스크린샷 실측).
+  //   `noWorkWeek` 전용 컬럼 메타가 DB 에 없어 No Work 메타(`staticColumns[NO_WORK]`)에서 클라로 거른다.
+  //   참조 안정화를 위해 memo — 토글마다 새 배열이면 DataGrid memo 가 무력화된다.
+  const noWorkColumns = useMemo(() => {
+    const cols = staticColumns[SHEETS.NO_WORK];
+    if (sc.bucket !== BUCKET.WEEK) return cols;
+    // Week 모드: Date·Day of Week·Valid·Fix 숨김 + `WEEK_NAME` 을 편집 셀(MANDATORY)로 승격한다.
+    //   Day 모드의 `WEEK_NAME` 은 메타 그대로 static('S', NO_WORK_DATE 파생 표시값)이다.
+    return cols
+      .filter(col => !NO_WORK_WEEK_HIDDEN_COLUMNS.includes(col.colNm))
+      .map(col =>
+        col.colNm === COLUMN.WEEK_NAME
+          ? { ...col, inputTpCd: CELL_INPUT_EDIT_TYPE.MANDATORY }
+          : col
+      );
+  }, [staticColumns, sc.bucket]);
+
+  // Week 모드 `WEEK_NAME` 셀 콤보 후보 — 조회 Period 가 걸치는 ISO 주차 라벨('2026-W40').
+  const weekCandidates = useMemo(
+    () => buildWeekCandidates(sc.fromYyyymm, sc.toYyyymm),
+    [sc.fromYyyymm, sc.toYyyymm]
   );
 
   const actions = useOptCapaActions({
@@ -202,6 +241,7 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
       selectedPlantCodes: sheets.selectedPlantCodes,
       plantCandidates: sheets.plantAll,
       lineCandidates: sheets.lineAll,
+      weekCandidates,
     }),
     [
       sheets.plantAll,
@@ -210,6 +250,7 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
       sheets.lineTypeAll,
       sheets.noWorkTypeAll,
       sheets.selectedPlantCodes,
+      weekCandidates,
     ]
   );
 
@@ -231,6 +272,7 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
           lineOptions={sheets.lineOptions}
           hasDivisionAuth={sheets.hasDivisionAuth}
           onSearch={actions.handleSearch}
+          onModelSearch={() => setOpenModelPopup(true)}
         />
       )}
       <SubTitle
@@ -261,12 +303,15 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
             <TabItem key={visibleSheet} label={SHEET_LABEL[visibleSheet]}>
               <OptCapaGrid
                 sheet={visibleSheet}
+                bucket={sc.bucket}
                 data={visibleSheet === sheet ? rows : []}
                 // 탭마다 **자기 시트 ref** 를 받는다 — 공유 금지({@link createSheetRefs}).
                 gridRef={gridRefs[visibleSheet]}
                 gridFilterRef={gridFilterRefs[visibleSheet]}
                 editTrackerRef={editTrackerRefs[visibleSheet]}
-                adminColumns={staticColumns[visibleSheet]}
+                adminColumns={
+                  visibleSheet === SHEETS.NO_WORK ? noWorkColumns : staticColumns[visibleSheet]
+                }
                 editMode={actions.canEdit}
                 divisionId={actions.divisionId}
                 comboSources={comboSources}
@@ -281,10 +326,28 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
       <NoWorkBatchModal
         open={actions.openBatch}
         divisionId={actions.divisionId}
+        divisionOptions={sheets.divisionOptions}
         plantOptions={sheets.plantOptions}
         lineAll={sheets.lineAll}
+        noWorkTypes={sheets.noWorkTypeAll}
         onClose={actions.closeBatch}
         onSaved={actions.refreshAfterExternalSave}
+      />
+
+      {/* 갭분석 C-06 — Model/Nickname 메1 팝업(SCP0031 C-06 과 같은 방식). 창을 열 때 입력값을 검색어로 넘기고,
+          여러 행을 고르면 고른 별칭 전부를 쉼표로 합쳐 받는다(별칭이 없으면 코드). 취소 시 기존값 유지. */}
+      <MaterialByDivisionModal
+        open={openModelPopup}
+        modalClose={() => setOpenModelPopup(false)}
+        setSelectedValue={(items, _itemName, _itemClassName, nickName, nickNames) =>
+          setSearchParams({ itemId: nickNames || nickName || items || '' })
+        }
+        preSearchParams={{
+          divisionId: sc.divisionId,
+          scpModuleType: MENU_ID,
+          operationGroup: '',
+          itemId: sc.itemId,
+        }}
       />
 
       {/* Excel upload — 완료 후 메인 재조회(AS-IS MSG00265 Yes 재조회 재현). */}
@@ -292,6 +355,31 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={actions.openUpload}
         modalClose={actions.closeUpload}
         onUploaded={actions.refreshAfterExternalSave}
+        onSave={async () => {
+          // AS-IS 적재(mode=1) — 검증 통과분 DB 반영(2번째 호출). 라우팅
+          //   (SCP0126,'No Work',UPLOAD_SAVE) → SCP0126_noWork_UPLOAD (ora.py 실측, USE_YN='Y').
+          try {
+            const res = await apiClient.post<Record<string, unknown>>(
+              `/${MENU_ID}/${ADMIN_SHEET_NAME[SHEETS.NO_WORK]}/UPLOAD_SAVE/call-proc`,
+              {
+                mode: 1,
+                createdBy: userId,
+                programId: MENU_ID,
+                sheetName: ADMIN_SHEET_NAME[SHEETS.NO_WORK],
+              }
+            );
+            const code = Number((res.data as { code?: string })?.code ?? 0);
+            const inner = (
+              res.data?.result as { o_result_cursor?: { CODE?: string; MSG?: string }[] }
+            )?.o_result_cursor?.[0];
+            if (res.status >= 400 || code || (inner && inner.CODE !== '0')) {
+              return { ok: false, message: inner?.MSG || (res.data as { message?: string })?.message };
+            }
+            return { ok: true };
+          } catch (e) {
+            return { ok: false, message: e instanceof Error ? e.message : undefined };
+          }
+        }}
       />
 
       {/*
@@ -299,27 +387,24 @@ export const OptCapa = ({ tabId, title }: PageProps<MENU_ID>) => {
         AS-IS `popItem.Form_Load(true, division, "", "", "")` 의 첫 인자가 `cboDivision.ControlValues`
         **원본**이다(cs:3746) — 다른 경로는 `GetCheckedListValue` 를 거치지만 ALL 옵션이 없어 값은 같다.
       */}
-      <ItemByDivisionModal
+      {/* ITEM_ID 셀 더블클릭 팝업 — AS-IS `SCM0002_ItembyDivisionPopup`(cs:3750)의 정본 TO-BE 는
+          `ModelByDivisionPopup`(menuId SCM0002)이다. 공용 `ItemByDivisionModal`(COM0008 = AS-IS
+          `DM0002_ItembyDivisionPopup`)은 **다른 팝업**이라 전환 초기 오매핑이었다 — SCM0002 SP 는
+          EE/EE_UC division 분기(PKG_SCM0002 BODY:71·73·114·240)를 갖지만 COM0008 SP 는 없어 EE 가
+          0건이 됐다(ora.py 실측 2026-10-20). 자매 `shipment-plan-electrode` 와 동일 팝업. */}
+      <ModelByDivisionPopup
         open={actions.itemPopup !== null}
-        modalClose={actions.closeItemPopup}
-        // 4번째 인자가 `NICK_NAME` 이다 — 인터페이스의 파라미터명(`itemType`)과 실제 호출 순서가
-        //   다르다(`ItemByDivisionModal.tsx:350-360`·`379-383` 실측). 이름이 아니라 위치를 따른다.
-        setSelectedValue={(itemId, _itemName, _itemClassName, nickName) =>
-          actions.handleItemSelect(str(itemId), str(nickName))
-        }
-        preSearchParams={
-          {
-            // AS-IS `popItem.Form_Load(true, division, "", "", "")`(cs:3751) — division 만 싣는다.
-            //   나머지 cascade 축은 이 코드베이스의 "필터 없음" sentinel 인 `ALL` 로 둔다.
-            divisionId: actions.divisionId,
-            deptId: 'ALL',
-            endCustomer: 'ALL',
-            salesSite: 'ALL',
-            projectCode: '',
-            itemId: '',
-          } as never
-        }
-        callFromCell={true}
+        onClose={actions.closeItemPopup}
+        // 반환값 itemId/nickName 만 셀에 반영한다(위치 아닌 필드명 — ModelSelection).
+        onSelect={sel => actions.handleItemSelect(str(sel.itemId), str(sel.nickName))}
+        params={{
+          // AS-IS `Form_Load(true, division, "", "", "")`(cs:3751). scmSite 는 빈값이면 0건이라
+          //   'ALL' 센티널, project/item 은 LIKE 부분일치라 빈값=전체(ModelByDivisionPopup 헤더 규약).
+          divisionId: actions.divisionId,
+          scmSiteId: 'ALL',
+          projectCode: '',
+          itemId: '',
+        }}
       />
     </>
   );

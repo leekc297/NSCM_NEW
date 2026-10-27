@@ -160,14 +160,14 @@ export const ShipmentPlanFix = ({ tabId, title }: PageProps<MENU_ID>) => {
   const hotkeyConfig: HotkeyConfig = {
     // 조회는 무해하므로 항상 허용(search 버튼 권한과 무관하게 조회 보장).
     search: handleSearch,
-    // SAVE = 무동작. AS-IS protected override SaveButton() 본문이 비어 있다(cs:468-469 — 아무 것도 안 함).
-    //   확정 해제(Unfix)는 화면 고유 btnUnfix(customButtons)만 수행한다 — SAVE 버튼에 unfix 를 배선하지 않는다
-    //   (사용자 지시 2026-10-02). 공용 SubTitle 기본 save 핸들러 부활 방지를 위해 명시적 무동작으로 둔다.
-    save: () => undefined,
-    // Insert/Delete — AS-IS toolbarOverride 자체가 없다(design 00 §4-2 / 01 §2.4). 공용 SubTitle 기본 addRow/removeRow
-    //   부활 방지를 위해 키를 명시적 무동작으로 둔다(skill §3 규칙: 키 생략·false 금지, 명시적 () => undefined).
-    insert: () => undefined,
-    delete: () => undefined,
+    // SAVE = 동작 없는 no-op 버튼이라 제거(false, 사용자 결정 2026-10-20: 무동작 버튼 미노출). AS-IS SaveButton
+    //   본문 공백(cs:468-469). 확정 해제(Unfix)는 화면 고유 btnUnfix(customButtons)로만 수행(사용자 지시
+    //   2026-10-02). 키 생략 금지(공용 SubTitle 기본 save 핸들러 부활) — false 로 명시.
+    save: false,
+    // Insert/Delete — BTN_MPG_M(권한) 미등록이라 숨김(false, 사용자 결정 2026-10-20). AS-IS toolbarOverride
+    //   없음(design 00 §4-2 / 01 §2.4). 키 생략 금지(공용 SubTitle addRow/removeRow 부활) — false 로 명시.
+    insert: false,
+    delete: false,
     manual: false,
     upload: false,
   };

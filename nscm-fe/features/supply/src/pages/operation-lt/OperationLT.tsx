@@ -45,7 +45,8 @@ export const OperationLT = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setToast = useMessageStore.getState().setToast;
   const setAlert = useMessageStore.getState().setAlert;
   const { validateSaveRows } = useOperationLTValidation();
-  // 필수 컬럼(메타 M/IM) 저장검증 — 전 화면 공통. 이 화면 INPUT_TP_CD 전 'S' 라 필수는 validateSaveRows 가 병행.
+  // 필수 컬럼(메타 M/IM + 라벨 '*') 저장검증 — 전 화면 공통(AS-IS checkRequiredOfSpread 등가).
+  //   validateSaveRows 는 4키 중복만 담당(AS-IS checkValidN1), 필수값은 이 공통 훅이 판정.
   const { saveWithValidation } = useSaveWithValidation();
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
@@ -145,9 +146,10 @@ export const OperationLT = ({ tabId, title }: PageProps<MENU_ID>) => {
       setToast({ type: 'error', message: t(MSG.NO_CHANGE, '_No changes to save.') });
       return;
     }
-    // 필수값 + 4키 중복 검증(design 01 R9 / 03 §3-4) — 전 행 대상 스캔.
+    // 4키 중복 검증(AS-IS checkValidN1, design 01 R9 / 03 §3-4) — 전 행 대상 스캔.
     if (!validateSaveRows(src).ok) return;
-    // 필수 컬럼 메타검증 통과 시 mutate (저장 성공/실패 toast·재조회는 useProcMutation 표준 onSuccess).
+    // 필수값 메타검증(라벨 '*'/INPUT_TP_CD) 통과 시 mutate — "[라벨] 값은 필수 입력 항목입니다"(MSG00429)
+    //   저장 성공/실패 toast·재조회는 useProcMutation 표준 onSuccess.
     saveWithValidation(dirty as unknown as OperationLTRow[], staticColumns[SHEETS.MAIN], mutate);
   };
 

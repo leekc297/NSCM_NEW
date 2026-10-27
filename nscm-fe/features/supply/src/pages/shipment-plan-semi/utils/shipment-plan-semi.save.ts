@@ -17,6 +17,7 @@ import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { EditTracker } from '@foundation/utils';
 
 import { MEASURE } from '../shipment-plan-semi.constants';
+
 import { dynColKindOf, pickField } from './shipment-plan-semi.editLock';
 
 // design 03 §4.4 24필드 순서 그대로(A 포함) — JSON_TABLE COLUMNS 절과 1:1 대응.
@@ -78,15 +79,19 @@ export const buildSaveRows = (
   timeZone: string,
   planType: string,
   seq: string,
-  fixReason = ''
+  fixReason = '',
+  // 81 계열 Weekly 저장(P_SCP0010_SAVE_SEMI_WEEKLY)은 W_ 셀을 주 수량 그대로 보낸다(AS-IS .cs:2580-2620).
+  bucketType: 'DAILY' | 'WEEKLY' = 'DAILY'
 ): SaveCellRow[] => {
   if (!tracker) return [];
   const rows: SaveCellRow[] = [];
+  const targetKind = bucketType === 'WEEKLY' ? 'W' : 'D';
   tracker.getOriginalValues().forEach((changed, row) => {
     const r = row as unknown as Record<string, unknown>;
     Object.keys(changed).forEach(binding => {
       const kind = dynColKindOf(binding);
-      if (kind !== 'D') return; // 저장 대상은 D_ 셀뿐(W_ 입력은 deptDayDistribute 로 이미 D_ 로 분배됨)
+      // if (kind !== 'D') return; // 저장 대상은 D_ 셀뿐(W_ 입력은 deptDayDistribute 로 이미 D_ 로 분배됨)
+      if (kind !== targetKind) return; // DAILY 는 D_ 셀, WEEKLY 는 W_ 셀(값 = YYYYMM + 주차 2자리)
       const yyyymmdd = binding.slice(2, 10);
       rows.push({
         a: '', // dead field(SP 미사용 확정) — SaveCellRow 주석 참조
@@ -111,7 +116,8 @@ export const buildSaveRows = (
         createdBy: userId,
         lastUpdatedBy: userId,
         timeZone,
-        bucketType: 'DAILY',
+        // bucketType: 'DAILY',
+        bucketType,
         transMode: s(pickField(r, 'TRANSPORT_MODE')),
         debugMode: 'F',
       });

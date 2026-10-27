@@ -2,6 +2,7 @@ import {
   ASSIGN_ALWAYS_EDITABLE_COLUMNS,
   ELTR_INSERT_LOCKED_COLUMN,
   MONTH_COLUMN_PREFIX,
+  ROW_SOURCE_LINE_POPUP,
   SOP_EDITABLE_COLUMNS,
   YEAR_COLUMN_PREFIX,
 } from '../capa-line-assign.constants';
@@ -27,7 +28,10 @@ const isInsertedRow = (row: GridRow | undefined): boolean => row?.CRUD_TYPE === 
  *   · `VALID_YN`/`LANE_QTY` → 행 상태 무관 상시 편집 (G19·G20)
  *   · 신규행('I')의 고정블록 → 편집 허용 (G18 `isInsertMode=false`)
  *   · 기존행의 고정블록    → 잠금
- *   · ELTR 신규행 `NICK_NAME` → 잠금 (G43, 2025-03-31 개정)
+ *   · ELTR 신규행 `NICK_NAME` → **Insert 버튼 경로만** 잠금 (G43, 2025-03-31 개정, cs:5419-5422)
+ *     AS-IS 는 `Insert_Row_Assign`(Insert 버튼)에서만 NICK_NAME 을 `LockRange` 하고
+ *     `Insert_Row_Assign_Line`(P03 CAPA Line 팝업)에서는 잠그지 않는다. 팝업 행에는
+ *     `ROW_SOURCE_LINE_POPUP` 마커가 있어 그 행은 ELTR 이어도 NICK_NAME 을 열어둔다.
  */
 export const isAssignCellEditable = (params: {
   binding: string;
@@ -41,7 +45,8 @@ export const isAssignCellEditable = (params: {
   if (isDateColumn(binding)) return true;
   if (ASSIGN_ALWAYS_EDITABLE_COLUMNS.includes(binding)) return true;
   if (!isInsertedRow(row)) return false;
-  if (isEltr && binding === ELTR_INSERT_LOCKED_COLUMN) return false;
+  // ELTR 신규행 NICK_NAME 잠금은 Insert 버튼 경로만 — 팝업(P03) 경로 행은 마커로 제외한다.
+  if (isEltr && binding === ELTR_INSERT_LOCKED_COLUMN && !row?.[ROW_SOURCE_LINE_POPUP]) return false;
   return true;
 };
 

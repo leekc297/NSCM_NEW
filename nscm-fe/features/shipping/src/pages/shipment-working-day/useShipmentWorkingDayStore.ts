@@ -6,7 +6,6 @@ import {
   ALL,
   BTN_GET_SCP_PERIOD,
   DEBUG_MODE,
-  DEFAULT_DAY_WEEK,
   MENU_ID,
   SHEETS,
 } from './shipment-working-day.constants';
@@ -62,8 +61,6 @@ const makeInitState = (): State => ({
     divisionId: ALL,
     fromYyyymmdd: '',
     toYyyymmdd: '',
-    dayWeekCode: DEFAULT_DAY_WEEK,
-    inputValue: '',
   },
   filters: {},
   calendarFilters: undefined,
@@ -81,8 +78,6 @@ const SEARCH_KEYS = new Set<string>([
   'divisionId',
   'fromYyyymmdd',
   'toYyyymmdd',
-  'dayWeekCode',
-  'inputValue',
 ]);
 
 export const useShipmentWorkingDayStore = createPersistedStoreWithTab<State & Action>(

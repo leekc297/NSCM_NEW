@@ -7,6 +7,7 @@ import { DataGrid } from '@shared/components';
 
 import {
   ADMIN_SHEET_NAME,
+  HEADER_DEPTH,
   HEADER_ROW_HEIGHT,
   type GridSheet,
 } from '../capa-lob-report.constants';
@@ -82,9 +83,34 @@ export const CapaLobReportGrid = ({
     };
     grid.formatItem.addHandler(formatItemHandler);
 
+    // 헤더 총높이 고정 — `headerRowHeight` prop 만으로는 정적 컬럼 기본높이가 동적 16·defaultSize 를
+    //   이겨 3단 전체가 48×3=144px 로 벌어진다(메모리 multi-tier-dyn-header-height-balloons).
+    //   실제 tier 수로 총높이(48)를 균등배분해 각 헤더 행·defaultSize 에 박는다(형제
+    //   ShipmentPlanElectrodeMainGrid applyHeaderHeight 정본). 목표값과 같으면 skip → updatedLayout 무한루프 방지.
+    const applyHeaderHeight = () => {
+      const headerRows = grid.columnHeaders?.rows;
+      if (!headerRows || headerRows.length === 0) return;
+      const target = (HEADER_ROW_HEIGHT * HEADER_DEPTH) / headerRows.length;
+      let changed = false;
+      for (let i = 0; i < headerRows.length; i += 1) {
+        if (Math.round(headerRows[i].height ?? headerRows.defaultSize) !== Math.round(target)) {
+          headerRows[i].height = target;
+          changed = true;
+        }
+      }
+      if (Math.round(headerRows.defaultSize) !== Math.round(target)) {
+        headerRows.defaultSize = target;
+        changed = true;
+      }
+      if (changed) grid.invalidate(true);
+    };
+    grid.updatedLayout.addHandler(applyHeaderHeight);
+    applyHeaderHeight();
+
     return () => {
       try {
         grid.formatItem?.removeHandler(formatItemHandler);
+        grid.updatedLayout?.removeHandler(applyHeaderHeight);
       } catch {
         /* unmount race */
       }
@@ -127,6 +153,9 @@ export const CapaLobReportGrid = ({
       allowMerging={allowMerging}
       // 전건 조회전용이라 dirty 집계 대상이 아니다(CRUD_TYPE 이 생기는 경로가 없다).
       excludeFromDirtyCheck
+      // 조회전용 Report — 셀 편집·행 추가/삭제가 없다(사용자 지시 2026-10-19). isReadOnly 면
+      //   CRUD status 행헤더 컬럼도 생기지 않는다(DataGrid L-1618). AS-IS `IsLock` 영구 true 와 등가.
+      isReadOnly
     />
   );
 };

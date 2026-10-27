@@ -182,6 +182,9 @@ editTrackerRef.current?.getOriginalValues()        // 원본 값 Map
 > Modal 에서 row 셀 set 후 `storeChange` 호출 의무 (CRUD_TYPE='U' 자동 + dirty flag). 호출 누락 시 SAVE 시 변경 미감지 → 무반영 사고.
 
 ### 5.4 `CustomMergeManager` (class — `allowMerging !== None` 시 자동)
+
+> **TO-BE 룰 CR-073(2026-10-27 사용자 판정)** — 셀 세로 병합은 **화면이 정한 키(그룹) 컬럼만** 적용한다(예 BOD `MERGE_COLUMNS` 9개). AS-IS 는 메타 컬럼 전부를 FPMerge.Restricted 로 병합하지만(SpreadInfo.cs:1909) TO-BE 는 값 컬럼(Priority·Route Id·Lead Time·Valid 등)을 병합하지 않으며 이는 오류가 아니다. 병합 키가 **왼쪽 전 컬럼 값 누적**(`_getMergeKey`)이라 비병합 컬럼 오른쪽에 둔 병합 대상 컬럼(BOD Trans Mode)은 실제로 병합되지 않는다 — 오류는 아니지만 MERGE_COLUMNS 위치 설계를 확인할 것. 정합검증 H3 는 이 룰로 판정(`_trace.spec.ts` · judge `H3_CR073` · `confirmed_requirements.csv` CR-073).
+
 ```tsx
 import { CustomMergeManager } from '@foundation/utils';
 

@@ -1,3 +1,5 @@
+import type { BUCKET } from './opt-capa.constants';
+
 /** 조회조건 — AS-IS 7항목(design 02 §1 S-1~S-7). 다중선택 2축은 `ALL` sentinel 배열이다. */
 export interface OptCapaSearchParams {
   divisionId: string;
@@ -9,6 +11,8 @@ export interface OptCapaSearchParams {
   lineIds: string[];
   nickName: string;
   itemId: string;
+  /** No Work 탭 전용 Bucket(Day/Week). Day 외 시트에서는 무시된다(조회/컬럼 분기 모두 No Work 한정). */
+  bucket: BUCKET;
 }
 
 /**

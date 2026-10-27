@@ -1,0 +1,94 @@
+﻿XML_F52E2B61-18A1-11d1-B105-00805F49916B
+"&#x0D;
+        SELECT CP.DIVISION_ID&#x0D;
+		     , CP.SCM_SITE_ID&#x0D;
+			 , CP.PLANT_SITE_ID&#x0D;
+             , CP.CUSTOMER_PROJECT_CODE&#x0D;
+             , CP.CUSTOMER_MODEL&#x0D;
+             , CP.INCOTERMS             &#x0D;
+             , CP.FCST_TYPE&#x0D;
+			 , CP.DOM_EXP&#x0D;
+			 , CP.MEASURE_GROUP&#x0D;
+             , CP.MEASURE&#x0D;
+			 , CP.UPLOAD_UOM&#x0D;
+             , CP.PROJECT_CODE&#x0D;
+             , CP.ITEM_ID&#x0D;
+		--[PJ2024-50461] Team Mapping------------------------------------&#x0D;
+			 --, CASE WHEN (([dbo].[FN_GET_DEPT_LIST]('leedonghoon', S.DEPT_ID) = 'Y') OR '' ='ADMIN') &#x0D;
+				--THEN 'Y' ELSE 'N' END AS EDIT_FLAG&#x0D;
+			 , CASE WHEN (([dbo].[FN_GET_DEPT_LIST]('leedonghoon', TEAM.DEPT_ID) = 'Y') OR '' ='ADMIN') &#x0D;
+				THEN 'Y' ELSE 'N' END AS EDIT_FLAG&#x0D;
+		--[PJ2024-50461] Team Mapping------------------------------------&#x0D;
+             , SUM(CASE WHEN SUBSTRING(CP.YYYYMMDD, 1, 4) + RIGHT('00' + CONVERT(VARCHAR, DATEPART(WEEK, CP.YYYYMMDD), 23), 2) = '202640' THEN CP.QTY ELSE NULL END) AS D_20261001 , SUM(CASE WHEN SUBSTRING(CP.YYYYMMDD, 1, 4) + RIGHT('00' + CONVERT(VARCHAR, DATEPART(WEEK, CP.YYYYMMDD), 23), 2) = '202641' THEN CP.QTY ELSE NULL END) AS D_20261005 , SUM(CASE WHEN SUBSTRING(CP.YYYYMMDD, 1, 4) + RIGHT('00' + CONVERT(VARCHAR, DATEPART(WEEK, CP.YYYYMMDD), 23), 2) = '202642' THEN CP.QTY ELSE NULL END) AS D_20261012 , SUM(CASE WHEN SUBSTRING(CP.YYYYMMDD, 1, 4) + RIGHT('00' + CONVERT(VARCHAR, DATEPART(WEEK, CP.YYYYMMDD), 23), 2) = '202643' THEN CP.QTY ELSE NULL END) AS D_20261019 , SUM(CASE WHEN SUBSTRING(CP.YYYYMMDD, 1, 4) + RIGHT('00' + CONVERT(VARCHAR, DATEPART(WEEK, CP.YYYYMMDD), 23), 2) = '202644' THEN CP.QTY ELSE NULL END) AS D_20261026 &#x0D;
+        FROM   [dbo].[DM_PLN_CUSTOMER_PSI] CP WITH(NOLOCK)&#x0D;
+		     			--, [dbo].[SCM_MST_SITE]        S  WITH(NOLOCK)&#x0D;
+		--[PJ2024-50611] ????? INNER JOIN ?? START&#x0D;
+		INNER JOIN  [dbo].[SCM_MST_SITE]        S  WITH(NOLOCK)
+			ON CP.DIVISION_ID   = S.DIVISION_ID
+			AND    CP.SCM"
+"_SITE_ID   = S.SCM_SITE_ID&#x0D;
+		--[PJ2024-50611] ????? INNER JOIN ?? END&#x0D;
+--[PJ2024-50461] Team Mapping------------------------------------&#x0D;
+			LEFT OUTER JOIN SCM_MST_SITE_ITEM ITM WITH(NOLOCK)&#x0D;
+				ON S.DIVISION_ID = ITM.DIVISION_ID&#x0D;
+				AND S.SCM_SITE_ID = ITM.SCM_SITE_ID&#x0D;
+				AND CP.PROJECT_CODE = ITM.PROJECT_CODE--[PJ2024-50611] ?? ??&#x0D;
+				AND CP.ITEM_ID = ITM.ITEM_ID--[PJ2024-50611] ?? ??&#x0D;
+			LEFT JOIN (&#x0D;
+				SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID &#x0D;
+				FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)&#x0D;
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)&#x0D;
+				ON B.DEPT_ID = C.DEPT_ID&#x0D;
+			) AS TEAM&#x0D;
+			ON      &#x0D;
+			TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](ITM.owner, ','))&#x0D;
+--[PJ2024-50461] Team Mapping------------------------------------&#x0D;
+        WHERE  1 = 1&#x0D;
+		AND    CP.DIVISION_ID   = S.DIVISION_ID&#x0D;
+		AND    CP.SCM_SITE_ID   = S.SCM_SITE_ID&#x0D;
+        AND    CP.MEASURE_GROUP = 'CUST_FCST' &#x0D;
+		
+ AND CP.DIVISION_ID IN (N'81')   &#x0D;
+		
+ AND TEAM.DEPT_ID IN (N'58127819')      &#x0D;
+        &#x0D;
+		&#x0D;
+		&#x0D;
+        &#x0D;
+	    	    &#x0D;
+			&#x0D;
+		AND    CP.YYYYMMDD BETWEEN '20261001' AND '20261031'&#x0D;
+		AND    CP.MEASURE IN (SELECT DISTINCT MEASURE&#x0D;
+		                      FROM   [dbo].[DM_MST_CUSTOMER_FCST] X WITH(NOLOCK)&#x0D;
+							  WHERE  1 = 1&#x0D;
+							  AND    X.DIVISION_ID = CP.DIVISION_ID                                     &#x0D;
+                              AND    X.SCM_SITE_ID = CP.SCM_SITE_ID -- ?? SITE? ??? Measure? ??.&#x0D;
+                              AND    X.UPLOAD_BUCKET_TYPE = 'WEEKLY'	&#x0D;
+							  AND    X.VALID_YN    = 'Y'&#x0D;
+							)		&#x0D;
+		GROUP BY CP.DIVISION_ID&#x0D;
+		--[PJ2024-50461] Team Mapping------------------------------------&#x0D;
+				--, S.DEPT_ID&#x0D;
+			   , TEAM.DEPT_ID&#x0D;
+		--[PJ2024-50461] Team Mapping------------------------------------&#"
+"x0D;
+		       , CP.SCM_SITE_ID&#x0D;
+			   , CP.PLANT_SITE_ID&#x0D;
+               , CP.CUSTOMER_PROJECT_CODE&#x0D;
+               , CP.CUSTOMER_MODEL&#x0D;
+               , CP.INCOTERMS             &#x0D;
+               , CP.FCST_TYPE&#x0D;
+			   , CP.DOM_EXP&#x0D;
+			   , CP.MEASURE_GROUP&#x0D;
+               , CP.MEASURE&#x0D;
+			   , CP.UPLOAD_UOM&#x0D;
+               , CP.PROJECT_CODE&#x0D;
+               , CP.ITEM_ID&#x0D;
+			   &#x0D;
+        ORDER BY CP.DIVISION_ID&#x0D;
+		       , CP.SCM_SITE_ID&#x0D;
+			   , CP.PLANT_SITE_ID&#x0D;
+		       , CP.CUSTOMER_PROJECT_CODE&#x0D;
+			   , CP.CUSTOMER_MODEL&#x0D;
+			   &#x0D;
+  "

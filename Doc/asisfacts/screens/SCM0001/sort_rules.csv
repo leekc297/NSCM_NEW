@@ -1,0 +1,9 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCM0001,SQL,SCM0001_GET_BUILDING_BY_PLANT,Doc\asisfacts\db\modules\dbo.SCM0001_GET_BUILDING_BY_PLANT.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0001,SQL,SCM0001_GET_DIVISION,Doc\asisfacts\db\modules\dbo.SCM0001_GET_DIVISION.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0001,SQL,SCM0001_GET_FROM_SITE,Doc\asisfacts\db\modules\dbo.SCM0001_GET_FROM_SITE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0001,SQL,SCM0001_GET_LINE_BY_OPERATION,Doc\asisfacts\db\modules\dbo.SCM0001_GET_LINE_BY_OPERATION.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0001,SQL,SCM0001_GET_OPERATION_BY_BUILDING,Doc\asisfacts\db\modules\dbo.SCM0001_GET_OPERATION_BY_BUILDING.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0001,SQL,SCM0001_GET_PLANT_BY_DIVISION,Doc\asisfacts\db\modules\dbo.SCM0001_GET_PLANT_BY_DIVISION.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0001,SQL,SCM0001_GET_SITE_BY_DIVISION,Doc\asisfacts\db\modules\dbo.SCM0001_GET_SITE_BY_DIVISION.sql,45,,SITE_DESCRIPTION,ORDER BY A.SITE_DESCRIPTION,0,정적
+SCM0001,SQL,SCM0001_GET_TO_SITE,Doc\asisfacts\db\modules\dbo.SCM0001_GET_TO_SITE.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

@@ -64,6 +64,9 @@ def run_tobe(cx, proc, params):
         else:
             k = nkey(re.sub(r'^P_', '', argn))
             val = lp.get(k, lp.get(nkey(argn)))
+            if val is None:  # 이름이 조금 다른 인자(AS-IS p_valid ↔ TO-BE P_VALID_YN) — 접두 일치로 잇는다(2026-10-26)
+                cand = [v for k2, v in lp.items() if k2 and (k.startswith(k2) or k2.startswith(k))]
+                val = cand[0] if len(cand) == 1 else None
             if val is None: missing.append(argn); val = None
             if dt in ('NUMBER', 'PLS_INTEGER', 'BINARY_INTEGER') and val not in (None, ''): val = float(val) if '.' in str(val) else int(val)
             call.append(val)
@@ -76,6 +79,11 @@ def run_tobe(cx, proc, params):
         rows = rc.fetchmany(MAX_ROWS)
         sets.append((argn, cols, [[nval(x) for x in r] for r in rows]))
     return sets, missing
+
+def _rows_of(sets):
+    try: return sum(len(x[-1]) for x in (sets or [])) if sets else ''  # AS-IS (cols, rows) · TO-BE (name, cols, rows) 모두 마지막 원소가 행
+    except Exception: return ''
+
 
 def compare(a_sets, t_sets):
     """As-is 결과셋 i ↔ To-Be O_RC{i} (O_RESULT_CURSOR 는 상태용이라 제외). 반환 (판정, 상세 md 라인)"""
@@ -108,7 +116,45 @@ def compare(a_sets, t_sets):
             for r in dt: md.append('| T | ' + ' | '.join(str(x)[:30] for x in r[:12]) + ' |')
         elif not only_a and not only_t and len(a[1]) == len(t[2]):
             md.append('- 일치')
+        # A7 컬럼별 결과 값 (2026-10-27) — DEV↔사내 데이터가 달라 행 값 직접 비교는 차이가 많다 → 데이터 무관 판정 2가지
+        #   ① 공란 컬럼: AS-IS 에 값이 있는 컬럼이 TO-BE 전 행 공란이면 FAIL (예: DM-169 Version 컬럼 공란)
+        #   ② 같은 키 행 대조: 첫 공통 컬럼 중 키 후보(_ID·CODE·NO·YYYYMMDD)로 겹치는 행의 컬럼별 불일치율 — 50% 이상이면 REVIEW
+        def filled(rows_, j):
+            return sum(1 for r in rows_ if nval(r[j]) not in ('', '-', '/')) / max(len(rows_), 1)  # 센티널 '-'·'/' = 공란
+        # 키 = 이름이 키 후보(_ID·CODE·NO·YYYYMMDD)이면서 AS-IS 값이 거의 유일(≥95%)한 첫 컬럼 1개 — DIVISION_ID 같은 저카디널리티·속성 _ID 제외
+        keyc = []
+        for k in common:
+            if re.search(r'(id|code|no|yyyymmdd)$', k) and a[1]:
+                ja0 = a[0].index(ac[k])
+                if len({nval(r[ja0]) for r in a[1]}) / len(a[1]) >= 0.95:
+                    keyc = [k]
+                    break
+        amap = tmap = {}
+        if keyc:
+            ka, kt = [a[0].index(ac[k]) for k in keyc], [t[1].index(tc[k]) for k in keyc]
+            amap = {tuple(nval(r[j]) for j in ka): r for r in a[1]}
+            tmap = {tuple(nval(r[j]) for j in kt): r for r in t[2]}
+        both = [k for k in amap if k in tmap]
+        for k in common:
+            ja, jt = a[0].index(ac[k]), t[1].index(tc[k])
+            fa, ft = filled(a[1], ja), filled(t[2], jt)
+            mis = sum(1 for kk in both if nval(amap[kk][ja]) != nval(tmap[kk][jt]))
+            if fa >= 0.05 and ft == 0 and len(t[2]) > 0:
+                v, note = 'FAIL', f"공란 컬럼 — AS-IS 값 있음 {fa:.1%} ↔ TO-BE 전 행 공란"
+            elif fa > 0 and ft == 0 and len(t[2]) > 0:
+                v, note = 'REVIEW', f"AS-IS 소수 행만 값 있음({fa:.2%}) ↔ TO-BE 전 행 공란 — DEV·사내 데이터 차이일 수 있음(같은 키 행 확인)"
+            elif len(both) >= 10 and mis / len(both) >= 0.5 and k not in keyc:
+                v, note = 'REVIEW', f"같은 키 {len(both)}행 중 {mis}행 값 다름({mis / len(both):.0%})"
+            else:
+                v, note = 'PASS', f"채움 AS-IS {fa:.0%} ↔ TO-BE {ft:.0%}" + (f" · 같은 키 {len(both)}행 중 다름 {mis}" if both else '')
+            COLPROF.append({'set': i + 1, 'column': ac[k], 'asis_fill': f"{fa:.3f}", 'tobe_fill': f"{ft:.3f}", 'key_rows': len(both), 'mismatch': mis, 'verdict': v, 'note': note})
+        empties = [p['column'] for p in COLPROF if p['set'] == i + 1 and p['verdict'] == 'FAIL']
+        if empties:
+            md.append(f"- A7 공란 컬럼(AS-IS 값 있음 · TO-BE 전 행 공란): {', '.join(empties)}")
     return verdict, md
+
+
+COLPROF = []  # compare() 가 결과셋 공통 컬럼별 채움·불일치 프로파일을 쌓는다 → <sp>.cols.csv
 
 cases = []
 with open(os.path.join(OUT_DIR, 'golden_cases.csv'), encoding='utf-8-sig', newline='') as f:
@@ -124,27 +170,32 @@ for c in cases:
     sc, sp, proc = c['screen'], c['asis_sp'], c['tobe_proc']
     params = json.loads(c['params'] or '{}')
     md = [f"# {sc} · {sp} ↔ {proc or '(미매칭)'}", '', f"- 실행: {datetime.datetime.now():%Y-%m-%d %H:%M:%S}", f"- 파라미터: `{json.dumps(params, ensure_ascii=False)}`", f"- 종류: {c['kind']}"]
+    a_sets = t_sets = None
     if c['kind'] == 'SAVE' and not WRITE: verdict = 'SKIP'; md.append('- SAVE 류 — `--write` 없이 건너뜀')
     elif not proc: verdict = 'SKIP'; md.append('- To-Be proc 미매칭 — golden_cases.csv 의 tobe_proc 를 지정(manual=Y)')
-    elif any(v == '' for v in params.values()): verdict = 'SKIP'; md.append('- 파라미터 값 미정 — param_defaults.json 또는 golden_cases.csv params 보완')
+    elif any(v == '' for v in params.values()) and (c.get('manual') or '').upper() != 'Y': verdict = 'SKIP'; md.append('- 파라미터 값 미정 — param_defaults.json 또는 golden_cases.csv params 보완 (manual=Y 면 빈값도 의도된 값으로 실행)')
     else:
         try:
             a_sets = run_asis(ca, sp, params)
             try:
                 t_sets, missing = run_tobe(ct, proc, params)
                 if missing: md.append(f"- To-Be 인자 중 값 없음(NULL 전달): {', '.join(missing)}")
-                verdict, lines = compare(a_sets, t_sets); md += lines
+                COLPROF.clear(); verdict, lines = compare(a_sets, t_sets); md += lines
             finally:
                 if c['kind'] == 'SAVE': ct.rollback()
         except Exception as e:
             verdict = 'ERR'; md.append(f"- 오류: {dbconn.mask(str(e), cfg).splitlines()[0][:400]}")
     os.makedirs(os.path.join(OUT_DIR, sc), exist_ok=True)
     open(os.path.join(OUT_DIR, sc, f'{sp}.md'), 'w', encoding='utf-8').write('\n'.join(md) + '\n')
-    summary.append({'screen': sc, 'case_id': c['case_id'], 'kind': c['kind'], 'asis_sp': sp, 'tobe_proc': proc, 'verdict': verdict})
+    if COLPROF and a_sets is not None:  # A7 컬럼 프로파일 — 정합검증 judge 가 반입(원장 A7 행)
+        with open(os.path.join(OUT_DIR, sc, f'{sp}.cols.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+            w = csv.DictWriter(f, fieldnames=['set', 'column', 'asis_fill', 'tobe_fill', 'key_rows', 'mismatch', 'verdict', 'note']); w.writeheader(); w.writerows(COLPROF)
+        COLPROF.clear()
+    summary.append({'screen': sc, 'case_id': c['case_id'], 'kind': c['kind'], 'asis_sp': sp, 'tobe_proc': proc, 'verdict': verdict, 'asis_rows': _rows_of(a_sets), 'tobe_rows': _rows_of(t_sets)})
     print(f"[{verdict}] {c['case_id']}")
 ca.close(); ct.close()
 with open(os.path.join(OUT_DIR, '_summary.csv'), 'w', encoding='utf-8-sig', newline='') as f:
-    w = csv.DictWriter(f, fieldnames=['screen', 'case_id', 'kind', 'asis_sp', 'tobe_proc', 'verdict']); w.writeheader(); w.writerows(summary)
+    w = csv.DictWriter(f, fieldnames=['screen', 'case_id', 'kind', 'asis_sp', 'tobe_proc', 'verdict', 'asis_rows', 'tobe_rows']); w.writeheader(); w.writerows(summary)
 cnt = {k: sum(1 for s in summary if s['verdict'] == k) for k in ['PASS', 'COLS', 'ROWS', 'DIFF', 'ERR', 'SKIP']}
 md = [f"# 골든 테스트 요약 {datetime.datetime.now():%Y-%m-%d %H:%M}", '', ' · '.join(f'{k} {v}' for k, v in cnt.items()), '', '| 화면 | As-is SP | To-Be PROC | 판정 |', '|---|---|---|---|'] + [f"| {s['screen']} | {s['asis_sp']} | {s['tobe_proc']} | {s['verdict']} |" for s in summary]
 open(os.path.join(OUT_DIR, '_summary.md'), 'w', encoding='utf-8').write('\n'.join(md) + '\n')

@@ -51,9 +51,16 @@ export const isCellEditable = (
   return EDIT_SET.has(binding);
 };
 
-// 인라인 편집(콤보/텍스트) 허용 — 팝업 셀(ITEM_ID/User..)은 인라인 편집 취소(팝업 전용, nscm-patterns §5-16).
+// 인라인 편집(키인/콤보 드롭다운) 허용 — **편집 가능한 모든 셀**이 입력을 받는다(= isCellEditable 과 동치).
+//   근거: AS-IS SSP0025 는 KeyPress 차단 핸들러가 없고(cs 전건), 편집셀이 전부 키인 가능 타입이다 —
+//     · ITEM_ID = FPText(텍스트)
+//     · USER_ID/PART_LEADER/TEAM_LEADER = 돋보기 배경이미지가 붙은 **TextCellType**(cs:91·121·162~164) = 텍스트 키인 O
+//     · DIVISION_ID/SITE_DESCRIPTION/VALID_YN = 콤보(드롭다운 입력)
+//   팝업 셀(ITEM_ID·USER/PART/TEAM)도 키인 + 더블클릭 팝업을 병행한다 — 더블클릭 팝업은 grid dblClick 이
+//   열되, 열기 전 finishEditing 으로 인라인 편집을 종료해 에디터가 모달 아래 남지 않게 한다(키인은 클릭+타이핑/F2).
+//   (자매 SSP0024 는 AS-IS 가 KeyPress 로 키인을 막아 팝업 전용이지만 SSP0025 는 다르다.)
 export const isInlineEditable = (
   binding: string,
   row: Record<string, unknown> | undefined,
   isEditMode: boolean
-): boolean => !isPopupColumn(binding) && isCellEditable(binding, row, isEditMode);
+): boolean => isCellEditable(binding, row, isEditMode);

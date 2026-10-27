@@ -41,12 +41,13 @@ const initState: State = {
   initialized: false,
   isOpenSearchArea: true,
   searchParams: {
-    // 기본 최신월 — AS-IS 는 SCP0084_GET_MONTH_RANGE.MAX_YYYYMM(cs:645), 미배포(goal.md ②)라
-    //   convert-sp 배포 전까지 현재월 폴백(런타임 월범위 초기화는 SP 배포 후 재판정).
+    // 기본 최신월 — AS-IS SCP0084_GET_MONTH_RANGE.MAX_YYYYMM(cs:645). 콤보(COMBO.MONTH_RANGE) 도착 전
+    //   초기 폴백만 현재월이고, Form 이 MAX_YYYYMM 도착 시 1회 덮어쓴다(InventoryTrendForm monthRange effect).
     month: dayjs().format('YYYYMM'),
     divisionId: 'ALL', // Division_SCP 기본 ALL(setListBox blnAllFlag=true, CControl.cs:56~70)
     plantId: 'ALL', // PlantByGroup_SCP 기본 ALL
     itemId: '',
+    detail: false, // 상세 22컬럼 기본 숨김 — AS-IS chkDetail.InitValue='N'(.designer:351)
   },
   filters: {},
   staticColumns: [],
@@ -114,7 +115,7 @@ export const useInventoryTrendStore = createPersistedStoreWithTab<State & Action
     },
     // F6(SubTitle searchParam) 개인화 저장분 복원(1회) — 정본 scp-bom(SCP0053)·자매 global-psi-report(SCP0100) 파리티.
     //   GET /admin/menu/{MENU_ID}/search-conditions → paramNm/paramCtn 를 searchParams 에 패치.
-    //   SearchParams 4필드(month/divisionId/plantId/itemId)는 전부 문자열 → 역직렬화 불요(불리언/배열 키 없음).
+    //   SearchParams 문자열 4필드(month/divisionId/plantId/itemId)는 그대로, detail(boolean)만 역직렬화한다.
     //   저장은 EXCLUDED_DATE_PARAM·빈값 필터 후 재삽입이라(gridAction.ts personalizeCondition),
     //   응답에 없는 키는 initState 기본값을 그대로 둔다(저장분 없거나 조회 실패도 동일).
     //   주의: setSearchParams(cascade)를 거치지 않고 직접 치환 — 저장된 divisionId·plantId 를 함께 복원한다.
@@ -130,13 +131,14 @@ export const useInventoryTrendStore = createPersistedStoreWithTab<State & Action
         const rows = res.data.result ?? [];
         if (rows.length === 0) return;
         const init = initState.searchParams;
-        const patch: Partial<SearchParams> = {};
+        const patch: Record<string, string | boolean> = {};
         for (const { paramNm, paramCtn } of rows) {
           if (!(paramNm in init)) continue; // SearchParams 필드만 allowlist
-          patch[paramNm as keyof SearchParams] = paramCtn ?? '';
+          // boolean 조회조건(detail)은 저장 시 문자열로 평문화되므로 되돌린다(형제 ending-inventory 동형).
+          patch[paramNm] = paramNm === 'detail' ? paramCtn === 'true' : (paramCtn ?? '');
         }
         set(state => {
-          state.searchParams = { ...state.searchParams, ...patch };
+          state.searchParams = { ...state.searchParams, ...(patch as Partial<SearchParams>) };
         });
       } catch {
         // 미저장/실패 = 기본값 유지 (console 금지 룰)

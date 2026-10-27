@@ -98,7 +98,7 @@ export const useMktFcstValidation = () => {
     if (dirty.length === 0) {
       // 변경/신규 없음 → toast + 공통 문구 (DMF0004~0007/0020/0072 과 동일 규약.
       //   필수·중복 등 검증 실패는 modal alert 유지).
-      setToast({ type: 'error', message: t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.') });
+      setToast({ type: 'error', message: t('MSG00004', '_수정한 내용이 없습니다.') });
       return { ok: false, msgId: MSG.NO_SAVE_DATA };
     }
 

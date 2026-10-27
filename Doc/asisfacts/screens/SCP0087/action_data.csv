@@ -1,0 +1,4 @@
+﻿"screen_id","class","method","line","action_kind","action_target","run_id","kind","db","name","division","status","resultsets"
+"SCP0087","SCP0087_MDMClassMaster","FindData_Main","216","ENDPOINT","new FoxDataRequest","d09f9038a297","SP","LGCE_SCMDEV","SCP0087_GET_MDM_CLASS_MASTER","","UNSAFE",""
+"SCP0087","SCP0087_MDMClassMaster","SCM_SYS_LOG_BATCH","395","ENDPOINT","new FoxDataRequest","80e8dd0d9ae9","SP","LGCE_SCMDEV","PR_SCM_SYS_LOG_BATCH","","UNSAFE",""
+"SCP0087","SCP0087_MDMClassMaster","SaveData_Main","330","ENDPOINT","sql.ExcuteProcedure","ef5f8d080662","SP","LGCE_SCMDEV","SCP0087_SAVE_MDM_CLASS_MASTER_ROW_DATASET","","UNSAFE",""

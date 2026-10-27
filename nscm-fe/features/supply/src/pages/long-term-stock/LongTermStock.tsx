@@ -145,8 +145,8 @@ export const LongTermStock = ({ tabId, title }: PageProps<MENU_ID>) => {
     search: hasButton('SEARCH') && !noDivisionAuth ? handleSearch : false,
     save: hasButton('SAVE') ? () => void handleSave() : false,
     excel: handleExcel,
-    insert: () => undefined, // 표시만(no-op) — 이 화면은 행 추가 미사용
-    delete: () => undefined, // 표시만(no-op) — 이 화면은 행 삭제 미사용
+    insert: false, // 행 추가 미사용 — 기능 없는 공통버튼은 숨김(TO-BE 룰 2026-10-26, 종전 no-op 노출 폐지)
+    delete: false, // 행 삭제 미사용 — 같은 룰
     manual: false,
     upload: false,
   };

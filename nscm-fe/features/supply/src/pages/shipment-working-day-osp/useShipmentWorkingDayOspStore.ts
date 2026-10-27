@@ -1,35 +1,31 @@
 import { apiClient } from '@foundation/apis';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
+import { createPersistedStoreWithTab } from '@shared/stores';
 
-import { DAY_WEEK, MENU_ID, SHEETS } from './shipment-working-day-osp.constants';
+import { MENU_ID, SHEETS } from './shipment-working-day-osp.constants';
 import type { SearchParamProps } from './shipment-working-day-osp.types';
 
 // SP filter payload — useTabProcQuery enabled 가드.
-//   MAIN = PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP (4 IN, OUT o_rc1 데이터 + o_result_cursor 상태).
-//   커서 실측(all_source BODY, 03_grid-columns §4): o_rc1 = 동적 PIVOT(정적 6 + 'D_'||YYYYMMDD), o_result_cursor = 상태.
-//   동적 기간 헤더는 데이터 커서가 아니라 사내 배선 타이틀 시트 CALENDAR(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN)로
-//   조회한다 — AS-IS InitSpread → GetSpdTitle(.cs:151,825-838) 1:1. (2026-10-20 정정: 이전 'BE 가 o_rc1_columns 로 노출'
-//   가정은 BaseService 원문과 다르다 — 사이드카는 SYS0013 DynamicQuery 전용, DoD B26/B27.)
+//   MAIN = PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP (4 IN, OUT O_RC1 데이터 + O_RESULT_CURSOR 상태).
+//   커서 실측(all_source BODY, 03_grid-columns §4): O_RC1 = 동적 PIVOT(정적 6 + D_/W_/M_), O_RESULT_CURSOR = 상태.
+//   단, call-proc 경로(MyBatis CustomMap)는 O_RC1 커서의 컬럼 메타 사이드카(o_rc1_columns)를 발행하지
+//   않고 null 셀도 생략한다 → 동적 D_/W_/M_ 컬럼 목록을 데이터 커서만으로는 알 수 없다. 그래서 AS-IS
+//   GetSpdTitle(3SPAN) 2콜을 재현: 별도 CALENDAR 시트(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN)로
+//   컬럼셋을 받아 동적 컬럼을 구성하고, MAIN O_RC1 의 동명 D_ 키에서 값을 바인딩한다(자매 SCP0010 동형).
 type FiltersBySheet = {
   [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
+  // CALENDAR(3SPAN) 헤더 SP 필터 — startYyyymmdd/endYyyymmdd(SCM_ADM_PROC_M COL_NM 실측).
+  [SHEETS.CALENDAR]?: ProcRequest<MENU_ID, SHEETS.CALENDAR>;
 };
 
 interface ShipmentWorkingDayOspState {
   initialized: boolean;
   // 개인화 조회조건 복원 1회 가드 (SubTitle F6 저장분 mount 복원 — initialized 는 컬럼 fetch 전용이라 별도).
   conditionsRestored: boolean;
-  // 서버 dayRange(기본 조회기간) 적용 1회 가드 — false 인 동안 Page 의 dayRange 쿼리가 살아 있고 applyDayRange 가 기간을 교체한다.
-  //   Reset Condition(F10) 의 reset() 이 false 로 되돌리면 캐시된 서버 구간을 다시 적용한다(BusinessPlan 정본 패턴).
-  dayRangeApplied: boolean;
   isOpenSearchArea: boolean;
   searchParams: SearchParamProps;
   filters: FiltersBySheet;
-  // 동적 기간 헤더(3SPAN) 조건 — MAIN 과 분리한다. AS-IS 는 조회 전에도 Form_Load → CreateSpread → InitSpread 가
-  //   GetSpdTitle 로 초기 기간의 일자 컬럼을 만들고(.cs:112,145,151), 조회 시 FindData_Main → InitSpread 로 다시 만든다(.cs:438).
-  //   Division 변경(resetGrid/clearFilters)은 행만 비우고 컬럼셋(기간 축)은 남긴다 — AS-IS CboDivision 핸들러도 컬럼 무변경(.cs:660-663).
-  calendarFilters?: ProcRequest<MENU_ID, SHEETS.CALENDAR>;
   staticColumn: RawFlexGridColumnConfig[];
 }
 
@@ -40,15 +36,9 @@ interface ShipmentWorkingDayOspAction {
   setDivision: (divisionId: string) => void;
   setFilters: () => void;
   clearFilters: () => void;
-  // 조회 전 초기 컬럼셋 — 현재 Period 로 calendarFilters 를 1회 채운다(AS-IS Form_Load InitSpread 등가). 같으면 no-op.
-  syncCalendarFilters: () => void;
-  // mount 시 persist 된 이전 탭의 calendarFilters 무효화(stale 기간 헤더 자동 발사 방지).
-  clearCalendarFilters: () => void;
   fetchStaticColumns: () => Promise<void>;
   // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchParams 패치(1회).
   restoreSearchConditions: () => Promise<void>;
-  // 서버 dayRange o_rc1[0].PERIOD('yyyymmdd:yyyymmdd') → 기본 Period 1회 적용 (AS-IS dCalendar.InitValue = GetDayRange() .cs:137 1:1).
-  applyDayRange: (range?: string) => void;
 }
 
 // 개인화 조건 복원 역직렬화 키(SubTitle F6 저장은 배열=콤마join·날짜키 제외 — personalizeCondition).
@@ -56,37 +46,28 @@ interface ShipmentWorkingDayOspAction {
 //   EXCLUDED_DATE_PARAM 이 제외하므로 복원 rows 에 오지 않는다. 불리언 조회조건 없음.
 const ARRAY_KEYS = new Set<string>(['plantSiteIds']);
 
-// dCalendar 기본기간 placeholder — 정본은 서버 dayRange(PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD — AS-IS InitControls
-//   `dCalendar.InitValue = GetDayRange()` .cs:137 = DateUtil.GetDayRange(cboDivision,'DAILY')) 응답이며 applyDayRange 가 교체한다.
-//   응답 전·미응답 fallback 은 그 SP 산식 근사 = 오늘 ~ 12개월 뒤 일자의 직전 일요일(일요일이면 당일; SP L2773~2779
-//   `TRUNC(TO_DATE(max)+1,'IW')-1`). 사내 실측 2026-10-20 → '20261020:20271017' 과 동일 산식. dayjs 로컬 날짜(toISOString UTC 금지).
-//   (이전 '당월 1일 ~ 익월 말일' 은 AS-IS 산식과 달라 2026-10-20 정정.)
-const initPeriod = (() => {
-  const start = dayjs();
-  const limit = start.add(12, 'month');
-  return {
-    start: start.format('YYYYMMDD'),
-    end: limit.subtract(limit.day(), 'day').format('YYYYMMDD'), // day(): 0=일 → 직전(또는 당일) 일요일
-  };
-})();
+// dCalendar 기본기간 — 02_search-combo §2 #3 Period(dCalendar GetDayRange DAILY). 데이터·성능 확정 전 기본안으로
+//   당월 1일 ~ 익월 말일 — dayjs 로컬 날짜(toISOString UTC 금지, SCP0019 동일).
+const initPeriod = {
+  start: dayjs().startOf('month').format('YYYYMMDD'),
+  end: dayjs().add(1, 'month').endOf('month').format('YYYYMMDD'),
+};
 
 const initShipmentWorkingDayOspState: ShipmentWorkingDayOspState = {
   initialized: false,
   conditionsRestored: false,
-  dayRangeApplied: false,
   isOpenSearchArea: true,
   searchParams: {
-    // 마운트 시 첫 권한 division 자동선택 — Form 이 옵션 로드 후 교정(session.div 비어있을 수 있음).
-    divisionId: useSessionStore.getState().session.div ?? '',
+    // Division 기본값 '81'(Automotive Battery) — 사용자 지시 2026-10-13. 세션 division 보다 우선.
+    //   (사용자가 81 권한이 없으면 콤보가 빈값으로 표시 → 수동 선택. 권한 보정이 필요하면 별도 처리.)
+    divisionId: '81',
     plantSiteIds: [],
-    // cboDayWeek 기본 SelectDay — btnInput 값입력 전 선택셀 기입 모드(02 §2 #4).
-    dayWeekCode: DAY_WEEK.SELECT_DAY,
     startYyyymmdd: initPeriod.start,
     endYyyymmdd: initPeriod.end,
-    inputValue: '',
+    // Day of the week / Input Value 는 조회조건이 아니라 입력 팝업(ShipmentWorkingDayOspInputModal)의
+    //   로컬 state 로 이동했다(2026-10-15). 여기(searchParams)에서 제거 — GET 파라미터도 아니었다(setFilters 미참조).
   },
   filters: {},
-  calendarFilters: undefined,
   staticColumn: [],
 };
 
@@ -95,9 +76,7 @@ export const useShipmentWorkingDayOspStore = createPersistedStoreWithTab<
 >(
   (set, get) => ({
     ...initShipmentWorkingDayOspState,
-    // F10(조회조건 초기화) — 컬럼셋(calendarFilters, 기간 축)은 보존한다. 비우면 Page 의 1회 동기화(calendarInitRef)가 다시 돌지 않아
-    //   다음 조회 전까지 일자 컬럼이 사라진다(자매 SCP0095 reset 의 calendarFilters 보존 1:1).
-    reset: () => set({ ...initShipmentWorkingDayOspState, calendarFilters: get().calendarFilters }),
+    reset: () => set(initShipmentWorkingDayOspState),
 
     setOpenSearchArea: open => {
       set(state => {
@@ -140,35 +119,19 @@ export const useShipmentWorkingDayOspStore = createPersistedStoreWithTab<
             fromYyyymmdd: p.startYyyymmdd, //        3 P_FROM_YYYYMMDD
             toYyyymmdd: p.endYyyymmdd, //            4 P_TO_YYYYMMDD
           },
-        };
-        // 컬럼셋 재구성 = 조회 발사 시점 스냅샷 — AS-IS FindData_Main → InitSpread → GetSpdTitle(.cs:438,151,833-834)이
-        //   dCalendar.Text1/Text2 로 3SPAN 을 다시 부른다. 키명 = 사내 PROC_M COL_NM(proc_params.csv P_SCP0009_GET_SHEET_CALENDAR_3SPAN IN 2).
-        //   기간 state 변화에 반응형으로 열지 않는다(조회 전 기간 수정만으로 컬럼이 바뀌면 미저장 편집이 조용히 날아간다).
-        state.calendarFilters = {
-          startYyyymmdd: p.startYyyymmdd, // 1 P_START_YYYYMMDD (AS-IS dCalendar.Text1.Replace("-",""))
-          endYyyymmdd: p.endYyyymmdd, //     2 P_END_YYYYMMDD   (AS-IS dCalendar.Text2.Replace("-",""))
+          // CALENDAR(3SPAN) — 동적 pivot 컬럼셋(D_/W_/M_)의 원천. 조회기간만 바인딩.
+          //   COL_NM 은 startYyyymmdd/endYyyymmdd(SCM_ADM_PROC_M 실측) — fromYyyymmdd/toYyyymmdd 로
+          //   보내면 name-lookup 바인딩이 NULL 처리돼 헤더 0열이 된다(자매 SCP0010 iter-1 선례).
+          [SHEETS.CALENDAR]: {
+            startYyyymmdd: p.startYyyymmdd,
+            endYyyymmdd: p.endYyyymmdd,
+          },
         };
       });
     },
     clearFilters: () =>
       set(state => {
         state.filters = {};
-      }),
-    syncCalendarFilters: () =>
-      set(state => {
-        const p = state.searchParams;
-        if (!p.startYyyymmdd || !p.endYyyymmdd) return;
-        if (
-          state.calendarFilters?.startYyyymmdd === p.startYyyymmdd &&
-          state.calendarFilters?.endYyyymmdd === p.endYyyymmdd
-        ) {
-          return;
-        }
-        state.calendarFilters = { startYyyymmdd: p.startYyyymmdd, endYyyymmdd: p.endYyyymmdd };
-      }),
-    clearCalendarFilters: () =>
-      set(state => {
-        state.calendarFilters = undefined;
       }),
 
     // ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 6행, admin 즉시 반영).
@@ -213,25 +176,10 @@ export const useShipmentWorkingDayOspStore = createPersistedStoreWithTab<
         }
         set(state => {
           state.searchParams = { ...state.searchParams, ...patch } as SearchParamProps;
-          // 저장된 Period 가 있으면 서버 dayRange 가 덮지 못하게 잠근다(BusinessPlan·sales-plan 규칙). 현재 저장측은 날짜키를
-          //   제외하므로 통상 도달하지 않으나, 저장 정책이 바뀌어도 복원값이 응답 도착 순간 되돌아가지 않도록 가드한다.
-          if ('startYyyymmdd' in patch || 'endYyyymmdd' in patch) state.dayRangeApplied = true;
         });
       } catch {
         // 미저장/실패 = 기본값 유지 (console 금지 룰)
       }
-    },
-
-    // 서버 dayRange o_rc1[0].PERIOD 'yyyymmdd:yyyymmdd' → 기본 Period (AS-IS dCalendar.InitValue = GetDayRange() .cs:137 1:1).
-    //   형식 불일치·빈값(SP 는 조회 구간이 없으면 NULL)은 무시 = placeholder 유지. 1회 적용 가드(dayRangeApplied).
-    applyDayRange: range => {
-      if (!range || !/^\d{8}:\d{8}$/.test(range)) return;
-      if (get().dayRangeApplied) return;
-      const [start, end] = range.split(':');
-      set(state => {
-        state.searchParams = { ...state.searchParams, startYyyymmdd: start, endYyyymmdd: end };
-        state.dayRangeApplied = true;
-      });
     },
   }),
   'shipment-working-day-osp-store'

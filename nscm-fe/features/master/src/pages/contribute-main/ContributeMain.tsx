@@ -137,8 +137,13 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!v1.ok) {
       // 어느 기간이 몇으로 합산됐는지 붙인다 — 화면에 보이는 달은 100 인데 스크롤 밖의 다른 달이
       //   걸린 경우, 기간 없이 "100% 가 아닙니다" 만 뜨면 사용자가 오탐과 구분할 수 없다.
+      //   월별 12개월 검사 실패(monthCount)는 같은 메시지라 "값이 있는 달 수/12" 를 붙여 구분한다.
       const detail =
-        v1.period == null ? '' : ` (${formatPeriodLabel(v1.period)}: ${(v1.sum ?? 0).toFixed(2)})`;
+        v1.period != null
+          ? ` (${formatPeriodLabel(v1.period)}: ${(v1.sum ?? 0).toFixed(2)})`
+          : v1.monthCount != null
+            ? ` (${v1.monthCount}/12)`
+            : '';
       void setAlert({
         type: 'alert',
         content:

@@ -1,0 +1,41 @@
+# [Harness] SCP0039 master-validation — BLOCK 0 / WARN 39
+
+- WARN AC1 액션 대조표 미처리 160행: AC-06915f25(상태 빈칸 UI_PROP this.IsPopup), AC-02a1f820(상태 빈칸 FLAG this._division_id), AC-6c45361b(상태 빈칸 FLAG this._plan_group_id), AC-1355042a(상태 빈칸 POPUP new DM0002_ItembyDivisionPopup), AC-8cc19d45(상태 빈칸 POPUP popItem.Form_Load), AC-06aa7dde(상태 빈칸 UI_PROP popItem.StartPosition), AC-7a52ae99(상태 빈칸 POPUP popItem.ShowDialog), AC-19d8d25a(상태 빈칸 VALUE_SET txtItemId.Text) … @Doc/asisfacts/screens/SCP0039/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 12행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-dbb371d9(Thread.Sleep @SCP0039_ValidationMaster.cs:557), AC-cc04bd16(dict.TryGetValue @SCP0039_ValidationMaster.cs:581), AC-96ce42ea(System.Diagnostics.Process.Start @SCP0039_ValidationMaster.cs:1161), AC-1c43cba4(openSubMenu @SCP0039_ValidationMaster.cs:1165), AC-aacf057f(SheetUtils.SetVisibleSheetColumn @SCP0039_ValidationMaster.cs:463), AC-874a5694(SheetUtils.SetVisibleSheetColumn @SCP0039_ValidationMaster.cs:464), AC-14ab9b83(SheetUtils.SetVisibleSheetColumn @SCP0039_ValidationMaster.cs:465), AC-25f84228(SheetUtils.SetVisibleSheetColumn @SCP0039_ValidationMaster.cs:469) … @Doc/asisfacts/screens/SCP0039/__asis-actions__.md
+- WARN G01 As-is 시트 'BOD' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G01 As-is 시트 'Line Assign' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G01 As-is 시트 'PJT ROUTE (ELEC)' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G01 As-is 시트 'Tact Time' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G02 As-is 엔드포인트 SCM.SCM0003_GET_LOOKUP_MASTER_DETAIL (SCM0003_GET_LOOKUP_MASTER_DETAIL) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 {?arg:pProcedureNm} () 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 {p:pProcedureNm} () 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 MenuContainer.UP_FX_GetGSCMAuthenticationMenuList (UP_FX_GetGSCMAuthenticationMenuList) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → btnItemId_Click_1 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellClick → SpdMain_CellClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDivision.SelectedIndexChanged → ClbDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbPlanGroup.SelectedIndexChanged → ClbPlanGroup_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.FormClosing → SCP0039_ValidationMaster_FormClosing 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 cboDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbPlanGroup / UsrCheckedList2 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdProjectRouteInfo / FpSpread 매핑표 §1 에 없음
+- WARN V01 As-is Expression 6건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- WARN VC1 대조표 FAIL 13행 (Doc/verify/SCP0039/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미구현 2행 — 작업 원장 Doc/verify/SCP0039/work_ledger.md W1(기능 구현)
+- WARN VC1 대조표 미검증 346행 — 검사 사유 REVIEW 417 · NOPATH 19 · NOT_RUN 176 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 160건 / 검사 인스턴스 170 — W1 2 · W2 13 · W4 1 · W5 9 · W6 48 · W7 83 · W8 4 · 구현 의심 5 (Doc/verify/SCP0039/work_ledger.md)
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @MasterValidation.tsx:77
+- WARN B05 Page: useTabProcQuery<MENU_ID> 조회 — 화면 조회는 메타 기반 call-proc 훅으로 — apiClient 직접 호출 금지
+- WARN B13 AS-IS 파일:라인 주석(// AS-IS …:L) — 이벤트 8건 대비 AS-IS 참조 주석 1건 — 1:1 추적 근거
+- WARN B19 expressions.md 6행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0039/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0039/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0039/SCP0039_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0039/SCP0039_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B27 As-is grid_code DB루프(SetCalendar:1264) — 루프 원천 결과셋이 타이틀 SP 판정에 안 걸림. 동적 컬럼 원천 확인 @grid
+- WARN M08 대조표에 As-is DB루프 컬럼 생성 행 없음: SetCalendar:1264 — '## §6 동적 컬럼' 에 행 추가(요지 'SetCalendar / 1264 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md

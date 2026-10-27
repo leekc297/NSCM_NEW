@@ -35,6 +35,13 @@ export const ADMIN_SHEET_NAME: Record<SHEETS, string> = {
   [SHEETS.PACK]: 'Pack Hold Stock',
 };
 
+// Excel 업로드 양식(Osp Stock) 헤더 — SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT 실측 그대로(2026-10-14).
+//   '|' 구분 9컬럼, '*'=필수. BE FileServiceImpl 헤더검증이 이 토큰(원형, '*' 포함)과 1:1 이름 매핑하므로
+//   양식 다운로드 헤더는 반드시 이 문자열 그대로여야 업로드가 매핑된다(hook #135 excel-form-upload-standard).
+//   AS-IS MenuEtcFileDownButton("StockOSP_ExcelForm.xls") 정적 양식을 flat 클라 생성으로 대체.
+export const EXCEL_FORM_HEADER =
+  'Div*|Plant Site Code*|Model*|Date(YYYYMMDD)*|Valuation Type|Qty(EOH)*|Cell From site|Comment|Box' as const;
+
 // 조회조건 콤보 SQL_ID (design 02 §0 — DB 실측 USE_YN='Y' 4/4 확인 2026-09-27). 이름 유사 재사용 금지:
 //   활성 소스(cs:48~53)가 쓰는 것은 Division_SCP + X1_SCP_ALL(1-suffix, 권한무시 ALL 변형)이다.
 //   무-suffix MyDivision/PlantSiteByDivisionOSP/PlantSitePackerHoldStock 은 주석 심볼 — 배선 금지(design 02 §0 A).
@@ -43,7 +50,14 @@ export const COMBO = {
   PLANT_SITE_OSP: 'PlantSiteByDivisionOSP1_SCP_ALL', // @divisionId 콤마 다건 INSTR (SITE_TYPE='PLANT' OSP_YN='Y')
   SALE_SITE_OSP: 'SaleSiteByDivision1_SCP_ALL', // @divisionId 콤마 다건 INSTR (SITE_TYPE='SALES')
   PLANT_SITE_PACK: 'PlantSitePackerHoldStock1_SCP_ALL', // @divisionId 단일 등호 (SITE_TYPE='PLANT' OSP_YN='Y')
+  // Osp 탭 Period 기본값(design 02 §4) — AS-IS CallBizCommonData('PERIOD_DEFAULT') 와 동일 등록 SQL.
+  //   FROM_VALUE(ISO_WEEK 당주 일자, 실측 '20261012') 반환. AS-IS 가 "Project Route 기본 날짜 규칙
+  //   따름"이라 명시(cs:538). From=FROM_VALUE 일자 그대로, To=+PERIOD_MONTHS_SPAN 개월(cs:553 GetDateAdd).
+  PERIOD_DEFAULT: 'PERIOD_DEFAULT',
 } as const;
+
+// Osp 탭 Period 기본 구간 = PERIOD_DEFAULT 일자 ~ +11개월(AS-IS cs:553 GetDateAdd(From,+11,'M')).
+export const PERIOD_MONTHS_SPAN = 11;
 
 // Status 조회조건 lookup — SCM_ADM_LOOKUP_MASTER_DETAIL LOOKUP_TYPE='PACKER_HOLD_STATUS'(design 02 §0):
 //   HOLD/Hold, RELEASE/Release. 그리드 DIR 컬럼 표시·조회조건 cboStatus 공용. add-ALL 기본 전체(단일선택).
@@ -73,12 +87,13 @@ export const VALIDATION_ERROR_BG = '#ffb6c1';
 export const LBL = {
   DIVISION: 'LBL00001', // Division (표준 LBL00001)
   PLANT_SITE: 'LBL00005', // Plant Site
-  MODEL: 'LBL00669', // Model (Item ID 조건)
+  MODEL: 'LBL00618', // Model/Nickname (사용자 지시 2026-10-14 — 메1 MaterialByDivisionModal 통합 패턴. locale 3언어 등록 실측)
   PERIOD: 'LBL00013', // Period
   INSPECTION: 'LBL01086', // Inspection (Pack 탭 전용)
   STATUS: 'LBL00014', // Status (Pack 탭 전용)
   CUTOFF_DATE: 'LBL00029', // Cutoff Date (Pack 탭 전용)
   SEARCH: 'LBL00112', // Search (표준 LBL00112)
+  EXCEL_FORM: 'LBL00762', // Excel Form (Osp 탭 양식 다운로드 버튼 — DB 실측 CN/EN/KO 완비)
   EXCEL_UPLOAD: 'LBL00346', // Excel Upload (Osp 탭 버튼 · 업로드 팝업 제목)
   EXCEL_FILE: 'LBL00759', // Excel File (업로드 팝업)
   OK: 'LBL00716', // OK (업로드 팝업)
@@ -93,7 +108,8 @@ export const LBL = {
 export const MSG = {
   REQUIRE_DIVISION: 'MSG00097', // Please select Division. (권한 0건 게이트, design 02 §6-8)
   DATE_REVERSAL: 'MSG00108', // 시작일이 종료일보다 클 수 없습니다. (R3/R4 역전검증, design 03 §3)
-  SAVE_SUCCESS: 'MSG00672', // {0}개의 데이터가 저장되었습니다.
+  INVALID_DATE_FORMAT: 'MSG00611', // 유효한 날짜 형식이 아닙니다. (YYYYMMDD) — 범용(KO/EN/CN 실측). 날짜셀 입력형식 차단
+  SAVE_SUCCESS: 'MSG00606', // 저장되었습니다. (건수 미표시 — 사용자 지시 2026-10-14, KO/EN/CN 실측)
   SAVE_FAIL: 'MSG00006', // Failed to save.
   NO_CHANGE: 'MSG00004', // No changes to save. (저장 대상 0건)
 } as const;

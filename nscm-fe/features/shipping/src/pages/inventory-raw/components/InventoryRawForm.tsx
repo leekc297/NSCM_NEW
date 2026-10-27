@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import type { ComboParam, ComboResponse, LookupResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
@@ -6,7 +8,7 @@ import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
-import { COMBO, LBL, LOOKUP, PLAN_DATE_COMBO_UNRESOLVED } from '../inventory-raw.constants';
+import { COMBO, LBL, LOOKUP } from '../inventory-raw.constants';
 import { useInventoryRawStore } from '../useInventoryRawStore';
 
 interface Props {
@@ -38,8 +40,17 @@ export const InventoryRawForm = ({ onSearch, onItemSearch }: Props) => {
     divisionId: sc.divisionId,
   };
 
-  const [divisions, plantSites] = useTabComboQueries({
-    filters: [COMBO.DIVISION, plantSiteFilter],
+  // Plan Date(PlanDateShip) — 바인드 @divisionId·@shipPlanType 두 개를 모두 넘긴다(COL-09:
+  //   세션 밖 바인드는 고정값이라도 comboParams 로 전달). AS-IS 는 param2(shipPlanType)를
+  //   넘기지 않아 비-'P' 분기(SSP_PLAN_VERSION_V)를 타므로 Main 분기값 'A' 를 명시한다.
+  const planDateFilter: ComboParam = {
+    comboId: COMBO.PLAN_DATE,
+    divisionId: sc.divisionId,
+    shipPlanType: 'A',
+  };
+
+  const [divisions, plantSites, planDates] = useTabComboQueries({
+    filters: [COMBO.DIVISION, plantSiteFilter, planDateFilter],
   });
   // Inventory Type = LookupCommon(LOOKUP_TYPE='INV_TYPE') — useTabLookupQueries 직접 조회
   //   (shipment-model-pic OPERATION_GROUP 선례와 동일, 콤보 브리지 원천과 동일 테이블).
@@ -48,6 +59,26 @@ export const InventoryRawForm = ({ onSearch, onItemSearch }: Props) => {
   const divisionOptions = toOptions(divisions);
   const plantSiteOptions = toOptions(plantSites);
   const inventoryTypeOptions = toOptions(inventoryTypes);
+  // NAME 이 이미 'YYYY-MM-DD' 로 내려온다(콤보 SQL 본문의 TO_CHAR) — 추가 포맷 불필요.
+  const planDateOptions = toOptions(planDates);
+
+  // Plan Date 기본 선택값 = 목록 첫 행[0] = 최신 Plan(콤보 SQL `ORDER BY UPPER(CODE) DESC`).
+  //   AS-IS 파리티: SSP0017_InventoryRaw.cs:364 주석 "기본값 설정하기위해 division만 가지고 우선 조회"
+  //   + cs:366 `setListBox(dt, cboPlanDate, false, "CODE", "NAME")` = 5인자 오버로드(CControl.cs:338)가
+  //   `cbo.DataSource = dt` 로 바인딩 → WinForms ComboBox 는 비어있지 않은 DataSource 바인딩 시
+  //   SelectedIndex 가 0 이 된다(같은 클래스 3인자 오버로드 CControl.cs:309 는 Items.Add 경로라
+  //   자동선택이 없어 SelectedIndex=0 을 명시 — 두 경로의 의도가 "첫 행 선택"으로 일치).
+  //   cs:168 `ConditionNotUseList.Add(cboPlanDate)` 로 조회조건 저장 대상도 아니라 매 로드마다
+  //   목록 기본값에서 와야 한다(store restoreSearchConditions 의 EXCLUDED_DATE_PARAM 과 정합).
+  //   미선택일 때만 설정 → 사용자가 고른 값은 재실행돼도 덮지 않는다(자매 ShipmentPsiForm I17 동일).
+  //   dep 은 목록 '값 시그니처' — length 만 보면 길이가 같은 목록 교체에서 재선택이 안 된다.
+  const planDateValueSig = planDateOptions.map(o => o.value).join('|');
+  useEffect(() => {
+    if (planDateOptions.length > 0 && !sc.planStartYyyymmdd) {
+      set({ planStartYyyymmdd: planDateOptions[0].value });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planDateValueSig]);
 
   return (
     <SearchArea
@@ -109,11 +140,11 @@ export const InventoryRawForm = ({ onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* Model(=Item ID) — 텍스트 + 팝업(ItemByDivisionModal, design 02 §4.6). */}
+          {/* Model/Nickname(=Item ID) — 텍스트 + 팝업(공용 MaterialByDivisionModal, design 02 §4.6). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.MODEL, '_Model')}
+              label={t(LBL.MODEL_NICKNAME, '_Model/Nickname')}
               labelAlign='right'
               render={() => (
                 <InputField
@@ -136,9 +167,8 @@ export const InventoryRawForm = ({ onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* Plan-date* — 필수(design 02 §4). 확인 필요(FAIL 후보): PLAN_DATE_COMBO_UNRESOLVED
-              (inventory-raw.constants.ts 참조) — AS-IS `PlanDateShip` 콤보의 TO-BE SQL_ID 미확정이라
-              데이터 소스를 연결하지 못했다. 빈 목록 슬롯만 렌더(임의 SQL_ID 대체 금지). */}
+          {/* Plan-date* — 필수(design 02 §4). SQL_ID 는 AS-IS 와 동명인 `PlanDateShip`
+              (constants COMBO.PLAN_DATE 주석 — ora.py 실측 2026-10-14로 미결 해소). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -147,9 +177,8 @@ export const InventoryRawForm = ({ onSearch, onItemSearch }: Props) => {
               required
               render={() => (
                 <CustomDropdown
-                  disabled={PLAN_DATE_COMBO_UNRESOLVED}
                   value={sc.planStartYyyymmdd}
-                  options={[]}
+                  options={planDateOptions}
                   onChange={(_, picked) => set({ planStartYyyymmdd: String(picked ?? '') })}
                 />
               )}

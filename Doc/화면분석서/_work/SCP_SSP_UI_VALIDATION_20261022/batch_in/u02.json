@@ -1,0 +1,434 @@
+[
+ {
+  "screen": "SCP0006",
+  "title": "Project Route",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0006_ProjectRoute/SCP0006_ProjectRoute.cs:2143"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0006_ProjectRoute/SCP0006_ProjectRoute.Designer.cs:886"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/project-route"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\SCP.GET_DATE_RANGE_1MONTH.sql",
+    "member": "GetDayRange",
+    "line": "1134",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0006_ProjectRoute\\SCP0006_ProjectRoute.cs",
+    "pattern": "P1_endpoint_sql",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0006_GET_PROJECT_ROUTE_SITE_82",
+    "member": "FindDataSite",
+    "line": "726",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0006_ProjectRoute\\SCP0006_ProjectRoute.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0006_GET_PROJECT_ROUTE_SITE",
+    "member": "FindDataSite",
+    "line": "730",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0006_ProjectRoute\\SCP0006_ProjectRoute.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0006_GET_PROJECT_ROUTE_BOM_82",
+    "member": "GetQueryInfoGetBOM",
+    "line": "757",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0006_ProjectRoute\\SCP0006_ProjectRoute.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0006_GET_PROJECT_ROUTE_BOM",
+    "member": "GetQueryInfoGetBOM",
+    "line": "761",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0006_ProjectRoute\\SCP0006_ProjectRoute.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0006_GET_PROJECT_ROUTE_PLANT",
+    "member": "GetQueryInfoGetPlant",
+    "line": "792",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0006_ProjectRoute\\SCP0006_ProjectRoute.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0006_SAVE_PROJECT_ROUTE_PLANT",
+    "member": "GetQueryInfoSavePlant",
+    "line": "823",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0006_ProjectRoute\\SCP0006_ProjectRoute.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SQL",
+    "unit": "foxquery_sql\\SCP.GET_DATE_RANGE_1MONTH.sql",
+    "member": "GetDayRange",
+    "line": "1134",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0006_ProjectRoute\\SCP0006_ProjectRoute.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0006_GET_PROJECT_ROUTE_BOM",
+   "SCP0006_GET_PROJECT_ROUTE_BOM_82",
+   "SCP0006_GET_PROJECT_ROUTE_PLANT",
+   "SCP0006_GET_PROJECT_ROUTE_SITE",
+   "SCP0006_GET_PROJECT_ROUTE_SITE_82",
+   "SCP0006_SAVE_PROJECT_ROUTE_PLANT",
+   "foxquery_sql\\SCP.GET_DATE_RANGE_1MONTH.sql"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0006_GET_PROJECT_ROUTE_PLANT",
+    "sp": "SCP0006_GET_PROJECT_ROUTE_PLANT",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "Plant 지정 검증용 ERP Item 목록(Item 끝 1자리 제외 LIKE, 40 사업부 활성 Item) 반환",
+    "message": null,
+    "on_fail": "두 번째 결과셋으로 대조 목록만 반환(판정은 FE)"
+   },
+   {
+    "entry_sp": "SCP0006_GET_PROJECT_ROUTE_SITE",
+    "sp": "SCP0006_GET_PROJECT_ROUTE_SITE",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "COUNT",
+    "desc": "MKT FCST 수요 모델의 BOM 하위 Item 중 유효 1순위 Plant 가 지정된 비율과 완료(Y/N)를 판정해 표시",
+    "message": null,
+    "on_fail": "cmpltd_status='N' 및 plant_per_item 'n/m' 표시"
+   },
+   {
+    "entry_sp": "SCP0006_GET_PROJECT_ROUTE_SITE",
+    "sp": "SCP0006_GET_PROJECT_ROUTE_SITE",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "수요 모델에 유효 BOM(대체우선·유효 ENG BOM, 전극 제외)이 없으면 'BOM Not Exists' 표시",
+    "message": "BOM Not Exists",
+    "on_fail": "plant_per_item 에 'BOM Not Exists' 표시"
+   },
+   {
+    "entry_sp": "SCP0006_GET_PROJECT_ROUTE_SITE_82",
+    "sp": "SCP0006_GET_PROJECT_ROUTE_SITE_82",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "COUNT",
+    "desc": "수요 모델 BOM 하위 Item 의 1순위 Plant 지정 비율·완료여부 판정(Site/Project 구분 없이 '-')",
+    "message": null,
+    "on_fail": "CMPLTD_STATUS='N', PLANT_PER_ITEM 'n/m' 표시"
+   },
+   {
+    "entry_sp": "SCP0006_GET_PROJECT_ROUTE_SITE_82",
+    "sp": "SCP0006_GET_PROJECT_ROUTE_SITE_82",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "유효 BOM 이 없는 모델에 'BOM Not Exists' 표시",
+    "message": "BOM Not Exists",
+    "on_fail": "PLANT_PER_ITEM 에 'BOM Not Exists' 표시"
+   },
+   {
+    "entry_sp": "SCP0006_SAVE_PROJECT_ROUTE_PLANT",
+    "sp": "SCP0006_SAVE_PROJECT_ROUTE_PLANT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 전체 롤백 후 'F' 와 에러 메시지 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "IF (XACT_STATE() <> 0) ROLLBACK TRAN; INSERT SCM_SYS_LOG_BATCH; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER + ']' + ERROR_MESSAGE();"
+   },
+   {
+    "entry_sp": "SCP0006_GET_PROJECT_ROUTE_SITE_82",
+    "sp": "FN_GET_SCP_ITEM_INACTIVE",
+    "depth": 1,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "같은 사업부·품목의 ACTIVE_FLAG 가 전부 'N' 인 경우만 비활성 품목으로 판정해 반환(하나라도 'Y' 면 제외)",
+    "message": null,
+    "on_fail": "비활성 품목 목록으로 반환(DIVISION_ID, ITEM_ID, 'N')"
+   },
+   {
+    "entry_sp": "SCP0006_SAVE_PROJECT_ROUTE_PLANT",
+    "sp": "PR_SCM_MST_SITE_ITEM_HIST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "이력 적재 오류 시 오류 로그만 남기고 커밋",
+    "message": null,
+    "on_fail": "INSERT INTO scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE(),...); IF @@TRANCOUNT > 0 COMMIT WORK"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0007",
+  "title": "BOD",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCM.Popup.UIL/SCP0007_DistributionRoutePopup.cs:713",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0007_BOD/SCP0007_BOD.cs:1471"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCM.Popup.UIL/SCP0007_DistributionRoutePopup.Designer.cs:700",
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0007_BOD/SCP0007_BOD.Designer.cs:684"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/bod"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0007_GET_BOD",
+    "member": "FindData_Main",
+    "line": "553",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0007_BOD\\SCP0007_BOD.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0007_GET_COUNTRY_CITY",
+    "member": "GetData_Country",
+    "line": "626",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0007_BOD\\SCP0007_BOD.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0007_SAVE_BOD",
+    "member": "SaveData_Main",
+    "line": "794",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0007_BOD\\SCP0007_BOD.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0007_GET_ROUTE_CNT",
+    "member": "SetCityCode",
+    "line": "1448",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0007_BOD\\SCP0007_BOD.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_GET_DISTRIBUTION_ROUTE",
+    "member": "FindDataMain",
+    "line": "436",
+    "file": "06.UIL\\GSCM.SCM.Popup.UIL\\SCP0007_DistributionRoutePopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0005_GET_DISTRIBUTION_ROUTE",
+    "member": "FindDataMain",
+    "line": "436",
+    "file": "06.UIL\\GSCM.SCM.Popup.UIL\\SCP0007_DistributionRoutePopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0007_GET_BOD",
+    "member": "FindData_Main",
+    "line": "553",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0007_BOD\\SCP0007_BOD.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0007_GET_COUNTRY_CITY",
+    "member": "GetData_Country",
+    "line": "626",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0007_BOD\\SCP0007_BOD.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0007_SAVE_BOD",
+    "member": "SaveData_Main",
+    "line": "794",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0007_BOD\\SCP0007_BOD.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0007_GET_ROUTE_CNT",
+    "member": "SetCityCode",
+    "line": "1448",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0007_BOD\\SCP0007_BOD.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0005_GET_DISTRIBUTION_ROUTE",
+   "SCP0007_GET_BOD",
+   "SCP0007_GET_COUNTRY_CITY",
+   "SCP0007_GET_ROUTE_CNT",
+   "SCP0007_SAVE_BOD"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0007_GET_BOD",
+    "sp": "SCP0007_GET_BOD",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "COUNT",
+    "desc": "구간에 등록된 Distribution Route 건수 표시(0이면 Route 미등록)",
+    "message": null,
+    "on_fail": "route_cnt 0 반환(정렬 첫 키)"
+   },
+   {
+    "entry_sp": "SCP0007_GET_BOD",
+    "sp": "SCP0007_GET_BOD",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "CONSISTENCY",
+    "desc": "BOD 에 연결된 Route 의 출발/도착 도시가 Site 의 도시와 일치하는지 표시",
+    "message": null,
+    "on_fail": "route_chk='N' 반환"
+   },
+   {
+    "entry_sp": "SCP0007_GET_BOD",
+    "sp": "SCP0007_GET_BOD",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "VMI(또는 W/S AS) 도착지는 DAP BOD 가 반드시 있어야 하며 없으면 DAP 행을 등록 필요로 표시",
+    "message": null,
+    "on_fail": "Incoterms 'DAP' 미등록 행을 Required 목록에 추가"
+   },
+   {
+    "entry_sp": "SCP0007_GET_BOD",
+    "sp": "SCP0007_GET_BOD",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "STATUS",
+    "desc": "도착지가 VMI N→Y 로 바뀌었는데 DAP BOD 가 없으면 등록 필요 행으로 표시",
+    "message": null,
+    "on_fail": "기존 비-DAP BOD 를 'DAP' 로 바꾼 등록 필요 행 추가"
+   },
+   {
+    "entry_sp": "SCP0007_GET_BOD",
+    "sp": "SCP0007_GET_BOD",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "MKT FCST 수요(To=Sales Site, From=Project Route 1순위 Plant)에 대응하는 BOD 가 없는 조합을 Required 로 표시",
+    "message": null,
+    "on_fail": "Required 모드에서 BOD 미등록 조합 목록 반환"
+   },
+   {
+    "entry_sp": "SCP0007_GET_ROUTE_CNT",
+    "sp": "SCP0007_GET_ROUTE_CNT",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "COUNT",
+    "desc": "출발/도착 도시 간 Route 등록 건수 반환",
+    "message": null,
+    "on_fail": "건수만 반환(판정은 FE)"
+   },
+   {
+    "entry_sp": "SCP0007_SAVE_BOD",
+    "sp": "SCP0007_SAVE_BOD",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "RANGE",
+    "desc": "같은 구간·Incoterms·운송모드에 적용기간이 겹치는 BOD 가 2건 이상이면 저장 전체 취소",
+    "message": "중복된 기간을 저장할 수 없습니다",
+    "on_fail": "SET @v_err_code=99030; THROW → CATCH ROLLBACK, 'F' + err_code/err_message/행 데이터"
+   },
+   {
+    "entry_sp": "SCP0007_SAVE_BOD",
+    "sp": "SCP0007_SAVE_BOD",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 롤백 후 'F' 와 오류코드·메시지·오류 행 데이터를 반환",
+    "message": "err_code/err_message (99030 또는 ERROR_NUMBER/ERROR_MESSAGE)",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch; SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message, DIVISI"
+   },
+   {
+    "entry_sp": "SCP0007_SAVE_BOD",
+    "sp": "PR_SCP_MST_BOD_ITEM",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 배치 로그만 남기고 정상 종료처럼 끝남",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "PR_SCM_SYS_LOG_BATCH 'ERROR' 로그만 기록(RETURN·RAISERROR 없음)"
+   },
+   {
+    "entry_sp": "SCP0007_SAVE_BOD",
+    "sp": "FN_NEXT_DAY",
+    "depth": 2,
+    "cls": "A 차단형",
+    "check_type": "FORMAT",
+    "desc": "요일 코드가 SUN~SAT 이 아니면 NULL 반환(계산 중단)",
+    "message": null,
+    "on_fail": "RETURN NULL"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0008",
+  "title": "Item Master",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0008_ItemMaster/SCP0008_ItemMaster.cs:372"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0008_ItemMaster/SCP0008_ItemMaster.Designer.cs:652"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0008_GET_ITEM_MASTER",
+    "member": "FindData",
+    "line": "292",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0008_ItemMaster\\SCP0008_ItemMaster.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0008_GET_ITEM_MASTER",
+    "member": "FindData",
+    "line": "292",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0008_ItemMaster\\SCP0008_ItemMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0008_GET_ITEM_MASTER"
+  ],
+  "db_validation_brief": []
+ }
+]

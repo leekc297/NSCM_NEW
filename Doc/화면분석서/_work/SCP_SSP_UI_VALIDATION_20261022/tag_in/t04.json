@@ -1,0 +1,3986 @@
+[
+ {
+  "key": "DB:SCP0015#429",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCP_ANL_PSI_GLOBAL_ESS",
+  "asis_line": "L2334-2355",
+  "condition": "BEGIN CATCH",
+  "on_fail": "SET @v_log_type = N'ERROR'; SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000)); EXEC PR_SCP_SYS_LOG_BATCH …; return -1",
+  "desc": "오류 시 배치 로그 ERROR 기록 후 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCP_ANL_PSI_GLOBAL_ESS",
+    "loc": "PR_SCP_ANL_PSI_GLOBAL_ESS.PROCEDURE.sql L1068-1078",
+    "diff": "AS-IS CATCH: ERROR 로그 후 return -1(ROLLBACK 없음, 부모 PR_SCP_ANL_CREATE_DATA 가 @rows<0 으로 오류 경로 진입). TO-BE: ROLLBACK + ERROR 로그 + RETURN(반환코드·RAISE 없음) → 호출자가 실패를 감지할 수 없음(실패 미전파). 반면 ROLLBACK 추가로 DELETE 후 INSERT 실패 시 기존 데이터 소실(원문이슈)은 해소됨."
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#442",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION",
+  "asis_line": "L376-387",
+  "condition": "ISNULL((SELECT TOP 1 CHILD_ITEM_ID FROM SCM_MST_MODEL_FINAL_ITEM_BOM_V WHERE MODEL_ID=P.ITEM_ID AND OPERATION_GROUP_ID='A' AND CELL_TYPE=CASE WHEN S.OSP_YN='Y' THEN 'CP' ELSE 'CA2' END), '-')",
+  "on_fail": "CELL ITEM_ID 를 '-' 센티널로 대체하고 TCO 가상 출하(S) 행 생성 계속",
+  "desc": "소형 TCO 가상 출하 생성 시 모델의 셀 BOM 자품목이 없으면 셀 품목을 '-' 로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION.PROCEDURE.sql L188-209",
+    "diff": "IF P_DIVISION_ID = '40' 블록 동일. AS-IS TOP 1(ORDER BY 없음) → ORDER BY CHILD_ITEM_ID 결정적 선택(복수 자품목 시 선택값 달라질 수 있음)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#443",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION",
+  "asis_line": "L462-526",
+  "condition": "AND A.TO_SITE <> ''  (L462 OSP->사내 TCO 도착, L526 사내->OSP 도착 두 UNION 블록 동일)",
+  "on_fail": "TO_SITE 빈값 출하계획 행은 TCO 가상 생산(P) 생성 대상에서 제외",
+  "desc": "도착 사이트(TO_SITE)가 빈 출하계획은 사내/외주 TCO 도착 생산 행 생성에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION.PROCEDURE.sql L226-245",
+    "diff": "A.TO_SITE <> '' → IS NOT NULL (Oracle ''=NULL 표현차, NULL 도 제외되는 결과 동일)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#444",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION",
+  "asis_line": "L2377-2882",
+  "condition": "INNER JOIN SCP_MST_FINAL_ITEM_V Y WITH (NOLOCK) (DIO 입력 L2377, 최종 INSERT L2882)",
+  "on_fail": null,
+  "desc": "Final Item 뷰에 없는 품목은 DIO measure 생성 및 SCP_ANL_PSI_PRODUCTION 적재에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치(AS-IS 추출누락 보충)",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION.PROCEDURE.sql L579-696",
+    "diff": "이관 일치(ELECTRODE 배치에서는 동일 패턴이 1368 로 추출됨)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#445",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION",
+  "asis_line": "L2426-2440",
+  "condition": "SUM(ISNULL(QTY,0)) OVER(PARTITION BY DIVISION_ID, FROM_SITE, ITEM_ID) AS flag ... AND Y.flag = 0",
+  "on_fail": "DIVISION/FROM_SITE/ITEM 단위 전 기간 수량 합이 0 인 행 전부 DELETE",
+  "desc": "사이트·품목별 전체 수량 합계가 0 인 PSI 데이터는 저장 대상에서 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION.PROCEDURE.sql L589-595",
+    "diff": "2020.11.13 GROUP BY QTY 제거판 그대로. +/- 상쇄 시 실데이터 삭제(원문이슈) 동일"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#446",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION",
+  "asis_line": "L2885-2889",
+  "condition": "AND X.YYYYMMDD < @v_pet_date  (@v_pet_date = scm_mst_plan.horizon_end_date + 1일, L161~166)",
+  "on_fail": "Plan Horizon 종료일 이후 일자 행은 INSERT 제외",
+  "desc": "계획 Horizon 종료일 이후 데이터는 최종 저장에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION.PROCEDURE.sql L697-697",
+    "diff": "scm_mst_plan 미존재 시 AS-IS 19000102 / TO-BE NULL 비교 → 전 행 제외 결과 동일"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#447",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION",
+  "asis_line": "L2978-2998",
+  "condition": "BEGIN CATCH",
+  "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1",
+  "desc": "실행 중 예외 시 오류 로그 기록 후 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION.PROCEDURE.sql L720-730",
+    "diff": "AS-IS CATCH: ERROR 로그 후 return -1(ROLLBACK 없음, 부모 PR_SCP_ANL_CREATE_DATA 가 @rows<0 으로 오류 경로 진입). TO-BE: ROLLBACK + ERROR 로그 + RETURN(반환코드·RAISE 없음) → 호출자가 실패를 감지할 수 없음(실패 미전파). 반면 ROLLBACK 추가로 DELETE 후 INSERT 실패 시 기존 데이터 소실(원문이슈)은 해소됨."
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#448",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+  "asis_line": "L98-107",
+  "condition": "SET @v_plan_cycle = ISNULL(@p_plan_cycle,'WEEKLY'); @v_plan_start_yyyymmdd = ISNULL(@p_plan_start_yyyymmdd,'-'); ... @v_division_id = ISNULL(@p_division_id,'40'); @v_engine_flag = ISNULL(@p_engine_flag,'Y')",
+  "on_fail": "NULL 파라미터를 고정 기본값(WEEKLY/'-'/'1'/'0'/'PR'/'40::WEEKLY'/'40'/'Y')으로 대체",
+  "desc": "입력 파라미터가 NULL 이면 소형/PR 별도 Job 기본값으로 대체",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION_AMEND.PROCEDURE.sql L87-96",
+    "diff": "기본값 10종 동일(P_ENGINE_FLAG 파라미터 DEFAULT 'N' 도 동일)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#449",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+  "asis_line": "L132-151",
+  "condition": "SELECT @v_seq = ISNULL(MAX(p.plan_seq),0) ... AND p.confirm_flag='Y'; IF @v_seq = '0' -> confirm 조건 없이 MAX(plan_seq)",
+  "on_fail": "확정 버전이 없으면 최신 SEQ 로 대체",
+  "desc": "별도 Job 수행 시 확정(Confirm) Plan SEQ 우선, 없으면 최대 SEQ 사용",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION_AMEND.PROCEDURE.sql L123-145",
+    "diff": "IF V_ENGINE_FLAG='Y' 블록(L98) 안, NVL(P_ENGINE_FLAG,'Y') 기본 처리도 AS-IS ISNULL(@p_engine_flag,'Y') 와 동일. ISNULL→NVL 표현 차이만."
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#450",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+  "asis_line": "L162-163",
+  "condition": "if @v_plan_type <> 'PR' OR @v_seq = '0'",
+  "on_fail": "return -1",
+  "desc": "PR Plan 이 아니거나 Plan SEQ 가 0(대상 버전 없음)이면 처리 중단하고 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION_AMEND.PROCEDURE.sql L151-154",
+    "diff": "AS-IS 는 return -1(부모 CREATE_DATA 가 GOTO _RETURN_ERR_CODE 로 오류 처리). TO-BE 는 반환값 없는 RETURN — 정상 종료와 구분 불가, 대상 버전 없음이 호출자에 전파되지 않음. 조건식은 동일"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#451",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+  "asis_line": "L561-561",
+  "condition": "INNER JOIN SCP_MST_FINAL_ITEM_V Y  WITH (NOLOCK)",
+  "on_fail": null,
+  "desc": "Final Item 뷰에 없는 품목의 SA/PA Amend 행은 SCP_ANL_PSI_PRODUCTION 적재에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치(AS-IS 추출누락 보충)",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION_AMEND.PROCEDURE.sql L541-544",
+    "diff": "이관 일치"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#452",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+  "asis_line": "L564-569",
+  "condition": "AND X.YYYYMMDD < @v_pet_date (horizon_end_date + 1일)",
+  "on_fail": "Horizon 종료일 이후 SA/PA 행 INSERT 제외",
+  "desc": "계획 Horizon 종료일 이후 Amend 데이터는 저장 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION_AMEND.PROCEDURE.sql L545-545",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#453",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+  "asis_line": "L629-649",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ERROR 로그 후 return -1",
+  "desc": "예외 시 오류 로그 기록 후 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCP_ANL_PSI_PRODUCTION_AMEND",
+    "loc": "PR_SCP_ANL_PSI_PRODUCTION_AMEND.PROCEDURE.sql L580-590",
+    "diff": "AS-IS CATCH: ERROR 로그 후 return -1(ROLLBACK 없음, 부모 PR_SCP_ANL_CREATE_DATA 가 @rows<0 으로 오류 경로 진입). TO-BE: ROLLBACK + ERROR 로그 + RETURN(반환코드·RAISE 없음) → 호출자가 실패를 감지할 수 없음(실패 미전파). 반면 ROLLBACK 추가로 DELETE 후 INSERT 실패 시 기존 데이터 소실(원문이슈)은 해소됨."
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#454",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+  "asis_line": "L224-229",
+  "condition": "CASE WHEN B.INCOTERMS <> '-' AND B.INCOTERMS IS NOT NULL THEN B.INCOTERMS ELSE (SELECT TOP 1 X.INCOTERMS FROM SCP_MST_BOD_N_V X WHERE X.DIVISION_ID=B.DIVISION_ID AND X.BOD_ID=B.BOD_ID) END",
+  "on_fail": "Incoterms 가 '-'/NULL 이면 BOD 마스터 Incoterms 로 대체",
+  "desc": "SHIP_REQ 의 Incoterms 가 비어있으면 BOD 마스터 값으로 보정",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L120-122",
+    "diff": "TOP 1(비결정) → MAX(결정적) 표현 차이"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L147-149",
+    "diff": "TOP 1 → MAX"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L356-358",
+    "diff": "TOP 1 → MAX"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#455",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+  "asis_line": "L316-321",
+  "condition": "CASE WHEN B.INCOTERMS <> '-' AND B.INCOTERMS IS NOT NULL THEN B.INCOTERMS ELSE (SELECT TOP 1 X.INCOTERMS FROM SCP_MST_BOD_N_V ...) END",
+  "on_fail": "Incoterms 가 '-'/NULL 이면 BOD 마스터 Incoterms 로 대체",
+  "desc": "SHIP_PLAN 의 Incoterms 가 비어있으면 BOD 마스터 값으로 보정",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L120-122",
+    "diff": "TOP 1(비결정) → MAX(결정적) 표현 차이"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L147-149",
+    "diff": "TOP 1 → MAX"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L356-358",
+    "diff": "TOP 1 → MAX"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#456",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+  "asis_line": "L329-349",
+  "condition": "FROM SCP_PLN_SHIPMENT_PLAN_PEGGING A LEFT OUTER JOIN SCP_PLN_SHIPMENT_PLAN B ON ... A.ORDER_ID=B.ORDER_ID AND B.MEASURE='SHIP_PLAN' AND B.SEMI_YN='N' WHERE ... AND B.DIVISION_ID is not null",
+  "on_fail": "출하계획(FG SHIP_PLAN) 이 매칭되지 않는 Pegging 행 제외",
+  "desc": "Pegging 결과 중 대응되는 FG 출하계획이 없는 행은 SHIP_PLAN 집계에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L152-170",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L363-381",
+    "diff": "UNPEGGING 조건은 TO-BE 에도 없음(AS-IS 주석과 동일)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#457",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+  "asis_line": "L596-598",
+  "condition": "CASE WHEN dbo.fn_scm_split(a.stock_plan_lot_id,4,'::') < @p_plan_start_yyyymmdd THEN @p_plan_start_yyyymmdd ELSE ... END",
+  "on_fail": "계획시작일 이전 Intransit 일자를 계획시작일로 보정",
+  "desc": "Intransit(WH_IN) 도착일이 계획 시작일 이전이면 계획 시작일로 당겨서 집계",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L333-334",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#458",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+  "asis_line": "L675-680",
+  "condition": "CASE WHEN B.INCOTERMS <> '-' AND B.INCOTERMS IS NOT NULL THEN B.INCOTERMS ELSE (SELECT TOP 1 X.INCOTERMS FROM SCP_MST_BOD_N_V ...) END",
+  "on_fail": "Incoterms 가 '-'/NULL 이면 BOD 마스터 Incoterms 로 대체",
+  "desc": "WH_IN(Pegging) 의 Incoterms 가 비어있으면 BOD 마스터 값으로 보정",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L120-122",
+    "diff": "TOP 1(비결정) → MAX(결정적) 표현 차이"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L147-149",
+    "diff": "TOP 1 → MAX"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L356-358",
+    "diff": "TOP 1 → MAX"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#459",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+  "asis_line": "L687-709",
+  "condition": "LEFT OUTER JOIN SCP_PLN_SHIPMENT_PLAN B ON ... B.MEASURE='SHIP_PLAN' AND B.SEMI_YN='N' WHERE ... AND B.DIVISION_ID is not null",
+  "on_fail": "출하계획 미매칭 Pegging 행은 WH_IN 집계 제외",
+  "desc": "Pegging 중 대응 FG 출하계획이 없는 행은 WH_IN 집계에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L152-170",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L363-381",
+    "diff": "UNPEGGING 조건은 TO-BE 에도 없음(AS-IS 주석과 동일)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#460",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+  "asis_line": "L814-861",
+  "condition": "WHERE ISNUMERIC(A.SEQ) = 1 (L814 임시테이블 적재, L861 MKT_FCST INSERT)",
+  "on_fail": "SEQ 가 숫자가 아닌 Net Demand 행 제외",
+  "desc": "Net Demand 뷰에서 SEQ 가 숫자형이 아닌 행은 MKT_FCST 집계에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L425-445",
+    "diff": "ISNUMERIC → 정규식. MSSQL ISNUMERIC 은 '1e5','$1','.' 등도 1 로 보나 TO-BE 정규식은 부호/소수만 허용 — 경계값만 차이(실데이터 SEQ 는 정수라 영향 없음으로 추정)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#461",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+  "asis_line": "L1808-1813",
+  "condition": "AND YYYYMMDD < @v_pet_date (horizon_end_date + 1일)",
+  "on_fail": "Horizon 종료일 이후 행 INSERT 제외",
+  "desc": "계획 Horizon 종료일 이후 FG 출하계획 데이터는 저장 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L795-795",
+    "diff": "AS-IS 는 plan 미존재 시 19000102 로 전 행 제외, TO-BE 는 V_PET_DATE NULL → 비교 UNKNOWN 으로 전 행 제외(결과 동일)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#462",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+  "asis_line": "L1879-1900",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ERROR 로그 후 return -1",
+  "desc": "예외 시 오류 로그 기록 후 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_FG",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql L820-829",
+    "diff": "AS-IS 는 ERROR 로그 후 return -1(부모 CREATE_DATA 가 @rows<0 으로 중단). TO-BE 는 PROCEDURE 라 반환코드 없음·재RAISE 없음 → 상위로 실패 미전파(주석에 '상위 계속 → RAISE 미전파' 명시). 또한 AS-IS ROLLBACK 주석·트랜잭션 미사용 ↔ TO-BE ROLLBACK 실행(DELETE 원복됨)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#463",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+  "asis_line": "L508-528",
+  "condition": "DELETE ... WHERE NOT EXISTS (SELECT 'X' FROM #tmp X WHERE X.MEASURE='SHIP_PLAN' AND X.ITEM_ID=... AND X.FROM_SITE=...)",
+  "on_fail": "전 구간 출하계획(SHIP_PLAN)이 없는 품목·From Site 의 모든 Measure 행 삭제",
+  "desc": "출하계획이 하나도 없는 품목/사이트는 반제품 출하계획 분석 대상에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI.PROCEDURE.sql L216-229",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#464",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+  "asis_line": "L774-825",
+  "condition": "A.YYYYMMDD < @p_plan_start_yyyymmdd AND A.MEASURE='SHIP_REQ' -> #Update; UPDATE X SET X.QTY = ISNULL(X.QTY,0)+ISNULL(Y.QTY,0) WHERE X.YYYYMMDD = X.PLAN_START_YYYYMMDD",
+  "on_fail": "계획시작일 이전 출하요청 수량을 계획시작일 수량에 합산",
+  "desc": "계획 시작일 이전 일자의 Ship Req 수량은 계획 첫날로 합산 보정",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI.PROCEDURE.sql L313-346",
+    "diff": "UPDATE..FROM JOIN → 상관 UPDATE+EXISTS 표현 차이"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI.PROCEDURE.sql L349-349",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#465",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+  "asis_line": "L828-828",
+  "condition": "DELETE FROM #tmp_SCP_ANL_SHIPMENT_PLAN_SEMI WHERE YYYYMMDD < PLAN_START_YYYYMMDD",
+  "on_fail": "계획시작일 이전 행 전부 삭제(전 Measure)",
+  "desc": "계획 시작일 이전 일자 데이터는 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI.PROCEDURE.sql L313-346",
+    "diff": "UPDATE..FROM JOIN → 상관 UPDATE+EXISTS 표현 차이"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI.PROCEDURE.sql L349-349",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#466",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+  "asis_line": "L1233-1233",
+  "condition": "AND YYYYMMDD < @v_pet_date (L1515, L1718 가상 Plant 복사 INSERT 도 동일)",
+  "on_fail": "Horizon 종료일 이후 행 INSERT 제외",
+  "desc": "계획 Horizon 종료일 이후 반제품 출하계획 데이터는 저장 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI.PROCEDURE.sql L469-469",
+    "diff": "plan 미존재 시 AS-IS 19000102 / TO-BE NULL → 둘 다 전 행 제외. TO-BE 는 HORIZON_END_DATE 길이 8 아닐 때 +1 미적용(TO-BE 추가 참조)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#467",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+  "asis_line": "L1429-1454",
+  "condition": "PD.PLAN_STATUS='1' AND PD.DISPLAY_YN='Y' AND PD.UI_DISPLAY_YN='Y' AND PD.NORMAL_COMPLETE_YN='Y' AND PD.ACTIVE_FLAG='Y' ... ROW_NUMBER() ... WHERE NUM = 1",
+  "on_fail": "정상완료·활성 Plan 이 없는 대상 사업부에는 가상 Plant 복사 INSERT 0건",
+  "desc": "JV ESS 가상 Plant 계획 복사 시 대상 사업부의 정상완료·표시·활성 Plan(FN>SE>MA>PR, 확정 우선, 최신 SEQ) 1건만 사용",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI.PROCEDURE.sql L507-579",
+    "diff": "AS-IS 원문이슈(삭제용 #PLAN_SEQ 에 NUM=1 없음)까지 동일 이관(L506 주석 명시)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#468",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+  "asis_line": "L1566-1650",
+  "condition": "PD.PLAN_STATUS='1' AND PD.DISPLAY_YN='Y' AND PD.UI_DISPLAY_YN='Y' AND PD.NORMAL_COMPLETE_YN='Y' AND PD.ACTIVE_FLAG='Y' ... NUM = 1; 삭제 대상 선정 WO.QTY > 0 (L1614)",
+  "on_fail": "정상완료·활성 원천 Plan 만 현재 사업부로 복사, 수량>0 품목만 기존 계획 삭제",
+  "desc": "가상 Plant 원천 사업부의 정상완료 Plan 1건 기준으로 현재 사업부 계획을 삭제 후 복사(수량 있는 품목만 삭제 대상)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI.PROCEDURE.sql L617-709",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#469",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+  "asis_line": "L1792-1813",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ERROR 로그 후 return -1",
+  "desc": "예외 시 오류 로그 기록 후 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI",
+    "loc": "PR_SCP_ANL_SHIPMENT_PLAN_SEMI.PROCEDURE.sql L729-738",
+    "diff": "AS-IS return -1(부모 중단 신호) → TO-BE 반환코드·RAISE 없음으로 상위 미전파. AS-IS ROLLBACK 주석(부분 반영) ↔ TO-BE ROLLBACK 실행(부분 반영 제거 — 개선 방향 차이)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#470",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_SUPPLY_PSI_BY_MODEL_82",
+  "asis_line": "L183-200",
+  "condition": "#TblDynamicPivot_SCP0074_MODELNAME ... AND A.QTY > 0  (L316 INNER JOIN MO ON ITEM_ID/CELL_ITEM_ID)",
+  "on_fail": "수량>0 이력이 없는 Pack/Cell 세트는 리포트 데이터에서 제외",
+  "desc": "PSI Global 에 양수 수량이 한 건도 없는 모델 세트는 공급 PSI 리포트 대상에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_SUPPLY_PSI_BY_MODEL_82",
+    "loc": "PR_SCP_ANL_SUPPLY_PSI_BY_MODEL_82.PROCEDURE.sql L70-134",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#472",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCP_ANL_SUPPLY_PSI_BY_MODEL_82",
+  "asis_line": "L1197-1218",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ERROR 로그 후 return -1",
+  "desc": "예외 시 오류 로그 기록 후 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCP_ANL_SUPPLY_PSI_BY_MODEL_82",
+    "loc": "PR_SCP_ANL_SUPPLY_PSI_BY_MODEL_82.PROCEDURE.sql L853-861",
+    "diff": "AS-IS 로그 후 return -1 → TO-BE 반환코드·RAISE 없음(상위 미전파). ROLLBACK 도 없고 블록 내 COMMIT 도 없음 → 실패 시 L184 DELETE·부분 INSERT 가 호출자 트랜잭션에 남아 호출자의 COMMIT/ROLLBACK 에 좌우됨"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#480",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+  "asis_line": "L112-118",
+  "condition": "WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL B WHERE LOOKUP_TYPE='EE_PSI_PRODUCTION' AND SEGMENT1='SCP' AND B.SEGMENT2=A.OPERATION_GROUP AND B.SEGMENT3=A.FROM_SITE AND B.SEGMENT4=A.DIVISION_ID)",
+  "on_fail": "이미 등록된 조회조건 조합은 INSERT 제외",
+  "desc": "PSI Production 조회조건(공정그룹·From Site·사업부) 중복 등록 방지",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L69-75",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L167-173",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L272-280",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L283-345",
+    "diff": "AS-IS 원문이슈(ON 절 ATTRIBUTE2 미포함 → 타 사업부 ATTRIBUTE2 덮어씀)까지 동일 이관"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L410-416",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L509-515",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#481",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+  "asis_line": "L224-230",
+  "condition": "WHERE NOT EXISTS (... LOOKUP_TYPE='EE_PROBLEM_REPORT_DEMAND' AND SEGMENT1='SCP' AND SEGMENT2=A.PLANT_SITE_ID AND SEGMENT3=A.SALES_SITE_ID AND SEGMENT4=A.DIVISION_ID)",
+  "on_fail": "기등록 조합 INSERT 제외",
+  "desc": "Problem Report Demand 조회조건(Plant·Sales Site·사업부) 중복 등록 방지",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L69-75",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L167-173",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L272-280",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L283-345",
+    "diff": "AS-IS 원문이슈(ON 절 ATTRIBUTE2 미포함 → 타 사업부 ATTRIBUTE2 덮어씀)까지 동일 이관"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L410-416",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L509-515",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#482",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+  "asis_line": "L337-337",
+  "condition": "AND LINE_ID NOT IN ('*')",
+  "on_fail": "LINE_ID '*' 행은 조회조건 생성 제외",
+  "desc": "라인이 '*'(미지정)인 생산계획은 Production Plan 조회조건에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L268-268",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#483",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+  "asis_line": "L341-349",
+  "condition": "WHERE NOT EXISTS (... LOOKUP_TYPE='EE_PRODUCTION_PLAN' AND SEGMENT2=A.OPERATION_GROUP AND SEGMENT3=A.SCM_SITE_ID AND SEGMENT4=A.LINE_ID AND SEGMENT5=A.OPERATION_ID AND ATTRIBUTE2=A.DIVISION_ID)",
+  "on_fail": "기등록 조합 임시테이블 적재 제외",
+  "desc": "Production Plan 조회조건(공정그룹·사이트·라인·공정·사업부) 중복 등록 방지",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L69-75",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L167-173",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L272-280",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L283-345",
+    "diff": "AS-IS 원문이슈(ON 절 ATTRIBUTE2 미포함 → 타 사업부 ATTRIBUTE2 덮어씀)까지 동일 이관"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L410-416",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L509-515",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#484",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+  "asis_line": "L355-421",
+  "condition": "MERGE ... ON (LOOKUP_TYPE, SEGMENT1~SEGMENT5) WHEN MATCHED THEN UPDATE ... WHEN NOT MATCHED THEN INSERT",
+  "on_fail": "키(SEGMENT1~5) 중복 시 INSERT 대신 DISPLAY_SEQ/ATTRIBUTE1/ATTRIBUTE2/VALID_YN 갱신",
+  "desc": "사업부(ATTRIBUTE2)만 다른 동일 조회조건은 신규 등록 대신 기존 행을 갱신(2025.03.14 중복 오류 보완)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L69-75",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L167-173",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L272-280",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L283-345",
+    "diff": "AS-IS 원문이슈(ON 절 ATTRIBUTE2 미포함 → 타 사업부 ATTRIBUTE2 덮어씀)까지 동일 이관"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L410-416",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L509-515",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#485",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+  "asis_line": "L495-501",
+  "condition": "WHERE NOT EXISTS (... LOOKUP_TYPE='EE_SHIPMENT_PLAN_FG' AND SEGMENT2=A.BIZ_TYPE AND SEGMENT3=A.TO_SITE AND SEGMENT4=A.DIVISION_ID)",
+  "on_fail": "기등록 조합 INSERT 제외",
+  "desc": "Shipment Plan FG 조회조건(BizType·To Site·사업부) 중복 등록 방지",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L69-75",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L167-173",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L272-280",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L283-345",
+    "diff": "AS-IS 원문이슈(ON 절 ATTRIBUTE2 미포함 → 타 사업부 ATTRIBUTE2 덮어씀)까지 동일 이관"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L410-416",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L509-515",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#486",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+  "asis_line": "L607-613",
+  "condition": "WHERE NOT EXISTS (... LOOKUP_TYPE='EE_SHIPMENT_PLAN_SEMI' AND B.SEGMENT2=A.OPERATION_GROUP AND B.SEGMENT3=A.TO_SITE AND B.SEGMENT4=A.DIVISION_ID)",
+  "on_fail": "기등록 조합 INSERT 제외",
+  "desc": "Shipment Plan SEMI 조회조건(공정그룹·To Site·사업부) 중복 등록 방지",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L69-75",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L167-173",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L272-280",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L283-345",
+    "diff": "AS-IS 원문이슈(ON 절 ATTRIBUTE2 미포함 → 타 사업부 ATTRIBUTE2 덮어씀)까지 동일 이관"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L410-416",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L509-515",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#487",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+  "asis_line": "L710-726",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ERROR 로그 후 return -1",
+  "desc": "예외 시 오류 로그 기록 후 -1 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE",
+    "loc": "PR_SCP_ANL_UI_EE_SEARCH_DATA_CREATE.PROCEDURE.sql L591-608",
+    "diff": "AS-IS return -1 → TO-BE 반환코드·RAISE 없음(상위 미전파). TO-BE 는 단계별 COMMIT(L142/240/384/483/582) 후 ROLLBACK 이므로 앞 단계 Lookup 등록분 유지 — 부분 반영 동작은 AS-IS 와 동일. 로그에 파라미터 JSON·SQLCODE 추가"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#1123",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Confirm 버튼",
+  "cls": "A 차단형",
+  "sp": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+  "asis_line": "L104-134",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER+']'+ERROR_MESSAGE()",
+  "desc": "발송 로그 저장 실패 시 오류 로그 후 F 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG",
+    "loc": "SCM_ADM_SAVE_MAIL_SEND_BATCH_LOG.PROCEDURE.sql L134-165",
+    "diff": "AS-IS: 오류 로그 후 COMMIT, 'F' 결과셋 반환(호출부 계속 진행). TO-BE: AUTONOMOUS_TRANSACTION 안에서 ROLLBACK(발송로그 INSERT 취소) 후 로그, END 로그 뒤 RAISE_APPLICATION_ERROR(-20001) 로 호출부(SCM_ADM_SMS_SEND_BATCH·SCM_SSP_MAIL_SEND 등)에 예외 전파. 'F'/메시지 결과셋은 주석(L152-153). 실패 처리가 결과 반환→예외 전파로 바뀜(AS-IS 원문이슈 COMMIT 은 ROLLBACK 으로 교정)."
+   }
+  ],
+  "fe_note": "Confirm/Run 모두 apiClient.post call-proc, RESULT_CODE='F' 만 실패로 판정(PlanManagement.tsx L264-266)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#1124",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "FN_GET_SEMI_YN",
+  "asis_line": "L52-59",
+  "condition": "if isnull(@X_cnt,0) > 1 SET @x_semi_yn='Y' else if isnull(@X_cnt,0)=1 SET @x_semi_yn='N' else SET @x_semi_yn=NULL  -- from/to 사이트 중 PLANT 건수",
+  "on_fail": "RETURN isnull(@x_semi_yn,'-')  (PLANT 사이트가 하나도 없으면 '-')",
+  "desc": "From/To 사이트가 모두 PLANT 면 Y, 하나만 PLANT 면 N, PLANT 사이트가 없으면 센티널 '-' 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "FN_GET_SEMI_YN",
+    "loc": "FN_GET_SEMI_YN.FUNCTION.sql L51-59",
+    "diff": "ISNULL(@X_cnt,0) → L33 NVL(SUM(CNT),0) 로 선반영. 반환 센티널 '-' 를 AS-IS 그대로 유지(신규 '/' 센티널 정책 미적용 — 의도적 원문 유지로 판단)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1131",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Confirm 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_DM_DNM_CREATE_C_WS_RTF",
+  "asis_line": "L1556-1572",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRAN; PR_SCM_SYS_LOG_BATCH ERROR 로그; SELECT '[[' + CONVERT(NVARCHAR(10), ERROR_LINE()) + ']' + ERROR_MESSAGE()",
+  "desc": "예외 시 전체 롤백 후 오류 라인·메시지 결과셋 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_DM_DNM_CREATE_C_WS_RTF",
+    "loc": "PR_DM_DNM_CREATE_C_WS_RTF.PROCEDURE.sql L1223-1243",
+    "diff": "롤백+ERROR 로그 동일. 차이: (1) 오류 결과셋 '[[라인]메시지' 반환 없음(로그만), 예외 삼킴 → 부모 PR_DM_PLN_MKT_FCST_C_QTY_BALANCE_CREATE(L2595) 미전파는 AS-IS 와 같음, (2) 정상 종료 시 본문 L1223 에서 COMMIT — 부모가 트랜잭션을 소유한다는 부모측 주석(L276)과 달리 부모의 앞선 DML 까지 확정됨, ROLLBACK 도 부모 작업 전체를 되돌림."
+   }
+  ],
+  "fe_note": "Confirm/Run 모두 apiClient.post call-proc, RESULT_CODE='F' 만 실패로 판정(PlanManagement.tsx L264-266)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#1132",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_BOH",
+  "asis_line": "L192-240",
+  "condition": "AND NOT ISNULL(S.INSP_TYPE, '') IN ('INSP_PRE', 'INSP_HOLD')  -- L192(AMDAU 모델 BOM 전개분), L240(그 외 품목) 동일",
+  "on_fail": "전진검사(INSP_PRE)·검사보류(INSP_HOLD) 재고행을 SCP_XLS_BOH 적재 대상에서 조용히 제외",
+  "desc": "전진검사 대기/보류 상태 재고는 시뮬레이터 BOH 에서 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_BOH",
+    "loc": "PR_SCP_XLS_BOH.PROCEDURE.sql L148-188",
+    "diff": "NOT ISNULL(INSP_TYPE,'') IN (…) → (IS NULL OR NOT IN …) 동치 표현"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1133",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCP_XLS_BOH",
+  "asis_line": "L311-332",
+  "condition": "BEGIN CATCH (IF @@TRANCOUNT > 0 ROLLBACK TRAN T1 은 주석)",
+  "on_fail": "EXEC PR_SCP_SYS_LOG_BATCH (ERROR); return -1",
+  "desc": "예외 시 오류 로그 기록 후 -1 반환 (부모가 @rows<0 으로 중단)",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCP_XLS_BOH",
+    "loc": "PR_SCP_XLS_BOH.PROCEDURE.sql L258-267",
+    "diff": "①AS-IS 는 ROLLBACK 주석(삭제분 잔존) → TO-BE 는 ROLLBACK 실행(L65 DELETE 까지 되돌림). ②AS-IS return -1 은 부모가 @rows<0 로 중단 판정하는 신호인데 TO-BE 는 반환값/OUT 코드 없이 흡수 RETURN → 호출자가 실패를 알 수 없음. ③로그 프로시저가 PR_SCP_SYS_LOG_BATCH → PR_SCM_SYS_LOG_BATCH"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#1239",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Confirm 버튼",
+  "cls": "A 차단형",
+  "sp": "SCM_ADM_MAIL_SEND",
+  "asis_line": "L73-106",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code; SELECT '['+ERROR_NUMBER+']'+ERROR_MESSAGE()",
+  "desc": "메일 발송 실패 시 오류 로그 후 F 결과 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM_ADM_MAIL_SEND",
+    "loc": "SCM_ADM_MAIL_SEND.PROCEDURE.sql L82-103",
+    "diff": "AS-IS: 로그 INSERT + COMMIT + SELECT 'F' result_code/메시지 결과셋 반환(예외 삼킴). TO-BE: 로그 후 RAISE_APPLICATION_ERROR 로 호출자에 예외 전파, COMMIT 없음(2026-10-07 ROLLBACK 제거 주석). 호출자 PKG_SSP0003 등은 예외 처리 여부에 따라 저장 실패로 이어질 수 있음"
+   }
+  ],
+  "fe_note": "Confirm/Run 모두 apiClient.post call-proc, RESULT_CODE='F' 만 실패로 판정(PlanManagement.tsx L264-266)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0015#1249",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L401-401",
+  "condition": "(SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-' WHEN X.NICK_NAME = '' THEN '-' ELSE X.NICK_NAME END) FROM DBO.SCM_MST_ITEM_SN X WHERE X.ITEM_ID = A.ITEM_ID AND X.DIVISION_ID = '82')",
+  "on_fail": "NULL/빈값이면 '-'",
+  "desc": "Nick Name 이 비어 있으면 '-' 로 표시(누락 방지)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L302-302",
+    "diff": "TOP 1→ROWNUM=1. Oracle 에서 ='' 분기는 항상 거짓이나 IS NULL 분기가 빈값을 포괄해 결과 동일. PACK_CELL_* NICK_NAME UPDATE(L2289~2300)도 동일 로직 이관"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1250",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L657-676",
+  "condition": "AND NOT EXISTS (SELECT 'X' FROM #SCP_XLS_PSI_GLOBAL_ESS Z WHERE Z.DIVISION_ID=SUB.DIVISION_ID ... AND Z.TRANSPORT_MODE=SUB.TRANSPORT_MODE AND Z.MEASURE='SHIP_PLAN' AND Z.BOD_ID=SUB.BOD_ID) AND SUB.MEASURE ='SHIP_PLAN'",
+  "on_fail": "이미 존재하는 키 조합은 INSERT 제외",
+  "desc": "SHIP_PLAN 을 BOD 운송모드별로 확장할 때 기존 행과 중복 방지",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L523-541",
+    "diff": "#temp→GTT"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L687-706",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L804-920",
+    "diff": "CROSS APPLY→콤마 조인(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L1171-1182",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2041-2046",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2322-2331",
+    "diff": "인라인뷰 DELETE→ROWID DELETE(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2333-2342",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2344-2353",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2385-2394",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2397-2406",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2614-2623",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1251",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L836-855",
+  "condition": "AND NOT EXISTS (... Z.MEASURE ='SEMI_SHIP_PLAN' AND Z.BOD_ID = SUB.BOD_ID AND Z.ATTRIBUTE1 = SUB.ATTRIBUTE1) AND SUB.MEASURE ='SEMI_SHIP_PLAN'",
+  "on_fail": "이미 존재하는 키 조합은 INSERT 제외",
+  "desc": "SEMI_SHIP_PLAN 운송모드별 확장 시 중복 방지",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L523-541",
+    "diff": "#temp→GTT"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L687-706",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L804-920",
+    "diff": "CROSS APPLY→콤마 조인(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L1171-1182",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2041-2046",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2322-2331",
+    "diff": "인라인뷰 DELETE→ROWID DELETE(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2333-2342",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2344-2353",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2385-2394",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2397-2406",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2614-2623",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1252",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L984-1107",
+  "condition": "AND NOT EXISTS (SELECT 'X' FROM #SCP_XLS_PSI_GLOBAL_ESS Z WHERE ... Z.FROM_SITE = Y.PLANT_SITE_ID AND Z.PROD_LINE = Y.LINE_ID AND Z.MEASURE IN ('CELL_PROD','PACK_PROD'))  (L984~995, L1096~1107 동일)",
+  "on_fail": "이미 해당 라인 행이 있으면 INSERT 제외",
+  "desc": "Tact Time 마스터 라인별 생산/부하율 행 추가 시 중복 방지",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L523-541",
+    "diff": "#temp→GTT"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L687-706",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L804-920",
+    "diff": "CROSS APPLY→콤마 조인(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L1171-1182",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2041-2046",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2322-2331",
+    "diff": "인라인뷰 DELETE→ROWID DELETE(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2333-2342",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2344-2353",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2385-2394",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2397-2406",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2614-2623",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1253",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L1443-1454",
+  "condition": "AND NOT EXISTS (... Z.FROM_SITE = Y.SCM_SITE_ID AND Z.PROD_LINE = Y.PROD_LINE AND Z.MEASURE IN ('PACK_TACT_TIME','CELL_TACT_TIME'))",
+  "on_fail": "이미 존재하면 INSERT 제외",
+  "desc": "Tact Time 행 라인별 추가 시 중복 방지",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L523-541",
+    "diff": "#temp→GTT"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L687-706",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L804-920",
+    "diff": "CROSS APPLY→콤마 조인(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L1171-1182",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2041-2046",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2322-2331",
+    "diff": "인라인뷰 DELETE→ROWID DELETE(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2333-2342",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2344-2353",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2385-2394",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2397-2406",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2614-2623",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1254",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2215-2218",
+  "condition": "WHERE TRANSPORT_MODE = '-'",
+  "on_fail": "SET X.LT_DAY = 0",
+  "desc": "운송모드가 없으면 L/T 를 0 으로 보정",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2001-2004",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1255",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2273-2278",
+  "condition": "AND X.MEASURE = 'PACK_PROD' AND CELL_ITEM_ID IS NOT NULL AND NOT EXISTS (SELECT * FROM #SCP_XLS_PSI_GLOBAL_ESS S WHERE MEASURE = 'SEMI_PACK_PROD_CELL' AND S.ITEM_ID = X.CELL_ITEM_ID)",
+  "on_fail": "셀품목 없거나 이미 존재하면 INSERT 제외",
+  "desc": "SEMI_PACK_PROD_CELL 누락분만 추가(셀품목 필수·중복 방지)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L523-541",
+    "diff": "#temp→GTT"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L687-706",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L804-920",
+    "diff": "CROSS APPLY→콤마 조인(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L1171-1182",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2041-2046",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2322-2331",
+    "diff": "인라인뷰 DELETE→ROWID DELETE(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2333-2342",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2344-2353",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2385-2394",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2397-2406",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2614-2623",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1256",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2338-2338",
+  "condition": "CASE WHEN LEN(PROJECT_CODE) = 0 THEN '-' ELSE PROJECT_CODE END",
+  "on_fail": "빈 문자열이면 '-'",
+  "desc": "Project Code 가 빈 문자열이면 '-' 로 저장",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2120-2120",
+    "diff": "AS-IS 는 NULL 이면 LEN=NULL 이라 NULL 그대로 저장, TO-BE 는 NULL 도 '-' 로 저장. Oracle ''=NULL 로 빈값·NULL 구분 불가한 데 따른 표현 차이(센티널 '-' 유지)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1257",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2523-2531",
+  "condition": "ROW_NUMBER() OVER (PARTITION BY CELL_ITEM_ID, ITEM_ID,FROM_SITE ORDER BY XLS_KEY1 desc) ... WHERE TBL.ROWNUM > 1",
+  "on_fail": "DELETE (XLS_KEY1 최대 행만 유지)",
+  "desc": "PACK_CELL_BOH 중복 행 제거",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L523-541",
+    "diff": "#temp→GTT"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L687-706",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L804-920",
+    "diff": "CROSS APPLY→콤마 조인(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L1171-1182",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2041-2046",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2322-2331",
+    "diff": "인라인뷰 DELETE→ROWID DELETE(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2333-2342",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2344-2353",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2385-2394",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2397-2406",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2614-2623",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1258",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2534-2542",
+  "condition": "ROW_NUMBER() OVER (PARTITION BY CELL_ITEM_ID, ITEM_ID,FROM_SITE ORDER BY XLS_KEY1 desc) ... WHERE TBL.ROWNUM > 1",
+  "on_fail": "DELETE (XLS_KEY1 최대 행만 유지)",
+  "desc": "PACK_CELL_EOH 중복 행 제거",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L523-541",
+    "diff": "#temp→GTT"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L687-706",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L804-920",
+    "diff": "CROSS APPLY→콤마 조인(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L1171-1182",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2041-2046",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2322-2331",
+    "diff": "인라인뷰 DELETE→ROWID DELETE(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2333-2342",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2344-2353",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2385-2394",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2397-2406",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2614-2623",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1259",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2544-2552",
+  "condition": "ROW_NUMBER() OVER (PARTITION BY CELL_ITEM_ID, ITEM_ID,FROM_SITE ORDER BY XLS_KEY1 desc) ... WHERE TBL.ROWNUM > 1",
+  "on_fail": "DELETE (XLS_KEY1 최대 행만 유지)",
+  "desc": "PACK_CELL_EOH_TOTAL 중복 행 제거",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L523-541",
+    "diff": "#temp→GTT"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L687-706",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L804-920",
+    "diff": "CROSS APPLY→콤마 조인(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L1171-1182",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2041-2046",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2322-2331",
+    "diff": "인라인뷰 DELETE→ROWID DELETE(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2333-2342",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2344-2353",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2385-2394",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2397-2406",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2614-2623",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1260",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2557-2560",
+  "condition": "DELETE FROM SCP_XLS_PSI_GLOBAL_ESS WHERE MEASURE ='SHIP_PLAN' AND BOD_ID ='-' AND CREATE_FROM_YYYYMMDD = @p_create_from_yyyymmdd",
+  "on_fail": "DELETE (조용히 삭제)",
+  "desc": "BOD 가 없는('-') 출하계획 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2356-2361",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1261",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2563-2566",
+  "condition": "DELETE ... WHERE MEASURE IN ('CELL_PROD','CELL_PROD_LOAD') AND PROD_LINE ='-'",
+  "on_fail": "DELETE (조용히 삭제)",
+  "desc": "생산라인 없는 셀 생산/부하율 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2364-2369",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2842-2847",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1262",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2584-2592",
+  "condition": "ROW_NUMBER() OVER (PARTITION BY CELL_ITEM_ID, ITEM_ID,FROM_SITE ORDER BY XLS_KEY1 desc) ... WHERE TBL.ROWNUM > 1",
+  "on_fail": "DELETE",
+  "desc": "PACK_SHIP_PLAN_TOTAL 중복 행 제거",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L523-541",
+    "diff": "#temp→GTT"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L687-706",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L804-920",
+    "diff": "CROSS APPLY→콤마 조인(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L1171-1182",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2041-2046",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2322-2331",
+    "diff": "인라인뷰 DELETE→ROWID DELETE(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2333-2342",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2344-2353",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2385-2394",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2397-2406",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2614-2623",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1263",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2594-2602",
+  "condition": "ROW_NUMBER() OVER (PARTITION BY CELL_ITEM_ID, ITEM_ID,FROM_SITE ORDER BY XLS_KEY1 desc) ... WHERE TBL.ROWNUM > 1",
+  "on_fail": "DELETE",
+  "desc": "CELL_SHIP_PLAN_TOTAL 중복 행 제거",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L523-541",
+    "diff": "#temp→GTT"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L687-706",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L804-920",
+    "diff": "CROSS APPLY→콤마 조인(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L1171-1182",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2041-2046",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2322-2331",
+    "diff": "인라인뷰 DELETE→ROWID DELETE(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2333-2342",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2344-2353",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2385-2394",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2397-2406",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2614-2623",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1264",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2604-2607",
+  "condition": "DELETE ... WHERE MEASURE ='PACK_SHIP_PLAN_TOTAL' AND OPERATION_GROUP = 'A'",
+  "on_fail": "DELETE",
+  "desc": "셀(A) 공정에 생성된 Pack 출하합계 행 삭제(메저-공정 부정합 제거)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2409-2414",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L3098-3106",
+    "diff": "다중테이블 DELETE→EXISTS. CREATE_FROM 조건 없음도 동일"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L3109-3120",
+    "diff": "조건 동일. 단 원천 GT_SCXL_BOD_OTHER_SHIP 를 채우는 부모 SP 전환본이 TO-BE 에 없어 실행 시 0건 삭제가 됨(부모 매핑 이슈)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1265",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2885-2893",
+  "condition": "ROW_NUMBER() OVER (PARTITION BY CELL_ITEM_ID, ITEM_ID, FROM_SITE, PROD_LINE ORDER BY XLS_KEY1 desc) ... WHERE TBL.ROWNUM > 1",
+  "on_fail": "DELETE",
+  "desc": "PACK_PROD_LOAD 중복 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L523-541",
+    "diff": "#temp→GTT"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L687-706",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L804-920",
+    "diff": "CROSS APPLY→콤마 조인(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L1171-1182",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2041-2046",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2322-2331",
+    "diff": "인라인뷰 DELETE→ROWID DELETE(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2333-2342",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2344-2353",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2385-2394",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2397-2406",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2614-2623",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1266",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2896-2899",
+  "condition": "DELETE SCP_XLS_PSI_GLOBAL_ESS WHERE CREATE_FROM_YYYYMMDD = @p_create_from_yyyymmdd AND ITEM_ID = '-' AND CELL_ITEM_ID IS NULL",
+  "on_fail": "DELETE",
+  "desc": "품목·셀품목이 모두 없는 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2626-2631",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1267",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2902-2916",
+  "condition": "AND X.MEASURE IN ('PACK_PROD_LOAD_TOTAL') AND ISNULL((SELECT DISTINCT 'Y' FROM ... A.FROM_SITE = X.FROM_SITE AND A.MEASURE = 'PACK_PROD'),'N') = 'N'",
+  "on_fail": "DELETE",
+  "desc": "같은 사이트에 PACK_PROD 가 없으면 PACK_PROD_LOAD_TOTAL 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2637-2646",
+    "diff": "ISNULL((SELECT DISTINCT 'Y'..),'N')='N' → NOT EXISTS(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2648-2658",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2660-2671",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2673-2684",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2686-2697",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2699-2708",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2710-2718",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1268",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2918-2933",
+  "condition": "AND X.MEASURE IN ('PACK_PROD_LOAD_TOTAL') AND ISNULL((SELECT DISTINCT 'Y' ... A.ITEM_ID = X.ITEM_ID AND A.FROM_SITE = X.FROM_SITE AND A.PROD_LINE = X.PROD_LINE AND A.MEASURE = 'PACK_PROD'),'N') = 'N'",
+  "on_fail": "DELETE",
+  "desc": "같은 품목·사이트·라인 PACK_PROD 없으면 PACK_PROD_LOAD_TOTAL 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2637-2646",
+    "diff": "ISNULL((SELECT DISTINCT 'Y'..),'N')='N' → NOT EXISTS(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2648-2658",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2660-2671",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2673-2684",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2686-2697",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2699-2708",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2710-2718",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1269",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2935-2951",
+  "condition": "AND X.MEASURE IN ('PACK_PROD_LOAD', 'PACK_WORKING_TIME', 'PACK_TACT_TIME') AND ISNULL((SELECT DISTINCT 'Y' ... ITEM_ID·CELL_ITEM_ID·FROM_SITE·PROD_LINE ... A.MEASURE = 'PACK_PROD'),'N') = 'N'",
+  "on_fail": "DELETE",
+  "desc": "대응 PACK_PROD 가 없는 Pack 부하율/가동시간/Tact 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2637-2646",
+    "diff": "ISNULL((SELECT DISTINCT 'Y'..),'N')='N' → NOT EXISTS(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2648-2658",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2660-2671",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2673-2684",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2686-2697",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2699-2708",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2710-2718",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1270",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2954-2970",
+  "condition": "AND X.MEASURE IN ('PACK_PROD_TOTAL', 'PACK_DIO') AND ISNULL((SELECT DISTINCT 'Y' ... ITEM_ID·CELL_ITEM_ID·FROM_SITE ... 'PACK_PROD'),'N') = 'N'",
+  "on_fail": "DELETE",
+  "desc": "대응 PACK_PROD 없는 Pack 생산합계/DIO 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2637-2646",
+    "diff": "ISNULL((SELECT DISTINCT 'Y'..),'N')='N' → NOT EXISTS(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2648-2658",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2660-2671",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2673-2684",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2686-2697",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2699-2708",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2710-2718",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1271",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2973-2989",
+  "condition": "AND X.MEASURE = 'CELL_TACT_TIME' AND ISNULL((SELECT DISTINCT 'Y' ... ITEM_ID·CELL_ITEM_ID·FROM_SITE·PROD_LINE ... 'CELL_PROD'),'N') = 'N'",
+  "on_fail": "DELETE",
+  "desc": "대응 CELL_PROD 없는 셀 Tact 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2637-2646",
+    "diff": "ISNULL((SELECT DISTINCT 'Y'..),'N')='N' → NOT EXISTS(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2648-2658",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2660-2671",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2673-2684",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2686-2697",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2699-2708",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2710-2718",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1272",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L2991-3005",
+  "condition": "AND X.MEASURE IN ('CELL_PROD_LOAD', 'CELL_WORKING_TIME') AND ISNULL((SELECT DISTINCT 'Y' ... A.FROM_SITE = X.FROM_SITE AND A.PROD_LINE = X.PROD_LINE AND A.MEASURE = 'CELL_PROD'),'N') = 'N'",
+  "on_fail": "DELETE",
+  "desc": "같은 사이트·라인 CELL_PROD 없는 셀 부하율/가동시간 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2637-2646",
+    "diff": "ISNULL((SELECT DISTINCT 'Y'..),'N')='N' → NOT EXISTS(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2648-2658",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2660-2671",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2673-2684",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2686-2697",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2699-2708",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2710-2718",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1273",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L3007-3020",
+  "condition": "AND X.MEASURE IN ('MKT_FCST_DIO', 'ALLOCATION_DIO', 'ALLOCATION_GAP_STD_DIO', 'ALLOCATION_GAP_MIN_DIO') AND ISNULL((SELECT DISTINCT 'Y' ... A.ITEM_ID <> '-' AND A.CELL_ITEM_ID = X.CELL_ITEM_ID),'N') = 'N'",
+  "on_fail": "DELETE",
+  "desc": "해당 셀품목을 쓰는 실품목 행이 없으면 DIO 메저 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2637-2646",
+    "diff": "ISNULL((SELECT DISTINCT 'Y'..),'N')='N' → NOT EXISTS(등가)"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2648-2658",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2660-2671",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2673-2684",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2686-2697",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2699-2708",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2710-2718",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1274",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L3147-3150",
+  "condition": "DELETE FROM SCP_XLS_PSI_GLOBAL_ESS WHERE MEASURE IN ('CELL_WORKING_TIME','PACK_WORKING_TIME') AND PROD_LINE ='-'",
+  "on_fail": "DELETE",
+  "desc": "생산라인 없는 가동시간 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2364-2369",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2842-2847",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1275",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L3152-3155",
+  "condition": "UPDATE ... SET QTY001=ISNULL(QTY001,0), ... WHERE QTY001 IS NULL",
+  "on_fail": "NULL 수량을 0 으로 초기화(저장 시 UNPIVOT 지원)",
+  "desc": "E20250805-000724: 특정 모델 저장 불가 이슈 대응 — NULL 수량 0 보정",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2850-2944",
+    "diff": "ISNULL→NVL. AS-IS 원문이슈(WHERE QTY001 IS NULL 한정·CREATE_FROM 조건 없음) 그대로 보존"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1276",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L3200-3244",
+  "condition": "ROW_NUMBER() OVER(PARTITION BY Z.CHILD_ITEM_ID ORDER BY Z.CHILD_ITEM_ID , MODULE_ID ) AS RN ... ) AS Z_R WHERE RN = 1",
+  "on_fail": "셀품목별 첫 모듈 1건만 ATTRIBUTE6 초기 세팅",
+  "desc": "E20260618-001229 ESS 시뮬레이터 중복 키 방지 — DC Link 코드 1차 세팅 시 셀품목당 1건",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2977-3018",
+    "diff": "UPDATE..FROM→MERGE"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1277",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "B 보정형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L3262-3265",
+  "condition": "IF @V_DC_CNT > 8",
+  "on_fail": "SET @V_DC_CNT = 8",
+  "desc": "DC Link 동종모델 추가 반복을 최대 8회로 제한",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L3040-3042",
+    "diff": null
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1278",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L3267-3312",
+  "condition": "AND LEFT(X.ATTRIBUTE6, 1) <> '1' AND CHARINDEX( ((CASE WHEN X.ITEM_ID = Z.MODULE_ID THEN '1' ELSE '2' END) + '::' + Z.MODULE_ID), X.ATTRIBUTE6, 1) = 0",
+  "on_fail": "이미 포함된 모듈코드·자기모듈('1::' 시작) 행은 추가 대상 제외",
+  "desc": "DC Link 코드 목록 누적 시 중복 코드 추가 방지",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L3080-3082",
+    "diff": "LEFT→SUBSTR, CHARINDEX→INSTR. AS-IS 원문이슈(ATTRIBUTE6 NULL 이면 UNKNOWN 으로 미갱신) 동일 보존"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1279",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L3315-3323",
+  "condition": "WHERE X.MEASURE IN ('SEMI_INTRANSIT_ETA', 'SEMI_INTRANSIT') AND X.OPERATION_GROUP = 'P' AND X.ATTRIBUTE6 IS NOT NULL AND M.SCM_SITE_ID = X.TO_SITE AND M.SITE_TYPE = 'SALES'",
+  "on_fail": "DELETE",
+  "desc": "DC Link Pack 행 중 고객(SALES) 사이트향 반제품 운송중 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2409-2414",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L3098-3106",
+    "diff": "다중테이블 DELETE→EXISTS. CREATE_FROM 조건 없음도 동일"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L3109-3120",
+    "diff": "조건 동일. 단 원천 GT_SCXL_BOD_OTHER_SHIP 를 채우는 부모 SP 전환본이 TO-BE 에 없어 실행 시 0건 삭제가 됨(부모 매핑 이슈)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1280",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L3327-3338",
+  "condition": "WHERE X.ITEM_ID = B.ITEM_ID AND X.FROM_SITE = B.FROM_SITE AND X.TO_SITE = B.TO_SITE AND X.BOD_ID = B.BOD_ID AND X.PROJECT_CODE = B.PROJECT_CODE AND X.INCOTERMS = B.INCOTERMS AND X.MEASURE = 'SHIP_REQ' AND X.OPERATION_GROUP = 'P'",
+  "on_fail": "DELETE",
+  "desc": "복수 BOD 보완(0 수량) 행과 동일 키의 SHIP_REQ 행 삭제",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L2409-2414",
+    "diff": null
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L3098-3106",
+    "diff": "다중테이블 DELETE→EXISTS. CREATE_FROM 조건 없음도 동일"
+   },
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L3109-3120",
+    "diff": "조건 동일. 단 원천 GT_SCXL_BOD_OTHER_SHIP 를 채우는 부모 SP 전환본이 TO-BE 에 없어 실행 시 0건 삭제가 됨(부모 매핑 이슈)"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0015#1281",
+  "kind": "DB",
+  "screen": "SCP0015",
+  "event": "실행(RUN) — Engine Run 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+  "asis_line": "L3362-3383",
+  "condition": "BEGIN CATCH",
+  "on_fail": "PR_SCP_SYS_LOG_BATCH ERROR 로그 후 return -1 (ROLLBACK 없음)",
+  "desc": "예외 시 로그 후 -1 반환 -> 부모 PR_SCP_XLS_PSI_GLOBAL_ESS L4620/L4661 에서 GOTO _RETURN_ERR_CODE",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PR_SCP_XLS_PSI_GLOBAL_ESS_S",
+    "loc": "PR_SCP_XLS_PSI_GLOBAL_ESS_S.PROCEDURE.sql L3175-3198",
+    "diff": "CATCH return -1 → O_RETURN_CODE := -1. ROLLBACK 없음·예외 흡수 동일. ERROR_LINE 대신 SQLCODE 기록"
+   }
+  ],
+  "fe_note": "apiClient.post call-proc(PlanManagement.tsx L311-320) — RESULT_CODE 가 'F' 일 때만 실패 알림(L264-266). 'E'(이미 실행 중) 결과는 실패로 보지 않음. TO-BE Run SP 본문은 P_RAISE_NOT_MIGRATED(엔진 미이관, L308-310 주석)",
+  "fe_downgrade_reason": "SP 가 'E'(해당 엔진이 이미 실행 되었습니다) 를 돌려주면 AS-IS 는 MSG00006 으로 실패를 알리지만 TO-BE 는 'F' 만 실패로 판정해 안내 없이 성공 흐름(재조회 폴링)으로 진행"
+ },
+ {
+  "key": "DB:SCP0017#0",
+  "kind": "DB",
+  "screen": "SCP0017",
+  "event": "조회(SEARCH)",
+  "cls": "A 차단형",
+  "sp": "SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL",
+  "asis_line": "L2150-2165",
+  "condition": "BEGIN CATCH (TRY 블록 내 모든 오류)",
+  "on_fail": "SET @v_log_type='ERROR', @v_log_message=ERROR_MESSAGE(), @v_description='ERROR_LINE : '+ERROR_LINE(); PRINT 만 수행",
+  "desc": "조회 중 오류 시 오류 내용을 PRINT 만 하고 종료",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0017.P_SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL",
+    "loc": "PKG_SCP0017.PACKAGE_BODY.sql L2604-2619",
+    "diff": "AS-IS CATCH 는 로그 변수만 세팅하고 PRINT 만 수행(UI 에 오류 미전달·로그 INSERT 없음 — 오류가 삼켜짐). TO-BE 는 빈 O_RC1 + 결과커서 CODE '-1'/SQLERRM 로 UI 에 실패 전달(로그 INSERT 는 둘 다 없음). 실패 시 반환 동작이 다름(TO-BE 가 엄격)."
+   }
+  ],
+  "fe_note": "TO-BE main 시트 P_SCP0017_GET_PRODUCTION_PLAN_MODEL_WATERFALL(constants 주석상 PKG 미배포) — useTabProcQuery(ProductionPlanWaterfall.tsx L101-107), 응답 code≠0 이면 서버 message 알림",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0019#0",
+  "kind": "DB",
+  "screen": "SCP0019",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "SCP0019_SAVE_WORKING_TIME_ROW",
+  "asis_line": "L218-238",
+  "condition": "BEGIN CATCH (TRY 블록 내 모든 오류)",
+  "on_fail": "INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT @v_err_code AS err_code, @v_err_message AS err_message",
+  "desc": "저장 중 오류 시 F 와 오류번호·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0019.P_SCP0019_SAVE_WORKING_TIME_ROW",
+    "loc": "PKG_SCP0019.PACKAGE_BODY.sql L655-694",
+    "diff": "AS-IS 는 행 단위 호출·명시 트랜잭션 없음(문장별 자동커밋) → CATCH 에서 ROLLBACK 없이 로그 후 'F' / err_code·err_message 2결과셋(앞서 실행된 이력 INSERT 는 남음). TO-BE 는 '^' 다건 일괄 처리 + SAVEPOINT 롤백(전 행 취소) 후 로그 COMMIT, 'F'+ERR_CODE+ERR_MESSAGE 단일 커서. 실패 시 원자성 범위가 다름."
+   }
+  ],
+  "fe_note": "apiClient.post 직접 호출 후 res.status>=400 또는 code≠0 이면 서버 message(없으면 MSG00618) 알림 — WorkingTime.tsx L196-207. 결과커서 F 는 BE 판정 의존",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0020#2",
+  "kind": "DB",
+  "screen": "SCP0020",
+  "event": "조회(SEARCH) — Packer",
+  "cls": "D 검증리포트형",
+  "sp": "SCP0020_GET_TACT_TIME_OSP",
+  "asis_line": "L290-297",
+  "condition": "isnull((select top 1 'Y' from SCP_MST_TACT_TIME_EXCEPT_OSP x where 동일 division·plant_site·operation·item·line),'N') as except_yn",
+  "on_fail": "Except 미등록 시 except_yn='N'",
+  "desc": "OSP Tact Time 행별 플랜예외 등록 여부 플래그 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+    "loc": "PKG_SCP0020.PACKAGE_BODY.sql L365-368",
+    "diff": "표현 차이만."
+   }
+  ],
+  "fe_note": "useTabProcQuery(TactTime.tsx L73-79). EXCEPT_YN 하늘색 표시 코드 없음(components/TactTimeMainGrid.tsx 에 formatItem 없음)",
+  "fe_downgrade_reason": "Except 등록 행 하늘색 표시가 TO-BE 화면에 없음"
+ },
+ {
+  "key": "DB:SCP0020#3",
+  "kind": "DB",
+  "screen": "SCP0020",
+  "event": "조회(SEARCH) — Packer",
+  "cls": "D 검증리포트형",
+  "sp": "SCP0020_GET_TACT_TIME_OSP",
+  "asis_line": "L307-353",
+  "condition": "a.valid_yn='Y' AND b.osp_yn='Y' AND isnull(b.ATTRIBUTE1,'N')='Y' AND NOT EXISTS(SCP_MST_TACT_TIME_OSP 동일 division·plant_site·item) AND EXISTS(#TblDynamicPivot_SCP0020_TMP — 당주~horizon_end MKT FCST qty>0 의 BOM 하위품목 또는 SCP_OPT_ENG_CONST_DEMAND_GROUP 룩업 품목·앞12자리 동일 품목 ∩ SCP_MST_FINAL_ITEM)",
+  "on_fail": "input_status='I', line_id 등 NULL 행으로 '등록 필요' 목록에 표시",
+  "desc": "라인 등록 외주사 Project Route 모델 중 수요가 있는데 OSP Tact Time 이 없는 모델을 등록필요 행으로 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SCP0020.P_SCP0020_GET_TACT_TIME_OSP",
+    "loc": "PKG_SCP0020.PACKAGE_BODY.sql L256-406",
+    "diff": "FCST 기간 V_CUR_MONDAY~horizon_end(L249~253), BOM 하위품목 + SCP_OPT_ENG_CONST_DEMAND_GROUP 룩업(모델 자체·앞12자리 동일) ∩ SCP_MST_FINAL_ITEM 동일. ATTRIBUTE10 공백(' ')을 TRIM 으로 빈값 처리(이관 데이터 보정)."
+   }
+  ],
+  "fe_note": "useTabProcQuery(TactTime.tsx L73-79). EXCEPT_YN 하늘색 표시 코드 없음(components/TactTimeMainGrid.tsx 에 formatItem 없음)",
+  "fe_downgrade_reason": "Except 등록 행 하늘색 표시가 TO-BE 화면에 없음"
+ },
+ {
+  "key": "DB:SCP0020#5",
+  "kind": "DB",
+  "screen": "SCP0020",
+  "event": "저장(SAVE) — Plant",
+  "cls": "A 차단형",
+  "sp": "SCP0020_SAVE_TACT_TIME",
+  "asis_line": "L413-444",
+  "condition": "BEGIN CATCH (THROW 99010 포함 모든 오류)",
+  "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT err_code, err_message, DIVISION_ID, PLANT_SITE_ID, ITEM_ID, OPERATION_ID, LINE_ID",
+  "desc": "저장 중 오류 시 롤백 후 F 와 오류번호·메시지·마지막 처리 행 키 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME",
+    "loc": "PKG_SCP0020.PACKAGE_BODY.sql L602-604",
+    "diff": "ROLLBACK·실패 반환은 동일하나 ① scm_sys_log_batch ERROR 로그 기록 없음(AS-IS 는 모든 오류 기록) ② err_code(99010/ERROR_NUMBER) 미반환 ③ 마지막 처리 행 키 5종(DIVISION_ID·PLANT_SITE_ID·ITEM_ID·OPERATION_ID·LINE_ID) 미반환"
+   }
+  ],
+  "fe_note": "TO-BE Plant 저장 미사용(PACKER 고정)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0020#7",
+  "kind": "DB",
+  "screen": "SCP0020",
+  "event": "저장(SAVE) — Tact Time Except",
+  "cls": "A 차단형",
+  "sp": "SCP0020_SAVE_TACT_TIME_EXCEPT",
+  "asis_line": "L368-395",
+  "condition": "BEGIN CATCH (TRY 블록 내 모든 오류, convert(float) 형변환 오류 포함)",
+  "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT err_code, err_message, '' AS tact_time_start_date, '' AS tact_time_end_date",
+  "desc": "저장 중 오류 시 롤백 후 F 와 오류번호·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_EXCEPT",
+    "loc": "PKG_SCP0020.PACKAGE_BODY.sql L1215-1216",
+    "diff": "ROLLBACK 동일(TO_NUMBER 변환 오류도 포착). AS-IS 의 scm_sys_log_batch ERROR 로그 INSERT 누락, 'F' + err_code·err_message·빈 기간 2칸 → '-1' + MSG 만."
+   }
+  ],
+  "fe_note": "TO-BE 는 except 시트 1종 저장",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0020#8",
+  "kind": "DB",
+  "screen": "SCP0020",
+  "event": "저장(SAVE) — Tact Time Except",
+  "cls": "C 필터형",
+  "sp": "SCP0020_SAVE_TACT_TIME_EXCEPT_OSP",
+  "asis_line": "L271-318",
+  "condition": "WHERE B.active_flag IN ('I','M') AND NOT EXISTS (SELECT 'X' FROM SCP_MST_TACT_TIME_EXCEPT_OSP A WHERE 동일 7개 키)",
+  "on_fail": "동일 키가 이미 있으면 INSERT 하지 않음(오류 없이 조용히 제외)",
+  "desc": "OSP Except 신규 입력 시 같은 기간 키가 이미 있으면 저장하지 않고 넘어감",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_EXCEPT_OSP",
+    "loc": "PKG_SCP0020.PACKAGE_BODY.sql L1409-1456",
+    "diff": "동일."
+   }
+  ],
+  "fe_note": "useProcMutation(TactTime.tsx L98-102) 기본 처리 — code≠0 이면 서버 message 알림, 결과커서 F·오류코드 FE 미판정",
+  "fe_downgrade_reason": "오류코드(2627)·기간 반환에 따른 중복 메시지·기간 칸 빨간색 표시를 TO-BE 화면이 재현하지 않음"
+ },
+ {
+  "key": "DB:SCP0020#9",
+  "kind": "DB",
+  "screen": "SCP0020",
+  "event": "저장(SAVE) — Tact Time Except",
+  "cls": "A 차단형",
+  "sp": "SCP0020_SAVE_TACT_TIME_EXCEPT_OSP",
+  "asis_line": "L380-407",
+  "condition": "BEGIN CATCH (TRY 블록 내 모든 오류, convert(float) 형변환 오류 포함)",
+  "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT err_code, err_message, '' AS tact_time_start_date, '' AS tact_time_end_date",
+  "desc": "저장 중 오류 시 롤백 후 F 와 오류번호·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_EXCEPT_OSP",
+    "loc": "PKG_SCP0020.PACKAGE_BODY.sql L1505-1506",
+    "diff": "ROLLBACK 동일. AS-IS 의 ERROR 로그 INSERT 누락, 'F' + err_code·err_message·빈 기간 2칸 → '-1' + MSG 만."
+   }
+  ],
+  "fe_note": "useProcMutation(TactTime.tsx L98-102) 기본 처리 — code≠0 이면 서버 message 알림, 결과커서 F·오류코드 FE 미판정",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0020#10",
+  "kind": "DB",
+  "screen": "SCP0020",
+  "event": "저장(SAVE) — Packer",
+  "cls": "A 차단형",
+  "sp": "SCP0020_SAVE_TACT_TIME_OSP",
+  "asis_line": "L219-273",
+  "condition": "기존 전체(#TMP) - 'D' 행 + 'I' 행 집계 후 SELECT @v_data_dup_cnt = COUNT(*) … WHERE A.CNT>1; IF( @v_data_dup_cnt>0)",
+  "on_fail": "SET @v_err_code=99010; SELECT TOP 1 중복 키를 @v_division_id 등에 담고 THROW @v_err_code, @v_err_message, 1 → CATCH ROLLBACK + SELECT 'F' AS result_code; SELECT err_code, err_message, DIVISION_ID, PLANT_SITE_ID, ITEM_ID, LINE_ID",
+  "desc": "기존 마스터에서 삭제 대상 제외 후 신규(I) 행을 합쳐 5개 키가 2건 이상이면 중복 오류로 전체 롤백, 첫 중복 키를 함께 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+    "loc": "PKG_SCP0020.PACKAGE_BODY.sql L746-768",
+    "diff": "집계 방식(기존-삭제행+신규행 CNT>1)을 신규 행별 (기존 존재·같은 저장 삭제 없음) + 같은 키 신규 수 > 1 로 재구성 — 판정 결과 동일, 모든 DML 이전 수행 동일. 오류 코드 99010·첫 중복 키(DIVISION_ID·PLANT_SITE_ID·ITEM_ID·LINE_ID) 미반환"
+   }
+  ],
+  "fe_note": "useProcMutation(TactTime.tsx L93-97, L209) 기본 처리 — 서버 message 알림, 결과커서 F·99010 FE 미판정",
+  "fe_downgrade_reason": "중복 키 표시·행 빨간색 표시를 TO-BE 화면이 재현하지 않음(BE 오류 메시지 의존)"
+ },
+ {
+  "key": "DB:SCP0020#11",
+  "kind": "DB",
+  "screen": "SCP0020",
+  "event": "저장(SAVE) — Packer",
+  "cls": "A 차단형",
+  "sp": "SCP0020_SAVE_TACT_TIME_OSP",
+  "asis_line": "L428-459",
+  "condition": "BEGIN CATCH",
+  "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; (사용자 메시지 없을 때만 scm_sys_log_batch ERROR 로그) SELECT 'F' AS result_code; SELECT err_code, err_message, DIVISION_ID, PLANT_SITE_ID, ITEM_ID, LINE_ID",
+  "desc": "예외 발생 시 롤백 후 F 결과셋과 오류코드·메시지·키 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_OSP",
+    "loc": "PKG_SCP0020.PACKAGE_BODY.sql L936-938",
+    "diff": "ROLLBACK·실패 반환 동일하나 ① 시스템 오류 시 scm_sys_log_batch ERROR 로그 없음(AS-IS 는 사용자 메시지 없을 때 기록) ② err_code 미반환 ③ 키(DIVISION_ID·PLANT_SITE_ID·ITEM_ID·LINE_ID) 미반환"
+   }
+  ],
+  "fe_note": "useProcMutation(TactTime.tsx L93-97, L209) 기본 처리 — 서버 message 알림, 결과커서 F·99010 FE 미판정",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0022#2",
+  "kind": "DB",
+  "screen": "SCP0022",
+  "event": "저장(SAVE) — Formation Except",
+  "cls": "C 필터형",
+  "sp": "SCP0022_SAVE_FORMATION_EXCEPT",
+  "asis_line": "L157-168",
+  "condition": "IF EXISTS (… RS.DIVISION_ID=@v_division_id AND RS.SCM_SITE_ID=@v_plant_site_id AND RP.PLANT_TYPE='VIRTUAL') CONTINUE",
+  "on_fail": "CONTINUE (해당 행 저장/삭제 건너뜀, 오류 없음)",
+  "desc": "가상(VIRTUAL) Plant Site 행은 조용히 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SCP0022.P_SCP0022_SAVE_FORMATION_EXCEPT",
+    "loc": "PKG_SCP0022.PACKAGE_BODY.sql L1980-2099",
+    "diff": "'D' 행도 동일하게 skip(가상 Site 판정이 CRUD 분기 바깥) — AS-IS 와 같음"
+   }
+  ],
+  "fe_note": "useProcMutation onError=handleExceptError(Formation.tsx L136-146, L175-180) — 오류 메시지에 99010/20010/overlap/중첩이 있으면 MSG00700, 아니면 서버 message. 2627·기간 칸 표시 없음. TO-BE 는 AS-IS 에 없는(주석 처리된) 기간 겹침 사전 차단을 추가(L345-349)",
+  "fe_downgrade_reason": "2627 중복 시 해당 기간 칸 빨간색 표시 재현 없음"
+ },
+ {
+  "key": "DB:SCP0022#3",
+  "kind": "DB",
+  "screen": "SCP0022",
+  "event": "저장(SAVE) — Formation Except",
+  "cls": "A 차단형",
+  "sp": "SCP0022_SAVE_FORMATION_EXCEPT",
+  "asis_line": "L179-195",
+  "condition": "COUNT(1) … 동일 DIVISION/plant_site/item AND NOT (@v_formation_end_date < x.formation_start_date OR @v_formation_start_date > x.formation_end_date) AND NOT (x.formation_start_date=@v_org_start_date AND x.formation_end_date=@v_org_end_date); IF(@cnt > 0)",
+  "on_fail": "SET @v_err_code=99010; THROW → CATCH ROLLBACK + SELECT 'F'; SELECT err_code, err_message, formation_start_date, formation_end_date",
+  "desc": "같은 Site·Item 의 기존 예외 구간과 기간이 겹치면(수정 전 원래 구간 제외) 오류로 전체 롤백",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SCP0022.P_SCP0022_SAVE_FORMATION_EXCEPT",
+    "loc": "PKG_SCP0022.PACKAGE_BODY.sql L1984-2001",
+    "diff": "THROW 99010 → RAISE_APPLICATION_ERROR(-20010, ' 입력 데이터 중 날짜가 중복되는 데이터가 있습니다.'), 예외부에서 99010 으로 재매핑(로그용). '' 비교는 NVL(x,' ') 로 재현. 메시지 동일"
+   }
+  ],
+  "fe_note": "useProcMutation onError=handleExceptError(Formation.tsx L136-146, L175-180) — 오류 메시지에 99010/20010/overlap/중첩이 있으면 MSG00700, 아니면 서버 message. 2627·기간 칸 표시 없음. TO-BE 는 AS-IS 에 없는(주석 처리된) 기간 겹침 사전 차단을 추가(L345-349)",
+  "fe_downgrade_reason": "2627 중복 시 해당 기간 칸 빨간색 표시 재현 없음"
+ },
+ {
+  "key": "DB:SCP0022#4",
+  "kind": "DB",
+  "screen": "SCP0022",
+  "event": "저장(SAVE) — Formation Except",
+  "cls": "A 차단형",
+  "sp": "SCP0022_SAVE_FORMATION_EXCEPT",
+  "asis_line": "L637-662",
+  "condition": "BEGIN CATCH",
+  "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code; SELECT err_code, err_message, formation_start_date, formation_end_date",
+  "desc": "예외 발생 시 롤백 후 F 결과셋과 오류코드·메시지·구간일자 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0022.P_SCP0022_SAVE_FORMATION_EXCEPT",
+    "loc": "PKG_SCP0022.PACKAGE_BODY.sql L2113-2131",
+    "diff": "롤백·로그·실패코드는 일치. 단 AS-IS 2번째 결과셋의 err_code·formation_start_date·formation_end_date(중복 구간 표시용)가 UI 로 반환되지 않음 — 구간일자·오류코드는 로그(P_IN_PARA_DATA)에만 기록"
+   }
+  ],
+  "fe_note": "useProcMutation onError=handleExceptError(Formation.tsx L136-146, L175-180) — 오류 메시지에 99010/20010/overlap/중첩이 있으면 MSG00700, 아니면 서버 message. 2627·기간 칸 표시 없음. TO-BE 는 AS-IS 에 없는(주석 처리된) 기간 겹침 사전 차단을 추가(L345-349)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0022#5",
+  "kind": "DB",
+  "screen": "SCP0022",
+  "event": "저장(SAVE) — Formation Except LT",
+  "cls": "C 필터형",
+  "sp": "SCP0022_SAVE_FORMATION_EXCEPT_LT",
+  "asis_line": "L173-184",
+  "condition": "IF EXISTS (… RS.DIVISION_ID=@v_division_id AND RS.SCM_SITE_ID=@v_plant_site_id AND RP.PLANT_TYPE='VIRTUAL') CONTINUE",
+  "on_fail": "CONTINUE (해당 행 저장/삭제 건너뜀, 오류 없음)",
+  "desc": "가상(VIRTUAL) Plant Site 행은 조용히 제외",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SCP0022.P_SCP0022_SAVE_FORMATION_EXCEPT_LT",
+    "loc": "PKG_SCP0022.PACKAGE_BODY.sql L2216-2333",
+    "diff": "AS-IS CONTINUE → IF 블록 skip, 동작 동일"
+   }
+  ],
+  "fe_note": "useProcMutation onError=handleExceptError(Formation.tsx L136-146, L181-190) — 위와 동일",
+  "fe_downgrade_reason": "2627 중복 시 해당 기간 칸 빨간색 표시 재현 없음"
+ },
+ {
+  "key": "DB:SCP0022#6",
+  "kind": "DB",
+  "screen": "SCP0022",
+  "event": "저장(SAVE) — Formation Except LT",
+  "cls": "A 차단형",
+  "sp": "SCP0022_SAVE_FORMATION_EXCEPT_LT",
+  "asis_line": "L200-216",
+  "condition": "COUNT(1) … 동일 DIVISION/plant_site/item AND NOT (@v_formation_end_date < x.formation_start_date OR @v_formation_start_date > x.formation_end_date) AND NOT (x.formation_start_date=@v_org_start_date AND x.formation_end_date=@v_org_end_date); IF(@cnt > 0)",
+  "on_fail": "SET @v_err_code=99010; THROW → CATCH ROLLBACK + SELECT 'F'; SELECT err_code, err_message, formation_start_date, formation_end_date",
+  "desc": "같은 Site·Item 의 기존 LT 예외 구간과 기간이 겹치면(수정 전 원래 구간 제외) 오류로 전체 롤백",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SCP0022.P_SCP0022_SAVE_FORMATION_EXCEPT_LT",
+    "loc": "PKG_SCP0022.PACKAGE_BODY.sql L2230-2244",
+    "diff": "THROW 99010 → RAISE_APPLICATION_ERROR(-20010) 동일 메시지. TO-BE 는 LT 값 보정(L2224-2227) 뒤에 중복 검사 — 순서만 다르고 결과 동일(단 F_TO_INT 형식 오류가 중복 오류보다 먼저 발생 가능)"
+   }
+  ],
+  "fe_note": "useProcMutation onError=handleExceptError(Formation.tsx L136-146, L181-190) — 위와 동일",
+  "fe_downgrade_reason": "2627 중복 시 해당 기간 칸 빨간색 표시 재현 없음"
+ },
+ {
+  "key": "DB:SCP0022#7",
+  "kind": "DB",
+  "screen": "SCP0022",
+  "event": "저장(SAVE) — Formation Except LT",
+  "cls": "B 보정형",
+  "sp": "SCP0022_SAVE_FORMATION_EXCEPT_LT",
+  "asis_line": "L238-263",
+  "condition": "CASE WHEN ISNULL(@v_lt_formation,'')='' THEN 0 ELSE convert(int, @v_lt_formation) end",
+  "on_fail": "LT_FORMATION 빈값이면 0 저장 (UPDATE·INSERT 양쪽)",
+  "desc": "LT 가 비어 있으면 0 으로 보정 저장 (ADD_LT 는 NULL 로만 정규화)",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SCP0022.P_SCP0022_SAVE_FORMATION_EXCEPT_LT",
+    "loc": "PKG_SCP0022.PACKAGE_BODY.sql L2224-2227",
+    "diff": "UPDATE·INSERT 양쪽 V_LT_FORMATION 사용 — 동일. 이력에는 F_TO_INT 값(빈 값 0) 전달"
+   }
+  ],
+  "fe_note": "useProcMutation onError=handleExceptError(Formation.tsx L136-146, L181-190) — 위와 동일",
+  "fe_downgrade_reason": "2627 중복 시 해당 기간 칸 빨간색 표시 재현 없음"
+ },
+ {
+  "key": "DB:SCP0022#8",
+  "kind": "DB",
+  "screen": "SCP0022",
+  "event": "저장(SAVE) — Formation Except LT",
+  "cls": "A 차단형",
+  "sp": "SCP0022_SAVE_FORMATION_EXCEPT_LT",
+  "asis_line": "L628-653",
+  "condition": "BEGIN CATCH",
+  "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code; SELECT err_code, err_message, formation_start_date, formation_end_date",
+  "desc": "예외 발생 시 롤백 후 F 결과셋과 오류코드·메시지·구간일자 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0022.P_SCP0022_SAVE_FORMATION_EXCEPT_LT",
+    "loc": "PKG_SCP0022.PACKAGE_BODY.sql L2347-2365",
+    "diff": "롤백·로그·실패코드 일치. AS-IS 결과셋의 err_code·formation_start_date·formation_end_date 는 UI 로 반환되지 않고 로그에만 기록"
+   }
+  ],
+  "fe_note": "useProcMutation onError=handleExceptError(Formation.tsx L136-146, L181-190) — 위와 동일",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0023#1",
+  "kind": "DB",
+  "screen": "SCP0023",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "SCP0023_SAVE_OUTSOURCING_CAPA",
+  "asis_line": "L170-195",
+  "condition": "BEGIN CATCH",
+  "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code; SELECT err_code, err_message",
+  "desc": "예외 발생 시 롤백 후 F 결과셋과 오류코드·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0023.P_SCP0023_SAVE_OUTSOURCING_CAPA",
+    "loc": "PKG_SCP0023.PACKAGE_BODY.sql L275-280",
+    "diff": "롤백·실패코드·메시지는 일치하나 AS-IS 의 scm_sys_log_batch ERROR 로그 기록이 TO-BE 에 없음(START/END 로그도 없음). err_code 별도 반환 없음. 성공 시 AS-IS 결과셋 없음(주석) ↔ TO-BE CODE '0'"
+   }
+  ],
+  "fe_note": "saveWithValidation → useProcMutation(features/supply/src/pages/outsourcing-capacity/OutsourcingCapacity.tsx L59-63, L105) — code≠0 이면 서버 message, 결과커서 F 는 FE 미판정(BE 판정 의존)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0024#0",
+  "kind": "DB",
+  "screen": "SCP0024",
+  "event": "실행(RUN) — Unfix 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_SYS_LOG_BATCH",
+  "asis_line": "L60-94",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT",
+  "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_SYS_LOG_BATCH",
+    "loc": "PR_SCM_SYS_LOG_BATCH.PROCEDURE.sql L84-143",
+    "diff": "롤백 후 오류내용 재기록·COMMIT 구조는 동일. 차이: (1) AUTONOMOUS_TRANSACTION 이라 ROLLBACK 이 호출자 트랜잭션을 롤백하지 않음(AS-IS 원문이슈 해소), (2) log_type 이 소문자 'error'(AS-IS 'ERROR'), (3) 오류 메시지를 log_message 가 아닌 sql_err_msg 컬럼에 저장, program_name 은 ERROR_PROCEDURE() 대신 입력 p_program_name, 입력값 JSON(in_para_data) 추가."
+   }
+  ],
+  "fe_note": "TO-BE FE 는 로그 SP 를 호출하지 않음",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0024#5",
+  "kind": "DB",
+  "screen": "SCP0024",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+  "asis_line": "L303-333",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS ERR_MESSAGE",
+  "desc": "예외 시 F 결과코드와 오류번호·메시지 1결과셋 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0024.P_SCP0024_SAVE_PROD_PLAN_FIX",
+    "loc": "PKG_SCP0024.PACKAGE_BODY.sql L1638-1655",
+    "diff": "AS-IS 는 BEGIN TRAN 없이 행 단위 확정 + CATCH 에서 COMMIT(앞 행 반영 잔존). TO-BE 는 SAVEPOINT 로 전체 되돌림(의도적 개선, 주석 L1368-1369). 결과셋 → OUT 파라미터(O_RESULT_CODE/CNT/MSG)"
+   }
+  ],
+  "fe_note": "TO-BE 미호출",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0024#10",
+  "kind": "DB",
+  "screen": "SCP0024",
+  "event": "실행(RUN) — Unfix 버튼",
+  "cls": "A 차단형",
+  "sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET",
+  "asis_line": "L466-496",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS err_message",
+  "desc": "예외 시 F 결과코드와 오류번호·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0024.P_SCP0024_SAVE_PLAN_FIX_DS",
+    "loc": "PKG_SCP0024.PACKAGE_BODY.sql L1301-1327",
+    "diff": "AS-IS 는 트랜잭션 없이 문장 단위 확정 + CATCH 에서 COMMIT(중간 실패 시 앞 단계 잔존, [원문이슈]). TO-BE 는 SAVEPOINT 로 전체 되돌림(의도적 개선, 주석 L735-736 명시). 반환 F + '[번호]메시지' 는 일치(CODE/MSG 칸 추가)"
+   }
+  ],
+  "fe_note": "useProcMutation(features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx L72-84, L138) — code≠0 이면 서버 message, 결과커서 F 는 FE 미판정(BE 판정 의존). 성공 토스트 건수는 FE 전송 건수(SP result_cnt 아님)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0025#0",
+  "kind": "DB",
+  "screen": "SCP0025",
+  "event": "실행(RUN) — Unfix 버튼",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_SYS_LOG_BATCH",
+  "asis_line": "L60-94",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT",
+  "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_SYS_LOG_BATCH",
+    "loc": "PR_SCM_SYS_LOG_BATCH.PROCEDURE.sql L84-143",
+    "diff": "롤백 후 오류내용 재기록·COMMIT 구조는 동일. 차이: (1) AUTONOMOUS_TRANSACTION 이라 ROLLBACK 이 호출자 트랜잭션을 롤백하지 않음(AS-IS 원문이슈 해소), (2) log_type 이 소문자 'error'(AS-IS 'ERROR'), (3) 오류 메시지를 log_message 가 아닌 sql_err_msg 컬럼에 저장, program_name 은 ERROR_PROCEDURE() 대신 입력 p_program_name, 입력값 JSON(in_para_data) 추가."
+   }
+  ],
+  "fe_note": "TO-BE FE 는 로그 SP 를 호출하지 않음",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0027#2",
+  "kind": "DB",
+  "screen": "SCP0027",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_MST_SITE_ITEM_HIST",
+  "asis_line": "L82-108",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT INTO scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE(),...); IF @@TRANCOUNT > 0 COMMIT WORK",
+  "desc": "이력 적재 오류 시 오류 로그만 남기고 커밋",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_MST_SITE_ITEM_HIST",
+    "loc": "PR_SCM_MST_SITE_ITEM_HIST.PROCEDURE.sql L115-132",
+    "diff": "AS-IS 는 오류 로그 후 흡수 + COMMIT(부모 SCP0006/0027/0048 미전파). TO-BE 는 ROLLBACK(부모 트랜잭션 전체) + 로그 + RAISE_APPLICATION_ERROR(-20001) 전파. 추가로 정상 경로에서도 L115 COMMIT 을 수행해 부모 트랜잭션을 중간 확정함(AUTONOMOUS 아님). 로그 program_name 은 $$PLSQL_UNIT 로 AS-IS 원문이슈(PR_SCM_MST_SITE_HIST 오기) 해소."
+   }
+  ],
+  "fe_note": "submitElectrodeSaveRequest(features/supply/src/pages/project-route-electrode/utils/projectRouteElectrode.saveRequest.ts L73-89) — status≥400·code≠0 이면 서버 message(없으면 MSG00006) 알림, 결과커서 F 는 FE 미판정(BE 판정 의존)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0029#8",
+  "kind": "DB",
+  "screen": "SCP0029",
+  "event": "실행(RUN) — Fix 버튼",
+  "cls": "A 차단형",
+  "sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+  "asis_line": "L303-333",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS ERR_MESSAGE",
+  "desc": "예외 시 F 결과코드와 오류번호·메시지 1결과셋 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0024.P_SCP0024_SAVE_PROD_PLAN_FIX",
+    "loc": "PKG_SCP0024.PACKAGE_BODY.sql L1638-1655",
+    "diff": "AS-IS 는 BEGIN TRAN 없이 행 단위 확정 + CATCH 에서 COMMIT(앞 행 반영 잔존). TO-BE 는 SAVEPOINT 로 전체 되돌림(의도적 개선, 주석 L1368-1369). 결과셋 → OUT 파라미터(O_RESULT_CODE/CNT/MSG)"
+   }
+  ],
+  "fe_note": "",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0037#1",
+  "kind": "DB",
+  "screen": "SCP0037",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "SCP0037_SAVE_OPERATION_LT",
+  "asis_line": "L304-333",
+  "condition": "BEGIN CATCH — IF( @v_err_message IS NULL OR @v_err_message ='')",
+  "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); 일반 예외: SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE(); / 업무 예외(@v_err_message 有): SELECT 'N' AS result_code; SELECT @v_err_message AS ERR_MESSAGE",
+  "desc": "예외 시 롤백·로그 후 일반 오류는 F, 업무 검증 오류(THROW 99020)는 N 과 메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0037.P_SCP0037_SAVE_OPERATION_LT",
+    "loc": "PKG_SCP0037.PACKAGE_BODY.sql L410-437",
+    "diff": "일반 예외(F + '[번호]메시지', 롤백·로그)는 일치. 업무 예외(N) 경로는 CATCH 를 거치지 않아(L253-264) AS-IS 의 scm_sys_log_batch ERROR 로그가 기록되지 않음"
+   }
+  ],
+  "fe_note": "useSaveWithValidation → useProcMutation(OperationLT.tsx L77-81, L151) — 응답 code≠0 이면 서버 message 알림. 결과커서 N/F 는 FE 미판정 → BE(PKG) 판정 의존(constants 주석상 TO-BE PKG_SCP0037 미배포, 미검증)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0039#10",
+  "kind": "DB",
+  "screen": "SCP0039",
+  "event": "조회(SEARCH)",
+  "cls": "D 검증리포트형",
+  "sp": "SCP0039_GET_VALIDATION_INTRANSIT_INVENTORY",
+  "asis_line": "L485-508",
+  "condition": "#INTRANSIT_INVENTORY LEFT JOIN #DEMAND_PLAN ON …, DP.INCOTERMS = IV.INCOTERMS(ISNULL(FINAL_INCOTERMS,INCOTERMS)), RN_2=1 WHERE DP.SCM_SITE_ID IS NULL AND NOT EXISTS(#INT_TARGET_CASE_1 동일 DIVISION/ITEM/TO_SITE/PROJECT_CODE)",
+  "on_fail": "결과셋 행 반환 MASTER_INVLD_CD='INT02'",
+  "desc": "Intransit 재고의 모델·To Site 는 수요에 있으나 해당 Incoterms 수요가 없으면 표시(INT01 대상 제외)",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0039.P_SCP0039_GET_VALIDATION_INTRANSIT_INV",
+    "loc": "PKG_SCP0039.PACKAGE_BODY.sql L8168-8194",
+    "diff": "INT01 대상 제외용 NOT EXISTS 의 'XA.PROJECT_CODE = A.PROJECT_CODE' 가 Oracle 에서 PROJECT_CODE NULL(AS-IS '' 이관분)일 때 거짓 → 빈 Project Code Intransit 건은 INT01 과 INT02 에 중복 표시(AS-IS 는 ''='' 로 제외). 보정: NVL(XA.PROJECT_CODE,'/') = NVL(A.PROJECT_CODE,'/') 등. PROJECT_CODE '-'→'/' 센티널 치환은 INT01 과 동일"
+   }
+  ],
+  "fe_note": "apiClient.callProc(VALIDATION_MAP 의 PKG_SCP0039 멤버) — res.code≠0 이면 서버 message, 예외면 MSG01052 알림(MasterValidation.tsx L116-145). 결과 행 수를 COUNT, 행을 우측 상세 그리드에 표시(L148-160)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0039#11",
+  "kind": "DB",
+  "screen": "SCP0039",
+  "event": "조회(SEARCH)",
+  "cls": "D 검증리포트형",
+  "sp": "SCP0039_GET_VALIDATION_INTRANSIT_INVENTORY",
+  "asis_line": "L519-526",
+  "condition": "F_DEST_ETA_DATE IS NOT NULL AND DATEDIFF(DAY ,CAST(F_DEST_ETA_DATE AS DATE) ,CAST(@v_from_yyyymmdd AS DATE)) > 7 AND F_DEST_ATA_DATE IS NULL",
+  "on_fail": "결과셋 행 반환 MASTER_INVLD_CD='INT03'",
+  "desc": "도착예정일이 금주 월요일보다 7일 넘게 지났는데 실제 도착일이 없으면(미착 지연) 표시",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0039.P_SCP0039_GET_VALIDATION_INTRANSIT_INV",
+    "loc": "PKG_SCP0039.PACKAGE_BODY.sql L8209-8221",
+    "diff": "AS-IS 는 F_DEST_ATA_DATE 진짜 NULL 만 미착으로 보고 '' 은 제외하나, Oracle 은 ''=NULL 이라 빈 문자열 건도 INT03 으로 포함(TO-BE 주석에 82 기준 8,197건 차이 명시, 업무 확정 대기). 또한 CAST(…AS DATE) 대신 TO_DATE(…,'YYYYMMDD') 고정 서식이라 ETA 가 다른 서식이면 예외 발생 가능"
+   }
+  ],
+  "fe_note": "apiClient.callProc(VALIDATION_MAP 의 PKG_SCP0039 멤버) — res.code≠0 이면 서버 message, 예외면 MSG01052 알림(MasterValidation.tsx L116-145). 결과 행 수를 COUNT, 행을 우측 상세 그리드에 표시(L148-160)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0039#28",
+  "kind": "DB",
+  "screen": "SCP0039",
+  "event": "조회(SEARCH)",
+  "cls": "D 검증리포트형",
+  "sp": "SCP0039_GET_VALIDATION_TACT_TIME",
+  "asis_line": "L1096-1138",
+  "condition": "Line Assign 된 Cell 모델(상위 MKT FCST 존재)의 BOM 전극 자품목(ATTRIBUTE8 NOT LIKE 'CA%', OPERATION_GROUP='E') x 전극 Project Route(동일 PLANT_ID) LEFT JOIN LINE_ASSIGN(당월~horizon, PRIORITY NOT IN ('0','9'), ACTIVE, SCP Plan 공정, 유효 라인) WHERE LA.LINE_ID IS NULL",
+  "on_fail": "오류 목록 행 MASTER_INVLD_CD='TTT04', MASTER_INVLD_CTN=N'line assign 미등록'",
+  "desc": "전극 모델이 Project Route Plant 에 Line Assign 되어 있지 않으면 오류 표시",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0039.P_SCP0039_GET_VALIDATION_TACT_TIME",
+    "loc": "PKG_SCP0039.PACKAGE_BODY.sql L6278-6332",
+    "diff": "AS-IS(L1115~1138)는 LEFT JOIN ON 절에 EXISTS(SCM_MST_LINE_SN ACTIVE_FLAG='Y')가 있어 '비활성 라인에만 Line Assign 된 전극'도 LA NULL → TTT04(line assign 미등록) 표시. TO-BE 는 인라인뷰 C 에 라인 유효 조건이 없어 비활성 라인 배정이 있으면 C 가 매칭되어 C.LINE_ID IS NULL 이 거짓 → 미표시(NOT EXISTS 보강은 AND 결합이라 효과 없음). 보정: 'AND C.LINE_ID IS NULL' 외부조인을 제거하고 NOT EXISTS 만 남기거나 C 에 SCM_MST_LINE_SN ACTIVE 조인 추가"
+   }
+  ],
+  "fe_note": "apiClient.callProc(VALIDATION_MAP 의 PKG_SCP0039 멤버) — res.code≠0 이면 서버 message, 예외면 MSG01052 알림(MasterValidation.tsx L116-145). 결과 행 수를 COUNT, 행을 우측 상세 그리드에 표시(L148-160)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0039#30",
+  "kind": "DB",
+  "screen": "SCP0039",
+  "event": "조회(SEARCH)",
+  "cls": "D 검증리포트형",
+  "sp": "SCP0039_GET_VALIDATION_TACT_TIME",
+  "asis_line": "L1207-1340",
+  "condition": "당주 PLAN_STATUS='1' 최신 Plan 의 PROD_PLAN_AMEND QTY != 0 중 TT.ITEM_ID IS NULL (해당 월 TACT_TIME_SN 없음, MONTH>=현재월, TACT_TIME!=0) AND TE.ITEM_ID IS NULL (Except 기간 밖) AND (EXISTS TACT_TIME_SN 당월~horizon OR EXISTS SCP_MST_TACT_TIME OR EXISTS SCP_MST_TACT_TIME_EXCEPT)",
+  "on_fail": "오류 목록 행 MASTER_INVLD_CD='TTT05', QTY=월합계, MASTER_INVLD_CTN=CONCAT('Prod Plan Month :',PROD_MONTH)",
+  "desc": "생산계획이 Tact Time 등록 기간(월/Except 기간) 밖에 입력되어 있으면 오류 표시(Tact Time 자체는 어딘가 존재하는 경우)",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0039.P_SCP0039_GET_VALIDATION_TACT_TIME",
+    "loc": "PKG_SCP0039.PACKAGE_BODY.sql L6476-6566",
+    "diff": "AS-IS(L1283-1291) TE LEFT JOIN 에는 'PP.YYYYMMDD BETWEEN TE.TACT_TIME_START_DATE AND TE.TACT_TIME_END_DATE' 기간 조건이 있으나 TO-BE E 외부조인에는 기간 조건 누락. 결과: 같은 키의 Except 행이 기간과 무관하게 하나라도 있으면 TTT05(Tact Time 기간 밖 생산계획)가 표시되지 않음(AS-IS 보다 적게 검출). 보정: 'AND A.YYYYMMDD BETWEEN E.TACT_TIME_START_DATE(+) AND E.TACT_TIME_END_DATE(+)' 추가"
+   }
+  ],
+  "fe_note": "apiClient.callProc(VALIDATION_MAP 의 PKG_SCP0039 멤버) — res.code≠0 이면 서버 message, 예외면 MSG01052 알림(MasterValidation.tsx L116-145). 결과 행 수를 COUNT, 행을 우측 상세 그리드에 표시(L148-160)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0041#4",
+  "kind": "DB",
+  "screen": "SCP0041",
+  "event": "저장(SAVE) — Pack Hold Stock",
+  "cls": "A 차단형",
+  "sp": "SCP0041_SAVE_PACKER_HOLD_STOCK",
+  "asis_line": "L182-184",
+  "condition": "BEGIN CATCH",
+  "on_fail": "SELECT 'F', CAST(ERROR_MESSAGE() AS NVARCHAR(1000))",
+  "desc": "예외 시 'F' 와 오류 메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0041.P_SCP0041_SAVE_PACKER_HOLD_STOCK",
+    "loc": "PKG_SCP0041.PACKAGE_BODY.sql L488-497",
+    "diff": "'F'+오류메시지 반환은 동일. AS-IS 는 ROLLBACK 없이 트랜잭션을 연 채 종료([원문이슈])하나 TO-BE 는 SAVEPOINT 로 롤백(부분 반영 차단 — 보정 방향). 오류 로그 미기록은 동일(START 로그만 L427)"
+   }
+  ],
+  "fe_note": "utils/stock-osp.save.ts callSavePack L372-401 — status≥400 또는 code≠0 이면 서버 message, 그 외 O_RESULT_CURSOR.RESULT_CODE 가 'S' 가 아니면 o_rc ERR_MESSAGE 를 알림(StockOspPage.tsx L135-140). FE 가 결과코드를 직접 판정 → AS-IS 의 거짓 성공 안내는 TO-BE 에서 해소",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0042#3",
+  "kind": "DB",
+  "screen": "SCP0042",
+  "event": "저장(SAVE) — Tact Time",
+  "cls": "A 차단형",
+  "sp": "SCP0020_SAVE_TACT_TIME",
+  "asis_line": "L413-444",
+  "condition": "BEGIN CATCH (THROW 99010 포함 모든 오류)",
+  "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT err_code, err_message, DIVISION_ID, PLANT_SITE_ID, ITEM_ID, OPERATION_ID, LINE_ID",
+  "desc": "저장 중 오류 시 롤백 후 F 와 오류번호·메시지·마지막 처리 행 키 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME",
+    "loc": "PKG_SCP0020.PACKAGE_BODY.sql L602-604",
+    "diff": "ROLLBACK·실패 반환은 동일하나 ① scm_sys_log_batch ERROR 로그 기록 없음(AS-IS 는 모든 오류 기록) ② err_code(99010/ERROR_NUMBER) 미반환 ③ 마지막 처리 행 키 5종(DIVISION_ID·PLANT_SITE_ID·ITEM_ID·OPERATION_ID·LINE_ID) 미반환"
+   }
+  ],
+  "fe_note": "",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0042#5",
+  "kind": "DB",
+  "screen": "SCP0042",
+  "event": "저장(SAVE) — Tact Time Except",
+  "cls": "A 차단형",
+  "sp": "SCP0020_SAVE_TACT_TIME_EXCEPT",
+  "asis_line": "L368-395",
+  "condition": "BEGIN CATCH (TRY 블록 내 모든 오류, convert(float) 형변환 오류 포함)",
+  "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT scm_sys_log_batch(ERROR); SELECT 'F' AS result_code; SELECT err_code, err_message, '' AS tact_time_start_date, '' AS tact_time_end_date",
+  "desc": "저장 중 오류 시 롤백 후 F 와 오류번호·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0020.P_SCP0020_SAVE_TACT_TIME_EXCEPT",
+    "loc": "PKG_SCP0020.PACKAGE_BODY.sql L1215-1216",
+    "diff": "ROLLBACK 동일(TO_NUMBER 변환 오류도 포착). AS-IS 의 scm_sys_log_batch ERROR 로그 INSERT 누락, 'F' + err_code·err_message·빈 기간 2칸 → '-1' + MSG 만."
+   }
+  ],
+  "fe_note": "",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0045#0",
+  "kind": "DB",
+  "screen": "SCP0045",
+  "event": "기타(ETC)",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_SYS_LOG_BATCH",
+  "asis_line": "L60-94",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT",
+  "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_SYS_LOG_BATCH",
+    "loc": "PR_SCM_SYS_LOG_BATCH.PROCEDURE.sql L84-143",
+    "diff": "롤백 후 오류내용 재기록·COMMIT 구조는 동일. 차이: (1) AUTONOMOUS_TRANSACTION 이라 ROLLBACK 이 호출자 트랜잭션을 롤백하지 않음(AS-IS 원문이슈 해소), (2) log_type 이 소문자 'error'(AS-IS 'ERROR'), (3) 오류 메시지를 log_message 가 아닌 sql_err_msg 컬럼에 저장, program_name 은 ERROR_PROCEDURE() 대신 입력 p_program_name, 입력값 JSON(in_para_data) 추가."
+   }
+  ],
+  "fe_note": "",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0046#0",
+  "kind": "DB",
+  "screen": "SCP0046",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_SYS_LOG_BATCH",
+  "asis_line": "L60-94",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT",
+  "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_SYS_LOG_BATCH",
+    "loc": "PR_SCM_SYS_LOG_BATCH.PROCEDURE.sql L84-143",
+    "diff": "롤백 후 오류내용 재기록·COMMIT 구조는 동일. 차이: (1) AUTONOMOUS_TRANSACTION 이라 ROLLBACK 이 호출자 트랜잭션을 롤백하지 않음(AS-IS 원문이슈 해소), (2) log_type 이 소문자 'error'(AS-IS 'ERROR'), (3) 오류 메시지를 log_message 가 아닌 sql_err_msg 컬럼에 저장, program_name 은 ERROR_PROCEDURE() 대신 입력 p_program_name, 입력값 JSON(in_para_data) 추가."
+   }
+  ],
+  "fe_note": "",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0047#0",
+  "kind": "DB",
+  "screen": "SCP0047",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_SYS_LOG_BATCH",
+  "asis_line": "L60-94",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT",
+  "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_SYS_LOG_BATCH",
+    "loc": "PR_SCM_SYS_LOG_BATCH.PROCEDURE.sql L84-143",
+    "diff": "롤백 후 오류내용 재기록·COMMIT 구조는 동일. 차이: (1) AUTONOMOUS_TRANSACTION 이라 ROLLBACK 이 호출자 트랜잭션을 롤백하지 않음(AS-IS 원문이슈 해소), (2) log_type 이 소문자 'error'(AS-IS 'ERROR'), (3) 오류 메시지를 log_message 가 아닌 sql_err_msg 컬럼에 저장, program_name 은 ERROR_PROCEDURE() 대신 입력 p_program_name, 입력값 JSON(in_para_data) 추가."
+   }
+  ],
+  "fe_note": "",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0048#5",
+  "kind": "DB",
+  "screen": "SCP0048",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_MST_SITE_ITEM_HIST",
+  "asis_line": "L82-108",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT INTO scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE(),...); IF @@TRANCOUNT > 0 COMMIT WORK",
+  "desc": "이력 적재 오류 시 오류 로그만 남기고 커밋",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_MST_SITE_ITEM_HIST",
+    "loc": "PR_SCM_MST_SITE_ITEM_HIST.PROCEDURE.sql L115-132",
+    "diff": "AS-IS 는 오류 로그 후 흡수 + COMMIT(부모 SCP0006/0027/0048 미전파). TO-BE 는 ROLLBACK(부모 트랜잭션 전체) + 로그 + RAISE_APPLICATION_ERROR(-20001) 전파. 추가로 정상 경로에서도 L115 COMMIT 을 수행해 부모 트랜잭션을 중간 확정함(AUTONOMOUS 아님). 로그 program_name 은 $$PLSQL_UNIT 로 AS-IS 원문이슈(PR_SCM_MST_SITE_HIST 오기) 해소."
+   }
+  ],
+  "fe_note": "utils/projectRouteWarranty.saveRequest.ts L71-87 — apiClient 직접 호출, HTTP≥400 또는 code≠0 이면 서버 message(없으면 MSG00006) 알림. SP 결과커서의 RESULT_CODE('F')는 FE 가 판정하지 않음 → BE 판정 의존(BE 미확인)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0049#0",
+  "kind": "DB",
+  "screen": "SCP0049",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_SYS_LOG_BATCH",
+  "asis_line": "L60-94",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT",
+  "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_SYS_LOG_BATCH",
+    "loc": "PR_SCM_SYS_LOG_BATCH.PROCEDURE.sql L84-143",
+    "diff": "롤백 후 오류내용 재기록·COMMIT 구조는 동일. 차이: (1) AUTONOMOUS_TRANSACTION 이라 ROLLBACK 이 호출자 트랜잭션을 롤백하지 않음(AS-IS 원문이슈 해소), (2) log_type 이 소문자 'error'(AS-IS 'ERROR'), (3) 오류 메시지를 log_message 가 아닌 sql_err_msg 컬럼에 저장, program_name 은 ERROR_PROCEDURE() 대신 입력 p_program_name, 입력값 JSON(in_para_data) 추가."
+   }
+  ],
+  "fe_note": "TO-BE 화면은 이 SP 를 호출하지 않음(저장 로그는 BE/PKG 몫, Capa.tsx postSave L263-297)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0049#33",
+  "kind": "DB",
+  "screen": "SCP0049",
+  "event": "저장(SAVE) — SCP0049_CAPANewVersionConfirmPopup",
+  "cls": "B 보정형",
+  "sp": "SCP0049_SAVE_NEW_VERSION",
+  "asis_line": "L186-208",
+  "condition": "IF @v_max_version_id = ''  -- SELECT @v_max_version_id = ISNULL(SUBSTRING(MAX(VERSION_ID),8,3),'') FROM SCM_MASTER_VERSION_INFO_H_SN WHERE SUBSTRING(VERSION_ID,1,6) = @v_iso_yyyyww",
+  "on_fail": "SET @v_new_version_id = @v_iso_yyyyww + '_001' (있으면 최대 일련번호 + 1, RIGHT('000'+…,3))",
+  "desc": "오늘(@p_today_yyyymmdd) ISO 주차에 기존 버전이 없으면 '주차_001', 있으면 최대 일련번호+1 로 VERSION_ID 채번",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0049.P_SAVE_NEW_VERSION",
+    "loc": "PKG_SCP0049.PACKAGE_BODY.sql L13835-13857",
+    "diff": "정상 채번 규칙(주차_001 / 최대+1 3자리)은 동일. 단 SCM_SYS_CALENDAR_M 에 기준일이 없어 V_ISO_YYYYWW 가 NULL 이면 AS-IS 는 NULL+'_001'=NULL → VERSION_ID NULL INSERT 실패 → CATCH 'F' 이나, Oracle 은 NULL||'_001'='_001' 이 되어 VERSION_ID '_001' 로 저장 성공 — 실패 시 동작 상이."
+   }
+  ],
+  "fe_note": "TO-BE NewVersionConfirmModal.tsx L84-109 에 서버 message 알림 처리가 있으나 Capa.tsx 미마운트로 실행 경로 없음",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0050#3",
+  "kind": "DB",
+  "screen": "SCP0050",
+  "event": "엑셀 업로드(UPLOAD) — SCP0050_ColumnSet_Popup",
+  "cls": "A 차단형",
+  "sp": "SCM0002_SET_TITLESET_POPUP",
+  "asis_line": "L341-367",
+  "condition": "BEGIN CATCH",
+  "on_fail": "INSERT INTO scm_sys_log_batch(…'ERROR', ERROR_MESSAGE()…); IF @@TRANCOUNT > 0 COMMIT WORK",
+  "desc": "예외 발생 시 오류 로그만 남김",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "SCM0002_SET_TITLESET_POPUP",
+    "loc": "SCM0002_SET_TITLESET_POPUP.PROCEDURE.sql L503-538",
+    "diff": "AS-IS: 로그 INSERT 후 @@TRANCOUNT>0 COMMIT(사전 DELETE·부분 INSERT 확정, 오류 삼킴). TO-BE: 전체 ROLLBACK + 로그 + RAISE_APPLICATION_ERROR 로 화면에 오류 전파"
+   }
+  ],
+  "fe_note": "TO-BE FE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0055#0",
+  "kind": "DB",
+  "screen": "SCP0055",
+  "event": "기타(ETC)",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_SYS_LOG_BATCH",
+  "asis_line": "L60-94",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT",
+  "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_SYS_LOG_BATCH",
+    "loc": "PR_SCM_SYS_LOG_BATCH.PROCEDURE.sql L84-143",
+    "diff": "롤백 후 오류내용 재기록·COMMIT 구조는 동일. 차이: (1) AUTONOMOUS_TRANSACTION 이라 ROLLBACK 이 호출자 트랜잭션을 롤백하지 않음(AS-IS 원문이슈 해소), (2) log_type 이 소문자 'error'(AS-IS 'ERROR'), (3) 오류 메시지를 log_message 가 아닌 sql_err_msg 컬럼에 저장, program_name 은 ERROR_PROCEDURE() 대신 입력 p_program_name, 입력값 JSON(in_para_data) 추가."
+   }
+  ],
+  "fe_note": "TO-BE 미사용",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0057#0",
+  "kind": "DB",
+  "screen": "SCP0057",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_SYS_LOG_BATCH",
+  "asis_line": "L60-94",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT",
+  "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_SYS_LOG_BATCH",
+    "loc": "PR_SCM_SYS_LOG_BATCH.PROCEDURE.sql L84-143",
+    "diff": "롤백 후 오류내용 재기록·COMMIT 구조는 동일. 차이: (1) AUTONOMOUS_TRANSACTION 이라 ROLLBACK 이 호출자 트랜잭션을 롤백하지 않음(AS-IS 원문이슈 해소), (2) log_type 이 소문자 'error'(AS-IS 'ERROR'), (3) 오류 메시지를 log_message 가 아닌 sql_err_msg 컬럼에 저장, program_name 은 ERROR_PROCEDURE() 대신 입력 p_program_name, 입력값 JSON(in_para_data) 추가."
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0057#8",
+  "kind": "DB",
+  "screen": "SCP0057",
+  "event": "저장(SAVE)",
+  "cls": "C 필터형",
+  "sp": "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW_DATASET",
+  "asis_line": "L145-327",
+  "condition": "#DIVISION_LAST_PLAN_INFO: PD.PLAN_STATUS = 1, DM.ATTRIBUTE3 != 'EE', PM.PLAN_CYCLE='WEEKLY', PM.PLAN_NAME >= 오늘-20일, RN = 1(PR>MA>SE>FN 우선·SEQ DESC) AND PLAN_TYPE != 'FN' → INNER JOIN #DIVISION_LAST_PLAN_INFO PV ON PV.DIVISION_ID = LM.RL_DIVISION_ID AND PV.PLAN_START_YYYYMMDD = PR.P_PLAN_START_YYYYMMDD",
+  "on_fail": "조건 불충족(해당 주차 JV division 최종 버전이 없거나 Final(FN)) 시 JV Real 라인 동기화 행을 생성하지 않음(조용히 제외)",
+  "desc": "ESS 가상 라인 수정분을 JV Real 라인에 동기화할 때, 그 주차 JV division 의 최신 정상 수행 버전이 Final Plan 이 아닌 경우에만 반영",
+  "tobe_cmp": [
+   {
+    "verdict": "일치",
+    "tobe": "PKG_SCP0013.P_SCP0013_SAVE_LINE_ROW_DS",
+    "loc": "PKG_SCP0013.PACKAGE_BODY.sql L5124-5316",
+    "diff": "ROW_NUMBER 정렬(PR4>MA3>SE2>FN1, PLAN_SEQ DESC, INPUT_START_DATE DESC)·DATEADD→SYSDATE-20 표현 차이만. INNER JOIN 으로 조건 불충족 시 동기화 행 미생성 동일."
+   },
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0013.P_SCP0013_SAVE_LINE_ROW_JSON",
+    "loc": "PKG_SCP0013.PACKAGE_BODY.sql L5124-5174",
+    "diff": "필터 조건(PLAN_STATUS=1·ATTRIBUTE3!='EE'·WEEKLY·최근 20일·RN=1·FN 제외)과 사용처(L5305·L5315-5316 PV 조인) 동일. 단 정렬 PLAN_SEQ DESC·INPUT_START_DATE DESC 에 NULLS LAST 미지정 — Oracle DESC 는 NULL 이 맨 앞, AS-IS(MSSQL)는 맨 뒤라 NULL 값이 있으면 RN=1 버전이 달라질 수 있음(같은 로직의 PKG_COM0000.P_SCP0011_SAVE_PROD_PLAN_LINE L3343-3344 는 NULLS LAST 명시)"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0057#10",
+  "kind": "DB",
+  "screen": "SCP0057",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "SCP0013_SAVE_PRODUCTION_PLAN_LINE_ROW_DATASET",
+  "asis_line": "L598-623",
+  "condition": "BEGIN CATCH (TRY 블록 내 모든 오류)",
+  "on_fail": "INSERT INTO scm_sys_log_batch(ERROR); SELECT @v_err_code AS err_code, @v_err_message AS err_message",
+  "desc": "저장 중 오류 발생 시 오류 로그 기록 후 오류번호·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0013.P_SCP0013_SAVE_LINE_ROW_DS",
+    "loc": "PKG_SCP0013.PACKAGE_BODY.sql L5630-5675",
+    "diff": "AS-IS CATCH 는 ROLLBACK 주석(--if (xact_state() <> 0) ROLLBACK TRAN)·'F' result_code 주석으로 err_code/err_message 결과셋 1개만 반환(BEGIN TRAN 열린 채 종료). TO-BE 는 ROLLBACK 수행 + O_RC1 'F'/0 + O_RC2 ERR_CODE/ERR_MESSAGE 반환, 로그 DESCRIPTION 에 BACKTRACE 추가, PROGRAM_NAME=ERROR_PROCEDURE() → V_PROGRAM_NAME. 실패 시 트랜잭션 처리·반환 형식이 다름(TO-BE 쪽이 안전 방향)."
+   },
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0013.P_SCP0013_SAVE_LINE_ROW_JSON",
+    "loc": "PKG_SCP0013.PACKAGE_BODY.sql L5630-5675",
+    "diff": "AS-IS CATCH 는 ROLLBACK·SELECT 'F' 가 주석(원문이슈: 미롤백, result_code 없이 err_code/err_message 만) — TO-BE 는 ROLLBACK 수행 + 로그 COMMIT + 'F' 반환으로 동작이 다름(결함 보정 방향). JSON 창구(L6205-6216)가 O_RESULT_CODE='F'·O_RESULT_MSG='[코드]메시지' 로 변환해 UI 에 전달. 창구 자체 EXCEPTION(L6224-6236)은 JSON 변환 단계 오류를 F·로그(CALL_TRAN)로 반환"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0057#15",
+  "kind": "DB",
+  "screen": "SCP0057",
+  "event": "실행(RUN) — Fix 버튼",
+  "cls": "A 차단형",
+  "sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET",
+  "asis_line": "L466-496",
+  "condition": "BEGIN CATCH",
+  "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS err_message",
+  "desc": "예외 시 F 결과코드와 오류번호·메시지 반환",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0024.P_SCP0024_SAVE_PLAN_FIX_DS",
+    "loc": "PKG_SCP0024.PACKAGE_BODY.sql L1301-1327",
+    "diff": "AS-IS 는 트랜잭션 없이 문장 단위 확정 + CATCH 에서 COMMIT(중간 실패 시 앞 단계 잔존, [원문이슈]). TO-BE 는 SAVEPOINT 로 전체 되돌림(의도적 개선, 주석 L735-736 명시). 반환 F + '[번호]메시지' 는 일치(CODE/MSG 칸 추가)"
+   }
+  ],
+  "fe_note": "TO-BE 미개발(tobe_folders 없음)",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0058#0",
+  "kind": "DB",
+  "screen": "SCP0058",
+  "event": "저장(SAVE) — Shipment Request",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_SYS_LOG_BATCH",
+  "asis_line": "L60-94",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT",
+  "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_SYS_LOG_BATCH",
+    "loc": "PR_SCM_SYS_LOG_BATCH.PROCEDURE.sql L84-143",
+    "diff": "롤백 후 오류내용 재기록·COMMIT 구조는 동일. 차이: (1) AUTONOMOUS_TRANSACTION 이라 ROLLBACK 이 호출자 트랜잭션을 롤백하지 않음(AS-IS 원문이슈 해소), (2) log_type 이 소문자 'error'(AS-IS 'ERROR'), (3) 오류 메시지를 log_message 가 아닌 sql_err_msg 컬럼에 저장, program_name 은 ERROR_PROCEDURE() 대신 입력 p_program_name, 입력값 JSON(in_para_data) 추가."
+   }
+  ],
+  "fe_note": "",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0058#6",
+  "kind": "DB",
+  "screen": "SCP0058",
+  "event": "실행(RUN) — Fix 버튼",
+  "cls": "B 보정형",
+  "sp": "SCP0009_SAVE_ANL_SHIPMENT_PLAN_FG_FIX_DATASET",
+  "asis_line": "L136-175",
+  "condition": "기존 FIX 행(division,biz_type,item,to/from site,project,incoterms,bod,yyyymmdd,origin div,electrode) 존재 → p_active_flag='M'+기존 FIX_ID, 없으면 'I' (WHERE p_active_flag !='D')",
+  "on_fail": "I 행: FIX_ID = 'F' + p_yyyymmdd + REPLICATE('0', 11 - LEN(seq)) + NEXT VALUE FOR SEQ1_SCP_ANL_SHIPMENT_PLAN_FIX",
+  "desc": "UI 플래그와 무관하게 FIX 존재여부로 입력/수정 모드를 재판정하고 신규는 FIX_ID 채번",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0009.P_SCP0009_SAVE_ANL_SHIP_FG_FIX_DATASET",
+    "loc": "PKG_SCP0009.PACKAGE_BODY.sql L4570-4622",
+    "diff": "판정·채번 규칙은 동일('F'+일자+11자리 0채움 SEQ). 단 입력 activeFlag 가 NULL 인 행: AS-IS 는 NULL != 'D' 가 UNKNOWN 이라 '' 로 초기화되지 않아 I/M 어느 쪽도 되지 않고 저장 제외, TO-BE 는 NVL 로 대상이 되어 'I'(또는 'M') 처리. 화면 JSON 래퍼(L5891)는 항상 I/D 를 보내므로 실영향 낮음. 다건 FIX 매칭 시 TO-BE MAX(FIX_ID)."
+   }
+  ],
+  "fe_note": "",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0058#12",
+  "kind": "DB",
+  "screen": "SCP0058",
+  "event": "저장(SAVE) — Shipment Request",
+  "cls": "C 필터형",
+  "sp": "PR_SCP_ANL_SHIPMENT_PLAN_FG_FIX_HIST_DATASET",
+  "asis_line": "L74-86",
+  "condition": "FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0009 B WHERE A.division_id=B.p_division_id ... AND ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-') = ISNULL(NULLIF(B.p_electrode_type,''),'-')",
+  "on_fail": "FIX 마스터에 동일 키가 없는 입력 행은 이력 INSERT 제외",
+  "desc": "FIX 테이블에 존재하는 키(사업부·BizType·품목·사이트·Project·Incoterms·BOD·일자·Origin·전극)만 FIX 이력 저장",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PKG_SCP0009.P_FIX_HIST_DATASET",
+    "loc": "PKG_SCP0009.PACKAGE_BODY.sql L199-212",
+    "diff": "FIX 마스터 존재 행만 이력 INSERT 하는 필터는 동일. 단 ORIGIN_FROM/TO_DIVISION_ID 가 빈값이면 AS-IS 는 ''='' 로 매칭되나 TO-BE 는 NULL=NULL 불일치로 이력에서 빠짐(SEMI 판 P_SEMI_FIX_HIST_DS 는 DECODE 로 보정했으나 FG 판은 미보정). 화면 조회가 '/'·'-' 센티널을 내려주면 실영향 낮음."
+   }
+  ],
+  "fe_note": "",
+  "fe_downgrade_reason": null
+ },
+ {
+  "key": "DB:SCP0059#0",
+  "kind": "DB",
+  "screen": "SCP0059",
+  "event": "저장(SAVE)",
+  "cls": "A 차단형",
+  "sp": "PR_SCM_SYS_LOG_BATCH",
+  "asis_line": "L60-94",
+  "condition": "BEGIN CATCH",
+  "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT",
+  "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+  "tobe_cmp": [
+   {
+    "verdict": "차이",
+    "tobe": "PR_SCM_SYS_LOG_BATCH",
+    "loc": "PR_SCM_SYS_LOG_BATCH.PROCEDURE.sql L84-143",
+    "diff": "롤백 후 오류내용 재기록·COMMIT 구조는 동일. 차이: (1) AUTONOMOUS_TRANSACTION 이라 ROLLBACK 이 호출자 트랜잭션을 롤백하지 않음(AS-IS 원문이슈 해소), (2) log_type 이 소문자 'error'(AS-IS 'ERROR'), (3) 오류 메시지를 log_message 가 아닌 sql_err_msg 컬럼에 저장, program_name 은 ERROR_PROCEDURE() 대신 입력 p_program_name, 입력값 JSON(in_para_data) 추가."
+   }
+  ],
+  "fe_note": "TO-BE 미개발(nscm-fe 에 SCP0059 화면 없음)",
+  "fe_downgrade_reason": null
+ }
+]

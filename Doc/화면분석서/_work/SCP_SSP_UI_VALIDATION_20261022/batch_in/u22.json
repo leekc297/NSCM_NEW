@@ -1,0 +1,472 @@
+[
+ {
+  "screen": "SCP0063",
+  "title": "PSI JV",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0063_PSI_JV/SCP0063_PSI_JV.cs:1815"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0063_PSI_JV/SCP0063_PSI_JV.Designer.cs:1001"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "214",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_FROM_SITE",
+    "member": "GetFromSiteByDivision",
+    "line": "227",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0011_GET_LAST_PLAN_VERSION",
+    "member": "GetLastPlanVersion",
+    "line": "765",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0012_GET_PSI_QTY",
+    "member": "FindData_Main_Parallel",
+    "line": "894",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0012_GET_PSI_PARAL",
+    "member": "FindData_Main_Parallel",
+    "line": "930",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0012_GET_PSI",
+    "member": "FindData_Main",
+    "line": "1088",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1763",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETUSERGROUPAUTHEXTENTIONLIST",
+    "member": "FindData_Division",
+    "line": "1789",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "214",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_FROM_SITE",
+    "member": "GetFromSiteByDivision",
+    "line": "227",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0011_GET_LAST_PLAN_VERSION",
+    "member": "GetLastPlanVersion",
+    "line": "765",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0012_GET_PSI_QTY",
+    "member": "FindData_Main_Parallel",
+    "line": "894",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0012_GET_PSI_PARAL",
+    "member": "FindData_Main_Parallel",
+    "line": "930",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0012_GET_PSI",
+    "member": "FindData_Main",
+    "line": "1088",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1763",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETUSERGROUPAUTHEXTENTIONLIST",
+    "member": "FindData_Division",
+    "line": "1789",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0063_PSI_JV\\SCP0063_PSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCM0001_GET_FROM_SITE",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0011_GET_LAST_PLAN_VERSION",
+   "SCP0012_GET_PSI",
+   "SCP0012_GET_PSI_PARAL",
+   "SCP0012_GET_PSI_QTY",
+   "UP_FX_GETUSERGROUPAUTHEXTENTIONLIST"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0064",
+  "title": "Global PSI JV",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0064_GlobalPSI_JV/SCP0064_GlobalPSI_JV.cs:1027"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0064_GlobalPSI_JV/SCP0064_GlobalPSI_JV.Designer.cs:995"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0031_GET_GLOBAL_PSI",
+    "member": "FindData_Main",
+    "line": "606",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0064_GlobalPSI_JV\\SCP0064_GlobalPSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "844",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0064_GlobalPSI_JV\\SCP0064_GlobalPSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "868",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0064_GlobalPSI_JV\\SCP0064_GlobalPSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETUSERGROUPAUTHEXTENTIONLIST",
+    "member": "FindData_Division",
+    "line": "1000",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0064_GlobalPSI_JV\\SCP0064_GlobalPSI_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0031_GET_GLOBAL_PSI",
+    "member": "FindData_Main",
+    "line": "606",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0064_GlobalPSI_JV\\SCP0064_GlobalPSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "844",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0064_GlobalPSI_JV\\SCP0064_GlobalPSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "868",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0064_GlobalPSI_JV\\SCP0064_GlobalPSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETUSERGROUPAUTHEXTENTIONLIST",
+    "member": "FindData_Division",
+    "line": "1000",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0064_GlobalPSI_JV\\SCP0064_GlobalPSI_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0031_GET_GLOBAL_PSI",
+   "UP_FX_GETUSERGROUPAUTHEXTENTIONLIST"
+  ],
+  "db_validation_brief": []
+ },
+ {
+  "screen": "SCP0065",
+  "title": "Production Plan Target JV",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0065_ProductionPlanTarget_JV/SCP0065_ProductionPlanTarget_JV.cs:1461"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0065_ProductionPlanTarget_JV/SCP0065_ProductionPlanTarget_JV.Designer.cs:691"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETUSERGROUPAUTHEXTENTIONLIST",
+    "member": "FindData_Division",
+    "line": "133",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0065_ProductionPlanTarget_JV\\SCP0065_ProductionPlanTarget_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_GET_PRODUCTION_PLAN_TARGET",
+    "member": "FindData_Main",
+    "line": "547",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0065_ProductionPlanTarget_JV\\SCP0065_ProductionPlanTarget_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET",
+    "member": "SaveData_Main",
+    "line": "673",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0065_ProductionPlanTarget_JV\\SCP0065_ProductionPlanTarget_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM",
+    "member": "btnConfirm_Click",
+    "line": "889",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0065_ProductionPlanTarget_JV\\SCP0065_ProductionPlanTarget_JV.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_GETUSERGROUPAUTHEXTENTIONLIST",
+    "member": "FindData_Division",
+    "line": "133",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0065_ProductionPlanTarget_JV\\SCP0065_ProductionPlanTarget_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_GET_PRODUCTION_PLAN_TARGET",
+    "member": "FindData_Main",
+    "line": "547",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0065_ProductionPlanTarget_JV\\SCP0065_ProductionPlanTarget_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET",
+    "member": "SaveData_Main",
+    "line": "673",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0065_ProductionPlanTarget_JV\\SCP0065_ProductionPlanTarget_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM",
+    "member": "btnConfirm_Click",
+    "line": "889",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0065_ProductionPlanTarget_JV\\SCP0065_ProductionPlanTarget_JV.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0051_GET_PRODUCTION_PLAN_TARGET",
+   "SCP0051_SAVE_PRODUCTION_PLAN_TARGET",
+   "SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM",
+   "UP_FX_GETUSERGROUPAUTHEXTENTIONLIST"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET",
+    "sp": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Target 등록/삭제 중 예외 시 전체 롤백 후 F 와 오류 메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT INTO scm_sys_log_batch(…); SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ER"
+   },
+   {
+    "entry_sp": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM",
+    "sp": "SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "Target 확정 UPDATE 중 예외 시 롤백 후 F 와 오류 메시지 반환",
+    "message": "'[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; INSERT INTO scm_sys_log_batch(…); SELECT 'F' AS result_code; SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ER"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0067",
+  "title": "Global PSI(xls)",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0067_GlobalPSI/SCP0067_GlobalPSI.cs:1547",
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0067_GlobalPSI/SCP0067_GlobalPSI.designer.cs:846"
+  ],
+  "designer_files": [],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0067_GET_GLOBAL_PSI",
+    "member": "FindData_Main",
+    "line": "436",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0067_GlobalPSI\\SCP0067_GlobalPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0067_SAVE_GLOBAL_PSI_ROW_DATASET",
+    "member": "SaveData_Main",
+    "line": "597",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0067_GlobalPSI\\SCP0067_GlobalPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1461",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0067_GlobalPSI\\SCP0067_GlobalPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0067_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "1493",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0067_GlobalPSI\\SCP0067_GlobalPSI.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0067_GET_GLOBAL_PSI",
+    "member": "FindData_Main",
+    "line": "436",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0067_GlobalPSI\\SCP0067_GlobalPSI.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1461",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0067_GlobalPSI\\SCP0067_GlobalPSI.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0067_GET_SPREAD_TITLE",
+    "member": "GetSpdTitle",
+    "line": "1493",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0067_GlobalPSI\\SCP0067_GlobalPSI.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCP0067_GET_GLOBAL_PSI",
+   "SCP0067_GET_SPREAD_TITLE",
+   "SCP0067_SAVE_GLOBAL_PSI_ROW_DATASET"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   }
+  ]
+ }
+]

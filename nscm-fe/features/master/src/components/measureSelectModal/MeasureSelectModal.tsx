@@ -15,7 +15,8 @@ import styles from './MeasureSelectModal.module.scss';
 //   데이터: measures = SCM_MST_SHEET_MEASURE 동적 fetch(BE GridMeasure camelCase). 화면이 주입.
 //   표시 상태: visibleMeasures(이전 OK 결과) 가 있으면 그것으로 복원, 없으면 display 기본.
 //   토글 가드: personalizable(=USER_SELECTABLE_FLAG) 행만 체크/이동 가능(비허용 행은 기본측 고정).
-//   컬럼: 기본은 Measure Name 만. showMeasureCode 로 Measure Code 컬럼을 앞에 덧붙일 수 있다.
+//   컬럼: 기본은 Measure Name 만. showMeasureCode 로 Measure Code, showLargeClass/showSmallClass 로
+//         Large/Small Class 컬럼을 앞에 덧붙일 수 있다(AS-IS SCM0002 LARGE/SMALL_CLASS 세로병합 재현).
 //   OK → 우측(표시) measure 코드 목록(전체 선택 시 null) 을 onApply 로 전달.
 //   Default → visibleMeasures/display 무시, defaultFlag='Y' 만 우측(표시)·나머지는 전부 좌측(비표시).
 //
@@ -49,6 +50,7 @@ interface MeasureDualRow {
   colNm: string;
   colLblNm: string;
   sClsLblNm: string;
+  lClsLblNm: string;
   /** 'Y'=표시(우측) / 'N'=비표시(좌측) */
   userFlag: string;
   personalizable: string;
@@ -76,6 +78,18 @@ interface MeasureSelectModalProps {
    * DMF0082 전용 — 통합테스트 1st No.40 "Measure Code, Measure Name만" 요구.
    */
   showMeasureCode?: boolean;
+  /**
+   * Small Class(sClsLblNm) 컬럼을 Measure Name 앞에 노출할지 여부. 미지정(false) 이면 숨김.
+   * SCP0100 전용 — AS-IS SCM0002_TitleSetForm_Popup 가 SMALL_CLASS_LABEL_NAME 을 세로 병합해 앞에
+   * 보여준 동작 재현(측정값이 Sales/Pack/Cell/AS/Total PSI 소분류로 묶여 보인다).
+   */
+  showSmallClass?: boolean;
+  /**
+   * Large Class(lClsLblNm) 컬럼을 Small Class 앞에 노출할지 여부. 미지정(false) 이면 숨김.
+   * AS-IS SCM0002_TitleSetForm_Popup 가 LARGE_CLASS_LABEL_NAME 을 세로 병합해 앞에 보여준 동작 재현.
+   * (SCP0100 은 LARGE_CLASS 전 행 공란이라 미사용 — 데이터가 있는 화면에서 켠다.)
+   */
+  showLargeClass?: boolean;
 }
 
 // Default 버튼 기준값 — BE 가 defaultFlag 를 아직 안 내려주면 display 로 degrade
@@ -93,6 +107,8 @@ export const MeasureSelectModal = ({
   onApply,
   fallbackCodes,
   showMeasureCode = false,
+  showSmallClass = false,
+  showLargeClass = false,
 }: MeasureSelectModalProps) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -105,6 +121,7 @@ export const MeasureSelectModal = ({
             colNm: measure.colNm,
             colLblNm: measure.colLblNm || measure.colNm,
             sClsLblNm: measure.sClsLblNm ?? '',
+            lClsLblNm: measure.lClsLblNm ?? '',
             personalizable: (measure.personalizable ?? true) ? 'Y' : 'N',
             display: (measure.display ?? false) ? 'Y' : 'N',
             defaultFlag: resolveDefaultFlag(measure),
@@ -114,6 +131,7 @@ export const MeasureSelectModal = ({
             colNm: code,
             colLblNm: code,
             sClsLblNm: '',
+            lClsLblNm: '',
             personalizable: 'Y',
             display: 'N',
             defaultFlag: 'N',
@@ -211,9 +229,33 @@ export const MeasureSelectModal = ({
       ...(showMeasureCode
         ? [{ key: 'colNm' as const, header: 'Measure Code', width: 120, align: 'left' as const }]
         : []),
+      ...(showLargeClass
+        ? [
+            {
+              key: 'lClsLblNm' as const,
+              header: 'Large Class',
+              width: 120,
+              align: 'left' as const,
+              // 연속 동일 대분류를 세로 병합(AS-IS SCM0002 FPMerge.Always).
+              merge: true,
+            },
+          ]
+        : []),
+      ...(showSmallClass
+        ? [
+            {
+              key: 'sClsLblNm' as const,
+              header: 'Small Class',
+              width: 120,
+              align: 'left' as const,
+              // 연속 동일 소분류를 세로 병합(AS-IS SCM0002 FPMerge.Always).
+              merge: true,
+            },
+          ]
+        : []),
       { key: 'colLblNm', header: 'Measure Name', align: 'left' },
     ],
-    [showMeasureCode]
+    [showMeasureCode, showSmallClass, showLargeClass]
   );
 
   const moveToUser = () => {

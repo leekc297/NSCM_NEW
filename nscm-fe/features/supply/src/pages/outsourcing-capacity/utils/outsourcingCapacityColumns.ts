@@ -3,7 +3,8 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 
 // SCP0023 그리드 컬럼 — 정본은 admin SCM_MST_SHEET_COLUMNS(PROGRAM_ID='SCP0023' 13행, design 03 §1 실측).
 //   admin 등록본이 있으면 authoritative 로 쓰고, 없으면(미등록/조회실패) 아래 MAIN_COLUMNS fallback.
-//   colNm 은 DB SHEET_COLUMNS COLUMN_NAME 그대로 lowercase (GET SP 반환 컬럼과 1:1).
+//   colNm 은 DB SHEET_COLUMNS COLUMN_NAME 그대로 대문자(2026-10-14 ora.py 재실측 — 05_register.sql 의
+//   lowercase 가정은 오류였다. GET SP 반환 컬럼이 unquoted 라 Oracle 기본 폴딩으로 대문자가 된다).
 
 export interface MainColumnMeta {
   key: string;
@@ -17,23 +18,23 @@ export interface MainColumnMeta {
   _inputEditType?: 'S' | 'O';
 }
 
-// design 03 §1 사양표(DB 메타 13열). daily_capa_qty 만 편집(정수 scale0). capa_order·valid_yn 숨김.
+// design 03 §1 사양표(DB 메타 13열). DAILY_CAPA_QTY 만 편집(정수 scale0). CAPA_ORDER·VALID_YN 숨김.
 export const MAIN_COLUMNS: MainColumnMeta[] = [
-  { key: 'division_id', header: 'Division', width: 60, align: 'C', _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'scm_site_id', header: 'Plant Site Code', width: 120, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'vendor_code', header: 'Vendor Code', width: 100, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'vendor_name', header: 'Vendor Name', width: 230, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'item_id', header: 'Model', width: 140, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'nick_name', header: 'Nick Name', width: 140, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
+  { key: 'DIVISION_ID', header: 'Division', width: 60, align: 'C', _ctrlType: 'FPText', _inputEditType: 'S' },
+  { key: 'SCM_SITE_ID', header: 'Plant Site Code', width: 120, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
+  { key: 'VENDOR_CODE', header: 'Vendor Code', width: 100, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
+  { key: 'VENDOR_NAME', header: 'Vendor Name', width: 230, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
+  { key: 'ITEM_ID', header: 'Model', width: 140, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
+  { key: 'NICK_NAME', header: 'Nick Name', width: 140, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
   // 유일 편집셀 — Daily Capacity* (정수 scale0, 최소 1). design 03 §1 #7.
-  { key: 'daily_capa_qty', header: 'Daily Capacity*', width: 120, align: 'R', scale: 0, _ctrlType: 'FPNumber', _inputEditType: 'O' },
-  // capa_order = GET SP 파생 정렬값(숨김), valid_yn = 저장 payload 전용(화면 미노출).
-  { key: 'capa_order', header: 'Daily Capacity Order', width: 0, align: 'L', visible: false, _ctrlType: 'FPNumber', _inputEditType: 'S' },
-  { key: 'valid_yn', header: 'valid_yn', width: 0, align: 'L', visible: false, _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'created_by', header: 'Created By', width: 100, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'creation_date', header: 'Creation Date', width: 140, align: 'C', _ctrlType: 'FPDateTime', _inputEditType: 'S' },
-  { key: 'last_updated_by', header: 'Last Updated By', width: 100, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
-  { key: 'last_update_date', header: 'Last Update Date', width: 140, align: 'C', _ctrlType: 'FPDateTime', _inputEditType: 'S' },
+  { key: 'DAILY_CAPA_QTY', header: 'Daily Capacity*', width: 120, align: 'R', scale: 0, _ctrlType: 'FPNumber', _inputEditType: 'O' },
+  // CAPA_ORDER = GET SP 파생 정렬값(숨김), VALID_YN = 저장 payload 전용(화면 미노출).
+  { key: 'CAPA_ORDER', header: 'Daily Capacity Order', width: 0, align: 'L', visible: false, _ctrlType: 'FPNumber', _inputEditType: 'S' },
+  { key: 'VALID_YN', header: 'valid_yn', width: 0, align: 'L', visible: false, _ctrlType: 'FPText', _inputEditType: 'S' },
+  { key: 'CREATED_BY', header: 'Created By', width: 100, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
+  { key: 'CREATION_DATE', header: 'Creation Date', width: 140, align: 'C', _ctrlType: 'FPDateTime', _inputEditType: 'S' },
+  { key: 'LAST_UPDATED_BY', header: 'Last Updated By', width: 100, align: 'L', _ctrlType: 'FPText', _inputEditType: 'S' },
+  { key: 'LAST_UPDATE_DATE', header: 'Last Update Date', width: 140, align: 'C', _ctrlType: 'FPDateTime', _inputEditType: 'S' },
 ];
 
 // MainColumnMeta -> DataGrid staticColumns(RawFlexGridColumnConfig).
@@ -53,7 +54,7 @@ export const buildColumns = (
       colWth: c.width ?? 100,
       visible: true,
       display: true,
-      // 소수자리(daily_capa_qty scale0=정수) 전달 — admin 메타 미등록 fallback 시에도 정수 포맷 보존.
+      // 소수자리(DAILY_CAPA_QTY scale0=정수) 전달 — admin 메타 미등록 fallback 시에도 정수 포맷 보존.
       //   admin 등록본(DATA_SCALE_NUMBER) 사용 경로엔 영향 없음(이 map 은 adminCols 없을 때만 실행).
       scale: c.scale,
       inputTpCd:

@@ -116,15 +116,15 @@
 | MSG00329 (cs:2678) 양식 Day | D 버킷 | - | Excel Form Download 버튼 제외(§5) | 제외 |
 | MSG00337 (cs:1020·1086) E2000 LANE 필수 | 셀 검증 | MSG.LANE_QTY_REQUIRED | `utils/capa.save.ts` validateSave(E2000·LINE ASSIGN·LANE_QTY 공백) — gap-resolve iter-3 실측 재확인(iter-1 에서 이미 구현, 본 표 갱신 누락이었음) | 구현 |
 | MSG00203/00107 (cs:1047·1058) priority 1~9·정수 | 셀 검증 | MSG.PRIORITY_RANGE/MSG.PRIORITY_INTEGER | `utils/capa.save.ts` validateSave(LA001 행) — 동상 실측 재확인 | 구현 |
-| MSG00193/00072 (cs:1099·1110) Yield>1·≤100 | 셀 검증 | MSG.YIELD_MIN/MSG.YIELD_MAX | `utils/capa.save.ts` validateSave(LA003 행) — 동상 실측 재확인 | 구현 |
+| MSG00193/00072 (cs:2327-2356) Yield 0 허용·0<값≤1 차단·≤100 | 셀 검증 | MSG.YIELD_MIN/MSG.YIELD_MAX | `utils/capa.save.ts` validateSave(LA003 행) — 인자 "Yield : 1"/"Yield : 100", YIELD D_ 빈 값→0 보정 후 검사(cs:2215-2220 E20240927-001617) · buildSaveElems 도 같은 보정으로 0 저장 | 구현 |
 | (예외 처리 5건: cs:934/1237/1521/2275/2768) | try/catch | 공용 예외 토스트 | apiClient 응답 인터셉터(O_RESULT_CURSOR.CODE 비정상 throw) + 각 호출부 catch | 구현(등가) |
 
 ## 3. gridSignals 92 (영역3 — 4축: lock/value/color/visible/기타)
 
 | AS-IS(cs) | TO-BE | 상태 |
 |---|---|---|
-| L2~L10 편집잠금 종합식(cs:551~627) | `capa.editLock.isCellEditable`(EDITORBLE_YN·LOSS_CODE·권한·CONFIRM_FLAG=ROW_RANKING1·LANE_QTY=LINE ASSIGN·기간경계 WORK_CALENDAR M≥+4/D≥당일/LOSS D불가) → beginningEdit e.cancel | 구현 |
-| L4 REQUEST_CHK LA001/2/3 (cs:563) | isCellEditable REQUEST_CHK 분기 | 구현 |
+| L2~L10 편집잠금 종합식(cs:551~627) | `capa.editLock.isCellEditable`(EDITORBLE_YN·LOSS_CODE·PLANT_TYPE='VIRTUAL' 행 전체 잠금(cs:902-905)·권한·CONFIRM_FLAG=ROW_RANKING1·LANE_QTY=LINE ASSIGN·기간경계 WORK_CALENDAR M≥당월+3(cs:861)/D≥당일/LOSS D불가) → beginningEdit e.cancel | 구현 |
+| L4 REQUEST_CHK LA001/2/3 (cs:563) | isCellEditable REQUEST_CHK 분기 남음 — Mail REQ 칸 자체를 붙이지 않음(Mail Request 버튼 제거, §5) | 제외 |
 | V3~V9 파생 산식(cs:1669~1716) | `capa.derive.recalcColumn`(XB020/XB021/XC041/XC042/XE500/M08/XD101) — cellEditEnded M_/Y_ + 조회직후 recalcAll | 구현(런타임 수치 파리티 미확인) |
 | V10 Best/Worst(cs:1774) | `capa.derive.recalcBestWorst` | 구현(미확인) |
 | C1 BEF 회색(cs:658) | formatItem `BEF_` gray | 구현 |
@@ -150,9 +150,9 @@
 
 ## 5. 조회조건 To-Be 정렬 (2026-10-07, Doc_lgc_bak/rules/domains/scp/SCP0049.md 기준)
 
-- 조회조건 순서: Div → Ver. → Operation group → Plant → Building → Line → Operation → Model/Nickname, extra 에 Material/Period/Bucket/RESULT·Empty Value.
+- 조회조건 순서: Div → Ver. → Operation group → Plant → Building → Line → Operation → Model/Nickname, extra 에 Material/Period/Bucket/Loss·RESULT·Empty Value.
 - Model/Nickname, Material 은 입력 + `MaterialByDivisionModal` 팝업(다건 콤마). Period 는 `PeriodField mode='month'`(From~To 유지, 상한 `periodMaxYyyymm` 제한은 피커에 없어 조회 시 6년 가드만 적용).
 - Bucket 은 Month/Day 다중선택, 초기 ALL(=`bucketDay=true`, `p_bucket='D,M'`), Month 만 선택하면 `'M'`. 초기 ALL 이라 기본 Period 가 1년을 넘으면 첫 조회가 Day 1년 가드(`MSG01348`)에 걸린다.
-- Plant/Building/Line/Operation 다중 콤보는 `'ALL'` sentinel 을 빈 배열로 저장한다(cascade 콤보 파라미터에 `'ALL'` 문자열이 실리면 하위 목록이 빈다). Operation group 은 `allOption` 으로 ALL 표시.
-- Loss/Line Assign/Tact Time/Yield 체크박스는 UI 제거, `CHECK_DEFAULTS`(N/Y/Y/Y) 고정 전송. Measure 셋팅 연동은 추후.
+- Plant/Building/Line/Operation 다중 콤보는 `'ALL'` sentinel 을 빈 배열로 저장한다(cascade 콤보 파라미터에 `'ALL'` 문자열이 실리면 하위 목록이 빈다). Operation group 은 AS-IS 에 ALL 항목이 없다(단일 선택, 첫 그룹 자동선택) — `allOption` 제거(2026-10-23 수정, 사용자 지적).
+- Loss 체크박스는 복원(기본 해제, cs:352) — 사용자 값을 `checkLoss` 로 전송. Line Assign/Tact Time/Yield 체크박스는 UI 제거, Y 고정 전송. Measure 셋팅 연동은 추후.
 - 화면 버튼에서 New Version/New Model/Mail Request/Excel Upload/Excel Form 제거(문서 #20~25). 위 §2 와 §4 의 해당 구현 항목은 현재 화면에서 호출되지 않는다. `NewVersionConfirmModal`, `CapaExcelUploadModal`, `capa.excelForm.ts` 는 미삭제 상태로 남아 있다.

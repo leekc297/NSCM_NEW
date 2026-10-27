@@ -1,0 +1,694 @@
+[
+ {
+  "screen": "SCP0023",
+  "title": "Outsourcing Capacity",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0023_OutsourcingCapacity/SCP0023_OutsourcingCapacity.cs:534"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0023_OutsourcingCapacity/SCP0023_OutsourcingCapacity.Designer.cs:468"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/outsourcing-capacity"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0023_SAVE_OUTSOURCING_CAPA",
+    "member": "SaveData",
+    "line": "296",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0023_OutsourcingCapacity\\SCP0023_OutsourcingCapacity.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0023_GET_OUTSOURCING_CAPA",
+    "member": "FindData_Main",
+    "line": "365",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0023_OutsourcingCapacity\\SCP0023_OutsourcingCapacity.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0023_SAVE_OUTSOURCING_CAPA",
+    "member": "SaveData",
+    "line": "296",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0023_OutsourcingCapacity\\SCP0023_OutsourcingCapacity.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0023_GET_OUTSOURCING_CAPA",
+    "member": "FindData_Main",
+    "line": "365",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0023_OutsourcingCapacity\\SCP0023_OutsourcingCapacity.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0023_GET_OUTSOURCING_CAPA",
+   "SCP0023_SAVE_OUTSOURCING_CAPA"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0023_SAVE_OUTSOURCING_CAPA",
+    "sp": "SCP0023_SAVE_OUTSOURCING_CAPA",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 롤백 후 F 결과셋과 오류코드·메시지 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code; SELECT err_code, err_message"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0024",
+  "title": "Production Plan Fix",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0024_ProductionPlanFix/SCP0024_ProductionPlanFix.cs:1752"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0024_ProductionPlanFix/SCP0024_ProductionPlanFix.Designer.cs:1033"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/production-plan-fix"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "765",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_GET_PRODUCTION_PLAN_FIX",
+    "member": "FindData_Main",
+    "line": "876",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "member": "SaveData",
+    "line": "1012",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1151",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+    "member": "GetLastRange",
+    "line": "1177",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "1190",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET",
+    "member": "SaveData_FixInfo_U",
+    "line": "1494",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET",
+    "member": "SaveData_FixInfo_U",
+    "line": "1494",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1553",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "member": "SaveData_FixInfo",
+    "line": "1684",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "765",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_GET_PRODUCTION_PLAN_FIX",
+    "member": "FindData_Main",
+    "line": "876",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "member": "SaveData",
+    "line": "1012",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1151",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+    "member": "GetLastRange",
+    "line": "1177",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "1190",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1553",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "member": "SaveData_FixInfo",
+    "line": "1684",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0024_ProductionPlanFix\\SCP0024_ProductionPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0024_GET_PRODUCTION_PLAN_FIX",
+   "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+   "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 F 결과코드와 오류번호·메시지 1결과셋 반환",
+    "message": "[ERROR_NUMBER()]ERROR_MESSAGE()",
+    "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS ERR_MESSAGE"
+   },
+   {
+    "entry_sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET",
+    "sp": "SCP0024_SAVE_PRODUCTION_PLAN_FIX_DATASET",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 F 결과코드와 오류번호·메시지 반환",
+    "message": "[ERROR_NUMBER()]ERROR_MESSAGE()",
+    "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS err_message"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0025",
+  "title": "Shipment Plan Fix",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0025_ShipmentPlanFix/SCP0025_ShipmentPlanFix.cs:1271"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Analysis/SCP0025_ShipmentPlanFix/SCP0025_ShipmentPlanFix.Designer.cs:913"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/shipment-plan-fix"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "227",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0025_GET_SHIPMENT_PLAN_FIX",
+    "member": "FindData_Main",
+    "line": "541",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+    "member": "GetLastRange",
+    "line": "729",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "743",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET",
+    "member": "SaveData_FixInfo_U",
+    "line": "1097",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1156",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1182",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "DM0003_GET_BUCKET_TYPE_CODE",
+    "member": "GetBucketType",
+    "line": "227",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0025_GET_SHIPMENT_PLAN_FIX",
+    "member": "FindData_Main",
+    "line": "541",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+    "member": "GetLastRange",
+    "line": "729",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCM0001_GET_SCP_DAY_PERIOD",
+    "member": "GetDayRange",
+    "line": "743",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "1156",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+    "member": "GetSpdTitle",
+    "line": "1182",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Analysis\\SCP0025_ShipmentPlanFix\\SCP0025_ShipmentPlanFix.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "DM0003_GET_BUCKET_TYPE_CODE",
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCM0001_GET_SCP_DAILY_PLAN_PERIOD",
+   "SCM0001_GET_SCP_DAY_PERIOD",
+   "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+   "SCP0025_GET_SHIPMENT_PLAN_FIX",
+   "SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET",
+    "sp": "SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 시 F 결과코드와 오류번호·메시지 반환",
+    "message": "[ERROR_NUMBER()]ERROR_MESSAGE()",
+    "on_fail": "scm_sys_log_batch ERROR 로그; IF @@TRANCOUNT > 0 COMMIT WORK; SELECT 'F' AS result_code, '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE() AS err_message"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0026",
+  "title": "Demand Grouping",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0026_DemandGrouping/SCP0026_DemandGrouping.cs:438"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0026_DemandGrouping/SCP0026_DemandGrouping.Designer.cs:437"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0026_GET_DEMAND_GROUPING",
+    "member": "FindData_Main",
+    "line": "299",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0026_DemandGrouping\\SCP0026_DemandGrouping.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0026_SAVE_DEMAND_GROUPING",
+    "member": "SaveData",
+    "line": "386",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0026_DemandGrouping\\SCP0026_DemandGrouping.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0026_GET_DEMAND_GROUPING",
+    "member": "FindData_Main",
+    "line": "299",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0026_DemandGrouping\\SCP0026_DemandGrouping.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0026_SAVE_DEMAND_GROUPING",
+    "member": "SaveData",
+    "line": "386",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0026_DemandGrouping\\SCP0026_DemandGrouping.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0026_GET_DEMAND_GROUPING",
+   "SCP0026_SAVE_DEMAND_GROUPING"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0026_SAVE_DEMAND_GROUPING",
+    "sp": "SCP0026_SAVE_DEMAND_GROUPING",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 롤백 후 F 결과셋과 오류코드·메시지 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code; SELECT err_code, err_message"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0027",
+  "title": "ProjectRoute (Electrode)",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0027_ProjectRoute_Electrode/SCP0027_ProjectRoute_Electrode.cs:1760"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0027_ProjectRoute_Electrode/SCP0027_ProjectRoute_Electrode.Designer.cs:495"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/project-route-electrode"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0027_SAVE_PROJECTROUTE_ELECTRODE",
+    "member": "SaveData",
+    "line": "698",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0027_ProjectRoute_Electrode\\SCP0027_ProjectRoute_Electrode.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0027_SAVE_PROJECTROUTE_ELECTRODE",
+    "member": "SaveData",
+    "line": "698",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0027_ProjectRoute_Electrode\\SCP0027_ProjectRoute_Electrode.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0027_SAVE_PROJECTROUTE_ELECTRODE"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0027_SAVE_PROJECTROUTE_ELECTRODE",
+    "sp": "SCP0027_SAVE_PROJECTROUTE_ELECTRODE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 롤백 후 F 결과셋과 오류번호·메시지(무명 컬럼) 반환",
+    "message": "[ERROR_NUMBER()]ERROR_MESSAGE()",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code; SELECT '[' + ERROR_NUMBER() + ']' + ERROR_MESSAGE()"
+   },
+   {
+    "entry_sp": "SCP0027_SAVE_PROJECTROUTE_ELECTRODE",
+    "sp": "PR_SCM_MST_SITE_ITEM_HIST",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "이력 적재 오류 시 오류 로그만 남기고 커밋",
+    "message": null,
+    "on_fail": "INSERT INTO scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE(),...); IF @@TRANCOUNT > 0 COMMIT WORK"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0028",
+  "title": "Shipment Lot Size",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.cs:784"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0028_Shipment_Lot_Size/SCP0028_Shipment_Lot_Size.Designer.cs:792"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/shipping/src/pages/shipment-lot-size"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0028_GET_SHIPMENT_LOT_SIZE",
+    "member": "FindData",
+    "line": "349",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0028_Shipment_Lot_Size\\SCP0028_Shipment_Lot_Size.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+    "member": "FindInput",
+    "line": "417",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0028_Shipment_Lot_Size\\SCP0028_Shipment_Lot_Size.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+    "member": "FindDelete",
+    "line": "511",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0028_Shipment_Lot_Size\\SCP0028_Shipment_Lot_Size.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+    "member": "SaveData",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0028_Shipment_Lot_Size\\SCP0028_Shipment_Lot_Size.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0028_GET_SHIPMENT_LOT_SIZE",
+    "member": "FindData",
+    "line": "349",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0028_Shipment_Lot_Size\\SCP0028_Shipment_Lot_Size.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+    "member": "FindInput",
+    "line": "417",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0028_Shipment_Lot_Size\\SCP0028_Shipment_Lot_Size.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+    "member": "FindDelete",
+    "line": "511",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0028_Shipment_Lot_Size\\SCP0028_Shipment_Lot_Size.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+    "member": "SaveData",
+    "line": "659",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0028_Shipment_Lot_Size\\SCP0028_Shipment_Lot_Size.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0028_GET_SHIPMENT_LOT_SIZE",
+   "SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+   "SCP0028_SAVE_SHIPMENT_LOT_SIZE"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+    "sp": "SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 롤백 후 F 결과코드만 반환(메시지 없음)",
+    "message": null,
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code"
+   },
+   {
+    "entry_sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+    "sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "예외 발생 시 롤백 후 F 결과코드만 반환(메시지 없음)",
+    "message": null,
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR 로그; SELECT 'F' AS result_code"
+   }
+  ]
+ }
+]

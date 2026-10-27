@@ -1,0 +1,562 @@
+﻿row_id,source,check,instance,result
+`usrConditionPanel1`(HidePanel) + `usrLayoutControl2`/`layou,FE 대조표,X-LOC,X-LOC|ROW:`usrConditionPanel1`(HidePanel) + `usrLayoutControl2`/`layou,FAIL
+`usrConditionPanel1`(HidePanel) + `usrLayoutControl2`/`layou,FE 대조표,K-SA,K-SA|SCREEN,NOT_RUN
+`usrConditionPanel1`(HidePanel) + `usrLayoutControl2`/`layou,FE 대조표,G3,G3|SCREEN,NOT_RUN
+`panel1`(Dock=Fill) → `spdMain`,FE 대조표,X-LOC,X-LOC|ROW:`panel1`(Dock=Fill) → `spdMain`,FAIL
+`panel1`(Dock=Fill) → `spdMain`,FE 대조표,A5,A5|ROW:`panel1`(Dock=Fill) → `spdMain`,NA
+`panel1`(Dock=Fill) → `spdMain`,FE 대조표,H5,H5|ROW:`panel1`(Dock=Fill) → `spdMain`,NA
+`panel1`(Dock=Fill) → `spdMain`,FE 대조표,H2,H2|ROW:`panel1`(Dock=Fill) → `spdMain`,NA
+`usrButton1`(미배선 죽은 컨트롤),FE 대조표,X-LOC,X-LOC|ROW:`usrButton1`(미배선 죽은 컨트롤),FAIL
+`usrButton1`(미배선 죽은 컨트롤),FE 대조표,X-ROW,X-ROW|ENTRY:`usrButton1`(미배선 죽은 컨트롤),REVIEW
+"`imageList1`(edit.png, cellTypeImage)",FE 대조표,X-LOC,"X-LOC|ROW:`imageList1`(edit.png, cellTypeImage)",FAIL
+"`imageList1`(edit.png, cellTypeImage)",FE 대조표,D1,"D1|ROW:`imageList1`(edit.png, cellTypeImage)",NA
+"`imageList1`(edit.png, cellTypeImage)",FE 대조표,D3,"D3|ROW:`imageList1`(edit.png, cellTypeImage)",NA
+"`imageList1`(edit.png, cellTypeImage)",FE 대조표,J2,J2|SCREEN,NOT_RUN
+"`clbDivision`(고정 ""40""+disabled, `MyDivisionInEE_SCP`)",FE 대조표,X-LOC,"X-LOC|ROW:`clbDivision`(고정 ""40""+disabled, `MyDivisionInEE_SCP`)",FAIL
+"`clbDivision`(고정 ""40""+disabled, `MyDivisionInEE_SCP`)",FE 대조표,G4,G4|COND:clbDivision,NOT_RUN
+"`clbDivision`(고정 ""40""+disabled, `MyDivisionInEE_SCP`)",FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+"`clbDivision`(고정 ""40""+disabled, `MyDivisionInEE_SCP`)",FE 대조표,G1,G1|COND:clbDivision,NOT_RUN
+"`clbDivision`(고정 ""40""+disabled, `MyDivisionInEE_SCP`)",FE 대조표,G6,G6|COND:clbDivision,NOT_RUN
+"`clbDivision`(고정 ""40""+disabled, `MyDivisionInEE_SCP`)",FE 대조표,A1,"A1|ROW:`clbDivision`(고정 ""40""+disabled, `MyDivisionInEE_SCP`)",REVIEW
+"`clbDivision`(고정 ""40""+disabled, `MyDivisionInEE_SCP`)",FE 대조표,J2,J2|SCREEN,NOT_RUN
+`clbPlantSite`(Division EE 분기 2종 SQL_ID),FE 대조표,X-LOC,X-LOC|ROW:`clbPlantSite`(Division EE 분기 2종 SQL_ID),FAIL
+`clbPlantSite`(Division EE 분기 2종 SQL_ID),FE 대조표,G4,G4|COND:clbPlantSite,NOT_RUN
+`clbPlantSite`(Division EE 분기 2종 SQL_ID),FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+`clbPlantSite`(Division EE 분기 2종 SQL_ID),FE 대조표,G1,G1|COND:clbPlantSite,NOT_RUN
+`clbPlantSite`(Division EE 분기 2종 SQL_ID),FE 대조표,G6,G6|COND:clbPlantSite,NOT_RUN
+`clbPlantSite`(Division EE 분기 2종 SQL_ID),FE 대조표,A1,A1|ROW:`clbPlantSite`(Division EE 분기 2종 SQL_ID),REVIEW
+`clbPlantSite`(Division EE 분기 2종 SQL_ID),FE 대조표,J2,J2|SCREEN,NOT_RUN
+`cboInventoryType`(`LookupCommon`/INV_TYPE),FE 대조표,X-LOC,X-LOC|ROW:`cboInventoryType`(`LookupCommon`/INV_TYPE),FAIL
+`cboInventoryType`(`LookupCommon`/INV_TYPE),FE 대조표,G4,G4|COND:cboInventoryType,NOT_RUN
+`cboInventoryType`(`LookupCommon`/INV_TYPE),FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+`cboInventoryType`(`LookupCommon`/INV_TYPE),FE 대조표,G1,G1|COND:cboInventoryType,NOT_RUN
+`cboInventoryType`(`LookupCommon`/INV_TYPE),FE 대조표,G6,G6|COND:cboInventoryType,NOT_RUN
+`cboInventoryType`(`LookupCommon`/INV_TYPE),FE 대조표,A1,A1|ROW:`cboInventoryType`(`LookupCommon`/INV_TYPE),REVIEW
+`cboInventoryType`(`LookupCommon`/INV_TYPE),FE 대조표,J2,J2|SCREEN,NOT_RUN
+`cboInventoryType`(`LookupCommon`/INV_TYPE),FE 대조표,B4,B4|COND:cboInventoryType,NOPATH
+`cboInventoryType`(`LookupCommon`/INV_TYPE),FE 대조표,B3,B3|COND:cboInventoryType,TODO
+`cboPlanDate`(`PlanDateShip`),FE 대조표,X-LOC,X-LOC|ROW:`cboPlanDate`(`PlanDateShip`),FAIL
+`cboPlanDate`(`PlanDateShip`),FE 대조표,G4,G4|COND:cboPlanDate,NOT_RUN
+`cboPlanDate`(`PlanDateShip`),FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+`cboPlanDate`(`PlanDateShip`),FE 대조표,G1,G1|COND:cboPlanDate,NOT_RUN
+`cboPlanDate`(`PlanDateShip`),FE 대조표,G6,G6|COND:cboPlanDate,NOT_RUN
+`cboPlanDate`(`PlanDateShip`),FE 대조표,A1,A1|ROW:`cboPlanDate`(`PlanDateShip`),REVIEW
+`cboPlanDate`(`PlanDateShip`),FE 대조표,J2,J2|SCREEN,NOT_RUN
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,X-LOC,X-LOC|ROW:`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FAIL
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,G4,G4|COND:txtItemId,NOT_RUN
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,G4,G4|BTN:btnItemId,NOPATH
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,G1,G1|COND:txtItemId,NOT_RUN
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,G6,G6|COND:txtItemId,NOT_RUN
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,H6,H6|COND:txtItemId,NOT_RUN
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,H6,H6|BTN:btnItemId,NOPATH
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,G5,G5|COND:txtItemId,NOPATH
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,G5,G5|BTN:btnItemId,NOPATH
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,M4,M4|COND:txtItemId,NOT_RUN
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,M4,M4|BTN:btnItemId,NOT_RUN
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,A1,A1|ROW:`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),REVIEW
+`txtItemId`+`btnItemId`(`SCM0002_ItembyDivisionPopup`),FE 대조표,J2,J2|SCREEN,NOT_RUN
+`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),FE 대조표,X-LOC,X-LOC|ROW:`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),FAIL
+`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),FE 대조표,G4,G4|ROW:`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),REVIEW
+`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),FE 대조표,G1,G1|ROW:`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),REVIEW
+`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),FE 대조표,G6,G6|ROW:`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),REVIEW
+`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),FE 대조표,A1,A1|ROW:`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),REVIEW
+`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),FE 대조표,J2,J2|SCREEN,NOT_RUN
+`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),FE 대조표,E4,E4|MSG:MSG00614,NOT_RUN
+`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),FE 대조표,I1,I1|SCREEN,NOT_RUN
+`DataUtil.checkRequiredOfSearch` alert 문구(MSG00614),FE 대조표,H10,H10|SCREEN,PASS
+`clbDivision_SelectedIndexChanged`(cascade),FE 대조표,X-LOC,X-LOC|ROW:`clbDivision_SelectedIndexChanged`(cascade),FAIL
+`clbDivision_SelectedIndexChanged`(cascade),FE 대조표,G4,G4|ROW:`clbDivision_SelectedIndexChanged`(cascade),REVIEW
+`clbDivision_SelectedIndexChanged`(cascade),FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+`clbDivision_SelectedIndexChanged`(cascade),FE 대조표,G1,G1|ROW:`clbDivision_SelectedIndexChanged`(cascade),REVIEW
+`clbDivision_SelectedIndexChanged`(cascade),FE 대조표,G6,G6|ROW:`clbDivision_SelectedIndexChanged`(cascade),REVIEW
+`clbDivision_SelectedIndexChanged`(cascade),FE 대조표,C1,C1|ROW:`clbDivision_SelectedIndexChanged`(cascade),REVIEW
+`clbDivision_SelectedIndexChanged`(cascade),FE 대조표,C4,C4|ROW:`clbDivision_SelectedIndexChanged`(cascade),NA
+`clbDivision_SelectedIndexChanged`(cascade),FE 대조표,A1,A1|ROW:`clbDivision_SelectedIndexChanged`(cascade),REVIEW
+`clbDivision_SelectedIndexChanged`(cascade),FE 대조표,J2,J2|SCREEN,NOT_RUN
+"`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",FE 대조표,X-LOC,"X-LOC|ROW:`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",FAIL
+"`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",FE 대조표,G4,"G4|ROW:`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",REVIEW
+"`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",FE 대조표,SC1,SC1|SCREEN,NOT_RUN
+"`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",FE 대조표,G1,"G1|ROW:`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",REVIEW
+"`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",FE 대조표,G6,"G6|ROW:`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",REVIEW
+"`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",FE 대조표,E2,"E2|ROW:`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",NA
+"`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",FE 대조표,A1,"A1|ROW:`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",REVIEW
+"`DataUtil.checkRequiredOfSearch`(""Plan-date*"")",FE 대조표,J2,J2|SCREEN,NOT_RUN
+"`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",FE 대조표,X-LOC,"X-LOC|ROW:`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",FAIL
+"`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",FE 대조표,A5,"A5|ROW:`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",NA
+"`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",FE 대조표,H5,"H5|ROW:`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",NA
+"`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",FE 대조표,H2,"H2|ROW:`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",NA
+"`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",FE 대조표,D1,"D1|ROW:`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",NA
+"`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",FE 대조표,D3,"D3|ROW:`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",NA
+"`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",FE 대조표,G1,"G1|ROW:`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",REVIEW
+"`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",FE 대조표,A1,"A1|ROW:`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",REVIEW
+"`LockColumn(0, max, true)`(조회 직후 전 컬럼 잠금)",FE 대조표,J2,J2|SCREEN,NOT_RUN
+"컬럼 31개(DB메타, hidden 4건)",FE 대조표,X-LOC,"X-LOC|ROW:컬럼 31개(DB메타, hidden 4건)",FAIL
+"컬럼 31개(DB메타, hidden 4건)",FE 대조표,A5,"A5|ROW:컬럼 31개(DB메타, hidden 4건)",NA
+"컬럼 31개(DB메타, hidden 4건)",FE 대조표,H5,"H5|ROW:컬럼 31개(DB메타, hidden 4건)",NA
+"컬럼 31개(DB메타, hidden 4건)",FE 대조표,H2,"H2|ROW:컬럼 31개(DB메타, hidden 4건)",NA
+`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,FE 대조표,X-LOC,X-LOC|ROW:`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,FAIL
+`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,FE 대조표,A5,A5|ROW:`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,NA
+`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,FE 대조표,H5,H5|ROW:`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,NA
+`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,FE 대조표,H2,H2|ROW:`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,NA
+`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,FE 대조표,B1,B1|ROW:`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,NA
+`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,FE 대조표,B2,B2|ROW:`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,NA
+`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,FE 대조표,B4,B4|ROW:`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,REVIEW
+`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,FE 대조표,D5,D5|ROW:`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,NA
+`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,FE 대조표,E5,E5|ROW:`INVENTORY_TYPE`/`INVENTORY_STATUS` 셀 콤보,NA
+"`InitSpreadFooterSum()`(cs:213-233 — Sum 라벨, LightGray, `{0:",FE 대조표,X-LOC,"X-LOC|ROW:`InitSpreadFooterSum()`(cs:213-233 — Sum 라벨, LightGray, `{0:",FAIL
+"`InitSpreadFooterSum()`(cs:213-233 — Sum 라벨, LightGray, `{0:",FE 대조표,A5,"A5|ROW:`InitSpreadFooterSum()`(cs:213-233 — Sum 라벨, LightGray, `{0:",NA
+"`InitSpreadFooterSum()`(cs:213-233 — Sum 라벨, LightGray, `{0:",FE 대조표,H5,"H5|ROW:`InitSpreadFooterSum()`(cs:213-233 — Sum 라벨, LightGray, `{0:",NA
+"`InitSpreadFooterSum()`(cs:213-233 — Sum 라벨, LightGray, `{0:",FE 대조표,H2,"H2|ROW:`InitSpreadFooterSum()`(cs:213-233 — Sum 라벨, LightGray, `{0:",NA
+`SmartColMerge()`(스크롤 재계산),FE 대조표,X-LOC,X-LOC|ROW:`SmartColMerge()`(스크롤 재계산),FAIL
+`SmartColMerge()`(스크롤 재계산),FE 대조표,A5,A5|ROW:`SmartColMerge()`(스크롤 재계산),NA
+`SmartColMerge()`(스크롤 재계산),FE 대조표,H5,H5|ROW:`SmartColMerge()`(스크롤 재계산),NA
+`SmartColMerge()`(스크롤 재계산),FE 대조표,H2,H2|ROW:`SmartColMerge()`(스크롤 재계산),NA
+`SmartColMerge()`(스크롤 재계산),FE 대조표,H3,H3|ROW:`SmartColMerge()`(스크롤 재계산),NA
+"`btnMeasure_Click` → `SCM0002_TitleSetForm_Popup(""SSP0001"",.",FE 대조표,X-LOC,"X-LOC|ROW:`btnMeasure_Click` → `SCM0002_TitleSetForm_Popup(""SSP0001"",.",FAIL
+"`btnMeasure_Click` → `SCM0002_TitleSetForm_Popup(""SSP0001"",.",FE 대조표,A5,"A5|ROW:`btnMeasure_Click` → `SCM0002_TitleSetForm_Popup(""SSP0001"",.",NA
+"`btnMeasure_Click` → `SCM0002_TitleSetForm_Popup(""SSP0001"",.",FE 대조표,H5,"H5|ROW:`btnMeasure_Click` → `SCM0002_TitleSetForm_Popup(""SSP0001"",.",NA
+"`btnMeasure_Click` → `SCM0002_TitleSetForm_Popup(""SSP0001"",.",FE 대조표,H2,"H2|ROW:`btnMeasure_Click` → `SCM0002_TitleSetForm_Popup(""SSP0001"",.",NA
+"`btnMeasure_Click` → `SCM0002_TitleSetForm_Popup(""SSP0001"",.",FE 대조표,H6,H6|BTN:btnMeasure,NOPATH
+"`btnMeasure_Click` → `SCM0002_TitleSetForm_Popup(""SSP0001"",.",FE 대조표,G5,G5|BTN:btnMeasure,NOPATH
+"`btnMeasure_Click` → `SCM0002_TitleSetForm_Popup(""SSP0001"",.",FE 대조표,M4,M4|BTN:btnMeasure,NOT_RUN
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,X-LOC,X-LOC|ROW:`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FAIL
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,A5,A5|ROW:`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),NA
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,H5,H5|ROW:`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),NA
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,H2,H2|ROW:`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),NA
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,F1,F1|SCREEN,NOT_RUN
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,F2,F2|SCREEN,NOPATH
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,J2,J2|SCREEN,NOT_RUN
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,D4,D4|ROW:`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),NA
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,D6,D6|SCREEN,NOT_RUN
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,F5,F5|SCREEN,NOT_RUN
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,D1,D1|ROW:`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),NA
+`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),FE 대조표,D3,D3|ROW:`Insert/Delete/Edit/SaveButton` override(전부 NO-OP),NA
+`siMain.Query(dsBinding)`(SP 바인딩),FE 대조표,X-LOC,X-LOC|ROW:`siMain.Query(dsBinding)`(SP 바인딩),FAIL
+`siMain.Query(dsBinding)`(SP 바인딩),FE 대조표,A5,A5|ROW:`siMain.Query(dsBinding)`(SP 바인딩),NA
+`siMain.Query(dsBinding)`(SP 바인딩),FE 대조표,H5,H5|ROW:`siMain.Query(dsBinding)`(SP 바인딩),NA
+`siMain.Query(dsBinding)`(SP 바인딩),FE 대조표,H2,H2|ROW:`siMain.Query(dsBinding)`(SP 바인딩),NA
+(AS-IS 상당 없음 — FPNumber 빈 셀),FE 대조표,X-LOC,X-LOC|ROW:(AS-IS 상당 없음 — FPNumber 빈 셀),PASS
+(AS-IS 상당 없음 — FPNumber 빈 셀),FE 대조표,A5,A5|ROW:(AS-IS 상당 없음 — FPNumber 빈 셀),NA
+(AS-IS 상당 없음 — FPNumber 빈 셀),FE 대조표,H5,H5|ROW:(AS-IS 상당 없음 — FPNumber 빈 셀),NA
+(AS-IS 상당 없음 — FPNumber 빈 셀),FE 대조표,H2,H2|ROW:(AS-IS 상당 없음 — FPNumber 빈 셀),NA
+ACT:SSP0017_InventoryRaw..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SSP0017_InventoryRaw..ctor:119:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SSP0017_InventoryRaw..ctor:122:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SSP0017_InventoryRaw.ClearUsrCheckedList,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.ClearUsrCheckedList,REVIEW
+ACT:SSP0017_InventoryRaw.ClearUsrCheckedList:153:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.ClearUsrCheckedList,REVIEW
+ACT:SSP0017_InventoryRaw.ClearUsrCheckedList:155:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.ClearUsrCheckedList,REVIEW
+ACT:SSP0017_InventoryRaw.ClearUsrCheckedList:156:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.ClearUsrCheckedList,REVIEW
+ACT:SSP0017_InventoryRaw.CreateSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.CreateSpread,REVIEW
+ACT:SSP0017_InventoryRaw.CreateSpread:188:1,AS-IS 액션,A5,A5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:188:1,AS-IS 액션,H2,H2|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:188:1,AS-IS 액션,H5,H5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:188:1,AS-IS 액션,D5,D5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:189:2,AS-IS 액션,A5,A5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:189:2,AS-IS 액션,H2,H2|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:189:2,AS-IS 액션,H5,H5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:189:2,AS-IS 액션,D5,D5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:191:3,AS-IS 액션,A5,A5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:191:3,AS-IS 액션,H2,H2|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:191:3,AS-IS 액션,H5,H5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:191:3,AS-IS 액션,D5,D5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:192:4,AS-IS 액션,A5,A5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:192:4,AS-IS 액션,H2,H2|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:192:4,AS-IS 액션,H5,H5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.CreateSpread:192:4,AS-IS 액션,D5,D5|ENTRY:SSP0017_InventoryRaw.CreateSpread,NA
+ACT:SSP0017_InventoryRaw.DefineProperty,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.DefineProperty,REVIEW
+ACT:SSP0017_InventoryRaw.DefineProperty,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.DefineProperty:141:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.DefineProperty:141:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.DefineProperty,REVIEW
+ACT:SSP0017_InventoryRaw.DefineProperty:143:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.DefineProperty:144:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.DefineProperty:144:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.DefineProperty,REVIEW
+ACT:SSP0017_InventoryRaw.DefineProperty:145:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.DefineProperty:145:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.DefineProperty,REVIEW
+ACT:SSP0017_InventoryRaw.Dispose,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.Dispose:16:1,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.Dispose:18:2,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.Dispose:20:3,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.FindButton,REVIEW
+ACT:SSP0017_InventoryRaw.FindButton,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindButton,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindButton,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindButton:265:1,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindButton:265:1,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindButton:265:1,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main,AS-IS 액션,G1,G1|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main,AS-IS 액션,G1,G1|COND:clbPlantSite,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main,AS-IS 액션,G1,G1|COND:txtItemId,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main,AS-IS 액션,G1,G1|COND:cboInventoryType,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main,AS-IS 액션,G1,G1|COND:cboPlanDate,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:372:1,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:372:1,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:372:1,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:372:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.FindData_Main,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:377:2,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:377:2,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:377:2,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:377:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.FindData_Main,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:377:3,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:377:3,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:377:3,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:379:4,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:379:4,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:379:4,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:380:5,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:380:5,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:380:5,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:380:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.FindData_Main,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:382:6,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:382:6,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:382:6,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:386:7,AS-IS 액션,G1,G1|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:386:7,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:386:7,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:386:7,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:387:8,AS-IS 액션,G1,G1|COND:clbPlantSite,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:387:8,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:387:8,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:387:8,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:388:9,AS-IS 액션,G1,G1|COND:txtItemId,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:388:9,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:388:9,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:388:9,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:389:10,AS-IS 액션,G1,G1|COND:cboInventoryType,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:389:10,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:389:10,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:389:10,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:390:11,AS-IS 액션,G1,G1|COND:cboPlanDate,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:390:11,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:390:11,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:390:11,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:391:12,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:391:12,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:391:12,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:392:13,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:392:13,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:392:13,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:393:14,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:393:14,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:393:14,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:394:15,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:394:15,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:394:15,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:397:16,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:397:16,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:397:16,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:399:17,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:399:17,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:399:17,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:400:18,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:400:18,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:400:18,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:400:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.FindData_Main,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:401:19,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:401:19,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:401:19,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:401:19,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SSP0017_GET_INVENTORY_RAW,PASS
+ACT:SSP0017_InventoryRaw.FindData_Main:403:20,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:403:20,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:403:20,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:403:20,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:405:21,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:405:21,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:405:21,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:405:21,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SSP0017_GET_INVENTORY_RAW,PASS
+ACT:SSP0017_InventoryRaw.FindData_Main:407:22,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:407:22,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:407:22,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:407:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.FindData_Main,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:409:23,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:409:23,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:409:23,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:410:24,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:410:24,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:410:24,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:411:25,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:411:25,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:411:25,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:412:26,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:412:26,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:412:26,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:413:27,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:413:27,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:413:27,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:414:28,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:414:28,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:414:28,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:415:29,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:415:29,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:415:29,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:416:30,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:416:30,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:416:30,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:417:31,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:417:31,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:417:31,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:419:32,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:419:32,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:419:32,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:419:32,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SSP0017_GET_INVENTORY_RAW,PASS
+ACT:SSP0017_InventoryRaw.FindData_Main:420:33,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:420:33,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:420:33,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:426:34,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:426:34,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:426:34,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:429:35,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:429:35,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:429:35,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:431:36,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:431:36,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:431:36,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:432:37,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:432:37,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:432:37,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:432:37,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.FindData_Main,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:434:38,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:434:38,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:434:38,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:434:38,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.FindData_Main,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:436:39,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:436:39,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:436:39,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:443:40,AS-IS 액션,A1,A1|SP:P_SSP0017_GET_INVENTORY_RAW,REVIEW
+ACT:SSP0017_InventoryRaw.FindData_Main:443:40,AS-IS 액션,A6,A6|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.FindData_Main:443:40,AS-IS 액션,F4,F4|SP:P_SSP0017_GET_INVENTORY_RAW,NOT_RUN
+ACT:SSP0017_InventoryRaw.Form_Load,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.Form_Load,REVIEW
+ACT:SSP0017_InventoryRaw.Form_Load,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.Form_Load:128:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.Form_Load:130:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.Form_Load:131:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.Form_Load:132:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.Form_Load:133:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.GetDayRange,AS-IS 액션,B4,B4|COND:cboPlanDate,NOPATH
+ACT:SSP0017_InventoryRaw.GetDayRange,AS-IS 액션,B3,B3|COND:cboPlanDate,TODO
+ACT:SSP0017_InventoryRaw.GetDayRange:505:1,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDayRange:505:1,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDayRange:507:2,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDayRange:507:2,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDayRange:508:3,AS-IS 액션,B4,B4|COND:cboPlanDate,NOPATH
+ACT:SSP0017_InventoryRaw.GetDayRange:508:3,AS-IS 액션,B3,B3|COND:cboPlanDate,TODO
+ACT:SSP0017_InventoryRaw.GetDayRange:509:4,AS-IS 액션,B4,B4|COND:cboPlanDate,NOPATH
+ACT:SSP0017_InventoryRaw.GetDayRange:509:4,AS-IS 액션,B3,B3|COND:cboPlanDate,TODO
+ACT:SSP0017_InventoryRaw.GetDayRange:511:5,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.GetDayRange:514:6,AS-IS 액션,F4,F4|SP:P_SCM0001_GET_SCP_DAY_PERIOD,NOT_RUN
+ACT:SSP0017_InventoryRaw.GetDayRange:514:6,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCM0001_GET_SCP_DAY_PERIOD,PASS
+ACT:SSP0017_InventoryRaw.GetDayRange:515:7,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDayRange:515:7,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDayRange:516:8,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDayRange:516:8,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDayRange:517:9,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDayRange:517:9,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDayRange:518:10,AS-IS 액션,F4,F4|SP:P_SCM0001_GET_SCP_DAY_PERIOD,NOT_RUN
+ACT:SSP0017_InventoryRaw.GetDayRange:518:10,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCM0001_GET_SCP_DAY_PERIOD,PASS
+ACT:SSP0017_InventoryRaw.GetDayRange:521:11,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDayRange:521:11,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetDayRange,REVIEW
+ACT:SSP0017_InventoryRaw.GetDivision,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.GetDivision,REVIEW
+ACT:SSP0017_InventoryRaw.GetDivision:474:1,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetDivision,REVIEW
+ACT:SSP0017_InventoryRaw.GetDivision:474:1,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetDivision,REVIEW
+ACT:SSP0017_InventoryRaw.GetDivision:476:2,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.GetDivision:478:3,AS-IS 액션,F4,F4|SP:SCM0001_GET_DIVISION,NOT_RUN
+ACT:SSP0017_InventoryRaw.GetDivision:478:3,AS-IS 액션,DB-SYN,DB-SYN|SP:SCM0001_GET_DIVISION,PASS
+ACT:SSP0017_InventoryRaw.GetDivision:479:4,AS-IS 액션,F4,F4|SP:SCM0001_GET_DIVISION,NOT_RUN
+ACT:SSP0017_InventoryRaw.GetDivision:479:4,AS-IS 액션,DB-SYN,DB-SYN|SP:SCM0001_GET_DIVISION,PASS
+ACT:SSP0017_InventoryRaw.GetDivision:482:5,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetDivision,REVIEW
+ACT:SSP0017_InventoryRaw.GetDivision:482:5,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetDivision,REVIEW
+ACT:SSP0017_InventoryRaw.GetShipToParty,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.GetShipToParty,REVIEW
+ACT:SSP0017_InventoryRaw.GetShipToParty:493:1,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetShipToParty,REVIEW
+ACT:SSP0017_InventoryRaw.GetShipToParty:493:1,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetShipToParty,REVIEW
+ACT:SSP0017_InventoryRaw.GetShipToParty:494:2,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetShipToParty,REVIEW
+ACT:SSP0017_InventoryRaw.GetShipToParty:494:2,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetShipToParty,REVIEW
+ACT:SSP0017_InventoryRaw.GetShipType,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.GetShipType,REVIEW
+ACT:SSP0017_InventoryRaw.GetShipType:487:1,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetShipType,REVIEW
+ACT:SSP0017_InventoryRaw.GetShipType:487:1,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetShipType,REVIEW
+ACT:SSP0017_InventoryRaw.GetShipType:488:2,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetShipType,REVIEW
+ACT:SSP0017_InventoryRaw.GetShipType:488:2,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetShipType,REVIEW
+ACT:SSP0017_InventoryRaw.GetSoldToParty,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.GetSoldToParty,REVIEW
+ACT:SSP0017_InventoryRaw.GetSoldToParty:499:1,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetSoldToParty,REVIEW
+ACT:SSP0017_InventoryRaw.GetSoldToParty:499:1,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetSoldToParty,REVIEW
+ACT:SSP0017_InventoryRaw.GetSoldToParty:500:2,AS-IS 액션,B4,B4|ENTRY:SSP0017_InventoryRaw.GetSoldToParty,REVIEW
+ACT:SSP0017_InventoryRaw.GetSoldToParty:500:2,AS-IS 액션,B3,B3|ENTRY:SSP0017_InventoryRaw.GetSoldToParty,REVIEW
+ACT:SSP0017_InventoryRaw.InitControls,AS-IS 액션,G6,G6|COND:cboPlanDate,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls,AS-IS 액션,G6,G6|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls,AS-IS 액션,G6,G6|COND:cboInventoryType,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls,AS-IS 액션,G4,G4|COND:cboPlanDate,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls,AS-IS 액션,G4,G4|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls,AS-IS 액션,G4,G4|COND:cboInventoryType,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:162:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:165:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:168:3,AS-IS 액션,G6,G6|COND:cboPlanDate,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:168:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:168:3,AS-IS 액션,G4,G4|COND:cboPlanDate,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:170:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:171:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:171:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitControls,REVIEW
+ACT:SSP0017_InventoryRaw.InitControls:173:6,AS-IS 액션,G6,G6|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:173:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:173:6,AS-IS 액션,G4,G4|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:173:6,AS-IS 액션,C1,C1|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:173:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitControls,REVIEW
+ACT:SSP0017_InventoryRaw.InitControls:175:7,AS-IS 액션,G6,G6|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:175:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:175:7,AS-IS 액션,G4,G4|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:175:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitControls,REVIEW
+ACT:SSP0017_InventoryRaw.InitControls:176:8,AS-IS 액션,G6,G6|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:176:8,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:176:8,AS-IS 액션,G4,G4|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:179:9,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:179:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitControls,REVIEW
+ACT:SSP0017_InventoryRaw.InitControls:180:10,AS-IS 액션,G6,G6|COND:cboInventoryType,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:180:10,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:180:10,AS-IS 액션,G4,G4|COND:cboInventoryType,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:180:10,AS-IS 액션,C1,C1|COND:cboInventoryType,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitControls:180:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitControls,REVIEW
+ACT:SSP0017_InventoryRaw.InitControls:182:11,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitEvent,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SSP0017_InventoryRaw.InitEvent,AS-IS 액션,G6,G6|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitEvent,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitEvent,AS-IS 액션,G4,G4|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitEvent,AS-IS 액션,G4,G4|BTN:btnItemId,NOPATH
+ACT:SSP0017_InventoryRaw.InitEvent,AS-IS 액션,G4,G4|BTN:btnMeasure,NOPATH
+ACT:SSP0017_InventoryRaw.InitEvent:243:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SSP0017_InventoryRaw.InitEvent:243:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitEvent:244:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SSP0017_InventoryRaw.InitEvent:244:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitEvent:244:2,AS-IS 액션,G4,G4|BTN:btnItemId,NOPATH
+ACT:SSP0017_InventoryRaw.InitEvent:245:3,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SSP0017_InventoryRaw.InitEvent:245:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitEvent:245:3,AS-IS 액션,G4,G4|BTN:btnMeasure,NOPATH
+ACT:SSP0017_InventoryRaw.InitEvent:247:4,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
+ACT:SSP0017_InventoryRaw.InitEvent:247:4,AS-IS 액션,G6,G6|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitEvent:247:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitEvent:247:4,AS-IS 액션,G4,G4|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitSpread,REVIEW
+ACT:SSP0017_InventoryRaw.InitSpread,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpread:198:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpread:200:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpread:202:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpread:205:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpread:205:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitSpread,REVIEW
+ACT:SSP0017_InventoryRaw.InitSpread:207:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpread:210:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitSpreadFooterSum,REVIEW
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:215:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:217:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:217:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitSpreadFooterSum,REVIEW
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:218:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:218:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitSpreadFooterSum,REVIEW
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:219:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:221:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:223:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:225:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:226:8,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:228:9,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:229:10,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:230:11,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:230:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitSpreadFooterSum,REVIEW
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:231:12,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.InitSpreadFooterSum:231:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.InitSpreadFooterSum,REVIEW
+ACT:SSP0017_InventoryRaw.SetChangedControl,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.SetChangedControl,REVIEW
+ACT:SSP0017_InventoryRaw.SetChangedControl,AS-IS 액션,E4,E4|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.SetChangedControl,AS-IS 액션,E4,E4|COND:clbPlantSite,NOT_RUN
+ACT:SSP0017_InventoryRaw.SetChangedControl,AS-IS 액션,E4,E4|COND:cboPlanDate,NOT_RUN
+ACT:SSP0017_InventoryRaw.SetChangedControl:350:1,AS-IS 액션,E4,E4|COND:clbDivision,NOT_RUN
+ACT:SSP0017_InventoryRaw.SetChangedControl:352:2,AS-IS 액션,C3,C3|ENTRY:SSP0017_InventoryRaw.SetChangedControl,NA
+ACT:SSP0017_InventoryRaw.SetChangedControl:352:2,AS-IS 액션,E4,E4|ENTRY:SSP0017_InventoryRaw.SetChangedControl,REVIEW
+ACT:SSP0017_InventoryRaw.SetChangedControl:354:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.SetChangedControl,REVIEW
+ACT:SSP0017_InventoryRaw.SetChangedControl:358:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.SetChangedControl,REVIEW
+ACT:SSP0017_InventoryRaw.SetChangedControl:362:5,AS-IS 액션,E4,E4|COND:clbPlantSite,NOT_RUN
+ACT:SSP0017_InventoryRaw.SetChangedControl:362:5,AS-IS 액션,C1,C1|COND:clbPlantSite,NOT_RUN
+ACT:SSP0017_InventoryRaw.SetChangedControl:362:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.SetChangedControl,REVIEW
+ACT:SSP0017_InventoryRaw.SetChangedControl:365:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.SetChangedControl,REVIEW
+ACT:SSP0017_InventoryRaw.SetChangedControl:366:7,AS-IS 액션,E4,E4|COND:cboPlanDate,NOT_RUN
+ACT:SSP0017_InventoryRaw.SetChangedControl:366:7,AS-IS 액션,C1,C1|COND:cboPlanDate,NOT_RUN
+ACT:SSP0017_InventoryRaw.SetChangedControl:366:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.SetChangedControl,REVIEW
+ACT:SSP0017_InventoryRaw.SpdMain_TopChange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.SpdMain_TopChange,REVIEW
+ACT:SSP0017_InventoryRaw.SpdMain_TopChange,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.SpdMain_TopChange:254:1,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.SpdMain_TopChange:255:2,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.SpdMain_TopChange:255:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.SpdMain_TopChange,REVIEW
+ACT:SSP0017_InventoryRaw.SpdMain_TopChange:256:3,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:286:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:286:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:287:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:287:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:288:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:288:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:289:4,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:289:4,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:291:5,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:291:5,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:291:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.btnItemId_Click,REVIEW
+ACT:SSP0017_InventoryRaw.btnItemId_Click:293:6,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:293:6,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:293:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.btnItemId_Click,REVIEW
+ACT:SSP0017_InventoryRaw.btnItemId_Click:294:7,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:294:7,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:294:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.btnItemId_Click,REVIEW
+ACT:SSP0017_InventoryRaw.btnItemId_Click:295:8,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:295:8,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:295:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.btnItemId_Click,REVIEW
+ACT:SSP0017_InventoryRaw.btnItemId_Click:297:9,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:297:9,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:299:10,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:299:10,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:301:11,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:301:11,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnItemId_Click:301:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.btnItemId_Click,REVIEW
+ACT:SSP0017_InventoryRaw.btnMeasure_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:307:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:307:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:308:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:308:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:310:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:310:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:312:4,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:312:4,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:316:5,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:316:5,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:316:5,AS-IS 액션,E4,E4|MSG:MSG00007,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:316:5,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:317:6,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:317:6,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:322:7,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:322:7,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:322:7,AS-IS 액션,E4,E4|MSG:MSG00007,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:322:7,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:323:8,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:323:8,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:326:9,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:326:9,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:326:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.btnMeasure_Click,REVIEW
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:327:10,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:327:10,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:327:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.btnMeasure_Click,REVIEW
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:328:11,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:328:11,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:328:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.btnMeasure_Click,REVIEW
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:330:12,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:330:12,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:332:13,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:332:13,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:332:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.btnMeasure_Click,REVIEW
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:333:14,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:333:14,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:334:15,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:334:15,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
+ACT:SSP0017_InventoryRaw.btnMeasure_Click:334:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.btnMeasure_Click,REVIEW
+ACT:SSP0017_InventoryRaw.clbDivision_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SSP0017_InventoryRaw.clbDivision_SelectedIndexChanged,REVIEW
+ACT:SSP0017_InventoryRaw.clbDivision_SelectedIndexChanged:464:1,AS-IS 액션,C2,C2|ENTRY:SSP0017_InventoryRaw.clbDivision_SelectedIndexChanged,NA
+ACT:SSP0017_InventoryRaw.clbDivision_SelectedIndexChanged:464:1,AS-IS 액션,C3,C3|ENTRY:SSP0017_InventoryRaw.clbDivision_SelectedIndexChanged,NA
+ACT:SSP0017_InventoryRaw.clbDivision_SelectedIndexChanged:464:1,AS-IS 액션,C6,C6|ENTRY:SSP0017_InventoryRaw.clbDivision_SelectedIndexChanged,NA

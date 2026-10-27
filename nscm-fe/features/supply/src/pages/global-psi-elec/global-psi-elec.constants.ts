@@ -40,10 +40,26 @@ export const COMBO = {
   COMPANY: 'COMPANY_EE',
   // cboPlanDate — 주단위 계획일자. division 종속 재조회(토큰 @divisionId). 단일선택.
   PLAN_DATE: 'DATE_WEEKLY',
+  // Report Type* — AS-IS SCP0095(전극)의 Report Type 콤보를 그대로 이관한 등록 콤보(SQL_NM='[전극] AS-IS
+  //   UP_FX_GetCommonDataList @Code=PlanType', ora.py 실측). SCP_PLAN_VERSION_V.plan_type 를 division 종속으로
+  //   반환 → 옵션이 division 마다 다름(예 EE=TE/PR/MA/SE/FN, EE_HD=PR/FN). 토큰 @divisionId(+옵션 @planStartYyyymmdd).
+  //   DATE_WEEKLY 동형으로 divisionId 만 전달(옵션 토큰 생략). 정적 PLAN_TYPE lookup 아님(그건 전 사업부 고정 5종).
+  REPORT_TYPE: 'PlanType',
 } as const;
 
 // Division 화면 전용 필터 — ATTRIBUTE3='EE'(전극만 유지, AS-IS GetDivisionEE). 좁히는 주체는 FE 하나만(design 02 §2-1).
 export const DIVISION_EE_INCLUDE = 'EE';
+
+// Measure 개인화 — SCM_MST_SHEET_MEASURE SHEET_NAME(SCP0095='Global PSI Elec', DB 실측 10행). fetchStaticMeasures·
+//   saveTitleSet 3점 일치 축. 자매 SCP0100(global-psi-report)의 measure 팝업 패턴 이식(사용자 지시 2026-10-15).
+export const MEASURE_SHEET_NAME = 'Global PSI Elec';
+// titleSet columnType — measure 개인화 'M'(자매 SCP0100/DMF0021 선례 동일).
+export const TITLESET_MEASURE_TYPE = 'M';
+
+// Report Type* 기본값 — AS-IS 기본 'FN'(반영 09주 기준, 스크린샷 기본 선택값). 옵션 원천은 COMBO.REPORT_TYPE
+//   (PlanType 콤보, division 종속 cascade — 정적 PLAN_TYPE lookup 아님). p_plan_type 으로 실린다(SP 필터, 필수).
+//   라벨은 LBL.PLAN_TYPE(LBL00040='Plan Type', 자매 SCP0100 동일 코드).
+export const PLAN_TYPE_DEFAULT = 'FN';
 
 // Bucket Type — AS-IS GetBucketType() SP(DAILY/WEEKLY/MONTHLY 고정 enum) 대신 정적 select 로 재현
 //   (자매 global-psi-report 동일 패턴 — 값이 고정 3종이고 조회 파라미터 아닌 pivot 표시 토글이라 SP 왕복 불요).
@@ -72,6 +88,7 @@ export const CONDITIONAL_BG = {
   P_SUM: 'rgb(218, 238, 243)', // PSI='P' & MEASURE_NAME='SUM' → #DAEEF3 연파랑 (R19)
   S_SUM: 'rgb(224, 243, 176)', // PSI='S' & MEASURE_NAME='SUM' → #E0F3B0 연녹 (R20)
   I_EOH: 'rgb(254, 235, 201)', // PSI='I' & MEASURE_NAME='EOH' → #FEEBC9 연주황 (R21)
+  PACKAGE_PLAN: 'rgb(245, 245, 245)', // MEASURE_NAME='Package Plan' → 연회색 (AS-IS cs:875)
 } as const;
 
 // 조건부 배경 적용 시작 컬럼 index(design 03 R19~21 "col4~끝"). 0-base 4번째 컬럼부터 값 영역.
@@ -97,6 +114,9 @@ export const MSG = {
   REQUIRE_CONDITION: 'MSG00013',
   // 권한 Division 0건(design 01 §2 #1 SetDivisionAuthCheck). MSG00097(EN)='Please select Division.'(실측).
   NO_DIVISION_AUTH: 'MSG00097',
+  // Plan Type 안내 문구 — 조회조건 하단. plan_type(MA/FN)별 산출물 설명. 사용자 지시 2026-10-15: 선행 라벨을
+  //   Report Type → Plan Type 으로 변경(필드명 Plan Type 과 일치). EN/KO locale MSG01399 동시 수정.
+  REPORT_TYPE_GUIDE: 'MSG01399',
 } as const;
 
 // i18n 라벨 — SCM_ADM_MSG_M(MSG_TP_CD='LBL') 실측 LBL ID(design 02 §4.5). t(LBL.KEY, '_Fallback').
@@ -104,10 +124,12 @@ export const LBL = {
   SEARCH: 'LBL00112', // Search (표준 LBL00112)
   DIVISION: 'LBL00001', // Division (표준 LBL00001)
   COMPANY: 'LBL00047', // Company
-  MODEL: 'LBL00669', // Model
+  MATERIAL: 'LBL00021', // Material (사용자 지시 2026-10-14: 기존 Model LBL00669 → Material. 메1 MaterialByDivisionModal 픽커)
   PLAN_DATE: 'LBL00039', // Plan Date
+  PLAN_TYPE: 'LBL00040', // Plan Type (p_plan_type — 사용자 지시 2026-10-14: 기존 Report Type LBL00795 에서 변경, 자매 SCP0100 동일 코드)
   PERIOD: 'LBL00013', // Period
   BUCKET: 'LBL00710', // Bucket
+  MEASURE: 'LBL00310', // Measure — 개인화 팝업 버튼(자매 SCP0100 동일 코드)
   // Bucket 드롭다운 옵션 라벨 — SCM_ADM_MSG_M 실측 전용 코드(ora.py 2026-09-26).
   //   iter-1 은 LBL00713(='Select at least one measure.')/LBL00711(='Column')/LBL00712(미등록)로 오배선이었다
   //   → Daily/Weekly/Monthly 정확 코드로 교정(iter-1 gap-audit G3).

@@ -281,8 +281,11 @@ export const CustomerModelMappingGrid = ({
     GridUtils.refreshRow(gridRef.current, clickedRow);
   };
 
-  const handleItemSelected = (itemCode: string, itemName?: string, itemType?: string) => {
+  const handleItemSelected = (itemCodes: string, itemName?: string, itemType?: string) => {
     if (!clickedDataItem) return;
+    // 공용 Model 팝업은 여러 줄을 고르면 ITEM_ID 를 쉼표로 이어 보낸다. 이 셀은 Model 한 건만
+    //   받는 자리라 맨 위 행 하나만 쓴다 (DMF0005 와 같은 방식, 2026-10-14 사용자 요청).
+    const itemCode = itemCodes?.split(',')[0] ?? '';
 
     editTrackerRef.current?.storeChange(
       clickedDataItem,

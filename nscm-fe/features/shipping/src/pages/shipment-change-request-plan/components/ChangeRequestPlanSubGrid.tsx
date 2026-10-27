@@ -5,6 +5,7 @@ import { type MutableRefObject, useCallback, useEffect, useMemo } from 'react';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { DataGrid } from '@shared/components';
 
+import { usePinDashDateFormat } from '../../../hooks/usePinDashDateFormat';
 import { COLUMN, MENU_ID } from '../shipment-change-request-plan.constants';
 import type { SubRow } from '../shipment-change-request-plan.types';
 
@@ -32,6 +33,9 @@ interface Props {
  *   과거 편집 게이트(SUB_MODE_EDITABLE_COLUMNS 등)는 dead 코드 오해에 근거해 잘못 열어 둔 것이라 제거했다.
  */
 export const ChangeRequestPlanSubGrid = ({ rows, gridRef, gridFilterRef, columns }: Props) => {
+  // 날짜 컬럼 형식을 조회값과 같은 대시(yyyy-MM-dd)로 고정 — 공용 getFormat 은 점 형식을 준다.
+  usePinDashDateFormat(gridRef, columns);
+
   // 인용은 getCombo(`quoteComboParams`)가 처리한다 — 화면은 raw 로 넘긴다(설계 §6.1).
   const comboParams = useMemo(() => ({ mnuId: MENU_ID }), []);
 

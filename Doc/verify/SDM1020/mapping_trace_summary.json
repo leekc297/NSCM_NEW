@@ -1,0 +1,198 @@
+{
+ "version": 2,
+ "menu_id": "SDM1020",
+ "asis_id": "SDM1020",
+ "generated": "2026-10-26T12:55:47",
+ "mapping_file": "nscm-fe\\features\\sdm\\src\\pages\\project-list\\__asis-mapping__.md",
+ "rows": 102,
+ "fe_rows": 102,
+ "action_rows": 0,
+ "fe_page": "nscm-fe\\features\\sdm\\src\\pages\\project-list",
+ "fe_mapping_missing": false,
+ "verdict": {
+  "FAIL": 96,
+  "해당없음": 4,
+  "미검증": 1,
+  "검증완료": 1
+ },
+ "instances": 550,
+ "instance_result": {
+  "FAIL": 96,
+  "NA": 358,
+  "NOT_RUN": 22,
+  "REVIEW": 67,
+  "NOPATH": 1,
+  "PASS": 6
+ },
+ "by_layer": {
+  "동적 생성·조회": {
+   "FAIL": 95,
+   "NA": 65,
+   "REVIEW": 65,
+   "PASS": 2
+  },
+  "정적 디자인": {
+   "NA": 86,
+   "NOT_RUN": 2,
+   "FAIL": 1,
+   "PASS": 4,
+   "REVIEW": 1
+  },
+  "편집·검증": {
+   "NA": 55,
+   "NOT_RUN": 15,
+   "REVIEW": 1
+  },
+  "권한": {
+   "NOT_RUN": 1
+  },
+  "콤보 후보": {
+   "NA": 46
+  },
+  "DB 실행·접근": {
+   "NA": 4
+  },
+  "Cascade": {
+   "NA": 6
+  },
+  "팝업": {
+   "NA": 96
+  },
+  "CRUD": {
+   "NOT_RUN": 2,
+   "NOPATH": 1
+  },
+  "공통 기능": {
+   "NOT_RUN": 2
+  }
+ },
+ "by_check": {
+  "A1": {
+   "REVIEW": 56
+  },
+  "A5": {
+   "NA": 25
+  },
+  "A6": {
+   "NA": 2
+  },
+  "B1": {
+   "NA": 12
+  },
+  "B2": {
+   "NA": 12
+  },
+  "B3": {
+   "NA": 6
+  },
+  "B4": {
+   "NA": 16
+  },
+  "C2": {
+   "NA": 2
+  },
+  "C3": {
+   "NA": 2
+  },
+  "C6": {
+   "NA": 2
+  },
+  "D1": {
+   "NA": 8
+  },
+  "D3": {
+   "NA": 8
+  },
+  "D4": {
+   "NA": 11
+  },
+  "D5": {
+   "NA": 12
+  },
+  "D6": {
+   "NOT_RUN": 1
+  },
+  "DB-SYN": {
+   "NA": 2
+  },
+  "E3": {
+   "NA": 4
+  },
+  "E4": {
+   "NOT_RUN": 14,
+   "REVIEW": 1
+  },
+  "E5": {
+   "NA": 12
+  },
+  "F1": {
+   "NOT_RUN": 1
+  },
+  "F2": {
+   "NOPATH": 1
+  },
+  "F4": {
+   "NA": 2
+  },
+  "F5": {
+   "NOT_RUN": 1
+  },
+  "G1": {
+   "NA": 55
+  },
+  "G3": {
+   "NOT_RUN": 1
+  },
+  "G4": {
+   "NA": 8
+  },
+  "G5": {
+   "NA": 32
+  },
+  "G6": {
+   "NA": 8
+  },
+  "H10": {
+   "FAIL": 1
+  },
+  "H2": {
+   "NA": 29
+  },
+  "H5": {
+   "NA": 24
+  },
+  "H6": {
+   "NA": 32
+  },
+  "I1": {
+   "NOT_RUN": 1
+  },
+  "J2": {
+   "NOT_RUN": 1
+  },
+  "K4": {
+   "NOT_RUN": 1
+  },
+  "M4": {
+   "NA": 32
+  },
+  "SC1": {
+   "NOT_RUN": 1
+  },
+  "X-LOC": {
+   "FAIL": 95,
+   "PASS": 2
+  },
+  "X-REASON": {
+   "PASS": 4,
+   "REVIEW": 1
+  },
+  "X-ROW": {
+   "REVIEW": 9
+  }
+ },
+ "todo_checks": {},
+ "unverified_reasons": {
+  "REVIEW": 1
+ }
+}

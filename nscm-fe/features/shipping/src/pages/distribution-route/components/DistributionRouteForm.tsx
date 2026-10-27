@@ -84,9 +84,8 @@ export const DistributionRouteForm = ({ onSearch, onFromSearch, onToSearch }: Pr
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onFromSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onFromSearch}
                       />
                     ),
                   }}
@@ -128,9 +127,8 @@ export const DistributionRouteForm = ({ onSearch, onFromSearch, onToSearch }: Pr
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onToSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onToSearch}
                       />
                     ),
                   }}

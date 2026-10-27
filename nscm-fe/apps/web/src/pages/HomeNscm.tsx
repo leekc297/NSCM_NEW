@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { Menu } from '@foundation/models';
 import { useClearAppData } from '@shared/hooks';
@@ -55,7 +55,11 @@ export const HomeNscm = () => {
   const toggleFavorite = useSessionStore(state => state.toggleFavorite);
   const openTab = useMDIStore(state => state.openTab);
   const { clearAllData } = useClearAppData();
-  const notices = useHomeNotices();
+  const allNotices = useHomeNotices();
+  const notices = useMemo(
+    () => allNotices.filter(notice => notice.MODULE_NM !== 'SPMS'),
+    [allNotices]
+  );
 
   // 로그아웃 — 서버 세션 종료(/user/logout)를 기다린 뒤 로컬 상태 전체 정리:
   //   열린 탭 전부 닫기(MDI 초기화) + 모든 페이지 스토어 reset + react-query 캐시 + sessionStorage 클리어.

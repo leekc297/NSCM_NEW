@@ -8,6 +8,10 @@
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
+// SCP·SSP 화면 VALIDATION 취합 화면 파일(Doc/화면분석서/{SCP|SSP}_화면_VALIDATION_취합_<최신>/<ID>.md) — 2026-10-23 사용자 지시: 검증 관련 작업 참고자료
+function valRefOf(p, id) {
+  try { const r = require(path.join(p.root, 'tools', 'Harness', 'lib', 'valref.js')).find({ validationRefDir: path.join(p.root, 'Doc', '화면분석서') }, id); return r && r.screen ? r.screen : ''; } catch { return ''; }
+}
 const cp = require('child_process');
 const promptPanel = require('./prompt-panel');
 const flow = require('./flow-panel');
@@ -66,6 +70,53 @@ function verifyStep(p, v, id) {
   } catch (e) { return { ok: false, why: `검증 예외: ${e.message}` }; }
 }
 const tabview = require('./tabview'); // 1.9.0: Workbench 내부 탭 뷰어
+// E2E 단계 의존 — 키 단계는 값 단계가 OK 일 때만 실행, 아니면 SKIP(사용자 지시 2026-10-22: CRUD 실패 시 권한별 CRUD 제외)
+const E2E_DEPENDS = { authcrud: 'crud' };
+// 체인 단계 st.ifMissing — 항목 중 하나라도 없으면 실행, 모두 있으면 SKIP. 항목 = 경로 문자열(존재) 또는 { file, minLines(최소 줄 수), has(포함 문자열) }
+//   경로 치환 ${root} ${id} ${genDir}. 반환 = 부족한 첫 항목 설명(실행 이유) 또는 null(자료 충분 → SKIP)
+function missingInput(p, list, id) {
+  const sub = x => String(x || '').replace(/\$\{id\}/g, id).replace(/\$\{root\}/g, p.root).replace(/\$\{genDir\}/g, p.genDir);
+  for (const e of [].concat(list || [])) {
+    const c = typeof e === 'string' ? { file: e } : e; const fp = sub(c.file); const rel = path.relative(p.root, fp);
+    if (!fs.existsSync(fp)) return `${rel} 없음`;
+    if (c.minLines || c.has) {
+      let t = ''; try { t = fs.readFileSync(fp, 'utf8'); } catch { return `${rel} 읽기 실패`; }
+      if (c.minLines && t.split(/\r?\n/).filter(l => l.trim()).length < c.minLines) return `${rel} 내용 없음`;
+      if (c.has && !t.includes(sub(c.has))) return `${rel} 에 ${sub(c.has)} 없음`;
+    }
+  }
+  return null;
+}
+// E2E 수선 판정 — Doc/gen/<ID>/E2E_REPAIR.md 의 마지막 '## 수선 <N> — <kind>' 섹션 끝 '판정요약: a= b= c=' (🩹 프롬프트 [4 보고] 형식)
+function readRepairVerdict(p, id) {
+  try {
+    const md = fs.readFileSync(path.join(p.genDir, id, 'E2E_REPAIR.md'), 'utf8'); const secs = md.split(/^## /m); const last = secs[secs.length - 1] || '';
+    const m = /판정요약:\s*a=(\d+)\s*b=(\d+)\s*c=(\d+)/.exec(last); const h = /^수선\s+(\d+)/.exec(last);
+    return m ? { a: +m[1], b: +m[2], c: +m[3], round: h ? +h[1] : null } : null;
+  } catch { return null; }
+}
+// 2026-10-26: 결과 봉투 vibe-result/1 읽기(tools/Harness/lib/envelope.js) — 파일 없음·깨짐·형식 위반 = state 'error'(판정 없음을 통과로 보지 않음)
+function readEnvelope(p, file) {
+  try { return require(path.join(p.root, 'tools', 'Harness', 'lib', 'envelope.js')).read(file); }
+  catch (e) { return { state: 'error', verdict: null, why: `봉투 모듈 없음: ${e.message}`, issues: [] }; }
+}
+const qArg = s => (/\s/.test(String(s)) ? `"${s}"` : String(s));
+// 1.9.14: 새 화면 생성 전 기존 생성분 탐지(2026-10-22 SSP0015 사고 — 커밋본이 있는데 🚀 체인이 파싱·Agent 18분 뒤 gen --apply 에서 exit 3).
+//   ① register.json ② To-Be 메뉴 메타(menu.csv MNU_URL 끝 세그먼트 = 페이지 폴더명, feature 무관 탐색) ③ __asis-mapping__.md 머리에 화면 ID — 셋의 합집합
+function findExistingPages(p, id) {
+  const ID = String(id || '').toUpperCase(); const found = new Set(); const pagesRoots = [];
+  try { for (const f of fs.readdirSync(path.join(p.tobeDir, 'features'))) { const pg = path.join(p.tobeDir, 'features', f, 'src', 'pages'); if (fs.existsSync(pg)) pagesRoots.push(pg); } } catch { }
+  try { const r = JSON.parse(fs.readFileSync(path.join(p.genDir, ID, 'register.json'), 'utf8')); found.add(path.join(p.tobeDir, 'features', r.feature, 'src', 'pages', r.pageDir)); } catch { }
+  try {
+    const rows = fs.readFileSync(path.join(p.tobeOutDir, 'db', 'menu.csv'), 'utf8').replace(/^﻿/, '').split(/\r?\n/).filter(Boolean).map(l => l.split(','));
+    const h = rows[0] || []; const me = rows.slice(1).find(r => String(r[h.indexOf('mnu_id')] || '').toUpperCase() === ID);
+    const seg = me ? String(me[h.indexOf('mnu_url')] || '').split('/').filter(Boolean).pop() : '';
+    if (seg) for (const pg of pagesRoots) found.add(path.join(pg, seg));
+  } catch { }
+  const idRe = new RegExp(`\\b${ID.replace(/[^A-Z0-9_]/g, '')}\\b`);
+  for (const pg of pagesRoots) { try { for (const d of fs.readdirSync(pg)) { const mp = path.join(pg, d, '__asis-mapping__.md'); if (fs.existsSync(mp) && idRe.test(fs.readFileSync(mp, 'utf8').slice(0, 4000))) found.add(path.join(pg, d)); } } catch { } }
+  return [...found].filter(d => { try { return fs.statSync(d).isDirectory(); } catch { return false; } });
+}
 const summ = inp => { try { const s = JSON.stringify(inp); return s.length > 160 ? s.slice(0, 160) + '…' : s; } catch { return ''; } };
 // 1.8.4: 도구 호출 한 줄 요약(사람이 읽는 형태) — Step 카드의 접힌 요약·도구 행 제목에 사용
 // 1.8.7: 로컬 파일·폴더를 OS 기본 프로그램으로 열기 — vscode.env.openExternal(Uri.file) 은 Windows 에서 한글 경로(Doc\화면설계서 등)를
@@ -113,8 +164,8 @@ const UI = {
   st_pick: ['Set a screen ID to see its progress, gates and outputs here.', '화면ID 를 입력하면 그 화면의 단계 현황·산출물이 여기 나옵니다.'], st_progress: ['Progress', '진행률'], st_stages: ['stages done', '단계 완료'], st_dod: ['DoD', 'DoD'], st_fe: ['FE Gate', 'FE 게이트'], st_pkg: ['PKG Gate', 'PKG 게이트'], st_gap: ['GAP open', 'GAP 미반영'], st_e2e: ['E2E', 'E2E'],
   st_notrun: ['not run', '미실행'], st_nospec: ['no spec', '스펙 없음'], st_items: ['items', '건'], st_outputs: ['Outputs', '산출물'], st_docs: ['Documents', '문서'], st_recent: ['Recent work', '최근 작업'], st_none: ['none', '없음'], st_changed: ['changed', '변경'], st_open: ['open', '진행중'], st_pipeline: ['Last pipeline', '마지막 파이프라인'],
   tb: [{ reload: 'Reload', edit: 'Edit', view: 'View', save: 'Save', editor: 'Open in editor', os: 'Open with OS', close: 'Close tab' }, { reload: '새로고침', edit: '편집', view: '보기', save: '저장', editor: '에디터로', os: 'OS 로 열기', close: '탭 닫기' }],
-  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', optional: 'optional', warn: 'Done w/ warnings', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', WAIT: 'waiting' ,REPAIR:'Repairing'}, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
-       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', optional: '선택', warn: '경고 포함 완료', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', WAIT: '대기' ,REPAIR:'수선 중'}, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
+  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', retry: 'retry', optional: 'optional', warn: 'Done w/ warnings', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', SKIP: 'skipped', WAIT: 'waiting' ,REPAIR:'Repairing'}, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
+       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', retry: '재시도', optional: '선택', warn: '경고 포함 완료', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', SKIP: '건너뜀', WAIT: '대기' ,REPAIR:'수선 중'}, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
   st_menu: ['Menu', '메뉴'], st_page: ['Page', '페이지'], st_click: ['Click a stage to run it', '단계를 누르면 실행됩니다'],
 };
 const t = (p, k) => (UI[k] || [k, k])[(p && p.language) === 'ko' ? 1 : 0];
@@ -154,9 +205,24 @@ function statusHtml(p, id) {
   const files = [['PIPELINE.md', ko ? '🛤️ 파이프라인' : '🛤️ Pipeline'], ['DOD.md', '✔️ DoD'], ['CHECK.md', ko ? '🚧 FE 게이트' : '🚧 FE Gate'], ['REPAIR.md', ko ? '🔧 FE 수선' : '🔧 FE Repair'], ['CHECK_PKG.md', ko ? '🧱 PKG 게이트' : '🧱 PKG Gate'], ['REPAIR_PKG.md', ko ? '🔗 PKG 이식' : '🔗 PKG Port'], ['GEN_NOTES.md', ko ? '📝 생성 노트' : '📝 Gen Notes'], [`${id}_registration.sql`, ko ? '✅ 등록 SQL' : '✅ Registration SQL'], [`${id}_PKG.sql`, '📦 PKG'], [`${id}_revert.sql`, ko ? '↩️ 되돌리기' : '↩️ Revert']].filter(([f]) => fs.existsSync(path.join(g, f)));
   const pack = path.join(p.outDir, 'screens', id, `${id}_summary.md`); const agent = path.join(p.outDir, 'agent', id); const docs = fs.existsSync(agent) ? fs.readdirSync(agent).filter(f => /\.md$/.test(f) && !/^_/.test(f)) : [];
   // Excel 문서: 팀 폴더(화면설계서·화면분석서·단위테스트) + 구 documents 폴더
+  // 1.9.28+(2026-10-27): 같은 문서(폴더 + 끝 버전 토큰들을 뗀 이름)는 마지막 버전 1건만 — 날짜(_20261014) 둘 다 있으면 날짜 우선,
+  //   아니면 버전(_v1.0·_v28·TestCases4.1·_v1.2_20260827) 숫자 비교, 같으면 수정 시각 최신
   const xlsx = [];
+  const VER_RE = /(?:[_\s-]?v?\d+(?:\.\d+)*)+$/i;
+  const verOf = s => { const m = VER_RE.exec(s); const toks = m ? m[0].split(/[_\s-]+|(?=v\d)/i).filter(Boolean).map(x => x.replace(/^v/i, '')) : []; const dt = toks.find(x => /^20\d{6}$/.test(x)); return { dt: dt ? Number(dt) : 0, n: toks.filter(x => x !== dt).flatMap(x => x.split('.').map(Number)) }; };
+  const cmpVer = (a, b) => { if (a.dt && b.dt && a.dt !== b.dt) return a.dt - b.dt; for (let i = 0; i < Math.max(a.n.length, b.n.length); i++) { const d = (a.n[i] || 0) - (b.n[i] || 0); if (d) return d; } return 0; };
   for (const [dir, icon] of [[path.join(p.root, 'Doc', '화면설계서'), '📘'], [path.join(p.root, 'Doc', '화면분석서'), '📗'], [path.join(p.root, 'Doc', '단위테스트'), '🧪'], [path.join(p.root, 'Doc', 'documents', id), '📄']]) {
-    try { for (const f of fs.readdirSync(dir)) if (/\.xlsx$/i.test(f) && f.toUpperCase().startsWith(id)) xlsx.push([path.join(dir, f), `${icon} ${f.replace(/\.xlsx$/i, '')}`]); } catch { }
+    const latest = new Map();
+    try {
+      for (const f of fs.readdirSync(dir)) {
+        if (!/\.xlsx$/i.test(f) || !f.toUpperCase().startsWith(id)) continue;
+        const stem = f.replace(/\.xlsx$/i, ''); const rest = stem.slice(id.length); const key = (id + rest.replace(VER_RE, '')).toUpperCase(); const ver = verOf(rest); // ID 숫자는 버전으로 떼지 않음
+        let mt = 0; try { mt = fs.statSync(path.join(dir, f)).mtimeMs; } catch { }
+        const cur = latest.get(key); const c = cur ? cmpVer(ver, cur.ver) : 1;
+        if (!cur || c > 0 || (c === 0 && mt > cur.mt)) latest.set(key, { f, stem, ver, mt });
+      }
+    } catch { }
+    for (const { f, stem } of [...latest.values()].sort((a, b) => a.stem.localeCompare(b.stem))) xlsx.push([path.join(dir, f), `${icon} ${stem}`]);
   }
   const hist = history.list(p).filter(h => h.id === id).slice(0, 8);
   const chip = (href, label, attr = 'data-f') => `<a class="chip" ${attr}="${esc(href)}">${esc(label)}</a>`;
@@ -290,7 +356,7 @@ class WB {
     }, to * 1000);
     // 1.8.0: 서버 출력은 Log 탭의 BE Log / FE Log 창으로 (포트 8080/5173 또는 이름의 BE/FE 로 판별)
     const stream = it.port === 8080 || /\bBE\b/i.test(name) ? 'be' : it.port === 5173 || /\bFE\b/i.test(name) ? 'fe' : 'task';
-    try { this.post({ type: 'showTab', tab: stream === 'task' ? 'log' : 'logs' }); } catch { }
+    try { this.post({ type: 'showTab', tab: stream === 'task' ? 'log' : 'logs', auto: true }); } catch { }
     this.spawnStream(p, 'cmd', ['/c', it.cmd], { spawn: { cwd }, onLine }, stream, name).then(code => {
       if (!ready) done(false, `기동 실패 — exit ${code}${tail.length ? '\n   ' + tail.filter(x => x.trim()).slice(-4).join('\n   ') : ''}`);
       else { this.post({ type: 'chat', role: 'meta', text: `■ ${name} 종료 (exit ${code})` }); }
@@ -333,7 +399,7 @@ class WB {
   //   보호: PROTECTED_PROC(VPN 등)·expectProc 밖의 프로세스는 종료하지 않고 안내만.
   async stopServer(p, it, name) {
     const stream = it.port === 8080 || /\bBE\b/i.test(name) ? 'be' : it.port === 5173 || /\bFE\b/i.test(name) ? 'fe' : 'task';
-    try { this.post({ type: 'showTab', tab: stream === 'task' ? 'log' : 'logs' }); } catch { }
+    try { this.post({ type: 'showTab', tab: stream === 'task' ? 'log' : 'logs', auto: true }); } catch { }
     const t0 = Date.now(); const expect = new RegExp(`^(${it.expectProc || 'java|node|cmd|powershell|pwsh'})(\\.exe)?$`, 'i');
     let acted = false;
     const occ = it.port ? portOwnerInfo(it.port) : null;
@@ -358,6 +424,20 @@ class WB {
   }
 
   // 1.8.8: Promise 반환 — 체인(runChain)이 Claude 단계의 종료(코드·is_error)를 기다릴 수 있게. 바쁘면 null
+  // 1.9.11: 체인 전용 — Claude 가 다른 요청(사용자 채팅 등)에 응답 중이면 끝날 때까지 기다렸다가 보낸다. 종전엔 askClaude 가 null 을 돌려 체인이 CANCEL 로 끝났다
+  //   (2026-10-21 19:28 SCP0100 🚒: smoke 실패 → 🩹 수선 2 호출 시점에 사용자의 "진행중인가요?" 채팅이 응답 중 → CANCEL → 체인 종료). 최대 maxMs(기본 60분) 대기, 2초 간격.
+  async askClaudeWhenIdle(p, prompt, harness, maxMs = 60 * 60 * 1000, label = 'Claude') {
+    if (this.claudeProc) {
+      const t0 = Date.now(); let told = false;
+      while (this.claudeProc && Date.now() - t0 < maxMs) {
+        if (!told) { told = true; this.out('task', `⏳ ${label}: Claude 가 다른 요청(사용자 채팅 등)에 응답 중 — 끝나면 이어서 진행합니다\n`, 'warn'); this.post({ type: 'chat', role: 'meta', text: `⏳ ${label} 대기 — Claude 가 다른 응답 중` }); }
+        await new Promise(r => setTimeout(r, 2000));
+      }
+      if (this.claudeProc) { this.out('task', `✖ ${label}: ${Math.round(maxMs / 60000)}분을 기다려도 Claude 가 비지 않음 — 단계 취소\n`, 'bad'); return null; }
+      this.out('task', `▶ ${label}: Claude 응답 끝남 — 이어서 진행 (${Math.round((Date.now() - t0) / 1000)}s 대기)\n`, 'ok');
+    }
+    return this.askClaude(p, prompt, harness);
+  }
   askClaude(p, prompt, harness) {
     if (this.claudeProc) { vscode.window.showWarningMessage(`워크벤치 #${this.inst}: Claude 가 아직 응답 중입니다 — 중지 후 다시 보내세요.`); return Promise.resolve(null); }
     return new Promise(resolveDone => { let resultError = false;
@@ -443,11 +523,36 @@ class WB {
     try { this.panel.reveal(undefined, true); } catch { }
   }
 
+  // 1.9.14: 새 화면 생성 요청(quick 체인·steps 작업의 newScreen:true) 시 기존 생성분이 있으면 [중지 / 기존 삭제 후 신규 생성] 을 묻는다(사용자 지시 2026-10-22).
+  //   기본값(Esc·창 닫기)은 중지. 삭제를 고르면 페이지 폴더 + Doc/gen/<ID>(이전 REPAIR.md·applied.json·이식된 PKG.sql 이 새 생성에 섞이지 않게)를
+  //   Doc/gen/_backup/<ID>/<시각>/ 에 복사한 뒤 지운다. 커밋본이면 git 에는 삭제로 보이고 같은 경로에 새로 생성된다. 반환 true = 진행
+  async confirmExistingPage(p, id, label) {
+    const ID = String(id || '').toUpperCase(); const pages = findExistingPages(p, ID); if (!pages.length) return true;
+    const walk = d => { try { return fs.readdirSync(d, { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]); } catch { return []; } };
+    let applied = null; try { applied = require(path.join(p.root, 'tools', 'Harness', 'lib', 'applied.js')); } catch { }
+    const lines = pages.map(d => { const gt = applied ? applied.gitTracked(d) : null; return `• ${path.relative(p.root, d)} — 파일 ${walk(d).length}개${gt ? ` · git 추적 ${gt.files.length}개(커밋본)` : ''}`; });
+    const STOP = '⏹ 중지', REPLACE = '🗑 기존 삭제 후 신규 생성';
+    const pick = await vscode.window.showWarningMessage(`${ID} 는 이미 생성된 화면이 있습니다 — 어떻게 할까요?`, { modal: true, detail: `${label}\n\n${lines.join('\n')}\n\n· 중지: 아무것도 바꾸지 않고 멈춥니다(기존 화면 보완은 🛠️ 기존 화면 보완 / 🚒 자동 보완).\n· 삭제 후 신규 생성: 위 폴더와 Doc/gen/${ID} 를 Doc/gen/_backup/${ID}/ 에 백업한 뒤 지우고 처음부터 생성합니다.` }, STOP, REPLACE);
+    if (pick !== REPLACE) { this.out('task', `⏹ 중지 — ${ID} 기존 생성분 있음(${pages.map(d => path.relative(p.root, d)).join(', ')}) · ${label}\n`, 'warn'); this.api.record('existing:stop', `${ID} ${label}`); return false; }
+    const stamp = (history.nowLocal ? history.nowLocal() : new Date().toISOString()).slice(0, 19).replace(/[:T]/g, '-');
+    const bak = path.join(p.genDir, '_backup', ID, stamp); const gdir = path.join(p.genDir, ID);
+    try {
+      for (const d of pages) fs.cpSync(d, path.join(bak, 'page', path.relative(p.tobeDir, d)), { recursive: true });
+      if (fs.existsSync(gdir)) fs.cpSync(gdir, path.join(bak, 'gen'), { recursive: true });
+      for (const d of pages) fs.rmSync(d, { recursive: true, force: true });
+      if (fs.existsSync(gdir)) fs.rmSync(gdir, { recursive: true, force: true });
+    } catch (e) { this.out('task', `✖ 기존 생성분 삭제 실패 — ${e.message} (백업: ${bak}) → 중지\n`, 'bad'); return false; }
+    this.out('task', `🗑 ${ID} 기존 생성분 삭제 → 신규 생성 진행\n   삭제: ${pages.map(d => path.relative(p.root, d)).join(', ')}${fs.existsSync(path.join(bak, 'gen')) ? `, ${path.relative(p.root, gdir)}` : ''}\n   백업: ${path.relative(p.root, bak)}\n`, 'warn');
+    this.api.record('existing:replace', `${ID} → ${path.relative(p.root, bak)}`);
+    return true;
+  }
+
   // 1.8.8: 체인 실행 — quick 항목 kind 'chain': steps[] 를 순서대로(작업 task / Claude 프롬프트 claude·claudeOf). 실패하면 거기서 멈추고(optional 단계는 계속),
   //   어디까지 됐는지 Task Log + Doc/gen/<ID>/FULLRUN.md 에 남긴다. 단계 내부 확인창(task.confirm)은 체인 시작 확인으로 갈음한다.
   async runChain(p, item, id, harness) {
     const steps = item.steps || []; if (!id) { this.out('task', `⛔ 체인 '${item.label}' 은 화면 ID 가 필요합니다\n`, 'bad'); return; }
     if (!steps.length) { this.out('task', `⛔ 체인 '${item.label}' 에 steps 가 없습니다 (quick.json)\n`, 'bad'); return; }
+    if (item.newScreen && !(await this.confirmExistingPage(p, id, `🚀 ${item.label}`))) return; // 1.9.14: 첫 단계 전에 판정(파싱·Agent 를 돌린 뒤 멈추지 않게)
     const all = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items);
     const t0 = Date.now(); const res = []; let stopped = false;
     const genDir = path.join(p.genDir, id); try { fs.mkdirSync(genDir, { recursive: true }); } catch { }
@@ -456,20 +561,34 @@ class WB {
     const writeMd = (final) => {
       const stamp = history.nowLocal ? history.nowLocal().slice(0, 16).replace('T', ' ') : new Date().toISOString();
       const fail = res.find(r => r.status === 'FAIL' || r.status === 'CANCEL'); const warn = res.some(r => r.status === 'WARN');
-      const head = !final ? '⏳ 진행 중' : fail ? `✖ ${fail.no}단계에서 중단 (${fail.name})` : warn ? '⚠ 경고 포함 완료' : '✅ 전부 완료';
-      const rows = steps.map((st, i) => { const r = res[i]; return `| ${i + 1} | ${nameOf(st)}${st.optional ? ' (선택)' : ''}${r && r.repairs ? ` (수선 ${r.repairs}회)` : ''} | ${r ? r.status : 'NOT_RUN'} | ${r && r.code != null ? r.code : '-'} | ${r ? r.sec + 's' : '-'} |`; });
+      const holdM = res.filter(r => r.status === 'HOLD').length; // 2026-10-26: 사람 확인 단계가 있으면 '전부 완료' 가 아니다
+      const head = !final ? '⏳ 진행 중' : fail ? `✖ ${fail.no}단계에서 중단 (${fail.name})` : holdM ? `⏸ 사람 확인 필요 ${holdM}단계(Doc/e2e/_human_review.md)` : warn ? '⚠ 경고 포함 완료' : '✅ 전부 완료';
+      const rows = steps.map((st, i) => { const r = res[i]; return `| ${i + 1} | ${nameOf(st)}${st.optional ? ' (선택)' : ''}${r && r.repairs ? ` (수선 ${r.repairs}회)` : ''}${r && r.note ? ` — ${r.note}` : ''} | ${r ? r.status : 'NOT_RUN'} | ${r && r.code != null ? r.code : '-'} | ${r ? r.sec + 's' : '-'} |`; });
       const next = fail ? `다음 할 일: ${fail.no}단계 '${fail.name}' 의 원인을 Task Log 에서 확인하고 그 단계 메뉴를 다시 실행 → 이후 단계는 이 체인을 다시 누르면 처음부터(완료 단계는 각 도구가 보존/건너뜀) 진행됩니다.` : (final ? '다음 할 일: UI Status 의 단계·E2E 타일과 Doc/gen/' + id + '/PIPELINE.md · Doc/e2e/results/_summary.md 확인' : '');
       const md = [`# FULLRUN ${id} — ${stamp} ${head}`, '', `체인: ${item.label} · 총 ${Math.round((Date.now() - t0) / 1000)}s`, '', '| # | 단계 | 결과 | exit | 소요 |', '|---|---|---|---|---|', ...rows, '', next, ''].join('\n');
       try { fs.writeFileSync(mdPath, md, 'utf8'); } catch { }
     };
     // 1.8.9: Flow 보드 — Claude 탭에 체인 전체(Step 수·현재 Step·진행바)와 Step 별 상태 카드. 작업 출력은 Task Log 에 그대로 남고 카드에는 최근 줄만
-    const fid = ++flowSeq; try { this.panel.reveal(undefined, true); this.post({ type: 'showTab', tab: 'chat' }); } catch { }
+    const fid = ++flowSeq; try { this.panel.reveal(undefined, true); this.post({ type: 'showTab', tab: 'chat', auto: true }); } catch { }
     this.post({ type: 'fb', state: 'start', id: fid, title: item.label, screen: id, steps: steps.map((st, i) => ({ no: i + 1, name: nameOf(st), kind: st.task ? 'task' : 'claude', optional: !!st.optional })), md: `Doc/gen/${id}/FULLRUN.md` });
     this.out('task', `\n🚀 체인 시작 — ${item.label} · ${id} · ${steps.length}단계\n`, 'cmd');
     this.api.record(`chain:${item.chainId || item.label}`, id);
     for (let i = 0; i < steps.length; i++) {
       const st = steps[i]; const name = nameOf(st); const no = i + 1;
       if (stopped) { res.push({ no, name, status: 'NOT_RUN', code: null, sec: 0 }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'NOT_RUN' }); continue; }
+      if (st.ifMissing) { // 2026-10-22: 자료가 이미 있으면 이 단계는 건너뛴다(문서 생성 체인의 선행 분석 등)
+        const why = missingInput(p, st.ifMissing, id);
+        if (!why) { res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: '자료 있음' }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' }); this.out('task', `\n⏭ [${no}/${steps.length}] ${name} — 자료 있음, 건너뜀\n`, ''); writeMd(false); continue; }
+        this.out('task', `\nℹ [${no}/${steps.length}] ${name} — 자료 부족(${why}) → 실행\n`, 'warn');
+      }
+      { // 2026-10-22: CRUD(S7.crud) 가 OK 가 아니면(실패·경고) 권한별 CRUD(S7.authcrud) 는 SKIP 하고 다음 단계로
+        const mk = /^S7\.(\w+)$/.exec(st.task || ''); const dep = mk && E2E_DEPENDS[mk[1]];
+        const di = dep ? steps.findIndex((x, k) => k < i && x.task === `S7.${dep}`) : -1;
+        if (di >= 0 && res[di] && res[di].status !== 'OK') {
+          res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: `${dep} ${res[di].status} → 실행 안 함` }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' });
+          this.out('task', `\n⏭ [${no}/${steps.length}] ${name} — SKIP (${dep} ${res[di].status})\n`, 'warn'); writeMd(false); continue;
+        }
+      }
       this.out('task', `\n── [${no}/${steps.length}] ${name}\n`, 'cmd'); const s0 = Date.now(); let code = null, cancelled = false;
       this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
       const kind = st.task ? String(st.task).split('.').pop() : '';
@@ -483,7 +602,7 @@ class WB {
             const q = st.claudeOf ? all.find(x => x.label === st.claudeOf || x.label_en === st.claudeOf) : null;
             const prompt = st.claude || (q && q.prompt);
             if (!prompt) { this.out('task', `프롬프트 없음: ${st.claudeOf || '(claude)'}\n`, 'bad'); c = 2; }
-            else { const r = await this.askClaude(p, substQ(prompt, { root: p.root, id, kind, step: name }), harness !== false); c = r ? (r.ok ? 0 : (r.code || 1)) : null; if (!r) cancelled = true; }
+            else { const r = await this.askClaudeWhenIdle(p, substQ(prompt, { root: p.root, id, kind, step: name }), harness !== false, 60 * 60 * 1000, `[${no}/${steps.length}] ${name}`); c = r ? (r.ok ? 0 : (r.code || 1)) : null; if (!r) { cancelled = true; this.out('task', `⛔ [${no}/${steps.length}] ${name} 취소 — Claude 를 쓸 수 없음(다른 응답이 끝나지 않음)\n`, 'bad'); } }
           }
         } catch (e) { c = -1; this.out('task', `예외: ${e.message}\n`, 'bad'); }
         // 1.9.5: 단계 결과 검증(verify) — 종료코드 0 이어도 산출물이 없으면 실패로 본다(E2E 가 시작도 못 했는데 '완료' 로 닫힌 SCP0100 사고)
@@ -493,7 +612,10 @@ class WB {
       code = await runOnce();
       // 1.9.7: 단계 수선(repair) — 실패(종료코드≠0 또는 verify 실패)하면 st.repair.claudeOf 프롬프트(🩹 E2E 오류 보완 등)로 Claude 가 원인을 찾아 고친 뒤 같은 단계를 다시 실행.
       //   rounds(기본 1)만큼 반복, 그래도 실패면 FAIL(선택 단계면 WARN). 사용자 지시 2026-10-21: "생성 후 GAP·TEST 시 오류에 대한 보완까지".
-      let repairs = 0;
+      let repairs = 0; let expectOnly = null; let lastV = null; // 1.9.12: 수선 판정이 전부 (c) 기대값/측정 결함이면 { c } — 재실행 생략, 단계 WARN 으로 계속(사용자 지시 "E2E 오류로 멈추지 말 것")
+      // 2026-10-26: 독립 판정(lastJ) · 사람 확인 사유(hold) · 테스트 약화(weakened) — 근거 미확인 (c)·약화 의심은 WARN 이 아니라 HOLD(사람 확인, 체인은 계속)
+      let lastJ = null; const hold = []; let weakened = false;
+      const readVerdict = () => readRepairVerdict(p, id);
       if (code !== 0 && !cancelled && st.repair && st.repair.claudeOf) {
         const rounds = Math.max(1, Number(st.repair.rounds || 1));
         const rq = all.find(x => x.label === st.repair.claudeOf || x.label_en === st.repair.claudeOf);
@@ -503,17 +625,43 @@ class WB {
           this.out('task', `\n🩹 [${no}/${steps.length}] ${name} 실패(exit ${code}) → 수선 ${r}/${rounds}: ${rq.label}\n`, 'warn');
           this.post({ type: 'fb', state: 'step', id: fid, no, status: 'REPAIR', round: r, rounds });
           this.post({ type: 'chat', role: 'meta', text: `🩹 ${name} 실패 → 수선 ${r}/${rounds} (${rq.label})` });
-          const rr = await this.askClaude(p, substQ(rq.prompt, { root: p.root, id, kind, step: name, round: r }), harness !== false);
-          if (!rr) { cancelled = true; break; }
+          const rr = await this.askClaudeWhenIdle(p, substQ(rq.prompt, { root: p.root, id, kind, step: name, round: r }), harness !== false, 60 * 60 * 1000, `수선 ${r}/${rounds}`);
+          if (!rr) { cancelled = true; this.out('task', `⛔ 수선 ${r}/${rounds} 취소 — Claude 를 쓸 수 없음(다른 응답이 끝나지 않음) → 단계 CANCEL\n`, 'bad'); break; }
           if (!rr.ok) { this.out('task', `✖ 수선 ${r}/${rounds} Claude 오류(exit ${rr.code}) — 재실행은 그래도 시도\n`, 'bad'); }
+          const v = readVerdict(); lastV = v;
+          // 2026-10-26: 수선 세션이 기대값 결함(c)을 주장했거나 판정요약이 없으면 → 독립 판정(새 세션·읽기 전용·근거 기계 확인)
+          let xids = [];
+          if (rq.expectPrompt && (!v || v.c > 0)) {
+            const jd = await this.judgeRepair(p, id, kind, v && v.round ? v.round : null); lastJ = jd;
+            if (jd.state === 'error') hold.push(`독립 판정 불가(${jd.why || '-'})`);
+            else {
+              xids = (jd.decision && jd.decision.expectFix) || [];
+              const hn = ((jd.decision && jd.decision.human) || []).length;
+              if (hn) hold.push(`근거 미확인 기대값 결함·판정 불가 ${hn}건(Doc/e2e/_human_review.md)`);
+            }
+          }
+          if (xids.length) { // 시험 기준(E2E 생성기·스펙) 보정 — 근거가 확인된 기대값 결함 항목만 · 전후 테스트 약화 검사
+            this.out('task', `🔧 [${no}/${steps.length}] ${name} — 시험 기준 보정(근거 확인 항목 ${xids.join(',')})\n`, 'warn');
+            await this.weakenCheck(p, id, '--snapshot');
+            const xr = await this.askClaudeWhenIdle(p, substQ(rq.expectPrompt, { root: p.root, id, kind, step: name, round: r, xids: xids.join(',') }), harness !== false, 60 * 60 * 1000, `시험 기준 보정 ${r}`);
+            if (!xr) { cancelled = true; this.out('task', `⛔ 시험 기준 보정 취소 — Claude 를 쓸 수 없음 → 단계 CANCEL\n`, 'bad'); break; }
+            if (!xr.ok) this.out('task', `✖ 시험 기준 보정 Claude 오류(exit ${xr.code}) — 재실행은 그래도 시도\n`, 'bad');
+            const w = await this.weakenCheck(p, id, '--compare');
+            if (w.state !== 'completed') { weakened = true; hold.push(w.state === 'error' ? `테스트 약화 검사 불가(${w.why || '-'})` : `테스트 약화 의심 ${(w.summary && w.summary.weakened) || '?'}건(Doc/gen/${id}/E2E_EXPECTFIX.result.json)`); }
+          }
           this.out('task', `↻ [${no}/${steps.length}] ${name} 재실행 (수선 ${r} 뒤)\n`, 'cmd');
           this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
           code = await runOnce();
         }
       }
+      // 2026-10-26: 기대값 결함만 남아 WARN 으로 넘기는 것은 독립 판정이 근거를 확인했을 때만(화면·DB 결함 0 · 사람 확인 0 · 약화 0)
+      if (code !== 0 && !cancelled && lastV && lastV.a === 0 && lastV.b === 0 && lastV.c > 0 && lastJ && lastJ.state === 'completed' && lastJ.summary && !lastJ.summary.screen && !lastJ.summary.db && !hold.length) expectOnly = lastV;
       const sec = Math.round((Date.now() - s0) / 1000); const ok = code === 0;
-      const status = cancelled ? 'CANCEL' : ok ? 'OK' : (st.optional ? 'WARN' : 'FAIL');
-      res.push({ no, name: repairs ? `${name} (수선 ${repairs}회)` : name, status, code, sec, repairs });
+      // HOLD = 사람 확인 필요(근거 미확인 기대값 결함·판정 불가·테스트 약화 의심). 체인은 멈추지 않지만(사용자 지시 "E2E 오류로 멈추지 말 것") 완료로 세지 않는다.
+      //   재시험이 통과해도 약화 의심이면 통과를 믿을 수 없으므로 HOLD.
+      const status = cancelled ? 'CANCEL' : ok ? (weakened ? 'HOLD' : 'OK') : hold.length ? 'HOLD' : (st.optional || expectOnly ? 'WARN' : 'FAIL');
+      const note = status === 'CANCEL' ? '취소 사유: Claude 사용 불가(다른 응답 미종료) 또는 입력 취소' : status === 'HOLD' ? `사람 확인 필요 — ${hold.join(' · ')}` : expectOnly ? `기대값/측정 결함 ${expectOnly.c}건(독립 판정 근거 확인 · 보정 큐 Doc/e2e/_expectation_issues.md)` : '';
+      res.push({ no, name: `${repairs ? `${name} (수선 ${repairs}회)` : name}${note ? ' — ' + note : ''}`, status, code, sec, repairs, note });
       this.post({ type: 'fb', state: 'step', id: fid, no, status, code, sec, repairs });
       this.out('task', `${ok ? '✅' : status === 'WARN' ? '⚠' : '✖'} [${no}/${steps.length}] ${name} — ${status}${code != null ? ` (exit ${code})` : ''}${repairs ? ` · 수선 ${repairs}회` : ''} · ${sec}s\n`, ok ? 'ok' : status === 'WARN' ? 'warn' : 'bad');
       if (status === 'FAIL' || status === 'CANCEL') stopped = true;
@@ -522,10 +670,11 @@ class WB {
     writeMd(true);
     const fail = res.find(r => r.status === 'FAIL' || r.status === 'CANCEL'); const okN = res.filter(r => r.status === 'OK').length; const total = Math.round((Date.now() - t0) / 1000);
     const repN = res.reduce((n, r) => n + (r.repairs || 0), 0);
-    const summary = fail ? `✖ 체인 중단 — ${fail.no}/${steps.length} '${fail.name}' ${fail.status} · 완료 ${okN}단계${repN ? ` · 수선 ${repN}회` : ''} · ${total}s` : `✅ 체인 완료 — ${steps.length}단계 중 OK ${okN}${repN ? ` · 수선 ${repN}회` : ''}${res.some(r => r.status === 'WARN') ? ` · 경고 ${res.filter(r => r.status === 'WARN').length}` : ''} · ${total}s`;
+    const holdN = res.filter(r => r.status === 'HOLD').length; // 2026-10-26: 사람 확인 단계가 있으면 '✅ 완료' 로 보고하지 않는다
+    const summary = fail ? `✖ 체인 중단 — ${fail.no}/${steps.length} '${fail.name}' ${fail.status} · 완료 ${okN}단계${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}` : ''} · ${total}s` : `${holdN ? '⏸ 체인 종료(사람 확인 필요)' : '✅ 체인 완료'} — ${steps.length}단계 중 OK ${okN}${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}(Doc/e2e/_human_review.md)` : ''}${res.some(r => r.status === 'WARN') ? ` · 경고 ${res.filter(r => r.status === 'WARN').length}` : ''} · ${total}s`;
     this.out('task', `\n${summary}\n   → ${path.relative(p.root, mdPath)}\n`, fail ? 'bad' : 'ok');
-    this.post({ type: 'fb', state: 'end', id: fid, ok: !fail, warn: res.some(r => r.status === 'WARN'), summary, sec: total });
-    try { (fail ? vscode.window.showWarningMessage : vscode.window.showInformationMessage)(`Vibe_Manager ${summary}`); } catch { }
+    this.post({ type: 'fb', state: 'end', id: fid, ok: !fail && !holdN, warn: res.some(r => r.status === 'WARN' || r.status === 'HOLD'), summary, sec: total });
+    try { (fail || holdN ? vscode.window.showWarningMessage : vscode.window.showInformationMessage)(`Vibe_Manager ${summary}`); } catch { }
     this.post({ type: 'status', html: statusHtml(p, id) }); this.post({ type: 'flow', html: flow.innerHtml(p, '') });
     return res;
   }
@@ -538,15 +687,18 @@ class WB {
       const vars0 = await api.collectInputs(task, { id, ids: id }); if (!vars0) return;
       const pf = path.join(p.promptsDir, task.prompt); if (!fs.existsSync(pf)) { this.out('task', `프롬프트 파일 없음: ${pf}\n`, 'bad'); return; }
       const rel = path.relative(p.root, pf).split(path.sep).join('/'); const sid = vars0.inputs.id || vars0.inputs.ids || id;
-      this.askClaude(p, `${rel} 를 읽고 그 지시대로 화면 ${sid} 작업을 해주세요.${fs.existsSync(path.join(p.genDir, sid, 'GEN_NOTES.md')) ? ` 메모: Doc/gen/${sid}/GEN_NOTES.md.` : ''} 룰은 tools/VibeManager/rules/10_RULES_KEEP.md 를 따르고, TODO(이식) 지점만 채우고 끝나면 __asis-mapping__.md 상태를 갱신하세요.`, true);
+      const vrf = valRefOf(p, sid);
+      this.askClaude(p, `${rel} 를 읽고 그 지시대로 화면 ${sid} 작업을 해주세요.${fs.existsSync(path.join(p.genDir, sid, 'GEN_NOTES.md')) ? ` 메모: Doc/gen/${sid}/GEN_NOTES.md.` : ''}${vrf ? ` VALIDATION 취합(검증 대조 원천): ${vrf}.` : ''} 룰은 tools/VibeManager/rules/10_RULES_KEEP.md 를 따르고, TODO(이식) 지점만 채우고 끝나면 __asis-mapping__.md 상태를 갱신하세요.`, true);
       api.record(task.id, `${rel} ${sid}`); return;
     }
     if (!/^(node|python|powershell|cmd)$/.test(task.kind)) { await api.runTaskById(taskId, { id, ids: id, dir: id ? api.pageDirOf(id) : '' }); return 0; }
     // 1.9.1: 체인 안에서는 선택 입력(mode 등)을 묻지 않고 'auto'(users.json 화면 지정 → 메타 추정)
-    const vars = await api.collectInputs(task, Object.assign({ id, ids: id, dir: id ? api.pageDirOf(id) : '' }, opts.inFlow ? { mode: 'auto' } : {})); if (!vars) return null;
+    const vars = await api.collectInputs(task, Object.assign({ id, ids: id, dir: id ? api.pageDirOf(id) : '' }, opts.inFlow ? { mode: 'auto' } : {}, opts.preset || {})); if (!vars) return null; // 1.9.10: opts.preset(수선 뒤 재실행 mode=auto 등)
     // 1.9.4: 체인 단계가 인자를 직접 지정하면(st.args — 예: pipeline --phase N) 그 인자로 실행
     const extra = Array.isArray(opts.args) && opts.args.length ? opts.args.flatMap(a => { const v = api.subst(a, vars); return /\$\{input:/.test(a) && task.splitArgs ? v.split(/\s+/).filter(Boolean) : (v === '' ? [] : [v]); }) : null;
-    if (opts.inFlow) return await this.execShell(p, task, vars, extra, id);
+    if (opts.inFlow) return await this.execShell(p, task, vars, extra, id, { inFlow: true });
+    // 1.9.17: E2E 전체 4단계(steps.json splitKinds) — run-e2e all 1회 대신 kind 별 순차 실행 = Flow 보드 4단계(사용자 지시 2026-10-22: 4단계 중 어디인지·무슨 작업인지 안 보임)
+    if (Array.isArray(task.splitKinds) && task.splitKinds.length) return await this.runSplitKinds(p, task, vars, id);
     // 1.8.9: 단일 작업도 1단계 Flow 보드로(체인 밖에서 메뉴/스테퍼로 실행한 경우) — 진행·결과가 텍스트 로그가 아니라 보드에 보이게
     const fid = ++flowSeq; const title = task.title || taskId; const s0 = Date.now();
     this.post({ type: 'fb', state: 'start', id: fid, title, screen: id || '', steps: [{ no: 1, name: title, kind: 'task', optional: false }], md: '' });
@@ -558,13 +710,160 @@ class WB {
     return code;
   }
 
+  // 2026-10-22: FLOW ★ 끝까지 — 종전엔 S5.pipeline(새 화면 생성 7단계)이라 이미 만든 화면에서 '기존 생성분 삭제/중지' 확인창이 떴다.
+  //   이제 페이지가 있으면 🚒 자동 보완 → 테스트·문서까지(chainId autofix-full), 없으면 🚀 ID 하나로 전체(chainId full).
+  async flowEnd(p, id) {
+    const ID = String(id || '').toUpperCase(); if (!ID) return;
+    const exists = findExistingPages(p, ID).length > 0; const cid = exists ? 'autofix-full' : 'full';
+    const item = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items).find(x => x.kind === 'chain' && x.chainId === cid);
+    if (!item) { this.out('task', `⛔ ★ 끝까지 — 체인 없음(quick.json chainId ${cid})\n`, 'bad'); return; }
+    this.out('task', `★ 끝까지 — ${ID} ${exists ? '기존 화면' : '새 화면'} → ${item.label}\n`, 'cmd');
+    vscode.window.showInformationMessage(`Vibe_Manager ★ ${ID} — ${item.label} 시작 (Claude 탭 Flow 보드에서 진행 확인)`);
+    await this.runChain(p, item, ID, effectiveHarness(undefined, null, item, ID));
+  }
+
+  // 2026-10-22: 🩹 E2E 오류 보완(메뉴) — 사용자는 실패 상세를 몰라도 되게 한 번에 처리한다(사용자 지시).
+  //   종류 = 최근 결과에서 실패한 첫 단계(smoke→crud→auth→authcrud) 자동 선택 · 보드 3단계:
+  //   ① 화면·DB 점검·보완(item.prompt) ② 시험 기준 보정(item.expectPrompt — 판정에 E2E 기대값 결함이 있을 때만, 없으면 SKIP) ③ 재시험(item.afterTask)
+  //   재시험이 통과하면 그 단계에 기대던 단계(E2E_DEPENDS — crud 뒤 authcrud)도 이어서 재시험. 결과는 통과/아직 실패만 알리고 상세는 E2E_REPAIR.md.
+  async repairE2E(p, item, id, harness) {
+    const kinds = ['smoke', 'crud', 'auth', 'authcrud'];
+    let rows = []; try { rows = fs.readFileSync(path.join(p.e2eOutDir, 'results', '_summary.csv'), 'utf8').split(/\r?\n/).filter(l => l.startsWith(`"${id}",`)); } catch { }
+    const failed = kinds.filter(k => rows.some(l => l.startsWith(`"${id}","${k}"`) && l.includes('"FAIL"')));
+    if (!failed.length) { this.out('task', `ℹ ${id}: 최근 E2E 결과에 실패가 없습니다 — 보완할 것이 없습니다\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager ${id}: 실패한 E2E 가 없습니다`); return; }
+    const kind = failed[0]; const label = { smoke: '스모크', crud: 'CRUD', auth: '권한', authcrud: '권한별 CRUD' };
+    let round = 1; try { round = (fs.readFileSync(path.join(p.genDir, id, 'E2E_REPAIR.md'), 'utf8').match(/^## 수선 /gm) || []).length + 1; } catch { }
+    const vars = { root: p.root, id, kind, round, step: '수동 실행' };
+    const fid = ++flowSeq; const t0 = Date.now();
+    const names = [`화면·DB 점검·보완 (${label[kind]})`, '독립 판정 · 시험 기준 보정(근거 확인 항목만)', `재시험 (${label[kind]})`];
+    try { this.panel.reveal(undefined, true); } catch { }
+    this.post({ type: 'fb', state: 'start', id: fid, title: `🩹 E2E 오류 보완 — ${id}`, screen: id, steps: names.map((name, i) => ({ no: i + 1, name, kind: i === 2 ? 'task' : 'claude', optional: i === 1 })), md: `Doc/gen/${id}/E2E_REPAIR.md` });
+    const step = (no, status) => this.post({ type: 'fb', state: 'step', id: fid, no, status });
+    const end = (ok, summary) => { this.post({ type: 'fb', state: 'end', id: fid, ok, warn: !ok, summary, sec: Math.round((Date.now() - t0) / 1000) }); this.out('task', `\n${summary}\n`, ok ? 'ok' : 'warn'); (ok ? vscode.window.showInformationMessage : vscode.window.showWarningMessage)(`Vibe_Manager ${summary}`); };
+    // ① 화면·DB
+    step(1, 'RUN');
+    const r1 = await this.askClaudeWhenIdle(p, substQ(item.prompt, vars), harness !== false, 60 * 60 * 1000, names[0]);
+    if (!r1) { step(1, 'CANCEL'); [2, 3].forEach(n => step(n, 'NOT_RUN')); return end(false, `⛔ ${id} E2E 오류 보완 취소 — Claude 를 쓸 수 없습니다(다른 응답 진행 중)`); }
+    step(1, r1.ok ? 'OK' : 'FAIL');
+    const v = readRepairVerdict(p, id); const thisRound = v && (v.round == null || v.round === round) ? v : null;
+    // ② 2026-10-26: 수선 세션이 기대값 결함(c)을 주장했거나 판정 기록이 없으면 독립 판정(새 세션·읽기 전용·근거 기계 확인) →
+    //    근거가 확인된 기대값 결함만 시험 기준 보정(전후 테스트 약화 검사). 근거 미확인·판정 불가는 사람 확인 큐.
+    const hold = []; let weakened = false;
+    if (item.expectPrompt && (!thisRound || thisRound.c > 0)) {
+      step(2, 'RUN');
+      const jd = await this.judgeRepair(p, id, kind, round); let xids = [];
+      if (jd.state === 'error') hold.push(`독립 판정 불가(${jd.why || '-'})`);
+      else {
+        xids = (jd.decision && jd.decision.expectFix) || [];
+        const hn = ((jd.decision && jd.decision.human) || []).length;
+        if (hn) hold.push(`근거 미확인 기대값 결함·판정 불가 ${hn}건(Doc/e2e/_human_review.md)`);
+      }
+      if (xids.length) {
+        await this.weakenCheck(p, id, '--snapshot');
+        const r2 = await this.askClaudeWhenIdle(p, substQ(item.expectPrompt, Object.assign({}, vars, { xids: xids.join(',') })), harness !== false, 60 * 60 * 1000, names[1]);
+        const w = await this.weakenCheck(p, id, '--compare');
+        if (w.state !== 'completed') { weakened = true; hold.push(w.state === 'error' ? `테스트 약화 검사 불가(${w.why || '-'})` : `테스트 약화 의심 ${(w.summary && w.summary.weakened) || '?'}건(Doc/gen/${id}/E2E_EXPECTFIX.result.json)`); }
+        step(2, !r2 ? 'CANCEL' : weakened ? 'HOLD' : r2.ok ? 'OK' : 'FAIL');
+      } else step(2, hold.length ? 'HOLD' : 'SKIP');
+    } else step(2, 'SKIP');
+    // ③ 재시험(+ 의존 단계)
+    step(3, 'RUN');
+    const tid = substQ(item.afterTask || 'S7.${kind}', vars);
+    let code = await this.runTaskStreaming(p, tid, id, { noConfirm: true, inFlow: true, preset: { mode: 'auto' } });
+    const dependents = code === 0 ? Object.keys(E2E_DEPENDS).filter(k => E2E_DEPENDS[k] === kind) : [];
+    for (const k of dependents) { this.out('task', `\n↻ ${label[k] || k} 도 이어서 재시험 (${label[kind]} 통과)\n`, 'cmd'); const c2 = await this.runTaskStreaming(p, `S7.${k}`, id, { noConfirm: true, inFlow: true, preset: { mode: 'auto' } }); if (c2 !== 0) code = c2; }
+    step(3, code === 0 ? (weakened ? 'HOLD' : 'OK') : hold.length ? 'HOLD' : 'FAIL');
+    const rest = failed.slice(1).filter(k => !dependents.includes(k));
+    if (code === 0 && weakened) end(false, `⏸ ${id} ${label[kind]} 재시험은 통과했지만 시험 기준 보정에서 테스트 약화가 의심됩니다 — 사람 확인 후에만 통과로 인정(${hold.join(' · ')})`);
+    else if (code !== 0 && hold.length) end(false, `⏸ ${id} ${label[kind]} 아직 실패 — 사람 확인 필요: ${hold.join(' · ')}`);
+    else if (code === 0) end(true, `✅ ${id} E2E 오류 보완 완료 — ${label[kind]}${dependents.length ? '·' + dependents.map(k => label[k]).join('·') : ''} 재시험 통과${rest.length ? ` · 남은 실패: ${rest.map(k => label[k]).join('·')} → 🩹 한 번 더` : ''}`);
+    else end(false, `⚠ ${id} E2E 오류 보완 후에도 ${label[kind]} 실패 — 🩹 를 한 번 더 실행하세요(반복되면 담당자 확인: Doc/gen/${id}/E2E_REPAIR.md)`);
+    this.api.record('e2e-repair', `${id} ${kind} round ${round} → ${code === 0 && !weakened ? 'PASS' : hold.length ? 'HOLD' : 'FAIL'}`);
+  }
+
+  // 2026-10-26 (Atlas Studio 규약 이식 — 검토자 분리·근거 등급): 🩹 독립 판정.
+  //   tools/Harness/e2e-judge.js = 새 Claude 세션(이전 대화 이어받지 않음)·읽기 전용 도구로 실패 원인을 다시 분류하고,
+  //   판정 근거(경로:줄 + 원문 인용)를 evidence_check.py 가 기계로 확인 → Doc/gen/<ID>/E2E_REPAIR.result.json
+  async judgeRepair(p, id, kind, round) {
+    const js = path.join(p.root, 'tools', 'Harness', 'e2e-judge.js');
+    const env = Object.assign({ CLAUDE_BIN: p.claude || '' }, p.claudeModel ? { CLAUDE_MODEL: p.claudeModel } : {});
+    await this.spawnStream(p, qArg(p.node || 'node'), [qArg(js), id, kind, ...(round ? ['--round', String(round)] : [])], { env }, 'task', `독립 판정 ${id} ${kind}`);
+    const e = readEnvelope(p, path.join(p.genDir, id, 'E2E_REPAIR.result.json'));
+    if (e.state !== 'error' && round && e.round && Number(e.round) !== Number(round)) return { state: 'error', why: `판정 회차 불일치(봉투 ${e.round} ≠ 수선 ${round})`, issues: [] };
+    return e;
+  }
+  // 테스트 약화 검사(보정 전 --snapshot / 보정 후 --compare → Doc/gen/<ID>/E2E_EXPECTFIX.result.json)
+  async weakenCheck(p, id, mode) {
+    const py = path.join(p.root, 'tools', 'Harness', 'verify', 'weaken_check.py');
+    await this.spawnStream(p, qArg(p.python || 'python'), [qArg(py), id, mode], {}, 'task', `테스트 약화 검사 ${mode}`);
+    return mode === '--compare' ? readEnvelope(p, path.join(p.genDir, id, 'E2E_EXPECTFIX.result.json')) : null;
+  }
+
+  // 1.9.17: splitKinds 작업 = kind 마다 1단계(args[0] 을 kind 로 바꿔 실행). 테스트 실패(exit 1 등)는 다음 단계를 계속 돌리고,
+  //   실행 환경 실패(2 node_modules 없음 · 4 다른 E2E 실행 중 · 5 BE/FE 미기동)는 나머지를 미실행으로 남긴다(같은 원인으로 전부 실패하므로).
+  async runSplitKinds(p, task, vars, id) {
+    const api = this.api; const kinds = task.splitKinds; const titles = task.splitTitles || {};
+    const fid = ++flowSeq; const t0 = Date.now(); const sid = String(vars.inputs.ids || vars.inputs.id || id || '').trim();
+    const names = kinds.map((k, i) => `E2E ${i + 1}/${kinds.length} ${titles[k] || k}`);
+    this.post({ type: 'fb', state: 'start', id: fid, title: task.title || task.id, screen: sid, steps: names.map((name, i) => ({ no: i + 1, name, kind: 'task', optional: false })), md: 'Doc/e2e/results/_summary.md' });
+    const res = []; let halt = null;
+    for (let i = 0; i < kinds.length; i++) {
+      const no = i + 1;
+      if (halt) { res.push({ no, status: 'NOT_RUN', code: null }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'NOT_RUN' }); continue; }
+      // 2026-10-22 사용자 지시: CRUD 가 실패하면 권한별 CRUD 는 실행하지 않고 SKIP(같은 저장 경로라 결과가 의미 없음)
+      const dep = E2E_DEPENDS[kinds[i]]; const di = dep ? kinds.indexOf(dep) : -1;
+      if (di >= 0 && di < i && res[di] && res[di].status !== 'OK') {
+        res.push({ no, status: 'SKIP', code: null }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' });
+        this.out('task', `\n⏭ [${no}/${kinds.length}] ${names[i]} — SKIP (${titles[dep] || dep} 실패 → 실행하지 않음)\n`, 'warn'); continue;
+      }
+      this.out('task', `\n── [${no}/${kinds.length}] ${names[i]}\n`, 'cmd');
+      this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
+      const tmpl = [kinds[i], ...(task.args || []).slice(1)];
+      const extra = tmpl.flatMap(a => { const v = api.subst(a, vars); return /\$\{input:/.test(a) && task.splitArgs ? v.split(/\s+/).filter(Boolean) : (v === '' ? [] : [v]); });
+      const s0 = Date.now(); let code = null;
+      try { code = await this.execShell(p, task, vars, extra, id, { inFlow: true }); } catch (e) { code = -1; this.out('task', `예외: ${e.message}\n`, 'bad'); }
+      const sec = Math.round((Date.now() - s0) / 1000); const status = code === 0 ? 'OK' : 'FAIL';
+      res.push({ no, status, code });
+      this.post({ type: 'fb', state: 'step', id: fid, no, status, code, sec });
+      if ([2, 4, 5].includes(code)) { halt = code; this.out('task', `⛔ 실행 환경 실패(exit ${code}) — 나머지 E2E 단계는 실행하지 않습니다\n`, 'bad'); }
+    }
+    const okN = res.filter(r => r.status === 'OK').length; const failN = res.filter(r => r.status === 'FAIL').length; const sec = Math.round((Date.now() - t0) / 1000);
+    const skipN = res.filter(r => r.status === 'SKIP').length;
+    const summary = `${failN ? '✖' : '✅'} ${task.title || task.id} — OK ${okN} · 실패 ${failN}${skipN ? ` · SKIP ${skipN}` : ''}${halt ? ` · 미실행 ${kinds.length - okN - failN - skipN} (exit ${halt})` : ''} · ${sec}s`;
+    this.post({ type: 'fb', state: 'end', id: fid, ok: !failN && !halt, warn: false, summary, sec });
+    this.out('task', `\n${summary}\n`, failN || halt ? 'bad' : 'ok');
+    const first = res.find(r => r.status !== 'OK'); return first ? (first.code == null ? halt : first.code) : 0;
+  }
+
+  // 1.9.17: run-e2e.cmd 는 Playwright 출력을 실행별 로그 파일(Doc/e2e/logs/run_<RUNID>_<kind>.log)로만 쓴다 → 화면에는 "output goes to the log file" 뿐이었다.
+  //   stdout 의 'RUNID … - log <path>' 줄로 파일을 알아내 1초 간격으로 새로 붙은 줄을 Task Log·Flow 단계 카드로 흘린다(카드는 ok/x 줄로 테스트별 결과를 집계).
+  logTailer() {
+    const { StringDecoder } = require('string_decoder'); const dec = new StringDecoder('utf8');
+    let file = null, pos = 0, rest = '', timer = null;
+    const emit = ln => { const tx = ln.replace(/\x1b\[[0-9;]*[A-Za-z]/g, ''); if (!tx.trim()) return; this.out('task', `  │ ${tx}\n`, /^\s*(x|✘)\s+\d+\s/.test(tx) ? 'bad' : /^\s*(ok|✓)\s+\d+\s/.test(tx) ? 'ok' : ''); };
+    const pump = () => {
+      if (!file) return;
+      try {
+        const size = fs.statSync(file).size; if (size <= pos) return;
+        const fd = fs.openSync(file, 'r'); const b = Buffer.alloc(size - pos); fs.readSync(fd, b, 0, b.length, pos); fs.closeSync(fd); pos = size;
+        rest += dec.write(b); const lines = rest.split(/\r?\n/); rest = lines.pop(); lines.forEach(emit);
+      } catch { }
+    };
+    return {
+      onLine: ln => { if (file) return; const m = /^RUNID\s+\S+\s+-\s+log\s+(.+?)\s*$/.exec(ln); if (m) { file = m[1]; timer = setInterval(pump, 1000); } },
+      stop: () => { if (timer) clearInterval(timer); pump(); rest += dec.end(); if (rest.trim()) emit(rest); rest = ''; }
+    };
+  }
+
   // 1.7.7: 스크립트 실행 본체 — 워크벤치 '작업 출력' 탭에 스트리밍 + 실제 exit code. 확장의 runShell(VS Code 작업 터미널) 도 여기로 위임.
   //   사유: 워크스페이스 터미널 프로파일(-NoExit · shellIntegration off)에서 VS Code 작업이 종료를 못 잡아 exit undefined(✗ 경고)·'실행 중' 고착 (2026-10-19 GAP/E2E).
-  async execShell(p, task, vars, extraArgs, id) {
+  async execShell(p, task, vars, extraArgs, id, xopts = {}) {
     const api = this.api;
     const script = api.subst(task.script, vars); if (!fs.existsSync(script)) { this.out('task', `스크립트 없음: ${script}\n`, 'bad'); return; }
+    // 1.9.14: 새 화면 생성 작업(steps.json newScreen:true) 단독 실행 — 기존 생성분 확인. 체인 안(inFlow)은 체인 시작 때 이미 물었다
+    if (task.newScreen && !xopts.inFlow) { const sid = (vars.inputs.id || (vars.inputs.ids || '').split(/\s+/)[0] || id || '').toUpperCase(); if (sid && !(await this.confirmExistingPage(p, sid, task.title || task.id))) { api.record(task.id, `(중지 — 기존 생성분) ${sid}`); return 4; } }
     const args = extraArgs || api.buildArgs(task, vars); const cwd = api.subst(task.cwd || path.dirname(script), vars);
-    try { this.panel.reveal(undefined, true); this.post({ type: 'showTab', tab: 'log' }); } catch { }
+    try { this.panel.reveal(undefined, true); this.post({ type: 'showTab', tab: 'log', auto: true }); } catch { }
     // 1.9.6: E2E(run-e2e.cmd · steps.json requireServers) 는 BE/FE 가 떠 있어야 한다 — 미기동이면 먼저 기동(메뉴·스테퍼·체인 모든 경로가 여기를 지난다)
     if ((task.requireServers || /run-e2e\.cmd$/i.test(script)) && process.env.VIBE_SKIP_SERVER_CHECK !== '1') { // VIBE_SKIP_SERVER_CHECK=1 은 모의(spawn 가로채기) 테스트 전용
       const ok = await this.ensureServers(p, Array.isArray(task.requireServers) ? task.requireServers.map(Number) : null);
@@ -580,7 +879,9 @@ class WB {
     else { cmd = 'cmd'; a = ['/c', script, ...args]; }
     // 1.7.5: 하네스(repair-loop 등)가 같은 최신 CLI·이 창의 모델 선택을 쓰도록 CLAUDE_BIN/CLAUDE_MODEL 전달
     const cenv = api.claudeEnv ? api.claudeEnv(p, this.getState().model || p.claudeModel) : {};
-    const code = await this.spawnStream(p, cmd, a, { spawn: { cwd }, env: cenv }, 'task', task.title);
+    const tail = /run-e2e\.cmd$/i.test(script) ? this.logTailer() : null; // 1.9.17: E2E 실행별 로그 실시간 이어 읽기
+    const code = await this.spawnStream(p, cmd, a, { spawn: { cwd }, env: cenv, onLine: tail ? tail.onLine : null }, 'task', task.title);
+    if (tail) tail.stop();
     if (hdir) try { history.finish(Object.assign({}, p, { pageDirOf: api.pageDirOf }), hdir, code); } catch { }
     api.afterTask(task.id, code);
     this.post({ type: 'status', html: statusHtml(p, histId || id || '') });
@@ -619,6 +920,7 @@ body{font:12px var(--vscode-font-family);color:var(--vscode-foreground);margin:0
 .rtabs .rtb{background:transparent;color:var(--vscode-foreground);border:0;border-bottom:2px solid transparent;padding:5px 12px;margin:0;cursor:pointer;border-radius:0;font-size:12px;opacity:.65}
 .rtabs .rtb:hover{opacity:1}
 .rtabs .rtb.on{opacity:1;border-bottom-color:var(--vscode-focusBorder);font-weight:700}
+.rtabs .rtb .nb{display:inline-block;margin-left:5px;padding:0 4px;border-radius:7px;font-size:9px;font-weight:700;line-height:14px;vertical-align:top;background:var(--vscode-activityBarBadge-background,#d33);color:var(--vscode-activityBarBadge-foreground,#fff)}
 #busy{display:none;align-items:center;gap:6px;margin-left:auto;padding-right:4px;font-size:11px;opacity:.9}
 #busy.on{display:inline-flex}
 #busy .label{opacity:.75}
@@ -707,6 +1009,10 @@ details.bfinal summary{cursor:pointer;font-weight:700;font-size:12px}
 .fboard .step .slast{max-width:44%}
 .ftail{margin:0;padding:4px 6px;max-height:220px;overflow:auto;white-space:pre-wrap;font-family:var(--vscode-editor-font-family);font-size:11px;opacity:.85;background:var(--vscode-textCodeBlock-background,rgba(127,127,127,.08));border-radius:3px}
 .ftail:empty{display:none}
+.e2elist{margin:0 0 4px;font-size:11px;max-height:240px;overflow:auto}
+.e2elist .e2ehead{font-weight:700;margin:2px 0 3px}
+.e2elist .e2erow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:1px 0}
+.e2elist .e2erow.fail{color:#f85149}.e2elist .e2erow.flaky{color:#d29922}.e2elist .e2erow.skip{opacity:.6}
 .fboard .sbody .run{margin:4px 0 2px}
 .fboard .sbody .run .board{margin-top:4px}
 /* 1.9.0: Workbench 내부 탭 뷰어 */
@@ -881,7 +1187,11 @@ const save=()=>vscode.postMessage(Object.assign({type:'state'},st()));
 $('mode').addEventListener('change',save);
 function addModelOpt(id,label){const sel=$('model');if(!id||[...sel.options].some(o=>o.value===id))return;const o=document.createElement('option');o.value=id;o.textContent=label||id;sel.insertBefore(o,sel.querySelector('option[value="__custom__"]'));}
 $('model').addEventListener('change',()=>{const v=$('model').value;if(v==='__custom__'){$('model').value=CUR_MODEL;vscode.postMessage({type:'pickModel',cur:CUR_MODEL});return;}CUR_MODEL=v;save();});
+// 1.9.15: 자동 이벤트는 보고 있는 탭을 바꾸지 않고 그 탭 헤더에 'N' 표시(사용자 지시 2026-10-22). 탭을 열면 표시 제거
+function curTab(){const b=document.querySelector('.rtabs .rtb.on');return b?b.dataset.t:'';}
+function markNew(t){if(!t||curTab()===t)return;const b=document.querySelector('.rtabs .rtb[data-t="'+t+'"]');if(!b||b.querySelector('.nb'))return;const n=document.createElement('span');n.className='nb';n.textContent='N';b.appendChild(n);}
 function showTab(t){
+  const nb=document.querySelector('.rtabs .rtb[data-t="'+t+'"] .nb');if(nb)nb.remove();
   if(t.startsWith('t:')){showDynTab(t);if(t==='t:flow')vscode.postMessage(Object.assign({type:'flow:refresh',filter:''},st()));return;}
   document.querySelectorAll('.dtab').forEach(d=>d.style.display='none');
   document.querySelectorAll('.rtabs .rtb').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
@@ -1035,8 +1345,8 @@ function addMeta(text){const d=el('div','m meta',text);if(RUN)RUN.board.querySel
 
 // ── 1.8.9 Flow 보드: 체인/단일 작업 = 전체 Step 수·현재 Step·진행바·경과 + Step 카드(대기/진행/완료/실패/경고). Claude 단계의 상황판(run)은 그 Step 카드 안에 ──
 let FLOW=null;
-const FST={RUN:'running',REPAIR:'running',OK:'done',FAIL:'bad',WARN:'warn',CANCEL:'bad',NOT_RUN:'wait',WAIT:'wait'};
-const FSI={RUN:'⏳',REPAIR:'🩹',OK:'✅',FAIL:'✖',WARN:'⚠',CANCEL:'⛔',NOT_RUN:'○',WAIT:'○'};
+const FST={RUN:'running',REPAIR:'running',OK:'done',FAIL:'bad',WARN:'warn',HOLD:'warn',CANCEL:'bad',NOT_RUN:'wait',SKIP:'wait',WAIT:'wait'};
+const FSI={RUN:'⏳',REPAIR:'🩹',OK:'✅',FAIL:'✖',WARN:'⚠',HOLD:'⏸',CANCEL:'⛔',NOT_RUN:'○',SKIP:'⏭',WAIT:'○'};
 function flowStart(m){
   if(FLOW&&!FLOW.done)flowEnd({ok:false,summary:UI_BD.stopped,sec:0});
   const f={id:m.id,steps:[],cur:0,total:(m.steps||[]).length,t0:Date.now(),done:false,timer:null,title:m.title||'',screen:m.screen||'',md:m.md||''};
@@ -1066,26 +1376,51 @@ function flowStep(m){
   const f=FLOW;if(!f||f.id!==m.id)return;const s=flowStepEl(m.no);if(!s)return;
   s.status=m.status;s.el.className='step '+(FST[m.status]||'wait');
   if(m.status==='RUN'||m.status==='REPAIR'){f.cur=m.no;f.active=s;s.sum.querySelector('.slast').textContent=m.status==='REPAIR'?('🩹 '+(UI_BD.fs&&UI_BD.fs.REPAIR||'repair')+' '+(m.round||1)+'/'+(m.rounds||1)):'';}
-  else{if(f.active===s)f.active=null;s.sum.querySelector('.sdur').textContent=(m.sec!=null?fmtSec(m.sec):'')+(m.code!=null&&m.code!==0?' · exit '+m.code:'');s.sum.querySelector('.slast').textContent=FSI[m.status]+' '+(UI_BD.fs[m.status]||m.status);}
+  else{if(f.active===s)f.active=null;s.sum.querySelector('.sdur').textContent=(m.sec!=null?fmtSec(m.sec):'')+(m.code!=null&&m.code!==0?' · exit '+m.code:'');s.sum.querySelector('.slast').textContent=FSI[m.status]+' '+(UI_BD.fs[m.status]||m.status)+(s.e2e?' · '+e2eSum(s):'');if(s.e2e)e2eRender(s);}
   flowHead();
+}
+// 1.9.17: E2E 단계 카드 — Task Log 로 흘러온 Playwright 결과 줄(ok/x N [chromium] › spec › 제목 (시간))을 테스트별로 집계.
+//   같은 제목이 다시 나오면 재시도(실패 뒤 ok = ⚠ flaky). 'Running N tests' = 그 단계의 전체 건수 → 진행바·카드 머리 'n/N'.
+function e2eOf(s){if(!s.e2e){const d=el('div','e2elist');s.body.insertBefore(d,s.tail);s.e2e={tests:{},order:[],total:0,el:d};}return s.e2e;}
+function e2eLine(s,ln){
+  const L=String(ln).replace(/^\\s*│\\s?/,'');
+  let m=/^\\s*Running (\\d+) tests?/.exec(L);
+  if(m){e2eOf(s).total=+m[1];e2eRender(s);return;}
+  m=/^\\s*(ok|x|✘|✓|-)\\s+\\d+\\s+\\[[^\\]]+\\]\\s+›\\s+(.+?)(?:\\s+\\(retry #(\\d+)\\))?(?:\\s+\\((\\d[\\d.]*(?:ms|s|m|h))\\))?\\s*$/.exec(L); // 소요시간 = 37.3s · 2.7m · 850ms
+  if(!m)return;
+  const e=e2eOf(s);const key=m[2];const st=(m[1]==='ok'||m[1]==='✓')?'ok':m[1]==='-'?'skip':'fail';const prev=e.tests[key];
+  if(!prev)e.order.push(key);
+  e.tests[key]={st:(prev&&prev.st==='fail'&&st==='ok')?'flaky':st,dur:m[4]||'',tries:m[3]?(+m[3]+1):(prev?prev.tries+1:1)}; // Playwright 재시도 줄 = 제목 뒤 '(retry #N)'
+  e2eRender(s);
+}
+function e2eCount(e){const c={ok:0,fail:0,flaky:0,skip:0};e.order.forEach(k=>{c[e.tests[k].st]++;});return c;}
+function e2eSum(s){const e=s.e2e;const c=e2eCount(e);return '🧪 '+e.order.length+'/'+(e.total||'?')+' · ✅'+c.ok+(c.flaky?' · ⚠'+c.flaky:'')+' · ✖'+c.fail+(c.skip?' · ○'+c.skip:'');}
+function e2eRender(s){
+  const e=s.e2e;if(!e)return;const ic={ok:'✅',fail:'✖',flaky:'⚠',skip:'○'};
+  const running=(s.status==='RUN'||s.status==='REPAIR');
+  e.el.textContent='';e.el.appendChild(el('div','e2ehead',e2eSum(s)+(running?' · ⏳ '+UI_BD.running:'')));
+  e.order.forEach(k=>{const t=e.tests[k];e.el.appendChild(el('div','e2erow '+t.st,ic[t.st]+' '+k.replace(/^\\S+\\.spec\\.ts:\\d+:\\d+\\s+›\\s+/,'')+(t.dur?' ('+t.dur+')':'')+(t.tries>1?' · '+UI_BD.retry+' '+(t.tries-1):'')));});
+  if(running)s.sum.querySelector('.slast').textContent=e2eSum(s);
 }
 function flowHead(){
   const f=FLOW;if(!f)return;const b=f.board;
   const done=f.steps.filter(s=>s.status==='OK'||s.status==='WARN').length;
   const cur=f.done?done:Math.min(f.total,done+(f.active?1:0));
   b.querySelector('.bcur').textContent=f.active?f.active.no:cur;b.querySelector('.bk-done').textContent=done;
-  const prog=f.done?done:Math.max(0,done+(f.active?0.5:0));
+  const ae=f.active&&f.active.e2e;const part=ae&&ae.total?Math.min(0.95,ae.order.length/ae.total):0.5; // 1.9.17: E2E 단계는 테스트 완료 비율만큼
+  const prog=f.done?done:Math.max(0,done+(f.active?part:0));
   b.querySelector('.bbar i').style.width=(f.total?Math.round(100*prog/f.total):0)+'%';
   b.querySelector('.bnow').textContent=f.active?('▶ '+f.active.sum.querySelector('.sttl').textContent):'';
 }
 function flowOut(text){
   const f=FLOW;if(!f||f.done||!f.active)return;const s=f.active;
   const parts=String(text).split('\\n');
-  for(const ln of parts){if(!ln.trim())continue;s.lines.push(ln);if(s.lines.length>60)s.lines.shift();}
+  for(const ln of parts){if(!ln.trim())continue;s.lines.push(ln);if(s.lines.length>60)s.lines.shift();e2eLine(s,ln);}
   s.tail.textContent=s.lines.join('\\n');
   const last=s.lines.length?s.lines[s.lines.length-1].trim():'';
-  if(last)s.sum.querySelector('.slast').textContent='↻ '+last.slice(0,100);
-  f.board.querySelector('.bnow').textContent='▶ '+s.sum.querySelector('.sttl').textContent+(last?' — '+last.slice(0,80):'');
+  if(last)s.sum.querySelector('.slast').textContent=s.e2e?e2eSum(s):'↻ '+last.slice(0,100);
+  f.board.querySelector('.bnow').textContent='▶ '+s.sum.querySelector('.sttl').textContent+(s.e2e?' — '+e2eSum(s):(last?' — '+last.slice(0,80):''));
+  flowHead();
 }
 function flowEnd(m){
   const f=FLOW;if(!f||f.done)return;f.done=true;if(f.timer)clearInterval(f.timer);
@@ -1191,7 +1526,7 @@ bindStatus();
 
 const procs={};
 window.addEventListener('message',e=>{const m=e.data;
- if(m.type==='out'){if(m.stream==='task')flowOut(m.text);const box=$(m.stream==='be'?'belog':m.stream==='fe'?'felog':'log');const stick=box.scrollHeight-box.scrollTop-box.clientHeight<40;const d=document.createElement('span');if(m.cls)d.className=m.cls;d.textContent=m.text;box.appendChild(d);while(box.childNodes.length>4000)box.removeChild(box.firstChild);if(stick)box.scrollTop=box.scrollHeight;}
+ if(m.type==='out'){if(m.stream==='task')flowOut(m.text);const box=$(m.stream==='be'?'belog':m.stream==='fe'?'felog':'log');const stick=box.scrollHeight-box.scrollTop-box.clientHeight<40;const d=document.createElement('span');if(m.cls)d.className=m.cls;d.textContent=m.text;box.appendChild(d);while(box.childNodes.length>4000)box.removeChild(box.firstChild);if(stick)box.scrollTop=box.scrollHeight;markNew(m.stream==='be'||m.stream==='fe'?'logs':'log');}
  else if(m.type==='server'){const st=$(m.name&&/BE/i.test(m.name)?'belogst':'felogst');if(st)st.textContent=m.state==='stopped'?'⏹ 종료됨':(m.ok?'✅ 기동 완료 ':'✖ 실패 ')+(m.sec!=null?m.sec+'s':'');}
  else if(m.type==='chat'){
    const stick=chatStick();
@@ -1201,23 +1536,24 @@ window.addEventListener('message',e=>{const m=e.data;
    else if(m.role==='result'){if(RUN&&!RUN.done)addResult(String(m.text));else{const d=document.createElement('details');d.className='m result';const sm=document.createElement('summary');sm.textContent='↳ '+firstLine(m.text).slice(0,160);d.appendChild(sm);const b=document.createElement('div');b.className='mb';b.textContent=m.text;d.appendChild(b);$('chat').appendChild(d);}}
    else {addMeta(String(m.text));}
    chatScroll(stick||m.role==='user');
-   if(document.querySelector('.rtabs .rtb[data-t="chat"]').classList.contains('on')===false&&m.role!=='meta'){showTab('chat');}
+   markNew('chat');
  }
- else if(m.type==='fb'){const stick=chatStick();if(m.state==='start')flowStart(m);else if(m.state==='step')flowStep(m);else if(m.state==='end')flowEnd(m);chatScroll(stick||m.state==='start');if(m.state==='start'&&document.querySelector('.rtabs .rtb[data-t="chat"]').classList.contains('on')===false)showTab('chat');}
- else if(m.type==='todos'){const stick=chatStick();if(RUN&&!RUN.done)applyTodos(m.items||[]);chatScroll(stick);}
- else if(m.type==='run'){const stick=chatStick();if(m.state==='done')endRun(m.text||'',m.ok!==false);chatScroll(stick);}
+ else if(m.type==='fb'){const stick=chatStick();if(m.state==='start')flowStart(m);else if(m.state==='step')flowStep(m);else if(m.state==='end')flowEnd(m);chatScroll(stick||m.state==='start');markNew('chat');}
+ else if(m.type==='todos'){const stick=chatStick();if(RUN&&!RUN.done)applyTodos(m.items||[]);chatScroll(stick);markNew('chat');}
+ else if(m.type==='run'){const stick=chatStick();if(m.state==='done')endRun(m.text||'',m.ok!==false);chatScroll(stick);markNew('chat');}
  else if(m.type==='tab'){
    if(m.kind==='flow'){ // FLOW 탭: 기존 #flow 요소를 탭 안으로 옮겨 flow 메시지·bindFlow 가 그대로 동작
      if(!TABS['flow']){openTabUI({key:'flow',title:m.title||'📊 FLOW',sub:m.sub||'',path:'',kind:'flow',html:'',editable:false,canEditor:false});const T=TABS['flow'];const c=T.pane.querySelector('.dtc');const fl=$('flow');fl.style.display='';c.appendChild(fl);T.pane.querySelector('.dt-os').style.display='none';T.pane.querySelector('.dt-reload').onclick=()=>vscode.postMessage(Object.assign({type:'flow:refresh',filter:''},st()));}
      showTab('t:flow');
    } else openTabUI(m);
  }
+ else if(m.type==='prefill'){const ta=$('t');ta.value=m.text||'';showTab('chat');ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);ta.scrollTop=ta.scrollHeight;}
  else if(m.type==='status'){$('status').innerHTML=m.html;bindStatus();}
  else if(m.type==='flow'){$('flow').innerHTML=m.html;bindFlow();}
  else if(m.type==='history'){$('hist').innerHTML=m.html;bindHist();}
  else if(m.type==='session'){$('sess').textContent=m.id?(UI_SESS+m.id.slice(0,8)):UI_NOSESS;}
  else if(m.type==='model'){const el=$('modelName');if(el)el.textContent=m.name||UI_AFTERSEND;if(m.name)addModelOpt(m.name,m.name);}
- else if(m.type==='showTab'){showTab(m.tab);}
+ else if(m.type==='showTab'){if(m.auto)markNew(m.tab);else showTab(m.tab);}
  else if(m.type==='setModel'){if(m.id){addModelOpt(m.id,m.id);$('model').value=m.id;CUR_MODEL=m.id;save();}}
  else if(m.type==='proc'){if(m.state==='start')procs[m.id]=m.label;else delete procs[m.id];}
  else if(m.type==='busy'){
@@ -1326,7 +1662,9 @@ function open(api, opts) {
     if (!id) return text;
     const bits = [`[화면 ${id}]`];
     for (const f of ['GEN_NOTES.md', 'CHECK.md', 'DOD.md', 'PIPELINE.md']) if (fs.existsSync(path.join(p.genDir, id, f))) bits.push(`Doc/gen/${id}/${f}`);
+    if (fs.existsSync(path.join(p.outDir, 'screens', id, '__asis-actions__.md'))) bits.push(`AS-IS 액션 대조표: Doc/asisfacts/screens/${id}/__asis-actions__.md`);
     if (fs.existsSync(path.join(p.outDir, 'screens', id))) bits.push(`Doc/asisfacts/screens/${id}/`);
+    const vr = valRefOf(p, id); if (vr) bits.push(`VALIDATION 취합(검증 작업 대조 원천): ${vr}`);
     bits.push('룰: tools/VibeManager/rules/10_RULES_KEEP.md');
     return `${bits.join(' · ')} — 참고 후: ${text}`;
   };
@@ -1414,7 +1752,7 @@ function open(api, opts) {
           await api.runTaskById(m.task, { id: m.id, ids: m.id, dir: pd });
           break;
         }
-        case 'flow:pipeline': await api.runTaskById('S5.pipeline', { id: m.id, ids: m.id }); break;
+        case 'flow:pipeline': await wb.flowEnd(p, m.id); break; // ★ 끝까지 — 기존 화면 🚒 / 새 화면 🚀
         case 'flow:open': wb.openTab(p, path.join(p.genDir, m.id)); break; // 1.9.0: 폴더 탭
         case 'cmd': vscode.commands.executeCommand(m.command); break;
         case 'show': wb.openTab(p, m.file); break; // 1.9.0: UI Status 칩 → Workbench 탭
@@ -1511,7 +1849,33 @@ function open(api, opts) {
             vscode.window.showInformationMessage(`Vibe_Manager 🚀 ${item.label} — ${effId} 시작 (Claude 탭 Flow 보드에서 진행 확인)`);
             await wb.runChain(p, item, effId, h);
           }
-          else if (item.kind === 'claude') wb.askClaude(p, substQ(item.prompt, { root: p.root, id: effId }), h);
+          else if (item.kind === 'claude' && item.prefill) {
+            // 1.9.13: 사용자 입력이 필요한 프롬프트(🛠️ 기존 화면 보완)는 바로 보내지 않고 채팅 입력창에 채워 둔다 — 사용자가 [보완 요청] 을 적고 전송(사용자 신고 "입력하기 전에 실행됨")
+            const text = substQ(item.prompt, { root: p.root, id: effId });
+            wb.post({ type: 'prefill', text }); try { wb.panel.reveal(undefined, false); } catch { }
+            wb.out('task', `📝 ${item.label} — 채팅 입력창에 프롬프트를 채웠습니다. 맨 아래 [보완 요청] 에 수정 내용을 적고 전송하세요(보내기 전에는 실행되지 않음)
+`, 'cmd');
+            vscode.window.showInformationMessage(`Vibe_Manager 📝 ${item.label}: 채팅 입력창 맨 아래 [보완 요청] 에 내용을 적고 전송하세요`);
+          }
+          else if (item.kind === 'claude') {
+            // 1.9.10: 🩹 E2E 오류 보완을 메뉴에서 직접 실행하면 ${kind}/${round}/${step} 이 치환되지 않은 채 전달됐다(수선 기록 15:38).
+            //   프롬프트에 ${kind} 가 있으면 종류를 고르게 하고(기본 = 최근 FAIL 행의 종류), round = E2E_REPAIR.md 의 '## 수선' 수 + 1,
+            //   끝나면 item.afterTask(예 "S7.${kind}")로 그 E2E 단계를 바로 재실행해 수선 효과를 확인한다(사용자 신고 "보완했는데 오류 지속").
+            if (item.verdict === 'repair') { await wb.repairE2E(p, item, effId, h); break; }
+            const vars = { root: p.root, id: effId };
+            if (/\$\{kind\}/.test(item.prompt || '')) {
+              const kinds = ['smoke', 'crud', 'auth', 'authcrud'];
+              let def = 'smoke'; try { const rows = fs.readFileSync(path.join(p.e2eOutDir, 'results', '_summary.csv'), 'utf8').split(/\r?\n/).filter(l => l.includes(`"${effId}"`) && l.includes('"FAIL"')); const m = rows.length && /^"[^"]*","([^"]*)"/.exec(rows[0]); if (m && kinds.includes(m[1])) def = m[1]; } catch { }
+              const pick = await vscode.window.showQuickPick(kinds.map(k => ({ label: k, description: k === def ? '최근 FAIL' : '' })).sort((a, b) => (a.label === def ? -1 : 0) - (b.label === def ? -1 : 0)), { placeHolder: `수선할 E2E 종류 (${effId})`, ignoreFocusOut: true });
+              if (!pick) return;
+              let round = 1; try { const md = fs.readFileSync(path.join(p.genDir, effId, 'E2E_REPAIR.md'), 'utf8'); round = (md.match(/^## 수선 /gm) || []).length + 1; } catch { }
+              Object.assign(vars, { kind: pick.label, round, step: '수동 실행' });
+            }
+            const r = await wb.askClaude(p, substQ(item.prompt, vars), h);
+            const rerun = !!(item.afterTask && vars.kind && r && r.ok);
+            if (rerun) { const tid = substQ(item.afterTask, vars); wb.out('task', `\n↻ 보완 뒤 재실행: ${tid} ${effId}\n`, 'cmd'); await wb.runTaskStreaming(p, tid, effId, { noConfirm: true, preset: { mode: 'auto' } }); }
+            else if (item.afterTask && vars.kind && r && !r.ok) wb.out('task', `✖ 수선 Claude 오류(exit ${r.code}) — 재실행 생략\n`, 'bad');
+          }
           else if (item.kind === 'command') vscode.commands.executeCommand(item.command);
           else if (item.kind === 'flowtab') { wb.post({ type: 'tab', key: 'flow', kind: 'flow', title: '📊 FLOW', sub: 'FLOW — 화면별 단계 진척(파싱→…→E2E 4단계)', editable: false, canEditor: false, canOS: false }); } // 1.9.0: FLOW = 고정 탭에서 제외, 메뉴로 여는 탭
           else if (item.kind === 'terminal' || item.kind === 'multi' || item.kind === 'server-stop') {
@@ -1575,12 +1939,34 @@ function open(api, opts) {
             if (leak.length) { wb.out('task', `⛔ 업로드 중단 — 허용 영역 밖 파일 포함: ${leak.join(', ')}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ⛔ Source Upload(UI): Vibe_Manager/도구 소스는 업로드할 수 없습니다 (${leak[0]})`); return; }
             const url = git(['remote', 'get-url', item.remote || 'common']).out; if (!/^(https?:\/\/|ssh:\/\/|git@|file:\/\/|[A-Za-z]:[\\/]|\/)/.test(url)) { wb.out('task', `원격 ${item.remote} URL 없음: ${url}\n`, 'bad'); return; }
             const base = item.baseBranch || 'main'; const d = history.nowLocal().slice(0, 10).replace(/-/g, '');
-            const branch = await vscode.window.showInputBox({ prompt: `푸시할 브랜치 (원격 ${url.replace(/\/\/[^@]+@/, '//')})`, value: `feat/${ID.toLowerCase()}-${d}`, ignoreFocusOut: true, validateInput: v => /^[\w./-]+$/.test(v.trim()) ? null : '브랜치 이름 형식' }); if (!branch) return;
-            const msg = await vscode.window.showInputBox({ prompt: '커밋 메시지', value: `feat(${ID}): ${pageBase} 화면 소스 업로드 (${files.length} files)`, ignoreFocusOut: true }); if (!msg) return;
-            const ok = await vscode.window.showWarningMessage(`${ID} 소스 ${files.length}개 → ${url.replace(/\/\/[^@]+@/, '//')} 의 ${branch.trim()} (base: ${base})\n다른 작업 파일은 포함되지 않습니다. 진행할까요?`, { modal: true }, '업로드');
+            const tipRef = `refs/remotes/${item.remote || 'common'}/${base}`;
+            // 1.9.17: 파일마다 '내 작업분'만 올린다(사용자 지시 2026-10-22) — 공통 최신을 받은 뒤 tools/CommonSync/common_sync.py --upload-prepare 가
+            //   전체(신규·공통 무변경) / 내 수정분만 3-way(공통도 바뀜 · d.ts = 이 화면 메뉴 키 블록만 · locales = 키 단위) / 제외(동일·내 편집 없음·충돌) 를 판정해 올릴 내용을 만든다.
+            //   종전엔 로컬 파일 전체를 공통 트리에 얹어 공통의 다른 사람 수정분을 덮을 수 있었고, 경로 접두(nscm-fe/)도 빠져 있었다.
+            wb.post({ type: 'showTab', tab: 'log', auto: true });
+            wb.out('task', `▶ Source Upload(UI) ${ID} — 공통 최신 받기 · 파일별 내 작업분 판정\n`, 'cmd');
+            const fr = git(['fetch', url, `${base}:${tipRef}`]); wb.out('task', `$ git fetch ${base}\n${fr.out.split(/\r?\n/).slice(-3).join('\n')}\n`, fr.code === 0 ? '' : 'bad'); if (fr.code !== 0) { wb.out('task', `✖ 공통 최신 받기 실패 — 업로드 중단\n`, 'bad'); return; }
+            const stampU = history.nowLocal().slice(0, 19).replace(/[:T]/g, '').replace(/-/g, ''); const prepDir = path.join(p.root, '.vibe', 'upload', `${ID}_${stampU}`);
+            fs.mkdirSync(prepDir, { recursive: true }); const listF = path.join(prepDir, 'files.txt'); const sumF = path.join(prepDir, 'summary.json');
+            fs.writeFileSync(listF, files.join('\n'), 'utf8');
+            const syncPy = path.join(p.root, 'tools', 'CommonSync', 'common_sync.py');
+            const pr = cp.spawnSync(p.python || 'python', [syncPy, '--upload-prepare', '--fe', cwd, '--tip', tipRef, '--keys', ID, '--files-from', listF, '--out', prepDir, '--summary', sumF], { cwd: p.root, encoding: 'utf8', windowsHide: true, maxBuffer: 64 * 1024 * 1024, env: Object.assign({}, process.env, { PYTHONIOENCODING: 'utf-8' }) });
+            wb.out('task', ((pr.stdout || '') + (pr.stderr || '')).trim() + '\n', pr.status === 0 ? '' : 'bad');
+            let prep = null; try { prep = JSON.parse(fs.readFileSync(sumF, 'utf8')); } catch { }
+            if (pr.status !== 0 || !prep || !prep.ok) { wb.out('task', `✖ 업로드 준비 실패 — 중단 (${path.relative(p.root, prepDir)})\n`, 'bad'); return; }
+            const upl = prep.files.filter(f => /^(whole-new|whole-mine|merged-mine)$/.test(f.mode));
+            const byMode = m => prep.files.filter(f => f.mode === m);
+            const conf = byMode('conflict'), notmine = byMode('skip-notmine');
+            wb.openTab(p, path.join(prepDir, 'UPLOAD_PREP.md'));
+            if (!upl.length) { wb.out('task', `⛔ 올릴 내 작업분이 없습니다 — 선택 ${files.length}개 모두 동일/내 편집 없음/충돌${conf.length ? ` (충돌 ${conf.length}: ${path.relative(p.root, path.join(prepDir, 'conflicts'))})` : ''}\n`, 'warn'); return; }
+            const sumTxt = `올릴 파일 ${upl.length} — 전체 ${byMode('whole-new').length + byMode('whole-mine').length}(신규 ${byMode('whole-new').length}·공통 무변경 ${byMode('whole-mine').length}) · 내 수정분만 병합 ${byMode('merged-mine').length}\n제외 — 공통과 동일 ${byMode('skip-same').length} · 내 편집 없음(옛 판본) ${notmine.length} · 로컬 없음 ${byMode('skip-missing').length} · 충돌 ${conf.length}${conf.length ? `\n충돌(올리지 않음): ${conf.map(f => f.rel.split('/').pop()).slice(0, 6).join(', ')}` : ''}`;
+            // 공통 저장소 이력(브랜치·커밋 메시지)에도 도구 이름·경로를 남기지 않는다
+            const TRACE_RE = /Vibe_?Manager|VibeManager|Harness|TobeGen|Fact ?Pack|CommonSync|\.vibe\b|tools[/\\]|Doc[/\\](asisfacts|tobefacts|gen|gap|e2e|recon|golden)/i;
+            const branch = await vscode.window.showInputBox({ prompt: `푸시할 브랜치 (원격 ${url.replace(/\/\/[^@]+@/, '//')})`, value: `feat/${ID.toLowerCase()}-${d}`, ignoreFocusOut: true, validateInput: v => !/^[\w./-]+$/.test(v.trim()) ? '브랜치 이름 형식' : TRACE_RE.test(v) ? '쓸 수 없는 이름이 들어 있습니다' : null }); if (!branch) return;
+            const msg = await vscode.window.showInputBox({ prompt: '커밋 메시지', value: `feat(${ID}): ${pageBase} 화면 소스 업로드 (${upl.length} files)`, ignoreFocusOut: true, validateInput: v => TRACE_RE.test(v) ? '쓸 수 없는 이름이 들어 있습니다' : null }); if (!msg) return;
+            const ok = await vscode.window.showWarningMessage(`${ID} → ${url.replace(/\/\/[^@]+@/, '//')} 의 ${branch.trim()} (base: ${base} ${String(prep.tip).slice(0, 9)})`, { modal: true, detail: `${sumTxt}\n\n공통 최신 위에 내 작업분만 얹은 커밋입니다(파일별 판정: UPLOAD_PREP.md 탭). 진행할까요?` }, '업로드');
             if (ok !== '업로드') return;
-            wb.post({ type: 'showTab', tab: 'log' });
-            wb.out('task', `▶ Source Upload(UI) ${ID}\n  repo ${cwd}\n  base ${item.remote}/${base} · branch ${branch.trim()} · files ${files.length}\n`, 'cmd');
+            wb.out('task', `▶ Source Upload(UI) ${ID}\n  repo ${cwd}\n  base ${item.remote}/${base} ${String(prep.tip).slice(0, 9)} · branch ${branch.trim()} · 올릴 파일 ${upl.length} / 선택 ${files.length} · 경로 접두 '${prep.prefix}'\n`, 'cmd');
             const step = (label, args, env) => { const r = git(args, env ? { env: Object.assign({}, process.env, env) } : undefined); wb.out('task', `$ git ${args.join(' ').slice(0, 160)}\n${r.out ? r.out.split(/\r?\n/).slice(-6).join('\n') + '\n' : ''}`, r.code === 0 ? '' : 'bad'); if (r.code !== 0) throw new Error(`${label} 실패 (exit ${r.code}): ${r.out.split(/\r?\n/).slice(-2).join(' ')}`); return r.out; };
             const idx = path.join(require('os').tmpdir(), `vibe_ui_upload_${Date.now()}.idx`); const genv = { GIT_INDEX_FILE: idx };
             // 푸시 전 게이트: nscm-fe 의 pre-push 훅은 `pnpm type-check`(이 PC 는 pnpm 금지 → 항상 실패)와 현재 작업 브랜치 이름만 보고,
@@ -1594,16 +1980,21 @@ function open(api, opts) {
               if (blk !== 0) { const go = await vscode.window.showWarningMessage(`${ID} 하네스 게이트 ${gate ? `BLOCK ${gate.block}` : '판정 실패'} — 그래도 업로드할까요?`, { modal: true }, '그래도 업로드'); if (go !== '그래도 업로드') { wb.out('task', `⛔ 업로드 중단 — 게이트 미통과 (Doc/gen/${ID}/CHECK.md 확인)\n`, 'warn'); return; } }
             }
             try {
-              step('fetch', ['fetch', url, `${base}:refs/remotes/${item.remote || 'common'}/${base}`]);
-              step('read-tree', ['read-tree', `refs/remotes/${item.remote || 'common'}/${base}`], genv);
-              for (let i = 0; i < files.length; i += 40) step('update-index', ['update-index', '--add', '--replace', '--', ...files.slice(i, i + 40)], genv);
+              // 판정 때 받은 공통 최신(tipRef) 그대로 — 그 위에 준비된 내용(전체/내 수정분)만 공통 트리 경로(prefix + 상대경로)로 얹는다
+              step('read-tree', ['read-tree', prep.tip], genv);
+              const info = upl.map(f => { const sha = step('hash-object', ['hash-object', '-w', '--path', f.path, f.out]).trim(); return `100644 ${sha}\t${f.path}`; });
+              const ui = cp.spawnSync('git', ['update-index', '--index-info'], { cwd, input: info.join('\n') + '\n', encoding: 'utf8', windowsHide: true, env: Object.assign({}, process.env, genv) });
+              wb.out('task', `$ git update-index --index-info (${info.length}건)\n${((ui.stdout || '') + (ui.stderr || '')).trim()}\n`, ui.status === 0 ? '' : 'bad'); if (ui.status !== 0) throw new Error(`update-index 실패 (exit ${ui.status})`);
               const tree = step('write-tree', ['write-tree'], genv).trim();
-              const commit = step('commit-tree', ['commit-tree', tree, '-p', `refs/remotes/${item.remote || 'common'}/${base}`, '-m', msg.trim()]).trim();
+              const changedN = git(['diff-tree', '-r', '--name-only', prep.tip, tree]).out.split(/\r?\n/).filter(Boolean);
+              wb.out('task', `공통 최신 대비 바뀌는 파일 ${changedN.length}건${changedN.length ? ': ' + changedN.slice(0, 10).join(', ') : ''}\n`, changedN.length === upl.length ? 'ok' : 'warn');
+              if (changedN.some(f => !upl.some(u => u.path === f))) throw new Error(`준비하지 않은 파일이 커밋에 섞임: ${changedN.filter(f => !upl.some(u => u.path === f)).slice(0, 5).join(', ')}`);
+              const commit = step('commit-tree', ['commit-tree', tree, '-p', prep.tip, '-m', msg.trim()]).trim();
               step('push', ['push', '--no-verify', url, `${commit}:refs/heads/${branch.trim()}`]); // pre-push(pnpm type-check·현재 브랜치명 검사)는 합성 커밋과 무관 → 위 하네스 게이트로 대체
               const web = url.replace(/\/\/[^@]+@/, '//').replace(/\.git$/, '') + `/tree/${branch.trim()}`;
-              wb.out('task', `✅ 업로드 완료 — ${files.length}개 파일 · 커밋 ${commit.slice(0, 10)} · ${web}\n   (로컬 작업 브랜치·인덱스는 건드리지 않았습니다)\n`, 'ok');
-              wb.post({ type: 'chat', role: 'meta', text: `✅ Source Upload(UI) ${ID} → ${branch.trim()} (${files.length} files)` });
-              Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager ✅ ${ID} 소스 ${files.length}개 → ${branch.trim()} 업로드 완료`, '브라우저로 열기')).then(a => { if (a) vscode.env.openExternal(vscode.Uri.parse(web)); }, () => { });
+              wb.out('task', `✅ 업로드 완료 — ${upl.length}개 파일(선택 ${files.length}) · 커밋 ${commit.slice(0, 10)} · ${web}\n   (로컬 작업 브랜치·인덱스는 건드리지 않았습니다 · 판정 ${path.relative(p.root, path.join(prepDir, 'UPLOAD_PREP.md'))})\n`, 'ok');
+              wb.post({ type: 'chat', role: 'meta', text: `✅ Source Upload(UI) ${ID} → ${branch.trim()} (${upl.length} files)` });
+              Promise.resolve(vscode.window.showInformationMessage(`Vibe_Manager ✅ ${ID} 소스 ${upl.length}개 → ${branch.trim()} 업로드 완료`, '브라우저로 열기')).then(a => { if (a) vscode.env.openExternal(vscode.Uri.parse(web)); }, () => { });
             } catch (e) {
               wb.out('task', `✖ ${e.message}\n   (권한 거부 403 이면 eunjoo-hwang/nscm-fe 에 push 권한이 없는 계정입니다 — 저장소 소유자에게 요청)\n`, 'bad');
               vscode.window.showErrorMessage(`Vibe_Manager ✖ Source Upload(UI) 실패: ${e.message.slice(0, 160)}`);
@@ -1630,6 +2021,32 @@ function open(api, opts) {
             const cred = item.credUser ? `-c credential.https://github.com.username=${item.credUser} ` : '';
             const line = ok === 'status 만' ? 'git status -s' : `git add -A && git commit -m "${msg.replace(/"/g, "'")}" && git ${cred}push ${item.remote} ${item.branch}`;
             wb.spawnStream(p, 'cmd', ['/c', line], { spawn: { cwd }, env: { GIT_TERMINAL_PROMPT: '0' } }, 'task', item.label);
+          }
+          else if (item.kind === 'git-common-sync') {
+            // 1.9.17: ⬇️🔀 Source Download & Merge — 공통소스 다운로드 규칙(메모리 reference_repo_upload_download_commands §2 · 회차 README 08-25~10-14) 도구화.
+            //   ① fetch + 미리보기(dry-run: 파일별 공통 채택 / 내 소스 유지 / 내 수정분 3-way / d.ts 블록 / locales 키 / 결정 대기) → ② 확인 → ③ 적용(같은 커밋일 때만) · 백업 · README · 기준선 갱신.
+            //   git merge/pull 은 쓰지 않는다(사내 GitLab 이력과 섞임). 푸시 없음(remote common push URL = no_push 확인 후에만 진행).
+            const syncPy = path.join(p.root, 'tools', 'CommonSync', 'common_sync.py'); const q = s => `"${s}"`;
+            const sumDir = path.join(p.root, '.vibe', 'common_sync'); fs.mkdirSync(sumDir, { recursive: true });
+            const sumF = path.join(sumDir, 'last_summary.json'); try { fs.rmSync(sumF, { force: true }); } catch { }
+            const env = { PYTHONIOENCODING: 'utf-8', GIT_TERMINAL_PROMPT: '0' };
+            wb.out('task', `▶ ${item.label} — 1/2 공통 최신 받기 + 파일별 판정(미리보기 · 파일 변경 없음)\n`, 'cmd');
+            const c1 = await wb.spawnStream(p, q(p.python || 'python'), [q(syncPy), '--dry-run', '--summary', q(sumF)], { env }, 'task', `${item.label} 미리보기`);
+            let s1 = null; try { s1 = JSON.parse(fs.readFileSync(sumF, 'utf8')); } catch { }
+            if (c1 !== 0 || !s1 || !s1.ok) { wb.out('task', `✖ 미리보기 실패(exit ${c1}) — 적용하지 않습니다\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ ${item.label}: 미리보기 실패 — Task Log 확인`); break; }
+            if (!s1.changed) { wb.out('task', `✅ 공통소스 새 변경 없음 (기준선 ${String(s1.base).slice(0, 9)})\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager ✅ 공통소스 새 변경 없음`); break; }
+            if (s1.report) wb.openTab(p, s1.report);
+            const A = s1.actions || {};
+            const detail = `기준선 ${String(s1.base).slice(0, 9)} → ${s1.tip_info}${s1.ancestor ? '' : ' (⚠ force-push 재작성)'}\n공통 신규 커밋 ${s1.commits} · 대상 파일 ${s1.changed}\n\n공통 원문 적용(내가 안 고친 파일·신규) ${A.write || 0}\n내 수정분 유지 + 공통 병합(3-way·d.ts·locales) ${A.merge || 0}\n삭제(내가 안 고친 파일) ${A.delete || 0}\n내 소스 유지 ${A.keep || 0}  (그중 결정 대기 ${s1.pending || 0} — 충돌 등, 자동 적용 안 함)\n\n적용 전 바뀌는 로컬 파일은 모두 _artifacts/_backup 에 백업됩니다. 미리보기: 열린 탭(PLAN).`;
+            const go = await vscode.window.showWarningMessage(`공통소스 ${s1.changed}건을 내 소스에 반영할까요?`, { modal: true, detail }, '적용');
+            if (go !== '적용') { wb.out('task', `⏹ 적용 취소 — 미리보기만 남김 (${s1.report ? path.relative(p.root, s1.report) : ''})\n`, 'warn'); break; }
+            wb.out('task', `▶ ${item.label} — 2/2 적용 (공통 ${String(s1.tip).slice(0, 9)})\n`, 'cmd');
+            const c2 = await wb.spawnStream(p, q(p.python || 'python'), [q(syncPy), '--apply', '--no-fetch', '--target', s1.tip, '--summary', q(sumF)], { env }, 'task', `${item.label} 적용`);
+            let s2 = null; try { s2 = JSON.parse(fs.readFileSync(sumF, 'utf8')); } catch { }
+            if (s2 && s2.report) wb.openTab(p, s2.report);
+            if (c2 === 0 && s2 && s2.ok) { wb.out('task', `✅ 반영 완료 — 기준선 ${String(s1.base).slice(0, 9)} → ${String(s1.tip).slice(0, 9)} · 결정 대기 ${s1.pending || 0} · 보고 ${path.relative(p.root, s2.report)}\n   다음: 결정 대기 파일 확인(README) · 필요 시 "타입체크 해줘"\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager ✅ 공통소스 반영 완료 — 결정 대기 ${s1.pending || 0}건 (README 확인)`); }
+            else { wb.out('task', `✖ 적용 실패(exit ${c2})${c2 === 3 ? ' — 미리보기 이후 공통이 바뀜: 다시 실행' : c2 === 4 ? ' — 적용 후 검증 실패: 기준선 미갱신, 백업으로 원복 가능' : ''}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ ${item.label} 적용 실패(exit ${c2}) — Task Log 확인`); }
+            api.record('quick', `${item.label} ${String(s1.base).slice(0, 9)}→${String(s1.tip).slice(0, 9)} exit ${c2}`);
           }
           else if (item.kind === 'git-merge') {
             const cwd = substQ(item.cwd, { root: p.root });
@@ -1687,4 +2104,6 @@ function refreshHtmlTab(key) { const h = htmlTabs.get(key); if (!h || !lastWB) r
 function showTab(tab) { if (!lastWB) return false; lastWB.post({ type: 'showTab', tab }); try { lastWB.panel.reveal(undefined, true); } catch { } return true; }
 function openDiff(key, title, aText, bText, aLabel, bLabel, sub) { if (!lastWB) return false; lastWB.openDiffTab(key, title, aText, bText, aLabel, bLabel, sub); return true; }
 function openFlowTab() { if (!lastWB) return false; lastWB.post({ type: 'tab', key: 'flow', kind: 'flow', title: '📊 FLOW', sub: 'FLOW — 화면별 단계 진척(파싱→…→E2E 4단계)', editable: false, canEditor: false, canOS: false }); try { lastWB.panel.reveal(undefined, true); } catch { } return true; }
-module.exports = { open, ask, quick, runShell, openTab, openDiff, openFlowTab, openHtmlTab, refreshHtmlTab, showTab };
+// FLOW 독립 패널(flow-panel.js)의 ★ 끝까지 — Workbench 를 열고 같은 판정으로 체인 실행
+async function runFlowEnd(id) { await vscode.commands.executeCommand('vibeManager.openWorkbench'); if (!lastWB || !lastWB.panel) return false; await lastWB.flowEnd(lastWB.api.paths(), id); return true; }
+module.exports = { open, ask, quick, runShell, runFlowEnd, openTab, openDiff, openFlowTab, openHtmlTab, refreshHtmlTab, showTab };

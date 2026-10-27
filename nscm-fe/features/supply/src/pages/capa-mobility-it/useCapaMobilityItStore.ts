@@ -43,8 +43,8 @@ const makeInitSearchParams = (): CapaMobilityItSearchParams => ({
   divisionId: FIXED_DIVISION,
   plantIds: [],
   lineIds: [],
-  // 초기 기간 — AS-IS GetDayRange(W52) 산출. TO-BE 는 오늘 기준 약 52주(당월 1일 ~ +52주) 기본값을
-  //   두되, 정확한 초기 범위 SP(SCM0001_GET_SCP_DAY_PERIOD) 산출은 조회 전이라 근사한다(design 02 §2-5).
+  // 초기 기간 — 실 산출은 Form 이 SP(SCM0001_GET_SCP_DAY_PERIOD, AS-IS GetDayRange W52)로 수행해 덮는다.
+  //   아래 dayjs 값은 콤보 응답 도착 전 placeholder(당월 1일 ~ +52주). SP 도착 시 월경계 보정값으로 교체(R5).
   startYyyymmdd: dayjs().startOf('month').format('YYYYMMDD'),
   endYyyymmdd: dayjs().startOf('month').add(52, 'week').subtract(1, 'day').format('YYYYMMDD'),
   itemId: '',

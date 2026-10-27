@@ -143,8 +143,30 @@ gap-resolve iter-1(2026-09-23) 재검증 결과. 각 항목 뒤 분류는 R3 사
     PLANT_ID_DESCRIPTION, TO_SITE_DESCRIPTION. 고정: MEASURE_LABEL='Prod Plan', MEASURE='PROD_PLAN',
     LINE_ID='-', BOH_QTY=0, SEQ_FLAG=앵커 SEQ_FLAG[0]+'50'(cs:1020~1021).
   - 컬럼명 전건이 `SCM_MST_SHEET_COLUMNS`('Integration PSI') 24행과 1:1 대응함을 실측 확인(2026-10-13 ora.py).
-  - ADMIN 분기(V1, cs:967~976)는 AS-IS 도 DIVISION_ID 만 넣으므로 그대로 뒀다. 현재 `auth.isAdmin` 은
-    전용 권한 콤보 미확정으로 false 고정이라(§4 R3) 실동작은 V2 다.
+  - ADMIN 분기(V1, cs:967~976)는 AS-IS 도 DIVISION_ID 만 넣으므로 그대로 뒀다.
+  - **U-7b `auth.isAdmin` 배선(사용자 지시 2026-10-19)**: 종전 `isAdmin:false` 고정을 해제하고
+    `session.groups`(USER_GR_NM 배열, nscm-be User.xml retrieveUserGroups)로 판정하도록 바꿨다.
+    - **원천**: SCP0111 은 `GET_ADMIN_GROUP_MEASURE` 룩업에 미등록(ora.py 실측 2026-10-19)이라 sales-plan 식
+      AuthGroup CMBO 를 못 쓴다. 대신 plan-control / sales-site-project-model 선례대로 session.groups 직접 판정.
+    - **비교값은 그룹 이름(NM)**: AS-IS `NowGroupID=='ADMIN'` 의 'ADMIN' 은 `USER_GR_ID` 다. DB 실측
+      (`SCM_ADM_USER_GR_M`) USER_GR_ID='ADMIN' 의 USER_GR_NM='System Administrator' → session.groups 에는 NM 이
+      내려오므로 `ADMIN_GROUP_NAME='System Administrator'` 로 비교해야 매칭된다(SCM PI Admin/SCP Planner 는 ID=NM).
+    - **영향 범위**: isAdmin=true 는 Insert V1(빈행·DIVISION_ID만) + BOH 셀 편집 + ADMIN 정보열 편집 + 저장
+      경로 SAVE_INTEGRATION_PSI_ADMIN(buildAdminPayload)을 함께 켠다 — 전부 AS-IS 관리자 정상 동작.
+    - isPiAdmin/isPlanner(SCM PI Admin / SCP Planner)는 BOH 편집 파리티 축이라 별도 검증 전까지 false 유지.
+  - **U-7c admin 신규행 Model/Nick Name 입력 = Item 팝업(사용자 지시 2026-10-19, 1단계)**:
+    - **문제**: U-7b 로 admin 신규행 전 컬럼이 열렸으나(인라인 텍스트), 품목 식별자를 자유 타이핑하는 건
+      조회영역(`MaterialByDivisionModal`)·타 화면(operation-lt / sales-site-project-model / plant-site) 관례와
+      어긋난다 — 품목은 **팝업 선택**으로 받아야 식별자 정합이 보장된다.
+    - **AS-IS 실측(roslyn)**: SCP0111 그리드 셀은 FPText/평문이고 `SCM0002_ItembyDivisionPopup` 은 **조회영역
+      버튼(BtnNickName/BtnItemId/BtnCellItem)에만** 붙는다(그리드 셀클릭은 LINE_ID 콤보 세팅뿐). 즉 AS-IS 는
+      그리드에서 타이핑이었다 — TO-BE 는 관례에 맞춰 팝업으로 **의도적 개선**(사용자 결정).
+    - **구현(IntegrationPsiGrid)**: `INSERT_POPUP_COLS={ITEM_ID,NICK_NAME}` 를 admin 신규행에서 인라인 편집 차단
+      (applyEditGate) + 셀 더블클릭 → `MaterialByDivisionModal` → 선택결과(itemId=Model, nickName)를 그 행에
+      채우고 refreshRow(operation-lt applyItemSelect 선례와 동형). 저장은 baseCell 이 행에서 직접 읽어 반영.
+    - **범위 밖(후속)**: Cell Model(CELL_ITEM_ID)·Cell Model Nick Name·Cell CF 는 이 Model 팝업 반환에 없다
+      (반환계약=itemId/itemName/itemClassName/nickName). 코드성 컬럼(Operation/Company/Plant/ValuationType/
+      Incoterms/Measure)의 셀 콤보화도 각 콤보 원천 DB 실측 확정 후 2단계.
 
 - **U-8 Delete = 미저장 신규행만 삭제(사용자 지시 2026-10-13)**: AS-IS `DeleteButton()` 은 **본문이 비어 있다**
   (cs:536~539) → AS-IS 에서 Delete 는 아무 일도 하지 않는다(사용자 관찰과 일치). TO-BE 는 지시에 따라
@@ -293,3 +315,55 @@ config 소유자가 등록해야 call-proc 타입/파라미터 매핑이 완성�
 
 주의: 이 키셋은 `utils/integrationPsiSave.ts` buildGeneralPayload/buildAdminPayload 반환 키와 1:1이다.
 SCM_ADM_PROC_M.COL_NM 이 확정되면 두 곳(여기 + save 빌더)이 함께 검증돼야 한다.
+
+## U-13 저장 검증 메시지 — OPERATION_GROUP 무효 + 15필수 공백 (사용자 지시 2026-10-19)
+
+- **증상**: admin 신규행에 입력 가능한 컬럼을 다 채우고 저장했더니 제네릭 "필수 입력란을 입력해 주세요"(MSG00013)만 떠서 **어느 값이 문제인지** 알 수 없었다. 필수 컬럼 빨간 점도 안 보였다.
+- **실제 원인(진단)**: Operation 에 "test" 를 key-in → `operationGroupToCode('test')===null`(유효=Pack/Cell/Electrode 뿐) → `opGroupLookupMissing` 이 TO-BE 에서 **MSG00013(제네릭)** 으로 떠 원인을 못 알렸다.
+- **AS-IS 실측(roslyn)**: 저장 검증은 (1) OPERATION_GROUP 무효 → 전용 리터럴 `"OPERATION_GROUP이 Lookup에 없는 값입니다"`(L1217), (2) MSG00260 중복(L1228), (3) **15필수 공백 → MSG00001**(L1237: division_id/company_id/plant_id/operation_group/cellitem_id/item_id/measure/line_id/valuation_type/to_product/to_site/incoterms/boh_qty/seq_flag/plan_type). TO-BE 는 **(3) 15필수 검증이 아예 누락**돼 있었다.
+- **수정**:
+  - OPERATION_GROUP 무효 → `MSG.OP_GROUP_INVALID`(비카탈로그 key + 한글 fallback "Operation 은 Pack / Cell / Electrode 중 하나로 입력하세요", DERIV_MISMATCH 선례). 종전 `OP_GROUP_LOOKUP_MISSING`(MSG00013) 대체.
+  - 15필수 공백검증 신설 — `REQUIRED_SAVE_FIELDS`(binding+label) 로 `unfoldSaveCells` 가 신규행(I)의 첫 공백 필드를 `missingRequiredField` 로 반환, handleSave 가 **MSG00429("{0} 값은 필수 입력 항목입니다")** 로 **필드명과 함께** 안내(business-plan/cust-psi-upload 선례 동일 코드). OPERATION_GROUP 공백은 opGroup 분기가 선처리.
+  - `REQUIRED_FIELD` 매핑을 MSG00013(제네릭) → **MSG00429**(필드명 포함)로 교체.
+  - 회귀테스트 `utils/integrationPsiSave.test.ts` +5건(전필수 통과 / 공백 binding 반환 / 스페이스=미입력 / BOH 0 통과 / LINE 공백=필수).
+- **빨간 점(미구현·후속)**: 15필수가 TO-BE 컬럼메타에서 `INPUT_TP_CD='S'`(MANDATORY 아님)라 공용 formatItem 이 헤더 `is-required`(red dot)를 안 그린다. 빨간 점은 `_requiredMark`/MANDATORY 로만 켜지는데, 메타 변경은 `isEditableCell`(편집가능)과 columnMapping 에 얽혀 비-admin 회귀 위험이 있다. **기능적 필수검증은 위로 확보**했고, 시각 red dot 은 별도(클라 formatItem 헤더 override 또는 메타 안전 확정) 후속 과제로 둔다.
+
+## U-14 admin 저장 실패 — ADMIN SP operationGroup 변환 누락 (ORA-12899) + FE 피드백 삼킴 (2026-10-19)
+
+- **증상**: admin 신규행 저장(Line 미입력 Confirm) 후 네트워크 요청은 가는데 화면에 성공/실패 어떤 피드백도 안 뜸. 저장 여부 확인 불가.
+- **실측(백엔드 로그 nscm.log 14:21:12/14:21:23, 2회 시도)**: proc O_RESULT_CURSOR =
+  `[-12899]ORA-12899: "SCM_MGR"."SCP_ANL_PSI_INTEGRATION"."OPERATION_GROUP" 열에 대한 값이 너무 큼(실제: 4, 최대값: 1)`,
+  `RESULT_CODE='F', CODE='-1', RESULT_CNT=0`. → **DB insert 0건(저장 안 됨)**. SCP_ANL_PSI_INTEGRATION 오늘 생성 0행 확인.
+- **원인 1 (DB SP 버그 — 핵심)**: `PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN` INSERT VALUES(L3439)가 `V_OPERATION_GROUP`
+  (표시명 "Pack", 4자)을 **코드 변환 없이** OPERATION_GROUP(VARCHAR(1))에 넣는다. 일반 SP(L806-808)는
+  `(CASE WHEN V_OPERATION_GROUP='Pack' THEN 'P' WHEN 'Cell' THEN 'A' ELSE 'E' END)` 변환이 있는데 ADMIN SP엔 누락.
+  WHERE절(L3355/L3392 `OPERATION_GROUP = UPPER(V_OPERATION_GROUP)`)도 raw 비교라 UPDATE/dedup 이 기존 'P' 행과 안 맞음.
+  → **admin 저장은 isAdmin 배선(U-7b) 전까지 한 번도 실행된 적 없어 이 버그가 이번에 처음 드러남.**
+- **원인 2 (FE 피드백 삼킴)**: `axios-interceptors responseErrorInterceptor` 는 403/500 만 resolve, 그 외
+  (401/404/연결오류)는 `Promise.reject`. `handleSave` 에 try/catch 가 없어 reject 가 통째로 삼켜져 무반응.
+- **수정(FE, 완료)**: `handleSave` 저장 실행부를 try/catch 로 감싸 실패 시 반드시 `MSG.SAVE_FAIL`+상세 alert 표시.
+- **수정(FE, 완료 — SP 무변경)**: ADMIN SP 는 원래 **코드("P") 계약**이다(INSERT L3439·WHERE L3355/L3392 모두
+  값을 그대로 씀, 내부 CASE 없음). 즉 FE 가 admin 저장에 표시명("Pack")을 보낸 게 문제였다. `buildAdminPayload` 가
+  operationGroup 을 `operationGroupToCode` 로 **코드로 변환해 전송**하도록 고쳤다(SCP0110 등 타 화면도 operation
+  group 은 코드 저장). **일반 저장은 표시명 유지** — 일반 SP(L806-808)가 내부 CASE 로 변환하는 비대칭 계약이라
+  그대로 둔다. 회귀테스트 +2건(admin=P^A^E / 일반=Pack). AGENT.md 규칙4 재조회로 SP 계약을 실측 확인했고 DB 배포 불요.
+- **주의(남은 과제)**: operationGroup 외 "test"(measure/company/plant/cellitem) 같은 무효값은 여전히 해당 컬럼
+  제약에 걸린다. 정상 저장은 **유효 코드값** 입력이 전제 — 코드성 컬럼의 콤보화/검증(operation group 을 Pack/Cell/
+  Electrode 드롭다운으로, measure 등도 콤보로)은 별도 과제. operation group 드롭다운은 입력 자체를 3값으로 제한해
+  이런 오저장을 예방한다(권장 후속).
+
+## U-15 신규행 코드성 컬럼 셀콤보 Wave1 (사용자 지시 2026-10-19)
+
+- **배경**: admin 신규행에서 코드성 컬럼을 자유 타이핑("test")하면 저장 시 SP 제약(ORA-12899 등)에 걸린다.
+  AS-IS 는 그리드 셀콤보가 LINE_ID 뿐이지만(나머지 타이핑), TO-BE 는 **유효값 드롭다운으로 제한**해 오입력을
+  원천 차단한다(SCP0110 등 타 화면이 operation group 등을 콤보로 처리하는 선례). 원천 확정된 4종부터(Wave1).
+- **구현(IntegrationPsiGrid)**: `buildCellCombo`(identity DataMap value=display) 로 4개 컬럼에 고정목록 콤보 부착
+  (updatedLayout 재부착, LINE_ID 와 동일 규약). identity 라 **조회행 표시 불변**, 편집은 admin 신규행만 열려 조회행엔
+  드롭다운 미노출. 원천(SCM_ADM_LOOKUP_MASTER_DETAIL / SCM_MST_SHEET_MEASURE 실측):
+  - **OPERATION_GROUP** → lookup OPERATION_GROUP SEGMENT2(Pack/Cell/Electrode). 셀=**표시명**(opGroupCode·일반SP
+    일관, admin payload 가 코드 변환 U-14와 짝).
+  - **INCOTERMS** → lookup INCOTERMS SEGMENT1(DAP…16) + "-"(비적용행 다수). 셀=코드.
+  - **PLAN_TYPE** → lookup PLAN_TYPE SEGMENT1(FN/MA/PR/SE/TE). 셀=코드.
+  - **MEASURE** → MEASURE_LABEL 열에 SCM_MST_SHEET_MEASURE colLblNm(7) 콤보. 선택 시 cellEditEnded 가
+    MEASURE(코드=colNm) 동기(저장 baseCell 은 row.MEASURE 사용). label↔code = staticMeasures.
+- **보류(소스 미확정)**: COMPANY/PLANT/TO_SITE(cascade 필요) = Wave2. VALUE_TYPE/UOM/TO_PRODUCT(깔끔한 원천 없음).

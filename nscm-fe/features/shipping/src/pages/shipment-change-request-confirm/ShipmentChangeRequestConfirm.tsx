@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { MainTitle, SsoUserModal, SubTitle } from '@shared/components';
-import { useProcMutation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ConfirmDetailPanel } from './components/ConfirmDetailPanel';
@@ -25,6 +25,7 @@ import {
 import type { ConfirmDetail, MainRow, SubRow } from './shipment-change-request-confirm.types';
 import styles from './ShipmentChangeRequestConfirm.module.scss';
 import { useShipmentChangeRequestConfirmStore } from './useShipmentChangeRequestConfirmStore';
+import { submitConfirmSave } from './utils/shipmentChangeRequestConfirmSave';
 
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
@@ -44,13 +45,17 @@ const emptyDetail: ConfirmDetail = {
 //   설계: .atlas/gscm-design/SSP0202/design/00~03. 상세 매핑: __asis-mapping__.md.
 //   마스터-디테일 2그리드 + 디테일 폼. 액션 3종(Approval/Reject/SelfReject)은 상시 노출 + 자격 미충족 시 disabled.
 //   PKG_SSP0202 는 배포 완료(2026-10-07 ora.py 실측 VALID) — 종전 "미배포" 주석은 stale 이었다.
-//   잔여 미배선: IF_CHECK(승인 후 ERP 적재) · PLAN_CHECK · SCS_CHECK · SAVE_40 분기(constants 주석 참조).
+//   2026-10-14 배선 완료: 승인 저장(SAVE/SAVE_40 division 분기) + 사전체크 3종(SCS_CHECK·PLAN_CHECK·IF_CHECK).
+//   **잔여(의도적 미이식)**: ERP 인터페이스 **웹서비스** 호출(AS-IS `CallClient.FN_ERP_UIWebService`,
+//     cs:1000~1028). AS-IS 에서도 **전면 주석** 상태라 미이식이 곧 패리티다(사용자 지시 2026-10-14).
+//     동명의 DB 프로시저 IF_CHECK 와 혼동하지 말 것 — 그쪽은 배선돼 있다.
 export const ShipmentChangeRequestConfirm = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
   const setToast = useMessageStore.getState().setToast;
   const setAlert = useMessageStore.getState().setAlert;
   const sesUserId = useSessionStore(s => s.session.userId) ?? '';
-  const { checkErpBlock } = useShipmentChangeRequestConfirmActions();
+  const { checkErpBlock, checkScsConfirmId, checkPlanProcessing, checkErpIf } =
+    useShipmentChangeRequestConfirmActions();
 
   const mainGridRef = useRef<FlexGrid>();
   const mainFilterRef = useRef<FlexGridFilter>();
@@ -123,11 +128,10 @@ export const ShipmentChangeRequestConfirm = ({ tabId, title }: PageProps<MENU_ID
     };
   }, [subData]);
 
-  const { mutate: mutateSave } = useProcMutation<MENU_ID, SHEETS.MAIN>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.MAIN,
-    tabId,
-  });
+  // 저장은 `useProcMutation` 을 쓰지 않는다 — 공용 mutation 은 `{ data: [행…] }` 로 보내는데
+  //   이 SP 의 PROC_M 에 `JVARCHAR` 가 없어 **33 인자가 전부 NULL 로 바인딩**됐다. SP 가 빈 입력으로
+  //   돌고 성공을 돌려줘 "성공 토스트만 뜨고 아무것도 저장 안 되는" 상태였다(사용자 신고 2026-10-14,
+  //   SCM_COM_SQL_LOG 실측). 평탄 객체 `apiClient.post` 경로다 — utils/shipmentChangeRequestConfirmSave.ts.
 
   useEffect(() => {
     // 진입 자동조회 금지 — keep-alive 잔여 filters 무효화(§5-7) + Period 기본값(D-14) + 컬럼메타 1회 fetch.
@@ -166,17 +170,46 @@ export const ShipmentChangeRequestConfirm = ({ tabId, title }: PageProps<MENU_ID
     !!row && isRequested && str(row[MASTER_USER_COLUMNS.REQUEST_USER]) === sesUserId;
   const isDelegate = !!row && delegatee === sesUserId; // A7 _bDelegate_Flag
 
-  // === 액션 저장 (design 01 §2 E/F, 가드 순서 준수) ===
-  //   현재 FE 는 클라 가드(RowCount0/사유 필수/확인) + ERP 차단(SSPBlockCheckIF_SCP 콤보)만 수행한다.
-  //   미배선: chkSaveYN(SCS_CHECK, MSG01356) · EngProcessingChk(PLAN_CHECK, MSG01294) · 승인 후 IF_CHECK 적재.
-  //   SP·버튼메타는 전부 배포돼 있으므로(2026-10-07 실측) 차단 사유는 "미배포"가 아니라 "FE 미배선"이다.
+  /**
+   * === 액션 저장 (design 01 §2 E/F) ===
+   *   AS-IS `BtnApproval_Click`(cs:1372~1413) 가드 순서 그대로:
+   *     1 RowCount0 -> 2 SCS체크 -> 3 처리중체크 -> 4 ERP차단 -> 5 확인 -> 6 IF체크 -> 7 저장
+   *   2·3 은 **승인 전용**이다(반려/자기반려 핸들러에는 호출이 없다 — cs:1311/1369).
+   *
+   *   ERP 인터페이스 **웹서비스** 호출(`CallClient.FN_ERP_UIWebService`, cs:1000~1028)은 이식하지
+   *   않는다 — AS-IS 도 전면 주석이라 미이식이 곧 패리티다(사용자 지시 2026-10-14 잔여 확정).
+   *   6번 IF체크는 그 웹서비스가 아니라 동명의 **DB 프로시저**다.
+   */
   const runAction = (action: ACTION, confirmMsg: string) => {
     // E9/E5/E1: 디테일 없으면 무동작(무메시지).
     if (subRows.length === 0) return;
     void (async () => {
       if (savingRef.current) return;
+      if (action === ACTION.APPROVAL) {
+        // E10 chkSaveYN: SCS 에 해당 Confirm ID 실적이 생겼으면 승인 불가(MSG00362 -> MSG01356).
+        if (await checkScsConfirmId(subRows)) {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.CONFIRM_ID_EXISTS, {
+              defaultValue:
+                'The Shipment performance based on the Confirm ID occurred in SCS. Approval is not possible.',
+            }),
+          });
+          return;
+        }
+        // E11 EngProcessingChk: SSP 일일계획 처리중이면 승인 불가. {0}=남은 분(수동 치환).
+        const remainMinutes = await checkPlanProcessing(sc.divisionId);
+        if (remainMinutes !== null) {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.ENGINE_PROCESSING, {
+              defaultValue: 'SSP Daily Plan Processing now. Please, Try again after {0} minutes.',
+            }).replace('{0}', remainMinutes),
+          });
+          return;
+        }
+      }
       // E2/E6/E12: ERP I/F 차단구간(SSPBlockCheckIF_SCP) — BLOCK_YN='Y'면 차단.
-      //   AS-IS 가드 순서(design 01 §2 E1-E8): RowCount0 -> ERP block -> confirm -> 사유필수. ERP 차단 최우선.
       if (await checkErpBlock(sc.divisionId)) {
         void setAlert({
           type: 'alert',
@@ -198,31 +231,52 @@ export const ShipmentChangeRequestConfirm = ({ tabId, title }: PageProps<MENU_ID
         return;
       }
       savingRef.current = true;
-      // SaveData 파라미터(design 01 §F, 34 param 중 핵심) — division 앞2 '40' 런타임 분기(SP 내부).
-      const payload = {
-        confirmYn: action, // A/R/S
-        changeReqNo: str(row?.[MASTER_USER_COLUMNS.CHANGE_REQ_NO]),
-        divisionId: sc.divisionId,
-        rejectReason: action === ACTION.APPROVAL ? '' : rejectReason,
-        delegateYn: isDelegate ? 'Y' : 'N',
-        delegatee: isDelegate ? delegatee : '',
-        language: useSessionStore.getState().session.langCd ?? '',
-      };
-      mutateSave([payload] as never, {
-        onSuccess: () => {
-          void setToast({ type: 'success', message: t(MSG.SAVE_SUCCESS, '__Saved.') });
-          // F4: 저장 성공 후 마스터 재조회 + 하단 디테일 그리드/폼/반려사유 초기화.
-          //   처리된 요청의 디테일이 그대로 남아 있으면 아직 승인 대기인 것처럼 보인다(자매 SSP0003 동일 조치).
-          clearDetail();
-          void refetchMain?.();
-        },
-        // 저장 실패 surfacing 은 useProcMutation 기본 onError(MSG00003 = SAVE_FAIL alert)로 처리.
-        //   F2/F3 세분(SAVE_FAIL vs SYSTEM_ERROR) 은 SAVE SP 응답코드 종속 → convert-sp 후속(미배포).
-        //   이중 제출 가드는 뮤테이션이 끝난 뒤에 해제한다(동기 해제는 in-flight 가드를 무력화).
-        onSettled: () => {
-          savingRef.current = false;
-        },
-      });
+      try {
+        const changeRequestNo = str(row?.[MASTER_USER_COLUMNS.CHANGE_REQ_NO]);
+        const changeType = str(row?.[MASTER_USER_COLUMNS.CHANGE_TYPE]);
+        // TO-BE UserSession 에 타임존 필드가 없다 — 빈 값(SP 보정). 저장 경로와 같은 규약.
+        const timeZone = '';
+
+        // E12 GetErpIFCheck — 저장 **직전** ERP I/F 적재 체크(cs:1411). 통과해야 SaveData 로 간다.
+        if (!(await checkErpIf({ changeRequestNo, action, changeType, timeZone }))) {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.SYSTEM_ERROR, {
+              defaultValue: 'A system error has occurred. Request No : {0}',
+            }).replace('{0}', changeRequestNo),
+          });
+          return;
+        }
+
+        const saved = await submitConfirmSave(subRows, {
+          changeRequestNo,
+          action,
+          rejectReason,
+          changeType,
+          userId: sesUserId,
+          timeZone,
+          //   A7 위임 분기 — 위임자일 때만 값을 싣는다(AS-IS cs:925~934).
+          delegatee: isDelegate ? delegatee : '',
+          delegateeDept: isDelegate ? str(row?.DELEGATEE_DEPT) : '',
+        });
+
+        if (saved.outcome !== 'ok') {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.SAVE_FAIL, { defaultValue: 'Failed to save.' }),
+          });
+          return;
+        }
+
+        // F4: 저장 성공 후 마스터 재조회 + 하단 디테일 그리드/폼/반려사유 초기화
+        //   (AS-IS cs:942~947 FindData_Main + InitSpread(siSub) + SetConfirmInfoClear 등가).
+        void setToast({ type: 'success', message: t(MSG.SAVE_SUCCESS, { defaultValue: 'Saved successfully.' }) });
+        clearDetail();
+        await refetchMain?.();
+      } finally {
+        //   이중 제출 가드는 작업이 완전히 끝난 뒤 해제한다(동기 해제는 in-flight 가드를 무력화).
+        savingRef.current = false;
+      }
     })();
   };
 
@@ -232,11 +286,11 @@ export const ShipmentChangeRequestConfirm = ({ tabId, title }: PageProps<MENU_ID
 
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    // D2/D3/D5: 표준 툴바 Insert/Delete/Save = AS-IS NO-OP(본문 공백). 명시적 무동작(키 생략 시 공통
-    //   addRow/removeRow 부활 — self-check hotkeyConfig NO-OP 게이트). false 금지(AS-IS 는 버튼 노출).
-    insert: () => undefined,
-    delete: () => undefined,
-    save: () => undefined,
+    // D2/D3/D5: 표준 툴바 Insert/Delete/Save = AS-IS NO-OP(본문 공백). TO-BE 룰(2026-10-26): 기능이 없는
+    //   공통버튼은 노출하지 않는다 → false(버튼·단축키 숨김). (종전 '명시적 무동작 노출' 은 AS-IS 노출 재현 목적이었다)
+    insert: false,
+    delete: false,
+    save: false,
     manual: false,
     upload: false,
   };

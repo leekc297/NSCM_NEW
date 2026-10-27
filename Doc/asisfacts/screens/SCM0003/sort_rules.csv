@@ -1,0 +1,4 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+SCM0003,SQL,SCM0003_AFTER_LOOKUP_MASTER_DETAIL,Doc\asisfacts\db\modules\dbo.SCM0003_AFTER_LOOKUP_MASTER_DETAIL.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+SCM0003,SQL,SCM0003_GET_LOOKUP_MASTER,Doc\asisfacts\db\modules\dbo.SCM0003_GET_LOOKUP_MASTER.sql,59,,LOOKUP_TYPE,ORDER BY lookup_type,0,정적
+SCM0003,SQL,SCM0003_GET_LOOKUP_MASTER_DETAIL,Doc\asisfacts\db\modules\dbo.SCM0003_GET_LOOKUP_MASTER_DETAIL.sql,60,,DISPLAY_SEQ,order by display_seq,0,정적

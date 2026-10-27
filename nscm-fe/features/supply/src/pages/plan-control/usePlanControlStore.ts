@@ -7,6 +7,7 @@ import type {
   EngineRunContext,
   MasterValidationResult,
   PlanControlSearchParams,
+  PlanIdCreateContext,
 } from './plan-control.types';
 
 type GridSheet = SHEETS.PLAN_CONTROL | SHEETS.ENGINE_RUN;
@@ -27,6 +28,9 @@ interface PlanControlState {
   // SCP0039 팝업 결과 — DETAIL 셀 표시(G06·G17)와 Confirm 가드(B16·B17)의 유일한 원천.
   masterValidation: MasterValidationResult;
   openSearchArea: boolean;
+  // A002 Create Plan ID 팝업 오픈 컨텍스트. null 이면 닫힘(AS-IS ShowDialog 대응 — 탭 스코프라
+  //   MDI keep-alive 에서 탭끼리 섞이지 않는다).
+  planIdCreateContext: PlanIdCreateContext | null;
 }
 
 interface PlanControlAction {
@@ -38,6 +42,7 @@ interface PlanControlAction {
   clearFilters: () => void;
   setEngineRunContext: (context: EngineRunContext | null) => void;
   setMasterValidation: (result: MasterValidationResult) => void;
+  setPlanIdCreateContext: (context: PlanIdCreateContext | null) => void;
   fetchStaticColumns: () => Promise<void>;
   setOpenSearchArea: (open?: boolean) => void;
   // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchParams 패치(1회).
@@ -65,6 +70,7 @@ const initState: PlanControlState = {
   engineRunContext: null,
   masterValidation: initMasterValidation,
   openSearchArea: true,
+  planIdCreateContext: null,
 };
 
 const fetchColumns = async (sheetNm: string): Promise<RawFlexGridColumnConfig[]> => {
@@ -130,6 +136,11 @@ export const usePlanControlStore = createPersistedStoreWithTab<
   setMasterValidation: result => {
     set(state => {
       state.masterValidation = result;
+    });
+  },
+  setPlanIdCreateContext: context => {
+    set(state => {
+      state.planIdCreateContext = context;
     });
   },
   fetchStaticColumns: async () => {

@@ -1,5 +1,36 @@
-import { DUMMY_CODE_PREFIX } from '../capa-line-assign.constants';
-import type { ComboOption } from '../capa-line-assign.types';
+import { ALL, DUMMY_CODE_PREFIX, EMPTY_CODE } from '../capa-line-assign.constants';
+import type { ComboOption, ComboRow } from '../capa-line-assign.types';
+
+const str = (v: unknown): string =>
+  typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+
+/** `'ALL'` 이거나 선택 0건이면 필터를 걸지 않는다(= 상위 단계 결과 전부). */
+export const pickedSet = (selected: string[]): Set<string> | null => {
+  if (selected.includes(ALL)) return null;
+  const picked = selected.filter(code => code && code !== ALL);
+  return picked.length === 0 ? null : new Set(picked);
+};
+
+export const inSet = (set: Set<string> | null, value: string): boolean => !set || set.has(value);
+
+/** 마스터 축별 distinct — `DBUtils.GetDistinctTable(CODE, NAME)` + `DeleteEmptyName` 등가. */
+export const distinctByCode = (
+  rows: ComboRow[],
+  idKey: string,
+  nameKey: string,
+  accept: (row: ComboRow) => boolean
+): ComboOption[] => {
+  const seen = new Map<string, string>();
+  for (const row of rows) {
+    if (!accept(row)) continue;
+    const code = str(row[idKey]);
+    const name = str(row[nameKey]);
+    // `CODE <> '-'` + 공백 제거(ScpCapaBL `DeleteEmptyName`) — design 02 §3.3.
+    if (!code || code === EMPTY_CODE || !name) continue;
+    if (!seen.has(code)) seen.set(code, name);
+  }
+  return [...seen.entries()].map(([value, label]) => ({ value, label }));
+};
 
 /**
  * `ScpCapaBL.GetSortedCode`(ScpCapaBL.cs:81-136) 등가 — CODE 오름차순, 단 `DMY_` 접두 Dummy 는 맨 뒤.

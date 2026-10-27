@@ -96,8 +96,10 @@ export const useBodStore = createPersistedStoreWithTab<BodState & BodAction>(
           acc[curr.paramNm] = curr.paramCtn;
           return acc;
         }, {} as SearchParamProps);
+        // 기본값 위에 저장값을 덮는다 — 저장 시 빈 값('')은 제외되므로(gridAction.personalizeCondition)
+        //   통째로 교체하면 Active ALL(validYn '')처럼 저장되지 않은 조건이 undefined 가 되어 빈칸으로 보인다.
         set(state => {
-          state.searchParams = searchParams;
+          state.searchParams = { ...initBodState.searchParams, ...searchParams };
         });
       }
       set(state => {

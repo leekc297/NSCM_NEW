@@ -22,6 +22,7 @@
 
 1. **기본은 White = "클래스를 붙이지 않는다"** (순수 흰색 강제 아님). 클래스가 없으면 표준 홀/짝 zebra(`.wj-alt`)가 자동 표시된다. → **zebra 를 죽이지 말 것**(셀에 흰색 inline 강제 금지).
 2. **편집 가능 셀 = `wj-cell-editable`(Yellow).** 가능하면 **컬럼 메타 editable**(`inputTpCd` O/M/IM/IO)로 표시 → 공용 `DataGrid` 의 `formatEditableColumns`(`GridUtils.isEditableCell`)가 **자동** 부여. 메타로 표현 못 하는 조건부 편집셀만 화면 `formatItem` 에서 `toggleClass(cell,'wj-cell-editable', editable)`.
+2-b. **팝업 입력 셀도 '편집 가능' 이다(CR-072, 사용자 의견 2026-10-27).** `SHEET_COLUMNS CELL=FPModal` 처럼 더블클릭 팝업으로 값을 바꾸는 셀(예 BOD Route Id)은 셀 에디터가 직접 열리지 않아도 사용자가 수정하는 셀이므로 **Yellow 가 정상**이다. 정합검증 H2(`_verify.spec.ts`)는 `asis_ref CELL=FPModal` 셀을 편집 가능으로 간주해 노랑 = PASS.
 3. **Gray(`wj-cell-non-editable`) = "원래 편집 가능하나 지금 잠긴" 특수 셀에만.** 예: DMF0020 LOC measure 동적셀의 **과거 주차**(이번 주 월요일 이전). **조회 전용 grid / 비편집 컬럼 전체를 회색칠 금지.**
 4. **상호배타 toggle**: Wijmo 셀 재활용으로 클래스 잔존 → 모든 분기에서 `toggleClass(cell,'wj-cell-editable',cond)` + `toggleClass(cell,'wj-cell-non-editable',cond2)` 양쪽 명시(false 포함).
 5. `alternatingRowStep` 은 Wijmo 기본 1(zebra ON). 공용 `DataGrid` 가 끄지 않음 — 화면이 0 으로 바꾸지 말 것(필요 시 `g.alternatingRowStep=1` 명시 보장).
@@ -71,3 +72,6 @@ toggleClass(e.cell, 'wj-cell-non-editable', isLockedButEditable);
 - 공용 자동 coloring: `packages/shared/.../data-grid/dataGridUtils.ts formatEditableColumns` (불변)
 - 짝 hook: `grid-multi-tier-header-height.md`(#93) · `screen-grid-edit-merge-and-meta-mandatory.md`(#89) · `grid-column-meta.md`
 - 기준 화면: **DMF0020**(정립) / **DMF0008**(2026-06-28 표준 적용)
+
+## 변경 이력
+- **2026-10-27** §1 2-b 신설 — 팝업 입력 셀(FPModal) = 편집 가능(노랑 정상) CR-072. 계기: SCP0007 정합검증서 ROUTE_ID '수정 COLUMN' 허위 FAIL(사용자 의견).

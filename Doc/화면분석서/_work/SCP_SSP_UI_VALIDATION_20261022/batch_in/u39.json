@@ -1,0 +1,278 @@
+[
+ {
+  "screen": "SCP0114",
+  "title": "CAPA LineMaster",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0114_CAPA_LineMaster/SCP0114_CAPA_LineMaster.cs:1934",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0114_CAPA_LineMaster/SCP0114_CAPA_LineMaster.cs:1562"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Master/SCP0114_CAPA_LineMaster/SCP0114_CAPA_LineMaster.Designer.cs:689",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0114_CAPA_LineMaster/SCP0114_CAPA_LineMaster.Designer.cs:608"
+  ],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/capa-line-master"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0114_GET_CAPA_LINE_MASTER",
+    "member": "FindData",
+    "line": "729",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0114_CAPA_LineMaster\\SCP0114_CAPA_LineMaster.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0114_SAVE_CAPA_LINE_MASTER",
+    "member": "SaveData",
+    "line": "908",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0114_CAPA_LineMaster\\SCP0114_CAPA_LineMaster.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0114_GET_CAPA_LINE_MASTER",
+    "member": "FindData",
+    "line": "442",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0114_CAPA_LineMaster\\SCP0114_CAPA_LineMaster.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0114_GET_CAPA_LINE_MASTER",
+    "member": "FindData",
+    "line": "729",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0114_CAPA_LineMaster\\SCP0114_CAPA_LineMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0114_SAVE_CAPA_LINE_MASTER",
+    "member": "SaveData",
+    "line": "908",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Master\\SCP0114_CAPA_LineMaster\\SCP0114_CAPA_LineMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0114_GET_CAPA_LINE_MASTER",
+    "member": "FindData",
+    "line": "442",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0114_CAPA_LineMaster\\SCP0114_CAPA_LineMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_SAVEMENUITEMINFO",
+    "member": "SaveData",
+    "line": "578",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0114_CAPA_LineMaster\\SCP0114_CAPA_LineMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_DELETEMENUITEMINFO",
+    "member": "SaveData",
+    "line": "579",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0114_CAPA_LineMaster\\SCP0114_CAPA_LineMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "UP_FX_SAVEMENUITEMINFO",
+    "member": "SaveData",
+    "line": "580",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0114_CAPA_LineMaster\\SCP0114_CAPA_LineMaster.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0114_GET_CAPA_LINE_MASTER",
+   "SCP0114_SAVE_CAPA_LINE_MASTER",
+   "UP_FX_DELETEMENUITEMINFO",
+   "UP_FX_SAVEMENUITEMINFO"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0114_SAVE_CAPA_LINE_MASTER",
+    "sp": "SCP0114_SAVE_CAPA_LINE_MASTER",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "신규 등록 시 해당 레벨의 ID 또는 NAME 이 이미 있으면 저장 중단(shop group E→ELTR 테이블, P/A→LINE 테이블, '-'→LINE 테이블)",
+    "message": "중복 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code=99020; THROW → CATCH: ROLLBACK; SELECT 'N' AS result_code, @v_err_message AS ERR_MESSAGE"
+   },
+   {
+    "entry_sp": "SCP0114_SAVE_CAPA_LINE_MASTER",
+    "sp": "SCP0114_SAVE_CAPA_LINE_MASTER",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "수정 시 해당 레벨 NAME 이 이미 존재하면 저장 중단",
+    "message": "중복 데이터가 있습니다.",
+    "on_fail": "SET @v_err_code=99020; THROW → CATCH: ROLLBACK; SELECT 'N' AS result_code, @v_err_message AS ERR_MESSAGE"
+   },
+   {
+    "entry_sp": "SCP0114_SAVE_CAPA_LINE_MASTER",
+    "sp": "SCP0114_SAVE_CAPA_LINE_MASTER",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외는 F, 업무 검증(THROW 99020)은 N 으로 구분해 반환",
+    "message": "[ERROR_NUMBER]ERROR_MESSAGE",
+    "on_fail": "if (xact_state() <> 0) ROLLBACK TRAN; scm_sys_log_batch ERROR INSERT; @v_err_message 없으면 SELECT 'F' AS result_code, '['+ERROR_NUMBER()+']'+ERROR_MESSAGE() AS ER"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0115",
+  "title": "Policy-based Inv. Mgmt.",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0115_PolicyInvManagement/SCP0115_PolicyInvMgmt.cs:2145",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0115_PolicyInvManagement/SCP0115_PolicyInvMgmt.designer.cs:772"
+  ],
+  "designer_files": [],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_GET_POLICY_INV_MGMT_PLAN",
+    "member": "Find_Data",
+    "line": "427",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_GET_COMBOBOX_DATA",
+    "member": "GetComboBoxMasterData",
+    "line": "520",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_GET_POLICY_INV_MGMT_PLAN_DATE",
+    "member": "GetPlanDateComboBox",
+    "line": "548",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_GET_POLICY_INV_MGMT_PLAN",
+    "member": "SaveData",
+    "line": "990",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN",
+    "member": "SavePlanData",
+    "line": "1120",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN",
+    "member": "Save_Data_Import",
+    "line": "1244",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_GET_POLICY_INV_MGMT_PLAN",
+    "member": "Find_Data",
+    "line": "427",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_GET_COMBOBOX_DATA",
+    "member": "GetComboBoxMasterData",
+    "line": "520",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_GET_POLICY_INV_MGMT_PLAN_DATE",
+    "member": "GetPlanDateComboBox",
+    "line": "548",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_GET_POLICY_INV_MGMT_PLAN",
+    "member": "SaveData",
+    "line": "990",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN",
+    "member": "SavePlanData",
+    "line": "1120",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN",
+    "member": "Save_Data_Import",
+    "line": "1244",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0115_PolicyInvManagement\\SCP0115_PolicyInvMgmt.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0115_GET_COMBOBOX_DATA",
+   "SCP0115_GET_POLICY_INV_MGMT_PLAN",
+   "SCP0115_GET_POLICY_INV_MGMT_PLAN_DATE",
+   "SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN",
+    "sp": "SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "일반 예외 시 로그 후 err_code/err_message 반환",
+    "message": "ERROR_MESSAGE()",
+    "on_fail": "scm_sys_log_batch ERROR INSERT; SELECT @v_err_code AS err_code, @v_err_message AS err_message; IF @@TRANCOUNT > 0 COMMIT WORK"
+   }
+  ]
+ }
+]

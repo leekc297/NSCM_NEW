@@ -1,14 +1,14 @@
 import { SHEETS } from '../shipment-plan.constants';
 
 // Detail 하위 sheet 탭 순서 (AS-IS SpdSheet 등록 순서 — 00_checklist §0).
-//   "Hold stock" 은 CreateSpread 상 주석처리(02 §4.1-2)였으나 Main BOH 드릴다운·Insert·Edit
-//   코드 경로가 실재(03 §1.3/§3-E/F)하므로 탭으로 노출한다.
+//   "Hold stock" 은 AS-IS CreateSpread 상 주석처리(02 §4.1-2)로 탭 미노출이 AS-IS 파리티다
+//   (AS-IS 실행 화면 6탭, 사용자 결정 2026-10-16). 탭·드릴다운 어디서도 노출하지 않는다
+//   (HOLD 드릴다운도 비활성화 — BOH_DRILLDOWN 참조). 조회/editLock/저장 코드는 휴면 유지.
 //   "Hold stock Detail" 은 UI 트리거·전용 GET SP 모두 미발견(03 §6-5) — 탭 제외, 확인필요로 보고.
 export const DETAIL_SHEETS: readonly SHEETS[] = [
   SHEETS.PLAN_DETAIL,
   SHEETS.STOCK_DETAIL,
   SHEETS.OWMS_DETAIL,
-  SHEETS.HOLD_STOCK,
   SHEETS.MES_STOCK,
   SHEETS.MES_STOCK_DETAIL,
   SHEETS.SHIPMENT_RESULT,
@@ -103,10 +103,11 @@ export const INITIAL_FIELDSET: DetailFieldSet = FIELDSETS[SHEETS.PLAN_DETAIL] as
 //   'BOH'(기초재고) 는 AS-IS 분기 대상 4종(ERP/oWMS/HOLD/MES) 밖 — 드릴다운 없음.
 //   주의: 'MES' 는 이 맵을 타지 않는다 — 페이지 handleMainDrilldown 이 MES Stock Detail +
 //   MES Stock 2-sheet 연속 조회로 특수 처리한다(AS-IS L2356~2366, gap-audit I10).
+//   'HOLD' 은 대상 Hold stock 탭을 숨겼으므로(사용자 결정 2026-10-16) 드릴다운도 비활성화 —
+//   더블클릭 시 handleMainDrilldown 의 `if (!sheet) return` 으로 무반응.
 export const BOH_DRILLDOWN: Record<string, SHEETS | undefined> = {
   ERP: SHEETS.STOCK_DETAIL,
   oWMS: SHEETS.OWMS_DETAIL,
-  HOLD: SHEETS.HOLD_STOCK,
   MES: SHEETS.MES_STOCK,
 };
 

@@ -1,0 +1,548 @@
+[
+ {
+  "screen": "SCP0083",
+  "title": "DIO Report",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0083_DIOReport/POPUP/SCP0083_DIOReportAgingPopup.cs:255",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0083_DIOReport/POPUP/SCP0083_DIOReportAgingPopup.designer.cs:117",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0083_DIOReport/POPUP/SCP0083_DIOReportOperationPopup.cs:260",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0083_DIOReport/POPUP/SCP0083_DIOReportOperationPopup.designer.cs:117",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0083_DIOReport/POPUP/SCP0083_DIOReportPopup.cs:201",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0083_DIOReport/POPUP/SCP0083_DIOReportPopup.designer.cs:115",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0083_DIOReport/SCP0083_DIOReport.cs:3490"
+  ],
+  "designer_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0083_DIOReport/SCP0083_DIOReport.Designer.cs:747"
+  ],
+  "tobe_folders": [],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_AGING_LT",
+    "member": "FindData",
+    "line": "170",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\POPUP\\SCP0083_DIOReportAgingPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_OPERATION_LT",
+    "member": "FindData",
+    "line": "152",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\POPUP\\SCP0083_DIOReportOperationPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_REPORT_H",
+    "member": "FindData",
+    "line": "167",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\POPUP\\SCP0083_DIOReportPopup.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_REPORT",
+    "member": "Find_Data",
+    "line": "551",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_CYCLE_INVENTORY",
+    "member": "Find_Data_Cycle",
+    "line": "719",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_SAVE_DIO_REPORT_ROW_DATASET",
+    "member": "SaveData_Main",
+    "line": "1055",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_SAVE_DIO_CYCLE_INVENTORY_ROW_DATASET",
+    "member": "SaveData_Cycle",
+    "line": "1258",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_PLAN_VERSION_INFO",
+    "member": "GetPlanCombo",
+    "line": "1710",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_VERSION_INFO",
+    "member": "GetVersionCombo",
+    "line": "1729",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "2808",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCP_ANL_DIO_REPORT",
+    "member": "BtnVersionCreate_Click",
+    "line": "2934",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCP_ANL_DIO_REPORT_VERSION_DELETE",
+    "member": "BtnVersionDelete_Click",
+    "line": "3041",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_AGING_LT",
+    "member": "FindData",
+    "line": "170",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\POPUP\\SCP0083_DIOReportAgingPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_OPERATION_LT",
+    "member": "FindData",
+    "line": "152",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\POPUP\\SCP0083_DIOReportOperationPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_REPORT_H",
+    "member": "FindData",
+    "line": "167",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\POPUP\\SCP0083_DIOReportPopup.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_REPORT",
+    "member": "Find_Data",
+    "line": "551",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_CYCLE_INVENTORY",
+    "member": "Find_Data_Cycle",
+    "line": "708",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_PLAN_VERSION_INFO",
+    "member": "GetPlanCombo",
+    "line": "1710",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0083_GET_DIO_VERSION_INFO",
+    "member": "GetVersionCombo",
+    "line": "1729",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "2808",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCP_ANL_DIO_REPORT",
+    "member": "BtnVersionCreate_Click",
+    "line": "2934",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCP_ANL_DIO_REPORT_VERSION_DELETE",
+    "member": "BtnVersionDelete_Click",
+    "line": "3041",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0083_DIOReport\\SCP0083_DIOReport.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_SCM_SYS_LOG_BATCH",
+   "PR_SCP_ANL_DIO_REPORT",
+   "PR_SCP_ANL_DIO_REPORT / PR_SCP_ANL_DIO_REPORT_VERSION_DELETE",
+   "PR_SCP_ANL_DIO_REPORT_VERSION_DELETE",
+   "SCP0083_GET_DIO_AGING_LT",
+   "SCP0083_GET_DIO_CYCLE_INVENTORY",
+   "SCP0083_GET_DIO_OPERATION_LT",
+   "SCP0083_GET_DIO_REPORT",
+   "SCP0083_GET_DIO_REPORT_H",
+   "SCP0083_GET_DIO_VERSION_INFO",
+   "SCP0083_GET_PLAN_VERSION_INFO",
+   "SCP0083_SAVE_DIO_CYCLE_INVENTORY_ROW_DATASET",
+   "SCP0083_SAVE_DIO_REPORT_ROW_DATASET"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "PR_SCP_ANL_DIO_REPORT",
+    "sp": "PR_SCP_ANL_DIO_REPORT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "RANGE",
+    "desc": "조회 개월수(Data Range)가 3~12 범위를 벗어나면 생성하지 않고 8 반환",
+    "message": null,
+    "on_fail": "END 로그('[RETURN 8]') 후 RETURN 8"
+   },
+   {
+    "entry_sp": "PR_SCP_ANL_DIO_REPORT",
+    "sp": "PR_SCP_ANL_DIO_REPORT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "DUP",
+    "desc": "같은 사업부·계획일·SEQ·버전이 이미 생성 중이거나 생성 완료돼 있으면 실행하지 않고 9 반환",
+    "message": null,
+    "on_fail": "END 로그('[RETURN 9]') 후 RETURN 9 (없으면 VER_STATUS='P' 로 버전 INSERT 후 진행)"
+   },
+   {
+    "entry_sp": "PR_SCP_ANL_DIO_REPORT",
+    "sp": "PR_SCP_ANL_DIO_REPORT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "생성 중 예외 시 진행중(P) 버전 정보를 삭제하고 오류 로그 후 -1 반환",
+    "message": null,
+    "on_fail": "DELETE SCP_ANL_DIO_REPORT_VERSION ... AND VER_STATUS='P'; ERROR 로그; PRINT; return -1"
+   },
+   {
+    "entry_sp": "PR_SCP_ANL_DIO_REPORT",
+    "sp": "PR_SCP_ANL_DIO_REPORT",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "COUNT",
+    "desc": "생성된 DIO Report 데이터가 0건이면 등록했던 버전 정보를 삭제(완료 처리하지 않음)",
+    "message": null,
+    "on_fail": "생성 데이터 있으면 VER_STATUS='C'(완료), 없으면 버전 행 삭제 후 RETURN 1"
+   },
+   {
+    "entry_sp": "PR_SCP_ANL_DIO_REPORT_VERSION_DELETE",
+    "sp": "PR_SCP_ANL_DIO_REPORT_VERSION_DELETE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXISTS",
+    "desc": "삭제할 DIO Report 버전이 없으면 아무것도 하지 않고 0 반환",
+    "message": null,
+    "on_fail": "SKIP 로그('SKIP : NO DATA') 후 RETURN 0 (결과셋 없음)"
+   },
+   {
+    "entry_sp": "PR_SCP_ANL_DIO_REPORT_VERSION_DELETE",
+    "sp": "PR_SCP_ANL_DIO_REPORT_VERSION_DELETE",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "버전 삭제 중 예외 시 VER_STATUS='P' 인 버전 행을 지우고 -1 반환",
+    "message": null,
+    "on_fail": "DELETE SCP_ANL_DIO_REPORT_VERSION ... AND VER_STATUS='P'; ERROR 로그; PRINT; return -1"
+   },
+   {
+    "entry_sp": "SCP0083_GET_DIO_VERSION_INFO",
+    "sp": "SCP0083_GET_DIO_VERSION_INFO",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "RUNNING",
+    "desc": "최신 DIO 버전이 생성중(P)이면 신규 버전(미생성) 선택지를 제공하지 않아 동시 생성 차단",
+    "message": "VER-P-생성중",
+    "on_fail": "기존 버전 목록만 반환(다음 버전 @MAX_VER+1 '미생성' 행을 붙이지 않음 — L86~116 ELSE 분기에서만 추가)"
+   },
+   {
+    "entry_sp": "SCP0083_GET_PLAN_VERSION_INFO",
+    "sp": "SCP0083_GET_PLAN_VERSION_INFO",
+    "depth": 0,
+    "cls": "D 검증리포트형",
+    "check_type": "EXISTS",
+    "desc": "계획 버전별로 DIO Report 미생성이면 생성 가능(Y), 이미 있으면 N 으로 표시",
+    "message": null,
+    "on_fail": "이미 DIO Report 가 생성된 계획 버전은 CREATE_YN='N'"
+   },
+   {
+    "entry_sp": "SCP0083_SAVE_DIO_CYCLE_INVENTORY_ROW_DATASET",
+    "sp": "SCP0083_SAVE_DIO_CYCLE_INVENTORY_ROW_DATASET",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 중 예외 시 롤백하고 오류코드·메시지 결과셋 반환",
+    "message": "ERROR_NUMBER() / ERROR_MESSAGE()",
+    "on_fail": "ROLLBACK + scm_sys_log_batch ERROR INSERT 후 SELECT @v_err_code AS err_code, @v_err_message AS err_message (result_code 'F' 반환은 주석)"
+   },
+   {
+    "entry_sp": "SCP0083_SAVE_DIO_REPORT_ROW_DATASET",
+    "sp": "SCP0083_SAVE_DIO_REPORT_ROW_DATASET",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "저장 중 예외 시 오류 로그 기록 후 오류코드·메시지 결과셋 반환",
+    "message": "ERROR_NUMBER() / ERROR_MESSAGE()",
+    "on_fail": "scm_sys_log_batch ERROR INSERT 후 SELECT @v_err_code AS err_code, @v_err_message AS err_message (ROLLBACK·'F' 반환 모두 주석)"
+   },
+   {
+    "entry_sp": "PR_SCP_ANL_DIO_REPORT / PR_SCP_ANL_DIO_REPORT_VERSION_DELETE",
+    "sp": "PR_SCP_SYS_LOG_BATCH",
+    "depth": 1,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백하고 오류 내용을 별도 트랜잭션으로 로그 테이블에 다시 기록",
+    "message": "ERROR_MESSAGE() (로그 테이블 기록)",
+    "on_fail": "ROLLBACK TRANSACTION PR_SCP_SYS_LOG_BATCH; BEGIN TRANSACTION PR_SCP_SYS_LOG_BATCH2; INSERT INTO scm_sys_log_batch VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_M"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0084",
+  "title": "Long-term stock",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0084_LongTermStock/SCP0084_LongTermStock.cs:816",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0084_LongTermStock/SCP0084_LongTermStock.designer.cs:439"
+  ],
+  "designer_files": [],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/long-term-stock"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_LONG_TERM_STOCK",
+    "member": "Find_Data",
+    "line": "308",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0084_LongTermStock\\SCP0084_LongTermStock.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_MONTH_RANGE",
+    "member": "GetMonthRange",
+    "line": "354",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0084_LongTermStock\\SCP0084_LongTermStock.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET",
+    "member": "SaveData_Memo",
+    "line": "450",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0084_LongTermStock\\SCP0084_LongTermStock.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH_PATTERN"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "514",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0084_LongTermStock\\SCP0084_LongTermStock.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_LONG_TERM_STOCK",
+    "member": "Find_Data",
+    "line": "308",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0084_LongTermStock\\SCP0084_LongTermStock.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_MONTH_RANGE",
+    "member": "GetMonthRange",
+    "line": "354",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0084_LongTermStock\\SCP0084_LongTermStock.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "PR_SCM_SYS_LOG_BATCH",
+    "member": "SCM_SYS_LOG_BATCH",
+    "line": "514",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0084_LongTermStock\\SCP0084_LongTermStock.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "PR_SCM_SYS_LOG_BATCH",
+   "SCP0084_GET_LONG_TERM_STOCK",
+   "SCP0084_GET_MONTH_RANGE",
+   "SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET"
+  ],
+  "db_validation_brief": [
+   {
+    "entry_sp": "PR_SCM_SYS_LOG_BATCH",
+    "sp": "PR_SCM_SYS_LOG_BATCH",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "로그 INSERT 실패 시 롤백 후 오류 내용을 별도 트랜잭션으로 재기록",
+    "message": null,
+    "on_fail": "ROLLBACK TRANSACTION PR_SCM_SYS_LOG_BATCH; BEGIN TRAN PR_SCM_SYS_LOG_BATCH2; INSERT scm_sys_log_batch (ERROR_PROCEDURE(),'ERROR',...,ERROR_MESSAGE()); COMMIT"
+   },
+   {
+    "entry_sp": "SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET",
+    "sp": "SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET",
+    "depth": 0,
+    "cls": "A 차단형",
+    "check_type": "EXCEPTION",
+    "desc": "MEMO 저장 중 예외 시 롤백하고 오류코드·메시지 결과셋 반환",
+    "message": "ERROR_NUMBER() / ERROR_MESSAGE()",
+    "on_fail": "ROLLBACK + scm_sys_log_batch ERROR INSERT 후 SELECT @v_err_code AS err_code, @v_err_message AS err_message"
+   }
+  ]
+ },
+ {
+  "screen": "SCP0085",
+  "title": "Ending Inventory",
+  "domain": "SCP",
+  "logic_files": [
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0085_EndingInventory/SCP0085_EndingInventory.cs:1148",
+   "06.UIL/GSCM.SCP.Forms.UIL/Report/SCP0085_EndingInventory/SCP0085_EndingInventory.designer.cs:886"
+  ],
+  "designer_files": [],
+  "tobe_folders": [
+   "nscm-fe/features/supply/src/pages/ending-inventory"
+  ],
+  "direct_calls": [
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0085_GET_SEARCH_INFO",
+    "member": "GetSearchInfo",
+    "line": "238",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0085_EndingInventory\\SCP0085_EndingInventory.cs",
+    "pattern": "P3_not_in_foxquery",
+    "status": "NOT_IN_FOXQUERY"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0085_GET_ENDING_INVENTORY",
+    "member": "Find_Data",
+    "line": "441",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0085_EndingInventory\\SCP0085_EndingInventory.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0085_GET_ENDING_INVENTORY_DAILY",
+    "member": "Find_Data",
+    "line": "441",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0085_EndingInventory\\SCP0085_EndingInventory.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_MONTH_RANGE",
+    "member": "GetMonthRange",
+    "line": "498",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0085_EndingInventory\\SCP0085_EndingInventory.cs",
+    "pattern": "P1_endpoint",
+    "status": "MATCH"
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0085_GET_ENDING_INVENTORY",
+    "member": "Find_Data",
+    "line": "419",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0085_EndingInventory\\SCP0085_EndingInventory.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0085_GET_ENDING_INVENTORY_DAILY",
+    "member": "Find_Data",
+    "line": "425",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0085_EndingInventory\\SCP0085_EndingInventory.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   },
+   {
+    "unit_kind": "SP",
+    "unit": "SCP0084_GET_MONTH_RANGE",
+    "member": "GetMonthRange",
+    "line": "498",
+    "file": "06.UIL\\GSCM.SCP.Forms.UIL\\Report\\SCP0085_EndingInventory\\SCP0085_EndingInventory.cs",
+    "pattern": "P4_literal_foxkey",
+    "status": ""
+   }
+  ],
+  "entry_sps": [
+   "SCP0084_GET_MONTH_RANGE",
+   "SCP0085_GET_ENDING_INVENTORY",
+   "SCP0085_GET_ENDING_INVENTORY_DAILY",
+   "SCP0085_GET_SEARCH_INFO"
+  ],
+  "db_validation_brief": []
+ }
+]

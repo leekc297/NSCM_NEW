@@ -54,6 +54,30 @@ for (const [c, lv, re, msg] of rules) { let m; let n = 0; const src = /TODO/.tes
   const lineOfStr = idx => codeStr.slice(0, idx).split('\n').length;
   for (const [c, lv, re, msg] of R3) { let m; let n = 0; while ((m = re.exec(codeStr)) && n < 20) { n++; add(lv, c, msg, lineOfStr(m.index)); } }
 }
+// ── P41: 메시지 ID (사용자 2026-10-22) — AS-IS SP 가 돌려주던 MSG ID 를 PKG 에 그대로 두면 TO-BE 에서 다른 문구가 뜬다(MSG00001 AS-IS '모든 항목은 필수 입력입니다.' / TO-BE '저장 하시겠습니까?')
+//    AS-IS SP 원문(register.json procs 의 asis_sp → Doc/asisfacts/db/modules/dbo.<SP>.sql)에 나온 ID 가 PKG 문자열에 그대로 있고 TO-BE 에서 뜻이 다르면 BLOCK — 문구로 찾은 TO-BE ID(lib/msgmap)
+{
+  const MM = require('./lib/msgmap'); const M = MM.load(cfg);
+  if (M.ok && ID) {
+    const used = new Set(); let reg = {}; try { reg = JSON.parse(fs.readFileSync(path.join(cfg.genOutDir, ID, 'register.json'), 'utf8')); } catch { /* register 없음 */ }
+    for (const p of reg.procs || []) { const sp = String(p.asis_sp || '').replace(/^dbo\./i, ''); if (!sp) continue; const f = path.join(cfg.asisOutDir || '', 'db', 'modules', `dbo.${sp}.sql`); try { for (const m of fs.readFileSync(f, 'utf8').matchAll(/MSG\d{5}/g)) used.add(m[0]); } catch { /* 원문 없음 */ } }
+    const seen = new Set(); const lineOfStr = idx => codeStr.slice(0, idx).split('\n').length;
+    for (const m of codeStr.matchAll(/MSG\d{5}/g)) {
+      const c = m[0]; if (!used.has(c) || seen.has(c) || !MM.collides(M, c)) continue; const r = MM.map(M, c); if (r.tobe === c) continue; seen.add(c);
+      add('BLOCK', 'P41', `AS-IS 메시지 ID 그대로 사용: ${c} — AS-IS '${r.asisText.slice(0, 40)}' / TO-BE ${c} = '${((M.tobe.get(c) || {}).KO || '').slice(0, 40)}' → 문구로 찾은 TO-BE ID ${r.tobe}${r.tobe === 'MSG?????' ? ' (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+)' : ''}`, lineOfStr(m.index));
+    }
+  }
+}
+// ── VR3: VALIDATION 취합 대조 (사용자 지시 2026-10-23) — SCP·SSP 화면 DB 검증 중 취합 기준 TO-BE 미적용 행(AS-IS SP 에 있고 TO-BE 에 없던 검사)·TAG 현황 안내.
+//    2026-10-22 16:25 스냅샷 판정이라 이후 이식분을 반영하지 못한다 → WARN. 대조 지시 = prompts/port_pkg.md 3-2
+{
+  const VR = require('./lib/valref'); const vr = ID ? VR.find(cfg, ID) : null;
+  if (vr && vr.screen) {
+    const db = vr.block.filter(x => x['UI / DB'] === 'DB'); const miss = db.filter(x => x['TO-BE 적용여부'] === '미적용');
+    const tg = {}; for (const x of db) for (const t of String(x['TO-BE 적용 TAG'] || '').split(/\s*\n\s*/)) if (t) tg[t] = (tg[t] || 0) + 1;
+    if (miss.length || Object.keys(tg).length) add('WARN', 'VR3', `VALIDATION 취합(${vr.stamp}) DB 행 ${db.length}건 — 미적용 ${miss.length}${miss.length ? ` (${miss.slice(0, 5).map(x => String(x['(참고) AS-IS 근거 위치'] || '').split(' / ')[0]).join(', ')}${miss.length > 5 ? ' …' : ''})` : ''} · TAG ${Object.entries(tg).map(([k, v]) => `${k} ${v}`).join(' ') || '없음'} → ${vr.screen} 의 DB 행과 대조`);
+  }
+}
 if (asisBlocks) add('BLOCK', 'P00', `ASIS 원문 블록 ${asisBlocks}개 잔존 — 이식 후 삭제`);
 if (!/CREATE OR REPLACE PACKAGE BODY/i.test(raw)) add('BLOCK', 'P90', 'PACKAGE BODY 없음');
 // 규약: 모든 PROCEDURE 에 O_RESULT_CURSOR, EXCEPTION WHEN OTHERS

@@ -1,0 +1,3 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,dr[DefColumns.COLUMN_NAME],CODE,SCP0029_ProductionPlanLine_SMALL,SCP0029_ProductionPlanLine_SMALL.cs:375,dr[DefColumns.COLUMN_LABEL_NAME],Text,,None,코드 선언 FPMerge.None,0,false,,,,"foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sColumnName.IndexOf(""B_"") > 0)"
+,dr[DefColumns.COLUMN_NAME],CODE,SCP0029_ProductionPlanLine_SMALL,SCP0029_ProductionPlanLine_SMALL.cs:379,dr[DefColumns.COLUMN_LABEL_NAME],Number,,None,코드 선언 FPMerge.None,70,true,,,,"foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0)"

@@ -1,22 +1,21 @@
 import { PeriodField } from 'features/master/src/components';
+import { useEffect } from 'react';
 
 import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
-import { useTabComboQueries, useTabLookupQueries } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { useTabComboQueries } from '@shared/hooks';
+import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
 import { useWorkingTimeStore } from '../useWorkingTimeStore';
-import { COMBO, DAY_WEEK_LOOKUP, DAY_WEEK_SELECT_DAY, LBL } from '../working-time.constants';
+import { COMBO, LBL } from '../working-time.constants';
 
 interface Props {
   onSubmit: () => void;
   // Division 변경 = Grid 초기화 (부모 resetGrid — 조회 결과·미저장 편집 폐기)
   onDivisionChange: () => void;
-  // btnInput 값입력 — 부모(WorkingTime)가 가드(조회 전/SelectDay/셀 미선택/범위) 후 선택 D_ 셀에 write.
-  onInput: () => void;
 }
 
 interface Option {
@@ -33,7 +32,7 @@ const toOptions = (rows: ComboResponse[] | undefined): Option[] =>
 // 02_search-combo.md 조회조건 콤보(영역2). cascade 는 전부 필터형 — _SCP_ALL 3콤보를 전량 로드 후
 //   FE 에서 client-side 필터(AS-IS DBUtils.Filter 재현, §3). Division 변경 = 하위 초기화 + Grid 비움.
 //   Building/Bucket/Sum 은 정적 hidden(01_layout §3) — 렌더하지 않는다.
-export const WorkingTimeForm = ({ onSubmit, onDivisionChange, onInput }: Props) => {
+export const WorkingTimeForm = ({ onSubmit, onDivisionChange }: Props) => {
   const { t } = useTranslation();
 
   const searchParams = useWorkingTimeStore(state => state.searchParams);
@@ -49,9 +48,17 @@ export const WorkingTimeForm = ({ onSubmit, onDivisionChange, onInput }: Props) 
   const [divisions, plantSites, buildings, operations, lines] = useTabComboQueries({
     filters: [COMBO.DIVISION, COMBO.PLANT_SITE, COMBO.BUILDING, COMBO.OPERATION, COMBO.LINE],
   });
-  const [dayWeeks] = useTabLookupQueries({ filters: [DAY_WEEK_LOOKUP] });
 
   const divisionOptions = toOptions(divisions);
+
+  // Division 기본값 교정 — 현재값이 옵션에 없으면(초기 '' 포함) 권한목록 첫 항목을 선택한다. AS-IS cboDivision
+  //   addAll=false, 명시 선택 없음 → 권한목록 첫 항목 기본선택(design 02 §2). session.div/'40' 을 기본으로
+  //   쓰지 않는다 — AS-IS 는 세션값이 아니라 목록 첫 항목을 쓴다(사용자 지시 2026-10-15, global-psi-report 선례).
+  const firstDivision = divisionOptions[0]?.value ?? '';
+  const hasDivision = divisionOptions.some(o => o.value === searchParams.divisionId);
+  useEffect(() => {
+    if (firstDivision && !hasDivision) setDivision(firstDivision);
+  }, [firstDivision, hasDivision, setDivision]);
 
   // clbPlantSite = division 하위 (DBUtils.Filter DIVISION_ID = division, §3 필터 #1)
   const plantSiteOptions = toOptions(
@@ -73,14 +80,6 @@ export const WorkingTimeForm = ({ onSubmit, onDivisionChange, onInput }: Props) 
       return true;
     })
   );
-  // cboDayWeek = lookup WEEK_WORK_TIME (SEGMENT1=CODE/SEGMENT2=NAME → 공용 lookup 훅이 CODE/NAME 정규화).
-  //   기본 SelectDay(값입력 전 미선택 상태, §2-b). ALL 옵션 없음(단일 필수 성격).
-  //   LookupResponse 는 ComboResponse 와 별 타입이라 toOptions 를 쓰지 않고 인라인 매핑(TactTime 1:1).
-  const dayWeekOptions: Option[] = (dayWeeks ?? []).map(r => {
-    const rec = r as Record<string, unknown>;
-    return { label: str(rec.NAME) || str(rec.CODE), value: str(rec.CODE) };
-  });
-
   // buildings 는 Line 필터를 위해 쓰이나 UI 는 hidden(01_layout §3) — 참조만 하고 렌더 안 함.
   void buildings;
 
@@ -164,23 +163,6 @@ export const WorkingTimeForm = ({ onSubmit, onDivisionChange, onInput }: Props) 
           {multi(LBL.LINE, '_Line', searchParams.lineIds, lineOptions, lineIds =>
             setSearchParams({ lineIds })
           )}
-          {/* Day of the week (lookup WEEK_WORK_TIME, 기본 SelectDay — §2-b). btnInput 값입력 대상 요일 결정. */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.DAY_OF_WEEK, '_Day of the week')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  value={searchParams.dayWeekCode}
-                  options={dayWeekOptions}
-                  onChange={(_, picked) =>
-                    setSearchParams({ dayWeekCode: String(picked ?? DAY_WEEK_SELECT_DAY) })
-                  }
-                />
-              )}
-            />
-          </Grid>
           {/* dCalendar 조회기간 — 공용 PeriodField(features/master 카탈로그, 타 supply 화면 1:1). */}
           <PeriodField
             gridSize={3}
@@ -191,37 +173,8 @@ export const WorkingTimeForm = ({ onSubmit, onDivisionChange, onInput }: Props) 
             }
             label={t(LBL.PERIOD, '_Period')}
           />
-          {/* Input Value(txtInpuValue MaxLength 4) + btnInput — 선택 D_ 셀에 요일단위 값 write(01_layout §1). */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.INPUT_VALUE, '_Input Value')}
-              labelAlign='right'
-              render={() => (
-                <InputField
-                  fullWidth
-                  value={searchParams.inputValue}
-                  inputProps={{ maxLength: 4 }}
-                  onChange={e => {
-                    // 0~7(요일단위)/0~1440(분단위) 범위는 write 시점(Grid)에서 검증(MSG00203). 여기선 숫자만 수용.
-                    const next = e.target.value.replace(/[^\d]/g, '');
-                    setSearchParams({ inputValue: next });
-                  }}
-                />
-              )}
-            />
-          </Grid>
-          <Grid size={3}>
-            <Button
-              appearance='outlined'
-              priority='normal'
-              // btnInput 가드 #3(SelectDay)/#1(조회 전) 등은 onInput(부모)·Grid 에서 순서대로 판정.
-              disabled={searchParams.dayWeekCode === DAY_WEEK_SELECT_DAY}
-              onClick={onInput}
-            >
-              {t(LBL.INPUT, '_Input')}
-            </Button>
-          </Grid>
+          {/* Day of the week · Input Value · Input 버튼은 조회조건에서 분리 — 버튼영역 '입력' 버튼이 여는
+              WorkingTimeInputModal 로 이동했다(2026-10-15 사용자 지시, 자매 SCP0096 shipment-working-day-osp 선례). */}
         </>
       }
     />

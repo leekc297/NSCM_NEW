@@ -218,9 +218,8 @@ export const ShipmentChangeRequestConfirmSsp0003Form = ({
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onRequestorSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onRequestorSearch}
                       />
                     ),
                   }}
@@ -248,9 +247,8 @@ export const ShipmentChangeRequestConfirmSsp0003Form = ({
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}

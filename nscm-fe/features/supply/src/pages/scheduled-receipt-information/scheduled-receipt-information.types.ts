@@ -18,8 +18,8 @@ export type ScheduledReceiptRow = ResponseData<MENU_ID, SHEETS.SCHEDULED_RECEIPT
 export interface SearchCondition {
   divisionId: string; // 단일(cascade 최상위, comboId MyDivision — 확인 필요 승계)
   planGroupIds: string; // 다중(콤마 결합/'ALL'), Division 필터방식(PlanGroup_SCP_ALL 전량 로드 후 클라 필터)
-  siteIds: string; // 다중(콤마 결합/'ALL'), Division 1차 + PlanGroup 2차 cascade — comboId 미확정(확인 필요)
-  childMaterialIds: string; // 다중(콤마 결합/'ALL'), Division 필터방식 — comboId 미확정(확인 필요)
+  siteIds: string; // 다중(콤마 결합/'ALL'), Division 단일필터(comboId PlantSiteSir, SCP0130-03 해소)
+  childMaterialIds: string; // 다중(콤마 결합/'ALL'), Division 단일필터(comboId ItemIdChild, SCP0130-03 해소)
   valid: string; // 단일, 정적 옵션 All/Y/N(화면설계서 목업 실측)
   fromDate: string; // 날짜, p_from_date
   itemId: string; // 텍스트(읽기전용) + 팝업(MaterialByDivisionModal) 결과 바인딩

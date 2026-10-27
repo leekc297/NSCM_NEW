@@ -10,9 +10,11 @@ import { useDynamicQueryStore, isIntegerValueType } from '../useDynamicQueryStor
 interface Props {
   gridRef: MutableRefObject<FlexGrid<ResponseData<MENU_ID, SHEETS.RESULT>> | undefined>;
   data: ResponseData<MENU_ID, SHEETS.RESULT, RESPONSE_SET.OUTPUT>[];
+  // 마지막 포커스 그리드를 SubTitle 툴바(Excel 등) 대상으로 삼기 위한 콜백
+  gotFocus?: () => void;
 }
 
-export const DynamicQueryResultGrid = ({ gridRef, data }: Props) => {
+export const DynamicQueryResultGrid = ({ gridRef, data, gotFocus }: Props) => {
   const resultGridColumns = useDynamicQueryStore(s => s.resultGridColumns);
   const dynamicQueryMeta = useDynamicQueryStore(s => s.dynamicQueryMeta);
 
@@ -109,6 +111,7 @@ export const DynamicQueryResultGrid = ({ gridRef, data }: Props) => {
       gridRef={gridRef}
       itemsSource={rowData}
       staticColumns={columns}
+      gotFocus={gotFocus}
       isReadOnly={true}
     />
   );

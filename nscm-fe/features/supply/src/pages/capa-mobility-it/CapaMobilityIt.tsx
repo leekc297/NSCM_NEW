@@ -17,6 +17,7 @@ import {
   CAPA_WORK_SAVE_LIMIT,
   CATEGORY_OPTIONS,
   DEFAULT_BUCKET,
+  EXCEL_FILE_PREFIX,
   LBL,
   MENU_ID,
   MSG,
@@ -26,19 +27,21 @@ import type { CapaMobilityItRow } from './capa-mobility-it.types';
 import styles from './CapaMobilityIt.module.scss';
 import { CapaMobilityItForm } from './components/CapaMobilityItForm';
 import { CapaMobilityItGrid } from './components/CapaMobilityItGrid';
-import { BulkUpdateModal, CopySelectModal } from './components/modals';
+import { BulkUpdateModal, CopySelectModal, ExcelOptionModal } from './components/modals';
 import { useCapaMobilityItValidation } from './hooks/useCapaMobilityItValidation';
 import { useCapaMobilityItStore } from './useCapaMobilityItStore';
 import { saveTitleSet } from './utils/capa-mobility-it.api';
 import {
   applyBulkInput,
+  bulkErrorMessage,
   type BulkType,
   hasBulkSelection,
   validateBulkType,
   validateBulkValue,
 } from './utils/capa-mobility-it.bulkInput';
 import { isCellEditable } from './utils/capa-mobility-it.editLock';
-import { buildSavePayload } from './utils/capa-mobility-it.save';
+import { type ExcelExportOptions, exportCapaExcel } from './utils/capa-mobility-it.excel';
+import { buildSavePayload, validateSavePayload } from './utils/capa-mobility-it.save';
 
 /**
  * SCP0098 Production Plan Line (CAPA Mobility IT / CAPA Report Small).
@@ -57,6 +60,7 @@ export const CapaMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const [copyOpen, setCopyOpen] = useState(false);
   const [measureOpen, setMeasureOpen] = useState(false);
+  const [excelOpen, setExcelOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const searchParams = useCapaMobilityItStore(s => s.searchParams);
@@ -162,12 +166,16 @@ export const CapaMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => {
       { from: searchParams.startYyyymmdd, to: searchParams.endYyyymmdd },
       userId
     );
-    // Capa Work 10000건 상한 (design 03 §4.4, validations #16/#23).
+    // 저장 값 검증 — AS-IS SaveDataFull 파리티(PRODUCT_READY 0~100 / DAILY_CAPA 0~1000000 /
+    //   LOAD_RATE 0~100 / RAMP_UP 0~1). 위반 시 저장 전체 차단. 메시지는 하드코딩 리터럴(MSG 코드 없음).
+    const valueErr = validateSavePayload(payload);
+    if (valueErr) {
+      await setAlert({ type: 'alert', content: valueErr });
+      return;
+    }
+    // Capa Work 10000건 상한 (design 03 §4.4, validations #16/#23). AS-IS 하드코딩 리터럴(다국어 아님).
     if (payload.capaWork.length > CAPA_WORK_SAVE_LIMIT) {
-      await setAlert({
-        type: 'alert',
-        content: t('MSG00000', '_Cannot save more than 10,000 rows.'),
-      });
+      await setAlert({ type: 'alert', content: '10000 건 이상의 데이터를 저장 할 수 없습니다.' });
       return;
     }
     const total = payload.productRate.length + payload.capaMonth.length + payload.capaWork.length;
@@ -175,8 +183,8 @@ export const CapaMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => {
       setToast({ type: 'default', message: t(MSG.NO_CHANGES, '_No changes to save.') });
       return;
     }
-    const confirmed = await setAlert({ type: 'confirm', content: t(MSG.SAVE_CONFIRM, '_Save?') });
-    if (!confirmed) return;
+    // 저장 확인 프롬프트 없음 — TO-BE 표준(save-feedback-toast-mandatory): confirm 은 삭제/취소에만,
+    //   저장은 검증 통과 시 바로 수행하고 성공 Toast 로 알린다(AS-IS MSG00012 확인창 미이식).
 
     setSaving(true);
     try {
@@ -236,7 +244,8 @@ export const CapaMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => {
     const row = g.rows[g.selection.row]?.dataItem as { MEASURE_UI?: string } | undefined;
     const category = presentMeasures.length === 1 ? presentMeasures[0] : (row?.MEASURE_UI ?? '');
     if (!CATEGORY_OPTIONS.some(o => o.value === category)) {
-      await setAlert({ type: 'alert', content: t('MSG00000', '_Select a measure row first.') });
+      // 등록코드 MSG01104 = '선택된 행이 없습니다.'(전 언어 실재).
+      await setAlert({ type: 'alert', content: t('MSG01104', '_No rows selected.') });
       return;
     }
     setBulkCategory(category);
@@ -248,16 +257,20 @@ export const CapaMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => {
     const g = gridRef.current;
     const tracker = editTrackerRef.current;
     if (!g || !tracker || !canEdit) return false;
-    if (validateBulkType(bulkCategory, type)) {
-      await setAlert({ type: 'alert', content: t('MSG00000', '_Daily Capa does not allow weekday input.') });
+    // bulk 값/타입 검증 메시지는 AS-IS 하드코딩 리터럴(다국어 아님) — bulkErrorMessage 로 원문 출력.
+    const typeErr = validateBulkType(bulkCategory, type);
+    if (typeErr) {
+      await setAlert({ type: 'alert', content: bulkErrorMessage(typeErr) });
       return false;
     }
     if (type === 'SelectDay' && !hasBulkSelection(g)) {
-      await setAlert({ type: 'alert', content: t('MSG00000', '_Select cells first.') });
+      // 선택 없음만 AS-IS 가 MSG 코드(MSG00134)를 썼다 = TO-BE 등록코드 MSG01153(동일 텍스트, 전 언어 실재).
+      await setAlert({ type: 'alert', content: t('MSG01153', '_Select a date and enter it.') });
       return false;
     }
-    if (validateBulkValue(bulkCategory, value)) {
-      await setAlert({ type: 'alert', content: t('MSG00000', '_Invalid input value.') });
+    const valueErr = validateBulkValue(bulkCategory, value);
+    if (valueErr) {
+      await setAlert({ type: 'alert', content: bulkErrorMessage(valueErr) });
       return false;
     }
     const changed = applyBulkInput({
@@ -269,21 +282,36 @@ export const CapaMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => {
       isCellEditable: (binding, row) => canEdit && isCellEditable(binding, row, staticBindingSet),
     });
     if (changed === 0) {
-      await setAlert({ type: 'alert', content: t('MSG00000', '_No cells to update.') });
+      // 등록코드 MSG01104 = '선택된 행이 없습니다.'(전 언어 실재).
+      await setAlert({ type: 'alert', content: t('MSG01104', '_No rows selected.') });
       return false;
     }
     return true;
   };
 
+  // Excel — AS-IS ExcelButton(FPC0109 옵션 팝업). 공통 다운로드 대신 이 화면 전용 옵션 export 로 교체.
+  const handleExcel = async (opt: ExcelExportOptions) => {
+    const g = gridRef.current;
+    if (!g) return;
+    try {
+      await exportCapaExcel(g, EXCEL_FILE_PREFIX, opt);
+    } catch {
+      await setAlert({ type: 'alert', content: t(MSG.SAVE_ERROR, '_Export error.') });
+    }
+  };
+
   const hotkeyConfig = {
     search: () => void handleSearch(),
-    // Insert 없음(조회형) — insert/delete/manual/upload 미노출(AS-IS 툴바에 없음).
+    // Insert/Delete — BTN_MPG_M(권한) 미등록이라 숨김(false, 사용자 결정 2026-10-20: 권한 정의 없이
+    //   노출되던 no-op 제거). manual/upload 는 미노출.
     insert: false as const,
     delete: false as const,
     manual: false as const,
     upload: false as const,
     // 저장 = EDIT 권한(편집 기본 ON) AND SAVE 권한.
     save: canEdit && hasButton('SAVE') ? () => void handleSave() : (false as const),
+    // Excel — 공통 다운로드 대신 옵션 모달을 연다(AS-IS FPC0109).
+    excel: () => setExcelOpen(true),
   };
 
   return (
@@ -306,9 +334,9 @@ export const CapaMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => {
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
         customButtons={[
-          // Copy Data — hasButton('SAVE') 게이트(데이터 변경 액션, design 01 §2 D5).
+          // Copy Data — hasButton('SAVE') 게이트(데이터 변경 액션, design 01 §2 D5). 라벨은 하드코딩 영문(다국어 미사용, 사용자 결정 2026-10-16).
           ...(hasButton('SAVE')
-            ? [{ label: t(LBL.COPY_DATA, 'Copy Data'), action: () => setCopyOpen(true) }]
+            ? [{ label: 'Copy Data', action: () => setCopyOpen(true) }]
             : []),
           // Bulk Update — Category/Day Type/Input Value/Input 을 대체(To-Be 문서 SCP0098). EDIT 권한 게이트.
           ...(canEdit ? [{ label: 'Bulk Update', action: () => void handleBulkOpen() }] : []),
@@ -348,6 +376,12 @@ export const CapaMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => {
       />
 
       <CopySelectModal open={copyOpen} onClose={() => setCopyOpen(false)} onConfirm={dayType => void handleCopy(dayType)} />
+
+      <ExcelOptionModal
+        open={excelOpen}
+        onClose={() => setExcelOpen(false)}
+        onConfirm={opt => void handleExcel(opt)}
+      />
 
       {/* 표시 measure 는 메인 SP(P_GET_CAPA_MOBILITYIT)가 저장분(titleSet 'M')으로 거르므로 FE 필터 없이 저장 후 재조회한다. */}
       <MeasureSelectModal

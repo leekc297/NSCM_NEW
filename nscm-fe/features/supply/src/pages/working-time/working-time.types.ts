@@ -18,14 +18,13 @@ export interface SearchParamProps {
   operationIds: string[];
   // clbLine(다중) — 다중키 필터형 최하위. 콤마 join.
   lineIds: string[];
-  // cboDayWeek(단일) — 값입력 대상 요일. 기본 SelectDay. cascade 없음(btnInput 대상 결정).
-  dayWeekCode: string;
   // dCalendar 조회기간 — yyyymmdd 8자리.
   startYyyymmdd: string;
   endYyyymmdd: string;
-  // txtInpuValue(MaxLength 4) — btnInput 이 선택 셀에 써넣을 값. 01_layout §1 #15.
-  inputValue: string;
 }
+// 주의: Day of the week(cboDayWeek)·Input Value(txtInpuValue)는 조회조건이 아니라 '입력' 팝업
+//   (WorkingTimeInputModal) 로컬 상태로 이동했다(2026-10-15 사용자 지시). GET SP 7 IN 파라미터에도
+//   없어 searchParams 에서 제거한다 — 자매 SCP0096 shipment-working-day-osp 선례.
 
 // 그리드 데이터 행 — GET SP O_RC1(피벗 데이터 커서). 정적 14컬럼(4 숨김) + 동적 D_yyyymmdd 값.
 //   OSP_YN 이 편집 게이트('Y' 행만 편집, 01_layout §2-b #5). DMF0014 EDIT_FLAG 대응.
@@ -58,13 +57,15 @@ export interface DynColumnMeta {
   type: string; //  JDBC 타입명(미사용 — 컬럼 존재/이름 판별에만)
 }
 
-// 동적 기간 컬럼(FE 파생) — o_rc1_columns 의 D_yyyymmdd 이름에서 도출. 요일 그룹은 커서가 주지 않으므로
-//   yyyymmdd 로 클라이언트 계산한다(SP "칸 펼치기": 일자마다 칸 1개, 요일은 캘린더 파생).
+// 동적 기간 컬럼(FE 파생) — D_yyyymmdd 이름에서 도출. AS-IS 3단 헤더(월/주/일)를 재현한다(03_grid §2-c).
+//   SP 가 타이틀 커서를 주지 않아 월/주 라벨도 yyyymmdd 로 클라이언트 계산(월=YYYY-MM, 주=ISO주).
 export interface DynDayColumn {
-  binding: string; //   D_yyyymmdd (그리드 셀 binding)
-  yyyymmdd: string; //  8자리 일자
-  dayLabel: string; //  leaf 헤더 = 일(DD, 앞 0 제거)
-  weekday: string; //   상단 그룹 span 키 = 요일 3글자(MON~SUN)
+  binding: string; //    D_yyyymmdd (그리드 셀 binding)
+  yyyymmdd: string; //   8자리 일자
+  dayLabel: string; //   leaf 헤더(3단) = 일(DD, 앞 0 제거)
+  weekday: string; //    일자 leaf 색상 키 = 요일 3글자(MON~SUN). SAT=blue/SUN=red (그룹 아님)
+  monthLabel: string; // 대분류(1단) span = 연-월(YYYY-MM)
+  weekLabel: string; //  소분류(2단) span = 주차(W + ISO주번호)
 }
 
 // SAVE 수집 엔트리 — 변경 셀(D_ 또는 WORKING_TIME_DEFAULT) net 변경. SAVE_KEYS 순서로 '^' join.

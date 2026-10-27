@@ -46,8 +46,8 @@
 | D-09 | 1164 / spdMain_ComboSelChange |  | 제외 — Insert 행 전제 사문 (읽기 전용) | 제외 |
 | D-10 | 1439 / fnValidation |  | 제외 — Insert 행 전제 사문 (fnValidation 9키 중복 검사 — 저장 경로 없음) | 제외 |
 | G-01 | 1657 (validation.md #14 txtVersion_KeyDown) / txtVersion KeyDown | components/MktFcstComparisonForm.tsx:Version InputField readOnly + onClick/onKeyDown=모달 (직접 타이핑 차단 1:1) |  | 구현 |
-| G-02 | 1671 / GetThisWeekMonday | components/MktFcstComparisonGrid.tsx:thisWeekMondayYmd (Current 실적 경계 월요일 역산) |  | 구현 |
-| G-03 | 1694 / GetLastWeekSunDayByDate | components/MktFcstComparisonGrid.tsx:lastWeekSundayYmd (Cutoff 버전 전주 일요일 역산) |  | 구현 |
+| G-02 | 1671 / GetThisWeekMonday |  | 제외 — PI 119 확정 TO-BE(실적·계획 구간 무관 흰색 배경)로 실적 구간 회색 미적용. Current 경계 역산 불필요 (2026-10-16, 2026-10-09 복원 커밋 a6f44a5f1 되돌림) | 제외 |
+| G-03 | 1694 / GetLastWeekSunDayByDate |  | 제외 — PI 119 확정 TO-BE(실적·계획 구간 무관 흰색 배경)로 실적 구간 회색 미적용. Cutoff 경계 역산 불필요 (2026-10-16) | 제외 |
 | G-04 | 1748 / SetAmountCalculating | components/MktFcstComparisonGrid.tsx:gridRows divisor===1 이면 원본 반환 (QTY index 0 가드 1:1) |  | 구현 |
 | P-01 | 588~595 / EditButton (F2) |  | 해당없음 — 편집 진입점 자체 미노출 (hotkeyConfig insert/delete/save=false — MSG00109 표시 상황 부재) | 해당없음 |
 | P-02 | 1652~1660 / btnVersion_Click 반환 검사 | components/ComparisonVersionModal.tsx:handleApply (VERSION_MAX_SELECT=2 초과 시 MSG00255 — AS-IS 반환부 검사를 모달 내부로 통합) |  | 구현 |
@@ -135,7 +135,7 @@
 | HANDLER:EditButton | AS-IS `DMF0040_MktFcst_Comparison.cs:589` (라이브 7행) |  | 해당없음 — 읽기전용 통보(MSG00109)뿐. TO-BE 는 편집 진입점 미노출 (P-01) | 해당없음 |
 | HANDLER:ExcelButton | AS-IS `DMF0040_MktFcst_Comparison.cs:604` (라이브 25행) | 공용 SubTitle Excel Download (excelFileName='MktFcstComparison' — HideZero·수치 포맷은 공용 옵션) |  | 구현 |
 | HANDLER:FindButton | AS-IS `DMF0040_MktFcst_Comparison.cs:574` (라이브 3행) · **사문(빈 몸통)** | MktFcstComparison.tsx:hotkeyConfig.search=handleSubmit |  | 구현 |
-| HANDLER:FindData | AS-IS `DMF0040_MktFcst_Comparison.cs:655` (라이브 156행) | MktFcstComparison.tsx:handleSubmit + useMktFcstComparisonStore.ts:setFilters + components/MktFcstComparisonGrid.tsx (회색/파랑/footer) |  | 구현 |
+| HANDLER:FindData | AS-IS `DMF0040_MktFcst_Comparison.cs:655` (라이브 156행) | MktFcstComparison.tsx:handleSubmit + useMktFcstComparisonStore.ts:setFilters + components/MktFcstComparisonGrid.tsx (파랑/footer. 실적 구간 회색 L774~886 은 PI 119 확정 TO-BE 흰색 배경으로 제외) |  | 구현 |
 | HANDLER:FindData:NegativeRed | AS-IS 프레임워크 `01_Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:4143` 등 `NumberCellType.NegativeRed=true` (전 수치 셀 음수 = Red) + `.cs:913~915` Difference 행 Blue | components/MktFcstComparisonGrid.tsx:formatHandler — 음수 Red(#c62828) 우선, Difference 0·양수 Blue(#1565c0) | 2026-08-27 사용자 지적 후 보완 — 화면 .cs 만 대조하고 프레임워크 셀타입 기본 서식(NegativeRed)을 누락 | 구현 |
 | HANDLER:Form_Load | AS-IS `DMF0040_MktFcst_Comparison.cs:188` (라이브 11행) | MktFcstComparison.tsx:60~66 + components/MktFcstComparisonForm.tsx:57~69 + useMktFcstComparisonStore.ts: 기본값 (E01) |  | 구현 |
 | HANDLER:InsertButton | AS-IS `DMF0040_MktFcst_Comparison.cs:579` (라이브 2행) · **사문(빈 몸통)** |  | 제외 — 빈 몸통. insert:false 미노출 | 제외 |
@@ -162,17 +162,24 @@
 
 ## 콤보 토큰 대사표 (hook #117 §5.6 — 조회조건 콤보 9종)
 
-> DMF0040 은 그리드 셀 콤보 0종(조회 전용) — 아래는 조회조건 콤보. 토큰 전달 주체는 **master 공용 검색필드**
-> (`features/master/src/components` — DivisionField 등)이며, 페이지 폴더에는 comboParams 리터럴이 없어
-> 게이트 섹션 7 이 "미전달" WARN 을 낸다 (도구 스캔 범위 = 페이지 폴더 한계 — 실전달은 아래 실측 인용).
+> DMF0040 은 그리드 셀 콤보 0종(조회 전용) — 아래는 조회조건 콤보.
+>
+> **2026-09-01 콤보 통일 (사용자 지정).** 조회조건 6종은 전부 **필터**다 — 파라미터 없이 전량을
+> 한 번 받고 좁히는 일은 화면이 한다(`buildComboOptions`). 그래서 아래 표의 "필요 토큰"은
+> 서버 바인드가 아니라 **클라이언트 축**을 뜻한다. 원천 상수와 축 규칙은
+> `utils/mkt-fcst-comparison.searchCombos.ts`, 결과셋별 반환 컬럼은
+> `GSCm/04.WSL/FoxQuery/DM/Common/BigFilter_list_line_dm.md` 참조.
+> Project / Model·Nickname / Owner / Period 는 종전대로 master 공용 검색필드를 쓴다.
 
-| SQL_ID | 필요 토큰 | 전달 주체 (실측) | 판정 |
+| SQL_ID (원천) | 목록 구성 조건 (클라 축) | 전달 주체 (실측) | 판정 |
 |---|---|---|---|
-| Division | @divisionId | 공용 SQL 관대형 — Division 목록 자체 조회라 무토큰 호출이 AS-IS 파리티 (DMF0035/0082 동일) | 정합 |
-| BizTypeByDivision | @divisionId | `BizTypeField division={searchParams.divisionId}` (MktFcstComparisonForm.tsx L160~164) | 정합 |
-| SiteByEndCustomer | @divisionId·@endCustomer | `SalesSiteField division=... endCustomer={searchParams.endCustomers.join(',')}` (L150~156) | 정합 |
-| PlantSitebyEndCustomer | @divisionId·@endCustomer | `PlantSiteField division=... endCustomer=...` (동일 패턴 — 40 은 disabled) | 정합 |
-| DmBizType / FcstType / ItemType / TeamByDivision / EndCustomerByDivision | (무토큰 또는 division) | 공용 필드 내부 전달 (`TeamField`/`EndCustomerField` division prop) | 정합 |
+| FilterMyDivision (#0) | 없음 — 단순 호출 | `buildComboOptions(divisions)` (MktFcstComparisonForm.tsx) — 이 결과셋은 DIVISION_ID 컬럼 자체가 없다 | 정합 |
+| FilterTeambyDivision (#1) | Division | `buildComboOptions(teams, { division })` | 정합 |
+| FilterEndCustomerByDivision (#2) | Division + Team | `buildComboOptions(endCustomers, { division, narrow: { column: 'DEPT_ID', codes: deptIds } })` — DEPT_ID 엄격 매칭 | 정합 |
+| FilterBizType (#3) | Division | `buildComboOptions(bizType, { division })` — DMF0048 Sales Monitoring 과 동일 원천 | 정합 |
+| FilterSiteByEndCustomer (#4) | Division + End Customer / 40 은 + Team | `buildComboOptions(salesSites, { division, narrow: [DEPT_ID, END_CUSTOMER] })` — 팀 축은 `resolveSalesSiteDeptIds` 가 40 에서만 켠다(81 계열·82 분기는 DEPT_ID 가 빈 문자열 고정) | 정합 |
+| FilterFromSiteByDivision (#5) | Division | `buildComboOptions(plantSites, { division })` — 이 결과셋에는 END_CUSTOMER 컬럼이 없다. 40 은 disabled | 정합 |
+| ReportBucketType / QtyType / ItemType | (무토큰) | `useTabComboQueries` — 재조회로 남긴 3종 | 정합 |
 
 ## 단위테스트 축 사유 (asis-coverage-check §0.4 — 게이트 섹션 9 WARN)
 

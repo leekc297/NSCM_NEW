@@ -1,0 +1,57 @@
+// AS-IS SCP0123_PlanIDCreatePopup 레이아웃: Plan Info./Prod. Frozen/Ship. Frozen 섹션 구조.
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+
+// AS-IS 섹션(simpleLabelItem) — 헤더 + 하위 폼.
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  font-size: 13px;
+  color: #333;
+  padding: 4px 0 2px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+// 2열 폼. 각 FormItem 은 라벨(우측정렬) + 입력.
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+}
+
+// AS-IS 범위형 셀: [시작] ~ [종료] 한 줄 + 그 아래 No Frozen 체크(AS-IS 줄맞춤).
+.rangeWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+// AS-IS 범위형: [시작(읽기전용)] ~ [종료(DatePicker)] + No Frozen 체크.
+.dateRange {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tilde {
+  color: #888;
+  padding: 0 2px;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 8px;
+}

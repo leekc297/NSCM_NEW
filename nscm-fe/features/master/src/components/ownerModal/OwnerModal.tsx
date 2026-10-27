@@ -130,21 +130,24 @@ export const OwnerModal = ({
 
   const handleSubmit = () => {
     if (singleSelect && selectedUsers.length > 1) {
+      // MSG01416 은 KO/EN/CN 이 모두 등록된 같은 뜻의 코드다. 종전 MSG01000 은 SCM_ADM_MSG_M 에 행이
+      //   없어 EN/CN 사용자에게도 아래 한글 기본 문구가 떴다(갭분석 메시지 다국어 재검증, 2026-10-19).
       void setAlert({
         type: 'alert',
-        content: t('MSG01000', 'Owner(sales)는 한명만 선택 가능합니다.'),
+        content: t('MSG01416', '_Owner(Sales)는 1명만 선택 가능합니다.'),
       });
       return;
     }
 
-    // 인원 상한 — 백엔드 메시지 코드가 아직 없어 임시 키 + 기본문구(MSG01000 과 같은 alert 방식).
+    // 인원 상한 — 같은 뜻의 기존 코드가 없어(「최대 N개/명까지」 계열은 버전·첨부·탭 전용 문구뿐) MSG01469 를
+    //   신규 등록했다(2026-10-20, _artifacts/_deploy_packages/DMF0005_MSG01469_OWNER_MAX_20261020).
+    //   {0}=최대 인원, {1}=선택 인원 — DB 문구의 자리표시는 i18next 가 채우지 않으므로 여기서 치환한다.
     if (maxSelect !== undefined && selectedUsers.length > maxSelect) {
       void setAlert({
         type: 'alert',
-        content: t(
-          'MSG_OWNER_MAX_COUNT',
-          `Owner 는 최대 ${maxSelect}명까지 선택할 수 있습니다. (선택 ${selectedUsers.length}명)`
-        ),
+        content: t('MSG01469', '_Owner는 최대 {0}명까지 선택할 수 있습니다. (선택 {1}명)')
+          .replace('{0}', String(maxSelect))
+          .replace('{1}', String(selectedUsers.length)),
       });
       return;
     }

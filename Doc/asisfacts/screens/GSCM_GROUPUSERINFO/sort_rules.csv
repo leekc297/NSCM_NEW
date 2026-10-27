@@ -1,0 +1,6 @@
+﻿screen_id,kind,sp,file,line,guard,keys,raw,depth,note
+GSCM_GROUPUSERINFO,SQL,UP_FX_GetGroupInfoList,Doc\asisfacts\db\modules\dbo.UP_FX_GetGroupInfoList.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)
+GSCM_GROUPUSERINFO,SQL,UP_FX_GetUserGroupAuthExtentionList,Doc\asisfacts\db\modules\dbo.UP_FX_GetUserGroupAuthExtentionList.sql,34,,DIVISION_ID,ORDER BY DIVISION_ID,0,정적
+GSCM_GROUPUSERINFO,SQL,UP_FX_GetUserGroupAuthExtentionList,Doc\asisfacts\db\modules\dbo.UP_FX_GetUserGroupAuthExtentionList.sql,56,,CODE,ORDER BY S.Code,0,정적
+GSCM_GROUPUSERINFO,SQL,UP_FX_GetUserGroupAuthExtentionList,Doc\asisfacts\db\modules\dbo.UP_FX_GetUserGroupAuthExtentionList.sql,103,,DIVISION_ID,ORDER BY DIVISION_ID,0,정적
+GSCM_GROUPUSERINFO,SQL,UP_FX_GetUserGroupInfoList,Doc\asisfacts\db\modules\dbo.UP_FX_GetUserGroupInfoList.sql,,,,,0,ORDER BY 없음 — 결과 순서 미정(테이블 순)

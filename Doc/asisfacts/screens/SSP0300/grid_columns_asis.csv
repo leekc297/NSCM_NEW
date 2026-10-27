@@ -1,0 +1,21 @@
+﻿sheet,column,source,class,ref,label,cell_type,combo_data_type,merge_policy,merge_src,width,visible,halign,decimals,max_length,conditions
+,SO_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:135,PO NO.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,"if(strElectrode_yn == ""Y"")"
+,SO_ITEM_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:136,PO Item No.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,"if(strElectrode_yn == ""Y"")"
+,SO_ITEM_QTY,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:137,PO Item Qty,Number,,,코드 선언(병합 인자 없음),,,,,,"if(strElectrode_yn == ""Y"")"
+,SO_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:141,SO NO.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,"else!(strElectrode_yn == ""Y"")"
+,SO_ITEM_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:142,SO Item No.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,"else!(strElectrode_yn == ""Y"")"
+,SO_ITEM_QTY,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:143,SO Item Qty,Number,,,코드 선언(병합 인자 없음),,,,,,"else!(strElectrode_yn == ""Y"")"
+,DO_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:147,DO NO.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,
+,DO_ITEM_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:148,DO Item No.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,
+,DO_ITEM_QTY,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:149,DO Item Qty.,Number,,,코드 선언(병합 인자 없음),,,,,,
+,CONFIRM_ID,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:150,Confirm ID,Text,,None,코드 선언 FPMerge.None,120,true,Center,,,
+,SO_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:135,PO NO.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,"if(strElectrode_yn == ""Y"")"
+,SO_ITEM_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:136,PO Item No.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,"if(strElectrode_yn == ""Y"")"
+,SO_ITEM_QTY,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:137,PO Item Qty,Number,,,코드 선언(병합 인자 없음),,,,,,"if(strElectrode_yn == ""Y"")"
+,SO_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:141,SO NO.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,"else!(strElectrode_yn == ""Y"")"
+,SO_ITEM_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:142,SO Item No.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,"else!(strElectrode_yn == ""Y"")"
+,SO_ITEM_QTY,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:143,SO Item Qty,Number,,,코드 선언(병합 인자 없음),,,,,,"else!(strElectrode_yn == ""Y"")"
+,DO_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:147,DO NO.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,
+,DO_ITEM_NO,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:148,DO Item No.,Text,,None,코드 선언 FPMerge.None,100,true,Center,,,
+,DO_ITEM_QTY,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:149,DO Item Qty.,Number,,,코드 선언(병합 인자 없음),,,,,,
+,CONFIRM_ID,CODE,SSP0300_OrderDetailPopup,SSP0300_OrderDetailPopup.cs:150,Confirm ID,Text,,None,코드 선언 FPMerge.None,120,true,Center,,,

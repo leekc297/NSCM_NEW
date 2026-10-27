@@ -112,7 +112,7 @@ export const ModelCodeChangeModal = ({ open, modalClose, tabId }: Props) => {
       CRUD_TYPE: row.CRUD_TYPE,
     }));
     if (saveData.length === 0) {
-      setToast({ type: 'error', message: t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.') });
+      setToast({ type: 'error', message: t('MSG00004', '_수정한 내용이 없습니다.') });
       return;
     }
 

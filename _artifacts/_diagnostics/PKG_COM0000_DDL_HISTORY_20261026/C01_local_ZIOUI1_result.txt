@@ -1,0 +1,565 @@
+================= §0 환경 지문 (QA / DEV 구분) =================
+
+DB_NAME      CON_NAME     SERVER_HOST          CONNECTED_AS RUN_AT
+------------ ------------ -------------------- ------------ -------------------
+ZIOUI1       ZIOUI1       localhost            SCM_MGR      2026-10-26 15:25:57
+
+================= §1 객체 현재 상태 (LAST_DDL = 마지막 1건만, 이력 아님) =================
+
+OBJECT_TYPE    STATUS   CREATED             LAST_DDL            SPEC_TIMESTAMP            LINES
+-------------- -------- ------------------- ------------------- -------------------- ----------
+PACKAGE        VALID    2026-10-09 13:38:26 2026-10-09 13:38:30 2026-10-06:16:44:16         220
+PACKAGE BODY   VALID    2026-10-09 13:38:50 2026-10-23 12:04:37 2026-10-23:12:04:37        4109
+
+
+선택된 레코드가 없습니다.
+
+================= §2 Unified Audit — PKG_COM0000 (정책상 0건 예상, 확인용) =================
+
+EVENT_TIME              DBUSERNAME   OS_USERNAME      USERHOST                 CLIENT_PROGRAM                   ACTION_NAME          OBJECT_SCH OBJECT_NAME      RETURN_CODE MEMBER_POS
+----------------------- ------------ ---------------- ------------------------ -------------------------------- -------------------- ---------- ---------------- ----------- ----------
+2026-10-10 12:31:46.393 SYS          oracle           localhost.localdomain    sqlplus@localhost.localdomain (T CREATE PACKAGE BODY  SCM_MGR    PKG_COM0000                0       7252
+                                                                               NS V1-V3)
+
+2026-10-10 12:35:42.261 SYS          oracle           localhost.localdomain    sqlplus@localhost.localdomain (T CREATE PACKAGE BODY  SCM_MGR    PKG_COM0000                0       7236
+                                                                               NS V1-V3)
+
+2026-10-10 12:38:26.127 SYS          oracle           localhost.localdomain    sqlplus@localhost.localdomain (T CREATE PACKAGE BODY  SCM_MGR    PKG_COM0000                0       7010
+                                                                               NS V1-V3)
+
+2026-10-12 19:18:17.691 SYS          oracle           localhost.localdomain    sqlplus@localhost.localdomain (T CREATE PACKAGE BODY  SCM_MGR    PKG_COM0000                0       7041
+                                                                               NS V1-V3)
+
+2026-10-12 19:18:28.682 SYS          oracle           localhost.localdomain    sqlplus@localhost.localdomain (T CREATE PACKAGE BODY  SCM_MGR    PKG_SCP0017                0          0
+                                                                               NS V1-V3)
+
+
+================= §3 ⭐ 패키지 DDL 실행 세션 전수 (메모리 ASH + AWR) =================
+HIT_PKG = Y 인 행이 PKG_COM0000 DDL / NO_TEXT = 원문 미보존(CURRENT_OBJ 로 보조 판정)
+※ ASH 는 샘플링 — 1초 미만 DDL 은 누락될 수 있다. "없음" ≠ "변경 없음"
+
+T_FROM              T_TO                USERNAME     MACHINE                  PROGRAM                        SID_SERIAL   SQL_ID        DDL_TYPE             PKG_IN_TEXT          CURRENT_OBJ          HIT_PKG HIT_MEMBER    SQL_LEN
+------------------- ------------------- ------------ ------------------------ ------------------------------ ------------ ------------- -------------------- -------------------- -------------------- ------- ---------- ----------
+2026-10-19 18:13:33 2026-10-19 18:13:33 SCM_MGR      DESKTOP-N00HD67          C:\Users\POJ\AppData\Local\Pro 266,16463    d1g90b3q4mv51 DROP PACKAGE                                                   NO_TEXT N
+2026-10-19 18:27:54 2026-10-19 18:27:54 SCM_MGR      DESKTOP-N00HD67          C:\Users\POJ\AppData\Local\Pro 620,1683     0kwnxt401uspk CREATE PACKAGE BODY                                            NO_TEXT N
+2026-10-20 17:23:47 2026-10-20 17:23:47 SCM_MGR      LGENSOL\P2605LN0024      powershell.exe                 828,16861    9g33zkxprdn6u CREATE PACKAGE BODY                                            NO_TEXT N
+2026-10-21 18:43:21 2026-10-21 18:43:21 SCM_MGR      DESKTOP-BMHBA84          DBeaver 26?2?0 ? Main          850,53073    0pytv1qqgzqrd CREATE PACKAGE BODY                                            NO_TEXT N
+2026-10-21 20:11:24 2026-10-21 20:11:24 SCM_MGR      P2605LN0006              C:\Python3.11.5\python.exe     402,601      ab14c65sxkyj6 CREATE PACKAGE BODY                                            NO_TEXT N
+2026-10-21 20:12:04 2026-10-21 20:12:04 SCM_MGR      P2605LN0006              C:\Python3.11.5\python.exe     622,47374    1q6augt8xxfjd ALTER PACKAGE BODY                                             NO_TEXT N
+2026-10-23 10:56:36 2026-10-23 10:56:36 SCM_MGR      DESKTOP-ELMPP0M          DBeaver 26?1?4 ? Main          27,33275     9qpp9mk8dpr7y CREATE PACKAGE BODY                                            NO_TEXT N
+2026-10-23 16:53:27 2026-10-23 16:53:27 SCM_MGR      P2605LN0024              C:\Users\LGES\AppData\Local\Pr 726,60344    302kszhuzd1z4 CREATE PACKAGE BODY                                            NO_TEXT N
+2026-10-26 14:57:24 2026-10-26 14:57:24 SCM_MGR      P2605LN0006              C:\Python3.11.5\python.exe     869,50743    8zzrnvb5n0udz CREATE PACKAGE                                                 NO_TEXT N
+
+9 행이 선택되었습니다.
+
+================= §4 PC → OS 사용자 매핑 =================
+※ 로그인 성공은 감사되지 않으므로 현재 접속 세션의 OSUSER 가 1차 근거
+※ §3 에 다른 PC 가 나오면 아래 정규식에 추가
+
+선택된 레코드가 없습니다.
+
+
+선택된 레코드가 없습니다.
+
+================= §5 ⭐ 대상 멤버 현재 상태 =================
+-- 5-1 SPEC 멤버 존재·오버로드
+
+OBJECT_NAME      PROCEDURE_NAME                           SUBPROGRAM_ID OVERLOAD
+---------------- ---------------------------------------- ------------- --------
+PKG_COM0000      P_COM0003_GET_STORAGE_BY_DIVISION_POPUP              3
+
+-- 5-2 현재 시그니처
+
+OVERLOAD   POSITION ARGUMENT_NAME            DATA_TYPE      IN_OUT D
+-------- ---------- ------------------------ -------------- ------ -
+                  1 P_DIVISION_ID            VARCHAR2       IN     N
+                  2 P_STORAGE_ID             VARCHAR2       IN     N
+                  3 O_RC1                    REF CURSOR     OUT    N
+                  4 O_RESULT_CURSOR          REF CURSOR     OUT    N
+
+-- 5-3 SPEC 선언부 원문
+
+      LINE TEXT
+---------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        28 PROCEDURE P_COM0003_GET_STORAGE_BY_DIVISION_POPUP
+        29 (
+        30     p_division_id 	IN 	VARCHAR2,
+        31     p_storage_id  	IN 	VARCHAR2,
+        32     o_rc1         	OUT SYS_REFCURSOR,
+        33 	O_RESULT_CURSOR	OUT	SYS_REFCURSOR
+        34 );
+
+7 행이 선택되었습니다.
+
+-- 5-4 BODY 멤버 전문 (머리 주석 15줄 포함 · MARK: HEAD=멤버 위 주석 / TAG=작성자·일자·수정 마커)
+
+      LINE MARK TEXT                                                                                                                                                                                     L_FROM       L_TO MEMBER_LINES
+---------- ---- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ ---------- ---------- ------------
+       163 HEAD                                                                                                                                                                                             178        249           72
+       164 HEAD 	OPEN O_RESULT_CURSOR FOR                                                                                                                                                                   178        249           72
+       165 HEAD 		SELECT '0' AS CODE, 'SUCCESS' AS MSG, '0' AS EVENT FROM DUAL;                                                                                                                             178        249           72
+       166 HEAD                                                                                                                                                                                             178        249           72
+       167 HEAD 	EXCEPTION                                                                                                                                                                                  178        249           72
+       168 HEAD 	    WHEN OTHERS THEN                                                                                                                                                                       178        249           72
+       169 HEAD 	        RAISE_APPLICATION_ERROR(-20001,                                                                                                                                                    178        249           72
+       170 HEAD 	        '[' || $$PLSQL_UNIT || '] SQLCODE=' || TO_CHAR(SQLCODE) ||                                                                                                                         178        249           72
+       171 HEAD 	        ' / SQLERRM=' || SQLERRM ||                                                                                                                                                        178        249           72
+       172 HEAD 	        ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||                                                                                                                          178        249           72
+       173 HEAD 	        ' / PARAMS=' || '-' );                                                                                                                                                             178        249           72
+       174 HEAD                                                                                                                                                                                             178        249           72
+       175 HEAD END P_COM0002_GET_CUSTOMER_BY_DIVISION_POPUP;                                                                                                                                               178        249           72
+       176 HEAD                                                                                                                                                                                             178        249           72
+       177 HEAD                                                                                                                                                                                             178        249           72
+       178      PROCEDURE P_COM0003_GET_STORAGE_BY_DIVISION_POPUP                                                                                                                                           178        249           72
+       179      (                                                                                                                                                                                           178        249           72
+       180          p_division_id 	IN 	VARCHAR2,                                                                                                                                                            178        249           72
+       181          p_storage_id  	IN 	VARCHAR2,                                                                                                                                                            178        249           72
+       182          o_rc1         	OUT SYS_REFCURSOR,                                                                                                                                                       178        249           72
+       183      	O_RESULT_CURSOR	OUT	SYS_REFCURSOR                                                                                                                                                          178        249           72
+       184      )                                                                                                                                                                                           178        249           72
+       185      AS                                                                                                                                                                                          178        249           72
+       186      BEGIN                                                                                                                                                                                       178        249           72
+       187          OPEN o_rc1 FOR                                                                                                                                                                          178        249           72
+       188      	SELECT                                                                                                                                                                                     178        249           72
+       189      	    S.DIVISION_ID,                                                                                                                                                                         178        249           72
+       190      	    D.DIVISION_NAME,                                                                                                                                                                       178        249           72
+       191      	    S.STORAGE_ID,                                                                                                                                                                          178        249           72
+       192      	    S.PLANT_ID,                                                                                                                                                                            178        249           72
+       193      	    S.STORAGE_DESCRIPTION                                                                                                                                                                  178        249           72
+       194      	FROM SCM_MST_SLOC S                                                                                                                                                                        178        249           72
+       195      	JOIN SCM_MST_DIVISION D                                                                                                                                                                    178        249           72
+       196      	  ON D.DIVISION_ID = S.DIVISION_ID                                                                                                                                                         178        249           72
+       197      	WHERE S.VALID_YN = 'Y'                                                                                                                                                                     178        249           72
+       198      --	  AND (                                                                                                                                                                                  178        249           72
+       199      --	        S.STORAGE_ID LIKE '6%'                                                                                                                                                           178        249           72
+       200      --	        OR S.STORAGE_ID LIKE 'A%'                                                                                                                                                        178        249           72
+       201      --	        OR S.STORAGE_ID LIKE 'B%'                                                                                                                                                        178        249           72
+       202      --	        OR (S.STORAGE_ID LIKE '799%' AND S.STORAGE_ID NOT IN ('7990', '7999'))                                                                                                           178        249           72
+       203      --	      )                                                                                                                                                                                  178        249           72
+       204      	  AND (                                                                                                                                                                                    178        249           72
+       205      	        P_DIVISION_ID = 'ALL'                                                                                                                                                              178        249           72
+       206      	        OR S.DIVISION_ID IN (                                                                                                                                                              178        249           72
+       207      	            SELECT TRIM(REGEXP_SUBSTR(P_DIVISION_ID, '[^,]+', 1, LEVEL))                                                                                                                   178        249           72
+       208      	            FROM DUAL                                                                                                                                                                      178        249           72
+       209      	            CONNECT BY REGEXP_SUBSTR(P_DIVISION_ID, '[^,]+', 1, LEVEL) IS NOT NULL                                                                                                         178        249           72
+       210      	        )                                                                                                                                                                                  178        249           72
+       211      	      )                                                                                                                                                                                    178        249           72
+       212 TAG  	  /* [2026.10.01] AJS 복수조건(쉼표 구분) 조회 - 입력 원문과 쉼표로 쪼갠 값을 함께 견준다 (START) */                                                                                       178        249           72
+       213      	  AND ( P_STORAGE_ID IS NULL                                                                                                                                                               178        249           72
+       214      	        OR UPPER(S.STORAGE_ID) LIKE '%' || UPPER(P_STORAGE_ID) || '%'                                                                                                                      178        249           72
+       215      	        OR EXISTS (SELECT 1                                                                                                                                                                178        249           72
+       216      	                     FROM (SELECT DISTINCT TRIM(REGEXP_SUBSTR(UPPER(P_STORAGE_ID), '[^,]+', 1, LEVEL)) AS TST                                                                              178        249           72
+       217      	                             FROM DUAL                                                                                                                                                     178        249           72
+       218      	                          CONNECT BY REGEXP_SUBSTR(UPPER(P_STORAGE_ID), '[^,]+', 1, LEVEL) IS NOT NULL) IA                                                                                 178        249           72
+       219      	                    WHERE IA.TST IS NOT NULL                                                                                                                                               178        249           72
+       220      	                      AND ( UPPER(S.STORAGE_ID) LIKE '%' || IA.TST || '%'                                                                                                                  178        249           72
+       221      	                          ) ) )                                                                                                                                                            178        249           72
+       222      --	  AND UPPER(S.STORAGE_ID) LIKE '%' || NVL(UPPER(P_STORAGE_ID), '') || '%'                                                                                                                178        249           72
+       223 TAG  	  /* [2026.10.01] AJS (END) */                                                                                                                                                             178        249           72
+       224      	  AND NOT EXISTS (                                                                                                                                                                         178        249           72
+       225      	        SELECT 1                                                                                                                                                                           178        249           72
+       226      	        FROM SCM_ADM_LOOKUP_MASTER_DETAIL LOOK                                                                                                                                             178        249           72
+       227      	        WHERE LOOK.LOOKUP_TYPE = 'SALES_SITE_VS_WAREHOUSE'                                                                                                                                 178        249           72
+       228      	          AND LOOK.VALID_YN    = 'Y'                                                                                                                                                       178        249           72
+       229      	          AND LOOK.SEGMENT1    = S.STORAGE_ID                                                                                                                                              178        249           72
+       230      	          AND (                                                                                                                                                                            178        249           72
+       231      	                P_DIVISION_ID = 'ALL'                                                                                                                                                      178        249           72
+       232      	                OR LOOK.SEGMENT3 = S.DIVISION_ID                                                                                                                                           178        249           72
+       233      	              )                                                                                                                                                                            178        249           72
+       234      	      );                                                                                                                                                                                   178        249           72
+       235                                                                                                                                                                                                  178        249           72
+       236      	OPEN O_RESULT_CURSOR FOR                                                                                                                                                                   178        249           72
+       237      		SELECT '0' AS CODE, 'SUCCESS' AS MSG, '0' AS EVENT FROM DUAL;                                                                                                                             178        249           72
+       238                                                                                                                                                                                                  178        249           72
+       239      	EXCEPTION                                                                                                                                                                                  178        249           72
+       240      	    WHEN OTHERS THEN                                                                                                                                                                       178        249           72
+       241      	        RAISE_APPLICATION_ERROR(-20001,                                                                                                                                                    178        249           72
+       242      	        '[' || $$PLSQL_UNIT || '] SQLCODE=' || TO_CHAR(SQLCODE) ||                                                                                                                         178        249           72
+       243      	        ' / SQLERRM=' || SQLERRM ||                                                                                                                                                        178        249           72
+       244      	        ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||                                                                                                                          178        249           72
+       245      	        ' / PARAMS=' || '-' );                                                                                                                                                             178        249           72
+       246                                                                                                                                                                                                  178        249           72
+       247      END P_COM0003_GET_STORAGE_BY_DIVISION_POPUP;                                                                                                                                                178        249           72
+       248                                                                                                                                                                                                  178        249           72
+       249                                                                                                                                                                                                  178        249           72
+
+87 행이 선택되었습니다.
+
+================= §6 ⭐ DDL 원문(감사 + AWR)에서 대상 멤버 구간만 시점별 출력 =================
+※ ★ = 직전 이벤트 대비 멤버 구간 길이 변경 = 내용이 바뀐 시점
+==================================================================
+#1 [AUDIT] 2026-10-10 12:31:46  DB=SYS  OS=oracle  HOST=localhost.localdomain  PROG=sqlplus@localhost.localdomain (TNS V1-V3)  ACTION=CREATE PACKAGE BODY
+    MEMBER_LEN=2472
+------------------------------------------------------------------
+PROCEDURE P_COM0003_GET_STORAGE_BY_DIVISION_POPUP
+(
+    p_division_id 	IN 	VARCHAR2,
+    p_storage_id  	IN 	VARCHAR2,
+    o_rc1         	OUT SYS_REFCURSOR,
+	O_RESULT_CURSOR	OUT	SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN o_rc1 FOR
+	SELECT
+	    S.DIVISION_ID,
+	    D.DIVISION_NAME,
+	    S.STORAGE_ID,
+	    S.PLANT_ID,
+	    S.STORAGE_DESCRIPTION
+	FROM SCM_MST_SLOC S
+	JOIN SCM_MST_DIVISION D
+	  ON D.DIVISION_ID
+= S.DIVISION_ID
+	WHERE S.VALID_YN = 'Y'
+	  AND (
+	        S.STORAGE_ID LIKE '6%'
+	        OR S.STORAGE_ID LIKE 'A%'
+	        OR S.STORAGE_ID LIKE 'B%'
+	        OR (S.STORAGE_ID LIKE '799%' AND S.STORAGE_ID NOT IN ('7990', '7999'))
+	      )
+	  AND (
+	        P_DIVISION_ID = 'ALL'
+	        OR S.DIVISION_ID IN (
+	            SELECT TRIM(REGEXP_SUBSTR(P_DIVISION_ID, '[^,]+', 1, LEVEL))
+	            FR
+OM DUAL
+	            CONNECT BY REGEXP_SUBSTR(P_DIVISION_ID, '[^,]+', 1, LEVEL) IS NOT NULL
+	        )
+	      )
+	  /* [2026.10.01] AJS ������������(������ ������) ������ - ������ ��������� ��������� �
+����� ������ ������ ��������� (START) */
+	  AND ( P_STORAGE_ID IS NULL
+	        OR UPPER(S.STORAGE_ID) LIKE '%' || UPPER(P_STORAGE_ID) || '%'
+	        OR EXISTS (SELECT 1
+	                     FROM (SELECT DISTINCT TRIM(REGEXP_SUBSTR(UPPER(P_STORAGE_ID), '[^,]+', 1, LEVEL)) AS TST
+	                             FROM DUAL
+	                          CONNECT BY REGEXP_SUBSTR(UPPER(P_STORAGE_ID), '[^,]
++', 1, LEVEL) IS NOT NULL) IA
+	                    WHERE IA.TST IS NOT NULL
+	                      AND ( UPPER(S.STORAGE_ID) LIKE '%' || IA.TST || '%'
+	                          ) ) )
+--	  AND UPPER(S.STORAGE_ID) LIKE '%' || NVL(UPPER(P_STORAGE_ID), '') || '%'
+	  /* [2026.10.01] AJS (END) */
+	  AND NOT EXISTS (
+	        SELECT 1
+	        FROM SCM_ADM_LOOKUP_MASTER_DETAIL LOOK
+	        WHERE LOOK.L
+OOKUP_TYPE = 'SALES_SITE_VS_WAREHOUSE'
+	          AND LOOK.VALID_YN    = 'Y'
+	          AND LOOK.SEGMENT1    = S.STORAGE_ID
+	          AND (
+	                P_DIVISION_ID = 'ALL'
+	                OR
+LOOK.SEGMENT3 = S.DIVISION_ID
+	              )
+	      );
+
+	OPEN O_RESULT_CURSOR FOR
+		SELECT '0' AS CODE, 'SUCCESS' AS MSG, '0' AS EVENT FROM DUAL;
+
+	EXCEPTION
+	    WHEN OTHERS THEN
+	        RAISE_APPLICATION_ERROR(-20001,
+	        '[' || $$PLSQL_UNIT || '] SQLCODE=' || TO_CHAR(SQLCODE) ||
+	        ' / SQLERRM=' || SQLERRM ||
+	        ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||
+	
+    ' / PARAMS=' || '-' );
+
+END P_COM0003_GET_STORAGE_BY_DIVISION_POPUP;
+==================================================================
+#2 [AUDIT] 2026-10-10 12:35:42  DB=SYS  OS=oracle  HOST=localhost.localdomain  PROG=sqlplus@localhost.localdomain (TNS V1-V3)  ACTION=CREATE PACKAGE BODY
+    MEMBER_LEN=2472
+------------------------------------------------------------------
+PROCEDURE P_COM0003_GET_STORAGE_BY_DIVISION_POPUP
+(
+    p_division_id 	IN 	VARCHAR2,
+    p_storage_id  	IN 	VARCHAR2,
+    o_rc1         	OUT SYS_REFCURSOR,
+	O_RESULT_CURSOR	OUT	SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN o_rc1 FOR
+	SELECT
+	    S.DIVISION_ID,
+	    D.DIVISION_NAME,
+	    S.STORAGE_ID,
+	    S.PLANT_ID,
+	    S.STORAGE_DESCRIPTION
+	FROM SCM_MST_SLOC S
+	JOIN SCM_MST_DIVISION D
+	  ON D.DIVISION_ID
+= S.DIVISION_ID
+	WHERE S.VALID_YN = 'Y'
+	  AND (
+	        S.STORAGE_ID LIKE '6%'
+	        OR S.STORAGE_ID LIKE 'A%'
+	        OR S.STORAGE_ID LIKE 'B%'
+	        OR (S.STORAGE_ID LIKE '799%' AND S.STORAGE_ID NOT IN ('7990', '7999'))
+	      )
+	  AND (
+	        P_DIVISION_ID = 'ALL'
+	        OR S.DIVISION_ID IN (
+	            SELECT TRIM(REGEXP_SUBSTR(P_DIVISION_ID, '[^,]+', 1, LEVEL))
+	            FR
+OM DUAL
+	            CONNECT BY REGEXP_SUBSTR(P_DIVISION_ID, '[^,]+', 1, LEVEL) IS NOT NULL
+	        )
+	      )
+	  /* [2026.10.01] AJS ������������(������ ������) ������ - ������ ��������� ��������� �
+����� ������ ������ ��������� (START) */
+	  AND ( P_STORAGE_ID IS NULL
+	        OR UPPER(S.STORAGE_ID) LIKE '%' || UPPER(P_STORAGE_ID) || '%'
+	        OR EXISTS (SELECT 1
+	                     FROM (SELECT DISTINCT TRIM(REGEXP_SUBSTR(UPPER(P_STORAGE_ID), '[^,]+', 1, LEVEL)) AS TST
+	                             FROM DUAL
+	                          CONNECT BY REGEXP_SUBSTR(UPPER(P_STORAGE_ID), '[^,]
++', 1, LEVEL) IS NOT NULL) IA
+	                    WHERE IA.TST IS NOT NULL
+	                      AND ( UPPER(S.STORAGE_ID) LIKE '%' || IA.TST || '%'
+	                          ) ) )
+--	  AND UPPER(S.STORAGE_ID) LIKE '%' || NVL(UPPER(P_STORAGE_ID), '') || '%'
+	  /* [2026.10.01] AJS (END) */
+	  AND NOT EXISTS (
+	        SELECT 1
+	        FROM SCM_ADM_LOOKUP_MASTER_DETAIL LOOK
+	        WHERE LOOK.L
+OOKUP_TYPE = 'SALES_SITE_VS_WAREHOUSE'
+	          AND LOOK.VALID_YN    = 'Y'
+	          AND LOOK.SEGMENT1    = S.STORAGE_ID
+	          AND (
+	                P_DIVISION_ID = 'ALL'
+	                OR
+LOOK.SEGMENT3 = S.DIVISION_ID
+	              )
+	      );
+
+	OPEN O_RESULT_CURSOR FOR
+		SELECT '0' AS CODE, 'SUCCESS' AS MSG, '0' AS EVENT FROM DUAL;
+
+	EXCEPTION
+	    WHEN OTHERS THEN
+	        RAISE_APPLICATION_ERROR(-20001,
+	        '[' || $$PLSQL_UNIT || '] SQLCODE=' || TO_CHAR(SQLCODE) ||
+	        ' / SQLERRM=' || SQLERRM ||
+	        ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||
+	
+    ' / PARAMS=' || '-' );
+
+END P_COM0003_GET_STORAGE_BY_DIVISION_POPUP;
+==================================================================
+#3 [AUDIT] 2026-10-10 12:38:26  DB=SYS  OS=oracle  HOST=localhost.localdomain  PROG=sqlplus@localhost.localdomain (TNS V1-V3)  ACTION=CREATE PACKAGE BODY
+    MEMBER_LEN=2418  ★ 직전 대비 길이 변경(2472→2418)
+------------------------------------------------------------------
+PROCEDURE P_COM0003_GET_STORAGE_BY_DIVISION_POPUP
+(
+    p_division_id 	IN 	VARCHAR2,
+    p_storage_id  	IN 	VARCHAR2,
+    o_rc1         	OUT SYS_REFCURSOR,
+	O_RESULT_CURSOR	OUT	SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN o_rc1 FOR
+	SELECT
+	    S.DIVISION_ID,
+	    D.DIVISION_NAME,
+	    S.STORAGE_ID,
+	    S.PLANT_ID,
+	    S.STORAGE_DESCRIPTION
+	FROM SCM_MST_SLOC S
+	JOIN SCM_MST_DIVISION D
+	  ON D.DIVISION_ID
+= S.DIVISION_ID
+	WHERE S.VALID_YN = 'Y'
+	  AND (
+	        S.STORAGE_ID LIKE '6%'
+	        OR S.STORAGE_ID LIKE 'A%'
+	        OR S.STORAGE_ID LIKE 'B%'
+	        OR (S.STORAGE_ID LIKE '799%' AND S.STORAGE_ID NOT IN ('7990', '7999'))
+	      )
+	  AND (
+	        P_DIVISION_ID = 'ALL'
+	        OR S.DIVISION_ID IN (
+	            SELECT TRIM(REGEXP_SUBSTR(P_DIVISION_ID, '[^,]+', 1, LEVEL))
+	            FR
+OM DUAL
+	            CONNECT BY REGEXP_SUBSTR(P_DIVISION_ID, '[^,]+', 1, LEVEL) IS NOT NULL
+	        )
+	      )
+	  /* [2026.10.01] AJS 복수조건(쉼표 구분) 조회 - 입력 원문과 쉼표로 쪼갠 값을 함께 견준다 (START) */
+	  AND ( P_ST
+ORAGE_ID IS NULL
+	        OR UPPER(S.STORAGE_ID) LIKE '%' || UPPER(P_STORAGE_ID) || '%'
+	        OR EXISTS (SELECT 1
+	                     FROM (SELECT DISTINCT TRIM(REGEXP_SUBSTR(UPPER(P_STORAGE_ID), '[^,]+', 1, LEVEL)) AS TST
+	                             FROM DUAL
+	                          CONNECT BY REGEXP_SUBSTR(UPPER(P_STORAGE_ID), '[^,]+', 1, LEVEL) IS NOT NULL) IA
+	                    WHE
+RE IA.TST IS NOT NULL
+	                      AND ( UPPER(S.STORAGE_ID) LIKE '%' || IA.TST || '%'
+	                          ) ) )
+--	  AND UPPER(S.STORAGE_ID) LIKE '%' || NVL(UPPER(P_STORAGE_ID), '') || '%'
+	  /* [2026.10.01] AJS (END) */
+	  AND NOT EXISTS (
+	        SELECT 1
+	        FROM SCM_ADM_LOOKUP_MASTER_DETAIL LOOK
+	        WHERE LOOK.LOOKUP_TYPE = 'SALES_SITE_VS_WAREHOUSE'
+	          AND
+LOOK.VALID_YN    = 'Y'
+	          AND LOOK.SEGMENT1    = S.STORAGE_ID
+	          AND (
+	                P_DIVISION_ID = 'ALL'
+	                OR LOOK.SEGMENT3 = S.DIVISION_ID
+	              )
+	
+);
+
+	OPEN O_RESULT_CURSOR FOR
+		SELECT '0' AS CODE, 'SUCCESS' AS MSG, '0' AS EVENT FROM DUAL;
+
+	EXCEPTION
+	    WHEN OTHERS THEN
+	        RAISE_APPLICATION_ERROR(-20001,
+	        '[' || $$PLSQL_UNIT || '] SQLCODE=' || TO_CHAR(SQLCODE) ||
+	        ' / SQLERRM=' || SQLERRM ||
+	        ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||
+	        ' / PARAMS=' || '-' );
+
+END P_COM0003_GET_STORAGE_
+BY_DIVISION_POPUP;
+==================================================================
+#4 [AUDIT] 2026-10-12 19:18:17  DB=SYS  OS=oracle  HOST=localhost.localdomain  PROG=sqlplus@localhost.localdomain (TNS V1-V3)  ACTION=CREATE PACKAGE BODY
+    MEMBER_LEN=2430  ★ 직전 대비 길이 변경(2418→2430)
+------------------------------------------------------------------
+PROCEDURE P_COM0003_GET_STORAGE_BY_DIVISION_POPUP
+(
+    p_division_id 	IN 	VARCHAR2,
+    p_storage_id  	IN 	VARCHAR2,
+    o_rc1         	OUT SYS_REFCURSOR,
+	O_RESULT_CURSOR	OUT	SYS_REFCURSOR
+)
+AS
+BEGIN
+    OPEN o_rc1 FOR
+	SELECT
+	    S.DIVISION_ID,
+	    D.DIVISION_NAME,
+	    S.STORAGE_ID,
+	    S.PLANT_ID,
+	    S.STORAGE_DESCRIPTION
+	FROM SCM_MST_SLOC S
+	JOIN SCM_MST_DIVISION D
+	  ON D.DIVISION_ID
+= S.DIVISION_ID
+	WHERE S.VALID_YN = 'Y'
+--	  AND (
+--	        S.STORAGE_ID LIKE '6%'
+--	        OR S.STORAGE_ID LIKE 'A%'
+--	        OR S.STORAGE_ID LIKE 'B%'
+--	        OR (S.STORAGE_ID LIKE '799%' AND S.STORAGE_ID NOT IN ('7990', '7999'))
+--	      )
+	  AND (
+	        P_DIVISION_ID = 'ALL'
+	        OR S.DIVISION_ID IN (
+	            SELECT TRIM(REGEXP_SUBSTR(P_DIVISION_ID, '[^,]+', 1, LEVEL))
+	
+          FROM DUAL
+	            CONNECT BY REGEXP_SUBSTR(P_DIVISION_ID, '[^,]+', 1, LEVEL) IS NOT NULL
+	        )
+	      )
+	  /* [2026.10.01] AJS 복수조건(쉼표 구분) 조회 - 입력 원문과 쉼표로 쪼갠 값을 함께 견준다 (START) */
+	
+  AND ( P_STORAGE_ID IS NULL
+	        OR UPPER(S.STORAGE_ID) LIKE '%' || UPPER(P_STORAGE_ID) || '%'
+	        OR EXISTS (SELECT 1
+	                     FROM (SELECT DISTINCT TRIM(REGEXP_SUBSTR(UPPER(P_STORAGE_ID), '[^,]+', 1, LEVEL)) AS TST
+	                             FROM DUAL
+	                          CONNECT BY REGEXP_SUBSTR(UPPER(P_STORAGE_ID), '[^,]+', 1, LEVEL) IS NOT NULL) IA
+	
+         WHERE IA.TST IS NOT NULL
+	                      AND ( UPPER(S.STORAGE_ID) LIKE '%' || IA.TST || '%'
+	                          ) ) )
+--	  AND UPPER(S.STORAGE_ID) LIKE '%' || NVL(UPPER(P_STORAGE_ID), '') || '%'
+	  /* [2026.10.01] AJS (END) */
+	  AND NOT EXISTS (
+	        SELECT 1
+	        FROM SCM_ADM_LOOKUP_MASTER_DETAIL LOOK
+	        WHERE LOOK.LOOKUP_TYPE = 'SALES_SITE_VS_WAREHOUSE'
+	
+        AND LOOK.VALID_YN    = 'Y'
+	          AND LOOK.SEGMENT1    = S.STORAGE_ID
+	          AND (
+	                P_DIVISION_ID = 'ALL'
+	                OR LOOK.SEGMENT3 = S.DIVISION_ID
+	
+   )
+	      );
+
+	OPEN O_RESULT_CURSOR FOR
+		SELECT '0' AS CODE, 'SUCCESS' AS MSG, '0' AS EVENT FROM DUAL;
+
+	EXCEPTION
+	    WHEN OTHERS THEN
+	        RAISE_APPLICATION_ERROR(-20001,
+	        '[' || $$PLSQL_UNIT || '] SQLCODE=' || TO_CHAR(SQLCODE) ||
+	        ' / SQLERRM=' || SQLERRM ||
+	        ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||
+	        ' / PARAMS=' || '-' );
+
+END P_COM0003_
+GET_STORAGE_BY_DIVISION_POPUP;
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+================= §7 ⭐⭐ 정리표 — 누가 · 언제 · 무엇을 =================
+[A] 이벤트 정리표 (시간순) · [B] LAST_DDL 대조 · [C] 대상 멤버 변경 상세(직전 버전 대비 줄 단위 -삭제 / +추가)
+※ 출처: AUDIT = Unified Audit(원문 보존) / AWR = DBA_HIST_SQLTEXT(원문 보존) / ASH = 세션 샘플(원문 없음)
+※ 비교는 공백·들여쓰기 정규화 후 줄 단위 · 줄 순서 이동만 있는 경우는 변경으로 잡지 않음
+[A] 이벤트 정리표 — PKG_COM0000 · 대상 멤버 P_COM0003_GET_STORAGE_BY_DIVISION_POPUP
+    수행 주체 = 실행 프로그램·원문 흔적 기준 추정 — 사람(GUI DB 도구 직접 실행) / AI·자동화(스크립트 런타임·AI 마커) / 구분 불가(sqlplus·JDBC 등)
+No   | 언제                         | 출처  | DB계정     | OS사용자                 | PC                       | 프로그램                                         | DDL                 | 수행 주체(근거)                                                        | 무엇을
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#1   | 2026-10-10 12:31:46          | AUDIT | SYS        | oracle                   | localhost.localdomain    | sqlplus@localhost.localdomain (TNS V1-V3)        | CREATE PACKAGE BODY | 구분 불가 — DB 서버 콘솔 SYS sqlplus 스크립트 (DBA·배치 적용)          | 기준본 (기간 내 첫 원문 · 비교 대상 없음) · 멤버 67줄
+#2   | 2026-10-10 12:35:42          | AUDIT | SYS        | oracle                   | localhost.localdomain    | sqlplus@localhost.localdomain (TNS V1-V3)        | CREATE PACKAGE BODY | 구분 불가 — DB 서버 콘솔 SYS sqlplus 스크립트 (DBA·배치 적용)          | 멤버 변경 없음 (다른 멤버 수정 또는 동일본 재생성)
+#3   | 2026-10-10 12:38:26          | AUDIT | SYS        | oracle                   | localhost.localdomain    | sqlplus@localhost.localdomain (TNS V1-V3)        | CREATE PACKAGE BODY | 구분 불가 — DB 서버 콘솔 SYS sqlplus 스크립트 (DBA·배치 적용)          | ★ 멤버 변경 : -1줄 / +1줄 → [C] 상세 · 내용 작성 태그 [2026.10.01] AJS(실행자와 다를 수 있음)
+#4   | 2026-10-12 19:18:17          | AUDIT | SYS        | oracle                   | localhost.localdomain    | sqlplus@localhost.localdomain (TNS V1-V3)        | CREATE PACKAGE BODY | 구분 불가 — DB 서버 콘솔 SYS sqlplus 스크립트 (DBA·배치 적용)          | ★ 멤버 변경 : -6줄 / +6줄 → [C] 상세
+#5   | 2026-10-19 18:13:33          | ASH   | SCM_MGR    | POJ(PC기준)              | DESKTOP-N00HD67          | C:\Users\POJ\AppData\Local\Programs\Python\Pytho | DROP PACKAGE        | AI·자동화 추정 — python 스크립트 실행                                  | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#6   | 2026-10-19 18:27:54          | ASH   | SCM_MGR    | POJ(PC기준)              | DESKTOP-N00HD67          | C:\Users\POJ\AppData\Local\Programs\Python\Pytho | CREATE PACKAGE BODY | AI·자동화 추정 — python 스크립트 실행                                  | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#7   | 2026-10-20 17:23:47          | ASH   | SCM_MGR    | jinseon_ahn(PC기준)      | LGENSOL\P2605LN0024      | powershell.exe                                   | CREATE PACKAGE BODY | AI·자동화 추정 — PowerShell 스크립트 실행                              | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#8   | 2026-10-21 18:43:21          | ASH   | SCM_MGR    | SUNGHAN.JUNG(PC기준)     | DESKTOP-BMHBA84          | DBeaver 26?2?0 ? Main                            | CREATE PACKAGE BODY | 사람 — DBeaver 객체 편집기 저장·컴파일                                 | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#9   | 2026-10-21 20:11:24          | ASH   | SCM_MGR    | gyucheol_lee(PC기준)     | P2605LN0006              | C:\Python3.11.5\python.exe                       | CREATE PACKAGE BODY | AI·자동화 추정 — python 스크립트 실행 · 본 파일 작성 PC(P2605LN0006)   | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#10  | 2026-10-21 20:12:04          | ASH   | SCM_MGR    | gyucheol_lee(PC기준)     | P2605LN0006              | C:\Python3.11.5\python.exe                       | ALTER PACKAGE BODY  | AI·자동화 추정 — python 스크립트 실행 · 본 파일 작성 PC(P2605LN0006)   | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#11  | 2026-10-23 10:56:36          | ASH   | SCM_MGR    | 신승훈(PC기준)           | DESKTOP-ELMPP0M          | DBeaver 26?1?4 ? Main                            | CREATE PACKAGE BODY | 사람 — DBeaver 객체 편집기 저장·컴파일                                 | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#12  | 2026-10-23 16:53:27          | ASH   | SCM_MGR    | jinseon_ahn(PC기준)      | P2605LN0024              | C:\Users\LGES\AppData\Local\Programs\Python\Pyth | CREATE PACKAGE BODY | AI·자동화 추정 — python 스크립트 실행                                  | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+#13  | 2026-10-26 14:57:24          | ASH   | SCM_MGR    | gyucheol_lee(PC기준)     | P2605LN0006              | C:\Python3.11.5\python.exe                       | CREATE PACKAGE      | AI·자동화 추정 — python 스크립트 실행 · 본 파일 작성 PC(P2605LN0006)   | 원문 미보존 — 변경 내용 확인 불가 · 대상 패키지 미확인(다른 패키지일 수 있음)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    수행 주체 집계 : 사람 2건 / AI·자동화 추정 7건 / 구분 불가 4건 (전체 13건)
+
+[B] 현재 LAST_DDL 대조 (±10초 이내 이벤트가 있으면 그 이벤트가 마지막 변경)
+    PACKAGE       LAST_DDL=2026-10-09 13:38:30  → 일치 이벤트 없음 (감사·ASH 미포착 — 실행자·내용 DB 로 확인 불가 · GRANT/재컴파일도 갱신됨)
+    PACKAGE BODY  LAST_DDL=2026-10-23 12:04:37  → 일치 이벤트 없음 (감사·ASH 미포착 — 실행자·내용 DB 로 확인 불가 · GRANT/재컴파일도 갱신됨)
+
+[C] 대상 멤버 변경 상세 (직전 버전 대비 · - 삭제된 줄 / + 추가된 줄)
+#3  2026-10-10 12:38:26  [AUDIT] CREATE PACKAGE BODY  누가=SYS / OS=oracle / PC=localhost.localdomain / sqlplus@localhost.localdomain (TNS V1-V3
+      - /* [2026.10.01] AJS ������������(������ ������) ������ - ������ ��������� ��������� ������ ������ ������ ��������� (START) */
+      + /* [2026.10.01] AJS 복수조건(쉼표 구분) 조회 - 입력 원문과 쉼표로 쪼갠 값을 함께 견준다 (START) */
+#4  2026-10-12 19:18:17  [AUDIT] CREATE PACKAGE BODY  누가=SYS / OS=oracle / PC=localhost.localdomain / sqlplus@localhost.localdomain (TNS V1-V3
+      - S.STORAGE_ID LIKE '6%'
+      - OR S.STORAGE_ID LIKE 'A%'
+      - OR S.STORAGE_ID LIKE 'B%'
+      - OR (S.STORAGE_ID LIKE '799%' AND S.STORAGE_ID NOT IN ('7990', '7999'))
+      - AND (
+      - )
+      + -- AND (
+      + -- S.STORAGE_ID LIKE '6%'
+      + -- OR S.STORAGE_ID LIKE 'A%'
+      + -- OR S.STORAGE_ID LIKE 'B%'
+      + -- OR (S.STORAGE_ID LIKE '799%' AND S.STORAGE_ID NOT IN ('7990', '7999'))
+      + -- )
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+================= 끝 =================
