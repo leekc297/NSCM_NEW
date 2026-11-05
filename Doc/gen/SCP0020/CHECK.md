@@ -1,0 +1,74 @@
+# [Harness] SCP0020 tact-time — BLOCK 2 / WARN 70
+
+- WARN AC1 액션 대조표 미처리 527행: AC-c567df54(상태 빈칸 POPUP new SCM0002_ItembyDivisionPopu), AC-46ab628f(상태 빈칸 POPUP popItem.Form_Load), AC-298321a1(상태 빈칸 UI_PROP popItem.StartPosition), AC-943f4373(상태 빈칸 POPUP popItem.ShowDialog), AC-71d66404(상태 빈칸 VALUE_SET txtItemId.Text), AC-fac7bce0(상태 빈칸 GRID_SET spread.SetValue), AC-62a09fc2(상태 빈칸 MESSAGE MessageHelper.GMessageBox), AC-953bfe78(상태 빈칸 GRID_SET spread.SetValue) … @Doc/asisfacts/screens/SCP0020/__asis-actions__.md
+- WARN AC2 사전 미등록 외부/상속 호출 의미 미기입 7행(AS-IS 원문 위치를 열어 '의미' 칸에 실제 동작 기입): AC-1d1f32ed(siExcept.DisplayedSheet.GetViewRowFromMo @SCP0020_TactTime.cs:2387), AC-aeb7f42a(siExcept.DisplayedSheet.GetViewRowFromMo @SCP0020_TactTime.cs:2433), AC-6957920c(siExcept.DisplayedSheet.GetViewRowFromMo @SCP0020_TactTime.cs:2434), AC-d757f960(siExcept.DisplayedSheet.GetViewRowFromMo @SCP0020_TactTime.cs:2466), AC-b5b9c328(siExcept.DisplayedSheet.GetViewRowFromMo @SCP0020_TactTime.cs:2492), AC-b0fe8949(CString.GetComboBoxValue @SCP0020_TactTime.cs:1052), AC-f34bbfbc(siMain.IsLockCell @SCP0020_TactTime.cs:2567) @Doc/asisfacts/screens/SCP0020/__asis-actions__.md
+- WARN G02 As-is 엔드포인트 SCP.SCP0020_GET_TACT_TIME_OSP (SCP0020_GET_TACT_TIME_OSP) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0020_GET_TACT_TIME (SCP0020_GET_TACT_TIME) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0020_GET_TACT_TIME_EXCEPT_OSP (SCP0020_GET_TACT_TIME_EXCEPT_OSP) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0020_GET_TACT_TIME_EXCEPT (SCP0020_GET_TACT_TIME_EXCEPT) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0020_SAVE_TACT_TIME_OSP (SCP0020_SAVE_TACT_TIME_OSP) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0020_SAVE_TACT_TIME (SCP0020_SAVE_TACT_TIME) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0020_SAVE_TACT_TIME_EXCEPT_OSP (SCP0020_SAVE_TACT_TIME_EXCEPT_OSP) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0020_SAVE_TACT_TIME_EXCEPT (SCP0020_SAVE_TACT_TIME_EXCEPT) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → btnItemId_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.EditModeOff → SpdMain_EditModeOff 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.EditChange → SpdMain_EditChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdExcept.EditModeOff → spdExcept_EditModeOff 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdExcept.EditChange → spdExcept_EditChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDivision.SelectedIndexChanged → ClbDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbPlantSite.SelectedIndexChanged → ClbPlantSite_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellDoubleClick → SpdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.TopChange → SpdMain_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellClick → SpdMain_CellClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdExcept.TopChange → SpdExcept_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdmMain.Changed → SpdMain_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdmMainPacker.Changed → SpdMain_Changed_Packer 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ClipboardPasted → SpdMain_ClipboardPasted 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.ActiveSheetChanged → SpdMain_ActiveSheetChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdmExcept.Changed → SpdExcept_Changed 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 cboOperationGroup / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboValid / UsrComboBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbLine / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbPlantSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdExcept / FpSpread 매핑표 §1 에 없음
+- BLOCK V01 Validation 마커 누락 7/7: V-001(Lundefined) V-002(Lres == false)            ) V-003(Lundefined) V-004(Lundefined) V-005(Lundefined) V-006(Lundefined) V-007(Lundefined) @hooks/useTactTimeValidation.ts
+- WARN V01 As-is Expression 34건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00108 — AS-IS '시작일자가 종료일자보다 늦을 수 없습니다.' / TO-BE MSG00108 = '조회 기간이 잘못되었습니다 (시작일 > 종료일).' → 문구로 찾은 TO-BE ID MSG01135 @hooks/useTactTimeValidation.test.tsx
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00002 — AS-IS '{0} 값은 필수 입력입니다' / TO-BE MSG00002 = '성공적으로 저장되었습니다.' → 문구로 찾은 TO-BE ID MSG00614 @tact-time.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00108 — AS-IS '시작일자가 종료일자보다 늦을 수 없습니다.' / TO-BE MSG00108 = '조회 기간이 잘못되었습니다 (시작일 > 종료일).' → 문구로 찾은 TO-BE ID MSG01135 @tact-time.constants.ts
+- BLOCK MS1 AS-IS 메시지 ID 그대로 사용: MSG00109 — AS-IS '읽기 전용입니다.' / TO-BE MSG00109 = '읽기전용 상태입니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+) @tact-time.constants.ts
+- WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @TactTime.tsx
+- WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 4건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) — Packer SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 편집(EDIT) — Tact Time Except SEQ1 [MSG00199] 작업중인 데이터가 있습니다. 작업  / 셀 입력(CHANGE) — Tact Time Except SEQ1 [MSG00203] 0.01~조회 MAX 사이의 수를  → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0020.md
+- WARN VR2 MSG00429 — VALIDATION 취합 판정: 조회(SEARCH) — Packer SEQ2 AS-IS MSG00002 [메시지 불일치] — 일치 — 필수 뜻은 같음. [주의] t() 결과에 .replace('{0}',…) 없음 · i18next 기본 보간은 {{}} 라 {0} 미치환(foundatio @hooks/useTactTimeValidation.test.tsx:75
+- WARN VR2 MSG00048 — VALIDATION 취합 판정: 저장(SAVE) — Tact Time Except SEQ5 AS-IS MSG00048 [메시지 불일치] — [메시지 불일치] TO-BE 미등록 — fallback '_Date must be >= 17530101.' 노출. constants 주석은 '등록 확인(09-25 @hooks/useTactTimeValidation.test.tsx:142
+- WARN VR2 MSG00105 — VALIDATION 취합 판정: 저장(SAVE) — Tact Time Except SEQ3 AS-IS MSG00105 [메시지 불일치] — [메시지 불일치] TO-BE 미등록 — fallback '_Overlapping period.' 노출. constants 주석은 '등록 확인(09-25)'이나 마 @hooks/useTactTimeValidation.test.tsx:187
+- WARN VR2 MSG00429 — VALIDATION 취합 판정: 조회(SEARCH) — Packer SEQ2 AS-IS MSG00002 [메시지 불일치] — 일치 — 필수 뜻은 같음. [주의] t() 결과에 .replace('{0}',…) 없음 · i18next 기본 보간은 {{}} 라 {0} 미치환(foundatio @tact-time.constants.ts:224
+- WARN VR2 MSG00048 — VALIDATION 취합 판정: 저장(SAVE) — Tact Time Except SEQ5 AS-IS MSG00048 [메시지 불일치] — [메시지 불일치] TO-BE 미등록 — fallback '_Date must be >= 17530101.' 노출. constants 주석은 '등록 확인(09-25 @tact-time.constants.ts:228
+- WARN VR2 MSG00105 — VALIDATION 취합 판정: 저장(SAVE) — Tact Time Except SEQ3 AS-IS MSG00105 [메시지 불일치] — [메시지 불일치] TO-BE 미등록 — fallback '_Overlapping period.' 노출. constants 주석은 '등록 확인(09-25)'이나 마 @tact-time.constants.ts:232
+- WARN VR2 MSG00662 — VALIDATION 취합 판정: 행추가(INSERT) — Tact Time Except SEQ1 AS-IS MSG00161 [메시지 불일치] — [메시지 불일치] 불일치 — AS-IS '더블클릭하여 Tact Time을 선택한 후 사용하세요!'(기준 행 선택 요구) ↔ TO-BE '조회 후 수정모드로 가능합 @tact-time.constants.ts:235
+- WARN LB1 라벨 리터럴 'Valid' 은 TO-BE 룰 CR-092(SCP·SSP Valid→Active) 변경 대상 — 'Active' 로 바꾼다(의도된 예외면 줄 끝 LB-OK) @tact-time.constants.ts:97
+- WARN VC1 대조표 FAIL 42행 (Doc/verify/SCP0020/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미검증 888행 — 검사 사유 REVIEW 366 · ERROR 1681 · NOPATH 25 · NOT_RUN 8 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 132건 / 검사 인스턴스 554 — W2 1 · W3 16 · W5 3 · W6 3 · W7 50 · W9 59 · 구현 의심 2 (Doc/verify/SCP0020/work_ledger.md)
+- WARN I18N1 다국어 미적용 — 화면에 '_Tact Time out of range.' 가 그대로 보임: 코드 MSG00203 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @components/TactTimeExceptGrid.tsx:101
+- WARN I18N1 다국어 미적용 — 화면에 '_Tact Time out of range.' 가 그대로 보임: 코드 MSG00203 가 msg_master 에 없음. 기존 LBL/MSG 재사용(문구로 찾기) 또는 SCM_ADM_MSG_M 신규 등록(KO/EN/CN, LBL01001+/MSG01001+) 후 코드 기입 @components/TactTimeMainGrid.tsx:133
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/TactTimeExceptGrid.tsx:140
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/TactTimeMainGrid.tsx:178
+- WARN R03 window.alert/confirm → useMessageStore (#26 messaging-api) @hooks/useTactTimeValidation.ts:53
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @TactTime.tsx:199
+- WARN R09 자체 행상태 필드 금지 — CRUD_TYPE 전용 (#99 §0) @utils/tactTimeEditLock.ts:13
+- WARN B19 expressions.md 34행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0020/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0020/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0020/SCP0020_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0020/SCP0020_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0020_GET_TACT_TIME_EXCEPT_OSP · 시트 'except') — 누락 sesUserId, mnuId — 현재 키: divisionId, plantSite, operationId, itemId, lineId · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0020_GET_ITEM_SEARCH · 시트 'itemSearch') — 누락 projectCode, scmSiteId, userId — 현재 키: divisionId, itemId, menuId · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0020_GET_TACT_TIME_OSP · 시트 'packer') — 누락 sesUserId, mnuId — 현재 키: divisionId, plantSiteId, lineId, operationGroupId, itemId · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0020_GET_TACT_TIME · 시트 'plant') — 누락 sesUserId, mnuId — 현재 키: divisionId, plantSiteId, lineId, operationGroupId, itemId, valid · BE positional 매핑이라 값이 NULL 로 감

@@ -1,0 +1,239 @@
+[
+ {
+  "row_id": "V-67473971",
+  "rule_id": "A5",
+  "target": "DMF0003 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-84383569",
+  "rule_id": "G1",
+  "target": "조회조건 chkColor",
+  "same": []
+ },
+ {
+  "row_id": "V-a1348885",
+  "rule_id": "G1",
+  "target": "조회조건 cboAS",
+  "same": []
+ },
+ {
+  "row_id": "V-c329e6ea",
+  "rule_id": "B7",
+  "target": "조회조건 Item Type",
+  "same": [
+   "V-d2c54b5e",
+   "V-6a005d34",
+   "V-abb39e40",
+   "V-8b9dba0a",
+   "V-c9d90583",
+   "V-4fc996e5",
+   "V-c4deb68e",
+   "V-61dc90f7"
+  ]
+ },
+ {
+  "row_id": "V-dba4ba2f",
+  "rule_id": "G1",
+  "target": "조회조건 Item Type",
+  "same": []
+ },
+ {
+  "row_id": "V-c0760c00",
+  "rule_id": "G1",
+  "target": "조회조건 chkSum",
+  "same": []
+ },
+ {
+  "row_id": "V-9b63a879",
+  "rule_id": "G1",
+  "target": "조회조건 Plant Site",
+  "same": []
+ },
+ {
+  "row_id": "V-a1d2192a",
+  "rule_id": "G1",
+  "target": "조회조건 drpPeriod",
+  "same": []
+ },
+ {
+  "row_id": "V-13387588",
+  "rule_id": "G2",
+  "target": "조회조건 Sales Site",
+  "same": []
+ },
+ {
+  "row_id": "V-d9b5a2c9",
+  "rule_id": "G1",
+  "target": "조회조건 Biz Type",
+  "same": []
+ },
+ {
+  "row_id": "V-d987a33b",
+  "rule_id": "B3",
+  "target": "조회조건 End Customer",
+  "same": []
+ },
+ {
+  "row_id": "V-0d8798bf",
+  "rule_id": "G1",
+  "target": "조회조건 End Customer",
+  "same": []
+ },
+ {
+  "row_id": "V-af0b4a18",
+  "rule_id": "B3",
+  "target": "조회조건 Team",
+  "same": []
+ },
+ {
+  "row_id": "V-f3d81a87",
+  "rule_id": "G8",
+  "target": "조회조건 Owner",
+  "same": []
+ },
+ {
+  "row_id": "V-0f02c763",
+  "rule_id": "G9",
+  "target": "조회조건 Owner",
+  "same": []
+ },
+ {
+  "row_id": "V-20252a50",
+  "rule_id": "G1",
+  "target": "조회조건 Sender Code",
+  "same": []
+ },
+ {
+  "row_id": "V-a6ff3193",
+  "rule_id": "H1",
+  "target": "Car Fcst.MINOR_CAT (소분류)",
+  "same": []
+ },
+ {
+  "row_id": "V-9131aabd",
+  "rule_id": "G5",
+  "target": "new DM0002_TitleSetForm_Popup(\"DMF0003\", SpdSheet.shtMain, true, clbDivision.ControlValues)",
+  "same": [
+   "V-d69b319c",
+   "V-9d72c711",
+   "V-23333d6b",
+   "V-cce72a64",
+   "V-0b9540b9"
+  ]
+ },
+ {
+  "row_id": "T-c92f2883",
+  "rule_id": "F4",
+  "target": "DMF0000_GET_MASTER_CHG_POPUP",
+  "same": []
+ },
+ {
+  "row_id": "T-166a486d",
+  "rule_id": "F4",
+  "target": "DMF0003_GET_BUCKET_TYPE_CODE",
+  "same": []
+ },
+ {
+  "row_id": "T-3a6f97cf",
+  "rule_id": "C4",
+  "target": "chkColor / Color",
+  "same": []
+ },
+ {
+  "row_id": "T-4e914bf7",
+  "rule_id": "G1",
+  "target": "txtItemId / Model / Item Id",
+  "same": []
+ },
+ {
+  "row_id": "T-9d634966",
+  "rule_id": "F4",
+  "target": "DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE",
+  "same": []
+ },
+ {
+  "row_id": "T-af790eaa",
+  "rule_id": "D5",
+  "target": "MEASURE / Measure",
+  "same": []
+ },
+ {
+  "row_id": "V-d2c54b5e",
+  "rule_id": "B7",
+  "target": "",
+  "folded_into": "V-c329e6ea"
+ },
+ {
+  "row_id": "V-6a005d34",
+  "rule_id": "B7",
+  "target": "",
+  "folded_into": "V-c329e6ea"
+ },
+ {
+  "row_id": "V-abb39e40",
+  "rule_id": "B7",
+  "target": "",
+  "folded_into": "V-c329e6ea"
+ },
+ {
+  "row_id": "V-8b9dba0a",
+  "rule_id": "B7",
+  "target": "",
+  "folded_into": "V-c329e6ea"
+ },
+ {
+  "row_id": "V-c9d90583",
+  "rule_id": "B7",
+  "target": "",
+  "folded_into": "V-c329e6ea"
+ },
+ {
+  "row_id": "V-4fc996e5",
+  "rule_id": "B7",
+  "target": "",
+  "folded_into": "V-c329e6ea"
+ },
+ {
+  "row_id": "V-c4deb68e",
+  "rule_id": "B7",
+  "target": "",
+  "folded_into": "V-c329e6ea"
+ },
+ {
+  "row_id": "V-61dc90f7",
+  "rule_id": "B7",
+  "target": "",
+  "folded_into": "V-c329e6ea"
+ },
+ {
+  "row_id": "V-d69b319c",
+  "rule_id": "G5",
+  "target": "",
+  "folded_into": "V-9131aabd"
+ },
+ {
+  "row_id": "V-9d72c711",
+  "rule_id": "G5",
+  "target": "",
+  "folded_into": "V-9131aabd"
+ },
+ {
+  "row_id": "V-23333d6b",
+  "rule_id": "G5",
+  "target": "",
+  "folded_into": "V-9131aabd"
+ },
+ {
+  "row_id": "V-cce72a64",
+  "rule_id": "G5",
+  "target": "",
+  "folded_into": "V-9131aabd"
+ },
+ {
+  "row_id": "V-0b9540b9",
+  "rule_id": "G5",
+  "target": "",
+  "folded_into": "V-9131aabd"
+ }
+]

@@ -7,6 +7,7 @@ import {
   Row,
 } from '@mescius/wijmo.grid';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import dayjs from 'dayjs';
 import styles from 'features/demand/src/pages/shipment-request/ShipmentRequest.module.scss';
 import { type MutableRefObject, type Ref, useCallback, useEffect, useMemo, useRef } from 'react';
 
@@ -126,6 +127,45 @@ const measureColorToCss = (raw: unknown): string => {
   return `rgb(${parts[0]}, ${parts[1]}, ${parts[2]})`;
 };
 
+// ── [ROLLBACK:dmf0045-measure-requestor-swap · 2026-10-29] ─────────────────────────────────
+//   사용자 지시(2026-10-29): 조회 그리드에서 Measure 와 Requestor(LAST_UPDATED_BY)의 좌우 위치를
+//   교체한다. 데이터(개인화 titleset·admin SORT_ORDER_NO)는 건드리지 않는 FE 전용·표시(display)만 변경.
+//
+//   왜 FE 에서 강제하나:
+//     · DMF0045 는 개인화 시트(PKG_NSCM_UI_COM_MENU.PR_GET_SHEET_COLUMN_LIST, V_PRSL_YN='Y')라 표시
+//       순서가 사용자별 SCM_MST_TITLESET_USER(USER_SORT_ORDER_NO)로 결정돼 admin SORT_ORDER_NO(SYS0004)
+//       로는 통제가 안 된다. 그리고 MEASURE·LAST_UPDATED_BY 는 둘 다 personalizable=false(사용자 Column
+//       설정 재정렬 불가)라 FE 강제 순서가 개인화와 충돌하지 않는다(실측 /admin/menu/DMF0045/column).
+//
+//   왜 '표시만' 바꾸고 fixedBindings(머지)는 안 건드리나:
+//     · 좌측 키컬럼 세로 머지(HierarchicalMergeManager)는 fixedBindings 순서로 leftBindings 계층을
+//       만든다. MEASURE 는 행마다 값이 달라 머지되지 않고, 그 '왼쪽'의 Requestor 는 같은 레코드의
+//       measure 행들에서 세로 머지된다. fixedBindings 순서까지 Measure 를 앞으로 바꾸면 Requestor 가
+//       Measure 오른쪽이 되어 세로 머지가 깨진다. 머지 결정은 binding 이름 기준·범위는 세로(동일 컬럼)라
+//       표시 위치와 무관하므로, 표시(mainStaticColumns)만 교체하면 머지는 원래대로 유지된다.
+//
+//   왜 fixed 재부여가 필요한가:
+//     · MEASURE 는 fixed:true(frozen 앵커)이고 공용 DataGrid 의 frozenColumns =
+//       flatStaticColumns.findLastIndex(_fixed)+1 (DataGrid.tsx) 이다. Measure 를 앞으로 옮기면
+//       뒤로 간 Requestor(fixed:false)가 고정영역 밖으로 빠져 기간컬럼과 함께 스크롤된다. → 새 마지막
+//       (Requestor)에 fixed:true 를 부여해 정적 블록 전체 frozen 을 유지한다.
+//
+//   롤백 방법: 이 함수(swapMeasureBeforeRequestor)를 제거하고 mainStaticColumns 의 호출에서 래핑만
+//     벗긴다 → visibleColumns.map(...) 원복. (fixedBindings/merge 는 애초에 미변경이라 별도 작업 없음)
+const swapMeasureBeforeRequestor = (
+  cols: RawFlexGridColumnConfig[]
+): RawFlexGridColumnConfig[] => {
+  const mi = cols.findIndex(c => c.colNm === 'MEASURE');
+  const ri = cols.findIndex(c => c.colNm === 'LAST_UPDATED_BY');
+  // 둘 다 존재하고 아직 '원래 순서'(Requestor 가 Measure 앞)일 때만 교체 — 멱등(이미 바뀐 상태/부재 시 무변경).
+  if (mi < 0 || ri < 0 || ri > mi) return cols;
+  const next = cols.slice();
+  const [measure] = next.splice(mi, 1); // Measure 추출
+  next.splice(ri, 0, measure); // Requestor 자리(앞)에 삽입 → [..., Measure, Requestor]
+  // 고정경계 유지: 새 마지막(Requestor)도 frozen. Measure 의 fixed:true 는 그대로 둔다.
+  return next.map(c => (c.colNm === 'LAST_UPDATED_BY' ? { ...c, fixed: true } : c));
+};
+
 export const ShipmentRequestGrid = ({
   rows,
   gridRef,
@@ -156,10 +196,24 @@ export const ShipmentRequestGrid = ({
 
   // 정적 컬럼 — admin(UI Category Setup) 메타 100% 주도. 하드코딩/화이트리스트 금지.
   //   FE 는 VISIBLE_FLAG(admin 관리 노출) + DISPLAY_FLAG(사용자 Column Setup 선택) 만 반영.
-  const visibleColumns = useMemo<RawFlexGridColumnConfig[]>(
+  const visibleColumnsRaw = useMemo<RawFlexGridColumnConfig[]>(
     () => (staticColumns ?? []).filter(c => c.visible !== false && c.display !== false),
     [staticColumns]
   );
+  // [ROLLBACK:dmf0045-tab-header-flicker · 2026-10-29] ──────────────────────────────────────────────
+  //   탭 전환(Pack↔Cell) 시 staticColumns 는 시트별 재조회로 매번 새 참조다. 그런데 공용 DataGrid 는
+  //   columnGroups(= mappedStaticColumns + normalizedDynamicColumns) 참조가 바뀌면 Wijmo 컬럼을 통째로
+  //   재생성하고(set columnGroups → this.columns.clear, DataGrid.tsx:771) 그때 다단 헤더가 기본(큰) 높이로
+  //   다시 그려졌다가 48px(hook #93)로 줄어드는 깜빡임이 난다. Pack/Cell 정적 컬럼 구조는 사실상 동일하므로
+  //   (DB 실측: Div 라벨 'DIv*'/'Div*' 대소문자만 상이) 구조 시그니처가 같으면 참조를 유지해 재생성을 막는다.
+  //   시그니처 = 레이아웃/헤더 구조 필드(colNm/fixed/colWth/라벨). 라벨은 소문자화해 대소문자 typo 를
+  //   무시하고, 셀 색(개인화)은 formatItem(colorMetaRef)이 별도 반영하므로 제외한다.
+  //   롤백: 이 시그니처 안정화를 제거하고 위 useMemo 의 이름을 visibleColumns 로 되돌린다(visibleColumnsRaw→visibleColumns).
+  const visibleColsSig = visibleColumnsRaw
+    .map(c => `${c.colNm}|${c.fixed}|${c.colWth}|${(c.colLblNm ?? '').toLowerCase()}`)
+    .join(',');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const visibleColumns = useMemo(() => visibleColumnsRaw, [visibleColsSig]);
   const fixedBindings = useMemo(() => visibleColumns.map(c => c.colNm), [visibleColumns]);
   const staticBindingSet = useMemo(() => new Set(fixedBindings), [fixedBindings]);
 
@@ -178,7 +232,10 @@ export const ShipmentRequestGrid = ({
 
   const mainStaticColumns = useMemo<RawFlexGridColumnConfig[]>(
     () =>
-      visibleColumns.map(c => ({
+      // [ROLLBACK:dmf0045-measure-requestor-swap · 2026-10-29] swapMeasureBeforeRequestor(...) 래핑만
+      //   벗기면 원복: visibleColumns.map(c => ({ ...c, visible: true, display: true })).
+      //   표시 전용 교체 — fixedBindings(머지)는 visibleColumns 원본을 그대로 쓰므로 머지 영향 없음.
+      swapMeasureBeforeRequestor(visibleColumns).map(c => ({
         ...c,
         visible: true,
         display: true,
@@ -217,7 +274,7 @@ export const ShipmentRequestGrid = ({
     }
     return [...set].sort().join(',');
   }, [spreadTitle, rows]);
-  const dynColMetas = useMemo<DynColMeta[]>(() => {
+  const dynColMetasRaw = useMemo<DynColMeta[]>(() => {
     const kindOf = (b: string): 'M' | 'W' | 'D' | null =>
       /^M_\d{6}$/.test(b) ? 'M' : /^W_\d{7,10}$/.test(b) ? 'W' : /^D_\d{8}$/.test(b) ? 'D' : null;
     // (1) GET_SPREAD_TITLE 우선
@@ -281,6 +338,15 @@ export const ShipmentRequestGrid = ({
       ];
     });
   }, [spreadTitle, rowDynKeySig, startYyyymmdd, endYyyymmdd]);
+  // [ROLLBACK:dmf0045-tab-header-flicker · 2026-10-29] 동적(기간) 컬럼도 탭 전환 시 spreadTitle 이 시트별
+  //   별도 쿼리(packSpread/cellSpread)라 새 참조로 오지만, 같은 기간이면 구조가 동일하다. 시그니처가 같으면
+  //   참조를 유지해 dynBindings/mainDynamicColumns→columnGroups 재대입(=헤더 재생성 깜빡임)을 막는다(위
+  //   visibleColumns 와 같은 취지). 롤백: 이 안정화를 제거하고 이름을 dynColMetas 로 되돌린다(dynColMetasRaw→dynColMetas).
+  const dynSig = dynColMetasRaw
+    .map(m => `${m.binding}|${m.kind}|${m.large}|${m.small}|${m.leaf}|${m.sort}|${m.dayCode}`)
+    .join(',');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const dynColMetas = useMemo(() => dynColMetasRaw, [dynSig]);
 
   // 주말 D_ binding → 헤더 글자색 (토 파랑 / 일 빨강, AS-IS cs 344-346). formatItem(헤더)이 ref 로 읽는다.
   const weekendColorByBinding = useMemo<Map<string, string>>(() => {
@@ -308,6 +374,9 @@ export const ShipmentRequestGrid = ({
   );
   const dOrderedDayBindingsRef = useRef<string[]>(dOrderedDayBindings);
   dOrderedDayBindingsRef.current = dOrderedDayBindings;
+  // 신규행(Insert) D_ frozen cutoff — AS-IS DMF0045 cs 1022 `DateTime.Today.AddDays(10)` 와 1:1(로컬 today+10).
+  //   D_ 바인딩 생성 포맷(dayjs YYYYMMDD)과 동일 기준. 세션 내 불변이라 mount 1회 계산(일 경계 변동은 무시).
+  const insertFrozenCutoffYmdRef = useRef<string>(dayjs().add(10, 'day').format('YYYYMMDD'));
   const summaryBindings = useMemo<string[]>(
     () => dynColMetas.filter(m => DYN_RANK[m.kind] < DYN_RANK[bucketPrefix]).map(m => m.binding),
     [dynColMetas, bucketPrefix]
@@ -469,6 +538,7 @@ export const ShipmentRequestGrid = ({
           row: rowItem,
           bucketType,
           dOrderedDayBindings: dOrderedDayBindingsRef.current,
+          insertFrozenCutoffYmd: insertFrozenCutoffYmdRef.current,
         });
         toggleClass(e.cell, 'wj-cell-editable', state.editable);
         // 비편집 measure 행(화이트리스트 밖) = Gray 음영 (design 03 §3 — 컬럼이 아니라 행 차원).
@@ -628,6 +698,7 @@ export const ShipmentRequestGrid = ({
           row,
           bucketType,
           dOrderedDayBindings: dOrderedDayBindingsRef.current,
+          insertFrozenCutoffYmd: insertFrozenCutoffYmdRef.current,
         });
         e.cancel = !state.editable;
       }

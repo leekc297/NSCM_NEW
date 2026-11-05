@@ -955,17 +955,17 @@ def safe_name(n):
     return n[:40]
 
 def next_version(folder, prefix):
-    vers = [0]
-    for f in glob.glob(os.path.join(folder, prefix + '_v*.xlsx')):
-        m = re.search(r'_v(\d+)(?:\.\d+)?\.xlsx$', f)
-        if m: vers.append(int(m.group(1)))
-    return max(vers) + 1
+    # 2026-10-28: old/ 까지 세어 이전 버전을 옮긴 뒤에도 번호가 이어진다(tools/Docs/doc_archive.py)
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import doc_archive
+    return doc_archive.next_version(folder, prefix)
 
 def save(wb, ID, name, out):
     os.makedirs(out, exist_ok=True)
     prefix = f'{ID}_{safe_name(name) or ID}_TestCases4'
     p = os.path.join(out, f'{prefix}_v{next_version(out, prefix)}.0.xlsx')
-    wb.save(p); return p
+    wb.save(p)
+    import doc_archive; doc_archive.archive_previous(p)  # 같은 UI 의 이전 버전 → <폴더>/old/ (2026-10-28 사용자)
+    return p
 
 
 if __name__ == '__main__':

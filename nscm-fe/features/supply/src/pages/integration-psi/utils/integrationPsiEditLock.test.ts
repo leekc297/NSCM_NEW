@@ -4,6 +4,7 @@ import {
   type AuthContext,
   INSERT_ROW_ONLY_EDITABLE,
   isInsertRowCellEditable,
+  isPivotCellValueEmpty,
 } from './integrationPsiEditLock';
 
 const GENERAL: AuthContext = { isAdmin: false, isPiAdmin: false, isPlanner: false };
@@ -58,5 +59,26 @@ describe('isInsertRowCellEditable — 신규행 잠금', () => {
     for (const col of ['202609', 'BOH_QTY', 'ITEM_ID', 'LINE_ID', 'MEASURE']) {
       expect(isInsertRowCellEditable(col, ADMIN)).toBe(true);
     }
+  });
+});
+
+// AS-IS 셀단위 빈값 잠금 (design 03 §3-Lock L4/L9/L13/L18 — qty=='' → month 셀 잠금).
+//   편집 가능 측정값 행이라도 그 달 값이 없으면 잠금 → 값 있는 셀만 편집. 0 은 값이 있는 것.
+describe('isPivotCellValueEmpty — AS-IS 셀단위 빈값 잠금', () => {
+  it('값이 없는(undefined/null/"") 셀은 빈값으로 본다', () => {
+    expect(isPivotCellValueEmpty({}, '202610')).toBe(true);
+    expect(isPivotCellValueEmpty({ '202610': undefined }, '202610')).toBe(true);
+    expect(isPivotCellValueEmpty({ '202610': null }, '202610')).toBe(true);
+    expect(isPivotCellValueEmpty({ '202610': '' }, '202610')).toBe(true);
+  });
+
+  it('0 은 값이 있는 것으로 보고 편집 허용한다(AS-IS qty=="" 비교, 0≠"")', () => {
+    expect(isPivotCellValueEmpty({ '202610': 0 }, '202610')).toBe(false);
+  });
+
+  it('숫자/문자 값이 있으면 빈값이 아니다', () => {
+    expect(isPivotCellValueEmpty({ '202610': 23 }, '202610')).toBe(false);
+    expect(isPivotCellValueEmpty({ '202610': -8 }, '202610')).toBe(false);
+    expect(isPivotCellValueEmpty({ '202610': '5' }, '202610')).toBe(false);
   });
 });

@@ -130,9 +130,8 @@ export const RequestInfoPanel = ({ requestInfo, canEdit, onChange, onApprovalSea
                     appearance='outlined'
                     priority='normal'
                     disabled={disabled}
-                    iconComponent={
-                      <FunctionSearchIcon appearance='lined' onClick={onApprovalSearch} />
-                    }
+                    iconComponent={<FunctionSearchIcon appearance='lined' />}
+                    onClick={onApprovalSearch}
                   />
                 ),
               }}
@@ -183,9 +182,13 @@ export const RequestInfoPanel = ({ requestInfo, canEdit, onChange, onApprovalSea
 
       <Grid size={4} />
 
-      {/* Reason Detail* — AS-IS `txtReasonDetail.Multiline = true`(Designer:1279), 641x24 로 두 열을
-          가로지르는 장문 칸이다. 필수: type='textarea' — InputField 는 type 으로 분기해 기본값('text')
-          이면 size 별 고정 높이를 걸어 multiline 만으로는 칸이 안 커진다(SSP0200 선례 주석). */}
+      {/* Reason Detail* — AS-IS `txtReasonDetail.Multiline = true`(Designer:1279), 641x24(한 줄 높이 +
+          스크롤)로 두 열을 가로지른다. type='textarea' 는 multiline 인데 행 상한이 없으면 입력 줄수만큼
+          무한히 커져 고정 폼 패널(FORM_PANEL_SIZE 248px, overflow:hidden) 밖으로 글자가 삐져나온다
+          (사용자 신고 2026-11-02 — 10줄 입력 시 상자 밖 표시). rows={2} 로 2줄 고정 + 초과분 네이티브
+          스크롤로 막는다. 또한 design-system 이 textarea 입력에 minHeight 72px 를 강제해 rows 만으로는
+          상자가 2줄로 안 줄어든다 — sx 로 그 바닥값을 풀어 컴팩트하게 둔다(ie=deepmerge 라 나머지
+          입력 스타일은 보존). */}
       <Grid size={8}>
         <FormItem
           className={commonStyles.formItem}
@@ -196,10 +199,11 @@ export const RequestInfoPanel = ({ requestInfo, canEdit, onChange, onApprovalSea
             <InputField
               type='textarea'
               fullWidth
-              height={44}
+              rows={2}
               disabled={disabled}
               value={requestInfo.reasonDetail}
               onChange={e => onChange({ reasonDetail: e.target.value })}
+              sx={{ '.MuiInputBase-input': { minHeight: 'unset' } }}
             />
           )}
         />

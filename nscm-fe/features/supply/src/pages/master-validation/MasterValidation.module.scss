@@ -13,6 +13,27 @@
   }
 }
 
+// 디테일 탭 래퍼 — Panel 높이를 다 쓰도록 flex column(TabWrapper.tabContainer 가 flex:1 로 채움).
+.detailTabs {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+
+  // 검증유형 탭이 12개라 디테일 패널 폭을 넘치면 마지막 탭(CAPA : Yield (Formation) 등)이 잘려 보인다.
+  //   공용 TabWrapper 의 탭 스트립(tabContainer 의 첫 자식 = .tabArea)은 overflow 미처리 → 여기서
+  //   가로 스크롤로 보강한다. 해시 클래스 대신 구조 선택자로 이 화면에만 한정(공용 컴포넌트 불변).
+  > div > div:first-child {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+  }
+}
+
 // 좌우 분할 드래그 바 — ResultArea splitBarCol 과 동일 패턴.
 .splitBar {
   position: relative;

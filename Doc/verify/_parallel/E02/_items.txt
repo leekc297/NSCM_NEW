@@ -1,0 +1,210 @@
+{'DM', 'GAP', 'GAPSELF', 'SCPSSP', 'SSP45REQ', 'SSP45', 'GAPPI'}
+['DM-C1', 'DM-C2', 'DM-C3', 'DM-C4', 'DM-C5']
+### EG004 A1 없음 | 과거 Version 선택 조회 결과 행 집합·건수 | code 코드 없음(golden 은 케이스 CSV 고정 인자 tools/DbConn/golden.py:207-219) | meas Version 값별 조회 실행 없음 | miss 팝업 반환값→Version 인자 정규화 후 조회 건수>0·AS-IS 일치 · 버전 유형별 행 범위 | how Version 원천(AS-IS 콤보/팝업 메타)에서 유형별 대표 버전을 골라 E2E 팝업 선택→call-proc 인자·행수 수집→golden 재실행
+   DM-187 [DMF0035] 조회 결과 건수(SF_W_20260907_V001 W37) / Version=SF_W_20260907_V001 / 동일 시점 AS-IS 와 행수·키 집합 일치
+   GAP-439 [DMF0082] 조회조건 Version 팝업 선택값(versionType · VERSION_NO) → 조회 / 40 · 81 계열(82 포함) · 전 그룹 / hongjae.kim 40 · Team 58099468 · End Custom / 과거 버전(예 SF_W_20260824_V001(W35))을 골라 조회하면 조회 결과 행 수 > 0 이고 AS-IS 같은 조건 결과와 같다 — 팝업 반환값의 '(' 이후를 잘라 VERSION_NO 
+   GAP-446 [DMF0082] 과거 버전(SF · MF · SP) 조회 결과 행 집합(DM_PLN_CFM_MKT_DEMA / 40 · 전 그룹 / hongjae.kim 40 · Sunwoda_CN_SZX · MIF489266C11 · Period 20 / SF 버전은 계획 구간 MKT FCST · SCM FCST · RTF 행 포함(Sunwoda_CN_SZX 35 · 35 · 9행 원천), MF 는 버전 주 월요일(20260824) 이후 계획·판가만
+### EG030 A5 부분 | 개인화 없을 때 선택 Div Default 구성 · 컬럼셋팅 팝업 Default | code Doc/e2e/specs/_trace.spec.ts:345-354 | meas 실행 계정 그리드를 AS-IS Division 표시와 비교. 계정 개인화 유무는 무시 | miss 개인화 없음 전제 통제·확인 없음(TITLESET 읽기 없음) · 팝업 내 Default 목록 미측정 · TO-BE UI Category DEFAULT_FLAG 대조 없음 | how 실행 전 계정 TITLESET_USER 를 조회해 개인화 유무 기록, 없는 계정 선택 · 팝업 Default 목록 = SHEET_COLUMNS DEFAULT_FLAG 대조
+   DM-C1 [COMMON] 컬럼/Measure 셋팅(개인화 Default) / 개인화 미저장 · Div 전환 / 개인화가 없으면 선택 Div 의 UI Category Default 컬럼·메저로 표시
+   DM-26 [DMF0020] 컬럼셋팅 팝업 Default / Div 40 · 개인화 없음 / 개인화 없을 때 Div 40 Default 컬럼 적용
+   DM-132 [DMF0020] Div별 컬럼 구성(COL_LIST 등) / Div별 / 컬럼셋팅 설정대로 그려짐, COL_LIST 비노출
+### EG033 A6 없음 | 팝업 반영 후 메인 그리드 행 정렬 = AS-IS | code 코드 없음(A6 은 조회 직후만 Doc/e2e/specs/_trace.spec.ts:798-813) | meas 입력 팝업 선택 후 정렬 측정 없음 | miss 팝업 선택 반영 후 행 순서 | how AS-IS 팝업 후 Sort 호출 facts(sort_rules GRID·CODE) 기반 시나리오 — ledger.py:141 ASIS A6 행에 측정 연결
+   SCPSSP-3 [SCP0028] 메인 그리드 행 정렬 / Div=81_HG, 입력 팝업 선택 완료 후 / 팝업 반영 후 행 정렬=AS-IS
+### EG044 A8 없음 | 팝업의 Period 기간 컬럼 생성·이상 데이터 0 | code 코드 없음 | meas 팝업 동적 컬럼 측정 없음 | miss 팝업 기간 칸·DB 이상 YYYYMM 값 | how PCOL 테스트(Doc/e2e/specs/_trace.spec.ts:522) 에 동적 패밀리 대조 추가 + 원장 YYYYMM 형식 위반 COUNT
+   DM-22 [DMF0020] Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE / Period 설정 / 팝업이 Period 기간만큼 YYYYMM 컬럼을 그려 조회, 이상 데이터(20280001 등) 0
+   DM-29 [DMF0020] Price Batch Input 팝업 / Div 40/81/81_JV · Period 설정 / Period 기간만큼 Spread 컬럼 생성·조회(데이터 없어도 기간 전체)
+### EG051 B3 없음 | 팝업 목록 정렬(Version DESC·Year 오름차순·Project 목록) | code 코드 없음(B3 행은 SEARCH·COLUMN 만 tools/Harness/verify/judge.py:836) | meas 팝업 그리드 순서 측정 없음 | miss 팝업 그리드 행 순서 ↔ AS-IS 팝업 SP ORDER BY | how AS-IS POPUP SP sort_rules 를 PCOL·M3 에 연결, 팝업 그리드 값 순서 대조
+   DM-94 [DMF0049] 버전 팝업 Version 목록 정렬 /  / Version명 DESC 정렬
+   GAP-282 [DMF0043] Contribution Version 팝업 Year 목록 정렬(yearPopup SEARC / 40 · hongjae.kim(DM ADMIN) · Year 2026(버전 15) → Contribution Version 팝 / 팝업 Year 목록 = ALL · 2019 · 2020 · … · 2026 오름차순 9건(AS-IS 와 같은 순서)
+   GAP-392 [DMF0068] 조회 결과 Project(PROJECT_CODE·PROJECT_NAME) 행 정렬 · 신규 / hongjae.kim(40·DM Admin) · Division 40(고정) → Version 팝업 Sales Plan · R / 대소문자 무시 오름차순 — Bosch → Boston Dynamics → BRP → BW.Akasol, Honda●예정●EVF → HONDA●예정●Plug-in · Project 목록 35건 같은 
+### EG060 B4 부분 | 팝업·비콤보·고정 목록 후보(Owner 팝업·Lookup 콤보·고정 항목) | code tools/Harness/verify/combo_oracle.py:777-780 (STATIC) · tools/Harness/verify/combo_oracle.py:697 | meas AS-IS 원천이 STATIC 이면 고정 목록 순서 비교(B3)·집합 비교(B4). 원천 없으면 판정필요. 비콤보·팝업은 대상 아님 | miss Owner 팝업 목록 · 입력 방식이 콤보인지(D5) · 언어 혼용 · SYS 화면 AS-IS 원천 미발견이면 판정필요 | how 팝업 목록은 M3 인자로 SP 동시 실행 대조 · 확정 고정 목록 CSV 추가
+   DM-114 [SYS0012] Approval Result 조회조건 콤보 /  / ALL/Approved/Requesting/Reject 4항목, 언어 혼용 0
+   DM-130 [DMF0005] Owner 팝업 사용자 목록 / 권한 무관 / SSO_USER∩SCM_ADM_USER_M 전체 사용자 조회·선택 입력
+   DM-165 [DMF0035] Version 조회조건 /  / Version 조건에서 버전 목록 조회 표시
+   DM-193 [SYS0010] System 컬럼 입력 방식 /  / SYSTEM Lookup 코드 콤보 선택 입력
+   DM-200 [SYS0006] API Type 조회조건 /  / API Type 콤보 리스트로 선택 조회
+### EG064 B5 없음 | Measure·컬럼 설정 팝업 후보(Div 재조회·후보 제외) | code tools/Harness/verify/popup_data_check.py:1-16 (M3 행수) | meas 개인화 메타 PROC 를 Div 값별 실행해 0건 여부만 | miss 후보 집합·개수·자동 Div 재조회 · 진입 직후 Div 기준 | how 팝업 호출 인자(Division 값) 캡처 + SHEET_MEASURE Div 별 집합 대조
+   DM-P38 [DMF0044] Measure 항목 구성 / Div별 / Div별 UI Category 기준 Measure 표시(AS-IS 미필터 대비 확정 기준)
+   GAP-16 [DMF0003] Measure 설정 팝업 후보(SCM_MST_SHEET_MEASURE DMF0003 Mkt / bpark416(81 DM Planner) · Division 81 · Measure 설정 팝업 열기 / 81 계열 후보 14개 — TMM [P+P]·VMI-In Plan·VMI-In Request·VMI Inv.·DIO 없음(19개면 결함)
+   GAP-203 [DMF0021] Measure 설정 팝업(Measure Setting) 후보 · Column 설정 후보 — / hongjae.kim(40) · 화면 진입 직후(Division 40 자동 선택 · Search 전) → Measure 설정  / 화면 진입 후 Division 자동 선택 시 그 사업부 Measure 로 목록 재조회 — 조회 전에도 선택 Division 의 Measure 만 표시(40 = 21개, 다른 사업부 Measure 0
+### EG069 B6 부분 | 조회조건 ALL·다중/단일 선택 사양 = 기준 | code Doc/e2e/specs/_verify.spec.ts:1886-1895 | meas 드롭다운 체크박스 유무·ALL 항목 ↔ 기준표 태그 또는 AS-IS 컨트롤(UsrCheckedList/UsrCombo) | miss AS-IS 단일→TO-BE 다중 개선 확정(문서 DM-2·DM-83·GAP-272)을 CR 로 안 보면 FAIL · 팝업 내 조건·Insert 단일 구분 미측정 · 후보 Name 표시는 G7 | how confirmed_requirements 에 사양 예외 등록→판정 분기 · 팝업 조건 포함
+   DM-2 [DMF0043_01] 조회조건 Product Group·Biz Type / Div 40 / Product Group·Biz Type 다중 선택 가능(AS-IS 단일→개선), Biz Type ALL 항목 존재
+   DM-83 [DMF0042] 조회조건 Item Type / Div 40 / Item Type 다중 선택 가능, 후보를 Name 으로 표시
+   DM-114 [SYS0012] Approval Result 조회조건 콤보 /  / ALL/Approved/Requesting/Reject 4항목, 언어 혼용 0
+   DM-199 [SYS0005] Schema 조회조건 /  / Select ALL 제공·조회 정상
+   DM-202 [SYS0016] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라 / Insert / Module=ALL/Common/DM/SCP/FP/SSP 다중선택(Insert 단일)·Sub Module 삭제·라벨 제목·Active 기본 Y·서식 동작·팝업 섹션 타이틀 테두리 밖
+### EG071 B6 부분 | Key-in 조회조건 콤마 다중 입력 | code Doc/e2e/specs/_verify.spec.ts:2031-2040 (G9) | meas 기본 결과 값 2개를 콤마로 넣어 두 값 모두 나오는지. G9 행 기록 | miss B6 행 미연결 · 기준표 유형2 다중 조건만 · 팝업형 칸 제외 | how B6 DEFECT 행을 G9 로 재매핑
+   DM-129 [COMMON] Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중  /  / 콤마 구분 다중 값 입력 가능·모두 조회, 전 화면 동일 동작
+### EG078 B8 없음 | Team 팝업 후보 원천 | code 코드 없음 | meas 팝업 목록 집합 대조 없음 | miss SSPM·SSO∩USER 기준 팝업 후보 · 계정별 동일 | how 팝업 호출 인자 캡처로 PROC 실행→확정 원천 SQL 집합 대조
+   GAP-211 [DMF0021] 신규 행 Team 팝업 후보(P_COM0009_GET_TEAM_POPUP · SCM_MST / eunah.koo(40 DM Planner) / 대조 hongjae.kim(40 DM ADMIN) · Division 40 · / 40 신규 행 Team 팝업 후보 = 권한 사업부의 사이트 품목 원장 DEPT_ID 전체(관리자 여부 무관 · 15개, 두 계정 같은 목록) — 확정 TO-BE(PI C2·110·151)
+   GAPPI-22 [DMF0005] Team 팝업(TEAM · DEPT_ID) 조회 목록 원천(SSO_DEPT_INFO ⨝ S / Team 팝업 열어 조회 → 목록을 SSO_DEPT_INFO 와 SCM_ADM_USER_M 의 DEPT_ID 일치 집합과 대조 / Team 팝업 목록은 SSO_DEPT_INFO 와 SCM_ADM_USER_M 의 DEPT_ID 가 일치하는 부서만 표시한다(SSO_USER_INFO 미사용)
+### EG093 C3 부분 | 팝업 선택 → 대상·연쇄 채움(OK·더블클릭 동일) | code Doc/e2e/specs/_trace.spec.ts:752-790 (M4) · Doc/e2e/specs/_trace.spec.ts:1812-1840 · Doc/e2e/specs/_trace.spec | meas C3 viaPopup 은 판정필요로 넘기고 M4 가 popMap 대상 채움 측정(값 있음·대응) | miss OK 버튼과 행 더블클릭 두 경로 동일성 미비교 · 다중 선택 빈 값 · 판정필요 C3 행 → M4 결과 자동 연결 범위 미확인 | how AS-IS 팝업 반환 매핑 facts 를 전 화면 추출, 확정 방법 2가지 각각 실행해 결과 비교
+   DM-151 [DMF0021] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼 / 신규 행 / Sales Site 입력 동작, Project 팝업 오픈 시 자동 조회, Model 후보=SALES_PLAN_ITEM_ID 룩업, Team=SSPM 기준 팝업 입력
+   GAP-19 [DMF0003] 신규 행 Project 팝업(PROJECT_CODE → PROJECT_NAME·PROJEC / wonqthanq(82 DM ADMIN) · Column Setting Project Status·Owner·Biz Type· / 확정 방법(OK 단추·두 번 누름)과 관계없이 Project Name·Status·Owner·Biz Type 채움, Model 선택 시 Item Type 채움, 82 Sales Site 변경 시 V
+   GAP-177 [DMF0020] 신규 행 Model 팝업(ITEM_ID · P_COM0008_GET_ITEM_BY_DIVI / wonqthanq(82) · 82 → 58187671 → NextEra → NextEra_US_PHX · Weekly · Se / 신규 4행 Currency 에 팝업 반환 통화(USD) 표시(ITEM_ID·ITEM_NAME 과 함께) — 여러 줄 선택이면 빈 값
+   GAP-470 [SYS0014] User Info Insert → 사용자 찾기 팝업 선택값(USER_ID · USER_NM / 전 그룹 · 편집 가능 그룹 / jaeuk.shin(ADMIN) · Group Info Test 선택 / User Info I / 사용자 찾기 창 선택 시 새 줄에 아이디 · 이름 · 영문 이름 · 부서 이름이 채워지고 Email 칸은 표시되지 않는다(SCM_MST_SHEET_COLUMNS UserInfo.USER_EML VA
+   SSP45-4 [DMF0045] 신규행 Model 셀(ITEM_ID)·Nick Name 셀(NICK_NAME) — 품목 팝 / Div 공통 · Insert 행에서 Model 팝업(Material by Division)으로 품목 선택 → Model·Nic / 품목 팝업에서 선택하면 메인그리드 신규행의 Model 과 Nick Name 이 자동으로 채워진다(테스트 결과 "처리 완료")
+### EG101 D1 없음 | Division 별 컬럼 허용(UI Category DIVISION_ID 하위 사업부 포함) 후 편집·팝업 | code  | meas D1 은 기본 Division 1회 조회만 측정(Division 순회 없음) | miss 하위 사업부 전환 후 컬럼 표시·편집·팝업 | how SHEET_COLUMNS DIVISION_ID 값 목록의 Division 별 D1 반복(사용자 지정 화면 범위)
+   GAP-104 [DMF0006] 그리드 PJT Code(PROJECT_CODE)·PJT(PROJECT_NAME) 컬럼 81 / bpark416(81·DM Planner) · Division 81_UC → Team 70018238 → End Custome / 81_UC 신규 행 PJT Code 팝업 열림 · A18GM1001 선택 가능 · SHEET_COLUMNS PROJECT_CODE·PROJECT_NAME DIVISION_ID·ATTRIBUTE1 =
+### EG104 D1 부분 | 팝업 전용 컬럼: 직접 편집 불가 · 붙여넣기/삭제/팝업만 허용 | code Doc/e2e/specs/_verify.spec.ts:646-661 · tools/Harness/verify/ledger.py:266-271 | meas 직접 편집기 열림=FAIL(기대 "팝업 입력"). 팝업 인자는 G5 별도 | miss 붙여넣기 코드 동반·Delete 키 삭제 허용 측정 없음 · 후보 룩업·팝업 자동 조회 없음 | how 팝업 컬럼에 Ctrl+V(코드·명칭 값)·Delete 키 시나리오를 공용 프로브로 추가
+    DM-18 DM-151 (no match)
+### EG119 D3 없음 | 팝업 그리드 행 조건(전 컬럼 편집 불가·색) | code Doc/e2e/specs/_trace.spec.ts:644 | meas PCOL 행은 판정필요(M3)로 넘기고 측정 안 함 · W4c 도 COL·LEDGER 만 | miss 팝업 내부 행 조건 잠금·색 | how 팝업 열린 상태의 dialog 그리드에 동일 조건 평가·editable 적용
+   SCPSSP-11 [SCP0006] Plant Assign 그리드 색상 / CA1 아이템 더블클릭 / CA1 행 전 컬럼 흰색(편집 불가)
+### EG125 D4 없음 | 읽기 전용 그리드 Insert 무동작 · Insert → 사용자 찾기 팝업 N행 추가 | code  | meas Insert 클릭 결과는 신규행 유무만 · 팝업 선행·다중 선택 행 수 없음 | miss Insert 팝업형·무동작형 | how AS-IS InsertButton POPUP 문장 → 팝업 열림·선택 수 = 추가 행 수 판정
+    GAP-468 GAP-477 (no match)
+### EG135 D5 없음 | 셀별 열리는 팝업 종류(공통 Item vs 전용 팝업) | code  | meas G5 는 인자 · M3 는 조회만. 어떤 팝업인지 비교 없음 | miss 팝업 정체 대조 | how AS-IS POPUP new X ↔ TO-BE 팝업 호출 sheet 대응표(PROC_M)로 판정
+   SSP45-3 [DMF0045] 신규행 Model 셀(ITEM_ID) 팝업 = Material by Division(Mat / Div 공통 · 공통버튼 Insert(F8) 로 한 행 추가 → Model 셀 팝업 아이콘 클릭 / Insert 한 행의 Model 셀 팝업 클릭 시 Item Popup 이 아니라 Material by Division 팝업이 표시된다(테스트 결과 "처리 완료")
+### EG137 D5 부분 | Project/Model 입력 = 텍스트+팝업 공통 컴포넌트(FPTextModal) | code Doc/e2e/specs/_trace.spec.ts:360 | meas POPUP = dataMap 없음만 확인 | miss 공통 컴포넌트 여부·텍스트 입력+아이콘 팝업 동작·조회조건 측 미측정 | how SHEET_COLUMNS CELL_CONTROL_OBJECT_TYPE_CODE 대조 + 입력·아이콘 클릭 동작 프로브
+    GAPPI-1_r6 GAPPI-16 DM-151 (no match)
+### EG159 E3 부분 | 입력된 필수값 오판 없음(붙여넣기 입력 포함) | code Doc/e2e/specs/_verify.spec.ts:1233-1255 | meas 필수 채운 마커 저장 성공이면 통과 | miss 붙여넣기·팝업 입력 경로의 코드 동반 없음 | how F3 프로브로 채운 뒤 Save → 필수 메시지 0 판정
+    DM-18 DM-215 (no match)
+### EG166 E4 없음 | 상·하단 그리드 다건·인원 제한·더블클릭 하위 조회 | code  | meas C5 는 연동 인자만 · 인원 제한·다건 측정 없음 | miss 팝업 다중 선택 수 제한·저장 길이 | how AS-IS 제한 문구 facts → N+1 선택 시도 판정
+    DM-82 GAPPI-28 (no match)
+### EG176 E7 부분 | 팝업 셀 Key-in 잘못된 값 → 되돌림/메시지 | code Doc/e2e/specs/_verify.spec.ts:630-645 · tools/Harness/verify/ledger.py:266-271 | meas 고정 잘못된 값 입력 → 값 유지+메시지 없으면 FAIL | miss edit_expect 가 UNKNOWN 이면 E7 행 미생성 · 메시지 뜨고 값 남아도 PASS · 저장 미측정 · AS-IS 동작 비교 없음 | how 값 잔존 시 Save 요청 본문 확인 + UNKNOWN 컬럼도 팝업 메타(CELL=FPModal)로 행 생성
+   SSP45REQ-23 [COMMON] 그리드 팝업 셀 Key-in(FPModal 컬럼 · Project Code·Model·Tr / 팝업 셀에 존재하지 않는 값을 직접 타이핑 후 포커스 이동/저장 · AS-IS 같은 조작과 비교 / Grid - 팝업 컬럼에 key-in이 되는 경우 잘못된 값이면 Validation 하기. As-is에서 동작 비교 필수
+### EG178 F1 없음 | 팝업·버튼 저장 실행(Exchange Rate·BPS I/F·Version Create·Price Batch·Mail Setup) | code  | meas M2 는 클릭 반응(5초)만 · 팝업 내부 저장 실행 없음 | miss 팝업 저장·DB 반영 | how PROC_M 팝업 SAVE 배선별 편집→저장→재조회(또는 ROLLBACK 직접 호출)
+    DM-55 DM-56 DM-93 DM-204 DM-234 (no match)
+### EG197 F2 없음 | 팝업 저장 건수·Close 시 미저장 폐기·재오픈 재조회 | code  | meas 팝업 저장 없음 | miss 팝업 상태 | how 팝업 내 편집→Close→재오픈 값 원복 판정
+   DM-146 [DMF0082] Exchange Rate 팝업(Save 건수·Close/재오픈·BPS I/F) / 최초 화면 접속, 수정 후 Close / 수정 건수 표시 일관, Close 시 미저장 편집 폐기·재오픈 시 재조회, BPS I/F 정상
+### EG248 G1 없음 | 팝업 내부 사용자 검색어로 조회 시 결과 필터 | code  | meas T:1080 팝업 조건은 '표시됨' 판정필요로만 기록 · 값 입력 조회 없음 | miss 팝업 조건 입력 → 팝업 조회 인자·행 필터 | how 팝업 조건 칸 값 입력 후 팝업 Search → 요청 본문·행 대조(공용 팝업 헬퍼 신설)
+   DM-87 [DMF0005] Owner 팝업(PKG_COM0000 COM0004/0006) User 조회조건 /  / 팝업 User 검색어 입력 후 조회 시 결과가 해당 사용자로 필터됨
+### EG251 G1 없음 | 팝업 반환 표시값 괄호 주석 제거 후 조회키 사용(결과>0) | code  | meas 코드 없음 — smoke 팝업(S:174-195)은 칸 값 채움만, 그 값으로 조회한 결과 비교 없음 | miss 팝업 값 선택 → 메인 조회 행>0 · 본문 키에 '(' 없음 | how 팝업 선택 후 요청 본문 값 형식(메타 키 값 존재) 대조 · AS-IS 동일 조건 golden
+   GAP-439 [DMF0082] 조회조건 Version 팝업 선택값(versionType · VERSION_NO) → 조회 / 40 · 81 계열(82 포함) · 전 그룹 / hongjae.kim 40 · Team 58099468 · End Custom / 과거 버전(예 SF_W_20260824_V001(W35))을 골라 조회하면 조회 결과 행 수 > 0 이고 AS-IS 같은 조건 결과와 같다 — 팝업 반환값의 '(' 이후를 잘라 VERSION_NO 
+### EG261 G2 없음 | 팝업 안 ALL 재조회·Search 버튼·Like/콤마 | code  | meas 코드 없음 — 팝업 조건에 값·ALL 입력 경로 없음(T:1080 판정필요) | miss 팝업 조건 ALL/Like/콤마 조회 결과 | how 팝업 조건 헬퍼 + G8/G9 입력 재사용
+   DM-P29 [DMF0020] Price Batch Input 팝업 Sales Site 조건 / Div 82(버튼 활성 Div) / 개별 Sales Site 조회 후 ALL/전체 선택 재조회 시 전체 결과
+   DM-212 [DMF0005] Project 팝업(그리드) /  / Search 버튼 제공·DB 즉시 조회·Like/콤마 다중 검색
+### EG273 G4 없음 | 선택 후 Version 칸 표시 = 버전명만 | code  | meas combo_oracle G7 은 콤보만 · 팝업 텍스트 칸 표시 미측정 | miss 팝업 선택값 표시 형식 | how 팝업 선택 후 칸 값 ↔ 메타 키 값 일치(설명 미부착)
+   DM-95 [DMF0049] Version 조회조건 선택값 표시 / 버전 선택 후 조건 클릭 / 선택 후 Version명만 표시(Description 혼재·변동 없음)
+### EG278 G4 부분 | 팝업 내부 조회조건 입력 가능·배치·크기 | code Doc/e2e/specs/_trace.spec.ts:1079 | meas 그리드 트리거 팝업의 조건 라벨 존재 | miss 입력 가능 · 배치·크기 · 버튼으로 여는 팝업 미측정 | how M3 팝업 열기 경로 공통화 후 input enabled·순서 대조(AS-IS Designer facts)
+   DM-51 [DMF0082] Price Batch Input 팝업 Model 조건 · End Customer 병합 / Div 40 / 팝업 Model 조회조건 텍스트 입력 가능, End Customer 컬럼 셀병합
+   DM-89 [DMF0042] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건 /  / 팝업 Period=메인 Period, Description 상단 배치, Div·Type 조회조건 크기 확대
+### EG280 G5 없음 | 팝업이 Period 기간만큼 컬럼 생성 | code  | meas 코드 없음 | miss 팝업 동적 컬럼 수·헤더 | how 팝업 그리드 동적 바인딩 수 = 기간 월수(AS-IS 생성식 facts)
+   DM-22 [DMF0020] Exchange Rate 팝업 · DM_MST_EXCHANGE_RATE / Period 설정 / 팝업이 Period 기간만큼 YYYYMM 컬럼을 그려 조회, 이상 데이터(20280001 등) 0
+   DM-29 [DMF0020] Price Batch Input 팝업 / Div 40/81/81_JV · Period 설정 / Period 기간만큼 Spread 컬럼 생성·조회(데이터 없어도 기간 전체)
+### EG281 G5 없음 | 팝업 조건 입력값이 팝업 조회 인자로 전달(고정 '%' 금지) | code  | meas T:1080 판정필요만 · 값 입력·요청 비교 없음 | miss 팝업 Search 요청 본문·행 필터 | how 팝업 조건 입력 → Search → 본문에 값 존재
+   DM-220 [DMF0005] Model 팝업 조회 /  / 팝업 조회조건 기준으로 결과 필터
+   GAPPI-23 [DMF0005] 그리드 Model 셀 팝업(ITEM_ID · itemId) 조회조건 필터 / 그리드 Model 셀 팝업 열기 → 조회조건에 Model 명 입력 → 조회 / 팝업 조회 결과가 입력한 조건(Model 명)으로 필터된다(itemId "%" 고정 전송 0)
+### EG284 G5 없음 | 팝업 Div 조건 메인값 고정·수정 불가 | code  | meas popup_args_check 명시 비대상(tools/Harness/verify/popup_args_check.py:24) · T:1778 은 특정 경로 전용 | miss disabled·값 고정 | how 팝업 Div 칸 disabled 판정(AS-IS Enabled facts)
+   DM-81 [DMF0044] Version 팝업 Div 조건 / Div 40 / 팝업 Div 조건은 Main Div 값 고정·수정 불가
+### EG285 G5 없음 | Team 팝업 범위 = SSO_DEPT 전체(소속 제한 없음) | code  | meas 비 ADMIN 계정 팝업 후보 측정 없음 | miss 계정별 후보 집합 | how 대체 계정 + 팝업 행수 대조(AS-IS SP golden)
+   DM-13 [DMF0005] Team 팝업 / 비 ADMIN 사용자(k0101) · 조회조건 공란 / Team 팝업은 SSO_DEPT 전체 DEPT 조회(사용자 소속 제한 없음, 확정)
+### EG286 G5 없음 | 조회조건 팝업 버튼 전 영역 클릭 | code  | meas 코드 없음(아이콘 클릭 1점만 S:176) | miss 버튼 테두리 포함 클릭 영역 | how 버튼 rect 네 모서리 클릭 → 열림
+   SCPSSP-4 [COMMON] From City 검색 버튼 / 버튼 끝(테두리) 클릭 / 버튼 전 영역 클릭 시 팝업 호출
+### EG287 G5 부분 | 팝업 Period = 메인 Period(연동·말일 처리) | code tools/Harness/verify/popup_args_check.py:1-30 | meas 모달 Period 속성 바인딩 정적 판정 | miss 실제 표시값·1일/말일 변환 미측정 | how 팝업 Period 칸 값 ↔ 메인 값·AS-IS 변환식 대조
+   DM-88 [DMF0042] Replace 버튼 팝업 Period·조회 /  / 팝업 Period Default=메인 그리드 Period, 팝업 데이터 정상 조회
+   DM-89 [DMF0042] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건 /  / 팝업 Period=메인 Period, Description 상단 배치, Div·Type 조회조건 크기 확대
+   DM-100 [DMF0044] 팝업 Period /  / 팝업 오픈 시 메인 Period 연동(메인 연도↔팝업 연월일 단위 차이로 종료 처리)
+   DM-223 [DMF0074] Version 팝업 Period /  / 팝업 Period=메인 From 1일~To 말일
+### EG288 G5 부분 | 메인 텍스트 입력 → 팝업 조건 전달·그 기준 조회 | code tools/Harness/verify/popup_args_check.py:1-30; Doc/e2e/specs/_verify.spec.ts:1370-1391 | meas 정적: 모달 속성이 조회조건에 바인딩되는지 · E2E: Enter/아이콘 열림 후 요청에 Division 값 포함 | miss 입력한 텍스트가 요청에 실리는지 실측 없음(Division 만) · 결과 필터 미측정 · 객체 변수 추적 한계(popup_args:19-23) | how 입력칸에 표본 입력 → 팝업 요청 본문·행 필터 대조
+   DM-C5 [COMMON] 팝업 연결 조회조건·그리드 컬럼 / 텍스트 입력 후 팝업 오픈 / 입력된 Text 가 팝업 조회조건으로 전달되어 그 기준으로 조회 결과 표시
+   SSP45REQ-6 [COMMON] Main 조회조건 textbox(Project·Model/Nickname 등) → 연결 팝 / 메인 textbox 에 값 입력 후 팝업 버튼 클릭 / Main 조회조건 textbox에서 입력된 값이 팝업을 띄웠을 때 연동되어 조회되는지
+   SCPSSP-17 [SCP0007] Route 검색 팝업 결과 / From/To City 입력 후 팝업 / 입력 From/To City 기준만 조회
+### EG295 G7 없음 | 버전 칸 선택값 표시 = 번호만(설명 미부착) | code  | meas combo_oracle 은 콤보만 — 팝업 채움 텍스트 칸 비대상 | miss 팝업 선택 후 칸 표시 형식 | how 팝업 선택값 ↔ 메타 키 컬럼 값 대조
+   DM-95 [DMF0049] Version 조회조건 선택값 표시 / 버전 선택 후 조건 클릭 / 선택 후 Version명만 표시(Description 혼재·변동 없음)
+   GAP-332 [DMF0044] 조회조건 Version(VERSION_NO) 채택 표시 — 번호만(Description 미 / hongjae.kim(40) · Division 40 → Sales Plan(REPORT_SP_W) → Year 2026 ·  / Version 칸에 R_S_20260823_V004 번호만 표시(설명 미부착 — 2026-09-03 사용자 확정 · PI 95 동일)
+### EG297 G8 없음 | 팝업 조회조건 대소문자 무시 | code  | meas V:1981 대상이 source=SEARCH 메인 조건뿐 — mapping_checkdefs 의 '팝업 포함'과 다름 | miss 팝업 조건 입력 대소문자 비교 | how 팝업 헬퍼 + 같은 G8 로직, 원장에 팝업 조건 행 생성(AS-IS 팝업 컨트롤 facts)
+   GAP-506 [SYS0014] Division Insert 부문 찾기 팝업(DivisionPopup · P_SYS0014 / 전 사업부 · Admin / jaeuk.shin(ADMIN) · Group Info Test → User Info guoyax / 부문 찾기 창에서 electrode · Electrode · auto 로 검색하면 대소문자와 무관하게 같은 결과(각 6건 · UPPER 양변 비교 · 공통규칙 R10)
+   SSP45REQ-13 [COMMON] 팝업 조회조건 텍스트(팝업 내 Model·Project 등 textbox) / 팝업 열어 조회조건에 대문자/소문자 값 각각 입력 후 팝업 Search / 대소문자 구별없이 조회되는지
+### EG299 G9 없음 | 팝업 조회조건 콤마 다중값 | code  | meas V:1981 메인 조건만 | miss 팝업 Search 결과 | how 팝업 헬퍼 + G9 로직
+   SSP45REQ-14 [COMMON] 팝업 조회조건 텍스트 콤마 다중값 입력(팝업 내 Model·Project 등 textbox / 팝업 조회조건에 a,b 콤마 구분 입력 후 팝업 Search / 콤마를 입력해서 조회(MULTI SELECT) 가 되는지
+### EG304 H10 없음 | 팝업·배치 저장 결과 코드 판정·문구 | code Doc/e2e/specs/_verify.spec.ts:772(메인 저장만) | meas 메인 저장 CODE≠0 FAIL | miss 팝업 저장 RESULT_MSG·성공 문구 미측정 | how 팝업 Save 시나리오 + 결과 커서 CODE 대조
+   GAP-448 [DMF0082] Price Batch Input 팝업 Save 결과 판정(o_rc1 첫 행 RESULT_C / 40 · 81 계열 · LOC 편집 가능 그룹 / hongjae.kim 40 · Sunwoda_CN_SZX · MIF48926 / Price Batch Input 저장이 검사에 실패(RESULT_CODE F)하면 저장 프로시저 RESULT_MSG(실패 사유)를 표시하고 창을 유지한다 — MSG00672 「{0}개의 데이터가 저
+   GAPPI-41 [DMF0082] Batch Price Input 실행 성공 메시지(BATCH · MSG) / Batch Price Input 실행 성공 후 표시 메시지 확인 / Batch 실행 성공 시 "저장이 완료되었습니다" 메시지가 표시된다("데이터가 0건 저장되었습니다" 0)
+### EG316 H3 없음 | 팝업 그리드 컬럼 병합 | code Doc/e2e/specs/_trace.spec.ts:857 | meas h3 는 et=COL(메인)만 | miss 팝업 병합 | how M3 팝업 그리드에 같은 판정
+   DM-51 [DMF0082] Price Batch Input 팝업 Model 조건 · End Customer 병합 / Div 40 / 팝업 Model 조회조건 텍스트 입력 가능, End Customer 컬럼 셀병합
+### EG322 H4 없음 | 팝업 크기·리사이즈·드래그 제한·레이아웃 | code  | meas drag/resize 코드 없음 | miss 뷰포트 제한·닫기 버튼 노출·배치 | how 팝업 드래그/리사이즈 후 rect ⊂ viewport
+   DM-89 [DMF0042] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건 /  / 팝업 Period=메인 Period, Description 상단 배치, Div·Type 조회조건 크기 확대
+   DM-175 [DMF0035] Project/Model/Owner 조회조건 팝업 /  / 팝업 스크롤바 없이 버튼까지 한 화면에 표시
+   GAPPI-24 [DMF0005] 팝업(Modal) resize·draggable 뷰포트 제한 · 닫기(CLOSE) 버튼 노 / 팝업 오픈 → 높이를 메인화면보다 크게 리사이즈 시도 · 드래그로 화면 밖 이동 시도 · 가로만 조절 / 팝업 리사이즈·드래그가 뷰포트(메인화면) 안으로 제한되어 닫기 버튼이 항상 보이고, 가로 조절 시 세로 크기가 변하지 않는다
+   GAPSELF-24 [DMF0044] Version 팝업(VERSION Modal) 레이아웃 / Version 팝업 열기 → 레이아웃·그리드·버튼 배치 확인 / Version 팝업 레이아웃이 디자인 표준대로 표시된다(깨짐 0)
+   GAPSELF-33 [DMF0082] Version 팝업(VERSION Modal) 레이아웃 / Version 팝업 열기 → 레이아웃·그리드·버튼 배치 확인 / Version 팝업 레이아웃이 디자인 표준대로 표시된다(깨짐 0)
+### EG330 H5 없음 | 팝업 제목·팝업 조건 라벨 | code  | meas PCOL H5 는 팝업 컬럼만(T:522) | miss 제목·첫 조건 라벨 | how 팝업 제목 텍스트 ↔ 메뉴/LBL 메타
+   SCPSSP-16 [SCP0007] Route 검색 팝업 제목 /  / 팝업명 등록 문구 표시('_' 0)
+   GAP-300 [DMF0043_01] Version 팝업 첫 칸(사업부, 값 40 고정 비활성) 라벨 — Div(LBL00001 / hongjae.kim(40·DM Admin) · Year 2026 → Version 칸 단추 → 팝업 첫 칸 라벨·값 확인 / 팝업 첫 칸 라벨 'Div'(LBL00001 KO Div · EN/CN Div.) · 값 「40 (40 Mobility & IT Battery)」 비활성
+### EG336 H6 없음 | 팝업 상단 선·디자인 표준·섹션 타이틀 | code  | meas 코드 없음 | miss border·레이아웃 | how 팝업 상단 computed border-top · 표준 구조 selector
+   GAPPI-30 [DMF0005] Model Code Change 팝업(MODEL_CODE_CHANGE Modal) 상단 선 / Model Code Change 버튼 클릭 → 팝업 상단 영역 확인 / 팝업 상단에 불필요한 선이 표시되지 않는다(팝업 디자인 표준)
+   GAPPI-34 [DMF0082] Batch Price Input 팝업(BATCH_PRICE Modal) 상단 LINE / Batch Price Input 버튼 클릭 → 팝업 상단 영역 확인 / 팝업 상단에 불필요한 선이 표시되지 않는다(팝업 디자인 표준)
+   GAPSELF-24 [DMF0044] Version 팝업(VERSION Modal) 레이아웃 / Version 팝업 열기 → 레이아웃·그리드·버튼 배치 확인 / Version 팝업 레이아웃이 디자인 표준대로 표시된다(깨짐 0)
+   GAPSELF-33 [DMF0082] Version 팝업(VERSION Modal) 레이아웃 / Version 팝업 열기 → 레이아웃·그리드·버튼 배치 확인 / Version 팝업 레이아웃이 디자인 표준대로 표시된다(깨짐 0)
+   DM-202 [SYS0016] Module 조회조건·Insert Module 콤보 / Sub Module 조회조건 / 라 / Insert / Module=ALL/Common/DM/SCP/FP/SSP 다중선택(Insert 단일)·Sub Module 삭제·라벨 제목·Active 기본 Y·서식 동작·팝업 섹션 타이틀 테두리 밖
+### EG337 H6 없음 | 팝업 크기·스크롤·리사이즈 | code  | meas 코드 없음 | miss rect·스크롤 | how H4 팝업 검사 공유
+   GAPPI-24 [DMF0005] 팝업(Modal) resize·draggable 뷰포트 제한 · 닫기(CLOSE) 버튼 노 / 팝업 오픈 → 높이를 메인화면보다 크게 리사이즈 시도 · 드래그로 화면 밖 이동 시도 · 가로만 조절 / 팝업 리사이즈·드래그가 뷰포트(메인화면) 안으로 제한되어 닫기 버튼이 항상 보이고, 가로 조절 시 세로 크기가 변하지 않는다
+   DM-166 [DMF0035] 팝업 조회조건·버튼 레이아웃 / 팝업 크기 축소 / 축소 시 조회조건·버튼 간섭 없음
+   DM-175 [DMF0035] Project/Model/Owner 조회조건 팝업 /  / 팝업 스크롤바 없이 버튼까지 한 화면에 표시
+   DM-31 [DMF0068] Main Version 조회조건 크기 · Version 팝업 Description 컬럼 폭 /  / Version 조회조건 축소, 팝업 Description 폭 확대
+   DM-89 [DMF0042] Ver.Cutoff 팝업 Period·Description·Div/Type 조회조건 /  / 팝업 Period=메인 Period, Description 상단 배치, Div·Type 조회조건 크기 확대
+### EG338 H6 없음 | 팝업 검색 기능(Team 단일 조건 ID·Name · Search·Like) | code  | meas 코드 없음 | miss ID·Name 모두 조회 | how 팝업 검색어 ID/Name 각각 조회
+   DM-177 [DMF0005] Team 팝업 조건(Team ID/Team Name) /  / Team 단일 조건으로 ID·Name 모두 검색
+   DM-212 [DMF0005] Project 팝업(그리드) /  / Search 버튼 제공·DB 즉시 조회·Like/콤마 다중 검색
+### EG339 H6 없음 | 팝업 제목 등록 문구 | code  | meas 코드 없음 | miss 제목 '_' 0 | how 팝업 열 때 untranslatedTexts 호출
+   SCPSSP-16 [SCP0007] Route 검색 팝업 제목 /  / 팝업명 등록 문구 표시('_' 0)
+### EG340 H6 없음 | 팝업 호출 버튼 전 영역 클릭 | code  | meas 코드 없음 | miss 클릭 영역 | how rect 모서리 클릭
+   SCPSSP-4 [COMMON] From City 검색 버튼 / 버튼 끝(테두리) 클릭 / 버튼 전 영역 클릭 시 팝업 호출
+### EG341 H6 없음 | 셀 Model 팝업 단일 선택 | code  | meas 코드 없음 | miss Ctrl/Shift 2행 불가 | how 팝업 그리드 selectionMode 판정 · 2행 선택 후 OK 결과
+   GAPPI-27 [COMMON] 그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택) / 전 화면 · 그리드 Model 셀 팝업 열기 → Ctrl/Shift 로 2행 이상 선택 시도 → OK / 그리드에서 여는 Model 팝업은 다중 선택이 불가하고 단일 행만 선택·셀에 반영된다(전 화면 동일)
+### EG342 H6 부분 | 버튼 OK→CLOSE·No. 컬럼·건수 | code Doc/e2e/specs/_verify.spec.ts:700-719; Doc/e2e/specs/_trace.spec.ts:1492 | meas 셀 더블클릭 팝업에서만 버튼 순서·첫 컬럼·건수 패턴 | miss 조회조건·버튼 팝업은 안 열어 NA/판정필요 · No. 1개·폭·공통 그리드 미측정 · _doc_proof 실측 0(ERROR 18) | how 팝업 전수 열기 경로(AS-IS POPUP 문장→트리거 해석) + 같은 판정
+   DM-C6 [COMMON] 전체 팝업 버튼 순서 /  / 팝업 버튼 순서 OK → CLOSE(Cancel) 통일
+   DM-C8 [COMMON] 전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리 / 필터 적용 시 / 모든 팝업에 왼쪽 No. 컬럼·조회/필터 건수 표시, 팝업 그리드는 공통 그리드(단축키·Sort 규칙 동일)
+   DM-179 [DMF0005] 팝업 No. 컬럼(Model/Owner/Project/Version 팝업) /  / 팝업 그리드 No. 컬럼 1개만·적정 폭
+   DM-90 [DMF0042] Cutoff 완료 후 버전 팝업 /  / 버전 팝업이 디자인 룰(팝업 표준)을 준수
+   DM-112 [SYS0012] Reject 팝업 /  / 디자인 가이드 준수
+### EG362 I2 부분 | '_' 폴백 노출 0 | code tools/E2E/lib/nscm.ts:506; Doc/e2e/specs/_verify.spec.ts:191-193,582-584 | meas 진입·조회·Insert 시점 화면 텍스트의 "_" 접두 | miss 팝업·저장 알림 시점 미측정 | how 팝업 열림·알림 시점에도 호출
+   SCPSSP-24 [SCP0007] 메시지 문구 /  / '_' 표시 0(MSG 등록)
+   GAP-33 [DMF0003] 화면 MSG/LBL 코드 MSG01165(ESS 3자리 안내)·MSG00004(수정한 내용 / wonqthanq(82 DM ADMIN) KO/EN · 변경 없이 Save / Insert 행 Model 2자리 입력 후 팝업 / 언어별 등록 문구 표시(「수정한 내용이 없습니다.」·EN 「No changes to save.」) · 팝업 제목 「Column」 · '_' 접두 폴백·한글 고정 문구 0
+   GAP-83 [DMF0005] 저장 오류 MSG00210·MSG00156 사용자 언어(FN_GET_MSG_LANG) ·  / jiwon.park(81 DM Administrator, 언어 ENG 전환) · Division 81 · Search → 변경 / 「No changes to save.」(MSG00004 EN) · 「You can select up to 10 Owners. (11 selected)」(MSG01469 EN) · 저장 오류도 사용자
+### EG370 J2 없음 | 팝업 내부 버튼·조회 권한 | code  | meas 코드 없음 | miss 팝업 권한 | how 계정별 팝업 Search 'No Permission' 판정
+   GAP-291 [DMF0043] Contribution Version 팝업 Insert · Delete · Save 버튼  / 40 · hongjae.kim(DM ADMIN) / 대조 eunah.koo(DM Planner) · Year 2026(버전 1 / hongjae.kim 팝업 Insert · Delete · Save · Cancel 표시 / eunah.koo 메뉴 DMF0043 없음(메뉴 권한 ADMIN 'Y' · DM ADMIN 'Y' 만) 
+   SSP45-5 [DMF0045] 신규행 Trans Mode 셀(TR_MODE) BOD Item Master 팝업(bodPo / 계정 attackgo · Div 81 조회 · Insert 행 추가 → Model AMCOME782-A1-0K0 / Proje / Trans Mode 팝업(BOD Item Master)이 "No Permission" 없이 BOD 데이터를 표시하고 선택·최종 저장까지 가능하다(AS-IS 동일)
+### EG384 K1 없음 | 팝업 그리드 Sort·Filter·건수 | code  | meas nscm.grid(0) 메인만 | miss 팝업 그리드 | how 팝업 그리드 범위로 같은 로직
+   DM-C8 [COMMON] 전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리 / 필터 적용 시 / 모든 팝업에 왼쪽 No. 컬럼·조회/필터 건수 표시, 팝업 그리드는 공통 그리드(단축키·Sort 규칙 동일)
+   DM-P64 [DMF0053] 팝업 Filter 텍스트 입력창 /  / 팝업 Filter 입력 가능·필터 반영
+### EG401 K2 부분 | 개인화 없음 Default·Div별 컬럼 구성·셋팅값 반영 | code Doc/e2e/specs/DMF0003.smoke.spec.ts:49-59; Doc/e2e/specs/_trace.spec.ts:330-345 | meas A5: 메타 기대 컬럼 ↔ 헤더(표본 Div) · K2 행은 smoke 모달 판정만 | miss 개인화 유무 전제 · Div 전환 재구성 · 팝업 Default 목록 | how Div 순회 + 개인화 삭제 계정 + 팝업 목록 대조
+   DM-C1 [COMMON] 컬럼/Measure 셋팅(개인화 Default) / 개인화 미저장 · Div 전환 / 개인화가 없으면 선택 Div 의 UI Category Default 컬럼·메저로 표시
+   DM-26 [DMF0020] 컬럼셋팅 팝업 Default / Div 40 · 개인화 없음 / 개인화 없을 때 Div 40 Default 컬럼 적용
+   DM-27 [DMF0020] 조회 건수 · Team 컬럼 표시 · 컬럼팝업 저장 설정 / 기간 2026.08.17~2027.02.28 / 건수 AS-IS 일치, Team 은 Name 표시, 컬럼팝업 저장 구성대로 조회
+   DM-132 [DMF0020] Div별 컬럼 구성(COL_LIST 등) / Div별 / 컬럼셋팅 설정대로 그려짐, COL_LIST 비노출
+   DM-138 [DMF0082] 조회 그리드 컬럼 구성 / Div 81 / 조회 컬럼=컬럼셋팅 설정값
+### EG403 K3 없음 | 팝업 그리드 단축키 | code Doc/e2e/specs/_verify.spec.ts:1686 | meas 이 문구 행은 판정필요로 남김 | miss 팝업 그리드 | how 팝업 범위 반복
+   DM-C8 [COMMON] 전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리 / 필터 적용 시 / 모든 팝업에 왼쪽 No. 컬럼·조회/필터 건수 표시, 팝업 그리드는 공통 그리드(단축키·Sort 규칙 동일)
+### EG431 M2 부분 | 버튼 팝업 Period·조회 | code Doc/e2e/specs/_verify.spec.ts:1396-1416; tools/Harness/verify/popup_args_check.py:1-30 | meas 열림 + 정적 바인딩 | miss 기간 값 · 조회 행 | how 버튼 팝업 경로에 M3 연결
+   DM-88 [DMF0042] Replace 버튼 팝업 Period·조회 /  / 팝업 Period Default=메인 그리드 Period, 팝업 데이터 정상 조회
+### EG432 M3 없음 | 팝업 조건 입력 → 필터·Like·콤마·대소문자 | code Doc/e2e/specs/_trace.spec.ts:1080 | meas 표시 라벨 있으면 판정필요(값 입력 없음) | miss 입력·필터 | how 팝업 조건 헬퍼 신설 · G1/G8/G9 재사용
+   DM-87 [DMF0005] Owner 팝업(PKG_COM0000 COM0004/0006) User 조회조건 /  / 팝업 User 검색어 입력 후 조회 시 결과가 해당 사용자로 필터됨
+   DM-220 [DMF0005] Model 팝업 조회 /  / 팝업 조회조건 기준으로 결과 필터
+   GAPPI-23 [DMF0005] 그리드 Model 셀 팝업(ITEM_ID · itemId) 조회조건 필터 / 그리드 Model 셀 팝업 열기 → 조회조건에 Model 명 입력 → 조회 / 팝업 조회 결과가 입력한 조건(Model 명)으로 필터된다(itemId "%" 고정 전송 0)
+   DM-177 [DMF0005] Team 팝업 조건(Team ID/Team Name) /  / Team 단일 조건으로 ID·Name 모두 검색
+   DM-181 [DMF0005] 텍스트 조회조건 Like 검색(Owner 팝업 User Name/EN) / 부분 문자열 입력 / 부분일치(Like) 입력 시 해당 조건을 만족하는 행 전부 조회(이름·영문명 모두 대상)
+### EG433 M3 없음 | 팝업 목록 원천·후보 집합 = 기준 | code  | meas popup_data_check 는 개인화 팝업 행수만(D:1-25) | miss 집합·원천 | how AS-IS 팝업 SP ↔ TO-BE PROC golden
+   DM-13 [DMF0005] Team 팝업 / 비 ADMIN 사용자(k0101) · 조회조건 공란 / Team 팝업은 SSO_DEPT 전체 DEPT 조회(사용자 소속 제한 없음, 확정)
+   DM-43 [DMF0003] Model 팝업(sMdmActive_Sw) / Div 82 · 행 추가 후 Item 검색 팝업 / MDM 중지 코드는 모델 팝업에 미조회(sMdmActive_Sw=Y 전달)
+   DM-130 [DMF0005] Owner 팝업 사용자 목록 / 권한 무관 / SSO_USER∩SCM_ADM_USER_M 전체 사용자 조회·선택 입력
+   DM-191 [SYS0014] User 팝업(User Info) / Group User 화면 / User 화면 Insert / Group User 팝업=등록 사용자(SCM_ADM_USER_M)만, User 화면 Insert 팝업=SSO 전체
+   GAP-211 [DMF0021] 신규 행 Team 팝업 후보(P_COM0009_GET_TEAM_POPUP · SCM_MST / eunah.koo(40 DM Planner) / 대조 hongjae.kim(40 DM ADMIN) · Division 40 · / 40 신규 행 Team 팝업 후보 = 권한 사업부의 사이트 품목 원장 DEPT_ID 전체(관리자 여부 무관 · 15개, 두 계정 같은 목록) — 확정 TO-BE(PI C2·110·151)
+### EG434 M3 없음 | 팝업 저장(CRUD·대량·COMMIT/ROLLBACK·결과 코드) | code  | meas 팝업 저장 시나리오 없음(T:1048-1066 조회만) | miss 저장·롤백 | how 팝업 내 편집·Save → 호출·원장·복원
+   DM-55 [DMF0082] Exchange Rate 팝업 저장 / Div 40 · 수정 후 저장 · 복사/붙여넣기 복수 행 / 저장 SQL Error 0, 붙여넣기 복수 행 전부 저장
+   DM-93 [DMF0044] BP Version 팝업 Version Create / DMF0042 Version Cutoff 직후 신규 버전 / 신규 컷오프 버전으로 Version Create 시 사전 Validation 후 버전 생성·DB 반영
+   GAP-260 [DMF0042] Exchange Rate 팝업 대량 저장(Exchange Price 80칸 이상) · P_ / hongjae.kim(40) · Business Plan → Exchange Rate 팝업 · Division 40 · 202 / 환율 칸 수와 무관하게 한 번에 저장 성공(ORA-06502·ORA-40478 0) — 80칸 이상 일괄 저장 시 원장 반영(AS-IS 제한 없음)
+   GAP-277 [DMF0043] Contribution Version 팝업 Save(version SAVE → P_DMF0 / 40 · hongjae.kim(DM ADMIN) · Year 2026(버전 15) → Contribution Version 팝 / 버전 저장 오류 시 오류 문구 표시(성공 알림 MSG00002 아님) · DM_MST_CONTRIBUTE_VER 새 버전 · 기여율 행 0(전체 ROLLBACK, 일부 반영 없음) · 정상 저장은 
+   GAP-329 [DMF0044] Text 팝업(82 · TEXTBOX 버튼) 저장 — 수정한 행마다 저장 호출 · API  / wonqthanq(82 DM Admin) · Division 82 → Sales Plan(REPORT_SP_W) → Year  / Text 팝업에서 고친 두 행 모두 저장(마지막 행만 저장되는 AS-IS 결함 교정 — 정책③ 2026-07-22)
+### EG437 M3 없음 | 팝업 Filter 입력 | code  | meas 코드 없음 | miss 필터 | how K1 팝업 범위
+   DM-P64 [DMF0053] 팝업 Filter 텍스트 입력창 /  / 팝업 Filter 입력 가능·필터 반영
+### EG440 M3 없음 | 메뉴 권한 사용자 팝업 조회 차단 없음 | code  | meas 비관리자 계정 팝업 시나리오 없음 | miss No Permission | how 비관리자 + 팝업 Search
+   SSP45-5 [DMF0045] 신규행 Trans Mode 셀(TR_MODE) BOD Item Master 팝업(bodPo / 계정 attackgo · Div 81 조회 · Insert 행 추가 → Model AMCOME782-A1-0K0 / Proje / Trans Mode 팝업(BOD Item Master)이 "No Permission" 없이 BOD 데이터를 표시하고 선택·최종 저장까지 가능하다(AS-IS 동일)
+### EG441 M3 부분 | 팝업 열림·조회 데이터 있음 | code Doc/e2e/specs/_trace.spec.ts:1048-1066; tools/Harness/verify/popup_data_check.py:1-25; tools/E2E/lib/smoke-ext | meas 그리드 트리거 더블클릭 Search → 행·HTTP · TitleSet 팝업 PROC 실행 · smoke 조건 팝업 선택 | miss 버튼 팝업·일반 조건 팝업의 AS-IS 행수 대조 없음 · 트리거 없으면 NA | how AS-IS POPUP 문장 전수 → 트리거 해석 + SP 직접 실행
+   DM-25 [DMF0020] Monthly Bucket 입력 · 저장 값 · Project Code/Model 팝업 / Bucket=Monthly · 행 추가 후 더블클릭 / Monthly 입력 가능(당월 비활성), 입력값 그대로 저장(898,139.180 유지), Current 버전 대소문자 무관, 셀 더블클릭 팝업 오픈
+   DM-156 [DMF0082] Excel Form 팝업 Search / Div 81 / 팝업 Search 시 데이터 조회
+   DM-165 [DMF0035] Version 조회조건 /  / Version 조건에서 버전 목록 조회 표시
+   DM-88 [DMF0042] Replace 버튼 팝업 Period·조회 /  / 팝업 Period Default=메인 그리드 Period, 팝업 데이터 정상 조회
+   DM-151 [DMF0021] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼 / 신규 행 / Sales Site 입력 동작, Project 팝업 오픈 시 자동 조회, Model 후보=SALES_PLAN_ITEM_ID 룩업, Team=SSPM 기준 팝업 입력
+### EG442 M3 부분 | 팝업 정렬·반영 후 행 정렬 | code Doc/e2e/specs/_trace.spec.ts:798(A6 메인) | meas 메인 정렬 A6 | miss 팝업 목록 DESC 미측정 | how 팝업 행 순서 ↔ AS-IS ORDER BY
+   DM-94 [DMF0049] 버전 팝업 Version 목록 정렬 /  / Version명 DESC 정렬
+   SCPSSP-3 [SCP0028] 메인 그리드 행 정렬 / Div=81_HG, 입력 팝업 선택 완료 후 / 팝업 반영 후 행 정렬=AS-IS
+### EG444 M4 없음 | 사용자 찾기 다중 선택 → 행 추가·칸 채움 | code  | meas 코드 없음 | miss Insert 팝업 선행 | how 팝업 N선택 → 신규행 N
+   GAP-470 [SYS0014] User Info Insert → 사용자 찾기 팝업 선택값(USER_ID · USER_NM / 전 그룹 · 편집 가능 그룹 / jaeuk.shin(ADMIN) · Group Info Test 선택 / User Info I / 사용자 찾기 창 선택 시 새 줄에 아이디 · 이름 · 영문 이름 · 부서 이름이 채워지고 Email 칸은 표시되지 않는다(SCM_MST_SHEET_COLUMNS UserInfo.USER_EML VA
+   GAP-477 [SYS0014] User Info Insert → 사용자 찾기 팝업(다중 선택 체크) → 고른 사람 수만큼 / 전 그룹 · 편집 가능 그룹 / jaeuk.shin(ADMIN) · Group Info Test 선택 / User Info I / User Info Insert 는 사용자 찾기 창(다중 선택)을 먼저 띄우고 고른 사용자 수만큼 줄을 추가한다(두 명 체크 → 두 줄 · AS-IS 와 같음)
+### EG445 M4 없음 | Save 후 팝업 닫힘 | code  | meas 코드 없음 | miss 닫힘 | how Save 후 표시 0
+   GAP-336 [DMF0044] Exchange Rate 팝업(EXCHANGE_RATE) Save → 저장 후 팝업 닫기  / hongjae.kim(40) · Division 40 → Sales Plan(REPORT_SP_W) → Year 2026 →  / Exchange Rate 팝업 Save 후 팝업 닫힘(저장 + 닫기 겸용 · 부모 재조회 없음은 AS-IS 와 같음, 2026-08-10 사용자 확정)
+### EG446 M4 없음 | 셀 Model 팝업 단일 선택 | code  | meas 코드 없음 | miss 단일 | how H6 동일
+   GAPPI-27 [COMMON] 그리드 셀 Model 팝업(ITEM_ID) 선택 모드(단일 선택) / 전 화면 · 그리드 Model 셀 팝업 열기 → Ctrl/Shift 로 2행 이상 선택 시도 → OK / 그리드에서 여는 Model 팝업은 다중 선택이 불가하고 단일 행만 선택·셀에 반영된다(전 화면 동일)
+### EG447 M4 없음 | Version 팝업 기간 → 메인 Period 반영 | code  | meas 코드 없음 | miss 기간 반영 | how 팝업 기간 변경 OK → 메인 값
+   GAP-226 [DMF0035] Version 팝업 OK 시 팝업 기간(Period) → 본 화면 조회 기간 반영(popV / jiwon.park(81·DM ADMIN) · Plan Type MKT FCST · Division 81 · 조회 기간 202 / OK 후 메인 Period 가 팝업 기간 2026-03-01~2027-02-28 로 반영(유지되면 결함)

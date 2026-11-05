@@ -1,0 +1,70 @@
+{
+ "screen": "SCP0096",
+ "generated": "2026-10-31 05:27:53",
+ "vars": {
+  "dtMyDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Division",
+   "targets": [
+    "SEARCH:cboDivision"
+   ],
+   "ref": "SCP0096_Shipment_Working_Day_OSP.cs:130 ← SCP0096_Shipment_Working_Day_OSP.cs:45",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtDayWeek": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "SEARCH:cboDayWeek"
+   ],
+   "ref": "SCP0096_Shipment_Working_Day_OSP.cs:132 ← SCP0096_Shipment_Working_Day_OSP.cs:49",
+   "rows": [
+    {
+     "CODE": "EveryDay",
+     "NAME": "EveryDay"
+    },
+    {
+     "CODE": "SelectDay",
+     "NAME": "SelectDay"
+    },
+    {
+     "CODE": "Mon",
+     "NAME": "Mon"
+    },
+    {
+     "CODE": "Tue",
+     "NAME": "Tue"
+    },
+    {
+     "CODE": "Wed",
+     "NAME": "Wed"
+    },
+    {
+     "CODE": "Thu",
+     "NAME": "Thu"
+    },
+    {
+     "CODE": "Fri",
+     "NAME": "Fri"
+    },
+    {
+     "CODE": "Sat",
+     "NAME": "Sat"
+    },
+    {
+     "CODE": "Sun",
+     "NAME": "Sun"
+    }
+   ]
+  },
+  "dtPlantSiteByDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "PlantByDivisionOperOsp3",
+   "targets": [
+    "SEARCH:clbPlantSite"
+   ],
+   "ref": "SCP0096_Shipment_Working_Day_OSP.cs:423 ← SCP0096_Shipment_Working_Day_OSP.cs:422",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1"
+  }
+ }
+}

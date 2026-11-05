@@ -346,12 +346,31 @@ export const CustomDropdown = ({
       ? SINGLE_ALL_OPTION
       : optionsWithAll.find(opt => opt.value === value);
 
-  // 전 항목 체크로 보여야 하는 상태 - 값이 모든 옵션을 실제로 열거한 경우.
-  //   SELECT ALL 도 'ALL' sentinel 이 아니라 선택값을 전부 열거해 내보내므로(아래 handleMultipleChange)
-  //   isAllSelected 하나로 잡힌다.
-  const allEntriesSelected = !!allOption && isAllSelected;
+  // SELECT ALL 체크 판정 - 검색 중과 아닐 때가 다르다.
+  //   검색어가 없으면 '모든 옵션이 선택됨'(isAllSelected).
+  //   검색 중이면 handleSelectAll 이 '그때 보이던 항목'만 대상으로 삼으므로, 체크 표시도
+  //   '보이는 항목이 전부 선택됨' 기준이어야 한다. 그러지 않으면 검색 중 SELECT ALL 을 눌러
+  //   보이는 항목이 전부 선택돼도(=의도대로 동작) isAllSelected(전체 옵션 기준)가 거짓이라
+  //   체크가 한 박자 켜졌다 꺼지는 깜빡임이 보였다(사용자 신고 2026-10-28).
+  const visibleOptions =
+    props.multiple && allOption && listSearch
+      ? filterBySearch(options, listSearch, opt => opt.label || '')
+      : options;
+  const isVisibleAllSelected =
+    visibleOptions.length > 0 && visibleOptions.every(opt => splitValueSet.has(opt.value));
 
-  const multipleValue = allEntriesSelected ? optionsWithAll : selectedOptions;
+  // 전 항목 체크로 보여야 하는 상태 - 값이 (검색 중이면) 보이는 옵션을, (아니면) 모든 옵션을
+  //   실제로 열거한 경우. SELECT ALL 도 'ALL' sentinel 이 아니라 선택값을 전부 열거해
+  //   내보내므로(아래 handleMultipleChange) 이 판정 하나로 체크 표시가 잡힌다.
+  const allEntriesSelected = !!allOption && (listSearch ? isVisibleAllSelected : isAllSelected);
+
+  // SELECT ALL 행의 체크 상태는 value 배열에 SELECT_ALL_OPTION(value='')이 들어있는지로 정해진다
+  //   (DropdownField 의 isOptionEqualToValue 가 value 로 비교). 그래서 '체크되어 보여야 할 때'만
+  //   SELECT_ALL_OPTION 을 선택값 앞에 끼운다.
+  //   주의: optionsWithAll(전체 옵션) 을 통째로 넘기면 안 된다 — 이 배열이 renderTags 의 칩과
+  //   선택 표시를 동시에 몰므로, 검색 중 '보이는 항목만' 선택한 경우까지 전체 옵션이 칩으로 뜬다.
+  //   실제 선택값(selectedOptions)은 그대로 두고 SELECT_ALL_OPTION 한 개만 더한다.
+  const multipleValue = allEntriesSelected ? [allOptionEntry, ...selectedOptions] : selectedOptions;
 
   const dropdownValue = props.multiple ? multipleValue : singleValue;
 

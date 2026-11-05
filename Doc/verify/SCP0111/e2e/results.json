@@ -1,0 +1,3231 @@
+{
+  "config": {
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0111/e2e/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.49.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_trace.spec.ts",
+      "file": "_trace.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "검증엔진 SCP0111 @trace",
+          "file": "_trace.spec.ts",
+          "line": 105,
+          "column": 6,
+          "specs": [
+            {
+              "title": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 38335,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:12:34.335Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-306c0c7fb01a9d0fe545",
+              "file": "_trace.spec.ts",
+              "line": 130,
+              "column": 7
+            },
+            {
+              "title": "G6 조회조건 초기값 = AS-IS 로드 문장",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 15177,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:13:20.810Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-d29ee410326879388eba",
+              "file": "_trace.spec.ts",
+              "line": 198,
+              "column": 7
+            },
+            {
+              "title": "C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 54107,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:13:43.379Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-83b99e7aa8862133386a",
+              "file": "_trace.spec.ts",
+              "line": 234,
+              "column": 7
+            },
+            {
+              "title": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 22100,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:14:45.463Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-d09ed44d8e7036980828",
+              "file": "_trace.spec.ts",
+              "line": 319,
+              "column": 7
+            },
+            {
+              "title": "PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 1172,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:15:14.532Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-8d8e4c13bfe519e5db6d",
+              "file": "_trace.spec.ts",
+              "line": 547,
+              "column": 7
+            },
+            {
+              "title": "W4 D3 행 조건부 잠금 = AS-IS lock_rules",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 18609,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:15:23.177Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-e3ffe7409a633a3b8439",
+              "file": "_trace.spec.ts",
+              "line": 622,
+              "column": 7
+            },
+            {
+              "title": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 24078,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:15:50.543Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-8df86dadb99a612dd88e",
+              "file": "_trace.spec.ts",
+              "line": 684,
+              "column": 7
+            },
+            {
+              "title": "W4 M4 팝업 선택값 반영 = AS-IS",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 1033,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:16:21.789Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-0b1446599f1ec5cf4643",
+              "file": "_trace.spec.ts",
+              "line": 790,
+              "column": 7
+            },
+            {
+              "title": "A6 조회 결과 행 순서 = AS-IS ORDER BY",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 19815,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:16:30.054Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-7150ea665760b85cc35f",
+              "file": "_trace.spec.ts",
+              "line": 839,
+              "column": 7
+            },
+            {
+              "title": "W4b H3·F5·F3·M3·J1·H4",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 40547,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:16:56.820Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-69c035b336751c63c906",
+              "file": "_trace.spec.ts",
+              "line": 894,
+              "column": 7
+            },
+            {
+              "title": "D6 Insert 위치·상태 = AS-IS",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 25721,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:17:44.978Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-35bdb6e44b85b896e893",
+              "file": "_trace.spec.ts",
+              "line": 1135,
+              "column": 7
+            },
+            {
+              "title": "W4c 정밀 판정 — 판정필요 해소",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 2건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_SITE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_SITE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 573334,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:18:18.256Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-13f31f34b20929395390",
+              "file": "_trace.spec.ts",
+              "line": 1163,
+              "column": 7
+            },
+            {
+              "title": "W4d 잔여 판정필요 실측",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 296386,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:27:57.803Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-223d9b5b8842d2e1eaf5",
+              "file": "_trace.spec.ts",
+              "line": 1591,
+              "column": 7
+            },
+            {
+              "title": "W9 대조표 미구현 행 실측",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 995,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:33:03.600Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-5e24d2ba34f2e8cb9b23",
+              "file": "_trace.spec.ts",
+              "line": 1938,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 SCP0111 @verify",
+          "file": "_verify.spec.ts",
+          "line": 187,
+          "column": 6,
+          "specs": [
+            {
+              "title": "조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 14151,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:33:14.411Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-42621eaf8318f48fd91d",
+              "file": "_verify.spec.ts",
+              "line": 211,
+              "column": 7
+            },
+            {
+              "title": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 116164,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[lap] 기존행 편집(D1) 14s\n"
+                        },
+                        {
+                          "text": "[dyn] 202609: 고정 21컬럼(1415px) ≥ 가시 폭 1543px → 측정 동안 고정 해제\n"
+                        },
+                        {
+                          "text": "[lap] 신규행 38s\n"
+                        },
+                        {
+                          "text": "[lap] 입력 프로브 행 65s\n"
+                        },
+                        {
+                          "text": "[lap] 연쇄 프로브 행 65s\n"
+                        },
+                        {
+                          "text": "[lap] 콤보 후보+재편집 68s\n"
+                        },
+                        {
+                          "text": "[lap] E1 71s\n"
+                        },
+                        {
+                          "text": "[lap] H13 98s\n"
+                        },
+                        {
+                          "text": "[lap] E2 98s\n"
+                        },
+                        {
+                          "text": "[lap] C3 98s\n"
+                        },
+                        {
+                          "text": "[lap] D5 98s\n"
+                        },
+                        {
+                          "text": "[lap] K5 98s\n"
+                        },
+                        {
+                          "text": "[lap] H2 98s\n"
+                        },
+                        {
+                          "text": "[lap] A2 114s\n"
+                        },
+                        {
+                          "text": "[lap] C2 114s\n"
+                        },
+                        {
+                          "text": "[lap] C6 114s\n"
+                        },
+                        {
+                          "text": "[lap] E5 114s\n"
+                        },
+                        {
+                          "text": "[lap] E7 114s\n"
+                        }
+                      ],
+                      "stderr": [
+                        {
+                          "text": "[inRow] CELL_CF: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        },
+                        {
+                          "text": "[inRow] BOH_QTY: 편집 가능 행 탐색 시간 예산 초과(6초) — 훑은 범위 안에 편집 가능 행 없음\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:33:35.908Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-99579bf1fc152036666a",
+              "file": "_verify.spec.ts",
+              "line": 233,
+              "column": 65
+            },
+            {
+              "title": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 942,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:35:38.260Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ec083d2d6114c068336d",
+              "file": "_verify.spec.ts",
+              "line": 711,
+              "column": 7
+            },
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "crud",
+                      "description": "mode=edit-save save=Y insert=N delete=Y editable=Y inserted=N saved=N found=N updated=N cleaned=Y restored=N saveCalls=0 errors=SAVE: SAVE call-proc 없음 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 · [181s] 재조회 · [182s] 행 찾기 14 · 행 [RSA-EVS2-HCB-060|APRSAEVS2-A2-060|196.000000] LINE_ID: '0' → '1' 저장 실패 · 재조회 값 'P8Q32' 미반영 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 'P8Q32' ⚠ 원값과 다름"
+                    },
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 208192,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:35:44.929Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-79c9e86213c94b65859b",
+              "file": "_verify.spec.ts",
+              "line": 774,
+              "column": 7
+            },
+            {
+              "title": "저장 세부(F1·F6) — 컬럼별 왕복·0 값 저장",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 344297,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[저장 세부] 21:42:38 202609 r26 시작\n"
+                        },
+                        {
+                          "text": "[저장 세부] 21:43:13 202609 끝\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:39:19.733Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c1a6ad0a99e7a75e8612",
+              "file": "_verify.spec.ts",
+              "line": 1384,
+              "column": 7
+            },
+            {
+              "title": "저장 경로(F1 실패·H10 취소·H11 로딩·F2 붙여넣기)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 SCP0111/main/SAVE/call-proc) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 234538,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:45:09.685Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-36b1b845e90840b9c165",
+              "file": "_verify.spec.ts",
+              "line": 1480,
+              "column": 7
+            },
+            {
+              "title": "신규행 검증(E3 컬럼별 필수·E4 키 중복)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 20906,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:49:11.579Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b77e6fb1936af24c0515",
+              "file": "_verify.spec.ts",
+              "line": 1576,
+              "column": 7
+            },
+            {
+              "title": "입력 검증 저장(E1 음수·소수·E2 날짜·E5 콤보)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1500000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 133939,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:49:41.213Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-11b15d81bf1037ba8c24",
+              "file": "_verify.spec.ts",
+              "line": 1677,
+              "column": 7
+            },
+            {
+              "title": "기간 동적 컬럼(A8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 16567,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:52:02.559Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c0895c0fc0ce3b01c231",
+              "file": "_verify.spec.ts",
+              "line": 1721,
+              "column": 7
+            },
+            {
+              "title": "실전송 건수(A1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 16617,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:52:26.054Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-01ff0ca88faa4d9431f3",
+              "file": "_verify.spec.ts",
+              "line": 1733,
+              "column": 7
+            },
+            {
+              "title": "합계 값(A3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 16904,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:52:49.684Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-0721687bee5f29888230",
+              "file": "_verify.spec.ts",
+              "line": 1744,
+              "column": 7
+            },
+            {
+              "title": "Division 컬럼(A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 35267,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:53:14.320Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-2c8d1699640f9815bbdc",
+              "file": "_verify.spec.ts",
+              "line": 1771,
+              "column": 7
+            },
+            {
+              "title": "조회조건 겹침(H4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 14563,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:53:56.975Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-cca165ad6e4b7a885aa3",
+              "file": "_verify.spec.ts",
+              "line": 1788,
+              "column": 7
+            },
+            {
+              "title": "Excel 2단계 차단(M1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 11997,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:54:20.027Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-8e773aa7f66ef1191e4c",
+              "file": "_verify.spec.ts",
+              "line": 1801,
+              "column": 7
+            },
+            {
+              "title": "Excel 양식·업로드(M1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 11818,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:54:39.643Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-4dd1b7d186cf675bc5d9",
+              "file": "_verify.spec.ts",
+              "line": 1815,
+              "column": 7
+            },
+            {
+              "title": "셀 연쇄 초기화(C2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 924,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:54:58.700Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7fa971554eaf122e885e",
+              "file": "_verify.spec.ts",
+              "line": 1849,
+              "column": 7
+            },
+            {
+              "title": "컬럼 설정 필수 컬럼(K2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 1181,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:55:06.604Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-93b50488f3191ab14069",
+              "file": "_verify.spec.ts",
+              "line": 1915,
+              "column": 7
+            },
+            {
+              "title": "언어 전환 문구 덤프(I2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 44009,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:55:15.168Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-cc3ed66b0e2eae96fe53",
+              "file": "_verify.spec.ts",
+              "line": 1970,
+              "column": 7
+            },
+            {
+              "title": "병합 셀 입력·Delete·원값 복원(H3·F5·D1·F3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 193904,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[ensureRows] 시도 → 1714행 · 본문 {\"divisionId\":\"81\",\"planStartYyyymmdd\":\"20260907\",\"planType\":\"\",\"seq\":\"\",\"fromYyyymm\":\"202609\",\"toYyyymm\":\"202702\",\"nickName\":\"\",\"cellItemId\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:56:06.691Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-931844d10e8a6709c98f",
+              "file": "_verify.spec.ts",
+              "line": 1994,
+              "column": 7
+            },
+            {
+              "title": "텍스트 부분 삭제·Insert 행 Div 변경(E6·D1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 25414,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T21:59:27.887Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5701eb7fd78682756385",
+              "file": "_verify.spec.ts",
+              "line": 2029,
+              "column": 7
+            },
+            {
+              "title": "조회 전 합계·기간 이상값·정렬 Copy(A10·N1·K1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 26783,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:00:00.235Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-cf74769d19381b94eacb",
+              "file": "_verify.spec.ts",
+              "line": 2041,
+              "column": 7
+            },
+            {
+              "title": "레이아웃·조회 묶음(H4·N1·G1·L2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 40647,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:00:34.090Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-6d85b1d0b26609af843f",
+              "file": "_verify.spec.ts",
+              "line": 2058,
+              "column": 7
+            },
+            {
+              "title": "필터 항목·연속 조회 본문(K1·G6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 128346,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:01:21.950Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-b414625452f9ab08291b",
+              "file": "_verify.spec.ts",
+              "line": 2082,
+              "column": 7
+            },
+            {
+              "title": "조회조건 초기값·Division 변경 뒤 Version(G6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 14139,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:03:37.263Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1de05123092e30c6ab8f",
+              "file": "_verify.spec.ts",
+              "line": 2094,
+              "column": 7
+            },
+            {
+              "title": "Team 값 덤프(B8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 16656,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:03:58.676Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-abde511743b7026e9ee1",
+              "file": "_verify.spec.ts",
+              "line": 2104,
+              "column": 7
+            },
+            {
+              "title": "Insert 행 Division(D4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 25686,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:04:22.785Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1df3e4d06f399ca7015c",
+              "file": "_verify.spec.ts",
+              "line": 2109,
+              "column": 7
+            },
+            {
+              "title": "동적 칸 정렬·방향키 응답(K1·L1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 84891,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:04:55.409Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7d982cbbd9ffda0ea2b1",
+              "file": "_verify.spec.ts",
+              "line": 2118,
+              "column": 7
+            },
+            {
+              "title": "기간 조건 글자·역전(E2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 18868,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:06:27.387Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-727973f6bbc7ef647ebf",
+              "file": "_verify.spec.ts",
+              "line": 2128,
+              "column": 7
+            },
+            {
+              "title": "Division별 조회 오류·콤보 이름(F4·A2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 175831,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:06:53.055Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-45cf0a526c6a2c9b350e",
+              "file": "_verify.spec.ts",
+              "line": 2138,
+              "column": 7
+            },
+            {
+              "title": "전용 버튼 확인창(M2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 19630,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:09:56.387Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-d5e8e0276de71a3c709e",
+              "file": "_verify.spec.ts",
+              "line": 2146,
+              "column": 7
+            },
+            {
+              "title": "편집 모드 구분(D1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 23711,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:10:24.005Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-11a9aa979d9b33cc001b",
+              "file": "_verify.spec.ts",
+              "line": 2154,
+              "column": 7
+            },
+            {
+              "title": "실적 구간 색(H2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 1164,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:10:57.111Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ea7c633fd8c6fb5ed5e5",
+              "file": "_verify.spec.ts",
+              "line": 2160,
+              "column": 7
+            },
+            {
+              "title": "이름·ID 조건 건수(A1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 1410,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:11:06.121Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-66316919d895d9372681",
+              "file": "_verify.spec.ts",
+              "line": 2172,
+              "column": 7
+            },
+            {
+              "title": "Sum 체크박스(A3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 1283,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:11:16.224Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-840d929a9bd2149ae6f6",
+              "file": "_verify.spec.ts",
+              "line": 2184,
+              "column": 7
+            },
+            {
+              "title": "숫자 표시 형식(H8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 1094,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:11:25.076Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-fc01046014e10ebaa70a",
+              "file": "_verify.spec.ts",
+              "line": 2195,
+              "column": 7
+            },
+            {
+              "title": "문서 표시 문구(H5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 4280,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:11:33.772Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-25268d27123287a8ae69",
+              "file": "_verify.spec.ts",
+              "line": 2204,
+              "column": 7
+            },
+            {
+              "title": "문서 시나리오",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 1350000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 224824,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:11:45.932Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-dd2cb6e7c9123fcae2ab",
+              "file": "_verify.spec.ts",
+              "line": 2217,
+              "column": 7
+            },
+            {
+              "title": "0 표시 규칙(H8)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 18992,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:15:38.075Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-f891cbffbe0326216a21",
+              "file": "_verify.spec.ts",
+              "line": 2457,
+              "column": 7
+            },
+            {
+              "title": "문서 조건별 버튼·컬럼 노출(K4·A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 3457,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:16:11.944Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-550d3034f7958b7f07fa",
+              "file": "_verify.spec.ts",
+              "line": 2464,
+              "column": 7
+            },
+            {
+              "title": "셀 편집 표시·값 유지(A2·F6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 38999,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:16:22.857Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-3c4d9f7f774bae92d438",
+              "file": "_verify.spec.ts",
+              "line": 2471,
+              "column": 7
+            },
+            {
+              "title": "재조회 하위 시트 초기화(A4)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 1031,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:17:08.667Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7b9489ea6c383e04a870",
+              "file": "_verify.spec.ts",
+              "line": 2496,
+              "column": 7
+            },
+            {
+              "title": "월 Bucket 합계(F1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 4420,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:17:16.122Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ab444d9bc68e67012d3e",
+              "file": "_verify.spec.ts",
+              "line": 2508,
+              "column": 7
+            },
+            {
+              "title": "정렬·필터 상태 Insert(D6)·붙여넣기 후보 외(F3)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 85067,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:17:28.611Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-1978109b16069ed09a5f",
+              "file": "_verify.spec.ts",
+              "line": 2534,
+              "column": 7
+            },
+            {
+              "title": "그리드 표시 묶음(N1·H8·A5)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 18591,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:19:01.730Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-bb535a29e552f1893380",
+              "file": "_verify.spec.ts",
+              "line": 2571,
+              "column": 7
+            },
+            {
+              "title": "화면 틀(J4 메뉴 오픈·탭 이름 · G4 돋보기)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 13565,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:19:27.670Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-dd8097b8eb94ea0801dc",
+              "file": "_verify.spec.ts",
+              "line": 2582,
+              "column": 7
+            },
+            {
+              "title": "선택 조회 복수·단일·전체 왕복(G2·B6)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 133003,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:19:49.537Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-fce99be55c8af5a75822",
+              "file": "_verify.spec.ts",
+              "line": 2593,
+              "column": 7
+            },
+            {
+              "title": "Excel 다운로드 내용(H7)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 29840,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:22:10.350Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-c6bbfec55265206b8dcc",
+              "file": "_verify.spec.ts",
+              "line": 2621,
+              "column": 7
+            },
+            {
+              "title": "필터 유지 재조회(K1)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 31179,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:22:49.541Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-474d17bb03dd86ddea8e",
+              "file": "_verify.spec.ts",
+              "line": 2638,
+              "column": 7
+            },
+            {
+              "title": "고정 컬럼(H12)·동적 헤더(A9)·로딩 표시(H11)·팝업 Enter(G10)·특수 버튼(M2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 420000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 34341,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:23:28.460Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-5a160a2aaff00b42e1bb",
+              "file": "_verify.spec.ts",
+              "line": 2670,
+              "column": 7
+            },
+            {
+              "title": "주 Bucket 입력 → 일자 배분(F9) — 사업부 기본 요일 1일 전량 · 주 합계 = 입력값 · 원복",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 2079,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:24:10.925Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-13204212ee9de2c521f6",
+              "file": "_verify.spec.ts",
+              "line": 2778,
+              "column": 7
+            },
+            {
+              "title": "권한별 편집 구간(J3) — GROUP 조건이 있는 AS-IS 잠금 규칙을 다른 권한 계정으로 재평가",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 995,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:24:21.550Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-7e21c2c4b45834fc1774",
+              "file": "_verify.spec.ts",
+              "line": 2847,
+              "column": 7
+            },
+            {
+              "title": "상단·하단 그리드 연동(K6) — 상단 행 클릭/더블클릭으로 하단 조회 시 상단 재조회·재렌더(깜빡임) 없음",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 17578,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:24:31.149Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-47444ae79e207ac842d5",
+              "file": "_verify.spec.ts",
+              "line": 2878,
+              "column": 7
+            },
+            {
+              "title": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 55579,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:24:55.710Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-0aab08baf68c8fff47f2",
+              "file": "_verify.spec.ts",
+              "line": 2921,
+              "column": 7
+            },
+            {
+              "title": "셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 38916,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:25:59.105Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-591de7da497ac6715a24",
+              "file": "_verify.spec.ts",
+              "line": 3057,
+              "column": 7
+            },
+            {
+              "title": "후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 2건 (500 admin/log/menu-access | 500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 23207,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:26:45.533Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-531465190b9e049d949a",
+              "file": "_verify.spec.ts",
+              "line": 3162,
+              "column": 7
+            },
+            {
+              "title": "조회조건 콤보 후보 품질(B1·B2)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 75076,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        },
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:27:15.411Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-be4a5854fc854f92c0ef",
+              "file": "_verify.spec.ts",
+              "line": 3214,
+              "column": 7
+            },
+            {
+              "title": "조회조건 텍스트 — 대소문자 무시(G8)·콤마 다중값(G9)",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 89445,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:28:38.666Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-feb3ff669e767dbb212f",
+              "file": "_verify.spec.ts",
+              "line": 3338,
+              "column": 7
+            },
+            {
+              "title": "Sort(F3)·Filter(F4) 버튼·단축키(K1) — 정렬 3단 토글·필터 UI·적용/해제 행수",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 75016,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "[userConds] SCP0111: 지정 조건 유효기간(2026-10-31T12:00:00+09:00) 경과 — 기본 조건으로 조회\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-04T22:30:15.430Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-17ca4688528ae3fbb74e",
+              "file": "_verify.spec.ts",
+              "line": 3424,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-04T21:12:28.196Z",
+    "duration": 4772178.374000001,
+    "expected": 72,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

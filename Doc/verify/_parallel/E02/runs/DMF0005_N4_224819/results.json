@@ -1,0 +1,137 @@
+{
+  "config": {
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/_parallel/E02/runs/DMF0005_N4_224819/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.49.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "eg_popup.spec.ts",
+      "file": "eg_popup.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "@eg-popup MAIN DMF0005 #0 DM0002_ItembyDivisionPopupEx COND:btnItemId",
+          "ok": false,
+          "tags": [
+            "eg-popup"
+          ],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "status": "timedOut",
+                  "duration": 1625,
+                  "error": {
+                    "message": "\u001b[31mFixture \"nscm\" timeout of 360000ms exceeded during setup.\u001b[39m",
+                    "stack": "\u001b[31mFixture \"nscm\" timeout of 360000ms exceeded during setup.\u001b[39m\n    at C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:7:26",
+                    "location": {
+                      "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                      "column": 26,
+                      "line": 7
+                    },
+                    "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:7\n\n\u001b[0m \u001b[90m  5 |\u001b[39m \u001b[36mimport\u001b[39m { installRequestMutations\u001b[33m,\u001b[39m flushMutationLog } \u001b[36mfrom\u001b[39m \u001b[32m'../lib/mutate'\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m  6 |\u001b[39m \u001b[36mexport\u001b[39m type \u001b[33mOpts\u001b[39m \u001b[33m=\u001b[39m { account\u001b[33m:\u001b[39m string\u001b[33m;\u001b[39m division\u001b[33m:\u001b[39m string }\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m \u001b[36mexport\u001b[39m \u001b[36mconst\u001b[39m test \u001b[33m=\u001b[39m base\u001b[33m.\u001b[39mextend\u001b[33m<\u001b[39m{ nscm\u001b[33m:\u001b[39m \u001b[33mNscm\u001b[39m } \u001b[33m&\u001b[39m \u001b[33mOpts\u001b[39m\u001b[33m>\u001b[39m({\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  8 |\u001b[39m   account\u001b[33m:\u001b[39m [process\u001b[33m.\u001b[39menv\u001b[33m.\u001b[39m\u001b[33mE2E_ACCOUNT\u001b[39m \u001b[33m||\u001b[39m \u001b[33mCFG\u001b[39m\u001b[33m.\u001b[39mdefaultAccount\u001b[33m,\u001b[39m { option\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }]\u001b[33m,\u001b[39m\n \u001b[90m  9 |\u001b[39m   division\u001b[33m:\u001b[39m [process\u001b[33m.\u001b[39menv\u001b[33m.\u001b[39m\u001b[33mE2E_DIVISION\u001b[39m \u001b[33m||\u001b[39m \u001b[33mCFG\u001b[39m\u001b[33m.\u001b[39mdefaultDivision\u001b[33m,\u001b[39m { option\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }]\u001b[33m,\u001b[39m\n \u001b[90m 10 |\u001b[39m   \u001b[90m// 2026-10-29: 픽스처 자체 timeout — 로그인 재시도(풀 고갈 60초 대기 × 최대 4회)가 테스트 timeout(180s)을 깎아 본문 전에 끝나지 않게 분리한다(Playwright fixture timeout 옵션)\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 26,
+                        "line": 7
+                      },
+                      "message": "\u001b[31mFixture \"nscm\" timeout of 360000ms exceeded during setup.\u001b[39m\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:7\n\n\u001b[0m \u001b[90m  5 |\u001b[39m \u001b[36mimport\u001b[39m { installRequestMutations\u001b[33m,\u001b[39m flushMutationLog } \u001b[36mfrom\u001b[39m \u001b[32m'../lib/mutate'\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m  6 |\u001b[39m \u001b[36mexport\u001b[39m type \u001b[33mOpts\u001b[39m \u001b[33m=\u001b[39m { account\u001b[33m:\u001b[39m string\u001b[33m;\u001b[39m division\u001b[33m:\u001b[39m string }\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  7 |\u001b[39m \u001b[36mexport\u001b[39m \u001b[36mconst\u001b[39m test \u001b[33m=\u001b[39m base\u001b[33m.\u001b[39mextend\u001b[33m<\u001b[39m{ nscm\u001b[33m:\u001b[39m \u001b[33mNscm\u001b[39m } \u001b[33m&\u001b[39m \u001b[33mOpts\u001b[39m\u001b[33m>\u001b[39m({\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  8 |\u001b[39m   account\u001b[33m:\u001b[39m [process\u001b[33m.\u001b[39menv\u001b[33m.\u001b[39m\u001b[33mE2E_ACCOUNT\u001b[39m \u001b[33m||\u001b[39m \u001b[33mCFG\u001b[39m\u001b[33m.\u001b[39mdefaultAccount\u001b[33m,\u001b[39m { option\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }]\u001b[33m,\u001b[39m\n \u001b[90m  9 |\u001b[39m   division\u001b[33m:\u001b[39m [process\u001b[33m.\u001b[39menv\u001b[33m.\u001b[39m\u001b[33mE2E_DIVISION\u001b[39m \u001b[33m||\u001b[39m \u001b[33mCFG\u001b[39m\u001b[33m.\u001b[39mdefaultDivision\u001b[33m,\u001b[39m { option\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m }]\u001b[33m,\u001b[39m\n \u001b[90m 10 |\u001b[39m   \u001b[90m// 2026-10-29: 픽스처 자체 timeout — 로그인 재시도(풀 고갈 60초 대기 × 최대 4회)가 테스트 timeout(180s)을 깎아 본문 전에 끝나지 않게 분리한다(Playwright fixture timeout 옵션)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:7:26"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
+                        "column": 17,
+                        "line": 110
+                      },
+                      "message": "Error: locator.fill: Test timeout of 180000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('textbox').first()\u001b[22m\n\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:110\n\n\u001b[0m \u001b[90m 108 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[36mawait\u001b[39m loginBtn\u001b[33m.\u001b[39misVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m3\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mfalse\u001b[39m)) {\n \u001b[90m 109 |\u001b[39m       \u001b[36mconst\u001b[39m box \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m)\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 110 |\u001b[39m       \u001b[36mawait\u001b[39m box\u001b[33m.\u001b[39mfill(userId)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m loginBtn\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 111 |\u001b[39m       \u001b[36mawait\u001b[39m loginBtn\u001b[33m.\u001b[39mwaitFor({ state\u001b[33m:\u001b[39m \u001b[32m'hidden'\u001b[39m\u001b[33m,\u001b[39m timeout\u001b[33m:\u001b[39m \u001b[35m30\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m undefined)\u001b[33m;\u001b[39m\n \u001b[90m 112 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m)\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m undefined)\u001b[33m;\u001b[39m\n \u001b[90m 113 |\u001b[39m     }\u001b[0m\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:110:17)\n    at Object.exports.test._test.test.extend.nscm.timeout (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:17:31)"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-31T13:48:36.954Z",
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                    "column": 26,
+                    "line": 7
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "85feec5f8d5a0014d343-1ed237a9a1b8985eb87b",
+          "file": "eg_popup.spec.ts",
+          "line": 865,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-31T13:48:29.581Z",
+    "duration": 375695.011,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

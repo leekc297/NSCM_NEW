@@ -1,0 +1,275 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-10-31T14:33:54+09:00",
+ "producer": "run_verify",
+ "id": "SCP0041",
+ "skip_e2e": false,
+ "started": "2026-10-31 13:07:40",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-d7866b99",
+   "class": "G3",
+   "msg": "SCP0041 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E smoke/auth 요약"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7fcd6f8f",
+   "class": "F10",
+   "msg": "PKG_SCP0041.P_SCP0041_STOCK_OSP_EXCEL_UPLOAD",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-7952b39b",
+   "class": "F10",
+   "msg": "PKG_SCP0041.P_SCP0041_SAVE_PACKER_HOLD_STOCK",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5e98adcc",
+   "class": "MS1",
+   "msg": "MSG00108",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC msgmap(문구 일치) + 코드 사용 ID"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-afc6e4cf",
+   "class": "B8",
+   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-31 14:21"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-df20a51c",
+   "class": "M1",
+   "msg": "Excel Upload 컬럼명 검증 메시지 · 파일 첨부 개수",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-31 14:21"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-feea4bdc",
+   "class": "B8",
+   "msg": "Team 컬럼(MKT FCST 조회·신규행)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-31 14:21"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3bb11760",
+   "class": "M1",
+   "msg": "Excel Upload 헤더 검증 메시지",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-31 14:21"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ffbefefd",
+   "class": "M1",
+   "msg": "Excel Upload Validation 메시지(Sales Site/Project/Model)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-31 14:21"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9a047e95",
+   "class": "G4",
+   "msg": "D00-1-024 · §1 usrConditionPanel1 / UsrConditionPanel",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-50abbf2a",
+   "class": "G4",
+   "msg": "D00-1-025 · §1 usrLayoutControl2 / UsrLayoutControl",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5d67715e",
+   "class": "G4",
+   "msg": "COMMON:UC-06 · Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ad9ab0a3",
+   "class": "G4",
+   "msg": "dCalendar (필수) · 기간",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-60b1b7ac",
+   "class": "G4",
+   "msg": "dCalendarCutoff (Pack) · 기간",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7c94a720",
+   "class": "X-ROW",
+   "msg": "SCP0041_StockOSP.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3b61f15f",
+   "class": "X-ROW",
+   "msg": "SCP0041_StockOSP.FindData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ddbb0ff3",
+   "class": "X-ROW",
+   "msg": "SCP0041_StockOSP.FindData_Pack",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-955703b7",
+   "class": "X-ROW",
+   "msg": "SCP0041_StockOSP.InitControls",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "summary": {
+  "rows": 1440,
+  "PASS": 482,
+  "FAIL": 18,
+  "판정필요": 26,
+  "미검증": 124,
+  "해당없음": 790,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 627,
+   "없음(미검증)": 124,
+   "없음(판정 대기)": 26,
+   "기계(상속·집계)": 660,
+   "출처 미기록": 3
+  },
+  "fail_listed": 18,
+  "coverage": {
+   "rules": 84,
+   "measured": 178,
+   "not_run_error": 97,
+   "na": 296,
+   "suspect_na100": [
+    "D1",
+    "D3",
+    "E1",
+    "E3",
+    "F1",
+    "F2",
+    "F6"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0041_StockOsp_CheckList_v22.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0041_StockOsp_ActionItemList_v22.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0041/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 검사기 회귀 오라클 위반(rc 10) — Doc/verify/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발 · 이 CheckList 는 검사기 결함을 안고 있음"
+}

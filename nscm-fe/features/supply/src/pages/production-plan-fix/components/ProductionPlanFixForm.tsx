@@ -248,7 +248,6 @@ export const ProductionPlanFixForm = ({ onSearch, onItemSearch }: Props) => {
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

@@ -42,6 +42,10 @@ interface State {
   openSearchArea: boolean;
   // L1 권한 게이트(design 01 §2) — MyDivision(EE 제외) 콤보 0건이면 false → 조회영역 disable.
   hasDivisionAuth: boolean;
+  // 권한 division 코드 전체(EE 제외) — Form Division 콤보 도착 시 채운다. Div=ALL(미선택) 전개 원천
+  //   (SSP0005 divisionCodes 패턴 이식). GET 필터·Model 팝업이 ALL 일 때 이 코드들로 전개한다.
+  //   Form 은 조회영역 접힘 시 언마운트되므로 page(Model 팝업)가 참조할 수 있게 store 에 보관한다.
+  divisionCodes: string[];
   // AS-IS GetDayRange(SCM0001_GET_SCP_DAY_PERIOD) 서버 산출 기본구간. Form 콤보가 도착 시 채운다.
   //   비어 있으면(콤보 미도착/실패) dayjs 주말근사로 폴백. mount·Division 변경·F10 리셋이 이 값을 기본값으로 쓴다.
   serverPeriod: { from: string; to: string };
@@ -72,6 +76,8 @@ interface Action {
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   setDivisionAuth: (has: boolean) => void;
+  // 권한 division 코드 전체 저장 — Form Division 콤보 결과(EE 제외 옵션값). ALL 전개 원천.
+  setDivisionCodes: (codes: string[]) => void;
   fetchStaticColumns: () => Promise<void>;
   /** ColumnLayoutModal onSave — 표시/순서/폭/색을 staticColumns[MAIN] 에 즉시 반영. */
   applyColumnLayout: (settings: ColumnLayoutSetting[]) => void;
@@ -105,6 +111,7 @@ const initState: State = {
   filters: {},
   openSearchArea: true,
   hasDivisionAuth: true,
+  divisionCodes: [],
   serverPeriod: { from: '', to: '' },
   staticColumns: emptyStaticColumns,
   originalStaticColumns: [],
@@ -194,6 +201,7 @@ export const useShipmentPlanConfirmDetailStore = createPersistedStoreWithTab<Sta
       set({
         ...initState,
         serverPeriod: sp,
+        divisionCodes: get().divisionCodes, // 권한 코드는 auth 데이터 — 리셋 시 보존(serverPeriod 동일)
         searchCondition: { ...initSearch, fromYyyymmdd: from, toYyyymmdd: to },
       });
     },
@@ -210,13 +218,17 @@ export const useShipmentPlanConfirmDetailStore = createPersistedStoreWithTab<Sta
     //   Period 기본값 리셋(SetChangedControl cs:380).
     setDivisions: divisionIds =>
       set(state => {
-        // AS-IS SetChangedControl(cs:381): Division 변경 시 drpPeriod.InitValue=GetDayRange() 재설정.
-        //   fromDate=오늘 고정이라 서버 구간은 불변 — 저장된 serverPeriod(없으면 dayjs)로 되돌린다.
+        // Division 변경 = From Site cascade 재조회 + **나머지 조회조건 전체 초기화(기본값 복원, 삭제 아님)**
+        //   (사용자 지시 2026-11-02). From Site/Model/Sold To/Ship To 는 빈값(기본), Period 는 서버 구간
+        //   (SetChangedControl cs:381 drpPeriod.InitValue=GetDayRange, fromDate=오늘 고정이라 불변 — 저장된
+        //   serverPeriod, 없으면 dayjs 근사)으로 되돌린다. 바뀐 divisionIds 만 유지.
         const { from, to } = effectivePeriod(state.serverPeriod);
-        state.searchCondition.divisionIds = divisionIds;
-        state.searchCondition.fromSiteIds = [];
-        state.searchCondition.fromYyyymmdd = from;
-        state.searchCondition.toYyyymmdd = to;
+        state.searchCondition = {
+          ...initSearch,
+          divisionIds,
+          fromYyyymmdd: from,
+          toYyyymmdd: to,
+        };
       }),
     initPeriodDefault: () =>
       set(state => {
@@ -267,9 +279,14 @@ export const useShipmentPlanConfirmDetailStore = createPersistedStoreWithTab<Sta
         //   p_division_id / p_from_site / p_item_id / p_from_yyyymmdd / p_to_yyyymmdd /
         //   p_Sold_To_Party / p_Ship_To_Party / debug_mode='F' / p_language(@sesLangCd 세션)
         const language = useSessionStore.getState().session.langCd ?? '';
+        // Div=ALL(미선택) = 권한 division 전체로 전개(SSP0005 ALL 전개 로직 이식). AS-IS GetCheckedListValue 도
+        //   체크된(=노출된, EE 제외) division 으로 전개하므로 '' 보다 권한 코드 명시가 AS-IS 에 더 가깝다.
+        //   코드 미도착 시 ''(=GET SP p_division_id TRIM 전체) 폴백.
+        const divisionId =
+          c.divisionIds.length > 0 ? c.divisionIds.join(',') : joinOrEmpty(get().divisionCodes);
         state.filters = {
           [SHEETS.MAIN]: {
-            divisionId: joinOrEmpty(c.divisionIds),
+            divisionId,
             fromSite: joinOrEmpty(c.fromSiteIds),
             itemId: multiLine(c.itemId),
             fromYyyymmdd: c.fromYyyymmdd,
@@ -293,6 +310,10 @@ export const useShipmentPlanConfirmDetailStore = createPersistedStoreWithTab<Sta
     setDivisionAuth: has =>
       set(state => {
         state.hasDivisionAuth = has;
+      }),
+    setDivisionCodes: codes =>
+      set(state => {
+        state.divisionCodes = codes;
       }),
 
     fetchStaticColumns: async () => {

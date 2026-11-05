@@ -1,0 +1,271 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-10-30T08:25:23+09:00",
+ "producer": "run_verify",
+ "id": "SCP0041",
+ "skip_e2e": false,
+ "started": "2026-10-30 07:19:02",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-04df217d",
+   "class": "A6",
+   "msg": "SCP0041_GET_STOCK_OSP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC sort_check (ZIOUI1 ALL_SOURCE LAST_DDL 2026-10-20 17:36:55)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-960823ee",
+   "class": "A6",
+   "msg": "SCP0041_GET_PACK_HOLD_STOCK",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC sort_check (ZIOUI1 ALL_SOURCE LAST_DDL 2026-10-20 17:36:55)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-afc6e4cf",
+   "class": "B8",
+   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 08:14"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-df20a51c",
+   "class": "M1",
+   "msg": "Excel Upload 컬럼명 검증 메시지 · 파일 첨부 개수",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 08:14"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-feea4bdc",
+   "class": "B8",
+   "msg": "Team 컬럼(MKT FCST 조회·신규행)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 08:14"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3bb11760",
+   "class": "M1",
+   "msg": "Excel Upload 헤더 검증 메시지",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 08:14"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ffbefefd",
+   "class": "M1",
+   "msg": "Excel Upload Validation 메시지(Sales Site/Project/Model)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 08:14"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-98535c14",
+   "class": "A6",
+   "msg": "D00-3-013 · §3 Query / (ds) — FindData_Main 결과 바인딩",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-49b2d5d7",
+   "class": "F4",
+   "msg": "D00-3-013 · §3 Query / (ds) — FindData_Main 결과 바인딩",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8cda1005",
+   "class": "A6",
+   "msg": "D00-3-015 · §3 Query / (ds) — FindData_Pack 결과 바인딩",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fa58307a",
+   "class": "F4",
+   "msg": "D00-3-015 · §3 Query / (ds) — FindData_Pack 결과 바인딩",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-dd2a4b65",
+   "class": "F4",
+   "msg": "[R3] · SaveButton Pack 탭만 SaveDataPacker",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-dde860d4",
+   "class": "X-ROW",
+   "msg": "SCP0041_StockOSP.BtnItemId_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7c94a720",
+   "class": "X-ROW",
+   "msg": "SCP0041_StockOSP.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-3b61f15f",
+   "class": "X-ROW",
+   "msg": "SCP0041_StockOSP.FindData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ddbb0ff3",
+   "class": "X-ROW",
+   "msg": "SCP0041_StockOSP.FindData_Pack",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-18becd50",
+   "class": "F4",
+   "msg": "SCP0040_SAVE_CHARACTERISTIC_CAPA",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 08:14"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6bec78df",
+   "class": "X-ROW",
+   "msg": "SCP0041_StockOSP.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2561c938",
+   "class": "X-ROW",
+   "msg": "SCP0041_StockOSP.btnExcelUpload_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "summary": {
+  "rows": 1439,
+  "PASS": 333,
+  "FAIL": 19,
+  "판정필요": 22,
+  "미검증": 114,
+  "해당없음": 951,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 743,
+   "없음(미검증)": 114,
+   "기계(상속·집계)": 560,
+   "없음(판정 대기)": 22
+  },
+  "fail_listed": 19
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0041_StockOsp_CheckList_v9.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0041_StockOsp_ActionItemList_v9.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0041/e2e_results.json"
+  }
+ ],
+ "note": ""
+}

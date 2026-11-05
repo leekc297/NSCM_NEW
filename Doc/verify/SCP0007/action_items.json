@@ -1,0 +1,47 @@
+[
+ {
+  "row_id": "V-2fdb9660",
+  "rule_id": "A6",
+  "target": "SCP0007_GET_BOD",
+  "same": []
+ },
+ {
+  "row_id": "V-2ecba37b",
+  "rule_id": "G2",
+  "target": "조회조건 To Site",
+  "same": []
+ },
+ {
+  "row_id": "V-9a934f52",
+  "rule_id": "E2",
+  "target": "bod.FROM_YYYYMMDD (FROM*)",
+  "same": []
+ },
+ {
+  "row_id": "V-cac6a100",
+  "rule_id": "E2",
+  "target": "bod.TO_YYYYMMDD (TO*)",
+  "same": []
+ },
+ {
+  "row_id": "V-c667b133",
+  "rule_id": "C6",
+  "target": "INCOTERMS_SSP,INCOTERMS",
+  "same": [
+   "V-3778a5ce",
+   "V-f1677353"
+  ]
+ },
+ {
+  "row_id": "V-3778a5ce",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "V-c667b133"
+ },
+ {
+  "row_id": "V-f1677353",
+  "rule_id": "C6",
+  "target": "",
+  "folded_into": "V-c667b133"
+ }
+]

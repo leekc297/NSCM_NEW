@@ -56,7 +56,8 @@ screens = sys.argv[1:] or sorted(d for d in os.listdir(os.path.join(ASIS, 'scree
 os.makedirs(OUT_DIR, exist_ok=True)
 out_path = os.path.join(OUT_DIR, 'golden_cases.csv')
 keep = {r['case_id']: r for r in rcsv(out_path) if r.get('manual') == 'Y'}
-rows = []
+# 다른 화면의 기존 케이스는 유지한다(2026-10-28: DMF0004 생성이 SCP0007 케이스 5건을 지워 골든/A1/A6/A7 판정 근거가 사라진 사고)
+rows = [r for r in rcsv(out_path) if r.get('screen') not in screens]
 for sc in screens:
     sps = []
     for r in rcsv(os.path.join(ASIS, 'screens', sc, 'endpoints.csv')):

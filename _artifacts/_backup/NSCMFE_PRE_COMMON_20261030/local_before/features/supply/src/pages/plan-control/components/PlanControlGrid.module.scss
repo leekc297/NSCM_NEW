@@ -1,0 +1,31 @@
+// LINK 셀 — AS-IS SetForeColor(Blue) + Font|FontStyle.Underline (G10·X03). inline hex 금지라 여기 둔다.
+.linkCell {
+  cursor: pointer;
+  color: #1976d2;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+// CONFIRM 셀 — AS-IS SetCellTypeButtonByText 로 만든 버튼셀. 캡션은 행마다 다르다(ACTION_NAME, G11).
+.actionButtonCell {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > span {
+    display: inline-block;
+    min-width: 72px;
+    padding: 1px 8px;
+    border: 1px solid #b7c0c9;
+    border-radius: 3px;
+    background: #f4f6f8;
+    text-align: center;
+    line-height: 18px;
+  }
+
+  &:hover > span {
+    border-color: #1976d2;
+    color: #1976d2;
+  }
+}

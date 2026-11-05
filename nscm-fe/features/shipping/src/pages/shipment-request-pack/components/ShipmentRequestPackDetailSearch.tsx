@@ -65,7 +65,6 @@ export const ShipmentRequestPackDetailSearch = ({ onSearch }: Props) => {
                 // 직접입력은 품번(modelId2) 기준 — 이전 팝업에서 세팅된 nickName2 보조조건을 지운다.
                 onChange={v => setSearchParams({ modelId2: v, nickName2: '' })}
                 onOpen={() => setOpenModel(true)}
-                onSearch={onSearch}
               />
             )}
           />
@@ -82,7 +81,6 @@ export const ShipmentRequestPackDetailSearch = ({ onSearch }: Props) => {
                     fullWidth
                     value={sp.lotId}
                     onChange={e => setSearchParams({ lotId: e.target.value })}
-                    onKeyDown={e => e.key === 'Enter' && onSearch()}
                   />
                 )}
               />
@@ -97,8 +95,7 @@ export const ShipmentRequestPackDetailSearch = ({ onSearch }: Props) => {
                     value={sp.requestor}
                     onChange={v => setSearchParams({ requestor: v })}
                     onOpen={() => setOpenRequestor(true)}
-                    onSearch={onSearch}
-                  />
+                      />
                 )}
               />
             </div>

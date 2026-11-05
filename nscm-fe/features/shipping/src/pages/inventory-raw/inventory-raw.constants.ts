@@ -60,7 +60,11 @@ export const AGGREGATE_COLUMNS = [
 //   value = LBL 코드, 사용처는 t(LBL.KEY, '_Fallback').
 export const LBL = {
   DIVISION: 'LBL00001', // Div.
-  PLANT_SITE: 'LBL00005', // Plant Site
+  // From Site(=AS-IS 'Plant Site' 라벨 변경, 사용자 결정 2026-10-30) — 콤보 원천·동작
+  //   (ShipmentRequestPlantSite_SCP/ShipmentPlanPlantSite_SCP)·필드(plantSiteIds)·SP 파라미터(p_plant_site)는
+  //   Plant Site 그대로, **표시 라벨만 From Site** 로 바꾼다. DMF0045(shipment-request) 2026-10-29 선례와
+  //   동일 규약(LBL00022='From Site', KO/EN 로케일 실측). 기존 LBL00005('Plant Site')에서 교체.
+  FROM_SITE: 'LBL00022', // From Site
   INVENTORY_TYPE: 'LBL01087', // Inventory Type
   // Model/Nickname — 입력값이 ITEM_ID 와 NICK_NAME 양쪽에 매칭되므로 라벨도 둘을 모두 알린다.
   //   LBL00618 'Model/Nickname' — SCM_ADM_MSG_M KO/EN/CN 전건 등록·USE_YN='Y' 실측(ora.py 2026-10-14)

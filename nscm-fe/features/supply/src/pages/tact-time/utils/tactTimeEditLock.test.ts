@@ -83,6 +83,10 @@ describe('tactTimeEditLock — Except', () => {
     expect(isExceptCellEditable('TACT_TIME', TACT_MODE.PACKER)).toBe(false);
     expect(isExceptCellEditable('DAILY_CAPACITY', TACT_MODE.PACKER)).toBe(true);
   });
+  it('NICK_NAME is locked in both parents', () => {
+    expect(isExceptCellEditable('NICK_NAME', TACT_MODE.PLANT)).toBe(false);
+    expect(isExceptCellEditable('NICK_NAME', TACT_MODE.PACKER)).toBe(false);
+  });
 });
 
 describe('tactTimeEditLock — Insert defaults', () => {

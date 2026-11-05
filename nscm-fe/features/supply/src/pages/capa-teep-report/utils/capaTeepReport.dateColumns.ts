@@ -133,8 +133,10 @@ export const buildPeriodColumns = (
       // 수치가 세로로 묶이면 안 된다 — 병합은 좌측 정적 컬럼 전용이다(03 §3.4 / V-27).
       allowMerging: false,
       allowResizing: true,
-      // 정렬·필터·숨김은 기간 컬럼에서도 동작해야 한다(공통 QA "우측 동적영역 포함").
-      allowSorting: true,
+      // 정렬은 헤더 상시 아이콘(◆)이 아니라 F3 로만 켠다 — 동적 컬럼 표준(정적 컬럼 toLeafColumn
+      //   이 allowSorting:false 로 내리는 것과 동일, 자매 capaLobReport.dateColumns.ts 선례).
+      //   true 로 두면 기간 컬럼마다 미정렬 ◆ 아이콘이 디폴트로 그려진다(dataGridUtils 아이콘 조건).
+      allowSorting: false,
       // 전 셀 비편집 — `INPUT_TP_CD='S'` 50행 전건이자 조회 직후 전열 잠금(03 G-08 / V-28).
       isReadOnly: true,
       visible: true,

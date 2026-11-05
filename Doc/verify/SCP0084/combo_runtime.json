@@ -1,0 +1,299 @@
+{
+ "at": "2026-11-04T22:37:40.545Z",
+ "search": {
+  "Div": {
+   "label": "Div",
+   "opts": [
+    "SELECT ALL",
+    "81 Automotive Battery",
+    "40 Mobility & IT Battery",
+    "82 ESS Battery",
+    "81_UC Automotive Battery(UC)",
+    "81_HM Automotive Battery(HM)",
+    "81_ST Automotive Battery(ST)",
+    "81_HD Automotive Battery(HD)",
+    "81_HG Automotive Battery(HG)"
+   ],
+   "multi": true,
+   "sel": []
+  },
+  "Plant": {
+   "label": "Plant",
+   "opts": [
+    "SELECT ALL",
+    "AZ Arizona Mobile Prod",
+    "GM Ohio Auto Prod",
+    "GM Tennessee Auto Prod",
+    "virtual plant(GM01)",
+    "HD Ohio Auto/ESS Prod",
+    "virtual plant(HD00)",
+    "HG Georgia Auto Prod",
+    "HM Karawang Auto Prod",
+    "HQ OC1 Mobile Prod",
+    "HQ OC2 Mobile Prod",
+    "HQ OC1 Auto Prod",
+    "HQ OC2 Auto Prod",
+    "HQ OC1 ESS Prod",
+    "MI Michigan Holland Auto Prod",
+    "MI Michigan LS Auto/ESS Prod",
+    "MI Michigan HP Auto Prod",
+    "MI Michigan Holland ESS Prod",
+    "MI Arizona Phoenix ESS Prod",
+    "virtual plant(MI02)",
+    "NA Nanjing Auto Prod",
+    "NB Nanjing Auto Prod",
+    "NB Nanjing ESS Prod",
+    "NJ Nanjing Mobile Prod",
+    "NJ Nanjing ESS Prod",
+    "OT Ontario Auto/ESS Prod",
+    "virtual plant(ST00)",
+    "WA WRO Auto Prod",
+    "WA WRO ESS Prod"
+   ],
+   "multi": true,
+   "sel": []
+  },
+  "Long Term Type": {
+   "label": "Long Term Type",
+   "opts": [
+    "SELECT ALL",
+    "비대상",
+    "장기 징후",
+    "장기"
+   ],
+   "multi": true,
+   "sel": []
+  }
+ },
+ "grid": {},
+ "combos": [
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0084\"}",
+   "status": 200,
+   "n": 14,
+   "keys": [
+    "CREATED_BY",
+    "ATTRIBUTE3",
+    "ATTRIBUTE10",
+    "LAST_UPDATED_BY",
+    "ATTRIBUTE2",
+    "ATTRIBUTE1",
+    "DAILY_PLAN_PERIOD",
+    "CREATION_DATE",
+    "ATTRIBUTE9",
+    "ATTRIBUTE8",
+    "LAST_UPDATE_DATE",
+    "ATTRIBUTE7",
+    "ATTRIBUTE6",
+    "ATTRIBUTE5",
+    "NAME",
+    "ATTRIBUTE4",
+    "CODE",
+    "VALID_YN"
+   ],
+   "rows": [
+    {
+     "c": "81",
+     "v": "81 Automotive Battery"
+    },
+    {
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
+    },
+    {
+     "c": "82",
+     "v": "82 ESS Battery"
+    },
+    {
+     "c": "EE",
+     "v": "EE Electrode"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
+    },
+    {
+     "c": "EE_UC",
+     "v": "EE_UC Electrode(UC)"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "EE_HM Electrode(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "EE_ST Electrode(ST)"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
+    },
+    {
+     "c": "EE_HD",
+     "v": "EE_HD Electrode(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "EE_HG Electrode(HG)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"PlantByGroup1_SCP_ALL\",\"mnuId\":\"SCP0084\"}",
+   "status": 200,
+   "n": 28,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "AZ00",
+     "v": "AZ Arizona Mobile Prod"
+    },
+    {
+     "c": "GM00",
+     "v": "GM Ohio Auto Prod"
+    },
+    {
+     "c": "GM01",
+     "v": "GM Tennessee Auto Prod"
+    },
+    {
+     "c": "VP_GM01",
+     "v": "virtual plant(GM01)"
+    },
+    {
+     "c": "HD00",
+     "v": "HD Ohio Auto/ESS Prod"
+    },
+    {
+     "c": "VP_HD00",
+     "v": "virtual plant(HD00)"
+    },
+    {
+     "c": "HG00",
+     "v": "HG Georgia Auto Prod"
+    },
+    {
+     "c": "HM00",
+     "v": "HM Karawang Auto Prod"
+    },
+    {
+     "c": "HQ06",
+     "v": "HQ OC1 Mobile Prod"
+    },
+    {
+     "c": "HQ10",
+     "v": "HQ OC2 Mobile Prod"
+    },
+    {
+     "c": "HQ07",
+     "v": "HQ OC1 Auto Prod"
+    },
+    {
+     "c": "HQ11",
+     "v": "HQ OC2 Auto Prod"
+    },
+    {
+     "c": "HQ08",
+     "v": "HQ OC1 ESS Prod"
+    },
+    {
+     "c": "MI00",
+     "v": "MI Michigan Holland Auto Prod"
+    },
+    {
+     "c": "MI02",
+     "v": "MI Michigan LS Auto/ESS Prod"
+    },
+    {
+     "c": "MI03",
+     "v": "MI Michigan HP Auto Prod"
+    },
+    {
+     "c": "MI01",
+     "v": "MI Michigan Holland ESS Prod"
+    },
+    {
+     "c": "MI04",
+     "v": "MI Arizona Phoenix ESS Prod"
+    },
+    {
+     "c": "VP_MI02",
+     "v": "virtual plant(MI02)"
+    },
+    {
+     "c": "NA00",
+     "v": "NA Nanjing Auto Prod"
+    },
+    {
+     "c": "NB01",
+     "v": "NB Nanjing Auto Prod"
+    },
+    {
+     "c": "NB02",
+     "v": "NB Nanjing ESS Prod"
+    },
+    {
+     "c": "NJ01",
+     "v": "NJ Nanjing Mobile Prod"
+    },
+    {
+     "c": "NJ02",
+     "v": "NJ Nanjing ESS Prod"
+    },
+    {
+     "c": "ST00",
+     "v": "OT Ontario Auto/ESS Prod"
+    },
+    {
+     "c": "VP_ST00",
+     "v": "virtual plant(ST00)"
+    },
+    {
+     "c": "WA00",
+     "v": "WA WRO Auto Prod"
+    },
+    {
+     "c": "WA01",
+     "v": "WA WRO ESS Prod"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"SCP0084_GET_MONTH_RANGE\",\"mnuId\":\"SCP0084\"}",
+   "status": 200,
+   "n": 1,
+   "keys": [
+    "MAX_YYYYMM",
+    "MIN_YYYYMM"
+   ],
+   "rows": [
+    {
+     "c": "202609",
+     "v": "202111"
+    }
+   ],
+   "user": "minyonglee1"
+  }
+ ]
+}

@@ -1,0 +1,9 @@
+PKG_DMF0082: [('PACKAGE', 'VALID', '2026-10-09 13:38:31'), ('PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')]
+PKG_DMF0082_1104: [('PACKAGE', 'VALID', '2026-11-04 16:00:18'), ('PACKAGE BODY', 'VALID', '2026-11-04 17:09:25')]
+=== cur_mylee env=['zioui1', 'localhost', '2026-11-04 17:12:36'] period=20261101~20270430 A=PKG_DMF0082 B=PKG_DMF0082_1104 users=minyonglee1 divs=40,81,82 scen=['current', 'filters'] gtt=True
+--- minyonglee1 div40 표본 {'site': 'Lenovo_HK_HKG', 'item_full': 'MCCM348014A3', 'cust': 'Lenovo', 'biz': 'CELL', 'project': 'Lenovo', 'owner': 'Lia Yun', 'team': '58520274', 'plant': None, 'sender': None, 'item': 'CM348'} 버전 {'MF_W': 'MF_W_20261027_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20261104_V001', 'MF_D': 'MF_D_20261026_V001'}
+17:13:50 minyonglee1 div40 Current                                  ERROR DPY-4011: the database or network closed the connection
+ORA-00028: session has been terminated
+ORA-06512: at "SCM_MGR.PKG_DMF0082_1104", line 831
+ORA-06512: at line 1
+Help: https://docs.oracle.com/err

@@ -171,6 +171,7 @@ export const LBL = {
   NICK_NAME: 'LBL00767', // Nick Name
   MODEL_NICKNAME: 'LBL00618', // Model/Nickname (메1 MaterialByDivisionModal 픽커 통합 필드)
   PLAN_DATE: 'LBL00039', // Plan Date
+  PLAN_VERSION: 'LBL01220', // Plan Date/Type/Seq
   PLAN_TYPE: 'LBL00040', // Plan Type
   SEQ: 'LBL00041', // Seq
   PERIOD: 'LBL00013', // Period (구 LBL00505 = DB 미등록 교정)

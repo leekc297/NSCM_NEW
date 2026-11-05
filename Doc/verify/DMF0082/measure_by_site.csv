@@ -1,0 +1,10 @@
+﻿combo_id,division,site_type,site,codes,result,why
+FcstPriceEditMeasure,40,VMI,AJ상사_AB_TES,LOC;MKT_FCST;VMI_In_Req,PASS,"VMI 사이트 후보 3건: LOC, MKT_FCST, VMI_In_Req · 표본 AJ상사_AB_TES"
+FcstPriceEditMeasure,40,AS,,,ERROR,[측정 경로 없음] 40 사업부에 AS 유형 유효 사이트 표본 없음
+FcstPriceEditMeasure,40,CUST,1X Technologies_US_PAO,LOC;MKT_FCST,PASS,"CUST 사이트 후보 2건: LOC, MKT_FCST · 표본 1X Technologies_US_PAO"
+FcstPriceEditMeasure,81,VMI,BMW_MX_MEX,LOC;MKT_FCST,PASS,"VMI 사이트 후보 2건: LOC, MKT_FCST · 표본 BMW_MX_MEX"
+FcstPriceEditMeasure,81,AS,EG01-81-AS,AS_In_Req;LOC,PASS,"AS 사이트 후보 2건: AS_In_Req, LOC · 표본 EG01-81-AS"
+FcstPriceEditMeasure,81,CUST,AC00-A,LOC;MKT_FCST,PASS,"CUST 사이트 후보 2건: LOC, MKT_FCST · 표본 AC00-A"
+FcstPriceEditMeasure,82,VMI,ABB_AA_TES,,ERROR,[확인 대상] VMI 사이트 후보 0건 — 사업부 82 의 편집 Measure 설정(DM_UI_EDITABLE_MEASURE 등) 자체가 없는지 확인 필요(규칙 판정 불가) · 표본 ABB_AA_TES
+FcstPriceEditMeasure,82,AS,EG01-82-AS,,ERROR,[확인 대상] AS 사이트 후보 0건 — 사업부 82 의 편집 Measure 설정(DM_UI_EDITABLE_MEASURE 등) 자체가 없는지 확인 필요(규칙 판정 불가) · 표본 EG01-82-AS
+FcstPriceEditMeasure,82,CUST,300MS 8ME SBS1_US_LAS,,ERROR,[확인 대상] CUST 사이트 후보 0건 — 사업부 82 의 편집 Measure 설정(DM_UI_EDITABLE_MEASURE 등) 자체가 없는지 확인 필요(규칙 판정 불가) · 표본 300MS 8ME SBS1_US_LAS

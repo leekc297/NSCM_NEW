@@ -80,7 +80,7 @@ export const COMBO = {
 } as const;
 
 export const LOOKUP = {
-  // Mobility&IT clbResultType — 유효행 [P=Plan, O=Result(LSP WM. oWMS), E=Result(ERP), R=Return] 중 Main 은 R 제외 → [P,O,E].
+  // Mobility&IT clbResultType — 유효행 [P=Plan, O=Result(LSP WM. oWMS), E=Result(ERP), R=Return] 전부 노출(AS-IS 초기 로드 파리티).
   SHIPMENT_RESULT_TYPE: 'SSP_SHIPMENT_RESULT_TYPE',
   // Packer 전용 lookup — [P=Plan, S=Result(PSCM)] 2행(DB 실측 SCM_ADM_LOOKUP_MASTER_DETAIL). Packer 는
   //   base lookup 클라 필터가 아니라 이 전용 lookup 을 쓴다(사용자 확정 2026-10-01 — 운영 파리티).
@@ -102,10 +102,15 @@ export enum BUCKET_TYPE {
   MONTHLY = 'MONTHLY',
 }
 
-// Result Type 시트별 코드셋(기본체크·payload용) — Main 은 base lookup 에서 클라 R제외 [P,O,E],
+// Result Type 시트별 코드셋(기본체크·payload용) — Main 은 base lookup 유효행 [P,O,E,R] 전부,
 //   Packer 는 전용 lookup SSP_SHIPMENT_RESULT_TYPE_PACKER 그대로 [P=Plan, S=Result(PSCM)].
+//   Main 에 R(Return) 포함 — AS-IS 초기 로드 동작과 파리티(setListBox 가 lookup 행 통째 바인딩,
+//   RemoveAt(3) 는 Form_Load 경로에서 주석 처리 → R 그대로 노출. SSP0015_ShipmentPSI.cs:638,642).
+//   배열 순서 = CODE 알파벳 오름차순([E,O,P,R]) — AS-IS DataService.cs:4601 OrderBy(CODE) 파리티.
+//   기본체크 defaultResultTypes 는 이 순서의 상위 2개(.slice(0,2)=[E,O])를 쓰므로
+//   AS-IS SetItemChecked(0),(1)(정렬 후 E,O) 와 일치한다.
 export const RESULT_TYPE_BY_SHEET = {
-  MAIN: ['P', 'O', 'E'],
+  MAIN: ['E', 'O', 'P', 'R'],
   PACKER: ['P', 'S'],
 } as const;
 
@@ -209,6 +214,8 @@ export const MSG = {
   PERIOD_EMPTY: 'MSG00665',
   PERIOD_ORDER: 'MSG00108',
   PERIOD_MAX: 'MSG01187',
+  // Hold stock 저장 Hold Date > Release Date (AS-IS checkValidN MSG00219 → TO-BE MSG01230, 문구 동일). 조회기간 역순(PERIOD_ORDER)과 구분.
+  HOLD_DATE_ORDER: 'MSG01230',
   // 읽기전용 셀 편집 거부 (AS-IS MSG00109 "읽기전용 상태입니다" → TO-BE 문구 역조회 MSG00109 동일, SCM_ADM_MSG_M 실측).
   //   주의: 종전 MSG00284 는 "Grid 가 준비되지 않았습니다"(GRID_NOT_READY)라 오매핑이었음 — I19 수정(2026-10-07).
   READONLY_SHEET: 'MSG00109',
@@ -219,8 +226,9 @@ export const MSG = {
   CONFIRM_CHANGETIME_LOCK: 'MSG01395',
   // ERP SO No 동일 건수 불일치 (AS-IS MSG00247 → TO-BE MSG00247, 문구 역조회 동일). 같은 SO 는 전건이 한 화면에.
   SO_NO_COUNT_MISMATCH: 'MSG00247',
-  // Shipment Date 날짜 형식 오류 (AS-IS MSG00049 "유효한 날짜 형식..." → TO-BE 문구 역조회 MSG01081).
-  INVALID_DATE_FORMAT: 'MSG01081',
+  // 날짜 형식 오류 (AS-IS MSG00049 "유효한 날짜 형식..."). 재번호 코드 MSG01081 은 {0} 자리표시가 있어
+  //   AS-IS 처럼 빈 인자로 호출하는 자리에 맞지 않는다. 자리표시 없는 MSG00611 을 쓴다(KO/EN/CN 등록 확인).
+  INVALID_DATE_FORMAT: 'MSG00611',
   // 출하일 입력 가능 기간 밖 (AS-IS MSG00194 "변경요청은 현재일 기준 D+{0} 출하일부터..." → TO-BE MSG01206)
   SHIP_DATE_OUT_OF_RANGE: 'MSG01206',
   // GetShipmentStatusChk 저장 게이트 3커서 (AS-IS SSP0015.cs GetShipmentStatusChk, 002xx → TO-BE 012xx 역매핑).

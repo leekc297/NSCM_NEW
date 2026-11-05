@@ -1,0 +1,7 @@
+﻿kind,target,result,why
+TB_FX,PKG_SYS0014,PASS,TB_FX_* 참조 0
+JSON_SHORT,PKG_SYS0014,PASS,PKG_SYS0014 JSON 생성 전부 CLOB 또는 없음
+SELECT_INTO,PKG_SYS0014,PASS,PKG_SYS0014 단건 SELECT INTO 전부 처리됨
+EMPTY_EQ,PKG_SYS0014,ERROR,[확인 대상] PKG_SYS0014 Oracle 에서 항상 거짓인 빈 문자열 비교 1곳: P_SEARCH = ''
+LIKE_NULL,PKG_SYS0014,PASS,PKG_SYS0014 가드 없는 LIKE 0
+SRC_E3,원장 없는 사용자 줄 유지(바깥 결합),PASS,원장 없는 사용자 줄 유지(바깥 결합): 'LEFT JOIN SCM_MGR.SCM_ADM_USER_M' 있음(줄 141) · 문서 GAP-498

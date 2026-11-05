@@ -7,9 +7,14 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { GridUtils, type EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
-import { ADMIN_SHEET_NAME, SHEETS } from '../shipment-request-electrode.constants';
+import {
+  ADMIN_SHEET_NAME,
+  REQUEST_DETAIL_AGGREGATE_COLUMNS,
+  SHEETS,
+} from '../shipment-request-electrode.constants';
 import type { RequestDetailRow } from '../shipment-request-electrode.types';
 import { isRequestDetailCellEditable } from '../utils/shipment-request-electrode.editLock';
+import { useFooterSum } from '../utils/shipment-request-electrode.footerSum';
 
 interface Props {
   rows: RequestDetailRow[];
@@ -44,6 +49,9 @@ export const ShipmentRequestElectrodeDetailGrid = ({
   onFocus,
   onItemCellDoubleClick,
 }: Props) => {
+  // 하단 합계(Sum)행 — AS-IS InitSpreadFooterSum(cs:3597-3636, Request Detail = SHIPMENT_QTY 단일). 데이터 있을 때만 표시.
+  useFooterSum(gridRef, staticColumns, rows, REQUEST_DETAIL_AGGREGATE_COLUMNS);
+
   const handleBeginningEdit = (grid: FlexGridType<RequestDetailRow>, e: CellRangeEventArgs) => {
     const column = grid.columns[e.col];
     const dataItem = GridUtils.getRow(grid, e.row) as RequestDetailRow | undefined;

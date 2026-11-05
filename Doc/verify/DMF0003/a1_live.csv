@@ -1,0 +1,5 @@
+﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
+DMF0003,Mkt Fcst|같은 사용자,DMF0003_GET_MKT_FCST_DATA,REVIEW,6,1738,AS-IS 6행 · TO-BE 1738행,사용자 k0101(ADMIN) · 양쪽 직접 실행
+DMF0003,Mkt Fcst|조회시간,DMF0003_GET_MKT_FCST_DATA,PASS,6,1738,조회 시간 TO-BE 12.8초(1738행) · AS-IS 13.9초(6행),사용자 k0101(ADMIN) · 양쪽 직접 실행
+DMF0003,Mkt Fcst|행구성,DMF0003_GET_MKT_FCST_DATA,REVIEW,6,1738,"[행 구성] 키 ['END_CUSTOMER40', 'SCM_SITE_ID', 'SCM_SITE_ID40', 'PROJECT_CODE', 'PROJECT_NAME', 'ITEM_ID', 'ITEM_ID40', 'NICK_NAME'] · 키당 Measure 수 AS-IS [3] TO-BE [1, 4, 5, 6, 7, 8] · 중복 (키,Measure) AS-IS 0 TO-BE 81 · 행 수 차이 ['BALANCE 2↔237', 'MKT_FCST 2↔296', 'MKT_FCST_RP 2↔296'] · TO-BE 전용 ['MKT_FCST_ENERGY', 'MKT_FCST_RP_CELL', 'RTF_ENERGY', 'RTF_SCP', 'RTF_SYS_RP']",사용자 k0101(ADMIN) · 양쪽 직접 실행
+DMF0003,Mkt Fcst,DMF0003_GET_MKT_FCST_DATA,REVIEW,2,697,"AS-IS 2행 · TO-BE 697행 · 키 ['END_CUSTOMER40', 'SCM_SITE_ID40', 'ITEM_ID40', 'INCOTERMS', 'FCST_TYPE', 'DOM_EXP', 'MEASURE'] AS-IS 전용 0 · TO-BE 전용 695 · 값 대조 23칸(숫자 컬럼 94) · 불일치 컬럼 0",

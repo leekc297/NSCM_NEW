@@ -171,9 +171,6 @@ export const CapaForm = ({ onSearch }: CapaFormProps) => {
               ),
             }}
             onChange={e => onChange(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === 'Enter') onSearch();
-            }}
           />
         )}
       />

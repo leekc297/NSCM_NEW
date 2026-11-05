@@ -141,6 +141,15 @@ export const DAY_CELL_DATA_MAP: readonly string[] = ['Y', 'N'];
 //   admin 메타에 CELL_COMBO_DATA_TYPE 이 등재돼 있어도 이 목록이 우선(WorkingTime 1:1).
 export const CODE_DISPLAY_COLUMNS: readonly string[] = ['DIVISION_ID'];
 
+// WORKING_TIME_DEFAULT 값 범위 — AS-IS SetReNumerCellType(SCP0096.cs:163, min=0, dec=0, max=7) + 정수(0~9)만
+//   입력 가능(사용자 지시 2026-10-29: 소수점 입력 금지). DB 실측 SCM_MST_SHEET_COLUMNS.DATA_SCALE_NUMBER=2
+//   는 이 AS-IS·사용자 지시와 불일치 — ShipmentWorkingDayOspGrid 가 scale 0 으로 코드 오버라이드한다(DB
+//   정정은 별도 register SQL 대상). MIN 은 숫자키만 입력 가능해 음수 입력 자체가 안 되므로 참고용.
+export const WORKING_TIME_DEFAULT_RANGE = {
+  MIN: 0,
+  MAX: 7,
+} as const;
+
 // 그리드 콤보 파라미터 — 등록 SQL @키 raw 치환값. 문자열 리터럴은 홑따옴표로 감싼다(BE raw 치환).
 //   D_ 셀콤보 dtValidYN(YesOrNo)은 파라미터 없음(고정 2값)이나 공용 DataGrid 규약상 전달한다(무해).
 export const GRID_COMBO_PARAMS: Record<string, string> = { mnuId: `'${MENU_ID}'` };

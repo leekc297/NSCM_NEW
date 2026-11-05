@@ -1,13 +1,13 @@
 # SCP0128 — To-Be Fact Pack 요약
 
-- page_key: `supply/safety-stock` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `supply/safety-stock` · feature: supply · As-is Fact Pack 있음
 - 파일 13 · 엔드포인트 호출 9 (미해결 0, 주석 속 4) · 이벤트 16 · 컴포넌트 사용 33 · 하드코딩 컬럼 0 · 메시지 20
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | component | 276 |
+| features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | component | 272 |
 | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | component | 220 |
 | features/supply/src/pages/safety-stock/index.ts | index | 2 |
 | features/supply/src/pages/safety-stock/safety-stock.constants.ts | constants | 90 |
@@ -46,10 +46,10 @@
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 160 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 175 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 199 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 230 |
-| FunctionSearchIcon | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 224 |
-| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 240 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 255 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 226 |
+| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 222 |
+| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 236 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/safety-stock/components/SafetyStockForm.tsx | 251 |
 | g | updatedLayout | apply | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 118 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 139 |
 | g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/safety-stock/components/SafetyStockGrid.tsx | 140 |

@@ -1,0 +1,36 @@
+warm : SP 19.40s fetch 27.88s rows=[16156, 6, 1, 5, 181, 1]
+trace: SP 20.20s fetch 28.07s rows=[16156, 6, 1, 5, 181, 1]
+
+div=82 group=ADMIN  SP 20.20s  | dep=1 SQL 합 20.11s  | 갭: DBMS_STATS 0.00s  PL/SQL·기타 0.04s
+
+    라인       초     비중  parse    exec  fetch    실행   하드         LIO         행  sqlid          문장
+  4479  12.637  62.6%   0.00   12.64   0.00     1    0     343,005   451,287  693uz77cmxbwk  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+     -   4.678  23.2%   0.41    4.27   0.00     1    1      35,386         0  514t92jq46mpu  WITH INTOG AS ( SELECT B.USER_GROUP, B.DIVISION_ID, B.MEASURE, B.DAYS, B.FROM_TI
+   547   1.347   6.7%   0.00    1.35   0.00     1    0     596,007    47,078  g9v4gu3gpx1p3  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+     -   0.967   4.8%   0.00    0.00   0.97     1    0      22,730         1  70xvv1ktud7js  SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP 
+     -   0.301   1.5%   0.00    0.00   0.30     1    0      22,730         1  1nh0xv3s9a5ka  SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP 
+   892   0.077   0.4%   0.00    0.08   0.00     1    0       7,704       794  67uj7hkzgqtrh  INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PROJECT_CODE
+  2682   0.066   0.3%   0.00    0.07   0.00     1    0      22,730         0  41tabk4sgrfsy  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE F WHERE F.MEASURE_GROUP = 'CUST
+   913   0.033   0.2%   0.00    0.03   0.00     1    0      22,730         0  ggkupust9vjpj  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+
+[범주 합계 dep=1]
+  PKG 문장            14.166s  문장   23  하드파싱    0  PARSE콜 0.000s
+  기타(매칭불가)           5.947s  문장   15  하드파싱    1  PARSE콜 0.408s
+  전체 하드파싱 이벤트 5 (재귀 포함)
+
+[기타(매칭불가) 상위]
+   4.678s 514t92jq46mpu WITH INTOG AS ( SELECT B.USER_GROUP, B.DIVISION_ID, B.MEASURE, B.DAYS, B.FROM_TIME, B.TO_TIME, LM.TOKEN AS LIMIT_MEASURE FROM (SELECT A.SEGM
+   0.967s 70xvv1ktud7js SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP BY DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITE
+   0.301s 1nh0xv3s9a5ka SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP BY DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITE
+
+[갭 > 50ms]
+
+[대기 이벤트 합]
+    5.379s  direct path write temp
+    1.222s  SQL*Net message from client
+    0.193s  direct path sync
+    0.100s  direct path read temp
+    0.064s  Free private memory to OS
+    0.018s  db file scattered read
+    0.002s  SQL*Net more data to client
+    0.001s  Allocate UGA memory from OS

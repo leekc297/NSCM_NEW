@@ -205,12 +205,8 @@ export const BodDistributionRoutePopup = ({
                               appearance='outlined'
                               priority='normal'
                               disabled
-                              iconComponent={
-                                <FunctionSearchIcon
-                                  appearance='lined'
-                                  onClick={() => setRegionMode('from')}
-                                />
-                              }
+                              iconComponent={<FunctionSearchIcon appearance='lined' />}
+                              onClick={() => setRegionMode('from')}
                             />
                           ),
                         }}
@@ -257,12 +253,8 @@ export const BodDistributionRoutePopup = ({
                               appearance='outlined'
                               priority='normal'
                               disabled
-                              iconComponent={
-                                <FunctionSearchIcon
-                                  appearance='lined'
-                                  onClick={() => setRegionMode('to')}
-                                />
-                              }
+                              iconComponent={<FunctionSearchIcon appearance='lined' />}
+                              onClick={() => setRegionMode('to')}
                             />
                           ),
                         }}

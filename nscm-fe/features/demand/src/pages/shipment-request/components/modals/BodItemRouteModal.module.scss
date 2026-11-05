@@ -1,12 +1,19 @@
+// [ROLLBACK:dmf0045-bod-popup-use-scp0030] SCP0030 GetBodItemModal.module.scss 와 동일 — 검색영역 제거 후
+//   그리드가 다이얼로그 높이를 flex 로 채우도록(종전 gridWrapper height:420px 고정은 flex 컨텍스트가 없어
+//   DataGrid 가 높이를 못 잡아 그리드가 통째로 안 그려졌다 = 건수만 맞고 렌더 실패).
 .dialogContentWrapper {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: 100%;
 }
 
 .gridWrapper {
+  display: flex;
+  flex-direction: column;
   position: relative;
-  height: 420px;
+  flex: 1;
+  min-height: 0;
 }
 
 .buttonWrapper {

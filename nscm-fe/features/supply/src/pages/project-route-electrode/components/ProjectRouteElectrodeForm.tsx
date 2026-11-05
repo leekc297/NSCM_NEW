@@ -204,12 +204,8 @@ export const ProjectRouteElectrodeForm = ({ onSearch }: Props) => {
                           appearance='outlined'
                           priority='normal'
                           disabled={noDivisionAuth}
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => !noDivisionAuth && setOpenItemModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => !noDivisionAuth && setOpenItemModal(true)}
                         />
                       ),
                     }}

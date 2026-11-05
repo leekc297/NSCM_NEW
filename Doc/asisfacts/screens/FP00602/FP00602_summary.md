@@ -1,6 +1,7 @@
 ﻿# FP00602 화면 Fact Pack
 
 > AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+> ⚠ .sln 미등록 전용 프로젝트(current 로 취급 · files.csv sln_registered=N): 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.UIL.csproj
 
 ## 1. 파일 구성
 | 구분 | 파일 | 프로젝트 | 줄수 |
@@ -11,10 +12,10 @@
 | current | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602_Plan_Amend_Line_Assy.UIL\FP00602_Plan_Amend_Line_Assy.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602_Plan_Amend_Line_Assy.UIL\FP00602_Plan_Amend_Line_Assy.UIL.csproj | 6277 |
 | current | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602_Plan_Amend_Line_Assy.UIL\FP00602_Plan_Amend_Line_Assy.designer.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602_Plan_Amend_Line_Assy.UIL\FP00602_Plan_Amend_Line_Assy.UIL.csproj | 2541 |
 | current | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602_Plan_Amend_Line_Assy.UIL\Properties\AssemblyInfo.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602_Plan_Amend_Line_Assy.UIL\FP00602_Plan_Amend_Line_Assy.UIL.csproj | 37 |
-| current(sln미등록) | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.UIL.csproj | 6062 |
-| current(sln미등록) | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.designer.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.UIL.csproj | 2467 |
-| current(sln미등록) | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\Properties\AssemblyInfo.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.UIL.csproj | 37 |
-| current(sln미등록) | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\Properties\Resources.Designer.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.UIL.csproj | 64 |
+| current | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.UIL.csproj | 6062 |
+| current | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.designer.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.UIL.csproj | 2467 |
+| current | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\Properties\AssemblyInfo.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.UIL.csproj | 37 |
+| current | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\Properties\Resources.Designer.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602Fox_Plan_Amend_Line_Assy.UIL\FP00602Fox_Plan_Amend_Line_Assy.UIL.csproj | 64 |
 | current | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602MK2_Plan_Amend_Line_Assy.UIL\FP00602MK2_Plan_Amend_Line_Assy.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602MK2_Plan_Amend_Line_Assy.UIL\FP00602MK2_Plan_Amend_Line_Assy.UIL.csproj | 6761 |
 | current | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602MK2_Plan_Amend_Line_Assy.UIL\FP00602MK2_Plan_Amend_Line_Assy.designer.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602MK2_Plan_Amend_Line_Assy.UIL\FP00602MK2_Plan_Amend_Line_Assy.UIL.csproj | 2578 |
 | current | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602MK2_Plan_Amend_Line_Assy.UIL\Properties\AssemblyInfo.cs | 06.UIL\GSCM.FP.Forms.UIL\Planning\FP00602MK2_Plan_Amend_Line_Assy.UIL\FP00602MK2_Plan_Amend_Line_Assy.UIL.csproj | 37 |

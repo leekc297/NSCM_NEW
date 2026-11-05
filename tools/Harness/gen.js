@@ -219,6 +219,16 @@ const files = T.render(ctx);
 { const AC = require('./lib/actions'); const feAc = path.join(cfg.feRoot, pageRel, AC.FILE); const docAc = AC.docPath(cfg, AID);
   const acr = AC.render(cfg, AID, fs.existsSync(feAc) ? fs.readFileSync(feAc, 'utf8') : fs.existsSync(docAc) ? fs.readFileSync(docAc, 'utf8') : '');
   if (acr) { files[AC.FILE] = acr.md; console.log(`액션 대조표: ${acr.rows}행 · 의미 확인 필요 ${acr.unknown}`); } }
+// 2026-10-30 --plan-only: 정합검증(prereq.py)이 E2E plan 만 필요할 때 — Doc/gen/<ID> 를 지우지 않고(기존 CHECK.md·DOD.md 등 보존) e2e_plan.json(+없을 때 register.json)만 쓴다.
+//   SCP0111 처럼 생성 절차를 거치지 않은 화면은 plan 이 없어 smoke 가 한 번도 돌지 않았고 G3/K4/SC1 등 smoke 근거 규칙이 전부 미측정이었다. --apply 와 함께 쓸 수 없다.
+if (a.includes('--plan-only')) {
+  if (a.includes('--apply')) { console.error('--plan-only 는 --apply 와 함께 쓸 수 없다'); process.exit(2); }
+  fs.mkdirSync(outRoot, { recursive: true });
+  const only = ['@e2e_plan.json'].concat(fs.existsSync(path.join(outRoot, 'register.json')) ? [] : ['@register.json']).filter(k => files[k] !== undefined);
+  for (const k of only) fs.writeFileSync(path.join(outRoot, k.slice(1)), files[k], 'utf8');
+  console.log(`${ID} --plan-only → ${outRoot}  (${only.map(k => k.slice(1)).join(', ')})  fields=${fields.length} buttons=${buttons.length} sheets=${mainSheets.length}+${popupSheets.length}popup procs=${procs.length}`);
+  process.exit(0);
+}
 fs.rmSync(outRoot, { recursive: true, force: true });
 for (const [rel, body] of Object.entries(files)) { const p = path.join(outRoot, rel.startsWith('@') ? rel.slice(1) : path.join(pageRel, rel)); fs.mkdirSync(path.dirname(p), { recursive: true }); fs.writeFileSync(p, body, 'utf8'); }
 if (scRes) fs.writeFileSync(path.join(outRoot, 'search_cond.json'), JSON.stringify({ note: '조회조건 기준표 적용 결과 — check.js SC1(순서)·SC2(제외 조건 잔존)가 Form.tsx 의 AS-IS 표지와 대조', domain: scRef.domain, screen: scRef.screen, src: scRef.src,
@@ -228,7 +238,10 @@ if (scRes) fs.writeFileSync(path.join(outRoot, 'search_cond.json'), JSON.stringi
 fs.writeFileSync(path.join(outRoot, 'msg_map.json'), JSON.stringify({ note: 'AS-IS 메시지 ID → TO-BE 메시지 ID (문구로 찾음). tobe=MSG????? 는 TO-BE 에 같은 문구가 없어 신규 등록 대상(MSG01001+)', map: msgMap }, null, 1), 'utf8');
 if (msgMap.length) console.log(`메시지 ID: AS-IS ${msgMap.length}건 → TO-BE 매핑 ${msgMap.filter(r => r.tobe !== 'MSG?????').length} · 신규 등록 대상 ${msgMap.filter(r => r.tobe === 'MSG?????').length} · AS-IS ID 를 그대로 쓰면 뜻이 달라지는 것 ${msgMap.filter(r => MM.collides(msgM, r.asis)).length}`);
 console.log(`${ID} → ${outRoot}  (${Object.keys(files).length} files)  page=${pageRel}  fields=${fields.length} buttons=${buttons.length} sheets=${mainSheets.length}+${popupSheets.length}popup procs=${procs.length} handlers=${handlers.length} tcs=${tcs.length} V=${validations.length} E=${expressions.length}`);
-if (a.includes('--apply')) {
+// 2026-11-02 작업 모드: DB MODE(repairScope=DB_ONLY) 는 FE 를 만들지 않는다 — 골격은 Doc/gen 에만 남긴다
+const dbModeNoApply = a.includes('--apply') && cfg.repairScope === 'DB_ONLY';
+if (dbModeNoApply) console.log(`[DB MODE] FE 적용 생략 — 골격은 ${outRoot} 에만 생성(UI/DB MODE 에서 적용)`);
+if (a.includes('--apply') && !dbModeNoApply) {
   const target = path.join(cfg.feRoot, pageRel);
   if (fs.existsSync(target)) {
     // --overwrite: 골격 재적용(생성기 수정 후). Claude/사람이 손댄 흔적(REPAIR.md 또는 매핑표 '구현' 행)이 있으면 거부 — 작업물 보호

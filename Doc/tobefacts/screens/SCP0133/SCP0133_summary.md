@@ -1,79 +1,85 @@
 # SCP0133 — To-Be Fact Pack 요약
 
-- page_key: `supply/warehouse-capacity` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 10 · 엔드포인트 호출 8 (미해결 0, 주석 속 1) · 이벤트 26 · 컴포넌트 사용 37 · 하드코딩 컬럼 0 · 메시지 16
+- page_key: `supply/warehouse-capacity` · feature: supply · As-is Fact Pack 있음
+- 파일 12 · 엔드포인트 호출 11 (미해결 0, 주석 속 5) · 이벤트 27 · 컴포넌트 사용 37 · 하드코딩 컬럼 0 · 메시지 17
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | component | 275 |
-| features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | component | 127 |
-| features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | component | 161 |
+| features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | component | 326 |
+| features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | component | 162 |
+| features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | component | 189 |
 | features/supply/src/pages/warehouse-capacity/index.ts | index | 2 |
-| features/supply/src/pages/warehouse-capacity/useWarehouseCapacityStore.ts | store | 187 |
-| features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | util | 56 |
-| features/supply/src/pages/warehouse-capacity/warehouse-capacity.constants.ts | constants | 101 |
-| features/supply/src/pages/warehouse-capacity/warehouse-capacity.types.ts | types | 20 |
+| features/supply/src/pages/warehouse-capacity/useWarehouseCapacityStore.ts | store | 211 |
+| features/supply/src/pages/warehouse-capacity/utils/warehouseCapacity.saveRequest.ts | util | 128 |
+| features/supply/src/pages/warehouse-capacity/utils/warehouseCapacityEditLock.ts | util | 111 |
+| features/supply/src/pages/warehouse-capacity/warehouse-capacity.constants.ts | constants | 133 |
+| features/supply/src/pages/warehouse-capacity/warehouse-capacity.types.ts | types | 23 |
 | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.module.scss | style | 12 |
-| features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | page | 239 |
+| features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | page | 367 |
+| features/supply/src/pages/warehouse-capacity/__asis-mapping__.md | mapping | 53 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 2 | Y | WarehouseCapacityForm.tsx:54 WarehouseCapacityForm.tsx:62 |
-| (useTabLookupQuery) | hook | 1 | Y | WarehouseCapacityForm.tsx:60 |
-| /admin/menu/SCP0133/search-conditions | http | 1 | Y | useWarehouseCapacityStore.ts:147 |
-| /admin/menu/SCP0133/column | http | 2 | Y | useWarehouseCapacityStore.ts:164 useWarehouseCapacityStore.ts:167 |
-| SCP0133/main//call-proc | hook | 2 | Y | WarehouseCapacity.tsx:67 WarehouseCapacity.tsx:74 |
+| (useTabComboQueries) | hook | 4 | Y | WarehouseCapacityForm.tsx:59 WarehouseCapacityForm.tsx:67 WarehouseCapacityGrid.tsx:63 WarehouseCapacity.tsx:118 |
+| (useTabLookupQuery) | hook | 1 | Y | WarehouseCapacityForm.tsx:65 |
+| /admin/menu/SCP0133/search-conditions | http | 1 | Y | useWarehouseCapacityStore.ts:171 |
+| /admin/menu/SCP0133/column | http | 2 | Y | useWarehouseCapacityStore.ts:188 useWarehouseCapacityStore.ts:191 |
+| /SCP0133/main\|itemMapping/SAVE/call-proc | http | 1 | Y | warehouseCapacity.saveRequest.ts:115 |
+| SCP0133/main//call-proc | hook | 1 | Y | WarehouseCapacity.tsx:69 |
+| SCP0133/itemMapping//call-proc | hook | 1 | Y | WarehouseCapacity.tsx:104 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
 |---|---|---|---|
-| main | divisionId opmzPlanGrId siteId stage whNm fromYyyymmdd toYyyymmdd itemId validYn | o_rc1 | SCP0133_GET_WAREHOUSE_CAPACITY SCP0133_GET_SEARCH_INFO SCP0133_SAVE_WAREHOUSE_CAPACITY SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING PKG_SCP0133 |
+| main | divisionId opmzPlanGrId siteId stage whNm fromYyyymmdd toYyyymmdd itemId validYn | o_rc1 | SCP0133_GET_WAREHOUSE_CAPACITY SCP0133_GET_WAREHOUSE_ITEM_MAPPING SCP0133_GET_SEARCH_INFO SCP0133_SAVE_WAREHOUSE_CAPACITY SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING PKG_SCP0133 |
+| itemMapping | divisionId opmzPlanGrId siteId stage whNm fromYyyymmdd toYyyymmdd itemId validYn | o_rc1 | SCP0133_GET_WAREHOUSE_CAPACITY SCP0133_GET_WAREHOUSE_ITEM_MAPPING SCP0133_GET_SEARCH_INFO SCP0133_SAVE_WAREHOUSE_CAPACITY SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING PKG_SCP0133 |
 
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 101 |
-| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,String | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 114 |
-| CustomDropdown | onChange | <arrow> set,toMultiArray | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 142 |
-| CustomDropdown | onChange | <arrow> set,toMultiArray | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 163 |
-| CustomDropdown | onChange | <arrow> set,toMultiArray | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 184 |
-| InputField | onChange | <arrow> set,e.target.value.split(',').map(v=>v.trim()).filter,e.target.value.split(',').map,e.target.value.split,v.trim | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 201 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 209 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 227 |
-| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 239 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 264 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 265 |
-| FunctionSearchIcon | onClick | onItemSearch | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 259 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 68 |
-| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 69 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 99 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 100 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 123 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 75 |
-| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 76 |
-| g | cellEditEnded | storLocDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 97 |
-| g | pastedCell | storLocDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 98 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 136 |
-| WarehouseCapacityForm | onSearch | handleSearch | jsx | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 187 |
-| WarehouseCapacityForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 187 |
-| WarehouseCapacityGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 209 |
-| WarehouseItemMappingGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 220 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 143 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,String | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 160 |
+| CustomDropdown | onChange | <arrow> set,toMultiArray | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 191 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 210 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 228 |
+| CustomDropdown | onChange | <arrow> set,toMultiArray | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 249 |
+| CustomDropdown | onChange | <arrow> set,toMultiArray | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 275 |
+| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 287 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 315 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityForm.tsx | 311 |
+| g | updatedLayout | apply | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 77 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 100 |
+| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 101 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 131 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 132 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseCapacityGrid.tsx | 158 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 80 |
+| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 81 |
+| g | cellEditEnded | storLocDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 102 |
+| g | pastedCell | storLocDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 103 |
+| g | cellEditEnded | whDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 123 |
+| g | pastedCell | whDeriveHandler | addHandler | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 124 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/warehouse-capacity/components/WarehouseItemMappingGrid.tsx | 164 |
+| WarehouseCapacityForm | onSearch | handleSearch | jsx | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 309 |
+| WarehouseCapacityForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 310 |
+| WarehouseCapacityGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 339 |
+| WarehouseItemMappingGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 351 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
 | Grid | 7 |
 | FormItem | 7 |
-| CustomDropdown | 5 |
-| InputField | 2 |
+| CustomDropdown | 6 |
 | DataGrid | 2 |
 | MaterialByDivisionModal | 2 |
 | TabItem | 2 |
 | SearchArea | 1 |
 | PeriodField | 1 |
+| InputField | 1 |
 | Button | 1 |
 | FunctionSearchIcon | 1 |
 | MainTitle | 1 |
@@ -90,28 +96,34 @@
 | code | count |
 |---|---|
 | LBL00112 | 1 |
-| LBL00319 | 1 |
-| LBL00001 | 1 |
 | LBL00002 | 1 |
-| LBL00015 | 1 |
+| LBL00016 | 1 |
 | LBL00061 | 1 |
-| LBL00639 | 1 |
+| LBL00064 | 1 |
+| LBL00007 | 1 |
 | LBL00013 | 1 |
-| LBL01142 | 2 |
+| LBL00618 | 1 |
 | MSG00004 | 1 |
 | MSG00013 | 1 |
 | MSG00703 | 1 |
-| MSG00219 | 1 |
+| MSG01135 | 1 |
+| MSG00611 | 1 |
 | MSG00085 | 1 |
-| LBL00641 | 1 |
+| MSG01149 | 1 |
+| MSG00003 | 1 |
+| MSG00002 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0133(6), SCP0129(1), SCP0025(1), SCP0020(1)
-- SP/PKG: SCP0133_GET_WAREHOUSE_CAPACITY(2), PKG_SCP0133(1), SCP0133_SAVE_WAREHOUSE_CAPACITY(1), SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING(1)
+- 화면ID: SCP0133(7), SCP0127(2), SCP0129(1), SCP0025(1), SCP0006(1), SCP0126(1), SCP0020(1)
+- SP/PKG: PKG_SCP0133(10), P_SCP0133_GET_WAREHOUSE_ITEM_MAPPING(2), P_SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING(2), P_SCP0133_GET(2), P_USER_ID(1), P_SCP0133_SAVE_(1), P_SCP0133_GET_WAREHOUSE_CAPACITY(1), P_SCP0133_SAVE_WAREHOUSE_CAPACITY(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| endpoint | ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch(31행 등록됨, | features/supply/src/pages/warehouse-capacity/useWarehouseCapacityStore.ts | 22 |
+| endpoint | ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch(31행 등록됨, | features/supply/src/pages/warehouse-capacity/useWarehouseCapacityStore.ts | 23 |
+| endpoint | 왜 useProcMutation({data:[rows]}) 가 아닌가: PKG_SCP0133 SAVE SP 2종은 각 컬럼이 별도 CLOB 인자이고 | features/supply/src/pages/warehouse-capacity/utils/warehouseCapacity.saveRequest.ts | 5 |
+| endpoint | PKG_SCP0133 에 배포돼 있어(gap-resolve iter-2 실측) main 시트와 동일하게 useTabProcQuery(조회)/ | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 35 |
+| endpoint | useProcMutation(저장)으로 배선한다(A2/A3 해소). 두 시트 조회조건은 동일 9파라미터다. | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 36 |
+| endpoint | 공용 useProcMutation({data:[rows]}) 은 이 SP 계약(컬럼별 CLOB)에서 전 파라미터 NULL 바인딩 → | features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx | 81 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

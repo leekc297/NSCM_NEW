@@ -1,4 +1,5 @@
 ﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
 "master/components/teamModal","","features/master/src/components/teamModal/TeamModal.tsx","22","COM0009","P_DIVISION_ID","","","조회 division (COM0009 P_DIVISION_ID). 미전달 시 빈 값 = 전체(기존 호출처 영향 없음)."
-"master/components/teamModal","","features/master/src/components/teamModal/TeamModal.tsx","44","COM0009","","","","Team ID/Name 을 하나의 'Team' 검색으로 통합했다. 서버(COM0009)에는 빈 파라미터로 전체 팀"
-"master/components/teamModal","","features/master/src/components/teamModal/TeamModal.tsx","135","DMF0082","","","","상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인."
+"master/components/teamModal","","features/master/src/components/teamModal/TeamModal.tsx","44","COM0009","","","","단일 'Team' 검색창 — 검색어를 서버(COM0009)로 보내 Search·팝업 열림마다 DB 재조회한다(화면 필터 없음)."
+"master/components/teamModal","","features/master/src/components/teamModal/TeamModal.tsx","46","","P_COM0009_GET_TEAM_POPUP","","","P_COM0009_GET_TEAM_POPUP 의 ①·② 분기가 p_team_id OR p_team_name(DEPT_ID 또는 이름)로 매칭하도록"
+"master/components/teamModal","","features/master/src/components/teamModal/TeamModal.tsx","133","DMF0082","","","","상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인."

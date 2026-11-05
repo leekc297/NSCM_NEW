@@ -20,6 +20,7 @@ import type { SearchParams } from './waterfall-shipment-plan-fg.types';
 type FiltersBySheet = {
   [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
   [SHEETS.TITLE]?: ProcRequest<MENU_ID, SHEETS.TITLE>;
+  [SHEETS.TITLE_ISO]?: ProcRequest<MENU_ID, SHEETS.TITLE_ISO>;
 };
 
 type StaticColumnsBySheet = {
@@ -156,6 +157,12 @@ export const useWaterfallShipmentPlanFgStore = createPersistedStoreWithTab<State
     setSearchParams: p =>
       set(state => {
         state.searchParams = { ...get().searchParams, ...p };
+        // AS-IS cboBucketType_SelectedIndexChanged / dCalendar_ValueChanged → InitSpread_2 →
+        //   siMain.InitSheet()(RowCount=0)로 Bucket·Period 변경 시 그리드를 비운다(재조회 전까지 빈 상태).
+        //   TO-BE 도 등가로 bucket·period patch 면 filters 를 clear 한다(Version 은 setVersions 에서 처리).
+        if ('bucket' in p || 'fromYyyymmdd' in p || 'toYyyymmdd' in p) {
+          state.filters = {};
+        }
       }),
     setDivision: divisionId =>
       set(state => {
@@ -190,6 +197,10 @@ export const useWaterfallShipmentPlanFgStore = createPersistedStoreWithTab<State
           next.toYyyymmdd = period.toYyyymmdd;
         }
         state.searchParams = next;
+        // AS-IS ClbVersion_SelectedIndexChanged → dCalendar.InitValue 재설정 → ValueChanged →
+        //   cboBucketType_SelectedIndexChanged → InitSpread_2 → InitSheet()로 그리드를 비운다.
+        //   TO-BE 도 Version 변경 시 등가로 filters 를 clear(재조회 전까지 빈 상태).
+        state.filters = {};
       }),
     // 메인 GET 파라미터 매핑 (design 02 §5 / 03 §4.2 — SP IN 순번 주석) + title(캘린더 start/end) payload.
     setFilters: ({ userId }) => {
@@ -207,12 +218,18 @@ export const useWaterfallShipmentPlanFgStore = createPersistedStoreWithTab<State
             itemId: p.itemId.trim(), //  6 p_item_id (Model 팝업 결과)
             versionNo: p.versionNos.join(','), //  7 p_version_no (다중, IN-list)
             electype: joinOrAll(p.electrodeTypes), //  8 p_electype (다중, ALL→NULL)
-            iso: p.bucket === BUCKET_TYPE.WEEKLY_ISO ? 'T' : 'F', //  9 p_iso
-            programId: MENU_ID, // 10 p_program_id
-            sheetName: SP_SHEET_NAME, // 11 p_sheet_name ('Shipment Plan FG'; 12 p_user_id = 세션 자동)
+            programId: MENU_ID, //  9 p_program_id
+            sheetName: SP_SHEET_NAME, // 10 p_sheet_name ('Shipment Plan FG'; 11 p_user_id = 세션 자동)
+            // 메인 SP 는 P_ISO 파라미터가 없다(DB 실측: P_SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL 12-IN).
+            //   ISO 여부는 아래 TITLE_ISO 캘린더 SP 가 W_..._ISO 컬럼명을 내느냐로만 결정한다(AS-IS 등가).
           },
+          // 캘린더 헤더 — bucket 에 맞는 시트만 Grid 가 enable 한다(아래 2개 중 하나만 실제 호출).
           [SHEETS.TITLE]: {
-            startYyyymmdd: from, // 1 P_START_YYYYMMDD (공용 캘린더 SP 2-IN)
+            startYyyymmdd: from, // 1 P_START_YYYYMMDD (공용 캘린더 SP 2-IN, NotISO)
+            endYyyymmdd: to, // 2 P_END_YYYYMMDD
+          },
+          [SHEETS.TITLE_ISO]: {
+            startYyyymmdd: from, // 1 P_START_YYYYMMDD (ISO 캘린더 SP 2-IN — P_USER_ID 없음, DB 실측)
             endYyyymmdd: to, // 2 P_END_YYYYMMDD
           },
         };

@@ -1,0 +1,901 @@
+{
+ "menu_id": "DMF0003",
+ "asis_id": "DMF0003",
+ "generated": "2026-10-30 05:03:39",
+ "a": {
+  "verdict": "FAIL",
+  "save_tables": [
+   "A",
+   "DM_PLN_MKT_FCST",
+   "DM_PLN_MKT_FCST_H",
+   "SCM_MST_SITE_ITEM"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "clbDivision",
+    "label": "Division",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbDivision",
+    "label": "Division",
+    "src": "UP_FX_GetCommonDataList @Code=MyDivision 분기",
+    "tables": [
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbTeam",
+    "label": "Team",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbTeam",
+    "label": "Team",
+    "src": "UP_FX_GetCommonDataList @Code=TeambyDivision 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "TB_FX_USER",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbBizType",
+    "label": "Biz Type",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbBizType",
+    "label": "Biz Type",
+    "src": "SCM0001_GET_BIZ_TYPE_BY_DIVISION 원문",
+    "tables": [
+     "SCM_MST_PROJECT"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbBizType",
+    "label": "Biz Type",
+    "src": "UP_FX_GetCommonDataList @Code=DM_BIZ_TYPE 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbEDISender",
+    "label": "Sender Code",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbEDISender",
+    "label": "Sender Code",
+    "src": "UP_FX_GetCommonDataList_DM @Code=EDI_SENDER_CODE 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbCustomer",
+    "label": "End Customer",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbCustomer",
+    "label": "End Customer",
+    "src": "UP_FX_GetCommonDataList @Code=EndCustomerByDivision40 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_DEPT_INFO",
+     "SCM_MST_SSO_USER_INFO"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbCustomer",
+    "label": "End Customer",
+    "src": "UP_FX_GetCommonDataList @Code=EndCustomerByDivisionDept 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbSalesSite",
+    "label": "Sales Site",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbSalesSite",
+    "label": "Sales Site",
+    "src": "UP_FX_GetCommonDataList_DM @Code=SiteByEndCustomer 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbSalesSite",
+    "label": "Sales Site",
+    "src": "UP_FX_GetCommonDataList_DM @Code=SiteByEndCustomer40 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_USER_INFO",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbSalesSite",
+    "label": "Sales Site",
+    "src": "UP_FX_GetCommonDataList @Code=SiteByEndCustomerAuth 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USER",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbSalesSite",
+    "label": "Sales Site",
+    "src": "UP_FX_GetCommonDataList @Code=SiteByEndCustomer 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbSalesSite",
+    "label": "Sales Site",
+    "src": "UP_FX_GetCommonDataList @Code=SiteByEndCustomer40 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_USER_INFO",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbPlantSite",
+    "label": "Plant Site",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbPlantSite",
+    "label": "Plant Site",
+    "src": "UP_FX_GetCommonDataList @Code=SalesPlant 분기",
+    "tables": [
+     "SCM_MST_ITEM_SN",
+     "SCM_MST_PROJECT_ITEM",
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbPlantSite",
+    "label": "Plant Site",
+    "src": "UP_FX_GetCommonDataList @Code=PlantSiteByItem 분기",
+    "tables": [
+     "SCM_MST_ITEM_SN",
+     "SCM_MST_PROJECT_ITEM",
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbPlantSite",
+    "label": "Plant Site",
+    "src": "UP_FX_GetCommonDataList @Code=PlantSiteByEndCustomer 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboBucketType",
+    "label": "Bucket",
+    "src": "DMF0003_GET_BUCKET_TYPE_CODE 원문",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbItemType",
+    "label": "Item Type",
+    "src": "SCM0001_GET_LOOKUP_VALUES 원문",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbSalesSite",
+    "label": "Sales Site",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbSalesSite",
+    "label": "Sales Site",
+    "src": "UP_FX_GetCommonDataList @Code=ScmSitebyEndCustomer40 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DomExp",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_DM @Code=DM_CUSTOMS_HANDBOOK 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "PlantSiteId",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "PlantSiteId",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=SalesPlant 분기",
+    "tables": [
+     "SCM_MST_ITEM_SN",
+     "SCM_MST_PROJECT_ITEM",
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "PlantSiteId",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=PlantSiteByItem 분기",
+    "tables": [
+     "SCM_MST_ITEM_SN",
+     "SCM_MST_PROJECT_ITEM",
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "PlantSiteId",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=PlantSiteByEndCustomer 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "FcstType",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_DM @Code=FCST_TYPE 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "Incoterms",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_DM @Code=INCOTERMS 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "AS_FROM_SITE",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=AS_FROM_SITE 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "Team",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=TeambyDivisionAuth 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_DEPT_INFO",
+     "SCM_MST_SSO_USER_INFO",
+     "TB_FX_USER",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "Customer40",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=EndCustomerByDivision40 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_DEPT_INFO",
+     "SCM_MST_SSO_USER_INFO"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "Customer40",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=EndCustomerByDivisionDeptAuth 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USER",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId40",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=SiteByEndCustomer 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId40",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_DM @Code=SiteByEndCustomer 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId40",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=SiteByEndCustomerAuth 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USER",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "Measure",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=MktFcstEditMeasure 분기",
+    "tables": [
+     "DM_MST_CUSTOMER_FCST",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "Customer",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=EndCustomerByDivision40 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_DEPT_INFO",
+     "SCM_MST_SSO_USER_INFO"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "Customer",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=EndCustomerByDivisionDeptAuth 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USER",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=SiteByEndCustomer 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_DM @Code=SiteByEndCustomer 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=SiteByEndCustomerAuth 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USER",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "Customer",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=EndCustomerByDivisionDept 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_DM @Code=SiteByEndCustomer40 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_USER_INFO",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=SiteByEndCustomer40 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_USER_INFO",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId40",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId40",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=ScmSitebyEndCustomer40 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "Customer40",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=EndCustomerByDivisionDept 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId40",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId40",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_DM @Code=SiteByEndCustomer40 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_USER_INFO",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "ScmSiteId40",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList @Code=SiteByEndCustomer40 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_USER_INFO",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "Incoterms",
+    "label": "",
+    "src": "UP_FX_GetCommonDataList_DM @Code=AS_INCOTERMS 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbCustomer",
+    "label": "End Customer",
+    "src": "UP_FX_GetCommonDataList @Code=EndCustomerByDivisionDeptAuth 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USER",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cmbCarMaker",
+    "label": "▼ 제조사:",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cmbBizType",
+    "label": "▼ BIZ TYPE:",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cmbBizType",
+    "label": "▼ BIZ TYPE:",
+    "src": "SCM0001_GET_BIZ_TYPE_BY_DIVISION 원문",
+    "tables": [
+     "SCM_MST_PROJECT"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cmbBizType",
+    "label": "▼ BIZ TYPE:",
+    "src": "UP_FX_GetCommonDataList @Code=DM_BIZ_TYPE 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cmbCarModel",
+    "label": "▼ 모델명:",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "BIZ_TYPE",
+    "label": "Biz Type",
+    "src": "UP_FX_GetCommonDataList @Code=BizTypeByDivision 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "src": "UP_FX_GetCommonDataList @Code=DOM_EXP 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "END_CUSTOMER",
+    "label": "End Customer",
+    "src": "UP_FX_GetCommonDataList @Code=EndCustomerByDivisionDept 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "END_CUSTOMER40",
+    "label": "End Customer*",
+    "src": "UP_FX_GetCommonDataList @Code=EndCustomerByDivision40 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_DEPT_INFO",
+     "SCM_MST_SSO_USER_INFO"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "FCST_TYPE",
+    "label": "FCST Type*",
+    "src": "UP_FX_GetCommonDataList @Code=FCST_TYPE_NOT_ETC 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "INCOTERMS",
+    "label": "Incoterms*",
+    "src": "UP_FX_GetCommonDataList @Code=Incoterms 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "ITEM_TYPE",
+    "label": "Item Type",
+    "src": "UP_FX_GetCommonDataList @Code=ItemType 분기",
+    "tables": [],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "MEASURE",
+    "label": "Measure*",
+    "src": "UP_FX_GetCommonDataList @Code=Measure 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL",
+     "SCM_MST_CUSTOMER",
+     "SCM_MST_DIVISION",
+     "SCM_MST_PLANT_SN",
+     "SCM_MST_SITE",
+     "SCM_MST_VENDOR",
+     "TB_FX_USER"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "PLANT_SITE_ID",
+    "label": "Plant Site*",
+    "src": "UP_FX_GetCommonDataList @Code=FromSiteByDivision 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "src": "UP_FX_GetCommonDataList @Code=SiteByEndCustomer 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "SCM_SITE_ID40",
+    "label": "Sales Site*",
+    "src": "UP_FX_GetCommonDataList @Code=SiteByEndCustomer 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "SOLDTO_CUSTOMER",
+    "label": "Sold-To Customer",
+    "src": "UP_FX_GetCommonDataList @Code=SoldCustomer 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "TEAM_ID",
+    "label": "Team",
+    "src": "UP_FX_GetCommonDataList @Code=DeptId 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "SCM_MST_SITE_ITEM",
+     "SCM_MST_SSO_DEPT_INFO",
+     "SCM_MST_SSO_USER_INFO"
+    ],
+    "overlap": [
+     "SCM_MST_SITE_ITEM"
+    ]
+   },
+   {
+    "kind": "GRID",
+    "target": "VMI_YN",
+    "label": "VMI",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   }
+  ],
+  "fe_invalidate": [],
+  "note": "저장이 콤보 원천을 바꿈: clbTeam(SCM_MST_SITE_ITEM), clbCustomer(SCM_MST_SITE_ITEM), clbSalesSite(SCM_MST_SITE_ITEM), clbSalesSite(SCM_MST_SITE_ITEM), clbSalesSite(SCM_MST_SITE_ITEM), Team(SCM_MST_SITE_ITEM), Customer40(SCM_MST_SITE_ITEM), ScmSiteId40(SCM_MST_SITE_ITEM), Customer(SCM_MST_SITE_ITEM), ScmSiteId(SCM_MST_SITE_ITEM), ScmSiteId(SCM_MST_SITE_ITEM), ScmSiteId(SCM_MST_SITE_ITEM), ScmSiteId40(SCM_MST_SITE_ITEM), ScmSiteId40(SCM_MST_SITE_ITEM), END_CUSTOMER40(SCM_MST_SITE_ITEM), SCM_SITE_ID(SCM_MST_SITE_ITEM), SCM_SITE_ID40(SCM_MST_SITE_ITEM), TEAM_ID(SCM_MST_SITE_ITEM) — TO-BE 화면에 저장 후 콤보 무효화(useInvalidateCombos) 없음 → 저장 직후 후보 미갱신"
+ }
+}

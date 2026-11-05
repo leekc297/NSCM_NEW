@@ -1,0 +1,71 @@
+{
+ "menu_id": "DMF0003",
+ "asis_id": "DMF0003",
+ "generated": "2026-10-31 14:11:11",
+ "rc": 6,
+ "items": [
+  {
+   "key": "db",
+   "what": "DB 접속(AS-IS MSSQL · TO-BE Oracle)",
+   "status": "OK",
+   "producer": "tools/DbConn/probe.py",
+   "evidence": "전부 접속"
+  },
+  {
+   "key": "asis_pack",
+   "what": "AS-IS Fact Pack(DMF0003)",
+   "status": "OK",
+   "producer": "tools/AsisFacts/pack.ps1",
+   "evidence": "controls.csv, actions.csv, files.csv, endpoints.csv 있음"
+  },
+  {
+   "key": "tobe_meta",
+   "what": "TO-BE DB 메타(Doc/tobefacts/db)",
+   "status": "OK",
+   "producer": "tools/DbConn/export_tobe_meta.py",
+   "evidence": "1.5시간 전 export(기준 12시간)"
+  },
+  {
+   "key": "tobe_index",
+   "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
+   "status": "OK",
+   "producer": "tools/TobeFacts/run.ps1",
+   "evidence": "nscm-fe\\features\\demand\\src\\pages\\mkt-fcst · 인덱스 최신"
+  },
+  {
+   "key": "mapping_md",
+   "what": "FE 대조표(__asis-mapping__.md)",
+   "status": "OK",
+   "producer": "화면 개발 시 작성(하네스 gen.js 초안 = Doc/gen/<ID>)",
+   "evidence": "nscm-fe\\features\\demand\\src\\pages\\mkt-fcst\\__asis-mapping__.md"
+  },
+  {
+   "key": "golden",
+   "what": "골든 케이스(golden_cases.csv)",
+   "status": "OK",
+   "producer": "tools/DbConn/gen_golden_cases.py",
+   "evidence": "20건 있음 · TO-BE PROC 미매칭 7건(DMF0003:SCM0001_GET_SITE_BY_DIVISION, DMF0003:SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER, DMF0003:SCM0001_GET_LOOKUP_VALUES, DMF0003:SCM0001_GET_TEAM_BY_DIVISION, DMF0003:SCM0001_GET_CUSTOMER_BY_DIVISION) — golden.py 가 SKIP(사람이 tobe_proc 지정)"
+  },
+  {
+   "key": "e2e_plan",
+   "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
+   "status": "OK",
+   "producer": "tools/Harness/gen.js",
+   "evidence": "있음"
+  },
+  {
+   "key": "e2e_spec",
+   "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
+   "status": "OK",
+   "producer": "tools/E2E/gen-e2e.js",
+   "evidence": "최신"
+  },
+  {
+   "key": "smoke",
+   "what": "smoke 결과(Doc/e2e/results/_summary.csv)",
+   "status": "FAIL",
+   "producer": "tools/E2E/run-e2e.cmd smoke <ID>",
+   "evidence": "실행 실패 — smoke 근거 규칙(G3·K4·SC1·K1·K2·I2)을 측정할 수 없어 검증을 중단한다 · 시간 초과 1800s"
+  }
+ ]
+}

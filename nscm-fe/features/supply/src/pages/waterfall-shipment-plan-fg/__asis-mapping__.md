@@ -84,7 +84,7 @@
 | D00-3-028 | §3 SetValue / (iRow, bef_month_idx, sum_month) | waterfall.derive.ts:81 monthOf.forEach(apply) |  | 구현 |
 | D00-3-029 | §3 SetValue / (iRow, bef_week_idx, val) | waterfall.derive.ts:69-70 BALANCE=소속 D_ 마지막(R8) |  | 구현 |
 | D00-3-030 | §3 SetValue / (iRow, bef_month_idx, val) | waterfall.derive.ts:69-70 BALANCE=소속 D_ 마지막(R8) |  | 구현 |
-| D00-3-031 | §3 SetDblClickColumnShowHide / (sender, e) 기간컬럼 펼침/접기 | WaterfallShipmentPlanFgGrid.tsx:207-232 onDblClick 헤더 드릴(rank 하위 접기/펼치기) |  | 구현 |
+| D00-3-031 | §3 SetDblClickColumnShowHide / (sender, e) 기간컬럼 펼침/접기 | WaterfallShipmentPlanFgGrid.tsx onDblClick 헤더 드릴(한 단계씩: M_→W_ 토글+D_접기 / W_→D_ 토글, 자매 SCP0017 1:1) |  | 구현 |
 | D00-3-032 | §3 ColumnHeaderHeight / (0, 20) 헤더 높이 | WaterfallShipmentPlanFgGrid.tsx:151-180 headerRowHeight 48/tier updatedLayout 강제 |  | 구현 |
 | D00-3-033 | §3 Visible= / Daily: isDaily/isWeekly → true | waterfall.periods.ts:56-57 DAILY kind==='D' → true |  | 구현 |
 | D00-3-034 | §3 Visible= / Daily: isMonthly/isWeekly → chkSum.Checked | waterfall.periods.ts:58 DAILY W_/M_ → chkSum |  | 구현 |

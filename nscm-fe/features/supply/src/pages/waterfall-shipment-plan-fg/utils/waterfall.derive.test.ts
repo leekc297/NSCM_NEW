@@ -15,6 +15,7 @@ const meta = (binding: string, kind: DynKind): DynColMeta => ({
   large: '',
   small: '',
   leaf: '',
+  mmdd: '',
   dayCode: '',
   sort: 0,
   seq: 0,

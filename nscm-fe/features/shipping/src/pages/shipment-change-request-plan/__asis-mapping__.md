@@ -116,6 +116,7 @@
 | **R-30** | `CHK` 헤더 전체선택 8건 | **미구현** — shtMain 에 `CHK` 컬럼이 없고(메타 실측) `spdSub` 이벤트 배선도 0건이라 **AS-IS 동작 여부가 불명**(설계 §6 #15). 구현하면 AS-IS 초과 가능성 | 미구현(확인필요) |
 | R-31① | `RollBack_Flag` 포커스 복귀 | 미구현 — 셀 롤백 시 Wijmo 기본 동작에 맡겼다 | 미구현 |
 | R-31② | EditButton 잠금 8건 | **`INPUT_TP_CD` 로 이관**(§3.4 매트릭스) + 행 조건만 `isRowEditable()`. **FE 컬럼명 상수 배열 금지**(hook #130) 준수 | 구현(메타 미적용) |
+| EditButton cs:783 | `siSub.RowCount==0` 일 때만 편집모드 진입 = 작성 중 요청이 있으면 상단 수정·Insert·New·Save 불가(메시지 없음). 설계서 01_layout "가드 0" 은 오기 | `canEditMain = canEdit && subRows.length === 0`. 요청정보 패널은 `canEdit` 유지 | 구현 |
 | R-31③④ | `Query(ds)` 바인딩 / 조회 직후 전열 잠금 | `useTabProcQuery` + `INPUT_TP_CD`. 전열 잠금은 조건부(`OPERATION_GROUP='E'`)였다는 설계 정정을 반영해 무조건 잠금은 이식하지 않았다 | 구현 |
 | **R-31⑤** | `SetChangeRequestSOGrid` 23건 | **미이식** — 호출 0건(Δ6) | 미이식(dead 23) |
 | R-31⑥⑦ | 팝업 결과 기입 + `TRANSPORT_MODE` 셀콤보 주입 | `writeCell()` (ITEM_ID→NICK_NAME, PROJECT_CODE→PROJECT_NAME). 셀콤보 주입은 미구현 | 부분구현 |

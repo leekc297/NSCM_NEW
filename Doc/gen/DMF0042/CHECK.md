@@ -1,4 +1,4 @@
-# [Harness] DMF0042 business-plan — BLOCK 21 / WARN 102 (final)
+# [Harness] DMF0042 business-plan — BLOCK 24 / WARN 102 (final)
 
 - WARN F15 onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5) @components/modals/ReplaceByCutoffModal.tsx:233
 - WARN F15 onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5) @components/modals/VersionCutoffModal.tsx:255
@@ -80,12 +80,15 @@
 - WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00097 — AS-IS '권한을 가진 Division이 없습니다.' / TO-BE MSG00097 = 'Division 을 선택하세요.' → 문구로 찾은 TO-BE ID MSG00667 @business-plan.constants.ts
 - WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00108 — AS-IS '시작일자가 종료일자보다 늦을 수 없습니다.' / TO-BE MSG00108 = '조회 기간이 잘못되었습니다 (시작일 > 종료일).' → 문구로 찾은 TO-BE ID MSG01135 @business-plan.constants.ts
 - WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00227 — AS-IS 'INSERT 모드에서는 저장 후 Bucket 변경이 가능합니다.' / TO-BE MSG00227 = 'Insert 된 행이 있어 Bucket 을 변경할 수 없습니다.' → 문구로 찾은 TO-BE ID MSG01237 @business-plan.constants.ts
+- BLOCK MS1 AS-IS 메시지 ID 그대로 사용: MSG00043 — AS-IS '저장시 중복 오류가 발생하였습니다.{0}' / TO-BE MSG00043 = '저장시 중복 오류가 발생하였습니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+) @business-plan.constants.ts
 - WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00002 — AS-IS '{0} 값은 필수 입력입니다' / TO-BE MSG00002 = '성공적으로 저장되었습니다.' → 문구로 찾은 TO-BE ID MSG00614 @business-plan.constants.ts
 - WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @business-plan.constants.ts
-- BLOCK VC1 대조표 FAIL 27행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)
-- BLOCK VC1 대조표 미검증 9467행 — 검사 사유 REVIEW 10248 · NOT_RUN 13129 · NOPATH 4784 · TODO 146 · WARN 120 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- BLOCK MS1 AS-IS 메시지 ID 그대로 사용: MSG00043 — AS-IS '저장시 중복 오류가 발생하였습니다.{0}' / TO-BE MSG00043 = '저장시 중복 오류가 발생하였습니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+) @utils/business-plan.save.test.ts
+- BLOCK MS1 AS-IS 메시지 ID 그대로 사용: MSG00043 — AS-IS '저장시 중복 오류가 발생하였습니다.{0}' / TO-BE MSG00043 = '저장시 중복 오류가 발생하였습니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+) @utils/business-plan.save.ts
+- BLOCK VC1 대조표 FAIL 15행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)
+- BLOCK VC1 대조표 미검증 8756행 — 검사 사유 ERROR 6956 · NOT_RUN 18677 · REVIEW 968 · NOPATH 467 · WARN 120 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
 - BLOCK VC1 작업 원장 미완료 1235건 / 검사 인스턴스 1275 — W2 15 · W3 1 · W4 8 · W5 96 · W6 476 · W7 639 · 구현 의심 10 (Doc/verify/DMF0042/work_ledger.md)
-- WARN VC1 대조표 검증 추적이 36시간 전 결과 — 재실행 후 판정
+- WARN VC1 대조표 검증 추적이 24시간 전 결과 — 재실행 후 판정
 - BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @BusinessPlan.tsx:270
 - WARN R10 감사키 빈문자열 (#99 §0.1) @BusinessPlan.tsx:76
 - BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/BusinessPlanGrid.tsx:149

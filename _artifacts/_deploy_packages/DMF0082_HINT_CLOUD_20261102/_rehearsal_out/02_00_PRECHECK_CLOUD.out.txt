@@ -1,0 +1,25 @@
+CHK | DB_NAME | CUR_USER | NOW
+L0 | ZIOUI1 | SCM_MGR | 2026-11-02 11:06:00
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL
+L0 | PACKAGE | VALID | 2026-10-09 13:38:31
+L0 | PACKAGE BODY | VALID | 2026-11-02 11:05:27
+(2 rows)
+
+ANCHOR | N_RANGE
+H1 | 1
+H2 | 1
+H3 | 1
+H4 | 1
+H5 | 1
+H6a | 1
+H6b | 1
+(7 rows)
+
+CHK | N | JUDGE
+L2 마커 | 0 | 미적용 (기대)
+(1 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

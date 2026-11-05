@@ -1,0 +1,4 @@
+﻿menu_id,sp,asis_file,asis_line,guard,asis_keys,tobe_proc,tobe_last_ddl,tobe_order_by,tobe_keys,verdict,note
+SCP0084,SCP0084_GET_LONG_TERM_STOCK,Doc\asisfacts\db\modules\dbo.SCP0084_GET_LONG_TERM_STOCK.sql,354,,"DIVISION_ID,PLANT_ID,ITEM_ID",PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK,2026-10-09 13:39:29,"ORDER BY SA.DIVISION_ID , SA.PLANT_ID , SA.ITEM_ID","DIVISION_ID,PLANT_ID,ITEM_ID",PASS,분기 키 순서 동일
+SCP0084,SCP0084_GET_MONTH_RANGE,Doc\asisfacts\db\modules\dbo.SCP0084_GET_MONTH_RANGE.sql,,,,,,,,REVIEW,TO-BE 프로시저 배선(PROC_M) 없음 — 대응 프로시저 확인
+SCP0084,PR_SCM_SYS_LOG_BATCH,Doc\asisfacts\db\modules\dbo.PR_SCM_SYS_LOG_BATCH.sql,,,,,,,,REVIEW,TO-BE 프로시저 배선(PROC_M) 없음 — 대응 프로시저 확인

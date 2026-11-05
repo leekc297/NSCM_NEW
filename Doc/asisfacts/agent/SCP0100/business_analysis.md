@@ -1,154 +1,158 @@
 ﻿# SCP0100 Global PSI Report — 업무분석서
 
-> **근거 범위**: AsisFacts 정적 추출 Fact Pack(SCP0100)과 1차 분석서만 사용했습니다. Fact Pack에 없는 내용은 **확인 필요**로 적었습니다.
-> 주석 처리된 호출(commented_calls)은 **0건**입니다. 아래 내용은 모두 활성 코드 기준입니다.
-> 엔드포인트 이름은 화면설계서 §5와 단위테스트 '근거' 열에서 같은 표기를 씁니다.
+> 근거: AsisFacts 정적 추출 사실 묶음(Fact Pack)과 1차 분석서(analysis.md, web_components.md, tobe_design.md)만 사용했습니다. 사실 묶음에 없는 내용은 **확인 필요**로 적었습니다.
+> 함께 보는 문서: 화면설계서 §5 액션 명세, 단위테스트 근거 열. 세 문서는 엔드포인트 이름을 똑같이 씁니다.
 
 ## 1. 업무 목적·범위
 
-| 항목 | 내용 |
-|---|---|
-| 화면 ID / 클래스 | SCP0100 / `SCP0100_Global_PSI_Report` |
-| 도메인 | SCP. 소스 경로는 `06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\` |
-| 화면 성격 | 조회(Report) 화면입니다. 구성은 차트(`chartMain`) 1개와 FarPoint Spread 3개(`spdSearchLevel`, `spdDetail`, `spdSearchLevelDetail`)입니다. |
-| 사실로 확인된 범위 | ① Plan Date 목록 조회 ② To Site 목록 조회 ③ 기간 헤더(캘린더 3SPAN) 조회와 그리드 동적 컬럼 구성 ④ 계획 종료일(PLAN_END_DATE) 공통 데이터 조회 ⑤ Bucket·Search Level·Display에 따른 화면 표시 전환 |
-| 저장·삭제 | 저장·삭제 엔드포인트는 추출되지 않았습니다. 조회 전용으로 보이지만 **확인 필요**입니다. |
-| 업무 목적 문장 | "Global PSI(생산·판매·재고) 리포트"라는 명칭 외에 업무 목적을 정의한 사실은 없습니다. **확인 필요** |
-| ⚠ 메인 데이터 조회 | 리포트 본문(시트 3개)과 차트 데이터를 채우는 엔드포인트가 **검출되지 않았습니다**. **최우선 확인 필요** |
+| 항목 | 내용 | 근거 |
+|---|---|---|
+| 화면 ID / 클래스 | SCP0100 / `SCP0100_Global_PSI_Report` | 파일 구성 |
+| 업무 영역 | SCP Report (`06.UIL\GSCM.SCP.Forms.UIL\Report\`) | 프로젝트 경로 |
+| 화면 성격 | Global PSI 리포트. 차트(`chartMain`)와 Spread 그리드 3개(REPORT / SEARCH_LEVEL / SEARCH_LEVEL_DETAIL)를 보여 줍니다 | controls.csv, grid_code.csv |
+| 업무 목적 | "PSI"의 업무 정의, 리포트가 답하려는 업무 질문 | **확인 필요** (사실 묶음에 업무 설명 없음) |
+| 범위: 조회 | 계획일자, 기간, Bucket, Site, Model, Project, Cell Group, Search Level 등으로 조건을 정하고 기간별 수량 컬럼을 보여 줍니다 | 컨트롤·이벤트·grid_code |
+| 범위: 저장 | 추출된 저장 계열 엔드포인트 **0건**. 조회 전용인지는 **확인 필요** | endpoints.csv |
+| 메인 데이터 조회 | 그리드·차트 본문 데이터를 가져오는 엔드포인트·SP가 **추출되지 않았습니다**. 툴바 조회(Search) 처리 방식은 **확인 필요** | analysis.md §2 경고 |
 
 ## 2. 사용자 시나리오 (행위 → 시스템 처리 → 결과)
 
-| # | 사용자 행위 | 시스템 처리 (핸들러 > 메서드 경로) | 엔드포인트 | 결과 |
+| # | 사용자 행위 | 시스템 처리 (핸들러 > 메서드) | 엔드포인트 | 결과 |
 |---:|---|---|---|---|
-| S1 | 화면을 엽니다 | `Form_Load` > CreateSpread > InitSpread > GetSpdTitle | `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | 시트 3개(SEARCH_LEVEL, REPORT, SEARCH_LEVEL_DETAIL)를 만들고 메타 컬럼과 기간 컬럼을 구성합니다 |
-| S2 | (화면 열기, 같은 흐름) | `Form_Load` > InitControls > GetPlanDate | `SCP.SCP0100_GET_PLAN_DATE` | cboPlanDate 목록을 채웁니다(바인딩 상세는 확인 필요) |
-| S3 | (화면 열기, 같은 흐름) | `Form_Load` > InitControls > SetCalendar > GetDayRange > GetPlanEndDate | `biz:CommonData.CommonDataList_REPORT` [code=Data_REPORT.Type.PLAN_END_DATE] | dCalendar 기간 범위를 설정합니다(정확한 계산식은 확인 필요) |
-| S4 | 화면이 표시된 직후 | `SCP0100_Global_PSI_Report_Shown` > InitControlsAfter > RefreshToSite > GetSiteList | `SCP.SCP0100_GET_SITE` | clbToSite 목록을 채웁니다 |
-| S5 | Plan Date를 바꿉니다 | `CboPlanDate_SelectedIndexChanged` > InitSpread > GetSpdTitle, 그리고 > SetCalendar > GetDayRange > GetPlanEndDate | `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN`, `biz:CommonData.CommonDataList_REPORT` | 기간 헤더를 다시 만들고 기간 범위를 다시 계산합니다 |
-| S6 | 기간(dCalendar)을 바꿉니다 | `DCalendar_ValueChanged` > InitSpread > GetSpdTitle | `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | 기간 헤더를 다시 만듭니다 |
-| S7 | Search Level 라디오를 바꿉니다 | `rgrpSearchLevel_SelectedIndexChanged` > InitSpread > GetSpdTitle | `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | 헤더를 다시 만듭니다. 시트 전환과의 관계는 확인 필요 |
-| S8 | Measure 버튼을 누릅니다 | `btnMeasure_Click` > InitSpread > GetSpdTitle | `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | 헤더를 다시 만듭니다. 메저 선택 UI는 확인 필요 |
-| S9 | Column 버튼을 누릅니다 | `BtnColumn_Click` > InitSpread > GetSpdTitle | `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | 헤더를 다시 만듭니다. 컬럼 선택 UI는 확인 필요 |
-| S10 | Bucket을 바꿉니다 | `CboBucketType_SelectedIndexChanged` > `if(_SI != null)` SetSpreadColumn (:1804) | 없음 | MONTHLY이면 `M_*` 컬럼, WEEKLY이면 `W_*` 컬럼만 보입니다 |
-| S11 | Display를 바꿉니다 | `CboDisplay_SelectedIndexChanged` | 없음 | splitContainer1.SplitterDistance가 0(:1833), 750(:1841), 270(:1849) 중 하나로 바뀝니다. 값별 대응은 확인 필요 |
-| S12 | Model 팝업 버튼을 누릅니다 | `BtnItemId_Click` | 없음 | `txtItemId.Text = sItemId`(:1947). 호출하는 팝업 화면은 확인 필요 |
-| S13 | Project 팝업 버튼을 누릅니다 | `BtnProject_Click` | 없음 | `txtProject.Text = sProjectCode`(:1981). 호출하는 팝업 화면은 확인 필요 |
-| S14 | Division / Graph / Search Level 콤보 / Unit Qty / Plan-type / Cell Qty / A/S를 바꿉니다 | `ClbDivision_SelectedIndexChanged`, `CboGraphType_SelectedIndexChanged`, `CboSearchLevel_SelectedIndexChanged`, `CboUnitQty_SelectedIndexChanged`, `CboPlanType_SelectedIndexChanged`, `ChkCellQty_CheckedChanged`, `ChkAS_CheckedChanged` | 없음 | 내부 동작은 **확인 필요** |
-| S15 | 조회(본문·차트 데이터) | 미식별 | 미식별 | **확인 필요** |
+| S1 | 메뉴에서 화면을 엽니다 | `Form_Load` > InitControls > GetPlanDate | `SCP.SCP0100_GET_PLAN_DATE` | Plan Date 콤보(`cboPlanDate`) 목록을 채웁니다 (콤보 바인딩 방식은 확인 필요) |
+| S2 | (화면 열기, 이어서) | `Form_Load` > InitControls > SetCalendar > GetDayRange > GetPlanEndDate | `biz:CommonData.CommonDataList_REPORT` (code=PLAN_END_DATE) | 기간(`dCalendar`) 범위를 정합니다 (종료일 계산식은 확인 필요) |
+| S3 | (화면 열기, 이어서) | `Form_Load` > CreateSpread > InitSpread > GetSpdTitle | `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | 시트 3개를 만들고, 메타 고정 컬럼과 기간 컬럼(3단 헤더)을 생성합니다 |
+| S4 | 화면이 표시된 직후 | `SCP0100_Global_PSI_Report_Shown` > InitControlsAfter > RefreshToSite > GetSiteList | `SCP.SCP0100_GET_SITE` | To Site(`clbToSite`) 목록을 채웁니다 |
+| S5 | Plan Date를 바꿉니다 | `CboPlanDate_SelectedIndexChanged` > SetCalendar / InitSpread | `biz:CommonData.CommonDataList_REPORT`, `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | 기간 범위와 그리드 기간 헤더를 다시 만듭니다 |
+| S6 | 기간을 바꿉니다 | `DCalendar_ValueChanged` > InitSpread > GetSpdTitle | `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | 기간 헤더를 다시 만듭니다 |
+| S7 | Search Level 라디오를 바꿉니다 | `rgrpSearchLevel_SelectedIndexChanged` > InitSpread > GetSpdTitle | `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | 헤더를 다시 만듭니다 |
+| S8 | Measure 버튼을 누릅니다 | `btnMeasure_Click` > InitSpread > GetSpdTitle | `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | 헤더를 다시 만듭니다 (Measure 선택 팝업이 있는지는 확인 필요) |
+| S9 | Column 버튼을 누릅니다 | `BtnColumn_Click` > InitSpread > GetSpdTitle | `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | 헤더를 다시 만듭니다 |
+| S10 | Bucket을 바꿉니다 | `CboBucketType_SelectedIndexChanged` > SetSpreadColumn (`if(_SI != null)`) | 없음 | MONTHLY면 `M_` 컬럼만, WEEKLY면 `W_` 컬럼만 표시합니다 |
+| S11 | Display를 바꿉니다 | `CboDisplay_SelectedIndexChanged` | 없음 | `splitContainer1.SplitterDistance`를 0 / 750 / 270 중 하나로 바꿉니다 |
+| S12 | Model 팝업 버튼을 누릅니다 | `BtnItemId_Click` | 추출 없음 (팝업 API 확인 필요) | `txtItemId.Text = sItemId` |
+| S13 | Project 팝업 버튼을 누릅니다 | `BtnProject_Click` | 추출 없음 (팝업 API 확인 필요) | `txtProject.Text = sProjectCode` |
+| S14 | Division, Graph, Search Level 콤보, Unit Qty, Plan-type, Cell Qty, A/S를 바꿉니다 | `ClbDivision_SelectedIndexChanged`, `CboGraphType_SelectedIndexChanged`, `CboSearchLevel_SelectedIndexChanged`, `CboUnitQty_SelectedIndexChanged`, `CboPlanType_SelectedIndexChanged`, `ChkCellQty_CheckedChanged`, `ChkAS_CheckedChanged` | 추출 없음 | 실제 처리는 **확인 필요** |
+| S15 | 조회(Search)를 실행합니다 | **확인 필요** (추출 안 됨) | **확인 필요** | 그리드·차트 데이터 표시 (추정, 확인 필요) |
 
 ## 3. 업무 흐름도 (텍스트 단계)
 
 ```
-[1] 화면 열기 (this.Load → Form_Load)
-    ├─ CreateSpread
-    │    ├─ AddSheet: spdSearchLevel=SEARCH_LEVEL(:684) / spdDetail=REPORT(:685) / spdSearchLevelDetail=SEARCH_LEVEL_DETAIL(:686)
-    │    ├─ GetSheetInfo ×3 (:688~690), ChangeSheet ×2 (:692, :693)
-    │    └─ InitSpread
-    │         ├─ InitSheet(_SI.SheetName) :702
-    │         ├─ GetSpdTitle :703 ──► SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN (:1326)
-    │         ├─ SetSheetHeaderColumn(_SI, 3) :705   (SCM_MST_SHEET_COLUMNS 메타, 헤더 3행)
-    │         ├─ InitSpreadDateColumn :706           (3SPAN 결과 행을 돌며 기간 컬럼 추가)
-    │         └─ SetSpreadColumn :708                (Bucket 기준 M_/W_ 표시 전환)
-    └─ InitControls
-         ├─ GetPlanDate ──► SCP.SCP0100_GET_PLAN_DATE (:1365)
-         └─ SetCalendar > GetDayRange > GetPlanEndDate ──► biz:CommonData.CommonDataList_REPORT (:2035)
-[2] 화면 표시 (this.Shown → SCP0100_Global_PSI_Report_Shown)
-    └─ InitControlsAfter > RefreshToSite > GetSiteList ──► SCP.SCP0100_GET_SITE (:1342)
+[1] 화면 Load (Form_Load)
+    ├─ InitControls
+    │   ├─ GetPlanDate ───────────────► SCP.SCP0100_GET_PLAN_DATE        → cboPlanDate
+    │   └─ SetCalendar > GetDayRange > GetPlanEndDate
+    │                    ─────────────► biz:CommonData.CommonDataList_REPORT (PLAN_END_DATE) → dCalendar
+    └─ CreateSpread
+        ├─ AddSheet ×3 (SEARCH_LEVEL / REPORT / SEARCH_LEVEL_DETAIL), GetSheetInfo ×3, ChangeSheet ×2
+        └─ InitSpread
+            ├─ InitSheet(_SI.SheetName)
+            ├─ GetSpdTitle ────────────► SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN → dsSpdTitle
+            ├─ SetSheetHeaderColumn(_SI, 3)   (메타 고정 컬럼)
+            ├─ InitSpreadDateColumn(_SI, _SI.nIdxData) (기간 컬럼 DB 루프)
+            └─ SetSpreadColumn               (Bucket별 M_/W_ 표시)
+[2] 화면 Shown (SCP0100_Global_PSI_Report_Shown)
+    └─ InitControlsAfter > RefreshToSite > GetSiteList ─► SCP.SCP0100_GET_SITE → clbToSite
 [3] 조건 변경
-    ├─ cboPlanDate 변경 ──► [InitSpread → 3SPAN] + [SetCalendar → CommonDataList_REPORT]
-    ├─ dCalendar / rgrpSearchLevel 변경, btnMeasure / btnColumn 클릭 ──► [InitSpread → 3SPAN]
-    ├─ cboBucketType 변경 ──► SetSpreadColumn (API 없음)
-    └─ cboDisplay 변경 ──► SplitterDistance 0/750/270 (API 없음)
-[4] 조회 실행 ──► 엔드포인트 미식별 (확인 필요)
-[5] 결과 표시 ──► VisibleSheet: 시트 3개 중 하나만 Visible (전환 조건은 확인 필요)
+    ├─ cboPlanDate 변경 → [기간 재계산(PLAN_END_DATE)] + [InitSpread 재실행]
+    ├─ dCalendar / rgrpSearchLevel / btnMeasure / btnColumn → [InitSpread 재실행]
+    ├─ cboBucketType → SetSpreadColumn (화면 내부 처리)
+    └─ cboDisplay → 차트/그리드 분할 위치 변경 (화면 내부 처리)
+[4] 조회 실행 → 메인 데이터 SP (확인 필요) → 그리드/차트 표시
+    └─ 시트 표시 전환: VisibleSheet (spdDetail / spdSearchLevel / spdSearchLevelDetail 중 1개)
 ```
 
 ## 4. 업무 규칙 (사실 근거)
 
-### 4-1. 조회조건 값 수집
+### 4-1. SP 분기 조건
+- SP 3개(`SCP0100_GET_SHEET_CALENDAR_3SPAN`, `SCP0100_GET_SITE`, `SCP0100_GET_PLAN_DATE`)의 본문, 파라미터, 분기 조건은 사실 묶음에 없습니다 → **확인 필요**.
+- 사실 묶음에 있는 것은 참조 객체뿐입니다(§5).
+  - `SCP0100_GET_SITE`와 `SCP0100_GET_PLAN_DATE`는 `FN_SPLITSTRING`을 참조합니다. 구분자로 이어 붙인 다중값 파라미터를 받는 것으로 보이지만, 어떤 파라미터인지는 **확인 필요**입니다.
+  - 둘 다 `SCP_RPT_GLOBAL_PSI_MD_MM`(월)과 `SCP_RPT_GLOBAL_PSI_MD_WW`(주)를 읽습니다. 월/주 중 어느 쪽을 쓸지 가르는 조건은 **확인 필요**입니다.
 
-| 규칙 | 근거 |
-|---|---|
-| Plan Start(YYYYMMDD), From Site, To Site, Plan-type, Search Level, Division 값을 `CString.GetCheckedListValue`(메타 컬럼 CODE)로 수집합니다 | getPlanStartYYYYMMDD:215, getFromSite:306, getToSite:325, getPlanType:344, getSearchLevel:412, getDivision:466 |
-| 세션의 NowGroupID와 USER_ID를 사용합니다 | BaseForm.OnShown:522 |
-| 필수 입력값 | 필수값 검증 코드는 추출되지 않았습니다. **확인 필요** |
-| SP 입력 파라미터 | 엔드포인트별 파라미터 목록이 추출되지 않았습니다. **확인 필요** |
+### 4-2. 필수값·검증
+- 조회 전 필수값 검사와 오류 메시지 호출은 **추출되지 않았습니다** → **확인 필요**.
+- 조건 값 수집 (`CString.GetCheckedListValue`, 메타 컬럼 `CODE`):
+  - `getPlanStartYYYYMMDD`:215
+  - `getFromSite`:306
+  - `getToSite`:325
+  - `getPlanType`:344
+  - `getSearchLevel`:412
+  - `getDivision`:466
 
-### 4-2. 날짜·버킷 규칙
+### 4-3. 날짜·버킷 규칙 (grid_code.csv)
 
-| # | 규칙 | 근거 |
-|---:|---|---|
-| R1 | 기간 컬럼의 원천은 `SCP0100_GET_SHEET_CALENDAR_3SPAN` 결과 행입니다. 사용하는 열은 COLUMN_NAME, COLUMN_LABEL_NAME, DAY_CODE, LARGE_CLASS_LABEL_NAME, SMALL_CLASS_LABEL_NAME입니다 | InitSpreadDateColumn:706, SCM_SYS_CALENDAR_M SELECT |
-| R2 | `COLUMN_NAME.IndexOf("B_") > 0`이면 텍스트 컬럼(폭 0, 숨김)으로 만듭니다 | :755 |
-| R3 | R2가 아니면 숫자 컬럼(폭 70, 표시)으로 만듭니다 | :760 |
-| R4 | `M_`로 시작하고 `_plan_start_yyyymm`을 포함하면 글자색을 빨강으로 합니다 | :767 |
-| R5 | `W_`로 시작하고 라벨에 "A" 또는 "B"가 있으면 글자색을 파랑으로 합니다 | :774, :778 |
-| R6 | 헤더 병합: 0행은 LARGE_CLASS_LABEL_NAME, 1행은 SMALL_CLASS_LABEL_NAME, 2행 등은 고정 문자열 "Qty"입니다 | :787~816 |
-| R7 | Bucket이 "MONTHLY"이면 `M_`로 시작하는 컬럼만 표시하고 나머지는 숨깁니다 | SetSpreadColumn :1103/:1107 |
-| R8 | Bucket이 "WEEKLY"이면 `W_`로 시작하는 컬럼만 표시하고 나머지는 숨깁니다 | SetSpreadColumn :1114/:1118 |
-| R9 | R7·R8 루프는 `iCol < Columns.Count` 전체를 대상으로 합니다. 시작 인덱스(고정 메타 컬럼도 숨기는지)는 **확인 필요**입니다 | :1103~1118 |
-| R10 | D0, D1 컬럼은 숨깁니다 | SetVisibleColumnCycle :1290 |
-| R11 | 계획 종료일은 공통 데이터 코드 PLAN_END_DATE로 조회합니다(Biz 경유). 원천 테이블은 **확인 필요** | GetPlanEndDate:2035 |
+| 규칙 | 조건 | 결과 | 줄 |
+|---|---|---|---:|
+| B1 Bucket 월 | `_bucket_type.Equals("MONTHLY")` 이고 `ColName.IndexOf("M_") == 0` | 컬럼 표시 | 1103 |
+| B2 Bucket 월 외 | MONTHLY 이고 `M_`로 시작하지 않음 | 컬럼 숨김 | 1107 |
+| B3 Bucket 주 | `_bucket_type.Equals("WEEKLY")` 이고 `ColName.IndexOf("W_") == 0` | 컬럼 표시 | 1114 |
+| B4 Bucket 주 외 | WEEKLY 이고 `W_`로 시작하지 않음 | 컬럼 숨김 | 1118 |
+| D1 보조 컬럼 | `sColumnName.IndexOf("B_") > 0` (0번째가 아닌 위치에 `B_` 포함) | Text 컬럼, 폭 0, Visible=false | 755 |
+| D2 수량 컬럼 | 그 외 | Num 컬럼, 폭 70, Visible=true | 760 |
+| D3 계획 시작월 강조 | `M_`로 시작하고 `_plan_start_yyyymm` 포함 | 글자색 Red | 767 |
+| D4 주차 강조 A | `W_`로 시작하고 라벨에 "A" 포함 | 글자색 Blue | 774 |
+| D5 주차 강조 B | `W_`로 시작하고 라벨에 "A"는 없고 "B" 포함 | 글자색 Blue | 778 |
+| D6 D0·D1 숨김 | `SetVisibleColumnCycle` 루프 (컬럼 D0, D1) | 숨김 | 1290 |
+| H1 3단 헤더 | 0행 LARGE_CLASS_LABEL_NAME 병합, 1행 SMALL_CLASS_LABEL_NAME 병합, 2행 "Qty" | 기간 헤더 구성 | 787~816 |
 
-### 4-3. SP 분기 조건
+- 기간 범위의 종료일은 `GetPlanEndDate`가 `biz:CommonData.CommonDataList_REPORT`(code=PLAN_END_DATE)에서 얻습니다. 계산식은 **확인 필요**입니다.
+- `_plan_start_yyyymm`, `_bucket_type` 값의 출처(어느 컨트롤·SP 결과에서 오는지)는 **확인 필요**입니다.
+- `SetSpreadColumn` 루프는 `iCol < _SI.ActiveSheet.Columns.Count` 범위를 돕니다. 시작 인덱스는 **확인 필요**입니다. 0부터 돌면 메타 고정 컬럼까지 숨겨질 수 있습니다.
 
-| SP | 분기 조건 |
-|---|---|
-| SCP0100_GET_PLAN_DATE | 참조 객체(SCP_PLAN_VERSION_V, SCP_PLN_INTERFACE_YN, SCP_RPT_GLOBAL_PSI_MD_MM / _WW, #TMP_PLAN)만 추출되었습니다. 내부 분기(예: MM/WW 선택 조건)는 **확인 필요** |
-| SCP0100_GET_SITE | SCP_RPT_GLOBAL_PSI_MD_MM / _WW와 FN_SPLITSTRING 참조만 추출되었습니다. 분기는 **확인 필요** |
-| SCP0100_GET_SHEET_CALENDAR_3SPAN | SCM_SYS_CALENDAR_M 참조만 추출되었습니다. 분기는 **확인 필요** |
+### 4-4. Search Level 표시 규칙 (`SetLayout`, `if(!_is_detail)`)
 
-### 4-4. 표시 규칙
+| `cboSearchLevel.SelectedIndex` | PRODUCT_LEVEL1 | PRODUCT_LEVEL2 | PRODUCT_LEVEL3 | 줄 |
+|---|---|---|---|---|
+| 1 | 표시 | 표시 | 숨김 | 1498~1500 |
+| 2 | 표시 | 숨김 | 숨김 | 1509~1511 |
+| 3 | 숨김 | 표시 | 숨김 | 1518~1520 |
+| 4 | 표시 | 표시 | 표시 | 1527~1529 |
+| case 라벨 미추출 | 숨김 | 숨김 | 숨김 | 1536~1538 (**확인 필요**) |
 
-| # | 규칙 | 근거 |
-|---:|---|---|
-| R12 | `!_is_detail`일 때 cboSearchLevel.SelectedIndex에 따라 PRODUCT_LEVEL1~3을 표시합니다 → 1: L1·L2 / 2: L1 / 3: L2 / 4: L1·L2·L3 / 나머지 case(라벨 미추출): 모두 숨김 | SetLayout :1498~1538 |
-| R13 | `lciSearchLevel.Enabled = !_is_detail` | EnableSearchLevel :1874 |
-| R14 | spdSearchLevel, spdDetail, spdSearchLevelDetail 중 하나만 Visible입니다. 전환 조건은 **확인 필요** | VisibleSheet :1880~1896 |
-| R15 | Plan-type LayoutItem(`PlanType`)은 Enabled=false입니다 | designer:1159 |
-| R16 | chkCellQty(Checked=true)와 chkAS는 Visible=false입니다 | designer:248/284, :929 |
+- `lciSearchLevel.Enabled = !_is_detail` (`EnableSearchLevel`:1874)
+- `SetLayout`을 호출하는 지점은 **확인 필요**입니다.
 
-## 5. 데이터 흐름 표 (엔드포인트 → SP → 읽기/쓰기 테이블)
+## 5. 데이터 흐름 표
 
-| 엔드포인트 | SP | 호출 메서드:줄 | 읽기 | 쓰기 | 함수 참조 | 호출 핸들러 |
-|---|---|---|---|---|---|---|
-| `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | SCP0100_GET_SHEET_CALENDAR_3SPAN | GetSpdTitle:1326 | SCM_SYS_CALENDAR_M | 없음 | — | Form_Load, CboPlanDate_SelectedIndexChanged, DCalendar_ValueChanged, rgrpSearchLevel_SelectedIndexChanged, BtnColumn_Click, btnMeasure_Click |
-| `SCP.SCP0100_GET_SITE` | SCP0100_GET_SITE | GetSiteList:1342 | SCP_RPT_GLOBAL_PSI_MD_MM, SCP_RPT_GLOBAL_PSI_MD_WW | 없음 | FN_SPLITSTRING | SCP0100_Global_PSI_Report_Shown |
-| `SCP.SCP0100_GET_PLAN_DATE` | SCP0100_GET_PLAN_DATE | GetPlanDate:1365 | SCP_PLAN_VERSION_V, SCM_SYS_CALENDAR_M, SCP_PLN_INTERFACE_YN, SCP_RPT_GLOBAL_PSI_MD_MM, SCP_RPT_GLOBAL_PSI_MD_WW, #TMP_PLAN | #TMP_PLAN(임시 테이블 INSERT, 영구 테이블 쓰기 없음) | FN_CHAR_TO_DATE, FN_SPLITSTRING | Form_Load |
-| `biz:CommonData.CommonDataList_REPORT` [code=Data_REPORT.Type.PLAN_END_DATE] | 미식별(Biz 경유 `Data_REPORT.CallBizCommonData`) | GetPlanEndDate:2035 | **확인 필요** | 없음(추출 기준) | — | Form_Load, CboPlanDate_SelectedIndexChanged |
-| (메인 본문·차트 조회) | **미식별** | — | — | — | — | **확인 필요** |
+| 엔드포인트 | SP | 호출 진입점 (핸들러) | 읽기 테이블/객체 | 쓰기 | 결과 반영 |
+|---|---|---|---|---|---|
+| `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` | `SCP0100_GET_SHEET_CALENDAR_3SPAN` | `Form_Load`, `CboPlanDate_SelectedIndexChanged`, `DCalendar_ValueChanged`, `rgrpSearchLevel_SelectedIndexChanged`, `btnMeasure_Click`, `BtnColumn_Click` (모두 InitSpread > GetSpdTitle:1326) | `SCM_SYS_CALENDAR_M` | 없음 | `dsSpdTitle` → 기간 컬럼, 3단 헤더 (REPORT / SEARCH_LEVEL / SEARCH_LEVEL_DETAIL) |
+| `SCP.SCP0100_GET_SITE` | `SCP0100_GET_SITE` | `SCP0100_Global_PSI_Report_Shown` (RefreshToSite > GetSiteList:1342) | `SCP_RPT_GLOBAL_PSI_MD_MM`, `SCP_RPT_GLOBAL_PSI_MD_WW`, 함수 `FN_SPLITSTRING` | 없음 | `clbToSite` 목록 |
+| `SCP.SCP0100_GET_PLAN_DATE` | `SCP0100_GET_PLAN_DATE` | `Form_Load` (InitControls > GetPlanDate:1365) | `SCP_PLAN_VERSION_V`, `SCM_SYS_CALENDAR_M`, `SCP_PLN_INTERFACE_YN`, `SCP_RPT_GLOBAL_PSI_MD_MM`, `SCP_RPT_GLOBAL_PSI_MD_WW`, 함수 `FN_CHAR_TO_DATE`, `FN_SPLITSTRING` | 임시 테이블 `#TMP_PLAN` INSERT/SELECT (영구 테이블 쓰기 없음) | `cboPlanDate` 목록 |
+| `biz:CommonData.CommonDataList_REPORT` (code=PLAN_END_DATE) | 없음 (via `Data_REPORT.CallBizCommonData`) | `Form_Load`, `CboPlanDate_SelectedIndexChanged` (SetCalendar > GetDayRange > GetPlanEndDate:2035) | **확인 필요** | **확인 필요** | `dCalendar` 기간 범위 |
+| (메인 리포트 조회) | **확인 필요** | **확인 필요** | **확인 필요** | **확인 필요** | 그리드, `chartMain` |
 
-메타 읽기(프레임워크): SCM_MST_SHEET_COLUMNS(SetSheetHeaderColumn)와 SCM_MST_SHEET_MEASURE(`Global PSI New` 35행)입니다.
+- 메타 원천: `SCM_MST_SHEET_COLUMNS`(33행), `SCM_MST_SHEET_MEASURE`(36행, 시트 `Global PSI New`), `SCM_MST_TITLESET_USER`(526행).
+- 주석 처리된 호출(commented_calls): 0건.
 
-## 6. division·권한별 변형
+## 6. Division·권한별 변형
 
-| 구분 | 사실 |
-|---|---|
-| division 메타 | 14개 division(40, 81, 81_HD, 81_HG, 81_HM, 81_ST, 81_UC, 82, EE, EE_HD, EE_HG, EE_HM, EE_ST, EE_UC) 모두 같습니다. REPORT 14/0, SEARCH_LEVEL 8/0, SEARCH_LEVEL_DETAIL 8/0, MEASURE `Global PSI New` 35/0 |
-| 최종 표시 | REPORT 11 (?3), SEARCH_LEVEL 5 (?3), SEARCH_LEVEL_DETAIL 5 (?3). `?3`은 PRODUCT_LEVEL1~3으로, 실행 시점의 cboSearchLevel 값에 따라 정해집니다 |
-| division 코드 분기 | 없습니다. 코드에 division 변수 비교가 추출되지 않았습니다 |
-| division 조회조건 | clbDivision(멀티 선택)의 값을 getDivision:466으로 수집합니다. SP 전달 여부는 확인 필요 |
-| 권한 | TB_FX_GroupMenuAuth에 4행이 있습니다. 그룹별 C/R/U/D 값은 **확인 필요**(dbmeta CSV) |
-| 기타 메타 | TB_FX_MenuItemInfo 1, TB_FX_ProgramInfo 1, TB_FX_Favorite 2, TB_FX_SearchCondition 23, SCM_MST_TITLESET_USER 526 |
+| 구분 | 사실 | 결론 |
+|---|---|---|
+| Division 메타 | 14개 Division 전부 REPORT 14/0, SEARCH_LEVEL 8/0, SEARCH_LEVEL_DETAIL 8/0, `Global PSI New` 35/0 (40, 81, 81_HD, 81_HG, 81_HM, 81_ST, 81_UC, 82, EE, EE_HD, EE_HG, EE_HM, EE_ST, EE_UC) | 같음 |
+| Division 최종 컬럼 | REPORT 11 (?3), SEARCH_LEVEL 5 (?3), SEARCH_LEVEL_DETAIL 5 (?3), 전 Division 같음 | 같음 |
+| Division 코드 분기 | Division 변수를 비교하는 분기는 추출되지 않음 | Division별 변형 **없음** |
+| Division 조건 | `clbDivision`(멀티), `getDivision`:466. 값을 SP에 넘기는 방식은 확인 필요 | 조건 값만 사용 |
+| 권한 | `TB_FX_GroupMenuAuth` 4행, `TB_FX_MenuItemInfo` 1행, `TB_FX_ProgramInfo` 1행, `TB_FX_Favorite` 2행. C/R/U/D 값 없음 | **확인 필요** |
+| 세션 | `BaseForm.OnShown`:522가 `NowGroupID`, `USER_ID`를 소비 | 프레임워크 공통 |
 
 ## 7. 외부 인터페이스
 
-- 외부 시스템 연계 호출은 Fact Pack에서 추출되지 않았습니다.
-- `SCP0100_GET_PLAN_DATE`가 SCP_PLN_INTERFACE_YN 테이블을 읽는다는 사실만 있습니다. 이 테이블의 업무 의미는 **확인 필요**입니다.
+- 사실 묶음에 외부 시스템 인터페이스는 없습니다.
+- `SCP_PLN_INTERFACE_YN`(`SCP0100_GET_PLAN_DATE`가 SELECT)은 이름에 인터페이스 여부 플래그가 들어 있어 보이지만, 의미는 **확인 필요**입니다.
 
 ## 8. 미확정·확인 필요
 
-| # | 항목 |
-|---:|---|
-| 1 | 메인 데이터(시트 3개 본문, 차트) 조회 엔드포인트와 SP |
-| 2 | `biz:CommonData.CommonDataList_REPORT` PLAN_END_DATE의 원천 테이블과 반환값 형식 |
-| 3 | 엔드포인트별 SP 입력 파라미터와 조회조건 매핑 |
-| 4 | ClbDivision, CboGraphType, CboSearchLevel, CboUnitQty, CboPlanType, ChkCellQty, ChkAS 핸들러의 내부 동작 |
-| 5 | CboDisplay 값과 SplitterDistance 0/750/270의 대응 |
-| 6 | `_is_detail` 결정 조건과 VisibleSheet 전환 규칙 |
-| 7 | SetSpreadColumn 루프 시작 인덱스 |
-| 8 | SetLayout 마지막 case 값 |
-| 9 | Model / Project 팝업 화면 ID |
-| 10 | 필수값 검증과 메시지 |
-| 11 | TB_FX_GroupMenuAuth 그룹별 C/R/U/D 값 |
-| 12 | SP 내부 분기(MM/WW 테이블 선택 조건 등) |
+| # | 항목 | 이유 |
+|---:|---|---|
+| 1 | 메인 조회(Search) 엔드포인트·SP, 차트 데이터 원천 | 추출된 엔드포인트 4개는 모두 초기화·헤더·콤보용 |
+| 2 | 각 SP의 파라미터, 분기 조건, 월/주 테이블 선택 조건 | SP 본문 없음 |
+| 3 | `biz:CommonData.CommonDataList_REPORT`(PLAN_END_DATE)의 원천 테이블과 계산식 | 사실 묶음에 SP·테이블 없음 |
+| 4 | 엔드포인트가 추출되지 않은 핸들러의 동작 | `ClbDivision_SelectedIndexChanged`, `CboGraphType_SelectedIndexChanged`, `CboSearchLevel_SelectedIndexChanged`, `CboUnitQty_SelectedIndexChanged`, `CboPlanType_SelectedIndexChanged`, `ChkCellQty_CheckedChanged`, `ChkAS_CheckedChanged` |
+| 5 | `BtnItemId_Click`, `BtnProject_Click` 팝업의 화면·API | 결과 세팅만 추출됨 |
+| 6 | 필수값 검증·메시지 | 추출 없음 |
+| 7 | `_bucket_type`, `_plan_start_yyyymm`, `_is_detail`이 결정되는 지점 | 추출 없음 |
+| 8 | `SetLayout` 마지막 case 라벨과 호출 지점 | 파서가 case 값을 추출하지 못함 |
+| 9 | 권한 C/R/U/D 값, `TB_FX_SearchCondition` 23행 내용 | 행 수만 있음 |
+| 10 | `SCM_MST_SHEET_MEASURE` `Global PSI New` 35행과 시트·차트의 연결 | 연결 코드 미추출 |

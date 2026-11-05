@@ -1,42 +1,42 @@
 # SCP0010 — To-Be Fact Pack 요약
 
-- page_key: `supply/shipment-plan-semi` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 16 · 엔드포인트 호출 15 (미해결 1, 주석 속 0) · 이벤트 22 · 컴포넌트 사용 31 · 하드코딩 컬럼 3 · 메시지 35
+- page_key: `supply/shipment-plan-semi` · feature: supply · As-is Fact Pack 있음
+- 파일 16 · 엔드포인트 호출 16 (미해결 1, 주석 속 1) · 이벤트 21 · 컴포넌트 사용 31 · 하드코딩 컬럼 3 · 메시지 36
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 3건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | component | 408 |
-| features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | component | 473 |
+| features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | component | 468 |
+| features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | component | 556 |
 | features/supply/src/pages/shipment-plan-semi/hooks/useShipmentPlanSemiValidation.ts | hook | 36 |
 | features/supply/src/pages/shipment-plan-semi/index.ts | index | 2 |
 | features/supply/src/pages/shipment-plan-semi/shipment-plan-semi.columns.ts | other | 48 |
-| features/supply/src/pages/shipment-plan-semi/shipment-plan-semi.constants.ts | constants | 131 |
+| features/supply/src/pages/shipment-plan-semi/shipment-plan-semi.constants.ts | constants | 132 |
 | features/supply/src/pages/shipment-plan-semi/shipment-plan-semi.types.ts | types | 44 |
-| features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | page | 495 |
+| features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | page | 564 |
 | features/supply/src/pages/shipment-plan-semi/useShipmentPlanSemiStore.test.tsx | test | 122 |
 | features/supply/src/pages/shipment-plan-semi/useShipmentPlanSemiStore.ts | store | 265 |
 | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.buildColumns.ts | util | 42 |
 | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.deptDayDistribute.ts | util | 59 |
-| features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | util | 190 |
+| features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | util | 213 |
 | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.headerMerge.ts | util | 58 |
-| features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.save.ts | util | 237 |
+| features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.save.ts | util | 243 |
 | features/supply/src/pages/shipment-plan-semi/__asis-mapping__.md | mapping | 520 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 6 | Y | ShipmentPlanSemiForm.tsx:55 ShipmentPlanSemiForm.tsx:64 ShipmentPlanSemiForm.tsx:68 ShipmentPlanSemiForm.tsx:69 ShipmentPlanSemiForm.tsx:70 ShipmentPlanSemiForm.tsx:72 |
-| SCP0010/main//call-proc | hook | 1 | Y | ShipmentPlanSemi.tsx:74 |
-| SCP0010/calendar//call-proc | hook | 1 | Y | ShipmentPlanSemi.tsx:81 |
-| /SCP0010/main/{action}/call-proc | http | 1 | N | ShipmentPlanSemi.tsx:176 |
-| /SCP0010/main/SAVE/call-proc | http | 1 | Y | ShipmentPlanSemi.tsx:342 |
+| (useTabComboQueries) | hook | 7 | Y | ShipmentPlanSemiForm.tsx:56 ShipmentPlanSemiForm.tsx:65 ShipmentPlanSemiForm.tsx:69 ShipmentPlanSemiForm.tsx:70 ShipmentPlanSemiForm.tsx:71 ShipmentPlanSemiForm.tsx:73 |
+| SCP0010/main//call-proc | hook | 1 | Y | ShipmentPlanSemi.tsx:78 |
+| SCP0010/calendar//call-proc | hook | 1 | Y | ShipmentPlanSemi.tsx:85 |
+| /SCP0010/main/{action}/call-proc | http | 1 | N | ShipmentPlanSemi.tsx:220 |
+| /SCP0010/main/SAVE_WEEKLY\|SAVE/call-proc | http | 1 | Y | ShipmentPlanSemi.tsx:410 |
 | /admin/menu/SCP0010/column | http | 1 | Y | useShipmentPlanSemiStore.ts:202 |
 | /admin/menu/SCP0010/measure | http | 1 | Y | useShipmentPlanSemiStore.ts:222 |
 | /admin/menu/SCP0010/search-conditions | http | 1 | Y | useShipmentPlanSemiStore.ts:242 |
-| /SCP0010/main/FIX/call-proc | propagated | 1 | Y | ShipmentPlanSemi.tsx:224 |
-| /SCP0010/main/UNFIX/call-proc | propagated | 1 | Y | ShipmentPlanSemi.tsx:248 |
+| /SCP0010/main/FIX/call-proc | propagated | 1 | Y | ShipmentPlanSemi.tsx:270 |
+| /SCP0010/main/UNFIX/call-proc | propagated | 1 | Y | ShipmentPlanSemi.tsx:296 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -44,28 +44,27 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 231 |
-| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 255 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 265 |
-| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 286 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 323 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 324 |
-| FunctionSearchIcon | onClick | onItemSearch | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 319 |
-| PlanVersionCascade | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 362 |
-| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 378 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 397 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 322 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 358 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 359 |
-| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 410 |
-| grid | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 454 |
-| DataGrid | initialized | handleGridInitialized | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 467 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 468 |
-| ShipmentPlanSemiForm | onSearch | handleSearch | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 386 |
-| ShipmentPlanSemiForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 386 |
-| ShipmentPlanSemiGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 437 |
-| MeasureSelectModal | onApply | <arrow> currentMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:MEASURE_SHEET_NAME[measureSheetGroup],columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,setToast,t | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 465 |
-| NewPlanModal | onSaved | handleNewPlanSaved | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 490 |
+| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 232 |
+| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 256 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 266 |
+| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 287 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 325 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 321 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 388 |
+| PlanVersionCascade | onChange | <arrow> set,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,clearFilters | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 408 |
+| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 441 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 365 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 408 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 409 |
+| g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 460 |
+| grid | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 536 |
+| DataGrid | initialized | handleGridInitialized | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 549 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 550 |
+| ShipmentPlanSemiForm | onSearch | handleSearch | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 455 |
+| ShipmentPlanSemiForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 455 |
+| ShipmentPlanSemiGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 506 |
+| MeasureSelectModal | onApply | <arrow> currentMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:MEASURE_SHEET_NAME[measureSheetGroup],columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,setToast,t | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 534 |
+| NewPlanModal | onSaved | handleNewPlanSaved | jsx | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 559 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -77,9 +76,9 @@
 | InputField | 1 |
 | Button | 1 |
 | FunctionSearchIcon | 1 |
+| Checkbox | 1 |
 | PlanVersionCascade | 1 |
 | PeriodRangePicker | 1 |
-| Checkbox | 1 |
 | DataGrid | 1 |
 | MainTitle | 1 |
 | ShipmentPlanSemiForm | 1 |
@@ -93,8 +92,8 @@
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| toLeafConfig | l.binding | l.header | 90 | l.visible |  |  | object | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 160 |
-| leaf | m.binding | m.kind === 'D' ? m.leaf : 'SUM' |  | isDynVisible(m.kind) |  |  | object | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 181 |
+| toLeafConfig | l.binding | l.header | 90 | l.visible |  |  | object | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 189 |
+| leaf | m.binding | m.kind === 'D' ? m.leaf : 'SUM' |  | isDynVisible(m.kind) |  |  | object | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 210 |
 | buildColumns | c.key | c.header | c.width ?? 100 | c.visible !== false |  |  | meta-map | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.buildColumns.ts | 29 |
 
 ## 7. 메시지 코드
@@ -119,8 +118,9 @@
 | LBL00001 | 1 |
 | LBL00027 | 1 |
 | LBL00039 | 1 |
+| LBL01220 | 1 |
 | LBL00040 | 1 |
-| LBL00768 | 1 |
+| LBL00041 | 1 |
 | LBL00013 | 1 |
 | LBL00022 | 1 |
 | LBL00023 | 1 |
@@ -132,10 +132,44 @@
 | LBL00310 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0010(18), SCP0009(14), SCP0013(12), SCP0011(1)
-- SP/PKG: PKG_SCP0010(11), P_SCP0010_SAVE_SEMI_DATASET(6), PKG_COM0000(3), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(3), SCP0013_GET_PLAN_TYPE_SAVE_YN(3), P_DATA(3), P_SCP0010_GET_SHIP_PLAN_SEMI(2), P_USER_ID(2), P_BIZ_TYPE(2), SCM0001_GET_SCP_DAY_PERIOD(1), P_SCP0010_SAVE_SEMI_FIX_DS(1), P_SCP0010_SAVE_SEMI_WEEKLY(1), P_SHEET_NAME(1), P_LOAD_INPUT(1), P_SEMI_FIX_HIST_DS(1)
+- 화면ID: SCP0010(19), SCP0009(15), SCP0013(12), SCP0011(1)
+- SP/PKG: PKG_SCP0010(11), P_SCP0010_SAVE_SEMI_DATASET(6), SCP0013_GET_PLAN_TYPE_SAVE_YN(4), PKG_COM0000(3), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(3), P_DATA(3), P_SCP0010_GET_SHIP_PLAN_SEMI(2), P_SCP0010_SAVE_SEMI_WEEKLY(2), P_USER_ID(2), P_BIZ_TYPE(2), SCM0001_GET_SCP_DAY_PERIOD(1), P_SCP0010_SAVE_SEMI_FIX_DS(1), P_SCP0010_WEEKLY_SAVE(1), P_SHEET_NAME(1), P_LOAD_INPUT(1), P_SEMI_FIX_HIST_DS(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
-(없음)
+| kind | snippet | file | line |
+|---|---|---|---|
+| code | set(next); | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 419 |
+| code | if (changed) clearFilters(); | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiForm.tsx | 420 |
+| code | const weekToDayBindings = useMemo(() => { | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 126 |
+| code | const map = new Map<string, string[]>(); | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 127 |
+| code | const dBindings = dynColMetas.filter(m => m.kind === 'D'); | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 128 |
+| code | .filter(m => m.kind === 'W') | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 130 |
+| code | .forEach(w => { | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 131 |
+| code | const days = dBindings.filter(d => weekOrMonthStart.get(d.binding) === w.weekStart).map(d => d.binding); | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 132 |
+| code | if (days.length > 0) map.set(w.binding, days); | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 133 |
+| code | }); | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 134 |
+| code | }, [dynColMetas, weekOrMonthStart]); | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 136 |
+| code | Object.entries(distributed).forEach(([dBinding, value]) => { | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 394 |
+| code | }); | features/supply/src/pages/shipment-plan-semi/components/ShipmentPlanSemiGrid.tsx | 396 |
+| code | const planEditable = useMemo( | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 100 |
+| code | () => ((mainData as { o_rc2?: { IS_EDITABLE?: string }[] })?.o_rc2?.[0]?.IS_EDITABLE ?? 'N') === 'Y', | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 101 |
+| code | ); | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 103 |
+| endpoint | const [planSeqRows] = useTabComboQueries({ filters: [COMBO.PLAN_SEQ] }); | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 161 |
+| code | void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') }); | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 264 |
+| code | void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') }); | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 288 |
+| code | if (sc.divisionId.startsWith('EE')) return; | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 321 |
+| code | void setAlert({ type: 'alert', content: t(MSG.SAVE_NOT_ALLOWED, '_This plan cannot be modified.') }); | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 348 |
+| code | const rows = buildSaveRows( | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 387 |
+| code | ); | features/supply/src/pages/shipment-plan-semi/ShipmentPlanSemi.tsx | 393 |
+| code | const { division, shipFrozen, bodToYyyymmdd, planStartYyyymmdd, queryToYyyymmdd } = params; | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 83 |
+| code | const blockStartDate = division === '40' \|\| division === '81' \|\| isDivision81Series(division) | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 90 |
+| code | if (!blockStartDate) return null; | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 93 |
+| code | return { from: blockStartDate, to: queryToYyyymmdd }; | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 99 |
+| code | return { from: blockStartDate, to: bodTo }; | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 101 |
+| code | const lockStart = findDuplicateWeekLockStart(ctx.weekBindingsAsc); | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 187 |
+| code | const lockStartIdx = ctx.weekBindingsAsc.indexOf(lockStart); | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 189 |
+| code | const thisIdx = ctx.weekBindingsAsc.indexOf(binding); | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 190 |
+| code | if (thisIdx >= 0 && thisIdx >= lockStartIdx) return false; | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.editLock.ts | 191 |
+| code | if (kind !== 'D') return; // 저장 대상은 D_ 셀뿐(W_ 입력은 deptDayDistribute 로 이미 D_ 로 분배됨) | features/supply/src/pages/shipment-plan-semi/utils/shipment-plan-semi.save.ts | 93 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

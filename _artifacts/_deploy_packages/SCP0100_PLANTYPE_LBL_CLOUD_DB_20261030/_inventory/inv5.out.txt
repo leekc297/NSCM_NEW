@@ -1,0 +1,149 @@
+
+## SHEET_COLUMNS desc (36 rows)
+COLUMN_NAME | DATA_TYPE | DATA_LENGTH | NULLABLE | DATA_DEFAULT
+PROGRAM_ID | VARCHAR2 | 400 | N | '/' 
+SHEET_NAME | VARCHAR2 | 600 | N | '/' 
+COLUMN_NAME | VARCHAR2 | 800 | N | '/' 
+COLUMN_LABEL_NAME | VARCHAR2 | 600 | N | '/' 
+SORT_ORDER_NO | NUMBER | 22 | N | 
+DATA_SORT_METHOD_CODE | VARCHAR2 | 40 | Y | 
+SMALL_CLASS_LABEL_NAME | VARCHAR2 | 600 | Y | 
+LARGE_CLASS_LABEL_NAME | VARCHAR2 | 600 | Y | 
+FIXED_FLAG | VARCHAR2 | 1 | N | 'N' 
+COLUMN_WIDTH | NUMBER | 22 | N | (80) 
+CELL_CONTROL_OBJECT_TYPE_CODE | VARCHAR2 | 200 | Y | 
+CELL_COMBO_DATA_TYPE | VARCHAR2 | 200 | Y | 
+DATA_SCALE_NUMBER | NUMBER | 22 | Y | 
+DATA_MAX_LENGTH | NUMBER | 22 | Y | 
+HORIZONTAL_ALIGN_CODE | VARCHAR2 | 200 | N | 'C' 
+UPPERCASE_APPLY_FLAG | VARCHAR2 | 1 | N | 'N' 
+VISIBLE_FLAG | VARCHAR2 | 4 | N | 'Y' 
+DIVISION_ID | VARCHAR2 | 200 | Y | 
+DEFAULT_FLAG | VARCHAR2 | 1 | N | 'Y' 
+USER_SELECTABLE_FLAG | VARCHAR2 | 1 | N | 'Y' 
+VALID_YN | VARCHAR2 | 4 | N | '/' 
+CREATED_BY | VARCHAR2 | 600 | N | 
+CREATION_DATE | DATE | 7 | Y | SYSDATE
+LAST_UPDATED_BY | VARCHAR2 | 600 | N | 
+LAST_UPDATE_DATE | DATE | 7 | Y | SYSDATE
+ATTRIBUTE1 | VARCHAR2 | 600 | Y | 
+ATTRIBUTE2 | VARCHAR2 | 600 | Y | 
+ATTRIBUTE3 | VARCHAR2 | 600 | Y | 
+ATTRIBUTE4 | VARCHAR2 | 600 | Y | 
+ATTRIBUTE5 | VARCHAR2 | 600 | Y | 
+ATTRIBUTE6 | VARCHAR2 | 600 | Y | 
+ATTRIBUTE7 | VARCHAR2 | 600 | Y | 
+ATTRIBUTE8 | VARCHAR2 | 600 | Y | 
+ATTRIBUTE9 | VARCHAR2 | 600 | Y | 
+ATTRIBUTE10 | VARCHAR2 | 600 | Y | 
+INPUT_TP_CD | VARCHAR2 | 100 | N | 'S' 
+
+## SHEET_COLUMNS SCP0100 any col (36 rows)
+PROGRAM_ID | SHEET_NAME | COLUMN_NAME | COLUMN_LABEL_NAME | SORT_ORDER_NO | DATA_SORT_METHOD_CODE | SMALL_CLASS_LABEL_NAME | LARGE_CLASS_LABEL_NAME | FIXED_FLAG | COLUMN_WIDTH | CELL_CONTROL_OBJECT_TYPE_CODE | CELL_COMBO_DATA_TYPE | DATA_SCALE_NUMBER | DATA_MAX_LENGTH | HORIZONTAL_ALIGN_CODE | UPPERCASE_APPLY_FLAG | VISIBLE_FLAG | DIVISION_ID | DEFAULT_FLAG | USER_SELECTABLE_FLAG | VALID_YN | CREATED_BY | CREATION_DATE | LAST_UPDATED_BY | LAST_UPDATE_DATE | ATTRIBUTE1 | ATTRIBUTE2 | ATTRIBUTE3 | ATTRIBUTE4 | ATTRIBUTE5 | ATTRIBUTE6 | ATTRIBUTE7 | ATTRIBUTE8 | ATTRIBUTE9 | ATTRIBUTE10 | INPUT_TP_CD
+SCP0100 | REPORT | CELL_CF | Cell Qty | 150 | ASC | Cell Qty | Cell Qty | - | 90 | FPNumber |  |  |  | R | - | Y |  | Y | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | CELL_GROUP | Cell Group | 20 | ASC | Cell Group | Cell Group | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | Y | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | DIVISION_ID | Div | 10 | ASC | Div | Div | - | 60 |  |  |  |  | C | - | Y |  | Y | Y | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | FROM_SITE | From Site | 100 | ASC | From Site | From Site | - | 100 |  |  |  |  | C | - | Y |  | Y | Y | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | INCOTERMS | INCOTERMS | 120 | ASC | INCOTERMS | INCOTERMS | - | 75 | FPTextBox |  |  |  | C | - | Y |  | Y | Y | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | ITEM_ID | Model | 130 | ASC | Model | Model | - | 120 | FPTextBox |  |  |  | L | - | Y |  | Y | Y | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | MEASURE_GROUP | Measure Group | 40 | ASC | Measure Group | Measure Group | - | 110 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | MEASURE_NAME | Measure Name | 90 | ASC | Measure Name | Measure Name | Y | 150 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | MEASURE_UI | Measure | 80 | ASC | Measure | Measure | - | 150 | FPTextBox |  |  |  | C | - | N |  | N | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | OPERATION_ID | Operation | 30 | ASC | Operation | Operation | - | 80 | FPTextBox |  |  |  | C | - | Y |  | Y | Y | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | PLAN_TYPE | Plan Type | 15 | ASC | Div | Div | - | 80 |  |  |  |  | C | - | Y |  | Y | Y | Y | CONVERT_SCP0100 | 2026-10-23 15:25:14 | CONVERT_SCP0100 | 2026-10-23 15:25:14 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | PRODUCT_LEVEL1 | Product Level1 | 50 | ASC | Product Level1 | Product Level1 | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | Y | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | PRODUCT_LEVEL2 | Product Level2 | 60 | ASC | Product Level2 | Product Level2 | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | Y | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | PRODUCT_LEVEL3 | Product Level3 | 70 | ASC | Product Level3 | Product Level3 | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | Y | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | TO_SITE | To Site | 110 | ASC | To Site | To Site | - | 110 |  |  |  |  | C | - | Y |  | Y | Y | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | REPORT | VARIOUS_KEY | Trans Mode or Line or Project | 140 | ASC | Trans Mode or Line or Project | Trans Mode or Line or Project | - | 70 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL | CELL_GROUP | Cell Group | 20 | ASC | Cell Group | Cell Group | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL | DIVISION_ID | Div | 10 | ASC | Div | Div | - | 60 |  |  |  |  | C | - | Y |  | Y | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL | MEASURE_GROUP | Measure Group | 70 | ASC | Measure Group | Measure Group | - | 110 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL | MEASURE_NAME | Measure Name | 90 | ASC | Measure Name | Measure Name | Y | 150 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL | MEASURE_UI | Measure | 80 | ASC | Measure | Measure | - | 150 | FPTextBox |  |  |  | C | - | N |  | N | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL | OPERATION_GROUP | Operation Group | 60 | ASC | Operation Group | Operation Group | - | 115 | FPTextBox |  |  |  | C | - | Y |  | Y | Y | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL | PLAN_TYPE | Plan Type | 15 | ASC | Plan Type | Plan Type | - | 80 |  |  |  |  | C | - | Y |  | Y | Y | Y | CONVERT_SCP0100 | 2026-10-23 12:09:52 | minyonglee1 | 2026-10-23 12:14:50 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL | PRODUCT_LEVEL1 | Product Level1 | 30 | ASC | Product Level1 | Product Level1 | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL | PRODUCT_LEVEL2 | Product Level2 | 40 | ASC | Product Level2 | Product Level2 | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL | PRODUCT_LEVEL3 | Product Level3 | 50 | ASC | Product Level3 | Product Level3 | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | iamarock | 2024-01-29 14:54:56 | iamarock | 2024-01-29 14:54:56 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL_DETAIL | CELL_GROUP | Cell Group | 20 | ASC | Cell Group | Cell Group | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | yschoithira | 2024-08-22 17:55:14 | yschoithira | 2024-08-22 17:55:14 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL_DETAIL | DIVISION_ID | Div | 10 | ASC | Div | Div | - | 60 |  |  |  |  | C | - | Y |  | Y | - | Y | yschoithira | 2024-08-22 17:55:14 | yschoithira | 2024-08-22 17:55:14 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL_DETAIL | MEASURE_GROUP | Measure Group | 40 | ASC | Measure Group | Measure Group | - | 110 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | yschoithira | 2024-08-22 17:55:14 | yschoithira | 2024-08-22 17:55:14 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL_DETAIL | MEASURE_NAME | Measure Name | 90 | ASC | Measure Name | Measure Name | Y | 150 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | yschoithira | 2024-08-22 17:55:14 | yschoithira | 2024-08-22 17:55:14 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL_DETAIL | MEASURE_UI | Measure | 80 | ASC | Measure | Measure | - | 150 | FPTextBox |  |  |  | C | - | N |  | N | - | Y | yschoithira | 2024-08-22 17:55:14 | yschoithira | 2024-08-22 17:55:14 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL_DETAIL | OPERATION_GROUP | Operation Group | 50 | ASC | Operation Group | Operation Group | - | 115 | FPTextBox |  |  |  | C | - | Y |  | Y | Y | Y | yschoithira | 2024-08-22 17:55:14 | yschoithira | 2024-08-22 17:55:14 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL_DETAIL | PLAN_TYPE | Plan Type | 15 | ASC | Plan Type | Plan Type | - | 80 |  |  |  |  | C | - | Y |  | Y | Y | Y | CONVERT_SCP0100 | 2026-10-23 12:09:52 | minyonglee1 | 2026-10-23 12:14:50 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL_DETAIL | PRODUCT_LEVEL1 | Product Level1 | 30 | ASC | Product Level1 | Product Level1 | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | yschoithira | 2024-08-22 17:55:14 | yschoithira | 2024-08-22 17:55:14 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL_DETAIL | PRODUCT_LEVEL2 | Product Level2 | 60 | ASC | Product Level2 | Product Level2 | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | yschoithira | 2024-08-22 17:55:14 | yschoithira | 2024-08-22 17:55:14 |  |  |  |  |  |  |  |  |  |  | S
+SCP0100 | SEARCH_LEVEL_DETAIL | PRODUCT_LEVEL3 | Product Level3 | 70 | ASC | Product Level3 | Product Level3 | - | 140 | FPTextBox |  |  |  | C | - | Y |  | Y | - | Y | yschoithira | 2024-08-22 17:55:14 | yschoithira | 2024-08-22 17:55:14 |  |  |  |  |  |  |  |  |  |  | S
+
+## LOOKUP SCP0100 (4 rows)
+LOOKUP_TYPE | SEGMENT1 | SEGMENT2 | SEGMENT3 | SEGMENT4 | SEGMENT5 | DISPLAY_SEQ | VALID_YN | CREATED_BY | CREATION_DATE | LAST_UPDATED_BY | LAST_UPDATE_DATE
+SHEET_PRSL_YN | SCP0100 | SEARCH_LEVEL | Y | - | - |  | Y | CONVERT_SCP0100 | 2026-09-29 11:35:38 | CONVERT_SCP0100 | 2026-09-29 11:35:38
+SHEET_PRSL_YN | SCP0100 | Global PSI New | Y | - | - |  | Y | CONVERT_SCP0100 | 2026-09-29 11:35:38 | CONVERT_SCP0100 | 2026-09-29 11:35:38
+SHEET_PRSL_YN | SCP0100 | SEARCH_LEVEL_DETAIL | Y | - | - |  | Y | CONVERT_SCP0100 | 2026-09-29 11:35:38 | CONVERT_SCP0100 | 2026-09-29 11:35:38
+SHEET_PRSL_YN | SCP0100 | REPORT | Y | - | - |  | Y | CONVERT_SCP0100 | 2026-09-29 11:35:38 | CONVERT_SCP0100 | 2026-09-29 11:35:38
+
+## LOOKUP types used (5 rows)
+LOOKUP_TYPE | CNT | MIN_CRE | MAX_UPD | UB
+BUCKET_TYPE_CODE | 3 | 2017-11-24 18:24:00 | 2017-11-24 18:27:00 | Admin
+PLAN_TYPE | 8 | 2017-12-04 17:35:00 | 2026-03-30 11:03:46 | blueeos,yanbn82
+PRODUCT_LEVEL | 7 | 2023-11-27 10:03:23 | 2024-10-23 09:02:32 | iamarock,yschoithira
+SCP_UNIT_QTY | 4 | 2023-02-13 11:51:16 | 2023-02-13 11:51:16 | vadabi3
+STOCK_TREND_DISPLAY | 3 | 2023-02-13 11:55:09 | 2023-02-13 11:55:09 | vadabi3
+
+## SRCH_COND (3 rows)
+USER_ID | MNU_ID | PRAM_NM | PRAM_CTN | CREATED_BY | CREATION_DATE | LAST_UPDATED_BY | LAST_UPDATE_DATE
+minyonglee1 | SCP0100 | bucket | MONTHLY | minyonglee1 | 2026-10-30 15:28:14 | minyonglee1 | 2026-10-30 15:28:14
+minyonglee1 | SCP0100 | chkAs | false | minyonglee1 | 2026-10-30 15:28:14 | minyonglee1 | 2026-10-30 15:28:14
+minyonglee1 | SCP0100 | chkCellQty | true | minyonglee1 | 2026-10-30 15:28:14 | minyonglee1 | 2026-10-30 15:28:14
+
+## PROGRAM (1 rows)
+PROGRAM_ID | PROGRAM_NAME | PROGRAM_PATH | CLASS_NAME | USE_YN | REGT_USER_ID | CREATED_BY | CREATION_DATE | LAST_UPDATED_BY | LAST_UPDATE_DATE
+SCP0100 | Global PSI Report | SCP\Report\SCP0100_Global_PSI_Report.dll | GSCM.SCP.Report.UIL.SCP0100_Global_PSI_Report | Y | vadabi3 | system | 2026-06-12 14:37:05 | system | 2026-06-12 14:37:05
+
+## PROGRAM cols (10 rows)
+COLUMN_NAME | DATA_TYPE | NULLABLE
+PROGRAM_ID | VARCHAR2 | N
+PROGRAM_NAME | VARCHAR2 | N
+PROGRAM_PATH | VARCHAR2 | N
+CLASS_NAME | VARCHAR2 | N
+USE_YN | CHAR | N
+REGT_USER_ID | VARCHAR2 | Y
+CREATED_BY | VARCHAR2 | N
+CREATION_DATE | DATE | N
+LAST_UPDATED_BY | VARCHAR2 | N
+LAST_UPDATE_DATE | DATE | N
+
+## MNU_M cols (26 rows)
+COLUMN_NAME | DATA_TYPE | DATA_LENGTH | NULLABLE | DATA_DEFAULT
+MNU_ID | VARCHAR2 | 50 | N | '/' 
+UPPR_MNU_ID | VARCHAR2 | 50 | Y | 
+MNU_URL | VARCHAR2 | 200 | Y | 
+SYS_MNUL_URL | VARCHAR2 | 150 | Y | 
+MNU_MSG_ID | VARCHAR2 | 50 | N | '/' 
+MNU_DESC | VARCHAR2 | 300 | Y | 
+SORT_ORD | NUMBER | 22 | N | 
+MNU_LV_NO | NUMBER | 22 | N | 
+MNU_TP_CD | VARCHAR2 | 20 | N | '/' 
+UNIT_TP_CD | VARCHAR2 | 1 | N | '/' 
+USE_YN | VARCHAR2 | 1 | N | 'Y' 
+N01_ATR_CTN | VARCHAR2 | 1200 | Y | 
+N02_ATR_CTN | VARCHAR2 | 1200 | Y | 
+N03_ATR_CTN | VARCHAR2 | 1200 | Y | 
+N04_ATR_CTN | VARCHAR2 | 1200 | Y | 
+N05_ATR_CTN | VARCHAR2 | 1200 | Y | 
+N06_ATR_CTN | VARCHAR2 | 1200 | Y | 
+N07_ATR_CTN | VARCHAR2 | 1200 | Y | 
+N08_ATR_CTN | VARCHAR2 | 1200 | Y | 
+N09_ATR_CTN | VARCHAR2 | 1200 | Y | 
+N10_ATR_CTN | VARCHAR2 | 1200 | Y | 
+CREATED_BY | VARCHAR2 | 30 | N | 
+CREATION_DATE | DATE | 7 | N | SYSDATE 
+LAST_UPDATED_BY | VARCHAR2 | 30 | N | 
+LAST_UPDATE_DATE | DATE | 7 | N | SYSDATE 
+ROUTE_PATH | VARCHAR2 | 4000 | Y | 
+
+## MNU parent (1 rows)
+MNU_ID | UPPR_MNU_ID | MNU_MSG_ID | MNU_DESC | MNU_TP_CD | USE_YN
+Supply_Plan | Supply | MNU00013 | Supply Plan | MENU | Y

@@ -1,20 +1,20 @@
 # SCP0033 — To-Be Fact Pack 요약
 
-- page_key: `shipping/shipment-semi-dept-day` · feature: shipping · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 12 · 엔드포인트 호출 5 (미해결 0, 주석 속 0) · 이벤트 15 · 컴포넌트 사용 16 · 하드코딩 컬럼 1 · 메시지 15
+- page_key: `shipping/shipment-semi-dept-day` · feature: shipping · As-is Fact Pack 있음
+- 파일 12 · 엔드포인트 호출 5 (미해결 0, 주석 속 0) · 이벤트 16 · 컴포넌트 사용 19 · 하드코딩 컬럼 1 · 메시지 15
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | component | 173 |
+| features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | component | 190 |
 | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | component | 162 |
 | features/shipping/src/pages/shipment-semi-dept-day/hooks/useShipmentSemiDeptDayValidation.ts | hook | 64 |
 | features/shipping/src/pages/shipment-semi-dept-day/index.ts | index | 2 |
 | features/shipping/src/pages/shipment-semi-dept-day/shipment-semi-dept-day.constants.ts | constants | 179 |
 | features/shipping/src/pages/shipment-semi-dept-day/shipment-semi-dept-day.types.ts | types | 32 |
 | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.module.scss | style | 12 |
-| features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | page | 376 |
+| features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | page | 409 |
 | features/shipping/src/pages/shipment-semi-dept-day/useShipmentSemiDeptDayStore.ts | store | 174 |
 | features/shipping/src/pages/shipment-semi-dept-day/utils/shipmentSemiDeptDayColumns.ts | util | 66 |
 | features/shipping/src/pages/shipment-semi-dept-day/utils/shipmentSemiDeptDayEditLock.ts | util | 48 |
@@ -23,9 +23,9 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 1 | Y | ShipmentSemiDeptDayForm.tsx:45 |
-| SCP0033/main//call-proc | hook | 1 | Y | ShipmentSemiDeptDay.tsx:78 |
-| /SCP0033/main/SAVE/call-proc | http | 1 | Y | ShipmentSemiDeptDay.tsx:243 |
+| (useTabComboQueries) | hook | 1 | Y | ShipmentSemiDeptDayForm.tsx:48 |
+| SCP0033/main//call-proc | hook | 1 | Y | ShipmentSemiDeptDay.tsx:84 |
+| /SCP0033/main/SAVE/call-proc | http | 1 | Y | ShipmentSemiDeptDay.tsx:249 |
 | /admin/menu/SCP0033/column | http | 1 | Y | useShipmentSemiDeptDayStore.ts:125 |
 | /admin/menu/SCP0033/search-conditions | http | 1 | Y | useShipmentSemiDeptDayStore.ts:146 |
 
@@ -35,21 +35,22 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 99 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 121 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 144 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 145 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 163 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 102 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 124 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 162 |
+| Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 158 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayForm.tsx | 180 |
 | g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 91 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 110 |
 | g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 128 |
 | DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-semi-dept-day/components/ShipmentSemiDeptDayGrid.tsx | 158 |
-| ShipmentSemiDeptDayForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 325 |
-| ShipmentSemiDeptDayGrid | onItemCellDblClick | handleItemCellDblClick | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 353 |
-| ShipmentSemiDeptDayGrid | onDivisionRequired | <arrow> setAlert,t | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 354 |
-| ShipmentSemiDeptDayGrid | onFocus | <arrow>  | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 360 |
-| ModelByDivisionPopup | onClose | <arrow> setItemPopup | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 369 |
-| ModelByDivisionPopup | onSelect | handleModelSelected | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 370 |
+| ShipmentSemiDeptDayForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 333 |
+| ShipmentSemiDeptDayForm | onModelSearch | <arrow> setModelPopupOpen | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 334 |
+| ShipmentSemiDeptDayGrid | onItemCellDblClick | handleItemCellDblClick | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 364 |
+| ShipmentSemiDeptDayGrid | onDivisionRequired | <arrow> setAlert,t | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 365 |
+| ShipmentSemiDeptDayGrid | onFocus | <arrow>  | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 371 |
+| ModelByDivisionPopup | onClose | <arrow> setItemPopup | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 380 |
+| ModelByDivisionPopup | onSelect | handleModelSelected | jsx | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 381 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -59,12 +60,15 @@
 | CustomDropdown | 2 |
 | SearchArea | 1 |
 | InputField | 1 |
+| Button | 1 |
+| FunctionSearchIcon | 1 |
 | DataGrid | 1 |
 | MainTitle | 1 |
 | ShipmentSemiDeptDayForm | 1 |
 | SubTitle | 1 |
 | ShipmentSemiDeptDayGrid | 1 |
 | ModelByDivisionPopup | 1 |
+| MaterialByDivisionModal | 1 |
 
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
@@ -75,8 +79,8 @@
 | code | count |
 |---|---|
 | LBL00001 | 1 |
-| LBL00669 | 1 |
-| LBL00639 | 1 |
+| LBL00618 | 1 |
+| LBL00007 | 1 |
 | LBL00112 | 1 |
 | LBL00664 | 1 |
 | LBL00343 | 1 |
@@ -96,7 +100,7 @@
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | deleteOnlyNew=true — 선택 신규행('I')만 제거, 기존행은 무변경(no-op, AS-IS DeleteButton return). | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 146 |
+| code | deleteOnlyNew=true — 선택 신규행('I')만 제거, 기존행은 무변경(no-op, AS-IS DeleteButton return). | features/shipping/src/pages/shipment-semi-dept-day/ShipmentSemiDeptDay.tsx | 152 |
 
 ## 10. __asis-mapping__.md 상태
 - 구현: 27

@@ -1,0 +1,67 @@
+{
+"at": "2026-10-31 21:54:28",
+"rows": [
+{
+"id": "SYS0012",
+"ctx": "룩업·참조",
+"eg": "EG065",
+"result": "PASS",
+"expected": "REQ_NO_DISPLAY 를 참조하는 DB 객체 존재",
+"actual": "제외 그룹 9 · 참조 ['PKG_SYS0011'] [19, 24, 37, 42]"
+},
+{
+"id": "SYS0012",
+"ctx": "SYSTEM_CD NSCM 프로시저 호출",
+"eg": "EG065",
+"result": "ERROR",
+"expected": "신청 목록 프로시저 실행",
+"actual": "ORA-06550: line 1, column 7:",
+"asis": "PKG_SYS0011"
+},
+{
+"id": "SYS0012",
+"ctx": "SYSTEM_CD NSCM",
+"eg": "EG065",
+"result": "PASS",
+"expected": "REQ_NO_DISPLAY 9개 비표시 — DM-227",
+"actual": "목록 10개 · 제외 그룹 잔존 []",
+"asis": "AS-IS UP_FX_GetReqAuthGroupInfo · PKG_SYS0011.P_SYS0011_GET_AUTH_DATA"
+},
+{
+"id": "SYS0012",
+"ctx": "SYSTEM_CD COMMON 프로시저 호출",
+"eg": "EG065",
+"result": "ERROR",
+"expected": "신청 목록 프로시저 실행",
+"actual": "ORA-06550: line 1, column 7:",
+"asis": "PKG_SYS0011"
+},
+{
+"id": "SYS0012",
+"ctx": "SYSTEM_CD COMMON",
+"eg": "EG065",
+"result": "PASS",
+"expected": "REQ_NO_DISPLAY 9개 비표시 — DM-227",
+"actual": "목록 0개 · 제외 그룹 잔존 []",
+"asis": "AS-IS UP_FX_GetReqAuthGroupInfo · PKG_SYS0011.P_SYS0011_GET_AUTH_DATA"
+},
+{
+"id": "SYS0012",
+"ctx": "SYSTEM_CD SPMS 프로시저 호출",
+"eg": "EG065",
+"result": "ERROR",
+"expected": "신청 목록 프로시저 실행",
+"actual": "ORA-06550: line 1, column 7:",
+"asis": "PKG_SYS0011"
+},
+{
+"id": "SYS0012",
+"ctx": "SYSTEM_CD SPMS",
+"eg": "EG065",
+"result": "PASS",
+"expected": "REQ_NO_DISPLAY 9개 비표시 — DM-227",
+"actual": "목록 2개 · 제외 그룹 잔존 []",
+"asis": "AS-IS UP_FX_GetReqAuthGroupInfo · PKG_SYS0011.P_SYS0011_GET_AUTH_DATA"
+}
+]
+}

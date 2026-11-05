@@ -3,11 +3,12 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
 import { GridAction } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useProcMutation, useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore } from '@shared/stores';
+import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { SalesSitePriorityForm } from './components/SalesSitePriorityForm';
 import { SalesSitePriorityGrid } from './components/SalesSitePriorityGrid';
@@ -16,6 +17,11 @@ import { MENU_ID, MSG, SHEETS } from './sales-site-priority.constants';
 import type { SalesSitePriorityRow } from './sales-site-priority.types';
 import { useSalesSitePriorityStore } from './useSalesSitePriorityStore';
 import { insertDefaults, s } from './utils/sales-site-priority.editLock';
+import { submitMainSave } from './utils/salesSitePriority.saveRequest';
+
+// "2025-04-21 00:00:00" -> "2025-04-21" (시간부 제거). 날짜만/빈값은 그대로(날짜 문자열은 최대 10자).
+const dateOnly = (v: unknown): string =>
+  (typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '').slice(0, 10);
 
 // AS-IS GSCM.SCP.Master.UIL SCP0131_SalesSitePriority — 단일 그리드 마스터 CRUD(pivot 없음).
 //   설계: .atlas/gscm-design/SCP0131/design/00~03. 상세 매핑: __asis-mapping__.md.
@@ -31,6 +37,8 @@ export const SalesSitePriority = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 필수 컬럼(메타 M/IM) 저장검증 — 전 화면 공통. 이 화면 INPUT_TP_CD 전 'S' 라 필수는 validateSaveRows 가 병행.
   const { saveWithValidation } = useSaveWithValidation();
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+  const queryClient = useQueryClient();
+  const sesUserId = useSessionStore.getState().session.userId ?? '';
 
   const gridRef = useRef<FlexGrid>();
   const gridFilterRef = useRef<FlexGridFilter>();
@@ -54,13 +62,40 @@ export const SalesSitePriority = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: filters[SHEETS.MAIN],
     enabled: !!filters[SHEETS.MAIN],
   });
-  const { mutate } = useProcMutation<MENU_ID, SHEETS.MAIN>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.MAIN,
-    tabId,
-  });
+  // FROM/TO 는 GET 이 "YYYY-MM-DD 00:00:00"(Oracle DATE 직렬화) 문자열로 내려, FPDate 컬럼 포맷
+  //   (yyyy.MM.dd)이 문자열엔 적용되지 않아 시간까지 노출된다(AS-IS 는 날짜만, SpdMain .ToString
+  //   ("yyyy-MM-dd")). 표시·편집·저장 모두 날짜만 쓰므로 시간부를 떼어 날짜(앞 10자)만 남긴다 —
+  //   저장 payload 는 ymd8(숫자만 8자리) 로 환원하므로 영향 없음.
+  const rows = useMemo<SalesSitePriorityRow[]>(() => {
+    const list = data?.o_rc1 ?? [];
+    return list.map(r => {
+      const o = r as Record<string, unknown>;
+      return { ...o, FROM_YYYYMMDD: dateOnly(o.FROM_YYYYMMDD), TO_YYYYMMDD: dateOnly(o.TO_YYYYMMDD) };
+    }) as unknown as SalesSitePriorityRow[];
+  }, [data]);
 
-  const rows = useMemo<SalesSitePriorityRow[]>(() => data?.o_rc1 ?? [], [data]);
+  // 저장 — SCP 표준 util(컬럼별 '^'-fold + POST + false-success 가드)로 저장하고, 성공 시 [tabId]
+  //   무효화로 활성 조회를 재조회한다. 공용 useProcMutation({data:[rows]}) 은 이 SAVE SP 계약(전
+  //   파라미터 CLOB)에서 activeFlag·pre* 가 NULL 바인딩 → UPDATE/DELETE 0행 no-op + 성공 토스트라
+  //   쓰지 않는다(메모리 save-proc-per-column-caret-fold-fe, 자매 SCP0133).
+  const persistSave = async (saveRows: Record<string, unknown>[]) => {
+    const result = await submitMainSave(saveRows, sesUserId);
+    if (!result.ok) {
+      void setAlert({ type: 'alert', content: result.message ?? t('MSG00003', '_Failed to save.') });
+      return;
+    }
+    // MSG00672 "{0} data saved." — AS-IS MSG00004(저장 건수)처럼 {0}를 실제 저장 건수로 치환한다.
+    //   건수 원천은 SP o_rc1[0].RESULT_CNT, 없으면 제출 행수로 폴백.
+    const savedCount = result.count ?? saveRows.length;
+    setToast({
+      type: 'success',
+      message: t(MSG.SAVE_SUCCESS, '{0} data saved.').replace('{0}', String(savedCount)),
+    });
+    // 저장 성공 후 EditTracker clear — 안 하면 hasChanges()가 계속 true 라 행이 dirty(노란색)로 남는다.
+    //   이어지는 invalidate 재조회가 clean 행으로 그리드를 리바인드한다(SCP0133 persistSave 패턴).
+    editTrackerRef.current?.clearChanges();
+    void queryClient.invalidateQueries({ queryKey: [tabId] });
+  };
 
   // mount 1회 + Search 마다 admin 컬럼 메타 fetch. keep-alive 탭 stale filters 자동발사 방지(clearFilters).
   //   F6 로 저장한 조회조건을 폼에 복원한다(새로고침 생존은 이 GET 뿐 — store 는 비영속, 기본점검 #3).
@@ -132,11 +167,9 @@ export const SalesSitePriority = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     // 필수값 + PRIO_RANK>=1 + From<=To 검증(design 00 §4a validations 저장시점분, §3 참조).
     if (!validateSaveRows(src).ok) return;
-    // 필수 컬럼 메타검증 통과 시 mutate(저장 성공/실패 toast·재조회는 useProcMutation 표준 onSuccess).
-    saveWithValidation(
-      dirty as unknown as SalesSitePriorityRow[],
-      staticColumns[SHEETS.MAIN],
-      mutate
+    // 필수 컬럼 메타검증(saveWithValidation) 통과 시 util(persistSave)이 컬럼별 '^'-fold 로 실저장.
+    saveWithValidation(dirty, staticColumns[SHEETS.MAIN], saveRows =>
+      void persistSave(saveRows)
     );
   };
 

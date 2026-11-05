@@ -178,10 +178,9 @@ export const ShipmentChangeRequestForm = ({ onSearch, onItemSearch }: Props) => 
               render={() => (
                 <InputField
                   fullWidth
-                  // 다건(개행/콤마) 입력 — store 의 multiLine() 이 `[\n,]` 로 분해해 SP IN 절로 보내는데
-                  //   multiline 이 없어 개행을 아예 못 넣었다(자매 SSP0200 은 multiline+maxRows=3).
-                  multiline
-                  maxRows={3}
+                  // 다건 입력은 콤마로 — store 의 multiLine() 이 `[\n,]` 로 분해해 SP IN 절로 보낸다.
+                  //   SSP0003 과 동일하게 single-line 으로 둔다: multiline+maxRows 면 긴 값이 입력칸 안에서
+                  //   줄바꿈돼 보기 흉하다(사용자 신고 2026-10-28). 개행 없이 콤마 구분으로 다건 유지.
                   className={commonStyles.popupSearchField}
                   value={sc.itemId}
                   InputProps={{
@@ -189,14 +188,12 @@ export const ShipmentChangeRequestForm = ({ onSearch, onItemSearch }: Props) => 
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

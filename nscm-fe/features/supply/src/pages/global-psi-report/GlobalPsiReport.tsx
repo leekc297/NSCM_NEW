@@ -253,6 +253,11 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
+        // Plan Date(planStartYyyymmdd)는 'yyyymmdd' 로 끝나 공통 EXCLUDED_DATE_PARAM 에 걸려 Period(from/to)와
+        //   함께 저장 제외되지만, 자유 날짜가 아니라 콤보 선택값이라 F6 저장/복원 대상이다 → opt-in(사용자 지시
+        //   2026-10-30, ShipmentPlanSemi 동일 패턴). Period(from/toYyyymmdd)는 제외 유지 — Plan Date 변경 시
+        //   Form effect 가 재시드하므로 복원 불요. 복원은 store restore 가 makeInitSearch allowlist 로 자동 처리.
+        conditionIncludeKeys={['planStartYyyymmdd']}
         customButtons={customButtons}
       />
 

@@ -187,6 +187,11 @@ export const RANGE = {
   SAFETY_STOCK_MAX: 100,
 } as const;
 
+/** PRIORITY 소수 입력 차단(타이핑/붙여넣기 시점) — BOD(SCP0007) BOD_NUMBER_RULES 과 동일 처방. */
+export const BOD_ITEM_NUMBER_RULES = {
+  [BOD_ITEM_COLUMN.PRIORITY]: { positiveOnly: true, integerOnly: true },
+};
+
 /**
  * i18n 코드 — SCM_ADM_MSG_M 실측(02 §4.5 LABEL 9종 + 03 검증 MSG). AS-IS 번호 그대로 쓰지 말 것(#114):
  * 문구 역조회한 TO-BE 코드. 등가 없으면 defaultValue fallback.

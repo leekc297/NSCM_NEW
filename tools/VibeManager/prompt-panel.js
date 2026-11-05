@@ -150,8 +150,8 @@ button.sec{background:var(--vscode-button-secondaryBackground);color:var(--vscod
 label{user-select:none}.hint{opacity:.6;font-size:11px;margin-top:4px}
 </style></head><body>
 <div class="row"><b>Vibe_Manager</b><span class="hint">입력은 워크벤치(에디터) 패널로 전달됩니다 — 터미널 없음</span></div>
-<textarea id="t" placeholder="프롬프트 입력 — Ctrl+Enter 전송"></textarea>
-<div class="row"><button id="send">전송 (Ctrl+Enter)</button><button class="sec" id="new">워크벤치 열기</button><button class="sec" id="newScr" title="화면ID 를 새로 입력합니다. 이전 화면 컨텍스트가 자동 prefix 로 섞이지 않도록 리셋합니다.">새 화면</button><button class="sec" id="cont" style="display:none"></button></div>
+<textarea id="t" placeholder="프롬프트 입력 — Enter 전송 · Shift+Enter 줄바꿈"></textarea>
+<div class="row"><button id="send">전송 (Enter)</button><button class="sec" id="new">워크벤치 열기</button><button class="sec" id="newScr" title="화면ID 를 새로 입력합니다. 이전 화면 컨텍스트가 자동 prefix 로 섞이지 않도록 리셋합니다.">새 화면</button><button class="sec" id="cont" style="display:none"></button></div>
 <div class="row">화면ID <input id="id" type="text" value="${esc(st.id || '')}" placeholder="DMF0052"><label title="화면ID 가 있으면 자동으로 컨텍스트 prefix 가 붙습니다. 체크를 꺼도 ID 가 있으면 자동 적용 — 체크는 ID 없이 강제할 때."><input id="ctx" type="checkbox" ${st.ctx ? 'checked' : ''}> 컨텍스트(자동)</label><label title="신규 UI 생성·GAP 분석/보완 작업은 자동으로 하네스 모드가 됩니다. 체크 안 해도 자동 — 체크는 다른 Claude 지시에도 강제할 때."><input id="harness" type="checkbox" ${st.harness ? 'checked' : ''}> 하네스(자동)</label></div>
 ${groups}
 <div class="row"><button class="sec" id="editq">메뉴 편집 (quick.json)</button></div>
@@ -161,7 +161,7 @@ const $=id=>document.getElementById(id);const state=()=>({id:$('id').value,ctx:$
 const save=()=>vscode.postMessage(Object.assign({type:'saveState'},state()));
 ['id','ctx','harness'].forEach(k=>$(k).addEventListener('change',save));
 function send(){const text=$('t').value;if(!text.trim())return;vscode.postMessage(Object.assign({type:'send',text},state()));$('t').value='';}
-$('send').onclick=send;$('t').addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();send();}});
+$('send').onclick=send;$('t').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.altKey&&!e.isComposing&&e.keyCode!==229){e.preventDefault();send();}});  // 1.9.30: Enter 전송 · Shift+Enter 줄바꿈 · 한글 조합 중 Enter 는 조합 확정만
 $('new').onclick=()=>vscode.postMessage(Object.assign({type:'new'},state()));
 $('newScr').onclick=()=>vscode.postMessage(Object.assign({type:'newScreen'},state()));
 $('cont').onclick=()=>vscode.postMessage(Object.assign({type:'continue'},state()));

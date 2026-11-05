@@ -1,0 +1,4 @@
+﻿menu_id,name,steps,msg_re,no_save,no_editor,rule,source,user,pattern_id,basis,key
+SCP0085,[자동] CN 언어 조회 건수 총/건 표기,"lang:CN;search;pagetext:(总|共|合计)\s*[\d,]+\s*(条|行|件|个)",,,,I1,자동 생성 P02 · btn_auth SEARCH,,P02,btn_auth SEARCH,I1|lang-cn-count
+SCP0085,[자동] 조회 중 Loading 토스트 없음,noload,,,,H10,자동 생성 P03 · btn_auth SEARCH,,P03,btn_auth SEARCH,H10|noload
+SCP0085,[자동] 조회조건 콤보 3종 = 콤보,iscombo:Div;iscombo:Plant;iscombo:Item\ Type,,,,B1,"자동 생성 P21 · 조회조건 기준표(search_cond.csv) TO-BE 선택 Div, Plant, Item Type",,P21,"조회조건 기준표(search_cond.csv) TO-BE 선택 Div, Plant, Item Type",B1|iscombo|div + B1|iscombo|item\type + B1|iscombo|plant

@@ -113,9 +113,8 @@ export const DelegateForm = ({
                         appearance='outlined'
                         priority='normal'
                         disabled={disabled}
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onDelegateeSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onDelegateeSearch}
                       />
                     ),
                   }}

@@ -1,7 +1,22 @@
-// QUERY/OPEN 액션셀 — 클릭 가능한 링크형 셀(read-only 그리드 위 유일 인터랙션).
-.actionCell {
+// QUERY/OPEN 액션셀 버튼 — AS-IS FPButton 등가(design 03 §1.1). read-only 그리드 위 유일 인터랙션.
+//   버튼 자체는 시각 표현이고 클릭 처리는 그리드 hitTest(binding) 가 맡는다.
+//   사이즈 규약 = PlanManagement cellButton(고정 16px, 셀 flex 중앙정렬). 기본 셀 높이에 버튼이
+//   커 보이던 문제를 height 고정 + 셀측 flex 로 해소(formatItem 에서 셀 display:flex 지정).
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-border, #c4c4c4);
+  border-radius: 3px;
+  background: var(--color-surface, #f5f5f5);
+  font-size: 11px;
+  line-height: 1;
   cursor: pointer;
-  color: #1976d2;
-  text-decoration: underline;
-  font-weight: 500;
+
+  &:hover {
+    background: var(--color-surface-hover, #e8e8e8);
+  }
 }

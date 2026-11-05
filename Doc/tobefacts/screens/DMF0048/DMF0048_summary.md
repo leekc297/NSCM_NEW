@@ -1,6 +1,6 @@
 # DMF0048 — To-Be Fact Pack 요약
 
-- page_key: `demand/sales-monitoring` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `demand/sales-monitoring` · feature: demand · As-is Fact Pack 있음
 - 파일 13 · 엔드포인트 호출 10 (미해결 0, 주석 속 3) · 이벤트 21 · 컴포넌트 사용 32 · 하드코딩 컬럼 4 · 메시지 26
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 4건
 
@@ -8,8 +8,8 @@
 | file | role | lines |
 |---|---|---|
 | features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.module.scss | component | 71 |
-| features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.tsx | component | 412 |
-| features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | component | 696 |
+| features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.tsx | component | 414 |
+| features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | component | 695 |
 | features/demand/src/pages/sales-monitoring/index.ts | index | 2 |
 | features/demand/src/pages/sales-monitoring/sales-monitoring.constants.ts | constants | 352 |
 | features/demand/src/pages/sales-monitoring/sales-monitoring.types.ts | types | 61 |
@@ -53,14 +53,14 @@
 | ProjectField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.tsx | 344 |
 | ItemField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.tsx | 356 |
 | OwnerField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.tsx | 378 |
-| Checkbox | onChange | <arrow> set | jsx | features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.tsx | 402 |
+| Checkbox | onChange | <arrow> set | jsx | features/demand/src/pages/sales-monitoring/components/SalesMonitoringForm.tsx | 404 |
 | g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 453 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 460 |
 | g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 464 |
 | g | updatedLayout | onLayout | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 530 |
 | g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 583 |
 | g | updatedLayout | applyFooter | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 634 |
-| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 664 |
+| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-monitoring/components/SalesMonitoringGrid.tsx | 661 |
 | SalesMonitoringForm | onSearch | handleSearch | jsx | features/demand/src/pages/sales-monitoring/SalesMonitoring.tsx | 315 |
 | ColumnLayoutModal | onSave | <arrow> clearGridOnSettingChange,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,//⚠️팝업조회(위sheetName/columnType)와반드시같은값이어야한다.sheetName:SHEETS.MAIN,columnType:'C',rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/sales-monitoring/SalesMonitoring.tsx | 361 |
 | MeasureSelectModal | onApply | <arrow> clearGridOnSettingChange,applyVisibleMeasures,staticMeasures[SHEETS.MAIN].map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).//필수:저장키는팝업조회와같은상수를써야한다(다르면재진입시개인화유실).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/sales-monitoring/SalesMonitoring.tsx | 410 |

@@ -78,6 +78,21 @@ export const ADMIN_SHEET_NAME: Partial<Record<SHEETS, string>> = {
   [SHEETS.REQUEST_DETAIL_EXCEL]: 'Shipment Request Detail Excel',
 };
 
+// 하단 상세 그리드 합계(Sum) 대상 컬럼 — AS-IS InitSpreadFooterSum(cs:3597-3636) ColumnFooter SumIgnoreHidden.
+//   Stock Detail = IWMS_QTY_UOM ~ TOTAL_QTY_PCM 수량 8컬럼(iStCol=IWMS_QTY_UOM, TOTAL_QTY_PCM 에서 break, cs:3604/3620).
+//   Request Detail = SHIPMENT_QTY 단일(iStCol=SHIPMENT_QTY, +1 에서 break, cs:3609/3626). 모두 FPNumber 로 실측(SCM_MST_SHEET_COLUMNS).
+export const STOCK_DETAIL_AGGREGATE_COLUMNS = [
+  'IWMS_QTY_UOM',
+  'IWMS_QTY_PCM',
+  'GMES_QTY_UOM',
+  'GMES_QTY_PCM',
+  'OWMS_QTY_UOM',
+  'OWMS_QTY_PCM',
+  'TOTAL_QTY_UOM',
+  'TOTAL_QTY_PCM',
+] as const;
+export const REQUEST_DETAIL_AGGREGATE_COLUMNS = ['SHIPMENT_QTY'] as const;
+
 // Measure 정의(SCM_MST_SHEET_MEASURE, PROGRAM_ID=SSP0022, SHEET_NAME=ADMIN_SHEET_NAME.MAIN) — 10건 실측 배포됨.
 //   design 03 §1.5 — R_SHIP_REQ_ETA 는 코드 특별분기(lock 범위·BackColor) 대상.
 export const MEASURE = {

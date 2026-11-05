@@ -15,6 +15,7 @@ except Exception: pass
 import sys, os, csv, json, re, datetime, decimal
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import dbconn
+import collections
 HERE = os.path.dirname(os.path.abspath(__file__))
 H = json.load(open(os.path.join(os.path.dirname(HERE), 'Harness', 'harness.json'), encoding='utf-8-sig'))
 OUT_DIR = os.path.join(os.path.dirname(H['genOutDir']), 'golden')
@@ -22,7 +23,7 @@ WRITE = '--write' in sys.argv
 args = [a for a in sys.argv[1:] if not a.startswith('--')]
 only_case = None
 if '--case' in sys.argv: only_case = sys.argv[sys.argv.index('--case') + 1]; args = [a for a in args if a != only_case]
-MAX_ROWS = 5000
+MAX_ROWS = 200000  # 2026-10-28: 5000 상한이 양쪽의 '앞 5000행' 창을 달리 잘라 395/395행 허위 차이를 만들던 결함 — 전량 비교(상한 도달 시 md 에 표기)
 
 def nkey(c): return re.sub(r'[^a-z0-9]', '', str(c).lower())
 def nval(v):
@@ -81,8 +82,54 @@ def run_tobe(cx, proc, params):
     return sets, missing
 
 def _rows_of(sets):
-    try: return sum(len(x[-1]) for x in (sets or [])) if sets else ''  # AS-IS (cols, rows) · TO-BE (name, cols, rows) 모두 마지막 원소가 행
+    try: return sum(len(x[-1]) for x in (sets or []) if not (len(x) == 3 and re.search(r'RESULT_CURSOR$', str(x[0])))) if sets else ''  # TO-BE 상태 커서(O_RESULT_CURSOR 1행)는 건수에서 제외(2026-10-28: 5000↔5001 · 1↔2 허위 건수 차이)  # AS-IS (cols, rows) · TO-BE (name, cols, rows) 모두 마지막 원소가 행
     except Exception: return ''
+
+SENTINEL = ('', '-', '/')  # 빈 값 센티널(AS-IS '' ↔ TO-BE '-'/'/') 은 같은 값으로 본다(2026-10-15 지시)
+def snorm(v): return '' if v in SENTINEL else v
+ORDERPROF = []  # compare() 가 결과셋별 데이터 기준(공통/전용)·실제 순서 대조를 쌓는다 → <sp>.order.csv (A6 실측 순서 · A1 데이터 기준)
+
+
+def _order_check(setno, a, t, ac, tc, common, ai, ti, md):
+    """같은 인자로 받은 두 결과의 ① 데이터 기준(공통·한쪽 전용 행) ② 공통·유일 행의 상대 순서 — 2026-10-28 사용자: 'AS-IS 와 TO-BE 의 데이터가 조회되는 기준이 달라 비교 불가 → 정합검증에 추가'"""
+    A = [tuple(r[j] for j in ai) for r in a[1]]; T = [tuple(r[j] for j in ti) for r in t[2]]
+    An = [tuple(snorm(v) for v in r) for r in A]; Tn = [tuple(snorm(v) for v in r) for r in T]
+    ca, ct_ = collections.Counter(An), collections.Counter(Tn)
+    both = [k for k in ca if k in ct_]
+    common_rows = sum(min(ca[k], ct_[k]) for k in both)
+    uniq = {k for k in both if ca[k] == 1 and ct_[k] == 1}
+    seqA = [k for k in An if k in uniq]; seqT = [k for k in Tn if k in uniq]
+    first = next((i for i in range(min(len(seqA), len(seqT))) if seqA[i] != seqT[i]), -1)
+    # 센티널 차이 — 같은 행(정규화 일치)에서 원값이 ''↔'-'/'/' 로 다른 컬럼과 행수(AS-IS '' 행이 MSSQL 에서는 '-' 행보다 앞에 정렬되므로 순서 차이의 원인이 된다)
+    rawA = {}; rawT = {}
+    for r, rn in zip(A, An):
+        if rn in uniq: rawA[rn] = r
+    for r, rn in zip(T, Tn):
+        if rn in uniq: rawT[rn] = r
+    sent_cnt = collections.Counter()
+    for k in uniq:
+        ra, rt = rawA[k], rawT[k]
+        for idx in range(len(common)):
+            if ra[idx] != rt[idx] and ra[idx] in SENTINEL and rt[idx] in SENTINEL: sent_cnt[ac[common[idx]]] += 1
+    sent_cols = [f"{c}({n}행 AS-IS '{next(rawA[k][common.index(nkey(c))] for k in uniq if rawA[k][common.index(nkey(c))] != rawT[k][common.index(nkey(c))])}'↔TO-BE '{next(rawT[k][common.index(nkey(c))] for k in uniq if rawA[k][common.index(nkey(c))] != rawT[k][common.index(nkey(c))])}')" for c, n in sent_cnt.most_common(6)]
+    # NULL/빈 값 정렬 위치 — MSSQL 은 '' 를 맨 앞, Oracle 은 ''=NULL 을 맨 뒤(NULLS LAST)에 둔다(2026-10-28 SCP0007 CUSTOMER 110행 실측) → 같은 ORDER BY 라도 실제 순서가 달라지는 원인
+    null_cols = []
+    for idx, k in enumerate(common):
+        ea = [i for i, r in enumerate(A) if r[idx] == '']; et = [i for i, r in enumerate(T) if r[idx] == '']
+        if len(ea) >= 2 and len(et) >= 2 and len(ea) < len(A) and len(et) < len(T):
+            ra = sum(ea) / len(ea) / max(1, len(A) - 1); rt = sum(et) / len(et) / max(1, len(T) - 1)
+            if (ra < 0.35 and rt > 0.65) or (ra > 0.65 and rt < 0.35): null_cols.append(f"{ac[k]}(빈 값 {len(ea)}행 AS-IS {'앞' if ra < 0.5 else '뒤'}↔TO-BE {'앞' if rt < 0.5 else '뒤'})")
+    cap = len(a[1]) >= MAX_ROWS or len(t[2]) >= MAX_ROWS
+    verdict = 'NA' if len(uniq) < 2 else ('PASS' if first < 0 and len(seqA) == len(seqT) else 'DIFF')
+    ex = ''
+    if first >= 0:
+        ex = f"r{first}: AS-IS={[x[:20] for x in seqA[first][:6]]} ↔ TO-BE={[x[:20] for x in seqT[first][:6]]}"
+    md.append(f"- 데이터 기준: 공통 {common_rows}행 · AS-IS 전용 {len(A) - common_rows}행 · TO-BE 전용 {len(T) - common_rows}행 (AS-IS dev MSSQL ≠ 사내 Oracle 데이터 · 센티널 ''·'-'·'/' 동일 취급){' · ⚠ 행 상한 ' + str(MAX_ROWS) + ' 도달' if cap else ''}")
+    md.append(f"- 실제 순서(공통·유일 {len(uniq)}행의 상대 순서): " + ('일치' if verdict == 'PASS' else ('불일치 — 첫 차이 ' + ex) if verdict == 'DIFF' else '비교 불가(공통 행 2 미만)')
+              + (f" · 센티널 차이 컬럼 {', '.join(sent_cols[:6])} — 빈 값 표기가 달라 정렬 위치가 달라질 수 있음(TO-BE 센티널 정책 2026-10-15)" if sent_cols else '')
+              + (f" · NULL 정렬 위치 차이 {', '.join(null_cols[:4])} — MSSQL '' 맨 앞 ↔ Oracle NULL 맨 뒤(NULLS LAST): PKG ORDER BY 에 NULLS FIRST 또는 NVL 센티널 적용 대상" if null_cols else ''))
+    ORDERPROF.append({'set': setno, 'asis_rows': len(A), 'tobe_rows': len(T), 'common_rows': common_rows, 'asis_only': len(A) - common_rows, 'tobe_only': len(T) - common_rows,
+                      'uniq_rows': len(uniq), 'order': verdict, 'first_mismatch': ex[:400], 'sentinel_cols': ','.join(sent_cols), 'null_order_cols': ','.join(null_cols), 'capped': 'Y' if cap else ''})
 
 
 def compare(a_sets, t_sets):
@@ -116,19 +163,24 @@ def compare(a_sets, t_sets):
             for r in dt: md.append('| T | ' + ' | '.join(str(x)[:30] for x in r[:12]) + ' |')
         elif not only_a and not only_t and len(a[1]) == len(t[2]):
             md.append('- 일치')
+        _order_check(i + 1, a, t, ac, tc, common, ai, ti, md)  # 데이터 기준 · 실제 순서(2026-10-28)
         # A7 컬럼별 결과 값 (2026-10-27) — DEV↔사내 데이터가 달라 행 값 직접 비교는 차이가 많다 → 데이터 무관 판정 2가지
         #   ① 공란 컬럼: AS-IS 에 값이 있는 컬럼이 TO-BE 전 행 공란이면 FAIL (예: DM-169 Version 컬럼 공란)
-        #   ② 같은 키 행 대조: 첫 공통 컬럼 중 키 후보(_ID·CODE·NO·YYYYMMDD)로 겹치는 행의 컬럼별 불일치율 — 50% 이상이면 REVIEW
+        #   ② 같은 키 행 대조: 키 후보 복합 키로 겹치는 행의 컬럼별 불일치 — 1행이라도 있으면 REVIEW(예시 포함)
         def filled(rows_, j):
             return sum(1 for r in rows_ if nval(r[j]) not in ('', '-', '/')) / max(len(rows_), 1)  # 센티널 '-'·'/' = 공란
-        # 키 = 이름이 키 후보(_ID·CODE·NO·YYYYMMDD)이면서 AS-IS 값이 거의 유일(≥95%)한 첫 컬럼 1개 — DIVISION_ID 같은 저카디널리티·속성 _ID 제외
+        # 키 = 키 후보(_ID·CODE·NO·YYYYMMDD·이름) 컬럼을 고유값 많은 순으로 더해 AS-IS 행이 유일해지는 복합 키(EG040 · 2026-11-02 — 단일 키는 복합 키 화면에서 대조 행 0)
         keyc = []
-        for k in common:
-            if re.search(r'(id|code|no|yyyymmdd)$', k) and a[1]:
-                ja0 = a[0].index(ac[k])
-                if len({nval(r[ja0]) for r in a[1]}) / len(a[1]) >= 0.95:
-                    keyc = [k]
+        if a[1]:
+            kc = [k for k in common if re.search(r'(id|code|no|yyyymmdd|name|type|measure|site)$', k)]
+            kc.sort(key=lambda k: -len({nval(r[a[0].index(ac[k])]) for r in a[1]}))
+            for k in kc[:8]:
+                keyc.append(k)
+                ja_ = [a[0].index(ac[x]) for x in keyc]
+                if len({tuple(nval(r[j]) for j in ja_) for r in a[1]}) / len(a[1]) >= 0.99:
                     break
+            else:
+                keyc = []  # 8개로도 유일하지 않으면 같은 행을 특정할 수 없다
         amap = tmap = {}
         if keyc:
             ka, kt = [a[0].index(ac[k]) for k in keyc], [t[1].index(tc[k]) for k in keyc]
@@ -138,13 +190,14 @@ def compare(a_sets, t_sets):
         for k in common:
             ja, jt = a[0].index(ac[k]), t[1].index(tc[k])
             fa, ft = filled(a[1], ja), filled(t[2], jt)
-            mis = sum(1 for kk in both if nval(amap[kk][ja]) != nval(tmap[kk][jt]))
+            misk = [kk for kk in both if nval(amap[kk][ja]) != nval(tmap[kk][jt])]; mis = len(misk)
+            mex = ' 예: ' + ' / '.join(f"{'|'.join(str(x)[:18] for x in kk[:3])}: '{str(nval(amap[kk][ja]))[:18]}'↔'{str(nval(tmap[kk][jt]))[:18]}'" for kk in misk[:2]) if misk else ''
             if fa >= 0.05 and ft == 0 and len(t[2]) > 0:
                 v, note = 'FAIL', f"공란 컬럼 — AS-IS 값 있음 {fa:.1%} ↔ TO-BE 전 행 공란"
             elif fa > 0 and ft == 0 and len(t[2]) > 0:
                 v, note = 'REVIEW', f"AS-IS 소수 행만 값 있음({fa:.2%}) ↔ TO-BE 전 행 공란 — DEV·사내 데이터 차이일 수 있음(같은 키 행 확인)"
-            elif len(both) >= 10 and mis / len(both) >= 0.5 and k not in keyc:
-                v, note = 'REVIEW', f"같은 키 {len(both)}행 중 {mis}행 값 다름({mis / len(both):.0%})"
+            elif len(both) >= 1 and mis >= 1 and k not in keyc:  # 소수 행 차이도 근거와 함께 남긴다 — DEV↔사내 데이터 차이일 수 있어 FAIL 로 단정하지 않는다
+                v, note = 'REVIEW', f"같은 키({'+'.join(keyc[:4])}) {len(both)}행 중 {mis}행 값 다름({mis / len(both):.0%}){mex}"
             else:
                 v, note = 'PASS', f"채움 AS-IS {fa:.0%} ↔ TO-BE {ft:.0%}" + (f" · 같은 키 {len(both)}행 중 다름 {mis}" if both else '')
             COLPROF.append({'set': i + 1, 'column': ac[k], 'asis_fill': f"{fa:.3f}", 'tobe_fill': f"{ft:.3f}", 'key_rows': len(both), 'mismatch': mis, 'verdict': v, 'note': note})
@@ -180,7 +233,7 @@ for c in cases:
             try:
                 t_sets, missing = run_tobe(ct, proc, params)
                 if missing: md.append(f"- To-Be 인자 중 값 없음(NULL 전달): {', '.join(missing)}")
-                COLPROF.clear(); verdict, lines = compare(a_sets, t_sets); md += lines
+                COLPROF.clear(); ORDERPROF.clear(); verdict, lines = compare(a_sets, t_sets); md += lines
             finally:
                 if c['kind'] == 'SAVE': ct.rollback()
         except Exception as e:
@@ -191,12 +244,28 @@ for c in cases:
         with open(os.path.join(OUT_DIR, sc, f'{sp}.cols.csv'), 'w', encoding='utf-8-sig', newline='') as f:
             w = csv.DictWriter(f, fieldnames=['set', 'column', 'asis_fill', 'tobe_fill', 'key_rows', 'mismatch', 'verdict', 'note']); w.writeheader(); w.writerows(COLPROF)
         COLPROF.clear()
-    summary.append({'screen': sc, 'case_id': c['case_id'], 'kind': c['kind'], 'asis_sp': sp, 'tobe_proc': proc, 'verdict': verdict, 'asis_rows': _rows_of(a_sets), 'tobe_rows': _rows_of(t_sets)})
+    if ORDERPROF and a_sets is not None:  # A6 실측 순서 · A1 데이터 기준 — judge/mapping_trace 가 반입
+        with open(os.path.join(OUT_DIR, sc, f'{sp}.order.csv'), 'w', encoding='utf-8-sig', newline='') as f:
+            w = csv.DictWriter(f, fieldnames=list(ORDERPROF[0].keys())); w.writeheader(); w.writerows(ORDERPROF)
+    o1 = ORDERPROF[0] if ORDERPROF else {}
+    summary.append({'screen': sc, 'case_id': c['case_id'], 'kind': c['kind'], 'asis_sp': sp, 'tobe_proc': proc, 'verdict': verdict, 'asis_rows': _rows_of(a_sets), 'tobe_rows': _rows_of(t_sets),
+                    'common_rows': o1.get('common_rows', ''), 'asis_only': o1.get('asis_only', ''), 'tobe_only': o1.get('tobe_only', ''), 'order': o1.get('order', '')})
+    ORDERPROF.clear()
     print(f"[{verdict}] {c['case_id']}")
 ca.close(); ct.close()
-with open(os.path.join(OUT_DIR, '_summary.csv'), 'w', encoding='utf-8-sig', newline='') as f:
-    w = csv.DictWriter(f, fieldnames=['screen', 'case_id', 'kind', 'asis_sp', 'tobe_proc', 'verdict', 'asis_rows', 'tobe_rows']); w.writeheader(); w.writerows(summary)
-cnt = {k: sum(1 for s in summary if s['verdict'] == k) for k in ['PASS', 'COLS', 'ROWS', 'DIFF', 'ERR', 'SKIP']}
-md = [f"# 골든 테스트 요약 {datetime.datetime.now():%Y-%m-%d %H:%M}", '', ' · '.join(f'{k} {v}' for k, v in cnt.items()), '', '| 화면 | As-is SP | To-Be PROC | 판정 |', '|---|---|---|---|'] + [f"| {s['screen']} | {s['asis_sp']} | {s['tobe_proc']} | {s['verdict']} |" for s in summary]
+# 2026-10-28: 화면별 병합 — 이번에 돌린 화면의 행만 바꾸고 다른 화면 행은 보존(화면마다 통째로 덮어써 다른 화면 골든 행이 사라지던 결함 · 창별 동시 실행 대비)
+_sp = os.path.join(OUT_DIR, '_summary.csv'); _ran = {s['screen'] for s in summary}
+_keep = []
+if os.path.exists(_sp):
+    with open(_sp, encoding='utf-8-sig', newline='') as f:
+        _keep = [r for r in csv.DictReader(f) if r.get('screen') not in _ran]
+summary_all = _keep + summary
+_fn = ['screen', 'case_id', 'kind', 'asis_sp', 'tobe_proc', 'verdict', 'asis_rows', 'tobe_rows', 'common_rows', 'asis_only', 'tobe_only', 'order']
+_tmp = _sp + f'.{os.getpid()}.tmp'
+with open(_tmp, 'w', encoding='utf-8-sig', newline='') as f:
+    w = csv.DictWriter(f, fieldnames=_fn); w.writeheader(); w.writerows([{k: s.get(k, '') for k in _fn} for s in summary_all])
+os.replace(_tmp, _sp)
+cnt = {k: sum(1 for s in summary_all if s['verdict'] == k) for k in ['PASS', 'COLS', 'ROWS', 'DIFF', 'ERR', 'SKIP']}
+md = [f"# 골든 테스트 요약 {datetime.datetime.now():%Y-%m-%d %H:%M}", '', ' · '.join(f'{k} {v}' for k, v in cnt.items()), '', '| 화면 | As-is SP | To-Be PROC | 판정 |', '|---|---|---|---|'] + [f"| {s['screen']} | {s['asis_sp']} | {s['tobe_proc']} | {s['verdict']} |" for s in summary_all]
 open(os.path.join(OUT_DIR, '_summary.md'), 'w', encoding='utf-8').write('\n'.join(md) + '\n')
 print('요약:', ' · '.join(f'{k} {v}' for k, v in cnt.items()), '→', os.path.join(OUT_DIR, '_summary.md'))

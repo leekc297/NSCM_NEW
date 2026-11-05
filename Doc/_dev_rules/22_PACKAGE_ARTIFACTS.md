@@ -7,6 +7,11 @@
 > ⭐ **선행 룰**: [`17_NEW_SCREEN_QUICKSTART.md`](17_NEW_SCREEN_QUICKSTART.md) (9 step), [`08_SCREEN_REGISTRATION.md`](08_SCREEN_REGISTRATION.md) (4-파일 SQL 세트)
 > ⭐ **연관**: [`18_CODE_REVIEW_CHECKLIST.md`](18_CODE_REVIEW_CHECKLIST.md) (GATE-1 빌드 검증 → 클라우드에서)
 
+> ⭐ **2026-10-30 화면 단위 클라우드 이관 = 결정적 빌더 `tools/CloudPkg/cloud_pkg.py`** (Vibe_Manager ☁️ 메뉴 2종 — 수정본·전체. 2026-11-02 범위는 환경설정 작업 모드가 정함: DB MODE = `--mode db` · UI/DB MODE = `--mode all`, 인자 `--mode auto`).
+> 수정본(`--mode db|all`) = 직전 이관(`_artifacts/_deploy_packages/_cloud_state/<ID>.json`) 이후 바뀐 것만 · 전체(`--full`) = 화면 소유 DB·META 전부(+FE 페이지·참조 파일·ID 참조 BE).
+> 생성·보완 끝에 `--stage` 로 작업 모드 범위의 수정본·전체를 미리 만들어 두고(`_staging/<ID>/`), 메뉴는 입력 지문이 같으면 복사만 한다. 판정 규칙의 단일 원천은 그 파일 머리말이다.
+> 아래 수작업 표준은 빌더가 다루지 않는 경우(공용 객체 패치·데이터 이관 등)에만 쓴다.
+
 이력: 2026-05-22 신설 — DMF0020 작업을 통해 표준 확정.
 
 ---

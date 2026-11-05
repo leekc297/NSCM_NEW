@@ -12,6 +12,7 @@ import {
 } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, ProgressIndicator } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
 import type { DivisionType } from '../../capa-line-assign.constants';
@@ -153,8 +154,12 @@ export const CapaLineAssignModelModal = ({
     p_factory_id: toCsv(sel.factoryIds, cascade.candidates.factoryIds, true),
     p_line_id: toCsv(sel.lineIds, cascade.candidates.lineIds, true),
     p_operation_id: toCsv(sel.operationIds, cascade.candidates.operationIds, true),
+    // AS-IS 는 `p_item_id` 를 빈값으로 고정 전달한다(..._Model.cs:1094-1095, 주석처리된 `_item_id`
+    //   대신 `""` 하드코딩). 조회 SP `P_SCP0104_GET_CAPA_LINE_ASSIGN_MDL_*` 의 IN 9번이 `P_ITEM_ID`
+    //   이고 `P_VALID_FLAG` 는 시그니처에 없다(all_arguments 실측 2026-10-28). 과거 `p_valid_flag: ''`
+    //   는 SP 가 받지 않는 키라 무시됐고 `p_item_id` 는 누락돼 있었다 — AS-IS·SP 계약대로 교정한다.
+    p_item_id: '',
     p_electrode_type: toCsv(sel.electrodeTypes, cascade.candidates.electrodeTypes, false),
-    p_valid_flag: '',
     p_program_id: MENU_ID,
     p_sheet_name: ADMIN_SHEET_NAME[effectiveSheet],
     debug_mode: 'F',
@@ -162,11 +167,28 @@ export const CapaLineAssignModelModal = ({
 
   const filters = useMemo(() => {
     if (!open) return undefined;
-    // AS-IS 파리티(#7): 오픈만으로는 조회하지 않는다 — Search(FindButton) 를 눌러 `applied` 가
-    // 세팅될 때만 조회한다. AS-IS `SCP0104_CAPA_Line_Assign_Model` 은 Form Load 자동조회가 없고
-    // 툴바 Search 로만 질의한다.
     return applied ?? undefined;
   }, [open, applied]);
+
+  // 오픈 시 자동조회(사용자 지시 2026-10-27) — 위 재시드 effect 가 먼저 돌아 `sel` 을 부모값으로
+  //   되맞추고 `applied=null` 로 비운다. 그 재시드가 커밋되어 `sel`(및 그로부터 파생된
+  //   `cascade.candidates`)이 갱신된 **다음** 렌더에서, `applied` 가 비어 있으면 그 fresh 값으로
+  //   `buildFilters()` 를 만들어 질의한다. deps 에 `sel`/`cascade` 를 넣어 재시드가 커밋된 뒤
+  //   재실행되게 해야 stale `sel` 로 조회되지 않는다(부모 Division/모드가 바뀐 뒤 재오픈하는 경우).
+  //   재오픈 시 재시드가 `applied=null` 로 비우므로 매 오픈 1회 조회된다. P03 CapaLineModal 과 동일
+  //   목적(오픈 자동조회)이되, 이 팝업은 오픈마다 재시드하므로 settle 후 1회 조회로 구현한다.
+  //
+  //   필수: 재시드가 커밋되기 **전**(같은 effect 패스)에는 `sel.divisionId` 가 아직 stale(초기 '')
+  //   이다. 재시드 effect 의 `setSel`/`setApplied(null)` 은 스케줄만 하고 이 패스의 `sel` 을 바꾸지
+  //   않으므로, 가드가 없으면 stale `''` 로 `buildFilters()` 가 나가 `p_division_id` 가 빈값으로
+  //   조회된다(콤보는 재시드 커밋 후 부모 Division 을 표시하지만 질의는 이미 빈값으로 확정). 그래서
+  //   `sel.divisionId` 가 부모 `divisionId` 로 되맞춰진(= 재시드 커밋 완료) 렌더에서만 질의한다.
+  useEffect(() => {
+    if (!open || applied) return;
+    if (sel.divisionId !== divisionId) return;
+    setApplied(buildFilters());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, applied, sel, cascade.candidates, divisionId]);
 
   const { data, isLoading, isFetching } = useTabProcQuery<
     MENU_ID,
@@ -393,6 +415,8 @@ export const CapaLineAssignModelModal = ({
               priority='primary'
               size='medium'
               buttonLabel='OK'
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
               onClick={handleSubmit}
             />
             <Button

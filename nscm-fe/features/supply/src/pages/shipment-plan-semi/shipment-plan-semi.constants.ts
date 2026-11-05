@@ -116,6 +116,7 @@ export const LBL = {
   DIVISION: 'LBL00001', // Division (표준 LBL00001)
   OPERATION_GROUP: 'LBL00027', // Operation group
   PLAN_DATE: 'LBL00039', // Plan Date
+  PLAN_VERSION: 'LBL01220', // Plan Date/Type/Seq
   PLAN_TYPE: 'LBL00040', // Plan Type
   SEQ: 'LBL00041', // Seq
   PERIOD: 'LBL00013', // Period

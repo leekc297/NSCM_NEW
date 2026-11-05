@@ -9,7 +9,7 @@ const STAGES = [
   { key: 'pack', label: '1 파싱', task: 'S1.packone' },
   { key: 'docs', label: '2 문서', task: 'S3.agent' },
   { key: 'xlsx', label: '2x Excel', task: 'S3.xlsx' },
-  { key: 'gap', label: '3 GAP', task: 'S4.one' },
+  { key: 'chk', label: '3 CheckList', task: 'S8.verify' }, // 2026-10-30 GAP 분석 폐지 → CheckList(fixlist.csv 조치 필요 행)
   { key: 'gen', label: '4 생성', task: 'S5.pipelinedry' },
   { key: 'gate', label: '5 게이트', task: 'S5.final' },
   { key: 'repair', label: '6 수선', task: 'S5.pipeline' },
@@ -42,7 +42,7 @@ function stageStatus(p, id) {
   const gate = path.join(p.outDir, 'agent', id, '_gate.csv');
   if (has(gate)) { const rows = csvObjs(gate); const bad = rows.filter(r => /FAIL|BLOCK/i.test(r.status || r.result || '')).length; s.docs = bad ? 'warn' : 'ok'; } else s.docs = has(path.join(p.outDir, 'agent', id, 'analysis.md')) ? 'warn' : 'none';
   const xd = path.join(p.root, 'Doc', 'documents', id); s.xlsx = has(xd) && fs.readdirSync(xd).some(f => /\.xlsx$/.test(f)) ? 'ok' : 'none';
-  const gapF = path.join(p.gapDir, `${id}_gap.csv`); if (has(gapF)) { const rows = csvObjs(gapF); const open = rows.filter(r => /^(open|미해결|GAP)/i.test(r.status || r.result || '') || (r.allowed === 'N')).length; s.gap = open ? 'warn' : 'ok'; s.gapN = `${rows.length - open}/${rows.length}`; } else s.gap = 'none';
+  const fxF = path.join(p.root, 'Doc', 'verify', id, 'fixlist.csv'); if (has(fxF)) { const rows = csvObjs(fxF).filter(r => (r.action_needed || '').toUpperCase() === 'Y'); const open = rows.filter(r => !/^(적용|검증완료)/.test(r.status || '')).length; s.chk = open ? 'warn' : 'ok'; s.chkN = `${rows.length - open}/${rows.length}`; } else s.chk = 'none';
   s.gen = has(path.join(g, 'GEN_NOTES.md')) ? (pageDirOf(p, id) && has(pageDirOf(p, id)) ? 'ok' : 'warn') : 'none';
   const chk = rd(path.join(g, 'CHECK.md')); const m = chk.match(/BLOCK (\d+) \/ WARN (\d+)/); s.gate = m ? (Number(m[1]) === 0 ? 'ok' : 'bad') : 'none'; s.gateN = m ? `${m[1]}/${m[2]}` : '';
   const dod = rd(path.join(g, 'DOD.md')).match(/(\d+)\/(\d+) 충족/); s.dod = dod ? `${dod[1]}/${dod[2]}` : '';

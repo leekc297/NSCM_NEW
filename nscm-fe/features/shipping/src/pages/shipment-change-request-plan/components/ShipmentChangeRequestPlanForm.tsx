@@ -234,8 +234,6 @@ export const ShipmentChangeRequestPlanForm = ({ onSearch, onItemSearch }: Props)
                 <InputField
                   fullWidth
                   disabled={noDivisionAuth}
-                  multiline
-                  maxRows={3}
                   className={commonStyles.popupSearchField}
                   value={sc.itemId}
                   InputProps={{
@@ -255,7 +253,7 @@ export const ShipmentChangeRequestPlanForm = ({ onSearch, onItemSearch }: Props)
             />
           </Grid>
 
-          {/* SO No — 다건(개행/콤마). */}
+          {/* SO No — 다건(콤마). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -265,9 +263,6 @@ export const ShipmentChangeRequestPlanForm = ({ onSearch, onItemSearch }: Props)
                 <InputField
                   fullWidth
                   disabled={noDivisionAuth}
-                  multiline
-                  maxRows={3}
-                  className={commonStyles.multilineSearchField}
                   value={sc.erpSoNo}
                   onChange={e => set({ erpSoNo: e.target.value })}
                 />
@@ -275,7 +270,7 @@ export const ShipmentChangeRequestPlanForm = ({ onSearch, onItemSearch }: Props)
             />
           </Grid>
 
-          {/* Confirm Id — 다건(개행/콤마). */}
+          {/* Confirm Id — 다건(콤마). 자매 Shipment Change History 와 같은 single-line. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -285,9 +280,6 @@ export const ShipmentChangeRequestPlanForm = ({ onSearch, onItemSearch }: Props)
                 <InputField
                   fullWidth
                   disabled={noDivisionAuth}
-                  multiline
-                  maxRows={3}
-                  className={commonStyles.multilineSearchField}
                   value={sc.confirmId}
                   onChange={e => set({ confirmId: e.target.value })}
                 />

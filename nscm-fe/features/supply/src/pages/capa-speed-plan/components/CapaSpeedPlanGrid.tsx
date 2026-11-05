@@ -11,7 +11,7 @@ import {
   ASSEMBLY_SCALE_VIEW,
   COLUMN,
   DIVISION_TYPE,
-  HEADER_ROW_HEIGHT,
+  HEADER_TOTAL_HEIGHT,
   MEASURE_COLOR_TARGETS,
   MENU_ID,
   SHEETS,
@@ -147,6 +147,9 @@ export const CapaSpeedPlanGrid = ({
     const grid = gridRef.current;
     if (!grid) return;
 
+    // 편집 시작 시 그 셀의 이전 값을 담아둔다 — 커밋된 값이 숫자가 아니면 cellEditEnded 가 이 값으로 되돌린다.
+    let lastEditOldValue: unknown;
+
     const formatItemHandler = (
       sender: FlexGridType,
       event: { panel: unknown; row: number; col: number; cell: HTMLElement }
@@ -184,7 +187,17 @@ export const CapaSpeedPlanGrid = ({
       if (binding === COLUMN.PFRSLT_QTY || binding === COLUMN.BASE_QTY || isEditablePeriodColumn(binding)) {
         const scale = scaleOf(row);
         const raw = row[binding];
-        if (scale !== null && raw !== null && raw !== undefined && raw !== '') {
+        // 편집 중인 셀(에디터 input 이 든 셀)은 textContent 를 덮지 않는다 — 덮으면 편집기 input 이
+        //   날아가 재편집이 안 된다. 숫자 값만 이 블록을 타므로(문자 값은 Number(raw)=NaN 이라 skip)
+        //   "숫자 셀만 재편집 안 됨"으로 나타났다(사용자 지적 2026-10-28).
+        const isEditingThisCell = !!event.cell.querySelector('input, select, textarea');
+        if (
+          !isEditingThisCell &&
+          scale !== null &&
+          raw !== null &&
+          raw !== undefined &&
+          raw !== ''
+        ) {
           const numeric = Number(raw);
           if (Number.isFinite(numeric)) {
             event.cell.textContent = numeric.toLocaleString(undefined, {
@@ -215,6 +228,7 @@ export const CapaSpeedPlanGrid = ({
       });
       event.cancel = !editable;
       if (!editable) return;
+      lastEditOldValue = row?.[binding]; // 되돌림용 이전 값
 
       // (e) 잠금 셀이 아닐 때만 콤보를 꽂는다(R-04). 행마다 후보가 달라야 정상이다(V-36).
       if (sheetRef.current === SHEETS.ELTR && binding === COLUMN.ELTR_LN_TP_CD) {
@@ -227,7 +241,7 @@ export const CapaSpeedPlanGrid = ({
 
     const pastingCellHandler = (
       sender: FlexGridType,
-      event: { cancel: boolean; row: number; col: number }
+      event: { cancel: boolean; row: number; col: number; data: unknown }
     ) => {
       const binding = sender.columns[event.col]?.binding ?? '';
       const row = sender.rows[event.row]?.dataItem as Scp0105Row | undefined;
@@ -240,7 +254,31 @@ export const CapaSpeedPlanGrid = ({
         })
       ) {
         event.cancel = true;
+        return;
       }
+      // Wijmo 기본 붙여넣기는 setCellData(coerce=true) 로 값을 쓰는데, 런타임 조립된 동적 기간 컬럼
+      //   (dataType 미지정)에는 coerce=true 가 값을 못 쓴다(2026-10-28 실측: 같은 셀에 coerce=false 는
+      //   써지고 coerce=true 는 NULL 로 남음 → 붙여넣기 무동작의 근본원인). 그래서 기본 paste 를 막고
+      //   숫자로 파싱해 직접 쓴다. 이 경로가 타이핑과 동일한 숫자검증(문자 붙여넣기 차단)도 겸한다.
+      const numericCol =
+        binding === COLUMN.PFRSLT_QTY ||
+        binding === COLUMN.BASE_QTY ||
+        isEditablePeriodColumn(binding);
+      if (!numericCol) return; // 숫자 컬럼이 아니면 Wijmo 기본 동작에 맡긴다
+      const raw = String(event.data ?? '').replaceAll(',', '').trim();
+      event.cancel = true; // 기본 paste 억제 — 아래에서 직접 적용
+      let wrote = false;
+      if (raw === '') {
+        sender.setCellData(event.row, event.col, null, false, true); // 빈값 = 클리어
+        wrote = true;
+      } else if (Number.isFinite(Number(raw))) {
+        sender.setCellData(event.row, event.col, Number(raw), false, true);
+        wrote = true;
+      }
+      // 숫자 아님 → 아무것도 쓰지 않음(문자 붙여넣기 차단)
+      // 붙여넣기도 타이핑 편집과 동일하게 자동계산(PPM 등 RecalcSheet)을 돈다 — 기본 paste 를 막아
+      //   cellEditEnded 가 안 불리므로 여기서 직접 재계산을 트리거한다(사용자 지적 2026-10-28).
+      if (wrote) editEndedRef.current(event.row, binding);
     };
     grid.pastingCell.addHandler(pastingCellHandler);
 
@@ -269,9 +307,86 @@ export const CapaSpeedPlanGrid = ({
       ) {
         return;
       }
+      // 숫자 셀에 숫자 아닌 값이 커밋됐으면 편집 전 값으로 되돌린다(문자 등록 차단, 사용자 요청 2026-10-28).
+      //   cellEditEnding 1차 방어가 놓친 경로(활성 에디터 null·blur 커밋 등)의 2차 안전망이다. 재계산 skip.
+      const numericCol =
+        binding === COLUMN.PFRSLT_QTY ||
+        binding === COLUMN.BASE_QTY ||
+        isEditablePeriodColumn(binding);
+      if (numericCol) {
+        const committed = row?.[binding];
+        if (
+          committed !== null &&
+          committed !== undefined &&
+          committed !== '' &&
+          !Number.isFinite(Number(String(committed).replaceAll(',', '')))
+        ) {
+          sender.setCellData(event.row, event.col, lastEditOldValue ?? null, false, true);
+          return;
+        }
+      }
       editEndedRef.current(event.row, binding);
     };
     grid.cellEditEnded.addHandler(cellEditEndedHandler);
+
+    // 숫자 셀 커밋 검증 — 문자·"1.2.3" 등 숫자로 변환 안 되는 값은 확정 직전에 취소해 등록을 막는다
+    //   (사용자 요청 2026-10-28). dataType:Number 는 재편집을 깨서(formatItem textContent 클로버 사고)
+    //   안 쓰고, cellEditEnding 으로 값만 검사한다 — 컬럼 타입/렌더를 안 건드려 편집에 영향 없다.
+    //   빈값은 클리어로 허용. 콤마(표시 포맷)는 제거 후 판정.
+    const cellEditEndingHandler = (
+      sender: FlexGridType,
+      event: { cancel: boolean; row: number; col: number }
+    ) => {
+      if (event.cancel) return;
+      const binding = sender.columns[event.col]?.binding ?? '';
+      const isNumericCol =
+        binding === COLUMN.PFRSLT_QTY ||
+        binding === COLUMN.BASE_QTY ||
+        isEditablePeriodColumn(binding);
+      if (!isNumericCol) return;
+      const editor = sender.activeEditor as HTMLInputElement | null;
+      if (!editor) return;
+      const raw = String(editor.value ?? '').replaceAll(',', '').trim();
+      if (raw === '') return; // 빈값 = 클리어 허용
+      if (!Number.isFinite(Number(raw))) event.cancel = true; // 숫자 아님 → 커밋 취소(이전 값 유지)
+    };
+    grid.cellEditEnding.addHandler(cellEditEndingHandler);
+
+    // 입력 단계 차단 — 숫자 셀 편집기에 숫자(음수·소수점 1개) 외 입력을 막는다(사용자 요청 2026-10-28:
+    //   문자는 입력조차 안 되게). formatItem 가드로 편집기가 보존되므로 리스너가 유지된다(이전 편집깨짐은
+    //   dataType·formatItem 클로버였고 지금은 해소). beforeinput 이 Latin·다중소수점을 입력 전에 막고,
+    //   input 핸들러가 IME(한글) 등으로 들어온 숫자 외 문자를 즉시 제거한다. 그래도 샌 값은 cellEditEnding/
+    //   cellEditEnded 가 2차로 거른다(3중 방어).
+    const prepareCellForEditHandler = (sender: FlexGridType, event: { col: number }) => {
+      const binding = sender.columns[event.col]?.binding ?? '';
+      const isNumericCol =
+        binding === COLUMN.PFRSLT_QTY ||
+        binding === COLUMN.BASE_QTY ||
+        isEditablePeriodColumn(binding);
+      if (!isNumericCol) return;
+      const editor = sender.activeEditor as HTMLInputElement | null;
+      if (!editor) return;
+      editor.addEventListener('beforeinput', (inputEvent: InputEvent) => {
+        // 타이핑(insertText)만 즉시 차단한다. 붙여넣기(insertFromPaste)·IME(insertCompositionText)는
+        //   아래 input 핸들러가 숫자 외를 걸러낸다 — 여기서 막으면 개행·탭이 섞인 클립보드(셀/범위 복사)로
+        //   붙여넣기가 통째로 막힌다(사용자 지적 2026-10-28).
+        if (inputEvent.inputType !== 'insertText') return;
+        if (inputEvent.data == null) return; // 삭제·커서이동 등 통과
+        const start = editor.selectionStart ?? editor.value.length;
+        const end = editor.selectionEnd ?? editor.value.length;
+        const next = (
+          editor.value.slice(0, start) +
+          inputEvent.data +
+          editor.value.slice(end)
+        ).replaceAll(',', '');
+        if (!/^-?\d*\.?\d*$/.test(next)) inputEvent.preventDefault();
+      });
+      editor.addEventListener('input', () => {
+        const cleaned = editor.value.replace(/[^\d.,\-]/g, ''); // 숫자·소수점·콤마·마이너스만 남긴다
+        if (cleaned !== editor.value) editor.value = cleaned;
+      });
+    };
+    grid.prepareCellForEdit.addHandler(prepareCellForEditHandler);
 
     return () => {
       try {
@@ -279,6 +394,8 @@ export const CapaSpeedPlanGrid = ({
         grid.beginningEdit?.removeHandler(beginningEditHandler);
         grid.pastingCell?.removeHandler(pastingCellHandler);
         grid.cellEditEnded?.removeHandler(cellEditEndedHandler);
+        grid.cellEditEnding?.removeHandler(cellEditEndingHandler);
+        grid.prepareCellForEdit?.removeHandler(prepareCellForEditHandler);
       } catch {
         /* unmount race */
       }
@@ -287,14 +404,15 @@ export const CapaSpeedPlanGrid = ({
   }, [staticColumns, periodColumns]);
 
   /**
-   * (b) 병합 토글 — AS-IS `SetSheetMerge`(cs:2147~2154) 가 `!IsEditMode` 일 때만
-   * `ToggleMerge(sheet,true)` + `SmartColMerge()` 를 돌리고, 편집 진입 시 `SetToggleMerge(_si,false)`
-   * (cs:1483·1578) 로 해제한다. **조회 직후(`AfterFindData`)에도 병합이 걸린다** — "Edit 토글 시에만"
-   * 처리하면 누락되므로 `isEditMode` 파생값으로 항상 계산한다(L-25, R-13/R-14, hook #69).
-   * 기간(동적) 컬럼은 `buildPeriodColumns` 에서 `allowMerging:false` 라 수치가 묶이지 않는다.
+   * (b) 병합 토글 — **데이터 셀 병합은 끈다(비병합)**. AS-IS `SetSheetMerge`(cs:2147~2154)는 `!IsEditMode`
+   * (읽기모드)일 때만 `ToggleMerge`+`SmartColMerge` 로 병합하고 **편집 진입 시 `SetToggleMerge(false)` 로
+   * 해제**한다. TO-BE 는 편집 토글을 이식하지 않아(convert-core §2.4) `editMode=canEdit` 가 EDIT 권한자에게
+   * 항상 true = **항상 편집모드**이므로, AS-IS 수정모드와 동일하게 **처음부터 병합이 풀린 상태**가 파리티다
+   * (사용자 확정 2026-10-28: AS-IS 수정모드 캡처가 전부 비병합). 헤더 머지(ColumnHeaders)는 유지. 기간
+   * (동적) 컬럼은 `buildPeriodColumns` 의 `allowMerging:false` 로도 별도 차단된다.
    */
   const allowMerging = isEditMode
-    ? AllowMerging.ColumnHeaders // 3단 헤더 머지는 유지하고 데이터 셀 병합만 해제
+    ? AllowMerging.ColumnHeaders // 데이터 셀 병합 해제, 3단 헤더 머지만 유지
     : AllowMerging.All;
 
   /**
@@ -331,6 +449,42 @@ export const CapaSpeedPlanGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditMode, measureColorTargets]);
 
+  // 헤더 총높이 48px 고정 — `headerRowHeight` prop(공용 DataGrid 가 columnHeaders.rows.defaultSize 만
+  //   세팅)만으로는 정적 컬럼 baked height 가 defaultSize 를 이겨 tier 마다 벌어진다. 형제 capa-line-assign
+  //   applyHeaderHeight 정본대로, 렌더된 tier 수로 48 을 균등배분해 각 header row.height·defaultSize 에 직접
+  //   박는다. 목표값과 같으면 skip → 무한루프 방지.
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const applyHeaderHeight = () => {
+      const headerRows = grid.columnHeaders?.rows;
+      if (!headerRows || headerRows.length === 0) return;
+      const target = HEADER_TOTAL_HEIGHT / headerRows.length;
+      let changed = false;
+      for (let i = 0; i < headerRows.length; i += 1) {
+        if (Math.round(headerRows[i].height ?? headerRows.defaultSize) !== Math.round(target)) {
+          headerRows[i].height = target;
+          changed = true;
+        }
+      }
+      if (Math.round(headerRows.defaultSize) !== Math.round(target)) {
+        headerRows.defaultSize = target;
+        changed = true;
+      }
+      if (changed) grid.invalidate(true);
+    };
+    grid.updatedLayout.addHandler(applyHeaderHeight);
+    applyHeaderHeight();
+    return () => {
+      try {
+        grid.updatedLayout?.removeHandler(applyHeaderHeight);
+      } catch {
+        /* unmount race */
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [staticColumns, periodColumns]);
+
   // 주의: DataGrid 를 래퍼 div 로 감싸지 않는다(hook #132). 공용 DataGrid 가 height:100% / flex:1 1 0 /
   //   min-height:0 을 이미 갖고 있어 래퍼는 중복이고, 선례 화면(SalesPlan/SalesFuturePrice/MktFcst/
   //   DemandManager)도 전부 해당 div 를 제거한 상태다.
@@ -344,8 +498,9 @@ export const CapaSpeedPlanGrid = ({
       dynamicColumns={periodColumns}
       comboParams={comboParams}
       sheetName={sheetName}
-      // 3단 헤더 총높이 48px — 컬럼 정의의 height 가 아니라 이 prop 이 단일 출처다(hook #93).
-      headerRowHeight={HEADER_ROW_HEIGHT}
+      // 헤더 단당 기본높이(prop 은 defaultSize 만) — 2단 기준 48/2=24. 총높이 48px 고정은 위
+      //   applyHeaderHeight 가 tier 수로 균등배분해 각 row.height 에 박는 것이 단일 출처다(hook #93).
+      headerRowHeight={HEADER_TOTAL_HEIGHT / 2}
       allowMerging={allowMerging}
       // 메타(`FIXED_FLAG`)가 경계를 표현하면 prop 을 **넘기지 않는다**(위 주석). 키 자체를 빼야
       //   공용 DataGrid 의 산출값이 `{...gridProps}` 에 덮이지 않는다.

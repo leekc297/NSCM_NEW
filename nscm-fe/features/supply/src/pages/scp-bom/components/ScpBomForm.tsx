@@ -147,14 +147,12 @@ export const ScpBomForm = ({ onSearch, onModelSearch, onDivisionAuth }: Props) =
                         appearance='outlined'
                         priority='normal'
                         disabled={noDivisionAuth}
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onModelSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onModelSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ modelId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -171,7 +169,6 @@ export const ScpBomForm = ({ onSearch, onModelSearch, onDivisionAuth }: Props) =
                   value={sc.parentId}
                   disabled={noDivisionAuth}
                   onChange={e => set({ parentId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -188,7 +185,6 @@ export const ScpBomForm = ({ onSearch, onModelSearch, onDivisionAuth }: Props) =
                   value={sc.childId}
                   disabled={noDivisionAuth}
                   onChange={e => set({ childId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

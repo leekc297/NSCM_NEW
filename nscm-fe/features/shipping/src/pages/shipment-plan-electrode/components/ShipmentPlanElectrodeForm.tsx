@@ -278,14 +278,12 @@ export const ShipmentPlanElectrodeForm = ({ onSearch, onItemSearch, onModelSearc
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -325,7 +323,6 @@ export const ShipmentPlanElectrodeForm = ({ onSearch, onItemSearch, onModelSearc
                   }}
                   // 직접입력은 품번(modelId) 기준 — 이전 팝업에서 세팅된 nickName 보조조건을 지운다.
                   onChange={e => set({ modelId: e.target.value, nickName: '' })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

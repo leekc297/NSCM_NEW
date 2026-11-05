@@ -107,33 +107,6 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
     [cascade.validOptions, t]
   );
 
-  /**
-   * 조회조건 Reset (CP-16 / design 01 §3.1) — AS-IS `UsrConditionPanel` 의 조건 초기화 경로
-   * (`SavePanelCondition` 주석 cs:1548·1558). §4.2 기본값으로 되돌린다.
-   *
-   * Division Type 은 조건이 아니라 **화면 모드 스위치**라 건드리지 않는다 — 되돌리면 두 탭이 통째로
-   * 초기화된다(R-01). 숨겨지는 축(ELTR 의 Operation·Line Type)은 `[]` 로 남긴다(U-3).
-   */
-  const handleResetCondition = () => {
-    const hiddenAxisValue = isEltr ? [] : [ALL];
-    const defaultVerId = cascade.verIdOptions[0]?.value ?? '';
-    setSearchParams({
-      divisionId: cascade.divisionOptions[0]?.value ?? '',
-      verId: defaultVerId,
-      // Plan Month 가 그대로면 Version 후보가 재계산되지 않아 기본값 effect 가 돌지 않는다 —
-      //   그 경우에만 현재 후보의 첫 행을 직접 넣는다.
-      verSeq: defaultVerId === sc.verId ? (cascade.verSeqOptions[0]?.value ?? '') : '',
-      siteIds: [ALL],
-      plantIds: [ALL],
-      factoryIds: [ALL],
-      lineIds: [ALL],
-      operationIds: hiddenAxisValue,
-      electrodeTypes: hiddenAxisValue,
-      itemId: '',
-      validYn: ALL,
-    });
-  };
-
   const singleField = (
     labelCode: string,
     labelEn: string,
@@ -201,7 +174,6 @@ export const CapaLineAssignForm = ({ cascade, onSearch }: Props) => {
         searchButtonLabel={t(LBL.SEARCH, '_Search')}
         isHidden={!openSearchArea}
         onSearch={onSearch}
-        onResetCondition={handleResetCondition}
         conditions={
           <>
             {/* 사용자 확정 배치(2026-10-19, Version/Plan Type 합병 2026-10-26) — 3줄 고정(접힘 영역

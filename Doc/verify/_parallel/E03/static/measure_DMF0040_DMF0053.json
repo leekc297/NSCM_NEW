@@ -1,0 +1,85 @@
+{
+"at": "2026-10-31 23:16:39",
+"rows": [
+{
+"id": "DMF0040",
+"ctx": "-",
+"result": "ERROR",
+"eg": "EG022",
+"expected": "AS-IS dbmeta",
+"actual": "SCM_MST_SHEET_MEASURE 스냅샷 없음(facts 미추출)"
+},
+{
+"id": "DMF0053",
+"ctx": "CUST Fcst Waterfall / Div 40",
+"eg": "EG022",
+"result": "PASS",
+"expected": "AS-IS 2",
+"actual": "TO-BE 2 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "Doc/asisfacts/screens/DMF0053/dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv"
+},
+{
+"id": "DMF0053",
+"ctx": "CUST Fcst Waterfall / Div 81",
+"eg": "EG022",
+"result": "PASS",
+"expected": "AS-IS 2",
+"actual": "TO-BE 2 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "Doc/asisfacts/screens/DMF0053/dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv"
+},
+{
+"id": "DMF0053",
+"ctx": "CUST Fcst Waterfall / Div 81_HD",
+"eg": "EG022",
+"result": "PASS",
+"expected": "AS-IS 2",
+"actual": "TO-BE 2 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "Doc/asisfacts/screens/DMF0053/dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv"
+},
+{
+"id": "DMF0053",
+"ctx": "CUST Fcst Waterfall / Div 81_HG",
+"eg": "EG022",
+"result": "PASS",
+"expected": "AS-IS 2",
+"actual": "TO-BE 2 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "Doc/asisfacts/screens/DMF0053/dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv"
+},
+{
+"id": "DMF0053",
+"ctx": "CUST Fcst Waterfall / Div 81_HM",
+"eg": "EG022",
+"result": "PASS",
+"expected": "AS-IS 2",
+"actual": "TO-BE 2 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "Doc/asisfacts/screens/DMF0053/dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv"
+},
+{
+"id": "DMF0053",
+"ctx": "CUST Fcst Waterfall / Div 81_ST",
+"eg": "EG022",
+"result": "PASS",
+"expected": "AS-IS 2",
+"actual": "TO-BE 2 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "Doc/asisfacts/screens/DMF0053/dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv"
+},
+{
+"id": "DMF0053",
+"ctx": "CUST Fcst Waterfall / Div 81_UC",
+"eg": "EG022",
+"result": "PASS",
+"expected": "AS-IS 2",
+"actual": "TO-BE 2 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "Doc/asisfacts/screens/DMF0053/dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv"
+},
+{
+"id": "DMF0053",
+"ctx": "CUST Fcst Waterfall / Div 82",
+"eg": "EG022",
+"result": "PASS",
+"expected": "AS-IS 2",
+"actual": "TO-BE 2 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "Doc/asisfacts/screens/DMF0053/dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv"
+}
+]
+}

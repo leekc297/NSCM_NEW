@@ -1,0 +1,927 @@
+{
+ "db": "ZIOUI1",
+ "host": "localhost",
+ "fetched": "2026-10-30 16:17:24",
+ "pkg_objects": [
+  {
+   "OBJECT_TYPE": "PACKAGE",
+   "STATUS": "VALID",
+   "CREATED": "2026-10-09 13:38:26",
+   "LAST_DDL": "2026-10-09 13:38:32"
+  },
+  {
+   "OBJECT_TYPE": "PACKAGE BODY",
+   "STATUS": "VALID",
+   "CREATED": "2026-10-09 13:38:49",
+   "LAST_DDL": "2026-10-16 09:42:30"
+  }
+ ],
+ "pkg_src_PACKAGE": {
+  "lines": 108,
+  "md5": "811a2a7f1590ce8dfec4d839c7ee0556",
+  "markers": [
+   "* 2026.09.23   ZIONEX       [PJ202650304] MSSQL -> Oracle 전환"
+  ]
+ },
+ "pkg_src_PACKAGE_BODY": {
+  "lines": 5107,
+  "md5": "6c5c08d029d3ff7b49487dc63a2bd8e4",
+  "markers": [
+   "* 2026.09.23   ZIONEX       [PJ202650304] MSSQL -> Oracle 전환",
+   "* 2026.10.07   AJS          [속도] 최종 피벗의 칸별 스칼라 하위질의(칸 수 x 행 수)를 수량 집계 바깥 조인 1회 + CASE 로 변경, 수량 임시 테이블 적재 생략(AUTO · CELL_",
+   "* 2026.10.16   AJS          Project 조회조건 쉼표 구분 복수 조회(부분 일치 유지 · WW · MM DATAONLY)"
+  ]
+ },
+ "pkg_procs": [
+  "P_SCP0100_GET_GLOBAL_PSI_REPORT",
+  "P_SCP0100_GET_GLOBAL_PSI_REPORT_WW_DATAONLY",
+  "P_SCP0100_GET_GLOBAL_PSI_REPORT_MM_DATAONLY",
+  "P_SCP0100_GET_PLAN_DATE",
+  "P_SCP0100_GET_SHEET_CALENDAR_3SPAN",
+  "P_SCP0100_GET_SITE"
+ ],
+ "gtt": [
+  "GT_SCP0100_ALL",
+  "GT_SCP0100_ALL_DISPLAY_SEQ",
+  "GT_SCP0100_ALL_MEASURE_UI",
+  "GT_SCP0100_ALL_VARIOUS_KEY",
+  "GT_SCP0100_CELL_GROUP_SORT_ORDER",
+  "GT_SCP0100_DAYCOLS",
+  "GT_SCP0100_DIO_DETAIL_RAW",
+  "GT_SCP0100_FINAL",
+  "GT_SCP0100_LINE",
+  "GT_SCP0100_MEASURE",
+  "GT_SCP0100_MEASURE1",
+  "GT_SCP0100_MEASURE2",
+  "GT_SCP0100_MEASURE3",
+  "GT_SCP0100_OPERATION",
+  "GT_SCP0100_PRODUCTLEVEL",
+  "GT_SCP0100_QTY_AUTO",
+  "GT_SCP0100_QTY_CELL_GROUP",
+  "GT_SCP0100_QTY_CELL_GROUP_DETAIL",
+  "GT_SCP0100_QTY_DETAIL",
+  "GT_SCP0100_QTY_PRODUCT_LEVEL1",
+  "GT_SCP0100_QTY_PRODUCT_LEVEL2",
+  "GT_SCP0100_QTY_PRODUCT_LEVEL3",
+  "GT_SCP0100_RAW",
+  "GT_SCP0100_RAW_CELL_CF",
+  "GT_SCP0100_TRANSPORT_MODE_CODE",
+  "GT_SCP0100_USER_COLS"
+ ],
+ "deps": [
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "FN_CHAR_TO_DATE",
+   "TYPE_": "FUNCTION"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "FN_GET_REPORT_USER_COLUMNS",
+   "TYPE_": "FUNCTION"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "FN_SPLITSTRING",
+   "TYPE_": "FUNCTION"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCM_MST_ITEM_SN",
+   "TYPE_": "SYNONYM"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCM_ADM_LOOKUP_MASTER_DETAIL",
+   "TYPE_": "TABLE"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCM_MST_SHEET_COLUMNS",
+   "TYPE_": "TABLE"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCM_MST_SHEET_MEASURE",
+   "TYPE_": "TABLE"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCM_MST_TITLESET_USER",
+   "TYPE_": "TABLE"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCM_SYS_CALENDAR_M",
+   "TYPE_": "TABLE"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCP_MST_FINAL_ITEM",
+   "TYPE_": "TABLE"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCP_PLN_INTERFACE_YN",
+   "TYPE_": "TABLE"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCP_RPT_GLOBAL_PSI_MD_DETAIL_MM",
+   "TYPE_": "TABLE"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCP_RPT_GLOBAL_PSI_MD_DETAIL_WW",
+   "TYPE_": "TABLE"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCP_RPT_GLOBAL_PSI_MD_MM",
+   "TYPE_": "TABLE"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCP_RPT_GLOBAL_PSI_MD_WW",
+   "TYPE_": "TABLE"
+  },
+  {
+   "OWNER_": "SCM_MGR",
+   "NAME_": "SCP_PLAN_VERSION_V",
+   "TYPE_": "VIEW"
+  }
+ ],
+ "grants": [
+  {
+   "GRANTEE": "SCMP_APP",
+   "PRIVILEGE": "EXECUTE"
+  }
+ ],
+ "synonyms": [
+  {
+   "OWNER": "SCMP_APP",
+   "SYNONYM_NAME": "PKG_SCP0100",
+   "TABLE_OWNER": "SCM_MGR",
+   "TABLE_NAME": "PKG_SCP0100"
+  }
+ ],
+ "meta_counts": {
+  "SCM_ADM_MNU_M": 1,
+  "SCM_ADM_API_M": 4,
+  "SCM_ADM_MNU_BTN_MPG_M": 9,
+  "SCM_ADM_PROC_M": 33,
+  "SCM_ADM_USER_GR_MNU_MPG_M": 5,
+  "SCM_ADM_USER_GR_MNU_BTN_MPG_M": 45,
+  "SCM_MST_SHEET_COLUMNS": 36,
+  "SCM_MST_SHEET_COLUMNS_base": 33,
+  "SCM_MST_SHEET_MEASURE": 36,
+  "SCM_ADM_MSG_M_MNU": 3,
+  "SCM_ADM_LOOKUP_SHEET_PRSL_YN": 4
+ },
+ "mnu_m": [
+  {
+   "MNU_ID": "SCP0100",
+   "UPPR_MNU_ID": "Supply_Plan",
+   "MNU_URL": "global-psi-report",
+   "MNU_MSG_ID": "MNU_SCP0100",
+   "MNU_DESC": "Global PSI New",
+   "SORT_ORD": 100,
+   "MNU_LV_NO": 3,
+   "MNU_TP_CD": "SCREEN",
+   "UNIT_TP_CD": "S",
+   "USE_YN": "Y",
+   "ROUTE_PATH": "supply/global-psi-report",
+   "CREATED_BY": "ZIONEX",
+   "CREATION_DATE": "2026-09-23 11:10:10",
+   "LAST_UPDATED_BY": "AJS",
+   "LAST_UPDATE_DATE": "2026-09-30 20:30:14"
+  }
+ ],
+ "api_m": [
+  {
+   "API_ID": "P_SCP0100_CALENDAR_GET",
+   "API_TP_CD": "PROC_SELECT",
+   "API_URL": "PKG_SCP0100.P_SCP0100_GET_SHEET_CALENDAR_3SPAN",
+   "USE_YN": "Y",
+   "CREATED_BY": "ZIONEX",
+   "CREATION_DATE": "2026-09-23 11:10:10",
+   "LAST_UPDATED_BY": "ZIONEX"
+  },
+  {
+   "API_ID": "P_SCP0100_GET",
+   "API_TP_CD": "PROC_SELECT",
+   "API_URL": "PKG_SCP0100.P_SCP0100_GET_GLOBAL_PSI_REPORT",
+   "USE_YN": "Y",
+   "CREATED_BY": "ZIONEX",
+   "CREATION_DATE": "2026-09-23 11:10:09",
+   "LAST_UPDATED_BY": "ZIONEX"
+  },
+  {
+   "API_ID": "P_SCP0100_PLAN_DATE_GET",
+   "API_TP_CD": "PROC_SELECT",
+   "API_URL": "PKG_SCP0100.P_SCP0100_GET_PLAN_DATE",
+   "USE_YN": "Y",
+   "CREATED_BY": "ZIONEX",
+   "CREATION_DATE": "2026-09-23 11:10:09",
+   "LAST_UPDATED_BY": "ZIONEX"
+  },
+  {
+   "API_ID": "P_SCP0100_SITE_GET",
+   "API_TP_CD": "PROC_SELECT",
+   "API_URL": "PKG_SCP0100.P_SCP0100_GET_SITE",
+   "USE_YN": "Y",
+   "CREATED_BY": "ZIONEX",
+   "CREATION_DATE": "2026-09-23 11:10:10",
+   "LAST_UPDATED_BY": "ZIONEX"
+  }
+ ],
+ "btn_mpg": [
+  {
+   "SHT_NM": "calendar",
+   "MNU_BTN_CD": "SEARCH",
+   "API_ID": "P_SCP0100_CALENDAR_GET",
+   "USE_YN": "Y",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-09-24 12:22:44"
+  },
+  {
+   "SHT_NM": "planDate",
+   "MNU_BTN_CD": "SEARCH",
+   "API_ID": "P_SCP0100_PLAN_DATE_GET",
+   "USE_YN": "Y",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-09-24 12:22:44"
+  },
+  {
+   "SHT_NM": "report",
+   "MNU_BTN_CD": "COLUMN_SETUP",
+   "API_ID": null,
+   "USE_YN": "Y",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-09-24 13:33:00"
+  },
+  {
+   "SHT_NM": "report",
+   "MNU_BTN_CD": "EXCEL",
+   "API_ID": null,
+   "USE_YN": "Y",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-09-24 12:22:44"
+  },
+  {
+   "SHT_NM": "report",
+   "MNU_BTN_CD": "MEASURE_SELECT",
+   "API_ID": null,
+   "USE_YN": "Y",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-09-24 13:33:00"
+  },
+  {
+   "SHT_NM": "report",
+   "MNU_BTN_CD": "SEARCH",
+   "API_ID": "P_SCP0100_GET",
+   "USE_YN": "Y",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-09-24 12:22:44"
+  },
+  {
+   "SHT_NM": "searchLevel",
+   "MNU_BTN_CD": "SEARCH",
+   "API_ID": "P_SCP0100_GET",
+   "USE_YN": "Y",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-09-24 12:22:44"
+  },
+  {
+   "SHT_NM": "searchLevelDetail",
+   "MNU_BTN_CD": "SEARCH",
+   "API_ID": "P_SCP0100_GET",
+   "USE_YN": "Y",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-09-24 12:22:44"
+  },
+  {
+   "SHT_NM": "site",
+   "MNU_BTN_CD": "SEARCH",
+   "API_ID": "P_SCP0100_SITE_GET",
+   "USE_YN": "Y",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-09-24 12:22:44"
+  }
+ ],
+ "proc_m": [
+  {
+   "PROC_NM": "PKG_SCP0100.P_SCP0100_GET_GLOBAL_PSI_REPORT",
+   "CNT": 19,
+   "CREATED_BY": "ZIONEX",
+   "LAST_UPDATED_BY": "ZIONEX",
+   "LAST_UPDATE_DATE": "2026-09-23 11:10:09"
+  },
+  {
+   "PROC_NM": "PKG_SCP0100.P_SCP0100_GET_PLAN_DATE",
+   "CNT": 5,
+   "CREATED_BY": "ZIONEX",
+   "LAST_UPDATED_BY": "ZIONEX",
+   "LAST_UPDATE_DATE": "2026-09-23 11:10:09"
+  },
+  {
+   "PROC_NM": "PKG_SCP0100.P_SCP0100_GET_SHEET_CALENDAR_3SPAN",
+   "CNT": 4,
+   "CREATED_BY": "ZIONEX",
+   "LAST_UPDATED_BY": "ZIONEX",
+   "LAST_UPDATE_DATE": "2026-09-23 11:10:09"
+  },
+  {
+   "PROC_NM": "PKG_SCP0100.P_SCP0100_GET_SITE",
+   "CNT": 5,
+   "CREATED_BY": "ZIONEX",
+   "LAST_UPDATED_BY": "ZIONEX",
+   "LAST_UPDATE_DATE": "2026-10-07 11:29:09"
+  }
+ ],
+ "proc_args": [
+  {
+   "PROC": "P_SCP0100_GET_GLOBAL_PSI_REPORT",
+   "ARG_CNT": 19
+  },
+  {
+   "PROC": "P_SCP0100_GET_GLOBAL_PSI_REPORT_MM_DATAONLY",
+   "ARG_CNT": 19
+  },
+  {
+   "PROC": "P_SCP0100_GET_GLOBAL_PSI_REPORT_WW_DATAONLY",
+   "ARG_CNT": 19
+  },
+  {
+   "PROC": "P_SCP0100_GET_PLAN_DATE",
+   "ARG_CNT": 5
+  },
+  {
+   "PROC": "P_SCP0100_GET_SHEET_CALENDAR_3SPAN",
+   "ARG_CNT": 4
+  },
+  {
+   "PROC": "P_SCP0100_GET_SITE",
+   "ARG_CNT": 5
+  }
+ ],
+ "gr_mnu": [
+  {
+   "USER_GR_ID": "ADMIN",
+   "USE_YN": "Y",
+   "CREATED_BY": "vadabi3",
+   "CREATION_DATE": "2023-11-27 09:46:21"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "USE_YN": "Y",
+   "CREATED_BY": "vadabi3",
+   "CREATION_DATE": "2023-11-27 11:40:21"
+  },
+  {
+   "USER_GR_ID": "SCM Viewer",
+   "USE_YN": "Y",
+   "CREATED_BY": "ohsun",
+   "CREATION_DATE": "2024-05-28 09:55:13"
+  },
+  {
+   "USER_GR_ID": "SCP Planner",
+   "USE_YN": "Y",
+   "CREATED_BY": "yongseokyoon",
+   "CREATION_DATE": "2023-11-28 13:26:47"
+  },
+  {
+   "USER_GR_ID": "SCP Tester",
+   "USE_YN": "Y",
+   "CREATED_BY": "yongseokyoon",
+   "CREATION_DATE": "2023-11-28 13:27:11"
+  }
+ ],
+ "gr_btn": [
+  {
+   "USER_GR_ID": "ADMIN",
+   "CNT": 9,
+   "CREATED_BY": "vadabi3",
+   "LAST_UPDATE_DATE": "2023-11-27 09:46:21"
+  },
+  {
+   "USER_GR_ID": "SCM PI Admin",
+   "CNT": 9,
+   "CREATED_BY": "vadabi3",
+   "LAST_UPDATE_DATE": "2023-11-27 11:40:21"
+  },
+  {
+   "USER_GR_ID": "SCM Viewer",
+   "CNT": 9,
+   "CREATED_BY": "ohsun",
+   "LAST_UPDATE_DATE": "2024-05-28 09:55:13"
+  },
+  {
+   "USER_GR_ID": "SCP Planner",
+   "CNT": 9,
+   "CREATED_BY": "yongseokyoon",
+   "LAST_UPDATE_DATE": "2023-11-28 13:26:47"
+  },
+  {
+   "USER_GR_ID": "SCP Tester",
+   "CNT": 9,
+   "CREATED_BY": "yongseokyoon",
+   "LAST_UPDATE_DATE": "2023-11-28 13:27:11"
+  }
+ ],
+ "cmbo": [
+  {
+   "SQL_ID": "Division_SCP",
+   "MDU_DIVS_CD": "ALL",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-09-10 16:36:44",
+   "LAST_UPDATED_BY": "AJS",
+   "LAST_UPDATE_DATE": "2026-10-12 17:56:33"
+  },
+  {
+   "SQL_ID": "PLAN_END_DATE_REPORT",
+   "MDU_DIVS_CD": "ALL",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-09-10 17:17:34",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-09-11 15:20:42"
+  },
+  {
+   "SQL_ID": "PlanType1_SCP_ALL",
+   "MDU_DIVS_CD": "ALL",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-09-10 16:36:44",
+   "LAST_UPDATED_BY": "AJS",
+   "LAST_UPDATE_DATE": "2026-10-12 17:56:34"
+  },
+  {
+   "SQL_ID": "SCPPlanPeriod_SCP",
+   "MDU_DIVS_CD": "ALL",
+   "USE_YN": "Y",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-09-10 16:36:44",
+   "LAST_UPDATED_BY": "AJS",
+   "LAST_UPDATE_DATE": "2026-09-17 19:09:41"
+  }
+ ],
+ "lookup_types": [
+  {
+   "LOOKUP_TYPE": "BUCKET_TYPE_CODE",
+   "CNT": 3,
+   "VALID_CNT": 3,
+   "LAST_UPDATE_DATE": "2017-11-24 18:27:00"
+  },
+  {
+   "LOOKUP_TYPE": "PLAN_TYPE",
+   "CNT": 8,
+   "VALID_CNT": 5,
+   "LAST_UPDATE_DATE": "2026-03-30 11:03:46"
+  },
+  {
+   "LOOKUP_TYPE": "PRODUCT_LEVEL",
+   "CNT": 7,
+   "VALID_CNT": 5,
+   "LAST_UPDATE_DATE": "2024-10-23 09:02:32"
+  },
+  {
+   "LOOKUP_TYPE": "SCP_UNIT_QTY",
+   "CNT": 4,
+   "VALID_CNT": 4,
+   "LAST_UPDATE_DATE": "2023-02-13 11:51:16"
+  },
+  {
+   "LOOKUP_TYPE": "STOCK_TREND_DISPLAY",
+   "CNT": 3,
+   "VALID_CNT": 3,
+   "LAST_UPDATE_DATE": "2023-02-13 11:55:09"
+  }
+ ],
+ "fe_codes": [
+  {
+   "MSG_ID": "LBL00001",
+   "LANGS": 3,
+   "EN": "Div.",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-02-13 15:53:29",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-08-19 10:53:08"
+  },
+  {
+   "MSG_ID": "LBL00012",
+   "LANGS": 3,
+   "EN": "PJT",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-02-13 15:53:29",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-03-19 10:02:51"
+  },
+  {
+   "MSG_ID": "LBL00021",
+   "LANGS": 3,
+   "EN": "Material",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-02-13 15:53:29",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2026-02-13 15:53:29"
+  },
+  {
+   "MSG_ID": "LBL00022",
+   "LANGS": 3,
+   "EN": "From Site",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-02-13 15:53:29",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2026-02-13 15:53:29"
+  },
+  {
+   "MSG_ID": "LBL00023",
+   "LANGS": 3,
+   "EN": "To Site",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-02-13 15:53:29",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2026-02-13 15:53:29"
+  },
+  {
+   "MSG_ID": "LBL00039",
+   "LANGS": 3,
+   "EN": "Plan Date",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-02-13 15:53:29",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2026-02-13 15:53:29"
+  },
+  {
+   "MSG_ID": "LBL00040",
+   "LANGS": 3,
+   "EN": "Plan Type",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-02-13 15:53:29",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2026-02-13 15:53:29"
+  },
+  {
+   "MSG_ID": "LBL00049",
+   "LANGS": 3,
+   "EN": "Cell Group",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-02-13 15:53:29",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2026-02-13 15:53:29"
+  },
+  {
+   "MSG_ID": "LBL00050",
+   "LANGS": 3,
+   "EN": "Search Level",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-02-13 15:53:29",
+   "LAST_UPDATED_BY": "SYSTEM",
+   "LAST_UPDATE_DATE": "2026-02-13 15:53:29"
+  },
+  {
+   "MSG_ID": "LBL00112",
+   "LANGS": 3,
+   "EN": "Search(F5)",
+   "CREATED_BY": "SYSTEM",
+   "CREATION_DATE": "2026-02-03 19:12:43",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-03-27 12:01:40"
+  },
+  {
+   "MSG_ID": "LBL00310",
+   "LANGS": 3,
+   "EN": "Measure",
+   "CREATED_BY": "minyonglee1",
+   "CREATION_DATE": "2026-03-11 16:30:12",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-03-12 10:19:54"
+  },
+  {
+   "MSG_ID": "LBL00605",
+   "LANGS": 3,
+   "EN": "Column Setting",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-29 17:04:36",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-08-11 16:12:00"
+  },
+  {
+   "MSG_ID": "LBL00683",
+   "LANGS": 3,
+   "EN": "Weekly",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-29 17:04:40",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-29 17:04:40"
+  },
+  {
+   "MSG_ID": "LBL00684",
+   "LANGS": 3,
+   "EN": "Monthly",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-29 17:04:40",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-29 17:04:40"
+  },
+  {
+   "MSG_ID": "LBL00690",
+   "LANGS": 3,
+   "EN": "Cell Qty",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-29 17:04:41",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-29 17:04:41"
+  },
+  {
+   "MSG_ID": "LBL00710",
+   "LANGS": 3,
+   "EN": "Bucket",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-29 17:04:41",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-07-13 16:08:54"
+  },
+  {
+   "MSG_ID": "LBL00767",
+   "LANGS": 3,
+   "EN": "Nick Name",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-07-13 15:48:03",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-07-13 15:48:03"
+  },
+  {
+   "MSG_ID": "LBL01073",
+   "LANGS": 3,
+   "EN": "Display",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-09-16 09:53:19",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-09-16 09:53:19"
+  },
+  {
+   "MSG_ID": "LBL01129",
+   "LANGS": 3,
+   "EN": "Unit (Qty)",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-09-16 09:53:22",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-09-16 09:53:22"
+  },
+  {
+   "MSG_ID": "LBL01163",
+   "LANGS": 3,
+   "EN": "Scale",
+   "CREATED_BY": "minyonglee1",
+   "CREATION_DATE": "2026-10-15 17:11:29",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-10-15 17:11:29"
+  },
+  {
+   "MSG_ID": "LBL01167",
+   "LANGS": 3,
+   "EN": "A/S",
+   "CREATED_BY": "minyonglee1",
+   "CREATION_DATE": "2026-10-19 09:52:20",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-10-19 09:52:20"
+  },
+  {
+   "MSG_ID": "MSG00097",
+   "LANGS": 3,
+   "EN": "Please select Division.",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-29 16:44:23",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-06-10 18:06:37"
+  },
+  {
+   "MSG_ID": "MSG00618",
+   "LANGS": 3,
+   "EN": "An error occurred while saving.",
+   "CREATED_BY": "admin",
+   "CREATION_DATE": "2026-06-29 16:44:26",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-09-01 16:25:10"
+  },
+  {
+   "MSG_ID": "MSG00703",
+   "LANGS": 3,
+   "EN": "There are unsaved changes. Do you want to search again?",
+   "CREATED_BY": "minyonglee1",
+   "CREATION_DATE": "2026-08-05 10:01:54",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-10-29 14:47:19"
+  },
+  {
+   "MSG_ID": "MSG00704",
+   "LANGS": 3,
+   "EN": "There is data being modified. Would you like to retrieve it?",
+   "CREATED_BY": "minyonglee1",
+   "CREATION_DATE": "2026-08-05 10:01:54",
+   "LAST_UPDATED_BY": "admin",
+   "LAST_UPDATE_DATE": "2026-08-12 13:19:04"
+  }
+ ],
+ "plan_type_rows": [
+  {
+   "PROGRAM_ID": "SCP0100",
+   "SHEET_NAME": "REPORT",
+   "COLUMN_NAME": "PLAN_TYPE",
+   "COLUMN_LABEL_NAME": "Plan Type",
+   "SORT_ORDER_NO": 15,
+   "DATA_SORT_METHOD_CODE": "ASC",
+   "SMALL_CLASS_LABEL_NAME": "Div",
+   "LARGE_CLASS_LABEL_NAME": "Div",
+   "FIXED_FLAG": "-",
+   "COLUMN_WIDTH": 80,
+   "CELL_CONTROL_OBJECT_TYPE_CODE": null,
+   "CELL_COMBO_DATA_TYPE": null,
+   "DATA_SCALE_NUMBER": null,
+   "DATA_MAX_LENGTH": null,
+   "HORIZONTAL_ALIGN_CODE": "C",
+   "UPPERCASE_APPLY_FLAG": "-",
+   "VISIBLE_FLAG": "Y",
+   "DIVISION_ID": null,
+   "DEFAULT_FLAG": "Y",
+   "USER_SELECTABLE_FLAG": "Y",
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "INPUT_TP_CD": "S",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-10-23 15:25:14",
+   "LAST_UPDATED_BY": "CONVERT_SCP0100",
+   "LAST_UPDATE_DATE": "2026-10-23 15:25:14"
+  },
+  {
+   "PROGRAM_ID": "SCP0100",
+   "SHEET_NAME": "SEARCH_LEVEL",
+   "COLUMN_NAME": "PLAN_TYPE",
+   "COLUMN_LABEL_NAME": "Plan Type",
+   "SORT_ORDER_NO": 15,
+   "DATA_SORT_METHOD_CODE": "ASC",
+   "SMALL_CLASS_LABEL_NAME": "Plan Type",
+   "LARGE_CLASS_LABEL_NAME": "Plan Type",
+   "FIXED_FLAG": "-",
+   "COLUMN_WIDTH": 80,
+   "CELL_CONTROL_OBJECT_TYPE_CODE": null,
+   "CELL_COMBO_DATA_TYPE": null,
+   "DATA_SCALE_NUMBER": null,
+   "DATA_MAX_LENGTH": null,
+   "HORIZONTAL_ALIGN_CODE": "C",
+   "UPPERCASE_APPLY_FLAG": "-",
+   "VISIBLE_FLAG": "Y",
+   "DIVISION_ID": null,
+   "DEFAULT_FLAG": "Y",
+   "USER_SELECTABLE_FLAG": "Y",
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "INPUT_TP_CD": "S",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-10-23 12:09:52",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-10-23 12:14:50"
+  },
+  {
+   "PROGRAM_ID": "SCP0100",
+   "SHEET_NAME": "SEARCH_LEVEL_DETAIL",
+   "COLUMN_NAME": "PLAN_TYPE",
+   "COLUMN_LABEL_NAME": "Plan Type",
+   "SORT_ORDER_NO": 15,
+   "DATA_SORT_METHOD_CODE": "ASC",
+   "SMALL_CLASS_LABEL_NAME": "Plan Type",
+   "LARGE_CLASS_LABEL_NAME": "Plan Type",
+   "FIXED_FLAG": "-",
+   "COLUMN_WIDTH": 80,
+   "CELL_CONTROL_OBJECT_TYPE_CODE": null,
+   "CELL_COMBO_DATA_TYPE": null,
+   "DATA_SCALE_NUMBER": null,
+   "DATA_MAX_LENGTH": null,
+   "HORIZONTAL_ALIGN_CODE": "C",
+   "UPPERCASE_APPLY_FLAG": "-",
+   "VISIBLE_FLAG": "Y",
+   "DIVISION_ID": null,
+   "DEFAULT_FLAG": "Y",
+   "USER_SELECTABLE_FLAG": "Y",
+   "VALID_YN": "Y",
+   "ATTRIBUTE1": null,
+   "ATTRIBUTE2": null,
+   "ATTRIBUTE3": null,
+   "ATTRIBUTE4": null,
+   "ATTRIBUTE5": null,
+   "ATTRIBUTE6": null,
+   "ATTRIBUTE7": null,
+   "ATTRIBUTE8": null,
+   "ATTRIBUTE9": null,
+   "ATTRIBUTE10": null,
+   "INPUT_TP_CD": "S",
+   "CREATED_BY": "CONVERT_SCP0100",
+   "CREATION_DATE": "2026-10-23 12:09:52",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-10-23 12:14:50"
+  }
+ ],
+ "lbl_rows": [
+  {
+   "MSG_ID": "LBL01163",
+   "LANG_CD": "CN",
+   "MSG_NM": "Scale",
+   "MSG_DESC": null,
+   "MSG_TP_CD": "LBL",
+   "USE_YN": "Y",
+   "CREATED_BY": "minyonglee1",
+   "CREATION_DATE": "2026-10-15 17:11:29",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-10-15 17:11:29"
+  },
+  {
+   "MSG_ID": "LBL01163",
+   "LANG_CD": "EN",
+   "MSG_NM": "Scale",
+   "MSG_DESC": null,
+   "MSG_TP_CD": "LBL",
+   "USE_YN": "Y",
+   "CREATED_BY": "minyonglee1",
+   "CREATION_DATE": "2026-10-15 17:11:29",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-10-15 17:11:29"
+  },
+  {
+   "MSG_ID": "LBL01163",
+   "LANG_CD": "KO",
+   "MSG_NM": "Scale",
+   "MSG_DESC": null,
+   "MSG_TP_CD": "LBL",
+   "USE_YN": "Y",
+   "CREATED_BY": "minyonglee1",
+   "CREATION_DATE": "2026-10-15 17:11:29",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-10-15 17:11:29"
+  },
+  {
+   "MSG_ID": "LBL01167",
+   "LANG_CD": "CN",
+   "MSG_NM": "A/S",
+   "MSG_DESC": null,
+   "MSG_TP_CD": "LBL",
+   "USE_YN": "Y",
+   "CREATED_BY": "minyonglee1",
+   "CREATION_DATE": "2026-10-19 09:52:20",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-10-19 09:52:20"
+  },
+  {
+   "MSG_ID": "LBL01167",
+   "LANG_CD": "EN",
+   "MSG_NM": "A/S",
+   "MSG_DESC": null,
+   "MSG_TP_CD": "LBL",
+   "USE_YN": "Y",
+   "CREATED_BY": "minyonglee1",
+   "CREATION_DATE": "2026-10-19 09:52:20",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-10-19 09:52:20"
+  },
+  {
+   "MSG_ID": "LBL01167",
+   "LANG_CD": "KO",
+   "MSG_NM": "A/S",
+   "MSG_DESC": null,
+   "MSG_TP_CD": "LBL",
+   "USE_YN": "Y",
+   "CREATED_BY": "minyonglee1",
+   "CREATION_DATE": "2026-10-19 09:52:20",
+   "LAST_UPDATED_BY": "minyonglee1",
+   "LAST_UPDATE_DATE": "2026-10-19 09:52:20"
+  }
+ ],
+ "sc_dup": 0,
+ "msg_dup": 0,
+ "signatures": {
+  "plan_type_rows": "db0a2ca987fec570c93ba7b9ef53c153",
+  "lbl_rows": "dd10e0710d777ac37da9f06c4f210c89",
+  "pkg_body_md5": "6c5c08d029d3ff7b49487dc63a2bd8e4",
+  "pkg_spec_md5": "811a2a7f1590ce8dfec4d839c7ee0556"
+ },
+ "built_at": "2026-10-30 16:17:26"
+}

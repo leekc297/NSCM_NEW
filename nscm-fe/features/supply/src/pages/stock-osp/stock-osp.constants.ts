@@ -80,6 +80,14 @@ export const ROW_EDIT_VALUE = 'HOLD';
 export const DATE_START_COLUMN = 'DATE_FORECAST_START';
 export const DATE_FINISH_COLUMN = 'DATE_FORECAST_FINISH';
 
+// Pack 시트 YYYY-MM-DD 표시·엑셀 대상 날짜 컬럼(사용자 지시 2026-10-28).
+export const CUTOFF_DATE_COLUMN = 'CUTOFF_DATE';
+export const PACK_DASH_DATE_COLUMNS = [
+  CUTOFF_DATE_COLUMN,
+  DATE_START_COLUMN,
+  DATE_FINISH_COLUMN,
+] as const;
+
 // 저장 검증오류 강조색 — AS-IS LightPink(cs:443~450 BackColor). hook #95 잠금 Gray 와 구분되는 오류 표기색(design 03 §3 R4).
 export const VALIDATION_ERROR_BG = '#ffb6c1';
 

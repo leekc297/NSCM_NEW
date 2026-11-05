@@ -1,2 +1,6 @@
 ﻿"page_key","menu_id","file","line","kind","snippet"
-"supply/warehouse-capacity","SCP0133","features/supply/src/pages/warehouse-capacity/useWarehouseCapacityStore.ts","22","endpoint","ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch(31행 등록됨,"
+"supply/warehouse-capacity","SCP0133","features/supply/src/pages/warehouse-capacity/useWarehouseCapacityStore.ts","23","endpoint","ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch(31행 등록됨,"
+"supply/warehouse-capacity","SCP0133","features/supply/src/pages/warehouse-capacity/utils/warehouseCapacity.saveRequest.ts","5","endpoint","왜 useProcMutation({data:[rows]}) 가 아닌가: PKG_SCP0133 SAVE SP 2종은 각 컬럼이 별도 CLOB 인자이고"
+"supply/warehouse-capacity","SCP0133","features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx","35","endpoint","PKG_SCP0133 에 배포돼 있어(gap-resolve iter-2 실측) main 시트와 동일하게 useTabProcQuery(조회)/"
+"supply/warehouse-capacity","SCP0133","features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx","36","endpoint","useProcMutation(저장)으로 배선한다(A2/A3 해소). 두 시트 조회조건은 동일 9파라미터다."
+"supply/warehouse-capacity","SCP0133","features/supply/src/pages/warehouse-capacity/WarehouseCapacity.tsx","81","endpoint","공용 useProcMutation({data:[rows]}) 은 이 SP 계약(컬럼별 CLOB)에서 전 파라미터 NULL 바인딩 →"

@@ -276,14 +276,12 @@ export const EndingInventoryForm = ({ onSearch, onItemSearch }: Props) => {
                         appearance='outlined'
                         priority='normal'
                         disabled={noDivisionAuth}
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

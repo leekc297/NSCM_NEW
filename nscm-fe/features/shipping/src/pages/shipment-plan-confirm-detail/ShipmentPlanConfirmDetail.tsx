@@ -54,6 +54,7 @@ export const ShipmentPlanConfirmDetail = ({ tabId, title }: PageProps<MENU_ID>) 
   const applyColumnLayout = useShipmentPlanConfirmDetailStore(s => s.applyColumnLayout);
   const initialized = useShipmentPlanConfirmDetailStore(s => s.initialized);
   const hasDivisionAuth = useShipmentPlanConfirmDetailStore(s => s.hasDivisionAuth);
+  const divisionCodes = useShipmentPlanConfirmDetailStore(s => s.divisionCodes);
 
   const queryClient = useQueryClient();
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
@@ -179,6 +180,9 @@ export const ShipmentPlanConfirmDetail = ({ tabId, title }: PageProps<MENU_ID>) 
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
         customButtons={customButtons}
+        // F10(Reset Condition) 시 서버 저장분 초기화에 더해 **현재 화면 조회조건도 즉시 기본값 복원**
+        //   (사용자 지시 2026-11-02). store.reset() 호출 — staticColumns/개인화는 MotherStore 가 보존.
+        resetConditionOnClient
       />
 
       <div className={styles.grid}>
@@ -203,7 +207,11 @@ export const ShipmentPlanConfirmDetail = ({ tabId, title }: PageProps<MENU_ID>) 
           if (items) setSearchCondition({ itemId: items });
         }}
         preSearchParams={{
-          divisionId: sc.divisionIds.join(','),
+          // Div=ALL(미선택)이면 권한 division 전체로 전개 — 빈 divisionId 면 모달 내부 조회가
+          //   enabled:false 로 막혀 결과가 비어 Model 검색이 불가하던 문제(사용자 신고 2026-11-02) 해소.
+          //   DMF0045(shipment-request) 는 단일 division 을 항상 넘겨 비지 않는다 — 같은 "항상 유효한 division"
+          //   을 다중 화면에선 ALL 전개(divisionCodes)로 충족한다.
+          divisionId: sc.divisionIds.length > 0 ? sc.divisionIds.join(',') : divisionCodes.join(','),
           operationGroup: '',
           scpModuleType: MENU_ID,
           itemId: sc.itemId,

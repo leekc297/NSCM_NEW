@@ -1,0 +1,72 @@
+﻿menu_id,sheet,column,label,asis_halign,asis_ref,tobe_program,tobe_sheet,tobe_halign,tobe_source,verdict,note
+DMF0082,,"dt.Rows[i][""BASIS_START_DATE""]","dt.Rows[i][""MMDD""]",R,DMF0082_SaveSalesFuturePrice_Popup.cs:712,,,,대응 메타 시트 없음,NA,TO-BE 대응 메타 시트 없음(AS-IS 시트 )
+DMF0082,,"dt.Rows[i][""BASIS_START_DATE""]",SUM,R,DMF0082_SaveSalesFuturePrice_Popup.cs:717,,,,대응 메타 시트 없음,NA,TO-BE 대응 메타 시트 없음(AS-IS 시트 )
+DMF0082,FcstNPrice,APPLICATION,Application,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,AS_FROM_SITE,AS From Site,C,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,C,메타 DMF0082/FcstNPrice,PASS,AS-IS center ↔ TO-BE center
+DMF0082,FcstNPrice,BUCKET,BUCKET,C,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,C,메타 DMF0082/FcstNPrice,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,FcstNPrice,CELL_MODEL_NICK_NAME,Cell Model Nick Name,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,CELL_PROD_SITE_ID,Cell Prod Site*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,CELL_TYPE,Product Group,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,CITY_NAME,City,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,COUNTRY_NAME,Country,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,CURRENCY,Currency*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,CUST_GROUP,Cust Group,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,CUST_GROUP_DTL,Cust Group Detail,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,DIVISION_ID,Division*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,DMS_CUSTOMER,End Cust.(Report),L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,DMS_SALES,Sold-To Cust.(Report),L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,DOM_EXP,Customs Handbook*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,EDIT_FLAG,Edit Flag,C,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,C,메타 DMF0082/FcstNPrice,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,FcstNPrice,END_CUSTOMER,End Customer*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,FCST_TYPE,FCST Type*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,FORECAST_INFOR_VERSION,Model Version,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,FORECAST_INFO_ALL,Spec & Version,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,FORECAST_INFO_BIZ_TYPE,Biz Type,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,FORECAST_INFO_CELL_MODEL,Cell Model,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,FORECAST_INFO_CELL_PACK_COUNT,Cell Pack Count,R,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,R,메타 DMF0082/FcstNPrice,PASS,AS-IS right ↔ TO-BE right
+DMF0082,FcstNPrice,FORECAST_INFO_SPEC,Model Spec,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,INCOTERMS,Incoterms*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,ITEM_ID,Model*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,ITEM_NAME,Model Name,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,ITEM_TYPE,Item Type,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,LAST_UPDATED_BY,Last Update By,C,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,C,메타 DMF0082/FcstNPrice,PASS,AS-IS center ↔ TO-BE center
+DMF0082,FcstNPrice,LAST_UPDATE_DATE,Last Update,C,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,C,메타 DMF0082/FcstNPrice,PASS,AS-IS center ↔ TO-BE center
+DMF0082,FcstNPrice,MDM_PROJECT_NAME,Project Name,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,FcstNPrice,MEASURE,Measure*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,MEASURE_GROUP,Measure Group,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,FcstNPrice,MIN_CAPACITY,Min Capacity,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,NICK_NAME,Nick Name,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,OWNER,Owner,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,ROUTE,Channel,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,SCM_SITE_ID,Sales Site*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,SENDER_NAME,Sender Name,C,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,C,메타 DMF0082/FcstNPrice,PASS,AS-IS center ↔ TO-BE center
+DMF0082,FcstNPrice,SOLDTO_CUSTOMER,Sold-To Customer,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,SORT_KEY,SORT_KEY,C,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,C,메타 DMF0082/FcstNPrice,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,FcstNPrice,TEAM_ID,Team,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,VERSION_NO,Version,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,FcstNPrice,VMI_YN,VMI,L,META SCM_MST_SHEET_COLUMNS(DMF0082/FcstNPrice),DMF0082,FcstNPrice,L,메타 DMF0082/FcstNPrice,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,AUTHORITY_YN,AY,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,BIZ_TYPE_NAME,Biz.Type,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,Sales Price Save All,CELL_PROD_SITE_ID,Cell Prod Site*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,COL_LIST,COL_LIST,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,CURRENCY,Currency*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,DEPT_ID,Team,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,DISPLAY_SEQ,DISPLAY_SEQ,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,DIVISION_ID,Division*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,DOM_EXP,Customs Handbook*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,END_CUSTOMER,End Customer,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,Sales Price Save All,END_CUSTOMER40,End Customer*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,FCST_TYPE,FCST Type*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,INCOTERMS,Incoterms*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,ITEM_CLASS_NAME,Model Type,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,Sales Price Save All,ITEM_ID,Model*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,ITEM_NAME,Model Name,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,Sales Price Save All,MEASURE,Measure*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,NEW_FLAG,New Flag,C,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,C,메타 DMF0082/Sales Price Save All,PASS,AS-IS center ↔ TO-BE center
+DMF0082,Sales Price Save All,NICK_NAME,Nick Name,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,Sales Price Save All,PLANT_SITE_ID,Plant Site*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,PRICE_ALL,일괄입력 Price,R,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,R,메타 DMF0082/Sales Price Save All,PASS,AS-IS right ↔ TO-BE right
+DMF0082,Sales Price Save All,PROJECT_CODE,Project Code*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left
+DMF0082,Sales Price Save All,PROJECT_NAME,Project,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,Sales Price Save All,PROJECT_STATUS,Project Status,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0082,Sales Price Save All,SCM_SITE_ID,Sales Site*,L,META SCM_MST_SHEET_COLUMNS(DMF0082/Sales Price Save All),DMF0082,Sales Price Save All,L,메타 DMF0082/Sales Price Save All,PASS,AS-IS left ↔ TO-BE left

@@ -7,21 +7,33 @@
 }
 
 // CONFIRM 셀 — AS-IS SetCellTypeButtonByText 로 만든 버튼셀. 캡션은 행마다 다르다(ACTION_NAME, G11).
+//   고정 min-width 가 "Engine Run Request" 같은 긴 캡션을 셀 너비(meta COLUMN_WIDTH=120)보다 넓게
+//   밀어내 잘려 보였다(2026-10-29). 좌우·상하 모두 셀(.actionButtonCell) 크기를 넘지 않게 100%로
+//   맞추고, 고정 line-height 대신 flex 중앙정렬로 세로를 채운다. 넘치는 캡션은 ellipsis 로 자른다.
+//   wj-cell 기본 padding(4px/3px)이 20px 행에서 버튼이 들어갈 세로 공간을 12px 로 눌러 너무
+//   좁아 보였다 — 이 셀만 padding 을 줄여 버튼 높이를 확보한다.
 .actionButtonCell {
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1px 6px;
 
   > span {
-    display: inline-block;
-    min-width: 72px;
-    padding: 1px 8px;
-    border: 1px solid #b7c0c9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0 8px;
+    border: 1px solid #f4f6f8;
     border-radius: 3px;
     background: #f4f6f8;
     text-align: center;
-    line-height: 18px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   &:hover > span {

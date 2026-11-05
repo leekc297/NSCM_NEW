@@ -5,7 +5,7 @@ import {
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, useEffect, useMemo, useRef } from 'react';
+import { type MutableRefObject, useEffect, useMemo } from 'react';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
@@ -26,7 +26,7 @@ import {
   toCalendarCols,
   type CalendarCol,
 } from '../utils/globalPsiElecColumns';
-import { conditionalBgOf, GlobalPsiElecMergeManager } from '../utils/globalPsiElecMerge';
+import { conditionalBgOf } from '../utils/globalPsiElecMerge';
 
 const s = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
@@ -88,29 +88,33 @@ export const GlobalPsiElecGrid = ({
 
   const pivotColumns = useMemo(() => buildPivotColumns(calendarCols, bucket), [calendarCols, bucket]);
 
-  // 병합 매니저 래핑 표식 — grid 인스턴스당 1회.
-  const mergeWrappedRef = useRef<FlexGridType | null>(null);
+  // AS-IS 와 동일하게 색 있는 행도 일반 세로병합 유지 — 병합 분리 래핑 해제.
+  // const mergeWrappedRef = useRef<FlexGridType | null>(null);
 
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
 
     // 색 있는 행(SUM/EOH/Package Plan)은 세로병합에서 분리.
-    if (mergeWrappedRef.current !== g) {
-      g.mergeManager = new GlobalPsiElecMergeManager(g.mergeManager);
-      mergeWrappedRef.current = g;
-    }
+    // if (mergeWrappedRef.current !== g) {
+    //   g.mergeManager = new GlobalPsiElecMergeManager(g.mergeManager);
+    //   mergeWrappedRef.current = g;
+    // }
 
     const formatHandler = (_sender: FlexGridType, ev: FormatItemEventArgs) => {
       const binding = ev.panel.columns[ev.col]?.binding ?? '';
 
       // 헤더 요일색(design 03 §3 R4) — D_ 일자 헤더가 토=파랑/일=빨강.
       if (ev.panel.cellType === CellType.ColumnHeader) {
-        const wd = weekdayOf(binding);
+        // 최하단 일자 줄만 칠한다 — 년월·주 병합셀은 첫 컬럼 요일색이 번진다.
+        const isDayRow = ev.row === ev.panel.rows.length - 1;
+        const wd = isDayRow ? weekdayOf(binding) : null;
         if (wd === 6) {
           ev.cell.style.color = '#1565c0'; // 토요일 파랑
         } else if (wd === 0) {
           ev.cell.style.color = '#d32f2f'; // 일요일 빨강
+        } else {
+          ev.cell.style.color = '';
         }
         return;
       }

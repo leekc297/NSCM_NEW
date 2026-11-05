@@ -306,8 +306,8 @@ export const HEADER_ROW_HEIGHT = 16; // 3단 x 16 = 총높이 48px (V-18c)
 export const MSG = {
   NO_DIVISION_AUTH: 'MSG00667', // "No authority assigned." (AS-IS MSG00097, 01 L-04)
   PROG_STAT_BLOCKED: 'MSG01410', // "... before {0}" (AS-IS MSG00423, 02 §4.4)
-  CANNOT_INSERT: 'MSG01044', // "Can not add as it is not in modify mode." (AS-IS MSG00008, 01 L-14)
-  CANNOT_DELETE: 'MSG01045', // "Can not delete as it is not in modify mode." (AS-IS MSG00009, 01 L-12)
+  // Insert/Delete 차단 메시지(MSG01044/MSG01045)는 제거했다 — 조회 전용이라 두 버튼 자체를 노출하지
+  //   않기로 확정(사용자 2026-10-29, D-2 번복). 버튼 메타·FE hotkeyConfig 양쪽에서 INSERT/DELETE 제외.
   // 콤보 조회 실패 — "권한 0건(MSG00667)" 과 반드시 구분한다. 실패를 권한 없음으로 오판하면
   //   네트워크 오류에 조회영역이 통째로 잠긴다(자매 SCP0108 iter-1 G-03).
   COMBO_LOAD_FAIL: 'MSG01390', // "An error occurred while initializing the search conditions."
@@ -331,13 +331,9 @@ export const LBL_MODULE_PACK = 'LBL01143';
  */
 export const LBL_DIVISION = 'LBL00001';
 
-/**
- * Version 라벨 — **AS-IS Designer Text `Version` = `LBL00606`** 를 쓴다(01 §2-F 실측).
- * TO-BE 조회조건 카탈로그 표기는 `Ver.` 인데 `SCM_ADM_MSG_M` 에 그 문구가 0건이다(ora.py 재확인).
- * 엉뚱한 근사 코드(`LBL00031`="Version.")를 재사용하면 다국어 전량 불일치가 되므로(hook #114)
- * AS-IS 파리티 코드를 유지하고 `Ver.` 신규 채번은 별도 상신 항목으로 남긴다(goal D-4 / 02 §7 A-4).
- */
-export const LBL_VERSION = 'LBL00606';
+// Version 라벨은 `components/CapaTeepReportForm.tsx` 에서 `Ver.` 리터럴로 하드코딩한다
+//   (사용자 지시 2026-10-29). `SCM_ADM_MSG_M` 에 `Ver.` 문구 LBL 코드가 0건이라 i18n 경유를
+//   쓰지 않는다 — DB 에 채번·등록되면 그때 `t('<신규코드>','_Ver.')` 로 되돌린다.
 
 // ====================================================================================
 // 컬럼 개인화 (ColumnLayoutModal) — 03 §0.2 / V-33·V-34

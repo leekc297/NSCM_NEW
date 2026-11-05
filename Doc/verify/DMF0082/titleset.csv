@@ -1,0 +1,4 @@
+﻿kind,target,result,why
+TITLESET_MIG,DMF0082,ERROR,"[확인 대상] 이관 대상 703행 중 TO-BE 없음 607행(예 [('jiman.choung', 'C', 'CELL_PROD_SITE_ID'), ('jiman.choung', 'C', 'CURRENCY'), ('jiman.choung', 'C', 'DIVISION_ID')]) · AS-IS 전체 786행 — AS-IS 접속이 개발 DB 라 이관 원천 일치 미확인"
+TITLESET_REQ,DMF0082.FcstNPrice,ERROR,"[확인 대상] 칸 설정 보유 24명 중 필수 컬럼 미보유 18명(예 anajwer: ['VERSION_NO']) — 실행 시 자동 포함 여부는 컬럼 설정 시험에서 확인 · Division 별 필수 미보유 사용자 수(사용자 Division 미확인 — 참고) {'40': 21, '81': 22, '81_HD': 22, '81_HG': 22, '81_HM': 22, '81_ST': 22, '81_UC': 22, '82': 21}"
+MEASURE_ORDER,DMF0082.FcstNPrice,PASS,같은 키 연속 5454쌍 전부 셋팅 순서 · 사용자 minyonglee1

@@ -42,6 +42,24 @@ export const hasDuplicateNewRow = (
   return newRows.some(row => existingKeys.has(keyOf(row)));
 };
 
+// Activity Seq 중복체크 — 직전 조회결과에 PRS_CD+PLAN_GR_ID+ACTV_SEQ 동일행이 있으면 true(design 03 §4.4 MSG00443).
+export const hasDuplicateActvSeq = (rows: PlanActivityMgmtRow[]): boolean => {
+  const keyOf = (row: PlanActivityMgmtRow): string => {
+    const record = row as Record<string, unknown>;
+    return [record.OPMZ_PRS_CD, record.OPMZ_PLAN_GR_ID, record.OPMZ_ACTV_SEQ].map(str).join('^');
+  };
+  const seen = new Set<string>();
+  for (const row of rows) {
+    const record = row as Record<string, unknown>;
+    const seq = str(record.OPMZ_ACTV_SEQ);
+    if (!seq) continue; // 공백은 필수검증(saveWithValidation, INPUT_TP_CD=M)이 별도로 막는다
+    const key = keyOf(row);
+    if (seen.has(key)) return true;
+    seen.add(key);
+  }
+  return false;
+};
+
 // 저장 payload — 컬럼별로 변경행 값을 캐럿(^)으로 접어 파라미터 문자열 전송(AS-IS CString.AppendString,
 //   SP SCM_ARR_SPL_VAL(...,'^',i) 파싱). design 03 §4.4 SAVE 7파라미터 = 6개 컬럼접기 + userId(세션).
 //   키명 = SCM_ADM_PROC_M.COL_NM(camelCase 컨벤션, 자매 SCP0005/SCP0006). snake_case p_* 로 보내면

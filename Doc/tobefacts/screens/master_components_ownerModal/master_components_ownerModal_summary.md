@@ -1,7 +1,7 @@
 # master_components_ownerModal — To-Be Fact Pack 요약
 
 - page_key: `master/components/ownerModal` · feature: master · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 4 · 엔드포인트 호출 2 (미해결 0, 주석 속 0) · 이벤트 7 · 컴포넌트 사용 17 · 하드코딩 컬럼 0 · 메시지 6
+- 파일 4 · 엔드포인트 호출 2 (미해결 0, 주석 속 0) · 이벤트 7 · 컴포넌트 사용 17 · 하드코딩 컬럼 0 · 메시지 7
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
@@ -9,7 +9,7 @@
 |---|---|---|
 | features/master/src/components/ownerModal/owner-modal.constants.ts | constants | 13 |
 | features/master/src/components/ownerModal/OwnerModal.module.scss | style | 52 |
-| features/master/src/components/ownerModal/OwnerModal.tsx | page | 321 |
+| features/master/src/components/ownerModal/OwnerModal.tsx | page | 324 |
 | features/master/src/components/ownerModal/ownerModalStore.ts | store | 41 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -24,13 +24,13 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | handleSearch | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 221 |
-| InputField | onChange | <arrow> setUserInput | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 231 |
-| InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 232 |
-| Button | onClick | handleSelectUsers | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 266 |
-| Button | onClick | handleCancelUsers | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 270 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 306 |
-| Button | onClick | modalClose | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 313 |
+| SearchArea | onSearch | handleSearch | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 224 |
+| InputField | onChange | <arrow> setUserInput | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 234 |
+| InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 235 |
+| Button | onClick | handleSelectUsers | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 269 |
+| Button | onClick | handleCancelUsers | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 273 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 309 |
+| Button | onClick | modalClose | jsx | features/master/src/components/ownerModal/OwnerModal.tsx | 316 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -53,7 +53,8 @@
 ## 7. 메시지 코드
 | code | count |
 |---|---|
-| MSG01000 | 1 |
+| MSG01416 | 1 |
+| MSG01469 | 1 |
 | LBL00674 | 2 |
 | LBL00336 | 1 |
 | LBL00664 | 1 |

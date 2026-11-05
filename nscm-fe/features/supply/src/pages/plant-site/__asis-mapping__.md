@@ -74,12 +74,12 @@
 | R-26 REP 단일성 | cs:2018-2048 | `PlantSiteCustomerGrid.handleCellEdit` |
 | R-27/28 Customer 팝업+중복 | cs:2112-2171 | `PlantSiteCustomerGrid.setCustomer` + `CustomerModal`(COM0002) |
 | R-05 Warranty 특례 | cs:709-723 | `PlantSiteGrid.handleCellEdit`(isWarrantyRow→A002) |
-| R-31 붙여넣기 name→code(G4) | cs:2195-2238 | `PlantSiteLocationGrid.handlePaste`(dataMap.getKeyValue 역조회 + 미일치 clear+경고 §6-8②) |
+| R-31 붙여넣기 name→code(G4) | cs:2195-2238 | name→code 역매핑·후보밖 clear 는 공용 DataGrid(wijmo coerce + clearOutOfListComboOnPaste)가 담당. `PlantSiteLocationGrid.handlePaste` 는 후보밖 clear 시 경고(MSG01079, §6-8②) + 파생 cascade 만. (과거 로컬 getKeyValue 재역조회가 유효값까지 지우던 버그 2026-10-29 제거 — Site·LocationOsp 와 동일 패턴으로 정렬) |
 | R-33 Location 필수(G1) | cs:1103-1131 | `validateLocationSave`(STORAGE 공백행 FACTORY/OPERATION 필수) → `PlantSite.handleSave` 저장 차단 |
 | R-34 Location 중복(G2) | cs:1947-2016 | `validateLocationSave`(STORAGE / (FACTORY,OPERATION) 전행 비교) → 저장 차단 |
 | R-38 customer 신규필수(G3) | cs:1246-1253 | `validateCustomerSave`(신규행 SOLDTO/SHIPTO 공백) → `PlantSite.handleSave` 저장 차단 |
 | R-06① main dirty↔sub 배타(G6) | cs:556-560 | sub 3그리드 beginningEdit `isMainDirty()` → cancel + MSG00129 |
-| R-32 편집 중 탭 전환 차단(G8) | cs:2095-2104 | `PlantSite.handleLowerTabChange`(현재 탭 dirty 시 전환 차단 + MSG01468 신규 채번, 확인 1개뿐인 하드 블록 — AS-IS 캡처 실측 2026-09-28), TabWrapper 제어형 |
+| R-32 편집 중 탭 전환 차단(G8) | cs:2095-2104 | `PlantSite.handleLowerTabChange`(현재 탭 dirty 시 전환 차단 + 공용 MSG01149, 확인 1개뿐인 하드 블록 — AS-IS 캡처 실측 2026-09-28. 과거 전용 채번 MSG01468 은 결재자 안내 메시지와 번호 충돌해 철회, 2026-10-29), TabWrapper 제어형 |
 | site.DIVISION_ID 셀 EE 필터(G7) | dtMyDivision=GetDivisionWithoutEE | 메타 `Division_SCP_NoEE`(05_register [5], ATTRIBUTE3<>'EE') 로 셀 repoint |
 | 셀 병합(G10) | cs:364-445 전 컬럼 FPMerge.None + 2189 SmartColMerge no-op | main `allowMerging` 제거 — 병합 없음이 AS-IS 파리티(sub 도 없음) |
 
@@ -105,7 +105,7 @@
 | 마스터 미선택(P-06, Insert 방어) | **정정(2026-09-28 독립 감사)**: 없음 — `MSG00161`/`nMainSelRow` 는 이 화면 AS-IS 소스에 부재(grep 0건, SCP0020/0021/0042 관용구를 오인용) | **MSG00014** | No row selected. — TO-BE 의도적 추가(AS-IS 재현 아님, P-06) |
 | 권한 division 0(R-01) | (SetDivisionAuthCheck) | **MSG00096** | No permission. |
 | main/sub 편집 배타(R-06①) | MSG00130 | **MSG00129** | Sheet-specific edit mode notice. (`{0}` 없는 문구 — 이 화면에서 그대로 사용 중) |
-| 탭 전환 차단(R-32) | MSG00129 | **MSG01468**(신규 채번) | You are modifying {0} and can not change the sheet. (정정 2026-09-28: 이전 서술은 MSG00130 "You have unsaved changes. Switch sheet?"를 Yes/No 확인으로 오판했으나, AS-IS 캡처 실측 결과 확인 버튼 1개뿐인 하드 블록이었다. `{0}` 치환이 필요해 MSG00129 재사용은 금지되고, Workbench/opt-capa 의 MSG01149 재사용 대신 이 화면 전용으로 DB 최대 번호(MSG01467, MSG99999 sentinel 제외) 다음 값을 신규 채번했다 — `05_register.sql` [14]) |
+| 탭 전환 차단(R-32) | MSG00129 | **MSG01149**(공용 재사용) | You are modifying {0} and can not change the sheet. (정정 2026-09-28: 이전 서술은 MSG00130 "You have unsaved changes. Switch sheet?"를 Yes/No 확인으로 오판했으나, AS-IS 캡처 실측 결과 확인 버튼 1개뿐인 하드 블록이었다. `{0}` 치환이 필요해 MSG00129 재사용은 금지된다. 당초 전용 MSG01468 을 신규 채번했으나 그 번호가 이미 결재자 안내 메시지로 선점돼 탭 전환 시 엉뚱한 문구가 떠, Workbench/opt-capa/formation 등과 동일한 공용 MSG01149 재사용으로 전환했다 — 2026-10-29) |
 | 붙여넣기 미일치(R-31) | (NullRef) | **MSG01079** | Not existing {0}. (§6-8② 교정) |
 
 ## 6. 미구현/잔여 (정직 보고 — 04_react-gap.md 와 동기화)

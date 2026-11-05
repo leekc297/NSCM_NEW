@@ -1,0 +1,6 @@
+﻿kind,target,result,why
+TB_FX,PKG_DMF0040,FAIL,AS-IS 사용자 테이블 참조 1종: ['TB_FX_USER']
+TB_FX,PKG_SCM0002,PASS,TB_FX_* 참조 0
+LABEL_AMP,FORECAST_INFO_SPEC.라벨,PASS,FORECAST_INFO_SPEC 라벨 라벨 'Spec & Version' = AS-IS
+LABEL_AMP,FORECAST_INFO_SPEC.소분류,FAIL,FORECAST_INFO_SPEC 소분류 라벨 '&' 뒤 잘림 — AS-IS 'Spec & Version' ↔ TO-BE 'Spec'
+LABEL_AMP,FORECAST_INFO_SPEC.대분류,FAIL,FORECAST_INFO_SPEC 대분류 라벨 '&' 뒤 잘림 — AS-IS 'Spec & Version' ↔ TO-BE 'Spec'

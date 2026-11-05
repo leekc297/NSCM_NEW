@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
@@ -27,6 +29,7 @@ export const BodForm = () => {
 
   const searchParams = useBodStore(state => state.searchParams);
   const setSearchParams = useBodStore(state => state.setSearchParams);
+  const setAllowedDivisionIds = useBodStore(state => state.setAllowedDivisionIds);
   const setFilters = useBodStore(state => state.setFilters);
   const fetchStaticColumns = useBodStore(state => state.fetchStaticColumns);
   const openSearchArea = useBodStore(state => state.isOpenSearchArea);
@@ -49,6 +52,12 @@ export const BodForm = () => {
       .map(item => ({ label: item.NAME, value: item.CODE })) ?? [];
   // Division ALL 일 때 From/To Site 를 거를 권한 Division 코드(bod.util.ts buildDivisionFilteredOptions 참조).
   const allowedDivisionIds = divisionOptions.map(option => option.value);
+  // 권한 Division 코드를 스토어에 동기화 — setFilters 가 'ALL' 을 이 코드 열거로 펼쳐 조회한다
+  //   (BodForm Search·툴바 SEARCH 핫키 양쪽을 포함해 중앙 처리, useBodStore setFilters 주석 참조).
+  const allowedDivisionIdsKey = allowedDivisionIds.join(',');
+  useEffect(() => {
+    setAllowedDivisionIds(allowedDivisionIdsKey ? allowedDivisionIdsKey.split(',') : []);
+  }, [allowedDivisionIdsKey, setAllowedDivisionIds]);
 
   const onSearch = () => {
     setFilters();

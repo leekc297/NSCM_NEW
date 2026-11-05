@@ -1,0 +1,540 @@
+﻿menu_id,row_id,class,opinion,rule_id,target,explain,source_file
+SCP0007,T-0028121a,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_DistributionRoutePopup.InitControls,AS-IS 메서드 안 세부 검사 17건 합산(PASS:15 · NA:2),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-0036ec3f,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4e-011 · §4e dtToSiteOfSpdAll1 / SpdMain_ClipboardPasted,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-005d8747,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",D1,D00-2-005 · §2 spdMain / ComboSelChange,세부 검사 33건 합산(PASS:23 · NA:9 · FAIL:1) — FAIL 세부: Route Id / Route Id — 원장 V-dde703c0 COLUMN / 원장 V-f50ac698 COLUMN / 실… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-00e05feb,기타,실제 구현여부로 판정,H6,MODAL:ShowDialog · AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무,세부 검사 17건 합산(PASS:11 · NA:6),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-00e52cb4,판정오류,"판정오류
+(오류 아님,,  AS-IS 초기값을 못가져 온 검증엔진의 잘못을 오류로 판정함)",G6,cboInputStatus / Input Status / Status,"조회조건 초기값: AS-IS 와 같음 (사용자 판정 '판정오류 (오류 아님,, AS-IS 초기값을 못가져 …')",Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-05cb921d,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,LT_TYPE / L/T Type,한 값을 고르면 연관 칸이 자동으로 채워지는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-07d9f5ff,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H2,SCP0007_BOD.SetImageCell,세부 검사 1건 합산(PASS:1),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-0839df65,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-045 · §3 SetBGColor / (TRANSPORT_MODE,InvalidColor)",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-0972ab37,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H2,D00-4b-011 · §4b SpdMain_TopChange / event / spdMain.TopChan,세부 검사 58건 합산(PASS:43 · FAIL:10 · NA:5) — FAIL 세부: Division / Division — 원장 V-2ae6f7ec COLUMN / 원장 V-07e7feaa ASIS / 실측[… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-09f5c9a9,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.cboDivision_SelectedIndexChanged,AS-IS 메서드 안 세부 검사 3건 합산(NOT_RUN:3 (미실행 검사가 남아 판정필요)),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-0b2e1f31,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C6,D00-4e-008 · §4e dtToSiteOfSpdAll1 / SpdMain_ComboSelChange,세부 검사 22건 합산(FAIL:8 · NA:8 · PASS:6) — FAIL 세부: To Site / To Site — 원장 V-c667b133 ASIS / 원장 V-1c76f13c ASIS / 원장 V-37… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-0b8db6b5,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-LOC,D00-4d-011 · §4d Data.Common / YesOrNo,대조표 기록 보강(구현 위치·사유) — 화면 오류 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-0c6e2ae6,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-067 · §3 SetCellTypeCombo / (e.Row,TO_SITE_CODE,dtToSi",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-0dff160e,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C6,D00-4e-009 · §4e dtToSiteOfSpdAll2 / SpdMain_ComboSelChange,세부 검사 22건 합산(FAIL:8 · NA:8 · PASS:6) — FAIL 세부: To Site / To Site — 원장 V-c667b133 ASIS / 원장 V-1c76f13c ASIS / 원장 V-37… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-0e366e1c,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4e-009 · §4e dtToSiteOfSpdAll2 / SpdMain_ComboSelChange,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-0f20f105,기타,실제 구현여부로 판정,H6,D00-4f-006 · §4f spdMain_CellDoubleClick / arList.Count==0,세부 검사 17건 합산(PASS:11 · NA:6),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-0f52b448,기타,"AS-IS 표기 COLUMN은 SHEET_COLUMN TABLE 에 VISIBLE = 'Y' 처리
+Label 은 TO-BE 별도 RULE 없으면 AS-IS 와 동일하게(별도RULE ex. Division >> Div.)",H5,TO_COUNTRY,검사 대상 아님 — 라벨 대상 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-11ea0283,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-034 · §3 SetCellTypeCombo / (i,INCOTERMS_SSP, dtIncote",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-1243ab10,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.spdMain_CellDoubleClick,AS-IS 메서드 안 세부 검사 58건 합산(PASS:49 · NA:9),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-134337c2,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,D00-4b-013 · §4b spdMain_CellDoubleClick / event / spdMain.C,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-134953fa,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H2,"D00-3-048 · §3 SetFGColor / (nStartColIdx..nEndColIdx,Defaul",세부 검사 58건 합산(PASS:43 · FAIL:10 · NA:5) — FAIL 세부: Division / Division — 원장 V-2ae6f7ec COLUMN / 원장 V-07e7feaa ASIS / 실측[… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-13bc201b,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4e-012 · §4e dtToSiteOfSpdAll2 / SpdMain_ClipboardPasted,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-154d6ff4,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-009 · §3 SetCellTypeCombo / (DIVISION_ID, dtMyDivision",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-1563b72c,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C6,D00-4b-003 · §4b SpdMain_Changed / event(dsdm.Changed) / —,세부 검사 22건 합산(FAIL:8 · NA:8 · PASS:6) — FAIL 세부: To Site / To Site — 원장 V-c667b133 ASIS / 원장 V-1c76f13c ASIS / 원장 V-37… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-157c8543,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,BOD_VALID / BOD Valid,같은 값 인접 셀의 세로 병합(TO-BE 룰 CR-073: 키 컬럼만 병합): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-16e39f71,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",D5,SCP0007_BOD.CreateSpread,세부 검사 39건 합산(PASS:36 · NA:3),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-1771c369,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",G4,"D00-3-009 · §3 SetCellTypeCombo / (DIVISION_ID, dtMyDivision",세부 검사 14건 합산(PASS:14),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-197db1ce,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H2,D00-2-009 · §2 spdMain / TopChange → SpdMain_TopChange (`siM,세부 검사 58건 합산(PASS:43 · FAIL:10 · NA:5) — FAIL 세부: Division / Division — 원장 V-2ae6f7ec COLUMN / 원장 V-07e7feaa ASIS / 실측[… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-1ad18cc7,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_DistributionRoutePopup.btnFromSrch_Click,AS-IS 메서드 안 세부 검사 20건 합산(PASS:13 · NA:6 · FAIL:1) — 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-1b5d4e68,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H5,INCOTERMS_SSP / Incoterms SSP,컬럼·조회조건 라벨(명칭): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-1c276f0a,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",E1,D00-2-004 · §2 spdMain / ClipboardPasted,세부 검사 10건 합산(NA:9 · PASS:1),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-1cabd8bc,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4d-005 · §4d Data_SCP.CommonAll / FromSiteByDivision1,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-1ec0a094,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-2-006 · §2 spdMain / EditChange,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-1ef63e86,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_DistributionRoutePopup.btnButtonList_UsrButtonList_C,AS-IS 메서드 안 세부 검사 3건 합산(PASS:2 · FAIL:1) — 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-22cfe693,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.FindData_Main,AS-IS 메서드 안 세부 검사 17건 합산(PASS:12 · NA:3 · REVIEW:1 · FAIL:1) — 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-23d9d382,기타,"AS-IS 표기 COLUMN은 SHEET_COLUMN TABLE 에 VISIBLE = 'Y' 처리
+Label 은 TO-BE 별도 RULE 없으면 AS-IS 와 동일하게(별도RULE ex. Division >> Div.)",H5,FROM_COUNTRY,검사 대상 아님 — 라벨 대상 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-26f5e6db,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-LOC,D00-4b-011 · §4b SpdMain_TopChange / event / spdMain.TopChan,대조표 기록 보강(구현 위치·사유) — 화면 오류 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-272cf53e,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,SCP0007_BOD.Set_ValidTextColor,세부 검사 5건 합산(PASS:4 · NA:1),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-27e0a65e,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",DB-SYN,D00-4e-005 · §4e dtFromSiteOfSpdAll / FindData_Main,세부 검사 5건 합산(PASS:5),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-2a56cec5,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H5,D00-1-026 · §1 spdMain / FpSpread,세부 검사 47건 합산(PASS:43 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-2e1f22f0,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4e-006 · §4e dtToSiteOfSpdAll / FindData_Main,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-2eb15fb6,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",G5,MODAL:ShowDialog · AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무,세부 검사 17건 합산(PASS:9 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-35c97c67,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",A1,D00-4e-005 · §4e dtFromSiteOfSpdAll / FindData_Main,세부 검사 5건 합산(REVIEW:2 · PASS:2 · NA:1) — FAIL 세부: PKG_SCP0007.P_SCP0007_GET_BOD — golden DIFF AS-IS 6487행 ↔ TO-BE 8121행… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-3686e072,판정오류,"판정오류
+(초기갑 설정 됨)",G6,clbIncotermsSSP / SSP Incoterms / Incoterms SSP,조회조건 초기값: AS-IS 와 같음 (사용자 판정 '판정오류 (초기갑 설정 됨)'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-36abe4ad,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",G5,D00-4f-006 · §4f spdMain_CellDoubleClick / arList.Count==0,세부 검사 17건 합산(PASS:9 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-37da7ec1,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C2,D00-4b-003 · §4b SpdMain_Changed / event(dsdm.Changed) / —,세부 검사 22건 합산(PASS:14 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-3868d5ae,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",G5,D00-4b-013 · §4b spdMain_CellDoubleClick / event / spdMain.C,세부 검사 17건 합산(PASS:9 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-38dbb1de,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,D00-4e-007 · §4e dtToSiteOfSpdAll / SpdMain_ComboSelChange,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-395e1123,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C6,D00-2-004 · §2 spdMain / ClipboardPasted,세부 검사 22건 합산(FAIL:8 · NA:8 · PASS:6) — FAIL 세부: To Site / To Site — 원장 V-c667b133 ASIS / 원장 V-1c76f13c ASIS / 원장 V-37… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-3b27c86f,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,BOD_VALID / BOD Valid,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-3f2f7edc,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H5,BOD_VALID / BOD Valid,컬럼·조회조건 라벨(명칭): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-3f4cb6f5,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",D5,LT_SUM,셀 입력 방식(텍스트·콤보·숫자·날짜): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-407adbc8,판정오류,"판정오류
+(초기갑 설정 됨)",G6,clbTransMode / Trans Mode,조회조건 초기값: AS-IS 와 같음 (사용자 판정 '판정오류 (초기갑 설정 됨)'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-40c0671b,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.InitSpread,AS-IS 메서드 안 세부 검사 15건 합산(PASS:11 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-416534c0,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.SaveData_Main,AS-IS 메서드 안 세부 검사 39건 합산(PASS:31 · FAIL:8) — 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-41d68397,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",A1,"D00-3-036 · §3 SetCellTypeCombo / (i,INCOTERMS_SSP, dtIncote",세부 검사 5건 합산(REVIEW:2 · PASS:2 · NA:1) — FAIL 세부: PKG_SCP0007.P_SCP0007_GET_BOD — golden DIFF AS-IS 6487행 ↔ TO-BE 8121행… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-44f9e39c,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,SCP0007_BOD.spdMain_CellDoubleClick,세부 검사 21건 합산(PASS:19 · NA:2),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-45df5a2d,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C6,D00-4b-008 · §4b SpdMain_ComboSelChange / event / spdMain.Co,세부 검사 22건 합산(FAIL:8 · NA:8 · PASS:6) — FAIL 세부: To Site / To Site — 원장 V-c667b133 ASIS / 원장 V-1c76f13c ASIS / 원장 V-37… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-4781ffad,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,D00-3-040 · §3 SmartColMerge / (),세부 검사 21건 합산(PASS:17 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-480b4c8e,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",D5,LT_LAY_OFF_CLEARANCE,셀 입력 방식(텍스트·콤보·숫자·날짜): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-48ad65e2,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.CreateSpread,AS-IS 메서드 안 세부 검사 4건 합산(NOT_RUN:3 · PASS:1 (미실행 검사가 남아 판정필요)),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-4b9d59d6,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H2,D00-1-027 · §1 spdMain_Sheet1 / SheetView,세부 검사 58건 합산(PASS:43 · FAIL:10 · NA:5) — FAIL 세부: Division / Division — 원장 V-2ae6f7ec COLUMN / 원장 V-07e7feaa ASIS / 실측[… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-4bba2081,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,D00-3-004 · §3 SmartColMerge / (),세부 검사 21건 합산(PASS:17 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-4c08d828,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,D00-4b-003 · §4b SpdMain_Changed / event(dsdm.Changed) / —,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-4d1bf3f7,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,TO_COUNTRY,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-4dbdc9d2,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-036 · §3 SetCellTypeCombo / (i,INCOTERMS_SSP, dtIncote",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-4dd18a8d,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,SCP0007_BOD.cboDivision_SelectedIndexChanged,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-509c1186,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H2,SCP0007_BOD.CreateSpread,세부 검사 58건 합산(PASS:43 · FAIL:10 · NA:5) — FAIL 세부: Division / Division — 원장 V-2ae6f7ec COLUMN / 원장 V-07e7feaa ASIS / 실측[… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-51d32086,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",A1,D00-4d-005 · §4d Data_SCP.CommonAll / FromSiteByDivision1,세부 검사 5건 합산(REVIEW:2 · PASS:2 · NA:1) — FAIL 세부: PKG_SCP0007.P_SCP0007_GET_BOD — golden DIFF AS-IS 6487행 ↔ TO-BE 8121행… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-52d44f24,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,PRIORITY / Priority,같은 값 인접 셀의 세로 병합(TO-BE 룰 CR-073: 키 컬럼만 병합): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-53241cf8,기타,동일 패턴 사유 확인 필요,X-REASON,D00-1-015 · §1 layoutControlGroup2 / LayoutControlGroup,대조표 기록(구현 위치·사유) 확인됨,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-5327b6e2,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-069 · §3 SetCellTypeCombo / (e.Row,TO_SITE_CODE,dtToSi",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-53ca162f,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",F4,D00-4e-006 · §4e dtToSiteOfSpdAll / FindData_Main,세부 검사 5건 합산(PASS:5),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-542f2fa2,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C2,D00-4b-008 · §4b SpdMain_ComboSelChange / event / spdMain.Co,세부 검사 22건 합산(PASS:14 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-54608ecf,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,DIVISION_ID / Division,검사 대상 아님 — 이번 조회 Division 이 복수(ALL)라 AS-IS 도 단일값 대입 불가 → 신규행 Division 은 콤보 선택(D4 에서 판정),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-58d205b9,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-074 · §3 SetCellTypeCombo / (iRow,TO_SITE_CODE,dtToSit",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-590f4386,기타,동작여부 판단해서 pass / fail 처리,H6,VALID_YN,검사 대상 아님 — 대상 아님),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-5966eec9,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,FROM_COUNTRY,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-59f746bf,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H5,D00-3-038 · §3 Query / (ds),세부 검사 47건 합산(PASS:43 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-5a988fdb,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",D5,LT_VOYAGE,셀 입력 방식(텍스트·콤보·숫자·날짜): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-5a9ef6d0,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4e-005 · §4e dtFromSiteOfSpdAll / FindData_Main,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-5ab515d4,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H2,D00-2-008 · §2 this / Load → Form_Load (InitForm·InitControl,세부 검사 58건 합산(PASS:43 · FAIL:10 · NA:5) — FAIL 세부: Division / Division — 원장 V-2ae6f7ec COLUMN / 원장 V-07e7feaa ASIS / 실측[… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-5fa9894a,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,LT_SUM,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-605461fe,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.SpdMain_Changed,AS-IS 메서드 안 세부 검사 7건 합산(PASS:5 · FAIL:2) — 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-61ce9b84,기타,구현대상인대 미구현이면 fail,H5,D00-4e-005 · §4e dtFromSiteOfSpdAll / FindData_Main,세부 검사 47건 합산(PASS:43 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-63a17d2a,판정오류,"판정오류
+(초기갑 설정 됨)",G6,clbToSite / To Site,조회조건 초기값: AS-IS 와 같음 (사용자 판정 '판정오류 (초기갑 설정 됨)'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-64a38e69,대상아님,"as-is 소스 확인 필요, 실 소스 없으면 해당없음으로 처리",X-REASON,"D00-3-029 · §3 LockColumn / (ROUTE_CNT..TRANSPORT_MODE,true)",대조표 기록(구현 위치·사유) 확인됨,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-6b502d41,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-075 · §3 SetCellTypeCombo / (iRow,TO_SITE_CODE,dtToSit",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-6bab36a8,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-2-007 · §2 spdMain / KeyPress,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-6eec79f1,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.SetCityCode,AS-IS 메서드 안 세부 검사 43건 합산(PASS:25 · NA:14 · FAIL:4) — 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-6f195598,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,D00-3-066,검사 대상 아님 — 이 진입점에 연결된 문장·요소 검사가 없다(대조표 행만 있고 AS-IS 문장 추출 0),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-70218ba2,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H2,D00-1-026 · §1 spdMain / FpSpread,세부 검사 58건 합산(PASS:43 · FAIL:10 · NA:5) — FAIL 세부: Division / Division — 원장 V-2ae6f7ec COLUMN / 원장 V-07e7feaa ASIS / 실측[… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-707c92bf,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",A1,D00-4e-006 · §4e dtToSiteOfSpdAll / FindData_Main,세부 검사 5건 합산(REVIEW:2 · PASS:2 · NA:1) — FAIL 세부: PKG_SCP0007.P_SCP0007_GET_BOD — golden DIFF AS-IS 6487행 ↔ TO-BE 8121행… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-7271b848,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H5,D00-4b-011 · §4b SpdMain_TopChange / event / spdMain.TopChan,세부 검사 47건 합산(PASS:43 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-728ec5b8,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",E2,TRANSPORT_MODE / Trans Mode,검사 대상 아님 — 날짜 입력 규칙 E2 대상 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-73c094f0,기타,동일 패턴 사유 확인 필요,X-REASON,D00-1-012 · §1 emptySpaceItem3 / EmptySpaceItem,대조표 기록(구현 위치·사유) 확인됨,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-753dc18d,기타,실제 구현여부로 판정,H6,D00-4b-013 · §4b spdMain_CellDoubleClick / event / spdMain.C,세부 검사 17건 합산(PASS:11 · NA:6),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-77ba311a,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,ROUTE_VALID / Route Valid,한 값을 고르면 연관 칸이 자동으로 채워지는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-7847cb92,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.InitControls,AS-IS 메서드 안 세부 검사 20건 합산(PASS:20),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-788a49eb,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",A6,D00-4e-005 · §4e dtFromSiteOfSpdAll / FindData_Main,세부 검사 5건 합산(NA:3 · FAIL:1 · PASS:1) — FAIL 세부: PKG_SCP0007.P_SCP0007_GET_BOD — 원장 V-1db4f99c SP / 원장 V-2fdb9660 SP /… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-7921392e,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,MODAL:ShowDialog · AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-7c5dcf08,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,ROUTE_VALID / Route Valid,같은 값 인접 셀의 세로 병합(TO-BE 룰 CR-073: 키 컬럼만 병합): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-7d230d18,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.SpdMain_ClipboardPasted,AS-IS 메서드 안 세부 검사 39건 합산(PASS:26 · NA:12 · FAIL:1) — 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-7e05a316,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4b-009 · §4b SpdMain_EditChange / event / spdMain.EditCh,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-80f4fa64,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,DAYS_SAT / Sat,한 값을 고르면 연관 칸이 자동으로 채워지는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-81904d28,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",E1,D00-4e-010 · §4e dtToSiteOfSpdAll / SpdMain_ClipboardPasted,세부 검사 10건 합산(NA:9 · PASS:1),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-83283aa0,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4d-006 · §4d Data_SCP.CommonAll / ToSiteBOD1,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-853ad8f5,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C2,D00-2-005 · §2 spdMain / ComboSelChange,세부 검사 22건 합산(PASS:14 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-8573381d,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-LOC,"D00-3-026 · §3 SetCellTypeCombo / (INCOTERMS_SSP, dtIncoterm",대조표 기록 보강(구현 위치·사유) — 화면 오류 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-860dfd89,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C6,SCP0007_BOD.SpdMain_Changed,세부 검사 1건 합산(FAIL:1) — FAIL 세부: From Site / From Site — 원장 V-c667b133 ASIS / 원장 V-21c28614 ASIS / 원장 … · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-86f34c05,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4d-007 · §4d Data_SCP.CommonAll / ToSiteByDivisionPlant1,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-88757671,실제오류확인,"오류 없어 보이는데 오류 표기에 대한 확인 필요
+대조표 상태 미구현 에 대해서 실제 오류가 아니면 표기하지 않도록 요청",X-NOTIMPL,"D00-3-066 · §3 ShowCell / (0,0,e.Row,e.Column,Center,Right)",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-8b029d0e,기타,"AS-IS 표기 COLUMN은 SHEET_COLUMN TABLE 에 VISIBLE = 'Y' 처리
+Label 은 TO-BE 별도 RULE 없으면 AS-IS 와 동일하게(별도RULE ex. Division >> Div.)",H5,SAFETY_STOCK / Safety Stock,검사 대상 아님 — 라벨 대상 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-8da85062,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H2,"D00-3-047 · §3 SetFGColor / (nStartColIdx..nEndColIdx,Invali",세부 검사 58건 합산(PASS:43 · FAIL:10 · NA:5) — FAIL 세부: Division / Division — 원장 V-2ae6f7ec COLUMN / 원장 V-07e7feaa ASIS / 실측[… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-8f68fe4d,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,btnFromSrch,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-8f752189,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-043 · §3 SetBGColor / (DIVISION_ID..INCOTERMS,InvalidC",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-8ffb271e,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C2,VMI_YN / To Site VMI,상위 값에 따라 콤보 후보가 다시 만들어지는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-9155f997,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4e-007 · §4e dtToSiteOfSpdAll / SpdMain_ComboSelChange,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-928e67bf,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H5,D00-1-027 · §1 spdMain_Sheet1 / SheetView,세부 검사 47건 합산(PASS:43 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-92a8d453,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4d-008 · §4d Data_SCP.CommonAll / ToSiteByDivision1,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-92c717b8,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,DIS_TOTAL_LEAD_TIME / Distribution Total Lead Time,한 값을 고르면 연관 칸이 자동으로 채워지는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-92d7a02d,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,ROUTE_VALID / Route Valid,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-92fe3af6,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,D00-2-009 · §2 spdMain / TopChange → SpdMain_TopChange (`siM,세부 검사 21건 합산(PASS:17 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-930b402c,대상아님,"as-is 소스 확인 필요, 실 소스 없으면 해당없음으로 처리",X-REASON,D00-3-005 · §3 VisibleTab / (true),대조표 기록(구현 위치·사유) 확인됨,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-95711a6a,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",G1,"D00-3-036 · §3 SetCellTypeCombo / (i,INCOTERMS_SSP, dtIncote",세부 검사 13건 합산(PASS:12 · NA:1),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-95eb45ef,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-LOC,D00-4d-012 · §4d Data.Common / incotermsEdit,대조표 기록 보강(구현 위치·사유) — 화면 오류 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-97066f9e,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,ROUTE_CNT / Route Count,같은 값 인접 셀의 세로 병합(TO-BE 룰 CR-073: 키 컬럼만 병합): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-985a579d,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,D00-4b-008 · §4b SpdMain_ComboSelChange / event / spdMain.Co,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-9ada0667,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4e-010 · §4e dtToSiteOfSpdAll / SpdMain_ClipboardPasted,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-9b1ee926,기타,"AS-IS 표기 COLUMN은 SHEET_COLUMN TABLE 에 VISIBLE = 'Y' 처리
+Label 은 TO-BE 별도 RULE 없으면 AS-IS 와 동일하게(별도RULE ex. Division >> Div.)",H5,ROUTE_CHK,검사 대상 아님 — 라벨 대상 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-9f08faaa,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",E1,D00-4b-007 · §4b SpdMain_ClipboardPasted / event / spdMain.C,세부 검사 10건 합산(NA:9 · PASS:1),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-a08bf57b,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.SpdMain_ComboSelChange,AS-IS 메서드 안 세부 검사 47건 합산(PASS:36 · NA:8 · FAIL:3) — 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-a099872c,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-LOC,D00-3-001 · §3 SmartColMerge / (),대조표 기록 보강(구현 위치·사유) — 화면 오류 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-a138efce,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,D00-4e-011 · §4e dtToSiteOfSpdAll1 / SpdMain_ClipboardPasted,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-a35997ab,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,D00-4e-010 · §4e dtToSiteOfSpdAll / SpdMain_ClipboardPasted,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-a8820c64,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,D00-4b-007 · §4b SpdMain_ClipboardPasted / event / spdMain.C,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-a9699aeb,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,D00-4e-009 · §4e dtToSiteOfSpdAll2 / SpdMain_ComboSelChange,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-aa1468b0,대상아님,"as-is 소스 확인 필요, 실 소스 없으면 해당없음으로 처리",X-REASON,"D00-3-030 · §3 LockColumn / (LT_TYPE..BOD_ID,true)",대조표 기록(구현 위치·사유) 확인됨,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-aca18ced,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",A1,"D00-3-009 · §3 SetCellTypeCombo / (DIVISION_ID, dtMyDivision",세부 검사 5건 합산(REVIEW:2 · PASS:2 · NA:1) — FAIL 세부: PKG_SCP0007.P_SCP0007_GET_BOD — golden DIFF AS-IS 6487행 ↔ TO-BE 8121행… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-b00b7e3d,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",F4,D00-4e-005 · §4e dtFromSiteOfSpdAll / FindData_Main,세부 검사 5건 합산(PASS:5),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-b04fa7d4,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,TO_CITY / To City,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-b13a2f93,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,FROM_CITY / From City,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-b4af3e84,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,SCP0007_BOD.SetChangeControl,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-b522d6a4,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C2,D00-2-004 · §2 spdMain / ClipboardPasted,세부 검사 22건 합산(PASS:14 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-b869945c,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4c-011 · §4c (없음) / GMessageBox / errCode in {99010..990,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-bb5e29e6,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4e-008 · §4e dtToSiteOfSpdAll1 / SpdMain_ComboSelChange,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-bbdf9946,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,D00-2-005 · §2 spdMain / ComboSelChange,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-bc5f52ca,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",DB-SYN,D00-4e-006 · §4e dtToSiteOfSpdAll / FindData_Main,세부 검사 5건 합산(PASS:5),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-bef806eb,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",G4,"D00-3-036 · §3 SetCellTypeCombo / (i,INCOTERMS_SSP, dtIncote",세부 검사 14건 합산(PASS:14),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c074cb4c,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",E1,D00-4e-011 · §4e dtToSiteOfSpdAll1 / SpdMain_ClipboardPasted,세부 검사 10건 합산(NA:9 · PASS:1),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c0ed6d27,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-LOC,D00-4d-001 · §4d BLUtils.GetDivisionWithoutEE / false,대조표 기록 보강(구현 위치·사유) — 화면 오류 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c11f26e5,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-076 · §3 SetCellTypeCombo / (iRow,TO_SITE_CODE,dtToSit",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c205818a,기타,동일 패턴 사유 확인 필요,H6,D00-2-003 · §2 spdMain / CellDoubleClick,세부 검사 17건 합산(PASS:11 · NA:6),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c2a1d40d,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C2,D00-4e-009 · §4e dtToSiteOfSpdAll2 / SpdMain_ComboSelChange,세부 검사 22건 합산(PASS:14 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c30afba1,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,BOD_ID,같은 값 인접 셀의 세로 병합(TO-BE 룰 CR-073: 키 컬럼만 병합): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c32845d9,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,"D00-3-065 · §3 SetActiveCell / (e.Row,e.Column)",팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c455efae,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,btnToSrch,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c466f2eb,실제오류확인,"오류 없어 보이는데 오류 표기에 대한 확인 필요
+대조표 상태 미구현 에 대해서 실제 오류가 아니면 표기하지 않도록 요청",X-NOTIMPL,"D00-3-065 · §3 SetActiveCell / (e.Row,e.Column)",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c4b491f6,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-046 · §3 SetBGColor / (PRIORITY,InvalidColor)",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c7205d8f,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",A5,D00-4e-005 · §4e dtFromSiteOfSpdAll / FindData_Main,세부 검사 47건 합산(PASS:47),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-c8df6187,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,VALID_YN,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-cba2c26f,기타,동일 패턴 사유 확인 필요,X-REASON,D00-1-017 · §1 layoutControlItem3 / LayoutControlItem,대조표 기록(구현 위치·사유) 확인됨,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-cc0ec4c1,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,D00-4b-011 · §4b SpdMain_TopChange / event / spdMain.TopChan,세부 검사 21건 합산(PASS:17 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-cca6ef90,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,DAYS_SAT / Sat,검사 대상 아님 — 토요일 비어 있음(선택 Route 에 값이 없을 수 있음 · 컬럼 확정 판정은 W4d 팝업 데이터 대조),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-ccd7cf6b,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",G1,D00-4d-005 · §4d Data_SCP.CommonAll / FromSiteByDivision1,세부 검사 13건 합산(PASS:12 · NA:1),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-ccfd0e2e,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",D5,LT_ARRIVAL_INLAND,셀 입력 방식(텍스트·콤보·숫자·날짜): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-cd33df32,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C6,SCP0007_BOD.cboDivision_SelectedIndexChanged,세부 검사 22건 합산(FAIL:8 · NA:8 · PASS:6) — FAIL 세부: To Site / To Site — 원장 V-c667b133 ASIS / 원장 V-1c76f13c ASIS / 원장 V-37… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-cd5119b3,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-044 · §3 SetBGColor / (TRANSPORT_MODE..TO_YYYYMMDD,Inv",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-cd587e1e,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_DistributionRoutePopup.btnToSrch_Click,AS-IS 메서드 안 세부 검사 20건 합산(PASS:13 · NA:6 · FAIL:1) — 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-cdb800d2,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C2,D00-4e-007 · §4e dtToSiteOfSpdAll / SpdMain_ComboSelChange,세부 검사 22건 합산(PASS:14 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-ce316fa9,판정오류,"판정오류
+(초기갑 설정 됨)",G6,clbFromSite / From Site,조회조건 초기값: AS-IS 와 같음 (사용자 판정 '판정오류 (초기갑 설정 됨)'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-cf31c363,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,D00-4e-012 · §4e dtToSiteOfSpdAll2 / SpdMain_ClipboardPasted,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-cfae312d,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,DAYS_SUN / Sun,검사 대상 아님 — 일요일 비어 있음(선택 Route 에 값이 없을 수 있음 · 컬럼 확정 판정은 W4d 팝업 데이터 대조),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-cfc327aa,대상아님,"as-is 소스 확인 필요, 실 소스 없으면 해당없음으로 처리",X-REASON,"D00-3-031 · §3 LockColumn / (ROUTE_VALID..end,true)",대조표 기록(구현 위치·사유) 확인됨,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-d08b2369,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",E1,D00-4e-012 · §4e dtToSiteOfSpdAll2 / SpdMain_ClipboardPasted,세부 검사 10건 합산(NA:9 · PASS:1),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-d0e4e975,기타,구현대상인대 미구현이면 fail,H6,"D00-3-065 · §3 SetActiveCell / (e.Row,e.Column)",세부 검사 17건 합산(PASS:11 · NA:6),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-d14715f9,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,BOD_VALID / BOD Valid,한 값을 고르면 연관 칸이 자동으로 채워지는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-d207d8c6,대상아님,"as-is 소스 확인 필요, 실 소스 없으면 해당없음으로 처리",X-REASON,D00-4e-004 · §4e dtCustomerAll / FindData_Main,대조표 기록(구현 위치·사유) 확인됨,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-d57932f0,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-LOC,D00-3-006 · §3 Visible= / SAFETY_STOCK.Visible=false,대조표 기록 보강(구현 위치·사유) — 화면 오류 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-d65cfaf5,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,DIS_TOTAL_LEAD_TIME / Distribution Total Lead Time,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-d97fd737,판정오류,"판정오류
+(초기갑 설정 됨)",G6,clbDivision / Div / Division / Div.,조회조건 초기값: AS-IS 와 같음 (사용자 판정 '판정오류 (초기갑 설정 됨)'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-da7e19e3,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,INCOTERMS_SSP / Incoterms SSP,같은 값 인접 셀의 세로 병합(TO-BE 룰 CR-073: 키 컬럼만 병합): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-e20b2009,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,D00-2-004 · §2 spdMain / ClipboardPasted,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-e251b20b,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",D1,D00-3-040 · §3 SmartColMerge / (),세부 검사 33건 합산(PASS:23 · NA:9 · FAIL:1) — FAIL 세부: Route Id / Route Id — 원장 V-dde703c0 COLUMN / 원장 V-f50ac698 COLUMN / 실… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-e57d3d1b,판정오류,"판정오류
+(초기갑 설정 됨)",G6,clbIncoterms / Incoterms,조회조건 초기값: AS-IS 와 같음 (사용자 판정 '판정오류 (초기갑 설정 됨)'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-e5ce8ba3,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,ROUTE_ID / Route Id,같은 값 인접 셀의 세로 병합(TO-BE 룰 CR-073: 키 컬럼만 병합): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-e6a975ad,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,"D00-3-068 · §3 SetCellTypeCombo / (e.Row,TO_SITE_CODE,dtToSi",대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-e722c68e,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",D5,LT_DEPARTURE_INLAND,셀 입력 방식(텍스트·콤보·숫자·날짜): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-e768e7a5,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C2,D00-4e-008 · §4e dtToSiteOfSpdAll1 / SpdMain_ComboSelChange,세부 검사 22건 합산(PASS:14 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-e7bb73f2,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,LT_TYPE / L/T Type,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-e8a38c46,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H5,SCP0007_BOD.CreateSpread,세부 검사 47건 합산(PASS:43 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-e8f45df3,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",G5,D00-2-003 · §2 spdMain / CellDoubleClick,세부 검사 17건 합산(PASS:9 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-e91ba0f3,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",G1,"D00-3-009 · §3 SetCellTypeCombo / (DIVISION_ID, dtMyDivision",세부 검사 13건 합산(PASS:12 · NA:1),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-ebac0090,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C6,D00-2-005 · §2 spdMain / ComboSelChange,세부 검사 22건 합산(FAIL:8 · NA:8 · PASS:6) — FAIL 세부: To Site / To Site — 원장 V-c667b133 ASIS / 원장 V-1c76f13c ASIS / 원장 V-37… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-ec0f1e97,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-NOTIMPL,D00-4b-010 · §4b SpdMain_KeyPress / event / spdMain.KeyPress,대조표엔 미구현이지만 화면에선 이미 구현됨 — 대조표 상태 수정 대상,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-ec1eeeda,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,D00-4f-006 · §4f spdMain_CellDoubleClick / arList.Count==0,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-ec8b6964,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H5,D00-2-008 · §2 this / Load → Form_Load (InitForm·InitControl,세부 검사 47건 합산(PASS:43 · NA:4),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-eda05710,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",G4,D00-4d-005 · §4d Data_SCP.CommonAll / FromSiteByDivision1,세부 검사 14건 합산(PASS:14),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f0e8023e,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",A6,D00-4e-006 · §4e dtToSiteOfSpdAll / FindData_Main,세부 검사 5건 합산(NA:3 · FAIL:1 · PASS:1) — FAIL 세부: PKG_SCP0007.P_SCP0007_GET_BOD — 원장 V-1db4f99c SP / 원장 V-2fdb9660 SP /… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f1af76ac,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_DistributionRoutePopup.InitSpread,AS-IS 메서드 안 세부 검사 134건 합산(PASS:127 · NA:6 · FAIL:1) — 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f1cd77d3,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H2,D00-3-038 · §3 Query / (ds),세부 검사 58건 합산(PASS:43 · FAIL:10 · NA:5) — FAIL 세부: Division / Division — 원장 V-2ae6f7ec COLUMN / 원장 V-07e7feaa ASIS / 실측[… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f4302652,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,D00-4e-008 · §4e dtToSiteOfSpdAll1 / SpdMain_ComboSelChange,세부 검사 46건 합산(PASS:35 · NA:11),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f478b82f,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",D1,D00-2-004 · §2 spdMain / ClipboardPasted,세부 검사 33건 합산(PASS:23 · NA:9 · FAIL:1) — FAIL 세부: Route Id / Route Id — 원장 V-dde703c0 COLUMN / 원장 V-f50ac698 COLUMN / 실… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f515f1b7,기타,"PASS
+(TO-BE 변경 기준 확인)",H5,DIVISION_ID / Division,컬럼·조회조건 라벨(명칭): AS-IS 와 같음 (사용자 판정 'PASS (TO-BE 변경 기준 확인)'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f5617dbe,기타,동작여부 판단해서 pass / fail 처리,H6,LT_SUM,검사 대상 아님 — 팝업 그리드에 LT_SUM 헤더 없음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f5bb630f,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",D6,SCP0007 화면,[Insert 한 새 행이 생기는 위치] 대상 SCP0007 화면. 확인한 내용: 조회 16301행 · r1 셀 클릭 후 Insert → 신규행 맨 위(0) · 행 16301→16302 ⇒ AS-IS 와 다릅니다(조치 필요). Insert 를 누르면 새 행이 선택한 행 자리 대신 맨 위,Doc\화면분석서\SCP0007_Bod_정합검증서_v51.xlsx
+SCP0007,T-f61591f8,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",H3,LEAD_TIME / Lead Time,같은 값 인접 셀의 세로 병합(TO-BE 룰 CR-073: 키 컬럼만 병합): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f6400f57,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.SetImageCell,AS-IS 메서드 안 세부 검사 12건 합산(PASS:10 · NA:2),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f6bb7b21,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",G5,"D00-3-065 · §3 SetActiveCell / (e.Row,e.Column)",세부 검사 17건 합산(PASS:9 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f712e982,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",M4,D00-2-003 · §2 spdMain / CellDoubleClick,팝업에서 고른 값이 행에 반영되는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f76250ba,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C2,SCP0007_BOD.cboDivision_SelectedIndexChanged,세부 검사 22건 합산(PASS:14 · NA:8),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f953685c,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",X-ROW,SCP0007_BOD.SetChangeControl,AS-IS 메서드 안 세부 검사 7건 합산(NA:4 · PASS:2 · NOT_RUN:1 (미실행 검사가 남아 판…),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-f9644978,기타,구현대상인대 미구현이면 fail,H2,D00-4e-005 · §4e dtFromSiteOfSpdAll / FindData_Main,세부 검사 58건 합산(PASS:43 · FAIL:10 · NA:5) — FAIL 세부: Division / Division — 원장 V-2ae6f7ec COLUMN / 원장 V-07e7feaa ASIS / 실측[… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-fb51c663,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C6,D00-4e-007 · §4e dtToSiteOfSpdAll / SpdMain_ComboSelChange,세부 검사 22건 합산(FAIL:8 · NA:8 · PASS:6) — FAIL 세부: To Site / To Site — 원장 V-c667b133 ASIS / 원장 V-1c76f13c ASIS / 원장 V-37… · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-fc29ea9b,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",D5,LT_WAIT_SHIPPING,셀 입력 방식(텍스트·콤보·숫자·날짜): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,T-fe0525a8,기타,"정확하게 어떤 항목인지 모르겠음… 정확하게 어떤 라벨인지 표기 해주세요. 
+오류인지도 모르겠습니다.",C3,DAYS_SUN / Sun,한 값을 고르면 연관 칸이 자동으로 채워지는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-05550393,기타,AS-IS 소스 정밀 분석 필요,C2,INCOTERMS_SSP,상위 값에 따라 콤보 후보가 다시 만들어지는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-0659d173,설명요구,사용자가 이해할 수 있도록 상세한 설명 필요,D1,"DIVISION_ID,INCOTERMS",검사 대상 아님 — R3 재질문 대상 아님. 단 기존행 재편집 시 잠금 범위 재현 여부는,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-0daf3213,실제오류확인,실제 오류 발생시 오류에 대한 정확한 상세표기 요청,C2,그리드 Sales Company→Sales Plant · Sales Site→Company/Plant,공통 점검 항목(상위 값에 따라 콤보 후보가 다시 만들어지는지) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-11335764,실제오류확인,실제 오류부분에 대한 상세설명 필요,G5,팝업 연결 조회조건·그리드 컬럼,공통 점검 항목(팝업으로 전달되는 조회조건·값) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-12111d37,중복,동일 판정 있으면 중복해서 표기 제외(상단에 있음),E2,Period 날짜,공통 점검 항목(날짜 셀 입력 검증(존재하지 않는 날짜 차단)) — 이 화면의 같은 규칙 세부 결과: 대상 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-12b5be32,기타,AS-IS 소스 정밀 분석 필요,C6,dt.Rows[nRow][DefColumns.LT_SUM],검사 대상 아님 — 팝업 그리드에 LT_ARRIVAL_INLAND/LT_SUM 컬럼 없음 또는 행 없음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-194eeb6f,기타,오류 없어 보이는데 오류 표기에 대한 확인 필요,G2,[SCP0028 결함 유형] From Site 조회조건,공통 점검 항목(멀티선택 조회조건(개별·전체 선택) 동작) — 이 화면의 같은 규칙 세부 결과: 다름 · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-1aeae36d,중복,동일 판정 있으면 중복해서 표기 제외(상단에 있음),F4,Period 날짜,공통 점검 항목(저장 SP 호출·SQL 오류 없음) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-1c76f13c,기타,AS-IS 소스 정밀 분석 필요,C6,TO_CITY,값을 바꾸지 않고 셀을 닫았을 때 연관 칸이 그대로 남는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-20bf7980,기타,TO-BE  기준 준수,H6,popCity.ShowDialog(),팝업의 버튼 구성·그리드: AS-IS 와 같음 (사용자 판정 'TO-BE 기준 준수'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-21f544d2,기타,TO-BE  기준 준수,H6,popCity.ShowDialog(),팝업의 버튼 구성·그리드: AS-IS 와 같음 (사용자 판정 'TO-BE 기준 준수'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-23a79591,판정오류,"판정 오류
+(현재 COMBO로 사용중)",G5,From City 검색 버튼,공통 점검 항목(팝업으로 전달되는 조회조건·값) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-267fbf02,실제오류확인,"오류 없어 보이는데 오류 표기에 대한 확인 필요
+결함일반화 에 대해서 실제 오류가 아니면 표기하지 않도록 요청",H2,[SCP0006 결함 유형] Main Grid 배경색,공통 점검 항목(셀 색(편집 가능 노랑·글자색)) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-2a0d3041,판정오류,판정오류,H2,"ROUTE_ID,ROUTE_ID",셀 색(편집 가능 노랑·글자색): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-2a3ea9e6,설명요구,이해 불가,B2,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Custom,공통 점검 항목(콤보 후보에 중복이 없는지) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-2a920029,기타,검사기구현 후 판정,I3,SCP0007 화면,검사 대상 아님 — 데이터 다국어 규칙 대상 없음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-2c8e5f93,판정오류,"소수점은 안들어 가나, 문자 입력되는것이 오류, 
+판정오류 or 표기오류",E1,bod.PRIORITY (Priority*),"숫자 셀 입력 범위(소수·최소·최대·문자 차단): AS-IS 와 같음 (사용자 판정 '소수점은 안들어 가나, 문자 입력되는것이 오류, 판정…')",Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-2e2c39a0,기타,검사기구현 후 판정,H4,Main Grid 컬럼 폭,공통 점검 항목(컬럼 폭 비율·가로 스크롤) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-2ecba37b,설명요구,"쉬운 설명에 대한 보완 요청 
+- 해당 오류는 ""ALL 선택 시 자릿수 초과로 오류 발생"" 으로만 표기하면 되는데 다른 설명이 너무 많음.",G2,조회조건 To Site,"조회조건 To Site: 전체(ALL) 선택 조회 시 서버 오류 — SP 인자 자릿수 초과(32,767B)",Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-2f88ae10,기타,TO-BE  기준 준수,I4,LBL/MSG/MENU 코드 사전,공통 점검 항목(I4) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-2fdb9660,기타,2번과 같은 오류로 판단되므로 동일 오류에 대해서는 1건만 표기요청,A6,SCP0007_GET_BOD,조회 결과 행 순서가 AS-IS 와 다름 — 빈 값 행 위치(Oracle NULL 정렬) · 기호/대소문자 정렬 차이,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-3778a5ce,설명요구,"쉬운 설명에 대한 보완 요청
+- 대상 COLUMN 지정, ""변경없이 편집 종료 시 CASCADE(종속COLUMN초기화) 미반영 처리 필요""",C6,"INCOTERMS_SSP,INCOTERMS","SSP Incoterms,Incoterms: To Site 셀을 변경 없이 편집 종료해도 종속 컬럼이 초기화됨 — CASCADE 미반영 처리 필요",Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-3a5bbab7,기타,검사기구현 후 판정,H9,Main Grid 컬럼 폭,공통 점검 항목(컬럼 폭 메타) — 이 화면의 같은 규칙 세부 결과: 대상 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-3ac70eb4,판정오류,"판정오류
+- 동일하게 동작함 확인",E6,SCP0007 화면,셀 키 입력(한글 IME·콤보 자동완성): AS-IS 와 같음 (사용자 판정 '판정오류 - 동일하게 동작함 확인'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-3cdb09f7,기타,검사기구현 후 판정,H8,bod.PRIORITY (Priority*),숫자 천단위·소수·날짜 표시 포맷: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-3fb6d815,기타,AS-IS 소스 정밀 분석 필요,C2,INCOTERMS_SSP,상위 값에 따라 콤보 후보가 다시 만들어지는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-45199a39,기타,TO-BE  기준 준수,H4,조회조건·버튼 배치 / 조회조건 콤보 드롭다운,공통 점검 항목(컬럼 폭 비율·가로 스크롤) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-4639bae0,판정오류,판정오류,H2,"ROUTE_ID,ROUTE_ID",셀 색(편집 가능 노랑·글자색): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-476fc6ca,기타,오류 없어 보이는데 오류 표기에 대한 확인 필요,E6,[DMF0049 결함 유형] 신규 입력 그리드(복사/붙여넣기·한글 입력·자동완성·병합 셀),공통 점검 항목(셀 키 입력(한글 IME·콤보 자동완성)) — 이 화면의 같은 규칙 세부 결과: 대상 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-47def325,중복,동일 판정 있으면 중복해서 표기 제외(상단에 있음),G2,멀티선택 조회조건 Select ALL,공통 점검 항목(멀티선택 조회조건(개별·전체 선택) 동작) — 이 화면의 같은 규칙 세부 결과: 대상 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-49b2c42f,판정오류,"수정 COLUMN
+판정오류",H2,bod.ROUTE_ID (Route Id*),셀 색(편집 가능 노랑·글자색): AS-IS 와 같음 (사용자 판정 '수정 COLUMN 판정오류'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-5766472d,실제오류확인,실제 오류에 대해서만 표기 요청,H2,입력 불가 컬럼 배경색,공통 점검 항목(셀 색(편집 가능 노랑·글자색)) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-5979255b,기타,검사기구현 후 판정,H8,총 건수 표시,공통 점검 항목(숫자 천단위·소수·날짜 표시 포맷) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-5a0fda6c,기타,TO-BE  기준 준수,H4,화면 축소 시 조회조건·스크롤,공통 점검 항목(컬럼 폭 비율·가로 스크롤) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-5d5d3e01,판정오류,판정오류,H6,전체 팝업 버튼 순서,공통 점검 항목(팝업의 버튼 구성·그리드) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-62191731,설명요구,이해 불가,G2,Key-in 조회조건(Project·Model/Nickname·Owner 등) 콤마 다중 입력,공통 점검 항목(멀티선택 조회조건(개별·전체 선택) 동작) — 이 화면의 같은 규칙 세부 결과: 대상 아님,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-6879e026,판정오류,"Incoterms 는 조건부 잠금 대상 아님. 
+SSP Incoterms 만 조건부 잠금 대상
+판정오류 or 표기오류",D1,bod.INCOTERMS (Incoterms*),컬럼이 잠겨 있는지(편집 가능/불가): AS-IS 와 같음 (사용자 판정 'Incoterms 는 조건부 잠금 대상 아님. SSP…'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-6f31804a,기타,AS-IS 소스 정밀 분석 필요,C3,"INCOTERMS_SSP,INCOTERMS",한 값을 고르면 연관 칸이 자동으로 채워지는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-6f9a6b96,판정오류,"해당 화면에서 실제 오류에 대해서 오류 발생시에만 오류 표기 요청
+대상이 아니면 오류 아님.",G1,Lookup 텍스트 조회조건 · 화면 깜빡임 · 상단 Grid 스크롤,공통 점검 항목(조회조건으로 조회 결과가 걸러지는지) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-7030e813,설명요구,이해 불가,A5,컬럼/Measure 셋팅(개인화 Default),공통 점검 항목(그리드에 보이는 컬럼 구성이 AS-IS(메타·Division·개인화)와 같은지) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-72441ae4,기타,검사기구현 후 판정,H8,총 건수 표시,공통 점검 항목(숫자 천단위·소수·날짜 표시 포맷) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-789090ba,기타,TO-BE  기준 준수,H6,"popCity.Form_Load(true, sCountry, sCity)",팝업의 버튼 구성·그리드: AS-IS 와 같음 (사용자 판정 'TO-BE 기준 준수'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-7e3330fd,실제오류확인,실제 오류에 대해서만 표기 요청,H2,실적 구간 배경색,공통 점검 항목(셀 색(편집 가능 노랑·글자색)) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-812dbb50,실제오류확인,실제 오류분만 정확하게 오류 표기 요청,B2,그리드 Combo(Sales Site 화면 Insert 시 End Customer·Sold-to Custom,공통 점검 항목(콤보 후보에 중복이 없는지) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-85a57a4c,중복,동일 판정 있으면 중복해서 표기 제외(상단에 있음),H6,전체 팝업 버튼 순서,공통 점검 항목(팝업의 버튼 구성·그리드) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-8a308c4f,실제오류확인,실제 오류분만 정확하게 오류 표기 요청,H6,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드,공통 점검 항목(팝업의 버튼 구성·그리드) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-92c7eace,실제오류확인,구현 필요,H2,siMain.SetFGColor,셀 색(편집 가능 노랑·글자색): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-93b13c72,기타,TO-BE  기준 준수,H6,"popCity.Form_Load(true, sCountry, sCity)",팝업의 버튼 구성·그리드: AS-IS 와 같음 (사용자 판정 'TO-BE 기준 준수'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-978e3dc7,실제오류확인,구현 필요,H2,siMain.SetFGColor,셀 색(편집 가능 노랑·글자색): AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-9a934f52,설명요구,"쉬운 설명에 대한 보완 요청 
+- ""일자형식 오류에도 입력 가능""",E2,bod.FROM_YYYYMMDD (FROM*),bod.From 일자 (FROM*): 일자 형식 오류(예 10월 33일)에도 입력 가능,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-a3f7b1ee,판정오류,판정 오류,A5,컬럼/Measure 셋팅(개인화 Default),공통 점검 항목(그리드에 보이는 컬럼 구성이 AS-IS(메타·Division·개인화)와 같은지) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-b4fcae1c,중복,동일 판정 있으면 중복해서 표기 제외(상단에 있음),A5,컬럼셋팅 팝업 Default,공통 점검 항목(그리드에 보이는 컬럼 구성이 AS-IS(메타·Division·개인화)와 같은지) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-b5d4b9c2,판정오류,판정오류,G5,Route 검색 팝업 결과,공통 점검 항목(팝업으로 전달되는 조회조건·값) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-b5debee2,판정오류,"판정 오류
+(현재 COMBO로 사용중)",H6,From City 검색 버튼,공통 점검 항목(팝업의 버튼 구성·그리드) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-c20aefb3,기타,AS-IS 소스 정밀 분석 필요,C3,dt.Rows[nRow][DefColumns.LT_SUM],검사 대상 아님 — 팝업 그리드에 LT_ARRIVAL_INLAND/LT_SUM 컬럼 없음 또는 행 없음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-c55fa07f,판정오류,Insert 시 end customer 편집 불가로 오류 재현 안됨,C2,그리드 End Customer→Sold-to Customer cascade,공통 점검 항목(상위 값에 따라 콤보 후보가 다시 만들어지는지) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-c667b133,기타,AS-IS 소스 정밀 분석 필요,C6,"INCOTERMS_SSP,INCOTERMS","SSP Incoterms,Incoterms: To Site 셀을 변경 없이 편집 종료해도 종속 컬럼이 초기화됨 — CASCADE 미반영 처리 필요 (같은 내용 3건: INCOTERMS_SSP,INCOTERMS)",Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-c7659e68,실제오류확인,FAIL,H5,Route 검색 팝업 제목,공통 점검 항목(컬럼·조회조건 라벨(명칭)) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-cac6a100,설명요구,"쉬운 설명에 대한 보완 요청 
+- ""일자형식 오류에도 입력 가능""",E2,bod.TO_YYYYMMDD (TO*),bod.To 일자 (TO*): 일자 형식 오류(예 10월 33일)에도 입력 가능,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-cffa4987,판정오류,"SSP Incoterms 는 조회조건에서 Label 지정되었으며, 조회조건에서 지정된 column 을 Grid 에서 사용하는 경우, 동일하 Label 로 사용하는 것이 Tobe rule 이므로
+판정 오류",H5,조회조건 명칭·순서 / 대응 컬럼명,공통 점검 항목(컬럼·조회조건 라벨(명칭)) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-d433bae7,기타,AS-IS 소스 정밀 분석 필요,C6,TO_CITY,값을 바꾸지 않고 셀을 닫았을 때 연관 칸이 그대로 남는지: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-d5b9a9d5,설명요구,"해당 POPUP을 어디서 불러오는 지 이해를 못했음
+상세 설명 필요",H6,전체 팝업 No. 컬럼·건수 · Contribution Sales Version 팝업 그리드,공통 점검 항목(팝업의 버튼 구성·그리드) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-d6e4800e,설명요구,이해 불가,M4,팝업 입력 컬럼,공통 점검 항목(팝업에서 고른 값이 행에 반영되는지) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-d85da172,설명요구,이해 불가,E4,(동적 메시지),검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-da446d7d,기타,검사기구현 후 판정,H8,bod.AFTER_LEAD_TIME (Additional Lead Time),숫자 천단위·소수·날짜 표시 포맷: AS-IS 와 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-de9182a0,판정오류,판정오류,G5,팝업 연결 조회조건·그리드 컬럼,공통 점검 항목(팝업으로 전달되는 조회조건·값) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-e0428ecf,중복,"상단과 동일 내용이면 중복 제거
+(TO-SITE전체선택시오류), 이외는 오류 없음.",G2,[DMF0020 결함 유형] Price Batch Input 팝업 Sales Site 조건,공통 점검 항목(멀티선택 조회조건(개별·전체 선택) 동작) — 이 화면의 같은 규칙 세부 결과: 다름 · 조치는 세부 행에서,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-e53c539d,판정오류,"실제 조회 시 이상 없음.
+판정오류",B2,bod.TO_SITE_CODE (To Site*),콤보 후보에 중복이 없는지: AS-IS 와 같음 (사용자 판정 '실제 조회 시 이상 없음. 판정오류'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-e8828359,기타,TO-BE  기준 준수,H4,조회조건·버튼 배치 / 조회조건 콤보 드롭다운,공통 점검 항목(컬럼 폭 비율·가로 스크롤) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-e8af5c0b,기타,TO-BE  기준 준수,H4,Main Grid 컬럼 폭,공통 점검 항목(컬럼 폭 비율·가로 스크롤) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-f02c8730,설명요구,상세 설명 필요,G4,조회조건 명칭·순서 / 대응 컬럼명,공통 점검 항목(조회조건 순서·구성이 기준표와 같은지) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-f1677353,중복,동일 COLUMN에 대한 내용이면 중복제거,C6,"INCOTERMS_SSP,INCOTERMS","SSP Incoterms,Incoterms: To Site 셀을 변경 없이 편집 종료해도 종속 컬럼이 초기화됨 — CASCADE 미반영 처리 필요",Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-f405979b,설명요구,사용자가 이해할 수 있도록 상세한 설명 필요,D1,siMain.LockColumn,검사 대상 아님 — TO-BE `useTabProcQuery`의 공통 에러 처리(React Query 표준 에러 바운,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-f4e5dbae,기타,PASS,H4,SCP0007 화면,컬럼 폭 비율·가로 스크롤: AS-IS 와 같음 (사용자 판정 'PASS'),Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0007,V-fb305011,기타,TO-BE  기준 준수,H4,화면 축소 시 조회조건·스크롤,공통 점검 항목(컬럼 폭 비율·가로 스크롤) — 이 화면의 같은 규칙 세부 결과: 같음,Doc\CheckList\SCP0007_Bod_CheckList_v91.xlsx
+SCP0020,T-2801ac0b,판정오류,판정오류 — TO-BE 에서는 * 빼도 오류 아님. *을 제외한 TEXT 만 일치하면 오류 아님(사용자 2026-10-29 → CR-077),E3,LINE_ID / Line,E3: AS-IS 와 같음 (사용자 판정 '판정오류 — TO-BE 에서는 * 빼도 오류 아님. …'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,T-6b72d463,중복,중복항목,A5,OPERATION_NAME / Operation,OPERATION_NAME / Operation: 그리드 컬럼 표시 여부가 AS-IS 와 다름,Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,T-a84e07c3,기타,오류 아니면 표기할 필요 없음.,X-LOC,2 조회 · btnItemId / txtItemId,대조표 기록 보강(구현 위치·사유) — 화면 오류 아님,Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,T-c99d4565,판정오류,판정오류 — TO-BE 에서 정상동작 확인. 오류 아닌데 오류 판단한 사유 확인해서 보완 요청(사용자 2026-10-29),C1,clbPlantSite / Plant Site,상위 조회조건을 바꾸면 하위 선택이 초기화되는지: AS-IS 와 같음 (사용자 판정 '판정오류 — TO-BE 에서 정상동작 확인. 오류 아…'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-071a83d7,판정오류,판정오류 - as-is 와 동일(AS-IS 오판),D1,Packer.DAILY_CAPACITY (Daily Capacity*),컬럼이 잠겨 있는지(편집 가능/불가): AS-IS 와 같음 (사용자 판정 '판정오류 - as-is 와 동일(AS-IS 오판)'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-15d2ee9d,판정오류,판정오류 - as-is 와 동일(AS-IS 오판),D1,Tact Time Except.LINE_ID (Line),컬럼이 잠겨 있는지(편집 가능/불가): AS-IS 와 같음 (사용자 판정 '판정오류 - as-is 와 동일(AS-IS 오판)'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-182876fa,중복,중복항목,H8,Plant.TACT_TIME (Tact Time*),숫자 천단위·소수·날짜 표시 포맷: AS-IS 와 같음,Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-30d175cd,중복,중복항목,H8,Tact Time.TACT_TIME (Tact Time*),숫자 천단위·소수·날짜 표시 포맷: AS-IS 와 같음,Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-3bc14e03,판정오류,판정오류 - as-is 와 동일(AS-IS 오판),D1,Tact Time Except.DAILY_CAPACITY (Daily Capacity),컬럼이 잠겨 있는지(편집 가능/불가): AS-IS 와 같음 (사용자 판정 '판정오류 - as-is 와 동일(AS-IS 오판)'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-3c603784,중복,중복항목,H8,Tact Time Except.YIELD (Yield(%)*),숫자 천단위·소수·날짜 표시 포맷: AS-IS 와 같음,Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-4aae1951,중복,중복항목,H8,Tact Time Except.TACT_TIME (Tact Time*),숫자 천단위·소수·날짜 표시 포맷: AS-IS 와 같음,Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-4cf51adc,판정오류,판정오류 - as-is 와 동일(AS-IS 오판),H8,Packer.YIELD (Yield(%)*),숫자 천단위·소수·날짜 표시 포맷: AS-IS 와 같음 (사용자 판정 '판정오류 - as-is 와 동일(AS-IS 오판)'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-694fb5a7,중복,중복항목,E1,Tact Time.PRIORITY (Priority*),Tact Time.Priority (Priority*): 숫자 입력 범위(소수·범위·문자) 검증이 AS-IS 와 다름,Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-765c18e7,중복,중복항목,H8,Tact Time.YIELD (Yield(%)*),숫자 천단위·소수·날짜 표시 포맷: AS-IS 와 같음,Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-7816d287,중복,중복항목,D1,Tact Time.DAILY_CAPACITY (Daily Capacity),검사 대상 아님 — 수동 검수 대상(작업 원장 W7),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-8192b7bd,판정오류,판정오류 - as-is 와 동일(AS-IS 오판),D1,Tact Time Except.DAILY_CAPACITY (Daily Capacity),컬럼이 잠겨 있는지(편집 가능/불가): AS-IS 와 같음 (사용자 판정 '판정오류 - as-is 와 동일(AS-IS 오판)'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-86d56f4b,판정오류,판정오류 - as-is 와 동일(AS-IS 오판),H8,Packer.TACT_TIME (Tact Time*),숫자 천단위·소수·날짜 표시 포맷: AS-IS 와 같음 (사용자 판정 '판정오류 - as-is 와 동일(AS-IS 오판)'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-8ae8a8c7,판정오류,판정오류 - as-is 와 동일(AS-IS 오판),D1,Packer.DAILY_CAPACITY (Daily Capacity*),컬럼이 잠겨 있는지(편집 가능/불가): AS-IS 와 같음 (사용자 판정 '판정오류 - as-is 와 동일(AS-IS 오판)'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-a193fc4f,판정오류,판정오류 - as-is 와 동일(AS-IS 오판),D4,VALID_YN,Insert 한 새 행의 기본값: AS-IS 와 같음 (사용자 판정 '판정오류 - as-is 와 동일(AS-IS 오판)'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-b2b749fb,중복,중복항목,D1,Plant.DAILY_CAPACITY (Daily Capacity),검사 대상 아님 — 수동 검수 대상(작업 원장 W7),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-bee68f3d,중복,중복항목,E1,Plant.PRIORITY (Priority*),Plant.Priority (Priority*): 숫자 입력 범위(소수·범위·문자) 검증이 AS-IS 와 다름,Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-cd782314,중복,중복항목,D1,Plant.DAILY_CAPACITY (Daily Capacity),검사 대상 아님 — 수동 검수 대상(작업 원장 W7),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-d866915f,판정오류,판정오류 - as-is 와 동일(AS-IS 오판),A5,Plant.JUMBO_MIN (Jumbo / Min),그리드에 보이는 컬럼 구성이 AS-IS(메타·Division·개인화)와 같은지: AS-IS 와 같음 (사용자 판정 '판정오류 - as-is 와 동일(AS-IS 오판)'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-df014800,중복,중복항목,D1,Tact Time.DAILY_CAPACITY (Daily Capacity),검사 대상 아님 — 수동 검수 대상(작업 원장 W7),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-df6d8165,판정오류,판정오류 - as-is 와 동일(AS-IS 오판),D4,USE_YN,Insert 한 새 행의 기본값: AS-IS 와 같음 (사용자 판정 '판정오류 - as-is 와 동일(AS-IS 오판)'),Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0020,V-f1798df9,중복,중복항목,H8,Plant.YIELD (Yield(%)*),숫자 천단위·소수·날짜 표시 포맷: AS-IS 와 같음,Doc\CheckList\SCP0020_TactTimeOsp_CheckList_v17.xlsx
+SCP0100,T-a9f9903a,판정오류,판정 오류 - 정상 동작,X-REOPEN,SCP0100 화면,X-REOPEN: AS-IS 와 같음 (사용자 판정 '판정 오류 - 정상 동작'),Doc\CheckList\SCP0100_GlobalPsiNew_CheckList_v22.xlsx
+SCP0100,T-e7b4759f,판정오류,판정 오류 - SELECT ALL 은 TO-BE에서 추가된 항목이고 나머지는 동일 하게 나옴,SC1,SCP0100 화면,기준표 순서: AS-IS 와 같음 (사용자 판정 '판정 오류 - SELECT ALL 은 TO-BE에서 …'),Doc\CheckList\SCP0100_GlobalPsiNew_CheckList_v22.xlsx
+SCP0100,V-10aa7d3c,판정오류,"판정 오류 - AS-IS 도 ',' 로 2개이상 입력 시 조회 안됨",G9,조회조건 Cell Group,"텍스트 조회조건에 콤마로 여러 값을 넣으면 전부 조회되는지: AS-IS 와 같음 (사용자 판정 '판정 오류 - AS-IS 도 ',' 로 2개이상 입력…')",Doc\CheckList\old\SCP0100_GlobalPsiNew_CheckList_v14.xlsx
+SCP0100,V-660335ee,판정오류,판정 오류 - 동일하게 동작,G1,조회조건 From Site,조회조건으로 조회 결과가 걸러지는지: AS-IS 와 같음 (사용자 판정 '판정 오류 - 동일하게 동작'),Doc\CheckList\SCP0100_GlobalPsiNew_CheckList_v22.xlsx
+SCP0100,V-94cedfc7,판정오류,판정 오류 -  DIVISION 선택 시 해당 DIVISON 만 조회 됨.,G1,조회조건 Div,조회조건으로 조회 결과가 걸러지는지: AS-IS 와 같음 (사용자 판정 '판정 오류 - DIVISION 선택 시 해당 DIVI…'),Doc\CheckList\SCP0100_GlobalPsiNew_CheckList_v22.xlsx
+SCP0100,V-c2b5cf3f,판정오류,판정 오류 - 동일하게 동작,G1,조회조건 To Site,조회조건으로 조회 결과가 걸러지는지: AS-IS 와 같음 (사용자 판정 '판정 오류 - 동일하게 동작'),Doc\CheckList\SCP0100_GlobalPsiNew_CheckList_v22.xlsx

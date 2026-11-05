@@ -1,0 +1,94 @@
+{
+ "screen": "SCP0028",
+ "generated": "2026-11-02 13:51:04",
+ "vars": {
+  "dtMyDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Division",
+   "targets": [
+    "SEARCH:cboDivision"
+   ],
+   "ref": "SCP0028_Shipment_Lot_Size.cs:134 ← SCP0028_Shipment_Lot_Size.cs:40",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtOperationGroup": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "SEARCH:cboOperationGroup"
+   ],
+   "ref": "SCP0028_Shipment_Lot_Size.cs:138 ← SCP0028_Shipment_Lot_Size.cs:137",
+   "rows": [
+    {
+     "CODE": "P",
+     "NAME": "Pack"
+    },
+    {
+     "CODE": "A",
+     "NAME": "Cell"
+    },
+    {
+     "CODE": "E",
+     "NAME": "Electrode"
+    }
+   ]
+  },
+  "dtTransMode": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "SEARCH:clbTransMode"
+   ],
+   "ref": "SCP0028_Shipment_Lot_Size.cs:140 ← SCP0028_Shipment_Lot_Size.cs:44",
+   "rows": [
+    {
+     "CODE": "AIR",
+     "NAME": "AIR"
+    },
+    {
+     "CODE": "FRY",
+     "NAME": "FERRY"
+    },
+    {
+     "CODE": "RAI",
+     "NAME": "RAIL"
+    },
+    {
+     "CODE": "SEA",
+     "NAME": "SEA"
+    },
+    {
+     "CODE": "TRK",
+     "NAME": "TRUCK"
+    }
+   ]
+  },
+  "dtFromSite": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "FromSiteByDivision",
+   "targets": [
+    "SEARCH:clbFromSite"
+   ],
+   "ref": "SCP0028_Shipment_Lot_Size.cs:167 ← SCP0028_Shipment_Lot_Size.cs:166",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2, @Param3"
+  },
+  "dtToSite": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "ToSiteByDivision",
+   "targets": [
+    "SEARCH:clbToSite"
+   ],
+   "ref": "SCP0028_Shipment_Lot_Size.cs:170 ← SCP0028_Shipment_Lot_Size.cs:169",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2, @Param3"
+  },
+  "<meta Data.Type.LookupCommon>": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "GRID:OPERATION_GROUP_ID"
+   ],
+   "ref": "SCM_MST_SHEET_COLUMNS SCP0028/Shipment Lot Size/OPERATION_GROUP_ID ← SCM_MST_SHEET_COLUMNS SCP0028/Shipment Lot Size/OPERATION_GROUP_ID",
+   "rows": []
+  }
+ }
+}

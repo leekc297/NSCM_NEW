@@ -1,0 +1,219 @@
+[
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "TITLE",
+  "egs": [
+   "EG330",
+   "EG339",
+   "EG362"
+  ],
+  "result": "PASS",
+  "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
+  "actual": "제목 'Owner Popup'",
+  "basis": "문서 SCPSSP-16·GAP-33",
+  "at": "2026-10-31T13:15:15.225Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "IDENTITY",
+  "egs": [
+   "EG135"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 팝업 'Owner by DivisionPopup'(DM0020_OwnerbyDivisionPopup) 과 같은 팝업",
+  "actual": "TO-BE 제목 'Owner Popup' · 제목 공통 토큰 [owner] · 클래스 공통 토큰 [ownerby] · 호출 ",
+  "basis": "DMF0005_SaleSite_PjtModelMapping.cs:4246 · 06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0020_OwnerbyDivisionPopup.cs",
+  "at": "2026-10-31T13:15:15.226Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "BTN_ORDER",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "버튼 순서 OK → CLOSE",
+  "actual": "버튼 [Open, Open, Open, Open, Search, OK, Close]",
+  "basis": "문서 DM-C6",
+  "at": "2026-10-31T13:15:15.226Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "NO_COL",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "왼쪽 No. 컬럼 1개",
+  "actual": "코너 [] · 첫 컬럼 'No' · No. 1개 · 행머리 폭 0px",
+  "basis": "문서 DM-C8·DM-179",
+  "at": "2026-10-31T13:15:15.227Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "NO_WIDTH",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(20px, 80행)",
+  "actual": "행머리 폭 0px · No 컬럼 폭 56px",
+  "basis": "문서 DM-179",
+  "at": "2026-10-31T13:15:15.227Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "COUNT",
+  "egs": [
+   "EG342",
+   "EG384"
+  ],
+  "result": "PASS",
+  "expected": "조회 건수 표시",
+  "actual": "'총80'",
+  "basis": "문서 DM-C8",
+  "at": "2026-10-31T13:15:15.227Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "MERGE",
+  "egs": [
+   "EG316"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 병합 호출 facts",
+  "actual": "AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2",
+  "basis": "",
+  "at": "2026-10-31T13:15:15.227Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "DIV_FIXED",
+  "egs": [
+   "EG284"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS Division 비활성(DM0020_OwnerbyDivisionPopup.cs:202) → 팝업 Div 메인값 고정·수정 불가",
+  "actual": "disabled=true · 값 [40 Mobility & IT Battery] · 메인 Div '40'",
+  "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0020_OwnerbyDivisionPopup.cs:DM0020_OwnerbyDivisionPopup.cs:202",
+  "at": "2026-10-31T13:15:15.228Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "COND_LIST",
+  "egs": [
+   "EG278",
+   "EG330"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 조건 라벨 [Division, Sales Site, End Customer]",
+  "actual": "TO-BE [Div:combo:비활성, Team:combo:비활성, End Customer:combo:비활성, Sales Site:combo:비활성, Owner:text] · 누락 [] · 라벨 차이 []",
+  "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DM0020_OwnerbyDivisionPopup.cs",
+  "at": "2026-10-31T13:15:15.228Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "PERIOD",
+  "egs": [
+   "EG287",
+   "EG431"
+  ],
+  "result": "NA",
+  "expected": "팝업 Period = 메인 Period",
+  "actual": "팝업에 기간 칸 없음 — 조건 [Div, Team, End Customer, Sales Site, Owner]",
+  "basis": "",
+  "at": "2026-10-31T13:15:15.229Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "DATA",
+  "egs": [
+   "EG441",
+   "EG440",
+   "EG370"
+  ],
+  "result": "PASS",
+  "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
+  "actual": "자동 조회 4건 · 행 80 · 오류 없음 · 알림 ''",
+  "basis": "",
+  "at": "2026-10-31T13:15:15.512Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "ORDER",
+  "egs": [
+   "EG051",
+   "EG442"
+  ],
+  "result": "FAIL",
+  "expected": "AS-IS ORDER BY DEPT_INFO.DEPT_NAME_KO, FxU.UserName, FxU.UserID",
+  "actual": "대조 키 [DEPT_NAME_KO] · 미대조 [USERNAME] · 행 80 · 위반 DEPT_NAME_KO: 0행 '중국지역Group,중국경영관리담당,통상관세T,통관2Part' → 1행 '소형.마케팅.아시아2.일본팀'",
+  "basis": "Doc/asisfacts/db/modules/dbo.DMF0020_GET_OWNER_DATA.sql:253",
+  "at": "2026-10-31T13:15:15.514Z",
+  "mut": "reverse"
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "DYN_COLS",
+  "egs": [
+   "EG280",
+   "EG044"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 동적 컬럼",
+  "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
+  "basis": "",
+  "at": "2026-10-31T13:15:15.514Z",
+  "mut": "reverse"
+ }
+]

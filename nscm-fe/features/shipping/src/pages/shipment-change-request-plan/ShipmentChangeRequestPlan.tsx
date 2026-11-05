@@ -139,6 +139,10 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
 
   const mainRows = useMemo<MainRow[]>(() => mainData?.o_rc1 ?? [], [mainData]);
   const subRows = useMemo<SubRow[]>(() => subData?.o_rc1 ?? [], [subData]);
+  // 작성 중인 요청(하단 행)이 있으면 상단 수정·추가 등록을 막는다. AS-IS EditButton(cs:783)이
+  //   siSub.RowCount==0 일 때만 편집모드로 들어가던 것의 등가다. 안내 메시지가 없는 것도 AS-IS 그대로다.
+  //   주의: 요청정보 패널에는 canEdit 을 준다 — 하단 요청을 확정하려면 그쪽은 입력돼야 한다.
+  const canEditMain = canEdit && subRows.length === 0;
 
   // 컬럼 가시성 토글·셀콤보는 폼 division(sc.divisionId) 기준이다(2026-10-26).
   //   조회 전 New 행이 division '' 콤보로 그려지던 문제 수정. div 변경 시 그리드를 비우므로 깜빡임 우려 없음.
@@ -156,10 +160,19 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
   } = useShipmentChangeRequestPlanCellCombos(gridDivisionId);
 
   // 조회 시 "데이터 나왔다 사라졌다" 방지(사용자 지시 2026-10-07): div 로 재조회하는 대용량 셀콤보가
-  //   데이터보다 늦게 도착하면 mainColumns 재빌드로 그리드가 한 번 비워졌다 다시 그려진다. 셀콤보가
-  //   준비될 때까지 그리드 표시 데이터를 미뤄, 데이터와 컬럼이 한 번에 나타나게 한다(전역 조회 스피너가
-  //   대기 구간을 덮는다). 저장·건수(dataCount)는 지연 없이 실제 mainRows 를 그대로 쓴다 — 표시 축만 지연.
-  const displayMainRows = cellCombosLoading ? EMPTY_MAIN_ROWS : mainRows;
+  //   데이터보다 늦게 도착하면 그리드가 한 번 비워졌다 다시 그려진다. 셀콤보가 준비될 때까지 표시 데이터를
+  //   미뤄 데이터·컬럼이 한 번에 나타나게 한다(전역 조회 스피너가 대기 구간을 덮는다).
+  //   필수: 이 게이트는 "조회 직후 셀콤보 최초 로딩" 에만 적용한다. 셀콤보가 한 번 준비된 뒤에는
+  //   편집 중 행-파라미터 조회(EndCustomer/TransMode)로 cellCombosLoading 이 다시 켜져도 그리드를
+  //   비우지 않는다 — 상시로 비우면 Model 값 변경마다 그리드가 통째로 비워졌다 돌아오며 깜빡였다
+  //   (2026-11-02 수정: 셀콤보 로딩에 메인 그리드 표시를 상시 묶지 않는다). combosGatedRef 는 조회
+  //   (handleSearch)에서 다시 true 로 올려 "다음 조회의 최초 로딩" 을 again 게이트한다.
+  const combosGatedRef = useRef(true);
+  useEffect(() => {
+    if (!cellCombosLoading) combosGatedRef.current = false;
+  }, [cellCombosLoading]);
+  const displayMainRows =
+    cellCombosLoading && combosGatedRef.current ? EMPTY_MAIN_ROWS : mainRows;
 
   // 출하일 상·하한 기준일수(CHANGE_REQ_DAY). 미조회면 undefined -> 해당 검증은 수행하지 않는다.
   const changeReqDay = useShipmentChangeRequestPlanBaseDay();
@@ -169,26 +182,23 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
    *   `saveWithValidation` 에 닿지 않아 div 분기로 숨긴 필수컬럼까지 필수검증 대상이 된다
    *   (`useSaveWithValidation` 은 `col.visible !== false` 로만 숨김을 제외한다).
    */
-  // From/To Site dataMap 은 그리드 effect(MainGrid)가 col.dataMap 으로 부착하므로 컬럼 빌드에서 제외한다
-  //   — 포함하면 조회 시 division 재조회로 mainColumns 가 재빌드돼 "컬럼 사라졌다 생김" 깜빡임이 난다.
-  //   나머지 주입 콤보(status/fcst/reason/division/transMode/endCustomer)는 조회로 바뀌지 않으므로 그대로
-  //   굽는다. 비-site 값에만 메모를 의존시켜 site 콤보가 바뀌어도 이 참조가 안정되게 한다.
+  // From/To Site·END_CUSTOMER·TRANSPORT_MODE dataMap 은 그리드 effect(MainGrid)가 col.dataMap 으로
+  //   부착하므로 컬럼 빌드에서 제외한다 — 포함하면 dataMap 이 바뀔 때마다(From/To Site=division 재조회,
+  //   END_CUSTOMER/TRANSPORT_MODE=행 파라미터 조회) mainColumns 가 재빌드돼 그리드가 깜빡인다
+  //   (END_CUSTOMER 는 Model 값 변경마다 loadEndCustomer 가 돌아 특히 자주 — 2026-11-02 수정).
+  //   나머지 주입 콤보(status/fcst/reason/division)만 굽는다 — 조회로 바뀌지 않아 참조가 안정된다.
   const statusMap = mainDataMaps[INJECTED_COMBO.SHIPMENT_STATUS];
   const fcstMap = mainDataMaps[INJECTED_COMBO.FCST_TYPE];
   const reasonMap = mainDataMaps[INJECTED_COMBO.CHANGE_REASON_CODE];
   const divisionMap = mainDataMaps[INJECTED_COMBO.DIVISION_ID];
-  const transModeMap = mainDataMaps[INJECTED_COMBO.TRANSPORT_MODE];
-  const endCustomerMap = mainDataMaps[INJECTED_COMBO.END_CUSTOMER];
   const bakedDataMaps = useMemo(
     () => ({
       [INJECTED_COMBO.SHIPMENT_STATUS]: statusMap,
       [INJECTED_COMBO.FCST_TYPE]: fcstMap,
       [INJECTED_COMBO.CHANGE_REASON_CODE]: reasonMap,
       [INJECTED_COMBO.DIVISION_ID]: divisionMap,
-      [INJECTED_COMBO.TRANSPORT_MODE]: transModeMap,
-      [INJECTED_COMBO.END_CUSTOMER]: endCustomerMap,
     }),
-    [statusMap, fcstMap, reasonMap, divisionMap, transModeMap, endCustomerMap]
+    [statusMap, fcstMap, reasonMap, divisionMap]
   );
 
   const mainColumns = useMemo(
@@ -289,6 +299,8 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
       alert(MSG.NO_AUTH_DIVISION, 'No authority assigned.');
       return;
     }
+    // 새 조회의 셀콤보 최초 로딩을 다시 게이트한다(위 displayMainRows 주석).
+    combosGatedRef.current = true;
     setFilter();
     void fetchStaticColumns();
   };
@@ -323,7 +335,7 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
 
   const handleInsert = () => {
     const grid = mainGridRef.current;
-    if (!grid || !canEdit) return;
+    if (!grid || !canEditMain) return;
     const base = copySourceRow();
     if (!base) return;
     // GridAction.addRow(grid, buildCopiedRow(base, sc.divisionId) as never, 'above', true);
@@ -368,7 +380,7 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
   // btnNew(cs:3375) — AS-IS 가 의도적으로 RowCount>0 가드를 뺀 경로다. 빈 그리드에서도 추가된다.
   const handleNew = () => {
     const grid = mainGridRef.current;
-    if (!grid || !canEdit) return;
+    if (!grid || !canEditMain) return;
     GridAction.addRow(grid, buildNewRow(sc.divisionId) as never, 'above', true);
   };
 
@@ -376,7 +388,7 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
   //   세트 삽입으로 한 번에 넣는다 — handleInsert 를 n회 반복하면 2건부터 빈 행을 복사한다(addRowSet 주석).
   const handleInsertMultiple = (count: number) => {
     const grid = mainGridRef.current;
-    if (!grid || !canEdit || count <= 0) return;
+    if (!grid || !canEditMain || count <= 0) return;
     const base = copySourceRow();
     if (!base) return;
     const copied = Array.from({ length: count }, () => buildCopiedRow(base, sc.divisionId));
@@ -431,7 +443,7 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
       target.row[target.binding] = value;
       if (nameCol && nameValue !== undefined) target.row[nameCol] = nameValue;
       mainGridRef.current?.invalidate();
-      // Model 은 팝업으로만 들어와 그리드의 ITEM_ID 편집 종료 트리거를 타지 않는다.
+      // 팝업으로 넣은 Model 은 그리드의 ITEM_ID 편집 종료 트리거를 타지 않는다.
       if (target.binding === ITEM_POPUP_COLUMN) void applyEndCustomer([target.row]);
     }
     popupTargetRef.current = null;
@@ -464,7 +476,10 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
     hasButton,
     onSearch: handleSearch,
     onInsert: handleInsert,
-    onSave: handleSave,
+    // 하단 조회가 끝나기 전에 만든 변경분이 남아 있어도 저장되지 않게 여기서도 막는다.
+    onSave: () => {
+      if (subRows.length === 0) handleSave();
+    },
     onDelete: handleDelete,
   });
 
@@ -503,7 +518,9 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
                 { label: t(SCREEN_TEXT.NEW, { defaultValue: 'New' }), action: handleNew },
                 {
                   label: t(SCREEN_TEXT.INSERT_MULTIPLE, { defaultValue: 'Insert Multiple' }),
-                  action: () => setOpenInsertMultiple(true),
+                  action: () => {
+                    if (canEditMain) setOpenInsertMultiple(true);
+                  },
                 },
               ]
             : undefined
@@ -529,7 +546,7 @@ export const ShipmentChangeRequestPlan = ({ tabId, title }: PageProps<MENU_ID>) 
                 gridFilterRef={mainFilterRef}
                 editTrackerRef={editTrackerRef}
                 singleProcess={singleProcess}
-                canEdit={canEdit}
+                canEdit={canEditMain}
                 columns={mainColumns}
                 dataMaps={mainDataMaps}
                 changeReqDay={changeReqDay}

@@ -61,14 +61,22 @@ export const Bod = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters,
   });
 
-  // Country/City 캐시 — AS-IS GetData_Country()(SCP0007_BOD.cs L604-638) 는 조회조건 division 으로
-  // p_scm_site_id='' 를 넘겨 전 SITE 를 1회 캐시(dtCountryCity)한다. SetCityCode 가 이 캐시로
-  // From/To Site 셀 변경마다 client-side lookup 한다(서버 재조회 없음).
-  // 화면 진입 때 전 Division 으로 1회 불러온다 — AS-IS 는 Find 때 조회조건 Division 으로만 캐시를 채워
-  //   조회 전 Insert 행은 Site 를 골라도 City 가 비고 Route 를 고를 수 없었다(QA 결함: 조회 전 Insert 저장 불가).
-  //   조회조건 Division 을 따르면 조건만 바꾸고 재조회하지 않은 상태에서 다른 Division 행의 Site 를 고칠 때
-  //   City 를 못 찾으므로 전체를 받는다. SP 는 'ALL' 이면 전 Division 을 돌려준다(PKG_SCP0007.P_SCP0007_GET_COUNTRY_CITY).
-  const countryCityFilters = useMemo(() => ({ divisionId: 'ALL', scmSiteId: '' }), []);
+  // Country/City 캐시 — AS-IS GetData_Country()(SCP0007_BOD.cs L604-638) 는 p_scm_site_id='' 로
+  // 전 SITE 를 1회 캐시(dtCountryCity)한다. SetCityCode 가 이 캐시로 From/To Site 셀 변경마다
+  // client-side lookup 한다(서버 재조회 없음).
+  // p_division_id 는 AS-IS 가 CString.GetCheckedListValue(dtMyDivision,…,false)(L607/617)로 넘긴다 —
+  //   false 는 현재 Division 선택과 무관하게 '권한 Division 코드 전체'를 강제 열거한다(CString.cs
+  //   L588-590). 즉 'ALL'(DB 전체 Division)이 아니라 '권한 Division 전체'다. 조회조건 Division 과
+  //   독립적으로 사용자가 편집 가능한 모든 Site 를 캐시하므로(조건만 바꾸고 재조회 안 한 Insert/편집도
+  //   City lookup 되게 — TO-BE 가 노린 pre-search Insert QA 결함 해소), allowedDivisionIds(권한
+  //   Division)를 그대로 쓴다. 'ALL' 로 보내면 권한 밖 Division 의 Site 까지 받는 누수가 생긴다
+  //   (사용자 신고 2026-10-29). 권한 Division 이 로드된 뒤에만 조회한다(빈 값으로 전체를 받지 않도록).
+  const allowedDivisionIds = useBodStore(state => state.allowedDivisionIds);
+  const allowedDivisionKey = allowedDivisionIds.join(',');
+  const countryCityFilters = useMemo(
+    () => ({ divisionId: allowedDivisionKey, scmSiteId: '' }),
+    [allowedDivisionKey]
+  );
   const { data: countryCityData, refetch: refetchCountryCity } = useTabProcQuery<
     MENU_ID,
     SHEETS.COUNTRY_CITY
@@ -77,7 +85,7 @@ export const Bod = ({ tabId, title }: PageProps<MENU_ID>) => {
     sheetName: SHEETS.COUNTRY_CITY,
     tabId,
     filters: countryCityFilters,
-    enabled: true,
+    enabled: allowedDivisionKey.length > 0,
   });
   const countryCityRows = useMemo(() => countryCityData?.o_rc1 ?? [], [countryCityData]);
   // 조회(Search)할 때마다 캐시를 새로 받는다 — AS-IS FindButton 이 매번 GetData_Country 를 부르는 것과 같다.

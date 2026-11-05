@@ -104,6 +104,16 @@ export const isPivotCellLocked = (
   return false;
 };
 
+// ===== 셀단위 빈값 잠금 (design 03 §3-Lock L4/L9/L13/L18 — `qty==''` → LockRange month 셀) =====
+//   AS-IS 는 편집 가능 측정값 행이라도 각 월 셀을 돌며 qty 가 빈 값이면(=그 달 레코드 없음) 그 셀을 잠근다
+//   (roslyn 실측 lines 589/664/705/803). 즉 **값이 있는 셀만 편집** — 행 전체를 여는 TO-BE 와 달리 셀 단위.
+//   '빈값' = undefined/null/'' (pivot 컬럼에 해당 YYYYMM 데이터가 없는 경우). 0 은 값이 있는 것으로 보고
+//   편집 허용한다(AS-IS 의 문자열 비교 qty=="" 와 동일 — 0 은 "" 이 아니다).
+export const isPivotCellValueEmpty = (row: Row, binding: string): boolean => {
+  const v = row[binding];
+  return v === undefined || v === null || v === '';
+};
+
 // ===== 신규행(Insert) 셀 잠금 — AS-IS InsertRow 직후 LockRange (cs:976 / 1054 / 1057) =====
 //   AS-IS 는 행을 삽입한 **그 행에** 곧바로 잠금을 건다. 일반 유저(비ADMIN)는 두 범위다:
 //     cs:1054  LockRange(insCell, PLAN_TYPE .. VALUE_TYPE, true)

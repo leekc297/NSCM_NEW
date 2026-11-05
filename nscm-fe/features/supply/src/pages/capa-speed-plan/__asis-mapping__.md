@@ -177,8 +177,8 @@
 | `_sheet_idx` — DivisionType → 시트 인덱스 | cs:1283~1296 | `capa-speed-plan.constants.ts:64~68` (`SHEET_BY_DIVISION_TYPE`) | |
 | `_division_type_name` — `ScpCapa.GetDivisionTypeName` | cs:187~193 | `capa-speed-plan.constants.ts:31~34` (`ADMIN_SHEET_NAME`), `hooks/useCapaSpeedPlanCombos.ts:261` | admin `SHEET_NAME` 과 대소문자까지 동일 |
 | `_fixed_column_name` = `DefColumns.IDX` | cs:175~185 | `capa-speed-plan.constants.ts:184` (`FIXED_COLUMN`) | 좌측 고정 경계. 소비처는 ③ 참조 |
-| `_sheet_status` — GET SP 변형 선택자 | cs:552~573 | `capa-speed-plan.constants.ts:132~137` (`SHEET_STATUS`) | `'2'`(2nd Cutoff)는 AS-IS 도 빈 문자열 → 도달 불가 |
-| `_sheet_name` — QueryId 접미 조립 | cs:545~551 | `hooks/useCapaSpeedPlanCombos.ts:265` (`p_sheet_status`) | `PKG_SCP0105` 미배포로 런타임 체인 미완(goal BLK-2) |
+| `_sheet_status` — GET SP 변형 선택자(CURRENT/1ST_CUTOFF) | cs:552~573 | 미이식(불요) | AS-IS 는 QueryId 접미로 SP 를 갈랐으나, 배포된 `PKG_SCP0105.P_SCP0105_GET_CAPA_SPEED_PLAN` 이 `P_PROG_STAT IN ('0','-')` 로 **서버에서** CURRENT/CUTOFF 분기한다 → FE 변형 선택자 불요. 과거 `SHEET_STATUS`/`p_sheet_status` 로 모사하던 것은 PROC_M 계약에 없어 call-proc 이 버리던 죽은 키라 제거(V4-02) |
+| `_sheet_name` — QueryId 접미 조립 | cs:545~551 | `hooks/useCapaSpeedPlanCombos.ts:280` (`p_sheet_name` = ASSEMBLY/ELTR) | 시트 분기는 `p_sheet_name` 으로 전달(서버 `P_SHEET_NAME` 분기). CURRENT/CUTOFF 는 위 `p_prog_stat` |
 | `_from_yyyymm` — 선택 Plan Month +1개월 | cs:243~264 | `utils/capaSpeedPlan.dateColumns.ts:32~35` (`toFromYyyymm`) | `DateTime.ParseExact` → `dayjs` |
 | Division 권한 0건 게이트 `SetDivisionAuthCheck(usrLayoutControl2)` | cs:1241~1242 (BaseForm:5995~6003†) | `CapaSpeedPlan.tsx:145~155`, `CapaSpeedPlan.tsx:307` (`disabled`), `components/CapaSpeedPlanForm.tsx:21~23` | 메시지는 `MSG00097` → **`MSG00667`** 재매핑 (01 L-04) |
 | `_division_type` getter — `rgrpDivisionType.SelectedIndex` | cs:194~217 | `useCapaSpeedPlanStore.ts:98` (`divisionType`) | 정수 `0/1/2` → 문자열 enum. ⑧ BLK-4 참조 |

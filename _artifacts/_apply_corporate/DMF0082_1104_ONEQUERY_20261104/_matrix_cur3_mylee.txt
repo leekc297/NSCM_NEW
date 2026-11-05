@@ -1,0 +1,28 @@
+PKG_DMF0082: [('PACKAGE', 'VALID', '2026-10-09 13:38:31'), ('PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')]
+PKG_DMF0082_1104: [('PACKAGE', 'VALID', '2026-11-04 16:00:18'), ('PACKAGE BODY', 'VALID', '2026-11-04 18:26:37')]
+=== cur3_mylee env=['zioui1', 'localhost', '2026-11-04 18:28:08'] period=20261101~20270430 A=PKG_DMF0082 B=PKG_DMF0082_1104 users=minyonglee1 divs=40,81 scen=['current', 'filters'] gtt=True
+--- minyonglee1 div40 표본 {'site': 'Lenovo_HK_HKG', 'item_full': 'MCCM348014A3', 'cust': 'Lenovo', 'biz': 'CELL', 'project': 'Lenovo', 'owner': 'Lia Yun', 'team': '58520274', 'plant': None, 'sender': None, 'item': 'CM348'} 버전 {'MF_W': 'MF_W_20261027_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20261104_V001', 'MF_D': 'MF_D_20261026_V001'}
+18:29:24 minyonglee1 div40 Current                                  PASS rows=  7619 A  66.53s B  66.44s  (동률 순서 차이: cur1)
+18:32:39 minyonglee1 div40 Current site=Lenovo_HK_HKG               PASS rows=   468 A   1.49s B   1.65s
+18:32:45 minyonglee1 div40 Current item=CM348                       PASS rows=  1071 A   5.93s B   6.02s  (동률 순서 차이: cur1)
+18:33:05 minyonglee1 div40 Current cust=Lenovo                      PASS rows=  1392 A   2.55s B   2.81s
+18:33:17 minyonglee1 div40 Current biz=CELL                         PASS rows=  5655 A  50.02s B  54.34s  (동률 순서 차이: cur1)
+18:36:01 minyonglee1 div40 Current project=Lenovo                   PASS rows=  1392 A   2.80s B   2.96s
+18:36:15 minyonglee1 div40 Current owner=Lia Yun                    PASS rows=  1401 A   2.81s B   3.00s
+18:36:32 minyonglee1 div40 Current team=58520274                    PASS rows=  2439 A   8.52s B   8.92s  (동률 순서 차이: cur1)
+18:37:23 minyonglee1 div40 Current sender=NOSUCH                    PASS rows=     0 A  60.33s B  59.27s  ⚠ 0행(미실증)
+18:39:30 minyonglee1 div40 Current qty=Y                            PASS rows=  1718 A  60.67s B  61.79s  (동률 순서 차이: cur1)
+--- minyonglee1 div81 표본 {'site': 'BMW_US_SPA', 'item_full': 'ACHP2005I-A1', 'cust': 'A18BW2003', 'biz': 'CELL', 'project': 'A18BW2003', 'owner': 'BYUNGCHANG PARK', 'team': '70000347', 'plant': 'WA00-P', 'sender': None, 'item': 'HP200'} 버전 {'MF_W': 'MF_W_20261028_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20261030_V001', 'MF_D': 'MF_D_20261026_V001'}
+18:42:12 minyonglee1 div81 Current                                  PASS rows=  8042 A  12.21s B  16.07s
+18:44:09 minyonglee1 div81 Current site=BMW_US_SPA                  PASS rows=   387 A   2.20s B   1.85s
+18:44:18 minyonglee1 div81 Current item=HP200                       PASS rows=   430 A   1.73s B   1.26s
+18:44:26 minyonglee1 div81 Current cust=A18BW2003                   PASS rows=     0 A   1.60s B   1.19s  ⚠ 0행(미실증)
+18:44:30 minyonglee1 div81 Current biz=CELL                         PASS rows=   146 A   1.88s B   1.41s
+18:44:35 minyonglee1 div81 Current project=A18BW2003                PASS rows=  1337 A   3.67s B   4.00s
+18:44:58 minyonglee1 div81 Current owner=BYUNGCHANG PARK            PASS rows=  1623 A   3.45s B   3.79s
+18:45:27 minyonglee1 div81 Current team=70000347                    PASS rows=  2883 A   4.46s B   4.99s
+18:46:15 minyonglee1 div81 Current plant=WA00-P                     PASS rows=  5257 A   7.83s B   8.72s
+18:47:39 minyonglee1 div81 Current sender=NOSUCH                    PASS rows=     0 A   4.42s B   3.69s  ⚠ 0행(미실증)
+18:48:00 minyonglee1 div81 Current qty=Y                            PASS rows=  1004 A   5.73s B   6.88s
+
+=== 시나리오 21 · FAIL 0 · 미실증 3

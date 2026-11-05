@@ -1,6 +1,6 @@
 # DMF0049 — To-Be Fact Pack 요약
 
-- page_key: `demand/etc-sales-reports` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `demand/etc-sales-reports` · feature: demand · As-is Fact Pack 있음
 - 파일 18 · 엔드포인트 호출 15 (미해결 1, 주석 속 3) · 이벤트 32 · 컴포넌트 사용 22 · 하드코딩 컬럼 2 · 메시지 22
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 2건
 
@@ -9,7 +9,7 @@
 |---|---|---|
 | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsForm.module.scss | component | 12 |
 | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsForm.tsx | component | 176 |
-| features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx | component | 877 |
+| features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx | component | 880 |
 | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsModals.tsx | component | 189 |
 | features/demand/src/pages/etc-sales-reports/etc-sales-reports.constants.ts | constants | 133 |
 | features/demand/src/pages/etc-sales-reports/etc-sales-reports.types.ts | types | 34 |
@@ -141,7 +141,7 @@
 | LBL00310 | 2 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0044(31), DMF0049(20), DMF0003(10), DMF0042(3), SCM0002(3), DMF0040(2), DMF0072(1), DMF0074(1)
+- 화면ID: DMF0044(31), DMF0049(20), DMF0003(10), DMF0042(3), SCM0002(3), DMF0040(2), DMF0072(1), DMF0074(1), DMF0021(1)
 - SP/PKG: PKG_DMF0049(3), P_DMF0044_GET_SALES_REPORTS_DATA(3), P_DMF0049_GET_SPREAD_TITLE(2), DMF0044_GET_SPREAD_TITLE(2), P_DMF0044_GET_MEASURE(2), P_CREATED_BY(2), P_USER_GROUP(2), DMF0049_SAVE_SALES_ETC_REPORT_C(2), DMF0049_GET_SPREAD_TITLE(1), P_RESULT_MONTH(1), PKG_DMF0044(1), SCM0002_SET_TITLESET_POPUP(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

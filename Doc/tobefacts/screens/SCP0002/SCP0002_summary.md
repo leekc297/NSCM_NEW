@@ -1,14 +1,14 @@
 # SCP0002 — To-Be Fact Pack 요약
 
-- page_key: `supply/line-master` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 14 · 엔드포인트 호출 7 (미해결 0, 주석 속 4) · 이벤트 12 · 컴포넌트 사용 18 · 하드코딩 컬럼 1 · 메시지 17
+- page_key: `supply/line-master` · feature: supply · As-is Fact Pack 있음
+- 파일 14 · 엔드포인트 호출 7 (미해결 0, 주석 속 4) · 이벤트 13 · 컴포넌트 사용 18 · 하드코딩 컬럼 1 · 메시지 15
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/line-master/components/LineMasterForm.tsx | component | 270 |
-| features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | component | 213 |
+| features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | component | 219 |
 | features/supply/src/pages/line-master/index.ts | index | 2 |
 | features/supply/src/pages/line-master/line-master.constants.ts | constants | 162 |
 | features/supply/src/pages/line-master/line-master.types.ts | types | 24 |
@@ -25,7 +25,7 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 2 | Y | LineMasterForm.tsx:54 LineMasterMainGrid.tsx:61 |
+| (useTabComboQueries) | hook | 2 | Y | LineMasterForm.tsx:54 LineMasterMainGrid.tsx:66 |
 | SCP0002/Plant//call-proc | hook | 1 | Y | LineMaster.tsx:53 |
 | SCP0002/Packer//call-proc | hook | 1 | Y | LineMaster.tsx:60 |
 | /admin/menu/SCP0002/column | http | 1 | Y | useLineMasterStore.ts:145 |
@@ -42,12 +42,13 @@
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/line-master/components/LineMasterForm.tsx | 190 |
 | CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,set,String,clearFilters | jsx | features/supply/src/pages/line-master/components/LineMasterForm.tsx | 210 |
 | CustomDropdown | onChange | <arrow> set,String | jsx | features/supply/src/pages/line-master/components/LineMasterForm.tsx | 260 |
-| g | updatedLayout | attach | addHandler | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 118 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 134 |
-| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 135 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 176 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 177 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 209 |
+| g | updatedLayout | attach | addHandler | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 123 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 139 |
+| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 140 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 181 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 182 |
+| DataGrid | initialized | <arrow> setGrid | jsx | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 205 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/line-master/components/LineMasterMainGrid.tsx | 215 |
 | LineMasterMainGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/line-master/LineMaster.tsx | 193 |
 | LineMasterForm | onSearch | handleSearch | jsx | features/supply/src/pages/line-master/LineMaster.tsx | 205 |
 
@@ -74,8 +75,6 @@
 ## 7. 메시지 코드
 | code | count |
 |---|---|
-| LBL00728 | 1 |
-| LBL00729 | 1 |
 | LBL00112 | 1 |
 | LBL00001 | 1 |
 | LBL00005 | 1 |

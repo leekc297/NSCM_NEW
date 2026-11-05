@@ -13,6 +13,24 @@ const toSelectedCodes = (value: string): string[] =>
     .filter(code => code !== '' && code.toUpperCase() !== 'ALL');
 
 /**
+ * 조회 전송용 Division 값 — 'ALL'/미선택이면 권한 Division 코드 전체를 콤마 열거로 펼친다.
+ * AS-IS CString.GetCheckedListValue(dtMyDivision, "ALL")(CString.cs L529-551) 등가 — 'ALL' 센티널을
+ * 서버로 그대로 보내면 조회 SP 가 무필터(DB 전체 Division)로 풀어 권한 밖 Division 까지 조회되므로
+ * (사용자 신고 2026-10-29: 40 권한만 있는데 전체가 조회됨), 전송 직전에만 권한 코드로 치환한다.
+ *   화면 표시용 searchParams.divisionId 는 'ALL' 로 그대로 둔다(칩이 전부 체크돼 보이지 않도록 —
+ *   AS-IS 도 clbDivision 은 미체크(= 전체) 상태로 보였다). 일부 선택은 그 선택 코드를 그대로 보낸다.
+ * 주의: 이 열거는 UX/정합용이고 권한 경계 자체는 아니다 — API 를 직접 'ALL'/타 Division 으로 호출하면
+ *   조회 SP 가 그대로 반환하므로, 권한 강제는 BE(SP) 과제로 남는다.
+ */
+export const resolveDivisionQueryValue = (
+  divisionId: string,
+  allowedDivisionIds: string[]
+): string => {
+  const codes = toSelectedCodes(divisionId);
+  return codes.length > 0 ? codes.join(',') : allowedDivisionIds.join(',');
+};
+
+/**
  * Division 선택값으로 From/To Site·Customer 등 콤보 행을 client-side 필터링.
  * AS-IS SetChangeControl()(SCP0007_BOD.cs L238-253) — `DIVISION_ID IN (...)` 서버 재조회를
  * client-side 필터(cascade-combo-filter.md §4)로 재현. Map dedup(§3, 복합키 없이 CODE 단일 — 이

@@ -7,17 +7,22 @@ export type MENU_ID = typeof MENU_ID;
 //   - 기간칼럼 헤더 : 공용 PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN (start/end 2-IN, 자매 SCP0018 배선 미러)
 //   - 저장 없음(읽기전용, EditButton=MSG00109 후 return · SaveButton NO-OP · Insert/Delete 미노출)
 //   버튼-API 배선(SCM_ADM_MNU_BTN_MPG_M): main/SEARCH · main/MEASURE_SELECT · spreadTitle/SEARCH
-//     (design 05_register.sql, 자매 SCP0018 실등록행 미러 — ora.py 적용).
-//   PKG_SCP0016 미배포(all_objects 0건) → 런타임 조회는 convert-sp 배포 후. 캘린더 SP(COM0000)는 VALID.
+//     · spreadTitleIso/SEARCH(Only Weekly 전용 ISO 캘린더 — 자매 SCP0018 실등록행 미러, ora.py 적용).
+//   PKG_SCP0016 VALID(배포 완료). 캘린더 SP(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN[_ISO]) VALID.
 export enum SHEETS {
   MAIN = 'main', // spdMain Waterfall 시트 — 메인 pivot 그리드 (28 고정 + D_/W_/M_ 동적)
-  TITLE = 'spreadTitle', // 기간칼럼 헤더(캘린더 3span) — 자매 SCP0018 SHT_NM='spreadTitle' 미러
+  TITLE = 'spreadTitle', // 기간칼럼 헤더(캘린더 3span, NotISO) — 자매 SCP0018 SHT_NM='spreadTitle' 미러
+  // Only Weekly(WEEKLY_ISO) 전용 ISO 캘린더 헤더 — PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO.
+  //   연속 ISO 주차(월 미분할, W_..._ISO 컬럼) + 최상단 날짜범위(MMDD_LABEL_NAME). AS-IS 와 동일하게
+  //   WeeklyISO 일 때만 이 시트를 호출한다(SCP0016.cs:1263-1268 등가). 자매 SCP0018 SHT_NM='spreadTitleIso' 미러.
+  TITLE_ISO = 'spreadTitleIso',
 }
 
 // NSCM 단일 cursor 표준 'o_rc1'.
 export const RESPONSE_SET = {
   MAIN: 'o_rc1',
   TITLE: 'o_rc1',
+  TITLE_ISO: 'o_rc1',
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 

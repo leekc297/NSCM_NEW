@@ -113,6 +113,7 @@ Write-Output "===== AUTO-ATTACHED RULE CONTEXT (attach-context v3) [FULL] ====="
 Write-Output ("TRIGGER-HINT: " + ($(if ($triggers.Count) { $triggers -join ', ' } else { 'T00 (키워드 미매칭 — TRIGGER_ROUTER 에서 직접 T# 선택)' })))
 Write-Output ("REQUIRED-READ: " + (($existing | ForEach-Object { Split-Path -Leaf $_ }) -join ', '))
 Write-Output "The following rules are MANDATORY for this task. Do not skip verification steps."
+Write-Output "NO GUESSING (user standing order 2026-10-31, hook #126 s0-1): never answer numbers, progress, durations, causes or results by feel or prediction. Cite only what was measured this session, with source and time; otherwise say NOT MEASURED and how to measure."
 Write-Output "Route with TRIGGER_ROUTER.md (T#), then Read every core hook of that row from Doc/_rules_v2/hooks/. UI work: pass UI_MANDATORY_CHECKLIST.md before writing."
 Write-Output "Start your first reply with: [T# 적용: ... / Read: ...]"
 Write-Output ""

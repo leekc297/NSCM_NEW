@@ -1,6 +1,6 @@
 import {
   AllowMerging,
-  type CellRange,
+  CellRange,
   CellType,
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
@@ -80,14 +80,27 @@ const HEADER_TOTAL_HEIGHT = 48;
 // leaf(최하단) pivot 헤더는 가로 병합하지 않는다 — leaf 가 전부 'SUM' 이라 값 기준 병합이 주/월 경계를 넘는다.
 class ProductionPlanMergeManager extends CustomMergeManager {
   getMergedRange(panel: GridPanel, currentRow: number, currentCol: number): CellRange | null {
+    // 기존 로직 주석 보존 (2026-10-28) 시작: leaf 행 병합을 통째로 꺼 월 SUM 세로 병합까지 깨짐
+    // if (
+    //   panel.cellType === CellType.ColumnHeader &&
+    //   currentRow === panel.rows.length - 1 &&
+    //   pivotKind(panel.columns[currentCol]?.binding ?? '') !== null
+    // ) {
+    //   return null;
+    // }
+    // 기존 로직 주석 보존 (2026-10-28) 끝
+    const rng = super.getMergedRange(panel, currentRow, currentCol);
     if (
+      rng &&
       panel.cellType === CellType.ColumnHeader &&
-      currentRow === panel.rows.length - 1 &&
+      rng.row2 === panel.rows.length - 1 &&
       pivotKind(panel.columns[currentCol]?.binding ?? '') !== null
     ) {
-      return null;
+      // leaf 행이 걸린 pivot 헤더는 가로 병합만 막고 세로 병합(월 SUM 2~3단)은 유지한다.
+      const vertical = new CellRange(rng.row, currentCol, rng.row2, currentCol);
+      return vertical.isSingleCell ? null : vertical;
     }
-    return super.getMergedRange(panel, currentRow, currentCol);
+    return rng;
   }
 }
 

@@ -43,15 +43,20 @@ export const ShipmentPsiDetailBar = ({ onDetailSearch, onModelSearch, onRequesto
   const fieldSet = fieldSetOf(activeDetailSheet, INITIAL_FIELDSET);
 
   // Result Type — 탭별로 다른 lookup(사용자 확정 2026-10-01):
-  //   Main   = SSP_SHIPMENT_RESULT_TYPE (유효 [P,O,E,R] 중 클라 R제외 → [P,O,E])
+  //   Main   = SSP_SHIPMENT_RESULT_TYPE (유효 [P,O,E,R] 전부 노출 — AS-IS 초기 로드 파리티)
   //   Packer = SSP_SHIPMENT_RESULT_TYPE_PACKER (전용 [P=Plan, S=Result(PSCM)], 클라 필터 없음)
   const [mainResultTypes, packerResultTypes] = useTabLookupQueries({
     filters: [LOOKUP.SHIPMENT_RESULT_TYPE, LOOKUP.SHIPMENT_RESULT_TYPE_PACKER],
   });
+  // 표시 순서 = CODE(value) 알파벳 오름차순 — AS-IS DataService.cs:4601 OrderBy(CODE) 파리티(Main=[E,O,P,R]).
+  //   CustomDropdown 은 sortBy 를 주지 않으면 넘긴 options 순서를 그대로 쓰므로 여기서 정렬한다.
   const resultTypeOptions = useMemo(() => {
-    if (mainSheet === 'packer') return toOptions(packerResultTypes);
+    const byCode = (a: Option, b: Option) => a.value.localeCompare(b.value);
+    if (mainSheet === 'packer') return toOptions(packerResultTypes).sort(byCode);
     const allowed = new Set<string>(RESULT_TYPE_BY_SHEET.MAIN);
-    return toOptions(mainResultTypes).filter(o => allowed.has(o.value));
+    return toOptions(mainResultTypes)
+      .filter(o => allowed.has(o.value))
+      .sort(byCode);
   }, [mainResultTypes, packerResultTypes, mainSheet]);
 
   return (
@@ -97,7 +102,6 @@ export const ShipmentPsiDetailBar = ({ onDetailSearch, onModelSearch, onRequesto
                     ),
                   }}
                   onChange={e => set({ model: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
                 />
               )}
             />
@@ -114,7 +118,6 @@ export const ShipmentPsiDetailBar = ({ onDetailSearch, onModelSearch, onRequesto
                   fullWidth
                   value={sc.lotId}
                   onChange={e => set({ lotId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
                 />
               )}
             />
@@ -142,7 +145,6 @@ export const ShipmentPsiDetailBar = ({ onDetailSearch, onModelSearch, onRequesto
                     ),
                   }}
                   onChange={e => set({ requestorId: e.target.value, requestorName: '' })}
-                  onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
                 />
               )}
             />
@@ -163,7 +165,6 @@ export const ShipmentPsiDetailBar = ({ onDetailSearch, onModelSearch, onRequesto
                   allOption={mainSheet !== 'packer'}
                   useClearIcon
                   limitTags={1}
-                  sortBy='label'
                   value={sc.resultTypes.join(',')}
                   options={resultTypeOptions}
                   onChange={(_, picked) =>

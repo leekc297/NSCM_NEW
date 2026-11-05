@@ -1,20 +1,20 @@
 # DMF0006 — To-Be Fact Pack 요약
 
-- page_key: `master/customer-model-mapping` · feature: master · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 10 · 엔드포인트 호출 10 (미해결 1, 주석 속 0) · 이벤트 21 · 컴포넌트 사용 41 · 하드코딩 컬럼 0 · 메시지 13
+- page_key: `master/customer-model-mapping` · feature: master · As-is Fact Pack 있음
+- 파일 10 · 엔드포인트 호출 10 (미해결 1, 주석 속 0) · 이벤트 21 · 컴포넌트 사용 41 · 하드코딩 컬럼 0 · 메시지 12
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.module.scss | component | 23 |
-| features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | component | 349 |
-| features/master/src/pages/customer-model-mapping/components/CustomerModelMappingGrid.tsx | component | 383 |
+| features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | component | 341 |
+| features/master/src/pages/customer-model-mapping/components/CustomerModelMappingGrid.tsx | component | 386 |
 | features/master/src/pages/customer-model-mapping/customer-model-mapping.constants.ts | constants | 320 |
-| features/master/src/pages/customer-model-mapping/customer-model-mapping.duplicateCheck.ts | other | 131 |
+| features/master/src/pages/customer-model-mapping/customer-model-mapping.duplicateCheck.ts | other | 142 |
 | features/master/src/pages/customer-model-mapping/customer-model-mapping.gridCombos.ts | other | 88 |
 | features/master/src/pages/customer-model-mapping/customer-model-mapping.types.ts | types | 12 |
-| features/master/src/pages/customer-model-mapping/CustomerModelMapping.tsx | page | 190 |
+| features/master/src/pages/customer-model-mapping/CustomerModelMapping.tsx | page | 202 |
 | features/master/src/pages/customer-model-mapping/index.ts | index | 2 |
 | features/master/src/pages/customer-model-mapping/useCustomerModelMappingStore.ts | store | 123 |
 
@@ -22,9 +22,9 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 4 | Y | CustomerModelMappingForm.tsx:48 CustomerModelMappingForm.tsx:80 CustomerModelMappingForm.tsx:93 CustomerModelMappingGrid.tsx:97 |
-| {?row} | http | 1 | N | customer-model-mapping.duplicateCheck.ts:117 |
-| DMF0006/customerModelMapping//call-proc | hook | 2 | Y | CustomerModelMapping.tsx:40 CustomerModelMapping.tsx:48 |
-| DMF0006/customerModelMapping/SEARCH/call-proc | callProc | 1 | Y | CustomerModelMapping.tsx:83 |
+| {?row} | http | 1 | N | customer-model-mapping.duplicateCheck.ts:122 |
+| DMF0006/customerModelMapping//call-proc | hook | 2 | Y | CustomerModelMapping.tsx:47 CustomerModelMapping.tsx:55 |
+| DMF0006/customerModelMapping/SEARCH/call-proc | callProc | 1 | Y | CustomerModelMapping.tsx:90 |
 | /admin/menu/DMF0006/column | http | 1 | Y | useCustomerModelMappingStore.ts:88 |
 | /admin/menu/DMF0006/search-conditions | http | 1 | Y | useCustomerModelMappingStore.ts:101 |
 
@@ -42,14 +42,14 @@
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 187 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 210 |
 | InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 230 |
-| InputField | onDoubleClick | <arrow> setOpenPrjByDivisionModal | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 246 |
-| FunctionSearchIcon | onClick | <arrow> setOpenPrjByDivisionModal | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 240 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 261 |
-| InputField | onDoubleClick | <arrow> setOpenModelByDivisionModal | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 276 |
-| FunctionSearchIcon | onClick | <arrow> setOpenModelByDivisionModal | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 270 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 289 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 304 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 323 |
+| InputField | onDoubleClick | <arrow> setOpenPrjByDivisionModal | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 242 |
+| Button | onClick | <arrow> setOpenPrjByDivisionModal | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 238 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 257 |
+| InputField | onDoubleClick | <arrow> setOpenModelByDivisionModal | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 268 |
+| Button | onClick | <arrow> setOpenModelByDivisionModal | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 264 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 281 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 296 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingForm.tsx | 315 |
 | g | updatedLayout | applyTeamDataMap | addHandler | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingGrid.tsx | 127 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingGrid.tsx | 159 |
 | g | formatItem | formatHandler | addHandler | features/master/src/pages/customer-model-mapping/components/CustomerModelMappingGrid.tsx | 175 |
@@ -92,11 +92,11 @@
 | LBL00083 | 1 |
 | LBL00084 | 1 |
 | LBL00007 | 1 |
-| MSG00060 | 2 |
+| MSG01092 | 1 |
 | MSG00618 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0049(2), DMF0006(2), DMF0007(2), DMF0042(1), DMF0020(1), DMF0043(1), DMF0004(1), DMF0003(1)
+- 화면ID: DMF0007(3), DMF0049(2), DMF0005(2), DMF0006(2), DMF0004(2), DMF0042(1), DMF0020(1), DMF0043(1), DMF0003(1)
 - SP/PKG: PKG_DMF0006(1), P_PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA(1), PR_GET_SHEET_COLUMN_LIST(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

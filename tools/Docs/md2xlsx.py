@@ -91,7 +91,7 @@ def build(ID):
     for f, title in SHEETS_MD:
         p = os.path.join(agent, f)
         if os.path.exists(p): put_md(wb.create_sheet(title), open(p, encoding='utf-8-sig').read()); n += 1
-    if os.path.exists(gap): put_csv(wb.create_sheet('GAP'), read_csv(gap)); n += 1
+    # 2026-10-30 GAP 분석 폐지 — GAP 시트 생성 중단
     # 대조표(__asis-mapping__.md): register.json 으로 페이지 위치
     reg = os.path.join(gen, 'register.json')
     if os.path.exists(reg):

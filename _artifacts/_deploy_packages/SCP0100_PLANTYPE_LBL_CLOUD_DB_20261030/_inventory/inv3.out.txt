@@ -1,0 +1,44 @@
+SWEEP START 2026-10-30 15:37:11
+TABLES 166
+HIT SCM_ADM_API_M (4, datetime.datetime(2026, 9, 23, 11, 10, 10), 0, 'ZIONEX')
+HIT SCM_ADM_LOOKUP_MASTER_DETAIL (4, datetime.datetime(2026, 9, 29, 11, 35, 38), 0, 'CONVERT_SCP0100')
+HIT SCM_ADM_MNU_BTN_MPG_M (9, datetime.datetime(2026, 9, 24, 13, 33), 0, 'CONVERT_SCP0100')
+HIT SCM_ADM_MNU_M (1, datetime.datetime(2026, 9, 30, 20, 30, 14), 0, 'AJS')
+HIT SCM_ADM_MSG_M (3, datetime.datetime(2026, 9, 23, 11, 10, 10), 0, 'CONVERT_ZIONEX')
+HIT SCM_ADM_PROC_M (33, datetime.datetime(2026, 10, 7, 11, 29, 9), 1, 'ZIONEX,AJS')
+HIT SCM_ADM_PROGRAM (1, datetime.datetime(2026, 6, 12, 14, 37, 5), 0, 'system')
+HIT SCM_ADM_USER_GR_MNU_BTN_MPG_M (45, datetime.datetime(2024, 5, 28, 9, 55, 13), 0, 'vadabi3,yongseokyoon,ohsun')
+HIT SCM_ADM_USER_GR_MNU_MPG_M (5, datetime.datetime(2024, 5, 28, 9, 55, 13), 0, 'vadabi3,yongseokyoon,ohsun')
+HIT SCM_ADM_USER_MNU_SRCH_COND_M (7, datetime.datetime(2026, 10, 30, 15, 28, 14), 7, 'minyonglee1')
+HIT SCM_MST_SHEET_COLUMNS (36, datetime.datetime(2026, 10, 23, 15, 25, 14), 3, 'CONVERT_SCP0100,iamarock,yschoithira,minyonglee1')
+HIT SCM_MST_SHEET_COLUMNS_BK20260909 (33, datetime.datetime(2024, 8, 22, 17, 55, 14), 0, 'yschoithira,iamarock')
+HIT SCM_MST_SHEET_MEASURE (36, datetime.datetime(2025, 12, 8, 11, 21, 29), 0, 'vadabi3,chkim.68,yschoithira,yanbn82')
+HIT SCM_MST_TITLESET_USER (268, datetime.datetime(2026, 10, 30, 13, 56, 15), 268, 'minyonglee1,attackgo,jeeeun,njlilian')
+
+## HITS 14
+SCM_ADM_API_M | 4 | 2026-09-23 11:10:10 | 0 | ZIONEX
+SCM_ADM_LOOKUP_MASTER_DETAIL | 4 | 2026-09-29 11:35:38 | 0 | CONVERT_SCP0100
+SCM_ADM_MNU_BTN_MPG_M | 9 | 2026-09-24 13:33:00 | 0 | CONVERT_SCP0100
+SCM_ADM_MNU_M | 1 | 2026-09-30 20:30:14 | 0 | AJS
+SCM_ADM_MSG_M | 3 | 2026-09-23 11:10:10 | 0 | CONVERT_ZIONEX
+SCM_ADM_PROC_M | 33 | 2026-10-07 11:29:09 | 1 | ZIONEX,AJS
+SCM_ADM_PROGRAM | 1 | 2026-06-12 14:37:05 | 0 | system
+SCM_ADM_USER_GR_MNU_BTN_MPG_M | 45 | 2024-05-28 09:55:13 | 0 | vadabi3,yongseokyoon,ohsun
+SCM_ADM_USER_GR_MNU_MPG_M | 5 | 2024-05-28 09:55:13 | 0 | vadabi3,yongseokyoon,ohsun
+SCM_ADM_USER_MNU_SRCH_COND_M | 7 | 2026-10-30 15:28:14 | 7 | minyonglee1
+SCM_MST_SHEET_COLUMNS | 36 | 2026-10-23 15:25:14 | 3 | CONVERT_SCP0100,iamarock,yschoithira,minyonglee1
+SCM_MST_SHEET_COLUMNS_BK20260909 | 33 | 2024-08-22 17:55:14 | 0 | yschoithira,iamarock
+SCM_MST_SHEET_MEASURE | 36 | 2025-12-08 11:21:29 | 0 | vadabi3,chkim.68,yschoithira,yanbn82
+SCM_MST_TITLESET_USER | 268 | 2026-10-30 13:56:15 | 268 | minyonglee1,attackgo,jeeeun,njlilian
+Traceback (most recent call last):
+  File "C:\Projects\NSCM\_artifacts\_deploy_packages\_work_SCP0100_20261030\inv3.py", line 35, in <module>
+    cur.execute("SELECT * FROM SCM_MST_SHEET_COLUMNS WHERE PROGRAM_ID='SCP0100' ORDER BY SHEET_NAME, SORT_ORDER, COLUMN_NAME")
+  File "C:\Python3.11.5\Lib\site-packages\oracledb\cursor.py", line 859, in execute
+    impl.execute(self)
+  File "src/oracledb/impl/thin/cursor.pyx", line 279, in oracledb.thin_impl.ThinCursorImpl.execute
+  File "src/oracledb/impl/thin/protocol.pyx", line 501, in oracledb.thin_impl.Protocol._process_single_message
+  File "src/oracledb/impl/thin/protocol.pyx", line 502, in oracledb.thin_impl.Protocol._process_single_message
+  File "src/oracledb/impl/thin/protocol.pyx", line 494, in oracledb.thin_impl.Protocol._process_message
+  File "src/oracledb/impl/thin/messages/base.pyx", line 102, in oracledb.thin_impl.Message._check_and_raise_exception
+oracledb.exceptions.DatabaseError: ORA-00904: "SORT_ORDER": invalid identifier
+Help: https://docs.oracle.com/error-help/db/ora-00904/

@@ -1,6 +1,7 @@
 import type { MeasureMeta } from 'features/master/src/components';
 
 import { apiClient } from '@foundation/apis';
+import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
@@ -10,6 +11,7 @@ import type { SearchParams } from './waterfall-shipment-plan-semi.types';
 interface Filters {
   [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
   [SHEETS.SPREAD_TITLE]?: ProcRequest<MENU_ID, SHEETS.SPREAD_TITLE>;
+  [SHEETS.SPREAD_TITLE_ISO]?: ProcRequest<MENU_ID, SHEETS.SPREAD_TITLE_ISO>;
 }
 
 interface WaterfallShipmentPlanSemiState {
@@ -42,6 +44,25 @@ interface WaterfallShipmentPlanSemiAction {
   restoreSearchConditions: () => Promise<void>;
 }
 
+// 기본 기간 = AS-IS dCalendar.InitValue = GetDayRange() → DateUtil.GetDayRange(SP
+//   SCM0001_GET_SCP_MONTH_PERIOD, cs:1039) 재현. from = 기준일(미지정 시 오늘),
+//   to = (기준일 + 12개월)을 그 주의 주초(일요일)로 라운딩해 from/to 를 함께 돌려준다.
+//   버전 선택 시 기준일 = 선택 버전 중 최신(날짜 max) 버전의 YYYYMMDD(GetDayRange cs:1033~1039) —
+//   start 뿐 아니라 end 도 기준일 기반으로 재계산해야 AS-IS 등가(이 화면은 Form 의 version effect 가 호출).
+//   customParseFormat 플러그인 미등록 환경이라 8자리→ISO(YYYY-MM-DD) 조립 후 파싱(프로젝트 공통 규약).
+//   화면 실측: 오늘 2026-10-26 → 2026-10-26 ~ 2027-10-24.
+export const periodFromDate = (fromYyyymmdd?: string): { startYyyymmdd: string; endYyyymmdd: string } => {
+  const from =
+    fromYyyymmdd && fromYyyymmdd.length === 8
+      ? dayjs(`${fromYyyymmdd.slice(0, 4)}-${fromYyyymmdd.slice(4, 6)}-${fromYyyymmdd.slice(6, 8)}`)
+      : dayjs();
+  const maxEnd = from.add(12, 'month');
+  const to = maxEnd.subtract(maxEnd.day(), 'day'); // dayjs day(): Sun=0 → 그 주 일요일로 당김
+  return { startYyyymmdd: from.format('YYYYMMDD'), endYyyymmdd: to.format('YYYYMMDD') };
+};
+
+const defaultPeriod = (): { startYyyymmdd: string; endYyyymmdd: string } => periodFromDate();
+
 const initSearchParams: SearchParams = {
   divisionId: '',
   operationGroup: '',
@@ -49,8 +70,7 @@ const initSearchParams: SearchParams = {
   electrodeTypes: [],
   bucket: BUCKET_TYPE.DAILY, // AS-IS DefineProperty — cboBucketType.ControlValues = Daily 고정
   versionNos: [],
-  startYyyymmdd: '',
-  endYyyymmdd: '',
+  ...defaultPeriod(), // AS-IS GetDayRange() 초기 기본값(버전 미선택)
   isSumChecked: false, // AS-IS chkSum InitValue="N"
 };
 
@@ -75,7 +95,7 @@ export const useWaterfallShipmentPlanSemiStore = createPersistedStoreWithTab<
     ...initState,
     reset: () =>
       set(state => {
-        state.searchParams = initSearchParams;
+        state.searchParams = { ...initSearchParams, ...defaultPeriod() }; // 기본 기간은 리셋 시점 기준 재계산
         state.filters = {};
         state.isOpenSearchArea = true;
       }),
@@ -100,7 +120,6 @@ export const useWaterfallShipmentPlanSemiStore = createPersistedStoreWithTab<
         state.filters = {}; // 그리드 초기화 — 재조회(Search) 전까지 빈 상태
       }),
     setFilters: ({ userId }) => {
-      let changed = false;
       set(state => {
         const p = state.searchParams;
         // p_sheet_name 파생값 — OperationGroup=='A' ? 'CELL' : 'ELECTRODE' (02_search-combo.md §5 말미,
@@ -124,13 +143,20 @@ export const useWaterfallShipmentPlanSemiStore = createPersistedStoreWithTab<
             endYyyymmdd: p.endYyyymmdd,
             userId,
           },
+          // ISO 전용 캘린더(Only Weekly) — 동일 기간 파라미터. 실제 호출은 Page 가 bucket===WEEKLY_ISO 일
+          //   때만 enable 한다(그 외 버킷은 위 NotISO spreadTitle 사용). AS-IS 버킷별 proc 분기 등가.
+          [SHEETS.SPREAD_TITLE_ISO]: {
+            startYyyymmdd: p.startYyyymmdd,
+            endYyyymmdd: p.endYyyymmdd,
+            userId,
+          },
         };
-        if (JSON.stringify(newFilters) !== JSON.stringify(state.filters)) {
-          state.filters = newFilters;
-          changed = true;
-        }
+        // 동일 조건 재조회 지원: 값이 같아도 매 Search 마다 filters 를 새 객체로 교체한다. useTabProcQuery
+        //   (useCustomQueryClient)는 filters '레퍼런스' 변경을 감지해 removeQueries 로 "비웠다 다시 fetch"
+        //   한다("같은 값으로 되돌아온 경우 포함" 주석) — 값 비교로 교체를 건너뛰면 재조회가 안 돈다(먹통).
+        state.filters = newFilters;
       });
-      return changed;
+      return true;
     },
     clearData: () =>
       set(state => {

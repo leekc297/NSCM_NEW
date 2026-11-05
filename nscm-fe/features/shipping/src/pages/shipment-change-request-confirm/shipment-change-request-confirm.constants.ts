@@ -4,8 +4,8 @@ export type MENU_ID = typeof MENU_ID;
 // AS-IS GSCM.SSP.Plan.UIL SSP0202_ShipmentChangeRequestConfirm (출하요청 변경 승인):
 //   설계 근거: .atlas/gscm-design/SSP0202/design/00_checklist.md ~ 03_grid-columns.md, 상세 매핑 __asis-mapping__.md
 //   - 조회 전용 승인 화면: 마스터-디테일 2그리드 + 디테일 폼(8필드 읽기전용 + rejectReason 입력).
-//   - 표준 툴바 Insert/Delete/Save = NO-OP(본문 공백), Edit = "읽기전용"(MSG00109) 안내만. Find 만 실동작.
-//   - 실제 액션은 커스텀 버튼 3종 Approval/Reject/SelfReject — 초기 숨김, 마스터 더블클릭 시 userId 비교로 토글.
+//   - 표준 툴바 Insert/Delete/Save = AS-IS NO-OP -> TO-BE 미노출(hotkeyConfig false, 사용자 결정 2026-10-27). Find 만 실동작.
+//   - 실제 액션은 커스텀 버튼 3종 Approval/Reject/SelfReject — 상시 노출, 마스터 더블클릭 후 userId 비교로 활성/비활성.
 //   - GET  SP : PKG_SSP0202.P_SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM(메인) / _GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING(디테일, Tables[0]=그리드/Tables[1]=폼)
 //   - SAVE SP : _SAVE_SHIPMENT_REQUEST_CONFIRM_40 / _SAVE_SHIPMENT_REQUEST_CONFIRM (division 앞2 '40' 런타임 분기)
 //   - PKG_SSP0202 배포 상태(2026-10-07 ora.py 실측): PACKAGE/PACKAGE BODY 모두 VALID. 종전 "미배포" 주석은 stale.
@@ -13,8 +13,9 @@ export type MENU_ID = typeof MENU_ID;
 //       _GET_DELEGATEE_LOAD / _GET_SCS_CONFIRM_ID_CHECK / _GET_SSP_PLAN_PROCESSING_CHECK /
 //       _SAVE_SHIPMENT_REQUEST_CONFIRM / _SAVE_SHIPMENT_REQUEST_CONFIRM_40 / _SAVE_..._CONFIRM_IF_CHECK.
 //       버튼메타(SCM_ADM_MNU_BTN_MPG_M)도 SEARCH/SAVE/SAVE_40/IF_CHECK/PLAN_CHECK/SCS_CHECK + delegate SEARCH 등록완료.
-//   - 미배선(FE): IF_CHECK(승인 후 ERP 적재) · PLAN_CHECK(EngProcessingChk MSG01294) · SCS_CHECK(chkSaveYN MSG01356) ·
-//       SAVE_40 분기. AS-IS cs:1379/1387/1411 에서 전부 호출된다(실측) — SP·메타가 준비됐으므로 다음 회차 배선 대상.
+//   - SAVE/SAVE_40 분기와 사전체크 3종(SCS_CHECK/PLAN_CHECK/IF_CHECK)은 2026-10-14 배선 완료
+//       (utils/shipmentChangeRequestConfirmSave.ts, hooks/useShipmentChangeRequestConfirmActions.ts).
+//       남은 갭은 design/04_impl-gap-audit.md iter-5 참고.
 export enum SHEETS {
   MAIN = 'main', // spdMain siMain "Shipment Change Request Confirm" (22컬럼, 조회전용)
   SUB = 'sub', // siSub "Shipment Change Request Confirm Detail" (50컬럼, 2단헤더, 조회전용)
@@ -45,6 +46,10 @@ export const ADMIN_SHEET_NAME: Record<SHEETS.MAIN | SHEETS.SUB, string> = {
 //   - Status/Change Type: lookup(LOOKUP_TYPE), 콤보 아님.
 //   - ERP 차단 게이트: SSPBlockCheckIF_SCP(CMBO_SQL, @segment1='SSP0202', 반환 BLOCK_YN/PERIOD).
 export const COMBO = {
+  // Division 라벨용 — MyDivision(권한 division + ATTRIBUTE3<>'EE' 내장). 값은 '40' 고정이라 조회엔
+  //   안 쓰지만, AS-IS clbDivision(setListBox(dtMyDivision)) 처럼 CODE 가 아닌 NAME
+  //   ('40 Mobility & IT Battery')을 표시하려고 가져온다(자매 SSP0201 동일).
+  DIVISION: 'MyDivision',
   FROM_SITE: 'FromSiteByDivisionOspPack',
 } as const;
 
@@ -67,6 +72,10 @@ export const PERIOD_OFFSET_DAY = 14; // Period 기본 D-14 (from=오늘-14, to=�
 // 그리드 동적 컬럼세트 분기 (design 03 §2 — _sChangeType 구동)
 // ====================================================================================
 export const CHANGE_TYPE_PLAN = 'P'; // 'P'(Plan) -> siSub ERP_SO_NO hide + 그룹라벨 "Plan"/"Confirm"
+// 반려/자기반려 IF_CHECK 대상 change type — AS-IS cs:1306/1365 `_sChangeType == C || N`.
+//   P/A 는 IF_CHECK(ERP 전송 배치를 쓰고 COMMIT 하는 SP, PKG body 670-691) 없이 저장한다(GAP-12).
+export const CHANGE_TYPE_CONFIRM = 'C';
+export const CHANGE_TYPE_NEW = 'N';
 export const STATUS_REQUESTED = 'Q'; // 승인/반려/자기반려 버튼 가시성 판정 status
 
 // siSub 동적 컬럼/그룹라벨 (design 03 §2 R2~R5)
@@ -83,10 +92,24 @@ export const SUB_GROUP_ANCHOR = { confirmed: 'LT_DAY', change: 'NEW_LT_DAY' } as
 export const MASTER_USER_COLUMNS = {
   REQUEST_USER: 'REQUEST_USER',
   APPROVAL_USER: 'APPROVAL_USER',
+  // 주의: DELEGATEE_* 는 마스터 GET 이 서버에서 위임 테이블까지 COALESCE 해소해 내려주는 값이다
+  //   (body 280-289: 저장값 A.DELEGATEE_USER 우선, 없으면 status Q/D 시 현재 위임자). 위임자 SP 를
+  //   따로 부르지 않아도 여기 이미 들어 있다(자매 SSP0003 동일).
   DELEGATEE_USER: 'DELEGATEE_USER',
+  DELEGATEE_DEPT: 'DELEGATEE_DEPT',
   STATUS: 'SHIPMENT_STATUS',
   CHANGE_TYPE: 'CHANGE_TYPE',
   CHANGE_REQ_NO: 'CHANGE_REQ_NO',
+} as const;
+
+// 위임자 SP(PKG_SSP0202.P_SSP0202_GET_DELEGATEE_LOAD, body 514-516) o_rc1 커서 컬럼명.
+//   필수: SP 는 `SELECT A.DELEGATEE_ID, B.DEPT_ID` 라 응답 키가 DELEGATEE_ID / DEPT_ID 다 —
+//   MASTER_USER_COLUMNS 의 DELEGATEE_USER / DELEGATEE_DEPT 와 다르다. 두 축을 섞어 읽으면 값이
+//   조용히 undefined 가 된다(자매 SSP0003 2026-09-30 실제 사고 — delegateeDept 가 빈 값으로 SAVE).
+//   GAP-14 해결(2026-10-28). memory proc-m-cursor-colnm-is-fe-response-key 계열.
+export const DELEGATE_COLUMNS = {
+  DELEGATEE_USER: 'DELEGATEE_ID',
+  DELEGATEE_DEPT: 'DEPT_ID',
 } as const;
 
 // 액션 코드(SaveData confirm_yn — 승인 A / 반려 R / 자기반려 S).

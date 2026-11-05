@@ -77,9 +77,11 @@ interface Action {
 
 // 개인화 조건 복원 역직렬화 키(SubTitle F6 저장은 배열=콤마join·불리언=String 평문화 — personalizeCondition).
 //   chkCellQty/chkAs = 체크박스(String(bool) → ==='true'). 그 외 조회조건은 전부 문자열(divisionId/planType/
-//   bucket/display/searchLevel/from·toSite/itemId/nickName/project/cellGroup) → 역직렬화 불요(그대로 patch).
-//   날짜 키(from·toYyyymmdd/planStartYyyymmdd)는 저장 측 EXCLUDED_DATE_PARAM(gridAction.ts)으로 저장 자체가
-//   제외 → 복원 응답에 없음(초기값 유지). 멀티셀렉트 배열 조건 없음(From/To Site 는 단일 문자열).
+//   bucket/display/searchLevel/from·toSite/itemId/nickName/project/cellGroup/planStartYyyymmdd) → 역직렬화
+//   불요(그대로 patch). planStartYyyymmdd(Plan Date)는 'yyyymmdd' 로 끝나 EXCLUDED_DATE_PARAM 에 걸리지만
+//   SubTitle conditionIncludeKeys opt-in 으로 저장되므로 복원 대상이다(makeInitSearch allowlist 통과 → 자동
+//   patch). Period 날짜 키(from·toYyyymmdd)만 여전히 저장 제외 → 복원 응답에 없음(Plan Date 재시드 effect 가
+//   기간을 다시 채운다). 멀티셀렉트 배열 조건 없음(From/To Site 는 단일 문자열).
 const RESTORE_BOOL_KEYS = new Set<string>(['chkCellQty', 'chkAs']);
 
 // 주의: 상수가 아니라 함수다 — 모듈 최상위 상수로 굳히면 청크 최초 로드 시점의 session.div 로 얼어붙어

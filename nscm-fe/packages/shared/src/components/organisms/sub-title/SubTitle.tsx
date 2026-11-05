@@ -32,7 +32,9 @@ import {
   registerViewActions,
   unregisterViewActions,
   useDialogStore,
+  useMenuId,
   useMessageStore,
+  useMotherStore,
   useTabid,
   useUIStore,
 } from '@shared/stores';
@@ -112,6 +114,13 @@ interface SubTitleProps {
    * 날짜 포맷이지만 보존해야 하는 조회조건(예: SCP0010 planStartYyyymmdd=plan date 선택)을 위한 opt-in.
    */
   conditionIncludeKeys?: string[];
+  /**
+   * Reset Condition(F10) 시 서버 저장분 초기화에 더해 **현재 화면의 조회조건도 즉시 기본값으로
+   * 되돌릴지** 여부(opt-in). 기본(false)은 AS-IS 파리티(2026-10-14) — F10 은 서버 개인화만 지우고
+   * 화면은 건드리지 않는다. 화면이 F10 직후 조회조건이 즉시 초기화되길 원할 때만 true 로 켠다
+   * (페이지 스토어의 reset() 을 MotherStore 경유로 호출 — staticColumns 등은 보존).
+   */
+  resetConditionOnClient?: boolean;
   customButtons?: CustomButtonProps[];
   searchAction?: () => void;
   // 조회(F5) 미저장 변경 가드의 dirty 키 override(옵션). 미지정 시 tab 전역 키(현행). 상단/하단 그리드가
@@ -136,6 +145,7 @@ const SubTitleComp = ({
   hotkeyConfig,
   searchParam,
   conditionIncludeKeys,
+  resetConditionOnClient = false,
   customButtons,
   searchAction,
   searchDirtyKey,
@@ -214,6 +224,10 @@ const SubTitleComp = ({
             });
             // AS-IS 파리티: F10 은 서버 저장(개인화) 검색조건만 초기화하고 현재 화면(조회조건/그리드)은
             //   건드리지 않는다. (TO-BE 가 추가했던 클라 resetSearchCondition(tabId) 제거 — 2026-10-14)
+            //   단 resetConditionOnClient(opt-in) 화면은 F10 직후 조회조건을 즉시 기본값으로 되돌린다
+            //   (페이지 스토어 reset() — staticColumns/filters 는 MotherStore 가 보존, 2026-10-28 요청).
+            if (resetConditionOnClient && tabId)
+              useMotherStore.getState().resetSearchCondition(tabId);
           });
       })();
     },
@@ -263,6 +277,30 @@ const SubTitleComp = ({
   buttonActions[Hotkeys.F7] = wrapWithEditCommit(buttonActions[Hotkeys.F7]);
   buttonActions[Hotkeys.F8] = wrapWithEditCommit(buttonActions[Hotkeys.F8]);
   buttonActions[Hotkeys.F9] = wrapWithEditCommit(buttonActions[Hotkeys.F9]);
+
+  // 권한 연동(공통) — SAVE/INSERT/DELETE 버튼은 "이 메뉴에 정의돼 있는데(hasButtonDef) 이 사용자에겐
+  //   없으면(!hasButton)" 숨긴다. 화면별 hotkeyConfig 에서 hasButton 을 일일이 걸 필요가 없어진다.
+  //   - SORT(F3)/FILTER(F4)/Manual(F1)/Condition(F6)/Excel/Upload 는 권한 불요 공통 클라 기능이라 제외.
+  //   - "정의 안 된" 버튼은 손대지 않아(현행 유지) SAVE 미정의 화면(EXECUTE 저장 등)엔 영향 없다.
+  //   - 로딩 중/ menuId 없음이면 건드리지 않는다. 실제 저장/행조작은 BE 가 최종 차단한다.
+  const contextMenuId = useMenuId();
+  const resolvedMenuId = menuId ?? contextMenuId;
+  const {
+    hasButton: hasBtnAuth,
+    hasButtonDef: hasBtnDef,
+    isLoading: isBtnAuthLoading,
+  } = useTabBtnPermissions({ menuId: resolvedMenuId ?? '', enabled: !!resolvedMenuId });
+  const gateByAuth = (
+    btnCd: string,
+    action: false | (() => void) | undefined
+  ): false | (() => void) => {
+    if (typeof action !== 'function') return action ?? false;
+    if (!resolvedMenuId || isBtnAuthLoading) return action;
+    return hasBtnDef(btnCd) && !hasBtnAuth(btnCd) ? false : action;
+  };
+  buttonActions[Hotkeys.F7] = gateByAuth('SAVE', buttonActions[Hotkeys.F7]);
+  buttonActions[Hotkeys.F8] = gateByAuth('INSERT', buttonActions[Hotkeys.F8]);
+  buttonActions[Hotkeys.F9] = gateByAuth('DELETE', buttonActions[Hotkeys.F9]);
 
   // Atlas 브리지 액션 노출 — 툴바가 실제로 실행하는 buttonActions(가드 포함)를 tabId 로
   // registry 에 등록한다. 브라우저 에이전트가 call_page_tool 로 버튼과 동일한 동작을 호출한다.

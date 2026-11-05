@@ -116,6 +116,9 @@ export const applyTiedColumnOrder = (
  * 편집모드 컬럼 표시/숨김 오버레이 (AS-IS `SetVisibleSheetColumns` cs:4371-4493 / design 03 §3.6 X-F).
  *
  * AS-IS 는 편집모드에 들어갈 때 코드(ID) 축 8컬럼을 드러내고, 조회모드로 돌아오면 다시 감춘다.
+ * 단 이 토글은 Assign 탭에만 걸려 있다 — `EditButton()` 의 Assign 분기만 `SetVisibleSheetColumns`
+ * 를 호출(cs:4123)하고 SOP 분기는 호출하지 않아(cs:4080-4100) SOP 8컬럼은 항상 숨김이다. TO-BE 에는
+ * Edit 이벤트가 없으므로 이 탭별 실동작을 `isAssign` 으로 고정한다: Assign=항상 노출, SOP=항상 숨김.
  * Assign 탭은 여기에 더해 메타 `ATTRIBUTE3='N'` 인 명칭 컬럼을 조회모드에서 폭 0 으로 접는다
  * (SOP 분기에는 이 블록이 없다 — cs:4374-4388 은 8컬럼 호출뿐).
  *
@@ -138,7 +141,10 @@ export const applyEditModeVisibility = (
 ): RawFlexGridColumnConfig[] =>
   columns.map(column => {
     if (EDIT_MODE_ONLY_COLUMNS.includes(column.colNm)) {
-      const shown = editMode && column.visible !== false;
+      // AS-IS 는 편집모드 토글에 묶였으나 TO-BE 에는 Edit 이벤트가 없다. AS-IS 실동작을 탭별로 고정
+      // 재현한다: Assign 탭은 `EditButton()`(cs:4123)이 8컬럼을 드러내므로 항상 노출, SOP 탭은
+      // `EditButton()` SOP 분기가 `SetVisibleSheetColumns` 를 호출하지 않아(cs:4080-4100) 항상 숨김.
+      const shown = isAssign && column.visible !== false;
       return { ...column, visible: shown, display: shown };
     }
     if (
@@ -213,6 +219,33 @@ export const collapseStaticLargeTier = (
     column.lClsLblNm === column.sClsLblNm
       ? column
       : { ...column, lClsLblNm: column.sClsLblNm }
+  );
+
+/**
+ * 관리 비노출(`visible === false` = VISIBLE_FLAG 'N') 컬럼을 그리드 구조에서도 뺀다
+ * (SOP 그리드 헤더 "SOP / SOP" 중복 교정 · DB 실측 2026-10-26).
+ *
+ * 공용 DataGrid 는 `display` 로만 Wijmo 투입을 거른다(DataGrid.tsx `filter(c => c.display)`).
+ * SCP0104 메타는 비노출 컬럼(SOP_YM·SOP_DDN 등)도 `DEFAULT_FLAG='Y'`(→ `display:true`) 라
+ * 투입에 살아남아, `mapRawColumnsToWijmoColumns` 의 그룹 매칭에서 **같은 `SMALL_CLASS_LABEL_NAME`**
+ * ('SOP') 를 가진 보이는 형제(SOP_DT)와 한 그룹에 묶인다. 그러면 그 그룹은 자식이 3개(2개 숨김)라
+ * Wijmo 가 1자식 그룹처럼 세로병합하지 못하고 "상위 SOP / leaf SOP" 2단으로 그린다.
+ *
+ * AS-IS 는 헤더 조립(SpreadInfo.cs:1729-1755) 전에 비노출 컬럼을 이미 걸러, SOP 그룹의 가시 자식이
+ * SOP_DT 하나뿐이고 `sColumnLabel == sSmallLabelName` 이라 `ColumnHeaderSpan(..., rowSpan=2, ...)`
+ * 세로병합으로 "SOP" 를 한 번만 보인다. 그 전처리를 TO-BE 화면에서 재현한다 —
+ * `visible === false` 면 `display` 도 `false` 로 내려 공용 필터가 구조에서 빼게 한다.
+ *
+ * admin 메타 원값(`visible`)은 건드리지 않는다(CLAUDE.md §2 체크4) — 바꾸는 건 투입 판정용 `display`
+ * 뿐이고, 이미 비노출인 컬럼을 추가로 노출하지 않으므로 표시 결과는 불변이다.
+ */
+export const hideInvisibleColumns = (
+  columns: RawFlexGridColumnConfig[]
+): RawFlexGridColumnConfig[] =>
+  columns.map(column =>
+    column.visible === false && column.display !== false
+      ? { ...column, display: false }
+      : column
   );
 
 /** `ColumnLayoutModal` fallback 용 — admin 메타에서 key/header/width 만 뽑는다. */

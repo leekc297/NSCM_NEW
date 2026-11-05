@@ -98,12 +98,13 @@ export const SAVE_KEY_COLUMNS: readonly string[] = [
 //   에서 추출 불가(SCM_MST_SHEET_COLUMNS 에 merge 플래그 없음 — FIXED_FLAG 만) → 자매 화면
 //   (ending-inventory)이 검증한 선두 식별 컬럼 집합을 그대로 적용한다(best-effort, grid-behavior-
 //   parity §1.3 누적키 방식은 선두 연속 컬럼에만 유효). 한계는 __asis-mapping__.md 에 기록.
-export const MERGE_COLUMNS: ReadonlySet<string> = new Set([
-  COL.YYYYMM,
-  COL.DIVISION_ID,
-  COL.PLANT_DESCRIPTION,
-  COL.PLANT_ID,
-]);
+// 기존 상수 주석 보존 (2026-10-22): 계단식 전 컬럼 병합으로 바꿔 미사용
+// export const MERGE_COLUMNS: ReadonlySet<string> = new Set([
+//   COL.YYYYMM,
+//   COL.DIVISION_ID,
+//   COL.PLANT_DESCRIPTION,
+//   COL.PLANT_ID,
+// ]);
 
 // 엑셀 고정밀 치환쌍(화면 컬럼 → *_XLS 컬럼, design 03 §3.1 W9). 화면=저정밀 표시(VIS=Y) /
 //   엑셀=고정밀(VIS=N). NSCM 공용 excelDownload 는 per-export 정밀도 스왑 훅이 없어 이번 회차엔

@@ -12,7 +12,7 @@ import { useCallback, useEffect, useRef, type MutableRefObject } from 'react';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
-import { GridUtils, paintNegativeText, toGridNumber } from '@foundation/utils';
+import { GridAction, GridUtils, paintNegativeText, toGridNumber } from '@foundation/utils';
 import { DataGrid, TabItem, TabWrapper } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
@@ -491,6 +491,49 @@ export const ShipmentPsiDetailGrid = ({
   const resolveGridRef = (sheet: SHEETS): MutableRefObject<FlexGridType | undefined> =>
     gridRefs[sheet] ?? (localGridRefs.current[sheet] ??= { current: undefined });
 
+  // filter ref 도 동일하게 보강한다 — 부모 gridFilterRefs 는 7개 시트만 담고 drill 서브시트
+  //   (WH_STOCK_DETAIL·HOLD_STOCK_DETAIL·WH_IN_PLAN_DETAIL)는 없다. 로컬 ref 를 만들어 DataGrid 에
+  //   넘기면 그 시트들도 F4(Filter) 단축키가 자기 FlexGridFilter 에 닿는다(ref 없으면 DataGrid 가
+  //   internalFilterRef 로만 쥐어 외부에서 toggle 할 수 없다).
+  const localGridFilterRefs = useRef<
+    Partial<Record<SHEETS, MutableRefObject<FlexGridFilter | undefined>>>
+  >({});
+  const resolveGridFilterRef = (sheet: SHEETS): MutableRefObject<FlexGridFilter | undefined> =>
+    gridFilterRefs[sheet] ?? (localGridFilterRefs.current[sheet] ??= { current: undefined });
+
+  // ── Detail 그리드 포커스 시 F3(Sort)/F4(Filter) — "포커스된 그리드별 단축키"(AS-IS parity) ──
+  //   공용 SubTitle 의 단축키 핸들러는 Main 그리드의 containsFocus 로만 게이트된다(SubTitle.tsx:282).
+  //   그래서 하단 Detail 그리드 포커스 시 Sort/Filter 가 발화하지 않았다(사용자 신고 2026-10-29).
+  //   처리를 자식(이 컴포넌트)에서 하는 이유: 부모는 7개 시트 ref 만 쥐고 drill 서브시트 3개는 로컬 ref 라
+  //   부모 레벨에서는 포커스된 그리드를 찾지 못한다. 여기선 resolveGridRef 로 전 시트(부모+로컬)가 보인다.
+  //   읽기전용 동작(정렬/필터)이라 편집 커밋·권한 게이트 없이 건다.
+  //   - 현재 보이는 visibleSheets 중 포커스를 가진 그리드에만 실행(Main 포커스는 SubTitle 담당 → 상호배타).
+  //   - F4 는 Wijmo 기본 datamap 열림을 막기 위해 preventDefault + stopImmediatePropagation(SubTitle.tsx:284 등가).
+  const visibleSheetsRef = useRef(visibleSheets);
+  visibleSheetsRef.current = visibleSheets;
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'F3' && e.key !== 'F4') return;
+      const sheet = visibleSheetsRef.current.find(s => resolveGridRef(s).current?.containsFocus());
+      if (sheet === undefined) return; // Detail 미포커스 → Main 담당(SubTitle)
+      const g = resolveGridRef(sheet).current;
+      if (!g) return;
+      if (e.key === 'F3') {
+        e.preventDefault();
+        GridAction.toggleColumnSort(g);
+        return;
+      }
+      // F4 — Wijmo 기본 datamap 열림 차단(SubTitle.tsx:284 과 동일 처방)
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const filter = resolveGridFilterRef(sheet).current;
+      if (filter) GridAction.toggleColumnFilter(g, filter);
+    };
+    globalThis.window.addEventListener('keydown', onKeyDown, true);
+    return () => globalThis.window.removeEventListener('keydown', onKeyDown, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // 음수 = 빨간 글자 (AS-IS NegativeRed 전역 파리티 — 모든 detail 시트 공통. 정본 paintNegativeText).
   //   시트별 formatItem(편집마킹·MES Blue 등)과 별개로 전 그리드(읽기전용·drill 서브시트 포함)·데이터셀·
   //   footer 합계 셀에 건다. MES USER_MOD_RELEASE_DATE 는 Blue 날짜 전용이라 음수판정에서 제외(color 보존).
@@ -551,7 +594,7 @@ export const ShipmentPsiDetailGrid = ({
         <TabItem key={sheet} label={ADMIN_SHEET_NAME[sheet] ?? sheet}>
           <DataGrid
             gridRef={resolveGridRef(sheet)}
-            gridFilterRef={gridFilterRefs[sheet]}
+            gridFilterRef={resolveGridFilterRef(sheet)}
             editTrackerRef={isReadOnlySheet(sheet) ? undefined : editTrackerRefs[sheet]}
             isReadOnly={isReadOnlySheet(sheet)}
             itemsSource={rowsBySheet[sheet] ?? EMPTY_ROWS}

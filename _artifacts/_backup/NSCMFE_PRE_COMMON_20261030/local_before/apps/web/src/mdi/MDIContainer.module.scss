@@ -1,0 +1,33 @@
+.mdiContainer{
+  height: 100%;
+}
+
+.mdiContent {
+  position: relative; /* 자식인 dim-overlay가 이 영역을 기준으로 움직임 */
+  width: 100%;
+  height: calc(100% - 34px);
+  min-height: 400px; /* 내용이 없어도 최소 높이 유지 */
+  padding: 17px 30px;
+  display: flex;
+  flex-direction: column;
+  transition: none;
+}
+
+.spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: background-color 0.5s linear;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  z-index: -999;
+  background-color: rgba(0, 0, 0, 0);
+  &.open {
+    cursor: not-allowed; /* 클릭 불가 시각화 */
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999; /* 본문 내용보다 위에 오도록 */
+  }
+}

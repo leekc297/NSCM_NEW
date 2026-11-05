@@ -1,4 +1,5 @@
 /* @refresh reload */
+import { apiClient } from '@foundation/apis';
 import { ROUTE_PATHS } from '@foundation/constants';
 import type { Menu } from '@foundation/models';
 import { getUuid } from '@foundation/utils';
@@ -123,6 +124,11 @@ export const useMDIStore = createPersistedStore<MDIState & MDIActions>(
         state.tabs = [...state.tabs, newTab];
         state.activeIndex = state.tabs.length - 1;
       });
+
+      // 메뉴 접속(최초 오픈) 로그 — 신규 탭을 생성하는 이 경로에서만 1회 기록한다.
+      //   기존 탭 재활성화(위 single 모드 return)·탭바 전환(setActiveTab)은 여기 도달하지 않아 제외된다.
+      //   fire-and-forget: 로그 적재 실패가 화면 오픈을 막지 않도록 await 하지 않고 에러를 삼킨다.
+      void apiClient.post('/admin/log/menu-access', { mnuId: freshMenu.mnuId }).catch(() => {});
     },
     setActiveTab: tabIndex => {
       set(state => {

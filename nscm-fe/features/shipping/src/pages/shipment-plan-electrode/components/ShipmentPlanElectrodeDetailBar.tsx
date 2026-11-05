@@ -105,14 +105,12 @@ export const ShipmentPlanElectrodeDetailBar = ({
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch2} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch2}
                       />
                     ),
                   }}
                   onChange={e => set({ detailItemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
                 />
               )}
             />
@@ -155,7 +153,6 @@ export const ShipmentPlanElectrodeDetailBar = ({
                   }}
                   // 직접입력은 품번(detailModelId) 기준 — 이전 팝업에서 세팅된 detailNickName 보조조건을 지운다.
                   onChange={e => set({ detailModelId: e.target.value, detailNickName: '' })}
-                  onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
                 />
               )}
             />
@@ -180,14 +177,12 @@ export const ShipmentPlanElectrodeDetailBar = ({
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onRequestorSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onRequestorSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ detailRequestor: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
                 />
               )}
             />
@@ -206,7 +201,6 @@ export const ShipmentPlanElectrodeDetailBar = ({
                   fullWidth
                   value={sc.detailLotId}
                   onChange={e => set({ detailLotId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
                 />
               )}
             />

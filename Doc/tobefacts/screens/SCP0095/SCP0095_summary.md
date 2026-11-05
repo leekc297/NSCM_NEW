@@ -1,30 +1,33 @@
 # SCP0095 — To-Be Fact Pack 요약
 
-- page_key: `supply/global-psi-elec` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 9 · 엔드포인트 호출 7 (미해결 0, 주석 속 2) · 이벤트 13 · 컴포넌트 사용 19 · 하드코딩 컬럼 1 · 메시지 12
+- page_key: `supply/global-psi-elec` · feature: supply · As-is Fact Pack 있음
+- 파일 11 · 엔드포인트 호출 8 (미해결 0, 주석 속 3) · 이벤트 13 · 컴포넌트 사용 30 · 하드코딩 컬럼 1 · 메시지 16
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | component | 264 |
-| features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | component | 160 |
-| features/supply/src/pages/global-psi-elec/global-psi-elec.constants.ts | constants | 118 |
-| features/supply/src/pages/global-psi-elec/global-psi-elec.types.ts | types | 20 |
-| features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | page | 185 |
+| features/supply/src/pages/global-psi-elec/components/GlobalPsiElecDrilldownModal.tsx | component | 130 |
+| features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | component | 309 |
+| features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | component | 222 |
+| features/supply/src/pages/global-psi-elec/global-psi-elec.constants.ts | constants | 140 |
+| features/supply/src/pages/global-psi-elec/global-psi-elec.types.ts | types | 21 |
+| features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | page | 292 |
 | features/supply/src/pages/global-psi-elec/index.ts | index | 2 |
-| features/supply/src/pages/global-psi-elec/useGlobalPsiElecStore.ts | store | 176 |
-| features/supply/src/pages/global-psi-elec/utils/globalPsiElecColumns.ts | util | 137 |
+| features/supply/src/pages/global-psi-elec/useGlobalPsiElecStore.ts | store | 215 |
+| features/supply/src/pages/global-psi-elec/utils/globalPsiElecColumns.ts | util | 144 |
+| features/supply/src/pages/global-psi-elec/utils/globalPsiElecMerge.ts | util | 43 |
 | features/supply/src/pages/global-psi-elec/__asis-mapping__.md | mapping | 222 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 3 | Y | GlobalPsiElecForm.tsx:72 GlobalPsiElecForm.tsx:74 GlobalPsiElecForm.tsx:76 |
-| SCP0095/globalPsiElec//call-proc | hook | 1 | Y | GlobalPsiElec.tsx:51 |
-| SCP0095/calendar//call-proc | hook | 1 | Y | GlobalPsiElec.tsx:71 |
-| /admin/menu/SCP0095/column | http | 1 | Y | useGlobalPsiElecStore.ts:124 |
-| /admin/menu/SCP0095/search-conditions | http | 1 | Y | useGlobalPsiElecStore.ts:153 |
+| (useTabComboQueries) | hook | 3 | Y | GlobalPsiElecForm.tsx:74 GlobalPsiElecForm.tsx:76 GlobalPsiElecForm.tsx:78 |
+| SCP0095/globalPsiElec//call-proc | hook | 1 | Y | GlobalPsiElec.tsx:72 |
+| SCP0095/calendar//call-proc | hook | 1 | Y | GlobalPsiElec.tsx:92 |
+| /admin/menu/SCP0095/column | http | 1 | Y | useGlobalPsiElecStore.ts:146 |
+| /admin/menu/SCP0095/measure | http | 1 | Y | useGlobalPsiElecStore.ts:169 |
+| /admin/menu/SCP0095/search-conditions | http | 1 | Y | useGlobalPsiElecStore.ts:192 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -32,67 +35,87 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 137 |
-| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 166 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 177 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 225 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 226 |
-| FunctionSearchIcon | onClick | onModelSearch | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 220 |
-| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 247 |
-| g | formatItem | formatHandler | addHandler | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 132 |
-| GlobalPsiElecForm | onSearch | handleSearch | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 150 |
-| GlobalPsiElecForm | onModelSearch | <arrow> setOpenModelPopup | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 150 |
-| GlobalPsiElecGrid | onCellDblClick | handleCellDblClick | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 171 |
-| ElecMaterialPopup | onClose | <arrow> setOpenModelPopup | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 178 |
-| ElecMaterialPopup | onSelect | <arrow> set | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 179 |
+| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 162 |
+| CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 191 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 202 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 249 |
+| Button | onClick | onMaterialSearch | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 245 |
+| PeriodField | onChange | <arrow> set | jsx | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecForm.tsx | 280 |
+| g | formatItem | formatHandler | addHandler | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 157 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 195 |
+| GlobalPsiElecForm | onSearch | handleSearch | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 231 |
+| GlobalPsiElecForm | onMaterialSearch | <arrow> setOpenMaterialPopup | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 231 |
+| GlobalPsiElecGrid | onCellDblClick | handleCellDblClick | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 253 |
+| MeasureSelectModal | onApply | handleMeasureApply | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 278 |
+| GlobalPsiElecDrilldownModal | onClose | <arrow> setDrilldownParams | jsx | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 285 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
-| Grid | 3 |
+| Grid | 4 |
 | FormItem | 3 |
 | CustomDropdown | 2 |
+| CustomDialog | 1 |
+| ProgressIndicator | 1 |
+| TabIdContext.Provider | 1 |
+| MenuIdContext.Provider | 1 |
+| ProductionPlanLine | 1 |
+| Seeder | 1 |
 | SearchArea | 1 |
 | InputField | 1 |
 | Button | 1 |
 | FunctionSearchIcon | 1 |
 | PeriodField | 1 |
+| Typography | 1 |
 | DataGrid | 1 |
+| IcMeasureSelect | 1 |
 | MainTitle | 1 |
 | GlobalPsiElecForm | 1 |
 | SubTitle | 1 |
 | GlobalPsiElecGrid | 1 |
-| ElecMaterialPopup | 1 |
+| MaterialByDivisionModal | 1 |
+| MeasureSelectModal | 1 |
+| GlobalPsiElecDrilldownModal | 1 |
 
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| leafOf | c.columnName | c.columnLabel \|\| 'Qty' | 70 | true | true |  | object | features/supply/src/pages/global-psi-elec/utils/globalPsiElecColumns.ts | 95 |
+| leafOf | c.columnName | isPivotAgg(c.columnName) ? 'SUM' : c.columnLabel \|\| 'Qty' | 70 | true | true |  | object | features/supply/src/pages/global-psi-elec/utils/globalPsiElecColumns.ts | 99 |
 
 ## 7. 메시지 코드
 | code | count |
 |---|---|
 | MSG00013 | 1 |
 | MSG00097 | 1 |
+| MSG01399 | 1 |
 | LBL00112 | 1 |
 | LBL00001 | 1 |
 | LBL00047 | 1 |
-| LBL00669 | 1 |
+| LBL00021 | 1 |
 | LBL00039 | 1 |
+| LBL00040 | 1 |
 | LBL00013 | 1 |
 | LBL00710 | 1 |
+| LBL00310 | 1 |
 | LBL00682 | 1 |
 | LBL00683 | 1 |
 | LBL00684 | 1 |
+| MSG00618 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0095(5), SCP0013(3), SCP0100(2), SCP0025(2), SCP0111(1), SCP0031(1), SCP0053(1)
-- SP/PKG: PKG_SCP0095(3), PKG_COM0000(2), SCP0095_GET_GLOBAL_PSI_ELEC(1), P_DIVISION_ID(1), P_SCP0095_GET_GLOBAL_PSI_ELEC(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(1), P_SCM0001_GET_SCP_DAY_PERIOD(1)
+- 화면ID: SCP0013(15), SCP0100(13), SCP0095(10), SCP0025(2), DMF0021(1), SCP0111(1), COM0013(1), SCP0031(1), SCP0053(1)
+- SP/PKG: PKG_SCP0095(4), PKG_COM0000(2), SCP0095_GET_GLOBAL_PSI_ELEC(1), P_DIVISION_ID(1), P_SCP0095_GET_GLOBAL_PSI_ELEC(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(1), P_SCM0001_GET_SCP_DAY_PERIOD(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| endpoint | mount — keep-alive 탭에 남은 stale filters 자동발사 차단(clearFilters) + admin 동적 메타 fetch(mount 1회). | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 83 |
-| endpoint | admin SCM_MST_SHEET_COLUMNS 동적 fetch(convert-core §2.4 하드코딩 금지). 미등록/실패 시 빈 배열. | features/supply/src/pages/global-psi-elec/useGlobalPsiElecStore.ts | 19 |
+| jsx | const mergeWrappedRef = useRef<FlexGridType \| null>(null); | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 92 |
+| code | g.mergeManager = new GlobalPsiElecMergeManager(g.mergeManager); | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 100 |
+| code | const psi = s(row.PSI); | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 128 |
+| code | const measure = s(row.MEASURE_NAME); | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 129 |
+| code | if (psi === 'P' && measure === 'SUM') ev.cell.style.backgroundColor = CONDITIONAL_BG.P_SUM; | features/supply/src/pages/global-psi-elec/components/GlobalPsiElecGrid.tsx | 130 |
+| endpoint | mount — keep-alive 탭에 남은 stale filters 자동발사 차단(clearFilters) + admin 동적 메타 fetch(mount 1회). | features/supply/src/pages/global-psi-elec/GlobalPsiElec.tsx | 104 |
+| endpoint | admin SCM_MST_SHEET_COLUMNS 동적 fetch(convert-core §2.4 하드코딩 금지). 미등록/실패 시 빈 배열. | features/supply/src/pages/global-psi-elec/useGlobalPsiElecStore.ts | 37 |
+| endpoint | SCM_MST_SHEET_MEASURE 동적 fetch(SHEET_NAME='Global PSI Elec' 10행, DB 실측). measure 개인화 팝업 원천. | features/supply/src/pages/global-psi-elec/useGlobalPsiElecStore.ts | 40 |
 
 ## 10. __asis-mapping__.md 상태
 - 구현: 54

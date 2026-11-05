@@ -250,9 +250,12 @@ export const useOptCapaValidation = () => {
    *   · 숫자 파싱 실패 → `MSG01082`(AS-IS MSG00050) · 음수 → 동일 메시지(AS-IS 도 같은 코드)
    *   · 소수 11자리 이상 → `MSG00165` (AS-IS 하드코딩 한글의 등가 문구)
    *   · `NO_WORK_DATE`/`DATE` 파싱 실패 → `MSG01081`(AS-IS MSG00046)
+   *   · `UTIL_RT` 음수 → `MSG01190`(사용자 지시 2026-10-28, AS-IS 는 허용하나 TO-BE 만 의도적으로 차단 —
+   *     `MSG.UTIL_RT_NEGATIVE` 주석 참조)
    *
    * 검사 대상 컬럼은 `NON_NEGATIVE_COLUMNS`(3건) / `DECIMAL_SCALE_COLUMNS`(3건) 로 AS-IS 실측
-   * 범위다 — 초과 차단은 AS-IS 가 통과시키는 저장을 막으므로 금지다(iter-3 감사 G3-6).
+   * 범위다 — 초과 차단은 AS-IS 가 통과시키는 저장을 막으므로 금지다(iter-3 감사 G3-6). `UTIL_RT` 음수
+   * 차단만 유일한 예외(사용자 승인된 AS-IS 이탈).
    */
   const findValueProblem = ({
     sheet,
@@ -304,8 +307,14 @@ export const useOptCapaValidation = () => {
         if (raw === undefined || isBlank(raw)) continue;
         if (!inAsisBranch(binding, row)) continue;
         // AS-IS `CheckDouble`(cs:3320) = `double.TryParse` 실패만 차단한다. 음수는 허용(추가 차단 금지).
-        if (parseNumber(raw) === undefined) {
+        const parsed = parseNumber(raw);
+        if (parsed === undefined) {
           return { msgId: MSG.INVALID_NUMBER, arg: `${label(binding)} : ${str(raw)}` };
+        }
+        // UTIL_RT 만 예외 — TO-BE 가 AS-IS 를 의도적으로 벗어나 음수를 막는다(사용자 지시 2026-10-28,
+        //   MSG.UTIL_RT_NEGATIVE 주석 참조). 다른 NUMERIC_PARSE_COLUMNS 는 위 AS-IS 음수 허용이 그대로 적용된다.
+        if (binding === COLUMN.UTIL_RT && parsed < 0) {
+          return { msgId: MSG.UTIL_RT_NEGATIVE, arg: label(binding) };
         }
       }
       for (const binding of DECIMAL_SCALE_COLUMNS) {

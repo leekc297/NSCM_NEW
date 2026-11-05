@@ -1,0 +1,9 @@
+PKG_DMF0082: [('PACKAGE', 'VALID', '2026-10-09 13:38:31'), ('PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')]
+PKG_DMF0082_1104: [('PACKAGE', 'VALID', '2026-11-04 16:00:18'), ('PACKAGE BODY', 'VALID', '2026-11-04 19:25:10')]
+=== cur7_82 env=['zioui1', 'localhost', '2026-11-04 19:25:34'] period=20261101~20270430 A=PKG_DMF0082 B=PKG_DMF0082_1104 users=k0101,minyonglee1 divs=82 scen=['current'] gtt=True
+--- k0101 div82 표본 {'site': 'NextEra_US_PHX', 'item_full': 'ETD1551AFB3A-XBA', 'cust': 'G-26-033', 'biz': None, 'project': 'G-26-033', 'owner': 'YEEUN CHO', 'team': '58187671', 'plant': None, 'sender': None, 'item': 'D1551'} 버전 {'MF_W': 'MF_W_20261027_V001', 'SF_W': None, 'SP_W': 'SP_W_20261029_V001', 'MF_D': 'MF_D_20261026_V001'}
+19:26:12 k0101 div82 Current                                  PASS rows= 16156 A  21.34s B  18.42s
+--- minyonglee1 div82 표본 {'site': 'NextEra_US_PHX', 'item_full': 'ETD1551AFB3A-XBA', 'cust': 'G-26-033', 'biz': None, 'project': 'G-26-033', 'owner': 'YEEUN CHO', 'team': '58187671', 'plant': None, 'sender': None, 'item': 'D1551'} 버전 {'MF_W': 'MF_W_20261027_V001', 'SF_W': None, 'SP_W': 'SP_W_20261029_V001', 'MF_D': 'MF_D_20261026_V001'}
+19:30:54 minyonglee1 div82 Current                                  PASS rows= 16251 A  27.06s B 475.92s
+
+=== 시나리오 2 · FAIL 0 · 미실증 0

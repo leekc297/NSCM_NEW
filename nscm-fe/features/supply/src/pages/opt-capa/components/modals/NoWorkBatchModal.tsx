@@ -12,6 +12,7 @@ import {
   DataGrid,
   PeriodRangePicker,
   ResultArea,
+  SearchArea,
 } from '@shared/components';
 import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { Grid } from '@shared/mui';
@@ -348,7 +349,10 @@ export const NoWorkBatchModal = ({
     options: ComboOption[],
     onPick: (codes: string[]) => void
   ) => (
-    <Grid size={3}>
+    // size=4(한 줄 3칸) — 이 팝업 폭 900px(SEARCH_POPUP_WIDTH)과 같은 폭인 다른 공용 팝업(예
+    //   ShipmentLotSizeBatchModal)과 콤보 폭을 맞춘 값이다. size=3(한 줄 4칸)으로 두면 이 팝업만 콤보가
+    //   좁아져 어긋난다(SRCH-01).
+    <Grid size={4}>
       <FormItem
         className={commonStyles.formItem}
         label={t(labelCode, labelEn)}
@@ -392,54 +396,58 @@ export const NoWorkBatchModal = ({
             open={saving}
             placement='parent'
           />
-          <Grid container spacing={1}>
-            {/* Division — 부모 값 고정 + 비활성(cs:116·120). 사용자가 바꿀 수 없다.
-                AS-IS `cboDivision` 과 동일하게 콤보로 표시하되 disabled 로 코드가 아닌 사업부명을 보여준다. */}
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LBL.DIVISION, 'Division')}
-                labelAlign='right'
-                render={() => (
-                  <CustomDropdown disabled value={divisionId} options={divisionOptions} />
-                )}
-              />
-            </Grid>
-            {multiCondition(LBL.PLANT, 'Plant', plantIds, plantOptions, codes => {
-              setPlantIds(codes);
-              setLineIds([]);
-            })}
-            {multiCondition(LBL.LINE, 'Line', lineIds, scopedLineOptions, setLineIds)}
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={FALLBACK_LABEL.WEEKS}
-                labelAlign='right'
-                render={() => (
-                  <InputField
-                    fullWidth
-                    value={weeks}
-                    onChange={event => setWeeks(event.target.value)}
-                    onKeyDown={event => event.key === 'Enter' && handleSearch()}
+          {/* 검색영역 — 공용 SearchArea(다른 팝업과 동형, 예 ShipmentLotSizeBatchModal). 종전 자체
+              Grid + outlined Search 버튼을 공용 컴포넌트로 교체 — 조회조건 칸 레이아웃이 다른
+              팝업들과 같아지고, 팝업 스코프 F5 조회도 SearchArea 가 제공한다(종전엔 버튼 라벨만
+              'Search(F5)'이고 실제 F5 키 바인딩이 없었다). */}
+          <SearchArea
+            searchButtonLabel={t(LBL.SEARCH, 'Search(F5)')}
+            onSearch={handleSearch}
+            conditions={
+              <>
+                {/* Division — 부모 값 고정 + 비활성(cs:116·120). 사용자가 바꿀 수 없다.
+                    AS-IS `cboDivision` 과 동일하게 콤보로 표시하되 disabled 로 코드가 아닌 사업부명을 보여준다. */}
+                <Grid size={4}>
+                  <FormItem
+                    className={commonStyles.formItem}
+                    label={t(LBL.DIVISION, 'Division')}
+                    labelAlign='right'
+                    render={() => (
+                      <CustomDropdown disabled value={divisionId} options={divisionOptions} />
+                    )}
                   />
-                )}
-              />
-            </Grid>
-          </Grid>
-          <div className={styles.periodRow}>
-            <PeriodRangePicker
-              start={period.start}
-              end={period.end}
-              onChange={(start, end) => setPeriod({ start, end })}
-            />
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='small'
-              buttonLabel={t(LBL.SEARCH, 'Search')}
-              onClick={handleSearch}
-            />
-          </div>
+                </Grid>
+                {multiCondition(LBL.PLANT, 'Plant', plantIds, plantOptions, codes => {
+                  setPlantIds(codes);
+                  setLineIds([]);
+                })}
+                {multiCondition(LBL.LINE, 'Line', lineIds, scopedLineOptions, setLineIds)}
+                <Grid size={4}>
+                  <FormItem
+                    className={commonStyles.formItem}
+                    label={FALLBACK_LABEL.WEEKS}
+                    labelAlign='right'
+                    render={() => (
+                      <InputField
+                        fullWidth
+                        value={weeks}
+                        onChange={event => setWeeks(event.target.value)}
+                        onKeyDown={event => event.key === 'Enter' && handleSearch()}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid size={4}>
+                  <PeriodRangePicker
+                    start={period.start}
+                    end={period.end}
+                    onChange={(start, end) => setPeriod({ start, end })}
+                    className={commonStyles.formItem}
+                  />
+                </Grid>
+              </>
+            }
+          />
           <div className={styles.gridWrapper}>
             <ResultArea title='' count={rows.length} gridRef={gridRef} gridFilterRef={gridFilterRef}>
               <DataGrid

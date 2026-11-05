@@ -1,19 +1,19 @@
 # SCP0037 — To-Be Fact Pack 요약
 
-- page_key: `supply/operation-lt` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 12 · 엔드포인트 호출 7 (미해결 0, 주석 속 2) · 이벤트 15 · 컴포넌트 사용 22 · 하드코딩 컬럼 1 · 메시지 13
+- page_key: `supply/operation-lt` · feature: supply · As-is Fact Pack 있음
+- 파일 12 · 엔드포인트 호출 7 (미해결 0, 주석 속 2) · 이벤트 16 · 컴포넌트 사용 22 · 하드코딩 컬럼 1 · 메시지 13
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | component | 238 |
-| features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | component | 253 |
-| features/supply/src/pages/operation-lt/hooks/useOperationLTValidation.ts | hook | 68 |
+| features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | component | 236 |
+| features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | component | 319 |
+| features/supply/src/pages/operation-lt/hooks/useOperationLTValidation.ts | hook | 62 |
 | features/supply/src/pages/operation-lt/index.ts | index | 2 |
 | features/supply/src/pages/operation-lt/operation-lt.constants.ts | constants | 112 |
 | features/supply/src/pages/operation-lt/operation-lt.types.ts | types | 26 |
-| features/supply/src/pages/operation-lt/OperationLT.tsx | page | 210 |
+| features/supply/src/pages/operation-lt/OperationLT.tsx | page | 212 |
 | features/supply/src/pages/operation-lt/useOperationLTStore.ts | store | 195 |
 | features/supply/src/pages/operation-lt/utils/operation-lt.columns.ts | util | 36 |
 | features/supply/src/pages/operation-lt/utils/operation-lt.editLock.ts | util | 63 |
@@ -25,7 +25,7 @@
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 2 | Y | OperationLTForm.tsx:53 OperationLTGrid.tsx:78 |
 | (useTabLookupQueries) | hook | 1 | Y | OperationLTForm.tsx:56 |
-| SCP0037/main//call-proc | hook | 2 | Y | OperationLT.tsx:70 OperationLT.tsx:77 |
+| SCP0037/main//call-proc | hook | 2 | Y | OperationLT.tsx:71 OperationLT.tsx:78 |
 | /admin/menu/SCP0037/column | http | 1 | Y | useOperationLTStore.ts:114 |
 | /admin/menu/SCP0037/search-conditions | http | 1 | Y | useOperationLTStore.ts:144 |
 
@@ -38,18 +38,19 @@
 | CustomDropdown | onChange | <arrow> onPick,str | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 118 |
 | CustomDropdown | onChange | <arrow> onPick,pickMulti | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 147 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 158 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 212 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 213 |
-| FunctionSearchIcon | onClick | onItemSearch | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 207 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 228 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 211 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 207 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/supply/src/pages/operation-lt/components/OperationLTForm.tsx | 226 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 135 |
 | g | cellEditEnded | cellEditEndedHandler | addHandler | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 157 |
-| g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 179 |
-| g.hostElement | dblclick | dblclickHandler | addEventListener | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 200 |
-| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 223 |
-| OperationLTForm | onSearch | handleSearch | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 172 |
-| OperationLTForm | onItemSearch | <arrow> setOpenMaterial | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 172 |
-| OperationLTGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 192 |
+| g | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 215 |
+| g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 225 |
+| g.hostElement | dblclick | dblclickHandler | addEventListener | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 246 |
+| g.hostElement | keydown | keydownHandler | addEventListener | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 264 |
+| DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/operation-lt/components/OperationLTGrid.tsx | 289 |
+| OperationLTForm | onSearch | handleSearch | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 174 |
+| OperationLTForm | onItemSearch | <arrow> setOpenMaterial | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 174 |
+| OperationLTGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/operation-lt/OperationLT.tsx | 194 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -98,7 +99,7 @@
 | kind | snippet | file | line |
 |---|---|---|---|
 | endpoint | 운영은 admin 동적 fetch(staticColumns)가 authoritative — 이 상수는 fallback 전용(하드코딩 아님). | features/supply/src/pages/operation-lt/operation-lt.constants.ts | 77 |
-| code | F6 저장 조건 복원(fetchSearchConditions)을 컬럼 메타 fetch 보다 먼저 await 한다 — fetchStaticColumns 가 | features/supply/src/pages/operation-lt/OperationLT.tsx | 86 |
+| code | F6 저장 조건 복원(fetchSearchConditions)을 컬럼 메타 fetch 보다 먼저 await 한다 — fetchStaticColumns 가 | features/supply/src/pages/operation-lt/OperationLT.tsx | 87 |
 | endpoint | ui-dynamic-property-management — admin SCM_MST_SHEET_COLUMNS 동적 fetch (실측 13행 등록됨, design 03 §1). | features/supply/src/pages/operation-lt/useOperationLTStore.ts | 21 |
 
 ## 10. __asis-mapping__.md 상태

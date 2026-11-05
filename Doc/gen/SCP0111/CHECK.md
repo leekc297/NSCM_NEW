@@ -30,24 +30,24 @@
 - WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 chkQty / UsrCheckBox 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN H03 조회조건 <Checkbox> 디자인(hook #154 v2): v1 무라벨(NBSP/공백 라벨) — 조건명을 FormItem label 로. 정본 GlobalPsiReportForm checkbox()/radio() — Grid(customGrid)+FormItem(formItem, label=조건명, labelAlign='right')+customCheckbox+<Checkbox checked onChange/> · Radio = FormItem label=그룹명 + <RadioGroup row><Radio labelText/> @components/IntegrationPsiForm.tsx:330
 - WARN V01 As-is Validation 6건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
 - WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00260 — AS-IS '신규 입력 데이터 중 중복된 데이터가 있습니다.' / TO-BE MSG00260 = '중복된 조합이 존재합니다 (Division/Project/Item/일자/' → 문구로 찾은 TO-BE ID MSG00428 @integration-psi.constants.ts
 - WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @integration-psi.constants.ts
 - WARN MS1 AS-IS 메시지 ID 그대로 사용: MSG00004 — AS-IS '{0}개의 데이터가 저장되었습니다.' / TO-BE MSG00004 = '수정한 내용이 없습니다.' → 문구로 찾은 TO-BE ID MSG00672 @utils/integrationPsiSave.test.ts
 - WARN VR1 VALIDATION 취합(20261022) 기준 UI 미적용 5건 — 화면 열기(OPEN) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ1 [MSG00097] 권한을 가진 Division이 없습 / 조회(SEARCH) SEQ2 [MSG00002] Bucket 값은 필수 입력입니다 / 조회(SEARCH) SEQ3 [MSG00002] Plan-date 값은 필수 입력입 / 저장(SAVE) — ADMIN 권한 SEQ3 [MSG00001] 모든 항목은 필수 입력입니다. → 이식 또는 __asis-mapping__ 에 제외 근거 @Doc/화면분석서/SCP_화면_VALIDATION_취합_20261022/SCP0111.md
-- WARN SC1 조회조건 순서가 기준표(SCP SCP_화면별 조회조건 정리_260731_v0.5.xlsx 365~371행)와 다를 수 있음(라벨 대조): 'Div' 이 'Period' 보다 앞 — 기준 순서: Div → Plan Date → Model/Nickname → Cell Model → Period → Qty ＜ 0 (40_SEARCH_COND.md #### SCP0111) @components/IntegrationPsiForm.tsx:255
-- WARN VC1 대조표 미검증 770행 — 검사 사유 REVIEW 358 · NOT_RUN 1856 · NOPATH 792 · TODO 6 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
-- WARN VC1 작업 원장 미완료 144건 / 검사 인스턴스 217 — W4 2 · W5 14 · W6 50 · W7 78 · 구현 의심 7 (Doc/verify/SCP0111/work_ledger.md)
-- WARN VC2 BE 계정 시노님·권한 문제 1건 — [SYN_MISSING] COMBO LineByOperationPlantId_SCP_ALL SCM_LINE_HIERARCHY_CPS_V_SN (호출 시 ORA-00942 / ORA-00904) · Doc/verify/SCP0111/syn_check.csv
-- WARN I18N2 다국어 미적용(영문 고정 'Operation 은 Pack / Cell / Elec'): 상수 MSG.OP_GROUP_INVALID 해석 불가(페이지 constants 에 없음) — 언어 전환 시 번역되지 않음 (msg_master 스냅샷 72시간 전 — python tools/DbConn/export_tobe_meta.py msg_master 로 새로고침 후 재판정) @IntegrationPsi.tsx:280
-- WARN I18N2 다국어 미적용(영문 고정 '수량 불일치'): 상수 MSG.DERIV_MISMATCH 해석 불가(페이지 constants 에 없음) — 언어 전환 시 번역되지 않음 (msg_master 스냅샷 72시간 전 — python tools/DbConn/export_tobe_meta.py msg_master 로 새로고침 후 재판정) @IntegrationPsi.tsx:502
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/IntegrationPsiGrid.tsx:148
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @IntegrationPsi.tsx:374
-- WARN R16 진입 Page 531 라인 > 400 — components/ 분리 (#9) @IntegrationPsi.tsx
+- WARN SC1 조회조건 순서가 기준표(SCP SCP_화면별 조회조건 정리_260731_v0.5.xlsx 365~371행)와 다를 수 있음(라벨 대조): 'Div' 이 'Period' 보다 앞 — 기준 순서: Div → Plan Date → Model/Nickname → Cell Model → Period → Qty ＜ 0 (40_SEARCH_COND.md #### SCP0111) @components/IntegrationPsiForm.tsx:256
+- WARN VC1 대조표 FAIL 69행 (Doc/verify/SCP0111/mapping_trace.md §FAIL)
+- WARN VC1 대조표 미검증 764행 — 검사 사유 REVIEW 60 · NOT_RUN 2074 · NOPATH 10 · ERROR 350 · WARN 49 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다
+- WARN VC1 작업 원장 미완료 78건 / 검사 인스턴스 269 — W3 25 · W5 7 · W7 31 · W9 15 · 구현 의심 5 (Doc/verify/SCP0111/work_ledger.md)
+- WARN VC1 대조표 검증 추적이 54시간 전 결과 — 재실행 후 판정
+- WARN I18N2 다국어 미적용(영문 고정 'Operation 은 Pack / Cell / Elec'): 상수 MSG.OP_GROUP_INVALID 해석 불가(페이지 constants 에 없음) — 언어 전환 시 번역되지 않음 @IntegrationPsi.tsx:282
+- WARN I18N2 다국어 미적용(영문 고정 '수량 불일치'): 상수 MSG.DERIV_MISMATCH 해석 불가(페이지 constants 에 없음) — 언어 전환 시 번역되지 않음 @IntegrationPsi.tsx:503
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/IntegrationPsiGrid.tsx:149
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @IntegrationPsi.tsx:375
+- WARN R16 진입 Page 532 라인 > 400 — components/ 분리 (#9) @IntegrationPsi.tsx
 - WARN B19 validation.md 6행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
 - WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
-- WARN B21 Doc/gen/SCP0111/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
-- WARN B21 Doc/gen/SCP0111/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
 - WARN B21 Doc/gen/SCP0111/SCP0111_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
 - WARN B21 Doc/gen/SCP0111/SCP0111_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
 - WARN B27 As-is grid_code DB루프(SetCalendar:354) — 루프 원천 결과셋이 타이틀 SP 판정에 안 걸림. 동적 컬럼 원천 확인 @grid

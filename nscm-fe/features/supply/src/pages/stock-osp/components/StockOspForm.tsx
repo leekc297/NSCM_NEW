@@ -193,14 +193,12 @@ export const StockOspForm = ({ onSearch, onItemSearch, onDivisionAuth }: Props) 
                   appearance='outlined'
                   priority='normal'
                   disabled={noDivisionAuth}
-                  iconComponent={
-                    <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                  }
+                  iconComponent={<FunctionSearchIcon appearance='lined' />}
+                  onClick={onItemSearch}
                 />
               ),
             }}
             onChange={e => set({ itemId: e.target.value })}
-            onKeyDown={e => e.key === 'Enter' && onSearch()}
           />
         )}
       />
@@ -210,8 +208,16 @@ export const StockOspForm = ({ onSearch, onItemSearch, onDivisionAuth }: Props) 
   // Pack 전용 조회조건(Inspection/Status/Cutoff Date) — Osp 탭엔 없음(undefined). Pack 탭 7칸(=2단 이내)이라
   //   접이식(extraConditions) 대상 아님(SRCH-02: 8칸 초과만 분리). conditions 2행째로 상시 노출 → 탭 전환 시 바로 보임
   //   (design 02 §4 탭별 조회조건 가시성 분기 / §6-5 Pack 탭 전용 노출).
+  //   배치 순서: Cutoff Date → Inspection → Status(사용자 지시 2026-10-28).
   const packExtra = isPack ? (
     <>
+      <PeriodField
+        gridSize={3}
+        start={sc.cutoffFromYyyymmdd}
+        end={sc.cutoffToYyyymmdd}
+        onChange={(start, end) => set({ cutoffFromYyyymmdd: start, cutoffToYyyymmdd: end })}
+        label={t(LBL.CUTOFF_DATE, '_Cutoff Date')}
+      />
       <Grid size={3}>
         <FormItem
           className={commonStyles.formItem}
@@ -223,7 +229,6 @@ export const StockOspForm = ({ onSearch, onItemSearch, onDivisionAuth }: Props) 
               value={sc.inspectionId}
               disabled={noDivisionAuth}
               onChange={e => set({ inspectionId: e.target.value })}
-              onKeyDown={e => e.key === 'Enter' && onSearch()}
             />
           )}
         />
@@ -245,13 +250,6 @@ export const StockOspForm = ({ onSearch, onItemSearch, onDivisionAuth }: Props) 
           )}
         />
       </Grid>
-      <PeriodField
-        gridSize={3}
-        start={sc.cutoffFromYyyymmdd}
-        end={sc.cutoffToYyyymmdd}
-        onChange={(start, end) => set({ cutoffFromYyyymmdd: start, cutoffToYyyymmdd: end })}
-        label={t(LBL.CUTOFF_DATE, '_Cutoff Date')}
-      />
     </>
   ) : undefined;
 
@@ -311,7 +309,7 @@ export const StockOspForm = ({ onSearch, onItemSearch, onDivisionAuth }: Props) 
             onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
             label='Inventory Date'
           />
-          {/* Pack 전용(Inspection/Status/Cutoff Date) — Pack 탭에서만 2행째로 노출(Osp 탭=undefined) */}
+          {/* Pack 전용(Cutoff Date/Inspection/Status) — Pack 탭에서만 2행째로 노출(Osp 탭=undefined) */}
           {packExtra}
         </>
       }

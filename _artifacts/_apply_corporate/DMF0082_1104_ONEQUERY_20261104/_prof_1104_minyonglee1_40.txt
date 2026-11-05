@@ -1,0 +1,33 @@
+warm : SP 67.42s fetch 5.16s rows=[7619, 6, 1, 5, 181, 1]
+trace: SP 67.76s fetch 5.17s rows=[7619, 6, 1, 5, 181, 1]
+
+div=40 group=ADMIN  SP 67.76s  | dep=1 SQL 합 67.64s  | 갭: DBMS_STATS 0.00s  PL/SQL·기타 0.07s
+
+    라인       초     비중  parse    exec  fetch    실행   하드         LIO         행  sqlid          문장
+   918  62.203  91.8%   0.00   62.20   0.00     1    0  10,414,524   154,252  gmxq8vpuv7ahx  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+     -   4.350   6.4%   0.12    4.23   0.00     1    1      10,604         0  a0qcjyyddumwn  WITH INTOG AS ( SELECT B.USER_GROUP, B.DIVISION_ID, B.MEASURE, B.DAYS, B.FROM_TI
+   547   0.658   1.0%   0.00    0.66   0.00     1    0     215,437    15,633  g9v4gu3gpx1p3  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+   892   0.399   0.6%   0.00    0.40   0.00     1    0      65,100     1,829  67uj7hkzgqtrh  INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PROJECT_CODE
+     -   0.021   0.0%   0.02    0.00   0.00     1    1         111         0  24ktttystdbfj  WITH INTOG AS ( SELECT B.USER_GROUP, B.DIVISION_ID, B.MEASURE, B.DAYS, B.FROM_TI
+
+[범주 합계 dep=1]
+  PKG 문장            63.265s  문장   21  하드파싱    0  PARSE콜 0.001s
+  기타(매칭불가)           4.373s  문장   12  하드파싱    2  PARSE콜 0.140s
+  전체 하드파싱 이벤트 5 (재귀 포함)
+
+[기타(매칭불가) 상위]
+   4.350s a0qcjyyddumwn WITH INTOG AS ( SELECT B.USER_GROUP, B.DIVISION_ID, B.MEASURE, B.DAYS, B.FROM_TIME, B.TO_TIME, LM.TOKEN AS LIMIT_MEASURE FROM (SELECT A.SEGM
+   0.021s 24ktttystdbfj WITH INTOG AS ( SELECT B.USER_GROUP, B.DIVISION_ID, B.MEASURE, B.DAYS, B.FROM_TIME, B.TO_TIME, LM.TOKEN AS LIMIT_MEASURE FROM (SELECT A.SEGM
+
+[갭 > 50ms]
+   0.054s PLSQL/기타   after 2146:SELECT COLUMN_VALUE AS C FROM TABLE(SYS.ODCIVARCHA
+
+[대기 이벤트 합]
+    2.929s  direct path write temp
+    0.772s  SQL*Net message from client
+    0.076s  db file sequential read
+    0.049s  direct path read temp
+    0.042s  Free private memory to OS
+    0.017s  direct path sync
+    0.005s  log file sync
+    0.002s  Allocate UGA memory from OS

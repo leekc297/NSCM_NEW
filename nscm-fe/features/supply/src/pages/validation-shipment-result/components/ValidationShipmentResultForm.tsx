@@ -167,11 +167,13 @@ export const ValidationShipmentResultForm = ({ onSearch, onProjectSearch, onItem
             />
           </Grid>
 
-          {/* Project — 텍스트 + 팝업버튼(ProjectByDivisionModal, division 컨텍스트). 콤마 다중 반환 */}
+          {/* Project — 텍스트 + 팝업버튼(ProjectByDivisionModal, division 컨텍스트). 콤마 다중 반환.
+              라벨은 전용 i18n LBL00012('PJT', 3언어 동일)을 쓴다(사용자 지시 2026-10-29) — 공유
+              LBL00617("Project")과 구분되는 별도 라벨이라 타 화면 영향 없음. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.PROJECT, '_Project')}
+              label={t(LBL.PJT, 'PJT')}
               labelAlign='right'
               render={() => (
                 <InputField
@@ -185,14 +187,12 @@ export const ValidationShipmentResultForm = ({ onSearch, onProjectSearch, onItem
                         appearance='outlined'
                         priority='normal'
                         disabled={noDivisionAuth}
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onProjectSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onProjectSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ projectCode: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -217,14 +217,12 @@ export const ValidationShipmentResultForm = ({ onSearch, onProjectSearch, onItem
                         appearance='outlined'
                         priority='normal'
                         disabled={noDivisionAuth}
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -235,6 +233,7 @@ export const ValidationShipmentResultForm = ({ onSearch, onProjectSearch, onItem
               (감싸면 라벨이 Period Period 로 중복 — 자매 safety-stock 패턴). */}
           <Grid size={3}>
             <PeriodRangePicker
+              className={commonStyles.formItem}
               label={t(LBL.PERIOD, 'Period')}
               start={sc.fromYyyymmdd}
               end={sc.toYyyymmdd}

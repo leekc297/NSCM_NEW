@@ -209,17 +209,23 @@ export const TactTimeForm = ({ onSearch, onItemSearch }: Props) => {
                   value={sc.itemId}
                   InputProps={{
                     endAdornment: (
+                      // <Button
+                      //   appearance='outlined'
+                      //   priority='normal'
+                      //   iconComponent={
+                      //     <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
+                      //   }
+                      // />
+                      // 아이콘만 클릭 영역이라 버튼 가장자리 클릭이 무시됨 — 버튼에 onClick
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

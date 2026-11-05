@@ -39,16 +39,17 @@ import {
   type EditLockContext,
   hasEditAuth,
   isBohCellEditable,
-  isEssEditableColorCell,
   isInsertRowCellEditable,
   isPivotCellLocked,
+  isPivotCellValueEmpty,
   isPivotColumn,
 } from '../utils/integrationPsiEditLock';
 
 // 편집가능 셀 배경색 — AS-IS SetBGColor2 편집모드 연두(140,240,60) (design 03 §3-Color C1/C2).
 //   hook#95 표준(편집가능=Yellow 계열)로 매핑. 잠금/실적 셀은 표준 회색.
-const EDITABLE_BG_COLOR = '#e8fce0'; // 연두(편집가능 pivot 셀)
-const LOCKED_BG_COLOR = '#f5f5f5'; // 회색(잠금 pivot 셀)
+// 음수 폰트색 — AS-IS NumberCellType.NegativeRed=true 재현(SpreadInfo.cs AddNumColumn, 표준 Color.Red).
+//   기간(월) pivot 셀·BOH_QTY·CELL_CF 등 숫자 컬럼의 음수 값을 빨간 글자로 표시한다.
+const NEGATIVE_RED_COLOR = '#ff0000';
 
 const s = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
@@ -315,7 +316,9 @@ export const IntegrationPsiGrid = ({
       if (binding === 'LINE_ID') return false;
       // pivot(YYYYMM) 기간셀 — L2~L23 잠금 규칙. 고정 컬럼은 전건 잠금.
       if (!isPivotColumn(binding, fixedBindingsRef.current)) return false;
-      return !isPivotCellLocked(row, lockCtxRef.current);
+      if (isPivotCellLocked(row, lockCtxRef.current)) return false;
+      // AS-IS 셀단위 빈값 잠금(L4/L9/L13/L18) — 편집 가능 행이라도 그 달 값이 없으면 잠금(값 있는 셀만 편집).
+      return !isPivotCellValueEmpty(row, binding);
     };
 
     // admin 신규행(CRUD='I')은 식별컬럼 INPUT_TP_CD='S' 의 **컬럼레벨 잠금**(공용 setEditableColumns →
@@ -365,6 +368,16 @@ export const IntegrationPsiGrid = ({
     const cellEditEndedHandler = (sender: FlexGridType, e: { row: number; col: number }) => {
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
+      // 정수 강제 — 숫자셀(기간 pivot / BOH_QTY)에 소수가 들어오면 버림(AS-IS NumberCellType DecimalPlaces=0,
+      //   BOH 는 SP 가 TRUNC). dataType=Number 라 문자는 Wijmo 가 커밋 거부한다. 소수만 여기서 정규화.
+      //   커스텀 편집기를 쓰지 않아(기본 셀 편집 유지) 방향키 이동·'-' 입력·엔터 커밋이 정상 동작한다.
+      if (row && (binding === 'BOH_QTY' || isPivotColumn(binding, fixedBindingsRef.current))) {
+        const v = row[binding];
+        if (typeof v === 'number' && !Number.isInteger(v)) {
+          row[binding] = Math.trunc(v);
+          sender.invalidate(); // 데이터만 바꿔선 셀 표시가 안 갱신 — 재그림 요청(편집 종료 시 1회).
+        }
+      }
       // MEASURE_LABEL 콤보 선택 → MEASURE(코드) 동기. 저장(baseCell)은 row.MEASURE 를 쓰므로 반드시 코드를 채운다.
       if (binding === 'MEASURE_LABEL' && row) {
         const code = measureCodeByLabelRef.current.get(s(row.MEASURE_LABEL));
@@ -410,6 +423,16 @@ export const IntegrationPsiGrid = ({
       if (!row) return;
       const ctx = lockCtxRef.current;
 
+      // 음수 빨강 폰트 — AS-IS NumberCellType.NegativeRed=true(SpreadInfo.cs AddNumColumn) 재현.
+      //   숫자 컬럼(기간 pivot / BOH_QTY / CELL_CF)의 음수 값에만 빨간 글자. 셀 재사용 대비 양수는 색 초기화.
+      if (
+        binding === 'BOH_QTY' ||
+        binding === 'CELL_CF' ||
+        isPivotColumn(binding, fixedBindingsRef.current)
+      ) {
+        ev.cell.style.color = toNum(row[binding]) < 0 ? NEGATIVE_RED_COLOR : '';
+      }
+
       // admin 신규행 — 수정가능 셀 양식을 **표준 wj-cell-editable**(다른 셀·화면과 동일한 편집가능 배경)로
       //   통일한다. 이 컬럼들은 메타 INPUT_TP_CD='S' 라 공용 formatItem 이 isEditableCell=false 로 양식을
       //   안 입힌다 → 편집은 되지만(applyEditGate override) 잠긴 것처럼 보이던 문제를 여기서 덮는다.
@@ -424,14 +447,31 @@ export const IntegrationPsiGrid = ({
         return;
       }
 
-      if (!isPivotColumn(binding, fixedBindingsRef.current)) return; // 고정 컬럼은 색상 대상 아님
-      if (isPivotCellLocked(row, ctx)) {
-        ev.cell.style.backgroundColor = LOCKED_BG_COLOR;
+      // BOH_QTY — 컬럼 메타(EDIT_FLAG)가 **전 행**에 편집가능(노랑 wj-cell-editable) 양식을 입히지만,
+      //   실제 편집은 행 단위다(measure=INV & seqFlag[1]=6 & 권한 — isBohCellEditable). 편집 불가 BOH 셀은
+      //   잠금처럼 보이도록 wj-cell-editable 를 떼고 회색 배경을 준다(사용자 지시 2026-10-30, 시각 혼동 제거).
+      //   편집 가능 셀은 클래스를 남기고 인라인 배경을 비워 표준 편집가능(노랑) 양식이 그대로 뜨게 한다.
+      //   편집 불가 BOH 셀은 **흰색**(일반 읽기전용 셀과 동일)으로 둔다(사용자 지시 2026-10-30).
+      if (binding === 'BOH_QTY') {
+        const bohEditable = isBohCellEditable(row, ctx);
+        ev.cell.classList.toggle('wj-cell-editable', bohEditable);
+        ev.cell.style.backgroundColor = bohEditable ? '' : '#ffffff';
         return;
       }
-      // 편집가능 + ESS 조건색 대상 = 연두(C1/C2). 그 외 편집가능 셀은 기본색.
-      if (isEssEditableColorCell(row, divisionRef.current)) {
-        ev.cell.style.backgroundColor = EDITABLE_BG_COLOR;
+
+      if (!isPivotColumn(binding, fixedBindingsRef.current)) return; // 고정 컬럼은 색상 대상 아님
+      // 편집가능 pivot 셀 = **노랑**(BOH 편집가능과 동일 wj-cell-editable), 잠금 셀 = **흰색**(사용자 지시 2026-11-02).
+      //   종전엔 ESS 조건색(연두)만 칠하고 그 외는 흰색으로 덮어, 공용이 입힌 노랑까지 지워져 "편집가능인데 흰색"인
+      //   셀이 생겼다(PROD_PLAN seqFlag[0]≠2 등). 편집 여부로 노랑/흰색을 직접 결정한다.
+      //   잠금 = 행단위 규칙(isPivotCellLocked) **또는** AS-IS 셀단위 빈값(L4/L9/L13/L18) — 값 있는 셀만 노랑.
+      const locked =
+        isPivotCellLocked(row, ctx) || isPivotCellValueEmpty(row, binding);
+      if (locked) {
+        ev.cell.classList.remove('wj-cell-editable'); // 공용이 입힌 노랑 제거
+        ev.cell.style.backgroundColor = '#ffffff'; // 잠금 = 평평한 흰색(테마 얼룩무늬 제거)
+      } else {
+        ev.cell.classList.add('wj-cell-editable'); // 편집가능 = 노랑(BOH 와 동일)
+        ev.cell.style.backgroundColor = ''; // 인라인 비워 클래스 노랑이 그대로 뜨게
       }
     };
     g.formatItem.addHandler(formatHandler);
@@ -454,6 +494,19 @@ export const IntegrationPsiGrid = ({
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);
 
+    // 숫자셀(기간 pivot / BOH_QTY) 문자·소수점 키 입력 차단 — dataType=Number 는 커밋만 거부하고 입력칸은
+    //   열려 문자가 보였다(사용자 지시 2026-11-02). 커스텀 편집기(InputNumber)는 방향키 이동을 깨므로 쓰지 않고,
+    //   keydown 에서 숫자·'-' 외 단일 문자만 막는다 — 제어키(방향키·Backspace·Enter·Tab)·단축키(Ctrl/Meta)는 통과.
+    const blockNonIntegerKey = (ev: KeyboardEvent) => {
+      if (ev.ctrlKey || ev.metaKey || ev.altKey) return; // 복사/붙여넣기·단축키 허용
+      if (ev.key.length !== 1) return; // 방향키·Backspace·Delete·Enter·Tab 등 제어키 허용
+      const binding = g.columns[g.selection?.col ?? -1]?.binding ?? '';
+      if (binding !== 'BOH_QTY' && !isPivotColumn(binding, fixedBindingsRef.current)) return;
+      if (/[0-9]/.test(ev.key) || ev.key === '-') return; // 숫자·음수부호만 허용(정수)
+      ev.preventDefault(); // 문자·소수점 등은 입력칸에 들어오지 못하게
+    };
+    g.hostElement.addEventListener('keydown', blockNonIntegerKey);
+
     // 고정 식별 컬럼 세로 병합(M1~M4 SmartColMerge) — pivot 컬럼은 병합 제외(buildPivotColumns allowMerging=false).
     for (let i = 0; i < g.columns.length; i++) {
       const b = g.columns[i].binding ?? '';
@@ -469,6 +522,7 @@ export const IntegrationPsiGrid = ({
         g.pastedCell?.removeHandler(cellEditEndedHandler);
         g.formatItem?.removeHandler(formatHandler);
         g.hostElement?.removeEventListener('dblclick', dblclickHandler);
+        g.hostElement?.removeEventListener('keydown', blockNonIntegerKey);
       } catch {
         /* unmount race */
       }

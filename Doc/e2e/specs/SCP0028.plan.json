@@ -1,0 +1,473 @@
+{
+  "id": "SCP0028",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0028",
+  "divCascade": [],
+  "divLabels": [
+    "Div.",
+    "Division"
+  ],
+  "condOrder": [],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "ShipmentLotSize",
+  "routePath": "shipping/shipment-lot-size",
+  "asisName": "Shipment_Lot_Size",
+  "fields": [
+    {
+      "key": "validYn",
+      "label": "Valid",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValid",
+      "tobeLabel": "Active",
+      "catalog": "",
+      "labels": [
+        "Active",
+        "Valid"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "divisionId",
+      "label": "Division*",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div.",
+        "Division"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId",
+      "tobeLabel": "Model",
+      "catalog": "",
+      "labels": [
+        "Model"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "operationGroup",
+      "label": "Operation Group",
+      "lbl": "LBL00027",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboOperationGroup",
+      "tobeLabel": "Operation group",
+      "catalog": "",
+      "labels": [
+        "Operation group",
+        "Operation Group"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite",
+      "tobeLabel": "From Site",
+      "catalog": "",
+      "labels": [
+        "From Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "transMode",
+      "label": "Trans Mode",
+      "lbl": "LBL00025",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbTransMode",
+      "tobeLabel": "Trans Mode",
+      "catalog": "",
+      "labels": [
+        "Trans Mode"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "toSiteIds",
+      "label": "To Site",
+      "lbl": "LBL00023",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbToSite",
+      "tobeLabel": "To Site",
+      "catalog": "",
+      "labels": [
+        "To Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "",
+  "asisMapping": "features\\shipping\\src\\pages\\shipment-lot-size\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "input",
+      "label": "Input",
+      "lbl": "LBL00872",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnInput"
+    },
+    {
+      "key": "delete",
+      "label": "Delete",
+      "lbl": "LBL00622",
+      "kind": "hotkey",
+      "tobe": "hotkeyConfig.delete",
+      "asis": "btnDelete"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Shipment Lot Size",
+      "key": "SHIPMENT_LOT_SIZE",
+      "labels": [
+        "Created By",
+        "Creation Date",
+        "Division",
+        "From Site",
+        "From Site",
+        "Increment*",
+        "Model",
+        "Last Update Date",
+        "Last Updated By",
+        "Lot Size*",
+        "Nick Name",
+        "Operation Group",
+        "Container Split*",
+        "To Site",
+        "To Site",
+        "Trans Mode",
+        "Trans Mode",
+        "Valid*"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Shipment Lot Size",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0028.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "Shipment Lot Size",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0028.P_",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0028_GET_SHIPMENT_LOT_SIZE",
+      "sheet": "Shipment Lot Size",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+      "entries": [
+        "event:this.btnDelete.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+      "sheet": "Shipment Lot Size",
+      "btn": "SHIPMENT_LOT_SIZE_INPUT",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+      "entries": [
+        "event:this.btnInput.Click"
+      ]
+    },
+    {
+      "sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+      "sheet": "Shipment Lot Size",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+      "entries": [
+        "event:this.btnDelete.Click",
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Shipment Lot Size": {
+      "40": [
+        "Div",
+        "Operation Group",
+        "From Site",
+        "To Site",
+        "Model",
+        "Nick Name",
+        "Trans Mode",
+        "Lot Size*",
+        "Increment*",
+        "Active*",
+        "Container Split*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div",
+        "Operation Group",
+        "From Site",
+        "To Site",
+        "Model",
+        "Nick Name",
+        "Trans Mode",
+        "Lot Size*",
+        "Increment*",
+        "Active*",
+        "Container Split*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div",
+        "Operation Group",
+        "From Site",
+        "To Site",
+        "Model",
+        "Nick Name",
+        "Trans Mode",
+        "Lot Size*",
+        "Increment*",
+        "Active*",
+        "Container Split*",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH",
+        "SAVE",
+        "DELETE",
+        "EDIT",
+        "INSERT"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40",
+        "EE"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SEARCH",
+      "SAVE",
+      "DELETE",
+      "EDIT",
+      "INSERT"
+    ],
+    "CAPA Planner": [
+      "SAVE",
+      "DELETE",
+      "SEARCH",
+      "INSERT"
+    ],
+    "DM ADMIN": [
+      "SEARCH",
+      "DELETE",
+      "INSERT",
+      "SAVE"
+    ],
+    "DM Planner": [
+      "SAVE",
+      "INSERT",
+      "EDIT",
+      "DELETE",
+      "SEARCH"
+    ],
+    "DM Viewer": [
+      "DELETE",
+      "INSERT",
+      "SEARCH",
+      "SAVE"
+    ],
+    "FP Planner": [
+      "EDIT",
+      "INSERT",
+      "DELETE",
+      "SEARCH",
+      "SAVE"
+    ],
+    "FP Viewer": [
+      "INSERT",
+      "SAVE",
+      "SEARCH",
+      "DELETE"
+    ],
+    "SCM PI Admin": [
+      "DELETE",
+      "SEARCH",
+      "INSERT",
+      "SAVE",
+      "EDIT"
+    ],
+    "SCM Viewer": [
+      "SAVE",
+      "DELETE",
+      "INSERT",
+      "SEARCH"
+    ],
+    "SCP Planner": [
+      "DELETE",
+      "SAVE",
+      "EDIT",
+      "SEARCH",
+      "INSERT"
+    ],
+    "SCP Tester": [
+      "DELETE",
+      "EDIT",
+      "INSERT",
+      "SEARCH",
+      "SAVE"
+    ],
+    "SSP ADMIN": [
+      "DELETE",
+      "INSERT",
+      "SAVE",
+      "SEARCH"
+    ],
+    "SSP Planner": [
+      "INSERT",
+      "EDIT",
+      "DELETE",
+      "SAVE",
+      "SEARCH"
+    ],
+    "SSP Viewer": [
+      "DELETE",
+      "SAVE",
+      "INSERT",
+      "SEARCH"
+    ]
+  },
+  "menuBtnCodes": [
+    "SEARCH",
+    "SAVE",
+    "DELETE",
+    "EDIT",
+    "INSERT"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

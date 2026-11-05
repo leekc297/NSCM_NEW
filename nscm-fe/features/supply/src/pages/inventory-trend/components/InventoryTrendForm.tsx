@@ -44,6 +44,7 @@ export const InventoryTrendForm = ({ onSearch, onItemSearch }: Props) => {
   const set = useInventoryTrendStore(state => state.setSearchParams);
   const openSearchArea = useInventoryTrendStore(state => state.isOpenSearchArea);
   const setNoDivisionAuth = useInventoryTrendStore(state => state.setNoDivisionAuth);
+  const setAuthDivisions = useInventoryTrendStore(state => state.setAuthDivisions);
 
   // Division=ALL 이면 Plant 콤보에 빈값 전달 → @divisionId IS NULL → 전체(design 02 §2-2).
   const divisionParam = sc.divisionId === 'ALL' ? '' : sc.divisionId;
@@ -130,6 +131,13 @@ export const InventoryTrendForm = ({ onSearch, onItemSearch }: Props) => {
   useEffect(() => {
     setNoDivisionAuth(noDivisionAuth);
   }, [noDivisionAuth, setNoDivisionAuth]);
+
+  // 권한 Division 코드를 스토어에 동기화 — setFilters 가 'ALL' 을 이 코드 열거로 펼쳐 조회한다
+  //   (권한 밖 division 누수 차단, useInventoryTrendStore setFilters 주석 참조).
+  const authDivisionKey = divisionOptions.map(o => o.value).join(',');
+  useEffect(() => {
+    setAuthDivisions(authDivisionKey ? authDivisionKey.split(',') : []);
+  }, [authDivisionKey, setAuthDivisions]);
 
   return (
     <SearchArea
@@ -228,14 +236,12 @@ export const InventoryTrendForm = ({ onSearch, onItemSearch }: Props) => {
                         appearance='outlined'
                         priority='normal'
                         disabled={noDivisionAuth}
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

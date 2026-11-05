@@ -1,0 +1,10 @@
+﻿menu_id,cond,kind,name,source
+DMF0020,Div=40,btn_hidden,Price Batch Input,DM-28
+DMF0020,Div=81,btn_hidden,Price Batch Input,DM-28
+DMF0044,Data Type=Cutoff Data,btn_hidden,Delete,DM-78;GAP-325
+DMF0044,Data Type=ETC Data,btn_shown,Delete,GAP-325
+DMF0044,Data Type=ETC Data,btn_hidden,Insert,GAP-312
+DMF0005,Div=40,btn_enabled,Model Code Change,GAPPI-17
+DMF0082,Div=40,col_hidden,AS FROM SITE,DM-47
+DMF0082,Div=40;Plan Type=Sales Plan,col_hidden,Cust Group Dtl,DM-239
+DMF0035,Plan Type=Biz Plan,col_shown,Version,DM-243

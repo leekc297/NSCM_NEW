@@ -1,19 +1,19 @@
 # supply_components_CapaItemPopup_tsx — To-Be Fact Pack 요약
 
 - page_key: `supply/components/CapaItemPopup.tsx` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 1 · 엔드포인트 호출 2 (미해결 0, 주석 속 0) · 이벤트 5 · 컴포넌트 사용 13 · 하드코딩 컬럼 0 · 메시지 4
+- 파일 1 · 엔드포인트 호출 2 (미해결 0, 주석 속 0) · 이벤트 5 · 컴포넌트 사용 14 · 하드코딩 컬럼 0 · 메시지 4
 - Grid 컬럼 출처: 메타(/column·titleSet) 미사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/components/CapaItemPopup.tsx | other | 290 |
+| features/supply/src/components/CapaItemPopup.tsx | other | 293 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 1 | Y | CapaItemPopup.tsx:101 |
-| SCM0002/CapaItemPopup//call-proc | hook | 1 | Y | CapaItemPopup.tsx:116 |
+| (useTabComboQueries) | hook | 1 | Y | CapaItemPopup.tsx:102 |
+| SCM0002/CapaItemPopup//call-proc | hook | 1 | Y | CapaItemPopup.tsx:117 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -21,11 +21,11 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | handleSearch | jsx | features/supply/src/components/CapaItemPopup.tsx | 211 |
-| InputField | onChange | <arrow> setItemId | jsx | features/supply/src/components/CapaItemPopup.tsx | 235 |
-| InputField | onKeyDown | <arrow> handleSearch | jsx | features/supply/src/components/CapaItemPopup.tsx | 236 |
-| Button | onClick | handleSubmit | jsx | features/supply/src/components/CapaItemPopup.tsx | 275 |
-| Button | onClick | onClose | jsx | features/supply/src/components/CapaItemPopup.tsx | 282 |
+| SearchArea | onSearch | handleSearch | jsx | features/supply/src/components/CapaItemPopup.tsx | 212 |
+| InputField | onChange | <arrow> setItemId | jsx | features/supply/src/components/CapaItemPopup.tsx | 236 |
+| InputField | onKeyDown | <arrow> handleSearch | jsx | features/supply/src/components/CapaItemPopup.tsx | 237 |
+| Button | onClick | handleSubmit | jsx | features/supply/src/components/CapaItemPopup.tsx | 278 |
+| Button | onClick | onClose | jsx | features/supply/src/components/CapaItemPopup.tsx | 285 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -40,6 +40,7 @@
 | ProgressIndicator | 1 |
 | ResultArea | 1 |
 | DataGrid | 1 |
+| ControlConfirmIcon | 1 |
 
 ## 6. 하드코딩 Grid 컬럼
 (없음)

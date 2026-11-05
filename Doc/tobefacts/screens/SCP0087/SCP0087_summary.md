@@ -1,13 +1,13 @@
 # SCP0087 — To-Be Fact Pack 요약
 
-- page_key: `supply/mdm-class-master` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 11 · 엔드포인트 호출 5 (미해결 0, 주석 속 1) · 이벤트 9 · 컴포넌트 사용 15 · 하드코딩 컬럼 1 · 메시지 8
+- page_key: `supply/mdm-class-master` · feature: supply · As-is Fact Pack 있음
+- 파일 11 · 엔드포인트 호출 5 (미해결 0, 주석 속 1) · 이벤트 7 · 컴포넌트 사용 15 · 하드코딩 컬럼 1 · 메시지 8
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/mdm-class-master/components/MdmClassMasterForm.tsx | component | 104 |
+| features/supply/src/pages/mdm-class-master/components/MdmClassMasterForm.tsx | component | 102 |
 | features/supply/src/pages/mdm-class-master/components/MdmClassMasterGrid.tsx | component | 49 |
 | features/supply/src/pages/mdm-class-master/hooks/useMdmClassMasterValidation.ts | hook | 37 |
 | features/supply/src/pages/mdm-class-master/index.ts | index | 2 |
@@ -37,10 +37,8 @@
 |---|---|---|---|---|---|
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/mdm-class-master/components/MdmClassMasterForm.tsx | 46 |
 | InputField | onChange | <arrow> set | jsx | features/supply/src/pages/mdm-class-master/components/MdmClassMasterForm.tsx | 60 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/mdm-class-master/components/MdmClassMasterForm.tsx | 61 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/mdm-class-master/components/MdmClassMasterForm.tsx | 77 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/mdm-class-master/components/MdmClassMasterForm.tsx | 78 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/supply/src/pages/mdm-class-master/components/MdmClassMasterForm.tsx | 94 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/mdm-class-master/components/MdmClassMasterForm.tsx | 76 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/supply/src/pages/mdm-class-master/components/MdmClassMasterForm.tsx | 92 |
 | DataGrid | gotFocus | onFocus | jsx | features/supply/src/pages/mdm-class-master/components/MdmClassMasterGrid.tsx | 45 |
 | MdmClassMasterForm | onSearch | handleSearch | jsx | features/supply/src/pages/mdm-class-master/MdmClassMaster.tsx | 118 |
 | MdmClassMasterGrid | onFocus | <arrow>  | jsx | features/supply/src/pages/mdm-class-master/MdmClassMaster.tsx | 137 |
@@ -70,7 +68,7 @@
 | MSG00003 | 2 |
 | LBL00017 | 1 |
 | LBL00035 | 1 |
-| LBL01131 | 1 |
+| LBL00007 | 1 |
 | LBL00112 | 1 |
 | MSG00004 | 1 |
 | MSG00002 | 1 |

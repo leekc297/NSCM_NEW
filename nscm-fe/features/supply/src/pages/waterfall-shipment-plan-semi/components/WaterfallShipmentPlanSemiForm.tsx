@@ -1,4 +1,4 @@
-import { ItemByDivisionModal, PeriodField } from 'features/master/src/components';
+import { MaterialByDivisionModal, PeriodField } from 'features/master/src/components';
 import { useEffect, useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -9,11 +9,14 @@ import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useMessageStore, useTabid } from '@shared/stores';
 
-import { useWaterfallShipmentPlanSemiStore } from '../useWaterfallShipmentPlanSemiStore';
-import { BUCKET_TYPE, LBL, MSG } from '../waterfall-shipment-plan-semi.constants';
+import { periodFromDate, useWaterfallShipmentPlanSemiStore } from '../useWaterfallShipmentPlanSemiStore';
+import { BUCKET_TYPE, LBL, MENU_ID, MSG } from '../waterfall-shipment-plan-semi.constants';
 
-// SCP0018 조회조건 — 02_search-combo.md §5 TO-BE 매핑 그대로.
-//   conditions(메인 6): Division/OperationGroup/Model/Bucket/Version/Period
+// SCP0018 조회조건 — AS-IS 레이아웃 그대로(한 줄 4개 × 2줄, 접기 없음). 순서:
+//   1행: Division / Operation Group / Model/Nickname / Electrode
+//   2행: Version / Bucket / Period / Sum
+//   SCP0018.md 변경=O 2건만 변형: Model/Nickname(팝업 MaterialByDivisionModal COM0013, 다건) + Ver.(명칭, 별건).
+//   나머지(변경=X)는 AS-IS 그대로 — Div/OperationGroup 단건 기본값(첫 항목), 기본 기간(GetDayRange).
 //   extraConditions(F6 펼침 2): ElectrodeType/Sum — 사용빈도 낮은 보조조건 판단(§5, 확인 필요 §7#8).
 //   OperationGroup 은 useCascadeFields 미사용 — 트리거별 SQL_ID 자체가 다르다(§2.3 이중 데이터소스,
 //   초기 LookupCommon(OPERATION_GROUP_SEMI[_EE]) → division onChange 시 OperationGroup[EE]_SCP 로 전환).
@@ -28,6 +31,7 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
   const searchParams = useWaterfallShipmentPlanSemiStore(state => state.searchParams);
   const setSearchParams = useWaterfallShipmentPlanSemiStore(state => state.setSearchParams);
   const setDivision = useWaterfallShipmentPlanSemiStore(state => state.setDivision);
+  const clearData = useWaterfallShipmentPlanSemiStore(state => state.clearData);
   const isOpenSearchArea = useWaterfallShipmentPlanSemiStore(state => state.isOpenSearchArea);
   const hasDivisionAuth = useWaterfallShipmentPlanSemiStore(state => state.hasDivisionAuth);
   const divisionAuthChecked = useWaterfallShipmentPlanSemiStore(state => state.divisionAuthChecked);
@@ -82,14 +86,34 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
   const versionOptions = (versions ?? []).map(item => ({ label: item.NAME, value: item.CODE }));
   const electrodeOptions = (electrodeTypes ?? []).map(item => ({ label: item.NAME, value: item.CODE }));
 
-  // Version 선택 변경 시 Period 파생 재계산 — GetDayRange() 서버 재조회 없음(§3). 확인 필요(§7#5 필수값 기준)
-  //   — 잠정: 최근 선택 버전의 'SP_W_YYYYMMDD' 접두 8자리를 기간 시작값으로 파생.
+  // AS-IS 기본값(SCP0018.md 변경=X — AS-IS 그대로) — Div/Operation Group 은 단건(단일 선택)이라 값이
+  //   비면 첫 항목을 자동 선택한다(AS-IS setListBox addAll=false = 첫 행 선택). 다건(Version/Electrode)은
+  //   공백=전체(ALL)라 비워 둔다. Search 게이트는 그대로(자동조회 아님 — 기본값만 세팅).
+  const firstDivision = divisionOptions[0]?.value;
   useEffect(() => {
-    const last = searchParams.versionNos[searchParams.versionNos.length - 1];
-    if (!last) return;
-    const match = /SP_W_(\d{8})/.exec(last);
-    if (!match) return;
-    setSearchParams({ startYyyymmdd: match[1] });
+    if (searchParams.divisionId || firstDivision === undefined) return;
+    setSearchParams({ divisionId: String(firstDivision) });
+  }, [firstDivision, searchParams.divisionId, setSearchParams]);
+
+  const firstOperGroup = operGroupOptions[0]?.value;
+  useEffect(() => {
+    if (searchParams.operationGroup || firstOperGroup === undefined) return;
+    setSearchParams({ operationGroup: String(firstOperGroup) });
+  }, [firstOperGroup, searchParams.operationGroup, setSearchParams]);
+
+  // Version 선택 변경 시 Period 파생 재계산 — AS-IS GetDayRange(cs:1033~1036): CString.GetCheckedListValue(
+  //   dtVersion, ..., true) + Substring(Length-8) = 선택 버전 중 '가장 최신(날짜 max)' 버전의 YYYYMMDD.
+  //   즉 선택 순서(배열 마지막)가 아니라 최신 주차 기준이다. 예: 40w/37w/28w 선택 → 40w, 40w 해제 → 37w.
+  useEffect(() => {
+    const dates = searchParams.versionNos
+      .map(v => /SP_W_(\d{8})/.exec(v)?.[1])
+      .filter((d): d is string => !!d)
+      .sort(); // YYYYMMDD 문자열 오름차순 = 날짜순
+    const latest = dates[dates.length - 1]; // 마지막 = 최대 = 가장 최신 버전
+    if (!latest) return;
+    // AS-IS GetDayRange(cs:1039) → DateUtil.GetDayRange(SP SCM0001_GET_SCP_MONTH_PERIOD) 는 선택 버전일을
+    //   기준으로 from/to 를 함께 반환한다 — start 뿐 아니라 end(= 기준일 + 12개월 주초 라운딩)도 재계산한다.
+    setSearchParams(periodFromDate(latest));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.versionNos]);
 
@@ -150,14 +174,19 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
                 )}
               />
             </Grid>
+            {/* Model/Nickname — SCP0018.md 조회조건 정리(v0.5) 변경=O: 명칭 Model -> Model/Nickname, 팝업
+                ItemByDivisionModal -> MaterialByDivisionModal(COM0013). 다건(개행/콤마) 입력 — 팝업 다건
+                선택 시 ITEM_ID csv 를 itemId 에 채운다. */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.MODEL, 'Model')}
+                label={t(LBL.MODEL_NICKNAME, 'Model/Nickname')}
                 labelAlign='right'
                 render={() => (
                   <InputField
                     fullWidth
+                    multiline
+                    maxRows={3}
                     className={commonStyles.popupSearchField}
                     disabled={areaDisabled}
                     value={searchParams.itemId}
@@ -168,9 +197,8 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
                           appearance='outlined'
                           priority='normal'
                           disabled={areaDisabled}
-                          iconComponent={
-                            <FunctionSearchIcon appearance='lined' onClick={() => setItemModalOpen(true)} />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setItemModalOpen(true)}
                         />
                       ),
                     }}
@@ -178,32 +206,52 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
                 )}
               />
             </Grid>
+            {/* Electrode — AS-IS 1행 4번째(변경=X). 다건(공백=전체 ALL)이라 기본 비움. division=EE 여부로
+                활성(!isEE 면 disable). 주의: AS-IS 는 init(SetChangedControl)에서만 평가하고 division 변경
+                live 경로(SetOperationGroupByDivision)는 재평가하지 않지만, TO-BE 는 공통 규약("Division 변경
+                = 검색조건 초기화", store setDivision)에 따라 division 변경 시 enable 을 live 재평가하고 선택값도
+                초기화한다(stale 방지 — AS-IS 고정 동작과 의도적으로 다름, 갭분석 G05 안A). */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.BUCKET, 'Bucket')}
+                label={t(LBL.ELECTRODE, 'Electrode')}
                 labelAlign='right'
-                render={() => (
-                  <CustomDropdown
-                    isInput={false}
-                    disabled={areaDisabled}
-                    value={searchParams.bucket}
-                    options={bucketOptions}
-                    onChange={(_, option) => setSearchParams({ bucket: String(option ?? BUCKET_TYPE.DAILY) })}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LBL.VERSION, 'Version')}
-                labelAlign='right'
-                required
                 render={() => (
                   <CustomDropdown
                     multiple
                     allOption
+                    useClearIcon
+                    limitTags={1}
+                    disabled={areaDisabled || !isEE}
+                    value={searchParams.electrodeTypes.join(',')}
+                    options={electrodeOptions}
+                    onChange={(_, picked) =>
+                      setSearchParams({
+                        electrodeTypes: String(picked ?? '')
+                          .split(',')
+                          .filter(Boolean),
+                      })
+                    }
+                  />
+                )}
+              />
+            </Grid>
+            {/* Version — 필수(*). 라벨 'Ver.' 하드코딩(SCP0016/FG 동일 방식, 사용자 지시 2026-10-20·2026-10-26) —
+                DB/번들에 'Ver.' 미등록 약어이고 KO/EN/CN 동일 표기라 i18n 불요(SCP0018.md 변경=O 명칭). */}
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label='Ver.'
+                labelAlign='right'
+                required
+                render={() => (
+                  <CustomDropdown
+                    // Version 은 AS-IS setListBox(dtVersion, clbVersion, false) = addAll=false → ALL 항목 없음·
+                    //   공백 기본(선택 안 됨)·필수(*). allOption 미사용 + placeholder='' 로 빈 값=공백 표시.
+                    //   (CustomDropdown 은 multiple 기본 placeholder 가 'ALL'(CustomDropdown.tsx:570)이라 공백으로 덮어쓴다.)
+                    //   미선택 조회 시 handleSubmit 필수값 체크(versionNos.length===0 → MSG00013)로 차단.
+                    multiple
+                    placeholder=''
                     useClearIcon
                     limitTags={1}
                     disabled={areaDisabled}
@@ -220,6 +268,28 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
                 )}
               />
             </Grid>
+            {/* Bucket — AS-IS 2행 2번째(변경=X). UI 조회조건(SP 미전달, 순수 클라 그리드 트리거, §2.4). */}
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t(LBL.BUCKET, 'Bucket')}
+                labelAlign='right'
+                render={() => (
+                  <CustomDropdown
+                    isInput={false}
+                    disabled={areaDisabled}
+                    value={searchParams.bucket}
+                    options={bucketOptions}
+                    // Bucket 변경 = AS-IS CboBucketType_SelectedIndexChanged → InitSpread_2(siMain) = 그리드
+                    //   데이터 클리어(재조회 필요, cs:1108~1120). 컬럼 visible 매트릭스는 그리드가 bucket 로 재계산.
+                    onChange={(_, option) => {
+                      setSearchParams({ bucket: String(option ?? BUCKET_TYPE.DAILY) });
+                      clearData();
+                    }}
+                  />
+                )}
+              />
+            </Grid>
             <PeriodField
               gridSize={3}
               label={t(LBL.PERIOD, 'Period')}
@@ -227,43 +297,12 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
               end={searchParams.endYyyymmdd}
               onChange={(start, end) => setSearchParams({ startYyyymmdd: start, endYyyymmdd: end })}
             />
-          </>
-        }
-        extraConditions={
-          <>
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t(LBL.ELECTRODE, 'Electrode')}
-                labelAlign='right'
-                render={() => (
-                  <CustomDropdown
-                    multiple
-                    allOption
-                    useClearIcon
-                    limitTags={1}
-                    // division=EE 초기값 기준 활성 — division 변경으로 재평가되지 않는다(AS-IS 그대로,
-                    //   02_search-combo.md §3/§7#2 사용자 확인 대상 — __asis-mapping__.md 참조).
-                    disabled={areaDisabled || !isEE}
-                    value={searchParams.electrodeTypes.join(',')}
-                    options={electrodeOptions}
-                    onChange={(_, picked) =>
-                      setSearchParams({
-                        electrodeTypes: String(picked ?? '')
-                          .split(',')
-                          .filter(Boolean),
-                      })
-                    }
-                  />
-                )}
-              />
-            </Grid>
+            {/* Sum — AS-IS 2행 마지막(변경=X). WEEKLY_ISO 면 숨김(Never), 그 외 표시(01_layout.md §2 트리거D). */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
                 label={' '}
                 labelAlign='right'
-                // 01_layout.md §2 트리거D — WEEKLY_ISO 면 완전 숨김(Never), 그 외 Always.
                 render={() =>
                   searchParams.bucket === BUCKET_TYPE.WEEKLY_ISO ? (
                     <></>
@@ -281,13 +320,21 @@ export const WaterfallShipmentPlanSemiForm = ({ onSubmit }: WaterfallShipmentPla
           </>
         }
       />
+      {/* Material by Division 공용 팝업(COM0013, SCM0002_MaterialByDivisionPopup). SCP0018.md 조회조건
+          정리(v0.5) 변경=O 로 ItemByDivisionModal(COM0008)에서 교체. 다건 선택(multiCheckbox) → ITEM_ID csv 를
+          itemId 로 채운다. Division 단일이라 multiDivision 불요. */}
       {itemModalOpen && (
-        <ItemByDivisionModal
+        <MaterialByDivisionModal
           open={itemModalOpen}
           modalClose={() => setItemModalOpen(false)}
           setSelectedValue={items => setSearchParams({ itemId: items })}
-          preSearchParams={{ divisionId: searchParams.divisionId }}
-          callFromCell={false}
+          multiCheckbox
+          preSearchParams={{
+            divisionId: searchParams.divisionId,
+            operationGroup: '',
+            scpModuleType: MENU_ID,
+            itemId: searchParams.itemId,
+          }}
         />
       )}
     </>

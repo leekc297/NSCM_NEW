@@ -1,0 +1,2 @@
+﻿menu,call,cls,trig,axis,egs,result,expected,actual,basis,note
+DMF0005,0,DM0002_ItembyDivisionPopupEx,COND:btnItemId,ASIS,EG433;EG441;EG060,판정필요,AS-IS DMF0002_GET_ITEM_BY_DIVISION_POPUPEx 15275행,"TO-BE 14429행 · 인자 {""p_division_id"": ""40"", ""p_dept_id"": ""ALL"", ""p_end_customer"": ""ALL"", ""p_project_code"": """", ""p_scm_site_id"": ""ALL"", ""p_item_id"": """", ""p_mdmActive_Sw"": ""ALL""} · 미대응 ['p_scm_site_id', 'p_mdmActive_Sw']",Doc/asisfacts/db/modules/dbo.DMF0002_GET_ITEM_BY_DIVISION_POPUPEx.sql · DM0002_ItembyDivisionPopupEx.cs:418,행 14429 · 계정 minyonglee1

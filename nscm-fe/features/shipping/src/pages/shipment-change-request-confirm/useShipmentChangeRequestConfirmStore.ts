@@ -32,6 +32,10 @@ interface State {
   // 개인화 조회조건 복원 1회 가드 — `initialized`(컬럼메타 축)와 분리한다. 컬럼메타는 매 mount 마다
   //   refetch 하므로 그 플래그에 얹으면 복원이 재실행되어 사용자가 바꾼 조건을 덮는다.
   conditionsRestored: boolean;
+  // 저장된 조회조건에서 Request Date(fromYyyymmdd/toYyyymmdd)를 복원했는지 표식.
+  //   true 면 mount 기본값 산출(initPeriodDefault)이 복원값을 덮지 않는다
+  //   (F6 conditionIncludeKeys 로 저장한 Request Date 가 재진입 시 D-14 기본으로 되돌아가던 것 방지).
+  periodRestored: boolean;
   searchCondition: SearchCondition;
   filters: FiltersBySheet;
   openSearchArea: boolean;
@@ -84,6 +88,7 @@ const emptyStaticColumns: StaticColumnsBySheet = {
 const initState: State = {
   initialized: false,
   conditionsRestored: false,
+  periodRestored: false,
   searchCondition: initSearch,
   filters: {},
   openSearchArea: true,
@@ -141,6 +146,10 @@ export const useShipmentChangeRequestConfirmStore = createPersistedStoreWithTab<
       }),
     initPeriodDefault: () =>
       set(state => {
+        // 복원된 Request Date(F6 저장분)가 있으면 mount 기본값으로 덮지 않는다. restore 는 이 함수
+        //   뒤에 비동기로 적용되므로, 첫 mount 는 기본값→복원값 순으로 복원이 이기고, 재진입/캐시 적중
+        //   시엔 이 가드가 복원값을 보존한다(F10 reset 은 periodRestored 를 false 로 되돌려 기본값 재산출).
+        if (state.periodRestored) return;
         const { from, to } = defaultPeriod();
         state.searchCondition.fromYyyymmdd = from;
         state.searchCondition.toYyyymmdd = to;
@@ -194,7 +203,7 @@ export const useShipmentChangeRequestConfirmStore = createPersistedStoreWithTab<
           ...get().filters,
           // 디테일 조회 — FindData_Sub. p_change_req_no/p_division_id/p_change_type/p_language.
           [SHEETS.SUB]: { changeReqNo, divisionId: division, changeType, language },
-          // 위임자 조회 — Delegate_Load(division+approval). 반환 DELEGATEE_USER 로 A1/A7 판정.
+          // 위임자 조회 — Delegate_Load(division+approval). 반환 DELEGATEE_ID/DEPT_ID(DELEGATE_COLUMNS)로 A1/A7 판정.
           [SHEETS.DELEGATE]: { divisionId: division, approvalUser: approval },
         };
       }),
@@ -237,9 +246,9 @@ export const useShipmentChangeRequestConfirmStore = createPersistedStoreWithTab<
     // 개인화 조회조건 복원 (SubTitle F6 저장분 되불러오기, 1회) — 자매 SSP0003 과 동일 구현.
     //   GET /admin/menu/{MENU_ID}/search-conditions → PRAM_NM/PRAM_CTN(BE 가 paramNm/paramCtn 으로
     //   매핑) 을 searchCondition 에 역직렬화. 배열키만 콤마 split, 나머지는 그대로.
-    //   주의: 저장(gridAction.personalizeCondition)은 **날짜 파라미터와 빈값을 제외**하므로
-    //   기간은 복원 대상이 아니다 — 기간은 mount 의 initPeriodDefault 기본값을 그대로 쓴다.
-    //   저장분이 없거나 실패하면 기본값을 유지한다(조용히 넘어간다).
+    //   Request Date(fromYyyymmdd/toYyyymmdd)도 복원한다 — SubTitle 이 conditionIncludeKeys 로 날짜
+    //   저장을 opt-in 했기 때문이다(기본 personalizeCondition 은 날짜를 제외). 복원되면 periodRestored
+    //   를 세워 initPeriodDefault 기본값이 덮지 않게 한다. 저장분이 없거나 실패하면 기본값 유지(조용히 넘어감).
     restoreSearchConditions: async () => {
       if (get().conditionsRestored) return;
       set(state => {
@@ -264,6 +273,9 @@ export const useShipmentChangeRequestConfirmStore = createPersistedStoreWithTab<
         }
         set(state => {
           state.searchCondition = { ...state.searchCondition, ...patch } as SearchCondition;
+          // Request Date 까지 복원됐으면 periodRestored 를 세워 mount 기본값이 덮지 않게 한다
+          //   (F6 는 conditionIncludeKeys=['fromYyyymmdd','toYyyymmdd'] opt-in 으로 날짜를 저장한다).
+          if (patch.fromYyyymmdd && patch.toYyyymmdd) state.periodRestored = true;
         });
       } catch {
         // 미저장/실패 = 기본값 유지 (console 금지)

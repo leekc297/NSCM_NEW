@@ -823,6 +823,13 @@ export const ShipmentChangeRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={sc}
+        // F6 저장에 Shipment Date(기간)를 포함한다 — 프레임워크 기본은 날짜를 제외(EXCLUDED_DATE_PARAM)하므로
+        //   opt-in 하지 않으면 저장 자체가 안 돼 재진입 시 복원되지 않았다(사용자 신고 2026-10-28).
+        //   복원 측은 store fetchStaticColumns + periodRestored 가드로 mount 기본값이 덮지 않게 처리.
+        conditionIncludeKeys={['fromYyyymmdd', 'toYyyymmdd']}
+        // F10(조회조건 저장 초기화) 직후 화면 조회조건도 즉시 기본값으로 되돌린다(사용자 요청 2026-10-28).
+        //   프레임워크 기본(false)은 서버 저장분만 지우므로 이 화면만 opt-in.
+        resetConditionOnClient
         customButtons={customButtons}
       />
 

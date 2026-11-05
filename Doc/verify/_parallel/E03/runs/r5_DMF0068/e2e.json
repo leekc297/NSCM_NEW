@@ -1,0 +1,57 @@
+[
+ {
+  "eg": "EG109",
+  "screen": "DMF0068",
+  "target": "Insert 그룹 차단",
+  "ctx": "DMF0068",
+  "result": "NA",
+  "expected": "AS-IS Insert GROUP 분기",
+  "actual": "InsertButton·InsertRow 경로에 GROUP guard MESSAGE 없음",
+  "asis": "facts_auth",
+  "note": ""
+ },
+ {
+  "eg": "EG373",
+  "screen": "DMF0068",
+  "target": "Insert 차단 메시지",
+  "ctx": "DMF0068",
+  "result": "NA",
+  "expected": "AS-IS Insert GROUP 분기",
+  "actual": "GROUP guard MESSAGE 없음",
+  "asis": "facts_auth",
+  "note": ""
+ },
+ {
+  "eg": "EG126",
+  "screen": "DMF0068",
+  "target": "Insert",
+  "ctx": "DMF0068",
+  "result": "NA",
+  "expected": "Insert 권한 Div",
+  "actual": "기본 계정 PR_GET_MNU_BTN_AUTH_DIV 에 INSERT 있는 Div 없음(후보 )",
+  "asis": "CR-070",
+  "note": ""
+ },
+ {
+  "eg": "EG140",
+  "screen": "DMF0068",
+  "target": "Insert",
+  "ctx": "DMF0068",
+  "result": "NA",
+  "expected": "Insert 권한 Div",
+  "actual": "기본 계정 PR_GET_MNU_BTN_AUTH_DIV 에 INSERT 있는 Div 없음(후보 )",
+  "asis": "CR-070",
+  "note": ""
+ },
+ {
+  "eg": "EG319",
+  "screen": "DMF0068",
+  "target": "Insert",
+  "ctx": "DMF0068",
+  "result": "NA",
+  "expected": "Insert 권한 Div",
+  "actual": "기본 계정 PR_GET_MNU_BTN_AUTH_DIV 에 INSERT 있는 Div 없음(후보 )",
+  "asis": "CR-070",
+  "note": ""
+ }
+]

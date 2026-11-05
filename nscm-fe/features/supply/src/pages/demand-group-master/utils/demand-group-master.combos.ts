@@ -8,13 +8,15 @@ import type { CustomComboOption } from './demand-group-master.columns';
 /**
  * Division 콤보 옵션 — Division_SCP 결과에 AS-IS 2종 클라 필터 재현.
  *   1) ATTRIBUTE3 <> 'EE' (전극/EE 사업부 제외 — BLUtils.GetDivisionWithoutEE cs L109/116)
- *   2) CODE 에 '81' 포함만 노출 (InitControls cs L166-191) + CODE Asc 정렬
+ *   2) CODE 에 '81' 또는 '82' 포함만 노출 + CODE Asc 정렬
+ *      AS-IS(InitControls cs L166-191)는 '81'만 노출하나, 사용자 지시(2026-10-30)로 '82' 도 노출.
  */
 export const buildDivisionOptions = (rows: ComboResponse[] | undefined): CustomComboOption[] =>
   (rows ?? [])
     .filter(row => {
       const attr3 = (row as Record<string, unknown>).ATTRIBUTE3;
-      return attr3 !== 'EE' && String(row.CODE ?? '').includes('81');
+      const code = String(row.CODE ?? '');
+      return attr3 !== 'EE' && (code.includes('81') || code.includes('82'));
     })
     .sort((a, b) => String(a.CODE ?? '').localeCompare(String(b.CODE ?? '')))
     .map(row => ({ label: row.NAME, value: row.CODE }));

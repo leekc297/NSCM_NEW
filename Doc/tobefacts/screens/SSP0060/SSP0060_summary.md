@@ -1,65 +1,72 @@
 # SSP0060 — To-Be Fact Pack 요약
 
-- page_key: `shipping/shipment-plan` · feature: shipping · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 28 · 엔드포인트 호출 26 (미해결 0, 주석 속 3) · 이벤트 93 · 컴포넌트 사용 108 · 하드코딩 컬럼 38 · 메시지 46
-- Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 38건
+- page_key: `shipping/shipment-plan` · feature: shipping · As-is Fact Pack 있음
+- 파일 26 · 엔드포인트 호출 53 (미해결 13, 주석 속 3) · 이벤트 80 · 컴포넌트 사용 100 · 하드코딩 컬럼 4 · 메시지 70
+- Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 4건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | component | 85 |
-| features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.module.scss | component | 29 |
-| features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | component | 315 |
-| features/shipping/src/pages/shipment-plan/components/modals/OrderDetailModal.tsx | component | 172 |
 | features/shipping/src/pages/shipment-plan/components/modals/RequestorModal.tsx | component | 121 |
-| features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | component | 179 |
+| features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | component | 493 |
 | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.module.scss | component | 22 |
-| features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | component | 267 |
-| features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | component | 651 |
-| features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | component | 431 |
-| features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | component | 620 |
+| features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | component | 268 |
+| features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.module.scss | component | 21 |
+| features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | component | 752 |
+| features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | component | 425 |
+| features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | component | 894 |
 | features/shipping/src/pages/shipment-plan/index.ts | index | 2 |
-| features/shipping/src/pages/shipment-plan/shipment-plan.constants.ts | constants | 276 |
-| features/shipping/src/pages/shipment-plan/shipment-plan.types.ts | types | 46 |
-| features/shipping/src/pages/shipment-plan/ShipmentPlan.module.scss | style | 38 |
-| features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | page | 1010 |
-| features/shipping/src/pages/shipment-plan/useShipmentPlanStore.ts | store | 465 |
+| features/shipping/src/pages/shipment-plan/shipment-plan.constants.ts | constants | 377 |
+| features/shipping/src/pages/shipment-plan/shipment-plan.types.ts | types | 48 |
+| features/shipping/src/pages/shipment-plan/ShipmentPlan.module.scss | style | 75 |
+| features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | page | 1339 |
+| features/shipping/src/pages/shipment-plan/useShipmentPlanStore.ts | store | 483 |
 | features/shipping/src/pages/shipment-plan/utils/shipment-plan.calc.test.ts | test | 170 |
 | features/shipping/src/pages/shipment-plan/utils/shipment-plan.calc.ts | util | 337 |
 | features/shipping/src/pages/shipment-plan/utils/shipment-plan.dblClickGuard.test.ts | test | 75 |
 | features/shipping/src/pages/shipment-plan/utils/shipment-plan.dblClickGuard.ts | util | 49 |
-| features/shipping/src/pages/shipment-plan/utils/shipment-plan.detailSheets.ts | util | 120 |
+| features/shipping/src/pages/shipment-plan/utils/shipment-plan.detailSheets.ts | util | 121 |
 | features/shipping/src/pages/shipment-plan/utils/shipment-plan.editLock.test.ts | test | 82 |
-| features/shipping/src/pages/shipment-plan/utils/shipment-plan.editLock.ts | util | 142 |
-| features/shipping/src/pages/shipment-plan/utils/shipment-plan.lookups.ts | util | 112 |
-| features/shipping/src/pages/shipment-plan/utils/shipment-plan.save.ts | util | 185 |
+| features/shipping/src/pages/shipment-plan/utils/shipment-plan.editLock.ts | util | 163 |
+| features/shipping/src/pages/shipment-plan/utils/shipment-plan.erpChain.ts | util | 829 |
+| features/shipping/src/pages/shipment-plan/utils/shipment-plan.lookups.ts | util | 204 |
+| features/shipping/src/pages/shipment-plan/utils/shipment-plan.save.ts | util | 465 |
 | features/shipping/src/pages/shipment-plan/utils/shipment-plan.transMode.ts | util | 93 |
-| features/shipping/src/pages/shipment-plan/__asis-mapping__.md | mapping | 592 |
+| features/shipping/src/pages/shipment-plan/__asis-mapping__.md | mapping | 634 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| SSP0060/confirmDetail//call-proc | hook | 2 | Y | ConfirmDetailModal.tsx:55 ShipmentRequestModal.tsx:60 |
-| /SSP0060/main/GET_ORDER_DETAIL/call-proc | http | 1 | Y | OrderDetailModal.tsx:113 |
-| (useTabComboQueries) | hook | 4 | Y | RequestorModal.tsx:43 ShipmentPlanDetailBar.tsx:58 ShipmentPlanForm.tsx:126 ShipmentPlanForm.tsx:140 |
-| /SSP0060/requestDraftingMain/SAVE/call-proc | http | 1 | Y | ShipmentRequestModal.tsx:76 |
-| (useTabLookupQueries) | hook | 2 | Y | ShipmentPlanDetailBar.tsx:57 shipment-plan.lookups.ts:59 |
-| SSP0060/division//call-proc | hook | 1 | Y | ShipmentPlanForm.tsx:104 |
-| /SSP0060/main/USER_CHECK/call-proc | http | 1 | Y | ShipmentPlan.tsx:128 |
-| SSP0060/main//call-proc | hook | 1 | Y | ShipmentPlan.tsx:197 |
-| SSP0060/calendar//call-proc | hook | 1 | Y | ShipmentPlan.tsx:204 |
-| SSP0060/planDetail//call-proc | hook | 1 | Y | ShipmentPlan.tsx:211 |
-| SSP0060/stockDetail//call-proc | hook | 1 | Y | ShipmentPlan.tsx:218 |
-| SSP0060/owmsDetail//call-proc | hook | 1 | Y | ShipmentPlan.tsx:225 |
-| SSP0060/holdStock//call-proc | hook | 1 | Y | ShipmentPlan.tsx:232 |
-| SSP0060/mesStock//call-proc | hook | 1 | Y | ShipmentPlan.tsx:239 |
-| SSP0060/mesStockDetail//call-proc | hook | 1 | Y | ShipmentPlan.tsx:246 |
-| SSP0060/shipmentResult//call-proc | hook | 1 | Y | ShipmentPlan.tsx:253 |
-| /SSP0060/main/SAVE/call-proc | http | 1 | Y | ShipmentPlan.tsx:324 |
-| /SSP0060/planDetail/SAVE/call-proc | http | 1 | Y | ShipmentPlan.tsx:348 |
-| /admin/menu/SSP0060/column | http | 1 | Y | useShipmentPlanStore.ts:368 |
-| /admin/menu/SSP0060/search-conditions | http | 1 | Y | useShipmentPlanStore.ts:393 |
-| /admin/menu/SSP0060/measure | http | 1 | Y | useShipmentPlanStore.ts:442 |
+| (useTabComboQueries) | hook | 5 | Y | RequestorModal.tsx:43 ShipmentPlanDetailBar.tsx:58 ShipmentPlanForm.tsx:128 ShipmentPlanForm.tsx:142 shipment-plan.lookups.ts:177 |
+| SSP0060/confirmDetail//call-proc | hook | 1 | Y | ShipmentRequestModal.tsx:91 |
+| /SSP0060/planDetail/SAVE/call-proc | http,propagated | 6 | Y | ShipmentRequestModal.tsx:265 ShipmentPlan.tsx:442 |
+| {?url} | http | 2 | N | ShipmentRequestModal.tsx:330 ShipmentPlan.tsx:470 |
+| {?params} | http | 2 | N | ShipmentRequestModal.tsx:331 ShipmentPlan.tsx:471 |
+| (useTabLookupQueries) | hook | 3 | Y | ShipmentPlanDetailBar.tsx:57 ShipmentPlan.tsx:311 shipment-plan.lookups.ts:82 |
+| SSP0060/division//call-proc | hook | 1 | Y | ShipmentPlanForm.tsx:106 |
+| /SSP0060/main/USER_CHECK/call-proc | http,propagated | 3 | Y | ShipmentPlan.tsx:163 |
+| SSP0060/main//call-proc | hook | 1 | Y | ShipmentPlan.tsx:233 |
+| SSP0060/calendar//call-proc | hook | 1 | Y | ShipmentPlan.tsx:240 |
+| SSP0060/planDetail//call-proc | hook | 1 | Y | ShipmentPlan.tsx:247 |
+| SSP0060/stockDetail//call-proc | hook | 1 | Y | ShipmentPlan.tsx:257 |
+| SSP0060/owmsDetail//call-proc | hook | 1 | Y | ShipmentPlan.tsx:264 |
+| SSP0060/holdStock//call-proc | hook | 1 | Y | ShipmentPlan.tsx:271 |
+| SSP0060/mesStock//call-proc | hook | 1 | Y | ShipmentPlan.tsx:278 |
+| SSP0060/mesStockDetail//call-proc | hook | 1 | Y | ShipmentPlan.tsx:285 |
+| SSP0060/shipmentResult//call-proc | hook | 1 | Y | ShipmentPlan.tsx:292 |
+| /SSP0060/main/SAVE/call-proc | http,propagated | 3 | Y | ShipmentPlan.tsx:420 |
+| /admin/menu/SSP0060/column | http,propagated | 3 | Y | useShipmentPlanStore.ts:386 |
+| /admin/menu/SSP0060/search-conditions | http | 1 | Y | useShipmentPlanStore.ts:411 |
+| /admin/menu/SSP0060/measure | http,propagated | 3 | Y | useShipmentPlanStore.ts:460 |
+| SSP0060/{?deps}/GET_SHIPMENT_STATUS/call-proc | callProc | 1 | N | shipment-plan.erpChain.ts:175 |
+| SSP0060/{?deps}/GET_ERP_SO_NO_CNT/call-proc | callProc | 1 | N | shipment-plan.erpChain.ts:231 |
+| SSP0060/{?deps}/CHECK_CONFIRM_CHANGETIME/call-proc | callProc | 1 | N | shipment-plan.erpChain.ts:256 |
+| SSP0060/{?deps}/DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM/call-proc | callProc | 1 | N | shipment-plan.erpChain.ts:363 |
+| SSP0060/{?deps}/ERP_ERROR_CONFIRM/call-proc | callProc | 1 | N | shipment-plan.erpChain.ts:506 |
+| SSP0060/{?deps}/IF_CHECK/call-proc | callProc | 1 | N | shipment-plan.erpChain.ts:605 |
+| SSP0060/{?deps}/SAVE_SHIPMENT_REQUEST_DRAFTING/call-proc | callProc | 1 | N | shipment-plan.erpChain.ts:677 |
+| SSP0060/{?deps}/SHIP_CONFIRM_CHG_BATCH_NEW_C/call-proc | callProc | 2 | N | shipment-plan.erpChain.ts:806 shipment-plan.erpChain.ts:813 |
+| /common/web-service/erpIf/call | propagated | 2 | Y | shipment-plan.erpChain.ts:334 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -80,130 +87,119 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| ColumnSelectDualList | onToggleLeft | toggle(setCheckedLeft) | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 262 |
-| ColumnSelectDualList | onToggleRight | toggle(setCheckedRight) | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 263 |
-| ColumnSelectDualList | onToggleAllLeft | <arrow> setCheckedLeft,baseRows.filter(r=>r.personalizable==='Y').map,baseRows.filter | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 264 |
-| ColumnSelectDualList | onToggleAllRight | <arrow> setCheckedRight,userRows.filter(r=>r.personalizable==='Y').map,userRows.filter | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 271 |
-| ColumnSelectDualList | onMoveRight | requireChecked(checkedLeft, moveToUser) | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 278 |
-| ColumnSelectDualList | onMoveLeft | requireChecked(checkedRight, moveToBase) | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 279 |
-| ColumnSelectDualList | onReorderRight | reorderRight | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 280 |
-| ColumnSelectDualList | onRowDoubleClickLeft | moveOne(moveToUser) | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 281 |
-| ColumnSelectDualList | onRowDoubleClickRight | moveOne(moveToBase) | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 282 |
-| Button | onClick | handleDefault | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 291 |
-| Button | onClick | handleOk | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 300 |
-| Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 307 |
-| Button | onClick | onClose | jsx | features/shipping/src/pages/shipment-plan/components/modals/OrderDetailModal.tsx | 164 |
 | InputField | onChange | <arrow> setKeyword | jsx | features/shipping/src/pages/shipment-plan/components/modals/RequestorModal.tsx | 93 |
 | InputField | onKeyDown | <arrow> handleSearch | jsx | features/shipping/src/pages/shipment-plan/components/modals/RequestorModal.tsx | 94 |
 | Button | onClick | handleSearch | jsx | features/shipping/src/pages/shipment-plan/components/modals/RequestorModal.tsx | 96 |
 | Button | onClick | handleSelect | jsx | features/shipping/src/pages/shipment-plan/components/modals/RequestorModal.tsx | 109 |
 | Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-plan/components/modals/RequestorModal.tsx | 112 |
-| InputField | onChange | <arrow> setTitle | jsx | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 156 |
-| Button | onClick | handleRequest | jsx | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 167 |
-| Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 170 |
+| g | updatedLayout | applyLayout | addHandler | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 244 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 245 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 246 |
+| Button | onClick | handleAutoSet | jsx | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 454 |
+| CustomDropdown | onChange | <arrow> setAutoReason,str | jsx | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 466 |
+| InputField | onChange | <arrow> setAutoDetail | jsx | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 475 |
+| Button | onClick | <arrow> handleSave | jsx | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 478 |
+| Button | onClick | modalClose | jsx | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 481 |
 | PeriodField | onChange | <arrow> setPeriod2 | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 95 |
 | PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 106 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 133 |
-| InputField | onKeyDown | <arrow> onDetailSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 134 |
-| FunctionSearchIcon | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 128 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 166 |
-| InputField | onKeyDown | <arrow> onDetailSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 167 |
-| FunctionSearchIcon | onClick | onRequestorSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 161 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 132 |
+| Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 128 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 163 |
+| Button | onClick | onRequestorSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 159 |
 | CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 190 |
-| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 219 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 243 |
-| InputField | onKeyDown | <arrow> onDetailSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 244 |
+| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 220 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 244 |
 | Button | onClick | onNew | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 255 |
-| Button | onClick | onDetailSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 260 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 172 |
-| g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 190 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 219 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 277 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 279 |
-| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 319 |
-| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 334 |
-| g | beginningEdit | editGateHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 367 |
-| g | pastingCell | editGateHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 368 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 382 |
-| g | formatItem | paintNegative | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 428 |
-| g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 457 |
-| g | updatedLayout | applyAggregates | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 548 |
-| g | updatedLayout | pinFooterToBottom | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 549 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 609 |
-| DataGrid | gotFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 639 |
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 217 |
-| CustomDropdown | onChange | <arrow> str,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 234 |
-| CustomDropdown | onChange | <arrow> str,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setCompany | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 258 |
-| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 284 |
-| CustomDropdown | onChange | <arrow> set,str | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 306 |
-| CustomDropdown | onChange | <arrow> handlePlanDateChange,str | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 322 |
-| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 336 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 363 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 364 |
-| FunctionSearchIcon | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 358 |
-| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 385 |
-| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 407 |
-| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 421 |
-| g | updatedLayout | applyMerge | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 338 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 368 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 382 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 462 |
-| g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 477 |
-| g | cellEditEnded | recalcCell | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 495 |
-| g | pastedCell | recalcCell | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 496 |
-| g.hostElement | keydown | deleteKeyHandler | addEventListener | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 540 |
-| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 559 |
-| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 573 |
-| ShipmentPlanForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 785 |
-| ShipmentPlanForm | onItemSearch | <arrow> setOpenItemMain | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 786 |
-| ShipmentPlanMainGrid | onDrilldown | handleMainDrilldown | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 817 |
-| ShipmentPlanDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 823 |
-| ShipmentPlanDetailBar | onNew | handleNew | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 824 |
-| ShipmentPlanDetailBar | onModelSearch | <arrow> setOpenItemDetailBar | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 825 |
-| ShipmentPlanDetailBar | onRequestorSearch | <arrow> setOpenRequestor | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 826 |
-| ShipmentPlanDetailGrid | onItemCellSearch | <arrow> openCellPopup | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 854 |
-| ShipmentPlanDetailGrid | onProjectCellSearch | <arrow> openCellPopup | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 855 |
-| ShipmentPlanDetailGrid | onConfirmDetail | setConfirmDetailNo | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 856 |
-| ShipmentPlanDetailGrid | onOrderDetail | setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 857 |
-| ModelByDivisionPopup | onClose | <arrow> setOpenItemMain | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 882 |
-| ModelByDivisionPopup | onSelect | <arrow> set,str | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 883 |
-| ModelByDivisionPopup | onClose | <arrow> setOpenItemDetailBar | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 895 |
-| ModelByDivisionPopup | onSelect | <arrow> set,str | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 896 |
-| ModelByDivisionPopup | onClose | <arrow> setCellPopupKind | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 910 |
-| ModelByDivisionPopup | onSelect | <arrow> str,planDetailGridRef.current?.collectionView?.refresh | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 911 |
-| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[SHEETS.MAIN]??'',columnType:TITLESET_MEASURE_TYPE,rows:codes.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,codes.map,setAlert,t | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 963 |
-| OrderDetailModal | onClose | <arrow> setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1005 |
+| Button | onClick | onDetailSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailBar.tsx | 261 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 189 |
+| g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 207 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 257 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 315 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 317 |
+| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 357 |
+| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 372 |
+| g | beginningEdit | editGateHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 405 |
+| g | pastingCell | editGateHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 406 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 420 |
+| g | updatedLayout | apply | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 454 |
+| g | formatItem | paintNegative | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 496 |
+| g.hostElement? | click | onDetailClick | addEventListener | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 521 |
+| g | updatedLayout | apply | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 547 |
+| g | updatedLayout | applyAggregates | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 635 |
+| g | updatedLayout | pinFooterToBottom | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 636 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 696 |
+| DataGrid | gotFocus | <arrow> setActiveGrid | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 740 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 219 |
+| CustomDropdown | onChange | <arrow> str,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 237 |
+| CustomDropdown | onChange | <arrow> str,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setCompany | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 261 |
+| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 287 |
+| CustomDropdown | onChange | <arrow> set,str | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 309 |
+| CustomDropdown | onChange | <arrow> handlePlanDateChange,str | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 325 |
+| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 339 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 365 |
+| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 361 |
+| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 386 |
+| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan/components/ShipmentPlanForm.tsx | 411 |
+| g | updatedLayout | applyMerge | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 546 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 576 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 590 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 691 |
+| g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 706 |
+| g | cellEditEnded | recalcCell | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 745 |
+| g | pastedCell | recalcCell | addHandler | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 746 |
+| g.hostElement | keydown | deleteKeyHandler | addEventListener | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 808 |
+| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 827 |
+| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 841 |
+| globalThis.window | keydown | onKeyDown | addEventListener | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 990 |
+| ShipmentPlanForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1084 |
+| ShipmentPlanForm | onItemSearch | <arrow> setOpenItemMain | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1085 |
+| ShipmentPlanMainGrid | onDrilldown | handleMainDrilldown | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1125 |
+| ShipmentPlanDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1135 |
+| ShipmentPlanDetailBar | onNew | handleNew | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1136 |
+| ShipmentPlanDetailBar | onModelSearch | <arrow> setOpenItemDetailBar | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1137 |
+| ShipmentPlanDetailBar | onRequestorSearch | <arrow> setOpenRequestor | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1138 |
+| ShipmentPlanDetailGrid | onItemCellSearch | <arrow> openCellPopup | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1166 |
+| ShipmentPlanDetailGrid | onProjectCellSearch | <arrow> openCellPopup | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1167 |
+| ShipmentPlanDetailGrid | onConfirmDetail | setConfirmDetailNo | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1168 |
+| ShipmentPlanDetailGrid | onOrderDetail | setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1169 |
+| ModelByDivisionPopup | onClose | <arrow> setCellPopupKind | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1222 |
+| ModelByDivisionPopup | onSelect | <arrow> str,planDetailGridRef.current?.collectionView?.refresh | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1223 |
+| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[SHEETS.MAIN]??'',columnType:TITLESET_MEASURE_TYPE,rows:(codes??[]).map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,(codes??[]).map,setAlert,t | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1288 |
+| ConfirmDetailModal | onClose | <arrow> setConfirmDetailNo | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1321 |
+| OrderDetailModal | onClose | <arrow> setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 1331 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
 | FormItem | 15 |
-| Grid | 15 |
-| Button | 14 |
-| CustomDropdown | 8 |
+| Grid | 14 |
+| Button | 11 |
+| CustomDropdown | 9 |
 | Stack | 7 |
-| DataGrid | 6 |
 | InputField | 6 |
-| CustomDialog | 5 |
-| Box | 3 |
+| DataGrid | 4 |
 | PeriodField | 3 |
 | FunctionSearchIcon | 3 |
-| ModelByDivisionPopup | 3 |
-| Checkbox | 2 |
-| ColumnSelectDualList | 1 |
-| ControlConfirmIcon | 1 |
+| CustomDialog | 2 |
+| Box | 2 |
+| Panel | 2 |
+| MaterialByDivisionModal | 2 |
 | TabWrapper | 1 |
 | TabItem | 1 |
 | SearchArea | 1 |
+| Checkbox | 1 |
 | IcMeasureSelect | 1 |
 | MainTitle | 1 |
 | ShipmentPlanForm | 1 |
 | SubTitle | 1 |
+| PanelGroup | 1 |
 | ShipmentPlanMainGrid | 1 |
+| PanelSeparator | 1 |
 | ShipmentPlanDetailBar | 1 |
 | ShipmentPlanDetailGrid | 1 |
+| ModelByDivisionPopup | 1 |
 | ProjectByDivisionModal | 1 |
-| RequestorModal | 1 |
+| SsoUserModal | 1 |
 | MeasureSelectModal | 1 |
 | ShipmentRequestModal | 1 |
 | ConfirmDetailModal | 1 |
@@ -212,57 +208,32 @@
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| POPUP_COLUMNS | DIVISION_ID | Div | 60 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 22 |
-| POPUP_COLUMNS | ERP_SO_NO | SO No | 110 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 23 |
-| POPUP_COLUMNS | PROJECT_CODE | Project Code | 110 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 24 |
-| POPUP_COLUMNS | PROJECT_NAME | Project Name | 130 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 25 |
-| POPUP_COLUMNS | FCST_TYPE | FCST Type | 80 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 26 |
-| POPUP_COLUMNS | NICK_NAME | Nick Name | 110 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 27 |
-| POPUP_COLUMNS | PRODUCT_LEVEL1 | Product Level1 | 100 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 28 |
-| POPUP_COLUMNS | ITEM_ID | Model | 130 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 29 |
-| POPUP_COLUMNS | FROM_SITE_DESCRIPTION | From Site | 120 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 30 |
-| POPUP_COLUMNS | TO_SITE_DESCRIPTION | To Site | 120 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 31 |
-| POPUP_COLUMNS | SOLDTO_DESCRIPTION | Sold To | 120 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 32 |
-| POPUP_COLUMNS | SHIPTO_DESCRIPTION | Ship To | 120 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 33 |
-| POPUP_COLUMNS | INCOTERMS | Incoterms | 80 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 34 |
-| POPUP_COLUMNS | SHIPMENT_DATE | Shipment Date | 100 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 35 |
-| POPUP_COLUMNS | SHIPMENT_CONFIRM_QTY | Shipment Qty | 100 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 36 |
-| POPUP_COLUMNS | ETD | ETD | 100 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 37 |
-| POPUP_COLUMNS | ETA | ETA | 100 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ConfirmDetailModal.tsx | 38 |
-| sourceRows | measure.colNm | measure.colLblNm \|\| measure.colNm |  | Y\|N |  |  | meta-map | features/shipping/src/pages/shipment-plan/components/modals/MeasureSelectModal.tsx | 96 |
-| ORDER_DETAIL_COLUMNS | SO_NO | SO NO. | 120 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/OrderDetailModal.tsx | 50 |
-| ORDER_DETAIL_COLUMNS | SO_ITEM_NO | SO Item No. | 100 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/OrderDetailModal.tsx | 51 |
-| ORDER_DETAIL_COLUMNS | SO_ITEM_QTY | SO Item Qty | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/OrderDetailModal.tsx | 59 |
-| ORDER_DETAIL_COLUMNS | DO_NO | DO NO. | 120 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/OrderDetailModal.tsx | 67 |
-| ORDER_DETAIL_COLUMNS | DO_ITEM_NO | DO Item No. | 100 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/OrderDetailModal.tsx | 68 |
-| ORDER_DETAIL_COLUMNS | DO_ITEM_QTY | DO Item Qty. | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/OrderDetailModal.tsx | 76 |
-| ORDER_DETAIL_COLUMNS | CONFIRM_ID | Confirm ID | 130 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/OrderDetailModal.tsx | 84 |
 | POPUP_COLUMNS | CODE | User ID | 140 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/RequestorModal.tsx | 29 |
 | POPUP_COLUMNS | NAME | User Name | 200 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/RequestorModal.tsx | 30 |
-| POPUP_COLUMNS | DIVISION_ID | Div | 60 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 31 |
-| POPUP_COLUMNS | ERP_SO_NO | SO No | 110 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 32 |
-| POPUP_COLUMNS | ITEM_ID | Model | 130 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 33 |
-| POPUP_COLUMNS | NICK_NAME | Nick Name | 110 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 34 |
-| POPUP_COLUMNS | FROM_SITE_DESCRIPTION | From Site | 120 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 35 |
-| POPUP_COLUMNS | TO_SITE_DESCRIPTION | To Site | 120 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 36 |
-| POPUP_COLUMNS | SHIPMENT_DATE | Shipment Date | 100 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 37 |
-| POPUP_COLUMNS | SHIPMENT_CONFIRM_QTY | Shipment Qty | 100 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 38 |
-| POPUP_COLUMNS | CHANGE_REASON_CODE | Change Reason | 110 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 39 |
-| POPUP_COLUMNS | CHANGE_REASON_DETAIL | Reason Detail | 140 |  |  |  | meta-shape | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 40 |
-| dynamicColumns | m.binding | m.kind === 'D' ? m.leaf \|\| 'SUM' : 'SUM' | 80 | isDynVisible(m.kind, bucketType, chkSum) |  |  | object | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 253 |
+| leaf | DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER | header | width |  |  |  | object | features/shipping/src/pages/shipment-plan/components/modals/ShipmentRequestModal.tsx | 140 |
+| dynamicColumns | m.binding | m.kind === 'D' ? m.leaf \|\| 'SUM' : 'SUM' | 80 | isDynVisible(m.kind, bucketType, chkSum) |  |  | object | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 422 |
 
 ## 7. 메시지 코드
 | code | count |
 |---|---|
-| LBL00713 | 2 |
-| LBL00310 | 2 |
-| LBL00764 | 1 |
-| LBL00765 | 1 |
+| LBL01115 | 2 |
+| LBL00025 | 1 |
+| LBL01111 | 1 |
+| LBL00869 | 1 |
+| LBL01141 | 1 |
+| LBL00669 | 1 |
+| LBL00022 | 2 |
+| LBL00023 | 2 |
+| LBL00024 | 1 |
+| LBL01060 | 2 |
+| LBL01104 | 2 |
 | MSG01401 | 1 |
 | MSG00429 | 1 |
+| MSG01206 | 1 |
 | MSG01291 | 1 |
 | MSG01289 | 1 |
 | MSG00013 | 1 |
+| MSG01126 | 1 |
 | MSG01244 | 1 |
 | MSG00284 | 1 |
 | MSG01261 | 1 |
@@ -273,23 +244,24 @@
 | MSG01295 | 1 |
 | MSG01315 | 1 |
 | MSG01201 | 1 |
-| MSG00133 | 1 |
+| MSG00004 | 1 |
 | MSG00002 | 1 |
 | MSG00003 | 1 |
+| MSG01321 | 1 |
 | LBL00001 | 1 |
 | LBL00047 | 1 |
-| LBL00022 | 1 |
 | LBL00618 | 1 |
 | LBL00013 | 1 |
 | LBL00039 | 1 |
 | LBL01108 | 1 |
 | LBL01109 | 1 |
-| LBL01115 | 1 |
 | LBL01057 | 1 |
 | LBL00710 | 1 |
 | LBL00687 | 1 |
+| LBL00310 | 1 |
 | LBL01028 | 1 |
 | LBL00112 | 1 |
+| LBL00664 | 1 |
 | LBL00783 | 1 |
 | LBL00627 | 1 |
 | LBL00716 | 1 |
@@ -298,26 +270,39 @@
 | LBL01125 | 1 |
 | LBL01144 | 1 |
 | LBL01145 | 1 |
+| MSG01208 | 1 |
+| MSG01215 | 1 |
+| MSG01125 | 1 |
+| MSG01258 | 1 |
+| MSG01259 | 1 |
+| MSG01202 | 1 |
+| MSG00247 | 1 |
+| MSG01081 | 1 |
+| MSG01395 | 1 |
+| MSG01275 | 1 |
+| MSG00704 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0060(15), SSP0015(15), SSP0200(4), SSP0300(4), SSP0025(3), SSP0014(3), SCP0001(1), SSP0021(1), DMF0021(1), SCP0025(1), SCP0005(1)
-- SP/PKG: PKG_SSP0060(8), PKG_SSP0002(7), P_DIVISION_ID(5), P_SSP0300_GET_ORDER_DETAIL(3), P_ITEM_ID(3), SSP0002_GET_USER_INFO_LIST(3), P_USER_ID(2), PKG_NSCM_UI_COM_MENU(2), PR_GET_SHEET_MEASURE_LIST(2), P_SSP0060_GET_SHIPMENT_PLAN(2), DM0003_GET_BUCKET_TYPE_CODE(2), P_SSP0002_GET_USER_INFO_LIST(2), P_SSP0060_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING(1), P_CHANGE_REQUEST_NO(1), P_LANGUAGE(1), DMF0002_GET_TITLESET_POPUP(1), P_COLUMN_TYPE(1), P_ERP_SO_NO(1), P_CONFIRM_ID(1), PKG_SSP0300(1), P_TITLE(1), PR_SSP_ANL_(1), P_SSP0060_GET_SHIPMENT_PLAN_DETAIL(1), P_SSP0060_GET_SHIPMENT_DIVISION(1), PKG_COM0000(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(1), P_SSP0200_USER_CHECK(1), SSP0060_SAVE_HOLD_STOCK_DATA(1), P_DBL_FLAG(1), SCP0009_GET_SHEET_CALENDAR_3SPAN(1), FN_GET_ANL_SHIP_FROZEN_DAY_CNT(1), PR_GET_LOOKUP_INFO_LIST(1), P_ACTIVE_FLAG(1), P_COMPANY_ID(1), P_FROM_SITE(1), P_TO_SITE(1), P_TRANSPORT_MODE(1), P_INCOTERMS(1), P_FCST_TYPE(1), P_PLAN_START_YYYYMMDD(1)
+- 화면ID: SSP0015(23), SSP0060(14), SSP0021(8), SSP0005(5), SSP0014(5), SSP0200(4), SSP0300(3), SSP0025(3), SSP0023(2), SCP0001(1), DMF0082(1), DMF0021(1), SCP0025(1), SCP0005(1)
+- SP/PKG: PKG_SSP0060(9), PKG_SSP0002(7), PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH(4), SSP0002_GET_USER_INFO_LIST(3), PKG_SSP0003(3), P_DIVISION_ID(3), SSP0003_GET_SSP_PLAN_PROCESSING_CHECK(2), P_SSP0300_GET_ORDER_DETAIL(2), DM0003_GET_BUCKET_TYPE_CODE(2), P_SSP0002_GET_USER_INFO_LIST(2), P_ITEM_ID(2), P_SSP0060_SAVE_SHIPMENT_REQUEST_CONFIRM(2), P_SSP0060_GET_SHIPMENT_PLAN_DETAIL(1), P_SSP0060_GET_SHIPMENT_DIVISION(1), PKG_COM0000(1), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(1), P_SSP0200_USER_CHECK(1), P_SCM_SSP_CHECK_CONFIRM_CHANGETIME_DE(1), P_SSP0060_GET_SHIPMENT_PSI_COMMENTS(1), SSP0060_SAVE_HOLD_STOCK_DATA(1), P_SCM0002_GET_ITEM_BY_DIVISION_POPUP(1), P_DBL_FLAG(1), SCP0009_GET_SHEET_CALENDAR_3SPAN(1), P_SSP0060_GET_SHIPMENT_PLAN(1), PKG_NSCM_UI_COM_MENU(1), PR_GET_SHEET_MEASURE_LIST(1), P_SSP0003_SAVE_REQ_IF_CHECK(1), PR_GET_LOOKUP_INFO_LIST(1), P_ACTIVE_FLAG(1), P_COMPANY_ID(1), P_FROM_SITE(1), P_TO_SITE(1), P_TRANSPORT_MODE(1), P_INCOTERMS(1), P_FCST_TYPE(1), P_PLAN_START_YYYYMMDD(1), P_YYYYMMDD(1), P_SHIPMENT_QTY(1), P_USER_ID(1), P_USER_DEPT_ID(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | 필수: early return 보다 먼저 기록한다(Main 그리드 clickHandler 와 동일 이유). | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 323 |
-| code | 조기 return 뒤에 묻히는 실수를 막는다(oWMS 핸들러는 STOCK_STATUS 아니면 즉시 return 한다). | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 412 |
-| code | o = footerRows.getTotalSize(); n = rows.getTotalSize() + o; s = _heightBrowser + i - o; | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 518 |
-| code | private static Color m_InValidColor = Color.FromArgb(92, 209, 229); | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 81 |
-| code | string strTmp_ItemID = GetValue(i, ITEM_ID); | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 409 |
+| code | 필수: early return 보다 먼저 기록한다(Main 그리드 clickHandler 와 동일 이유). | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 361 |
+| code | 조기 return 뒤에 묻히는 실수를 막는다(oWMS 핸들러는 STOCK_STATUS 아니면 즉시 return 한다). | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 480 |
+| code | o = footerRows.getTotalSize(); n = rows.getTotalSize() + o; s = _heightBrowser + i - o; | features/shipping/src/pages/shipment-plan/components/ShipmentPlanDetailGrid.tsx | 605 |
+| code | private static Color m_InValidColor = Color.FromArgb(92, 209, 229); | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 154 |
+| code | string strTmp_ItemID = GetValue(i, ITEM_ID); | features/shipping/src/pages/shipment-plan/components/ShipmentPlanMainGrid.tsx | 617 |
 | code | - 툴바 5버튼: Find/Save/Insert/Edit = 실동작, Delete = NO-OP `() => undefined` (00 §4d 확정 — 재판단 금지). | features/shipping/src/pages/shipment-plan/shipment-plan.constants.ts | 11 |
-| code | 툴바: Find/Save/Insert/Edit=실동작, Delete=NO-OP `() => undefined` (00 §4d — 노출 유지, false 숨김 금지). | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 63 |
-| code | `bool isOK = GetSSPUserCheck(); if (isOK == false) { GMessageBox("MSG00251", UserId); return; }` | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 117 |
-| endpoint | ── mount — keep-alive 잔여 filters 무효화 + Main 컬럼 메타 1회 fetch (np §5-7) ── | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 366 |
-| endpoint | ── Detail 탭 전환 시 해당 sheet 컬럼 메타 lazy fetch (헤더 생성) ── | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 375 |
-| code | R2 — 경고 없이 조용히 return (AS-IS L2148) | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 710 |
-| endpoint | 1) admin SCM_MST_SHEET_COLUMNS fetch (mount + Search — ui-dynamic-property-management §2.3). | features/shipping/src/pages/shipment-plan/useShipmentPlanStore.ts | 362 |
+| code | 툴바: Find/Save/Insert/Edit=실동작, Delete=NO-OP `() => undefined` (00 §4d — 노출 유지, false 숨김 금지). | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 84 |
+| code | `bool isOK = GetSSPUserCheck(); if (isOK == false) { GMessageBox("MSG00251", UserId); return; }` | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 152 |
+| endpoint | ── mount — keep-alive 잔여 filters 무효화 + Main 컬럼 메타 1회 fetch (np §5-7) ── | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 531 |
+| endpoint | ── Detail 탭 전환 시 해당 sheet 컬럼 메타 lazy fetch (헤더 생성) ── | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 542 |
+| code | R2 — 경고 없이 조용히 return (AS-IS L2148) | features/shipping/src/pages/shipment-plan/ShipmentPlan.tsx | 945 |
+| endpoint | 1) admin SCM_MST_SHEET_COLUMNS fetch (mount + Search — ui-dynamic-property-management §2.3). | features/shipping/src/pages/shipment-plan/useShipmentPlanStore.ts | 380 |
 | code | 사용법: 클릭 핸들러에서 **early return 보다 먼저** track() 을 부른다(헤더·빈 영역 클릭도 null 로 | features/shipping/src/pages/shipment-plan/utils/shipment-plan.dblClickGuard.ts | 12 |
+| code | 더블클릭 시 handleMainDrilldown 의 `if (!sheet) return` 으로 무반응. | features/shipping/src/pages/shipment-plan/utils/shipment-plan.detailSheets.ts | 107 |
+| code | lookup 행 배열의 참조 안정화 — useTabLookupQueries 는 useQueries 결과를 `.map(d => d.data)` 로 돌려줘 **매 렌더 새 배열**이다(참조 불안정). 그대로 useMemo deps 에 쓰면 파생 DataMap/맵이 매 렌더 재생성되고, 그 인스턴스를 그리드 col.dataMap 에 재대입하는 effect 가 매 렌더 돌아 편집 중 드롭다운이 닫히고 커밋이 증발한다 (2026-10- | features/shipping/src/pages/shipment-plan/utils/shipment-plan.lookups.ts | 37 |
 | code | TransMode 셀콤보 route 파생키 (갭항목 I04). AS-IS SpdDetail_CellClick(GSCM.SSP.Plan.UIL/SSP0060_ShipmentPlan.cs L1974~1997)은 TRANSPORT_MODE 셀을 누르면 그 행의 route 로 콤보를 **행 단위 재조회**한다: string sDivision = GetValue(DIVISION_ID); string sFromSite = GetValue | features/shipping/src/pages/shipment-plan/utils/shipment-plan.transMode.ts | 1 |
 
 ## 10. __asis-mapping__.md 상태

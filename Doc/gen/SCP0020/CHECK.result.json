@@ -1,0 +1,48 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-10-30T03:15:24.959Z",
+ "producer": "check.js",
+ "id": "SCP0020",
+ "final": false,
+ "page": "nscm-fe/features/supply/src/pages/tact-time",
+ "state": "completed",
+ "verdict": "fail",
+ "summary": {
+  "block": 2,
+  "warn": 70
+ },
+ "issues": [
+  {
+   "id": "V01",
+   "class": "BLOCK",
+   "msg": "Validation 마커 누락 7/7: V-001(Lundefined) V-002(Lres == false)            ) V-003(Lundefined) V-004(Lundefined) V-005(Lundefined) V-006(Lundefined) V-007(Lundefined)",
+   "where": "hooks/useTactTimeValidation.ts",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js V01"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "MS1",
+   "class": "BLOCK",
+   "msg": "AS-IS 메시지 ID 그대로 사용: MSG00109 — AS-IS '읽기 전용입니다.' / TO-BE MSG00109 = '읽기전용 상태입니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+)",
+   "where": "tact-time.constants.ts",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js MS1"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "check.js"
+  }
+ ]
+}

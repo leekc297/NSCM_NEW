@@ -1,0 +1,189 @@
+
+## CMBO cols (9 rows)
+COLUMN_NAME
+SQL_ID
+MDU_DIVS_CD
+SQL_NM
+SQL_DTL_CTN
+USE_YN
+CREATED_BY
+CREATION_DATE
+LAST_UPDATED_BY
+LAST_UPDATE_DATE
+
+## CMBO rows (4 rows)
+SQL_ID | MDU_DIVS_CD | USE_YN | CREATED_BY | CREATION_DATE | LAST_UPDATED_BY | LAST_UPDATE_DATE
+Division_SCP | ALL | Y | admin | 2026-09-10 16:36:44 | AJS | 2026-10-12 17:56:33
+PLAN_END_DATE_REPORT | ALL | Y | admin | 2026-09-10 17:17:34 | admin | 2026-09-11 15:20:42
+PlanType1_SCP_ALL | ALL | Y | admin | 2026-09-10 16:36:44 | AJS | 2026-10-12 17:56:34
+SCPPlanPeriod_SCP | ALL | Y | admin | 2026-09-10 16:36:44 | AJS | 2026-09-17 19:09:41
+
+## LOOKUP types (0 rows)
+TYP | CNT | MAX_UPD | UB
+
+## LOOKUP cols (28 rows)
+COLUMN_NAME
+LOOKUP_TYPE
+SEGMENT1
+SEGMENT2
+SEGMENT3
+SEGMENT4
+SEGMENT5
+DISPLAY_SEQ
+VALID_YN
+DESCRIPTION
+CREATED_BY
+CREATION_DATE
+LAST_UPDATED_BY
+LAST_UPDATE_DATE
+ATTRIBUTE1
+ATTRIBUTE2
+ATTRIBUTE3
+ATTRIBUTE4
+ATTRIBUTE5
+ATTRIBUTE6
+ATTRIBUTE7
+ATTRIBUTE8
+ATTRIBUTE9
+ATTRIBUTE10
+ATTRIBUTE11
+ATTRIBUTE12
+ATTRIBUTE13
+ATTRIBUTE14
+ATTRIBUTE15
+
+## MSG_M FE codes (25 rows)
+MSG_ID | NMS | CRE | UPD | CB | UB
+LBL00001 | CN=Div. / EN=Div. / KO=Div | 2026-02-13 15:53:29 | 2026-08-19 10:53:08 | SYSTEM | minyonglee1
+LBL00012 | CN=PJT / EN=PJT / KO=PJT | 2026-02-13 15:53:29 | 2026-03-19 10:02:51 | SYSTEM | minyonglee1
+LBL00021 | CN=Material / EN=Material / KO=Material | 2026-02-13 15:53:29 | 2026-02-13 15:53:29 | SYSTEM | SYSTEM
+LBL00022 | CN=From Site / EN=From Site / KO=From Site | 2026-02-13 15:53:29 | 2026-02-13 15:53:29 | SYSTEM | SYSTEM
+LBL00023 | CN=To Site / EN=To Site / KO=To Site | 2026-02-13 15:53:29 | 2026-02-13 15:53:29 | SYSTEM | SYSTEM
+LBL00039 | CN=Plan Date / EN=Plan Date / KO=Plan Date | 2026-02-13 15:53:29 | 2026-02-13 15:53:29 | SYSTEM | SYSTEM
+LBL00040 | CN=Plan Type / EN=Plan Type / KO=Plan Type | 2026-02-13 15:53:29 | 2026-02-13 15:53:29 | SYSTEM | SYSTEM
+LBL00049 | CN=Cell Group / EN=Cell Group / KO=Cell Group | 2026-02-13 15:53:29 | 2026-02-13 15:53:29 | SYSTEM | SYSTEM
+LBL00050 | CN=Search Level / EN=Search Level / KO=Search Level | 2026-02-13 15:53:29 | 2026-02-13 15:53:29 | SYSTEM | SYSTEM
+LBL00112 | CN=Search(F5) / EN=Search(F5) / KO=Search(F5) | 2026-02-03 19:12:43 | 2026-03-27 12:01:40 | SYSTEM,minyonglee1 | minyonglee1
+LBL00310 | CN=Measure / EN=Measure / KO=Measure | 2026-03-11 16:30:12 | 2026-03-12 10:19:54 | minyonglee1,park.choyi | minyonglee1
+LBL00605 | CN=Column Setting / EN=Column Setting / KO=Column Setting | 2026-06-29 17:04:36 | 2026-08-11 16:12:00 | admin | admin
+LBL00683 | CN=Weekly / EN=Weekly / KO=Weekly | 2026-06-29 17:04:40 | 2026-06-29 17:04:40 | admin | admin
+LBL00684 | CN=Monthly / EN=Monthly / KO=Monthly | 2026-06-29 17:04:40 | 2026-06-29 17:04:40 | admin | admin
+LBL00690 | CN=Cell Qty / EN=Cell Qty / KO=Cell Qty | 2026-06-29 17:04:41 | 2026-06-29 17:04:41 | admin | admin
+LBL00710 | CN=Bucket / EN=Bucket / KO=Bucket | 2026-06-29 17:04:41 | 2026-07-13 16:08:54 | admin | minyonglee1
+LBL00767 | CN=Nick Name / EN=Nick Name / KO=Nick Name | 2026-07-13 15:48:03 | 2026-07-13 15:48:03 | admin | admin
+LBL01073 | CN=Display / EN=Display / KO=Display | 2026-09-16 09:53:19 | 2026-09-16 09:53:19 | admin | admin
+LBL01129 | CN=Unit (Qty) / EN=Unit (Qty) / KO=Unit (Qty) | 2026-09-16 09:53:22 | 2026-09-16 09:53:22 | admin | admin
+LBL01163 | CN=Scale / EN=Scale / KO=Scale | 2026-10-15 17:11:29 | 2026-10-15 17:11:29 | minyonglee1 | minyonglee1
+LBL01167 | CN=A/S / EN=A/S / KO=A/S | 2026-10-19 09:52:20 | 2026-10-19 09:52:20 | minyonglee1 | minyonglee1
+MSG00097 | CN=Please select Division. / EN=Please select Division. / KO=Division 을 선택하세요. | 2026-06-29 16:44:23 | 2026-06-10 18:06:37 | admin | admin
+MSG00618 | CN=An error occurred while saving. / EN=An error occurred while saving. / KO=저장 중 오류가 발생했습니다. | 2026-06-29 16:44:26 | 2026-09-01 16:25:10 | admin | minyonglee1
+MSG00703 | CN=There are unsaved changes. Do you want to search again? / EN=There are unsaved changes. Do you want to search again? / KO=수정 중인 데이터가 있습니다. 이 화면을 닫으시겠습니까? | 2026-08-05 10:01:54 | 2026-10-29 14:47:19 | minyonglee1 | minyonglee1
+MSG00704 | CN=There is data being modified. Would you like to retrieve it? / EN=There is data being modified. Would you like to retrieve it? / KO=수정 중인 데이터가 있습니다. 조회 하시겠습니까? | 2026-08-05 10:01:54 | 2026-08-12 13:19:04 | minyonglee1 | admin
+
+## MSG_M missing (0 rows)
+MSG_ID
+
+## MSG_M recent by user (90 rows)
+MSG_ID | LANG_CD | MSG_TP_CD | MSG_NM | CREATED_BY | CREATION_DATE | LAST_UPDATED_BY | LAST_UPDATE_DATE
+LBL01161 | KO | LBL | Vendor Name | minyonglee1 | 2026-10-13 17:38:59 | minyonglee1 | 2026-10-13 17:38:59
+LBL01162 | EN | LBL | Vendor Code | minyonglee1 | 2026-10-13 17:38:59 | minyonglee1 | 2026-10-13 17:38:59
+LBL01162 | CN | LBL | Vendor Code | minyonglee1 | 2026-10-13 17:38:59 | minyonglee1 | 2026-10-13 17:38:59
+LBL01161 | CN | LBL | Vendor Name | minyonglee1 | 2026-10-13 17:38:59 | minyonglee1 | 2026-10-13 17:38:59
+LBL01162 | KO | LBL | Vendor Code | minyonglee1 | 2026-10-13 17:38:59 | minyonglee1 | 2026-10-13 17:38:59
+LBL01161 | EN | LBL | Vendor Name | minyonglee1 | 2026-10-13 17:38:59 | minyonglee1 | 2026-10-13 17:38:59
+MNU01014 | KO | MNU | Production Plan | minyonglee1 | 2026-10-14 10:38:12 | minyonglee1 | 2026-10-14 10:38:12
+MNU01014 | EN | MNU | Production Plan | minyonglee1 | 2026-10-14 10:38:12 | minyonglee1 | 2026-10-14 10:38:12
+MNU01014 | CN | MNU | Production Plan | minyonglee1 | 2026-10-14 10:38:12 | minyonglee1 | 2026-10-14 10:38:12
+MNU01015 | KO | MNU | Plan Management | minyonglee1 | 2026-10-14 10:49:24 | minyonglee1 | 2026-10-14 10:49:24
+MNU01015 | EN | MNU | Plan Management | minyonglee1 | 2026-10-14 10:49:24 | minyonglee1 | 2026-10-14 10:49:24
+MNU01015 | CN | MNU | Plan Management | minyonglee1 | 2026-10-14 10:49:24 | minyonglee1 | 2026-10-14 10:49:24
+MSG01458 | KO | MSG | Version을 생성하시겠습니까? | minyonglee1 | 2026-10-14 14:29:58 | minyonglee1 | 2026-10-14 14:29:58
+MSG01458 | CN | MSG | Do you want to create the Version? | minyonglee1 | 2026-10-14 14:29:58 | minyonglee1 | 2026-10-14 14:29:58
+MSG01457 | KO | MSG | 해당 Version을 취소하시겠습니까? | minyonglee1 | 2026-10-14 14:29:58 | minyonglee1 | 2026-10-14 14:29:58
+MSG01457 | CN | MSG | Do you want to cancel this Version? | minyonglee1 | 2026-10-14 14:29:58 | minyonglee1 | 2026-10-14 14:29:58
+MSG01457 | EN | MSG | Do you want to cancel this Version? | minyonglee1 | 2026-10-14 14:29:58 | minyonglee1 | 2026-10-14 14:29:58
+MSG01458 | EN | MSG | Do you want to create the Version? | minyonglee1 | 2026-10-14 14:29:58 | minyonglee1 | 2026-10-14 14:29:58
+MSG00210 | EN | MSG | Duplicate storage is not possible for the same EndCustomer, SalesSite, and Model | AJS | 2026-09-29 21:17:17 | minyonglee1 | 2026-10-14 15:23:06
+MSG00156 | CN | MSG | There are no models associated with the project. Please check the project model connection information. | AJS | 2026-09-29 21:17:17 | minyonglee1 | 2026-10-14 15:23:06
+MSG00210 | CN | MSG | Duplicate storage is not possible for the same EndCustomer, SalesSite, and Model | AJS | 2026-09-29 21:17:17 | minyonglee1 | 2026-10-14 15:23:06
+MSG00156 | EN | MSG | There are no models associated with the project. Please check the project model connection information. | AJS | 2026-09-29 21:17:17 | minyonglee1 | 2026-10-14 15:23:06
+MSG00210 | KO | MSG | 동일한 EndCustomer, SalesSite, Model에 대하여 중복저장이 불가합니다. | AJS | 2026-09-29 21:17:17 | minyonglee1 | 2026-10-14 15:23:06
+MSG00156 | KO | MSG | 해당프로젝트에 연결된 모델이 없습니다.  프로젝트 모델 연결 정보를 확인해주세요. | AJS | 2026-09-29 21:17:17 | minyonglee1 | 2026-10-14 15:23:06
+MNU_SCP0019 | CN | MNU | Work Calendar(OSP) | CONVERT_ZIONEX | 2026-09-23 18:10:24 | admin | 2026-10-15 14:42:27
+MNU_SCP0019 | KO | MNU | Work Calendar(OSP) | CONVERT_ZIONEX | 2026-09-23 18:10:24 | admin | 2026-10-15 14:42:27
+MNU_SCP0019 | EN | MNU | Work Calendar(OSP) | CONVERT_ZIONEX | 2026-09-23 18:10:24 | admin | 2026-10-15 14:42:27
+LBL01163 | EN | LBL | Scale | minyonglee1 | 2026-10-15 17:11:29 | minyonglee1 | 2026-10-15 17:11:29
+LBL01163 | CN | LBL | Scale | minyonglee1 | 2026-10-15 17:11:29 | minyonglee1 | 2026-10-15 17:11:29
+LBL01163 | KO | LBL | Scale | minyonglee1 | 2026-10-15 17:11:29 | minyonglee1 | 2026-10-15 17:11:29
+LBL01167 | EN | LBL | A/S | minyonglee1 | 2026-10-19 09:52:20 | minyonglee1 | 2026-10-19 09:52:20
+LBL01167 | KO | LBL | A/S | minyonglee1 | 2026-10-19 09:52:20 | minyonglee1 | 2026-10-19 09:52:20
+LBL01167 | CN | LBL | A/S | minyonglee1 | 2026-10-19 09:52:20 | minyonglee1 | 2026-10-19 09:52:20
+MSG01469 | KO | MSG | Owner는 최대 {0}명까지 선택할 수 있습니다. (선택 {1}명) | admin | 2026-10-20 11:11:06 | admin | 2026-10-20 11:11:06
+MSG01469 | CN | MSG | Owner最多可选择{0}名。（已选择{1}名） | admin | 2026-10-20 11:11:06 | admin | 2026-10-20 11:11:06
+MSG01469 | EN | MSG | You can select up to {0} Owners. ({1} selected) | admin | 2026-10-20 11:11:06 | admin | 2026-10-20 11:11:06
+MSG01461 | EN | MSG | Copy previous month''s data to current month | minyonglee1 | 2026-10-20 15:56:08 | minyonglee1 | 2026-10-20 16:06:07
+MSG01461 | KO | MSG | 전 월 데이터를 금 월로 복사 | minyonglee1 | 2026-10-20 15:56:08 | minyonglee1 | 2026-10-20 16:06:07
+MSG01461 | CN | MSG | Copy previous month''s data to current month | minyonglee1 | 2026-10-20 15:56:08 | minyonglee1 | 2026-10-20 16:06:07
+MSG01462 | KO | MSG | 전 주 데이터를 금 주로 복사 | minyonglee1 | 2026-10-20 15:56:08 | minyonglee1 | 2026-10-20 16:06:17
+MSG01462 | CN | MSG | Copy previous week''s data to current week | minyonglee1 | 2026-10-20 15:56:08 | minyonglee1 | 2026-10-20 16:06:17
+MSG01462 | EN | MSG | Copy previous week''s data to current week | minyonglee1 | 2026-10-20 15:56:08 | minyonglee1 | 2026-10-20 16:06:17
+MNU_SCP0027 | EN | MNU | ProjectRoute(Electrode) | CONVERT_ZIONEX | 2026-09-24 20:30:15 | minyonglee1 | 2026-10-22 11:47:53
+MNU_SCP0027 | KO | MNU | ProjectRoute(Electrode) | CONVERT_ZIONEX | 2026-09-24 20:30:15 | minyonglee1 | 2026-10-22 11:47:53
+MNU_SCP0027 | CN | MNU | ProjectRoute(Electrode) | CONVERT_ZIONEX | 2026-09-24 20:30:15 | minyonglee1 | 2026-10-22 11:47:53
+MNU_SCP0048 | CN | MNU | ProjectRoute(Warranty) | CONVERT_ZIONEX | 2026-09-24 21:18:39 | minyonglee1 | 2026-10-22 11:48:47
+MNU_SCP0048 | EN | MNU | ProjectRoute(Warranty) | CONVERT_ZIONEX | 2026-09-24 21:18:39 | minyonglee1 | 2026-10-22 11:48:47
+MNU_SCP0048 | KO | MNU | ProjectRoute(Warranty) | CONVERT_ZIONEX | 2026-09-24 21:18:39 | minyonglee1 | 2026-10-22 11:48:47
+MNU_SCP0096 | EN | MNU | Shipment Working Day(OSP) | CONVERT_ZIONEX | 2026-09-24 10:40:35 | minyonglee1 | 2026-10-22 11:49:01
+MNU_SCP0096 | KO | MNU | Shipment Working Day(OSP) | CONVERT_ZIONEX | 2026-09-24 10:40:35 | minyonglee1 | 2026-10-22 11:49:01
+MNU_SCP0096 | CN | MNU | Shipment Working Day(OSP) | CONVERT_ZIONEX | 2026-09-24 10:40:35 | minyonglee1 | 2026-10-22 11:49:01
+MNU_SCP0104 | CN | MNU | Line Assign | CONVERT_ZIONEX | 2026-09-23 18:17:39 | minyonglee1 | 2026-10-22 11:49:31
+MNU_SCP0104 | EN | MNU | Line Assign | CONVERT_ZIONEX | 2026-09-23 18:17:39 | minyonglee1 | 2026-10-22 11:49:31
+MNU_SCP0104 | KO | MNU | Line Assign | CONVERT_ZIONEX | 2026-09-23 18:17:39 | minyonglee1 | 2026-10-22 11:49:31
+MNU_SCP0105 | CN | MNU | Speed Plan | CONVERT_ZIONEX | 2026-09-23 18:15:36 | minyonglee1 | 2026-10-22 11:49:44
+MNU_SCP0105 | EN | MNU | Speed Plan | CONVERT_ZIONEX | 2026-09-23 18:15:36 | minyonglee1 | 2026-10-22 11:49:44
+MNU_SCP0105 | KO | MNU | Speed Plan | CONVERT_ZIONEX | 2026-09-23 18:15:36 | minyonglee1 | 2026-10-22 11:49:44
+MNU_SCP0106 | EN | MNU | Loss Plan | CONVERT_ZIONEX | 2026-09-23 22:20:55 | minyonglee1 | 2026-10-22 11:50:05
+MNU_SCP0106 | KO | MNU | Loss Plan | CONVERT_ZIONEX | 2026-09-23 22:20:55 | minyonglee1 | 2026-10-22 11:50:05
+MNU_SCP0106 | CN | MNU | Loss Plan | CONVERT_ZIONEX | 2026-09-23 22:20:55 | minyonglee1 | 2026-10-22 11:50:05
+MNU_SSP0024 | CN | MNU | Shipment Master Electrode | CONVERT_ZIONEX | 2026-09-23 11:56:17 | minyonglee1 | 2026-10-22 11:51:24
+MNU_SSP0024 | EN | MNU | Shipment Master Electrode | CONVERT_ZIONEX | 2026-09-23 11:56:17 | minyonglee1 | 2026-10-22 11:51:24
+MNU_SSP0024 | KO | MNU | Shipment Master Electrode | CONVERT_ZIONEX | 2026-09-23 11:56:16 | minyonglee1 | 2026-10-22 11:51:24
+MSG01472 | CN | MSG | The ship request has been created successfully. | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG01473 | EN | MSG | The version has been cancelled successfully. | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG01471 | CN | MSG | The operation failed. (Please contact the administrator.) | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG01472 | KO | MSG | Ship Req.가 생성되었습니다. | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG01474 | KO | MSG | Version이 생성되었습니다. | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG01473 | CN | MSG | The version has been cancelled successfully. | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG01473 | KO | MSG | Version이 취소 처리되었습니다. | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG01472 | EN | MSG | The ship request has been created successfully. | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG01471 | EN | MSG | The operation failed. (Please contact the administrator.) | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG01474 | EN | MSG | The version has been created successfully. | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG01474 | CN | MSG | The version has been created successfully. | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG01471 | KO | MSG | 실패하였습니다. (담당자에게 문의하십시오.) | minyonglee1 | 2026-10-26 10:12:08 | minyonglee1 | 2026-10-26 10:12:08
+MSG00172 | KO | MSG | 최대 조회일은 From Date + {0} 입니다. | admin | 2026-10-28 16:28:42 | admin | 2026-10-28 16:28:42
+MSG00172 | EN | MSG | Maximum Period is From Date + {0}. | admin | 2026-10-28 16:28:46 | admin | 2026-10-28 16:28:46
+MSG00172 | CN | MSG | Maximum Period is From Date + {0}. | admin | 2026-10-28 16:28:49 | admin | 2026-10-28 16:28:49
+MSG01477 | CN | MSG | OPERATION_GROUP 不是 Lookup 中的值。请输入 Pack / Cell / Electrode 之一。 | admin | 2026-10-29 12:10:15 | admin | 2026-10-29 12:10:15
+MSG01477 | KO | MSG | OPERATION_GROUP이 Lookup에 없는 값입니다. Pack / Cell / Electrode 중 하나로 입력하세요. | admin | 2026-10-29 12:10:15 | admin | 2026-10-29 12:10:15
+MSG01478 | KO | MSG | 수량 불일치!! {0} Prod plan Qty : {1} / {2} In-house moving Qty : {3} / {2} In-house moving Qty Should be {4} | admin | 2026-10-29 12:10:15 | admin | 2026-10-29 12:10:15
+MSG01478 | EN | MSG | Quantity mismatch!! {0} Prod plan Qty : {1} / {2} In-house moving Qty : {3} / {2} In-house moving Qty Should be {4} | admin | 2026-10-29 12:10:15 | admin | 2026-10-29 12:10:15
+MSG01478 | CN | MSG | 数量不一致!! {0} Prod plan Qty : {1} / {2} In-house moving Qty : {3} / {2} In-house moving Qty Should be {4} | admin | 2026-10-29 12:10:15 | admin | 2026-10-29 12:10:15
+MSG01477 | EN | MSG | OPERATION_GROUP is not a value in the Lookup. Enter one of Pack / Cell / Electrode. | admin | 2026-10-29 12:10:15 | admin | 2026-10-29 12:10:15
+MSG00703 | CN | MSG | There are unsaved changes. Do you want to search again? | minyonglee1 | 2026-08-05 10:01:54 | minyonglee1 | 2026-10-29 14:47:19
+MSG00703 | EN | MSG | There are unsaved changes. Do you want to search again? | minyonglee1 | 2026-08-05 10:01:54 | minyonglee1 | 2026-10-29 14:47:19
+MSG00703 | KO | MSG | 수정 중인 데이터가 있습니다. 이 화면을 닫으시겠습니까? | minyonglee1 | 2026-08-05 10:01:54 | minyonglee1 | 2026-10-29 14:47:19
+LBL01218 | EN | LBL | PJT Code | minyonglee1 | 2026-10-29 17:49:50 | minyonglee1 | 2026-10-29 17:49:50
+LBL01218 | KO | LBL | PJT Code | minyonglee1 | 2026-10-29 17:49:50 | minyonglee1 | 2026-10-29 17:49:50
+LBL01218 | CN | LBL | PJT Code | minyonglee1 | 2026-10-29 17:49:50 | minyonglee1 | 2026-10-29 17:49:50
+
+## LBL01167 full (3 rows)
+MSG_ID | LANG_CD | MSG_NM | MSG_DESC | MSG_TP_CD | USE_YN | CREATED_BY | CREATION_DATE | LAST_UPDATED_BY | LAST_UPDATE_DATE
+LBL01167 | CN | A/S |  | LBL | Y | minyonglee1 | 2026-10-19 09:52:20 | minyonglee1 | 2026-10-19 09:52:20
+LBL01167 | EN | A/S |  | LBL | Y | minyonglee1 | 2026-10-19 09:52:20 | minyonglee1 | 2026-10-19 09:52:20
+LBL01167 | KO | A/S |  | LBL | Y | minyonglee1 | 2026-10-19 09:52:20 | minyonglee1 | 2026-10-19 09:52:20
+
+## users (3 rows)
+USER_ID | USER_NM
+admin | 시스템관리자
+iamarock | 이성찬
+minyonglee1 | 이민용

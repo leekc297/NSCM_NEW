@@ -158,6 +158,14 @@
     "SCP0122": {
       "mode": "admin",
       "updated": "2026-10-22"
+    },
+    "SCP0111": {
+      "conds": {
+        "Plan Date": "20260907"
+      },
+      "condsNote": "사용자 지정 2026-10-31 — Plan Date 20260907 은 이번 실행(v21)만 한정(사용자: 앞으로는 다른 일자도 데이터 있을 예정). condsValidUntil 이 지나면 무시 → 기본 조건으로 조회",
+      "updated": "2026-10-31",
+      "condsValidUntil": "2026-10-31T12:00:00+09:00"
     }
   }
 }

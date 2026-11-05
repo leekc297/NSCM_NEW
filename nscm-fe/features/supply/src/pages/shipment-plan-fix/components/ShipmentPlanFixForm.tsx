@@ -200,7 +200,6 @@ export const ShipmentPlanFixForm = ({ onSearch, onItemSearch }: Props) => {
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -233,15 +232,19 @@ export const ShipmentPlanFixForm = ({ onSearch, onItemSearch }: Props) => {
             v => set({ bucket: v as BUCKET_TYPE })
           )}
           {/* SUM 체크박스 — W_/M_ SUM 롤업 컬럼 가시성 토글(design 03 §2.6, 재조회 없음).
-              FormItem 라벨 컬럼(140px)에 라벨을 올려 다른 필드와 동일한 간격 확보 —
-              바로 앞 Period 와 붙어 보이던 문제 해소(자매 ShipmentPsiForm Sum 과 동형). */}
+              체크박스 앞·라벨 뒤(Checkbox labelText), FormItem 라벨 칸은 공백으로 두어 다른 필드와 동일한
+              간격 확보 — 바로 앞 Period 와 붙어 보이던 문제 해소(자매 ShipmentPsiForm Sum 과 동형). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.SUM, '_Sum')}
+              label={' '}
               labelAlign='right'
               render={() => (
-                <Checkbox checked={sc.chkSum} onChange={checked => set({ chkSum: checked })} />
+                <Checkbox
+                  labelText={t(LBL.SUM, '_Sum')}
+                  checked={sc.chkSum}
+                  onChange={checked => set({ chkSum: checked })}
+                />
               )}
             />
           </Grid>

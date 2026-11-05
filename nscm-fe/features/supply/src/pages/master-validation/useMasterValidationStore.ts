@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
+import { createPersistedStoreWithTab } from '@shared/stores';
 
 import type { SHEETS } from './master-validation.constants';
 import { MASTER_ADMIN_SHEET_NAME, MENU_ID } from './master-validation.constants';
@@ -39,9 +39,12 @@ interface MasterValidationAction {
 //   SCP0039 조회조건 3필드 중 멀티셀렉트는 planGroupIds 1건(나머지 divisionId/itemId 는 문자열 그대로).
 const RESTORE_ARRAY_KEYS = new Set<string>(['planGroupIds']);
 
+// divisionId '' = 미지정 — Form 의 교정 effect 가 콤보 로드 후 권한목록(EE 제외) 첫 행으로 채운다
+//   (AS-IS cboDivision 바인딩 후 SelectedIndex=0 동일). session.div 로 선점하지 않는다(AS-IS 는
+//   로그인 사업부가 아니라 목록 첫 행을 기본 선택, design 02 §2 #1).
 // planGroupIds: [] = 전체(ALL) — SP payload p_plan_group_id='' 로 매핑(design 02 §4).
 const initSearchParams: SearchParamProps = {
-  divisionId: useSessionStore.getState().session.div ?? '',
+  divisionId: '',
   planGroupIds: [],
   itemId: '',
 };

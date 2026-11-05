@@ -1,0 +1,21 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-03T01:05:17.282Z",
+ "producer": "check.js",
+ "id": "SCP0111",
+ "final": false,
+ "page": "nscm-fe/features/supply/src/pages/integration-psi",
+ "state": "completed",
+ "verdict": "pass",
+ "summary": {
+  "block": 0,
+  "warn": 52
+ },
+ "issues": [],
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "check.js"
+  }
+ ]
+}

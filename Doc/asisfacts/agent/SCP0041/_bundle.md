@@ -1,0 +1,323 @@
+﻿# SCP0041 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.csproj | 37 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.csproj | 900 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.csproj | 821 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| button:FindButton | FindButton > FindData_Main | 662 | SCP.SCP0041_GET_STOCK_OSP | MATCH | SP SCP0041_GET_STOCK_OSP |
+| button:FindButton | FindButton > FindData_Pack | 740 | SCP.SCP0041_GET_PACK_HOLD_STOCK | MATCH | SP SCP0041_GET_PACK_HOLD_STOCK |
+| button:SaveButton | SaveButton > SaveDataPacker | 469 | SCP.SCP0041_SAVE_PACKER_HOLD_STOCK | MATCH | SP SCP0041_SAVE_PACKER_HOLD_STOCK |
+| button:SaveButton | SaveButton > SaveDataPacker > FindData_Pack | 740 | SCP.SCP0041_GET_PACK_HOLD_STOCK | MATCH | SP SCP0041_GET_PACK_HOLD_STOCK |
+| event:spdMain.SheetTabClick | SpdMain_SheetTabClick > SetSelectMenu > setPeriod | 549 | biz:CommonData.CommonDataList [code=PERIOD_DEFAULT] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > InitControls > GetLookupData | 165 | SCM.SCM0001_GET_LOOKUP_VALUES | MATCH | SP SCM0001_GET_LOOKUP_VALUES |
+| event:this.Load | Form_Load > InitControls > setPeriod | 549 | biz:CommonData.CommonDataList [code=PERIOD_DEFAULT] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | SaveData | 354 | SCP.SCP0040_SAVE_CHARACTERISTIC_CAPA | MATCH | SP SCP0040_SAVE_CHARACTERISTIC_CAPA |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=PERIOD_DEFAULT] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_SYS_CALENDAR_M, UP_FX_GetCommonDataList:REF:FN_MULTY_TIME |
+| SCM.SCM0001_GET_LOOKUP_VALUES | MATCH | 1 | SP SCM0001_GET_LOOKUP_VALUES | EXEC:SCM0001_GET_LOOKUP_VALUES, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
+| SCP.SCP0040_SAVE_CHARACTERISTIC_CAPA | MATCH | 1 | SP SCP0040_SAVE_CHARACTERISTIC_CAPA | EXEC:SCP0040_SAVE_CHARACTERISTIC_CAPA, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_CHARACTERISTIC_HIST, MERGE:SCP_MST_CHAR_CAPA, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_CHAR_CAPA_H |  |
+| SCP.SCP0041_GET_PACK_HOLD_STOCK | MATCH | 1 | SP SCP0041_GET_PACK_HOLD_STOCK | EXEC:SCP0041_GET_PACK_HOLD_STOCK, SELECT:SCM_MST_SITE, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_USER_NAME, SELECT:SCM_DNM_STOCK_LOT_CONTROL, REF:STRING_SPLIT, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SSO_USER_INFO |  |
+| SCP.SCP0041_GET_STOCK_OSP | MATCH | 1 | SP SCP0041_GET_STOCK_OSP | EXEC:SCP0041_GET_STOCK_OSP, REF:FN_GET_ITEM_NICKNAME, SELECT:SCM_DNM_STOCK_OSP, SELECT:SCM_MST_SITE, REF:STRING_SPLIT, SELECT:SCM_MST_ITEM_SN |  |
+| SCP.SCP0041_SAVE_PACKER_HOLD_STOCK | MATCH | 1 | SP SCP0041_SAVE_PACKER_HOLD_STOCK | EXEC:SCP0041_SAVE_PACKER_HOLD_STOCK, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SCM_DNM_STOCK_LOT_CONTROL, INSERT:SCM_SYS_LOG_BATCH |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| setPeriod | dt.Rows[0] | FROM_VALUE, TO_VALUE |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| SetSheetHeaderColumn | SetSpreadInit:211 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| GetCheckedListValue | SetChangedControl:520, FindData_Main:639, FindData_Main:640, FindData_Pack:712, FindData_Pack:713, FindData_Pack:718 | CString.GetCheckedListValue | CODE |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this.btnExcelUpload | Click | btnExcelUpload_Click | InitializeComponent:380 |
+| this.formDown | Click | btnExcelFormDownload_Click | InitializeComponent:419 |
+| this | Load | Form_Load | .ctor:117 |
+| btnItemId | Click | BtnItemId_Click | InitEvent:219 |
+| cboDivision | SelectedIndexChanged | CboDivision_SelectedIndexChanged | InitEvent:220 |
+| spdMain | SheetTabClick | SpdMain_SheetTabClick | InitEvent:221 |
+| this.spdMain | EditChange | SpdMain_EditChange | InitEvent:223 |
+| this.siMain.ActiveSheet | CellChanged | ActiveSheet_CellChanged | InitEvent:224 |
+
+## 6. 컨트롤 (27개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 10 | Division, layoutControlItem7, lblItemId, layoutControlItem4, layoutControlItem1, layoutControlItem2, layoutControlItem5, layoutInspection, layStatus, layoutCutoffDate |
+| UsrButton | 4 | usrButton1, btnItemId, btnExcelUpload, formDown |
+| UsrDateRangePicker3 | 2 | dCalendar, dCalendarCutoff |
+| UsrCombo | 2 | cboDivision, cboStatus |
+| UsrMultiLineEditor | 2 | txtItemId, txtInspection |
+| UsrConditionPanel | 1 | usrConditionPanel1 |
+| UsrLayoutControl | 1 | usrLayoutControl2 |
+| UsrCheckedList | 1 | clbPlantSite |
+| LayoutControlGroup | 1 | layoutControlGroup2 |
+| EmptySpaceItem | 1 | emptySpaceItem1 |
+| FpSpread | 1 | spdMain |
+| SheetView | 1 | spdMain_Sheet1 |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 14 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_ADM_EXCEL_COLUMNS | 1 | dbmeta_dbo_SCM_ADM_EXCEL_COLUMNS.csv |
+| dbo.SCM_ADM_LOOKUP_MASTER_DETAIL | 1 | dbmeta_dbo_SCM_ADM_LOOKUP_MASTER_DETAIL.csv |
+| dbo.SCM_ADM_LOOKUP_MASTER_DETAIL_H | 8 | dbmeta_dbo_SCM_ADM_LOOKUP_MASTER_DETAIL_H.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 29 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.TB_FX_Favorite | 38 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 9 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 34 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (0건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SCP0041 | Osp Stock | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 |
+| SCM_MST_SHEET_COLUMNS | SCP0041 | Pack Hold Stock | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 | 15/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **META(프레임워크) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Osp Stock, Pack Hold Stock
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@SetSpreadInit:211
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitializeComponent |  | 665 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 666 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 667 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 668 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Osp Stock | META+코드연결 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 |
+| Pack Hold Stock | META+코드연결 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 | 15 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (6 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","GetLookupData","165","ctor","fox","SCM.SCM0001_GET_LOOKUP_VALUES","SCM.SCM0001_GET_LOOKUP_VALUES","MATCH","SP SCM0001_GET_LOOKUP_VALUES","EXEC:SCM0001_GET_LOOKUP_VALUES, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","SaveData","354","ctor","fox","SCP.SCP0040_SAVE_CHARACTERISTIC_CAPA","SCP.SCP0040_SAVE_CHARACTERISTIC_CAPA","MATCH","SP SCP0040_SAVE_CHARACTERISTIC_CAPA","EXEC:SCP0040_SAVE_CHARACTERISTIC_CAPA, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_CHARACTERISTIC_HIST, MERGE:SCP_MST_CHAR_CAPA, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_CHAR_CAPA_H","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","SaveDataPacker","469","ctor","fox","SCP.SCP0041_SAVE_PACKER_HOLD_STOCK","SCP.SCP0041_SAVE_PACKER_HOLD_STOCK","MATCH","SP SCP0041_SAVE_PACKER_HOLD_STOCK","EXEC:SCP0041_SAVE_PACKER_HOLD_STOCK, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SCM_DNM_STOCK_LOT_CONTROL, INSERT:SCM_SYS_LOG_BATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","setPeriod","549","derived","biz","CommonData.CommonDataList [code=PERIOD_DEFAULT]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","FindData_Main","662","ctor","fox","SCP.SCP0041_GET_STOCK_OSP","SCP.SCP0041_GET_STOCK_OSP","MATCH","SP SCP0041_GET_STOCK_OSP","EXEC:SCP0041_GET_STOCK_OSP, REF:FN_GET_ITEM_NICKNAME, SELECT:SCM_DNM_STOCK_OSP, SELECT:SCM_MST_SITE, REF:STRING_SPLIT, SELECT:SCM_MST_ITEM_SN","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","FindData_Pack","740","ctor","fox","SCP.SCP0041_GET_PACK_HOLD_STOCK","SCP.SCP0041_GET_PACK_HOLD_STOCK","MATCH","SP SCP0041_GET_PACK_HOLD_STOCK","EXEC:SCP0041_GET_PACK_HOLD_STOCK, SELECT:SCM_MST_SITE, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_USER_NAME, SELECT:SCM_DNM_STOCK_LOT_CONTROL, REF:STRING_SPLIT, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SSO_USER_INFO","",""
+```
+
+### FILE flow.csv (8 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","event","this.Load","Form_Load > InitControls > setPeriod","setPeriod","549","biz:CommonData.CommonDataList [code=PERIOD_DEFAULT]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","event","this.Load","Form_Load > InitControls > GetLookupData","GetLookupData","165","SCM.SCM0001_GET_LOOKUP_VALUES","MATCH","SP SCM0001_GET_LOOKUP_VALUES","EXEC:SCM0001_GET_LOOKUP_VALUES, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","event","spdMain.SheetTabClick","SpdMain_SheetTabClick > SetSelectMenu > setPeriod","setPeriod","549","biz:CommonData.CommonDataList [code=PERIOD_DEFAULT]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","button","FindButton","FindButton > FindData_Pack","FindData_Pack","740","SCP.SCP0041_GET_PACK_HOLD_STOCK","MATCH","SP SCP0041_GET_PACK_HOLD_STOCK","EXEC:SCP0041_GET_PACK_HOLD_STOCK, SELECT:SCM_MST_SITE, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_USER_NAME, SELECT:SCM_DNM_STOCK_LOT_CONTROL, REF:STRING_SPLIT, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SSO_USER_INFO"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","button","FindButton","FindButton > FindData_Main","FindData_Main","662","SCP.SCP0041_GET_STOCK_OSP","MATCH","SP SCP0041_GET_STOCK_OSP","EXEC:SCP0041_GET_STOCK_OSP, REF:FN_GET_ITEM_NICKNAME, SELECT:SCM_DNM_STOCK_OSP, SELECT:SCM_MST_SITE, REF:STRING_SPLIT, SELECT:SCM_MST_ITEM_SN"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","button","SaveButton","SaveButton > SaveDataPacker","SaveDataPacker","469","SCP.SCP0041_SAVE_PACKER_HOLD_STOCK","MATCH","SP SCP0041_SAVE_PACKER_HOLD_STOCK","EXEC:SCP0041_SAVE_PACKER_HOLD_STOCK, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, UPDATE:SCM_DNM_STOCK_LOT_CONTROL, INSERT:SCM_SYS_LOG_BATCH"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","button","SaveButton","SaveButton > SaveDataPacker > FindData_Pack","FindData_Pack","740","SCP.SCP0041_GET_PACK_HOLD_STOCK","MATCH","SP SCP0041_GET_PACK_HOLD_STOCK","EXEC:SCP0041_GET_PACK_HOLD_STOCK, SELECT:SCM_MST_SITE, REF:FN_GET_ITEM_NICKNAME, REF:FN_GET_USER_NAME, SELECT:SCM_DNM_STOCK_LOT_CONTROL, REF:STRING_SPLIT, SELECT:SCM_MST_ITEM_SN, SELECT:SCM_MST_SSO_USER_INFO"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","unreached","(진입점 미연결)","SaveData","SaveData","354","SCP.SCP0040_SAVE_CHARACTERISTIC_CAPA","MATCH","SP SCP0040_SAVE_CHARACTERISTIC_CAPA","EXEC:SCP0040_SAVE_CHARACTERISTIC_CAPA, EXEC:PR_SCM_SYS_LOG_BATCH_CALL_TRAN, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, EXEC:PR_SCP_MST_CHARACTERISTIC_HIST, MERGE:SCP_MST_CHAR_CAPA, INSERT:SCM_SYS_LOG_BATCH, INSERT:SCP_MST_CHAR_CAPA_H"
+```
+
+### FILE events.csv (8 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","380","this.btnExcelUpload","Click","btnExcelUpload_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","419","this.formDown","Click","btnExcelFormDownload_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP",".ctor","117","this","Load","Form_Load","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","InitEvent","219","btnItemId","Click","BtnItemId_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","InitEvent","220","cboDivision","SelectedIndexChanged","CboDivision_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","InitEvent","221","spdMain","SheetTabClick","SpdMain_SheetTabClick","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","InitEvent","223","this.spdMain","EditChange","SpdMain_EditChange","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","InitEvent","224","this.siMain.ActiveSheet","CellChanged","ActiveSheet_CellChanged","+="
+```
+
+### FILE controls.csv (27 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","usrButton1","GSCM.Windows.Forms.Controls.UsrButton","","33"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","34"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","35"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","dCalendar","GSCM.Windows.Forms.Controls.UsrDateRangePicker3","usrLayoutControl2","36"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","cboDivision","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","37"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","clbPlantSite","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","38"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","txtItemId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","39"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","btnItemId","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","40"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","btnExcelUpload","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","41"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","formDown","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","42"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","txtInspection","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","43"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","cboStatus","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","44"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","45"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","Division","DevExpress.XtraLayout.LayoutControlItem","","46"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","layoutControlItem7","DevExpress.XtraLayout.LayoutControlItem","","47"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","48"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","lblItemId","DevExpress.XtraLayout.LayoutControlItem","","49"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","50"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","layoutControlItem1","DevExpress.XtraLayout.LayoutControlItem","","51"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","layoutControlItem2","DevExpress.XtraLayout.LayoutControlItem","","52"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","layoutControlItem5","DevExpress.XtraLayout.LayoutControlItem","","53"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","layoutInspection","DevExpress.XtraLayout.LayoutControlItem","","54"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","layStatus","DevExpress.XtraLayout.LayoutControlItem","","55"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","spdMain","FarPoint.Win.Spread.FpSpread","this","56"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","57"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","dCalendarCutoff","GSCM.Windows.Forms.Controls.UsrDateRangePicker3","usrLayoutControl2","58"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","layoutCutoffDate","DevExpress.XtraLayout.LayoutControlItem","","59"
+```
+
+### FILE props.csv (54 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","110","usrButton1","Size","new System.Drawing.Size(75, 23)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","119","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","122","usrConditionPanel1","Size","new System.Drawing.Size(1469, 48)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","124","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","139","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","144","usrLayoutControl2","Size","new System.Drawing.Size(1469, 48)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","146","usrLayoutControl2","Text","""usrLayoutControl2"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","187","dCalendar","Size","new System.Drawing.Size(210, 22)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","230","cboDivision","Size","new System.Drawing.Size(20, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","266","clbPlantSite","Size","new System.Drawing.Size(113, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","303","txtItemId","Size","new System.Drawing.Size(100, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","336","btnItemId","Size","new System.Drawing.Size(39, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","373","btnExcelUpload","Size","new System.Drawing.Size(99, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","376","btnExcelUpload","Text","""Upload"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","413","formDown","Size","new System.Drawing.Size(99, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","416","formDown","Text","""Excel Form"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","451","txtInspection","Size","new System.Drawing.Size(100, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","487","cboStatus","Size","new System.Drawing.Size(70, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","509","layoutControlGroup2","Size","new System.Drawing.Size(1469, 49)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","514","Division","Control","this.cboDivision"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","518","Division","Size","new System.Drawing.Size(75, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","519","Division","Text","""Division*"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","526","layoutControlItem7","Control","this.clbPlantSite"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","531","layoutControlItem7","Size","new System.Drawing.Size(172, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","533","layoutControlItem7","Text","""Plant Site"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","541","emptySpaceItem1","Size","new System.Drawing.Size(12, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","546","lblItemId","Control","this.txtItemId"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","550","lblItemId","Size","new System.Drawing.Size(141, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","551","lblItemId","Text","""Model"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","558","layoutControlItem4","Control","this.btnItemId"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","564","layoutControlItem4","Size","new System.Drawing.Size(43, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","571","layoutControlItem1","Control","this.btnExcelUpload"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","577","layoutControlItem1","Size","new System.Drawing.Size(103, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","584","layoutControlItem2","Control","this.formDown"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","590","layoutControlItem2","Size","new System.Drawing.Size(103, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","592","layoutControlItem2","Text","""layoutControlItem1"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","598","layoutControlItem5","Control","this.dCalendar"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","603","layoutControlItem5","Size","new System.Drawing.Size(260, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","605","layoutControlItem5","Text","""Period*"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","612","layoutInspection","Control","this.txtInspection"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","618","layoutInspection","Size","new System.Drawing.Size(166, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","620","layoutInspection","Text","""Inspection"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","627","layStatus","Control","this.cboStatus"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","633","layStatus","Size","new System.Drawing.Size(114, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","635","layStatus","Text","""Status"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","643","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","648","spdMain","Size","new System.Drawing.Size(1469, 554)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","730","dCalendarCutoff","Size","new System.Drawing.Size(210, 22)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","743","layoutCutoffDate","Control","this.dCalendarCutoff"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","749","layoutCutoffDate","Size","new System.Drawing.Size(260, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","751","layoutCutoffDate","Text","""Cutoff Date"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","765","this","Text","""Plant Qty"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","InitControls","156","layoutInspection","Text","DefPackLabel.INSEPECTION_ID"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","BtnItemId_Click","882","txtItemId","Text","sItemId"
+```
+
+### FILE grid_effective.csv (29 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Osp Stock","META+코드연결","ATTRIBUTE1","Valuation Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","ATTRIBUTE2","Cell From Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","ATTRIBUTE3","Box","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","COMMENT","Comment","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","CREATED_BY","Created By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","CREATION_DATE","Creation Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","DIVISION_ID","Division*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","ITEM_ID","Model*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","LAST_UPDATE_DATE","Last Update Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","LAST_UPDATED_BY","Last Updated By","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","NICK_NAME","Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","QTY","Qty*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","SITE_DESCRIPTION","Plant Site*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Osp Stock","META+코드연결","YYYYMMDD","Date*","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","CREATION_DATE","Create Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","CUTOFF_DATE","Cutoff Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","DATE_FINISH_REAL","실제 완료일","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","DATE_FORECAST_FINISH","예상 완료일","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","DATE_FORECAST_START","예상 시작일","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","DIR","Status","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","INSPECTION_ID","관리번호","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","MODIFIER","수정자","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","MODIFIER_DATE","Change Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","NICK_NAME","Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","PLANT_ID","PLANT","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","PROD_ID","Model","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","QTY","수량","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","REQUSET_USER","변경점 신청자","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Pack Hold Stock","META+코드연결","SITE_DESCRIPTION","Plant Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (17 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","CreateSpread","174","Osp Stock","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Osp Stock ¦ Osp Stock ¦ 1 ¦ 1 ¦ 35","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 35"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","CreateSpread","175","Osp Stock","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","CreateSpread","177","Pack Hold Stock","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Pack Hold Stock ¦ Pack Hold Stock ¦ 1 ¦ 1 ¦ 35","","","spdMain ¦ SpdSheet.shtPacker ¦ SpdSheet.shtPacker ¦ 1 ¦ 1 ¦ 35"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","CreateSpread","178","Pack Hold Stock","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","CreateSpread","180","Pack Hold Stock","SHEET","ChangeSheet","EXPR","","","","","","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","InitSpread","195","0","SHEET","ChangeSheet","EXPR","","","","0","","","0"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","InitSpread","196","Osp Stock","SHEET","ChangeActiveSheet","HARDCODED","","","","Osp Stock","sSheetName","","SpdSheet.shtMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","SetSpreadInit","203","0","SHEET","ChangeSheet","EXPR","","","","0","","if(sheetName.Equals(""Osp Stock""))","0"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","SetSpreadInit","204","0","SHEET","InitSheet","EXPR","","","","0","","if(sheetName.Equals(""Osp Stock""))","0"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","SetSpreadInit","208","1","SHEET","ChangeSheet","EXPR","","","","1","","else!(sheetName.Equals(""Osp Stock""))","1"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","SetSpreadInit","209","1","SHEET","InitSheet","EXPR","","","","1","","else!(sheetName.Equals(""Osp Stock""))","1"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","SetSpreadInit","211","1","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} ¦ 1","siObj,iColumnHeaderRowCount","","siMain ¦ 1"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","EditButton","268","","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","if(iFocusTabIndex == 1) ⟫ if(spdMain != null) ⟫ if(this.fps != null) ⟫ if(fps.Name.Equals(spdMain.Name))","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","665","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","666","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","667","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.Designer.cs","SCP0041_StockOSP","InitializeComponent","668","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (2 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","setPeriod","558","dt.Rows[0]","FROM_VALUE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0041_StockOSP\SCP0041_StockOSP.cs","SCP0041_StockOSP","setPeriod","559","dt.Rows[0]","TO_VALUE","[]"
+```
+
+### FILE commented_calls.csv (0 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+```

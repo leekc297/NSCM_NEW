@@ -1,14 +1,14 @@
 # SCP0127 — To-Be Fact Pack 요약
 
-- page_key: `supply/precede-safety-stock-day` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `supply/precede-safety-stock-day` · feature: supply · As-is Fact Pack 있음
 - 파일 11 · 엔드포인트 호출 9 (미해결 0, 주석 속 4) · 이벤트 16 · 컴포넌트 사용 33 · 하드코딩 컬럼 0 · 메시지 21
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | component | 303 |
-| features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx | component | 233 |
+| features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | component | 299 |
+| features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx | component | 231 |
 | features/supply/src/pages/precede-safety-stock-day/index.ts | index | 2 |
 | features/supply/src/pages/precede-safety-stock-day/precede-safety-stock-day.constants.ts | constants | 115 |
 | features/supply/src/pages/precede-safety-stock-day/precede-safety-stock-day.types.ts | types | 16 |
@@ -44,15 +44,15 @@
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | 184 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | 201 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | 223 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | 256 |
-| FunctionSearchIcon | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | 250 |
-| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | 266 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | 282 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | 252 |
+| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | 248 |
+| PeriodRangePicker | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | 262 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayForm.tsx | 278 |
 | g | updatedLayout | apply | addHandler | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx | 125 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx | 153 |
-| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx | 154 |
-| g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx | 171 |
-| g | updatedLayout | applyDateColumnTypes | addHandler | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx | 175 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx | 151 |
+| g | pastingCell | beginningEditHandler | addHandler | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx | 152 |
+| g | pastedCell | pastedCellHandler | addHandler | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx | 169 |
+| g | updatedLayout | applyDateColumnTypes | addHandler | features/supply/src/pages/precede-safety-stock-day/components/PrecedeSafetyStockDayGrid.tsx | 173 |
 | PrecedeSafetyStockDayGrid | onItemModalOpenChange | setItemModalOpen | jsx | features/supply/src/pages/precede-safety-stock-day/PrecedeSafetyStockDay.tsx | 225 |
 
 ## 5. 컴포넌트 사용 집계
@@ -92,7 +92,7 @@
 | MSG00013 | 1 |
 | MSG00260 | 1 |
 | MSG00046 | 1 |
-| MSG00219 | 1 |
+| MSG01230 | 1 |
 | MSG00085 | 1 |
 | MSG00458 | 1 |
 | MSG00004 | 1 |

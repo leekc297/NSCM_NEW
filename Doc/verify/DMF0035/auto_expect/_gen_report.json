@@ -1,0 +1,151 @@
+{
+ "id": "DMF0035",
+ "asis": "DMF0035",
+ "at": "2026-11-05 05:47:11",
+ "has_asis": true,
+ "tobe_cols": 160,
+ "buttons": [
+  "SAVE",
+  "SEARCH"
+ ],
+ "env": {
+  "division": "40",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 최다 40(60칸 · 분포 {'40': 60, '82': 6})"
+ },
+ "patterns": {
+  "p_lang": {
+   "rows": 3,
+   "why_not": []
+  },
+  "p_formdl": {
+   "rows": 0,
+   "why_not": [
+    "Excel Form 버튼 없음(AS-IS Text · btn_auth FORM_DATA)"
+   ]
+  },
+  "p_insertat": {
+   "rows": 0,
+   "why_not": [
+    "INSERT 버튼 없음"
+   ]
+  },
+  "p_delete": {
+   "rows": 0,
+   "why_not": [
+    "DELETE 버튼 없음"
+   ]
+  },
+  "p_combo": {
+   "rows": 0,
+   "why_not": [
+    "신규 행 편집 콤보 칸 없음(sheet_columns FPComboBox · INPUT_TP_CD O/M/IO/IM)"
+   ]
+  },
+  "p_decimal": {
+   "rows": 0,
+   "why_not": [
+    "cell_rules.csv 없음(소수 자릿수 사실 없음)"
+   ]
+  },
+  "p_reqfp": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_blank_save": {
+   "rows": 0,
+   "why_not": [
+    "INSERT·SAVE 버튼 둘 다 있어야 함"
+   ]
+  },
+  "p_dirty": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_clear": {
+   "rows": 0,
+   "why_not": [
+    "cell_clear.csv 없음"
+   ]
+  },
+  "p_dyn": {
+   "rows": 2,
+   "why_not": []
+  },
+  "p_toggle": {
+   "rows": 2,
+   "why_not": []
+  },
+  "p_iscombo": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_baddate": {
+   "rows": 0,
+   "why_not": [
+    "INSERT·SAVE 버튼 둘 다 있어야 함"
+   ]
+  },
+  "p_modins": {
+   "rows": 0,
+   "why_not": [
+    "INSERT·SAVE 버튼 둘 다 있어야 함"
+   ]
+  },
+  "p_popfill": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 더블클릭 팝업 뒤 다른 칸 채움 없음(또는 신규 행 편집 칸 아님)"
+   ]
+  },
+  "p_samekey": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 변경 핸들러의 같은 키 행 동반 갱신 없음"
+   ]
+  },
+  "p_colvis": {
+   "rows": 0,
+   "why_not": [
+    "1640 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "1646 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "1652 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "1670 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "1854 표시 값 없음(chkSum.Checked)",
+    "1864 표시 값 없음(chkSum.Checked)"
+   ]
+  },
+  "p_btnvis": {
+   "rows": 0,
+   "why_not": []
+  },
+  "p_sumtoggle": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_divroundtrip": {
+   "rows": 1,
+   "why_not": []
+  }
+ },
+ "auth_drop": [
+  "P15 [자동] 편집 중 Redraw 실행 → MSG00680(DM-52 일반  — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)"
+ ],
+ "files": {
+  "scenario_expect.csv": {
+   "rows": 10,
+   "used": 10
+  },
+  "doc_ui_expect.csv": {
+   "rows": 0,
+   "used": 0
+  },
+  "sum_toggle_expect.csv": {
+   "rows": 1,
+   "used": 0
+  }
+ },
+ "rows": 11,
+ "rows_used": 10,
+ "dup_of_hand": 1
+}

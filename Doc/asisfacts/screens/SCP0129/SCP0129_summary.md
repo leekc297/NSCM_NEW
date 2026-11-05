@@ -1,13 +1,14 @@
 ﻿# SCP0129 화면 Fact Pack
 
 > AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+> ⚠ .sln 미등록 전용 프로젝트(current 로 취급 · files.csv sln_registered=N): 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.csproj
 
 ## 1. 파일 구성
 | 구분 | 파일 | 프로젝트 | 줄수 |
 |---|---|---|---:|
-| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.csproj | 37 |
-| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.csproj | 1090 |
-| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.csproj | 733 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.csproj | 37 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.csproj | 1090 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0129_DemandException\SCP0129_DemandException.csproj | 733 |
 
 ## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |

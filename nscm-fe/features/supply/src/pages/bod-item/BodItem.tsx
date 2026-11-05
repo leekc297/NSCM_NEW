@@ -146,8 +146,9 @@ export const BodItem = ({ tabId, title }: PageProps<MENU_ID>) => {
     [SHEET_INDEX.BOD_EXCLUDED]: excludedRows.length,
   };
 
+  // AS-IS FindButton(cs:414-432)과 동일하게 활성 탭 한 시트만 조회(useBodItemStore.setFilters 참조).
   const handleSearch = () => {
-    setFilters();
+    setFilters(SHEET_BY_INDEX[activeTab]);
     void fetchStaticColumns();
   };
 

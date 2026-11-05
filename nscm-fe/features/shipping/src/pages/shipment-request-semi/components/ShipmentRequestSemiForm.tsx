@@ -270,14 +270,12 @@ export const ShipmentRequestSemiForm = ({ onSearch, onModelSearch }: Props) => {
                         appearance='outlined'
                         priority='normal'
                         disabled={noDivisionAuth}
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onModelSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onModelSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

@@ -10,11 +10,9 @@ interface Props {
   value: string;
   onChange: (v: string) => void;
   onOpen: () => void;
-  // Enter = 재조회(상세검색 바 등에서 사용). 미전달이면 Enter 무동작.
-  onSearch?: () => void;
 }
 
-export const PopupInput = ({ value, onChange, onOpen, onSearch }: Props) => (
+export const PopupInput = ({ value, onChange, onOpen }: Props) => (
   <InputField
     fullWidth
     className={commonStyles.popupSearchField}
@@ -24,11 +22,11 @@ export const PopupInput = ({ value, onChange, onOpen, onSearch }: Props) => (
         <Button
           appearance='outlined'
           priority='normal'
-          iconComponent={<FunctionSearchIcon appearance='lined' onClick={onOpen} />}
+          iconComponent={<FunctionSearchIcon appearance='lined' />}
+          onClick={onOpen}
         />
       ),
     }}
     onChange={e => onChange(e.target.value)}
-    onKeyDown={onSearch ? e => e.key === 'Enter' && onSearch() : undefined}
   />
 );

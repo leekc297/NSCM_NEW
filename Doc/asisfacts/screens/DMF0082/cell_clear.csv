@@ -1,0 +1,3 @@
+﻿grid,src,tgt,src_col,tgt_col,cond,refilled,ref
+siMain,ScmSiteId,BUCKET,SCM_SITE_ID,BUCKET,if (siMain.GetColumnIndex(DefColumns.Division) != -1 && siMain.GetColumnIndex(DefColumns.ScmSiteId) != -1) ▸ else of (dtSalesBucket.Rows.Count > 0),Y,DMF0082_FcstNPrice_Mgmt.cs:8319 DMF0082_FcstNPrice_Mgmt.spdMain_ComboSelChange
+siMain,Incoterms,BUCKET,INCOTERMS,BUCKET,if (siMain.GetColumnIndex(DefColumns.Division) != -1 && siMain.GetColumnIndex(DefColumns.ScmSiteId) != -1) ▸ else of (dtSalesBucket.Rows.Count > 0),Y,DMF0082_FcstNPrice_Mgmt.cs:8339 DMF0082_FcstNPrice_Mgmt.spdMain_ComboSelChange

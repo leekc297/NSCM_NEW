@@ -1,0 +1,298 @@
+{
+  "menuId": "SCP0028",
+  "page": "ShipmentLotSize",
+  "feature": "shipping",
+  "routePath": "shipping/shipment-lot-size",
+  "asisName": "Shipment_Lot_Size",
+  "fields": [
+    {
+      "key": "validYn",
+      "label": "Valid",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboValid"
+    },
+    {
+      "key": "divisionId",
+      "label": "Division*",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "operationGroup",
+      "label": "Operation Group",
+      "lbl": "LBL00027",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboOperationGroup"
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite"
+    },
+    {
+      "key": "transMode",
+      "label": "Trans Mode",
+      "lbl": "LBL00025",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbTransMode"
+    },
+    {
+      "key": "toSiteIds",
+      "label": "To Site",
+      "lbl": "LBL00023",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbToSite"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "input",
+      "label": "Input",
+      "lbl": "LBL00872",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnInput"
+    },
+    {
+      "key": "delete",
+      "label": "Delete",
+      "lbl": "LBL00622",
+      "kind": "hotkey",
+      "tobe": "hotkeyConfig.delete",
+      "asis": "btnDelete"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Shipment Lot Size",
+      "key": "SHIPMENT_LOT_SIZE",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DIVISION_ID",
+        "FROM_SITE",
+        "FROM_SITE_DESCRIPTION",
+        "INCREMENT",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LOT_SIZE",
+        "NICK_NAME",
+        "OPERATION_GROUP_ID",
+        "SPLIT_YN",
+        "TO_SITE",
+        "TO_SITE_DESCRIPTION",
+        "TRANS_MODE_CODE",
+        "TRANS_MODE_NAME",
+        "VALID_YN"
+      ],
+      "labels": [
+        "Created By",
+        "Creation Date",
+        "Division",
+        "From Site",
+        "From Site",
+        "Increment*",
+        "Model",
+        "Last Update Date",
+        "Last Updated By",
+        "Lot Size*",
+        "Nick Name",
+        "Operation Group",
+        "Container Split*",
+        "To Site",
+        "To Site",
+        "Trans Mode",
+        "Trans Mode",
+        "Valid*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Shipment Lot Size",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0028.P_",
+      "entries": []
+    },
+    {
+      "sp": "",
+      "sheet": "Shipment Lot Size",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0028.P_",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0028_GET_SHIPMENT_LOT_SIZE",
+      "sheet": "Shipment Lot Size",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+      "entries": [
+        "event:this.btnDelete.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+      "sheet": "Shipment Lot Size",
+      "btn": "SHIPMENT_LOT_SIZE_INPUT",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+      "entries": [
+        "event:this.btnInput.Click"
+      ]
+    },
+    {
+      "sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+      "sheet": "Shipment Lot Size",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+      "entries": [
+        "event:this.btnDelete.Click",
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=LookupCommon]",
+        "biz:CommonData.YesOrNo",
+        "biz:CommonData.CommonDataList [code=FromSiteByDivision]",
+        "biz:CommonData.CommonDataList [code=ToSiteByDivision]"
+      ]
+    },
+    {
+      "name": "handleInput",
+      "target": "this.btnInput",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT"
+      ]
+    },
+    {
+      "name": "handleDelete",
+      "target": "this.btnDelete",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+        "SCP.SCP0028_GET_SHIPMENT_LOT_SIZE"
+      ]
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMainChange",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleClbDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=FromSiteByDivision]",
+        "biz:CommonData.CommonDataList [code=ToSiteByDivision]"
+      ]
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

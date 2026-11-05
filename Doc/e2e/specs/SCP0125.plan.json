@@ -1,0 +1,800 @@
+{
+  "id": "SCP0125",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0125",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Plan Date",
+    "MKT FCST Ver.",
+    "Model/Nickname"
+  ],
+  "condGone": [],
+  "page": "Workbench",
+  "routePath": "supply/workbench",
+  "asisName": "Workbench",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "dpPlanDateDays",
+      "label": "Plan Date",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "DatePickerCalendar",
+      "comboId": "",
+      "popup": false,
+      "asis": "dpPlanDate_Days",
+      "tobeLabel": "Plan Date",
+      "catalog": "",
+      "labels": [
+        "Plan Date"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "version",
+      "label": "MKT FCST Ver.",
+      "lbl": "LBL00060",
+      "kind": "single",
+      "component": "VersionField",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboVersion",
+      "tobeLabel": "MKT FCST Ver.",
+      "catalog": "",
+      "labels": [
+        "MKT FCST Ver."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtItem",
+      "tobeLabel": "Model",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "planDate",
+      "label": "Plan Date",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanDate",
+      "tobeLabel": "Plan Date",
+      "catalog": "",
+      "labels": [
+        "Plan Date"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "Workbench",
+  "asisMapping": "features\\supply\\src\\pages\\workbench\\__asis-mapping__.md",
+  "buttons": [],
+  "mainSheets": [
+    {
+      "name": "Elec. Demand",
+      "key": "ELEC_DEMAND",
+      "labels": [
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Division*",
+        "Item*",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Nick Name",
+        "Operation ID*",
+        "PLAN_START_YYYYMMDD",
+        "Plan Type*",
+        "Plant Site*",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "Origin Qty",
+        "SEQ*",
+        "Date*"
+      ]
+    },
+    {
+      "name": "MKT FCST",
+      "key": "MKT_FCST",
+      "labels": [
+        "Cell Prod site",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "CUTOFF_YYYYMMDD",
+        "Division*",
+        "Due Date*",
+        "FCST Type",
+        "FCST Type*",
+        "Incoterms*",
+        "Item*",
+        "Last Update Date",
+        "Last Updated By",
+        "Nick Name",
+        "Plant site",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "Project Code",
+        "Project Code",
+        "Origin Qty",
+        "Sales site*",
+        "Version*"
+      ]
+    },
+    {
+      "name": "STOCK",
+      "key": "STOCK",
+      "labels": [
+        "Before Degas*",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "CUTOFF_YYYYMMDD",
+        "Division*",
+        "From site",
+        "Incoterms",
+        "Date*",
+        "Item*",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Nick Name",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "Project Code",
+        "Origin Qty",
+        "SCM site*",
+        "SRCE_DIVS_CD",
+        "Stock Type",
+        "Stock Type*"
+      ]
+    },
+    {
+      "name": "Stock(2nd OCV)",
+      "key": "STOCK_2ND_OCV",
+      "labels": [
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "CUTOFF_YYYYMMDD",
+        "Division*",
+        "Item*",
+        "Last Update Date",
+        "Last Updated By",
+        "Nick Name",
+        "Operation ID*",
+        "Operation",
+        "Plant*",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "Origin Qty",
+        "2nd OCV Date",
+        "2nd OCV Time",
+        "Stock Type",
+        "Stock Type*"
+      ]
+    },
+    {
+      "name": "Stock(Elec. Plant)",
+      "key": "STOCK_ELEC_PLANT",
+      "labels": [
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "CUTOFF_YYYYMMDD",
+        "Division*",
+        "From site",
+        "Incoterms",
+        "Date*",
+        "Item*",
+        "Last Update Date",
+        "Last Updated By",
+        "Location*",
+        "Nick Name",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "Project Code",
+        "Origin Qty",
+        "SCM site*",
+        "SRCE_DIVS_CD",
+        "Stock Type",
+        "Stock Type*"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Elec. Demand",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0125.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0125_GET_SEARCH_INFO",
+      "sheet": "Elec. Demand",
+      "btn": "SEARCH_INFO",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_SEARCH_INFO",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Elec. Demand",
+      "btn": "ACTION",
+      "status": "UNRESOLVED",
+      "candidate": "PKG_SCP0125.P_",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_MKT_FCST_ADJ",
+      "sheet": "MKT FCST",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_MKT_FCST_ADJ",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_STOCK_ADJ",
+      "sheet": "STOCK",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ADJ",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_STOCK_ADJ_UC",
+      "sheet": "STOCK",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ADJ_UC",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_STOCK_ELEC_PLNT",
+      "sheet": "STOCK",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ELEC_PLNT",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_STOCK_ELEC_PLNT_UC",
+      "sheet": "STOCK",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ELEC_PLNT_UC",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_MKT_FCST_ELEC_DEMAND",
+      "sheet": "MKT FCST",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_MKT_FCST_ELEC_DEMAND",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_STOCK_SECOND_OCV",
+      "sheet": "STOCK",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_SECOND_OCV",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_SAVE_MKT_FCST_ADJ",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_SAVE_MKT_FCST_ADJ",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_SAVE_STOCK_ADJ",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_SAVE_STOCK_ADJ",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_SAVE_STOCK_SECOND_OCV",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_SAVE_STOCK_SECOND_OCV",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Elec. Demand": {
+      "40": [
+        "Div*",
+        "Plan Type*",
+        "SEQ*",
+        "Plant Site*",
+        "Line*",
+        "Operation ID*",
+        "Nick Name",
+        "Item*",
+        "Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div*",
+        "Plan Type*",
+        "SEQ*",
+        "Plant Site*",
+        "Line*",
+        "Operation ID*",
+        "Nick Name",
+        "Item*",
+        "Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div*",
+        "Plan Type*",
+        "SEQ*",
+        "Plant Site*",
+        "Line*",
+        "Operation ID*",
+        "Nick Name",
+        "Item*",
+        "Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    },
+    "MKT FCST": {
+      "40": [
+        "Div*",
+        "Version*",
+        "Project Code",
+        "Project Code",
+        "Sales site*",
+        "Nick Name",
+        "Item*",
+        "FCST Type*",
+        "Incoterms*",
+        "Plant site",
+        "Cell Prod site",
+        "Due Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div*",
+        "Version*",
+        "Project Code",
+        "Project Code",
+        "Sales site*",
+        "Nick Name",
+        "Item*",
+        "FCST Type*",
+        "Incoterms*",
+        "Plant site",
+        "Cell Prod site",
+        "Due Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div*",
+        "Version*",
+        "Project Code",
+        "Project Code",
+        "Sales site*",
+        "Nick Name",
+        "Item*",
+        "FCST Type*",
+        "Incoterms*",
+        "Plant site",
+        "Cell Prod site",
+        "Due Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    },
+    "STOCK": {
+      "40": [
+        "Div*",
+        "Stock Type*",
+        "Project Code",
+        "Nick Name",
+        "Item*",
+        "Incoterms",
+        "From site",
+        "SCM site*",
+        "Line*",
+        "Before Degas*",
+        "Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div*",
+        "Stock Type*",
+        "Project Code",
+        "Nick Name",
+        "Item*",
+        "Incoterms",
+        "From site",
+        "SCM site*",
+        "Line*",
+        "Before Degas*",
+        "Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div*",
+        "Stock Type*",
+        "Project Code",
+        "Nick Name",
+        "Item*",
+        "Incoterms",
+        "From site",
+        "SCM site*",
+        "Line*",
+        "Before Degas*",
+        "Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    },
+    "Stock(2nd OCV)": {
+      "40": [
+        "Div*",
+        "Stock Type*",
+        "Nick Name",
+        "Item*",
+        "Plant*",
+        "Operation ID*",
+        "Operation",
+        "2nd OCV Time",
+        "2nd OCV Date",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div*",
+        "Stock Type*",
+        "Nick Name",
+        "Item*",
+        "Plant*",
+        "Operation ID*",
+        "Operation",
+        "2nd OCV Time",
+        "2nd OCV Date",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div*",
+        "Stock Type*",
+        "Nick Name",
+        "Item*",
+        "Plant*",
+        "Operation ID*",
+        "Operation",
+        "2nd OCV Time",
+        "2nd OCV Date",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    },
+    "Stock(Elec. Plant)": {
+      "40": [
+        "Div*",
+        "Stock Type*",
+        "Project Code",
+        "Nick Name",
+        "Item*",
+        "Incoterms",
+        "From site",
+        "SCM site*",
+        "Location*",
+        "Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div*",
+        "Stock Type*",
+        "Project Code",
+        "Nick Name",
+        "Item*",
+        "Incoterms",
+        "From site",
+        "SCM site*",
+        "Location*",
+        "Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div*",
+        "Stock Type*",
+        "Project Code",
+        "Nick Name",
+        "Item*",
+        "Incoterms",
+        "From site",
+        "SCM site*",
+        "Location*",
+        "Date*",
+        "Origin Qty",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "DELETE",
+        "INSERT",
+        "EXCEL",
+        "EDIT",
+        "SAVE",
+        "SEARCH"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "DELETE",
+      "INSERT",
+      "EXCEL",
+      "EDIT",
+      "SAVE",
+      "SEARCH"
+    ],
+    "FP Planner": [
+      "SAVE",
+      "DELETE",
+      "EDIT",
+      "EXCEL",
+      "INSERT",
+      "SEARCH"
+    ],
+    "SCM PI Admin": [
+      "INSERT",
+      "DELETE",
+      "EDIT",
+      "EXCEL",
+      "SAVE",
+      "SEARCH"
+    ],
+    "SCP Planner": [
+      "SAVE",
+      "SEARCH",
+      "DELETE",
+      "EDIT",
+      "EXCEL",
+      "INSERT"
+    ]
+  },
+  "menuBtnCodes": [
+    "DELETE",
+    "INSERT",
+    "EXCEL",
+    "EDIT",
+    "SAVE",
+    "SEARCH"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

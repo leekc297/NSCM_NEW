@@ -1,0 +1,59 @@
+﻿row_id,src_file,src_sheet,src_row,열A,No,구분,내용,관련 팀,비고,조치결과 확인일자,No.,UI ID,UI명,Div,테스트 내용,유형,검토담당,테스트 결과,담당자,요청일자,요청내용 확인일자,조치결과,증빙_이미지,증빙_시트
+SSP45REQ-1,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,3,,1,div 조회 조건,div를 1개만 선택하는 화면은 div 변경시 모든 gid와 조회 조건을 초기화 한다,A,,,,,,,,,,,,,,,,
+SSP45REQ-2,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,4,,2,div 조회 조건,사업부마다 보여지는 컬럼이 다른지 확인하고 As-is와 동일한지 확인,A,,,,,,,,,,,,,,,,
+SSP45REQ-3,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,5,,3,COMBO 조회 조건,보여지는 data가 같은지 확인 (다른 경우는 분석필요),B,,,,,,,,,,,,,,,,
+SSP45REQ-4,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,6,,4,COMBO 조회 조건,Cascade 가 잘 작동하는 지,A,,,,,,,,,,,,,,,,
+SSP45REQ-5,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,7,,5,COMBO 조회 조건,single / multi select 일때 조회가 잘 동작하는지,A/B,,,,,,,,,,,,,,,,
+SSP45REQ-6,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,8,,6,Textbox 조회 조건,Main 조회조건 textbox에서 입력된 값이 팝업을 띄웠을 때 연동되어 조회되는지,A,,,,,,,,,,,,,,,,
+SSP45REQ-7,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,9,,7,Textbox 조회 조건,대소문자 구별없이 조회되는지,B,,,,,,,,,,,,,,,,
+SSP45REQ-8,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,10,,8,Textbox 조회 조건,콤마를 입력해서 조회(MULTI SELECT) 가 되는지,,,,,,,,,,,,,,,,,
+SSP45REQ-9,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,11,,9,공통 버튼 기능,각 GRID에 SORT 버튼 / 단축기 기능이 정상작동하는지,A,,,,,,,,,,,,,,,,
+SSP45REQ-10,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,12,,10,공통 버튼 기능,각 GRID에 FILTER 버튼 / 단축기 기능이 정상작동하는지,A,,,,,,,,,,,,,,,,
+SSP45REQ-11,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,13,,11,공통 버튼 기능,CONDITION 버튼이 정상 동작하는지. Period(날짜) 관련된 값은 처리 안함,A,,,,,,,,,,,,,,,,
+SSP45REQ-12,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,14,,12,공통 버튼 기능,RESET CONDITION 버튼이 정상 동작하는지.,A,,,,,,,,,,,,,,,,
+SSP45REQ-13,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,15,,13,팝업 조회조건,대소문자 구별없이 조회되는지,B,,,,,,,,,,,,,,,,
+SSP45REQ-14,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,16,,14,팝업 조회조건,콤마를 입력해서 조회(MULTI SELECT) 가 되는지,A/B,,,,,,,,,,,,,,,,
+SSP45REQ-15,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,17,,15,GRID,각 GRID에서 AS-IS에서 EDIT(F2)를 눌렀을때 EDIT 되는 컬럼이 TO-BE에서는 기본적으로 EDIT 상태로 조회 되는지,A,,,,,,,,,,,,,,,,
+SSP45REQ-16,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,18,,16,GRID,Insert 기능이 As-Is에 있을때 To-Be도 동작하는지,A,,,,,,,,,,,,,,,,
+SSP45REQ-17,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,19,,17,GRID,Delete 기능이 잘 동작하는지,,,,,,,,,,,,,,,,,
+SSP45REQ-18,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,20,,18,GRID,Combo / 팝업이 있는 경우 동일하게 구성되는지,A,,,,,,,,,,,,,,,,
+SSP45REQ-19,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,21,,19,GRID,Combo data가 As-Is와 같은지.,B,,,,,,,,,,,,,,,,
+SSP45REQ-20,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,22,,20,GRID,Save 기능 확인. 기존값 수정 + Insert 를 대상으로 확인,A / B,,,,,,,,,,,,,,,,
+SSP45REQ-21,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,23,,21,GRID,Grid가 여러 개 있는경우 더블 클릭 기능 확인,A,,,,,,,,,,,,,,,,
+SSP45REQ-22,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,24,,22,GRID,Grid - Combo에서 key-in이 되는 경우 Combo 내에서 없는 값이면 초기화 되기,A,,,,,,,,,,,,,,,,
+SSP45REQ-23,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,25,,23,GRID,Grid - 팝업 컬럼에 key-in이 되는 경우 잘못된 값이면 Validation 하기. As-is에서 동작 비교 필수,A / B,,,,,,,,,,,,,,,,
+SSP45REQ-24,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,26,,24,GRID,Grid - 필수 컬럼 미입력 시 Validation 팝업 필수,A,,,,,,,,,,,,,,,,
+SSP45REQ-25,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,공통요건,27,,25,GRID,Grid - 필수 컬럼 Setting 검토. 사업부별로 다를 수 있음.,A,어떻게 체크해야하는지 UI 와 상의필요,,,,,,,,,,,,,,,
+SSP45-1,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,3,,,SCP,,,,,1,DMF0045,Shipment Request,공통,"[조회 조건] 
+(1) 배열순 변경
+(2) 조회조건명 변경 : Project -> PJT,  Plant Site -> From Site
+
+",,강용준,asis 와 동일하게 수정,,,,,_img/ssp45/검증내역_r3c6_1.png;_img/ssp45/검증내역_r3c7_1.png,
+SSP45-2,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,4,,,SCP,,,,,2,DMF0045,Shipment Request,공통,"[조회조건] Div 배열순이 다름. 최소한 81_Automotive, 82_ESS_Battery...순으로..",,강용준,공통함수로 구현된 순서 -> 이 화면만 개별로 적용,,,,,_img/ssp45/검증내역_r4c7_1.png;_img/ssp45/검증내역_r4c7_2.png,
+SSP45-3,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,5,,,,,,,,3,DMF0045,Shipment Request,공통,"[메인그리드] 공통버튼 Insert 눌러서 한행 추가 후 모델 팝업 클릭시 Item 팝업이 표시됨.
+                 Material by Division 팝업으로 수정",,강용준,처리 완료,,,,,_img/ssp45/검증내역_r5c7_1.png,
+SSP45-4,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,6,,,,,,,,4,DMF0045,Shipment Request,,[몌인그리드] No3.에서 품목 선택시 메인그리드의 Model 및 Nick Name에 자동 설정되도록 수정.,,강용준,처리 완료,,,,,_img/ssp45/검증내역_r6c7_1.png,
+SSP45-5,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,7,,,,,,,,5,DMF0045,Shipment Request,,"[메인그리드] - 계정 : attackgo / Div : 81 조회
+Insert 행 추가 후 Model : AMCOME782-A1-0K0 / Project Code : A15BW7001 선택이후 Trans Mode 팝업
+클릭 시 팝업에 No Permission이 표시됨( AS-IS에서는 데이터 표시 및 최종 저장 가능 ) ",,,,,,,,_img/ssp45/검증내역_r7c7_1.png,
+SSP45-6,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,8,,,,,,,,6,DMF0045,Shipment Request,,"[조회조건] 
+1) Project, Model/Nickname like검색 되지 않음. , 복수 건 되지 않음. 소문자 검색 되지 않음.
+",,강용준,안진선 부장님이 처리해주신 것 같음. 현상 재현 불가,,,,,,
+SSP45-7,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,9,,,,,,,,7,DMF0045,Shipment Request,,"[메인그리드] Insert 로 행 추가 후 아무것도 입력하지 않고, 계획값만 입력 해도 성공했다고 메시지가 표시됨.",,,,,,,,_img/ssp45/검증내역_r9c7_1.png,
+SSP45-8,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,10,,,,,,,,8,DMF0045,Shipment Request,,"[메인그리드] Measure와 Requestor의 위치 변경
+AS-IS
+
+
+
+
+
+
+TO-BE",,,,,,,,_img/ssp45/검증내역_r10c7_1.png;_img/ssp45/검증내역_r10c7_2.png,
+SSP45-9,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,11,,,,,,,,9,DMF0045,Shipment Request,,"Insert 이후 Frozen 구간도 입력 가능하도록 되어 있음.
+추가행의 입력가능 셀 제약 필요. AS-IS는 일괄 오늘+10일 이후로 하드코딩 되어 있는 것 같음.
+From Site별로 Frozen 구간 결정되는데, 행추가 이후 From Site 선택되지 않음. AS-IS와 동일하게 +10이후
+부터 수정 가능하도록 수정( Frozen구간에 입력이 되면 문제가 될 수 있음 )
+",,,,,,,,_img/ssp45/검증내역_r11c7_1.png,
+SSP45-10,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,12,,,,,,,,10,DMF0045,Shipment Request,,,,,,,,,,,
+SSP45-11,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,13,,,,,,,,11,DMF0045,Shipment Request,,,,,,,,,,,
+SSP45-12,☆NSCME_SCP&SSP 테스트_DMF0045(Shipment Request).xlsx,검증내역,14,,,,,,,,12,DMF0045,Shipment Request,,,,,,,,,,,

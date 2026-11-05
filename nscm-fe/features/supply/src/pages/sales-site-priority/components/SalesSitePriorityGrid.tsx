@@ -9,7 +9,7 @@ import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 
-import { COMBO, SITE_TYPE } from '../sales-site-priority.constants';
+import { COMBO } from '../sales-site-priority.constants';
 import type { SalesSitePriorityRow } from '../sales-site-priority.types';
 import { findPlanGroupCodeByName, toCascadeSource } from '../utils/sales-site-priority.cascadeCombo';
 import { applyItemSelect, isCellEditable, isItemPopupCell, s } from '../utils/sales-site-priority.editLock';
@@ -108,9 +108,10 @@ export const SalesSitePriorityGrid = ({
         editTrackerRef={editTrackerRef}
         itemsSource={rows as unknown as WijmoRowItem[]}
         staticColumns={adminColumns ?? []}
-        // SCM_SITE_ID 그리드 셀 콤보(SiteMasterAll_SCP)는 @siteType 필수 등호 조건이라
-        //   comboParams 미전달 시 '' 로 치환돼 0건이 된다(runtime-parity-gate SCP0131 v1 §3.2).
-        comboParams={{ siteType: `'${SITE_TYPE}'` }}
+        // SCM_SITE_ID 그리드 셀 콤보는 admin 메타 CELL_COMBO_DATA_TYPE='ScmSite'(AS-IS SCP0128 포팅,
+        //   SALES+PLANT, DIVISION_ID 반환)를 쓰며 division 좁힘은 ATTRIBUTE2 PARAM2='DIVISION_ID:DIVISION_ID'
+        //   cascade 가 행별 DIVISION_ID 로 처리한다. ScmSite 는 @siteType 를 받지 않으므로 이전 comboParams
+        //   siteType='SALES' 는 무효 no-op(그리드가 SiteMasterAll_SCP 를 쓴다는 스테일 가정의 잔재)이라 제거.
         gotFocus={onFocus}
       />
       {/* 그리드 셀 Item 팝업 — MaterialByDivisionModal(COM0013), 조회영역과 동일 팝업 재사용(design 02 §4.6). */}

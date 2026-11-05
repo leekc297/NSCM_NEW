@@ -1,0 +1,4078 @@
+[
+ {
+  "row_id": "T-e438eb9a",
+  "result": "PASS",
+  "evidence": "화면 진입 직후(조회 전) 그리드 0행 · 진입 시 호출 없음 — 기대 빈 그리드·조회 없음 (AS-IS 로드 중 조회 호출 없음)",
+  "tobe_ref": "E2E @trace",
+  "cond": "0b5ee48e"
+ },
+ {
+  "row_id": "T-4d5e31ce",
+  "result": "PASS",
+  "evidence": "AS-IS 버튼 Search·Insert·Delete·Save → TO-BE 전부 노출 · 대조표 제외 결정 Edit(비교 제외) (보이는 버튼: KOR, 이 이민용, Home, Shipment Lot Size, Scroll tabs left, Scroll tabs right, Close others, Close All, Open, Search(F5), 입력, Delete, Insert(F8), Delete(F9), Save(F7), Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10))",
+  "tobe_ref": "E2E @trace",
+  "cond": "7902ea49"
+ },
+ {
+  "row_id": "T-3b19c851",
+  "result": "PASS",
+  "evidence": "탭 닫기 → 재오픈: 치명 콘솔 0 · 5xx 0 · 재오픈 직후 행 0(최초 진입 0)",
+  "tobe_ref": "E2E @trace",
+  "cond": "c86f3c15"
+ },
+ {
+  "row_id": "T-f5bcceb8",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '81 Automotive Battery' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "a4eec9d5"
+ },
+ {
+  "row_id": "T-b4aaa011",
+  "result": "PASS",
+  "evidence": "AS-IS setListBox(…, true) = ALL 선택 ↔ TO-BE 초기 'ALL'",
+  "tobe_ref": "E2E @trace",
+  "cond": "757caf1a"
+ },
+ {
+  "row_id": "T-c52f20f7",
+  "result": "PASS",
+  "evidence": "AS-IS setListBox(…, true) = ALL 선택 ↔ TO-BE 초기 'ALL'",
+  "tobe_ref": "E2E @trace",
+  "cond": "541efacb"
+ },
+ {
+  "row_id": "T-88d1a2fe",
+  "result": "PASS",
+  "evidence": "AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)'",
+  "tobe_ref": "E2E @trace",
+  "cond": "ed9192b2"
+ },
+ {
+  "row_id": "T-085f39dd",
+  "result": "PASS",
+  "evidence": "AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)'",
+  "tobe_ref": "E2E @trace",
+  "cond": "fbb24c25"
+ },
+ {
+  "row_id": "T-d69afb38",
+  "result": "PASS",
+  "evidence": "AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)'",
+  "tobe_ref": "E2E @trace",
+  "cond": "2e807aaf"
+ },
+ {
+  "row_id": "T-38f907e2",
+  "result": "FAIL",
+  "evidence": "조회조건 txtItemId(Model/Item Id) 칸 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "aa20d19b"
+ },
+ {
+  "row_id": "T-482ab29e",
+  "result": "NA",
+  "evidence": "대조표 행 `SetChangedControl` cascade (cs:158~171)(cs:158~171) 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "3e44a078"
+ },
+ {
+  "row_id": "T-f91236a4",
+  "result": "PASS",
+  "evidence": "'Div' → '40 Mobility & IT Battery' 변경 · 콤보 재요청 2건 · 하위 clbFromSite(사전 선택 'HQ05-W') 'HQ05-W ​'→'​' 후보 30→33(변경), clbToSite(사전 선택 'Ford_US_RDF') 'Ford_US_RDF ​'→'​' 후보 486→1352(변경) · AS-IS 핸들러 ClbDivision_SelectedIndexChanged · AS-IS 하위 후보 = 메모리 필터(DB 재조회 없음 → 콤보 재요청 0건 정상)",
+  "tobe_ref": "E2E @trace",
+  "cond": "f30ee09a"
+ },
+ {
+  "row_id": "T-e271577f",
+  "result": "PASS",
+  "evidence": "AS-IS cboValid 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace",
+  "cond": "c930c4ea"
+ },
+ {
+  "row_id": "T-b2df1648",
+  "result": "PASS",
+  "evidence": "AS-IS cboOperationGroup 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace",
+  "cond": "d9309b66"
+ },
+ {
+  "row_id": "T-9674b638",
+  "result": "PASS",
+  "evidence": "AS-IS clbTransMode 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace",
+  "cond": "9656dff7"
+ },
+ {
+  "row_id": "T-f6fbcab4",
+  "result": "PASS",
+  "evidence": "AS-IS clbFromSite 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace",
+  "cond": "d5eb9c34"
+ },
+ {
+  "row_id": "T-a2282196",
+  "result": "PASS",
+  "evidence": "AS-IS clbToSite 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace",
+  "cond": "736a069e"
+ },
+ {
+  "row_id": "T-fad117f6",
+  "result": "판정필요",
+  "evidence": "PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP: SCM0002/ModelPopup/SEARCH, SCP0033/popup/SEARCH, SSP0019/popup/SEARCH — 화면 진입·조회 중 호출 없음(셀 이벤트·팝업 조회 경로 — 해당 시나리오에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "15db1acc"
+ },
+ {
+  "row_id": "T-a9985ef6",
+  "result": "판정필요",
+  "evidence": "PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION: COM0013/materialByDivision/SEARCH — 화면 진입·조회 중 호출 없음(셀 이벤트·팝업 조회 경로 — 해당 시나리오에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "9667b136"
+ },
+ {
+  "row_id": "T-c770299c",
+  "result": "FAIL",
+  "evidence": "PR_GET_MNU_BTN_AUTH: (PROC_M 배선 없음 — AS-IS 엔드포인트의 TO-BE 프로시저 배선 확인) — 화면 진입·조회 중 호출 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "26dd2330"
+ },
+ {
+  "row_id": "T-c9c9823b",
+  "result": "PASS",
+  "evidence": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE: main/SEARCH HTTP 200 1941행",
+  "tobe_ref": "E2E @trace",
+  "cond": "cfa2239f"
+ },
+ {
+  "row_id": "T-0159f9dc",
+  "result": "NA",
+  "evidence": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE: SCP0028/main/DELETE, SCP0028/main/SAVE — 화면 진입·조회 중 호출 없음(저장 경로 — @verify CRUD 실저장 행에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "43d4138c"
+ },
+ {
+  "row_id": "T-6b9a8ce8",
+  "result": "NA",
+  "evidence": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT: SCP0028/main/INSERT — 화면 진입·조회 중 호출 없음(저장 경로 — @verify CRUD 실저장 행에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "9b39d066"
+ },
+ {
+  "row_id": "T-f43dac0f",
+  "result": "판정필요",
+  "evidence": "PKG_SCP0028.P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP: SCP0028/popup/SEARCH — 화면 진입·조회 중 호출 없음(셀 이벤트·팝업 조회 경로 — 해당 시나리오에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "e1634603"
+ },
+ {
+  "row_id": "T-fc9d26c9",
+  "result": "PASS",
+  "evidence": "AS-IS 기본 표시 컬럼 3 ⊆ TO-BE 그리드 15: 누락 0 (AS-IS 숨김·코드추가 helper 컬럼은 비교 제외: FROM_SITE, FROM_SITE_DESCRIPTION, INCREMENT, ITEM_ID, LAST_UPDATED_BY, LAST_UPDATE_DATE, LOT_SIZE, NICK_NAME, OPERATION_GROUP_ID, SPLIT_YN, TO_SITE, TO_SITE_DESCRIPTION, TRANS_MODE_CODE, TRANS_MODE_NAME, VALID_YN)",
+  "tobe_ref": "E2E @trace",
+  "cond": "affbaefb"
+ },
+ {
+  "row_id": "T-69768704",
+  "result": "PASS",
+  "evidence": "LOT_SIZE: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace",
+  "cond": "90e89ae1"
+ },
+ {
+  "row_id": "T-e56e8da0",
+  "result": "PASS",
+  "evidence": "INCREMENT: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace",
+  "cond": "0b77f1a9"
+ },
+ {
+  "row_id": "T-e1e924a8",
+  "result": "PASS",
+  "evidence": "VALID_YN: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace",
+  "cond": "81b8ec36"
+ },
+ {
+  "row_id": "T-ed99a75c",
+  "result": "PASS",
+  "evidence": "SPLIT_YN: AS-IS(Div 81) '기본' ↔ TO-BE 표시=Y (TO-BE 메타 VISIBLE=Y)",
+  "tobe_ref": "E2E @trace",
+  "cond": "b576aa53"
+ },
+ {
+  "row_id": "T-cd6a2885",
+  "result": "PASS",
+  "evidence": "LOT_SIZE: AS-IS 'Lot Size' = TO-BE 헤더 'Lot Size'",
+  "tobe_ref": "E2E @trace",
+  "cond": "90e89ae1"
+ },
+ {
+  "row_id": "T-de1d56a8",
+  "result": "PASS",
+  "evidence": "INCREMENT: AS-IS 'Increment' = TO-BE 헤더 'Increment'",
+  "tobe_ref": "E2E @trace",
+  "cond": "0b77f1a9"
+ },
+ {
+  "row_id": "T-5fa3ec51",
+  "result": "PASS",
+  "evidence": "VALID_YN: AS-IS 'Valid' → TO-BE 헤더 'Active' — TO-BE 룰 CR-092: SCP·SSP 라벨 'Valid' 은 'Active' 로 변경(AS-IS 와 달라도 PASS)",
+  "tobe_ref": "E2E @trace",
+  "cond": "81b8ec36"
+ },
+ {
+  "row_id": "T-2cbd47f8",
+  "result": "PASS",
+  "evidence": "SPLIT_YN: AS-IS 'Container Split' = TO-BE 헤더 'Container Split'",
+  "tobe_ref": "E2E @trace",
+  "cond": "b576aa53"
+ },
+ {
+  "row_id": "T-a53e3cf6",
+  "result": "PASS",
+  "evidence": "LOT_SIZE: AS-IS NUMBER(AS-IS 문장) ↔ TO-BE dataType=2 dataMap=N editor",
+  "tobe_ref": "E2E @trace",
+  "cond": "3cb733f1"
+ },
+ {
+  "row_id": "T-facf1db7",
+  "result": "PASS",
+  "evidence": "INCREMENT: AS-IS NUMBER(AS-IS 문장) ↔ TO-BE dataType=2 dataMap=N editor",
+  "tobe_ref": "E2E @trace",
+  "cond": "99e1b2ee"
+ },
+ {
+  "row_id": "V-fa381617",
+  "result": "PASS",
+  "evidence": "그리드 컬럼 구성(AS-IS Div 81 기준 4컬럼 대조): 누락 없음 · 추가 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-118f6d1e",
+  "result": "PASS",
+  "evidence": "그리드 컬럼 구성(AS-IS Div 81 기준 4컬럼 대조): 누락 없음 · 추가 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-08715b17",
+  "result": "PASS",
+  "evidence": "그리드 컬럼 구성(AS-IS Div 81 기준 4컬럼 대조): 누락 없음 · 추가 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-fcbaeab9",
+  "result": "PASS",
+  "evidence": "그리드 컬럼 구성(AS-IS Div 81 기준 4컬럼 대조): 누락 없음 · 추가 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-b9e88ced",
+  "result": "PASS",
+  "evidence": "기존행 r0 LOT_SIZE 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @trace",
+  "cond": "2967ff66"
+ },
+ {
+  "row_id": "T-65b3b9a4",
+  "result": "PASS",
+  "evidence": "기존행 r0 INCREMENT 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @trace",
+  "cond": "11e36b5f"
+ },
+ {
+  "row_id": "T-6e99ed5e",
+  "result": "PASS",
+  "evidence": "기존행 r0 VALID_YN 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @trace",
+  "cond": "81b8ec36"
+ },
+ {
+  "row_id": "T-c43e7f9d",
+  "result": "PASS",
+  "evidence": "기존행 r0 SPLIT_YN 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @trace",
+  "cond": "b576aa53"
+ },
+ {
+  "row_id": "T-160db64c",
+  "result": "PASS",
+  "evidence": "기존행 r0 DIVISION_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @trace",
+  "cond": "a08b42ec"
+ },
+ {
+  "row_id": "T-b5cc58c6",
+  "result": "PASS",
+  "evidence": "기존행 r0 CREATED_BY 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @trace",
+  "cond": "f21ca112"
+ },
+ {
+  "row_id": "T-e7ce6f3a",
+  "result": "PASS",
+  "evidence": "기존행 r0 TRANS_MODE_NAME 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @trace",
+  "cond": "7ee5dca6"
+ },
+ {
+  "row_id": "T-66509489",
+  "result": "PASS",
+  "evidence": "기존행 r0 LAST_UPDATE_DATE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @trace",
+  "cond": "87caa848"
+ },
+ {
+  "row_id": "T-d233d70c",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "90e89ae1"
+ },
+ {
+  "row_id": "T-092101ec",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "0b77f1a9"
+ },
+ {
+  "row_id": "T-bdc22af1",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "81b8ec36"
+ },
+ {
+  "row_id": "T-8e0e10c5",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "b576aa53"
+ },
+ {
+  "row_id": "T-e7ce5e82",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "2967ff66"
+ },
+ {
+  "row_id": "T-593d0c8b",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "11e36b5f"
+ },
+ {
+  "row_id": "T-caa356c6",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "3d44b6b7"
+ },
+ {
+  "row_id": "T-c8fd6fcd",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "ab4c2655"
+ },
+ {
+  "row_id": "T-0951d49a",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "53165682"
+ },
+ {
+  "row_id": "T-f09e54be",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "1dbc3d27"
+ },
+ {
+  "row_id": "T-452261da",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "3d44b6b7"
+ },
+ {
+  "row_id": "T-df55bbf2",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "ab4c2655"
+ },
+ {
+  "row_id": "T-e0206256",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "b9aebcdc"
+ },
+ {
+  "row_id": "T-8e0c6de4",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(실행 문장 없음) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @trace",
+  "cond": "b9420657"
+ },
+ {
+  "row_id": "T-4d6f6c87",
+  "result": "NA",
+  "evidence": "LOT_SIZE: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "7bfebcda"
+ },
+ {
+  "row_id": "T-a14b1ffd",
+  "result": "NA",
+  "evidence": "INCREMENT: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "bd18c2a6"
+ },
+ {
+  "row_id": "T-686860e9",
+  "result": "NA",
+  "evidence": "VALID_YN: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "a0d6e6a0"
+ },
+ {
+  "row_id": "T-4bc81061",
+  "result": "NA",
+  "evidence": "SPLIT_YN: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "f3284a9f"
+ },
+ {
+  "row_id": "T-657a057c",
+  "result": "NA",
+  "evidence": "DIVISION_ID: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "4d2a5f44"
+ },
+ {
+  "row_id": "T-8c50b747",
+  "result": "NA",
+  "evidence": "CREATED_BY: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "8161f525"
+ },
+ {
+  "row_id": "T-8249bbe9",
+  "result": "NA",
+  "evidence": "TRANS_MODE_NAME: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "9f5d90e8"
+ },
+ {
+  "row_id": "T-950d3d65",
+  "result": "NA",
+  "evidence": "LAST_UPDATE_DATE: AS-IS 에 행 조건 잠금(lock_rules ROW_COND) 없음 — 편집 가능 여부는 D1 에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "3b571dc8"
+ },
+ {
+  "row_id": "T-884ad9f3",
+  "result": "NA",
+  "evidence": "MSG00002: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "9944f9aa"
+ },
+ {
+  "row_id": "T-627e2743",
+  "result": "NA",
+  "evidence": "MSG00429: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "2a8105df"
+ },
+ {
+  "row_id": "T-86090cf3",
+  "result": "NA",
+  "evidence": "MSG01091: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "a7a0e473"
+ },
+ {
+  "row_id": "T-a79c50f4",
+  "result": "NA",
+  "evidence": "MSG00014: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "23e5b9fb"
+ },
+ {
+  "row_id": "T-c96012e6",
+  "result": "NA",
+  "evidence": "MSG00683: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "6d7c5638"
+ },
+ {
+  "row_id": "T-2f878317",
+  "result": "NA",
+  "evidence": "MSG00059: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "f9996ffc"
+ },
+ {
+  "row_id": "T-9c0060f9",
+  "result": "NA",
+  "evidence": "MSG00016: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "ee2f07a0"
+ },
+ {
+  "row_id": "T-dbdb5f4b",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "47ecca4d"
+ },
+ {
+  "row_id": "T-2030b1b3",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "6cf93691"
+ },
+ {
+  "row_id": "T-61a37bf5",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "ea842e86"
+ },
+ {
+  "row_id": "T-2eca880a",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "cdac5261"
+ },
+ {
+  "row_id": "T-0caf6c62",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "9ef12f89"
+ },
+ {
+  "row_id": "T-4677b9e5",
+  "result": "판정필요",
+  "evidence": "MSG00284 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "455e9291"
+ },
+ {
+  "row_id": "T-a48de69e",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "22484cdc"
+ },
+ {
+  "row_id": "T-cc3cc178",
+  "result": "NA",
+  "evidence": "MSG00133: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (modiCnt==0)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",
+  "tobe_ref": "E2E @trace",
+  "cond": "03580e5d"
+ },
+ {
+  "row_id": "T-d35a8011",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "ddeeff69"
+ },
+ {
+  "row_id": "T-281e8ef6",
+  "result": "FAIL",
+  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인",
+  "tobe_ref": "E2E @trace",
+  "cond": "5011de91"
+ },
+ {
+  "row_id": "T-1572ce8c",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "7f4dab4c"
+ },
+ {
+  "row_id": "T-239d320f",
+  "result": "FAIL",
+  "evidence": "MSG00006: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인",
+  "tobe_ref": "E2E @trace",
+  "cond": "7b9aeb8f"
+ },
+ {
+  "row_id": "T-61a9d269",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "d7a17c73"
+ },
+ {
+  "row_id": "T-833aceab",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "93c9bb89"
+ },
+ {
+  "row_id": "T-fdfe4318",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "74a62ab3"
+ },
+ {
+  "row_id": "T-141a62a1",
+  "result": "판정필요",
+  "evidence": "MSG00099 — checkValidSize 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(checkValidSize)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "6ab50096"
+ },
+ {
+  "row_id": "T-e025353a",
+  "result": "판정필요",
+  "evidence": "MSG00099 — checkValidSize 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(checkValidSize)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "2ae1b964"
+ },
+ {
+  "row_id": "T-16ce7bee",
+  "result": "판정필요",
+  "evidence": "MSG00031 — FindDelete 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(FindDelete)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "0ba81768"
+ },
+ {
+  "row_id": "T-a5c1bb0f",
+  "result": "판정필요",
+  "evidence": "MSG00084 — checkValidSize 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(checkValidSize)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "a3b8b04e"
+ },
+ {
+  "row_id": "V-356aae9e",
+  "result": "NA",
+  "evidence": "MSG00133: 위반 입력 자동 생성 불가(검사기 한계 — 화면 오류 아님 · 수동 검수 W7) — guard 'if (modiCnt==0)' (변수→컬럼 {}) → 검증 미완(검사기 확장 필요, 사용자 룰: 미검증은 PASS 가 아님)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-88b49284",
+  "result": "FAIL",
+  "evidence": "MSG00004: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-fb2bb601",
+  "result": "FAIL",
+  "evidence": "MSG00006: 저장 성공 응답('S') → 결과 메시지 — CRUD 실저장(@verify F1 NOT_RUN: ) 경로에서 성공 알림·재조회 확인",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-fe6dcb91",
+  "result": "판정필요",
+  "evidence": "MSG00099 — checkValidSize 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(checkValidSize)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4ff698de",
+  "result": "판정필요",
+  "evidence": "MSG00084 — checkValidSize 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(checkValidSize)에서 판정",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-427c462f",
+  "result": "PASS",
+  "evidence": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE: 결과 1940행이 AS-IS 키 [DIVISION_ID,OPERATION_GROUP_ID] 순으로 정렬됨 (단일 규칙) · 그리드에 없는 키 FROM_SITE,TO_SITE,TRANS_MODE_CODE 와 그 뒤 키는 비교 제외(비노출 컬럼 — 앞 2개 키만 대조)",
+  "tobe_ref": "E2E @trace",
+  "cond": "cec12be2"
+ },
+ {
+  "row_id": "T-073acab9",
+  "result": "NA",
+  "evidence": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT: 저장 SP — 결과 정렬 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "9f3c7327"
+ },
+ {
+  "row_id": "T-db1c456f",
+  "result": "PASS",
+  "evidence": "Division 후보 8건 [81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace",
+  "cond": "a4182def"
+ },
+ {
+  "row_id": "V-e4ba86f4",
+  "result": "PASS",
+  "evidence": "Division 후보 8건 [81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c27c0a9b",
+  "result": "PASS",
+  "evidence": "Division 후보 8건 [81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-6f328fe9",
+  "result": "PASS",
+  "evidence": "LOT_SIZE: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace",
+  "cond": "d5b6e63c"
+ },
+ {
+  "row_id": "T-7ded8582",
+  "result": "PASS",
+  "evidence": "INCREMENT: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace",
+  "cond": "f51a30d1"
+ },
+ {
+  "row_id": "T-620b63d8",
+  "result": "PASS",
+  "evidence": "VALID_YN: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace",
+  "cond": "927dccca"
+ },
+ {
+  "row_id": "T-3ca38a7a",
+  "result": "PASS",
+  "evidence": "SPLIT_YN: AS-IS 는 병합(프레임워크 기본 — 메타 컬럼은 FPMerge.Restricted (GSCM/01.Framework/GSCM.Windows.Forms/Class/SpreadInfo.cs:1909)) ↔ TO-BE 는 이 컬럼을 병합 대상에서 제외(column.allowMerging=false · BodGrid MERGE_COLUMNS) — TO-BE 룰 CR-073: 셀 병합은 키(그룹) 컬럼만, 값 컬럼은 병합하지 않음 → AS-IS 와 달라도 PASS",
+  "tobe_ref": "E2E @trace",
+  "cond": "10406f50"
+ },
+ {
+  "row_id": "T-ece165f6",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "6257c4da"
+ },
+ {
+  "row_id": "V-2c7c7c6c",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-9e35a1d4",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-abf7496d",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8e194f95",
+  "result": "FAIL",
+  "evidence": "Insert → 신규행 CRUD_TYPE='없음' · 기존행 LOT_SIZE 편집 → CRUD_TYPE='' · 기존행 Delete → CRUD_TYPE='' · Active 관리 화면(CR-057: 기존행 D Flag 표시 안 함 · 컬럼 VALID_YN) (AS-IS CRUD Status I/U/D 표시)",
+  "tobe_ref": "E2E @trace",
+  "cond": "c86f3c15"
+ },
+ {
+  "row_id": "V-e50f03fc",
+  "result": "FAIL",
+  "evidence": "Insert → 신규행 CRUD_TYPE='없음' · 기존행 LOT_SIZE 편집 → CRUD_TYPE='' · 기존행 Delete → CRUD_TYPE='' · Active 관리 화면(CR-057: 기존행 D Flag 표시 안 함 · 컬럼 VALID_YN) (AS-IS CRUD Status I/U/D 표시)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4667febc",
+  "result": "NA",
+  "evidence": "필수 조회조건 없음(플랜 required 0 · 기준표 필수 표시 0) — 조회조건 필수 검증 대상 아님(AS-IS checkRequired 는 필수 컨트롤이 있을 때만 동작)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-992e7085",
+  "result": "NA",
+  "evidence": "필수 조회조건 없음(플랜 required 0 · 기준표 필수 표시 0) — 조회조건 필수 검증 대상 아님(AS-IS checkRequired 는 필수 컨트롤이 있을 때만 동작)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-234d08f7",
+  "result": "NA",
+  "evidence": "조회 1940행 · r1 셀 클릭 후 Insert → 신규행 신규행 없음 · 행 1940→1940 — AS-IS SpreadInfo.Insert(): 활성 행 위치(r1)에 삽입 — 위치 다름",
+  "tobe_ref": "E2E @trace",
+  "cond": "f50d9372"
+ },
+ {
+  "row_id": "V-847b4787",
+  "result": "PASS",
+  "evidence": "Division 후보 8건 [81 Automotive Battery, 40 Mobility & IT Battery, 82 ESS Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-602d9026",
+  "result": "FAIL",
+  "evidence": "[단일선택 Valid]  — 판정 가능한 옵션 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-bedf6778",
+  "result": "NA",
+  "evidence": "Valid 단일 선택 콤보 — ALL/다중 사양 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8968fb50",
+  "result": "PASS",
+  "evidence": "[단일선택 Division*] '81 Automotive Battery' → 1940행 · 요청 인자 포함 | '40 Mobility & IT Battery' → 265행 · 요청 인자 미확인 | '82 ESS Battery' → 280행 · 요청 인자 미확인",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-0a1e0c9f",
+  "result": "NA",
+  "evidence": "Division* 단일 선택 콤보 — ALL/다중 사양 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-9e2b9258",
+  "result": "FAIL",
+  "evidence": "조회조건 Model 칸 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-a9349c2a",
+  "result": "PASS",
+  "evidence": "[단일선택 Operation Group] 'ALL' → 1940행 | 'Pack' → 1270행 · OPERATION_GROUP_ID 조건 밖 1270 OK | 'Cell' → 670행 · OPERATION_GROUP_ID 조건 밖 670 OK",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-0cb5ad1c",
+  "result": "NA",
+  "evidence": "Operation Group 단일 선택 콤보 — ALL/다중 사양 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-dd4f9db4",
+  "result": "ERROR",
+  "evidence": "[멀티선택 From Site] 선택할 옵션 없음(후보 1) — 후보가 1개 이하라 선택 변경 검사 불가(콤보 원천 오류·데이터 없음: B1/B4·DB-SYN 참조)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-ff037ad7",
+  "result": "ERROR",
+  "evidence": "[멀티선택 From Site] 후보 없음 — 후보가 1개 이하라 ALL 검사 불가",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c096b37d",
+  "result": "PASS",
+  "evidence": "[멀티선택 Trans Mode] 'AIR' 1개 선택 조회 → 388행 · TRANS_MODE_NAME 값 전부 일치 (기본 ALL 1940행) · 조회 요청 0건",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-506dfa50",
+  "result": "PASS",
+  "evidence": "[멀티선택 Trans Mode] ALL 선택 조회 → 1940행 (개별 388행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8e065123",
+  "result": "PASS",
+  "evidence": "[멀티선택 To Site] 'HKI_KR_WJU' 1개 선택 조회 → 5행 · TO_SITE_DESCRIPTION 값 전부 일치 (기본 ALL 1940행) · 조회 요청 0건",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-855c80ac",
+  "result": "PASS",
+  "evidence": "[멀티선택 To Site] ALL 선택 조회 → 1735행 (개별 5행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-20b0d5ea",
+  "result": "PASS",
+  "evidence": "LOT_SIZE: AS-IS 소수 0자리·천단위 Y ↔ TO-BE format='' 표시 '12,800'(원값 '12800')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-da75db3d",
+  "result": "PASS",
+  "evidence": "INCREMENT: AS-IS 소수 0자리·천단위 Y ↔ TO-BE format='' 표시 '12,800'(원값 '12800')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8028b0e3",
+  "result": "PASS",
+  "evidence": "CREATION_DATE: AS-IS 표시 yyyy-MM-dd HH:mm:ss ↔ TO-BE format='yyyy.MM.dd' 표시 '2022-11-30 14:44:53'(원값 '2022-11-30 14:44:53')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-43d7f5b7",
+  "result": "PASS",
+  "evidence": "LAST_UPDATE_DATE: AS-IS 표시 yyyy-MM-dd HH:mm:ss ↔ TO-BE format='yyyy.MM.dd' 표시 '2026-11-02 06:43:24'(원값 '2026-11-02 06:43:24')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-d52fde23",
+  "result": "PASS",
+  "evidence": "조회 1940행 — 화면에 건수 '1940' 표시 있음(총 건수 표시 확정 규칙)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-da55fb5d",
+  "result": "PASS",
+  "evidence": "조회 1940행 — 화면에 건수 '1940' 표시 있음(총 건수 표시 확정 규칙)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-38d22b58",
+  "result": "PASS",
+  "evidence": "컬럼 폭 15개 메타 대조 — 25% 초과 이탈 0: 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-178de068",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-687fa372",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c7c18237",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-5998ce6b",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-1c0dc546",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-1a6ae9c9",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-7676d91a",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e077cf2e",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-ffdf963a",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-27b3da52",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-b558c110",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c4173e97",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-cf66b2b2",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-b4a4af43",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c74ec86c",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4097be01",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-6016e7a7",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-b341748c",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-ca12318c",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-6516d863",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-2711580b",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e72bb257",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-f7ad2ea2",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-addd2b39",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-010e046c",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-83a7b13b",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-51e5f610",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e26f047d",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-630c193f",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-accc8b75",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-88cde01a",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-546de16d",
+  "result": "FAIL",
+  "evidence": "조회(Division ALL) 응답 64508ms · 1940행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내) 초과",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-ffbf38b4",
+  "result": "FAIL",
+  "evidence": "조회(Division ALL) 응답 64508ms · 1940행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내) 초과",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-27cc2d6b",
+  "result": "FAIL",
+  "evidence": "조회(Division ALL) 응답 64508ms · 1940행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내) 초과",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8d2007c3",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo, From Site=combo, To Site=combo, Trans Mode=combo, Active=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4559d4da",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo, From Site=combo, To Site=combo, Trans Mode=combo, Active=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-82575ade",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo, From Site=combo, To Site=combo, Trans Mode=combo, Active=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-0361c3bf",
+  "result": "NA",
+  "evidence": "Team·Sales Site·End Customer·Sold to·Plant Site 조회조건 없음(화면 조건: Div, From Site, To Site, Trans Mode, Active) — 원천 표준 규칙 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-88723f3e",
+  "result": "NA",
+  "evidence": "Team·Sales Site·End Customer·Sold to·Plant Site 조회조건 없음(화면 조건: Div, From Site, To Site, Trans Mode, Active) — 원천 표준 규칙 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-32399990",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 이 이민용 | Home | Shipment Lot Size | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | 입력 | Delete | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-189127d5",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 이 이민용 | Home | Shipment Lot Size | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | 입력 | Delete | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-ea2ac5ab",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 이 이민용 | Home | Shipment Lot Size | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | 입력 | Delete | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-84d0e51b",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 이 이민용 | Home | Shipment Lot Size | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | 입력 | Delete | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c9853373",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 이 이민용 | Home | Shipment Lot Size | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | 입력 | Delete | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-20b32ad4",
+  "result": "NA",
+  "evidence": "그리드 1940행에 Sum/Total/합계 행·컬럼 푸터 없음 — 합계행 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3615e93d",
+  "result": "NA",
+  "evidence": "그리드 1940행에 Sum/Total/합계 행·컬럼 푸터 없음 — 합계행 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-289d5d81",
+  "result": "ERROR",
+  "evidence": "[측정 코드 없음] 메뉴 노출·라우트 실측 미구현 — 결함 대상 'Home / Auth Request 메뉴' (결함 아님 · 미측정 · 문구 매칭 판정 제거 2026-10-31)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-15f47ff2",
+  "result": "ERROR",
+  "evidence": "[측정 코드 없음] 메뉴 노출·라우트 실측 미구현 — 결함 대상 '그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화' (결함 아님 · 미측정 · 문구 매칭 판정 제거 2026-10-31)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-18e96524",
+  "result": "ERROR",
+  "evidence": "[측정 코드 없음] 언어 전환 비교 미구현 — 명칭 컬럼 NICK_NAME,TRANS_MODE_NAME 표본 50건 중 한글 0(참고값 · 판정 근거 아님, 종전엔 무조건 PASS 였음 2026-10-31)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-bf135439",
+  "result": "PASS",
+  "evidence": "dataMap 컬럼 3: OPERATION_GROUP_ID 'A'→'Cell'(AS-IS 코드) · VALID_YN 'Y'→'Y'(AS-IS 코드) · SPLIT_YN 'N'→'N'(AS-IS 코드) — AS-IS 표시 방식과 동일(코드 표시 컬럼은 AS-IS 도 코드 · NAME 추가 표시는 확정규칙 A2 허용)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-f7a0b89e",
+  "result": "PASS",
+  "evidence": "dataMap 컬럼 3: OPERATION_GROUP_ID 'A'→'Cell'(AS-IS 코드) · VALID_YN 'Y'→'Y'(AS-IS 코드) · SPLIT_YN 'N'→'N'(AS-IS 코드) — AS-IS 표시 방식과 동일(코드 표시 컬럼은 AS-IS 도 코드 · NAME 추가 표시는 확정규칙 A2 허용)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-9f49b852",
+  "result": "PASS",
+  "evidence": "CUSTOMER 1940행 공란 표기 빈값/NULL — 단일 표기",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8fb8e871",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE 1940행 공란 표기 빈값/NULL — 단일 표기",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-59ca3b25",
+  "result": "NA",
+  "evidence": "'LBL/MSG/MENU 코드 사전' 은 코드 사전·마스터 전역 항목 — SCP0028 그리드 데이터로 측정할 공란 컬럼 아님(전역 N1 은 사전 점검 도구 대상)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-68f2e792",
+  "result": "PASS",
+  "evidence": "SCP0028_GET_SHIPMENT_LOT_SIZE: SKIP AS-IS ?행 ↔ TO-BE ?행 · SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT: SKIP AS-IS ?행 ↔ TO-BE ?행",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8bdff29f",
+  "result": "PASS",
+  "evidence": "Division ALL 1940행 조회 후 '81' 단일 재조회 → 1940행 · DIVISION_ID 다른 값 0 — 이전 결과 잔존 없음(시트 초기화 후 재채움)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3a45c9b9",
+  "result": "PASS",
+  "evidence": "진입 화면 '_' 폴백 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-b48e5d97",
+  "result": "판정필요",
+  "evidence": "Delete 조회 전 프로브 미구현",
+  "tobe_ref": "E2E @verify",
+  "cond": "2a4f0317"
+ },
+ {
+  "row_id": "V-16b386a8",
+  "result": "PASS",
+  "evidence": "기존행 r0 DIVISION_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-814f0e63",
+  "result": "PASS",
+  "evidence": "기존행 r0 OPERATION_GROUP_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-776e9f00",
+  "result": "PASS",
+  "evidence": "기존행 r0 FROM_SITE_DESCRIPTION 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-bec5bf16",
+  "result": "PASS",
+  "evidence": "기존행 r0 TO_SITE_DESCRIPTION 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-7d751e3b",
+  "result": "PASS",
+  "evidence": "기존행 r0 ITEM_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-977fb42b",
+  "result": "PASS",
+  "evidence": "기존행 r0 NICK_NAME 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-595ebd82",
+  "result": "PASS",
+  "evidence": "기존행 r0 TRANS_MODE_NAME 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-881e5200",
+  "result": "PASS",
+  "evidence": "기존행 r0 LOT_SIZE 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-e742cfe3",
+  "result": "PASS",
+  "evidence": "기존행 r0 INCREMENT 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-d8f7b6b6",
+  "result": "PASS",
+  "evidence": "기존행 r0 VALID_YN 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-09ba5f25",
+  "result": "PASS",
+  "evidence": "기존행 r0 SPLIT_YN 편집=true (AS-IS 편집 가능)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-e2bb1721",
+  "result": "PASS",
+  "evidence": "기존행 r0 CREATED_BY 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-6e29ea53",
+  "result": "PASS",
+  "evidence": "기존행 r0 CREATION_DATE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-f33e2f4d",
+  "result": "PASS",
+  "evidence": "기존행 r0 LAST_UPDATED_BY 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-02c488ee",
+  "result": "PASS",
+  "evidence": "기존행 r0 LAST_UPDATE_DATE 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-807ce196",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-49b74e1a",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-b7d3b50f",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-fe0de9c0",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-1032c717",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-a48fca29",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-19eba037",
+  "result": "PASS",
+  "evidence": "OPERATION_GROUP_ID: 원값 'A' → 표시 'Cell' (이름 'Cell') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-b374f708",
+  "result": "PASS",
+  "evidence": "OPERATION_GROUP_ID 신규행·기존행 모두 편집 불가 — 입력 경로 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-59056cd1",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-19dbf57f",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-c06b9a84",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-eba2b607",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-954df2e5",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-9b9267ff",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-1b10da7b",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-9fb9cc94",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-453827de",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-14bd2be6",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-4b4a7ae3",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-6d2f93ab",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-ac1a6185",
+  "result": "PASS",
+  "evidence": "VALID_YN: 원값 'Y' → 표시 'Y' (이름 'Y') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-0fb62e74",
+  "result": "PASS",
+  "evidence": "VALID_YN: 목록 밖 'ZZ_E2E_NOT_IN_LIST' 입력 → 값 'Y'",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-a75b28d5",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-f62746ce",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-b3aeb86c",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-55f0d272",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-45432329",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-97da1130",
+  "result": "PASS",
+  "evidence": "SPLIT_YN: 원값 'N' → 표시 'N' (이름 'N') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-e90b8442",
+  "result": "PASS",
+  "evidence": "SPLIT_YN: 목록 밖 'ZZ_E2E_NOT_IN_LIST' 입력 → 값 'N'",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-fc3bd077",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-19c73c57",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-5ee103c5",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-fd77aa3c",
+  "result": "NA",
+  "evidence": "Insert 무동작 = AS-IS 파리티(AS-IS InsertButton,InsertRow 실행 문장 0) — 신규 행 없음이 정상",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-6259d313",
+  "result": "FAIL",
+  "evidence": "기존행 r0 LOT_SIZE: 유효값 '1' 입력 OK(키보드) · 소수 0자리 초과 입력 '1.5' → 값 '15' OK · 문자(숫자 아님) 입력 'ab' → 값 '15' OK · 최소 0 미만 입력 '-1' → 값 '-1' NG (AS-IS cell_rules 기대: 소수 0자리 · 정수만(소수·문자 거부) · 최소 0 · 최대 9999999999 · 천단위 Y — 규칙 밖 값 거부) — AS-IS 가 막는 값이 TO-BE 셀에 그대로 들어감(FE 컬럼 editor/dataType·scale 확인)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-597f4433",
+  "result": "FAIL",
+  "evidence": "기존행 r0 INCREMENT: 유효값 '0' 입력 OK(키보드) · 소수 0자리 초과 입력 '1.5' → 값 '15' OK · 문자(숫자 아님) 입력 'ab' → 값 '15' OK · 최소 0 미만 입력 '-1' → 값 '-1' NG (AS-IS cell_rules 기대: 소수 0자리 · 정수만(소수·문자 거부) · 최소 0 · 최대 9999999999 · 천단위 Y — 규칙 밖 값 거부) — AS-IS 가 막는 값이 TO-BE 셀에 그대로 들어감(FE 컬럼 editor/dataType·scale 확인)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-e06a0981",
+  "result": "NA",
+  "evidence": "LOT_SIZE: AS-IS 숫자 규칙 최소 0(음수 불가 컬럼) — 음수 글자색 대상 아님",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-8ab368de",
+  "result": "NA",
+  "evidence": "INCREMENT: AS-IS 숫자 규칙 최소 0(음수 불가 컬럼) — 음수 글자색 대상 아님",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-2ab668bf",
+  "result": "PASS",
+  "evidence": "CREATION_DATE 신규행·기존행 모두 편집 불가(입력 경로 없음) — 잘못된 날짜 입력 불가",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-7f38f199",
+  "result": "PASS",
+  "evidence": "LAST_UPDATE_DATE 신규행·기존행 모두 편집 불가(입력 경로 없음) — 잘못된 날짜 입력 불가",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-66b1a489",
+  "result": "PASS",
+  "evidence": "OPERATION_GROUP_ID: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-77100d57",
+  "result": "PASS",
+  "evidence": "LOT_SIZE: AS-IS NUMBER ↔ TO-BE dataType=Number · dataMap=N · editor",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-2bdf7955",
+  "result": "PASS",
+  "evidence": "INCREMENT: AS-IS NUMBER ↔ TO-BE dataType=Number · dataMap=N · editor",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-618e561f",
+  "result": "PASS",
+  "evidence": "VALID_YN: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-aa075cf2",
+  "result": "PASS",
+  "evidence": "SPLIT_YN: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-3ae7c623",
+  "result": "PASS",
+  "evidence": "CREATION_DATE: AS-IS DATETIME ↔ TO-BE dataType=Object · dataMap=N · editor · format=yyyy.MM.dd",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-2ce779cb",
+  "result": "PASS",
+  "evidence": "LAST_UPDATE_DATE: AS-IS DATETIME ↔ TO-BE dataType=Object · dataMap=N · editor · format=yyyy.MM.dd",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-f19d838c",
+  "result": "NA",
+  "evidence": "DIVISION_ID 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-8cca9060",
+  "result": "PASS",
+  "evidence": "OPERATION_GROUP_ID: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-36266ac3",
+  "result": "PASS",
+  "evidence": "FROM_SITE_DESCRIPTION: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-d6ea5ee6",
+  "result": "PASS",
+  "evidence": "TO_SITE_DESCRIPTION: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-c68682e9",
+  "result": "PASS",
+  "evidence": "ITEM_ID: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-207b87b5",
+  "result": "PASS",
+  "evidence": "NICK_NAME: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-f8c905c6",
+  "result": "PASS",
+  "evidence": "TRANS_MODE_NAME: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-c5219535",
+  "result": "PASS",
+  "evidence": "LOT_SIZE: 기존행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-65ae4e60",
+  "result": "PASS",
+  "evidence": "INCREMENT: 기존행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-2fa7e39e",
+  "result": "PASS",
+  "evidence": "VALID_YN: 기존행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-20cf6e59",
+  "result": "PASS",
+  "evidence": "SPLIT_YN: 기존행 편집=true 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-fd905226",
+  "result": "PASS",
+  "evidence": "CREATED_BY: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-7f992fa3",
+  "result": "PASS",
+  "evidence": "CREATION_DATE: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-e1cc7e1e",
+  "result": "PASS",
+  "evidence": "LAST_UPDATED_BY: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-fb4dc86a",
+  "result": "PASS",
+  "evidence": "LAST_UPDATE_DATE: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-d9f71764",
+  "result": "NA",
+  "evidence": "Insert 버튼 비활성(수정 저장형 화면) — 신규행 필수 공란 저장 시나리오 없음 · 저장 검사는 F1/F2/F4/F6(기존 행 수정 저장)에서 수행",
+  "tobe_ref": "E2E @verify",
+  "cond": "e07a8fae"
+ },
+ {
+  "row_id": "V-d7cde174",
+  "result": "NA",
+  "evidence": "Insert 버튼 비활성(수정 저장형 화면) — 신규행 필수 공란 저장 시나리오 없음 · 저장 검사는 F1/F2/F4/F6(기존 행 수정 저장)에서 수행",
+  "tobe_ref": "E2E @verify",
+  "cond": "a4e4c047"
+ },
+ {
+  "row_id": "V-a5e26726",
+  "result": "NA",
+  "evidence": "Insert 버튼 비활성(수정 저장형 화면) — 신규행 필수 공란 저장 시나리오 없음 · 저장 검사는 F1/F2/F4/F6(기존 행 수정 저장)에서 수행",
+  "tobe_ref": "E2E @verify",
+  "cond": "e0c39271"
+ },
+ {
+  "row_id": "V-fbb3bbaf",
+  "result": "NA",
+  "evidence": "Insert 버튼 비활성(수정 저장형 화면) — 신규행 필수 공란 저장 시나리오 없음 · 저장 검사는 F1/F2/F4/F6(기존 행 수정 저장)에서 수행",
+  "tobe_ref": "E2E @verify",
+  "cond": "07d8d827"
+ },
+ {
+  "row_id": "V-483219d8",
+  "result": "NA",
+  "evidence": "Insert 버튼 비활성(수정 저장형 화면) — 신규행 필수 공란 저장 시나리오 없음 · 저장 검사는 F1/F2/F4/F6(기존 행 수정 저장)에서 수행",
+  "tobe_ref": "E2E @verify",
+  "cond": "d944ca01"
+ },
+ {
+  "row_id": "V-cc3d7061",
+  "result": "NA",
+  "evidence": "Insert 버튼 비활성(수정 저장형 화면) — 신규행 필수 공란 저장 시나리오 없음 · 저장 검사는 F1/F2/F4/F6(기존 행 수정 저장)에서 수행",
+  "tobe_ref": "E2E @verify",
+  "cond": "be0442ce"
+ },
+ {
+  "row_id": "V-2a38c0ec",
+  "result": "ERROR",
+  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=0보다 큰 정수를 입력하십시오. · [182s] 재조회 · [182s] 행 찾기 0 · 행 [81|Cell|LGESOC Cell HQ07] VALID_YN: 'Y' → 'N' 저장 실패 · 재조회 값 'N' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 'N' ⚠ 원값과 다름",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-76f53419",
+  "result": "PASS",
+  "evidence": "LOT_SIZE r3 → 12799 · 실패 문구 표시 '[저장 경로 시험] 강제 실패'",
+  "tobe_ref": "E2E @verify 저장 경로",
+  "cond": "56594782"
+ },
+ {
+  "row_id": "V-6cc4d697",
+  "result": "ERROR",
+  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=0보다 큰 정수를 입력하십시오. · [182s] 재조회 · [182s] 행 찾기 0 · 행 [81|Cell|LGESOC Cell HQ07] VALID_YN: 'Y' → 'N' 저장 실패 · 재조회 값 'N' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 'N' ⚠ 원값과 다름",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-e20fb714",
+  "result": "PASS",
+  "evidence": "LOT_SIZE r9→r3 '5760' · 붙여넣은 뒤 칸 '5760' · 붙여넣기 → 저장 요청 2건 · 본문에 값 있음",
+  "tobe_ref": "E2E @verify 저장 경로",
+  "cond": "fd28131e"
+ },
+ {
+  "row_id": "V-8f2c256d",
+  "result": "ERROR",
+  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=0보다 큰 정수를 입력하십시오. · [182s] 재조회 · [182s] 행 찾기 0 · 행 [81|Cell|LGESOC Cell HQ07] VALID_YN: 'Y' → 'N' 저장 실패 · 재조회 값 'N' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 'N' ⚠ 원값과 다름",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-98001dbc",
+  "result": "PASS",
+  "evidence": "LOT_SIZE r3 원값 '12,800' · 경계값 '9999999999' 저장·재조회 '9,999,999,999' 일치 · 원복 OK",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "5f790b2d"
+ },
+ {
+  "row_id": "V-c56a201c",
+  "result": "ERROR",
+  "evidence": "[업무 검증 차단] 표본 값이 저장 전 검증에 막힘 — 저장 세부(컬럼별 왕복) 행 참조 · 수정 저장 경로 강제(edit-save) · [1s] 수정 입력 완료 · [61s] 저장 응답 call-proc 없음 알림=0보다 큰 정수를 입력하십시오. · [182s] 재조회 · [182s] 행 찾기 0 · 행 [81|Cell|LGESOC Cell HQ07] VALID_YN: 'Y' → 'N' 저장 실패 · 재조회 값 'N' 반영 확인 · 저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 'N' ⚠ 원값과 다름",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-c82c6754",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] LOT_SIZE 입력이 반영 안 됨 '7'→''",
+  "tobe_ref": "E2E @verify 셀 편집",
+  "cond": "13932bc6"
+ },
+ {
+  "row_id": "V-1b743800",
+  "result": "PASS",
+  "evidence": "수정 저장 1회 DB 전후 대조 — SCP_MST_SHIPMENT_LOT_SIZE(키 DIVISION_ID,FROM_SITE,TO_SITE,ITEM_ID): 추가 0 · 삭제 0 · 변경 1",
+  "tobe_ref": "E2E @verify 저장 세부 DB",
+  "cond": "4fbac3a1"
+ },
+ {
+  "row_id": "V-8576fe4c",
+  "result": "PASS",
+  "evidence": "변경 행 1 감사 컬럼 대조: Created 불변 · Updated 갱신 · 수정자=저장 계정",
+  "tobe_ref": "E2E @verify 저장 세부 DB",
+  "cond": "4fbac3a1"
+ },
+ {
+  "row_id": "V-ba558c2a",
+  "result": "PASS",
+  "evidence": "SCP_MST_SHIPMENT_LOT_SIZE_H +1 · SCP_MST_SHIPMENT_LOT_SIZE: +0 -0 ~1 / SCP_MST_SHIPMENT_LOT_SIZE_H: +1 -0 ~0",
+  "tobe_ref": "E2E @verify 저장 세부 DB",
+  "cond": "4fbac3a1"
+ },
+ {
+  "row_id": "V-eb542cf8",
+  "result": "PASS",
+  "evidence": "이력 행 1건 ↔ 원장 변경 전후 값 대조 일치",
+  "tobe_ref": "E2E @verify 저장 세부 DB",
+  "cond": "c0c2b940"
+ },
+ {
+  "row_id": "V-7f511bed",
+  "result": "PASS",
+  "evidence": "저장 2회 뒤 SCP_MST_SHIPMENT_LOT_SIZE: 추가 0 · 삭제 0",
+  "tobe_ref": "E2E @verify 저장 세부 DB",
+  "cond": "dd928257"
+ },
+ {
+  "row_id": "V-28f35ca2",
+  "result": "PASS",
+  "evidence": "편집 가능 4컬럼 중 왕복 4 · 입력 경로 실패 0 · 변경 인식 실패 0 · 업무 검증 차단·사유 불명 0 · 값 불일치 0 — LOT_SIZE r3 '12,800'→'12801' 재조회 '12,801' OK · 원복 OK / INCREMENT: +1 차단(화면 메시지 'Increment은 Lot Size 보다 클 수 없습니다.') / INCREMENT r3 '12,800'→'12799' 재조회 '12,799' OK · 원복 OK / VALID_YN r3 'Y'→'N' 재조회 'N' OK · 원복 OK / SPLIT_YN r3 'N'→'Y' 재조회 'Y' OK · 원복 OK",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "0f1387ec"
+ },
+ {
+  "row_id": "V-f0336498",
+  "result": "PASS",
+  "evidence": "LOT_SIZE r3 '12,800'→0 저장 전 화면 검증 거부 · AS-IS 같은 컬럼 검증 checkValidSize:771 · 원복 OK · 화면 메시지 '0보다 큰 정수를 입력하십시오.'",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "33391ca3"
+ },
+ {
+  "row_id": "V-83e14b5f",
+  "result": "PASS",
+  "evidence": "LOT_SIZE r3 '12,800'→빈값 저장 전 화면 검증 거부 · AS-IS 같은 컬럼 검증 checkValidSize:771 · 원복 OK · 화면 메시지 '0보다 큰 정수를 입력하십시오.'",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "86ca7438"
+ },
+ {
+  "row_id": "V-eef8848c",
+  "result": "PASS",
+  "evidence": "LOT_SIZE 저장 1회 — r3 '12,800'→'12801' 재조회 '12,801' OK · r9 '5,760'→'5761' 재조회 '5,761' OK · 원복 '12,800' OK · 원복 '5,760' OK",
+  "tobe_ref": "E2E @verify 저장 세부",
+  "cond": "92f0eb0a"
+ },
+ {
+  "row_id": "V-4633ca25",
+  "result": "PASS",
+  "evidence": "조회 클릭 → 로딩 표시 관측 2회(100ms 폴링) · 응답 550ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외",
+  "tobe_ref": "E2E @verify",
+  "cond": "670b4701"
+ },
+ {
+  "row_id": "V-80d7f29e",
+  "result": "NA",
+  "evidence": "LOT_SIZE r3 → 12799 · 확인창 없음 · AS-IS 저장 경로에도 확인 코드 없음",
+  "tobe_ref": "E2E @verify 저장 경로",
+  "cond": "e5202097"
+ },
+ {
+  "row_id": "V-2a373e9a",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 메타 필수 컬럼 행이 없어 신규 행 대조군을 만들지 못함",
+  "tobe_ref": "E2E @verify 신규행 검증",
+  "cond": "71c89073"
+ },
+ {
+  "row_id": "V-57fd6f09",
+  "result": "FAIL",
+  "evidence": "INCREMENT r3 원값 '12800' · 규칙 밖 값 '-1' 이 저장 요청에 실림 · 칸 '-1'",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "2b16e246"
+ },
+ {
+  "row_id": "V-b4192f37",
+  "result": "FAIL",
+  "evidence": "LOT_SIZE r3 원값 '12800' · 규칙 밖 값 '-1' 이 저장 요청에 실림 · 칸 '-1'",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "dcc9eed8"
+ },
+ {
+  "row_id": "V-d26f37f8",
+  "result": "PASS",
+  "evidence": "SPLIT_YN r0 원값 'N' · 'ZZZ_E2E_BAD' 입력 뒤 칸 'N' · 저장 요청 없음 · 문구 '수정한 내용이 없습니다.'",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "774621c9"
+ },
+ {
+  "row_id": "V-c93ed0b3",
+  "result": "PASS",
+  "evidence": "SPLIT_YN r0 원값 'N' · 'ZZZ_E2E_BAD' 입력 뒤 칸 'N' · 저장 요청 없음",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "993957ed"
+ },
+ {
+  "row_id": "V-498adb40",
+  "result": "PASS",
+  "evidence": "VALID_YN r0 원값 'Y' · 'ZZZ_E2E_BAD' 입력 뒤 칸 'Y' · 저장 요청 없음",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "a68cbb44"
+ },
+ {
+  "row_id": "V-d38085a4",
+  "result": "PASS",
+  "evidence": "VALID_YN r0 원값 'Y' · 'ZZZ_E2E_BAD' 입력 뒤 칸 'Y' · 저장 요청 없음",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "a6dfa762"
+ },
+ {
+  "row_id": "V-0577b243",
+  "result": "NA",
+  "evidence": "Division 기본 순회 — CREATION_DATE 값 있는 편집 행 없음(표시 여부는 A5·편집은 D1 행에서 판정)",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "ed0af91f"
+ },
+ {
+  "row_id": "V-ec6ddaea",
+  "result": "NA",
+  "evidence": "Division 기본 순회 — LAST_UPDATE_DATE 값 있는 편집 행 없음(표시 여부는 A5·편집은 D1 행에서 판정)",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "af58291a"
+ },
+ {
+  "row_id": "V-0e0f6191",
+  "result": "NA",
+  "evidence": "Division 기본 순회 — OPERATION_GROUP_ID 값 있는 편집 행 없음(표시 여부는 A5·편집은 D1 행에서 판정)",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "c3f40c76"
+ },
+ {
+  "row_id": "V-9b96f53c",
+  "result": "NA",
+  "evidence": "Division 기본 순회 — OPERATION_GROUP_ID 값 있는 편집 행 없음(표시 여부는 A5·편집은 D1 행에서 판정)",
+  "tobe_ref": "E2E @verify 입력 검증",
+  "cond": "c5c098ea"
+ },
+ {
+  "row_id": "V-1fa717cd",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 정렬 적용 실패 — 헤더 클릭으로 정렬 안 됨 또는 컬렉션 없음",
+  "tobe_ref": "E2E @verify 행 상태",
+  "cond": "04e26ead"
+ },
+ {
+  "row_id": "V-5ac519d4",
+  "result": "FAIL",
+  "evidence": "필터(F:DIVISION_ID) 상태에서 Insert 뒤 신규 행 없음",
+  "tobe_ref": "E2E @verify 행 상태",
+  "cond": "85de9e9f"
+ },
+ {
+  "row_id": "V-b26a55ed",
+  "result": "ERROR",
+  "evidence": "[측정 경로 없음] 유효 후보 'N' 붙여넣기도 반영 안 됨 — 그리드 붙여넣기 경로 확인 필요",
+  "tobe_ref": "E2E @verify 행 상태",
+  "cond": "3b24417b"
+ },
+ {
+  "row_id": "V-a6d2a7df",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "db0b6000"
+ },
+ {
+  "row_id": "V-dbc1fcb2",
+  "result": "PASS",
+  "evidence": "조회 클릭 → 로딩 표시 관측 2회(100ms 폴링) · 응답 550ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-2480338d",
+  "result": "PASS",
+  "evidence": "고정 컬럼 0개 [] ↔ META FIXED_FLAG=Y [] → 기대 고정(마지막 FIXED 까지) [] · 고정 영역 폭 0px / 그리드 가시 폭 1543px(뷰포트 1920)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-c0282ed8",
+  "result": "ERROR",
+  "evidence": "조회조건 Model 칸 없음 — 측정 불가",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-142f1f67",
+  "result": "NA",
+  "evidence": "AS-IS 잠금 규칙에 권한 그룹(GROUP) 조건이 있는 컬럼 없음 — 권한별 편집 구간 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-a21491c7",
+  "result": "NA",
+  "evidence": "그리드 1개 — 상단·하단(HEAD/DETAIL) 구조 아님(TO-BE 단일 그리드 · AS-IS 시트 구성 차이는 A 규칙)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-56d630dd",
+  "result": "PASS",
+  "evidence": "copy PASS: 선택 0,6,0,6 · 0행 TRANS_MODE_NAME 표시값 'AIR' · Ctrl+C 클립보드 'AIR'(일치) · 우클릭 Copy 'AIR'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(TRANS_MODE_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(TRANS_MODE_NAME) 클릭 → 선택 행 0~1939/1940 · 열 6~6(시험 열 6) — 열 전체 선택 | hide PASS: 헤더(TRANS_MODE_NAME) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-4c3670c9",
+  "result": "판정필요",
+  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회 · 미포함: 팝업 그리드(이 시험은 메인 그리드만), Sort/Filter·정렬 후 동작(K1 smoke 행)",
+  "tobe_ref": "E2E @verify",
+  "cond": "e2739692"
+ },
+ {
+  "row_id": "V-78baf3af",
+  "result": "판정필요",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(TRANS_MODE_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 · 미포함: 팝업 그리드(이 시험은 메인 그리드만)",
+  "tobe_ref": "E2E @verify",
+  "cond": "0351e52e"
+ },
+ {
+  "row_id": "V-dc108353",
+  "result": "PASS",
+  "evidence": "hdr PASS: 헤더(TRANS_MODE_NAME) 클릭 → 선택 행 0~1939/1940 · 열 6~6(시험 열 6) — 열 전체 선택",
+  "tobe_ref": "E2E @verify",
+  "cond": "e96c3a35"
+ },
+ {
+  "row_id": "V-3f707b7c",
+  "result": "판정필요",
+  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,6,0,6 · 0행 TRANS_MODE_NAME 표시값 'AIR' · Ctrl+C 클립보드 'AIR'(일치) · 우클릭 Copy 'AIR'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(TRANS_MODE_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(TRANS_MODE_NAME) 클릭 → 선택 행 0~1939/1940 · 열 6~6(시험 열 6) — 열 전체 선택 | hide PASS: 헤더(TRANS_MODE_NAME) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify",
+  "cond": "3b134d2e"
+ },
+ {
+  "row_id": "V-25eb4baa",
+  "result": "판정필요",
+  "evidence": "hide PASS: 헤더(TRANS_MODE_NAME) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행), 동적 Bucket 컬럼",
+  "tobe_ref": "E2E @verify",
+  "cond": "b6fc94a4"
+ },
+ {
+  "row_id": "V-2a05c61f",
+  "result": "판정필요",
+  "evidence": "copy PASS: 선택 0,6,0,6 · 0행 TRANS_MODE_NAME 표시값 'AIR' · Ctrl+C 클립보드 'AIR'(일치) · 우클릭 Copy 'AIR'(일치) | hide PASS: 헤더(TRANS_MODE_NAME) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행)",
+  "tobe_ref": "E2E @verify",
+  "cond": "567536cd"
+ },
+ {
+  "row_id": "V-04302ccf",
+  "result": "판정필요",
+  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,6,0,6 · 0행 TRANS_MODE_NAME 표시값 'AIR' · Ctrl+C 클립보드 'AIR'(일치) · 우클릭 Copy 'AIR'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(TRANS_MODE_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(TRANS_MODE_NAME) 클릭 → 선택 행 0~1939/1940 · 열 6~6(시험 열 6) — 열 전체 선택 | hide PASS: 헤더(TRANS_MODE_NAME) 우클릭 → Hide Column → 컬럼 비표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify",
+  "cond": "0e8dbe71"
+ },
+ {
+  "row_id": "V-260d041e",
+  "result": "PASS",
+  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify",
+  "cond": "90c3576b"
+ },
+ {
+  "row_id": "V-b5c52916",
+  "result": "PASS",
+  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify",
+  "cond": "794a7155"
+ },
+ {
+  "row_id": "V-d781c146",
+  "result": "PASS",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(TRANS_MODE_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택",
+  "tobe_ref": "E2E @verify",
+  "cond": "794a7155"
+ },
+ {
+  "row_id": "V-729c8d58",
+  "result": "판정필요",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(TRANS_MODE_NAME) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 · 미포함: 팝업 그리드(이 시험은 메인 그리드만)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-4b3b52e5",
+  "result": "PASS",
+  "evidence": "hdr PASS: 헤더(TRANS_MODE_NAME) 클릭 → 선택 행 0~1939/1940 · 열 6~6(시험 열 6) — 열 전체 선택",
+  "tobe_ref": "E2E @verify",
+  "cond": "e96c3a35"
+ },
+ {
+  "row_id": "V-0a0342c3",
+  "result": "판정필요",
+  "evidence": "Insert 후 신규행 미발견",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-5349b028",
+  "result": "판정필요",
+  "evidence": "Insert 후 신규행 미발견",
+  "tobe_ref": "E2E @verify",
+  "cond": "e5cf1e91"
+ },
+ {
+  "row_id": "V-16d1b2ea",
+  "result": "판정필요",
+  "evidence": "Insert 후 신규행 미발견",
+  "tobe_ref": "E2E @verify",
+  "cond": "0e8dbe71"
+ },
+ {
+  "row_id": "V-13254dec",
+  "result": "판정필요",
+  "evidence": "판정필요: (a) 저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 12건 재조회(새 마스터 반영 경로 있음) · 최초 진입 12건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-02cca4b6",
+  "result": "판정필요",
+  "evidence": "판정필요: (a) 저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 12건 재조회(새 마스터 반영 경로 있음) · 최초 진입 12건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-e3cbb602",
+  "result": "판정필요",
+  "evidence": "판정필요: (a) 저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 12건 재조회(새 마스터 반영 경로 있음) · 최초 진입 12건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-fcba9999",
+  "result": "판정필요",
+  "evidence": "판정필요: (a) 저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 12건 재조회(새 마스터 반영 경로 있음) · 최초 진입 12건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-e7534976",
+  "result": "판정필요",
+  "evidence": "판정필요: (a) 저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 12건 재조회(새 마스터 반영 경로 있음) · 최초 진입 12건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-8c12aeea",
+  "result": "판정필요",
+  "evidence": "판정필요: (a) 저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 12건 재조회(새 마스터 반영 경로 있음) · 최초 진입 12건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-4f2b09d7",
+  "result": "판정필요",
+  "evidence": "판정필요: (a) 저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control",
+  "tobe_ref": "E2E @verify",
+  "cond": "2ce6c429"
+ },
+ {
+  "row_id": "V-81f7459d",
+  "result": "판정필요",
+  "evidence": "판정필요: (a) 저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control",
+  "tobe_ref": "E2E @verify",
+  "cond": "c79b07db"
+ },
+ {
+  "row_id": "V-3625f78e",
+  "result": "판정필요",
+  "evidence": "판정필요: (a) 저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control",
+  "tobe_ref": "E2E @verify",
+  "cond": "3ee9243d"
+ },
+ {
+  "row_id": "V-f0ce81ef",
+  "result": "PASS",
+  "evidence": "PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 12건 재조회(새 마스터 반영 경로 있음) · 최초 진입 12건",
+  "tobe_ref": "E2E @verify",
+  "cond": "fd9611d0"
+ },
+ {
+  "row_id": "V-4625c728",
+  "result": "판정필요",
+  "evidence": "판정필요: (a) 저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 12건 재조회(새 마스터 반영 경로 있음) · 최초 진입 12건",
+  "tobe_ref": "E2E @verify",
+  "cond": "11699a71"
+ },
+ {
+  "row_id": "V-7b4221db",
+  "result": "PASS",
+  "evidence": "PASS: (b-재조회) 조회 버튼 → admin/combo 0건 · AS-IS 조회 때 재바인딩 없음(초기화 때만 바인딩 — 재진입 기준으로 판정) | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 12건 재조회(새 마스터 반영 경로 있음) · 최초 진입 12건",
+  "tobe_ref": "E2E @verify",
+  "cond": "b13670e8"
+ },
+ {
+  "row_id": "V-fadf569b",
+  "result": "PASS",
+  "evidence": "PASS: (b-재조회) 조회 버튼 → admin/combo 0건 · AS-IS 조회 때 재바인딩 없음(초기화 때만 바인딩 — 재진입 기준으로 판정) | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 12건 재조회(새 마스터 반영 경로 있음) · 최초 진입 12건",
+  "tobe_ref": "E2E @verify",
+  "cond": "726e5489"
+ },
+ {
+  "row_id": "V-b9707c91",
+  "result": "판정필요",
+  "evidence": "조회조건 라벨 'Valid' 를 조회조건 영역에서 못 찾음 — 명칭 차이는 H5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-aa2587f7",
+  "result": "PASS",
+  "evidence": "조회조건 Division*: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-9b9b22df",
+  "result": "PASS",
+  "evidence": "조회조건 Division* 후보 8건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-e6f27a68",
+  "result": "PASS",
+  "evidence": "조회조건 Division* 후보 8건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-061988d3",
+  "result": "PASS",
+  "evidence": "조회조건 Operation Group: 다중선택 기대 false/화면 false · ALL 기대 false/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-b013c2c3",
+  "result": "PASS",
+  "evidence": "조회조건 Operation Group 후보 3건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-d08e451c",
+  "result": "PASS",
+  "evidence": "조회조건 Operation Group 후보 3건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-ba71f160",
+  "result": "PASS",
+  "evidence": "조회조건 From Site: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-f274c2b2",
+  "result": "PASS",
+  "evidence": "조회조건 From Site 후보 29건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-cc05baba",
+  "result": "PASS",
+  "evidence": "조회조건 From Site 후보 29건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-f801dafd",
+  "result": "PASS",
+  "evidence": "조회조건 Trans Mode: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-802ea52f",
+  "result": "PASS",
+  "evidence": "조회조건 Trans Mode 후보 5건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-980093b6",
+  "result": "PASS",
+  "evidence": "조회조건 Trans Mode 후보 5건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-88d2673a",
+  "result": "PASS",
+  "evidence": "조회조건 To Site: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-ea022968",
+  "result": "PASS",
+  "evidence": "조회조건 To Site 후보 485건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-3a81c8a3",
+  "result": "PASS",
+  "evidence": "조회조건 To Site 후보 485건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-93e5a09c",
+  "result": "FAIL",
+  "evidence": "'Model' 에 'acep2065i-b1'(기본 결과 값 'ACEP2065I-B1' 대소문자 반전) 입력 조회 → ITEM_ID 1940행 중 조건 밖 268종: ACEN1053I-A1, ACEN1053I-B1, ACEN1053I-B1-D03, ACEN1053I-B1-D04",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-6f2c58ff",
+  "result": "ERROR",
+  "evidence": "Model · [확인 대상] 'CEP2065I-B' 조회 1940행 중 ITEM_ID 에 그 문자열 없는 값 268종: ACEN1053I-A1, ACEN1053I-B1, ACEN1053I-B1-D03, ACEN1053I-B1-D04(ID·명칭 등 다른 칸 검색일 수 있음)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9a00109a"
+ },
+ {
+  "row_id": "V-ed2ee896",
+  "result": "FAIL",
+  "evidence": "'Model' 에 'ACEP2065I-B1,ACEN1053I-A1' 입력 조회 → ITEM_ID 1940행 · 'ACEP2065I-B1' 있음 · 'ACEN1053I-A1' 있음 · 조건 밖 267종: ACEN1053I-B1, ACEN1053I-B1-D03, ACEN1053I-B1-D04, ACEN2052I-A1",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-2ecc44d8",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-c678240a",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "e2739692"
+ },
+ {
+  "row_id": "V-3278f26e",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "56b0f36f"
+ },
+ {
+  "row_id": "V-80a6dcbe",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "60f2f53a"
+ },
+ {
+  "row_id": "V-caf75c41",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "6c00b5f2"
+ },
+ {
+  "row_id": "V-f8d140b9",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "467d44ac"
+ },
+ {
+  "row_id": "V-5ac45000",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b6fc94a4"
+ },
+ {
+  "row_id": "V-30be4a5e",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "567536cd"
+ },
+ {
+  "row_id": "V-1205a722",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "0529442d"
+ },
+ {
+  "row_id": "V-8aea8ffe",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "794a7155"
+ },
+ {
+  "row_id": "V-8928d74c",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "081caa10"
+ },
+ {
+  "row_id": "V-82d29293",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "e84666f0"
+ },
+ {
+  "row_id": "V-36ad6f06",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-f5341cd8",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-a18e12ad",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-258ac088",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-d183ecae",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-6186063e",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-7ef4500a",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-dbfc6b4e",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-17034a88",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "56b0f36f"
+ },
+ {
+  "row_id": "V-73d3542d",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b6fc94a4"
+ },
+ {
+  "row_id": "V-964d0d04",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "0529442d"
+ },
+ {
+  "row_id": "V-3fa73c62",
+  "result": "PASS",
+  "evidence": "F3(ITEM_ID): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+ITEM_ID' → '-ITEM_ID' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용(값 1개) → 5행(전 1940) · 필터 해제 → 1940행 (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "081caa10"
+ },
+ {
+  "row_id": "EG-6361a825",
+  "result": "PASS",
+  "evidence": "기대 제목 등록 문구 · '_' 폴백/코드 노출 0 · 실제 제목 'Shipment Lot Size - Delete' · 근거 문서 SCPSSP-16·GAP-33",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-dcd1c347",
+  "result": "PASS",
+  "evidence": "기대 AS-IS 팝업 'ShipmentLotSize Input/Delete Popup'(SCM0002_ShipmentLotSizePopup) 과 같은 팝업 · 실제 TO-BE 제목 'Shipment Lot Size - Delete' · 제목 공통 토큰 [shipmentlotsize,delete] · 클래스 공통 토큰 [shipment,lot,size] · 호출  · 근거 SCP0028_Shipment_Lot_Size.cs:299 · 06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-8d104ad6",
+  "result": "PASS",
+  "evidence": "기대 버튼 순서 OK → CLOSE · 실제 버튼 [Open, Open, Open, Open, Search(F5), OK, Close] · 근거 문서 DM-C6",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-af67cddc",
+  "result": "PASS",
+  "evidence": "기대 왼쪽 No. 컬럼 1개 · 실제 코너 [​] · 첫 컬럼 'No' · No. 1개 · 행머리 폭 50px · 근거 문서 DM-C8·DM-179",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-31faacc6",
+  "result": "PASS",
+  "evidence": "기대 No. 폭 ≥ 행수 자릿수 표시 폭(27px, 383행) · 실제 행머리 폭 50px · No 컬럼 폭 56px · 근거 문서 DM-179",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-f3ab83c2",
+  "result": "PASS",
+  "evidence": "기대 조회 건수 표시 · 실제 '총383' · 근거 문서 DM-C8",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-463c3695",
+  "result": "판정필요",
+  "evidence": "기대 AS-IS 병합 호출 facts · 실제 AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2 · 근거 ",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-6c1894b6",
+  "result": "PASS",
+  "evidence": "기대 팝업 조건 'To Site' 입력 가능(AS-IS 비활성 문장 없음) · 실제 TO-BE 'To Site' disabled=false · 값 [] · 근거 06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs:SCM0002_ShipmentLotSizePopup.Designer.cs:56",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-8bbf1461",
+  "result": "NA",
+  "evidence": "기대 팝업 Div 고정 · 실제 AS-IS 비활성 문장 없음 · TO-BE disabled=false · 근거 ",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-cc2ac49c",
+  "result": "PASS",
+  "evidence": "기대 AS-IS 조건 라벨 [Division*, Operation Group, From Site, To Site] · 실제 TO-BE [Div:combo, From Site:combo, To Site:combo, Model/Nickname:text, Operation group:combo] · 누락 [] · 라벨 차이 [] · 근거 06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-30a77e98",
+  "result": "NA",
+  "evidence": "기대 팝업 Period = 메인 Period · 실제 팝업에 기간 칸 없음 — 조건 [Div, From Site, To Site, Model/Nickname, Operation group] · 근거 ",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-01b36c8b",
+  "result": "PASS",
+  "evidence": "기대 팝업 조회 오류 없음 · 데이터 있음(No Permission 0) · 실제 자동 조회 7건 · 행 383 · 오류 없음 · 알림 '' · 근거 ",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-c93ee43e",
+  "result": "PASS",
+  "evidence": "기대 AS-IS ORDER BY a.DIVISION_ID, OPERATION_GROUP_ID, a.from_site, TO_SITE, a.ITEM_ID · 실제 대조 키 [DIVISION_ID,OPERATION_GROUP_ID,FROM_SITE,TO_SITE,ITEM_ID] · 행 383 · 위반 없음 · 근거 Doc/asisfacts/db/modules/dbo.SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP.sql:97",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-4d1d3641",
+  "result": "NA",
+  "evidence": "기대 팝업 기간 동적 컬럼 · 실제 AS-IS 팝업에 루프 컬럼 생성 facts 없음 · 근거 ",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-79db1264",
+  "result": "PASS",
+  "evidence": "기대 F3(정렬 스위치) + 머리글 클릭 → OPERATION_GROUP_ID 오름/내림 토글(공통 그리드 규칙 CR-034) · 실제 스위치 true · 1회 OPERATION_GROUP_ID ASC · 2회 OPERATION_GROUP_ID DESC · 첫 행 'A'→'P' · 근거 문서 DM-C8",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-f4b4cce0",
+  "result": "ERROR",
+  "evidence": "기대 F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원 · 실제 아이콘 0→2 · 행 383→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]'). · 근거 문서 DM-C8·DM-P64",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-9a0c5212",
+  "result": "NA",
+  "evidence": "기대 필터 후 건수 표시 · 실제 '' · 근거 문서 DM-C8",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-e192f929",
+  "result": "PASS",
+  "evidence": "기대 ↓ 키 → 다음 행 선택(공통 그리드 단축키) · 실제 선택 행 1 · 근거 문서 DM-C8",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-f70cad2d",
+  "result": "PASS",
+  "evidence": "기대 AS-IS 잠금 호출 있음(SCM0002_ShipmentLotSizePopup.cs:223 siMain.LockColumn(siMain.GetColumnIndex(DefColumns.DIVISION_) · 실제 편집 가능 컬럼 [] · 첫 셀 클래스 'wj-cell wj-align-center' · 근거 SCM0002_ShipmentLotSizePopup.cs:223",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-6ce9009f",
+  "result": "PASS",
+  "evidence": "기대 'Model/Nickname'='APVCC517H-A4' 조회 요청 본문에 값 포함(고정 '%' 금지) · 실제 요청 1건 · 본문 {\"divisionId\":\"81\",\"operationGroup\":\"\",\"fromSite\":\"\",\"toSite\":\"\",\"itemId\":\"APVCC517H-A4\",\"actionFlag\":\"D\"} · 근거 문서 GAPPI-23·DM-220",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-e7bd767e",
+  "result": "PASS",
+  "evidence": "기대 'Model/Nickname'='APVCC517H-A4' → 값 포함 행만(기준 383행 중) · 실제 1행 · 전행 포함 true · 컬럼 'Model' · 근거 Doc/asisfacts/db/modules/dbo.SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP.sql (AS-IS LIKE)",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-69d74bd7",
+  "result": "PASS",
+  "evidence": "기대 부분 문자열 'PVCC517H-A' → 포함 행(≥ 1) · 실제 8행 · 전행 포함 true · AS-IS LIKE=true · 근거 Doc/asisfacts/db/modules/dbo.SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP.sql (AS-IS LIKE)",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-c64a2df4",
+  "result": "PASS",
+  "evidence": "기대 대소문자 무시 — 'apvcc517h-a4' 행수 = 'APVCC517H-A4' 행수 · 실제 1 vs 1 · AS-IS UPPER=false · 근거 문서 GAP-506·SSP45REQ-13",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-1d1dfd47",
+  "result": "PASS",
+  "evidence": "기대 콤마 'APVCC517H-A4,APBMW12V0-A1-D01' → 두 값 모두 조회 · 실제 2행 · 'APVCC517H-A4' true · 'APBMW12V0-A1-D01' true · AS-IS 콤마 분해=true · 근거 Doc/asisfacts/db/modules/dbo.SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP.sql (AS-IS LIKE)",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-a84a7224",
+  "result": "PASS",
+  "evidence": "기대 조건 비우고 재조회 → 기준 383행 · 실제 383행 · 근거 문서 DM-P29",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-5944aa59",
+  "result": "PASS",
+  "evidence": "기대 AS-IS UsrCombo(다중=false) · 실제 TO-BE 'Operation group' 다중=false · 후보 4 · ALL true — 다르면 개선 확정 CR 여부 확인(문서 DM-2·DM-83) · 근거 06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ShipmentLotSizePopup.cs:SCM0002_ShipmentLotSizePopup.Designer.cs:43",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-598dcb4c",
+  "result": "PASS",
+  "evidence": "기대 팝업·닫기·버튼 모두 뷰포트 안 · 실제 rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 [] · 근거 문서 GAPPI-24",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-1b00a92f",
+  "result": "PASS",
+  "evidence": "기대 스크롤바 없이 버튼까지 한 화면(그리드 내부 제외) · 실제 paperV=false paperH=false · 내용 초과 202px · 본문 스크롤 [] · 근거 문서 DM-175",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-2e65bc91",
+  "result": "PASS",
+  "evidence": "기대 머리 아래~첫 내용 사이 가로줄 없음 · 실제 머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1300,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}] · 근거 문서 GAPPI-30·GAPPI-34",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-e04489c3",
+  "result": "NA",
+  "evidence": "기대 섹션 타이틀 = 테두리 밖 · 실제 타이틀 [] · 근거 문서 DM-202",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-9a56f5ab",
+  "result": "PASS",
+  "evidence": "기대 화면 밖으로 드래그 시도 → 뷰포트 안 유지 · 실제 드래그 후 rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080 · 근거 문서 GAPPI-24",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-ede85c8d",
+  "result": "PASS",
+  "evidence": "기대 반대 방향 드래그 → 뷰포트 안 · 실제 rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 근거 문서 GAPPI-24",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-f1dcb664",
+  "result": "PASS",
+  "evidence": "기대 가로만 조절 → 세로 불변(810) · 실제 조절 후 {\"x\":173,\"y\":135,\"w\":1575,\"h\":810} · 근거 문서 GAPPI-24",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-d52e6cd3",
+  "result": "PASS",
+  "evidence": "기대 크게 조절 → 뷰포트 안 · 닫기 보임 · 실제 rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true · 근거 문서 GAPPI-24",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-89567901",
+  "result": "NA",
+  "evidence": "기대 축소 → 조건·버튼 간섭 없음 · 실제 리사이즈 핸들 없음 · 근거 ",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-5ca14a48",
+  "result": "ERROR",
+  "evidence": "기대 AS-IS btnInput_Click 팝업(SCM0002_ShipmentLotSizePopup) 열림 · 실제 BTN: 버튼 [Input/Input/Input] 비노출 — 화면 버튼 [KOR, 이\n\n이민용, Home, Shipment Lot Size, Close others, Close All, Search(F5), 입력, Delete, Insert(F8), Delete(F9), Save(F7), Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10)] · 근거 SCP0028_Shipment_Lot_Size.cs:271",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-45e90381",
+  "result": "PASS",
+  "evidence": "기대 제목 등록 문구 · '_' 폴백/코드 노출 0 · 실제 제목 'Material by Division' · 근거 문서 SCPSSP-16·GAP-33",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-be9d2e58",
+  "result": "PASS",
+  "evidence": "기대 AS-IS 팝업 'Model by DivisionPopup'(SCM0002_ItembyDivisionPopup) 과 같은 팝업 · 실제 TO-BE 제목 'Material by Division' · 제목 공통 토큰 [division] · 클래스 공통 토큰 [division] · 호출  · 근거 SCP0028_Shipment_Lot_Size.cs:248 · 06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-2644dff3",
+  "result": "PASS",
+  "evidence": "기대 버튼 순서 OK → CLOSE · 실제 버튼 [Open, Search, OK, Close] · 근거 문서 DM-C6",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-b0d10a90",
+  "result": "PASS",
+  "evidence": "기대 왼쪽 No. 컬럼 1개 · 실제 코너 [​] · 첫 컬럼 'No' · No. 1개 · 행머리 폭 50px · 근거 문서 DM-C8·DM-179",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-6be7f873",
+  "result": "PASS",
+  "evidence": "기대 No. 폭 ≥ 행수 자릿수 표시 폭(34px, 9616행) · 실제 행머리 폭 50px · No 컬럼 폭 56px · 근거 문서 DM-179",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-89799316",
+  "result": "PASS",
+  "evidence": "기대 조회 건수 표시 · 실제 '총9,616' · 근거 문서 DM-C8",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-85b2e975",
+  "result": "판정필요",
+  "evidence": "기대 AS-IS 병합 호출 facts · 실제 AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2 · 근거 ",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-c404de5e",
+  "result": "PASS",
+  "evidence": "기대 AS-IS Division 비활성(SCM0002_ItembyDivisionPopup.cs:164) → 팝업 Div 메인값 고정·수정 불가 · 실제 disabled=true · 값 [Automotive Battery] · 메인 Div '81' · 근거 06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs:SCM0002_ItembyDivisionPopup.cs:164",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-ac06e957",
+  "result": "판정필요",
+  "evidence": "기대 AS-IS 조건 라벨 [Model, Division, Site, Project] · 실제 TO-BE [Div:combo:비활성, Operation Group:text:비활성, Material:text] · 누락 [Model, Site, Project] · 라벨 차이 [] · 근거 06.UIL/GSCM.SCM.Popup.UIL/SCM0002_ItembyDivisionPopup.cs",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-8dca56be",
+  "result": "NA",
+  "evidence": "기대 팝업 Period = 메인 Period · 실제 팝업에 기간 칸 없음 — 조건 [Div, Operation Group, Material] · 근거 ",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-78d744a4",
+  "result": "PASS",
+  "evidence": "기대 팝업 조회 오류 없음 · 데이터 있음(No Permission 0) · 실제 자동 조회 2건 · 행 9616 · 오류 없음 · 알림 '' · 근거 ",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-fdb1b3d4",
+  "result": "PASS",
+  "evidence": "기대 AS-IS ORDER BY D.DIVISION_ID, S.SCM_SITE_ID, S.SITE_DESCRIPTION, I.ITEM_ID, T.ITEM_NAME · 실제 대조 키 [DIVISION_ID] · 미대조 [SCM_SITE_ID] · 행 3000 · 위반 없음 · 근거 Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql:64",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-a44d4d31",
+  "result": "NA",
+  "evidence": "기대 팝업 기간 동적 컬럼 · 실제 AS-IS 팝업에 루프 컬럼 생성 facts 없음 · 근거 ",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-fa9c06b1",
+  "result": "PASS",
+  "evidence": "기대 F3(정렬 스위치) + 머리글 클릭 → ITEM_ID 오름/내림 토글(공통 그리드 규칙 CR-034) · 실제 스위치 true · 1회 ITEM_ID ASC · 2회 ITEM_ID DESC · 첫 행 'AAEF1001I-A1-000'→'ECR3512F1-01-T02' · 근거 문서 DM-C8",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-1ab3f3fd",
+  "result": "ERROR",
+  "evidence": "기대 F4 필터 UI → 값 적용 시 행 감소 · 해제 시 복원 · 실제 아이콘 0→2 · 행 9616→-1→-1 · 건수 문구 '' · TimeoutError: locator.click: Timeout 5000ms exceeded. Call log: - waiting for locator('.wj-columnfiltereditor').first().locator('a, button, [class*=\"wj-btn\"]'). · 근거 문서 DM-C8·DM-P64",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-4bc05a10",
+  "result": "NA",
+  "evidence": "기대 필터 후 건수 표시 · 실제 '' · 근거 문서 DM-C8",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-d437848c",
+  "result": "PASS",
+  "evidence": "기대 ↓ 키 → 다음 행 선택(공통 그리드 단축키) · 실제 선택 행 1 · 근거 문서 DM-C8",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-fb231b5d",
+  "result": "PASS",
+  "evidence": "기대 AS-IS 잠금 호출 있음(SCM0002_ItembyDivisionPopup.cs:264 siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true);) · 실제 편집 가능 컬럼 [] · 첫 셀 클래스 'wj-cell wj-align-center' · 근거 SCM0002_ItembyDivisionPopup.cs:264",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-4271840d",
+  "result": "PASS",
+  "evidence": "기대 'Material'='ECR3512F1-01-T02' 조회 요청 본문에 값 포함(고정 '%' 금지) · 실제 요청 1건 · 본문 {\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"ECR3512F1-01-T02\",\"scpModuleType\":\"SCP0028\"} · 근거 문서 GAPPI-23·DM-220",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-0c9c840e",
+  "result": "PASS",
+  "evidence": "기대 'Material'='ECR3512F1-01-T02' → 값 포함 행만(기준 9616행 중) · 실제 2행 · 전행 포함 true · 컬럼 'Material Code' · 근거 Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql (AS-IS LIKE)",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-7bf5ec98",
+  "result": "PASS",
+  "evidence": "기대 부분 문자열 'CR3512F1-01-T0' → 포함 행(≥ 2) · 실제 6행 · 전행 포함 true · AS-IS LIKE=true · 근거 Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql (AS-IS LIKE)",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-e261e0b7",
+  "result": "PASS",
+  "evidence": "기대 대소문자 무시 — 'ecr3512f1-01-t02' 행수 = 'ECR3512F1-01-T02' 행수 · 실제 2 vs 2 · AS-IS UPPER=false · 근거 문서 GAP-506·SSP45REQ-13",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-3dad877d",
+  "result": "PASS",
+  "evidence": "기대 콤마 'ECR3512F1-01-T02,ECR3512F1-01-T01' → 두 값 모두 조회 · 실제 4행 · 'ECR3512F1-01-T02' true · 'ECR3512F1-01-T01' true · AS-IS 콤마 분해=true · 근거 Doc/asisfacts/db/modules/dbo.SCM0002_GET_ITEM_BY_DIVISION_POPUP.sql (AS-IS LIKE)",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-9e42ccfd",
+  "result": "PASS",
+  "evidence": "기대 조건 비우고 재조회 → 기준 9616행 · 실제 9616행 · 근거 문서 DM-P29",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-a8934499",
+  "result": "PASS",
+  "evidence": "기대 팝업·닫기·버튼 모두 뷰포트 안 · 실제 rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 [] · 근거 문서 GAPPI-24",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-e793d7c4",
+  "result": "PASS",
+  "evidence": "기대 스크롤바 없이 버튼까지 한 화면(그리드 내부 제외) · 실제 paperV=false paperH=false · 내용 초과 153px · 본문 스크롤 [] · 근거 문서 DM-175",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-cfb36dbd",
+  "result": "PASS",
+  "evidence": "기대 머리 아래~첫 내용 사이 가로줄 없음 · 실제 머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1300,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\",\"box\":true}] · 근거 문서 GAPPI-30·GAPPI-34",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-2219b2fc",
+  "result": "NA",
+  "evidence": "기대 섹션 타이틀 = 테두리 밖 · 실제 타이틀 [] · 근거 문서 DM-202",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-45768452",
+  "result": "PASS",
+  "evidence": "기대 화면 밖으로 드래그 시도 → 뷰포트 안 유지 · 실제 드래그 후 rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 뷰포트 1920x1080 · 근거 문서 GAPPI-24",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-7aff185e",
+  "result": "PASS",
+  "evidence": "기대 반대 방향 드래그 → 뷰포트 안 · 실제 rect {\"x\":285,\"y\":135,\"w\":1350,\"h\":810} · 근거 문서 GAPPI-24",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-5387cb21",
+  "result": "PASS",
+  "evidence": "기대 가로만 조절 → 세로 불변(810) · 실제 조절 후 {\"x\":173,\"y\":135,\"w\":1575,\"h\":810} · 근거 문서 GAPPI-24",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-3c0db5c9",
+  "result": "PASS",
+  "evidence": "기대 크게 조절 → 뷰포트 안 · 닫기 보임 · 실제 rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true · 근거 문서 GAPPI-24",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-ef7af61a",
+  "result": "PASS",
+  "evidence": "기대 축소 → 조건·버튼 겹침 없음 · 실제 rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 [] · 근거 문서 DM-166",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-ac9382f0",
+  "result": "PASS",
+  "evidence": "기대 AS-IS _bMultiSelect=true → 다중 · 실제 Ctrl+클릭 2행 → 선택 2행 · selectionMode=6 · 근거 SCP0028_Shipment_Lot_Size.cs:248 · 문서 GAPPI-27",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-8d8c9f55",
+  "result": "ERROR",
+  "evidence": "기대 OK → 대상 칸에 선택 값 · 실제 대상 '' → '' · OK 버튼 'OK' · 닫힘 true · 대응 컬럼 [] · 근거 SCP0028_Shipment_Lot_Size.cs:248",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-ad8eaa01",
+  "result": "NA",
+  "evidence": "기대 팝업 기간 → 메인 Period 반영 · 실제 AS-IS 기간 대입 0건 · 팝업 기간 0 · 메인 기간 0 · 근거 ",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-ea38ffcb",
+  "result": "FAIL",
+  "evidence": "기대 더블클릭 결과 = OK 결과('') · 실제 더블클릭 'AAEF1001I-A1-000' · 근거 문서 GAP-19",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-3312dae6",
+  "result": "PASS",
+  "evidence": "기대 버튼 테두리 포함 전 영역 클릭 → 팝업 열림 · 실제 좌상:열림 · 우상:열림 · 좌하:열림 · 우하:열림 · 중앙:열림 · 버튼 36x36 · 근거 문서 SCPSSP-4",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-fbe06cfe",
+  "result": "PASS",
+  "evidence": "기대 텍스트 입력 + 아이콘 팝업 공통 입력 칸 · 실제 입력 가능 true · 칸 'Model/Nickname' · 근거 문서 GAPPI-1·GAPPI-16",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-7f5aeace",
+  "result": "PASS",
+  "evidence": "기대 메인 입력 'ELFP-000' → 팝업 조건·요청 전달 · 그 기준 조회 · 실제 팝업 조건 표시 [Material] · 요청 포함 true · 행 4 · 전행 포함 true · 본문 {\"divisionId\":\"81\",\"operationGroup\":\"\",\"itemId\":\"ELFP-000\",\"scpModuleType\":\"SCP0028\"} · AS-IS 인자 [_bMultiSelect=LITERAL,_DivisionID=CONTROL,_ScmSiteId=LITERAL,_ProjectCode=LITERAL,_ItemID=CONTROL] · 근거 SCP0028_Shipment_Lot_Size.cs:248",
+  "tobe_ref": "E2E @eg-popup"
+ },
+ {
+  "row_id": "EG-e60442c9",
+  "result": "NA",
+  "evidence": "기대 AS-IS Div·GROUP 분기 문장 · 실제 없음(살아있는 메서드 전체 상태 문장 0건 중 분기 0) · AS-IS facts_auth",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-8350162d",
+  "result": "NA",
+  "evidence": "기대 AS-IS Div·GROUP 분기 문장 · 실제 없음(살아있는 메서드 전체 상태 문장 0건 중 분기 0) · AS-IS facts_auth",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-b1eb9792",
+  "result": "NA",
+  "evidence": "기대 AS-IS Div·GROUP 분기 문장 · 실제 없음(살아있는 메서드 전체 상태 문장 0건 중 분기 0) · AS-IS facts_auth",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-9002be9c",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-b3547da8",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-de116d01",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-c6b0131a",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-b30ac021",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-8480898d",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-2f9effa0",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-6019dc2c",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-53b1410c",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-34943f6b",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-9ad3a48b",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-cb356733",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-454957ba",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-660641c3",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-d91571e3",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-c242a0ef",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-298b42af",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-f72bc688",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-93881697",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-c38dabee",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-5ee59851",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-1672c145",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-493dc0d8",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-860816ba",
+  "result": "PASS",
+  "evidence": "기대 Div 권한 있음 → 기능 있으면 노출 · 실제 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-00969b92",
+  "result": "PASS",
+  "evidence": "기대 Division 전환 중 세션 오류(401/403) 0 — DM-163 · 실제 0건(5xx 0건 별도) · AS-IS ",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-a5d95def",
+  "result": "PASS",
+  "evidence": "기대 본문 Division=81 — DM-85 · 실제 81 · AS-IS AS-IS: 조회 인자 = 선택 Division",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-13d34768",
+  "result": "PASS",
+  "evidence": "기대 본문 Division=40 — DM-85 · 실제 40 · AS-IS AS-IS: 조회 인자 = 선택 Division",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-a37537bf",
+  "result": "PASS",
+  "evidence": "기대 원래 Div 복귀 시 처음 헤더와 동일 — DM-P60 · 실제 동일(정적 15컬럼) · AS-IS ",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-f4a61ba4",
+  "result": "NA",
+  "evidence": "기대 Div 별 DEFAULT 컬럼 차이 · 실제 메타(Shipment Lot Size) 차이 0 — 재구성 대상 컬럼 없음 · AS-IS SCM_MST_SHEET_COLUMNS",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-cc00dd03",
+  "result": "NA",
+  "evidence": "기대 Year·Version 초기값 문장 · 실제 AS-IS 로드·변경 경로에 해당 문장 없음 · AS-IS facts_auth",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-26655e03",
+  "result": "PASS",
+  "evidence": "기대 그룹 1개 중 메뉴 권한 1개 → 노출 · 실제 트리에 있음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-e6b79fdc",
+  "result": "PASS",
+  "evidence": "기대 후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,82 · 실제 후보 40,82 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-c4a175c8",
+  "result": "PASS",
+  "evidence": "기대 후보 안의 값(40,82) · 실제 40 · AS-IS DM-65",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-a73c321b",
+  "result": "PASS",
+  "evidence": "기대 행 Division ⊆ 권한 40,82 · 실제 265행 Division 40 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-78055f79",
+  "result": "PASS",
+  "evidence": "기대 조회 결과 = 권한 Div 범위(40,82) · 실제 265행 · Division 40 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M · 건수 = 원장 대조는 facts_auth_db 후처리",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-9e9aed49",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-97e11d8d",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-7cf0b518",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-3c4f4003",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-40352682",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-7f421207",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-ffd49731",
+  "result": "PASS",
+  "evidence": "기대 그룹 8개 중 메뉴 권한 7개 → 노출 · 실제 트리에 있음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-7a670b8c",
+  "result": "판정필요",
+  "evidence": "기대 후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC · 실제 후보 81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG · 권한 있는데 없음 EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M · Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-2ab2aa60",
+  "result": "PASS",
+  "evidence": "기대 후보 안의 값(81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG) · 실제 81 · AS-IS DM-65",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-eb10cca1",
+  "result": "PASS",
+  "evidence": "기대 행 Division ⊆ 권한 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC · 실제 1940행 Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-111359ef",
+  "result": "PASS",
+  "evidence": "기대 조회 결과 = 권한 Div 범위(40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC) · 실제 1940행 · Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M · 건수 = 원장 대조는 facts_auth_db 후처리",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-aaab3ad0",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-94f0d730",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-b67063c4",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-254f2d17",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-9381c725",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-5d1523a2",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-b343fb79",
+  "result": "PASS",
+  "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 있음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-ccd673aa",
+  "result": "PASS",
+  "evidence": "기대 후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40 · 실제 후보 40 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-73a81a68",
+  "result": "PASS",
+  "evidence": "기대 단일 권한 → 40 · 실제 40 · AS-IS DM-65",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-1d96fd4e",
+  "result": "PASS",
+  "evidence": "기대 이전 계정 Div 잔존 0 · 실제 이전 81 · 이번 40 · AS-IS ",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-c6297d9f",
+  "result": "PASS",
+  "evidence": "기대 행 Division ⊆ 권한 40 · 실제 265행 Division 40 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-5184e4d9",
+  "result": "PASS",
+  "evidence": "기대 조회 결과 = 권한 Div 범위(40) · 실제 265행 · Division 40 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M · 건수 = 원장 대조는 facts_auth_db 후처리",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-4dbe33c2",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-81cd9593",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-e407edd5",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-77636068",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-7a88dc15",
+  "result": "FAIL",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-a0ea432d",
+  "result": "FAIL",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 40) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-61bb436c",
+  "result": "PASS",
+  "evidence": "기대 그룹 3개 중 메뉴 권한 2개 → 노출 · 실제 트리에 있음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-8a2e9079",
+  "result": "판정필요",
+  "evidence": "기대 후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC · 실제 후보 81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG · 권한 있는데 없음 EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M · Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-ae016a08",
+  "result": "PASS",
+  "evidence": "기대 후보 안의 값(81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG) · 실제 81 · AS-IS DM-65",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-b34d4456",
+  "result": "PASS",
+  "evidence": "기대 행 Division ⊆ 권한 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC · 실제 1940행 Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-5e6aebde",
+  "result": "PASS",
+  "evidence": "기대 조회 결과 = 권한 Div 범위(40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC) · 실제 1940행 · Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M · 건수 = 원장 대조는 facts_auth_db 후처리",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-f01f41fe",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-171d98f7",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-26a7eaaf",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-c8285469",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-f5581822",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-72144f23",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-8a6f6660",
+  "result": "PASS",
+  "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 있음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-21f65557",
+  "result": "판정필요",
+  "evidence": "기대 후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC · 실제 후보 81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG · 권한 있는데 없음 EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M · Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-c637760a",
+  "result": "PASS",
+  "evidence": "기대 후보 안의 값(81,40,82,81_UC,81_HM,81_ST,81_HD,81_HG) · 실제 81 · AS-IS DM-65",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-5e1c5326",
+  "result": "PASS",
+  "evidence": "기대 행 Division ⊆ 권한 40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC · 실제 1940행 Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-8dbd5f36",
+  "result": "PASS",
+  "evidence": "기대 조회 결과 = 권한 Div 범위(40,81,81_HD,81_HG,81_HM,81_ST,81_UC,82,EE,EE_HD,EE_HG,EE_HM,EE_ST,EE_UC) · 실제 1940행 · Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M · 건수 = 원장 대조는 facts_auth_db 후처리",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-1bdafc53",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-cf6e8f4a",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-71bc8dee",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-736b8463",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-038dec52",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-5e9c4115",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-3dfff694",
+  "result": "PASS",
+  "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 있음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-31cf990f",
+  "result": "PASS",
+  "evidence": "기대 후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,81_HD,81_HG,81_HM,81_ST,81_UC,82 · 실제 후보 81,82,81_UC,81_HM,81_ST,81_HD,81_HG · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-5abf0697",
+  "result": "PASS",
+  "evidence": "기대 후보 안의 값(81,82,81_UC,81_HM,81_ST,81_HD,81_HG) · 실제 81 · AS-IS DM-65",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-cce1d3cb",
+  "result": "PASS",
+  "evidence": "기대 행 Division ⊆ 권한 81,81_HD,81_HG,81_HM,81_ST,81_UC,82 · 실제 1940행 Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-6e87bcf8",
+  "result": "PASS",
+  "evidence": "기대 조회 결과 = 권한 Div 범위(81,81_HD,81_HG,81_HM,81_ST,81_UC,82) · 실제 1940행 · Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M · 건수 = 원장 대조는 facts_auth_db 후처리",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-c439434a",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-cc30e889",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-3b49204b",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-e1ef042d",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-b9cd5e26",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-3fca1e6c",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-613f00a8",
+  "result": "PASS",
+  "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 있음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-84af5de7",
+  "result": "PASS",
+  "evidence": "기대 후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81 · 실제 후보 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-bf305d86",
+  "result": "PASS",
+  "evidence": "기대 단일 권한 → 81 · 실제 81 · AS-IS DM-65",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-1332e81d",
+  "result": "PASS",
+  "evidence": "기대 행 Division ⊆ 권한 81 · 실제 1940행 Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-a02da1d0",
+  "result": "PASS",
+  "evidence": "기대 조회 결과 = 권한 Div 범위(81) · 실제 1940행 · Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M · 건수 = 원장 대조는 facts_auth_db 후처리",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-c5a47b69",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-913b4544",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-50392c56",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-d6e116b0",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-1e23ee08",
+  "result": "FAIL",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-e6cfb2a1",
+  "result": "FAIL",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-3b82fdc6",
+  "result": "PASS",
+  "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 있음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-8097adcc",
+  "result": "판정필요",
+  "evidence": "기대 후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 81,82,EE · 실제 후보 81,82 · 권한 있는데 없음 EE · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M · Division 원장 유효값 밖 코드일 수 있어 누락은 판정필요",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-a6893d70",
+  "result": "PASS",
+  "evidence": "기대 후보 안의 값(81,82) · 실제 81 · AS-IS DM-65",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-ade81c53",
+  "result": "PASS",
+  "evidence": "기대 행 Division ⊆ 권한 81,82,EE · 실제 1940행 Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-ffe87d61",
+  "result": "PASS",
+  "evidence": "기대 조회 결과 = 권한 Div 범위(81,82,EE) · 실제 1940행 · Division 81 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M · 건수 = 원장 대조는 facts_auth_db 후처리",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-b06292a8",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-39bafa68",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) SAVE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-46d761dd",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-8d3aee02",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) INSERT 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-9c73f639",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-dc2eda4e",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 81) DELETE 있음 → 진입 직후 자동 Div 권한으로 노출(GAPPI-15·CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-fac3f7e5",
+  "result": "PASS",
+  "evidence": "기대 그룹 2개 중 메뉴 권한 1개 → 노출 · 실제 트리에 있음 · AS-IS SCM_ADM_USER_GR_MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-1364e412",
+  "result": "PASS",
+  "evidence": "기대 후보 = 메뉴 권한 그룹의 부문 권한(USE_YN Y) 82 · 실제 후보 82 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M×MNU_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-3be837eb",
+  "result": "PASS",
+  "evidence": "기대 단일 권한 → 82 · 실제 82 · AS-IS DM-65",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-4d76c830",
+  "result": "PASS",
+  "evidence": "기대 이전 계정 Div 잔존 0 · 실제 이전 81 · 이번 82 · AS-IS ",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-fd452ae1",
+  "result": "PASS",
+  "evidence": "기대 행 Division ⊆ 권한 82 · 실제 280행 Division 82 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-a1d40109",
+  "result": "PASS",
+  "evidence": "기대 조회 결과 = 권한 Div 범위(82) · 실제 280행 · Division 82 · AS-IS SCM_ADM_USER_GR_UNIT_AUTH_MPG_M · 건수 = 원장 대조는 facts_auth_db 후처리",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-3023d90b",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-b4b2d634",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) SAVE 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-31421a34",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-422bc530",
+  "result": "PASS",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) INSERT 없음 → 비노출(CR-070) · 실제 조회 전 비노출 · 조회 후 비노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-b949a64b",
+  "result": "FAIL",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-3e88650e",
+  "result": "FAIL",
+  "evidence": "기대 PR_GET_MNU_BTN_AUTH_DIV(Div 82) DELETE 없음 → 비노출(CR-070) · 실제 조회 전 노출 · 조회 후 노출 · AS-IS PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH_DIV · CR-070",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-87c80432",
+  "result": "NA",
+  "evidence": "기대 Measure 버튼 · 실제 버튼·설정 창 없음 · AS-IS ",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-b60a525b",
+  "result": "NA",
+  "evidence": "기대 Measure 버튼 · 실제 버튼·설정 창 없음 · AS-IS ",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-0bd6821c",
+  "result": "NA",
+  "evidence": "기대 Column Setting 버튼 · 실제 버튼·설정 창 없음 · AS-IS ",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-522b370f",
+  "result": "NA",
+  "evidence": "기대 AS-IS Insert GROUP 분기 · 실제 InsertButton·InsertRow 경로에 GROUP guard MESSAGE 없음 · AS-IS facts_auth",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-50fd3a64",
+  "result": "NA",
+  "evidence": "기대 AS-IS Insert GROUP 분기 · 실제 GROUP guard MESSAGE 없음 · AS-IS facts_auth",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-ab8129bb",
+  "result": "ERROR",
+  "evidence": "기대 신규행 ≤ 그룹 맨 위 r0 — GAPSELF-15 · 실제 신규행 r-1 · 메시지 - · AS-IS SCP0028_Shipment_Lot_Size.cs:202",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-cfe1f9a1",
+  "result": "ERROR",
+  "evidence": "기대 신규행 ≤ 그룹 맨 위 r0 — GAPSELF-15 · 실제 신규행 r-1 · 메시지 - · AS-IS SCP0028_Shipment_Lot_Size.cs:202",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-556db533",
+  "result": "ERROR",
+  "evidence": "기대 헤더 클릭 정렬 · 실제 헤더 15칸 클릭 후 정렬 상태 없음 — 측정 경로 없음 · AS-IS ",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-ec9f5056",
+  "result": "NA",
+  "evidence": "기대 AS-IS GROUP·행 값 잠금 규칙 · 실제 edit_expect 규칙 0건 중 GROUP·COL 조건 없음 · AS-IS edit_expect.csv",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-ac92919b",
+  "result": "NA",
+  "evidence": "기대 AS-IS GROUP·행 값 잠금 규칙 · 실제 edit_expect 규칙 0건 중 GROUP·COL 조건 없음 · AS-IS edit_expect.csv",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-ca021fdb",
+  "result": "NA",
+  "evidence": "기대 AS-IS GROUP·행 값 잠금 규칙 · 실제 edit_expect 규칙 0건 중 GROUP·COL 조건 없음 · AS-IS edit_expect.csv",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-dee51b04",
+  "result": "NA",
+  "evidence": "기대 AS-IS GROUP·행 값 잠금 규칙 · 실제 edit_expect 규칙 0건 중 GROUP·COL 조건 없음 · AS-IS edit_expect.csv",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-d0d41ac4",
+  "result": "NA",
+  "evidence": "기대 GET_ADMIN_GROUP_MEASURE 행 · 실제 이 메뉴 룩업 0행(SEGMENT2=SCP0028) · AS-IS SCM_ADM_LOOKUP_MASTER_DETAIL",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-7a9d18cf",
+  "result": "NA",
+  "evidence": "기대 GET_ADMIN_GROUP_MEASURE 행 · 실제 이 메뉴 룩업 0행(SEGMENT2=SCP0028) · AS-IS SCM_ADM_LOOKUP_MASTER_DETAIL",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-39246d2d",
+  "result": "NA",
+  "evidence": "기대 GET_ADMIN_GROUP_MEASURE 행 · 실제 이 메뉴 룩업 0행(SEGMENT2=SCP0028) · AS-IS SCM_ADM_LOOKUP_MASTER_DETAIL",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-6e7f354b",
+  "result": "NA",
+  "evidence": "기대 AS-IS ColumnHeaderSpan 문장 · 실제 없음 · TO-BE 헤더 1행 병합 0개 · AS-IS facts_auth",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-3da46b0f",
+  "result": "ERROR",
+  "evidence": "기대 TITLESET_USER 보유·미보유 계정쌍 · 실제 명부에 쌍 없음(보유 N · 미보유 Y) · AS-IS SCM_MST_TITLESET_USER",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-45863dbe",
+  "result": "NA",
+  "evidence": "기대 Column 버튼 · 실제 버튼 없음 · AS-IS ",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-46d55916",
+  "result": "ERROR",
+  "evidence": "기대 Auth Request(권한 신청) 화면 메인 — DM-247 · 실제 명부에 GUEST 전용 계정 없음 → 세션 응답 변조로 FE 만 측정(BE 판정 미측정) · AS-IS DM-247·GAP-475 · 메뉴 0건 세션 변조는 BE 로그인 판정을 대신하지 못해 판정하지 않음 — users.json 에 GUEST 전용 계정 필요",
+  "tobe_ref": "E2E @eg-auth"
+ },
+ {
+  "row_id": "EG-e15844cc",
+  "result": "판정필요",
+  "evidence": "AS-IS 1810행 · TO-BE 1940행 · 키 ['OPERATION_GROUP_ID', 'from_site_description', 'to_site_description', 'ITEM_ID', 'NICK_NAME', 'trans_mode_name', 'VALID_YN', 'SPLIT_YN'] AS-IS 전용 10 · TO-BE 전용 140 · 값 대조 2802칸(숫자 컬럼 3) · 불일치 컬럼 2 · LOT_SIZE 1건 예 14400.0↔15552.0 · INCREMENT 1건 예 14400.0↔15552.0",
+  "tobe_ref": "E2E @a1-live"
+ },
+ {
+  "row_id": "EG-bd80125c",
+  "result": "ERROR",
+  "evidence": "[다국어 확인 필요] 화면 고정 한글 · nscm-fe/features/shipping/src/pages/shipment-lot-size/hooks/useShipmentLotSizeValidation.ts:52 · '{0}은 {1} 보다 클 수 없습니다.'",
+  "tobe_ref": "E2E @i18n-static"
+ },
+ {
+  "row_id": "EG-90f19bff",
+  "result": "ERROR",
+  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00002,MSG00606 · '[CN] Saved successfully.'",
+  "tobe_ref": "E2E @i18n-static"
+ },
+ {
+  "row_id": "EG-76f247a0",
+  "result": "ERROR",
+  "evidence": "[다국어 확인 필요] 같은 문구 다른 코드 · MSG00002,MSG00606 · '[EN] Saved successfully.'",
+  "tobe_ref": "E2E @i18n-static"
+ },
+ {
+  "row_id": "EG-78281d4c",
+  "result": "판정필요",
+  "evidence": "[SORT 기준 차이 → 판정필요] 문자 키 5/5건 AS-IS 콜레이션과 다를 수 있음: DIVISION_ID(NULL 먼저 없음), OPERATION_GROUP_ID(NULL 먼저 없음), FROM_SITE(NULL 먼저 없음), TO_SITE(NULL 먼저 없음), ITEM_ID(NULL 먼저 없음) · 자료형 모름 1건(TRANS_MODE_CODE)",
+  "tobe_ref": "E2E @sort-ci"
+ },
+ {
+  "row_id": "EG-c77e3290",
+  "result": "판정필요",
+  "evidence": "[SORT 기준 차이 → 판정필요] 문자 키 5/5건 AS-IS 콜레이션과 다를 수 있음: DIVISION_ID(NULL 먼저 없음), OPERATION_GROUP(NULL 먼저 없음), FROM_SITE(NULL 먼저 없음), TO_SITE(NULL 먼저 없음), ITEM_ID(NULL 먼저 없음) · 자료형 모름 1건(TRANS_MODE_CODE)",
+  "tobe_ref": "E2E @sort-ci"
+ },
+ {
+  "row_id": "EG-874e9a91",
+  "result": "PASS",
+  "evidence": "KO 문구 18건 일치 · 사전에 없는 문구 9건",
+  "tobe_ref": "E2E @i18n-lang"
+ },
+ {
+  "row_id": "EG-393dff7e",
+  "result": "PASS",
+  "evidence": "EN 문구 19건 일치 · 사전에 없는 문구 9건",
+  "tobe_ref": "E2E @i18n-lang"
+ },
+ {
+  "row_id": "EG-bd49cfa8",
+  "result": "FAIL",
+  "evidence": "CN 화면에 다른 언어 문구 1건: 'Condition'→'条件' · 사전에 없는 문구 9건",
+  "tobe_ref": "E2E @i18n-lang"
+ },
+ {
+  "row_id": "EG-11bd575c",
+  "result": "PASS",
+  "evidence": "후보 32건 집합 일치 · TO-BE 32건 · AS-IS 32건",
+  "tobe_ref": "E2E @cascade"
+ },
+ {
+  "row_id": "EG-234ff7f2",
+  "result": "PASS",
+  "evidence": "후보 1351건 집합 일치 · TO-BE 1351건 · AS-IS 1351건",
+  "tobe_ref": "E2E @cascade"
+ }
+]

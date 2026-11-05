@@ -36,6 +36,12 @@ FRAMEWORK_DEFAULTS = [
     ('cell_type_default', 'Text', f'{SPREADINFO}:1387~1393', 'CELL_CONTROL_OBJECT_TYPE_CODE 가 NULL 이면 기본 텍스트 셀'),
     ('cell_type_combo', 'FPComboBox → CELL_COMBO_DATA_TYPE 콤보', f'{SPREADINFO}:1444~1455', '메타 FPComboBox 컬럼은 CELL_COMBO_DATA_TYPE(예 YesOrNo) 데이터로 콤보 셀'),
     ('checked_list_no_selection', 'ALL', 'GSCM/01.Framework/GSCM.Windows.Forms/Class/UsrCheckedList.cs:298-307', '다중 체크리스트 선택 없음 = ALL(전체)'),
+    # 2026-10-30 숫자 셀 기본값(SCP0111 음수 빨강·정수만 미검출 계기) — AddColumn NumberCellType 분기 원문
+    ('number_negative_red', 'true', f'{SPREADINFO}:4369', 'NumberCellType 은 NegativeRed=true — 음수는 빨간 글자(화면 코드가 아니라 프레임워크 기본)'),
+    ('number_fixed_point_decimals', '0 when blFixedPoint', f'{SPREADINFO}:4366-4367', 'blFixedPoint=true 면 DecimalPlaces=0(정수만) · FixedPoint=blFixedPoint'),
+    ('number_min_max', '-99999999999999 ~ 99999999999999', f'{SPREADINFO}:4372-4373', 'NumberCellType MinimumValue/MaximumValue 기본'),
+    ('addnumcolumn_5arg_fixedpoint', 'true', f'{SPREADINFO}:4477-4481', 'AddNumColumn(header, field, merge, width, visible) 5-인자 오버로드 → AddColumn(…, FPDataType.FPNum, false, true) = 천단위 표시 false·blFixedPoint true(정수)'),
+    ('fpnumber_scale_null_decimals', '0', f'{SPREADINFO}:1433-1439', '메타 FPNumber 의 DATA_SCALE_NUMBER 가 NULL/0 이면 소수 0자리(정수만)'),
 ]
 
 

@@ -1,0 +1,7 @@
+﻿lang,result,why
+KO,PASS,KO 문구 18건 일치 · 사전에 없는 문구 37건
+EN,FAIL,"EN 화면에 다른 언어 문구 4건: '발생사유 상세'(한글), '발생사유 유형'(한글), '소진방안 상'(한글), '소진방안 유형'(한글) · 사전에 없는 문구 33건"
+EN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 PLANT_DESCRIPTION 9행, ITEM_NAME 3행, LONG_TERM_TYPE 200행, ITEM_TYPE 200행, PROCESS_GROUP 194행, PROCESS_DETAIL 56행, PIC 10행 — 명칭 칸이면 언어 미반영"
+CN,FAIL,"CN 화면에 다른 언어 문구 5건: 'Condition'→'条件', '발생사유 상세'(한글), '발생사유 유형'(한글), '소진방안 상'(한글), '소진방안 유형'(한글) · 사전에 없는 문구 33건"
+CN 데이터,ERROR,"[확인 대상] 그리드 칸 한글 PLANT_DESCRIPTION 9행, ITEM_NAME 3행, LONG_TERM_TYPE 200행, ITEM_TYPE 200행, PROCESS_GROUP 194행, PROCESS_DETAIL 56행, PIC 10행 — 명칭 칸이면 언어 미반영"
+조회 버튼,PASS,조회 버튼 KO Search(F5) · EN Search(F5) · CN Search(F5)

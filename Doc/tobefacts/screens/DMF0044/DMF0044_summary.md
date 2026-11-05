@@ -1,6 +1,6 @@
 # DMF0044 — To-Be Fact Pack 요약
 
-- page_key: `demand/sales-reports` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `demand/sales-reports` · feature: demand · As-is Fact Pack 있음
 - 파일 31 · 엔드포인트 호출 35 (미해결 1, 주석 속 2) · 이벤트 47 · 컴포넌트 사용 45 · 하드코딩 컬럼 5 · 메시지 34
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 5건
 
@@ -15,8 +15,8 @@
 | features/demand/src/pages/sales-reports/components/modals/textboxModalStore.ts | store | 23 |
 | features/demand/src/pages/sales-reports/components/SalesReportsForm.module.scss | component | 193 |
 | features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx | component | 165 |
-| features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | component | 824 |
-| features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | component | 241 |
+| features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | component | 827 |
+| features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | component | 245 |
 | features/demand/src/pages/sales-reports/index.ts | index | 2 |
 | features/demand/src/pages/sales-reports/sales-reports.constants.ts | constants | 106 |
 | features/demand/src/pages/sales-reports/sales-reports.types.ts | types | 48 |
@@ -113,9 +113,9 @@
 | g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 712 |
 | g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 769 |
 | f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx | 791 |
-| ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,settings.filter,saveTitleSet,visible.map,onClose | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 160 |
-| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,staticMeasures.map,saveTitleSet('M',selected.map((name,i)=>({name,sortOrderNo:i+1}))).then,saveTitleSet,selected.map,fetchStaticMeasures | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 194 |
-| VersionModal | onSelect | onVersionSelect | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 219 |
+| ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,settings.filter,saveTitleSet,visible.map,onClose | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 164 |
+| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,staticMeasures.map,saveTitleSet('M',selected.map((name,i)=>({name,sortOrderNo:i+1}))).then,saveTitleSet,selected.map,fetchStaticMeasures | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 198 |
+| VersionModal | onSelect | onVersionSelect | jsx | features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx | 223 |
 | SalesReportsForm | onSearch | handleSearch | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 692 |
 | SalesReportsForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 693 |
 | SalesReportsForm | onReportTypeChange | handleReportTypeChange | jsx | features/demand/src/pages/sales-reports/SalesReports.tsx | 694 |
@@ -201,7 +201,7 @@
 | LBL00310 | 2 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0044(29), DMF0003(10), DMF0042(9), DMF0049(8), DMF0020(2), DMF0072(1), DMF0074(1), DM0002(1), DMF0040(1), DMF0053(1)
+- 화면ID: DMF0044(29), DMF0003(10), DMF0042(9), DMF0049(8), DMF0020(2), DMF0072(1), DMF0074(1), DM0002(1), DMF0021(1), DMF0005(1), DMF0040(1), DMF0053(1)
 - SP/PKG: DMF0044_GET_SPREAD_TITLE(6), P_DMF0044_GET_MEASURE(4), P_DMF0044_GET_SALES_REPORTS_DATA(4), P_YYYYMMDD(2), DMF0044_GET_SALES_REPORTS_DATA(2), P_CREATED_BY(2), PKG_DMF0044(2), DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP(1), DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE(1), P_VERSION_NO(1), P_YYYYMM(1), P_DESCRIPTION1(1), P_ACTION_TYPE(1), P_MDF_TYPE(1), P_USER_GROUP(1), SCM0002_SET_TITLESET_POPUP(1), P_DMF0044_SAVE_DM_EXCHANGE_RATE_REPORT(1), P_DMF0044_SAVE_TEXTBOX(1), P_CUTOFF_YYYYMMDD(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

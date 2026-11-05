@@ -7,6 +7,7 @@ import { DataGrid } from '@shared/components';
 import {
   BOD_ITEM_EDITABLE,
   BOD_ITEM_MERGE_COLUMNS,
+  BOD_ITEM_NUMBER_RULES,
   MENU_ID,
   SHEETS,
 } from '../bod-item.constants';
@@ -92,6 +93,7 @@ export const BodItemGrid = ({
       staticColumns={staticColumns}
       allowMerging={AllowMerging.Cells}
       comboParams={{ divisionId, mnuId: MENU_ID }}
+      numberRules={BOD_ITEM_NUMBER_RULES}
     />
   );
 };

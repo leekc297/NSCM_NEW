@@ -1,0 +1,33 @@
+{
+ "menu_id": "SCP0028",
+ "generated": "2026-11-02 15:13:07",
+ "F8": {
+  "verdict": "PASS",
+  "note": "감사 컬럼 = 저장 계정·저장 시각 (CREATED_BY=minyonglee1 · CREATION_DATE=2026-10-31 19:25:57 · LAST_UPDATED_BY=minyonglee1 · LAST_UPDATE_DATE=2026-10-31 19:25:57) · SCP_MST_SHIPMENT_LOT_SIZE 1행"
+ },
+ "F7": {
+  "verdict": "PASS",
+  "asis_sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+  "asis_insert_tables": [
+   "SCP_MST_SHIPMENT_LOT_SIZE"
+  ],
+  "asis_update_only": [],
+  "tobe_written": [
+   "SCP_MST_SHIPMENT_LOT_SIZE",
+   "SCP_MST_SHIPMENT_LOT_SIZE_H"
+  ],
+  "tobe_extra": [
+   "SCP_MST_SHIPMENT_LOT_SIZE_H"
+  ],
+  "note": "AS-IS 신규행 경로 테이블 SCP_MST_SHIPMENT_LOT_SIZE 모두 기록 · TO-BE 에만 기록(참고 — AS-IS 트리거·다른 경로 여부 확인): SCP_MST_SHIPMENT_LOT_SIZE_H"
+ },
+ "run": {
+  "cleanup_sql": "Doc\\verify\\SCP0028\\cleanup\\cleanup_20261031_probe.sql",
+  "account": "minyonglee1",
+  "saved_at": "",
+  "tables": {
+   "SCP_MST_SHIPMENT_LOT_SIZE": 1,
+   "SCP_MST_SHIPMENT_LOT_SIZE_H": 1
+  }
+ }
+}

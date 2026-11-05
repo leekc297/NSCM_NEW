@@ -389,18 +389,20 @@ export const SalesMonitoringForm = ({ onSearch }: SalesMonitoringFormProps) => {
               Weekly 조회 시 월(M_) 합계 칸, Daily 조회 시 주(W_)·월(M_) 합계 칸을 함께 보인다.
               기본 해제(AS-IS InitControls L283 chkSum.Checked=false — Designer 초기값 true 를 덮는다).
               재조회 없이 즉시 반영된다 — 그리드 applyDynVisibility 가 sumYn 을 보고 visible 만 바꾼다. */}
-          {/* 아래줄 첫 칸(Project 바로 밑). Sales Plan 과 같은 형태 — "Sum" 라벨은 FormItem 라벨 칸에
-              두어 윗줄 Project 라벨과 세로로 맞추고, 체크 상자는 입력 칸에 둔다(사용자 확정 2026-10-06).
-              라벨 없는 customGrid 칸으로 두면 체크 상자가 칸 왼쪽 끝에 붙어 다른 조건들과 열이 어긋난다. */}
+          {/* 체크박스를 앞, 라벨을 뒤로 둔다(사용자 확정 2026-10-30 — 체크박스 앞 통일).
+              FormItem 라벨 칸은 공백으로 두어 윗줄 Project 라벨과 세로로 맞추고,
+              Checkbox labelText 로 라벨을 달아 체크상자 오른쪽에 붙인다. */}
           <Grid size={3}>
             <FormItem
-              label={t('LBL00687', '_Sum')}
+              label={' '}
               labelAlign='right'
               className={commonStyles.formItem}
               render={() => (
-                <div className={commonStyles.customCheckbox}>
-                  <Checkbox checked={sc.sumYn} onChange={checked => set({ sumYn: checked })} />
-                </div>
+                <Checkbox
+                  labelText={t('LBL00687', '_Sum')}
+                  checked={sc.sumYn}
+                  onChange={checked => set({ sumYn: checked })}
+                />
               )}
             />
           </Grid>

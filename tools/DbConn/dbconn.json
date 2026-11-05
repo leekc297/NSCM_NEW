@@ -11,7 +11,7 @@
       "note": "SELECT / 읽기전용 SP 실행만. 파서(AsisFacts db), golden 원본 결과 추출에 사용"
     },
     "tobe": {
-      "title": "To-Be Oracle (ZIOUI1 / SCM_MGR)",
+      "title": "To-Be Oracle (ZIOUI1 / system → CURRENT_SCHEMA SCM_MGR)",
       "type": "oracle",
       "envPrefix": "TOBE_DB",
       "keys": { "host": "HOST", "port": "PORT", "service": "PDB", "user": "USER", "password": "PASS" },

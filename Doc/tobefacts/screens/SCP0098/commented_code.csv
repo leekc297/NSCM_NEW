@@ -1,0 +1,2 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/capa-mobility-it","SCP0098","features/supply/src/pages/capa-mobility-it/utils/capa-mobility-it.save.ts","100","code","저장 전 값 검증 — AS-IS SaveDataFull(L1998~2177) 파리티. 변경된 행(payload)만 AS-IS 순서로 검사해 첫 위반 메시지를 반환한다. null = 통과. 하나라도 위반하면 저장 전체 차단(AS-IS return). 메시지는 AS-IS 하드코딩 한글 리터럴 그대로다(MSG 코드 없음 = 다국어 아님 → t() 래핑하지 않는다). 검증 순서(AS-IS): 빈값 → 숫자아님/음수 → 범위초과. AS"

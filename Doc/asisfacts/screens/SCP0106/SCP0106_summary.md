@@ -1,15 +1,16 @@
 ﻿# SCP0106 화면 Fact Pack
 
 > AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+> ⚠ .sln 미등록 전용 프로젝트(current 로 취급 · files.csv sln_registered=N): 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj
 
 ## 1. 파일 구성
 | 구분 | 파일 | 프로젝트 | 줄수 |
 |---|---|---|---:|
-| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\AssemblyUtils.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj | 1733 |
-| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\EltrUtils.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj | 2490 |
-| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj | 37 |
-| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj | 4373 |
-| current(sln미등록) | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj | 1203 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\AssemblyUtils.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj | 1733 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\EltrUtils.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj | 2490 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj | 37 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj | 4373 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0106_CAPA_Loss_Plan\SCP0106_CAPA_Loss_Plan.csproj | 1203 |
 
 ## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |

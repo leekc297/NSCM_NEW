@@ -23,8 +23,12 @@ interface Props {
   adminColumns?: RawFlexGridColumnConfig[];
 }
 
-// _sChangeType='P'(Plan): ERP_SO_NO 숨김 + 그룹라벨 "Confirmed"->"Plan"/"Change"->"Confirm"(메타에 없어 FE 오버라이드).
-//   else(C/N/A): ERP_SO_NO 표시 + 그룹라벨 "Confirmed"/"Change"(메타 SMALL_CLASS_LABEL_NAME 일치). design 03 §2 R2~R5.
+// _sChangeType='P'(Plan): 그룹라벨 "Confirmed"->"Plan"/"Change"->"Confirm"(메타에 없어 FE 오버라이드).
+//   else(C/N/A): 그룹라벨 "Confirmed"/"Change"(메타 SMALL_CLASS_LABEL_NAME 일치). design 03 §2 R2~R5.
+//   ERP_SO_NO(SO No): SSP0202 는 자매 SSP0003 과 달리 **전 분기 숨김**이다 — AS-IS 는 else 에서 Visible=true 로
+//   토글하나 메타 폭 0 이라 실제로는 안 보인다(사용자 AS-IS 실측 확인 2026-10-28). 그래서 메타를 VISIBLE_FLAG='N'
+//   으로 되돌려(06b_hide_erp_so_no.sql) 전 분기 숨긴다. 아래 P 분기의 visible:false 세팅은 메타 숨김과 중복이나
+//   안전망으로 유지한다.
 const applyChangeTypeBranch = (
   cols: RawFlexGridColumnConfig[],
   changeType: string

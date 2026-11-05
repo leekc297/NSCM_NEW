@@ -68,6 +68,30 @@ for (const [c, lv, re, msg] of rules) { let m; let n = 0; const src = /TODO/.tes
     }
   }
 }
+// ── P42: 조회 결과 결정적 순서 (CR-075 · 사용자 판정 2026-10-28 "조회 QUERY 에 ORDER 가 없거나 그리드 정렬이 누락되면 오류")
+//    그리드에 바인딩되는 GET PROC(PROC_M sheet 가 SHEET_COLUMNS 메타를 가진 시트) 본문에 ORDER BY 가 없으면 BLOCK. 룩업·집계(비그리드 시트)·SAVE 는 대상 아님.
+//    AS-IS 정렬 키(sort_rules.csv)가 있는데 ORDER BY 에 NULLS FIRST/NVL 이 없으면 WARN — MSSQL 은 빈 값을 맨 앞, Oracle 은 NULL 을 맨 뒤에 둬 같은 ORDER BY 라도 실제 순서가 다르다(SCP0007 CUSTOMER 110행 실측).
+{
+  try {
+    const { readCsv } = require('../TobeFacts/src/util');
+    const pmP = path.join(cfg.tobeOutDir || '', 'db', 'proc_meta.csv'), scP = path.join(cfg.tobeOutDir || '', 'db', 'sheet_columns.csv');
+    if (ID && fs.existsSync(pmP) && fs.existsSync(scP)) {
+      const gridSheets = new Set(readCsv(scP).filter(r => String(r.program_id || '').toUpperCase() === ID).map(r => r.sheet_name));
+      const pm = readCsv(pmP).filter(r => String(r.menu_id || '').toUpperCase() === ID && r.proc && /SEARCH|GET|FIND|LIST/i.test(String(r.btn || '') + ' ' + String(r.proc_nm || '')));
+      const srP = path.join(cfg.asisOutDir || '', 'screens', ID, 'sort_rules.csv');
+      const sortKeys = fs.existsSync(srP) ? readCsv(srP).filter(r => r.kind === 'SQL' && r.keys && String(r.depth || '0') === '0') : [];
+      for (const r of pm) {
+        const proc = String(r.proc_nm || r.proc.split('.').pop() || '').toUpperCase(); if (!gridSheets.has(r.sheet)) continue;
+        const hi = codeStr.search(new RegExp(`^\\s*PROCEDURE\\s+${proc}\\b`, 'im')); if (hi < 0) continue;  // codeStr: 동적 SQL 문자열 안의 ORDER BY 도 본다(주석만 제거) · CRLF 안전(인덱스 슬라이스)
+        const ei = codeStr.slice(hi).search(new RegExp(`^\\s*END\\s+${proc}\\s*;`, 'im')); const m = [null, '', codeStr.slice(hi, ei > 0 ? hi + ei : undefined)];
+        const body = m[2]; const ob = [...body.matchAll(/\bORDER\s+BY\b([\s\S]*?)(?:;|'\s*;|\n\s*\n|$)/gi)];
+        const line = lineOf(hi);
+        if (!ob.length) add('BLOCK', 'P42', `${proc}: 그리드(sheet '${r.sheet}') 조회 PROC 에 ORDER BY 없음 — 조회 결과는 결정적 순서 필수(CR-075). AS-IS 키 ${sortKeys.filter(k => k.sp && proc.includes(k.sp.replace(/^.*?_/, '').toUpperCase())).map(k => k.keys).join(' | ') || '(AS-IS 도 없음 → 화면 키 컬럼 순)'}`, line);
+        else if (sortKeys.length && !ob.some(x => /NULLS\s+FIRST/i.test(x[1]))) add('WARN', 'P42', `${proc}: ORDER BY 에 NULLS FIRST 없음 — 빈 값 행이 MSSQL(맨 앞)과 달리 맨 뒤로 정렬될 수 있음(CR-075 ④ · SCP0007 CUSTOMER 실측)`, line);
+      }
+    }
+  } catch (e) { add('WARN', 'P42', `CR-075 검사 실행 실패: ${String(e.message || e).slice(0, 120)}`); }
+}
 // ── VR3: VALIDATION 취합 대조 (사용자 지시 2026-10-23) — SCP·SSP 화면 DB 검증 중 취합 기준 TO-BE 미적용 행(AS-IS SP 에 있고 TO-BE 에 없던 검사)·TAG 현황 안내.
 //    2026-10-22 16:25 스냅샷 판정이라 이후 이식분을 반영하지 못한다 → WARN. 대조 지시 = prompts/port_pkg.md 3-2
 {

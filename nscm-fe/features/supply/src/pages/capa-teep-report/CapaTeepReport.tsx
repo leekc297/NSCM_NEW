@@ -233,35 +233,6 @@ export const CapaTeepReport = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   /**
-   * Insert(F8) / Delete(F9) — **관측 동작이 무동작이 아니다.** 베이스 `CheckValidation` 이 시트 잠금
-   * (`IsLock` 영구 true, 01 L-21)을 보고 각각 `MSG00008`/`MSG00009` 를 띄우고 화면 override 에 도달하지
-   * 않는다(01 L-12/L-14 — `BaseForm:3199~3218` + `3313~3337` 실측). 사용자 확정(goal D-2 = "메시지 재현 +
-   * 메타 등록")대로 **키를 존재시킨 채 alert 핸들러**를 둔다. TO-BE 코드는 `MSG01044`/`MSG01045` 다 —
-   * AS-IS 번호를 그대로 쓰면 전혀 다른 문구가 뜬다(01 §2-F).
-   *   `false`  -> 버튼이 사라져 AS-IS 와 시각적으로 달라진다
-   *   키 생략  -> 공용 SubTitle 기본 `addRow`/`removeRow` 가 살아나 AS-IS 에 없던 행 추가·삭제가 생긴다
-   * 둘 다 오답이다(01 §2-E / V-08·V-09 / 03 V-30). 행 추가·제거 로직은 만들지 않는다.
-   * AS-IS 화면 `DeleteButton()` 의 가드 3건(L-07~L-09)도 이식하지 않는다 — 베이스가 먼저 차단해 그 가드가
-   * 실행되는 상태가 존재하지 않고, 이식하면 "선택 행이 있으면 삭제됨" 경로를 새로 만들 위험이 있다.
-   */
-  const handleInsert = () => {
-    void setAlert({
-      type: 'alert',
-      content: t(MSG.CANNOT_INSERT, {
-        defaultValue: 'Can not add as it is not in modify mode.',
-      }),
-    });
-  };
-  const handleDelete = () => {
-    void setAlert({
-      type: 'alert',
-      content: t(MSG.CANNOT_DELETE, {
-        defaultValue: 'Can not delete as it is not in modify mode.',
-      }),
-    });
-  };
-
-  /**
    * hotkeyConfig — 전 항목 `useTabBtnPermissions().hasButton()` 조건부(하드코딩 금지, CLAUDE.md §2 체크3).
    * `save: false` — 저장 SP 가 존재하지 않고 `SaveButton` override 도 없다(03 §4.4 / V-10·V-29).
    * Edit 는 `customButtons` 에도 만들지 않는다 — AS-IS `EditButton` override 가 0건이라 편집모드 자체가
@@ -272,8 +243,14 @@ export const CapaTeepReport = ({ tabId, title }: PageProps<MENU_ID>) => {
    */
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    insert: hasButton('INSERT') ? handleInsert : false,
-    delete: hasButton('DELETE') ? handleDelete : false,
+    // Insert / Delete — 조회 전용 리포트라 **제거**한다(사용자 확정 2026-10-29, 종전 goal D-2 번복).
+    //   AS-IS 는 잠긴 시트라도 툴바에 두 버튼을 띄우고 클릭 시 차단 메시지를 냈지만, TO-BE 는 조회
+    //   전용 화면에서 아예 노출하지 않기로 했다 — AS-IS 와 의도적으로 다르다.
+    //   버튼 메타(`SCM_ADM_MNU_BTN_MPG_M`)에서도 INSERT/DELETE 등록을 뺐다(05_register.sql). 여기서는
+    //   `save`/`manual`/`upload` 와 같은 "이 화면에 없는 기능" 축으로 명시 `false` 를 둔다 — 키를
+    //   생략하면 공용 SubTitle 기본 addRow/removeRow 가 살아나 없던 행 추가·삭제가 생긴다.
+    insert: false,
+    delete: false,
     save: false,
     manual: false,
     upload: false,

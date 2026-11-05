@@ -77,13 +77,25 @@ const MainTitleComp = ({
                 onChange={(_, val) => toggleOpenSearchArea?.(val)}
               />
             )}
-            <ControlZoomIcon
-              type={pageFullscreen ? 'zoom-out' : 'zoom-in'}
-              iconSize={20}
+            {/* 전체보기 토글.
+                주의: onClick 을 ControlZoomIcon(SVG)에 직접 걸면 화면 진입 직후 첫 클릭이
+                무시되는 경우가 있다 — SVG 는 포커스를 받지 못하는(non-focusable) 요소라,
+                그리드(Wijmo FlexGrid 등)가 포커스를 쥔 상태에서 처음 누르면 그 클릭이
+                "포커스를 떼는 처리"로만 소모되고 click 핸들러까지 도달하지 못한다(두 번째
+                클릭은 포커스 정리 후라 정상). 포커스 가능한 button 으로 감싸 첫 클릭에서
+                포커스 이동과 토글이 한 번에 처리되게 한다. */}
+            <button
+              type='button'
+              className={styles.fullscreenToggle}
+              aria-label={pageFullscreen ? 'Exit full screen' : 'Full screen'}
               onClick={togglePageFullscreen}
-              cursor='pointer'
-              sx={{ color: palette.semantic.color.commonTextLight }}
-            />
+            >
+              <ControlZoomIcon
+                type={pageFullscreen ? 'zoom-out' : 'zoom-in'}
+                iconSize={20}
+                sx={{ color: palette.semantic.color.commonTextLight }}
+              />
+            </button>
           </>
         }
       />

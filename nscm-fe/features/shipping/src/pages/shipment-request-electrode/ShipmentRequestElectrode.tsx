@@ -17,7 +17,6 @@ import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ExcelUploadModal } from './components/ExcelUploadModal';
-
 import { ShipmentRequestElectrodeDetailBar } from './components/ShipmentRequestElectrodeDetailBar';
 import { ShipmentRequestElectrodeDetailGrid } from './components/ShipmentRequestElectrodeDetailGrid';
 import { ShipmentRequestElectrodeForm } from './components/ShipmentRequestElectrodeForm';
@@ -29,6 +28,7 @@ import type {
   ShipmentPsiRow,
   StockDetailRow,
 } from './shipment-request-electrode.types';
+import styles from './ShipmentRequestElectrode.module.scss';
 import { useShipmentRequestElectrodeStore } from './useShipmentRequestElectrodeStore';
 import {
   buildNewRow,
@@ -517,57 +517,65 @@ export const ShipmentRequestElectrode = ({ tabId, title }: PageProps<MENU_ID>) =
         customButtons={customButtons}
         searchParam={conditionSaveParam}
       />
-      <PanelGroup orientation='vertical'>
+      <PanelGroup className={styles.bodyPanelGroup} orientation='vertical'>
         <Panel defaultSize={50} minSize={20}>
-          <ShipmentRequestElectrodeMainGrid
-            rows={mainRowsShown}
-            gridRef={gridRefMain}
-            gridFilterRef={gridFilterRefMain}
-            staticColumns={staticColumns[SHEETS.MAIN]}
-            bohMode={bohMode}
-            bucketType={searchParams.bucketType}
-            sumChecked={searchParams.sumChecked}
-            pastPeriodChecked={searchParams.pastPeriodChecked}
-            planDate={searchParams.planDate}
-            spreadTitle={spreadTitleRows}
-            onFocus={() => setActiveGrid('spdMain')}
-          />
+          <div className={styles.gridArea}>
+            <ShipmentRequestElectrodeMainGrid
+              rows={mainRowsShown}
+              gridRef={gridRefMain}
+              gridFilterRef={gridFilterRefMain}
+              staticColumns={staticColumns[SHEETS.MAIN]}
+              bohMode={bohMode}
+              bucketType={searchParams.bucketType}
+              sumChecked={searchParams.sumChecked}
+              pastPeriodChecked={searchParams.pastPeriodChecked}
+              planDate={searchParams.planDate}
+              spreadTitle={spreadTitleRows}
+              onFocus={() => setActiveGrid('spdMain')}
+            />
+          </div>
         </Panel>
         <PanelSeparator />
         <Panel defaultSize={50} minSize={20}>
-          {/* 2차 조회조건 바(usrLayoutControl3) — Material[팝업]·Nick Name·Lot ID·Search. 활성 Detail 탭 재조회. */}
-          <ShipmentRequestElectrodeDetailBar
-            onDetailSearch={handleDetailSearch}
-            onItemSearch2={() => setOpenDetailItem(true)}
-            onModelSearch2={() => setOpenDetailModel(true)}
-          />
-          {/* AS-IS 탭 순서(CreateSpread cs:574-575, 기본 활성 cs:595): Stock Detail(0) → Shipment Request Detail(1). */}
-          <TabWrapper
-            persist
-            onTabClick={index => setActiveDetailTab(index === 0 ? 'stockDetail' : 'requestDetail')}
-          >
-            <TabItem label={t(LBL.TAB_STOCK_DETAIL, 'Stock Detail')}>
-              <ShipmentRequestElectrodeStockGrid
-                rows={stockDetailRows}
-                gridRef={gridRefStock}
-                gridFilterRef={gridFilterRefStock}
-                staticColumns={staticColumns[SHEETS.STOCK_DETAIL]}
-                onFocus={() => setActiveGrid('spdDetail')}
-              />
-            </TabItem>
-            <TabItem label={t(LBL.TAB_REQUEST_DETAIL, 'Shipment Request Detail')}>
-              <ShipmentRequestElectrodeDetailGrid
-                rows={requestDetailRows}
-                gridRef={gridRefRequest}
-                gridFilterRef={gridFilterRefRequest}
-                editTrackerRef={editTrackerRefRequest}
-                staticColumns={staticColumns[SHEETS.REQUEST_DETAIL]}
-                isEditMode={canEdit}
-                onFocus={() => setActiveGrid('spdDetail')}
-                onItemCellDoubleClick={handleItemCellDoubleClick}
-              />
-            </TabItem>
-          </TabWrapper>
+          {/* .gridArea(flex column + height:100% + overflow:hidden) 로 감싸야 TabWrapper/FlexGrid 높이가
+              제약되어 wijmo 가 ColumnFooter(Sum) 공간을 확보·바닥 고정한다(자매 SSP0026 동일). */}
+          <div className={styles.gridArea}>
+            {/* 2차 조회조건 바(usrLayoutControl3) — Material[팝업]·Nick Name·Lot ID·Search. 활성 Detail 탭 재조회. */}
+            <ShipmentRequestElectrodeDetailBar
+              onDetailSearch={handleDetailSearch}
+              onItemSearch2={() => setOpenDetailItem(true)}
+              onModelSearch2={() => setOpenDetailModel(true)}
+            />
+            {/* AS-IS 탭 순서(CreateSpread cs:574-575, 기본 활성 cs:595): Stock Detail(0) → Shipment Request Detail(1). */}
+            <TabWrapper
+              persist
+              onTabClick={index =>
+                setActiveDetailTab(index === 0 ? 'stockDetail' : 'requestDetail')
+              }
+            >
+              <TabItem label={t(LBL.TAB_STOCK_DETAIL, 'Stock Detail')}>
+                <ShipmentRequestElectrodeStockGrid
+                  rows={stockDetailRows}
+                  gridRef={gridRefStock}
+                  gridFilterRef={gridFilterRefStock}
+                  staticColumns={staticColumns[SHEETS.STOCK_DETAIL]}
+                  onFocus={() => setActiveGrid('spdDetail')}
+                />
+              </TabItem>
+              <TabItem label={t(LBL.TAB_REQUEST_DETAIL, 'Shipment Request Detail')}>
+                <ShipmentRequestElectrodeDetailGrid
+                  rows={requestDetailRows}
+                  gridRef={gridRefRequest}
+                  gridFilterRef={gridFilterRefRequest}
+                  editTrackerRef={editTrackerRefRequest}
+                  staticColumns={staticColumns[SHEETS.REQUEST_DETAIL]}
+                  isEditMode={canEdit}
+                  onFocus={() => setActiveGrid('spdDetail')}
+                  onItemCellDoubleClick={handleItemCellDoubleClick}
+                />
+              </TabItem>
+            </TabWrapper>
+          </div>
         </Panel>
       </PanelGroup>
 

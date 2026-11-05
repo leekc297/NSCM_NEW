@@ -69,3 +69,4 @@ K_GRID_BIND,ACTKIND,GRID_BIND,A1,그리드 데이터 바인딩 — 조회 결과
 K_GRID_INIT,ACTKIND,GRID_INIT,A5;H5,그리드 시트·컬럼 구성
 K_THROW,ACTKIND,THROW,E4,예외·중단 — 업무 검증 메시지
 K_RESOURCE,ACTKIND,RESOURCE,X-REOPEN,자원 해제 — 닫기·재오픈
+K_GRID_CLEAR,ACTKIND,GRID_CLEAR,C4,조건 변경 핸들러 안의 그리드 초기화(ClearDataSource·RemoveRows·Clear) — 조건 변경 시 그리드 상태(2026-10-30 SCP0111 Plan Date)

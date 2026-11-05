@@ -546,16 +546,31 @@ export const ShipmentRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
         customButtons={customButtons}
       />
 
-      {/* AS-IS FpSpread SheetView(spdMain 2시트) 등가 — Pack Biz / Cell Biz 시트 탭(표준 TabWrapper,
-          SCP0002 LineMaster 패턴). 단일 그리드라 persist 미사용(활성 탭만 마운트). 탭 전환 =
-          handleSheetChange(시트 스왑 + 그리드/조회 초기화). 캡션 = 배포 SHEET_NAME 리터럴(다국어 키 없음). */}
-      <TabWrapper
-        activeTabIndex={activeSheet === SHEETS.CELL ? 1 : 0}
-        setActiveTabIndex={index => handleSheetChange(index === 1 ? SHEETS.CELL : SHEETS.PACK)}
-      >
-        <TabItem label={SHEETS.PACK}>{mainGrid}</TabItem>
-        <TabItem label={SHEETS.CELL}>{mainGrid}</TabItem>
-      </TabWrapper>
+      {/* AS-IS FpSpread SheetView(spdMain 2시트) 등가 — Pack Biz / Cell Biz 시트 탭. 캡션 = 배포
+          SHEET_NAME 리터럴(다국어 키 없음). 탭 전환 = handleSheetChange(시트 스왑 + 편집추적 초기화).
+          [ROLLBACK:dmf0045-tab-grid-remount-flicker · 2026-10-29] ──────────────────────────────────
+            종전엔 같은 mainGrid 를 두 <TabItem> 에 넣었다(아래 '원복' 참고). 그런데 TabWrapper 는 persist
+            미사용 시 활성 탭 child 만 렌더해(molecules/tab/Tab.tsx), 탭을 번갈아 누르면 그리드가 매번
+            언마운트→리마운트됐다. 리마운트 때 다단 헤더가 Wijmo 기본(큰) 높이로 새로 그려졌다가 48px(hook
+            #93)로 줄어드는 깜빡임이 났다(사용자 리포트 2026-10-29). → 그리드를 탭 콘텐츠 밖에 1회만 고정
+            렌더해 리마운트를 제거한다. 시트 전환은 activeSheet prop(rows/staticColumns)만 갱신되고 그리드는
+            상주하므로 헤더가 유지된다. 데이터는 시트별 react-query 캐시로 보존(handleSheetChange 주석 참고).
+            TabItem 은 라벨만(탭 버튼용). 레이아웃: TabWrapper 는 strip 높이(flex:0 0 auto), 그리드가
+            남은 높이(flex:1, viewInner 가 flex column)를 차지 — 종전 TabWrapper contentArea(flex-grow:1)
+            역할을 그리드 컨테이너가 이어받는다.
+            롤백: 아래 두 div 래퍼를 제거하고 원복 —
+              <TabWrapper ...><TabItem label={SHEETS.PACK}>{mainGrid}</TabItem>
+                <TabItem label={SHEETS.CELL}>{mainGrid}</TabItem></TabWrapper> */}
+      <div style={{ flex: '0 0 auto' }}>
+        <TabWrapper
+          activeTabIndex={activeSheet === SHEETS.CELL ? 1 : 0}
+          setActiveTabIndex={index => handleSheetChange(index === 1 ? SHEETS.CELL : SHEETS.PACK)}
+        >
+          <TabItem label={SHEETS.PACK} />
+          <TabItem label={SHEETS.CELL} />
+        </TabWrapper>
+      </div>
+      <div style={{ flex: '1 1 0', minHeight: 0, overflow: 'hidden' }}>{mainGrid}</div>
 
       {/* 모달 5종 — 셀 PROJECT/BOD/ITEM + Column/Measure Setting (진입 분리) */}
       <ShipmentRequestModals

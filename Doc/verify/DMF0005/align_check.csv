@@ -1,0 +1,134 @@
+﻿menu_id,sheet,column,label,asis_halign,asis_ref,tobe_program,tobe_sheet,tobe_halign,tobe_source,verdict,note
+DMF0005,,ITEM_ID_BEFORE,BEFORE,L,DMF0005_ModelCodeChange.cs:130,,,,대응 메타 시트 없음,NA,TO-BE 대응 메타 시트 없음(AS-IS 시트 )
+DMF0005,,ITEM_ID_AFTER,AFTER,L,DMF0005_ModelCodeChange.cs:131,,,,대응 메타 시트 없음,NA,TO-BE 대응 메타 시트 없음(AS-IS 시트 )
+DMF0005,ContributeMain,PRODUCT_GROUP,제품군,L,META SCM_MST_SHEET_COLUMNS(DMF0043/ContributeMain),SCP0009,Shipment Request,L,메타 SCP0009/Shipment Request,PASS,AS-IS left ↔ TO-BE left
+DMF0005,MDF Reports,APPLICATION_GR,Application Gr,L,META SCM_MST_SHEET_COLUMNS(DMF0044/MDF Reports),DMF0049,MDF Reports,L,메타 DMF0049/MDF Reports,PASS,AS-IS left ↔ TO-BE left
+DMF0005,MDF Reports,CELL_MODEL_INFO,Cell Model Info,L,META SCM_MST_SHEET_COLUMNS(DMF0044/MDF Reports),DMF0049,MDF Reports,L,메타 DMF0049/MDF Reports,PASS,AS-IS left ↔ TO-BE left
+DMF0005,MDF Reports,PRODUCT_DETAILS,Product Details (Report),L,META SCM_MST_SHEET_COLUMNS(DMF0044/MDF Reports),DMF0049,MDF Reports,L,메타 DMF0049/MDF Reports,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,ACTIVE_FLAG,MDM Active,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,ALT_SIM_YN,대체/유사모델,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,APPLICATION,Application*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,ATTRIBUTE1,Sold-to Cust.(Report),C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,ATTRIBUTE2,End Cust.(Report),L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,ATTRIBUTE4,Destination,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,ATTRIBUTE5,Cell Model,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,BPMS_EXIST,BPMS Exist,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,CATHODE_MATERIALS,양극재,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,CELL_NAME,Cell Name,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,CELL_PER_CAR,Cell/Car,R,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,R,메타 DMF0005/production,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Production,CELL_PER_MODULE,Cell/Module,R,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,R,메타 DMF0005/production,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Production,CELL_S_OP_REPORT,Cell Prod. Site (S&OP Report),L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,,메타 DMF0005/production,NA,TO-BE DMF0005/production 에 컬럼 없음 — 표시 구성(A5)에서 판정
+DMF0005,Production,CELL_TYPE,Product Group,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,CELL_TYPE_81,Cell Type*,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,CELL_TYPE_82,Cell Type*,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,CHANGE_REASON,CHANGE REASON,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,CONSENSUS,CONSENSUS,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,CONSENSUS_ESS,ESS Subsidiary*,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,CONSENSUS_MKT,MKT*,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,CONSENSUS_SCM,SCM*,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,CRGE_ORG_NM,Org.Name (Report),L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,CURRENCY,Currency*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,CUSTOMER_MODEL,Customer Model,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,CUST_ENG_NM,End Customer (Report),L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,CUST_GROUP,Cust Group*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,CUST_GROUP_DTL,Cust Group Detail,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,DEPT_ID,Team,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,DEPT_ID2,Team,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,DEPT_ID_82,Team(Sales),L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,DESCRIPTION,Description,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,DIVISION_ID,Division*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,EDI,EDI Incoterms,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,EDIT_FLAG,Edit Flag,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0005,Production,EDIT_FLAG2,Edit Flag,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0005,Production,EDIT_FLAG3,Edit Flag,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0005,Production,EDI_LT,EDI Leadtime,R,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,R,메타 DMF0005/production,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Production,END_CUSTOMER,End Customer,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,END_CUSTOMER40,End Customer*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,ENERGE_WH,Energy(Wh),R,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,R,메타 DMF0005/production,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Production,INVENTORY_DAY,INVENTORY DAY,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,ITEM_CLASS_NAME,Model Type,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,ITEM_ID,Model*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,ITEM_NAME,Model Name,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,ITEM_TYPE,Item Type,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,KWH,KWh/Cell*,R,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,R,메타 DMF0005/production,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Production,LAST_UPDATED_BY,Update By,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,LAST_UPDATE_DATE,Update Date,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,LIABILITY_PERIOD,Liablity(Week),L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,MODULE_PER_CAR,Module/Car,R,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,R,메타 DMF0005/production,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Production,MODULE_VARIANT,Module Variant,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,NICK_NAME,Nick Name,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,OWNER,Owner Name,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,PARTIAL_PLAN_YN,Partial Plan YN,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,PRJ_OWNR_ID,Owner(PM)*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,PRODUCTION_PROCESS,Production Process*,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,PROJECT_CODE,Project Code*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,PROJECT_INFO,Project,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,PROJECT_NAME,Project,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,PROJECT_OWNER,Project Owner,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,PROJECT_STATUS,Project Status,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,PROJECT_S_OP_REPORT,Project(S&OP Report),L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,,메타 DMF0005/production,NA,TO-BE DMF0005/production 에 컬럼 없음 — 표시 구성(A5)에서 판정
+DMF0005,Production,REPORT_GROUP1,Application Gr.,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,REPORT_GROUP2,Cust.(Report),L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,REPORT_GROUP3,Product Gr.(Report),L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,REPORT_GROUP4,Product Details.(Report),L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,REPORT_GROUP5,Cyl Gr.(Report),L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,,메타 DMF0005/production,NA,TO-BE DMF0005/production 에 컬럼 없음 — 표시 구성(A5)에서 판정
+DMF0005,Production,REPORT_GROUP6,Cell Model Info,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,REPORT_GROUP7,비고1,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,REPORT_GROUP8,비고2,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,ROUTE,Channel,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,SALES_COMPANY,Sales Company,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,SALES_PLANT,Sales Plant,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,SALES_PLAN_ADJUST_YN,Sales Sync*,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,SCM_SITE_ID,Sales Site*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,SCM_SITE_ID40,Sales Site*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,SHIPTO_CODE,Rep Ship-To,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,SHIPTO_DESCRIPTION,Rep Ship-To,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,SOLDTO_CODE,Sold-To,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,SOLDTO_CUSTOMER,Sold-To Customer,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,SOLDTO_DESCRIPTION,Sold-To,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,USER_ID,Owner*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,USER_ID_82,Owner(Sales)*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,L,메타 DMF0005/production,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Production,VALID_YN,Active*,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,C,메타 DMF0005/production,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Production,VMI_LT,VMI_LT,R,META SCM_MST_SHEET_COLUMNS(DMF0005/Production),DMF0005,production,R,메타 DMF0005/production,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Purchase,ATTRIBUTE1,양극재,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,C,메타 DMF0005/purchase,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Purchase,BPMS_EXIST,BPMS Exist,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,C,메타 DMF0005/purchase,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Purchase,CELL_PER_CAR,Cell/Car,R,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,R,메타 DMF0005/purchase,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Purchase,CELL_PER_MODULE,Cell/Module,R,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,R,메타 DMF0005/purchase,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Purchase,CELL_TYPE_81,Cell Type*,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,C,메타 DMF0005/purchase,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Purchase,CELL_TYPE_82,Cell Type*,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,C,메타 DMF0005/purchase,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Purchase,CURRENCY,Currency,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,CUSTOMER_MODEL,Customer Model,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,DIVISION_ID,Division,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,EDI,EDI Incoterms,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,EDIT_FLAG,Edit Flag,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,C,메타 DMF0005/purchase,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0005,Purchase,EDI_LT,EDI Leadtime,R,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,R,메타 DMF0005/purchase,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Purchase,ITEM_CLASS_NAME,Model Type,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,ITEM_ID,Model,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,ITEM_TYPE,Item Type,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,KWH,KWh/Cell*,R,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,R,메타 DMF0005/purchase,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Purchase,LAST_UPDATED_BY,Update By,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,LAST_UPDATE_DATE,Update Date,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,LIABILITY_PERIOD,Liablity(Week),R,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,R,메타 DMF0005/purchase,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Purchase,MODULE_PER_CAR,Module/Car,R,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,R,메타 DMF0005/purchase,PASS,AS-IS right ↔ TO-BE right
+DMF0005,Purchase,MODULE_VARIANT,Module variant,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,C,메타 DMF0005/purchase,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Purchase,NICK_NAME,Nick Name,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,OWNER,Owner Name,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,PROJECT_CODE,Project Code,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,PROJECT_NAME,Project,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,PROJECT_STATUS,Project Status,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,SALES_COMPANY,Sales Company*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,SALES_PLANT,Sales Plant*,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,SALES_PLAN_ADJUST_YN,Sales Sync,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,C,메타 DMF0005/purchase,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Purchase,SCM_SITE_ID,Sales Site,L,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,L,메타 DMF0005/purchase,PASS,AS-IS left ↔ TO-BE left
+DMF0005,Purchase,USER_ID,Owner*,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,C,메타 DMF0005/purchase,PASS,AS-IS center ↔ TO-BE center
+DMF0005,Purchase,VALID_YN,Active,C,META SCM_MST_SHEET_COLUMNS(DMF0005/Purchase),DMF0005,purchase,C,메타 DMF0005/purchase,PASS,AS-IS center ↔ TO-BE center
+DMF0005,SSPM,CONTRIBUTION_TYPE,기여율 구분,C,META SCM_MST_SHEET_COLUMNS(DMF0008/SSPM),DMF0008,sspm,C,메타 DMF0008/sspm,PASS,AS-IS center ↔ TO-BE center
+DMF0005,SSPM,OS_CORP,해외법인,C,META SCM_MST_SHEET_COLUMNS(DMF0008/SSPM),DMF0008,sspm,C,메타 DMF0008/sspm,PASS,AS-IS center ↔ TO-BE center
+DMF0005,SSPM,REPORT_GROUP1,Application Gr.,C,META SCM_MST_SHEET_COLUMNS(DMF0008/SSPM),DMF0008,sspm,C,메타 DMF0008/sspm,PASS,AS-IS center ↔ TO-BE center
+DMF0005,SSPM,REPORT_GROUP2,Cust. (Report),C,META SCM_MST_SHEET_COLUMNS(DMF0008/SSPM),DMF0008,sspm,C,메타 DMF0008/sspm,PASS,AS-IS center ↔ TO-BE center
+DMF0005,SSPM,REPORT_GROUP3,Product Gr.(Report),C,META SCM_MST_SHEET_COLUMNS(DMF0008/SSPM),DMF0008,sspm,C,메타 DMF0008/sspm,PASS,AS-IS center ↔ TO-BE center
+DMF0005,SSPM,REPORT_GROUP4,Product Details.(Report),C,META SCM_MST_SHEET_COLUMNS(DMF0008/SSPM),DMF0008,sspm,C,메타 DMF0008/sspm,PASS,AS-IS center ↔ TO-BE center
+DMF0005,SSPM,REPORT_GROUP5,Cyl Gr. (Report),C,META SCM_MST_SHEET_COLUMNS(DMF0008/SSPM),DMF0008,sspm,C,메타 DMF0008/sspm,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+DMF0005,SSPM,REPORT_GROUP6,Cell Model Info,C,META SCM_MST_SHEET_COLUMNS(DMF0008/SSPM),DMF0008,sspm,C,메타 DMF0008/sspm,PASS,AS-IS center ↔ TO-BE center
+DMF0005,SSPM,REPORT_GROUP7,비고1,C,META SCM_MST_SHEET_COLUMNS(DMF0008/SSPM),DMF0008,sspm,C,메타 DMF0008/sspm,PASS,AS-IS center ↔ TO-BE center
+DMF0005,SSPM,REPORT_GROUP8,비고2,C,META SCM_MST_SHEET_COLUMNS(DMF0008/SSPM),DMF0008,sspm,C,메타 DMF0008/sspm,PASS,AS-IS center ↔ TO-BE center

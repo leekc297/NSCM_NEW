@@ -1,16 +1,16 @@
 # DMF0021 — To-Be Fact Pack 요약
 
-- page_key: `demand/sales-plan` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 27 · 엔드포인트 호출 14 (미해결 0, 주석 속 3) · 이벤트 30 · 컴포넌트 사용 34 · 하드코딩 컬럼 3 · 메시지 42
+- page_key: `demand/sales-plan` · feature: demand · As-is Fact Pack 있음
+- 파일 27 · 엔드포인트 호출 14 (미해결 0, 주석 속 3) · 이벤트 28 · 컴포넌트 사용 34 · 하드코딩 컬럼 3 · 메시지 43
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 3건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/demand/src/pages/sales-plan/components/SalesPlanForm.module.scss | component | 28 |
-| features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | component | 498 |
-| features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | component | 1250 |
-| features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx | component | 302 |
+| features/demand/src/pages/sales-plan/components/SalesPlanForm.module.scss | component | 8 |
+| features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | component | 462 |
+| features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | component | 1255 |
+| features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx | component | 305 |
 | features/demand/src/pages/sales-plan/index.ts | index | 2 |
 | features/demand/src/pages/sales-plan/sales-plan.constants.ts | constants | 227 |
 | features/demand/src/pages/sales-plan/sales-plan.types.ts | types | 59 |
@@ -22,7 +22,7 @@
 | features/demand/src/pages/sales-plan/utils/sales-plan.auth.test.ts | test | 19 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.auth.ts | util | 12 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.division.ts | util | 93 |
-| features/demand/src/pages/sales-plan/utils/sales-plan.editLock.test.ts | test | 177 |
+| features/demand/src/pages/sales-plan/utils/sales-plan.editLock.test.ts | test | 179 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts | util | 264 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.gridCombos.ts | util | 50 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.insertAnchor.test.ts | test | 69 |
@@ -31,14 +31,14 @@
 | features/demand/src/pages/sales-plan/utils/sales-plan.save.test.ts | test | 67 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.save.ts | util | 203 |
 | features/demand/src/pages/sales-plan/utils/sales-plan.searchCombos.ts | util | 78 |
-| features/demand/src/pages/sales-plan/utils/sales-plan.validate.ts | util | 131 |
+| features/demand/src/pages/sales-plan/utils/sales-plan.validate.ts | util | 132 |
 | features/demand/src/pages/sales-plan/__asis-analysis__.md | other | 261 |
 | features/demand/src/pages/sales-plan/__asis-mapping__.md | mapping | 783 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 5 | Y | SalesPlanForm.tsx:96 SalesPlanForm.tsx:113 SalesPlanGrid.tsx:137 SalesPlan.tsx:69 SalesPlan.tsx:162 |
+| (useTabComboQueries) | hook | 5 | Y | SalesPlanForm.tsx:93 SalesPlanForm.tsx:110 SalesPlanGrid.tsx:137 SalesPlan.tsx:69 SalesPlan.tsx:162 |
 | DMF0021/dayRange//call-proc | hook | 1 | Y | SalesPlan.tsx:102 |
 | DMF0021/Sales Plan//call-proc | hook | 1 | Y | SalesPlan.tsx:121 |
 | DMF0021/spreadTitle//call-proc | hook | 1 | Y | SalesPlan.tsx:130 |
@@ -61,18 +61,16 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 196 |
-| SearchArea | onSearch | onSearch | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 272 |
-| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,set,String,onDivisionChange | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 289 |
-| CustomDropdown | onChange | <arrow> set,toMulti,String | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 392 |
-| PeriodField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 401 |
-| CustomDropdown | onChange | <arrow> validation.validateBucketChange,hasPendingChanges,setBucketType | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 413 |
-| div | onKeyDownCapture | openFieldModalOnEnter | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 430 |
-| ProjectField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 434 |
-| div | onKeyDownCapture | openFieldModalOnEnter | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 444 |
-| ItemField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 448 |
-| OwnerField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 472 |
-| Checkbox | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 488 |
+| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 193 |
+| SearchArea | onSearch | onSearch | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 241 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,set,String,onDivisionChange | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 258 |
+| CustomDropdown | onChange | <arrow> set,toMulti,String | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 358 |
+| PeriodField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 367 |
+| CustomDropdown | onChange | <arrow> validation.validateBucketChange,hasPendingChanges,setBucketType | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 379 |
+| ProjectField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 399 |
+| ItemField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 411 |
+| OwnerField | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 434 |
+| Checkbox | onChange | <arrow> set | jsx | features/demand/src/pages/sales-plan/components/SalesPlanForm.tsx | 452 |
 | g | updatedLayout | attach | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 277 |
 | g | formatItem | formatHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 749 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 824 |
@@ -84,8 +82,8 @@
 | g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1091 |
 | g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1141 |
 | f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx | 1210 |
-| ColumnLayoutModal | onSave | <arrow> onSettingChanged,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx | 230 |
-| MeasureSelectModal | onApply | <arrow> onSettingChanged,applyVisibleMeasures,staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx | 277 |
+| ColumnLayoutModal | onSave | <arrow> onSettingChanged,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx | 233 |
+| MeasureSelectModal | onApply | <arrow> onSettingChanged,applyVisibleMeasures,staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx | 280 |
 | SalesPlanForm | onSearch | handleSearch | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 530 |
 | SalesPlanForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 531 |
 | SalesPlanGrid | onPopupCellDblClick | handlePopupCellDblClick | jsx | features/demand/src/pages/sales-plan/SalesPlan.tsx | 566 |
@@ -134,7 +132,7 @@
 | LBL00684 | 2 |
 | LBL00112 | 1 |
 | LBL00001 | 1 |
-| LBL00044 | 1 |
+| LBL00044 | 2 |
 | LBL00080 | 2 |
 | LBL00011 | 2 |
 | LBL00085 | 1 |
@@ -164,7 +162,7 @@
 | LBL00024 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0003(16), DMF0021(14), DMF0082(7), DMF0020(4), DMF0014(3), DMF0040(2), DMF0053(2), SCM0001(1), SYS0004(1), COM0008(1), DMF0048(1)
+- 화면ID: DMF0003(16), DMF0021(14), DMF0082(7), DMF0020(4), DMF0014(3), DMF0040(2), DMF0053(2), SCM0001(1), SYS0004(1), COM0008(1), DMF0005(1), DMF0048(1)
 - SP/PKG: P_DMF0021_GET_SPREAD_TITLE(6), PR_GET_DAY_RANGE(6), P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX(5), P_USERINFO(3), DMF0003_GET_BUCKET_TYPE_CODE(2), P_DMF0021_GET_SALES_PLAN_MEASUREINFO(2), P_USER_DEPT_ID(2), PR_GET_SHEET_COLUMN_LIST(1), P_BUCKET(1), P_BUCKET_TYPE(1), PKG_DMF0021(1), P_DMF0021_SAVE_DM_PLN_SALES_PLAN_ALL(1), P_CREATED_BY(1), DMF0002_GET_TITLESET_POPUP(1), DMF0003_GET_SPREAD_TITLE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

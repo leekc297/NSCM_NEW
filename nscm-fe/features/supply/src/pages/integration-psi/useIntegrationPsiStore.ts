@@ -49,6 +49,8 @@ interface Action {
   reset: () => void;
   setSearchCondition: (p: Partial<SearchCondition>) => void;
   setDivision: (divisionId: string) => void;
+  // PlanDate 변경 = 기간 재설정(그 PlanDate 기준 기본값) + 그리드 초기화(filters clear). 사용자 지시 2026-10-30.
+  setPlanDate: (planStartYyyymmdd: string, fromYyyymm: string, toYyyymm: string) => void;
   // F10(Reset Condition) 화면 조회조건 값 초기화 — Division·filters(그리드)는 보존.
   resetConditionValues: () => void;
   setFilter: () => void;
@@ -137,6 +139,21 @@ export const useIntegrationPsiStore = createPersistedStoreWithTab<State & Action
           divisionId,
         };
         state.filters = {}; // 그리드 데이터 clear (design 02 §5.2 division 변경 = Grid 초기화)
+      }),
+    // PlanDate 변경(싱글 콤보) = 기간(from/to)을 그 PlanDate 기준 기본값으로 재설정하고 **그리드도 초기화**한다
+    //   (사용자 지시 2026-10-30). AS-IS SetChangedPeriod(무조건 재계산 cs:1859→293~294) + 조회결과 clear
+    //   (ClearDataSource) 파리티. filters 를 비우면 useTabProcQuery enabled=false 로 이전 응답이 즉시 사라진다
+    //   (setDivision 과 동일 메커니즘). planStartYyyymmdd/period 외 다른 조건(nick/cellItem/item/qty)은 보존한다
+    //   — Division 변경과 달리 PlanDate 는 cascade 최상위가 아니므로 전 조건 초기화는 하지 않는다.
+    setPlanDate: (planStartYyyymmdd, fromYyyymm, toYyyymm) =>
+      set(state => {
+        state.searchCondition = {
+          ...state.searchCondition,
+          planStartYyyymmdd,
+          fromYyyymm,
+          toYyyymm,
+        };
+        state.filters = {}; // 그리드 데이터 clear (PlanDate 변경 = Grid 초기화)
       }),
     // F10(Reset Condition) 화면 조회조건 값 초기화 — 공용 SubTitle F10 은 2026-10-14 이후 서버 저장분만
     //   지우고 화면 값은 건드리지 않는다(AS-IS 파리티). 사용자 지시(2026-10-19)로 이 화면은 F10 에 화면 값

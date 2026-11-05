@@ -62,10 +62,27 @@ def tobe_order_by(body):
         if ch == ',' and d == 0: parts.append(cur); cur = ''
         else: cur += ch
     parts.append(cur)
+    def _unwrap(p):
+        """NLSSORT(A.COL, 'NLS_SORT=…') · UPPER(COL) · NVL(COL, '/') 같은 래퍼의 첫 인자를 키로(2026-10-29 SCP0041 'NLSSORT' 가 키로 잡혀 1번째 키부터 다름 허위 FAIL)"""
+        for _ in range(3):
+            m = re.match(r'(?i)^(NLSSORT|UPPER|LOWER|TRIM|LTRIM|RTRIM|NVL|NVL2|COALESCE|TO_CHAR|TO_NUMBER|TO_DATE|SUBSTR|CAST|DECODE|REGEXP_REPLACE|REGEXP_SUBSTR|TRANSLATE|REPLACE|LPAD|RPAD|ROUND|TRUNC|ABS|GREATEST|LEAST|INSTR|LENGTH)\s*\((.*)$', p.strip())
+            if not m: return p
+            inner = m.group(2); d = 0; out = ''
+            for ch in inner:
+                if ch == '(': d += 1
+                elif ch == ')':
+                    if d == 0: break
+                    d -= 1
+                elif ch == ',' and d == 0: break
+                out += ch
+            tail_ = inner[len(out):]
+            p = out.strip() + (' DESC' if re.search(r'(?i)\bDESC\b', tail_) else '')
+        return p
     for p in parts:
         p = ' '.join(p.split())
         if not p: continue
         desc = bool(re.search(r'(?i)\bDESC\b', p))
+        p = _unwrap(p)
         m = re.match(r'(?i)^CASE\s+WHEN\s+(.*?)\s+THEN\s+([\w.]+)\s*(?:ELSE\s+\w+\s*)?END', p)
         if m: keys.append((m.group(2).split('.')[-1].upper(), m.group(1), desc)); continue
         m = re.match(r'^([\w.]+)', p)
@@ -112,6 +129,11 @@ def main():
             cache[pkg] = (strip_comments(''.join(r[0] for r in cur.fetchall())), meta[1]); return cache[pkg]
         by_sp = {}
         for r in rules: by_sp.setdefault(r['sp'], []).append(r)
+        # CR-075(2026-10-28 사용자): 그리드에 표시되는 조회 SP = PROC_M 의 sheet 가 SHEET_COLUMNS 메타를 가진 시트. 결과 1행 집계·룩업 SP 는 대상 아님
+        grid_sheets = {r['sheet_name'] for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'sheet_columns.csv')) if r.get('program_id', '').upper() == mid}
+        sheet_of = {tail(r['proc']): r.get('sheet', '') for r in pm_all if r.get('menu_id', '').upper() == mid}
+        gold = {tail(g.get('asis_sp', '')): g for g in rdcsv(os.path.join(DOC, 'golden', '_summary.csv')) if g.get('screen', '').upper() == mid}
+        pkg_msgs = []  # MS1(메시지 의미 대조)용 — TO-BE PKG 본문이 쓰는 MSG ID
         for sp, rs in by_sp.items():
             tp = tobe_proc(sp)
             row = {'menu_id': mid, 'sp': sp, 'tobe_proc': tp}
@@ -127,9 +149,16 @@ def main():
                 if r.get('depth') and str(r['depth']) != '0': continue  # 서브쿼리(TOP) 정렬은 결과 순서 규칙이 아니다
                 base = {**row, 'asis_file': r['file'], 'asis_line': r['line'], 'guard': r['guard'], 'asis_keys': r['keys'], 'tobe_last_ddl': ddl, 'tobe_order_by': ' '.join(ob.split())[:300]}
                 if not body: out.append({**base, 'tobe_keys': '', 'verdict': 'REVIEW', 'note': f'TO-BE 본문 없음(ALL_SOURCE {pkg}.{proc} 미발견)'}); continue
+                if body and not any(m_['proc'] == proc for m_ in pkg_msgs): pkg_msgs.append({'pkg': pkg, 'proc': proc, 'msg_ids': ','.join(sorted(set(re.findall(r'MSG\d{5}', body))))})
                 if not r['keys']:
-                    if not tkeys: out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': 'AS-IS·TO-BE 모두 ORDER BY 없음(결과 순서 미정) — 동일'})
-                    elif 'ORDER BY 없음' in r['note']: out.append({**base, 'tobe_keys': ','.join(effective(tkeys, '')), 'verdict': 'REVIEW', 'note': 'AS-IS 에 없는 정렬을 TO-BE 가 추가 — 의도(결정적 순서) 확인'})
+                    if not tkeys:
+                        sh = sheet_of.get(tail(sp), ''); g = gold.get(tail(sp), {}); nrows = int(g.get('asis_rows') or g.get('tobe_rows') or -1)
+                        is_save = bool(re.search(r'(?i)_(SAVE|SET|INS|UPD|DEL|CHK|CHECK)', sp))
+                        if is_save: out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': '저장 SP — 결과 순서 대상 아님'})
+                        elif sh and sh not in grid_sheets: out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': f"AS-IS·TO-BE 모두 ORDER BY 없음 — 그리드 비바인딩 룩업 SP(PROC_M sheet '{sh}' 는 SHEET_COLUMNS 없음) → CR-075 대상 아님"})
+                        elif 0 <= nrows <= 1: out.append({**base, 'tobe_keys': '', 'verdict': 'NA', 'note': f'AS-IS·TO-BE 모두 ORDER BY 없음 — 결과 {nrows}행 집계 SP → CR-075 대상 아님'})
+                        else: out.append({**base, 'tobe_keys': '', 'verdict': 'FAIL', 'note': f"TO-BE PKG 에 ORDER BY 없음(AS-IS 도 없음) — 그리드 표시 조회 SP 는 결정적 순서 필수(TO-BE 룰 CR-075 · 사용자 판정 2026-10-28) → PKG {pkg}.{proc} 에 ORDER BY 추가(DB 객체 보완)"})
+                    elif 'ORDER BY 없음' in r['note']: out.append({**base, 'tobe_keys': ','.join(effective(tkeys, '')), 'verdict': 'PASS', 'note': 'AS-IS 에 없던 ORDER BY 를 TO-BE 가 추가 — 결정적 순서(TO-BE 룰 CR-075 충족인'})
                     else: out.append({**base, 'tobe_keys': ','.join(effective(tkeys, r['guard'])), 'verdict': 'REVIEW', 'note': 'AS-IS 키 해석 실패 — 원문 확인: ' + r['raw'][:120]})
                     continue
                 eff = effective(tkeys, r['guard']); want = [k.strip().upper() for k in r['keys'].split(',') if k.strip()]
@@ -141,6 +170,8 @@ def main():
                     v, note = 'FAIL', f"{i + 1}번째 키부터 다름: AS-IS {want[i:i + 3]} ↔ TO-BE {eff[i:i + 3]}" + (' · TO-BE 키 부족' if len(eff) < len(want) else '')
                 out.append({**base, 'tobe_keys': ','.join(eff), 'verdict': v, 'note': note})
     od = os.path.join(DOC, 'verify', mid); os.makedirs(od, exist_ok=True)
+    with open(os.path.join(od, 'tobe_pkg_msgs.csv'), 'w', encoding='utf-8-sig', newline='') as fp:  # MS1 메시지 의미 대조(judge) 입력
+        w = csv.DictWriter(fp, fieldnames=['pkg', 'proc', 'msg_ids']); w.writeheader(); w.writerows(pkg_msgs)
     p = os.path.join(od, 'sort_check.csv')
     with open(p, 'w', encoding='utf-8-sig', newline='') as fp:
         w = csv.DictWriter(fp, fieldnames=COLS); w.writeheader(); [w.writerow({k: x.get(k, '') for k in COLS}) for x in out]

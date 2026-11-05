@@ -9,29 +9,36 @@
 import { expect, type Page, type Locator, type Response } from '@playwright/test';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { applyGridMutations } from './mutate';  // CheckList 자기검증(변이 시험, 2026-10-28) — CL_MUTATE 없으면 무동작
 
 export const CFG = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'e2e.config.json'), 'utf8').replace(/^﻿/, ''));
 export const FE: string = process.env.E2E_FE || CFG.feUrl;
 export const BE: string = process.env.E2E_BE || CFG.beUrl;
 
-export type ProcCall = { url: string; menu: string; sheet: string; btn: string; status: number; rows: number | null; ms: number; req?: string; res?: string; body?: string };
+export type ProcCall = { url: string; menu: string; sheet: string; btn: string; status: number; rows: number | null; ms: number; req?: string; res?: string; body?: string; dur?: number; sets?: Record<string, Record<string, unknown>[]> };
 
 export class Nscm {
   calls: ProcCall[] = [];
   /** 2026-10-24 W1: 콤보 API(admin/combo·combo-muti) 요청 본문·응답 건수 — AS-IS 원천 비교의 TO-BE 인자 증거 */
-  combos: { url: string; body: string; status: number; n: number | null; keys: string[]; rows?: { c: string; v: string }[] }[] = [];
+  combos: { url: string; body: string; status: number; n: number | null; keys: string[]; rows?: { c: string; v: string }[]; user?: string }[] = [];
+  /** 현재 로그인 계정(loginAs 가 갱신) — 콤보 수집·세션 축 검사기(combo_live_check)가 쓴다(2026-11-03) */
+  curUser = '';
   /** 2026-10-21: 화면 콘솔 오류·페이지 예외 — 공용 그리드 생성이 Wijmo 단언으로 죽어도(SCP0100 "Unknown property inner") 라벨 누락으로만 보였던 사고. smoke 가 어노테이션 `console` 로 남기고 FAIL 로 세운다 */
   consoleErrors: string[] = [];
   /** 2026-10-26: 이 화면 요청 중 HTTP 5xx(모든 /api/ — 콤보·call-proc·메타) — BE 로그 DB 오류를 이 테스트에 귀속하는 근거 */
-  serverErrors: { url: string; status: number }[] = [];
+  serverErrors: { url: string; status: number; body?: string }[] = [];
+  /** 2026-10-31 사용자 지정 조회조건(users.json screens[<ID>].conds: 라벨 → 값) — openScreen 때 읽고 첫 search() 직전에 1회 적용(SCP0111 Plan Date 20260907 = 데이터 있는 조건) */
+  userConds: Record<string, string> = {};
+  private userCondsApplied = false;
+  userCondsNote = '';
   constructor(public page: Page) {
-    page.on('response', (res: Response) => { if (res.status() >= 500 && /\/api\//.test(res.url())) this.serverErrors.push({ url: res.url().slice(0, 200), status: res.status() }); });
+    page.on('response', (res: Response) => { if (res.status() >= 500 && /\/api\//.test(res.url())) { const rec = { url: res.url().slice(0, 200), status: res.status(), body: '' }; this.serverErrors.push(rec); res.text().then(t => { rec.body = String(t || '').slice(0, 600); }).catch(() => undefined); } });  // 본문(ORA 코드)으로 '이 화면의' DB 오류인지 가린다(2026-10-29)
     page.on('pageerror', err => { this.consoleErrors.push(`pageerror: ${String(err && err.message || err).slice(0, 300)}`); });
     page.on('console', msg => { if (msg.type() === 'error') { const t = msg.text(); if (!/favicon|net::ERR_|Failed to load resource|\[vite\]|React DevTools|Download the React/i.test(t)) this.consoleErrors.push(`console.error: ${t.slice(0, 300)}`); } });
     page.on('response', async (res: Response) => {
       const u = res.url();
       if (/\/admin\/combo(?:-muti)?(?:\?|$)/.test(u)) {
-        const rec = { url: u, body: '', status: res.status(), n: null as number | null, keys: [] as string[] };
+        const rec = { url: u, body: '', status: res.status(), n: null as number | null, keys: [] as string[], rows: [] as { c: string; v: string }[], user: this.curUser };
         this.combos.push(rec);
         try { rec.body = (res.request().postData() || '').slice(0, 2000); } catch { /* no body */ }
         try {
@@ -49,6 +56,7 @@ export class Nscm {
       // 응답 헤더 시점에 먼저 기록(동기) — json 파싱을 기다린 뒤 push 하면 search() 가 calls 를 자른 뒤에 들어가 '호출 0' 으로 오판한다(2026-10-20)
       const rec: ProcCall = { url: u, menu: decodeURIComponent(m[1]), sheet: decodeURIComponent(m[2]), btn: decodeURIComponent(m[3]), status: res.status(), rows: null, ms: 0 };
       this.calls.push(rec);
+      res.finished().then(() => { const tm = res.request().timing(); if (tm && tm.responseEnd > 0) rec.dur = Math.round(tm.responseEnd); }).catch(() => undefined);  // 요청 시작~응답 끝(EG415 · Node 왕복 제외)
       // 2026-10-23 조회조건 동작 검사: 조회 요청 본문(조건 인자) — 조건을 바꾼 뒤 인자가 달라졌는지 비교한다(최대 4000자)
       try { const pd = res.request().postData() || ''; rec.body = pd.length > 4000 ? pd.slice(0, 4000) : pd; } catch { /* no body */ }
       try {
@@ -60,6 +68,8 @@ export class Nscm {
           if (rec.req != null) { try { rec.res = JSON.stringify(j).slice(0, 300); } catch { /* ignore */ } }
           const arr = Array.isArray(j) ? j : (j?.data ?? j?.result ?? j?.rows ?? null);
           rec.rows = Array.isArray(arr) ? arr.length : (arr && typeof arr === 'object' ? Object.values(arr).reduce((n: number, v: unknown) => n + (Array.isArray(v) ? v.length : 0), 0) : null);
+          // 2026-11-03 부가 결과셋(기준월·컷오프 등 작은 셋)을 남긴다 — 시나리오 dynlock 이 화면 자신의 응답값(AS-IS ds.Tables[1] 과 같은 원천)으로 경계를 정한다
+          { const sets: Record<string, Record<string, unknown>[]> = {}; const scan = (o: unknown) => { if (!o || typeof o !== 'object' || Array.isArray(o)) return; for (const [k, v] of Object.entries(o as Record<string, unknown>)) { if (v === arr) continue; if (Array.isArray(v) && v.length > 0 && v.length <= 2000 && v[0] && typeof v[0] === 'object') sets[k] = (v as Record<string, unknown>[]).slice(0, 3); } }; scan(j); scan((j as { result?: unknown })?.result); scan((j as { data?: unknown })?.data); scan(arr); if (Object.keys(sets).length) rec.sets = sets; }
         }
       } catch { /* 스트리밍/비JSON */ }
     });
@@ -71,19 +81,31 @@ export class Nscm {
    *  /user/login 은 useSessionStore.ts 가 실제로 쓰는 엔드포인트라 FE 쿠키 동작(SameSite/credentials)까지 그대로 재현된다. 실패 시에만 dev-login 으로 한 번 더 시도.
    */
   async loginAs(userId: string) {
+    this.curUser = userId;
     // FE 는 BE 를 직접 부르지 않고 vite 프록시(FE/api → BE)를 거친다(axios baseURL '/api') → 세션 쿠키는 FE origin 에 있어야 한다.
     // BE(localhost:8080) 에 직접 로그인하면 쿠키가 다른 호스트에 남아 FE 는 로그인 화면을 보여준다(2026-10-20 실측 스크린샷).
     const api = `${FE}${CFG.feApiPrefix ?? '/api'}`;
     await this.page.goto(FE, { waitUntil: 'domcontentloaded' });
-    const r = await this.page.evaluate(async ({ api, id }) => {
+    const post = () => this.page.evaluate(async ({ api, id }) => {
       try {
         const res = await fetch(`${api}/user/login`, { method: 'POST', credentials: 'include', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ userId: id }) });
         return { status: res.status, text: (await res.text()).slice(0, 300) };
       } catch (e) { return { status: 0, text: String(e) }; }
     }, { api, id: userId });
+    // 2026-10-29: 로그인 401/5xx/무응답 = 계정 문제만이 아니다 — BE 커넥션 풀(HikariPool maxPoolSize) 고갈이면 PR_GET_NSCM_USER 가 60초 대기 후 SqlException → UsernameNotFound → 401(-9998).
+    //   실측: 5화면 동시 CheckList(21:18) 중 21:24~21:26 풀 고갈(BE 로그 'Connection is not available … total=10, active=10, waiting=22') → SCP0020·SCP0096·SCP0111 의 @trace 1개씩이 같은 분에 로그인 실패.
+    //   일시 장애라 간격을 두고 재시도한다(최대 LOGIN_TRIES회 · LOGIN_WAIT_MS 간격 · 픽스처 timeout 360s 안). 그래도 실패면 dev-login 폴백 뒤 사유(풀 고갈 가능)를 붙여 던진다.
+    const LOGIN_TRIES = Number(process.env.E2E_LOGIN_TRIES || CFG.loginTries || 4), LOGIN_WAIT_MS = Number(process.env.E2E_LOGIN_WAIT_MS || CFG.loginWaitMs || 15_000);
+    let r = await post(); const hist: string[] = [];
+    for (let i = 1; (r.status < 200 || r.status >= 300) && i < LOGIN_TRIES; i++) {
+      hist.push(`${i}회 HTTP ${r.status}`);
+      await this.page.waitForTimeout(LOGIN_WAIT_MS);
+      await this.page.goto(FE, { waitUntil: 'domcontentloaded' }).catch(() => undefined);
+      r = await post();
+    }
     if (r.status < 200 || r.status >= 300) {
       const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });
-      if (!res || res.status() >= 400) throw new Error(`로그인 실패: POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동. tools/E2E/probe-accounts.js 로 가능 계정 확인`);
+      if (!res || res.status() >= 400) throw new Error(`로그인 실패(${LOGIN_TRIES}회 시도${hist.length ? ' · ' + hist.join('·') : ''}): POST ${api}/user/login HTTP ${r.status} ${r.text} · dev-login HTTP ${res ? res.status() : '-'} — '${userId}' 가 SCM_ADM_USER_M/PR_GET_NSCM_USER 에 없거나 BE/FE 미기동, 또는 BE 커넥션 풀 고갈(동시 E2E 과다 — BE 로그 'Connection is not available' · config-local.yml maxPoolSize 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);
     }
     await this.page.goto(FE, { waitUntil: 'domcontentloaded' });
     await this.page.waitForLoadState('networkidle').catch(() => undefined);
@@ -162,6 +184,12 @@ export class Nscm {
   /** MDI 딥링크로 화면을 연다. 반환: authorized(권한 안내가 뜨지 않음), notFound */
   async openScreen(menuId: string) {
     this.calls = []; this.searchExpanded = false; this.consoleErrors = [];
+    this.userConds = {}; this.userCondsApplied = false; this.userCondsNote = '';
+    try { const uj = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'users.json'), 'utf8').replace(/^\uFEFF/, '')); const sc = (uj.screens || {})[menuId.toUpperCase()] || {};
+      // condsValidUntil(ISO) 이 지났으면 무시 — '이번만 한정' 조건(2026-10-31 사용자: SCP0111 Plan Date 20260907 은 이번 실행만)
+      const until = sc.condsValidUntil ? Date.parse(sc.condsValidUntil) : NaN;
+      if (sc.conds && typeof sc.conds === 'object' && !(isFinite(until) && Date.now() > until)) this.userConds = sc.conds;
+      else if (sc.conds && isFinite(until)) console.log(`[userConds] ${menuId}: 지정 조건 유효기간(${sc.condsValidUntil}) 경과 — 기본 조건으로 조회`); } catch { /* 명부 없음 */ }
     await this.page.goto(`${FE}/view/${menuId}`, { waitUntil: 'domcontentloaded' });
     await this.dismissNotices();
     await this.activateScreenTab(menuId);
@@ -183,8 +211,8 @@ export class Nscm {
     const dlg = this.page.locator('[role="dialog"]:visible, [role="alertdialog"]:visible, .MuiDialog-root:visible').last();
     if (!(await dlg.isVisible({ timeout: 1_000 }).catch(() => false))) return false;
     const names = prefer === 'ok' ? [/^(확인|OK|Yes|예|Confirm|저장|Save|닫기|Close)$/i] : [/^(취소|Cancel|No|아니오)$/i, /^(확인|OK|닫기|Close)$/i];
-    for (const n of names) { const b = dlg.getByRole('button', { name: n }).first(); if (await b.isVisible().catch(() => false)) { await b.click(); return true; } }
-    if (prefer === 'ok') { const last = dlg.getByRole('button').last(); if (await last.isVisible().catch(() => false)) { await last.click(); return true; } }
+    for (const n of names) { const b = dlg.getByRole('button', { name: n }).first(); if (await b.isVisible().catch(() => false)) { await b.click({ timeout: 5_000 }).catch(() => undefined); return true; } }
+    if (prefer === 'ok') { const last = dlg.getByRole('button').last(); if (await last.isVisible().catch(() => false)) { await last.click({ timeout: 5_000 }).catch(() => undefined); return true; } }
     await this.page.keyboard.press('Escape'); return true;
   }
 
@@ -239,8 +267,11 @@ export class Nscm {
     // force(2026-10-23 조회조건 동작 검사): 플래그와 무관하게 '지금 접혀 있으면' 다시 펼친다 — 접힘 판정 = 보이는 조회영역 안 MUI Collapse 가 hidden
     if (force) {
       const collapsed = await this.page.evaluate(() => Array.from(document.querySelectorAll('.MuiCollapse-hidden')).some(e => !!(e as HTMLElement).closest('form, [class*="SearchArea"], [class*="searchArea"]'))).catch(() => false);
-      if (!collapsed) return true;
+      // 2026-10-29(SCP0100): MuiCollapse 가 아니라 자체 토글(_toggleButton_)로 두 번째 줄을 숨기는 조회영역 — 크기 0 인 formItem 이 있으면 접힌 것으로 본다
+      const hiddenItems = await this.hiddenFormItems();
+      if (!collapsed && !hiddenItems) return true;
       this.searchExpanded = false;
+      if (!collapsed && hiddenItems) { if (await this.clickSearchToggle(hiddenItems)) { this.searchExpanded = true; return true; } }
     }
     if (this.searchExpanded) return true;
     const searchBtn = await this.visibleFirst(this.page.getByRole('button', { name: /^(조회|Search)(\(F5\))?$/ }));
@@ -253,6 +284,20 @@ export class Nscm {
     this.searchExpanded = true; return true;
   }
   private searchExpanded = false;
+  /** 크기 0(숨김) 인 조회조건 칸 수 */
+  private async hiddenFormItems(): Promise<number> {
+    return this.page.evaluate(() => Array.from(document.querySelectorAll('[class*="_formItem_"]')).filter(e => !e.closest('.wj-flexgrid, [role="dialog"], .MuiDialog-root')).filter(e => { const b = (e as HTMLElement).getBoundingClientRect(); return b.width === 0 || b.height === 0; }).length).catch(() => 0);
+  }
+  /** 조회영역 토글 버튼(_toggleButton_ · 텍스트 없는 아이콘 버튼)을 눌러 숨은 칸이 줄면 성공, 아니면 되돌린다 */
+  private async clickSearchToggle(before: number): Promise<boolean> {
+    const btn = this.page.locator('[class*="_toggleButton_"], [class*="toggleButton"]').filter({ hasNot: this.page.locator('.wj-flexgrid') }).first();
+    if (!(await btn.isVisible({ timeout: 1_000 }).catch(() => false))) return false;
+    await btn.click({ timeout: 3_000 }).catch(() => undefined); await this.page.waitForTimeout(600);
+    const after = await this.hiddenFormItems();
+    if (after < before) return true;
+    await btn.click({ timeout: 3_000 }).catch(() => undefined); await this.page.waitForTimeout(400);
+    return false;
+  }
 
   /** Division 선택 — DivisionField(콤보) 가 있으면 옵션 선택 */
   async setDivision(code: string) {
@@ -265,8 +310,38 @@ export class Nscm {
   }
 
   /** 조회 실행 — SearchArea 조회 버튼 → call-proc(SEARCH 류) 응답 대기 */
+  /** 사용자 지정 조회조건 적용 — 라벨 트랙 글자로 FormItem 칸을 찾아 콤보면 값(숫자만 비교)이 들어있는 옵션을, 아니면 첫 입력칸에 값을 넣는다. 적용 결과는 userCondsNote 에 남긴다 */
+  async applyUserConds(): Promise<string> {
+    const notes: string[] = [];
+    for (const [label, value] of Object.entries(this.userConds || {})) {
+      try {
+        await this.expandSearchArea().catch(() => undefined);
+        const nrm = (s: string) => String(s || '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
+        const item = this.page.locator('[class*="_formItem_"], [class*="formItem"]').filter({ has: this.page.locator(':scope > :first-child', { hasText: new RegExp(label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') }) }).first();
+        if (!(await item.isVisible({ timeout: 3_000 }).catch(() => false))) { notes.push(`${label}: 칸 없음`); continue; }
+        const combo = item.locator('[role="combobox"]').first();
+        if (await combo.count()) {
+          await combo.click({ timeout: 3_000 }).catch(() => undefined);
+          const opts = this.page.locator('.MuiAutocomplete-popper [role="option"], [role="listbox"] [role="option"]');
+          await opts.first().waitFor({ state: 'visible', timeout: 4_000 }).catch(() => undefined);
+          const texts = await opts.allInnerTexts().catch(() => [] as string[]);
+          const digits = value.replace(/\D/g, '');
+          let idx = texts.findIndex(t => nrm(t) === nrm(value) || (digits.length >= 6 && t.replace(/\D/g, '').includes(digits)) || nrm(t).includes(nrm(value)));
+          if (idx >= 0) { await opts.nth(idx).click({ timeout: 3_000 }).catch(() => undefined); notes.push(`${label}='${texts[idx].trim().slice(0, 30)}'`); }
+          else { await this.page.keyboard.press('Escape').catch(() => undefined); notes.push(`${label}: 옵션 '${value}' 없음(후보 ${texts.length})`); }
+        } else {
+          const inp = item.locator('input:not([type="hidden"]), textarea').first();
+          if (await inp.count()) { await inp.fill(value, { timeout: 3_000 }).catch(() => undefined); await inp.press('Tab').catch(() => undefined); notes.push(`${label}='${value}'`); } else notes.push(`${label}: 입력칸 없음`);
+        }
+      } catch (e) { notes.push(`${label}: 적용 실패 ${String((e as Error).message || e).slice(0, 60)}`); }
+    }
+    this.userCondsNote = notes.join(' · ');
+    if (notes.length) console.log(`[userConds] ${this.userCondsNote}`);
+    return this.userCondsNote;
+  }
   async search(opts: { timeout?: number } = {}) {
     await this.clearDialogs();
+    if (!this.userCondsApplied && Object.keys(this.userConds || {}).length) { this.userCondsApplied = true; await this.applyUserConds(); }
     const before = this.calls.length;
     const btn = await this.visibleFirst(this.page.getByRole('button', { name: /^(조회|Search)(\(F5\))?$/ }));
     const t0 = Date.now();
@@ -277,6 +352,7 @@ export class Nscm {
     await waitSearch;
     await this.page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => undefined);
     const mine = this.calls.slice(before); mine.forEach(c => (c.ms = Date.now() - t0));
+    await applyGridMutations(this.page);  // 조회 직후 그리드 변이 주입(CL_MUTATE 지정 시만)
     return mine;
   }
 
@@ -415,19 +491,26 @@ export class Nscm {
   }
 
   /** 저장 — Save(F7) 클릭 → SAVE call-proc 응답/알림 확인. 확인 다이얼로그는 OK */
-  async save() {
+  async save(opts: { timeout?: number; quickBlock?: boolean } = {}) {
     const before = this.calls.length;
     // 2026-10-20: 응답 감시를 클릭 '전에' 건다 — 뒤에 걸면 빠른 응답을 놓쳐 60s 를 그대로 소모했다(실측: 저장 61s). SAVE 류 call-proc 만 기다린다
-    const waitSave = this.page.waitForResponse(r => /call-proc/.test(r.url()) && /\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i.test(r.url()), { timeout: 60_000 }).catch(() => undefined);
+    const waitSave = this.page.waitForResponse(r => /call-proc/.test(r.url()) && /\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i.test(r.url()), { timeout: opts.timeout ?? 60_000 }).catch(() => undefined);
+    // 클릭 전에 떠 있던 토스트는 이번 저장의 결과가 아니다(2026-10-31 SCP0028 지난 성공 토스트를 검증 차단 사유로 오기록)
+    const staleToast = new Set((await this.page.locator('.MuiSnackbar-root, [role="alert"], .Toastify__toast').allInnerTexts().catch(() => [] as string[])).map(t => t.replace(/\s+/g, ' ').trim()));
     await this.subButton('Save').click({ timeout: 10_000 });
+    // 저장 전 토스트·알림(업무 검증·변경 없음)은 닫기 전에 읽는다 — closeAlert 뒤에는 내용이 없다
+    await this.page.waitForTimeout(500); let toast = ''; for (const t of await this.page.locator('.MuiSnackbar-root, [role="alert"], .Toastify__toast').allInnerTexts().catch(() => [] as string[])) { const v = t.replace(/\s+/g, ' ').trim(); if (v && !staleToast.has(v)) { toast = v; break; } }
+    const preAlert = await this.alertText().catch(() => '');
+    const preCancel = !!preAlert && await this.page.locator('[role="dialog"]:visible, [role="alertdialog"]:visible, .MuiDialog-root:visible').last().getByRole('button', { name: /^(취소|Cancel|No|아니오)$/i }).first().isVisible().catch(() => false);
     await this.closeAlert('ok');
-    await waitSave;
+    // quickBlock: 취소 버튼 없는 알림 = 저장 전 차단 — 응답을 기다리지 않는다(저장 구간을 가짜 응답으로 끊는 시험 전용)
+    if (!(opts.quickBlock && preAlert && !preCancel)) await waitSave;
     await this.page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => undefined);
     // 결과 알림(성공/ORA 오류)은 닫힐 때까지 최대 3회 — 남아 있으면 다음 클릭(조회·셀 편집)이 전부 막힌다(2026-10-20 실측)
     let msg = ''; for (let k = 0; k < 3; k++) { const m = await this.alertText(); if (!m) break; msg = msg || m; await this.closeAlert('ok'); await this.page.waitForTimeout(300); }
     // 결과 커서의 ERR_CODE(call-proc 성공 판정 = 결과 커서 CODE) 도 메시지에 반영
     const calls = this.calls.slice(before); for (const c of calls) { const m2 = /"ERR_CODE":\s*(-?\d+)[^}]*"ERR_MESSAGE":\s*"([^"]{0,200})/.exec(c.res || ''); if (m2 && m2[1] !== '0' && !msg) msg = m2[2]; }
-    return { calls, message: msg };
+    const clean = (t: string) => t.replace(/(^|[ ]|[\r\n])+(Confirm|확인|OK|Cancel|취소)([ ]|[\r\n])*$/g, '').trim(); return { calls, message: clean(msg || (calls.length ? toast : (preAlert || toast))) };
   }
   /**
    * 다국어 미적용 노출 — 2026-10-23 사용자 지시: t(코드, '_기본문구') 의 코드가 SCM_ADM_MSG_M 에 없으면 '_기본문구' 가 그대로 보인다 → 오류.
@@ -457,7 +540,7 @@ export class Nscm {
  *  분류 SYN = 시노님·권한·객체 해석(ORA-00942·ORA-04043·PLS-00201·ORA-01031·ORA-00980·ORA-04063·ORA-06508) / DB = 그 밖의 ORA·PLS.
  */
 export const BE_LOG: string = process.env.E2E_BE_LOG || CFG.beLogFile || path.join(__dirname, '..', '..', '..', 'nscm-be', 'logs', 'nscm.log');
-export type DbErr = { code: string; cls: 'SYN' | 'DB'; object: string; msg: string };
+export type DbErr = { code: string; cls: 'SYN' | 'OBJ' | 'META' | 'DB'; object: string; msg: string };  // 2026-10-29 CR-076: OBJ = DB 객체 없음·컴파일·인자 불일치, META = PROC_M/API_M 누락
 export function beLogMark(): { size: number } { try { return { size: fs.statSync(BE_LOG).size }; } catch { return { size: -1 }; } }
 export function beLogErrors(mark: { size: number }): DbErr[] {
   try {
@@ -466,9 +549,13 @@ export function beLogErrors(mark: { size: number }): DbErr[] {
     if (len <= 0) return [];
     const fd = fs.openSync(BE_LOG, 'r'); const buf = Buffer.alloc(len); fs.readSync(fd, buf, 0, len, from); fs.closeSync(fd);
     const out = new Map<string, DbErr>();
-    for (const m of buf.toString('utf8').matchAll(/\b((?:ORA|PLS)-\d{5}):?([^\r\n]{0,240})/g)) {
+    const txt = buf.toString('utf8');
+    for (const m of txt.matchAll(/(NullPointerException[^\r\n]{0,160}(?:makeProcedure|callProc|procParam|PROC_M)|프로시저 정보 없음[^\r\n]{0,120}|PROC_M[^\r\n]{0,40}(?:없음|not found|empty)[^\r\n]{0,80}|API_M[^\r\n]{0,40}(?:없음|not found)[^\r\n]{0,80})/g)) {
+      const k = `META|${m[1].slice(0, 80)}`; if (!out.has(k)) out.set(k, { code: 'META', cls: 'META', object: (/(PROC_M|API_M)/.exec(m[1]) || ['메타'])[0], msg: m[1].slice(0, 200) });
+    }
+    for (const m of txt.matchAll(/\b((?:ORA|PLS)-\d{5}):?([^\r\n]{0,240})/g)) {
       const code = m[1]; const msg = m[2].trim(); const obj = (/"([A-Z0-9_$#]+)"\."([A-Z0-9_$#]+)"/.exec(msg) || [])[0] || '';
-      const cls: DbErr['cls'] = /ORA-00942|ORA-04043|PLS-00201|ORA-01031|ORA-00980|ORA-04063|ORA-06508/.test(code) ? 'SYN' : 'DB';
+      const cls: DbErr['cls'] = /ORA-00942|ORA-04043|ORA-01031|ORA-00980|ORA-04063|ORA-06508/.test(code) ? 'SYN' : /PLS-00201|PLS-00306|PLS-00302|ORA-00904|ORA-04068|ORA-04061|ORA-06575/.test(code) ? 'OBJ' : 'DB';
       if (/ORA-06512|ORA-06550/.test(code)) continue; // 스택 위치·PL/SQL 래퍼 줄 — 원인 코드가 따로 있다
       const k = `${code}|${obj}|${msg.slice(0, 60)}`; if (!out.has(k)) out.set(k, { code, cls, object: obj, msg: msg.slice(0, 200) });
     }

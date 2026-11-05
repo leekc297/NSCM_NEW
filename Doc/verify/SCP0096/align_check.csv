@@ -1,0 +1,9 @@
+﻿menu_id,sheet,column,label,asis_halign,asis_ref,tobe_program,tobe_sheet,tobe_halign,tobe_source,verdict,note
+SCP0096,,dr[DefColumns.COLUMN_NAME],dr[DefColumns.COLUMN_LABEL_NAME],,SCP0096_Shipment_Working_Day_OSP.cs:196,,,,대응 메타 시트 없음,NA,AS-IS 정렬 근거 없음
+SCP0096,,dr[DefColumns.COLUMN_NAME],dr[DefColumns.COLUMN_LABEL_NAME],C,SCP0096_Shipment_Working_Day_OSP.cs:203,,,,대응 메타 시트 없음,NA,TO-BE 대응 메타 시트 없음(AS-IS 시트 )
+SCP0096,Shipment Working Day OSP,DIVISION_ID,Division,C,META SCM_MST_SHEET_COLUMNS(SCP0096/Shipment Working Day OSP),SCP0096,Shipment Working Day OSP,C,메타 SCP0096/Shipment Working Day OSP,PASS,AS-IS center ↔ TO-BE center
+SCP0096,Shipment Working Day OSP,LAST_INPUT_DATE,Last Input Date,C,META SCM_MST_SHEET_COLUMNS(SCP0096/Shipment Working Day OSP),SCP0096,Shipment Working Day OSP,C,메타 SCP0096/Shipment Working Day OSP,PASS,AS-IS center ↔ TO-BE center
+SCP0096,Shipment Working Day OSP,MEASURE,Measure,L,META SCM_MST_SHEET_COLUMNS(SCP0096/Shipment Working Day OSP),SCP0096,Shipment Working Day OSP,L,메타 SCP0096/Shipment Working Day OSP,PASS,AS-IS left ↔ TO-BE left
+SCP0096,Shipment Working Day OSP,PLANT_SITE_ID,Plant Site ID,L,META SCM_MST_SHEET_COLUMNS(SCP0096/Shipment Working Day OSP),SCP0096,Shipment Working Day OSP,L,메타 SCP0096/Shipment Working Day OSP,PASS,AS-IS left ↔ TO-BE left
+SCP0096,Shipment Working Day OSP,PLANT_SITE_NAME,Plant Site,L,META SCM_MST_SHEET_COLUMNS(SCP0096/Shipment Working Day OSP),SCP0096,Shipment Working Day OSP,L,메타 SCP0096/Shipment Working Day OSP,PASS,AS-IS left ↔ TO-BE left
+SCP0096,Shipment Working Day OSP,WORKING_TIME_DEFAULT,Working Time Default,R,META SCM_MST_SHEET_COLUMNS(SCP0096/Shipment Working Day OSP),SCP0096,Shipment Working Day OSP,R,메타 SCP0096/Shipment Working Day OSP,PASS,AS-IS right ↔ TO-BE right

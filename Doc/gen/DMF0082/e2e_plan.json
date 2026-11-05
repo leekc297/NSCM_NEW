@@ -1,0 +1,776 @@
+{
+  "menuId": "DMF0082",
+  "page": "ForecastPrice",
+  "feature": "demand",
+  "routePath": "demand/forecast-price",
+  "asisName": "FcstNPrice_Mgmt",
+  "fields": [
+    {
+      "key": "sumYn",
+      "label": "Sum",
+      "lbl": "LBL00687",
+      "kind": "check",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkSum"
+    },
+    {
+      "key": "qty",
+      "label": " ",
+      "lbl": "",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboQty"
+    },
+    {
+      "key": "bucketType",
+      "label": "Bucket",
+      "lbl": "LBL00710",
+      "kind": "single",
+      "component": "BucketField",
+      "comboId": "BucketType",
+      "popup": false,
+      "asis": "cboBucketType"
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod"
+    },
+    {
+      "key": "salesSiteIds",
+      "label": "Sales Site",
+      "lbl": "LBL00011",
+      "kind": "multi",
+      "component": "SalesSiteField",
+      "comboId": "SalesSite",
+      "popup": false,
+      "asis": "clbSalesSite"
+    },
+    {
+      "key": "bizType",
+      "label": "Biz Type",
+      "lbl": "LBL00085",
+      "kind": "single",
+      "component": "BizTypeField",
+      "comboId": "BizTypeByDivision",
+      "popup": false,
+      "asis": "clbBizType"
+    },
+    {
+      "key": "endCustomer",
+      "label": "End Customer",
+      "lbl": "LBL00080",
+      "kind": "multi",
+      "component": "EndCustomerField",
+      "comboId": "EndCustomerByDivision",
+      "popup": false,
+      "asis": "clbCustomer"
+    },
+    {
+      "key": "teamIds",
+      "label": "Team",
+      "lbl": "LBL00502",
+      "kind": "multi",
+      "component": "TeamField",
+      "comboId": "TeambyDivision",
+      "popup": false,
+      "asis": "clbTeam"
+    },
+    {
+      "key": "divisionIds",
+      "label": "Division",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision"
+    },
+    {
+      "key": "version",
+      "label": "Version",
+      "lbl": "LBL00606",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtVersion"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model / Nickname",
+      "lbl": "LBL00618",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "measure",
+      "label": "Measure",
+      "lbl": "LBL00310",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    },
+    {
+      "key": "column",
+      "label": "Column",
+      "lbl": "LBL00711",
+      "kind": "subtitle-custom",
+      "tobe": "COLUMN_SETUP",
+      "asis": "btnColumn"
+    },
+    {
+      "key": "savePricePeriod",
+      "label": "Price일괄입력",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnSavePricePeriod"
+    },
+    {
+      "key": "version",
+      "label": "Version",
+      "lbl": "LBL00606",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnVersion"
+    },
+    {
+      "key": "exchangeRate",
+      "label": "Exchange Rate",
+      "lbl": "LBL00661",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnExchangeRate"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "FcstNPrice",
+      "key": "FCSTNPRICE",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "APPLICATION",
+        "AS_FROM_SITE",
+        "BUCKET",
+        "CELL_MODEL_NICK_NAME",
+        "CELL_PROD_SITE_ID",
+        "CELL_TYPE",
+        "CITY_NAME",
+        "COUNTRY_NAME",
+        "CURRENCY",
+        "CUST_GROUP",
+        "CUST_GROUP_DTL",
+        "DIVISION_ID",
+        "DMS_CUSTOMER",
+        "DMS_SALES",
+        "DOM_EXP",
+        "EDIT_FLAG",
+        "END_CUSTOMER",
+        "FCST_TYPE",
+        "FORECAST_INFO_ALL",
+        "FORECAST_INFO_BIZ_TYPE",
+        "FORECAST_INFO_CELL_MODEL",
+        "FORECAST_INFO_CELL_PACK_COUNT",
+        "FORECAST_INFO_SPEC",
+        "FORECAST_INFOR_VERSION",
+        "INCOTERMS",
+        "ITEM_ID",
+        "ITEM_NAME",
+        "ITEM_TYPE",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "MDM_PROJECT_NAME",
+        "MEASURE",
+        "MEASURE_GROUP",
+        "MIN_CAPACITY",
+        "NICK_NAME",
+        "OWNER",
+        "ROUTE",
+        "SCM_SITE_ID",
+        "SENDER_NAME",
+        "SOLDTO_CUSTOMER",
+        "SORT_KEY",
+        "TEAM_ID",
+        "VERSION_NO",
+        "VMI_YN"
+      ],
+      "labels": [
+        "Application",
+        "AS From Site",
+        "BUCKET",
+        "Cell Model Nick Name",
+        "Cell Prod Site*",
+        "Product Group",
+        "City",
+        "Country",
+        "Currency*",
+        "Cust Group",
+        "Cust Group Detail",
+        "Division*",
+        "End Cust.(Report)",
+        "Sold-To Cust.(Report)",
+        "Customs Handbook*",
+        "Edit Flag",
+        "End Customer*",
+        "FCST Type*",
+        "Spec & Version",
+        "Biz Type",
+        "Cell Model",
+        "Cell Pack Count",
+        "Model Spec",
+        "Model Version",
+        "Incoterms*",
+        "Model*",
+        "Model Name",
+        "Item Type",
+        "Last Update",
+        "Last Update By",
+        "Project Name",
+        "Measure*",
+        "Measure Group",
+        "Min Capacity",
+        "Nick Name",
+        "Owner",
+        "Channel",
+        "Sales Site*",
+        "Sender Name",
+        "Sold-To Customer",
+        "SORT_KEY",
+        "Team",
+        "Version",
+        "VMI"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Sales Price Save All",
+      "key": "SALES_PRICE_SAVE_ALL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "AUTHORITY_YN",
+        "BIZ_TYPE_NAME",
+        "CELL_PROD_SITE_ID",
+        "COL_LIST",
+        "CURRENCY",
+        "DEPT_ID",
+        "DISPLAY_SEQ",
+        "DIVISION_ID",
+        "DOM_EXP",
+        "END_CUSTOMER",
+        "END_CUSTOMER40",
+        "FCST_TYPE",
+        "INCOTERMS",
+        "ITEM_CLASS_NAME",
+        "ITEM_ID",
+        "ITEM_NAME",
+        "MEASURE",
+        "NEW_FLAG",
+        "NICK_NAME",
+        "PLANT_SITE_ID",
+        "PRICE_ALL",
+        "PROJECT_CODE",
+        "PROJECT_NAME",
+        "PROJECT_STATUS",
+        "SCM_SITE_ID"
+      ],
+      "labels": [
+        "AY",
+        "Biz.Type",
+        "Cell Prod Site*",
+        "COL_LIST",
+        "Currency*",
+        "Team",
+        "DISPLAY_SEQ",
+        "Division*",
+        "Customs Handbook*",
+        "End Customer",
+        "End Customer*",
+        "FCST Type*",
+        "Incoterms*",
+        "Model Type",
+        "Model*",
+        "Model Name",
+        "Measure*",
+        "New Flag",
+        "Nick Name",
+        "Plant Site*",
+        "일괄입력 Price",
+        "Project Code*",
+        "Project",
+        "Project Status",
+        "Sales Site*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "DMF0082_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_DMF0082_GET_SPREAD_TITLE",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.btnExchangeRate.Click",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0082_GET_MAIN_DATA",
+      "sheet": "FcstNPrice",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_DMF0082_GET_MAIN_DATA",
+      "entries": [
+        "event:this.btnExchangeRate.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "FcstNPrice",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_DMF0082.P_",
+      "entries": []
+    },
+    {
+      "sp": "DMF0082_SAVE_MAIN_DATA",
+      "sheet": "FcstNPrice",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_DMF0082_SAVE_MAIN_DATA",
+      "entries": [
+        "button:SaveButton",
+        "event:this.btnButtonList.UsrButtonList_Click_Detected"
+      ]
+    },
+    {
+      "sp": "UP_FX_GETCOMMONDATALIST_DM",
+      "sheet": "(combo)",
+      "btn": "(콤보ID 등록)",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_UP_FX_GETCOMMONDATALIST_DM",
+      "entries": [
+        "event:this.clbCustomer.SelectedIndexChanged",
+        "event:this.btnExchangeRate.Click",
+        "event:this.spdMain.ClipboardPasted",
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.spdMain.ComboSelChange",
+        "event:dsdm.Changed",
+        "button:FindButton",
+        "button:InsertButton",
+        "button:SaveButton",
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+      "sheet": "FcstNPrice",
+      "btn": "BIZ_TYPE_BY_DIVISION",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+      "entries": [
+        "event:this.spdMain.ComboSelChange"
+      ]
+    },
+    {
+      "sp": "PR_GET_DAY_RANGE",
+      "sheet": "FcstNPrice",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_PR_GET_DAY_RANGE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+      "sheet": "FcstNPrice",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+      "entries": [
+        "event:this.btnExchangeRate.Click",
+        "event:this.Load",
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "FcstNPrice",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_DMF0003_GET_BUCKET_TYPE_CODE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_MKT_FCST_COMPARE_POPUP",
+      "sheet": "FcstNPrice",
+      "btn": "MKT_FCST_COMPARE_POPUP",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_DMF0003_GET_MKT_FCST_COMPARE_POPUP",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "DMF0082_POPUP_GET_WEEKDATA",
+      "sheet": "FcstNPrice",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_DMF0082_POPUP_GET_WEEKDATA",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE",
+      "sheet": "FcstNPrice",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0082_POPUP_GET_MEASURE_COUNTINFO",
+      "sheet": "FcstNPrice",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_DMF0082_POPUP_GET_MEASURE_COUNTINFO",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+      "sheet": "FcstNPrice",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_LOOKUP_VALUES",
+      "sheet": "FcstNPrice",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_SCM0001_GET_LOOKUP_VALUES",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE",
+      "sheet": "savePriceTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0082.P_DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "event:this.clbDivisions.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": true,
+  "handlers": [
+    {
+      "name": "handleSum",
+      "target": "this.chkSum",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleMeasure",
+      "target": "this.btnMeasure",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "DM.DMF0082_GET_SPREAD_TITLE"
+      ]
+    },
+    {
+      "name": "handleColumn",
+      "target": "this.btnColumn",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "DM.DMF0082_GET_SPREAD_TITLE"
+      ]
+    },
+    {
+      "name": "handleBucketType",
+      "target": "this.cboBucketType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleBucketType",
+      "target": "this.cboBucketType",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCustomer",
+      "target": "this.clbCustomer",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "DM.UP_FX_GetCommonDataList_DM"
+      ]
+    },
+    {
+      "name": "handleTeam",
+      "target": "this.clbTeam",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleDivision",
+      "target": "this.clbDivision",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSavePricePeriod",
+      "target": "this.btnSavePricePeriod",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleVersion",
+      "target": "this.btnVersion",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handletxtVersionKeyDown",
+      "target": "this.btnVersion",
+      "event": "KeyDown",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleExchangeRate",
+      "target": "this.btnExchangeRate",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "DM.DMF0082_GET_MAIN_DATA",
+        "biz:CommonData.CommonDataList [code=DefaultBucketDay]",
+        "DM.UP_FX_GetCommonDataList_DM",
+        "DM.DMF0082_GET_SPREAD_TITLE",
+        "DM.DMF0082_POPUP_GET_FUTUREPRICE_INFO"
+      ]
+    },
+    {
+      "name": "handleMainClipboardPasted",
+      "target": "this.spdMain",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": [
+        "DM.UP_FX_GetCommonDataList_DM",
+        "biz:CommonData.CommonDataList [code=CELL_PROD_SITE_ID]"
+      ]
+    },
+    {
+      "name": "handleMainLeaveCell",
+      "target": "this.spdMain",
+      "event": "LeaveCell",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMain",
+      "target": "this.spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": [
+        "DM.DMF0003_GET_MKT_FCST_COMPARE_POPUP",
+        "DM.UP_FX_GetCommonDataList_DM"
+      ]
+    },
+    {
+      "name": "handleMainComboSelChange",
+      "target": "this.spdMain",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": [
+        "DM.UP_FX_GetCommonDataList_DM",
+        "biz:CommonData.CommonDataList [code=EndCustomerByDivision40]",
+        "SCM.SCM0001_GET_BIZ_TYPE_BY_DIVISION"
+      ]
+    },
+    {
+      "name": "handleMainEditChange",
+      "target": "this.spdMain",
+      "event": "EditChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMainTopChange",
+      "target": "this.spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMainKeyUp",
+      "target": "this.spdMain",
+      "event": "KeyUp",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "DM.DMF0082_GET_SPREAD_TITLE",
+        "DM.DMF0082_POPUP_GET_FUTUREPRICE_INFO",
+        "DM.DMF0003_GET_BUCKET_TYPE_CODE",
+        "DM.PR_GET_DAY_RANGE",
+        "DM.DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE",
+        "biz:CommonData.CommonDataList [code=MyDivision]",
+        "biz:CommonData.CommonDataList [code=UpperDeptId]",
+        "DM.DMF0082_POPUP_GET_WEEKDATA",
+        "DM.DMF0082_POPUP_GET_MEASURE_COUNTINFO_SAVE_PRICE",
+        "DM.DMF0082_POPUP_GET_MEASURE_COUNTINFO",
+        "SCM.SCM0001_GET_LOOKUP_VALUES",
+        "DM.UP_FX_GetCommonDataList_DM"
+      ]
+    },
+    {
+      "name": "handleMain",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": [
+        "DM.UP_FX_GetCommonDataList_DM",
+        "biz:CommonData.CommonDataList [code=CURRENCY_LIST]",
+        "biz:CommonData.CommonDataList [code=CELL_PROD_SITE_ID]"
+      ]
+    },
+    {
+      "name": "handleBucketType",
+      "target": "this.cboBucketType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleMain",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": [
+        "DM.UP_FX_GetCommonDataList_DM",
+        "biz:CommonData.CommonDataList [code=CURRENCY_LIST]",
+        "biz:CommonData.CommonDataList [code=CELL_PROD_SITE_ID]"
+      ]
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

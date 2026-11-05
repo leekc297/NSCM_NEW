@@ -3,6 +3,11 @@
   "mode": "admin",
   "modeSource": "users.json screens",
   "menuId": "SCP0100",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
   "condOrder": [
     "Div",
     "Cell Group",
@@ -21,6 +26,7 @@
     "Search Level"
   ],
   "condGone": [],
+  "condNotUse": [],
   "page": "GlobalPsiReport",
   "routePath": "supply/global-psi-report",
   "asisName": "Global_PSI_Report",
@@ -491,6 +497,7 @@
     "REPORT": {
       "40": [
         "Div",
+        "Plan Type",
         "Cell Group",
         "Operation",
         "Measure Group",
@@ -507,6 +514,7 @@
       ],
       "81": [
         "Div",
+        "Plan Type",
         "Cell Group",
         "Operation",
         "Measure Group",
@@ -523,6 +531,7 @@
       ],
       "82": [
         "Div",
+        "Plan Type",
         "Cell Group",
         "Operation",
         "Measure Group",
@@ -541,6 +550,7 @@
     "SEARCH_LEVEL": {
       "40": [
         "Div",
+        "Plan Type",
         "Cell Group",
         "Product Level1",
         "Product Level2",
@@ -551,6 +561,7 @@
       ],
       "81": [
         "Div",
+        "Plan Type",
         "Cell Group",
         "Product Level1",
         "Product Level2",
@@ -561,6 +572,7 @@
       ],
       "82": [
         "Div",
+        "Plan Type",
         "Cell Group",
         "Product Level1",
         "Product Level2",
@@ -573,6 +585,7 @@
     "SEARCH_LEVEL_DETAIL": {
       "40": [
         "Div",
+        "Plan Type",
         "Cell Group",
         "Product Level1",
         "Measure Group",
@@ -583,6 +596,7 @@
       ],
       "81": [
         "Div",
+        "Plan Type",
         "Cell Group",
         "Product Level1",
         "Measure Group",
@@ -593,6 +607,7 @@
       ],
       "82": [
         "Div",
+        "Plan Type",
         "Cell Group",
         "Product Level1",
         "Measure Group",
@@ -628,6 +643,7 @@
     ],
     "staticBindings": [
       "DIVISION_ID",
+      "PLAN_TYPE",
       "CELL_GROUP",
       "OPERATION_ID",
       "MEASURE_GROUP",
@@ -654,79 +670,92 @@
   },
   "accounts": [
     {
-      "id": "jaeuk.shin",
-      "name": "",
+      "id": "jooyong026",
+      "name": "강주용",
       "groups": [
-        "SCP ADMIN",
-        "SYSTEM ADMIN"
+        "ADMIN"
       ],
       "divisions": [
         "40"
       ],
-      "roles": {},
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
       "roleNote": "ADMIN",
       "admin": true,
       "adminOf": [
         "SCP ADMIN"
       ],
       "screenGroup": "",
-      "source": "users.json",
+      "source": "users.json areas.SCP",
       "tobeGroups": [
         "ADMIN",
-        "DM ADMIN",
-        "FP Planner",
-        "FP Viewer",
         "GUEST",
-        "JV Planner",
-        "SCM PI Admin",
-        "SCM Viewer",
-        "SCP Planner",
-        "SCP Tester",
-        "SSP Planner",
-        "SSP Viewer"
+        "SSP Planner"
       ],
       "menuAccess": "Y",
       "expectedBtns": [
         "SEARCH",
-        "EXCEL",
         "MEASURE_SELECT",
+        "EXCEL",
         "COLUMN_SETUP"
       ],
-      "matrix": []
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40"
+      ]
     },
     {
-      "id": "hongjae.kim",
-      "name": "김홍재 선임",
+      "id": "dana.robot",
+      "name": "Dana",
       "groups": [
-        "DM Admin"
+        "SCP Planner"
       ],
       "divisions": [
         "40"
       ],
       "roles": {
-        "40": "DM Admin"
+        "40": "SCP Planner"
       },
       "roleNote": "권한 없음 대표",
       "admin": false,
       "adminOf": [],
       "screenGroup": "",
-      "source": "users.json",
+      "source": "users.json areas.SCP",
       "tobeGroups": [
-        "DM ADMIN",
-        "DM Planner",
-        "GUEST"
+        "SCP Planner"
       ],
-      "menuAccess": "N",
-      "expectedBtns": [],
-      "matrix": []
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH",
+        "MEASURE_SELECT",
+        "COLUMN_SETUP",
+        "EXCEL"
+      ],
+      "matrix": [],
+      "expectedDivs": []
     }
   ],
   "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
       "SEARCH",
-      "EXCEL",
       "MEASURE_SELECT",
+      "EXCEL",
       "COLUMN_SETUP"
     ],
     "SCM PI Admin": [
@@ -737,8 +766,8 @@
     ],
     "SCM Viewer": [
       "SEARCH",
-      "COLUMN_SETUP",
       "EXCEL",
+      "COLUMN_SETUP",
       "MEASURE_SELECT"
     ],
     "SCP Planner": [
@@ -756,8 +785,8 @@
   },
   "menuBtnCodes": [
     "SEARCH",
-    "EXCEL",
     "MEASURE_SELECT",
+    "EXCEL",
     "COLUMN_SETUP"
   ],
   "menuAuth": "menu.csv",

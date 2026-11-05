@@ -1,0 +1,184 @@
+{
+ "id": "DMF0048",
+ "asis": "DMF0048",
+ "at": "2026-11-05 05:47:12",
+ "has_asis": true,
+ "tobe_cols": 51,
+ "buttons": [
+  "COLUMN_SETUP",
+  "EXCEL",
+  "MEASURE_SELECT",
+  "SAVE",
+  "SEARCH"
+ ],
+ "env": {
+  "division": "40",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 최다 40(20칸 · 분포 {'40': 20})"
+ },
+ "patterns": {
+  "p_lang": {
+   "rows": 3,
+   "why_not": []
+  },
+  "p_formdl": {
+   "rows": 0,
+   "why_not": [
+    "Excel Form 버튼 없음(AS-IS Text · btn_auth FORM_DATA)"
+   ]
+  },
+  "p_insertat": {
+   "rows": 0,
+   "why_not": [
+    "INSERT 버튼 없음"
+   ]
+  },
+  "p_delete": {
+   "rows": 0,
+   "why_not": [
+    "DELETE 버튼 없음"
+   ]
+  },
+  "p_combo": {
+   "rows": 36,
+   "why_not": []
+  },
+  "p_decimal": {
+   "rows": 0,
+   "why_not": [
+    "cell_rules.csv 없음(소수 자릿수 사실 없음)"
+   ]
+  },
+  "p_reqfp": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_blank_save": {
+   "rows": 0,
+   "why_not": [
+    "INSERT·SAVE 버튼 둘 다 있어야 함"
+   ]
+  },
+  "p_dirty": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_clear": {
+   "rows": 0,
+   "why_not": [
+    "cell_clear.csv 없음"
+   ]
+  },
+  "p_dyn": {
+   "rows": 2,
+   "why_not": []
+  },
+  "p_toggle": {
+   "rows": 2,
+   "why_not": []
+  },
+  "p_iscombo": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_baddate": {
+   "rows": 0,
+   "why_not": [
+    "INSERT·SAVE 버튼 둘 다 있어야 함"
+   ]
+  },
+  "p_modins": {
+   "rows": 0,
+   "why_not": [
+    "INSERT·SAVE 버튼 둘 다 있어야 함"
+   ]
+  },
+  "p_popfill": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 더블클릭 팝업 뒤 다른 칸 채움 없음(또는 신규 행 편집 칸 아님)"
+   ]
+  },
+  "p_samekey": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 변경 핸들러의 같은 키 행 동반 갱신 없음"
+   ]
+  },
+  "p_colvis": {
+   "rows": 0,
+   "why_not": [
+    "1204 표시 값 없음(chkSum.Checked)",
+    "1214 표시 값 없음(chkSum.Checked)"
+   ]
+  },
+  "p_btnvis": {
+   "rows": 0,
+   "why_not": []
+  },
+  "p_sumtoggle": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_divroundtrip": {
+   "rows": 1,
+   "why_not": []
+  }
+ },
+ "auth_drop": [
+  "P07 [자동] DIVISION_ID 셀 콤보 후보 있음 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P08 [자동] DIVISION_ID 신규 행 콤보 붙여넣기 — 후보 값 반영 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P09 [자동] DIVISION_ID 신규 행 콤보 붙여넣기 — 후보 밖 값 거 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P10 [자동] DIVISION_ID 신규 행 콤보 직접 입력 — 후보 값 반영 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P07 [자동] END_CUSTOMER40 셀 콤보 후보 있음 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P08 [자동] END_CUSTOMER40 신규 행 콤보 붙여넣기 — 후보 값  — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P09 [자동] END_CUSTOMER40 신규 행 콤보 붙여넣기 — 후보 밖  — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P10 [자동] END_CUSTOMER40 신규 행 콤보 직접 입력 — 후보 값 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P07 [자동] SCM_SITE_ID 셀 콤보 후보 있음 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P08 [자동] SCM_SITE_ID 신규 행 콤보 붙여넣기 — 후보 값 반영 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P09 [자동] SCM_SITE_ID 신규 행 콤보 붙여넣기 — 후보 밖 값 거 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P10 [자동] SCM_SITE_ID 신규 행 콤보 직접 입력 — 후보 값 반영 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P07 [자동] INCOTERMS 셀 콤보 후보 있음 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P08 [자동] INCOTERMS 신규 행 콤보 붙여넣기 — 후보 값 반영 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P09 [자동] INCOTERMS 신규 행 콤보 붙여넣기 — 후보 밖 값 거부 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P10 [자동] INCOTERMS 신규 행 콤보 직접 입력 — 후보 값 반영(붙 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P07 [자동] FCST_TYPE 셀 콤보 후보 있음 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P08 [자동] FCST_TYPE 신규 행 콤보 붙여넣기 — 후보 값 반영 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P09 [자동] FCST_TYPE 신규 행 콤보 붙여넣기 — 후보 밖 값 거부 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P10 [자동] FCST_TYPE 신규 행 콤보 직접 입력 — 후보 값 반영(붙 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P07 [자동] DOM_EXP 셀 콤보 후보 있음 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P08 [자동] DOM_EXP 신규 행 콤보 붙여넣기 — 후보 값 반영 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P09 [자동] DOM_EXP 신규 행 콤보 붙여넣기 — 후보 밖 값 거부 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P10 [자동] DOM_EXP 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P07 [자동] COMPANY_ID 셀 콤보 후보 있음 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P08 [자동] COMPANY_ID 신규 행 콤보 붙여넣기 — 후보 값 반영 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P09 [자동] COMPANY_ID 신규 행 콤보 붙여넣기 — 후보 밖 값 거부 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P10 [자동] COMPANY_ID 신규 행 콤보 직접 입력 — 후보 값 반영( — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P07 [자동] PLANT_SITE_ID 셀 콤보 후보 있음 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P08 [자동] PLANT_SITE_ID 신규 행 콤보 붙여넣기 — 후보 값 반 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P09 [자동] PLANT_SITE_ID 신규 행 콤보 붙여넣기 — 후보 밖 값 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P10 [자동] PLANT_SITE_ID 신규 행 콤보 직접 입력 — 후보 값  — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P07 [자동] MEASURE 셀 콤보 후보 있음 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P08 [자동] MEASURE 신규 행 콤보 붙여넣기 — 후보 값 반영 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P09 [자동] MEASURE 신규 행 콤보 붙여넣기 — 후보 밖 값 거부 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P10 [자동] MEASURE 신규 행 콤보 직접 입력 — 후보 값 반영(붙여넣 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P14 [자동] 신규 행 있을 때 Bucket 변경 차단 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)"
+ ],
+ "files": {
+  "scenario_expect.csv": {
+   "rows": 10,
+   "used": 10
+  },
+  "doc_ui_expect.csv": {
+   "rows": 0,
+   "used": 0
+  },
+  "sum_toggle_expect.csv": {
+   "rows": 1,
+   "used": 0
+  }
+ },
+ "rows": 11,
+ "rows_used": 10,
+ "dup_of_hand": 1
+}

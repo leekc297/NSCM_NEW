@@ -134,19 +134,17 @@ export const PlanControlGrid = ({
     []
   );
 
+  // handleFormatItem 도 handleBeginningEdit 과 같은 이유로 initialized 콜백에서 건다(바로 위 G08 주석).
+  //   예전엔 마운트 1회성 useEffect(gridRef 의존)로 걸었는데, 검색 등으로 그리드 인스턴스가 재생성되면
+  //   새 그리드엔 다시 안 붙어 LINK 링크체·CONFIRM 버튼체·Plan ID 편집가능 색이 전부 사라지는
+  //   실사고(2026-10-30, G08 과 동일 원인) — initialized 는 매 (재)생성마다 호출되므로 이 문제가 없다.
   const handleInitialized = useCallback(
     (grid: FlexGrid<PlanControlRow>) => {
       grid.beginningEdit.addHandler(handleBeginningEdit);
+      grid.formatItem.addHandler(handleFormatItem);
     },
-    [handleBeginningEdit]
+    [handleBeginningEdit, handleFormatItem]
   );
-
-  useEffect(() => {
-    const grid = gridRef.current;
-    if (!grid) return;
-    grid.formatItem.addHandler(handleFormatItem);
-    return () => grid.formatItem.removeHandler(handleFormatItem);
-  }, [gridRef, handleFormatItem]);
 
   // E08 — 콤보 셀 키입력 차단. AS-IS SpdMain_KeyPress(cs:1313-1322)는 "잠기지 않은 셀이면서 그 컬럼의
   //   CellType 이 ComboBoxCellType 이면 e.Handled = true" 로 문자 키 입력을 통째로 막는다. 즉 Plan ID 는

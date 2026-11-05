@@ -24,6 +24,9 @@ interface State {
   // F6(SubTitle) 개인화 조회조건 복원 1회 가드 — initialized(컬럼 fetch 전용)와 분리.
   //   새로고침=새 store 라 재진입마다 다시 복원된다.
   conditionsRestored: boolean;
+  // 권한 Division 코드(Form 이 Division 콤보 로드 후 세팅) — setFilters 가 'ALL' 을 이 코드 열거로
+  //   펼쳐 조회한다(권한 밖 division 누수 차단, setFilters 주석 참조).
+  authDivisions: string[];
 }
 
 interface Action {
@@ -33,6 +36,7 @@ interface Action {
   setFilters: () => void;
   clearFilters: () => void;
   setNoDivisionAuth: (value: boolean) => void;
+  setAuthDivisions: (codes: string[]) => void;
   fetchStaticColumns: () => Promise<void>;
   restoreSearchConditions: () => Promise<void>;
 }
@@ -53,6 +57,7 @@ const initState: State = {
   staticColumns: [],
   noDivisionAuth: false, // 콤보 미조회 상태 기본 허용(divisions undefined 동안 조회 미차단)
   conditionsRestored: false,
+  authDivisions: [],
 };
 
 export const useInventoryTrendStore = createPersistedStoreWithTab<State & Action>(
@@ -79,10 +84,20 @@ export const useInventoryTrendStore = createPersistedStoreWithTab<State & Action
     setFilters: () =>
       set(state => {
         const c = get().searchParams;
+        // Division 은 'ALL'/미선택을 권한 Division 코드로 '전개'해 보낸다 — AS-IS GetCheckedListValue
+        //   2-arg(SCP0101_InventoryTrend.cs L287)가 'ALL'을 dtMyDivision(권한) 코드로 열거한 것과 등가.
+        //   리터럴 'ALL'(무필터)로 보내면 GET SP 가 권한 밖 division 까지 반환한다(제한 계정 권한 우회,
+        //   SCP0084 선례·실측). 표시용 searchParams.divisionId 는 'ALL' 유지. plant 는 division 게이트라
+        //   'ALL'(무필터)로 둬도 결과 동일.
+        const picked = c.divisionId
+          .split(',')
+          .map(s => s.trim())
+          .filter(x => x !== '' && x.toUpperCase() !== 'ALL');
+        const divisionId = picked.length > 0 ? picked.join(',') : get().authDivisions.join(',');
         state.filters = {
           [SHEETS.MAIN]: {
             yyyymm: c.month, // p_yyyymm
-            divisionId: c.divisionId, // p_division_id (콤마 다중, ALL)
+            divisionId, // p_division_id (ALL=권한 division 코드 열거)
             plantId: c.plantId, // p_plant_id (콤마 다중, ALL)
             itemId: c.itemId, // p_item_id
             debugMode: 'F', // debug_mode
@@ -93,6 +108,10 @@ export const useInventoryTrendStore = createPersistedStoreWithTab<State & Action
     clearFilters: () =>
       set(state => {
         state.filters = {};
+      }),
+    setAuthDivisions: codes =>
+      set(state => {
+        if (state.authDivisions.join(',') !== codes.join(',')) state.authDivisions = codes;
       }),
     setNoDivisionAuth: value =>
       set(state => {

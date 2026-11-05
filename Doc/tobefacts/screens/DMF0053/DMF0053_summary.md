@@ -1,16 +1,16 @@
 # DMF0053 — To-Be Fact Pack 요약
 
-- page_key: `demand/cust-fcst-waterfall` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `demand/cust-fcst-waterfall` · feature: demand · As-is Fact Pack 있음
 - 파일 11 · 엔드포인트 호출 9 (미해결 0, 주석 속 0) · 이벤트 20 · 컴포넌트 사용 33 · 하드코딩 컬럼 3 · 메시지 21
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 3건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | component | 379 |
+| features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | component | 392 |
 | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallGrid.tsx | component | 552 |
 | features/demand/src/pages/cust-fcst-waterfall/cust-fcst-waterfall.constants.test.ts | test | 48 |
-| features/demand/src/pages/cust-fcst-waterfall/cust-fcst-waterfall.constants.ts | constants | 94 |
+| features/demand/src/pages/cust-fcst-waterfall/cust-fcst-waterfall.constants.ts | constants | 101 |
 | features/demand/src/pages/cust-fcst-waterfall/cust-fcst-waterfall.types.ts | types | 46 |
 | features/demand/src/pages/cust-fcst-waterfall/CustFcstWaterfall.tsx | page | 304 |
 | features/demand/src/pages/cust-fcst-waterfall/index.ts | index | 2 |
@@ -41,16 +41,16 @@
 |---|---|---|---|---|---|
 | CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 148 |
 | SearchArea | onSearch | onSubmit | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 181 |
-| CustomDropdown | onChange | <arrow> String,setSearchParams,onDivisionChange | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 196 |
-| PeriodField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 245 |
-| PeriodField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 253 |
-| CustomDropdown | onChange | <arrow> setSearchParams,onBucketChange | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 265 |
-| ProjectField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 283 |
-| ItemField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 294 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 322 |
-| OwnerField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 337 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 354 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 369 |
+| CustomDropdown | onChange | <arrow> String,setSearchParams,onDivisionChange | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 209 |
+| PeriodField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 258 |
+| PeriodField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 266 |
+| CustomDropdown | onChange | <arrow> setSearchParams,onBucketChange | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 278 |
+| ProjectField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 296 |
+| ItemField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 307 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String(options??'').split(',').filter,String(options??'').split,String | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 335 |
+| OwnerField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 350 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 367 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallForm.tsx | 382 |
 | g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallGrid.tsx | 370 |
 | g.hostElement? | dblclick | onDblClick | addEventListener | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallGrid.tsx | 496 |
 | g | formatItem | formatHandler | addHandler | features/demand/src/pages/cust-fcst-waterfall/components/CustFcstWaterfallGrid.tsx | 526 |

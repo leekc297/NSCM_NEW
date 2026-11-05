@@ -1,0 +1,5 @@
+﻿proc,sheet,cols,result,why
+PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA,Mkt Fcst,44,PASS,PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA(Mkt Fcst) 칸 44개 전부 선택 조회 오류 0
+PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA,Mkt Fcst|행분리,24,PASS,"Mkt Fcst ['LAST_UPDATED_BY', 'LAST_UPDATE_DATE'] 추가 전후 401행 = 401행"
+PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DATA,psi,17,ERROR,[측정 경로 없음] PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DATA(psi) 칸 설정 없이도 실패 — 인자 확인 필요: ORA-01840: input value not long enough for date format
+PKG_DMF0003.P_DMF0003_GET_BUCKET_TYPE_CODE,,0,NA,인자 값 없음(골든 케이스)

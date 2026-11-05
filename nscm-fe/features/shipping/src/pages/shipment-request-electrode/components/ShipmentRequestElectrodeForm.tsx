@@ -283,14 +283,12 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => setSearchParams({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -313,14 +311,12 @@ export const ShipmentRequestElectrodeForm = ({ onSearch, onItemSearch, onModelSe
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onModelSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onModelSearch}
                       />
                     ),
                   }}
                   onChange={e => setSearchParams({ modelId: e.target.value, nickName: '' })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

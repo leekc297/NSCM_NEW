@@ -6,6 +6,7 @@ import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, ProgressIndicator } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
 import type { DivisionType, SHEETS } from '../../capa-line-assign.constants';
@@ -406,6 +407,8 @@ export const CapaLineModal = ({
               priority='primary'
               size='medium'
               buttonLabel='OK'
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
               onClick={handleSubmit}
             />
             <Button

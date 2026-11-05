@@ -1,0 +1,9 @@
+﻿menu_id,name,where,text,cond,source
+DMF0035,Sum 행 라벨,footer,Sum,,DM-242
+DMF0035,Measure MKT FCST[R+P],cell:^MEASURE,MKT FCST[R+P],Plan Type=MKT FCST,DM-186
+DMF0040,합계 행 라벨,footer,Sum,,GAP-237
+DMF0008,최종 갱신 Last Update Start,page,Last Update Start,,GAP-137
+DMF0008,최종 갱신 Last Update End,page,Last Update End,,GAP-137
+DMF0008,최종 갱신 Updated by,page,Updated by,,GAP-137
+DMF0003,Partial Week 머리글 +,header,~\+\s*$,Div=82;Bucket=Weekly,GAPPI-21
+DMF0040,Measure Version 명칭,cell:^MEASURE,~_V\d{3},Version=@pop:Current,DM-118

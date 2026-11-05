@@ -1,0 +1,27 @@
+PKG_DMF0082: [('PACKAGE', 'VALID', '2026-10-09 13:38:31'), ('PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')]
+PKG_DMF0082_1104: [('PACKAGE', 'VALID', '2026-11-04 16:00:18'), ('PACKAGE BODY', 'VALID', '2026-11-04 17:39:23')]
+=== cur2_k0101 env=['zioui1', 'localhost', '2026-11-04 17:45:04'] period=20261101~20270430 A=PKG_DMF0082 B=PKG_DMF0082_1104 users=k0101 divs=81,82 scen=['current', 'filters'] gtt=True
+--- k0101 div81 표본 {'site': 'BMW_US_SPA', 'item_full': 'ACHP2005I-A1', 'cust': 'A18BW2003', 'biz': 'CELL', 'project': 'A18BW2003', 'owner': 'BYUNGCHANG PARK', 'team': '70000347', 'plant': 'WA00-P', 'sender': None, 'item': 'HP200'} 버전 {'MF_W': 'MF_W_20261028_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20261030_V001', 'MF_D': 'MF_D_20261026_V001'}
+17:45:20 k0101 div81 Current                                  PASS rows=  7909 A   8.18s B  11.96s
+17:47:04 k0101 div81 Current site=BMW_US_SPA                  PASS rows=   389 A   1.86s B   1.72s
+17:47:13 k0101 div81 Current item=HP200                       PASS rows=   416 A   1.47s B   1.11s
+17:47:20 k0101 div81 Current cust=A18BW2003                   PASS rows=     0 A   1.51s B   1.29s  ⚠ 0행(미실증)
+17:47:23 k0101 div81 Current biz=CELL                         PASS rows=   140 A   1.65s B   1.34s
+17:47:28 k0101 div81 Current project=A18BW2003                PASS rows=  1343 A   2.74s B   3.33s
+17:47:49 k0101 div81 Current owner=BYUNGCHANG PARK            PASS rows=  1601 A   2.83s B   3.44s
+17:48:11 k0101 div81 Current team=70000347                    PASS rows=  2909 A   3.69s B   4.44s
+17:48:50 k0101 div81 Current plant=WA00-P                     PASS rows=  5192 A   5.69s B   6.87s
+17:49:58 k0101 div81 Current sender=NOSUCH                    PASS rows=     0 A   4.29s B   3.86s  ⚠ 0행(미실증)
+17:50:19 k0101 div81 Current qty=Y                            PASS rows=   700 A   5.13s B   5.22s
+--- k0101 div82 표본 {'site': 'NextEra_US_PHX', 'item_full': 'ETD1551AFB3A-XBA', 'cust': 'G-26-033', 'biz': None, 'project': 'G-26-033', 'owner': 'YEEUN CHO', 'team': '58187671', 'plant': None, 'sender': None, 'item': 'D1551'} 버전 {'MF_W': 'MF_W_20261027_V001', 'SF_W': None, 'SP_W': 'SP_W_20261029_V001', 'MF_D': 'MF_D_20261026_V001'}
+17:51:28 k0101 div82 Current                                  PASS rows= 16156 A  30.99s B  69.19s
+17:55:59 k0101 div82 Current site=NextEra_US_PHX              PASS rows=  7617 A  13.90s B  13.87s
+17:57:45 k0101 div82 Current item=D1551                       PASS rows= 12818 A  19.27s B  39.28s
+18:01:27 k0101 div82 Current cust=G-26-033                    PASS rows=     0 A   2.01s B   1.44s  ⚠ 0행(미실증)
+18:01:32 k0101 div82 Current project=G-26-033                 PASS rows=   444 A   3.48s B   3.14s
+18:01:47 k0101 div82 Current owner=YEEUN CHO                  PASS rows= 11048 A  17.07s B  34.79s
+18:05:34 k0101 div82 Current team=58187671                    PASS rows= 11815 A  17.63s B  49.08s
+18:09:49 k0101 div82 Current sender=NOSUCH                    PASS rows=     0 A  13.40s B  14.76s  ⚠ 0행(미실증)
+18:10:40 k0101 div82 Current qty=Y                            PASS rows=   704 A  16.99s B  26.99s
+
+=== 시나리오 20 · FAIL 0 · 미실증 4

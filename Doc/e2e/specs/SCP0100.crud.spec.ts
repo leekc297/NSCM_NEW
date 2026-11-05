@@ -1,9 +1,10 @@
-// 자동 생성 — tools/E2E/gen-e2e.js (2026-10-23) · 원천: Doc/gen/SCP0100/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
+// 자동 생성 — tools/E2E/gen-e2e.js (2026-10-30) · 원천: Doc/gen/SCP0100/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
 import { test, expect } from '../../../tools/E2E/fixtures/test';
 import * as fs from 'node:fs';
 const PLAN = JSON.parse(fs.readFileSync(__dirname + '/SCP0100.plan.json', 'utf8'));
 const MENU = "SCP0100";
 import { crudCycle } from '../../../tools/E2E/lib/crud';
+import { divisionCascade } from '../../../tools/E2E/lib/cascade';
 
 test.describe(`${MENU} Global_PSI_Report CRUD @crud`, () => {
   test('조회 전용 화면 — 저장 버튼이 없어야 한다', async ({ nscm }) => {

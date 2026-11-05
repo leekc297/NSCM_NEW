@@ -62,10 +62,39 @@ RX_SP = re.compile(r'\b(?:PKG_[A-Z0-9_]+(?:\.[A-Z0-9_]+)?|P_[A-Z0-9_]{4,}|UP_[A-
 RX_MSG = re.compile(r'\bMSG\d{5}\b')
 RX_CS = re.compile(r'\b([A-Za-z0-9_]+\.cs):(\d+)')
 NOT_COND = re.compile(r'^(usrButtonList|usrConditionPanel\w*|usrLayoutControl\w*|dtMy\w*|dt[A-Z]\w*All|dtCustomer\w*)$')
-tail = lambda s: re.sub(r'^(P_|UP_|SP_)', '', s.split('.')[-1].upper())
+_REBIND_KINDS = {'LIST_REBIND', 'LIST_BIND', 'LIST_CLEAR', 'COMBO_DATA', 'VALUE_CLEAR', 'STATE_RESET'}
+
+
+def cond_written(x, tok):
+    """C1·C4 하위 조건 = 핸들러가 값·후보를 '바꾸는' 컨트롤만(2026-10-29 SCP0020 T-c99d4565 판정오류 — 읽기만 한 상위 cboDivision 을 하위로 잡음).
+    쓰기 = 재바인딩 문장(setListBox 등)의 인자 · 속성 대입(X.ControlValues = …) · X.Set*/Clear*/Init*… 호출 · Set*/Clear*/Bind*…(…, X, …) 헬퍼 인자.
+    읽기(GetCheckedListValue(…, X.ControlValues) · if (X.ControlValues …))는 상위 입력이지 하위가 아니다. 전 화면 1,005 핸들러 감사에서 쓰기 누락 0 확인"""
+    t = re.escape(tok); raw = x.get('raw', '')
+    if x['kind'] in _REBIND_KINDS and re.search(r'\b' + t + r'\b', f"{x['target']} {x['value']}"): return True
+    if re.search(r'\b' + t + r'(?:\.\w+)*\s*(?<![=!<>])=(?!=)', raw): return True
+    if re.search(r'\b' + t + r'(?:\.\w+)*\.(?:Set|Clear|Init|Reset|Bind|Fill|Load|Refresh|Add|Remove|DataBind)\w*\s*\(', raw): return True
+    return bool(re.search(r'\b(?!Get)\w*(?:set|Set|clear|Clear|bind|Bind|fill|Fill|init|Init|load|Load|refresh|Refresh)\w*\s*\([^()]*\b' + t + r'\b(?!\s*\.)', raw))
+
+
+tail =lambda s: re.sub(r'^(P_|UP_|SP_)', '', s.split('.')[-1].upper())
 ENGINE_CHECKS = {'H3', 'E3', 'M3', 'F5', 'F3', 'J1', 'H4', 'A6', 'A10', 'X-REOPEN', 'K4', 'G6', 'C1', 'C4', 'D6', 'D3', 'E4', 'M4', 'H5', 'A5', 'H2', 'D1', 'D5', 'E1', 'D4', 'C3', 'C2', 'C6', 'F4'}  # 검증 엔진 Doc/e2e/specs/_trace.spec.ts 구현 검사
 E = None  # 요소 사전(main 에서 채움 — engine_condition 이 하위 조건 라벨을 찾는다)
 RES = {'PASS': 'PASS', 'FAIL': 'FAIL', 'NOT_RUN': 'NOT_RUN', '판정필요': 'REVIEW', 'NA': 'NA', 'ERROR': 'ERROR', 'OK': 'PASS', 'WARN': 'WARN', 'REVIEW': 'REVIEW'}
+
+
+_FE_IDX = {}
+
+
+def fe_find_basename(name):
+    """nscm-fe 전체(node_modules·dist 제외)에서 파일 이름으로 찾기 — 상대 경로 끝 일치 실패 시 이동 여부 판정용"""
+    if not _FE_IDX:
+        base = os.path.join(ROOT, 'nscm-fe')
+        for dp, dns, fns in os.walk(base):
+            dns[:] = [x for x in dns if x not in ('node_modules', 'dist', '.turbo', 'coverage')]
+            for fn in fns:
+                if fn.endswith(('.ts', '.tsx', '.scss', '.css', '.json')):
+                    _FE_IDX.setdefault(fn, []).append(os.path.relpath(os.path.join(dp, fn), ROOT).replace(chr(92), '/'))
+    return _FE_IDX.get(name, [])
 
 
 def file_text(f, srcs):
@@ -83,10 +112,30 @@ def file_text(f, srcs):
     return None
 
 
+_KNOWN_PROCS = None
+
+
+def known_procs():
+    """TO-BE proc_meta 의 프로시저 꼬리 이름 — 'P_' 로 시작하는 토큰이 진짜 프로시저인지 가리는 기준(2026-10-29)"""
+    global _KNOWN_PROCS
+    if _KNOWN_PROCS is None:
+        _KNOWN_PROCS = {r['proc'].split('.')[-1].upper() for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'proc_meta.csv')) if r.get('proc')}
+    return _KNOWN_PROCS
+
+
 def sp_tokens(text):
     """SP·엔드포인트 이름 — 추출기 말줄임('…')으로 잘린 이름 제외 · 그리드 컬럼명(ROUTE_CHK 처럼 _CHK 로 끝나는 컬럼)은 SP 가 아니다(2026-10-26 F4 오판)"""
     cols = set(E.cols) if E else set()
-    return list(dict.fromkeys(m.group(0).split('.')[-1] for m in RX_SP.finditer(text) if text[m.end():m.end() + 1] != '…' and m.group(0).split('.')[-1] not in cols))
+    out = []
+    for m in RX_SP.finditer(text):
+        if text[m.end():m.end() + 1] == '…': continue
+        tok = m.group(0).split('.')[-1]
+        if tok in cols: continue
+        # 'P_…' 는 TO-BE 프로시저 접두이지만 패키지명(P_SCM0002)·바인드 변수(@P_BUCKET·P_FROM_SITE)도 같은 모양이다 → 동사 세그먼트(_GET/_SAVE…)가 있거나 proc_meta 에 있는 것만 SP (2026-10-29 SCP0100 F4 허위 FAIL 5건)
+        if tok.startswith('P_') and not re.search(r'_(GET|SAVE|SET|INS|UPD|DEL|CHK|CHECK|PROC|EXEC|CALC|GEN|MAKE|LOAD|SYNC|UPLOAD|DOWN)', tok) and tok.upper() not in known_procs(): continue
+        if text[max(0, m.start() - 1):m.start()] == '@': continue
+        out.append(tok)
+    return list(dict.fromkeys(out))
 
 
 def asis_id():
@@ -94,6 +143,53 @@ def asis_id():
     for r in rdcsv(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'map_screen.csv')):
         if r.get('tobe_id', '').upper() == MENU: return r['asis_id'].upper()
     return MENU
+
+
+_PM_ALL = None
+_ASIS_SPS = None
+
+
+def resolve_call_proc(name):
+    """SP 이름(대조표·AS-IS 엔드포인트) → TO-BE call-proc 배선(proc_meta 행 목록, 해석 경로).
+    BE 해석 경로(PKG_NSCM_UI_COMM.PR_GET_PROC_INFO_LIST = BTN_MPG ⨝ API_M → PROC_M)와 같은 키를 모두 본다.
+    2026-10-29 SCP0111 F4 허위 '배선 없음' 6건 계기 — 대조표가 SP 를 API_ID(P_SCP0111_GET)로 적은 경우와
+    TO-BE 프로시저명이 AS-IS 보다 줄어든 경우(SCP0111_SAVE_INTEGRATION_PSI_ADMIN → P_SCP0111_SAVE_PSI_ADMIN)를 못 찾았다.
+      ① 프로시저명 일치  ② API_ID 일치  ③ 골든 케이스 asis_sp→tobe_proc  ④ P_ 접두·_OSP 접미 정규화
+      ⑤ 토큰 부분집합 1:1 — 같은 화면·같은 동사(GET/SAVE…)의 TO-BE 프로시저 중 토큰이 AS-IS 토큰의 부분집합이고,
+         이 화면의 다른 AS-IS SP 가 이름 그대로 차지한 프로시저를 뺀 뒤 후보가 정확히 1개일 때만(추측 배정 금지)."""
+    global _PM_ALL, _ASIS_SPS
+    if _PM_ALL is None:
+        _PM_ALL = [r for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'proc_meta.csv')) if r.get('proc')]
+    nm_t = name.split('.')[-1].upper()
+    pm = [r for r in _PM_ALL if r['proc'].split('.')[-1].upper() == nm_t]
+    if pm: return pm, ''
+    pm = [r for r in _PM_ALL if tail(r['proc']) == tail(name)]  # 종전 A6 기준(P_/UP_/SP_ 접두 무시) 유지
+    if pm: return pm, ''
+    pm = [r for r in _PM_ALL if (r.get('api_id') or '').upper() == nm_t]
+    if pm: return pm, f"API_ID {nm_t} → {', '.join(sorted({r['proc'] for r in pm}))}"
+    tobe = {tail(g.get('tobe_proc') or '-') for g in rdcsv(os.path.join(DOC, 'golden', 'golden_cases.csv')) if g.get('screen', '').upper() == MENU and tail(g.get('asis_sp') or '-') == tail(name) and g.get('tobe_proc')}
+    pm = [r for r in _PM_ALL if tail(r['proc']) in tobe]
+    if pm: return pm, f"골든 매핑 {nm_t} → {', '.join(sorted({r['proc'] for r in pm}))}"
+    nz = lambda x: re.sub(r'^P_', '', x.upper()).replace('_OSP', '')
+    mine = [r for r in _PM_ALL if r['menu_id'].upper() == MENU]
+    pm = [r for r in mine if nz(r['proc'].split('.')[-1]) == nz(nm_t)]
+    if pm: return pm, f"이름 매핑 {nm_t} → {', '.join(sorted({r['proc'] for r in pm}))}"
+    toks = lambda x: [t for t in nz(x.split('.')[-1]).split('_') if t and not re.fullmatch(r'[A-Z]{2,4}\d{3,4}', t)]
+    at = toks(nm_t)
+    if len(at) < 2: return [], ''
+    if _ASIS_SPS is None:
+        try:
+            eps = rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'endpoints.csv'))
+        except Exception:
+            eps = []
+        _ASIS_SPS = {nz(m.group(0).split('.')[-1]) for e in eps if (e.get('variant') or 'current') == 'current'
+                     for m in re.finditer(r'[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?', e.get('sp_or_sql') or '')}
+    taken = {nz(p) for p in _ASIS_SPS} - {nz(nm_t)}
+    cands = {r['proc'] for r in mine
+             if (pt := toks(r['proc'])) and pt[0] == at[0] and set(pt) <= set(at) and nz(r['proc'].split('.')[-1]) not in taken}
+    if len(cands) != 1: return [], ''
+    pm = [r for r in mine if r['proc'] in cands]
+    return pm, f"토큰 매핑 {nm_t} → {next(iter(cands))}(같은 화면·같은 동사·유일 후보)"
 
 
 def find_page():
@@ -206,6 +302,8 @@ def parse_actions(asis):
     acts = rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis, 'actions.csv'))
     if not acts: return [], {}, ''
     main_cls = collections.Counter(r['class'] for r in acts).most_common(1)[0][0]
+    sys.path.insert(0, HERE); from asis_live import dead_methods
+    dead = dead_methods(asis)  # 실행되지 않는 메서드(진입점 미연결 + 원문 호출 0) — 문장은 AS-IS 사실 아님(2026-10-30 SCP0041 SaveData F4 허위 FAIL)
     by = collections.OrderedDict()
     for r in acts: by.setdefault((r['class'], r['method']), []).append(r)
     rows = []
@@ -213,13 +311,14 @@ def parse_actions(asis):
         fb = os.path.basename(rs[0]['file'].replace('\\', '/'))
         eid = f'{cls}.{meth}'
         kinds = collections.Counter(r['kind'] for r in rs)
+        dw = dead.get((cls, meth), '')
         rows.append({'line': rs[0]['line'], 'section': 'AS-IS 진입점', 'id': f'ACT:{eid}', 'entry': eid, 'cls': cls, 'meth': meth, 'popup': cls != main_cls, 'kind': 'ENTRY',
                      'text': f'{eid} ' + ' '.join(f"{r['target']} {r['value'][:80]}" for r in rs)[:3000], 'status': '', 'src': 'AS-IS 액션',
-                     'cs': [f"{fb}:{r['line']}" for r in rs], 'detail': f'문장 {len(rs)}: ' + ', '.join(f'{k} {v}' for k, v in kinds.most_common(6))})
+                     'cs': [f"{fb}:{r['line']}" for r in rs], 'detail': f'문장 {len(rs)}: ' + ', '.join(f'{k} {v}' for k, v in kinds.most_common(6)), 'dead': dw})
         for r in rs:
             rows.append({'line': r['line'], 'section': f"AS-IS 문장 {r['kind']}", 'id': f"ACT:{eid}:{r['line']}:{r['stmt_no']}", 'entry': eid, 'cls': cls, 'meth': meth, 'popup': cls != main_cls, 'kind': r['kind'],
                          'text': f"{r['target']} {r['value'][:300]} {r['endpoint']} {r['guard'][:200]}", 'status': '', 'src': 'AS-IS 액션', 'cs': [f"{fb}:{r['line']}"],
-                         'detail': f"{r['kind']} {r['raw'][:160]}", 'raw': r['raw'], 'endpoint': r['endpoint'], 'guard': r['guard']})
+                         'detail': f"{r['kind']} {r['raw'][:160]}", 'raw': r['raw'], 'endpoint': r['endpoint'], 'guard': r['guard'], 'dead': dw})
     return rows, by, main_cls
 
 
@@ -328,6 +427,16 @@ class Elems:
         for (cls, meth), rs in acts.items():
             for r in rs:
                 if r['kind'] == 'CALL_LOCAL': self.callees[f'{cls}.{meth}'].add(f"{cls}.{r['target']}")
+        # 조건 컨트롤 이벤트 핸들러 → 조건 컨트롤(events.csv) — 핸들러 본문의 GRID_CLEAR 문장(ClearDataSource 등)에는 컨트롤 이름이 없어 C4 요소를 못 찾던 결함(2026-10-30 SCP0111 Plan Date 그리드 초기화 미검출)
+        #   CALL_LOCAL 피호출 메서드(SetChangedPeriod 등)도 같은 조건 컨트롤에 귀속
+        self.handler_cond = {}
+        for ev in rdcsv(os.path.join(sd, 'events.csv')):
+            tgt = (ev.get('target') or '').replace('this.', '').split('.')[0]; h = (ev.get('handler') or '').strip()
+            if h and tgt in self.conds and (ev.get('op') or '+=') == '+=': self.handler_cond.setdefault(h, tgt)
+        for (cls, meth), rs in acts.items():
+            if meth in self.handler_cond:
+                for r in rs:
+                    if r['kind'] == 'CALL_LOCAL': self.handler_cond.setdefault(r['target'], self.handler_cond[meth])
 
     def of(self, text):
         out = []
@@ -418,6 +527,26 @@ def judge(rs):
 RX_REASON = re.compile(r'대체|이동|공통|룰|rule|hook|#\d+|지시|결정|AS-IS (?:미사용|주석|dead)|미사용|주석|디자이너|레이아웃|컨테이너|리소스|서버측|프레임워크|동일 사유|위와 동일|대응 요소 없|구조로|흡수|불필요|조회 전용|dead|개념 자체가 없|단일 뷰|단일 그리드|탭 자체|시트 1개|무의미|읽기 ?전용|read-?only|Enabled\s*=\s*false|disabled|기준표|search_cond|SC1|SC2|BUTTON_AREA|IN_CALENDAR|COLUMN_PERSONAL|COMMON_BUTTON', re.I)
 
 
+
+_LBL_ALIAS_CACHE = {}
+
+
+def label_alias_map(mid):
+    """TO-BE 라벨 별칭(CR-092 SCP·SSP Valid→Active, 2026-10-30) — {정규화 AS-IS 라벨: 정규화 TO-BE 라벨}. 정본 tools/Harness/rules/label_alias.csv"""
+    if mid in _LBL_ALIAS_CACHE:
+        return _LBL_ALIAS_CACHE[mid]
+    out = _LBL_ALIAS_CACHE.setdefault(mid, {})
+    pth = os.path.join(ROOT, 'tools', 'Harness', 'rules', 'label_alias.csv')
+    if not os.path.exists(pth):
+        return out
+    sf = lambda v: re.sub(r'[^0-9a-z가-힣]', '', re.sub(r'\*', '', v or '').lower())
+    with open(pth, encoding='utf-8-sig', newline='') as f:
+        for x in csv.DictReader(f):
+            ss = [t.strip().upper() for t in (x.get('scope') or 'ALL').split(';') if t.strip()]
+            if 'ALL' in ss or mid in ss or any(len(t) == 3 and mid.startswith(t) for t in ss):
+                out[sf(x.get('asis_label'))] = sf(x.get('tobe_label'))
+    return out
+
 def main():
     asis = asis_id(); page = find_page(); srcs = page_sources(page)
     acts_rows, acts, main_cls = parse_actions(asis)
@@ -486,7 +615,7 @@ def main():
             if sj == 'ENTRY':
                 ek = r.get('entry') or r['id']; own.append(add_inst(f'{c}|ENTRY:{ek}', c, 'ENTRY', ek, r)); continue
             if sj == 'SP':
-                sps = sp_tokens(f"{r.get('endpoint', '')} {r['text']}") or (sorted(entry_sp.get(r.get('entry'), [])) if r['src'] == 'AS-IS 액션' else [])
+                sps = [x for x in sp_tokens(re.sub(r'\s+IF\s+@[A-Za-z0-9_]+', ' ', f"{r.get('endpoint', '')} {r['text']}")) if not x.startswith('@')] or (sorted(entry_sp.get(r.get('entry'), [])) if r['src'] == 'AS-IS 액션' else [])
                 if sps:
                     for sp in dict.fromkeys(sps):
                         tp = proc_of(sp) or sp
@@ -495,6 +624,8 @@ def main():
                     own.append(add_inst(f'{c}|{"ENTRY:" + r["entry"] if r.get("entry") else "ROW:" + r["id"]}', c, 'ENTRY' if r.get('entry') else 'ROW', r.get('entry') or r['id'], r))
                 continue
             els2 = [('PCOL', n) if et == 'COL' and n in E.popup_cols else (et, n) for et, n in els]
+            if c in ('C1', 'C4') and r['src'] == 'AS-IS 액션' and r.get('meth') in E.handler_cond and not any(et == 'COND' for et, _ in els2):
+                els2 = els2 + [('COND', E.handler_cond[r['meth']])]  # 조건 변경 핸들러(또는 그 피호출) 안의 문장 → 그 조건 컨트롤의 C1/C4 요소(2026-10-30)
             ok = [(et, n) for et, n in els2 if c in ELEM_OK.get(et, set())]
             if c == 'D4' and r['src'] == 'AS-IS 액션' and r.get('meth') != 'InsertButton':
                 ok = [(et, n) for et, n in ok if et not in ('COL', 'PCOL')]  # 신규행 기본값은 InsertButton 의 SetValue 만 — 다른 진입점의 SetValue 는 연쇄(C3)·팝업 반영(M4)
@@ -561,6 +692,7 @@ def main():
                     zero = (ar == 0) != (tr_ == 0) and max(ar, tr_) > 0  # 한쪽만 0건 = 조회 자체가 안 됨 → FAIL (사용자 2026-10-26)
                     res = 'PASS' if v == 'PASS' else 'FAIL' if (v in ('COLS', 'ERR') or zero) else 'NA' if (v == 'SKIP' and g.get('kind') == 'SAVE') else 'REVIEW'
                     note = (' — 저장 SP 는 골든(조회 결과 비교) 대상 아님: DB 반영은 CRUD 실저장(F1)·BE 오류(F4)로 판정' if (v == 'SKIP' and g.get('kind') == 'SAVE') else ' — 한쪽만 0건(조회 불가)' if zero else ' — 같은 조건 건수 차이(AS-IS dev DB ≠ TO-BE DB) 해석 필요' if v in ('ROWS', 'DIFF') else ' — 컬럼 집합 차이' if v == 'COLS' else ' — 실행 오류' if v == 'ERR' else ' — 파라미터 미정' if v == 'SKIP' else '')
+                    if g.get('common_rows'): note += f" · 데이터 기준: 공통 {g['common_rows']}행 / AS-IS 전용 {g.get('asis_only', '')} / TO-BE 전용 {g.get('tobe_only', '')} (환경 데이터 차이 — 같은 행의 값은 A7, 순서는 A6 에서 대조)"
                     d['hits'].append((res, f"golden {v} AS-IS {ar}행 ↔ TO-BE {tr_}행: Doc/golden/{MENU}/{g.get('asis_sp', '')}.md{note}"))
         if d['check'] == 'A1' and d['et'] == 'SP' and not d['hits']:
             d['static'] = ('REVIEW', f"골든 비교 케이스 없음({d['name']} — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요)")
@@ -568,6 +700,12 @@ def main():
             for s in rdcsv(os.path.join(DOC, 'verify', MENU, 'sort_check.csv')):
                 if tail(s['sp']) == tail(d['name']) or tail(s.get('tobe_proc', '') or '-') == tail(d['name']):
                     d['hits'].append(({'PASS': 'PASS', 'FAIL': 'FAIL', 'NA': 'NA'}.get(s['verdict'], 'REVIEW'), f"정렬대조 {s['verdict']} {s['note'][:50]}"))
+            # 실측 순서(golden.py 2026-10-28): 같은 인자의 AS-IS·TO-BE 결과에서 공통·유일 행의 상대 순서 — ORDER BY 가 같아도 실제 순서가 다르면 FAIL
+            no_order = any((tail(s['sp']) == tail(d['name']) or tail(s.get('tobe_proc', '') or '-') == tail(d['name'])) and s['verdict'] == 'NA' for s in rdcsv(os.path.join(DOC, 'verify', MENU, 'sort_check.csv')))
+            for g in rdcsv(os.path.join(DOC, 'golden', '_summary.csv')):
+                if no_order or g.get('screen', '').upper() != MENU or (g.get('order') or '') not in ('PASS', 'DIFF'): continue
+                if tail(g.get('asis_sp', '') or '-') == tail(d['name']) or tail(g.get('tobe_proc', '') or '-') == tail(d['name']):
+                    d['hits'].append(('PASS' if g['order'] == 'PASS' else 'FAIL', f"실측 순서대조 {g['order']} 공통 {g.get('common_rows', '')}행(Doc/golden/{MENU}/{g.get('asis_sp', '')}.order.csv)"))
         if d['check'] == 'DB-SYN' and d['et'] == 'SP':
             # 이 화면 syn_check 에 없는 SP(공용 팝업 — 타 화면 PKG)는 다른 화면의 syn_check.csv 에서 찾는다
             syn_x = syn if any(tail(s['name']) == tail(d['name']) for s in syn) else [s for f in glob.glob(os.path.join(DOC, 'verify', '*', 'syn_check.csv')) for s in rdcsv(f) if s.get('kind') == 'PROC' and tail(s['name']) == tail(d['name'])]
@@ -611,27 +749,45 @@ def main():
             if not files:
                 d['static'] = ('NA', '대조표 기록 보강 대상(화면 오류 아님): 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 구현 여부는 같은 행의 다른 검사로 판정') if r.get('has_loc') else                               ('REVIEW', '이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요')
             else:
-                bad = []
+                bad = []; moved = []
                 for f, l1, l2 in files:
                     body = file_text(f, srcs)
                     if body is None:
                         if f.endswith(('.sql', '.java', '.xml')): continue  # DB·BE 산출물은 이 검사 범위 밖(syn_check·F4 가 본다)
+                        # 파일이 공용(shared/packages)으로 옮겨졌거나 대조표가 상대 경로를 줄여 적은 경우 — 이름으로 nscm-fe 전체를 찾아 실존하면 이동으로 본다(2026-10-29 SCP0020 DataGrid.tsx·ItemSearchModal.tsx 허위 FAIL)
+                        mv = fe_find_basename(os.path.basename(f))
+                        if mv: moved.append(f"{f}→{mv[0]}"); continue
                         bad.append(f'{f} 없음'); continue
                     n = body.count(chr(10)) + 1
                     if l1 and int(l2 or l1) > n: bad.append(f'{f}:{l1}-{l2 or l1} > {n}줄')
-                d['static'] = ('FAIL', '구현 위치 실존 안 함: ' + ', '.join(bad)[:120]) if bad else ('PASS', f'구현 위치 실존 {len(files)}곳')
+                d['static'] = ('FAIL', '구현 위치 실존 안 함: ' + ', '.join(bad)[:120]) if bad else ('PASS', f'구현 위치 실존 {len(files)}곳' + (f" (이동 {len(moved)}: {', '.join(moved)[:100]})" if moved else ''))
         elif c == 'E3' and d['et'] in ('COL', 'PCOL'):
             col = d['name']; gr = E.grule.get(col, {}); tb = E.tobe.get(col, {})
             if d['et'] == 'PCOL': gr = next((r for r in E.grule_all if r.get('column') == col and r.get('sheet', '') != E.main_sheet), gr); tb = {}
             if not gr and not tb: d['static'] = None
             else:
                 areq = '*' in (gr.get('label') or ''); t = '*' in (tb.get('column_label_name') or '') or tb.get('input_tp_cd') == 'IM'
+                star_free = lambda s: re.sub(r'[^0-9a-z가-힣]', '', re.sub(r'\*', '', s or '').lower())
                 if not gr: d['static'] = ('REVIEW', f'AS-IS 필수 표시(grid_rule 라벨 *) 정보 없음 — TO-BE 필수={t}')
-                else: d['static'] = ('PASS' if areq == t else 'FAIL', f"필수 표시 AS-IS {'*' if areq else '-'}('{gr.get('label', '')}') ↔ TO-BE {'*' if t else '-'}('{tb.get('column_label_name', '')}' INPUT_TP_CD={tb.get('input_tp_cd', '')})" + ('' if areq == t else ' — 필수 여부 불일치(저장 검증 checkRequiredOfSpread 대상 차이)'))
+                elif areq != t and star_free(gr.get('label')) and (star_free(gr.get('label')) == star_free(tb.get('column_label_name'))
+                                                                  or label_alias_map(MENU).get(star_free(gr.get('label'))) == star_free(tb.get('column_label_name'))):  # CR-092 별칭(Valid→Active)도 같은 라벨로 본다
+                    # TO-BE 룰 CR-077(사용자 2026-10-29 SCP0020 조치 필요 6번): TO-BE 는 라벨 '*' 를 빼도 오류 아님 — '*' 를 뺀 문구가 같으면 PASS
+                    d['static'] = ('PASS', f"필수 표시 AS-IS {'*' if areq else '-'}('{gr.get('label', '')}') ↔ TO-BE {'*' if t else '-'}('{tb.get('column_label_name', '')}' INPUT_TP_CD={tb.get('input_tp_cd', '')}) — TO-BE 룰 CR-077: '*' 를 뺀 라벨 문구 일치 → 오류 아님")
+                else: d['static'] =('PASS' if areq == t else 'FAIL', f"필수 표시 AS-IS {'*' if areq else '-'}('{gr.get('label', '')}') ↔ TO-BE {'*' if t else '-'}('{tb.get('column_label_name', '')}' INPUT_TP_CD={tb.get('input_tp_cd', '')})" + ('' if areq == t else ' — 필수 여부 불일치(저장 검증 checkRequiredOfSpread 대상 차이)'))
         elif c == 'H10' and d['et'] == 'SCREEN' and srcs:
             raw = [k for k, v in srcs.items() if re.search(r'(?<![\w.])(?:window\.)?(?:alert|confirm)\s*\(', v)]
             std = re.search(r'useMessage|showMessage|openAlert|useAlert|useConfirm|MessageBox|useDialog|alertMessage|messageCode', alltxt)
             d['static'] = ('FAIL', f'표준 메시지 대신 브라우저 alert/confirm 직접 호출: {", ".join(raw)[:100]}') if raw else ('PASS', '브라우저 alert/confirm 직접 호출 0 · 공용 메시지 API 사용') if std else ('REVIEW', '메시지 호출 자체가 없음 — AS-IS 메시지 발생 조건(E4)과 대조 필요')
+
+    # ── 실행되지 않는 AS-IS 코드(asis_live.dead_methods) 에서만 나온 검사 = 대상 아님 ──
+    #   2026-10-30 SCP0041 조치 필요 3번: SaveButton 의 '// SaveData();' 주석 → SaveData 본문 SCP0040_SAVE_CHARACTERISTIC_CAPA 를 F4 로 잡아 'PROC_M 배선 없음' FAIL
+    #   → FE 대조표 행 집계(D00-3-013·015·[R3]) 3건까지 증폭(T4·T5). 살아있는 문장이 한 행이라도 있으면 그대로 검사한다(SP 공유 등)
+    for d in inst.values():
+        drs = [rmap.get(rid, {}) for rid in d['rows']]
+        if drs and all(x.get('dead') for x in drs):
+            d['static'] = ('NA', f"검사 대상 아님 — {drs[0]['dead']}")
+            d['hits'] = []  # 이전 E2E·원장 판정(같은 죽은 코드 근거)은 쓰지 않는다
+            d['dead'] = drs[0]['dead'][:200]  # 2026-10-30: 조건 JSON "dead" 로 실어 검증 엔진(_trace/_verify)·judge E2E 반입이 이 행을 측정·덮어쓰기하지 않게(SCP0041 SCP0040 F4 가 14:38 E2E 로 다시 FAIL 되던 원인)
 
     # ── 인스턴스 결과 ──
     for d in inst.values():
@@ -688,7 +844,7 @@ def main():
             others = list({o['key']: o for o in others}.values())
             if others:
                 rs = [o['result'] for o in others]; w = worst(rs)
-                d['result'] = 'REVIEW' if w in ('NOT_RUN', 'NOPATH', 'TODO') else w
+                d['result'] = 'ERROR' if w in ('NOT_RUN', 'TODO') else 'NA' if w == 'NOPATH' else w  # 미실행 집계 = 미검증(ERROR) · 검사 경로 없음 = 수동 검수(NA) — 판정필요는 A1 만(2026-10-28)
                 d['why'] = f"진입점 집계 {len(others)}검사 — " + ' · '.join(f'{k}:{v}' for k, v in collections.Counter(rs).most_common()) + ('' if w not in ('NOT_RUN', 'NOPATH', 'TODO') else ' (미실행 검사가 남아 판정필요)')
                 d['agg'] = [o['key'] for o in others][:40]
             else:
@@ -709,7 +865,7 @@ def main():
             d['result'], d['why'] = 'NA', f"검사 대상 아님 — 이 화면에 {d['check']} 를 적용할 요소(컬럼·조회조건·SP)가 없다"
             continue
         rs = [o['result'] for o in pool]; w = worst(rs)
-        d['result'] = 'REVIEW' if w in ('NOT_RUN', 'NOPATH', 'TODO') else w
+        d['result'] = 'ERROR' if w in ('NOT_RUN', 'TODO') else 'NA' if w == 'NOPATH' else w  # 미실행 집계 = 미검증(ERROR) · 검사 경로 없음 = 수동 검수(NA) — 판정필요는 A1 만(2026-10-28)
         lab = (rmap.get(d['name'], {}).get('label') or '') if d['et'] == 'ROW' else ''
         bad = [o for o in pool if o['result'] in ('FAIL', 'REVIEW')]
         d['why'] = f"{'진입점' if d['et'] == 'ENTRY' else '행'} 집계 — 대조표 {d['name']}{(' ' + repr(lab[:50])) if lab else ''} 의 {d['check']} {len(pool)}요소: " + ' · '.join(f'{k}:{v}' for k, v in collections.Counter(rs).most_common()) + ((' · FAIL 요소: ' + '; '.join(f"{o.get('display', '')[:30]} — {CLEAN(o.get('why') or '')[:80]}" for o in bad[:4])) if bad else '') + ('' if w not in ('NOT_RUN', 'NOPATH', 'TODO') else ' (미실행 요소가 남아 판정필요)')
@@ -740,13 +896,14 @@ def main():
     for r in rows:
         ks = links[r['id']]; rs = [inst[k]['result'] for k in ks]
         if re.match(r'^미구현', r['status']): v = '미구현'
+        elif r.get('dead') and all(x == 'NA' for x in rs): v = '해당없음'  # 실행되지 않는 AS-IS 메서드 문장(asis_live) — 사유는 summary 에
         elif 'FAIL' in rs: v = 'FAIL'
         elif rs and all(x in ('PASS', 'NA') for x in rs): v = '해당없음' if is_excl(r) else '검증완료'  # 해당없음 = 사유 근거 검사(X-REASON) PASS
         else: v = '미검증'
         cnt = collections.Counter(rs)
         out.append({'menu_id': MENU, 'source': r['src'], 'section': r['section'][:60], 'row_id': r['id'], 'line': r['line'], 'status': r['status'], 'verdict': v,
                     'checks': ' '.join(f"{inst[k]['check']}={inst[k]['result']}" for k in ks)[:600], 'result_counts': ' '.join(f'{k}:{n}' for k, n in cnt.most_common()),
-                    'instances': ' '.join(ks)[:600], 'summary': CLEAN((r.get('detail') or r['text'])[:220])})
+                    'instances': ' '.join(ks)[:600], 'summary': CLEAN(((f"[실행 안 됨] {r['dead'][:120]} · " if r.get('dead') else '') + (r.get('detail') or r['text']))[:340])})
     od = os.path.join(DOC, 'verify', MENU); os.makedirs(od, exist_ok=True)
     if a.to_ledger: to_ledger(inst, od, rmap)
     wcsv(os.path.join(od, 'mapping_trace.csv'), out)
@@ -812,6 +969,7 @@ def engine_condition(d, rmap):
     rows = [rmap[i] for i in d['rows'] if i in rmap]
     raws = [r.get('raw', '') for r in rows if r.get('raw')]
     j = {'et': d['et'], 'name': d['name'], 'labels': list(dict.fromkeys([x for x in d['display'].split(' / ') if x]))[:6]}
+    if d.get('dead'): j['dead'] = d['dead']  # 실행되지 않는 AS-IS 코드에서만 나온 검사 — 하류(검증 엔진·judge)가 측정·반입하지 않는다(JSON 앞쪽에 둬 절단되지 않게)
     j['popup'] = bool(rows) and all(r.get('popup') for r in rows if r.get('src') == 'AS-IS 액션') and any(r.get('src') == 'AS-IS 액션' for r in rows)  # 공용 팝업 클래스 안 대상 — 메인 화면에서 찾지 않는다
     c = d['check']
     srows = [r for r in rows if r.get('src') == 'AS-IS 액션' and r.get('kind') != 'ENTRY']
@@ -852,6 +1010,15 @@ def engine_condition(d, rmap):
             j['src'] = list(dict.fromkeys(srcs))[:3]
             if c == 'C3' and not assign and own: j['noAssign'] = True  # 값 대입 문장이 없다(잠금·스타일만) — 연쇄 채움 검사 대상 아님
             if any(x in E.trigger_cols for x in j['src']): j['viaPopup'] = True  # 원천이 팝업을 여는 셀 — 값은 팝업 선택으로 채워진다(M4)
+            if c == 'C3':
+                # 팝업 선택 행(dr["필드"]) → 이 컬럼 대응 · 고정값("Y") — AS-IS SetRoute: ROUTE_VALID←VALID_YN · DIS_TOTAL_LEAD_TIME←LT_SUM · TRANSPORT_MODE←TRANSPORT_MODE_NAME · BOD_VALID←"Y"
+                # (2026-10-28: 이름이 달라 E2E 가 '팝업 데이터에 해당 항목 없음' NA 로 빠지던 결함 — 실측 가능하게)
+                pm = {}
+                for r in assign:
+                    if not re.search(r'DoubleClick|SetRoute|Popup|Dialog', r.get('meth') or ''): continue  # 팝업 선택 반영 문장만(InsertButton 기본값 등 다른 대입은 D4 몫 — 2026-10-28 TO_YYYYMMDD 허위 FAIL)
+                    for mm_ in re.finditer(r'DefColumns\.' + re.escape(col) + r'\)\s*\)?\s*,\s*(?:dr\["(\w+)"\]|"([^"]*)")', r.get('raw', '')):
+                        pm[col] = mm_.group(1) if mm_.group(1) else '=' + (mm_.group(2) or '')
+                if pm: j['popMap'] = pm
         if c == 'D4':
             lits = [m.group(1) for r in own if r.get('meth') == 'InsertButton' for m in re.finditer(r'SetValue\([^;]*?DefColumns\.' + re.escape(col) + r'\)\s*,\s*("[^"]*"|-?\d+(?:\.\d+)?|true|false)\s*\)', r.get('raw', ''))]
             j['d4'] = [x.strip('"') for x in lits][:3]
@@ -945,10 +1112,13 @@ def engine_condition(d, rmap):
         srs = [r for r in rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'sort_rules.csv')) if r['kind'] == 'SQL' and tail(r['sp']) == tail(d['name']) and (r.get('depth') or '0') == '0']
         j['sort'] = [{'guard': r['guard'][:200], 'keys': [k.strip() for k in r['keys'].split(',') if k.strip()]} for r in srs if r['keys']][:4]
         j['sortNone'] = bool(srs) and not any(r['keys'] for r in srs)
-        pm = [r for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'proc_meta.csv')) if r.get('proc') and tail(r['proc']) == tail(d['name'])]
+        pm, via = resolve_call_proc(d['name'])  # F4 와 같은 배선 해석(API_ID·축약명 포함)
+        if via: j['callProcVia'] = via
         j['callProc'] = [{'menu': r['menu_id'], 'sheet': r['sheet'], 'btn': r['btn']} for r in pm][:4]
     if d['et'] == 'SP' and c == 'F4':
-        pm = [r for r in rdcsv(os.path.join(DOC, 'tobefacts', 'db', 'proc_meta.csv')) if r.get('proc') and r['proc'].split('.')[-1].upper() == d['name'].split('.')[-1].upper()]
+        # 배선 해석 = resolve_call_proc(프로시저명·API_ID·골든·정규화·토큰 1:1) — 2026-10-29 SCP0020 GET_TACT_TIME_EXCEPT · SCP0111 API_ID/축약명 허위 '배선 없음'
+        pm, via = resolve_call_proc(d['name'])
+        if via: j['callProcVia'] = via
         j['callProc'] = [{'menu': r['menu_id'], 'sheet': r['sheet'], 'btn': r['btn']} for r in pm][:4]
     if c == 'A10':
         acts = rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'actions.csv'))
@@ -958,14 +1128,22 @@ def engine_condition(d, rmap):
         j['raws'] = [x[:160] for x in raws if d['name'] in x][:8]
     elif c in ('C1', 'C4'):
         acts = rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'actions.csv'))
-        hs = {x['value'].replace('+=', '').strip() for x in acts if x['kind'] == 'EVENT_WIRE' and x['target'].startswith(d['name'] + '.')}
+        hs = {x['value'].replace('+=', '').strip() for x in acts if x['kind'] == 'EVENT_WIRE' and re.sub(r'^this\.', '', x['target']).startswith(d['name'] + '.')}
+        # Designer 연결은 events.csv 에 'this.컨트롤' 로 있다 — 이걸 안 보면 핸들러·하위 조건이 전부 비어 C1 이 재요청 여부만 판정했다(2026-11-02 DMF0005 EG084)
+        hs |= {e['handler'] for e in rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'events.csv')) if re.sub(r'^this\.', '', e.get('target') or '') == d['name'] and e.get('handler') and e.get('variant', 'current') in ('current', 'shared')}
         body = [x for x in acts if x['method'] in hs]
         calls = {x['target'] for x in body if x['kind'] == 'CALL_LOCAL'}
         body += [x for x in acts if x['method'] in calls]
         j['handlers'] = sorted(hs)
-        j['children'] = sorted({m.group(0) for x in body for m in RX_COND.finditer(f"{x['target']} {x['value']}") if m.group(0) != d['name'] and not NOT_COND.match(m.group(0)) and m.group(0) in E.conds})  # 화면 조건 컨트롤만(dtFromSite 같은 DataTable 변수 제외)
+        seen = {m.group(0) for x in body for m in RX_COND.finditer(f"{x['target']} {x['value']}") if m.group(0) != d['name'] and not NOT_COND.match(m.group(0)) and m.group(0) in E.conds}  # 화면 조건 컨트롤만(dtFromSite 같은 DataTable 변수 제외)
+        j['children'] = sorted(c2 for c2 in seen if any(cond_written(x, c2) for x in body))  # 값·후보를 바꾸는 컨트롤만 — 읽기만 한 컨트롤(상위 입력)은 parents
+        j['parents'] = sorted(seen - set(j['children']))
+        # 하위 후보 재구성 경로: 핸들러 체인에 DB 호출(ENDPOINT)이 없으면 메모리 필터(DBUtils.Filter·Select) — TO-BE 도 클라이언트 필터면 콤보 재요청 0건이 정상(2026-10-29 SCP0020)
+        j['rebindVia'] = 'db' if any(x['kind'] == 'ENDPOINT' for x in body) else 'memory'
         j['childLabels'] = {c: list(dict.fromkeys(E.aliases('COND', c)))[:6] for c in j['children']}  # 하위 조건의 화면 라벨 후보(검증 엔진이 칸을 찾는다)
-        j['clear'] = [f"{x['method']}:{x['line']} {x['raw'][:80]}" for x in body if re.search(r'RowCount\s*=\s*0|DataSource\s*=\s*null|\.Clear\(|ClearSheet|ClearSpread|InitSpread', x['raw'])]
+        j['clear'] = [f"{x['method']}:{x['line']} {x['raw'][:80]}" for x in body if x['kind'] == 'GRID_CLEAR' or re.search(r'RowCount\s*=\s*0|DataSource\s*=\s*null|\.Clear\(|ClearSheet|ClearSpread|ClearDataSource|RemoveRows\(|Rows\.Clear|InitSpread', x['raw'])]
+        # 초기화 뒤 같은 핸들러 체인이 즉시 재조회(FindData·SearchButton·Search*·Retrieve*)하면 기대는 '초기화 후 즉시 재조회' — TO-BE 자동 재조회가 정상(2026-10-30 SCP0100 CboBucketType: SetGridClear(); … FindData())
+        j['requery'] = [f"{x['method']}:{x['line']} {x['target']}" for x in body if x['kind'] in ('CALL_LOCAL', 'CALL_BASE') and re.match(r'^(FindData|SearchButton|Search\w*|Retrieve\w*|Inquiry\w*|GetData\w*|LoadData\w*)$', x['target'] or '')]
     elif c == 'D6':
         acts = rdcsv(os.path.join(DOC, 'asisfacts', 'screens', asis_id(), 'actions.csv'))
         ins = [x for x in acts if x['method'] == 'InsertButton' and re.search(r'\.Insert\(|AddRows?\(|AddNew', x['raw'])]
@@ -975,7 +1153,7 @@ def engine_condition(d, rmap):
         main = collections.Counter(x['class'] for x in acts).most_common(1)[0][0] if acts else ''
         ms = {x['method'] for x in acts if x['class'] == main}
         excl = [r for r in rmap.values() if r.get('src') == 'FE 대조표' and re.match(r'^(제외|해당없음)', r.get('status', ''))]
-        j['excluded'] = sorted({b for b, m in (('Edit', 'EditButton'), ('Insert', 'InsertButton'), ('Delete', 'DeleteButton'), ('Save', 'SaveButton'), ('Search', 'FindButton')) if any(m in r['text'] for r in excl)})  # 대조표가 제외로 결정한 버튼
+        j['excluded'] = sorted({b for b, m in (('Edit', 'EditButton'), ('Insert', 'InsertButton'), ('Delete', 'DeleteButton'), ('Save', 'SaveButton'), ('Search', 'FindButton')) if any(m in r['text'] for r in excl)} | {'Edit'})  # 대조표가 제외로 결정한 버튼 + Edit(CR-093: TO-BE 는 편집 모드 버튼 없이 셀 직접 편집 — 사용자 결정 2026-10-30)
         j['buttons'] = [b for b, m in (('Search', 'FindButton'), ('Insert', 'InsertButton'), ('Delete', 'DeleteButton'), ('Save', 'SaveButton'), ('Edit', 'EditButton'), ('Excel', 'ExcelButton'), ('Print', 'PrintButton')) if m in ms]
         j['custom'] = sorted({m.group(1) for x in acts if 'ButtonList' in x['method'] for m in re.finditer(r'"([A-Za-z][A-Za-z ]{1,30})"', x['raw'])})
     if 'editExpect' in j: j['editExpect'] = {k: (v[:400] if isinstance(v, str) else v) for k, v in j['editExpect'].items()}
@@ -989,7 +1167,7 @@ def engine_condition(d, rmap):
         elif isinstance(j[k], list): j[k] = j[k][:n]
         elif isinstance(j[k], dict): j[k] = {kk: j[k][kk] for kk in list(j[k])[:n]}
         s = json.dumps(j, ensure_ascii=False)
-    if len(s) > 3000: s = json.dumps({**{'et': j.get('et'), 'name': j.get('name'), 'labels': j.get('labels', [])[:3], 'truncated': True}, **{k: j[k] for k in ('popup', 'asisCombo', 'merge', 'viaPopup', 'd5Src', 'd5', 'noAssign', 'allFlag', 'ctlType', 'asisLabel') if k in j}}, ensure_ascii=False)  # 작은 판정 키는 폴백에도 남긴다(2026-10-27 VMI_YN asisCombo 누락)
+    if len(s) > 3000: s = json.dumps({**{'et': j.get('et'), 'name': j.get('name'), 'labels': j.get('labels', [])[:3], 'truncated': True}, **{k: j[k] for k in ('dead', 'popup', 'asisCombo', 'merge', 'viaPopup', 'popMap', 'd5Src', 'd5', 'noAssign', 'allFlag', 'ctlType', 'asisLabel') if k in j}}, ensure_ascii=False)  # 작은 판정 키는 폴백에도 남긴다(2026-10-27 VMI_YN asisCombo 누락)
     return s
 
 
@@ -1004,10 +1182,14 @@ def to_ledger(inst, od, rmap):
     keep = [r for r in old if r.get('source') not in ('MAPPING', 'TRACE')]
     add = []
     for d in inst.values():
-        linked = d['et'] == 'LEDGER' or any(h[1].startswith('원장 ') for h in d['hits'])
+        # linked = 요소 실측(RULE_SCREEN·SEARCH·COLUMN·ASIS·SP·MSG 원장 행)만 — GENERAL/DEFECT/CONFIRMED 행은 소비자(상속)라 연결로 치지 않는다
+        #   (2026-10-30 T14: judge 가 GENERAL K4 를 판정한 뒤 2차 --to-ledger 가 'linked' 로 보고 측정된 TRACE K4 FAIL 행을 버리던 되먹임)
+        linked = d['et'] == 'LEDGER' or any(h[1].startswith('원장 ') and not re.search(r'\b(GENERAL|DEFECT|CONFIRMED)\b', h[1]) for h in d['hits'])
+        rid0 = trace_id(d['key']); pr0 = prev.get(rid0, {})
+        measured_now = bool(pr0) and pr0.get('result') in ('PASS', 'FAIL', 'NA', 'ERROR', '판정필요') and re.match(r'^(E2E|수동)', pr0.get('tobe_ref', '')) and not re.match(r'^(실측\[T-[0-9a-f]+\]: )?(검증엔진|선행 대조표 |행 집계|진입점 집계|대조표 상태 미구현|선행 미구현에 종속)', pr0.get('evidence') or '')
         # 원장에 그 검사 행이 이미 있으면 건너뛴다 — 단 검증 엔진(@trace) 구현 검사인데 원장 행이 전부 미실행이면 엔진이 실행하도록 TRACE 행을 만든다(SEARCH C1 Div 등)
-        # A6 는 정적 대조(원장 SP 행)와 E2E 실측(TRACE 행)이 별개 증거 — 둘 다 남긴다
-        if linked and d['check'] != 'A6' and not (d['check'] in ENGINE_CHECKS and all(h[0] == 'NOT_RUN' for h in d['hits'] if h[1].startswith('원장 '))): continue
+        # A6 는 정적 대조(원장 SP 행)와 E2E 실측(TRACE 행)이 별개 증거 — 둘 다 남긴다 · 이번 실행에 실측된 TRACE 행은 어떤 경우에도 버리지 않는다(T14)
+        if linked and d['check'] != 'A6' and not measured_now and not (d['check'] in ENGINE_CHECKS and all(h[0] == 'NOT_RUN' for h in d['hits'] if h[1].startswith('원장 '))): continue
         df = DEFS.get(d['check'], {}); fam = d['check'][0] if re.match(r'^[A-N]\d', d['check']) else FAM.get(df.get('layer', 'GEN'), 'G')
         rid = trace_id(d['key']); pr = prev.get(rid, {})
         res = d['static'][0] if d['static'] else ('NOT_RUN' if d['result'] in ('NOT_RUN', 'NOPATH', 'TODO', 'BLOCKED') else d['result'])
@@ -1016,7 +1198,12 @@ def to_ledger(inst, od, rmap):
         ev = d['static'][1] if d['static'] else d['why']
         tobe = ''
         pev = pr.get('evidence') or ''
-        measured = pr.get('result') not in (None, '', 'NOT_RUN') and re.match(r'^(E2E|수동)', pr.get('tobe_ref', '')) and not re.match(r'^(실측\[T-[0-9a-f]+\]: )?(검증엔진|선행 대조표 |행 집계|진입점 집계|대조표 상태 미구현|선행 미구현에 종속)', pev) and not (pr.get('tobe_ref', '').startswith('수동') and not pev.startswith('[사용자판정]'))  # 파생 증거·해제된 사용자판정은 보존 대상 아님(2026-10-27)
+        measured = pr.get('result') not in (None, '', 'NOT_RUN') and re.match(r'^(E2E|수동)', pr.get('tobe_ref', '')) and not re.match(r'^(실측\[T-[0-9a-f]+\]: )?(검증엔진|선행 대조표 |행 집계|진입점 집계|대조표 상태 미구현|선행 미구현에 종속)', pev) and not (pr.get('tobe_ref', '').startswith('수동') and not pev.startswith('[사용자판정]')) \
+            and pr.get('tobe_ref', '') != '수동 사용자판정(CheckList)'  # 파생 증거·해제된 사용자판정은 보존 대상 아님(2026-10-27) · CheckList 사용자판정은 judge 가 매번 다시 반입 — 여기서 보존하면 검사기 자신의 판정(원판정)이 다시 계산되지 않아 회귀 오라클이 무력화됨(2026-10-30 T12)
+        cond_now = CLEAN(engine_condition(d, rmap)); cond_prev = pr.get('condition') or ''
+        if measured and cond_prev and cond_prev != cond_now and not (pr.get('tobe_ref', '').startswith('수동')) and not d.get('dead'):  # dead = 정적 결론(검사 대상 아님)이 우선 — 재측정 대상이 아니다(2026-10-30)
+            # 2026-10-29(재발 방지): 검사 조건(배선·라벨·대상)이 바뀌었으면 옛 E2E 판정은 그 조건의 것 — 보존하지 않고 재측정 대상으로(미실행). 옛 FAIL 이 조치 필요에 남던 원인
+            measured = False; ev = f"[재측정 필요] 검사 조건 변경(이전 판정 {pr.get('result')} 보류: {(pr.get('evidence') or '')[:160]})"; res = 'NOT_RUN'
         if measured and (not d['static'] or d['check'] == 'X-NOTIMPL'):
             res, ev, tobe = pr['result'], pr.get('evidence', ''), pr['tobe_ref']  # 검증 엔진·사람 판정 보존 — X-NOTIMPL(대조표 미구현) 도 W9 실측이 있으면 실측이 정답(2026-10-27 사용자: 확인 없이 FAIL 처리하면 보완 불가)
             if d['check'] == 'X-NOTIMPL':

@@ -1,5 +1,5 @@
 import {
-  ItemByDivisionModal,
+  MaterialByDivisionModal,
   MeasureSelectModal,
   ProjectByDivisionModal,
 } from 'features/master/src/components';
@@ -99,17 +99,31 @@ export const ShipmentRequestModals = ({
       <ProjectByDivisionModal
         open={openProject}
         modalClose={() => onClose('PROJECT')}
-        // 반환 positional (projectCode, projectName, projectStatus, bizTypeName, projectOwner) — design 03 §3.
-        //   주의: 공용 SCM0002 모달은 END_CUSTOMER 를 positional 로 반환하지 않는다(master 계약).
-        //   AS-IS cs 1250-1310 은 END_CUSTOMER 도 채우나 모달 반환에 없어 여기서 임의로 채우지 않는다
-        //   (blank/추측 금지 — 04_react-gap 확인필요. 반환되는 컬럼만 반영).
-        setSelectedValue={(projectCode, projectName, projectStatus, bizTypeName, projectOwner) => {
+        // 반환 positional (projectCode, projectName, projectStatus, bizTypeName, projectOwner,
+        //   deptId, deptName, bizType, endCustomer) — 공용 ProjectByDivisionModal 계약.
+        //   END_CUSTOMER: AS-IS Project 팝업(cs 1305)이 채운다 — 공용 모달에 endCustomer(9번째) 반환을 추가해 반영.
+        //   TEAM_NAME_KO: AS-IS Project 팝업은 Team 을 채우지 않는다(Team 은 TR_MODE 팝업 cs 1387 담당).
+        //     사용자 지시(2026-10-30)로 Project 선택 시 Team(팝업 반환 deptName)도 함께 채운다(AS-IS 초과).
+        //     [ROLLBACK:dmf0045-project-popup-fill-team] TEAM_NAME_KO 줄만 제거하면 AS-IS 패리티(End Customer 만).
+        setSelectedValue={(
+          projectCode,
+          projectName,
+          projectStatus,
+          bizTypeName,
+          projectOwner,
+          _deptId,
+          deptName,
+          _bizType,
+          endCustomer
+        ) => {
           applyToInsertRow({
             PROJECT_CODE: projectCode,
             PROJECT_NAME: projectName ?? '',
             PROJECT_STATUS: projectStatus ?? '',
             BIZ_TYPE_NAME: bizTypeName ?? '',
             PROJECT_OWNER: projectOwner ?? '',
+            END_CUSTOMER: endCustomer ?? '', // AS-IS cs 1305 (Project 팝업이 채우는 컬럼)
+            TEAM_NAME_KO: deptName ?? '', // 사용자 지시 2026-10-30 (AS-IS 초과 — [ROLLBACK:dmf0045-project-popup-fill-team])
           });
         }}
         preSearchParams={
@@ -125,30 +139,26 @@ export const ShipmentRequestModals = ({
         callFromCell={true}
       />
 
-      {/* 셀 모달 — ITEM_ID → DMF0047 ItembyDivisionPopup (Pack='P'/Cell='A' BizType 은 SP 응답 필터) */}
-      <ItemByDivisionModal
+      {/* 셀 모달 — ITEM_ID(Model) → COM0013 MaterialByDivisionModal(공통 팝업, SCM0002_MaterialByDivisionPopup).
+          사용자 지시 2026-10-29: 기존 ItemByDivisionModal(DMF0047)에서 조회조건 Model/Nickname 과 동일한
+          공통 팝업으로 교체. 파라미터도 조회조건 팝업과 동형(scpModuleType=화면ID / operationGroup 공란).
+          더블클릭 = 그 행으로 확정(모달 handleDblClick→emit) → ITEM_ID/NICK_NAME 2컬럼 채움. */}
+      <MaterialByDivisionModal
         open={openItem}
         modalClose={() => onClose('ITEM')}
-        // 반환 positional (itemId, itemName, itemClassName, itemType, nickName) — master 계약 순서.
-        //   design 03 §3: ItemID→ITEM_ID, NickName→NICK_NAME 2컬럼만 채움.
-        setSelectedValue={(itemId, _itemName, _itemClassName, _itemType, nickName) => {
+        // 반환 (itemId, itemName, itemClassName, nickName, nickNames). design 03 §3: Model→ITEM_ID, Nickname→NICK_NAME.
+        setSelectedValue={(itemId, _itemName, _itemClassName, nickName) => {
           applyToInsertRow({
             ITEM_ID: itemId,
             NICK_NAME: nickName ?? '',
           });
         }}
-        preSearchParams={
-          {
-            divisionId: rowValue('DIVISION_ID', divisionId),
-            deptId: rowValue('DEPT_ID'),
-            endCustomer: rowValue('END_CUSTOMER'),
-            salesSite: rowValue('SCM_SITE_ID'),
-            projectCode: rowValue('PROJECT_CODE', ''),
-            itemId: rowValue('ITEM_ID', ''),
-            activeFlag: 'Y',
-          } as never
-        }
-        callFromCell={true}
+        preSearchParams={{
+          divisionId: rowValue('DIVISION_ID', divisionId),
+          scpModuleType: MENU_ID,
+          operationGroup: '',
+          itemId: rowValue('ITEM_ID', ''),
+        }}
       />
 
       {/* 셀 모달 — TR_MODE → DMF0046 BOD 팝업(로컬 구성 — 전제 ITEM_ID 는 그리드가 선차단) */}
@@ -161,14 +171,19 @@ export const ShipmentRequestModals = ({
         setSelectedValue={(bodRows: BodItemReturn[]) => {
           const first = bodRows[0];
           if (!first) return;
+          // SCP0030 기반 BOD 팝업은 END_CUSTOMER/Team(c_END_CUSTOMER·c_DEPT_NAME_KO)을 반환하지 않아 ''다.
+          //   빈값으로 덮으면 직전 Project 팝업(cs 1305/사용자지시)이 채운 End Customer·Team 이 지워진다
+          //   → 반환값이 있을 때만 반영하고, 없으면 기존 값을 보존한다(AS-IS 는 BOD 가 채우나 TO-BE 미반환).
+          const endCustomer = toCellStr(first.c_END_CUSTOMER);
+          const teamNameKo = toCellStr(first.c_DEPT_NAME_KO);
           applyToInsertRow({
             FROM_SITE: toCellStr(first.c_FROM_SITE),
             TO_SITE: toCellStr(first.c_TO_SITE),
             INCOTERMS: toCellStr(first.c_INCOTERMS),
             TR_MODE: toCellStr(first.c_TRANSPORT_MODE),
             BOD_ID: toCellStr(first.c_BOD_ID),
-            END_CUSTOMER: toCellStr(first.c_END_CUSTOMER),
-            TEAM_NAME_KO: toCellStr(first.c_DEPT_NAME_KO),
+            ...(endCustomer ? { END_CUSTOMER: endCustomer } : {}),
+            ...(teamNameKo ? { TEAM_NAME_KO: teamNameKo } : {}),
           });
         }}
       />

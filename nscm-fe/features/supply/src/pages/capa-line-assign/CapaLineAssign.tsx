@@ -24,11 +24,13 @@ import {
   useTabComboQueries,
   useTabProcQuery,
 } from '@shared/hooks';
+import { ProgressIndicator } from '@shared/lges';
 import { useMessageStore } from '@shared/stores';
 
 import {
   ASSIGN_SHEET_BY_DIVISION_TYPE,
   COLUMN,
+  COLUMN_SETTING_HIDDEN_COLUMNS,
   COMBO,
   CUTOFF_PROG_STATS,
   DIVISION_TYPE,
@@ -46,7 +48,7 @@ import {
   SOP_MODEL_SHEET_BY_DIVISION_TYPE,
   SOP_SHEET_BY_DIVISION_TYPE,
   TAB,
-  TAB_MODE_SUFFIX,
+  TAB_MODE_LABEL,
   TITLESET_COLUMN_TYPE,
   type TabIndex,
 } from './capa-line-assign.constants';
@@ -127,6 +129,9 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [openLinePopup, setOpenLinePopup] = useState(false);
   const [openSopModelPopup, setOpenSopModelPopup] = useState(false);
   const [itemPopupRow, setItemPopupRow] = useState<GridRow | null>(null);
+  // 저장 진행 중 스피너 표시용 state. 중복호출 가드는 `savingRef`(동기 ref)가 전담하고, 이 state 는
+  //   UI(ProgressIndicator) 노출만 담당한다 — mkt-fcst/sales-plan 과 동일 패턴.
+  const [saving, setSaving] = useState(false);
 
   const assignGridRef = useRef<FlexGrid | undefined>(undefined);
   const sopGridRef = useRef<FlexGrid | undefined>(undefined);
@@ -145,6 +150,7 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
   const openSearchArea = useCapaLineAssignStore(s => s.openSearchArea);
   const initialized = useCapaLineAssignStore(s => s.initialized);
   const setOpenSearchArea = useCapaLineAssignStore(s => s.setOpenSearchArea);
+  const setSearchParams = useCapaLineAssignStore(s => s.setSearchParams);
   const setFilters = useCapaLineAssignStore(s => s.setFilters);
   const clearFilters = useCapaLineAssignStore(s => s.clearFilters);
   const clearAssignFilters = useCapaLineAssignStore(s => s.clearAssignFilters);
@@ -157,8 +163,8 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const divisionType = sc.divisionType;
   const isEltr = divisionType === DIVISION_TYPE.ELTR;
-  // 탭 라벨 모드 접미 — 시트명 2분류(Electrode→-ELTR, Cell·Module-Pack→-ASSEMBLY). 표시 전용.
-  const tabModeSuffix = isEltr ? TAB_MODE_SUFFIX.ELTR : TAB_MODE_SUFFIX.ASSEMBLY;
+  // 탭 줄(탭 버튼 오른쪽)에 표시할 현재 모드 텍스트(표시 전용) — 탭 라벨에 넣으면 remount 되므로 라벨 밖에 둔다.
+  const tabModeLabel = isEltr ? TAB_MODE_LABEL.ELTR : TAB_MODE_LABEL.ASSEMBLY;
   const assignSheet = ASSIGN_SHEET_BY_DIVISION_TYPE[divisionType];
   const sopSheet = SOP_SHEET_BY_DIVISION_TYPE[divisionType];
   const linePopupSheet = LINE_SHEET_BY_DIVISION_TYPE[divisionType];
@@ -306,8 +312,18 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
       prevDivisionTypeRef.current = sc.divisionType;
       prevDivisionRef.current = sc.divisionId;
       prevVerRef.current = verKey;
-      assignTrackerRef.current?.clearChanges();
-      sopTrackerRef.current?.clearChanges();
+      // AS-IS `rgrpDivisionType_SelectedIndexChanged`(cs:5530-5544)는 `BeforeFindDataAssign`/`SOP` 로
+      //   두 그리드를 `ClearDataSoure`(데이터소스 통짜 비움)+`IsEditModes=false` 한다. TO-BE 는 탭이
+      //   `persist` 라 그리드가 언마운트되지 않으므로, 미저장 추가행(CRUD='I')이 react-query 캐시 배열에
+      //   splice 된 채 남는다(gridAction addRowSet). Cell↔Module 처럼 시트가 안 바뀌는 전환은 `sopRows`
+      //   배열 참조가 그대로라 아래 `discardChanges` 가 그 live 배열에서 추가행을 실제로 걷어낸다
+      //   (=ClearDataSoure 등가). 시트가 바뀌는 ELTR↔ASSEMBLY 전환은 `sopSheet` 가 바뀌어 `sopRows` 가
+      //   빈 새 배열로 교체되고 Wijmo 가 CollectionView 를 그 새 배열로 즉시 스왑하므로 추가행은 화면에서
+      //   사라진다(옛 캐시 배열은 아래 `removeQueries` 로 폐기). 탭 라벨은 모드와 무관하게 고정해 둔다 —
+      //   라벨이 바뀌면 TabWrapper(molecules/Tab.tsx) 가 라벨을 key 로 써 그리드가 통째로 remount 되고,
+      //   DataGrid 가 unmount 시 `grid.dispose()` 를 안 해 옛 Wijmo 인스턴스가 추가행째 DOM 에 남는다.
+      GridAction.discardChanges(assignGridRef.current, assignTrackerRef.current);
+      GridAction.discardChanges(sopGridRef.current, sopTrackerRef.current);
       // 컬럼 메타는 set() 커밋 뒤 새 값으로 호출한다(producer 안 get() 금지 — §5-5).
       void fetchStaticColumns(sc.divisionId);
       queryClient.removeQueries({ queryKey: [tabId] });
@@ -354,11 +370,21 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   AS-IS 에서 사문화된 분기다(R-27 / V-21). 없는 검증을 새로 만들지 않는다.
   const handleSearch = () => {
     if (!cascade.hasDivisionAuth) return;
+    // Division 빈값 보정 — `searchParams.divisionId` 는 평문 string 이라 최초 진입/F10(store.reset)
+    //   직후 `''` 가 되는 창이 있고, 그 창에서 Search 하면 `setFilters` 가 빈 `p_division_id` 를 실어
+    //   SP 가 Division 필터를 통째로 풀어 전체조회가 된다(SOP SP body 4486-4489 `TRIM IS NULL → 조건없음`).
+    //   AS-IS `cboDivision.ControlValues` 는 바인딩 후 항상 첫 행 선택값을 가져 빈값이 될 수 없던 불변식의
+    //   명령형 판 — 자가복구 effect(Form.tsx:67-71)는 값만 메울 뿐 조회를 재발사하지 않으므로, 단순 return
+    //   가드는 "Search 눌러도 무반응"이 된다. 여기서 첫 옵션으로 메워 그 값으로 조회를 이어간다.
+    const divisionId = sc.divisionId || cascade.divisionOptions[0]?.value || '';
+    if (!divisionId) return; // 콤보 자체가 비면(권한 0건 등) 조회 불가 — hasDivisionAuth 로 이미 걸러지나 방어.
+    // zustand set 은 동기라 뒤따르는 `setFilters` producer 가 패치된 divisionId 를 본다(하위 조건은 보존).
+    if (divisionId !== sc.divisionId) setSearchParams({ divisionId });
     assignTrackerRef.current?.clearChanges();
     sopTrackerRef.current?.clearChanges();
     // AS-IS FindButton 은 `isPageSOP` 로 갈린다 — 활성 탭 1개만 조회한다.
     setFilters(activeTab, cascade.candidates);
-    void fetchStaticColumns(sc.divisionId);
+    void fetchStaticColumns(divisionId);
   };
 
   /**
@@ -432,6 +458,7 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
           });
 
       savingRef.current = true;
+      setSaving(true);
       try {
         const res = await apiClient.post<Record<string, unknown>>(
           `/${MENU_ID}/${activeSheet}/SAVE/call-proc`,
@@ -487,6 +514,7 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
         });
       } finally {
         savingRef.current = false;
+        setSaving(false);
       }
     })();
   };
@@ -497,8 +525,8 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
    * 검증 2단(둘 다 필수):
    *   ① 화면 커스텀 — SP 가 필수키 공백 행을 **에러 없이 버리므로**(§4.3-d) FE 가 먼저 막는다.
    *   ② 공용 메타 기반 `useSaveWithValidation` — `INPUT_TP_CD=M/IM` 컬럼 빈값 차단.
-   *      전제: `SCM_MST_SHEET_COLUMNS.INPUT_TP_CD` 가 전건 `'S'` 인 현재 상태에서는 무발동이다
-   *      (design 03 §0.3). `05_register.sql` 의 정정 UPDATE(U-8 승인)가 적용돼야 실효가 생긴다.
+   *      `SCM_MST_SHEET_COLUMNS.INPUT_TP_CD` 는 ora.py 실측(2026-10-28) 결과 전건 `'S'` 가 아니라
+   *      ID축=`IM`·명칭축=`IO`·`VALID_YN`/`LANE_QTY`=`O` 로 등록돼 있어 M/IM 빈값 차단이 실동한다.
    */
   const handleSave = () => {
     const isSop = activeTab === TAB.SOP;
@@ -720,13 +748,16 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
   /** P02 선택 다건 → SOP 행 추가. 중복키(8키) 행은 건너뛴다(§3.5.1). */
   const handleSopModelConfirm = (picked: GridRow[]) => {
     const grid = sopGridRef.current;
-    if (!grid || !applied) return;
+    // AS-IS `btnSopNew`(cs:2222-2235)은 조회여부를 보지 않고 콤보 현재값(`_division` getter)으로 행을
+    //   채운다 — 미조회에서도 Insert 가 된다. `applied` 를 가드로 걸지 않고(그 차단은 AS-IS 에 없음)
+    //   DIVISION_ID fallback 만 확정값→입력 중 조회조건 순으로 둔다(팝업 prop line 843-845 와 동일).
+    if (!grid) return;
     const existing = new Set(sopRows.map(row => keyOf(row, SOP_DUP_KEYS)));
     const newRows: Partial<WijmoRowItem>[] = [];
     for (const source of picked) {
       // AS-IS `Edit_Row_Sop`(G39) — 17필드 + `VALID_YN='Y'`.
       const candidate: Record<string, unknown> = {
-        [COLUMN.DIVISION_ID]: str(source.DIVISION_ID) || applied.divisionId,
+        [COLUMN.DIVISION_ID]: str(source.DIVISION_ID) || applied?.divisionId || sc.divisionId,
         [COLUMN.SITE_ID]: str(source.SITE_ID),
         [COLUMN.SITE_NAME]: str(source.SITE_NAME),
         [COLUMN.COMPANY_ID]: str(source.COMPANY_ID),
@@ -782,8 +813,11 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
           persist
           activeTabIndex={activeTab}
           setActiveTabIndex={index => setActiveTab(index as TabIndex)}
+          // 탭 버튼들 오른쪽에 현재 Division 모드(ELTR/ASSEMBLY)를 텍스트로 표시 — 탭 라벨에 넣으면
+          //   TabWrapper 가 라벨을 persist key 로 써 그리드가 remount 되므로 라벨 밖인 rightSlot 에 둔다.
+          rightSlot={tabModeLabel}
         >
-          <TabItem label={`${t(LBL.TAB_LINE_ASSIGN, '_Line Assign')}${tabModeSuffix}`}>
+          <TabItem label={t(LBL.TAB_LINE_ASSIGN, '_Line Assign')}>
             <CapaLineAssignGrid
               sheet={assignSheet}
               data={assignRows}
@@ -801,7 +835,7 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
             />
           </TabItem>
           {/* SOP 탭 라벨은 `SCM_ADM_MSG_M` 에 등가 LBL 이 없다 — 임의 등록 금지, 영문 fallback 유지. */}
-          <TabItem label={`${FALLBACK_LABEL.TAB_SOP}${tabModeSuffix}`}>
+          <TabItem label={FALLBACK_LABEL.TAB_SOP}>
             <CapaLineSopGrid
               sheet={sopSheet}
               data={sopRows}
@@ -842,14 +876,18 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
       />
 
       {/*
-        P01 Item — 그리드 셀(`NICK_NAME`/`ITEM_ID`) 경유. AS-IS `ShowItem` 은 `Init(true, …)` =
-        **다중선택**이고(cs:5860) 선택 1건이면 현재행 수정, 2건 이상이면 행 추가다(A-6).
-        공용 `CapaItemPopup` 이 `multiSelect`/`selectedAll` 을 이미 제공하므로 자기 화면만 고쳐 배선한다.
+        P01 Item — 그리드 셀(`NICK_NAME`/`ITEM_ID`) 경유. AS-IS `ShowItem` 은 `Init(true, …)` 로
+        열지만(cs:5847) 실사용은 **단일선택**이다 — 팝업(`SCM0002_CAPAItemPopup`)에 OK/확정 버튼이
+        없고(InsertButton 등 전부 빈 구현, cs:255-269) 유일한 확정 경로인 셀 더블클릭이 그 한 행만
+        담고 즉시 Close 한다(`spdMain_CellDoubleClick`→`SetItem`→`Close`, cs:355-359). `SetItem` 의
+        `multiSelect` 다건 분기(`GetSelections`, cs:373-397)는 이를 실행할 UI(다건 선택 후 확정)가
+        없어 실질 도달 불가다. 따라서 `multiSelect` 를 켜지 않아 체크박스 없이 더블클릭 단건으로만
+        확정한다(AS-IS 일치). `handleItemPopupSelect` 의 1건 경로(현재행 수정)만 타며 이는 AS-IS
+        `selectedItems.Count == 1 → Edit_Row_Assign`(cs:5717) 과 같다.
         `OPERATION_GROUP = shop_group` 필터는 AS-IS 가 **조회 직후 목록 자체**에 건다
         (SCM0002_CAPAItemPopup.cs:301-303) — 공용 `operationGroup` prop 이 같은 위치에 걸어준다.
       */}
       <CapaItemPopup
-        multiSelect
         open={itemPopupRow !== null}
         operationGroup={SHOP_GROUP_BY_DIVISION_TYPE[divisionType]}
         params={{
@@ -876,6 +914,8 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
         sheetName={activeSheet}
         columnType={TITLESET_COLUMN_TYPE}
         divisionId={sc.divisionId}
+        // AS-IS 가 SCP0104 에서만 가리던 ID/NAME 컬럼 — 공용 팝업에 화면 전용으로 전달(cs:349-357).
+        hiddenColumns={[...COLUMN_SETTING_HIDDEN_COLUMNS]}
         fallbackColumns={toLayoutFallback(activeColumns)}
         onSave={settings => {
           const sheet = activeSheet;
@@ -918,6 +958,9 @@ export const CapaLineAssign = ({ tabId, title }: PageProps<MENU_ID>) => {
           });
         }}
       />
+
+      {/* 저장 진행 표시 — mkt-fcst/sales-plan 과 동일(저장 중 화면 전역 스피너). */}
+      <ProgressIndicator shape='circular' placement='parent' open={saving} />
     </>
   );
 };

@@ -87,6 +87,9 @@ export const WORKING_TIME_RANGE = {
   DAY_MAX: 1440,
 } as const;
 
+// 조회 기간 상한(일) — SP 결과가 고정 14 + 일자 컬럼이라 Oracle 1000 컬럼 제한(ORA-01792) 전에 막는다.
+export const MAX_PERIOD_DAYS = 980;
+
 // AS-IS Validation MSG — SCM_ADM_MSG_M 실측(02 §5). 미등록 3건은 EN fallback 병기(정직 표기).
 export const MSG = {
   // btnInput(Bulk Update) 조회 전 차단 — 가드 조건은 !hasSearched(조회 전). AS-IS BtnInput_Click 의
@@ -112,6 +115,8 @@ export const MSG = {
   //   "조회 기간이 잘못되었습니다 (시작일 > 종료일).") 사용 — fallback 문구와 동일, KO/EN/CN 등록(ora.py 실측 2026-10-19).
   //   종전 MSG00050 은 TO-BE 미등록이라 '_Invalid period…' fallback 이 그대로 노출됐다(화면 실측).
   INVALID_FORMAT: 'MSG00108',
+  // 기간 상한 초과 — "최대 조회일은 From Date + {0} 입니다." ({0}=MAX_PERIOD_DAYS)
+  PERIOD_MAX: 'MSG01187',
   // 근무시간 범위 초과(0~7 / 0~1440) — AS-IS 는 MSG00203("{0}~{1} 사이의 수를 입력하세요.")을 쓰나 TO-BE 에는
   //   MSG00203 미등록, 동일 문구가 MSG01037 로 등록됨(KO/EN/CN exact match, ora.py 실측 2026-10-19) → MSG01037 사용.
   //   AS-IS 와 동일하게 저장 시점(handleSave)에만 검사한다 — 입력·편집·일괄입력은 범위 미검사(D_ 셀 타입 max 없음,

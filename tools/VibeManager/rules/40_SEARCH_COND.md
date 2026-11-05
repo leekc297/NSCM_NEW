@@ -20,6 +20,7 @@
 | 필수 | To-Be 필수값 표기 우선, 없으면 As-Is 필수값(O) |
 | Div 초기화 | `N` = Div. 변경 시 값 유지(초기화 안 함). 공란 = 기본 동작 |
 | **판정(TO-BE 룰 · CR-071, 2026-10-26 사용자 지시)** | **SCP·SSP 조회조건 = 이 기준표에 USE 로 정의된 조건만, 기준표 순서대로, 기준표 라벨(To-Be 명칭)로 사용한다.** 기준표 라벨이 AS-IS 명칭과 달라도(Division→Div. · Input Status→Status · Valid→Active) **결함이 아니라 PASS**. 기준표가 제외·이동한 AS-IS 조건이 조회영역에 없는 것도 결함 아님(NA). 결함 = 기준표 조건 누락 · 기준표에 없는 조건 노출 · 순서 다름 · 라벨 다름. 하네스: judge STATIC H5(라벨)/G4(순서) ↔ `search_cond.csv` · check.js SC1(순서)/SC2(제외 잔존) · mapping_trace `sc_excl`(기준표 제외 AS-IS 조건 = NA) · `confirmed_requirements.csv CR-071` |
+| **명칭 변경 룰(TO-BE 룰 · CR-092, 2026-10-30 사용자 지시)** | **SCP·SSP 의 'Valid' 는 조회조건·그리드·팝업 그리드 모두 'Active' 로 일괄 변경.** 기준표의 Valid→Active(16행)와 같은 결정을 그리드 컬럼 라벨까지 넓힌 것 — AS-IS Valid ↔ TO-BE Active = PASS · TO-BE 에 Valid 잔존 = CR-092 FAIL(보완 대상: 메타 `SHEET_COLUMNS.COLUMN_LABEL_NAME` UPDATE · Form 라벨). 정본 `tools/Harness/rules/label_alias.csv`(scope·asis_label·tobe_label — 복합 명칭 'Valid From/To' 등은 행 추가 전 대상 아님). 하네스: judge H5_CR092/CR092_LEFT · `_trace.spec` H5 · check.js LB1/LB2 · KEEP H21 |
 
 ## 2. 조회조건 RULE (SCP 파일 원문)
 

@@ -150,7 +150,28 @@ BuildingByPlant,Y,"SELECT DISTINCT A.FACTORY_ID AS CODE , A.FACTORY_NAME AS NAME
 BuildingByPlant1_SCP_ALL,Y,"SELECT DISTINCT A.FACTORY_ID AS CODE , A.FACTORY_NAME AS NAME ,PLANT_ID FROM SCM_MST_FACTORY_SN A WHERE 1=1 AND ( @plantId IS NULL OR INSTR(',' || @plantId || ',', ',' || A.PLANT_ID || ',') > 0 )"
 BuildingByPlantSite,Y,"SELECT IA.CODE , IA.NAME FROM (SELECT 'ALL' AS CODE , 'ALL' AS NAME , 0 AS SORT_NO FROM DUAL UNION ALL SELECT DISTINCT A.FACTORY_ID AS CODE , A.FACTORY_ID || ' : ' || A.FACTORY_NAME AS NAME , 1 AS SORT_NO FROM SCM_MST_FACTORY_SN A WHERE 1 = 1 AND (@pPlantSiteId IS NULL OR INSTR(',' || SUBSTR(@pPlantSiteId, 1, 4) || ',', ',' || A.PLANT_ID || ',') > 0) AND (@divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0)) IA ORDER BY IA.SORT_NO , UPPER(IA.CODE)"
 BuildingByShopGroupId1_SCP_ALL,Y,"SELECT A.FACTORY_ID AS CODE , A.FACTORY_NAME AS NAME , A.DIVISION_ID , A.SHOP_GROUP_ID , A.SITE_ID , A.PLANT_ID FROM SCM_MST_FACTORY_SN A WHERE 1=1 AND NVL(A.ACTIVE_FLAG,'N') = 'Y' GROUP BY A.FACTORY_ID , A.FACTORY_NAME , A.DIVISION_ID , A.SHOP_GROUP_ID , A.SITE_ID , A.PLANT_ID"
-BuildingByShopGroupId_SCP,Y,"SELECT DISTINCT A.FACTORY_ID AS CODE , A.FACTORY_NAME AS NAME FROM SCM_MST_FACTORY_SN A WHERE 1=1 AND NVL(A.ACTIVE_FLAG,'N') = 'Y' AND ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0 ) AND ( @plantId IS NULL OR INSTR(',' || @plantId || ',', ',' || A.PLANT_ID || ',') > 0 ) AND ( @param3 IS NULL OR A.SHOP_GROUP_ID IN ( SELECT CASE WHEN REGEXP_SUBSTR(@param3, '[^,]+', 1, LEVEL) = 'F' THEN 'A' ELSE REGEXP_SUBSTR(@param3, '[^,]+', 1, LEVEL) end FROM DUAL CONNECT BY REGEXP_SUBSTR(@param3, '[^,]+', 1, LEVEL) IS NOT NULL ) )"
+BuildingByShopGroupId_SCP,Y,"SELECT /*+ OPT_PARAM('_push_join_predicate' 'false') */ DISTINCT A.FACTORY_ID AS CODE
+     , '(' || A.FACTORY_ID || ')' || B.FACTORY_NAME AS NAME
+  FROM FP_INSTANCE_LINE_V A
+     , SCM_FACTORY_M B
+     , SCM_PLANT_M C
+     , SCM_OPERATION_M D
+     , FP_INSTANCE_FACTORY_M E
+ WHERE A.FACTORY_ID = B.FACTORY_ID
+   AND A.SITE_ID = C.SITE_ID
+   AND A.COMPANY_ID = C.COMPANY_ID
+   AND A.PLANT_ID = C.PLANT_ID
+   AND A.DIVISION_ID = C.DIVISION_ID
+   AND A.SITE_ID = D.SITE_ID
+   AND A.COMPANY_ID = D.COMPANY_ID
+   AND A.DIVISION_ID = D.DIVISION_ID
+   AND A.OPERATION_ID = D.OPERATION_ID
+   AND A.INSTANCE_ID = E.INSTANCE_ID
+   AND A.FACTORY_ID = E.FACTORY_ID
+   AND (@divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0)
+   AND (@plantId IS NULL OR INSTR(',' || @plantId || ',', ',' || A.PLANT_ID || ',') > 0)
+   AND (@param3 IS NULL OR INSTR(',' || @param3 || ',', ',' || E.SHOP_GROUP_ID || ',') > 0)
+ ORDER BY CODE"
 BuildingForShipMasterElec,Y,"SELECT DISTINCT F.FACTORY_NAME AS CODE , F.FACTORY_ID AS NAME , F.DIVISION_ID AS DIVISION_ID , F.PLANT_ID AS PLANT_ID , F.COMPANY_ID AS COMPANY_ID , S.SCM_SITE_ID AS SCM_SITE_ID FROM SCM_MST_FACTORY_SN F JOIN SCM_MST_SITE S ON S.DIVISION_ID = F.DIVISION_ID AND S.PLANT_ID = F.PLANT_ID WHERE 1=1 AND ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || F.DIVISION_ID || ',') > 0 ) AND ( @plantId IS NULL OR INSTR(',' || @plantId || ',', ',' || F.PLANT_ID || ',') > 0 )"
 CALENDAR_YYYY,Y,"SELECT DISTINCT CALENDAR_YYYY AS CODE, CALENDAR_YYYY AS NAME FROM SCM_MGR.SCM_SYS_CALENDAR_M ORDER BY UPPER(CALENDAR_YYYY)"
 CALENDAR_YYYY_DM,Y,"SELECT CALENDAR_YYYY AS CODE, CALENDAR_YYYY AS NAME FROM SCM_SYS_CALENDAR_M GROUP BY CALENDAR_YYYY"
@@ -205,7 +226,7 @@ WHERE B.VALID_YN = 'Y'
   AND ( @country IS NULL OR @country = 'ALL'
         OR INSTR(',' || @country || ',', ',' || B.COUNTRY || ',') > 0 )
 ORDER BY UPPER(B.CITY_NAME)"
-COMPANY_EE,Y,"SELECT A.COMPANY_NAME CODE , A.COMPANY_ID NAME FROM SCM_MST_COMPANY_SN A"
+COMPANY_EE,Y,"SELECT A.COMPANY_ID CODE , A.COMPANY_ID NAME FROM SCM_MST_COMPANY_SN A"
 COMPANY_ID_INTERNAL_TXN,Y,"SELECT COMPANY_ID AS CODE , COMPANY_ID AS NAME FROM SCM_MST_COMPANY_SN"
 COUNTRY_MST,Y,"SELECT A.COUNTRY CODE , A.COUNTRY_NAME NAME FROM SCM_MGR.SCM_MST_COUNTRY A WHERE 1=1 AND A.VALID_YN = 'Y' ORDER BY UPPER(A.COUNTRY_NAME)"
 CURRENCY_LIST,Y,"SELECT SEGMENT1 AS CODE,
@@ -1522,7 +1543,7 @@ SELECT '-' AS CODE, '-' AS NAME, NULL AS DIVISION_ID, NULL AS SCM_SITE_ID FROM D
  ORDER BY UPPER(NAME)"
 LineByOperationPlantId_SCP,Y,"SELECT DISTINCT A.LINE_ID AS CODE , A.LINE_ID || ' ' || A.LINE_NAME AS NAME FROM SCM_LINE_HIERARCHY_V_SN A WHERE NOT EXISTS (SELECT 1 FROM SCM_SYS_LOOKUP_VALUE_SN B WHERE B.LOOKUP_TYPE_CODE = 'CAPA_UI_EXCEPT_LINE' AND B.ACTIVE_FLAG = 'Y' AND A.DIVISION_ID = B.SEGMENT1 AND A.PLANT_ID = B.SEGMENT2 AND A.LINE_ID = B.SEGMENT4 AND A.OPERATION_ID = B.SEGMENT3 AND A.ELECTRODE_TYPE = B.SEGMENT5 ) AND ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0) AND ( @plantId IS NULL OR INSTR(',' || @plantId || ',', ',' || A.PLANT_ID || ',') > 0) AND ( @factoryId IS NULL OR INSTR(',' || @factoryId || ',', ',' || A.FACTORY_ID || ',') > 0) AND ( @operationGroupId IS NULL OR INSTR(',' || @operationGroupId || ',', ',' || A.OPERATION_GROUP_ID || ',') > 0) ORDER BY UPPER(A.LINE_ID)"
 LineByOperationPlantId_SCP_ALL,Y,"SELECT A.LINE_ID AS CODE , A.LINE_ID || ' ' || A.LINE_NAME AS NAME , A.DIVISION_ID AS DIVISION_ID , A.OPERATION_GROUP_ID AS SHOP_GROUP_ID , A.PLANT_ID AS PLANT_ID , A.FACTORY_ID AS FACTORY_ID FROM SCM_LINE_HIERARCHY_CPS_V_SN A WHERE 1=1 GROUP BY A.LINE_ID , A.LINE_NAME , A.DIVISION_ID , A.OPERATION_GROUP_ID , A.PLANT_ID , A.FACTORY_ID ORDER BY UPPER(A.LINE_ID)"
-LineByPlantPacker_SCP,Y,"SELECT LINE_ID AS CODE, LINE_NAME AS NAME, DIVISION_ID, SCM_SITE_ID FROM SCM_MST_LINE_OSP WHERE ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || DIVISION_ID || ',') > 0 ) AND ( @scmSiteId IS NULL OR INSTR(',' || @scmSiteId || ',', ',' || SCM_SITE_ID || ',') > 0 ) AND NVL(VALID_YN, 'Y') = 'Y'"
+LineByPlantPacker_SCP,Y,"SELECT LINE_ID AS CODE, LINE_ID || ' ' || LINE_NAME AS NAME, DIVISION_ID, SCM_SITE_ID FROM SCM_MST_LINE_OSP WHERE ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || DIVISION_ID || ',') > 0 ) AND ( @scmSiteId IS NULL OR INSTR(',' || @scmSiteId || ',', ',' || SCM_SITE_ID || ',') > 0 ) AND NVL(VALID_YN, 'Y') = 'Y' ORDER BY SCM_SITE_ID, LINE_ID"
 LineProdPlanLine,Y,"SELECT *
   FROM (
 SELECT DISTINCT A.LINE_ID AS CODE ,A.LINE_ID || ' ' || A.LINE_NAME AS NAME FROM SCM_MST_LINE_SN A JOIN SCM_MST_SITE B ON A.COMPANY_ID = B.COMPANY_ID AND A.SITE_ID = B.SITE_ID AND A.DIVISION_ID = B.DIVISION_ID AND A.PLANT_ID = B.PLANT_ID JOIN SCP_ANL_PRODUCTION_PLAN C ON C.DIVISION_ID = @divisionId AND C.OPERATION_GROUP=@operationGroup AND ( @scmSiteId IS NULL OR INSTR(',' || @scmSiteId || ',', ',' || C.SCM_SITE_ID || ',') > 0 ) INNER JOIN (SELECT DISTINCT b.segment4, b.segment1 FROM scm_adm_lookup_master_detail b WHERE b.lookup_type = 'LOCATION_GROUP_ROUTE' AND b.valid_yn = 'Y' AND b.segment3 = 'Y' ) f ON a.operation_id = f.segment4 WHERE 1=1 AND A.ACTIVE_FLAG ='Y' AND A.DIVISION_ID = C.ORIGIN_DIVISION_ID AND A.LINE_ID = C.LINE_ID UNION ALL SELECT '-' AS CODE ,'-' AS NAME
@@ -1807,10 +1828,21 @@ PlanDate_FN_SCP,Y,"SELECT A.plan_start_yyyymmdd AS CODE , TO_CHAR(FN_CHAR_TO_DAT
 PlanDate_REPORT1_SCP_ALL,Y,"SELECT DISTINCT CODE , NAME ,A.DIVISION_ID FROM ( SELECT BASIS_YYYYMMDD AS CODE , DATE_FULL_NAME || ' (' || WEEK_NAME || ')' AS NAME , '' AS DIVISION_ID FROM SCM_SYS_CALENDAR_M WHERE BASIS_YYYYMMDD = TO_CHAR(TRUNC(SYSDATE, 'IW'), 'YYYYMMDD') UNION ALL SELECT PLAN_START_YYYYMMDD AS CODE , B.DATE_FULL_NAME || ' (' || B.WEEK_NAME || ')' AS NAME ,A.DIVISION_ID FROM SCP_PLAN_VERSION_V A JOIN SCM_SYS_CALENDAR_M B ON A.PLAN_START_YYYYMMDD = B.BASIS_YYYYMMDD WHERE ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || DIVISION_ID || ',') > 0 ) ) A ORDER BY UPPER(CODE) DESC"
 PlanDate_REPORT_SCP,Y,"SELECT DISTINCT CODE , NAME FROM ( SELECT BASIS_YYYYMMDD AS CODE , DATE_FULL_NAME || ' (' || WEEK_NAME || ')' AS NAME FROM SCM_SYS_CALENDAR_M WHERE BASIS_YYYYMMDD = TO_CHAR(TRUNC(SYSDATE, 'IW'), 'YYYYMMDD') UNION ALL SELECT PLAN_START_YYYYMMDD AS CODE , B.DATE_FULL_NAME || ' (' || B.WEEK_NAME || ')' AS NAME FROM SCP_PLAN_VERSION_V A JOIN SCM_SYS_CALENDAR_M B ON A.PLAN_START_YYYYMMDD = B.BASIS_YYYYMMDD WHERE ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || DIVISION_ID || ',') > 0 ) ) A ORDER BY UPPER(CODE) DESC"
 PlanExecYn_SCP,Y,"SELECT D.MODELING_ID, D.DIVISION_ID, D.PLAN_ID, D.PLAN_SEQ, D.PLAN_TYPE, D.PLAN_STATUS FROM scm_mst_modeling M , scm_mst_plan_detail d , scm_mst_plan p , SCM_ADM_LOOKUP_MASTER_DETAIL c WHERE M.PLAN_CYCLE = 'WEEKLY' AND M.DIVISION_ID = @divisionId and m.MODELING_ID = d.MODELING_ID and m.DIVISION_ID = d.DIVISION_ID and p.DIVISION_ID = d.DIVISION_ID and p.PLAN_CYCLE = m.PLAN_CYCLE and p.PLAN_ID = d.PLAN_ID and d.division_id = @divisionId and d.plan_type not in ('TE','TM') and c.lookup_type='PLAN_TYPE' and c.valid_yn='Y' and c.segment1=d.plan_type ORDER BY UPPER(p.plan_name) DESC, C.display_seq DESC,D.PLAN_SEQ DESC FETCH FIRST 1 ROWS ONLY"
-PlanGroup,Y,"select OPMZ_PLAN_GR_ID AS CODE , OPMZ_PLAN_GR_NAME AS NAME , DIVISION_ID from SCP_OPMZ_PLAN_GR_M where VALID_YN = 'Y'"
+PlanGroup,Y,"SELECT OPMZ_PLAN_GR_ID   AS CODE
+     , OPMZ_PLAN_GR_NAME AS NAME
+     , DIVISION_ID
+  FROM SCP_OPMZ_PLAN_GR_M
+ WHERE VALID_YN = 'Y'
+ ORDER BY FN_ASIS_SORT_KEY(OPMZ_PLAN_GR_NAME) NULLS FIRST"
 PlanGroupByOwner_SCP0120,Y,"SELECT OPMZ_PLAN_GR_ID AS CODE, OPMZ_PLAN_GR_NAME AS NAME, DIVISION_ID FROM SCP_OPMZ_PLAN_GR_M WHERE VALID_YN = 'Y' AND ( EXISTS (SELECT 1 FROM SCM_ADM_USER_GR_MPG_M UG JOIN SCM_ADM_LOOKUP_MASTER_DETAIL AG ON AG.LOOKUP_TYPE = 'GET_ADMIN_GROUP' AND AG.SEGMENT2 = 'SCP0120' AND AG.VALID_YN = 'Y' AND AG.SEGMENT1 = UG.USER_GR_ID WHERE UG.USER_ID = @sesUserId) OR OWNR_LST_CTN LIKE '%' || @sesUserId || '%' ) ORDER BY UPPER(OPMZ_PLAN_GR_NAME)"
 PlanGroupTgtType_SCP,Y,"SELECT SEGMENT1 CODE, DESCRIPTION NAME FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'OPMZ_TGT_DIVS_CD' AND SEGMENT2 = @divisionId AND VALID_YN = 'Y' ORDER BY DISPLAY_SEQ"
-PlanGroup_SCP_ALL,Y,"select OPMZ_PLAN_GR_ID AS CODE , OPMZ_PLAN_GR_NAME AS NAME , DIVISION_ID from SCP_OPMZ_PLAN_GR_M where VALID_YN = 'Y'"
+PlanGroupVirtualBom,Y,"SELECT DISTINCT a.OPMZ_PLAN_GR_ID AS CODE , b.OPMZ_PLAN_GR_NAME AS NAME , a.DIVISION_ID FROM SCP_OPMZ_VIRTUAL_BOM a, SCP_OPMZ_PLAN_GR_M b WHERE a.OPMZ_PLAN_GR_ID = b.OPMZ_PLAN_GR_ID AND a.DIVISION_ID = b.DIVISION_ID ORDER BY b.OPMZ_PLAN_GR_NAME"
+PlanGroup_SCP_ALL,Y,"SELECT OPMZ_PLAN_GR_ID   AS CODE
+     , OPMZ_PLAN_GR_NAME AS NAME
+     , DIVISION_ID
+  FROM SCP_OPMZ_PLAN_GR_M
+ WHERE VALID_YN = 'Y'
+ ORDER BY FN_ASIS_SORT_KEY(OPMZ_PLAN_GR_NAME) NULLS FIRST"
 PlanID_SCP_ALL,Y,"select OPMZ_PLAN_ID AS CODE , OPMZ_PLAN_ID AS NAME , OPMZ_PLAN_GR_ID , OPMZ_PRS_CD , DIVISION_ID , PLAN_START_YYYYMMDD from SCP_OPMZ_PLAN_M where 1=1 and NVL(ATTRIBUTE10, 'X') != 'AI' and PLAN_START_YYYYMMDD between TO_CHAR(ADD_MONTHS(SYSDATE, -6), 'YYYYMMDD') and TO_CHAR(SYSDATE, 'YYYYMMDD') order by UPPER(CODE) desc"
 PlanSeq,Y,"SELECT plan_seq as CODE , ( TO_CHAR(plan_seq)|| ' - ' || (case when confirm_flag is null or confirm_flag ='' then 'N' when confirm_flag = 'Y' then 'Confirm' end) )AS NAME FROM SCP_PLAN_VERSION_V WHERE 1=1 and division_id = @divisionId and ( @planStartYyyymmdd IS NULL OR plan_start_yyyymmdd = @planStartYyyymmdd ) and ( @planType IS NULL OR plan_type = @planType ) AND ( @versionId IS NULL OR version_id = @versionId ) GROUP BY plan_seq,confirm_flag ORDER BY plan_seq DESC"
 PlanSeq1_SCP_ALL,Y,"SELECT plan_seq as CODE , ( TO_CHAR(plan_seq)|| ' - ' || (case when confirm_flag is null or confirm_flag ='' then 'N' when confirm_flag = 'Y' then 'Confirm' end) ) NAME , division_id DIVISION_ID , plan_start_yyyymmdd PLANDATE , plan_type PLANTYPE FROM SCP_PLAN_VERSION_V WHERE 1=1 and ( @divisionId IS NULL OR division_id = @divisionId) and ( @planStartYyyymmdd IS NULL OR plan_start_yyyymmdd = @planStartYyyymmdd ) and ( @planType IS NULL OR plan_type = @planType ) AND ( @versionId IS NULL OR version_id = @versionId ) GROUP BY plan_seq,confirm_flag, division_id, plan_start_yyyymmdd, plan_type ORDER BY plan_seq DESC"
@@ -1822,7 +1854,7 @@ PlanType1_SCP_ALL,Y,"SELECT PLAN_TYPE AS CODE , PLAN_TYPE AS NAME , MAX(PLAN_TYP
 PlanTypeShip,Y,"SELECT plan_type as code , plan_type as name ,'1' as plan_type_order FROM SSP_PLAN_VERSION_V WHERE 1=1 and division_id = @divisionId and ( @planStartYyyymmdd IS NULL OR plan_start_yyyymmdd = @planStartYyyymmdd ) GROUP BY plan_type order by UPPER(plan_type_order)"
 PlanWeek,Y,"SELECT B.WEEK_NAME AS CODE ,plan_start_yyyymmdd || '-' || B.WEEK_NAME AS name FROM FN_SCP_PLAN_VERSION_V(@param1,'', @calendarYyyy,'') a JOIN scm_sys_calendar_m b ON a.plan_start_yyyymmdd = b.basis_yyyymmdd WHERE 1=1 GROUP BY plan_start_yyyymmdd , b.WEEK_NAME ORDER BY UPPER(name) DESC"
 PlanWeek1_SCP_ALL,Y,"SELECT B.WEEK_NAME AS CODE ,plan_start_yyyymmdd || '-' || B.WEEK_NAME AS name ,division_id DIVISION_ID ,plan_start_yyyymmdd PLAN_YEAR FROM SCP_PLAN_VERSION_V a JOIN scm_sys_calendar_m b ON a.plan_start_yyyymmdd = b.basis_yyyymmdd WHERE 1=1 GROUP BY plan_start_yyyymmdd , b.WEEK_NAME ,division_id ORDER BY UPPER(name) DESC"
-PlanWeekDate_SCP,Y,"SELECT BASIS_YYYYMMDD || '-' || WEEK_NAME  AS WEEK_LIST, WEEK_NAME AS PLAN_WEEK, BASIS_YYYYMMDD AS PLAN_START_YYYYMMDD FROM SCM_SYS_CALENDAR_M WHERE CALENDAR_YYYY = @planYear AND DAYOFWEEK = 'MON' ORDER BY BASIS_YYYYMMDD DESC"
+PlanWeekDate_SCP,Y,"SELECT BASIS_YYYYMMDD || '-' || WEEK_NAME  AS WEEK_LIST, WEEK_NAME AS PLAN_WEEK, BASIS_YYYYMMDD AS PLAN_START_YYYYMMDD FROM SCM_SYS_CALENDAR_M WHERE CALENDAR_YYYY = @planYear AND DAYOFWEEK = 'MON' AND BASIS_YYYYMMDD <= TO_CHAR(SYSDATE, 'YYYYMMDD') ORDER BY BASIS_YYYYMMDD DESC"
 PlanYear,Y,"SELECT DISTINCT SUBSTR(plan_version_id,1,4 ) code ,SUBSTR(plan_version_id,1,4 ) AS name FROM FN_SCP_PLAN_VERSION_V(@param1,'','','') ORDER BY UPPER(code) DESC"
 PlanYear1_SCP_ALL,Y,"SELECT DISTINCT SUBSTR(plan_version_id,1,4 ) code ,SUBSTR(plan_version_id,1,4 ) name ,division_id DIVISION_ID FROM SCP_PLAN_VERSION_V ORDER BY UPPER(code) DESC"
 Plan_InforElectrode,Y,"SELECT REPLACE(PLAN_START_YYYYMMDD, '-', '') AS CODE
@@ -1894,12 +1926,12 @@ PlantByElectordeShipFromSite,Y,"SELECT SEGMENT3 AS CODE , SEGMENT3 AS NAME fROM 
 PlantByElectordeShipToSite,Y,"SELECT ATTRIBUTE1 AS CODE , ATTRIBUTE1 AS NAME fROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'ELECTRODE_SHIP_FROM_TO' AND VALID_YN = 'Y' AND (@segment5 IS NULL OR SEGMENT5=@segment5) AND (@segment4 IS NULL OR SEGMENT4=@segment4) GROUP BY ATTRIBUTE1"
 PlantByElectordeShipToSite_EE,Y,"SELECT ATTRIBUTE1 AS CODE , ATTRIBUTE1 AS NAME fROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'ELECTRODE_SHIP_FROM_TO' AND VALID_YN = 'Y' AND (@segment2 IS NULL OR SEGMENT2=@segment2) AND (@segment3 IS NULL OR SEGMENT3=@segment3) GROUP BY ATTRIBUTE1"
 PlantByGroup1_SCP_ALL,Y,"SELECT PLANT_ID AS CODE , PLANT_NAME AS NAME , DIVISION_ID AS DIVISION_ID FROM SCM_SITE_HIERARCHY_CPS_V_SN GROUP BY PLANT_ID , PLANT_NAME , DIVISION_ID"
-PlantByGroup_SCP,Y,"SELECT /*+ OPT_PARAM('_push_join_predicate' 'false') */ DISTINCT PLANT_ID AS CODE , PLANT_NAME AS NAME FROM SCM_SITE_HIERARCHY_V_SN A WHERE 1 = 1 AND ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0 ) AND ( @shopGroupId IS NULL OR INSTR(',' || @shopGroupId || ',', ',' || A.SHOP_GROUP_ID || ',') > 0 )"
+PlantByGroup_SCP,Y,"SELECT /*+ OPT_PARAM('_push_join_predicate' 'false') */ DISTINCT PLANT_ID AS CODE , PLANT_NAME AS NAME FROM SCM_SITE_HIERARCHY_V_SN A WHERE 1 = 1 AND ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0 ) AND ( @shopGroupId IS NULL OR INSTR(',' || @shopGroupId || ',', ',' || A.SHOP_GROUP_ID || ',') > 0 ) ORDER BY FN_ASIS_SORT_KEY(PLANT_NAME) NULLS FIRST"
 PlantByGroup_SCP_ALL,Y,"SELECT PLANT_ID AS CODE , PLANT_NAME AS NAME , DIVISION_ID AS DIVISION_ID , SHOP_GROUP_ID FROM SCM_SITE_HIERARCHY_CPS_V_SN GROUP BY PLANT_ID , PLANT_NAME , DIVISION_ID , SHOP_GROUP_ID"
 PlantCell,Y,"SELECT DISTINCT S.SCM_SITE_ID AS CODE , S.SITE_DESCRIPTION AS NAME FROM SCM_MST_SITE S WHERE (@divisionId IS NULL OR S.DIVISION_ID = @divisionId) AND S.OPERATION_GROUP = 'A' AND NVL(S.OSP_YN,'Y') <> 'Y' ORDER BY UPPER(S.SITE_DESCRIPTION)"
 PlantEE,Y,"SELECT DISTINCT LOGISTIC_PLANT_ID AS CODE , LOGISTIC_PLANT_ID AS NAME FROM SCM_MST_SITE S WHERE (@divisionId IS NULL OR DIVISION_ID=@divisionId) AND (@companyId IS NULL OR COMPANY_ID=@companyId) AND SITE_TYPE = 'PLANT' AND OPERATION_GROUP ='E' AND OSP_YN = 'N' ORDER BY UPPER(S.LOGISTIC_PLANT_ID) DESC"
 PlantSite,Y,"SELECT DIVISION_CODE, DIVISION_CODE || ' ' || DIVISION_NAME AS DIVISION_NAME, TEAM_CODE, TEAM_NAME, END_CUSTOMER_CODE, END_CUSTOMER_NAME, PLANT_SITE_CODE, PLANT_SITE_NAME, CODE, NAME FROM ( SELECT X1.*, PLANT_SITE_CODE AS CODE, PLANT_SITE_NAME AS NAME FROM ( SELECT DIVISION_CODE, DIVISION_NAME, TEAM_CODE, TEAM_NAME, END_CUSTOMER_CODE, END_CUSTOMER_NAME, CODE PLANT_SITE_CODE, NAME PLANT_SITE_NAME FROM (WITH AXIS AS ( SELECT M.DIVISION_ID FROM ( SELECT DIVISION_ID, COUNT(DISTINCT SCM_SITE_ID) N FROM SCM_MST_SITE WHERE SITE_TYPE = 'PLANT' AND VALID_YN = 'Y' GROUP BY DIVISION_ID) M JOIN ( SELECT DIVISION_ID, COUNT(DISTINCT PLANT_SITE_ID) N FROM DM_PLN_MKT_FCST WHERE PLANT_SITE_ID IS NOT NULL AND PLANT_SITE_ID <> '-' GROUP BY DIVISION_ID) F ON M.DIVISION_ID = F.DIVISION_ID WHERE F.N >= M.N * 0.5), ITM AS ( SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID FROM SCM_MST_SITE_ITEM WHERE VALID_YN = 'Y' AND DEPT_ID IS NOT NULL) SELECT DIVISION_CODE, ( SELECT MIN(V.DIVISION_NAME) FROM SCM_MST_DIVISION V WHERE V.DIVISION_ID = X.DIVISION_CODE) AS DIVISION_NAME, TEAM_CODE, ( SELECT CASE @sesLangCd WHEN 'EN' THEN D.DEPT_NAME_EN WHEN 'CN' THEN D.DEPT_NAME_CN ELSE D.DEPT_NAME_KO END FROM SCM_MST_SSO_DEPT_INFO D WHERE D.DEPT_ID = X.TEAM_CODE) AS TEAM_NAME, END_CUSTOMER_CODE, NVL((SELECT MIN(L.SEGMENT3) FROM SCM_ADM_LOOKUP_MASTER_DETAIL L WHERE L.LOOKUP_TYPE = 'END_CUSTOMER' AND L.VALID_YN = 'Y' AND L.SEGMENT1 = X.DIVISION_CODE AND L.SEGMENT2 = X.END_CUSTOMER_CODE), X.END_CUSTOMER_CODE) AS END_CUSTOMER_NAME, CODE, NAME FROM ( SELECT DISTINCT F.DIVISION_ID AS DIVISION_CODE, I.DEPT_ID AS TEAM_CODE, NVL(S.END_CUSTOMER, F.PROJECT_CODE) AS END_CUSTOMER_CODE, F.PLANT_SITE_ID AS CODE, F.PLANT_SITE_ID AS NAME FROM DM_PLN_MKT_FCST F JOIN AXIS Z ON F.DIVISION_ID = Z.DIVISION_ID LEFT JOIN SCM_MST_SITE S ON F.DIVISION_ID = S.DIVISION_ID AND F.SCM_SITE_ID = S.SCM_SITE_ID LEFT JOIN ITM I ON F.DIVISION_ID = I.DIVISION_ID AND F.SCM_SITE_ID = I.SCM_SITE_ID WHERE F.PLANT_SITE_ID IS NOT NULL AND F.PLANT_SITE_ID <> '-' AND F.DIVISION_ID IN ( SELECT UNIT_ID FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M WHERE USER_ID = @sesUserId AND UNIT_TP_CD = 'D' AND USE_YN = 'Y') UNION ALL SELECT DISTINCT A.DIVISION_ID, CAST(NULL AS VARCHAR2(200)), CAST(NULL AS VARCHAR2(100)), A.SCM_SITE_ID, A.SCM_SITE_ID FROM SCM_MST_SITE A WHERE A.SITE_TYPE = 'PLANT' AND A.VALID_YN = 'Y' AND A.DIVISION_ID NOT IN ( SELECT DIVISION_ID FROM AXIS) AND A.DIVISION_ID IN ( SELECT UNIT_ID FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M WHERE USER_ID = @sesUserId AND UNIT_TP_CD = 'D' AND USE_YN = 'Y') ) X ORDER BY UPPER(DIVISION_CODE), UPPER(CODE)) X9 WHERE X9.DIVISION_CODE NOT IN ( SELECT V9.DIVISION_ID FROM SCM_MST_DIVISION V9 WHERE V9.ATTRIBUTE3 = 'EE') ) X1 ) X3"
-PlantSiteByDivision,Y,"SELECT A.SCM_SITE_ID AS CODE , A.SITE_DESCRIPTION AS NAME FROM SCM_MST_SITE A WHERE 1 = 1 AND A.SITE_TYPE = 'PLANT' AND A.VALID_YN = 'Y' AND INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0"
+PlantSiteByDivision,Y,"SELECT A.SCM_SITE_ID AS CODE , A.SITE_DESCRIPTION AS NAME FROM SCM_MST_SITE A WHERE 1 = 1 AND A.SITE_TYPE = 'PLANT' AND A.VALID_YN = 'Y' AND INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0 ORDER BY FN_ASIS_SORT_KEY(A.DIVISION_ID) NULLS FIRST, FN_ASIS_SORT_KEY(A.SCM_SITE_ID) NULLS FIRST"
 PlantSiteByDivision1Ex_SCP_ALL,Y,"SELECT A.SCM_SITE_ID AS CODE , A.SITE_DESCRIPTION AS NAME , A.DIVISION_ID FROM SCM_MST_SITE A WHERE 1 = 1 AND A.SITE_TYPE = 'PLANT' AND A.VALID_YN = 'Y' AND ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0 )"
 PlantSiteByDivision1_SCP_ALL,Y,"SELECT '-' AS CODE, '-' AS NAME, '-' AS DIVISION_ID UNION ALL SELECT A.SCM_SITE_ID AS CODE , A.SITE_DESCRIPTION AS NAME ,A.DIVISION_ID FROM SCM_MST_SITE A WHERE 1 = 1 AND A.SITE_TYPE = 'PLANT' AND A.VALID_YN = 'Y' AND ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0)"
 PlantSiteByDivisionEEOperation_SCP,Y,"SELECT A.SCM_SITE_ID AS CODE , A.SITE_DESCRIPTION AS NAME FROM SCM_MST_SITE A WHERE 1 = 1 AND A.SITE_TYPE = 'PLANT' AND A.VALID_YN = 'Y' AND (@divisionId='EE' OR A.DIVISION_ID=@divisionId) AND NOT EXISTS (SELECT D.SCM_SITE_ID FROM SCM_MST_SITE D WHERE 1=1 AND A.SCM_SITE_ID = D.SCM_SITE_ID AND D.DIVISION_ID = '40' AND D.OPERATION_GROUP = 'P' AND D.OSP_YN = 'Y' ) ORDER BY UPPER(A.SCM_SITE_ID)"
@@ -2325,6 +2357,7 @@ SCMTeamByDivision_SCP,Y,"SELECT DISTINCT D.DEPT_ID AS CODE , CASE WHEN ( NVL(( S
 SCP0084_GET_MONTH_RANGE,Y,"SELECT MIN(YYYYMM) AS MIN_YYYYMM
      , MAX(YYYYMM) AS MAX_YYYYMM
   FROM SCP_ANL_LONG_TERM_STOCK"
+SCP0085_GET_SEARCH_INFO,Y,"SELECT CODE, NAME FROM ( SELECT ATTRIBUTE3 AS CODE, ATTRIBUTE3 || ' ' || ATTRIBUTE4 AS NAME FROM SCP_ANL_MONTH_END_STOCK_R WHERE LENGTH(@yyyymmdd) = 6 AND YYYYMM = @yyyymmdd AND DIVISION_ID IS NOT NULL AND (@divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || DIVISION_ID || ',') > 0) AND (@plantId IS NULL OR INSTR(',' || @plantId || ',', ',' || PLANT_ID || ',') > 0) GROUP BY ATTRIBUTE3, ATTRIBUTE4 UNION SELECT ATTRIBUTE3 AS CODE, ATTRIBUTE3 || ' ' || ATTRIBUTE4 AS NAME FROM SCP_ANL_MONTH_END_STOCK_R_D WHERE LENGTH(@yyyymmdd) = 8 AND CUTOFF_DATE = @yyyymmdd AND DIVISION_ID IS NOT NULL AND (@divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || DIVISION_ID || ',') > 0) AND (@plantId IS NULL OR INSTR(',' || @plantId || ',', ',' || PLANT_ID || ',') > 0) GROUP BY ATTRIBUTE3, ATTRIBUTE4 ) ORDER BY CODE"
 SCPKPI_SCP,Y,"SELECT A.SEGMENT1 AS KPI_ID , A.SEGMENT2 AS KPI_NM , A.SEGMENT3 AS DIVISION_ID , A.SEGMENT4 AS DEPT_ID , A.DISPLAY_SEQ FROM SCM_ADM_LOOKUP_MASTER_DETAIL A WHERE A.LOOKUP_TYPE='SCM_KPI_GOAL' AND A.VALID_YN='Y' ORDER BY UPPER(A.SEGMENT1), UPPER(A.SEGMENT3), A.DISPLAY_SEQ"
 SCPPlanPeriod_SCP,Y,"SELECT HORIZON_START_DATE ,HORIZON_END_DATE ,PLAN_CYCLE ,(TRUNC(TO_DATE(HORIZON_END_DATE, 'YYYYMMDD') + 1, 'IW') - TRUNC(TO_DATE(PLAN_NAME, 'YYYYMMDD') + 1, 'IW')) / 7 AS DIFF_WEEK FROM SCM_MST_PLAN WHERE 1 = 1 AND PLAN_NAME = @planName AND DIVISION_ID = @divisionId AND PLAN_CYCLE = 'WEEKLY'"
 SCP_PLANNER_EDIT_FLAG_DM,Y,"SELECT B.SEGMENT1 AS AUTH, B.SEGMENT4 AS MEASURE, ATTRIBUTE1 AS EDIT_DAYS, ATTRIBUTE2 AS FROM_TIME, ATTRIBUTE3 AS TO_TIME, ATTRIBUTE4 AS LIMIT_AUTH FROM SCM_ADM_LOOKUP_MASTER_DETAIL B WHERE B.LOOKUP_TYPE = 'GET_ADMIN_GROUP_MEASURE' AND B.VALID_YN = 'Y' AND B.SEGMENT2 = @segment2 AND B.SEGMENT3 = @segment3 AND B.SEGMENT1 = @segment1 AND (B.ATTRIBUTE1 = 'ALL' OR B.ATTRIBUTE1 IN (SELECT DAYOFWEEK FROM SCM_SYS_CALENDAR_M WHERE BASIS_YYYYMMDD = TO_CHAR(SYSDATE, 'YYYYMMDD'))) AND TO_NUMBER(REPLACE(SUBSTR(TO_CHAR(SYSDATE, 'HH24:MI:SS'), 1, 5), ':', '')) BETWEEN TO_NUMBER(B.ATTRIBUTE2) AND TO_NUMBER(B.ATTRIBUTE3)"
@@ -2362,6 +2395,285 @@ SSP0060_UserInfoList,Y,"SELECT USER_ID AS CODE
       OR USER_ENG_NM LIKE '%' || @userName || '%' )
  ORDER BY UPPER(USER_ID)"
 SSP0200_ApprovalUserList,N,"SELECT DISTINCT U.USER_ID AS CODE , U.USER_NM AS NAME , U.USER_ENG_NM , U.DEPT_ID , CASE WHEN @sesLangCd = 'KO' THEN D.DEPT_NAME_KO        WHEN @sesLangCd = 'EN' THEN D.DEPT_NAME_EN        WHEN @sesLangCd = 'CN' THEN D.DEPT_NAME_CN        ELSE '-' END AS DEPT_NM FROM SCM_ADM_USER_M U, SCM_MST_SSO_DEPT_INFO D, SCM_ADM_USER_GR_MPG_M G WHERE U.DEPT_ID = D.DEPT_ID (+)   AND G.USER_ID = U.USER_ID   AND G.USER_GR_ID IN ('SSP Planner', 'ADMIN', 'SCM PI Admin')   AND NVL(G.USE_YN, 'Y') = 'Y'   AND NVL(U.USE_YN, 'Y') = 'Y'   AND ( @userName IS NULL      OR UPPER(U.USER_ID) LIKE '%' || UPPER(@userName) || '%'      OR UPPER(U.USER_NM) LIKE '%' || UPPER(@userName) || '%'      OR UPPER(U.USER_ENG_NM) LIKE '%' || UPPER(@userName) || '%' ) ORDER BY UPPER(U.USER_ID)"
+SSP0200_GET_ITEM_FROM_BOD,Y,"SELECT IA.DIVISION_ID
+     , IA.BOD_ID
+     , IB.ITEM_ID
+     , IA.INCOTERMS
+     , IA.PRIORITY
+     , IA.TRANSPORT_MODE
+     , A.OPERATION_GROUP
+  FROM (SELECT DISTINCT XA.DIVISION_ID
+             , XA.BOD_ID
+             , XA.FROM_SITE
+             , XA.TO_SITE
+             , XA.SSP_INCOTERMS AS INCOTERMS
+             , XA.TRANSPORT_MODE
+             , XA.PRIORITY
+          FROM SCP_MST_BOD_N_V XA
+         WHERE XA.BOD_VALID_YN = 'Y'
+           AND XA.FROM_YYYYMMDD <= TO_CHAR(SYSDATE, 'YYYYMMDD')
+           AND XA.TO_YYYYMMDD > TO_CHAR(SYSDATE, 'YYYYMMDD')
+           AND XA.DIVISION_ID = @divisionId
+           AND XA.FROM_SITE = @fromSite
+           AND XA.TO_SITE = @toSite) IA
+     , (SELECT DISTINCT XB.DIVISION_ID
+             , XB.ITEM_ID
+             , XB.BOD_ID
+          FROM SCP_MST_BOD_ITEM XB
+         WHERE XB.DIVISION_ID = @divisionId
+           AND (@itemId IS NULL
+            OR  XB.ITEM_ID IN (SELECT XC.COLUMN_VALUE
+                                 FROM TABLE(STRING_SPLIT(@itemId, ',')) XC))) IB
+     , SCP_MST_FINAL_ITEM A
+ WHERE IB.DIVISION_ID = IA.DIVISION_ID
+   AND IB.BOD_ID = IA.BOD_ID
+   AND A.DIVISION_ID(+) = IA.DIVISION_ID
+   AND A.ITEM_ID(+) = IB.ITEM_ID
+   AND A.OPERATION_GROUP(+) = 'E'
+   AND IA.DIVISION_ID = @divisionId
+   AND IA.FROM_SITE = @fromSite
+   AND IA.TO_SITE = @toSite
+ ORDER BY IA.PRIORITY NULLS FIRST"
+SSP0200_GET_PLANT_SITE_BY_DIVISION,Y,"SELECT IA.CODE
+     , IA.NAME
+  FROM (SELECT '-' AS CODE
+             , '-' AS NAME
+          FROM DUAL
+        UNION ALL
+        SELECT A.SCM_SITE_ID AS CODE
+             , A.SITE_DESCRIPTION AS NAME
+          FROM SCM_MST_SITE A
+         WHERE A.DIVISION_ID IN (SELECT XA.UNIT_ID
+                                   FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M XA
+                                  WHERE XA.USER_GR_ID IN (SELECT XB.USER_GR_ID
+                                                            FROM SCM_ADM_USER_GR_MPG_M XB
+                                                           WHERE XB.USE_YN = 'Y'
+                                                             AND XB.USER_ID = @sesUserId)
+                                    AND (NVL(TRIM(@mnuId), 'ALL') = 'ALL'
+                                     OR  XA.USER_GR_ID IN (SELECT XC.USER_GR_ID
+                                                             FROM SCM_ADM_USER_GR_MNU_MPG_M XC
+                                                            WHERE XC.USE_YN = 'Y'
+                                                              AND XC.MNU_ID = @mnuId))
+                                    AND XA.UNIT_TP_CD = 'D'
+                                    AND XA.USE_YN = 'Y'
+                                    AND XA.USER_ID = @sesUserId)
+           AND A.SITE_TYPE = 'PLANT'
+           AND A.VALID_YN = 'Y'
+           AND (@divisionId IS NULL
+            OR  A.DIVISION_ID IN (SELECT XD.COLUMN_VALUE
+                                    FROM TABLE(STRING_SPLIT(@divisionId, ',')) XD))
+           AND (@companyId IS NULL
+            OR  A.COMPANY_ID IN (SELECT XE.COLUMN_VALUE
+                                   FROM TABLE(STRING_SPLIT(@companyId, ',')) XE))
+           AND (@validYn IS NULL
+            OR  A.VALID_YN = @validYn)
+        UNION ALL
+        SELECT B.SCM_SITE_ID AS CODE
+             , B.SITE_DESCRIPTION AS NAME
+          FROM SCM_MST_SITE B
+         WHERE B.DIVISION_ID IN (SELECT XF.COLUMN_VALUE
+                                   FROM TABLE(STRING_SPLIT(@divisionId, ',')) XF)
+           AND B.ATTRIBUTE9 IN (SELECT XG.SCM_SITE_ID
+                                  FROM SCM_MST_SITE XG
+                                     , SCM_ADM_USER_GR_UNIT_AUTH_MPG_M XH
+                                 WHERE XG.DIVISION_ID = XH.UNIT_ID
+                                   AND XH.USER_GR_ID IN (SELECT XI.USER_GR_ID
+                                                           FROM SCM_ADM_USER_GR_MPG_M XI
+                                                          WHERE XI.USE_YN = 'Y'
+                                                            AND XI.USER_ID = @sesUserId)
+                                   AND (NVL(TRIM(@mnuId), 'ALL') = 'ALL'
+                                    OR  XH.USER_GR_ID IN (SELECT XJ.USER_GR_ID
+                                                            FROM SCM_ADM_USER_GR_MNU_MPG_M XJ
+                                                           WHERE XJ.USE_YN = 'Y'
+                                                             AND XJ.MNU_ID = @mnuId))
+                                   AND XG.SITE_TYPE = 'PLANT'
+                                   AND XH.UNIT_TP_CD = 'D'
+                                   AND XH.USE_YN = 'Y'
+                                   AND XH.USER_ID = @sesUserId)
+           AND B.SITE_TYPE = 'PLANT'
+           AND B.VALID_YN = 'Y'
+           AND (@companyId IS NULL
+            OR  B.COMPANY_ID IN (SELECT XK.COLUMN_VALUE
+                                   FROM TABLE(STRING_SPLIT(@companyId, ',')) XK))
+           AND (@validYn IS NULL
+            OR  B.VALID_YN = @validYn)) IA
+ GROUP BY IA.CODE
+        , IA.NAME
+ ORDER BY IA.CODE"
+SSP0200_GET_SHIPMENT_DIVISION,Y,"SELECT IA.CODE
+     , IA.NAME
+     , MAX(IA.ATTRIBUTE1) AS ATTRIBUTE1
+  FROM (SELECT A.DIVISION_ID AS CODE
+             , NVL2(MIN(A.DIVISION_NAME), A.DIVISION_ID || ' ' || MIN(A.DIVISION_NAME), NULL) AS NAME
+             , 1 AS ATTRIBUTE1
+          FROM SCM_MST_DIVISION A
+         WHERE A.DIVISION_ID IN (SELECT XA.UNIT_ID
+                                   FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M XA
+                                  WHERE XA.USER_GR_ID IN (SELECT XB.USER_GR_ID
+                                                            FROM SCM_ADM_USER_GR_MPG_M XB
+                                                           WHERE XB.USE_YN = 'Y'
+                                                             AND XB.USER_ID = @sesUserId)
+                                    AND (NVL(TRIM(@mnuId), 'ALL') = 'ALL'
+                                     OR  XA.USER_GR_ID IN (SELECT XC.USER_GR_ID
+                                                             FROM SCM_ADM_USER_GR_MNU_MPG_M XC
+                                                            WHERE XC.USE_YN = 'Y'
+                                                              AND XC.MNU_ID = @mnuId))
+                                    AND XA.UNIT_TP_CD = 'D'
+                                    AND XA.USE_YN = 'Y'
+                                    AND XA.USER_ID = @sesUserId)
+         GROUP BY A.DIVISION_ID
+        UNION
+        SELECT B.DIVISION_ID AS CODE
+             , NVL2(MIN(B.DIVISION_NAME), B.DIVISION_ID || ' ' || MIN(B.DIVISION_NAME), NULL) AS NAME
+             , 0 AS ATTRIBUTE1
+          FROM SCM_MST_DIVISION B
+         WHERE B.DIVISION_ID IN (SELECT XD.DIVISION_ID
+                                   FROM SCM_MST_SITE XD
+                                      , SCM_MST_SITE XE
+                                      , SCM_ADM_USER_GR_UNIT_AUTH_MPG_M XF
+                                  WHERE XD.ATTRIBUTE9 = XE.SCM_SITE_ID
+                                    AND XE.DIVISION_ID = XF.UNIT_ID
+                                    AND XF.USER_GR_ID IN (SELECT XG.USER_GR_ID
+                                                            FROM SCM_ADM_USER_GR_MPG_M XG
+                                                           WHERE XG.USE_YN = 'Y'
+                                                             AND XG.USER_ID = @sesUserId)
+                                    AND (NVL(TRIM(@mnuId), 'ALL') = 'ALL'
+                                     OR  XF.USER_GR_ID IN (SELECT XH.USER_GR_ID
+                                                             FROM SCM_ADM_USER_GR_MNU_MPG_M XH
+                                                            WHERE XH.USE_YN = 'Y'
+                                                              AND XH.MNU_ID = @mnuId))
+                                    AND XE.SITE_TYPE = 'PLANT'
+                                    AND XF.UNIT_TP_CD = 'D'
+                                    AND XF.USE_YN = 'Y'
+                                    AND XF.USER_ID = @sesUserId)
+         GROUP BY B.DIVISION_ID) IA
+ GROUP BY IA.CODE
+        , IA.NAME
+ ORDER BY IA.CODE"
+SSP0200_GET_SHIPMENT_PLANT_SITE_BY_DIVISION_EE_OPERATION,Y,"SELECT IA.CODE
+     , IA.NAME
+  FROM (SELECT A.SCM_SITE_ID AS CODE
+             , A.SITE_DESCRIPTION AS NAME
+          FROM SCM_MST_SITE A
+         WHERE A.DIVISION_ID IN (SELECT XA.UNIT_ID
+                                   FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M XA
+                                  WHERE XA.USER_GR_ID IN (SELECT XB.USER_GR_ID
+                                                            FROM SCM_ADM_USER_GR_MPG_M XB
+                                                           WHERE XB.USE_YN = 'Y'
+                                                             AND XB.USER_ID = @sesUserId)
+                                    AND (NVL(TRIM(@mnuId), 'ALL') = 'ALL'
+                                     OR  XA.USER_GR_ID IN (SELECT XC.USER_GR_ID
+                                                             FROM SCM_ADM_USER_GR_MNU_MPG_M XC
+                                                            WHERE XC.USE_YN = 'Y'
+                                                              AND XC.MNU_ID = @mnuId))
+                                    AND XA.UNIT_TP_CD = 'D'
+                                    AND XA.USE_YN = 'Y'
+                                    AND XA.USER_ID = @sesUserId)
+           AND A.SITE_TYPE = 'PLANT'
+           AND A.VALID_YN = 'Y'
+           AND (@divisionId = 'EE'
+            OR  A.DIVISION_ID = @divisionId)
+        UNION ALL
+        SELECT B.SCM_SITE_ID AS CODE
+             , B.SITE_DESCRIPTION AS NAME
+          FROM SCM_MST_SITE B
+         WHERE B.ATTRIBUTE9 IN (SELECT XD.SCM_SITE_ID
+                                  FROM SCM_MST_SITE XD
+                                     , SCM_ADM_USER_GR_UNIT_AUTH_MPG_M XE
+                                 WHERE XD.DIVISION_ID = XE.UNIT_ID
+                                   AND XE.USER_GR_ID IN (SELECT XF.USER_GR_ID
+                                                           FROM SCM_ADM_USER_GR_MPG_M XF
+                                                          WHERE XF.USE_YN = 'Y'
+                                                            AND XF.USER_ID = @sesUserId)
+                                   AND (NVL(TRIM(@mnuId), 'ALL') = 'ALL'
+                                    OR  XE.USER_GR_ID IN (SELECT XG.USER_GR_ID
+                                                            FROM SCM_ADM_USER_GR_MNU_MPG_M XG
+                                                           WHERE XG.USE_YN = 'Y'
+                                                             AND XG.MNU_ID = @mnuId))
+                                   AND XD.SITE_TYPE = 'PLANT'
+                                   AND XE.UNIT_TP_CD = 'D'
+                                   AND XE.USE_YN = 'Y'
+                                   AND XE.USER_ID = @sesUserId)
+           AND B.SITE_TYPE = 'PLANT'
+           AND B.VALID_YN = 'Y'
+           AND (@divisionId = 'EE'
+            OR  B.DIVISION_ID = @divisionId)) IA
+ WHERE NOT EXISTS (SELECT 1
+                     FROM SCM_MST_SITE XH
+                    WHERE XH.SCM_SITE_ID = IA.CODE
+                      AND XH.DIVISION_ID = '40'
+                      AND XH.OPERATION_GROUP = 'P'
+                      AND XH.OSP_YN = 'Y')
+ GROUP BY IA.CODE
+        , IA.NAME
+ ORDER BY IA.CODE"
+SSP0200_GET_SHIPMENT_PLAN_PLANT_SITE,Y,"SELECT DISTINCT IA.CODE
+     , IA.NAME
+     , IA.COMPANY_ID
+  FROM (SELECT A.SCM_SITE_ID AS CODE
+             , A.SITE_DESCRIPTION AS NAME
+             , A.COMPANY_ID
+          FROM SCM_MST_SITE A
+         WHERE A.DIVISION_ID IN (SELECT XA.COLUMN_VALUE
+                                   FROM TABLE(STRING_SPLIT(@divisionId, ',')) XA)
+           AND A.DIVISION_ID IN (SELECT XB.UNIT_ID
+                                   FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M XB
+                                  WHERE XB.USER_GR_ID IN (SELECT XC.USER_GR_ID
+                                                            FROM SCM_ADM_USER_GR_MPG_M XC
+                                                           WHERE XC.USE_YN = 'Y'
+                                                             AND XC.USER_ID = @sesUserId)
+                                    AND (NVL(TRIM(@mnuId), 'ALL') = 'ALL'
+                                     OR  XB.USER_GR_ID IN (SELECT XD.USER_GR_ID
+                                                             FROM SCM_ADM_USER_GR_MNU_MPG_M XD
+                                                            WHERE XD.USE_YN = 'Y'
+                                                              AND XD.MNU_ID = @mnuId))
+                                    AND XB.UNIT_TP_CD = 'D'
+                                    AND XB.USE_YN = 'Y'
+                                    AND XB.USER_ID = @sesUserId)
+           AND A.SITE_TYPE = 'PLANT'
+           AND A.VALID_YN = 'Y'
+        UNION ALL
+        SELECT B.SCM_SITE_ID AS CODE
+             , B.SITE_DESCRIPTION AS NAME
+             , B.COMPANY_ID
+          FROM SCM_MST_SITE B
+         WHERE B.DIVISION_ID IN (SELECT XE.COLUMN_VALUE
+                                   FROM TABLE(STRING_SPLIT(@divisionId, ',')) XE)
+           AND B.ATTRIBUTE9 IN (SELECT XF.SCM_SITE_ID
+                                  FROM SCM_MST_SITE XF
+                                     , SCM_ADM_USER_GR_UNIT_AUTH_MPG_M XG
+                                 WHERE XF.DIVISION_ID = XG.UNIT_ID
+                                   AND XG.USER_GR_ID IN (SELECT XH.USER_GR_ID
+                                                           FROM SCM_ADM_USER_GR_MPG_M XH
+                                                          WHERE XH.USE_YN = 'Y'
+                                                            AND XH.USER_ID = @sesUserId)
+                                   AND (NVL(TRIM(@mnuId), 'ALL') = 'ALL'
+                                    OR  XG.USER_GR_ID IN (SELECT XI.USER_GR_ID
+                                                            FROM SCM_ADM_USER_GR_MNU_MPG_M XI
+                                                           WHERE XI.USE_YN = 'Y'
+                                                             AND XI.MNU_ID = @mnuId))
+                                   AND XF.SITE_TYPE = 'PLANT'
+                                   AND XG.UNIT_TP_CD = 'D'
+                                   AND XG.USE_YN = 'Y'
+                                   AND XG.USER_ID = @sesUserId)
+           AND B.SITE_TYPE = 'PLANT'
+           AND B.VALID_YN = 'Y'
+        UNION ALL
+        SELECT DISTINCT C.SEGMENT1 AS CODE
+             , NVL2(D.SITE_DESCRIPTION, C.SEGMENT1 || '   ' || D.SITE_DESCRIPTION, NULL) AS NAME
+             , D.COMPANY_ID
+          FROM SCM_ADM_LOOKUP_MASTER_DETAIL C
+             , SCM_MST_SITE D
+         WHERE C.SEGMENT1 = D.SCM_SITE_ID
+           AND C.LOOKUP_TYPE = 'EE_SHIPMENT_PLAN'
+           AND C.VALID_YN = 'Y'
+           AND D.VALID_YN = 'Y') IA
+ WHERE NOT EXISTS (SELECT 1
+                     FROM SCM_ADM_LOOKUP_MASTER_DETAIL XJ
+                    WHERE XJ.SEGMENT1 = IA.COMPANY_ID
+                      AND XJ.LOOKUP_TYPE = 'SSP_UI_EXCEPT_COMPANY'
+                      AND XJ.VALID_YN = 'Y')
+ ORDER BY IA.CODE"
 SSP16LocBodTotal_FP,Y,"SELECT TRANSPORT_MODE|| ':' || BOD_ID|| ':' || TO_CHAR(ROUTE_ID)|| ':' || TO_CHAR(LT_TOTAL) CODE , TRANSPORT_MODE NAME FROM SCP_MST_BOD_V WHERE DIVISION_ID = @divisionId AND FROM_SITE = @fromSite"
 SSP16LocBodTotal_SCP,Y,"SELECT TRANSPORT_MODE|| ':' || BOD_ID|| ':' || TO_CHAR(ROUTE_ID)|| ':' || TO_CHAR(LT_TOTAL) CODE , TRANSPORT_MODE NAME FROM SCP_MST_BOD_V WHERE DIVISION_ID = @divisionId AND FROM_SITE = @fromSite"
 SSP16LocIncoterms_SCP,Y,"SELECT DISTINCT SSP_INCOTERMS AS CODE, SSP_INCOTERMS AS NAME FROM SCP_MST_BOD_V WHERE DIVISION_ID = @divisionId AND FROM_SITE = @fromSite AND TO_SITE = @toSite ORDER BY UPPER(SSP_INCOTERMS)"
@@ -2771,7 +3083,33 @@ ShipmentRequestPlantSite_SCP,Y,"SELECT IA.CODE
                       AND SA.VALID_YN = 'Y')"
 ShopGroupIdEE_SCP,Y,"SELECT DISTINCT SHOP_GROUP_ID AS CODE , OPERATION_GROUP AS NAME FROM SCM_SITE_HIERARCHY_V_SN A WHERE 1 = 1 AND A.SHOP_GROUP_ID = 'E'"
 ShopGroupIdNotEE_SCP,Y,"SELECT DISTINCT SHOP_GROUP_ID AS CODE , OPERATION_GROUP AS NAME FROM SCM_SITE_HIERARCHY_V_SN A WHERE 1 = 1 AND ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0 ) AND A.SHOP_GROUP_ID <> 'E'"
-ShopGroupId_SCP,Y,"SELECT /*+ OPT_PARAM('_push_join_predicate' 'false') */ DISTINCT SHOP_GROUP_ID AS CODE , OPERATION_GROUP AS NAME FROM SCM_SITE_HIERARCHY_V_SN A WHERE 1 = 1 AND ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0 )"
+ShopGroupId_SCP,Y,"SELECT /*+ OPT_PARAM('_push_join_predicate' 'false') */ DISTINCT E.SHOP_GROUP_ID AS CODE
+     , IA.OPERATION_GROUP AS NAME
+  FROM FP_INSTANCE_LINE_V A
+     , SCM_FACTORY_M B
+     , SCM_PLANT_M C
+     , SCM_OPERATION_M D
+     , FP_INSTANCE_FACTORY_M E
+     , (SELECT SHOP_GROUP_ID
+             , OPERATION_GROUP
+          FROM SCM_SITE_HIERARCHY_V_SN
+         GROUP BY SHOP_GROUP_ID
+             , OPERATION_GROUP
+       ) IA
+ WHERE A.FACTORY_ID = B.FACTORY_ID
+   AND A.SITE_ID = C.SITE_ID
+   AND A.COMPANY_ID = C.COMPANY_ID
+   AND A.PLANT_ID = C.PLANT_ID
+   AND A.DIVISION_ID = C.DIVISION_ID
+   AND A.SITE_ID = D.SITE_ID
+   AND A.COMPANY_ID = D.COMPANY_ID
+   AND A.DIVISION_ID = D.DIVISION_ID
+   AND A.OPERATION_ID = D.OPERATION_ID
+   AND A.INSTANCE_ID = E.INSTANCE_ID
+   AND A.FACTORY_ID = E.FACTORY_ID
+   AND E.SHOP_GROUP_ID = IA.SHOP_GROUP_ID(+)
+   AND (@divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0)
+ ORDER BY CODE"
 ShopGroupId_SCP_ALL,Y,"SELECT SHOP_GROUP_ID AS CODE , OPERATION_GROUP AS NAME , A.DIVISION_ID AS DIVISION_ID FROM SCM_SITE_HIERARCHY_CPS_V_SN A GROUP BY SHOP_GROUP_ID , OPERATION_GROUP , A.DIVISION_ID"
 Site,Y,"SELECT DIVISION_ID
      , CODE
@@ -3059,7 +3397,7 @@ FROM (
          , 2 AS SORT_ORDER
     FROM SCM_MST_SITE A
     WHERE A.SITE_TYPE = 'SALES'
-      AND ( NVL(@validYn, 'Y') <> 'Y'
+      AND ( NVL(@validYn, 'N') <> 'Y'
         OR A.VALID_YN = 'Y' )
       AND NVL(A.OPERATION_GROUP, '~') <> 'W'
       AND ( NVL(@divisionId, 'ALL') = 'ALL'
@@ -3087,7 +3425,7 @@ FROM (
       AND D.SEGMENT1 = B.SCM_SITE_ID
       AND D.LOOKUP_TYPE = 'AS_SITE_PLANT'
       AND D.VALID_YN = 'Y'
-      AND ( NVL(@validYn, 'Y') <> 'Y'
+      AND ( NVL(@validYn, 'N') <> 'Y'
         OR B.VALID_YN = 'Y' )
       AND D.SEGMENT3 = @divisionId
       AND ( @asYn = 'Y'
@@ -3315,7 +3653,9 @@ ToSiteBOD1_SCP_ALL,Y,"SELECT *
   FROM (
 SELECT SCM_SITE_ID AS CODE ,SCM_SITE_ID AS NAME ,SITE_TYPE ,CITY ,A.DIVISION_ID DIVISION_ID FROM SCM_MST_SITE A WHERE A.VALID_YN = 'Y' AND ( @divisionId IS NULL OR INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0) UNION SELECT SCM_SITE_ID AS CODE , SCM_SITE_ID AS NAME ,SITE_TYPE ,CITY ,A.DIVISION_ID FROM SCM_MST_SITE A WHERE A.VALID_YN = 'Y' AND A.SCM_SITE_ID LIKE '%' || '-A'
        )
- ORDER BY UPPER(SITE_TYPE)"
+ ORDER BY FN_ASIS_SORT_KEY(SITE_TYPE)   NULLS FIRST
+        , FN_ASIS_SORT_KEY(CODE)        NULLS FIRST
+        , FN_ASIS_SORT_KEY(DIVISION_ID) NULLS FIRST"
 ToSiteBOD_SCP,Y,"SELECT *
   FROM (
 SELECT SCM_SITE_ID AS CODE ,SCM_SITE_ID AS NAME ,SITE_TYPE ,CITY FROM SCM_MST_SITE A WHERE A.VALID_YN = 'Y' AND INSTR(',' || @divisionId || ',', ',' || A.DIVISION_ID || ',') > 0 UNION SELECT SCM_SITE_ID AS CODE , SCM_SITE_ID AS NAME ,SITE_TYPE ,CITY FROM SCM_MST_SITE A WHERE A.VALID_YN = 'Y' AND A.SCM_SITE_ID LIKE '%' || '-A'

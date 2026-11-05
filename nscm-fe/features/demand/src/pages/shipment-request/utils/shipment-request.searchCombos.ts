@@ -1,3 +1,7 @@
+import type { ComboOption } from 'features/master/src/components';
+
+import type { ComboResponse } from '@foundation/models';
+
 import { isDiv40 } from './shipment-request.division';
 
 /**
@@ -41,6 +45,36 @@ export const SEARCH_COMBO = {
   //   'PlantSiteByDivision'(권한 없음·NAME=설명)이 아니다. 공유 콤보라 repoint 만(validYn='N' 은 Form).
   plantSite: 'FromSiteByDivision',
 } as const;
+
+/**
+ * DMF0045 전용 콤보 옵션 빌더 — 서버 순서 보존판(이 화면만. 공통 buildComboOptions 는 미변경).
+ *
+ * 공통 buildComboOptions(bigFilterCombo.ts)는 마지막에 value(CODE) localeCompare 로 재정렬한다
+ *   — bigFilterCombo 규칙 3 "OrderBy(CODE)"로, AS-IS Filter 콤보(DataService.GetDMInnerTable)
+ *   재현이다. 그러나 이 화면의 Division/Team/EndCustomer/SalesSite/PlantSite 는 Filter 가 아니라
+ *   재조회 SP(MyDivision=ORDER BY ATTRIBUTE1, TeambyDivision 등)라 서버가 이미 업무 순서로 내려준다.
+ *   여기에 CODE 재정렬을 걸면 Division 이 81,82,81_UC,81_HM,81_ST,81_HD,81_HG(ATTRIBUTE1 업무순)
+ *   대신 81,81_HD,81_HG,81_HM,81_ST,81_UC,82(코드 알파벳순)로 뒤바뀐다. AS-IS cs:200-206 의
+ *   clsCtrl.setListBox 는 재정렬 없이 DataTable 행순(SP ORDER BY) 그대로 바인딩하므로, 그 동작을
+ *   이 화면에서만 복원한다(공통 함수 변경·타 화면 영향 없음).
+ *
+ * dedup(같은 CODE 는 첫 행 우선)은 buildComboOptions 와 동일하고, 마지막 정렬만 생략한다. 이 화면
+ *   콤보는 재조회 응답이라 축(narrow)을 걸지 않으므로(= 서버가 이미 좁힘) 축 필터는 불필요하다.
+ */
+const comboCell = (row: ComboResponse, column: string): string => {
+  const raw = row[column] as string | number | null | undefined;
+  return raw === null || raw === undefined ? '' : String(raw).trim();
+};
+
+export const buildOrderedComboOptions = (rows: ComboResponse[] | undefined): ComboOption[] => {
+  const byCode = new Map<string, ComboOption>();
+  for (const row of rows ?? []) {
+    const code = comboCell(row, 'CODE');
+    if (code === '' || byCode.has(code)) continue;
+    byCode.set(code, { label: comboCell(row, 'NAME') || code, value: code });
+  }
+  return [...byCode.values()];
+};
 
 // Bucket 은 CMBO SQL 이 아니라 LOOKUP 정적 콤보다(design 02 §2-6/§5). BUCKET_TYPE_CODE 는
 //   SCM_ADM_CMBO_SQL_M SQL_ID 로는 미등록이고 SCM_ADM_LOOKUP_MASTER_DETAIL.LOOKUP_TYPE 으로만 존재한다

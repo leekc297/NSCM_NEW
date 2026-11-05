@@ -1,25 +1,25 @@
 # SCP0030 — To-Be Fact Pack 요약
 
-- page_key: `supply/bod-item` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `supply/bod-item` · feature: supply · As-is Fact Pack 있음
 - 파일 14 · 엔드포인트 호출 8 (미해결 0, 주석 속 1) · 이벤트 20 · 컴포넌트 사용 47 · 하드코딩 컬럼 17 · 메시지 22
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 17건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/bod-item/bod-item.constants.ts | constants | 236 |
+| features/supply/src/pages/bod-item/bod-item.constants.ts | constants | 241 |
 | features/supply/src/pages/bod-item/bod-item.types.ts | types | 23 |
 | features/supply/src/pages/bod-item/BodItem.module.scss | style | 15 |
-| features/supply/src/pages/bod-item/BodItem.tsx | page | 427 |
+| features/supply/src/pages/bod-item/BodItem.tsx | page | 433 |
 | features/supply/src/pages/bod-item/components/BodExcludedGrid.tsx | component | 136 |
 | features/supply/src/pages/bod-item/components/BodItemForm.module.scss | component | 12 |
-| features/supply/src/pages/bod-item/components/BodItemForm.tsx | component | 210 |
-| features/supply/src/pages/bod-item/components/BodItemGrid.tsx | component | 98 |
+| features/supply/src/pages/bod-item/components/BodItemForm.tsx | component | 221 |
+| features/supply/src/pages/bod-item/components/BodItemGrid.tsx | component | 100 |
 | features/supply/src/pages/bod-item/components/modals/GetBodItemModal.module.scss | component | 22 |
 | features/supply/src/pages/bod-item/components/modals/GetBodItemModal.tsx | component | 180 |
 | features/supply/src/pages/bod-item/index.ts | index | 2 |
-| features/supply/src/pages/bod-item/useBodItemStore.ts | store | 148 |
-| features/supply/src/pages/bod-item/utils/bod-item.util.ts | util | 122 |
+| features/supply/src/pages/bod-item/useBodItemStore.ts | store | 171 |
+| features/supply/src/pages/bod-item/utils/bod-item.util.ts | util | 137 |
 | features/supply/src/pages/bod-item/__asis-mapping__.md | mapping | 67 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -27,10 +27,10 @@
 |---|---|---|---|---|
 | SCP0030/bodItem//call-proc | hook | 2 | Y | BodItem.tsx:77 BodItem.tsx:105 |
 | SCP0030/bodItemExcluded//call-proc | hook | 2 | Y | BodItem.tsx:97 BodItem.tsx:116 |
-| (useTabComboQueries) | hook | 1 | Y | BodItemForm.tsx:41 |
+| (useTabComboQueries) | hook | 1 | Y | BodItemForm.tsx:44 |
 | SCP0030/bodPopup//call-proc | hook | 1 | Y | GetBodItemModal.tsx:72 |
-| /admin/menu/SCP0030/column | http | 1 | Y | useBodItemStore.ts:110 |
-| /admin/menu/SCP0030/search-conditions | http | 1 | Y | useBodItemStore.ts:126 |
+| /admin/menu/SCP0030/column | http | 1 | Y | useBodItemStore.ts:133 |
+| /admin/menu/SCP0030/search-conditions | http | 1 | Y | useBodItemStore.ts:149 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -43,24 +43,24 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| BodItemForm | onSearch | handleSearch | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 338 |
-| BodItemForm | onOpenItemSearch | <arrow> setItemSearchOpen | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 339 |
-| BodExcludedGrid | onItemCellDblClick | <arrow> setItemPopup | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 377 |
-| BodExcludedGrid | onBodCellDblClick | <arrow> setBodPopup | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 378 |
+| BodItemForm | onSearch | handleSearch | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 344 |
+| BodItemForm | onOpenItemSearch | <arrow> setItemSearchOpen | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 345 |
+| BodExcludedGrid | onItemCellDblClick | <arrow> setItemPopup | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 383 |
+| BodExcludedGrid | onBodCellDblClick | <arrow> setBodPopup | jsx | features/supply/src/pages/bod-item/BodItem.tsx | 384 |
 | grid | beginningEdit | handler | addHandler | features/supply/src/pages/bod-item/components/BodExcludedGrid.tsx | 98 |
 | grid | updatedLayout | apply | addHandler | features/supply/src/pages/bod-item/components/BodExcludedGrid.tsx | 113 |
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 55 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 76 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 92 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 109 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 125 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 143 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 160 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 176 |
-| FunctionSearchIcon | onClick | onOpenItemSearch | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 181 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 200 |
-| grid | beginningEdit | handler | addHandler | features/supply/src/pages/bod-item/components/BodItemGrid.tsx | 61 |
-| grid | updatedLayout | apply | addHandler | features/supply/src/pages/bod-item/components/BodItemGrid.tsx | 76 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 70 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 86 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 102 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 119 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 135 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 153 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 170 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 186 |
+| Button | onClick | onOpenItemSearch | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 192 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/bod-item/components/BodItemForm.tsx | 211 |
+| grid | beginningEdit | handler | addHandler | features/supply/src/pages/bod-item/components/BodItemGrid.tsx | 62 |
+| grid | updatedLayout | apply | addHandler | features/supply/src/pages/bod-item/components/BodItemGrid.tsx | 77 |
 | Button | onClick | handleSubmit | jsx | features/supply/src/pages/bod-item/components/modals/GetBodItemModal.tsx | 165 |
 | Button | onClick | modalClose | jsx | features/supply/src/pages/bod-item/components/modals/GetBodItemModal.tsx | 172 |
 
@@ -136,14 +136,14 @@
 | MSG00085 | 2 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0030(3), SCP0007(3), SCP0130(1), COM0013(1)
+- 화면ID: SCP0007(6), SCP0030(3), SCP0130(1), COM0013(1)
 - SP/PKG: PKG_SCP0030(3), PR_GET_SHEET_COLUMN_LIST(2), PKG_NSCM_UI_COM_MENU(1), P_SCP0030_SAVE_BOD_EXCLUDED_ITEM(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
 | endpoint | Search(=setFilters 가 새 filters 객체를 만듦)마다 재조회 — 기존 useTabProcQuery(filters 참조 변경 시 조회)와 같은 규약. | features/supply/src/pages/bod-item/BodItem.tsx | 91 |
-| code | 메인(BOD Item): action != 'I' 면 즉시 return하고, InsertButton(cs:247~)은 본문 전건 주석("insert 없음", | features/supply/src/pages/bod-item/BodItem.tsx | 174 |
-| code | DELETE 도 Excluded 전용 — BOD Item 은 Insert 없음 → 신규행 없음 → AS-IS DeleteButton(action!='I' return)상 삭제 불가(cs:239-245). | features/supply/src/pages/bod-item/BodItem.tsx | 313 |
+| code | 메인(BOD Item): action != 'I' 면 즉시 return하고, InsertButton(cs:247~)은 본문 전건 주석("insert 없음", | features/supply/src/pages/bod-item/BodItem.tsx | 175 |
+| code | DELETE 도 Excluded 전용 — BOD Item 은 Insert 없음 → 신규행 없음 → AS-IS DeleteButton(action!='I' return)상 삭제 불가(cs:239-245). | features/supply/src/pages/bod-item/BodItem.tsx | 319 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

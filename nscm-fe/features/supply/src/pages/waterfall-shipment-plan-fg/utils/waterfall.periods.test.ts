@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { BUCKET_TYPE } from '../waterfall-shipment-plan-fg.constants';
 
-import { baseVisibleOf, isIsoWeek } from './waterfall.periods';
+import { baseVisibleOf, isIsoWeek, weekKeyOf } from './waterfall.periods';
 
 // AS-IS SetSpreadColumn(SCP0016.cs:1213-1281) 버킷별 Visible 분기 1:1 검증.
 //   isDaily=D_ / isWeekly=W_ / isWeeklyISO=(W_ && _ISO 접미) / isMonthly=M_.
@@ -17,6 +17,28 @@ describe('isIsoWeek', () => {
     expect(isIsoWeek('W_2026011')).toBe(false);
     expect(isIsoWeek('D_20260101')).toBe(false);
     expect(isIsoWeek('M_202601')).toBe(false);
+  });
+});
+
+// 2단(주) 헤더 가로병합 키 — Sum 체크로 W_(주합) 가 보일 때 'Wxx' 헤더가 주합 칸과 일자 칸으로
+//   쪼개지던 결함의 회귀 가드. W_ 롤업과 그 주의 D_ 일자들이 같은 키를 공유해야 한 칸으로 병합된다.
+describe('weekKeyOf — W_ 롤업과 소속 D_ 가 같은 2단 주차 키를 공유', () => {
+  it('W_ 는 인코딩 ISO주차, 같은 주 D_ 는 날짜에서 ISO주차 계산 → 일치', () => {
+    // 2026 ISO 35주(08.24 월 ~ 08.30 일). W_ binding = yyyymm(202608)+ISO_WEEK(35).
+    expect(weekKeyOf('W_20260835')).toBe('35');
+    expect(weekKeyOf('D_20260824')).toBe('35'); // 월
+    expect(weekKeyOf('D_20260830')).toBe('35'); // 일
+    // 다음 주(36)로 넘어가면 키가 달라져 병합 경계가 생긴다.
+    expect(weekKeyOf('D_20260831')).toBe('36');
+  });
+
+  it('M_ 등 비주차 kind 는 빈 키', () => {
+    expect(weekKeyOf('M_202608')).toBe('');
+    expect(weekKeyOf('x')).toBe('');
+  });
+
+  it('ISO 접미(_ISO)는 slice 경계 밖이라 주차 파싱에 영향 없음', () => {
+    expect(weekKeyOf('W_20260835_ISO')).toBe('35');
   });
 });
 

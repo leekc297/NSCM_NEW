@@ -1,0 +1,50 @@
+{
+ "menu_id": "SCP0096",
+ "asis_id": "SCP0096",
+ "generated": "2026-10-28 18:18:55",
+ "rc": 0,
+ "items": [
+  {
+   "key": "db",
+   "what": "DB 접속(AS-IS MSSQL · TO-BE Oracle)",
+   "status": "OK",
+   "producer": "tools/DbConn/probe.py",
+   "evidence": "전부 접속"
+  },
+  {
+   "key": "asis_pack",
+   "what": "AS-IS Fact Pack(SCP0096)",
+   "status": "OK",
+   "producer": "tools/AsisFacts/pack.ps1",
+   "evidence": "controls.csv, actions.csv, files.csv, endpoints.csv 있음"
+  },
+  {
+   "key": "tobe_meta",
+   "what": "TO-BE DB 메타(Doc/tobefacts/db)",
+   "status": "OK",
+   "producer": "tools/DbConn/export_tobe_meta.py",
+   "evidence": "8.7시간 전 export(기준 12시간)"
+  },
+  {
+   "key": "tobe_index",
+   "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
+   "status": "OK",
+   "producer": "tools/TobeFacts/run.ps1",
+   "evidence": "nscm-fe\\features\\supply\\src\\pages\\shipment-working-day-osp · 인덱스 최신"
+  },
+  {
+   "key": "gap",
+   "what": "GAP 분석(Doc/gap/<ID>_gap.csv)",
+   "status": "DONE",
+   "producer": "tools/Harness/gap.js <ID>",
+   "evidence": "파싱 결과보다 오래됨 → 재생성 · rc=0 · 10s · SP 등록 메타 1465행 반영 (C:\\Projects\\NSCM\\Doc\\tobefacts\\db\\proc_meta.csv) 시트 컬럼 메타 16372행 반영 GAP: 1화면 → C:\\Projects\\NSCM\\Doc\\gap (index.html 대시보드)"
+  },
+  {
+   "key": "gen_register",
+   "what": "생성 절차 산출물(Doc/gen/<ID>/register.json)",
+   "status": "OK",
+   "producer": "생성 절차(gen.js)",
+   "evidence": "있음"
+  }
+ ]
+}

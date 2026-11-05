@@ -1,0 +1,9 @@
+PKG_DMF0082: [('PACKAGE', 'VALID', '2026-10-09 13:38:31'), ('PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')]
+PKG_DMF0082_1104: [('PACKAGE', 'VALID', '2026-11-04 16:00:18'), ('PACKAGE BODY', 'VALID', '2026-11-04 16:00:17')]
+=== selftest env=['zioui1', 'localhost', '2026-11-04 16:48:20'] period=20261101~20270430 A=PKG_DMF0082 B=PKG_DMF0082_1104 users=k0101 divs=40 scen=['current', 'filters'] gtt=False
+--- k0101 div40 표본 {'site': None, 'item_full': None, 'cust': None, 'biz': None, 'project': None, 'owner': None, 'team': None, 'plant': None, 'sender': None, 'item': None} 버전 {'MF_W': 'MF_W_20261027_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20261104_V001', 'MF_D': 'MF_D_20261026_V001'}
+16:48:31 k0101 div40 Current                                  PASS rows=  7019 A   5.92s B   5.80s
+16:48:53 k0101 div40 Current sender=NOSUCH                    PASS rows=     0 A   3.18s B   3.29s  ⚠ 0행(미실증)
+16:49:01 k0101 div40 Current qty=Y                            PASS rows=  1118 A   3.75s B   3.70s
+
+=== 시나리오 3 · FAIL 0 · 미실증 1

@@ -1,0 +1,5 @@
+﻿menu_id,name,steps,msg_re,no_save,no_editor,rule,source,user,pattern_id,basis,key
+SCP0100,[자동] CN 언어 조회 건수 총/건 표기,"lang:CN;search;pagetext:(总|共|合计)\s*[\d,]+\s*(条|行|件|个)",,,,I1,자동 생성 P02 · btn_auth SEARCH,,P02,btn_auth SEARCH,I1|lang-cn-count
+SCP0100,[자동] 조회 중 Loading 토스트 없음,noload,,,,H10,자동 생성 P03 · btn_auth SEARCH,,P03,btn_auth SEARCH,H10|noload
+SCP0100,[자동] 당주 구분선(rail) = 이번 주(Weekly),cond:Bucket=Weekly;search;rail:W@mon,,,,H2,자동 생성 P18 · AS-IS W_ 칸 접두 검사 3건 · 조회조건 Bucket,,P18,AS-IS W_ 칸 접두 검사 3건 · 조회조건 Bucket,H2|rail
+SCP0100,[자동] 조회조건 콤보 9종 = 콤보,iscombo:Div;iscombo:From\ Site;iscombo:To\ Site;iscombo:Search\ Mode;iscombo:Search\ Level;iscombo:Bucket;iscombo:Plan\ Date;iscombo:Plan\ Type;iscombo:Scale,,,,B1,"자동 생성 P21 · 조회조건 기준표(search_cond.csv) TO-BE 선택 Div, From Site, To Site, Search Mode, Search Level, Bucket",,P21,"조회조건 기준표(search_cond.csv) TO-BE 선택 Div, From Site, To Site, Search Mode, Search Level, Bucket",B1|iscombo|bucket + B1|iscombo|div + B1|iscombo|from\site + B1|iscombo|plan\date + B1|iscombo|plan\type + B1|iscombo|scale + B1|iscombo|search\level + B1|iscombo|search\mode + B1|iscombo|to\site

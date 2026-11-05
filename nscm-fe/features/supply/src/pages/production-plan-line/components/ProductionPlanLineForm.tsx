@@ -403,7 +403,6 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
               ),
             }}
             onChange={e => onPick(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && onSearch()}
           />
         )}
       />
@@ -451,29 +450,25 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
               둘을 함께 채운다(페이지 setSelectedValue: ITEM_ID→itemId / NICK_NAME→nickName). */}
           {pickerField(t(LBL.MATERIAL, '_Material'), sc.itemId, v => set({ itemId: v }))}
           {pickerField(t(LBL.MODEL_NICKNAME, '_Model/Nickname'), sc.nickName, v => set({ nickName: v }))}
+          {/* Model 줄의 남은 9칸을 비워 그 줄을 유지한다. 아래 Plan 버전이 Model 옆으로 올라오지 않게 하는 칸이다. */}
+          <Grid size={9} />
 
-        </>
-      }
-      // 조회조건 2줄 초과분(Plan 버전/Period·Bucket·Sum)은 접고펼침으로 분리 — DMF0014 동일 패턴(SearchArea
-      //   extraConditions = 접힘 기본, Search 옆 ^ 버튼으로 토글). 필드 순서는 AS-IS 그대로 유지한다.
-      extraConditions={
-        <>
-          {/* Row2 — Plan-date* / Plan-type* / Seq* / Period* / Bucket / Sum */}
+          {/* Row3 — Plan Date/Type/Seq / Bucket / Period / Sum. 접고펼침 없이 모두 항상 보이게 둔다(SCP0009
+              ShipmentPlanFgForm 동일, 사용자 지시 2026-11-02). extraConditions 를 넘기지 않아 펼치기 버튼도 없다. */}
           {/* Plan-date → Plan-type → Seq 는 AS-IS UsrCombo 단일선택 필수 종속 콤보(design 02 #9/#10). 공용
               PlanVersionCascade(종속 콤보 + 공유 캐스케이더)로 교체 — 클릭하면 date→type→seq 컬럼 팝업이 열려
               경로를 고르고, 상위 변경 시 하위 초기화. 선택값은 기존과 동일하게 1-요소 배열로 store 에 보존
               (하위 cascade·기본값 effect 호환). 자동선택(최신 date·마지막 type·첫 seq)은 기존 effect 가 그대로
               채운다. combined 단일 입력칸(기본) — 라벨 'Plan Date/Type/Seq' 하나 + 선택값 'date / type / seq'로
-              표시(사용자 지시 2026-10-21, 참조 Bootstrap Cascader). 입력칸 고정폭 190px(사용자 지시 2026-10-21
-              — 자동폭보다 190px 가 보기 좋음). 190+라벨(140)=330 이 size=3 슬롯에 들어가 옆 필드 안 밀림. 길면
-              … 로 잘리고 전체값은 hover title. slot 확대(size>3)는 뒤틀림 유발하므로 금지. */}
+              표시(사용자 지시 2026-10-21, 참조 Bootstrap Cascader). 입력칸 고정폭을 주지 않아 같은
+              commonStyles.formItem 필드 칼럼을 채우는 다른 조회조건과 가로폭을 맞춘다(사용자 지시 2026-10-30).
+              선택값이 셀보다 길면 … 로 잘리고 전체값은 hover title. slot 확대(size>3)는 뒤틀림 유발하므로 금지. */}
           <Grid size={3}>
             <PlanVersionCascade
               variant='horizontal'
               labelAlign='right'
               formItemClassName={commonStyles.formItem}
-              label='Plan Date/Type/Seq'
-              inputWidth='190px'
+              label={t(LBL.PLAN_VERSION, '_Plan Date/Type/Seq')}
               levels={planVersionLevels}
               divisionId={sc.divisionId}
               value={planVersionValue}
@@ -510,18 +505,20 @@ export const ProductionPlanLineForm = ({ onSearch, onItemSearch }: Props) => {
           </Grid>
 
           {/* Sum(SUM 컬럼 토글). ALL/Line Assign 은 사용자 지시(2026-10-01)로 제거. SCP0009(ShipmentPlanFgForm)
-              동일 패턴으로 교체 — FormItem label(140px 우측정렬) + customGrid 로 체크박스를 행 높이 기준 세로
-              중앙 정렬(사용자 지시 2026-10-21, Period 와 겹침 해소). 윗줄 마지막 칸 size=3(cascade3+Bucket3+
-              Period3+Sum3=12). */}
+              동일 패턴으로 교체 — 체크박스 앞·라벨 뒤(Checkbox labelText), FormItem 라벨 칸은 공백으로 두고
+              customGrid 로 체크박스를 행 높이 기준 세로 중앙 정렬(사용자 지시 2026-10-21, Period 와 겹침 해소).
+              Row3 마지막 칸 size=3(cascade3+Bucket3+Period3+Sum3=12). */}
           <Grid size={3} className={commonStyles.customGrid}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.SUM, '_Sum')}
+              label={' '}
               labelAlign='right'
               render={() => (
-                <div className={commonStyles.customCheckbox}>
-                  <Checkbox checked={sc.chkSum} onChange={checked => set({ chkSum: checked })} />
-                </div>
+                <Checkbox
+                  labelText={t(LBL.SUM, '_Sum')}
+                  checked={sc.chkSum}
+                  onChange={checked => set({ chkSum: checked })}
+                />
               )}
             />
           </Grid>

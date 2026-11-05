@@ -1,3 +1,4 @@
+import { toggleClass } from '@mescius/wijmo';
 import {
   CellType,
   type CellRangeEventArgs,
@@ -7,11 +8,13 @@ import {
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo } from 'react';
 
+import { CELL_CONTROL_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import {
+  CUTOFF_DATE_COLUMN,
   DATE_FINISH_COLUMN,
   DATE_START_COLUMN,
   EDITABLE_COLUMNS,
@@ -61,6 +64,16 @@ export const PackHoldStockGrid = ({
   onInvalidDate,
 }: Props) => {
   const comboParams = useMemo(() => ({ mnuId: `'${MENU_ID}'` }), []);
+
+  // CUTOFF_DATE 메타는 FPDate 라 엑셀에서 날짜셀(mm-dd-yy)로 바뀐다. 조회전용이므로 FPDateText 로 다뤄
+  //   예상 시작/완료일과 같이 YYYY-MM-DD 문자열 그대로 내려받게 한다(사용자 지시 2026-10-28).
+  const columns = useMemo(
+    () =>
+      staticColumns.map(c =>
+        c.colNm === CUTOFF_DATE_COLUMN ? { ...c, cellCtrlObjTpCd: CELL_CONTROL_TYPE.DATE_TEXT } : c
+      ),
+    [staticColumns]
+  );
 
   // R2 — 행 편집잠금(design 03 §3 R2). 편집 3컬럼(QTY/START/FINISH)은 DIR='HOLD' 행만 개방.
   //   DB 메타는 전 컬럼 INPUT_TP_CD='S' 라, 공용 DataGrid setEditableColumns 가 beginningEdit 에서
@@ -136,6 +149,10 @@ export const PackHoldStockGrid = ({
       // 역전 위반 행의 날짜 2컬럼만 강조(전 행 도배 방지). 정상 시 '' 로 해제.
       const mark = isReversed(row) && DATE_COLS.includes(binding);
       e.cell.style.backgroundColor = mark ? VALIDATION_ERROR_BG : '';
+      // 비HOLD 행(실제 완료일 있음 등)은 편집 잠금이므로 메타 기준 노란색(편집가능 표시)을 해제
+      if (EDITABLE.includes(binding) && !isHoldRow(row)) {
+        toggleClass(e.cell, 'wj-cell-editable', false);
+      }
     };
     g.formatItem.addHandler(handler);
     g.invalidate();
@@ -148,7 +165,7 @@ export const PackHoldStockGrid = ({
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
       itemsSource={rows as unknown as WijmoRowItem[]}
-      staticColumns={staticColumns}
+      staticColumns={columns}
       comboParams={comboParams}
     />
   );

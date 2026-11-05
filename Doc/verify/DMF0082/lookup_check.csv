@@ -1,0 +1,4 @@
+﻿side,target,lookup_type,result,why,ref
+기존행,CURRENCY,"CURRENCY_LIST,NO_DATA",PASS,SEGMENT1 기준 · 후보 10건 = 활성 코드 전부 · 비활성 0,DMF0082_FcstNPrice_Mgmt.cs:2630 ← DMF0082_FcstNPrice_Mgmt.cs:2629
+신규행,Incoterms,"AS_INCOTERMS,INCOTERMS",ERROR,"SEGMENT1 기준 · [확인 대상] 활성 코드 9건 후보에 없음(화면 조건으로 좁힌 후보일 수 있음): ['81', '81_UC', '82', 'A01', 'DAT', 'DDU', 'Z01', 'Z02']",DMF0082_FcstNPrice_Mgmt.cs:2532 ← DMF0082_FcstNPrice_Mgmt.cs:2528
+기존행,Incoterms,"AS_INCOTERMS,INCOTERMS",ERROR,"SEGMENT1 기준 · [확인 대상] 활성 코드 3건 후보에 없음(화면 조건으로 좁힌 후보일 수 있음): ['81', '81_UC', '82']",DMF0082_FcstNPrice_Mgmt.cs:2532 ← DMF0082_FcstNPrice_Mgmt.cs:2528

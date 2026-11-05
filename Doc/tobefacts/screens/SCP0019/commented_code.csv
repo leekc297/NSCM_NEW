@@ -1,2 +1,4 @@
 ﻿"page_key","menu_id","file","line","kind","snippet"
-"supply/working-time","SCP0019","features/supply/src/pages/working-time/useWorkingTimeStore.ts","141","endpoint","ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 14행, admin 즉시 반영)."
+"supply/working-time","SCP0019","features/supply/src/pages/working-time/useWorkingTimeStore.ts","144","endpoint","ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 14행, admin 즉시 반영)."
+"supply/working-time","SCP0019","features/supply/src/pages/working-time/WorkingTime.tsx","93","code","return buildDynDayColumns(sidecar?.length ? sidecar : deriveDayColumnMeta(rows));"
+"supply/working-time","SCP0019","features/supply/src/pages/working-time/WorkingTime.tsx","196","code","셀엔 들어가되 저장에서 차단. 첫 위반에서 MSG00203 표시 후 저장 중단(AS-IS GMessageBox+return 파리티)."

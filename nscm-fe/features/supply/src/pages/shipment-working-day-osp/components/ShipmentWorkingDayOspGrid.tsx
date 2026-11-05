@@ -1,5 +1,6 @@
 import { toggleClass } from '@mescius/wijmo';
 import {
+  type CellEditEndingEventArgs,
   type CellRangeEventArgs,
   CellType,
   type FlexGrid,
@@ -17,6 +18,7 @@ import {
   CODE_DISPLAY_COLUMNS,
   DAY_CELL_DATA_MAP,
   GRID_COMBO_PARAMS,
+  WORKING_TIME_DEFAULT_RANGE,
 } from '../shipment-working-day-osp.constants';
 import { buildDynSumColumns } from '../shipment-working-day-osp.dynamic-columns';
 import type {
@@ -60,6 +62,9 @@ interface MergedColumnMeta {
   fixed: boolean;
   cellCtrlObjTpCd?: CELL_CONTROL_TYPE;
   cellCboDataTp?: string;
+  // admin DATA_SCALE_NUMBER — FPNumber 셀 편집기(InputNumber format n{scale}) 생성·소수 자릿수 제한의 원천.
+  //   누락 시 InputNumber 가 안 붙어 문자/소수자리 입력이 안 막힌다(WorkingTimeGrid 2026-10-16 사고 1:1).
+  scale?: number;
 }
 
 export const ShipmentWorkingDayOspGrid = ({
@@ -97,6 +102,7 @@ export const ShipmentWorkingDayOspGrid = ({
           fixed: col.fixed === true, // admin FIXED_FLAG 위임 (MEASURE 좌측고정 등 — 리터럴 덮어쓰기 금지)
           cellCboDataTp: comboKey,
           cellCtrlObjTpCd: comboKey ? CELL_CONTROL_TYPE.COMBO : col.cellCtrlObjTpCd,
+          scale: col.scale, // admin DATA_SCALE_NUMBER 위임 — FPNumber 편집기 소수 자릿수 원천
         } as MergedColumnMeta;
       }),
     [staticColumn]
@@ -125,6 +131,11 @@ export const ShipmentWorkingDayOspGrid = ({
             : CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
         cellCtrlObjTpCd: c.cellCtrlObjTpCd,
         cellCboDataTp: c.cellCboDataTp,
+        // FPNumber InputNumber 편집기(n{scale}) 생성용 — 누락 시 문자/소수 입력 미차단. WORKING_TIME_DEFAULT 는
+        //   admin DATA_SCALE_NUMBER=2(DB 실측)이나 AS-IS SetReNumerCellType(SCP0096.cs:163)은 dec=0(정수)이고
+        //   사용자 지시(2026-10-29)도 소수점 입력 자체를 금지한다 — DB 메타값 대신 0 으로 강제한다(DB 정정은
+        //   별도 register SQL 대상, EDITABLE_STATIC_BINDING 과 같은 성격의 임시 코드-오버라이드).
+        scale: c.binding === EDITABLE_STATIC_BINDING ? 0 : c.scale,
       })),
     [visibleColumns]
   );
@@ -262,6 +273,55 @@ export const ShipmentWorkingDayOspGrid = ({
     };
     g.beginningEdit.addHandler(beginningEditHandler);
 
+    // WORKING_TIME_DEFAULT 범위 검증(0~7, 정수만) — AS-IS SetReNumerCellType(min=0, dec=0, max=7, cs:163) +
+    //   사용자 지시(2026-10-29: 소수점 입력 자체 금지). InputNumber 의 min/max 는 편집기에서 값을 실제로
+    //   강제하지 못하므로(WorkingTimeGrid 2026-10-16 실측 동일 증상) 커밋 직전 cellEditEnding 에서 검증해
+    //   정수가 아니거나 0~7 밖이면 편집 종료를 취소한다(잘못된 값이 셀에 남지 않는다).
+    const rangeGuardHandler = (
+      _s: FlexGrid<ShipmentWorkingDayOspRow>,
+      e: CellEditEndingEventArgs
+    ) => {
+      if (e.cancel || _s.columns[e.col]?.binding !== EDITABLE_STATIC_BINDING) return;
+      const raw = String(_s.activeEditor?.value ?? '').trim();
+      if (raw === '') return;
+      if (!/^\d+$/.test(raw) || Number(raw) > WORKING_TIME_DEFAULT_RANGE.MAX) e.cancel = true;
+    };
+    g.cellEditEnding.addHandler(rangeGuardHandler);
+
+    // WORKING_TIME_DEFAULT 입력 시점 차단(WorkingTimeGrid guardDefaultMaxOnInput 델타) — 위
+    //   rangeGuardHandler 는 '저장'만 막는다(편집기엔 값이 그대로 타이핑되고 커밋 때 조용히 되돌아감).
+    //   beforeinput 을 capture 로 걸어 InputNumber 자체 핸들러보다 먼저 가로채, (1) 숫자(0~9) 이외의
+    //   문자(소수점·마이너스·문자 등 — 사용자 지시 2026-10-29 정수만)이거나 (2) 삽입 결과값이 MAX(7)를
+    //   넘으면 그 입력을 취소한다. 삭제(ev.data==null)는 항상 통과.
+    const guardDefaultMaxOnInput = (ev: InputEvent) => {
+      if (ev.data == null) return; // 삭제·조합취소 등 값 추가가 아닌 입력은 허용
+      if (!/^\d+$/.test(ev.data)) {
+        ev.preventDefault(); // 숫자 외 문자(소수점 포함) 차단
+        return;
+      }
+      const el = ev.target as HTMLInputElement;
+      const start = el.selectionStart ?? el.value.length;
+      const end = el.selectionEnd ?? el.value.length;
+      const next = el.value.slice(0, start) + ev.data + el.value.slice(end);
+      if (next !== '' && Number(next) > WORKING_TIME_DEFAULT_RANGE.MAX) ev.preventDefault();
+    };
+    const prepareEditHandler = (
+      _s: FlexGrid<ShipmentWorkingDayOspRow>,
+      e: CellRangeEventArgs
+    ) => {
+      const col = _s.columns[e.col];
+      if (col?.binding !== EDITABLE_STATIC_BINDING) return;
+      // 필수: InputNumber(커스텀 에디터) 셀은 grid.activeEditor 가 null 이라 거기에 beforeinput 을 달면
+      //   조용히 건너뛴다 — 컬럼이 들고 있는 InputNumber 편집기의 inputElement 에 직접 단다. 컬럼당 편집기
+      //   1개가 재사용되므로 같은 함수 참조 재등록을 브라우저가 중복 제거해 리스너가 쌓이지 않는다.
+      const el =
+        (col.editor as { inputElement?: HTMLInputElement } | null)?.inputElement ??
+        _s.activeEditor;
+      if (!el) return;
+      el.addEventListener('beforeinput', guardDefaultMaxOnInput as EventListener, true);
+    };
+    g.prepareCellForEdit.addHandler(prepareEditHandler);
+
     return () => {
       try {
         g.formatItem?.removeHandler(formatHandler);
@@ -270,6 +330,16 @@ export const ShipmentWorkingDayOspGrid = ({
       }
       try {
         g.beginningEdit?.removeHandler(beginningEditHandler);
+      } catch {
+        /* unmount race */
+      }
+      try {
+        g.cellEditEnding?.removeHandler(rangeGuardHandler);
+      } catch {
+        /* unmount race */
+      }
+      try {
+        g.prepareCellForEdit?.removeHandler(prepareEditHandler);
       } catch {
         /* unmount race */
       }

@@ -1,0 +1,105 @@
+{
+ "menu_id": "SCP0028",
+ "asis_id": "SCP0028",
+ "generated": "2026-11-02 13:51:37",
+ "a": {
+  "verdict": "판정필요",
+  "note": "저장 SP SCP0028_SAVE_SHIPMENT_LOT_SIZE 대상 SCP_MST_SHIPMENT_LOT_SIZE 와 콤보 원천 9종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음 · 원천 미확인 1종: control",
+  "save_tables": [
+   "SCP_MST_SHIPMENT_LOT_SIZE"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "cboDivision",
+    "label": "Division*",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=Division 분기 + FN_GET_DIVISION 원문",
+    "tables": [
+     "FN_GET_DIVISION",
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboOperationGroup",
+    "label": "Operation Group",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbTransMode",
+    "label": "Trans Mode",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "control",
+    "label": "",
+    "src": "원천 SP 없음/BigFilter",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbFromSite",
+    "label": "From Site",
+    "src": "UP_FX_GetCommonDataList @Code=FromSiteByDivision 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbToSite",
+    "label": "To Site",
+    "src": "UP_FX_GetCommonDataList @Code=ToSiteByDivision 분기",
+    "tables": [
+     "SCM_MST_SITE",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "OPERATION_GROUP_ID",
+    "label": "Operation Group",
+    "src": "UP_FX_GetCommonDataList @Code=LookupCommon 분기",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER",
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "SPLIT_YN",
+    "label": "Container Split*",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   },
+   {
+    "kind": "GRID",
+    "target": "VALID_YN",
+    "label": "Valid*",
+    "src": "고정 목록",
+    "tables": null,
+    "overlap": []
+   }
+  ]
+ }
+}

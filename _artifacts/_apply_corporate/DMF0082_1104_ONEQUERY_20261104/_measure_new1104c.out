@@ -1,0 +1,33 @@
+=== new1104c pkg=PKG_DMF0082_1104 env=['zioui1', 'localhost', '2026-11-05 07:13:06'] pkg=[('PACKAGE', 'VALID', '2026-11-04 16:00:18'), ('PACKAGE BODY', 'VALID', '2026-11-05 04:38:45')] period=20261101~20270430 ver=Current users=['k0101', 'minyonglee1'] divs=['40', '81', '82'] runs=3
+07:13:08 k0101 40 r1 proc=4.157s fetch=3.941s rows=[7019, 6, 1, 5, 181, 1] rc1=095c63bfc3/89d61bd608
+   gates {'site_item_4key': [15633, 15633], 'site_item_6key': [15633, 15633], 'sel_measure_dup': [23, 23, 22], 'param_token_empty': [9, 0], 'fnp_rows': [151808, 5], 'mf_sp_rows': [0]}
+07:13:16 k0101 40 r2 proc=4.098s fetch=5.062s rows=[7019, 6, 1, 5, 181, 1] rc1=095c63bfc3/89d61bd608
+07:13:26 k0101 40 r3 proc=4.158s fetch=2.93s rows=[7019, 6, 1, 5, 181, 1] rc1=095c63bfc3/89d61bd608
+07:13:33 k0101 81 r1 proc=6.385s fetch=6.878s rows=[7909, 6, 1, 5, 181, 1] rc1=38eb39c0ba/3f6fd3ab1a
+   gates {'site_item_4key': [40204, 40204], 'site_item_6key': [40204, 40204], 'sel_measure_dup': [23, 23, 22], 'param_token_empty': [9, 0], 'fnp_rows': [195354, 11], 'mf_sp_rows': [0]}
+07:13:46 k0101 81 r2 proc=8.284s fetch=6.862s rows=[7909, 6, 1, 5, 181, 1] rc1=38eb39c0ba/3f6fd3ab1a
+07:14:02 k0101 81 r3 proc=6.361s fetch=5.974s rows=[7909, 6, 1, 5, 181, 1] rc1=38eb39c0ba/3f6fd3ab1a
+07:14:14 k0101 82 r1 proc=18.389s fetch=14.042s rows=[16157, 6, 1, 5, 181, 1] rc1=c104225cb8/fa51ef3881
+   gates {'site_item_4key': [47078, 47078], 'site_item_6key': [47078, 47078], 'sel_measure_dup': [23, 23, 22], 'param_token_empty': [9, 0], 'fnp_rows': [451287, 8], 'mf_sp_rows': [0]}
+07:14:47 k0101 82 r2 proc=18.611s fetch=14.864s rows=[16157, 6, 1, 5, 181, 1] rc1=c104225cb8/fa51ef3881
+07:15:21 k0101 82 r3 proc=18.409s fetch=10.716s rows=[16157, 6, 1, 5, 181, 1] rc1=c104225cb8/fa51ef3881
+07:15:50 minyonglee1 40 r1 proc=7.341s fetch=5.76s rows=[7619, 6, 1, 5, 181, 1] rc1=c04eb14ae5/a4284c5824
+   gates {'site_item_4key': [15633, 15633], 'site_item_6key': [15633, 15633], 'sel_measure_dup': [10, 10, 8], 'param_token_empty': [9, 0], 'fnp_rows': [154252, 7], 'mf_sp_rows': [0]}
+07:16:04 minyonglee1 40 r2 proc=7.098s fetch=7.542s rows=[7619, 6, 1, 5, 181, 1] rc1=c04eb14ae5/a4284c5824
+07:16:19 minyonglee1 40 r3 proc=7.429s fetch=7.827s rows=[7619, 6, 1, 5, 181, 1] rc1=c04eb14ae5/a4284c5824
+07:16:34 minyonglee1 81 r1 proc=13.295s fetch=10.544s rows=[8042, 6, 1, 5, 181, 1] rc1=966fe8435a/6f437e7d47
+   gates {'site_item_4key': [40204, 40204], 'site_item_6key': [40204, 40204], 'sel_measure_dup': [10, 10, 8], 'param_token_empty': [9, 0], 'fnp_rows': [206121, 7], 'mf_sp_rows': [0]}
+07:16:58 minyonglee1 81 r2 proc=13.261s fetch=10.503s rows=[8042, 6, 1, 5, 181, 1] rc1=966fe8435a/6f437e7d47
+07:17:22 minyonglee1 81 r3 proc=12.953s fetch=7.945s rows=[8042, 6, 1, 5, 181, 1] rc1=966fe8435a/6f437e7d47
+07:17:43 minyonglee1 82 r1 proc=28.217s fetch=19.189s rows=[16253, 6, 1, 5, 181, 1] rc1=91a30645b4/75f1f771cf
+   gates {'site_item_4key': [47078, 47078], 'site_item_6key': [47078, 47078], 'sel_measure_dup': [10, 10, 8], 'param_token_empty': [9, 0], 'fnp_rows': [448786, 6], 'mf_sp_rows': [0]}
+07:18:31 minyonglee1 82 r2 proc=26.944s fetch=20.765s rows=[16253, 6, 1, 5, 181, 1] rc1=91a30645b4/75f1f771cf
+07:19:19 minyonglee1 82 r3 proc=27.232s fetch=18.78s rows=[16253, 6, 1, 5, 181, 1] rc1=91a30645b4/75f1f771cf
+ledger changed: none
+--- median (proc / fetch / rc1 rows)
+k0101 40: proc 4.16s fetch 3.94s rows [7019] digests 1
+k0101 81: proc 6.38s fetch 6.86s rows [7909] digests 1
+k0101 82: proc 18.41s fetch 14.04s rows [16157] digests 1
+minyonglee1 40: proc 7.34s fetch 7.54s rows [7619] digests 1
+minyonglee1 81: proc 13.26s fetch 10.50s rows [8042] digests 1
+minyonglee1 82: proc 27.23s fetch 19.19s rows [16253] digests 1

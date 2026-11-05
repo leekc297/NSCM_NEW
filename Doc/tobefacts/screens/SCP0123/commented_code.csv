@@ -1,3 +1,6 @@
 ﻿"page_key","menu_id","file","line","kind","snippet"
-"supply/plan-control","SCP0123","features/supply/src/pages/plan-control/hooks/usePlanControlCellActions.ts","84","code","confirm 은 Promise<boolean> — ""No"" 면 그 자리에서 중단한다(AS-IS DialogResult.No return)."
-"supply/plan-control","SCP0123","features/supply/src/pages/plan-control/plan-control.constants.ts","41","endpoint","일단위 판정 집합의 조회 경로. useTabLookupQueries(admin/lookup)를 쓰면 응답 컬럼명이"
+"supply/plan-control","SCP0123","features/supply/src/pages/plan-control/components/PlanControlGrid.tsx","63","jsx","<DataGrid formatItem={...}> prop 이 아니라 아래 effect 에서 gridRef 에 직접 addHandler 한다 —"
+"supply/plan-control","SCP0123","features/supply/src/pages/plan-control/components/PlanControlGrid.tsx","120","jsx","<DataGrid beginningEdit={...}> prop 으로 넘기지 않는다 — DataGrid 의 setEditableColumns"
+"supply/plan-control","SCP0123","features/supply/src/pages/plan-control/hooks/usePlanControlCellActions.ts","85","code","confirm 은 Promise<boolean> — ""No"" 면 그 자리에서 중단한다(AS-IS DialogResult.No return)."
+"supply/plan-control","SCP0123","features/supply/src/pages/plan-control/plan-control.constants.ts","58","endpoint","일단위 판정 집합의 조회 경로. useTabLookupQueries(admin/lookup)를 쓰면 응답 컬럼명이"
+"supply/plan-control","SCP0123","features/supply/src/pages/plan-control/PlanControl.tsx","177","code","removeRow 가 살아나 AS-IS 에 없던 행 추가·삭제가 실제로 동작한다. () => undefined 로 버튼만 렌더하고"

@@ -1,0 +1,5 @@
+﻿menu_id,sheet,asis_sp,verdict,asis_rows,tobe_rows,detail,note
+DMF0082,FcstNPrice|같은 사용자,DMF0082_GET_MAIN_DATA,PASS,15,15,AS-IS 15행 · TO-BE 15행,사용자 candoism(ADMIN) · 양쪽 직접 실행
+DMF0082,FcstNPrice|조회시간,DMF0082_GET_MAIN_DATA,PASS,15,15,조회 시간 TO-BE 1.0초(15행) · AS-IS 5.8초(15행),사용자 candoism(ADMIN) · 양쪽 직접 실행
+DMF0082,FcstNPrice|행구성,DMF0082_GET_MAIN_DATA,PASS,15,15,"[행 구성] 키 ['END_CUSTOMER', 'SCM_SITE_ID', 'ITEM_ID', 'NICK_NAME', 'INCOTERMS', 'FCST_TYPE', 'DOM_EXP', 'CELL_PROD_SITE_ID'] · 키당 Measure 수 AS-IS [3, 6] TO-BE [3, 6] · 중복 (키,Measure) AS-IS 0 TO-BE 0 · Measure 6종 행 수 일치",사용자 candoism(ADMIN) · 양쪽 직접 실행
+DMF0082,FcstNPrice,DMF0082_GET_MAIN_DATA,REVIEW,15,7721,"AS-IS 15행 · TO-BE 7721행 · 키 ['END_CUSTOMER', 'SCM_SITE_ID', 'ITEM_ID', 'NICK_NAME', 'INCOTERMS', 'FCST_TYPE', 'DOM_EXP', 'CELL_PROD_SITE_ID'] AS-IS 전용 0 · TO-BE 전용 2264 · 값 대조 0칸(숫자 컬럼 88) · 불일치 컬럼 0","미대응 인자 ['p_team_id', 'p_customer', 'p_scm_site_id', 'p_created_by']"

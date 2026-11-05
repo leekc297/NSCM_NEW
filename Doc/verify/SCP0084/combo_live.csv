@@ -1,0 +1,4 @@
+﻿combo_id,body,resp_n,db_n,missing,extra,result,why
+Division_SCP,"{""comboId"":""Division_SCP"",""mnuId"":""SCP0084""}",14,14,,,PASS,응답 14건 = DB 14건
+PlantByGroup1_SCP_ALL,"{""comboId"":""PlantByGroup1_SCP_ALL"",""mnuId"":""SCP0084""}",28,28,,,PASS,응답 28건 = DB 28건
+SCP0084_GET_MONTH_RANGE,"{""comboId"":""SCP0084_GET_MONTH_RANGE"",""mnuId"":""SCP0084""}",1,1,202111,202609,FAIL,응답 1건 ↔ DB 1건 · DB 에만(응답 누락) 1: 202111 · 응답에만 1: 202609

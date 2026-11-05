@@ -1,0 +1,959 @@
+{
+"at": "2026-10-31 21:40:37",
+"rows": [
+{
+"id": "DMF0003",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 15",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner', 'Test'] · AS-IS 만 ['JV Planner', 'SCP Tester', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0004",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 14",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['JV Planner', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0005",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 14",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['JV Planner', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0007",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 12",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)', 'SCM Viewer'] · AS-IS 만 ['SSP Planner', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0008",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 2",
+"actual": "TO-BE 6 · TO-BE 만 ['DM Planner', 'DM Planner (W/S)', 'DM Viewer', 'Test'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0014",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 11",
+"actual": "TO-BE 7 · TO-BE 만 [] · AS-IS 만 ['FP Viewer', 'SCP Planner', 'SCP Tester', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0020",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 12",
+"actual": "TO-BE 10 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['JV Planner', 'SCP Planner', 'SCP Tester', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0021",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 11 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 ['JV Planner', 'SCP Tester', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0022",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 11 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['JV Planner', 'SCP Tester', 'SSP Planner', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0035",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 14",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['JV Planner', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0040",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner', 'DM Planner', 'DM Viewer', 'FP Planner', 'FP Viewer', 'SCM PI Admin', 'SCM Viewer', 'SCP Tester'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0042",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 9",
+"actual": "TO-BE 7 · TO-BE 만 [] · AS-IS 만 ['FP Viewer', 'SCP Tester']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0043",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 4",
+"actual": "TO-BE 2 · TO-BE 만 [] · AS-IS 만 ['FP Viewer', 'SCP Tester']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0043_01",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 5",
+"actual": "TO-BE 4 · TO-BE 만 ['DM Viewer'] · AS-IS 만 ['FP Viewer', 'SCP Tester']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0044",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 5",
+"actual": "TO-BE 4 · TO-BE 만 ['DM Viewer'] · AS-IS 만 ['FP Viewer', 'SCP Tester']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0045",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0048",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 7",
+"actual": "TO-BE 5 · TO-BE 만 ['DM Viewer'] · AS-IS 만 ['FP Viewer', 'JV Planner', 'SCP Tester']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0049",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 5",
+"actual": "TO-BE 5 · TO-BE 만 ['DM Viewer', 'SCM PI Admin'] · AS-IS 만 ['FP Viewer', 'SCP Tester']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0053",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 5 · TO-BE 만 ['DM Planner (W/S)', 'DM Viewer'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0068",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 2",
+"actual": "TO-BE 4 · TO-BE 만 ['DM Viewer', 'SCM PI Admin'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0072",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 5 · TO-BE 만 ['DM Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0074",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 1",
+"actual": "TO-BE 3 · TO-BE 만 ['DM ADMIN', 'DM Viewer'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "DMF0082",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 15",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 ['JV Planner', 'SCP Tester', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCM0014",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 11",
+"actual": "TO-BE 11 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCM0019",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 6",
+"actual": "TO-BE 2 · TO-BE 만 [] · AS-IS 만 ['FP Viewer', 'SCP Tester', 'SSP ADMIN', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0001",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0002",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['SSP Planner', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0005",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0006",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0007",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0009",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0010",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0011",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0013",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0016",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0017",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0018",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0019",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 12 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 ['SSP Planner', 'SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0020",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0022",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0023",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0024",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0025",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0027",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 12",
+"actual": "TO-BE 12 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0028",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0030",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 12",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0031",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 12",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0033",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 11",
+"actual": "TO-BE 12 · TO-BE 만 ['CAPA Planner', 'SSP Planner'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0037",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0039",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 9",
+"actual": "TO-BE 11 · TO-BE 만 ['CAPA Planner', 'DM Planner', 'DM Planner (W/S)'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0041",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 9",
+"actual": "TO-BE 9 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 ['SSP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0048",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 4",
+"actual": "TO-BE 5 · TO-BE 만 ['DM Planner (W/S)', 'SCP Planner'] · AS-IS 만 ['FP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0049",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "PASS",
+"expected": "AS-IS 그룹 8",
+"actual": "TO-BE 8 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0053",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 14",
+"actual": "TO-BE 4 · TO-BE 만 [] · AS-IS 만 ['CAPA Planner', 'DM ADMIN', 'DM Planner', 'DM Viewer', 'FP Planner', 'FP Viewer', 'SCM Viewer', 'SSP ADMIN']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0055",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 11",
+"actual": "TO-BE 12 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0080",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 6",
+"actual": "TO-BE 5 · TO-BE 만 [] · AS-IS 만 ['FP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0084",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 8",
+"actual": "TO-BE 12 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)', 'DM Viewer', 'FP Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0085",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 10",
+"actual": "TO-BE 12 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0087",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 6",
+"actual": "TO-BE 5 · TO-BE 만 [] · AS-IS 만 ['FP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0095",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "PASS",
+"expected": "AS-IS 그룹 5",
+"actual": "TO-BE 5 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0096",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "PASS",
+"expected": "AS-IS 그룹 4",
+"actual": "TO-BE 4 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0097",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "PASS",
+"expected": "AS-IS 그룹 4",
+"actual": "TO-BE 4 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0098",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 5 · TO-BE 만 ['SCM Viewer', 'SCP Tester'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0100",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 4",
+"actual": "TO-BE 5 · TO-BE 만 ['SCM Viewer'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0101",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 4",
+"actual": "TO-BE 12 · TO-BE 만 ['CAPA Planner', 'DM ADMIN', 'DM Planner', 'DM Planner (W/S)', 'DM Viewer', 'FP Planner', 'FP Viewer', 'SCM Viewer'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0104",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 5",
+"actual": "TO-BE 8 · TO-BE 만 ['FP Planner', 'SCM PI Admin', 'SCP Tester'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0105",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 5",
+"actual": "TO-BE 8 · TO-BE 만 ['FP Planner', 'SCM PI Admin', 'SCP Tester'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0106",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 5",
+"actual": "TO-BE 8 · TO-BE 만 ['FP Planner', 'SCM PI Admin', 'SCP Tester'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0107",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 5",
+"actual": "TO-BE 8 · TO-BE 만 ['FP Planner', 'SCM PI Admin', 'SCP Tester'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0108",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 5",
+"actual": "TO-BE 8 · TO-BE 만 ['FP Planner', 'SCM PI Admin', 'SCP Tester'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0110",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 4",
+"actual": "TO-BE 5 · TO-BE 만 ['SCP Tester'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0111",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 4",
+"actual": "TO-BE 5 · TO-BE 만 ['SCM Viewer'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0114",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 8 · TO-BE 만 ['FP Planner', 'FP Viewer', 'SCM PI Admin', 'SCM Viewer', 'SCP Tester'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0120",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 4 · TO-BE 만 ['FP Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0121",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 4 · TO-BE 만 ['FP Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0122",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 3 · TO-BE 만 ['FP Planner'] · AS-IS 만 ['SCP Planner']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0123",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 4 · TO-BE 만 ['FP Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0124",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 4 · TO-BE 만 ['FP Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0125",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 4 · TO-BE 만 ['FP Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0126",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 4 · TO-BE 만 ['FP Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0127",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "PASS",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 3 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0128",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "PASS",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 3 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0129",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "PASS",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 3 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0130",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 4 · TO-BE 만 ['DM ADMIN'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0131",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "PASS",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 3 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0132",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "PASS",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 3 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SCP0133",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "PASS",
+"expected": "AS-IS 그룹 3",
+"actual": "TO-BE 3 · TO-BE 만 [] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0003",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 12",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0005",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0012",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0014",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0015",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0017",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0019",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0020",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 7",
+"actual": "TO-BE 5 · TO-BE 만 [] · AS-IS 만 ['FP Planner', 'FP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0021",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0022",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 12",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0023",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 12",
+"actual": "TO-BE 14 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0024",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 12",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0025",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 12",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0026",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 11",
+"actual": "TO-BE 10 · TO-BE 만 ['DM Planner (W/S)'] · AS-IS 만 ['FP Planner', 'FP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0045",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 11",
+"actual": "TO-BE 13 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0060",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0200",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 13",
+"actual": "TO-BE 15 · TO-BE 만 ['CAPA Planner', 'DM Planner (W/S)'] · AS-IS 만 []",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0201",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 7",
+"actual": "TO-BE 8 · TO-BE 만 ['SCM PI Admin', 'SCM Viewer'] · AS-IS 만 ['FP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+},
+{
+"id": "SSP0202",
+"ctx": "그룹×메뉴",
+"eg": "EG372",
+"result": "FAIL",
+"expected": "AS-IS 그룹 7",
+"actual": "TO-BE 8 · TO-BE 만 ['SCM PI Admin', 'SCM Viewer'] · AS-IS 만 ['FP Viewer']",
+"asis": "dbo.TB_FX_GroupMenuAuth(운영 AS-IS DB)"
+}
+]
+}

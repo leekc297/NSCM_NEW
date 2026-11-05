@@ -1,0 +1,38 @@
+{
+ "menu_id": "DMF0082",
+ "generated": "2026-10-31 15:37:07",
+ "F8": {
+  "verdict": "PASS",
+  "note": "감사 컬럼 = 저장 계정·저장 시각 (CREATED_BY=minyonglee1 · CREATION_DATE=2026-10-25 05:07:49 · LAST_UPDATED_BY=minyonglee1 · LAST_UPDATE_DATE=2026-10-25 05:07:49) · DM_PLN_CFM_SELLING_PRICE 3행"
+ },
+ "F7": {
+  "verdict": "FAIL",
+  "asis_sp": "DMF0082_SAVE_MAIN_DATA",
+  "asis_insert_tables": [
+   "DM_PLN_CFM_MKT_DEMAND_PLAN",
+   "DM_PLN_CFM_MKT_DEMAND_PLAN_H",
+   "DM_PLN_CFM_SELLING_PRICE",
+   "DM_PLN_CFM_SELLING_PRICE_H"
+  ],
+  "asis_update_only": [
+   "A"
+  ],
+  "tobe_written": [
+   "DM_PLN_CFM_SELLING_PRICE",
+   "SCM_MST_FUTURE_PRICE"
+  ],
+  "tobe_extra": [
+   "SCM_MST_FUTURE_PRICE"
+  ],
+  "note": "AS-IS DMF0082_SAVE_MAIN_DATA 신규행 경로 기록 테이블 DM_PLN_CFM_MKT_DEMAND_PLAN, DM_PLN_CFM_MKT_DEMAND_PLAN_H, DM_PLN_CFM_SELLING_PRICE_H 에 TO-BE 저장이 행을 남기지 않음 · UPDATE 만(신규 1건 시험 대상 아님): A · TO-BE 에만 기록(참고 — AS-IS 트리거·다른 경로 여부 확인): SCM_MST_FUTURE_PRICE"
+ },
+ "run": {
+  "cleanup_sql": "Doc\\verify\\DMF0082\\cleanup\\cleanup_20261025_051326.sql",
+  "account": "minyonglee1",
+  "saved_at": "2026-10-25 05:06:32",
+  "tables": {
+   "DM_PLN_CFM_SELLING_PRICE": 3,
+   "SCM_MST_FUTURE_PRICE": 3
+  }
+ }
+}

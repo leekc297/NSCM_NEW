@@ -1,0 +1,76 @@
+{
+ "screen": "SCP0122",
+ "generated": "2026-11-04 18:34:08",
+ "vars": {
+  "dtMyDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Division",
+   "targets": [
+    "SEARCH:cboDivision"
+   ],
+   "ref": "SCP0122_PlanActivityMgmt.cs:126 ← SCP0122_PlanActivityMgmt.cs:40",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtProcessCdAll": {
+   "sp": "UP_FX_GetCommonDataList",
+   "code": "LookupCommon",
+   "targets": [
+    "SEARCH:cboProcess"
+   ],
+   "ref": "SCP0122_PlanActivityMgmt.cs:127 ← SCP0122_PlanActivityMgmt.cs:47",
+   "rows": [
+    {
+     "CODE": "P001",
+     "NAME": "SCP 엔진 최적화 프로세스"
+    }
+   ]
+  },
+  "dtActivityCdAll": {
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "code": "ActivityCode",
+   "targets": [
+    "GRID:OPMZ_ACTV_NAME",
+    "PARAM:ActivityCode"
+   ],
+   "ref": "SCP0122_PlanActivityMgmt.cs:210 ← SCP0122_PlanActivityMgmt.cs:45",
+   "rows": [
+    {
+     "CODE": "A001",
+     "NAME": "Master Validation"
+    },
+    {
+     "CODE": "A002",
+     "NAME": "Create Plan ID"
+    },
+    {
+     "CODE": "A003",
+     "NAME": "Engine Run"
+    },
+    {
+     "CODE": "A004",
+     "NAME": "Plan Out Review and Amend"
+    },
+    {
+     "CODE": "A005",
+     "NAME": "FP Target I/F"
+    },
+    {
+     "CODE": "A006",
+     "NAME": "Release"
+    },
+    {
+     "CODE": "A007",
+     "NAME": "Input Constraint"
+    },
+    {
+     "CODE": "A008",
+     "NAME": "Constraint Validation"
+    },
+    {
+     "CODE": "A009",
+     "NAME": "Ship Plan Semi Cut-Off (To Packer)"
+    }
+   ]
+  }
+ }
+}

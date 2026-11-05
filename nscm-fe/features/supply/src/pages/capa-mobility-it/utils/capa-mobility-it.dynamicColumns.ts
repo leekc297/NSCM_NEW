@@ -230,14 +230,16 @@ export class CapaHeaderMergeManager extends CustomMergeManager<CapaMobilityItRow
 }
 
 /** bucket → 표시할 동적 컬럼 종류 집합 (design 03 §2.3, AS-IS SetLayout cs:3190~).
- *   Daily(기본): 월 M_('Capa/일')만 표시. AS-IS Detail 미체크 기본값(D_=isDetail / M_=!isDetail,
- *     chkDetail.InitValue='N') 재현 — Detail 체크박스는 미이식이라 기본(미체크=월) 상태로 고정(사용자 결정 2026-10-16).
- *   Weekly→W_ / Monthly→M_ (C2 기능적 해석, 스펙확정 대상).
- *   D_·PR_M_ 은 숨김(Daily 미체크 기준). */
+ *   Daily(기본): 일자(D_) 컬럼 표시 — D_ 는 3단 헤더(월 년월 → 주 Wnn → 일 dd)를 품으므로
+ *     이 하나로 AS-IS 의 월/주/일 3단(SCP0009_GET_SHEET_CALENDAR_3SPAN) 표시를 재현한다
+ *     (사용자 지시 2026-10-28: AS-IS 는 월·주·일 전부 표시 — 이전 "미체크=월 고정 M_" 결정 폐기).
+ *     월 단일컬럼 M_ 은 값이 전행 NULL 이면 BE call-proc 이 null 컬럼을 버려(BaseService) o_rc 에서
+ *     사라지므로 M_ 단독 표시는 "동적컬럼 0개" 로 보였다 — D_(값 0.000, 비-null) 표시로 해소.
+ *   Weekly→W_ / Monthly→M_ (C2 기능적 해석, 스펙확정 대상). */
 export const visibleKinds = (bucketType: string): Set<DynKind> => {
   const b = (bucketType || 'DAILY').toUpperCase();
   if (b === 'WEEKLY') return new Set<DynKind>(['W']);
   if (b === 'MONTHLY') return new Set<DynKind>(['M']);
-  // DAILY — Detail 미체크 기본값 = 월(M_) 'Capa/일'.
-  return new Set<DynKind>(['M']);
+  // DAILY — 일자(D_) 3단 헤더(월/주/일)로 AS-IS 파리티.
+  return new Set<DynKind>(['D']);
 };

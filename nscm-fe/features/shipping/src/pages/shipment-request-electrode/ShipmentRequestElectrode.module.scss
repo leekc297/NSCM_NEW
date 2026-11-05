@@ -1,0 +1,24 @@
+// PanelGroup(vertical) 상하 분할 레이아웃 — 자매 SSP0026 ShipmentRequestPack.module.scss 와 동일.
+//   각 Panel 콘텐츠를 .gridArea(flex column + height:100% + min-height:0 + overflow:hidden)로 감싸야
+//   TabWrapper/FlexGrid 높이가 제대로 제약되어, wijmo 가 ColumnFooter(합계행) 공간을 확보하고 바닥에
+//   고정한다. 이 래퍼가 없으면 그리드가 content 높이로 늘어나 footer 가 뷰포트 밖으로 흘러 안 보인다
+//   (2026-10-28 Stock/Request Detail Sum 미표시 원인).
+.bodyPanelGroup {
+  flex: 1 1 0;
+  min-height: 0;
+
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+}
+
+// 각 Panel 직속 래퍼 — Panel 이 높이를 관리하므로 height:100%. TabWrapper(.tabContainer flex:1 1 0)가
+//   이 안에서 남은 높이를 채운다. overflow:hidden 이 FlexGrid 바깥 1~2px 넘침만 자른다.
+.gridArea {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}

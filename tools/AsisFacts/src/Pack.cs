@@ -208,11 +208,13 @@ public static class Pack
         var actTotals = new long[4];
         foreach (var s in scr.Values.OrderBy(x => x.Id, StringComparer.Ordinal))
         {
-            var variant = Variants(s, slnProjects);
+            var unreg = new HashSet<string>(StringComparer.Ordinal);
+            var variant = Variants(s, slnProjects, unreg);
+            Func<string, string> slnOf = proj => slnProjects.Count == 0 ? "" : unreg.Contains(proj) ? "N" : "Y"; // files.csv sln_registered: Y/N · .sln 없으면 빈값
             var dir = Path.Combine(baseDir, s.Id);
             Directory.CreateDirectory(dir);
             var visible = s.Uses.Where(u => u.Active == "1" && u.Commented == "0" && !HideStatus.Contains(u.Status) && !u.Key.EndsWith(".PseudoDataClient")).ToList();
-            WriteCsvs(dir, s, variant, visible, eps, refs);
+            WriteCsvs(dir, s, variant, visible, eps, refs, slnOf);
             var metaFiles = new List<string>();
             if (screenMeta.TryGetValue(s.Id, out var mt))
                 foreach (var (tbl, rows) in mt)
@@ -234,7 +236,7 @@ public static class Pack
             GridCode.WriteCsv(dir, s.Grid, f => variant.GetValueOrDefault(f, ""));
             var gridMode = GridCode.Mode(gridRows, GridView.HasData);
             _gridModes[s.Id] = gridMode;
-            File.WriteAllText(Path.Combine(dir, s.Id + "_summary.md"), Summary(s, variant, visible, flows, eps, refs) + GridView.Write(dir, s.Id) + GridCode.Summary(gridRows, gridMode)
+            File.WriteAllText(Path.Combine(dir, s.Id + "_summary.md"), Summary(s, variant, visible, flows, eps, refs, unreg) + GridView.Write(dir, s.Id) + GridCode.Summary(gridRows, gridMode)
                 + GridMerge.Write(dir, s.Id, gridRows, GridView.RowsFor(s.Id), GridView.Divisions), new UTF8Encoding(true));
 
             var cur = variant.Where(v => v.Value != "legacy").Select(v => v.Key).ToHashSet();
@@ -289,7 +291,10 @@ public static class Pack
     /// 같은 화면이 여러 프로젝트에 있을 때: 화면 전용 csproj(이름에 화면ID) = current, 나머지 UIL 사본 = legacy.
     /// 화면 전용 csproj 가 없으면 모두 only.
     /// </summary>
-    static Dictionary<string, string> Variants(Scr s, HashSet<string> sln)
+    /// 2026-11-04: .sln 미등록 전용 csproj 는 variant 를 "current" 로 두고 unreg 에 프로젝트만 모은다(files.csv sln_registered 열 · summary 주석).
+    ///   종전 "current(sln미등록)" 표기는 variant 를 'current' 정확 일치로 읽는 소비자(facts_combosrc·gen_golden_cases·ledger·check.js·gen-e2e 등 20곳)에서
+    ///   파일 0건 → CheckList exit 6(SCP0122 11-04 17:04 · SCP0125 10-30) · 31 화면 영향. variant 는 분류값만 담는다.
+    static Dictionary<string, string> Variants(Scr s, HashSet<string> sln, HashSet<string> unreg)
     {
         var d = new Dictionary<string, string>(StringComparer.Ordinal);
         bool Dedicated(string proj) => Path.GetFileNameWithoutExtension(proj).ToUpperInvariant().Contains(s.Id);
@@ -301,7 +306,7 @@ public static class Pack
             var proj = f["project"];
             var fname = Path.GetFileName(f["file"].Replace('\\', '/'));
             string v = !hasDedicated || f["layer"] != "06.UIL" ? "only" : Dedicated(proj) ? "current" : dedicatedNames.Contains(fname) ? "legacy" : "shared";
-            if (v == "current" && sln.Count > 0 && !sln.Contains(proj)) v = "current(sln미등록)";
+            if (v == "current" && sln.Count > 0 && !sln.Contains(proj)) unreg.Add(proj);
             d[f["file"]] = v;
         }
         return d;
@@ -330,10 +335,10 @@ public static class Pack
         return string.Join(", ", items.Distinct().Take(60));
     }
 
-    static void WriteCsvs(string dir, Scr s, Dictionary<string, string> variant, List<Use> visible, Dictionary<string, Ep> eps, Dictionary<string, List<string>> refs)
+    static void WriteCsvs(string dir, Scr s, Dictionary<string, string> variant, List<Use> visible, Dictionary<string, Ep> eps, Dictionary<string, List<string>> refs, Func<string, string> slnOf)
     {
-        using (var w = new CsvOut(Path.Combine(dir, "files.csv"), "variant", "file", "project", "lines", "encoding", "sha256", "parse_errors"))
-            foreach (var f in s.Files) w.Row(variant[f["file"]], f["file"], f["project"], f["lines"], f["encoding"], f["sha256"], f["parse_errors"]);
+        using (var w = new CsvOut(Path.Combine(dir, "files.csv"), "variant", "file", "project", "lines", "encoding", "sha256", "parse_errors", "sln_registered"))
+            foreach (var f in s.Files) w.Row(variant[f["file"]], f["file"], f["project"], f["lines"], f["encoding"], f["sha256"], f["parse_errors"], slnOf(f["project"]));
         using (var w = new CsvOut(Path.Combine(dir, "endpoints.csv"), "variant", "file", "class", "member", "line", "site_kind", "kind", "candidate", "key", "status", "sp_or_sql", "objects", "via", "detail"))
             foreach (var u in visible.OrderBy(u => variant[u.File]).ThenBy(u => u.File).ThenBy(u => int.Parse(u.Line)))
                 w.Row(variant[u.File], u.File, u.Cls, u.Member, u.Line, u.SiteKind, u.Kind, u.Cand, u.Key, u.Status, Detail(u.Key, eps), Objects(u.Key, eps, refs), u.Via, u.Detail);
@@ -432,13 +437,14 @@ public static class Pack
 
     static string Esc(string s) => (s ?? "").Replace("|", "\\|").Replace("\r", " ").Replace("\n", " ");
 
-    static string Summary(Scr s, Dictionary<string, string> variant, List<Use> visible, List<FlowRow> flows, Dictionary<string, Ep> eps, Dictionary<string, List<string>> refs)
+    static string Summary(Scr s, Dictionary<string, string> variant, List<Use> visible, List<FlowRow> flows, Dictionary<string, Ep> eps, Dictionary<string, List<string>> refs, HashSet<string> unreg)
     {
         var cur = variant.Where(v => v.Value != "legacy").Select(v => v.Key).ToHashSet();
         var sb = new StringBuilder();
         sb.AppendLine($"# {s.Id} 화면 Fact Pack");
         sb.AppendLine();
         sb.AppendLine("> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.");
+        if (unreg.Count > 0) sb.AppendLine($"> ⚠ .sln 미등록 전용 프로젝트(current 로 취급 · files.csv sln_registered=N): {string.Join(", ", unreg.OrderBy(x => x, StringComparer.Ordinal).Select(Esc))}");
         sb.AppendLine();
         sb.AppendLine("## 1. 파일 구성");
         sb.AppendLine("| 구분 | 파일 | 프로젝트 | 줄수 |"); sb.AppendLine("|---|---|---|---:|");

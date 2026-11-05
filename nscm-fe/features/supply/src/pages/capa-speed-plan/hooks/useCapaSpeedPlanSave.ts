@@ -103,11 +103,7 @@ export const useCapaSpeedPlanSave = ({
 
         void setToast({
           type: 'success',
-          // i18next 기본 보간자는 `{{ }}` 라 DB 메시지의 `{0}` 은 옵션 전달로 치환되지 않는다.
-          message: t(MSG.SAVE_SUCCESS, { defaultValue: '{0} data saved.' }).replace(
-            '{0}',
-            String(outcome.savedCount || dirty.length)
-          ),
+          message: t(MSG.SAVE_SUCCESS, { defaultValue: 'Saved successfully.' }),
         });
         editTrackerRef.current?.clearChanges();
         // "조회모드 복귀"는 없다 — TO-BE 는 Edit 모드토글이 없어 복귀할 모드가 없다(canEdit 는 권한).

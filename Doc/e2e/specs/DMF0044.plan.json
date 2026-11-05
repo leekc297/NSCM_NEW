@@ -1,0 +1,817 @@
+{
+  "id": "DMF0044",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "DMF0044",
+  "divCascade": [],
+  "divLabels": [
+    "Div.",
+    "Division"
+  ],
+  "condOrder": [],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "SalesReports",
+  "routePath": "demand/sales-reports",
+  "asisName": "Sales_Reports",
+  "fields": [
+    {
+      "key": "spVersion",
+      "label": "SP Version",
+      "lbl": "LBL00798",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtSPVersion",
+      "tobeLabel": "SP Version",
+      "catalog": "",
+      "labels": [
+        "SP Version"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "type",
+      "label": "Report Type",
+      "lbl": "LBL00795",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbType",
+      "tobeLabel": "Report Type",
+      "catalog": "",
+      "labels": [
+        "Report Type"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "year",
+      "label": "Year",
+      "lbl": "LBL00086",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "usrYear",
+      "tobeLabel": "Year",
+      "catalog": "",
+      "labels": [
+        "Year"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "dataType",
+      "label": "Data Type",
+      "lbl": "LBL00089",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "usrDataType",
+      "tobeLabel": "Data Type",
+      "catalog": "",
+      "labels": [
+        "Data Type"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "divisionIds",
+      "label": "Division",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div.",
+        "Division"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": {
+    "rows": 1,
+    "spans": 3,
+    "literals": [
+      "col4"
+    ],
+    "maxRowPx": 32
+  },
+  "catalogScreen": "",
+  "asisMapping": "features\\demand\\src\\pages\\sales-reports\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "textbox",
+      "label": "Text 입력",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnTextbox"
+    },
+    {
+      "key": "exchangeRate",
+      "label": "Exchange Rate",
+      "lbl": "LBL00661",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnExchangeRate"
+    },
+    {
+      "key": "spVer",
+      "label": "SP Ver",
+      "lbl": "LBL00093",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnSPVer"
+    },
+    {
+      "key": "measure",
+      "label": "Description",
+      "lbl": "LBL00608",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "MDF Reports",
+      "key": "MDF_REPORTS",
+      "labels": [
+        "Application",
+        "Application Gr",
+        "Biz.Type1",
+        "Biz.Type2",
+        "Cell Model",
+        "Cell Model Info",
+        "Cell_Name",
+        "CELL/CAR",
+        "Cell Prod Site*",
+        "Column Description",
+        "Company Id*",
+        "Country Name",
+        "Currency",
+        "Cust Group Details",
+        "Cust. (Report)",
+        "DATA_TYPE",
+        "Department*",
+        "Department Name",
+        "Team",
+        "Team Name",
+        "Division",
+        "Edit Flag",
+        "End Cust.(Report)",
+        "End Customer",
+        "Energy(KWH)",
+        "Energy(WH)",
+        "FCST_TYPE",
+        "Incoterms",
+        "Model",
+        "Model Name",
+        "용도",
+        "Measure",
+        "MODEL TYPE",
+        "MODULE/CAR",
+        "NICK_NAME",
+        "PLANT_SITE",
+        "Product Details (Report)",
+        "Product Gr.(Report)",
+        "PROJECT_CODE",
+        "PROJECT_Name"
+      ]
+    }
+  ],
+  "popupSheets": [
+    "Cut-Off PopUp",
+    "MDFVerpopup",
+    "Sales Price PopUp",
+    "Textbox Popup"
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": true,
+  "procs": [
+    {
+      "sp": "DMF0044_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_GET_SPREAD_TITLE",
+      "entries": [
+        "event:this.clbType.SelectedIndexChanged",
+        "event:this.btnMeasure.Click",
+        "event:this.clbDivision.SelectedIndexChanged",
+        "event:this.Load",
+        "event:clbType.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0044_GET_SALES_REPORTS_DATA",
+      "sheet": "MDF Reports",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_GET_SALES_REPORTS_DATA",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0044_SAVE_SALES_PLAN_REPORT_C",
+      "sheet": "MDF Reports",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_REPORT_C",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0044_SAVE_SALES_PLAN_REPORT_C_CF",
+      "sheet": "MDF Reports",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_REPORT_C_CF",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "MDF Reports",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_DMF0044.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCM0001_GET_LOOKUP_VALUES",
+      "sheet": "MDF Reports",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_SCM0001_GET_LOOKUP_VALUES",
+      "entries": [
+        "event:this.Load",
+        "event:dsdm.Changed",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "DMF0044_GET_MEASURE",
+      "sheet": "MDF Reports",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_GET_MEASURE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "UP_FX_GETCOMMONDATALIST_DM",
+      "sheet": "(combo)",
+      "btn": "(콤보ID 등록)",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_UP_FX_GETCOMMONDATALIST_DM",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DM0021_GET_DM_MST_VERSION",
+      "sheet": "MDF Reports",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DM0021_GET_DM_MST_VERSION",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "PR_DM_PLN_SALES_PLAN_CUTOFF",
+      "sheet": "MDF Reports",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_PR_DM_PLN_SALES_PLAN_CUTOFF",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "MDF Reports",
+      "btn": "ACTION",
+      "status": "UNRESOLVED",
+      "candidate": "PKG_DMF0044.P_",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0000_GET_COMMON_SPREAD_TITLE",
+      "entries": [
+        "event:this.Load",
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.btnCopy.Click",
+        "button:FindButton",
+        "event:this.btnVerCopy.Click",
+        "event:this.btnVerDel.Click",
+        "event:this.btnTranCancel.Click",
+        "event:this.btnTransfer.Click",
+        "event:this.clbType.SelectedIndexChanged",
+        "event:this.btnVerCre.Click",
+        "event:this.usrButton1.Click",
+        "event:clbType.SelectedIndexChanged"
+      ]
+    },
+    {
+      "sp": "DMF0044_GET_COPY_VERSION_POPUP",
+      "sheet": "MDF Reports",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_GET_COPY_VERSION_POPUP",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+      "sheet": "MDF Reports",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_VERSION_COPY",
+      "entries": [
+        "event:this.btnVerCopy.Click",
+        "event:this.btnVerDel.Click",
+        "event:this.btnVerCre.Click",
+        "event:this.btnButtonList.UsrButtonList_Click_Detected"
+      ]
+    },
+    {
+      "sp": "DMF0044_SAVE_BIZ_PLAN_VERSION_COPY",
+      "sheet": "MDF Reports",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_SAVE_BIZ_PLAN_VERSION_COPY",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected"
+      ]
+    },
+    {
+      "sp": "DMF0044_MOBILE_REPORT_CREATE",
+      "sheet": "MDF Reports",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_MOBILE_REPORT_CREATE",
+      "entries": [
+        "event:this.btnTransfer.Click",
+        "event:this.btnTranCancel.Click"
+      ]
+    },
+    {
+      "sp": "DMF0044_GET_SALES_VERSION_POPUP",
+      "sheet": "MDF Reports",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP",
+      "entries": [
+        "event:this.Load",
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.btnCopy.Click",
+        "button:FindButton",
+        "event:this.btnVerCopy.Click",
+        "event:this.btnVerDel.Click",
+        "event:this.btnTranCancel.Click",
+        "event:this.btnTransfer.Click",
+        "event:this.btnVerCre.Click",
+        "event:this.usrButton1.Click"
+      ]
+    },
+    {
+      "sp": "DMF0044_GET_TEXTBOX",
+      "sheet": "MDF Reports",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_GET_TEXTBOX",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0044_SAVE_TEXTBOX",
+      "sheet": "MDF Reports",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_SAVE_TEXTBOX",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE",
+      "sheet": "exchangeRate",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP",
+      "sheet": "MDF Reports",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP_DATA",
+      "sheet": "MDF Reports",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP_DATA",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0044_SAVE_DM_EXCHANGE_RATE_REPORT",
+      "sheet": "MDF Reports",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0044.P_DMF0044_SAVE_DM_EXCHANGE_RATE_REPORT",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "MDF Reports": {
+      "40": [
+        "Cust. (Report)",
+        "End Cust.(Report)",
+        "Sold-To",
+        "Sold-To Cust.(Report)",
+        "Cust Group Details",
+        "NICK_NAME",
+        "Energy(WH)",
+        "Product Details (Report)",
+        "Cell Model Info",
+        "Cell Model",
+        "Company Id*",
+        "Cell Prod Site*",
+        "Biz.Type1",
+        "Biz.Type2",
+        "Application Gr",
+        "Application",
+        "Country Name"
+      ],
+      "81": [],
+      "82": [
+        "Energy(KWH)",
+        "용도",
+        "SoldToCountry",
+        "ShipToCountry",
+        "Cell_Name"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": {
+    "titles": [
+      {
+        "sp": "DMF0044_GET_SPREAD_TITLE",
+        "members": [
+          "InitSpread"
+        ]
+      },
+      {
+        "sp": "DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE",
+        "members": [
+          "InitSpread"
+        ]
+      }
+    ],
+    "dbLoop": [
+      "InitSpread_X:208",
+      "InitSpread:279"
+    ],
+    "titleSheets": [
+      "spreadTitle",
+      "exchangeRate"
+    ],
+    "titlePairs": [
+      {
+        "sheet": "spreadTitle",
+        "btn": "SEARCH"
+      },
+      {
+        "sheet": "exchangeRate",
+        "btn": "TITLE"
+      }
+    ],
+    "staticBindings": [
+      "COLUMN DESCRIPTION",
+      "DATA_TYPE",
+      "DIVISION_ID",
+      "EDIT_FLAG",
+      "DEPARTMENT_ID",
+      "DEPARTMENT_NAME",
+      "DEPT_ID",
+      "DEPT_NAME",
+      "CUST_REPORT",
+      "END_CUSTOMER",
+      "END_CUST_REPORT",
+      "SOLDTO_CODE",
+      "SOLDTO_CUST_REPORT",
+      "CUST_GROUP_DTL",
+      "PRODUCT_GROUP",
+      "ITEM_ID",
+      "ITEM_NAME",
+      "NICK_NAME",
+      "ENERGE_WH",
+      "ENERGE_KWH",
+      "PRODUCT_DETAILS",
+      "CELL_MODEL_INFO",
+      "CELL_MODEL",
+      "CURRENCY",
+      "COMPANY_ID",
+      "CELL_PROD_SITE",
+      "BIZ_TYPE",
+      "BIZ_TYPE_NAME40",
+      "APPLICATION_GR",
+      "APPLICATION",
+      "COUNTRY_CODE",
+      "VERSION_NO",
+      "PROJECT_CODE",
+      "SCM_SITE_ID",
+      "MEASURE",
+      "FCST_TYPE",
+      "PLANT_SITE_ID",
+      "CELL_PER_CAR",
+      "MODULE_PER_CAR",
+      "MODEL_TYPE",
+      "ITEM_USE",
+      "SOLDTO_COUNTRY",
+      "SHIPTO_COUNTRY",
+      "PROJECT_NAME",
+      "CELL_NAME",
+      "INCOTERMS"
+    ]
+  },
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "k0101",
+      "name": "",
+      "groups": [
+        "DM ADMIN",
+        "SYSTEM ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {},
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "DM ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.DM",
+      "tobeGroups": [
+        "ADMIN",
+        "DM ADMIN",
+        "DM Planner",
+        "DM Planner (W/S)",
+        "FP Viewer",
+        "GUEST",
+        "JV Planner",
+        "SCM PI Admin",
+        "SCP Planner",
+        "SSP Viewer"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "COLUMN_SETUP",
+        "TEXTBOX",
+        "SP_VER",
+        "SEARCH",
+        "SAVE_CF",
+        "SAVE",
+        "MEASURE_SELECT",
+        "INSERT",
+        "EXCHANGE_RATE",
+        "EXCEL",
+        "DELETE",
+        "SEARCH_DATA",
+        "EXRATE_SAVE",
+        "TITLE",
+        "TRANSFER",
+        "ACTION",
+        "ACTION_BP"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40",
+        "EE_UC",
+        "82",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "81_UC"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "COLUMN_SETUP",
+      "TEXTBOX",
+      "SP_VER",
+      "SEARCH",
+      "SAVE_CF",
+      "SAVE",
+      "MEASURE_SELECT",
+      "INSERT",
+      "EXCHANGE_RATE",
+      "EXCEL",
+      "DELETE",
+      "SEARCH_DATA",
+      "EXRATE_SAVE",
+      "TITLE",
+      "TRANSFER",
+      "ACTION",
+      "ACTION_BP"
+    ],
+    "DM ADMIN": [
+      "COLUMN_SETUP",
+      "DELETE",
+      "EXCEL",
+      "EXCHANGE_RATE",
+      "INSERT",
+      "MEASURE_SELECT",
+      "SAVE",
+      "SAVE_CF",
+      "SEARCH",
+      "SP_VER",
+      "TEXTBOX",
+      "SEARCH_DATA",
+      "TITLE",
+      "EXRATE_SAVE",
+      "TRANSFER",
+      "ACTION",
+      "ACTION_BP"
+    ],
+    "DM Viewer": [
+      "SP_VER",
+      "TEXTBOX",
+      "SEARCH",
+      "MEASURE_SELECT",
+      "EXCHANGE_RATE",
+      "EXCEL",
+      "COLUMN_SETUP",
+      "SEARCH_DATA",
+      "TITLE",
+      "SAVE"
+    ],
+    "FP Viewer": [
+      "EXCEL",
+      "SAVE",
+      "SEARCH",
+      "INSERT",
+      "MEASURE_SELECT",
+      "SAVE_CF",
+      "SP_VER",
+      "TEXTBOX",
+      "COLUMN_SETUP",
+      "DELETE",
+      "EXCHANGE_RATE",
+      "SEARCH_DATA",
+      "EXRATE_SAVE",
+      "TITLE",
+      "ACTION",
+      "ACTION_BP",
+      "TRANSFER"
+    ],
+    "SCM PI Admin": [
+      "SAVE",
+      "INSERT",
+      "EXCHANGE_RATE",
+      "DELETE",
+      "SP_VER",
+      "EXCEL",
+      "TEXTBOX",
+      "COLUMN_SETUP",
+      "SEARCH",
+      "SAVE_CF",
+      "MEASURE_SELECT",
+      "EXRATE_SAVE",
+      "SEARCH_DATA",
+      "TITLE",
+      "ACTION",
+      "TRANSFER",
+      "ACTION_BP"
+    ],
+    "SCP Tester": [
+      "EXCEL",
+      "COLUMN_SETUP",
+      "MEASURE_SELECT",
+      "SEARCH",
+      "EXCHANGE_RATE",
+      "SAVE_CF",
+      "TEXTBOX",
+      "INSERT",
+      "SAVE",
+      "SP_VER",
+      "DELETE",
+      "EXRATE_SAVE",
+      "TITLE",
+      "SEARCH_DATA",
+      "ACTION_BP",
+      "TRANSFER",
+      "ACTION"
+    ]
+  },
+  "menuBtnCodes": [
+    "COLUMN_SETUP",
+    "TEXTBOX",
+    "SP_VER",
+    "SEARCH",
+    "SAVE_CF",
+    "SAVE",
+    "MEASURE_SELECT",
+    "INSERT",
+    "EXCHANGE_RATE",
+    "EXCEL",
+    "DELETE",
+    "SEARCH_DATA",
+    "EXRATE_SAVE",
+    "TITLE",
+    "TRANSFER",
+    "ACTION",
+    "ACTION_BP"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

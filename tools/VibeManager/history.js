@@ -5,6 +5,7 @@
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const SNAP_TASKS = { 'S5.pipeline': 'both', 'S5.pipelinedesign': 'both', 'S5.pipelineregen': 'both', 'S5.repair': 'fe', 'S5.new': 'fe', 'S5.claude': 'fe', 'S5.pkgrepair': 'pkg', 'S5.pkg': 'pkg', 'S5.pkgdeploy': 'pkg', 'S5.regsql': 'pkg', 'S5.regcommit': 'pkg', 'S5.revertcommit': 'pkg', 'S4.one': 'both', 'S3.agent': 'docs', 'S3.docs': 'docs', 'S1.packone': 'docs' };
 const ts = () => { const d = new Date(); const z = n => String(n).padStart(2, '0'); return `${d.getFullYear()}${z(d.getMonth() + 1)}${z(d.getDate())}_${z(d.getHours())}${z(d.getMinutes())}${z(d.getSeconds())}`; };
@@ -33,13 +34,25 @@ function sources(p, id, scope) {
   return out;
 }
 // 1.8.0: scopeOverride — SNAP_TASKS 에 없는 작업(Claude 프롬프트·🛠️/🧯 보완 등)도 'both' 로 스냅샷을 남긴다
-function begin(p, id, taskId, note, scopeOverride) {
-  const scope = scopeOverride || SNAP_TASKS[taskId]; if (!scope || !id) return null;
-  const dir = path.join(p.vibeDir, 'history', id, `${ts()}_${taskId.replace(/[^\w.]/g, '_')}`);
-  const before = path.join(dir, 'before'); fs.mkdirSync(before, { recursive: true });
-  const srcs = sources(p, id, scope); for (const s of srcs) copyTree(s.dir, path.join(before, s.name), s.rels);
-  const meta = { id, task: taskId, scope, note: note || '', start: nowLocal(), end: null, exit: null, sources: srcs.map(s => ({ name: s.name, dir: s.dir, files: s.rels.length })) };
+// 1.9.36(2026-10-30 사용자: VM 메뉴·프롬프트로 한 작업을 작업 이력에서 보기): 스냅샷 대상이 아니거나 화면 ID 가 없어도 '실행 기록'(scope none)을 남긴다.
+//   extra = { source: 'menu'|'prompt'|'chain'|'task', label: 메뉴 이름, text: 프롬프트 원문 }
+const NOID = '_공통';
+function begin(p, id, taskId, note, scopeOverride, extra = {}) {
+  let scope = scopeOverride || SNAP_TASKS[taskId] || 'none'; const sid = (id || '').toUpperCase();
+  if (!sid) scope = 'none';
+  const base = path.join(p.vibeDir, 'history', sid || NOID, `${ts()}_${String(taskId || 'run').replace(/[^\w.]/g, '_')}`);
+  let dir = base; for (let k = 2; fs.existsSync(dir); k++) dir = `${base}_${k}`;
+  fs.mkdirSync(dir, { recursive: true });
+  const srcs = scope === 'none' ? [] : sources(p, sid, scope);
+  if (scope !== 'none') { const before = path.join(dir, 'before'); fs.mkdirSync(before, { recursive: true }); for (const s of srcs) copyTree(s.dir, path.join(before, s.name), s.rels); }
+  let user = ''; try { user = os.userInfo().username; } catch { }
+  const meta = { id: sid || NOID, task: taskId, scope, note: note || '', start: nowLocal(), end: null, exit: null, sources: srcs.map(s => ({ name: s.name, dir: s.dir, files: s.rels.length })),
+    source: extra.source || (taskId === 'claude' ? 'prompt' : 'task'), label: extra.label || '', text: String(extra.text || '').slice(0, 20000), user, host: os.hostname() };
   fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(meta, null, 2), 'utf8'); return dir;
+}
+// 즉시 끝나는 메뉴(터미널·서버·Git 등) — 실행 사실만 기록
+function event(p, id, taskId, label, extra = {}) {
+  try { const dir = begin(p, id, taskId, label, 'none', Object.assign({ source: 'menu', label }, extra)); const m = JSON.parse(fs.readFileSync(path.join(dir, 'meta.json'), 'utf8')); m.end = m.start; m.exit = 'event'; m.afterMode = 'end'; m.changed = []; fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(m, null, 2), 'utf8'); return dir; } catch { return null; }
 }
 // 1.8.0: afterMode — 'end'(작업 종료 시점 = 진짜 수정후) / 'view'(작업후 미기록이라 열람 시점의 현재 상태로 대체).
 //   사용자 지적(2026-10-20): 열람 시점 스냅샷을 '작업후'처럼 보여주면 수정후가 아니라 '현재'와 비교하게 된다 → 모드를 기록하고 UI/diff 제목에 구분 표시.
@@ -49,6 +62,7 @@ function finish(p, dir, exit, afterMode) {
   const meta = JSON.parse(fs.readFileSync(path.join(dir, 'meta.json'), 'utf8'));
   const mode = afterMode || 'end';
   if (mode === 'view' && meta.afterMode === 'end') return;
+  if (meta.scope === 'none') { if (mode === 'end') { meta.end = nowLocal(); meta.exit = exit; } meta.afterMode = 'end'; meta.changed = []; fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(meta, null, 2), 'utf8'); return; }
   const after = path.join(dir, 'after'); fs.rmSync(after, { recursive: true, force: true }); fs.mkdirSync(after, { recursive: true });
   for (const s of sources(p, meta.id, meta.scope)) copyTree(s.dir, path.join(after, s.name), s.rels);
   if (mode === 'end') { meta.end = nowLocal(); meta.exit = exit; }
@@ -74,9 +88,9 @@ function currentSnapshot(p, meta) {
 
 let panel = null;
 function open(api) {
-  const render = () => { const p = api.paths(); panel.webview.html = html(list(p), panel._mode || 'screen', panel._sel || ''); };
+  const render = () => { const p = api.paths(); panel.webview.html = html(list(p).filter(it => it.scope !== 'none'), panel._mode || 'date', panel._sel || ''); };
   if (panel) { panel.reveal(); render(); return; }
-  panel = vscode.window.createWebviewPanel('vibeManager.history', '작업 이력 — Vibe_Manager', vscode.ViewColumn.One, { enableScripts: true, retainContextWhenHidden: true });
+  panel = vscode.window.createWebviewPanel('vibeManager.history', 'Revision History — Vibe_Manager', vscode.ViewColumn.One, { enableScripts: true, retainContextWhenHidden: true });
   panel.onDidDispose(() => { panel = null; });
   panel.webview.onDidReceiveMessage(async m => {
     const p = api.paths();
@@ -123,15 +137,23 @@ const del=document.getElementById('del');if(del)del.onclick=()=>vscode.postMessa
 </script></body></html>`;
 }
 // 워크벤치 내부 탭용: 콘텐츠 영역만 반환 (events 는 workbench.js 에서 history:* 로 처리)
-function innerHtml(p, mode, sel) {
+const SRC = { menu: ['📋', '메뉴'], prompt: ['💬', '프롬프트'], chain: ['🔗', '체인 단계'], task: ['⚙️', '작업'] };
+const srcOf = it => it.source || (it.task === 'claude' ? 'prompt' : 'task');
+const durOf = it => { const a = new Date(it.start).getTime(), b = new Date(it.end).getTime(); if (isNaN(a) || isNaN(b) || b < a) return ''; const s = Math.round((b - a) / 1000); return s < 60 ? `${s}초` : s < 3600 ? `${Math.floor(s / 60)}분 ${s % 60}초` : `${Math.floor(s / 3600)}시간 ${Math.floor(s % 3600 / 60)}분`; };
+function innerHtml(p, mode, sel, src, view) {
   const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-  const items = list(p);
+  mode = mode || 'date'; src = src || 'all'; view = view === 'task' ? 'task' : 'rev';
+  const all = view === 'rev' ? list(p).filter(it => it.scope !== 'none') : list(p); const items = view === 'rev' || src === 'all' ? all : all.filter(it => srcOf(it) === src);
   const groups = {}; for (const it of items) { const k = mode === 'date' ? it.date : it.id; (groups[k] = groups[k] || []).push(it); }
   const keys = Object.keys(groups).sort((a, b) => mode === 'date' ? b.localeCompare(a) : a.localeCompare(b));
-  const row = it => `<div class="hit${it.dir === sel ? ' hsel' : ''}" data-dir="${esc(it.dir)}"><b>${esc(it.id)}</b> <span class="task">${esc(it.task)}</span> <span class="when">${esc(fmtLocal(it.start))}</span> <span class="st ${it.exit === 0 ? 'ok' : it.end ? 'bad' : 'run'}">${it.exit === 0 ? '✓' : it.end ? `exit ${esc(it.exit)}` : '진행중'}</span> <span class="n">${it.changed ? `변경 ${it.changed.length}` : ''}${it.afterMode === 'view' ? ' · ⚠ 작업후 미기록(열람시점 비교)' : ''}</span>${it.note ? `<div class="note">${esc(it.note)}</div>` : ''}</div>`;
-  const left = keys.map(k => `<details open><summary>${mode === 'date' ? '📅' : '🎯'} ${esc(k)} <span class="n">(${groups[k].length})</span></summary>${groups[k].map(row).join('')}</details>`).join('');
+  const stOf = it => it.exit === 'event' ? ['ok', '▶ 실행'] : it.exit === 0 ? ['ok', '✓'] : it.end ? ['bad', `exit ${it.exit}`] : ['run', '진행중'];
+  const row = it => { const [ic] = SRC[srcOf(it)] || ['•']; const [sc, sl] = stOf(it); const title = it.label || (srcOf(it) === 'prompt' ? (it.text || it.note || '').replace(/\s+/g, ' ').slice(0, 70) : it.task);
+    return `<div class="hit${it.dir === sel ? ' hsel' : ''}" data-dir="${esc(it.dir)}"><span title="${esc((SRC[srcOf(it)] || [, ''])[1])}">${ic}</span> <span class="when">${esc(fmtLocal(it.start).slice(mode === 'date' ? 11 : 0))}</span> <b>${esc(it.id === NOID ? '' : it.id)}</b> <span class="task">${esc(title)}</span> <span class="st ${sc}">${esc(sl)}</span> <span class="n">${durOf(it)}${it.changed && it.changed.length ? ` · 변경 ${it.changed.length}` : ''}${it.afterMode === 'view' ? ' · ⚠ 작업후 미기록(열람시점 비교)' : ''}</span></div>`; };
+  const left = keys.map(k => `<details open><summary>${mode === 'date' ? '📅' : '🎯'} ${esc(k === NOID ? '(화면 ID 없음)' : k)} <span class="n">(${groups[k].length})</span></summary>${groups[k].map(row).join('')}</details>`).join('');
   const cur = items.find(i => i.dir === sel);
-  let right = '<div class="hint">왼쪽에서 이력을 선택하면 변경 파일 목록이 나옵니다. 파일 클릭 = 수정전(작업 시작 직전) ↔ 수정후(작업 종료 시점) diff · "현재와" = 수정후 ↔ 지금 파일.</div>';
+  let right = view === 'task'
+    ? '<div class="hint">VM 메뉴·체인 단계·작업·직접 입력한 프롬프트의 실행 내역입니다(1.9.36 이후 기록). 왼쪽에서 선택하면 메뉴 이름·프롬프트 원문·결과·소요 시간과 변경 파일이 나옵니다.</div>'
+    : '<div class="hint">왼쪽에서 이력을 선택하면 변경 파일 목록이 나옵니다. 파일 클릭 = 수정전(작업 시작 직전) ↔ 수정후(작업 종료 시점) diff · "현재와" = 수정후 ↔ 지금 파일.</div>';
   if (cur) {
     const ch = cur.changed || []; const by = { fe: [], db: [], docs: [], gap: [] };
     for (const c of ch) { const k = c.file.split(/[\\/]/)[0]; (by[k] = by[k] || []).push(c); }
@@ -139,12 +161,15 @@ function innerHtml(p, mode, sel) {
     const afterInfo = cur.afterMode === 'view'
       ? `<div class="hint" style="color:#d29922">⚠ 이 이력은 작업 종료 시점의 '수정후' 가 기록되지 않아 <b>열람 시점(${esc(fmtLocal(cur.afterAt, 16))}) 의 현재 상태</b>와 비교 중입니다 — 그 사이 다른 작업의 변경이 섞일 수 있습니다.</div>`
       : `<div class="hint">수정전 = ${esc(fmtLocal(cur.start))} 작업 시작 직전 · 수정후 = ${esc(fmtLocal(cur.end))} 작업 종료 시점 (로컬 시간)</div>`;
-    right = `<h3>🕒 ${esc(cur.id)} · ${esc(cur.task)} · ${esc(fmtLocal(cur.start))}${cur.end ? ` → ${esc(fmtTime(cur.end))}` : ''}</h3>${afterInfo}<div class="row"><button class="sec" id="hist-od" data-dir="${esc(cur.dir)}">📁 폴더 열기</button><button class="sec" id="hist-del" data-dir="${esc(cur.dir)}">🗑️ 이력 삭제</button></div>${ch.length ? sect('fe', '🎨 FE 페이지') + sect('db', '🗄️ DB 객체 (PKG · 등록 · 되돌리기 SQL)') + sect('docs', '📚 문서') + sect('gap', '🔍 GAP') : '<div class="hint">변경 없음</div>'}`;
+    const [sic, slb] = SRC[srcOf(cur)] || ['•', srcOf(cur)];
+    const runInfo = `<table class="hkv"><tr><td>출처</td><td>${sic} ${esc(slb)}${cur.label ? ` · <b>${esc(cur.label)}</b>` : ''}</td></tr><tr><td>화면</td><td>${esc(cur.id === NOID ? '(없음)' : cur.id)}</td></tr><tr><td>작업</td><td>${esc(cur.task)}${cur.note && cur.note !== cur.label ? ` — ${esc(cur.note)}` : ''}</td></tr><tr><td>시각</td><td>${esc(fmtLocal(cur.start))}${cur.end ? ` → ${esc(fmtTime(cur.end))} (${durOf(cur)})` : ' (진행중)'}</td></tr><tr><td>결과</td><td>${cur.exit === 'event' ? '실행(즉시 종료 메뉴)' : cur.exit === 0 ? '✓ 성공' : cur.end ? `✖ exit ${esc(cur.exit)}` : '진행중'}</td></tr>${cur.user ? `<tr><td>사용자</td><td>${esc(cur.user)}${cur.host ? ' @ ' + esc(cur.host) : ''}</td></tr>` : ''}</table>${cur.text ? `<details${srcOf(cur) === 'prompt' ? ' open' : ''}><summary>${srcOf(cur) === 'prompt' ? '💬 프롬프트 원문' : '📝 전송 프롬프트'}</summary><pre class="hpre">${esc(cur.text)}</pre></details>` : ''}`;
+    right = `<h3>🕒 ${esc(cur.label || cur.task)} · ${esc(fmtLocal(cur.start))}</h3>${runInfo}${cur.scope === 'none' ? '<div class="hint">파일 스냅샷 대상이 아닌 실행 — 실행 기록만 남깁니다.</div>' : afterInfo}<div class="row"><button class="sec" id="hist-od" data-dir="${esc(cur.dir)}">📁 폴더 열기</button><button class="sec" id="hist-del" data-dir="${esc(cur.dir)}">🗑️ 이력 삭제</button></div>${cur.scope === 'none' ? '' : ch.length ? sect('fe', '🎨 FE 페이지') + sect('db', '🗄️ DB 객체 (PKG · 등록 · 되돌리기 SQL)') + sect('docs', '📚 문서') + sect('gap', '🔍 GAP(폐지 전 기록)') : '<div class="hint">변경 없음</div>'}`;
   }
+  const sb = (k, l) => `<button class="sec${src === k ? ' on' : ''}" data-hsrc="${k}">${l}</button>`;
   return `<div class="hist-root">
-    <div class="hist-top"><button class="sec${mode === 'screen' ? ' on' : ''}" data-hmode="screen">🎯 화면별</button><button class="sec${mode === 'date' ? ' on' : ''}" data-hmode="date">📅 일자별</button><button class="sec" id="hist-rf">🔁 새로고침</button> <span class="n">${items.length}건 · .vibe/history</span></div>
-    <div class="hist-cols"><div class="hist-l">${left || '<div class="hint">이력 없음 — 파이프라인/수선/PKG/등록 작업을 실행하면 작업 전·후 스냅샷이 쌓입니다.</div>'}</div><div class="hist-r">${right}</div></div>
+    <div class="hist-top"><button class="sec${mode === 'date' ? ' on' : ''}" data-hmode="date">📅 일자별</button><button class="sec${mode === 'screen' ? ' on' : ''}" data-hmode="screen">🎯 화면별</button>${view === 'task' ? ` │ ${sb('all', '전체')}${sb('menu', '📋 메뉴')}${sb('prompt', '💬 프롬프트')}${sb('chain', '🔗 체인 단계')}${sb('task', '⚙️ 작업')}` : ''} <button class="sec" id="hist-rf">🔁 새로고침</button> <span class="n">${items.length}건 · .vibe/history</span></div>
+    <div class="hist-cols"><div class="hist-l">${left || (view === 'task' ? '<div class="hint">실행 내역 없음 — VM 메뉴를 실행하거나 프롬프트를 보내면 쌓입니다.</div>' : '<div class="hint">이력 없음 — 파이프라인/수선/PKG/등록 작업을 실행하면 작업 전·후 스냅샷이 쌓입니다.</div>')}</div><div class="hist-r">${right}</div></div>
   </div>`;
 }
 
-module.exports = { begin, finish, list, open, SNAP_TASKS, innerHtml, afterLabel, nowLocal, fmtLocal };
+module.exports = { begin, finish, event, list, open, SNAP_TASKS, innerHtml, afterLabel, nowLocal, fmtLocal };

@@ -1,0 +1,23 @@
+﻿kind,target,result,why
+TB_FX,PKG_DMF0003,PASS,TB_FX_* 참조 0
+JSON_SHORT,PKG_DMF0003,ERROR,"[확인 대상] PKG_DMF0003 RETURNING CLOB 없는 JSON 생성 10곳(본문 줄 [9564, 11949, 12666, 12673, 12772, 12848]) — 대량이면 ORA-40478"
+SELECT_INTO,PKG_DMF0003,ERROR,"[확인 대상] PKG_DMF0003 빈 결과 처리 없는 단건 SELECT INTO 31곳: 줄1146:v_MKT_FCST_R, 줄1714:v_CUST_FCST_M, 줄1755:v_MKT_FCST_S, 줄1793:v_MKT_FCST_R, 줄2150:v_EDI_SUM, 줄2298:V_GT_DMF0 — 기준 데이터 없으면 ORA-01403"
+EMPTY_EQ,PKG_DMF0003,ERROR,"[확인 대상] PKG_DMF0003 Oracle 에서 항상 거짓인 빈 문자열 비교 19곳: LP_PROJECT_CODE = '', S_FUTURE_VALID <> '', V_COLUMN = '', V_PV_COL_LIST = '', V_WRK_DOM_EXP_NEW = '', V_WRK_FCST_TYPE_NEW = ''"
+LIKE_NULL,PKG_DMF0003,ERROR,"[확인 대상] PKG_DMF0003 가드 없는 LIKE 2곳 — 칸이 NULL 인 행이 조건 때문에 탈락 가능: ['ATTRIBUTE2~V_DEPT_ID@2477', 'F.PROJECT_CODE~C@6572']"
+TEAM_SRC,PKG_DMF0003,ERROR,"[확인 대상] PKG_DMF0003 에 OWNER→SSO_USER_INFO.DEPT_ID 경유 후보 2곳(본문 줄 [6354, 6491]) — Team 원천은 SITE_ITEM.DEPT_ID 만"
+ATTR9,EndCustomerByDivisionDeptAuth,PASS,콤보 SQL 'EndCustomerByDivisionDeptAuth' 실존
+ATTR9,AS_INCOTERMS,PASS,콤보 SQL 'AS_INCOTERMS' 실존
+ATTR9,FCST_TYPE_DM,PASS,콤보 SQL 'FCST_TYPE_DM' 실존
+ATTR9,MktFcstEditMeasure,PASS,콤보 SQL 'MktFcstEditMeasure' 실존
+LABEL_AMP,FORECAST_INFO_ALL.라벨,PASS,FORECAST_INFO_ALL 라벨 라벨 'Spec & Version' = AS-IS
+LABEL_AMP,FORECAST_INFO_ALL.소분류,PASS,FORECAST_INFO_ALL 소분류 라벨 'Spec & Version' = AS-IS
+LABEL_AMP,FORECAST_INFO_ALL.대분류,PASS,FORECAST_INFO_ALL 대분류 라벨 'Spec & Version' = AS-IS
+LABEL_AMP,PROJECT_S_OP_REPORT.라벨,ERROR,[확인 대상] PROJECT_S_OP_REPORT 라벨 AS-IS 'Project(S&OP Report)' 의 & 가 TO-BE 'Project(S Report)' 에 없음 — 의도한 변경인지 확인
+LABEL_AMP,PROJECT_S_OP_REPORT.소분류,ERROR,[확인 대상] PROJECT_S_OP_REPORT 소분류 AS-IS 'Project(S&OP Report)' 의 & 가 TO-BE 'Project(S Report)' 에 없음 — 의도한 변경인지 확인
+LABEL_AMP,PROJECT_S_OP_REPORT.대분류,ERROR,[확인 대상] PROJECT_S_OP_REPORT 대분류 AS-IS 'Project(S&OP Report)' 의 & 가 TO-BE 'Project(S Report)' 에 없음 — 의도한 변경인지 확인
+TEAM_SRC,FilterTeambyDivision,PASS,콤보 FilterTeambyDivision SQL 이 SITE_ITEM 을 읽음
+TEAM_SRC,TeambyDivision,PASS,콤보 TeambyDivision SQL 이 SITE_ITEM 을 읽음
+TEAM_SRC,TeambyDivisionAuth,PASS,콤보 TeambyDivisionAuth SQL 이 SITE_ITEM 을 읽음
+SRC_F4,BNPIn 대응 행 기본 키 전체 결합,PASS,BNPIn 대응 행 기본 키 전체 결합: 'B.PLANT_SITE_ID = A.V_PLANT_SITE_ID' 있음(줄 11255) · 문서 GAP-29
+SRC_F4,저장 뒤 수량 균형 재계산 호출,PASS,저장 뒤 수량 균형 재계산 호출: 'SCM_MGR.PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE' 있음(줄 11841) · 문서 GAP-26
+SRC_F4,주 입력 일자 분배가 사업부 기본 요일 참조,FAIL,주 입력 일자 분배가 사업부 기본 요일 참조: /DEFAULT_BUCKET_DAY/ 없음 · 문서 GAP-7

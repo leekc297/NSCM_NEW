@@ -41,6 +41,8 @@ export const LBL = {
   ACTIVE: 'LBL00007',
   LOOKUP_VALUES: 'LBL00637',
   SEARCH: 'LBL00112',
+  CONFIRM: 'LBL00359',
+  CANCEL: 'LBL00107',
 } as const;
 
 /**
@@ -69,6 +71,8 @@ export const MSG = {
   INTEGER_ONLY: 'MSG00460',
   /** 저장 대상이 아닌 영역에 변경분이 남아 있을 때의 확인 문구(전용 MSG 미등록 대체분). */
   UNSAVED_DATA: 'MSG01059',
+   /** 건수 입력이 1~1000 정수가 아닐 때. "{0}" 자리에 입력값이 들어간다. */
+  INVALID_NUMBER: 'MSG00050',
 } as const;
 
 /**
@@ -132,3 +136,7 @@ export const MASTER_DUPLICATE_KEY_COLUMNS = ['LOOKUP_TYPE'] as const;
 export const DISPLAY_SEQ_PATTERN = /^[+-]?[0-9]{1,10}$/;
 /** SP 범위 검사(PKG L813~821)와 같은 한계값. */
 export const DISPLAY_SEQ_MAX = 2147483647;
+
+/** Bulk Insert 팝업의 추가 가능 건수 범위. */
+export const BULK_INSERT_MIN = 1;
+export const BULK_INSERT_MAX = 1000;

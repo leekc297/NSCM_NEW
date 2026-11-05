@@ -1,0 +1,4 @@
+-- 2026-11-04 검증엔진 GAP-267 Set Price 실측 전 백업(사내 ZIOUI1) — DM_PLN_BP_FCST Division 40 전 행
+CREATE TABLE SCM_MGR.ZV_BPFCST40_BK20261104 AS SELECT * FROM SCM_MGR.DM_PLN_BP_FCST WHERE DIVISION_ID = '40';
+-- 복원(시험이 바꾼 행만): Set Price 가 갱신(LAST_UPDATED_BY='SYSTEM' · LAST_UPDATE_DATE >= 시험 시각)한 행을 백업 값으로 되돌리고, 백업에 없던 신규 행은 삭제
+-- 실측 뒤 정리: DROP TABLE SCM_MGR.ZV_BPFCST40_BK20261104 PURGE;

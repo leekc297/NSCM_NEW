@@ -146,12 +146,12 @@ export const ShipmentAlloReportForm = ({ onSearch }: Props) => {
                 <Button
                   appearance='outlined'
                   priority='normal'
-                  iconComponent={<FunctionSearchIcon appearance='lined' onClick={onPopup} />}
+                  iconComponent={<FunctionSearchIcon appearance='lined' />}
+                  onClick={onPopup}
                 />
               ),
             }}
             onChange={() => undefined}
-            onKeyDown={e => e.key === 'Enter' && onSearch()}
           />
         )}
       />

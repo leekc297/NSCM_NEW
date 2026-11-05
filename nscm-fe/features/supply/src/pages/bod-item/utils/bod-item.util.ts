@@ -32,6 +32,21 @@ export const toSelectedCodes = (value: string): string[] =>
     .filter(code => code !== '' && code.toUpperCase() !== ALL);
 
 /**
+ * 조회 전송용 Division 값 — 'ALL'/미선택이면 권한 Division 코드 전체를 콤마 열거로 펼친다.
+ * AS-IS CString.GetCheckedListValue(dtMyDivision, …) 2-arg(SCP0030_BOD_ITEM.cs L644/739) 등가 — 'ALL'
+ * 센티널을 그대로 보내면 조회 SP 가 무필터(DB 전체 Division)로 풀어 권한 밖 Division 까지 조회된다
+ * (자매화면 SCP0007 BOD 와 동일 누수). 전송 직전에만 권한 코드로 치환하고 화면 표시용
+ * searchParams.divisionId 는 'ALL' 로 둔다. 일부 선택은 그 선택 코드를 그대로 보낸다.
+ */
+export const resolveDivisionQueryValue = (
+  divisionId: string,
+  allowedDivisionIds: string[]
+): string => {
+  const codes = toSelectedCodes(divisionId);
+  return codes.length > 0 ? codes.join(',') : allowedDivisionIds.join(',');
+};
+
+/**
  * Division 선택값으로 콤보 행을 client-side 필터 — AS-IS SetChangeControl()의 `DIVISION_ID IN (...)`
  * 서버 재조회를 클라 필터로 재현(02 §3, convert-core §2.6). division 미선택('ALL')이면 전체 통과.
  * From/To Site·Plan Group 공통 사용(반환에 DIVISION_ID 포함).

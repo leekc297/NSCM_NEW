@@ -1,0 +1,33 @@
+trace: SP 2.22s fetch 0.19s rows=[438, 6, 1, 5, 181, 1]
+
+div=81 group=ADMIN  SP 2.22s  | dep=1 SQL 합 2.16s  | 갭: DBMS_STATS 0.00s  PL/SQL·기타 0.04s
+
+    라인       초     비중  parse    exec  fetch    실행   하드         LIO         행  sqlid          문장
+   592   1.365  61.5%   0.00    1.36   0.00     1    0     518,855    40,204  g9v4gu3gpx1p3  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+  1034   0.230  10.3%   0.00    0.23   0.00     1    0      10,514     8,942  b4k3fgnu8sw3n  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+     -   0.202   9.1%   0.12    0.08   0.00     1    1         911         0  cx68dh8nk6c8j  WITH INTOG AS ( SELECT B.USER_GROUP, B.DIVISION_ID, B.MEASURE, B.DAYS, B.FROM_TI
+   962   0.143   6.4%   0.00    0.14   0.00     1    2       7,353     1,192  65v9hc0ku02pq  INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C (DIVISION_ID, PROJECT_CO
+   937   0.128   5.8%   0.00    0.13   0.00     1    0      15,930     1,171  67uj7hkzgqtrh  INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PROJECT_CODE
+   990   0.027   1.2%   0.00    0.03   0.00     1    2         757         0  24mhn16x47uz7  INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C (DIVISION_ID, PROJECT_C
+     -   0.022   1.0%   0.02    0.00   0.00     1    1         115         0  cjxra9trzvq6m  WITH INTOG AS ( SELECT B.USER_GROUP, B.DIVISION_ID, B.MEASURE, B.DAYS, B.FROM_TI
+
+[범주 합계 dep=1]
+  PKG 문장             1.909s  문장   31  하드파싱    5  PARSE콜 0.004s
+  기타(매칭불가)           0.249s  문장   15  하드파싱    2  PARSE콜 0.141s
+  전체 하드파싱 이벤트 18 (재귀 포함)
+
+[기타(매칭불가) 상위]
+   0.202s cx68dh8nk6c8j WITH INTOG AS ( SELECT B.USER_GROUP, B.DIVISION_ID, B.MEASURE, B.DAYS, B.FROM_TIME, B.TO_TIME, LM.TOKEN AS LIMIT_MEASURE FROM (SELECT A.SEGM
+   0.022s cjxra9trzvq6m WITH INTOG AS ( SELECT B.USER_GROUP, B.DIVISION_ID, B.MEASURE, B.DAYS, B.FROM_TIME, B.TO_TIME, LM.TOKEN AS LIMIT_MEASURE FROM (SELECT A.SEGM
+
+[갭 > 50ms]
+
+[대기 이벤트 합]
+    0.153s  SQL*Net message from client
+    0.007s  direct path sync
+    0.006s  log file sync
+    0.004s  db file sequential read
+    0.004s  Free private memory to OS
+    0.001s  Allocate UGA memory from OS
+    0.000s  direct path write temp
+    0.000s  db file scattered read

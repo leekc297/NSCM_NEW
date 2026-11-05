@@ -28,6 +28,7 @@ sys.path.insert(0, os.path.join(ROOT, 'tools', 'DbConn'))
 sys.path.insert(0, os.path.dirname(__file__))
 from dbconn import connect  # noqa: E402
 import facts_combosrc as fc  # noqa: E402
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from asis_live import dead_methods, dead_sps, sp_base  # noqa: E402
 
 E2E_CFG = os.path.join(ROOT, 'tools', 'E2E', 'e2e.config.json')
 BIGFILTER = os.path.join(ROOT, 'GSCM', '04.WSL', 'FoxQuery', 'DM', 'Common', 'BigFilter.xml')
@@ -592,7 +593,9 @@ def load_display(asis_id):
     d = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', asis_id)
     types = {r['name']: r['type'].rsplit('.', 1)[-1] for r in read_csv(os.path.join(d, 'controls.csv'))}
     calls = {}
+    dead = dead_methods(asis_id)  # 실행되지 않는 AS-IS 메서드의 바인딩 제외(2026-10-30 asis_live)
     for r in read_csv(os.path.join(d, 'actions.csv')):
+        if (r['class'], r['method']) in dead: continue
         if r['kind'] == 'LIST_REBIND' and r['target'].endswith(('setListBox', 'setListBoxEx')):
             a = [s.strip().strip('"') for s in r['value'].strip('()').split(',')]
             if len(a) >= 2:
@@ -713,6 +716,9 @@ def main():
                     by_text = {rep(r): r['CODE'] for r in rows}
                     # 표시값 = 코드 표현이면 AS-IS 에 없는 항목도 그 문구가 곧 코드(설명 단계로 넘긴다)
                     t_keys = [by_text.get(t, t if rep_name == 'CODE' else f'?{t}') for t in tobe_texts]
+                if os.environ.get('B4_MUTATE') == '1' and len(set(t_keys) & set(a_keys)) > 1:
+                    gone = next(k for k in t_keys if k in set(a_keys))
+                    t_keys = [k for k in t_keys if k != gone]  # 변이 시험(2026-10-28): AS-IS 후보 1개를 TO-BE 에서 뺌 → B4 FAIL 이어야
                 a_only = [k for k in dict.fromkeys(a_keys) if k not in set(t_keys)]
                 t_only = [k for k in dict.fromkeys(t_keys) if k not in set(a_keys)]
                 score = len(a_only) + len(t_only)
@@ -785,6 +791,21 @@ def main():
                 g7_check(rec, x['target'], rows, tobe_texts)
             o2_override(rec, target, label, t_keys, ctx)
             cr_scope(rec, kind, target, label)
+            # Active 정책(EG055) — 코드로 비교되는 대상만. 표시값 비교(NAME)는 코드 집합과 대조할 수 없다
+            if meta.get('mst') and rep_name == 'CODE' and kind not in ('CASCADE', 'GRID_CASCADE'):
+                try:
+                    from active_policy import judge_active, master_sets
+                    ms = master_sets(tcx.cursor(), meta['mst'])
+                    if ms:
+                        only_y = any(re.search('만 후보', x['requirement']) for x in CRS if x['req_id'] in rec.get('cr', []))
+                        reqs = [x['requirement'] for x in CRS if x['req_id'] in rec.get('cr', [])]
+                        # 조회조건 '전체' 는 확정 규칙 대상(무관하게)에만 — 규칙 대상 아닌 조건(SCP0007 From Site)은 AS-IS 후보가 기준이라 재지 않는다(2026-11-02 허위 FAIL 2건)
+                        if kind != 'SEARCH' or only_y or any('무관' in q for q in reqs):
+                            rec['active'], rec['active_why'] = judge_active('SEARCH' if kind == 'SEARCH' else 'GRID', only_y, t_keys, ms[0], ms[1])
+                            if rec['active'] == 'FAIL' and rec.get('b4') == 'PASS' and not reqs:  # AS-IS 후보와 같고 적용 확정 규칙 없음 — 결함 단정 금지
+                                rec['active'], rec['active_why'] = 'ERROR', '[확인 대상] AS-IS 후보와 일치하나 정책과 다름 · ' + rec['active_why']
+                except Exception as ex3:  # noqa: BLE001 — 측정 실패는 ERROR 로 남긴다
+                    rec['active'], rec['active_why'] = 'ERROR', f'[측정 경로 없음] 마스터 조회 실패: {str(ex3)[:150]}'
             # 정렬: TO-BE 가 표시명 오름차순이면 AS-IS(코드·원천 정렬)와 달라도 의도된 개선일 수 있다 → 사람 확인(오탐 억제)
             if rec.get('b3') == 'FAIL':
                 shown = [t for t in tobe_texts if t]
@@ -935,28 +956,70 @@ def main():
             ctx = {k: v for k, v in sctx.items() if not k.endswith('.' + role(name))} if role(name) else dict(sctx)  # 자기 자신의 선택값으로는 거르지 않는다
             results.append(judge('SEARCH', name, lab, cands, texts, codes if hit > 0 else None, ctx,
                                  f"화면 초기(선택 {', '.join(sel_desc) or '없음=ALL'})"))
-        # 그리드 — 신규행(Insert 경로 우선)
-        for b, d in (rt.get('grid') or {}).items():
-            nr = d.get('newRow') or {}
-            if not nr.get('disp') and not nr.get('items'):
+        # 상위 값으로 좁힌 하위 후보(EG081) — C1 시험 덤프의 상위 값을 ctx 에 넣어 AS-IS 원천을 재실행
+        _cf = os.path.join(ROOT, 'Doc', 'verify', mid, 'combo_cascade.json')
+        for cd in (json.load(open(_cf, encoding='utf-8')) if os.path.exists(_cf) else []):
+            rl = role(cd['parent'])
+            if not rl:
                 continue
-            by_v = {}
-            for it in nr.get('items', []):
-                by_v.setdefault(it['v'], it['c'])
-            texts = [t for t in nr.get('disp', []) if t.strip()]
-            codes = [by_v.get(t, f'?{t}') for t in texts]
-            ctx = {f'row.{k}': v for k, v in (d.get('newCtx') or {}).items()}
-            # 행별 재조회 응답이 있으면 그것이 그 행의 편집 후보(컬럼 dataMap 은 누적 표시맵일 수 있다 — DMF0082 CELL_PROD_SITE_ID)
-            rs = row_specific(rt.get('combos', []), {it['c'] for it in nr.get('items', [])}, list((d.get('newCtx') or {}).values()))
-            row_note = ''
-            if rs:
-                texts, codes = [r['v'] for r in rs[1]], [r['c'] for r in rs[1]]
-                row_note = f" · TO-BE 후보 = 행별 재조회 응답 {rs[0].get('body', '')[:90]}"
-            tg = [r for r in src if r['target_kind'] == 'GRID' and norm(r['target']) == norm(b)]
-            cands = [r for r in tg if re.search(r'Insert', r['method'] or '', re.I)] or [r for r in tg if (r['method'] or '') == 'SheetMeta']                 or [r for r in tg if INIT_METHODS.match(r['method'] or '<field>')] or tg
-            results.append(judge('GRID', b, d.get('header', ''), cands, texts, codes, ctx, f"신규행({', '.join(f'{k}={v}' for k, v in (d.get('newCtx') or {}).items())}){row_note}"))
+            pc, _h = to_codes([cd['picked'].strip()])
+            if not pc or pc[0].startswith('?'):
+                continue
+            texts = [t for t in cd.get('opts', []) if t.strip() and not ALL_WORDS.match(t.strip())]
+            lab = label_of(cd['child'])
+            cands = [r for r in src if r['target_kind'] == 'SEARCH' and r['label'] == lab]
+            codes, hit = to_codes(texts)
+            ctx = {**{k: v for k, v in sctx.items() if not k.endswith('.' + (role(cd['child']) or '§'))}, f'Filter.{rl}': pc[0], f'row.{rl}': pc[0]}
+            for r in src:
+                if r['target_kind'] == 'SEARCH' and r['label'] == label_of(cd['parent']):
+                    ctx[f"ctrl.{r['target']}"] = pc[0]
+            results.append(judge('CASCADE', cd['child'], lab, cands, texts, codes if hit > 0 else None, ctx, f"상위 {cd['parent']}={pc[0]}"))
+        # 상위 셀 값별 하위 셀 후보(EG088) — C2 시험 덤프의 원천 값을 행 문맥에 넣어 AS-IS 원천을 재실행
+        _seen_gc = set()
+        for gc in rt.get('gridCascade') or []:
+            _k = (gc['src'], gc['v'], gc['tgt'])  # 같은 대상 C2 행이 여럿이면 같은 시도가 반복 기록된다
+            if _k in _seen_gc:
+                continue
+            _seen_gc.add(_k)
+            tg = [r for r in src if r['target_kind'] == 'GRID' and norm(r['target']) == norm(gc['tgt']) and (r['method'] or '') != 'SheetMeta']
+            if not tg or not gc.get('cands'):
+                continue
+            ctx = {f'row.{k}': v for k, v in (gc.get('ctx') or {}).items()}
+            ctx[f"row.{gc['src']}"] = gc['v']
+            results.append(judge('GRID_CASCADE', gc['tgt'], '', tg, gc['cands'], gc['cands'], ctx, f"원천 {gc['src']}={gc['v']}"))
+        # 그리드 — 신규행(Insert 경로 우선) + 기존행(EG059 · 2026-11-01 기존행 후보는 덤프만 하고 판정이 없었다 · Insert 없는 화면은 기존행이 유일한 대상)
+        for b, d in (rt.get('grid') or {}).items():
+            for side, dump_key, ctx_key, label in (('new', 'newRow', 'newCtx', '신규행'), ('ex', 'existing', 'exCtx', '기존행')):
+                nr = d.get(dump_key) or {}
+                if not nr.get('disp') and not nr.get('items'):
+                    continue
+                by_v = {}
+                for it in nr.get('items', []):
+                    by_v.setdefault(it['v'], it['c'])
+                texts = [t for t in nr.get('disp', []) if t.strip()]
+                codes = [by_v.get(t, f'?{t}') for t in texts]
+                ctx = {f'row.{k}': v for k, v in (d.get(ctx_key) or {}).items()}
+                # 행별 재조회 응답이 있으면 그것이 그 행의 편집 후보(컬럼 dataMap 은 누적 표시맵일 수 있다 — DMF0082 CELL_PROD_SITE_ID)
+                rs = row_specific(rt.get('combos', []), {it['c'] for it in nr.get('items', [])}, list((d.get(ctx_key) or {}).values()))
+                row_note = ''
+                if rs:
+                    texts, codes = [r['v'] for r in rs[1]], [r['c'] for r in rs[1]]
+                    row_note = f" · TO-BE 후보 = 행별 재조회 응답 {rs[0].get('body', '')[:90]}"
+                tg = [r for r in src if r['target_kind'] == 'GRID' and norm(r['target']) == norm(b)]
+                ins = [r for r in tg if re.search(r'Insert', r['method'] or '', re.I)]
+                non_ins = [r for r in tg if not re.search(r'Insert', r['method'] or '', re.I)]
+                pool = ins if side == 'new' else non_ins
+                cands = pool or [r for r in tg if (r['method'] or '') == 'SheetMeta'] or [r for r in tg if INIT_METHODS.match(r['method'] or '<field>')] or tg
+                has_new = bool((d.get('newRow') or {}).get('disp') or (d.get('newRow') or {}).get('items'))
+                kind = 'GRID' if side == 'new' or not has_new else 'GRID_EX'
+                results.append(judge(kind, b, d.get('header', ''), cands, texts, codes, ctx, f"{label}({', '.join(f'{k}={v}' for k, v in (d.get(ctx_key) or {}).items())}){row_note}"))
     out = os.path.join(ROOT, 'Doc', 'verify', mid, 'combo_oracle.json')
     with open(out, 'w', encoding='utf-8') as f:
         json.dump({'mid': mid, 'asis_id': asis_id, 'account': user, 'group': asis.group, 'results': results}, f, ensure_ascii=False, indent=1, default=str)
     from collections import Counter
-    print(f"{mid}: 콤보 {len(results)}개 — B4 {dict(Counter(r.get('b4') for r in r
+    print(f"{mid}: 콤보 {len(results)}개 — B4 {dict(Counter(r.get('b4') for r in results))} · B3 {dict(Counter(r.get('b3') for r in results))} · G7 {dict(Counter(r.get('g7') for r in results if r.get('kind') == 'SEARCH'))} → {out}")
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

@@ -1,6 +1,6 @@
 # DMF0040 — To-Be Fact Pack 요약
 
-- page_key: `demand/mkt-fcst-comparison` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `demand/mkt-fcst-comparison` · feature: demand · As-is Fact Pack 있음
 - 파일 14 · 엔드포인트 호출 12 (미해결 0, 주석 속 1) · 이벤트 34 · 컴포넌트 사용 60 · 하드코딩 컬럼 8 · 메시지 29
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 8건
 
@@ -11,7 +11,7 @@
 | features/demand/src/pages/mkt-fcst-comparison/components/ComparisonVersionModal.tsx | component | 325 |
 | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonForm.module.scss | component | 17 |
 | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonForm.tsx | component | 507 |
-| features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | component | 642 |
+| features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | component | 563 |
 | features/demand/src/pages/mkt-fcst-comparison/index.ts | index | 2 |
 | features/demand/src/pages/mkt-fcst-comparison/mkt-fcst-comparison.constants.test.ts | test | 56 |
 | features/demand/src/pages/mkt-fcst-comparison/mkt-fcst-comparison.constants.ts | constants | 106 |
@@ -20,7 +20,7 @@
 | features/demand/src/pages/mkt-fcst-comparison/useMktFcstComparisonStore.ts | store | 449 |
 | features/demand/src/pages/mkt-fcst-comparison/utils/mkt-fcst-comparison.api.ts | api | 51 |
 | features/demand/src/pages/mkt-fcst-comparison/utils/mkt-fcst-comparison.searchCombos.ts | util | 70 |
-| features/demand/src/pages/mkt-fcst-comparison/__asis-mapping__.md | mapping | 181 |
+| features/demand/src/pages/mkt-fcst-comparison/__asis-mapping__.md | mapping | 188 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
@@ -71,9 +71,9 @@
 | Checkbox | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonForm.tsx | 475 |
 | Checkbox | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonForm.tsx | 481 |
 | ComparisonVersionModal | onApply | <arrow> setSearchParams | jsx | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonForm.tsx | 495 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 414 |
-| g.hostElement? | dblclick | onDblClick | addEventListener | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 568 |
-| g | formatItem | formatHandler | addHandler | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 618 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 371 |
+| g.hostElement? | dblclick | onDblClick | addEventListener | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 497 |
+| g | formatItem | formatHandler | addHandler | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 539 |
 | MktFcstComparisonForm | onSubmit | handleSubmit | jsx | features/demand/src/pages/mkt-fcst-comparison/MktFcstComparison.tsx | 219 |
 | MktFcstComparisonForm | onDivisionChange | handleDivisionChange | jsx | features/demand/src/pages/mkt-fcst-comparison/MktFcstComparison.tsx | 220 |
 | MktFcstComparisonForm | onBucketChange | handleBucketChange | jsx | features/demand/src/pages/mkt-fcst-comparison/MktFcstComparison.tsx | 221 |
@@ -118,9 +118,9 @@
 | VERSION_COLUMNS | VERSION_TYPE | Type | 90 |  |  |  | meta-shape | features/demand/src/pages/mkt-fcst-comparison/components/ComparisonVersionModal.tsx | 56 |
 | VERSION_COLUMNS | CREATED_BY | Create By | 110 |  |  |  | meta-shape | features/demand/src/pages/mkt-fcst-comparison/components/ComparisonVersionModal.tsx | 57 |
 | VERSION_COLUMNS | CREATION_DATE | Create Date | 150 |  |  |  | meta-shape | features/demand/src/pages/mkt-fcst-comparison/components/ComparisonVersionModal.tsx | 58 |
-| dynColMetas | String(r.COLUMN_NAME) |  | widthOf(r.COLUMN_WIDTH) |  |  |  | object | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 176 |
-| dynColMetas | b |  | widthOf('') |  |  |  | object | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 193 |
-| dynamicColumns | m.binding | isOnlyWeekly ? 'SUM' : dailyVisible ? m.kind === 'D' ? m.lea | m.width | dynVisible(m.binding) | true |  | object | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 260 |
+| dynColMetas | String(r.COLUMN_NAME) |  | widthOf(r.COLUMN_WIDTH) |  |  |  | object | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 133 |
+| dynColMetas | b |  | widthOf('') |  |  |  | object | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 150 |
+| dynamicColumns | m.binding | isOnlyWeekly ? 'SUM' : dailyVisible ? m.kind === 'D' ? m.lea | m.width | dynVisible(m.binding) | true |  | object | features/demand/src/pages/mkt-fcst-comparison/components/MktFcstComparisonGrid.tsx | 217 |
 
 ## 7. 메시지 코드
 | code | count |

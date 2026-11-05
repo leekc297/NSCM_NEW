@@ -5,7 +5,7 @@ import type { ComboResponse } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
-import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
+import { Button, Checkbox, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
@@ -45,8 +45,9 @@ const toDate = (value: string): dayjs.Dayjs | null =>
     ? dayjs(`${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`)
     : null;
 
-// design 02 조회조건 10건 — main 8(Division/FromSite/ToSite/Incoterms/TransMode/ShipmentDate/Model/SoNo) +
-//   extra 2(ConfirmId/Current). Model/SoNo 를 2번째 줄로 올려 main 에 배치(사용자 지시 2026-10-22). 기본포커스=Division.
+// design 02 조회조건 10건 — main 8(Division/FromSite/ToSite/Incoterms/Current/ShipmentDate/Model/SoNo) +
+//   extra 2(ConfirmId/TransMode). Model/SoNo 를 2번째 줄로 올려 main 에 배치(사용자 지시 2026-10-22).
+//   Current 를 AS-IS 처럼 Incoterms 뒤로, Trans Mode 를 조회조건 맨 끝으로 이동(사용자 지시 2026-11-02). 기본포커스=Division.
 export const ShipmentChangeHistoryForm = ({ onSearch, onOpenModelPopup }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -218,25 +219,23 @@ export const ShipmentChangeHistoryForm = ({ onSearch, onOpenModelPopup }: Props)
             />
           </Grid>
 
-          {/* Trans Mode (다중, ssp0019_TransportMode_SCP — design 02 §1 #5). */}
+          {/* Current (체크박스 — design 02 §1 #11 / 03 §3 SetCheckRow. 그리드 행표시 토글, 서버 재조회 없음). LBL01065.
+              조회 조건이 아니라 표시 토글(체크=LAST_SEQ='C' 현재값 행만, 해제=전행). AS-IS 는 1번째 줄 Incoterms 뒤
+              맨 오른쪽에 위치 — 그 순서에 맞춰 Incoterms 바로 뒤(5번째 칸, Div 아래 열)로 배치(사용자 지시 2026-11-02).
+              정렬: 공통 라벨 열(140px)을 모사해 '☐ Current' 를 라벨 열 안에서 우측 정렬 → 'Current' 글자가 윗줄 'Div'
+              라벨과 같은 x 에서 끝난다(사용자 지시 2026-11-02 "들여쓰기 더, Div 아래 정렬"). 체크박스는 라벨 왼쪽으로
+              돌출(박스 앞·라벨 뒤 = AS-IS 캡션 우측 모양 유지). styles.currentField/currentLabelSlot 참조. */}
           <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.TRANS_MODE, '_Trans Mode')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  multiple
-                  allOption
-                  useClearIcon
+            <div className={styles.currentField}>
+              <div className={styles.currentLabelSlot}>
+                <Checkbox
+                  labelText={t(LBL.CURRENT, '_Current')}
                   disabled={noDivisionAuth}
-                  limitTags={1}
-                  value={sc.transModes.join(',')}
-                  options={transModeOptions}
-                  onChange={(_, picked) => set({ transModes: splitMulti(picked) })}
+                  checked={sc.chkCurrent}
+                  onChange={checked => set({ chkCurrent: checked })}
                 />
-              )}
-            />
+              </div>
+            </div>
           </Grid>
 
           {/* Shipment Date (기간 range — design 02 §1 #6 / §4. 기본 1개월은 page 가 mount 시 세팅).
@@ -307,14 +306,12 @@ export const ShipmentChangeHistoryForm = ({ onSearch, onOpenModelPopup }: Props)
                         appearance='outlined'
                         priority='normal'
                         disabled={noDivisionAuth}
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onOpenModelPopup} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onOpenModelPopup}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -332,7 +329,6 @@ export const ShipmentChangeHistoryForm = ({ onSearch, onOpenModelPopup }: Props)
                   disabled={noDivisionAuth}
                   value={sc.soNo}
                   onChange={e => set({ soNo: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -353,24 +349,29 @@ export const ShipmentChangeHistoryForm = ({ onSearch, onOpenModelPopup }: Props)
                   disabled={noDivisionAuth}
                   value={sc.confirmId}
                   onChange={e => set({ confirmId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
           </Grid>
 
-          {/* Current (체크박스 — design 02 §1 #11 / 03 §3 SetCheckRow. 그리드 행표시 토글, 서버 재조회 없음). LBL01065. */}
+          {/* Trans Mode (다중, ssp0019_TransportMode_SCP — design 02 §1 #5). AS-IS 는 조회조건 맨 끝(Confirm ID
+              뒤, 2번째 줄 우측)에 위치 — 그 순서에 맞춰 조회조건 마지막으로 이동(사용자 지시 2026-11-02).
+              라벨 LBL01221('TransportMode', KO/EN/CN 전건 등록) — AS-IS 표시문구 일치(사용자 지시 2026-11-02). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.CURRENT, '_Current')}
+              label={t(LBL.TRANS_MODE, '_TransportMode')}
               labelAlign='right'
               render={() => (
-                <input
-                  type='checkbox'
+                <CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
                   disabled={noDivisionAuth}
-                  checked={sc.chkCurrent}
-                  onChange={e => set({ chkCurrent: e.target.checked })}
+                  limitTags={1}
+                  value={sc.transModes.join(',')}
+                  options={transModeOptions}
+                  onChange={(_, picked) => set({ transModes: splitMulti(picked) })}
                 />
               )}
             />

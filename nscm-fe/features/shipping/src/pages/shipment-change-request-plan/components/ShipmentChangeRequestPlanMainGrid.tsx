@@ -86,6 +86,18 @@ const STATUS_PROPAGATION = new Set<string>(SO_PROPAGATE_STATUS_COLUMNS);
 // chkSingleProcess 를 보지 않는 경로(AS-IS SpdMain_ComboSelChange 에 체크박스 조건이 없다).
 const IGNORE_SINGLE_PROCESS = new Set<string>(SO_PROPAGATE_IGNORE_SINGLE_COLUMNS);
 
+// dataMap 을 컬럼 config 에 굽지 않고 effect 로 col.dataMap 부착하는 콤보(깜빡임 방지).
+//   columns util 의 EFFECT_ATTACHED_COMBOS 와 반드시 동기 — 거기서 cellCtrlObjTpCd=COMBO 로만 두고
+//   dataMap 은 비운 컬럼들이라, 여기서 부착하지 않으면 빈 드롭다운이 된다.
+//   From/To Site 는 division 재조회로, END_CUSTOMER/TRANSPORT_MODE 는 행 파라미터 조회로 dataMap 이
+//   바뀐다 — 구우면 바뀔 때마다 mainColumns 재빌드로 그리드가 깜빡인다(2026-11-02 수정).
+const EFFECT_ATTACHED_BINDINGS = [
+  COLUMN.FROM_SITE_DESCRIPTION,
+  COLUMN.TO_SITE_DESCRIPTION,
+  COLUMN.END_CUSTOMER,
+  COLUMN.TRANSPORT_MODE,
+];
+
 /**
  * TransMode 후보 조회 키 — 신규행은 Description 열, 기존행은 코드 열을 쓴다(AS-IS cs:5449~5455
  *   `if (action != "I")` 분기 그대로). 두 축을 섞으면 후보가 조용히 0행이 된다.
@@ -99,6 +111,11 @@ const transModeKeysOf = (row: GridRowData): TransModeKeys => {
     incoterms: str(row[COLUMN.INCOTERMS]),
   };
 };
+
+/** 팝업셀(Model/Project Code)이 활성인 행 — 신규행만, Project Code 는 div 40/EE 면 잠금. */
+const isPopupCellActive = (row: GridRowData, binding: string): boolean =>
+  isInsertedRow(row) &&
+  !(binding === PROJECT_POPUP_COLUMN && isEndCustomerDivision(str(row[COLUMN.DIVISION_ID])));
 
 /** EndCustomer 후보 조회 키 — AS-IS setEndCustomer(cs:6650)는 항상 Description 열을 쓴다. */
 const endCustomerKeysOf = (row: GridRowData): EndCustomerKeys => ({
@@ -139,20 +156,17 @@ export const ShipmentChangeRequestPlanMainGrid = ({
   //   조회조건 쪽(`ShipmentChangeRequestPlanForm.tsx`)과 같은 raw 표기로 맞춘다(설계 §6.1).
   const comboParams = useMemo(() => ({ mnuId: MENU_ID }), []);
 
-  // From/To Site 셀콤보 dataMap — buildMainColumns 가 굽지 않고(조회 시 재조회로 컬럼이 재빌드돼 "컬럼
-  //   사라졌다 생김" 깜빡이던 것 방지) 여기서 Wijmo 컬럼에 직접 올린다. 공용 매퍼와 같은 DataMap 을 쓰려고
+  // 셀콤보 dataMap — buildMainColumns 가 굽지 않고(조회·행 편집으로 dataMap 이 바뀔 때 컬럼이 재빌드돼
+  //   깜빡이던 것 방지) 여기서 Wijmo 컬럼에 직접 올린다. 공용 매퍼와 같은 DataMap 을 쓰려고
   //   buildLeafColumnDataMap 을 재사용한다(cascade/dedupe/정렬 동일). 메모이즈해 updatedLayout 재부착마다
   //   같은 참조를 재사용한다(매번 새로 만들면 setter 가 항상 돌아 불필요한 갱신).
-  const siteDataMaps = useMemo(() => {
+  const comboDataMaps = useMemo(() => {
     const build = (binding: string) => {
       const cfg = columns.find(c => c.colNm === binding);
       const rows = dataMaps[binding];
       return cfg && rows ? buildLeafColumnDataMap({ ...cfg, dataMap: rows }) : undefined;
     };
-    return {
-      [COLUMN.FROM_SITE_DESCRIPTION]: build(COLUMN.FROM_SITE_DESCRIPTION),
-      [COLUMN.TO_SITE_DESCRIPTION]: build(COLUMN.TO_SITE_DESCRIPTION),
-    };
+    return Object.fromEntries(EFFECT_ATTACHED_BINDINGS.map(b => [b, build(b)]));
   }, [columns, dataMaps]);
 
   // columnGroups 재대입(구조 변경)마다 col.dataMap 이 지워지므로 updatedLayout 에서 재부착한다
@@ -161,9 +175,9 @@ export const ShipmentChangeRequestPlanMainGrid = ({
     const grid = gridRef.current;
     if (!grid) return;
     const attach = () => {
-      for (const binding of [COLUMN.FROM_SITE_DESCRIPTION, COLUMN.TO_SITE_DESCRIPTION]) {
+      for (const binding of EFFECT_ATTACHED_BINDINGS) {
         const col = grid.getColumn(binding);
-        const map = siteDataMaps[binding] ?? null; // Wijmo Column.dataMap 은 DataMap | null
+        const map = comboDataMaps[binding] ?? null; // Wijmo Column.dataMap 은 DataMap | null
         if (col && col.dataMap !== map) col.dataMap = map;
       }
     };
@@ -176,7 +190,7 @@ export const ShipmentChangeRequestPlanMainGrid = ({
         /* unmount race */
       }
     };
-  }, [gridRef, siteDataMaps]);
+  }, [gridRef, comboDataMaps]);
 
   /**
    * EndCustomer 후보 재조회 + 자동선택 (AS-IS setEndCustomer cs:6650~6685).
@@ -196,20 +210,45 @@ export const ShipmentChangeRequestPlanMainGrid = ({
     [loadEndCustomer]
   );
 
+  // 팝업셀 직접 입력·붙여넣기 후처리 — 대문자 강제(AS-IS cellTypeImage CharacterCasing.Upper, D17)와
+  //   Model 확정 시 EndCustomer 재조회(AS-IS cs:5145 / 붙여넣기 cs:5912).
+  //   EDIT_MAIN 마킹은 하지 않는다: R-19 신호 19건에 두 열이 없고 신규행에서만 편집된다.
+  const commitPopupCell = useCallback(
+    (sender: FlexGridType, row: GridRowData, binding: string, write: CellWriter) => {
+      const value = str(row[binding]);
+      if (value !== value.toUpperCase()) write(row, binding, value.toUpperCase());
+      if (binding === ITEM_POPUP_COLUMN) void applyEndCustomer(row, write, sender);
+    },
+    [applyEndCustomer]
+  );
+
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
 
-    // 편집 진입 게이트 — 행 조건 + 팝업셀 인라인 편집 취소(nscm-patterns §5-16).
+    // 편집 진입 게이트 — 행 조건 + 팝업셀 마우스 편집 취소(nscm-patterns §5-16).
     //   컬럼 축(INPUT_TP_CD)은 공용 DataGrid 가 이미 판정하므로 여기서 다시 화이트리스트를 두지 않는다.
-    const editGate = (sender: FlexGridType, e: { cancel: boolean; row: number; col: number }) => {
+    const editGate = (
+      sender: FlexGridType,
+      e: { cancel: boolean; row: number; col: number; data?: unknown }
+    ) => {
       const binding = sender.columns[e.col]?.binding ?? '';
       const row = GridUtils.getRow(sender, e.row) as GridRowData | undefined;
       if (!row) {
         e.cancel = true;
         return;
       }
-      if (POPUP_COLUMNS.has(binding) || DRILLDOWN_COLUMNS.has(binding)) {
+      if (DRILLDOWN_COLUMNS.has(binding)) {
+        e.cancel = true;
+        return;
+      }
+      // 팝업셀은 신규행에서 키 입력·붙여넣기를 받는다(AS-IS cs:829 잠금 해제 + ClipboardPasted cs:5912).
+      //   주의: Wijmo 는 선택된 셀을 다시 클릭하면 MouseEvent 로 편집을 시작한다. 그대로 두면 더블클릭이
+      //   팝업 대신 텍스트 편집으로 빠지므로 마우스 경로만 취소한다(키 입력은 KeyboardEvent, 붙여넣기는 문자열).
+      if (
+        POPUP_COLUMNS.has(binding) &&
+        (e.data instanceof MouseEvent || !isPopupCellActive(row, binding))
+      ) {
         e.cancel = true;
         return;
       }
@@ -293,11 +332,9 @@ export const ShipmentChangeRequestPlanMainGrid = ({
           setEditMain(row, 'Y');
           break;
         }
-        case COLUMN.ITEM_ID: {
-          // AS-IS cs:5145 — Model 확정 시 EndCustomer 후보 재조회(div 40/EE 분기에서만 열이 보인다).
-          //   EDIT_MAIN 마킹은 하지 않는다: R-19 신호 19건에 ITEM_ID 가 없고, 이 열은 신규행에서만
-          //   편집되므로 EDIT_MAIN 축(기존행 수정 표시)과 무관하다.
-          void applyEndCustomer(row, write, sender);
+        case ITEM_POPUP_COLUMN:
+        case PROJECT_POPUP_COLUMN: {
+          commitPopupCell(sender, row, binding, write);
           break;
         }
         case COLUMN.INCOTERMS: {
@@ -410,6 +447,16 @@ export const ShipmentChangeRequestPlanMainGrid = ({
     };
     grid.cellEditEnded.addHandler(onCellEditEnded);
 
+    // 붙여넣기는 cellEditEnded 를 타지 않아 팝업셀 후처리만 따로 건다(AS-IS ClipboardPasted cs:5912).
+    const onPastedCell = (sender: FlexGridType, e: { row: number; col: number }) => {
+      const binding = sender.columns[e.col]?.binding ?? '';
+      const row = GridUtils.getRow(sender, e.row) as GridRowData | undefined;
+      if (!row || !POPUP_COLUMNS.has(binding)) return;
+      commitPopupCell(sender, row, binding, trackedWriter(editTrackerRef.current));
+      sender.invalidate();
+    };
+    grid.pastedCell.addHandler(onPastedCell);
+
     // 셀 표시 — 편집 가능 여부 색 + 행별 수량 소수자리(§2.3 S1 / CP-6) + 액션 아이콘 렌더 게이트.
     const onFormatItem = (
       sender: FlexGridType,
@@ -452,11 +499,7 @@ export const ShipmentChangeRequestPlanMainGrid = ({
       // 액션 아이콘은 클릭 핸들러뿐 아니라 렌더 자체를 게이트한다(CP-18) —
       //   살아 보이는 죽은 버튼을 남기지 않는다.
       if (POPUP_COLUMNS.has(binding)) {
-        const openable =
-          editable &&
-          isInsertedRow(row) &&
-          !(binding === PROJECT_POPUP_COLUMN && isEndCustomerDivision(str(row[COLUMN.DIVISION_ID])));
-        e.cell.classList.toggle('wj-cell-popup', openable);
+        e.cell.classList.toggle('wj-cell-popup', editable && isPopupCellActive(row, binding));
       }
     };
     grid.formatItem.addHandler(onFormatItem);
@@ -466,6 +509,7 @@ export const ShipmentChangeRequestPlanMainGrid = ({
         grid.beginningEdit?.removeHandler(editGate);
         grid.pastingCell?.removeHandler(editGate);
         grid.cellEditEnded?.removeHandler(onCellEditEnded);
+        grid.pastedCell?.removeHandler(onPastedCell);
         grid.formatItem?.removeHandler(onFormatItem);
       } catch {
         /* unmount race */
@@ -483,7 +527,13 @@ export const ShipmentChangeRequestPlanMainGrid = ({
     loadTransMode,
     isTransModeLoaded,
     applyEndCustomer,
+    commitPopupCell,
   ]);
+
+  // 하단 조회 결과가 상단보다 늦게 오면 canEdit 만 바뀌고 셀은 다시 그려지지 않아 편집색이 남는다.
+  useEffect(() => {
+    gridRef.current?.invalidate();
+  }, [gridRef, canEdit]);
 
   // 팝업/드릴다운 — ITEM_ID·PROJECT_CODE 는 신규행에서만, ERP_SO_NO·CHANGE_REQ_NO 는 값이 있을 때만.
   const handleDblClick = useCallback(
@@ -502,10 +552,7 @@ export const ShipmentChangeRequestPlanMainGrid = ({
         return;
       }
       if (!POPUP_COLUMNS.has(binding)) return;
-      if (!isRowEditable(row, canEdit) || !isInsertedRow(row)) return;
-      if (binding === PROJECT_POPUP_COLUMN && isEndCustomerDivision(str(row[COLUMN.DIVISION_ID]))) {
-        return;
-      }
+      if (!isRowEditable(row, canEdit) || !isPopupCellActive(row, binding)) return;
       // Model(ITEM_ID) 셀 팝업은 신규행의 Div → From Site → To Site 가 먼저 채워져야 열린다
       //   (AS-IS cs:5100~5124, 각각 MSG00098 "먼저 {0}을(를) 선택하십시오"). 신규행은 설명(DESCRIPTION)
       //   열에 값이 들어간다(transModeKeysOf 와 동일 축). 가드가 없으면 빈 division/site 로 팝업이 열려

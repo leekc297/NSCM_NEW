@@ -1,0 +1,5 @@
+﻿menu_id,column_re,format_re,desc,row_col,row_val,cond,source
+DMF0053,"^[WMDY]?_?\d{6,8}$","^-?\d{1,3}(,\d{3})*$",기간 칸 정수,,,,GAP-381
+DMF0003,"^[WMDY]?_?\d{6,8}$","^-?\d[\d,]*\.\d{3}$|^0$",Energy 행 소수 3자리,MEASURE,MKT_FCST_ENERGY,Div=82,GAP-12
+DMF0003,"^[WMDY]?_?\d{6,8}$","^-?\d{1,3}(,\d{3})*$",MKT FCST[R+P] 행 정수,MEASURE,MKT_FCST_RP,Div=82,GAP-12
+DMF0053,"^[WMDY]?_?\d{6,8}$",^\d{2}\.\d{2} ~ \d{2}\.\d{2}$,Only Weekly 머리글 기간 표기,@header,,Bucket=Only Weekly,GAP-377

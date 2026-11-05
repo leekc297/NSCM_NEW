@@ -120,8 +120,11 @@ export const isPackerCellEditable = (binding: string, row: Row): boolean => {
 
 // ===== Except 시트 편집 판정 (design 03 §1.3 / §3.2 cs:648-687) =====
 //   부모탭(Plant/Packer)에 따라 DAILY_CAPACITY / TACT_TIME 중 하나 잠금(cs:681/684).
+// NICK_NAME 은 AS-IS LockColumn(DIVISION_ID~LINE_ID, cs:676) 범위라 잠금.
 const EXCEPT_BASE_EDITABLE = new Set([
-  'NICK_NAME',
+  // 기존 로직 주석 보존 (2026-10-27) 시작
+  // 'NICK_NAME',
+  // 기존 로직 주석 보존 (2026-10-27) 끝
   'TACT_TIME',
   'YIELD',
   'DAILY_CAPACITY',

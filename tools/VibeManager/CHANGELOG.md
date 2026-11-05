@@ -1,3 +1,117 @@
+## 1.9.40 작업 실패 시 원인 줄 표시 — 로그의 [FAIL]/[ERROR] 줄을 작업창·채팅·Flow 보드·VS Code 알림에 (2026-11-04 · workbench.js·package.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자: "VM CHECKLIST 작업 수행 시 오류 발생 — 작업창에 어떤 오류인지가 보이지 않습니다. 오류 발생 시 어떤 오류가 발생했는지 쉽게 인지할 수 있도록 알려주세요."
+- **증상**: 🔎 CheckList SCP0122(17:04:59) 가 `✖ 실패 — … (exit 6) · 844s` 로만 끝남. 실제 원인 `[FAIL] SCP0122: files.csv current 변형 없음 — AsisFacts 먼저 실행` 은 Task Log 65줄 안에 묻혀 있었다(10-30 SCP0125 exit 6 도 같은 줄).
+- **spawnStream**: 출력 줄 중 표식(`[FAIL]`/`[ERROR]`/`✖`/`Traceback`/`…Error:`/`ORA-`/`PLS-`/`ENOENT`/`EADDRINUSE`/`npm ERR!`/`error TSnnnn`) 줄을 최대 8개 모아 두고, 종료코드≠0 이면 ① Task Log 에 `✖ 실패 원인(로그의 [FAIL]/[ERROR] 줄)` 블록 ② 채팅 meta `✖ <작업> 실패 (exit N) + 원인 줄 + 로그 경로` ③ VS Code 경고(첫 원인 줄 · 'Log 보기'). 표식 줄이 없으면 마지막 출력 3줄을 원인 후보로. 서버 기동(startServerStream)은 `failReport:false`(taskkill 종료는 실패가 아님).
+- **단일 작업(메뉴)**: Flow 보드 결과 줄 `✖ 실패 — 제목 (exit N)` 아래에 `원인: …` · `로그: …` 추가.
+- **체인 단계**: 결과 note 에 `원인: <첫 줄>`(FULLRUN.md·단계 목록) · `⏭ 실행 실패라 보완하지 않음` 줄에 원인 · 체인 중단 요약에 원인 전체(여러 줄일 때). verify 실패는 verifyStep 사유를 그대로 원인으로.
+- 확인: 두 실패 로그 재생(11-04 SCP0122 · 10-30 SCP0125) → 각각 `[ERROR] 골든 케이스 … 생성 0건` + `[FAIL] …: files.csv current 변형 없음` 2줄만 추출 · 정상 종료 로그(11-03 ☁️)는 표시 없음. `node --check` 통과. 백업 *.bak_20261104b.
+- 이번 exit 6 의 근본 원인(검증엔진 결함 · 같은 날 보완 — Pack.cs variant 분리 · files.csv sln_registered 열 · 31 화면 Pack 재생성 · _checker_defects.md T53): AsisFacts Pack.cs 가 .sln 미등록 프로젝트의 variant 를 `current(sln미등록)` 으로 기록하는데 `facts_combosrc.py`(== 'current') · `gen_golden_cases.py`(== 'current') 가 정확히 `current` 만 받는다 → files.csv 31 화면(FP00602·FP00900~903·FP02003·SCP0104~0109·0112·0114~0116·0120~0133·SSP0046) 에서 CheckList 가 같은 줄로 중단된다.
+
+## 1.9.39 E2E 테스트 메뉴 단계 폐지 · 자동보완 = CheckList → 오류분 보완 → 재판정 반복 (2026-11-04 · quick.json·workbench.js·extension.js — VS Code 창 다시 로드 필요)
+- 사용자: "E2E 테스트 메뉴단계는 없애 주세요. 자동보완 시 CHECKLIST 작업을 진행하고 오류분에 대해서 자동보완되도록 하는 구조로 진행해주세요."
+- **E2E 메뉴 단계 제거**: 🚀·🧩·📏·🚒 체인의 E2E 1/4~4/4(S7.smoke·crud·auth·authcrud) 단계 · 🎬 E2E 전체 4단계 메뉴 · 🩹 E2E 오류 보완 메뉴 · 빈 '테스트' 묶음 · 명령 팔레트 '7 E2E 전체 4단계'. E2E(Playwright @verify·@trace)는 CheckList(run_verify) 안에서 그대로 실행된다. steps.json S7.* 작업 정의와 E2E 도구는 보존(CheckList 가 스펙을 쓴다).
+- **재판정 단계 신설**(체인 4개 · 🧯 단계 바로 뒤): S8.verify + verify `checklistOpen`(이번 실행이 만든 fixlist.csv 의 action_needed=Y 0행이어야 통과) + repair `🧯 자동 보완` 2회 · `on: verify`(조치 필요가 남았을 때만 보완 — 서버 미기동·CheckList 미생성 같은 실행 실패는 보완하지 않고 FAIL).
+- **okCodes**: run_verify 종료코드 10(검사기 회귀·커버리지 게이트)은 화면 보완 대상이 아니므로 판정을 계속하고 단계 WARN 으로 남긴다.
+- fixlist.csv 는 칸 안 줄바꿈이 있어(DMF0003·DMF0082·SCP0007·SCP0111) CSV 파서로 집계 — Python csv 와 행 수·조치 필요 수 일치 확인(11-04).
+- 🚒 이름 = '🚒 자동보완 (CheckList → 오류분 보완 → 재판정 반복 → 문서)' · chainId(autofix-full) 유지.
+
+## 1.9.38 ☁️ 수정본 대상 누락 보완 · 이관 기준선 = 완료 표시로만 이동 (2026-11-03 · quick.json·steps.json·tools/CloudPkg/cloud_pkg.py 1.1.0)
+- 사용자: "이전 작업에서 1021 폴더를 만들었는데, 수정본 클릭 시 그 폴더를 알려주거나 수정본만 추출하면 되는데 새 수정본에 적용 대상이 누락된다."
+- **원인**: 패키지를 만들기만 해도 '직전 이관' 기준선이 옮겨졌다. SCP0111 10:21 생성 → 10:37 수정본 = 전부 '직전과 같음' 제외, 00·90 만 남음.
+- **☁️ 클라우드 이관 완료 표시**(S5.cloudApplied · `--applied`) 신설: 기준선은 이것으로만 옮긴다. 수정본은 그때까지 누적된다.
+- **다시 클릭**: 입력이 같으면 기존 폴더 안내 · 기준선 이후 변경 없으면 새 폴더 없이 마지막 패키지 안내.
+- **같은 분 재생성**: 이전 폴더를 지우던 결함 수정 — 이름이 있으면 초까지 붙인다.
+
+## 1.9.37 + 환경설정 🧭 작업 모드(DB MODE / UI/DB MODE) · ☁️ 메뉴 4→2 · 🧯 메뉴 2→1 (2026-11-02 · quick.json·steps.json·workbench.js·package.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자: "환경설정에서 DB MODE, UI/DB MODE 선택 · UI/DB = 제약 없이 개발, Git Download & Merge 때 로컬 보호 · DB = DB·META 만, FE 는 가이드만, Git Download & Merge 때 로컬 보호 안 함 · CheckList 는 모드 무관 전체" · "클라우드 이관도 모드로 자동 선택, 메뉴 4개 → 2개" · "자동 보완, 자동 보완(DB) 도 하나로".
+- **🧭 작업 모드**(kind work-mode): 값 저장 = `tools/Harness/harness.json repairScope`(DB_ONLY = DB MODE · DB_FE = UI/DB MODE) · 쓰기 = `set_scope.py`(DB·UIDB 별칭 추가). 🧭 보완 범위 메뉴를 대체.
+- **DB MODE 강제**: 모든 Claude 요청 앞에 DB MODE 문단 주입(메뉴·체인·수선·직접 입력 공통) · 실행 hook `.claude/hooks/check-work-mode.ps1`(FE·BE 수정 차단) · `gen.js --apply` 는 Doc/gen 만 생성 · `repair-loop.js` FE 수선 건너뜀(--pkg 는 실행) · 체인 E2E 는 FE 페이지가 없을 때만 SKIP.
+- **🧯 자동 보완 통합**: 🧯 자동 보완(DB) 제거 — 🧯 자동 보완 1개가 작업 모드를 따른다.
+- **☁️ 통합**: ☁️ 클라우드 이관 패키지(수정본)·(전체) 2개(S5.cloudMod·S5.cloudFull) · `cloud_pkg.py --mode auto`(기본값) · `--stage` = 작업 모드 범위의 수정본+전체 2종. `--mode db|all` 직접 지정은 유지.
+- **⬇️🔀 Source Download & Merge**: DB MODE = `common_sync.py --overwrite-local`(로컬 편집본도 공통 원문으로 덮어씀 · 공통이 지운 파일 삭제 · 로컬 전용 파일 유지 · 백업 유지) / UI/DB MODE = 기존 보호 병합.
+- **CheckList**: 검사·판정 코드는 모드를 읽지 않음(표시 열·문구만 사용). 변경 없음. 공통 컴포넌트 변경 전 확인(E15)은 유지. 백업 *.bak_20261102.
+
+## 1.9.36 + Task History 신설 · 작업 이력 → Revision History · 기본 일자별 (2026-10-30 · quick.json·workbench.js·extension.js·history.js·package.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자: "History 초기값 = 일자별(화면별은 내 작업본이 아닌 화면이 먼저 보임)" · "VM 메뉴·프롬프트 입력 작업 내역을 이력으로 보기" · "현재 작업 이력·WorkBench History = Revision History, 추가 기능 = Task History, Overview & Reports 에".
+- **Revision History**(기존): 메뉴·탭 이름 변경 · 파일 전후 스냅샷이 있는 이력만 · 기본 일자별 · 선택·삭제 후에도 보던 방식 유지(종전엔 화면별로 되돌아감).
+- **Task History**(신규): 워크벤치 탭 🧾 + Overview & Reports 메뉴(명령 vibeManager.openTaskHistory). VM 메뉴·체인·체인 단계·작업·직접 입력 프롬프트 전부 기록 — 화면 ID 없음·스냅샷 비대상 포함(scope none, `.vibe/history/_공통/`). 필터 전체/메뉴/프롬프트/체인 단계/작업 · 상세 = 출처·메뉴 이름·프롬프트 원문(withCtx 앞 사용자 입력)·시각·소요·결과·사용자·변경 파일. 터미널·서버·Git 처럼 즉시 끝나는 메뉴는 실행 사실만(▶ 실행). 1.9.36 이전 실행은 스냅샷 이력만 보임.
+- history.begin 시그니처 확장(extra) · history.event 추가 · askClaude 4번째 인자 hmeta. 백업 *.bak_20261030_hist.
+
+## 1.9.35 − GAP 분석 폐지 → CheckList 로 대체 (2026-10-30 · quick.json·steps.json·workbench.js·extension.js·flow-panel.js·package.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자: "CheckList 가 완성되면 GAP 분석은 필요 없음 → 제거". CheckList 파이프라인(run_verify)은 GAP 을 쓰지 않음(사전 확인).
+- 제거: 메뉴 🔍 GAP 분석 · steps S4.run/S4.one/S4.dash/S4.open(S4 = 골든 테스트만 남김) · 체인 📝·🚀·🧩·📏·🚒 의 GAP 단계 · 🧯 자동 보완/🧯 자동 보완(DB) 진단의 gap.js·gap.csv · 문서 사전 준비(prereq.py --docs) gap.js 재생성 · make_docs.py GAP분석서 · md2xlsx.py GAP 시트 · 빠른 화면 메뉴 '4 GAP 실행/열기' · 환경 요약 GAP 줄 · 하네스 자동 대상 S4.one · KEEP D8a 의 gap.js 판정 문구.
+- 대체: FLOW 진척 '3 GAP' → '3 CheckList'(Doc/verify/<ID>/fixlist.csv action_needed=Y 중 미적용) · 상태 타일 'GAP 미반영' → 'CheckList 조치 필요'. 메뉴·체인 문구의 'UI CheckList' → 'CheckList'.
+- 보존(삭제 안 함): tools/Harness/gap.js · Doc/gap/* 기존 산출물 · make_docs.build_gap(이력). 백업 *.bak_20261030_gap.
+
+## 1.9.34 + 클라우드 이관 = 결정적 빌더 · 수정본/전체 4종 · PKG 보완 · META 생성 및 보완 · 자동 보완(DB) (2026-10-30 · quick.json·steps.json·workbench.js·extension.js·package.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자: "클라우드 이관(DB) 1시간 넘게 걸림 — 생성·보완 때 미리 만들고, 요청하면 취합만. 미리 만들지 않았어도 5분 안에". → Claude 프롬프트 방식 폐지, `tools/CloudPkg/cloud_pkg.py`(사내 1회 조회 → 00 PRECHECK·05 BACKUP·10 DDL·20 PKG·25 SHARED·30 META·40 GRANT·90 VERIFY·99 ROLLBACK · 사내 리허설 DRY/ROLLBACK). 실측 SCP0100: 즉시 생성 12~53초 · 사전 생성 4종 94초 · 미리 만든 묶음 취합 10~30초.
+- 메뉴(사용자 지정 명칭): ☁️ 클라우드 이관 패키지(DB, UI)(수정본) · (DB)(수정본) = 직전 이관(`_artifacts/_deploy_packages/_cloud_state/<ID>.json`) 이후 바뀐 것만 / ☁️ 클라우드 이관 패키지(DB, UI) · (DB) = 전체 취합(화면 소유 DB·META 전부 + FE 페이지 폴더·참조 파일 + ID 참조 BE). 폴더 `<ID>_CLOUD_{DB|DBUI}_{MOD|FULL}_<일시>`.
+- 사전 생성: quick 항목 `postTask: S5.cloudStage`(🧯 자동 보완 · 🧯 자동 보완(DB) · 🩹 · 🔗 · 🩺 · 🧾 성공 뒤) + 체인(🚀·🧩·📏·🚒) 끝 단계 + 🛠️ 수동 보완 프롬프트 끝 안내. 묶음 = `_staging/<ID>/<mode>_<scope>/` + 입력 지문(manifest.json) — 메뉴 실행 시 지문 같으면 복사, 다르면 즉시 생성.
+- 🔗 PKG 변환 → 🔗 PKG 변환 (AS-IS>>TO-BE) · 신규 🩺 PKG 보완(컴파일·실행 ORA- 오류 재현·수정·검증, FE/BE 가이드만) · 신규 🧾 META 생성 및 보완(없으면 생성, 있으면 현재 PKG ALL_ARGUMENTS·UI 에 맞게 보완) · 신규 🧯 자동 보완(DB)(자동 보완 아래 — DB 직접 수정, FE·BE 는 Doc/verify/<ID>/FE_GUIDE_*.md 가이드만, repairScope 무관). 🧯 자동 보완 · 🚒 자동보완 & 테스트 유지.
+- 🔎 UI CheckList → 🔎 CheckList (상단 아이콘 qCheckList 접두도 변경). 백업 *.bak_20261030(b).
+
+## 1.9.33 + 📋 테스트결과서 메뉴 (2026-10-30 · quick.json·steps.json·package.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자 요청: "CheckList 작업 후 작업 내역에 대해서 테스트결과서를 생성 — 항목별 Group, 상세 내역을 테스트 내역과 결과로, 사용자의 언어로 보기 편하게 Excel, 필요하면 화면 캡처 포함, 메뉴는 UI CheckList 하단에(차후 UI CheckList 에 포함 예정이나 지금은 별도)".
+- 메뉴 `📋 테스트결과서` = 체인 `S8.verifyIfStale`(CheckList 없거나 오래됐으면 E2E 포함 전체 실행) → `S8.report`(`tools/Harness/verify/make_test_report.py <ID>`). 산출 `Doc/테스트결과서/<ID>_<화면명>_테스트결과서_v<n>.xlsx`(이전 판 old/).
+- 시트: 요약(실행 시각·환경·Playwright 실행·CheckList 대조·전체/그룹별 통과·실패·확인 필요·미검증·해당 없음·통과율) · 테스트결과(영역 11그룹 → 검사 규칙 → 항목 · Excel 개요(outline) 접기 · 테스트 내역[방법·조건·기준·AS-IS 근거·판정 출처]·기대·실제 상세·결과·설명·겪는 일·캡처·비고·검증 ID) · 실패 상세(항목별 블록 + 조치 계층·종결 근거 + 캡처 이미지) · 실행 테스트 · 화면 캡처(스모크 + 실패) · 용어 설명.
+- 캡처: `_verify.spec`·`_trace.spec` afterEach — 그 테스트에서 FAIL 행이 나오면 종료 시점 화면을 `Doc/verify/<ID>/e2e/shots/`(색인 `index_verify.json`·`index_trace.json`)에 저장(실패 순간과 다를 수 있음을 note 에 명시) · run_verify 가 E2E 전에 이전 캡처 제거. 스모크 캡처(`Doc/e2e/results/shots/<ID>_*.png`)는 그대로 실린다.
+- 결과 수치는 같은 실행의 CheckList 와 1:1(SCP0100 v12 ↔ 테스트결과서 v1: 1630행 · 통과 492 · 실패 19 · 확인 필요 36 · 미검증 48 · 해당 없음 1035). 테스트결과서는 아무것도 다시 측정하지 않는다.
+- (같은 날 추가) 룰 **H21 — SCP·SSP 컬럼·조회조건 명칭 Valid→Active 일괄(TO-BE 룰 CR-092, 사용자 지시 2026-10-30)**: 정본 `tools/Harness/rules/label_alias.csv` · `rules/10_RULES_KEEP.md` H21 · `40_SEARCH_COND.md` 명칭 변경 룰 행 · check.js `LB1`(페이지 소스 라벨 리터럴 'Valid' → FINAL BLOCK · 예외 `LB-OK`) `LB2`(TO-BE 메타 COLUMN_LABEL_NAME 'Valid' → WARN · 메타 UPDATE 안내) · 정합검증 judge/`_trace.spec` H5 별칭 판정(AS-IS Valid↔TO-BE Active = PASS · TO-BE Valid 잔존 = CR-092 FAIL). 룰 파일은 저장소에서 읽으므로 설치 폴더 복사 불필요(CHANGELOG 만 복사).
+
+## 1.9.32 + 서버 기동 완료 → 상단 스피너 중지 (2026-10-30 · workbench.js·package.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 결함: ☕ BE Start / 🎨 FE Start 로 띄운 서버는 기동 완료 후에도 프로세스가 계속 살아 있어 `procs` 에 남고, 상단 busy 표시(스피너 + `NSCM BE, NSCM FE`)가 계속 돎.
+- 교정: 완료 로그(ready) 매치 또는 포트 LISTEN 확인으로 기동 완료 판정 시 해당 프로세스를 `ready` 로 표시 → `updateBusy()` 가 ready 프로세스를 스피너 대상에서 제외. 기동 중·시간 초과(완료 미확인)·다른 작업 실행 중에는 기존대로 스피너 표시. 종료(Finish)·프로세스 관리 대상은 그대로.
+
+## 1.9.31 + 탭 명칭 = 화면 ID 반영 (2026-10-30 · workbench.js·package.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 화면 ID 미지정 창 = 기존과 동일 `VM#n`(열린 창 순서) · 지정 후 = `VM-<ID>`(예: `VM-SCP0100`) · 같은 ID 창 2개 이상 = `VM-<ID>#1`·`VM-<ID>#2`(그 ID 창끼리 열린 순서).
+- `retitle()` 가 창 열기·닫기·ID 변경(setState) 때 전 창 명칭 재계산 — ID 해제 시 `VM#n` 복귀.
+
+## 1.9.30 + 완료 판정 = 후속 작업(자식 프로세스) 종료까지 (2026-10-29 · workbench.js 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사고: VM#2 가 '완료' 로 표시된 뒤에도 Claude 가 백그라운드로 띄운 `run_verify.py SCP0020`(r41) 이 돌고 있었고(Playwright 트레이스 18:47:00 까지 기록), 사용자가 중지하자 18:47:04 자식 프로세스가 함께 종료 → 23/23 직전에서 검증 소실·판정/CheckList 미생성. 원인 = Claude 가 "아직 끝나지 않아 중간 결과만 보고" 로 턴을 끝냈고 워크벤치는 result 이벤트만 보고 완료 처리.
+- 워크벤치: result 가 와도 `liveDescendants(pid)`(프로세스 트리, cmd/conhost/claude 제외)가 비어 있지 않으면 상태를 **'보고 완료 · 후속 작업 진행 중'**(run pending · 경과 시계 유지 · 최종 보고는 바로 펼침)으로 두고, 10초마다 다시 확인해 전부 끝났을 때만 '완료'(종료 확인 시각·보고 후 경과 표기). 조회 실패는 '확인 불가' 로 적고 완료로 바꾸지 않음. 보고 뒤 후속 작업 중 중지(종료 코드≠0)면 '⏹ 중지 — 후속 작업도 함께 종료됨(결과 소실·재실행 필요)'.
+- 중지 버튼: 중지 직전에 함께 종료될 후속 작업 목록(이름·PID·명령 110자)을 채팅 meta 로 먼저 보여 줌.
+- 룰: `rules/10_RULES_KEEP.md` **H20** — 검증 실행을 띄운 턴은 끝날 때까지 턴을 끝내지 않는다(중간 보고 종료 금지 · 상한 초과 시 '미완료' 명시).
+## 1.9.29 + Enter 전송 · 질문 줄 한 줄 표시 (2026-10-29 · workbench.js·prompt-panel.js 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자 요청: 프롬프트 창도 Claude 와 같이 **Enter = 전송 · Shift+Enter = 줄바꿈**(워크벤치 입력창·프롬프트 패널 둘 다) · 한글 IME 조합 중 Enter(isComposing·keyCode 229)는 조합 확정만 하고 전송하지 않음 · Ctrl+Enter 도 전송 · ↑/↓ 이력 탐색 유지 · 버튼·안내 문구 갱신.
+- 질문 줄(💬) = `💬 [화면 <ID>] : <질문 첫 줄>` — 화면 컨텍스트 경로 접두 숨김 · 기본 한 줄(넘치면 …) · 여러 줄이거나 140자 넘는 질문만 펼쳐서 질문 전문 · 접두 포함 원문 전체는 마우스 올리면(툴팁).
+
+## 1.9.29 + LITE 질의 = Step 상황판 없이 질문 + 결과만 (2026-10-29 · workbench.js 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자 요청: Step Status 가 필요 없는 LITE 질의(산출물 없는 질문·확인)는 상황판(현재 Step/전체·진행바·도구/수정/경과·Step 카드)을 띄우지 않고 위 질문 + 아래 결과만.
+- 판별: 시작 시 프롬프트로 예측(attach-context 훅과 같은 기준 — 300자 미만 · 질의 신호 있음 · 산출물 동사 없음 · `!lite`/`!full` 강제, 화면 컨텍스트 접두 `[화면 …] … — 참고 후:` 는 빼고 판단) → 응답 첫 줄 `[LITE]` 면 LITE 확정 · `[T# …]` 표기나 할 일 목록(TodoWrite)이 오면 작업(FULL)으로 확정해 상황판 복귀.
+- LITE 화면: 진행 중 = '⏳ 진행 중 · 경과' 한 줄 · 끝나면 결과 본문(높이 제한 없음, '최종 보고' 머리 숨김) · 비용/시간 메타 줄 유지.
+- 질문 줄(💬)은 모든 실행에서 화면 컨텍스트 접두 대신 실제 질문 첫 줄을 보여줌(펼치면 전문).
+- Claude 비정상 종료 진단(사용자: '세션이 끊어졌다' 메시지만 반복): stderr 를 .vibe/logs/<ts>_claude_wb<N>.log 에 기록하고 종료 코드 메시지에 마지막 stderr 와 원인별 안내(세션 재개 실패/로그인 만료/CLI 경로/네트워크)를 붙임 · '새 세션' 안내는 --resume 실패일 때만
+- 프롬프트 입력창 ↑/↓ 이력 탐색(사용자 요청): 캐럿이 첫 줄일 때 ↑ = 이전 명령, 마지막 줄일 때 ↓ = 다음 명령, 마지막 다음은 작성 중이던 초안 복원 · webview state 에 최근 200건 유지
+
+## 1.9.28 + 창별 독립 E2E(하네스 측: tools/E2E/runlock.js 화면별 잠금 · run_verify 대기 · golden/gen-e2e/prereq 공용 파일 보호) — 2026-10-28
+- 다른 화면의 UI CheckList 는 창마다 동시에, 같은 화면만 순서대로. 이미 돌고 있던 실행(옛 코드)은 영향 없음.
+
+## 1.9.28 + 창별 화면 ID 독립 · 탭 명칭 VM#n · 재기동 아이콘 (2026-10-28 · workbench.js·extension.js·package.json 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 결함: 사이드바 빠른 실행이 공용 `vibeManager.lastId`(마지막으로 어느 창이든 정한 ID)를 현재 창에 넘겨 '현재 ID 유지' 로 확정되면 그 창의 ID 가 다른 창 ID 로 바뀜. 새 창도 다른 창의 ID 를 기본값으로 가져옴.
+- 교정: `workbench.currentId()`(현재 창의 ID) 우선 — 사이드바 실행·입력 기본값·트리 ID. 새 창(VM#2…)은 빈 ID 로 시작, 1번 창만 마지막 ID 복원. 공용 lastId 는 새 창 기본값/입력 기본값으로만.
+- 탭 명칭 `VM#1`·`VM#2`… = 열린 창 순서의 연속 번호(닫으면 남은 창 번호 재부여 · 생성 누적 번호 #3·#5 건너뜀 교정) · 재기동(BE & FE Finish & Start) 아이콘 `$(debug-restart)`(녹색) → `$(device-desktop)`(단색 모니터).
+
+## 1.9.28 + Workbench 다중 창 — 명령은 현재 선택된 창에서 실행 (2026-10-28 · workbench.js 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 결함: 새 창(Workbench #2, #3…)을 여러 개 연 뒤 첫 창에 포커스를 두고 사이드바·빠른 실행·열기 명령을 실행하면 **마지막에 만든 창**으로 넘어갔다 — 라우팅 기준 `lastWB` 가 '마지막에 생성된 창' 으로만 갱신되고 포커스 이동을 따라가지 않았음.
+- 교정: 패널 `onDidChangeViewState`(활성 전환)·웹뷰 메시지 수신 시 그 창을 `lastWB` 로 갱신 → 명령은 사용자가 보고 있는 창에서 실행. 창을 닫으면 남은 창 중 하나로.
+
+## 1.9.28 + 생성·보완 ↔ 정합검증 연결 · 메뉴 재편 (2026-10-28 · workbench.js 설치 폴더 반영 — VS Code 창 다시 로드 필요)
+- 사용자 지시: 생성 시 생성 후 정합검증 / 자동 보완 시 정합검증이 최신이 아니면 정합검증 후 보완 / 보완은 정합검증 '조치 필요' 항목을 일괄 보완 / 정합검증은 소스를 수정하지 않는다.
+- **정합검증 사전 작업 선수행**(`tools/Harness/verify/prereq.py`, run_verify 0단계): DB 접속 · AS-IS Fact Pack(pack.ps1) · TO-BE 메타(export_tobe_meta, 12시간 기준) · TO-BE 화면 인덱스(TobeFacts, FE 소스가 더 새로우면) · 골든 케이스(gen_golden_cases) · E2E 스펙(gen-e2e)·smoke 를 없거나 오래되면 먼저 실행. 생성 절차 산출물(Doc/gen e2e_plan)·FE 대조표·조회조건 기준표는 만들지 않고 MANUAL 로 기록(Doc/verify/<ID>/prereq.json · 정합검증서에는 넣지 않음).
+- **S8.verifyIfStale**(`verify/verify_if_stale.py`): 직전 정합검증 시작(run_verify.result.json started) 이후 FE 소스·PKG LAST_DDL_TIME·화면 메타 LAST_UPDATE_DATE 가 바뀌었거나 결과가 없으면 run_verify 실행, 최신이면 건너뜀.
+- **생성**(🚀·🧩·📏): '새 화면 7/7 대조표 갱신' 뒤 `S8.verify`(optional) → 이어지는 자동 보완이 조치 필요 항목을 일괄 보완.
+- **보완**(🛠️·🧯·🩹·🔗): quick 항목 `preTask: "S8.verifyIfStale"` — workbench.js 가 Claude 로 보내기 전에 실행(🛠️ 입력창 채움 · 🩹 E2E 종류 선택·수선 회차 동작 유지, 사전 단계 실패해도 보완은 계속). 🚒 체인 첫 단계 = S8.verifyIfStale.
+- **보완 지시문**: 일괄 대상 = `Doc/verify/<ID>/fixlist.csv` 의 `action_needed=Y` 행 전부(= 정합검증서 '조치 필요' 시트, 상속 FAIL 포함·중복 제외) · 행마다 처리 결과 보고 · 끝나면 정합검증 재실행. fixlist 없으면 기존 방식. 🔗 PKG 변환 = 조치 필요 중 DB 객체·DB 메타 행 동반 해소.
+- **메뉴 재편**: 카테고리 '분석' → '분석,문서'(📝 문서 생성 · 🗂️ Excel 폴더를 🔎 화면 정합검증 뒤로 이동, '문서' 카테고리 삭제) · 보완 메뉴 이름 🛠️ 수동 보완 · 🧯 자동 보완 · 🚒 자동보완 & 테스트(claudeOf 참조 20건 갱신).
+- **📝 문서 생성 = 생성 절차 없이**(사용자: 다른 PC 에서 만든 UI 도 파싱부터 필요한 절차만 거쳐 문서화): 체인 2단계 `S3.prep`(prereq.py --docs) — TO-BE 메타·TO-BE 인덱스를 소스보다 오래됐으면 다시, GAP 은 '없을 때만'→ 파싱 결과보다 오래되면 재생성(DMF0082 실측: 옛 GAP 재생성). `tools/Docs/make_docs.py` 페이지 폴더 = register.json(생성 산출물) 없거나 그 폴더가 실제로 없으면 TO-BE 인덱스로(종전: 'TO-BE 페이지 미생성'·대조표 매핑 시트 빈칸).
+- **🌐 다국어 JSON 재생성**(Git 그룹, `S2.genI18n` → `tools/Env/fe_gen_i18n.py`): `pnpm gen`(gen:icons → gen:i18n)과 같은 내용을 pnpm 없이 실행 · 로컬 BE(127.0.0.1:8080) 메시지만 — 로컬이 메시지를 안 주면 아무것도 바꾸지 않고 중단(목데이터 덮어쓰기 방지) · 전후 KO/EN/CN 키 수 보고.
+- **S8.verifyIfStale 실행 중 확인**: 같은 화면 정합검증이 실행 중(Doc/e2e/_run.lock 'verify <ID>' + pid 생존)이면 새로 돌리지 않음(rc 4) — 다른 세션 실행 도중 중간 원장으로 문서가 생긴 사고(10-28 v72 중간본, 삭제함) 재발 방지.
+- **정합검증서 → CheckList**(사용자: 폴더·문서 명칭 변경): `Doc/CheckList/<ID>_<화면명>_CheckList_v<N>.xlsx` · 보완대상도 `Doc/CheckList` · 번호는 옛 정합검증서 번호를 이어감(SCP0007 → v73) · 사용자 의견 누적은 옛 이름·이전 위치(Doc/화면분석서)·old/ 까지 읽음. 메뉴 🔎 UI CheckList · S8 폴더 열기 = Doc/CheckList · UI Status 문서 카드에 📋 CheckList 폴더 추가(workbench.js 설치 반영).
+- **이전 버전 old/ 이동**(사용자: 신규 버전 문서를 만들면 같은 UI 의 이전 버전은 폴더 내 old 로, 없으면 생성): `tools/Docs/doc_archive.py` — 같은 UI·같은 문서 = 접두 '{ID}_{화면명}_{종류}' 정확 일치(DMF0003 ↔ DMF0003_1 섞임 방지) · 번호는 old/ 포함 계산 · 열려 있어 못 옮긴 파일은 경고. 적용: make_docs(화면설계서·UI분석서·GAP분석서·대조표) · make_testcases(TestCases4) · make_verify_docs(CheckList·보완대상 — 이전 위치 Doc/화면분석서 의 같은 화면 정합검증서·보완대상도 Doc/CheckList/old 로).
+- 메뉴 카테고리 이름 '분석,문서' → '분석·문서'.
+- **명칭 일괄 변경**(사용자): 화면에 보이는 '정합검증' → 'CheckList'(메뉴·단계·지시문·실행 로그·워크벤치 문구) · 보완대상(목록) 문서 → **ActionItemList**(`Doc/CheckList/<ID>_<화면명>_ActionItemList_v<N>.xlsx`, 번호는 옛 보완대상 이어감 · 옛 보완대상은 다음 생성 때 old/). 옛 파일 찾기 패턴(정합검증서·보완대상)은 이전 버전 읽기용으로 유지.
+- **상단 아이콘 재구성**(사용자 지정): Workbench · Flow · 🔄 BE & FE Finish & Start · ⬇️🔀 Source Download & Merge · 🚀 ID 하나로 전체 · 🔎 UI CheckList 만(신규 명령 vibeManager.qRestart·qSourceSync·qFullChain·qCheckList = quick.json 메뉴를 label 로 찾아 실행). 제거: 화면 선택·대시보드·새로고침·게이트 집계·환경 점검·이력(명령은 명령 팔레트에 남음) · '…' 더보기 유지. extension.js·package.json 설치 폴더 반영(package.json 은 설치 메타 보존) — VS Code 창 다시 로드 필요. 백업 *.bak_20261028b
+- 백업: workbench.js.bak_20261028 · quick.json.bak_20261028 · steps.json.bak_20261028 · CHANGELOG.md.bak_20261028 · 설치 폴더 workbench.js.bak_20261028
 ## 1.9.28 + UI Status 문서 = 같은 문서는 마지막 버전만 (2026-10-27 · workbench.js 설치 폴더 반영 — VS Code 창 다시 로드 필요)
 - 사용자 지시: "UI STATUS TAB 문서에는 동일 문서의 경우 제일 마지막에 생성된 버전의 문서만 표기". 📚 문서 카드의 Excel(화면설계서·화면분석서·단위테스트·documents/<ID>)을 **폴더 + 끝 버전 토큰들을 뗀 이름(대소문자 무시)** 으로 묶어 1건만 표시.
 - 최신 판정: 두 파일 모두 날짜(_YYYYMMDD)가 있으면 날짜 우선 → 버전 숫자(_v1.0 · _v28 · TestCases4.1 · _v1.2_20260827) → 같으면 수정 시각 최신. 화면 ID 숫자는 버전으로 떼지 않음. 실측(전 30화면): DMF0005 56→2 · SCP0007 63→8(종류별 1) · DMF0014 ValidationCases 6→1 · Validation_Rules 3→1(v3_20260923).

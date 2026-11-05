@@ -1,7 +1,7 @@
 # SSP0015 — To-Be Fact Pack 요약
 
-- page_key: `shipping/shipment-plan-mobility-it` · feature: shipping · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 20 · 엔드포인트 호출 32 (미해결 1, 주석 속 3) · 이벤트 71 · 컴포넌트 사용 138 · 하드코딩 컬럼 28 · 메시지 42
+- page_key: `shipping/shipment-plan-mobility-it` · feature: shipping · As-is Fact Pack 있음
+- 파일 20 · 엔드포인트 호출 37 (미해결 2, 주석 속 4) · 이벤트 70 · 컴포넌트 사용 138 · 하드코딩 컬럼 28 · 메시지 49
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 28건
 
 ## 1. 파일
@@ -9,22 +9,22 @@
 |---|---|---|
 | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentChangeRequestDraftingModal.tsx | component | 186 |
 | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentOrderDetailModal.tsx | component | 109 |
-| features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.module.scss | component | 26 |
-| features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | component | 185 |
-| features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | component | 495 |
-| features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | component | 356 |
-| features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | component | 609 |
+| features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.module.scss | component | 15 |
+| features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | component | 188 |
+| features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | component | 612 |
+| features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | component | 359 |
+| features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | component | 632 |
 | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMemoModal.tsx | component | 169 |
 | features/shipping/src/pages/shipment-plan-mobility-it/index.ts | index | 2 |
-| features/shipping/src/pages/shipment-plan-mobility-it/shipment-plan-mobility-it.constants.ts | constants | 276 |
+| features/shipping/src/pages/shipment-plan-mobility-it/shipment-plan-mobility-it.constants.ts | constants | 346 |
 | features/shipping/src/pages/shipment-plan-mobility-it/shipment-plan-mobility-it.types.ts | types | 42 |
-| features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.module.scss | style | 100 |
-| features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | page | 1508 |
-| features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts | store | 492 |
+| features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.module.scss | style | 103 |
+| features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | page | 1806 |
+| features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts | store | 503 |
 | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.detailSheets.ts | util | 136 |
 | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.editLock.ts | util | 93 |
 | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.merge.ts | util | 137 |
-| features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.save.ts | util | 205 |
+| features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.save.ts | util | 297 |
 | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.sum.ts | util | 84 |
 | features/shipping/src/pages/shipment-plan-mobility-it/__asis-mapping__.md | mapping | 87 |
 
@@ -33,33 +33,37 @@
 |---|---|---|---|---|
 | /SSP0015/main/GET_REQ_DRAFTING/call-proc | http | 1 | Y | ShipmentChangeRequestDraftingModal.tsx:140 |
 | /SSP0015/main/GET_ORDER_DETAIL/call-proc | http | 1 | Y | ShipmentOrderDetailModal.tsx:62 |
-| (useTabLookupQueries) | hook | 2 | Y | ShipmentPsiDetailBar.tsx:48 ShipmentPsiForm.tsx:158 |
-| (useTabComboQueries) | hook | 1 | Y | ShipmentPsiForm.tsx:77 |
-| /SSP0015/main/USER_CHECK/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:134 |
-| SSP0015/main//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:192 |
-| SSP0015/mainPacker//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:199 |
-| /SSP0015/main/GET_SHIPMENT_PSI_PACKER_PAST/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:211 |
-| SSP0015/calendar//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:219 |
-| SSP0015/confirmDetail//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:229 |
-| /SSP0015/main/GET_SHIPMENT_CONFIRM_DETAIL_PACKER/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:240 |
-| SSP0015/whStock//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:248 |
-| SSP0015/holdStock//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:255 |
-| SSP0015/mesStock//call-proc | hook | 2 | Y | ShipmentPlanMobilityIt.tsx:262 ShipmentPlanMobilityIt.tsx:520 |
-| SSP0015/scsStock//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:269 |
-| SSP0015/stockLocationDetail//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:276 |
-| SSP0015/shipmentResult//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:283 |
-| /SSP0015/main/GET_SHIPMENT_PSI_COMMENTS/call-proc | http | 2 | Y | ShipmentPlanMobilityIt.tsx:295 ShipmentPlanMobilityIt.tsx:1148 |
-| /SSP0015/main/SAVE/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:416 |
-| {?endpoint} | http | 1 | N | ShipmentPlanMobilityIt.tsx:445 |
-| /SSP0015/holdStock/SAVE/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:493 |
-| /SSP0015/main/GET_SHIPMENT_STATUS/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:809 |
-| /SSP0015/main/GET_ERP_SO_NO_CNT/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:872 |
-| /SSP0015/main/CHECK_CONFIRM_CHANGETIME/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:902 |
-| /common/web-service/erpIf/call-test | http | 1 | Y | ShipmentPlanMobilityIt.tsx:946 |
-| /SSP0015/main/SAVE_SHIPMENT_PSI_COMMENTS/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1258 |
-| /admin/menu/SSP0015/column | http | 1 | Y | useShipmentPlanMobilityItStore.ts:412 |
-| /admin/menu/SSP0015/measure | http | 1 | Y | useShipmentPlanMobilityItStore.ts:440 |
-| /admin/menu/SSP0015/search-conditions | http | 1 | Y | useShipmentPlanMobilityItStore.ts:469 |
+| (useTabLookupQueries) | hook | 2 | Y | ShipmentPsiDetailBar.tsx:48 ShipmentPlanMobilityIt.tsx:209 |
+| (useTabComboQueries) | hook | 1 | Y | ShipmentPsiForm.tsx:78 |
+| /SSP0015/main/USER_CHECK/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:158 |
+| SSP0015/main//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:236 |
+| SSP0015/mainPacker//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:243 |
+| /SSP0015/main/GET_SHIPMENT_PSI_PACKER_PAST/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:255 |
+| SSP0015/calendar//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:263 |
+| SSP0015/confirmDetail//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:273 |
+| /SSP0015/main/GET_SHIPMENT_CONFIRM_DETAIL_PACKER/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:284 |
+| SSP0015/whStock//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:292 |
+| SSP0015/holdStock//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:299 |
+| SSP0015/mesStock//call-proc | hook | 2 | Y | ShipmentPlanMobilityIt.tsx:306 ShipmentPlanMobilityIt.tsx:593 |
+| SSP0015/scsStock//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:313 |
+| SSP0015/stockLocationDetail//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:320 |
+| SSP0015/shipmentResult//call-proc | hook | 1 | Y | ShipmentPlanMobilityIt.tsx:327 |
+| /SSP0015/main/GET_SHIPMENT_PSI_COMMENTS/call-proc | http | 2 | Y | ShipmentPlanMobilityIt.tsx:339 ShipmentPlanMobilityIt.tsx:1433 |
+| /SSP0015/main/SAVE/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:486 |
+| {?endpoint} | http | 1 | N | ShipmentPlanMobilityIt.tsx:515 |
+| /SSP0015/holdStock/SAVE/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:566 |
+| /common/web-service/erpIf/call | http | 2 | Y | ShipmentPlanMobilityIt.tsx:773 ShipmentPlanMobilityIt.tsx:810 |
+| /SSP0015/main/IF_CHECK/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:799 |
+| /SSP0015/main/DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:828 |
+| /SSP0015/main/ERP_ERROR_CONFIRM/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:860 |
+| /SSP0015/main/GET_SHIPMENT_STATUS/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1051 |
+| /SSP0015/main/GET_ERP_SO_NO_CNT/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1114 |
+| /SSP0015/main/CHECK_CONFIRM_CHANGETIME/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1144 |
+| /SSP0015/main/{draftBtn}/call-proc | http | 1 | N | ShipmentPlanMobilityIt.tsx:1193 |
+| /SSP0015/main/SAVE_SHIPMENT_PSI_COMMENTS/call-proc | http | 1 | Y | ShipmentPlanMobilityIt.tsx:1543 |
+| /admin/menu/SSP0015/column | http | 1 | Y | useShipmentPlanMobilityItStore.ts:422 |
+| /admin/menu/SSP0015/measure | http | 1 | Y | useShipmentPlanMobilityItStore.ts:450 |
+| /admin/menu/SSP0015/search-conditions | http | 1 | Y | useShipmentPlanMobilityItStore.ts:479 |
 
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
@@ -80,75 +84,74 @@
 |---|---|---|---|---|---|
 | Button | onClick | onClose | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentChangeRequestDraftingModal.tsx | 179 |
 | Button | onClick | onClose | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentOrderDetailModal.tsx | 102 |
-| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 66 |
-| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 75 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 98 |
-| InputField | onKeyDown | <arrow> onDetailSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 99 |
-| FunctionSearchIcon | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 94 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 115 |
-| InputField | onKeyDown | <arrow> onDetailSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 116 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 142 |
-| InputField | onKeyDown | <arrow> onDetailSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 143 |
-| FunctionSearchIcon | onClick | onRequestorSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 138 |
-| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 167 |
-| Button | onClick | onDetailSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 178 |
-| g | beginningEdit | gateHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 158 |
-| g | pastingCell | gateHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 159 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 173 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 225 |
-| g | pastedCell | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 226 |
-| g | pastedCell | pastedDateHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 264 |
-| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 281 |
-| g | beginningEdit | gate | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 315 |
-| g | pastingCell | gate | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 316 |
-| g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 335 |
-| g | cellEditEnded | dateCheck | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 358 |
-| g | pastedCell | dateCheck | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 359 |
-| g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 416 |
-| g | formatItem | paint | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 454 |
-| DataGrid | gotFocus | handleGotFocus | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 488 |
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 173 |
-| CustomDropdown | onChange | <arrow>  | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 191 |
-| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 215 |
-| CustomDropdown | onChange | <arrow> set,str | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 233 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 261 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 262 |
-| FunctionSearchIcon | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 257 |
-| CustomDropdown | onChange | <arrow> handlePlanDateChange,str | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 278 |
-| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 291 |
-| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 321 |
-| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 326 |
-| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 331 |
-| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 336 |
-| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 342 |
-| g | updatedLayout | applyMerge | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 308 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 321 |
-| g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 335 |
-| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 437 |
-| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 504 |
-| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 511 |
-| g | updatedLayout | applyDynVisibility | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 564 |
+| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 71 |
+| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 80 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 104 |
+| Button | onClick | onModelSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 100 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 120 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 147 |
+| Button | onClick | onRequestorSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 143 |
+| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 170 |
+| Button | onClick | onDetailSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailBar.tsx | 181 |
+| g | beginningEdit | gateHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 181 |
+| g | pastingCell | gateHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 182 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 196 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 248 |
+| g | pastedCell | cellEditEndedHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 249 |
+| g | pastedCell | pastedDateHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 287 |
+| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 304 |
+| g | beginningEdit | gate | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 338 |
+| g | pastingCell | gate | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 339 |
+| g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 358 |
+| g | cellEditEnding | editEnding | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 382 |
+| g | pastingCell | pasteCheck | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 383 |
+| g | cellEditEnded | dateCheck | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 407 |
+| g | pastedCell | dateCheck | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 408 |
+| g | updatedLayout | <arrow> pinFooterToBottom | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 450 |
+| g | formatItem | fmt | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 474 |
+| globalThis.window | keydown | onKeyDown | addEventListener | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 532 |
+| g | formatItem | paint | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 555 |
+| DataGrid | gotFocus | handleGotFocus | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 605 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 176 |
+| CustomDropdown | onChange | <arrow>  | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 194 |
+| CustomDropdown | onChange | <arrow> set,str(picked).split(',').filter,str(picked).split,str | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 218 |
+| CustomDropdown | onChange | <arrow> set,str | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 236 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 265 |
+| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 261 |
+| CustomDropdown | onChange | <arrow> handlePlanDateChange,str | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 281 |
+| PeriodField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 294 |
+| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 324 |
+| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 329 |
+| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 334 |
+| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 339 |
+| Checkbox | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 345 |
+| g | updatedLayout | applyMerge | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 328 |
+| g | loadedRows | applyMerge | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 330 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 343 |
+| g | pastingCell | pastingCellHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 357 |
+| g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 459 |
+| g.hostElement | dblclick | dblClickHandler | addEventListener | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 526 |
+| g.hostElement | click | clickHandler | addEventListener | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 533 |
+| g | updatedLayout | applyDynVisibility | addHandler | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 587 |
 | InputField | onChange | <arrow> setChangeQty,onlyDigits | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMemoModal.tsx | 117 |
 | InputField | onChange | <arrow> setComments | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMemoModal.tsx | 136 |
 | Button | onClick | handleSubmit | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMemoModal.tsx | 154 |
 | Button | onClick | onClose | jsx | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMemoModal.tsx | 161 |
-| ShipmentPsiMainGrid | onDrilldown | handleMainDrilldown | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1312 |
-| ShipmentPsiMainGrid | onFigureDrilldown | handleFigureDrilldown | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1313 |
-| ShipmentPsiMainGrid | onMemo | handleMemo | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1316 |
-| ShipmentPsiForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1329 |
-| ShipmentPsiForm | onItemSearch | <arrow> setOpenItemMain | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1329 |
-| ShipmentPsiDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1370 |
-| ShipmentPsiDetailBar | onModelSearch | <arrow> setOpenItemDetail | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1371 |
-| ShipmentPsiDetailBar | onRequestorSearch | <arrow> setOpenRequestor | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1372 |
-| ShipmentPsiDetailGrid | onConfirmDetail | setReqDraftingNo | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1401 |
-| ShipmentPsiDetailGrid | onOrderDetail | setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1402 |
-| ModelByDivisionPopup | onClose | <arrow> setOpenItemDetail | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1434 |
-| ModelByDivisionPopup | onSelect | <arrow> set,str | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1435 |
-| MeasureSelectModal | onApply | <arrow> setOpenMeasure,applyVisibleMeasures,(staticMeasures[activeMainSheet]??[]).map,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[activeMainSheet]??'',columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1445 |
-| ShipmentPsiMemoModal | onClose | <arrow> setMemoCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1490 |
-| ShipmentPsiMemoModal | onSave | handleMemoSave | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1491 |
-| ShipmentOrderDetailModal | onClose | <arrow> setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1496 |
-| ShipmentChangeRequestDraftingModal | onClose | <arrow> setReqDraftingNo | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1503 |
+| ShipmentPsiMainGrid | onDrilldown | handleMainDrilldown | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1597 |
+| ShipmentPsiMainGrid | onFigureDrilldown | handleFigureDrilldown | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1598 |
+| ShipmentPsiMainGrid | onMemo | handleMemo | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1601 |
+| ShipmentPsiForm | onSearch | handleSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1614 |
+| ShipmentPsiForm | onItemSearch | <arrow> setOpenItemMain | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1614 |
+| ShipmentPsiDetailBar | onDetailSearch | handleDetailSearch | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1655 |
+| ShipmentPsiDetailBar | onModelSearch | <arrow> setOpenItemDetail | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1656 |
+| ShipmentPsiDetailBar | onRequestorSearch | <arrow> setOpenRequestor | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1657 |
+| ShipmentPsiDetailGrid | onConfirmDetail | setReqDraftingNo | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1686 |
+| ShipmentPsiDetailGrid | onOrderDetail | setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1687 |
+| MeasureSelectModal | onApply | <arrow> setOpenMeasure,applyVisibleMeasures,(staticMeasures[activeMainSheet]??[]).map,saveTitleSet({menuId:MENU_ID,sheetName:ADMIN_SHEET_NAME[activeMainSheet]??'',columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1743 |
+| ShipmentPsiMemoModal | onClose | <arrow> setMemoCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1788 |
+| ShipmentPsiMemoModal | onSave | handleMemoSave | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1789 |
+| ShipmentOrderDetailModal | onClose | <arrow> setOrderDetailCtx | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1794 |
+| ShipmentChangeRequestDraftingModal | onClose | <arrow> setReqDraftingNo | jsx | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1801 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -171,6 +174,7 @@
 | TabItem | 3 |
 | TabWrapper | 2 |
 | Panel | 2 |
+| MaterialByDivisionModal | 2 |
 | RequestForm | 1 |
 | SearchArea | 1 |
 | Label | 1 |
@@ -185,8 +189,6 @@
 | PanelSeparator | 1 |
 | ShipmentPsiDetailBar | 1 |
 | ShipmentPsiDetailGrid | 1 |
-| MaterialByDivisionModal | 1 |
-| ModelByDivisionPopup | 1 |
 | MeasureSelectModal | 1 |
 | SsoUserModal | 1 |
 | ShipmentPsiMemoModal | 1 |
@@ -223,14 +225,15 @@
 | ORDER_DETAIL_COLUMNS | DO_ITEM_NO | DO Item No. | 100 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentOrderDetailModal.tsx | 45 |
 | ORDER_DETAIL_COLUMNS | DO_ITEM_QTY | DO Item Qty. | 110 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentOrderDetailModal.tsx | 46 |
 | ORDER_DETAIL_COLUMNS | CONFIRM_ID | Confirm ID | 130 | true |  |  | meta-shape | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentOrderDetailModal.tsx | 47 |
-| dynamicColumns | m.binding | m.kind === 'D' ? m.leaf \|\| 'SUM' : m.kind === 'B' ? m.leaf : | 80 | isDynVisible(m.kind, bucketType, chkSumRef.current) |  |  | object | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 161 |
+| dynamicColumns | m.binding | m.kind === 'D' ? m.leaf \|\| 'SUM' : m.kind === 'B' ? m.leaf : | 80 | isDynVisible(m.kind, bucketType, chkSumRef.current) |  |  | object | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 165 |
 
 ## 7. 메시지 코드
 | code | count |
 |---|---|
 | MSG00284 | 1 |
 | MSG00225 | 1 |
-| MSG00133 | 1 |
+| MSG00004 | 2 |
+| MSG00704 | 1 |
 | MSG00013 | 1 |
 | MSG00429 | 1 |
 | MSG01291 | 1 |
@@ -240,12 +243,14 @@
 | MSG00665 | 1 |
 | MSG00108 | 1 |
 | MSG01187 | 1 |
+| MSG01230 | 1 |
 | MSG00109 | 1 |
 | MSG00002 | 1 |
 | MSG00003 | 1 |
 | MSG01395 | 1 |
 | MSG00247 | 1 |
-| MSG01081 | 1 |
+| MSG00611 | 1 |
+| MSG01206 | 1 |
 | MSG01258 | 1 |
 | MSG01259 | 1 |
 | MSG01202 | 1 |
@@ -270,37 +275,62 @@
 | LBL00112 | 1 |
 | LBL00664 | 1 |
 | LBL00783 | 1 |
+| MSG01208 | 1 |
+| MSG01215 | 1 |
+| MSG01309 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0015(33), SSP0300(5), SCM0002(4), SSP0200(3), SSP0060(1), SSP0003(1), SCP0020(1)
-- SP/PKG: SCM0001_GET_SCP_DAY_PERIOD(4), P_ACTIVE_FLAG(4), P_SSP0003_GET_REQ_DRAFTING(3), PKG_SSP0003(2), SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING(2), P_SSP0003_GET_DRAFTING(2), P_SSP0300_GET_ORDER_DETAIL(2), PKG_SSP0300(2), SSP0002_GET_USER_INFO_LIST(2), P_PLAN_TYPE(2), P_SSP0015_SAVE_SHIPMENT_PSI(2), P_CHANGE_REQUEST_NO(1), P_LANGUAGE(1), PR_GET_PROC_INFO_LIST(1), SSP0300_GET_ORDER_DETAIL(1), P_SSP0200_USER_CHECK(1), PKG_SSP0002(1), P_SSP0002_GET_USER_INFO_LIST(1), P_SSP0015_GET_WH_STOCK(1), FN_STRING_SPLIT(1), PKG_SSP0015(1), P_NONCHK(1), P_DIVISION_ID(1), P_FROM_SITE(1), P_ITEM_ID(1), P_PLAN_START_YYYYMMDD(1), P_YYYYMMDD(1), P_MEASURE(1), P_USER_ID(1), P_DEBUG_MODE(1), P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40(1), P_SSP0015_SAVE_BLOCK_STOCK_DATA(1)
+- 화면ID: SSP0015(36), SSP0200(5), SSP0300(5), SCM0002(4), SSP0021(2), SSP0003(2), SSP0060(1), SSP0012(1), SCP0020(1)
+- SP/PKG: PKG_SSP0003(4), P_SSP0003_GET_DRAFTING(4), SCM0001_GET_SCP_DAY_PERIOD(4), P_ACTIVE_FLAG(4), P_SSP0003_GET_REQ_DRAFTING(3), SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING(2), P_SSP0300_GET_ORDER_DETAIL(2), PKG_SSP0300(2), SSP0002_GET_USER_INFO_LIST(2), P_SSP0003_SAVE_REQ_IF_CHECK(2), P_PLAN_TYPE(2), P_SSP0015_SAVE_SHIPMENT_PSI(2), P_SSP0015_SAVE_SHIPMENT_REQUEST_DRAFTING(2), P_CHANGE_REQUEST_NO(1), P_LANGUAGE(1), FN_MULTY_TIME(1), PR_GET_PROC_INFO_LIST(1), SSP0300_GET_ORDER_DETAIL(1), P_SSP0200_USER_CHECK(1), PKG_SSP0002(1), P_SSP0002_GET_USER_INFO_LIST(1), P_SSP0015_SCM_SSP_DEL_DRAFTING_BY_CONFIRM(1), P_SSP0015_SCM_SSP_ERP_ERROR_CONFIRM(1), P_SSP0003_GET_IF_CHECK(1), P_SSP0003_IF_CHECK(1), P_SSP0015_GET_WH_STOCK(1), FN_STRING_SPLIT(1), P_NONCHK(1), P_DIVISION_ID(1), P_FROM_SITE(1), P_ITEM_ID(1), P_PLAN_START_YYYYMMDD(1), P_YYYYMMDD(1), P_MEASURE(1), P_USER_ID(1), P_DEBUG_MODE(1), PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH(1), P_SSP0015_SAVE_SHIPMENT_REQUEST_CONFIRM_40(1), P_SSP0015_SAVE_BLOCK_STOCK_DATA(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| endpoint | staticColumns fetch(시트별 ~13회 순차 도착)마다 재렌더될 때 그리드가 매번 재처리돼 과도한 깜빡임이 난다. | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 58 |
-| code | 편집 가능 셀(= WH_IN 최신 Plan D_)만 Wijmo 편집에 맡기고(return), 그 외 잠긴 셀은 drill/memo. | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 477 |
-| code | const mainRows = useMemo<MainRow[]>( | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 324 |
-| code | () => | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 325 |
-| code | ); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 332 |
-| code | const detailStaticColumns = useMemo(() => { | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 372 |
-| code | if (mainSheet !== 'packer') return staticColumns; | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 373 |
-| code | if (!cd) return staticColumns; | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 375 |
-| code | const packerHidden = new Set(['ERP_SO_NO', 'TRANSPORT_MODE']); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 376 |
-| code | return { | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 377 |
-| code | [SHEETS.CONFIRM_DETAIL]: cd.map(c => | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 379 |
-| code | }; | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 382 |
-| code | }, [staticColumns, mainSheet]); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 383 |
-| endpoint | const { mutate: mutateHold } = useProcMutation<MENU_ID, SHEETS.HOLD_STOCK>({ | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 479 |
-| code | onSuccess: () => { | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 483 |
-| code | holdStockEditTrackerRef.current?.clearChanges(); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 484 |
-| code | setToast({ type: 'success', message: t(MSG.SAVED, '__Saved successfully.') }); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 485 |
-| code | setDetailFilter(SHEETS.HOLD_STOCK, 'N'); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 486 |
-| code | }); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 488 |
-| code | mutateHold(dirty as unknown as HoldStockRow[]); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1012 |
-| code | if (activeDetailSheet !== SHEETS.HOLD_STOCK) return; // AS-IS Insert 가드(Hold stock 한정, 01 R5) | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1059 |
-| endpoint | Measure 동적 fetch (SCM_MST_SHEET_MEASURE) — MeasureSelectModal 대상. 시트별 보관. | features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts | 433 |
+| endpoint | staticColumns fetch(시트별 ~13회 순차 도착)마다 재렌더될 때 그리드가 매번 재처리돼 과도한 깜빡임이 난다. | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 80 |
+| code | }); | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiDetailGrid.tsx | 403 |
+| code | const companyId = useSessionStore(s => s.session.companyId); | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 160 |
+| endpoint | const [myModelDefaultCheck] = useTabLookupQueries({ filters: [LOOKUP.MY_MODEL_DEFAULT_CHECK] }); | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 161 |
+| code | const myModelDefaultApplied = useRef(false); | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 162 |
+| code | useEffect(() => { | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 163 |
+| code | if (myModelDefaultApplied.current) return; | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 164 |
+| code | if (!companyId \|\| !myModelDefaultCheck \|\| myModelDefaultCheck.length === 0) return; | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 165 |
+| code | const whitelist = new Set(myModelDefaultCheck.map(r => str(r.CODE))); | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 166 |
+| code | if (whitelist.has(companyId)) set({ chkMyModel: true }); | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 168 |
+| code | }, [companyId, myModelDefaultCheck]); | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiForm.tsx | 170 |
+| jsx | const mergeWrappedRef = useRef<FlexGridType \| null>(null); | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 209 |
+| code | g.mergeManager = new ShipmentPsiMergeManager(g.mergeManager); | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 293 |
+| code | 편집 가능 셀(= WH_IN 최신 Plan D_)만 Wijmo 편집에 맡기고(return), 그 외 잠긴 셀은 drill/memo. | features/shipping/src/pages/shipment-plan-mobility-it/components/ShipmentPsiMainGrid.tsx | 499 |
+| code | const mainRows = useMemo<MainRow[]>( | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 360 |
+| code | () => | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 361 |
+| code | ); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 366 |
+| code | const mainRows = useMemo<MainRow[]>( | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 394 |
+| code | () => | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 395 |
+| code | ); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 402 |
+| code | const detailStaticColumns = useMemo(() => { | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 442 |
+| code | if (mainSheet !== 'packer') return staticColumns; | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 443 |
+| code | if (!cd) return staticColumns; | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 445 |
+| code | const packerHidden = new Set(['ERP_SO_NO', 'TRANSPORT_MODE']); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 446 |
+| code | return { | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 447 |
+| code | [SHEETS.CONFIRM_DETAIL]: cd.map(c => | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 449 |
+| code | }; | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 452 |
+| code | }, [staticColumns, mainSheet]); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 453 |
+| code | setDetailFilter(SHEETS.CONFIRM_DETAIL, 'N'); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 542 |
+| endpoint | const { mutate: mutateHold } = useProcMutation<MENU_ID, SHEETS.HOLD_STOCK>({ | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 552 |
+| code | onSuccess: () => { | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 556 |
+| code | holdStockEditTrackerRef.current?.clearChanges(); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 557 |
+| code | setToast({ type: 'success', message: t(MSG.SAVED, '__Saved successfully.') }); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 558 |
+| code | setDetailFilter(SHEETS.HOLD_STOCK, 'N'); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 559 |
+| code | }); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 561 |
+| code | setDetailFilter(SHEETS.MES_STOCK, 'N'); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 600 |
+| code | setToast({ type: 'error', message: t(MSG.NO_MODIFICATION, '__No modifications have been made.') }); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1031 |
+| code | mutateHold(dirty as unknown as HoldStockRow[]); | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1289 |
+| code | if (activeDetailSheet !== SHEETS.HOLD_STOCK) return; // AS-IS Insert 가드(Hold stock 한정, 01 R5) | features/shipping/src/pages/shipment-plan-mobility-it/ShipmentPlanMobilityIt.tsx | 1344 |
+| code | const KEEP = new Set<string>([SHEETS.MAIN, SHEETS.MAIN_PACKER, SHEETS.CALENDAR]); | features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts | 179 |
+| endpoint | Measure 동적 fetch (SCM_MST_SHEET_MEASURE) — MeasureSelectModal 대상. 시트별 보관. | features/shipping/src/pages/shipment-plan-mobility-it/useShipmentPlanMobilityItStore.ts | 443 |
 | code | const blank = typeof va === 'string' && va.trim() === ''; | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.merge.ts | 67 |
 | code | return !blank && va === (rb[binding] ?? ''); | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.merge.ts | 68 |
+| code | shipmentDate: r => str(r.SHIPMENT_DATE), // proc 가 SUBSTR(1,10)+REPLACE('-') 로 정규화 | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.save.ts | 225 |
+| code | newEtdDate: r => str(r.NEW_ETD), | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.save.ts | 230 |
+| code | newEtaDate: r => str(r.NEW_ETA), | features/shipping/src/pages/shipment-plan-mobility-it/utils/shipment-plan-mobility-it.save.ts | 231 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

@@ -220,3 +220,7 @@ nscm-be/.bootrun*.out
 # E2E per-run logs / run lock (2026-10-21, tools/E2E/runlock.js)
 Doc/e2e/logs/
 Doc/e2e/_run.lock
+
+# Playwright 실행 산출물(trace/zip/webm, 2026-11-05) — 100MB 초과 trace 로 GitHub push 거부(GH001, 11-03~11-05 백업 3회) · 재생성 가능
+Doc/verify/**/artifacts/
+**/.playwright-artifacts-*/

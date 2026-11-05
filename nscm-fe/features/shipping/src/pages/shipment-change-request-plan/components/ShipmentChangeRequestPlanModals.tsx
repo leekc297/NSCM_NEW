@@ -87,7 +87,9 @@ export const ShipmentChangeRequestPlanModals = ({
         //   2번째(itemName)를 받으면 모델 설명(`MC,M,M,46950,…` 속성 나열)이 Nick Name 에 박힌다.
         const picked = str(itemId);
         if (!picked) return;
-        if (calledFromCell) writeCell(picked, str(nickName), COLUMN.NICK_NAME);
+        // 공용 팝업은 Shift 범위 선택 시 ITEM_ID 를 쉼표로 이어 보낸다. 셀은 Model 한 건만 받는 자리라
+        //   맨 위 행 하나만 쓴다. Nick Name 은 팝업이 이미 첫 행 기준으로 보낸다(조회조건은 다건 유지).
+        if (calledFromCell) writeCell(picked.split(',')[0] ?? '', str(nickName), COLUMN.NICK_NAME);
         else setSearchItemId(picked);
       }}
       preSearchParams={{

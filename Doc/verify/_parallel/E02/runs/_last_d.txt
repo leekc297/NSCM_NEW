@@ -1,0 +1,12 @@
+[PRE 21:52:03] BE=401 FE=200
+[PRE] BE 로그 말미 HikariPool 타임아웃 0건
+[LOCK] verify DMF0005 · 슬롯 0 · 시작 21:52:05
+[END 21:53:45] rc=0
+[BE] 말미 HikariPool 타임아웃 0건 · 401 0건
+  ok 1 [chromium] › eg_popup.spec.ts:666:9 › @eg-popup MAIN DMF0005 #0 DM0002_ItembyDivisionPopupEx COND:btnItemId (51.2s)
+  ok 2 [chromium] › eg_popup.spec.ts:666:9 › @eg-popup MAIN DMF0005 #1 DM0020_OwnerbyDivisionPopup COND:btnOwner (18.9s)
+
+  Slow test file: [chromium] › eg_popup.spec.ts (1.2m)
+  Consider splitting slow test files to speed up parallel execution
+  2 passed (1.6m)
+/c/Projects/NSCM/Doc/verify/_parallel/E02/runs/DMF0005_d_215202

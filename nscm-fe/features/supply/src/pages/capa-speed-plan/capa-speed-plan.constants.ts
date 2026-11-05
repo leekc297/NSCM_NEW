@@ -45,13 +45,17 @@ export const DIVISION_TYPE = {
 export type DivisionType = (typeof DIVISION_TYPE)[keyof typeof DIVISION_TYPE];
 
 /**
- * 초기 선택값 = Cell.
+ * 초기 선택값 = Operation group 옵션 목록(Form divisionTypeOptions)의 **첫 번째 = Electrode**.
  *
- * AS-IS Designer 는 `SelectedIndex` 를 세팅하지 않아 DevExpress 기본값 `-1`(무선택)로 시작한다.
- * 그 상태는 `_sheet_idx=1`(ELTR) 인데 `_shop_group='P'`(Module/Pack) 라는 비정합이라(02 §4.2),
- * 사용자 확정(2026-09-23, goal.md §5-6 BLK-4)으로 정합 상태인 `Cell` 을 채택했다 — 재판단 금지.
+ * 사용자 지시(2026-10-27): 임의 기본값을 고정하지 말고 "첫 번째 데이터"가 선택되게 한다 —
+ * 다른 단일 콤보(Div/Plan Month 등)가 목록 첫 행을 기본선택하는 것과 같은 규칙. 옵션 순서는
+ * Electrode(0)·Cell(1)·Module-Pack(2)(AS-IS rgrpDivisionType 순서)이라 첫 행 = Electrode 다.
+ *
+ * (이전엔 Cell 고정이었다 — AS-IS 가 SelectedIndex 미지정으로 `-1`(무선택) 비정합 상태라 정합값
+ * Cell 을 택했었다(2026-09-23 BLK-4). 2026-10-27 사용자 지시로 "첫 번째 선택"으로 변경. Electrode 는
+ * `_sheet_idx=0`(ELTR) + `_shop_group='E'` 로 정합 상태라 그때의 `-1` 비정합 우려는 없다.)
  */
-export const DEFAULT_DIVISION_TYPE: DivisionType = DIVISION_TYPE.CELL;
+export const DEFAULT_DIVISION_TYPE: DivisionType = DIVISION_TYPE.ELTR;
 
 /** AS-IS ScpCapa.GetShopGroupId(CAPA:111~135) — 마스터 슬라이스의 SHOP_GROUP_ID 필터축. */
 export const SHOP_GROUP_ID: Record<DivisionType, string> = {
@@ -127,14 +131,6 @@ export const READ_ONLY_PROGRESS_STATUS: readonly string[] = [
   PROGRESS_STATUS.FIRST_CUTOFF,
   PROGRESS_STATUS.SECOND_CUTOFF,
 ];
-
-/** AS-IS `_sheet_status`(cs:552~573) — GET SP 변형 선택자. '2' 는 Status 목록에서 제외돼 도달 불가. */
-export const SHEET_STATUS: Record<string, string> = {
-  [PROGRESS_STATUS.PRE]: 'CURRENT',
-  [PROGRESS_STATUS.CURRENT]: 'CURRENT',
-  [PROGRESS_STATUS.FIRST_CUTOFF]: '1ST_CUTOFF',
-  [PROGRESS_STATUS.SECOND_CUTOFF]: '',
-};
 
 /** Plan Type 파생값 — `BIZ_PLAN_USE_YN='Y'` 면 BP, 아니면 RP(기본). AS-IS ScpCapaBL:654~691. */
 export const PLAN_TYPE = { BIZ: 'BP', ROLLING: 'RP' } as const;
@@ -242,7 +238,11 @@ export const ASSEMBLY_SCALE_VIEW: Record<string, number> = {
 // 3단 헤더 (design 03 §2.4 / hook #93)
 // ====================================================================================
 export const HEADER_DEPTH = 3;
-export const HEADER_ROW_HEIGHT = 16; // 3단 x 16 = 총높이 48px
+// 헤더 총높이 48px — 2단(연>월)이어도 1단 높이(48)를 tier 수로 나눠 각 단이 나눠 갖는다(2단=48/2=24px/단).
+//   공용 DataGrid 의 headerRowHeight prop(= columnHeaders.rows.defaultSize 만)만으로는 정적 컬럼 baked
+//   height 를 못 이겨 tier 마다 벌어지므로, CapaSpeedPlanGrid.applyHeaderHeight 가 렌더된 tier 수로 이 값을
+//   나눠 각 header row.height 에 직접 박는다(형제 capa-line-assign 동일). 사용자 결정 2026-10-27.
+export const HEADER_TOTAL_HEIGHT = 48;
 
 // ====================================================================================
 // 저장 직렬화 (design 03 §4.3 — AS-IS SetQueryInfoSave cs:2295~2325)
@@ -264,7 +264,7 @@ export const MSG = {
   NO_DIVISION_AUTH: 'MSG00667', // "No authority assigned." (AS-IS MSG00097, 01 L-04)
   READ_ONLY: 'MSG00109', // "Read-only mode." (AS-IS MSG00109 동일 의미, 01 L-11)
   NO_PERMISSION: 'MSG00096', // "No permission." (AS-IS MSG00096 동일 의미, 01 L-12)
-  SAVE_SUCCESS: 'MSG00672', // "{0} data saved." (AS-IS MSG00004)
+  SAVE_SUCCESS: 'MSG00606', // "저장되었습니다." / "Saved successfully." (건수 미표기 — 사용자 요청. 이전 MSG00672 "{0}개의 데이터가 저장되었습니다")
   SAVE_FAIL: 'MSG00006', // "Failed to save." (AS-IS MSG00006 동일 의미)
   NO_CHANGES: 'MSG00133', // "No modifications have been made." (AS-IS MSG00133 동일 의미)
 } as const;

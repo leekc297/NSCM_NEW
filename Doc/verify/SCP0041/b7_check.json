@@ -1,0 +1,56 @@
+{
+ "menu_id": "SCP0041",
+ "asis_id": "SCP0041",
+ "generated": "2026-10-31 13:08:21",
+ "a": {
+  "verdict": "NA",
+  "note": "저장 SP SCP0041_SAVE_PACKER_HOLD_STOCK 대상 SCM_DNM_STOCK_LOT_CONTROL 와 콤보 원천 4종이 읽는 테이블이 겹치지 않음 — 이 화면 저장으로 바뀌는 후보 없음",
+  "save_tables": [
+   "SCM_DNM_STOCK_LOT_CONTROL"
+  ],
+  "targets": [
+   {
+    "kind": "SEARCH",
+    "target": "cboDivision",
+    "label": "Division*",
+    "src": "UP_FX_GetCommonDataList_SCP @Code=Division 분기 + FN_GET_DIVISION 원문",
+    "tables": [
+     "FN_GET_DIVISION",
+     "SCM_MST_DIVISION",
+     "TB_FX_USERGROUPAUTHEXTENTION"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "cboStatus",
+    "label": "Status",
+    "src": "SCM0001_GET_LOOKUP_VALUES 원문",
+    "tables": [
+     "SCM_ADM_LOOKUP_MASTER_DETAIL"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbPlantSite",
+    "label": "Plant Site",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=PlantSiteByDivisionOSP1 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   },
+   {
+    "kind": "SEARCH",
+    "target": "clbPlantSite",
+    "label": "Plant Site",
+    "src": "UP_FX_GetCommonDataList_SCP_ALL @Code=PlantSitePackerHoldStock1 분기",
+    "tables": [
+     "SCM_MST_SITE"
+    ],
+    "overlap": []
+   }
+  ]
+ }
+}

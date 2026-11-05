@@ -1,6 +1,6 @@
 import { CellRange, CellType, type GridPanel, MergeManager } from '@mescius/wijmo.grid';
 
-import { dynKindOf, largeKeyOf, rankOf, weekNoOf } from './waterfall.periods';
+import { dynKindOf, isIsoWeek, largeKeyOf, rankOf, weekKeyOf } from './waterfall.periods';
 
 /**
  * Waterfall 계층 병합 — 자매 production-plan-waterfall(SCP0017) `WaterfallMergeManager` 이식(D/W/M).
@@ -32,9 +32,11 @@ export class WaterfallMergeManager extends MergeManager {
     if (rank === null) return '\0';
     const large = largeKeyOf(binding);
     if (rank === 0) return `${large}:SUM`;
-    if (kind === 'W') return `${large}:W${weekNoOf(binding)}`;
-    // 최하위(일) — 소속 주차에 합류해야 2단이 가로로 묶인다. 주차는 binding 에서 파생 불가하므로 일 단위 키.
-    if (kind === 'D') return `${large}:D`;
+    // 2단(주) 키 — W_ 롤업(주합)과 그 주의 D_ 일자들이 같은 주차 키를 공유해야 'Wxx' 헤더가 한 칸으로
+    //   가로 병합된다. 주차는 binding 에서 파생 가능(weekKeyOf: W_ 는 인코딩 ISO주차, D_ 는 날짜에서 ISO주차
+    //   계산 — 같은 주면 일치). 종전엔 D_ 를 월 단위 상수 키(`large:D`)로 둬 W_ 롤업(`large:Wxx`)과 키가
+    //   달라, Sum 체크로 W_ 가 보일 때 'W35' 2단 헤더가 두 칸으로 쪼개졌다(자매 SCP0017 동형 수정).
+    if (kind === 'W' || kind === 'D') return `${large}:W${weekKeyOf(binding)}`;
     return '\0';
   }
 
@@ -93,9 +95,13 @@ export class WaterfallMergeManager extends MergeManager {
       // 가로 병합은 1단(월)·2단(주차)에만 — 3단 leaf(일자)는 컬럼당 1칸.
       if (r > 1) return null;
       const bind = (i: number): string => panel.columns[i]?.binding ?? '';
+      // 1단(월) 가로 병합 키 — NotISO 는 월(largeKey)로 묶어 가로 병합한다. ISO(Only Weekly)는 AS-IS
+      //   InitSpreadDateColumnISO(월 병합 없이 주차마다 독립 날짜범위)와 등가로, 같은 달이어도 주차끼리
+      //   1단을 합치지 않도록 binding 자체를 키로 써 각 주차를 1열로 남긴다(hook: ISO 1단 미분할 수정).
       const keyOf =
         r === 0
-          ? (b: string) => (dynKindOf(b) ? largeKeyOf(b) : '\0')
+          ? (b: string) =>
+              !dynKindOf(b) ? '\0' : isIsoWeek(b) ? b : largeKeyOf(b)
           : (b: string) => this.subKeyOf(b);
       const key = keyOf(binding);
       if (key === '\0') return null;

@@ -1,0 +1,2 @@
+﻿proc,result,why,order_by
+PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK,판정필요,"[SORT 기준 차이 → 판정필요] 문자 키 3/3건 AS-IS 콜레이션과 다를 수 있음: DIVISION_ID(대소문자 무시·NULL 먼저 없음), PLANT_ID(대소문자 무시·NULL 먼저 없음), ITEM_ID(대소문자 무시·NULL 먼저 없음)","ORDER BY SA.DIVISION_ID , SA.PLANT_ID , SA.ITEM_ID"

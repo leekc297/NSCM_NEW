@@ -70,7 +70,7 @@ import {
   revertRowChanges,
   safeString,
 } from '@foundation/utils';
-import { useTabComboQueryResults } from '@shared/hooks';
+import { useTabBtnPermissions, useTabComboQueryResults } from '@shared/hooks';
 import {
   DialogScopeContext,
   registerDirtyCheck,
@@ -78,6 +78,7 @@ import {
   scopeDirtyKey,
   tabDirtyKey,
   useDialogStore,
+  useMenuId,
   useMessageStore,
   useTabid,
   useUIStore,
@@ -544,6 +545,22 @@ interface DataGridProps<T extends WijmoRowItem = WijmoRowItem> extends FlexGridP
    *   isReadOnly 로 만들 수 없는 그리드에만 사용(SCP0134 Plan Management).
    */
   hideStatusColumn?: boolean;
+  /**
+   * SAVE 권한 연동 — SAVE 권한이 없으면 그리드를 읽기전용으로 강제한다(AS-IS MODIFY 파리티).
+   * 셀 편집 차단은 공용 dataGridUtils 가 grid.isReadOnly 하나로 수렴해 두어 isReadOnly 만 올리면 전 셀이 잠긴다.
+   * 버튼 노출(툴바 SAVE/INSERT)은 종전 메뉴 단위 hasButton 유지 — 이 기능은 그리드 편집가부만 다룬다.
+   * 실제 저장은 BE(PR_CHECK_MNU_BTN_AUTH)가 시트 단위로 최종 차단하므로 이건 UX 정합이다.
+   *
+   * 기본(미지정): menuId 를 MenuIdContext(useMenuId)에서 자동으로 읽어 **메뉴 단위**로 판정한다 —
+   *   화면 수정 없이 전 그리드 자동 적용. 잠금 조건은 "메뉴에 SAVE 가 정의돼 있는데(saveDefined,
+   *   mnuBtnDefs) 이 사용자에겐 없음". SAVE 정의가 아예 없는 화면(EXECUTE 저장 등)은 자동으로 빠진다.
+   * - { sheetName } : 한 메뉴 안에서 시트별 SAVE 가 갈릴 때 **시트 단위**로 정밀 판정(menuId 생략 시 context).
+   * - false : 이 그리드만 자동 잠금에서 제외(opt-out).
+   *
+   * sheetName 은 버튼 SHT_NM(=저장 라우팅 SHEETS 값)과 동일해야 하며 대소문자를 구분한다
+   *   — 콤보용 sheetName prop(admin SHEET_NAME)과 값 공간이 다를 수 있어 자동 승계하지 않는다.
+   */
+  saveAuth?: { menuId?: string; sheetName?: string } | false;
   /** 공통 컨텍스트(우클릭) 메뉴 사용 여부 (기본 true) */
   useContextMenu?: boolean;
   /**
@@ -604,6 +621,8 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   numberRules,
   excludeFromDirtyCheck = false,
   hideStatusColumn = false,
+  saveAuth,
+  isReadOnly,
   useContextMenu = true,
   contextMenuItems,
   excelFileName,
@@ -650,6 +669,37 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
   //   정적 컬럼은 toLeafColumn 이 allowSorting:false 로 만들어 주므로 F3 전에는 꺼진 상태로 시작한다.
   const sortingEnabled =
     gridProps.allowSorting !== false && gridProps.allowSorting !== AllowSorting.None;
+
+  // SAVE 권한 연동 — SAVE 권한이 없으면 그리드를 읽기전용으로 강제한다(AS-IS MODIFY 파리티).
+  //   기본은 MenuIdContext(useMenuId)에서 menuId 를 자동으로 읽어 전 그리드에 메뉴 단위로 적용하고,
+  //   saveAuth={{sheetName}} 면 시트 단위 정밀 판정, saveAuth={false} 면 opt-out.
+  //   queryKey(['menu-auth', menuId])를 useTabBtnPermissions 와 공유하므로 화면이 이미 부른 경우
+  //   추가 네트워크 호출 없이 react-query 캐시를 재사용한다.
+  const contextMenuId = useMenuId();
+  // saveAuth===false 면 opt-out(자동 잠금 제외), 객체면 그 설정, 미지정이면 context menuId 로 메뉴 단위 자동.
+  const saveAuthConfig = saveAuth === false ? undefined : saveAuth;
+  const resolvedMenuId = saveAuth === false ? undefined : (saveAuthConfig?.menuId ?? contextMenuId);
+  const resolvedSheetName = saveAuthConfig?.sheetName;
+  const {
+    hasButton: hasSaveAuthButton,
+    hasButtonDef: hasSaveAuthButtonDef,
+    isLoading: isSaveAuthLoading,
+  } = useTabBtnPermissions({
+    menuId: resolvedMenuId ?? '',
+    enabled: !!resolvedMenuId,
+  });
+  // 잠금 = (메뉴/시트에 SAVE 가 정의됨) AND (이 사용자에겐 SAVE 없음).
+  //   saveDefined 가드가 핵심 — SAVE 정의가 없는 화면(EXECUTE 저장 등)은 자동 잠금에서 빠진다.
+  //   권한 로딩 중에는 잠그지 않는다(편집 가능한 그리드를 잠깐 막는 오동작 방지 — 저장은 BE 가 최종 차단).
+  const lacksSaveAuth =
+    !!resolvedMenuId &&
+    !isSaveAuthLoading &&
+    hasSaveAuthButtonDef('SAVE', resolvedSheetName) &&
+    !hasSaveAuthButton('SAVE', resolvedSheetName);
+  // 반드시 boolean 으로 — 명시 prop 으로 넘기므로 undefined 면 wijmo isReadOnly setter 가
+  //   asBoolean assert 로 터진다(화면이 isReadOnly 를 안 넘긴 그리드가 대부분). !!isReadOnly 로
+  //   undefined→false(wijmo 기본값과 동일) 보정. 종전 {...gridProps} 경로의 default 와 등가.
+  const effectiveReadOnly = lacksSaveAuth || !!isReadOnly;
 
   // 다이얼로그(팝업) 안이면 그 스코프 id, 페이지 최상위면 null. 팝업일 때만 F3/F4를 자동 등록한다.
   const scopeId = useContext(DialogScopeContext);
@@ -938,6 +988,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     formatSortableColumns,
     formatPendingComboColumns,
     formatTextTypeColumns,
+    formatSentinelColumns,
     setEditableColumns,
     setMoveCellByTab,
     setMoveByMetakey,
@@ -1594,6 +1645,9 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     // 텍스트 셀(FPText/FPTextBox)로 내려온 숫자 원본값의 천단위 콤마 제거 — 표시만 교정.
     //   setCellTooltip 보다 먼저 등록해야 툴팁도 콤마 없는 텍스트를 읽는다.
     grid.formatItem.addHandler((_sender, e) => formatTextTypeColumns(grid, e));
+    // 센티널 값('/' 단독) 전역 숨김 — 표시 텍스트만 비운다(저장값은 '/' 유지).
+    //   setCellTooltip 보다 먼저 등록해야 툴팁도 비운 텍스트를 읽는다.
+    grid.formatItem.addHandler((_sender, e) => formatSentinelColumns(grid, e));
 
     // 포커스 행 표시(No 컬럼) 갱신 - selection 만 바뀌면 RowHeader 셀의 바인딩 데이터는
     //   안 바뀌므로 Wijmo 가 formatItem(paintRowNoSelectionStyle)을 자동 재호출하지 않는다.
@@ -1661,7 +1715,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
     }
     if (useResultColumns) setResultColumn(grid);
 
-    if (!gridProps.isReadOnly && !hideStatusColumn)
+    if (!isReadOnly && !hideStatusColumn)
       grid.rowHeaders.columns.push(new Column({ align: 'center' }));
     grid.rowHeaders.columns[0].width = initialIndexRowHeaderWidth;
     /**
@@ -1929,6 +1983,7 @@ const DataGridComp = <T extends WijmoRowItem = WijmoRowItem>({
         initialized={handleInitialized}
         allowMerging={allowMerging}
         {...gridProps}
+        isReadOnly={effectiveReadOnly}
       />
       {/* 컬럼 설정 팝업 — 컨텍스트 메뉴 Column Settings… (layoutKey 지정 그리드만) */}
       {layoutKey && (

@@ -23,9 +23,14 @@ export const deriveJumboMin = (tactTime: unknown, laneQty: unknown): number => {
 
 // TACT_TIME 파생 — DAILY_CAPACITY 변경 시 공백이면 0, else round5(86400 / DAILY_CAPACITY)
 //   (design 03 §3.3 #71~74, Except/Packer 공용).
-export const deriveTactTimeFromDaily = (dailyCapacity: unknown): number => {
+// 0 이면 null 반환, 호출부는 TACT_TIME 을 그대로 둔다(AS-IS 0 나누기 예외로 기존값 유지).
+export const deriveTactTimeFromDaily = (dailyCapacity: unknown): number | null => {
   const d = toNum(dailyCapacity);
-  if (d === null || d === 0) return 0;
+  // 기존 로직 주석 보존 (2026-10-27) 시작
+  // if (d === null || d === 0) return 0;
+  // 기존 로직 주석 보존 (2026-10-27) 끝
+  if (d === null) return 0;
+  if (d === 0) return null;
   return round5(86400 / d);
 };
 

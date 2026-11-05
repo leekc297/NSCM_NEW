@@ -1,0 +1,2634 @@
+[
+ {
+  "row_id": "T-240f8074",
+  "result": "PASS",
+  "evidence": "화면 진입 직후(조회 전) 그리드 0행 · 진입 시 호출 planDate/SEARCH(17행), calendar/SEARCH(77행), site/SEARCH(38행), site/SEARCH(370행) — 기대 빈 그리드·조회 없음 (AS-IS 로드 중 조회 호출 없음)",
+  "tobe_ref": "E2E @trace",
+  "cond": "6c9a1383"
+ },
+ {
+  "row_id": "T-87da6c5e",
+  "result": "PASS",
+  "evidence": "AS-IS 버튼 Search·Excel → TO-BE 전부 노출 · 대조표 제외 결정 Edit(비교 제외) (보이는 버튼: KOR, 이 이민용, Home, Global PSI New, Scroll tabs left, Scroll tabs right, Close others, Close All, Open, Search(F5), Column Setting, Measure, Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10), Excel)",
+  "tobe_ref": "E2E @trace",
+  "cond": "c5fe261f"
+ },
+ {
+  "row_id": "T-a9f9903a",
+  "result": "PASS",
+  "evidence": "탭 닫기 → 재오픈: 치명 콘솔 0 · 5xx 0 · 재오픈 직후 행 0(최초 진입 0) · 참고: 탭 닫는 중(화면 해제) 콘솔 예외 1건 (pageerror: Cannot read properties of null (reading 'finishEditing')) — 재오픈에 영향 없으면 결함 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "f82430b0"
+ },
+ {
+  "row_id": "T-62167f59",
+  "result": "FAIL",
+  "evidence": "조회조건 cboDisplay(Display) 칸 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "57551dcd"
+ },
+ {
+  "row_id": "T-d4a15d6f",
+  "result": "NA",
+  "evidence": "대조표 행 COMMON:UC-06(1st 행8) 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "6a39d0c2"
+ },
+ {
+  "row_id": "T-0b85bc8c",
+  "result": "NA",
+  "evidence": "대조표 행 cboDivision() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "381d8bcf"
+ },
+ {
+  "row_id": "T-57616c24",
+  "result": "NA",
+  "evidence": "대조표 행 dtpFrom() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "eec64fdc"
+ },
+ {
+  "row_id": "T-ba223ca7",
+  "result": "NA",
+  "evidence": "대조표 행 dtpTo() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "f32b7e9c"
+ },
+ {
+  "row_id": "T-4dfb2933",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '2026-09-07 (W37)' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "2f42ecfe"
+ },
+ {
+  "row_id": "T-cb2af2bd",
+  "result": "PASS",
+  "evidence": "AS-IS 초기값 코드 'FN'(라벨 옵션 'FN') ↔ TO-BE 초기 표시 'FN' 일치",
+  "tobe_ref": "E2E @trace",
+  "cond": "8b75d5ad"
+ },
+ {
+  "row_id": "T-274ec5b3",
+  "result": "NA",
+  "evidence": "대조표 행 cboBucket() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "548d39cd"
+ },
+ {
+  "row_id": "T-36ac5196",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '표준 레포트(Only Cell Group)' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "e3424e0d"
+ },
+ {
+  "row_id": "T-d42b29f4",
+  "result": "NA",
+  "evidence": "대조표 행 cboFromSite() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "6210d3fb"
+ },
+ {
+  "row_id": "T-843e523f",
+  "result": "NA",
+  "evidence": "대조표 행 cboToSite() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "0e363d60"
+ },
+ {
+  "row_id": "T-7fbe5498",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '(빈값)' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "293cf893"
+ },
+ {
+  "row_id": "T-9c591adf",
+  "result": "NA",
+  "evidence": "대조표 행 ~~txtNickName~~(잔존) 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "46453923"
+ },
+ {
+  "row_id": "T-26013cd3",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '(빈값)' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "b68af590"
+ },
+ {
+  "row_id": "T-f7809e76",
+  "result": "판정필요",
+  "evidence": "조회조건 대상 아님 또는 화면 라벨 미식별(ROW (CELL_GROUP)) — 진입점 단위 초기화는 시나리오 필요",
+  "tobe_ref": "E2E @trace",
+  "cond": "f0df59a3"
+ },
+ {
+  "row_id": "T-8e8ae3e8",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '(빈값)' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "c15e423a"
+ },
+ {
+  "row_id": "T-469bc7df",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '(빈값)' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "a1c4bbfe"
+ },
+ {
+  "row_id": "T-06bce574",
+  "result": "NA",
+  "evidence": "대조표 행 (세션)(세션) 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "4cacf0d6"
+ },
+ {
+  "row_id": "T-391f3b9b",
+  "result": "NA",
+  "evidence": "대조표 행 CboGraphType() 은 조회조건 칸이 아님(패널 토글·셀 콤보·SP 조회 등) — 조회조건 초기값 규칙 대상 아님(조건별 G6 는 COND 요소에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "7cf06c5f"
+ },
+ {
+  "row_id": "T-fdec8a37",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 '표준 레포트(Only Cell Group)' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "d007b301"
+ },
+ {
+  "row_id": "T-513903fd",
+  "result": "PASS",
+  "evidence": "AS-IS 다중 체크리스트(선택 없음 = 전체) ↔ TO-BE 초기 '(전체)'",
+  "tobe_ref": "E2E @trace",
+  "cond": "d0123f3c"
+ },
+ {
+  "row_id": "T-d38f9200",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 'Monthly' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "bfe2df64"
+ },
+ {
+  "row_id": "T-f19edab1",
+  "result": "PASS",
+  "evidence": "AS-IS 로드 문장에 초기값 대입 없음(디자이너·프레임워크 기본) → TO-BE 기본값 'QTY/1' 허용 (사용자 룰 2026-10-26)",
+  "tobe_ref": "E2E @trace",
+  "cond": "8cefddb3"
+ },
+ {
+  "row_id": "T-640e9d15",
+  "result": "FAIL",
+  "evidence": "조회조건 cboGraphType(Graph/Graph Type) 칸 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "7e64631f"
+ },
+ {
+  "row_id": "T-78cec8db",
+  "result": "NA",
+  "evidence": "행 cboBucket() 은 조회조건 칸이 아닌 데이터테이블/핸들러 행 — 조회조건 C1 는 COND 요소(Div/From Site/To Site)에서 판정, 이 행 자체는 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "b2cab730"
+ },
+ {
+  "row_id": "T-91c1e562",
+  "result": "판정필요",
+  "evidence": "'Div' → '81 Automotive Battery' 변경 · 콤보 재요청 0건 · 하위 (없음) · AS-IS 핸들러 ClbDivision_SelectedIndexChanged · AS-IS 하위 후보 = 메모리 필터(DB 재조회 없음 → 콤보 재요청 0건 정상) — AS-IS 하위 대상 미식별: 재요청 여부만 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "a1895f71"
+ },
+ {
+  "row_id": "T-9faeae80",
+  "result": "PASS",
+  "evidence": "'Plan Date' → '2026-08-31 (W36)' 변경 · 콤보 재요청 1건 · 하위 (없음) · AS-IS 핸들러 CboPlanDate_SelectedIndexChanged · AS-IS 하위 후보 = 메모리 필터(DB 재조회 없음 → 콤보 재요청 0건 정상) — AS-IS 하위 대상 미식별: 재요청 여부만 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "b2bfa0d9"
+ },
+ {
+  "row_id": "T-35605eb2",
+  "result": "판정필요",
+  "evidence": "'Bucket' → 'Weekly' 변경 · 콤보 재요청 0건 · 하위 (없음) · AS-IS 핸들러 CboBucketType_SelectedIndexChanged · AS-IS 하위 후보 = 메모리 필터(DB 재조회 없음 → 콤보 재요청 0건 정상) — AS-IS 하위 대상 미식별: 재요청 여부만 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "635d05f8"
+ },
+ {
+  "row_id": "T-732cd438",
+  "result": "판정필요",
+  "evidence": "'Scale' → 'QTY/1,000' 변경 · 콤보 재요청 0건 · 하위 (없음) · AS-IS 핸들러 CboUnitQty_SelectedIndexChanged · AS-IS 하위 후보 = 메모리 필터(DB 재조회 없음 → 콤보 재요청 0건 정상) — AS-IS 하위 대상 미식별: 재요청 여부만 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "c0766bfb"
+ },
+ {
+  "row_id": "T-7e47b472",
+  "result": "FAIL",
+  "evidence": "상위 조회조건 [Display] 칸 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "ab23f392"
+ },
+ {
+  "row_id": "T-09c31e38",
+  "result": "PASS",
+  "evidence": "AS-IS clbFromSite 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace",
+  "cond": "d5eb9c34"
+ },
+ {
+  "row_id": "T-41065df6",
+  "result": "판정필요",
+  "evidence": "'Plan Type' → 'TE' 변경 · 콤보 재요청 0건 · 하위 (없음) · AS-IS 핸들러 CboPlanType_SelectedIndexChanged · AS-IS 하위 후보 = 메모리 필터(DB 재조회 없음 → 콤보 재요청 0건 정상) — AS-IS 하위 대상 미식별: 재요청 여부만 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "1f93d345"
+ },
+ {
+  "row_id": "T-c035060e",
+  "result": "판정필요",
+  "evidence": "'Search Level' → 'Detail 표준 레포트' 변경 · 콤보 재요청 0건 · 하위 (없음) · AS-IS 핸들러 CboSearchLevel_SelectedIndexChanged · AS-IS 하위 후보 = 메모리 필터(DB 재조회 없음 → 콤보 재요청 0건 정상) — AS-IS 하위 대상 미식별: 재요청 여부만 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "3800f924"
+ },
+ {
+  "row_id": "T-25402505",
+  "result": "PASS",
+  "evidence": "AS-IS clbToSite 변경 핸들러 없음(연쇄 없음) — TO-BE 도 하위 조건 값 변화 없음(앞 실측: 콤보 재요청만, 선택값 유지)",
+  "tobe_ref": "E2E @trace",
+  "cond": "736a069e"
+ },
+ {
+  "row_id": "T-96b43f3c",
+  "result": "NA",
+  "evidence": "행 cboBucket() 은 조회조건 칸이 아닌 데이터테이블/핸들러 행 — 조회조건 C4 는 COND 요소(Div/From Site/To Site)에서 판정, 이 행 자체는 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "b2cab730"
+ },
+ {
+  "row_id": "T-fd62bcd4",
+  "result": "PASS",
+  "evidence": "조회 1668행 → 'Div' 변경('81 Automotive Battery') 후 0행 · 자동 재조회 0건 — 기대 그리드 초기화(AS-IS ClbDivision_SelectedIndexChanged:1767 if (fps != null) { SpreadInfo.ClearDataSource(_SPD); } ; ClbDivision_SelectedIndexChanged:1769 SpreadInfo.ClearDataSource()",
+  "tobe_ref": "E2E @trace",
+  "cond": "a1895f71"
+ },
+ {
+  "row_id": "T-9e89a4c0",
+  "result": "PASS",
+  "evidence": "조회 1668행 → 'Bucket' 변경('Weekly') 후 2003행 · 자동 재조회 3건 — 기대 그리드 초기화 후 즉시 재조회(AS-IS SetGridClear:1818 if (_SI != null) { SpreadInfo.ClearDataSource(_SPD); } ; SetGridClear:1820 SpreadInfo.ClearDataSource( → CboBucketType_SelectedIndexChanged:1812 FindData)",
+  "tobe_ref": "E2E @trace",
+  "cond": "635d05f8"
+ },
+ {
+  "row_id": "T-78dd442a",
+  "result": "판정필요",
+  "evidence": "PKG_SCM0002.P_SCM0002_GET_ITEM_BY_DIVISION_POPUP: SCM0002/ModelPopup/SEARCH, SCP0033/popup/SEARCH, SSP0019/popup/SEARCH — 화면 진입·조회 중 호출 없음(셀 이벤트·팝업 조회 경로 — 해당 시나리오에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "15db1acc"
+ },
+ {
+  "row_id": "T-eeee4a4e",
+  "result": "판정필요",
+  "evidence": "PKG_SCM0002.P_SCM0002_GET_PROJECT_BY_DIVISION_POPUP: SCM0002/ProjectByDivPopup/SEARCH — 화면 진입·조회 중 호출 없음(셀 이벤트·팝업 조회 경로 — 해당 시나리오에서 판정)",
+  "tobe_ref": "E2E @trace",
+  "cond": "3c55b074"
+ },
+ {
+  "row_id": "T-1e02e496",
+  "result": "PASS",
+  "evidence": "PKG_SCP0100.P_SCP0100_GET_PLAN_DATE: planDate/SEARCH HTTP 200 17행",
+  "tobe_ref": "E2E @trace",
+  "cond": "9da13d84"
+ },
+ {
+  "row_id": "T-93c235ab",
+  "result": "PASS",
+  "evidence": "PKG_SCP0100.P_SCP0100_GET_SITE: site/SEARCH HTTP 200 38행, site/SEARCH HTTP 200 370행",
+  "tobe_ref": "E2E @trace",
+  "cond": "7b20d913"
+ },
+ {
+  "row_id": "T-69028340",
+  "result": "PASS",
+  "evidence": "PKG_SCP0100.P_SCP0100_GET_GLOBAL_PSI_REPORT: searchLevel/SEARCH HTTP 200 1669행",
+  "tobe_ref": "E2E @trace",
+  "cond": "13640923"
+ },
+ {
+  "row_id": "T-d70b25da",
+  "result": "PASS",
+  "evidence": "PKG_SCP0100.P_SCP0100_GET_SHEET_CALENDAR_3SPAN: calendar/SEARCH HTTP 200 77행",
+  "tobe_ref": "E2E @trace",
+  "cond": "2ee16769"
+ },
+ {
+  "row_id": "T-24c5f2c0",
+  "result": "FAIL",
+  "evidence": "AS-IS 기본 표시 컬럼 2 ⊆ TO-BE 그리드 17: 누락 CELL_CF (AS-IS 숨김·코드추가 helper 컬럼은 비교 제외: D0, D1, DIVISION_ID, FROM_SITE, INCOTERMS, ITEM_ID, MEASURE_GROUP, MEASURE_NAME, MEASURE_UI, OPERATION_ID, PRODUCT_LEVEL1, PRODUCT_LEVEL2, PRODUCT_LEVEL3, TO_SITE, VARIOUS_KEY)",
+  "tobe_ref": "E2E @trace",
+  "cond": "5eb06fc9"
+ },
+ {
+  "row_id": "T-f762cc1b",
+  "result": "FAIL",
+  "evidence": "AS-IS 기본 표시 컬럼 2 ⊆ TO-BE 그리드 17: 누락 CELL_CF (AS-IS 숨김·코드추가 helper 컬럼은 비교 제외: D0, D1, DIVISION_ID, FROM_SITE, INCOTERMS, ITEM_ID, MEASURE_GROUP, MEASURE_NAME, MEASURE_UI, OPERATION_ID, PRODUCT_LEVEL1, PRODUCT_LEVEL2, PRODUCT_LEVEL3, TO_SITE, VARIOUS_KEY)",
+  "tobe_ref": "E2E @trace",
+  "cond": "1db42019"
+ },
+ {
+  "row_id": "T-cbfd4c10",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL1: AS-IS(Div 40) '기본 →표시? →표시? →숨김? →표시? →숨김?' — 표시 여부가 조건 분기(원문 미해석 '?')라 정답 미확정 → 수동 검수 W7 (TO-BE 표시=N)",
+  "tobe_ref": "E2E @trace",
+  "cond": "a2a9af99"
+ },
+ {
+  "row_id": "T-4b7f62e1",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL1: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='Y' → 양쪽 숨김(표시 여부는 A5 PASS) — 라벨 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "a2a9af99"
+ },
+ {
+  "row_id": "T-fc2a4f34",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL2: AS-IS(Div 40) '기본 →표시? →숨김? →표시? →표시? →숨김?' — 표시 여부가 조건 분기(원문 미해석 '?')라 정답 미확정 → 수동 검수 W7 (TO-BE 표시=N)",
+  "tobe_ref": "E2E @trace",
+  "cond": "6f7c4b8a"
+ },
+ {
+  "row_id": "T-0fb8bf9a",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL2: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='Y' → 양쪽 숨김(표시 여부는 A5 PASS) — 라벨 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "6f7c4b8a"
+ },
+ {
+  "row_id": "T-f5950dc8",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL3: AS-IS(Div 40) '기본 →숨김? →숨김? →숨김? →표시? →숨김?' — 표시 여부가 조건 분기(원문 미해석 '?')라 정답 미확정 → 수동 검수 W7 (TO-BE 표시=N)",
+  "tobe_ref": "E2E @trace",
+  "cond": "699b1c08"
+ },
+ {
+  "row_id": "T-dd36ca3f",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL3: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='Y' → 양쪽 숨김(표시 여부는 A5 PASS) — 라벨 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "699b1c08"
+ },
+ {
+  "row_id": "T-2219aa82",
+  "result": "PASS",
+  "evidence": "CELL_GROUP: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @trace",
+  "cond": "1ad13084"
+ },
+ {
+  "row_id": "T-68913d3c",
+  "result": "PASS",
+  "evidence": "MEASURE_GROUP: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @trace",
+  "cond": "b84142bb"
+ },
+ {
+  "row_id": "T-c065d5f2",
+  "result": "PASS",
+  "evidence": "MEASURE_NAME: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @trace",
+  "cond": "2633e5d3"
+ },
+ {
+  "row_id": "T-d7567c2b",
+  "result": "NA",
+  "evidence": "VARIOUS_KEY 현재 그리드에 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "8a29e481"
+ },
+ {
+  "row_id": "T-ca6ddcc7",
+  "result": "NA",
+  "evidence": "MEASURE_UI: 그리드 미표시 — AS-IS Division 전부 숨김 · TO-BE META VISIBLE='N' → 양쪽 숨김(표시 여부는 A5 PASS) — 표시 색상 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "daa93783"
+ },
+ {
+  "row_id": "T-0bca397b",
+  "result": "NA",
+  "evidence": "COLUMN_LABEL_NAME 현재 그리드에 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "dd27761f"
+ },
+ {
+  "row_id": "T-7a14034d",
+  "result": "NA",
+  "evidence": "DAY_CODE 현재 그리드에 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "ca4e151d"
+ },
+ {
+  "row_id": "T-c0b01cff",
+  "result": "판정필요",
+  "evidence": "CELL_GROUP 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "22ce34b8"
+ },
+ {
+  "row_id": "T-1e462d9c",
+  "result": "판정필요",
+  "evidence": "MEASURE_GROUP 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "4ee2a55e"
+ },
+ {
+  "row_id": "T-a0e95d74",
+  "result": "판정필요",
+  "evidence": "MEASURE_NAME 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "346bfbc4"
+ },
+ {
+  "row_id": "T-0017f31c",
+  "result": "판정필요",
+  "evidence": "VARIOUS_KEY 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "ff87ca7c"
+ },
+ {
+  "row_id": "T-966774ad",
+  "result": "판정필요",
+  "evidence": "MEASURE_UI 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "eaf22071"
+ },
+ {
+  "row_id": "T-81d70a4b",
+  "result": "판정필요",
+  "evidence": "COLUMN_LABEL_NAME 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "7d5684df"
+ },
+ {
+  "row_id": "T-98710d71",
+  "result": "판정필요",
+  "evidence": "DAY_CODE 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "812724f7"
+ },
+ {
+  "row_id": "T-953fdd42",
+  "result": "판정필요",
+  "evidence": "PRODUCT_LEVEL1 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "70f49e2f"
+ },
+ {
+  "row_id": "T-5b50ff50",
+  "result": "판정필요",
+  "evidence": "PRODUCT_LEVEL2 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "748694cc"
+ },
+ {
+  "row_id": "T-4a61384d",
+  "result": "판정필요",
+  "evidence": "PRODUCT_LEVEL3 연쇄 원천 컬럼 해석 불가 — AS-IS ",
+  "tobe_ref": "E2E @trace",
+  "cond": "7b4b495f"
+ },
+ {
+  "row_id": "T-f93d14b7",
+  "result": "NA",
+  "evidence": "CELL_GROUP: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "9fe7a3f0"
+ },
+ {
+  "row_id": "T-74dbf6a1",
+  "result": "NA",
+  "evidence": "MEASURE_GROUP: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "a125615b"
+ },
+ {
+  "row_id": "T-99c741ee",
+  "result": "NA",
+  "evidence": "MEASURE_NAME: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "9c396acc"
+ },
+ {
+  "row_id": "T-9d09620f",
+  "result": "NA",
+  "evidence": "VARIOUS_KEY: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "14442042"
+ },
+ {
+  "row_id": "T-c309fb5a",
+  "result": "NA",
+  "evidence": "MEASURE_UI: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "4a38a19e"
+ },
+ {
+  "row_id": "T-fa40d8c9",
+  "result": "NA",
+  "evidence": "SCP0100_Global_PSI_Report.SetBackColor: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "13b519be"
+ },
+ {
+  "row_id": "T-677166df",
+  "result": "NA",
+  "evidence": "COLUMN_LABEL_NAME: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "61ab9d42"
+ },
+ {
+  "row_id": "T-f337a513",
+  "result": "NA",
+  "evidence": "DAY_CODE: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "5fc6242f"
+ },
+ {
+  "row_id": "T-16aaf71a",
+  "result": "NA",
+  "evidence": "SCP0100_Global_PSI_Report.SetCalculating: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "5e034dbd"
+ },
+ {
+  "row_id": "T-011f198a",
+  "result": "NA",
+  "evidence": "SCP0100_Global_PSI_Report.SetCalendar: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "f7db5ff6"
+ },
+ {
+  "row_id": "T-a2afbd54",
+  "result": "NA",
+  "evidence": "SCP0100_Global_PSI_Report.SetGridClear: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "92d0866f"
+ },
+ {
+  "row_id": "T-71e15d92",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL1: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "b10aaf1a"
+ },
+ {
+  "row_id": "T-4f1ba6cd",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL2: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "cc8eb3de"
+ },
+ {
+  "row_id": "T-2ef8fbba",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL3: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "0dddf4ae"
+ },
+ {
+  "row_id": "T-045b670b",
+  "result": "NA",
+  "evidence": "SCP0100_Global_PSI_Report.SetSpreadColumn: 이 대상에 연결된 AS-IS 메시지 문장 없음 — 업무 검증 메시지 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "f22565d2"
+ },
+ {
+  "row_id": "T-928815e7",
+  "result": "판정필요",
+  "evidence": "(동적) — DCalendar_ValueChanged 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(DCalendar_ValueChanged)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "51ab5729"
+ },
+ {
+  "row_id": "T-c4a71651",
+  "result": "판정필요",
+  "evidence": "(동적) — DCalendar_ValueChanged 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(DCalendar_ValueChanged)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "b0062502"
+ },
+ {
+  "row_id": "T-ae06d4c1",
+  "result": "판정필요",
+  "evidence": "(동적) — DCalendar_ValueChanged 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(DCalendar_ValueChanged)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "fb374de4"
+ },
+ {
+  "row_id": "T-54cc1fe4",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "tobe_ref": "E2E @trace",
+  "cond": "f591640c"
+ },
+ {
+  "row_id": "T-23b5360a",
+  "result": "판정필요",
+  "evidence": "(동적) — DCalendar_ValueChanged 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(DCalendar_ValueChanged)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "dfa02cfe"
+ },
+ {
+  "row_id": "T-d3319e30",
+  "result": "판정필요",
+  "evidence": "(동적) — DCalendar_ValueChanged 경로 메시지(저장 전 검증 아님) — 해당 동작 시나리오(DCalendar_ValueChanged)에서 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "1ff470c9"
+ },
+ {
+  "row_id": "V-6bd5bafa",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c3931d87",
+  "result": "NA",
+  "evidence": "PKG_SCP0100.P_SCP0100_GET_PLAN_DATE: 첫 정렬 키 CODE 가 그리드에 없음(비노출 컬럼) — 화면 순서로는 판정 불가 · 골든 순서대조(Doc/golden/SCP0100/*.order.csv · SP 행 A6)로 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "ccd6e944"
+ },
+ {
+  "row_id": "T-10274267",
+  "result": "NA",
+  "evidence": "PKG_SCP0100.P_SCP0100_GET_SITE: 첫 정렬 키 FROM_SITE 가 그리드에 없음(비노출 컬럼) — 화면 순서로는 판정 불가 · 골든 순서대조(Doc/golden/SCP0100/*.order.csv · SP 행 A6)로 판정",
+  "tobe_ref": "E2E @trace",
+  "cond": "96c6354c"
+ },
+ {
+  "row_id": "T-81adddbe",
+  "result": "PASS",
+  "evidence": "Division 후보 6건 [81 Automotive Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST), 81_HD Automotive Battery(HD), 81_HG Automotive Battery(HG)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace",
+  "cond": "a4182def"
+ },
+ {
+  "row_id": "V-a4db16a1",
+  "result": "PASS",
+  "evidence": "Division 후보 6건 [81 Automotive Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST), 81_HD Automotive Battery(HD), 81_HG Automotive Battery(HG)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-b86f83fb",
+  "result": "PASS",
+  "evidence": "Division 후보 6건 [81 Automotive Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST), 81_HD Automotive Battery(HD), 81_HG Automotive Battery(HG)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-01266151",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-05dec894",
+  "result": "PASS",
+  "evidence": "Insert 버튼 비노출 · 기존행 편집 가능 셀 없음(편집 상태 표시 미검) · Delete 버튼 비노출(권한 또는 기능 없음) (AS-IS CRUD Status I/U/D 표시)",
+  "tobe_ref": "E2E @trace",
+  "cond": "f82430b0"
+ },
+ {
+  "row_id": "V-93a33fa6",
+  "result": "PASS",
+  "evidence": "Insert 버튼 비노출 · 기존행 편집 가능 셀 없음(편집 상태 표시 미검) · Delete 버튼 비노출(권한 또는 기능 없음) (AS-IS CRUD Status I/U/D 표시)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-3752f0a4",
+  "result": "NA",
+  "evidence": "Insert 버튼 없음 · AS-IS 에도 InsertButton/Insert 문장 없음(조회·보고 화면) — 신규행 위치 검사 대상 아님",
+  "tobe_ref": "E2E @trace",
+  "cond": "1244f008"
+ },
+ {
+  "row_id": "V-def913d7",
+  "result": "PASS",
+  "evidence": "Division 후보 6건 [81 Automotive Battery, 81_UC Automotive Battery(UC), 81_HM Automotive Battery(HM), 81_ST Automotive Battery(ST), 81_HD Automotive Battery(HD), 81_HG Automotive Battery(HG)] — 권한 필터 콤보(MyDivision) · 마스터 밖 코드 0 · AS-IS SetDivisionAuthCheck(권한 Division 0 이면 조건 비활성) 와 같은 권한 기반 후보",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-de8a0cc2",
+  "result": "FAIL",
+  "evidence": "조회조건 Display 칸 없음",
+  "tobe_ref": "E2E @trace",
+  "cond": "9c546a42"
+ },
+ {
+  "row_id": "V-94cedfc7",
+  "result": "ERROR",
+  "evidence": "[멀티선택 Div] '81_HM Automotive Battery(HM)' 1개 선택 조회 → 1668행 · DIVISION_ID 값 조건 밖 5종(81,81_HD,81_HG,81_ST) (기본 ALL 1668행) · 조회 후 30초간 그리드 변화 없음 · 조회 요청 1건(본문에 '81_HM' 미포함) · 조건 칸 표시 '' — [측정 실패] 고른 값이 조건 칸에 들어가지 않음(검사기 조작 실패) — 판정 불가",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-da9a83ce",
+  "result": "PASS",
+  "evidence": "[멀티선택 Div] ALL 선택 조회 → 1668행 (개별 1668행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-f1e27fbc",
+  "result": "NA",
+  "evidence": "Cell Group 콤보 아님(text) — 멀티선택 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-207bf098",
+  "result": "NA",
+  "evidence": "PJT 콤보 아님(popup) — 멀티선택 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-419c305b",
+  "result": "NA",
+  "evidence": "Model/Nickname 콤보 아님(popup) — 멀티선택 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-660335ee",
+  "result": "ERROR",
+  "evidence": "[멀티선택 From Site] 'A040-A' 1개 선택 조회 → 0행 (기본 ALL 1668행) · 조회 요청 1건(본문에 'A040-A' 포함) · 조건 칸 표시 'A040-A' · 결과 컬럼 미식별 값에서 고를 후보를 못 찾아 임의 후보 선택 — [측정 실패] 결과에 없던 후보를 골라 0행(데이터 없음) — 조건 반영 여부 판정 불가",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4e18aa82",
+  "result": "PASS",
+  "evidence": "[멀티선택 From Site] ALL 선택 조회 → 573행 (개별 0행)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c2b5cf3f",
+  "result": "ERROR",
+  "evidence": "[멀티선택 To Site] 'Aeonus_KR_GUN' 1개 선택 조회 → 1668행 (기본 ALL 1668행) · 조회 후 30초간 그리드 변화 없음 · 조회 요청 1건(본문에 'Aeonus_KR_GUN' 미포함) · 조건 칸 표시 '' · 결과 컬럼 미식별 값에서 고를 후보를 못 찾아 임의 후보 선택 — [측정 실패] 고른 값이 조건 칸에 들어가지 않음(검사기 조작 실패) — 판정 불가",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c29a1dcf",
+  "result": "FAIL",
+  "evidence": "[멀티선택 To Site] ALL 선택 조회 → 550행 (개별 1668행) — ALL 이 전체를 돌려주지 않음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-afc20fa5",
+  "result": "NA",
+  "evidence": "Search Mode 콤보 아님(radio) — 멀티선택 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e5e3142b",
+  "result": "PASS",
+  "evidence": "[단일선택 Search Level] '표준 레포트(Only Cell Group)' → 1668행 · 요청 인자 미확인 | 'Detail 표준 레포트' → 0행 · 요청 인자 미확인 | 'Product Level 1' → 1086행 · 요청 인자 미확인",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8f3024be",
+  "result": "NA",
+  "evidence": "Search Level 단일 선택 콤보 — ALL/다중 사양 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-bb132c47",
+  "result": "NA",
+  "evidence": "Period 콤보 아님(period) — 멀티선택 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3122023d",
+  "result": "PASS",
+  "evidence": "[단일선택 Bucket] 'Weekly' → 0행 · 요청 인자 미확인 | 'Monthly' → 1668행 · 요청 인자 미확인",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-bad33add",
+  "result": "NA",
+  "evidence": "Bucket 단일 선택 콤보 — ALL/다중 사양 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-5f388b69",
+  "result": "PASS",
+  "evidence": "[단일선택 Plan Date] '2026-09-07 (W37)' → 1668행 · 요청 인자 미확인 | '2026-08-31 (W36)' → 1668행 · 요청 인자 미확인 | '2026-08-17 (W34)' → 1668행 · 요청 인자 미확인",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-09735e04",
+  "result": "NA",
+  "evidence": "Plan Date 단일 선택 콤보 — ALL/다중 사양 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-36b44806",
+  "result": "PASS",
+  "evidence": "[단일선택 Plan Type] 'TE' → 1668행 · 요청 인자 미확인 | 'PR' → 1668행 · 요청 인자 미확인 | 'MA' → 1668행 · 요청 인자 미확인",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-64e3f5f8",
+  "result": "NA",
+  "evidence": "Plan Type 단일 선택 콤보 — ALL/다중 사양 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-d98e13c5",
+  "result": "PASS",
+  "evidence": "[단일선택 Scale] 'QTY/1' → 1668행 · 요청 인자 미확인 | 'QTY/1,000' → 1668행 · 요청 인자 미확인 | 'QTY/1,000,000' → 1668행 · 요청 인자 미확인",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-5c0aa816",
+  "result": "NA",
+  "evidence": "Scale 단일 선택 콤보 — ALL/다중 사양 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-486a68f0",
+  "result": "NA",
+  "evidence": "Cell Qty 콤보 아님(checkbox) — 멀티선택 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-136cb505",
+  "result": "NA",
+  "evidence": "A/S 콤보 아님(checkbox) — 멀티선택 검사 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-99717454",
+  "result": "NA",
+  "evidence": "CELL_CF 현재 그리드에 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-0bcd2290",
+  "result": "PASS",
+  "evidence": "조회 1668행 — 화면에 건수 '1668' 표시 있음(총 건수 표시 확정 규칙)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-7ae43f86",
+  "result": "PASS",
+  "evidence": "조회 1668행 — 화면에 건수 '1668' 표시 있음(총 건수 표시 확정 규칙)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-119f1a7a",
+  "result": "NA",
+  "evidence": "메타 COLUMN_WIDTH 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-06c28402",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-60d351ce",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3c2e57fb",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-97351ce4",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-79e0339a",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-d83293a6",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-aeac934f",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e30613b4",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-15dd8a21",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-99fa99a8",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-aacc9e1e",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-01005005",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c798457a",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4428185b",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4d9dc857",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c8a5252d",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-39f7dc8d",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-16a5fe79",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-fa8dbcc8",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-55326fff",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e2bfd7a2",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-87f49b60",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4c20ceb4",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-53cc269a",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-40faaec4",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-1615f3ad",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e2b9ea74",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-d415d9f2",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8f9162d6",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8f19e44b",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-67e88bac",
+  "result": "PASS",
+  "evidence": "페이지 가로 스크롤 없음 · 컬럼 폭은 TO-BE 디자인 룰(H9 에서 메타 대조) — TO-BE 기준 준수(사용자 2026-10-26)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-798e53a2",
+  "result": "PASS",
+  "evidence": "조회(Division ALL) 응답 1446ms · 1668행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-d0ad3fb0",
+  "result": "PASS",
+  "evidence": "조회(Division ALL) 응답 1446ms · 1668행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-7008d16e",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo, From Site=combo, To Site=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-52ffa94d",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo, From Site=combo, To Site=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-0623e582",
+  "result": "NA",
+  "evidence": "텍스트 입력 조회조건 없음(조회조건 종류: Div=combo, From Site=combo, To Site=combo) — 입력 중 재렌더 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-8eea682f",
+  "result": "NA",
+  "evidence": "Team·Sales Site·End Customer·Sold to·Plant Site 조회조건 없음(화면 조건: Div, From Site, To Site) — 원천 표준 규칙 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-a5a182f1",
+  "result": "NA",
+  "evidence": "Team·Sales Site·End Customer·Sold to·Plant Site 조회조건 없음(화면 조건: Div, From Site, To Site) — 원천 표준 규칙 대상 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-9cfb8a61",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 이 이민용 | Home | Global PSI New | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Column Setting | Measure | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-9bec952d",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 이 이민용 | Home | Global PSI New | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Column Setting | Measure | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-6eeb4826",
+  "result": "NA",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 이 이민용 | Home | Global PSI New | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Column Setting | Measure | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel) — Upload 규칙 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c9c4b7cd",
+  "result": "PASS",
+  "evidence": "합계 행/푸터 감지(298) — 조회 후 표시",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-371ccee4",
+  "result": "NA",
+  "evidence": "결함 대상 'Home / Auth Request 메뉴' 은 SCP0100 화면 범위 밖(Home/메뉴 트리 결함) — 이 화면 대조표 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-5bbce481",
+  "result": "NA",
+  "evidence": "결함 대상 '그룹ID별 메뉴·버튼 권한(MENU AUTH · BTN AUTH) 운영데이터 동기화' 은 SCP0100 화면 범위 밖(Home/메뉴 트리 결함) — 이 화면 대조표 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-689e1773",
+  "result": "PASS",
+  "evidence": "명칭 컬럼 MEASURE_NAME — 표본 50건 중 한글 0 (사용자 언어 EN 세션: 한글 0 이면 영문 표시)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-066b62be",
+  "result": "NA",
+  "evidence": "dataMap(콤보) 컬럼 없음",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-ec75c345",
+  "result": "PASS",
+  "evidence": "CUSTOMER 1668행 공란 표기 빈값/NULL — 단일 표기",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3d6e08a9",
+  "result": "PASS",
+  "evidence": "FROM_SITE_CODE 1668행 공란 표기 빈값/NULL — 단일 표기",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-702edb7f",
+  "result": "NA",
+  "evidence": "'LBL/MSG/MENU 코드 사전' 은 코드 사전·마스터 전역 항목 — SCP0100 그리드 데이터로 측정할 공란 컬럼 아님(전역 N1 은 사전 점검 도구 대상)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-0f3c6bb1",
+  "result": "PASS",
+  "evidence": "SCP0100_GET_SHEET_CALENDAR_3SPAN: SKIP AS-IS ?행 ↔ TO-BE ?행 · SCP0100_GET_SITE: SKIP AS-IS ?행 ↔ TO-BE ?행 · SCP0100_GET_PLAN_DATE: SKIP AS-IS ?행 ↔ TO-BE ?행",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-9f49ee9f",
+  "result": "FAIL",
+  "evidence": "Division ALL 1668행 조회 후 '81' 단일 재조회 → 1668행 · DIVISION_ID 다른 값 216 — 이전 결과 잔존",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4a8e2e19",
+  "result": "PASS",
+  "evidence": "진입 화면 '_' 폴백 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-d42c9506",
+  "result": "PASS",
+  "evidence": "기존행 r0 DIVISION_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-3858c36c",
+  "result": "NA",
+  "evidence": "기존행 r0 PLAN_TYPE: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-91f8e90f",
+  "result": "PASS",
+  "evidence": "기존행 r0 CELL_GROUP 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-1e63e3e7",
+  "result": "NA",
+  "evidence": "기존행 r0 OPERATION_ID: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-ecd975ba",
+  "result": "PASS",
+  "evidence": "기존행 r0 MEASURE_GROUP 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-4c8f9abe",
+  "result": "NA",
+  "evidence": "기존행 r0 PRODUCT_LEVEL1: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-de9f4d9b",
+  "result": "NA",
+  "evidence": "기존행 r0 PRODUCT_LEVEL2: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-7f71f9ca",
+  "result": "NA",
+  "evidence": "기존행 r0 PRODUCT_LEVEL3: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-c10d68b9",
+  "result": "PASS",
+  "evidence": "기존행 r0 MEASURE_NAME 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-0f2a07b9",
+  "result": "NA",
+  "evidence": "기존행 r0 FROM_SITE: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-5b5a9751",
+  "result": "NA",
+  "evidence": "기존행 r0 TO_SITE: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-b7293de0",
+  "result": "NA",
+  "evidence": "기존행 r0 INCOTERMS: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-471c846a",
+  "result": "NA",
+  "evidence": "기존행 r0 ITEM_ID: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-a6d786fd",
+  "result": "NA",
+  "evidence": "기존행 r0 VARIOUS_KEY: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-891f83e4",
+  "result": "NA",
+  "evidence": "기존행 r0 CELL_CF: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-d7499626",
+  "result": "PASS",
+  "evidence": "기존행 r0 DIVISION_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-823c2009",
+  "result": "NA",
+  "evidence": "기존행 r0 PLAN_TYPE: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-4493b293",
+  "result": "PASS",
+  "evidence": "기존행 r0 CELL_GROUP 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-402aaa7c",
+  "result": "NA",
+  "evidence": "기존행 r0 PRODUCT_LEVEL1: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-d623dbba",
+  "result": "NA",
+  "evidence": "기존행 r0 PRODUCT_LEVEL2: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-ea278f38",
+  "result": "NA",
+  "evidence": "기존행 r0 PRODUCT_LEVEL3: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-fa853730",
+  "result": "NA",
+  "evidence": "기존행 r0 OPERATION_GROUP: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-7bd0a4b4",
+  "result": "PASS",
+  "evidence": "기존행 r0 MEASURE_GROUP 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-7dd05d72",
+  "result": "PASS",
+  "evidence": "기존행 r0 MEASURE_NAME 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-67fb113a",
+  "result": "PASS",
+  "evidence": "기존행 r0 DIVISION_ID 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-f60758eb",
+  "result": "NA",
+  "evidence": "기존행 r0 PLAN_TYPE: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-dc1ceef1",
+  "result": "PASS",
+  "evidence": "기존행 r0 CELL_GROUP 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-e15a5f0b",
+  "result": "NA",
+  "evidence": "기존행 r0 PRODUCT_LEVEL1: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-f432305e",
+  "result": "PASS",
+  "evidence": "기존행 r0 MEASURE_GROUP 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-ffe098bd",
+  "result": "NA",
+  "evidence": "기존행 r0 OPERATION_GROUP: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-7067bc07",
+  "result": "NA",
+  "evidence": "기존행 r0 PRODUCT_LEVEL2: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-6e2cd9dc",
+  "result": "NA",
+  "evidence": "기존행 r0 PRODUCT_LEVEL3: 현재 그리드에 없음(Division·개인화·다른 시트) — 표시 여부는 A5 행에서 판정",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-542230b1",
+  "result": "PASS",
+  "evidence": "기존행 r0 MEASURE_NAME 편집=false (AS-IS 잠금)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-5ec2ea7c",
+  "result": "판정필요",
+  "evidence": "기존행 r0 동적 <DYNAMIC:LOOP> → 대표 M_202609(13개 중)  편집=false — 기대: AS-IS 동적 컬럼 잠금 기대 없음(편집 모드 기본 해제 가정) — 잠금 문장이 없으면 편집 가능",
+  "tobe_ref": "E2E @verify",
+  "cond": "b61587bd"
+ },
+ {
+  "row_id": "V-183d2a12",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-a3f3ff3c",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-33820a78",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-40c6b883",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-a8b0808a",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-057e54ed",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-2f9d8773",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-32607420",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-b445b0b6",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-5c3a7761",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-f1e66e14",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-0571c044",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-5f595773",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-a3106df2",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-5f2fadf4",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-553aa31f",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-985313e5",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-9abcfb80",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-5852ee10",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-0979babe",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-7923d174",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-b1b18993",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-4abd40d7",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-bac07b69",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-05c21e0b",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-2005a85b",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-5003ed76",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-a4d237c5",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-7da0bc7e",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-6c94631d",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-56289039",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-81b3acc1",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-c8a182db",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-39bec34f",
+  "result": "판정필요",
+  "evidence": "Insert 버튼 비노출 — 신규행 조건 행은 이 화면에 측정 대상 없음(입력 검증·연쇄·표시 검사는 기존행으로 계속)",
+  "tobe_ref": "E2E @verify",
+  "cond": "9dd4d87c"
+ },
+ {
+  "row_id": "V-1e79fb70",
+  "result": "NA",
+  "evidence": "CELL_CF: 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-ee14a371",
+  "result": "NA",
+  "evidence": "CELL_CF: 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-b1f0b9b3",
+  "result": "NA",
+  "evidence": "CELL_CF 현재 그리드에 없음 — 표시 여부는 A5",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-61307b49",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-53da647d",
+  "result": "NA",
+  "evidence": "PLAN_TYPE 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-3c2bff86",
+  "result": "PASS",
+  "evidence": "CELL_GROUP: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-9bfe9101",
+  "result": "NA",
+  "evidence": "OPERATION_ID 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-1da8565a",
+  "result": "PASS",
+  "evidence": "MEASURE_GROUP: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-8c5d5bca",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL1 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-66fdc2cd",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL2 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-cc87a869",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL3 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-182e5fdb",
+  "result": "PASS",
+  "evidence": "MEASURE_NAME: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-4c0bb438",
+  "result": "NA",
+  "evidence": "FROM_SITE 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-668a63a8",
+  "result": "NA",
+  "evidence": "TO_SITE 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-959ce3c4",
+  "result": "NA",
+  "evidence": "INCOTERMS 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-82a79877",
+  "result": "NA",
+  "evidence": "ITEM_ID 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-33b93efd",
+  "result": "NA",
+  "evidence": "VARIOUS_KEY 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-13a7ada0",
+  "result": "NA",
+  "evidence": "CELL_CF 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-50d13451",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-5d26e8b1",
+  "result": "NA",
+  "evidence": "PLAN_TYPE 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-8badac7e",
+  "result": "PASS",
+  "evidence": "CELL_GROUP: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-832bb53c",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL1 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-62c179d7",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL2 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-19bf9018",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL3 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-d3b6b6d2",
+  "result": "NA",
+  "evidence": "OPERATION_GROUP 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-89ae4f8c",
+  "result": "PASS",
+  "evidence": "MEASURE_GROUP: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-39223b94",
+  "result": "PASS",
+  "evidence": "MEASURE_NAME: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-093fb0da",
+  "result": "PASS",
+  "evidence": "DIVISION_ID: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-9c9ff4e7",
+  "result": "NA",
+  "evidence": "PLAN_TYPE 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-90187848",
+  "result": "PASS",
+  "evidence": "CELL_GROUP: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-20e17470",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL1 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-85779748",
+  "result": "PASS",
+  "evidence": "MEASURE_GROUP: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-10e37606",
+  "result": "NA",
+  "evidence": "OPERATION_GROUP 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-5f573c17",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL2 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-1e0bfa01",
+  "result": "NA",
+  "evidence": "PRODUCT_LEVEL3 현재 그리드에 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-2fbc9c53",
+  "result": "PASS",
+  "evidence": "MEASURE_NAME: 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-6d2af84d",
+  "result": "PASS",
+  "evidence": "M_202609 (동적 <DYNAMIC:LOOP> → 대표 M_202609(13개 중)): 기존행 편집=false 표시 일치",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-e37a2e20",
+  "result": "NA",
+  "evidence": "Save 버튼 비노출 — 저장 기능 없음(조회 전용) 또는 계정 권한 없음 → 저장 검사 대상 아님",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-9763a974",
+  "result": "NA",
+  "evidence": "Save 버튼 비노출 — 저장 기능 없음(조회 전용) 또는 계정 권한 없음 → 저장 검사 대상 아님",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-885ab283",
+  "result": "NA",
+  "evidence": "Save 버튼 비노출 — 저장 기능 없음(조회 전용) 또는 계정 권한 없음 → 저장 검사 대상 아님",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-c907c363",
+  "result": "NA",
+  "evidence": "Save 버튼 비노출 — 저장 기능 없음(조회 전용) 또는 계정 권한 없음 → 저장 검사 대상 아님",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-f0dd81db",
+  "result": "PASS",
+  "evidence": "조회 클릭 → 로딩 표시 관측 4회(100ms 폴링) · 응답 1386ms · 응답 1.5초 뒤 표시 없음 · 조회 전 상시 요소 2개 제외",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-4afd2dbe",
+  "result": "PASS",
+  "evidence": "고정 컬럼 4개 [DIVISION_ID, CELL_GROUP, MEASURE_GROUP, MEASURE_NAME] ↔ META FIXED_FLAG=Y [MEASURE_NAME, MEASURE_NAME, MEASURE_NAME] → 기대 고정(마지막 FIXED 까지) [DIVISION_ID, CELL_GROUP, MEASURE_GROUP, MEASURE_NAME] · 고정 영역 폭 460px / 그리드 가시 폭 1543px(뷰포트 1920)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-79312760",
+  "result": "ERROR",
+  "evidence": "조회조건 Model / Nick Name 칸 없음 — 측정 불가",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-1ccb0af5",
+  "result": "FAIL",
+  "evidence": "Project 입력칸 Enter → 팝업 열리지 않음 — AS-IS 는 Enter 로 팝업(GAP DMF0072 F-09·DMF0074 F-07) · FE onKeyDown Enter → 모달 열기 확인",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-65f355fd",
+  "result": "ERROR",
+  "evidence": "[측정 경로 누락] Project 팝업 열림 → 팝업 조회 요청 3건 (report/SEARCH, projectByDivision/SEARCH) · 조회 Division '' 포함 0건 — 메인 조회 요청에서 Division 값을 읽지 못해 인자 전달 대조 불가(검사기: 조회 본문 키 확인)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-5e429823",
+  "result": "ERROR",
+  "evidence": "[측정 경로 누락] Project 팝업 열림 → 팝업 조회 요청 3건 (report/SEARCH, projectByDivision/SEARCH) · 조회 Division '' 포함 0건 — 메인 조회 요청에서 Division 값을 읽지 못해 인자 전달 대조 불가(검사기: 조회 본문 키 확인)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-b6350453",
+  "result": "PASS",
+  "evidence": "버튼 'Measure'(MEASURE_SELECT) 클릭 → 팝업 열림",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-c3e56225",
+  "result": "NA",
+  "evidence": "버튼 'Column'(COLUMN_SETUP) 비노출 — 권한/화면 기능 없음(노출 규칙은 K4·J2)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-a88703bb",
+  "result": "NA",
+  "evidence": "AS-IS 잠금 규칙에 권한 그룹(GROUP) 조건이 있는 컬럼 없음 — 권한별 편집 구간 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-4efa1276",
+  "result": "NA",
+  "evidence": "그리드 1개 — 상단·하단(HEAD/DETAIL) 구조 아님(TO-BE 단일 그리드 · AS-IS 시트 구성 차이는 A 규칙)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-8eb463f2",
+  "result": "NA",
+  "evidence": "그리드 1개 — 상단·하단(HEAD/DETAIL) 구조 아님(TO-BE 단일 그리드 · AS-IS 시트 구성 차이는 A 규칙)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-3bedbd86",
+  "result": "FAIL",
+  "evidence": "copy PASS: 선택 0,4,0,4 · 0행 M_202609 표시값 '0' · Ctrl+C 클립보드 '0'(일치) · 우클릭 Copy '0'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(M_202609) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(M_202609) 클릭 → 선택 행 0~1667/1668 · 열 4~4(시험 열 4) — 열 전체 선택 | hide FAIL: 헤더(M_202609) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-bb2e61e1",
+  "result": "판정필요",
+  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회 · 미포함: 팝업 그리드(이 시험은 메인 그리드만), Sort/Filter·정렬 후 동작(K1 smoke 행)",
+  "tobe_ref": "E2E @verify",
+  "cond": "e2739692"
+ },
+ {
+  "row_id": "V-e346ed5c",
+  "result": "판정필요",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(M_202609) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 · 미포함: 팝업 그리드(이 시험은 메인 그리드만)",
+  "tobe_ref": "E2E @verify",
+  "cond": "0351e52e"
+ },
+ {
+  "row_id": "V-8a17f1f6",
+  "result": "PASS",
+  "evidence": "hdr PASS: 헤더(M_202609) 클릭 → 선택 행 0~1667/1668 · 열 4~4(시험 열 4) — 열 전체 선택",
+  "tobe_ref": "E2E @verify",
+  "cond": "e96c3a35"
+ },
+ {
+  "row_id": "V-c4efd3c8",
+  "result": "판정필요",
+  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,4,0,4 · 0행 M_202609 표시값 '0' · Ctrl+C 클립보드 '0'(일치) · 우클릭 Copy '0'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(M_202609) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(M_202609) 클릭 → 선택 행 0~1667/1668 · 열 4~4(시험 열 4) — 열 전체 선택 | hide FAIL: 헤더(M_202609) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify",
+  "cond": "3b134d2e"
+ },
+ {
+  "row_id": "V-f557a78f",
+  "result": "FAIL",
+  "evidence": "hide FAIL: 헤더(M_202609) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행), 동적 Bucket 컬럼",
+  "tobe_ref": "E2E @verify",
+  "cond": "b6fc94a4"
+ },
+ {
+  "row_id": "V-75c64d57",
+  "result": "FAIL",
+  "evidence": "copy PASS: 선택 0,4,0,4 · 0행 M_202609 표시값 '0' · Ctrl+C 클립보드 '0'(일치) · 우클릭 Copy '0'(일치) | hide FAIL: 헤더(M_202609) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 · 미포함: Sort/Filter·정렬 후 동작(K1 smoke 행)",
+  "tobe_ref": "E2E @verify",
+  "cond": "567536cd"
+ },
+ {
+  "row_id": "V-96eec160",
+  "result": "판정필요",
+  "evidence": "K3 조작 실측(이 행 문구는 Ctrl·헤더·Copy·Hide·F5 외 — Sort/Filter 동적 컬럼·팝업 No.·붙여넣기 등 별도 확인): copy PASS: 선택 0,4,0,4 · 0행 M_202609 표시값 '0' · Ctrl+C 클립보드 '0'(일치) · 우클릭 Copy '0'(일치) | ctrl PASS: Ctrl+클릭 0행·2행(M_202609) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 | hdr PASS: 헤더(M_202609) 클릭 → 선택 행 0~1667/1668 · 열 4~4(시험 열 4) — 열 전체 선택 | hide FAIL: 헤더(M_202609) 우클릭 → Hide Column → 컬럼 여전히 표시 · Unhide All 복원 | f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify",
+  "cond": "0e8dbe71"
+ },
+ {
+  "row_id": "V-8cdc31c0",
+  "result": "PASS",
+  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify",
+  "cond": "90c3576b"
+ },
+ {
+  "row_id": "V-fa4c9667",
+  "result": "PASS",
+  "evidence": "f5 PASS: F5 → 조회 호출 1건(SEARCH) · 페이지 이동 0회",
+  "tobe_ref": "E2E @verify",
+  "cond": "794a7155"
+ },
+ {
+  "row_id": "V-195daf30",
+  "result": "PASS",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(M_202609) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택",
+  "tobe_ref": "E2E @verify",
+  "cond": "794a7155"
+ },
+ {
+  "row_id": "V-78fee034",
+  "result": "판정필요",
+  "evidence": "ctrl PASS: Ctrl+클릭 0행·2행(M_202609) → 선택 범위 시도1 [[2,2],[0,0]] · selectionMode=6 — 비연속 다중 선택 · 미포함: 팝업 그리드(이 시험은 메인 그리드만)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-ca7e5342",
+  "result": "PASS",
+  "evidence": "hdr PASS: 헤더(M_202609) 클릭 → 선택 행 0~1667/1668 · 열 4~4(시험 열 4) — 열 전체 선택",
+  "tobe_ref": "E2E @verify",
+  "cond": "e96c3a35"
+ },
+ {
+  "row_id": "V-d7bff765",
+  "result": "NA",
+  "evidence": "ime NA: 기존행에 직접 입력하는 문자 컬럼 없음 | auto NA: 기존행에 편집 가능한 콤보 컬럼 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-405281b7",
+  "result": "NA",
+  "evidence": "ime NA: 기존행에 직접 입력하는 문자 컬럼 없음 | auto NA: 기존행에 편집 가능한 콤보 컬럼 없음 [전체: ime NA: 기존행에 직접 입력하는 문자 컬럼 없음 | auto NA: 기존행에 편집 가능한 콤보 컬럼 없음]",
+  "tobe_ref": "E2E @verify",
+  "cond": "e5cf1e91"
+ },
+ {
+  "row_id": "V-67222710",
+  "result": "NA",
+  "evidence": "ime NA: 기존행에 직접 입력하는 문자 컬럼 없음 | auto NA: 기존행에 편집 가능한 콤보 컬럼 없음 · 미포함: 복사/붙여넣기(K3·F3 행), 붙여넣기 병합 셀(H3 행) [전체: ime NA: 기존행에 직접 입력하는 문자 컬럼 없음 | auto NA: 기존행에 편집 가능한 콤보 컬럼 없음]",
+  "tobe_ref": "E2E @verify",
+  "cond": "0e8dbe71"
+ },
+ {
+  "row_id": "V-26777304",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-7bb84a47",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-f0772a72",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-5f4419a2",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-f020fb50",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-8ab726dd",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-db81f294",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-3f3d65ee",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-f3724678",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-dfbab7c7",
+  "result": "NA",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "2ce6c429"
+ },
+ {
+  "row_id": "V-c717ba10",
+  "result": "NA",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "c79b07db"
+ },
+ {
+  "row_id": "V-da0077cc",
+  "result": "NA",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음",
+  "tobe_ref": "E2E @verify",
+  "cond": "3ee9243d"
+ },
+ {
+  "row_id": "V-79aa63a3",
+  "result": "PASS",
+  "evidence": "PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "fd9611d0"
+ },
+ {
+  "row_id": "V-9e2ba7d1",
+  "result": "PASS",
+  "evidence": "NA: (a) 저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음 | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "11699a71"
+ },
+ {
+  "row_id": "V-99600f06",
+  "result": "FAIL",
+  "evidence": "FAIL: (b-재조회) 조회 버튼 → admin/combo 0건 · AS-IS 조회 때 재바인딩 cboSearchLevel@RefreshSearchLevel | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "b13670e8"
+ },
+ {
+  "row_id": "V-9d825c01",
+  "result": "FAIL",
+  "evidence": "FAIL: (b-재조회) 조회 버튼 → admin/combo 0건 · AS-IS 조회 때 재바인딩 cboSearchLevel@RefreshSearchLevel | PASS: (b-재진입) 탭 닫고 SPA 재진입(direct) → admin/combo 8건 재조회(새 마스터 반영 경로 있음) · 최초 진입 8건",
+  "tobe_ref": "E2E @verify",
+  "cond": "726e5489"
+ },
+ {
+  "row_id": "V-3a831625",
+  "result": "PASS",
+  "evidence": "조회조건 Div: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-9ee6d484",
+  "result": "PASS",
+  "evidence": "조회조건 Div 후보 6건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-bf8e40f8",
+  "result": "PASS",
+  "evidence": "조회조건 Div 후보 6건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-d8b851bb",
+  "result": "PASS",
+  "evidence": "조회조건 From Site: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-4a2613c3",
+  "result": "PASS",
+  "evidence": "조회조건 From Site 후보 36건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-951f11a6",
+  "result": "PASS",
+  "evidence": "조회조건 From Site 후보 36건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-a449aa09",
+  "result": "PASS",
+  "evidence": "조회조건 To Site: 다중선택 기대 true/화면 true · ALL 기대 true/화면 true",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-085347e9",
+  "result": "PASS",
+  "evidence": "조회조건 To Site 후보 368건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-4962ab4b",
+  "result": "PASS",
+  "evidence": "조회조건 To Site 후보 368건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-358ffb30",
+  "result": "판정필요",
+  "evidence": "'Search Mode' 항목에 콤보 없음(텍스트/팝업형 — 가장 가까운 콤보가 다른 항목 소속 4개)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-04fa9fd9",
+  "result": "판정필요",
+  "evidence": "'Search Level' 항목에 콤보 없음(텍스트/팝업형 — 가장 가까운 콤보가 다른 항목 소속 4개)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-f8ec81f4",
+  "result": "PASS",
+  "evidence": "조회조건 Bucket: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-752c8d49",
+  "result": "PASS",
+  "evidence": "조회조건 Bucket 후보 2건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-812dee42",
+  "result": "PASS",
+  "evidence": "조회조건 Bucket 후보 2건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-9aed65bf",
+  "result": "PASS",
+  "evidence": "조회조건 Plan Date: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-fd05c147",
+  "result": "PASS",
+  "evidence": "조회조건 Plan Date 후보 16건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-976a0d97",
+  "result": "PASS",
+  "evidence": "조회조건 Plan Date 후보 16건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-89a705b9",
+  "result": "PASS",
+  "evidence": "조회조건 Plan Type: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-e5fbf3a7",
+  "result": "PASS",
+  "evidence": "조회조건 Plan Type 후보 4건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-42b35545",
+  "result": "PASS",
+  "evidence": "조회조건 Plan Type 후보 4건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-62e268b7",
+  "result": "PASS",
+  "evidence": "조회조건 Scale: 다중선택 기대 false/화면 false · ALL 기대 false/화면 false",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-f5310794",
+  "result": "PASS",
+  "evidence": "조회조건 Scale 후보 4건 · 빈 항목 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-c8686b74",
+  "result": "PASS",
+  "evidence": "조회조건 Scale 후보 4건 · 중복 0",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-086b9c45",
+  "result": "PASS",
+  "evidence": "'Cell Group' 에 'a5-c'(기본 결과 값 'A5-C' 대소문자 반전) 입력 조회 → CELL_GROUP 6행",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-b3ff86f0",
+  "result": "판정필요",
+  "evidence": "'PJT' 과 같은 이름의 결과 컬럼 없음(후보 PJT · PJT Code · PJT Name · PJT ID) — 결과 대조 불가(조건 ↔ 컬럼 대응 확인)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-7354c4c4",
+  "result": "판정필요",
+  "evidence": "'PJT' 과 같은 이름의 결과 컬럼 없음(후보 PJT · PJT Code · PJT Name · PJT ID) — 결과 대조 불가(조건 ↔ 컬럼 대응 확인)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-a9fdd06e",
+  "result": "판정필요",
+  "evidence": "조회조건 라벨 'Model/Nickname' 를 조회조건 영역에서 못 찾음 — 명칭 차이는 H5 행",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-66adafb7",
+  "result": "판정필요",
+  "evidence": "조회조건 라벨 'Model/Nickname' 를 조회조건 영역에서 못 찾음 — 명칭 차이는 H5 행",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-0539b5d7",
+  "result": "판정필요",
+  "evidence": "'Period' 과 같은 이름의 결과 컬럼 없음(후보 Period · Period Code · Period Name · Period ID) — 결과 대조 불가(조건 ↔ 컬럼 대응 확인)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-6fae920f",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "da39a3ee"
+ },
+ {
+  "row_id": "V-2157c554",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "e2739692"
+ },
+ {
+  "row_id": "V-26afa393",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "56b0f36f"
+ },
+ {
+  "row_id": "V-82f08378",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "60f2f53a"
+ },
+ {
+  "row_id": "V-58ef9442",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "6c00b5f2"
+ },
+ {
+  "row_id": "V-aa1a952a",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "467d44ac"
+ },
+ {
+  "row_id": "V-6be2314f",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b6fc94a4"
+ },
+ {
+  "row_id": "V-90451c7b",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "567536cd"
+ },
+ {
+  "row_id": "V-214e1943",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "0529442d"
+ },
+ {
+  "row_id": "V-8f2f6b8d",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "794a7155"
+ },
+ {
+  "row_id": "V-b7d3a9fc",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "081caa10"
+ },
+ {
+  "row_id": "V-9547fc11",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "e84666f0"
+ },
+ {
+  "row_id": "V-3e15cb49",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-2c792acd",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-f4c5e20c",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-d4c6d70e",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-9ce24902",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-d4d87ed6",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-cf24e745",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-01d84e26",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "377b764d"
+ },
+ {
+  "row_id": "V-9f861e24",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "56b0f36f"
+ },
+ {
+  "row_id": "V-563e0822",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "b6fc94a4"
+ },
+ {
+  "row_id": "V-05b9746b",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "0529442d"
+ },
+ {
+  "row_id": "V-3f6acb1a",
+  "result": "판정필요",
+  "evidence": "F3(CELL_GROUP): 정렬 스위치 false → true · 헤더 클릭 ×3: '없음' → '+CELL_GROUP' → '-CELL_GROUP' → '없음' · Sort 버튼: 스위치 true → false · F4: 필터 아이콘 0 → 2 · 필터 적용 시험 불가(도구): TimeoutError: locator.click: Timeout 15000ms exceeded. Call log: - waiting for locator('.wj-flexgrid (공통 요건 9·10 · Sort 3단 토글 CR-034 · Filter 적용/해제 CR-009)",
+  "tobe_ref": "E2E @verify",
+  "cond": "081caa10"
+ }
+]

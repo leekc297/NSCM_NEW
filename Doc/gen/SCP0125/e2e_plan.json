@@ -1,0 +1,628 @@
+{
+  "menuId": "SCP0125",
+  "page": "Workbench",
+  "feature": "supply",
+  "routePath": "supply/workbench",
+  "asisName": "Workbench",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "dpPlanDateDays",
+      "label": "Plan Date",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "DatePickerCalendar",
+      "comboId": "",
+      "popup": false,
+      "asis": "dpPlanDate_Days"
+    },
+    {
+      "key": "version",
+      "label": "MKT FCST Ver.",
+      "lbl": "LBL00060",
+      "kind": "single",
+      "component": "VersionField",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboVersion"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtItem"
+    },
+    {
+      "key": "planDate",
+      "label": "Plan Date",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanDate"
+    }
+  ],
+  "buttons": [],
+  "sheets": [
+    {
+      "name": "Elec. Demand",
+      "key": "ELEC_DEMAND",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CHG_QTY",
+        "CHG_RSN",
+        "CHG_TYPE",
+        "DIVISION_ID",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LINE_ID",
+        "NICK_NAME",
+        "OPERATION_ID",
+        "PLAN_START_YYYYMMDD",
+        "PLAN_TYPE",
+        "PLANT_SITE_ID",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "QTY",
+        "SEQ",
+        "YYYYMMDD"
+      ],
+      "labels": [
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "Division*",
+        "Item*",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Nick Name",
+        "Operation ID*",
+        "PLAN_START_YYYYMMDD",
+        "Plan Type*",
+        "Plant Site*",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "Origin Qty",
+        "SEQ*",
+        "Date*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "MKT FCST",
+      "key": "MKT_FCST",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CELL_PROD_SITE_ID",
+        "CHG_QTY",
+        "CHG_RSN",
+        "CHG_TYPE",
+        "CUTOFF_YYYYMMDD",
+        "DIVISION_ID",
+        "DUE_DATE",
+        "FCST_TYPE",
+        "FCST_TYPE_NAME",
+        "INCOTERMS",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "NICK_NAME",
+        "PLANT_SITE_ID",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "PROJECT_CODE",
+        "PROJECT_CODE_40",
+        "QTY",
+        "SCM_SITE_ID",
+        "VERSION_NO"
+      ],
+      "labels": [
+        "Cell Prod site",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "CUTOFF_YYYYMMDD",
+        "Division*",
+        "Due Date*",
+        "FCST Type",
+        "FCST Type*",
+        "Incoterms*",
+        "Item*",
+        "Last Update Date",
+        "Last Updated By",
+        "Nick Name",
+        "Plant site",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "Project Code",
+        "Project Code",
+        "Origin Qty",
+        "Sales site*",
+        "Version*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "STOCK",
+      "key": "STOCK",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "BEFORE_DEGAS",
+        "CHG_QTY",
+        "CHG_RSN",
+        "CHG_TYPE",
+        "CUTOFF_YYYYMMDD",
+        "DIVISION_ID",
+        "FROM_SITE_ID",
+        "INCOTERMS",
+        "INV_DATE",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LINE_ID",
+        "NICK_NAME",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "PROJECT_CODE",
+        "QTY",
+        "SCM_SITE_ID",
+        "SRCE_DIVS_CD",
+        "STOCK_TYPE",
+        "STOCK_TYPE_NAME"
+      ],
+      "labels": [
+        "Before Degas*",
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "CUTOFF_YYYYMMDD",
+        "Division*",
+        "From site",
+        "Incoterms",
+        "Date*",
+        "Item*",
+        "Last Update Date",
+        "Last Updated By",
+        "Line*",
+        "Nick Name",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "Project Code",
+        "Origin Qty",
+        "SCM site*",
+        "SRCE_DIVS_CD",
+        "Stock Type",
+        "Stock Type*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Stock(2nd OCV)",
+      "key": "STOCK_2ND_OCV",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CHG_QTY",
+        "CHG_RSN",
+        "CHG_TYPE",
+        "CUTOFF_YYYYMMDD",
+        "DIVISION_ID",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "NICK_NAME",
+        "OPERATION_ID",
+        "OPERATION_NAME",
+        "PLANT_ID",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "QTY",
+        "SECOND_OCV_DATE",
+        "SECOND_OCV_TIME",
+        "STOCK_TYPE",
+        "STOCK_TYPE_NAME"
+      ],
+      "labels": [
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "CUTOFF_YYYYMMDD",
+        "Division*",
+        "Item*",
+        "Last Update Date",
+        "Last Updated By",
+        "Nick Name",
+        "Operation ID*",
+        "Operation",
+        "Plant*",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "Origin Qty",
+        "2nd OCV Date",
+        "2nd OCV Time",
+        "Stock Type",
+        "Stock Type*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Stock(Elec. Plant)",
+      "key": "STOCK_ELEC_PLANT",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CHG_QTY",
+        "CHG_RSN",
+        "CHG_TYPE",
+        "CUTOFF_YYYYMMDD",
+        "DIVISION_ID",
+        "FROM_SITE_ID",
+        "INCOTERMS",
+        "INV_DATE",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LOCATION_CODE",
+        "NICK_NAME",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "PROJECT_CODE",
+        "QTY",
+        "SCM_SITE_ID",
+        "SRCE_DIVS_CD",
+        "STOCK_TYPE",
+        "STOCK_TYPE_NAME"
+      ],
+      "labels": [
+        "Changed Qty*",
+        "Reason*",
+        "Change Type",
+        "CUTOFF_YYYYMMDD",
+        "Division*",
+        "From site",
+        "Incoterms",
+        "Date*",
+        "Item*",
+        "Last Update Date",
+        "Last Updated By",
+        "Location*",
+        "Nick Name",
+        "PRE_CHG_QTY",
+        "PRE_CHG_RSN",
+        "Project Code",
+        "Origin Qty",
+        "SCM site*",
+        "SRCE_DIVS_CD",
+        "Stock Type",
+        "Stock Type*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Elec. Demand",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0125.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0125_GET_SEARCH_INFO",
+      "sheet": "Elec. Demand",
+      "btn": "SEARCH_INFO",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_SEARCH_INFO",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Elec. Demand",
+      "btn": "ACTION",
+      "status": "UNRESOLVED",
+      "candidate": "PKG_SCP0125.P_",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_MKT_FCST_ADJ",
+      "sheet": "MKT FCST",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_MKT_FCST_ADJ",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_STOCK_ADJ",
+      "sheet": "STOCK",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ADJ",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_STOCK_ADJ_UC",
+      "sheet": "STOCK",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ADJ_UC",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_STOCK_ELEC_PLNT",
+      "sheet": "STOCK",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ELEC_PLNT",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_STOCK_ELEC_PLNT_UC",
+      "sheet": "STOCK",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ELEC_PLNT_UC",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_MKT_FCST_ELEC_DEMAND",
+      "sheet": "MKT FCST",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_MKT_FCST_ELEC_DEMAND",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_GET_STOCK_SECOND_OCV",
+      "sheet": "STOCK",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_SECOND_OCV",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_SAVE_MKT_FCST_ADJ",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_SAVE_MKT_FCST_ADJ",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_SAVE_STOCK_ADJ",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_SAVE_STOCK_ADJ",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0125_SAVE_STOCK_SECOND_OCV",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0125.P_SCP0125_SAVE_STOCK_SECOND_OCV",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": []
+    },
+    {
+      "name": "handleClbDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCboPlanDate",
+      "target": "cboPlanDate",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleMainCell",
+      "target": "this.spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "this.spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainActiveSheet",
+      "target": "this.spdMain",
+      "event": "ActiveSheetChanged",
+      "slot": "state",
+      "calls": []
+    },
+    {
+      "name": "handleSubActiveSheetChanging",
+      "target": "this.spdMain",
+      "event": "ActiveSheetChanging",
+      "slot": "state",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainClipboardPasted",
+      "target": "this.spdMain",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainComboSelChange",
+      "target": "this.spdMain",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": []
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

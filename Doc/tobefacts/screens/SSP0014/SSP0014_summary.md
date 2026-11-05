@@ -1,20 +1,20 @@
 # SSP0014 — To-Be Fact Pack 요약
 
-- page_key: `shipping/shipment-model-pic` · feature: shipping · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 13 · 엔드포인트 호출 10 (미해결 0, 주석 속 0) · 이벤트 18 · 컴포넌트 사용 28 · 하드코딩 컬럼 1 · 메시지 15
+- page_key: `shipping/shipment-model-pic` · feature: shipping · As-is Fact Pack 있음
+- 파일 13 · 엔드포인트 호출 10 (미해결 0, 주석 속 0) · 이벤트 16 · 컴포넌트 사용 28 · 하드코딩 컬럼 1 · 메시지 15
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | component | 259 |
-| features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx | component | 217 |
+| features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | component | 244 |
+| features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx | component | 234 |
 | features/shipping/src/pages/shipment-model-pic/hooks/useShipmentModelPicValidation.ts | hook | 68 |
 | features/shipping/src/pages/shipment-model-pic/index.ts | index | 2 |
 | features/shipping/src/pages/shipment-model-pic/shipment-model-pic.constants.ts | constants | 172 |
 | features/shipping/src/pages/shipment-model-pic/shipment-model-pic.types.ts | types | 64 |
 | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.module.scss | style | 12 |
-| features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | page | 566 |
+| features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | page | 565 |
 | features/shipping/src/pages/shipment-model-pic/useShipmentModelPicStore.ts | store | 198 |
 | features/shipping/src/pages/shipment-model-pic/utils/shipmentModelPicColumns.ts | util | 50 |
 | features/shipping/src/pages/shipment-model-pic/utils/shipmentModelPicEditLock.ts | util | 16 |
@@ -24,8 +24,8 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 1 | Y | ShipmentModelPicForm.tsx:76 |
-| (useTabLookupQueries) | hook | 2 | Y | ShipmentModelPicForm.tsx:80 ShipmentModelPicGrid.tsx:76 |
+| (useTabComboQueries) | hook | 1 | Y | ShipmentModelPicForm.tsx:64 |
+| (useTabLookupQueries) | hook | 2 | Y | ShipmentModelPicForm.tsx:68 ShipmentModelPicGrid.tsx:76 |
 | /SSP0014/main/USER_CHECK/call-proc | http | 1 | Y | useShipmentModelPicValidation.ts:47 |
 | (useTabComboQueryResults) | hook | 1 | Y | ShipmentModelPic.tsx:87 |
 | SSP0014/main//call-proc | hook | 1 | Y | ShipmentModelPic.tsx:163 |
@@ -42,24 +42,22 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 102 |
-| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,set,clearFilters | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 121 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 153 |
-| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 175 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 199 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 230 |
-| InputField | onKeyDown | <arrow> handleEnterSearch | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 231 |
-| FunctionSearchIcon | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 225 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 248 |
-| InputField | onKeyDown | <arrow> handleEnterSearch | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 249 |
+| SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 90 |
+| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,set,clearFilters | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 109 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 141 |
+| CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 163 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 187 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 217 |
+| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 213 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicForm.tsx | 234 |
 | g | formatItem | formatItemHandler | addHandler | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx | 107 |
 | g | cellEditEnded | deriveName | addHandler | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx | 161 |
 | g | pastedCell | deriveName | addHandler | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx | 162 |
-| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx | 213 |
-| ShipmentModelPicForm | onSearch | hasButton('SEARCH') ? handleSearch : undefined | jsx | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | 501 |
-| ShipmentModelPicForm | onItemSearch | <arrow> setOpenItem | jsx | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | 502 |
-| ShipmentModelPicGrid | onUserCellDblClick | handleUserCellDblClick | jsx | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | 533 |
-| ShipmentModelPicGrid | onFocus | <arrow>  | jsx | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | 534 |
+| DataGrid | gotFocus | onFocus | jsx | features/shipping/src/pages/shipment-model-pic/components/ShipmentModelPicGrid.tsx | 230 |
+| ShipmentModelPicForm | onSearch | hasButton('SEARCH') ? handleSearch : undefined | jsx | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | 500 |
+| ShipmentModelPicForm | onItemSearch | <arrow> setOpenItem | jsx | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | 501 |
+| ShipmentModelPicGrid | onUserCellDblClick | handleUserCellDblClick | jsx | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | 532 |
+| ShipmentModelPicGrid | onFocus | <arrow>  | jsx | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | 533 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -90,7 +88,7 @@
 | LBL00001 | 1 |
 | LBL00027 | 1 |
 | LBL00022 | 1 |
-| LBL00639 | 1 |
+| LBL00007 | 1 |
 | LBL00669 | 1 |
 | LBL00618 | 1 |
 | LBL00339 | 1 |
@@ -104,12 +102,10 @@
 | MSG01052 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SSP0014(9), COM0010(3), SCM0002(2), DMF0020(1), SCP0005(1)
+- 화면ID: SSP0014(9), COM0010(3), SCM0002(2), SCP0005(2), SCP0013(1), DMF0020(1)
 - SP/PKG: PKG_SSP0014(7), P_SSP0014_SAVE_MODEL_PIC(3), P_SSP0014_GET_USER_ID_CHECK(2), P_USER_ID(2), P_SSP0014_GET_MODEL_PIC(2), P_ITEM_ID(2), P_CREATE_ID(1), P_DIVISION_ID(1), P_OPERATION_GROUP(1), P_FROM_SITE(1), P_VALID_YN(1), P_LANGUAGE(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
-| kind | snippet | file | line |
-|---|---|---|---|
-| code | 그대로 살아 버튼이 실제 동작한다 — no-op 로 만들려면 반드시 () => undefined 를 명시한다 | features/shipping/src/pages/shipment-model-pic/ShipmentModelPic.tsx | 476 |
+(없음)
 
 ## 10. __asis-mapping__.md 상태
 - 구현: 39

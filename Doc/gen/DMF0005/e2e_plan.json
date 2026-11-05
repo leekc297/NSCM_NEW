@@ -1,0 +1,824 @@
+{
+  "menuId": "DMF0005",
+  "page": "SalesSiteProjectModel",
+  "feature": "demand",
+  "routePath": "demand/sales-site-project-model",
+  "asisName": "SaleSite_PjtModelMapping",
+  "fields": [
+    {
+      "key": "projectInfo",
+      "label": "Project Null",
+      "lbl": "",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkProjectInfo"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model / Nickname",
+      "lbl": "LBL00618",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "projectCodes",
+      "label": "Project",
+      "lbl": "LBL00617",
+      "kind": "popup",
+      "component": "ProjectField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtProject"
+    },
+    {
+      "key": "endCustomer",
+      "label": "End Customer",
+      "lbl": "LBL00080",
+      "kind": "multi",
+      "component": "EndCustomerField",
+      "comboId": "EndCustomerByDivision",
+      "popup": false,
+      "asis": "clbEndCustomer"
+    },
+    {
+      "key": "teamIds",
+      "label": "Team",
+      "lbl": "LBL00502",
+      "kind": "multi",
+      "component": "TeamField",
+      "comboId": "TeambyDivision",
+      "popup": false,
+      "asis": "clbTeam"
+    },
+    {
+      "key": "salesSiteIds",
+      "label": "Sales Site",
+      "lbl": "LBL00011",
+      "kind": "multi",
+      "component": "SalesSiteField",
+      "comboId": "SalesSite",
+      "popup": false,
+      "asis": "clbSalesSite"
+    },
+    {
+      "key": "endCust",
+      "label": "End Customer(Report) Null",
+      "lbl": "",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkEndCust"
+    },
+    {
+      "key": "detail",
+      "label": "Detail",
+      "lbl": "LBL00316",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkDetail"
+    },
+    {
+      "key": "useYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboActive"
+    },
+    {
+      "key": "divisionIds",
+      "label": "Division",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision"
+    },
+    {
+      "key": "owners",
+      "label": "Owner",
+      "lbl": "LBL00082",
+      "kind": "popup",
+      "component": "OwnerField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtOwner"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "modelChange",
+      "label": "Model Code change",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnModelChange"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Production",
+      "key": "PRODUCTION",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "ACTIVE_FLAG",
+        "ALT_SIM_YN",
+        "APPLICATION",
+        "ATTRIBUTE1",
+        "ATTRIBUTE2",
+        "ATTRIBUTE4",
+        "ATTRIBUTE5",
+        "BPMS_EXIST",
+        "CATHODE_MATERIALS",
+        "CELL_NAME",
+        "CELL_PER_CAR",
+        "CELL_PER_MODULE",
+        "CELL_S_OP_REPORT",
+        "CELL_TYPE",
+        "CELL_TYPE_81",
+        "CELL_TYPE_82",
+        "CHANGE_REASON",
+        "CONSENSUS",
+        "CONSENSUS_ESS",
+        "CONSENSUS_MKT",
+        "CONSENSUS_SCM",
+        "CRGE_ORG_NM",
+        "CURRENCY",
+        "CUST_ENG_NM",
+        "CUST_GROUP",
+        "CUST_GROUP_DTL",
+        "CUSTOMER_MODEL",
+        "DEPT_ID",
+        "DEPT_ID_82",
+        "DEPT_ID2",
+        "DESCRIPTION",
+        "DIVISION_ID",
+        "EDI",
+        "EDI_LT",
+        "EDIT_FLAG",
+        "EDIT_FLAG2",
+        "EDIT_FLAG3",
+        "END_CUSTOMER",
+        "END_CUSTOMER40",
+        "ENERGE_WH",
+        "INVENTORY_DAY",
+        "ITEM_CLASS_NAME",
+        "ITEM_ID",
+        "ITEM_NAME",
+        "ITEM_TYPE",
+        "KWH",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LIABILITY_PERIOD",
+        "MODULE_PER_CAR",
+        "MODULE_VARIANT",
+        "NICK_NAME",
+        "OWNER",
+        "PARTIAL_PLAN_YN",
+        "PRJ_OWNR_ID",
+        "PRODUCTION_PROCESS",
+        "PROJECT_CODE",
+        "PROJECT_INFO",
+        "PROJECT_NAME",
+        "PROJECT_OWNER",
+        "PROJECT_S_OP_REPORT",
+        "PROJECT_STATUS",
+        "REPORT_GROUP1",
+        "REPORT_GROUP2",
+        "REPORT_GROUP3",
+        "REPORT_GROUP4",
+        "REPORT_GROUP5",
+        "REPORT_GROUP6",
+        "REPORT_GROUP7",
+        "REPORT_GROUP8",
+        "ROUTE",
+        "SALES_COMPANY",
+        "SALES_PLAN_ADJUST_YN",
+        "SALES_PLANT",
+        "SCM_SITE_ID",
+        "SCM_SITE_ID40",
+        "SHIPTO_CODE",
+        "SHIPTO_DESCRIPTION",
+        "SOLDTO_CODE",
+        "SOLDTO_CUSTOMER",
+        "SOLDTO_DESCRIPTION",
+        "USER_ID",
+        "USER_ID_82",
+        "VALID_YN",
+        "VMI_LT"
+      ],
+      "labels": [
+        "MDM Active",
+        "대체/유사모델",
+        "Application*",
+        "Sold-to Cust.(Report)",
+        "End Cust.(Report)",
+        "Destination",
+        "Cell Model",
+        "BPMS Exist",
+        "양극재",
+        "Cell Name",
+        "Cell/Car",
+        "Cell/Module",
+        "Cell Prod. Site (S&OP Report)",
+        "Product Group",
+        "Cell Type*",
+        "Cell Type*",
+        "CHANGE REASON",
+        "CONSENSUS",
+        "ESS Subsidiary*",
+        "MKT*",
+        "SCM*",
+        "Org.Name (Report)",
+        "Currency*",
+        "End Customer (Report)",
+        "Cust Group*",
+        "Cust Group Detail",
+        "Customer Model",
+        "Team",
+        "Team(Sales)",
+        "Team",
+        "Description",
+        "Division*",
+        "EDI Incoterms",
+        "EDI Leadtime",
+        "Edit Flag",
+        "Edit Flag",
+        "Edit Flag",
+        "End Customer",
+        "End Customer*",
+        "Energy(Wh)",
+        "INVENTORY DAY",
+        "Model Type",
+        "Model*",
+        "Model Name",
+        "Item Type",
+        "KWh/Cell*",
+        "Update Date",
+        "Update By",
+        "Liablity(Week)",
+        "Module/Car",
+        "Module Variant",
+        "Nick Name",
+        "Owner Name",
+        "Partial Plan YN",
+        "Owner(PM)*",
+        "Production Process*",
+        "Project Code*",
+        "Project",
+        "Project",
+        "Project Owner",
+        "Project(S&OP Report)",
+        "Project Status",
+        "Application Gr.",
+        "Cust.(Report)",
+        "Product Gr.(Report)",
+        "Product Details.(Report)",
+        "Cyl Gr.(Report)",
+        "Cell Model Info",
+        "비고1",
+        "비고2",
+        "Channel",
+        "Sales Company",
+        "Sales Sync*",
+        "Sales Plant",
+        "Sales Site*",
+        "Sales Site*",
+        "Rep Ship-To",
+        "Rep Ship-To",
+        "Sold-To",
+        "Sold-To Customer",
+        "Sold-To",
+        "Owner*",
+        "Owner(Sales)*",
+        "Active*",
+        "VMI_LT"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Purchase",
+      "key": "PURCHASE",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "ATTRIBUTE1",
+        "BPMS_EXIST",
+        "CELL_PER_CAR",
+        "CELL_PER_MODULE",
+        "CELL_TYPE_81",
+        "CELL_TYPE_82",
+        "CURRENCY",
+        "CUSTOMER_MODEL",
+        "DIVISION_ID",
+        "EDI",
+        "EDI_LT",
+        "EDIT_FLAG",
+        "ITEM_CLASS_NAME",
+        "ITEM_ID",
+        "ITEM_TYPE",
+        "KWH",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "LIABILITY_PERIOD",
+        "MODULE_PER_CAR",
+        "MODULE_VARIANT",
+        "NICK_NAME",
+        "OWNER",
+        "PROJECT_CODE",
+        "PROJECT_NAME",
+        "PROJECT_STATUS",
+        "SALES_COMPANY",
+        "SALES_PLAN_ADJUST_YN",
+        "SALES_PLANT",
+        "SCM_SITE_ID",
+        "USER_ID",
+        "VALID_YN"
+      ],
+      "labels": [
+        "양극재",
+        "BPMS Exist",
+        "Cell/Car",
+        "Cell/Module",
+        "Cell Type*",
+        "Cell Type*",
+        "Currency",
+        "Customer Model",
+        "Division",
+        "EDI Incoterms",
+        "EDI Leadtime",
+        "Edit Flag",
+        "Model Type",
+        "Model",
+        "Item Type",
+        "KWh/Cell*",
+        "Update Date",
+        "Update By",
+        "Liablity(Week)",
+        "Module/Car",
+        "Module variant",
+        "Nick Name",
+        "Owner Name",
+        "Project Code",
+        "Project",
+        "Project Status",
+        "Sales Company*",
+        "Sales Sync",
+        "Sales Plant*",
+        "Sales Site",
+        "Owner*",
+        "Active"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Sales Site Project Model Popup",
+      "key": "SALES_SITE_PROJECT_MODEL_POPUP",
+      "popup": true,
+      "rule": "코드 하드코딩 전용(메타 없음)",
+      "columns": [
+        "ITEM_ID_AFTER",
+        "ITEM_ID_BEFORE"
+      ],
+      "labels": [
+        "AFTER",
+        "BEFORE"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Production",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_DMF0005.P_",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Production",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_DMF0005.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCM0001_GET_LOOKUP_VALUES",
+      "sheet": "Production",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_SCM0001_GET_LOOKUP_VALUES",
+      "entries": [
+        "event:this.Load",
+        "button:InsertButton"
+      ]
+    },
+    {
+      "sp": "DMF0005_GET_SALES_SITE_MODEL_PRODUCTION",
+      "sheet": "Production",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_DMF0005_GET_SALES_SITE_MODEL_PRODUCTION",
+      "entries": [
+        "event:this.btnModelChange.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0005_GET_SALES_SITE_MODEL_PURCHASE",
+      "sheet": "Purchase",
+      "btn": "SALES_SITE_MODEL_PURCHASE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_DMF0005_GET_SALES_SITE_MODEL_PURCHASE",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION",
+      "sheet": "Production",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "UP_FX_GETCOMMONDATALIST_DM",
+      "sheet": "(combo)",
+      "btn": "(콤보ID 등록)",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_UP_FX_GETCOMMONDATALIST_DM",
+      "entries": [
+        "event:this.spdMain.ClipboardPasted",
+        "event:this.spdMain.CellClick",
+        "event:this.spdMain.ComboSelChange",
+        "event:this.spdSub.ClipboardPasted",
+        "event:this.spdSub.ComboSelChange",
+        "button:InsertButton"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_SITE_INFO_BY_DIVISION",
+      "sheet": "Sales Site Project Model Popup",
+      "btn": "SITE_INFO_BY_DIVISION",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_SCM0001_GET_SITE_INFO_BY_DIVISION",
+      "entries": [
+        "event:this.spdMain.ComboSelChange"
+      ]
+    },
+    {
+      "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_DMF0000_GET_COMMON_SPREAD_TITLE",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnModelChange.Click",
+        "event:this.Load",
+        "event:this.clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "UP_FX_GetComboDataList",
+      "sheet": "Production",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_UP_FX_GETCOMBODATALIST",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0005_SAVE_MODEL_CHANGE_POPUP",
+      "sheet": "Production",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_DMF0005_SAVE_MODEL_CHANGE_POPUP",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": true,
+  "handlers": [
+    {
+      "name": "handleMainClipboardPasted",
+      "target": "this.spdMain",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": [
+        "DM.UP_FX_GetCommonDataList_DM",
+        "biz:CommonData.CommonDataList [code=SalesCompany]",
+        "biz:CommonData.CommonDataList [code=SalesPlant]"
+      ]
+    },
+    {
+      "name": "handleMainLeaveCell",
+      "target": "this.spdMain",
+      "event": "LeaveCell",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMainCell",
+      "target": "this.spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": [
+        "DM.UP_FX_GetCommonDataList_DM",
+        "biz:CommonData.CommonDataList [code=CompanySalesSite]",
+        "biz:CommonData.CommonDataList [code=SalesCompany]",
+        "biz:CommonData.CommonDataList [code=SalesPlant]"
+      ]
+    },
+    {
+      "name": "handleMain",
+      "target": "this.spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": [
+        "DM.DMF0005_GET_SALES_SITE_MODEL_PURCHASE",
+        "DM.DMF0000_GET_COMMON_SPREAD_TITLE"
+      ]
+    },
+    {
+      "name": "handleMainComboSelChange",
+      "target": "this.spdMain",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": [
+        "DM.UP_FX_GetCommonDataList_DM",
+        "SCM.SCM0001_GET_SITE_INFO_BY_DIVISION",
+        "biz:CommonData.CommonDataList [code=SalesCompany]",
+        "biz:CommonData.CommonDataList [code=SalesPlant]"
+      ]
+    },
+    {
+      "name": "handleMainTopChange",
+      "target": "this.spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleProject",
+      "target": "this.btnProject",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handletxtProjectKeyDown",
+      "target": "this.txtProject",
+      "event": "KeyDown",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleEndCustomer",
+      "target": "this.clbEndCustomer",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleClbTeam",
+      "target": "this.clbTeam",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleDetail",
+      "target": "this.chkEndCust",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleDetail",
+      "target": "this.chkDetail",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleOwner",
+      "target": "this.btnOwner",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleModelChange",
+      "target": "this.btnModelChange",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "DM.DMF0005_GET_SALES_SITE_MODEL_PRODUCTION",
+        "DM.DMF0000_GET_COMMON_SPREAD_TITLE"
+      ]
+    },
+    {
+      "name": "handleSubClipboardPasted",
+      "target": "this.spdSub",
+      "event": "ClipboardPasted",
+      "slot": "grid-event",
+      "calls": [
+        "DM.UP_FX_GetCommonDataList_DM",
+        "biz:CommonData.CommonDataList [code=SalesCompany]",
+        "biz:CommonData.CommonDataList [code=SalesPlant]"
+      ]
+    },
+    {
+      "name": "handleSubCell",
+      "target": "this.spdSub",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=PlantByDivisionCompany]",
+        "biz:CommonData.CommonDataList [code=CompanySalesSite]",
+        "biz:CommonData.CommonDataList [code=SalesCompany]",
+        "biz:CommonData.CommonDataList [code=SalesPlant]"
+      ]
+    },
+    {
+      "name": "handleSub",
+      "target": "this.spdSub",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSubComboSelChange",
+      "target": "this.spdSub",
+      "event": "ComboSelChange",
+      "slot": "grid-event",
+      "calls": [
+        "DM.UP_FX_GetCommonDataList_DM",
+        "biz:CommonData.CommonDataList [code=SalesCompany]",
+        "biz:CommonData.CommonDataList [code=SalesPlant]"
+      ]
+    },
+    {
+      "name": "handleSubTopChange",
+      "target": "this.spdSub",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCM.SCM0001_GET_LOOKUP_VALUES",
+        "biz:CommonData.CommonDataList [code=Auth_Dept]",
+        "DM.DMF0000_GET_COMMON_SPREAD_TITLE",
+        "biz:CommonData.CommonDataList [code=ItemType]",
+        "DM.UP_FX_GetComboDataList"
+      ]
+    },
+    {
+      "name": "handleMain",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=CompanySalesSite]",
+        "biz:CommonData.CommonDataList [code=SalesCompany]",
+        "biz:CommonData.CommonDataList [code=SalesPlant]"
+      ]
+    },
+    {
+      "name": "handleshtMainDataModel",
+      "target": "dsdm",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleshtSubDataModel",
+      "target": "dsdm2",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleDivision",
+      "target": "this.clbDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "DM.DMF0000_GET_COMMON_SPREAD_TITLE"
+      ]
+    },
+    {
+      "name": "handleSub",
+      "target": "dsdm2",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=CompanySalesSite]",
+        "biz:CommonData.CommonDataList [code=SalesCompany]",
+        "biz:CommonData.CommonDataList [code=SalesPlant]"
+      ]
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

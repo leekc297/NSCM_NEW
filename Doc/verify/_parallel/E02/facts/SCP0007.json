@@ -1,0 +1,279 @@
+{
+ "screen": "SCP0007",
+ "calls": [
+  {
+   "cls": "SCP0007_DistributionRoutePopup",
+   "method": "spdMain_CellDoubleClick",
+   "asis_ref": "SCP0007_BOD.cs:1052",
+   "trigger": {
+    "kind": "CELL",
+    "control": "spdMain",
+    "column": "ROUTE_ID",
+    "guard": "if (!siMain.IsLock(siMain.SheetName)) ▸ if (e.Column == siMain.GetColumnIndex(DefColumns.ROUTE_ID))"
+   },
+   "multi": "false",
+   "div_arg": "",
+   "period_args": [
+    "sFromCountry",
+    "sFromCity",
+    "sToCountry",
+    "sToCity"
+   ],
+   "args": [
+    {
+     "param": "_FromCountry",
+     "kind": "VAR",
+     "arg": "sFromCountry"
+    },
+    {
+     "param": "_FromCity",
+     "kind": "VAR",
+     "arg": "sFromCity"
+    },
+    {
+     "param": "_ToCountry",
+     "kind": "VAR",
+     "arg": "sToCountry"
+    },
+    {
+     "param": "_ToCity",
+     "kind": "VAR",
+     "arg": "sToCity"
+    },
+    {
+     "param": "_TransMode",
+     "kind": "VAR",
+     "arg": "sTransMode"
+    },
+    {
+     "param": "_bMultiSelect",
+     "kind": "LITERAL",
+     "arg": "false"
+    },
+    {
+     "param": "_isConditionReadOnly",
+     "kind": "LITERAL",
+     "arg": "true"
+    }
+   ],
+   "results": [],
+   "after": [],
+   "back": [
+    {
+     "ref": "SCP0007_BOD.cs:1054",
+     "target": "popRoute.StartPosition",
+     "value": "System.Windows.Forms.FormStartPosition.CenterParent"
+    },
+    {
+     "ref": "SCP0007_BOD.cs:1096",
+     "target": "spdMain.ShowCell",
+     "value": "(0, 0, e.Row, e.Column, FarPoint.Win.Spread.VerticalPosition.Center, FarPoint.Wi"
+    }
+   ]
+  }
+ ],
+ "classes": {
+  "SCP0007_DistributionRoutePopup": {
+   "cls": "SCP0007_DistributionRoutePopup",
+   "in_pack": true,
+   "file": "06.UIL/GSCM.SCM.Popup.UIL/SCP0007_DistributionRoutePopup.cs",
+   "title": "Distribution Route Popup",
+   "conds": [
+    {
+     "name": "txtToCity",
+     "type": "UsrMultiLineEditor",
+     "label": " To City",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0007_DistributionRoutePopup.Designer.cs:41",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (isConditionReadOnly)",
+       "ref": "SCP0007_DistributionRoutePopup.cs:219",
+       "method": "InitControls"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "txtToCountry",
+     "type": "UsrMultiLineEditor",
+     "label": " To Country",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0007_DistributionRoutePopup.Designer.cs:43",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (isConditionReadOnly)",
+       "ref": "SCP0007_DistributionRoutePopup.cs:218",
+       "method": "InitControls"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "txtFromCity",
+     "type": "UsrMultiLineEditor",
+     "label": "From City",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0007_DistributionRoutePopup.Designer.cs:44",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (isConditionReadOnly)",
+       "ref": "SCP0007_DistributionRoutePopup.cs:214",
+       "method": "InitControls"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "txtFromCountry",
+     "type": "UsrMultiLineEditor",
+     "label": "From Country",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0007_DistributionRoutePopup.Designer.cs:45",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (isConditionReadOnly)",
+       "ref": "SCP0007_DistributionRoutePopup.cs:215",
+       "method": "InitControls"
+      }
+     ],
+     "hidden_code": null
+    },
+    {
+     "name": "clbTransMode",
+     "type": "UsrCheckedList",
+     "label": "Trans Mode",
+     "visible_designer": true,
+     "disabled_designer": true,
+     "ref": "SCP0007_DistributionRoutePopup.Designer.cs:47",
+     "disabled_code": null,
+     "disabled_guarded": [
+      {
+       "prop": "Enabled",
+       "value": "false",
+       "guard": "if (isConditionReadOnly)",
+       "ref": "SCP0007_DistributionRoutePopup.cs:222",
+       "method": "InitControls"
+      }
+     ],
+     "hidden_code": null
+    }
+   ],
+   "buttons": [
+    {
+     "name": "btnToSrch",
+     "text": "",
+     "visible": true
+    },
+    {
+     "name": "btnFromSrch",
+     "text": "",
+     "visible": true
+    },
+    {
+     "name": "btnButtonList",
+     "text": "",
+     "visible": true
+    }
+   ],
+   "sps": [
+    {
+     "sp": "SCP0005_GET_DISTRIBUTION_ROUTE",
+     "src": "Doc/asisfacts/db/modules/dbo.SCP0005_GET_DISTRIBUTION_ROUTE.sql",
+     "order_known": true,
+     "order_keys": "from_country,from_city, TO_COUNTRY, TO_CITY, PRIORITY",
+     "order_line": "108",
+     "like": true,
+     "upper": true,
+     "comma": true,
+     "params": [
+      "p_from_country",
+      "p_from_city",
+      "p_to_country",
+      "p_to_city",
+      "p_transport_mode",
+      "p_valid_yn"
+     ],
+     "method": "FindDataMain",
+     "ref": "SCP0007_DistributionRoutePopup.cs:432",
+     "save": false
+    }
+   ],
+   "merge": [],
+   "lock": [
+    {
+     "ref": "SCP0007_DistributionRoutePopup.cs:454",
+     "method": "FindDataMain",
+     "raw": "siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)",
+     "guard": ""
+    }
+   ],
+   "color": [],
+   "dyn_cols": [],
+   "multi_check": [],
+   "selection": [],
+   "filter": [],
+   "sort": [],
+   "close_after": [
+    {
+     "ref": "SCP0007_DistributionRoutePopup.cs:365",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "switch (buttonItem.UserType) { case ButtonListType.Find: FindDataMain(); break; case ButtonListType.OK: SetRoute(); if (!isEmptyValue) this.Close(); else isEmpt",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0007_DistributionRoutePopup.cs:372",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "if (!isEmptyValue) this.Close(); else isEmptyValue = false;",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.OK:"
+    },
+    {
+     "ref": "SCP0007_DistributionRoutePopup.cs:372",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.OK: ▸ if (!isEmptyValue)"
+    },
+    {
+     "ref": "SCP0007_DistributionRoutePopup.cs:376",
+     "method": "btnButtonList_UsrButtonList_Click_Detected",
+     "raw": "this.Close()",
+     "guard": "switch (buttonItem.UserType) case ButtonListType.Close:"
+    },
+    {
+     "ref": "SCP0007_DistributionRoutePopup.cs:530",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "if (!isEmptyValue) this.Close(); else isEmptyValue = false;",
+     "guard": ""
+    },
+    {
+     "ref": "SCP0007_DistributionRoutePopup.cs:530",
+     "method": "spdMain_CellDoubleClick",
+     "raw": "this.Close()",
+     "guard": "if (!isEmptyValue)"
+    }
+   ],
+   "messages": [
+    "MessageHelper.GMessageBox(\"MSG00222\", null)",
+    "MessageHelper.GMessageBox(\"MSG00222\", null)"
+   ],
+   "period_use": [],
+   "from": "factpack"
+  }
+ }
+}

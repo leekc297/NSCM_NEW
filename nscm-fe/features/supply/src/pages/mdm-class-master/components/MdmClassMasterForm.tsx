@@ -58,7 +58,6 @@ export const MdmClassMasterForm = ({ onSearch }: Props) => {
                   autoFocus
                   value={sc.classId}
                   onChange={e => set({ classId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -75,7 +74,6 @@ export const MdmClassMasterForm = ({ onSearch }: Props) => {
                   fullWidth
                   value={sc.className}
                   onChange={e => set({ className: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

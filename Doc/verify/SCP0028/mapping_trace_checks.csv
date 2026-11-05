@@ -1,62 +1,62 @@
 ﻿row_id,source,check,instance,result
-cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,X-LOC,X-LOC|ROW:cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FAIL
-cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,G4,G4|COND:cboDivision,NOT_RUN
+cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,X-LOC,X-LOC|ROW:cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,NA
+cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,G4,G4|COND:cboDivision,FAIL
 cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,SC1,SC1|SCREEN,NOT_RUN
-cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,G1,G1|COND:cboDivision,NOT_RUN
+cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,G1,G1|COND:cboDivision,PASS
 cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,G6,G6|COND:cboDivision,NOT_RUN
 cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,A1,A1|ROW:cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,REVIEW
 cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,J2,J2|SCREEN,NOT_RUN
-cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,B4,B4|COND:cboDivision,NOPATH
-cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,B3,B3|COND:cboDivision,TODO
-"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,X-LOC,"X-LOC|ROW:cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FAIL
-"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,G4,G4|COND:cboOperationGroup,NOT_RUN
+cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,B4,B4|COND:cboDivision,NOT_RUN
+cboDivision `Data_SCP.Common(Type.Division)` + GetDivisionWi,FE 대조표,B3,B3|COND:cboDivision,NOT_RUN
+"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,X-LOC,"X-LOC|ROW:cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",NA
+"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,G4,G4|COND:cboOperationGroup,FAIL
 "cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,SC1,SC1|SCREEN,NOT_RUN
-"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,G1,G1|COND:cboOperationGroup,NOT_RUN
+"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,G1,G1|COND:cboOperationGroup,PASS
 "cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,G6,G6|COND:cboOperationGroup,NOT_RUN
 "cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,A1,"A1|ROW:cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",REVIEW
 "cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,B4,B4|COND:cboOperationGroup,NOPATH
-"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,B3,B3|COND:cboOperationGroup,TODO
-"cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",FE 대조표,X-LOC,"X-LOC|ROW:cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",FAIL
-"cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",FE 대조표,G4,G4|COND:cboValid,NOT_RUN
+"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,B4,B4|COND:cboOperationGroup,NOT_RUN
+"cboOperationGroup `LookupCommon(""OPERATION_GROUP"")` (cs:137)",FE 대조표,B3,B3|COND:cboOperationGroup,NOT_RUN
+"cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",FE 대조표,X-LOC,"X-LOC|ROW:cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",NA
+"cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",FE 대조표,G4,G4|COND:cboValid,FAIL
 "cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",FE 대조표,SC1,SC1|SCREEN,NOT_RUN
-"cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",FE 대조표,G1,G1|COND:cboValid,NOT_RUN
+"cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",FE 대조표,G1,G1|COND:cboValid,PASS
 "cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",FE 대조표,G6,G6|COND:cboValid,NOT_RUN
 "cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",FE 대조표,A1,"A1|ROW:cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",REVIEW
 "cboValid `DataBind(Type.YesOrNo,true)` (cs:135)",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,X-LOC,"X-LOC|ROW:clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FAIL
-"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,G4,G4|COND:clbTransMode,NOT_RUN
+"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,X-LOC,"X-LOC|ROW:clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",NA
+"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,G4,G4|COND:clbTransMode,FAIL
 "clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,SC1,SC1|SCREEN,NOT_RUN
-"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,G1,G1|COND:clbTransMode,NOT_RUN
+"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,G1,G1|COND:clbTransMode,PASS
 "clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,G6,G6|COND:clbTransMode,NOT_RUN
 "clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,A1,"A1|ROW:clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",REVIEW
 "clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,B4,B4|COND:clbTransMode,NOPATH
-"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,B3,B3|COND:clbTransMode,TODO
-clbFromSite `FromSiteByDivision` (cs:166),FE 대조표,X-LOC,X-LOC|ROW:clbFromSite `FromSiteByDivision` (cs:166),FAIL
-clbFromSite `FromSiteByDivision` (cs:166),FE 대조표,G4,G4|COND:clbFromSite,NOT_RUN
+"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,B4,B4|COND:clbTransMode,NOT_RUN
+"clbTransMode `LookupCommon(""TRANSPORT_MODE_CODE"")` (cs:44,14",FE 대조표,B3,B3|COND:clbTransMode,NOT_RUN
+clbFromSite `FromSiteByDivision` (cs:166),FE 대조표,X-LOC,X-LOC|ROW:clbFromSite `FromSiteByDivision` (cs:166),NA
+clbFromSite `FromSiteByDivision` (cs:166),FE 대조표,G4,G4|COND:clbFromSite,FAIL
 clbFromSite `FromSiteByDivision` (cs:166),FE 대조표,SC1,SC1|SCREEN,NOT_RUN
-clbFromSite `FromSiteByDivision` (cs:166),FE 대조표,G1,G1|COND:clbFromSite,NOT_RUN
+clbFromSite `FromSiteByDivision` (cs:166),FE 대조표,G1,G1|COND:clbFromSite,PASS
 clbFromSite `FromSiteByDivision` (cs:166),FE 대조표,G6,G6|COND:clbFromSite,NOT_RUN
 clbFromSite `FromSiteByDivision` (cs:166),FE 대조표,A1,A1|ROW:clbFromSite `FromSiteByDivision` (cs:166),REVIEW
 clbFromSite `FromSiteByDivision` (cs:166),FE 대조표,J2,J2|SCREEN,NOT_RUN
-clbToSite `ToSiteByDivision` (cs:169),FE 대조표,X-LOC,X-LOC|ROW:clbToSite `ToSiteByDivision` (cs:169),FAIL
-clbToSite `ToSiteByDivision` (cs:169),FE 대조표,G4,G4|COND:clbToSite,NOT_RUN
+clbToSite `ToSiteByDivision` (cs:169),FE 대조표,X-LOC,X-LOC|ROW:clbToSite `ToSiteByDivision` (cs:169),NA
+clbToSite `ToSiteByDivision` (cs:169),FE 대조표,G4,G4|COND:clbToSite,FAIL
 clbToSite `ToSiteByDivision` (cs:169),FE 대조표,SC1,SC1|SCREEN,NOT_RUN
-clbToSite `ToSiteByDivision` (cs:169),FE 대조표,G1,G1|COND:clbToSite,NOT_RUN
+clbToSite `ToSiteByDivision` (cs:169),FE 대조표,G1,G1|COND:clbToSite,PASS
 clbToSite `ToSiteByDivision` (cs:169),FE 대조표,G6,G6|COND:clbToSite,NOT_RUN
 clbToSite `ToSiteByDivision` (cs:169),FE 대조표,A1,A1|ROW:clbToSite `ToSiteByDivision` (cs:169),REVIEW
 clbToSite `ToSiteByDivision` (cs:169),FE 대조표,J2,J2|SCREEN,NOT_RUN
-"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,X-LOC,"X-LOC|ROW:txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FAIL
-"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,G4,G4|COND:txtItemId,NOT_RUN
+"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,X-LOC,"X-LOC|ROW:txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",NA
+"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,G4,G4|COND:txtItemId,FAIL
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,G4,G4|BTN:btnItemId,NOPATH
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,SC1,SC1|SCREEN,NOT_RUN
-"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,G1,G1|COND:txtItemId,NOT_RUN
+"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,G1,G1|COND:txtItemId,ERROR
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,G6,G6|COND:txtItemId,NOT_RUN
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,H6,H6|COND:txtItemId,NOT_RUN
-"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,H6,H6|BTN:btnItemId,NOPATH
-"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,G5,G5|COND:txtItemId,NOPATH
-"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,G5,G5|BTN:btnItemId,NOPATH
+"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,H6,H6|BTN:btnItemId,NOT_RUN
+"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,G5,G5|COND:txtItemId,NOT_RUN
+"txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,G5,G5|BTN:btnItemId,NOT_RUN
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,M4,M4|COND:txtItemId,NOT_RUN
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,M4,M4|BTN:btnItemId,NOT_RUN
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,A1,A1|SP:P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,REVIEW
@@ -68,46 +68,46 @@ clbToSite `ToSiteByDivision` (cs:169),FE 대조표,J2,J2|SCREEN,NOT_RUN
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,DB-SYN,DB-SYN|SP:P_SCM0002_GET_ITEM_BY_DIVISION_POPUP,PASS
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,DB-SYN,DB-SYN|SP:P_SCM0002_GET_MATERIAL_BY_DIVISION,PASS
 "txtItemId + btnItemId `SCM0002_ItembyDivisionPopup` (cs:245,",FE 대조표,J2,J2|SCREEN,NOT_RUN
-`SetChangedControl` cascade (cs:158~171),FE 대조표,X-LOC,X-LOC|ROW:`SetChangedControl` cascade (cs:158~171),FAIL
-`SetChangedControl` cascade (cs:158~171),FE 대조표,G4,G4|ROW:`SetChangedControl` cascade (cs:158~171),REVIEW
+`SetChangedControl` cascade (cs:158~171),FE 대조표,X-LOC,X-LOC|ROW:`SetChangedControl` cascade (cs:158~171),NA
+`SetChangedControl` cascade (cs:158~171),FE 대조표,G4,G4|ROW:`SetChangedControl` cascade (cs:158~171),FAIL
 `SetChangedControl` cascade (cs:158~171),FE 대조표,SC1,SC1|SCREEN,NOT_RUN
-`SetChangedControl` cascade (cs:158~171),FE 대조표,G1,G1|ROW:`SetChangedControl` cascade (cs:158~171),REVIEW
-`SetChangedControl` cascade (cs:158~171),FE 대조표,G6,G6|ROW:`SetChangedControl` cascade (cs:158~171),REVIEW
+`SetChangedControl` cascade (cs:158~171),FE 대조표,G1,G1|ROW:`SetChangedControl` cascade (cs:158~171),ERROR
+`SetChangedControl` cascade (cs:158~171),FE 대조표,G6,G6|ROW:`SetChangedControl` cascade (cs:158~171),ERROR
 `SetChangedControl` cascade (cs:158~171),FE 대조표,A1,A1|ROW:`SetChangedControl` cascade (cs:158~171),REVIEW
 `SetChangedControl` cascade (cs:158~171),FE 대조표,J2,J2|SCREEN,NOT_RUN
-Query(ds) FindData (cs:368),FE 대조표,X-LOC,X-LOC|ROW:Query(ds) FindData (cs:368),FAIL
-Query(ds) FindData (cs:368),FE 대조표,A5,A5|ROW:Query(ds) FindData (cs:368),REVIEW
-Query(ds) FindData (cs:368),FE 대조표,H5,H5|ROW:Query(ds) FindData (cs:368),REVIEW
-Query(ds) FindData (cs:368),FE 대조표,H2,H2|ROW:Query(ds) FindData (cs:368),REVIEW
-Query(ds) FindData (cs:368),FE 대조표,H3,H3|ROW:Query(ds) FindData (cs:368),REVIEW
+Query(ds) FindData (cs:368),FE 대조표,X-LOC,X-LOC|ROW:Query(ds) FindData (cs:368),NA
+Query(ds) FindData (cs:368),FE 대조표,A5,A5|ROW:Query(ds) FindData (cs:368),PASS
+Query(ds) FindData (cs:368),FE 대조표,H5,H5|ROW:Query(ds) FindData (cs:368),ERROR
+Query(ds) FindData (cs:368),FE 대조표,H2,H2|ROW:Query(ds) FindData (cs:368),ERROR
+Query(ds) FindData (cs:368),FE 대조표,H3,H3|ROW:Query(ds) FindData (cs:368),ERROR
 Query(ds) FindData (cs:368),FE 대조표,A1,A1|ROW:Query(ds) FindData (cs:368),REVIEW
-Query(ds) FindData (cs:368),FE 대조표,A6,A6|ROW:Query(ds) FindData (cs:368),REVIEW
-Query(ds) FindData (cs:368),FE 대조표,F4,F4|ROW:Query(ds) FindData (cs:368),REVIEW
-Query(ds) FindData (cs:368),FE 대조표,DB-SYN,DB-SYN|ROW:Query(ds) FindData (cs:368),REVIEW
-Query(ds) FindData (cs:368),FE 대조표,D1,D1|ROW:Query(ds) FindData (cs:368),REVIEW
-Query(ds) FindData (cs:368),FE 대조표,D3,D3|ROW:Query(ds) FindData (cs:368),REVIEW
+Query(ds) FindData (cs:368),FE 대조표,A6,A6|ROW:Query(ds) FindData (cs:368),ERROR
+Query(ds) FindData (cs:368),FE 대조표,F4,F4|ROW:Query(ds) FindData (cs:368),ERROR
+Query(ds) FindData (cs:368),FE 대조표,DB-SYN,DB-SYN|ROW:Query(ds) FindData (cs:368),NA
+Query(ds) FindData (cs:368),FE 대조표,D1,D1|ROW:Query(ds) FindData (cs:368),ERROR
+Query(ds) FindData (cs:368),FE 대조표,D3,D3|ROW:Query(ds) FindData (cs:368),ERROR
 Query(ds) FindData (cs:368),FE 대조표,J2,J2|SCREEN,NOT_RUN
-"SwitchLock (cs:232, gridSignals#4)",FE 대조표,X-LOC,"X-LOC|ROW:SwitchLock (cs:232, gridSignals#4)",FAIL
-"SwitchLock (cs:232, gridSignals#4)",FE 대조표,A5,"A5|ROW:SwitchLock (cs:232, gridSignals#4)",REVIEW
-"SwitchLock (cs:232, gridSignals#4)",FE 대조표,H5,"H5|ROW:SwitchLock (cs:232, gridSignals#4)",REVIEW
-"SwitchLock (cs:232, gridSignals#4)",FE 대조표,H2,"H2|ROW:SwitchLock (cs:232, gridSignals#4)",REVIEW
-"SwitchLock (cs:232, gridSignals#4)",FE 대조표,D1,"D1|ROW:SwitchLock (cs:232, gridSignals#4)",REVIEW
-"SwitchLock (cs:232, gridSignals#4)",FE 대조표,D3,"D3|ROW:SwitchLock (cs:232, gridSignals#4)",REVIEW
-"SwitchLock (cs:232, gridSignals#4)",FE 대조표,H3,"H3|ROW:SwitchLock (cs:232, gridSignals#4)",REVIEW
+"SwitchLock (cs:232, gridSignals#4)",FE 대조표,X-LOC,"X-LOC|ROW:SwitchLock (cs:232, gridSignals#4)",NA
+"SwitchLock (cs:232, gridSignals#4)",FE 대조표,A5,"A5|ROW:SwitchLock (cs:232, gridSignals#4)",PASS
+"SwitchLock (cs:232, gridSignals#4)",FE 대조표,H5,"H5|ROW:SwitchLock (cs:232, gridSignals#4)",ERROR
+"SwitchLock (cs:232, gridSignals#4)",FE 대조표,H2,"H2|ROW:SwitchLock (cs:232, gridSignals#4)",ERROR
+"SwitchLock (cs:232, gridSignals#4)",FE 대조표,D1,"D1|ROW:SwitchLock (cs:232, gridSignals#4)",ERROR
+"SwitchLock (cs:232, gridSignals#4)",FE 대조표,D3,"D3|ROW:SwitchLock (cs:232, gridSignals#4)",ERROR
+"SwitchLock (cs:232, gridSignals#4)",FE 대조표,H3,"H3|ROW:SwitchLock (cs:232, gridSignals#4)",ERROR
 "SwitchLock (cs:232, gridSignals#4)",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,X-LOC,"X-LOC|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FAIL
-"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,A5,"A5|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",REVIEW
-"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,H5,"H5|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",REVIEW
-"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,H2,"H2|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",REVIEW
-"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,D1,"D1|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",REVIEW
-"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,D3,"D3|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",REVIEW
-"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,H3,"H3|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",REVIEW
+"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,X-LOC,"X-LOC|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",NA
+"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,A5,"A5|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",PASS
+"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,H5,"H5|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",ERROR
+"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,H2,"H2|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",ERROR
+"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,D1,"D1|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",ERROR
+"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,D3,"D3|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",ERROR
+"LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,H3,"H3|ROW:LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",ERROR
 "LockColumn(DIV..TRANS,234)/(audit,235)/(0..max,369)",FE 대조표,J2,J2|SCREEN,NOT_RUN
-편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,X-LOC,X-LOC|ROW:편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FAIL
-편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,A5,A5|COL:LOT_SIZE,NOT_RUN
-편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,A5,A5|COL:INCREMENT,NOT_RUN
-편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,A5,A5|COL:VALID_YN,NOT_RUN
-편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,A5,A5|COL:SPLIT_YN,NOT_RUN
+편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,X-LOC,X-LOC|ROW:편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,NA
+편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,A5,A5|COL:LOT_SIZE,PASS
+편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,A5,A5|COL:INCREMENT,PASS
+편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,A5,A5|COL:VALID_YN,PASS
+편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,A5,A5|COL:SPLIT_YN,PASS
 편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,H5,H5|COL:LOT_SIZE,NOT_RUN
 편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,H5,H5|COL:INCREMENT,NOT_RUN
 편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,H5,H5|COL:VALID_YN,NOT_RUN
@@ -129,9 +129,9 @@ Query(ds) FindData (cs:368),FE 대조표,J2,J2|SCREEN,NOT_RUN
 편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,D3,D3|COL:VALID_YN,NOT_RUN
 편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,D3,D3|COL:SPLIT_YN,NOT_RUN
 편집 4컬럼 LOT_SIZE/INCREMENT/VALID_YN/SPLIT_YN,FE 대조표,J2,J2|SCREEN,NOT_RUN
-"SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,X-LOC,"X-LOC|ROW:SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FAIL
-"SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,A5,A5|COL:LOT_SIZE,NOT_RUN
-"SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,A5,A5|COL:INCREMENT,NOT_RUN
+"SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,X-LOC,"X-LOC|ROW:SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",NA
+"SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,A5,A5|COL:LOT_SIZE,PASS
+"SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,A5,A5|COL:INCREMENT,PASS
 "SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,H5,H5|COL:LOT_SIZE,NOT_RUN
 "SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,H5,H5|COL:INCREMENT,NOT_RUN
 "SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,H2,H2|COL:LOT_SIZE,NOT_RUN
@@ -145,9 +145,9 @@ Query(ds) FindData (cs:368),FE 대조표,J2,J2|SCREEN,NOT_RUN
 "SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,D3,D3|COL:LOT_SIZE,NOT_RUN
 "SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,D3,D3|COL:INCREMENT,NOT_RUN
 "SetReNumerCellType(LOT_SIZE/INCREMENT,0) (cs:187,188)",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,X-LOC,"X-LOC|ROW:SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FAIL
-"SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,A5,A5|COL:LOT_SIZE,NOT_RUN
-"SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,A5,A5|COL:INCREMENT,NOT_RUN
+"SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,X-LOC,"X-LOC|ROW:SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",NA
+"SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,A5,A5|COL:LOT_SIZE,PASS
+"SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,A5,A5|COL:INCREMENT,PASS
 "SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,H5,H5|COL:LOT_SIZE,NOT_RUN
 "SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,H5,H5|COL:INCREMENT,NOT_RUN
 "SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,H2,H2|COL:LOT_SIZE,NOT_RUN
@@ -167,140 +167,140 @@ Query(ds) FindData (cs:368),FE 대조표,J2,J2|SCREEN,NOT_RUN
 "SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,D3,D3|COL:LOT_SIZE,NOT_RUN
 "SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,D3,D3|COL:INCREMENT,NOT_RUN
 "SetValue(INCREMENT=LOT_SIZE) (cs:735, gridSignals#16)",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,X-LOC,"X-LOC|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FAIL
-"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,A5,"A5|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",REVIEW
-"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,H5,"H5|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",REVIEW
-"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,H2,"H2|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",REVIEW
-"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,H3,"H3|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",REVIEW
-"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,D4,"D4|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",REVIEW
+"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,X-LOC,"X-LOC|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",NA
+"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,A5,"A5|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",PASS
+"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,H5,"H5|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",ERROR
+"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,H2,"H2|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",ERROR
+"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,H3,"H3|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",ERROR
+"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,D4,"D4|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",ERROR
 "SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,F1,F1|SCREEN,NOT_RUN
-"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,F2,F2|SCREEN,NOPATH
+"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,F2,F2|SCREEN,NOT_RUN
 "SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,D1,"D1|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",REVIEW
-"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,D3,"D3|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",REVIEW
-"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,X-LOC,"X-LOC|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",FAIL
-"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,A5,"A5|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",REVIEW
-"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,H5,"H5|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",REVIEW
-"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,H2,"H2|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",REVIEW
-"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,H3,"H3|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",REVIEW
-"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,D1,"D1|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",REVIEW
-"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,D3,"D3|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",REVIEW
+"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,D1,"D1|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",ERROR
+"SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",FE 대조표,D3,"D3|ROW:SetValue/BGColor 기본값 회귀 CRUD 해제 (cs:594,595, #13/#14)",ERROR
+"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,X-LOC,"X-LOC|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",NA
+"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,A5,"A5|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",PASS
+"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,H5,"H5|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",ERROR
+"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,H2,"H2|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",ERROR
+"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,H3,"H3|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",ERROR
+"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,D1,"D1|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",ERROR
+"SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,D3,"D3|ROW:SmartColMerge (cs:371,438,721, #9/#12/#15)",ERROR
 "SmartColMerge (cs:371,438,721, #9/#12/#15)",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,X-LOC,"X-LOC|ROW:Delete() 신규행만 (cs:213~224, #3)",FAIL
-"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,A5,"A5|ROW:Delete() 신규행만 (cs:213~224, #3)",REVIEW
-"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,H5,"H5|ROW:Delete() 신규행만 (cs:213~224, #3)",REVIEW
-"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,H2,"H2|ROW:Delete() 신규행만 (cs:213~224, #3)",REVIEW
-"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,H3,"H3|ROW:Delete() 신규행만 (cs:213~224, #3)",REVIEW
+"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,X-LOC,"X-LOC|ROW:Delete() 신규행만 (cs:213~224, #3)",NA
+"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,A5,"A5|ROW:Delete() 신규행만 (cs:213~224, #3)",PASS
+"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,H5,"H5|ROW:Delete() 신규행만 (cs:213~224, #3)",ERROR
+"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,H2,"H2|ROW:Delete() 신규행만 (cs:213~224, #3)",ERROR
+"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,H3,"H3|ROW:Delete() 신규행만 (cs:213~224, #3)",ERROR
 "Delete() 신규행만 (cs:213~224, #3)",FE 대조표,F1,F1|SCREEN,NOT_RUN
 "Delete() 신규행만 (cs:213~224, #3)",FE 대조표,F5,F5|SCREEN,NOT_RUN
 "Delete() 신규행만 (cs:213~224, #3)",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,D1,"D1|ROW:Delete() 신규행만 (cs:213~224, #3)",REVIEW
-"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,D3,"D3|ROW:Delete() 신규행만 (cs:213~224, #3)",REVIEW
-checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,X-LOC,X-LOC|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),FAIL
-checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,A5,A5|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),REVIEW
-checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,H5,H5|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),REVIEW
-checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,H2,H2|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),REVIEW
-checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,H3,H3|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),REVIEW
+"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,D1,"D1|ROW:Delete() 신규행만 (cs:213~224, #3)",ERROR
+"Delete() 신규행만 (cs:213~224, #3)",FE 대조표,D3,"D3|ROW:Delete() 신규행만 (cs:213~224, #3)",ERROR
+checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,X-LOC,X-LOC|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),NA
+checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,A5,A5|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),PASS
+checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,H5,H5|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),ERROR
+checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,H2,H2|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),ERROR
+checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,H3,H3|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),ERROR
 checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,F1,F1|SCREEN,NOT_RUN
-checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,F2,F2|SCREEN,NOPATH
+checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,F2,F2|SCREEN,NOT_RUN
 checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,J2,J2|SCREEN,NOT_RUN
-checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,D1,D1|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),REVIEW
-checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,D3,D3|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),REVIEW
-checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,E3,E3|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),NA
-checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,E4,E4|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),REVIEW
-checkRequiredOfSpread,FE 대조표,X-LOC,X-LOC|ROW:checkRequiredOfSpread,FAIL
-checkRequiredOfSpread,FE 대조표,A5,A5|ROW:checkRequiredOfSpread,REVIEW
-checkRequiredOfSpread,FE 대조표,H5,H5|ROW:checkRequiredOfSpread,REVIEW
-checkRequiredOfSpread,FE 대조표,H2,H2|ROW:checkRequiredOfSpread,REVIEW
-checkRequiredOfSpread,FE 대조표,H3,H3|ROW:checkRequiredOfSpread,REVIEW
-checkRequiredOfSpread,FE 대조표,D1,D1|ROW:checkRequiredOfSpread,REVIEW
-checkRequiredOfSpread,FE 대조표,D3,D3|ROW:checkRequiredOfSpread,REVIEW
+checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,D1,D1|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),ERROR
+checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,D3,D3|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),ERROR
+checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,E3,E3|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),ERROR
+checkValidSize LOT<INC / 0값 (cs:762~773),FE 대조표,E4,E4|ROW:checkValidSize LOT<INC / 0값 (cs:762~773),ERROR
+checkRequiredOfSpread,FE 대조표,X-LOC,X-LOC|ROW:checkRequiredOfSpread,NA
+checkRequiredOfSpread,FE 대조표,A5,A5|ROW:checkRequiredOfSpread,PASS
+checkRequiredOfSpread,FE 대조표,H5,H5|ROW:checkRequiredOfSpread,ERROR
+checkRequiredOfSpread,FE 대조표,H2,H2|ROW:checkRequiredOfSpread,ERROR
+checkRequiredOfSpread,FE 대조표,H3,H3|ROW:checkRequiredOfSpread,ERROR
+checkRequiredOfSpread,FE 대조표,D1,D1|ROW:checkRequiredOfSpread,ERROR
+checkRequiredOfSpread,FE 대조표,D3,D3|ROW:checkRequiredOfSpread,ERROR
 checkRequiredOfSpread,FE 대조표,J2,J2|SCREEN,NOT_RUN
-checkRequiredOfSpread,FE 대조표,E3,E3|ROW:checkRequiredOfSpread,NA
-checkRequiredOfSpread,FE 대조표,E4,E4|ROW:checkRequiredOfSpread,REVIEW
-FindButton (cs),FE 대조표,X-LOC,X-LOC|ROW:FindButton (cs),FAIL
-FindButton (cs),FE 대조표,G1,G1|ROW:FindButton (cs),REVIEW
+checkRequiredOfSpread,FE 대조표,E3,E3|ROW:checkRequiredOfSpread,ERROR
+checkRequiredOfSpread,FE 대조표,E4,E4|ROW:checkRequiredOfSpread,ERROR
+FindButton (cs),FE 대조표,X-LOC,X-LOC|ROW:FindButton (cs),NA
+FindButton (cs),FE 대조표,G1,G1|ROW:FindButton (cs),ERROR
 FindButton (cs),FE 대조표,A1,A1|ROW:FindButton (cs),REVIEW
 FindButton (cs),FE 대조표,J2,J2|SCREEN,NOT_RUN
-EditButton SwitchLock (cs:229~236),FE 대조표,X-LOC,X-LOC|ROW:EditButton SwitchLock (cs:229~236),FAIL
-EditButton SwitchLock (cs:229~236),FE 대조표,D1,D1|ROW:EditButton SwitchLock (cs:229~236),REVIEW
-EditButton SwitchLock (cs:229~236),FE 대조표,D3,D3|ROW:EditButton SwitchLock (cs:229~236),REVIEW
+EditButton SwitchLock (cs:229~236),FE 대조표,X-LOC,X-LOC|ROW:EditButton SwitchLock (cs:229~236),NA
+EditButton SwitchLock (cs:229~236),FE 대조표,D1,D1|ROW:EditButton SwitchLock (cs:229~236),ERROR
+EditButton SwitchLock (cs:229~236),FE 대조표,D3,D3|ROW:EditButton SwitchLock (cs:229~236),ERROR
 EditButton SwitchLock (cs:229~236),FE 대조표,J2,J2|SCREEN,NOT_RUN
-SaveButton SaveData (cs:574~),FE 대조표,X-LOC,X-LOC|ROW:SaveButton SaveData (cs:574~),FAIL
+SaveButton SaveData (cs:574~),FE 대조표,X-LOC,X-LOC|ROW:SaveButton SaveData (cs:574~),NA
 SaveButton SaveData (cs:574~),FE 대조표,F1,F1|SCREEN,NOT_RUN
-SaveButton SaveData (cs:574~),FE 대조표,F6,F6|SCREEN,NOPATH
-SaveButton SaveData (cs:574~),FE 대조표,F4,F4|ROW:SaveButton SaveData (cs:574~),REVIEW
-SaveButton SaveData (cs:574~),FE 대조표,DB-SYN,DB-SYN|ROW:SaveButton SaveData (cs:574~),REVIEW
-SaveButton SaveData (cs:574~),FE 대조표,F2,F2|SCREEN,NOPATH
+SaveButton SaveData (cs:574~),FE 대조표,F6,F6|SCREEN,NOT_RUN
+SaveButton SaveData (cs:574~),FE 대조표,F4,F4|ROW:SaveButton SaveData (cs:574~),ERROR
+SaveButton SaveData (cs:574~),FE 대조표,DB-SYN,DB-SYN|ROW:SaveButton SaveData (cs:574~),NA
+SaveButton SaveData (cs:574~),FE 대조표,F2,F2|SCREEN,NOT_RUN
 SaveButton SaveData (cs:574~),FE 대조표,J2,J2|SCREEN,NOT_RUN
-**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,X-LOC,X-LOC|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),FAIL
-**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,D4,D4|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),REVIEW
+**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,X-LOC,X-LOC|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),NA
+**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,D4,D4|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),ERROR
 **저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,F1,F1|SCREEN,NOT_RUN
-**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,F2,F2|SCREEN,NOPATH
+**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,F2,F2|SCREEN,NOT_RUN
 **저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,J2,J2|SCREEN,NOT_RUN
-**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,D1,D1|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),REVIEW
-**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,D3,D3|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),REVIEW
-**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,E3,E3|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),NA
-**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,E4,E4|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),REVIEW
-**SAVE SP 분기 = M/D 2종**,FE 대조표,X-LOC,X-LOC|ROW:**SAVE SP 분기 = M/D 2종**,FAIL
+**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,D1,D1|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),ERROR
+**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,D3,D3|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),ERROR
+**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,E3,E3|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),ERROR
+**저장대상 = 편집행만** (cs:582~603·631~654),FE 대조표,E4,E4|ROW:**저장대상 = 편집행만** (cs:582~603·631~654),ERROR
+**SAVE SP 분기 = M/D 2종**,FE 대조표,X-LOC,X-LOC|ROW:**SAVE SP 분기 = M/D 2종**,NA
 **SAVE SP 분기 = M/D 2종**,FE 대조표,F1,F1|SCREEN,NOT_RUN
-**SAVE SP 분기 = M/D 2종**,FE 대조표,F2,F2|SCREEN,NOPATH
+**SAVE SP 분기 = M/D 2종**,FE 대조표,F2,F2|SCREEN,NOT_RUN
 **SAVE SP 분기 = M/D 2종**,FE 대조표,J2,J2|SCREEN,NOT_RUN
-**SAVE SP 분기 = M/D 2종**,FE 대조표,D4,D4|ROW:**SAVE SP 분기 = M/D 2종**,REVIEW
+**SAVE SP 분기 = M/D 2종**,FE 대조표,D4,D4|ROW:**SAVE SP 분기 = M/D 2종**,ERROR
 **SAVE SP 분기 = M/D 2종**,FE 대조표,D6,D6|SCREEN,NOT_RUN
 **SAVE SP 분기 = M/D 2종**,FE 대조표,F5,F5|SCREEN,NOT_RUN
-"**toolbar InsertButton no-op (cs:200~203, R10)**",FE 대조표,X-LOC,"X-LOC|ROW:**toolbar InsertButton no-op (cs:200~203, R10)**",FAIL
-"**toolbar InsertButton no-op (cs:200~203, R10)**",FE 대조표,D4,"D4|ROW:**toolbar InsertButton no-op (cs:200~203, R10)**",REVIEW
+"**toolbar InsertButton no-op (cs:200~203, R10)**",FE 대조표,X-LOC,"X-LOC|ROW:**toolbar InsertButton no-op (cs:200~203, R10)**",NA
+"**toolbar InsertButton no-op (cs:200~203, R10)**",FE 대조표,D4,"D4|ROW:**toolbar InsertButton no-op (cs:200~203, R10)**",ERROR
 "**toolbar InsertButton no-op (cs:200~203, R10)**",FE 대조표,D6,D6|SCREEN,NOT_RUN
 "**toolbar InsertButton no-op (cs:200~203, R10)**",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,X-LOC,"X-LOC|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",FAIL
-"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,H6,"H6|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",REVIEW
-"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,G5,"G5|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",REVIEW
-"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,M4,"M4|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",REVIEW
-"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,D4,"D4|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",REVIEW
+"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,X-LOC,"X-LOC|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",NA
+"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,H6,"H6|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",NA
+"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,G5,"G5|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",NA
+"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,M4,"M4|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",ERROR
+"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,D4,"D4|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",ERROR
 "**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,D6,D6|SCREEN,NOT_RUN
 "**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,J2,J2|SCREEN,NOT_RUN
 "**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,F1,F1|SCREEN,NOT_RUN
 "**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,F5,F5|SCREEN,NOT_RUN
-"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,G1,"G1|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",REVIEW
+"**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,G1,"G1|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",ERROR
 "**toolbar DeleteButton remove-new (cs:213~224, R4)**",FE 대조표,A1,"A1|ROW:**toolbar DeleteButton remove-new (cs:213~224, R4)**",REVIEW
-두 버튼 **노출** 조건,FE 대조표,X-LOC,X-LOC|ROW:두 버튼 **노출** 조건,FAIL
-두 버튼 **노출** 조건,FE 대조표,A5,A5|ROW:두 버튼 **노출** 조건,REVIEW
+두 버튼 **노출** 조건,FE 대조표,X-LOC,X-LOC|ROW:두 버튼 **노출** 조건,NA
+두 버튼 **노출** 조건,FE 대조표,A5,A5|ROW:두 버튼 **노출** 조건,PASS
 두 버튼 **노출** 조건,FE 대조표,A1,A1|SP:PR_GET_MNU_BTN_AUTH,REVIEW
 두 버튼 **노출** 조건,FE 대조표,A6,A6|SP:PR_GET_MNU_BTN_AUTH,NOT_RUN
 두 버튼 **노출** 조건,FE 대조표,F4,F4|SP:PR_GET_MNU_BTN_AUTH,NOT_RUN
 두 버튼 **노출** 조건,FE 대조표,DB-SYN,DB-SYN|SP:PR_GET_MNU_BTN_AUTH,NOPATH
-두 버튼 **노출** 조건,FE 대조표,D4,D4|ROW:두 버튼 **노출** 조건,REVIEW
+두 버튼 **노출** 조건,FE 대조표,D4,D4|ROW:두 버튼 **노출** 조건,ERROR
 두 버튼 **노출** 조건,FE 대조표,D6,D6|SCREEN,NOT_RUN
 두 버튼 **노출** 조건,FE 대조표,J2,J2|SCREEN,NOT_RUN
 두 버튼 **노출** 조건,FE 대조표,F1,F1|SCREEN,NOT_RUN
 두 버튼 **노출** 조건,FE 대조표,F5,F5|SCREEN,NOT_RUN
-"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,X-LOC,"X-LOC|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FAIL
-"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,H6,H6|BTN:btnInput,NOPATH
-"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,G5,G5|BTN:btnInput,NOPATH
+"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,X-LOC,"X-LOC|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",NA
+"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,H6,H6|BTN:btnInput,NOT_RUN
+"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,G5,G5|BTN:btnInput,NOT_RUN
 "btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,M4,M4|BTN:btnInput,NOT_RUN
-"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,D1,"D1|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",REVIEW
-"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,D3,"D3|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",REVIEW
+"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,D1,"D1|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",ERROR
+"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,D3,"D3|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",ERROR
 "btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,G1,"G1|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",REVIEW
+"btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,G1,"G1|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",ERROR
 "btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",FE 대조표,A1,"A1|ROW:btnInput ""Input"" 일괄입력 팝업 (cs:260~286, R5)",REVIEW
-"btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,X-LOC,"X-LOC|ROW:btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FAIL
-"btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,H6,H6|BTN:btnDelete,NOPATH
-"btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,G5,G5|BTN:btnDelete,NOPATH
+"btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,X-LOC,"X-LOC|ROW:btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",NA
+"btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,H6,H6|BTN:btnDelete,NOT_RUN
+"btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,G5,G5|BTN:btnDelete,NOT_RUN
 "btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,M4,M4|BTN:btnDelete,NOT_RUN
 "btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,F1,F1|SCREEN,NOT_RUN
-"btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,F2,F2|SCREEN,NOPATH
+"btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,F2,F2|SCREEN,NOT_RUN
 "btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,J2,J2|SCREEN,NOT_RUN
 "btnDelete ""Delete"" 일괄삭제 팝업 (cs:288~314, R6)",FE 대조표,F5,F5|SCREEN,NOT_RUN
-"btnItemId Item 팝업 (cs:238~257, R7)",FE 대조표,X-LOC,"X-LOC|ROW:btnItemId Item 팝업 (cs:238~257, R7)",FAIL
-"btnItemId Item 팝업 (cs:238~257, R7)",FE 대조표,H6,H6|BTN:btnItemId,NOPATH
-"btnItemId Item 팝업 (cs:238~257, R7)",FE 대조표,G5,G5|BTN:btnItemId,NOPATH
+"btnItemId Item 팝업 (cs:238~257, R7)",FE 대조표,X-LOC,"X-LOC|ROW:btnItemId Item 팝업 (cs:238~257, R7)",NA
+"btnItemId Item 팝업 (cs:238~257, R7)",FE 대조표,H6,H6|BTN:btnItemId,NOT_RUN
+"btnItemId Item 팝업 (cs:238~257, R7)",FE 대조표,G5,G5|BTN:btnItemId,NOT_RUN
 "btnItemId Item 팝업 (cs:238~257, R7)",FE 대조표,M4,M4|BTN:btnItemId,NOT_RUN
-**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,X-LOC,X-LOC|ROW:**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FAIL
+**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,X-LOC,X-LOC|ROW:**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),NA
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,H6,H6|COND:clbFromSite,NOT_RUN
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,G5,G5|COND:clbFromSite,NOPATH
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,M4,M4|COND:clbFromSite,NOT_RUN
-**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,G1,G1|COND:clbFromSite,NOT_RUN
+**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,G1,G1|COND:clbFromSite,PASS
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,A1,A1|ROW:**팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),REVIEW
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,J2,J2|SCREEN,NOT_RUN
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,E4,E4|COND:clbFromSite,NOT_RUN
@@ -308,44 +308,44 @@ SaveButton SaveData (cs:574~),FE 대조표,J2,J2|SCREEN,NOT_RUN
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,E4,E4|MSG:MSG00429,NOT_RUN
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,I1,I1|SCREEN,NOT_RUN
 **팝업 Find — From Site 필수** (SCM0002 팝업 cs:261~266),FE 대조표,H10,H10|SCREEN,PASS
-팝업 Form_Load `//FindData();` (cs:146),FE 대조표,X-LOC,X-LOC|ROW:팝업 Form_Load `//FindData();` (cs:146),FAIL
-팝업 Form_Load `//FindData();` (cs:146),FE 대조표,H6,H6|ROW:팝업 Form_Load `//FindData();` (cs:146),REVIEW
-팝업 Form_Load `//FindData();` (cs:146),FE 대조표,G5,G5|ROW:팝업 Form_Load `//FindData();` (cs:146),REVIEW
-팝업 Form_Load `//FindData();` (cs:146),FE 대조표,M4,M4|ROW:팝업 Form_Load `//FindData();` (cs:146),REVIEW
+팝업 Form_Load `//FindData();` (cs:146),FE 대조표,X-LOC,X-LOC|ROW:팝업 Form_Load `//FindData();` (cs:146),NA
+팝업 Form_Load `//FindData();` (cs:146),FE 대조표,H6,H6|ROW:팝업 Form_Load `//FindData();` (cs:146),NA
+팝업 Form_Load `//FindData();` (cs:146),FE 대조표,G5,G5|ROW:팝업 Form_Load `//FindData();` (cs:146),NA
+팝업 Form_Load `//FindData();` (cs:146),FE 대조표,M4,M4|ROW:팝업 Form_Load `//FindData();` (cs:146),ERROR
 팝업 Form_Load `//FindData();` (cs:146),FE 대조표,A1,A1|ROW:팝업 Form_Load `//FindData();` (cs:146),REVIEW
-팝업 Form_Load `//FindData();` (cs:146),FE 대조표,A6,A6|ROW:팝업 Form_Load `//FindData();` (cs:146),REVIEW
-팝업 Form_Load `//FindData();` (cs:146),FE 대조표,F4,F4|ROW:팝업 Form_Load `//FindData();` (cs:146),REVIEW
-팝업 Form_Load `//FindData();` (cs:146),FE 대조표,DB-SYN,DB-SYN|ROW:팝업 Form_Load `//FindData();` (cs:146),REVIEW
-팝업 Form_Load `//FindData();` (cs:146),FE 대조표,G1,G1|ROW:팝업 Form_Load `//FindData();` (cs:146),REVIEW
+팝업 Form_Load `//FindData();` (cs:146),FE 대조표,A6,A6|ROW:팝업 Form_Load `//FindData();` (cs:146),ERROR
+팝업 Form_Load `//FindData();` (cs:146),FE 대조표,F4,F4|ROW:팝업 Form_Load `//FindData();` (cs:146),ERROR
+팝업 Form_Load `//FindData();` (cs:146),FE 대조표,DB-SYN,DB-SYN|ROW:팝업 Form_Load `//FindData();` (cs:146),NA
+팝업 Form_Load `//FindData();` (cs:146),FE 대조표,G1,G1|ROW:팝업 Form_Load `//FindData();` (cs:146),ERROR
 팝업 Form_Load `//FindData();` (cs:146),FE 대조표,J2,J2|SCREEN,NOT_RUN
-팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,X-LOC,X-LOC|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FAIL
-팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,K-SA,K-SA|SCREEN,NOT_RUN
-팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,G3,G3|SCREEN,NOT_RUN
-팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,H6,H6|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),REVIEW
-팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,G5,G5|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),REVIEW
-팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,M4,M4|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),REVIEW
-팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,H2,H2|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),REVIEW
-팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,G1,G1|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),REVIEW
+팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,X-LOC,X-LOC|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),NA
+팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,K-SA,K-SA|SCREEN,PASS
+팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,G3,G3|SCREEN,FAIL
+팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,H6,H6|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),NA
+팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,G5,G5|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),NA
+팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,M4,M4|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),ERROR
+팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,H2,H2|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),ERROR
+팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,G1,G1|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),ERROR
 팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,A1,A1|ROW:팝업 검색영역 + Find 버튼 (cs 상단 검색영역),REVIEW
 팝업 검색영역 + Find 버튼 (cs 상단 검색영역),FE 대조표,J2,J2|SCREEN,NOT_RUN
-팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,X-LOC,X-LOC|ROW:팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FAIL
+팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,X-LOC,X-LOC|ROW:팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,NA
 팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,H6,H6|COND:clbFromSite,NOT_RUN
 팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,H6,H6|COND:clbToSite,NOT_RUN
 팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,G5,G5|COND:clbFromSite,NOPATH
 팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,G5,G5|COND:clbToSite,NOPATH
 팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,M4,M4|COND:clbFromSite,NOT_RUN
 팝업 `clbFromSite`/`clbToSite` CheckedListBox (cs:184·188 `set,FE 대조표,M4,M4|COND:clbToSite,NOT_RUN
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,X-LOC,X-LOC|ROW:**팝업 OK `SaveData` (cs:308~369)**,FAIL
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,A5,A5|ROW:**팝업 OK `SaveData` (cs:308~369)**,REVIEW
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,H5,H5|ROW:**팝업 OK `SaveData` (cs:308~369)**,REVIEW
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,H2,H2|ROW:**팝업 OK `SaveData` (cs:308~369)**,REVIEW
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,H6,H6|ROW:**팝업 OK `SaveData` (cs:308~369)**,REVIEW
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,G5,G5|ROW:**팝업 OK `SaveData` (cs:308~369)**,REVIEW
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,M4,M4|ROW:**팝업 OK `SaveData` (cs:308~369)**,REVIEW
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,X-LOC,X-LOC|ROW:**팝업 OK `SaveData` (cs:308~369)**,NA
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,A5,A5|ROW:**팝업 OK `SaveData` (cs:308~369)**,PASS
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,H5,H5|ROW:**팝업 OK `SaveData` (cs:308~369)**,ERROR
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,H2,H2|ROW:**팝업 OK `SaveData` (cs:308~369)**,ERROR
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,H6,H6|ROW:**팝업 OK `SaveData` (cs:308~369)**,NA
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,G5,G5|ROW:**팝업 OK `SaveData` (cs:308~369)**,NA
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,M4,M4|ROW:**팝업 OK `SaveData` (cs:308~369)**,ERROR
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,F1,F1|SCREEN,NOT_RUN
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,F6,F6|SCREEN,NOPATH
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,F4,F4|ROW:**팝업 OK `SaveData` (cs:308~369)**,REVIEW
-**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,DB-SYN,DB-SYN|ROW:**팝업 OK `SaveData` (cs:308~369)**,REVIEW
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,F6,F6|SCREEN,NOT_RUN
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,F4,F4|ROW:**팝업 OK `SaveData` (cs:308~369)**,ERROR
+**팝업 OK `SaveData` (cs:308~369)**,FE 대조표,DB-SYN,DB-SYN|ROW:**팝업 OK `SaveData` (cs:308~369)**,NA
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,F5,F5|SCREEN,NOT_RUN
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,J2,J2|SCREEN,NOT_RUN
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,E4,E4|MSG:MSG01091,NOT_RUN
@@ -355,41 +355,41 @@ SaveButton SaveData (cs:574~),FE 대조표,J2,J2|SCREEN,NOT_RUN
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,E4,E4|MSG:MSG00016,NOT_RUN
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,I1,I1|SCREEN,NOT_RUN
 **팝업 OK `SaveData` (cs:308~369)**,FE 대조표,H10,H10|SCREEN,PASS
-**`FindInput` 5 CSV 위치조인 (cs:394~429)**,FE 대조표,X-LOC,X-LOC|ROW:**`FindInput` 5 CSV 위치조인 (cs:394~429)**,FAIL
-**`FindInput` 5 CSV 위치조인 (cs:394~429)**,FE 대조표,X-ROW,X-ROW|ENTRY:**`FindInput` 5 CSV 위치조인 (cs:394~429)**,REVIEW
-"`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,X-LOC,"X-LOC|ROW:`FindDelete` `p_transport_mode=""X""` (cs:498)",FAIL
+**`FindInput` 5 CSV 위치조인 (cs:394~429)**,FE 대조표,X-LOC,X-LOC|ROW:**`FindInput` 5 CSV 위치조인 (cs:394~429)**,NA
+**`FindInput` 5 CSV 위치조인 (cs:394~429)**,FE 대조표,X-ROW,X-ROW|ENTRY:**`FindInput` 5 CSV 위치조인 (cs:394~429)**,NA
+"`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,X-LOC,"X-LOC|ROW:`FindDelete` `p_transport_mode=""X""` (cs:498)",NA
 "`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,H6,H6|COL:TRANS_MODE_CODE,NOPATH
 "`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,G5,G5|COL:TRANS_MODE_CODE,NOPATH
 "`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,M4,M4|COL:TRANS_MODE_CODE,NOT_RUN
 "`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,F1,F1|SCREEN,NOT_RUN
 "`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,F5,F5|SCREEN,NOT_RUN
 "`FindDelete` `p_transport_mode=""X""` (cs:498)",FE 대조표,J2,J2|SCREEN,NOT_RUN
-"SetDivisionAuthCheck (cs:131~132, R1)",FE 대조표,X-LOC,"X-LOC|ROW:SetDivisionAuthCheck (cs:131~132, R1)",FAIL
-"SetDivisionAuthCheck (cs:131~132, R1)",FE 대조표,G1,"G1|ROW:SetDivisionAuthCheck (cs:131~132, R1)",REVIEW
+"SetDivisionAuthCheck (cs:131~132, R1)",FE 대조표,X-LOC,"X-LOC|ROW:SetDivisionAuthCheck (cs:131~132, R1)",NA
+"SetDivisionAuthCheck (cs:131~132, R1)",FE 대조표,G1,"G1|ROW:SetDivisionAuthCheck (cs:131~132, R1)",ERROR
 "SetDivisionAuthCheck (cs:131~132, R1)",FE 대조표,A1,"A1|ROW:SetDivisionAuthCheck (cs:131~132, R1)",REVIEW
 "SetDivisionAuthCheck (cs:131~132, R1)",FE 대조표,J2,J2|SCREEN,NOT_RUN
 P_SCP0028_GET_SHIPMENT_LOT_SIZE,FE 대조표,X-LOC,X-LOC|ROW:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
 P_SCP0028_GET_SHIPMENT_LOT_SIZE,FE 대조표,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-P_SCP0028_GET_SHIPMENT_LOT_SIZE,FE 대조표,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-P_SCP0028_GET_SHIPMENT_LOT_SIZE,FE 대조표,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+P_SCP0028_GET_SHIPMENT_LOT_SIZE,FE 대조표,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+P_SCP0028_GET_SHIPMENT_LOT_SIZE,FE 대조표,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 P_SCP0028_GET_SHIPMENT_LOT_SIZE,FE 대조표,DB-SYN,DB-SYN|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,FE 대조표,X-LOC,X-LOC|ROW:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,REVIEW
 P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,FE 대조표,F1,F1|SCREEN,NOT_RUN
-P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,FE 대조표,F6,F6|SCREEN,NOPATH
+P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,FE 대조표,F6,F6|SCREEN,NOT_RUN
 P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,FE 대조표,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
 P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,FE 대조표,DB-SYN,DB-SYN|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,PASS
 P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,X-LOC,X-LOC|ROW:P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,REVIEW
 P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,REVIEW
-P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,NOT_RUN
+P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,PASS
 P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,NOT_RUN
 P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,DB-SYN,DB-SYN|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,PASS
-P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,D4,D4|ROW:P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,REVIEW
+P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,D4,D4|ROW:P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,ERROR
 P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,D6,D6|SCREEN,NOT_RUN
 P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,FE 대조표,J2,J2|SCREEN,NOT_RUN
 P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,X-LOC,X-LOC|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,REVIEW
-P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,H6,H6|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,REVIEW
-P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,G5,G5|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,REVIEW
-P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,M4,M4|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,REVIEW
+P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,H6,H6|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,NA
+P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,G5,G5|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,NA
+P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,M4,M4|ROW:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,ERROR
 P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,A1,A1|SP:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,REVIEW
 P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,A6,A6|SP:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,NOT_RUN
 P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,F4,F4|SP:P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,NOT_RUN
@@ -397,33 +397,34 @@ P_SCM0002_GET_SHIPMENT_LOT_SIZE_POPUP,FE 대조표,DB-SYN,DB-SYN|SP:P_SCM0002_GE
 ACT:SCP0028_Shipment_Lot_Size..ctor,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
 ACT:SCP0028_Shipment_Lot_Size..ctor:92:1,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
 ACT:SCP0028_Shipment_Lot_Size..ctor:95:2,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged:715:1,AS-IS 액션,C2,C2|ENTRY:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged:715:1,AS-IS 액션,C3,C3|ENTRY:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged:715:1,AS-IS 액션,C6,C6|ENTRY:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList:151:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList:153:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList:154:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:176:1,AS-IS 액션,A5,A5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:176:1,AS-IS 액션,H2,H2|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:176:1,AS-IS 액션,H5,H5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:176:1,AS-IS 액션,D5,D5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:177:2,AS-IS 액션,A5,A5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:177:2,AS-IS 액션,H2,H2|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:177:2,AS-IS 액션,H5,H5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:177:2,AS-IS 액션,D5,D5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:178:3,AS-IS 액션,A5,A5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:178:3,AS-IS 액션,H2,H2|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:178:3,AS-IS 액션,H5,H5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:178:3,AS-IS 액션,D5,D5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:180:4,AS-IS 액션,A5,A5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:180:4,AS-IS 액션,H2,H2|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:180:4,AS-IS 액션,H5,H5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.CreateSpread:180:4,AS-IS 액션,D5,D5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged,ERROR
+ACT:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged:715:1,AS-IS 액션,C2,C2|ENTRY:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged,ERROR
+ACT:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged:715:1,AS-IS 액션,C3,C3|ENTRY:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged,ERROR
+ACT:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged:715:1,AS-IS 액션,C6,C6|ENTRY:SCP0028_Shipment_Lot_Size.ClbDivision_SelectedIndexChanged,ERROR
+ACT:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList,NA
+ACT:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList:151:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList,NA
+ACT:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList:153:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList,NA
+ACT:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList:154:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.ClearUsrCheckedList,NA
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:176:1,AS-IS 액션,A5,A5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,PASS
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:176:1,AS-IS 액션,H2,H2|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:176:1,AS-IS 액션,H5,H5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:176:1,AS-IS 액션,D5,D5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:177:2,AS-IS 액션,A5,A5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,PASS
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:177:2,AS-IS 액션,H2,H2|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:177:2,AS-IS 액션,H5,H5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:177:2,AS-IS 액션,D5,D5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:178:3,AS-IS 액션,A5,A5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,PASS
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:178:3,AS-IS 액션,H2,H2|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:178:3,AS-IS 액션,H5,H5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:178:3,AS-IS 액션,D5,D5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:180:4,AS-IS 액션,A5,A5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,PASS
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:180:4,AS-IS 액션,H2,H2|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:180:4,AS-IS 액션,H5,H5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
+ACT:SCP0028_Shipment_Lot_Size.CreateSpread:180:4,AS-IS 액션,D5,D5|ENTRY:SCP0028_Shipment_Lot_Size.CreateSpread,ERROR
 ACT:SCP0028_Shipment_Lot_Size.DeleteButton,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.DeleteButton,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.DeleteButton:213:1,AS-IS 액션,D4,D4|LEDGER:V-b48e5d97,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.DeleteButton:213:1,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.DeleteButton:213:1,AS-IS 액션,F5,F5|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.DeleteButton:215:2,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
@@ -448,239 +449,247 @@ ACT:SCP0028_Shipment_Lot_Size.EditButton,AS-IS 액션,D1,D1|COL:DIVISION_ID,NOT_
 ACT:SCP0028_Shipment_Lot_Size.EditButton,AS-IS 액션,D1,D1|COL:CREATED_BY,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.EditButton,AS-IS 액션,D3,D3|COL:DIVISION_ID,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.EditButton,AS-IS 액션,D3,D3|COL:CREATED_BY,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.EditButton:231:1,AS-IS 액션,D1,D1|ENTRY:SCP0028_Shipment_Lot_Size.EditButton,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.EditButton:231:1,AS-IS 액션,D3,D3|ENTRY:SCP0028_Shipment_Lot_Size.EditButton,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.EditButton:232:2,AS-IS 액션,D1,D1|ENTRY:SCP0028_Shipment_Lot_Size.EditButton,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.EditButton:232:2,AS-IS 액션,D3,D3|ENTRY:SCP0028_Shipment_Lot_Size.EditButton,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.EditButton:231:1,AS-IS 액션,D1,D1|ENTRY:SCP0028_Shipment_Lot_Size.EditButton,ERROR
+ACT:SCP0028_Shipment_Lot_Size.EditButton:231:1,AS-IS 액션,D3,D3|ENTRY:SCP0028_Shipment_Lot_Size.EditButton,ERROR
+ACT:SCP0028_Shipment_Lot_Size.EditButton:232:2,AS-IS 액션,D1,D1|LEDGER:V-b1aa0c11,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.EditButton:234:3,AS-IS 액션,D1,D1|LEDGER:V-24fe12e1,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.EditButton:234:3,AS-IS 액션,D1,D1|COL:DIVISION_ID,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.EditButton:234:3,AS-IS 액션,D1,D1|COL:TRANS_MODE_NAME,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.EditButton:234:3,AS-IS 액션,D3,D3|COL:DIVISION_ID,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.EditButton:234:3,AS-IS 액션,D3,D3|COL:TRANS_MODE_NAME,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.EditButton:235:4,AS-IS 액션,D1,D1|LEDGER:V-11c3c17f,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.EditButton:235:4,AS-IS 액션,D1,D1|COL:CREATED_BY,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.EditButton:235:4,AS-IS 액션,D1,D1|COL:LAST_UPDATE_DATE,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.EditButton:235:4,AS-IS 액션,D3,D3|COL:CREATED_BY,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.EditButton:235:4,AS-IS 액션,D3,D3|COL:LAST_UPDATE_DATE,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindButton,REVIEW
 ACT:SCP0028_Shipment_Lot_Size.FindButton,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindButton,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindButton,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindButton,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindButton,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindButton:197:1,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindButton:197:1,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindButton:197:1,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:cboDivision,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:cboOperationGroup,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:clbFromSite,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:clbToSite,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:clbTransMode,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:txtItemId,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:cboValid,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindButton:197:1,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindButton:197:1,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:cboDivision,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:cboOperationGroup,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:clbFromSite,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:clbToSite,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:clbTransMode,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:txtItemId,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,G1,G1|COND:cboValid,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:322:1,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:322:1,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:322:1,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:322:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindData:322:1,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:322:1,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:322:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindData:325:2,AS-IS 액션,E3,E3|LEDGER:V-4667febc,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindData:325:2,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:325:2,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:325:2,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:325:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindData:325:2,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:325:2,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:325:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindData:325:3,AS-IS 액션,E3,E3|LEDGER:V-4667febc,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindData:325:3,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:325:3,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:325:3,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:325:3,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:325:3,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:327:4,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:327:4,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:327:4,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:327:4,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:327:4,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:329:5,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:329:5,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:329:5,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:329:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindData:329:5,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:329:5,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:329:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,ERROR
 ACT:SCP0028_Shipment_Lot_Size.FindData:330:6,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:330:6,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:330:6,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:332:7,AS-IS 액션,G1,G1|COND:cboDivision,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:330:6,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:330:6,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:332:7,AS-IS 액션,G1,G1|COND:cboDivision,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:332:7,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:332:7,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:332:7,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:333:8,AS-IS 액션,G1,G1|COND:cboOperationGroup,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:332:7,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:332:7,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:333:8,AS-IS 액션,G1,G1|COND:cboOperationGroup,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:333:8,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:333:8,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:333:8,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:334:9,AS-IS 액션,G1,G1|COND:clbFromSite,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:333:8,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:333:8,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:334:9,AS-IS 액션,G1,G1|COND:clbFromSite,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:334:9,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:334:9,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:334:9,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:335:10,AS-IS 액션,G1,G1|COND:clbToSite,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:334:9,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:334:9,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:335:10,AS-IS 액션,G1,G1|COND:clbToSite,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:335:10,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:335:10,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:335:10,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:336:11,AS-IS 액션,G1,G1|COND:clbTransMode,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:335:10,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:335:10,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:336:11,AS-IS 액션,G1,G1|COND:clbTransMode,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:336:11,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:336:11,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:336:11,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:337:12,AS-IS 액션,G1,G1|COND:txtItemId,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:336:11,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:336:11,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:337:12,AS-IS 액션,G1,G1|COND:txtItemId,ERROR
 ACT:SCP0028_Shipment_Lot_Size.FindData:337:12,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:337:12,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:337:12,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:338:13,AS-IS 액션,G1,G1|COND:cboValid,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:337:12,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:337:12,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:338:13,AS-IS 액션,G1,G1|COND:cboValid,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:338:13,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:338:13,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:338:13,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:338:13,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:338:13,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:341:14,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:341:14,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:341:14,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:341:14,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:341:14,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:343:15,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:343:15,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:343:15,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:343:15,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:343:15,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:344:16,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:344:16,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:344:16,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:344:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindData:344:16,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:344:16,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:344:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,ERROR
 ACT:SCP0028_Shipment_Lot_Size.FindData:345:17,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:345:17,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:345:17,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:345:17,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:345:17,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:345:17,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:347:18,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:347:18,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:347:18,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:347:18,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:347:18,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:347:18,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindData:349:19,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:349:19,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:349:19,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:349:19,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:349:19,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:349:19,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:350:20,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:350:20,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:350:20,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:350:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindData:350:20,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:350:20,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:350:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,ERROR
 ACT:SCP0028_Shipment_Lot_Size.FindData:351:21,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:351:21,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:351:21,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:351:21,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:351:21,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:352:22,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:352:22,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:352:22,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:352:22,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:352:22,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:353:23,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:353:23,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:353:23,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:353:23,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:353:23,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:354:24,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:354:24,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:354:24,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:354:24,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:354:24,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:355:25,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:355:25,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:355:25,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:355:25,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:355:25,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:356:26,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:356:26,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:356:26,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:356:26,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:356:26,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:357:27,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:357:27,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:357:27,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:357:27,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:357:27,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:359:28,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:359:28,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:359:28,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:359:28,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:359:28,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:359:28,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:361:29,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:361:29,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:361:29,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:361:29,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:361:29,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:366:30,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:366:30,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:366:30,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:366:30,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:366:30,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:368:31,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:368:31,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:368:31,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:368:31,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:368:31,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:369:32,AS-IS 액션,D1,D1|LEDGER:V-57e71a21,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindData:369:32,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:369:32,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:369:32,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:369:32,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindData:369:32,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:369:32,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:369:32,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,ERROR
 ACT:SCP0028_Shipment_Lot_Size.FindData:371:33,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:371:33,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:371:33,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:371:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindData:371:33,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:371:33,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:371:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindData,ERROR
 ACT:SCP0028_Shipment_Lot_Size.FindData:373:34,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:373:34,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:373:34,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:373:34,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:373:34,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:375:35,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:375:35,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:375:35,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:375:35,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:375:35,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:378:36,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:378:36,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:378:36,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindData:378:36,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:378:36,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindData:384:37,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindData:384:37,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindData:384:37,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindDelete,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:464:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:467:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:468:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:469:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:470:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:471:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:473:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:474:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:475:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:476:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:477:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:478:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:479:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:480:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:481:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:482:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:483:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:485:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:487:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:489:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:492:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:494:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:495:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:496:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:497:25,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:498:26,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:499:27,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:501:28,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:502:29,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:503:30,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:504:31,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:506:32,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:509:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:511:34,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindData:384:37,AS-IS 액션,A6,A6|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindData:384:37,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.FindDelete,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:464:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:467:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:468:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:469:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:470:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:471:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:473:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:474:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:475:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:476:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:477:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:478:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:479:13,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:480:14,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:481:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:482:16,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:483:17,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:485:18,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:487:19,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:489:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:492:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:494:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:495:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:496:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:497:25,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:498:26,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:499:27,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:501:28,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:502:29,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:503:30,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:504:31,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:506:32,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:509:33,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:511:34,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
 ACT:SCP0028_Shipment_Lot_Size.FindDelete:511:34,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindDelete:511:34,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,PASS
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:513:35,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:515:36,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:515:36,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:513:35,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:515:36,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:515:36,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindDelete:515:36,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindDelete:515:36,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.FindDelete:515:36,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,PASS
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:517:37,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:517:37,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
 ACT:SCP0028_Shipment_Lot_Size.FindDelete:517:37,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:519:38,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:520:39,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:521:40,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:522:41,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:523:42,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:524:43,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:525:44,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:526:45,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:527:46,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:528:47,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:529:48,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:530:49,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:531:50,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:533:51,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:538:52,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:540:53,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:544:54,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:519:38,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:520:39,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:521:40,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:522:41,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:523:42,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:524:43,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:525:44,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:526:45,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:527:46,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:528:47,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:529:48,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:530:49,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:531:50,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:533:51,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:538:52,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:540:53,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:544:54,AS-IS 액션,G1,G1|LEDGER:V-86e7f1e2,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:544:54,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
 ACT:SCP0028_Shipment_Lot_Size.FindDelete:544:54,AS-IS 액션,E4,E4|MSG:MSG00031,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindDelete:544:54,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:545:55,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:549:56,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:550:57,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:551:58,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:553:59,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:545:55,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:549:56,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:550:57,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:551:58,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:553:59,AS-IS 액션,G1,G1|LEDGER:V-a89007be,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:553:59,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
 ACT:SCP0028_Shipment_Lot_Size.FindDelete:553:59,AS-IS 액션,E4,E4|MSG:MSG00284,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindDelete:553:59,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.FindDelete:563:60,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindDelete:563:60,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindDelete,ERROR
 ACT:SCP0028_Shipment_Lot_Size.FindInput,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
 ACT:SCP0028_Shipment_Lot_Size.FindInput:397:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindInput:400:2,AS-IS 액션,E3,E3|LEDGER:V-992e7085,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindInput:400:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindInput:400:3,AS-IS 액션,E3,E3|LEDGER:V-992e7085,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindInput:400:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
 ACT:SCP0028_Shipment_Lot_Size.FindInput:402:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
 ACT:SCP0028_Shipment_Lot_Size.FindInput:404:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
@@ -709,6 +718,7 @@ ACT:SCP0028_Shipment_Lot_Size.FindInput:428:20,AS-IS 액션,X-ROW,X-ROW|ENTRY:SC
 ACT:SCP0028_Shipment_Lot_Size.FindInput:433:21,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
 ACT:SCP0028_Shipment_Lot_Size.FindInput:435:22,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
 ACT:SCP0028_Shipment_Lot_Size.FindInput:435:22,AS-IS 액션,A1,A1|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.FindInput:436:23,AS-IS 액션,D1,D1|LEDGER:V-d3546632,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.FindInput:436:23,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
 ACT:SCP0028_Shipment_Lot_Size.FindInput:438:24,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
 ACT:SCP0028_Shipment_Lot_Size.FindInput:440:25,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
@@ -717,7 +727,7 @@ ACT:SCP0028_Shipment_Lot_Size.FindInput:444:27,AS-IS 액션,X-ROW,X-ROW|ENTRY:SC
 ACT:SCP0028_Shipment_Lot_Size.FindInput:446:28,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
 ACT:SCP0028_Shipment_Lot_Size.FindInput:449:29,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
 ACT:SCP0028_Shipment_Lot_Size.FindInput:455:30,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.FindInput,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.Form_Load,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.Form_Load,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.Form_Load,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.Form_Load,ERROR
 ACT:SCP0028_Shipment_Lot_Size.Form_Load,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.Form_Load:100:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.Form_Load:101:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
@@ -729,47 +739,48 @@ ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G6,G6|COND:cboValid,NOT_
 ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G6,G6|COND:cboOperationGroup,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G6,G6|COND:clbTransMode,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G4,G4|COND:cboValid,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G4,G4|COND:cboOperationGroup,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G4,G4|COND:clbTransMode,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G4,G4|COND:cboDivision,FAIL
+ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G4,G4|COND:cboValid,FAIL
+ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G4,G4|COND:cboOperationGroup,FAIL
+ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G4,G4|COND:clbTransMode,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls,AS-IS 액션,G4,G4|BTN:btnItemId,NOPATH
 ACT:SCP0028_Shipment_Lot_Size.InitControls:129:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitControls:131:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.InitControls:132:3,AS-IS 액션,J1,J1|LEDGER:V-c27c0a9b,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitControls:132:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls:132:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.InitControls:132:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls:134:4,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitControls:134:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls:134:4,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.InitControls:134:4,AS-IS 액션,G4,G4|COND:cboDivision,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls:134:4,AS-IS 액션,C1,C1|COND:cboDivision,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls:134:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.InitControls:134:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls:135:5,AS-IS 액션,G6,G6|COND:cboValid,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitControls:135:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls:135:5,AS-IS 액션,G4,G4|COND:cboValid,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.InitControls:135:5,AS-IS 액션,G4,G4|COND:cboValid,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls:135:5,AS-IS 액션,C1,C1|COND:cboValid,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls:135:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.InitControls:135:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls:137:6,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls:137:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.InitControls:137:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls:138:7,AS-IS 액션,G6,G6|COND:cboOperationGroup,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitControls:138:7,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls:138:7,AS-IS 액션,G4,G4|COND:cboOperationGroup,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.InitControls:138:7,AS-IS 액션,G4,G4|COND:cboOperationGroup,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls:138:7,AS-IS 액션,C1,C1|COND:cboOperationGroup,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls:138:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.InitControls:138:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls:140:8,AS-IS 액션,G6,G6|COND:clbTransMode,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitControls:140:8,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls:140:8,AS-IS 액션,G4,G4|COND:clbTransMode,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.InitControls:140:8,AS-IS 액션,G4,G4|COND:clbTransMode,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls:140:8,AS-IS 액션,C1,C1|COND:clbTransMode,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls:140:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.InitControls:140:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitControls,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls:142:9,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitControls:144:10,AS-IS 액션,G6,G6|COND:cboDivision,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitControls:144:10,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitControls:144:10,AS-IS 액션,G4,G4|COND:cboDivision,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.InitControls:144:10,AS-IS 액션,G4,G4|COND:cboDivision,FAIL
 ACT:SCP0028_Shipment_Lot_Size.InitControls:144:10,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
 ACT:SCP0028_Shipment_Lot_Size.InitControls:146:11,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitControls:146:11,AS-IS 액션,G4,G4|BTN:btnItemId,NOPATH
 ACT:SCP0028_Shipment_Lot_Size.InitControls:146:11,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
 ACT:SCP0028_Shipment_Lot_Size.InitEvent,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.InitEvent,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitEvent,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.InitEvent,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitEvent,NA
 ACT:SCP0028_Shipment_Lot_Size.InitEvent,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitEvent,AS-IS 액션,G4,G4|BTN:btnInput,NOPATH
 ACT:SCP0028_Shipment_Lot_Size.InitEvent,AS-IS 액션,G4,G4|BTN:btnDelete,NOPATH
@@ -785,10 +796,10 @@ ACT:SCP0028_Shipment_Lot_Size.InitEvent:122:4,AS-IS 액션,G03-WIRE,G03-WIRE|SCR
 ACT:SCP0028_Shipment_Lot_Size.InitEvent:122:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitEvent:124:5,AS-IS 액션,G03-WIRE,G03-WIRE|SCREEN,NOPATH
 ACT:SCP0028_Shipment_Lot_Size.InitEvent:124:5,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitSpread,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.InitSpread,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InitSpread,ERROR
 ACT:SCP0028_Shipment_Lot_Size.InitSpread,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitSpread,AS-IS 액션,A5,A5|COL:LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitSpread,AS-IS 액션,A5,A5|COL:INCREMENT,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.InitSpread,AS-IS 액션,A5,A5|COL:LOT_SIZE,PASS
+ACT:SCP0028_Shipment_Lot_Size.InitSpread,AS-IS 액션,A5,A5|COL:INCREMENT,PASS
 ACT:SCP0028_Shipment_Lot_Size.InitSpread,AS-IS 액션,H2,H2|COL:LOT_SIZE,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitSpread,AS-IS 액션,H2,H2|COL:INCREMENT,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitSpread,AS-IS 액션,H5,H5|COL:LOT_SIZE,NOT_RUN
@@ -798,566 +809,595 @@ ACT:SCP0028_Shipment_Lot_Size.InitSpread,AS-IS 액션,D5,D5|COL:INCREMENT,NOT_RU
 ACT:SCP0028_Shipment_Lot_Size.InitSpread:185:1,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitSpread:186:2,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitSpread:187:3,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitSpread:187:3,AS-IS 액션,A5,A5|COL:LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.InitSpread:187:3,AS-IS 액션,A5,A5|COL:LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.InitSpread:187:3,AS-IS 액션,H2,H2|COL:LOT_SIZE,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitSpread:187:3,AS-IS 액션,H5,H5|COL:LOT_SIZE,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitSpread:187:3,AS-IS 액션,D5,D5|COL:LOT_SIZE,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitSpread:188:4,AS-IS 액션,A10,A10|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InitSpread:188:4,AS-IS 액션,A5,A5|COL:INCREMENT,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.InitSpread:188:4,AS-IS 액션,A5,A5|COL:INCREMENT,PASS
 ACT:SCP0028_Shipment_Lot_Size.InitSpread:188:4,AS-IS 액션,H2,H2|COL:INCREMENT,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitSpread:188:4,AS-IS 액션,H5,H5|COL:INCREMENT,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InitSpread:188:4,AS-IS 액션,D5,D5|COL:INCREMENT,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.InsertButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InsertButton,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.InsertButton,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.InsertButton,ERROR
 ACT:SCP0028_Shipment_Lot_Size.InsertButton,AS-IS 액션,D6,D6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.InsertButton:202:1,AS-IS 액션,D6,D6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveButton,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveButton,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveButton,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveButton,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveButton,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveButton,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveButton,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveButton,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveButton:207:1,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveButton:207:1,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveButton:207:1,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveButton:207:1,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveButton:207:1,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveButton:207:1,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveButton:207:1,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveButton:207:1,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData,AS-IS 액션,F2,F2|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:578:1,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:578:1,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:578:1,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:578:1,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:578:1,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:578:1,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:578:1,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:578:1,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:580:2,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:580:2,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:580:2,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:580:2,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:580:2,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:580:2,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:580:2,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:580:2,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:582:3,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:582:3,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:582:3,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:582:3,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:582:3,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:582:3,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:582:3,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:582:3,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:583:4,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:583:4,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:583:4,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:583:4,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:583:4,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:583:4,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:583:4,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:583:4,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:585:5,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:585:5,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:585:5,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:585:5,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:585:5,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:585:5,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:585:5,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:585:5,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:587:6,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:587:6,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:587:6,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:587:6,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:587:6,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:587:6,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:587:6,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:587:6,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:589:7,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:589:7,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:589:7,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:589:7,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:589:7,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:589:7,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:589:7,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:589:7,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:594:8,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:594:8,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:594:8,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:594:8,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:594:8,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:594:8,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:594:8,AS-IS 액션,F6,F6|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:594:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SaveData,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.SaveData:594:8,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:594:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SaveData,ERROR
+ACT:SCP0028_Shipment_Lot_Size.SaveData:595:9,AS-IS 액션,H2,H2|LEDGER:V-a99ddb18,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:595:9,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:595:9,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:595:9,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:595:9,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:595:9,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:595:9,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:595:9,AS-IS 액션,F6,F6|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:595:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SaveData,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.SaveData:595:9,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:595:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SaveData,ERROR
 ACT:SCP0028_Shipment_Lot_Size.SaveData:598:10,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:598:10,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:598:10,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:598:10,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:598:10,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:598:10,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:598:10,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:598:10,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:602:11,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:602:11,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:602:11,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:602:11,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:602:11,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:602:11,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:602:11,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:602:11,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:606:12,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:606:12,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:606:12,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:606:12,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:606:12,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:606:12,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:606:12,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:606:12,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:608:13,AS-IS 액션,E4,E4|LEDGER:V-356aae9e,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:608:13,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:608:13,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:608:13,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:608:13,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:608:13,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:608:13,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:608:13,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:608:13,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:608:13,AS-IS 액션,E4,E4|MSG:MSG00133,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:608:13,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:609:14,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:609:14,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:609:14,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:609:14,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:609:14,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:609:14,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:609:14,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:609:14,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:612:15,AS-IS 액션,E3,E3|LEDGER:V-483219d8,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:612:15,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:612:15,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:612:15,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:612:15,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:612:15,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:612:15,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:612:15,AS-IS 액션,F6,F6|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:612:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SaveData,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.SaveData:612:15,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:612:15,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SaveData,ERROR
+ACT:SCP0028_Shipment_Lot_Size.SaveData:612:16,AS-IS 액션,E3,E3|LEDGER:V-483219d8,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:612:16,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:612:16,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:612:16,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:612:16,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:612:16,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:612:16,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:612:16,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:612:16,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:614:17,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:614:17,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:614:17,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:614:17,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:614:17,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:614:17,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:614:17,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:614:17,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:614:18,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:614:18,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:614:18,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:614:18,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:614:18,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:614:18,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:614:18,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:614:18,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:616:19,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:616:19,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:616:19,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:616:19,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:616:19,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:616:19,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:616:19,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:616:19,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:617:20,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:617:20,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:617:20,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:617:20,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:617:20,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:617:20,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:617:20,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:617:20,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:618:21,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:618:21,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:618:21,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:618:21,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:618:21,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:618:21,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:618:21,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:618:21,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:619:22,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:619:22,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:619:22,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:619:22,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:619:22,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:619:22,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:619:22,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:619:22,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:620:23,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:620:23,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:620:23,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:620:23,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:620:23,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:620:23,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:620:23,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:620:23,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:621:24,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:621:24,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:621:24,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:621:24,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:621:24,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:621:24,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:621:24,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:621:24,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:622:25,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:622:25,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:622:25,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:622:25,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:622:25,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:622:25,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:622:25,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:622:25,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:623:26,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:623:26,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:623:26,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:623:26,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:623:26,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:623:26,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:623:26,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:623:26,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:624:27,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:624:27,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:624:27,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:624:27,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:624:27,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:624:27,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:624:27,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:624:27,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:625:28,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:625:28,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:625:28,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:625:28,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:625:28,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:625:28,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:625:28,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:625:28,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:626:29,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:626:29,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:626:29,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:626:29,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:626:29,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:626:29,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:626:29,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:626:29,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:628:30,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:628:30,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:628:30,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:628:30,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:628:30,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:628:30,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:628:30,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:628:30,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:630:31,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:630:31,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:630:31,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:630:31,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:630:31,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:630:31,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:630:31,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:630:31,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:632:32,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:632:32,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:632:32,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:632:32,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:632:32,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:632:32,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:632:32,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:632:32,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:634:33,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:634:33,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:634:33,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:634:33,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:634:33,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:634:33,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:634:33,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:634:33,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:636:34,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:636:34,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:636:34,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:636:34,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:636:34,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:636:34,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:636:34,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:636:34,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:637:35,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:637:35,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:637:35,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:637:35,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:637:35,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:637:35,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:637:35,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:637:35,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:639:36,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:639:36,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:639:36,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:639:36,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:639:36,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:639:36,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:639:36,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:639:36,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:641:37,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:641:37,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:641:37,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:641:37,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:641:37,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:641:37,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:641:37,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:641:37,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:642:38,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:642:38,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:642:38,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:642:38,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:642:38,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:642:38,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:642:38,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:642:38,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:643:39,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:643:39,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:643:39,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:643:39,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:643:39,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:643:39,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:643:39,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:643:39,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:644:40,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:644:40,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:644:40,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:644:40,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:644:40,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:644:40,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:644:40,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:644:40,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:645:41,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:645:41,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:645:41,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:645:41,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:645:41,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:645:41,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:645:41,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:645:41,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:646:42,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:646:42,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:646:42,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:646:42,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:646:42,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:646:42,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:646:42,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:646:42,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:648:43,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:648:43,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:648:43,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:648:43,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:648:43,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:648:43,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:648:43,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:648:43,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:649:44,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:649:44,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:649:44,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:649:44,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:649:44,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:649:44,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:649:44,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:649:44,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:650:45,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:650:45,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:650:45,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:650:45,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:650:45,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:650:45,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:650:45,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:650:45,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:652:46,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:652:46,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:652:46,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:652:46,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:652:46,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:652:46,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:652:46,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:652:46,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:654:47,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:654:47,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:654:47,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:654:47,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:654:47,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:654:47,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:654:47,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:654:47,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:657:48,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:657:48,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:657:48,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:657:48,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:657:48,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:657:48,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:657:48,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:657:48,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:659:49,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:659:49,AS-IS 액션,F2,F2|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:659:49,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:659:49,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:659:49,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:659:49,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:659:49,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:661:50,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:661:50,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:661:50,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:661:50,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:661:50,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:661:50,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:661:50,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:661:50,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:663:51,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:663:51,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:663:51,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:663:51,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:663:51,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:663:51,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:663:51,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:663:51,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:663:51,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:663:51,AS-IS 액션,DB-SYN,DB-SYN|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:665:52,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:665:52,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:665:52,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:665:52,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:665:52,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:665:52,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:665:52,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:665:52,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:665:52,AS-IS 액션,X-REOPEN,X-REOPEN|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:667:53,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:667:53,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:667:53,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:667:53,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:667:53,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:667:53,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:667:53,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:667:53,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:668:54,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:668:54,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:668:54,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:668:54,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:668:54,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:668:54,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:668:54,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:668:54,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:669:55,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:669:55,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:669:55,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:669:55,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:669:55,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:669:55,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:669:55,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:669:55,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:670:56,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:670:56,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:670:56,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:670:56,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:670:56,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:670:56,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:670:56,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:670:56,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:671:57,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:671:57,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:671:57,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:671:57,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:671:57,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:671:57,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:671:57,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:671:57,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:672:58,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:672:58,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:672:58,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:672:58,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:672:58,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:672:58,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:672:58,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:672:58,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:673:59,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:673:59,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:673:59,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:673:59,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:673:59,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:673:59,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:673:59,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:673:59,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:674:60,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:674:60,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:674:60,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:674:60,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:674:60,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:674:60,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:674:60,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:674:60,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:675:61,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:675:61,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:675:61,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:675:61,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:675:61,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:675:61,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:675:61,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:675:61,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:676:62,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:676:62,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:676:62,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:676:62,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:676:62,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:676:62,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:676:62,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:676:62,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:677:63,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:677:63,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:677:63,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:677:63,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:677:63,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:677:63,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:677:63,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:677:63,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:678:64,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:678:64,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:678:64,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:678:64,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:678:64,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:678:64,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:678:64,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:678:64,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:679:65,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:679:65,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:679:65,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:679:65,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:679:65,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:679:65,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:679:65,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:679:65,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:681:66,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:681:66,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:681:66,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:681:66,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:681:66,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:681:66,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:681:66,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:681:66,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:686:67,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:686:67,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:686:67,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:686:67,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:686:67,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:686:67,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:686:67,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:686:67,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:688:68,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:688:68,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:688:68,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:688:68,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:688:68,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:688:68,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:688:68,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:688:68,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:691:69,AS-IS 액션,E4,E4|LEDGER:V-88b49284,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:691:69,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:691:69,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:691:69,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:691:69,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:691:69,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:691:69,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:691:69,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:691:69,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:691:69,AS-IS 액션,E4,E4|MSG:MSG00004,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:691:69,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:692:70,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:692:70,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:692:70,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:692:70,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:692:70,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:692:70,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:692:70,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:692:70,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:696:71,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:696:71,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:696:71,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:696:71,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:696:71,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:696:71,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:696:71,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:696:71,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:697:72,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:697:72,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:697:72,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:697:72,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:697:72,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:697:72,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:697:72,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:697:72,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:698:73,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:698:73,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:698:73,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:698:73,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:698:73,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:698:73,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:698:73,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:698:73,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:700:74,AS-IS 액션,E4,E4|LEDGER:V-fb2bb601,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:700:74,AS-IS 액션,F1,F1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:700:74,AS-IS 액션,F2,F2|SCREEN,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SaveData:700:74,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:700:74,AS-IS 액션,F2,F2|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SaveData:700:74,AS-IS 액션,F4,F4|SP:P_SCP0028_GET_SHIPMENT_LOT_SIZE,PASS
 ACT:SCP0028_Shipment_Lot_Size.SaveData:700:74,AS-IS 액션,F4,F4|SP:P_SCP0028_SAVE_SHIPMENT_LOT_SIZE,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SaveData:700:74,AS-IS 액션,F6,F6|SCREEN,NOPATH
+ACT:SCP0028_Shipment_Lot_Size.SaveData:700:74,AS-IS 액션,F6,F6|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:700:74,AS-IS 액션,E4,E4|MSG:MSG00006,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SaveData:700:74,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SetChangedControl,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SetChangedControl,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.SetChangedControl,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SetChangedControl,ERROR
 ACT:SCP0028_Shipment_Lot_Size.SetChangedControl,AS-IS 액션,E4,E4|COND:cboDivision,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SetChangedControl,AS-IS 액션,E4,E4|COND:clbFromSite,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SetChangedControl,AS-IS 액션,E4,E4|COND:clbToSite,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:160:1,AS-IS 액션,E4,E4|COND:cboDivision,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:166:2,AS-IS 액션,E4,E4|COND:cboDivision,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:166:2,AS-IS 액션,B4,B4|COND:cboDivision,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:166:2,AS-IS 액션,B3,B3|COND:cboDivision,TODO
+ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:166:2,AS-IS 액션,B4,B4|COND:cboDivision,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:166:2,AS-IS 액션,B3,B3|COND:cboDivision,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:167:3,AS-IS 액션,E4,E4|COND:clbFromSite,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:167:3,AS-IS 액션,C1,C1|COND:clbFromSite,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:167:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SetChangedControl,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:167:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SetChangedControl,ERROR
 ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:169:4,AS-IS 액션,E4,E4|COND:cboDivision,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:169:4,AS-IS 액션,B4,B4|COND:cboDivision,NOPATH
-ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:169:4,AS-IS 액션,B3,B3|COND:cboDivision,TODO
+ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:169:4,AS-IS 액션,B4,B4|COND:cboDivision,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:169:4,AS-IS 액션,B3,B3|COND:cboDivision,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:170:5,AS-IS 액션,E4,E4|COND:clbToSite,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:170:5,AS-IS 액션,C1,C1|COND:clbToSite,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:170:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SetChangedControl,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.SpdMain_TopChange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SpdMain_TopChange,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.SetChangedControl:170:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SetChangedControl,ERROR
+ACT:SCP0028_Shipment_Lot_Size.SpdMain_TopChange,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SpdMain_TopChange,ERROR
 ACT:SCP0028_Shipment_Lot_Size.SpdMain_TopChange,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SpdMain_TopChange:720:1,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.SpdMain_TopChange:721:2,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.SpdMain_TopChange:721:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SpdMain_TopChange,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.SpdMain_TopChange:721:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.SpdMain_TopChange,ERROR
 ACT:SCP0028_Shipment_Lot_Size.SpdMain_TopChange:722:3,AS-IS 액션,H4,H4|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:291:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:291:1,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:291:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:293:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:293:2,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:293:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:298:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:298:3,AS-IS 액션,G5,G5|LEDGER:V-99c509aa,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:298:3,AS-IS 액션,H6,H6|LEDGER:V-aa6bec9e,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:298:3,AS-IS 액션,M3,M3|LEDGER:V-180ef854,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:298:3,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:298:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:298:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnDelete_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:299:4,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:298:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnDelete_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:299:4,AS-IS 액션,G5,G5|LEDGER:V-480372c9,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:299:4,AS-IS 액션,H6,H6|LEDGER:V-6cb6bfa8,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:299:4,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:299:4,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:299:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnDelete_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:300:5,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:299:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnDelete_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:300:5,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:300:5,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:300:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnDelete_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:301:6,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:300:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnDelete_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:301:6,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:301:6,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:301:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnDelete_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:302:7,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:301:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnDelete_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:302:7,AS-IS 액션,G5,G5|LEDGER:V-b9f0504a,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:302:7,AS-IS 액션,H6,H6|LEDGER:V-d816896f,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:302:7,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:302:7,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:302:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnDelete_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:304:8,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:302:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnDelete_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:304:8,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:304:8,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:305:9,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:305:9,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:305:9,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:306:10,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:306:10,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:306:10,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:307:11,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:307:11,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:307:11,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:308:12,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:308:12,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:308:12,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:309:13,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:309:13,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:309:13,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:311:14,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:311:14,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:311:14,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:312:15,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:312:15,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnDelete_Click:312:15,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:263:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:263:1,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:263:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:265:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:265:2,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:265:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:270:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:270:3,AS-IS 액션,G5,G5|LEDGER:V-4ad19f40,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:270:3,AS-IS 액션,H6,H6|LEDGER:V-c2d97238,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:270:3,AS-IS 액션,M3,M3|LEDGER:V-b2d03a00,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:270:3,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:270:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:270:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnInput_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:271:4,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:270:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnInput_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:271:4,AS-IS 액션,G5,G5|LEDGER:V-86b2f489,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:271:4,AS-IS 액션,H6,H6|LEDGER:V-d41bec0d,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:271:4,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:271:4,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:271:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnInput_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:272:5,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:271:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnInput_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:272:5,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:272:5,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:272:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnInput_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:273:6,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:272:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnInput_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:273:6,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:273:6,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:273:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnInput_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:274:7,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:273:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnInput_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:274:7,AS-IS 액션,G5,G5|LEDGER:V-e06826aa,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:274:7,AS-IS 액션,H6,H6|LEDGER:V-5123358d,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:274:7,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:274:7,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:274:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnInput_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:276:8,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:274:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnInput_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:276:8,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:276:8,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:277:9,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:277:9,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:277:9,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:278:10,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:278:10,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:278:10,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:279:11,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:279:11,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:279:11,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:280:12,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:280:12,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:280:12,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:281:13,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:281:13,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:281:13,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:283:14,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:283:14,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:283:14,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:284:15,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:284:15,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnInput_Click:284:15,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:240:1,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:240:1,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:240:1,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:242:2,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:242:2,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:242:2,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:243:3,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:243:3,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:243:3,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:244:4,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:244:4,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:244:4,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:246:5,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:246:5,AS-IS 액션,G5,G5|LEDGER:V-26b0134a,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:246:5,AS-IS 액션,H6,H6|LEDGER:V-97b0fc4e,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:246:5,AS-IS 액션,M3,M3|LEDGER:V-fcaf4a95,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:246:5,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:246:5,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:246:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnItemId_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:248:6,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:246:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnItemId_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:248:6,AS-IS 액션,G5,G5|LEDGER:V-dc8f2fac,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:248:6,AS-IS 액션,H6,H6|LEDGER:V-a9485a6a,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:248:6,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:248:6,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:248:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnItemId_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:249:7,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:248:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnItemId_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:249:7,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:249:7,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:249:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnItemId_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:250:8,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:249:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnItemId_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:250:8,AS-IS 액션,G5,G5|LEDGER:V-46f73ab8,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:250:8,AS-IS 액션,H6,H6|LEDGER:V-c4a9dc2c,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:250:8,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:250:8,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:250:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnItemId_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:252:9,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:250:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnItemId_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:252:9,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:252:9,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:254:10,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:254:10,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:254:10,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:256:11,AS-IS 액션,K4,K4|SCREEN,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:256:11,AS-IS 액션,K4,K4|SCREEN,PASS
 ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:256:11,AS-IS 액션,J2,J2|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:256:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnItemId_Click,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:753:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:755:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:757:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:759:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:760:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:762:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:764:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.btnItemId_Click:256:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.btnItemId_Click,ERROR
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:753:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:755:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:757:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:759:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:760:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:762:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:764:7,AS-IS 액션,E4,E4|LEDGER:V-fe6dcb91,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:764:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
 ACT:SCP0028_Shipment_Lot_Size.checkValidSize:764:7,AS-IS 액션,E4,E4|COL:LOT_SIZE,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.checkValidSize:764:7,AS-IS 액션,E4,E4|MSG:MSG00099,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.checkValidSize:764:7,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:766:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:769:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:771:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:766:8,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:769:9,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:771:10,AS-IS 액션,E4,E4|LEDGER:V-4ff698de,NOT_RUN
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:771:10,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
 ACT:SCP0028_Shipment_Lot_Size.checkValidSize:771:10,AS-IS 액션,E4,E4|COL:LOT_SIZE,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.checkValidSize:771:10,AS-IS 액션,E4,E4|MSG:MSG00084,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.checkValidSize:771:10,AS-IS 액션,I1,I1|SCREEN,NOT_RUN
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:773:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.checkValidSize:777:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.spdMain_Change,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:727:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:729:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:730:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:732:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:733:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:734:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,REVIEW
-ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:735:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,REVIEW
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:773:11,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
+ACT:SCP0028_Shipment_Lot_Size.checkValidSize:777:12,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.checkValidSize,ERROR
+ACT:SCP0028_Shipment_Lot_Size.spdMain_Change,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,ERROR
+ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:727:1,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,ERROR
+ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:729:2,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,ERROR
+ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:730:3,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,ERROR
+ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:732:4,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,ERROR
+ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:733:5,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,ERROR
+ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:734:6,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,ERROR
+ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:735:7,AS-IS 액션,X-ROW,X-ROW|ENTRY:SCP0028_Shipment_Lot_Size.spdMain_Change,ERROR
 ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:735:7,AS-IS 액션,C3,C3|COL:LOT_SIZE,NOT_RUN
 ACT:SCP0028_Shipment_Lot_Size.spdMain_Change:735:7,AS-IS 액션,C3,C3|COL:INCREMENT,NOT_RUN

@@ -410,9 +410,8 @@ export const CapaLobReportForm = ({ combos, onSearch, onOpenItemPopup, disabled 
                         appearance='outlined'
                         priority='normal'
                         disabled={disabled}
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onOpenItemPopup} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onOpenItemPopup}
                       />
                     ),
                   }}

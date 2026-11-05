@@ -98,7 +98,7 @@ export const LBL = {
   OPERATION_GROUP: 'LBL00027',
   PLANT_SITE: 'LBL00005',
   LINE: 'LBL00010',
-  VERSION: 'LBL00606',
+  VERSION: 'LBL00606', // Version (참조용 — 화면 표기는 'Ver.' 하드코딩. DB/번들 'Ver.' 미등록, SCP0016 패턴 일치)
   ELECTRODE: 'LBL00038',
   BUCKET: 'LBL00710',
   PERIOD: 'LBL00013',

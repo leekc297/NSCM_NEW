@@ -92,8 +92,11 @@ export const SHEET_BIZ_TYPE: Record<SHEETS.PACK | SHEETS.CELL, string> = {
 export const MSG = {
   // Division 미선택 — 조회 가드 (AS-IS FindData cs:609 MSG00097). 실측 존재.
   REQUIRE_DIVISION: 'MSG00097',
-  // 필수값 — "{0} 필수" (design 03 §4.3 필수 7종). 실측 존재.
-  REQUIRED_FIELD: 'MSG00002',
+  // 필수값 — "{0} 값은 필수 입력 항목입니다." (design 03 §4.3 필수 7종, AS-IS cs 1495~1551).
+  //   AS-IS 번호 MSG00002('{0} 필수')는 TO-BE SCM_ADM_MSG_M 에서 "저장 성공"(Saved successfully)으로
+  //   재번호됨 → 그대로 쓰면 필수값 경고가 성공 메시지로 뜬다(2026-10-29 실사고). 문구 역조회로
+  //   TO-BE MSG00429(KO "{0} 값은 필수 입력 항목입니다." / EN "{0} value is required.")로 재매핑(DB 실측).
+  REQUIRED_FIELD: 'MSG00429',
   // 필수 컬럼 없음 — (EditButton/SaveData). 실측 존재.
   REQUIRED_COLUMN: 'MSG00113',
   // 음수 qty 차단 — AS-IS MSG00084(미배포) → 사내 MSG00085("{0} 이상 값만") 재매핑.

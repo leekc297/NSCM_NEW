@@ -1,0 +1,8301 @@
+{
+"id": "DMF0082",
+"at": "2026-10-31 21:55:52",
+"asis": {
+"insertStmts": [
+{
+"kind": "CALL_LOCAL",
+"raw": "InsertRow()",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:683",
+"method": "InsertButton"
+},
+{
+"kind": "CALL_EXT",
+"raw": "spdMain.Sheets[0].GetSelection(0)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:2503",
+"method": "InsertRow"
+},
+{
+"kind": "BRANCH",
+"raw": "if (range != null && range.Row > -1) { bFocusYN = true; if (range.Row < siMain.ActiveRowIndex) { iFocusRow = range.Row; //신규로 생기는 Row가 range의 첫행보다 밑에서 생기기 때문에 +",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:2506",
+"method": "InsertRow"
+},
+{
+"kind": "BRANCH",
+"raw": "if (range.Row < siMain.ActiveRowIndex) { iFocusRow = range.Row; //신규로 생기는 Row가 range의 첫행보다 밑에서 생기기 때문에 +1 하지않음. } else { iFocusRow = range.Row + 1; //ROW가 한개 생기",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:2509",
+"method": "InsertRow"
+},
+{
+"kind": "LOCAL",
+"raw": "int iActRow = siMain.ActiveRowIndex;",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:2524",
+"method": "InsertRow"
+}
+],
+"headerSpan": [
+{
+"raw": "siMain.ColumnHeaderSpan(0, iCellCnt, 3, 1, 20, sColumnLabel, FPHAlign.Center)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:476",
+"method": "SetSpreadHeaderSpan"
+},
+{
+"raw": "siMain.ColumnHeaderSpan(0, iLargeStartCol, 1, iLargeSpanCnt, 20, sLargeSpanName, FPHAlign.Center)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:507",
+"method": "SetSpreadHeaderSpan"
+},
+{
+"raw": "siMain.ColumnHeaderSpan(1, iLargeStartCol, 2, 1, 20, \"SUM\", FPHAlign.Center)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:508",
+"method": "SetSpreadHeaderSpan"
+},
+{
+"raw": "siMain.ColumnHeaderSpan(1, iSmallStartCol, 1, iSmallSpanCnt, 20, sSmallSpanName, FPHAlign.Center)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:513",
+"method": "SetSpreadHeaderSpan"
+},
+{
+"raw": "siMain.ColumnHeaderSpan(2, iSmallStartCol, 1, 1, 30, \"SUM\", FPHAlign.Center)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:514",
+"method": "SetSpreadHeaderSpan"
+},
+{
+"raw": "siMain.ColumnHeaderSpan(1, iSmallStartCol, 1, iSmallSpanCnt, 20, sSmallSpanName, FPHAlign.Center)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:521",
+"method": "SetSpreadHeaderSpan"
+},
+{
+"raw": "siMain.ColumnHeaderSpan(2, iSmallStartCol, 1, 1, 20, \"SUM\", FPHAlign.Center)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:522",
+"method": "SetSpreadHeaderSpan"
+},
+{
+"raw": "siMain.ColumnHeaderSpan(1, iSmallStartCol, 1, iSmallSpanCnt, 20, sSmallSpanName, FPHAlign.Center)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:533",
+"method": "SetSpreadHeaderSpan"
+},
+{
+"raw": "siMain.ColumnHeaderSpan(2, iSmallStartCol, 1, 1, 20, \"SUM\", FPHAlign.Center)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:534",
+"method": "SetSpreadHeaderSpan"
+},
+{
+"raw": "siMain.ColumnHeaderSpan(0, iLargeStartCol, 1, iLargeSpanCnt, 20, sLargeSpanName, FPHAlign.Center)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:535",
+"method": "SetSpreadHeaderSpan"
+},
+{
+"raw": "siMain.ColumnHeaderSpan(1, iLargeStartCol, 2, 1, 20, \"SUM\", FPHAlign.Center)",
+"ref": "DMF0082_FcstNPrice_Mgmt.cs:536",
+"method": "SetSpreadHeaderSpan"
+}
+],
+"planExcluded": [],
+"editRules": [],
+"mainClass": "DMF0082_FcstNPrice_Mgmt",
+"divControls": [
+"clbDivision"
+],
+"changeMethods": [],
+"loadMethods": [
+".ctor",
+"CreateSpread",
+"DefineProperty",
+"Form_Load",
+"GetBucketType",
+"GetDayRange",
+"GetFuturePriceInfo",
+"GetSpdTitle",
+"InitControls",
+"InitSaveDataTable",
+"InitSpread",
+"InitSpreadFooterSum",
+"OnShown",
+"SetChangeControl",
+"SetSpreadColumn",
+"SetSpreadHeaderSpan"
+],
+"states": [],
+"stateCountAll": 1,
+"defaults": [],
+"insertGuards": [],
+"deadExcluded": [
+"DMF0082_SaveSalesFuturePrice_Popup.Dsdm_Changed",
+"DMF0082_SaveSalesFuturePrice_Popup.clbDivisions_SelectedIndexChanged_1",
+"DMF0082_SaveSalesFuturePrice_Popup.drpDateTime_Load"
+],
+"hasMerge": false
+},
+"db": {
+"menu": {
+"mnu_id": "DMF0082",
+"uppr_mnu_id": "Demand_Plan",
+"unit_tp_cd": "D",
+"use_yn": "Y",
+"n01_atr_ctn": "NSCM"
+},
+"menuGroups": [
+{
+"user_gr_id": "CAPA Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "JV Planner",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"use_yn": "N"
+}
+],
+"btnAuth": [
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "GUEST",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "EDIT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "EDIT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "EDIT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "EDIT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Planner (W/S)",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "INSERT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "CAPA Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Viewer",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM Viewer",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH_CURRENT",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP ADMIN",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "titleSet",
+"mnu_btn_cd": "SAVE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SCM PI Admin",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "TITLE",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "FP Planner",
+"sht_nm": "spreadTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "SSP Planner",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "DM Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "FORM_DATA",
+"use_yn": "Y"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "fcstNPrice",
+"mnu_btn_cd": "DELETE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH_DATA",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "version",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "JV Planner",
+"sht_nm": "buttonAuth",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_DATA",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "IF",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SCP Tester",
+"sht_nm": "savePriceTitle",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "FcstNPrice",
+"mnu_btn_cd": "UPLOAD_SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "futurePriceInfo",
+"mnu_btn_cd": "SAVE",
+"use_yn": "N"
+},
+{
+"user_gr_id": "SSP Viewer",
+"sht_nm": "savePriceData",
+"mnu_btn_cd": "SEARCH",
+"use_yn": "N"
+}
+],
+"columns": [
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "APPLICATION",
+"column_label_name": "Application",
+"sort_order_no": "180",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "AS_FROM_SITE",
+"column_label_name": "AS From Site",
+"sort_order_no": "330",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "AS_YN",
+"column_label_name": "AS_YN",
+"sort_order_no": "437",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "ATTR1",
+"column_label_name": "ATTR1",
+"sort_order_no": "435",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "BIZ_TYPE",
+"column_label_name": "Biz Type",
+"sort_order_no": "32",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "BUCKET",
+"column_label_name": "BUCKET",
+"sort_order_no": "410",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "CELL_MODEL_NICK_NAME",
+"column_label_name": "Cell Model Nick Name",
+"sort_order_no": "290",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "CELL_PER_CAR",
+"column_label_name": "Cell/Car",
+"sort_order_no": "291",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "CELL_PER_MODULE",
+"column_label_name": "Cell/Module",
+"sort_order_no": "292",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "CELL_PROD_SITE_ID",
+"column_label_name": "Cell Prod Site*",
+"sort_order_no": "370",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "CELL_QUANTITY",
+"column_label_name": "Cell Quantity",
+"sort_order_no": "295",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "CELL_TYPE",
+"column_label_name": "Product Group",
+"sort_order_no": "230",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "CITY_NAME",
+"column_label_name": "City",
+"sort_order_no": "60",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "COUNTRY_NAME",
+"column_label_name": "Country",
+"sort_order_no": "50",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "CURRENCY",
+"column_label_name": "Currency*",
+"sort_order_no": "380",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "CUST_GROUP",
+"column_label_name": "Cust Group",
+"sort_order_no": "150",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "CUST_GROUP_DTL",
+"column_label_name": "Cust Group Detail",
+"sort_order_no": "160",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "DEPT_ID",
+"column_label_name": "Department",
+"sort_order_no": "25",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "DEPT_NAME",
+"column_label_name": "Department Name",
+"sort_order_no": "27",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "DEPT_NAME_KO",
+"column_label_name": "Department",
+"sort_order_no": "26",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div*",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "DMS_CUSTOMER",
+"column_label_name": "End Cust.(Report)",
+"sort_order_no": "320",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "DMS_SALES",
+"column_label_name": "Sold-To Cust.(Report)",
+"sort_order_no": "310",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "DOM_EXP",
+"column_label_name": "Customs Handbook*",
+"sort_order_no": "140",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "EDIT_FLAG",
+"column_label_name": "Edit Flag",
+"sort_order_no": "420",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "END_CUSTOMER",
+"column_label_name": "End Customer*",
+"sort_order_no": "30",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "ENERGE",
+"column_label_name": "Energy(KWH)",
+"sort_order_no": "294",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "FCST_TYPE",
+"column_label_name": "FCST Type*",
+"sort_order_no": "130",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "FORECAST_INFOR_VERSION",
+"column_label_name": "Model Version",
+"sort_order_no": "280",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "FORECAST_INFO_ALL",
+"column_label_name": "Spec & Version",
+"sort_order_no": "260",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "FORECAST_INFO_BIZ_TYPE",
+"column_label_name": "Biz Type",
+"sort_order_no": "220",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "FORECAST_INFO_CELL_MODEL",
+"column_label_name": "Cell Model",
+"sort_order_no": "240",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "FORECAST_INFO_CELL_PACK_COUNT",
+"column_label_name": "Cell Pack Count",
+"sort_order_no": "250",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "FORECAST_INFO_SPEC",
+"column_label_name": "Model Spec",
+"sort_order_no": "270",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "GROUP_ID",
+"column_label_name": "Group Id",
+"sort_order_no": "135",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "INCOTERMS",
+"column_label_name": "Incoterms*",
+"sort_order_no": "110",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "ITEM_ID",
+"column_label_name": "Model*",
+"sort_order_no": "80",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "ITEM_NAME",
+"column_label_name": "Model Name",
+"sort_order_no": "90",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "ITEM_TYPE",
+"column_label_name": "Item Type",
+"sort_order_no": "120",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "LAST_UPDATED_BY",
+"column_label_name": "Last Update By",
+"sort_order_no": "350",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "LAST_UPDATE_DATE",
+"column_label_name": "Last Update",
+"sort_order_no": "340",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "MDM_PROJECT_NAME",
+"column_label_name": "Project Name",
+"sort_order_no": "200",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "MEASURE",
+"column_label_name": "Measure*",
+"sort_order_no": "450",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "MEASURE_GROUP",
+"column_label_name": "Measure Group",
+"sort_order_no": "400",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "MIN_CAPACITY",
+"column_label_name": "Min Capacity",
+"sort_order_no": "210",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "MODULE_PER_CAR",
+"column_label_name": "Module/Car",
+"sort_order_no": "293",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "NEW_FLAG",
+"column_label_name": "New Flag",
+"sort_order_no": "434",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "100",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "OWNER",
+"column_label_name": "Owner",
+"sort_order_no": "170",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "PLANT_SITE_ID",
+"column_label_name": "Plant Site*",
+"sort_order_no": "141",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "PROJECT_CODE",
+"column_label_name": "Project Code*",
+"sort_order_no": "71",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "PROJECT_NAME",
+"column_label_name": "Project",
+"sort_order_no": "72",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "PROJECT_OWNER",
+"column_label_name": "Project Owner",
+"sort_order_no": "74",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "PROJECT_STATUS",
+"column_label_name": "Project Status",
+"sort_order_no": "73",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "PROJECT_S_OP_REPORT",
+"column_label_name": "Project(S Report)",
+"sort_order_no": "23",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "ROUTE",
+"column_label_name": "Channel",
+"sort_order_no": "190",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "SCM_SITE_ID",
+"column_label_name": "Sales Site*",
+"sort_order_no": "70",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "SENDER_NAME",
+"column_label_name": "Sender Name",
+"sort_order_no": "360",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "SOLDTO_CUSTOMER",
+"column_label_name": "Sold-To Customer",
+"sort_order_no": "40",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "SORT_KEY",
+"column_label_name": "SORT_KEY",
+"sort_order_no": "430",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "TEAM_ID",
+"column_label_name": "Team",
+"sort_order_no": "20",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "TEAM_NAME_KO",
+"column_label_name": "Team",
+"sort_order_no": "22",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "VERSION_NO",
+"column_label_name": "Version",
+"sort_order_no": "390",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "VMI_STD_DIO",
+"column_label_name": "VMI_STD_DIO",
+"sort_order_no": "436",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "VMI_YN",
+"column_label_name": "VMI",
+"sort_order_no": "300",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "AUTHORITY_YN",
+"column_label_name": "AY",
+"sort_order_no": "200",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "BIZ_TYPE_NAME",
+"column_label_name": "Biz.Type",
+"sort_order_no": "90",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "CELL_PROD_SITE_ID",
+"column_label_name": "Cell Prod Site*",
+"sort_order_no": "190",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "COL_LIST",
+"column_label_name": "COL_LIST",
+"sort_order_no": "230",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "CURRENCY",
+"column_label_name": "Currency*",
+"sort_order_no": "170",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "DEPT_ID",
+"column_label_name": "Team",
+"sort_order_no": "20",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "DISPLAY_SEQ",
+"column_label_name": "DISPLAY_SEQ",
+"sort_order_no": "210",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "DIVISION_ID",
+"column_label_name": "Division*",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "DOM_EXP",
+"column_label_name": "Customs Handbook*",
+"sort_order_no": "160",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "END_CUSTOMER",
+"column_label_name": "End Customer",
+"sort_order_no": "30",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "END_CUSTOMER40",
+"column_label_name": "End Customer*",
+"sort_order_no": "40",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "FCST_TYPE",
+"column_label_name": "FCST Type*",
+"sort_order_no": "150",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "INCOTERMS",
+"column_label_name": "Incoterms*",
+"sort_order_no": "140",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "ITEM_CLASS_NAME",
+"column_label_name": "Model Type",
+"sort_order_no": "110",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "ITEM_ID",
+"column_label_name": "Model*",
+"sort_order_no": "100",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "ITEM_NAME",
+"column_label_name": "Model Name",
+"sort_order_no": "120",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "MEASURE",
+"column_label_name": "Measure*",
+"sort_order_no": "240",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "NEW_FLAG",
+"column_label_name": "New Flag",
+"sort_order_no": "220",
+"visible_flag": "Y",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "NICK_NAME",
+"column_label_name": "Nick Name",
+"sort_order_no": "130",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "PLANT_SITE_ID",
+"column_label_name": "Plant Site*",
+"sort_order_no": "180",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "PRICE_ALL",
+"column_label_name": "일괄입력 Price",
+"sort_order_no": "250",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "PROJECT_CODE",
+"column_label_name": "Project Code*",
+"sort_order_no": "60",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "PROJECT_NAME",
+"column_label_name": "Project",
+"sort_order_no": "70",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "PROJECT_STATUS",
+"column_label_name": "Project Status",
+"sort_order_no": "80",
+"visible_flag": "N",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Save All",
+"column_name": "SCM_SITE_ID",
+"column_label_name": "Sales Site*",
+"sort_order_no": "50",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "N",
+"valid_yn": "Y",
+"division_id": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "CURRENCY",
+"column_label_name": "Currency",
+"sort_order_no": "50",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "DEPT_NAME",
+"column_label_name": "Team",
+"sort_order_no": "20",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "DIVISION_ID",
+"column_label_name": "Div",
+"sort_order_no": "10",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "END_CUSTOMER",
+"column_label_name": "End Customer",
+"sort_order_no": "30",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "ITEM_ID",
+"column_label_name": "Model",
+"sort_order_no": "60",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M0",
+"column_label_name": "M0",
+"sort_order_no": "70",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M1",
+"column_label_name": "M1",
+"sort_order_no": "80",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M10",
+"column_label_name": "M10",
+"sort_order_no": "170",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M11",
+"column_label_name": "M11",
+"sort_order_no": "180",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M12",
+"column_label_name": "M12",
+"sort_order_no": "190",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M2",
+"column_label_name": "M2",
+"sort_order_no": "90",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M3",
+"column_label_name": "M3",
+"sort_order_no": "100",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M4",
+"column_label_name": "M4",
+"sort_order_no": "110",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M5",
+"column_label_name": "M5",
+"sort_order_no": "120",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M6",
+"column_label_name": "M6",
+"sort_order_no": "130",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M7",
+"column_label_name": "M7",
+"sort_order_no": "140",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M8",
+"column_label_name": "M8",
+"sort_order_no": "150",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "M9",
+"column_label_name": "M9",
+"sort_order_no": "160",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "Sales Price Template",
+"column_name": "PROJECT_CODE",
+"column_label_name": "Project Code",
+"sort_order_no": "40",
+"visible_flag": "Y",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": ""
+}
+],
+"measures": [
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "AS_In_Plan",
+"column_label_name": "AS In Plan[R+P]",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "AS_In_Req",
+"column_label_name": "AS In Request[R+P]",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "AS_Inv",
+"column_label_name": "AS Inv.",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "BALANCE",
+"column_label_name": "Balance",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "CUST_FCST",
+"column_label_name": "Cust. FCST[P+P]",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "FCST_GAP",
+"column_label_name": "Fcst Gap(MKT vs SCM)",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "IN_TRANSIT",
+"column_label_name": "In-Transit(ETA)",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "KRW",
+"column_label_name": "Unit Price(KRW)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "LOC",
+"column_label_name": "Unit Price(LOC)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "MKT_AMT_KRW",
+"column_label_name": "MKT FCST Amt.(KRW)",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "MKT_AMT_LOC",
+"column_label_name": "MKT FCST Amt.(LOC)",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "MKT_FCST",
+"column_label_name": "MKT FCST[R+P]",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "MKT_FCST_PP",
+"column_label_name": "MKT FCST[P+P]",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "MKT_FCST_RP_CAR",
+"column_label_name": "MKT FCST[R+P] CAR",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "MKT_FCST_RP_CELL",
+"column_label_name": "MKT FCST[R+P] CELL",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "RTF_SCP",
+"column_label_name": "RTF[P+P]",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "RTF_SYS_RP",
+"column_label_name": "RTF[R+P]",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "RTF_SYS_RP_CAR",
+"column_label_name": "RTF[R+P] CAR",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "RTF_SYS_RP_CELL",
+"column_label_name": "RTF[R+P] CELL",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "SCM_FCST",
+"column_label_name": "SCM FCST[R+P]",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "TMM_FCST",
+"column_label_name": "TMM [P+P]",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "N",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "USD",
+"column_label_name": "Unit Price(USD)",
+"default_flag": "Y",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "VMI_DIO",
+"column_label_name": "DIO",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "N",
+"division_id": "81,81_UC,81_HM,81_ST,81_HD,81_HG"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "VMI_In_Plan",
+"column_label_name": "VMI-In Plan[R+P]",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "VMI_In_Req",
+"column_label_name": "VMI-In Request[R+P]",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+},
+{
+"program_id": "DMF0082",
+"sheet_name": "FcstNPrice",
+"column_name": "VMI_Inv",
+"column_label_name": "VMI Inv.",
+"default_flag": "N",
+"user_selectable_flag": "Y",
+"valid_yn": "Y",
+"division_id": "40"
+}
+],
+"lookupMeasure": [
+{
+"segment1": "ADMIN",
+"segment3": "40",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "40",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "40",
+"segment4": "SCM_FCST",
+"attribute1": "MON",
+"attribute2": "1000",
+"attribute3": "1900",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "40",
+"segment4": "VMI_In_Req",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "0411",
+"attribute3": "1030",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_HD",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_HD",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_HD",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "1006",
+"attribute3": "1150",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_HG",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_HG",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_HG",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "1010",
+"attribute3": "1140",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_HM",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_HM",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_HM",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "0401",
+"attribute3": "1130",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_ST",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_ST",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_ST",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "0406",
+"attribute3": "1135",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_UC",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_UC",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "ADMIN",
+"segment3": "81_UC",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "1001",
+"attribute3": "1145",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "40",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "40",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "40",
+"segment4": "VMI_In_Req",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81_HD",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81_HD",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81_HG",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81_HG",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81_HM",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81_HM",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81_ST",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81_ST",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81_UC",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment3": "81_UC",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "40",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "40",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "40",
+"segment4": "VMI_In_Req",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81_HD",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81_HD",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81_HG",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81_HG",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81_HM",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81_HM",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81_ST",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81_ST",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81_UC",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment3": "81_UC",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner (W/S)",
+"segment3": "81",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner (W/S)",
+"segment3": "81_HD",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner (W/S)",
+"segment3": "81_HG",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner (W/S)",
+"segment3": "81_HM",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner (W/S)",
+"segment3": "81_ST",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner (W/S)",
+"segment3": "81_UC",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "40",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "40",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "40",
+"segment4": "SCM_FCST",
+"attribute1": "MON",
+"attribute2": "1000",
+"attribute3": "1900",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "40",
+"segment4": "VMI_In_Req",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "0411",
+"attribute3": "1030",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_HD",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_HD",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_HD",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "1006",
+"attribute3": "1150",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_HG",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_HG",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_HG",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "1010",
+"attribute3": "1140",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_HM",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_HM",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_HM",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "0401",
+"attribute3": "1130",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_ST",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_ST",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_ST",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "0406",
+"attribute3": "1135",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_UC",
+"segment4": "LOC",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_UC",
+"segment4": "MKT_FCST",
+"attribute1": "",
+"attribute2": "",
+"attribute3": "",
+"attribute4": "",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment3": "81_UC",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "1001",
+"attribute3": "1145",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment3": "40",
+"segment4": "SCM_FCST",
+"attribute1": "MON",
+"attribute2": "1000",
+"attribute3": "1900",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment3": "81",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "0411",
+"attribute3": "1030",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment3": "81_HD",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "1006",
+"attribute3": "1150",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment3": "81_HG",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "1010",
+"attribute3": "1140",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment3": "81_HM",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "0401",
+"attribute3": "1130",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment3": "81_ST",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "0406",
+"attribute3": "1135",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment3": "81_UC",
+"segment4": "SCM_FCST",
+"attribute1": "TUE",
+"attribute2": "1001",
+"attribute3": "1145",
+"attribute4": "MKT_FCST",
+"valid_yn": "Y"
+}
+],
+"lookupAdmin": [
+{
+"segment1": "ADMIN",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM ADMIN",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "DM Planner",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCM PI Admin",
+"segment2": "ALL",
+"valid_yn": "Y"
+},
+{
+"segment1": "SCP Planner",
+"segment2": "ALL",
+"valid_yn": "Y"
+}
+],
+"now": {
+"now_": "2026-10-31 21:55",
+"dow": "SAT",
+"hm": "2155"
+}
+},
+"accounts": [
+{
+"key": "DM/40/DM Admin",
+"keys": [
+"DM/40/DM Admin"
+],
+"groups": [
+"DM ADMIN",
+"DM Planner",
+"GUEST"
+],
+"menuGroups": [
+"DM ADMIN",
+"DM Planner"
+],
+"divsAll": [
+"40"
+],
+"divsMenu": [
+"40"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0006",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0043",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0055",
+"SCP0084",
+"SCP0085",
+"SCP0101",
+"SCP0130",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0002",
+"SYS0010",
+"SYS0011",
+"SYS0012",
+"SYS0013",
+"SYS0014",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 19
+},
+{
+"key": "DM/40/DM Planner",
+"keys": [
+"DM/40/DM Planner"
+],
+"groups": [
+"DM Planner",
+"FP Viewer",
+"GUEST"
+],
+"menuGroups": [
+"DM Planner",
+"FP Viewer"
+],
+"divsAll": [
+"40",
+"EE"
+],
+"divsMenu": [
+"40",
+"EE"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0006",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0072",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0049",
+"SCP0055",
+"SCP0084",
+"SCP0085",
+"SCP0101",
+"SCP0104",
+"SCP0105",
+"SCP0106",
+"SCP0107",
+"SCP0108",
+"SCP0114",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0002",
+"SYS0011",
+"SYS0013",
+"SYS0014",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 19
+},
+{
+"key": "DM/40/DM Viewer",
+"keys": [
+"DM/40/DM Viewer"
+],
+"groups": [
+"DM Planner",
+"DM Viewer",
+"GUEST"
+],
+"menuGroups": [
+"DM Planner",
+"DM Viewer"
+],
+"divsAll": [
+"40"
+],
+"divsMenu": [
+"40"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0006",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0055",
+"SCP0084",
+"SCP0085",
+"SCP0101",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0002",
+"SYS0011",
+"SYS0013",
+"SYS0014",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 19
+},
+{
+"key": "DM/40/SCP Planner",
+"keys": [
+"DM/40/SCP Planner"
+],
+"groups": [
+"DM Viewer",
+"FP Viewer",
+"GMES Viewer",
+"GUEST",
+"SCP Planner",
+"SSP Viewer"
+],
+"menuGroups": [
+"DM Viewer",
+"FP Viewer",
+"SCP Planner"
+],
+"divsAll": [
+"40",
+"81",
+"EE"
+],
+"divsMenu": [
+"40",
+"81",
+"EE"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0048",
+"SCP0049",
+"SCP0053",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0097",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0105",
+"SCP0106",
+"SCP0107",
+"SCP0108",
+"SCP0110",
+"SCP0111",
+"SCP0114",
+"SCP0120",
+"SCP0121",
+"SCP0123",
+"SCP0123_PLAN_ID",
+"SCP0124",
+"SCP0125",
+"SCP0126",
+"SCP0127",
+"SCP0128",
+"SCP0129",
+"SCP0130",
+"SCP0131",
+"SCP0132",
+"SCP0133",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"SupplyPopup",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 23
+},
+{
+"key": "DM/81/DM Admin",
+"keys": [
+"DM/81/DM Admin"
+],
+"groups": [
+"DM ADMIN",
+"GUEST"
+],
+"menuGroups": [
+"DM ADMIN"
+],
+"divsAll": [
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC"
+],
+"divsMenu": [
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0006",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0043",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0028",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0055",
+"SCP0084",
+"SCP0085",
+"SCP0101",
+"SCP0130",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0010",
+"SYS0011",
+"SYS0012",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 18
+},
+{
+"key": "DM/81/DM Planner",
+"keys": [
+"DM/81/DM Planner"
+],
+"groups": [
+"DM Planner",
+"DM Viewer",
+"FP Viewer",
+"GUEST"
+],
+"menuGroups": [
+"DM Planner",
+"DM Viewer",
+"FP Viewer"
+],
+"divsAll": [
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE"
+],
+"divsMenu": [
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0006",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0049",
+"SCP0055",
+"SCP0084",
+"SCP0085",
+"SCP0101",
+"SCP0104",
+"SCP0105",
+"SCP0106",
+"SCP0107",
+"SCP0108",
+"SCP0114",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0002",
+"SYS0011",
+"SYS0013",
+"SYS0014",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 18
+},
+{
+"key": "DM/81/DM Planner (W/S)",
+"keys": [
+"DM/81/DM Planner (W/S)"
+],
+"groups": [
+"DM Planner",
+"DM Planner (W/S)",
+"FP Planner",
+"FP Viewer",
+"GUEST",
+"SCM Viewer"
+],
+"menuGroups": [
+"DM Planner",
+"DM Planner (W/S)",
+"FP Planner",
+"FP Viewer",
+"SCM Viewer"
+],
+"divsAll": [
+"40",
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE"
+],
+"divsMenu": [
+"40",
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0006",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0072",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0048",
+"SCP0049",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0105",
+"SCP0106",
+"SCP0107",
+"SCP0108",
+"SCP0110",
+"SCP0111",
+"SCP0114",
+"SCP0120",
+"SCP0121",
+"SCP0122",
+"SCP0123",
+"SCP0123_PLAN_ID",
+"SCP0124",
+"SCP0125",
+"SCP0126",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0002",
+"SYS0011",
+"SYS0013",
+"SYS0014",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"SupplyPopup",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 17
+},
+{
+"key": "DM/81/DM Viewer",
+"keys": [
+"DM/81/DM Viewer"
+],
+"groups": [
+"DM Planner",
+"DM Planner (W/S)",
+"DM Viewer",
+"FP Viewer",
+"GUEST"
+],
+"menuGroups": [
+"DM Planner",
+"DM Planner (W/S)",
+"DM Viewer",
+"FP Viewer"
+],
+"divsAll": [
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE"
+],
+"divsMenu": [
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0006",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0048",
+"SCP0049",
+"SCP0055",
+"SCP0084",
+"SCP0085",
+"SCP0101",
+"SCP0104",
+"SCP0105",
+"SCP0106",
+"SCP0107",
+"SCP0108",
+"SCP0114",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0002",
+"SYS0011",
+"SYS0013",
+"SYS0014",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 20
+},
+{
+"key": "DM/81/SCP Planner",
+"keys": [
+"DM/81/SCP Planner"
+],
+"groups": [
+"DM Viewer",
+"FP Viewer",
+"GUEST",
+"SCM Viewer",
+"SCP Planner"
+],
+"menuGroups": [
+"DM Viewer",
+"FP Viewer",
+"SCM Viewer",
+"SCP Planner"
+],
+"divsAll": [
+"40",
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE",
+"EE_HD",
+"EE_HG",
+"EE_HM",
+"EE_ST",
+"EE_UC"
+],
+"divsMenu": [
+"40",
+"81",
+"81_HD",
+"81_HG",
+"81_HM",
+"81_ST",
+"81_UC",
+"82",
+"EE",
+"EE_HD",
+"EE_HG",
+"EE_HM",
+"EE_ST",
+"EE_UC"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0048",
+"SCP0049",
+"SCP0053",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0097",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0105",
+"SCP0106",
+"SCP0107",
+"SCP0108",
+"SCP0110",
+"SCP0111",
+"SCP0114",
+"SCP0120",
+"SCP0121",
+"SCP0123",
+"SCP0123_PLAN_ID",
+"SCP0124",
+"SCP0125",
+"SCP0126",
+"SCP0127",
+"SCP0128",
+"SCP0129",
+"SCP0130",
+"SCP0131",
+"SCP0132",
+"SCP0133",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"SupplyPopup",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 22
+},
+{
+"key": "DM/82/DM Admin",
+"keys": [
+"DM/82/DM Admin"
+],
+"groups": [
+"DM ADMIN",
+"GUEST",
+"SCM Viewer",
+"SSP Viewer"
+],
+"menuGroups": [
+"DM ADMIN",
+"SCM Viewer"
+],
+"divsAll": [
+"82"
+],
+"divsMenu": [
+"82"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0006",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0043",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0049",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0105",
+"SCP0106",
+"SCP0107",
+"SCP0108",
+"SCP0110",
+"SCP0111",
+"SCP0114",
+"SCP0130",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0010",
+"SYS0011",
+"SYS0012",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 23
+},
+{
+"key": "DM/82/DM Planner",
+"keys": [
+"DM/82/DM Planner"
+],
+"groups": [
+"DM Planner",
+"DM Viewer",
+"FP Viewer",
+"GUEST",
+"SCM Viewer"
+],
+"menuGroups": [
+"DM Planner",
+"DM Viewer",
+"FP Viewer",
+"SCM Viewer"
+],
+"divsAll": [
+"81",
+"81_ST",
+"82",
+"EE",
+"EE_ST"
+],
+"divsMenu": [
+"81",
+"81_ST",
+"82",
+"EE",
+"EE_ST"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0006",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0049",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0105",
+"SCP0106",
+"SCP0107",
+"SCP0108",
+"SCP0110",
+"SCP0111",
+"SCP0114",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0002",
+"SYS0011",
+"SYS0013",
+"SYS0014",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 23
+},
+{
+"key": "DM/82/DM Planner (W/S)",
+"keys": [
+"DM/82/DM Planner (W/S)"
+],
+"groups": [
+"GUEST"
+],
+"menuGroups": [],
+"divsAll": [],
+"divsMenu": [],
+"menus": [
+"Auth_Mgmt",
+"Authority",
+"Demand",
+"Demand_Master",
+"SYS0011",
+"TEST"
+],
+"titleset": 0
+},
+{
+"key": "DM/82/DM Viewer",
+"keys": [
+"DM/82/DM Viewer"
+],
+"groups": [
+"DM ADMIN",
+"DM Viewer",
+"GUEST"
+],
+"menuGroups": [
+"DM ADMIN",
+"DM Viewer"
+],
+"divsAll": [
+"82"
+],
+"divsMenu": [
+"82"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0006",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0043",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0055",
+"SCP0084",
+"SCP0085",
+"SCP0101",
+"SCP0130",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0010",
+"SYS0011",
+"SYS0012",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 0
+},
+{
+"key": "DM/82/SCP Planner",
+"keys": [
+"DM/82/SCP Planner"
+],
+"groups": [
+"DM Viewer",
+"FP Viewer",
+"GMES Viewer",
+"GUEST",
+"SCM Viewer",
+"SCP Planner"
+],
+"menuGroups": [
+"DM Viewer",
+"FP Viewer",
+"SCM Viewer",
+"SCP Planner"
+],
+"divsAll": [
+"40",
+"81",
+"81_HD",
+"81_ST",
+"81_UC",
+"82",
+"EE",
+"EE_HD",
+"EE_ST",
+"EE_UC"
+],
+"divsMenu": [
+"40",
+"81",
+"81_HD",
+"81_ST",
+"81_UC",
+"82",
+"EE",
+"EE_HD",
+"EE_ST",
+"EE_UC"
+],
+"menus": [
+"Admin",
+"Admin_Menu",
+"Auth_Mgmt",
+"Authority",
+"COM0001",
+"COM0002",
+"COM0003",
+"COM0004",
+"COM0005",
+"COM0006",
+"COM0007",
+"COM0008",
+"COM0009",
+"COM0010",
+"COM0011",
+"COM0013",
+"COM0014",
+"CommonPopup",
+"DMF0003",
+"DMF0004",
+"DMF0005",
+"DMF0007",
+"DMF0008",
+"DMF0014",
+"DMF0020",
+"DMF0021",
+"DMF0022",
+"DMF0035",
+"DMF0040",
+"DMF0042",
+"DMF0043_01",
+"DMF0044",
+"DMF0045",
+"DMF0048",
+"DMF0049",
+"DMF0053",
+"DMF0068",
+"DMF0072",
+"DMF0074",
+"DMF0082",
+"Demand",
+"Demand_Master",
+"Demand_Plan",
+"Demand_Waterfall",
+"Popup",
+"SCM Supply",
+"SCM0002",
+"SCM0014",
+"SCP0001",
+"SCP0002",
+"SCP0005",
+"SCP0006",
+"SCP0007",
+"SCP0009",
+"SCP0010",
+"SCP0011",
+"SCP0013",
+"SCP0016",
+"SCP0017",
+"SCP0018",
+"SCP0019",
+"SCP0020",
+"SCP0022",
+"SCP0023",
+"SCP0024",
+"SCP0025",
+"SCP0027",
+"SCP0028",
+"SCP0030",
+"SCP0031",
+"SCP0033",
+"SCP0037",
+"SCP0039",
+"SCP0041",
+"SCP0048",
+"SCP0049",
+"SCP0053",
+"SCP0055",
+"SCP0080",
+"SCP0084",
+"SCP0085",
+"SCP0087",
+"SCP0095",
+"SCP0096",
+"SCP0097",
+"SCP0098",
+"SCP0100",
+"SCP0101",
+"SCP0104",
+"SCP0105",
+"SCP0106",
+"SCP0107",
+"SCP0108",
+"SCP0110",
+"SCP0111",
+"SCP0114",
+"SCP0120",
+"SCP0121",
+"SCP0123",
+"SCP0123_PLAN_ID",
+"SCP0124",
+"SCP0125",
+"SCP0126",
+"SCP0127",
+"SCP0128",
+"SCP0129",
+"SCP0130",
+"SCP0131",
+"SCP0132",
+"SCP0133",
+"SCP0134",
+"SSP0003",
+"SSP0005",
+"SSP0012",
+"SSP0014",
+"SSP0015",
+"SSP0017",
+"SSP0019",
+"SSP0021",
+"SSP0022",
+"SSP0023",
+"SSP0024",
+"SSP0025",
+"SSP0026",
+"SSP0045",
+"SSP0060",
+"SSP0200",
+"SSP0201",
+"SSP0202",
+"SYS0011",
+"SYS0013",
+"Shipping",
+"Shipping_Master",
+"Shipping_Schedule",
+"Supply",
+"SupplyPopup",
+"Supply_Master",
+"Supply_OPT_Plan",
+"Supply_Plan",
+"Supply_Waterfall",
+"TEST",
+"Waterfall"
+],
+"titleset": 0
+}
+],
+"btnDiv": {
+"__default__": {
+"40": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HD": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HG": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HM": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_ST": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_UC": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"82": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_HD": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_HG": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_HM": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_ST": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_UC": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+]
+},
+"DM/40/DM Admin": {
+"40": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+]
+},
+"DM/40/DM Planner": {
+"40": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+]
+},
+"DM/40/DM Viewer": {
+"40": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+]
+},
+"DM/40/SCP Planner": {
+"40": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"EE": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+]
+},
+"DM/81/DM Admin": {
+"81": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HD": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HG": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HM": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_ST": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_UC": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+]
+},
+"DM/81/DM Planner": {
+"81": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HD": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HG": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HM": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_ST": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_UC": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"82": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"EE": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+]
+},
+"DM/81/DM Planner (W/S)": {
+"40": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"81": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HD": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HG": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HM": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_ST": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_UC": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"82": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"EE": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+]
+},
+"DM/81/DM Viewer": {
+"81": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HD": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"81_HG": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"81_HM": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"81_ST": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"81_UC": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"82": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"EE": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+]
+},
+"DM/81/SCP Planner": {
+"40": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HD": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HG": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HM": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_ST": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_UC": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"82": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_HD": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_HG": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_HM": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_ST": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_UC": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+]
+},
+"DM/82/DM Admin": {
+"82": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+]
+},
+"DM/82/DM Planner": {
+"81": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"81_ST": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"82": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"EE_ST": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+]
+},
+"DM/82/DM Planner (W/S)": {},
+"DM/82/DM Viewer": {
+"82": [
+"DELETE",
+"EDIT",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+]
+},
+"DM/82/SCP Planner": {
+"40": [
+"FORM_DATA",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD_DATA"
+],
+"81": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_HD": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_ST": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"81_UC": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"82": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_HD": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_ST": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+],
+"EE_UC": [
+"DELETE",
+"FORM_DATA",
+"IF",
+"INSERT",
+"SAVE",
+"SEARCH",
+"SEARCH_CURRENT",
+"SEARCH_DATA",
+"TITLE",
+"UPLOAD",
+"UPLOAD_DATA",
+"UPLOAD_SAVE"
+]
+}
+}
+}

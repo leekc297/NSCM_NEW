@@ -1,0 +1,1372 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-11-05T08:01:23+09:00",
+ "producer": "run_verify",
+ "id": "SCP0111",
+ "skip_e2e": false,
+ "started": "2026-11-05 06:11:20",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-1a8b7e39",
+   "class": "F1",
+   "msg": "SCP0111 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b5cfd22a",
+   "class": "F2",
+   "msg": "SCP0111 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3cf1ef89",
+   "class": "F4",
+   "msg": "SCP0111 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9df393e4",
+   "class": "F5",
+   "msg": "SCP0111 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2220c069",
+   "class": "F6",
+   "msg": "SCP0111 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a4e04101",
+   "class": "G3",
+   "msg": "SCP0111 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E smoke/auth 요약"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-171648d3",
+   "class": "H4",
+   "msg": "SCP0111 헤더 글자 잘림",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 레이아웃 묶음 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d2511df5",
+   "class": "L2",
+   "msg": "SCP0111 조건 입력 중 재렌더",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 레이아웃 묶음 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-198950ce",
+   "class": "I1",
+   "msg": "SCP0111 시나리오 [자동] CN 언어 조회 건수 총/건 표기",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-daa3f0ba",
+   "class": "D6",
+   "msg": "SCP0111 시나리오 [자동] 선택 행 위로 Insert",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2eed0400",
+   "class": "E3",
+   "msg": "SCP0111 시나리오 [자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 시나리오 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e1eb57b1",
+   "class": "G4",
+   "msg": "SCP0111 돋보기 위치",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 화면 틀 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-923a13d7",
+   "class": "H4",
+   "msg": "SCP0111 조회조건 겹침 1366",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 조회조건 겹침 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-be5a2381",
+   "class": "A5",
+   "msg": "SCP0111 Division 컬럼 40/Integration PSI",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Division 컬럼 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-daf0f58f",
+   "class": "A5",
+   "msg": "SCP0111 Division 컬럼 81/Integration PSI",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Division 컬럼 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-acae451e",
+   "class": "A5",
+   "msg": "SCP0111 Division 컬럼 82/Integration PSI",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify Division 컬럼 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-56473196",
+   "class": "F1",
+   "msg": "SCP0111 저장 실패 처리",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 저장 경로 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0184021b",
+   "class": "H10",
+   "msg": "SCP0111 저장 취소 요청 없음",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 저장 경로 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-47b619ec",
+   "class": "H11",
+   "msg": "SCP0111 저장 중 로딩",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 저장 경로 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-129ff7c5",
+   "class": "F2",
+   "msg": "SCP0111 붙여넣기 저장 인식",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify 저장 경로 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a9296f21",
+   "class": "G10",
+   "msg": "조회조건 Model/Nickname",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5776bee9",
+   "class": "F10",
+   "msg": "PKG_SCP0111.P_SCP0111_SAVE_INTEGRATION_PSI",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c939af9e",
+   "class": "F10",
+   "msg": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e9c8ca19",
+   "class": "G9",
+   "msg": "조회조건 Cell Model",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a30ef64b",
+   "class": "G1",
+   "msg": "조회조건 Period",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5f70c87f",
+   "class": "D1",
+   "msg": "Integration PSI.PLAN_TYPE (Plan Type)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2e5af804",
+   "class": "D1",
+   "msg": "Integration PSI.OPERATION_GROUP (Operation)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-65d7acb9",
+   "class": "D1",
+   "msg": "Integration PSI.CELL_MODEL_NICK_NAME (Cell Model Nick Name)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5a3e4ab5",
+   "class": "D1",
+   "msg": "Integration PSI.CELL_ITEM_ID (Cell Model)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fdf6bec9",
+   "class": "D1",
+   "msg": "Integration PSI.NICK_NAME (Nick Name)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-8c320f28",
+   "class": "D1",
+   "msg": "Integration PSI.ITEM_ID (Model)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4eb504e3",
+   "class": "D1",
+   "msg": "Integration PSI.CELL_CF (Cell Coversion Factor)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-72eb6e0d",
+   "class": "D1",
+   "msg": "Integration PSI.COMPANY_ID (Company)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b6e82660",
+   "class": "D1",
+   "msg": "Integration PSI.PLANT_ID_DESCRIPTION (Plant)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6cb3f7bc",
+   "class": "D1",
+   "msg": "Integration PSI.MEASURE_LABEL (Measure)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e71635cf",
+   "class": "D1",
+   "msg": "Integration PSI.TO_PRODUCT (To Product)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a5d9e967",
+   "class": "D1",
+   "msg": "Integration PSI.VALUE_TYPE (Valuation Type)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d2113726",
+   "class": "D1",
+   "msg": "Integration PSI.TO_SITE_DESCRIPTION (To Site)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-48843285",
+   "class": "D1",
+   "msg": "Integration PSI.INCOTERMS (Incoterms)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9cbd9cd8",
+   "class": "D1",
+   "msg": "Integration PSI.INCOTERMS (Incoterms)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-08c9996f",
+   "class": "D1",
+   "msg": "Integration PSI.BOH_QTY (BOH)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3fd855b9",
+   "class": "D1",
+   "msg": "Integration PSI.BOH_QTY (BOH)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4962487b",
+   "class": "D1",
+   "msg": "Integration PSI.UOM (UOM)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-66ddcf9e",
+   "class": "D1",
+   "msg": "Integration PSI.SEQ_FLAG (SEQ_FLAG)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-0183a369",
+   "class": "D1",
+   "msg": "Integration PSI.MEASURE (MEASURE)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-173fe96d",
+   "class": "D1",
+   "msg": "Integration PSI.PLANT_ID (Plant)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c21b9ea7",
+   "class": "D1",
+   "msg": "Integration PSI.TO_SITE (To Site)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-80e2a3d0",
+   "class": "D1",
+   "msg": "Integration PSI.<DYNAMIC:CalendarMonth> (동적 CalendarMonth 컬럼)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-cf182b16",
+   "class": "D1",
+   "msg": "Integration PSI.<DYNAMIC:CalendarMonth> (동적 CalendarMonth 컬럼)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-2c42b77d",
+   "class": "MS1",
+   "msg": "MSG00260",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC msgmap(문구 일치) + 코드 사용 ID"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e52e3323",
+   "class": "E4",
+   "msg": "MSG00004",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4d16fe68",
+   "class": "E4",
+   "msg": "MSG00004",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-66ba244d",
+   "class": "L1",
+   "msg": "조회조건 텍스트 입력 중 그리드",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-549d7b72",
+   "class": "D1",
+   "msg": "[DMF0020 결함 유형] Team·End Customer 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-309492cc",
+   "class": "D6",
+   "msg": "[DMF0068 결함 일반화] Insert 시 Project 컬럼 · Sort",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d16dccae",
+   "class": "J3",
+   "msg": "[DMF0082 결함 유형] SCM_FCST·MKT_FCST 편집 구간(GET_ADMIN_GROUP_MEASURE)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-cac24638",
+   "class": "J3",
+   "msg": "[DMF0082 결함 유형] MKT_FCST[R+P] 편집",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-54aee855",
+   "class": "D6",
+   "msg": "[DMF0042 결함 유형] Exchange Rate Currency · 중복 Keyset 메시지 · Insert 위치 · Delete 버튼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3e0a70d1",
+   "class": "D1",
+   "msg": "[DMF0049 결함 유형] Cell Model·Cell Model Info 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f9f36b75",
+   "class": "D1",
+   "msg": "[DMF0021 결함 유형] ETC 입력 Team·Measure 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-b1b592b4",
+   "class": "D1",
+   "msg": "[DMF0042 결함 유형] Sales Site·End Customer 셀",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ed251427",
+   "class": "D1",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-48ed3894",
+   "class": "D1",
+   "msg": "[SYS0002 결함 유형] Dept 컬럼 / Use Y/N·Active 헤더",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4bd447e6",
+   "class": "D1",
+   "msg": "[SCP0007 결함 유형] Insert 행 Div 셀 / 하위 Site",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d58c5f18",
+   "class": "A5",
+   "msg": "[DMF0021 결함 일반화] 그리드 End Customer 컬럼(END_CUSTOMER_ID) · 컬럼 셋팅 개인화 저장(필수 컬럼)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f14b1541",
+   "class": "D6",
+   "msg": "[DMF0005 결함 일반화] Insert 행 위치 · 셀 병합(FPMerge) 그룹",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-70873fca",
+   "class": "G9",
+   "msg": "[DMF0053 결함 일반화] 조회조건 Project(PROJECT_CODE)·Model/Nickname(ITEM_ID)·Owner 텍스트 조건 — 대소문자 무시(양변 UPPER) · 쉼표 다중 입력",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5ab71178",
+   "class": "G10",
+   "msg": "[DMF0072 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Model/Nickname Popup 열기(Div 40 은 Project 제외)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-62c553cb",
+   "class": "G10",
+   "msg": "[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item Popup 열기 · Model 팝업 사전 조건 activeFlag 미전달(사용 중지 모델 포함)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5f029e26",
+   "class": "G9",
+   "msg": "[DMF0045 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(ITEM_ID/NICK_NAME) 텍스트 — like(부분일치)·콤마 복수·소문자 조회",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-a60e7f28",
+   "class": "D6",
+   "msg": "그리드 Insert 신규행 위치",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ea67ed5b",
+   "class": "F4",
+   "msg": "PKG_SCP0111.P_SCP0111_SAVE_INTEGRATION_PSI",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify CRUD 실저장 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-03071eab",
+   "class": "F4",
+   "msg": "P_SCP0111_SAVE",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify CRUD 실저장 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-81330c67",
+   "class": "F4",
+   "msg": "PKG_SCP0111.P_SCP0111_SAVE_PSI_ADMIN",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify CRUD 실저장 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c715eadc",
+   "class": "F4",
+   "msg": "P_SCP0111_SAVE_ADMIN",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify CRUD 실저장 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-40ab485f",
+   "class": "D6",
+   "msg": "SCP0111 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-541fb101",
+   "class": "F5",
+   "msg": "SCP0111 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7258c056",
+   "class": "E4",
+   "msg": "MSG00004",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4488b2b4",
+   "class": "X-REOPEN",
+   "msg": "SCP0111 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f0258bdb",
+   "class": "X-ROW",
+   "msg": "SCP0111_IntegrationPSI.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-caf721fa",
+   "class": "X-ROW",
+   "msg": "SCP0111_IntegrationPSI.FindData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-f6a98d1b",
+   "class": "X-ROW",
+   "msg": "SCP0111_IntegrationPSI.GetBucketType",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6cbc2db4",
+   "class": "X-ROW",
+   "msg": "SCP0111_IntegrationPSI.GetEssPackLineAll",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-fb540b9b",
+   "class": "X-ROW",
+   "msg": "SCP0111_IntegrationPSI.InitControls",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a5cb2d9d",
+   "class": "X-ROW",
+   "msg": "SCP0111_IntegrationPSI.InsertButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-5c60353e",
+   "class": "F4",
+   "msg": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify CRUD 실저장 @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a67f7ade",
+   "class": "X-ROW",
+   "msg": "SCP0111_IntegrationPSI.SaveData",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-78c12e63",
+   "class": "X-ROW",
+   "msg": "SCP0111_IntegrationPSI.SpdMain_TopChange",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-eb4e0e13",
+   "class": "X-ROW",
+   "msg": "SCP0111_IntegrationPSI._defaultDataModel_Changed",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-65640b9a",
+   "class": "D4",
+   "msg": "SCP0111 EG140 병합 그룹 위 삽입 병합 PLAN_TYPE r0~36 · 선택 r1",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-08f72f25",
+   "class": "D4",
+   "msg": "SCP0111 EG319 병합 그룹 위 삽입 병합 PLAN_TYPE r0~36 · 선택 r1",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-2e732f55",
+   "class": "J3",
+   "msg": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-c268b3bb",
+   "class": "D1",
+   "msg": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-4ca56f7c",
+   "class": "J3",
+   "msg": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-e16b3a6a",
+   "class": "D1",
+   "msg": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/ADMIN · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-82d30dcc",
+   "class": "J3",
+   "msg": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-2e8307c0",
+   "class": "D1",
+   "msg": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-d13c141b",
+   "class": "J3",
+   "msg": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-b31053bd",
+   "class": "D1",
+   "msg": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/40/SCM PI Admin · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-d3e4b9b4",
+   "class": "J3",
+   "msg": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-6ca2bc0c",
+   "class": "D1",
+   "msg": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-cf3316d3",
+   "class": "J3",
+   "msg": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-9657323f",
+   "class": "D1",
+   "msg": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCP Planner · Div 81",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-96be91cd",
+   "class": "J3",
+   "msg": "SCP0111 EG377 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-fb4948d7",
+   "class": "D1",
+   "msg": "SCP0111 EG124 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-72d47971",
+   "class": "J3",
+   "msg": "SCP0111 EG378 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-558ab61d",
+   "class": "D1",
+   "msg": "SCP0111 EG123 행·칸 편집 = AS-IS 규칙(그룹 합집합·행 값) SCP/81/SCM PI Admin · Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @eg-auth @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-ac3a715e",
+   "class": "I2",
+   "msg": "SCP0111 언어 전환 CN",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @i18n-lang @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-4e04ee8a",
+   "class": "B7",
+   "msg": "SCP0111 콤보 후보 최신성 SCPPlanPeriod_SCP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @combo-live @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "EG-4c539bff",
+   "class": "B7",
+   "msg": "SCP0111 콤보 후보 최신성 SCPPlanPeriod_SCP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @combo-live @11-05 07:58"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "summary": {
+  "rows": 1717,
+  "PASS": 572,
+  "FAIL": 110,
+  "판정필요": 10,
+  "미검증": 75,
+  "해당없음": 950,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1057,
+   "없음(미검증)": 75,
+   "없음(판정 대기)": 10,
+   "기계(상속·집계)": 575
+  },
+  "fail_listed": 110,
+  "coverage": {
+   "rules": 90,
+   "measured": 473,
+   "not_run_error": 50,
+   "na": 326,
+   "suspect_na100": [
+    "D2"
+   ]
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0111_IntegrationPsi_CheckList_v23.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0111_IntegrationPsi_ActionItemList_v23.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0111/e2e_results.json"
+  }
+ ],
+ "note": "⚠ 검사기 회귀 오라클 위반(rc 10) — Doc/verify/_regress_report.md: 알려진 결함 미검출 또는 허위 FAIL 재발 · 이 CheckList 는 검사기 결함을 안고 있음"
+}

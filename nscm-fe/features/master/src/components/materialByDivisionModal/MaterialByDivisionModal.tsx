@@ -66,6 +66,8 @@ interface MaterialByDivisionModalProps {
   multiDivision?: boolean;
   /** 팝업 가로 폭(px, 옵션). */
   dialogSize?: number;
+  /** Operation Group 표시 라벨(옵션). 없으면 코드값 표시. SP 에는 코드가 넘어간다. */
+  operationGroupLabel?: string;
 }
 
 const DEFAULT_DIALOG_SIZE = SEARCH_POPUP_WIDTH;
@@ -92,6 +94,7 @@ export const MaterialByDivisionModal = ({
   multiCheckbox = false,
   multiDivision = false,
   dialogSize = DEFAULT_DIALOG_SIZE,
+  operationGroupLabel,
 }: MaterialByDivisionModalProps) => {
   const { t } = useTranslation();
 
@@ -300,7 +303,12 @@ export const MaterialByDivisionModal = ({
                     label={t('LBL_OPERATION_GROUP', 'Operation Group')}
                     labelAlign='right'
                     render={() => (
-                      <InputField fullWidth disabled value={searchParam.operationGroup ?? ''} />
+                      // <InputField fullWidth disabled value={searchParam.operationGroup ?? ''} />
+                      <InputField
+                        fullWidth
+                        disabled
+                        value={operationGroupLabel ?? searchParam.operationGroup ?? ''}
+                      />
                     )}
                   />
                 </Grid>

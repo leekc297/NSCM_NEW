@@ -1,0 +1,672 @@
+<title>DM Dashboard</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+<style>
+/* Layout: NSCM 앱 셸(헤더 52 / 사이드바 240 / MDI 탭 34 / 본문 17px 30px) 위에 대시보드 카드·그리드를 얹는다.
+   색·치수는 nscm-fe foundation _colors-lges.scss / Header·Sidebar·MDITabs·Tab module.scss / wijmo _variables.scss 값 그대로. */
+:root {
+  --bg: #ffffff;            /* commonBgBasic */
+  --bg-deep: #f7f9f8;       /* commonBgDeep · navTopBgBasic · 사이드바 */
+  --bg-deeper: #f1f4f3;     /* commonBgDeeper · tableBgHeader */
+  --bg-strong: #ebeeed;
+  --border: #dde0df;        /* commonBorderBasic */
+  --border-light: #f1f4f3;
+  --border-strong: #b9bcbb; /* commonBorderStrong · Tab 테두리 */
+  --grid-border: #d6d9e1;   /* wijmo $wj-bdr-clr */
+  --grid-head: #f7f7f8;     /* wijmo $wj-hdr-bkg */
+  --grid-odd: #f7f9f8;
+  --text: #1f1f1f;          /* commonTextBasic */
+  --text-light: #5b5c5b;
+  --text-lighter: #979998;
+  --text-done: #979998;
+  --primary: #2d9bb2;       /* commonBgPrimary · navTopBorderSelected */
+  --primary-deep: #1f7795;  /* controlFilledBgPrimary */
+  --primary-extreme: #0b3e63;
+  --primary-hover: #3ec2cf;
+  --sys-name: #135678;      /* navTopTextSysNamePrimary */
+  --sel-bg: #b4faef;
+  --ok: #00806a;      --ok-bg: #dcfbea;      --ok-text: #01463a;     --ok-border: #56d8aa;
+  --warn: #ff9322;    --warn-bg: #feefd6;    --warn-text: #b75511;   --warn-border: #ffcb7a;
+  --crit: #f94b50;    --crit-bg: #fee6db;    --crit-text: #b32542;   --crit-border: #fda293;
+  --fcst: #554596;    --fcst-bg: #e6def9;    --fcst-text: #554596;
+  --series-a: #2d9bb2; --series-b: #554596; --series-c: #e12991; --series-d: #6d941c;
+  --font: 'Noto Sans KR', 'Spoqa Han Sans Neo', '맑은 고딕', 'malgun gothic', 'Apple SD Gothic Neo', sans-serif;
+  --shadow: 0 1px 2px rgba(31, 31, 31, 0.06);
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+button { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+.num { font-variant-numeric: tabular-nums; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* ===== Header 52px ===== */
+.hdr { position: relative; z-index: 10; height: 52px; background: var(--bg-deep); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding-right: max(22px, env(safe-area-inset-right, 0px)); }
+.hdr-left { display: flex; align-items: center; height: 51px; }
+.hamburger { width: 52px; height: 52px; border: 0; background: var(--primary); color: #fff; display: grid; place-items: center; cursor: pointer; }
+.hamburger:hover { background: #3ab3bf; }
+.hamburger svg { width: 20px; height: 20px; }
+.logo { display: flex; align-items: center; margin: 0 12px; height: 100%; }
+.logo .abb { padding-right: 12px; color: var(--sys-name); font-weight: 700; font-size: 24px; line-height: 36px; border-right: 1px solid var(--border-strong); }
+.logo .full { margin-left: 12px; display: flex; flex-direction: column; justify-content: center; }
+.logo .ko { color: var(--sys-name); font-weight: 500; font-size: 14px; line-height: 18px; white-space: nowrap; }
+.logo .en { color: #6e706f; font-weight: 300; font-size: 12px; line-height: 18px; white-space: nowrap; }
+.topnav { height: 100%; display: flex; align-items: center; gap: 50px; }
+.topnav a { position: relative; height: 52px; display: flex; align-items: center; font-size: 14px; font-weight: 700; color: var(--text-lighter); cursor: pointer; }
+.topnav a.sel { color: var(--text-light); }
+.topnav a.sel::after { content: ''; position: absolute; width: 120%; height: 3px; bottom: 0; left: 50%; transform: translateX(-50%); background: var(--primary); }
+.user { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.user .lang { min-width: 60px; display: flex; align-items: center; gap: 4px; }
+.avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--primary-deep); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+
+/* ===== Layout ===== */
+.layout { display: flex; height: calc(100% - 52px); }
+.sidebar { width: 240px; flex: 0 0 240px; background: var(--bg-deep); border-right: 1px solid var(--border); overflow-y: auto; }
+.sidebar .ptitle { font-size: 14px; font-weight: 700; padding: 18px 14px; border-bottom: 1px solid var(--border); color: var(--text-light); margin: 0; }
+.mgroup { display: flex; flex-direction: column; }
+.mgroup > .g { height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; cursor: pointer; color: var(--text); font-size: 14px; }
+.mgroup > .g:hover { background: var(--border); }
+.mgroup > .g.open { color: var(--primary); }
+.mgroup > .g .ic { width: 13px; height: 13px; }
+.mgroup .gsub { display: block; padding: 0 15px 6px 15px; margin-top: -8px; font-size: 11px; color: var(--text-lighter); }
+.mgroup .sub { height: 40px; display: flex; align-items: center; padding-left: 36px; font-size: 13px; cursor: pointer; }
+.mgroup .sub:hover { background: #6e706f; color: #fff; }
+.mgroup .sub.on { color: var(--primary); font-weight: 500; box-shadow: inset 3px 0 0 var(--primary); }
+.main { flex: 1; min-width: 0; height: 100%; background: var(--bg); overflow-y: auto; display: flex; flex-direction: column; }
+
+/* MDI 탭 34px */
+.mdi { height: 34px; flex: 0 0 34px; background: var(--bg-deep); border-bottom: 1px solid var(--border); display: flex; align-items: stretch; overflow: hidden; }
+.mdi .strip { flex: 1 1 auto; min-width: 0; display: flex; overflow-x: auto; scrollbar-width: none; }
+.mdi .strip::-webkit-scrollbar { display: none; }
+.mdi .tab { color: var(--text-done); font-weight: 300; font-size: 14px; border: 0; background: transparent; border-right: 1px solid var(--border); display: flex; align-items: center; gap: 12px; padding: 0 8px; cursor: pointer; white-space: nowrap; flex: 0 0 auto; }
+.mdi .tab.active { background: var(--bg); color: var(--text); font-weight: 400; }
+.mdi .tab .x { font-size: 12px; }
+.mdi .actions { flex: 0 0 auto; display: flex; border-left: 1px solid var(--border); }
+.mdi .actions button { border: 0; border-right: 1px solid var(--border); background: transparent; color: var(--text-done); font-size: 14px; font-weight: 300; padding: 0 10px; cursor: pointer; }
+.mdi .actions button:last-child { border-right: 0; }
+.mdi .actions .arrow { padding: 0 6px; opacity: .3; }
+
+.content { padding-block: 17px 24px; padding-left: max(30px, env(safe-area-inset-left, 0px)); padding-right: max(30px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; min-height: 0; flex: 1; }
+
+/* ===== MainTitle ===== */
+.mtitle { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 7px; min-height: 32px; flex-wrap: wrap; }
+.mtitle h1 { margin: 0; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text); }
+.mtitle h1 .star { width: 18px; height: 18px; color: var(--text-light); }
+.mtitle .right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.crumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--primary-deep); }
+.crumb .sep { color: var(--text-lighter); }
+.crumb .cur { font-weight: 700; }
+.switch { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-light); }
+.switch .knob { width: 32px; height: 18px; border-radius: 9px; background: var(--primary); position: relative; }
+.switch .knob::after { content: ''; position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; }
+.zoom { width: 20px; height: 20px; color: var(--text-light); border: 0; background: none; padding: 0; cursor: pointer; }
+.basedate { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.basedate label { font-weight: 700; color: var(--text); }
+.basedate input { height: 28px; border: 1px solid var(--border); border-radius: 2px; background: #fff; padding: 0 8px; font: inherit; font-size: 13px; color: var(--text); }
+
+/* ===== SearchArea ===== */
+.sarea { background: var(--bg-deep); border-radius: 2px; padding: 14px 16px; display: flex; justify-content: space-between; gap: 16px; align-items: flex-end; margin-bottom: 10px; flex-wrap: wrap; }
+.sgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px 24px; flex: 1 1 600px; min-width: 0; }
+.fitem { display: grid; grid-template-columns: minmax(70px, auto) minmax(0, 1fr); align-items: center; gap: 8px; }
+.fitem label { font-size: 13px; font-weight: 700; text-align: right; white-space: nowrap; }
+.fitem label.req::before { content: '*'; color: var(--crit); margin-right: 2px; }
+.ctl { height: 36px; border: 1px solid var(--border); border-radius: 2px; background: #fff; padding: 0 10px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--text); font-family: inherit; width: 100%; min-width: 0; }
+.ctl.ro { background: var(--bg-deeper); color: var(--text-lighter); }
+.ctl .caret { font-size: 10px; color: var(--text-lighter); }
+/* ===== 필터 카드 (기준월 · Biz Type · OEM · 최근 업데이트) ===== */
+.fcards { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.fcard { position: relative; background: #fff; border: 1px solid var(--border); border-radius: 6px; box-shadow: var(--shadow); min-height: 50px; padding: 6px 12px; display: flex; flex-direction: column; justify-content: center; }
+.fcard.sel { flex: 0 1 200px; min-width: 150px; padding-right: 36px; cursor: pointer; }
+.fcard.sel:hover, .fcard.sel:focus-within { border-color: var(--primary); }
+.fcard .flb { font-size: 11px; color: var(--text-light); line-height: 1.3; }
+.fcard select { appearance: none; -webkit-appearance: none; border: 0; background: transparent; padding: 0; margin: 0; font: inherit; font-size: 14px; font-weight: 500; color: var(--text); cursor: pointer; outline: none; width: 100%; }
+.fcard .chev { position: absolute; right: 12px; top: 50%; width: 14px; height: 14px; margin-top: -7px; color: var(--text-light); pointer-events: none; }
+.fcard.upd { flex: 0 1 280px; min-width: 240px; flex-direction: row; align-items: center; gap: 10px; }
+.fcard.upd .txt { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
+.fcard.upd .val { font-size: 14px; font-weight: 500; }
+.fcard .ibtn { width: 26px; height: 26px; border: 0; background: none; padding: 3px; color: var(--text-light); border-radius: 4px; cursor: pointer; flex: none; }
+.fcard .ibtn:hover { background: var(--bg-deeper); color: var(--primary-deep); }
+.fcard .ibtn svg { width: 20px; height: 20px; display: block; }
+.fcard .ibtn.spin svg { animation: fspin .6s linear; }
+@keyframes fspin { to { transform: rotate(360deg); } }
+
+.btn { height: 32px; border-radius: 2px; border: 1px solid var(--border); background: #fff; color: var(--text); font-size: 13px; font-weight: 700; padding: 0 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--bg-deeper); }
+.btn.primary { background: var(--primary-deep); border-color: var(--primary-deep); color: #fff; height: 36px; padding: 0 16px; }
+.btn.primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+.btn svg { width: 14px; height: 14px; }
+.btnrow { display: flex; justify-content: flex-end; gap: 6px; margin: 4px 0 8px; flex-wrap: wrap; }
+
+/* ===== 2차 탭 (TabWrapper) ===== */
+.tabs { height: 36px; box-shadow: inset 0 -1px 0 0 var(--border-strong); display: flex; margin: 4px 0 12px; overflow-x: auto; }
+.tabs button { height: 36px; border: 0; background: transparent; color: var(--text-light); font-size: 13px; padding: 0 12px; box-shadow: inset 0 0 0 1px var(--border-strong); cursor: pointer; white-space: nowrap; }
+.tabs button.active { color: var(--primary); background: #fff; position: relative; z-index: 2; box-shadow: inset 1px 0 0 0 var(--border-strong), inset -1px 0 0 0 var(--border-strong), inset 0 1px 0 0 var(--border-strong), inset 0 -1px 0 0 #fff; }
+
+/* ===== 카드·섹션 ===== */
+.sec-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 6px; }
+.sec-title h2 { margin: 0; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.sec-title h2::before { content: ''; width: 8px; height: 8px; border-radius: 4px; background: var(--primary); }
+.sec-title .meta { font-size: 12px; color: var(--text-light); }
+.card { background: #fff; border: 1px solid var(--border); border-radius: 2px; box-shadow: var(--shadow); padding: 12px 14px; min-width: 0; }
+
+.kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.kpi { display: flex; flex-direction: column; gap: 6px; border-top: 3px solid var(--primary); }
+.kpi.ok { border-top-color: var(--ok); }
+.kpi.warn { border-top-color: var(--warn); }
+.kpi.crit { border-top-color: var(--crit); }
+.kpi.fcst { border-top-color: var(--fcst); }
+.kpi .lb { font-size: 12px; color: var(--text-light); font-weight: 500; }
+.kpi .v { font-size: 26px; font-weight: 700; line-height: 1.1; display: flex; align-items: baseline; gap: 4px; }
+.kpi .v .u { font-size: 13px; font-weight: 500; color: var(--text-light); }
+.kpi .s { font-size: 11px; color: var(--text-lighter); display: flex; align-items: center; gap: 6px; }
+
+.pill { display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 700; border: 1px solid transparent; white-space: nowrap; }
+.pill.ok { background: var(--ok-bg); color: var(--ok-text); border-color: var(--ok-border); }
+.pill.warn { background: var(--warn-bg); color: var(--warn-text); border-color: var(--warn-border); }
+.pill.crit { background: var(--crit-bg); color: var(--crit-text); border-color: var(--crit-border); }
+.pill.none { background: var(--bg-deeper); color: var(--text-light); border-color: var(--border); }
+.pill.fcst { background: var(--fcst-bg); color: var(--fcst-text); border-color: #a897df; }
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+.row2 { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(280px, 1fr); gap: 14px; margin-bottom: 14px; align-items: stretch; }
+/* 2단 높이 정렬 — 좌측 그리드가 우측 Heat Map 카드 높이만큼 늘어나 하단 공백이 없게 행 높이를 균등 배분 */
+.row2 > div { display: flex; flex-direction: column; min-width: 0; }
+.row2 .gridwrap { flex: 1 1 auto; display: flex; flex-direction: column; }
+.row2 table.grid { height: 100%; }
+.row2 table.grid tbody td { height: auto; }
+.row2 .card { flex: 1 1 auto; }
+.row3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+
+/* ===== Wijmo 풍 그리드 ===== */
+.gridwrap { overflow-x: auto; border: 1px solid var(--grid-border); border-radius: 2px; }
+table.grid { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12px; }
+table.grid th { background: var(--grid-head); font-weight: 700; color: #000; height: 36px; padding: 4px 6px; border-right: 1px solid var(--grid-border); border-bottom: 1px solid var(--grid-border); text-align: center; white-space: nowrap; }
+table.grid th .req { color: var(--crit); font-size: 8px; vertical-align: middle; margin-right: 4px; }
+table.grid td { height: 24px; padding: 3px 6px; border-right: 1px solid var(--grid-border); border-bottom: 1px solid var(--grid-border); white-space: nowrap; }
+table.grid th:last-child, table.grid td:last-child { border-right: 0; }
+table.grid tr:last-child td { border-bottom: 0; }
+table.grid tbody tr:hover td { background: var(--bg-deeper); }
+table.grid td.r { text-align: right; }
+table.grid td.c { text-align: center; }
+table.grid td.no { text-align: center; color: var(--text-light); background: var(--grid-head); }
+table.grid th.no { width: 40px; }
+table.grid td.code { font-weight: 700; }
+table.grid td .bar { display: inline-block; height: 6px; border-radius: 3px; vertical-align: middle; margin-left: 6px; background: var(--primary); }
+
+/* Risk heat map */
+.heat { display: grid; grid-template-columns: 70px repeat(3, minmax(0, 1fr)); gap: 6px 8px; align-items: center; }
+.heat .h { font-size: 12px; font-weight: 700; text-align: center; color: var(--text-light); height: 24px; display: grid; place-items: center; background: var(--grid-head); border: 1px solid var(--grid-border); border-radius: 2px; }
+.heat .rl { font-size: 12px; font-weight: 700; }
+.heat .cell { display: grid; place-items: center; height: 36px; }
+.ind { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 12px; font-weight: 700; line-height: 1; }
+.ind.ok { background: var(--ok); }
+.ind.warn { background: var(--warn); }
+.ind.crit { background: var(--crit); }
+.ind.warn::after { content: '!'; }
+.ind.ok::after { content: '✓'; }
+.ind.crit::after { content: '✕'; }
+.legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11px; color: var(--text-light); margin-top: 10px; }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.legend i.sq { border-radius: 2px; }
+
+/* 차트 */
+.chart { position: relative; width: 100%; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart .axis { stroke: var(--border-strong); stroke-width: 1; }
+.chart .gridline { stroke: var(--border-light); stroke-width: 1; }
+.chart .tick { font-size: 10px; fill: var(--text-lighter); font-family: var(--font); }
+.chart .lab { font-size: 10px; fill: var(--text-light); font-weight: 700; font-family: var(--font); }
+.chart .hit { fill: transparent; }
+.chart .hit:hover { fill: rgba(45, 155, 178, 0.06); }
+.tip { position: absolute; pointer-events: none; background: #fff; border: 1px solid var(--border-strong); border-radius: 2px; padding: 6px 8px; font-size: 11px; box-shadow: 0 2px 6px rgba(0,0,0,.12); white-space: nowrap; z-index: 5; display: none; }
+.tip b { display: block; margin-bottom: 2px; }
+.tip span { display: flex; align-items: center; gap: 6px; }
+.tip i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.chart-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11px; color: var(--text-light); margin: 2px 0 6px; }
+.chart-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.chart-legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.chart-legend i.line { height: 2px; width: 14px; border-radius: 1px; }
+.toolsel { height: 26px; border: 1px solid var(--border); border-radius: 2px; background: #fff; font: inherit; font-size: 12px; padding: 0 6px; color: var(--text); }
+
+/* Excess / Dead stock */
+.stat2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.stat { border: 1px solid var(--border); border-radius: 2px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.stat .lb { font-size: 12px; color: var(--text-light); font-weight: 500; display: flex; align-items: center; gap: 6px; }
+.stat .lb i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+.stat .v { font-size: 22px; font-weight: 700; line-height: 1.2; }
+.stat .v .u { font-size: 12px; font-weight: 500; color: var(--text-light); margin-left: 2px; }
+.stat .s { font-size: 11px; color: var(--text-lighter); }
+.hbars { display: grid; grid-template-columns: 48px minmax(0, 1fr) 56px; gap: 6px 8px; align-items: center; font-size: 11px; }
+.hbars .k { font-weight: 700; }
+.hbars .track { height: 10px; background: var(--bg-deeper); border-radius: 2px; overflow: hidden; display: flex; gap: 2px; }
+.hbars .track i { display: block; height: 100%; }
+.hbars .n { text-align: right; color: var(--text-light); }
+.hbars .n.pct { color: var(--text); font-weight: 700; }
+
+/* 하단 3 영역 */
+.excess { display: grid; grid-template-columns: minmax(0, 1fr) 112px; gap: 10px; align-items: stretch; }
+.excess table.grid th { height: 30px; white-space: normal; line-height: 1.25; padding: 3px 4px; font-size: 11px; }
+.excess table.grid td { padding: 3px 5px; font-size: 11px; }
+.excess table.grid tr.sum td { background: var(--bg-deeper); font-weight: 700; }
+.excess td.neg { color: var(--crit-text); font-weight: 700; }
+.alertbox { border: 1px solid var(--crit-border); background: var(--crit-bg); border-radius: 2px; padding: 12px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px; min-width: 0; }
+.alertbox .ic { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--crit); color: var(--crit); font-weight: 700; font-size: 13px; display: grid; place-items: center; }
+.alertbox .lb { font-size: 11px; font-weight: 700; color: var(--crit-text); line-height: 1.35; word-break: keep-all; }
+.logic dd { word-break: keep-all; }
+.alertbox .v { font-size: 26px; font-weight: 700; color: var(--crit-text); line-height: 1.1; }
+.alertbox .u { font-size: 11px; color: var(--crit-text); }
+.mape { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 14px; align-items: center; }
+.mape .big { border: 1px solid var(--border); border-radius: 2px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; gap: 2px; }
+.mape .big .lb { font-size: 11px; color: var(--text-light); font-weight: 500; }
+.mape .big .v { font-size: 32px; font-weight: 700; color: var(--primary-deep); line-height: 1.1; }
+.mape .big .v .u { font-size: 14px; font-weight: 500; }
+.mape .big .s { font-size: 10px; color: var(--text-lighter); }
+.logic { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.logic ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+.logic li { padding-left: 12px; position: relative; }
+.logic li::before { content: ''; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--primary); }
+.logic dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 10px; font-size: 12px; }
+.logic dt, .logic dd { margin: 0; padding: 5px 6px; border-bottom: 1px solid var(--border-light); min-height: 28px; display: flex; align-items: center; }
+.logic dt { background: var(--grid-head); color: var(--text-light); font-weight: 700; white-space: nowrap; }
+.logic dd { font-weight: 500; }
+.row3 + .row3 { margin-top: 14px; }
+@media (max-width: 640px) { .excess, .mape, .logic { grid-template-columns: 1fr; } }
+
+/* ===== 제품 로그 ===== */
+.pcols { display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); gap: 14px; margin-bottom: 14px; }
+.info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
+.info dl { margin: 0; display: grid; grid-template-columns: 150px minmax(0, 1fr); }
+.info dt, .info dd { margin: 0; padding: 7px 8px; border-bottom: 1px solid var(--border-light); font-size: 12px; min-height: 32px; display: flex; align-items: center; }
+.info dt { background: var(--grid-head); font-weight: 700; color: var(--text-light); }
+.info dd { font-weight: 500; }
+.status-list { display: flex; flex-direction: column; gap: 8px; }
+.status-list .it { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 2px; font-size: 12px; }
+.status-list .it b { font-weight: 700; }
+.status-list .it small { color: var(--text-lighter); font-size: 11px; }
+.ranges { display: grid; grid-template-columns: 110px minmax(0, 1fr) 170px 120px; gap: 10px 14px; align-items: center; font-size: 12px; }
+.ranges .hd { font-size: 11px; font-weight: 700; color: var(--text-light); background: var(--grid-head); border: 1px solid var(--grid-border); padding: 4px 8px; }
+.ranges .k { font-weight: 700; }
+.ranges .tl { position: relative; height: 22px; background: var(--bg-deeper); border-radius: 2px; }
+.ranges .tl i { position: absolute; top: 4px; height: 14px; border-radius: 2px; background: var(--primary); }
+.ranges .tl i.fc { background: var(--fcst); }
+.ranges .tl i.cr { background: var(--series-c); }
+.ranges .tl em { position: absolute; top: 4px; font-style: normal; font-size: 10px; color: #fff; line-height: 14px; padding: 0 6px; white-space: nowrap; }
+.ranges .n { color: var(--text-light); }
+.yaxis { display: grid; grid-template-columns: 110px minmax(0, 1fr) 170px 120px; gap: 0 14px; font-size: 10px; color: var(--text-lighter); }
+.yaxis .ticks { display: flex; justify-content: space-between; }
+.placeholder { border: 1px dashed var(--border-strong); border-radius: 2px; padding: 40px 16px; text-align: center; color: var(--text-lighter); font-size: 13px; }
+.note { font-size: 11px; color: var(--text-lighter); margin-top: 12px; }
+
+/* ===== 반응형 ===== */
+@media (max-width: 1400px) { .topnav { gap: 30px; } .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } .row3 { grid-template-columns: 1fr; } .sgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 1100px) { .sidebar { display: none; } .row2, .pcols { grid-template-columns: 1fr; } .info { grid-template-columns: 1fr; } .logo .full { display: none; } .topnav { display: none; } }
+@media (max-width: 640px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sgrid { grid-template-columns: 1fr; } .content { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); } .ranges, .yaxis { grid-template-columns: 90px minmax(0, 1fr); } .ranges .n, .ranges .hd:nth-child(n+3), .yaxis :nth-child(n+3) { display: none; } .info dl { grid-template-columns: 120px minmax(0, 1fr); } .user .name { display: none; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+</style>
+
+<header class="hdr">
+  <div class="hdr-left">
+    <button class="hamburger" type="button" aria-label="메뉴"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 5h16M2 10h16M2 15h16"/></svg></button>
+    <a class="logo" href="#dashboard"><span class="abb">SCM</span><span class="full"><span class="ko">공급망관리시스템</span><span class="en">Supply Chain Management system</span></span></a>
+  </div>
+  <nav class="topnav"><a class="sel">Demand</a><a>Supply</a><a>Shipping</a><a>Authority</a><a>Admin</a></nav>
+  <div class="user"><span class="lang">KO <span style="font-size:10px">▾</span></span><span class="avatar">LM</span><span class="name">이민용</span></div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <p class="ptitle">Demand</p>
+    <div class="mgroup"><a class="g">Demand Master <span class="ic">＋</span></a></div>
+    <div class="mgroup">
+      <a class="g open">ASFM Dashboard <span class="ic">－</span></a>
+      <span class="gsub">After Sales Forecast Management</span>
+      <a class="sub on" href="#dashboard" data-nav="dashboard">대시보드</a>
+      <a class="sub" data-nav="product">제품 현황</a>
+      <a class="sub" data-nav="model">수요예측 모형</a>
+      <a class="sub" data-nav="yearly">연도별 예측수량</a>
+    </div>
+    <div class="mgroup"><a class="g">Demand Plan <span class="ic">＋</span></a></div>
+    <div class="mgroup"><a class="g">Waterfall <span class="ic">＋</span></a></div>
+  </aside>
+
+  <main class="main">
+    <div class="mdi">
+      <div class="strip">
+        <button class="tab" type="button">Home</button>
+        <button class="tab active" type="button" data-tab="dashboard">대시보드 홈 <span class="x">✕</span></button>
+      </div>
+      <div class="actions"><button class="arrow" type="button">‹</button><button class="arrow" type="button">›</button><button type="button">Close others</button><button type="button">Close All</button></div>
+    </div>
+
+    <!-- ================= 대시보드 홈 ================= -->
+    <section class="content" id="view-dashboard">
+      <div class="mtitle">
+        <h1><svg class="star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1.1 5.9L12 16.9l-5.3 2.8 1.1-5.9-4.3-4.1 5.9-.8z"/></svg>대시보드 홈</h1>
+        <div class="right">
+          <span class="crumb">Demand <span class="sep">›</span> ASFM Dashboard <span class="sep">›</span> <span class="cur">대시보드 홈</span></span>
+          <button class="zoom" type="button" aria-label="전체 화면"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8V3h5M17 8V3h-5M3 12v5h5M17 12v5h-5"/></svg></button>
+        </div>
+      </div>
+
+      <div class="fcards">
+        <label class="fcard sel"><span class="flb">기준월</span>
+          <select id="f-month"><option>2026-11</option><option>2026-10</option><option>2026-09</option><option>2026-08</option><option>2026-07</option><option>2026-06</option></select>
+          <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6l4 4 4-4"/></svg></label>
+        <label class="fcard sel"><span class="flb">Biz Type</span>
+          <select id="f-biz"><option>전체</option><option>Cell</option><option>Module</option><option>Pack</option></select>
+          <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6l4 4 4-4"/></svg></label>
+        <label class="fcard sel"><span class="flb">OEM</span>
+          <select id="f-oem"><option>전체</option><option>GM</option><option>Volvo</option><option>Ford</option><option>HKMC</option></select>
+          <svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6l4 4 4-4"/></svg></label>
+        <div class="fcard upd">
+          <button class="ibtn" type="button" id="f-refresh" aria-label="새로고침" title="새로고침"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M16 10a6 6 0 1 1-1.8-4.3"/><path d="M16 3.5v3h-3"/></svg></button>
+          <span class="txt"><span class="flb">최근 업데이트</span><span class="val num" id="f-updated">2026-11-03 08:30</span></span>
+          <button class="ibtn" type="button" aria-label="업데이트 안내" title="수요 예측 모델은 매주 월요일 08:30 에 업데이트됩니다 (목업 표기)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"/><path d="M10 9v5" stroke-linecap="round"/><circle cx="10" cy="6.2" r=".6" fill="currentColor"/></svg></button>
+        </div>
+      </div>
+
+      <div class="kpis">
+        <div class="card kpi"><span class="lb">관리 대상 품목</span><span class="v num">4 <span class="u">EA</span></span><span class="s">OEM 4 · Biz Type 3</span></div>
+        <div class="card kpi"><span class="lb">AS 재고 가치</span><span class="v num">28.4 <span class="u">억원</span></span><span class="s">기준월 2026-11 재고 환산</span></div>
+        <div class="card kpi crit"><span class="lb">예상 부족 품목</span><span class="v num">2 <span class="u">EA</span></span><span class="s"><span class="pill crit"><span class="dot"></span>생산 필요</span>N2.2A · F2</span></div>
+        <div class="card kpi warn"><span class="lb">Excess 품목</span><span class="v num">1 <span class="u">EA</span></span><span class="s"><span class="pill warn"><span class="dot"></span>과다 보유</span>P39</span></div>
+        <div class="card kpi ok"><span class="lb">평균 Inventory Cover</span><span class="v num">14.2 <span class="u">개월</span></span><span class="s">4개 품목 단순 평균</span></div>
+        <div class="card kpi fcst"><span class="lb">Forecast Accuracy</span><span class="v num">82<span class="u">%</span></span><span class="s">최근 12개월 · 1 − MAPE</span></div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <div class="sec-title"><h2>제품 현황</h2><span class="meta">총 <b class="num">4</b> 건</span></div>
+          <div class="gridwrap">
+            <table class="grid">
+              <thead><tr><th class="no">No</th><th>제품 코드</th><th>OEM</th><th>Biz Type</th><th>현재 재고</th><th>Inventory Cover (M)</th><th>Stock-out 예상월</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td class="no">1</td><td class="code">P30B</td><td>Volvo</td><td>Module</td><td class="r num">1,200,000</td><td class="r num">18.2<span class="bar" style="width:46px"></span></td><td class="c">-</td><td class="c"><span class="pill ok"><span class="dot"></span>유지</span></td></tr>
+                <tr><td class="no">2</td><td class="code">N2.2A</td><td>GM</td><td>Pack</td><td class="r num">530,000</td><td class="r num">4.1<span class="bar" style="width:10px;background:var(--crit)"></span></td><td class="c num" style="color:var(--crit-text);font-weight:700">2026-03</td><td class="c"><span class="pill crit"><span class="dot"></span>생산 필요</span></td></tr>
+                <tr><td class="no">3</td><td class="code">P39</td><td>Ford</td><td>Module</td><td class="r num">2,100,000</td><td class="r num">26.3<span class="bar" style="width:66px;background:var(--warn)"></span></td><td class="c">-</td><td class="c"><span class="pill warn"><span class="dot"></span>과다 보유</span></td></tr>
+                <tr><td class="no">4</td><td class="code">F2</td><td>HKMC</td><td>Cell</td><td class="r num">300,000</td><td class="r num">3.1<span class="bar" style="width:8px;background:var(--crit)"></span></td><td class="c num" style="color:var(--crit-text);font-weight:700">2026-01</td><td class="c"><span class="pill crit"><span class="dot"></span>생산 필요</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="sec-title"><h2>Risk Heat Map</h2><span class="meta">Stock-out 위험 · 구간별</span></div>
+          <div class="card">
+            <div class="heat">
+              <span></span><span class="h">3M</span><span class="h">6M</span><span class="h">12M</span>
+              <span class="rl">P30B</span><span class="cell"><i class="ind ok" title="P30B · 3M · 정상"></i></span><span class="cell"><i class="ind ok" title="P30B · 6M · 정상"></i></span><span class="cell"><i class="ind ok" title="P30B · 12M · 정상"></i></span>
+              <span class="rl">N2.2A</span><span class="cell"><i class="ind warn" title="N2.2A · 3M · 주의"></i></span><span class="cell"><i class="ind crit" title="N2.2A · 6M · 부족"></i></span><span class="cell"><i class="ind crit" title="N2.2A · 12M · 부족"></i></span>
+              <span class="rl">P39</span><span class="cell"><i class="ind ok" title="P39 · 3M · 정상"></i></span><span class="cell"><i class="ind warn" title="P39 · 6M · 과다"></i></span><span class="cell"><i class="ind warn" title="P39 · 12M · 과다"></i></span>
+              <span class="rl">F2</span><span class="cell"><i class="ind crit" title="F2 · 3M · 부족"></i></span><span class="cell"><i class="ind crit" title="F2 · 6M · 부족"></i></span><span class="cell"><i class="ind crit" title="F2 · 12M · 부족"></i></span>
+            </div>
+            <div class="legend"><span><i style="background:var(--ok)"></i>✓ 정상</span><span><i style="background:var(--warn)"></i>! 주의 / 과다</span><span><i style="background:var(--crit)"></i>✕ 부족 (생산 필요)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row3">
+        <div>
+          <div class="sec-title"><h2>Inventory Projection</h2><select class="toolsel" id="proj-product" aria-label="제품 선택"><option value="N2.2A">N2.2A · GM Pack</option><option value="P30B">P30B · Volvo Module</option><option value="P39">P39 · Ford Module</option><option value="F2">F2 · HKMC Cell</option></select></div>
+          <div class="card">
+            <div class="chart-legend"><span><i style="background:var(--series-a)"></i>Demand</span><span><i style="background:var(--series-b)"></i>Planned Supply / 생산</span><span><i class="line" style="background:var(--series-c)"></i>Projected Inventory</span><span class="meta" style="margin-left:auto">단위: 천 EA · 월별</span></div>
+            <div class="chart" id="chart-proj"></div>
+          </div>
+        </div>
+        <div>
+          <div class="sec-title"><h2>Forecast vs Actual</h2><span class="meta">최근 12개월 · 관리 품목 합계</span></div>
+          <div class="card">
+            <div class="chart-legend"><span><i class="line" style="background:var(--series-a)"></i>Actual Demand</span><span><i class="line" style="background:var(--series-b)"></i>Forecast</span><span class="meta" style="margin-left:auto">단위: 천 EA · Accuracy 82%</span></div>
+            <div class="chart" id="chart-fva"></div>
+          </div>
+        </div>
+        <div>
+          <div class="sec-title"><h2>Cover Month 추이</h2><span class="meta">최근 12개월 · 제품별</span></div>
+          <div class="card">
+            <div class="chart-legend"><span><i class="line" style="background:var(--series-a)"></i>P30B</span><span><i class="line" style="background:var(--series-b)"></i>N2.2A</span><span><i class="line" style="background:var(--series-c)"></i>P39</span><span><i class="line" style="background:var(--series-d)"></i>F2</span><span class="meta" style="margin-left:auto">단위: 개월</span></div>
+            <div class="chart" id="chart-cover"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row3">
+        <div>
+          <div class="sec-title"><h2>Excess / 과재고 현황</h2><span class="meta">단위: 천 EA · 억원</span></div>
+          <div class="card excess">
+            <div class="gridwrap">
+              <table class="grid">
+                <thead><tr><th>제품</th><th>현재 재고<br>(천 EA)</th><th>예상 수요<br>(12M)</th><th>Excess<br>(천 EA)</th><th>Excess 금액<br>(억원)</th></tr></thead>
+                <tbody>
+                  <tr><td class="code">P39</td><td class="r num">2,100</td><td class="r num">800</td><td class="r num">1,300</td><td class="r num neg">10.4</td></tr>
+                  <tr><td class="code">P30B</td><td class="r num">1,200</td><td class="r num">1,100</td><td class="r num">100</td><td class="r num neg">0.8</td></tr>
+                  <tr><td class="code">N2.2A</td><td class="r num">530</td><td class="r num">1,200</td><td class="c">-</td><td class="c">-</td></tr>
+                  <tr><td class="code">F2</td><td class="r num">300</td><td class="r num">1,000</td><td class="c">-</td><td class="c">-</td></tr>
+                  <tr class="sum"><td>합계</td><td class="c">-</td><td class="c">-</td><td class="r num">1,400</td><td class="r num neg">11.2</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="alertbox"><span class="ic">!</span><span class="lb">예상 폐기 위험 금액<br>(12M)</span><span class="v num">11.2</span><span class="u">억원</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="sec-title"><h2>예측 정확도 (MAPE)</h2><span class="meta">최근 12개월</span></div>
+          <div class="card">
+            <div class="mape">
+              <div class="big"><span class="lb">전체 평균</span><span class="v num">82<span class="u">%</span></span><span class="s">Accuracy = 1 − MAPE</span></div>
+              <div class="hbars" id="mape-bars"></div>
+            </div>
+            <div class="note" style="margin-top:10px">※ MAPE (Mean Absolute Percentage Error) · 제품별 막대는 MAPE, 낮을수록 정확</div>
+          </div>
+        </div>
+        <div>
+          <div class="sec-title"><h2>Forecast Logic &amp; Info</h2><span class="meta">적용 모형 요약</span></div>
+          <div class="card logic">
+            <ul>
+              <li>최근 24개월 판매 이력 기반 예측</li>
+              <li>계절성(Seasonality) 반영</li>
+              <li>Warranty / 수명 패턴 반영</li>
+              <li>Service Campaign / 리콜 반영</li>
+              <li>월 단위 Forecast (24개월)</li>
+              <li>매주 자동 업데이트 (월요일)</li>
+            </ul>
+            <dl>
+              <dt>모델</dt><dd>ETS + Seasonality</dd>
+              <dt>예측 단위</dt><dd>월 (Monthly)</dd>
+              <dt>예측 기간</dt><dd class="num">24개월</dd>
+              <dt>최근 모델 학습</dt><dd class="num">2026-11-01</dd>
+              <dt>다음 업데이트</dt><dd class="num">2026-11-09 (월요일)</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <p class="note">※ UI 목업 — 표시 값은 설계 프롬프트·참조 이미지의 예시 수치와 그에 맞춘 샘플 시계열이며 실제 DB 데이터가 아닙니다.</p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  try {
+    var b = document.getElementById('f-refresh');
+    if (!b) return;
+    b.addEventListener('click', function () {
+      b.classList.remove('spin'); void b.offsetWidth; b.classList.add('spin');
+    });
+  } catch (e) { /* 목업: 무시 */ }
+})();
+(function () {
+  'use strict';
+  var MONTHS_PROJ = ['26-11','26-12','27-01','27-02','27-03','27-04','27-05','27-06','27-07','27-08','27-09','27-10'];
+  var MONTHS_PAST = ['25-11','25-12','26-01','26-02','26-03','26-04','26-05','26-06','26-07','26-08','26-09','26-10'];
+  var C = { a: '#2d9bb2', b: '#554596', c: '#e12991', d: '#6d941c', warn: '#ff9322', crit: '#f94b50' };
+  var COVER = { months: MONTHS_PAST_REF(), series: [
+    { k: 'P30B',  c: '#2d9bb2', v: [22, 21.5, 21, 20.5, 20, 19.8, 19.5, 19.2, 19, 18.8, 18.5, 18.2] },
+    { k: 'N2.2A', c: '#554596', v: [9.5, 9, 8.5, 8, 7.2, 6.8, 6.2, 5.6, 5.2, 4.8, 4.5, 4.1] },
+    { k: 'P39',   c: '#e12991', v: [29, 28.8, 28.6, 28.3, 28, 27.8, 27.5, 27.2, 27, 26.8, 26.5, 26.3] },
+    { k: 'F2',    c: '#6d941c', v: [7.5, 7, 6.5, 6, 5.5, 5, 4.6, 4.2, 3.9, 3.6, 3.3, 3.1] } ] };
+  var MAPE = [ { k: 'P30B', v: 18 }, { k: 'N2.2A', v: 24 }, { k: 'P39', v: 15 }, { k: 'F2', v: 32 } ];
+  function MONTHS_PAST_REF() { return ['25-11','25-12','26-01','26-02','26-03','26-04','26-05','26-06','26-07','26-08','26-09','26-10']; }
+
+  // 샘플 시계열(천 EA) — 제품표의 현재 재고·Cover 와 정합되게 구성
+  var PROJ = {
+    'N2.2A': { start: 530,  demand: [128,132,130,135,131,129,133,130,128,134,131,130], supply: [0,0,0,0,150,150,150,150,130,130,130,130] },
+    'P30B':  { start: 1200, demand: [62,68,65,70,66,64,69,71,67,65,63,68],             supply: [0,0,0,0,0,0,40,0,0,0,0,0] },
+    'P39':   { start: 2100, demand: [78,82,80,79,81,80,83,78,80,82,79,80],             supply: [0,0,0,0,0,0,0,0,0,0,0,0] },
+    'F2':    { start: 300,  demand: [95,98,96,97,99,96,98,97,95,96,98,97],             supply: [0,0,0,120,120,120,100,100,100,100,100,100] }
+  };
+  var FVA = { actual: [368,375,362,381,390,372,385,377,369,392,380,374], forecast: [352,360,370,365,378,384,370,381,389,375,371,382] };
+
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function fmt(n) { return Math.round(n).toLocaleString('ko-KR'); }
+  function niceMax(v) { var p = Math.pow(10, Math.floor(Math.log10(v))); var s = [1,1.5,2,2.5,3,4,5,6,7.5,8,10]; for (var i = 0; i < s.length; i++) { if (s[i] * p >= v) return s[i] * p; } return 10 * p; }
+
+  function frame(container, yMax, months, rightPad) {
+    var W = 560, H = 230, L = 46, R = rightPad || 12, T = 12, B = 30;
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img' });
+    var pw = W - L - R, ph = H - T - B;
+    var y = function (v) { return T + ph - (v / yMax) * ph; };
+    var ticks = 4;
+    for (var i = 0; i <= ticks; i++) {
+      var v = yMax * i / ticks;
+      svg.appendChild(el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), 'class': i === 0 ? 'axis' : 'gridline' }));
+      svg.appendChild(el('text', { x: L - 6, y: y(v) + 3, 'text-anchor': 'end', 'class': 'tick' }, fmt(v)));
+    }
+    var slot = pw / months.length;
+    months.forEach(function (m, i) {
+      svg.appendChild(el('text', { x: L + slot * (i + 0.5), y: H - B + 14, 'text-anchor': 'middle', 'class': 'tick' }, m));
+    });
+    container.innerHTML = '';
+    container.appendChild(svg);
+    var tip = document.createElement('div'); tip.className = 'tip'; container.appendChild(tip);
+    return { svg: svg, y: y, L: L, T: T, pw: pw, ph: ph, slot: slot, W: W, H: H, tip: tip, container: container };
+  }
+  function hover(f, months, rowsFn) {
+    months.forEach(function (m, i) {
+      var r = el('rect', { x: f.L + f.slot * i, y: f.T, width: f.slot, height: f.ph, 'class': 'hit' });
+      r.addEventListener('mousemove', function (ev) {
+        var rows = rowsFn(i);
+        f.tip.innerHTML = '<b>20' + m + '</b>' + rows.map(function (q) { return '<span><i style="background:' + q.c + '"></i>' + q.n + ' <strong class="num">' + q.v + '</strong></span>'; }).join('');
+        f.tip.style.display = 'block';
+        var box = f.container.getBoundingClientRect();
+        var x = ev.clientX - box.left + 12, yy = ev.clientY - box.top + 12;
+        if (x + f.tip.offsetWidth > box.width) x = ev.clientX - box.left - f.tip.offsetWidth - 12;
+        f.tip.style.left = x + 'px'; f.tip.style.top = yy + 'px';
+      });
+      r.addEventListener('mouseleave', function () { f.tip.style.display = 'none'; });
+      f.svg.appendChild(r);
+    });
+  }
+
+  function drawProjection(code) {
+    var d = PROJ[code];
+    var inv = [], cur = d.start, stockout = -1;
+    for (var i = 0; i < 12; i++) { cur = cur - d.demand[i] + d.supply[i]; if (cur < 0) cur = 0; inv.push(cur); if (cur === 0 && stockout < 0) stockout = i; }
+    var yMax = niceMax(Math.max(d.start, Math.max.apply(null, inv), Math.max.apply(null, d.demand), Math.max.apply(null, d.supply)));
+    var f = frame(document.getElementById('chart-proj'), yMax, MONTHS_PROJ);
+    var bw = Math.min(10, (f.slot - 8) / 2);
+    for (var j = 0; j < 12; j++) {
+      var cx = f.L + f.slot * (j + 0.5);
+      var hD = f.T + f.ph - f.y(d.demand[j]);
+      f.svg.appendChild(el('rect', { x: cx - bw - 1, y: f.y(d.demand[j]), width: bw, height: hD, rx: 2, fill: C.a }));
+      if (d.supply[j] > 0) {
+        var hS = f.T + f.ph - f.y(d.supply[j]);
+        f.svg.appendChild(el('rect', { x: cx + 1, y: f.y(d.supply[j]), width: bw, height: hS, rx: 2, fill: C.b }));
+      }
+    }
+    var pts = inv.map(function (v, i) { return (f.L + f.slot * (i + 0.5)) + ',' + f.y(v); }).join(' ');
+    f.svg.appendChild(el('polyline', { points: pts, fill: 'none', stroke: C.c, 'stroke-width': 2, 'stroke-linejoin': 'round' }));
+    inv.forEach(function (v, i) {
+      var cx = f.L + f.slot * (i + 0.5);
+      f.svg.appendChild(el('circle', { cx: cx, cy: f.y(v), r: i === stockout ? 5 : 3, fill: i === stockout ? C.crit : C.c, stroke: '#fff', 'stroke-width': 1.5 }));
+    });
+    if (stockout >= 0) {
+      var sx = f.L + f.slot * (stockout + 0.5);
+      f.svg.appendChild(el('line', { x1: sx, x2: sx, y1: f.T, y2: f.T + f.ph, stroke: C.crit, 'stroke-dasharray': '3 3' }));
+      f.svg.appendChild(el('text', { x: sx + 5, y: f.T + 12, 'class': 'lab', fill: C.crit }, 'Stock-out 20' + MONTHS_PROJ[stockout]));
+    }
+    f.svg.appendChild(el('text', { x: f.L + f.slot * 0.5 + 8, y: f.y(inv[0]) - 8, 'class': 'lab' }, fmt(inv[0])));
+    f.svg.appendChild(el('text', { x: f.L + f.slot * 11.5 - 6, y: f.y(inv[11]) - 8, 'text-anchor': 'end', 'class': 'lab' }, fmt(inv[11])));
+    hover(f, MONTHS_PROJ, function (i) { return [ { n: 'Demand', v: fmt(d.demand[i]), c: C.a }, { n: 'Supply', v: fmt(d.supply[i]), c: C.b }, { n: 'Inventory', v: fmt(inv[i]), c: C.c } ]; });
+  }
+
+  function drawFva() {
+    var all = FVA.actual.concat(FVA.forecast);
+    var yMax = niceMax(Math.max.apply(null, all) * 1.05);
+    var f = frame(document.getElementById('chart-fva'), yMax, MONTHS_PAST);
+    [ ['forecast', C.b], ['actual', C.a] ].forEach(function (s) {
+      var arr = FVA[s[0]];
+      var pts = arr.map(function (v, i) { return (f.L + f.slot * (i + 0.5)) + ',' + f.y(v); }).join(' ');
+      f.svg.appendChild(el('polyline', { points: pts, fill: 'none', stroke: s[1], 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-dasharray': s[0] === 'forecast' ? '5 3' : 'none' }));
+      arr.forEach(function (v, i) { f.svg.appendChild(el('circle', { cx: f.L + f.slot * (i + 0.5), cy: f.y(v), r: 3, fill: s[1], stroke: '#fff', 'stroke-width': 1.5 })); });
+    });
+    f.svg.appendChild(el('text', { x: f.L + f.slot * 11.5 - 6, y: f.y(FVA.actual[11]) - 8, 'text-anchor': 'end', 'class': 'lab' }, 'Actual ' + fmt(FVA.actual[11])));
+    f.svg.appendChild(el('text', { x: f.L + f.slot * 11.5 - 6, y: f.y(FVA.forecast[11]) + 14, 'text-anchor': 'end', 'class': 'lab' }, 'Fcst ' + fmt(FVA.forecast[11])));
+    hover(f, MONTHS_PAST, function (i) {
+      var e = Math.abs(FVA.actual[i] - FVA.forecast[i]) / FVA.actual[i] * 100;
+      return [ { n: 'Actual', v: fmt(FVA.actual[i]), c: C.a }, { n: 'Forecast', v: fmt(FVA.forecast[i]), c: C.b }, { n: 'Error', v: e.toFixed(1) + '%', c: '#979998' } ];
+    });
+  }
+
+  function drawCover() {
+    var all = [];
+    COVER.series.forEach(function (s) { all = all.concat(s.v); });
+    var yMax = niceMax(Math.max.apply(null, all) * 1.08);
+    var f = frame(document.getElementById('chart-cover'), yMax, COVER.months, 44);
+    COVER.series.forEach(function (s) {
+      var pts = s.v.map(function (v, i) { return (f.L + f.slot * (i + 0.5)) + ',' + f.y(v); }).join(' ');
+      f.svg.appendChild(el('polyline', { points: pts, fill: 'none', stroke: s.c, 'stroke-width': 2, 'stroke-linejoin': 'round' }));
+      s.v.forEach(function (v, i) { f.svg.appendChild(el('circle', { cx: f.L + f.slot * (i + 0.5), cy: f.y(v), r: 2.5, fill: s.c, stroke: '#fff', 'stroke-width': 1.5 })); });
+    });
+    // 끝 라벨 — 위에서 아래로 정렬해 11px 미만 간격이면 아래로 밀어 겹침 방지
+    var labs = COVER.series.map(function (s) { return { k: s.k, c: s.c, y: f.y(s.v[11]) }; }).sort(function (a, b) { return a.y - b.y; });
+    for (var i = 1; i < labs.length; i++) { if (labs[i].y - labs[i - 1].y < 11) labs[i].y = labs[i - 1].y + 11; }
+    labs.forEach(function (l) { f.svg.appendChild(el('text', { x: f.L + f.slot * 11.5 + 8, y: l.y + 3, 'class': 'lab', fill: l.c }, l.k)); });
+    hover(f, COVER.months, function (i) { return COVER.series.map(function (s) { return { n: s.k, v: s.v[i].toFixed(1) + '개월', c: s.c }; }); });
+  }
+
+  function drawMape() {
+    var box = document.getElementById('mape-bars');
+    var max = Math.max.apply(null, MAPE.map(function (r) { return r.v; }));
+    box.innerHTML = '';
+    MAPE.forEach(function (r) {
+      var k = document.createElement('span'); k.className = 'k'; k.textContent = r.k;
+      var t = document.createElement('span'); t.className = 'track';
+      var a = document.createElement('i'); a.style.width = (r.v / max * 100) + '%'; a.style.background = C.a; a.title = r.k + ' MAPE ' + r.v + '%'; t.appendChild(a);
+      var n = document.createElement('span'); n.className = 'n num pct'; n.textContent = r.v + '%';
+      box.appendChild(k); box.appendChild(t); box.appendChild(n);
+    });
+  }
+
+  // 뷰 전환 — hash: #dashboard | #product-log
+  var VIEWS = { 'dashboard': 'view-dashboard' };
+  function show(name) {
+    if (!VIEWS[name]) name = 'dashboard';
+    Object.keys(VIEWS).forEach(function (k) { document.getElementById(VIEWS[k]).hidden = (k !== name); });
+    document.querySelectorAll('.mdi .tab[data-tab]').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-tab') === name); });
+    document.querySelectorAll('.sidebar .sub[data-nav]').forEach(function (a) { a.classList.toggle('on', a.getAttribute('data-nav') === name); });
+  }
+  window.addEventListener('hashchange', function () { show(location.hash.replace('#', '')); });
+  document.querySelectorAll('.mdi .tab[data-tab]').forEach(function (b) { b.addEventListener('click', function () { location.hash = b.getAttribute('data-tab'); }); });
+  document.querySelectorAll('.sidebar .sub[data-nav]').forEach(function (a) {
+    a.addEventListener('click', function (ev) { var n = a.getAttribute('data-nav'); if (!VIEWS[n]) { ev.preventDefault(); } });
+  });
+  document.getElementById('proj-product').addEventListener('change', function (e) { drawProjection(e.target.value); });
+
+  show(location.hash.replace('#', ''));
+  drawProjection('N2.2A');
+  drawFva();
+  drawCover();
+  drawMape();
+})();
+</script>

@@ -16,7 +16,7 @@
 | features/admin/src/pages/group-user/group-user.constants.ts | constants | 23 |
 | features/admin/src/pages/group-user/group-user.types.ts | types | 5 |
 | features/admin/src/pages/group-user/GroupUser.module.scss | style | 56 |
-| features/admin/src/pages/group-user/GroupUser.tsx | page | 430 |
+| features/admin/src/pages/group-user/GroupUser.tsx | page | 444 |
 | features/admin/src/pages/group-user/index.ts | index | 2 |
 | features/admin/src/pages/group-user/useGroupUserStore.ts | store | 132 |
 | features/admin/src/pages/group-user/__asis-mapping__.md | mapping | 43 |
@@ -25,9 +25,9 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | SYS0014/DivisionPopup//call-proc | hook | 1 | Y | DivisionModal.tsx:35 |
-| SYS0014/GroupInfo//call-proc | hook | 2 | Y | GroupUser.tsx:96 GroupUser.tsx:118 |
-| SYS0014/UserInfo//call-proc | hook | 1 | Y | GroupUser.tsx:103 |
-| SYS0014/Division//call-proc | hook | 1 | Y | GroupUser.tsx:110 |
+| SYS0014/GroupInfo//call-proc | hook | 2 | Y | GroupUser.tsx:107 GroupUser.tsx:129 |
+| SYS0014/UserInfo//call-proc | hook | 1 | Y | GroupUser.tsx:114 |
+| SYS0014/Division//call-proc | hook | 1 | Y | GroupUser.tsx:121 |
 | /admin/menu/SYS0014/column | http | 3 | Y | useGroupUserStore.ts:100 useGroupUserStore.ts:103 useGroupUserStore.ts:106 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -52,8 +52,8 @@
 | InputField | onChange | <arrow> setSearchText | jsx | features/admin/src/pages/group-user/components/modals/DivisionModal.tsx | 139 |
 | Button | onClick | handleConfirm | jsx | features/admin/src/pages/group-user/components/modals/DivisionModal.tsx | 179 |
 | Button | onClick | onClose | jsx | features/admin/src/pages/group-user/components/modals/DivisionModal.tsx | 186 |
-| DivisionModal | onClose | closeDivisionModal | jsx | features/admin/src/pages/group-user/GroupUser.tsx | 413 |
-| DivisionModal | onSelect | selectDivisionModal | jsx | features/admin/src/pages/group-user/GroupUser.tsx | 414 |
+| DivisionModal | onClose | closeDivisionModal | jsx | features/admin/src/pages/group-user/GroupUser.tsx | 427 |
+| DivisionModal | onSelect | selectDivisionModal | jsx | features/admin/src/pages/group-user/GroupUser.tsx | 428 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

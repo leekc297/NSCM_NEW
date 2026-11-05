@@ -1,0 +1,204 @@
+# -*- coding: utf-8 -*-
+"""[E20261102-RTFLATESTPRICE] 패치 정의 (사내 적용·클라우드 패키지 공용 단일 원천).
+규칙: RTF 주차(BASIS_START_DATE)에 단가 행이 없으면 그 주차 이전의 단가(>0) 중 가장 최근 값으로 SalesAmt 계산.
+UI 입력 검증(MSG00462 등)은 그대로. 원장(단가·환율)에는 쓰지 않고 금액 계산용 임시 값만 만든다."""
+
+MARK = '[E20261102-RTFLATESTPRICE]'
+KEYS = ('DIVISION_ID', 'PROJECT_CODE', 'SCM_SITE_ID', 'ITEM_ID', 'DOM_EXP', 'FCST_TYPE', 'INCOTERMS', 'PLANT_SITE_ID')
+
+
+def _last(col):
+    return f'MAX(P.{col}) KEEP (DENSE_RANK LAST ORDER BY P.YYYYMMDD, P.PRICE)'
+
+
+def _batch_insert(ledger, proj_col, cell_expr, cell_join, ind):
+    """배치 T2_PRICE 대체 행. W 는 RTF 키×버킷 1행."""
+    cell_w = f', T.CELL_PROD_SITE_ID' if cell_join else ''
+    p_cell = f'\n{ind}       AND P.CELL_PROD_SITE_ID = W.CELL_PROD_SITE_ID' if cell_join else ''
+    x_cell = f'\n{ind}                       AND X.CELL_PROD_SITE_ID = W.CELL_PROD_SITE_ID' if cell_join else ''
+    g_cell = f', W.CELL_PROD_SITE_ID' if cell_join else ''
+    return f"""{ind}INSERT INTO GT_PRDM_T2_PRICE
+{ind}( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, CELL_PROD_SITE_ID, ITEM_ID, YYYYMMDD, CURRENCY, MEASURE, DOM_EXP, FCST_TYPE, INCOTERMS, PRICE )
+{ind}SELECT W.DIVISION_ID, W.PROJECT_CODE, W.SCM_SITE_ID, W.PLANT_SITE_ID, {cell_expr}, W.ITEM_ID, W.BASIS_START_DATE
+{ind}     , {_last('CURRENCY')}, P.MEASURE, W.DOM_EXP, W.FCST_TYPE, W.INCOTERMS
+{ind}     , {_last('PRICE')}
+{ind}  FROM ( SELECT DISTINCT T.DIVISION_ID, T.PROJECT_CODE, T.SCM_SITE_ID, T.PLANT_SITE_ID{cell_w}, T.ITEM_ID, T.DOM_EXP, T.FCST_TYPE, T.INCOTERMS, C.BASIS_START_DATE
+{ind}           FROM GT_PRDM_T2_MKT_FCST T
+{ind}           JOIN SCM_SYS_CALENDAR_M C ON C.BASIS_YYYYMMDD = T.YYYYMMDD
+{ind}          WHERE T.MEASURE = 'RTF_SYS_RP' AND T.QTY <> 0 ) W
+{ind}  JOIN {ledger} P
+{ind}    ON P.DIVISION_ID = W.DIVISION_ID
+{ind}   AND P.{proj_col} = W.PROJECT_CODE
+{ind}   AND P.SCM_SITE_ID = W.SCM_SITE_ID
+{ind}   AND P.ITEM_ID = W.ITEM_ID
+{ind}   AND P.DOM_EXP = W.DOM_EXP
+{ind}   AND P.FCST_TYPE = W.FCST_TYPE
+{ind}   AND P.INCOTERMS = W.INCOTERMS
+{ind}   AND P.PLANT_SITE_ID = W.PLANT_SITE_ID{p_cell}
+{ind}   AND P.MEASURE IN ( 'KRW', 'LOC', 'USD' )
+{ind}   AND P.PRICE > 0
+{ind}   AND P.YYYYMMDD < W.BASIS_START_DATE
+{ind} WHERE NOT EXISTS ( SELECT 1 FROM GT_PRDM_T2_PRICE X
+{ind}                     WHERE X.DIVISION_ID = W.DIVISION_ID AND X.PROJECT_CODE = W.PROJECT_CODE AND X.SCM_SITE_ID = W.SCM_SITE_ID
+{ind}                       AND X.ITEM_ID = W.ITEM_ID AND X.DOM_EXP = W.DOM_EXP AND X.FCST_TYPE = W.FCST_TYPE
+{ind}                       AND X.INCOTERMS = W.INCOTERMS AND X.PLANT_SITE_ID = W.PLANT_SITE_ID{x_cell}
+{ind}                       AND X.MEASURE = P.MEASURE AND X.YYYYMMDD = W.BASIS_START_DATE )
+{ind} GROUP BY W.DIVISION_ID, W.PROJECT_CODE, W.SCM_SITE_ID, W.PLANT_SITE_ID{g_cell}, W.ITEM_ID, W.DOM_EXP, W.FCST_TYPE, W.INCOTERMS, W.BASIS_START_DATE, P.MEASURE;"""
+
+
+I16 = ' ' * 16
+BATCH_BLOCK = f"""
+                /* {MARK} RTF 주차(BASIS_START_DATE)에 단가가 없으면 그 주차 이전의 가장 최근 단가로 SalesAmt 를 계산한다.
+                   시스템이 단가 없는 주차에 RTF 를 제시한 경우용. MKT_AMT 는 위에서 이미 만들어 영향 없다. 임시 테이블에만 넣고 단가 원장은 바꾸지 않는다. */
+                IF ( V_DIVISION_ID = '40' ) THEN
+{_batch_insert('DM_PLN_CFM_SELLING_PRICE', 'END_CUSTOMER', 'W.CELL_PROD_SITE_ID', True, I16 + '    ')}
+                ELSE
+{_batch_insert('SCM_MST_FUTURE_PRICE', 'PROJECT_CODE', "'-'", False, I16 + '    ')}
+                END IF;
+"""
+
+
+def _save_insert(ledger_join, cell_expr_note=''):
+    return ledger_join
+
+
+_SAVE_COMMON_SELECT = f"""SELECT W.DIVISION_ID, W.PROJECT_CODE, W.SCM_SITE_ID, W.ITEM_ID, W.DOM_EXP, W.FCST_TYPE, W.INCOTERMS, W.PLANT_SITE_ID, W.CELL_PROD_SITE_ID
+			 , {_last('CURRENCY')}, P.MEASURE, W.BASIS_START_DATE
+			 , {_last('PRICE')}
+			 , 'RTF_LATEST_PRICE', SYSDATE
+		  FROM ( SELECT DISTINCT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, CELL_PROD_SITE_ID, BASIS_START_DATE
+				   FROM GT_PRMF_T2_MKT_FCST
+				  WHERE MEASURE = 'RTF_SYS_RP' AND QTY <> 0 ) W"""
+_SAVE_NOTEX = """AND P.MEASURE IN ('KRW', 'LOC', 'USD')
+		   AND P.PRICE > 0
+		   AND P.YYYYMMDD < W.BASIS_START_DATE
+		 WHERE NOT EXISTS ( SELECT 1 FROM GT_PRMF_T2_PRICE X
+							 WHERE X.DIVISION_ID = W.DIVISION_ID AND X.PROJECT_CODE = W.PROJECT_CODE AND X.SCM_SITE_ID = W.SCM_SITE_ID
+							   AND X.ITEM_ID = W.ITEM_ID AND X.DOM_EXP = W.DOM_EXP AND X.FCST_TYPE = W.FCST_TYPE AND X.INCOTERMS = W.INCOTERMS
+							   AND X.PLANT_SITE_ID = W.PLANT_SITE_ID AND X.CELL_PROD_SITE_ID = W.CELL_PROD_SITE_ID
+							   AND X.MEASURE = P.MEASURE AND X.YYYYMMDD = W.BASIS_START_DATE )
+		 GROUP BY W.DIVISION_ID, W.PROJECT_CODE, W.SCM_SITE_ID, W.ITEM_ID, W.DOM_EXP, W.FCST_TYPE, W.INCOTERMS, W.PLANT_SITE_ID, W.CELL_PROD_SITE_ID, W.BASIS_START_DATE, P.MEASURE;"""
+_SAVE_INTO = """INSERT INTO GT_PRMF_T2_PRICE
+		( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, CELL_PROD_SITE_ID
+		, CURRENCY, MEASURE, YYYYMMDD, PRICE, CREATED_BY, CREATION_DATE )"""
+SAVE_BLOCK = f"""
+		/* {MARK} RTF 주차에 단가가 없으면 그 주차 이전의 가장 최근 단가로 SalesAmt 를 계산한다(임시 테이블에만, 단가 원장 무변경).
+		   RTF 행 통화도 같은 단가로 채운다. MKT_AMT 에는 쓰지 않도록 A006 뒤에서 대체 행을 지운다. */
+		IF (V_DIVISION_ID = '40') THEN
+		{_SAVE_INTO}
+		{_SAVE_COMMON_SELECT}
+		  JOIN DM_PLN_CFM_SELLING_PRICE P
+			ON P.DIVISION_ID = W.DIVISION_ID AND P.PROJECT_CODE = W.PROJECT_CODE AND P.SCM_SITE_ID = W.SCM_SITE_ID
+		   AND P.ITEM_ID = W.ITEM_ID AND P.DOM_EXP = W.DOM_EXP AND P.FCST_TYPE = W.FCST_TYPE AND P.INCOTERMS = W.INCOTERMS
+		   AND P.CELL_PROD_SITE_ID = W.CELL_PROD_SITE_ID
+		   {_SAVE_NOTEX}
+		ELSIF (SUBSTR(V_DIVISION_ID, 1, 2) = '81') THEN
+		{_SAVE_INTO}
+		{_SAVE_COMMON_SELECT}
+		  JOIN SCM_MST_FUTURE_PRICE P
+			ON P.DIVISION_ID = W.DIVISION_ID AND P.PROJECT_CODE = W.PROJECT_CODE AND P.SCM_SITE_ID = W.SCM_SITE_ID
+		   AND P.ITEM_ID = W.ITEM_ID AND P.DOM_EXP = W.DOM_EXP AND P.FCST_TYPE = W.FCST_TYPE AND P.INCOTERMS = W.INCOTERMS
+		   AND P.PLANT_SITE_ID = W.PLANT_SITE_ID
+		   {_SAVE_NOTEX}
+		END IF;
+		UPDATE GT_PRMF_SALES_PLAN_TEMP T
+		   SET T.CURRENCY = ( SELECT MAX(X.CURRENCY) FROM GT_PRMF_T2_PRICE X
+							   WHERE X.CREATED_BY = 'RTF_LATEST_PRICE' AND X.MEASURE = 'LOC'
+								 AND X.DIVISION_ID = T.DIVISION_ID AND X.PROJECT_CODE = T.PROJECT_CODE AND X.SCM_SITE_ID = T.SCM_SITE_ID
+								 AND X.ITEM_ID = T.ITEM_ID AND X.DOM_EXP = T.DOM_EXP AND X.FCST_TYPE = T.FCST_TYPE AND X.INCOTERMS = T.INCOTERMS
+								 AND X.PLANT_SITE_ID = T.PLANT_SITE_ID AND X.CELL_PROD_SITE_ID = T.CELL_PROD_SITE_ID
+								 AND X.YYYYMMDD = ( SELECT C.BASIS_START_DATE FROM SCM_SYS_CALENDAR_M C WHERE C.BASIS_YYYYMMDD = T.YYYYMMDD ) )
+		 WHERE T.MEASURE = 'RTF_SYS_RP' AND T.CURRENCY IS NULL;
+"""
+SAVE_DELETE = f"""
+		DELETE FROM GT_PRMF_T2_PRICE WHERE CREATED_BY = 'RTF_LATEST_PRICE';	/* {MARK} MKT_AMT 는 기존 기준 유지 */
+"""
+
+SINGLE_BLOCK = f"""        /* {MARK} RTF 주차에 단가가 없으면(통화 NULL = 외부 조인 미일치) 그 주차 이전의 가장 최근 단가로 RTF 통화·SalesAmt 를 다시 계산한다. 단가 원장 무변경. */
+        MERGE INTO GT_PRDM_SALES_PLAN_TEMP_SINGLE T
+        USING ( SELECT S.ROWID AS RID
+                     , {_last('CURRENCY')} AS CURRENCY
+                     , {_last('PRICE')} AS PRICE
+                     , MAX(R.QTY) AS RTF_QTY
+                  FROM GT_PRDM_SALES_PLAN_TEMP_SINGLE S
+                  JOIN SCM_SYS_CALENDAR_M C ON C.BASIS_YYYYMMDD = S.YYYYMMDD
+                  JOIN SCM_MST_FUTURE_PRICE P
+                    ON P.DIVISION_ID = S.DIVISION_ID AND P.PROJECT_CODE = S.PROJECT_CODE AND P.SCM_SITE_ID = S.SCM_SITE_ID
+                   AND P.ITEM_ID = S.ITEM_ID AND P.DOM_EXP = S.DOM_EXP AND P.FCST_TYPE = S.FCST_TYPE AND P.INCOTERMS = S.INCOTERMS
+                   AND P.PLANT_SITE_ID = S.PLANT_SITE_ID
+                   AND P.MEASURE = CASE S.MEASURE WHEN 'SalesAmt_KRW' THEN 'KRW' WHEN 'SalesAmt_USD' THEN 'USD' ELSE 'LOC' END
+                   AND P.PRICE > 0
+                   AND P.YYYYMMDD < C.BASIS_START_DATE
+                  LEFT JOIN GT_PRDM_SALES_PLAN_TEMP_SINGLE R
+                    ON R.DIVISION_ID = S.DIVISION_ID AND R.PROJECT_CODE = S.PROJECT_CODE AND R.SCM_SITE_ID = S.SCM_SITE_ID
+                   AND R.ITEM_ID = S.ITEM_ID AND R.DOM_EXP = S.DOM_EXP AND R.FCST_TYPE = S.FCST_TYPE AND R.INCOTERMS = S.INCOTERMS
+                   AND R.PLANT_SITE_ID = S.PLANT_SITE_ID AND R.CELL_PROD_SITE_ID = S.CELL_PROD_SITE_ID
+                   AND R.YYYYMMDD = S.YYYYMMDD AND R.MEASURE = 'RTF_SYS_RP'
+                 WHERE S.MEASURE IN ( 'RTF', 'RTF_SYS_RP', 'SalesAmt_KRW', 'SalesAmt_LOC', 'SalesAmt_USD' )
+                   AND S.CURRENCY IS NULL
+                 GROUP BY S.ROWID ) F
+           ON ( T.ROWID = F.RID )
+         WHEN MATCHED THEN
+              UPDATE SET T.CURRENCY = F.CURRENCY
+                       , T.QTY      = CASE WHEN T.MEASURE LIKE 'SalesAmt%' THEN ROUND(NVL(F.RTF_QTY, 0) * F.PRICE, 5) ELSE T.QTY END;
+
+"""
+
+SYNC_BLOCK = f"""
+            /* {MARK} RTF 주차에 단가가 없으면 그 주차 이전의 가장 최근 단가로 SalesAmt 를 만들고 RTF 통화를 채운다(82 저장 시 사업부 전체를 다시 만들므로 필요). 단가 원장 무변경. */
+            INSERT INTO SCM_MGR.GT_FSPS_SALES_PLAN_TEMP_LOC
+            (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, MEASURE, PLANT_SITE_ID, YYYYMMDD, CURRENCY, QTY, CREATED_BY, CREATION_DATE)
+            SELECT W.DIVISION_ID, W.PROJECT_CODE, W.SCM_SITE_ID, W.ITEM_ID, W.DOM_EXP, W.FCST_TYPE, W.INCOTERMS
+                 , CASE P.MEASURE WHEN 'KRW' THEN 'SalesAmt_KRW' WHEN 'LOC' THEN 'SalesAmt_LOC' ELSE 'SalesAmt_USD' END
+                 , W.PLANT_SITE_ID, W.YYYYMMDD
+                 , {_last('CURRENCY')}
+                 , CAST(ROUND(W.QTY * {_last('PRICE')}, 5) AS NUMBER(30, 10))
+                 , NULL, NULL
+            FROM   ( SELECT T.*, C.BASIS_START_DATE
+                     FROM   SCM_MGR.GT_FSPS_T_MKT_FCST T
+                     JOIN   SCM_MGR.SCM_SYS_CALENDAR_M C ON C.BASIS_YYYYMMDD = T.YYYYMMDD
+                     WHERE  T.MEASURE = 'RTF_SYS_RP' AND T.QTY <> 0 ) W
+            JOIN   SCM_MGR.SCM_MST_FUTURE_PRICE P
+                ON P.DIVISION_ID = W.DIVISION_ID AND P.PROJECT_CODE = W.PROJECT_CODE AND P.SCM_SITE_ID = W.SCM_SITE_ID
+               AND P.ITEM_ID = W.ITEM_ID AND P.DOM_EXP = W.DOM_EXP AND P.FCST_TYPE = W.FCST_TYPE AND P.INCOTERMS = W.INCOTERMS
+               AND P.PLANT_SITE_ID = W.PLANT_SITE_ID
+               AND P.MEASURE IN ('KRW', 'LOC', 'USD')
+               AND P.PRICE > 0
+               AND P.YYYYMMDD < W.BASIS_START_DATE
+            WHERE  NOT EXISTS ( SELECT 1 FROM SCM_MGR.GT_FSPS_T_PRICE X
+                                WHERE X.DIVISION_ID = W.DIVISION_ID AND X.PROJECT_CODE = W.PROJECT_CODE AND X.SCM_SITE_ID = W.SCM_SITE_ID
+                                  AND X.ITEM_ID = W.ITEM_ID AND X.DOM_EXP = W.DOM_EXP AND X.FCST_TYPE = W.FCST_TYPE AND X.INCOTERMS = W.INCOTERMS
+                                  AND X.PLANT_SITE_ID = W.PLANT_SITE_ID AND X.MEASURE = P.MEASURE AND X.YYYYMMDD = W.BASIS_START_DATE )
+            AND    NOT EXISTS ( SELECT 1
+                                FROM   SCM_MGR.SCM_MST_SITE_ITEM A
+                                     , SCM_MGR.DM_PLN_SALES_PLAN  B
+                                WHERE  SALES_PLAN_ADJUST_YN  = 'N'
+                                AND    A.ITEM_ID             = B.ITEM_ID
+                                AND    A.DIVISION_ID         = B.DIVISION_ID
+                                AND    A.PROJECT_CODE        = B.PROJECT_CODE
+                                AND    A.SCM_SITE_ID         = B.SCM_SITE_ID
+                                AND    B.LAST_UPDATED_BY NOT IN ('SYSTEM', 'CUTOFF')
+                                AND    B.YYYYMMDD           >= V_NEXT_MON_MINUS7
+                                AND    A.DIVISION_ID         = W.DIVISION_ID
+                                AND    A.PROJECT_CODE        = W.PROJECT_CODE
+                                AND    A.SCM_SITE_ID         = W.SCM_SITE_ID
+                                AND    A.ITEM_ID             = W.ITEM_ID )
+            GROUP BY W.DIVISION_ID, W.PROJECT_CODE, W.SCM_SITE_ID, W.ITEM_ID, W.DOM_EXP, W.FCST_TYPE, W.INCOTERMS, W.PLANT_SITE_ID, W.YYYYMMDD, W.QTY, P.MEASURE;
+            UPDATE SCM_MGR.GT_FSPS_SALES_PLAN_TEMP_LOC T
+            SET    T.CURRENCY = ( SELECT MAX(X.CURRENCY) FROM SCM_MGR.GT_FSPS_SALES_PLAN_TEMP_LOC X
+                                  WHERE  X.MEASURE = 'SalesAmt_LOC' AND X.DIVISION_ID = T.DIVISION_ID AND X.PROJECT_CODE = T.PROJECT_CODE
+                                  AND    X.SCM_SITE_ID = T.SCM_SITE_ID AND X.ITEM_ID = T.ITEM_ID AND X.DOM_EXP = T.DOM_EXP AND X.FCST_TYPE = T.FCST_TYPE
+                                  AND    X.INCOTERMS = T.INCOTERMS AND X.PLANT_SITE_ID = T.PLANT_SITE_ID AND X.YYYYMMDD = T.YYYYMMDD )
+            WHERE  T.MEASURE = 'RTF_SYS_RP' AND T.CURRENCY IS NULL;
+"""
+
+# (객체, 유형, [(범위 시작, 범위 끝, 앵커 정규식, 넣을 위치 'after'|'before', 블록)])
+# 앵커는 ASCII. 범위 문자열은 프로시저 경계(패키지만). 앵커는 범위 안에서 정확히 1건이어야 한다.
+PATCHES = [
+    ('PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW', 'PROCEDURE', [
+        (None, None, r"[^\n]*' : A007--'[^\n]*\n", 'after', BATCH_BLOCK)]),
+    ('PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_MKT_FCST_SAVE', 'PROCEDURE', [
+        (None, None, r"[^\n]*' : A003--'[^\n]*\n", 'after', SAVE_BLOCK),
+        (None, None, r"[^\n]*' : A006--'[^\n]*\n", 'after', SAVE_DELETE)]),
+]
+# 2026-11-02 사용자 지시: PKG_DMF0020·PKG_DMF0003 은 대상 제외. SINGLE_BLOCK·SYNC_BLOCK 은 이미 적용된 곳에서 제거할 때만 쓴다(97_REMOVE).

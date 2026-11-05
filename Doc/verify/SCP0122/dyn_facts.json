@@ -1,0 +1,332 @@
+{
+ "combos": {
+  "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0122\"}": [
+   {
+    "c": "81",
+    "v": "81 Automotive Battery"
+   },
+   {
+    "c": "40",
+    "v": "40 Mobility & IT Battery"
+   },
+   {
+    "c": "82",
+    "v": "82 ESS Battery"
+   },
+   {
+    "c": "EE",
+    "v": "EE Electrode"
+   },
+   {
+    "c": "81_UC",
+    "v": "81_UC Automotive Battery(UC)"
+   },
+   {
+    "c": "EE_UC",
+    "v": "EE_UC Electrode(UC)"
+   },
+   {
+    "c": "81_HM",
+    "v": "81_HM Automotive Battery(HM)"
+   },
+   {
+    "c": "EE_HM",
+    "v": "EE_HM Electrode(HM)"
+   },
+   {
+    "c": "81_ST",
+    "v": "81_ST Automotive Battery(ST)"
+   },
+   {
+    "c": "EE_ST",
+    "v": "EE_ST Electrode(ST)"
+   },
+   {
+    "c": "81_HD",
+    "v": "81_HD Automotive Battery(HD)"
+   },
+   {
+    "c": "EE_HD",
+    "v": "EE_HD Electrode(HD)"
+   },
+   {
+    "c": "81_HG",
+    "v": "81_HG Automotive Battery(HG)"
+   },
+   {
+    "c": "EE_HG",
+    "v": "EE_HG Electrode(HG)"
+   }
+  ],
+  "{\"comboId\":\"ActivityCode\",\"mnuId\":\"SCP0122\"}": [
+   {
+    "c": "A001",
+    "v": "Master Validation"
+   },
+   {
+    "c": "A002",
+    "v": "Create Plan ID"
+   },
+   {
+    "c": "A003",
+    "v": "Engine Run"
+   },
+   {
+    "c": "A004",
+    "v": "Plan Out Review and Amend"
+   },
+   {
+    "c": "A005",
+    "v": "FP Target I/F"
+   },
+   {
+    "c": "A006",
+    "v": "Release"
+   },
+   {
+    "c": "A007",
+    "v": "Input Constraint"
+   },
+   {
+    "c": "A008",
+    "v": "Constraint Validation"
+   },
+   {
+    "c": "A009",
+    "v": "Ship Plan Semi Cut-Off (To Packer)"
+   }
+  ],
+  "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPMZ_PRS_CD'\",\"mnuId\":\"SCP0122\"}": [
+   {
+    "c": "P001",
+    "v": "SCP 엔진 최적화 프로세스"
+   }
+  ],
+  "{\"comboId\":\"PlanGroup_SCP_ALL\",\"mnuId\":\"SCP0122\"}": [
+   {
+    "c": "PG0014",
+    "v": "18650"
+   },
+   {
+    "c": "PG0029",
+    "v": "18650_OC"
+   },
+   {
+    "c": "PG0020",
+    "v": "21700_IM_NJ"
+   },
+   {
+    "c": "PG0021",
+    "v": "21700_IM_OC"
+   },
+   {
+    "c": "PG0015",
+    "v": "21700_Non_IM_NJ"
+   },
+   {
+    "c": "PG0019",
+    "v": "21700_Non_IM_NJ_CFC"
+   },
+   {
+    "c": "PG0017",
+    "v": "21700_Non_IM_OC"
+   },
+   {
+    "c": "PG0016",
+    "v": "21700_Non_IM_OC_CFC"
+   },
+   {
+    "c": "PG0001",
+    "v": "E129A_E128A"
+   },
+   {
+    "c": "PG0002",
+    "v": "E161A"
+   },
+   {
+    "c": "PG0003",
+    "v": "E62B_E63F"
+   },
+   {
+    "c": "PG0005",
+    "v": "E72B"
+   },
+   {
+    "c": "PG0061",
+    "v": "E79C"
+   },
+   {
+    "c": "PG0006",
+    "v": "E81A_NB"
+   },
+   {
+    "c": "PG0007",
+    "v": "E81B_E85A"
+   },
+   {
+    "c": "PG0008",
+    "v": "E85A_E81B_DIO"
+   },
+   {
+    "c": "PG0022",
+    "v": "E90B"
+   },
+   {
+    "c": "PG0057",
+    "v": "ESAZ"
+   },
+   {
+    "c": "PG0024",
+    "v": "ESNA"
+   },
+   {
+    "c": "PG0025",
+    "v": "ESNB"
+   },
+   {
+    "c": "PG0059",
+    "v": "ESNB_ESS"
+   },
+   {
+    "c": "PG0027",
+    "v": "ESNJ"
+   },
+   {
+    "c": "PG0052",
+    "v": "ESNJ_POUCH"
+   },
+   {
+    "c": "PG0028",
+    "v": "ESOC"
+   },
+   {
+    "c": "PG0042",
+    "v": "ESOC_ELECBIZ"
+   },
+   {
+    "c": "PG0043",
+    "v": "ESOC_NFF"
+   },
+   {
+    "c": "PG0054",
+    "v": "ESS_NAM"
+   },
+   {
+    "c": "PG0035",
+    "v": "ESS_NB"
+   },
+   {
+    "c": "PG0034",
+    "v": "ESWA_EBEJ"
+   },
+   {
+    "c": "PG0026",
+    "v": "ESWA_ED"
+   },
+   {
+    "c": "PG0060",
+    "v": "ESWA_ESS"
+   },
+   {
+    "c": "PG0030",
+    "v": "GM1_A"
+   },
+   {
+    "c": "PG0033",
+    "v": "GM1_E"
+   },
+   {
+    "c": "PG0009",
+    "v": "H5.5"
+   },
+   {
+    "c": "PG0053",
+    "v": "H5.5A_WA"
+   },
+   {
+    "c": "PG0062",
+    "v": "HG_E81C_E69B"
+   },
+   {
+    "c": "PG0012",
+    "v": "L10D"
+   },
+   {
+    "c": "PG0010",
+    "v": "LV15AB"
+   },
+   {
+    "c": "PG0011",
+    "v": "LV9.8A_H07"
+   },
+   {
+    "c": "PG0036",
+    "v": "Micro_Cyl"
+   },
+   {
+    "c": "PG0055",
+    "v": "NFF_AZ"
+   },
+   {
+    "c": "PG0056",
+    "v": "NFF_OC"
+   },
+   {
+    "c": "PG0037",
+    "v": "P_Non_NT"
+   },
+   {
+    "c": "PG0038",
+    "v": "P_NT"
+   },
+   {
+    "c": "PG0063",
+    "v": "RFx_Sim"
+   },
+   {
+    "c": "PG0058",
+    "v": "Test"
+   }
+  ],
+  "{\"comboId\":\"ActivityCode\",\"mnuId\":\"SCP0122\",\"sheetName\":\"'Plan Activity Mgmt'\",\"validYn\":\"'Y'\"}": [
+   {
+    "c": "A001",
+    "v": "Master Validation"
+   },
+   {
+    "c": "A002",
+    "v": "Create Plan ID"
+   },
+   {
+    "c": "A003",
+    "v": "Engine Run"
+   },
+   {
+    "c": "A004",
+    "v": "Plan Out Review and Amend"
+   },
+   {
+    "c": "A005",
+    "v": "FP Target I/F"
+   },
+   {
+    "c": "A006",
+    "v": "Release"
+   },
+   {
+    "c": "A007",
+    "v": "Input Constraint"
+   },
+   {
+    "c": "A008",
+    "v": "Constraint Validation"
+   },
+   {
+    "c": "A009",
+    "v": "Ship Plan Semi Cut-Off (To Packer)"
+   }
+  ]
+ },
+ "popupFields": {},
+ "at": "2026-11-04T09:53:17.906Z"
+}

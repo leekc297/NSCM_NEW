@@ -2,13 +2,13 @@
  {
   "row_id": "T-abc31dcf",
   "result": "PASS",
-  "evidence": "화면 진입 직후(조회 전) 그리드 0행 · 진입 시 호출 countryCity/SEARCH(3041행) — 기대 빈 그리드·조회 없음 (AS-IS 로드 중 조회 호출: Form_Load:167 FindDataMain() [if (isConditionReadOnly)] — 전부 조건부라 일반 진입은 조회 없음)",
+  "evidence": "화면 진입 직후(조회 전) 그리드 0행 · 진입 시 호출 countryCity/SEARCH(3044행) — 기대 빈 그리드·조회 없음 (AS-IS 로드 중 조회 호출: Form_Load:167 FindDataMain() [if (isConditionReadOnly)] — 전부 조건부라 일반 진입은 조회 없음)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-557a2890",
   "result": "PASS",
-  "evidence": "AS-IS 버튼 Search·Insert·Delete·Save → TO-BE 전부 노출 · 대조표 제외 결정 Edit(비교 제외) (보이는 버튼: KOR, Home, BOD, Scroll tabs left, Scroll tabs right, Close others, Close All, Open, Search(F5), Insert(F8), Delete(F9), Save(F7), Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10), Excel, Toggle Calendar, Toggle )",
+  "evidence": "AS-IS 버튼 Search·Insert·Delete·Save → TO-BE 전부 노출 · 대조표 제외 결정 Edit(비교 제외) (보이는 버튼: KOR, 이 이민용, Home, BOD, Scroll tabs left, Scroll tabs right, Close others, Close All, Open, Search(F5), Insert(F8), Delete(F9), Save(F7), Sort(F3), Filter(F4), Condition(F6), Reset Condition(F10), Excel, Toggle Calendar, )",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -134,7 +134,7 @@
  {
   "row_id": "T-f01e425e",
   "result": "PASS",
-  "evidence": "'Div' → '81 Automotive Battery' 변경 · 콤보 재요청 6건 · 하위 clbFromSite '​'→'​', clbToSite '​'→'​' · AS-IS 핸들러 cboDivision_SelectedIndexChanged",
+  "evidence": "'Div' → '81 Automotive Battery' 변경 · 콤보 재요청 5건 · 하위 clbFromSite '​'→'​', clbToSite '​'→'​' · AS-IS 핸들러 cboDivision_SelectedIndexChanged",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -769,14 +769,14 @@
  },
  {
   "row_id": "T-abce0e2e",
-  "result": "판정필요",
-  "evidence": "PKG_SCP0007.P_SCP0007_SAVE_BOD: SCP0007/bod/SAVE — 화면 진입·조회 중 호출 없음(저장 경로 — @verify CRUD 실저장 행에서 판정)",
-  "tobe_ref": "E2E @trace"
+  "result": "PASS",
+  "evidence": "PKG_SCP0007.P_SCP0007_SAVE_BOD: 저장 호출 1회 HTTP 200 · SQL 오류 없음 · bod/SAVE:200 응답={\"code\":\"0\",\"message\":\"success\",\"result\":{\"O_RESULT_CURSOR\":[{\"RESULT_CNT\":\"1\",\"MSG\":\"SUCCESS\",\"CODE\":\"0\",\"RESULT_CODE\":\"S\"}],\"DATARESULT\":[]}}",
+  "tobe_ref": "E2E @verify CRUD 실저장"
  },
  {
   "row_id": "T-816d08a6",
   "result": "PASS",
-  "evidence": "routeCnt/SEARCH 호출 2회 HTTP 200,200 — 셀 이벤트(To Site 변경) 경로",
+  "evidence": "routeCnt/SEARCH 호출 5회 HTTP 200,200,200,200,200 — 셀 이벤트(To Site 변경) 경로",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -979,8 +979,8 @@
  },
  {
   "row_id": "T-1b5d4e68",
-  "result": "FAIL",
-  "evidence": "INCOTERMS_SSP: AS-IS 'Incoterms SSP' ↔ TO-BE 헤더 'SSP Incoterms' — 메타 라벨 'Incoterms SSP' 과도 다름",
+  "result": "PASS",
+  "evidence": "INCOTERMS_SSP: AS-IS 'Incoterms SSP' → TO-BE 헤더 'SSP Incoterms' = 메타 라벨(SHEET_COLUMNS 'SSP Incoterms') — TO-BE 룰(CR-071: 조회조건과 같은 컬럼은 기준표 라벨, 그 외는 메타 라벨이 정답) → AS-IS 와 달라도 PASS",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -1015,8 +1015,8 @@
  },
  {
   "row_id": "T-3f2f7edc",
-  "result": "FAIL",
-  "evidence": "BOD_VALID: AS-IS 'BOD Valid' ↔ TO-BE 헤더 'Active' — 메타 라벨 'BOD Valid' 과도 다름",
+  "result": "PASS",
+  "evidence": "BOD_VALID: AS-IS 'BOD Valid' → TO-BE 헤더 'Active' = 메타 라벨(SHEET_COLUMNS 'Active') — TO-BE 룰(CR-071: 조회조건과 같은 컬럼은 기준표 라벨, 그 외는 메타 라벨이 정답) → AS-IS 와 달라도 PASS",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -1460,7 +1460,7 @@
  {
   "row_id": "T-32dbf43e",
   "result": "PASS",
-  "evidence": "신규행 VMI_YN='N' (AS-IS 기본값 'N')",
+  "evidence": "신규행 VMI_YN='N' ↔ AS-IS 기본값 \"N\" 일치",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -1514,7 +1514,7 @@
  {
   "row_id": "T-a1d3f01c",
   "result": "PASS",
-  "evidence": "신규행 BOD_VALID='Y' (AS-IS 기본값 'Y')",
+  "evidence": "신규행 BOD_VALID='Y' ↔ AS-IS 기본값 \"Y\" 일치",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -1550,25 +1550,25 @@
  {
   "row_id": "T-0048d170",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME='0' (AS-IS 기본값 '0')",
+  "evidence": "신규행 BEFORE_LEAD_TIME='0' ↔ AS-IS 기본값 0 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-72849258",
   "result": "PASS",
-  "evidence": "신규행 AFTER_LEAD_TIME='0' (AS-IS 기본값 '0')",
+  "evidence": "신규행 AFTER_LEAD_TIME='0' ↔ AS-IS 기본값 0 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-b777aed2",
-  "result": "판정필요",
-  "evidence": "신규행 FROM_YYYYMMDD='2026-10-26' — AS-IS 기본값이 식(siMain.SetValue(siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColumns.FROM_YYY) — 사람 확인",
+  "result": "PASS",
+  "evidence": "신규행 FROM_YYYYMMDD='2026-10-26' ↔ AS-IS 기본값 sYYYYMMDD(이번주 월요일 20261026) 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-42c2f859",
   "result": "PASS",
-  "evidence": "신규행 TO_YYYYMMDD='2099-12-27' (AS-IS 기본값 '2099-12-27')",
+  "evidence": "신규행 TO_YYYYMMDD='2099-12-27' ↔ AS-IS 기본값 \"2099-12-27\" 일치",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -1765,8 +1765,8 @@
  },
  {
   "row_id": "T-11b385d5",
-  "result": "NA",
-  "evidence": "BOD_VALID 현재 그리드에 없음",
+  "result": "PASS",
+  "evidence": "BOD_VALID: 신규행 편집=true 표시 일치",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -1879,74 +1879,74 @@
  },
  {
   "row_id": "T-80dd9479",
-  "result": "NA",
-  "evidence": "ROUTE_ID: AS-IS 문장은 셀 타입(이미지)·글자색 설정(ROUTE_CHK 기준) — 값 연쇄 아님(셀 유형 D5 · 색상 H2 에서 판정)",
+  "result": "PASS",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 ROUTE_ID='740' · 기대 팝업 ROUTE_ID 필드='740' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-2110e2a5",
   "result": "PASS",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → TRANSPORT_MODE='TRUCK'→'TRUCK' · 선택 Route 의 TRANSPORT_MODE='TRK'(팝업 TRANSPORT_MODE_NAME='TRUCK' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 TRANSPORT_MODE 을 행에 채움 일치",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 TRANSPORT_MODE='TRUCK' · 기대 팝업 TRANSPORT_MODE_NAME 필드='TRUCK' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-5753c6f4",
   "result": "PASS",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → PRIORITY='3'→'1' · 선택 Route 의 PRIORITY='1'(팝업 LT_SUM='1' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 PRIORITY 을 행에 채움 일치",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 PRIORITY='1' · 기대 팝업 PRIORITY 필드='1' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-5d7bb6a2",
   "result": "PASS",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_MON='Y'→'Y' · 선택 Route 의 DAYS_MON='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 DAYS_MON 을 행에 채움 일치",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 DAYS_MON='Y' · 기대 팝업 DAYS_MON 필드='Y' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-a0be7964",
   "result": "PASS",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_TUE='Y'→'Y' · 선택 Route 의 DAYS_TUE='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 DAYS_TUE 을 행에 채움 일치",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 DAYS_TUE='Y' · 기대 팝업 DAYS_TUE 필드='Y' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-60c48e59",
   "result": "PASS",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_WED='Y'→'Y' · 선택 Route 의 DAYS_WED='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 DAYS_WED 을 행에 채움 일치",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 DAYS_WED='Y' · 기대 팝업 DAYS_WED 필드='Y' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-2be80777",
   "result": "PASS",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_THU='Y'→'Y' · 선택 Route 의 DAYS_THU='Y'(팝업 DAYS_TUE='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 DAYS_THU 을 행에 채움 일치",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 DAYS_THU='Y' · 기대 팝업 DAYS_THU 필드='Y' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-e7cb1553",
   "result": "PASS",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_FRI='Y'→'Y' · 선택 Route 의 DAYS_FRI='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 는 선택 Route 의 DAYS_FRI 을 행에 채움 일치",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 DAYS_FRI='Y' · 기대 팝업 DAYS_FRI 필드='Y' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-80f4fa64",
   "result": "PASS",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_SAT=''→'' · 선택 Route 의 DAYS_SAT='' — AS-IS SetRoute 는 선택 Route 의 DAYS_SAT 을 행에 채움 (선택 Route 값도 빈값 → 채울 값 없음, 정상)",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 DAYS_SAT='' · 기대 팝업 DAYS_SAT 필드='' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 불일치(행에 채워지지 않음)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-fe0525a8",
   "result": "PASS",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DAYS_SUN=''→'' · 선택 Route 의 DAYS_SUN='' — AS-IS SetRoute 는 선택 Route 의 DAYS_SUN 을 행에 채움 (선택 Route 값도 빈값 → 채울 값 없음, 정상)",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 DAYS_SUN='' · 기대 팝업 DAYS_SUN 필드='' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 불일치(행에 채워지지 않음)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-77ba311a",
-  "result": "NA",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → ROUTE_VALID=''→'' · 선택 Route 의 ROUTE_VALID=(팝업 데이터에 해당 항목 없음) — AS-IS SetRoute 는 선택 Route 의 ROUTE_VALID 을 행에 채움 — 팝업 데이터에 없는 항목이라 대조 불가",
+  "result": "PASS",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 ROUTE_VALID='Y' · 기대 팝업 VALID_YN 필드='Y' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-92c717b8",
-  "result": "NA",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → DIS_TOTAL_LEAD_TIME=''→'' · 선택 Route 의 DIS_TOTAL_LEAD_TIME=(팝업 데이터에 해당 항목 없음) — AS-IS SetRoute 는 선택 Route 의 DIS_TOTAL_LEAD_TIME 을 행에 채움 — 팝업 데이터에 없는 항목이라 대조 불가",
+  "result": "PASS",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 DIS_TOTAL_LEAD_TIME='1' · 기대 팝업 LT_SUM 필드='1' — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 일치",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -1964,7 +1964,7 @@
  {
   "row_id": "T-3d06b14a",
   "result": "PASS",
-  "evidence": "TO_SITE_CODE='APRO_KR_ANY' 입력 → TO_CITY='KRANY' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움 일치",
+  "evidence": "TO_SITE_CODE='ABB_BE_JUM' 입력 → TO_CITY='BEJUM' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움 일치",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -1994,13 +1994,13 @@
  {
   "row_id": "T-06d0a043",
   "result": "PASS",
-  "evidence": "TO_SITE_CODE='APRO_KR_ANY' 입력 → VMI_YN='N' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움 일치",
+  "evidence": "TO_SITE_CODE='ABB_BE_JUM' 입력 → VMI_YN='N' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움 일치",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-d14715f9",
-  "result": "NA",
-  "evidence": "r0 ROUTE_ID 더블클릭 → Distribution Route 팝업 1행 · OK(현재 행 적용) → BOD_VALID=''→'' · 선택 Route 의 BOD_VALID=(팝업 데이터에 해당 항목 없음) — AS-IS SetRoute 는 선택 Route 의 BOD_VALID 을 행에 채움 — 팝업 데이터에 없는 항목이라 대조 불가",
+  "result": "PASS",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 2초 뒤 신규행 BOD_VALID='Y' · 기대 AS-IS 고정값 \"Y\" — AS-IS SetRoute 는 선택 Route 의 값을 행에 채움(TO-BE Bod.tsx handleRouteSelect 동일 대응) → 일치",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2024,7 +2024,7 @@
  {
   "row_id": "T-9d5649ef",
   "result": "PASS",
-  "evidence": "From/To City(EGCAI/KRANY) 입력 → ROUTE_CNT='0' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움 · 양쪽 City 로 ROUTE_CNT 조회 일치",
+  "evidence": "From/To City(EGCAI/BEJUM) 입력 → ROUTE_CNT='0' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움 · 양쪽 City 로 ROUTE_CNT 조회 일치",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2036,7 +2036,7 @@
  {
   "row_id": "T-d2841849",
   "result": "PASS",
-  "evidence": "TO_SITE_CODE='APRO_KR_ANY' 입력 → TO_COUNTRY='KR' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움 일치",
+  "evidence": "TO_SITE_CODE='ABB_BE_JUM' 입력 → TO_COUNTRY='BE' — AS-IS SetCityCode: dtCountryCity 캐시에서 COUNTRY/CITY/VMI_YN 채움 일치",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2054,13 +2054,13 @@
  {
   "row_id": "T-07a4cc84",
   "result": "PASS",
-  "evidence": "TO_SITE PLANT 'KR04179400_40-E' → INCOTERMS 후보 10·편집=false / SALES 'APRO_KR_ANY' → 후보 10·편집=true — AS-IS: PLANT 면 잠금, 아니면 해제",
+  "evidence": "TO_SITE PLANT 'AZ00-A' → INCOTERMS 후보 10·편집=false / SALES 'ABB_BE_JUM' → 후보 10·편집=true · 편집 분기 후보 10 ↔ AS-IS dtIncotermsEdit 10 일치 — AS-IS: PLANT 면 잠금, 아니면 해제",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-e535e619",
   "result": "PASS",
-  "evidence": "TO_SITE PLANT 'KR04179400_40-E' → INCOTERMS_SSP 후보 10·편집=true / SALES 'APRO_KR_ANY' → 후보 10·편집=false — AS-IS: PLANT 면 Edit 콤보(dtIncotermsEdit)·해제, 아니면 일반 콤보·잠금",
+  "evidence": "TO_SITE PLANT 'AZ00-A' → INCOTERMS_SSP 후보 10·편집=true / SALES 'ABB_BE_JUM' → 후보 10·편집=false · 편집 분기 후보 10 ↔ AS-IS dtIncotermsEdit 10 일치 — AS-IS: PLANT 면 Edit 콤보(dtIncotermsEdit)·해제, 아니면 일반 콤보·잠금",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2089,8 +2089,8 @@
  },
  {
   "row_id": "T-48725bd0",
-  "result": "PASS",
-  "evidence": "FROM_SITE_CODE 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → TO_SITE_CODE 'EG00'→'EG00' — 값 유지(정상)",
+  "result": "FAIL",
+  "evidence": "FROM_SITE_CODE 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → TO_SITE_CODE 'AU00'→'' — 값을 바꾸지 않았는데 TO_SITE_CODE 이 지워짐(AS-IS 는 FROM_SITE_CODE 값이 실제로 바뀔 때만 TO_SITE_CODE 을 다시 계산)",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2119,8 +2119,8 @@
  },
  {
   "row_id": "T-e8c4af58",
-  "result": "PASS",
-  "evidence": "FROM_SITE_CODE 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → DIVISION_ID '81'→'81' — 값 유지(정상)",
+  "result": "판정필요",
+  "evidence": "원천 FROM_SITE_CODE 신규행 편집 불가",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2150,7 +2150,7 @@
  {
   "row_id": "T-a457e667",
   "result": "PASS",
-  "evidence": "r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r2 TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · 계산 불가 절(판정 제외): TO_SITE_CODE='' 타입 미확인",
+  "evidence": "r0 TO_SITE ''=(빈 값 → 유형 없음: AS-IS strTO_SITE_TYPE 도 빈 문자열) == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2306,19 +2306,19 @@
  {
   "row_id": "T-abc44845",
   "result": "PASS",
-  "evidence": "r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r2 TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · 계산 불가 절(판정 제외): TO_SITE_CODE='' 타입 미확인",
+  "evidence": "r0 TO_SITE ''=(빈 값 → 유형 없음: AS-IS strTO_SITE_TYPE 도 빈 문자열) == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-051e2c8c",
   "result": "PASS",
-  "evidence": "r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r2 TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · 계산 불가 절(판정 제외): TO_SITE_CODE='' 타입 미확인",
+  "evidence": "r0 TO_SITE ''=(빈 값 → 유형 없음: AS-IS strTO_SITE_TYPE 도 빈 문자열) == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-8300a0fa",
   "result": "PASS",
-  "evidence": "r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r2 TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · 계산 불가 절(판정 제외): TO_SITE_CODE='' 타입 미확인",
+  "evidence": "r0 TO_SITE ''=(빈 값 → 유형 없음: AS-IS strTO_SITE_TYPE 도 빈 문자열) == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2330,7 +2330,7 @@
  {
   "row_id": "T-aa95f6d2",
   "result": "PASS",
-  "evidence": "r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r2 TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · 계산 불가 절(판정 제외): TO_SITE_CODE='' 타입 미확인",
+  "evidence": "r0 TO_SITE ''=(빈 값 → 유형 없음: AS-IS strTO_SITE_TYPE 도 빈 문자열) == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2342,7 +2342,7 @@
  {
   "row_id": "T-0c3aaaf4",
   "result": "PASS",
-  "evidence": "r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r2 TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · 계산 불가 절(판정 제외): TO_SITE_CODE='' 타입 미확인",
+  "evidence": "r0 TO_SITE ''=(빈 값 → 유형 없음: AS-IS strTO_SITE_TYPE 도 빈 문자열) == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK · r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 EditButton:496) OK",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2389,62 +2389,62 @@
  },
  {
   "row_id": "V-9a793d94",
-  "result": "FAIL",
-  "evidence": "조건 계산 불가: TO_SITE_CODE='' 타입 미확인",
+  "result": "NA",
+  "evidence": "조회 16301행 중 조건을 만족하는 행 없음 — 조건 데이터 없음(검사 대상 데이터 부재)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-eb4a5d7f",
-  "result": "FAIL",
-  "evidence": "조건 계산 불가: TO_SITE_CODE='' 타입 미확인",
+  "result": "NA",
+  "evidence": "조회 16301행 중 조건을 만족하는 행 없음 — 조건 데이터 없음(검사 대상 데이터 부재)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-69447e5a",
   "result": "PASS",
-  "evidence": "r1 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.EditButton) OK · r2 TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.EditButton) OK · 계산 불가 절(판정 제외): TO_SITE_CODE='' 타입 미확인",
+  "evidence": "r0 TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.EditButton) OK · r1 TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.EditButton) OK",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-b30dd3c6",
-  "result": "FAIL",
-  "evidence": "조건 계산 불가: TO_SITE_CODE='' 타입 미확인",
+  "result": "NA",
+  "evidence": "조회 16301행 중 조건을 만족하는 행 없음 — 조건 데이터 없음(검사 대상 데이터 부재)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-3b5c0b42",
-  "result": "FAIL",
-  "evidence": "조건 계산 불가: TO_SITE_CODE='' 타입 미확인",
+  "result": "NA",
+  "evidence": "조회 16301행 중 조건을 만족하는 행 없음 — 조건 데이터 없음(검사 대상 데이터 부재)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-4dfc32a3",
   "result": "PASS",
-  "evidence": "r1 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK · r2 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK · 계산 불가 절(판정 제외): TO_SITE_CODE='' 타입 미확인",
+  "evidence": "r0 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK · r1 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-004d10db",
   "result": "PASS",
-  "evidence": "r1 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK · r2 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK · 계산 불가 절(판정 제외): TO_SITE_CODE='' 타입 미확인",
+  "evidence": "r0 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'Alte_KR_SEL'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK · r1 FROM_SITE_CODE='HQ06-A' 비어있지 않음 & TO_SITE 'D.Throne_KR_BCN'=SALES == PLANT(else) → INCOTERMS_SSP 편집=false (AS-IS 잠금 SCP0007_BOD.SetCityCode) OK",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-df27b39b",
   "result": "PASS",
-  "evidence": "r69 SAFETY_STOCK 그리드에 없음",
+  "evidence": "r68 SAFETY_STOCK 그리드에 없음",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-90f8f008",
   "result": "PASS",
-  "evidence": "r1 SAFETY_STOCK 그리드에 없음 · r2 SAFETY_STOCK 그리드에 없음",
+  "evidence": "r0 SAFETY_STOCK 그리드에 없음 · r1 SAFETY_STOCK 그리드에 없음",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-c16aafeb",
   "result": "PASS",
-  "evidence": "r69 SAFETY_STOCK 그리드에 없음",
+  "evidence": "r68 SAFETY_STOCK 그리드에 없음",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2456,7 +2456,7 @@
  {
   "row_id": "V-28803102",
   "result": "PASS",
-  "evidence": "r69 SAFETY_STOCK 그리드에 없음",
+  "evidence": "r68 SAFETY_STOCK 그리드에 없음",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2624,7 +2624,7 @@
  {
   "row_id": "T-67b84cc3",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2659,8 +2659,8 @@
  },
  {
   "row_id": "T-c831d0ca",
-  "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2671,98 +2671,98 @@
  },
  {
   "row_id": "T-f43f855f",
-  "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-2743944c",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-3033558e",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-19f1456d",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-ccd89d63",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-575b8ff6",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-b658c1cd",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-67066e18",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-abda0109",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-1313f506",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-04bf74ed",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-b5832e6f",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-7d64aaba",
-  "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-d6696f54",
-  "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-24fff771",
-  "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-c2d7f5ab",
   "result": "NA",
-  "evidence": "팝업 Route 1행 중 DAYS 빈 행 없음 — MSG00222 조건 데이터 부재(검사 대상 데이터 없음)",
+  "evidence": "DAYS 가 빈 경로가 선택 데이터에 없어 메시지 조건 미발생 — 조건 데이터 부재(검사 대상 데이터 없음)",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2774,25 +2774,25 @@
  {
   "row_id": "T-94caf15a",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-71bf1a50",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-1ef184d2",
-  "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "result": "NA",
+  "evidence": "BEFORE_LEAD_TIME 숨김 컬럼(화면 미표시) — 사용자가 값을 넣을 경로가 없어 MSG00085(BEFORE_LEAD_TIME) 은 화면에서 발생 불가 · 표시 여부 정합은 A5/H1 행 참조",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-9cce21be",
   "result": "PASS",
-  "evidence": "신규행 BEFORE_LEAD_TIME=-1 입력(편집 불가) → Save → 알림 '[Incoterms] 값은 필수 입력 항목입니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(ExFactory/Additional Lead Time : 0) 일치·처리 중단",
+  "evidence": "신규행 AFTER_LEAD_TIME=-1 입력(성공) → Save → 알림 'Additional Lead Time : 0 이상의 값만 입력 가능합니다.\nConfirm' · SAVE 호출 없음 — AS-IS MSG00085 '{0} 이상의 값만 입력 가능합니다'(비교 문구 '이상의 값만 입력 가능합니다.') 일치·처리 중단",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2833,8 +2833,8 @@
  },
  {
   "row_id": "V-d85da172",
-  "result": "PASS",
-  "evidence": "저장 실패(중복) 응답 처리 실측(W9): 같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 셀 색 변화 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY (문제 행·셀 강조 구현됨) — AS-IS 는 errCode 99010/99020/99030/99040 별로 문제 행·셀을 InvalidColor 로 표시",
+  "result": "NA",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -2846,181 +2846,181 @@
  {
   "row_id": "V-6b41b7c0",
   "result": "NA",
-  "evidence": "(동적 메시지): catch 블록 예외 메시지(프레임워크 공통 오류 표시) — 검사 대상 아님",
+  "evidence": "검사 대상 아님 — catch 블록 예외 메시지(프레임워크 공통 오류 표시)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-b269936e",
   "result": "NA",
-  "evidence": "팝업 Route 1행 중 DAYS 빈 행 없음 — MSG00222 조건 데이터 부재(검사 대상 데이터 없음)",
+  "evidence": "DAYS 가 빈 경로가 선택 데이터에 없어 메시지 조건 미발생 — 조건 데이터 부재(검사 대상 데이터 없음)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-793ff670",
   "result": "NA",
-  "evidence": "팝업 Route 1행 중 DAYS 빈 행 없음 — MSG00222 조건 데이터 부재(검사 대상 데이터 없음)",
+  "evidence": "DAYS 가 빈 경로가 선택 데이터에 없어 메시지 조건 미발생 — 조건 데이터 부재(검사 대상 데이터 없음)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-f712e982",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-2a9efba4",
   "result": "PASS",
-  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → ROUTE_ID='740'→'740' · 선택 Route 의 ROUTE_ID='740' — AS-IS SetRoute 가 선택 Route 의 ROUTE_ID 을 행에 채움 일치",
+  "evidence": "ROUTE_ID: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-c32845d9",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-134337c2",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-ec1eeeda",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-7921392e",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-b13a2f93",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-b04fa7d4",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-44e9a8c7",
   "result": "PASS",
-  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → PRIORITY='3'→'1' · 선택 Route 의 PRIORITY='1'(팝업 LT_SUM='1' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 PRIORITY 을 행에 채움 일치",
+  "evidence": "PRIORITY: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-2ad3f7c8",
   "result": "PASS",
-  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → TRANSPORT_MODE='TRUCK'→'TRUCK' · 선택 Route 의 TRANSPORT_MODE='TRK'(팝업 TRANSPORT_MODE_NAME='TRUCK' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 TRANSPORT_MODE 을 행에 채움 일치",
+  "evidence": "TRANSPORT_MODE: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-e7bb73f2",
   "result": "PASS",
-  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 첫 행 선택·OK → 신규행 L/T Type 직후 'AVERAGE' · 2초 뒤 'AVERAGE' · 팝업 첫 행의 LT_TYPE='AVERAGE' — AS-IS SetRoute 는 선택 Route 의 LT_TYPE 을 행에 채움(TO-BE Bod.tsx handleRouteSelect 도 route.LT_TYPE 대입) → 일치",
+  "evidence": "LT_TYPE: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-ed158135",
   "result": "PASS",
-  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_MON='Y'→'Y' · 선택 Route 의 DAYS_MON='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 DAYS_MON 을 행에 채움 일치",
+  "evidence": "DAYS_MON: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-20aeb1b0",
   "result": "PASS",
-  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_TUE='Y'→'Y' · 선택 Route 의 DAYS_TUE='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 DAYS_TUE 을 행에 채움 일치",
+  "evidence": "DAYS_TUE: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-bebb2931",
   "result": "PASS",
-  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_WED='Y'→'Y' · 선택 Route 의 DAYS_WED='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 DAYS_WED 을 행에 채움 일치",
+  "evidence": "DAYS_WED: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-3f05ad85",
   "result": "PASS",
-  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_THU='Y'→'Y' · 선택 Route 의 DAYS_THU='Y'(팝업 DAYS_TUE='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 DAYS_THU 을 행에 채움 일치",
+  "evidence": "DAYS_THU: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-423aaa7b",
   "result": "PASS",
-  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_FRI='Y'→'Y' · 선택 Route 의 DAYS_FRI='Y'(팝업 DAYS_THU='Y' 과 일치 — 코드/명칭 쌍) — AS-IS SetRoute 가 선택 Route 의 DAYS_FRI 을 행에 채움 일치",
+  "evidence": "DAYS_FRI: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-cca6ef90",
-  "result": "PASS",
-  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_SAT=''→'' · 선택 Route 의 DAYS_SAT='' — AS-IS SetRoute 가 선택 Route 의 DAYS_SAT 을 행에 채움 (선택 Route 값도 빈값, 정상)",
+  "result": "NA",
+  "evidence": "DAYS_SAT: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740' — DAYS_SAT 비어 있음(선택 Route 에 값이 없을 수 있음 · 컬럼 확정 판정은 W4d 팝업 데이터 대조)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-cfae312d",
-  "result": "PASS",
-  "evidence": "ROUTE_ID 더블클릭 → Distribution Route 팝업(1행) OK(현재 행 적용) → DAYS_SUN=''→'' · 선택 Route 의 DAYS_SUN='' — AS-IS SetRoute 가 선택 Route 의 DAYS_SUN 을 행에 채움 (선택 Route 값도 빈값, 정상)",
+  "result": "NA",
+  "evidence": "DAYS_SUN: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740' — DAYS_SUN 비어 있음(선택 Route 에 값이 없을 수 있음 · 컬럼 확정 판정은 W4d 팝업 데이터 대조)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-d65cfaf5",
   "result": "PASS",
-  "evidence": "DIS_TOTAL_LEAD_TIME: r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "DIS_TOTAL_LEAD_TIME: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-3b27c86f",
   "result": "PASS",
-  "evidence": "BOD_VALID: r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "BOD_VALID: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-92d7a02d",
   "result": "PASS",
-  "evidence": "ROUTE_VALID: r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "ROUTE_VALID: r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-5966eec9",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-4d1bf3f7",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-c8df6187",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-5fa9894a",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-8f68fe4d",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-c455efae",
   "result": "PASS",
-  "evidence": "r1(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
+  "evidence": "r0(ROUTE_CNT 1) ROUTE_ID 더블클릭 → Distribution Route 팝업 OK(현재 행 적용) → 대상 14개 중 채워짐 12(변경 2): BOD_VALID='Y', DAYS_FRI='Y', DAYS_MON='Y', DAYS_SAT='', DAYS_SUN='', DAYS_THU='Y', DAYS_TUE='Y', DAYS_WED='Y', DIS_TOTAL_LEAD_TIME='1', LT_TYPE='AVERAGE', PRIORITY='1', ROUTE_ID='740'",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -3044,7 +3044,7 @@
  {
   "row_id": "T-49ee4fee",
   "result": "NA",
-  "evidence": "AS-IS ROUTE_CNT SP ORDER BY 없음 · 결과 1행(집계) — 정렬 검사 대상 아님 (호출 2회 실측)",
+  "evidence": "AS-IS ROUTE_CNT SP ORDER BY 없음 · 결과 1행(집계) — 정렬 검사 대상 아님 (호출 5회 실측)",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -3242,25 +3242,49 @@
  {
   "row_id": "V-f8ab5f49",
   "result": "PASS",
-  "evidence": "TO_SITE_CODE 'IL00' Ctrl+C → 신규행 Ctrl+V → 'IL00' · 연쇄 TO_CITY='INDEL' (AS-IS SpdMain_ClipboardPasted: 붙여넣기에도 콤보·연쇄 적용)",
+  "evidence": "TO_SITE_CODE 'Alte_KR_SEL' Ctrl+C → 신규행 Ctrl+V → 'Alte_KR_SEL' · 연쇄 TO_CITY='KRSEL' (AS-IS SpdMain_ClipboardPasted: 붙여넣기에도 콤보·연쇄 적용)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-4adcd8b4",
   "result": "PASS",
-  "evidence": "TO_SITE_CODE 'IL00' Ctrl+C → 신규행 Ctrl+V → 'IL00' · 연쇄 TO_CITY='INDEL' (AS-IS SpdMain_ClipboardPasted: 붙여넣기에도 콤보·연쇄 적용)",
+  "evidence": "TO_SITE_CODE 'Alte_KR_SEL' Ctrl+C → 신규행 Ctrl+V → 'Alte_KR_SEL' · 연쇄 TO_CITY='KRSEL' (AS-IS SpdMain_ClipboardPasted: 붙여넣기에도 콤보·연쇄 적용)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-b7bacac5",
   "result": "PASS",
-  "evidence": "TO_SITE_CODE 'IL00' Ctrl+C → 신규행 Ctrl+V → 'IL00' · 연쇄 TO_CITY='INDEL' (AS-IS SpdMain_ClipboardPasted: 붙여넣기에도 콤보·연쇄 적용)",
+  "evidence": "TO_SITE_CODE 'Alte_KR_SEL' Ctrl+C → 신규행 Ctrl+V → 'Alte_KR_SEL' · 연쇄 TO_CITY='KRSEL' (AS-IS SpdMain_ClipboardPasted: 붙여넣기에도 콤보·연쇄 적용)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-b093a04e",
   "result": "NA",
   "evidence": "필수 조회조건 없음(플랜 required 0) — 조회조건 필수 검증 대상 아님(AS-IS checkRequiredOfSearch 는 필수 컨트롤이 있을 때만 동작)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-978e3dc7",
+  "result": "PASS",
+  "evidence": "[재실측 2026-10-28] AS-IS Set_ValidTextColor: ① Route Valid=N 행 r199 Trans Mode 글자색 'rgb(189, 189, 189)' · Distribution Total 'rgb(189, 189, 189)' ↔ Route Valid=Y 행 r1 'rgb(0, 0, 0)' — AS-IS 는 N 행만 회색(189,189,189) 일치 / ② Route Check≠Y 행 r219 Route Id 글자색 'rgb(255, 0, 0)' ↔ Route Check=Y 행 r1 'rgb(0, 0, 0)' — AS-IS 는 ≠Y 행만 빨강 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-92c7eace",
+  "result": "PASS",
+  "evidence": "[재실측 2026-10-28] AS-IS Set_ValidTextColor: ① Route Valid=N 행 r199 Trans Mode 글자색 'rgb(189, 189, 189)' · Distribution Total 'rgb(189, 189, 189)' ↔ Route Valid=Y 행 r1 'rgb(0, 0, 0)' — AS-IS 는 N 행만 회색(189,189,189) 일치 / ② Route Check≠Y 행 r219 Route Id 글자색 'rgb(255, 0, 0)' ↔ Route Check=Y 행 r1 'rgb(0, 0, 0)' — AS-IS 는 ≠Y 행만 빨강 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-2a0d3041",
+  "result": "PASS",
+  "evidence": "[재실측 2026-10-28] AS-IS Set_ValidTextColor: ① Route Valid=N 행 r199 Trans Mode 글자색 'rgb(189, 189, 189)' · Distribution Total 'rgb(189, 189, 189)' ↔ Route Valid=Y 행 r1 'rgb(0, 0, 0)' — AS-IS 는 N 행만 회색(189,189,189) 일치 / ② Route Check≠Y 행 r219 Route Id 글자색 'rgb(255, 0, 0)' ↔ Route Check=Y 행 r1 'rgb(0, 0, 0)' — AS-IS 는 ≠Y 행만 빨강 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-4639bae0",
+  "result": "PASS",
+  "evidence": "[재실측 2026-10-28] AS-IS Set_ValidTextColor: ① Route Valid=N 행 r199 Trans Mode 글자색 'rgb(189, 189, 189)' · Distribution Total 'rgb(189, 189, 189)' ↔ Route Valid=Y 행 r1 'rgb(0, 0, 0)' — AS-IS 는 N 행만 회색(189,189,189) 일치 / ② Route Check≠Y 행 r219 Route Id 글자색 'rgb(255, 0, 0)' ↔ Route Check=Y 행 r1 'rgb(0, 0, 0)' — AS-IS 는 ≠Y 행만 빨강 일치",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -3542,7 +3566,7 @@
  {
   "row_id": "V-80075f7b",
   "result": "PASS",
-  "evidence": "[단일선택 Status] 'Required' → 593행 · ROUTE_ID 빈값 500/500 OK | 'Completed' → 16301행 · ROUTE_ID 빈값 0/500 OK",
+  "evidence": "[단일선택 Status] 'Required' → 595행 · ROUTE_ID 빈값 500/500 OK | 'Completed' → 16301행 · ROUTE_ID 빈값 0/500 OK",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -3566,13 +3590,13 @@
  {
   "row_id": "V-05550393",
   "result": "PASS",
-  "evidence": "TO_SITE PLANT 'KR04179400_40-E' → INCOTERMS_SSP 후보 10·편집=true / SALES 'APRO_KR_ANY' → 후보 10·편집=false — AS-IS: PLANT 면 Edit 콤보(dtIncotermsEdit)·해제, 아니면 일반 콤보·잠금",
+  "evidence": "TO_SITE PLANT 'AZ00-A' → INCOTERMS_SSP 후보 10·편집=true / SALES 'ABB_BE_JUM' → 후보 10·편집=false · 편집 분기 후보 10 ↔ AS-IS dtIncotermsEdit 10 일치 — AS-IS: PLANT 면 Edit 콤보(dtIncotermsEdit)·해제, 아니면 일반 콤보·잠금",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-3fb6d815",
   "result": "PASS",
-  "evidence": "TO_SITE PLANT 'KR04179400_40-E' → INCOTERMS_SSP 후보 10·편집=true / SALES 'APRO_KR_ANY' → 후보 10·편집=false — AS-IS: PLANT 면 Edit 콤보(dtIncotermsEdit)·해제, 아니면 일반 콤보·잠금",
+  "evidence": "TO_SITE PLANT 'AZ00-A' → INCOTERMS_SSP 후보 10·편집=true / SALES 'ABB_BE_JUM' → 후보 10·편집=false · 편집 분기 후보 10 ↔ AS-IS dtIncotermsEdit 10 일치 — AS-IS: PLANT 면 Edit 콤보(dtIncotermsEdit)·해제, 아니면 일반 콤보·잠금",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -3597,6 +3621,30 @@
   "row_id": "V-da446d7d",
   "result": "PASS",
   "evidence": "AFTER_LEAD_TIME: AS-IS 소수 0자리·천단위 Y ↔ TO-BE format='' 표시 '0'(원값 '0')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-d2ce51bc",
+  "result": "PASS",
+  "evidence": "FROM_YYYYMMDD: AS-IS 표시 yyyy-MM-dd ↔ TO-BE format='yyyy.MM.dd' 표시 '2024-12-30'(원값 '2024-12-30')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-fa03875e",
+  "result": "PASS",
+  "evidence": "TO_YYYYMMDD: AS-IS 표시 yyyy-MM-dd ↔ TO-BE format='yyyy.MM.dd' 표시 '2100-01-03'(원값 '2100-01-03')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-b1138882",
+  "result": "PASS",
+  "evidence": "CREATION_DATE: AS-IS 표시 yyyy-MM-dd HH:mm:ss ↔ TO-BE format='yyyy.MM.dd' 표시 '2025-01-02 20:39:35'(원값 '2025-01-02 20:39:35')",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-5f01d412",
+  "result": "PASS",
+  "evidence": "LAST_UPDATE_DATE: AS-IS 표시 yyyy-MM-dd HH:mm:ss ↔ TO-BE format='yyyy.MM.dd' 표시 '2026-10-23 08:08:22'(원값 '2026-10-23 08:08:22')",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -3698,13 +3746,13 @@
  {
   "row_id": "V-9ddf6f45",
   "result": "PASS",
-  "evidence": "조회(Division ALL) 응답 4461ms · 16301행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "evidence": "조회(Division ALL) 응답 4754ms · 16301행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-367adf82",
   "result": "PASS",
-  "evidence": "조회(Division ALL) 응답 4461ms · 16301행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
+  "evidence": "조회(Division ALL) 응답 4754ms · 16301행 — 기준 10초(화면 규칙 L1: 조회·저장·키 이동 응답 기준 이내)",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -3740,19 +3788,19 @@
  {
   "row_id": "V-97bafb79",
   "result": "NA",
-  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | Home | BOD | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 이 이민용 | Home | BOD | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-e448d922",
   "result": "NA",
-  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | Home | BOD | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 이 이민용 | Home | BOD | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-623073ce",
   "result": "NA",
-  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | Home | BOD | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
+  "evidence": "Excel Upload 기능 없음(툴바 버튼: KOR | 이 이민용 | Home | BOD | Scroll tabs left | Scroll tabs right | Close others | Close All | Open | Search(F5) | Insert(F8) | Delete(F9) | Save(F7) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10) | Excel | Toggle Calendar | Toggle Time List) — Upload 규칙 대상 아님",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -3800,13 +3848,79 @@
  {
   "row_id": "V-28615bf9",
   "result": "판정필요",
-  "evidence": "SCP0007_GET_BOD: DIFF AS-IS 5000행 ↔ TO-BE 5001행 · SCP0007_GET_COUNTRY_CITY: DIFF AS-IS 1415행 ↔ TO-BE 1395행 · SCP0007_GET_ROUTE_CNT: PASS AS-IS 1행 ↔ TO-BE 2행 · SCP0005_GET_DISTRIBUTION_ROUTE: PASS AS-IS 1행 ↔ TO-BE 2행 — 같은 조건 건수·키 차이(AS-IS dev DB ≠ TO-BE DB): 사람 판단",
+  "evidence": "SCP0007_GET_BOD: DIFF AS-IS 6487행 ↔ TO-BE 8121행 · SCP0007_GET_COUNTRY_CITY: DIFF AS-IS 1415행 ↔ TO-BE 1394행 · SCP0007_GET_ROUTE_CNT: PASS AS-IS 1행 ↔ TO-BE 1행 · SCP0005_GET_DISTRIBUTION_ROUTE: PASS AS-IS 1행 ↔ TO-BE 1행 — 같은 조건 건수·키 차이(AS-IS dev DB ≠ TO-BE DB): 사람 판단",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-5e9a1901",
   "result": "PASS",
   "evidence": "신규행 FROM_YYYYMMDD='2026-10-26' ↔ AS-IS 기본값 sYYYYMMDD(이번주 월요일 20261026) 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-7c70dcda",
+  "result": "PASS",
+  "evidence": "신규행 FROM_YYYYMMDD='2026-10-26' ↔ AS-IS 기본값 sYYYYMMDD(이번주 월요일 20261026) 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c7eeafa4",
+  "result": "PASS",
+  "evidence": "신규행 TO_YYYYMMDD='2099-12-27' ↔ AS-IS 기본값 \"2099-12-27\" 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-26f4a973",
+  "result": "PASS",
+  "evidence": "신규행 TO_YYYYMMDD='2099-12-27' ↔ AS-IS 기본값 \"2099-12-27\" 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-7bf0abdf",
+  "result": "PASS",
+  "evidence": "신규행 VMI_YN='N' ↔ AS-IS 기본값 \"N\" 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-0f819d2d",
+  "result": "PASS",
+  "evidence": "신규행 VMI_YN='N' ↔ AS-IS 기본값 \"N\" 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-1048ddab",
+  "result": "PASS",
+  "evidence": "신규행 BOD_VALID='Y' ↔ AS-IS 기본값 \"Y\" 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-c7315768",
+  "result": "PASS",
+  "evidence": "신규행 BOD_VALID='Y' ↔ AS-IS 기본값 \"Y\" 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-848b60cb",
+  "result": "PASS",
+  "evidence": "신규행 BEFORE_LEAD_TIME='0' ↔ AS-IS 기본값 0 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-bd01c7ad",
+  "result": "PASS",
+  "evidence": "신규행 BEFORE_LEAD_TIME='0' ↔ AS-IS 기본값 0 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-cca95bf9",
+  "result": "PASS",
+  "evidence": "신규행 AFTER_LEAD_TIME='0' ↔ AS-IS 기본값 0 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-8371d9ec",
+  "result": "PASS",
+  "evidence": "신규행 AFTER_LEAD_TIME='0' ↔ AS-IS 기본값 0 일치",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -3830,31 +3944,67 @@
  {
   "row_id": "V-ed4185e9",
   "result": "PASS",
-  "evidence": "신규행 INCOTERMS: TO_SITE PLANT 'KR04179400_40-E' → 편집=false(값 'DAP') / 비PLANT 'APRO_KR_ANY' → 편집=true(값 '') — AS-IS SetCityCode: PLANT 면 잠금(EXW/DAP 자동), 아니면 해제",
+  "evidence": "신규행 INCOTERMS: TO_SITE PLANT 'AZ00-A' → 편집=false(값 'DAP') / 비PLANT 'ABB_BE_JUM' → 편집=true(값 '') — AS-IS SetCityCode: PLANT 면 잠금(EXW/DAP 자동), 아니면 해제",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "V-6879e026",
   "result": "PASS",
-  "evidence": "신규행 INCOTERMS: TO_SITE PLANT 'KR04179400_40-E' → 편집=false(값 'DAP') / 비PLANT 'APRO_KR_ANY' → 편집=true(값 '') — AS-IS SetCityCode: PLANT 면 잠금(EXW/DAP 자동), 아니면 해제",
+  "evidence": "신규행 INCOTERMS: TO_SITE PLANT 'AZ00-A' → 편집=false(값 'DAP') / 비PLANT 'ABB_BE_JUM' → 편집=true(값 '') — AS-IS SetCityCode: PLANT 면 잠금(EXW/DAP 자동), 아니면 해제",
   "tobe_ref": "E2E @trace"
  },
  {
-  "row_id": "V-1eba3132",
+  "row_id": "V-2b0d2f11",
   "result": "PASS",
-  "evidence": "신규행 INCOTERMS_SSP: TO_SITE PLANT 'KR04179400_40-E' → 편집=true(값 'DAP') / 비PLANT 'APRO_KR_ANY' → 편집=false(값 '') — AS-IS SetCityCode: PLANT 면 해제(dtIncotermsEdit), 아니면 잠금",
+  "evidence": "신규행 INCOTERMS_SSP: TO_SITE PLANT 'AZ00-A' → 편집=true(값 'DAP') / 비PLANT 'ABB_BE_JUM' → 편집=false(값 '') — AS-IS SetCityCode: PLANT 면 해제(dtIncotermsEdit), 아니면 잠금",
   "tobe_ref": "E2E @trace"
  },
  {
-  "row_id": "V-57ca2b81",
+  "row_id": "V-471a4250",
   "result": "PASS",
-  "evidence": "신규행 INCOTERMS_SSP: TO_SITE PLANT 'KR04179400_40-E' → 편집=true(값 'DAP') / 비PLANT 'APRO_KR_ANY' → 편집=false(값 '') — AS-IS SetCityCode: PLANT 면 해제(dtIncotermsEdit), 아니면 잠금",
+  "evidence": "신규행 INCOTERMS_SSP: TO_SITE PLANT 'AZ00-A' → 편집=true(값 'DAP') / 비PLANT 'ABB_BE_JUM' → 편집=false(값 '') — AS-IS SetCityCode: PLANT 면 해제(dtIncotermsEdit), 아니면 잠금",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-13a24181",
   "result": "PASS",
   "evidence": "기존행 r1 TO_SITE 'Alte_KR_SEL'(SALES) → INCOTERMS 편집=false — AS-IS 기존행(EditButton) 기대 잠금(Incoterms 는 기존행에서 항상 잠금, EditButton:453) 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-6f31804a",
+  "result": "PASS",
+  "evidence": "TO_SITE PLANT 'AZ00-A' → INCOTERMS='DAP' · INCOTERMS_SSP='DAP' — AS-IS: DAP 면 SSP 에 복사, EXW 면 SSP 미복사 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c21de22c",
+  "result": "PASS",
+  "evidence": "TO_SITE PLANT 'AZ00-A' → INCOTERMS='DAP' · INCOTERMS_SSP='DAP' — AS-IS: DAP 면 SSP 에 복사, EXW 면 SSP 미복사 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-b1d46bfe",
+  "result": "PASS",
+  "evidence": "TO_SITE PLANT 'AZ00-A' → INCOTERMS='DAP' · INCOTERMS_SSP='DAP' — AS-IS: DAP 면 SSP 에 복사, EXW 면 SSP 미복사 일치",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c667b133",
+  "result": "FAIL",
+  "evidence": "To Site 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → Incoterms 'DAP'→'' · SSP Incoterms 'DAP'→'' — 값이 바뀌지 않았는데 Incoterms 가 지워짐(AS-IS SetCityCode 는 Site 값이 실제로 바뀔 때만 재계산)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3778a5ce",
+  "result": "FAIL",
+  "evidence": "To Site 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → Incoterms 'DAP'→'' · SSP Incoterms 'DAP'→'' — 값이 바뀌지 않았는데 Incoterms 가 지워짐(AS-IS SetCityCode 는 Site 값이 실제로 바뀔 때만 재계산)",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-f1677353",
+  "result": "FAIL",
+  "evidence": "To Site 셀을 열었다가 값을 바꾸지 않고 닫음(더블클릭+Esc) → Incoterms 'DAP'→'' · SSP Incoterms 'DAP'→'' — 값이 바뀌지 않았는데 Incoterms 가 지워짐(AS-IS SetCityCode 는 Site 값이 실제로 바뀔 때만 재계산)",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -3900,15 +4050,45 @@
   "tobe_ref": "E2E @trace"
  },
  {
-  "row_id": "T-11ea0283",
+  "row_id": "V-1a650f57",
+  "result": "PASS",
+  "evidence": "기존행 r8008(To Site PLANT) SSP Incoterms 콤보 후보 16건 — 빈 항목 0",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-21e64731",
+  "result": "PASS",
+  "evidence": "기존행 r8008(To Site PLANT) SSP Incoterms 콤보 후보 16건 · 중복 0",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-c4c4f56c",
+  "result": "PASS",
+  "evidence": "SSP Incoterms 콤보 표시값 [A01, Z01, Z04, EXW, FCA, FAS] — Incoterms 는 AS-IS 도 코드(=명칭) 표시",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-cf7e1c7f",
   "result": "NA",
-  "evidence": "조회 결과(16301행 · To Site 종류 886건 중 PLANT 유형 0건)에 To Site 가 PLANT 인 기존행을 찾지 못해 재현 불가 — AS-IS: 기존행도 To Site 가 PLANT 면 SSP Incoterms 를 편집 가능 콤보(dtIncotermsEdit)로 전환",
+  "evidence": "SSP Incoterms 는 콤보 셀 — 키 입력 규칙(대문자·길이) 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-e2f42de2",
+  "result": "PASS",
+  "evidence": "SSP Incoterms 셀 입력 방식 = 콤보(후보 16건) — AS-IS 메타 FPComboBox·dtIncotermsEdit",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "T-11ea0283",
+  "result": "PASS",
+  "evidence": "기존행 r8008(To Site 'HQ06-A' PLANT) SSP Incoterms: 편집 가능 · 콤보 후보 16건 — AS-IS EditButton 은 기존행도 To Site PLANT 면 SSP Incoterms 콤보(dtIncotermsEdit)로 편집 허용 → 동작 일치(대조표 상태와 다름)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-4dbdc9d2",
-  "result": "NA",
-  "evidence": "조회 결과(16301행 · To Site 종류 886건 중 PLANT 유형 0건)에 To Site 가 PLANT 인 기존행을 찾지 못해 재현 불가 — AS-IS: 기존행도 To Site 가 PLANT 면 SSP Incoterms 를 편집 가능 콤보(dtIncotermsEdit)로 전환",
+  "result": "PASS",
+  "evidence": "기존행 r8008(To Site 'HQ06-A' PLANT) SSP Incoterms: 편집 가능 · 콤보 후보 16건 — AS-IS EditButton 은 기존행도 To Site PLANT 면 SSP Incoterms 콤보(dtIncotermsEdit)로 편집 허용 → 동작 일치(대조표 상태와 다름)",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -4050,39 +4230,81 @@
   "tobe_ref": "E2E @trace"
  },
  {
+  "row_id": "V-c048e442",
+  "result": "PASS",
+  "evidence": "신규행 BOD_VALID 편집=true — 메타 INPUT_TP_CD 'O'(선택 입력) 기준 콤보 편집 가능",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-3e156035",
+  "result": "PASS",
+  "evidence": "신규행 BOD_VALID 편집=true — 메타 INPUT_TP_CD 'O'(선택 입력) 기준 콤보 편집 가능",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-692f8be5",
+  "result": "PASS",
+  "evidence": "신규행 BOD_VALID 콤보 후보 2건 [Y, N] — 빈 항목 0",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-f6a9e13c",
+  "result": "PASS",
+  "evidence": "신규행 BOD_VALID 콤보 후보 2건 · 중복 0",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-259a92f7",
+  "result": "PASS",
+  "evidence": "신규행 BOD_VALID 콤보 표시값 [Y, N] — 코드가 아닌 표시값(dataMap)으로 노출",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-89a71a51",
+  "result": "NA",
+  "evidence": "BOD_VALID 는 콤보 셀 — 키 입력 규칙(대문자·길이) 대상 아님",
+  "tobe_ref": "E2E @trace"
+ },
+ {
+  "row_id": "V-afdb1d96",
+  "result": "PASS",
+  "evidence": "신규행 BOD_VALID 셀 입력 방식 = 콤보(후보 2건) — AS-IS 메타 FPComboBox",
+  "tobe_ref": "E2E @trace"
+ },
+ {
   "row_id": "T-c466f2eb",
   "result": "PASS",
-  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 선택·OK 후 그리드 커서(선택 셀) = r0/c12 (더블클릭한 셀 r0/c12) — AS-IS 는 선택 후 그 셀로 커서 이동(SetActiveCell) + 화면 중앙 스크롤(ShowCell) → 커서 위치 일치(스크롤 중앙 정렬은 미측정)",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 선택·OK 후 그리드 커서(선택 셀) = r8008/c12 (더블클릭한 셀 r8008/c12) — AS-IS 는 선택 후 그 셀로 커서 이동(SetActiveCell) + 화면 중앙 스크롤(ShowCell) → 커서 위치 일치(스크롤 중앙 정렬은 미측정)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-88757671",
   "result": "PASS",
-  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 선택·OK 후 그리드 커서(선택 셀) = r0/c12 (더블클릭한 셀 r0/c12) — AS-IS 는 선택 후 그 셀로 커서 이동(SetActiveCell) + 화면 중앙 스크롤(ShowCell) → 커서 위치 일치(스크롤 중앙 정렬은 미측정)",
+  "evidence": "Route Id 더블클릭 → Distribution Route 팝업 선택·OK 후 그리드 커서(선택 셀) = r8008/c12 (더블클릭한 셀 r8008/c12) — AS-IS 는 선택 후 그 셀로 커서 이동(SetActiveCell) + 화면 중앙 스크롤(ShowCell) → 커서 위치 일치(스크롤 중앙 정렬은 미측정)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-8f752189",
   "result": "PASS",
-  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r0 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:rgb(255, 248, 205)→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
+  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r8008 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-cd5119b3",
   "result": "PASS",
-  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r0 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:rgb(255, 248, 205)→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
+  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r8008 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-0839df65",
   "result": "PASS",
-  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r0 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:rgb(255, 248, 205)→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
+  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r8008 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
   "tobe_ref": "E2E @trace"
  },
  {
   "row_id": "T-c4b491f6",
   "result": "PASS",
-  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r0 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:rgb(255, 248, 205)→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
+  "evidence": "같은 키(기준 기존행 r0(DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=A01, PRIORITY=3)) 신규행 Save → 저장 호출 1건 HTTP 200 · 결과 CODE≠0 있음 · 화면 메시지 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다\nConfirm' → 신규행 r8008 셀 색 저장 전→후 [DIVISION_ID:rgb(255, 248, 205)→rgb(204, 229, 255), FROM_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), TO_SITE_CODE:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS:rgb(255, 248, 205)→rgb(204, 229, 255), INCOTERMS_SSP:rgb(255, 255, 255)→rgb(255, 255, 255), TRANSPORT_MODE:→rgb(204, 229, 255), PRIORITY:→rgb(255, 248, 205)] — AS-IS 는 거부된 중복 행의 DIVISION_ID~INCOTERMS(99010 은 Trans Mode, 99030/99040 은 Trans Mode~TO 기간, 99020 은 Priority 추가) 배경을 InvalidColor 로 강조 → 강조 셀 DIVISION_ID, FROM_SITE_CODE, TO_SITE_CODE, INCOTERMS, TRANSPORT_MODE, PRIORITY 확인(일치)",
   "tobe_ref": "E2E @trace"
  },
  {
@@ -4251,12 +4473,6 @@
   "row_id": "V-d3a19ae4",
   "result": "PASS",
   "evidence": "기존행 r0 REMARKS 편집=true (AS-IS 편집 가능)",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-88ed38ae",
-  "result": "PASS",
-  "evidence": "기존행 r0 BOD_VALID 편집=true (AS-IS 편집 가능)",
   "tobe_ref": "E2E @verify"
  },
  {
@@ -4446,12 +4662,6 @@
   "tobe_ref": "E2E @verify"
  },
  {
-  "row_id": "V-860019a0",
-  "result": "PASS",
-  "evidence": "신규행 r0 BOD_VALID 편집=true (AS-IS 편집 가능)",
-  "tobe_ref": "E2E @verify"
- },
- {
   "row_id": "V-7e7aaad5",
   "result": "PASS",
   "evidence": "신규행 r0 ROUTE_VALID 편집=false (AS-IS 잠금)",
@@ -4514,7 +4724,7 @@
  {
   "row_id": "V-e53c539d",
   "result": "FAIL",
-  "evidence": "TO_SITE_CODE 후보 5362건(신규행 Division='81' 기준) · 중복 EG00×6, IL00×2, MI00×2, AU00×2, KR04179400_40-E×2, HQ07-A×3, WA00_81-W×2, HD00-P×2",
+  "evidence": "TO_SITE_CODE 후보 5362건(신규행 Division='81' 기준) · 중복 AU00×2, EG00×6, IL00×2, MI00×2, AZ00-A×3, AZ00-E×2, CN00249500-P×2, CN00254300_40-P×2",
   "tobe_ref": "E2E @verify"
  },
  {
@@ -4539,30 +4749,6 @@
   "row_id": "V-dcb28665",
   "result": "PASS",
   "evidence": "INCOTERMS 후보 10건(신규행 Division='81' 기준) · 중복 0",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-fd613b1b",
-  "result": "PASS",
-  "evidence": "INCOTERMS_SSP 후보 10건 · 빈 항목 0",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-1b1c62b9",
-  "result": "PASS",
-  "evidence": "INCOTERMS_SSP 후보 10건(신규행 Division='81' 기준) · 중복 0",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-f414c7be",
-  "result": "PASS",
-  "evidence": "BOD_VALID 후보 2건 · 빈 항목 0",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-5db3e6be",
-  "result": "PASS",
-  "evidence": "BOD_VALID 후보 2건(신규행 Division='81' 기준) · 중복 0",
   "tobe_ref": "E2E @verify"
  },
  {
@@ -4602,12 +4788,6 @@
   "tobe_ref": "E2E @verify"
  },
  {
-  "row_id": "V-6f31804a",
-  "result": "판정필요",
-  "evidence": "원천 컬럼 분기 해석 불가 — 조건 'if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SITE_CODE)) ▸ if (!str'",
-  "tobe_ref": "E2E @verify"
- },
- {
   "row_id": "V-d6804183",
   "result": "PASS",
   "evidence": "신규행 연쇄 FROM_SITE_CODE → FROM_CITY: FROM_SITE_CODE='E00L00300_40-P' → FROM_CITY='EGCAI' (AS-IS SCP0007_BOD.cs:1245 SCP0007_BOD.SpdMain_ClipboardPasted)",
@@ -4620,12 +4800,6 @@
   "tobe_ref": "E2E @verify"
  },
  {
-  "row_id": "V-c21de22c",
-  "result": "PASS",
-  "evidence": "신규행 연쇄 INCOTERMS → INCOTERMS_SSP: INCOTERMS='EXW' → INCOTERMS_SSP='EXW' (AS-IS SCP0007_BOD.cs:1269 SCP0007_BOD.SpdMain_ClipboardPasted)",
-  "tobe_ref": "E2E @verify"
- },
- {
   "row_id": "V-359b0363",
   "result": "PASS",
   "evidence": "신규행 연쇄 FROM_SITE_CODE → FROM_CITY: FROM_SITE_CODE='E00L00300_40-P' → FROM_CITY='EGCAI' (AS-IS SCP0007_BOD.cs:1165 SCP0007_BOD.SpdMain_ComboSelChange)",
@@ -4635,12 +4809,6 @@
   "row_id": "V-3777a124",
   "result": "PASS",
   "evidence": "신규행 연쇄 TO_SITE_CODE → TO_CITY: TO_SITE_CODE='IL00' → TO_CITY='INDEL' (AS-IS SCP0007_BOD.cs:1176 SCP0007_BOD.SpdMain_ComboSelChange)",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-b1d46bfe",
-  "result": "PASS",
-  "evidence": "신규행 연쇄 INCOTERMS → INCOTERMS_SSP: INCOTERMS='EXW' → INCOTERMS_SSP='EXW' (AS-IS SCP0007_BOD.cs:1348 SCP0007_BOD.SpdMain_EditChange)",
   "tobe_ref": "E2E @verify"
  },
  {
@@ -4668,12 +4836,6 @@
   "tobe_ref": "E2E @verify"
  },
  {
-  "row_id": "V-5e2682cd",
-  "result": "PASS",
-  "evidence": "INCOTERMS_SSP: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
-  "tobe_ref": "E2E @verify"
- },
- {
   "row_id": "V-92b6fd91",
   "result": "PASS",
   "evidence": "PRIORITY: AS-IS NUMBER ↔ TO-BE dataType=Number · dataMap=N",
@@ -4695,12 +4857,6 @@
   "row_id": "V-cc75c9e7",
   "result": "PASS",
   "evidence": "TO_YYYYMMDD: AS-IS DATE ↔ TO-BE dataType=String · dataMap=N · format=yyyy.MM.dd",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-b8ab0029",
-  "result": "PASS",
-  "evidence": "BOD_VALID: AS-IS COMBO ↔ TO-BE dataType=String · dataMap=Y",
   "tobe_ref": "E2E @verify"
  },
  {
@@ -4764,7 +4920,7 @@
   "tobe_ref": "E2E @verify"
  },
  {
-  "row_id": "V-8aaa7d49",
+  "row_id": "V-5e19c131",
   "result": "PASS",
   "evidence": "INCOTERMS_SSP: 기존행 편집=false 표시 일치 · 신규행 편집=false 표시 일치",
   "tobe_ref": "E2E @verify"
@@ -4884,7 +5040,7 @@
   "tobe_ref": "E2E @verify"
  },
  {
-  "row_id": "V-5bc4407a",
+  "row_id": "V-71d00043",
   "result": "PASS",
   "evidence": "BOD_VALID: 기존행 편집=true 표시 일치 · 신규행 편집=true 표시 일치",
   "tobe_ref": "E2E @verify"
@@ -4950,18 +5106,6 @@
   "tobe_ref": "E2E @verify"
  },
  {
-  "row_id": "V-824b15b3",
-  "result": "PASS",
-  "evidence": "INCOTERMS_SSP: 원값 'A01' → 표시 'A01' (이름 'A01') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-2f65232f",
-  "result": "PASS",
-  "evidence": "BOD_VALID: 원값 'N' → 표시 'N' (이름 'N') · AS-IS 조회 시점 코드(TextCell · 콤보는 Insert/Edit 때만)",
-  "tobe_ref": "E2E @verify"
- },
- {
   "row_id": "V-15c200be",
   "result": "판정필요",
   "evidence": "FROM_SITE_CODE='EG01_81-W' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-A' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-E' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='HQ07-P' → TO_SITE_CODE 후보 2668건 · FROM_SITE_CODE='KR02239900_81-P' → TO_SITE_CODE 후보 2668건 — 원천 값과 무관하게 후보 동일(AS-IS 필터 분기 조건 확인 필요) (AS-IS SCP0007_BOD.cs:1224 SCP0007_BOD.SpdMain_ClipboardPasted)",
@@ -4998,12 +5142,6 @@
   "tobe_ref": "E2E @verify"
  },
  {
-  "row_id": "V-c667b133",
-  "result": "판정필요",
-  "evidence": "원천 컬럼 분기 해석 불가 — 조건 'if (!string.IsNullOrEmpty(strFROM_SITE_CODE) || !string.IsNullOrEmpty(strFROM_SITE_CODE)) ▸ if (!str'",
-  "tobe_ref": "E2E @verify"
- },
- {
   "row_id": "V-21c28614",
   "result": "PASS",
   "evidence": "FROM_SITE_CODE='KR02239900_81-P' 더블클릭+Esc(값 변경 없음) → FROM_CITY 'KROSN'→'KROSN'",
@@ -5013,18 +5151,6 @@
   "row_id": "V-54cb4e73",
   "result": "PASS",
   "evidence": "FROM_SITE_CODE='KR02239900_81-P' 더블클릭+Esc(값 변경 없음) → FROM_CITY 'KROSN'→'KROSN'",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-3778a5ce",
-  "result": "PASS",
-  "evidence": "INCOTERMS='EXW' 더블클릭+Esc(값 변경 없음) → INCOTERMS_SSP 'EXW'→'EXW'",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-f1677353",
-  "result": "PASS",
-  "evidence": "INCOTERMS='EXW' 더블클릭+Esc(값 변경 없음) → INCOTERMS_SSP 'EXW'→'EXW'",
   "tobe_ref": "E2E @verify"
  },
  {
@@ -5055,18 +5181,6 @@
   "row_id": "V-793ae738",
   "result": "PASS",
   "evidence": "INCOTERMS: 목록 밖 'ZZ_E2E_NOT_IN_LIST' 입력 → 값 ''",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-9e57c498",
-  "result": "PASS",
-  "evidence": "INCOTERMS_SSP 신규행 편집 불가 — 입력 경로 없음",
-  "tobe_ref": "E2E @verify"
- },
- {
-  "row_id": "V-d2e96986",
-  "result": "PASS",
-  "evidence": "BOD_VALID: 목록 밖 'ZZ_E2E_NOT_IN_LIST' 입력 → 값 'Y'",
   "tobe_ref": "E2E @verify"
  },
  {
@@ -5120,19 +5234,19 @@
  {
   "row_id": "V-5d86cb57",
   "result": "PASS",
-  "evidence": "SQL 오류 없음 — 전송값 DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=FOB, PRIORITY=1, FROM_YYYYMMDD=2024-12-30, TO_YYYYMMDD=2100-01-03, BOD_VALID=Y, ROUTE_ID=740, REMARKS=E2E_10271739 · 입력 후 저장 전 변경 PRIORITY '97'→'1', BOD_VALID 'N'→'Y' · 팝업 ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 0 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' (외 5회) · 저장 요청 1건 · 메시지 '성공적으로 저장되었습니다. · 키 콤보 [FROM_SITE_CODE,TO_SITE_CODE,INCOTERMS,BOD_VALID] · 재시도 키 순서 [TO_SITE_CODE,INCOTERMS,FROM_SITE_CODE] (팝업 인자 ROUTE_ID) · 시도1: TO_SITE_CODE='CN00254300_40-P' → 팝업 후보 0행 — 저장 생략·원래 값 'Alte_KR_SEL' 복원 · 시도2: INCOTERMS='FOB' 저장 (이전 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다 Confirm')'",
+  "evidence": "SQL 오류 없음 — 전송값 DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=FOB, PRIORITY=1, FROM_YYYYMMDD=2024-12-30, TO_YYYYMMDD=2100-01-03, BOD_VALID=Y, ROUTE_ID=740, REMARKS=E2E_10281702 · 입력 후 저장 전 변경 PRIORITY '97'→'1', BOD_VALID 'N'→'Y' · 팝업 ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 0 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' (외 5회) · 저장 요청 1건 · 메시지 '성공적으로 저장되었습니다. · 키 콤보 [FROM_SITE_CODE,TO_SITE_CODE,INCOTERMS,BOD_VALID] · 재시도 키 순서 [TO_SITE_CODE,INCOTERMS,FROM_SITE_CODE] (팝업 인자 ROUTE_ID) · 시도1: TO_SITE_CODE='CN00254300_40-P' → 팝업 후보 0행 — 저장 생략·원래 값 'Alte_KR_SEL' 복원 · 시도2: INCOTERMS='FOB' 저장 (이전 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다 Confirm')'",
   "tobe_ref": "E2E @verify"
  },
  {
   "row_id": "V-063068f4",
   "result": "PASS",
-  "evidence": "Save 1회로 저장 성공 — 전송값 DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=FOB, PRIORITY=1, FROM_YYYYMMDD=2024-12-30, TO_YYYYMMDD=2100-01-03, BOD_VALID=Y, ROUTE_ID=740, REMARKS=E2E_10271739 · 입력 후 저장 전 변경 PRIORITY '97'→'1', BOD_VALID 'N'→'Y' · 팝업 ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 0 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' (외 5회) · 저장 요청 1건 · 메시지 '성공적으로 저장되었습니다. · 키 콤보 [FROM_SITE_CODE,TO_SITE_CODE,INCOTERMS,BOD_VALID] · 재시도 키 순서 [TO_SITE_CODE,INCOTERMS,FROM_SITE_CODE] (팝업 인자 ROUTE_ID) · 시도1: TO_SITE_CODE='CN00254300_40-P' → 팝업 후보 0행 — 저장 생략·원래 값 'Alte_KR_SEL' 복원 · 시도2: INCOTERMS='FOB' 저장 (이전 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다 Confirm')'",
+  "evidence": "Save 1회로 저장 성공 — 전송값 DIVISION_ID=40, FROM_SITE_CODE=HQ06-A, TO_SITE_CODE=Alte_KR_SEL, INCOTERMS=FOB, PRIORITY=1, FROM_YYYYMMDD=2024-12-30, TO_YYYYMMDD=2100-01-03, BOD_VALID=Y, ROUTE_ID=740, REMARKS=E2E_10281702 · 입력 후 저장 전 변경 PRIORITY '97'→'1', BOD_VALID 'N'→'Y' · 팝업 ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 0 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' / ROUTE_ID: 더블클릭 전 대화상자 0 · 열린 대화상자 'Distribution Route' 그리드 1 / ROUTE_ID: 팝업 행 1 → '740' (외 5회) · 저장 요청 1건 · 메시지 '성공적으로 저장되었습니다. · 키 콤보 [FROM_SITE_CODE,TO_SITE_CODE,INCOTERMS,BOD_VALID] · 재시도 키 순서 [TO_SITE_CODE,INCOTERMS,FROM_SITE_CODE] (팝업 인자 ROUTE_ID) · 시도1: TO_SITE_CODE='CN00254300_40-P' → 팝업 후보 0행 — 저장 생략·원래 값 'Alte_KR_SEL' 복원 · 시도2: INCOTERMS='FOB' 저장 (이전 '저장시 중복 오류가 발생하였습니다. 중복된 기간을 저장할 수 없습니다 Confirm')'",
   "tobe_ref": "E2E @verify"
  },
  {
   "row_id": "V-45c17570",
   "result": "PASS",
-  "evidence": "저장 후 재조회에 마커 'E2E_10271739'(REMARKS) 행 존재 — DB 반영 확인 · 정리 완료(마커 행 삭제·저장·재조회 부재 확인)",
+  "evidence": "저장 후 재조회에 마커 'E2E_10281702'(REMARKS) 행 존재 — DB 반영 확인 · 정리 완료(마커 행 삭제·저장·재조회 부재 확인)",
   "tobe_ref": "E2E @verify"
  },
  {
@@ -5221,14 +5335,14 @@
  },
  {
   "row_id": "V-3ac70eb4",
-  "result": "FAIL",
-  "evidence": "ime FAIL: 신규행 REMARKS 선택(편집기 닫힘·포커스 DIV.wj-cell wj-align-left cell-cha) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IME 모사 — OS IME 와 동일하지 않음) | auto PASS: 신규행 DIVISION_ID 에 '40' 입력 → 편집기 '40 Mobility & IT Battery' · Enter 후 셀 '40 Mobility & IT Battery' (기대 후보 '40 Mobility & IT Battery')",
+  "result": "PASS",
+  "evidence": "ime NA: 신규행 REMARKS 선택(편집기 닫힘·포커스 DIV.wj-cell wj-align-left cell-cha) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IME 모사 — OS IME 와 동일하지 않음) | auto PASS: 신규행 DIVISION_ID 에 '40' 입력 → 편집기 '40 Mobility & IT Battery' · Enter 후 셀 '40 Mobility & IT Battery' (기대 후보 '40 Mobility & IT Battery')",
   "tobe_ref": "E2E @verify"
  },
  {
   "row_id": "V-476fc6ca",
-  "result": "FAIL",
-  "evidence": "ime FAIL: 신규행 REMARKS 선택(편집기 닫힘·포커스 DIV.wj-cell wj-align-left cell-cha) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IME 모사 — OS IME 와 동일하지 않음) | auto PASS: 신규행 DIVISION_ID 에 '40' 입력 → 편집기 '40 Mobility & IT Battery' · Enter 후 셀 '40 Mobility & IT Battery' (기대 후보 '40 Mobility & IT Battery') · 미포함: 복사/붙여넣기(K3·F3 행), 붙여넣기 병합 셀(H3 행) [전체: ime FAIL: 신규행 REMARKS 선택(편집기 닫힘·포커스 DIV.wj-cell wj-align-left cell-cha) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (C]",
+  "result": "판정필요",
+  "evidence": "ime NA: 신규행 REMARKS 선택(편집기 닫힘·포커스 DIV.wj-cell wj-align-left cell-cha) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP IME 모사 — OS IME 와 동일하지 않음) | auto PASS: 신규행 DIVISION_ID 에 '40' 입력 → 편집기 '40 Mobility & IT Battery' · Enter 후 셀 '40 Mobility & IT Battery' (기대 후보 '40 Mobility & IT Battery') · 미포함: 복사/붙여넣기(K3·F3 행), 붙여넣기 병합 셀(H3 행) [전체: ime NA: 신규행 REMARKS 선택(편집기 닫힘·포커스 DIV.wj-cell wj-align-left cell-cha) → IME 조합 '한글' → 편집기 '(안 열림)' · 셀 값 '' — 첫 타건에 조합 받을 입력칸 없음(실제 OS IME 에선 첫 글자가 영문으로 들어가는 원인) · 대조군(편집기 연 뒤 같은 조합) '한글' = 모사 유효 (CDP]",
   "tobe_ref": "E2E @verify"
  },
  {

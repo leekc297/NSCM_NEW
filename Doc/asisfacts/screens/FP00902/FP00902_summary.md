@@ -1,15 +1,16 @@
 ﻿# FP00902 화면 Fact Pack
 
 > AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+> ⚠ .sln 미등록 전용 프로젝트(current 로 취급 · files.csv sln_registered=N): 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\FP00902_Item_Setup_Attr.UIL.csproj, 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Group_Attr.UIL\FP00902_Item_Setup_Group_Attr.UIL.csproj
 
 ## 1. 파일 구성
 | 구분 | 파일 | 프로젝트 | 줄수 |
 |---|---|---|---:|
-| current(sln미등록) | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\FP00902_Item_Setup_Attr.cs | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\FP00902_Item_Setup_Attr.UIL.csproj | 2071 |
-| current(sln미등록) | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\FP00902_Item_Setup_Attr.Designer.cs | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\FP00902_Item_Setup_Attr.UIL.csproj | 675 |
-| current(sln미등록) | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\Properties\AssemblyInfo.cs | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\FP00902_Item_Setup_Attr.UIL.csproj | 37 |
-| current(sln미등록) | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Group_Attr.UIL\Properties\AssemblyInfo.cs | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Group_Attr.UIL\FP00902_Item_Setup_Group_Attr.UIL.csproj | 37 |
-| current(sln미등록) | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Group_Attr.UIL\TestCode.cs | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Group_Attr.UIL\FP00902_Item_Setup_Group_Attr.UIL.csproj | 48 |
+| current | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\FP00902_Item_Setup_Attr.cs | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\FP00902_Item_Setup_Attr.UIL.csproj | 2071 |
+| current | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\FP00902_Item_Setup_Attr.Designer.cs | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\FP00902_Item_Setup_Attr.UIL.csproj | 675 |
+| current | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\Properties\AssemblyInfo.cs | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Attr.UIL\FP00902_Item_Setup_Attr.UIL.csproj | 37 |
+| current | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Group_Attr.UIL\Properties\AssemblyInfo.cs | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Group_Attr.UIL\FP00902_Item_Setup_Group_Attr.UIL.csproj | 37 |
+| current | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Group_Attr.UIL\TestCode.cs | 06.UIL\GSCM.FP.Forms.UIL\Master\FP00902_Item_Setup_Group_Attr.UIL\FP00902_Item_Setup_Group_Attr.UIL.csproj | 48 |
 
 ## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
 | 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |

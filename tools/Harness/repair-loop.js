@@ -14,6 +14,8 @@ const DESIGN = opt('--design', ''); // 화면설계서(md) 경로 — 지정 시
 const repo = path.dirname(cfg.feRoot);
 const ids = opt('--batch') ? fs.readFileSync(opt('--batch'), 'utf8').split(/\r?\n/).map(s => s.trim()).filter(s => s && !s.startsWith('#')) : a.filter(x => !x.startsWith('--') && !['--max', '--feature', '--page', '--config', '--batch'].includes(a[a.indexOf(x) - 1]));
 if (!ids.length) { console.error('화면ID 또는 --batch 파일을 지정하세요'); process.exit(2); }
+// 2026-11-02 작업 모드: DB MODE(repairScope=DB_ONLY) 는 FE 수선을 하지 않는다. --pkg(DB 이식)는 그대로 실행
+if (!PKG && cfg.repairScope === 'DB_ONLY') { console.log('[DB MODE] FE 수선 루프 건너뜀 — FE 는 가이드만(UI/DB MODE 에서 실행)'); process.exit(0); }
 const ALLOWED = 'Read,Edit,Write,Glob,Grep,Bash(node *),Bash(dir *),Bash(ls *),Bash(type *),Bash(cat *)';
 const HENV = Object.assign({}, process.env, { VIBE_HARNESS: '1', NSCM_SKIP_RULE_READ: '1' }); // 하네스 표식 — .claude/hooks 의 check-rules-read/attach-context 통과(룰은 프롬프트로 주입)
 const run = (cmd, args, opts = {}) => { const r = spawnSync(cmd, args, Object.assign({ encoding: 'utf8', maxBuffer: 256 * 1024 * 1024, shell: process.platform === 'win32', timeout: 45 * 60 * 1000, env: HENV }, opts)); return { code: r.status, out: (r.stdout || '') + (r.stderr || '') + (r.error ? '\n' + r.error.message : ''), err: r.error }; };

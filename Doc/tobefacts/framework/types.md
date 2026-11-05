@@ -14,13 +14,14 @@
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **RawFlexGridColumnConfig** | `@foundation/models` | 375 |  |  |
-| **PageProps** | `@foundation/models` | 143 |  |  |
-| **HotkeyConfig** | `@foundation/models` | 132 |  |  |
-| **ComboResponse** | `@foundation/models` | 95 |  |  |
-| **FlexGridColumnConfig** | `@foundation/models` | 70 |  |  |
-| **ComboParam** | `@foundation/models` | 27 |  |  |
-| **LookupResponse** | `@foundation/models` | 6 |  |  |
+| **RawFlexGridColumnConfig** | `@foundation/models` | 388 |  |  |
+| **PageProps** | `@foundation/models` | 145 |  |  |
+| **HotkeyConfig** | `@foundation/models` | 134 |  |  |
+| **ComboResponse** | `@foundation/models` | 109 |  |  |
+| **FlexGridColumnConfig** | `@foundation/models` | 74 |  |  |
+| **ComboParam** | `@foundation/models` | 30 |  |  |
+| **LookupResponse** | `@foundation/models` | 7 |  |  |
+| **Menu** | `@foundation/models` | 1 |  |  |
 | **SalesSite** | `@foundation/models` | 1 |  |  |
 | **ApiResponse** | `@foundation/models` | 0 |  |  |
 | **BizType** | `@foundation/models` | 0 |  |  |
@@ -34,7 +35,6 @@
 | **I18nResponse** | `@foundation/models` | 0 |  |  |
 | **LiveColumnExportMeta** | `@foundation/utils` | 0 |  | `collectLiveColumnExportMeta` 결과 — 컬럼을 갈아끼우기 전에 떠 둔 화면 상태. |
 | **LookupParam** | `@foundation/models` | 0 |  |  |
-| **Menu** | `@foundation/models` | 0 |  |  |
 | **NumberInputRule** | `@foundation/utils` | 0 |  | 숫자 컬럼 입력 제한 규칙. 값이 없는 항목은 제한하지 않는다. |
 | **ProcStreamHandlers** | `@foundation/models` | 0 |  |  |
 | **ProcStreamLine** | `@foundation/models` | 0 |  | [E20261015-STREAMPROC] 대량 조회 스트리밍(call-proc-stream) 계약. BE 는 같은 메타(SCM_ADM_MNU_BTN_MPG_M → API_M → PROC_M)로 같은 프로시저를 실행하고, OUT 커서를 읽는 즉시 묶음  |
@@ -48,11 +48,12 @@
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **ComboOption** | `features/master/src/components` | 28 |  | Filter 콤보 옵션 만들기 — AS-IS DataService.GetDMInnerTable 재현. 그 함수는 세션당 한 번 받아 둔 데이터셋(list_line_dm)을 메모리에서 거른다. TO-BE 는 등록 SQL(Filter*)이 같은 결과셋을  |
-| **MeasureMeta** | `features/master/src/components` | 18 |  | 공용 Measure 선택 popup (2026-07-30 통합 — 화면별 5벌 중복 제거): // AS-IS DM0002_TitleSetForm_Popup.cs 의 measure 모드 동등 동작. ColumnSettingModal(컬럼 모드) 의 형제 |
+| **ComboOption** | `features/master/src/components` | 32 |  | Filter 콤보 옵션 만들기 — AS-IS DataService.GetDMInnerTable 재현. 그 함수는 세션당 한 번 받아 둔 데이터셋(list_line_dm)을 메모리에서 거른다. TO-BE 는 등록 SQL(Filter*)이 같은 결과셋을  |
+| **MeasureMeta** | `features/master/src/components` | 20 |  | 공용 Measure 선택 popup (2026-07-30 통합 — 화면별 5벌 중복 제거): // AS-IS DM0002_TitleSetForm_Popup.cs 의 measure 모드 동등 동작. ColumnSettingModal(컬럼 모드) 의 형제 |
+| **Row** | `features/master/src/components` | 3 |  | // helpers // |
+| **ModelSelection** | `features/master/src/components` | 2 |  | AS-IS 반환값 (SCM0002_ItembyDivisionPopup: ItemID/ItemName/ItemType/NickName/ItemClassName). |
 | **ItemModalColumn** | `features/master/src/components` | 1 |  |  |
 | **ItemModalCondition** | `features/master/src/components` | 1 |  |  |
-| **ModelSelection** | `features/master/src/components` | 1 |  | AS-IS 반환값 (SCM0002_ItembyDivisionPopup: ItemID/ItemName/ItemType/NickName/ItemClassName). |
 | **CapaAuthContext** | `features/master/src/components` | 0 |  |  |
 | **CapaAuthListRow** | `features/master/src/components` | 0 |  |  |
 | **CapaFpInstanceRow** | `features/master/src/components` | 0 |  |  |
@@ -75,7 +76,6 @@
 | **PlantSiteModalColumn** | `features/master/src/components` | 0 |  | 결과 그리드 고정 컬럼(colNm → 라벨·폭). admin 컬럼 메타(SHEET_COLUMNS) 가 없을 때 쓰는 fallback. o_rc1 실측 컬럼(P_SCM0002_GET_ITEM_BY_PLANT_SITE_POPUP) 기준. AS-IS 컬럼  |
 | **ProjectByDivisionPopupParams** | `features/master/src/components` | 0 |  |  |
 | **ProjectByDivisionSelection** | `features/master/src/components` | 0 |  |  |
-| **Row** | `features/master/src/components` | 0 |  | // helpers // |
 | **UseCascadeFieldsOptions** | `features/master/src/components` | 0 |  | useCascadeFields / CascadeFields 공통 입력. |
 | **VersionModalProps** | `features/master/src/components` | 0 |  |  |
 
@@ -84,9 +84,9 @@
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
 | **ColumnLayoutRow** | `@shared/components` | 11 |  |  |
-| **DualListColumn** | `@shared/components` | 3 |  | 공용 Column Setting dual list (2026-06-20 신설 / 2026-07-01 디자인 개편 + 우측 D&D 순서이동): // AS-IS DM0002_TitleSetForm_Popup.cs 의 Base/User dual list 동 |
 | **CascadeNode** | `@shared/components` | 1 |  | 계층 선택지 트리 노드 — value/label 과 선택 시 펼쳐질 하위(children). // children 이 없으면 잎(최종 선택)이다. |
 | **ColumnMetaRow** | `@shared/components` | 1 |  | admin 컬럼 메타 1행 중 컬럼 설정 팝업이 쓰는 부분 (`/admin/menu/{mnuId}/column` = GridColumn DTO). |
+| **DualListColumn** | `@shared/components` | 1 |  | 공용 Column Setting dual list (2026-06-20 신설 / 2026-07-01 디자인 개편 + 우측 D&D 순서이동): // AS-IS DM0002_TitleSetForm_Popup.cs 의 Base/User dual list 동 |
 | **SsoUserRow** | `@shared/components` | 1 |  | COM0010 ssoUser 응답 행 — multiCheckbox 모드의 setSelectedValues 가 그대로 넘긴다. |
 | **WeekOfMonth** | `@shared/lib` | 1 |  | 수량/금액 Bucket 배분 공통 유틸 — 화면 recalc(표시) 배분용 순수 함수. // // 룰1 (월 → 주): 월 수량 입력 시 주별 "월내 기여 일수" Rate 산출 후 주별 배분. // 끝자리(rounding 잔여)는 마지막 주차에 +/- |
 | **BaseTabState** | `@shared/stores` | 0 |  |  |

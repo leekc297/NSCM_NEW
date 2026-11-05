@@ -10,11 +10,11 @@ import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
-import { COMBO, LBL, MENU_ID, SITE_TYPE } from '../sales-site-priority.constants';
+import { COMBO, LBL, MENU_ID } from '../sales-site-priority.constants';
 import { useSalesSitePriorityStore } from '../useSalesSitePriorityStore';
 import {
   filterByDivision,
-  resolveSiteDivisionParam,
+  filterSiteByDivision,
   toCascadeSource,
   toOptions,
 } from '../utils/sales-site-priority.cascadeCombo';
@@ -56,19 +56,13 @@ export const SalesSitePriorityForm = ({ onSearch }: Props) => {
   // Division 은 EE 포함(design 02 §2-1 comboCalls#1 code=false — GetDivisionWithoutEE 아님).
   //   Plan Group 은 全件 조회 후 클라 cascade 필터(design 02 §3 filterCalls#1, PlanGroup SQL_ID가
   //   DIVISION_ID 를 반환해 클라 필터 가능, ora.py 실측).
-  //   Site(SiteMasterAll_SCP)는 CODE/NAME 만 반환하고 DIVISION_ID 컬럼이 없다(ora.py 실측,
-  //   gap-audit iter-1 SCP0131-G01 — 미선택 상태에서 클라 DIVISION_ID 필터가 항상 0건이 되는
-  //   데이터 계약 불일치). SQL 자체는 `@divisionId`(콤마 목록, INSTR 매칭) 서버 파라미터를 받으므로
-  //   AS-IS RefreshSiteByDivision(.cs:254-268)과 동일하게 좁힌다 — division==='EE'일 때만 81/40/82
-  //   합집합, 그 외에는 GetDivisionChecked 매핑값(EE_UC->81_UC 등) 단일값, 미선택 시엔 81/40/82
-  //   전달(runtime-parity-gate SCP0131 v1 §3.3 — 이전엔 base3 교집합으로 비3종 division 전체가
-  //   빈 필터로 새던 결함이 있었다).
-  const siteDivisionParam = resolveSiteDivisionParam(sc.divisionId);
-  const siteFilter: ComboParam = {
-    comboId: COMBO.SITE,
-    siteType: SITE_TYPE,
-    divisionId: siteDivisionParam,
-  };
+  //   Site(ScmSite)는 AS-IS SCP0128 결과셋#2(SALES VALID + PLANT 전체)를 포팅한 콤보로 DIVISION_ID 를
+  //   반환하므로 全件 조회 후 클라 cascade 필터로 좁힌다(filterSiteByDivision) — AS-IS RefreshSiteByDivision
+  //   (.cs:254-268)과 동일: division==='EE'면 81/40/82 합집합, 그 외엔 GetDivisionChecked 매핑값.
+  //   그리드 셀 콤보(CELL_COMBO_DATA_TYPE='ScmSite')와 동일 소스라 AS-IS(dtScmSiteAll 단일 소스가
+  //   리스트박스+셀 공용)와 등가. iter-2 에서 SiteMasterAll_SCP(@siteType='SALES', PLANT 누락)로
+  //   배선됐던 조회조건 콤보를 ScmSite 로 되돌려 PLANT 사이트(HQ06-A/NJ01-A)를 복원한다(갭 항목 B).
+  const siteFilter: ComboParam = { comboId: COMBO.SITE };
   const [divisions, planGroups, sites, validYn] = useTabComboQueries({
     filters: [COMBO.DIVISION, COMBO.PLAN_GROUP, siteFilter, COMBO.VALID],
   });
@@ -83,7 +77,7 @@ export const SalesSitePriorityForm = ({ onSearch }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firstDivision, sc.divisionId]);
   const planGroupOptions = toOptions(filterByDivision(toCascadeSource(planGroups), sc.divisionId));
-  const siteOptions = toDivisionOptions(sites);
+  const siteOptions = toOptions(filterSiteByDivision(toCascadeSource(sites), sc.divisionId));
   const validOptions = toDivisionOptions(validYn);
 
   return (
@@ -161,6 +155,10 @@ export const SalesSitePriorityForm = ({ onSearch }: Props) => {
               />
             </Grid>
             {/* Item ID — 텍스트 + 돋보기(MaterialByDivisionModal COM0013, design 02 §4.6).
+                SCP0131.md 조회조건 정리(v0.5) 유형 '텍스트/다중': AS-IS btnItemId_Click 이 팝업을
+                Form_Load(true,...) 다중선택으로 열어 여러 ITEM_ID 를 멀티라인 txtItemId 에 채운다
+                (SCP0131.cs:961, 형제 SCP0013 동일). TO-BE GET SP 도 STRING_SPLIT(p_item_id, ',') 로
+                콤마 다건 분해(PKG_SCP0131 조회 proc). 입력은 다건(개행/콤마) — SCP0018 선례와 동일.
                 라벨 미등록 — 스펙 명칭(Model/Nickname) defaultValue 만 표기. */}
             <Grid size={3}>
               <FormItem
@@ -170,6 +168,8 @@ export const SalesSitePriorityForm = ({ onSearch }: Props) => {
                 render={() => (
                   <InputField
                     fullWidth
+                    multiline
+                    maxRows={3}
                     className={commonStyles.popupSearchField}
                     value={sc.itemId}
                     InputProps={{
@@ -177,17 +177,12 @@ export const SalesSitePriorityForm = ({ onSearch }: Props) => {
                         <Button
                           appearance='outlined'
                           priority='normal'
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => setOpenItemModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setOpenItemModal(true)}
                         />
                       ),
                     }}
                     onChange={e => set({ itemId: e.target.value })}
-                    onKeyDown={e => e.key === 'Enter' && onSearch()}
                   />
                 )}
               />
@@ -202,7 +197,8 @@ export const SalesSitePriorityForm = ({ onSearch }: Props) => {
                 onChange={(start, end) => set({ fromDate: start, toDate: end })}
               />
             </Grid>
-            {/* Valid(단일, 필수 — design 02 §2-4). ALL 센티널 없음(AS-IS 는 필수값 검사 대상). */}
+            {/* Active(Valid, 단일) — AS-IS cboValid 는 Y/N/ALL 이고 기본 ALL(.cs:170-171, SelectedValue="Y"
+                주석처리). allOption 으로 ALL(값 '') 포함·기본 '' = ALL, 검색은 ALL→'' 로 전체 조회(setFilter). */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
@@ -210,6 +206,7 @@ export const SalesSitePriorityForm = ({ onSearch }: Props) => {
                 labelAlign='right'
                 render={() => (
                   <CustomDropdown
+                    allOption
                     value={sc.validYn}
                     options={validOptions}
                     onChange={(_, picked) => set({ validYn: str(picked) })}
@@ -221,11 +218,13 @@ export const SalesSitePriorityForm = ({ onSearch }: Props) => {
         }
       />
       {/* 조회영역 Item ID 팝업 — MaterialByDivisionModal(COM0013), division 컨텍스트 전달(design 02 §4.6).
-          확인 필요: scpModuleType/operationGroup 등 실 파라미터 값은 AS-IS 원본 미확보로 잠정값. */}
+          다건 선택(multiCheckbox) → ITEM_ID csv 를 itemId 로 채운다(AS-IS Form_Load(true,...) 다중선택
+          등가, SCP0018 선례와 동일). GET SP 가 STRING_SPLIT(',') 로 다건 분해해 LIKE 조회. */}
       <MaterialByDivisionModal
         open={openItemModal}
         modalClose={() => setOpenItemModal(false)}
         setSelectedValue={items => set({ itemId: items })}
+        multiCheckbox
         preSearchParams={{
           divisionId: sc.divisionId,
           scpModuleType: MENU_ID,

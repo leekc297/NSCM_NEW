@@ -3,6 +3,19 @@
   "mode": "admin",
   "modeSource": "users.json screens",
   "menuId": "SCP0122",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div.",
+    "Division"
+  ],
+  "condOrder": [
+    "Div",
+    "Plan Group",
+    "Process"
+  ],
+  "condGone": [],
+  "condNotUse": [],
   "page": "PlanActivityMgmt",
   "routePath": "supply/plan-activity-mgmt",
   "asisName": "PlanActivityMgmt",
@@ -53,6 +66,7 @@
       "tobeLabel": "Div.",
       "catalog": "",
       "labels": [
+        "Div",
         "Div.",
         "Division"
       ],
@@ -188,107 +202,118 @@
   },
   "accounts": [
     {
-      "id": "jaeuk.shin",
-      "name": "",
+      "id": "jooyong026",
+      "name": "강주용",
       "groups": [
-        "SCP ADMIN",
-        "SYSTEM ADMIN"
+        "ADMIN"
       ],
       "divisions": [
         "40"
       ],
-      "roles": {},
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
       "roleNote": "ADMIN",
       "admin": true,
       "adminOf": [
         "SCP ADMIN"
       ],
       "screenGroup": "",
-      "source": "users.json",
+      "source": "users.json areas.SCP",
       "tobeGroups": [
         "ADMIN",
-        "DM ADMIN",
-        "FP Planner",
-        "FP Viewer",
         "GUEST",
-        "JV Planner",
-        "SCM PI Admin",
-        "SCM Viewer",
-        "SCP Planner",
-        "SCP Tester",
-        "SSP Planner",
-        "SSP Viewer"
+        "SSP Planner"
       ],
       "menuAccess": "Y",
       "expectedBtns": [
+        "INSERT",
+        "DELETE",
         "SAVE",
         "EDIT",
-        "SEARCH",
-        "INSERT",
-        "DELETE"
+        "SEARCH"
       ],
-      "matrix": []
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40"
+      ]
     },
     {
-      "id": "hongjae.kim",
-      "name": "김홍재 선임",
+      "id": "dana.robot",
+      "name": "Dana",
       "groups": [
-        "DM Admin"
+        "SCP Planner"
       ],
       "divisions": [
         "40"
       ],
       "roles": {
-        "40": "DM Admin"
+        "40": "SCP Planner"
       },
       "roleNote": "권한 없음 대표",
       "admin": false,
       "adminOf": [],
       "screenGroup": "",
-      "source": "users.json",
+      "source": "users.json areas.SCP",
       "tobeGroups": [
-        "DM ADMIN",
-        "DM Planner",
-        "GUEST"
+        "SCP Planner"
       ],
       "menuAccess": "N",
       "expectedBtns": [],
-      "matrix": []
+      "matrix": [],
+      "expectedDivs": []
     }
   ],
   "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
+      "INSERT",
+      "DELETE",
       "SAVE",
       "EDIT",
+      "SEARCH"
+    ],
+    "FP Planner": [
+      "SAVE",
       "SEARCH",
+      "EDIT",
       "INSERT",
       "DELETE"
     ],
-    "FP Planner": [
-      "DELETE",
+    "SCM PI Admin": [
       "EDIT",
-      "SEARCH",
       "SAVE",
+      "SEARCH",
+      "DELETE",
       "INSERT"
     ],
-    "SCM PI Admin": [
-      "INSERT",
-      "EDIT",
-      "SAVE",
-      "DELETE",
-      "SEARCH"
-    ],
     "SCP Planner": [
-      "SEARCH"
+      "SEARCH",
+      "INSERT",
+      "DELETE",
+      "SAVE"
     ]
   },
   "menuBtnCodes": [
+    "INSERT",
+    "DELETE",
     "SAVE",
     "EDIT",
-    "SEARCH",
-    "INSERT",
-    "DELETE"
+    "SEARCH"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

@@ -65,10 +65,24 @@ export const useDemandGroupMasterStore = createPersistedStoreWithTab<
       //   화면엔 Period 류 일자조건이 없어 operationGroup/groupName/projectId/itemId 전부 대상).
       //   operationGroup 을 비우면 DemandGroupMasterForm 의 기본값 effect 가 첫 항목으로 재세팅한다.
       if (params.divisionId !== undefined && params.divisionId !== prev.divisionId) {
-        next.operationGroup = '';
-        next.groupName = '';
-        next.projectId = '';
-        next.itemId = '';
+        // 같은 호출에 명시적으로 넘어온 필드는 리셋하지 않는다 — 최초 기본값 시딩이 division 과
+        //   operationGroup 을 한 번에 세팅할 때(Form 의 통합 시딩 effect) operationGroup 이 방금 넣은
+        //   값으로 유지돼야 한다. 이게 없으면 division 변경 리셋이 같은 호출의 operationGroup 을
+        //   되돌려 기본값이 빈 채로 남는다(개발서버 프로덕션 빌드 실사고 2026-10-29).
+        if (params.operationGroup === undefined) next.operationGroup = '';
+        if (params.groupName === undefined) next.groupName = '';
+        if (params.projectId === undefined) next.projectId = '';
+        if (params.itemId === undefined) next.itemId = '';
+        state.filters = { [SHEETS.GROUP_NAME]: undefined, [SHEETS.MODEL_LIST]: undefined };
+      } else if (
+        params.operationGroup !== undefined &&
+        prev.operationGroup !== '' &&
+        params.operationGroup !== prev.operationGroup
+      ) {
+        // Operation Group 변경 = 두 그리드 초기화(PI 2026-10-30). Model List 의 GROUP_ID 셀 콤보 후보는
+        //   현재 Operation Group 으로 좁혀지므로, Pack 조회 결과를 남긴 채 Cell 로 바꾸면 남은 행의
+        //   GROUP_ID 가 후보에 없어 그룹명이 빈칸이 된다. 다른 조회조건은 유지한다.
+        //   최초 기본값 시딩('' → 첫 항목)은 화면 초기화 대상이 아니다.
         state.filters = { [SHEETS.GROUP_NAME]: undefined, [SHEETS.MODEL_LIST]: undefined };
       }
       state.searchParams = next;

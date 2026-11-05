@@ -48,11 +48,13 @@ export const toPeriodColumnNames = (rows: readonly SpreadTitleRow[]): string[] =
     .filter(name => !!name && isEditablePeriodColumn(name));
 
 /**
- * 3단 동적 컬럼 그룹 — 1단 `LARGE_CLASS_LABEL_NAME` > 2단 `SMALL_CLASS_LABEL_NAME`(연도) >
- * 3단 `COLUMN_LABEL_NAME`(`2025-10` / `2028`).
+ * 동적 컬럼 그룹 — `LARGE_CLASS_LABEL_NAME`(대분류) > `SMALL_CLASS_LABEL_NAME`(연도) >
+ * `COLUMN_LABEL_NAME`(`2025-10` / `2028`).
  *
- * SCP0105 는 lookup `SCP_CAPA_RPT_CODE` 에 행이 없어 **1단 라벨이 항상 빈 값**이다 —
- * AS-IS 패리티이므로 임의로 채우지 않는다(03 §2.2-5, C-11).
+ * SCP0105 는 lookup `SCP_CAPA_RPT_CODE` 에 행이 없어 **대분류 라벨이 항상 빈 값**이다 —
+ * AS-IS 패리티이므로 임의로 채우지 않는다(03 §2.2-5, C-11). 또한 **빈 대분류 tier 는 아예 만들지
+ * 않는다** — 빈 헤더 band 가 연도 위에 한 줄 더 생기면 AS-IS(연>월 2단)와 어긋난다(사용자 지적
+ * 2026-10-27). 즉 SCP0105 는 연>월 2단, 대분류 라벨이 있는 경우에만 3단이 된다.
  *
  * `*_ASSIGN_PRIORITY` 는 컬럼으로 만들지 않는다. AS-IS 는 폭0 + Resizable=false 로 숨기지만,
  * Wijmo 에서는 컬럼을 만들면 우클릭 Filter/Sort/Hide 목록과 컬럼설정 모달에 노출된다(R-03 취지 위반).
@@ -89,9 +91,15 @@ export const buildPeriodColumns = (
       sub = { header: smallLabel, columns: [] };
       subs.set(smallLabel, sub);
     }
+    // 월 컬럼 leaf 라벨은 MM(월)만 쓴다 — 연도는 상위 그룹(SMALL_CLASS)이 이미 보여준다(AS-IS 파리티,
+    //   사용자 캡처 2026-10-27: "2026" 그룹 아래 "11"·"12"). COLUMN_LABEL_NAME 이 "2026-11" 이라
+    //   '-' 뒤(MM)를 쓰고, 연 컬럼(Y_, "2029"처럼 '-' 없음)은 그대로 둔다. binding(COLUMN_NAME)은
+    //   불변이라 저장 계약에 영향 없다.
+    const rawLabel = String(row.COLUMN_LABEL_NAME ?? row.COLUMN_NAME);
+    const leafLabel = rawLabel.includes('-') ? rawLabel.slice(rawLabel.indexOf('-') + 1) : rawLabel;
     sub.columns.push({
       binding: row.COLUMN_NAME,
-      header: String(row.COLUMN_LABEL_NAME ?? row.COLUMN_NAME),
+      header: leafLabel,
       align: 'right',
       width: columnWidth,
       allowDragging: false,
@@ -104,17 +112,26 @@ export const buildPeriodColumns = (
     });
   }
 
-  return largeGroups.map(group => ({
-    header: group.header,
-    align: 'center',
-    visible: true,
-    columns: [...group.subs.values()].map(sub => ({
+  return largeGroups.flatMap(group => {
+    const yearGroups = [...group.subs.values()].map(sub => ({
       header: sub.header,
-      align: 'center',
+      align: 'center' as const,
       visible: true,
       columns: sub.columns,
-    })),
-  }));
+    }));
+    // 대분류(LARGE_CLASS) 라벨이 빈 값이면 그 tier 를 만들지 않는다 — 빈 헤더 band 한 줄이 연도 위에
+    //   더 생겨 AS-IS(연>월 2단)와 어긋난다(사용자 지적 2026-10-27). SCP0105 는 lookup
+    //   SCP_CAPA_RPT_CODE 행이 없어 항상 빈 값이라 2단으로 내려간다. 라벨이 있을 때만 3단으로 감싼다.
+    if (!group.header) return yearGroups;
+    return [
+      {
+        header: group.header,
+        align: 'center' as const,
+        visible: true,
+        columns: yearGroups,
+      },
+    ];
+  });
 };
 
 /** 컬럼셋 재조립 억제용 서명 — 조회마다 배열 참조가 바뀌어도 내용이 같으면 rebuild 하지 않는다. */

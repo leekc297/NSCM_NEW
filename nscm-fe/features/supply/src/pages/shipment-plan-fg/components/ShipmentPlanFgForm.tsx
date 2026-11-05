@@ -328,8 +328,10 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
       searchButtonLabel={t(LBL.SEARCH, '_Search')}
       isHidden={!openSearchArea}
       onSearch={onSearch}
-      // 배치(사용자 지시 2026-10-21): conditions(상시 노출, 2줄) = Div/OpGroup/FromSite/Team/ToSite +
-      //   PJT/Model/Electrode. extraConditions(접기/펼치기) = Bucket/Sum + PlanDate/Type/Seq(cascade)/Period.
+      // 배치(사용자 지시 2026-10-30): 접기/펼치기(extraConditions) 없이 3줄 전부 상시 노출한다. 조회조건
+      //   12개(size=3)를 단일 conditions 그리드에 두어 4개씩 3줄로 배치한다. 1줄 Div/OpGroup/FromSite/ToSite,
+      //   2줄 Team/PJT/Model/Electrode, 3줄 PlanDate·Type·Seq(cascade)/Bucket/Period/Sum.
+      //   extraConditions 를 넘기지 않으므로 SEARCH 옆 펼치기 토글(chevron)도 사라진다.
       conditions={
         <>
           {/* Division* — 무필터, EE 제외 없음(design 02 §2.1) */}
@@ -398,12 +400,12 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' onClick={onProjectSearch} />}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onProjectSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ projectCode: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -425,12 +427,12 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' onClick={onItemSearch} />}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -444,21 +446,18 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
             electrodeTypeIds => set({ electrodeTypeIds }),
             !isEE // division EE 여부로 Enabled 만 토글(design 02 §2.7) — 비활성 시 선택값 유지 안 함
           )}
-        </>
-      }
-      extraConditions={
-        <>
+
           {/* Plan Date → Type → Seq — 공유 PlanVersionCascade(SCP0013 자매 화면과 동일). combined 단일 입력칸
-              (기본) — 클릭하면 date→type→seq 컬럼 팝업으로 경로 선택. 입력칸 고정폭 190px + 라벨(140) 수용
-              size=3 래퍼(SCP0013 동일, 사용자 지시 2026-10-21). PlanDate 변경 시 Period(dCalendar) W52 재설정
+              (기본) — 클릭하면 date→type→seq 컬럼 팝업으로 경로 선택. 입력칸 고정폭을 주지 않아 같은
+              commonStyles.formItem 필드 칼럼을 채우는 다른 조회조건(CustomDropdown/InputField)과 가로폭을
+              맞춘다(사용자 지시 2026-10-30). size=3 래퍼. PlanDate 변경 시 Period(dCalendar) W52 재설정
               (AS-IS GetDayRange(W52) 파리티). */}
           <Grid size={3}>
             <PlanVersionCascade
               variant='horizontal'
               labelAlign='right'
               formItemClassName={commonStyles.formItem}
-              label='Plan Date/Type/Seq'
-              inputWidth='190px'
+              label={t(LBL.PLAN_VERSION, '_Plan Date/Type/Seq')}
               levels={planVersionLevels}
               divisionId={sc.divisionId}
               value={planVersionValue}
@@ -494,17 +493,19 @@ export const ShipmentPlanFgForm = ({ onSearch, onChangeBucketType, onItemSearch,
             />
           </Grid>
           {/* ALL(chkAll)은 화면에 노출하지 않는다 — 스토어 기본값(true) 고정으로 서버에 P_CHK_ALL='Y' 를 보낸다. */}
-          {/* Sum — SCP0031(GlobalPsiForm) 과 동일 스타일: FormItem label 에 실제 라벨을 넣고 customGrid 로
-              체크박스를 행 높이 기준 세로 중앙 정렬한다(2026-10-21). */}
+          {/* Sum — SCP0031(GlobalPsiForm) 과 동일 스타일: 체크박스 앞·라벨 뒤(Checkbox labelText), FormItem
+              라벨 칸은 공백으로 두고 customGrid 로 체크박스를 행 높이 기준 세로 중앙 정렬한다(2026-10-21). */}
           <Grid size={3} className={commonStyles.customGrid}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.SUM, '_Sum')}
+              label={' '}
               labelAlign='right'
               render={() => (
-                <div className={commonStyles.customCheckbox}>
-                  <Checkbox checked={sc.chkSum} onChange={checked => set({ chkSum: checked })} />
-                </div>
+                <Checkbox
+                  labelText={t(LBL.SUM, '_Sum')}
+                  checked={sc.chkSum}
+                  onChange={checked => set({ chkSum: checked })}
+                />
               )}
             />
           </Grid>

@@ -1,7 +1,7 @@
 # SCP0055 — To-Be Fact Pack 요약
 
-- page_key: `supply/shipment-allo-report` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 9 · 엔드포인트 호출 6 (미해결 0, 주석 속 1) · 이벤트 12 · 컴포넌트 사용 32 · 하드코딩 컬럼 4 · 메시지 18
+- page_key: `supply/shipment-allo-report` · feature: supply · As-is Fact Pack 있음
+- 파일 9 · 엔드포인트 호출 6 (미해결 0, 주석 속 1) · 이벤트 11 · 컴포넌트 사용 32 · 하드코딩 컬럼 4 · 메시지 18
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 4건
 
 ## 1. 파일
@@ -36,9 +36,8 @@
 |---|---|---|---|---|---|
 | CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/shipment-allo-report/components/ShipmentAlloReportForm.tsx | 105 |
 | CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/shipment-allo-report/components/ShipmentAlloReportForm.tsx | 126 |
-| InputField | onChange | <arrow>  | jsx | features/supply/src/pages/shipment-allo-report/components/ShipmentAlloReportForm.tsx | 153 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/shipment-allo-report/components/ShipmentAlloReportForm.tsx | 154 |
-| FunctionSearchIcon | onClick | onPopup | jsx | features/supply/src/pages/shipment-allo-report/components/ShipmentAlloReportForm.tsx | 149 |
+| InputField | onChange | <arrow>  | jsx | features/supply/src/pages/shipment-allo-report/components/ShipmentAlloReportForm.tsx | 154 |
+| Button | onClick | onPopup | jsx | features/supply/src/pages/shipment-allo-report/components/ShipmentAlloReportForm.tsx | 150 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/shipment-allo-report/components/ShipmentAlloReportForm.tsx | 166 |
 | DatePickerCalendar | onChange | <arrow> set,d.format | jsx | features/supply/src/pages/shipment-allo-report/components/ShipmentAlloReportForm.tsx | 198 |
 | DatePickerCalendar | onChange | <arrow> set,d.format | jsx | features/supply/src/pages/shipment-allo-report/components/ShipmentAlloReportForm.tsx | 213 |

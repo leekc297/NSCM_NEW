@@ -590,6 +590,13 @@ export const MSG = {
   UPLOAD_DONE: 'MSG00265',
   UPLOAD_FAIL: 'MSG01068',
   UPLOAD_FILE_REQUIRED: 'MSG01385',
+  /**
+   * UTIL_RT(Utilization Rate) 음수 차단 — 사용자 지시(2026-10-28). AS-IS `CheckDouble`(cs:3312)은
+   * 음수를 허용하지만(§findValueProblem 주석), TO-BE 는 이 컬럼만 의도적으로 AS-IS 를 벗어나
+   * 음수를 막는다(업무상 가동률 음수가 무의미하다는 판단). 다른 `NUMERIC_PARSE_COLUMNS`(EFCY 등)는
+   * AS-IS 그대로 음수 허용 유지 — 이 메시지는 UTIL_RT 전용이다.
+   */
+  UTIL_RT_NEGATIVE: 'MSG01190',
 } as const;
 
 /** 조회조건·버튼 라벨 — design 02 §5 / 01 §1.2 실측(전건 존재, 신규 0건). */

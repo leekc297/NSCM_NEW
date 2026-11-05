@@ -238,6 +238,9 @@ export const InventoryTrendGrid = ({ gridRef, gridFilterRef, data, month, detail
       initialized={handleInitialized}
       itemsSource={data}
       staticColumns={staticColumns}
+      // 읽기전용 Report — AS-IS Save NO-OP(cs:248~249)·Edit 실효0(MEMO 부재)·조회직후 전컬럼 LockColumn(cs:320).
+      //   그리드 레벨 isReadOnly 로 셀 편집 차단 + CRUD status rowHeader 제거(DataGrid 기본은 편집가능).
+      isReadOnly
       // 전 컬럼 읽기전용 Report — 편집셀 없음(LockColumn cs:320, staticColumns INPUT_TP_CD 전건 'S').
       // SmartColMerge(cs:325, 헤더 cs:192) → All 로 데이터 셀 + 컬럼 헤더 병합.
       //   데이터 셀 병합은 per-column allowMerging(위 effect)이 MERGE_COLUMNS 선두만 남기고,

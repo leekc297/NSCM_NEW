@@ -1,0 +1,17 @@
+{
+"at": "2026-10-31 21:46:43",
+"rows": [
+{
+"id": "DMF0048",
+"ctx": "PKG_DMF0048",
+"eg": "EG395",
+"result": "FAIL",
+"expected": "계정 리터럴 분기 0 — GAP-349",
+"actual": "2715줄 중 1건 L1358",
+"asis": "PKG_DMF0048",
+"note": [
+"IF p_created_by = '329navy' THEN"
+]
+}
+]
+}

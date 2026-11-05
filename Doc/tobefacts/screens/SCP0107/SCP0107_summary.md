@@ -1,16 +1,16 @@
 # SCP0107 — To-Be Fact Pack 요약
 
-- page_key: `supply/capa-teep-report` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 15 · 엔드포인트 호출 7 (미해결 0, 주석 속 2) · 이벤트 15 · 컴포넌트 사용 42 · 하드코딩 컬럼 1 · 메시지 26
+- page_key: `supply/capa-teep-report` · feature: supply · As-is Fact Pack 있음
+- 파일 15 · 엔드포인트 호출 7 (미해결 0, 주석 속 2) · 이벤트 15 · 컴포넌트 사용 43 · 하드코딩 컬럼 1 · 메시지 23
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 1건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/capa-teep-report/capa-teep-report.constants.ts | constants | 349 |
+| features/supply/src/pages/capa-teep-report/capa-teep-report.constants.ts | constants | 345 |
 | features/supply/src/pages/capa-teep-report/capa-teep-report.types.ts | types | 132 |
-| features/supply/src/pages/capa-teep-report/CapaTeepReport.tsx | page | 370 |
-| features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | component | 378 |
+| features/supply/src/pages/capa-teep-report/CapaTeepReport.tsx | page | 347 |
+| features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | component | 384 |
 | features/supply/src/pages/capa-teep-report/components/CapaTeepReportGrid.module.scss | component | 28 |
 | features/supply/src/pages/capa-teep-report/components/CapaTeepReportGrid.tsx | component | 166 |
 | features/supply/src/pages/capa-teep-report/components/modals/CapaTeepReportColumnModal.tsx | component | 120 |
@@ -20,8 +20,8 @@
 | features/supply/src/pages/capa-teep-report/useCapaTeepReportStore.ts | store | 440 |
 | features/supply/src/pages/capa-teep-report/utils/capaTeepReport.combos.ts | util | 461 |
 | features/supply/src/pages/capa-teep-report/utils/capaTeepReport.cursors.ts | util | 54 |
-| features/supply/src/pages/capa-teep-report/utils/capaTeepReport.dateColumns.ts | util | 162 |
-| features/supply/src/pages/capa-teep-report/__asis-mapping__.md | mapping | 432 |
+| features/supply/src/pages/capa-teep-report/utils/capaTeepReport.dateColumns.ts | util | 164 |
+| features/supply/src/pages/capa-teep-report/__asis-mapping__.md | mapping | 438 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
@@ -37,35 +37,36 @@
 ## 3. procedures.d.ts 등재 시트
 | sheet | request_keys | response_cursors | sp_hints |
 |---|---|---|---|
-| ASSEMBLY | version versionSeq divisionId siteId plantId factoryId lineId operationId electrodeType programId sheetName debugMode | o_rc1 | SCP0107_GET_CAPA_TEEP_ASSEMBLY SCP0107_GET_CAPA_TEEP_ELTR SCP0104_GET_SPREAD_TITLE PKG_SCP0107 PKG_SCP0104 P_SNAKE |
-| ELTR | version versionSeq divisionId siteId plantId factoryId lineId operationId electrodeType programId sheetName debugMode | o_rc1 | SCP0107_GET_CAPA_TEEP_ASSEMBLY SCP0107_GET_CAPA_TEEP_ELTR SCP0104_GET_SPREAD_TITLE PKG_SCP0107 PKG_SCP0104 P_SNAKE |
-| spreadTitle | fromYyyymm programId sheetName | o_rc1 | SCP0107_GET_CAPA_TEEP_ASSEMBLY SCP0107_GET_CAPA_TEEP_ELTR SCP0104_GET_SPREAD_TITLE PKG_SCP0107 PKG_SCP0104 P_SNAKE |
+| ASSEMBLY | version versionSeq divisionId siteId plantId factoryId lineId operationId electrodeType programId sheetName debugMode | o_rc1 | PKG_SCP0107 P_SCP0107_GET_CAPA_TEEP_ASSEMBLY P_SCP0107_GET_CAPA_TEEP_ELTR P_SCP0107_GET_SPREAD_TITLE PKG_SCP0104 P_SNAKE |
+| ELTR | version versionSeq divisionId siteId plantId factoryId lineId operationId electrodeType programId sheetName debugMode | o_rc1 | PKG_SCP0107 P_SCP0107_GET_CAPA_TEEP_ASSEMBLY P_SCP0107_GET_CAPA_TEEP_ELTR P_SCP0107_GET_SPREAD_TITLE PKG_SCP0104 P_SNAKE |
+| spreadTitle | fromYyyymm programId sheetName | o_rc1 | PKG_SCP0107 P_SCP0107_GET_CAPA_TEEP_ASSEMBLY P_SCP0107_GET_CAPA_TEEP_ELTR P_SCP0107_GET_SPREAD_TITLE PKG_SCP0104 P_SNAKE |
 
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CapaTeepReportForm | onSearch | handleSearch | jsx | features/supply/src/pages/capa-teep-report/CapaTeepReport.tsx | 333 |
-| CapaTeepReportColumnModal | onClose | <arrow> setOpenColumnSetting | jsx | features/supply/src/pages/capa-teep-report/CapaTeepReport.tsx | 363 |
+| CapaTeepReportForm | onSearch | handleSearch | jsx | features/supply/src/pages/capa-teep-report/CapaTeepReport.tsx | 310 |
+| CapaTeepReportColumnModal | onClose | <arrow> setOpenColumnSetting | jsx | features/supply/src/pages/capa-teep-report/CapaTeepReport.tsx | 340 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 103 |
 | CustomDropdown | onChange | <arrow> setSearchParamsWithLineTypeRefresh,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 124 |
-| CustomDropdown | onChange | <arrow> setSearchParamsWithLineTypeRefresh,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 147 |
-| CustomDropdown | onChange | <arrow> setSearchParamsWithLineTypeRefresh,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 170 |
-| CustomDropdown | onChange | <arrow> setSearchParamsWithLineTypeRefresh,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 196 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 226 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 251 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 276 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 299 |
-| CustomDropdown | onChange | <arrow> setSearchParamsWithLineTypeRefresh,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 330 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 355 |
+| CustomDropdown | onChange | <arrow> setSearchParamsWithLineTypeRefresh,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 152 |
+| CustomDropdown | onChange | <arrow> setSearchParamsWithLineTypeRefresh,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 175 |
+| CustomDropdown | onChange | <arrow> setSearchParamsWithLineTypeRefresh,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 205 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 241 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 266 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 291 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 314 |
+| CustomDropdown | onChange | <arrow> setSearchParamsWithLineTypeRefresh,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 346 |
+| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/capa-teep-report/components/CapaTeepReportForm.tsx | 371 |
 | grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/capa-teep-report/components/CapaTeepReportGrid.tsx | 120 |
 | ColumnLayoutModal | onSave | <arrow> applyColumnLayout,settings.map,Number,String,clearFilters,settings.filter | jsx | features/supply/src/pages/capa-teep-report/components/modals/CapaTeepReportColumnModal.tsx | 73 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
-| Grid | 11 |
-| FormItem | 11 |
+| Grid | 10 |
+| FormItem | 10 |
 | CustomDropdown | 10 |
+| Box | 3 |
 | IcGridColumnSetup | 1 |
 | MainTitle | 1 |
 | CapaTeepReportForm | 1 |
@@ -87,20 +88,17 @@
 |---|---|
 | MSG00667 | 1 |
 | MSG01410 | 1 |
-| MSG01044 | 1 |
-| MSG01045 | 1 |
 | MSG01390 | 1 |
 | MSG01052 | 1 |
 | MSG00003 | 1 |
 | LBL01143 | 1 |
 | LBL00001 | 1 |
-| LBL00606 | 1 |
 | LBL00605 | 3 |
 | LBL00038 | 1 |
 | LBL01059 | 1 |
 | LBL00112 | 1 |
-| LBL00053 | 1 |
 | LBL00027 | 1 |
+| LBL00053 | 1 |
 | LBL00015 | 1 |
 | LBL00030 | 1 |
 | LBL00008 | 1 |

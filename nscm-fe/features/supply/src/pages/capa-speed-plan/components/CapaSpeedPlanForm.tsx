@@ -4,7 +4,7 @@ import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
-import { Grid } from '@shared/mui';
+import { Box, Grid } from '@shared/mui';
 import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
 import {
@@ -26,10 +26,12 @@ interface Props {
 /**
  * 조회조건 13필드 (design 02 §1.1 / §5.1).
  *
- * 단 구성(hook #52): `conditions` 9필드(12-column 합 24 = 2단) + `extraConditions` 4필드(3단).
- * **순서는 잠정이다** — AS-IS Designer 의 `LayoutControlItem.Location` 과 `Control.Location` 이 서로
- * 다른 행 배정을 줘 정적 소스만으로 확정할 수 없다(01 §5 확인필요-1 / goal BLK-5 미해소).
- * 02 §1 인벤토리 순서를 채택했고 04 리포트에 "확인필요(사용자 축)"로 남겼다.
+ * 레이아웃 — SCP0105 조회조건 매핑표 순서, 12-column 자동 wrap → 3단. 앞 2단은 항상 노출하고
+ * 3단은 접는다(SearchArea extraConditions, chevron 토글 — 자매 SCP0104 동일 패턴, 사용자 요청
+ * 2026-10-27). 기본 접힘.
+ *   1단(conditions)      Operation group · Item(Basic Nickname/Model 동적) · Div · Plan Month
+ *   2단(conditions)      Ver.(+Plan Type 파생) · Status · Site · Plant
+ *   3단(extraConditions) Building · Line · Operation(동적) · Line Type(동적)
  *
  * 동적 가시성 2규칙의 **조건식 비대칭을 통일하지 않는다**(01 L-01/L-02):
  *   showOperation     = divisionType !== 'ELTR'
@@ -50,6 +52,17 @@ export const CapaSpeedPlanForm = ({ combos, onSearch, onOpenItemPopup, disabled 
   const planType = useCapaSpeedPlanStore(state => state.planType);
 
   const tabId = useTabid();
+
+  // 미저장 편집 이탈 가드 — 그리드를 초기화하는 조회조건 콤보(Division·DivisionType·Version·
+  //   VersionSeq·Status)는 편집중(dirty)이면 MSG00704 confirm 을 통과한 뒤에만 상태를 바꾼다.
+  //   취소 시 store 상태가 그대로라 controlled 콤보가 이전 값으로 복귀하고, 초기화 effect
+  //   (useCapaSpeedPlanConditionEffects (2)(3a)(3b))도 dep 불변이라 돌지 않는다(commit 51d4e9fa 패턴).
+  //   Site/Plant/Building/Line/Operation/LineType cascade 콤보는 그리드를 비우지 않으므로 가드 대상 아님.
+  const guardDirty = (apply: () => void) => {
+    void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+      if (ok) apply();
+    });
+  };
 
   const showOperation = sc.divisionType !== DIVISION_TYPE.ELTR;
   const showElectrodeType =
@@ -76,46 +89,80 @@ export const CapaSpeedPlanForm = ({ combos, onSearch, onOpenItemPopup, disabled 
       onSearch={onSearch}
       conditions={
         <>
-          {/* 1단 — DivisionType(시트 전환축) / Division / Plan Month / Version / Plan Type */}
-          {/* DivisionType 은 라벨이 없다 — AS-IS `lciDivisionType.TextVisible=false`(Designer.cs:700).
-              `LBL00038`("Electrode")은 이 필드의 **선택지 하나**이지 필드명이 아니다. 라벨로 붙이면
-              Electrode/Cell/Module-Pack 3지선다 앞에 "Electrode" 가 찍혀 오해를 만든다.
-              같은 화면의 Plan Type(`TextVisible=false`)과 동일하게 빈 라벨로 둔다. */}
+          {/* 1단 — Operation group / Material / Div / Plan Month */}
+          {/* DivisionType 라벨 = "Operation group"(LBL00027). AS-IS 는 `lciDivisionType.TextVisible=false`
+              로 라벨이 없었으나, TO-BE 조회조건 설계(SCP0105 매핑표)가 필드명 "Operation group" 을
+              부여한다 — 선택지(Electrode/Cell/Module-Pack)가 아니라 공정그룹 축을 가리키는 필드명이다. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label=''
+              label={t('LBL00027', '_Operation group')}
+              labelAlign='right'
               render={() => (
                 <CustomDropdown
                   disabled={disabled}
                   value={sc.divisionType}
                   options={divisionTypeOptions}
                   onChange={(_, picked) =>
-                    setDivisionType((String(picked ?? '') || DIVISION_TYPE.CELL) as DivisionType)
+                    guardDirty(() =>
+                      setDivisionType(
+                        (String(picked ?? '') || DIVISION_TYPE.CELL) as DivisionType
+                      )
+                    )
                   }
                 />
               )}
             />
           </Grid>
+          {/* Item — 라벨이 Operation group(DivisionType)별 동적이다(AS-IS 01 L-03 파리티, 자매 SCP0104
+              동일): Cell/Module-Pack = Basic Nickname(LBL00054) / Electrode = Material(LBL00021).
+              조건은 `showOperation`(= divisionType !== ELTR). AS-IS Electrode 는 Model(LBL00669)이었으나
+              사용자 지시 2026-10-28 로 Electrode 라벨만 Material(LBL00021)로 변경(필드는 항상 노출, 라벨만 전환).
+              입력창 + 팝업 아이콘은 한 덩어리(hook #121 popupSearchField). 선택은 다중(팝업 multiSelect →
+              콤마결합) — CapaSpeedPlanItemPopup 참조. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t('LBL00001', '_Div')}
+              label={showOperation ? t('LBL00054', '_Basic Nickname') : t('LBL00021', '_Material')}
+              labelAlign='right'
+              render={() => (
+                <InputField
+                  fullWidth
+                  className={commonStyles.popupSearchField}
+                  value={sc.itemId}
+                  disabled={disabled}
+                  onChange={event => setSearchCondition({ itemId: event.target.value })}
+                  onDoubleClick={onOpenItemPopup}
+                  InputProps={{
+                    endAdornment: (
+                      <Button
+                        appearance='outlined'
+                        priority='normal'
+                        disabled={disabled}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onOpenItemPopup}
+                      />
+                    ),
+                  }}
+                />
+              )}
+            />
+          </Grid>
+          {/* Div 라벨은 리터럴 'Div' — LBL00001 EN/CN="Div."(마침표)지만 AS-IS·이 화면은 "Div"다.
+              공유 메시지(141화면 사용)라 전역 수정하지 않기로 함(사용자 결정 2026-10-27, SCP0105만) —
+              같은 파일 'Ver.'/'Module/Pack' 리터럴 선례. 정식 LBL 채번 시 t() 로 교체. */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label='Div'
               labelAlign='right'
               render={() => (
                 <CustomDropdown
                   disabled={disabled}
                   value={sc.divisionId}
                   options={combos.divisionOptions}
-                  // Division 변경 = 검색조건(Div·DivisionType 제외) + 그리드 초기화(store setDivision,
-                  //   TO-BE 공통 요건). 편집중(dirty)이면 MSG00704 confirm 후에만 실행, 취소 시
-                  //   controlled 콤보가 이전 Div 로 복귀(commit 51d4e9fa 패턴).
-                  onChange={(_, picked) => {
-                    const next = String(picked ?? '');
-                    void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
-                      if (ok) setDivision(next);
-                    });
-                  }}
+                  // Division 변경 = 검색조건(Div·DivisionType 제외) + 그리드 초기화(store setDivision).
+                  onChange={(_, picked) => guardDirty(() => setDivision(String(picked ?? '')))}
                 />
               )}
             />
@@ -130,36 +177,47 @@ export const CapaSpeedPlanForm = ({ combos, onSearch, onOpenItemPopup, disabled 
                   disabled={disabled}
                   value={sc.version}
                   options={combos.versionOptions}
-                  onChange={(_, picked) => setSearchCondition({ version: String(picked ?? '') })}
+                  onChange={(_, picked) =>
+                    guardDirty(() => setSearchCondition({ version: String(picked ?? '') }))
+                  }
                 />
               )}
-            />
-          </Grid>
-          <Grid size={2}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t('LBL00606', '_Version')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  disabled={disabled}
-                  value={sc.versionSeq}
-                  options={combos.versionSeqOptions}
-                  onChange={(_, picked) => setSearchCondition({ versionSeq: String(picked ?? '') })}
-                />
-              )}
-            />
-          </Grid>
-          {/* Plan Type — AS-IS `txtPlanType` 은 TextVisible=false(라벨 없음) + Enabled=false 인 파생 표시. */}
-          <Grid size={1}>
-            <FormItem
-              className={commonStyles.formItem}
-              label=''
-              render={() => <InputField fullWidth disabled value={planType} />}
             />
           </Grid>
 
-          {/* 2단 — Status / Site / Plant / Building */}
+          {/* 2단 — Version(+Plan Type) / Status / Site / Plant */}
+          {/* Version(Seq) + Plan Type 를 한 칸(size=3)에 Box flex 50:50 으로 묶는다 — 자매 SCP0104/0108
+              패턴(사용자 확정 2026-10-26). size=2+1 로 쪼개면 조회조건 그리드(전 칸 size=3·min-width 290)가
+              뒤틀려 콤보 폭이 들쭉날쭉해진다(사용자 지적 2026-10-27). Version 라벨 "Ver." 는 리터럴
+              (사용자 결정): `SCM_ADM_MSG_M` 에 "Ver." 0건이고 근사코드 LBL00031="Version." 재사용은 표기
+              불일치라 신규 채번 대신 하드코딩(같은 파일 'Module/Pack' 선례). 정식 LBL 채번 시 t() 로 교체.
+              Plan Type 은 조회 파라미터가 아니라 파생 표시다(`txtPlanType.Enabled=false`). */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label='Ver.'
+              labelAlign='right'
+              render={() => (
+                <Box sx={{ display: 'flex', gap: 0.5, width: '100%', minWidth: 0 }}>
+                  <Box sx={{ flex: '1 1 0', minWidth: 0 }}>
+                    <CustomDropdown
+                      disabled={disabled}
+                      value={sc.versionSeq}
+                      options={combos.versionSeqOptions}
+                      onChange={(_, picked) =>
+                        guardDirty(() =>
+                          setSearchCondition({ versionSeq: String(picked ?? '') })
+                        )
+                      }
+                    />
+                  </Box>
+                  <Box sx={{ flex: '1 1 0', minWidth: 0 }}>
+                    <InputField fullWidth disabled value={planType} />
+                  </Box>
+                </Box>
+              )}
+            />
+          </Grid>
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -171,7 +229,9 @@ export const CapaSpeedPlanForm = ({ combos, onSearch, onOpenItemPopup, disabled 
                   value={sc.progressStatus}
                   options={combos.statusOptions}
                   onChange={(_, picked) =>
-                    setSearchCondition({ progressStatus: String(picked ?? '') })
+                    guardDirty(() =>
+                      setSearchCondition({ progressStatus: String(picked ?? '') })
+                    )
                   }
                 />
               )}
@@ -229,6 +289,11 @@ export const CapaSpeedPlanForm = ({ combos, onSearch, onOpenItemPopup, disabled 
               )}
             />
           </Grid>
+        </>
+      }
+      extraConditions={
+        <>
+          {/* 3단 — Building / Line / Operation(동적) / Line Type(동적) */}
           {/* 컨트롤명은 clbFactory 지만 AS-IS 표기는 "Building" 이다 — LBL00008(실측). "Factory" 아님. */}
           <Grid size={3}>
             <FormItem
@@ -254,11 +319,6 @@ export const CapaSpeedPlanForm = ({ combos, onSearch, onOpenItemPopup, disabled 
               )}
             />
           </Grid>
-        </>
-      }
-      extraConditions={
-        <>
-          {/* 3단 — Line / Operation(동적) / Line Type(동적) / Item(팝업) */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -326,41 +386,6 @@ export const CapaSpeedPlanForm = ({ combos, onSearch, onOpenItemPopup, disabled 
                 )}
               />
             )}
-          </Grid>
-          {/* Item — 라벨이 DivisionType 으로 갈린다(01 L-03): Cell/MP = Basic Nickname / ELTR = Model.
-              입력창 + 팝업 아이콘은 한 덩어리로 묶는다(hook #121 popupSearchField). */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={
-                showElectrodeType
-                  ? t('LBL00054', '_Basic Nickname')
-                  : t('LBL00669', '_Model')
-              }
-              labelAlign='right'
-              render={() => (
-                <InputField
-                  fullWidth
-                  className={commonStyles.popupSearchField}
-                  value={sc.itemId}
-                  disabled={disabled}
-                  onChange={event => setSearchCondition({ itemId: event.target.value })}
-                  onDoubleClick={onOpenItemPopup}
-                  InputProps={{
-                    endAdornment: (
-                      <Button
-                        appearance='outlined'
-                        priority='normal'
-                        disabled={disabled}
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onOpenItemPopup} />
-                        }
-                      />
-                    ),
-                  }}
-                />
-              )}
-            />
           </Grid>
         </>
       }

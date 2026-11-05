@@ -1,0 +1,63 @@
+[
+ {
+  "row_id": "V-6c947c4c",
+  "rule_id": "A5",
+  "target": "SCP0020 화면",
+  "same": [
+   "T-6b72d463"
+  ]
+ },
+ {
+  "row_id": "V-c8a74bd1",
+  "rule_id": "B2",
+  "target": "조회조건 Line",
+  "same": []
+ },
+ {
+  "row_id": "V-91f5dc2a",
+  "rule_id": "G5",
+  "target": "조회조건 Model/Nickname",
+  "same": []
+ },
+ {
+  "row_id": "V-56a410c3",
+  "rule_id": "E1",
+  "target": "Packer.PRIORITY (Priority*)",
+  "same": [
+   "V-bee68f3d",
+   "V-694fb5a7"
+  ]
+ },
+ {
+  "row_id": "V-00c36130",
+  "rule_id": "E4",
+  "target": "MSG00043",
+  "same": [
+   "V-c7a15bd8"
+  ]
+ },
+ {
+  "row_id": "T-6b72d463",
+  "rule_id": "A5",
+  "target": "",
+  "folded_into": "V-6c947c4c"
+ },
+ {
+  "row_id": "V-bee68f3d",
+  "rule_id": "E1",
+  "target": "",
+  "folded_into": "V-56a410c3"
+ },
+ {
+  "row_id": "V-694fb5a7",
+  "rule_id": "E1",
+  "target": "",
+  "folded_into": "V-56a410c3"
+ },
+ {
+  "row_id": "V-c7a15bd8",
+  "rule_id": "E4",
+  "target": "",
+  "folded_into": "V-00c36130"
+ }
+]

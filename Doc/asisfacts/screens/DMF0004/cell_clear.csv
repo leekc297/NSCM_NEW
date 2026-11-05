@@ -1,0 +1,9 @@
+﻿grid,src,tgt,src_col,tgt_col,cond,refilled,ref
+siMain,CountryName,Country,COUNTRY_NAME,COUNTRY,"if (siMain.GetText(e.Row, siMain.GetColumnIndex(DefColumns.CountryName)) == """")",,DMF0004_SalesSite.cs:2665 DMF0004_SalesSite.shtMainDataModel_Changed
+siMain,CountryName,SiteId,COUNTRY_NAME,SCM_SITE_ID,"if (siMain.GetText(e.Row, siMain.GetColumnIndex(DefColumns.CountryName)) == """")",,DMF0004_SalesSite.cs:2666 DMF0004_SalesSite.shtMainDataModel_Changed
+siMain,CityName,City,CITY_NAME,CITY,"if (siMain.GetText(e.Row, siMain.GetColumnIndex(DefColumns.CityName)) == """")",,DMF0004_SalesSite.cs:2673 DMF0004_SalesSite.shtMainDataModel_Changed
+siMain,CityName,SiteId,CITY_NAME,SCM_SITE_ID,"if (siMain.GetText(e.Row, siMain.GetColumnIndex(DefColumns.CityName)) == """")",,DMF0004_SalesSite.cs:2674 DMF0004_SalesSite.shtMainDataModel_Changed
+siMain,TeamName,Team,TEAM_NAME,TEAM_ID,,,DMF0004_SalesSite.cs:2379 DMF0004_SalesSite.spdMain_EditChange
+siMain,CountryName,Country,COUNTRY_NAME,COUNTRY,,,DMF0004_SalesSite.cs:2383 DMF0004_SalesSite.spdMain_EditChange
+siMain,CityName,City,CITY_NAME,CITY,,,DMF0004_SalesSite.cs:2387 DMF0004_SalesSite.spdMain_EditChange
+siSub,SoldToCode,ShipToCode,SOLDTO_CODE,SHIPTO_CODE,,,DMF0004_SalesSite.cs:2395 DMF0004_SalesSite.spdSub_EditChange

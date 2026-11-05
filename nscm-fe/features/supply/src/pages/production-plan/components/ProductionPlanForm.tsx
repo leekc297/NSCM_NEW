@@ -280,7 +280,6 @@ export const ProductionPlanForm = ({ onSearch, onItemSearch }: Props) => {
               ),
             }}
             onChange={e => onChange(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && onSearch()}
           />
         )}
       />
@@ -357,23 +356,20 @@ export const ProductionPlanForm = ({ onSearch, onItemSearch }: Props) => {
               )}
             />
           </Grid>
-        </>
-      }
-      // 조회조건 2줄 초과분(Plan 버전/Period)은 접고펼침으로 분리 — DMF0014 동일 패턴(SearchArea
-      //   extraConditions = 접힘 기본, Search 옆 ^ 버튼으로 토글). 필드 순서는 AS-IS 그대로 유지한다.
-      extraConditions={
-        <>
+
+          {/* Plan 버전·Period 는 접고펼침 없이 항상 보이게 둔다(SCP0009·SCP0013 동일, 사용자 지시 2026-11-02).
+              extraConditions 를 넘기지 않아 펼치기 버튼도 없다. */}
           {/* Row2 — Plan-date* / Plan-type* / Seq* — 자매 SCP0013 과 동일 공유 PlanVersionCascade. combined
               단일 입력칸(기본) — 클릭하면 date→type→seq 컬럼 팝업으로 경로 선택, 상위 변경 시 하위 초기화.
-              선택값은 기존과 동일하게 1-요소 배열로 store 에 보존(기본값 effect·filters 호환). 입력칸 고정폭
-              190px + 라벨(140) 수용 size=3 래퍼(SCP0013 동일, 사용자 지시 2026-10-21). */}
+              선택값은 기존과 동일하게 1-요소 배열로 store 에 보존(기본값 effect·filters 호환). 입력칸 고정폭을
+              주지 않아 같은 commonStyles.formItem 필드 칼럼을 채우는 다른 조회조건과 가로폭을 맞춘다(사용자
+              지시 2026-10-30). size=3 래퍼. */}
           <Grid size={3}>
             <PlanVersionCascade
               variant='horizontal'
               labelAlign='right'
               formItemClassName={commonStyles.formItem}
-              label='Plan Date/Type/Seq'
-              inputWidth='190px'
+              label={t(LBL.PLAN_VERSION, '_Plan Date/Type/Seq')}
               levels={planVersionLevels}
               divisionId={sc.divisionId}
               value={planVersionValue}

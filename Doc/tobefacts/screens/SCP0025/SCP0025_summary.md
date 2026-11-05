@@ -1,13 +1,13 @@
 # SCP0025 — To-Be Fact Pack 요약
 
-- page_key: `supply/shipment-plan-fix` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 15 · 엔드포인트 호출 8 (미해결 0, 주석 속 2) · 이벤트 17 · 컴포넌트 사용 23 · 하드코딩 컬럼 2 · 메시지 17
+- page_key: `supply/shipment-plan-fix` · feature: supply · As-is Fact Pack 있음
+- 파일 15 · 엔드포인트 호출 8 (미해결 0, 주석 속 2) · 이벤트 16 · 컴포넌트 사용 23 · 하드코딩 컬럼 2 · 메시지 17
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | component | 252 |
+| features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | component | 256 |
 | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixGrid.tsx | component | 269 |
 | features/supply/src/pages/shipment-plan-fix/hooks/useShipmentPlanFixValidation.ts | hook | 40 |
 | features/supply/src/pages/shipment-plan-fix/index.ts | index | 2 |
@@ -42,11 +42,10 @@
 | CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 111 |
 | CustomDropdown | onChange | <arrow> onPick,String | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 141 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 152 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 201 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 202 |
-| FunctionSearchIcon | onClick | onItemSearch | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 197 |
-| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 228 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 243 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 202 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 198 |
+| PeriodRangePicker | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 222 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixForm.tsx | 246 |
 | g | formatItem | formatHandler | addHandler | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixGrid.tsx | 108 |
 | g | updatedLayout | syncFixedBindings | addHandler | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixGrid.tsx | 138 |
 | g | updatedLayout | applyHeaderHeight | addHandler | features/supply/src/pages/shipment-plan-fix/components/ShipmentPlanFixGrid.tsx | 155 |
@@ -110,7 +109,6 @@
 | kind | snippet | file | line |
 |---|---|---|---|
 | endpoint | admin 동적 메타(SCM_MST_SHEET_COLUMNS 'Shipment Plan Fix' 20행) — mount 1회 fetch(hook #66). Search 시에도 refetch. | features/supply/src/pages/shipment-plan-fix/ShipmentPlanFix.tsx | 85 |
-| code | 부활 방지를 위해 키를 명시적 무동작으로 둔다(skill §3 규칙: 키 생략·false 금지, 명시적 () => undefined). | features/supply/src/pages/shipment-plan-fix/ShipmentPlanFix.tsx | 168 |
 | endpoint | admin SCM_MST_SHEET_COLUMNS('Shipment Plan Fix') 동적 fetch (ui-dynamic-property-management §2.3). 20행 등록 확인. | features/supply/src/pages/shipment-plan-fix/useShipmentPlanFixStore.ts | 30 |
 | jsx | (2) 엑셀 내려받기용 — 사유를 Fix Reason 행의 일자(D_<YYYYMMDD>) pivot 바인딩에도 직접 심는다. | features/supply/src/pages/shipment-plan-fix/utils/shipmentPlanFixDerive.ts | 83 |
 

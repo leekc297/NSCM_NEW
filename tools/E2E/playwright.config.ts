@@ -20,7 +20,10 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'off',
-    viewport: { width: 1600, height: 900 },
+    // 2026-10-31: 1600 폭에서는 SCP0111 처럼 메타 FIXED_FLAG 로 정적 컬럼 21개(1415px)가 전부 고정되는 그리드의 스크롤 영역이 0 에 가까워(client 1383)
+    //   월 컬럼이 렌더되지 않아 D1/E1/H13 동적 컬럼 측정이 불가했다(viewRange c-1~-1). 사용자 모니터(FHD+)에 맞춰 넓게 — 고정 폭 ↔ 뷰포트 경고는 H12 가 따로 낸다
+    //   2026-10-31 2560 은 그리드 프로브·K1·W4c 가 극단적으로 느려져 타임아웃 → FHD(1920×1080). 고정 영역이 가시 폭을 넘는 그리드는 probe.unfreezeIfNeeded 가 측정 동안 고정을 푼다
+    viewport: { width: Number(process.env.E2E_VIEWPORT_W || 1920), height: Number(process.env.E2E_VIEWPORT_H || 1080) },
     locale: 'ko-KR',
   },
   outputDir: path.join(results, 'artifacts'),

@@ -62,6 +62,11 @@ def main():
             break
     head = open(sp, encoding='utf-8', errors='ignore').read()
     user = (re.search(r'계정 (\S+)', head) or [None, ''])[1]
+    if not user:  # 정리 SQL 머리글에 계정이 없으면 E2E 기본 계정 — 빈 값과 비교하면 정상 계정이 '불일치' 로 나온다(2026-11-02 SCP0028 허위 F8)
+        try:
+            user = json.load(open(os.path.join(ROOT, 'tools', 'E2E', 'e2e.config.json'), encoding='utf-8-sig')).get('defaultAccount', '')
+        except (OSError, ValueError):
+            user = ''
     t0 = re.search(r"TO_DATE\('(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d)'", head)
     t0 = datetime.datetime.strptime(t0.group(1), '%Y-%m-%d %H:%M:%S') if t0 else None
     spec = json.load(open(os.path.join(HERE, 'cleanup_spec.json'), encoding='utf-8')).get(mid, {})
@@ -70,7 +75,9 @@ def main():
     res['run'] = {'cleanup_sql': os.path.relpath(sp, ROOT), 'account': user, 'saved_at': t0.strftime('%Y-%m-%d %H:%M:%S') if t0 else '',
                   'tables': {t: len(v) for t, v in backs.items()}}
     # F8
-    if not root:
+    if not user:
+        res['F8'] = {'verdict': 'NOT_RUN', 'note': '저장 계정을 알 수 없음(정리 SQL 머리글·e2e.config 모두 없음)'}
+    elif not root:
         res['F8'] = {'verdict': 'NOT_RUN', 'note': f'루트 테이블 {root_t} 백업 행 없음'}
     elif not any(c in root[0] for c in AUDIT):
         res['F8'] = {'verdict': 'NA', 'note': f'{root_t} 에 감사 컬럼 없음'}
@@ -91,7 +98,9 @@ def main():
         vals = ' · '.join(f"{c}={root[0].get(c, '')}" for c in AUDIT if c in root[0])
         res['F8'] = {'verdict': 'FAIL' if bad else 'PASS', 'note': ('; '.join(dict.fromkeys(bad)) if bad else f"감사 컬럼 = 저장 계정·저장 시각 ({vals})") + f" · {root_t} {len(root)}행"}
     # F7
-    save_sp = next((g['asis_sp'] for g in read_csv(os.path.join(ROOT, 'Doc', 'golden', 'golden_cases.csv')) if g.get('screen') == mid and g.get('kind') == 'SAVE'), '')
+    sys.path.insert(0, HERE); from asis_live import live_golden, asis_of
+    asis = asis_of(mid, sys.argv[sys.argv.index('--asis') + 1] if '--asis' in sys.argv else '')
+    save_sp = next((g['asis_sp'] for g in live_golden(mid, asis, 'SAVE')), '')  # 실행되지 않는 AS-IS 메서드의 저장 SP 제외(2026-10-30 SCP0041)
     tg = asis_targets(save_sp) if save_sp else None
     if not tg:
         res['F7'] = {'verdict': 'NA' if not save_sp else 'NOT_RUN', 'note': '저장 SP 없음' if not save_sp else f'AS-IS 저장 SP 원문 없음({save_sp})'}

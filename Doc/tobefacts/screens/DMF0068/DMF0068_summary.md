@@ -1,6 +1,6 @@
 # DMF0068 — To-Be Fact Pack 요약
 
-- page_key: `demand/demand-manager` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `demand/demand-manager` · feature: demand · As-is Fact Pack 있음
 - 파일 19 · 엔드포인트 호출 8 (미해결 0, 주석 속 1) · 이벤트 24 · 컴포넌트 사용 33 · 하드코딩 컬럼 2 · 메시지 22
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 2건
 
@@ -16,7 +16,7 @@
 | features/demand/src/pages/demand-manager/demand-manager.constants.ts | constants | 124 |
 | features/demand/src/pages/demand-manager/demand-manager.types.ts | types | 78 |
 | features/demand/src/pages/demand-manager/DemandManager.module.scss | style | 79 |
-| features/demand/src/pages/demand-manager/DemandManager.tsx | page | 381 |
+| features/demand/src/pages/demand-manager/DemandManager.tsx | page | 383 |
 | features/demand/src/pages/demand-manager/index.ts | index | 2 |
 | features/demand/src/pages/demand-manager/useDemandManagerStore.ts | store | 203 |
 | features/demand/src/pages/demand-manager/utils/demand-manager.api.ts | api | 64 |
@@ -24,7 +24,7 @@
 | features/demand/src/pages/demand-manager/utils/demand-manager.merge.ts | util | 108 |
 | features/demand/src/pages/demand-manager/utils/demand-manager.months.ts | util | 56 |
 | features/demand/src/pages/demand-manager/utils/demand-manager.save.ts | util | 91 |
-| features/demand/src/pages/demand-manager/utils/demand-manager.validate.ts | util | 87 |
+| features/demand/src/pages/demand-manager/utils/demand-manager.validate.ts | util | 89 |
 | features/demand/src/pages/demand-manager/__asis-mapping__.md | mapping | 105 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
@@ -69,10 +69,10 @@
 | div | onDoubleClick | handleGridDoubleClick | jsx | features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx | 304 |
 | Button | onClick | adoptCurrentSelection | jsx | features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx | 335 |
 | Button | onClick | modalClose | jsx | features/demand/src/pages/demand-manager/components/modals/VersionPopupModal.tsx | 342 |
-| DemandManagerForm | onSearch | handleSearch | jsx | features/demand/src/pages/demand-manager/DemandManager.tsx | 345 |
-| DemandManagerForm | onOpenVersionModal | <arrow> setOpenVersionModal | jsx | features/demand/src/pages/demand-manager/DemandManager.tsx | 346 |
-| DemandManagerForm | onChangeVersion | <arrow> setSearchCondition | jsx | features/demand/src/pages/demand-manager/DemandManager.tsx | 347 |
-| VersionPopupModal | onSelect | <arrow> setSearchCondition | jsx | features/demand/src/pages/demand-manager/DemandManager.tsx | 376 |
+| DemandManagerForm | onSearch | handleSearch | jsx | features/demand/src/pages/demand-manager/DemandManager.tsx | 347 |
+| DemandManagerForm | onOpenVersionModal | <arrow> setOpenVersionModal | jsx | features/demand/src/pages/demand-manager/DemandManager.tsx | 348 |
+| DemandManagerForm | onChangeVersion | <arrow> setSearchCondition | jsx | features/demand/src/pages/demand-manager/DemandManager.tsx | 349 |
+| VersionPopupModal | onSelect | <arrow> setSearchCondition | jsx | features/demand/src/pages/demand-manager/DemandManager.tsx | 378 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

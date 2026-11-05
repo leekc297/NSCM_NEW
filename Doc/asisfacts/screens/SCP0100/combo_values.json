@@ -1,0 +1,33 @@
+{
+ "screen": "SCP0100",
+ "generated": "2026-10-31 03:33:58",
+ "vars": {
+  "dtPlanDate": {
+   "sp": "SCP0100_GET_PLAN_DATE",
+   "code": "",
+   "targets": [
+    "SEARCH:cboPlanDate"
+   ],
+   "ref": "SCP0100_Global_PSI_Report.cs:524 ← SCP0100_Global_PSI_Report.cs:596",
+   "unresolved": "실행 중에만 정해지는 인자: @p_division_id, @p_bucket"
+  },
+  "dtFromSite": {
+   "sp": "SCP0100_GET_SITE",
+   "code": "",
+   "targets": [
+    "SEARCH:clbFromSite"
+   ],
+   "ref": "SCP0100_Global_PSI_Report.cs:552 ← SCP0100_Global_PSI_Report.cs:551",
+   "unresolved": "실행 중에만 정해지는 인자: @p_division_id, @p_bucket"
+  },
+  "dtToSite": {
+   "sp": "SCP0100_GET_SITE",
+   "code": "",
+   "targets": [
+    "SEARCH:clbToSite"
+   ],
+   "ref": "SCP0100_Global_PSI_Report.cs:557 ← SCP0100_Global_PSI_Report.cs:556",
+   "unresolved": "실행 중에만 정해지는 인자: @p_division_id, @p_bucket"
+  }
+ }
+}

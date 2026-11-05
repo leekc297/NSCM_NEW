@@ -7,7 +7,7 @@ import {
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef, type MutableRefObject } from 'react';
+import { useEffect, type MutableRefObject } from 'react';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { DataGrid } from '@shared/components';
@@ -45,7 +45,6 @@ export const InventoryRawGrid = ({ rows, gridRef, gridFilterRef, staticColumns }
   //   게다가 wijmo `set columnGroups` 는 Column 을 통째로 재생성해 `col.aggregate` 를 None 으로
   //   되돌리므로 1회 대입으로는 남지 않는다 → `updatedLayout` 마다 재적용한다(자매 SSP0021
   //   ShipmentPlanDetailGrid 와 동일 처방).
-  const footerHookedRef = useRef(false);
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid || staticColumns.length === 0) return;
@@ -75,21 +74,29 @@ export const InventoryRawGrid = ({ rows, gridRef, gridFilterRef, staticColumns }
       });
     };
 
-    // 합계 셀 서식·배경 — AS-IS 는 ColumnFooter 에만 적용(cs:228-230)하므로 데이터 셀은 건드리지 않는다.
+    // 합계 셀 서식·배경 — AS-IS 는 `BackColor=LightGray` 를 **집계 대상 범위 컬럼(STOCK_QTY~EXPIRATION_QTY)
+    //   에만** 적용한다(design 03 §3 #5, cs:230 "범위 컬럼"). 전체 footer 행이 아니라 집계 컬럼 footer 셀만
+    //   회색이므로 배경 대입을 sumSet 통과 뒤로 둔다 — 비집계 컬럼·"Sum" 라벨 셀은 기본색(AS-IS 패리티,
+    //   사용자 결정 2026-10-30. 공용 표준엔 footer 배경 규칙 없음 → AS-IS 우선). 데이터 셀(ColumnFooter 아님)은 미변경.
     const formatFooter = (sender: FlexGrid, e: FormatItemEventArgs) => {
       if (e.panel.cellType !== CellType.ColumnFooter) return;
-      e.cell.style.backgroundColor = FOOTER_SUM_BACKGROUND;
       if (!sumSet.has(sender.columns[e.col]?.binding ?? '')) return;
+      e.cell.style.backgroundColor = FOOTER_SUM_BACKGROUND;
       const value = e.panel.getCellData(e.row, e.col, false) as unknown;
       if (typeof value === 'number') e.cell.textContent = Globalize.format(value, FOOTER_SUM_FORMAT);
     };
 
     applyAggregates();
-    if (!footerHookedRef.current) {
-      footerHookedRef.current = true;
-      grid.updatedLayout.addHandler(applyAggregates);
-      grid.formatItem.addHandler(formatFooter);
-    }
+    grid.updatedLayout.addHandler(applyAggregates);
+    grid.formatItem.addHandler(formatFooter);
+    // GRID-06: 등록한 핸들러는 cleanup 에서 해제한다 — 언마운트·deps 변경·그리드 재생성 시 누수/중복
+    //   방지. 종전엔 footerHookedRef 로 1회만 등록해 그리드 인스턴스가 새로 만들어지면 재부착되지
+    //   않았다(핸들러는 live grid.rows 를 읽는 안정 클로저라 재등록해도 동작 동일, 자매
+    //   ShipmentPlanDetailGrid 의 removeHandler cleanup 규약과 동일).
+    return () => {
+      grid.updatedLayout.removeHandler(applyAggregates);
+      grid.formatItem.removeHandler(formatFooter);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staticColumns, rows]);
 
@@ -101,6 +108,10 @@ export const InventoryRawGrid = ({ rows, gridRef, gridFilterRef, staticColumns }
       staticColumns={staticColumns}
       allowMerging={AllowMerging.Cells}
       useAggregationRow
+      // 조회 전용 그리드(AS-IS LockColumn, 전 컬럼 INPUT_TP_CD='S'). isReadOnly 를 줘 수정상태(CRUD)
+      //   rowHeader status 컬럼을 노출하지 않는다(DataGrid.tsx:1664 — 읽기전용이면 status 컬럼 미생성).
+      //   자매 조회전용 그리드(ShipmentRequestElectrodeMainGrid 등 "표시전용 isReadOnly")와 동일 규약.
+      isReadOnly
     />
   );
 };

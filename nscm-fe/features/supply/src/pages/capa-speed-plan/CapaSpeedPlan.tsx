@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { IcGridColumnSetup } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
-import { GridAction } from '@foundation/utils';
+// import { GridAction } from '@foundation/utils'; // SCP0105: Insert/Delete 버튼 숨김(2026-10-28)으로 handleDelete 주석처리되어 미사용
 import type { EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
@@ -177,28 +177,24 @@ export const CapaSpeedPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   /**
-   * Insert — **명시적 무동작**. AS-IS `InsertButton()` 본문이 빈 구현이다(cs:1463~1465, R-15).
-   * `hotkeyConfig` 에서 키를 생략하면 공용 SubTitle 의 기본 `addRow` 가 살아나 AS-IS 에 없던
-   * 행 추가가 생기고, `false` 로 주면 버튼이 사라져 시각적으로 달라진다 — 둘 다 오답이다.
-   * 메타에도 `MNU_BTN_CD='INSERT'` 를 등록한다(사용자 확정 2026-09-23, goal.md BLK-6).
+   * Insert/Delete — **버튼 숨김**(사용자 확정 2026-10-28, 2026-09-23 "노출 유지" 결정을 뒤집음).
+   * AS-IS 는 두 버튼을 노출하나 동작이 없다(Insert 는 빈 구현 cs:1463~1465 / Delete 는 신규행('I')만
+   * 처리하는데 이 화면은 행 추가가 없어 실질 무동작 cs:1821~1839). 사용하지 않는 버튼을 노출하지 않기로
+   * 하여 hotkeyConfig 에서 insert/delete 를 false 로 내려 버튼을 제거한다. 과거 핸들러는 근거 보존용으로
+   * 아래에 주석으로 남긴다. 메타(SCM_ADM... MNU_BTN_CD='INSERT'/'DELETE') 등록도 함께 제거해야 한다.
    */
-  const handleInsert = () => undefined;
+  // const handleInsert = () => undefined;
 
-  /**
-   * Delete — AS-IS `DeleteButton()`(cs:1821~1839). 가드 3종(그리드 없음/빈 그리드/행 미선택)은 전부
-   * 무동작이고, 선택행 상태가 `'I'`(신규) 일 때만 로컬 제거한다. 이 화면은 행 추가가 없어 신규행이
-   * 생기지 않으므로 **실질 무동작**이다 — 기존 행이 지워지지 않는 것이 핵심이다(R-27, V-40).
-   */
-  const handleDelete = () => {
-    const grid = gridRef.current;
-    if (!grid) return;
-    if (grid.rows.length === 0) return;
-    if (!grid.selectedRows?.length) return;
-    const selected = grid.selectedRows[0]?.dataItem as Scp0105Row | undefined;
-    if (selected?.CRUD_TYPE !== 'I') return;
-    GridAction.removeRow(grid, true);
-    grid.invalidate();
-  };
+  // const handleDelete = () => {
+  //   const grid = gridRef.current;
+  //   if (!grid) return;
+  //   if (grid.rows.length === 0) return;
+  //   if (!grid.selectedRows?.length) return;
+  //   const selected = grid.selectedRows[0]?.dataItem as Scp0105Row | undefined;
+  //   if (selected?.CRUD_TYPE !== 'I') return;
+  //   GridAction.removeRow(grid, true);
+  //   grid.invalidate();
+  // };
 
   const { handleCellEditEnded } = useCapaSpeedPlanCellEdit({
     gridRef,
@@ -220,7 +216,8 @@ export const CapaSpeedPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   /**
    * hotkeyConfig — `useTabBtnPermissions` 경유 의무(하드코딩 금지, CLAUDE.md §2 체크3).
-   * `insert` 는 **키를 존재시킨 채 명시적 무동작 함수**다(위 handleInsert 주석 참조).
+   * `insert`/`delete` 는 **버튼 숨김**(false). AS-IS 에는 두 버튼이 있으나 동작이 없어, 사용하지 않는
+   * 버튼을 노출하지 않기로 함(사용자 확정 2026-10-28, 2026-09-23 "노출 유지" 결정 뒤집음). 메타 등록도 제거.
    * `manual`/`upload` 는 AS-IS 에 없는 기능이라 false.
    *
    * Edit(AS-IS F2)는 여기 없다 — TO-BE 공통 결정으로 Edit 모드토글은 이식하지 않고 편집 가능 여부는
@@ -228,8 +225,8 @@ export const CapaSpeedPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
    */
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
-    insert: hasButton('INSERT') ? handleInsert : false,
-    delete: hasButton('DELETE') ? handleDelete : false,
+    insert: false,
+    delete: false,
     save: hasButton('SAVE') ? handleSave : false,
     manual: false,
     upload: false,

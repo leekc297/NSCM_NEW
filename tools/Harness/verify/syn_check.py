@@ -62,7 +62,7 @@ def main():
         grantees = {app, 'PUBLIC'} | roles
         app_syn = {r[0]: (r[1], r[2]) for r in q("SELECT SYNONYM_NAME, TABLE_OWNER, TABLE_NAME FROM DBA_SYNONYMS WHERE OWNER=:o", o=app)}
         pub_syn = {r[0]: (r[1], r[2]) for r in q("SELECT SYNONYM_NAME, TABLE_OWNER, TABLE_NAME FROM DBA_SYNONYMS WHERE OWNER='PUBLIC' AND TABLE_OWNER IN ('SCM_MGR','FP_MGR','INF_MGR','ENG_SCP','SCMD_MGR')")}
-        app_obj = {r[0] for r in q("SELECT OBJECT_NAME FROM DBA_OBJECTS WHERE OWNER=:o", o=app)}
+        app_obj = {r[0] for r in q("SELECT OBJECT_NAME FROM DBA_OBJECTS WHERE OWNER=:o AND OBJECT_TYPE <> 'SYNONYM'", o=app)}  # 앱 계정의 '시노님'은 자기 객체가 아니다 — 연쇄를 따라 대상 객체 권한까지 봐야 한다(2026-10-29 SCM_LINE_HIERARCHY_CPS_V_SN 허위 OK)
         owner_obj = {}  # SCM_MGR 이름공간(테이블·뷰·패키지·함수·시노님) — 콤보 SQL 토큰 중 '객체 이름' 판별용
         for n, t, st in q("SELECT OBJECT_NAME, OBJECT_TYPE, STATUS FROM DBA_OBJECTS WHERE OWNER=:o AND OBJECT_TYPE IN ('TABLE','VIEW','PACKAGE','PROCEDURE','FUNCTION','SYNONYM','SEQUENCE','MATERIALIZED VIEW','TYPE')", o=owner):
             owner_obj.setdefault(n, (t, st))
@@ -121,6 +121,25 @@ def main():
                 callee = r['pkg'] or r['proc'].split('.')[0]
                 v, path, tgt = resolve(callee, 'EXEC')
                 rows.append({'menu_id': menu, 'kind': 'PROC', 'source': f"{r['sheet']}/{r['btn']}", 'name': r['proc'], 'resolved': tgt, 'verdict': v, 'path': path, 'error_if_called': {'SYN_MISSING': 'PLS-00201 / ORA-06550', 'PRIV_MISSING': 'PLS-00201 / ORA-01031', 'TARGET_MISSING': 'ORA-00980', 'INVALID': 'ORA-04063 / ORA-06508'}.get(v, '')})
+            # ①-b 메타(CR-076, 2026-10-29): 메뉴·PROC_M(SEARCH)·SHEET_COLUMNS 가 없으면 화면이 뜨지도/조회되지도 않는다 → META_MISSING(차단)
+            menus_meta = {m['mnu_id'].upper() for m in rd('menu.csv') if (m.get('use_yn') or 'Y') != 'N'}
+            if menu not in menus_meta:
+                rows.append({'menu_id': menu, 'kind': 'META', 'source': 'SCM_ADM_MNU_M', 'name': f'MENU {menu}', 'resolved': '', 'verdict': 'META_MISSING', 'path': '메뉴 메타(SCM_ADM_MNU_M) 에 이 화면 행이 없음(또는 USE_YN=N)', 'error_if_called': '메뉴 미노출 · 화면 진입 불가'})
+            pm_menu = [x for x in pm if x['menu_id'].upper() == menu and x.get('proc') and (x.get('use_yn') or 'Y') != 'N']
+            if not pm_menu:
+                rows.append({'menu_id': menu, 'kind': 'META', 'source': 'SCM_ADM_PROC_M/API_M', 'name': f'PROC_M {menu}', 'resolved': '', 'verdict': 'META_MISSING', 'path': '이 화면의 PROC_M/API_M 배선 행이 없음', 'error_if_called': '조회·저장 call-proc 전부 실패'})
+            elif not any((x.get('btn') or '').upper().startswith('SEARCH') for x in pm_menu):
+                rows.append({'menu_id': menu, 'kind': 'META', 'source': 'SCM_ADM_PROC_M', 'name': f'PROC_M {menu} SEARCH', 'resolved': '', 'verdict': 'META_MISSING', 'path': 'SEARCH 버튼 PROC_M 배선 없음 — 조회 불가', 'error_if_called': '조회 call-proc 실패'})
+            sc_rows = [x for x in rd('sheet_columns.csv') if (x.get('program_id') or '').upper() == menu and (x.get('valid_yn') or 'Y') != 'N']
+            # SHEET_COLUMNS — 시트별 판정은 룩업 시트(calendar·routeCnt·site 등 컬럼 메타 없음이 정상)와 구분할 근거가 메타에 없어 하지 않는다 → 화면 전체에 컬럼 메타가 0행일 때만 META_MISSING(2026-10-29)
+            if pm_menu and any((x.get('btn') or '').upper().startswith('SEARCH') for x in pm_menu) and not sc_rows:
+                rows.append({'menu_id': menu, 'kind': 'META', 'source': 'SCM_MST_SHEET_COLUMNS', 'name': f'SHEET_COLUMNS {menu}', 'resolved': '', 'verdict': 'META_MISSING', 'path': '이 화면(PROGRAM_ID)의 컬럼 메타가 0행 — 그리드 컬럼 0', 'error_if_called': '그리드 비어 있음·titleset 실패'})
+            # INVALID 패키지는 컴파일 오류 첫 줄을 붙인다(DB 객체 오류를 CheckList 에 그대로 보이게)
+            for rr in rows:
+                if rr['verdict'] == 'INVALID' and rr.get('resolved'):
+                    ow_, nm_ = (rr['resolved'].split('.') + [''])[:2]
+                    er = q("SELECT LINE, POSITION, TEXT FROM DBA_ERRORS WHERE OWNER=:o AND NAME=:n AND TYPE IN ('PACKAGE BODY','PACKAGE','PROCEDURE','FUNCTION','VIEW') ORDER BY SEQUENCE FETCH FIRST 1 ROWS ONLY", o=ow_, n=nm_)
+                    if er: rr['path'] = (rr['path'] + f" · 컴파일 오류 L{er[0][0]}:{er[0][1]} {str(er[0][2])[:120]}")
             # ② 콤보 SQL — 화면 FE 소스에 쓰인 콤보 ID + 셀 콤보 메타
             ids = set()
             page = None

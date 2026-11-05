@@ -1,0 +1,60 @@
+﻿menu_id,sheet,column,label,asis_halign,asis_ref,tobe_program,tobe_sheet,tobe_halign,tobe_source,verdict,note
+SCP0084,Long Term Stock,AMOUNT,Amount,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,AMOUNT_KRW,AMOUNT KRW,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0084,Long Term Stock,AMOUNT_XLS,Amount,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0084,Long Term Stock,CHARG,CHARG,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0084,Long Term Stock,CURRENCY,Currency,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS center ↔ TO-BE center
+SCP0084,Long Term Stock,DEVALUATION_AGE,Devaluation Age,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS center ↔ TO-BE center
+SCP0084,Long Term Stock,DIVISION_ID,DIV,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS center ↔ TO-BE center
+SCP0084,Long Term Stock,ENDING_STOCK_CONVERSION_QTY,Q'ty(Cell),R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0084,Long Term Stock,ENDING_STOCK_QTY,Q'ty(All),R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0084,Long Term Stock,EXHT_TP_CD,소진방안 유형,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,EXHT_TP_CTN,소진방안 상,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,EXTH_TP_CTN,EXTH_TP_CTN,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,,메타 SCP0113/BOH Long-Term Stock,NA,TO-BE SCP0113/BOH Long-Term Stock 에 컬럼 없음 — 표시 구성(A5)에서 판정
+SCP0084,Long Term Stock,EX_TO_BAMT,Exchange Rate,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,GPLM_CELL_CONVERSION_FACTOR,GPLM Cell Conversion factor,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,GPLM_CELL_MODEL,GPLM Cell Model,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,ITEM_ID,Material,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,ITEM_NAME,Description,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,ITEM_TYPE,Item Type,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,ITEM_UOM,Unit,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS center ↔ TO-BE center
+SCP0084,Long Term Stock,LEVEL_1_NAME,MDM class_Lv1,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,LEVEL_2_NAME,MDM class_Lv2,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,LEVEL_3_NAME,MDM class_Lv3,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,LEVEL_4_NAME,MDM class_Lv4,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,LONG_TERM_STOCK_AMOUNT,Amount(KRW),R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,LONG_TERM_STOCK_AMOUNT_XLS,Amount(KRW),R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0084,Long Term Stock,LONG_TERM_STOCK_QTY,Quantity,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,LONG_TERM_STOCK_QTY_XLS,Quantity,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0084,Long Term Stock,LONG_TERM_TYPE,Long term Type,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS center ↔ TO-BE center
+SCP0084,Long Term Stock,MDM_NICK_NAME,MDM Project Nick name,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,MEMO,Memo,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,NO_USAGE_IN_3M,No usage in 3M,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0084,Long Term Stock,OCCR_RSN_CD,발생사유 유형,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,OCCR_RSN_CD_ATTRIBUTE1,Test OCC_RSN_CD,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,,메타 SCP0113/BOH Long-Term Stock,NA,TO-BE SCP0113/BOH Long-Term Stock 에 컬럼 없음 — 표시 구성(A5)에서 판정
+SCP0084,Long Term Stock,OCCR_RSN_CTN,발생사유 상세,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,PIC,PIC,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,PLANT_DESCRIPTION,Plant Site,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,PLANT_ID,Plant,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS center ↔ TO-BE center
+SCP0084,Long Term Stock,PROCESS_DETAIL,Material Group,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,PROCESS_GROUP,Process Group,L,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,L,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS left ↔ TO-BE left
+SCP0084,Long Term Stock,QTY_1,QTY_1,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,QTY_10,QTY_10,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,QTY_11,QTY_11,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,QTY_12,QTY_12,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,QTY_2,QTY_2,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,QTY_3,QTY_3,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,QTY_4,QTY_4,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,QTY_5,QTY_5,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,QTY_6,QTY_6,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,QTY_7,QTY_7,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,QTY_8,QTY_8,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,QTY_9,QTY_9,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,SCP_EXTRA_SPEC,Extra Spec,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS center ↔ TO-BE center
+SCP0084,Long Term Stock,UNIT_PRICE,Unit Price,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,UNIT_PRICE_KRW,Unit Price(KRW),R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS right ↔ TO-BE right
+SCP0084,Long Term Stock,UNIT_PRICE_KRW_XLS,Unit Price(KRW),R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0084,Long Term Stock,UNIT_PRICE_XLS,Unit Price,R,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,R,메타 SCP0113/BOH Long-Term Stock,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0084,Long Term Stock,VALUATION_CLASS,Valuation class,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS center ↔ TO-BE center
+SCP0084,Long Term Stock,YYYYMM,YY.MM,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,PASS,AS-IS center ↔ TO-BE center
+SCP0084,Long Term Stock,YYYYMM_VAL,YYYYMM_VAL,C,META SCM_MST_SHEET_COLUMNS(SCP0084/Long Term Stock),SCP0113,BOH Long-Term Stock,C,메타 SCP0113/BOH Long-Term Stock,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님

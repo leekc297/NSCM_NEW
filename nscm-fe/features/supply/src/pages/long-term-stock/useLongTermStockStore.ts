@@ -21,6 +21,9 @@ interface State {
   // Division 권한 게이트(R8, cs:146~147) — Division_SCP 결과 0건. Form 이 콤보 조회로 판정해 기록,
   //   page 가 조회 액션(SubTitle search hotkey) 차단에 사용(usrLayoutControl2 Enabled=false 대응).
   noDivisionAuth: boolean;
+  // 권한 Division 코드(Form 이 Division 콤보 로드 후 세팅) — setFilters 가 'ALL' 을 이 코드 열거로
+  //   펼쳐 조회한다(권한 밖 division 누수 차단, setFilters 주석 참조).
+  authDivisions: string[];
 }
 
 interface Action {
@@ -30,6 +33,7 @@ interface Action {
   setFilters: () => void;
   clearFilters: () => void;
   setNoDivisionAuth: (value: boolean) => void;
+  setAuthDivisions: (codes: string[]) => void;
   fetchStaticColumns: () => Promise<void>;
   // 저장된 조회조건(F6 Condition) 불러오기 — Month 제외(월범위/기본값 로직이 소유). mount 1회.
   loadSavedCondition: () => Promise<void>;
@@ -47,6 +51,7 @@ const initState: State = {
   filters: {},
   staticColumns: [],
   noDivisionAuth: false, // 콤보 미조회 상태 기본 허용(divisions undefined 동안 조회 미차단)
+  authDivisions: [],
 };
 
 export const useLongTermStockStore = createPersistedStoreWithTab<State & Action>(
@@ -74,10 +79,20 @@ export const useLongTermStockStore = createPersistedStoreWithTab<State & Action>
       set(state => {
         const c = get().searchParams;
         const csv = (v: string): string => (v === 'ALL' ? '' : v);
+        // Division 은 'ALL'/미선택을 권한 Division 코드로 '전개'해 보낸다 — AS-IS GetCheckedListValue
+        //   2-arg(SCP0084_LongTermStock.cs L294)가 'ALL'을 dtMyDivision(권한) 코드로 열거한 것과 등가.
+        //   리터럴 ''(무필터)로 보내면 GET SP 가 권한 밖 division 까지 반환한다(제한 계정 권한 우회,
+        //   SCP0001·SSP0005 선례, 실측 2026-10-30). 표시용 searchParams.divisionId 는 'ALL' 유지.
+        //   plant/longTermType 은 division 게이트/전역이라 ''(무필터)로 둬도 결과 동일.
+        const picked = c.divisionId
+          .split(',')
+          .map(s => s.trim())
+          .filter(x => x !== '' && x.toUpperCase() !== 'ALL');
+        const divisionId = picked.length > 0 ? picked.join(',') : get().authDivisions.join(',');
         state.filters = {
           [SHEETS.MAIN]: {
             yyyymm: c.month, // p_yyyymm
-            divisionId: csv(c.divisionId), // p_division_id (콤마 다중, 전체='')
+            divisionId, // p_division_id (ALL=권한 division 코드 열거)
             plantId: csv(c.plantId), // p_plant_id (콤마 다중, 전체='')
             longTermTypeCode: csv(c.longTermTypeCode), // p_long_term_type_code (콤마 다중, 전체='')
             debugMode: 'F', // debug_mode
@@ -92,6 +107,10 @@ export const useLongTermStockStore = createPersistedStoreWithTab<State & Action>
     setNoDivisionAuth: value =>
       set(state => {
         state.noDivisionAuth = value;
+      }),
+    setAuthDivisions: codes =>
+      set(state => {
+        if (state.authDivisions.join(',') !== codes.join(',')) state.authDivisions = codes;
       }),
     // 컬럼 메타 동적 fetch — SCM_MST_SHEET_COLUMNS(admin) 변경 즉시 반영(ui-category hook, 하드코딩 금지).
     fetchStaticColumns: async () => {

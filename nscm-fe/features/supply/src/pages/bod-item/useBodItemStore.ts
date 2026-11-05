@@ -4,6 +4,7 @@ import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { ADMIN_SHEET_NAME, ALL, MENU_ID, SHEETS } from './bod-item.constants';
 import type { SearchParamProps } from './bod-item.types';
+import { resolveDivisionQueryValue } from './utils/bod-item.util';
 
 type FiltersBySheet = {
   [SHEETS.BOD_ITEM]?: ProcRequest<MENU_ID, SHEETS.BOD_ITEM>;
@@ -16,6 +17,9 @@ interface BodItemState {
   initialized: boolean;
   isOpenSearchArea: boolean;
   searchParams: SearchParamProps;
+  // 권한 Division 코드(BodItemForm 이 Division 콤보 로드 후 세팅) — setFilters 가 'ALL' 을 이 코드
+  //   열거로 펼쳐 조회한다(권한 밖 Division 누수 차단, 아래 setFilters 주석 참조).
+  allowedDivisionIds: string[];
   filters: FiltersBySheet;
   staticColumns: StaticColumnsBySheet;
 }
@@ -24,7 +28,8 @@ interface BodItemAction {
   reset: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
-  setFilters: () => void;
+  setAllowedDivisionIds: (ids: string[]) => void;
+  setFilters: (sheet: SHEETS) => void;
   fetchStaticColumns: () => Promise<void>;
 }
 
@@ -45,6 +50,7 @@ const initState: BodItemState = {
   initialized: false,
   isOpenSearchArea: true,
   searchParams: initSearchParams,
+  allowedDivisionIds: [],
   filters: {},
   staticColumns: {
     [SHEETS.BOD_ITEM]: [],
@@ -93,14 +99,31 @@ export const useBodItemStore = createPersistedStoreWithTab<BodItemState & BodIte
     },
     // bodItem GET 은 planGroupId 미전달(AS-IS 메인 SP 주석처리, 02 §5.3 — 비기능 유지),
     // Excluded GET 만 planGroupId 를 받는다(PROC_M 실측).
-    setFilters: () => {
+    // AS-IS FindButton(cs:414-432)은 활성 시트 하나만 조회한다(ActiveSheetIndex==0 → GET_BOD_ITEM,
+    //   아니면 GET_BOD_EXCLUDED_ITEM) — 두 시트를 동시에 조회하지 않는다. 반대 시트의 필터는 건드리지
+    //   않고 그대로 둔다(사용자 리포트 2026-10-29: Search 시 두 탭이 같이 조회되는 문제 수정).
+    setAllowedDivisionIds: ids => {
+      set(state => {
+        state.allowedDivisionIds = ids;
+      });
+    },
+    setFilters: sheet => {
       set(state => {
         const sp = get().searchParams;
-        const base = buildBaseFilter(sp);
-        state.filters = {
-          [SHEETS.BOD_ITEM]: base,
-          [SHEETS.BOD_EXCLUDED]: { ...base, planGroupId: sp.planGroupId },
+        // Division 'ALL'(미조작 기본값)은 권한 Division 코드 열거로 펼쳐 조회한다 — 'ALL' 센티널을
+        //   그대로 보내면 조회 SP 가 무필터(DB 전체 Division)로 풀어 권한 밖까지 조회된다(AS-IS
+        //   GetCheckedListValue(dtMyDivision,…) 2-arg 등가, utils/bod-item.util.ts). 표시용
+        //   searchParams.divisionId 는 'ALL' 로 둔다. from/to Site·Plan Group 은 Division 게이트라
+        //   'ALL'(무필터)이어도 결과 동일 → 그대로 둔다(자매 SCP0007 BOD 와 동일 판정).
+        const base = {
+          ...buildBaseFilter(sp),
+          divisionId: resolveDivisionQueryValue(sp.divisionId, get().allowedDivisionIds),
         };
+        if (sheet === SHEETS.BOD_EXCLUDED) {
+          state.filters[SHEETS.BOD_EXCLUDED] = { ...base, planGroupId: sp.planGroupId };
+        } else {
+          state.filters[SHEETS.BOD_ITEM] = base;
+        }
       });
     },
     // 컬럼 메타는 admin(SCM_MST_SHEET_COLUMNS)에서 동적 fetch — 하드코딩 금지(#65/#66).

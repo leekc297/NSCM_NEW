@@ -1,0 +1,400 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-10-30T12:27:41+09:00",
+ "producer": "run_verify",
+ "id": "SCP0020",
+ "skip_e2e": true,
+ "started": "2026-10-30 12:16:57",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-6c947c4c",
+   "class": "A5",
+   "msg": "SCP0020 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 07:43"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c8a74bd1",
+   "class": "B2",
+   "msg": "조회조건 Line",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-30 07:43"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-91f5dc2a",
+   "class": "G5",
+   "msg": "조회조건 Model/Nickname",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC popup_args_check (AS-IS 팝업 인자 ↔ TO-BE 모달 전달값)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-56a410c3",
+   "class": "E1",
+   "msg": "Packer.PRIORITY (Priority*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-30 07:43"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-bee68f3d",
+   "class": "E1",
+   "msg": "Plant.PRIORITY (Priority*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-30 07:43"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-694fb5a7",
+   "class": "E1",
+   "msg": "Tact Time.PRIORITY (Priority*)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-30 07:43"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-00c36130",
+   "class": "E4",
+   "msg": "MSG00043",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 07:43"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c7a15bd8",
+   "class": "E4",
+   "msg": "MSG00043",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 07:43"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-eeed5f03",
+   "class": "B8",
+   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 07:43"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-5e4e2a09",
+   "class": "G5",
+   "msg": "[DMF0003 결함 유형] Model 팝업(sMdmActive_Sw)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-73c4ec0b",
+   "class": "G5",
+   "msg": "[DMF0021 결함 유형] 신규 행 Sales Site·Project 팝업·Model 후보·Team 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-e92ff152",
+   "class": "G5",
+   "msg": "[DMF0005 결함 유형] Model 팝업 조회",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-c911e5d7",
+   "class": "A5",
+   "msg": "[DMF0082 결함 유형] Project Name 컬럼",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-1fabe562",
+   "class": "G5",
+   "msg": "[SCP0006 결함 유형] Capa New Model 팝업 조건(Group/Plant)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-fa89dba1",
+   "class": "E1",
+   "msg": "[SCP0007 결함 유형] Additional Lead Time",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f7417c59",
+   "class": "G5",
+   "msg": "[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item Popup 열기 · Model 팝업 사전 조건 activeFlag 미전달(사용 중지 모델 포함)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-3c4be550",
+   "class": "B8",
+   "msg": "Team 컬럼(MKT FCST 조회·신규행)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 07:43"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-274428ff",
+   "class": "A5",
+   "msg": "2 조회 · btnItemId / txtItemId",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-8356a25c",
+   "class": "A5",
+   "msg": "3 그리드 · spdExcept",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-c3a11315",
+   "class": "A5",
+   "msg": "SmartColMerge · 9",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-800a4bd1",
+   "class": "A5",
+   "msg": "COMMON:UC-01 · 필터링 상태에서 신규행 Insert 시 필터를 유지한 채 추가 행이 보이도록 (keepRowVisibleUnderFilter ",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-e66888ba",
+   "class": "A5",
+   "msg": "COMMON:UC-05 · Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-27903ee5",
+   "class": "A5",
+   "msg": "COMMON:UC-07 · 필터가 걸린 상태에서 재조회해도 조회되고 필터도 그대로 적용",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-539108ed",
+   "class": "X-ROW",
+   "msg": "SCP0020_TactTime.InitSpread",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-6b72d463",
+   "class": "A5",
+   "msg": "OPERATION_NAME / Operation",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-30 07:43"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-867daa01",
+   "class": "X-ROW",
+   "msg": "SCP0020_TactTime.SaveData_Except",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-b51d2f1b",
+   "class": "X-ROW",
+   "msg": "SCP0020_TactTime.SaveData_Except_Packer",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9808fe46",
+   "class": "X-ROW",
+   "msg": "SCP0020_TactTime.SaveData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-2e82b769",
+   "class": "X-ROW",
+   "msg": "SCP0020_TactTime.SaveData_Packer",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-9526ae01",
+   "class": "X-ROW",
+   "msg": "SCP0020_TactTime.btnItemId_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "summary": {
+  "rows": 1874,
+  "PASS": 715,
+  "FAIL": 30,
+  "판정필요": 24,
+  "미검증": 47,
+  "해당없음": 1058,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 1092,
+   "없음(미검증)": 47,
+   "기계(상속·집계)": 699,
+   "사람": 12,
+   "없음(판정 대기)": 24
+  },
+  "fail_listed": 30
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0020_TactTimeOsp_CheckList_v17.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0020_TactTimeOsp_ActionItemList_v16.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  }
+ ],
+ "note": "E2E 미실행(--skip-e2e) — E2E 행은 이전 결과 또는 미검증"
+}

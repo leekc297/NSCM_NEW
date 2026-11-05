@@ -1,0 +1,148 @@
+{
+ "id": "DMF0006",
+ "asis": "DMF0006",
+ "at": "2026-11-05 05:47:10",
+ "has_asis": true,
+ "tobe_cols": 18,
+ "buttons": [
+  "DELETE",
+  "INSERT",
+  "SAVE",
+  "SEARCH"
+ ],
+ "env": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "patterns": {
+  "p_lang": {
+   "rows": 3,
+   "why_not": []
+  },
+  "p_formdl": {
+   "rows": 0,
+   "why_not": [
+    "Excel Form 버튼 없음(AS-IS Text · btn_auth FORM_DATA)"
+   ]
+  },
+  "p_insertat": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_delete": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 삭제가 신규 행만(DeleteButton 258 guard == StringI) → 기존 행 D 저장 대상 아님"
+   ]
+  },
+  "p_combo": {
+   "rows": 16,
+   "why_not": []
+  },
+  "p_decimal": {
+   "rows": 0,
+   "why_not": [
+    "cell_rules.csv 없음(소수 자릿수 사실 없음)"
+   ]
+  },
+  "p_reqfp": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_blank_save": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_dirty": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 이벤트 핸들러에 신규 행(FlagI/StringI) 검사 메시지 없음 · 기능 버튼 없음"
+   ]
+  },
+  "p_clear": {
+   "rows": 0,
+   "why_not": [
+    "cell_clear.csv 없음"
+   ]
+  },
+  "p_dyn": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 동적 기간 칸(W_/M_/D_ 접두 검사) 없음"
+   ]
+  },
+  "p_toggle": {
+   "rows": 0,
+   "why_not": [
+    "컬럼을 다시 만드는 조회조건(SetSpreadColumn 호출 핸들러) 없음"
+   ]
+  },
+  "p_iscombo": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_baddate": {
+   "rows": 0,
+   "why_not": [
+    "신규 행 편집 날짜 칸 없음"
+   ]
+  },
+  "p_modins": {
+   "rows": 0,
+   "why_not": [
+    "기존 행 편집 글자 칸 없음"
+   ]
+  },
+  "p_popfill": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 더블클릭 팝업 뒤 다른 칸 채움 없음(또는 신규 행 편집 칸 아님)"
+   ]
+  },
+  "p_samekey": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 변경 핸들러의 같은 키 행 동반 갱신 없음"
+   ]
+  },
+  "p_colvis": {
+   "rows": 2,
+   "why_not": []
+  },
+  "p_btnvis": {
+   "rows": 0,
+   "why_not": []
+  },
+  "p_sumtoggle": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS chkSum(Sum) 없음"
+   ]
+  },
+  "p_divroundtrip": {
+   "rows": 0,
+   "why_not": [
+    "일부 Division 칸 중 AS-IS 기본 표시 · TO-BE 숨김 불가 칸 없음(화면 Division [])"
+   ]
+  }
+ },
+ "auth_drop": [],
+ "files": {
+  "scenario_expect.csv": {
+   "rows": 23,
+   "used": 23
+  },
+  "doc_ui_expect.csv": {
+   "rows": 2,
+   "used": 2
+  },
+  "sum_toggle_expect.csv": {
+   "rows": 0,
+   "used": 0
+  }
+ },
+ "rows": 25,
+ "rows_used": 25,
+ "dup_of_hand": 0
+}

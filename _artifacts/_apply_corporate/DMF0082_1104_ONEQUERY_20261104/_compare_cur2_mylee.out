@@ -1,0 +1,52 @@
+PKG_DMF0082: [('PACKAGE', 'VALID', '2026-10-09 13:38:31'), ('PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')]
+PKG_DMF0082_1104: [('PACKAGE', 'VALID', '2026-11-04 16:00:18'), ('PACKAGE BODY', 'VALID', '2026-11-04 17:39:23')]
+=== cur2_mylee env=['zioui1', 'localhost', '2026-11-04 17:45:07'] period=20261101~20270430 A=PKG_DMF0082 B=PKG_DMF0082_1104 users=minyonglee1 divs=40,81,82 scen=['current', 'filters'] gtt=True
+--- minyonglee1 div40 표본 {'site': 'Lenovo_HK_HKG', 'item_full': 'MCCM348014A3', 'cust': 'Lenovo', 'biz': 'CELL', 'project': 'Lenovo', 'owner': 'Lia Yun', 'team': '58520274', 'plant': None, 'sender': None, 'item': 'CM348'} 버전 {'MF_W': 'MF_W_20261027_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20261104_V001', 'MF_D': 'MF_D_20261026_V001'}
+17:46:21 minyonglee1 div40 Current                                  FAIL rows=  7619 A  66.22s B  67.87s
+      cur1 rows 7619/7619 cols 432/432 srt True ord False
+17:49:33 minyonglee1 div40 Current site=Lenovo_HK_HKG               PASS rows=   468 A   1.68s B   1.67s
+17:49:39 minyonglee1 div40 Current item=CM348                       FAIL rows=  1071 A   6.04s B   6.23s
+      cur1 rows 1071/1071 cols 432/432 srt True ord False
+17:49:59 minyonglee1 div40 Current cust=Lenovo                      PASS rows=  1392 A   2.71s B   2.86s
+17:50:09 minyonglee1 div40 Current biz=CELL                         FAIL rows=  5655 A  52.56s B  56.74s
+      cur1 rows 5655/5655 cols 432/432 srt True ord False
+17:52:43 minyonglee1 div40 Current project=Lenovo                   PASS rows=  1392 A   2.73s B   2.93s
+17:52:54 minyonglee1 div40 Current owner=Lia Yun                    PASS rows=  1401 A   2.68s B   3.21s
+17:53:06 minyonglee1 div40 Current team=58520274                    FAIL rows=  2439 A   9.51s B   9.95s
+      cur1 rows 2439/2439 cols 432/432 srt True ord False
+17:53:44 minyonglee1 div40 Current sender=NOSUCH                    PASS rows=     0 A  61.45s B  60.72s  ⚠ 0행(미실증)
+17:55:51 minyonglee1 div40 Current qty=Y                            FAIL rows=  1718 A  61.70s B  63.39s
+      cur1 rows 1718/1718 cols 432/432 srt True ord False
+--- minyonglee1 div81 표본 {'site': 'BMW_US_SPA', 'item_full': 'ACHP2005I-A1', 'cust': 'A18BW2003', 'biz': 'CELL', 'project': 'A18BW2003', 'owner': 'BYUNGCHANG PARK', 'team': '70000347', 'plant': 'WA00-P', 'sender': None, 'item': 'HP200'} 버전 {'MF_W': 'MF_W_20261028_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20261030_V001', 'MF_D': 'MF_D_20261026_V001'}
+17:58:32 minyonglee1 div81 Current                                  FAIL rows=  8042 A  11.75s B  23.73s
+      cur1 rows 8042/8042 cols 432/432 srt False ord False
+18:00:51 minyonglee1 div81 Current site=BMW_US_SPA                  FAIL rows=   387 A   2.02s B   1.85s
+      cur1 rows 387/387 cols 432/432 srt False ord False
+18:01:02 minyonglee1 div81 Current item=HP200                       FAIL rows=   430 A   1.68s B   1.28s
+      cur1 rows 430/430 cols 432/432 srt False ord False
+18:01:11 minyonglee1 div81 Current cust=A18BW2003                   PASS rows=     0 A   1.53s B   1.05s  ⚠ 0행(미실증)
+18:01:15 minyonglee1 div81 Current biz=CELL                         FAIL rows=   146 A   1.72s B   1.29s
+      cur1 rows 146/146 cols 432/432 srt False ord False
+18:01:22 minyonglee1 div81 Current project=A18BW2003                FAIL rows=  1337 A   3.31s B   3.80s
+      cur1 rows 1337/1337 cols 432/432 srt False ord False
+18:01:52 minyonglee1 div81 Current owner=BYUNGCHANG PARK            FAIL rows=  1623 A   3.40s B   4.02s
+      cur1 rows 1623/1623 cols 432/432 srt False ord False
+18:02:19 minyonglee1 div81 Current team=70000347                    FAIL rows=  2883 A   4.40s B   5.89s
+      cur1 rows 2883/2883 cols 432/432 srt False ord False
+18:03:12 minyonglee1 div81 Current plant=WA00-P                     FAIL rows=  5257 A   7.79s B  12.29s
+      cur1 rows 5257/5257 cols 432/432 srt False ord False
+18:05:11 minyonglee1 div81 Current sender=NOSUCH                    PASS rows=     0 A   4.25s B   5.42s  ⚠ 0행(미실증)
+18:05:41 minyonglee1 div81 Current qty=Y                            FAIL rows=  1004 A   5.82s B   7.73s
+      cur1 rows 1004/1004 cols 432/432 srt False ord False
+--- minyonglee1 div82 표본 {'site': 'NextEra_US_PHX', 'item_full': 'ETD1551AFB3A-XBA', 'cust': 'G-26-033', 'biz': None, 'project': 'G-26-033', 'owner': 'YEEUN CHO', 'team': '58187671', 'plant': None, 'sender': None, 'item': 'D1551'} 버전 {'MF_W': 'MF_W_20261027_V001', 'SF_W': None, 'SP_W': 'SP_W_20261029_V001', 'MF_D': 'MF_D_20261026_V001'}
+18:07:23 minyonglee1 div82 Current                                  PASS rows= 16251 A  32.73s B  68.81s
+18:13:18 minyonglee1 div82 Current site=NextEra_US_PHX              PASS rows=  7671 A  15.74s B  23.26s
+18:15:48 minyonglee1 div82 Current item=D1551                       PASS rows= 12901 A  24.53s B  43.57s
+18:19:29 minyonglee1 div82 Current cust=G-26-033                    PASS rows=     0 A   2.03s B   1.51s  ⚠ 0행(미실증)
+18:19:33 minyonglee1 div82 Current project=G-26-033                 PASS rows=   444 A   3.71s B   3.48s
+18:19:46 minyonglee1 div82 Current owner=YEEUN CHO                  PASS rows= 11101 A  21.98s B  37.10s
+18:22:36 minyonglee1 div82 Current team=58187671                    PASS rows= 11873 A  24.48s B  41.78s
+18:25:48 minyonglee1 div82 Current sender=NOSUCH                    PASS rows=     0 A  13.90s B  14.68s  ⚠ 0행(미실증)
+18:26:32 minyonglee1 div82 Current qty=Y                            PASS rows=   873 A  14.34s B  23.92s
+
+=== 시나리오 30 · FAIL 14 · 미실증 5

@@ -1,0 +1,161 @@
+{
+ "id": "DMF0042",
+ "asis": "DMF0042",
+ "at": "2026-11-05 05:47:11",
+ "has_asis": true,
+ "tobe_cols": 60,
+ "buttons": [
+  "COLUMN_SETUP",
+  "CUTOFF",
+  "DELETE",
+  "EXCEL",
+  "EXCHANGE_RATE",
+  "INSERT",
+  "MEASURE_SELECT",
+  "REPLACE",
+  "SAVE",
+  "SEARCH",
+  "SET_PRICE"
+ ],
+ "env": {
+  "division": "40",
+  "user": "Div=40;DM Admin",
+  "basis": "override 사용자 지시 2026-11-04 06:03 — DMF0042·DMF0044·DMF0049 = Division 40 전용"
+ },
+ "patterns": {
+  "p_lang": {
+   "rows": 3,
+   "why_not": []
+  },
+  "p_formdl": {
+   "rows": 0,
+   "why_not": [
+    "Excel Form 버튼 없음(AS-IS Text · btn_auth FORM_DATA)"
+   ]
+  },
+  "p_insertat": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_delete": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_combo": {
+   "rows": 32,
+   "why_not": []
+  },
+  "p_decimal": {
+   "rows": 0,
+   "why_not": [
+    "cell_rules.csv 없음(소수 자릿수 사실 없음)"
+   ]
+  },
+  "p_reqfp": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_blank_save": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_dirty": {
+   "rows": 5,
+   "why_not": []
+  },
+  "p_clear": {
+   "rows": 0,
+   "why_not": [
+    "cell_clear.csv 없음"
+   ]
+  },
+  "p_dyn": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_toggle": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_iscombo": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_baddate": {
+   "rows": 0,
+   "why_not": [
+    "신규 행 편집 날짜 칸 없음"
+   ]
+  },
+  "p_modins": {
+   "rows": 0,
+   "why_not": [
+    "기존 행 편집 글자 칸 없음"
+   ]
+  },
+  "p_popfill": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_samekey": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 변경 핸들러의 같은 키 행 동반 갱신 없음"
+   ]
+  },
+  "p_colvis": {
+   "rows": 0,
+   "why_not": [
+    "478 표시 값 없음(chkSum.Checked)",
+    "488 표시 값 없음(chkSum.Checked)",
+    "1608 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "1614 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "1630 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "504 표시 값 없음(chkSum.Checked)",
+    "514 표시 값 없음(chkSum.Checked)",
+    "1672 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "1678 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "1694 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "502 표시 값 없음(chkSum.Checked)",
+    "512 표시 값 없음(chkSum.Checked)",
+    "1671 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "1677 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)",
+    "1693 표시 값 없음(!siMain.ActiveSheet.Columns[iCol].Visibl)"
+   ]
+  },
+  "p_btnvis": {
+   "rows": 0,
+   "why_not": []
+  },
+  "p_sumtoggle": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 첫 상태 = 체크(Designer true · 코드 해제 없음) → 실행기 토글 방향 반대 · 만들지 않음"
+   ]
+  },
+  "p_divroundtrip": {
+   "rows": 0,
+   "why_not": [
+    "Division 고정 화면(override 40) — 전환 시험 불가"
+   ]
+  }
+ },
+ "auth_drop": [],
+ "files": {
+  "scenario_expect.csv": {
+   "rows": 48,
+   "used": 44
+  },
+  "doc_ui_expect.csv": {
+   "rows": 0,
+   "used": 0
+  },
+  "sum_toggle_expect.csv": {
+   "rows": 0,
+   "used": 0
+  }
+ },
+ "rows": 48,
+ "rows_used": 44,
+ "dup_of_hand": 4
+}

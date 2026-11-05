@@ -1,0 +1,471 @@
+[
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "TITLE",
+  "egs": [
+   "EG330",
+   "EG339",
+   "EG362"
+  ],
+  "result": "PASS",
+  "expected": "제목 등록 문구 · '_' 폴백/코드 노출 0",
+  "actual": "제목 'Version'",
+  "basis": "문서 SCPSSP-16·GAP-33",
+  "at": "2026-10-31T12:30:21.948Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "IDENTITY",
+  "egs": [
+   "EG135"
+  ],
+  "result": "FAIL",
+  "expected": "AS-IS 팝업 'Sales Reports Popup'(DMF0044_United_VersionPopup) 과 같은 팝업",
+  "actual": "TO-BE 제목 'Version' · 공통 토큰 []",
+  "basis": "DMF0044_Sales_Reports.cs:1151 · 06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF0044_United_VersionPopup.cs",
+  "at": "2026-10-31T12:30:21.949Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "BTN_ORDER",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "버튼 순서 OK → CLOSE",
+  "actual": "버튼 [Open, Open, Search, calendar, Transfer, Transfer Cancel, Version Delete, Version Copy, OK, Close]",
+  "basis": "문서 DM-C6",
+  "at": "2026-10-31T12:30:21.950Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "NO_COL",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "왼쪽 No. 컬럼 1개",
+  "actual": "코너 [No] · 첫 컬럼 'Divison' · No. 1개 · 행머리 폭 50px",
+  "basis": "문서 DM-C8·DM-179",
+  "at": "2026-10-31T12:30:21.950Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "NO_WIDTH",
+  "egs": [
+   "EG342"
+  ],
+  "result": "PASS",
+  "expected": "No. 폭 ≥ 행수 자릿수 표시 폭(13px, 1행)",
+  "actual": "행머리 폭 50px",
+  "basis": "문서 DM-179",
+  "at": "2026-10-31T12:30:21.950Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "COUNT",
+  "egs": [
+   "EG342",
+   "EG384"
+  ],
+  "result": "PASS",
+  "expected": "조회 건수 표시",
+  "actual": "'총1'",
+  "basis": "문서 DM-C8",
+  "at": "2026-10-31T12:30:21.950Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "MERGE",
+  "egs": [
+   "EG316"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 병합 호출 facts",
+  "actual": "AS-IS 병합 호출 없음(원문 확인) · TO-BE allowMerging=2",
+  "basis": "",
+  "at": "2026-10-31T12:30:21.950Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "DIV_FIXED",
+  "egs": [
+   "EG284"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS Division 비활성(DMF0044_United_VersionPopup.cs:120) → 팝업 Div 메인값 고정·수정 불가",
+  "actual": "disabled=true · 값 [40 Mobility & IT Battery] · 메인 Div ''",
+  "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF0044_United_VersionPopup.cs:DMF0044_United_VersionPopup.cs:120",
+  "at": "2026-10-31T12:30:21.951Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "COND_LIST",
+  "egs": [
+   "EG278",
+   "EG330"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS 조건 라벨 [ layoutControl_MVDate, Division, Description, Type]",
+  "actual": "TO-BE [Div:combo:비활성, Period:period] · 누락 [ layoutControl_MVDate, Description, Type] · 라벨 차이 []",
+  "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF0044_United_VersionPopup.cs",
+  "at": "2026-10-31T12:30:21.952Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "COND_MULTI",
+  "egs": [
+   "EG069"
+  ],
+  "result": "판정필요",
+  "expected": "AS-IS UsrCombo(다중=false)",
+  "actual": "TO-BE 'Div' 칩 표시=false — 콤보 열어 확인 전 표시 기반 값",
+  "basis": "06.UIL/GSCM.DM.Plan.UIL/POPUP/DMF0044_United_VersionPopup.cs:DMF0044_United_VersionPopup.Designer.cs:44",
+  "at": "2026-10-31T12:30:21.952Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "PERIOD",
+  "egs": [
+   "EG287",
+   "EG431"
+  ],
+  "result": "판정필요",
+  "expected": "팝업 Period = 메인 Period",
+  "actual": "메인 기간 칸 못 읽음 · 팝업 [2026.09.30 ~ 2027.03.31]",
+  "basis": "",
+  "at": "2026-10-31T12:30:21.953Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "DATA",
+  "egs": [
+   "EG441",
+   "EG440",
+   "EG370"
+  ],
+  "result": "PASS",
+  "expected": "팝업 조회 오류 없음 · 데이터 있음(No Permission 0)",
+  "actual": "자동 조회 4건 · 행 1 · 오류 없음 · 알림 ''",
+  "basis": "",
+  "at": "2026-10-31T12:30:22.054Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "ORDER",
+  "egs": [
+   "EG051",
+   "EG442"
+  ],
+  "result": "NA",
+  "expected": "팝업 목록 순서 = AS-IS ORDER BY",
+  "actual": "행 1 — 순서 대조 불가",
+  "basis": "",
+  "at": "2026-10-31T12:30:22.054Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "DYN_COLS",
+  "egs": [
+   "EG280",
+   "EG044"
+  ],
+  "result": "NA",
+  "expected": "팝업 기간 동적 컬럼",
+  "actual": "AS-IS 팝업에 루프 컬럼 생성 facts 없음",
+  "basis": "",
+  "at": "2026-10-31T12:30:22.054Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "GRID_SORT",
+  "egs": [
+   "EG384"
+  ],
+  "result": "NA",
+  "expected": "팝업 그리드 Sort",
+  "actual": "행 1 · 정렬 효과 대조 불가",
+  "basis": "",
+  "at": "2026-10-31T12:30:22.055Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "GRID_FILTER",
+  "egs": [
+   "EG384",
+   "EG437"
+  ],
+  "result": "판정필요",
+  "expected": "팝업 Filter 사용 가능(문서 DM-C8·DM-P64)",
+  "actual": "필터 아이콘 0 · Filter 버튼 false · 입력칸 false — 값 적용 시험은 FILTER 묶음",
+  "basis": "",
+  "at": "2026-10-31T12:30:22.098Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "GRID_KEYS",
+  "egs": [
+   "EG403"
+  ],
+  "result": "NA",
+  "expected": "단축키",
+  "actual": "행 1",
+  "basis": "",
+  "at": "2026-10-31T12:30:22.442Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "GRID_LOCK",
+  "egs": [
+   "EG119"
+  ],
+  "result": "PASS",
+  "expected": "AS-IS 잠금 호출 있음(DMF0044_United_VersionPopup.cs:246 siMain.LockColumn(siMain.GetColumnIndex(DefColumns.DIVISION_)",
+  "actual": "편집 가능 컬럼 [] · 첫 셀 클래스 'wj-cell wj-state-selected wj-state-active wj-align-center'",
+  "basis": "DMF0044_United_VersionPopup.cs:246",
+  "at": "2026-10-31T12:30:22.515Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "FILTER",
+  "egs": [
+   "EG248",
+   "EG281",
+   "EG432",
+   "EG261",
+   "EG297",
+   "EG299",
+   "EG338"
+  ],
+  "result": "NA",
+  "expected": "팝업 텍스트 조건 입력 → 필터",
+  "actual": "입력 가능한 텍스트 조건 없음 — 조건 [Div:combo:비활성, Period:period]",
+  "basis": "",
+  "at": "2026-10-31T12:30:22.649Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "LAYOUT_VIEW",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "팝업·닫기·버튼 모두 뷰포트 안",
+  "actual": "rect {\"x\":75,\"y\":135,\"w\":1770,\"h\":810} · 뷰포트 1920x1080 · 닫기 아이콘 true · 밖 버튼 []",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-10-31T12:30:22.650Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "LAYOUT_SCROLL",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "FAIL",
+  "expected": "스크롤바 없이 버튼까지 한 화면(그리드 내부 제외)",
+  "actual": "paperV=true paperH=false · 본문 스크롤 []",
+  "basis": "문서 DM-175",
+  "at": "2026-10-31T12:30:22.650Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "TOPLINE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "FAIL",
+  "expected": "머리 아래~첫 내용 사이 가로줄 없음",
+  "actual": "머리 높이 32 · 가로줄 [{\"y\":48,\"w\":1720,\"color\":\"rgb(221, 224, 223)\",\"cls\":\"MuiBox-root css-jkvobk\",\"side\":\"top\"}]",
+  "basis": "문서 GAPPI-30·GAPPI-34",
+  "at": "2026-10-31T12:30:22.651Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "SECTION_TITLE",
+  "egs": [
+   "EG336"
+  ],
+  "result": "NA",
+  "expected": "섹션 타이틀 = 테두리 밖",
+  "actual": "타이틀 []",
+  "basis": "문서 DM-202",
+  "at": "2026-10-31T12:30:22.651Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "DRAG",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "화면 밖으로 드래그 시도 → 뷰포트 안 유지",
+  "actual": "드래그 후 rect {\"x\":75,\"y\":135,\"w\":1770,\"h\":810} · 뷰포트 1920x1080",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-10-31T12:30:25.599Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "DRAG_BACK",
+  "egs": [
+   "EG322"
+  ],
+  "result": "PASS",
+  "expected": "반대 방향 드래그 → 뷰포트 안",
+  "actual": "rect {\"x\":75,\"y\":135,\"w\":1770,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-10-31T12:30:28.850Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "RESIZE_W",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "가로만 조절 → 세로 불변(810)",
+  "actual": "조절 후 {\"x\":32,\"y\":135,\"w\":1856,\"h\":810}",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-10-31T12:30:31.805Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "RESIZE_MAX",
+  "egs": [
+   "EG322",
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "크게 조절 → 뷰포트 안 · 닫기 보임",
+  "actual": "rect {\"x\":32,\"y\":32,\"w\":1856,\"h\":1016} · 닫기 true",
+  "basis": "문서 GAPPI-24",
+  "at": "2026-10-31T12:30:34.270Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "RESIZE_MIN",
+  "egs": [
+   "EG337"
+  ],
+  "result": "PASS",
+  "expected": "축소 → 조건·버튼 겹침 없음",
+  "actual": "rect {\"x\":360,\"y\":315,\"w\":1200,\"h\":450} · 겹침 []",
+  "basis": "문서 DM-166",
+  "at": "2026-10-31T12:30:36.519Z",
+  "mut": ""
+ }
+]

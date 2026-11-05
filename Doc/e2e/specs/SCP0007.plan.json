@@ -1,8 +1,20 @@
 {
   "id": "SCP0007",
-  "mode": "division",
-  "modeSource": "auto(Division 조회조건 있음)",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
   "menuId": "SCP0007",
+  "divCascade": [
+    [
+      "From Site"
+    ],
+    [
+      "To Site"
+    ]
+  ],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
   "condOrder": [
     "Div",
     "From Site",
@@ -341,7 +353,7 @@
         "To City",
         "To Site VMI",
         "Incoterms*",
-        "Incoterms SSP*",
+        "SSP Incoterms*",
         "Priority*",
         "Route Count",
         "Trans Mode",
@@ -361,7 +373,7 @@
         "FROM*",
         "TO*",
         "Remarks",
-        "BOD Valid*",
+        "Active*",
         "Route Valid",
         "Created By",
         "Creation Date",
@@ -377,7 +389,7 @@
         "To City",
         "To Site VMI",
         "Incoterms*",
-        "Incoterms SSP*",
+        "SSP Incoterms*",
         "Priority*",
         "Route Count",
         "Trans Mode",
@@ -397,7 +409,7 @@
         "FROM*",
         "TO*",
         "Remarks",
-        "BOD Valid*",
+        "Active*",
         "Route Valid",
         "Created By",
         "Creation Date",
@@ -413,7 +425,7 @@
         "To City",
         "To Site VMI",
         "Incoterms*",
-        "Incoterms SSP*",
+        "SSP Incoterms*",
         "Priority*",
         "Route Count",
         "Trans Mode",
@@ -433,7 +445,7 @@
         "FROM*",
         "TO*",
         "Remarks",
-        "BOD Valid*",
+        "Active*",
         "Route Valid",
         "Created By",
         "Creation Date",
@@ -458,172 +470,63 @@
   },
   "accounts": [
     {
-      "id": "dodae",
-      "name": "도대현 책임",
+      "id": "jooyong026",
+      "name": "강주용",
       "groups": [
-        "SCP Planner"
+        "ADMIN"
       ],
       "divisions": [
         "40"
       ],
       "roles": {
-        "40": "SCP Planner"
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
       },
-      "roleNote": "",
-      "admin": false,
-      "adminOf": [],
-      "screenGroup": "",
-      "source": "users.json",
-      "tobeGroups": [
-        "DM Viewer",
-        "FP Viewer",
-        "GMES Viewer",
-        "GUEST",
-        "SCP Planner",
-        "SSP Viewer"
-      ],
-      "menuAccess": "Y",
-      "expectedBtns": [
-        "SEARCH"
-      ],
-      "matrix": []
-    },
-    {
-      "id": "bottle",
-      "name": "김재병 선임",
-      "groups": [
-        "SCP Planner"
-      ],
-      "divisions": [
-        "81"
-      ],
-      "roles": {
-        "81": "SCP Planner"
-      },
-      "roleNote": "",
-      "admin": false,
-      "adminOf": [],
-      "screenGroup": "",
-      "source": "users.json",
-      "tobeGroups": [
-        "DM Viewer",
-        "FP Viewer",
-        "GUEST",
-        "SCM Viewer",
-        "SCP Planner"
-      ],
-      "menuAccess": "Y",
-      "expectedBtns": [
-        "SEARCH"
-      ],
-      "matrix": []
-    },
-    {
-      "id": "coeogus",
-      "name": "채대현 책임",
-      "groups": [
-        "SCP Planner"
-      ],
-      "divisions": [
-        "82"
-      ],
-      "roles": {
-        "82": "SCP Planner"
-      },
-      "roleNote": "",
-      "admin": false,
-      "adminOf": [],
-      "screenGroup": "",
-      "source": "users.json",
-      "tobeGroups": [
-        "DM Viewer",
-        "FP Viewer",
-        "GMES Viewer",
-        "GUEST",
-        "SCM Viewer",
-        "SCP Planner"
-      ],
-      "menuAccess": "Y",
-      "expectedBtns": [
-        "SEARCH"
-      ],
-      "matrix": []
-    },
-    {
-      "id": "jaeuk.shin",
-      "name": "",
-      "groups": [
-        "SCP ADMIN",
-        "SYSTEM ADMIN"
-      ],
-      "divisions": [
-        "40",
-        "81",
-        "82"
-      ],
-      "roles": {},
       "roleNote": "ADMIN",
       "admin": true,
       "adminOf": [
         "SCP ADMIN"
       ],
       "screenGroup": "",
-      "source": "users.json",
+      "source": "users.json areas.SCP",
       "tobeGroups": [
         "ADMIN",
-        "DM ADMIN",
-        "FP Planner",
-        "FP Viewer",
         "GUEST",
-        "JV Planner",
-        "SCM PI Admin",
-        "SCM Viewer",
-        "SCP Planner",
-        "SCP Tester",
-        "SSP Planner",
-        "SSP Viewer"
+        "SSP Planner"
       ],
       "menuAccess": "Y",
       "expectedBtns": [
         "DELETE",
-        "SAVE",
         "INSERT",
+        "SAVE",
         "SEARCH"
       ],
-      "matrix": []
-    },
-    {
-      "id": "jiwon.park",
-      "name": "박지원 선임",
-      "groups": [
-        "DM Admin"
-      ],
-      "divisions": [
-        "40"
-      ],
-      "roles": {
-        "81": "DM Admin"
-      },
-      "roleNote": "권한 없음 대표",
-      "admin": false,
-      "adminOf": [],
-      "screenGroup": "",
-      "source": "users.json",
-      "tobeGroups": [
-        "DM ADMIN",
-        "GUEST"
-      ],
-      "menuAccess": "N",
-      "expectedBtns": [],
-      "matrix": []
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40",
+        "EE"
+      ]
     }
   ],
   "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
       "DELETE",
-      "SAVE",
       "INSERT",
+      "SAVE",
       "SEARCH"
     ],
     "DM ADMIN": [
@@ -649,8 +552,8 @@
     ],
     "SCM PI Admin": [
       "SEARCH",
-      "SAVE",
       "DELETE",
+      "SAVE",
       "INSERT"
     ],
     "SCM Viewer": [
@@ -664,9 +567,9 @@
     ],
     "SSP Planner": [
       "SEARCH",
+      "SAVE",
       "DELETE",
-      "INSERT",
-      "SAVE"
+      "INSERT"
     ],
     "SSP Viewer": [
       "SEARCH",
@@ -677,8 +580,8 @@
   },
   "menuBtnCodes": [
     "DELETE",
-    "SAVE",
     "INSERT",
+    "SAVE",
     "SEARCH"
   ],
   "menuAuth": "menu.csv",

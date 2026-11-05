@@ -4,6 +4,7 @@
 //   · Insert 가 없는 셀 편집 저장형 화면: 편집 가능 셀 값을 바꿔 Save → 재조회로 반영 확인 → **원래 값으로 복원 Save** → 재조회로 복원 확인
 import type { TestInfo } from '@playwright/test';
 import type { Nscm } from './nscm';
+import { probe } from './probe';
 
 export type CrudPlan = { keyColumns?: string[]; sample?: { div?: string } };
 export type CrudOutcome = {
@@ -25,10 +26,12 @@ function nextValue(orig: string): { next: string; restore: string } {
   return { next: t + 'X', restore: t };
 }
 
-export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark: string): Promise<CrudOutcome> {
+// opt.mode='edit-save'(2026-10-30 WP3): Insert 가 보여도 기존행 수정 저장 경로를 강제한다(정합검증 @verify 가 신규행 경로 실패 시 폴백)
+export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark: string, opt: { mode?: 'edit-save'; onBeforeSave?: (dataRow: number) => Promise<void>; onAfterSave?: (saved: boolean) => Promise<void> } = {}): Promise<CrudOutcome> {
   const out: CrudOutcome = { mode: 'no-save', saveVisible: false, insertVisible: false, deleteVisible: false, editable: null, inserted: false, saved: false, found: false, updated: false, cleaned: true, restored: true, saveCalls: 0, saveErrors: [], notes: [] };
   out.saveVisible = await nscm.subButtonVisible('Save');
-  out.insertVisible = await nscm.subButtonVisible('Insert');
+  out.insertVisible = opt.mode === 'edit-save' ? false : await nscm.subButtonVisible('Insert');
+  if (opt.mode === 'edit-save') out.notes.push('수정 저장 경로 강제(edit-save)');
   out.deleteVisible = await nscm.subButtonVisible('Delete');
   const callsBefore = nscm.calls.length;
   const countSave = () => { const c = nscm.calls.slice(callsBefore).filter(x => /SAVE|INS|UPD|DEL/i.test(x.btn)); out.saveCalls = c.length; return c; };
@@ -50,7 +53,7 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
     const headers = await nscm.gridHeaders(0);
     let ecs = await nscm.editableCells(0, 40);
     if (!ecs.length) { const meta = await nscm.gridColumnsMeta(0); const cols = meta ? meta.map((m, i) => (m.readOnly ? -1 : i)).filter(i => i >= 0).slice(0, 8) : [1, 2, 3]; const rl = nscm.grid(0).locator('.wj-cells .wj-row'); const n = Math.min(await rl.count(), 20); for (let r = 0; r < n; r++) { const t = (await rl.nth(r).locator('.wj-cell').allInnerTexts().catch(() => [] as string[])).map(s => s.trim()); for (const c of cols) ecs.push({ row: r, col: c, text: t[c] ?? '' }); } out.notes.push('wj-cell-editable 없음 → 컬럼 정의 기준 후보'); }
-    const ordered = ecs.filter(c => c.text !== '').concat(ecs.filter(c => c.text === '')).slice(0, 24);
+    const ordered = ecs.filter(c => c.text !== '').slice(0, 24);  // 빈칸은 DB 행이 없을 수 있어 제외 — 저장하면 새 행이 남는다(2026-10-31 SCP0028)
     if (!ordered.length) { out.editable = false; out.notes.push('편집 가능 셀 없음'); countSave(); annotate(info, out); return out; }
     const S: { col: number; row: number; orig: string; nv: { next: string; restore: string } | null; key: string } = { col: -1, row: -1, orig: '', nv: null, key: '' };
     for (const c of ordered) {
@@ -70,27 +73,36 @@ export async function crudCycle(nscm: Nscm, info: TestInfo, plan: CrudPlan, mark
     const readAfterSearch = async (fallbackRow: number) => { for (let k = 0; k < 30; k++) { const r = await nscm.findRowByKey(key); if (r >= 0) { const v = await cellOf(r); if (v !== '') return { r, v }; } await nscm.page.waitForTimeout(500); } const r = Math.max(await nscm.findRowByKey(key), fallbackRow); return { r, v: await cellOf(r) }; };
     try {
       // 2) 저장 → 재조회 → 같은 행(키 셀 3개)에서 반영 확인
+      // 저장 전에 행 전체 값으로 식별 문자열을 잡는다(수정 컬럼 제외)
+      const identEx = [colName]; const dataRow = await nscm.page.evaluate(`(() => { const el = [...document.querySelectorAll('.wj-flexgrid')].find(e => e.offsetParent !== null); const c = el && el['$WJ-CTRL']; if (!c) return ${row}; const vr = c.viewRange; return (vr && vr.row > 0 ? vr.row : 0) + ${row}; })()`) as number;
+      const identity = await probe.rowIdentity(nscm.page, dataRow, identEx);
+      if (opt.onBeforeSave) await opt.onBeforeSave(dataRow);  // 저장 전 DB 스냅샷(원복 전 비교용 · 2026-10-31)
       T('수정 입력 완료'); const s1 = await nscm.save(); T('저장 응답 ' + (s1.calls.length ? s1.calls.map(c => c.btn + ':' + c.status + (c.req ? ' 요청=' + c.req.replace(/\s+/g, ' ').slice(0, 180) : '') + (c.res ? ' 응답=' + c.res.slice(0, 120) : '')).join(' | ') : 'call-proc 없음') + (s1.message ? ' 알림=' + s1.message.slice(0, 80) : ''));
       out.saved = !ERR.test(s1.message || '') && s1.calls.every(c => c.status < 400) && s1.calls.length > 0;
       if (!out.saved) out.saveErrors.push(`SAVE: ${s1.message || (s1.calls.length ? s1.calls.map(c => `${c.btn} HTTP ${c.status}`).join(',') : 'SAVE call-proc 없음')}`);
+      if (opt.onAfterSave) await opt.onAfterSave(out.saved);
       await nscm.search(); T('재조회');
-      const a1 = await readAfterSearch(row); const r1 = a1.r; T('행 찾기 ' + r1);
-      const v1 = a1.v; out.found = same(v1, nv.next); out.updated = out.found;
+      // 행 전체 값으로 같은 행을 찾는다 — 유일하지 않으면 원복하지 않는다(다른 행 덮어쓰기 방지, 2026-10-31)
+      await nscm.page.waitForTimeout(800); await probe.waitRows(nscm.page, 30_000).catch(() => undefined);
+      const hits1 = identity ? await probe.findRowsByIdentity(nscm.page, identity, identEx) : [];
+      if (hits1.length !== 1) { out.notes.push(`행 식별 ${hits1.length}건(1건이어야 함) — 재조회 대조·원복 중단${out.saved ? ' · ⚠ 저장은 됨: 수동 원복 필요 [' + colName + ' 원값 ' + orig + ']' : ''}`); out.found = false; out.restored = !out.saved; countSave(); annotate(info, out); return out; }
+      const r1 = hits1[0]; T('행 찾기 ' + r1);
+      const v1 = (await probe.displayText(nscm.page, r1, colName)) ?? ''; out.found = same(v1, nv.next); out.updated = out.found;
       out.notes.push(`행 [${key}] ${colName}: '${orig}' → '${nv.next}' 저장 ${out.saved ? '성공' : '실패'} · 재조회 값 '${v1}' ${out.found ? '반영 확인' : '미반영'}`);
       // 3) 원복 저장 → 재조회 → 복원 확인
-      await nscm.setCell(r1, col, nv.restore, 0); T('원복 입력');
+      if (!out.saved) { out.restored = same(v1, orig); out.notes.push(`저장 요청 없음/실패 — 원복 저장 생략 · 재조회 값 '${v1}' ${out.restored ? '원값 그대로' : '⚠ 원값과 다름'}`); countSave(); annotate(info, out); return out; }
+      if (!(await probe.setByEditor(nscm.page, r1, colName, nv.restore))) throw new Error(`원복 입력 실패 r${r1} ${colName}`); T('원복 입력');
       const s2 = await nscm.save(); T('원복 저장 응답'); const ok2 = !ERR.test(s2.message || '') && s2.calls.every(c => c.status < 400) && s2.calls.length > 0;
       if (!ok2) out.saveErrors.push(`RESTORE: ${s2.message || 'SAVE call-proc 없음'}`);
       await nscm.search();
-      const a2 = await readAfterSearch(r1); const v2 = a2.v; out.restored = same(v2, orig);
+      await nscm.page.waitForTimeout(800); await probe.waitRows(nscm.page, 30_000).catch(() => undefined);
+      const hits2 = await probe.findRowsByIdentity(nscm.page, identity, identEx);
+      const v2 = hits2.length === 1 ? (await probe.displayText(nscm.page, hits2[0], colName)) ?? '' : `(행 식별 ${hits2.length}건)`; out.restored = hits2.length === 1 && same(v2, orig);
       out.notes.push(`원복 '${orig}' 저장 ${ok2 ? '성공' : '실패'} · 재조회 값 '${v2}' ${out.restored ? '복원 확인' : '미복원 — 수동 확인 필요'}`);
     } catch (e) {
       out.notes.push(`예외: ${String(e).split('\n')[0].slice(0, 160)}`); out.restored = false;
-      // 저장은 됐는데 복원 전에 끊긴 경우 — 복원 1회 재시도(재조회 → 행 찾기 → 원복 입력 → 저장 → 재조회 확인)
-      if (out.saved && !out.restored) {
-        try { await nscm.search(); let rr = await nscm.findRowByKey(key); if (rr < 0) rr = row; await nscm.setCell(rr, col, nv.restore, 0); const s3 = await nscm.save(); await nscm.search(); let r3 = await nscm.findRowByKey(key); if (r3 < 0) r3 = rr; out.restored = same(await cellOf(r3), orig); out.notes.push(`복원 재시도 ${out.restored ? '성공' : '실패'}${s3.message ? ' (' + s3.message + ')' : ''}`); }
-        catch (e2) { out.notes.push(`복원 재시도 예외: ${String(e2).split('\n')[0].slice(0, 120)}`); }
-      }
+      // 저장은 됐는데 복원 전에 끊긴 경우 — 앞 칸 키로 찾아 넣으면 다른 행을 덮어쓸 수 있어 자동 재시도하지 않는다(2026-10-31). 원값을 보고해 수동 원복
+      if (out.saved && !out.restored) out.notes.push(`⚠ 수동 원복 필요 — 행 [${key}] ${colName} 원값 '${orig}'`);
     }
     countSave(); annotate(info, out); return out;
   }

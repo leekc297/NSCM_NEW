@@ -18,7 +18,14 @@ import sys
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 SRC = os.path.join(ROOT, 'GSCM')
-COLS = ['sheet', 'column', 'cell_type', 'decimals', 'min', 'max', 'separator', 'max_length', 'uppercase', 'source', 'ref']
+COLS = ['sheet', 'column', 'cell_type', 'decimals', 'min', 'max', 'separator', 'max_length', 'uppercase', 'negative_red', 'fixed_point', 'source', 'ref']
+RX_DEFCOL = r'Def\w+\.'  # 화면마다 Def 클래스 이름이 다르다(DefColumns·DefMain …) — 2026-10-30 SCP0111
+
+
+def framework_defaults():
+    """Doc/asisfacts/framework/spreadinfo_defaults.csv(facts_gridcols 가 원문 인용으로 기록) — 코드에 하드코딩하지 않는다"""
+    p = os.path.join(ROOT, 'Doc', 'asisfacts', 'framework', 'spreadinfo_defaults.csv')
+    return {r['rule']: r for r in read_csv(p)} if os.path.exists(p) else {}
 META_TYPE = {'FPNumber': 'NUMBER', 'FPNumberText': 'NUMBER_TEXT', 'FPDate': 'DATE', 'FPDateTime': 'DATETIME', 'FPComboBox': 'COMBO',
              'FPCheckBox': 'CHECK', 'FPText': 'TEXT', 'FPTextUpper': 'TEXT', 'FPButton': 'BUTTON'}
 MAXV = '9999999999'
@@ -48,6 +55,11 @@ def main():
     sid = sys.argv[1].upper()
     sdir = os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', sid)
     rules = {}
+    D = framework_defaults()
+    neg_default = 'Y' if (D.get('number_negative_red', {}).get('value') or '').lower() == 'true' else ''
+    neg_ref = D.get('number_negative_red', {}).get('ref', 'SpreadInfo.cs NumberCellType')
+    mm = re.findall(r'-?\d+', D.get('number_min_max', {}).get('value') or '')
+    fw_min, fw_max = (mm[0], mm[1]) if len(mm) == 2 else ('', '')
 
     def put(sheet, col, **kw):
         key = col.upper()
@@ -67,7 +79,9 @@ def main():
         dec = (scale if scale and scale.isdigit() and int(scale) > 0 else '0') if typ == 'NUMBER' else ''
         put(m.get('SHEET_NAME'), m['COLUMN_NAME'], cell_type=typ, decimals=dec, separator='Y' if typ == 'NUMBER' else '',
             max_length=(m.get('DATA_MAX_LENGTH') or '').strip(), uppercase=(m.get('UPPERCASE_APPLY_FLAG') or '').strip(),
-            source='META', ref=f"SHEET_COLUMNS {m.get('SHEET_NAME')}.{m['COLUMN_NAME']} CELL={ctl or '-'} SCALE={scale or 'NULL'} · SpreadInfo.cs:1433-1439/1497")
+            negative_red=neg_default if typ == 'NUMBER' else '', fixed_point=('Y' if dec == '0' else 'N') if typ == 'NUMBER' else '',
+            min=fw_min if typ == 'NUMBER' else '', max=fw_max if typ == 'NUMBER' else '',
+            source='META', ref=f"SHEET_COLUMNS {m.get('SHEET_NAME')}.{m['COLUMN_NAME']} CELL={ctl or '-'} SCALE={scale or 'NULL'} · SpreadInfo.cs:1433-1439/1497" + (f" · {neg_ref}" if typ == 'NUMBER' else ''))
 
     files = [f['file'] for f in read_csv(os.path.join(sdir, 'files.csv')) if f.get('variant') != 'legacy' and f['file'].endswith('.cs') and not f['file'].endswith('.Designer.cs')]
     for rel in files:
@@ -78,23 +92,26 @@ def main():
             s = line.strip()
             if s.startswith('//'):
                 continue
-            m = re.search(r'SetReNumerCellType\(\s*\w+\s*,\s*\w+\.GetColumnIndex\(\s*DefColumns\.(\w+)\s*\)\s*((?:,\s*-?\d+\s*)*)\)', s)
+            m = re.search(r'SetReNumerCellType\(\s*\w+\s*,\s*\w+\.GetColumnIndex\(\s*' + RX_DEFCOL + r'(\w+)\s*\)\s*((?:,\s*-?\d+\s*)*)\)', s)
             if m:
                 args = [x.strip() for x in m.group(2).split(',') if x.strip()]
                 mn = args[0] if len(args) >= 1 else '0'
                 dec = args[1] if len(args) >= 2 else '0'
                 mx = args[2] if len(args) >= 3 else MAXV
-                put('', m.group(1), cell_type='NUMBER', decimals=dec, min=mn, max=mx, separator='Y', source='CODE_SetReNumerCellType',
-                    ref=f'{base}:{i} · SpreadInfo.cs:13772-13856')
+                put('', m.group(1), cell_type='NUMBER', decimals=dec, min=mn, max=mx, separator='Y', negative_red=neg_default, fixed_point='Y' if dec == '0' else 'N',
+                    source='CODE_SetReNumerCellType', ref=f'{base}:{i} · SpreadInfo.cs:13772-13856')
                 continue
-            m = re.search(r'AddNumColumn(?:Ex)?\(\s*"[^"]*"\s*,\s*DefColumns\.(\w+)\s*,(.*)\)\s*;', s)
+            m = re.search(r'AddNumColumn(?:Ex)?\(\s*"[^"]*"\s*,\s*' + RX_DEFCOL + r'(\w+)\s*,(.*)\)\s*;', s)
             if m:
                 tail = [x.strip() for x in m.group(2).split(',')]
                 ints = [x for x in tail[4:] if re.fullmatch(r'\d+', x)]  # merge,width,visible,align… 뒤의 정수 = 소수자리
-                put('', m.group(1), cell_type='NUMBER', decimals=ints[-1] if ints else '0', separator='Y' if 'true' in tail[-1:] else '',
-                    source='CODE_AddNumColumn', ref=f'{base}:{i}')
+                # 5-인자 AddNumColumn(header, field, merge, width, visible) = blFixedPoint true(정수) — 기본값 CSV 인용
+                five = len(tail) <= 3 and (D.get('addnumcolumn_5arg_fixedpoint', {}).get('value') or '').lower() == 'true'
+                dec = ints[-1] if ints else '0'
+                put('', m.group(1), cell_type='NUMBER', decimals=dec, min=fw_min, max=fw_max, separator='Y' if 'true' in tail[-1:] else '', negative_red=neg_default,
+                    fixed_point='Y' if (five or dec == '0') else 'N', source='CODE_AddNumColumn', ref=f'{base}:{i}' + (f" · {D.get('addnumcolumn_5arg_fixedpoint', {}).get('ref', '')}" if five else ''))
                 continue
-            m = re.search(r'Add(DateTime|Date)Column\(\s*"[^"]*"\s*,\s*DefColumns\.(\w+)', s)
+            m = re.search(r'Add(DateTime|Date)Column\(\s*"[^"]*"\s*,\s*' + RX_DEFCOL + r'(\w+)', s)
             if m:
                 put('', m.group(2), cell_type='DATETIME' if m.group(1) == 'DateTime' else 'DATE', source=f'CODE_Add{m.group(1)}Column', ref=f'{base}:{i}')
     out = os.path.join(sdir, 'cell_rules.csv')

@@ -10,7 +10,9 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 1
+    },
     "preserveOutput": "always",
     "reporter": [
       [
@@ -55,175 +57,224 @@
     "shard": null,
     "updateSnapshots": "missing",
     "version": "1.49.1",
-    "workers": 2,
+    "workers": 1,
     "webServer": null
   },
   "suites": [
     {
-      "title": "_verify.spec.ts",
-      "file": "_verify.spec.ts",
+      "title": "DMF0082.smoke.spec.ts",
+      "file": "DMF0082.smoke.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "정합검증 SCP0007 @verify",
-          "file": "_verify.spec.ts",
-          "line": 129,
+          "title": "DMF0082 FcstNPrice_Mgmt 스모크 @smoke",
+          "file": "DMF0082.smoke.spec.ts",
+          "line": 8,
           "column": 6,
           "specs": [
             {
-              "title": "조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)",
+              "title": "공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual",
               "ok": true,
               "tags": [
-                "verify"
+                "smoke"
               ],
               "tests": [
                 {
-                  "timeout": 180000,
-                  "annotations": [],
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "common",
+                      "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 239"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 0"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 5"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) Period 비저장(기간 조건 제외)(common) — 저장 키 5개 중 기간 키 0 (bucketType, divisionId, qtyYn, sumYn, versionType)"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) 저장 복원(재진입)(common) — 저장 조건 2개 재진입 후 그대로 복원"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 7개 유지"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Excel 다운로드(common) — 'FcstPrice_20261105_110236.xlsx' 6773B"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Columns 컬럼 설정(common) — 설정 창 열림·닫힘(X)"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                    },
+                    {
+                      "type": "commonsum",
+                      "description": "12/12 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 1"
+                    },
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 83955,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-05T02:01:15.849Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d557cdbda6ec1bc6afb1-9885c521afe3244feed5",
-              "file": "_verify.spec.ts",
-              "line": 134,
+              "id": "cc80c3ccd65098aca97a-0efb12f8d92a38276812",
+              "file": "DMF0082.smoke.spec.ts",
+              "line": 111,
               "column": 7
-            },
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "SCP0084.smoke.spec.ts",
+      "file": "SCP0084.smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "SCP0084 LongTermStock 스모크 @smoke",
+          "file": "SCP0084.smoke.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
             {
-              "title": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "title": "공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual",
               "ok": true,
               "tags": [
-                "verify"
+                "smoke"
               ],
               "tests": [
                 {
-                  "timeout": 180000,
-                  "annotations": [],
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "common",
+                      "description": "[OK] Search(조회 버튼)(common) — call-proc 1 · 행 2038"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] F5 단축키(조회)(common) — call-proc 1"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Sort(F3)(common) — 클릭 정상"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Filter(F4)(common) — 클릭 정상 · 필터 아이콘 2"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Condition(F6) 조회조건 저장(common) — 알림 '조회 조건이 저장되었습니다. Confirm' · 저장 행 3"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 조회조건 초기화(common) — 확인 '저장된 검색조건을 초기화 하겠습니까? Cancel Confirm' → 결과 '검색조건이 초기화 되었습니다. Confirm' · 남은 저장 행 0"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)(common) — 화면 조건값 4개 유지"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] (저장 조회조건 복원)(common) — 테스트 전 저장값 3건 재저장 HTTP 200"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Excel 다운로드(common) — 'LongTermStock_20261105_110333.xlsx' 368547B"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[NA] Columns 컬럼 설정(common) — 버튼 없음"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[OK] Search Area 조회영역 토글(common) — 조회영역(조회조건 칸) 표시 true→false→true · 스위치 true→false→true"
+                    },
+                    {
+                      "type": "common",
+                      "description": "[NA] Manual(F1)(common) — 버튼 없음"
+                    },
+                    {
+                      "type": "commonsum",
+                      "description": "10/10 OK · FAIL 0 · WARN 0 · ERROR 0 · NA 2"
+                    },
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/log/menu-access) · 같은 시간 BE 로그 DB 오류 0건: "
+                    }
+                  ],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
                   "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "passed",
+                      "duration": 48605,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-05T02:02:48.782Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
                 }
               ],
-              "id": "d557cdbda6ec1bc6afb1-4144bfd339445d8e1aae",
-              "file": "_verify.spec.ts",
-              "line": 155,
-              "column": 7
-            },
-            {
-              "title": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지",
-              "ok": true,
-              "tags": [
-                "verify"
-              ],
-              "tests": [
-                {
-                  "timeout": 180000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d557cdbda6ec1bc6afb1-e08f6491f3a25e14f176",
-              "file": "_verify.spec.ts",
-              "line": 423,
-              "column": 7
-            },
-            {
-              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
-              "ok": true,
-              "tags": [
-                "verify"
-              ],
-              "tests": [
-                {
-                  "timeout": 180000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d557cdbda6ec1bc6afb1-3844d8e9f2ef1ab78472",
-              "file": "_verify.spec.ts",
-              "line": 486,
-              "column": 7
-            },
-            {
-              "title": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회",
-              "ok": true,
-              "tags": [
-                "verify"
-              ],
-              "tests": [
-                {
-                  "timeout": 180000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d557cdbda6ec1bc6afb1-2bbd7aaae5a95141e4a0",
-              "file": "_verify.spec.ts",
-              "line": 968,
-              "column": 7
-            },
-            {
-              "title": "셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성",
-              "ok": true,
-              "tags": [
-                "verify"
-              ],
-              "tests": [
-                {
-                  "timeout": 180000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d557cdbda6ec1bc6afb1-3a09c8ec5b3928222b43",
-              "file": "_verify.spec.ts",
-              "line": 1104,
-              "column": 7
-            },
-            {
-              "title": "조회조건 콤보 후보 품질(B1·B2)",
-              "ok": true,
-              "tags": [
-                "verify"
-              ],
-              "tests": [
-                {
-                  "timeout": 180000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [],
-                  "status": "skipped"
-                }
-              ],
-              "id": "d557cdbda6ec1bc6afb1-a66397cc15113e0dccb4",
-              "file": "_verify.spec.ts",
-              "line": 1182,
+              "id": "d78240201136862a49e0-ffe9b702ec85cbdd7ecb",
+              "file": "SCP0084.smoke.spec.ts",
+              "line": 111,
               "column": 7
             }
           ]
@@ -233,10 +284,10 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-27T16:45:26.569Z",
-    "duration": 1205.6229999999996,
-    "expected": 0,
-    "skipped": 7,
+    "startTime": "2026-11-05T02:01:12.906Z",
+    "duration": 153533.814,
+    "expected": 2,
+    "skipped": 0,
     "unexpected": 0,
     "flaky": 0
   }

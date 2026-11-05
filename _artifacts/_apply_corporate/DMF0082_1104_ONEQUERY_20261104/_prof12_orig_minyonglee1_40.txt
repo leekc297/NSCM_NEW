@@ -1,0 +1,49 @@
+trace: SP 8.41s fetch 5.18s rows=[7619, 6, 1, 5, 181, 1]
+
+div=40 group=ADMIN  SP 8.41s  | dep=1 SQL 합 8.35s  | 갭: DBMS_STATS 0.00s  PL/SQL·기타 0.03s
+
+    라인       초     비중  parse    exec  fetch    실행   하드         LIO         행  sqlid          문장
+     -   2.824  33.6%   0.00    2.82   0.00     1    0      72,871   154,252  b9hn6zvmrhkhu  INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, 
+  5257   2.207  26.2%   0.00    2.21   0.00     1    0      19,789         0  947dxgm7n5x1f  MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT RID_ , MAX(CREATE_DATE) OVE
+  1457   1.202  14.3%   0.00    1.20   0.00     1    2      85,581   150,522  cvcz8rcw9kvm7  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+     -   0.344   4.1%   0.00    0.00   0.34     1    0       9,147         1  70xvv1ktud7js  SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP 
+  1566   0.303   3.6%   0.00    0.30   0.00     1    2      12,179     6,604  9c5f9hbzbuj8a  INSERT ALL WHEN X_LD_EMIT = 1 THEN INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCS
+   871   0.181   2.1%   0.00    0.18   0.00     1    0      23,779    15,633  19mfxqb34sbky  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, S
+  3714   0.170   2.0%   0.00    0.17   0.00     1    0      18,160        12  4pxda1qnut3uk  MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+  3714   0.162   1.9%   0.00    0.16   0.00     1    0      24,048     5,741  0vvdpr0vkb4tr  MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+   621   0.161   1.9%   0.00    0.16   0.00     1    0      33,836    21,164  0rp3b1v236wwz  INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, ITEM_ID, ITE
+  3714   0.132   1.6%   0.00    0.13   0.00     1    0      18,251        99  8fa7wv2tt1m54  MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+  1457   0.099   1.2%   0.00    0.10   0.00     1    0      18,612     1,224  day2h1hdkc8y1  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+  1067   0.094   1.1%   0.00    0.09   0.00     1    0       5,270    15,633  63ar9rz0axr5p  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+   678   0.081   1.0%   0.00    0.08   0.00     1    0       2,258    13,535  9wgfrws532db6  INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_A_V ( DIVISION_ID, ITEM_ID, ITEM_
+  1457   0.056   0.7%   0.00    0.06   0.00     1    2       3,143     1,221  1kr5k368wpvrj  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+  4136   0.053   0.6%   0.00    0.05   0.00     1    0      13,432     3,490  20xrvz802rfsy  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B
+  4988   0.038   0.5%   0.00    0.04   0.00     1    0       9,890         0  7u7nvxcn0pzm0  UPDATE SCM_MGR.GT_DMF0082_MF_SP SET CELL_PROD_SITE_ID = '-' WHERE CELL_PROD_SITE
+  4979   0.035   0.4%   0.00    0.03   0.00     1    0       9,890         0  67sysamdcxzmj  UPDATE SCM_MGR.GT_DMF0082_MF_SP SET AS_FROM_SITE = ' ' WHERE AS_FROM_SITE IS NUL
+   751   0.032   0.4%   0.00    0.03   0.00     1    0       2,386    13,535  8ngcf5avm1q3q  INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_V ( DIVISION_ID, ITEM_ID, ITEM_NA
+  5032   0.031   0.4%   0.00    0.03   0.00     1    0      10,038       144  3s6z6hhcamhc8  UPDATE SCM_MGR.GT_DMF0082_MF_SP SET CURRENCY = ' ' WHERE MEASURE NOT IN ('LOC', 
+  5000   0.026   0.3%   0.00    0.03   0.00     1    0       9,890         0  4nb3gsynxqkjd  MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT DIVISION_ID, PROJECT_CODE, 
+  4298   0.025   0.3%   0.00    0.02   0.00     1    0       9,147         0  41tabk4sgrfsy  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE F WHERE F.MEASURE_GROUP = 'CUST
+  1355   0.024   0.3%   0.00    0.02   0.00     1    2         500         0  dubk2cua6sa59  INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C (DIVISION_ID, PROJECT_CO
+  1399   0.021   0.2%   0.00    0.02   0.00     1    2         503         0  dmhkvn42xm4w5  INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C (DIVISION_ID, PROJECT_C
+
+[범주 합계 dep=1]
+  PKG 문장             5.181s  문장   79  하드파싱   12  PARSE콜 0.005s
+  기타(매칭불가)           3.170s  문장   14  하드파싱    0  PARSE콜 0.000s
+  전체 하드파싱 이벤트 12 (재귀 포함)
+
+[기타(매칭불가) 상위]
+   2.824s b9hn6zvmrhkhu INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS , MEASUR
+   0.344s 70xvv1ktud7js SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP BY DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITE
+
+[갭 > 50ms]
+
+[대기 이벤트 합]
+    4.181s  direct path write temp
+    0.842s  SQL*Net message from client
+    0.074s  direct path read temp
+    0.023s  Free private memory to OS
+    0.005s  log file sync
+    0.004s  Allocate UGA memory from OS
+    0.001s  SQL*Net more data to client
+    0.000s  SQL*Net message to client

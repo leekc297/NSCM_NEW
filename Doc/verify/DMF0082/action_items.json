@@ -1,0 +1,288 @@
+[
+ {
+  "row_id": "V-75957a15",
+  "rule_id": "A5",
+  "target": "DMF0082 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-38a8a336",
+  "rule_id": "G3",
+  "target": "DMF0082 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-b92ec5a3",
+  "rule_id": "F7",
+  "target": "DMF0082 저장 연계 테이블",
+  "same": []
+ },
+ {
+  "row_id": "V-42fea939",
+  "rule_id": "H11",
+  "target": "DMF0082 화면",
+  "same": []
+ },
+ {
+  "row_id": "V-a9870add",
+  "rule_id": "F10",
+  "target": "PKG_DMF0082.P_DMF0082_SAVE_MAIN_DATA",
+  "same": [
+   "V-200a34a6"
+  ]
+ },
+ {
+  "row_id": "V-0c8f4244",
+  "rule_id": "F10",
+  "target": "PKG_DMF0082.P_DMF0082_EXCEL_UPLOAD",
+  "same": []
+ },
+ {
+  "row_id": "V-9027370c",
+  "rule_id": "F10",
+  "target": "PKG_DMF0000.P_DMF0000_SAVE_EXCHANGE_POPUP_DATA",
+  "same": []
+ },
+ {
+  "row_id": "V-3064b06b",
+  "rule_id": "F10",
+  "target": "SCM0002_SET_TITLESET_POPUP",
+  "same": []
+ },
+ {
+  "row_id": "V-5537bfe4",
+  "rule_id": "B3",
+  "target": "조회조건 End Customer",
+  "same": []
+ },
+ {
+  "row_id": "V-cc05e048",
+  "rule_id": "B3",
+  "target": "조회조건 Team",
+  "same": []
+ },
+ {
+  "row_id": "V-2cece244",
+  "rule_id": "B4",
+  "target": "FcstNPrice.TEAM_ID (Team)",
+  "same": []
+ },
+ {
+  "row_id": "V-7e7c4c2d",
+  "rule_id": "B3",
+  "target": "FcstNPrice.SOLDTO_CUSTOMER (Sold-To Customer)",
+  "same": []
+ },
+ {
+  "row_id": "V-d9d2a8c3",
+  "rule_id": "H2",
+  "target": "FcstNPrice.ITEM_ID (Model*)",
+  "same": []
+ },
+ {
+  "row_id": "V-c7a4b5d8",
+  "rule_id": "B3",
+  "target": "FcstNPrice.FCST_TYPE (FCST Type*)",
+  "same": []
+ },
+ {
+  "row_id": "V-67e34115",
+  "rule_id": "B4",
+  "target": "FcstNPrice.FCST_TYPE (FCST Type*)",
+  "same": []
+ },
+ {
+  "row_id": "V-48949855",
+  "rule_id": "B4",
+  "target": "FcstNPrice.CELL_PROD_SITE_ID (Cell Prod Site*)",
+  "same": []
+ },
+ {
+  "row_id": "V-a1173add",
+  "rule_id": "B1",
+  "target": "FcstNPrice.CURRENCY (Currency*)",
+  "same": []
+ },
+ {
+  "row_id": "V-617cc49a",
+  "rule_id": "D5",
+  "target": "FcstNPrice.<DYNAMIC:LOOP> (동적 LOOP 컬럼)",
+  "same": []
+ },
+ {
+  "row_id": "V-fc8c3261",
+  "rule_id": "H8",
+  "target": "FcstNPrice.<DYNAMIC:LOOP> (동적 LOOP 컬럼)",
+  "same": []
+ },
+ {
+  "row_id": "V-dc74a9a1",
+  "rule_id": "MS1",
+  "target": "MSG00137",
+  "same": []
+ },
+ {
+  "row_id": "V-0a1d4ac3",
+  "rule_id": "MS1",
+  "target": "MSG00283",
+  "same": []
+ },
+ {
+  "row_id": "V-0556d0b8",
+  "rule_id": "MS1",
+  "target": "MSG00108",
+  "same": []
+ },
+ {
+  "row_id": "V-9703b532",
+  "rule_id": "MS1",
+  "target": "MSG00164",
+  "same": []
+ },
+ {
+  "row_id": "V-4066740e",
+  "rule_id": "G5",
+  "target": "new DM0002_TitleSetForm_Popup(\"DMF0082\", SpdSheet.shtMain, true, clbDivision.ControlValues)",
+  "same": [
+   "V-7c7fba0d"
+  ]
+ },
+ {
+  "row_id": "V-c1bcb2bc",
+  "rule_id": "MS1",
+  "target": "MSG00227",
+  "same": []
+ },
+ {
+  "row_id": "V-9b36903b",
+  "rule_id": "D4",
+  "target": "InsertButton 전제 isCurVersion",
+  "same": []
+ },
+ {
+  "row_id": "T-0d37e73a",
+  "rule_id": "C2",
+  "target": "DIVISION_ID / Division",
+  "same": []
+ },
+ {
+  "row_id": "T-48c20115",
+  "rule_id": "H2",
+  "target": "ITEM_ID / Model",
+  "same": []
+ },
+ {
+  "row_id": "T-13ca144b",
+  "rule_id": "H2",
+  "target": "CELL_PROD_SITE_ID / Cell Prod Site",
+  "same": []
+ },
+ {
+  "row_id": "T-22cd82b1",
+  "rule_id": "D5",
+  "target": "MEASURE / Measure",
+  "same": []
+ },
+ {
+  "row_id": "T-d7c7bae7",
+  "rule_id": "F4",
+  "target": "POPUP_GET_FUTUREPRICE_INFO",
+  "same": []
+ },
+ {
+  "row_id": "T-3052e069",
+  "rule_id": "F4",
+  "target": "PKG_DMF0082",
+  "same": []
+ },
+ {
+  "row_id": "T-0230a46d",
+  "rule_id": "D5",
+  "target": "DIVISION_ID / Division",
+  "same": []
+ },
+ {
+  "row_id": "T-44442445",
+  "rule_id": "G4",
+  "target": "cboBucketType / Bucket / Bucket Type",
+  "same": []
+ },
+ {
+  "row_id": "T-1b3d0f40",
+  "rule_id": "G4",
+  "target": "drpPeriod / Period / From / To / 기간",
+  "same": []
+ },
+ {
+  "row_id": "T-786235be",
+  "rule_id": "F4",
+  "target": "DMF0003_GET_BUCKET_TYPE_CODE",
+  "same": []
+ },
+ {
+  "row_id": "T-62b53f5b",
+  "rule_id": "G4",
+  "target": "clbDivision / Division / Div.",
+  "same": []
+ },
+ {
+  "row_id": "T-20f1994f",
+  "rule_id": "G4",
+  "target": "clbTeam / Team",
+  "same": []
+ },
+ {
+  "row_id": "T-7618544d",
+  "rule_id": "G4",
+  "target": "clbCustomer / End Customer / Customer",
+  "same": []
+ },
+ {
+  "row_id": "T-dfcf7638",
+  "rule_id": "G4",
+  "target": "clbBizType / Biz Type / Biz. Type",
+  "same": []
+ },
+ {
+  "row_id": "T-9a904c00",
+  "rule_id": "G4",
+  "target": "clbSalesSite / Sales Site",
+  "same": []
+ },
+ {
+  "row_id": "T-762604a0",
+  "rule_id": "G4",
+  "target": "txtVersion / Version",
+  "same": []
+ },
+ {
+  "row_id": "T-124c05e1",
+  "rule_id": "G4",
+  "target": "chkSum / Sum",
+  "same": []
+ },
+ {
+  "row_id": "T-676451ad",
+  "rule_id": "G4",
+  "target": "drpDateTime / Date Time",
+  "same": []
+ },
+ {
+  "row_id": "T-f36de5dc",
+  "rule_id": "G4",
+  "target": "clbDivisions / Division / Divisions",
+  "same": []
+ },
+ {
+  "row_id": "V-200a34a6",
+  "rule_id": "F10",
+  "target": "",
+  "folded_into": "V-a9870add"
+ },
+ {
+  "row_id": "V-7c7fba0d",
+  "rule_id": "G5",
+  "target": "",
+  "folded_into": "V-4066740e"
+ }
+]

@@ -289,6 +289,35 @@ if (ID) {
   }
 }
 
+// 8c) 라벨 별칭 룰 (사용자 지시 2026-10-30 · CR-092) — SCP·SSP 컬럼·조회조건 명칭 Valid → Active 일괄. 정본 rules/label_alias.csv(scope·asis_label·tobe_label).
+//    LB1 = 페이지 소스의 라벨 리터럴 '_Valid' / label: 'Valid' / header: 'Valid' 잔존 → 'Active' 로(FINAL BLOCK · 평소 WARN · 의도된 예외는 그 줄 `LB-OK`)
+//    LB2 = TO-BE 메타(Doc/tobefacts/db/sheet_columns.csv) 이 화면 COLUMN_LABEL_NAME 이 변경 전 라벨 → 메타 UPDATE 대상(WARN — 화면 코드로 못 고치는 항목이라 BLOCK 하지 않음)
+if (ID) {
+  const laP = path.join(R, 'label_alias.csv');
+  const csvRows = txt => { const L = txt.replace(/^\uFEFF/, '').split(/\r?\n/).filter(l => l.trim()); const cells = l => { const o = []; let c = '', q = false; for (let i = 0; i < l.length; i++) { const ch = l[i]; if (q) { if (ch === '"' && l[i + 1] === '"') { c += '"'; i++; } else if (ch === '"') q = false; else c += ch; } else if (ch === '"') q = true; else if (ch === ',') { o.push(c); c = ''; } else c += ch; } o.push(c); return o; }; const h = cells(L[0]); return L.slice(1).map(l => Object.fromEntries(cells(l).map((v, i) => [h[i], v]))); };
+  const canonL = v => String(v || '').replace(/\*/g, '').toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
+  const scopeOkL = sc => { const ss = String(sc || 'ALL').toUpperCase().split(';').map(x => x.trim()).filter(Boolean); return ss.includes('ALL') || ss.includes(ID) || ss.some(x => x.length === 3 && ID.startsWith(x)); };
+  const aliases = fs.existsSync(laP) ? csvRows(read(laP)).filter(a => a.asis_label && a.tobe_label && scopeOkL(a.scope)) : [];
+  if (aliases.length) {
+    const lv = FINAL ? 'BLOCK' : 'WARN';
+    for (const [f, t] of Object.entries(src)) t.split(/\r?\n/).forEach((ln, i) => {
+      if (/LB-OK/.test(ln)) return;
+      for (const m of ln.matchAll(/(?:'_([^']+)'|\b(?:label|header|headerName|title|columnLabel)\s*:\s*'([^']+)')/g)) {
+        const lit = m[1] || m[2]; const a = aliases.find(x => canonL(x.asis_label) === canonL(lit));
+        if (a) F(lv, 'LB1', `라벨 리터럴 '${lit}' 은 TO-BE 룰 ${a.req_id}(SCP·SSP ${a.asis_label}→${a.tobe_label}) 변경 대상 — '${a.tobe_label}' 로 바꾼다(의도된 예외면 줄 끝 LB-OK)`, `${rel(f)}:${i + 1}`);
+      }
+    });
+    const scP = path.join(__dirname, '..', '..', 'Doc', 'tobefacts', 'db', 'sheet_columns.csv');
+    if (fs.existsSync(scP)) {
+      for (const r of csvRows(read(scP))) {
+        if (String(r.program_id || '').toUpperCase() !== ID || (r.valid_yn || 'Y') !== 'Y') continue;
+        const a = aliases.find(x => canonL(x.asis_label) === canonL(r.column_label_name));
+        if (a) F('WARN', 'LB2', `TO-BE 메타 SHEET_COLUMNS ${r.sheet_name}.${r.column_name} 라벨 '${r.column_label_name}' 은 TO-BE 룰 ${a.req_id} 변경 대상 → COLUMN_LABEL_NAME '${a.tobe_label}' 메타 UPDATE(사내 적용 절차 T18 · 화면 코드 수정으로는 해결 안 됨)`, `Doc/tobefacts/db/sheet_columns.csv PROGRAM_ID=${ID}`);
+      }
+    }
+  }
+}
+
 // 8b) 조회영역 일괄 입력 = 버튼 영역 버튼 + 입력 팝업 (hook #155 — 사용자 지시 2026-10-23, 정본 SCP0096 shipment-working-day-osp)
 //    대상 = 조회조건 기준표가 BUTTON_AREA + 'Bulk Update' 검토문구로 표시한 화면(SCP0019/SCP0096/SCP0098/SSP0005).
 //    BU1 = ①SubTitle customButtons 에 Input/Bulk 버튼 없음 ②<Page>InputModal.tsx / BulkUpdateModal.tsx 없음(FINAL BLOCK·평소 WARN) ③버튼 라벨 리터럴(WARN)

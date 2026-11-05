@@ -1,0 +1,4 @@
+﻿kind,target,result,why
+TITLESET_MIG,DMF0003,ERROR,"[확인 대상] 이관 대상 1167행 중 TO-BE 없음 1049행(예 [('park.choyi', 'C', 'DIVISION_ID'), ('park.choyi', 'C', 'DIVISION_ID40'), ('park.choyi', 'C', 'DOM_EXP')]) · AS-IS 전체 1307행 — AS-IS 접속이 개발 DB 라 이관 원천 일치 미확인"
+TITLESET_REQ,DMF0003.Mkt Fcst,ERROR,"[확인 대상] 칸 설정 보유 28명 중 필수 컬럼 미보유 3명(예 asan.kim: ['MEASURE']) — 실행 시 자동 포함 여부는 컬럼 설정 시험에서 확인 · Division 별 필수 미보유 사용자 수(사용자 Division 미확인 — 참고) {'40': 3, '81': 13, '81_HD': 13, '81_HG': 13, '81_HM': 13, '81_ST': 13, '81_UC': 13, '82': 8}"
+MEASURE_ORDER,DMF0003.Mkt Fcst,PASS,같은 키 연속 400쌍 전부 셋팅 순서 · 사용자 minyonglee1

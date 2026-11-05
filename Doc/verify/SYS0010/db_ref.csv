@@ -1,0 +1,8 @@
+﻿kind,target,result,why
+TB_FX,PKG_SYS0010,PASS,TB_FX_* 참조 0
+JSON_SHORT,PKG_SYS0010,PASS,PKG_SYS0010 JSON 생성 전부 CLOB 또는 없음
+SELECT_INTO,PKG_SYS0010,PASS,PKG_SYS0010 단건 SELECT INTO 전부 처리됨
+EMPTY_EQ,PKG_SYS0010,PASS,PKG_SYS0010 빈 문자열 직접 비교 0
+LIKE_NULL,PKG_SYS0010,PASS,PKG_SYS0010 가드 없는 LIKE 0
+SRC_E3,System admin 표시 순서 Lookup Display Seq,PASS,"System admin 표시 순서 Lookup Display Seq: 'SYSTEM_ADM', 'WEEK_WORK_TIME') THEN
+				                    ' 있음(줄 135) · 문서 DM-213"

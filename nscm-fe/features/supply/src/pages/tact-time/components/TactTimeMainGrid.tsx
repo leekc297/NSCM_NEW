@@ -42,6 +42,9 @@ interface Props {
 const s = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
 
+// PRIORITY 는 0~99 정수만 (숫자 2자리). numberRules 는 문자/상한을 막지 못해 화면에서 가드한다.
+const PRIORITY_PATTERN = /^\d{0,2}$/;
+
 export const TactTimeMainGrid = ({
   mode,
   rows,
@@ -67,6 +70,9 @@ export const TactTimeMainGrid = ({
   editModeRef.current = editMode;
   const isPlantRef = useRef(isPlant);
   isPlantRef.current = isPlant;
+  // 부모 리렌더마다 바뀌는 콜백 — deps 에 넣으면 effect 재실행(invalidate)으로 그리드가 깜빡인다.
+  const onRowDblClickRef = useRef(onRowDblClick);
+  onRowDblClickRef.current = onRowDblClick;
 
   // 편집잠금(beginningEdit) + 파생 Auto-Sync(cellEditEnded) 핸들러 — SalesFuturePriceGrid 패턴.
   useEffect(() => {
@@ -117,7 +123,12 @@ export const TactTimeMainGrid = ({
         }
       } else if (binding === 'DAILY_CAPACITY') {
         // Packer: DAILY_CAPACITY 변경 -> TACT_TIME 파생 (cs:2717/2722)
-        setCell('TACT_TIME', deriveTactTimeFromDaily(row.DAILY_CAPACITY));
+        // 기존 로직 주석 보존 (2026-10-27) 시작
+        // setCell('TACT_TIME', deriveTactTimeFromDaily(row.DAILY_CAPACITY));
+        // 기존 로직 주석 보존 (2026-10-27) 끝
+        // DAILY_CAPACITY 0 이면 TACT_TIME 유지(AS-IS 동일).
+        const derived = deriveTactTimeFromDaily(row.DAILY_CAPACITY);
+        if (derived !== null) setCell('TACT_TIME', derived);
       }
 
       // TACT_TIME 셀입력 clamp [MIN, MAX] (cs:2895 — MSG00203). Max 실측 SQL 은 asis.py 차단(확인 필요).
@@ -133,11 +144,59 @@ export const TactTimeMainGrid = ({
     g.cellEditEnded.addHandler(cellEditEndedHandler);
     g.pastedCell.addHandler(cellEditEndedHandler);
 
+    // PRIORITY 입력 가드 — 타이핑은 키 입력 차단, 확정/붙여넣기는 반영 안 함.
+    const isPriorityCol = (sender: FlexGridType, col: number) =>
+      sender.columns[col]?.binding === 'PRIORITY';
+    const prepareCellForEditHandler = (sender: FlexGridType, e: { col: number }) => {
+      const editor = sender.activeEditor;
+      if (!editor || !isPriorityCol(sender, e.col)) return;
+      editor.addEventListener('beforeinput', (ev: InputEvent) => {
+        if (ev.data == null) return;
+        const { value, selectionStart, selectionEnd } = editor;
+        const next =
+          value.slice(0, selectionStart ?? value.length) +
+          ev.data +
+          value.slice(selectionEnd ?? value.length);
+        if (!PRIORITY_PATTERN.test(next.replaceAll(',', ''))) ev.preventDefault();
+      });
+      // beforeinput 으로 못 막는 입력(한글 IME 등)은 즉시 숫자 2자리로 정리
+      editor.addEventListener('input', () => {
+        const cleaned = editor.value.replace(/\D/g, '').slice(0, 2);
+        if (cleaned !== editor.value) editor.value = cleaned;
+      });
+    };
+    // 편집 전 셀에서 바로 타이핑하면 Wijmo 가 첫 글자로 편집을 시작한다 — 숫자 외 키는 여기서 차단
+    const hostKeydownHandler = (ev: KeyboardEvent) => {
+      if (g.activeEditor || !isPriorityCol(g, g.selection.col)) return;
+      if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
+      if (ev.key === 'Process' || (ev.key.length === 1 && !/\d/.test(ev.key))) {
+        ev.preventDefault();
+        ev.stopPropagation();
+      }
+    };
+    g.hostElement.addEventListener('keydown', hostKeydownHandler, true);
+    const cellEditEndingHandler = (sender: FlexGridType, e: { col: number; cancel: boolean }) => {
+      const editor = sender.activeEditor;
+      if (!editor || e.cancel || !isPriorityCol(sender, e.col)) return;
+      if (!PRIORITY_PATTERN.test(editor.value.replaceAll(',', '').trim())) e.cancel = true;
+    };
+    const pastingCellHandler = (
+      sender: FlexGridType,
+      e: { col: number; cancel: boolean; data?: unknown }
+    ) => {
+      if (!isPriorityCol(sender, e.col)) return;
+      if (!PRIORITY_PATTERN.test(s(e.data).replaceAll(',', '').trim())) e.cancel = true;
+    };
+    g.prepareCellForEdit.addHandler(prepareCellForEditHandler);
+    g.cellEditEnding.addHandler(cellEditEndingHandler);
+    g.pastingCell.addHandler(pastingCellHandler);
+
     const dblclickHandler = (ev: MouseEvent) => {
       const ht = g.hitTest(ev);
       if (ht.cellType !== CellType.Cell) return;
       const row = g.rows[ht.row]?.dataItem as MainRow | undefined;
-      if (row) onRowDblClick(row);
+      // if (row) onRowDblClick(row);
+      if (row) onRowDblClickRef.current(row);
     };
     g.hostElement.addEventListener('dblclick', dblclickHandler);
 
@@ -163,14 +222,19 @@ export const TactTimeMainGrid = ({
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.cellEditEnded?.removeHandler(cellEditEndedHandler);
         g.pastedCell?.removeHandler(cellEditEndedHandler);
+        g.prepareCellForEdit?.removeHandler(prepareCellForEditHandler);
+        g.cellEditEnding?.removeHandler(cellEditEndingHandler);
+        g.pastingCell?.removeHandler(pastingCellHandler);
+        g.hostElement?.removeEventListener('keydown', hostKeydownHandler, true);
         g.hostElement?.removeEventListener('dblclick', dblclickHandler);
         g.formatItem?.removeHandler(formatItemHandler);
       } catch {
         /* unmount race */
       }
     };
+    // }, [columns, onRowDblClick]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns, onRowDblClick]);
+  }, [columns]);
 
   return (
     <DataGrid

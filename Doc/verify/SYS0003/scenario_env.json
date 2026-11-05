@@ -1,0 +1,74 @@
+{
+ "menu_id": "SYS0003",
+ "asis_id": "GSCM_MENUITEMINFO",
+ "area": "DM",
+ "generated": "2026-11-05 06:14:41",
+ "division_cond": {
+  "present": false,
+  "labels": []
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "DM Admin": "hongjae.kim",
+   "DM Planner": "eunah.koo",
+   "DM Viewer": "yooah.chung",
+   "SCP Planner": "dodae"
+  },
+  "81": {
+   "DM Admin": "jiwon.park",
+   "DM Planner": "bpark416",
+   "DM Planner (W/S)": "jaehyeok",
+   "DM Viewer": "park6151",
+   "SCP Planner": "bottle"
+  },
+  "82": {
+   "DM Admin": "wonqthanq",
+   "DM Planner": "ys_cho",
+   "DM Planner (W/S)": "miyeong.lee",
+   "DM Viewer": "yeonjusung",
+   "SCP Planner": "coeogus"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [
+   "DELETE",
+   "INSERT",
+   "SAVE",
+   "SEARCH"
+  ],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [],
+ "popup_conds": [],
+ "bucket_cond": "",
+ "observed": {
+  "source": "e2e_results.json 없음",
+  "max_rows_after_search": null,
+  "zero_row_failures": []
+ },
+ "warnings": []
+}

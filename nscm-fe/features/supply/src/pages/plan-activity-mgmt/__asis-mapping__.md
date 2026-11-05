@@ -16,6 +16,8 @@ TO-BE: `nscm-fe/features/supply/src/pages/plan-activity-mgmt/`
 | `SetDivisionAuthCheck`(`dtMyDivision.Rows.Count==0`, `usrLayoutControl2.Enabled=false`) | cs:123-124 | `noAuthDivision` → 콤보 disable + Search 무동작(`handleSearch` 게이트) + `MSG00667` alert | division 데이터 권한 게이트(L2). SearchArea(shared) 무수정 위해 조회 함수에서 차단 |
 | `RefreshPlanGroupByDivision` DIVISION_ID='' 필터 → 후보 0 | cs:169-172 | Division 무선택 시 `planGroupOptions=[]`(전체노출 아님) | design 02 §4 초기 후보 0 등가 |
 
+> 각주(2026-10-30): 커밋 `bfe535f05`로 PlanGroup onChange 에도 Division 과 동일한 `confirmIfDirtyKey(tabDirtyKey(tabId),'search')` dirty 가드를 추가해 iter-4 R4-01(편집중 미저장 가드 누락)을 해소함(`PlanActivityMgmtForm.tsx:163-169`).
+
 ## 그리드 (design 03)
 
 | AS-IS | 라인 | TO-BE | 비고 |

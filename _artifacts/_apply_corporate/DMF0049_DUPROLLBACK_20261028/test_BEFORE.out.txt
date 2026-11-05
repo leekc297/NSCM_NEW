@@ -1,0 +1,7 @@
+BEFORE AT 2026-10-28T16:14:15
+ version before ('N', '2026-10-02 13:36:17')
+ pre-DML rows 1
+ MOBILE msg: ['ETC Report데이터를 Sales Report 데이터와 병합하는 과정에서 중복 데이터가 발생했습니다.\nE']
+ pre-DML value after MOBILE (same session): DUPRB_TEST -> 'DUPRB_TEST' = 선행 변경 살아남음 / '<NULL>' = ROLLBACK 됨
+ leftover test value (other session): 0
+ version after ('N', '2026-10-02 13:36:17')

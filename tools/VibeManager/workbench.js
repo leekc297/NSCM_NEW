@@ -30,7 +30,7 @@ const AUTO_HARNESS_TASKS = new Set([
   'S5.pipeline', 'S5.pipelinedesign', 'S5.pipelineregen', 'S5.pipelinedry',
   'S5.new', 'S5.claude', 'S5.repair', 'S5.check', 'S5.final',
   'S5.pkgrepair', 'S5.pkg', 'S5.pkgdeploy',
-  'S4.one', 'S3.agent'
+  'S3.agent'
 ]);
 function effectiveHarness(userHarness, taskId, item, id) {
   if (userHarness) return true;
@@ -53,8 +53,33 @@ function claudeArgs(p, resume, overrides) {
   if (resume) a.push('--resume', resume);
   return a;
 }
+// 1.9.37(2026-11-02 사용자): 환경설정 작업 모드 — 단일 원천 tools/Harness/harness.json repairScope(DB_ONLY = DB MODE · DB_FE = UI/DB MODE). 실행 시점마다 읽는다
+function workMode(p) {
+  let v = 'DB_ONLY';
+  try { v = JSON.parse(fs.readFileSync(path.join(p.root, 'tools', 'Harness', 'harness.json'), 'utf8').replace(/^\uFEFF/, '')).repairScope || 'DB_ONLY'; } catch { }
+  const db = v !== 'DB_FE'; return { code: db ? 'DB_ONLY' : 'DB_FE', db, name: db ? 'DB MODE' : 'UI/DB MODE' };
+}
+// DB MODE 면 모든 Claude 요청 앞에 붙는다(메뉴·체인·수선·직접 입력 공통) — 메뉴를 나누지 않고 이 문단 하나로 범위를 정한다
+function workModePrefix(p, id) {
+  if (!workMode(p).db) return '';
+  const g = `Doc/verify/${id || '<화면ID>'}/FE_GUIDE_<YYYYMMDD_HHMM>.md`;
+  return `**[작업 모드 = DB MODE — 환경설정 값 · 아래 본문보다 이 문단이 우선한다]** DB 객체(PKG/SP)·DB 메타는 사내 ZIOUI1 에 직접 수정·적용한다. 화면 FE(nscm-fe)·BE(nscm-be)·공통 컴포넌트는 **한 줄도 수정하지 않는다** — FE 페이지 폴더 안 파일(대조표 __asis-mapping__.md 포함) 쓰기, FE 실행 확인 목적의 수정도 하지 않는다(실행 hook check-work-mode 가 차단한다). FE/BE 수정이 필요한 항목은 가이드(파일:라인 · 변경 전/후 · 이유 · 검증법)로 ${g} 에 모으고, fixlist.csv 해당 행 status=보류(가이드)·change 에 가이드 파일명을 적는다. 본문에서 FE·BE 를 고치라는 지시와 'FE 수정 승인' 문구는 모두 '가이드로 남긴다' 로 읽는다. 보고 끝에 가이드 파일 경로와 항목 수를 적는다. **CheckList(run_verify)는 모드와 무관하게 전체를 수행한다** — 모드를 이유로 어떤 검사·E2E 도 건너뛰거나 NA 처리하지 않는다.\n\n`;
+}
 let flowSeq = 0; // 1.8.9: Flow 보드 일련번호(체인·단일 작업)
 // 1.9.5: 체인 단계 산출물 검증 — verify: { type: 'e2eRows', kind } → Doc/e2e/results/_summary.csv 에 (화면, 종류) 행이 이번 실행(파일 갱신 시각 ≥ 단계 시작) 뒤 존재 · { type: 'fileExists', file }
+// RFC 4180 최소 파서 — 따옴표 칸 안 쉼표·줄바꿈·"" 이스케이프
+function parseCsv(t) {
+  const out = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < t.length; i++) {
+    const ch = t[i];
+    if (q) { if (ch === '"') { if (t[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; continue; }
+    if (ch === '"') q = true; else if (ch === ',') { row.push(cell); cell = ''; }
+    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && t[i + 1] === '\n') i++; row.push(cell); out.push(row); row = []; cell = ''; }
+    else cell += ch;
+  }
+  if (cell !== '' || row.length) { row.push(cell); out.push(row); }
+  return out;
+}
 function verifyStep(p, v, id) {
   if (process.env.VIBE_CHAIN_NO_VERIFY === '1') return { ok: true, why: '검증 생략(VIBE_CHAIN_NO_VERIFY)' }; // 모의 테스트 전용
   try {
@@ -64,6 +89,16 @@ function verifyStep(p, v, id) {
       const rows = fs.readFileSync(f, 'utf8').split(/\r?\n/).filter(l => l.includes(`"${id}"`) && (!v.kind || l.includes(`"${v.kind}"`)));
       if (!rows.length) return { ok: false, why: `E2E 결과에 ${id}${v.kind ? '/' + v.kind : ''} 행이 없음(스펙 미생성 또는 실행 실패)` };
       const pass = rows.filter(l => l.includes('"PASS"')).length; return { ok: true, why: `E2E ${v.kind || ''} ${pass}/${rows.length} PASS` };
+    }
+    // 2026-11-04: CheckList 재판정 — 이번 실행이 만든 Doc/verify/<ID>/fixlist.csv 의 조치 필요(action_needed=Y) 행이 0 이어야 통과(남으면 repair → 재판정)
+    if (v.type === 'checklistOpen') {
+      const f = path.join(p.root, 'Doc', 'verify', id, 'fixlist.csv'); if (!fs.existsSync(f)) return { ok: false, why: `CheckList 결과 없음: ${path.relative(p.root, f)}`, from: 'run' };
+      const since = v._since || 0; if (since && fs.statSync(f).mtimeMs < since) return { ok: false, why: `CheckList 가 이번 실행에서 갱신되지 않음 — ${path.relative(p.root, f)}`, from: 'run' };
+      // 칸 안 따옴표·쉼표·줄바꿈이 있다(DMF0003·DMF0082·SCP0007·SCP0111 실측) → 줄 분할 대신 CSV 파서
+      const rowsAll = parseCsv(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')).filter(r => r.some(x => x !== '')); const hh = rowsAll[0] || []; const ai = hh.indexOf('action_needed');
+      if (ai < 0) return { ok: false, why: 'fixlist.csv 에 action_needed 열 없음', from: 'run' };
+      const body = rowsAll.slice(1); const open = body.filter(r => String(r[ai] || '').trim().toUpperCase() === 'Y').length;
+      return open ? { ok: false, why: `CheckList 조치 필요 ${open}행 남음(전체 ${body.length}행)` } : { ok: true, why: `CheckList 조치 필요 0행(전체 ${body.length}행)` };
     }
     if (v.type === 'fileExists') { const f = String(v.file || '').replace(/\$\{id\}/g, id).replace(/\$\{root\}/g, p.root).replace(/\$\{genDir\}/g, p.genDir); return fs.existsSync(f) ? { ok: true, why: `산출물 있음 ${path.relative(p.root, f)}` } : { ok: false, why: `산출물 없음 ${f}` }; }
     return { ok: true, why: '검증 규칙 없음' };
@@ -153,23 +188,23 @@ function toolBrief(name, inp, ko) {
 
 // ── 1.8.3: UI 텍스트 사전 (vibeManager.language: en 기본 / ko) ──
 const UI = {
-  tab_claude: ['Claude', 'Claude'], tab_log: ['Log', 'Log'], tab_task: ['Task Log', 'Task Log'], tab_status: ['UI Status', 'UI Status'], tab_flow: ['FLOW', 'FLOW'], tab_hist: ['History', 'History'],
-  send: ['📤 Send (Ctrl+Enter)', '📤 전송 (Ctrl+Enter)'], sending: ['⌛ Responding…', '⌛ 응답 중…'], stop: ['⏹️ Stop', '⏹️ 중지'], clear: ['🧹 Clear', '🧹 지우기'], attach: ['📎 Attach', '📎 첨부'],
+  tab_claude: ['Claude', 'Claude'], tab_log: ['Log', 'Log'], tab_task: ['Task Log', 'Task Log'], tab_status: ['UI Status', 'UI Status'], tab_flow: ['FLOW', 'FLOW'], tab_hist: ['Revision History', 'Revision History'], tab_thist: ['Task History', 'Task History'],
+  send: ['📤 Send (Enter)', '📤 전송 (Enter)'], sending: ['⌛ Responding…', '⌛ 응답 중…'], stop: ['⏹️ Stop', '⏹️ 중지'], clear: ['🧹 Clear', '🧹 지우기'], attach: ['📎 Attach', '📎 첨부'],
   noid: ['(no ID)', '(ID 없음)'], mode_auto: ['🤖 Auto (accept edits)', '🤖 자동 (수용)'], mode_manual: ['🖐️ Manual', '🖐️ 수동'], mode_plan: ['📋 PLAN', '📋 PLAN'], mode_bypass: ['🔓 Auto-approve (all)', '🔓 자동승인 (전부허용)'],
   model_default: ['Default (Claude Code /model · settings)', '기본 (Claude Code /model·settings)'], model_default_set: ['Default (setting: ', '기본 (설정: '], model_custom: ['✏️ Enter model…', '✏️ 직접 입력…'], inuse: ['in use', '사용중'], after_send: ['(shown after first send)', '(전송 후 표시)'],
   remote: ['📱 Remote', '📱 원격'], nosess: ['no session', '세션 없음'], sess: ['session ', '세션 '], newsess: ['🔄 New Session', '🔄 새 세션'], newwin: ['➕ New Window', '➕ 새 창'], editq: ['✎ quick.json', '✎ quick.json'],
   latest: ['⤓ Latest', '⤓ 최신'], belog: ['☕ BE Log', '☕ BE Log'], felog: ['🎨 FE Log', '🎨 FE Log'], tasklog: ['🧾 Task Log', '🧾 Task Log'],
-  ph: ['Prompt — Ctrl+Enter to send · 📎 attach files · screen context is attached automatically when an ID is set · harness is automatic for new-UI/GAP work', '프롬프트 — Ctrl+Enter 전송 · 📎 파일 첨부 · 화면ID 있으면 그 화면 컨텍스트가 자동 첨부 · 신규 UI/GAP 작업은 하네스 자동'],
-  chat_hint: ['Send a prompt — Claude replies and tool use appear here (session kept).', '프롬프트를 보내면 Claude 응답·도구 사용이 여기 표시됩니다 (세션 유지).'], flow_hint: ['Loads when the FLOW tab is opened…', 'FLOW 탭 선택 시 자동 로드됩니다…'], hist_hint: ['Loads when the History tab is opened…', 'History 탭 선택 시 자동 로드됩니다…'],
-  st_pick: ['Set a screen ID to see its progress, gates and outputs here.', '화면ID 를 입력하면 그 화면의 단계 현황·산출물이 여기 나옵니다.'], st_progress: ['Progress', '진행률'], st_stages: ['stages done', '단계 완료'], st_dod: ['DoD', 'DoD'], st_fe: ['FE Gate', 'FE 게이트'], st_pkg: ['PKG Gate', 'PKG 게이트'], st_gap: ['GAP open', 'GAP 미반영'], st_e2e: ['E2E', 'E2E'],
+  ph: ['Prompt — Enter to send · Shift+Enter new line · 📎 attach files · screen context is attached automatically when an ID is set · harness is automatic for new-UI/GAP work', '프롬프트 — Enter 전송 · Shift+Enter 줄바꿈 · 📎 파일 첨부 · 화면ID 있으면 그 화면 컨텍스트가 자동 첨부 · 신규 UI/GAP 작업은 하네스 자동'],
+  chat_hint: ['Send a prompt — Claude replies and tool use appear here (session kept).', '프롬프트를 보내면 Claude 응답·도구 사용이 여기 표시됩니다 (세션 유지).'], flow_hint: ['Loads when the FLOW tab is opened…', 'FLOW 탭 선택 시 자동 로드됩니다…'], hist_hint: ['Loads when the Revision History tab is opened…', 'Revision History 탭 선택 시 자동 로드됩니다…'],
+  st_pick: ['Set a screen ID to see its progress, gates and outputs here.', '화면ID 를 입력하면 그 화면의 단계 현황·산출물이 여기 나옵니다.'], st_progress: ['Progress', '진행률'], st_stages: ['stages done', '단계 완료'], st_dod: ['DoD', 'DoD'], st_fe: ['FE Gate', 'FE 게이트'], st_pkg: ['PKG Gate', 'PKG 게이트'], st_chk: ['CheckList open', 'CheckList 조치 필요'], st_e2e: ['E2E', 'E2E'],
   st_notrun: ['not run', '미실행'], st_nospec: ['no spec', '스펙 없음'], st_items: ['items', '건'], st_outputs: ['Outputs', '산출물'], st_docs: ['Documents', '문서'], st_recent: ['Recent work', '최근 작업'], st_none: ['none', '없음'], st_changed: ['changed', '변경'], st_open: ['open', '진행중'], st_pipeline: ['Last pipeline', '마지막 파이프라인'],
   tb: [{ reload: 'Reload', edit: 'Edit', view: 'View', save: 'Save', editor: 'Open in editor', os: 'Open with OS', close: 'Close tab' }, { reload: '새로고침', edit: '편집', view: '보기', save: '저장', editor: '에디터로', os: 'OS 로 열기', close: '탭 닫기' }],
-  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', retry: 'retry', optional: 'optional', warn: 'Done w/ warnings', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', SKIP: 'skipped', WAIT: 'waiting' ,REPAIR:'Repairing'}, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
-       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', retry: '재시도', optional: '선택', warn: '경고 포함 완료', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', SKIP: '건너뜀', WAIT: '대기' ,REPAIR:'수선 중'}, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
+  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', retry: 'retry', optional: 'optional', warn: 'Done w/ warnings', pending: 'Reported · follow-up work still running', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', SKIP: 'skipped', WAIT: 'waiting' ,REPAIR:'Repairing'}, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
+       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', retry: '재시도', optional: '선택', warn: '경고 포함 완료', pending: '보고 완료 · 후속 작업 진행 중', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', SKIP: '건너뜀', WAIT: '대기' ,REPAIR:'수선 중'}, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
   st_menu: ['Menu', '메뉴'], st_page: ['Page', '페이지'], st_click: ['Click a stage to run it', '단계를 누르면 실행됩니다'],
 };
 const t = (p, k) => (UI[k] || [k, k])[(p && p.language) === 'ko' ? 1 : 0];
-const STAGE_EN = { pack: '1 Parse', docs: '2 Docs', xlsx: '2x Excel', gap: '3 GAP', gen: '4 Build', gate: '5 Gate', repair: '6 Repair', pkg: '7 PKG', reg: '8 Reg SQL', e2e: '9 E2E', smoke: '9 Smoke', crud: '10 CRUD', auth: '11 Auth', authcrud: '12 Auth×CRUD' };
+const STAGE_EN = { pack: '1 Parse', docs: '2 Docs', xlsx: '2x Excel', chk: '3 CheckList', gen: '4 Build', gate: '5 Gate', repair: '6 Repair', pkg: '7 PKG', reg: '8 Reg SQL', e2e: '9 E2E', smoke: '9 Smoke', crud: '10 CRUD', auth: '11 Auth', authcrud: '12 Auth×CRUD' };
 // 1.8.8: UI Status 의 테스트 타일 4종(단계 키 → 라벨)
 const E2E_TILES = [['smoke', 'Smoke', 'Smoke'], ['crud', 'CRUD', 'CRUD'], ['auth', 'Auth', '권한'], ['authcrud', 'Auth×CRUD', '권한별 CRUD']];
 
@@ -187,7 +222,8 @@ function statusHtml(p, id) {
   } catch { }
   let pageRel = ''; try { const r = JSON.parse(rd(path.join(g, 'register.json'))); pageRel = `features/${r.feature}/src/pages/${r.pageDir}`; } catch { }
   const dod = /(\d+)\/(\d+) 충족/.exec(rd(path.join(g, 'DOD.md'))); const fe = /BLOCK (\d+) \/ WARN (\d+)/.exec(rd(path.join(g, 'CHECK.md'))); const pk = /BLOCK (\d+) \/ WARN (\d+)/.exec(rd(path.join(g, 'CHECK_PKG.md')));
-  let gapOpen = null, gapTot = 0; try { const gl = rd(path.join(p.gapDir, `${id}_gap.csv`)).split(/\r?\n/).filter(Boolean); if (gl.length > 1) { const h = gl[0].split(','); const si = h.indexOf('status'); gapTot = gl.length - 1; gapOpen = gl.slice(1).filter(l => /MISSING|UNMAPPED/.test((l.split(',')[si] || ''))).length; } } catch { }
+  // 2026-10-30 GAP 분석 폐지 → CheckList 조치 필요(Doc/verify/<ID>/fixlist.csv action_needed=Y 중 미적용) — 변수명은 타일 코드 호환
+  let gapOpen = null, gapTot = 0; try { const fx = rd(path.join(p.root, 'Doc', 'verify', id, 'fixlist.csv')).replace(/^\uFEFF/, '').split(/\r?\n/).filter(Boolean); if (fx.length > 1) { const hh = fx[0].split(','); const ai = hh.indexOf('action_needed'), si2 = hh.indexOf('status'); const rowsY = fx.slice(1).map(l => l.split(',')).filter(c => (c[ai] || '').toUpperCase() === 'Y'); gapTot = rowsY.length; gapOpen = rowsY.filter(c => !/^(적용|검증완료)/.test(c[si2] || '')).length; } } catch { }
   const stages = flow.STAGES; const done = stages.filter(st => s[st.key] === 'ok').length; const pct = Math.round(done / stages.length * 100);
   const tile = (label, value, sub, cls) => `<div class="kpi ${cls || ''}"><div class="kv">${value}</div><div class="kl">${label}</div>${sub ? `<div class="ks">${sub}</div>` : ''}</div>`;
   const kpis = [
@@ -195,7 +231,7 @@ function statusHtml(p, id) {
     tile(t(p, 'st_dod'), dod ? `${dod[1]}/${dod[2]}` : '–', dod ? '' : t(p, 'st_notrun'), dod ? (dod[1] === dod[2] ? 'ok' : 'mid') : ''),
     tile(t(p, 'st_fe'), fe ? `B ${fe[1]} · W ${fe[2]}` : '–', fe ? '' : t(p, 'st_notrun'), fe ? (fe[1] === '0' ? 'ok' : 'bad') : ''),
     tile(t(p, 'st_pkg'), pk ? `B ${pk[1]} · W ${pk[2]}` : '–', pk ? '' : t(p, 'st_notrun'), pk ? (pk[1] === '0' ? 'ok' : 'bad') : ''),
-    tile(t(p, 'st_gap'), gapOpen == null ? '–' : String(gapOpen), gapOpen == null ? t(p, 'st_notrun') : `/ ${gapTot} ${t(p, 'st_items')}`, gapOpen == null ? '' : (gapOpen === 0 ? 'ok' : 'bad')),
+    tile(t(p, 'st_chk'), gapOpen == null ? '–' : String(gapOpen), gapOpen == null ? t(p, 'st_notrun') : `/ ${gapTot} ${t(p, 'st_items')}`, gapOpen == null ? '' : (gapOpen === 0 ? 'ok' : 'bad')),
     // 1.8.8: 테스트 4단계 타일 — 결과 있음 n/m(ok/bad) · 스펙만 있음 '미실행' · 스펙 없음 '–'
     ...E2E_TILES.map(([k, en, ko2]) => { const st = s[k] || 'none', n = s[k + 'N']; return tile(`E2E ${p.language === 'ko' ? ko2 : en}`, n || '–', n ? '' : (st === 'warn' ? t(p, 'st_notrun') : t(p, 'st_nospec')), n ? (st === 'ok' ? 'ok' : st === 'warn' ? 'mid' : 'bad') : ''); }),
   ].join('');
@@ -211,7 +247,7 @@ function statusHtml(p, id) {
   const VER_RE = /(?:[_\s-]?v?\d+(?:\.\d+)*)+$/i;
   const verOf = s => { const m = VER_RE.exec(s); const toks = m ? m[0].split(/[_\s-]+|(?=v\d)/i).filter(Boolean).map(x => x.replace(/^v/i, '')) : []; const dt = toks.find(x => /^20\d{6}$/.test(x)); return { dt: dt ? Number(dt) : 0, n: toks.filter(x => x !== dt).flatMap(x => x.split('.').map(Number)) }; };
   const cmpVer = (a, b) => { if (a.dt && b.dt && a.dt !== b.dt) return a.dt - b.dt; for (let i = 0; i < Math.max(a.n.length, b.n.length); i++) { const d = (a.n[i] || 0) - (b.n[i] || 0); if (d) return d; } return 0; };
-  for (const [dir, icon] of [[path.join(p.root, 'Doc', '화면설계서'), '📘'], [path.join(p.root, 'Doc', '화면분석서'), '📗'], [path.join(p.root, 'Doc', '단위테스트'), '🧪'], [path.join(p.root, 'Doc', 'documents', id), '📄']]) {
+  for (const [dir, icon] of [[path.join(p.root, 'Doc', '화면설계서'), '📘'], [path.join(p.root, 'Doc', '화면분석서'), '📗'], [path.join(p.root, 'Doc', 'CheckList'), '📋'], [path.join(p.root, 'Doc', '단위테스트'), '🧪'], [path.join(p.root, 'Doc', 'documents', id), '📄']]) {
     const latest = new Map();
     try {
       for (const f of fs.readdirSync(dir)) {
@@ -224,7 +260,7 @@ function statusHtml(p, id) {
     } catch { }
     for (const { f, stem } of [...latest.values()].sort((a, b) => a.stem.localeCompare(b.stem))) xlsx.push([path.join(dir, f), `${icon} ${stem}`]);
   }
-  const hist = history.list(p).filter(h => h.id === id).slice(0, 8);
+  const hist = history.list(p).filter(h => h.id === id && h.scope !== 'none').slice(0, 8);
   const chip = (href, label, attr = 'data-f') => `<a class="chip" ${attr}="${esc(href)}">${esc(label)}</a>`;
   return `<div class="dash">
     <div class="dhead"><div class="did">${esc(id)}</div><div class="dmeta"><div class="dname">${esc(name || '')}</div><div class="dsub">${mpath ? `${t(p, 'st_menu')}: ${esc(mpath)}` : ''}${pageRel ? `${mpath ? ' · ' : ''}${t(p, 'st_page')}: ${esc(pageRel)}` : ''}</div></div></div>
@@ -269,6 +305,24 @@ function killTree(pid) {
     try { process.kill(-pid, 'SIGTERM'); } catch { process.kill(pid, 'SIGTERM'); } return true;
   } catch { return false; }
 }
+// 1.9.30(2026-10-29 사용자: VM#2 가 '완료' 로 표시된 뒤에도 백그라운드 검증(run_verify SCP0020 r41)이 돌고 있었고, 중지하자 23/23 직전에 함께 죽어 결과 소실):
+//   Claude 가 result 를 보낸 뒤에도 살아 있는 자식 프로세스 트리(run_verify.py·playwright·bash·chrome …) = '후속 작업'. 셸 래퍼(cmd/conhost)와 claude 자체는 제외.
+//   조회 실패(권한·시간초과)는 null — 모르면 '완료' 로 바꾸지 않고 '확인 불가' 로 적는다. Windows 는 부모가 죽어도 ParentProcessId 가 남으므로 고아도 같은 걸음으로 찾는다
+function liveDescendants(pid) {
+  if (!pid) return [];
+  try {
+    if (process.platform === 'win32') {
+      const ps = `$all=Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId,Name,CommandLine; $q=@(${pid}); $seen=@{}; $out=@(); while($q.Count){ $p=$q[0]; $q=@($q | Select-Object -Skip 1); foreach($c in ($all | Where-Object { $_.ParentProcessId -eq $p })){ if(-not $seen.ContainsKey($c.ProcessId)){ $seen[$c.ProcessId]=1; $q+=$c.ProcessId; $out+=$c } } }; $out | ForEach-Object { '{0}|{1}|{2}' -f $_.ProcessId,$_.Name,((([string]$_.CommandLine) -replace '\\s+',' ') -replace '^(.{0,160}).*','$1') }`;
+      const r = cp.spawnSync('powershell', ['-NoProfile', '-Command', ps], { encoding: 'utf8', windowsHide: true, timeout: 20000 });
+      if (r.status !== 0) return null;
+      return String(r.stdout || '').split(/\r?\n/).map(l => l.split('|')).filter(a => a.length >= 2 && /^\d+$/.test(a[0].trim()))
+        .map(a => ({ pid: Number(a[0]), name: a[1].trim(), cmd: a.slice(2).join('|').trim() }))
+        .filter(x => !/^(cmd|conhost|claude)(\.exe)?$/i.test(x.name));
+    }
+    const out = []; const walk = (p, depth) => { if (depth > 12) return; const r = cp.spawnSync('pgrep', ['-P', String(p)], { encoding: 'utf8', timeout: 5000 }); for (const c of String(r.stdout || '').split(/\s+/).filter(Boolean)) { const cm = cp.spawnSync('ps', ['-o', 'comm=,args=', '-p', c], { encoding: 'utf8', timeout: 5000 }); const ln = String(cm.stdout || '').trim(); out.push({ pid: Number(c), name: ln.split(/\s+/)[0] || '', cmd: ln.slice(0, 160) }); walk(c, depth + 1); } };
+    walk(pid, 0); return out.filter(x => !/^(sh|bash|claude)$/i.test(x.name));
+  } catch { return null; }
+}
 function portOwner(port) {
   const i = portOwnerInfo(port); return i ? `${i.name} ${i.pid}` : '';
 }
@@ -289,17 +343,20 @@ class WB {
     //   신규 필드: permissionMode (default = 설정 defaultPermissionMode), model ('' = 전역 설정 사용).
     //   1.7.1: 기본 모드 = VS Code 설정 vibeManager.defaultPermissionMode (기본 bypassPermissions = 자동승인).
     //   예전 버전이 저장해 둔 permissionMode('acceptEdits')는 permVer<2 이면 버리고 설정값을 따른다.
-    const def = { id: this.api.ctx.workspaceState.get('vibeManager.lastId', ''), ctx: true, harness: false, permissionMode: this.api.paths().permissionMode, model: '', permVer: 2 };
     const saved = Object.assign({}, this.api.ctx.workspaceState.get(this.stateKey()) || {});
+    // 1.9.28+: 창별 ID 독립 — 이 창이 저장한 ID 가 있으면 그것, 없으면 1번 창만 마지막 ID 를 복원하고 추가 창(VM#2…)은 빈 ID 로 시작(다른 창의 ID 를 자기 ID 로 오인하던 결함 2026-10-28)
+    const def = { id: ('id' in saved) ? String(saved.id || '') : (this.inst === 1 ? this.api.ctx.workspaceState.get('vibeManager.lastId', '') : ''), ctx: true, harness: false, permissionMode: this.api.paths().permissionMode, model: '', permVer: 2 };
     if (saved.permVer !== 2) delete saved.permissionMode;
     return Object.assign(def, saved, { permVer: 2 });
   }
-  setState(s) { this.api.ctx.workspaceState.update(this.stateKey(), s); }
+  setState(s) { this.api.ctx.workspaceState.update(this.stateKey(), s); this.titleId = String((s || {}).id || '').trim().toUpperCase(); retitle(); }
   post(m) { if (this.panel) try { this.panel.webview.postMessage(m); } catch { } }
   out(stream, text, cls) { this.post({ type: 'out', stream, text: String(text), cls: cls || '' }); }
   updateBusy() {
-    const labels = [...this.procs.values()].map(x => x.label);
-    this.post({ type: 'busy', procs: this.procs.size, claude: !!this.claudeProc, labels });
+    // 1.9.32: 기동 완료(ready)된 상주 서버(BE/FE)는 '실행 중 작업'이 아니므로 스피너 대상에서 제외
+    const busy = [...this.procs.values()].filter(x => !x.ready);
+    const labels = busy.map(x => x.label);
+    this.post({ type: 'busy', procs: busy.length, claude: !!this.claudeProc, labels });
   }
 
   spawnStream(p, cmd, args, opts, stream, label) {
@@ -311,17 +368,35 @@ class WB {
     this.post({ type: 'proc', id, label, state: 'start' }); this.updateBusy();
     const ws = fs.createWriteStream(logF); let buf = '';
     const onLine = opts && typeof opts.onLine === 'function' ? opts.onLine : null; // 1.7.9: 줄 단위 콜백(서버 기동 완료 감지 등)
-    const onData = d => { const t = d.toString('utf8'); ws.write(t); buf += t; const lines = buf.split(/\r?\n/); buf = lines.pop(); for (const ln of lines) { this.out(stream, ln + '\n'); if (onLine) try { onLine(ln); } catch { } } };
+    // 1.9.40: 실패 원인 수집 — 로그에 찍힌 [FAIL]/[ERROR]/Traceback/ORA- 줄과 마지막 출력 줄을 모아 두었다가 종료코드≠0 이면 작업창·채팅·VS Code 알림에 그대로 보여준다
+    //   (2026-11-04 사용자: "작업창에 어떤 오류인지가 보이지 않습니다" — CheckList exit 6 의 실제 원인 '[FAIL] files.csv current 변형 없음' 이 Task Log 65줄 안에 묻혀 있었다)
+    //   표식 = 하네스 스크립트가 쓰는 [FAIL]/[ERROR]/✖ · Python Traceback/…Error: · Oracle ORA-/PLS- · node ENOENT/EADDRINUSE/npm ERR!/TS 오류 · '실패 0' 같은 집계 줄은 제외
+    const FAIL_RE = /\[(FAIL|ERROR)\]|^[✖✘]|^(FAIL|ERROR)\b|Traceback \(most recent|^\s*[A-Za-z_.]*(Error|Exception)\b\s*[:(]|ORA-\d{5}|PLS-\d{5}|npm ERR!|error TS\d{4}|\bENOENT\b|\bEADDRINUSE\b|\bECONNREFUSED\b|^✖/;
+    const failLines = []; const lastLines = [];
+    const noteLine = ln => { const s = String(ln).replace(/\u001b\[[0-9;]*m/g, '').trim(); if (!s) return; lastLines.push(s); if (lastLines.length > 3) lastLines.shift(); if (FAIL_RE.test(s) && !failLines.includes(s)) { failLines.push(s); if (failLines.length > 8) failLines.shift(); } };
+    const onData = d => { const t = d.toString('utf8'); ws.write(t); buf += t; const lines = buf.split(/\r?\n/); buf = lines.pop(); for (const ln of lines) { this.out(stream, ln + '\n'); noteLine(ln); if (onLine) try { onLine(ln); } catch { } } };
     child.stdout.on('data', onData); child.stderr.on('data', onData);
+    child.on('error', e => noteLine(`spawn 실패: ${e.message}`)); // 실행 파일 없음(ENOENT) 등 — close 전에 원인을 남긴다
     if (opts && opts.input != null) { child.stdin.write(opts.input); child.stdin.end(); }
     return new Promise(res => child.on('close', code => {
-      if (buf) this.out(stream, buf + '\n');
+      if (buf) { this.out(stream, buf + '\n'); noteLine(buf); }
       ws.end(); this.procs.delete(id);
       this.post({ type: 'proc', id, label, state: 'end', code }); this.updateBusy();
       this.out(stream, `■ 종료 exit ${code} — 로그 ${path.relative(p.root, logF)}\n`, code === 0 ? 'ok' : 'bad');
+      if (code !== 0 && !(opts && opts.failReport === false)) {
+        const picked = failLines.length ? failLines.slice(-5) : lastLines; // 표식 줄이 없으면 마지막 출력 3줄을 원인 후보로
+        const why = picked.map(s => s.length > 240 ? s.slice(0, 240) + '…' : s).join('\n');
+        const rel = path.relative(p.root, logF);
+        this._lastFail = { id, label, code, why, log: rel, src: failLines.length ? 'mark' : 'tail', at: Date.now() };
+        this.out(stream, `✖ 실패 원인(${failLines.length ? '로그의 [FAIL]/[ERROR] 줄' : '표식 줄 없음 — 마지막 출력'}):\n${why.split('\n').map(s => '   ' + s).join('\n')}\n`, 'bad');
+        this.post({ type: 'chat', role: 'meta', text: `✖ ${label || cmd} 실패 (exit ${code})\n${why}\n로그: ${rel}` });
+        try { Promise.resolve(vscode.window.showWarningMessage(`Vibe_Manager ✖ ${label || cmd} 실패 (exit ${code}) — ${picked[0] || ''}`.slice(0, 300), 'Log 보기')).then(a => { if (a) this.post({ type: 'showTab', tab: 'log' }); }, () => { }); } catch { }
+      }
       res(code);
     }));
   }
+  // 1.9.40: 직전 spawnStream 실패 원인(종료코드가 같을 때만) — execShell·체인 단계 요약이 '원인: …' 으로 덧붙인다
+  takeFail(code) { const f = this._lastFail; if (!f || code === 0 || code == null || f.code !== code) return null; this._lastFail = null; return f; }
 
   // 1.7.9: 서버 기동 = 스트리밍 + 완료 감지 (quick.json: ready 정규식 · port · readyTimeoutSec)
   //   완료 로그 매치 → ✅ 기동 완료(초) 출력 + VS Code 알림 · 완료 전 종료 → ✖ 기동 실패 + 마지막 출력 · 시간 초과 → ⚠ 안내(포트 LISTEN 이면 완료로 간주)
@@ -337,6 +412,7 @@ class WB {
       this.out(sstream, `${ok ? '✅' : '✖'} ${name} ${msg} (${sec}s)${it.hint ? ' — ' + it.hint.split(' · ')[0] : ''}\n`, ok ? 'ok' : 'bad');
       this.post({ type: 'chat', role: 'meta', text: `${ok ? '✅' : '✖'} ${name} ${msg} (${sec}s)` });
       this.post({ type: 'server', name, ok, sec });
+      if (ok) { for (const pr of this.procs.values()) if (pr.label === name) pr.ready = true; this.updateBusy(); } // 1.9.32: 기동 완료 → 스피너 중지
       if (ok) vscode.window.showInformationMessage(`Vibe_Manager ✅ ${name} 기동 완료 (${sec}s)${it.port ? ` · 포트 ${it.port}` : ''}`);
       else Promise.resolve(vscode.window.showWarningMessage(`Vibe_Manager ✖ ${name} ${msg.split('\n')[0]}`, 'Log 보기')).then(a => { if (a) this.post({ type: 'showTab', tab: 'logs' }); }, () => { });
     };
@@ -357,7 +433,7 @@ class WB {
     // 1.8.0: 서버 출력은 Log 탭의 BE Log / FE Log 창으로 (포트 8080/5173 또는 이름의 BE/FE 로 판별)
     const stream = it.port === 8080 || /\bBE\b/i.test(name) ? 'be' : it.port === 5173 || /\bFE\b/i.test(name) ? 'fe' : 'task';
     try { this.post({ type: 'showTab', tab: stream === 'task' ? 'log' : 'logs', auto: true }); } catch { }
-    this.spawnStream(p, 'cmd', ['/c', it.cmd], { spawn: { cwd }, onLine }, stream, name).then(code => {
+    this.spawnStream(p, 'cmd', ['/c', it.cmd], { spawn: { cwd }, onLine, failReport: false }, stream, name).then(code => { // 1.9.40: 서버 종료(taskkill)는 실패 보고 대상 아님 — 기동 실패는 아래 done() 이 알린다
       if (!ready) done(false, `기동 실패 — exit ${code}${tail.length ? '\n   ' + tail.filter(x => x.trim()).slice(-4).join('\n   ') : ''}`);
       else { this.post({ type: 'chat', role: 'meta', text: `■ ${name} 종료 (exit ${code})` }); }
     });
@@ -419,6 +495,8 @@ class WB {
   }
 
   stopAll() {
+    // 1.9.30: 중지 전에 Claude 가 띄운 후속 작업을 보여 준다 — 함께 종료되어 결과가 소실되는 것을 사용자가 알 수 있게
+    if (this.claudeProc) { try { const ds = liveDescendants(this.claudeProc.pid); if (ds && ds.length) this.post({ type: 'chat', role: 'meta', text: `⏹ 중지 — 함께 종료되는 후속 작업 ${ds.length}개:\n${ds.map(x => `· ${x.name}(${x.pid}) ${x.cmd.slice(0, 110)}`).join('\n')}` }); } catch { } }
     for (const [, pr] of this.procs) try { if (process.platform === 'win32') cp.spawn('taskkill', ['/pid', String(pr.child.pid), '/T', '/F']); else pr.child.kill('SIGTERM'); } catch { }
     if (this.claudeProc) try { if (process.platform === 'win32') cp.spawn('taskkill', ['/pid', String(this.claudeProc.pid), '/T', '/F']); else this.claudeProc.kill(); } catch { }
   }
@@ -436,9 +514,9 @@ class WB {
       if (this.claudeProc) { this.out('task', `✖ ${label}: ${Math.round(maxMs / 60000)}분을 기다려도 Claude 가 비지 않음 — 단계 취소\n`, 'bad'); return null; }
       this.out('task', `▶ ${label}: Claude 응답 끝남 — 이어서 진행 (${Math.round((Date.now() - t0) / 1000)}s 대기)\n`, 'ok');
     }
-    return this.askClaude(p, prompt, harness);
+    return this.askClaude(p, prompt, harness, { source: 'chain', label });
   }
-  askClaude(p, prompt, harness) {
+  askClaude(p, prompt, harness, hmeta = {}) {
     if (this.claudeProc) { vscode.window.showWarningMessage(`워크벤치 #${this.inst}: Claude 가 아직 응답 중입니다 — 중지 후 다시 보내세요.`); return Promise.resolve(null); }
     return new Promise(resolveDone => { let resultError = false;
     // 첨부 파일 → Claude Code 에 @path 토큰으로 전달
@@ -452,10 +530,32 @@ class WB {
     const overrides = { permissionMode: s.permissionMode || p.permissionMode, model: s.model || '' };
     // 1.7.5: p.claude = 자동 선택된 최신 CLI 전체 경로 — shell 실행이므로 공백 경로 인용
     // 1.8.0: Claude 프롬프트(🛠️/🧯/💬 보완 포함)도 작업 전·후 스냅샷 — 화면ID 가 있을 때 FE 페이지 + DB 객체(both)
-    let hdir = null; try { const sid = (s.id || '').toUpperCase(); if (sid) hdir = history.begin(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), sid, 'claude', prompt.replace(/\s+/g, ' ').slice(0, 140), 'both'); } catch { }
+    // 1.9.36: 화면 ID 가 없어도 실행 기록(scope none) — 메뉴 이름·프롬프트 원문·출처를 함께 남긴다
+    let hdir = null; try { const sid = (s.id || '').toUpperCase(); hdir = history.begin(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), sid, 'claude', (hmeta.label || prompt).replace(/\s+/g, ' ').slice(0, 140), sid ? 'both' : 'none', { source: hmeta.source || 'prompt', label: hmeta.label || '', text: hmeta.text || prompt }); } catch { }
     const child = cp.spawn(/\s/.test(p.claude) ? `"${p.claude}"` : p.claude, claudeArgs(p, this.claudeSession, overrides), { cwd: p.root, shell: process.platform === 'win32', env });
     this.claudeProc = child; this.post({ type: 'claude', state: 'start' }); this.updateBusy();
     let buf = ''; let any = false;
+    // 1.9.30(2026-10-29 사용자: VM#2 '완료' 표시 뒤에도 검증이 돌고 있었고 중단으로 소실): result 가 와도 Claude 가 띄운 자식이 살아 있으면 '완료' 가 아니라
+    //   '보고 완료 · 후속 작업 진행 중'(run pending). 10초마다 다시 보고 전부 끝났을 때 '완료'. 조회 실패면 완료로 바꾸지 않고 '확인 불가' 를 적는다
+    let doneMsg = null, finished = false, pendTimer = null, pendSince = 0;
+    const descText = ds => ds.map(x => `· ${x.name}(${x.pid}) ${x.cmd.slice(0, 110)}`).join('\n');
+    const finish = (ok, text) => { if (finished) return; finished = true; if (pendTimer) { clearInterval(pendTimer); pendTimer = null; } this.post({ type: 'run', state: 'done', ok, text }); };
+    const settle = () => {
+      if (finished || !doneMsg) return;
+      const ds = liveDescendants(child.pid);
+      if (ds === null) { finish(doneMsg.ok, doneMsg.text + ' · ⚠ 후속 작업 확인 불가(프로세스 조회 실패) — 검증을 띄웠다면 로그로 종료를 확인하세요'); return; }
+      if (!ds.length) {
+        finish(doneMsg.ok, doneMsg.text + (pendSince ? ` · 후속 작업 종료 확인 ${history.nowLocal().slice(11, 19)}(보고 후 ${Math.round((Date.now() - pendSince) / 1000)}s)` : ''));
+        if (pendSince) this.post({ type: 'chat', role: 'meta', text: '✅ 보고 뒤에 돌던 후속 작업이 전부 끝났습니다 — 이제 완료입니다' });
+        return;
+      }
+      if (!pendSince) {
+        pendSince = Date.now();
+        this.post({ type: 'run', state: 'pending', text: `${doneMsg.text} · 후속 작업 ${ds.length}개 진행 중` });
+        this.post({ type: 'chat', role: 'meta', text: `⏳ Claude 는 보고를 끝냈지만 띄워 둔 작업이 아직 돌고 있습니다 — 끝날 때까지 '완료' 로 바꾸지 않습니다. 지금 중지하면 함께 종료되어 결과가 소실됩니다:\n${descText(ds)}` });
+        pendTimer = setInterval(settle, 10000);
+      }
+    };
     const handle = line => {
       let j; try { j = JSON.parse(line); } catch { this.out('claude', line + '\n'); return; }
       if (j.type === 'system' && j.session_id) {
@@ -483,20 +583,37 @@ class WB {
       }
       else if (j.type === 'result') {
         if (j.session_id) this.claudeSession = j.session_id; if (j.is_error) resultError = true;
-        // 1.8.4: 최종 결과 = 상황판 마감(run done) — 헤더 상태·진행바 100%·최종 보고 펼침
-        this.post({ type: 'run', state: 'done', ok: !j.is_error, text: `${j.is_error ? '✖ 오류' : '✓ 완료'} · ${j.num_turns || ''}턴 · ${Math.round((j.duration_ms || 0) / 1000)}s${j.total_cost_usd != null ? ` · ${Number(j.total_cost_usd).toFixed(3)}` : ''}` });
         if (j.is_error && j.result && !any) this.post({ type: 'chat', role: 'assistant', text: String(j.result) });
+        // 1.8.4: 최종 결과 = 상황판 마감(run done) — 헤더 상태·진행바 100%·최종 보고 펼침
+        // 1.9.30: 자식 프로세스가 살아 있으면 마감하지 않고 '보고 완료 · 후속 작업 진행 중' (settle 이 끝을 확인한 뒤 마감)
+        doneMsg = { ok: !j.is_error, text: `${j.is_error ? '✖ 오류' : '✓ 완료'} · ${j.num_turns || ''}턴 · ${Math.round((j.duration_ms || 0) / 1000)}s${j.total_cost_usd != null ? ` · ${Number(j.total_cost_usd).toFixed(3)}` : ''}` };
+        settle();
       }
     };
     const onData = d => { buf += d.toString('utf8'); const lines = buf.split(/\r?\n/); buf = lines.pop(); for (const ln of lines) if (ln.trim()) handle(ln); };
-    child.stdout.on('data', onData); child.stderr.on('data', d => this.out('claude', d.toString('utf8')));
-    child.stdin.write(full); child.stdin.end();
+    // 1.9.29(2026-10-29 사용자: "세션이 끊어졌다" 메시지만 반복되고 원인을 알 수 없음): claude 의 stderr 를 파일(.vibe/logs/<ts>_claude.log)에 남기고
+    //   비정상 종료 시 마지막 stderr 줄을 메시지에 그대로 붙인다 — '새 세션' 으로 해결되는 것은 --resume 실패(세션 없음)일 때만이고, 그 밖(인증 만료·CLI 경로·네트워크·CPU 과부하 타임아웃)은 stderr 가 답이다
+    const errTail = []; let logWs = null; let logF = '';
+    try { const logDir = path.join(p.vibeDir, 'logs'); fs.mkdirSync(logDir, { recursive: true }); logF = path.join(logDir, `${history.nowLocal().slice(0, 19).replace(/[:.]/g, '-')}_claude_wb${this.inst}.log`); logWs = fs.createWriteStream(logF); logWs.write(`$ ${p.claude} ${claudeArgs(p, this.claudeSession, overrides).join(' ')}\n--- prompt ---\n${full.slice(0, 2000)}\n--- output ---\n`); } catch { logWs = null; }
+    child.stdout.on('data', d => { onData(d); if (logWs) try { logWs.write(d); } catch { } });
+    child.stderr.on('data', d => { const t = d.toString('utf8'); this.out('claude', t); if (logWs) try { logWs.write('[stderr] ' + t); } catch { } for (const ln of t.split(/\r?\n/)) if (ln.trim()) { errTail.push(ln.trim().slice(0, 200)); if (errTail.length > 6) errTail.shift(); } });
+    child.on('error', e => { errTail.push(`spawn 실패: ${e.message}`); this.out('claude', `spawn 실패: ${e.message}\n`, 'bad'); });
+    { const wm = workMode(p); if (wm.db) this.post({ type: 'chat', role: 'meta', text: '🧭 작업 모드 DB MODE — DB·META 만 수정, FE·BE 는 가이드만' }); }
+    child.stdin.write(workModePrefix(p, (s.id || '').toUpperCase()) + full); child.stdin.end();
     child.on('close', code => {
       if (buf.trim()) handle(buf);
       this.claudeProc = null;
+      // 1.9.30: 보고 뒤 후속 작업이 돌던 중 종료 코드≠0 = 중지(taskkill /T) — 후속 작업도 함께 죽었음을 적는다. 정상 종료면 고아가 남아 있을 수 있으므로 settle 이 끝을 확인
+      if (doneMsg && !finished) { if (code !== 0 && pendSince) finish(false, `⏹ 중지 — 보고 뒤 돌고 있던 후속 작업 ${Math.round((Date.now() - pendSince) / 1000)}s 만에 함께 종료됨(그 작업의 결과는 소실·재실행 필요)`); else settle(); }
       this.post({ type: 'claude', state: 'end', code }); this.updateBusy();
-      if (code !== 0 && !any) this.post({ type: 'chat', role: 'meta', text: `claude 종료 코드 ${code} — 이전 세션이 만료됐으면 "새 세션" 후 다시 보내세요` });
-      if (hdir) { try { history.finish(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), hdir, code, 'end'); const n = (JSON.parse(fs.readFileSync(path.join(hdir, 'meta.json'), 'utf8')).changed || []).length; this.post({ type: 'chat', role: 'meta', text: `🕒 수정 이력 저장 — 변경 ${n}개 파일 (이력 탭에서 수정전 ↔ 수정후 비교)` }); } catch { } this.post({ type: 'history', html: history.innerHtml(p, 'screen', '') }); }
+      if (logWs) try { logWs.end(`\n--- exit ${code} ---\n`); } catch { }
+      if (code !== 0 && !any) {
+        const why = errTail.length ? errTail.join(' | ') : '(stderr 없음)';
+        const isResume = /No conversation found|session.*not found|resume/i.test(why) && !!this.claudeSession;
+        const hint = isResume ? '이전 세션을 이어받지 못함 → "새 세션" 후 다시 보내세요' : /not logged in|authentication|401|login/i.test(why) ? 'Claude Code 로그인 만료 → 터미널에서 `claude` 실행해 다시 로그인' : /is not recognized|ENOENT|cannot find/i.test(why) ? `Claude CLI 경로 문제(${p.claude}) → 설정 vibeManager.claudePath 확인` : /ETIMEDOUT|ECONNRESET|fetch failed|network|EAI_AGAIN/i.test(why) ? '네트워크/API 연결 실패 → VPN·프록시·PC 부하 확인 후 재시도' : '"새 세션" 으로 해결되는 문제가 아닐 수 있음 — 아래 stderr 와 로그를 확인';
+        this.post({ type: 'chat', role: 'meta', text: `✖ claude 종료 코드 ${code} — ${hint}\nstderr: ${why}${logF ? `\n로그: ${path.relative(p.root, logF)}` : ''}` });
+      }
+      if (hdir) { try { history.finish(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), hdir, code, 'end'); const hm = JSON.parse(fs.readFileSync(path.join(hdir, 'meta.json'), 'utf8')); const n = (hm.changed || []).length; if (hm.scope !== 'none') this.post({ type: 'chat', role: 'meta', text: `🕒 수정 이력 저장 — 변경 ${n}개 파일 (이력 탭에서 수정전 ↔ 수정후 비교)` }); } catch { } this.post({ type: 'history', html: history.innerHtml(p, 'screen', '') }); }
       resolveDone({ code, ok: code === 0 && !resultError, error: resultError });
     });
     });
@@ -555,6 +672,7 @@ class WB {
     if (item.newScreen && !(await this.confirmExistingPage(p, id, `🚀 ${item.label}`))) return; // 1.9.14: 첫 단계 전에 판정(파싱·Agent 를 돌린 뒤 멈추지 않게)
     const all = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items);
     const t0 = Date.now(); const res = []; let stopped = false;
+    let chHist = null; try { chHist = history.begin(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), id, `chain_${item.chainId || 'run'}`, item.label, 'none', { source: 'menu', label: item.label, text: steps.map((st, k) => `${k + 1}. ${st.title || st.task || st.claudeOf || ''}`).join('\n') }); } catch { }
     const genDir = path.join(p.genDir, id); try { fs.mkdirSync(genDir, { recursive: true }); } catch { }
     const mdPath = path.join(genDir, 'FULLRUN.md');
     const nameOf = st => st.title || (st.task ? `${st.task} ${(this.api.findTask(st.task) || {}).title || ''}`.trim() : (st.claudeOf || 'Claude'));
@@ -589,12 +707,18 @@ class WB {
           this.out('task', `\n⏭ [${no}/${steps.length}] ${name} — SKIP (${dep} ${res[di].status})\n`, 'warn'); writeMd(false); continue;
         }
       }
+      // 1.9.37: DB MODE 는 FE 를 만들지 않으므로 페이지가 없는 화면의 E2E 는 실행할 대상이 없다(CheckList 단계는 건너뛰지 않는다)
+      if (/^S7\./.test(st.task || '') && workMode(p).db) {
+        const pd = this.api.pageDirOf(id);
+        if (!pd || !fs.existsSync(pd)) { res.push({ no, name, status: 'SKIP', code: null, sec: 0, note: 'DB MODE · FE 페이지 없음' }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'SKIP' }); this.out('task', `\n⏭ [${no}/${steps.length}] ${name} — DB MODE · FE 페이지 없음, 건너뜀\n`, 'warn'); writeMd(false); continue; }
+      }
       this.out('task', `\n── [${no}/${steps.length}] ${name}\n`, 'cmd'); const s0 = Date.now(); let code = null, cancelled = false;
       this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
       const kind = st.task ? String(st.task).split('.').pop() : '';
       // 단계 1회 실행(작업 또는 Claude) + verify — 1.9.7: 수선 뒤 재실행을 위해 함수로 분리
+      let failFrom = null; let okCodeNote = ''; let failWhy = ''; // 2026-11-04: 실패 출처(run = 실행·산출물 실패 / verify = 판정 결과) · okCodes 로 통과시킨 종료코드 기록 · 1.9.40 failWhy = 로그 [FAIL]/[ERROR] 줄
       const runOnce = async () => {
-        let c = null; cancelled = false;
+        let c = null; cancelled = false; failFrom = null; okCodeNote = ''; failWhy = '';
         if (st.verify) st.verify = Object.assign({}, st.verify, { _since: Date.now() - 1000 });
         try {
           if (st.task) { c = await this.runTaskStreaming(p, st.task, id, { noConfirm: true, inFlow: true, args: st.args || null }); if (c == null) cancelled = true; }
@@ -606,7 +730,10 @@ class WB {
           }
         } catch (e) { c = -1; this.out('task', `예외: ${e.message}\n`, 'bad'); }
         // 1.9.5: 단계 결과 검증(verify) — 종료코드 0 이어도 산출물이 없으면 실패로 본다(E2E 가 시작도 못 했는데 '완료' 로 닫힌 SCP0100 사고)
-        if (c === 0 && st.verify) { const v = verifyStep(p, st.verify, id); if (!v.ok) { c = 3; this.out('task', `✖ 검증 실패: ${v.why}\n`, 'bad'); } else this.out('task', `✔ 검증: ${v.why}\n`, 'ok'); }
+        // 2026-11-04: okCodes — 산출물은 만들어졌지만 경고인 종료코드(run_verify 10 = 검사기 회귀·커버리지 게이트)는 통과로 보고 verify 로 넘긴다(화면 보완으로 풀 문제가 아님 · 경고로 남김)
+        if (c != null && c !== 0 && Array.isArray(st.okCodes) && st.okCodes.includes(c)) { okCodeNote = `종료코드 ${c} 경고(검사기 게이트 — Doc/verify/_regress_report.md · coverage.csv)`; this.out('task', `⚠ ${okCodeNote} → 판정 계속\n`, 'warn'); c = 0; }
+        if (c != null && c !== 0) { failFrom = 'run'; const fw = this.takeFail(c); failWhy = fw ? fw.why : ''; }
+        if (c === 0 && st.verify) { const v = verifyStep(p, st.verify, id); if (!v.ok) { c = 3; failFrom = v.from || 'verify'; failWhy = v.why || ''; this.out('task', `✖ 검증 실패: ${v.why}\n`, 'bad'); } else this.out('task', `✔ 검증: ${v.why}\n`, 'ok'); }
         return c;
       };
       code = await runOnce();
@@ -621,6 +748,8 @@ class WB {
         const rq = all.find(x => x.label === st.repair.claudeOf || x.label_en === st.repair.claudeOf);
         if (!rq || !rq.prompt) this.out('task', `⚠ 수선 프롬프트 없음(quick.json): ${st.repair.claudeOf}\n`, 'warn');
         else for (let r = 1; r <= rounds && code !== 0 && !cancelled; r++) {
+          // 2026-11-04: repair.on='verify' — 판정 결과(조치 필요 남음)일 때만 보완. 실행 실패(서버 미기동·CheckList 미생성)는 화면 보완 대상이 아니다
+          if (st.repair.on === 'verify' && failFrom !== 'verify') { this.out('task', `⏭ [${no}/${steps.length}] ${name} — 실행 실패(exit ${code})라 보완하지 않음(원인 확인 후 다시 실행)${failWhy ? `\n   원인: ${failWhy.split('\n').join('\n   ')}` : ''}\n`, 'bad'); break; }
           repairs++;
           this.out('task', `\n🩹 [${no}/${steps.length}] ${name} 실패(exit ${code}) → 수선 ${r}/${rounds}: ${rq.label}\n`, 'warn');
           this.post({ type: 'fb', state: 'step', id: fid, no, status: 'REPAIR', round: r, rounds });
@@ -659,19 +788,22 @@ class WB {
       const sec = Math.round((Date.now() - s0) / 1000); const ok = code === 0;
       // HOLD = 사람 확인 필요(근거 미확인 기대값 결함·판정 불가·테스트 약화 의심). 체인은 멈추지 않지만(사용자 지시 "E2E 오류로 멈추지 말 것") 완료로 세지 않는다.
       //   재시험이 통과해도 약화 의심이면 통과를 믿을 수 없으므로 HOLD.
-      const status = cancelled ? 'CANCEL' : ok ? (weakened ? 'HOLD' : 'OK') : hold.length ? 'HOLD' : (st.optional || expectOnly ? 'WARN' : 'FAIL');
-      const note = status === 'CANCEL' ? '취소 사유: Claude 사용 불가(다른 응답 미종료) 또는 입력 취소' : status === 'HOLD' ? `사람 확인 필요 — ${hold.join(' · ')}` : expectOnly ? `기대값/측정 결함 ${expectOnly.c}건(독립 판정 근거 확인 · 보정 큐 Doc/e2e/_expectation_issues.md)` : '';
-      res.push({ no, name: `${repairs ? `${name} (수선 ${repairs}회)` : name}${note ? ' — ' + note : ''}`, status, code, sec, repairs, note });
+      const status = cancelled ? 'CANCEL' : ok ? (weakened ? 'HOLD' : okCodeNote ? 'WARN' : 'OK') : hold.length ? 'HOLD' : (st.optional || expectOnly ? 'WARN' : 'FAIL');
+      const note0 = status === 'CANCEL' ? '취소 사유: Claude 사용 불가(다른 응답 미종료) 또는 입력 취소' : status === 'HOLD' ? `사람 확인 필요 — ${hold.join(' · ')}` : expectOnly ? `기대값/측정 결함 ${expectOnly.c}건(독립 판정 근거 확인 · 보정 큐 Doc/e2e/_expectation_issues.md)` : '';
+      const why = (status === 'FAIL' || status === 'WARN') && failWhy ? failWhy : ''; // 1.9.40: 실패 단계의 원인(로그 [FAIL]/[ERROR] 줄 · verify 사유)을 결과 note·FULLRUN.md·체인 요약에 남긴다
+      const note = [note0, okCodeNote, why ? `원인: ${why.split('\n')[0]}` : ''].filter(Boolean).join(' · ');
+      res.push({ no, name: `${repairs ? `${name} (수선 ${repairs}회)` : name}${note ? ' — ' + note : ''}`, status, code, sec, repairs, note, why });
       this.post({ type: 'fb', state: 'step', id: fid, no, status, code, sec, repairs });
       this.out('task', `${ok ? '✅' : status === 'WARN' ? '⚠' : '✖'} [${no}/${steps.length}] ${name} — ${status}${code != null ? ` (exit ${code})` : ''}${repairs ? ` · 수선 ${repairs}회` : ''} · ${sec}s\n`, ok ? 'ok' : status === 'WARN' ? 'warn' : 'bad');
       if (status === 'FAIL' || status === 'CANCEL') stopped = true;
       writeMd(false);
     }
     writeMd(true);
-    const fail = res.find(r => r.status === 'FAIL' || r.status === 'CANCEL'); const okN = res.filter(r => r.status === 'OK').length; const total = Math.round((Date.now() - t0) / 1000);
+    const fail = res.find(r => r.status === 'FAIL' || r.status === 'CANCEL');
+    if (chHist) try { history.finish(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), chHist, fail ? 1 : 0); } catch { } const okN = res.filter(r => r.status === 'OK').length; const total = Math.round((Date.now() - t0) / 1000);
     const repN = res.reduce((n, r) => n + (r.repairs || 0), 0);
     const holdN = res.filter(r => r.status === 'HOLD').length; // 2026-10-26: 사람 확인 단계가 있으면 '✅ 완료' 로 보고하지 않는다
-    const summary = fail ? `✖ 체인 중단 — ${fail.no}/${steps.length} '${fail.name}' ${fail.status} · 완료 ${okN}단계${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}` : ''} · ${total}s` : `${holdN ? '⏸ 체인 종료(사람 확인 필요)' : '✅ 체인 완료'} — ${steps.length}단계 중 OK ${okN}${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}(Doc/e2e/_human_review.md)` : ''}${res.some(r => r.status === 'WARN') ? ` · 경고 ${res.filter(r => r.status === 'WARN').length}` : ''} · ${total}s`;
+    const summary = fail ? `✖ 체인 중단 — ${fail.no}/${steps.length} '${fail.name}' ${fail.status} · 완료 ${okN}단계${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}` : ''} · ${total}s${fail.why && fail.why.includes('\n') ? `\n원인:\n${fail.why}` : ''}` : `${holdN ? '⏸ 체인 종료(사람 확인 필요)' : '✅ 체인 완료'} — ${steps.length}단계 중 OK ${okN}${repN ? ` · 수선 ${repN}회` : ''}${holdN ? ` · 사람 확인 ${holdN}(Doc/e2e/_human_review.md)` : ''}${res.some(r => r.status === 'WARN') ? ` · 경고 ${res.filter(r => r.status === 'WARN').length}` : ''} · ${total}s`;
     this.out('task', `\n${summary}\n   → ${path.relative(p.root, mdPath)}\n`, fail ? 'bad' : 'ok');
     this.post({ type: 'fb', state: 'end', id: fid, ok: !fail && !holdN, warn: res.some(r => r.status === 'WARN' || r.status === 'HOLD'), summary, sec: total });
     try { (fail || holdN ? vscode.window.showWarningMessage : vscode.window.showInformationMessage)(`Vibe_Manager ${summary}`); } catch { }
@@ -688,7 +820,7 @@ class WB {
       const pf = path.join(p.promptsDir, task.prompt); if (!fs.existsSync(pf)) { this.out('task', `프롬프트 파일 없음: ${pf}\n`, 'bad'); return; }
       const rel = path.relative(p.root, pf).split(path.sep).join('/'); const sid = vars0.inputs.id || vars0.inputs.ids || id;
       const vrf = valRefOf(p, sid);
-      this.askClaude(p, `${rel} 를 읽고 그 지시대로 화면 ${sid} 작업을 해주세요.${fs.existsSync(path.join(p.genDir, sid, 'GEN_NOTES.md')) ? ` 메모: Doc/gen/${sid}/GEN_NOTES.md.` : ''}${vrf ? ` VALIDATION 취합(검증 대조 원천): ${vrf}.` : ''} 룰은 tools/VibeManager/rules/10_RULES_KEEP.md 를 따르고, TODO(이식) 지점만 채우고 끝나면 __asis-mapping__.md 상태를 갱신하세요.`, true);
+      this.askClaude(p, `${rel} 를 읽고 그 지시대로 화면 ${sid} 작업을 해주세요.${fs.existsSync(path.join(p.genDir, sid, 'GEN_NOTES.md')) ? ` 메모: Doc/gen/${sid}/GEN_NOTES.md.` : ''}${vrf ? ` VALIDATION 취합(검증 대조 원천): ${vrf}.` : ''} 룰은 tools/VibeManager/rules/10_RULES_KEEP.md 를 따르고, TODO(이식) 지점만 채우고 끝나면 __asis-mapping__.md 상태를 갱신하세요.`, true, { source: 'task', label: task.title || task.id });
       api.record(task.id, `${rel} ${sid}`); return;
     }
     if (!/^(node|python|powershell|cmd)$/.test(task.kind)) { await api.runTaskById(taskId, { id, ids: id, dir: id ? api.pageDirOf(id) : '' }); return 0; }
@@ -705,8 +837,9 @@ class WB {
     this.post({ type: 'fb', state: 'step', id: fid, no: 1, status: 'RUN' });
     let code = null; try { code = await this.execShell(p, task, vars, null, id); } catch (e) { code = -1; this.out('task', `예외: ${e.message}\n`, 'bad'); }
     const sec = Math.round((Date.now() - s0) / 1000); const ok = code === 0;
+    const fw = ok ? null : this.takeFail(code); // 1.9.40: Flow 보드 결과 줄에 실패 원인(로그 [FAIL]/[ERROR] 줄)을 그대로 붙인다 — 'exit 6' 만으로는 무엇이 실패했는지 알 수 없다
     this.post({ type: 'fb', state: 'step', id: fid, no: 1, status: ok ? 'OK' : 'FAIL', code, sec });
-    this.post({ type: 'fb', state: 'end', id: fid, ok, warn: false, summary: `${ok ? '✅ 완료' : '✖ 실패'} — ${title}${code != null ? ` (exit ${code})` : ''} · ${sec}s`, sec });
+    this.post({ type: 'fb', state: 'end', id: fid, ok, warn: false, summary: `${ok ? '✅ 완료' : '✖ 실패'} — ${title}${code != null ? ` (exit ${code})` : ''} · ${sec}s${fw ? `\n원인: ${fw.why}\n로그: ${fw.log}` : ''}`, sec });
     return code;
   }
 
@@ -870,7 +1003,7 @@ class WB {
       if (!ok) { api.record(task.id, `(선행 실패 — BE/FE 미기동) ${path.basename(script)} ${args.join(' ')}`); api.afterTask(task.id, 5); return 5; }
     }
     const histId = (vars.inputs.id || (vars.inputs.ids || '').split(/\s+/)[0] || '').toUpperCase(); let hdir = null;
-    try { hdir = history.begin(Object.assign({}, p, { pageDirOf: api.pageDirOf }), histId, task.id, `${path.basename(script)} ${args.join(' ')}`); } catch { }
+    try { hdir = history.begin(Object.assign({}, p, { pageDirOf: api.pageDirOf }), histId, task.id, `${path.basename(script)} ${args.join(' ')}`, null, { source: xopts && xopts.inFlow ? 'chain' : 'menu', label: task.title || task.id }); } catch { }
     api.record(task.id, `${path.basename(script)} ${args.join(' ')}`);
     let cmd, a;
     if (task.kind === 'node') { cmd = p.node; a = [script, ...args]; }
@@ -887,7 +1020,8 @@ class WB {
     this.post({ type: 'status', html: statusHtml(p, histId || id || '') });
     // 작업 종료 후 FLOW/history 탭도 자동 갱신
     this.post({ type: 'flow', html: flow.innerHtml(p, '') });
-    this.post({ type: 'history', html: history.innerHtml(p, 'screen', '') });
+    this.post({ type: 'history', view: 'rev', html: history.innerHtml(p, 'date', '', 'all', 'rev') });
+    this.post({ type: 'history', view: 'task', html: history.innerHtml(p, 'date', '', 'all', 'task') });
     return code;
   }
 }
@@ -935,7 +1069,7 @@ button.sec{background:var(--vscode-button-secondaryBackground);color:var(--vscod
 
 summary{cursor:pointer;font-weight:600;margin-top:6px}
 
-#log,#chat,#status,#flow,#hist{flex:1;overflow:auto;background:var(--vscode-editor-background);border:1px solid var(--b);padding:6px;white-space:pre-wrap;font-family:var(--vscode-editor-font-family);font-size:12px;min-height:0}
+#log,#chat,#status,#flow,#hist,#thist{flex:1;overflow:auto;background:var(--vscode-editor-background);border:1px solid var(--b);padding:6px;white-space:pre-wrap;font-family:var(--vscode-editor-font-family);font-size:12px;min-height:0}
 /* 1.8.0: Log 탭 = BE Log | FE Log 2창 · Task Log 탭 */
 #logs{flex:1;display:flex;gap:6px;min-height:0}
 #logs .logpane{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
@@ -946,7 +1080,7 @@ summary{cursor:pointer;font-weight:600;margin-top:6px}
 .loghead .latest{font-size:10px;padding:1px 6px;margin:0}
 .logbody{flex:1;overflow:auto;background:var(--vscode-editor-background);border:1px solid var(--b);padding:6px;white-space:pre-wrap;font-family:var(--vscode-editor-font-family);font-size:12px;min-height:0}
 #logwrap .loghead .latest{margin-left:auto}
-#chat,#status,#flow,#hist{white-space:normal;font-family:var(--vscode-font-family)}
+#chat,#status,#flow,#hist,#thist{white-space:normal;font-family:var(--vscode-font-family)}
 .m{margin:4px 0;padding:4px 6px;border-radius:4px;white-space:pre-wrap}
 .m.user{background:var(--vscode-input-background);border-left:3px solid var(--vscode-focusBorder)}
 .m.assistant{border-left:3px solid #3fb950}
@@ -966,6 +1100,11 @@ details.m.result{border-left:3px solid var(--vscode-focusBorder)}
 .run{margin:6px 0 14px}
 details.runq{border-left:3px solid var(--vscode-focusBorder);background:var(--vscode-input-background)}
 details.runq summary{font-weight:600;font-size:12px;opacity:1}
+/* 1.9.30: 질문 줄 기본 한 줄(넘치면 …) · 펼치면 전문 */
+.runq{border-left:3px solid var(--vscode-focusBorder);background:var(--vscode-input-background)}
+.runq .rq1{font-weight:600;font-size:12px;opacity:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+details.runq[open]>summary.rq1{white-space:nowrap}
+details.runq .mb{font-family:var(--vscode-font-family);font-size:12px}
 .board{border:1px solid var(--b);border-radius:8px;background:var(--vscode-editorWidget-background,transparent);overflow:hidden;margin-top:6px}
 .board.running{border-color:#d29922}.board.done{border-color:#3fb950}.board.bad{border-color:#f85149}
 /* 1.8.9: 로그용 색상 클래스(.bad/.ok/.warn)가 보드 전체 글자색으로 상속되지 않게 — 상태는 배지·테두리·번호만 */
@@ -1003,6 +1142,13 @@ details.step>summary::before{content:'▸';opacity:.5;font-size:11px;width:8px}d
 .bfoot{padding:2px 8px 6px}.bfoot .m.meta{margin:2px 0}.bfoot:empty{display:none}
 details.bfinal{border-top:1px solid var(--b);padding:6px 10px 8px}
 details.bfinal summary{cursor:pointer;font-weight:700;font-size:12px}
+/* 1.9.30: LITE 질의 = Step 상황판 없이 질문 + 결과만 */
+.blite{display:none;padding:6px 10px;font-size:12px;opacity:.8}
+.run.lite>.board>.bhead,.run.lite>.board>.bsteps{display:none}
+.run.lite>.board.running>.blite{display:block}
+.run.lite>.board>details.bfinal{border-top:0}
+.run.lite>.board>details.bfinal>summary{display:none}
+.run.lite>.board>details.bfinal .ft{max-height:none;margin-top:0}
 /* 1.8.9: Flow 보드(체인·단일 작업) */
 .board.fboard .bhead{background:linear-gradient(135deg,rgba(88,166,255,.35) 0%,var(--vscode-editorWidget-background,transparent) 140%)}
 .fboard .step .sdur{font-size:10px;opacity:.7;flex:none;font-family:var(--vscode-editor-font-family)}
@@ -1117,6 +1263,8 @@ h4{margin:8px 0 2px 0}
 .hist-top{display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin-bottom:4px}
 .hist-cols{flex:1;display:grid;grid-template-columns:46% 54%;gap:6px;min-height:0}
 .hist-l,.hist-r{overflow:auto;padding:4px 6px;border:1px solid var(--b);border-radius:3px}
+.hkv{border-collapse:collapse;margin:4px 0 6px 0;font-size:11.5px}.hkv td{padding:1px 8px 1px 0;vertical-align:top}.hkv td:first-child{opacity:.65;white-space:nowrap}
+.hpre{white-space:pre-wrap;word-break:break-all;max-height:320px;overflow:auto;font-size:11px;background:var(--vscode-textCodeBlock-background);padding:6px;border-radius:3px}
 .hit{padding:3px 5px;border-radius:3px;cursor:pointer;margin:2px 0;font-size:11px}
 .hit:hover{background:var(--vscode-list-hoverBackground)}
 .hit.hsel{background:var(--vscode-list-activeSelectionBackground);color:var(--vscode-list-activeSelectionForeground)}
@@ -1129,7 +1277,7 @@ h4{margin:8px 0 2px 0}
 </style></head><body>
 <div id="top">
   <!-- 1.8.0: '작업 출력' → Log. Log 탭 = BE Log | FE Log 두 창(서버 기동 스트림) · Task Log 탭 = 그 외 작업(gap.js·pipeline 등) 출력. 각 창에 ⤓ 최신 버튼 -->
-  <div class="rtabs"><button class="rtb on" data-t="chat">✴️ Claude</button><button class="rtb" data-t="logs">📜 Log</button><button class="rtb" data-t="log">🧾 Task Log</button><button class="rtb" data-t="status">🎯 UI Status</button><button class="rtb" data-t="hist">🕒 History</button><span id="dtabs"></span><span id="busy"><span class="spinner"></span><span class="label"></span></span></div>
+  <div class="rtabs"><button class="rtb on" data-t="chat">✴️ Claude</button><button class="rtb" data-t="logs">📜 Log</button><button class="rtb" data-t="log">🧾 Task Log</button><button class="rtb" data-t="status">🎯 UI Status</button><button class="rtb" data-t="hist">🕒 Revision History</button><button class="rtb" data-t="thist">🧾 Task History</button><span id="dtabs"></span><span id="busy"><span class="spinner"></span><span class="label"></span></span></div>
   <div id="chat">
     <div class="hint">${t(p, 'chat_hint')}</div>
     <div id="thinking" class="thinking"><span class="pulse">✻</span><span>Thinking…</span></div>
@@ -1142,14 +1290,15 @@ h4{margin:8px 0 2px 0}
   <div id="status" style="display:none">${statusHtml(p, state.id)}</div>
   <div id="flow" style="display:none"><div class="hint">${t(p, 'flow_hint')}</div></div>
   <div id="hist" style="display:none"><div class="hint">${t(p, 'hist_hint')}</div></div>
+  <div id="thist" style="display:none"><div class="hint">Task History 탭 선택 시 자동 로드됩니다…</div></div>
 </div>
 <div id="bottom">
   <div id="attached"></div>
-  <!-- 1.7.6: 프롬프트 우측 = 전송(Ctrl+Enter) · 중지 · 지우기 세로 배치 -->
+  <!-- 1.7.6: 프롬프트 우측 = 전송(Enter · 1.9.30 Ctrl+Enter→Enter) · 중지 · 지우기 세로 배치 -->
   <div class="prow">
     <textarea id="t" placeholder="${esc(t(p, 'ph'))}"></textarea>
     <div class="pact">
-      <button id="send" title="프롬프트를 Claude 에 전송 (Ctrl+Enter)">${t(p, 'send')}</button>
+      <button id="send" title="프롬프트를 Claude 에 전송 (Enter · 줄바꿈 Shift+Enter)">${t(p, 'send')}</button>
       <button class="sec" id="stop" title="실행 중인 자식 프로세스·Claude 요청 모두 중지">${t(p, 'stop')}</button>
       <button class="sec" id="clear" title="작업 출력·Claude 대화 지우기">${t(p, 'clear')}</button>
     </div>
@@ -1195,17 +1344,38 @@ function showTab(t){
   if(t.startsWith('t:')){showDynTab(t);if(t==='t:flow')vscode.postMessage(Object.assign({type:'flow:refresh',filter:''},st()));return;}
   document.querySelectorAll('.dtab').forEach(d=>d.style.display='none');
   document.querySelectorAll('.rtabs .rtb').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
-  [['log','logwrap'],['logs','logs'],['chat','chat'],['status','status'],['hist','hist']].forEach(([k,el])=>$(el).style.display=k===t?'':'none');
+  [['log','logwrap'],['logs','logs'],['chat','chat'],['status','status'],['hist','hist'],['thist','thist']].forEach(([k,el])=>$(el).style.display=k===t?'':'none');
   if(t==='logs'){['belog','felog'].forEach(scrollLatest);} else if(t==='log') scrollLatest('log');
-  if(t==='hist') vscode.postMessage(Object.assign({type:'history:refresh',mode:'screen',sel:''},st()));
+  if(t==='hist'||t==='thist') vscode.postMessage(Object.assign({type:'history:refresh',view:t==='thist'?'task':'rev',mode:'date',sel:''},st()));
   else if(t==='status') vscode.postMessage(Object.assign({type:'status'},st()));
 }
 document.querySelectorAll('.rtabs .rtb').forEach(b=>b.onclick=()=>showTab(b.dataset.t));
 
 
-function send(){const text=$('t').value;if(!text.trim())return;vscode.postMessage(Object.assign({type:'prompt',text},st()));$('t').value='';showTab('chat');}
+// 1.9.29(2026-10-29 사용자): 프롬프트 ↑/↓ 이력 — 캐럿이 첫 줄일 때 ↑ = 이전 명령, 마지막 줄일 때 ↓ = 다음 명령(마지막 다음은 작성 중이던 초안 복원). 창을 다시 열어도 유지(webview state, 최근 200건)
+const PH={list:((vscode.getState()||{}).promptHist)||[],idx:-1,draft:''};
+function phSave(){try{vscode.setState(Object.assign({},vscode.getState()||{},{promptHist:PH.list.slice(-200)}));}catch(_){}}
+function phPush(t){t=String(t||'');if(!t.trim())return;if(PH.list[PH.list.length-1]!==t)PH.list.push(t);if(PH.list.length>200)PH.list.shift();PH.idx=-1;PH.draft='';phSave();}
+function phShow(v){const ta=$('t');ta.value=v;ta.setSelectionRange(v.length,v.length);ta.scrollTop=ta.scrollHeight;}
+function phKey(e){
+  const ta=$('t');
+  if(e.key==='ArrowUp'&&!e.shiftKey&&!e.altKey&&!e.ctrlKey){
+    if(ta.value.slice(0,ta.selectionStart).includes('\\n'))return;            // 첫 줄이 아니면 보통 커서 이동
+    if(!PH.list.length)return;
+    if(PH.idx===-1){PH.draft=ta.value;PH.idx=PH.list.length;}                 // 최신(작성 중)에서 올라가기 시작 — 초안 보관
+    if(PH.idx>0){PH.idx--;phShow(PH.list[PH.idx]);}
+    e.preventDefault();
+  } else if(e.key==='ArrowDown'&&!e.shiftKey&&!e.altKey&&!e.ctrlKey){
+    if(ta.value.slice(ta.selectionStart).includes('\\n'))return;              // 마지막 줄이 아니면 보통 커서 이동
+    if(PH.idx===-1)return;                                                    // 이미 최신(초안)이면 아무것도 안 함
+    e.preventDefault();PH.idx++;
+    if(PH.idx>=PH.list.length){PH.idx=-1;phShow(PH.draft);PH.draft='';} else phShow(PH.list[PH.idx]);
+  }
+}
+function send(){const text=$('t').value;if(!text.trim())return;phPush(text);vscode.postMessage(Object.assign({type:'prompt',text},st()));$('t').value='';showTab('chat');}
 $('send').onclick=send;
-$('t').addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();send();}});
+// 1.9.30: Claude 와 같이 Enter = 전송 · Shift+Enter = 줄바꿈 · 한글 IME 조합 중 Enter(isComposing·229)는 조합 확정만
+$('t').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.altKey&&!e.isComposing&&e.keyCode!==229){e.preventDefault();send();return;}phKey(e);});
 $('t').addEventListener('paste',e=>{
   const items=(e.clipboardData||{}).items||[];
   for(const it of items){
@@ -1239,20 +1409,32 @@ function fmtSec(s){s=Math.max(0,Math.round(s));return s<60?s+'s':Math.floor(s/60
 function firstLine(t){return (String(t||'').split('\\n').find(x=>x.trim())||'').replace(/^[#>*\\-\\s]+/,'').replace(/\\*\\*/g,'').trim();}
 function chatStick(){const c=$('chat');return c.scrollHeight-c.scrollTop-c.clientHeight<80;}
 function chatScroll(stick){if(stick)$('chat').scrollTop=$('chat').scrollHeight;}
+// 1.9.30: LITE 질의(산출물 없는 질문·확인) = Step 상황판 숨김 → 질문 + 결과만.
+//   시작 시 프롬프트로 예측(attach-context 훅과 같은 기준, 화면 컨텍스트 접두 제외) → 응답 첫 줄 [LITE] 면 LITE 확정,
+//   [T# …] 표기·할 일 목록(TodoWrite) 이 오면 작업(FULL) 으로 확정해 상황판을 다시 보임.
+const LITE_ACT=/만들|생성|작성|수정|변경|추가|삭제|적용|구현|변환|배포|이관|저장해|고쳐|바꿔|재작업|보완|리팩|정정|등록|반영|패치|컴파일|빌드|실행해|돌려|테스트\\s*케이스|분석서|설계서|패키지|\\b(create|implement|add|update|write|refactor|deploy|apply|migrate|fix|modify|change|generate|build|convert|register|patch|rework)\\b/i;
+const LITE_Q=/\\?|뭐|무엇|어디|몇|왜|어떻게|알려|설명|확인만|보여|있나|인가|인지|맞나|차이|의미|뜻|\\b(what|where|which|why|how|explain|show)\\b/i;
+function bareQ(t){t=String(t||'');if(/^\\[화면 [^\\]]+\\]/.test(t)){const i=t.indexOf(' — 참고 후: ');if(i>=0)return t.slice(i+' — 참고 후: '.length);}return t;}
+function predictLite(t){const q=bareQ(t).trim();if(/^!lite\\b/i.test(q))return true;if(/^!full\\b/i.test(q))return false;const p=q.replace(/^!(full|lite)\\b\\s*/i,'');return p.length<300&&LITE_Q.test(p)&&!LITE_ACT.test(p);}
+function setLite(r,on,fixed){if(!r||r.liteFixed)return;r.lite=!!on;if(fixed)r.liteFixed=true;r.el.classList.toggle('lite',r.lite);}
+function liteMark(txt){const f=String(txt||'').trimStart();return /^\\[LITE\\]/i.test(f)?true:(/^\\[T\\d/i.test(f)?false:null);}
 function newRun(promptText){
   if(RUN&&!RUN.done)endRun(null,null);
-  const r={steps:[],cur:-1,todos:null,t0:Date.now(),tools:0,edits:0,done:false,ok:null,lastText:'',totalHint:0,timer:null};
+  const r={steps:[],cur:-1,todos:null,t0:Date.now(),tools:0,edits:0,done:false,ok:null,lastText:'',totalHint:0,timer:null,lite:false,liteFixed:false};
   const mk=(String(promptText).match(/\\[\\s*\\d+\\s+[^\\]]{1,20}\\]/g)||[]);if(mk.length>=2)r.totalHint=new Set(mk).size;
   r.el=el('div','run');
-  const u=el('details','m user runq');const us=el('summary');const f=firstLine(promptText)||promptText;us.textContent='💬 '+(f.length>140?f.slice(0,140)+'…':f);u.appendChild(us);u.appendChild(el('div','mb',promptText));r.el.appendChild(u);
+  // 1.9.30: 질문 줄 = '💬 [화면 ID] : 질문 첫 줄'(컨텍스트 경로 접두 숨김 · 한 줄) · 여러 줄/긴 질문만 펼쳐서 전문 · 원문 전체(접두 포함)는 마우스 올리면
+  {const q=bareQ(promptText).replace(/^\\s+|\\s+$/g,'');const sm=/^\\[화면 ([^\\]]+)\\]/.exec(String(promptText));const tag=(sm&&q!==String(promptText))?'[화면 '+sm[1]+'] : ':'';
+   const lines=q.split('\\n').filter(x=>x.trim());const f1=(lines[0]||q).trim();const more=lines.length>1||f1.length>140;
+   const u=el(more?'details':'div','m user runq');const us=el(more?'summary':'div','rq1','💬 '+tag+f1);us.title=String(promptText);u.appendChild(us);if(more)u.appendChild(el('div','mb',q));r.el.appendChild(u);}
   const b=el('div','board running');
-  b.innerHTML='<div class="bhead"><div class="bstep"><span class="bcur">0</span><span class="bsl">/</span><span class="btot">?</span><span class="bsll"></span></div><div class="bmid"><div class="btitle"></div><div class="bbar"><i></i></div><div class="bnow"></div></div><div class="bkpis"><div class="bk"><b class="bk-tools">0</b><span></span></div><div class="bk"><b class="bk-edits">0</b><span></span></div><div class="bk"><b class="bk-time">0s</b><span></span></div><div class="bk"><b class="bk-st running"></b></div></div></div><div class="bsteps"></div><div class="bfoot"></div>';
+  b.innerHTML='<div class="bhead"><div class="bstep"><span class="bcur">0</span><span class="bsl">/</span><span class="btot">?</span><span class="bsll"></span></div><div class="bmid"><div class="btitle"></div><div class="bbar"><i></i></div><div class="bnow"></div></div><div class="bkpis"><div class="bk"><b class="bk-tools">0</b><span></span></div><div class="bk"><b class="bk-edits">0</b><span></span></div><div class="bk"><b class="bk-time">0s</b><span></span></div><div class="bk"><b class="bk-st running"></b></div></div></div><div class="blite">⏳ '+UI_BD.running+'</div><div class="bsteps"></div><div class="bfoot"></div>';
   b.querySelector('.bsll').textContent=UI_BD.step;
   const kl=b.querySelectorAll('.bk span');kl[0].textContent=UI_BD.tools;kl[1].textContent=UI_BD.edits;kl[2].textContent=UI_BD.elapsed;
-  r.board=b;r.el.appendChild(b);
+  r.board=b;r.el.appendChild(b);setLite(r,predictLite(promptText),false);
   runContainer().appendChild(r.el);const th=$('thinking');if(th)$('chat').appendChild(th);
   RUN=r;setStatus(UI_BD.running,'running');updateHead();
-  r.timer=setInterval(()=>{if(RUN!==r||r.done){clearInterval(r.timer);return;}r.board.querySelector('.bk-time').textContent=fmtSec((Date.now()-r.t0)/1000);},1000);
+  r.timer=setInterval(()=>{if(RUN!==r||r.done){clearInterval(r.timer);return;}const sec=fmtSec((Date.now()-r.t0)/1000);r.board.querySelector('.bk-time').textContent=sec;r.board.querySelector('.blite').textContent='⏳ '+(r.pending?UI_BD.pending:UI_BD.running)+' · '+sec;},1000);
   chatScroll(true);return r;
 }
 function setStatus(txt,cls){if(!RUN)return;const s=RUN.board.querySelector('.bk-st');s.textContent=txt;s.className='bk-st '+cls;RUN.board.className='board '+cls;}
@@ -1273,6 +1455,7 @@ function newStep(title,idx,isTodo){
 function curStep(){const r=RUN;if(!r)return null;if(r.cur>=0&&r.steps[r.cur])return r.steps[r.cur];const st=newStep('',null,false);updateHead();return st;}
 function addText(txt){
   const r=RUN;if(!r)return;const f=firstLine(txt);r.lastText=txt;
+  const lm=liteMark(txt);if(lm!==null)setLite(r,lm,true);
   let st=r.cur>=0?r.steps[r.cur]:null;
   const marker=/^\\[?\\s*\\d+\\s*[\\].:)]\\s*\\S/.test(f)||/^(step|단계)\\s*\\d+/i.test(f);
   if(!r.todos&&(!st||st.tools.length>0||marker)){st=newStep(f.slice(0,90),null,false);}
@@ -1313,7 +1496,7 @@ function updateHead(){
   const cs=r.steps[r.cur];b.querySelector('.btitle').textContent=cs?((cs.idx+1)+'. '+(cs.title||UI_BD.prep)):'';
 }
 function applyTodos(items){
-  const r=RUN;if(!r)return;
+  const r=RUN;if(!r)return;setLite(r,false,true);
   if(!r.todos){
     // 첫 할 일 목록 도착: 그 전까지의 동적 step 은 '0 준비' 하나로 합침
     if(r.steps.length){const keep=r.steps[0];for(let i=1;i<r.steps.length;i++){const x=r.steps[i];while(x.body.firstChild)keep.body.appendChild(x.body.firstChild);keep.tools=keep.tools.concat(x.tools);for(const k in x.kinds)keep.kinds[k]=(keep.kinds[k]||0)+x.kinds[k];x.el.remove();}
@@ -1337,9 +1520,17 @@ function endRun(text,ok){
   r.steps.forEach(x=>{if(x.status==='run')setStepStatus(x,ok?'done':(ok===false?'bad':'wait'));x.sum.querySelector('.slast').textContent='';});
   setStatus(ok?UI_BD.done:(ok===false?UI_BD.error:UI_BD.stopped),ok?'done':'bad');
   r.board.querySelector('.bnow').textContent='';
-  if(r.lastText){const fd=el('details','bfinal');fd.open=true;fd.appendChild(el('summary',null,'📄 '+UI_BD.final));fd.appendChild(el('div','ft',r.lastText));r.board.insertBefore(fd,r.board.querySelector('.bfoot'));}
+  showFinal(r);
   if(text)addMeta(text);
   updateHead();
+}
+function showFinal(r){if(!r.lastText||r.finalShown)return;r.finalShown=true;const fd=el('details','bfinal');fd.open=true;fd.appendChild(el('summary',null,'📄 '+UI_BD.final));fd.appendChild(el('div','ft',r.lastText));r.board.insertBefore(fd,r.board.querySelector('.bfoot'));}
+// 1.9.30: 보고 완료 · 후속 작업 진행 중 — 최종 보고는 바로 펼치되 상태·경과 시계는 '진행 중' 으로 유지(끝나면 run done 이 마감)
+function pendRun(text){
+  const r=RUN;if(!r||r.done)return;r.pending=true;
+  r.steps.forEach(x=>{if(x.status==='run'){setStepStatus(x,'done');x.sum.querySelector('.slast').textContent='';}});
+  setStatus(UI_BD.pending,'running');r.board.querySelector('.bnow').textContent='';
+  showFinal(r);if(text)addMeta(text);
 }
 function addMeta(text){const d=el('div','m meta',text);if(RUN)RUN.board.querySelector('.bfoot').appendChild(d);else $('chat').appendChild(d);}
 
@@ -1486,7 +1677,7 @@ function showDynTab(t){
   const key=t.slice(2);
   document.querySelectorAll('.dtab').forEach(d=>d.style.display='none');
   // 1.9.8: 요소가 없어도 죽지 않게 + 탭 안에 들어가 있는 #flow 는 숨기지 않는다(FLOW 탭 내용이 비던 원인)
-  ['logwrap','logs','chat','status','flow','hist'].forEach(id=>{const e=$(id);if(!e)return;if(id==='flow'&&e.closest('.dtab'))return;e.style.display='none';});
+  ['logwrap','logs','chat','status','flow','hist','thist'].forEach(id=>{const e=$(id);if(!e)return;if(id==='flow'&&e.closest('.dtab'))return;e.style.display='none';});
   const T=TABS[key];if(T)T.pane.style.display='flex';
   document.querySelectorAll('.rtabs .rtb').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
 }
@@ -1505,7 +1696,7 @@ function bindStatus(){
   document.querySelectorAll('#status .stp[data-task]').forEach(e=>e.onclick=()=>{if(e.dataset.task)vscode.postMessage(Object.assign({type:'task',task:e.dataset.task},st()));});
   document.querySelectorAll('#status a[data-f]').forEach(a=>a.onclick=()=>vscode.postMessage({type:'show',file:a.dataset.f}));
   document.querySelectorAll('#status a[data-open]').forEach(a=>a.onclick=()=>vscode.postMessage({type:'openExternal',file:a.dataset.open}));
-  document.querySelectorAll('#status a[data-hist]').forEach(a=>a.onclick=()=>{showTab('hist');vscode.postMessage({type:'history:refresh',mode:'screen',sel:a.dataset.hist});});
+  document.querySelectorAll('#status a[data-hist]').forEach(a=>a.onclick=()=>{showTab('hist');vscode.postMessage({type:'history:refresh',view:'rev',mode:'date',sel:a.dataset.hist});});
 }
 function bindFlow(){
   document.querySelectorAll('#flow td.fc').forEach(td=>td.onclick=()=>vscode.postMessage({type:'flow:task',task:td.dataset.task,id:td.dataset.id}));
@@ -1513,14 +1704,17 @@ function bindFlow(){
   const ff=document.getElementById('flow-f');if(ff)ff.addEventListener('keydown',e=>{if(e.key==='Enter')vscode.postMessage({type:'flow:refresh',filter:e.target.value});});
   const frf=document.getElementById('flow-rf');if(frf)frf.onclick=()=>vscode.postMessage({type:'flow:refresh',filter:(document.getElementById('flow-f')||{}).value||''});
 }
-function bindHist(){
-  document.querySelectorAll('#hist [data-hmode]').forEach(b=>b.onclick=()=>vscode.postMessage({type:'history:refresh',mode:b.dataset.hmode,sel:''}));
-  const hrf=document.getElementById('hist-rf');if(hrf)hrf.onclick=()=>vscode.postMessage({type:'history:refresh',mode:document.querySelector('#hist [data-hmode].on')?.dataset.hmode||'screen',sel:''});
-  document.querySelectorAll('#hist .hit').forEach(e=>e.onclick=()=>vscode.postMessage({type:'history:select',dir:e.dataset.dir}));
-  document.querySelectorAll('#hist .hf').forEach(e=>e.onclick=ev=>{if(ev.target.classList.contains('hlive'))return;vscode.postMessage({type:'history:diff',dir:e.dataset.dir,file:e.dataset.file});});
-  document.querySelectorAll('#hist .hlive').forEach(b=>b.onclick=ev=>{ev.stopPropagation();vscode.postMessage({type:'history:diffLive',dir:b.dataset.dir,file:b.dataset.file});});
-  const od=document.getElementById('hist-od');if(od)od.onclick=()=>vscode.postMessage({type:'openExternal',file:od.dataset.dir});
-  const del=document.getElementById('hist-del');if(del)del.onclick=()=>vscode.postMessage({type:'history:delete',dir:del.dataset.dir});
+function bindHist(view){
+  const v=view==='task'?'task':'rev'; const R=$(v==='task'?'thist':'hist'); if(!R)return;
+  const hMode=()=>R.querySelector('[data-hmode].on')?.dataset.hmode||'date'; const hSrc=()=>R.querySelector('[data-hsrc].on')?.dataset.hsrc||'all';
+  R.querySelectorAll('[data-hmode]').forEach(b=>b.onclick=()=>vscode.postMessage({type:'history:refresh',view:v,mode:b.dataset.hmode,src:hSrc(),sel:''}));
+  R.querySelectorAll('[data-hsrc]').forEach(b=>b.onclick=()=>vscode.postMessage({type:'history:refresh',view:v,mode:hMode(),src:b.dataset.hsrc,sel:''}));
+  const hrf=R.querySelector('#hist-rf');if(hrf)hrf.onclick=()=>vscode.postMessage({type:'history:refresh',view:v,mode:hMode(),src:hSrc(),sel:''});
+  R.querySelectorAll('.hit').forEach(e=>e.onclick=()=>vscode.postMessage({type:'history:select',view:v,dir:e.dataset.dir,mode:hMode(),src:hSrc()}));
+  R.querySelectorAll('.hf').forEach(e=>e.onclick=ev=>{if(ev.target.classList.contains('hlive'))return;vscode.postMessage({type:'history:diff',dir:e.dataset.dir,file:e.dataset.file});});
+  R.querySelectorAll('.hlive').forEach(b=>b.onclick=ev=>{ev.stopPropagation();vscode.postMessage({type:'history:diffLive',dir:b.dataset.dir,file:b.dataset.file});});
+  const od=R.querySelector('#hist-od');if(od)od.onclick=()=>vscode.postMessage({type:'openExternal',file:od.dataset.dir});
+  const del=R.querySelector('#hist-del');if(del)del.onclick=()=>vscode.postMessage({type:'history:delete',view:v,dir:del.dataset.dir,mode:hMode(),src:hSrc()});
 }
 bindStatus();
 
@@ -1540,7 +1734,7 @@ window.addEventListener('message',e=>{const m=e.data;
  }
  else if(m.type==='fb'){const stick=chatStick();if(m.state==='start')flowStart(m);else if(m.state==='step')flowStep(m);else if(m.state==='end')flowEnd(m);chatScroll(stick||m.state==='start');markNew('chat');}
  else if(m.type==='todos'){const stick=chatStick();if(RUN&&!RUN.done)applyTodos(m.items||[]);chatScroll(stick);markNew('chat');}
- else if(m.type==='run'){const stick=chatStick();if(m.state==='done')endRun(m.text||'',m.ok!==false);chatScroll(stick);markNew('chat');}
+ else if(m.type==='run'){const stick=chatStick();if(m.state==='done')endRun(m.text||'',m.ok!==false);else if(m.state==='pending')pendRun(m.text||'');chatScroll(stick);markNew('chat');}
  else if(m.type==='tab'){
    if(m.kind==='flow'){ // FLOW 탭: 기존 #flow 요소를 탭 안으로 옮겨 flow 메시지·bindFlow 가 그대로 동작
      if(!TABS['flow']){openTabUI({key:'flow',title:m.title||'📊 FLOW',sub:m.sub||'',path:'',kind:'flow',html:'',editable:false,canEditor:false});const T=TABS['flow'];const c=T.pane.querySelector('.dtc');const fl=$('flow');fl.style.display='';c.appendChild(fl);T.pane.querySelector('.dt-os').style.display='none';T.pane.querySelector('.dt-reload').onclick=()=>vscode.postMessage(Object.assign({type:'flow:refresh',filter:''},st()));}
@@ -1550,7 +1744,7 @@ window.addEventListener('message',e=>{const m=e.data;
  else if(m.type==='prefill'){const ta=$('t');ta.value=m.text||'';showTab('chat');ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);ta.scrollTop=ta.scrollHeight;}
  else if(m.type==='status'){$('status').innerHTML=m.html;bindStatus();}
  else if(m.type==='flow'){$('flow').innerHTML=m.html;bindFlow();}
- else if(m.type==='history'){$('hist').innerHTML=m.html;bindHist();}
+ else if(m.type==='history'){$(m.view==='task'?'thist':'hist').innerHTML=m.html;bindHist(m.view);}
  else if(m.type==='session'){$('sess').textContent=m.id?(UI_SESS+m.id.slice(0,8)):UI_NOSESS;}
  else if(m.type==='model'){const el=$('modelName');if(el)el.textContent=m.name||UI_AFTERSEND;if(m.name)addModelOpt(m.name,m.name);}
  else if(m.type==='showTab'){if(m.auto)markNew(m.tab);else showTab(m.tab);}
@@ -1645,14 +1839,19 @@ function open(api, opts) {
     try { lastWB.panel.reveal(); return lastWB; } catch { }
   }
   const wb = new WB(api);
-  const title = panels.size === 0 ? 'Vibe_Manager Workbench' : `Vibe_Manager Workbench #${wb.inst}`;
+  // 1.9.28+: 탭 명칭 = 열린 창 순서의 연속 번호 VM#1·VM#2…(생성 누적 번호 inst 는 상태 키용 — 닫은 창 번호가 비어 #3·#5 로 건너뛰던 결함 2026-10-28)
+  // 1.9.31: 화면 ID 지정 후 = VM-<ID> · 같은 ID 창 2개 이상 = VM-<ID>#k — retitle() 이 열기·닫기·ID 변경 때 전 창 재계산
+  const renumber = retitle;
+  wb.num = panels.size + 1; const title = `VM#${wb.num}`;
   const column = (fresh && panels.size > 0) ? vscode.ViewColumn.Beside : vscode.ViewColumn.Active;
   const panel = vscode.window.createWebviewPanel('vibeManager.workbench', title, column, { enableScripts: true, retainContextWhenHidden: true });
   const iconColor = vscode.Uri.file(path.join(api.ctx.extensionPath, 'media', 'vibe-color.svg'));
   const iconMono = vscode.Uri.file(path.join(api.ctx.extensionPath, 'media', 'vibe.svg'));
   try { panel.iconPath = { light: iconMono, dark: iconColor }; } catch { }
-  wb.panel = panel; panels.add(wb); lastWB = wb;
-  panel.onDidDispose(() => { panels.delete(wb); wb.stopAll(); if (lastWB === wb) lastWB = [...panels][0] || null; });
+  wb.panel = panel; panels.add(wb); lastWB = wb; retitle();
+  panel.onDidDispose(() => { panels.delete(wb); wb.stopAll(); if (lastWB === wb) lastWB = [...panels][0] || null; renumber(); });
+  // 1.9.28+: 여러 Workbench 창을 열면 명령(사이드바·빠른 실행·열기)이 '마지막에 만든 창' 으로 가던 결함 — 사용자가 보고 있는(활성) 창을 lastWB 로 따라간다(2026-10-28)
+  panel.onDidChangeViewState(e => { try { if (e.webviewPanel.active && panels.has(wb)) lastWB = wb; } catch { } });
 
   const s = wb.getState();
   panel.webview.html = html(wb, api.paths(), Object.assign({ steps: api.loadSteps() }, s));
@@ -1670,6 +1869,7 @@ function open(api, opts) {
   };
 
   const onMsg = async m => {
+    if (panels.has(wb)) lastWB = wb;  // 1.9.28+: 웹뷰에서 조작한 창이 곧 현재 창
     const p = api.paths(); const id = (m.id || '').toUpperCase();
     try {
       switch (m.type) {
@@ -1716,11 +1916,11 @@ function open(api, opts) {
         }
         case 'status': wb.post({ type: 'status', html: statusHtml(p, id) }); break;
         case 'flow:refresh': wb.post({ type: 'flow', html: flow.innerHtml(p, m.filter || '') }); break;
-        case 'history:refresh': wb.post({ type: 'history', html: history.innerHtml(p, m.mode || 'screen', m.sel || '') }); break;
+        case 'history:refresh': wb.post({ type: 'history', view: m.view || 'rev', html: history.innerHtml(p, m.mode || 'date', m.sel || '', m.src || 'all', m.view || 'rev') }); break;
         case 'history:select': {
           const items = history.list(p); const meta = items.find(x => x.dir === m.dir);
           if (meta && !meta.afterMode) { try { history.finish(Object.assign({}, p, { pageDirOf: api.pageDirOf }), meta.dir, meta.exit, 'view'); } catch { } }
-          wb.post({ type: 'history', html: history.innerHtml(p, 'screen', m.dir) });
+          wb.post({ type: 'history', view: m.view || 'rev', html: history.innerHtml(p, m.mode || 'date', m.dir, m.src || 'all', m.view || 'rev') });
           break;
         }
         case 'history:diff': {
@@ -1744,7 +1944,7 @@ function open(api, opts) {
         }
         case 'history:delete': {
           const ok = await vscode.window.showWarningMessage(`이력 삭제: ${path.basename(m.dir)}`, { modal: true }, '삭제');
-          if (ok === '삭제') { try { fs.rmSync(m.dir, { recursive: true, force: true }); } catch { } wb.post({ type: 'history', html: history.innerHtml(p, 'screen', '') }); }
+          if (ok === '삭제') { try { fs.rmSync(m.dir, { recursive: true, force: true }); } catch { } wb.post({ type: 'history', view: m.view || 'rev', html: history.innerHtml(p, m.mode || 'date', '', m.src || 'all', m.view || 'rev') }); }
           break;
         }
         case 'flow:task': {
@@ -1772,7 +1972,7 @@ function open(api, opts) {
         case 'prompt': {
           // 1.6: ctx/harness 체크박스 제거 — ID 가 있으면 자동 컨텍스트, 자동 하네스는 effectiveHarness 가 판정.
           const h = effectiveHarness(false, null, null, id);
-          wb.askClaude(p, withCtx(p, id, m.text, true), h);
+          wb.askClaude(p, withCtx(p, id, m.text, true), h, { source: 'prompt', text: m.text });
           api.record('prompt', m.text.slice(0, 120));
           break;
         }
@@ -1839,7 +2039,20 @@ function open(api, opts) {
               wb.post({ type: 'chat', role: 'meta', text: `화면 ID → ${effId} · 세션 리셋` });
             }
           }
+          // 2026-10-28 사용자: 자동 보완 전 CheckList 가 최신이 아니면 먼저 실행 — quick 항목 preTask(예 S8.verifyIfStale, 최신이면 스크립트가 건너뜀).
+          //   웹뷰가 보낸 item 에는 새 속성이 빠질 수 있어 quick.json 원본에서 다시 찾는다. 사전 단계가 실패해도 보완은 계속(CheckList 결과 없으면 기존 방식)
+          {
+            const src = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items).find(x => x.label === item.label) || item;
+            if (src.preTask && item.kind === 'claude' && effId) {
+              wb.out('task', `\n── 사전 단계: ${src.preTask} (${effId}) — ${item.label}\n`, 'cmd');
+              const pc = await wb.runTaskStreaming(p, src.preTask, effId, { noConfirm: true, inFlow: true });
+              if (pc == null) { wb.out('task', `⛔ 사전 단계 취소 — "${item.label}" 실행 안 함\n`, 'warn'); break; }
+              if (pc !== 0) wb.out('task', `⚠ 사전 단계 종료코드 ${pc} — CheckList 결과 없이(또는 직전 결과로) 보완을 계속합니다\n`, 'warn');
+            }
+          }
           const taskId = item.kind === 'task' ? item.task : null;
+          // 1.9.36: 즉시 끝나는 메뉴(터미널·서버·Git·브라우저)는 실행 사실만 작업 이력에 남긴다
+          if (/^(terminal|multi|server-stop|browser|git-common-sync|git-upload-ui|git-upload|git-status|work-mode)$/.test(item.kind)) { try { history.event(Object.assign({}, p, { pageDirOf: api.pageDirOf }), effId, `menu_${item.kind}`, item.label); } catch { } }
           const h = effectiveHarness(m.harness, taskId, item, effId);
           if (item.kind === 'task') await wb.runTaskStreaming(p, item.task, effId);
           else if (item.kind === 'chain') { // 1.8.8: 순차 체인(파싱→…→문서 등)
@@ -1861,7 +2074,12 @@ function open(api, opts) {
             // 1.9.10: 🩹 E2E 오류 보완을 메뉴에서 직접 실행하면 ${kind}/${round}/${step} 이 치환되지 않은 채 전달됐다(수선 기록 15:38).
             //   프롬프트에 ${kind} 가 있으면 종류를 고르게 하고(기본 = 최근 FAIL 행의 종류), round = E2E_REPAIR.md 의 '## 수선' 수 + 1,
             //   끝나면 item.afterTask(예 "S7.${kind}")로 그 E2E 단계를 바로 재실행해 수선 효과를 확인한다(사용자 신고 "보완했는데 오류 지속").
-            if (item.verdict === 'repair') { await wb.repairE2E(p, item, effId, h); break; }
+            if (item.verdict === 'repair') {
+              await wb.repairE2E(p, item, effId, h);
+              const srcR = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items).find(x => x.label === item.label) || item;
+              if (srcR.postTask && effId) { wb.out('task', `\n── 후속 단계: ${srcR.postTask} (${effId}) — 클라우드 이관 파일 사전 생성\n`, 'cmd'); await wb.runTaskStreaming(p, srcR.postTask, effId, { noConfirm: true, inFlow: true }); }
+              break;
+            }
             const vars = { root: p.root, id: effId };
             if (/\$\{kind\}/.test(item.prompt || '')) {
               const kinds = ['smoke', 'crud', 'auth', 'authcrud'];
@@ -1871,10 +2089,33 @@ function open(api, opts) {
               let round = 1; try { const md = fs.readFileSync(path.join(p.genDir, effId, 'E2E_REPAIR.md'), 'utf8'); round = (md.match(/^## 수선 /gm) || []).length + 1; } catch { }
               Object.assign(vars, { kind: pick.label, round, step: '수동 실행' });
             }
-            const r = await wb.askClaude(p, substQ(item.prompt, vars), h);
+            const r = await wb.askClaude(p, substQ(item.prompt, vars), h, { source: 'menu', label: item.label });
+            // 2026-10-30 사용자: 생성·보완이 끝나면 클라우드 이관 파일을 미리 만들어 둔다 — quick 항목 postTask(예 S5.cloudStage). 실패해도 보완 결과에는 영향 없음
+            {
+              const src2 = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items).find(x => x.label === item.label) || item;
+              if (src2.postTask && r && r.ok && effId) {
+                wb.out('task', `\n── 후속 단계: ${src2.postTask} (${effId}) — 클라우드 이관 파일 사전 생성\n`, 'cmd');
+                const pc2 = await wb.runTaskStreaming(p, src2.postTask, effId, { noConfirm: true, inFlow: true });
+                if (pc2 !== 0) wb.out('task', `⚠ 후속 단계 종료코드 ${pc2} — 이관 메뉴 실행 시 그 자리에서 다시 만듭니다\n`, 'warn');
+              }
+            }
             const rerun = !!(item.afterTask && vars.kind && r && r.ok);
             if (rerun) { const tid = substQ(item.afterTask, vars); wb.out('task', `\n↻ 보완 뒤 재실행: ${tid} ${effId}\n`, 'cmd'); await wb.runTaskStreaming(p, tid, effId, { noConfirm: true, preset: { mode: 'auto' } }); }
             else if (item.afterTask && vars.kind && r && !r.ok) wb.out('task', `✖ 수선 Claude 오류(exit ${r.code}) — 재실행 생략\n`, 'bad');
+          }
+          else if (item.kind === 'work-mode') { // 1.9.37: 🧭 작업 모드 — 쓰기는 set_scope.py 하나로
+            const cur = workMode(p);
+            const opts = [
+              { label: 'UI/DB MODE', code: 'DB_FE', description: cur.code === 'DB_FE' ? '현재' : '', detail: '제약 없이 개발·수정 · Git Download & Merge 때 로컬 소스 보호 · 클라우드 이관 = DB + FE·BE' },
+              { label: 'DB MODE', code: 'DB_ONLY', description: cur.code === 'DB_ONLY' ? '현재' : '', detail: 'DB·META 만 개발·수정, FE·BE 는 가이드만 · Git Download & Merge 때 로컬 소스 보호 안 함 · 클라우드 이관 = DB 만' }];
+            const pick = await vscode.window.showQuickPick(opts, { placeHolder: `작업 모드 선택 (현재 ${cur.name}) — CheckList 는 모드와 무관하게 전체 수행`, ignoreFocusOut: true });
+            if (!pick) break;
+            if (pick.code === cur.code) { wb.out('task', `🧭 작업 모드 변경 없음 — ${cur.name}\n`, ''); break; }
+            const sc = await wb.spawnStream(p, `"${p.python || 'python'}"`, [`"${path.join(p.root, 'tools', 'Harness', 'verify', 'set_scope.py')}"`, pick.code], { env: { PYTHONIOENCODING: 'utf-8' } }, 'task', '작업 모드 변경');
+            const now = workMode(p);
+            if (sc === 0 && now.code === pick.code) { wb.out('task', `🧭 작업 모드 → ${now.name}\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager 🧭 작업 모드 → ${now.name}`); }
+            else { wb.out('task', `✖ 작업 모드 변경 실패(exit ${sc}) — 현재 ${now.name}\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ 작업 모드 변경 실패 — 현재 ${now.name}`); }
+            api.record('quick', `${item.label} ${cur.name}→${now.name}`);
           }
           else if (item.kind === 'command') vscode.commands.executeCommand(item.command);
           else if (item.kind === 'flowtab') { wb.post({ type: 'tab', key: 'flow', kind: 'flow', title: '📊 FLOW', sub: 'FLOW — 화면별 단계 진척(파싱→…→E2E 4단계)', editable: false, canEditor: false, canOS: false }); } // 1.9.0: FLOW = 고정 탭에서 제외, 메뉴로 여는 탭
@@ -2029,19 +2270,23 @@ function open(api, opts) {
             const syncPy = path.join(p.root, 'tools', 'CommonSync', 'common_sync.py'); const q = s => `"${s}"`;
             const sumDir = path.join(p.root, '.vibe', 'common_sync'); fs.mkdirSync(sumDir, { recursive: true });
             const sumF = path.join(sumDir, 'last_summary.json'); try { fs.rmSync(sumF, { force: true }); } catch { }
+            // 1.9.37: 작업 모드 — DB MODE = 로컬 소스 보호 안 함(--overwrite-local) · UI/DB MODE = 기존 보호 병합. 미리보기·적용이 같은 값을 쓰도록 여기서 한 번만 읽는다
+            const wmSync = workMode(p); const owArg = wmSync.db ? ['--overwrite-local'] : [];
+            wb.out('task', `🧭 작업 모드 ${wmSync.name} — ${wmSync.db ? '로컬 소스 보호 안 함(내 편집본도 공통 원문으로 덮어씀)' : '로컬 소스 보호(내 편집본 유지·3-way)'}\n`, wmSync.db ? 'warn' : '');
             const env = { PYTHONIOENCODING: 'utf-8', GIT_TERMINAL_PROMPT: '0' };
             wb.out('task', `▶ ${item.label} — 1/2 공통 최신 받기 + 파일별 판정(미리보기 · 파일 변경 없음)\n`, 'cmd');
-            const c1 = await wb.spawnStream(p, q(p.python || 'python'), [q(syncPy), '--dry-run', '--summary', q(sumF)], { env }, 'task', `${item.label} 미리보기`);
+            const c1 = await wb.spawnStream(p, q(p.python || 'python'), [q(syncPy), '--dry-run', ...owArg, '--summary', q(sumF)], { env }, 'task', `${item.label} 미리보기`);
             let s1 = null; try { s1 = JSON.parse(fs.readFileSync(sumF, 'utf8')); } catch { }
             if (c1 !== 0 || !s1 || !s1.ok) { wb.out('task', `✖ 미리보기 실패(exit ${c1}) — 적용하지 않습니다\n`, 'bad'); vscode.window.showErrorMessage(`Vibe_Manager ✖ ${item.label}: 미리보기 실패 — Task Log 확인`); break; }
             if (!s1.changed) { wb.out('task', `✅ 공통소스 새 변경 없음 (기준선 ${String(s1.base).slice(0, 9)})\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager ✅ 공통소스 새 변경 없음`); break; }
             if (s1.report) wb.openTab(p, s1.report);
             const A = s1.actions || {};
             const detail = `기준선 ${String(s1.base).slice(0, 9)} → ${s1.tip_info}${s1.ancestor ? '' : ' (⚠ force-push 재작성)'}\n공통 신규 커밋 ${s1.commits} · 대상 파일 ${s1.changed}\n\n공통 원문 적용(내가 안 고친 파일·신규) ${A.write || 0}\n내 수정분 유지 + 공통 병합(3-way·d.ts·locales) ${A.merge || 0}\n삭제(내가 안 고친 파일) ${A.delete || 0}\n내 소스 유지 ${A.keep || 0}  (그중 결정 대기 ${s1.pending || 0} — 충돌 등, 자동 적용 안 함)\n\n적용 전 바뀌는 로컬 파일은 모두 _artifacts/_backup 에 백업됩니다. 미리보기: 열린 탭(PLAN).`;
-            const go = await vscode.window.showWarningMessage(`공통소스 ${s1.changed}건을 내 소스에 반영할까요?`, { modal: true, detail }, '적용');
+            const detailDb = `⚠ DB MODE — 로컬 소스를 보호하지 않습니다.\n기준선 ${String(s1.base).slice(0, 9)} → ${s1.tip_info}${s1.ancestor ? '' : ' (⚠ force-push 재작성)'}\n\n공통 원문으로 덮어쓰기(내 편집본 포함) ${A.write || 0}\n삭제(공통이 지운 파일 · 내 편집본 포함) ${A.delete || 0}\n공통에 없는 로컬 전용 파일 유지 ${s1.local_only || 0}\n\n적용 전 바뀌는 로컬 파일은 모두 _artifacts/_backup 에 백업됩니다. 미리보기: 열린 탭(PLAN).`;
+            const go = await vscode.window.showWarningMessage(wmSync.db ? `DB MODE: 로컬 소스 ${s1.changed}건을 공통소스로 덮어쓸까요?` : `공통소스 ${s1.changed}건을 내 소스에 반영할까요?`, { modal: true, detail: wmSync.db ? detailDb : detail }, '적용');
             if (go !== '적용') { wb.out('task', `⏹ 적용 취소 — 미리보기만 남김 (${s1.report ? path.relative(p.root, s1.report) : ''})\n`, 'warn'); break; }
             wb.out('task', `▶ ${item.label} — 2/2 적용 (공통 ${String(s1.tip).slice(0, 9)})\n`, 'cmd');
-            const c2 = await wb.spawnStream(p, q(p.python || 'python'), [q(syncPy), '--apply', '--no-fetch', '--target', s1.tip, '--summary', q(sumF)], { env }, 'task', `${item.label} 적용`);
+            const c2 = await wb.spawnStream(p, q(p.python || 'python'), [q(syncPy), '--apply', '--no-fetch', ...owArg, '--target', s1.tip, '--summary', q(sumF)], { env }, 'task', `${item.label} 적용`);
             let s2 = null; try { s2 = JSON.parse(fs.readFileSync(sumF, 'utf8')); } catch { }
             if (s2 && s2.report) wb.openTab(p, s2.report);
             if (c2 === 0 && s2 && s2.ok) { wb.out('task', `✅ 반영 완료 — 기준선 ${String(s1.base).slice(0, 9)} → ${String(s1.tip).slice(0, 9)} · 결정 대기 ${s1.pending || 0} · 보고 ${path.relative(p.root, s2.report)}\n   다음: 결정 대기 파일 확인(README) · 필요 시 "타입체크 해줘"\n`, 'ok'); vscode.window.showInformationMessage(`Vibe_Manager ✅ 공통소스 반영 완료 — 결정 대기 ${s1.pending || 0}건 (README 확인)`); }
@@ -2075,7 +2320,7 @@ function open(api, opts) {
   return wb;
 }
 
-function ask(text, harness) { if (!lastWB) return; lastWB.askClaude(lastWB.api.paths(), text, harness); }
+function ask(text, harness) { if (!lastWB) return; lastWB.askClaude(lastWB.api.paths(), text, harness, { source: 'prompt', text }); }
 // 1.7.7: 확장 runShell 위임 — 열린 워크벤치가 있으면 거기서 스트리밍 실행(true), 없으면 false(호출측이 VS Code 작업으로 fallback)
 async function runShell(task, vars, extraArgs) {
   if (!lastWB || !lastWB.panel || !panels.has(lastWB)) return false;
@@ -2084,6 +2329,7 @@ async function runShell(task, vars, extraArgs) {
 }
 async function quick(item, id, harness) {
   if (!lastWB || !lastWB.panel) return;
+  const own = String((lastWB.getState() || {}).id || '').toUpperCase(); if (own) id = own;  // 1.9.28+: 사이드바 실행은 현재 창의 ID 로(공용 lastId 가 다른 창 ID 를 덮던 결함)
   try { lastWB.panel.webview.postMessage({ type: 'noop' }); } catch { }
   await lastWB.panel._onQuick({ type: 'quick', item, id, harness });
 }
@@ -2101,9 +2347,22 @@ function openHtmlTab(key, title, sub, render, onAction) {
   return true;
 }
 function refreshHtmlTab(key) { const h = htmlTabs.get(key); if (!h || !lastWB) return false; return openHtmlTab(key, h.title, h.sub, h.render, h.onAction); }
+// 1.9.31(2026-10-30 사용자): 탭 명칭 — 화면 ID 미지정 = VM#n(열린 창 순서) · 지정 = VM-<ID> · 같은 ID 창 2개 이상 = VM-<ID>#k(그 ID 창끼리 열린 순서)
+function retitle() {
+  const ws = [...panels].sort((a, b) => a.inst - b.inst);
+  const idOf = w => (w.titleId != null ? w.titleId : String((w.getState() || {}).id || '').trim().toUpperCase());
+  const cnt = {}; for (const w of ws) { const k = idOf(w); if (k) cnt[k] = (cnt[k] || 0) + 1; }
+  const seen = {}; let n = 0;
+  for (const w of ws) {
+    const k = idOf(w); w.num = ++n;
+    const t = !k ? `VM#${w.num}` : (cnt[k] > 1 ? `VM-${k}#${(seen[k] = (seen[k] || 0) + 1)}` : `VM-${k}`);
+    try { if (w.panel && w.panel.title !== t) w.panel.title = t; } catch { }
+  }
+}
+function currentId() { return lastWB && panels.has(lastWB) ? String((lastWB.getState() || {}).id || '').toUpperCase() : ''; }  // 1.9.28+: 현재 창의 ID
 function showTab(tab) { if (!lastWB) return false; lastWB.post({ type: 'showTab', tab }); try { lastWB.panel.reveal(undefined, true); } catch { } return true; }
 function openDiff(key, title, aText, bText, aLabel, bLabel, sub) { if (!lastWB) return false; lastWB.openDiffTab(key, title, aText, bText, aLabel, bLabel, sub); return true; }
 function openFlowTab() { if (!lastWB) return false; lastWB.post({ type: 'tab', key: 'flow', kind: 'flow', title: '📊 FLOW', sub: 'FLOW — 화면별 단계 진척(파싱→…→E2E 4단계)', editable: false, canEditor: false, canOS: false }); try { lastWB.panel.reveal(undefined, true); } catch { } return true; }
 // FLOW 독립 패널(flow-panel.js)의 ★ 끝까지 — Workbench 를 열고 같은 판정으로 체인 실행
 async function runFlowEnd(id) { await vscode.commands.executeCommand('vibeManager.openWorkbench'); if (!lastWB || !lastWB.panel) return false; await lastWB.flowEnd(lastWB.api.paths(), id); return true; }
-module.exports = { open, ask, quick, runShell, runFlowEnd, openTab, openDiff, openFlowTab, openHtmlTab, refreshHtmlTab, showTab };
+module.exports = { open, ask, quick, runShell, runFlowEnd, openTab, openDiff, openFlowTab, openHtmlTab, refreshHtmlTab, showTab, currentId };

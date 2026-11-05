@@ -1,0 +1,269 @@
+{
+ "db": "59.19.252.148:2521/ZIOUI1",
+ "session": [
+  "SCM_MGR",
+  "ZIOUI1",
+  "localhost",
+  "2026-10-30 16:17:29"
+ ],
+ "started": "2026-10-30 16:17:30",
+ "steps": [
+  {
+   "seq": 1,
+   "file": "00_PRECHECK_CLOUD.sql",
+   "errors": 0,
+   "dml": []
+  },
+  {
+   "seq": 2,
+   "file": "30_META_SHEET_COLUMNS_PLAN_TYPE.sql",
+   "errors": 0,
+   "dml": [
+    [
+     "MERGE",
+     0
+    ],
+    [
+     "MERGE",
+     0
+    ],
+    [
+     "MERGE",
+     0
+    ]
+   ]
+  },
+  {
+   "seq": 3,
+   "file": "31_MSG_LBL_SCP0100.sql",
+   "errors": 0,
+   "dml": [
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ]
+   ]
+  },
+  {
+   "seq": 4,
+   "file": "30_META_SHEET_COLUMNS_PLAN_TYPE.sql",
+   "errors": 0,
+   "dml": [
+    [
+     "MERGE",
+     0
+    ],
+    [
+     "MERGE",
+     0
+    ],
+    [
+     "MERGE",
+     0
+    ]
+   ]
+  },
+  {
+   "seq": 5,
+   "file": "31_MSG_LBL_SCP0100.sql",
+   "errors": 0,
+   "dml": [
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ]
+   ]
+  },
+  {
+   "seq": 6,
+   "file": "90_VERIFY.sql",
+   "errors": 0,
+   "dml": []
+  },
+  {
+   "seq": 7,
+   "file": "99_ROLLBACK.sql",
+   "errors": 0,
+   "dml": [
+    [
+     "DELETE",
+     0
+    ],
+    [
+     "DELETE",
+     0
+    ]
+   ]
+  },
+  {
+   "seq": 8,
+   "file": "30_META_SHEET_COLUMNS_PLAN_TYPE.sql",
+   "errors": 0,
+   "dml": [
+    [
+     "MERGE",
+     0
+    ],
+    [
+     "MERGE",
+     0
+    ],
+    [
+     "MERGE",
+     0
+    ]
+   ]
+  },
+  {
+   "seq": 9,
+   "file": "31_MSG_LBL_SCP0100.sql",
+   "errors": 0,
+   "dml": [
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ],
+    [
+     "INSERT",
+     0
+    ]
+   ]
+  },
+  {
+   "seq": 10,
+   "file": "90_VERIFY.sql",
+   "errors": 0,
+   "dml": []
+  }
+ ],
+ "start_state": {
+  "plan_type_sig": "db0a2ca987fec570c93ba7b9ef53c153",
+  "lbl_sig": "dd10e0710d777ac37da9f06c4f210c89",
+  "sheet_columns_cnt": 36,
+  "plan_type_cnt": 3,
+  "lbl_cnt": 6,
+  "pkg_body_md5": "6c5c08d029d3ff7b49487dc63a2bd8e4",
+  "plan_type_audit": [
+   [
+    "CONVERT_SCP0100",
+    "CONVERT_SCP0100",
+    "2026-10-23 15:25:14"
+   ],
+   [
+    "CONVERT_SCP0100",
+    "minyonglee1",
+    "2026-10-23 12:14:50"
+   ],
+   [
+    "CONVERT_SCP0100",
+    "minyonglee1",
+    "2026-10-23 12:14:50"
+   ]
+  ]
+ },
+ "end_state": {
+  "plan_type_sig": "db0a2ca987fec570c93ba7b9ef53c153",
+  "lbl_sig": "dd10e0710d777ac37da9f06c4f210c89",
+  "sheet_columns_cnt": 36,
+  "plan_type_cnt": 3,
+  "lbl_cnt": 6,
+  "pkg_body_md5": "6c5c08d029d3ff7b49487dc63a2bd8e4",
+  "plan_type_audit": [
+   [
+    "CONVERT_SCP0100",
+    "CONVERT_SCP0100",
+    "2026-10-23 15:25:14"
+   ],
+   [
+    "CONVERT_SCP0100",
+    "minyonglee1",
+    "2026-10-23 12:14:50"
+   ],
+   [
+    "CONVERT_SCP0100",
+    "minyonglee1",
+    "2026-10-23 12:14:50"
+   ]
+  ]
+ },
+ "end_equals_start": true,
+ "end_equals_build_facts": true,
+ "insert_path_trial": {
+  "deleted": [
+   3,
+   6
+  ],
+  "inserted_rowcounts": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "values_equal_after_insert": true,
+  "admin_marked_rows_in_trial": 3,
+  "restored_after_rollback": true
+ },
+ "finished": "2026-10-30 16:17:37",
+ "total_errors": 0
+}

@@ -19,14 +19,20 @@ const PLAN_HIDDEN = new Set<string>(PLAN_HIDDEN_COLUMNS);
 const END_CUSTOMER_ONLY = new Set<string>(DIVISION_TOGGLE.END_CUSTOMER_ONLY);
 const PROJECT_ONLY = new Set<string>(DIVISION_TOGGLE.PROJECT_ONLY);
 
-// From/To Site 셀콤보는 division 으로 재조회돼 조회 시 dataMap 이 바뀐다. dataMap 을 컬럼 config 에 구우면
-//   mainColumns 배열이 바뀌어 공용 DataGrid 가 columnGroups 를 통째로 다시 그려(컬럼이 사라졌다 생김) 깜빡인다.
-//   그래서 이 둘만 dataMap 을 굽지 않고 **콤보 셀 유형만** 지정하고, 실제 dataMap 은 그리드 effect 가
+// 조회/행값으로 dataMap 이 바뀌는 콤보 4종. dataMap 을 컬럼 config 에 구우면 mainColumns 배열이 바뀌어
+//   공용 DataGrid 가 columnGroups 를 통째로 다시 그려(컬럼이 사라졌다 생김) 깜빡인다.
+//   그래서 이 넷은 dataMap 을 굽지 않고 **콤보 셀 유형만** 지정하고, 실제 dataMap 은 그리드 effect 가
 //   `col.dataMap =` 로 부착한다(공용 DataGrid 의 cellCboDataTp 자동 재부착과 같은 메커니즘 — 주입 콤보는
-//   cellCboDataTp 를 비워 그 대상에서 빠지므로 화면이 직접 한다). 나머지 콤보는 조회로 안 바뀌어 그대로 굽는다.
-const SITE_COMBO_EFFECT_ATTACHED = new Set<string>([
+//   cellCboDataTp 를 비워 그 대상에서 빠지므로 화면이 직접 한다).
+//   - From/To Site: division 재조회로 dataMap 이 바뀐다.
+//   - END_CUSTOMER/TRANSPORT_MODE: 행 파라미터 콤보라 Model·행 편집마다 loadEndCustomer/loadTransMode 로
+//     dataMap 이 바뀐다. 구우면 Model 값 변경마다 mainColumns 가 재빌드돼 그리드가 깜빡였다(2026-11-02 수정).
+//   나머지 콤보(status/fcst/reason/division)는 조회로 안 바뀌어 그대로 굽는다.
+const EFFECT_ATTACHED_COMBOS = new Set<string>([
   COLUMN.FROM_SITE_DESCRIPTION,
   COLUMN.TO_SITE_DESCRIPTION,
+  COLUMN.END_CUSTOMER,
+  COLUMN.TRANSPORT_MODE,
 ]);
 
 export const isEndCustomerDivision = (divisionId: string): boolean =>
@@ -78,7 +84,7 @@ export const buildMainColumns = (
     if (isPlan && PLAN_HIDDEN.has(col.colNm)) col = { ...col, colWth: 0 };
     if (END_CUSTOMER_ONLY.has(col.colNm) && !endCustomerDiv) col = { ...col, visible: false };
     if (PROJECT_ONLY.has(col.colNm) && endCustomerDiv) col = { ...col, visible: false };
-    if (SITE_COMBO_EFFECT_ATTACHED.has(col.colNm)) {
+    if (EFFECT_ATTACHED_COMBOS.has(col.colNm)) {
       // dataMap 은 굽지 않는다(그리드 effect 가 부착) — 콤보 셀 유형만 지정해 드롭다운 자리를 만든다.
       col = { ...col, cellCboDataTp: undefined, cellCtrlObjTpCd: CELL_CONTROL_TYPE.COMBO };
     } else {

@@ -7,7 +7,7 @@
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/components/PlanVersionCascade.tsx | other | 58 |
+| features/supply/src/components/PlanVersionCascade.tsx | other | 72 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 (없음)
@@ -18,7 +18,7 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CascadeDropdown | onChange | onChange | jsx | features/supply/src/components/PlanVersionCascade.tsx | 50 |
+| CascadeDropdown | onChange | onChange | jsx | features/supply/src/components/PlanVersionCascade.tsx | 60 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |

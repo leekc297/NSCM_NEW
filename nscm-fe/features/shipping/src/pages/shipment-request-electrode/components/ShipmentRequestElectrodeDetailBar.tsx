@@ -70,14 +70,12 @@ export const ShipmentRequestElectrodeDetailBar = ({
                   <Button
                     appearance='outlined'
                     priority='normal'
-                    iconComponent={
-                      <FunctionSearchIcon appearance='lined' onClick={onItemSearch2} />
-                    }
+                    iconComponent={<FunctionSearchIcon appearance='lined' />}
+                    onClick={onItemSearch2}
                   />
                 ),
               }}
               onChange={e => setSearchParams({ itemId2: e.target.value })}
-              onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
             />
           )}
         />
@@ -98,14 +96,12 @@ export const ShipmentRequestElectrodeDetailBar = ({
                   <Button
                     appearance='outlined'
                     priority='normal'
-                    iconComponent={
-                      <FunctionSearchIcon appearance='lined' onClick={onModelSearch2} />
-                    }
+                    iconComponent={<FunctionSearchIcon appearance='lined' />}
+                    onClick={onModelSearch2}
                   />
                 ),
               }}
               onChange={e => setSearchParams({ modelId2: e.target.value, nickName2: '' })}
-              onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
             />
           )}
         />
@@ -119,7 +115,6 @@ export const ShipmentRequestElectrodeDetailBar = ({
               fullWidth
               value={sp.lotId}
               onChange={e => setSearchParams({ lotId: e.target.value })}
-              onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
             />
           )}
         />

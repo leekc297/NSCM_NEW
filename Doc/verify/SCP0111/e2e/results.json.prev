@@ -1,0 +1,1565 @@
+{
+  "config": {
+    "configFile": "C:\\Projects\\NSCM\\tools\\E2E\\playwright.config.ts",
+    "rootDir": "C:/Projects/NSCM/Doc/e2e/specs",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Projects/NSCM/Doc/verify/SCP0111/e2e/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {},
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Projects/NSCM/Doc/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.49.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "_trace.spec.ts",
+      "file": "_trace.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "검증엔진 SCP0111 @trace",
+          "file": "_trace.spec.ts",
+          "line": 87,
+          "column": 6,
+          "specs": [
+            {
+              "title": "A10 조회 전 그리드 · K4 버튼 구성 · X-REOPEN 닫기·재오픈",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 2건 (500 admin/combo | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "failed",
+                      "duration": 185487,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:04:25.993Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace--9b623--K4-버튼-구성-·-X-REOPEN-닫기·재오픈-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace--9b623--K4-버튼-구성-·-X-REOPEN-닫기·재오픈-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-306c0c7fb01a9d0fe545",
+              "file": "_trace.spec.ts",
+              "line": 93,
+              "column": 7
+            },
+            {
+              "title": "G6 조회조건 초기값 = AS-IS 로드 문장",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "failed",
+                      "duration": 65638,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:10:57.757Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-G6-조회조건-초기값-AS-IS-로드-문장-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-G6-조회조건-초기값-AS-IS-로드-문장-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-d29ee410326879388eba",
+              "file": "_trace.spec.ts",
+              "line": 139,
+              "column": 7
+            },
+            {
+              "title": "C1·C4 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 / 그리드 상태",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 3건 (500 admin/combo | 500 admin/combo | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "status": "failed",
+                      "duration": 84694,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:13:19.899Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace--d3e1d-경-→-하위-후보-재조회·선택-초기화-그리드-상태-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace--d3e1d-경-→-하위-후보-재조회·선택-초기화-그리드-상태-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-83b99e7aa8862133386a",
+              "file": "_trace.spec.ts",
+              "line": 175,
+              "column": 7
+            },
+            {
+              "title": "W5 컬럼 대상 검사 — H5·A5·H2·D1·D5·E1·D4·C3·C2·C6·F4(TRACE 행)",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "status": "failed",
+                      "duration": 156980,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:18:40.093Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace--4eca2-·E1·D4·C3·C2·C6·F4-TRACE-행--chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace--4eca2-·E1·D4·C3·C2·C6·F4-TRACE-행--chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-d09ed44d8e7036980828",
+              "file": "_trace.spec.ts",
+              "line": 223,
+              "column": 7
+            },
+            {
+              "title": "PCOL 팝업 내부 그리드 컬럼 — H5·A5·D5·H2",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "status": "passed",
+                      "duration": 39278,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:24:25.299Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-8d8e4c13bfe519e5db6d",
+              "file": "_trace.spec.ts",
+              "line": 421,
+              "column": 7
+            },
+            {
+              "title": "W4 D3 행 조건부 잠금 = AS-IS lock_rules",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존 | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_LINE_SN\\\"이(가) 존재하지 않습니다.\\n\\"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "status": "failed",
+                      "duration": 152239,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:25:06.408Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-W4-D3-행-조건부-잠금-AS-IS-lock-rules-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-W4-D3-행-조건부-잠금-AS-IS-lock-rules-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-e3ffe7409a633a3b8439",
+              "file": "_trace.spec.ts",
+              "line": 494,
+              "column": 7
+            },
+            {
+              "title": "W4 E4 업무 검증 메시지 = AS-IS(저장 차단)",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_LINE_SN\\\"이(가) 존재하지 않습니다.\\n\\ | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "status": "failed",
+                      "duration": 152868,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:31:14.961Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-W4-E4-업무-검증-메시지-AS-IS-저장-차단--chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-W4-E4-업무-검증-메시지-AS-IS-저장-차단--chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-8df86dadb99a612dd88e",
+              "file": "_trace.spec.ts",
+              "line": 556,
+              "column": 7
+            },
+            {
+              "title": "W4 M4 팝업 선택값 반영 = AS-IS",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "status": "passed",
+                      "duration": 48235,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:37:09.159Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-0b1446599f1ec5cf4643",
+              "file": "_trace.spec.ts",
+              "line": 646,
+              "column": 7
+            },
+            {
+              "title": "A6 조회 결과 행 순서 = AS-IS ORDER BY",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "status": "failed",
+                      "duration": 169998,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:37:59.158Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-A6-조회-결과-행-순서-AS-IS-ORDER-BY-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-A6-조회-결과-행-순서-AS-IS-ORDER-BY-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-7150ea665760b85cc35f",
+              "file": "_trace.spec.ts",
+              "line": 695,
+              "column": 7
+            },
+            {
+              "title": "W4b H3·F5·F3·M3·J1·H4",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 600000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_LINE_SN\\\"이(가) 존재하지 않습니다.\\n\\ | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "status": "failed",
+                      "duration": 170559,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:41:50.271Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-W4b-H3·F5·F3·M3·J1·H4-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-W4b-H3·F5·F3·M3·J1·H4-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-69c035b336751c63c906",
+              "file": "_trace.spec.ts",
+              "line": 748,
+              "column": 7
+            },
+            {
+              "title": "D6 Insert 위치·상태 = AS-IS",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존 | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_LINE_SN\\\"이(가) 존재하지 않습니다.\\n\\"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "status": "failed",
+                      "duration": 150434,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 , ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:46:12.814Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-D6-Insert-위치·상태-AS-IS-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-D6-Insert-위치·상태-AS-IS-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-35bdb6e44b85b896e893",
+              "file": "_trace.spec.ts",
+              "line": 933,
+              "column": 7
+            },
+            {
+              "title": "W4c 정밀 판정 — 판정필요 해소",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 9건 (500 admin/combo | 500 admin/combo | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 4건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_MST_LINE_SN\\\"이(가) 존재하지 않습니다.\\n\\ | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "status": "failed",
+                      "duration": 1035315,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 , ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 , ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 4건(ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 , ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T14:49:15.033Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-W4c-정밀-판정-—-판정필요-해소-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-W4c-정밀-판정-—-판정필요-해소-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-13f31f34b20929395390",
+              "file": "_trace.spec.ts",
+              "line": 959,
+              "column": 7
+            },
+            {
+              "title": "W4d 잔여 판정필요 실측",
+              "ok": false,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1800000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "status": "failed",
+                      "duration": 116393,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T15:07:24.346Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-W4d-잔여-판정필요-실측-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_trace-검증엔진-SCP0111-trace-W4d-잔여-판정필요-실측-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-223d9b5b8842d2e1eaf5",
+              "file": "_trace.spec.ts",
+              "line": 1324,
+              "column": 7
+            },
+            {
+              "title": "W9 대조표 미구현 행 실측",
+              "ok": true,
+              "tags": [
+                "trace"
+              ],
+              "tests": [
+                {
+                  "timeout": 1200000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "status": "passed",
+                      "duration": 24146,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T15:11:18.783Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "61ae7fb993b6ecef23da-5e24d2ba34f2e8cb9b23",
+              "file": "_trace.spec.ts",
+              "line": 1671,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "_verify.spec.ts",
+      "file": "_verify.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "정합검증 SCP0111 @verify",
+          "file": "_verify.spec.ts",
+          "line": 132,
+          "column": 6,
+          "specs": [
+            {
+              "title": "조회 전 버튼 전제조건(D4) · 화면 진입 다국어(I2)",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 3건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "status": "failed",
+                      "duration": 35813,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 3건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 \"SCMP_APP\".\"SCM_MST_LINE_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T15:11:44.689Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verify-조회-전-버튼-전제조건-D4-·-화면-진입-다국어-I2--chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verify-조회-전-버튼-전제조건-D4-·-화면-진입-다국어-I2--chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-42621eaf8318f48fd91d",
+              "file": "_verify.spec.ts",
+              "line": 137,
+              "column": 7
+            },
+            {
+              "title": "그리드 컬럼 프로브 — 표시(A5)·기존행/신규행 편집(D1)·입력 후 재편집·콤보 후보(B1·B2)·숫자(E1)·날짜(E2)·다국어(I2)",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 480000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 2건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "status": "failed",
+                      "duration": 216923,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T15:12:56.643Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verif-22de9-1·B2-·숫자-E1-·날짜-E2-·다국어-I2--chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verif-22de9-1·B2-·숫자-E1-·날짜-E2-·다국어-I2--chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-99579bf1fc152036666a",
+              "file": "_verify.spec.ts",
+              "line": 158,
+              "column": 7
+            },
+            {
+              "title": "그리드 더블클릭 팝업 인자(G5) — AS-IS 가 팝업에 넘기는 셀 값이 TO-BE 팝업 조회 요청에 들어가는지",
+              "ok": true,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "status": "passed",
+                      "duration": 23879,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T15:16:53.991Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-ec083d2d6114c068336d",
+              "file": "_verify.spec.ts",
+              "line": 426,
+              "column": 7
+            },
+            {
+              "title": "CRUD — 필수 공란 실제 저장 시도(E3) → 필수 채워 실제 저장·재조회·값 보존·정리(F1·F2·F4·F6)",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 2건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "status": "failed",
+                      "duration": 215525,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T15:17:19.351Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verif-6e0ab-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verif-6e0ab-저장·재조회·값-보존·정리-F1·F2·F4·F6--chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-79c9e86213c94b65859b",
+              "file": "_verify.spec.ts",
+              "line": 489,
+              "column": 7
+            },
+            {
+              "title": "그리드 조작(K3) — Ctrl+클릭 다중선택·헤더 클릭 열 선택·Copy(Ctrl+C·우클릭)·Hide Column·F5 조회",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 2건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "status": "failed",
+                      "duration": 96932,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T15:21:07.600Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verif-f1333-rl-C·우클릭-·Hide-Column·F5-조회-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verif-f1333-rl-C·우클릭-·Hide-Column·F5-조회-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-0aab08baf68c8fff47f2",
+              "file": "_verify.spec.ts",
+              "line": 1033,
+              "column": 7
+            },
+            {
+              "title": "셀 키 입력(E6) — 한글 IME 첫 글자·콤보 자동완성",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 1건 (500 admin/combo) · 같은 시간 BE 로그 DB 오류 2건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "status": "failed",
+                      "duration": 78578,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T15:22:49.578Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verify-셀-키-입력-E6-—-한글-IME-첫-글자·콤보-자동완성-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verify-셀-키-입력-E6-—-한글-IME-첫-글자·콤보-자동완성-chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-591de7da497ac6715a24",
+              "file": "_verify.spec.ts",
+              "line": 1169,
+              "column": 7
+            },
+            {
+              "title": "후보 갱신(B7) — 저장→콤보 원천 대조(a)·재진입/재조회 시 콤보 재조회(b)",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 2건 (500 admin/combo | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 2건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "status": "failed",
+                      "duration": 48361,
+                      "error": {
+                        "message": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인",
+                        "stack": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)",
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                          "column": 15,
+                          "line": 20
+                        },
+                        "snippet": "   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T15:24:23.128Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verif-7690e-천-대조-a-·재진입-재조회-시-콤보-재조회-b--chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verif-7690e-천-대조-a-·재진입-재조회-시-콤보-재조회-b--chromium\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                        "column": 15,
+                        "line": 20
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-531465190b9e049d949a",
+              "file": "_verify.spec.ts",
+              "line": 1267,
+              "column": 7
+            },
+            {
+              "title": "조회조건 콤보 후보 품질(B1·B2)",
+              "ok": false,
+              "tags": [
+                "verify"
+              ],
+              "tests": [
+                {
+                  "timeout": 900000,
+                  "annotations": [
+                    {
+                      "type": "dberr",
+                      "description": "BE 5xx 7건 (500 admin/combo | 500 admin/combo | 500 admin/combo) · 같은 시간 BE 로그 DB 오류 53건: [SYN] ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\" | [SYN] ORA-00942 테이블 또는 뷰  \\\"SCMP_APP\\\".\\\"SCM_LINE_HIERARCHY_CPS_V_SN\\\"이(가) 존 | [DB] ORA-17820 네트워크 어댑터가 접속을 설정할 수 없습니다. (CONNECTION_ID=cNdE7uYeQNqnMtXLmNy | [DB] ORA-03113 database connection closed by peer (connection_type=client,  | [DB] ORA-17800 읽은 호출에서 -1을 가져왔습니다. (CONNECTION_ID=7Mr+bXzsTPSugspR9s15dA==) | [DB] ORA-17800 읽은 호출에서 -1을 가져왔습니다. (CONNECTION_ID=VqoYsfluTp2W69xQJZoW0Q==)"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 17,
+                      "status": "timedOut",
+                      "duration": 912529,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 900000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 900000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 900000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts",
+                            "column": 15,
+                            "line": 20
+                          },
+                          "message": "Error: BE DB 오류 — 시노님·권한 누락 2건(ORA-00942 \"SCMP_APP\".\"SCM_LINE_HIERARCHY_CPS_V_SN\", ORA-00942 ) — tools/Harness/verify/syn_check.py 로 정적 확인 · SQL 오류 51건(ORA-17820 네트워크 어댑터가 접속을 설정할 수 없습니다. (CONNECTION_ID=cNdE7uYeQ, ORA-03113 database connection closed by peer (connection_typ, ORA-17800 읽은 호출에서 -1을 가져왔습니다. (CONNECTION_ID=7Mr+bXzsTPSugsp)\n\n   at ..\\..\\..\\tools\\E2E\\fixtures\\test.ts:20\n\n\u001b[0m \u001b[90m 18 |\u001b[39m       \u001b[36mif\u001b[39m (n\u001b[33m.\u001b[39mserverErrors\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength) {\n \u001b[90m 19 |\u001b[39m         \u001b[36mconst\u001b[39m syn \u001b[33m=\u001b[39m errs\u001b[33m.\u001b[39mfilter(e \u001b[33m=>\u001b[39m e\u001b[33m.\u001b[39mcls \u001b[33m===\u001b[39m \u001b[32m'SYN'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 20 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`BE DB 오류 — ${syn.length ? `시노님·권한 누락 ${syn.length}건(${syn.slice(0, 4).map(e => `${e.code} ${e.object}`).join(', ')}) — tools/Harness/verify/syn_check.py 로 정적 확인`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${syn\u001b[33m.\u001b[39mlength \u001b[33m&&\u001b[39m errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m' · '\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}${errs\u001b[33m.\u001b[39mlength \u001b[33m>\u001b[39m syn\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m \u001b[32m`SQL 오류 ${errs.length - syn.length}건(${errs.filter(e => e.cls === 'DB').slice(0, 3).map(e => e.code + ' ' + e.msg.slice(0, 50)).join(', ')})`\u001b[39m \u001b[33m:\u001b[39m \u001b[32m''\u001b[39m}\u001b[32m`);\u001b[39m\n \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 21 |\u001b[39m \u001b[32m      }\u001b[39m\n \u001b[90m 22 |\u001b[39m \u001b[32m    }\u001b[39m\n \u001b[90m 23 |\u001b[39m \u001b[32m  },\u001b[39m\u001b[0m\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:20:15)"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts",
+                            "column": 100,
+                            "line": 1384
+                          },
+                          "message": "Error: page.waitForTimeout: Test timeout of 900000ms exceeded.\n\n\u001b[0m \u001b[90m 1382 |\u001b[39m       \u001b[36mconst\u001b[39m esc \u001b[33m=\u001b[39m name\u001b[33m.\u001b[39mreplace(\u001b[35m/[.*+?^${}()|[\\]\\\\]/g\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'\\\\$&'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 1383 |\u001b[39m       \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mopenScreen(\u001b[33mID\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mexpandSearchArea()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 1384 |\u001b[39m       \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msearch()\u001b[33m;\u001b[39m \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m k \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m k \u001b[33m<\u001b[39m \u001b[35m240\u001b[39m \u001b[33m&&\u001b[39m (\u001b[36mawait\u001b[39m probe\u001b[33m.\u001b[39mrowCount(p)) \u001b[33m<=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m k\u001b[33m++\u001b[39m) \u001b[36mawait\u001b[39m p\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mclearDialogs()\u001b[33m;\u001b[39m\n \u001b[90m      |\u001b[39m                                                                                                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 1385 |\u001b[39m       \u001b[36mawait\u001b[39m p\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m20\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m undefined)\u001b[33m;\u001b[39m\n \u001b[90m 1386 |\u001b[39m       \u001b[90m// 본 조회 시트 = 기본 조회 응답 중 행이 가장 많은 시트(보조 조회와 구분)\u001b[39m\n \u001b[90m 1387 |\u001b[39m       \u001b[36mconst\u001b[39m mainSheet \u001b[33m=\u001b[39m [\u001b[33m...\u001b[39mnscm\u001b[33m.\u001b[39mcalls]\u001b[33m.\u001b[39mfilter(c \u001b[33m=>\u001b[39m \u001b[35m/SEARCH/i\u001b[39m\u001b[33m.\u001b[39mtest(c\u001b[33m.\u001b[39mbtn))\u001b[33m.\u001b[39msort((a\u001b[33m,\u001b[39m c) \u001b[33m=>\u001b[39m (c\u001b[33m.\u001b[39mrows \u001b[33m||\u001b[39m \u001b[35m0\u001b[39m) \u001b[33m-\u001b[39m (a\u001b[33m.\u001b[39mrows \u001b[33m||\u001b[39m \u001b[35m0\u001b[39m))[\u001b[35m0\u001b[39m]\u001b[33m?\u001b[39m\u001b[33m.\u001b[39msheet \u001b[33m||\u001b[39m \u001b[32m''\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\_verify.spec.ts:1384:100"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T15:25:31.848Z",
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verify-조회조건-콤보-후보-품질-B1·B2--chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Projects\\NSCM\\Doc\\verify\\SCP0111\\e2e\\artifacts\\_verify-정합검증-SCP0111-verify-조회조건-콤보-후보-품질-B1·B2--chromium\\trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d557cdbda6ec1bc6afb1-be4a5854fc854f92c0ef",
+              "file": "_verify.spec.ts",
+              "line": 1318,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T14:04:01.306Z",
+    "duration": 5818975.915,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 18,
+    "flaky": 0
+  }
+}

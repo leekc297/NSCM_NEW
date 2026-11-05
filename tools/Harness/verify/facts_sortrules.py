@@ -15,6 +15,7 @@
   사용처: ledger.py A6 행(조회 SP 마다 1행, 분기별 기대) · sort_check.py(TO-BE PKG ORDER BY 정적 대조) · _trace.spec @trace A6(결과 행 순서 실측)
 """
 import csv, os, re, sys, collections
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from asis_live import dead_methods, dead_sps, sp_base  # noqa: E402
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 DOC = os.path.join(ROOT, 'Doc')
 SCR = os.path.join(DOC, 'asisfacts', 'screens')
@@ -119,9 +120,11 @@ def run(screen):
     for r in rdcsv(os.path.join(sd, 'endpoints.csv')):
         n = (r.get('sp') or r.get('endpoint') or r.get('name') or '').split('.')[-1].strip().strip('"')
         if n: sps.append(n)
+    dead = dead_methods(screen)
     for r in rdcsv(os.path.join(sd, 'actions.csv')):
-        if r.get('kind') == 'ENDPOINT' and r.get('endpoint'): sps.append(r['endpoint'].split('.')[-1])
-    sps = [s for s in dict.fromkeys(sps) if re.fullmatch(r'[A-Za-z0-9_]+', s)]
+        if r.get('kind') == 'ENDPOINT' and r.get('endpoint') and (r['class'], r['method']) not in dead: sps.append(r['endpoint'].split('.')[-1])
+    dsp = dead_sps(screen)  # 호출이 전부 실행되지 않는 메서드 안에만 있는 SP — endpoints.csv 에 있어도 정렬 규칙 원천 아님(2026-10-30 asis_live)
+    sps = [s for s in dict.fromkeys(sps) if re.fullmatch(r'[A-Za-z0-9_]+', s) and sp_base(s) not in dsp]
     rows = []
     for sp in sps: rows += sp_rules(sp, screen)
     rows += code_rules(screen)

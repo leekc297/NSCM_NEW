@@ -140,7 +140,9 @@ export const PLAN_GROUP_ALL = 'ALL';
 export const LBL = {
   DIVISION: 'LBL00001', // Division
   PLAN_GROUP: 'LBL00002', // Plan Group
-  MODEL: 'LBL00669', // Model
+  // Model/Nickname — SCP0039.md 조회조건 정리(v0.5) 변경=O: 명칭 Model -> Model/Nickname + 팝업
+  //   ItemByDivisionModal -> MaterialByDivisionModal(COM0013). LBL00618 = Model/Nickname(SCP0033 동일 코드).
+  MODEL_NICKNAME: 'LBL00618', // Model/Nickname
   SEARCH: 'LBL00112', // Search(F5)
 } as const;
 

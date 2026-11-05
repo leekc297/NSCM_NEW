@@ -28,10 +28,10 @@ describe('tactTimeDerive', () => {
     expect(deriveJumboMin(2, null)).toBe(0);
   });
 
-  it('deriveTactTimeFromDaily = round5(86400/daily), blank/0 -> 0', () => {
+  it('deriveTactTimeFromDaily = round5(86400/daily), blank -> 0, 0 -> null', () => {
     expect(deriveTactTimeFromDaily(86400)).toBe(1);
     expect(deriveTactTimeFromDaily(2)).toBe(43200);
-    expect(deriveTactTimeFromDaily(0)).toBe(0);
+    expect(deriveTactTimeFromDaily(0)).toBeNull();
     expect(deriveTactTimeFromDaily('')).toBe(0);
   });
 

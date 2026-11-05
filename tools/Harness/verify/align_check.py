@@ -51,8 +51,11 @@ def fe_overrides(mid):
 
 
 def main():
-    mid = sys.argv[1]
-    asis = read_csv(os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', mid, 'grid_columns_asis.csv'))
+    mid = sys.argv[1].upper()
+    # facts_gridcols 산출 = AS-IS ID 폴더(2026-10-28: TO-BE≠AS-IS ID 화면은 mid 로 읽으면 빈 입력) — --asis 또는 map_screen.csv
+    aid = sys.argv[sys.argv.index('--asis') + 1].upper() if '--asis' in sys.argv else next(
+        (m['asis_id'].upper() for m in read_csv(os.path.join(ROOT, 'tools', 'Harness', 'rules', 'map_screen.csv')) if (m.get('tobe_id') or '').upper() == mid), mid)
+    asis = read_csv(os.path.join(ROOT, 'Doc', 'asisfacts', 'screens', aid, 'grid_columns_asis.csv'))
     if not asis:
         print(f"{mid}: AS-IS grid_columns_asis.csv 없음 — H1 대상 없음")
         return

@@ -1,0 +1,640 @@
+{
+  "menuId": "SCP0041",
+  "page": "StockOsp",
+  "feature": "supply",
+  "routePath": "supply/stock-osp",
+  "asisName": "StockOSP",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant Site",
+      "lbl": "LBL00005",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlantSite"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "inspection",
+      "label": "Inspection",
+      "lbl": "LBL01086",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtInspection"
+    },
+    {
+      "key": "period",
+      "label": "Inventory Date",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendar"
+    },
+    {
+      "key": "calendarCutoff",
+      "label": "Cutoff Date",
+      "lbl": "LBL00029",
+      "kind": "single",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendarCutoff"
+    },
+    {
+      "key": "status",
+      "label": "Status",
+      "lbl": "LBL00014",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboStatus"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "excelUpload",
+      "label": "Upload",
+      "lbl": "LBL01130",
+      "kind": "subtitle-custom",
+      "tobe": "EXCEL_UPLOAD",
+      "asis": "btnExcelUpload"
+    },
+    {
+      "key": "formDown",
+      "label": "Excel Form",
+      "lbl": "LBL00762",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "formDown"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Osp Stock",
+      "key": "OSP_STOCK",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "ATTRIBUTE1",
+        "ATTRIBUTE2",
+        "ATTRIBUTE3",
+        "COMMENT",
+        "CREATED_BY",
+        "CREATION_DATE",
+        "DIVISION_ID",
+        "ITEM_ID",
+        "LAST_UPDATE_DATE",
+        "LAST_UPDATED_BY",
+        "NICK_NAME",
+        "QTY",
+        "SITE_DESCRIPTION",
+        "YYYYMMDD"
+      ],
+      "labels": [
+        "Valuation Type",
+        "Cell From Site",
+        "Box",
+        "Comment",
+        "Created By",
+        "Creation Date",
+        "Division*",
+        "Model*",
+        "Last Update Date",
+        "Last Updated By",
+        "Nick Name",
+        "Qty*",
+        "Plant Site*",
+        "Date*"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "Pack Hold Stock",
+      "key": "PACK_HOLD_STOCK",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "CREATION_DATE",
+        "CUTOFF_DATE",
+        "DATE_FINISH_REAL",
+        "DATE_FORECAST_FINISH",
+        "DATE_FORECAST_START",
+        "DIR",
+        "INSPECTION_ID",
+        "MODIFIER",
+        "MODIFIER_DATE",
+        "NICK_NAME",
+        "PLANT_ID",
+        "PROD_ID",
+        "QTY",
+        "REQUSET_USER",
+        "SITE_DESCRIPTION"
+      ],
+      "labels": [
+        "Create Date",
+        "Cutoff Date",
+        "실제 완료일",
+        "예상 완료일",
+        "예상 시작일",
+        "Status",
+        "관리번호",
+        "수정자",
+        "Change Date",
+        "Nick Name",
+        "PLANT",
+        "Model",
+        "수량",
+        "변경점 신청자",
+        "Plant Site"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "SCM0001_GET_LOOKUP_VALUES",
+      "sheet": "Osp Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0041.P_SCM0001_GET_LOOKUP_VALUES",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SCP0040_SAVE_CHARACTERISTIC_CAPA",
+      "sheet": "Osp Stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0041.P_SCP0040_SAVE_CHARACTERISTIC_CAPA",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0041_SAVE_PACKER_HOLD_STOCK",
+      "sheet": "Osp Stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0041.P_SCP0041_SAVE_PACKER_HOLD_STOCK",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Osp Stock",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0041.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0041_GET_STOCK_OSP",
+      "sheet": "Osp Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0041.P_SCP0041_GET_STOCK_OSP",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0041_GET_PACK_HOLD_STOCK",
+      "sheet": "Pack Hold Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleExcelUpload",
+      "target": "this.btnExcelUpload",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleExcelFormDownload",
+      "target": "this.formDown",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=PERIOD_DEFAULT]",
+        "SCM.SCM0001_GET_LOOKUP_VALUES"
+      ]
+    },
+    {
+      "name": "handleItemId",
+      "target": "btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCboDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainSheetTab",
+      "target": "spdMain",
+      "event": "SheetTabClick",
+      "slot": "state",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=PERIOD_DEFAULT]"
+      ]
+    },
+    {
+      "name": "handleSpdMainEditChange",
+      "target": "this.spdMain",
+      "event": "EditChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleActiveSheetCell",
+      "target": "this.siMain.ActiveSheet",
+      "event": "CellChanged",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [
+    {
+      "id": "TC-ID",
+      "kind": "구분",
+      "pre": "사전조건",
+      "step": "절차",
+      "input": "입력값",
+      "expect": "기대결과",
+      "basis": "근거"
+    },
+    {
+      "id": "TC-SCP0041-001",
+      "kind": "초기화",
+      "pre": "사용자 로그인, 메뉴 권한 있음",
+      "step": "화면을 연다",
+      "input": "-",
+      "expect": "`SCM.SCM0001_GET_LOOKUP_VALUES` 1회 호출, 룩업 값 로드(바인딩 컨트롤 확인 필요)",
+      "basis": "`Form_Load` > GetLookupData:165 / `SCM.SCM0001_GET_LOOKUP_VALUES` / SP `SCM0001_GET_LOOKUP_VALUES`"
+    },
+    {
+      "id": "TC-SCP0041-002",
+      "kind": "초기화",
+      "pre": "공통데이터 PERIOD_DEFAULT 존재",
+      "step": "화면을 열고 `dCalendar`·`dCalendarCutoff` 값을 확인한다",
+      "input": "-",
+      "expect": "기간 컨트롤에 PERIOD_DEFAULT 결과 1행의 FROM_VALUE~TO_VALUE가 설정됨(적용 대상 확인 필요)",
+      "basis": "`Form_Load` > setPeriod:549 / `biz:CommonData.CommonDataList` [code=PERIOD_DEFAULT]"
+    },
+    {
+      "id": "TC-SCP0041-003",
+      "kind": "초기화",
+      "pre": "-",
+      "step": "화면을 열고 `spdMain`의 활성 탭을 확인한다",
+      "input": "-",
+      "expect": "탭 `Osp Stock`, `Pack Hold Stock` 2개가 보이고 활성 탭은 `Osp Stock`",
+      "basis": "InitSpread:195~196 / `Form_Load` / 시트 `Osp Stock`, `Pack Hold Stock`"
+    },
+    {
+      "id": "TC-SCP0041-004",
+      "kind": "초기화",
+      "pre": "-",
+      "step": "조회조건 라벨을 확인한다",
+      "input": "-",
+      "expect": "`cboDivision`=\"Division*\", `clbPlantSite`=\"Plant Site\", `txtItemId`=\"Model\", `dCalendar`=\"Period*\", `txtInspection`=DefPackLabel.INSEPECTION_ID 문구(확인 필요), `cboStatus`=\"Status\", `dCalendarCutoff`=\"Cutoff Date\", `btnExcelUpload`=\"Upload\", `formDown`=\"Excel Form\"",
+      "basis": "props.csv / `Form_Load`"
+    },
+    {
+      "id": "TC-SCP0041-005",
+      "kind": "그리드",
+      "pre": "활성 탭 `Osp Stock`",
+      "step": "`spdMain` 헤더를 확인한다",
+      "input": "-",
+      "expect": "14컬럼: Valuation Type, Cell From Site, Box, Comment, Created By, Creation Date, Division*, Model*, Last Update Date, Last Updated By, Nick Name, Qty*, Plant Site*, Date* (순서는 메타 원문 확인 필요)",
+      "basis": "시트 `Osp Stock` / SetSheetHeaderColumn@SetSpreadInit:211"
+    },
+    {
+      "id": "TC-SCP0041-006",
+      "kind": "그리드",
+      "pre": "탭 `Pack Hold Stock` 선택",
+      "step": "`spdMain` 헤더를 확인한다",
+      "input": "-",
+      "expect": "15컬럼: Create Date, Cutoff Date, 실제 완료일, 예상 완료일, 예상 시작일, Status, 관리번호, 수정자, Change Date, Nick Name, PLANT, Model, 수량, 변경점 신청자, Plant Site",
+      "basis": "시트 `Pack Hold Stock` / SetSheetHeaderColumn@SetSpreadInit:211"
+    },
+    {
+      "id": "TC-SCP0041-007",
+      "kind": "조회",
+      "pre": "활성 탭 `Osp Stock`, 데이터 있음",
+      "step": "`cboDivision` 선택, `clbPlantSite` 체크, `dCalendar` 기간 입력 후 툴바 Find",
+      "input": "Division=테스트 Division, Plant Site 1건 이상",
+      "expect": "`SCP.SCP0041_GET_STOCK_OSP` 호출, Plant Site는 CODE 값으로 전달, `Osp Stock` 시트에 결과 표시",
+      "basis": "FindButton > FindData_Main:662 / `SCP.SCP0041_GET_STOCK_OSP` / SP `SCP0041_GET_STOCK_OSP` / 시트 `Osp Stock`"
+    },
+    {
+      "id": "TC-SCP0041-008",
+      "kind": "조회",
+      "pre": "탭 `Pack Hold Stock`, 데이터 있음",
+      "step": "`cboDivision`, `clbPlantSite`, `txtInspection`, `cboStatus`, `dCalendarCutoff` 입력 후 툴바 Find",
+      "input": "Inspection·Status·Cutoff 값",
+      "expect": "`SCP.SCP0041_GET_PACK_HOLD_STOCK` 호출, `Pack Hold Stock` 시트에 결과 표시",
+      "basis": "FindButton > FindData_Pack:740 / `SCP.SCP0041_GET_PACK_HOLD_STOCK` / SP `SCP0041_GET_PACK_HOLD_STOCK` / 시트 `Pack Hold Stock`"
+    },
+    {
+      "id": "TC-SCP0041-009",
+      "kind": "조회",
+      "pre": "탭별로 각각 실행",
+      "step": "툴바 Find 한 번 실행 후 호출된 엔드포인트를 기록한다",
+      "input": "-",
+      "expect": "활성 시트 엔드포인트만 호출되는지, 두 엔드포인트가 모두 호출되는지 기록(As-is 기대값 확인 필요)",
+      "basis": "FindButton / `SCP.SCP0041_GET_STOCK_OSP`, `SCP.SCP0041_GET_PACK_HOLD_STOCK`"
+    },
+    {
+      "id": "TC-SCP0041-010",
+      "kind": "조회",
+      "pre": "해당 조건 데이터 없음",
+      "step": "`Osp Stock` 탭에서 결과가 없는 조건으로 Find",
+      "input": "데이터 없는 기간",
+      "expect": "그리드 0행, 오류 없음(빈 결과 메시지 확인 필요)",
+      "basis": "`SCP.SCP0041_GET_STOCK_OSP` / 시트 `Osp Stock`"
+    },
+    {
+      "id": "TC-SCP0041-011",
+      "kind": "조회",
+      "pre": "해당 조건 데이터 없음",
+      "step": "`Pack Hold Stock` 탭에서 결과가 없는 조건으로 Find",
+      "input": "존재하지 않는 `txtInspection` 값",
+      "expect": "그리드 0행, 오류 없음(메시지 확인 필요)",
+      "basis": "`SCP.SCP0041_GET_PACK_HOLD_STOCK` / 시트 `Pack Hold Stock`"
+    },
+    {
+      "id": "TC-SCP0041-012",
+      "kind": "조회",
+      "pre": "SP 오류 유도(권한 회수 등)",
+      "step": "툴바 Find",
+      "input": "-",
+      "expect": "오류 메시지 표시, 그리드 기존 상태 유지(메시지 원문 확인 필요)",
+      "basis": "`SCP.SCP0041_GET_STOCK_OSP` / `SCP.SCP0041_GET_PACK_HOLD_STOCK` (오류 응답)"
+    },
+    {
+      "id": "TC-SCP0041-013",
+      "kind": "조회",
+      "pre": "필수 조회조건 비움",
+      "step": "`cboDivision` 또는 `dCalendar`를 비우고 Find",
+      "input": "Division 빈값 / Period 빈값",
+      "expect": "필수값 검증 동작(메시지·차단 여부 확인 필요)",
+      "basis": "라벨 `Division*`, `Period*` / FindButton"
+    },
+    {
+      "id": "TC-SCP0041-014",
+      "kind": "저장",
+      "pre": "`Pack Hold Stock` 조회 완료, 편집 모드",
+      "step": "셀 값 수정 후 툴바 Save",
+      "input": "수정 행 1건 이상",
+      "expect": "`SCP.SCP0041_SAVE_PACKER_HOLD_STOCK` 호출 → SCM_DNM_STOCK_LOT_CONTROL UPDATE, SCM_SYS_LOG_BATCH 로그 1건 이상 → `SCP.SCP0041_GET_PACK_HOLD_STOCK`로 재조회되어 수정값 표시",
+      "basis": "SaveButton > SaveDataPacker:469 > FindData_Pack:740 / SP `SCP0041_SAVE_PACKER_HOLD_STOCK` / 시트 `Pack Hold Stock`"
+    },
+    {
+      "id": "TC-SCP0041-015",
+      "kind": "저장",
+      "pre": "저장 SP 오류 유도",
+      "step": "Save",
+      "input": "잘못된 값(검증 대상은 SP 원문 확인 필요)",
+      "expect": "오류 메시지 표시, 데이터 변경 없음, 재조회 안 함(확인 필요)",
+      "basis": "`SCP.SCP0041_SAVE_PACKER_HOLD_STOCK` (오류 응답)"
+    },
+    {
+      "id": "TC-SCP0041-016",
+      "kind": "저장",
+      "pre": "수정 없음",
+      "step": "아무것도 바꾸지 않고 Save",
+      "input": "-",
+      "expect": "저장 대상 없음 처리(메시지 확인 필요), UPDATE 0건",
+      "basis": "SaveButton / `SCP.SCP0041_SAVE_PACKER_HOLD_STOCK`"
+    },
+    {
+      "id": "TC-SCP0041-017",
+      "kind": "저장",
+      "pre": "화면의 모든 버튼·탭·툴바 조작",
+      "step": "Find/Save/Edit, 탭 전환, 모든 버튼을 실행하며 호출 로그를 확인한다",
+      "input": "-",
+      "expect": "`SCP.SCP0040_SAVE_CHARACTERISTIC_CAPA`(`SCP0040_SAVE_CHARACTERISTIC_CAPA`)가 한 번도 호출되지 않음(미도달 확인용 음성 테스트)",
+      "basis": "SaveData:354 unreached / `SCP.SCP0040_SAVE_CHARACTERISTIC_CAPA`"
+    },
+    {
+      "id": "TC-SCP0041-018",
+      "kind": "이벤트",
+      "pre": "화면 열림",
+      "step": "`spdMain`에서 `Pack Hold Stock` 탭 클릭 → 다시 `Osp Stock` 탭 클릭",
+      "input": "-",
+      "expect": "탭을 클릭할 때마다 `biz:CommonData.CommonDataList`(PERIOD_DEFAULT)가 호출되어 기간 기본값이 다시 설정됨. 조회조건 표시 전환 여부 기록(확인 필요)",
+      "basis": "`SpdMain_SheetTabClick` > SetSelectMenu > setPeriod:549 / `biz:CommonData.CommonDataList` / 시트 `Osp Stock`, `Pack Hold Stock`"
+    },
+    {
+      "id": "TC-SCP0041-019",
+      "kind": "이벤트",
+      "pre": "화면 열림",
+      "step": "`btnItemId` 클릭 → 팝업에서 모델 선택",
+      "input": "모델 1건 이상",
+      "expect": "`txtItemId.Text`에 선택 모델(sItemId)이 들어감",
+      "basis": "`BtnItemId_Click` :882"
+    },
+    {
+      "id": "TC-SCP0041-020",
+      "kind": "이벤트",
+      "pre": "화면 열림",
+      "step": "`cboDivision` 값을 바꾼다",
+      "input": "Division A → B",
+      "expect": "처리 결과 기록(`clbPlantSite` 목록이 바뀌는지 등 확인 필요), 오류 없음",
+      "basis": "`CboDivision_SelectedIndexChanged` (InitEvent:220)"
+    },
+    {
+      "id": "TC-SCP0041-021",
+      "kind": "이벤트",
+      "pre": "화면 열림",
+      "step": "`btnExcelUpload` 클릭 → 파일 선택",
+      "input": "엑셀 양식 파일",
+      "expect": "업로드 처리(대상 시트·저장 SP 확인 필요), 오류 없음",
+      "basis": "`btnExcelUpload_Click` (InitializeComponent:380)"
+    },
+    {
+      "id": "TC-SCP0041-022",
+      "kind": "이벤트",
+      "pre": "화면 열림",
+      "step": "`formDown` 클릭",
+      "input": "-",
+      "expect": "엑셀 양식 파일이 내려받아짐(양식 컬럼 확인 필요)",
+      "basis": "`btnExcelFormDownload_Click` (InitializeComponent:419)"
+    },
+    {
+      "id": "TC-SCP0041-023",
+      "kind": "이벤트",
+      "pre": "`Pack Hold Stock` 조회·편집 모드",
+      "step": "`spdMain` 셀에 값을 입력한다(편집 중)",
+      "input": "임의 값",
+      "expect": "편집 중 처리 동작 기록(변경 표시 등 확인 필요)",
+      "basis": "`SpdMain_EditChange` (InitEvent:223) / 시트 `Pack Hold Stock`"
+    },
+    {
+      "id": "TC-SCP0041-024",
+      "kind": "이벤트",
+      "pre": "`Pack Hold Stock` 조회·편집 모드",
+      "step": "셀 값을 바꾸고 포커스를 옮긴다",
+      "input": "임의 값",
+      "expect": "셀 변경 처리 동작 기록(행 상태 표시 등 확인 필요)",
+      "basis": "`ActiveSheet_CellChanged` (InitEvent:224)"
+    },
+    {
+      "id": "TC-SCP0041-025",
+      "kind": "권한",
+      "pre": "탭 `Pack Hold Stock` (iFocusTabIndex == 1)",
+      "step": "툴바 Edit",
+      "input": "-",
+      "expect": "편집 모드 진입(GetSheetInfo 수행)",
+      "basis": "EditButton:268 / 시트 `Pack Hold Stock`"
+    },
+    {
+      "id": "TC-SCP0041-026",
+      "kind": "권한",
+      "pre": "탭 `Osp Stock`",
+      "step": "툴바 Edit",
+      "input": "-",
+      "expect": "`iFocusTabIndex == 1` 조건이 아니면 GetSheetInfo를 하지 않음(화면상 결과 확인 필요)",
+      "basis": "EditButton:268 / 시트 `Osp Stock`"
+    },
+    {
+      "id": "TC-SCP0041-027",
+      "kind": "권한",
+      "pre": "조회 전용 권한 그룹 사용자",
+      "step": "화면을 열고 툴바 버튼 노출을 확인한다",
+      "input": "-",
+      "expect": "TB_FX_GroupMenuAuth 설정에 따름(기대값 확인 필요)",
+      "basis": "TB_FX_GroupMenuAuth 9행 / SaveButton / `SCP.SCP0041_SAVE_PACKER_HOLD_STOCK`"
+    },
+    {
+      "id": "TC-SCP0041-028",
+      "kind": "division",
+      "pre": "Division 40, 81, 82, EE 사용자(또는 선택)",
+      "step": "각 Division으로 `Osp Stock` 조회",
+      "input": "Division=40/81/82/EE",
+      "expect": "모든 Division에서 14컬럼 구성이 같음",
+      "basis": "grid_effective.csv / 시트 `Osp Stock` / `SCP.SCP0041_GET_STOCK_OSP`"
+    },
+    {
+      "id": "TC-SCP0041-029",
+      "kind": "division",
+      "pre": "Division 40, 81, 82, EE",
+      "step": "각 Division으로 `Pack Hold Stock` 조회",
+      "input": "Division=40/81/82/EE",
+      "expect": "모든 Division에서 15컬럼 구성이 같음",
+      "basis": "grid_effective.csv / 시트 `Pack Hold Stock` / `SCP.SCP0041_GET_PACK_HOLD_STOCK`"
+    },
+    {
+      "id": "TC-SCP0041-030",
+      "kind": "division",
+      "pre": "81 하위(81_HD 등)·EE 하위 Division",
+      "step": "하위 Division으로 두 시트를 조회한다",
+      "input": "Division=81_HD, EE_UC 등",
+      "expect": "컬럼 수 `Osp Stock` 14 / `Pack Hold Stock` 15 그대로",
+      "basis": "grid_effective.csv (14개 division 공통)"
+    }
+  ],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

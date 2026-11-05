@@ -118,7 +118,6 @@ export const ShipmentPlanAutoEssDetailBar = ({
                     ),
                   }}
                   onChange={e => set({ model: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
                 />
               )}
             />
@@ -148,7 +147,6 @@ export const ShipmentPlanAutoEssDetailBar = ({
                     ),
                   }}
                   onChange={e => set({ requestorId: e.target.value, requestorName: '' })}
-                  onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
                 />
               )}
             />
@@ -199,7 +197,6 @@ export const ShipmentPlanAutoEssDetailBar = ({
                   fullWidth
                   value={sc.boxId}
                   onChange={e => set({ boxId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onDetailSearch()}
                 />
               )}
             />

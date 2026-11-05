@@ -1,0 +1,16 @@
+﻿menu_id,sheet,column,label,asis_halign,asis_ref,tobe_program,tobe_sheet,tobe_halign,tobe_source,verdict,note
+SCP0122,Plan Activity Mgmt,AUTO_YN,Auto Flag,C,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,C,메타 SCP0122/Plan Activity Mgmt,PASS,AS-IS center ↔ TO-BE center
+SCP0122,Plan Activity Mgmt,CONFIRM_YN,Confirm Flag,C,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,C,메타 SCP0122/Plan Activity Mgmt,PASS,AS-IS center ↔ TO-BE center
+SCP0122,Plan Activity Mgmt,DIVISION_ID,Div.,C,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,C,메타 SCP0122/Plan Activity Mgmt,PASS,AS-IS center ↔ TO-BE center
+SCP0122,Plan Activity Mgmt,LINK_UI_TYPE,Link UI Type,L,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,L,메타 SCP0122/Plan Activity Mgmt,PASS,AS-IS left ↔ TO-BE left
+SCP0122,Plan Activity Mgmt,OPMZ_ACTV_CD,Activity Code,L,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,L,메타 SCP0122/Plan Activity Mgmt,PASS,AS-IS left ↔ TO-BE left
+SCP0122,Plan Activity Mgmt,OPMZ_ACTV_NAME,Activity Name,L,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,L,메타 SCP0122/Plan Activity Mgmt,PASS,AS-IS left ↔ TO-BE left
+SCP0122,Plan Activity Mgmt,OPMZ_ACTV_SEQ,Act. Seq,C,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,C,메타 SCP0122/Plan Activity Mgmt,PASS,AS-IS center ↔ TO-BE center
+SCP0122,Plan Activity Mgmt,OPMZ_PLAN_GR_ID,Plan Group ID,C,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,C,메타 SCP0122/Plan Activity Mgmt,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0122,Plan Activity Mgmt,OPMZ_PLAN_GR_NAME,Plan Group,L,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,L,메타 SCP0122/Plan Activity Mgmt,PASS,AS-IS left ↔ TO-BE left
+SCP0122,Plan Activity Mgmt,OPMZ_PRS_CD,Process CD,C,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,C,메타 SCP0122/Plan Activity Mgmt,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0122,Plan Activity Mgmt,OPMZ_PRS_NAME,Process,L,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,L,메타 SCP0122/Plan Activity Mgmt,PASS,AS-IS left ↔ TO-BE left
+SCP0122,Plan Activity Mgmt,OPTION_YN,Option Flag,C,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,C,메타 SCP0122/Plan Activity Mgmt,PASS,AS-IS center ↔ TO-BE center
+SCP0122,Plan Activity Mgmt,PRE_OPMZ_ACTV_CD,PRE_OPMZ_ACTV_CD,L,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,L,메타 SCP0122/Plan Activity Mgmt,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0122,Plan Activity Mgmt,PRE_OPMZ_ACTV_SEQ,PRE_OPMZ_ACTV_SEQ,C,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,C,메타 SCP0122/Plan Activity Mgmt,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0122,Plan Activity Mgmt,PROGRAM_NAME,Program Name,L,META SCM_MST_SHEET_COLUMNS(SCP0122/Plan Activity Mgmt),SCP0122,Plan Activity Mgmt,L,메타 SCP0122/Plan Activity Mgmt,PASS,AS-IS left ↔ TO-BE left

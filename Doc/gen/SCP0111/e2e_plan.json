@@ -1,0 +1,653 @@
+{
+  "menuId": "SCP0111",
+  "page": "IntegrationPsi",
+  "feature": "supply",
+  "routePath": "supply/integration-psi",
+  "asisName": "IntegrationPSI",
+  "fields": [
+    {
+      "key": "cmbToMonth",
+      "label": " ~",
+      "lbl": "",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cmbToMonth"
+    },
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "planDate",
+      "label": "Plan Date",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanDate"
+    },
+    {
+      "key": "planType",
+      "label": "Plan-type",
+      "lbl": "LBL00040",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanType"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "cellItemId",
+      "label": "Cell Model",
+      "lbl": "LBL00051",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtCellItemId"
+    },
+    {
+      "key": "cmbFromMonth",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cmbFromMonth"
+    },
+    {
+      "key": "qty",
+      "label": "Qty ＜ 0",
+      "lbl": "LBL00689",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkQty"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "nickName",
+      "label": "Nick Name",
+      "lbl": "LBL00767",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnNickName"
+    },
+    {
+      "key": "cellItemId",
+      "label": "Cell Item Id",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnCellItem_Id"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Integration PSI",
+      "key": "INTEGRATION_PSI",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "BOH_QTY",
+        "CELL_CF",
+        "CELL_ITEM_ID",
+        "CELL_MODEL_NICK_NAME",
+        "COMPANY_ID",
+        "DIVISION_ID",
+        "INCOTERMS",
+        "ITEM_ID",
+        "LINE_ID",
+        "MEASURE",
+        "MEASURE_COLOR",
+        "MEASURE_LABEL",
+        "MEASURE_ORDER_NO",
+        "NICK_NAME",
+        "OPERATION_GROUP",
+        "PLAN_TYPE",
+        "PLANT_ID",
+        "PLANT_ID_DESCRIPTION",
+        "SEQ_FLAG",
+        "TO_PRODUCT",
+        "TO_SITE",
+        "TO_SITE_DESCRIPTION",
+        "UOM",
+        "VALUE_TYPE"
+      ],
+      "labels": [
+        "BOH",
+        "Cell Coversion Factor",
+        "Cell Model",
+        "Cell Model Nick Name",
+        "Company",
+        "Division",
+        "Incoterms",
+        "Model",
+        "Line",
+        "MEASURE",
+        "MEASURE_COLOR",
+        "Measure",
+        "MEASURE_ORDER_NO",
+        "Nick Name",
+        "Operation",
+        "Plan Type",
+        "Plant",
+        "Plant",
+        "SEQ_FLAG",
+        "To Product",
+        "To Site",
+        "To Site",
+        "UOM",
+        "Valuation Type"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Integration PSI",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0111.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0111_GET_ESS_PACK_LINE",
+      "sheet": "Integration PSI",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SCP0111_GET_INTEGRATION_PSI",
+      "sheet": "Integration PSI",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DM0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "Integration PSI",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0111.P_DM0003_GET_BUCKET_TYPE_CODE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+      "sheet": "Integration PSI",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0111.P_SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0111_SAVE_INTEGRATION_PSI",
+      "sheet": "Integration PSI",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0111.P_SCP0111_SAVE_INTEGRATION_PSI",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCP0111_GET_ESS_PACK_LINE",
+        "biz:CommonData.CommonDataList [code=CalendarMonth]",
+        "DM.DM0003_GET_BUCKET_TYPE_CODE"
+      ]
+    },
+    {
+      "name": "handleNickName",
+      "target": "this.btnNickName",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "this.spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "this.spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleMainCell",
+      "target": "this.spdMain",
+      "event": "CellClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleCboDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=CalendarMonth]"
+      ]
+    },
+    {
+      "name": "handleCboPlanDate",
+      "target": "cboPlanDate",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=CalendarMonth]"
+      ]
+    },
+    {
+      "name": "handleCboPlanType",
+      "target": "cboPlanType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=CalendarMonth]"
+      ]
+    },
+    {
+      "name": "handledefaultDataModel",
+      "target": "_defaultDataModel",
+      "event": "Changed",
+      "slot": "handler",
+      "calls": [
+        "biz:CommonData.CommonDataList [code=CalendarMonth]"
+      ]
+    }
+  ],
+  "tcs": [
+    {
+      "id": "TC-ID",
+      "kind": "구분",
+      "pre": "사전조건",
+      "step": "절차",
+      "input": "입력값",
+      "expect": "기대결과",
+      "basis": "근거"
+    },
+    {
+      "id": "TC-SCP0111-001",
+      "kind": "초기화",
+      "pre": "메뉴 권한이 있는 사용자",
+      "step": "화면을 엽니다.",
+      "input": "-",
+      "expect": "오류 없이 진입합니다. Line 목록을 조회합니다.",
+      "basis": "`Form_Load` > GetEssPackLineAll:490, `SCP.SCP0111_GET_ESS_PACK_LINE`, SP `SCP0111_GET_ESS_PACK_LINE`"
+    },
+    {
+      "id": "TC-SCP0111-002",
+      "kind": "초기화",
+      "pre": "TC-001",
+      "step": "진입 직후 Bucket Type 호출 여부를 확인합니다.",
+      "input": "-",
+      "expect": "Bucket Type 코드를 조회합니다(사용처 확인 필요).",
+      "basis": "`Form_Load` > InitControls > GetBucketType:1095, `DM.DM0003_GET_BUCKET_TYPE_CODE`, SP `DM0003_GET_BUCKET_TYPE_CODE`"
+    },
+    {
+      "id": "TC-SCP0111-003",
+      "kind": "초기화",
+      "pre": "TC-001",
+      "step": "`cmbFromMonth`, `cmbToMonth` 목록을 엽니다.",
+      "input": "-",
+      "expect": "CalendarMonth 결과(CODE/NAME)가 바인딩되어 있습니다.",
+      "basis": "`Form_Load` > InitControls > SetChangedPeriod:287/288, `biz:CommonData.CommonDataList` [code=CalendarMonth]"
+    },
+    {
+      "id": "TC-SCP0111-004",
+      "kind": "초기화",
+      "pre": "TC-001",
+      "step": "조회조건 영역을 확인합니다.",
+      "input": "-",
+      "expect": "`cboPlanType`, `btnCellItem_Id`는 보이지 않습니다. `cboDivision`(`Division*`)과 `cboPlanDate`(`Plan-date*`)는 필수로 표시됩니다.",
+      "basis": "props.csv Visible=false(305, 450), `Form_Load`"
+    },
+    {
+      "id": "TC-SCP0111-005",
+      "kind": "초기화",
+      "pre": "TC-001",
+      "step": "그리드 `spdMain`을 확인합니다.",
+      "input": "-",
+      "expect": "시트 `Integration PSI`가 생성되고, 메타 컬럼과 월 컬럼이 만들어져 있습니다.",
+      "basis": "`Form_Load` > CreateSpread > InitSpread > SetCalendar:345, 시트 `Integration PSI`, `biz:CommonData.CommonDataList` [code=CalendarMonth]"
+    },
+    {
+      "id": "TC-SCP0111-006",
+      "kind": "초기화",
+      "pre": "ESS Pack Line 데이터가 0건인 환경",
+      "step": "화면을 엽니다.",
+      "input": "-",
+      "expect": "빈 결과여도 예외 없이 진입합니다. 이후 `spdMain_CellClick`에서 dtLine을 참조할 때 오류가 없어야 합니다(AS-IS 동작 확인 필요).",
+      "basis": "`SCP.SCP0111_GET_ESS_PACK_LINE`, SP `SCP0111_GET_ESS_PACK_LINE`, `spdMain_CellClick`"
+    },
+    {
+      "id": "TC-SCP0111-007",
+      "kind": "이벤트",
+      "pre": "TC-001",
+      "step": "`cboDivision` 값을 바꿉니다.",
+      "input": "Division 다른 값",
+      "expect": "`cmbFromMonth`/`cmbToMonth`를 다시 바인딩합니다.",
+      "basis": "`CboDivision_SelectedIndexChanged` > SetChangedPeriod:287/288, `biz:CommonData.CommonDataList` [code=CalendarMonth]"
+    },
+    {
+      "id": "TC-SCP0111-008",
+      "kind": "이벤트",
+      "pre": "TC-001",
+      "step": "`cboPlanDate` 값을 바꿉니다.",
+      "input": "Plan-date 다른 값",
+      "expect": "Period를 다시 바인딩하고, 그리드 월 컬럼을 CalendarMonth 결과대로 다시 만듭니다.",
+      "basis": "`CboPlanDate_SelectedIndexChanged` > SetChangedPeriod:287/288, InitSpread > SetCalendar:345, `biz:CommonData.CommonDataList` [code=CalendarMonth], 시트 `Integration PSI`"
+    },
+    {
+      "id": "TC-SCP0111-009",
+      "kind": "이벤트",
+      "pre": "`cboPlanType`이 노출되거나 값이 바뀌는 조건(확인 필요)",
+      "step": "`cboPlanType` 값을 바꿉니다.",
+      "input": "Plan-type 다른 값",
+      "expect": "Period를 다시 바인딩합니다.",
+      "basis": "`CboPlanType_SelectedIndexChanged` > SetChangedPeriod:287/288, `biz:CommonData.CommonDataList` [code=CalendarMonth]"
+    },
+    {
+      "id": "TC-SCP0111-010",
+      "kind": "이벤트",
+      "pre": "TC-001",
+      "step": "기본 데이터 모델을 바꾸는 동작을 합니다(발생 조건 확인 필요).",
+      "input": "-",
+      "expect": "CalendarMonth를 다시 조회합니다(반영 대상 확인 필요).",
+      "basis": "`_defaultDataModel_Changed`:1980, `biz:CommonData.CommonDataList` [code=CalendarMonth]"
+    },
+    {
+      "id": "TC-SCP0111-011",
+      "kind": "이벤트",
+      "pre": "TC-001",
+      "step": "`btnNickName`을 누르고 값을 선택합니다.",
+      "input": "Nick Name 1건 이상",
+      "expect": "선택한 값이 `txtNickName`에 들어갑니다.",
+      "basis": "`BtnNickName_Click`:1887 (`txtNickName.Text = sNickName`)"
+    },
+    {
+      "id": "TC-SCP0111-012",
+      "kind": "이벤트",
+      "pre": "TC-001",
+      "step": "`btnItemId`를 누르고 값을 선택합니다.",
+      "input": "Model 1건 이상",
+      "expect": "선택한 값이 `txtItemId`에 들어갑니다.",
+      "basis": "`BtnItemId_Click`:1926 (`txtItemId.Text = sItemId`)"
+    },
+    {
+      "id": "TC-SCP0111-013",
+      "kind": "그리드",
+      "pre": "조회 결과 1건 이상, 편집 모드",
+      "step": "`spdMain`의 셀(LINE_ID 등)을 클릭합니다.",
+      "input": "-",
+      "expect": "dtLine의 CODE/NAME을 참조해 처리합니다(셀 반영 내용 확인 필요). 오류가 없어야 합니다.",
+      "basis": "`spdMain_CellClick`:1781~1786, 시트 `Integration PSI`"
+    },
+    {
+      "id": "TC-SCP0111-014",
+      "kind": "그리드",
+      "pre": "조회 결과 1건 이상",
+      "step": "`spdMain` 셀을 더블클릭합니다.",
+      "input": "-",
+      "expect": "AS-IS와 같은 동작을 합니다(내부 동작 확인 필요). 오류가 없어야 합니다.",
+      "basis": "`SpdMain_CellDoubleClick`, 시트 `Integration PSI`"
+    },
+    {
+      "id": "TC-SCP0111-015",
+      "kind": "그리드",
+      "pre": "조회 결과가 화면보다 많음",
+      "step": "`spdMain`을 세로로 스크롤합니다.",
+      "input": "-",
+      "expect": "AS-IS와 같은 동작을 합니다(내부 동작 확인 필요). 오류가 없어야 합니다.",
+      "basis": "`SpdMain_TopChange`, 시트 `Integration PSI`"
+    },
+    {
+      "id": "TC-SCP0111-016",
+      "kind": "조회",
+      "pre": "필수 조건 입력",
+      "step": "`cboDivision`, `cboPlanDate`, `cmbFromMonth`~`cmbToMonth`를 고르고 Find를 누릅니다.",
+      "input": "유효 Division/Plan-date/Period",
+      "expect": "결과가 시트 `Integration PSI`에 표시되고, 월 컬럼이 다시 만들어집니다.",
+      "basis": "FindButton > FindData_Main:874, `SCP.SCP0111_GET_INTEGRATION_PSI`, SP `SCP0111_GET_INTEGRATION_PSI`, SetCalendar:345 `biz:CommonData.CommonDataList` [code=CalendarMonth]"
+    },
+    {
+      "id": "TC-SCP0111-017",
+      "kind": "조회",
+      "pre": "데이터가 없는 조건",
+      "step": "Find를 누릅니다.",
+      "input": "결과 0건 조건",
+      "expect": "그리드 0행, 오류 없음. 0건 안내 메시지 여부는 확인 필요입니다.",
+      "basis": "`SCP.SCP0111_GET_INTEGRATION_PSI`, SP `SCP0111_GET_INTEGRATION_PSI`"
+    },
+    {
+      "id": "TC-SCP0111-018",
+      "kind": "조회",
+      "pre": "SP 오류를 유도할 수 있는 환경",
+      "step": "Find를 누릅니다.",
+      "input": "SP 오류 응답",
+      "expect": "오류 메시지를 표시하고, 그리드에 잘못된 결과를 남기지 않습니다(메시지 원문 확인 필요).",
+      "basis": "`SCP.SCP0111_GET_INTEGRATION_PSI`, SP `SCP0111_GET_INTEGRATION_PSI`"
+    },
+    {
+      "id": "TC-SCP0111-019",
+      "kind": "조회",
+      "pre": "TC-001",
+      "step": "`cboDivision` 또는 `cboPlanDate`를 비우고 Find를 누릅니다.",
+      "input": "필수값 빈값",
+      "expect": "필수값 검증으로 조회를 막습니다(검증 코드·메시지 확인 필요).",
+      "basis": "`Division*`/`Plan-date*` 라벨(props.csv 602/632), `SCP.SCP0111_GET_INTEGRATION_PSI`"
+    },
+    {
+      "id": "TC-SCP0111-020",
+      "kind": "조회",
+      "pre": "TC-016 조건",
+      "step": "`txtItemId`, `txtNickName`, `txtCellItemId`에 여러 줄 값을 넣고 Find를 누릅니다.",
+      "input": "2건 이상 멀티라인",
+      "expect": "입력한 모든 값으로 필터링됩니다(파라미터 매핑·구분자 확인 필요).",
+      "basis": "`SCP.SCP0111_GET_INTEGRATION_PSI`, SP `SCP0111_GET_INTEGRATION_PSI`(REF:STRING_SPLIT)"
+    },
+    {
+      "id": "TC-SCP0111-021",
+      "kind": "조회",
+      "pre": "TC-016 조건",
+      "step": "`chkQty`(`Qty < 0`)를 체크하고 Find를 누릅니다.",
+      "input": "체크 ON/OFF",
+      "expect": "체크 여부에 따라 결과가 AS-IS와 같습니다(반영 방식 확인 필요).",
+      "basis": "`SCP.SCP0111_GET_INTEGRATION_PSI`, SP `SCP0111_GET_INTEGRATION_PSI`"
+    },
+    {
+      "id": "TC-SCP0111-022",
+      "kind": "그리드",
+      "pre": "조회 완료(조회 모드)",
+      "step": "시트 `Integration PSI`의 컬럼 헤더를 확인합니다.",
+      "input": "-",
+      "expect": "메타 표시 22컬럼(BOH, Cell Coversion Factor, Cell Model, Cell Model Nick Name, Company, Division, Incoterms, Model, Line, MEASURE, Measure, Nick Name, Operation, Plan Type, Plant, Plant, SEQ_FLAG, To Product, To Site, To Site, UOM, Valuation Type)이 정의되어 있고, MEASURE_COLOR와 MEASURE_ORDER_NO는 숨겨져 있습니다.",
+      "basis": "시트 `Integration PSI`, SCM_MST_SHEET_COLUMNS, InitSpread SetSheetHeaderColumn:333"
+    },
+    {
+      "id": "TC-SCP0111-023",
+      "kind": "그리드",
+      "pre": "조회 완료(조회 모드)",
+      "step": "SEQ_FLAG, MEASURE, PLANT_ID, TO_SITE를 확인합니다.",
+      "input": "-",
+      "expect": "SEQ_FLAG·MEASURE는 숨김(폭 0), PLANT_ID·TO_SITE는 폭 0입니다.",
+      "basis": "시트 `Integration PSI`, SetVisibleSheetColumns:1078~1082"
+    },
+    {
+      "id": "TC-SCP0111-024",
+      "kind": "그리드",
+      "pre": "조회 완료",
+      "step": "월 컬럼 수와 헤더를 확인합니다.",
+      "input": "Period 범위",
+      "expect": "CalendarMonth 결과 행 수만큼 숫자 컬럼(헤더 YYYYMM_NAME, 폭 75)이 있습니다. Tag가 `D_`/`W_`인 컬럼은 숨기고 `M_`인 컬럼만 표시합니다.",
+      "basis": "시트 `Integration PSI`, SetCalendar:354, SetSpreadColumn:392/396, `biz:CommonData.CommonDataList` [code=CalendarMonth]"
+    },
+    {
+      "id": "TC-SCP0111-025",
+      "kind": "이벤트",
+      "pre": "조회 완료",
+      "step": "Edit를 누릅니다.",
+      "input": "-",
+      "expect": "편집 모드로 바뀌고, SEQ_FLAG(60), MEASURE(80), PLANT_ID(65), TO_SITE(75)가 보입니다.",
+      "basis": "EditButton:554/622, `biz:CommonData.CommonDataList` [code=CalendarMonth], `biz:CommonData.CommonDataList` [code=LookupCommon], SetVisibleSheetColumns:1069~1073, 시트 `Integration PSI`"
+    },
+    {
+      "id": "TC-SCP0111-026",
+      "kind": "저장",
+      "pre": "편집 모드, ADMIN 분기 조건 충족(조건 확인 필요)",
+      "step": "값을 수정하고 Save를 누릅니다.",
+      "input": "수정 1행 이상",
+      "expect": "ADMIN 저장 SP가 실행되어 SCP_ANL_PSI_INTEGRATION에 UPDATE/INSERT되고 SCM_SYS_LOG_BATCH에 기록됩니다. 이어서 다시 조회합니다.",
+      "basis": "SaveButton > SaveData:1379, `SCP.SCP0111_SAVE_INTEGRATION_PSI_ADMIN`, SP `SCP0111_SAVE_INTEGRATION_PSI_ADMIN`, FindData_Main:874 `SCP.SCP0111_GET_INTEGRATION_PSI`"
+    },
+    {
+      "id": "TC-SCP0111-027",
+      "kind": "저장",
+      "pre": "편집 모드, 일반 분기 조건 충족(조건 확인 필요)",
+      "step": "값을 수정하고 Save를 누릅니다.",
+      "input": "수정 1행 이상",
+      "expect": "일반 저장 SP가 실행되어 SCP_ANL_PSI_INTEGRATION에 INSERT/UPDATE되고 SCM_SYS_LOG_BATCH에 기록됩니다. 이어서 다시 조회합니다.",
+      "basis": "SaveButton > SaveData:1637, `SCP.SCP0111_SAVE_INTEGRATION_PSI`, SP `SCP0111_SAVE_INTEGRATION_PSI`, FindData_Main:874 `SCP.SCP0111_GET_INTEGRATION_PSI`"
+    },
+    {
+      "id": "TC-SCP0111-028",
+      "kind": "저장",
+      "pre": "편집 모드",
+      "step": "Save를 누릅니다.",
+      "input": "-",
+      "expect": "저장 전에 CalendarMonth(1154/1242/1511)와 LookupCommon(1205)을 조회하고, 그 결과(dtTemp/dtToMonth/dtMonth CODE)로 저장 범위를 구성합니다(사용 방식 확인 필요).",
+      "basis": "SaveData, `biz:CommonData.CommonDataList` [code=CalendarMonth], `biz:CommonData.CommonDataList` [code=LookupCommon]"
+    },
+    {
+      "id": "TC-SCP0111-029",
+      "kind": "저장",
+      "pre": "편집 모드, 수정 없음",
+      "step": "Save를 누릅니다.",
+      "input": "변경 0건",
+      "expect": "저장 SP를 호출하지 않거나 안내합니다(AS-IS 동작 확인 필요).",
+      "basis": "`SCP.SCP0111_SAVE_INTEGRATION_PSI_ADMIN`, `SCP.SCP0111_SAVE_INTEGRATION_PSI`"
+    },
+    {
+      "id": "TC-SCP0111-030",
+      "kind": "저장",
+      "pre": "SP 오류를 유도할 수 있는 환경",
+      "step": "Save를 누릅니다.",
+      "input": "SP 오류 응답",
+      "expect": "오류 메시지를 표시하고 데이터가 부분 반영되지 않습니다(메시지 원문·롤백 동작 확인 필요).",
+      "basis": "SP `SCP0111_SAVE_INTEGRATION_PSI_ADMIN`, SP `SCP0111_SAVE_INTEGRATION_PSI`"
+    },
+    {
+      "id": "TC-SCP0111-031",
+      "kind": "권한",
+      "pre": "그룹이 다른 사용자 2명(NowGroupID 상이)",
+      "step": "각각 Edit와 Save를 실행합니다.",
+      "input": "-",
+      "expect": "그룹에 따라 편집/저장 동작(저장 SP 분기 포함)이 AS-IS와 같습니다(조건 확인 필요).",
+      "basis": "EditButton:559, SaveData:1159 NowGroupID, TB_FX_GroupMenuAuth, `SCP.SCP0111_SAVE_INTEGRATION_PSI_ADMIN`, `SCP.SCP0111_SAVE_INTEGRATION_PSI`"
+    },
+    {
+      "id": "TC-SCP0111-032",
+      "kind": "division",
+      "pre": "대표 division 사용자(40, 81, 82, EE 계열)",
+      "step": "각 division으로 Find를 실행하고 컬럼을 비교합니다.",
+      "input": "Division 40 / 81 / 82 / EE",
+      "expect": "14개 division 모두 메타 표시 컬럼 22개가 같습니다(division 변형 없음).",
+      "basis": "시트 `Integration PSI`, grid_effective.csv, `SCP.SCP0111_GET_INTEGRATION_PSI`"
+    }
+  ],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

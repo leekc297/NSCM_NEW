@@ -93,7 +93,8 @@ def main():
     asis_id = sys.argv[sys.argv.index('--asis') + 1].upper() if '--asis' in sys.argv else mid
     out = os.path.join(ROOT, 'Doc', 'verify', mid, 'b7_check.json')
     res = {'menu_id': mid, 'asis_id': asis_id, 'generated': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-    save_sp = next((g['asis_sp'] for g in read_csv(os.path.join(ROOT, 'Doc', 'golden', 'golden_cases.csv')) if g.get('screen') == mid and g.get('kind') == 'SAVE'), '')
+    from asis_live import live_golden
+    save_sp = next((g['asis_sp'] for g in live_golden(mid, asis_id, 'SAVE')), '')  # 실행되지 않는 AS-IS 메서드의 저장 SP 제외(2026-10-30 SCP0041 SCP0040_SAVE_CHARACTERISTIC_CAPA)
     tg = sa.asis_targets(save_sp) if save_sp else None
     if not save_sp:
         res['a'] = {'verdict': 'NA', 'note': '저장 SP 없음(조회 전용 화면) — 이 화면 저장으로 바뀌는 콤보 후보 없음', 'targets': []}

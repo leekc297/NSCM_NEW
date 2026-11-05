@@ -292,10 +292,6 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
                     ),
                   }}
                   onDoubleClick={() => setOpenProjectModal(true)}
-                  // AS-IS DMF0072 umltProject_KeyDown(L223~228): Enter → Project 팝업 열기(이 화면 개별 배선).
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && sc.divisionId !== '40') setOpenProjectModal(true);
-                  }}
                   disabled={sc.divisionId === '40'}
                 />
               )}
@@ -326,10 +322,6 @@ export const NnMasterMappingForm = ({ onSearch }: Props) => {
                     ),
                   }}
                   onDoubleClick={() => setOpenItemModal(true)}
-                  // AS-IS DMF0072 umltModel_KeyDown(L231~236): Enter → Model/Nickname 팝업 열기(이 화면 개별 배선).
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') setOpenItemModal(true);
-                  }}
                 />
               )}
             />

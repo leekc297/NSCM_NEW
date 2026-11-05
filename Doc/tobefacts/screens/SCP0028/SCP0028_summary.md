@@ -1,7 +1,7 @@
 # SCP0028 — To-Be Fact Pack 요약
 
-- page_key: `shipping/shipment-lot-size` · feature: shipping · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 16 · 엔드포인트 호출 8 (미해결 0, 주석 속 1) · 이벤트 30 · 컴포넌트 사용 55 · 하드코딩 컬럼 7 · 메시지 29
+- page_key: `shipping/shipment-lot-size` · feature: shipping · As-is Fact Pack 있음
+- 파일 16 · 엔드포인트 호출 8 (미해결 0, 주석 속 1) · 이벤트 29 · 컴포넌트 사용 55 · 하드코딩 컬럼 7 · 메시지 29
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 7건
 
 ## 1. 파일
@@ -11,9 +11,9 @@
 | features/shipping/src/pages/shipment-lot-size/components/modals/ShipmentLotSizeBatchModal.tsx | component | 388 |
 | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | component | 259 |
 | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | component | 157 |
-| features/shipping/src/pages/shipment-lot-size/hooks/useShipmentLotSizeValidation.ts | hook | 80 |
+| features/shipping/src/pages/shipment-lot-size/hooks/useShipmentLotSizeValidation.ts | hook | 77 |
 | features/shipping/src/pages/shipment-lot-size/index.ts | index | 2 |
-| features/shipping/src/pages/shipment-lot-size/shipment-lot-size.constants.ts | constants | 183 |
+| features/shipping/src/pages/shipment-lot-size/shipment-lot-size.constants.ts | constants | 187 |
 | features/shipping/src/pages/shipment-lot-size/shipment-lot-size.types.ts | types | 26 |
 | features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.module.scss | style | 12 |
 | features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx | page | 407 |
@@ -59,9 +59,8 @@
 | CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 143 |
 | CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 162 |
 | CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 181 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 211 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 212 |
-| FunctionSearchIcon | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 207 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 212 |
+| Button | onClick | onItemSearch | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 208 |
 | CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 230 |
 | CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeForm.tsx | 249 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/shipment-lot-size/components/ShipmentLotSizeGrid.tsx | 80 |
@@ -117,7 +116,7 @@
 | MSG00429 | 2 |
 | LBL00001 | 1 |
 | LBL00027 | 1 |
-| LBL00639 | 1 |
+| LBL00007 | 1 |
 | LBL00025 | 1 |
 | LBL00022 | 1 |
 | LBL00023 | 1 |
@@ -130,11 +129,11 @@
 | LBL00716 | 1 |
 | LBL00627 | 1 |
 | MSG00002 | 1 |
-| MSG00133 | 1 |
-| MSG00006 | 1 |
+| MSG00004 | 1 |
+| MSG00003 | 1 |
 | MSG00031 | 1 |
 | MSG00618 | 1 |
-| MSG00099 | 1 |
+| MSG01127 | 1 |
 | MSG00699 | 1 |
 | MSG01091 | 1 |
 | MSG00014 | 1 |

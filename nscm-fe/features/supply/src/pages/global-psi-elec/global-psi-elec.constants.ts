@@ -40,11 +40,6 @@ export const COMBO = {
   COMPANY: 'COMPANY_EE',
   // cboPlanDate — 주단위 계획일자. division 종속 재조회(토큰 @divisionId). 단일선택.
   PLAN_DATE: 'DATE_WEEKLY',
-  // Report Type* — AS-IS SCP0095(전극)의 Report Type 콤보를 그대로 이관한 등록 콤보(SQL_NM='[전극] AS-IS
-  //   UP_FX_GetCommonDataList @Code=PlanType', ora.py 실측). SCP_PLAN_VERSION_V.plan_type 를 division 종속으로
-  //   반환 → 옵션이 division 마다 다름(예 EE=TE/PR/MA/SE/FN, EE_HD=PR/FN). 토큰 @divisionId(+옵션 @planStartYyyymmdd).
-  //   DATE_WEEKLY 동형으로 divisionId 만 전달(옵션 토큰 생략). 정적 PLAN_TYPE lookup 아님(그건 전 사업부 고정 5종).
-  REPORT_TYPE: 'PlanType',
 } as const;
 
 // Division 화면 전용 필터 — ATTRIBUTE3='EE'(전극만 유지, AS-IS GetDivisionEE). 좁히는 주체는 FE 하나만(design 02 §2-1).
@@ -56,10 +51,15 @@ export const MEASURE_SHEET_NAME = 'Global PSI Elec';
 // titleSet columnType — measure 개인화 'M'(자매 SCP0100/DMF0021 선례 동일).
 export const TITLESET_MEASURE_TYPE = 'M';
 
-// Report Type* 기본값 — AS-IS 기본 'FN'(반영 09주 기준, 스크린샷 기본 선택값). 옵션 원천은 COMBO.REPORT_TYPE
-//   (PlanType 콤보, division 종속 cascade — 정적 PLAN_TYPE lookup 아님). p_plan_type 으로 실린다(SP 필터, 필수).
-//   라벨은 LBL.PLAN_TYPE(LBL00040='Plan Type', 자매 SCP0100 동일 코드).
-export const PLAN_TYPE_DEFAULT = 'FN';
+// Plan Type(Report Type*) 옵션 — AS-IS InitPlanType()(SCP0095_GlobalPSI_Elec.cs L331~351)를 그대로 이관한
+//   고정 2종(MA, FN). AS-IS 는 SP/DB 조회가 아니라 코드에서 하드코딩한 DataTable 이며 division·plan date 와
+//   무관하다(CboPlanDate_SelectedIndexChanged L555~559 는 Plan Type 을 재적재하지 않음). value/label 모두 코드값.
+//   기본값 = AS-IS 의 SelectedIndex=Rows.Count-1(마지막 행=FN). NAME=CODE 라 라벨도 'MA'/'FN'.
+export const PLAN_TYPE_OPTIONS = [
+  { label: 'MA', value: 'MA' },
+  { label: 'FN', value: 'FN' },
+] as const;
+export const PLAN_TYPE_DEFAULT = 'FN'; // AS-IS InitPlanType 기본 선택(마지막 행). p_plan_type 으로 실림(SP 필터, 필수).
 
 // Bucket Type — AS-IS GetBucketType() SP(DAILY/WEEKLY/MONTHLY 고정 enum) 대신 정적 select 로 재현
 //   (자매 global-psi-report 동일 패턴 — 값이 고정 3종이고 조회 파라미터 아닌 pivot 표시 토글이라 SP 왕복 불요).

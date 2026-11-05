@@ -1,7 +1,7 @@
 # DMF0003 — To-Be Fact Pack 요약
 
-- page_key: `demand/mkt-fcst` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 31 · 엔드포인트 호출 23 (미해결 2, 주석 속 4) · 이벤트 46 · 컴포넌트 사용 93 · 하드코딩 컬럼 42 · 메시지 104
+- page_key: `demand/mkt-fcst` · feature: demand · As-is Fact Pack 있음
+- 파일 31 · 엔드포인트 호출 23 (미해결 2, 주석 속 4) · 이벤트 46 · 컴포넌트 사용 93 · 하드코딩 컬럼 42 · 메시지 105
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 42건
 
 ## 1. 파일
@@ -9,7 +9,7 @@
 |---|---|---|
 | features/demand/src/pages/mkt-fcst/components/MktFcstForm.module.scss | component | 60 |
 | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx | component | 452 |
-| features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | component | 2255 |
+| features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | component | 2263 |
 | features/demand/src/pages/mkt-fcst/components/modals/index.ts | index | 8 |
 | features/demand/src/pages/mkt-fcst/components/modals/mkt-fcst-modals.constants.ts | constants | 376 |
 | features/demand/src/pages/mkt-fcst/components/modals/PrHistoryModal.tsx | component | 216 |
@@ -17,16 +17,16 @@
 | features/demand/src/pages/mkt-fcst/components/modals/SspSyncCompareModal.tsx | component | 123 |
 | features/demand/src/pages/mkt-fcst/components/modals/SspSyncResultModal.tsx | component | 83 |
 | features/demand/src/pages/mkt-fcst/index.ts | index | 2 |
-| features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts | constants | 399 |
+| features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts | constants | 400 |
 | features/demand/src/pages/mkt-fcst/mkt-fcst.types.ts | types | 72 |
 | features/demand/src/pages/mkt-fcst/MktFcst.module.scss | style | 101 |
-| features/demand/src/pages/mkt-fcst/MktFcst.tsx | page | 1196 |
+| features/demand/src/pages/mkt-fcst/MktFcst.tsx | page | 1221 |
 | features/demand/src/pages/mkt-fcst/useMktFcstStore.ts | store | 563 |
 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.comboDebug.ts | util | 261 |
-| features/demand/src/pages/mkt-fcst/utils/mkt-fcst.core.test.ts | test | 264 |
+| features/demand/src/pages/mkt-fcst/utils/mkt-fcst.core.test.ts | test | 285 |
 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.division.ts | util | 160 |
-| features/demand/src/pages/mkt-fcst/utils/mkt-fcst.editLock.ts | util | 283 |
-| features/demand/src/pages/mkt-fcst/utils/mkt-fcst.gridCombos.ts | util | 589 |
+| features/demand/src/pages/mkt-fcst/utils/mkt-fcst.editLock.ts | util | 297 |
+| features/demand/src/pages/mkt-fcst/utils/mkt-fcst.gridCombos.ts | util | 596 |
 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.merge.ts | util | 222 |
 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.prContext.ts | util | 208 |
 | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.recalc.test.ts | test | 256 |
@@ -44,7 +44,7 @@
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 9 | Y | MktFcstForm.tsx:57 MktFcstForm.tsx:93 MktFcstGrid.tsx:262 MktFcstGrid.tsx:444 MktFcstGrid.tsx:496 MktFcstGrid.tsx:629 |
 | {?param} | http | 1 | N | MktFcstGrid.tsx:565 |
-| {?buildVmiLookupParam(editedRowRec,division)} | http | 1 | N | MktFcstGrid.tsx:1587 |
+| {?buildVmiLookupParam(editedRowRec,division)} | http | 1 | N | MktFcstGrid.tsx:1595 |
 | DMF0003/prHistory//call-proc | hook | 1 | Y | PrHistoryModal.tsx:73 |
 | DMF0003/prPopup//call-proc | hook | 1 | Y | PrModal.tsx:90 |
 | /DMF0003/prPopup/SAVE/call-proc | http | 1 | Y | PrModal.tsx:183 |
@@ -84,24 +84,24 @@
 | Checkbox | onChange | <arrow> set | jsx | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx | 430 |
 | Checkbox | onChange | <arrow> set | jsx | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx | 435 |
 | Checkbox | onChange | <arrow> set | jsx | features/demand/src/pages/mkt-fcst/components/MktFcstForm.tsx | 442 |
-| g | formatItem | formatHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1175 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1430 |
-| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1685 |
-| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1754 |
-| li | mouseenter | <arrow>  | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1850 |
-| li | mouseleave | <arrow>  | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1851 |
-| li | mousedown | <arrow> e.preventDefault,e.stopPropagation,handlePrAction | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1853 |
-| document | mousedown | dismissOutside | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1863 |
-| document | contextmenu | dismissOutside | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1864 |
-| g | cellEditEnding | editChangeHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1878 |
-| g.hostElement | keydown | blockQtyDotKey | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1887 |
-| g | cellEditEnding | truncQtyOnCommit | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1898 |
-| g | pastingCell | pastingCellHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2015 |
-| g | pastedCell | pastedCellHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2016 |
-| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2020 |
-| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2135 |
-| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2188 |
-| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2219 |
+| g | formatItem | formatHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1183 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1438 |
+| g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1693 |
+| g.hostElement | dblclick | dblclickHandler | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1762 |
+| li | mouseenter | <arrow>  | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1858 |
+| li | mouseleave | <arrow>  | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1859 |
+| li | mousedown | <arrow> e.preventDefault,e.stopPropagation,handlePrAction | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1861 |
+| document | mousedown | dismissOutside | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1871 |
+| document | contextmenu | dismissOutside | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1872 |
+| g | cellEditEnding | editChangeHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1886 |
+| g.hostElement | keydown | blockQtyDotKey | addEventListener | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1895 |
+| g | cellEditEnding | truncQtyOnCommit | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1906 |
+| g | pastingCell | pastingCellHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2023 |
+| g | pastedCell | pastedCellHandler | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2024 |
+| g | scrollPositionChanged | handleScrollInvalidate | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2028 |
+| g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2143 |
+| g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2196 |
+| f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2227 |
 | g | selectionChanged | onSelection | addHandler | features/demand/src/pages/mkt-fcst/components/modals/PrHistoryModal.tsx | 106 |
 | Button | onClick | modalClose | jsx | features/demand/src/pages/mkt-fcst/components/modals/PrHistoryModal.tsx | 208 |
 | InputField | onChange | <arrow> setPrHeader | jsx | features/demand/src/pages/mkt-fcst/components/modals/PrModal.tsx | 277 |
@@ -115,9 +115,9 @@
 | MktFcstGrid | onPopupCellDblClick | <arrow> toCellStr,isEssItemPopupBlocked,cell,setAlert,t,setPopupGroupId | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 933 |
 | MktFcstGrid | onPrContext | handlePrContext | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 964 |
 | MktFcstGrid | onSspCompare | handleSspCompare | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 965 |
-| PrModal | onSaved | <arrow> refetch | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1087 |
-| ColumnLayoutModal | onSave | <arrow> clearGridOnSettingChange,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,//⚠️팝업조회(위sheetName/columnType)와반드시같은값이어야한다.sheetName:SHEETS.MAIN,columnType:'C',rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1114 |
-| MeasureSelectModal | onApply | <arrow> clearGridOnSettingChange,applyVisibleMeasures,staticMeasures[SHEETS.MAIN].map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:'M',rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1166 |
+| PrModal | onSaved | <arrow> refetch | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1112 |
+| ColumnLayoutModal | onSave | <arrow> clearGridOnSettingChange,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,//⚠️팝업조회(위sheetName/columnType)와반드시같은값이어야한다.sheetName:SHEETS.MAIN,columnType:'C',rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1139 |
+| MeasureSelectModal | onApply | <arrow> clearGridOnSettingChange,applyVisibleMeasures,staticMeasures[SHEETS.MAIN].map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:'M',rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map | jsx | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 1191 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -234,7 +234,7 @@
 | LBL00744 | 1 |
 | LBL00641 | 1 |
 | LBL00746 | 1 |
-| LBL00747 | 1 |
+| LBL00677 | 1 |
 | LBL00698 | 1 |
 | LBL00699 | 1 |
 | LBL00694 | 1 |
@@ -265,7 +265,7 @@
 | MSG00476 | 1 |
 | MSG00477 | 1 |
 | MSG00478 | 1 |
-| MSG00147 | 1 |
+| MSG01165 | 1 |
 | MSG00618 | 3 |
 | LBL00666 | 1 |
 | MSG00606 | 1 |
@@ -284,31 +284,18 @@
 | LBL00706 | 1 |
 | LBL00707 | 1 |
 | LBL00708 | 1 |
+| MSG00004 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0003(25), DMF0020(19), DMF0021(8), DMF0082(8), DMF0040(2), SYS0004(1), DMF0053(1), DMF0042(1), DMF0004(1)
+- 화면ID: DMF0003(25), DMF0020(19), DMF0021(8), DMF0082(8), DMF0040(2), SYS0004(1), DMF0005(1), DMF0053(1), DMF0042(1), DMF0004(1)
 - SP/PKG: DMF0003_GET_MKT_FCST_DATA(8), DMF0003_GET_SPREAD_TITLE(6), PR_HEADER(4), DMF0003_SAVE_PRPOPUP(2), DMF0003_GET_MKT_FCST_COMPARE_POPUP(2), DMF0003_SAVE_MKT_FCST(2), PKG_DMF0003(2), DMF0002_GET_TITLESET_POPUP(2), PR_GET_SHEET_COLUMN_LIST(2), DMF0003_GET_PR_HISTORY_POPUP(1), DMF0003_GET_PRPOPUP(1), DMF0003_GET_BUCKET_TYPE_CODE(1), PR_GET_SHEET_MEASURE_LIST(1), PR_GET_DAY_RANGE(1), P_USER_GROUP(1), SCM0002_SET_TITLESET_POPUP(1), P_CREATED_BY(1), P_BUCKET(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | const NOTATION_FIXED3 = new Intl.NumberFormat('en-US', { | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 109 |
-| code | }); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 112 |
-| code | const NOTATION_TRIM3 = new Intl.NumberFormat('en-US', { | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 113 |
-| code | }); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 116 |
-| code | const NOTATION_INT = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 117 |
-| code | const formatQtyByNotation = (raw: unknown, notation: unknown): string => { | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 118 |
-| code | if (raw == null \|\| raw === '') return ''; | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 119 |
-| code | const n = toNumber(raw); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 120 |
-| code | const nt = toCellStr(notation).trim().toUpperCase(); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 121 |
-| code | if (nt === 'INTEGER') return NOTATION_INT.format(Math.round(n)); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 122 |
-| code | if (nt === 'POINT3') return n === 0 ? '0' : NOTATION_FIXED3.format(n); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 123 |
-| code | return NOTATION_TRIM3.format(n); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 125 |
-| code | }; | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 126 |
-| code | e.cell.textContent = formatQtyByNotation(dynVal, rowItem?.NOTATION); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1053 |
-| code | 비어 있을 수 있다(캐시 hit 이면 fetchRowParamCombo 가 즉시 return 하므로 무해). | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1566 |
-| code | g.hostElement.addEventListener('contextmenu', contextMenuHandler, { capture: true }); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1868 |
-| code | applyStaticCascade 는 비-insert('I' 아님) 행에서 즉시 return 하므로 EditTracker 에 | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1979 |
-| code | g.hostElement?.removeEventListener('contextmenu', contextMenuHandler, { capture: true }); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2051 |
+| code | 비어 있을 수 있다(캐시 hit 이면 fetchRowParamCombo 가 즉시 return 하므로 무해). | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1574 |
+| code | g.hostElement.addEventListener('contextmenu', contextMenuHandler, { capture: true }); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1876 |
+| code | applyStaticCascade 는 비-insert('I' 아님) 행에서 즉시 return 하므로 EditTracker 에 | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 1987 |
+| code | g.hostElement?.removeEventListener('contextmenu', contextMenuHandler, { capture: true }); | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx | 2059 |
 | endpoint | ⚠️ Phase 2 fallback 전용 — 정본은 admin SCM_MST_SHEET_COLUMNS 동적 fetch (fetchStaticColumns). | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts | 96 |
 | jsx | WijmoRowItem(값=WijmoPrimitive) 제약을 충족 → 공용 DataGrid 제네릭 <DataGrid<MktFcstRow>> | features/demand/src/pages/mkt-fcst/mkt-fcst.types.ts | 38 |
 | endpoint | ⭐ mount 시 1회 admin 메타 fetch (#42/#65 동적 속성관리 baseline) | features/demand/src/pages/mkt-fcst/MktFcst.tsx | 322 |

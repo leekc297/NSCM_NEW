@@ -1,0 +1,93 @@
+{
+ "menu_id": "SCP0063",
+ "asis_id": "SCP0063",
+ "area": "SCP",
+ "generated": "2026-11-05 06:14:40",
+ "division_cond": {
+  "present": true,
+  "labels": [
+   "Division*"
+  ]
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "SCP Planner": "dana.robot",
+   "SCP Tester": "lucky-alex",
+   "SCM Viewer": "zhangjiali",
+   "ADMIN": "jooyong026",
+   "SCM PI Admin": "jinseon_ahn"
+  },
+  "81": {
+   "SCP Planner": "jsh96",
+   "SCP Tester": "lucky-alex",
+   "SCM Viewer": "popiel",
+   "ADMIN": "jooyong026",
+   "SCM PI Admin": "wangyucnb"
+  },
+  "82": {
+   "SCP Planner": "jsh96",
+   "SCP Tester": "lucky-alex",
+   "SCM Viewer": "kang_huichan",
+   "ADMIN": "jooyong026",
+   "SCM PI Admin": "wangyucnb"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [
+  {
+   "label": "Plan-date",
+   "source": "AS-IS controls 라벨 *"
+  },
+  {
+   "label": "Division",
+   "source": "AS-IS controls 라벨 *"
+  },
+  {
+   "label": "Plan-type",
+   "source": "AS-IS controls 라벨 *"
+  },
+  {
+   "label": "Seq",
+   "source": "AS-IS controls 라벨 *"
+  },
+  {
+   "label": "Period",
+   "source": "AS-IS controls 라벨 *"
+  }
+ ],
+ "popup_conds": [],
+ "bucket_cond": "Bucket",
+ "observed": {
+  "source": "e2e_results.json 없음",
+  "max_rows_after_search": null,
+  "zero_row_failures": []
+ },
+ "warnings": []
+}

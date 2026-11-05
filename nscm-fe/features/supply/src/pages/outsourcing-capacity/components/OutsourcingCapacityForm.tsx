@@ -155,7 +155,6 @@ export const OutsourcingCapacityForm = ({ onSearch, onItemSearch }: Props) => {
                   }}
                   // 직접 타이핑 = Model(itemId) 수동 입력 — 팝업으로 함께 채워진 nickName 잔재를 비운다.
                   onChange={e => set({ itemId: e.target.value, nickName: '' })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

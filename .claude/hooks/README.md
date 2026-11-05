@@ -13,6 +13,7 @@
 |---|---|---|:---:|
 | `attach-context.{ps1,sh}` | **UserPromptSubmit** | (차단 없음) **v3 2026-10-12**: `!lite`/`!full` 또는 질의 판별 → **LITE** 는 1줄 안내만 / **FULL** 은 anti-simplification + `TRIGGER_ROUTER.md`(MASTER §2 추출본) + 키워드별 진입 hook 첨부, T01/T01M 은 `UI_MANDATORY_CHECKLIST.md`(§3 추출본) 추가, 합계 120KB 상한(초과분은 경로 안내). RULESET_MASTER 전문(159KB) 첨부 **중단**. ⚠ `.sh` 는 구 v2 로직(미동기) | 0 |
 | `block-dev-commands.{ps1,sh}` | **PreToolUse (Bash)** | local `pnpm/turbo/eslint` 차단 (`ALLOW_PNPM=1` 우회) | deny |
+| `check-work-mode.ps1` | **PreToolUse (Write/Edit/MultiEdit/NotebookEdit/Bash/PowerShell)** | **2026-11-02 신설** — 작업 모드 DB MODE(`tools/Harness/harness.json` repairScope=DB_ONLY)면 `nscm-fe`·`nscm-be` 수정 차단. Bash 는 명령 문자열 패턴만 판정(cd 후 상대경로·스크립트 내부 쓰기는 못 잡음). UI/DB MODE·설정 읽기 실패 = 통과 | 2 |
 | `check-rules-read.ps1` | **PreToolUse (Write/Edit/MultiEdit)** | **2026-10-12 신설** — 대상 경로별 필수 룰 hook 을 이 세션에서 읽었는지(Read 호출 또는 attach 첨부) transcript 로 검사, 미열람 시 차단 + Read 경로 안내. FE pages / FE packages / BE / `_artifacts` SQL·PY 4분류. 우회 `NSCM_SKIP_RULE_READ=1`(보고 의무) | 2 |
 | `check-dbeaver-sql.{ps1,sh}` | **PostToolUse (Write/Edit/MultiEdit)** | `*_DBeaver*.sql` SQL*Plus 토큰 | 2 |
 | `check-notnull-insert.{ps1,sh}` | **PostToolUse** | `**/sql/*.sql` INSERT NOT NULL 누락 (하드코딩 6 테이블) | 2 |

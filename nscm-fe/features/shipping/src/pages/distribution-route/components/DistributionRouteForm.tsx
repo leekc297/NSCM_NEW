@@ -64,7 +64,6 @@ export const DistributionRouteForm = ({ onSearch, onFromSearch, onToSearch }: Pr
                   fullWidth
                   value={sc.fromCountry}
                   onChange={e => set({ fromCountry: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -90,7 +89,6 @@ export const DistributionRouteForm = ({ onSearch, onFromSearch, onToSearch }: Pr
                     ),
                   }}
                   onChange={e => set({ fromCity: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -107,7 +105,6 @@ export const DistributionRouteForm = ({ onSearch, onFromSearch, onToSearch }: Pr
                   fullWidth
                   value={sc.toCountry}
                   onChange={e => set({ toCountry: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -133,7 +130,6 @@ export const DistributionRouteForm = ({ onSearch, onFromSearch, onToSearch }: Pr
                     ),
                   }}
                   onChange={e => set({ toCity: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

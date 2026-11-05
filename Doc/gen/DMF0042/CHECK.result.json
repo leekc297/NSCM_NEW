@@ -1,6 +1,6 @@
 {
  "schema": "vibe-result/1",
- "ts": "2026-10-27T15:48:33.130Z",
+ "ts": "2026-11-04T23:03:30.143Z",
  "producer": "check.js",
  "id": "DMF0042",
  "final": true,
@@ -8,7 +8,7 @@
  "state": "completed",
  "verdict": "fail",
  "summary": {
-  "block": 21,
+  "block": 24,
   "warn": 102
  },
  "issues": [
@@ -65,9 +65,48 @@
    "grade": "hard"
   },
   {
+   "id": "MS1",
+   "class": "BLOCK",
+   "msg": "AS-IS 메시지 ID 그대로 사용: MSG00043 — AS-IS '저장시 중복 오류가 발생하였습니다.{0}' / TO-BE MSG00043 = '저장시 중복 오류가 발생하였습니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+)",
+   "where": "business-plan.constants.ts",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js MS1"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "MS1",
+   "class": "BLOCK",
+   "msg": "AS-IS 메시지 ID 그대로 사용: MSG00043 — AS-IS '저장시 중복 오류가 발생하였습니다.{0}' / TO-BE MSG00043 = '저장시 중복 오류가 발생하였습니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+)",
+   "where": "utils/business-plan.save.test.ts",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js MS1"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "MS1",
+   "class": "BLOCK",
+   "msg": "AS-IS 메시지 ID 그대로 사용: MSG00043 — AS-IS '저장시 중복 오류가 발생하였습니다.{0}' / TO-BE MSG00043 = '저장시 중복 오류가 발생하였습니다.' → 문구로 찾은 TO-BE ID MSG????? (TO-BE 에 같은 문구 없음 — msg_master 신규 등록 MSG01001+)",
+   "where": "utils/business-plan.save.ts",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "check.js MS1"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
    "id": "VC1",
    "class": "BLOCK",
-   "msg": "대조표 FAIL 27행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)",
+   "msg": "대조표 FAIL 15행 (Doc/verify/DMF0042/mapping_trace.md §FAIL)",
    "where": "",
    "evidence": [
     {
@@ -80,7 +119,7 @@
   {
    "id": "VC1",
    "class": "BLOCK",
-   "msg": "대조표 미검증 9467행 — 검사 사유 REVIEW 10248 · NOT_RUN 13129 · NOPATH 4784 · TODO 146 · WARN 120 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다",
+   "msg": "대조표 미검증 8756행 — 검사 사유 ERROR 6956 · NOT_RUN 18677 · REVIEW 968 · NOPATH 467 · WARN 120 (NOT_RUN = 검사기 있음·미실행 · NOPATH = 검사기 있으나 이 대상 실행 경로 없음 · TODO = 검사기 미구현). 미검증은 PASS 가 아니다",
    "where": "",
    "evidence": [
     {

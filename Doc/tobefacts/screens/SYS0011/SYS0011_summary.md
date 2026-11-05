@@ -10,7 +10,7 @@
 | features/authority/src/pages/auth-request/auth-request.constants.ts | constants | 32 |
 | features/authority/src/pages/auth-request/auth-request.grid-utils.ts | other | 5 |
 | features/authority/src/pages/auth-request/AuthRequest.module.scss | style | 37 |
-| features/authority/src/pages/auth-request/AuthRequest.tsx | page | 379 |
+| features/authority/src/pages/auth-request/AuthRequest.tsx | page | 389 |
 | features/authority/src/pages/auth-request/components/AuthorityGrid.tsx | component | 39 |
 | features/authority/src/pages/auth-request/components/DivisionGrid.tsx | component | 40 |
 | features/authority/src/pages/auth-request/components/MyAuthorityListGrid.tsx | component | 82 |
@@ -21,10 +21,10 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| SYS0011/authority//call-proc | hook | 1 | Y | AuthRequest.tsx:57 |
-| SYS0011/division//call-proc | hook | 1 | Y | AuthRequest.tsx:65 |
-| SYS0011/myAuthorityList//call-proc | hook | 2 | Y | AuthRequest.tsx:73 AuthRequest.tsx:89 |
-| SYS0011/userInfo//call-proc | hook | 3 | Y | AuthRequest.tsx:81 AuthRequest.tsx:99 UserInfoDetail.tsx:26 |
+| SYS0011/authority//call-proc | hook | 1 | Y | AuthRequest.tsx:64 |
+| SYS0011/division//call-proc | hook | 1 | Y | AuthRequest.tsx:72 |
+| SYS0011/myAuthorityList//call-proc | hook | 2 | Y | AuthRequest.tsx:80 AuthRequest.tsx:96 |
+| SYS0011/userInfo//call-proc | hook | 3 | Y | AuthRequest.tsx:88 AuthRequest.tsx:106 UserInfoDetail.tsx:26 |
 | (useTabComboQueries) | hook | 1 | Y | UserInfoDetail.tsx:34 |
 | /admin/menu/SYS0011/column | http | 4 | Y | useAuthRequestStore.ts:74 useAuthRequestStore.ts:77 useAuthRequestStore.ts:80 useAuthRequestStore.ts:83 |
 
@@ -39,8 +39,8 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| Button | onClick | handleInsert | jsx | features/authority/src/pages/auth-request/AuthRequest.tsx | 296 |
-| Button | onClick | handleDelete | jsx | features/authority/src/pages/auth-request/AuthRequest.tsx | 304 |
+| Button | onClick | handleInsert | jsx | features/authority/src/pages/auth-request/AuthRequest.tsx | 303 |
+| Button | onClick | handleDelete | jsx | features/authority/src/pages/auth-request/AuthRequest.tsx | 311 |
 | grid | loadedRows | <arrow> applyRowSelection | addHandler | features/authority/src/pages/auth-request/components/MyAuthorityListGrid.tsx | 62 |
 | CustomDropdown | onChange | <arrow> setLangCd | jsx | features/authority/src/pages/auth-request/components/UserInfoDetail.tsx | 79 |
 | CustomDropdown | onChange | <arrow> setTmzCd | jsx | features/authority/src/pages/auth-request/components/UserInfoDetail.tsx | 92 |

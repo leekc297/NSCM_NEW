@@ -22,7 +22,13 @@ import { SalesSiteForm } from './components/SalesSiteForm';
 import { SalesSiteGrid } from './components/SalesSiteGrid';
 import { SalesSiteLocationGrid } from './components/SalesSiteLocationGrid';
 import type { RESPONSE_SET } from './sales-site.constants';
-import { MENU_ID, SHEET_INDEX, SHEETS } from './sales-site.constants';
+import {
+  MENU_ID,
+  SHEET_INDEX,
+  SHEETS,
+  SITE_NOT_SELECTED_MSG,
+  SITE_NOT_SELECTED_MSG_ID,
+} from './sales-site.constants';
 import styles from './SalesSite.module.scss';
 import { useSalesSiteStore } from './useSalesSiteStore';
 import { SALES_SITE_STALE_COMBO_IDS } from './utils/sales-site.salesSiteCombo';
@@ -152,6 +158,12 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     const scmSiteId =
       activeTab === SHEET_INDEX.SITE ? undefined : filters[SHEETS.CUSTOMER]?.salesSite;
+    // 하단 행추가는 상단 Sales Site 를 더블클릭해 하단을 조회한 뒤에만 허용한다. 조회 직후 상단 첫 행이
+    //   선택돼 보여도 하단 조회조건이 없으면 신규행 Sales Site 를 채울 값이 없다(PI 2026-10-30).
+    if (activeTab !== SHEET_INDEX.SITE && !scmSiteId) {
+      void setAlert({ type: 'alert', content: t(SITE_NOT_SELECTED_MSG_ID, SITE_NOT_SELECTED_MSG) });
+      return;
+    }
 
     // 신규행 division 은 조회조건에서 선택한 값(searchParams.divisionId)을 따른다. filters 는
     //   조회를 눌러야 채워지므로, 조회 전 행추가 때 filters 를 쓰면 undefined 로 빠져 하드코딩

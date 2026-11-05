@@ -1,4 +1,4 @@
-import { ItemByDivisionModal } from 'features/master/src/components';
+import { MaterialByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -7,9 +7,9 @@ import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
-import { confirmIfDirtyKey, tabDirtyKey, useSessionStore, useTabid } from '@shared/stores';
+import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
-import { COMBO, EXCLUDE_EE_DIVISION, LBL } from '../master-validation.constants';
+import { COMBO, EXCLUDE_EE_DIVISION, LBL, MENU_ID } from '../master-validation.constants';
 import { useMasterValidationStore } from '../useMasterValidationStore';
 
 interface Props {
@@ -17,7 +17,8 @@ interface Props {
 }
 
 // 조회조건(design 02) — Division*(Division_SCP + FE EE 제외, 단일 필수) /
-//   Plan Group(PlanGroup_SCP_ALL 전량 -> 선택 Division 클라 필터, 다중 ALL) / Model(Item 팝업).
+//   Plan Group(PlanGroup_SCP_ALL 전량 -> 선택 Division 클라 필터, 다중 ALL) /
+//   Model/Nickname(MaterialByDivisionModal COM0013, 다건 — SCP0039.md v0.5 변경=O).
 export const MasterValidationForm = ({ onSearch }: Props) => {
   const { t } = useTranslation();
 
@@ -46,15 +47,15 @@ export const MasterValidationForm = ({ onSearch }: Props) => {
     [planGroupsRaw, searchParams.divisionId]
   );
 
-  // Division 기본값 교정 — 권한목록(EE 제외)에 session.div 있으면 그 값, 없으면 첫 행(AS-IS 단일 강제선택).
-  const session = useSessionStore(state => state.session);
+  // Division 기본값 교정 — AS-IS(cboDivision 바인딩 후 SelectedIndex=0)와 동일하게 권한목록(EE 제외,
+  //   Division_SCP ORDER BY ATTRIBUTE1)의 첫 행을 강제 선택한다. session.div 가 아니라 목록 첫 행이
+  //   기준(AS-IS GetDivisionWithoutEE + 단일콤보 기본선택, design 02 §2 #1).
   useEffect(() => {
     if (searchParams.divisionId) return;
     const codes = (divisions ?? []).map(item => String(item.CODE ?? '')).filter(Boolean);
     if (codes.length === 0) return;
-    const sessionDiv = String(session.div ?? '');
-    setDivision(codes.includes(sessionDiv) ? sessionDiv : codes[0]);
-  }, [divisions, searchParams.divisionId, session.div, setDivision]);
+    setDivision(codes[0]);
+  }, [divisions, searchParams.divisionId, setDivision]);
 
   return (
     <>
@@ -116,15 +117,19 @@ export const MasterValidationForm = ({ onSearch }: Props) => {
                 )}
               />
             </Grid>
-            {/* Model/Item — 텍스트 + 돋보기 팝업(선택적, design 02 §4.6) */}
+            {/* Model/Nickname — 텍스트(다건) + 돋보기 팝업(선택적). SCP0039.md 조회조건 정리(v0.5)
+                변경=O: 명칭 Model -> Model/Nickname, 팝업 ItemByDivisionModal -> MaterialByDivisionModal(COM0013).
+                다건(개행/콤마) 입력 — 팝업 다건 선택 시 ITEM_ID csv 를 itemId(p_item_id)에 채운다. */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t(LBL.MODEL, '_Model')}
+                label={t(LBL.MODEL_NICKNAME, '_Model/Nickname')}
                 labelAlign='right'
                 render={() => (
                   <InputField
                     fullWidth
+                    multiline
+                    maxRows={3}
                     disabled={noDivisionAuth}
                     className={commonStyles.popupSearchField}
                     value={searchParams.itemId}
@@ -134,12 +139,8 @@ export const MasterValidationForm = ({ onSearch }: Props) => {
                           appearance='outlined'
                           priority='normal'
                           disabled={noDivisionAuth}
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => !noDivisionAuth && setOpenItemModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => !noDivisionAuth && setOpenItemModal(true)}
                         />
                       ),
                     }}
@@ -152,20 +153,20 @@ export const MasterValidationForm = ({ onSearch }: Props) => {
         }
       />
 
-      {/* Item by Division 공용 팝업(AS-IS DM0002_ItembyDivisionPopupEx = COM0008, design 02 §4.6).
-          preSearchParams: divisionId + team/endCustomer/salesSite='ALL' / project=''. */}
-      <ItemByDivisionModal
+      {/* Material by Division 공용 팝업(COM0013, SCM0002_MaterialByDivisionPopup). SCP0039.md 조회조건
+          정리(v0.5) 변경=O 로 ItemByDivisionModal(COM0008)에서 교체. 다건 선택(multiCheckbox) → ITEM_ID csv 를
+          itemId 로 채운다. Division 단일이라 multiDivision 불요. preSearchParams: divisionId + scpModuleType=MENU_ID. */}
+      <MaterialByDivisionModal
         open={openItemModal}
         modalClose={() => setOpenItemModal(false)}
-        setSelectedValue={itemId => setSearchParams({ itemId })}
+        setSelectedValue={items => setSearchParams({ itemId: items })}
+        multiCheckbox
         preSearchParams={{
           divisionId: searchParams.divisionId,
-          deptId: 'ALL',
-          endCustomer: 'ALL',
-          salesSite: 'ALL',
-          projectCode: '',
+          operationGroup: '',
+          scpModuleType: MENU_ID,
+          itemId: searchParams.itemId,
         }}
-        callFromCell={false}
       />
     </>
   );

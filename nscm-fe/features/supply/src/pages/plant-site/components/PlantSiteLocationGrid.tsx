@@ -153,35 +153,30 @@ export const PlantSiteLocationGrid = ({
     }
   };
 
-  // R-31(G4): 붙여넣기 시 표시명(name)을 콤보 dataMap 으로 역조회해 code 로 치환(AS-IS cs:2209-2232).
-  //   AS-IS 는 미일치 시 FirstOrDefault NullReference — TO-BE 는 §6-8② 교정으로 셀 클리어+경고.
+  // R-31(G4): 붙여넣기 표시명(name)->코드(code) 역매핑과 "후보 밖 값 클리어"는 공용 DataGrid 가
+  //   담당한다(wijmo dataMap coerce + clearOutOfListComboOnPaste). 과거 이 핸들러가 getKeyValue 로
+  //   한 번 더 역조회했는데, 공용이 이미 코드로 바꿔 둔 값을 '이름'으로 간주해 재역조회하는 바람에
+  //   드롭다운에 있는 유효 값까지 "존재하지 않음"으로 지워졌다(2026-10-29 실사고, Location·Building 등).
+  //   여기서는 (a) 후보 밖이라 공용이 셀을 비웠으면 경고만 띄우고({0}=컬럼 라벨명), (b) 파생
+  //   cascade(코드/명칭·하위 리셋)를 태운다. (빈 값을 붙여넣어 비는 드문 경우에도 경고가 뜰 수 있다.)
   const handlePaste = (grid: FlexGrid<LocationRow>, e: CellRangeEventArgs) => {
     const binding = grid.columns[e.col]?.binding;
-    const row = GridUtils.getRow(grid, e.row) as (LocationRow & Record<string, unknown>) | null;
+    const row = GridUtils.getRow(grid, e.row);
     if (!binding || !row) return;
 
-    if (PASTE_REVERSE_BINDINGS.includes(binding)) {
-      const dm = grid.columns.getColumn(binding)?.dataMap;
-      const pasted = str(row[binding]);
-      if (dm && pasted) {
-        // getKeyValue: 표시명(name) -> 코드(code). AS-IS 는 붙여넣은 값을 name 으로 간주해 역조회한다.
-        const code = dm.getKeyValue(pasted) as unknown;
-        if (code === null || code === undefined || str(code) === '') {
-          row[binding] = '';
-          if (binding === 'LOCATION_CODE2') row.LOCATION_CODE = '';
-          if (binding === 'FACTORY_ID2') row.FACTORY_ID = '';
-          if (binding === 'OPERATION_ID2') row.OPERATION_ID = '';
-          void setAlert({
-            type: 'alert',
-            content: t(MSG.PASTE_NOT_FOUND, '_목록에 없는 값입니다.', { 0: pasted }),
-          });
-          GridUtils.refreshRow(grid, e.row);
-          return;
-        }
-        row[binding] = str(code);
-      }
+    if (
+      PASTE_REVERSE_BINDINGS.includes(binding) &&
+      str((row as Record<string, unknown>)[binding]) === ''
+    ) {
+      void setAlert({
+        type: 'alert',
+        // DB 메시지 자리표시는 `{0}`(i18next `{{ }}` 보간이 아님)이라 직접 치환한다({0}=컬럼 라벨명).
+        content: t(MSG.PASTE_NOT_FOUND, '_목록에 없는 값입니다.').replace(
+          '{0}',
+          str(grid.columns[e.col]?.header) || binding
+        ),
+      });
     }
-    // 코드 치환 후 정방향 cascade(코드/명칭 파생·하위 리셋) 를 그대로 태운다.
     handleCellEdit(grid, e);
   };
 

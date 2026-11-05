@@ -38,6 +38,38 @@ export const weekNoOf = (binding: string): string =>
   dynKindOf(binding) === 'W' ? binding.slice(8, 10) : '';
 
 /**
+ * ISO 8601 주차 (월요일 기준) — D_yyyymmdd 의 소속 주 계산용(자매 SCP0017 isoWeekOfDate 동형).
+ *   8자리 yyyymmdd 아니면 NaN.
+ */
+const isoWeekOfDate = (yyyymmdd: string): number => {
+  const d = new Date(
+    Date.UTC(+yyyymmdd.slice(0, 4), +yyyymmdd.slice(4, 6) - 1, +yyyymmdd.slice(6, 8))
+  );
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+};
+
+/**
+ * 2단(주) 그룹 키 — 라벨(small)이 아니라 binding 에서 뽑는다. W_ 롤업(주합)과 그 주의 D_ 일자들이
+ *   같은 키를 공유해야 'Wxx' 2단 헤더가 한 칸으로 가로 병합된다(자매 SCP0017 weekKeyOf 동형). W_ 는
+ *   인코딩된 ISO주차(slice 8,10), D_ 는 날짜에서 ISO주차 계산 — 같은 주면 두 값이 일치한다. M_ 등은 ''.
+ *   종전엔 D_ 를 월 단위 상수 키(`large:D`)로 둬 W_ 롤업(`large:Wxx`)과 키가 달라, Sum 체크로 W_ 가
+ *   보일 때 'W35' 2단 헤더가 주합계 칸과 일자 칸으로 쪼개졌다(SCP0016 실측 — W_ 는 slice(8,10) 이 ISO_WEEK,
+ *   '_ISO' 접미는 경계 밖이라 비ISO/ISO 공통으로 파싱 영향 없음).
+ */
+export const weekKeyOf = (binding: string): string => {
+  const kind = dynKindOf(binding);
+  if (kind === 'W') return binding.slice(8, 10);
+  if (kind === 'D') {
+    const wk = isoWeekOfDate(binding.slice(2, 10));
+    return Number.isNaN(wk) ? '' : String(wk).padStart(2, '0');
+  }
+  return '';
+};
+
+/**
  * BucketType 별 기간칼럼 기본 표시 (AS-IS SetSpreadColumn SCP0016.cs:1213-1281 1:1). chkSum = Daily/Weekly 의 W_/M_ 합계 토글.
  *   Daily      : D 표시 · W = chkSum · M = chkSum
  *   Weekly     : D 숨김 · W 표시 · M = chkSum

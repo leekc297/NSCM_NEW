@@ -9,7 +9,7 @@
 |---|---|---|
 | features/demand/src/components/versionModal/version-modal.api.ts | api | 85 |
 | features/demand/src/components/versionModal/version-modal.constants.ts | constants | 77 |
-| features/demand/src/components/versionModal/VersionModal.module.scss | style | 131 |
+| features/demand/src/components/versionModal/VersionModal.module.scss | style | 103 |
 | features/demand/src/components/versionModal/VersionModal.tsx | page | 660 |
 | features/demand/src/components/versionModal/versionModalStore.ts | store | 32 |
 

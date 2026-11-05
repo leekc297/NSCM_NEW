@@ -157,7 +157,7 @@ async function collectInputs(task, preset) {
       const pick = await vscode.window.showQuickPick(inp.options.map(o => typeof o === 'string' ? { label: o } : { label: o.value || o.label, description: o.description || '' }), { placeHolder: inp.prompt || inp.name, ignoreFocusOut: true });
       if (!pick) return null; vars.inputs[inp.name] = pick.label; continue;
     }
-    const v = await vscode.window.showInputBox({ prompt: inp.prompt || inp.name, value: inp.default || ctx.workspaceState.get('vibeManager.lastId', ''), ignoreFocusOut: true, validateInput: s => (inp.required !== false && !s.trim()) ? '값을 입력하세요' : null });
+    const v = await vscode.window.showInputBox({ prompt: inp.prompt || inp.name, value: inp.default || workbench.currentId() || ctx.workspaceState.get('vibeManager.lastId', ''), ignoreFocusOut: true, validateInput: s => (inp.required !== false && !s.trim()) ? '값을 입력하세요' : null });
     if (v == null) return null; vars.inputs[inp.name] = v.trim();
     if (/^ids?$/.test(inp.name)) ctx.workspaceState.update('vibeManager.lastId', v.trim().split(/\s+/)[0]);
   }
@@ -309,13 +309,12 @@ async function quickScreen() {
   const id = await vscode.window.showInputBox({ prompt: '화면(프로그램) ID', value: ctx.workspaceState.get('vibeManager.lastId', 'DMF0052'), ignoreFocusOut: true });
   if (!id) return; const ID = id.trim().toUpperCase(); ctx.workspaceState.update('vibeManager.lastId', ID); if (dodTree) dodTree.refresh();
   const p = paths(); const has = f => fs.existsSync(f);
-  const st = { pack: has(path.join(p.outDir, 'screens', ID)), agent: has(path.join(p.outDir, 'agent', ID, '_gate.csv')), gen: has(path.join(p.genDir, ID, 'GEN_NOTES.md')), gap: has(path.join(p.gapDir, `${ID}_gap.csv`)) };
+  const st = { pack: has(path.join(p.outDir, 'screens', ID)), agent: has(path.join(p.outDir, 'agent', ID, '_gate.csv')), gen: has(path.join(p.genDir, ID, 'GEN_NOTES.md')), };
   const pageDir = (() => { if (!st.gen) return ''; try { const r = JSON.parse(fs.readFileSync(path.join(p.genDir, ID, 'register.json'), 'utf8')); return path.join(p.tobeDir, 'features', ...r.routePath.split('/').flatMap((s, i) => i === 0 ? [s, 'src', 'pages'] : [s])); } catch (_) { return ''; } })();
   const mark = b => b ? '$(pass-filled)' : '$(circle-large-outline)';
   const items = [
     { label: `${mark(st.pack)} 1 As-is Fact Pack 열기`, description: st.pack ? 'Doc/asisfacts/screens/' + ID : '없음 — pack 먼저', run: () => openPath(path.join(p.outDir, 'screens', ID)) },
     { label: `${mark(st.agent)} 3 Agent 문서 생성/열기`, description: st.agent ? '게이트 결과 있음 → 열기' : '실행 (분석서 5종 + 문서 3종)', run: () => st.agent ? openPath(path.join(p.outDir, 'agent', ID)) : runTask(findTask('S3.agent'), { ids: ID }) },
-    { label: `${mark(st.gap)} 4 GAP 실행/열기`, description: st.gap ? 'Doc/gap/' + ID + '_gap.csv' : 'As-is↔To-Be 대사 실행', run: () => st.gap ? openPath(path.join(p.gapDir, `${ID}_gap.csv`)) : runTask(findTask('S4.one'), { ids: ID }) },
     { label: `${mark(st.gen)} 5 신규 화면 골격 생성 (new-screen.ps1)`, description: st.gen ? 'GEN_NOTES 있음 → 열기' : '골격 생성 + nscm-fe 적용 + 1차 게이트', run: () => st.gen ? openPath(path.join(p.genDir, ID, 'GEN_NOTES.md')) : runTask(findTask('S5.new'), { id: ID }) },
     { label: `$(sparkle) 5 Claude Code 로 TODO 이식`, description: st.gen ? '프롬프트 자동 전달' : 'GEN_NOTES 없음 — 골격 먼저', run: () => runTask(findTask('S5.claude'), { id: ID }) },
     { label: `$(checklist) 5 게이트 판정 / 최종(--final)`, description: pageDir || '페이지 폴더 미확인', run: async () => { const f = await vscode.window.showQuickPick(['게이트 판정', '최종 게이트 (--final)'], {}); if (!f) return; runTask(findTask(f.startsWith('최종') ? 'S5.final' : 'S5.check'), { dir: pageDir }); } },
@@ -325,7 +324,6 @@ async function quickScreen() {
     { label: `$(sync) 5 자동 수선 루프 (gen→Claude→게이트 ×3)`, description: has(path.join(p.genDir, ID, 'REPAIR.md')) ? 'REPAIR.md 있음 → 재실행' : '사람 개입 없이 PASS 까지', run: () => runTask(findTask('S5.repair'), { ids: ID }) },
     { label: `$(beaker) 4 골든 테스트 (As-is SP ↔ To-Be PROC 결과 대조)`, description: has(path.join(p.goldenDir, ID)) ? 'Doc/golden/' + ID : '케이스 생성 후 실행', run: () => runTask(findTask('S4.golden'), { ids: ID }) },
     { label: `$(rocket) ★ ID 하나로 전체 (파싱→분석→생성→보완→테스트→문서)`, description: '순차 체인 — 실패 단계에서 멈추고 Doc/gen/<ID>/FULLRUN.md', run: async () => { const it = (promptPanel.loadQuick(p.extDir, p.root).groups || []).flatMap(g => g.items).find(x => x.chainId === 'full'); if (!it) return vscode.window.showWarningMessage('quick.json 에 chainId=full 항목이 없습니다'); await vscode.commands.executeCommand('vibeManager.openWorkbench'); await workbench.quick(it, ID, false); } },
-    { label: `$(play-circle) 7 E2E 전체 4단계 (Smoke·CRUD·권한·권한별 CRUD)`, description: has(path.join(p.e2eOutDir, 'specs', `${ID}.smoke.spec.ts`)) ? '스펙 있음 → 실행' : '스펙 생성 + 실행 (FE/BE 기동 필요)', run: () => runTask(findTask('S7.all'), { ids: ID }) }
   ];
   const pick = await vscode.window.showQuickPick(items, { placeHolder: `${ID} — 어느 단계 작업?`, matchOnDescription: true }); if (pick) await pick.run();
 }
@@ -409,7 +407,7 @@ class DodProvider {
   constructor() { this._em = new vscode.EventEmitter(); this.onDidChangeTreeData = this._em.event; }
   refresh() { this._em.fire(); }
   getTreeItem(el) { return el; }
-  id() { return ctx.workspaceState.get('vibeManager.lastId', ''); }
+  id() { return workbench.currentId() || ctx.workspaceState.get('vibeManager.lastId', ''); }  // 1.9.28+: 현재 창 ID 우선
   getChildren(el) {
     const p = paths(); if (!p.root) return []; const ID = this.id();
     if (!el) {
@@ -513,7 +511,7 @@ async function checkEnv() {
   const p = paths(); const lines = [`# 환경 점검 — ${new Date().toLocaleString()}`, ''];
   const tryCmd = (cmd, args) => { try { return cp.execFileSync(cmd, args, { encoding: 'utf8', timeout: 15000, shell: process.platform === 'win32' }).trim().split(/\r?\n/)[0]; } catch (e) { return `✗ ${e.message.split('\n')[0]}`; } };
   lines.push(`- node: ${tryCmd(p.node, ['--version'])}`, `- dotnet: ${tryCmd('dotnet', ['--version'])}`, `- python: ${tryCmd('python', ['--version'])}`, `- git: ${tryCmd('git', ['--version'])}`, `- claude: ${tryCmd(p.claude, ['--version'])}`, '');
-  for (const [l, f] of [['As-is 파서', path.join(p.toolsDir, 'run.ps1')], ['To-Be 파서', path.join(p.root, 'tools', 'TobeFacts', 'run.ps1')], ['하네스', path.join(p.harnessDir, 'gen.js')], ['typescript(nscm-fe)', path.join(p.tobeDir, 'node_modules', 'typescript', 'lib', 'typescript.js')], ['As-is Fact Pack', path.join(p.outDir, 'screens', '_index.csv')], ['To-Be Fact', path.join(p.tobeOutDir, 'screens', '_index.csv')], ['클라우드 메타 CSV', path.join(p.tobeOutDir, 'db', 'proc_meta.csv')], ['GAP', path.join(p.gapDir, '_summary.csv')]]) lines.push(`- ${l}: ${fs.existsSync(f) ? '✓' : '✗ 없음'} \`${f}\``);
+  for (const [l, f] of [['As-is 파서', path.join(p.toolsDir, 'run.ps1')], ['To-Be 파서', path.join(p.root, 'tools', 'TobeFacts', 'run.ps1')], ['하네스', path.join(p.harnessDir, 'gen.js')], ['typescript(nscm-fe)', path.join(p.tobeDir, 'node_modules', 'typescript', 'lib', 'typescript.js')], ['As-is Fact Pack', path.join(p.outDir, 'screens', '_index.csv')], ['To-Be Fact', path.join(p.tobeOutDir, 'screens', '_index.csv')], ['클라우드 메타 CSV', path.join(p.tobeOutDir, 'db', 'proc_meta.csv')]]) lines.push(`- ${l}: ${fs.existsSync(f) ? '✓' : '✗ 없음'} \`${f}\``);
   const dir = path.join(p.vibeDir, 'reports'); fs.mkdirSync(dir, { recursive: true }); const file = path.join(dir, 'env_check.md'); fs.writeFileSync(file, lines.join('\n') + '\n', 'utf8');
   await openPath(file);
 }
@@ -600,7 +598,14 @@ function activate(context) {
     vscode.commands.registerCommand('vibeManager.refreshPrompt', () => vscode.commands.executeCommand('vibeManager.openWorkbench')),
     // 1.7.3: 사이드바 = 워크벤치와 동일한 전체 메뉴 1개 (구 4개 뷰 내용은 카테고리로 포함)
     vscode.window.registerTreeDataProvider('vibeManager.menu', menuTree),
-    vscode.commands.registerCommand('vibeManager.runQuick', async item => { if (!item) return; await vscode.commands.executeCommand('vibeManager.openWorkbench'); await workbench.quick(item, ctx.workspaceState.get('vibeManager.lastId', ''), false); }),
+    vscode.commands.registerCommand('vibeManager.runQuick', async item => { if (!item) return; await vscode.commands.executeCommand('vibeManager.openWorkbench'); await workbench.quick(item, workbench.currentId() || ctx.workspaceState.get('vibeManager.lastId', ''), false); }),
+    // 2026-10-28 상단 아이콘(사용자 지정): quick.json 메뉴를 label 접두로 찾아 runQuick 으로 실행 — view/title 메뉴는 인자를 못 넘겨 아이콘마다 명령 1개
+    ...[['vibeManager.qRestart', '🔄 BE & FE Finish & Start'], ['vibeManager.qSourceSync', '⬇️🔀 Source Download & Merge'], ['vibeManager.qFullChain', '🚀 ID 하나로 전체'], ['vibeManager.qCheckList', '🔎 CheckList']]
+      .map(([cmd, pre]) => vscode.commands.registerCommand(cmd, () => {
+        const it = promptPanel.loadQuick(paths().extDir, paths().root).groups.flatMap(g => g.items || []).find(x => String(x.label || '').startsWith(pre));
+        if (!it) { vscode.window.showWarningMessage(`Vibe_Manager: quick.json 에 '${pre}' 메뉴가 없습니다`); return; }
+        return vscode.commands.executeCommand('vibeManager.runQuick', it);
+      })),
     vscode.commands.registerCommand('vibeManager.refresh', () => { tree.refresh(); refreshDashboard(); }),
     vscode.commands.registerCommand('vibeManager.runTask', (node, preset) => runTask(typeof node === 'string' ? findTask(node) : (node && node.task ? node.task : null), preset)),
     vscode.commands.registerCommand('vibeManager.quickScreen', quickScreen),
@@ -608,6 +613,7 @@ function activate(context) {
     vscode.commands.registerCommand('vibeManager.openWorkbench', () => { workbench.open(wbApi()); }),
     vscode.commands.registerCommand('vibeManager.openWorkbenchNew', () => { workbench.open(wbApi(), { fresh: true }); }),
     vscode.commands.registerCommand('vibeManager.openFlow', async () => { await vscode.commands.executeCommand('vibeManager.openWorkbench'); if (workbench.openFlowTab()) return; return flowPanel.open({ paths, runTaskById: (tid, preset) => runTask(findTask(tid), preset), openPath }); }),
+    vscode.commands.registerCommand('vibeManager.openTaskHistory', async () => { await vscode.commands.executeCommand('vibeManager.openWorkbench'); workbench.showTab('thist'); }),
     vscode.commands.registerCommand('vibeManager.openHistory', async () => { await vscode.commands.executeCommand('vibeManager.openWorkbench'); if (workbench.showTab('hist')) return; return history.open({ paths, openPath }); }),
     vscode.commands.registerCommand('vibeManager.gateReport', gateReport),
     vscode.commands.registerCommand('vibeManager.openOutputFolder', () => openPath(paths().outDir)),

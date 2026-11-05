@@ -22,10 +22,14 @@ const str = (v: unknown): string =>
 const toOptions = (rows: ComboResponse[] | LookupResponse[] | undefined) =>
   (rows ?? []).map(r => ({ label: str(r.NAME) || str(r.CODE), value: str(r.CODE) }));
 
-// design 02 (02_search-combo.md) §1 조회조건 5항목:
-//   Division(고정 "40"+disabled) / Plant Site(다중, Division EE 분기 SQL_ID 2종) /
-//   Inventory Type(단일 lookup INV_TYPE) / Plan-date*(단일, SQL_ID 확인 필요) /
-//   Model(=Item ID, 입력+팝업).
+// design 02 (02_search-combo.md) §1 조회조건 5항목. 렌더 순서는 AS-IS 시각 배치(Designer 픽셀)
+//   그대로 맞춘다(사용자 결정 2026-10-29): Division(x0) → Plant Site(x232) → Model(=Item ID, x393)
+//   → Inventory Type(x590) → Plan-date*(2행 단독, x0/y28). SearchArea 가 Grid size={3}(한 행 4칸)이라
+//   Plan Date 가 2행에 단독으로 떨어져 AS-IS 2행 레이아웃과 일치한다. 설계문서(§5)는 AS-IS tabIndex
+//   (Inventory Type=3 < Model=4)를 따라 Inventory Type 을 앞에 뒀으나 "순서 기준"을 명시한 문서 근거가
+//   없어, AS-IS 화면 배치를 우선 적용했다.
+//   Division(고정 "40"+disabled) / Plant Site(다중, EE 분기 SQL_ID 2종) /
+//   Model(=Item ID, 입력+팝업) / Inventory Type(단일 lookup INV_TYPE) / Plan-date*(PlanDateShip).
 export const InventoryRawForm = ({ onSearch, onItemSearch }: Props) => {
   const { t } = useTranslation();
 
@@ -97,11 +101,12 @@ export const InventoryRawForm = ({ onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* Plant Site — 다중선택, Division cascade 재조회(design 02 §3#1). */}
+          {/* From Site(=AS-IS Plant Site, 라벨만 변경·사용자 결정 2026-10-30, DMF0045 선례) — 다중선택,
+              Division cascade 재조회(design 02 §3#1). 콤보 원천·필드·SP 파라미터는 Plant Site 그대로. */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.PLANT_SITE, '_Plant Site')}
+              label={t(LBL.FROM_SITE, '_From Site')}
               labelAlign='right'
               render={() => (
                 <CustomDropdown
@@ -123,24 +128,8 @@ export const InventoryRawForm = ({ onSearch, onItemSearch }: Props) => {
             />
           </Grid>
 
-          {/* Inventory Type — 단일선택, 기본선택 없음(design 02 §4). */}
-          <Grid size={3}>
-            <FormItem
-              className={commonStyles.formItem}
-              label={t(LBL.INVENTORY_TYPE, '_Inventory Type')}
-              labelAlign='right'
-              render={() => (
-                <CustomDropdown
-                  allOption
-                  value={sc.inventoryType}
-                  options={inventoryTypeOptions}
-                  onChange={(_, picked) => set({ inventoryType: String(picked ?? 'ALL') })}
-                />
-              )}
-            />
-          </Grid>
-
-          {/* Model/Nickname(=Item ID) — 텍스트 + 팝업(공용 MaterialByDivisionModal, design 02 §4.6). */}
+          {/* Model/Nickname(=Item ID) — 텍스트 + 팝업(공용 MaterialByDivisionModal, design 02 §4.6).
+              AS-IS 시각 배치상 Inventory Type(Designer x590)보다 앞(x393)이라 여기에 둔다(순서 주석 참조). */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -156,12 +145,29 @@ export const InventoryRawForm = ({ onSearch, onItemSearch }: Props) => {
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' onClick={onItemSearch} />}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
+                />
+              )}
+            />
+          </Grid>
+
+          {/* Inventory Type — 단일선택, 기본선택 없음(design 02 §4). */}
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t(LBL.INVENTORY_TYPE, '_Inventory Type')}
+              labelAlign='right'
+              render={() => (
+                <CustomDropdown
+                  allOption
+                  value={sc.inventoryType}
+                  options={inventoryTypeOptions}
+                  onChange={(_, picked) => set({ inventoryType: String(picked ?? 'ALL') })}
                 />
               )}
             />

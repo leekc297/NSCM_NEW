@@ -1,0 +1,254 @@
+== _prof_PKG_DMF0082_1104_minyonglee1_div40.trc.txt cursor 140585957656272 len 26435
+    1 p  0           0 TEMP TABLE TRANSFORMATION  (cr=10373377 pr=0 pw=0 str=1 time=59477098 dr=0 dw=0 us)             cr=         0 t=    0.00
+    2 p  1           0 LOAD AS SELECT (CURSOR DURATION MEMORY) SYS_TEMP_0FD9D9955_49C63B (cr=10364909 pr=0 pw=0 str=1  cr=         0 t=    0.00
+    3 p  2     156,518 UNION-ALL  (cr=10364909 pr=0 pw=0 str=1 time=3519801 dr=0 dw=0 us)                              cr=         0 t=    0.00
+    4 p  3       4,775 FILTER  (cr=9403 pr=0 pw=0 str=1 time=71342 dr=0 dw=0 us)                                       cr=         0 t=    0.00
+    5 p  4       4,775 HASH JOIN  (cr=9403 pr=0 pw=0 str=1 time=70836 dr=0 dw=0 us cost=12863 size=172418688 card=1429 cr=         0 t=    0.00
+    6 p  5          10 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=31 dr=0 dw=0 us cos cr=         0 t=    0.00
+    7 p  5      47,573 HASH JOIN  (cr=9400 pr=0 pw=0 str=1 time=93588 dr=0 dw=0 us cost=12860 size=166458924 card=1429 cr=         0 t=    0.00
+    8 p  7          14 TABLE ACCESS FULL GT_DMF0082_T_WS_FCST (cr=3 pr=0 pw=0 str=1 time=15 dr=0 dw=0 us cost=2 size=1 cr=         0 t=    0.00
+    9 p  7      47,573 HASH JOIN  (cr=9397 pr=0 pw=0 str=1 time=85316 dr=0 dw=0 us cost=12858 size=165001140 card=1429 cr=         0 t=    0.00
+   10 p  9      47,573 HASH JOIN RIGHT OUTER (cr=8690 pr=0 pw=0 str=1 time=47985 dr=0 dw=0 us cost=2894 size=59194500  cr=         0 t=    0.00
+   11 p 10       1,829 TABLE ACCESS FULL GT_DMF0082_T_LAST_DATA_SETUP_FCST (cr=27 pr=0 pw=0 str=1 time=139 dr=0 dw=0 u cr=         0 t=    0.00
+   12 p 10      47,573 TABLE ACCESS FULL DM_PLN_CFM_MKT_DEMAND_PLAN (cr=8663 pr=0 pw=0 str=1 time=33876 dr=0 dw=0 us c cr=         0 t=    0.00
+   13 p  9      15,056 TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM (cr=707 pr=0 pw=0 str=1 time=5824 dr=0 dw=0 us cost cr=         0 t=    0.00
+   14 p  3       1,221 FILTER  (cr=10325550 pr=0 pw=0 str=1 time=4508004 dr=0 dw=0 us)                                 cr=         0 t=    0.00
+   15 p 14       1,221 NESTED LOOPS OUTER (cr=10325550 pr=0 pw=0 str=1 time=4507877 dr=0 dw=0 us cost=209 size=12052 c cr=         0 t=    0.00
+   16 p 15       1,221 NESTED LOOPS  (cr=10324811 pr=0 pw=0 str=1 time=4504315 dr=0 dw=0 us cost=207 size=10885 card=1 cr=         0 t=    0.00
+   17 p 16     210,784 MERGE JOIN CARTESIAN (cr=713 pr=0 pw=0 str=1 time=128280 dr=0 dw=0 us cost=196 size=10791 card= cr=         0 t=    0.00
+   18 p 17          14 MERGE JOIN CARTESIAN (cr=6 pr=0 pw=0 str=1 time=69 dr=0 dw=0 us cost=4 size=519 card=1)         cr=         0 t=    0.00
+   19 p 18           1 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=34 dr=0 dw=0 us cos cr=         0 t=    0.00
+   20 p 18          14 BUFFER SORT (cr=3 pr=0 pw=0 str=1 time=15 dr=0 dw=0 us cost=2 size=1428 card=14)                cr=         0 t=    0.00
+   21 p 20          14 TABLE ACCESS FULL GT_DMF0082_T_WS_FCST (cr=3 pr=0 pw=0 str=1 time=9 dr=0 dw=0 us cost=2 size=14 cr=         0 t=    0.00
+   22 p 17     210,784 BUFFER SORT (cr=707 pr=0 pw=0 str=14 time=105183 dr=0 dw=0 us cost=194 size=146807424 card=1429 cr=         0 t=    0.00
+   23 p 22      15,056 TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM (cr=707 pr=0 pw=0 str=1 time=5341 dr=0 dw=0 us cost cr=         0 t=    0.00
+   24 p 16       1,221 TABLE ACCESS BY INDEX ROWID BATCHED DM_PLN_CFM_MKT_DEMAND_PLAN (cr=10324098 pr=0 pw=0 str=21078 cr=         0 t=    0.00
+   25 p 24       1,221 INDEX RANGE SCAN PK_DM_PLN_CFM_MKT_DEMAND_PLAN (cr=10323774 pr=0 pw=0 str=210784 time=56600564  cr=         0 t=    0.00
+   26 p 15       1,221 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_T_LAST_DATA_SETUP_FCST (cr=739 pr=0 pw=0 str=122 cr=         0 t=    0.00
+   27 p 26       1,221 INDEX RANGE SCAN IX_GT82_LDS_FCST_PERF (cr=483 pr=0 pw=0 str=1221 time=2363 dr=0 dw=0 us cost=1 cr=         0 t=    0.00
+   28 p  3     150,522 VIEW  (cr=29234 pr=0 pw=0 str=1 time=825695 dr=0 dw=0 us cost=39268 size=109491525 card=10209)  cr=         0 t=    0.00
+   29 p 28     157,230 WINDOW SORT (cr=29234 pr=0 pw=0 str=1 time=792207 dr=0 dw=0 us cost=39268 size=111288309 card=1 cr=         0 t=    0.00
+   30 p 29     157,230 FILTER  (cr=29234 pr=0 pw=0 str=1 time=266656 dr=0 dw=0 us)                                     cr=         0 t=    0.00
+   31 p 30     157,230 HASH JOIN  (cr=29234 pr=0 pw=0 str=1 time=265056 dr=0 dw=0 us cost=16129 size=111288309 card=10 cr=         0 t=    0.00
+   32 p 31          10 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=42 dr=0 dw=0 us cos cr=         0 t=    0.00
+   33 p 31     157,230 HASH JOIN  (cr=29231 pr=0 pw=0 str=1 time=253022 dr=0 dw=0 us cost=16127 size=107031156 card=10 cr=         0 t=    0.00
+   34 p 33     157,800 HASH JOIN  (cr=28524 pr=0 pw=0 str=1 time=114212 dr=0 dw=0 us cost=7842 size=22910628 card=1080 cr=         0 t=    0.00
+   35 p 34          14 SORT UNIQUE (cr=3 pr=0 pw=0 str=1 time=31 dr=0 dw=0 us cost=2 size=1428 card=14)                cr=         0 t=    0.00
+   36 p 35          14 TABLE ACCESS FULL GT_DMF0082_T_WS_FCST (cr=3 pr=0 pw=0 str=1 time=19 dr=0 dw=0 us cost=2 size=1 cr=         0 t=    0.00
+   37 p 34     157,833 TABLE ACCESS FULL DM_PLN_CFM_SELLING_PRICE (cr=28521 pr=0 pw=0 str=1 time=90485 dr=0 dw=0 us co cr=         0 t=    0.00
+   38 p 33      15,056 TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM (cr=707 pr=0 pw=0 str=1 time=6564 dr=0 dw=0 us cost cr=         0 t=    0.00
+   39 p  3           0 FILTER  (cr=9 pr=0 pw=0 str=1 time=286 dr=0 dw=0 us)                                            cr=         0 t=    0.00
+   40 p 39           0 HASH JOIN  (cr=9 pr=0 pw=0 str=1 time=283 dr=0 dw=0 us cost=477 size=3305203 card=269)          cr=         0 t=    0.00
+   41 p 40          10 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=48 dr=0 dw=0 us cos cr=         0 t=    0.00
+   42 p 40           0 HASH JOIN  (cr=6 pr=0 pw=0 str=1 time=145 dr=0 dw=0 us cost=475 size=3010344 card=258)          cr=         0 t=    0.00
+   43 p 42           0 HASH JOIN OUTER (cr=6 pr=0 pw=0 str=1 time=113 dr=0 dw=0 us cost=282 size=360168 card=258)      cr=         0 t=    0.00
+   44 p 43           0 HASH JOIN  (cr=6 pr=0 pw=0 str=1 time=89 dr=0 dw=0 us cost=273 size=59082 card=258)             cr=         0 t=    0.00
+   45 p 44          14 TABLE ACCESS FULL GT_DMF0082_T_WS_FCST (cr=3 pr=0 pw=0 str=1 time=19 dr=0 dw=0 us cost=2 size=1 cr=         0 t=    0.00
+   46 p 44           0 TABLE ACCESS BY INDEX ROWID BATCHED DM_PLN_SALES_PLAN_RESULT (cr=3 pr=0 pw=0 str=1 time=19 dr=0 cr=         0 t=    0.00
+   47 p 46           0 INDEX RANGE SCAN IDX_DM_PLN_SALES_PLAN_RESULT_N1 (cr=3 pr=0 pw=0 str=1 time=17 dr=0 dw=0 us cos cr=         0 t=    0.00
+   48 p 43           0 TABLE ACCESS FULL GT_DMF0082_T_LAST_DATA_SETUP_FCST (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us c cr=         0 t=    0.00
+   49 p 42           0 TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=192  cr=         0 t=    0.00
+   50 p  3           0 FILTER  (cr=713 pr=0 pw=0 str=1 time=13218 dr=0 dw=0 us)                                        cr=         0 t=    0.00
+   51 p 50           0 HASH JOIN  (cr=713 pr=0 pw=0 str=1 time=13217 dr=0 dw=0 us cost=7275 size=424437 card=39)       cr=         0 t=    0.00
+   52 p 51      15,056 TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM (cr=707 pr=0 pw=0 str=1 time=5799 dr=0 dw=0 us cost cr=         0 t=    0.00
+   53 p 51           0 HASH JOIN  (cr=6 pr=0 pw=0 str=1 time=130 dr=0 dw=0 us cost=134 size=23829 card=39)             cr=         0 t=    0.00
+   54 p 53          14 TABLE ACCESS FULL GT_DMF0082_T_WS_FCST (cr=3 pr=0 pw=0 str=1 time=31 dr=0 dw=0 us cost=2 size=1 cr=         0 t=    0.00
+   55 p 53           0 NESTED LOOPS  (cr=3 pr=0 pw=0 str=1 time=16 dr=0 dw=0 us cost=132 size=22905 card=45)           cr=         0 t=    0.00
+   56 p 55           0 NESTED LOOPS  (cr=3 pr=0 pw=0 str=1 time=15 dr=0 dw=0 us cost=132 size=22905 card=100)          cr=         0 t=    0.00
+   57 p 56           0 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=14 dr=0 dw=0 us cos cr=         0 t=    0.00
+   58 p 56           0 INDEX RANGE SCAN IDX_DM_PLN_MKT_FCST_RESULT_N1 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=2 cr=         0 t=    0.00
+   59 p 55           0 TABLE ACCESS BY INDEX ROWID DM_PLN_MKT_FCST_RESULT (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us co cr=         0 t=    0.00
+   60 p  1           0 LOAD AS SELECT (CURSOR DURATION MEMORY) SYS_TEMP_0FD9D9956_49C63B (cr=0 pr=0 pw=0 str=1 time=73 cr=         0 t=    0.00
+   61 p 60     156,518 HASH JOIN RIGHT OUTER (cr=0 pr=0 pw=0 str=1 time=513767 dr=0 dw=0 us cost=96883 size=385028118  cr=         0 t=    0.00
+   62 p 61       1,898 VIEW  (cr=0 pr=0 pw=0 str=1 time=82418 dr=0 dw=0 us cost=24222 size=298 card=1)                 cr=         0 t=    0.00
+   63 p 62       1,898 FILTER  (cr=0 pr=0 pw=0 str=1 time=82415 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   64 p 63       1,921 SORT GROUP BY (cr=0 pr=0 pw=0 str=1 time=82396 dr=0 dw=0 us cost=24222 size=320 card=1)         cr=         0 t=    0.00
+   65 p 64       1,944 VIEW  VW_DAG_0 (cr=0 pr=0 pw=0 str=1 time=81277 dr=0 dw=0 us cost=24221 size=320 card=1)        cr=         0 t=    0.00
+   66 p 65       1,944 HASH GROUP BY (cr=0 pr=0 pw=0 str=1 time=81277 dr=0 dw=0 us cost=24221 size=518 card=1)         cr=         0 t=    0.00
+   67 p 66      50,174 FILTER  (cr=0 pr=0 pw=0 str=1 time=76778 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   68 p 67      50,174 VIEW  (cr=0 pr=0 pw=0 str=1 time=75592 dr=0 dw=0 us cost=24219 size=14966574 card=28893)        cr=         0 t=    0.00
+   69 p 68     156,518 TABLE ACCESS FULL SYS_TEMP_0FD9D9955_49C63B (cr=0 pr=0 pw=0 str=1 time=63819 dr=0 dw=0 us cost= cr=         0 t=    0.00
+   70 p 61     156,518 HASH JOIN RIGHT OUTER (cr=0 pr=0 pw=0 str=1 time=379222 dr=0 dw=0 us cost=72662 size=376418004  cr=         0 t=    0.00
+   71 p 70       2,170 VIEW  (cr=0 pr=0 pw=0 str=1 time=79632 dr=0 dw=0 us cost=24222 size=484 card=1)                 cr=         0 t=    0.00
+   72 p 71       2,170 FILTER  (cr=0 pr=0 pw=0 str=1 time=79605 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   73 p 72       2,174 SORT GROUP BY (cr=0 pr=0 pw=0 str=1 time=79578 dr=0 dw=0 us cost=24222 size=506 card=1)         cr=         0 t=    0.00
+   74 p 73       2,178 VIEW  VW_DAG_1 (cr=0 pr=0 pw=0 str=1 time=78089 dr=0 dw=0 us cost=24221 size=506 card=1)        cr=         0 t=    0.00
+   75 p 74       2,178 HASH GROUP BY (cr=0 pr=0 pw=0 str=1 time=78088 dr=0 dw=0 us cost=24221 size=704 card=1)         cr=         0 t=    0.00
+   76 p 75      50,174 FILTER  (cr=0 pr=0 pw=0 str=1 time=68707 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   77 p 76      50,174 VIEW  (cr=0 pr=0 pw=0 str=1 time=67127 dr=0 dw=0 us cost=24219 size=20340672 card=28893)        cr=         0 t=    0.00
+   78 p 77     156,518 TABLE ACCESS FULL SYS_TEMP_0FD9D9955_49C63B (cr=0 pr=0 pw=0 str=1 time=55516 dr=0 dw=0 us cost= cr=         0 t=    0.00
+   79 p 70     156,518 HASH JOIN RIGHT OUTER (cr=0 pr=0 pw=0 str=1 time=235819 dr=0 dw=0 us cost=48440 size=362433792  cr=         0 t=    0.00
+   80 p 79       2,239 VIEW  (cr=0 pr=0 pw=0 str=1 time=93598 dr=0 dw=0 us cost=24221 size=546 card=1)                 cr=         0 t=    0.00
+   81 p 80       2,239 SORT GROUP BY (cr=0 pr=0 pw=0 str=1 time=93594 dr=0 dw=0 us cost=24221 size=766 card=1)         cr=         0 t=    0.00
+   82 p 81      50,174 FILTER  (cr=0 pr=0 pw=0 str=1 time=78629 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   83 p 82      50,174 VIEW  (cr=0 pr=0 pw=0 str=1 time=76919 dr=0 dw=0 us cost=24219 size=22132038 card=28893)        cr=         0 t=    0.00
+   84 p 83     156,518 TABLE ACCESS FULL SYS_TEMP_0FD9D9955_49C63B (cr=0 pr=0 pw=0 str=1 time=64976 dr=0 dw=0 us cost= cr=         0 t=    0.00
+   85 p 79     156,518 VIEW  (cr=0 pr=0 pw=0 str=1 time=79041 dr=0 dw=0 us cost=24219 size=346658214 card=28893)       cr=         0 t=    0.00
+   86 p 85     156,518 TABLE ACCESS FULL SYS_TEMP_0FD9D9955_49C63B (cr=0 pr=0 pw=0 str=1 time=42534 dr=0 dw=0 us cost= cr=         0 t=    0.00
+   87 p  1           0 LOAD TABLE CONVENTIONAL  GT_DMF0082_TEMP_FCST_N_PRICE (cr=8468 pr=0 pw=0 str=1 time=776241 dr=0 cr=         0 t=    0.00
+   88 p 87     154,252 FILTER  (cr=6 pr=0 pw=0 str=1 time=212589 dr=0 dw=0 us)                                         cr=         0 t=    0.00
+   89 p 88     154,252 HASH JOIN RIGHT ANTI (cr=6 pr=0 pw=0 str=1 time=168077 dr=0 dw=0 us cost=50302 size=356598378 c cr=         0 t=    0.00
+   90 p 89           3 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=39 dr=0 dw=0 us cos cr=         0 t=    0.00
+   91 p 89     157,742 VIEW  (cr=3 pr=0 pw=0 str=1 time=181951 dr=0 dw=0 us cost=50300 size=364019210 card=28895)      cr=         0 t=    0.00
+   92 p 91     157,742 UNION-ALL  (cr=3 pr=0 pw=0 str=1 time=153143 dr=0 dw=0 us)                                      cr=         0 t=    0.00
+   93 p 92     156,518 VIEW  (cr=0 pr=0 pw=0 str=1 time=85310 dr=0 dw=0 us cost=14154 size=346658214 card=28893)       cr=         0 t=    0.00
+   94 p 93     156,518 TABLE ACCESS FULL SYS_TEMP_0FD9D9956_49C63B (cr=0 pr=0 pw=0 str=1 time=52903 dr=0 dw=0 us cost= cr=         0 t=    0.00
+   95 p 92       1,224 VIEW  (cr=3 pr=0 pw=0 str=1 time=127929 dr=0 dw=0 us cost=36147 size=23796 card=2)              cr=         0 t=    0.00
+   96 p 95       1,224 UNION-ALL  (cr=3 pr=0 pw=0 str=1 time=127682 dr=0 dw=0 us)                                      cr=         0 t=    0.00
+   97 p 96           0 SORT GROUP BY (cr=0 pr=0 pw=0 str=1 time=51123 dr=0 dw=0 us cost=21990 size=11993 card=1)       cr=         0 t=    0.00
+   98 p 97           0 FILTER  (cr=0 pr=0 pw=0 str=1 time=51093 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   99 p 98           0 MERGE JOIN CARTESIAN (cr=0 pr=0 pw=0 str=1 time=51091 dr=0 dw=0 us cost=21988 size=693027498 ca cr=         0 t=    0.00
+  100 p 99           0 VIEW  (cr=0 pr=0 pw=0 str=1 time=51069 dr=0 dw=0 us cost=14154 size=334465368 card=28893)       cr=         0 t=    0.00
+  101 p100     156,518 TABLE ACCESS FULL SYS_TEMP_0FD9D9956_49C63B (cr=0 pr=0 pw=0 str=1 time=41857 dr=0 dw=0 us cost= cr=         0 t=    0.00
+  102 p 99           0 BUFFER SORT (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=21990 size=834 card=2)               cr=         0 t=    0.00
+  103 p102           0 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost cr=         0 t=    0.00
+  104 p 96       1,224 SORT GROUP BY (cr=3 pr=0 pw=0 str=1 time=76301 dr=0 dw=0 us cost=14157 size=11993 card=1)       cr=         0 t=    0.00
+  105 p104       2,444 FILTER  (cr=3 pr=0 pw=0 str=1 time=6102 dr=0 dw=0 us)                                           cr=         0 t=    0.00
+  106 p105       2,444 MERGE JOIN CARTESIAN (cr=3 pr=0 pw=0 str=1 time=5977 dr=0 dw=0 us cost=14156 size=346513749 car cr=         0 t=    0.00
+  107 p106           1 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=50 dr=0 dw=0 us cos cr=         0 t=    0.00
+  108 p106       2,444 BUFFER SORT (cr=0 pr=0 pw=0 str=1 time=5420 dr=0 dw=0 us cost=14155 size=334465368 card=28893)  cr=         0 t=    0.00
+  109 p108       2,444 VIEW  (cr=0 pr=0 pw=0 str=1 time=1658 dr=0 dw=0 us cost=14154 size=334465368 card=28893)        cr=         0 t=    0.00
+  110 p109     156,518 TABLE ACCESS FULL SYS_TEMP_0FD9D9956_49C63B (cr=0 pr=0 pw=0 str=1 time=53972 dr=0 dw=0 us cost= cr=         0 t=    0.00
+  111 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  112 p111           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  113 p 88           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  114 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  115 p114           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  116 p 88           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  117 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  118 p117           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  119 p 88           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  120 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  121 p120           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  122 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  123 p122           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  124 p 88           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  125 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  126 p125           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+== _prof_PKG_DMF0082_1104_k0101_div40.trc.txt cursor 140277166640384 len 26435
+    1 p  0           0 TEMP TABLE TRANSFORMATION  (cr=56474 pr=0 pw=0 str=1 time=2472265 dr=0 dw=0 us)                 cr=         0 t=    0.00
+    2 p  1           0 LOAD AS SELECT (CURSOR DURATION MEMORY) SYS_TEMP_0FD9D9955_49C63B (cr=39385 pr=0 pw=0 str=1 tim cr=         0 t=    0.00
+    3 p  2     155,297 UNION-ALL  (cr=39385 pr=0 pw=0 str=1 time=507144 dr=0 dw=0 us)                                  cr=         0 t=    0.00
+    4 p  3       4,775 FILTER  (cr=9403 pr=0 pw=0 str=1 time=72909 dr=0 dw=0 us)                                       cr=         0 t=    0.00
+    5 p  4       4,775 HASH JOIN  (cr=9403 pr=0 pw=0 str=1 time=72151 dr=0 dw=0 us cost=12863 size=172418688 card=1429 cr=         0 t=    0.00
+    6 p  5          23 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=32 dr=0 dw=0 us cos cr=         0 t=    0.00
+    7 p  5      47,573 HASH JOIN  (cr=9400 pr=0 pw=0 str=1 time=96924 dr=0 dw=0 us cost=12860 size=166458924 card=1429 cr=         0 t=    0.00
+    8 p  7          14 TABLE ACCESS FULL GT_DMF0082_T_WS_FCST (cr=3 pr=0 pw=0 str=1 time=17 dr=0 dw=0 us cost=2 size=1 cr=         0 t=    0.00
+    9 p  7      47,573 HASH JOIN  (cr=9397 pr=0 pw=0 str=1 time=87732 dr=0 dw=0 us cost=12858 size=165001140 card=1429 cr=         0 t=    0.00
+   10 p  9      47,573 HASH JOIN RIGHT OUTER (cr=8690 pr=0 pw=0 str=1 time=48532 dr=0 dw=0 us cost=2894 size=59194500  cr=         0 t=    0.00
+   11 p 10       1,829 TABLE ACCESS FULL GT_DMF0082_T_LAST_DATA_SETUP_FCST (cr=27 pr=0 pw=0 str=1 time=205 dr=0 dw=0 u cr=         0 t=    0.00
+   12 p 10      47,573 TABLE ACCESS FULL DM_PLN_CFM_MKT_DEMAND_PLAN (cr=8663 pr=0 pw=0 str=1 time=34170 dr=0 dw=0 us c cr=         0 t=    0.00
+   13 p  9      15,056 TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM (cr=707 pr=0 pw=0 str=1 time=3899 dr=0 dw=0 us cost cr=         0 t=    0.00
+   14 p  3           0 FILTER  (cr=3 pr=0 pw=0 str=1 time=45 dr=0 dw=0 us)                                             cr=         0 t=    0.00
+   15 p 14           0 NESTED LOOPS OUTER (cr=3 pr=0 pw=0 str=1 time=42 dr=0 dw=0 us cost=209 size=12052 card=1)       cr=         0 t=    0.00
+   16 p 15           0 NESTED LOOPS  (cr=3 pr=0 pw=0 str=1 time=39 dr=0 dw=0 us cost=207 size=10885 card=1)            cr=         0 t=    0.00
+   17 p 16           0 MERGE JOIN CARTESIAN (cr=3 pr=0 pw=0 str=1 time=38 dr=0 dw=0 us cost=196 size=10791 card=1)     cr=         0 t=    0.00
+   18 p 17           0 MERGE JOIN CARTESIAN (cr=3 pr=0 pw=0 str=1 time=36 dr=0 dw=0 us cost=4 size=519 card=1)         cr=         0 t=    0.00
+   19 p 18           0 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=32 dr=0 dw=0 us cos cr=         0 t=    0.00
+   20 p 18           0 BUFFER SORT (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=2 size=1428 card=14)                 cr=         0 t=    0.00
+   21 p 20           0 TABLE ACCESS FULL GT_DMF0082_T_WS_FCST (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=2 size=14 cr=         0 t=    0.00
+   22 p 17           0 BUFFER SORT (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=194 size=146807424 card=14292)       cr=         0 t=    0.00
+   23 p 22           0 TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=192  cr=         0 t=    0.00
+   24 p 16           0 TABLE ACCESS BY INDEX ROWID BATCHED DM_PLN_CFM_MKT_DEMAND_PLAN (cr=0 pr=0 pw=0 str=0 time=0 dr= cr=         0 t=    0.00
+   25 p 24           0 INDEX RANGE SCAN PK_DM_PLN_CFM_MKT_DEMAND_PLAN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1 cr=         0 t=    0.00
+   26 p 15           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_T_LAST_DATA_SETUP_FCST (cr=0 pr=0 pw=0 str=0 tim cr=         0 t=    0.00
+   27 p 26           0 INDEX RANGE SCAN IX_GT82_LDS_FCST_PERF (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1 size=0  cr=         0 t=    0.00
+   28 p  3     150,522 VIEW  (cr=29234 pr=0 pw=0 str=1 time=772762 dr=0 dw=0 us cost=39268 size=109491525 card=10209)  cr=         0 t=    0.00
+   29 p 28     157,230 WINDOW SORT (cr=29234 pr=0 pw=0 str=1 time=738259 dr=0 dw=0 us cost=39268 size=111288309 card=1 cr=         0 t=    0.00
+   30 p 29     157,230 FILTER  (cr=29234 pr=0 pw=0 str=1 time=256546 dr=0 dw=0 us)                                     cr=         0 t=    0.00
+   31 p 30     157,230 HASH JOIN  (cr=29234 pr=0 pw=0 str=1 time=255073 dr=0 dw=0 us cost=16129 size=111288309 card=10 cr=         0 t=    0.00
+   32 p 31          23 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=17 dr=0 dw=0 us cos cr=         0 t=    0.00
+   33 p 31     157,230 HASH JOIN  (cr=29231 pr=0 pw=0 str=1 time=244123 dr=0 dw=0 us cost=16127 size=107031156 card=10 cr=         0 t=    0.00
+   34 p 33     157,800 HASH JOIN  (cr=28524 pr=0 pw=0 str=1 time=106485 dr=0 dw=0 us cost=7842 size=22910628 card=1080 cr=         0 t=    0.00
+   35 p 34          14 SORT UNIQUE (cr=3 pr=0 pw=0 str=1 time=33 dr=0 dw=0 us cost=2 size=1428 card=14)                cr=         0 t=    0.00
+   36 p 35          14 TABLE ACCESS FULL GT_DMF0082_T_WS_FCST (cr=3 pr=0 pw=0 str=1 time=17 dr=0 dw=0 us cost=2 size=1 cr=         0 t=    0.00
+   37 p 34     157,833 TABLE ACCESS FULL DM_PLN_CFM_SELLING_PRICE (cr=28521 pr=0 pw=0 str=1 time=85230 dr=0 dw=0 us co cr=         0 t=    0.00
+   38 p 33      15,056 TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM (cr=707 pr=0 pw=0 str=1 time=4677 dr=0 dw=0 us cost cr=         0 t=    0.00
+   39 p  3           0 FILTER  (cr=9 pr=0 pw=0 str=1 time=327 dr=0 dw=0 us)                                            cr=         0 t=    0.00
+   40 p 39           0 HASH JOIN  (cr=9 pr=0 pw=0 str=1 time=325 dr=0 dw=0 us cost=477 size=3305203 card=269)          cr=         0 t=    0.00
+   41 p 40          23 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=49 dr=0 dw=0 us cos cr=         0 t=    0.00
+   42 p 40           0 HASH JOIN  (cr=6 pr=0 pw=0 str=1 time=159 dr=0 dw=0 us cost=475 size=3010344 card=258)          cr=         0 t=    0.00
+   43 p 42           0 HASH JOIN OUTER (cr=6 pr=0 pw=0 str=1 time=122 dr=0 dw=0 us cost=282 size=360168 card=258)      cr=         0 t=    0.00
+   44 p 43           0 HASH JOIN  (cr=6 pr=0 pw=0 str=1 time=98 dr=0 dw=0 us cost=273 size=59082 card=258)             cr=         0 t=    0.00
+   45 p 44          14 TABLE ACCESS FULL GT_DMF0082_T_WS_FCST (cr=3 pr=0 pw=0 str=1 time=19 dr=0 dw=0 us cost=2 size=1 cr=         0 t=    0.00
+   46 p 44           0 TABLE ACCESS BY INDEX ROWID BATCHED DM_PLN_SALES_PLAN_RESULT (cr=3 pr=0 pw=0 str=1 time=15 dr=0 cr=         0 t=    0.00
+   47 p 46           0 INDEX RANGE SCAN IDX_DM_PLN_SALES_PLAN_RESULT_N1 (cr=3 pr=0 pw=0 str=1 time=12 dr=0 dw=0 us cos cr=         0 t=    0.00
+   48 p 43           0 TABLE ACCESS FULL GT_DMF0082_T_LAST_DATA_SETUP_FCST (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us c cr=         0 t=    0.00
+   49 p 42           0 TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=192  cr=         0 t=    0.00
+   50 p  3           0 FILTER  (cr=736 pr=0 pw=0 str=1 time=14658 dr=0 dw=0 us)                                        cr=         0 t=    0.00
+   51 p 50           0 HASH JOIN  (cr=736 pr=0 pw=0 str=1 time=14655 dr=0 dw=0 us cost=7275 size=424437 card=39)       cr=         0 t=    0.00
+   52 p 51      15,056 TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM (cr=707 pr=0 pw=0 str=1 time=7048 dr=0 dw=0 us cost cr=         0 t=    0.00
+   53 p 51           0 HASH JOIN  (cr=29 pr=0 pw=0 str=1 time=185 dr=0 dw=0 us cost=134 size=23829 card=39)            cr=         0 t=    0.00
+   54 p 53          14 TABLE ACCESS FULL GT_DMF0082_T_WS_FCST (cr=3 pr=0 pw=0 str=1 time=27 dr=0 dw=0 us cost=2 size=1 cr=         0 t=    0.00
+   55 p 53           0 NESTED LOOPS  (cr=26 pr=0 pw=0 str=1 time=63 dr=0 dw=0 us cost=132 size=22905 card=45)          cr=         0 t=    0.00
+   56 p 55           0 NESTED LOOPS  (cr=26 pr=0 pw=0 str=1 time=61 dr=0 dw=0 us cost=132 size=22905 card=100)         cr=         0 t=    0.00
+   57 p 56          10 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=13 dr=0 dw=0 us cos cr=         0 t=    0.00
+   58 p 56           0 INDEX RANGE SCAN IDX_DM_PLN_MKT_FCST_RESULT_N1 (cr=23 pr=0 pw=0 str=10 time=41 dr=0 dw=0 us cos cr=         0 t=    0.00
+   59 p 55           0 TABLE ACCESS BY INDEX ROWID DM_PLN_MKT_FCST_RESULT (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us co cr=         0 t=    0.00
+   60 p  1           0 LOAD AS SELECT (CURSOR DURATION MEMORY) SYS_TEMP_0FD9D9956_49C63B (cr=0 pr=0 pw=0 str=1 time=71 cr=         0 t=    0.00
+   61 p 60     155,297 HASH JOIN RIGHT OUTER (cr=0 pr=0 pw=0 str=1 time=493037 dr=0 dw=0 us cost=96883 size=385028118  cr=         0 t=    0.00
+   62 p 61       1,898 VIEW  (cr=0 pr=0 pw=0 str=1 time=78155 dr=0 dw=0 us cost=24222 size=298 card=1)                 cr=         0 t=    0.00
+   63 p 62       1,898 FILTER  (cr=0 pr=0 pw=0 str=1 time=78152 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   64 p 63       1,921 SORT GROUP BY (cr=0 pr=0 pw=0 str=1 time=78111 dr=0 dw=0 us cost=24222 size=320 card=1)         cr=         0 t=    0.00
+   65 p 64       1,944 VIEW  VW_DAG_0 (cr=0 pr=0 pw=0 str=1 time=77067 dr=0 dw=0 us cost=24221 size=320 card=1)        cr=         0 t=    0.00
+   66 p 65       1,944 HASH GROUP BY (cr=0 pr=0 pw=0 str=1 time=77067 dr=0 dw=0 us cost=24221 size=518 card=1)         cr=         0 t=    0.00
+   67 p 66      50,174 FILTER  (cr=0 pr=0 pw=0 str=1 time=64498 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   68 p 67      50,174 VIEW  (cr=0 pr=0 pw=0 str=1 time=63746 dr=0 dw=0 us cost=24219 size=14966574 card=28893)        cr=         0 t=    0.00
+   69 p 68     155,297 TABLE ACCESS FULL SYS_TEMP_0FD9D9955_49C63B (cr=0 pr=0 pw=0 str=1 time=59574 dr=0 dw=0 us cost= cr=         0 t=    0.00
+   70 p 61     155,297 HASH JOIN RIGHT OUTER (cr=0 pr=0 pw=0 str=1 time=363827 dr=0 dw=0 us cost=72662 size=376418004  cr=         0 t=    0.00
+   71 p 70       2,170 VIEW  (cr=0 pr=0 pw=0 str=1 time=84423 dr=0 dw=0 us cost=24222 size=484 card=1)                 cr=         0 t=    0.00
+   72 p 71       2,170 FILTER  (cr=0 pr=0 pw=0 str=1 time=84396 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   73 p 72       2,174 SORT GROUP BY (cr=0 pr=0 pw=0 str=1 time=84392 dr=0 dw=0 us cost=24222 size=506 card=1)         cr=         0 t=    0.00
+   74 p 73       2,178 VIEW  VW_DAG_1 (cr=0 pr=0 pw=0 str=1 time=83092 dr=0 dw=0 us cost=24221 size=506 card=1)        cr=         0 t=    0.00
+   75 p 74       2,178 HASH GROUP BY (cr=0 pr=0 pw=0 str=1 time=83092 dr=0 dw=0 us cost=24221 size=704 card=1)         cr=         0 t=    0.00
+   76 p 75      50,174 FILTER  (cr=0 pr=0 pw=0 str=1 time=67323 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   77 p 76      50,174 VIEW  (cr=0 pr=0 pw=0 str=1 time=65820 dr=0 dw=0 us cost=24219 size=20340672 card=28893)        cr=         0 t=    0.00
+   78 p 77     155,297 TABLE ACCESS FULL SYS_TEMP_0FD9D9955_49C63B (cr=0 pr=0 pw=0 str=1 time=61942 dr=0 dw=0 us cost= cr=         0 t=    0.00
+   79 p 70     155,297 HASH JOIN RIGHT OUTER (cr=0 pr=0 pw=0 str=1 time=217187 dr=0 dw=0 us cost=48440 size=362433792  cr=         0 t=    0.00
+   80 p 79       2,239 VIEW  (cr=0 pr=0 pw=0 str=1 time=79086 dr=0 dw=0 us cost=24221 size=546 card=1)                 cr=         0 t=    0.00
+   81 p 80       2,239 SORT GROUP BY (cr=0 pr=0 pw=0 str=1 time=79085 dr=0 dw=0 us cost=24221 size=766 card=1)         cr=         0 t=    0.00
+   82 p 81      50,174 FILTER  (cr=0 pr=0 pw=0 str=1 time=61077 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   83 p 82      50,174 VIEW  (cr=0 pr=0 pw=0 str=1 time=60646 dr=0 dw=0 us cost=24219 size=22132038 card=28893)        cr=         0 t=    0.00
+   84 p 83     155,297 TABLE ACCESS FULL SYS_TEMP_0FD9D9955_49C63B (cr=0 pr=0 pw=0 str=1 time=57084 dr=0 dw=0 us cost= cr=         0 t=    0.00
+   85 p 79     155,297 VIEW  (cr=0 pr=0 pw=0 str=1 time=73114 dr=0 dw=0 us cost=24219 size=346658214 card=28893)       cr=         0 t=    0.00
+   86 p 85     155,297 TABLE ACCESS FULL SYS_TEMP_0FD9D9955_49C63B (cr=0 pr=0 pw=0 str=1 time=43025 dr=0 dw=0 us cost= cr=         0 t=    0.00
+   87 p  1           0 LOAD TABLE CONVENTIONAL  GT_DMF0082_TEMP_FCST_N_PRICE (cr=17089 pr=0 pw=0 str=1 time=725337 dr= cr=         0 t=    0.00
+   88 p 87     151,808 FILTER  (cr=6 pr=0 pw=0 str=1 time=327392 dr=0 dw=0 us)                                         cr=         0 t=    0.00
+   89 p 88     151,808 HASH JOIN RIGHT ANTI (cr=6 pr=0 pw=0 str=1 time=288220 dr=0 dw=0 us cost=50302 size=356598378 c cr=         0 t=    0.00
+   90 p 89           4 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=46 dr=0 dw=0 us cos cr=         0 t=    0.00
+   91 p 89     156,521 VIEW  (cr=3 pr=0 pw=0 str=1 time=174720 dr=0 dw=0 us cost=50300 size=364019210 card=28895)      cr=         0 t=    0.00
+   92 p 91     156,521 UNION-ALL  (cr=3 pr=0 pw=0 str=1 time=148459 dr=0 dw=0 us)                                      cr=         0 t=    0.00
+   93 p 92     155,297 VIEW  (cr=0 pr=0 pw=0 str=1 time=76695 dr=0 dw=0 us cost=14154 size=346658214 card=28893)       cr=         0 t=    0.00
+   94 p 93     155,297 TABLE ACCESS FULL SYS_TEMP_0FD9D9956_49C63B (cr=0 pr=0 pw=0 str=1 time=44942 dr=0 dw=0 us cost= cr=         0 t=    0.00
+   95 p 92       1,224 VIEW  (cr=3 pr=0 pw=0 str=1 time=126758 dr=0 dw=0 us cost=36147 size=23796 card=2)              cr=         0 t=    0.00
+   96 p 95       1,224 UNION-ALL  (cr=3 pr=0 pw=0 str=1 time=126391 dr=0 dw=0 us)                                      cr=         0 t=    0.00
+   97 p 96           0 SORT GROUP BY (cr=0 pr=0 pw=0 str=1 time=51189 dr=0 dw=0 us cost=21990 size=11993 card=1)       cr=         0 t=    0.00
+   98 p 97           0 FILTER  (cr=0 pr=0 pw=0 str=1 time=51161 dr=0 dw=0 us)                                          cr=         0 t=    0.00
+   99 p 98           0 MERGE JOIN CARTESIAN (cr=0 pr=0 pw=0 str=1 time=51160 dr=0 dw=0 us cost=21988 size=693027498 ca cr=         0 t=    0.00
+  100 p 99           0 VIEW  (cr=0 pr=0 pw=0 str=1 time=51140 dr=0 dw=0 us cost=14154 size=334465368 card=28893)       cr=         0 t=    0.00
+  101 p100     155,297 TABLE ACCESS FULL SYS_TEMP_0FD9D9956_49C63B (cr=0 pr=0 pw=0 str=1 time=43885 dr=0 dw=0 us cost= cr=         0 t=    0.00
+  102 p 99           0 BUFFER SORT (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=21990 size=834 card=2)               cr=         0 t=    0.00
+  103 p102           0 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost cr=         0 t=    0.00
+  104 p 96       1,224 SORT GROUP BY (cr=3 pr=0 pw=0 str=1 time=74209 dr=0 dw=0 us cost=14157 size=11993 card=1)       cr=         0 t=    0.00
+  105 p104       2,444 FILTER  (cr=3 pr=0 pw=0 str=1 time=6348 dr=0 dw=0 us)                                           cr=         0 t=    0.00
+  106 p105       2,444 MERGE JOIN CARTESIAN (cr=3 pr=0 pw=0 str=1 time=5979 dr=0 dw=0 us cost=14156 size=346513749 car cr=         0 t=    0.00
+  107 p106           1 TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE (cr=3 pr=0 pw=0 str=1 time=52 dr=0 dw=0 us cos cr=         0 t=    0.00
+  108 p106       2,444 BUFFER SORT (cr=0 pr=0 pw=0 str=1 time=5419 dr=0 dw=0 us cost=14155 size=334465368 card=28893)  cr=         0 t=    0.00
+  109 p108       2,444 VIEW  (cr=0 pr=0 pw=0 str=1 time=1531 dr=0 dw=0 us cost=14154 size=334465368 card=28893)        cr=         0 t=    0.00
+  110 p109     155,297 TABLE ACCESS FULL SYS_TEMP_0FD9D9956_49C63B (cr=0 pr=0 pw=0 str=1 time=52541 dr=0 dw=0 us cost= cr=         0 t=    0.00
+  111 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  112 p111           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  113 p 88           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  114 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  115 p114           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  116 p 88           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  117 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  118 p117           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  119 p 88           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  120 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  121 p120           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  122 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  123 p122           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  124 p 88           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00
+  125 p 88           0 TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw cr=         0 t=    0.00
+  126 p125           0 INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01 (cr=0 pr=0 pw=0 str=0 time=0 dr=0 dw=0 us cost=1  cr=         0 t=    0.00

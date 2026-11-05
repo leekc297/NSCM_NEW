@@ -1413,3 +1413,234 @@ UI  생성 및 보완 시 동적 구간에 대한 COLUMN 생성을 놓친 사유
 2026-10-28T07:36:29+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge decb32c81→72cd58a46 exit 0
 2026-10-28T07:36:29+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge SCP0007
 2026-10-28T07:39:16+09:00	workbench	start		quick: ⬆️ Source Backup SCP0007
+2026-10-28T10:57:01+09:00	workbench	start		quick: 📂 산출물 폴더 (Doc/asisfacts) SCP0007
+2026-10-28T11:21:10+09:00	workbench	start		quick: 🌐 다국어 JSON 재생성 SCP0007
+2026-10-28T11:46:35+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 72cd58a46→0a6352c5c exit 0
+2026-10-28T11:46:35+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge SCP0007
+2026-10-28T11:47:26+09:00	workbench	start		quick: 🔄 BE & FE Finish & Start SCP0007
+2026-10-28T14:45:17+09:00	workbench	start		chain:docs: SCP0096
+2026-10-28T14:45:19+09:00	workbench	start		quick: 📝 문서 생성 (분석서·설계서·GAP·테스트 → MD + Excel) SCP0096
+2026-10-28T14:45:55+09:00	workbench	start		prompt: 진행중인가요? 오류로 중지되었나요?
+2026-10-28T14:48:58+09:00	workbench	start		chain:docs: SCP0096
+2026-10-28T14:49:00+09:00	workbench	start		quick: 📝 문서 생성 (분석서·설계서·GAP·테스트 → MD + Excel) SCP0096
+2026-10-28T14:49:17+09:00	workbench	start		prompt: 오류 발생 사유 확인해주세요
+2026-10-28T15:22:05+09:00	workbench	start		prompt: 네.. 복사해주세요. 
+2026-10-28T18:18:38+09:00	workbench	start		chain:docs: SCP0096
+2026-10-28T18:18:38+09:00	S3.prep	start		S3.prep: prereq.py SCP0096 --docs
+2026-10-28T18:18:56+09:00	S3.prep	end	0	
+2026-10-28T18:19:02+09:00	S3.agent	start		S3.agent: agent.ps1 SCP0096 -Driver claude-cli -Model claude-opus-5-5
+2026-10-28T18:24:22+09:00	workbench	start		chain:docs: SCP0020
+2026-10-28T18:24:22+09:00	S3.prep	start		S3.prep: prereq.py SCP0020 --docs
+2026-10-28T18:25:02+09:00	workbench	start		chain:docs: SCP0041
+2026-10-28T18:25:02+09:00	S3.prep	start		S3.prep: prereq.py SCP0041 --docs
+2026-10-28T18:25:11+09:00	S3.prep	end	0	
+2026-10-28T18:25:14+09:00	S3.agent	start		S3.agent: agent.ps1 SCP0041 -Driver claude-cli -Model claude-opus-5-5
+2026-10-28T18:26:05+09:00	workbench	start		chain:docs: SCP0100
+2026-10-28T18:26:05+09:00	S3.prep	start		S3.prep: prereq.py SCP0100 --docs
+2026-10-28T18:26:31+09:00	workbench	start		chain:docs: SCP0111
+2026-10-28T18:26:31+09:00	S3.prep	start		S3.prep: prereq.py SCP0111 --docs
+2026-10-28T18:26:46+09:00	S3.prep	end	0	
+2026-10-28T18:26:57+09:00	S3.agent	start		S3.agent: agent.ps1 SCP0111 -Driver claude-cli -Model claude-opus-5-5
+2026-10-28T18:28:10+09:00	S3.prep	end	0	
+2026-10-28T18:28:12+09:00	S3.agent	start		S3.agent: agent.ps1 SCP0020 -Driver claude-cli -Model claude-opus-5-5
+2026-10-28T18:28:26+09:00	S3.agent	end	0	
+2026-10-28T18:28:30+09:00	S3.xlsx	start		S3.xlsx: make_docs.py SCP0096
+2026-10-28T18:28:53+09:00	S3.xlsx	end	0	
+2026-10-28T18:28:59+09:00	workbench	start		quick: 📝 문서 생성 (분석서·설계서·GAP·테스트 → MD + Excel) SCP0096
+2026-10-28T18:30:58+09:00	S3.prep	end	0	
+2026-10-28T18:31:00+09:00	S3.agent	start		S3.agent: agent.ps1 SCP0100 -Driver claude-cli -Model claude-opus-5-5
+2026-10-28T18:31:51+09:00	S3.agent	end	0	
+2026-10-28T18:31:53+09:00	S3.xlsx	start		S3.xlsx: make_docs.py SCP0041
+2026-10-28T18:32:06+09:00	S3.xlsx	end	0	
+2026-10-28T18:32:09+09:00	workbench	start		quick: 📝 문서 생성 (분석서·설계서·GAP·테스트 → MD + Excel) SCP0041
+2026-10-28T18:34:31+09:00	S3.agent	end	0	
+2026-10-28T18:34:33+09:00	S3.xlsx	start		S3.xlsx: make_docs.py SCP0111
+2026-10-28T18:35:03+09:00	S3.xlsx	end	0	
+2026-10-28T18:35:11+09:00	workbench	start		quick: 📝 문서 생성 (분석서·설계서·GAP·테스트 → MD + Excel) SCP0111
+2026-10-28T18:38:26+09:00	S3.agent	end	0	
+2026-10-28T18:38:27+09:00	S3.xlsx	start		S3.xlsx: make_docs.py SCP0020
+2026-10-28T18:38:42+09:00	S3.xlsx	end	0	
+2026-10-28T18:38:51+09:00	workbench	start		quick: 📝 문서 생성 (분석서·설계서·GAP·테스트 → MD + Excel) SCP0020
+2026-10-28T18:38:52+09:00	S3.agent	end	0	
+2026-10-28T18:38:54+09:00	S3.xlsx	start		S3.xlsx: make_docs.py SCP0100
+2026-10-28T18:39:11+09:00	S3.xlsx	end	0	
+2026-10-28T18:39:13+09:00	workbench	start		quick: 📝 문서 생성 (분석서·설계서·GAP·테스트 → MD + Excel) SCP0100
+2026-10-28T19:03:34+09:00	S8.verify	start		S8.verify: run_verify.py SCP0096
+2026-10-28T19:04:24+09:00	S8.verify	start		S8.verify: run_verify.py SCP0020
+2026-10-28T19:04:56+09:00	S8.verify	start		S8.verify: run_verify.py SCP0041
+2026-10-28T19:05:13+09:00	S8.verify	start		S8.verify: run_verify.py SCP0100
+2026-10-28T19:05:29+09:00	S8.verify	start		S8.verify: run_verify.py SCP0111
+2026-10-28T19:06:10+09:00	S8.verify	end	4	
+2026-10-28T19:06:12+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0041
+2026-10-28T19:07:40+09:00	S8.verify	end	4	
+2026-10-28T19:07:47+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0111
+2026-10-28T19:49:34+09:00	workbench	start		prompt: 중지해 주세요... 제대로 진행이 되지 않고 있네요
+
+2026-10-28T19:53:16+09:00	S8.verify	end	4294967295	
+2026-10-28T19:53:18+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0020
+2026-10-28T19:58:30+09:00	S8.verify	end	0	
+2026-10-28T19:58:31+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0096
+2026-10-28T20:20:12+09:00	workbench	start		prompt: CheckList 을 봤는데, 1번부터 11번까지를 봤는데, 1번은 판정 필요 항목이고, 2, 3번 5번부터 11번까지가 전체 오류가 아닌데 오류로 표기되어 있습니다. 
+다른항목을 보기전에 오류가 아닌것들이 이렇게 
+2026-10-28T20:30:08+09:00	S8.verify	end	0	
+2026-10-28T20:30:09+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0100
+2026-10-28T21:07:54+09:00	workbench	start		prompt: SCP0096 수정 후 저장 시 SQL ERROR 발생합니다. 확인 후 보완 요청 합니다.
+2026-10-28T22:57:14+09:00	S8.verify	start		S8.verify: run_verify.py SCP0096
+2026-10-28T22:58:37+09:00	S8.verify	start		S8.verify: run_verify.py SCP0020
+2026-10-28T22:58:56+09:00	S8.verify	start		S8.verify: run_verify.py SCP0041
+2026-10-28T22:59:17+09:00	S8.verify	start		S8.verify: run_verify.py SCP0100
+2026-10-28T22:59:37+09:00	S8.verify	start		S8.verify: run_verify.py SCP0111
+2026-10-28T23:35:27+09:00	S8.verify	end	0	
+2026-10-28T23:35:39+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0096
+2026-10-29T00:14:18+09:00	S8.verify	end	0	
+2026-10-29T00:14:21+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0020
+2026-10-29T00:15:38+09:00	S8.verify	end	0	
+2026-10-29T00:15:40+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0041
+2026-10-29T00:22:18+09:00	S8.verify	end	0	
+2026-10-29T00:22:20+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0100
+2026-10-29T00:23:07+09:00	workbench	start		prompt: CHECKLIST 에 나온 조치필요 항목 중 조회조건의 순서와 LABEL 차이등에 대해서 조회조건 기준 EXCEL 파일과 비교해서 오류인지 다시 확이니해주세요
+2026-10-29T00:31:45+09:00	workbench	start		prompt: CHECKLIST 에 조회조건이 조치필요 SHEET 에 나왔는데, 실제 오류가 아닌것 같은데 조회조건에 나온 이유를 확인해주세요. 
+
+2026-10-29T00:41:56+09:00	S8.verify	end	0	
+2026-10-29T00:41:58+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0111
+2026-10-29T09:27:07+09:00	workbench	start		quick: 🔄 BE & FE Finish & Start SCP0096
+2026-10-29T09:59:17+09:00	S8.verify	start		S8.verify: run_verify.py SCP0020
+2026-10-29T09:59:31+09:00	S8.verify	start		S8.verify: run_verify.py SCP0111
+2026-10-29T10:30:32+09:00	S8.verify	end	0	
+2026-10-29T10:30:35+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0020
+2026-10-29T10:55:48+09:00	S8.verify	end	0	
+2026-10-29T10:55:50+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0111
+2026-10-29T11:14:37+09:00	workbench	start		prompt: 이화면에 대한 메타데이터 보완해주세요. 
+2026-10-29T11:29:45+09:00	S8.verify	start		S8.verify: run_verify.py SCP0020
+2026-10-29T11:45:47+09:00	S8.verify	start		S8.verify: run_verify.py SCP0041
+2026-10-29T11:46:16+09:00	S8.verify	start		S8.verify: run_verify.py SCP0100
+2026-10-29T12:00:38+09:00	workbench	start		prompt: GRID, WORKING TIME DEFAULT 가 편집 가능 COLUMN인데 어떤 역활을 하는지 기능 확인해서 알려주세요. 
+2026-10-29T12:02:55+09:00	workbench	start		prompt: GRID COLUMN, WORKING TIME DEFAULT 가 편집가능 COLUMN 입니다. 어떤 역활을 하는지 알려주세요. 
+2026-10-29T12:14:55+09:00	workbench	start		prompt: 조회조건 MODEL/NICKNAME POPUP 기동 시 DIV, MODEL 코드는 조회조건에서 연동 되느데 OPERATION GROUP 이 연동되지 않고 있습니다. 이부분도 오류로 표기되어야 하는데, 지금 누락되어 
+2026-10-29T12:17:45+09:00	S8.verify	end	0	
+2026-10-29T12:17:55+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0020
+2026-10-29T12:30:08+09:00	workbench	start		prompt: 새로운 세션 연결되었나요?
+2026-10-29T12:34:57+09:00	workbench	start		prompt: 실제 배선되어 있는데 검사기오류로 처리되었다면 CHECKLIST 에 대한 보완 진행해주세요. 
+동일한 사항이 반복되지 않도록 보완 하고 RULE로도 적용해서 반복되지않도록 해주세요.
+2026-10-29T12:38:22+09:00	workbench	start		prompt: 중지해주세요. 
+2026-10-29T12:38:31+09:00	workbench	start		prompt: 중지해주세요.
+2026-10-29T13:12:29+09:00	S8.verify	end	0	
+2026-10-29T13:12:30+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0041
+2026-10-29T13:42:22+09:00	workbench	start		quick: 🔄 BE & FE Finish & Start SCP0096
+2026-10-29T13:45:37+09:00	workbench	start		prompt: 서버 기동되었나요?
+
+2026-10-29T13:49:33+09:00	workbench	start		prompt: Claude 창에서 STEP 별 Status 을 보여줄 필요 없는 Lite 한 질의에는 Step Status 띄우지 않고 위의 질문과 밑에 결과를 보여주는 창만 있으면 될 것 같아요... 이렇게 보완해주세요.
+2026-10-29T14:03:08+09:00	workbench	start		prompt: 1. 프롬프트 창도 클로드와 동일하게 enter시 실행 ... 줄바꿈은 Shift+Enter 로 하도록 Operation 변경해주세요. 
+
+2. 그리고 입력 프롬프트를 보여줄 때 아래와 같이 변경해주세요. 
+AS-I
+2026-10-29T14:14:27+09:00	workbench	start		prompt: 위의 수정사항 적용되었나요? 아니면 RELOAD 해야 하나요?
+
+2026-10-29T15:04:14+09:00	workbench	start		quick: 🔄 BE & FE Finish & Start SCP0096
+2026-10-29T15:06:09+09:00	S8.verify	start		S8.verify: run_verify.py SCP0096
+2026-10-29T15:45:13+09:00	workbench	start		quick: 🔄 BE & FE Finish & Start SCP0096
+2026-10-29T15:50:37+09:00	S8.verify	start		S8.verify: run_verify.py SCP0096
+2026-10-29T16:11:04+09:00	S8.verify	end	0	
+2026-10-29T16:11:05+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0096
+2026-10-29T16:13:34+09:00	S8.verify	start		S8.verify: run_verify.py SCP0020
+2026-10-29T16:16:43+09:00	workbench	start		prompt: GRIDCOLUMN 중 WORKING TIME DEFAULT 가 수정 가능 COLUMN 입니다. 이 COLUMN이 어떤 역활을 하는지 찾아서 알려주세요.
+2026-10-29T16:30:01+09:00	workbench	start		prompt: Working Time Default 는 as-is 에서는 정수, 0-7 사이만 입력인데, to-be 는 그러한 rule 이 없습니다. 이부분은 오류로 판정되어야 하는데 오류로 판정되지 않은 사유를 확인하고 유사한 
+2026-10-29T16:35:38+09:00	S8.verify	end	0	
+2026-10-29T16:35:39+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0020
+2026-10-29T16:45:58+09:00	workbench	start		prompt: 조치필요 6번  은 TO-BE 에서는 * 빼도 오류 아니므로, 오류항목에서 *을 제외한 TEXT 만 일치하면 오류 아님. 오류에서 제외
+조치필요 7번은 TO-BE 에서 정상동작 확인 - 오류아닌데 오류 판단환 사유 
+2026-10-29T16:46:26+09:00	S8.verify	start		S8.verify: run_verify.py SCP0041
+2026-10-29T17:15:37+09:00	S8.verify	start		S8.verify: run_verify.py SCP0100
+2026-10-29T17:54:04+09:00	S8.verify	end	0	
+2026-10-29T17:54:08+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0041
+2026-10-29T19:03:44+09:00	S8.verify	end	0	
+2026-10-29T19:03:46+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0100
+2026-10-29T21:18:38+09:00	S8.verify	start		S8.verify: run_verify.py SCP0100
+2026-10-29T21:18:45+09:00	S8.verify	start		S8.verify: run_verify.py SCP0041
+2026-10-29T21:18:54+09:00	S8.verify	start		S8.verify: run_verify.py SCP0020
+2026-10-29T21:19:03+09:00	S8.verify	start		S8.verify: run_verify.py SCP0096
+2026-10-29T21:19:14+09:00	S8.verify	start		S8.verify: run_verify.py SCP0111
+2026-10-29T21:19:47+09:00	S8.verify	end	5	
+2026-10-29T21:19:52+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0041
+2026-10-29T22:14:04+09:00	S8.verify	end	0	
+2026-10-29T22:14:12+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0096
+2026-10-29T22:20:32+09:00	S8.verify	end	0	
+2026-10-29T22:20:38+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0020
+2026-10-29T22:44:24+09:00	S8.verify	end	0	
+2026-10-29T22:44:26+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0111
+2026-10-29T22:48:15+09:00	S8.verify	end	0	
+2026-10-29T22:48:17+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0100
+2026-10-29T23:33:30+09:00	S8.verify	start		S8.verify: run_verify.py SCP0041
+2026-10-30T00:29:12+09:00	S8.verify	end	0	
+2026-10-30T00:29:14+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0041
+2026-10-30T07:12:23+09:00	S8.verify	start		S8.verify: run_verify.py SCP0096
+2026-10-30T07:18:38+09:00	S8.verify	start		S8.verify: run_verify.py SCP0020
+2026-10-30T07:18:56+09:00	S8.verify	start		S8.verify: run_verify.py SCP0041
+2026-10-30T07:44:36+09:00	S8.verify	end	0	
+2026-10-30T07:44:38+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0096
+2026-10-30T07:46:38+09:00	S8.verify	start		S8.verify: run_verify.py SCP0100
+2026-10-30T07:50:52+09:00	S8.verify	end	0	
+2026-10-30T07:50:55+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0020
+2026-10-30T07:52:16+09:00	S8.verify	start		S8.verify: run_verify.py SCP0111
+2026-10-30T08:25:24+09:00	S8.verify	end	0	
+2026-10-30T08:25:26+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0041
+2026-10-30T08:45:49+09:00	S8.verify	end	8	
+2026-10-30T08:45:50+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0100
+2026-10-30T08:48:45+09:00	S8.verify	end	0	
+2026-10-30T08:48:45+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0111
+2026-10-30T09:52:19+09:00	workbench	start		quick: 🔄 BE & FE Finish & Start SCP0096
+2026-10-30T09:55:41+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 0a6352c5c→916e9cb3b exit 0
+2026-10-30T09:55:41+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge SCP0096
+2026-10-30T10:21:40+09:00	workbench	start		prompt: CHECKLIST 의 조치필요 NO. 3 : "SCP0040_SAVE_CHARACTERISTIC_CAPA: SP 호출 오류 또는 TO-BE 배선 없음" 에 대해서 상세 성명 해주세요. 
+2026-10-30T10:37:22+09:00	workbench	start		prompt: 이 오류 판단에 대해서는 CHECKLIST  기능 보완 해주세요.
+2026-10-30T11:02:32+09:00	workbench	start		prompt: Measure POPUP에 데이터가 조회되지 않습니다. 
+하지만 CheckList  에 목록이 도출되지 않았습니다. 원인 확인해서 보완 해주세요. 
+2026-10-30T11:33:22+09:00	workbench	start		quick: 🔄 BE & FE Finish & Start SCP0111
+2026-10-30T13:28:53+09:00	workbench	start		quick: 🔄 BE & FE Finish & Start SCP0020
+2026-10-30T13:36:31+09:00	S8.verify	start		S8.verify: run_verify.py SCP0111
+2026-10-30T13:36:54+09:00	S8.verify	start		S8.verify: run_verify.py SCP0100
+2026-10-30T13:37:40+09:00	S8.verify	start		S8.verify: run_verify.py SCP0041
+2026-10-30T14:44:35+09:00	S8.verify	end	0	
+2026-10-30T14:44:44+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0111
+2026-10-30T14:51:08+09:00	S8.verify	end	0	
+2026-10-30T14:51:09+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0041
+2026-10-30T15:19:40+09:00	S8.verify	end	0	
+2026-10-30T15:19:42+09:00	workbench	start		quick: 🔎 UI CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0100
+2026-10-30T16:08:18+09:00	workbench	start		quick: 🔄 BE & FE Finish & Start SCP0096
+2026-10-30T16:24:51+09:00	workbench	start		quick: ☁️ 클라우드 이관 패키지(DB) (PKG·META·MENU) SCP0100
+2026-10-30T16:42:22+09:00	S8.verifyIfStale	start		S8.verifyIfStale: verify_if_stale.py SCP0125
+2026-10-30T16:43:18+09:00	workbench	start		prompt: 조회 시 Stock TAB 의 속도가 많이 느립니다。 원인 찾아서 보완해주세요。 
+2026-10-30T16:58:34+09:00	S8.verifyIfStale	end	6	
+2026-10-30T16:58:42+09:00	workbench	start		quick: 🛠️ 수동 보완 SCP0125
+2026-10-30T18:22:24+09:00	workbench	start		quick: 🕒 작업 이력 (화면별/일자별 · 전후 비교) SCP0100
+2026-11-02T09:53:13+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 916e9cb3b→0b6b4a75b exit 0
+2026-11-02T09:53:14+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge SCP0096
+2026-11-02T11:04:02+09:00	workbench	start		quick: 🧭 작업 모드 (DB MODE / UI/DB MODE) SCP0096
+2026-11-02T11:04:11+09:00	workbench	start		quick: 🧭 작업 모드 (DB MODE / UI/DB MODE) SCP0096
+2026-11-02T15:34:33+09:00	workbench	start		quick: ⬆️ Source Backup SCP0096
+2026-11-03T09:45:51+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge 0b6b4a75b→eaeb29174 exit 0
+2026-11-03T09:45:51+09:00	workbench	start		quick: ⬇️🔀 Source Download & Merge SCP0096
+2026-11-03T09:46:59+09:00	workbench	start		prompt: BOH 에 값 입력하고 저장 시 동일 KEY 의 ROW 가 2건이 조회 됩니다. 
+원인 확인 후 보완 해주세요. 
+2026-11-03T10:15:40+09:00	workbench	start		prompt: 현재 모드를 DB 모드로 하고, FE 수정없이 DB 만으로 수정할 수 있으면 수정될 수 있도록 해주세요. 
+기존 수정분도 FE 수정없이 DB 만으로 작업 가능한 부분만 진행하고, FE 수정 필요 시 가이드만 해주세요
+2026-11-03T10:37:20+09:00	S5.cloudMod	start		S5.cloudMod: cloud_pkg.py SCP0111 --mode auto
+2026-11-03T10:37:37+09:00	S5.cloudMod	end	0	
+2026-11-03T10:37:44+09:00	workbench	start		quick: ☁️ 클라우드 이관 패키지(수정본) SCP0111
+2026-11-03T10:42:54+09:00	workbench	start		prompt: BOH 입력 시 2개 ROW로 나오는 부분은 수정하였습니다. 
+추가 적으로 BOH 입력 시 동적 구간에 INV 메저 데이터에 BOH 가 적용되어야 하지 않나요? 이부분에 대해서 AS-IS 로직 확인 후 보완 필요하면
+2026-11-03T11:04:55+09:00	workbench	start		prompt: 클라우드 이관을 보면 이전 수정 작업 시 20261103_1021 폴더를 생성하고, 클라우드 이관(수정본) 클릭 시 수정본 폴더를 알려주거나 수정본만 추출해서 알려주면 되는데, 신규로 알려준 수정본에 적용할 대상이 
+2026-11-03T15:28:13+09:00	workbench	start		quick: ⬆️ Source Backup SCP0111
+2026-11-03T18:02:03+09:00	workbench	start		quick: 📶 FLOW 진척 SCP0111
+2026-11-04T10:48:50+09:00	workbench	start		quick: ⬆️ Source Backup SCP0111
+2026-11-04T17:04:59+09:00	S8.verify	start		S8.verify: run_verify.py SCP0122
+2026-11-04T17:19:00+09:00	S8.verify	end	6	
+2026-11-04T17:19:07+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0122
+2026-11-04T17:59:24+09:00	S8.verify	start		S8.verify: run_verify.py SCP0122
+2026-11-04T17:59:30+09:00	S8.verify	end	6	
+2026-11-04T17:59:31+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0122
+2026-11-05T05:38:34+09:00	S8.verify	start		S8.verify: run_verify.py SCP0084
+2026-11-05T07:56:50+09:00	S8.verify	end	10	
+2026-11-05T07:56:51+09:00	workbench	start		quick: 🔎 CheckList (AS-IS vs TO-BE → CheckList·ActionItemList) SCP0084
+2026-11-05T09:38:18+09:00	workbench	start		quick: ⬆️ Source Backup SCP0084
+2026-11-05T10:39:09+09:00	workbench	start		quick: ⬆️ Source Backup SCP0084

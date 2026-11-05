@@ -1,2010 +1,999 @@
-# 작업 원장 — DMF0003 · 2026-10-26 12:49
+# 작업 원장 — DMF0003 · 2026-10-30 05:39
 
-> 검사 인스턴스 2203건 중 PASS·NA 288건 외 **1915건 전부가 할 일**이다(판정과 별도 대기열 없음). 0건이 될 때까지 화면 미완료(VC1·G11).
-> 보완 범위 repairScope = **DB_ONLY** — FE 항목은 가이드만(직접 수정 금지). 이 원장은 코드를 고치지 않는다.
+> 검사 인스턴스 3271건 중 PASS·NA 2341건 외 **930건 전부가 할 일**이다(판정과 별도 대기열 없음). 0건이 될 때까지 화면 미완료(VC1·G11).
+> 보완 범위 repairScope = **DB_FE** — FE 항목은 적용 대상. 이 원장은 코드를 고치지 않는다.
 
 | 유형 | 할 일 | 건수 | 완료 조건 |
 |---|---|---|---|
-| W2 | 구현 위치 확인 | 48 | 구현 위치 실존 |
-| W4 | 검사기 구현 | 13 | 검사기 구현 → 실행 PASS |
-| W5 | 검사기 연결 | 97 | 원장 항목/엔진 연결 → 실행 PASS |
-| W6 | 검증 실행 | 617 | 실행 → PASS |
-| W7 | 기대값 확정 | 1140 | 기대 확정 → PASS/FAIL |
+| W3 | 동작 수정 | 198 | 재판정 PASS |
+| W5 | 검사기 연결 | 77 | 원장 항목/엔진 연결 → 실행 PASS |
+| W6 | 검증 실행 | 25 | 실행 → PASS |
+| W7 | 기대값 확정 | 184 | 기대 확정 → PASS/FAIL |
+| W9 | 도구 오류 | 446 | 원인 해소 → 재판정 |
 
-- 담당: 사람 판정 / AS-IS 원문 확인 → 재판정 1088 · E2E 617 · 하네스 110 · 대조표 100
-- **구현 의심**(검사기 없음/경로 없음인데 TO-BE 흔적도 없음): 27건 — 검증 전에 구현 여부부터 확인
+- 담당: 하네스·환경 446 · 화면 FE 142 · 사람 판정 / AS-IS 원문 확인 → 재판정 132 · 하네스 77 · 대조표 52 · DB 객체 45 · E2E 25 · DB 11
+- **구현 의심**(검사기 없음/경로 없음인데 TO-BE 흔적도 없음): 16건 — 검증 전에 구현 여부부터 확인
 
 ## 검사별 할 일 분포
 
 | 검사 | 층 | W1 | W2 | W3 | W4 | W5 | W6 | W7 | W8 | W9 | 검사 방법 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| X-ROW | GEN |  |  |  |  |  |  | 398 |  |  | 대조표 행이 서술한 동작을 화면에서 재현 |
-| E4 | EDIT |  |  |  |  |  | 99 | 34 |  |  | 업무 검증·메시지 발생 조건(조건부 필수·중복·관계) |
-| X-LOC | GEN |  | 48 |  |  |  |  | 47 |  |  | 대조표 상태 구현 행의 구현 위치(파일:라인)가 TO-BE 소스에 실존 |
-| F4 | DB |  |  |  |  |  | 28 | 42 |  |  | 저장·조회 SQL 오류 0(BE 로그 DB 오류 0) |
-| H2 | DESIGN |  |  |  |  |  | 48 | 18 |  |  | 배경·글자색 규칙 |
-| B4 | COMBO |  |  |  |  | 17 |  | 48 |  |  | 콤보 후보 집합 = AS-IS 원천+필터(같은 데이터에 AS-IS 논리 적용) |
-| C3 | CASCADE |  |  |  |  |  | 36 | 27 |  |  | 연쇄 자동 채움 |
-| D1 | EDIT |  |  |  |  |  | 38 | 25 |  |  | 컬럼 편집 가능 여부(신규행·기존행) |
-| D3 | EDIT |  |  |  |  |  | 38 | 25 |  |  | 행 값 기반 조건부 잠금 |
-| A5 | DESIGN |  |  |  |  |  | 47 | 14 |  |  | 표시 컬럼 구성 = 메타·AS-IS(Div·개인화·필수) |
-| H5 | DESIGN |  |  |  |  |  | 51 | 10 |  |  | 라벨 명칭 |
-| D5 | EDIT |  |  |  |  |  | 46 | 14 |  |  | 셀 에디터 유형 |
-| A1 | GEN |  |  |  |  |  |  | 57 |  |  | 같은 조건으로 AS-IS SP 논리를 TO-BE 데이터에 적용한 행수·키 집합과 비교 |
-| G1 | GEN |  |  |  |  |  | 18 | 35 |  |  | 조회조건 값 변경 → 조회 인자·결과 반영 |
+| D3 | EDIT |  |  |  |  |  |  |  |  | 348 | 행 값 기반 조건부 잠금 |
+| X-ROW | GEN |  |  | 26 |  |  |  | 12 |  | 32 | 대조표 행이 서술한 동작을 화면에서 재현 |
+| A1 | GEN |  |  |  |  |  |  | 56 |  |  | 같은 조건으로 AS-IS SP 논리를 TO-BE 데이터에 적용한 행수·키 집합과 비교 |
 | X-REASON | DESIGN |  |  |  |  |  |  | 52 |  |  | 제외·해당없음 사유·근거(룰·지시·원문·이동 위치) 존재 — 근거 없으면 사람 확인 |
-| B3 | COMBO |  |  |  | 13 |  |  | 38 |  |  | 콤보 후보 정렬 = AS-IS |
-| DB-SYN | DB |  |  |  |  | 10 |  | 39 |  |  | BE 계정 시노님·권한·대상 객체 |
-| E3 | EDIT |  |  |  |  |  | 4 | 37 |  |  | 필수 입력 검증 |
-| M4 | POPUP |  |  |  |  |  | 23 | 15 |  |  | 팝업 선택값 반영 |
-| C2 | CASCADE |  |  |  |  |  | 20 | 15 |  |  | 그리드 셀 cascade 후보 |
-| C6 | CASCADE |  |  |  |  |  | 20 | 15 |  |  | 무변경 편집 종료 시 연쇄 미발동 |
-| G4 | DESIGN |  |  |  |  | 8 | 21 | 5 |  |  | 조회조건 표시·라벨·활성 |
-| G5 | POPUP |  |  |  |  | 19 |  | 15 |  |  | 팝업 조건 연동(인자) |
-| H6 | POPUP |  |  |  |  | 16 | 3 | 15 |  |  | 팝업 표준·열림 |
-| G6 | GEN |  |  |  |  |  | 18 | 8 |  |  | 조회조건 초기 기본값 = AS-IS Form_Load |
-| C1 | CASCADE |  |  |  |  |  | 11 | 14 |  |  | 상위 조회조건 변경 → 하위 후보 재조회·선택 초기화 |
-| D4 | EDIT |  |  |  |  |  | 5 | 17 |  |  | 신규행 기본값·자동세팅·Insert 전제 |
-| A6 | GEN |  |  |  |  |  | 12 | 9 |  |  | 결과 행 정렬 순서 — AS-IS 정렬 방식(SQL ORDER BY / 그리드·코드 정렬) 그대로 · 분기별 키 순서 동일 · |
-| B1 | COMBO |  |  |  |  | 9 |  | 10 |  |  | 콤보 후보 빈 행 없음 |
-| B2 | COMBO |  |  |  |  | 9 |  | 10 |  |  | 콤보 후보 중복 없음 |
-| E5 | EDIT |  |  |  |  | 5 |  | 10 |  |  | 콤보 셀 후보 외 값 차단 |
-| C4 | CASCADE |  |  |  |  |  | 1 | 14 |  |  | 조회조건 변경 시 그리드 상태(초기화·유지) = AS-IS |
-| M3 | POPUP |  |  |  |  |  | 15 |  |  |  | 팝업 내부 기능(조회·CRUD) |
-| E1 | EDIT |  |  |  |  |  | 3 | 7 |  |  | 숫자 소수자리·정수·부호·범위 |
-| E2 | EDIT |  |  |  |  | 1 |  | 1 |  |  | 날짜 형식·유효성 |
-| F2 | CRUD |  |  |  |  | 1 |  |  |  |  | 1회 저장(변경 감지) |
-| F6 | CRUD |  |  |  |  | 1 |  |  |  |  | 저장 후 값 보존 |
+| X-LOC | GEN |  |  |  |  |  |  | 47 |  |  | 대조표 상태 구현 행의 구현 위치(파일:라인)가 TO-BE 소스에 실존 |
+| G1 | GEN |  |  | 45 |  |  |  |  |  | 1 | 조회조건 값 변경 → 조회 인자·결과 반영 |
+| F4 | DB |  |  | 45 |  |  |  |  |  |  | 저장·조회 SQL 오류 0(BE 로그 DB 오류 0) |
+| B3 | COMBO |  |  | 33 |  | 10 |  |  |  |  | 콤보 후보 정렬 = AS-IS |
+| E3 | EDIT |  |  |  |  |  |  | 4 |  | 37 | 필수 입력 검증 |
+| M4 | POPUP |  |  |  |  |  |  | 10 |  | 28 | 팝업 선택값 반영 |
+| G5 | POPUP |  |  | 26 |  | 4 |  |  |  |  | 팝업 조건 연동(인자) |
+| G4 | DESIGN |  |  |  |  | 8 | 21 |  |  |  | 조회조건 표시·라벨·활성 |
+| B4 | COMBO |  |  |  |  | 15 |  |  |  |  | 콤보 후보 집합 = AS-IS 원천+필터(같은 데이터에 AS-IS 논리 적용) |
+| A6 | GEN |  |  | 11 |  |  |  | 3 |  |  | 결과 행 정렬 순서 — AS-IS 정렬 방식(SQL ORDER BY / 그리드·코드 정렬) 그대로 · 분기별 키 순서 동일 · |
+| D5 | EDIT |  |  | 11 |  |  |  |  |  |  | 셀 에디터 유형 |
+| B1 | COMBO |  |  |  |  | 10 |  |  |  |  | 콤보 후보 빈 행 없음 |
+| B2 | COMBO |  |  |  |  | 10 |  |  |  |  | 콤보 후보 중복 없음 |
+| DB-SYN | DB |  |  |  |  | 9 |  |  |  |  | BE 계정 시노님·권한·대상 객체 |
+| E5 | EDIT |  |  |  |  | 7 |  |  |  |  | 콤보 셀 후보 외 값 차단 |
+| H6 | POPUP |  |  |  |  | 2 | 3 |  |  |  | 팝업 표준·열림 |
+| C4 | CASCADE |  |  | 1 |  |  |  |  |  |  | 조회조건 변경 시 그리드 상태(초기화·유지) = AS-IS |
+| E2 | EDIT |  |  |  |  | 1 |  |  |  |  | 날짜 형식·유효성 |
 | G03-WIRE | GEN |  |  |  |  | 1 |  |  |  |  | AS-IS 이벤트가 TO-BE 대조표·핸들러로 전부 연결 |
-| J2 | AUTH |  |  |  |  |  | 1 |  |  |  | 권한별 버튼·기능 |
-| G3 | COMMON |  |  |  |  |  | 1 |  |  |  | 조회조건 저장·복원 |
-| K4 | COMMON |  |  |  |  |  | 1 |  |  |  | 버튼 구성·조건별 노출 |
-| F1 | CRUD |  |  |  |  |  | 1 |  |  |  | 저장 후 DB 반영(마커 행) |
-| F3 | CRUD |  |  |  |  |  | 1 |  |  |  | 붙여넣기 경로 → 값·검증·연쇄·저장 |
-| F5 | CRUD |  |  |  |  |  | 1 |  |  |  | CRUD Status 표시 정합 |
-| H4 | DESIGN |  |  |  |  |  | 1 |  |  |  | 레이아웃·스크롤·크기 |
-| I1 | DESIGN |  |  |  |  |  | 1 |  |  |  | LBL/MSG 언어별 등록 |
 | SC1 | DESIGN |  |  |  |  |  | 1 |  |  |  | 조회조건 순서 = 기준표 |
-| D6 | EDIT |  |  |  |  |  | 1 |  |  |  | Insert 위치·상태 유지 |
-| A10 | GEN |  |  |  |  |  | 1 |  |  |  | 조회 전 그리드 초기 상태(빈 그리드·헤더) = AS-IS |
-| X-REOPEN | GEN |  |  |  |  |  | 1 |  |  |  | 화면 닫기·재오픈 시 오류·잔존 상태 없음 |
 
-## W2 구현 위치 확인 (48)
+## W3 동작 수정 (198)
 
 | ID | 검사 | 대상 | 담당 | 할 일 | TO-BE 흔적 | 대조표 행 |
 |---|---|---|---|---|---|---|
-| WK-DMF0003-0001 | X-LOC | 23 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (23) |
-| WK-DMF0003-0002 | X-LOC | 28 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (28) |
-| WK-DMF0003-0003 | X-LOC | CC-02 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CC-02) |
-| WK-DMF0003-0004 | X-LOC | CC-03 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CC-03) |
-| WK-DMF0003-0005 | X-LOC | CC-04 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CC-04) |
-| WK-DMF0003-0006 | X-LOC | CC-06 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CC-06) |
-| WK-DMF0003-0007 | X-LOC | CC-07 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CC-07) |
-| WK-DMF0003-0008 | X-LOC | CC-08 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CC-08) |
-| WK-DMF0003-0009 | X-LOC | CD-07 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CD-07) |
-| WK-DMF0003-0010 | X-LOC | CD-09 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CD-09) |
-| WK-DMF0003-0011 | X-LOC | CE-108 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CE-108) |
-| WK-DMF0003-0012 | X-LOC | CE-115 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CE-115) |
-| WK-DMF0003-0013 | X-LOC | CE-116 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CE-116) |
-| WK-DMF0003-0014 | X-LOC | CE-117 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CE-117) |
-| WK-DMF0003-0015 | X-LOC | CE-118 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CE-118) |
-| WK-DMF0003-0016 | X-LOC | CE-119 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CE-119) |
-| WK-DMF0003-0017 | X-LOC | CE-120 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CE-120) |
-| WK-DMF0003-0018 | X-LOC | CE-121 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CE-121) |
-| WK-DMF0003-0019 | X-LOC | CG-101 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CG-101) |
-| WK-DMF0003-0020 | X-LOC | CG-110 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CG-110) |
-| WK-DMF0003-0021 | X-LOC | CG-118 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CG-118) |
-| WK-DMF0003-0022 | X-LOC | CH-02 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CH-02) |
-| WK-DMF0003-0023 | X-LOC | CH-03 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CH-03) |
-| WK-DMF0003-0024 | X-LOC | CH-08 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CH-08) |
-| WK-DMF0003-0025 | X-LOC | CH-108 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CH-108) |
-| WK-DMF0003-0026 | X-LOC | CI-07 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CI-07) |
-| WK-DMF0003-0027 | X-LOC | CJ-01 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CJ-01) |
-| WK-DMF0003-0028 | X-LOC | CJ-02 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CJ-02) |
-| WK-DMF0003-0029 | X-LOC | CJ-03 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CJ-03) |
-| WK-DMF0003-0030 | X-LOC | CJ-04 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CJ-04) |
-| WK-DMF0003-0031 | X-LOC | CK-01 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CK-01) |
-| WK-DMF0003-0032 | X-LOC | CK-02 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CK-02) |
-| WK-DMF0003-0033 | X-LOC | CK-03 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CK-03) |
-| WK-DMF0003-0034 | X-LOC | CK-05 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CK-05) |
-| WK-DMF0003-0035 | X-LOC | CK-07 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CK-07) |
-| WK-DMF0003-0036 | X-LOC | CK-08 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CK-08) |
-| WK-DMF0003-0037 | X-LOC | CK-09 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CK-09) |
-| WK-DMF0003-0038 | X-LOC | CK-10 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CK-10) |
-| WK-DMF0003-0039 | X-LOC | CK-11 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (CK-11) |
-| WK-DMF0003-0040 | X-LOC | E04 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (E04) |
-| WK-DMF0003-0041 | X-LOC | E05 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (E05) |
-| WK-DMF0003-0042 | X-LOC | E06 | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (E06) |
-| WK-DMF0003-0043 | X-LOC | HANDLER:spdMain_ClipboardPasted | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (HANDLER:spdMain_ClipboardPasted) |
-| WK-DMF0003-0044 | X-LOC | HANDLER:spdMain_KeyUp | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (HANDLER:spdMain_KeyUp) |
-| WK-DMF0003-0045 | X-LOC | MODAL:SspSyncCompareModal | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (MODAL:SspSyncCompareModal) |
-| WK-DMF0003-0046 | X-LOC | MODAL:SspSyncPopUp | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (MODAL:SspSyncPopUp) |
-| WK-DMF0003-0047 | X-LOC | MODAL:SspSyncResultModal | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (MODAL:SspSyncResultModal) |
-| WK-DMF0003-0048 | X-LOC | 행잠금: 좌측 상세컬럼 read-only (#8~27, #34~70) | 대조표(FE __asis-mapping__.md) | 구현 위치 확인·대조표 보강 — 상태 구현인데 구현 위치(파일:라인) 칸이 비어 있음 — 대조표 보강 또는 구현 확인 |  | 1 (행잠금: 좌측 상세컬럼 read-only (#8~27, #34~70)) |
+| WK-DMF0003-0001 | C4 | chkColor / Color | 화면 FE(적용 예정) | C4 FAIL 수정 — chkColor / Color: 실측[T-3a6f97cf]: 상위 조회조건 [Color] 칸 없음 (FX-DMF0003-189) |  | 1 (HANDLER:chkColor_CheckedChanged) |
+| WK-DMF0003-0002 | B3 | 5 | 화면 FE(적용 예정) | B3 FAIL 수정 — 5: 행 집계 — 대조표 5 'Sales Site 재로드 GetSalesSite (L2653~2656/L3103~3111' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FAIL 요소 |  | 1 (5) |
+| WK-DMF0003-0003 | B3 | 8 | 화면 FE(적용 예정) | B3 FAIL 수정 — 8: 행 집계 — 대조표 8 'SCP 시간창(81) — LOOKUP SCP_PLANNER_EDIT_FLAG 행 0=차단 ' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FAIL 요소 |  | 1 (8) |
+| WK-DMF0003-0004 | B3 | 9 | 화면 FE(적용 예정) | B3 FAIL 수정 — 9: 행 집계 — 대조표 9 'DM류 시간창 — LOOKUP DM_PLANNER_EDIT_FLAG 행 존재=차단 MSG0' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FAIL 요소 |  | 1 (9) |
+| WK-DMF0003-0005 | B3 | CA-03 | 화면 FE(적용 예정) | B3 FAIL 수정 — CA-03: 행 집계 — 대조표 CA-03 '§1 `SCP Planner` × 81* × `SCP_PLANNER_EDIT_FLAG` 0' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · |  | 1 (CA-03) |
+| WK-DMF0003-0006 | B3 | CE-110 | 화면 FE(적용 예정) | B3 FAIL 수정 — CE-110: 행 집계 — 대조표 CE-110 '§5.3 [원문 무번호] LOOKUP_TYPE / 건수(유효)' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FAIL 요소: clbT |  | 1 (CE-110) |
+| WK-DMF0003-0007 | B3 | CE-115 | 화면 FE(적용 예정) | B3 FAIL 수정 — CE-115: 행 집계 — 대조표 CE-115 '§5.3 [원문 무번호] **TMM_MEASURE_ADMIN** / 70(70)' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FAI |  | 1 (CE-115) |
+| WK-DMF0003-0008 | B3 | CE-116 | 화면 FE(적용 예정) | B3 FAIL 수정 — CE-116: 행 집계 — 대조표 CE-116 '§5.3 [원문 무번호] **CELL_TYPE** / 21(21)' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FAIL 요소: cl |  | 1 (CE-116) |
+| WK-DMF0003-0009 | B3 | CE-117 | 화면 FE(적용 예정) | B3 FAIL 수정 — CE-117: 행 집계 — 대조표 CE-117 '§5.3 [원문 무번호] **DM_BIZ_TYPE** / 3(3)' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FAIL 요소: cl |  | 1 (CE-117) |
+| WK-DMF0003-0010 | B3 | CE-118 | 화면 FE(적용 예정) | B3 FAIL 수정 — CE-118: 행 집계 — 대조표 CE-118 '§5.3 [원문 무번호] **DM_BIZ_TYPE_40** / 1(1)' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FAIL 요소: |  | 1 (CE-118) |
+| WK-DMF0003-0011 | B3 | CE-119 | 화면 FE(적용 예정) | B3 FAIL 수정 — CE-119: 행 집계 — 대조표 CE-119 '§5.3 [원문 무번호] **EDI_END_CUSTOMER** / 16(16)' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FAIL |  | 1 (CE-119) |
+| WK-DMF0003-0012 | B3 | CE-120 | 화면 FE(적용 예정) | B3 FAIL 수정 — CE-120: 행 집계 — 대조표 CE-120 '§5.3 [원문 무번호] **RPA_END_CUSTOMER** / 4(4)' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FAIL 요 |  | 1 (CE-120) |
+| WK-DMF0003-0013 | B3 | CE-121 | 화면 FE(적용 예정) | B3 FAIL 수정 — CE-121: 행 집계 — 대조표 CE-121 '§5.3 [원문 무번호] **DM_MEASURE_POSITIONAL_NOTATION** /' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 |  | 1 (CE-121) |
+| WK-DMF0003-0014 | B3 | CG-07 | 화면 FE(적용 예정) | B3 FAIL 수정 — CG-07: 행 집계 — 대조표 CG-07 "§7 버킷 배분 / 주→일: 요일비트(기본 '0000010'=FRI) 균등+잔여 마지막, " 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · |  | 1 (CG-07) |
+| WK-DMF0003-0015 | B3 | CI-08 | 화면 FE(적용 예정) | B3 FAIL 수정 — CI-08: 행 집계 — 대조표 CI-08 '§9.2 SCP Planner 시간창(81) / LOOKUP `SCP_PLANNER_EDI' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · |  | 1 (CI-08) |
+| WK-DMF0003-0016 | B3 | CI-09 | 화면 FE(적용 예정) | B3 FAIL 수정 — CI-09: 행 집계 — 대조표 CI-09 '§9.2 DM Planner류 시간창(81) / LOOKUP `DM_PLANNER_EDIT' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · |  | 1 (CI-09) |
+| WK-DMF0003-0017 | B3 | CK-07 | 화면 FE(적용 예정) | B3 FAIL 수정 — CK-07: 행 집계 — 대조표 CK-07 '§11 SCM.SCM0001_GET_LOOKUP_VALUES / ITEM_TYPE_CODE' 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · |  | 1 (CK-07) |
+| WK-DMF0003-0018 | B3 | DMF0003_1_MktFcst.GetBizTypebyDivision | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetBizTypebyDivision: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetBizTypebyDivision 의 B3 14요소: NOPATH:10 · PA |  | 3 (ACT:DMF0003_1_MktFcst.GetBizTypebyDivisi) |
+| WK-DMF0003-0019 | B3 | DMF0003_1_MktFcst.GetBucketType | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetBucketType: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetBucketType 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2  |  | 2 (ACT:DMF0003_1_MktFcst.GetBucketType:5581) |
+| WK-DMF0003-0020 | B3 | DMF0003_1_MktFcst.GetCustomerbyDivision | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetCustomerbyDivision: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetCustomerbyDivision 의 B3 14요소: NOPATH:10 ·  |  | 4 (ACT:DMF0003_1_MktFcst.GetCustomerbyDivis) |
+| WK-DMF0003-0021 | B3 | DMF0003_1_MktFcst.GetCustomsHandbook | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetCustomsHandbook: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetCustomsHandbook 의 B3 14요소: NOPATH:10 · PASS:2 |  | 8 (ACT:DMF0003_1_MktFcst.GetCustomsHandbook) |
+| WK-DMF0003-0022 | B3 | DMF0003_1_MktFcst.GetDayRange | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetDayRange: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetDayRange 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FA |  | 4 (ACT:DMF0003_1_MktFcst.GetDayRange:5512:1) |
+| WK-DMF0003-0023 | B3 | DMF0003_1_MktFcst.GetDivision | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetDivision: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetDivision 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FA |  | 2 (ACT:DMF0003_1_MktFcst.GetDivision:5468:1) |
+| WK-DMF0003-0024 | B3 | DMF0003_1_MktFcst.GetEdiSender | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetEdiSender: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetEdiSender 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 ·  |  | 8 (ACT:DMF0003_1_MktFcst.GetEdiSender:6211:) |
+| WK-DMF0003-0025 | B3 | DMF0003_1_MktFcst.GetFirstWed | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetFirstWed: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetFirstWed 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FA |  | 9 (ACT:DMF0003_1_MktFcst.GetFirstWed:6851:1) |
+| WK-DMF0003-0026 | B3 | DMF0003_1_MktFcst.GetItemType | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetItemType: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetItemType 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 · FA |  | 3 (ACT:DMF0003_1_MktFcst.GetItemType:5593:1) |
+| WK-DMF0003-0027 | B3 | DMF0003_1_MktFcst.GetItemType2 | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetItemType2: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetItemType2 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 ·  |  | 3 (ACT:DMF0003_1_MktFcst.GetItemType2:5606:) |
+| WK-DMF0003-0028 | B3 | DMF0003_1_MktFcst.GetPlantSitebyEndCusto | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetPlantSitebyEndCustomer: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetPlantSitebyEndCustomer 의 B3 14요소: NOPA |  | 5 (ACT:DMF0003_1_MktFcst.GetPlantSitebyEndC) |
+| WK-DMF0003-0029 | B3 | DMF0003_1_MktFcst.GetScmSitebyDivision | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetScmSitebyDivision: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetScmSitebyDivision 의 B3 14요소: NOPATH:10 · PA |  | 5 (ACT:DMF0003_1_MktFcst.GetScmSitebyDivisi) |
+| WK-DMF0003-0030 | B3 | DMF0003_1_MktFcst.GetTeambyDivision | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetTeambyDivision: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetTeambyDivision 의 B3 14요소: NOPATH:10 · PASS:2 · |  | 3 (ACT:DMF0003_1_MktFcst.GetTeambyDivision:) |
+| WK-DMF0003-0031 | B3 | DMF0003_1_MktFcst.GetWeekNumber | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.GetWeekNumber: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetWeekNumber 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2  |  | 9 (ACT:DMF0003_1_MktFcst.GetWeekNumber:5795) |
+| WK-DMF0003-0032 | B3 | DMF0003_1_MktFcst.getDayOfWeek | 화면 FE(적용 예정) | B3 FAIL 수정 — DMF0003_1_MktFcst.getDayOfWeek: 진입점 집계 — 대조표 DMF0003_1_MktFcst.getDayOfWeek 의 B3 14요소: NOPATH:10 · PASS:2 · FAIL:2 ·  |  | 3 (ACT:DMF0003_1_MktFcst.getDayOfWeek:6070:) |
+| WK-DMF0003-0033 | B3 | clbCustomer / End Customer / Customer | 화면 FE(적용 예정) | B3 FAIL 수정 — clbCustomer / End Customer / Customer: 원장 V-d987a33b SEARCH (FX-DMF0003-016) |  | 4 (ACT:DMF0003_1_MktFcst.cboDivision_Select) |
+| WK-DMF0003-0034 | B3 | clbTeam / Team | 화면 FE(적용 예정) | B3 FAIL 수정 — clbTeam / Team: 원장 V-af0b4a18 SEARCH (FX-DMF0003-019) |  | 6 (ACT:DMF0003_1_MktFcst.cboDivision_Select) |
+| WK-DMF0003-0035 | F4 | 3 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — 3: 행 집계 — 대조표 3 'AS FROM SITE 필수 — MSG00113(EditButton L876~888, DM' 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: DM |  | 1 (3) |
+| WK-DMF0003-0036 | F4 | 34 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — 34: 행 집계 — 대조표 34 'FindData data_start_pos<0' 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: DMF0000_GET_MASTER_CHG_PO |  | 1 (34) |
+| WK-DMF0003-0037 | F4 | 6 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — 6: 행 집계 — 대조표 6 '공통 콤보 PARAM5 W/S 플래그 — GetSalesSite40(L7047~7066) ' 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: DM |  | 0 () |
+| WK-DMF0003-0038 | F4 | 7 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — 7: 행 집계 — 대조표 7 'SCP Planner 차단 — Edit 82·40(L828~834) / Insert 81(' 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: DM |  | 0 () |
+| WK-DMF0003-0039 | F4 | 8 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — 8: 행 집계 — 대조표 8 'SCP 시간창(81) — LOOKUP SCP_PLANNER_EDIT_FLAG 행 0=차단 ' 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: DM |  | 0 () |
+| WK-DMF0003-0040 | F4 | CK-06 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — CK-06: 행 집계 — 대조표 CK-06 '§11 DM.PR_GET_DAY_RANGE / 기간 기본값' 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: DMF0000_GET_ |  | 1 (CK-06) |
+| WK-DMF0003-0041 | F4 | CRUD:E02:SEARCH | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — CRUD:E02:SEARCH: 행 집계 — 대조표 CRUD:E02:SEARCH '[SEARCH] §2 FindData — 조회 (FindButton L805 → FindD' 의 F4 27요소: NA:23 · F |  | 1 (CRUD:E02:SEARCH) |
+| WK-DMF0003-0042 | F4 | DMF0000_GET_MASTER_CHG_POPUP | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0000_GET_MASTER_CHG_POPUP: 실측[T-c92f2883]: DMF0000_GET_MASTER_CHG_POPUP: (PROC_M 배선 없음 — AS-IS 엔드포인트의 TO-BE 프로시저 배 |  | 152 (CH-108 ACT:DMF0003_MatsterChgPopup.FindB) |
+| WK-DMF0003-0043 | F4 | DMF0003_1_MktFcst.GetCustomsHandbook | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_1_MktFcst.GetCustomsHandbook: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetCustomsHandbook 의 F4 27요소: NA:23 · FAIL:3 · P |  | 2 (ACT:DMF0003_1_MktFcst.GetCustomsHandbook) |
+| WK-DMF0003-0044 | F4 | DMF0003_1_MktFcst.GetDayRange | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_1_MktFcst.GetDayRange: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetDayRange 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요 |  | 2 (ACT:DMF0003_1_MktFcst.GetDayRange:5516:3) |
+| WK-DMF0003-0045 | F4 | DMF0003_1_MktFcst.GetEdiSender | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_1_MktFcst.GetEdiSender: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetEdiSender 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL |  | 2 (ACT:DMF0003_1_MktFcst.GetEdiSender:6215:) |
+| WK-DMF0003-0046 | F4 | DMF0003_1_MktFcst.GetFcstType | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_1_MktFcst.GetFcstType: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetFcstType 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요 |  | 2 (ACT:DMF0003_1_MktFcst.GetFcstType:6086:3) |
+| WK-DMF0003-0047 | F4 | DMF0003_1_MktFcst.GetIncotermsType | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_1_MktFcst.GetIncotermsType: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetIncotermsType 의 F4 27요소: NA:23 · FAIL:3 · PASS: |  | 2 (ACT:DMF0003_1_MktFcst.GetIncotermsType:6) |
+| WK-DMF0003-0048 | F4 | DMF0003_1_MktFcst.GetSalesSite | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_1_MktFcst.GetSalesSite: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetSalesSite 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL |  | 2 (ACT:DMF0003_1_MktFcst.GetSalesSite:6130:) |
+| WK-DMF0003-0049 | F4 | DMF0003_1_MktFcst.GetSalesSite40 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_1_MktFcst.GetSalesSite40: 진입점 집계 — 대조표 DMF0003_1_MktFcst.GetSalesSite40 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 ·  |  | 2 (ACT:DMF0003_1_MktFcst.GetSalesSite40:615) |
+| WK-DMF0003-0050 | F4 | DMF0003_CustDemandAnalysis.FindDataMain | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_CustDemandAnalysis.FindDataMain: 진입점 집계 — 대조표 DMF0003_CustDemandAnalysis.FindDataMain 의 F4 27요소: NA:23 · FAIL |  | 1 (ACT:DMF0003_CustDemandAnalysis.FindDataM) |
+| WK-DMF0003-0051 | F4 | DMF0003_CustDemandAnalysis.GetSLOC | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_CustDemandAnalysis.GetSLOC: 진입점 집계 — 대조표 DMF0003_CustDemandAnalysis.GetSLOC 의 F4 27요소: NA:23 · FAIL:3 · PASS: |  | 2 (ACT:DMF0003_CustDemandAnalysis.GetSLOC:9) |
+| WK-DMF0003-0052 | F4 | DMF0003_CustDemandAnalysis.GetSPlant | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_CustDemandAnalysis.GetSPlant: 진입점 집계 — 대조표 DMF0003_CustDemandAnalysis.GetSPlant 의 F4 27요소: NA:23 · FAIL:3 · P |  | 2 (ACT:DMF0003_CustDemandAnalysis.GetSPlant) |
+| WK-DMF0003-0053 | F4 | DMF0003_GET_BUCKET_TYPE_CODE | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_GET_BUCKET_TYPE_CODE: 실측[T-166a486d]: DMF0003_GET_BUCKET_TYPE_CODE: (PROC_M 배선 없음 — AS-IS 엔드포인트의 TO-BE 프로시저 배 |  | 7 (CK-04 ACT:DMF0003_1_MktFcst.GetBucketTyp) |
+| WK-DMF0003-0054 | F4 | DMF0003_MktFcst.GetCustomsHandbook | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_MktFcst.GetCustomsHandbook: 진입점 집계 — 대조표 DMF0003_MktFcst.GetCustomsHandbook 의 F4 27요소: NA:23 · FAIL:3 · PASS: |  | 2 (ACT:DMF0003_MktFcst.GetCustomsHandbook:7) |
+| WK-DMF0003-0055 | F4 | DMF0003_MktFcst.GetDayRange | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_MktFcst.GetDayRange: 진입점 집계 — 대조표 DMF0003_MktFcst.GetDayRange 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: D |  | 2 (ACT:DMF0003_MktFcst.GetDayRange:6325:3 A) |
+| WK-DMF0003-0056 | F4 | DMF0003_MktFcst.GetEdiSender | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_MktFcst.GetEdiSender: 진입점 집계 — 대조표 DMF0003_MktFcst.GetEdiSender 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: |  | 2 (ACT:DMF0003_MktFcst.GetEdiSender:7111:3 ) |
+| WK-DMF0003-0057 | F4 | DMF0003_MktFcst.GetFcstType | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_MktFcst.GetFcstType: 진입점 집계 — 대조표 DMF0003_MktFcst.GetFcstType 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: D |  | 2 (ACT:DMF0003_MktFcst.GetFcstType:6984:3 A) |
+| WK-DMF0003-0058 | F4 | DMF0003_MktFcst.GetIncotermsType | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_MktFcst.GetIncotermsType: 진입점 집계 — 대조표 DMF0003_MktFcst.GetIncotermsType 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 ·  |  | 2 (ACT:DMF0003_MktFcst.GetIncotermsType:700) |
+| WK-DMF0003-0059 | F4 | DMF0003_MktFcst.GetLookupValues | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_MktFcst.GetLookupValues: 진입점 집계 — 대조표 DMF0003_MktFcst.GetLookupValues 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FA |  | 2 (ACT:DMF0003_MktFcst.GetLookupValues:7131) |
+| WK-DMF0003-0060 | F4 | DMF0003_MktFcst.GetSalesSite | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_MktFcst.GetSalesSite: 진입점 집계 — 대조표 DMF0003_MktFcst.GetSalesSite 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: |  | 2 (ACT:DMF0003_MktFcst.GetSalesSite:7028:3 ) |
+| WK-DMF0003-0061 | F4 | DMF0003_MktFcst.GetSalesSite40 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_MktFcst.GetSalesSite40: 진입점 집계 — 대조표 DMF0003_MktFcst.GetSalesSite40 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL |  | 2 (ACT:DMF0003_MktFcst.GetSalesSite40:7053:) |
+| WK-DMF0003-0062 | F4 | DMF0003_PRPopup.GetSLOC | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_PRPopup.GetSLOC: 진입점 집계 — 대조표 DMF0003_PRPopup.GetSLOC 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: DMF0000_G |  | 2 (ACT:DMF0003_PRPopup.GetSLOC:603:3 ACT:DM) |
+| WK-DMF0003-0063 | F4 | DMF0003_PRPopup.GetSPlant | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_PRPopup.GetSPlant: 진입점 집계 — 대조표 DMF0003_PRPopup.GetSPlant 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: DMF00 |  | 2 (ACT:DMF0003_PRPopup.GetSPlant:585:3 ACT:) |
+| WK-DMF0003-0064 | F4 | DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE: 실측[T-9d634966]: DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE: (PROC_M 배선 없음 — AS-IS 엔드포 |  | 106 (ACT:DMF0003_MatsterChgPopup.SaveButton A) |
+| WK-DMF0003-0065 | F4 | DMF0003_SspSyncComparePopUp.FindData | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_SspSyncComparePopUp.FindData: 진입점 집계 — 대조표 DMF0003_SspSyncComparePopUp.FindData 의 F4 27요소: NA:23 · FAIL:3 · P |  | 1 (ACT:DMF0003_SspSyncComparePopUp.FindData) |
+| WK-DMF0003-0066 | F4 | DMF0003_SspSyncPopUp.FindData | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_SspSyncPopUp.FindData: 진입점 집계 — 대조표 DMF0003_SspSyncPopUp.FindData 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요 |  | 1 (ACT:DMF0003_SspSyncPopUp.FindData) |
+| WK-DMF0003-0067 | F4 | DMF0003_T_MktFcst.GetCustomsHandbook | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_T_MktFcst.GetCustomsHandbook: 진입점 집계 — 대조표 DMF0003_T_MktFcst.GetCustomsHandbook 의 F4 27요소: NA:23 · FAIL:3 · P |  | 2 (ACT:DMF0003_T_MktFcst.GetCustomsHandbook) |
+| WK-DMF0003-0068 | F4 | DMF0003_T_MktFcst.GetDayRange | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_T_MktFcst.GetDayRange: 진입점 집계 — 대조표 DMF0003_T_MktFcst.GetDayRange 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요 |  | 2 (ACT:DMF0003_T_MktFcst.GetDayRange:5069:3) |
+| WK-DMF0003-0069 | F4 | DMF0003_T_MktFcst.GetEdiSender | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_T_MktFcst.GetEdiSender: 진입점 집계 — 대조표 DMF0003_T_MktFcst.GetEdiSender 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL |  | 2 (ACT:DMF0003_T_MktFcst.GetEdiSender:5722:) |
+| WK-DMF0003-0070 | F4 | DMF0003_T_MktFcst.GetFcstType | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_T_MktFcst.GetFcstType: 진입점 집계 — 대조표 DMF0003_T_MktFcst.GetFcstType 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요 |  | 2 (ACT:DMF0003_T_MktFcst.GetFcstType:5601:3) |
+| WK-DMF0003-0071 | F4 | DMF0003_T_MktFcst.GetIncotermsType | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_T_MktFcst.GetIncotermsType: 진입점 집계 — 대조표 DMF0003_T_MktFcst.GetIncotermsType 의 F4 27요소: NA:23 · FAIL:3 · PASS: |  | 2 (ACT:DMF0003_T_MktFcst.GetIncotermsType:5) |
+| WK-DMF0003-0072 | F4 | DMF0003_T_MktFcst.GetSalesSite | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_T_MktFcst.GetSalesSite: 진입점 집계 — 대조표 DMF0003_T_MktFcst.GetSalesSite 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL |  | 2 (ACT:DMF0003_T_MktFcst.GetSalesSite:5645:) |
+| WK-DMF0003-0073 | F4 | DMF0003_T_MktFcst.GetSalesSite40 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — DMF0003_T_MktFcst.GetSalesSite40: 진입점 집계 — 대조표 DMF0003_T_MktFcst.GetSalesSite40 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 ·  |  | 2 (ACT:DMF0003_T_MktFcst.GetSalesSite40:566) |
+| WK-DMF0003-0074 | F4 | E02 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — E02: 행 집계 — 대조표 E02 '§2 FindData — 조회 (FindButton L805 → FindData L1673' 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소 |  | 1 (E02) |
+| WK-DMF0003-0075 | F4 | E03-2 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — E03-2: 행 집계 — 대조표 E03-2 '§3.2 SaveButton (L1340) → SaveData (L2220~2506)' 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요 |  | 1 (E03-2) |
+| WK-DMF0003-0076 | F4 | E04-2 | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — E04-2: 행 집계 — 대조표 E04-2 '§4.2 SetSaveData (L5395~5522) / SetSaveDataRemove ' 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAI |  | 1 (E04-2) |
+| WK-DMF0003-0077 | F4 | HANDLER:FindData | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — HANDLER:FindData: 행 집계 — 대조표 HANDLER:FindData 'AS-IS `DMF0003_MktFcst.cs:1673` (라이브 80행)' 의 F4 27요소: NA:23 · FAIL:3 · |  | 1 (HANDLER:FindData) |
+| WK-DMF0003-0078 | F4 | HANDLER:SaveData | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — HANDLER:SaveData: 행 집계 — 대조표 HANDLER:SaveData 'AS-IS `DMF0003_MktFcst.cs:2220` (라이브 199행)' 의 F4 27요소: NA:23 · FAIL:3  |  | 1 (HANDLER:SaveData) |
+| WK-DMF0003-0079 | F4 | — | DB 객체(PKG/SP)(적용 예정) | F4 FAIL 수정 — —: 행 집계 — 대조표 — '(저장대상 0)' 의 F4 27요소: NA:23 · FAIL:3 · PASS:1 · FAIL 요소: DMF0000_GET_MASTER_CHG_POPUP — 실측[T-c92f2883 |  | 1 (—) |
+| WK-DMF0003-0080 | D5 | 12 | 화면 FE(적용 예정) | D5 FAIL 수정 — 12: 행 집계 — 대조표 12 'spdMain_ComboSelChange' 의 D5 49요소: NA:45 · PASS:3 · FAIL:1 · FAIL 요소: MEASURE / Measure — 실측[T-af7 |  | 1 (12) |
+| WK-DMF0003-0081 | D5 | 73 | 화면 FE(적용 예정) | D5 FAIL 수정 — 73: 행 집계 — 대조표 73 'MSG00472 FcstType 코드 검증' 의 D5 49요소: NA:45 · PASS:3 · FAIL:1 · FAIL 요소: MEASURE / Measure — 실측[T-af |  | 1 (73) |
+| WK-DMF0003-0082 | D5 | BizType / CustomsHandbook / FcstType / I | 화면 FE(적용 예정) | D5 FAIL 수정 — BizType / CustomsHandbook / FcstType / Incoterms / ItemType : 행 집계 — 대조표 BizType / CustomsHandbook / FcstType / Incot |  | 1 (BizType / CustomsHandbook / FcstType / I) |
+| WK-DMF0003-0083 | D5 | COMMON:UC-05 | 화면 FE(적용 예정) | D5 FAIL 수정 — COMMON:UC-05: 행 집계 — 대조표 COMMON:UC-05 'Excel Download 시 콤보 컬럼 데이터가 Code 아닌 Name 으로 출력 (gr' 의 D5 49요소: NA:45 · PASS:3  |  | 1 (COMMON:UC-05) |
+| WK-DMF0003-0084 | D5 | DMF0003_1_MktFcst.CreateSpread | 화면 FE(적용 예정) | D5 FAIL 수정 — DMF0003_1_MktFcst.CreateSpread: 진입점 집계 — 대조표 DMF0003_1_MktFcst.CreateSpread 의 D5 49요소: NA:45 · PASS:3 · FAIL:1 · FAIL |  | 10 (ACT:DMF0003_1_MktFcst.CreateSpread:529:1) |
+| WK-DMF0003-0085 | D5 | E04-3 | 화면 FE(적용 예정) | D5 FAIL 수정 — E04-3: 행 집계 — 대조표 E04-3 '§4.3 spdMain_ComboSelChange (L3291~3603)' 의 D5 49요소: NA:45 · PASS:3 · FAIL:1 · FAIL 요소: MEAS |  | 1 (E04-3) |
+| WK-DMF0003-0086 | D5 | EndCustomerByDivision40Team | 화면 FE(적용 예정) | D5 FAIL 수정 — EndCustomerByDivision40Team: 행 집계 — 대조표 EndCustomerByDivision40Team '(없음)' 의 D5 49요소: NA:45 · PASS:3 · FAIL:1 · FAIL  |  | 1 (EndCustomerByDivision40Team) |
+| WK-DMF0003-0087 | D5 | MEASURE / Measure | 화면 FE(적용 예정) | D5 FAIL 수정 — MEASURE / Measure: 실측[T-af790eaa]: MEASURE: AS-IS TEXT(cell_rules) ↔ TO-BE dataType=1 dataMap=Y — AS-IS TEXT 에디터가 아님  |  | 2 (ACT:DMF0003_SspSyncPopUp.InitSpread ACT:) |
+| WK-DMF0003-0088 | D5 | Measure | 화면 FE(적용 예정) | D5 FAIL 수정 — Measure: 행 집계 — 대조표 Measure 'mnuId' 의 D5 49요소: NA:45 · PASS:3 · FAIL:1 · FAIL 요소: MEASURE / Measure — 실측[T-af790eaa]: |  | 1 (Measure) |
+| WK-DMF0003-0089 | D5 | SiteByEndCustomer | 화면 FE(적용 예정) | D5 FAIL 수정 — SiteByEndCustomer: 행 집계 — 대조표 SiteByEndCustomer 'divisionId, endCustomer' 의 D5 49요소: NA:45 · PASS:3 · FAIL:1 · FAIL 요 |  | 1 (SiteByEndCustomer) |
+| WK-DMF0003-0090 | D5 | TeambyDivisionAuth | 화면 FE(적용 예정) | D5 FAIL 수정 — TeambyDivisionAuth: 행 집계 — 대조표 TeambyDivisionAuth '(없음)' 의 D5 49요소: NA:45 · PASS:3 · FAIL:1 · FAIL 요소: MEASURE / Meas |  | 1 (TeambyDivisionAuth) |
+| WK-DMF0003-0091 | A6 | 34 | DB(🛠️/🧯 적용 가능) | A6 FAIL 수정 — 34: 행 집계 — 대조표 34 'FindData data_start_pos<0' 의 A6 12요소: PASS:7 · REVIEW:3 · FAIL:2 · FAIL 요소: PKG_DMF0003.P_DMF0003_ |  | 1 (34) |
+| WK-DMF0003-0092 | A6 | 6 | DB(🛠️/🧯 적용 가능) | A6 FAIL 수정 — 6: 행 집계 — 대조표 6 '공통 콤보 PARAM5 W/S 플래그 — GetSalesSite40(L7047~7066) ' 의 A6 12요소: PASS:7 · REVIEW:3 · FAIL:2 · FAIL 요소: |  | 0 () |
+| WK-DMF0003-0093 | A6 | CK-06 | DB(🛠️/🧯 적용 가능) | A6 FAIL 수정 — CK-06: 행 집계 — 대조표 CK-06 '§11 DM.PR_GET_DAY_RANGE / 기간 기본값' 의 A6 12요소: PASS:7 · REVIEW:3 · FAIL:2 · FAIL 요소: PKG_DMF00 |  | 1 (CK-06) |
+| WK-DMF0003-0094 | A6 | CRUD:E02:SEARCH | DB(🛠️/🧯 적용 가능) | A6 FAIL 수정 — CRUD:E02:SEARCH: 행 집계 — 대조표 CRUD:E02:SEARCH '[SEARCH] §2 FindData — 조회 (FindButton L805 → FindD' 의 A6 12요소: PASS:7 ·  |  | 1 (CRUD:E02:SEARCH) |
+| WK-DMF0003-0095 | A6 | DMF0003_CustDemandAnalysis.FindDataMain | DB(🛠️/🧯 적용 가능) | A6 FAIL 수정 — DMF0003_CustDemandAnalysis.FindDataMain: 진입점 집계 — 대조표 DMF0003_CustDemandAnalysis.FindDataMain 의 A6 12요소: PASS:7 · REV |  | 1 (ACT:DMF0003_CustDemandAnalysis.FindDataM) |
+| WK-DMF0003-0096 | A6 | DMF0003_SspSyncComparePopUp.FindData | DB(🛠️/🧯 적용 가능) | A6 FAIL 수정 — DMF0003_SspSyncComparePopUp.FindData: 진입점 집계 — 대조표 DMF0003_SspSyncComparePopUp.FindData 의 A6 12요소: PASS:7 · REVIEW:3  |  | 1 (ACT:DMF0003_SspSyncComparePopUp.FindData) |
+| WK-DMF0003-0097 | A6 | DMF0003_SspSyncPopUp.FindData | DB(🛠️/🧯 적용 가능) | A6 FAIL 수정 — DMF0003_SspSyncPopUp.FindData: 진입점 집계 — 대조표 DMF0003_SspSyncPopUp.FindData 의 A6 12요소: PASS:7 · REVIEW:3 · FAIL:2 · FAI |  | 1 (ACT:DMF0003_SspSyncPopUp.FindData) |
+| WK-DMF0003-0098 | A6 | E02 | DB(🛠️/🧯 적용 가능) | A6 FAIL 수정 — E02: 행 집계 — 대조표 E02 '§2 FindData — 조회 (FindButton L805 → FindData L1673' 의 A6 12요소: PASS:7 · REVIEW:3 · FAIL:2 · FAIL |  | 1 (E02) |
+| WK-DMF0003-0099 | A6 | HANDLER:FindData | DB(🛠️/🧯 적용 가능) | A6 FAIL 수정 — HANDLER:FindData: 행 집계 — 대조표 HANDLER:FindData 'AS-IS `DMF0003_MktFcst.cs:1673` (라이브 80행)' 의 A6 12요소: PASS:7 · REVIEW: |  | 1 (HANDLER:FindData) |
+| WK-DMF0003-0100 | A6 | PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPA | DB(🛠️/🧯 적용 가능) | A6 FAIL 수정 — PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPARE_POPUP: 원장 V-14cb6885 SP / 정렬대조 FAIL 1번째 키부터 다름: AS-IS ['CASE'] ↔ TO-BE ['S |  | 2 (CH-105 CK-05) |
+| WK-DMF0003-0101 | A6 | PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA | DB(🛠️/🧯 적용 가능) | A6 FAIL 수정 — PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA: 원장 V-c65d7696 SP / 원장 V-e9044489 SP / 원장 V-dfbc6aa5 SP / 원장 V-5e5f45bb SP /  |  | 297 (CK-01 ACT:DMF0003_1_MktFcst.FindButton A) |
+| WK-DMF0003-0102 | G1 | 15 | 화면 FE(적용 예정) | G1 FAIL 수정 — 15: 행 집계 — 대조표 15 'ValidationCheck' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 · FAIL 요소: drpPeriod / Period — 원장  |  | 0 () |
+| WK-DMF0003-0103 | G1 | 2 | 화면 FE(적용 예정) | G1 FAIL 수정 — 2: 행 집계 — 대조표 2 "InitSpread(sType) 5곳 — CreateSpread·Division변경='LO" 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 ·  |  | 1 (2) |
+| WK-DMF0003-0104 | G1 | 34 | 화면 FE(적용 예정) | G1 FAIL 수정 — 34: 행 집계 — 대조표 34 'FindData data_start_pos<0' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 · FAIL 요소: drpPeriod / Pe |  | 1 (34) |
+| WK-DMF0003-0105 | G1 | 6 | 화면 FE(적용 예정) | G1 FAIL 수정 — 6: 행 집계 — 대조표 6 '공통 콤보 PARAM5 W/S 플래그 — GetSalesSite40(L7047~7066) ' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 ·  |  | 0 () |
+| WK-DMF0003-0106 | G1 | 6. HTTP E2E | 화면 FE(적용 예정) | G1 FAIL 수정 — 6. HTTP E2E: 행 집계 — 대조표 6. HTTP E2E '일반 행 M 왕복 생략' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 · FAIL 요소: drpPeriod |  | 1 (6. HTTP E2E) |
+| WK-DMF0003-0107 | G1 | AS_FROM_SITE | 화면 FE(적용 예정) | G1 FAIL 수정 — AS_FROM_SITE: 행 집계 — 대조표 AS_FROM_SITE 'param1' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 · FAIL 요소: drpPeriod / P |  | 1 (AS_FROM_SITE) |
+| WK-DMF0003-0108 | G1 | CA-07 | 화면 FE(적용 예정) | G1 FAIL 수정 — CA-07: 행 집계 — 대조표 CA-07 '§1 dt8Week 없음(조회 선행 안 함) / MSG00259 차단' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 · FAIL |  | 1 (CA-07) |
+| WK-DMF0003-0109 | G1 | CD-03 | 화면 FE(적용 예정) | G1 FAIL 수정 — CD-03: 행 집계 — 대조표 CD-03 '§4 AS_FROM_SITE / `AS_FROM_SITE`(division)' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 ·  |  | 1 (CD-03) |
+| WK-DMF0003-0110 | G1 | CD-10 | 화면 FE(적용 예정) | G1 FAIL 수정 — CD-10: 행 집계 — 대조표 CD-10 '§4 PLANT_SITE_ID / 조회조건 dtPlantSite → 행별 `SalesPla' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ER |  | 1 (CD-10) |
+| WK-DMF0003-0111 | G1 | CE-05 | 화면 FE(적용 예정) | G1 FAIL 수정 — CE-05: 행 집계 — 대조표 CE-05 '§5 조회 컬럼 강제 / [E20260402] W/S 권한 진입 시 GET_SPREAD_T' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ER |  | 1 (CE-05) |
+| WK-DMF0003-0112 | G1 | CF-05 | 화면 FE(적용 예정) | G1 FAIL 수정 — CF-05: 행 집계 — 대조표 CF-05 '§6 저장 성공(Tables 없음) / MSG00004(건수) + 재조회 + viewpor' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ER |  | 1 (CF-05) |
+| WK-DMF0003-0113 | G1 | CF-102 | 화면 FE(적용 예정) | G1 FAIL 수정 — CF-102: 행 집계 — 대조표 CF-102 '§6.2 [원문 무번호] 조회 / MSG00097' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 · FAIL 요소: drpP |  | 1 (CF-102) |
+| WK-DMF0003-0114 | G1 | CF-103 | 화면 FE(적용 예정) | G1 FAIL 수정 — CF-103: 행 집계 — 대조표 CF-103 '§6.2 [원문 무번호] 조회 / MSG00108' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 · FAIL 요소: drpP |  | 1 (CF-103) |
+| WK-DMF0003-0115 | G1 | CF-104 | 화면 FE(적용 예정) | G1 FAIL 수정 — CF-104: 행 집계 — 대조표 CF-104 '§6.2 [원문 무번호] 조회 / MSG00164' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 · FAIL 요소: drpP |  | 1 (CF-104) |
+| WK-DMF0003-0116 | G1 | CF-105 | 화면 FE(적용 예정) | G1 FAIL 수정 — CF-105: 행 집계 — 대조표 CF-105 '§6.2 [원문 무번호] 조회 / MSG00665' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 · FAIL 요소: drpP |  | 1 (CF-105) |
+| WK-DMF0003-0117 | G1 | CG-07 | 화면 FE(적용 예정) | G1 FAIL 수정 — CG-07: 행 집계 — 대조표 CG-07 "§7 버킷 배분 / 주→일: 요일비트(기본 '0000010'=FRI) 균등+잔여 마지막, " 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ER |  | 1 (CG-07) |
+| WK-DMF0003-0118 | G1 | CH-09 | 화면 FE(적용 예정) | G1 FAIL 수정 — CH-09: 행 집계 — 대조표 CH-09 '§8 캐스케이드 / Division→Team→EndCustomer→SalesSite(+Pl' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ER |  | 1 (CH-09) |
+| WK-DMF0003-0119 | G1 | CI-02 | 화면 FE(적용 예정) | G1 FAIL 수정 — CI-02: 행 집계 — 대조표 CI-02 '§9 당주 라인 / 초록 BevelBorder — count≥2 시 [E20250313] ' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ER |  | 1 (CI-02) |
+| WK-DMF0003-0120 | G1 | CI-07 | 화면 FE(적용 예정) | G1 FAIL 수정 — CI-07: 행 집계 — 대조표 CI-07 '§9 저장 후 / Action 클리어 + UnLockColor + 행 재잠금(빨강 계열)' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERR |  | 1 (CI-07) |
+| WK-DMF0003-0121 | G1 | CK-01 | 화면 FE(적용 예정) | G1 FAIL 수정 — CK-01: 행 집계 — 대조표 CK-01 '§11 DM.DMF0003_GET_MKT_FCST_DATA / 조회' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 · FAIL  |  | 1 (CK-01) |
+| WK-DMF0003-0122 | G1 | CK-10 | 화면 FE(적용 예정) | G1 FAIL 수정 — CK-10: 행 집계 — 대조표 CK-10 '§11 DataService.GetDMInnerTable / 조회조건 콤보 8축(§1.1-' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ER |  | 1 (CK-10) |
+| WK-DMF0003-0123 | G1 | COMMON:UC-02 | 화면 FE(적용 예정) | G1 FAIL 수정 — COMMON:UC-02: 행 집계 — 대조표 COMMON:UC-02 "데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠" 의 G1 35요소: NA:21 · FAIL:10 |  | 1 (COMMON:UC-02) |
+| WK-DMF0003-0124 | G1 | COMMON:UC-03 | 화면 FE(적용 예정) | G1 FAIL 수정 — COMMON:UC-03: 행 집계 — 대조표 COMMON:UC-03 '컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후' 의 G1 35요소: NA:21 · FAIL:10 |  | 1 (COMMON:UC-03) |
+| WK-DMF0003-0125 | G1 | COMMON:UC-06 | 화면 FE(적용 예정) | G1 FAIL 수정 — COMMON:UC-06: 행 집계 — 대조표 COMMON:UC-06 'Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 (1st 행8)' 의 G1 35요소: NA:21 · FAIL:10 · PASS: |  | 1 (COMMON:UC-06) |
+| WK-DMF0003-0126 | G1 | COMMON:UC-07 | 화면 FE(적용 예정) | G1 FAIL 수정 — COMMON:UC-07: 행 집계 — 대조표 COMMON:UC-07 '필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilte' 의 G1 35요소: NA:21 · FAIL:10 |  | 1 (COMMON:UC-07) |
+| WK-DMF0003-0127 | G1 | CRUD:E02:SEARCH | 화면 FE(적용 예정) | G1 FAIL 수정 — CRUD:E02:SEARCH: 행 집계 — 대조표 CRUD:E02:SEARCH '[SEARCH] §2 FindData — 조회 (FindButton L805 → FindD' 의 G1 35요소: NA:21 · F |  | 1 (CRUD:E02:SEARCH) |
+| WK-DMF0003-0128 | G1 | E01-1 | 화면 FE(적용 예정) | G1 FAIL 수정 — E01-1: 행 집계 — 대조표 E01-1 '§1.1 InitControls (L422~563) — 조회조건 콤보 로딩·기본값' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 |  | 1 (E01-1) |
+| WK-DMF0003-0129 | G1 | E02 | 화면 FE(적용 예정) | G1 FAIL 수정 — E02: 행 집계 — 대조표 E02 '§2 FindData — 조회 (FindButton L805 → FindData L1673' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR: |  | 1 (E02) |
+| WK-DMF0003-0130 | G1 | HANDLER:OnShown | 화면 FE(적용 예정) | G1 FAIL 수정 — HANDLER:OnShown: 행 집계 — 대조표 HANDLER:OnShown 'AS-IS `DMF0003_MktFcst.cs:332` (라이브 12행)' 의 G1 35요소: NA:21 · FAIL:10 · P |  | 1 (HANDLER:OnShown) |
+| WK-DMF0003-0131 | G1 | HANDLER:btnItemId_Click | 화면 FE(적용 예정) | G1 FAIL 수정 — HANDLER:btnItemId_Click: 행 집계 — 대조표 HANDLER:btnItemId_Click 'AS-IS `DMF0003_MktFcst.cs:5725` (라이브 17행)' 의 G1 35요소: NA |  | 1 (HANDLER:btnItemId_Click) |
+| WK-DMF0003-0132 | G1 | HANDLER:btnOwner_Click | 화면 FE(적용 예정) | G1 FAIL 수정 — HANDLER:btnOwner_Click: 행 집계 — 대조표 HANDLER:btnOwner_Click 'AS-IS `DMF0003_MktFcst.cs:6449` (라이브 14행)' 의 G1 35요소: NA:2 |  | 1 (HANDLER:btnOwner_Click) |
+| WK-DMF0003-0133 | G1 | HANDLER:btnProject_Click | 화면 FE(적용 예정) | G1 FAIL 수정 — HANDLER:btnProject_Click: 행 집계 — 대조표 HANDLER:btnProject_Click 'AS-IS `DMF0003_MktFcst.cs:5702` (라이브 17행)' 의 G1 35요소:  |  | 1 (HANDLER:btnProject_Click) |
+| WK-DMF0003-0134 | G1 | HANDLER:spdMain_CellClick | 화면 FE(적용 예정) | G1 FAIL 수정 — HANDLER:spdMain_CellClick: 행 집계 — 대조표 HANDLER:spdMain_CellClick 'AS-IS `DMF0003_MktFcst.cs:6596` (라이브 74행)' 의 G1 35요소 |  | 1 (HANDLER:spdMain_CellClick) |
+| WK-DMF0003-0135 | G1 | `components/MktFcstForm.tsx` | 화면 FE(적용 예정) | G1 FAIL 수정 — `components/MktFcstForm.tsx`: 행 집계 — 대조표 `components/MktFcstForm.tsx` '수정' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERRO |  | 1 (`components/MktFcstForm.tsx`) |
+| WK-DMF0003-0136 | G1 | cboAS / AS | 화면 FE(적용 예정) | G1 FAIL 수정 — cboAS / AS: 원장 V-a1348885 SEARCH (FX-DMF0003-003) |  | 4 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
+| WK-DMF0003-0137 | G1 | chkColor / Color | 화면 FE(적용 예정) | G1 FAIL 수정 — chkColor / Color: 원장 V-84383569 SEARCH (FX-DMF0003-002) |  | 32 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
+| WK-DMF0003-0138 | G1 | clbBizType / Biz Type | 화면 FE(적용 예정) | G1 FAIL 수정 — clbBizType / Biz Type: 원장 V-d9b5a2c9 SEARCH (FX-DMF0003-015) |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
+| WK-DMF0003-0139 | G1 | clbCustomer / End Customer / Customer | 화면 FE(적용 예정) | G1 FAIL 수정 — clbCustomer / End Customer / Customer: 원장 V-0d8798bf SEARCH (FX-DMF0003-018) |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
+| WK-DMF0003-0140 | G1 | clbEDISender / Sender Code / EDISender | 화면 FE(적용 예정) | G1 FAIL 수정 — clbEDISender / Sender Code / EDISender: 원장 V-20252a50 SEARCH (FX-DMF0003-025) |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
+| WK-DMF0003-0141 | G1 | clbEndCustomer / End Customer | 화면 FE(적용 예정) | G1 FAIL 수정 — clbEndCustomer / End Customer: 원장 V-0d8798bf SEARCH (FX-DMF0003-018) |  | 2 (ACT:DMF0003_MatsterChgPopup.FindData ACT) |
+| WK-DMF0003-0142 | G1 | clbItemType / Item Type | 화면 FE(적용 예정) | G1 FAIL 수정 — clbItemType / Item Type: 원장 V-dba4ba2f SEARCH (FX-DMF0003-005) |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
+| WK-DMF0003-0143 | G1 | clbPlantSite / Plant Site | 화면 FE(적용 예정) | G1 FAIL 수정 — clbPlantSite / Plant Site: 원장 V-9b63a879 SEARCH (FX-DMF0003-008) |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
+| WK-DMF0003-0144 | G1 | drpPeriod / Period | 화면 FE(적용 예정) | G1 FAIL 수정 — drpPeriod / Period: 원장 V-a1d2192a SEARCH (FX-DMF0003-010) |  | 18 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
+| WK-DMF0003-0145 | G1 | txtItemId / Model / Item Id | 화면 FE(적용 예정) | G1 FAIL 수정 — txtItemId / Model / Item Id: 실측[T-4e914bf7]: 조회조건 Model 칸 없음 (FX-DMF0003-208) |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
+| WK-DMF0003-0146 | G1 | — | 화면 FE(적용 예정) | G1 FAIL 수정 — —: 행 집계 — 대조표 — '(저장대상 0)' 의 G1 35요소: NA:21 · FAIL:10 · PASS:3 · ERROR:1 · FAIL 요소: drpPeriod / Period — 원장 V-a1d2192 |  | 0 () |
+| WK-DMF0003-0147 | X-ROW | DMF0003_1_MktFcst.FindButton | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_1_MktFcst.FindButton: 진입점 집계 12검사 — REVIEW:4 · PASS:4 · NA:3 · FAIL:1 (FX-DMF0003-205) |  | 1 (ACT:DMF0003_1_MktFcst.FindButton) |
+| WK-DMF0003-0148 | X-ROW | DMF0003_1_MktFcst.FindData | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_1_MktFcst.FindData: 진입점 집계 50검사 — NA:18 · PASS:15 · FAIL:10 · REVIEW:4 · ERROR:2 · NOT_RUN:1 (FX-DMF0003-2 |  | 14 (ACT:DMF0003_1_MktFcst.FindData:1453:2 AC) |
+| WK-DMF0003-0149 | X-ROW | DMF0003_1_MktFcst.GetBucketType | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_1_MktFcst.GetBucketType: 진입점 집계 5검사 — NOPATH:3 · PASS:1 · FAIL:1 (FX-DMF0003-211) |  | 1 (ACT:DMF0003_1_MktFcst.GetBucketType) |
+| WK-DMF0003-0150 | X-ROW | DMF0003_1_MktFcst.btnColumn_Click | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_1_MktFcst.btnColumn_Click: 진입점 집계 8검사 — NA:5 · FAIL:1 · NOT_RUN:1 · NOPATH:1 (FX-DMF0003-240) |  | 2 (ACT:DMF0003_1_MktFcst.btnColumn_Click:49) |
+| WK-DMF0003-0151 | X-ROW | DMF0003_1_MktFcst.btnMeasure_Click | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_1_MktFcst.btnMeasure_Click: 진입점 집계 8검사 — NA:5 · NOT_RUN:1 · NOPATH:1 · FAIL:1 (FX-DMF0003-241) |  | 2 (ACT:DMF0003_1_MktFcst.btnMeasure_Click:4) |
+| WK-DMF0003-0152 | X-ROW | DMF0003_1_MktFcst.cboDivision_SelectedIn | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_1_MktFcst.cboDivision_SelectedIndexChanged: 진입점 집계 16검사 — NA:8 · PASS:6 · FAIL:2 (FX-DMF0003-242) |  | 5 (ACT:DMF0003_1_MktFcst.cboDivision_Select) |
+| WK-DMF0003-0153 | X-ROW | DMF0003_1_MktFcst.clbTeam_SelectedIndexC | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_1_MktFcst.clbTeam_SelectedIndexChanged: 진입점 집계 9검사 — NOT_RUN:3 · PASS:2 · NA:2 · FAIL:2 (FX-DMF0003-243) |  | 3 (ACT:DMF0003_1_MktFcst.clbTeam_SelectedIn) |
+| WK-DMF0003-0154 | X-ROW | DMF0003_MatsterChgPopup.FindButton | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_MatsterChgPopup.FindButton: 진입점 집계 7검사 — REVIEW:3 · NA:2 · FAIL:1 · PASS:1 (FX-DMF0003-258) |  | 2 (ACT:DMF0003_MatsterChgPopup.FindButton A) |
+| WK-DMF0003-0155 | X-ROW | DMF0003_MatsterChgPopup.FindData | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_MatsterChgPopup.FindData: 진입점 집계 27검사 — NA:12 · PASS:6 · REVIEW:3 · ERROR:3 · FAIL:2 · NOPATH:1 (FX-DMF000 |  | 45 (ACT:DMF0003_MatsterChgPopup.FindData:315) |
+| WK-DMF0003-0156 | X-ROW | DMF0003_MatsterChgPopup.SaveButton | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_MatsterChgPopup.SaveButton: 진입점 집계 7검사 — NA:5 · FAIL:2 (FX-DMF0003-267) |  | 1 (ACT:DMF0003_MatsterChgPopup.SaveButton:3) |
+| WK-DMF0003-0157 | X-ROW | DMF0003_MatsterChgPopup.SaveData | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_MatsterChgPopup.SaveData: 진입점 집계 22검사 — NA:15 · PASS:3 · FAIL:2 · NOPATH:2 (FX-DMF0003-268) |  | 103 (ACT:DMF0003_MatsterChgPopup.SaveData:408) |
+| WK-DMF0003-0158 | X-ROW | DMF0003_MktFcst.FindButton | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_MktFcst.FindButton: 진입점 집계 7검사 — REVIEW:2 · NA:2 · PASS:2 · FAIL:1 (FX-DMF0003-271) |  | 2 (ACT:DMF0003_MktFcst.FindButton ACT:DMF00) |
+| WK-DMF0003-0159 | X-ROW | DMF0003_MktFcst.FindData | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_MktFcst.FindData: 진입점 집계 37검사 — NA:14 · PASS:11 · FAIL:8 · REVIEW:2 · NOT_RUN:1 · ERROR:1 (FX-DMF0003-272) |  | 59 (ACT:DMF0003_MktFcst.FindData:1675:1 ACT:) |
+| WK-DMF0003-0160 | X-ROW | DMF0003_MktFcst.GetBucketType | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_MktFcst.GetBucketType: 진입점 집계 4검사 — PASS:1 · NA:1 · FAIL:1 · NOPATH:1 (FX-DMF0003-274) |  | 6 (ACT:DMF0003_MktFcst.GetBucketType ACT:DM) |
+| WK-DMF0003-0161 | X-ROW | DMF0003_MktFcst.btnColumn_Click | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_MktFcst.btnColumn_Click: 진입점 집계 10검사 — NA:7 · NOT_RUN:1 · NOPATH:1 · FAIL:1 (FX-DMF0003-288) |  | 6 (ACT:DMF0003_MktFcst.btnColumn_Click:5752) |
+| WK-DMF0003-0162 | X-ROW | DMF0003_MktFcst.btnMeasure_Click | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_MktFcst.btnMeasure_Click: 진입점 집계 10검사 — NA:7 · NOT_RUN:1 · NOPATH:1 · FAIL:1 (FX-DMF0003-289) |  | 6 (ACT:DMF0003_MktFcst.btnMeasure_Click:576) |
+| WK-DMF0003-0163 | X-ROW | DMF0003_MktFcst.spdMain_CellDoubleClick | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_MktFcst.spdMain_CellDoubleClick: 진입점 집계 41검사 — NA:22 · NOT_RUN:8 · PASS:5 · NOPATH:4 · ERROR:1 · FAIL:1 (F |  | 187 (ACT:DMF0003_MktFcst.spdMain_CellDoubleCl) |
+| WK-DMF0003-0164 | X-ROW | DMF0003_SspSyncPopUp.InitSpread | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_SspSyncPopUp.InitSpread: 진입점 집계 50검사 — NA:35 · PASS:14 · FAIL:1 (FX-DMF0003-309) |  | 14 (ACT:DMF0003_SspSyncPopUp.InitSpread ACT:) |
+| WK-DMF0003-0165 | X-ROW | DMF0003_T_MktFcst.FindButton | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_T_MktFcst.FindButton: 진입점 집계 7검사 — REVIEW:2 · NA:2 · PASS:2 · FAIL:1 (FX-DMF0003-312) |  | 2 (ACT:DMF0003_T_MktFcst.FindButton ACT:DMF) |
+| WK-DMF0003-0166 | X-ROW | DMF0003_T_MktFcst.FindData | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_T_MktFcst.FindData: 진입점 집계 43검사 — NA:17 · PASS:11 · FAIL:10 · REVIEW:2 · ERROR:2 · NOT_RUN:1 (FX-DMF0003-3 |  | 121 (ACT:DMF0003_T_MktFcst.FindData:1085:1 AC) |
+| WK-DMF0003-0167 | X-ROW | DMF0003_T_MktFcst.GetBucketType | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_T_MktFcst.GetBucketType: 진입점 집계 4검사 — NA:1 · FAIL:1 · NOPATH:1 · PASS:1 (FX-DMF0003-315) |  | 6 (ACT:DMF0003_T_MktFcst.GetBucketType ACT:) |
+| WK-DMF0003-0168 | X-ROW | DMF0003_T_MktFcst.btnColumn_Click | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_T_MktFcst.btnColumn_Click: 진입점 집계 10검사 — NA:7 · NOT_RUN:1 · NOPATH:1 · FAIL:1 (FX-DMF0003-328) |  | 5 (ACT:DMF0003_T_MktFcst.btnColumn_Click:45) |
+| WK-DMF0003-0169 | X-ROW | DMF0003_T_MktFcst.btnMeasure_Click | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_T_MktFcst.btnMeasure_Click: 진입점 집계 10검사 — NA:7 · NOT_RUN:1 · NOPATH:1 · FAIL:1 (FX-DMF0003-329) |  | 5 (ACT:DMF0003_T_MktFcst.btnMeasure_Click:4) |
+| WK-DMF0003-0170 | X-ROW | DMF0003_T_MktFcst.cboDivision_SelectedIn | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_T_MktFcst.cboDivision_SelectedIndexChanged: 진입점 집계 17검사 — NA:8 · PASS:7 · FAIL:2 (FX-DMF0003-330) |  | 52 (ACT:DMF0003_T_MktFcst.cboDivision_Select) |
+| WK-DMF0003-0171 | X-ROW | DMF0003_T_MktFcst.clbTeam_SelectedIndexC | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_T_MktFcst.clbTeam_SelectedIndexChanged: 진입점 집계 7검사 — NA:3 · PASS:2 · FAIL:2 (FX-DMF0003-331) |  | 12 (ACT:DMF0003_T_MktFcst.clbTeam_SelectedIn) |
+| WK-DMF0003-0172 | X-ROW | DMF0003_T_MktFcst.spdMain_CellDoubleClic | 화면 FE(적용 예정) | X-ROW FAIL 수정 — DMF0003_T_MktFcst.spdMain_CellDoubleClick: 진입점 집계 41검사 — NA:22 · NOT_RUN:8 · PASS:5 · NOPATH:4 · ERROR:1 · FAIL:1  |  | 177 (ACT:DMF0003_T_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0173 | G5 | 13 | 화면 FE(적용 예정) | G5 FAIL 수정 — 13: 행 집계 — 대조표 13 'spdMain_CellDoubleClick' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12 · NOPATH:4 · FAIL 요소: C — 원장 V-2dda |  | 1 (13) |
+| WK-DMF0003-0174 | G5 | 2 | 화면 FE(적용 예정) | G5 FAIL 수정 — 2: 행 집계 — 대조표 2 "InitSpread(sType) 5곳 — CreateSpread·Division변경='LO" 의 G5 132요소: NA:94 · PASS:22 · FAIL:12 · NOPATH:4 |  | 1 (2) |
+| WK-DMF0003-0175 | G5 | C | 화면 FE(적용 예정) | G5 FAIL 수정 — C: 원장 V-2dda3c64 ASIS / 원장 V-9131aabd ASIS / 원장 V-d3ac0e98 ASIS / 원장 V-7d612a9e ASIS / 원장 V-3b167019 ASIS / 원장 V-d69b |  | 2 (C-119 HANDLER:spdMain_KeyUp) |
+| WK-DMF0003-0176 | G5 | CF-05 | 화면 FE(적용 예정) | G5 FAIL 수정 — CF-05: 행 집계 — 대조표 CF-05 '§6 저장 성공(Tables 없음) / MSG00004(건수) + 재조회 + viewpor' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12 ·  |  | 1 (CF-05) |
+| WK-DMF0003-0177 | G5 | CF-06 | 화면 FE(적용 예정) | G5 FAIL 수정 — CF-06: 행 집계 — 대조표 CF-06 '§6 SP 가 Tables[0] 반환 / 그 메시지 표시 + Tables[1] 있으면 Ss' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12 ·  |  | 1 (CF-06) |
+| WK-DMF0003-0178 | G5 | CH-102 | 화면 FE(적용 예정) | G5 FAIL 수정 — CH-102: 행 집계 — 대조표 CH-102 '§8 [원문 무번호] PR (Request Info) / `DMF0003_GET_PRPOP' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12  |  | 1 (CH-102) |
+| WK-DMF0003-0179 | G5 | CH-103 | 화면 FE(적용 예정) | G5 FAIL 수정 — CH-103: 행 집계 — 대조표 CH-103 '§8 [원문 무번호] PR History / `DMF0003_GET_PR_HISTORY_P' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12  |  | 1 (CH-103) |
+| WK-DMF0003-0180 | G5 | CH-105 | 화면 FE(적용 예정) | G5 FAIL 수정 — CH-105: 행 집계 — 대조표 CH-105 '§8 [원문 무번호] SSP Sync Compare / `DMF0003_GET_MKT_FC' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12  |  | 1 (CH-105) |
+| WK-DMF0003-0181 | G5 | CH-108 | 화면 FE(적용 예정) | G5 FAIL 수정 — CH-108: 행 집계 — 대조표 CH-108 '§8 [원문 무번호] **Master Change** / `DMF0000_GET_MASTE' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12  |  | 1 (CH-108) |
+| WK-DMF0003-0182 | G5 | CK-05 | 화면 FE(적용 예정) | G5 FAIL 수정 — CK-05: 행 집계 — 대조표 CK-05 '§11 DM.DMF0003_GET_MKT_FCST_COMPARE_POPUP / 동기화 비교' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12 ·  |  | 1 (CK-05) |
+| WK-DMF0003-0183 | G5 | CK-11 | 화면 FE(적용 예정) | G5 FAIL 수정 — CK-11: 행 집계 — 대조표 CK-11 '§11 (팝업 경유) DMF0003_GET_PRPOPUP/GET_PR_HISTORY_POP' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12 ·  |  | 1 (CK-11) |
+| WK-DMF0003-0184 | G5 | DMF0003_MktFcst | 화면 FE(적용 예정) | G5 FAIL 수정 — DMF0003_MktFcst: 원장 V-84af1dc6 ASIS / 원장 V-9d72c711 ASIS / 원장 V-046f681e ASIS / 원장 V-a7b2c013 ASIS / 원장 V-1fae3d2f AS |  | 3 (HANDLER:spdMain_CellDoubleClick HANDLER:) |
+| WK-DMF0003-0185 | G5 | DMF0003_T_MktFcst | 화면 FE(적용 예정) | G5 FAIL 수정 — DMF0003_T_MktFcst: 원장 V-9ef5ec0e ASIS / 원장 V-cce72a64 ASIS / 원장 V-4980f96a ASIS / 원장 V-756a4574 ASIS / 원장 V-43f3e3cc  |  | 1 (ACT:DMF0003_T_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0186 | G5 | E04-4 | 화면 FE(적용 예정) | G5 FAIL 수정 — E04-4: 행 집계 — 대조표 E04-4 '§4.4 spdMain_CellDoubleClick (L3604~3942)' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12 · NOPATH:4  |  | 1 (E04-4) |
+| WK-DMF0003-0187 | G5 | E04-5 | 화면 FE(적용 예정) | G5 FAIL 수정 — E04-5: 행 집계 — 대조표 E04-5 '§4.5 spdMain_KeyUp (L5636~5700) / EditChange (L648' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12 ·  |  | 1 (E04-5) |
+| WK-DMF0003-0188 | G5 | E06 | 화면 FE(적용 예정) | G5 FAIL 수정 — E06: 행 집계 — 대조표 E06 '§6 호출 팝업 상세 (8종)' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12 · NOPATH:4 · FAIL 요소: C — 원장 V-2dda3c64  |  | 1 (E06) |
+| WK-DMF0003-0189 | G5 | M | 화면 FE(적용 예정) | G5 FAIL 수정 — M: 원장 V-2dda3c64 ASIS / 원장 V-9131aabd ASIS / 원장 V-d69b319c ASIS / 원장 V-ae56a1a3 ASIS / 원장 V-6b81da15 ASIS / 원장 V-27f9 |  | 1 (MODAL:MeasureSelectModal) |
+| WK-DMF0003-0190 | G5 | Popup | 화면 FE(적용 예정) | G5 FAIL 수정 — Popup: 행 집계 — 대조표 Popup '**8**' 의 G5 132요소: NA:94 · PASS:22 · FAIL:12 · NOPATH:4 · FAIL 요소: C — 원장 V-2dda3c64 ASIS /  |  | 1 (Popup) |
+| WK-DMF0003-0191 | G5 | btnColumn | 화면 FE(적용 예정) | G5 FAIL 수정 — btnColumn: 원장 V-9131aabd ASIS / 원장 V-db3c29e8 ASIS / 원장 V-9d72c711 ASIS / 원장 V-046f681e ASIS / 원장 V-cce72a64 ASIS / 원 |  | 0 () |
+| WK-DMF0003-0192 | G5 | btnMeasure | 화면 FE(적용 예정) | G5 FAIL 수정 — btnMeasure: 원장 V-d69b319c ASIS / 원장 V-46313296 ASIS / 원장 V-23333d6b ASIS / 원장 V-477859ab ASIS / 원장 V-0b9540b9 ASIS /  |  | 0 () |
+| WK-DMF0003-0193 | G5 | new DM0002_TitleSetForm_Popup("DMF0003", | 화면 FE(적용 예정) | G5 FAIL 수정 — new DM0002_TitleSetForm_Popup("DMF0003", SpdSheet.shtMain, f: 원장 V-d69b319c (FX-DMF0003-028) |  | 1 (ACT:DMF0003_1_MktFcst.btnMeasure_Click:4) |
+| WK-DMF0003-0194 | G5 | new DM0002_TitleSetForm_Popup("DMF0003", | 화면 FE(적용 예정) | G5 FAIL 수정 — new DM0002_TitleSetForm_Popup("DMF0003", SpdSheet.shtMain, f: 원장 V-23333d6b (FX-DMF0003-030) |  | 1 (ACT:DMF0003_MktFcst.btnMeasure_Click:576) |
+| WK-DMF0003-0195 | G5 | new DM0002_TitleSetForm_Popup("DMF0003", | 화면 FE(적용 예정) | G5 FAIL 수정 — new DM0002_TitleSetForm_Popup("DMF0003", SpdSheet.shtMain, f: 원장 V-0b9540b9 (FX-DMF0003-032) |  | 1 (ACT:DMF0003_T_MktFcst.btnMeasure_Click:4) |
+| WK-DMF0003-0196 | G5 | new DM0002_TitleSetForm_Popup("DMF0003", | 화면 FE(적용 예정) | G5 FAIL 수정 — new DM0002_TitleSetForm_Popup("DMF0003", SpdSheet.shtMain, t: 원장 V-9131aabd (FX-DMF0003-027) |  | 1 (ACT:DMF0003_1_MktFcst.btnColumn_Click:49) |
+| WK-DMF0003-0197 | G5 | new DM0002_TitleSetForm_Popup("DMF0003", | 화면 FE(적용 예정) | G5 FAIL 수정 — new DM0002_TitleSetForm_Popup("DMF0003", SpdSheet.shtMain, t: 원장 V-9d72c711 (FX-DMF0003-029) |  | 1 (ACT:DMF0003_MktFcst.btnColumn_Click:5752) |
+| WK-DMF0003-0198 | G5 | new DM0002_TitleSetForm_Popup("DMF0003", | 화면 FE(적용 예정) | G5 FAIL 수정 — new DM0002_TitleSetForm_Popup("DMF0003", SpdSheet.shtMain, t: 원장 V-cce72a64 (FX-DMF0003-031) |  | 1 (ACT:DMF0003_T_MktFcst.btnColumn_Click:45) |
 
-## W4 검사기 구현 (13)
-
-| ID | 검사 | 대상 | 담당 | 할 일 | TO-BE 흔적 | 대조표 행 |
-|---|---|---|---|---|---|---|
-| WK-DMF0003-0049 | B3 | AS_FROM_SITE | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 AS_FROM_SITE | 있음(SHEET_COLUMNS) | 8 (CD-03 ACT:DMF0003_MktFcst.InsertRow:2615) |
-| WK-DMF0003-0050 | B3 | D | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 D | 있음(FE 소스) | 1 (CD-03) |
-| WK-DMF0003-0051 | B3 | FCST_TYPE | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 FCST_TYPE | 있음(SHEET_COLUMNS) | 9 (ACT:DMF0003_1_MktFcst.GetFcstType ACT:DM) |
-| WK-DMF0003-0052 | B3 | N | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 N | 있음(FE 소스) | 13 (6 ACT:DMF0003_1_MktFcst.GetSalesSite ACT) |
-| WK-DMF0003-0053 | B3 | P | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 P | 있음(FE 소스) | 3 (ACT:DMF0003_1_MktFcst.GetIncotermsType:6) |
-| WK-DMF0003-0054 | B3 | S | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 S | 있음(FE 소스) | 6 (CD-08 6 ACT:DMF0003_MktFcst.GetSalesSite) |
-| WK-DMF0003-0055 | B3 | SCM_SITE_ID | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 SCM_SITE_ID | 있음(SHEET_COLUMNS) | 1 (CD-08) |
-| WK-DMF0003-0056 | B3 | cboAS / AS | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 cboAS / AS | 있음(FE 소스) | 8 (ACT:DMF0003_1_MktFcst.GetSalesSite ACT:D) |
-| WK-DMF0003-0057 | B3 | cboBucketType / Bucket / Bucket Type | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 cboBucketType / Bucket / Bucket Type | 있음(FE 소스) | 3 (ACT:DMF0003_1_MktFcst.FindData:1651:104 ) |
-| WK-DMF0003-0058 | B3 | clbCustomer / End Customer / Customer | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 clbCustomer / End Customer / Customer | 있음(FE 소스) | 4 (ACT:DMF0003_1_MktFcst.cboDivision_Select) |
-| WK-DMF0003-0059 | B3 | clbDivision / Division | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 clbDivision / Division | 있음(FE 소스) | 22 (ACT:DMF0003_1_MktFcst.Form_Load:334:8 AC) |
-| WK-DMF0003-0060 | B3 | clbTeam / Team | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 clbTeam / Team | 있음(FE 소스) | 6 (ACT:DMF0003_1_MktFcst.cboDivision_Select) |
-| WK-DMF0003-0061 | B3 | drpPeriod / Period | 하네스(검증 엔진 _trace.spec.ts) | 검사기 구현 B3 — 콤보 후보 정렬 = AS-IS · 대상 drpPeriod / Period | 있음(FE 소스) | 10 (ACT:DMF0003_1_MktFcst.GetSpdTitle ACT:DM) |
-
-## W5 검사기 연결 (97)
-
-| ID | 검사 | 대상 | 담당 | 할 일 | TO-BE 흔적 | 대조표 행 |
-|---|---|---|---|---|---|---|
-| WK-DMF0003-0062 | B1 | AS_FROM_SITE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL AS_FROM_SITE | 있음(SHEET_COLUMNS) | 2 (AS_FROM_SITE ACT:DMF0003_MktFcst.InsertR) |
-| WK-DMF0003-0063 | B1 | C | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL C | 있음(FE 소스) | 1 (C-118) |
-| WK-DMF0003-0064 | B1 | D | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL D | 있음(FE 소스) | 1 (AS_FROM_SITE) |
-| WK-DMF0003-0065 | B1 | PLANT_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL PLANT_SITE_ID | 있음(SHEET_COLUMNS) | 3 (PlantByDivisionCompany PlantSiteByItem 7) |
-| WK-DMF0003-0066 | B1 | S | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL S | 있음(FE 소스) | 2 (ACT:DMF0003_MktFcst.InsertRow:2597:36 AC) |
-| WK-DMF0003-0067 | B1 | SCM_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL SCM_SITE_ID | 있음(SHEET_COLUMNS) | 1 (SiteByEndCustomerAuth) |
-| WK-DMF0003-0068 | B1 | SLOC | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 PCOL SLOC | 판단불가(대상 단위 PCOL) | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0069 | B1 | STORAGE_PLANT_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 PCOL STORAGE_PLANT_ID | 판단불가(대상 단위 PCOL) | 1 (ACT:DMF0003_PRPopup.spdMain_Changed:566:) |
-| WK-DMF0003-0070 | B1 | clbDivision / Division | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COND clbDivision / Division | 있음(FE 소스) | 9 (ACT:DMF0003_1_MktFcst.InsertRow:1928:20 ) |
-| WK-DMF0003-0071 | B2 | AS_FROM_SITE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL AS_FROM_SITE | 있음(SHEET_COLUMNS) | 2 (AS_FROM_SITE ACT:DMF0003_MktFcst.InsertR) |
-| WK-DMF0003-0072 | B2 | C | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL C | 있음(FE 소스) | 1 (C-118) |
-| WK-DMF0003-0073 | B2 | D | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL D | 있음(FE 소스) | 1 (AS_FROM_SITE) |
-| WK-DMF0003-0074 | B2 | PLANT_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL PLANT_SITE_ID | 있음(SHEET_COLUMNS) | 3 (PlantByDivisionCompany PlantSiteByItem 7) |
-| WK-DMF0003-0075 | B2 | S | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL S | 있음(FE 소스) | 2 (ACT:DMF0003_MktFcst.InsertRow:2597:36 AC) |
-| WK-DMF0003-0076 | B2 | SCM_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL SCM_SITE_ID | 있음(SHEET_COLUMNS) | 1 (SiteByEndCustomerAuth) |
-| WK-DMF0003-0077 | B2 | SLOC | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 PCOL SLOC | 판단불가(대상 단위 PCOL) | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0078 | B2 | STORAGE_PLANT_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 PCOL STORAGE_PLANT_ID | 판단불가(대상 단위 PCOL) | 1 (ACT:DMF0003_PRPopup.spdMain_Changed:566:) |
-| WK-DMF0003-0079 | B2 | clbDivision / Division | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COND clbDivision / Division | 있음(FE 소스) | 9 (ACT:DMF0003_1_MktFcst.InsertRow:1928:20 ) |
-| WK-DMF0003-0080 | B4 | AS_FROM_SITE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL AS_FROM_SITE | 있음(SHEET_COLUMNS) | 10 (CD-03 AS_FROM_SITE ACT:DMF0003_MktFcst.I) |
-| WK-DMF0003-0081 | B4 | C | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL C | 있음(FE 소스) | 1 (C-118) |
-| WK-DMF0003-0082 | B4 | D | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL D | 있음(FE 소스) | 2 (CD-03 AS_FROM_SITE) |
-| WK-DMF0003-0083 | B4 | FCST_TYPE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL FCST_TYPE | 있음(SHEET_COLUMNS) | 9 (ACT:DMF0003_1_MktFcst.GetFcstType ACT:DM) |
-| WK-DMF0003-0084 | B4 | N | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL N | 있음(FE 소스) | 13 (6 ACT:DMF0003_1_MktFcst.GetSalesSite ACT) |
-| WK-DMF0003-0085 | B4 | P | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL P | 있음(FE 소스) | 3 (ACT:DMF0003_1_MktFcst.GetIncotermsType:6) |
-| WK-DMF0003-0086 | B4 | PLANT_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL PLANT_SITE_ID | 있음(SHEET_COLUMNS) | 3 (PlantByDivisionCompany PlantSiteByItem 7) |
-| WK-DMF0003-0087 | B4 | S | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL S | 있음(FE 소스) | 8 (CD-08 6 ACT:DMF0003_MktFcst.GetSalesSite) |
-| WK-DMF0003-0088 | B4 | SCM_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL SCM_SITE_ID | 있음(SHEET_COLUMNS) | 2 (CD-08 SiteByEndCustomerAuth) |
-| WK-DMF0003-0089 | B4 | SLOC | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 PCOL SLOC | 판단불가(대상 단위 PCOL) | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0090 | B4 | STORAGE_PLANT_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 PCOL STORAGE_PLANT_ID | 판단불가(대상 단위 PCOL) | 1 (ACT:DMF0003_PRPopup.spdMain_Changed:566:) |
-| WK-DMF0003-0091 | B4 | cboAS / AS | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COND cboAS / AS | 있음(FE 소스) | 8 (ACT:DMF0003_1_MktFcst.GetSalesSite ACT:D) |
-| WK-DMF0003-0092 | B4 | cboBucketType / Bucket / Bucket Type | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COND cboBucketType / Bucket / Bucket Type | 있음(FE 소스) | 3 (ACT:DMF0003_1_MktFcst.FindData:1651:104 ) |
-| WK-DMF0003-0093 | B4 | clbCustomer / End Customer / Customer | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COND clbCustomer / End Customer / Customer | 있음(FE 소스) | 4 (ACT:DMF0003_1_MktFcst.cboDivision_Select) |
-| WK-DMF0003-0094 | B4 | clbDivision / Division | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COND clbDivision / Division | 있음(FE 소스) | 31 (ACT:DMF0003_1_MktFcst.Form_Load:334:8 AC) |
-| WK-DMF0003-0095 | B4 | clbTeam / Team | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COND clbTeam / Team | 있음(FE 소스) | 6 (ACT:DMF0003_1_MktFcst.cboDivision_Select) |
-| WK-DMF0003-0096 | B4 | drpPeriod / Period | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COND drpPeriod / Period | 있음(FE 소스) | 10 (ACT:DMF0003_1_MktFcst.GetSpdTitle ACT:DM) |
-| WK-DMF0003-0097 | F2 | DMF0003 화면 | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 F2(_verify.spec(@verify)) → 대상 SCREEN DMF0003 화면 | 판단불가(대상 단위 SCREEN) | 668 (E03 E03-2 E04-2 CA-01 CA-02 CA-03 CA-04 ) |
-| WK-DMF0003-0098 | F6 | DMF0003 화면 | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 F6(_verify.spec(@verify)) → 대상 SCREEN DMF0003 화면 | 판단불가(대상 단위 SCREEN) | 634 (E03-2 E04-2 CI-10 CK-02 — 3 HANDLER:Save) |
-| WK-DMF0003-0099 | DB-SYN | DMF0000_GET_MASTER_CHG_POPUP | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP DMF0000_GET_MASTER_CHG_POPUP | 없음(PROC_M 대응 없음) | 5 (CH-108 ACT:DMF0003_MatsterChgPopup.FindD) |
-| WK-DMF0003-0100 | DB-SYN | DMF0003_GET_BUCKET_TYPE_CODE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP DMF0003_GET_BUCKET_TYPE_CODE | 없음(PROC_M 대응 없음) | 7 (CK-04 ACT:DMF0003_1_MktFcst.GetBucketTyp) |
-| WK-DMF0003-0101 | DB-SYN | DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE | 없음(PROC_M 대응 없음) | 2 (ACT:DMF0003_MatsterChgPopup.SaveData:529) |
-| WK-DMF0003-0102 | DB-SYN | P_AUTHORITY | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP P_AUTHORITY | 없음(PROC_M 대응 없음) | 1 (CI-10) |
-| WK-DMF0003-0103 | DB-SYN | SCM0001_GET_BIZ_TYPE_BY_DIVISION | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_BIZ_TYPE_BY_DIVISION | 없음(PROC_M 대응 없음) | 7 (CK-08 ACT:DMF0003_1_MktFcst.GetBizTypeby) |
-| WK-DMF0003-0104 | DB-SYN | SCM0001_GET_CUSTOMER_BY_DIVISION | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_CUSTOMER_BY_DIVISION | 없음(PROC_M 대응 없음) | 6 (ACT:DMF0003_1_MktFcst.GetCustomerbyDivis) |
-| WK-DMF0003-0105 | DB-SYN | SCM0001_GET_LOOKUP_VALUES | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_LOOKUP_VALUES | 없음(PROC_M 대응 없음) | 15 (CK-07 ACT:DMF0003_1_MktFcst.GetItemType:) |
-| WK-DMF0003-0106 | DB-SYN | SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER | 없음(PROC_M 대응 없음) | 6 (ACT:DMF0003_1_MktFcst.GetPlantSitebyEndC) |
-| WK-DMF0003-0107 | DB-SYN | SCM0001_GET_SITE_BY_DIVISION | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_SITE_BY_DIVISION | 없음(PROC_M 대응 없음) | 6 (ACT:DMF0003_1_MktFcst.GetScmSitebyDivisi) |
-| WK-DMF0003-0108 | DB-SYN | SCM0001_GET_TEAM_BY_DIVISION | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_TEAM_BY_DIVISION | 없음(PROC_M 대응 없음) | 6 (ACT:DMF0003_1_MktFcst.GetTeambyDivision:) |
-| WK-DMF0003-0109 | G4 | btnCalculation | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnCalculation | 없음 | 6 (ACT:DMF0003_1_MktFcst.InitControls:473:6) |
-| WK-DMF0003-0110 | G4 | btnColumn | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnColumn | 없음 | 4 (ACT:DMF0003_1_MktFcst.InitControls:465:5) |
-| WK-DMF0003-0111 | G4 | btnIncotermsChg | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnIncotermsChg | 있음(FE 소스) | 24 (ACT:DMF0003_1_MktFcst.DefineProperty ACT) |
-| WK-DMF0003-0112 | G4 | btnItemId | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnItemId | 없음 | 1 (HANDLER:btnItemId_Click) |
-| WK-DMF0003-0113 | G4 | btnMeasure | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnMeasure | 없음 | 4 (ACT:DMF0003_1_MktFcst.InitControls:466:5) |
-| WK-DMF0003-0114 | G4 | btnOwner | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnOwner | 없음 | 1 (HANDLER:btnOwner_Click) |
-| WK-DMF0003-0115 | G4 | btnProject | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnProject | 없음 | 10 (HANDLER:btnProject_Click ACT:DMF0003_1_M) |
-| WK-DMF0003-0116 | G4 | btnUpDown | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnUpDown | 없음 | 5 (ACT:DMF0003_1_MktFcst.InitSpread ACT:DMF) |
-| WK-DMF0003-0117 | E2 | YYYYMMDD | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E2(_verify.spec(@verify)) → 대상 COL YYYYMMDD | 있음(SHEET_COLUMNS) | 1 (111) |
-| WK-DMF0003-0118 | E5 | AS_FROM_SITE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL AS_FROM_SITE | 있음(SHEET_COLUMNS) | 1 (AS_FROM_SITE) |
-| WK-DMF0003-0119 | E5 | C | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL C | 있음(FE 소스) | 1 (C-118) |
-| WK-DMF0003-0120 | E5 | D | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL D | 있음(FE 소스) | 1 (AS_FROM_SITE) |
-| WK-DMF0003-0121 | E5 | PLANT_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL PLANT_SITE_ID | 있음(SHEET_COLUMNS) | 3 (PlantByDivisionCompany PlantSiteByItem 7) |
-| WK-DMF0003-0122 | E5 | SCM_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL SCM_SITE_ID | 있음(SHEET_COLUMNS) | 1 (SiteByEndCustomerAuth) |
-| WK-DMF0003-0123 | G03-WIRE | DMF0003 화면 | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G03-WIRE(check.js G03) → 대상 SCREEN DMF0003 화면 | 판단불가(대상 단위 SCREEN) | 56 (ACT:DMF0003_1_MktFcst..ctor ACT:DMF0003_) |
-| WK-DMF0003-0124 | G5 | C | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 COL C | 있음(FE 소스) | 2 (C-119 HANDLER:spdMain_KeyUp) |
-| WK-DMF0003-0125 | G5 | DMF0003_MatsterChgPopup | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 POPUP DMF0003_MatsterChgPopup | 판단불가(대상 단위 POPUP) | 4 (CA-116 ACT:DMF0003_1_MktFcst.btnIncoterm) |
-| WK-DMF0003-0126 | G5 | DMF0003_MktFcst | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 POPUP DMF0003_MktFcst | 판단불가(대상 단위 POPUP) | 3 (HANDLER:spdMain_CellDoubleClick HANDLER:) |
-| WK-DMF0003-0127 | G5 | DMF0003_PRHistoryPopup | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 POPUP DMF0003_PRHistoryPopup | 판단불가(대상 단위 POPUP) | 4 (MODAL:PrHistoryModal ACT:DMF0003_1_MktFc) |
-| WK-DMF0003-0128 | G5 | DMF0003_PRPopup | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 POPUP DMF0003_PRPopup | 판단불가(대상 단위 POPUP) | 8 (CA-111 MODAL:PrModal ACT:DMF0003_1_MktFc) |
-| WK-DMF0003-0129 | G5 | DMF0003_SspSyncComparePopUp | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 POPUP DMF0003_SspSyncComparePopUp | 판단불가(대상 단위 POPUP) | 6 (CA-114 MODAL:DMF0003_SspSyncComparePopUp) |
-| WK-DMF0003-0130 | G5 | DMF0003_SspSyncPopUp | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 POPUP DMF0003_SspSyncPopUp | 판단불가(대상 단위 POPUP) | 6 (MODAL:DMF0003_SspSyncPopUp MODAL:SspSync) |
-| WK-DMF0003-0131 | G5 | DMF0003_T_MktFcst | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 POPUP DMF0003_T_MktFcst | 판단불가(대상 단위 POPUP) | 1 (ACT:DMF0003_T_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0132 | G5 | I | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 COL I | 있음(FE 소스) | 1 (CG-05) |
-| WK-DMF0003-0133 | G5 | M | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 COL M | 있음(FE 소스) | 1 (MODAL:MeasureSelectModal) |
-| WK-DMF0003-0134 | G5 | btnColumn | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G5(_verify.spec(@verify)) → 대상 BTN btnColumn | 없음 | 0 () |
-| WK-DMF0003-0135 | G5 | btnIncotermsChg | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 BTN btnIncotermsChg | 있음(FE 소스) | 0 () |
-| WK-DMF0003-0136 | G5 | btnItemId | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G5(_verify.spec(@verify)) → 대상 BTN btnItemId | 없음 | 0 () |
-| WK-DMF0003-0137 | G5 | btnMeasure | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G5(_verify.spec(@verify)) → 대상 BTN btnMeasure | 없음 | 0 () |
-| WK-DMF0003-0138 | G5 | btnOwner | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G5(_verify.spec(@verify)) → 대상 BTN btnOwner | 없음 | 0 () |
-| WK-DMF0003-0139 | G5 | btnProject | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G5(_verify.spec(@verify)) → 대상 BTN btnProject | 없음 | 0 () |
-| WK-DMF0003-0140 | G5 | cboBucketType / Bucket / Bucket Type | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 COND cboBucketType / Bucket / Bucket Type | 있음(FE 소스) | 6 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0141 | G5 | clbDivision / Division | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 COND clbDivision / Division | 있음(FE 소스) | 16 (ACT:DMF0003_1_MktFcst.btnColumn_Click:49) |
-| WK-DMF0003-0142 | G5 | drpPeriod / Period | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(_verify.spec(@verify)) → 대상 COND drpPeriod / Period | 있음(FE 소스) | 5 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0143 | H6 | C | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 COL C | 있음(FE 소스) | 2 (C-119 HANDLER:spdMain_KeyUp) |
-| WK-DMF0003-0144 | H6 | DMF0003_MatsterChgPopup | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 POPUP DMF0003_MatsterChgPopup | 판단불가(대상 단위 POPUP) | 4 (CA-116 ACT:DMF0003_1_MktFcst.btnIncoterm) |
-| WK-DMF0003-0145 | H6 | DMF0003_MktFcst | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 POPUP DMF0003_MktFcst | 판단불가(대상 단위 POPUP) | 3 (HANDLER:spdMain_CellDoubleClick HANDLER:) |
-| WK-DMF0003-0146 | H6 | DMF0003_PRHistoryPopup | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 POPUP DMF0003_PRHistoryPopup | 판단불가(대상 단위 POPUP) | 4 (MODAL:PrHistoryModal ACT:DMF0003_1_MktFc) |
-| WK-DMF0003-0147 | H6 | DMF0003_PRPopup | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 POPUP DMF0003_PRPopup | 판단불가(대상 단위 POPUP) | 8 (CA-111 MODAL:PrModal ACT:DMF0003_1_MktFc) |
-| WK-DMF0003-0148 | H6 | DMF0003_SspSyncComparePopUp | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 POPUP DMF0003_SspSyncComparePopUp | 판단불가(대상 단위 POPUP) | 6 (CA-114 MODAL:DMF0003_SspSyncComparePopUp) |
-| WK-DMF0003-0149 | H6 | DMF0003_SspSyncPopUp | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 POPUP DMF0003_SspSyncPopUp | 판단불가(대상 단위 POPUP) | 6 (MODAL:DMF0003_SspSyncPopUp MODAL:SspSync) |
-| WK-DMF0003-0150 | H6 | DMF0003_T_MktFcst | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 POPUP DMF0003_T_MktFcst | 판단불가(대상 단위 POPUP) | 1 (ACT:DMF0003_T_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0151 | H6 | I | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 COL I | 있음(FE 소스) | 1 (CG-05) |
-| WK-DMF0003-0152 | H6 | M | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 COL M | 있음(FE 소스) | 1 (MODAL:MeasureSelectModal) |
-| WK-DMF0003-0153 | H6 | btnColumn | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 BTN btnColumn | 없음 | 0 () |
-| WK-DMF0003-0154 | H6 | btnIncotermsChg | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 BTN btnIncotermsChg | 있음(FE 소스) | 0 () |
-| WK-DMF0003-0155 | H6 | btnItemId | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 BTN btnItemId | 없음 | 0 () |
-| WK-DMF0003-0156 | H6 | btnMeasure | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 BTN btnMeasure | 없음 | 0 () |
-| WK-DMF0003-0157 | H6 | btnOwner | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 BTN btnOwner | 없음 | 0 () |
-| WK-DMF0003-0158 | H6 | btnProject | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 BTN btnProject | 없음 | 0 () |
-
-## W6 검증 실행 (617)
-
-| ID | 검사 | 대상 | 담당 | 할 일 | TO-BE 흔적 | 대조표 행 |
-|---|---|---|---|---|---|---|
-| WK-DMF0003-0159 | J2 | DMF0003 화면 | E2E(auth/authcrud 스펙 생성·실행) | J2 실행 — DMF0003 화면 · 검사기 있음(auth·authcrud spec) — 실행 필요: auth |  | 374 (E01-1 E02 E03 E03-1 E03-2 E03-3 E03-4 E0) |
-| WK-DMF0003-0160 | C1 | cboBucketType / Bucket / Bucket Type | E2E(검증 엔진 @trace 재실행(run_verify)) | C1 실행 — cboBucketType / Bucket / Bucket Type · 검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InitControls:446:4) |
-| WK-DMF0003-0161 | C1 | chkColor / Color | E2E(검증 엔진 @trace 재실행(run_verify)) | C1 실행 — chkColor / Color · 검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace |  | 1 (HANDLER:chkColor_CheckedChanged) |
-| WK-DMF0003-0162 | C1 | clbBizType / Biz Type | E2E(검증 엔진 @trace 재실행(run_verify)) | C1 실행 — clbBizType / Biz Type · 검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace |  | 15 (ACT:DMF0003_1_MktFcst.InitControls:381:1) |
-| WK-DMF0003-0163 | C1 | clbCustomer / End Customer / Customer | E2E(검증 엔진 @trace 재실행(run_verify)) | C1 실행 — clbCustomer / End Customer / Customer · 검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace |  | 15 (ACT:DMF0003_1_MktFcst.InitControls:433:3) |
-| WK-DMF0003-0164 | C1 | clbDivision / Division | E2E(검증 엔진 @trace 재실행(run_verify)) | C1 실행 — clbDivision / Division · 검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace |  | 4 (ACT:DMF0003_1_MktFcst.InitControls:366:2) |
-| WK-DMF0003-0165 | C1 | clbEDISender / Sender Code / EDISender | E2E(검증 엔진 @trace 재실행(run_verify)) | C1 실행 — clbEDISender / Sender Code / EDISender · 검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.InitControls:421:3) |
-| WK-DMF0003-0166 | C1 | clbEndCustomer / End Customer | E2E(검증 엔진 @trace 재실행(run_verify)) | C1 실행 — clbEndCustomer / End Customer · 검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace |  | 1 (ACT:DMF0003_MatsterChgPopup.InitControls) |
-| WK-DMF0003-0167 | C1 | clbItemType / Item Type | E2E(검증 엔진 @trace 재실행(run_verify)) | C1 실행 — clbItemType / Item Type · 검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InitControls:462:5) |
-| WK-DMF0003-0168 | C1 | clbPlantSite / Plant Site | E2E(검증 엔진 @trace 재실행(run_verify)) | C1 실행 — clbPlantSite / Plant Site · 검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace |  | 4 (ACT:DMF0003_1_MktFcst.InitControls:442:4) |
-| WK-DMF0003-0169 | C1 | clbSalesSite / Sales Site | E2E(검증 엔진 @trace 재실행(run_verify)) | C1 실행 — clbSalesSite / Sales Site · 검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace |  | 19 (ACT:DMF0003_1_MktFcst.InitControls:437:4) |
-| WK-DMF0003-0170 | C1 | clbTeam / Team | E2E(검증 엔진 @trace 재실행(run_verify)) | C1 실행 — clbTeam / Team · 검사기 있음(_trace.spec(@trace) 상위 변경→하위 후보) — 실행 필요: trace |  | 7 (ACT:DMF0003_1_MktFcst.InitControls:370:5) |
-| WK-DMF0003-0171 | C2 | AS_FROM_SITE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — AS_FROM_SITE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 26 (CE-04 ACT:DMF0003_1_MktFcst.spdMain_Chan) |
-| WK-DMF0003-0172 | C2 | BUCKET | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — BUCKET · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_Changed:35) |
-| WK-DMF0003-0173 | C2 | C | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — C · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 7 (C-118 C-121 CE-04 ACT:DMF0003_1_MktFcst.) |
-| WK-DMF0003-0174 | C2 | D | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — D · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 13 (E04-1 ACT:DMF0003_1_MktFcst.spdMain_Chan) |
-| WK-DMF0003-0175 | C2 | DEMAND_OPERATION | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — DEMAND_OPERATION · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 25 (ACT:DMF0003_CustDemandAnalysis.spdMain_C) |
-| WK-DMF0003-0176 | C2 | E | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — E · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0177 | C2 | FCST_TYPE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — FCST_TYPE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 3 (CE-04 ACT:DMF0003_MktFcst.spdMain_ComboS) |
-| WK-DMF0003-0178 | C2 | I | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — I · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 259 (CG-05 ACT:DMF0003_1_MktFcst.spdMain_Chan) |
-| WK-DMF0003-0179 | C2 | IMPUTATION_YN | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — IMPUTATION_YN · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 40 (ACT:DMF0003_CustDemandAnalysis.spdMain_C) |
-| WK-DMF0003-0180 | C2 | M | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — M · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 1 (E04-1) |
-| WK-DMF0003-0181 | C2 | MEASURE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — MEASURE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (CE-04 1) |
-| WK-DMF0003-0182 | C2 | N | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — N · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0183 | C2 | P | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — P · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 1 (ACT:DMF0003_MatsterChgPopup.spdMain_Chan) |
-| WK-DMF0003-0184 | C2 | S | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — S · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (CE-04 1 ACT:DMF0003_MktFcst.spdMain_Comb) |
-| WK-DMF0003-0185 | C2 | SCM_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — SCM_SITE_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 1 (CE-04) |
-| WK-DMF0003-0186 | C2 | SLOC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — SLOC · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.spdMain_Changed ACT:) |
-| WK-DMF0003-0187 | C2 | STORAGE_PLANT_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — STORAGE_PLANT_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 8 (ACT:DMF0003_PRPopup.spdMain_Changed ACT:) |
-| WK-DMF0003-0188 | C2 | VARIATION_FACTOR | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — VARIATION_FACTOR · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.spdMain_C) |
-| WK-DMF0003-0189 | C2 | VMI_STD_DIO | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — VMI_STD_DIO · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0190 | C2 | VMI_YN | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C2 실행 — VMI_YN · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0191 | C3 | AS_FROM_SITE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — AS_FROM_SITE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 43 (CE-04 ACT:DMF0003_1_MktFcst.SetSaveData ) |
-| WK-DMF0003-0192 | C3 | B | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — B · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 12 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-0193 | C3 | BUCKET | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — BUCKET · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_Changed:35) |
-| WK-DMF0003-0194 | C3 | C | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — C · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 9 (C-118 C-121 C-122 CE-04 HANDLER:spdMain_) |
-| WK-DMF0003-0195 | C3 | D | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — D · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 24 (E04-1 ACT:DMF0003_1_MktFcst.SetSpreadHea) |
-| WK-DMF0003-0196 | C3 | DEMAND_OPERATION | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — DEMAND_OPERATION · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 33 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
-| WK-DMF0003-0197 | C3 | DESC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — DESC · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 3 (ACT:DMF0003_CustDemandAnalysis.SetSpread) |
-| WK-DMF0003-0198 | C3 | E | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — E · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0199 | C3 | EDI_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — EDI_QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
-| WK-DMF0003-0200 | C3 | FCST_TYPE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — FCST_TYPE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 5 (CE-04 ACT:DMF0003_MktFcst.spdMain_Clipbo) |
-| WK-DMF0003-0201 | C3 | GAP | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — GAP · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 22 (ACT:DMF0003_1_MktFcst.PSI_FindData:7052:) |
-| WK-DMF0003-0202 | C3 | I | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — I · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 259 (CG-05 ACT:DMF0003_1_MktFcst.spdMain_Chan) |
-| WK-DMF0003-0203 | C3 | IMPUTATION_YN | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — IMPUTATION_YN · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 45 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
-| WK-DMF0003-0204 | C3 | IN_DE_VOL | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — IN_DE_VOL · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 2 (ACT:DMF0003_CustDemandAnalysis.SetSpread) |
-| WK-DMF0003-0205 | C3 | ITEM_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — ITEM_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0206 | C3 | ITEM_NAME | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — ITEM_NAME · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0207 | C3 | M | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — M · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 1 (E04-1) |
-| WK-DMF0003-0208 | C3 | MEASURE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — MEASURE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 2 (CE-04 1) |
-| WK-DMF0003-0209 | C3 | MKT_DP | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — MKT_DP · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 8 (ACT:DMF0003_1_MktFcst.PSI_FindData:7026:) |
-| WK-DMF0003-0210 | C3 | MKT_FCST | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — MKT_FCST · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
-| WK-DMF0003-0211 | C3 | N | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — N · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0212 | C3 | P | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — P · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 1 (ACT:DMF0003_MatsterChgPopup.spdMain_Chan) |
-| WK-DMF0003-0213 | C3 | PROJECT_CODE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — PROJECT_CODE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0214 | C3 | PR_HEADER | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — PR_HEADER · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 5 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0215 | C3 | REQUESTED_BY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — REQUESTED_BY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0216 | C3 | REQUEST_DATE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — REQUEST_DATE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0217 | C3 | REQUEST_NO | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — REQUEST_NO · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0218 | C3 | RESULT | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — RESULT · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 12 (ACT:DMF0003_1_MktFcst.PSI_FindData:7036:) |
-| WK-DMF0003-0219 | C3 | S | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — S · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 6 (CE-04 1 ACT:DMF0003_1_MktFcst.OnShown:34) |
-| WK-DMF0003-0220 | C3 | SCM_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — SCM_SITE_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 2 (CE-04 ACT:DMF0003_MatsterChgPopup.InitCo) |
-| WK-DMF0003-0221 | C3 | SLOC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — SLOC · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0222 | C3 | STORAGE_PLANT_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — STORAGE_PLANT_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 10 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0223 | C3 | VARIATION_FACTOR | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — VARIATION_FACTOR · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 10 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
-| WK-DMF0003-0224 | C3 | VMI_STD_DIO | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — VMI_STD_DIO · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0225 | C3 | VMI_YN | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — VMI_YN · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0226 | C3 | YYYYMMDD | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C3 실행 — YYYYMMDD · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(값 대입 문장 원천)) — 실행 필요: trace |  | 17 (ACT:DMF0003_1_MktFcst.SetSaveData ACT:DM) |
-| WK-DMF0003-0227 | C4 | chkColor / Color | E2E(검증 엔진 @trace 재실행(run_verify)) | C4 실행 — chkColor / Color · 검사기 있음(_trace.spec(@trace) 조건 변경→그리드 상태) — 실행 필요: trace |  | 1 (HANDLER:chkColor_CheckedChanged) |
-| WK-DMF0003-0228 | C6 | AS_FROM_SITE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — AS_FROM_SITE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 26 (CE-04 ACT:DMF0003_1_MktFcst.spdMain_Chan) |
-| WK-DMF0003-0229 | C6 | BUCKET | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — BUCKET · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_Changed:35) |
-| WK-DMF0003-0230 | C6 | C | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — C · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 7 (C-118 C-121 CE-04 ACT:DMF0003_1_MktFcst.) |
-| WK-DMF0003-0231 | C6 | D | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — D · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 13 (E04-1 ACT:DMF0003_1_MktFcst.spdMain_Chan) |
-| WK-DMF0003-0232 | C6 | DEMAND_OPERATION | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — DEMAND_OPERATION · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 25 (ACT:DMF0003_CustDemandAnalysis.spdMain_C) |
-| WK-DMF0003-0233 | C6 | E | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — E · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0234 | C6 | FCST_TYPE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — FCST_TYPE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 3 (CE-04 ACT:DMF0003_MktFcst.spdMain_ComboS) |
-| WK-DMF0003-0235 | C6 | I | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — I · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 259 (CG-05 ACT:DMF0003_1_MktFcst.spdMain_Chan) |
-| WK-DMF0003-0236 | C6 | IMPUTATION_YN | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — IMPUTATION_YN · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 40 (ACT:DMF0003_CustDemandAnalysis.spdMain_C) |
-| WK-DMF0003-0237 | C6 | M | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — M · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 1 (E04-1) |
-| WK-DMF0003-0238 | C6 | MEASURE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — MEASURE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (CE-04 1) |
-| WK-DMF0003-0239 | C6 | N | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — N · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0240 | C6 | P | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — P · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 1 (ACT:DMF0003_MatsterChgPopup.spdMain_Chan) |
-| WK-DMF0003-0241 | C6 | S | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — S · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (CE-04 1 ACT:DMF0003_MktFcst.spdMain_Comb) |
-| WK-DMF0003-0242 | C6 | SCM_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — SCM_SITE_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 1 (CE-04) |
-| WK-DMF0003-0243 | C6 | SLOC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — SLOC · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.spdMain_Changed ACT:) |
-| WK-DMF0003-0244 | C6 | STORAGE_PLANT_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — STORAGE_PLANT_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 8 (ACT:DMF0003_PRPopup.spdMain_Changed ACT:) |
-| WK-DMF0003-0245 | C6 | VARIATION_FACTOR | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — VARIATION_FACTOR · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.spdMain_C) |
-| WK-DMF0003-0246 | C6 | VMI_STD_DIO | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — VMI_STD_DIO · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0247 | C6 | VMI_YN | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | C6 실행 — VMI_YN · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-0248 | G3 | DMF0003 화면 | E2E(smoke 스펙 생성·실행(🧪 E2E smoke)) | G3 실행 — DMF0003 화면 · 검사기 있음(smoke 공통 기능(Condition·Reset)) — 실행 필요: smoke |  | 7 (COMMON:UC-01 COMMON:UC-02 COMMON:UC-03 C) |
-| WK-DMF0003-0249 | K4 | DMF0003 화면 | E2E(검증 엔진 @trace 재실행(run_verify)) | K4 실행 — DMF0003 화면 · 검사기 있음(_trace.spec(@trace) 버튼 구성) — 실행 필요: trace |  | 277 (COMMON:UC-01 COMMON:UC-02 COMMON:UC-03 C) |
-| WK-DMF0003-0250 | F1 | DMF0003 화면 | E2E(@verify 재실행(run_verify) / crud 스펙 생성 | F1 실행 — DMF0003 화면 · 검사기 있음(_verify.spec(@verify) 실저장·crud spec) — 실행 필요: crud |  | 682 (E03 E03-2 E03-4 E04-2 CA-01 CA-02 CA-03 ) |
-| WK-DMF0003-0251 | F3 | DMF0003 화면 | E2E(검증 엔진 @trace 재실행(run_verify)) | F3 실행 — DMF0003 화면 · 검사기 있음(_trace.spec(@trace) W4b 붙여넣기 — Ctrl+C/Ctrl+V 로 셀 값 복사 후 값·연쇄) — 실행 필요: trace |  | 84 (E04-5 C-122 Events 18 19 HANDLER:spdMain) |
-| WK-DMF0003-0252 | F5 | DMF0003 화면 | E2E(검증 엔진 @trace 재실행(run_verify)) | F5 실행 — DMF0003 화면 · 검사기 있음(_trace.spec(@trace) W4b CRUD 상태 — Insert 행 CRUD_TYPE=I·편집 행 M 표시) — 실행 필요: trace |  | 17 (E03-4 CA-02 CRUD:E03:DELETE MODAL:Measur) |
-| WK-DMF0003-0253 | F4 | DMF0000_GET_MASTER_CHG_POPUP | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — DMF0000_GET_MASTER_CHG_POPUP · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace |  | 152 (CH-108 ACT:DMF0003_MatsterChgPopup.FindB) |
-| WK-DMF0003-0254 | F4 | DMF0003_GET_BUCKET_TYPE_CODE | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — DMF0003_GET_BUCKET_TYPE_CODE · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace |  | 7 (CK-04 ACT:DMF0003_1_MktFcst.GetBucketTyp) |
-| WK-DMF0003-0255 | F4 | DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smo |  | 106 (ACT:DMF0003_MatsterChgPopup.SaveButton A) |
-| WK-DMF0003-0256 | F4 | PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_ | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실 |  | 151 (ACT:DMF0003_MatsterChgPopup.FindButton A) |
-| WK-DMF0003-0257 | F4 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_PRO | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_PROPERTY · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실 |  | 4 (ACT:DMF0003_1_MktFcst.CAR_PROPERTY:6639:) |
-| WK-DMF0003-0258 | F4 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_REF | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_REF · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: |  | 5 (ACT:DMF0003_1_MktFcst.CAR_REF_DATA:6536:) |
-| WK-DMF0003-0259 | F4 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) |  | 2 (ACT:DMF0003_1_MktFcst.PSI_FindData:6948:) |
-| WK-DMF0003-0260 | F4 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DATA · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실 |  | 7 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0261 | F4 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — |  | 3 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
-| WK-DMF0003-0262 | F4 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) |  | 3 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
-| WK-DMF0003-0263 | F4 | PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPA | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPARE_POPUP · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP))  |  | 9 (CH-105 CK-05 ACT:DMF0003_1_MktFcst.spdMa) |
-| WK-DMF0003-0264 | F4 | PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요:  |  | 634 (CK-01 ACT:DMF0003_1_MktFcst.FindButton A) |
-| WK-DMF0003-0265 | F4 | PKG_DMF0003.P_DMF0003_GET_PRPOPUP | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_PRPOPUP · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke· |  | 129 (CH-102 CK-11 ACT:DMF0003_PRPopup.FindDat) |
-| WK-DMF0003-0266 | F4 | PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POP | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POPUP · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필 |  | 35 (CH-103 ACT:DMF0003_PRHistoryPopup.FindDa) |
-| WK-DMF0003-0267 | F4 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: s |  | 631 (CK-03 ACT:DMF0003_1_MktFcst.FindButton A) |
-| WK-DMF0003-0268 | F4 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_C | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_CAR · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필 |  | 213 (ACT:DMF0003_1_MktFcst.FindButton ACT:DMF) |
-| WK-DMF0003-0269 | F4 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_P | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_PSI · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필 |  | 213 (ACT:DMF0003_1_MktFcst.FindButton ACT:DMF) |
-| WK-DMF0003-0270 | F4 | PKG_DMF0003.P_DMF0003_SAVE_DM_ANL_MKT_PS | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP))  |  | 85 (ACT:DMF0003_CustDemandAnalysis.SaveButto) |
-| WK-DMF0003-0271 | F4 | PKG_DMF0003.P_DMF0003_SAVE_MKT_FCST | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_SAVE_MKT_FCST · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smok |  | 348 (CI-10 CK-02 ACT:DMF0003_1_MktFcst.SaveBu) |
-| WK-DMF0003-0272 | F4 | PKG_DMF0003.P_DMF0003_SAVE_PRPOPUP | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — PKG_DMF0003.P_DMF0003_SAVE_PRPOPUP · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke |  | 90 (ACT:DMF0003_PRPopup.SaveButton ACT:DMF00) |
-| WK-DMF0003-0273 | F4 | P_AUTHORITY | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — P_AUTHORITY · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace |  | 1 (CI-10) |
-| WK-DMF0003-0274 | F4 | SCM0001_GET_BIZ_TYPE_BY_DIVISION | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — SCM0001_GET_BIZ_TYPE_BY_DIVISION · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·t |  | 7 (CK-08 ACT:DMF0003_1_MktFcst.GetBizTypeby) |
-| WK-DMF0003-0275 | F4 | SCM0001_GET_CUSTOMER_BY_DIVISION | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — SCM0001_GET_CUSTOMER_BY_DIVISION · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·t |  | 6 (ACT:DMF0003_1_MktFcst.GetCustomerbyDivis) |
-| WK-DMF0003-0276 | F4 | SCM0001_GET_DIVISION | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — SCM0001_GET_DIVISION · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace |  | 6 (ACT:DMF0003_1_MktFcst.GetDivision:5472:3) |
-| WK-DMF0003-0277 | F4 | SCM0001_GET_LOOKUP_VALUES | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — SCM0001_GET_LOOKUP_VALUES · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace |  | 15 (CK-07 ACT:DMF0003_1_MktFcst.GetItemType:) |
-| WK-DMF0003-0278 | F4 | SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: s |  | 6 (ACT:DMF0003_1_MktFcst.GetPlantSitebyEndC) |
-| WK-DMF0003-0279 | F4 | SCM0001_GET_SITE_BY_DIVISION | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — SCM0001_GET_SITE_BY_DIVISION · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace |  | 6 (ACT:DMF0003_1_MktFcst.GetScmSitebyDivisi) |
-| WK-DMF0003-0280 | F4 | SCM0001_GET_TEAM_BY_DIVISION | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | F4 실행 — SCM0001_GET_TEAM_BY_DIVISION · 검사기 있음(smoke calls·dberr·_verify · _trace.spec(@trace) W5(SP 호출 HTTP)) — 실행 필요: smoke·trace |  | 6 (ACT:DMF0003_1_MktFcst.GetTeambyDivision:) |
-| WK-DMF0003-0281 | A5 | AS_FROM_SITE | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — AS_FROM_SITE · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (CD-03 AS_FROM_SITE) |
-| WK-DMF0003-0282 | A5 | B | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — B · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 12 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-0283 | A5 | C | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — C · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 10 (C-124 ACT:DMF0003_CustDemandAnalysis.Ini) |
-| WK-DMF0003-0284 | A5 | CATEGORY | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — CATEGORY · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0285 | A5 | CONFIRM_ID | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — CONFIRM_ID · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0286 | A5 | D | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — D · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 4 (CD-03 AS_FROM_SITE ACT:DMF0003_1_MktFcst) |
-| WK-DMF0003-0287 | A5 | DEMAND_OPERATION | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — DEMAND_OPERATION · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 25 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0288 | A5 | DESC | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — DESC · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0289 | A5 | DOM_EXP | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — DOM_EXP · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0290 | A5 | EDI_QTY | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — EDI_QTY · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0291 | A5 | F | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — F · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0292 | A5 | FCST_TYPE | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — FCST_TYPE · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0293 | A5 | GAP | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — GAP · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 6 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-0294 | A5 | I | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — I · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 1 (CF-01) |
-| WK-DMF0003-0295 | A5 | IMPUTATION_YN | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — IMPUTATION_YN · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 20 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0296 | A5 | INCOTERMS | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — INCOTERMS · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0297 | A5 | IN_DDAY | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — IN_DDAY · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0298 | A5 | IN_DE_VOL | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — IN_DE_VOL · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0299 | A5 | ITEM_DETAIL | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — ITEM_DETAIL · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0300 | A5 | ITEM_ID | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — ITEM_ID · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 8 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0301 | A5 | ITEM_NAME | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — ITEM_NAME · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0302 | A5 | ITEM_QTY | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — ITEM_QTY · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0303 | A5 | ITEM_SEQ | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — ITEM_SEQ · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 3 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0304 | A5 | ITEM_UOM | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — ITEM_UOM · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0305 | A5 | L | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — L · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0306 | A5 | MEASURE | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — MEASURE · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_SspSyncPopUp.InitSpread ACT:) |
-| WK-DMF0003-0307 | A5 | MKT_FCST | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — MKT_FCST · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0308 | A5 | N | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — N · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 6 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0309 | A5 | P | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — P · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 1 (CA-108) |
-| WK-DMF0003-0310 | A5 | PLANT_SITE_ID | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — PLANT_SITE_ID · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0311 | A5 | PLAN_QTY | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — PLAN_QTY · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0312 | A5 | PROJECT_CODE | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — PROJECT_CODE · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 10 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0313 | A5 | PR_HEADER | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — PR_HEADER · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0314 | A5 | QTY | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — QTY · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 4 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0315 | A5 | REQUESTED_BY | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — REQUESTED_BY · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0316 | A5 | REQUEST_DATE | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — REQUEST_DATE · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0317 | A5 | REQUEST_NO | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — REQUEST_NO · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 3 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0318 | A5 | RESULT | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — RESULT · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0319 | A5 | RESULT_QTY | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — RESULT_QTY · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0320 | A5 | SCM_SITE_ID | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — SCM_SITE_ID · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0321 | A5 | SLOC | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — SLOC · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0322 | A5 | SO_NO | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — SO_NO · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0323 | A5 | STORAGE_PLANT_ID | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — STORAGE_PLANT_ID · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0324 | A5 | SYNC_QTY | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — SYNC_QTY · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_SspSyncPopUp.InitSpread ACT:) |
-| WK-DMF0003-0325 | A5 | VARIATION_FACTOR | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — VARIATION_FACTOR · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 10 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0326 | A5 | YYYYMM | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — YYYYMM · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 2 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0327 | A5 | YYYYMMDD | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | A5 실행 — YYYYMMDD · 검사기 있음(_verify.spec(@verify)·smoke columns · _trace.spec(@trace) W5 컬럼 표시·그리드 구성(grid_effective Divi |  | 6 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0328 | G4 | cboBucketType / Bucket / Bucket Type | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — cboBucketType / Bucket / Bucket Type · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 15 (ACT:DMF0003_1_MktFcst.DefineProperty ACT) |
-| WK-DMF0003-0329 | G4 | cboCellQty / Cell Qty | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — cboCellQty / Cell Qty · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 12 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0330 | G4 | chkColor / Color | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — chkColor / Color · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0331 | G4 | chkSum / Sum | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — chkSum / Sum · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0332 | G4 | clbBizType / Biz Type | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbBizType / Biz Type · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 11 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0333 | G4 | clbCustomer / End Customer / Customer | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbCustomer / End Customer / Customer · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 11 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0334 | G4 | clbDivision / Division | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbDivision / Division · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 61 (ACT:DMF0003_1_MktFcst.DefineProperty ACT) |
-| WK-DMF0003-0335 | G4 | clbEDISender / Sender Code / EDISender | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbEDISender / Sender Code / EDISender · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 8 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0336 | G4 | clbEndCustomer / End Customer | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbEndCustomer / End Customer · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 5 (ACT:DMF0003_MatsterChgPopup.InitControls) |
-| WK-DMF0003-0337 | G4 | clbItemType / Item Type | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbItemType / Item Type · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 5 (ACT:DMF0003_1_MktFcst.InitControls:462:5) |
-| WK-DMF0003-0338 | G4 | clbPlantSite / Plant Site | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbPlantSite / Plant Site · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0339 | G4 | clbSalesSite / Sales Site | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbSalesSite / Sales Site · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 10 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0340 | G4 | clbTeam / Team | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbTeam / Team · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 18 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0341 | G4 | drpPeriod / Period | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — drpPeriod / Period · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.FindData:1482:16 A) |
-| WK-DMF0003-0342 | G4 | drpPeriod1 / ▼ PERIOD: / Period1 | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — drpPeriod1 / ▼ PERIOD: / Period1 · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 2 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0343 | G4 | drpPeriodPSI / PERIOD / Period PSI | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — drpPeriodPSI / PERIOD / Period PSI · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 4 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0344 | G4 | drpPeriodSimulation / SIMULATION / Perio | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — drpPeriodSimulation / SIMULATION / Period Simulati · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 3 (ACT:DMF0003_1_MktFcst.InitControls:456:5) |
-| WK-DMF0003-0345 | G4 | txtMarketShare / ▼ 당사 M/S(%): / Market S | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — txtMarketShare / ▼ 당사 M/S(%): / Market Share · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 2 (ACT:DMF0003_1_MktFcst.txtMarketShare_Cli) |
-| WK-DMF0003-0346 | G4 | txtPrHeader / PR Header / Pr Header | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — txtPrHeader / PR Header / Pr Header · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 2 (ACT:DMF0003_PRPopup.EditButton:293:16 AC) |
-| WK-DMF0003-0347 | G4 | txtProject / Project | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — txtProject / Project · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 2 (ACT:DMF0003_MatsterChgPopup.InitControls) |
-| WK-DMF0003-0348 | G4 | txtRequestNo / Request No | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — txtRequestNo / Request No · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 1 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0349 | H2 | AS_FROM_SITE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — AS_FROM_SITE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (CD-03 Expressions 행잠금: AS_FROM_SITE 조건부 ) |
-| WK-DMF0003-0350 | H2 | B | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — B · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 12 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-0351 | H2 | C | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — C · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 9 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0352 | H2 | CATEGORY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — CATEGORY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0353 | H2 | CONFIRM_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — CONFIRM_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0354 | H2 | D | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — D · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 3 (CD-03 AS_FROM_SITE ACT:DMF0003_1_MktFcst) |
-| WK-DMF0003-0355 | H2 | DEMAND_OPERATION | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — DEMAND_OPERATION · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0356 | H2 | DESC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — DESC · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0357 | H2 | DOM_EXP | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — DOM_EXP · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0358 | H2 | EDI_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — EDI_QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0359 | H2 | F | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — F · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0360 | H2 | FCST_TYPE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — FCST_TYPE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 7 (행잠금: AS_FROM_SITE 조건부 (#90~95, #128~130)) |
-| WK-DMF0003-0361 | H2 | GAP | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — GAP · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-0362 | H2 | I | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — I · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 1 (CF-01) |
-| WK-DMF0003-0363 | H2 | IMPUTATION_YN | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — IMPUTATION_YN · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 5 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0364 | H2 | INCOTERMS | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — INCOTERMS · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0365 | H2 | IN_DDAY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — IN_DDAY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0366 | H2 | IN_DE_VOL | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — IN_DE_VOL · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0367 | H2 | ITEM_DETAIL | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — ITEM_DETAIL · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0368 | H2 | ITEM_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — ITEM_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 8 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0369 | H2 | ITEM_NAME | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — ITEM_NAME · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0370 | H2 | ITEM_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — ITEM_QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0371 | H2 | ITEM_SEQ | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — ITEM_SEQ · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 3 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0372 | H2 | ITEM_UOM | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — ITEM_UOM · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0373 | H2 | L | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — L · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0374 | H2 | MEASURE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — MEASURE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncPopUp.InitSpread ACT:) |
-| WK-DMF0003-0375 | H2 | MKT_FCST | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — MKT_FCST · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0376 | H2 | N | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — N · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0377 | H2 | P | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — P · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 1 (CA-108) |
-| WK-DMF0003-0378 | H2 | PLANT_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — PLANT_SITE_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0379 | H2 | PLAN_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — PLAN_QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0380 | H2 | PROJECT_CODE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — PROJECT_CODE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 10 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0381 | H2 | PR_HEADER | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — PR_HEADER · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0382 | H2 | QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0383 | H2 | REQUESTED_BY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — REQUESTED_BY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0384 | H2 | REQUEST_DATE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — REQUEST_DATE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0385 | H2 | REQUEST_NO | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — REQUEST_NO · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 3 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0386 | H2 | RESULT | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — RESULT · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0387 | H2 | RESULT_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — RESULT_QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0388 | H2 | S | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — S · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 1 (행잠금: AS_FROM_SITE 조건부 (#90~95, #128~130)) |
-| WK-DMF0003-0389 | H2 | SCM_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — SCM_SITE_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0390 | H2 | SLOC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — SLOC · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0391 | H2 | SO_NO | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — SO_NO · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0392 | H2 | STORAGE_PLANT_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — STORAGE_PLANT_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0393 | H2 | SYNC_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — SYNC_QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncPopUp.InitSpread ACT:) |
-| WK-DMF0003-0394 | H2 | VARIATION_FACTOR | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — VARIATION_FACTOR · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0395 | H2 | YYYYMM | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — YYYYMM · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 2 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0396 | H2 | YYYYMMDD | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H2 실행 — YYYYMMDD · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0397 | H4 | DMF0003 화면 | E2E(검증 엔진 @trace 재실행(run_verify)) | H4 실행 — DMF0003 화면 · 검사기 있음(_trace.spec(@trace) W4b 레이아웃 — 가로 스크롤·그리드 높이·컬럼 폭 실측(기대 = AS-IS 폭 메타)) — 실행 필요: trace |  | 26 (E04-5 CF-05 ACT:DMF0003_1_MktFcst.spdMai) |
-| WK-DMF0003-0398 | H5 | AS_FROM_SITE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — AS_FROM_SITE · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (CD-03 AS_FROM_SITE) |
-| WK-DMF0003-0399 | H5 | B | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — B · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 12 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-0400 | H5 | C | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — C · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 9 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0401 | H5 | CATEGORY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — CATEGORY · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0402 | H5 | CONFIRM_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — CONFIRM_ID · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0403 | H5 | D | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — D · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (CD-03 AS_FROM_SITE ACT:DMF0003_1_MktFcst) |
-| WK-DMF0003-0404 | H5 | DEMAND_OPERATION | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — DEMAND_OPERATION · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0405 | H5 | DESC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — DESC · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0406 | H5 | DOM_EXP | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — DOM_EXP · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0407 | H5 | EDI_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — EDI_QTY · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0408 | H5 | F | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — F · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0409 | H5 | FCST_TYPE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — FCST_TYPE · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0410 | H5 | GAP | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — GAP · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-0411 | H5 | I | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — I · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 1 (CF-01) |
-| WK-DMF0003-0412 | H5 | IMPUTATION_YN | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — IMPUTATION_YN · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 5 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0413 | H5 | INCOTERMS | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — INCOTERMS · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0414 | H5 | IN_DDAY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — IN_DDAY · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0415 | H5 | IN_DE_VOL | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — IN_DE_VOL · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0416 | H5 | ITEM_DETAIL | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — ITEM_DETAIL · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0417 | H5 | ITEM_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — ITEM_ID · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 8 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0418 | H5 | ITEM_NAME | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — ITEM_NAME · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0419 | H5 | ITEM_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — ITEM_QTY · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0420 | H5 | ITEM_SEQ | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — ITEM_SEQ · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 3 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0421 | H5 | ITEM_UOM | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — ITEM_UOM · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0422 | H5 | L | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — L · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0423 | H5 | MEASURE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — MEASURE · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncPopUp.InitSpread ACT:) |
-| WK-DMF0003-0424 | H5 | MKT_FCST | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — MKT_FCST · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0425 | H5 | N | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — N · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 6 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0426 | H5 | P | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — P · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 1 (CA-108) |
-| WK-DMF0003-0427 | H5 | PLANT_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — PLANT_SITE_ID · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0428 | H5 | PLAN_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — PLAN_QTY · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0429 | H5 | PROJECT_CODE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — PROJECT_CODE · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 10 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0430 | H5 | PR_HEADER | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — PR_HEADER · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0431 | H5 | QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — QTY · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0432 | H5 | REQUESTED_BY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — REQUESTED_BY · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0433 | H5 | REQUEST_DATE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — REQUEST_DATE · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0434 | H5 | REQUEST_NO | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — REQUEST_NO · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 3 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0435 | H5 | RESULT | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — RESULT · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0436 | H5 | RESULT_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — RESULT_QTY · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0437 | H5 | SCM_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — SCM_SITE_ID · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0438 | H5 | SLOC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — SLOC · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0439 | H5 | SO_NO | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — SO_NO · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0440 | H5 | STORAGE_PLANT_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — STORAGE_PLANT_ID · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0441 | H5 | SYNC_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — SYNC_QTY · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncPopUp.InitSpread ACT:) |
-| WK-DMF0003-0442 | H5 | VARIATION_FACTOR | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — VARIATION_FACTOR · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0443 | H5 | YYYYMM | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — YYYYMM · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 2 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0444 | H5 | YYYYMMDD | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — YYYYMMDD · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0445 | H5 | cboBucketType / Bucket / Bucket Type | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — cboBucketType / Bucket / Bucket Type · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) —  |  | 54 (ACT:DMF0003_1_MktFcst.SetSpreadColumn AC) |
-| WK-DMF0003-0446 | H5 | chkColor / Color | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — chkColor / Color · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 57 (ACT:DMF0003_1_MktFcst.SetSpreadColumn AC) |
-| WK-DMF0003-0447 | H5 | chkSum / Sum | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — chkSum / Sum · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 9 (ACT:DMF0003_1_MktFcst.SetSpreadColumn AC) |
-| WK-DMF0003-0448 | H5 | clbDivision / Division | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | H5 실행 — clbDivision / Division · 검사기 있음(_verify·SC 게이트 · _trace.spec(@trace) W5 컬럼 헤더 ↔ AS-IS 라벨(grid_effective)) — 실행 필요: trace |  | 24 (ACT:DMF0003_1_MktFcst.InitSpread ACT:DMF) |
-| WK-DMF0003-0449 | I1 | DMF0003 화면 | E2E(judge.py META 판정(DB 접속)) | I1 실행 — DMF0003 화면 · 검사기 있음(judge(DB 조회)·하네스 I18N1) — 실행 필요: meta |  | 199 (E03-1 E03-2 E05-2 E05-3 CA-01 CA-02 CA-0) |
-| WK-DMF0003-0450 | SC1 | DMF0003 화면 | E2E(mapping_trace.py 재실행 / smoke 스펙 생성·실 | SC1 실행 — DMF0003 화면 · 검사기 있음(check.js SC1·smoke 기준표 순서) — 실행 필요: smoke |  | 8 (E01-1 CD-10 CK-10 COMMON:UC-06 `componen) |
-| WK-DMF0003-0451 | D1 | APPLICATION | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — APPLICATION · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2037:98 ) |
-| WK-DMF0003-0452 | D1 | AS_FROM_SITE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — AS_FROM_SITE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 21 (CC-05 CE-02 CK-09 Expressions 행잠금: AS_FR) |
-| WK-DMF0003-0453 | D1 | C | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — C · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 2 (C-121 ACT:DMF0003_MktFcst.EditButton) |
-| WK-DMF0003-0454 | D1 | CELL_PER_MODULE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — CELL_PER_MODULE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2772:152) |
-| WK-DMF0003-0455 | D1 | CUST_GROUP | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — CUST_GROUP · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2031:92 ) |
-| WK-DMF0003-0456 | D1 | CUST_GROUP_DTL | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — CUST_GROUP_DTL · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2033:94 ) |
-| WK-DMF0003-0457 | D1 | D | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — D · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 5 (AS_FROM_SITE ACT:DMF0003_1_MktFcst.Inser) |
-| WK-DMF0003-0458 | D1 | DMS_CUSTOMER | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — DMS_CUSTOMER · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2059:120) |
-| WK-DMF0003-0459 | D1 | DMS_SALES | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — DMS_SALES · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2057:118) |
-| WK-DMF0003-0460 | D1 | FCST_TYPE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — FCST_TYPE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 4 (CE-03 CK-09 행잠금: AS_FROM_SITE 조건부 (#90~9) |
-| WK-DMF0003-0461 | D1 | FORECAST_INFO_BIZ_TYPE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — FORECAST_INFO_BIZ_TYPE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2045:106) |
-| WK-DMF0003-0462 | D1 | FORECAST_INFO_CELL_MODEL | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — FORECAST_INFO_CELL_MODEL · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2049:110) |
-| WK-DMF0003-0463 | D1 | FORECAST_INFO_CELL_PACK_COUNT | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — FORECAST_INFO_CELL_PACK_COUNT · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2051:112) |
-| WK-DMF0003-0464 | D1 | FORECAST_INFO_SPEC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — FORECAST_INFO_SPEC · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2053:114) |
-| WK-DMF0003-0465 | D1 | I | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — I · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 1 (CB-03) |
-| WK-DMF0003-0466 | D1 | INCOTERMS | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — INCOTERMS · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 1 (CD-02) |
-| WK-DMF0003-0467 | D1 | ITEM_DETAIL | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — ITEM_DETAIL · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.EditButton ACT:DMF00) |
-| WK-DMF0003-0468 | D1 | ITEM_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — ITEM_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 1 (CD-10) |
-| WK-DMF0003-0469 | D1 | L | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — L · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 0 () |
-| WK-DMF0003-0470 | D1 | LAST_UPDATED_BY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — LAST_UPDATED_BY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2067:126) |
-| WK-DMF0003-0471 | D1 | LAST_UPDATE_DATE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — LAST_UPDATE_DATE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2065:124) |
-| WK-DMF0003-0472 | D1 | MDM_PROJECT_NAME | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — MDM_PROJECT_NAME · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2041:102) |
-| WK-DMF0003-0473 | D1 | MEASURE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — MEASURE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 1 (1) |
-| WK-DMF0003-0474 | D1 | MIN_CAPACITY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — MIN_CAPACITY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2043:104) |
-| WK-DMF0003-0475 | D1 | N | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — N · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 1 (8. 콤보 호출지점) |
-| WK-DMF0003-0476 | D1 | PLANT_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — PLANT_SITE_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (CD-10 PlantByDivisionCompany 7. 콤보 파라미터) |
-| WK-DMF0003-0477 | D1 | PROJECT_CODE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — PROJECT_CODE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 2 (CD-10 Div40 Sales Site 편집 후보 (`endCustom) |
-| WK-DMF0003-0478 | D1 | PROJECT_S_OP_REPORT | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — PROJECT_S_OP_REPORT · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2766:150) |
-| WK-DMF0003-0479 | D1 | Q | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — Q · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 1 (ACT:DMF0003_PRPopup.EditButton) |
-| WK-DMF0003-0480 | D1 | QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_PRPopup.EditButton ACT:DMF00) |
-| WK-DMF0003-0481 | D1 | ROUTE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — ROUTE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2039:100) |
-| WK-DMF0003-0482 | D1 | S | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — S · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 17 (CB-04 행잠금: 좌측 상세컬럼 read-only (#8~27, #34) |
-| WK-DMF0003-0483 | D1 | SCM_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — SCM_SITE_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 1 (CE-02) |
-| WK-DMF0003-0484 | D1 | SENDER_CODE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — SENDER_CODE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2069:128) |
-| WK-DMF0003-0485 | D1 | SENDER_NAME | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — SENDER_NAME · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2071:130) |
-| WK-DMF0003-0486 | D1 | SLOC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — SLOC · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.EditButton ACT:DMF00) |
-| WK-DMF0003-0487 | D1 | STORAGE_PLANT_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — STORAGE_PLANT_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.EditButton ACT:DMF00) |
-| WK-DMF0003-0488 | D1 | VMI_YN | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D1 실행 — VMI_YN · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(edit_expect)) — 실행 필요: trace |  | 9 (ACT:DMF0003_1_MktFcst.EditButton:1284:11) |
-| WK-DMF0003-0489 | D3 | APPLICATION | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — APPLICATION · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2037:98 ) |
-| WK-DMF0003-0490 | D3 | AS_FROM_SITE | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — AS_FROM_SITE · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 21 (CC-05 CE-02 CK-09 Expressions 행잠금: AS_FR) |
-| WK-DMF0003-0491 | D3 | C | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — C · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 2 (C-121 ACT:DMF0003_MktFcst.EditButton) |
-| WK-DMF0003-0492 | D3 | CELL_PER_MODULE | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — CELL_PER_MODULE · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2772:152) |
-| WK-DMF0003-0493 | D3 | CUST_GROUP | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — CUST_GROUP · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2031:92 ) |
-| WK-DMF0003-0494 | D3 | CUST_GROUP_DTL | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — CUST_GROUP_DTL · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2033:94 ) |
-| WK-DMF0003-0495 | D3 | D | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — D · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 5 (AS_FROM_SITE ACT:DMF0003_1_MktFcst.Inser) |
-| WK-DMF0003-0496 | D3 | DMS_CUSTOMER | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — DMS_CUSTOMER · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2059:120) |
-| WK-DMF0003-0497 | D3 | DMS_SALES | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — DMS_SALES · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2057:118) |
-| WK-DMF0003-0498 | D3 | FCST_TYPE | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — FCST_TYPE · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 4 (CE-03 CK-09 행잠금: AS_FROM_SITE 조건부 (#90~9) |
-| WK-DMF0003-0499 | D3 | FORECAST_INFO_BIZ_TYPE | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — FORECAST_INFO_BIZ_TYPE · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2045:106) |
-| WK-DMF0003-0500 | D3 | FORECAST_INFO_CELL_MODEL | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — FORECAST_INFO_CELL_MODEL · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2049:110) |
-| WK-DMF0003-0501 | D3 | FORECAST_INFO_CELL_PACK_COUNT | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — FORECAST_INFO_CELL_PACK_COUNT · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: tra |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2051:112) |
-| WK-DMF0003-0502 | D3 | FORECAST_INFO_SPEC | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — FORECAST_INFO_SPEC · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2053:114) |
-| WK-DMF0003-0503 | D3 | I | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — I · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 1 (CB-03) |
-| WK-DMF0003-0504 | D3 | INCOTERMS | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — INCOTERMS · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 1 (CD-02) |
-| WK-DMF0003-0505 | D3 | ITEM_DETAIL | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — ITEM_DETAIL · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.EditButton ACT:DMF00) |
-| WK-DMF0003-0506 | D3 | ITEM_ID | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — ITEM_ID · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 1 (CD-10) |
-| WK-DMF0003-0507 | D3 | L | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — L · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 0 () |
-| WK-DMF0003-0508 | D3 | LAST_UPDATED_BY | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — LAST_UPDATED_BY · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2067:126) |
-| WK-DMF0003-0509 | D3 | LAST_UPDATE_DATE | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — LAST_UPDATE_DATE · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2065:124) |
-| WK-DMF0003-0510 | D3 | MDM_PROJECT_NAME | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — MDM_PROJECT_NAME · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2041:102) |
-| WK-DMF0003-0511 | D3 | MEASURE | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — MEASURE · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 1 (1) |
-| WK-DMF0003-0512 | D3 | MIN_CAPACITY | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — MIN_CAPACITY · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2043:104) |
-| WK-DMF0003-0513 | D3 | N | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — N · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 1 (8. 콤보 호출지점) |
-| WK-DMF0003-0514 | D3 | PLANT_SITE_ID | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — PLANT_SITE_ID · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (CD-10 PlantByDivisionCompany 7. 콤보 파라미터) |
-| WK-DMF0003-0515 | D3 | PROJECT_CODE | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — PROJECT_CODE · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 2 (CD-10 Div40 Sales Site 편집 후보 (`endCustom) |
-| WK-DMF0003-0516 | D3 | PROJECT_S_OP_REPORT | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — PROJECT_S_OP_REPORT · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2766:150) |
-| WK-DMF0003-0517 | D3 | Q | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — Q · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 1 (ACT:DMF0003_PRPopup.EditButton) |
-| WK-DMF0003-0518 | D3 | QTY | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — QTY · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_PRPopup.EditButton ACT:DMF00) |
-| WK-DMF0003-0519 | D3 | ROUTE | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — ROUTE · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2039:100) |
-| WK-DMF0003-0520 | D3 | S | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — S · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 17 (CB-04 행잠금: 좌측 상세컬럼 read-only (#8~27, #34) |
-| WK-DMF0003-0521 | D3 | SCM_SITE_ID | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — SCM_SITE_ID · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 1 (CE-02) |
-| WK-DMF0003-0522 | D3 | SENDER_CODE | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — SENDER_CODE · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2069:128) |
-| WK-DMF0003-0523 | D3 | SENDER_NAME | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — SENDER_NAME · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2071:130) |
-| WK-DMF0003-0524 | D3 | SLOC | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — SLOC · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.EditButton ACT:DMF00) |
-| WK-DMF0003-0525 | D3 | STORAGE_PLANT_ID | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — STORAGE_PLANT_ID · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.EditButton ACT:DMF00) |
-| WK-DMF0003-0526 | D3 | VMI_YN | E2E(검증 엔진 @trace 재실행(run_verify)) | D3 실행 — VMI_YN · 검사기 있음(_trace.spec(@trace) W4 행 조건 잠금 — lock_rules ROW_COND guard 를 행 값으로 계산) — 실행 필요: trace |  | 9 (ACT:DMF0003_1_MktFcst.EditButton:1284:11) |
-| WK-DMF0003-0527 | D4 | AS_FROM_SITE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D4 실행 — AS_FROM_SITE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace |  | 1 (CE-02) |
-| WK-DMF0003-0528 | D4 | I | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D4 실행 — I · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace |  | 2 (CB-03 CRUD:E03:DELETE) |
-| WK-DMF0003-0529 | D4 | N | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D4 실행 — N · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace |  | 1 (CA-02) |
-| WK-DMF0003-0530 | D4 | S | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D4 실행 — S · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace |  | 1 (행잠금: 좌측 상세컬럼 read-only (#8~27, #34~70)) |
-| WK-DMF0003-0531 | D4 | SCM_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D4 실행 — SCM_SITE_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(InsertButton SetValue 리터럴)) — 실행 필요: trace |  | 1 (CE-02) |
-| WK-DMF0003-0532 | D5 | AS_FROM_SITE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — AS_FROM_SITE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (AS_FROM_SITE ACT:DMF0003_MktFcst.InsertR) |
-| WK-DMF0003-0533 | D5 | B | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — B · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 12 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-0534 | D5 | C | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — C · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 10 (C-118 ACT:DMF0003_CustDemandAnalysis.Ini) |
-| WK-DMF0003-0535 | D5 | CATEGORY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — CATEGORY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0536 | D5 | CONFIRM_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — CONFIRM_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0537 | D5 | D | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — D · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (AS_FROM_SITE ACT:DMF0003_1_MktFcst.SetSp) |
-| WK-DMF0003-0538 | D5 | DEMAND_OPERATION | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — DEMAND_OPERATION · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0539 | D5 | DESC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — DESC · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0540 | D5 | DOM_EXP | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — DOM_EXP · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0541 | D5 | EDI_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — EDI_QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0542 | D5 | F | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — F · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0543 | D5 | FCST_TYPE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — FCST_TYPE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0544 | D5 | GAP | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — GAP · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-0545 | D5 | IMPUTATION_YN | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — IMPUTATION_YN · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 5 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0546 | D5 | INCOTERMS | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — INCOTERMS · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0547 | D5 | IN_DDAY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — IN_DDAY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0548 | D5 | IN_DE_VOL | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — IN_DE_VOL · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0549 | D5 | ITEM_DETAIL | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — ITEM_DETAIL · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0550 | D5 | ITEM_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — ITEM_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 8 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0551 | D5 | ITEM_NAME | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — ITEM_NAME · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0552 | D5 | ITEM_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — ITEM_QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0553 | D5 | ITEM_SEQ | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — ITEM_SEQ · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 3 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0554 | D5 | ITEM_UOM | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — ITEM_UOM · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0555 | D5 | L | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — L · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0556 | D5 | MEASURE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — MEASURE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncPopUp.InitSpread ACT:) |
-| WK-DMF0003-0557 | D5 | MKT_FCST | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — MKT_FCST · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0558 | D5 | N | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — N · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 6 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0559 | D5 | PLANT_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — PLANT_SITE_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 5 (PlantByDivisionCompany PlantSiteByItem 7) |
-| WK-DMF0003-0560 | D5 | PLAN_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — PLAN_QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0561 | D5 | PROJECT_CODE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — PROJECT_CODE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 10 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0562 | D5 | PR_HEADER | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — PR_HEADER · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0563 | D5 | QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0564 | D5 | REQUESTED_BY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — REQUESTED_BY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0565 | D5 | REQUEST_DATE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — REQUEST_DATE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0566 | D5 | REQUEST_NO | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — REQUEST_NO · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 3 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0567 | D5 | RESULT | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — RESULT · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0568 | D5 | RESULT_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — RESULT_QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0569 | D5 | S | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — S · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_MktFcst.InsertRow:2597:36 AC) |
-| WK-DMF0003-0570 | D5 | SCM_SITE_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — SCM_SITE_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 7 (SiteByEndCustomerAuth ACT:DMF0003_PRPopu) |
-| WK-DMF0003-0571 | D5 | SLOC | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — SLOC · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0572 | D5 | SO_NO | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — SO_NO · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-0573 | D5 | STORAGE_PLANT_ID | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — STORAGE_PLANT_ID · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 3 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-0574 | D5 | SYNC_QTY | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — SYNC_QTY · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_SspSyncPopUp.InitSpread ACT:) |
-| WK-DMF0003-0575 | D5 | VARIATION_FACTOR | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — VARIATION_FACTOR · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 4 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0576 | D5 | YYYYMM | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — YYYYMM · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 2 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-0577 | D5 | YYYYMMDD | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | D5 실행 — YYYYMMDD · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(AS-IS 셀 타입 문장)) — 실행 필요: trace |  | 6 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-0578 | D6 | DMF0003 화면 | E2E(검증 엔진 @trace 재실행(run_verify)) | D6 실행 — DMF0003 화면 · 검사기 있음(_trace.spec(@trace) Insert 위치) — 실행 필요: trace |  | 25 (E03-3 CA-02 CB-02 CB-03 CB-104 CE-02 CG-) |
-| WK-DMF0003-0579 | E1 | AS_FROM_SITE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | E1 실행 — AS_FROM_SITE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(cell_rules)) — 실행 필요: trace |  | 8 (ACT:DMF0003_MktFcst.spdMain_ClipboardPas) |
-| WK-DMF0003-0580 | E1 | C | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | E1 실행 — C · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(cell_rules)) — 실행 필요: trace |  | 2 (C-122 HANDLER:spdMain_KeyUp) |
-| WK-DMF0003-0581 | E1 | FCST_TYPE | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | E1 실행 — FCST_TYPE · 검사기 있음(_verify.spec(@verify) · _trace.spec(@trace) W5(cell_rules)) — 실행 필요: trace |  | 2 (ACT:DMF0003_MktFcst.spdMain_ClipboardPas) |
-| WK-DMF0003-0582 | E3 | D | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | E3 실행 — D · 검사기 있음(_verify.spec(@verify) 화면 단위 · _trace.spec(@trace) W4b 컬럼 단위(필수 공란 Save → 메시지, 저장 차단)) — 실행 필요 |  | 1 (E04-1) |
-| WK-DMF0003-0583 | E3 | I | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | E3 실행 — I · 검사기 있음(_verify.spec(@verify) 화면 단위 · _trace.spec(@trace) W4b 컬럼 단위(필수 공란 Save → 메시지, 저장 차단)) — 실행 필요 |  | 3 (CF-01 CF-02 CG-02) |
-| WK-DMF0003-0584 | E3 | L | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | E3 실행 — L · 검사기 있음(_verify.spec(@verify) 화면 단위 · _trace.spec(@trace) W4b 컬럼 단위(필수 공란 Save → 메시지, 저장 차단)) — 실행 필요 |  | 1 (17) |
-| WK-DMF0003-0585 | E3 | M | E2E(@verify 재실행(run_verify) / 검증 엔진 @tra | E3 실행 — M · 검사기 있음(_verify.spec(@verify) 화면 단위 · _trace.spec(@trace) W4b 컬럼 단위(필수 공란 Save → 메시지, 저장 차단)) — 실행 필요 |  | 1 (E04-1) |
-| WK-DMF0003-0586 | E4 | AS_FROM_SITE | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — AS_FROM_SITE · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 12 (CA-05 CF-04 CJ-02 ACT:DMF0003_1_MktFcst.) |
-| WK-DMF0003-0587 | E4 | B | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — B · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 12 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-0588 | E4 | D | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — D · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 4 (E04-1 ACT:DMF0003_1_MktFcst.SetSpreadHea) |
-| WK-DMF0003-0589 | E4 | DEMAND_OPERATION | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — DEMAND_OPERATION · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_CustDemandAnalysis.SetSpread) |
-| WK-DMF0003-0590 | E4 | DESC | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — DESC · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_CustDemandAnalysis.SetSpread) |
-| WK-DMF0003-0591 | E4 | EDI_QTY | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — EDI_QTY · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_CustDemandAnalysis.SetSpread) |
-| WK-DMF0003-0592 | E4 | GAP | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — GAP · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 4 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-0593 | E4 | I | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — I · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 7 (CF-01 CF-02 CG-02 CH-07 ACT:DMF0003_1_Mk) |
-| WK-DMF0003-0594 | E4 | IMPUTATION_YN | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — IMPUTATION_YN · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 3 (ACT:DMF0003_CustDemandAnalysis.SetSpread) |
-| WK-DMF0003-0595 | E4 | IN_DE_VOL | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — IN_DE_VOL · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_CustDemandAnalysis.SetSpread) |
-| WK-DMF0003-0596 | E4 | ITEM_ID | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — ITEM_ID · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0597 | E4 | ITEM_NAME | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — ITEM_NAME · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0598 | E4 | L | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — L · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (17) |
-| WK-DMF0003-0599 | E4 | M | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — M · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (E04-1) |
-| WK-DMF0003-0600 | E4 | MKT_FCST | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MKT_FCST · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_CustDemandAnalysis.SetSpread) |
-| WK-DMF0003-0601 | E4 | MSG00002 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00002 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 65 (CG-01 106 ACT:DMF0003_1_MktFcst.SetSaveD) |
-| WK-DMF0003-0602 | E4 | MSG00003 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00003 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (28 26/27/28) |
-| WK-DMF0003-0603 | E4 | MSG00004 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00004 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 8 (E05-3 CF-05 41/42 `mkt-fcst.constants.ts) |
-| WK-DMF0003-0604 | E4 | MSG00005 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00005 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_MatsterChgPopup.SaveData:437) |
-| WK-DMF0003-0605 | E4 | MSG00006 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00006 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_PRPopup.SaveData:407:76 ACT:) |
-| WK-DMF0003-0606 | E4 | MSG00034 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00034 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 8 (CF-02 ACT:DMF0003_1_MktFcst.SaveData:170) |
-| WK-DMF0003-0607 | E4 | MSG00043 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00043 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 7 (CF-01 CF-107 CG-02 ACT:DMF0003_1_MktFcst) |
-| WK-DMF0003-0608 | E4 | MSG00096 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00096 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 5 (CA-01 CJ-04 7 ACT:DMF0003_MktFcst.EditBu) |
-| WK-DMF0003-0609 | E4 | MSG00097 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00097 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 6 (CF-102 CH-01 ACT:DMF0003_1_MktFcst.FindD) |
-| WK-DMF0003-0610 | E4 | MSG00108 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00108 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 6 (CF-103 CH-02 ACT:DMF0003_1_MktFcst.FindD) |
-| WK-DMF0003-0611 | E4 | MSG00113 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00113 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 12 (CA-05 3 ACT:DMF0003_1_MktFcst.EditButton) |
-| WK-DMF0003-0612 | E4 | MSG00152 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00152 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (CF-111) |
-| WK-DMF0003-0613 | E4 | MSG00164 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00164 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 6 (CF-104 CH-03 ACT:DMF0003_1_MktFcst.FindD) |
-| WK-DMF0003-0614 | E4 | MSG00225 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00225 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 5 (CG-03 숫자값검증 ACT:DMF0003_1_MktFcst.spdMai) |
-| WK-DMF0003-0615 | E4 | MSG00227 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00227 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 7 (E05-2 CF-113 CH-07 HANDLER:cboBucketType) |
-| WK-DMF0003-0616 | E4 | MSG00259 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00259 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 4 (CA-07 ACT:DMF0003_1_MktFcst.EditButton:1) |
-| WK-DMF0003-0617 | E4 | MSG00260 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00260 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 4 (CG-02 ACT:DMF0003_1_MktFcst.spdMain_Chan) |
-| WK-DMF0003-0618 | E4 | MSG00343 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00343 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (ACT:DMF0003_MatsterChgPopup.SaveData:558) |
-| WK-DMF0003-0619 | E4 | MSG00366 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00366 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_1_MktFcst.SaveData:1773:68 A) |
-| WK-DMF0003-0620 | E4 | MSG00429 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00429 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (CF-106) |
-| WK-DMF0003-0621 | E4 | MSG00448 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00448 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 3 (CA-02 CF-112 ACT:DMF0003_MktFcst.EditBut) |
-| WK-DMF0003-0622 | E4 | MSG00472 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00472 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (73 ACT:DMF0003_MktFcst.spdMain_ComboSelC) |
-| WK-DMF0003-0623 | E4 | MSG00476 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00476 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 5 (E03-2 CF-04 3 ACT:DMF0003_MktFcst.SaveDa) |
-| WK-DMF0003-0624 | E4 | MSG00477 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00477 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 5 (CA-03 CI-08 CJ-04 8 ACT:DMF0003_MktFcst.) |
-| WK-DMF0003-0625 | E4 | MSG00478 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00478 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 7 (E03-1 E05-3 CA-04 CI-09 CJ-02 9 ACT:DMF0) |
-| WK-DMF0003-0626 | E4 | MSG00606 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00606 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 3 (E05-3 CF-05 `MktFcst.tsx`) |
-| WK-DMF0003-0627 | E4 | MSG00617 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00617 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (CF-111) |
-| WK-DMF0003-0628 | E4 | MSG00631 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00631 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (106 `mkt-fcst.constants.ts`) |
-| WK-DMF0003-0629 | E4 | MSG00632 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00632 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (37/43) |
-| WK-DMF0003-0630 | E4 | MSG00633 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00633 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (36) |
-| WK-DMF0003-0631 | E4 | MSG00634 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00634 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 0 () |
-| WK-DMF0003-0632 | E4 | MSG00635 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00635 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (30) |
-| WK-DMF0003-0633 | E4 | MSG00636 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00636 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (31) |
-| WK-DMF0003-0634 | E4 | MSG00637 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00637 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (10/12/14) |
-| WK-DMF0003-0635 | E4 | MSG00638 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00638 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (32) |
-| WK-DMF0003-0636 | E4 | MSG00639 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00639 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (101) |
-| WK-DMF0003-0637 | E4 | MSG00640 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00640 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (130) |
-| WK-DMF0003-0638 | E4 | MSG00641 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00641 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 0 () |
-| WK-DMF0003-0639 | E4 | MSG00642 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00642 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (95) |
-| WK-DMF0003-0640 | E4 | MSG00643 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00643 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (40) |
-| WK-DMF0003-0641 | E4 | MSG00644 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00644 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 0 () |
-| WK-DMF0003-0642 | E4 | MSG00645 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00645 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 0 () |
-| WK-DMF0003-0643 | E4 | MSG00646 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00646 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (—) |
-| WK-DMF0003-0644 | E4 | MSG00649 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00649 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (`components/modals/{PrModal,PrHistoryMod) |
-| WK-DMF0003-0645 | E4 | MSG00653 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00653 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (`components/modals/{PrModal,PrHistoryMod) |
-| WK-DMF0003-0646 | E4 | MSG00660 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00660 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (CF-108) |
-| WK-DMF0003-0647 | E4 | MSG00661 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00661 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (CF-114) |
-| WK-DMF0003-0648 | E4 | MSG00662 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00662 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (CA-07 CF-115) |
-| WK-DMF0003-0649 | E4 | MSG00663 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00663 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (CF-110) |
-| WK-DMF0003-0650 | E4 | MSG00664 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00664 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (CF-116) |
-| WK-DMF0003-0651 | E4 | MSG00665 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00665 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (CF-105) |
-| WK-DMF0003-0652 | E4 | MSG00666 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00666 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (CF-109) |
-| WK-DMF0003-0653 | E4 | MSG00703 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — MSG00703 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (COMMON:UC-02) |
-| WK-DMF0003-0654 | E4 | N | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — N · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 1 (CA-02) |
-| WK-DMF0003-0655 | E4 | PROJECT_CODE | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — PROJECT_CODE · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0656 | E4 | PR_HEADER | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — PR_HEADER · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 4 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0657 | E4 | REQUESTED_BY | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — REQUESTED_BY · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0658 | E4 | REQUEST_DATE | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — REQUEST_DATE · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0659 | E4 | REQUEST_NO | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — REQUEST_NO · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0660 | E4 | RESULT | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — RESULT · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_CustDemandAnalysis.SetSpread) |
-| WK-DMF0003-0661 | E4 | S | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — S · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 4 (CF-04 3 ACT:DMF0003_MktFcst.EditButton:8) |
-| WK-DMF0003-0662 | E4 | SLOC | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — SLOC · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0663 | E4 | STORAGE_PLANT_ID | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — STORAGE_PLANT_ID · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0664 | E4 | VARIATION_FACTOR | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — VARIATION_FACTOR · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 2 (ACT:DMF0003_CustDemandAnalysis.SetSpread) |
-| WK-DMF0003-0665 | E4 | YYYYMMDD | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — YYYYMMDD · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 17 (ACT:DMF0003_1_MktFcst.SetSaveData ACT:DM) |
-| WK-DMF0003-0666 | E4 | cboAS / AS | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — cboAS / AS · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 3 (E05-2 ACT:DMF0003_1_MktFcst.SaveData:177) |
-| WK-DMF0003-0667 | E4 | cboBucketType / Bucket / Bucket Type | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — cboBucketType / Bucket / Bucket Type · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 |  | 57 (ACT:DMF0003_1_MktFcst.SetSpreadColumn AC) |
-| WK-DMF0003-0668 | E4 | chkColor / Color | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — chkColor / Color · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 57 (ACT:DMF0003_1_MktFcst.SetSpreadColumn AC) |
-| WK-DMF0003-0669 | E4 | chkSum / Sum | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — chkSum / Sum · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 9 (ACT:DMF0003_1_MktFcst.SetSpreadColumn AC) |
-| WK-DMF0003-0670 | E4 | clbDivision / Division | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — clbDivision / Division · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필 |  | 13 (ACT:DMF0003_1_MktFcst.EditButton:993:4 A) |
-| WK-DMF0003-0671 | E4 | drpPeriod / Period | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — drpPeriod / Period · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요:  |  | 3 (ACT:DMF0003_1_MktFcst.FindData:1480:15 A) |
-| WK-DMF0003-0672 | E4 | drpPeriod1 / ▼ PERIOD: / Period1 | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — drpPeriod1 / ▼ PERIOD: / Period1 · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도  |  | 1 (ACT:DMF0003_1_MktFcst.btnCalculation_Cli) |
-| WK-DMF0003-0673 | E4 | txtDivisionName / Division / Division Na | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtDivisionName / Division / Division Name · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) →  |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0674 | E4 | txtItemId / Model / Item Id | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtItemId / Model / Item Id · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — |  | 2 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0675 | E4 | txtItemName / Item Name | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtItemName / Item Name · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행  |  | 2 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0676 | E4 | txtPRHeader / PR Header / PRHeader | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtPRHeader / PR Header / PRHeader · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시 |  | 2 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0677 | E4 | txtPrHeader / PR Header / Pr Header | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtPrHeader / PR Header / Pr Header · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장  |  | 4 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0678 | E4 | txtProjectCode / Project Code | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtProjectCode / Project Code · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) |  | 2 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0679 | E4 | txtPuchGroup / Puch Group | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtPuchGroup / Puch Group · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실 |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0680 | E4 | txtPuchMgr / Puch Mgr | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtPuchMgr / Puch Mgr · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실행 필요 |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0681 | E4 | txtRequestDate / Request Date | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtRequestDate / Request Date · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0682 | E4 | txtRequestNo / Request No | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtRequestNo / Request No · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) — 실 |  | 3 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0683 | E4 | txtRequestedBy / Requested By | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtRequestedBy / Requested By · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장 시도 판정) |  | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-0684 | E4 | txtYYYYMMDD / YYYY-MM-DD / YYYYMMDD | E2E(검증 엔진 @trace 재실행(run_verify)) | E4 실행 — txtYYYYMMDD / YYYY-MM-DD / YYYYMMDD · 검사기 있음(_trace.spec(@trace) W4 위반 입력 자동 생성(빈값·FROM>TO·요일·바이트) + Save(요청 차단) → 메시지·저장  |  | 2 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-0685 | A10 | DMF0003 화면 | E2E(검증 엔진 @trace 재실행(run_verify)) | A10 실행 — DMF0003 화면 · 검사기 있음(_trace.spec(@trace) 조회 전 그리드) — 실행 필요: trace |  | 785 (ACT:DMF0003_1_MktFcst.DefineProperty ACT) |
-| WK-DMF0003-0686 | A6 | DMF0000_GET_MASTER_CHG_POPUP | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — DMF0000_GET_MASTER_CHG_POPUP · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spe |  | 49 (CH-108 ACT:DMF0003_MatsterChgPopup.FindB) |
-| WK-DMF0003-0687 | A6 | DMF0003_GET_BUCKET_TYPE_CODE | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — DMF0003_GET_BUCKET_TYPE_CODE · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spe |  | 1 (CK-04) |
-| WK-DMF0003-0688 | A6 | PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_ | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 |  | 46 (ACT:DMF0003_MatsterChgPopup.FindButton A) |
-| WK-DMF0003-0689 | A6 | PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPA | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPARE_POPUP · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE |  | 2 (CH-105 CK-05) |
-| WK-DMF0003-0690 | A6 | PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · |  | 297 (CK-01 ACT:DMF0003_1_MktFcst.FindButton A) |
-| WK-DMF0003-0691 | A6 | PKG_DMF0003.P_DMF0003_GET_PRPOPUP | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — PKG_DMF0003.P_DMF0003_GET_PRPOPUP · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trac |  | 42 (CH-102 CK-11 ACT:DMF0003_PRPopup.FindDat) |
-| WK-DMF0003-0692 | A6 | PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POP | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POPUP · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회 |  | 35 (CH-103 ACT:DMF0003_PRHistoryPopup.FindDa) |
-| WK-DMF0003-0693 | A6 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) ·  |  | 288 (CK-03 ACT:DMF0003_1_MktFcst.FindButton A) |
-| WK-DMF0003-0694 | A6 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_C | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_CAR · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회 |  | 107 (ACT:DMF0003_1_MktFcst.FindButton ACT:DMF) |
-| WK-DMF0003-0695 | A6 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_P | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_PSI · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회 |  | 107 (ACT:DMF0003_1_MktFcst.FindButton ACT:DMF) |
-| WK-DMF0003-0696 | A6 | SCM0001_GET_BIZ_TYPE_BY_DIVISION | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — SCM0001_GET_BIZ_TYPE_BY_DIVISION · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace |  | 1 (CK-08) |
-| WK-DMF0003-0697 | A6 | SCM0001_GET_LOOKUP_VALUES | E2E(mapping_trace.py 재실행 / 검증 엔진 @trace  | A6 실행 — SCM0001_GET_LOOKUP_VALUES · 검사기 있음(sort_check.py(AS-IS SP ORDER BY ↔ TO-BE PKG ORDER BY, ALL_SOURCE 새로 조회) · _trace.spec(@ |  | 1 (CK-07) |
-| WK-DMF0003-0698 | G1 | cboAS / AS | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — cboAS / AS · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 4 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0699 | G1 | cboBucketType / Bucket / Bucket Type | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — cboBucketType / Bucket / Bucket Type · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 22 (ACT:DMF0003_1_MktFcst.FindData:1593:80 A) |
-| WK-DMF0003-0700 | G1 | cboCellQty / Cell Qty | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — cboCellQty / Cell Qty · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0701 | G1 | cboQty / . / Qty | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — cboQty / . / Qty · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0702 | G1 | chkColor / Color | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — chkColor / Color · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 32 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0703 | G1 | clbBizType / Biz Type | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — clbBizType / Biz Type · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0704 | G1 | clbCustomer / End Customer / Customer | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — clbCustomer / End Customer / Customer · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0705 | G1 | clbDivision / Division | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — clbDivision / Division · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 17 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0706 | G1 | clbEDISender / Sender Code / EDISender | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — clbEDISender / Sender Code / EDISender · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0707 | G1 | clbEndCustomer / End Customer | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — clbEndCustomer / End Customer · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 2 (ACT:DMF0003_MatsterChgPopup.FindData ACT) |
-| WK-DMF0003-0708 | G1 | clbItemType / Item Type | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — clbItemType / Item Type · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0709 | G1 | clbPlantSite / Plant Site | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — clbPlantSite / Plant Site · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0710 | G1 | clbSalesSite / Sales Site | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — clbSalesSite / Sales Site · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 8 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0711 | G1 | clbTeam / Team | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — clbTeam / Team · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 11 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0712 | G1 | drpPeriod / Period | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — drpPeriod / Period · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 18 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0713 | G1 | txtItemId / Model / Item Id | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — txtItemId / Model / Item Id · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0714 | G1 | txtOwner / Owner | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — txtOwner / Owner · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0715 | G1 | txtProject / Project | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G1 실행 — txtProject / Project · 검사기 있음(smoke 조회조건 동작·_verify) — 실행 필요: smoke |  | 8 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
-| WK-DMF0003-0716 | G6 | cboBucketType / Bucket / Bucket Type | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — cboBucketType / Bucket / Bucket Type · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 15 (ACT:DMF0003_1_MktFcst.DefineProperty ACT) |
-| WK-DMF0003-0717 | G6 | cboCellQty / Cell Qty | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — cboCellQty / Cell Qty · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 12 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0718 | G6 | chkColor / Color | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — chkColor / Color · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0719 | G6 | chkSum / Sum | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — chkSum / Sum · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0720 | G6 | clbBizType / Biz Type | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — clbBizType / Biz Type · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 11 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0721 | G6 | clbCustomer / End Customer / Customer | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — clbCustomer / End Customer / Customer · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 11 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0722 | G6 | clbDivision / Division | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — clbDivision / Division · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 61 (ACT:DMF0003_1_MktFcst.DefineProperty ACT) |
-| WK-DMF0003-0723 | G6 | clbEDISender / Sender Code / EDISender | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — clbEDISender / Sender Code / EDISender · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 8 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0724 | G6 | clbEndCustomer / End Customer | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — clbEndCustomer / End Customer · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 5 (ACT:DMF0003_MatsterChgPopup.InitControls) |
-| WK-DMF0003-0725 | G6 | clbItemType / Item Type | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — clbItemType / Item Type · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 5 (ACT:DMF0003_1_MktFcst.InitControls:462:5) |
-| WK-DMF0003-0726 | G6 | clbPlantSite / Plant Site | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — clbPlantSite / Plant Site · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0727 | G6 | clbSalesSite / Sales Site | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — clbSalesSite / Sales Site · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 10 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0728 | G6 | clbTeam / Team | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — clbTeam / Team · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 18 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0729 | G6 | drpPeriod / Period | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — drpPeriod / Period · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0730 | G6 | drpPeriod1 / ▼ PERIOD: / Period1 | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — drpPeriod1 / ▼ PERIOD: / Period1 · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 1 (ACT:DMF0003_1_MktFcst.InitControls) |
-| WK-DMF0003-0731 | G6 | drpPeriodPSI / PERIOD / Period PSI | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — drpPeriodPSI / PERIOD / Period PSI · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 4 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
-| WK-DMF0003-0732 | G6 | drpPeriodSimulation / SIMULATION / Perio | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — drpPeriodSimulation / SIMULATION / Period Simulati · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.InitControls:456:5) |
-| WK-DMF0003-0733 | G6 | txtProject / Project | E2E(검증 엔진 @trace 재실행(run_verify)) | G6 실행 — txtProject / Project · 검사기 있음(_trace.spec(@trace) 초기값) — 실행 필요: trace |  | 2 (ACT:DMF0003_MatsterChgPopup.InitControls) |
-| WK-DMF0003-0734 | X-REOPEN | DMF0003 화면 | E2E(검증 엔진 @trace 재실행(run_verify)) | X-REOPEN 실행 — DMF0003 화면 · 검사기 있음(_trace.spec(@trace) 닫기·재오픈) — 실행 필요: trace |  | 120 (ACT:DMF0003_1_MktFcst.CAR_PROPERTY:6637:) |
-| WK-DMF0003-0735 | H6 | cboBucketType / Bucket / Bucket Type | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | H6 실행 — cboBucketType / Bucket / Bucket Type · 검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0736 | H6 | clbDivision / Division | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | H6 실행 — clbDivision / Division · 검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke |  | 16 (ACT:DMF0003_1_MktFcst.btnColumn_Click:49) |
-| WK-DMF0003-0737 | H6 | drpPeriod / Period | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | H6 실행 — drpPeriod / Period · 검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke |  | 5 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0738 | M3 | DMF0003_CustDemandAnalysis | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — DMF0003_CustDemandAnalysis · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 25 (ACT:DMF0003_CustDemandAnalysis..ctor ACT) |
-| WK-DMF0003-0739 | M3 | DMF0003_MatsterChgPopup | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — DMF0003_MatsterChgPopup · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 23 (ACT:DMF0003_MatsterChgPopup..ctor ACT:DM) |
-| WK-DMF0003-0740 | M3 | DMF0003_MktFcst | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — DMF0003_MktFcst · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 71 (ACT:DMF0003_MktFcst..ctor ACT:DMF0003_Mk) |
-| WK-DMF0003-0741 | M3 | DMF0003_PRHistoryPopup | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — DMF0003_PRHistoryPopup · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 13 (ACT:DMF0003_MktFcst.contextMenuStrip1_It) |
-| WK-DMF0003-0742 | M3 | DMF0003_PRPopup | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — DMF0003_PRPopup · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 20 (ACT:DMF0003_MktFcst.contextMenuStrip1_It) |
-| WK-DMF0003-0743 | M3 | DMF0003_SspSyncComparePopUp | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — DMF0003_SspSyncComparePopUp · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 11 (ACT:DMF0003_MktFcst.spdMain_CellDoubleCl) |
-| WK-DMF0003-0744 | M3 | DMF0003_SspSyncPopUp | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — DMF0003_SspSyncPopUp · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 13 (ACT:DMF0003_MktFcst.SaveData:2452:117 AC) |
-| WK-DMF0003-0745 | M3 | DMF0003_T_MktFcst | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — DMF0003_T_MktFcst · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 67 (ACT:DMF0003_T_MktFcst..ctor ACT:DMF0003_) |
-| WK-DMF0003-0746 | M3 | btnButton | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — btnButton · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 1 (ACT:DMF0003_PRPopup.FindDataMain:506:35) |
-| WK-DMF0003-0747 | M3 | btnColumn | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — btnColumn · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 5 (ACT:DMF0003_MktFcst.InitControls ACT:DMF) |
-| WK-DMF0003-0748 | M3 | btnIncotermsChg | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — btnIncotermsChg · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 18 (ACT:DMF0003_MktFcst.DefineProperty ACT:D) |
-| WK-DMF0003-0749 | M3 | btnItemId | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — btnItemId · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 2 (ACT:DMF0003_MktFcst.btnItemId_Click ACT:) |
-| WK-DMF0003-0750 | M3 | btnMeasure | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — btnMeasure · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 5 (ACT:DMF0003_MktFcst.InitControls ACT:DMF) |
-| WK-DMF0003-0751 | M3 | btnOwner | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — btnOwner · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 2 (ACT:DMF0003_MktFcst.btnOwner_Click ACT:D) |
-| WK-DMF0003-0752 | M3 | btnProject | E2E(검증 엔진 @trace 재실행(run_verify)) | M3 실행 — btnProject · 검사기 있음(_trace.spec(@trace) W4b 팝업 내부 조회(Search → 행·오류)) — 실행 필요: trace |  | 16 (ACT:DMF0003_MktFcst.InitControls ACT:DMF) |
-| WK-DMF0003-0753 | M4 | C | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — C · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 2 (C-119 HANDLER:spdMain_KeyUp) |
-| WK-DMF0003-0754 | M4 | DMF0003_MatsterChgPopup | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — DMF0003_MatsterChgPopup · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 1 (CA-116) |
-| WK-DMF0003-0755 | M4 | DMF0003_MktFcst | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — DMF0003_MktFcst · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 3 (HANDLER:spdMain_CellDoubleClick HANDLER:) |
-| WK-DMF0003-0756 | M4 | DMF0003_PRHistoryPopup | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — DMF0003_PRHistoryPopup · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 1 (MODAL:PrHistoryModal) |
-| WK-DMF0003-0757 | M4 | DMF0003_PRPopup | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — DMF0003_PRPopup · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 2 (CA-111 MODAL:PrModal) |
-| WK-DMF0003-0758 | M4 | DMF0003_SspSyncComparePopUp | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — DMF0003_SspSyncComparePopUp · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 6 (CA-114 MODAL:DMF0003_SspSyncComparePopUp) |
-| WK-DMF0003-0759 | M4 | DMF0003_SspSyncPopUp | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — DMF0003_SspSyncPopUp · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 3 (MODAL:DMF0003_SspSyncPopUp MODAL:SspSync) |
-| WK-DMF0003-0760 | M4 | DMF0003_T_MktFcst | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — DMF0003_T_MktFcst · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 1 (ACT:DMF0003_T_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0761 | M4 | GAP | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — GAP · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 5 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0762 | M4 | I | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — I · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 1 (CG-05) |
-| WK-DMF0003-0763 | M4 | M | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — M · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 1 (MODAL:MeasureSelectModal) |
-| WK-DMF0003-0764 | M4 | MKT_DP | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — MKT_DP · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 2 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0765 | M4 | N | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — N · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0766 | M4 | RESULT | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — RESULT · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0767 | M4 | btnColumn | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — btnColumn · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 0 () |
-| WK-DMF0003-0768 | M4 | btnIncotermsChg | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — btnIncotermsChg · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 0 () |
-| WK-DMF0003-0769 | M4 | btnItemId | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — btnItemId · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 0 () |
-| WK-DMF0003-0770 | M4 | btnMeasure | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — btnMeasure · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 0 () |
-| WK-DMF0003-0771 | M4 | btnOwner | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — btnOwner · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 0 () |
-| WK-DMF0003-0772 | M4 | btnProject | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — btnProject · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 0 () |
-| WK-DMF0003-0773 | M4 | cboBucketType / Bucket / Bucket Type | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — cboBucketType / Bucket / Bucket Type · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0774 | M4 | clbDivision / Division | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — clbDivision / Division · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 10 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-0775 | M4 | drpPeriod / Period | E2E(검증 엔진 @trace 재실행(run_verify)) | M4 실행 — drpPeriod / Period · 검사기 있음(_trace.spec(@trace) W4 트리거 셀 더블클릭 → 팝업 선택 → 대상 셀 채움) — 실행 필요: trace |  | 5 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-
-## W7 기대값 확정 (1140)
+## W5 검사기 연결 (77)
 
 | ID | 검사 | 대상 | 담당 | 할 일 | TO-BE 흔적 | 대조표 행 |
 |---|---|---|---|---|---|---|
-| WK-DMF0003-0776 | C1 | 10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — 10: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-0777 | C1 | 11 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — 11: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (11) |
-| WK-DMF0003-0778 | C1 | 22 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — 22: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (22) |
-| WK-DMF0003-0779 | C1 | 9 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — 9: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-0780 | C1 | C-114 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — C-114: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (C-114) |
-| WK-DMF0003-0781 | C1 | C-115 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — C-115: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (C-115) |
-| WK-DMF0003-0782 | C1 | C-116 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — C-116: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (C-116) |
-| WK-DMF0003-0783 | C1 | C-117 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — C-117: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (C-117) |
-| WK-DMF0003-0784 | C1 | C-124 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — C-124: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (C-124) |
-| WK-DMF0003-0785 | C1 | HANDLER:cboBucketType_SelectedIndexChang | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — HANDLER:cboBucketType_SelectedIndexChanged: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:cboBucketType_SelectedIndexChang) |
-| WK-DMF0003-0786 | C1 | HANDLER:cboDivision_SelectedIndexChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — HANDLER:cboDivision_SelectedIndexChanged: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:cboDivision_SelectedIndexChanged) |
-| WK-DMF0003-0787 | C1 | HANDLER:chkSum_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — HANDLER:chkSum_CheckedChanged: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:chkSum_CheckedChanged) |
-| WK-DMF0003-0788 | C1 | HANDLER:clbCustomer_SelectedIndexChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — HANDLER:clbCustomer_SelectedIndexChanged: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:clbCustomer_SelectedIndexChanged) |
-| WK-DMF0003-0789 | C1 | HANDLER:clbTeam_SelectedIndexChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C1 기대값 확정 — HANDLER:clbTeam_SelectedIndexChanged: 행 집계 — C1 11요소: NOT_RUN:11 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:clbTeam_SelectedIndexChanged) |
-| WK-DMF0003-0790 | C2 | 12 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — 12: 행 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 1 (12) |
-| WK-DMF0003-0791 | C2 | 14 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — 14: 행 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 1 (14) |
-| WK-DMF0003-0792 | C2 | DMF0003_1_MktFcst.cboAS_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — DMF0003_1_MktFcst.cboAS_CheckedChanged: 진입점 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.cboAS_CheckedChang) |
-| WK-DMF0003-0793 | C2 | DMF0003_1_MktFcst.cboBucketType_Selected | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — DMF0003_1_MktFcst.cboBucketType_SelectedIndexChang: 진입점 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 17 (ACT:DMF0003_1_MktFcst.cboBucketType_Sele) |
-| WK-DMF0003-0794 | C2 | DMF0003_1_MktFcst.cboDivision_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — DMF0003_1_MktFcst.cboDivision_SelectedIndexChanged: 진입점 집계 — C2 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 36 (ACT:DMF0003_1_MktFcst.cboDivision_Select) |
-| WK-DMF0003-0795 | C2 | DMF0003_1_MktFcst.chkColor_CheckedChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — DMF0003_1_MktFcst.chkColor_CheckedChanged: 진입점 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.chkColor_CheckedCh) |
-| WK-DMF0003-0796 | C2 | DMF0003_1_MktFcst.chkSum_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — DMF0003_1_MktFcst.chkSum_CheckedChanged: 진입점 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.chkSum_CheckedChan) |
-| WK-DMF0003-0797 | C2 | DMF0003_1_MktFcst.clbCustomer_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — DMF0003_1_MktFcst.clbCustomer_SelectedIndexChanged: 진입점 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.clbCustomer_Select) |
-| WK-DMF0003-0798 | C2 | DMF0003_1_MktFcst.clbTeam_SelectedIndexC | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — DMF0003_1_MktFcst.clbTeam_SelectedIndexChanged: 진입점 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.clbTeam_SelectedIn) |
-| WK-DMF0003-0799 | C2 | DMF0003_1_MktFcst.cmbCarMaker_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — DMF0003_1_MktFcst.cmbCarMaker_SelectedIndexChanged: 진입점 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 6 (ACT:DMF0003_1_MktFcst.cmbCarMaker_Select) |
-| WK-DMF0003-0800 | C2 | DMF0003_1_MktFcst.spdMain_Changed | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — DMF0003_1_MktFcst.spdMain_Changed: 진입점 집계 — C2 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요) |  | 393 (ACT:DMF0003_1_MktFcst.spdMain_Changed:31) |
-| WK-DMF0003-0801 | C2 | DMF0003_1_MktFcst.spdMain_ComboSelChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — DMF0003_1_MktFcst.spdMain_ComboSelChange: 진입점 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 56 (ACT:DMF0003_1_MktFcst.spdMain_ComboSelCh) |
-| WK-DMF0003-0802 | C2 | E04-3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — E04-3: 행 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 1 (E04-3) |
-| WK-DMF0003-0803 | C2 | HANDLER:spdMain_Changed | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — HANDLER:spdMain_Changed: 행 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_Changed) |
-| WK-DMF0003-0804 | C2 | HANDLER:spdMain_ComboSelChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | C2 기대값 확정 — HANDLER:spdMain_ComboSelChange: 행 집계 — C2 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_ComboSelChange) |
-| WK-DMF0003-0805 | C3 | 12 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — 12: 행 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 1 (12) |
-| WK-DMF0003-0806 | C3 | 14 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — 14: 행 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 1 (14) |
-| WK-DMF0003-0807 | C3 | 18 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — 18: 행 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 1 (18) |
-| WK-DMF0003-0808 | C3 | 19 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — 19: 행 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 1 (19) |
-| WK-DMF0003-0809 | C3 | DMF0003_1_MktFcst.SetSaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.SetSaveData: 진입점 집계 — C3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요) |  | 50 (ACT:DMF0003_1_MktFcst.SetSaveData:4651:2) |
-| WK-DMF0003-0810 | C3 | DMF0003_1_MktFcst.SetSaveDataRemove | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.SetSaveDataRemove: 진입점 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 30 (ACT:DMF0003_1_MktFcst.SetSaveDataRemove:) |
-| WK-DMF0003-0811 | C3 | DMF0003_1_MktFcst.SetSaveSheetColor | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.SetSaveSheetColor: 진입점 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.SetSaveSheetColor:) |
-| WK-DMF0003-0812 | C3 | DMF0003_1_MktFcst.SetSpreadColumn | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.SetSpreadColumn: 진입점 집계 — C3 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-0813 | C3 | DMF0003_1_MktFcst.SetSpreadHeaderSpan | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan: 진입점 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 53 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-0814 | C3 | DMF0003_1_MktFcst.SetSpreadHeaderSpan_SU | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan_SUB1: 진입점 집계 — C3 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요) |  | 52 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-0815 | C3 | DMF0003_1_MktFcst.cboAS_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.cboAS_CheckedChanged: 진입점 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.cboAS_CheckedChang) |
-| WK-DMF0003-0816 | C3 | DMF0003_1_MktFcst.cboBucketType_Selected | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.cboBucketType_SelectedIndexChang: 진입점 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 17 (ACT:DMF0003_1_MktFcst.cboBucketType_Sele) |
-| WK-DMF0003-0817 | C3 | DMF0003_1_MktFcst.cboDivision_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.cboDivision_SelectedIndexChanged: 진입점 집계 — C3 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 36 (ACT:DMF0003_1_MktFcst.cboDivision_Select) |
-| WK-DMF0003-0818 | C3 | DMF0003_1_MktFcst.chkColor_CheckedChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.chkColor_CheckedChanged: 진입점 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.chkColor_CheckedCh) |
-| WK-DMF0003-0819 | C3 | DMF0003_1_MktFcst.chkSum_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.chkSum_CheckedChanged: 진입점 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.chkSum_CheckedChan) |
-| WK-DMF0003-0820 | C3 | DMF0003_1_MktFcst.clbCustomer_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.clbCustomer_SelectedIndexChanged: 진입점 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.clbCustomer_Select) |
-| WK-DMF0003-0821 | C3 | DMF0003_1_MktFcst.clbTeam_SelectedIndexC | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.clbTeam_SelectedIndexChanged: 진입점 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.clbTeam_SelectedIn) |
-| WK-DMF0003-0822 | C3 | DMF0003_1_MktFcst.cmbCarMaker_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.cmbCarMaker_SelectedIndexChanged: 진입점 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 6 (ACT:DMF0003_1_MktFcst.cmbCarMaker_Select) |
-| WK-DMF0003-0823 | C3 | DMF0003_1_MktFcst.spdMain_Changed | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.spdMain_Changed: 진입점 집계 — C3 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요) |  | 393 (ACT:DMF0003_1_MktFcst.spdMain_Changed:31) |
-| WK-DMF0003-0824 | C3 | DMF0003_1_MktFcst.spdMain_ComboSelChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — DMF0003_1_MktFcst.spdMain_ComboSelChange: 진입점 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 56 (ACT:DMF0003_1_MktFcst.spdMain_ComboSelCh) |
-| WK-DMF0003-0825 | C3 | E04-3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — E04-3: 행 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 1 (E04-3) |
-| WK-DMF0003-0826 | C3 | E04-5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — E04-5: 행 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 1 (E04-5) |
-| WK-DMF0003-0827 | C3 | Events | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — Events: 행 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 1 (Events) |
-| WK-DMF0003-0828 | C3 | HANDLER:spdMain_Changed | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — HANDLER:spdMain_Changed: 행 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_Changed) |
-| WK-DMF0003-0829 | C3 | HANDLER:spdMain_ClipboardPasted | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — HANDLER:spdMain_ClipboardPasted: 행 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_ClipboardPasted) |
-| WK-DMF0003-0830 | C3 | HANDLER:spdMain_ComboSelChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — HANDLER:spdMain_ComboSelChange: 행 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_ComboSelChange) |
-| WK-DMF0003-0831 | C3 | HANDLER:spdMain_EditChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | C3 기대값 확정 — HANDLER:spdMain_EditChange: 행 집계 — C3 36요소: NOT_RUN:36 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_EditChange) |
-| WK-DMF0003-0832 | C4 | 10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — 10: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-0833 | C4 | 11 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — 11: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (11) |
-| WK-DMF0003-0834 | C4 | 22 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — 22: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (22) |
-| WK-DMF0003-0835 | C4 | 9 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — 9: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-0836 | C4 | C-114 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — C-114: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (C-114) |
-| WK-DMF0003-0837 | C4 | C-115 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — C-115: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (C-115) |
-| WK-DMF0003-0838 | C4 | C-116 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — C-116: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (C-116) |
-| WK-DMF0003-0839 | C4 | C-117 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — C-117: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (C-117) |
-| WK-DMF0003-0840 | C4 | C-124 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — C-124: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (C-124) |
-| WK-DMF0003-0841 | C4 | HANDLER:cboBucketType_SelectedIndexChang | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — HANDLER:cboBucketType_SelectedIndexChanged: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:cboBucketType_SelectedIndexChang) |
-| WK-DMF0003-0842 | C4 | HANDLER:cboDivision_SelectedIndexChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — HANDLER:cboDivision_SelectedIndexChanged: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:cboDivision_SelectedIndexChanged) |
-| WK-DMF0003-0843 | C4 | HANDLER:chkSum_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — HANDLER:chkSum_CheckedChanged: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:chkSum_CheckedChanged) |
-| WK-DMF0003-0844 | C4 | HANDLER:clbCustomer_SelectedIndexChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — HANDLER:clbCustomer_SelectedIndexChanged: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:clbCustomer_SelectedIndexChanged) |
-| WK-DMF0003-0845 | C4 | HANDLER:clbTeam_SelectedIndexChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C4 기대값 확정 — HANDLER:clbTeam_SelectedIndexChanged: 행 집계 — C4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:clbTeam_SelectedIndexChanged) |
-| WK-DMF0003-0846 | C6 | 12 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — 12: 행 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 1 (12) |
-| WK-DMF0003-0847 | C6 | 14 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — 14: 행 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 1 (14) |
-| WK-DMF0003-0848 | C6 | DMF0003_1_MktFcst.cboAS_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — DMF0003_1_MktFcst.cboAS_CheckedChanged: 진입점 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.cboAS_CheckedChang) |
-| WK-DMF0003-0849 | C6 | DMF0003_1_MktFcst.cboBucketType_Selected | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — DMF0003_1_MktFcst.cboBucketType_SelectedIndexChang: 진입점 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 17 (ACT:DMF0003_1_MktFcst.cboBucketType_Sele) |
-| WK-DMF0003-0850 | C6 | DMF0003_1_MktFcst.cboDivision_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — DMF0003_1_MktFcst.cboDivision_SelectedIndexChanged: 진입점 집계 — C6 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 36 (ACT:DMF0003_1_MktFcst.cboDivision_Select) |
-| WK-DMF0003-0851 | C6 | DMF0003_1_MktFcst.chkColor_CheckedChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — DMF0003_1_MktFcst.chkColor_CheckedChanged: 진입점 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.chkColor_CheckedCh) |
-| WK-DMF0003-0852 | C6 | DMF0003_1_MktFcst.chkSum_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — DMF0003_1_MktFcst.chkSum_CheckedChanged: 진입점 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.chkSum_CheckedChan) |
-| WK-DMF0003-0853 | C6 | DMF0003_1_MktFcst.clbCustomer_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — DMF0003_1_MktFcst.clbCustomer_SelectedIndexChanged: 진입점 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.clbCustomer_Select) |
-| WK-DMF0003-0854 | C6 | DMF0003_1_MktFcst.clbTeam_SelectedIndexC | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — DMF0003_1_MktFcst.clbTeam_SelectedIndexChanged: 진입점 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.clbTeam_SelectedIn) |
-| WK-DMF0003-0855 | C6 | DMF0003_1_MktFcst.cmbCarMaker_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — DMF0003_1_MktFcst.cmbCarMaker_SelectedIndexChanged: 진입점 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 6 (ACT:DMF0003_1_MktFcst.cmbCarMaker_Select) |
-| WK-DMF0003-0856 | C6 | DMF0003_1_MktFcst.spdMain_Changed | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — DMF0003_1_MktFcst.spdMain_Changed: 진입점 집계 — C6 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요) |  | 393 (ACT:DMF0003_1_MktFcst.spdMain_Changed:31) |
-| WK-DMF0003-0857 | C6 | DMF0003_1_MktFcst.spdMain_ComboSelChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — DMF0003_1_MktFcst.spdMain_ComboSelChange: 진입점 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 56 (ACT:DMF0003_1_MktFcst.spdMain_ComboSelCh) |
-| WK-DMF0003-0858 | C6 | E04-3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — E04-3: 행 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 1 (E04-3) |
-| WK-DMF0003-0859 | C6 | HANDLER:spdMain_Changed | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — HANDLER:spdMain_Changed: 행 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_Changed) |
-| WK-DMF0003-0860 | C6 | HANDLER:spdMain_ComboSelChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | C6 기대값 확정 — HANDLER:spdMain_ComboSelChange: 행 집계 — C6 20요소: NOT_RUN:20 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_ComboSelChange) |
-| WK-DMF0003-0861 | B1 | 12 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B1 기대값 확정 — 12: 행 집계 — B1 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (12) |
-| WK-DMF0003-0862 | B1 | 73 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B1 기대값 확정 — 73: 행 집계 — B1 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (73) |
-| WK-DMF0003-0863 | B1 | BizType / CustomsHandbook / FcstType / I | 사람 판정 / AS-IS 원문 확인 → 재판정 | B1 기대값 확정 — BizType / CustomsHandbook / FcstType / Incoterms /: 행 집계 — B1 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (BizType / CustomsHandbook / FcstType / I) |
-| WK-DMF0003-0864 | B1 | COMMON:UC-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B1 기대값 확정 — COMMON:UC-05: 행 집계 — B1 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-05) |
-| WK-DMF0003-0865 | B1 | E04-3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B1 기대값 확정 — E04-3: 행 집계 — B1 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (E04-3) |
-| WK-DMF0003-0866 | B1 | EndCustomerByDivision40Team | 사람 판정 / AS-IS 원문 확인 → 재판정 | B1 기대값 확정 — EndCustomerByDivision40Team: 행 집계 — B1 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (EndCustomerByDivision40Team) |
-| WK-DMF0003-0867 | B1 | EndCustomerByDivisionDeptAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | B1 기대값 확정 — EndCustomerByDivisionDeptAuth: 행 집계 — B1 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (EndCustomerByDivisionDeptAuth) |
-| WK-DMF0003-0868 | B1 | Measure | 사람 판정 / AS-IS 원문 확인 → 재판정 | B1 기대값 확정 — Measure: 행 집계 — B1 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (Measure) |
-| WK-DMF0003-0869 | B1 | SiteByEndCustomer | 사람 판정 / AS-IS 원문 확인 → 재판정 | B1 기대값 확정 — SiteByEndCustomer: 행 집계 — B1 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (SiteByEndCustomer) |
-| WK-DMF0003-0870 | B1 | TeambyDivisionAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | B1 기대값 확정 — TeambyDivisionAuth: 행 집계 — B1 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (TeambyDivisionAuth) |
-| WK-DMF0003-0871 | B2 | 12 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B2 기대값 확정 — 12: 행 집계 — B2 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (12) |
-| WK-DMF0003-0872 | B2 | 73 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B2 기대값 확정 — 73: 행 집계 — B2 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (73) |
-| WK-DMF0003-0873 | B2 | BizType / CustomsHandbook / FcstType / I | 사람 판정 / AS-IS 원문 확인 → 재판정 | B2 기대값 확정 — BizType / CustomsHandbook / FcstType / Incoterms /: 행 집계 — B2 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (BizType / CustomsHandbook / FcstType / I) |
-| WK-DMF0003-0874 | B2 | COMMON:UC-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B2 기대값 확정 — COMMON:UC-05: 행 집계 — B2 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-05) |
-| WK-DMF0003-0875 | B2 | E04-3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B2 기대값 확정 — E04-3: 행 집계 — B2 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (E04-3) |
-| WK-DMF0003-0876 | B2 | EndCustomerByDivision40Team | 사람 판정 / AS-IS 원문 확인 → 재판정 | B2 기대값 확정 — EndCustomerByDivision40Team: 행 집계 — B2 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (EndCustomerByDivision40Team) |
-| WK-DMF0003-0877 | B2 | EndCustomerByDivisionDeptAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | B2 기대값 확정 — EndCustomerByDivisionDeptAuth: 행 집계 — B2 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (EndCustomerByDivisionDeptAuth) |
-| WK-DMF0003-0878 | B2 | Measure | 사람 판정 / AS-IS 원문 확인 → 재판정 | B2 기대값 확정 — Measure: 행 집계 — B2 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (Measure) |
-| WK-DMF0003-0879 | B2 | SiteByEndCustomer | 사람 판정 / AS-IS 원문 확인 → 재판정 | B2 기대값 확정 — SiteByEndCustomer: 행 집계 — B2 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (SiteByEndCustomer) |
-| WK-DMF0003-0880 | B2 | TeambyDivisionAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | B2 기대값 확정 — TeambyDivisionAuth: 행 집계 — B2 9요소: NOPATH:9 (미실행 요소가 남아 판정필요) |  | 1 (TeambyDivisionAuth) |
-| WK-DMF0003-0881 | B3 | 5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — 5: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (5) |
-| WK-DMF0003-0882 | B3 | 8 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — 8: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (8) |
-| WK-DMF0003-0883 | B3 | 9 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — 9: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (9) |
-| WK-DMF0003-0884 | B3 | CA-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CA-03: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CA-03) |
-| WK-DMF0003-0885 | B3 | CE-110 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CE-110: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CE-110) |
-| WK-DMF0003-0886 | B3 | CE-115 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CE-115: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CE-115) |
-| WK-DMF0003-0887 | B3 | CE-116 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CE-116: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CE-116) |
-| WK-DMF0003-0888 | B3 | CE-117 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CE-117: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CE-117) |
-| WK-DMF0003-0889 | B3 | CE-118 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CE-118: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CE-118) |
-| WK-DMF0003-0890 | B3 | CE-119 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CE-119: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CE-119) |
-| WK-DMF0003-0891 | B3 | CE-120 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CE-120: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CE-120) |
-| WK-DMF0003-0892 | B3 | CE-121 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CE-121: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CE-121) |
-| WK-DMF0003-0893 | B3 | CG-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CG-07: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CG-07) |
-| WK-DMF0003-0894 | B3 | CI-08 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CI-08: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CI-08) |
-| WK-DMF0003-0895 | B3 | CI-09 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CI-09: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CI-09) |
-| WK-DMF0003-0896 | B3 | CK-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — CK-07: 행 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 1 (CK-07) |
-| WK-DMF0003-0897 | B3 | DMF0003_1_MktFcst.GetBizTypebyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetBizTypebyDivision: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetBizTypebyDivisi) |
-| WK-DMF0003-0898 | B3 | DMF0003_1_MktFcst.GetBucketType | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetBucketType: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetBucketType:5581) |
-| WK-DMF0003-0899 | B3 | DMF0003_1_MktFcst.GetCustomerbyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetCustomerbyDivision: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.GetCustomerbyDivis) |
-| WK-DMF0003-0900 | B3 | DMF0003_1_MktFcst.GetCustomsHandbook | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetCustomsHandbook: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 8 (ACT:DMF0003_1_MktFcst.GetCustomsHandbook) |
-| WK-DMF0003-0901 | B3 | DMF0003_1_MktFcst.GetDayRange | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetDayRange: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.GetDayRange:5512:1) |
-| WK-DMF0003-0902 | B3 | DMF0003_1_MktFcst.GetDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetDivision: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetDivision:5468:1) |
-| WK-DMF0003-0903 | B3 | DMF0003_1_MktFcst.GetEdiSender | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetEdiSender: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 8 (ACT:DMF0003_1_MktFcst.GetEdiSender:6211:) |
-| WK-DMF0003-0904 | B3 | DMF0003_1_MktFcst.GetFcstType | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetFcstType: 진입점 집계 — B3 1요소: TODO:1 (미실행 요소가 남아 판정필요) |  | 7 (ACT:DMF0003_1_MktFcst.GetFcstType:6082:1) |
-| WK-DMF0003-0905 | B3 | DMF0003_1_MktFcst.GetFirstWed | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetFirstWed: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 9 (ACT:DMF0003_1_MktFcst.GetFirstWed:6851:1) |
-| WK-DMF0003-0906 | B3 | DMF0003_1_MktFcst.GetIncotermsType | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetIncotermsType: 진입점 집계 — B3 1요소: TODO:1 (미실행 요소가 남아 판정필요) |  | 8 (ACT:DMF0003_1_MktFcst.GetIncotermsType:6) |
-| WK-DMF0003-0907 | B3 | DMF0003_1_MktFcst.GetItemType | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetItemType: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetItemType:5593:1) |
-| WK-DMF0003-0908 | B3 | DMF0003_1_MktFcst.GetItemType2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetItemType2: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetItemType2:5606:) |
-| WK-DMF0003-0909 | B3 | DMF0003_1_MktFcst.GetPlantSitebyEndCusto | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetPlantSitebyEndCustomer: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.GetPlantSitebyEndC) |
-| WK-DMF0003-0910 | B3 | DMF0003_1_MktFcst.GetSalesSite | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetSalesSite: 진입점 집계 — B3 2요소: TODO:2 (미실행 요소가 남아 판정필요) |  | 7 (ACT:DMF0003_1_MktFcst.GetSalesSite:6126:) |
-| WK-DMF0003-0911 | B3 | DMF0003_1_MktFcst.GetSalesSite40 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetSalesSite40: 진입점 집계 — B3 2요소: TODO:2 (미실행 요소가 남아 판정필요) |  | 7 (ACT:DMF0003_1_MktFcst.GetSalesSite40:614) |
-| WK-DMF0003-0912 | B3 | DMF0003_1_MktFcst.GetScmSitebyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetScmSitebyDivision: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.GetScmSitebyDivisi) |
-| WK-DMF0003-0913 | B3 | DMF0003_1_MktFcst.GetSpdTitle | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetSpdTitle: 진입점 집계 — B3 2요소: TODO:2 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetSpdTitle:5534:4) |
-| WK-DMF0003-0914 | B3 | DMF0003_1_MktFcst.GetSpdTitle_Car | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetSpdTitle_Car: 진입점 집계 — B3 2요소: TODO:2 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetSpdTitle_Car:55) |
-| WK-DMF0003-0915 | B3 | DMF0003_1_MktFcst.GetSpdTitle_PSI | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetSpdTitle_PSI: 진입점 집계 — B3 2요소: TODO:2 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetSpdTitle_PSI:55) |
-| WK-DMF0003-0916 | B3 | DMF0003_1_MktFcst.GetTeambyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetTeambyDivision: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetTeambyDivision:) |
-| WK-DMF0003-0917 | B3 | DMF0003_1_MktFcst.GetWeekNumber | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.GetWeekNumber: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 9 (ACT:DMF0003_1_MktFcst.GetWeekNumber:5795) |
-| WK-DMF0003-0918 | B3 | DMF0003_1_MktFcst.getDayOfWeek | 사람 판정 / AS-IS 원문 확인 → 재판정 | B3 기대값 확정 — DMF0003_1_MktFcst.getDayOfWeek: 진입점 집계 — B3 13요소: TODO:13 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.getDayOfWeek:6070:) |
-| WK-DMF0003-0919 | B4 | 12 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — 12: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (12) |
-| WK-DMF0003-0920 | B4 | 5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — 5: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (5) |
-| WK-DMF0003-0921 | B4 | 73 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — 73: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (73) |
-| WK-DMF0003-0922 | B4 | 8 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — 8: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (8) |
-| WK-DMF0003-0923 | B4 | 9 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — 9: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (9) |
-| WK-DMF0003-0924 | B4 | BizType / CustomsHandbook / FcstType / I | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — BizType / CustomsHandbook / FcstType / Incoterms /: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (BizType / CustomsHandbook / FcstType / I) |
-| WK-DMF0003-0925 | B4 | CA-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CA-03: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CA-03) |
-| WK-DMF0003-0926 | B4 | CE-110 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CE-110: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CE-110) |
-| WK-DMF0003-0927 | B4 | CE-115 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CE-115: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CE-115) |
-| WK-DMF0003-0928 | B4 | CE-116 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CE-116: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CE-116) |
-| WK-DMF0003-0929 | B4 | CE-117 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CE-117: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CE-117) |
-| WK-DMF0003-0930 | B4 | CE-118 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CE-118: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CE-118) |
-| WK-DMF0003-0931 | B4 | CE-119 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CE-119: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CE-119) |
-| WK-DMF0003-0932 | B4 | CE-120 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CE-120: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CE-120) |
-| WK-DMF0003-0933 | B4 | CE-121 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CE-121: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CE-121) |
-| WK-DMF0003-0934 | B4 | CG-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CG-07: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CG-07) |
-| WK-DMF0003-0935 | B4 | CI-08 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CI-08: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CI-08) |
-| WK-DMF0003-0936 | B4 | CI-09 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CI-09: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CI-09) |
-| WK-DMF0003-0937 | B4 | CK-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — CK-07: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (CK-07) |
-| WK-DMF0003-0938 | B4 | COMMON:UC-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — COMMON:UC-05: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-05) |
-| WK-DMF0003-0939 | B4 | DMF0003_1_MktFcst.GetBizTypebyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetBizTypebyDivision: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetBizTypebyDivisi) |
-| WK-DMF0003-0940 | B4 | DMF0003_1_MktFcst.GetBucketType | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetBucketType: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetBucketType:5581) |
-| WK-DMF0003-0941 | B4 | DMF0003_1_MktFcst.GetCustomerbyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetCustomerbyDivision: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.GetCustomerbyDivis) |
-| WK-DMF0003-0942 | B4 | DMF0003_1_MktFcst.GetCustomsHandbook | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetCustomsHandbook: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 8 (ACT:DMF0003_1_MktFcst.GetCustomsHandbook) |
-| WK-DMF0003-0943 | B4 | DMF0003_1_MktFcst.GetDayRange | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetDayRange: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.GetDayRange:5512:1) |
-| WK-DMF0003-0944 | B4 | DMF0003_1_MktFcst.GetDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetDivision: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetDivision:5468:1) |
-| WK-DMF0003-0945 | B4 | DMF0003_1_MktFcst.GetEdiSender | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetEdiSender: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 8 (ACT:DMF0003_1_MktFcst.GetEdiSender:6211:) |
-| WK-DMF0003-0946 | B4 | DMF0003_1_MktFcst.GetFcstType | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetFcstType: 진입점 집계 — B4 1요소: NOPATH:1 (미실행 요소가 남아 판정필요) |  | 7 (ACT:DMF0003_1_MktFcst.GetFcstType:6082:1) |
-| WK-DMF0003-0947 | B4 | DMF0003_1_MktFcst.GetFirstWed | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetFirstWed: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 9 (ACT:DMF0003_1_MktFcst.GetFirstWed:6851:1) |
-| WK-DMF0003-0948 | B4 | DMF0003_1_MktFcst.GetIncotermsType | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetIncotermsType: 진입점 집계 — B4 1요소: NOPATH:1 (미실행 요소가 남아 판정필요) |  | 8 (ACT:DMF0003_1_MktFcst.GetIncotermsType:6) |
-| WK-DMF0003-0949 | B4 | DMF0003_1_MktFcst.GetItemType | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetItemType: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetItemType:5593:1) |
-| WK-DMF0003-0950 | B4 | DMF0003_1_MktFcst.GetItemType2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetItemType2: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetItemType2:5606:) |
-| WK-DMF0003-0951 | B4 | DMF0003_1_MktFcst.GetPlantSitebyEndCusto | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetPlantSitebyEndCustomer: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.GetPlantSitebyEndC) |
-| WK-DMF0003-0952 | B4 | DMF0003_1_MktFcst.GetSalesSite | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetSalesSite: 진입점 집계 — B4 2요소: NOPATH:2 (미실행 요소가 남아 판정필요) |  | 7 (ACT:DMF0003_1_MktFcst.GetSalesSite:6126:) |
-| WK-DMF0003-0953 | B4 | DMF0003_1_MktFcst.GetSalesSite40 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetSalesSite40: 진입점 집계 — B4 2요소: NOPATH:2 (미실행 요소가 남아 판정필요) |  | 7 (ACT:DMF0003_1_MktFcst.GetSalesSite40:614) |
-| WK-DMF0003-0954 | B4 | DMF0003_1_MktFcst.GetScmSitebyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetScmSitebyDivision: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.GetScmSitebyDivisi) |
-| WK-DMF0003-0955 | B4 | DMF0003_1_MktFcst.GetSpdTitle | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetSpdTitle: 진입점 집계 — B4 2요소: NOPATH:2 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetSpdTitle:5534:4) |
-| WK-DMF0003-0956 | B4 | DMF0003_1_MktFcst.GetSpdTitle_Car | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetSpdTitle_Car: 진입점 집계 — B4 2요소: NOPATH:2 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetSpdTitle_Car:55) |
-| WK-DMF0003-0957 | B4 | DMF0003_1_MktFcst.GetSpdTitle_PSI | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetSpdTitle_PSI: 진입점 집계 — B4 2요소: NOPATH:2 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetSpdTitle_PSI:55) |
-| WK-DMF0003-0958 | B4 | DMF0003_1_MktFcst.GetTeambyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetTeambyDivision: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.GetTeambyDivision:) |
-| WK-DMF0003-0959 | B4 | DMF0003_1_MktFcst.GetWeekNumber | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.GetWeekNumber: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 9 (ACT:DMF0003_1_MktFcst.GetWeekNumber:5795) |
-| WK-DMF0003-0960 | B4 | DMF0003_1_MktFcst.getDayOfWeek | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — DMF0003_1_MktFcst.getDayOfWeek: 진입점 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.getDayOfWeek:6070:) |
-| WK-DMF0003-0961 | B4 | E04-3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — E04-3: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (E04-3) |
-| WK-DMF0003-0962 | B4 | EndCustomerByDivision40Team | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — EndCustomerByDivision40Team: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (EndCustomerByDivision40Team) |
-| WK-DMF0003-0963 | B4 | EndCustomerByDivisionDeptAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — EndCustomerByDivisionDeptAuth: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (EndCustomerByDivisionDeptAuth) |
-| WK-DMF0003-0964 | B4 | Measure | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — Measure: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (Measure) |
-| WK-DMF0003-0965 | B4 | SiteByEndCustomer | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — SiteByEndCustomer: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (SiteByEndCustomer) |
-| WK-DMF0003-0966 | B4 | TeambyDivisionAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | B4 기대값 확정 — TeambyDivisionAuth: 행 집계 — B4 17요소: NOPATH:17 (미실행 요소가 남아 판정필요) |  | 1 (TeambyDivisionAuth) |
-| WK-DMF0003-0967 | DB-SYN | 3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — 3: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 1 (3) |
-| WK-DMF0003-0968 | DB-SYN | 34 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — 34: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 1 (34) |
-| WK-DMF0003-0969 | DB-SYN | 6 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — 6: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-0970 | DB-SYN | 7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — 7: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-0971 | DB-SYN | 8 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — 8: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-0972 | DB-SYN | CK-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — CK-06: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 1 (CK-06) |
-| WK-DMF0003-0973 | DB-SYN | CRUD:E02:SEARCH | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — CRUD:E02:SEARCH: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E02:SEARCH) |
-| WK-DMF0003-0974 | DB-SYN | DMF0003_1_MktFcst.GetCustomsHandbook | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_1_MktFcst.GetCustomsHandbook: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetCustomsHandbook) |
-| WK-DMF0003-0975 | DB-SYN | DMF0003_1_MktFcst.GetDayRange | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_1_MktFcst.GetDayRange: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetDayRange:5516:3) |
-| WK-DMF0003-0976 | DB-SYN | DMF0003_1_MktFcst.GetEdiSender | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_1_MktFcst.GetEdiSender: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetEdiSender:6215:) |
-| WK-DMF0003-0977 | DB-SYN | DMF0003_1_MktFcst.GetFcstType | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_1_MktFcst.GetFcstType: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetFcstType:6086:3) |
-| WK-DMF0003-0978 | DB-SYN | DMF0003_1_MktFcst.GetIncotermsType | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_1_MktFcst.GetIncotermsType: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetIncotermsType:6) |
-| WK-DMF0003-0979 | DB-SYN | DMF0003_1_MktFcst.GetSalesSite | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_1_MktFcst.GetSalesSite: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetSalesSite:6130:) |
-| WK-DMF0003-0980 | DB-SYN | DMF0003_1_MktFcst.GetSalesSite40 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_1_MktFcst.GetSalesSite40: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetSalesSite40:615) |
-| WK-DMF0003-0981 | DB-SYN | DMF0003_CustDemandAnalysis.GetSLOC | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_CustDemandAnalysis.GetSLOC: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_CustDemandAnalysis.GetSLOC:9) |
-| WK-DMF0003-0982 | DB-SYN | DMF0003_CustDemandAnalysis.GetSPlant | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_CustDemandAnalysis.GetSPlant: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_CustDemandAnalysis.GetSPlant) |
-| WK-DMF0003-0983 | DB-SYN | DMF0003_MktFcst.GetCustomsHandbook | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_MktFcst.GetCustomsHandbook: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetCustomsHandbook:7) |
-| WK-DMF0003-0984 | DB-SYN | DMF0003_MktFcst.GetDayRange | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_MktFcst.GetDayRange: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetDayRange:6325:3 A) |
-| WK-DMF0003-0985 | DB-SYN | DMF0003_MktFcst.GetEdiSender | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_MktFcst.GetEdiSender: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetEdiSender:7111:3 ) |
-| WK-DMF0003-0986 | DB-SYN | DMF0003_MktFcst.GetFcstType | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_MktFcst.GetFcstType: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetFcstType:6984:3 A) |
-| WK-DMF0003-0987 | DB-SYN | DMF0003_MktFcst.GetIncotermsType | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_MktFcst.GetIncotermsType: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetIncotermsType:700) |
-| WK-DMF0003-0988 | DB-SYN | DMF0003_MktFcst.GetLookupValues | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_MktFcst.GetLookupValues: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetLookupValues:7131) |
-| WK-DMF0003-0989 | DB-SYN | DMF0003_MktFcst.GetSalesSite | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_MktFcst.GetSalesSite: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetSalesSite:7028:3 ) |
-| WK-DMF0003-0990 | DB-SYN | DMF0003_MktFcst.GetSalesSite40 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_MktFcst.GetSalesSite40: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetSalesSite40:7053:) |
-| WK-DMF0003-0991 | DB-SYN | DMF0003_PRPopup.GetSLOC | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_PRPopup.GetSLOC: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_PRPopup.GetSLOC:603:3 ACT:DM) |
-| WK-DMF0003-0992 | DB-SYN | DMF0003_PRPopup.GetSPlant | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_PRPopup.GetSPlant: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_PRPopup.GetSPlant:585:3 ACT:) |
-| WK-DMF0003-0993 | DB-SYN | DMF0003_T_MktFcst.GetCustomsHandbook | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_T_MktFcst.GetCustomsHandbook: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetCustomsHandbook) |
-| WK-DMF0003-0994 | DB-SYN | DMF0003_T_MktFcst.GetDayRange | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_T_MktFcst.GetDayRange: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetDayRange:5069:3) |
-| WK-DMF0003-0995 | DB-SYN | DMF0003_T_MktFcst.GetEdiSender | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_T_MktFcst.GetEdiSender: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetEdiSender:5722:) |
-| WK-DMF0003-0996 | DB-SYN | DMF0003_T_MktFcst.GetFcstType | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_T_MktFcst.GetFcstType: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetFcstType:5601:3) |
-| WK-DMF0003-0997 | DB-SYN | DMF0003_T_MktFcst.GetIncotermsType | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_T_MktFcst.GetIncotermsType: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetIncotermsType:5) |
-| WK-DMF0003-0998 | DB-SYN | DMF0003_T_MktFcst.GetSalesSite | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_T_MktFcst.GetSalesSite: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetSalesSite:5645:) |
-| WK-DMF0003-0999 | DB-SYN | DMF0003_T_MktFcst.GetSalesSite40 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — DMF0003_T_MktFcst.GetSalesSite40: 진입점 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetSalesSite40:566) |
-| WK-DMF0003-1000 | DB-SYN | E02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — E02: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 1 (E02) |
-| WK-DMF0003-1001 | DB-SYN | E03-2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — E03-2: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 1 (E03-2) |
-| WK-DMF0003-1002 | DB-SYN | E04-2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — E04-2: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 1 (E04-2) |
-| WK-DMF0003-1003 | DB-SYN | HANDLER:FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — HANDLER:FindData: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:FindData) |
-| WK-DMF0003-1004 | DB-SYN | HANDLER:SaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — HANDLER:SaveData: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:SaveData) |
-| WK-DMF0003-1005 | DB-SYN | — | 사람 판정 / AS-IS 원문 확인 → 재판정 | DB-SYN 기대값 확정 — —: 행 집계 — DB-SYN 28요소: PASS:18 · NOPATH:10 (미실행 요소가 남아 판정필요) |  | 1 (—) |
-| WK-DMF0003-1006 | F4 | 3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — 3: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (3) |
-| WK-DMF0003-1007 | F4 | 34 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — 34: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (34) |
-| WK-DMF0003-1008 | F4 | 6 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — 6: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1009 | F4 | 7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — 7: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1010 | F4 | 8 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — 8: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1011 | F4 | CK-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — CK-06: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (CK-06) |
-| WK-DMF0003-1012 | F4 | CRUD:E02:SEARCH | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — CRUD:E02:SEARCH: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E02:SEARCH) |
-| WK-DMF0003-1013 | F4 | DMF0003_1_MktFcst.GetCustomsHandbook | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_1_MktFcst.GetCustomsHandbook: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetCustomsHandbook) |
-| WK-DMF0003-1014 | F4 | DMF0003_1_MktFcst.GetDayRange | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_1_MktFcst.GetDayRange: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetDayRange:5516:3) |
-| WK-DMF0003-1015 | F4 | DMF0003_1_MktFcst.GetEdiSender | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_1_MktFcst.GetEdiSender: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetEdiSender:6215:) |
-| WK-DMF0003-1016 | F4 | DMF0003_1_MktFcst.GetFcstType | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_1_MktFcst.GetFcstType: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetFcstType:6086:3) |
-| WK-DMF0003-1017 | F4 | DMF0003_1_MktFcst.GetIncotermsType | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_1_MktFcst.GetIncotermsType: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetIncotermsType:6) |
-| WK-DMF0003-1018 | F4 | DMF0003_1_MktFcst.GetSalesSite | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_1_MktFcst.GetSalesSite: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetSalesSite:6130:) |
-| WK-DMF0003-1019 | F4 | DMF0003_1_MktFcst.GetSalesSite40 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_1_MktFcst.GetSalesSite40: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.GetSalesSite40:615) |
-| WK-DMF0003-1020 | F4 | DMF0003_CustDemandAnalysis.FindDataMain | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_CustDemandAnalysis.FindDataMain: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (ACT:DMF0003_CustDemandAnalysis.FindDataM) |
-| WK-DMF0003-1021 | F4 | DMF0003_CustDemandAnalysis.GetSLOC | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_CustDemandAnalysis.GetSLOC: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_CustDemandAnalysis.GetSLOC:9) |
-| WK-DMF0003-1022 | F4 | DMF0003_CustDemandAnalysis.GetSPlant | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_CustDemandAnalysis.GetSPlant: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_CustDemandAnalysis.GetSPlant) |
-| WK-DMF0003-1023 | F4 | DMF0003_MktFcst.GetCustomsHandbook | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_MktFcst.GetCustomsHandbook: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetCustomsHandbook:7) |
-| WK-DMF0003-1024 | F4 | DMF0003_MktFcst.GetDayRange | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_MktFcst.GetDayRange: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetDayRange:6325:3 A) |
-| WK-DMF0003-1025 | F4 | DMF0003_MktFcst.GetEdiSender | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_MktFcst.GetEdiSender: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetEdiSender:7111:3 ) |
-| WK-DMF0003-1026 | F4 | DMF0003_MktFcst.GetFcstType | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_MktFcst.GetFcstType: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetFcstType:6984:3 A) |
-| WK-DMF0003-1027 | F4 | DMF0003_MktFcst.GetIncotermsType | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_MktFcst.GetIncotermsType: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetIncotermsType:700) |
-| WK-DMF0003-1028 | F4 | DMF0003_MktFcst.GetLookupValues | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_MktFcst.GetLookupValues: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetLookupValues:7131) |
-| WK-DMF0003-1029 | F4 | DMF0003_MktFcst.GetSalesSite | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_MktFcst.GetSalesSite: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetSalesSite:7028:3 ) |
-| WK-DMF0003-1030 | F4 | DMF0003_MktFcst.GetSalesSite40 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_MktFcst.GetSalesSite40: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.GetSalesSite40:7053:) |
-| WK-DMF0003-1031 | F4 | DMF0003_PRPopup.GetSLOC | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_PRPopup.GetSLOC: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_PRPopup.GetSLOC:603:3 ACT:DM) |
-| WK-DMF0003-1032 | F4 | DMF0003_PRPopup.GetSPlant | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_PRPopup.GetSPlant: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_PRPopup.GetSPlant:585:3 ACT:) |
-| WK-DMF0003-1033 | F4 | DMF0003_SspSyncComparePopUp.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_SspSyncComparePopUp.FindData: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (ACT:DMF0003_SspSyncComparePopUp.FindData) |
-| WK-DMF0003-1034 | F4 | DMF0003_SspSyncPopUp.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_SspSyncPopUp.FindData: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (ACT:DMF0003_SspSyncPopUp.FindData) |
-| WK-DMF0003-1035 | F4 | DMF0003_T_MktFcst.GetCustomsHandbook | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_T_MktFcst.GetCustomsHandbook: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetCustomsHandbook) |
-| WK-DMF0003-1036 | F4 | DMF0003_T_MktFcst.GetDayRange | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_T_MktFcst.GetDayRange: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetDayRange:5069:3) |
-| WK-DMF0003-1037 | F4 | DMF0003_T_MktFcst.GetEdiSender | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_T_MktFcst.GetEdiSender: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetEdiSender:5722:) |
-| WK-DMF0003-1038 | F4 | DMF0003_T_MktFcst.GetFcstType | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_T_MktFcst.GetFcstType: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetFcstType:5601:3) |
-| WK-DMF0003-1039 | F4 | DMF0003_T_MktFcst.GetIncotermsType | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_T_MktFcst.GetIncotermsType: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetIncotermsType:5) |
-| WK-DMF0003-1040 | F4 | DMF0003_T_MktFcst.GetSalesSite | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_T_MktFcst.GetSalesSite: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetSalesSite:5645:) |
-| WK-DMF0003-1041 | F4 | DMF0003_T_MktFcst.GetSalesSite40 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — DMF0003_T_MktFcst.GetSalesSite40: 진입점 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.GetSalesSite40:566) |
-| WK-DMF0003-1042 | F4 | E02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — E02: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (E02) |
-| WK-DMF0003-1043 | F4 | E03-2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — E03-2: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (E03-2) |
-| WK-DMF0003-1044 | F4 | E04-2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — E04-2: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (E04-2) |
-| WK-DMF0003-1045 | F4 | HANDLER:FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — HANDLER:FindData: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:FindData) |
-| WK-DMF0003-1046 | F4 | HANDLER:SaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — HANDLER:SaveData: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:SaveData) |
-| WK-DMF0003-1047 | F4 | — | 사람 판정 / AS-IS 원문 확인 → 재판정 | F4 기대값 확정 — —: 행 집계 — F4 28요소: NOT_RUN:28 (미실행 요소가 남아 판정필요) |  | 1 (—) |
-| WK-DMF0003-1048 | A5 | 3. 배선 체인 L7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — 3. 배선 체인 L7: 행 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 1 (3. 배선 체인 L7) |
-| WK-DMF0003-1049 | A5 | CD-09 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — CD-09: 행 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 1 (CD-09) |
-| WK-DMF0003-1050 | A5 | CJ-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — CJ-01: 행 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 1 (CJ-01) |
-| WK-DMF0003-1051 | A5 | CJ-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — CJ-05: 행 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 1 (CJ-05) |
-| WK-DMF0003-1052 | A5 | CRUD:E03:EXCEL | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — CRUD:E03:EXCEL: 행 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E03:EXCEL) |
-| WK-DMF0003-1053 | A5 | DMF0003_1_MktFcst.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — DMF0003_1_MktFcst.CreateSpread: 진입점 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 10 (ACT:DMF0003_1_MktFcst.CreateSpread:529:1) |
-| WK-DMF0003-1054 | A5 | DMF0003_1_MktFcst.SetSpreadColumn | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — DMF0003_1_MktFcst.SetSpreadColumn: 진입점 집계 — A5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-1055 | A5 | DMF0003_1_MktFcst.SetSpreadHeaderSpan | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan: 진입점 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 53 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1056 | A5 | DMF0003_1_MktFcst.SetSpreadHeaderSpan_SU | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan_SUB1: 진입점 집계 — A5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요) |  | 52 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1057 | A5 | E01-3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — E01-3: 행 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 1 (E01-3) |
-| WK-DMF0003-1058 | A5 | E03-5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — E03-5: 행 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 1 (E03-5) |
-| WK-DMF0003-1059 | A5 | E04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — E04: 행 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 1 (E04) |
-| WK-DMF0003-1060 | A5 | E05-2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — E05-2: 행 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 1 (E05-2) |
-| WK-DMF0003-1061 | A5 | HANDLER:ExcelButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | A5 기대값 확정 — HANDLER:ExcelButton: 행 집계 — A5 47요소: NOT_RUN:47 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:ExcelButton) |
-| WK-DMF0003-1062 | G4 | CD-10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G4 기대값 확정 — CD-10: 행 집계 — G4 29요소: NOT_RUN:21 · NOPATH:8 (미실행 요소가 남아 판정필요) |  | 1 (CD-10) |
-| WK-DMF0003-1063 | G4 | CK-10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G4 기대값 확정 — CK-10: 행 집계 — G4 29요소: NOT_RUN:21 · NOPATH:8 (미실행 요소가 남아 판정필요) |  | 1 (CK-10) |
-| WK-DMF0003-1064 | G4 | COMMON:UC-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G4 기대값 확정 — COMMON:UC-06: 행 집계 — G4 29요소: NOT_RUN:21 · NOPATH:8 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-06) |
-| WK-DMF0003-1065 | G4 | E01-1 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G4 기대값 확정 — E01-1: 행 집계 — G4 29요소: NOT_RUN:21 · NOPATH:8 (미실행 요소가 남아 판정필요) |  | 1 (E01-1) |
-| WK-DMF0003-1066 | G4 | `components/MktFcstForm.tsx` | 사람 판정 / AS-IS 원문 확인 → 재판정 | G4 기대값 확정 — `components/MktFcstForm.tsx`: 행 집계 — G4 29요소: NOT_RUN:21 · NOPATH:8 (미실행 요소가 남아 판정필요) |  | 1 (`components/MktFcstForm.tsx`) |
-| WK-DMF0003-1067 | H2 | 3. 배선 체인 L7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — 3. 배선 체인 L7: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 1 (3. 배선 체인 L7) |
-| WK-DMF0003-1068 | H2 | 7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — 7: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1069 | H2 | CB-104 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — CB-104: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 1 (CB-104) |
-| WK-DMF0003-1070 | H2 | CD-09 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — CD-09: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 1 (CD-09) |
-| WK-DMF0003-1071 | H2 | CF-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — CF-05: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 1 (CF-05) |
-| WK-DMF0003-1072 | H2 | CRUD:E03:EXCEL | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — CRUD:E03:EXCEL: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E03:EXCEL) |
-| WK-DMF0003-1073 | H2 | DMF0003_1_MktFcst.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — DMF0003_1_MktFcst.CreateSpread: 진입점 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 10 (ACT:DMF0003_1_MktFcst.CreateSpread:529:1) |
-| WK-DMF0003-1074 | H2 | DMF0003_1_MktFcst.SetSaveSheetColor | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — DMF0003_1_MktFcst.SetSaveSheetColor: 진입점 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.SetSaveSheetColor:) |
-| WK-DMF0003-1075 | H2 | DMF0003_1_MktFcst.SetSpreadColumn | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — DMF0003_1_MktFcst.SetSpreadColumn: 진입점 집계 — H2 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-1076 | H2 | DMF0003_1_MktFcst.SetSpreadHeaderSpan | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan: 진입점 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 53 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1077 | H2 | DMF0003_1_MktFcst.SetSpreadHeaderSpan_SU | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan_SUB1: 진입점 집계 — H2 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요) |  | 52 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1078 | H2 | DMF0003_1_MktFcst.chkColor_CheckedChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — DMF0003_1_MktFcst.chkColor_CheckedChanged: 진입점 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.chkColor_CheckedCh) |
-| WK-DMF0003-1079 | H2 | E03-5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — E03-5: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 1 (E03-5) |
-| WK-DMF0003-1080 | H2 | E04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — E04: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 1 (E04) |
-| WK-DMF0003-1081 | H2 | E04-5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — E04-5: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 1 (E04-5) |
-| WK-DMF0003-1082 | H2 | HANDLER:ExcelButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — HANDLER:ExcelButton: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:ExcelButton) |
-| WK-DMF0003-1083 | H2 | HANDLER:btnItemId_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — HANDLER:btnItemId_Click: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:btnItemId_Click) |
-| WK-DMF0003-1084 | H2 | HANDLER:chkColor_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | H2 기대값 확정 — HANDLER:chkColor_CheckedChanged: 행 집계 — H2 48요소: NOT_RUN:48 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:chkColor_CheckedChanged) |
-| WK-DMF0003-1085 | H5 | 3. 배선 체인 L7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H5 기대값 확정 — 3. 배선 체인 L7: 행 집계 — H5 51요소: NOT_RUN:51 (미실행 요소가 남아 판정필요) |  | 1 (3. 배선 체인 L7) |
-| WK-DMF0003-1086 | H5 | CD-09 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H5 기대값 확정 — CD-09: 행 집계 — H5 51요소: NOT_RUN:51 (미실행 요소가 남아 판정필요) |  | 1 (CD-09) |
-| WK-DMF0003-1087 | H5 | CRUD:E03:EXCEL | 사람 판정 / AS-IS 원문 확인 → 재판정 | H5 기대값 확정 — CRUD:E03:EXCEL: 행 집계 — H5 51요소: NOT_RUN:51 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E03:EXCEL) |
-| WK-DMF0003-1088 | H5 | DMF0003_1_MktFcst.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | H5 기대값 확정 — DMF0003_1_MktFcst.CreateSpread: 진입점 집계 — H5 51요소: NOT_RUN:51 (미실행 요소가 남아 판정필요) |  | 10 (ACT:DMF0003_1_MktFcst.CreateSpread:529:1) |
-| WK-DMF0003-1089 | H5 | DMF0003_1_MktFcst.SetSpreadColumn | 사람 판정 / AS-IS 원문 확인 → 재판정 | H5 기대값 확정 — DMF0003_1_MktFcst.SetSpreadColumn: 진입점 집계 — H5 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-1090 | H5 | DMF0003_1_MktFcst.SetSpreadHeaderSpan | 사람 판정 / AS-IS 원문 확인 → 재판정 | H5 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan: 진입점 집계 — H5 51요소: NOT_RUN:51 (미실행 요소가 남아 판정필요) |  | 53 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1091 | H5 | DMF0003_1_MktFcst.SetSpreadHeaderSpan_SU | 사람 판정 / AS-IS 원문 확인 → 재판정 | H5 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan_SUB1: 진입점 집계 — H5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요) |  | 52 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1092 | H5 | E03-5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H5 기대값 확정 — E03-5: 행 집계 — H5 51요소: NOT_RUN:51 (미실행 요소가 남아 판정필요) |  | 1 (E03-5) |
-| WK-DMF0003-1093 | H5 | E04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H5 기대값 확정 — E04: 행 집계 — H5 51요소: NOT_RUN:51 (미실행 요소가 남아 판정필요) |  | 1 (E04) |
-| WK-DMF0003-1094 | H5 | HANDLER:ExcelButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | H5 기대값 확정 — HANDLER:ExcelButton: 행 집계 — H5 51요소: NOT_RUN:51 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:ExcelButton) |
-| WK-DMF0003-1095 | X-REASON | C-101 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — C-101 §0.1 [원문 무번호] 계통 / 방식 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (C-101) |
-| WK-DMF0003-1096 | X-REASON | C-108 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — C-108 §0.2 [원문 무번호] 이벤트 / 81/82 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (C-108) |
-| WK-DMF0003-1097 | X-REASON | CA-06 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-06 §1 필수 컬럼 부재 — 81*: 9종(+PlantSiteId) / 82: 8종 / 40: 8종(40 계열 키) / MSG00113 차단  AS-IS 는 컬럼셋팅으로 필수 컬럼 제거 가능한 |  | 1 (CA-06) |
-| WK-DMF0003-1098 | X-REASON | CA-102 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-102 §1 [원문 무번호] DMF0003_1 / (별도 소스) 해당없음 범위 제외 — `DMF0003_1`/`DMF0003_T` 는 별도 메뉴(사용자 확정 2026-08-15). 본 대사표 대 |  | 1 (CA-102) |
-| WK-DMF0003-1099 | X-REASON | CA-103 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-103 §1 [원문 무번호] DMF0003_T / (별도 소스) 해당없음 범위 제외 — `DMF0003_1`/`DMF0003_T` 는 별도 메뉴(사용자 확정 2026-08-15). 본 대사표 대 |  | 1 (CA-103) |
-| WK-DMF0003-1100 | X-REASON | CA-104 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-104 §1 [원문 무번호] 화면 ID / DMF0003 (MktFcst / 시장예측) 해당없음 문서 머리말(화면 메타정보) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CA-104) |
-| WK-DMF0003-1101 | X-REASON | CA-105 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-105 §1 [원문 무번호] 도메인 / Demand (수요) 해당없음 문서 머리말(화면 메타정보) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CA-105) |
-| WK-DMF0003-1102 | X-REASON | CA-106 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-106 §1 [원문 무번호] 메뉴 / Demand > Demand Plan > MKT FCST 해당없음 문서 머리말(화면 메타정보) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없 |  | 1 (CA-106) |
-| WK-DMF0003-1103 | X-REASON | CA-107 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-107 §1 [원문 무번호] TO-BE FE / `nscm-fe/features/demand/src/pages/mkt-fcst/` 해당없음 문서 머리말(화면 메타정보) — 요구사항 행이 아님.  |  | 1 (CA-107) |
-| WK-DMF0003-1104 | X-REASON | CA-109 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-109 §1 [원문 무번호] 편집 가능 / **Division 82 만** (회의 확정 2026-07-07, 실 데이터 확인) 해당없음 문서 머리말(화면 메타정보) — 요구사항 행이 아님. `- |  | 1 (CA-109) |
-| WK-DMF0003-1105 | X-REASON | CA-110 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-110 §1 [원문 무번호] POPUP / AS-IS Class 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CA-110) |
-| WK-DMF0003-1106 | X-REASON | CA-112 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-112 §1 [원문 무번호] PR History / `DMF0003_PRHistoryPopup` 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없 |  | 1 (CA-112) |
-| WK-DMF0003-1107 | X-REASON | CA-113 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-113 §1 [원문 무번호] SSP Sync / `DMF0003_SspSyncPopUp` 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CA-113) |
-| WK-DMF0003-1108 | X-REASON | CC-101 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CC-101 §3.1 [원문 무번호] 컨트롤 / 담긴 LAYER (Control 바인딩) 해당없음 — 표 헤더 원천 `DMF0003_MktFcst_상세분석서_v2.0.md` L69 = 표 헤더 행(컨 |  | 1 (CC-101) |
-| WK-DMF0003-1109 | X-REASON | CE-101 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-101 §5.1 [원문 무번호] 논리 컬럼 / 40 전용 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-101) |
-| WK-DMF0003-1110 | X-REASON | CE-102 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-102 §5.1 [원문 무번호] Div* / `DIVISION_ID40` 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-102) |
-| WK-DMF0003-1111 | X-REASON | CE-104 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-104 §5.1 [원문 무번호] Sales Site* / `SCM_SITE_ID40` 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-104) |
-| WK-DMF0003-1112 | X-REASON | CE-105 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-105 §5.1 [원문 무번호] Model* / `ITEM_ID40` 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-105) |
-| WK-DMF0003-1113 | X-REASON | CE-106 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-106 §5.1 [원문 무번호] Plant Site* / — 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-106) |
-| WK-DMF0003-1114 | X-REASON | CE-107 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-107 §5.1 [원문 무번호] Energy/Cell / — 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-107) |
-| WK-DMF0003-1115 | X-REASON | CE-122 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-122 §5.4 [원문 무번호] 콤보 SQL_ID / 바인드 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-122) |
-| WK-DMF0003-1116 | X-REASON | CE-123 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-123 §5.4 [원문 무번호] `MktFcstEditMeasure` / @divisionId 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-123) |
-| WK-DMF0003-1117 | X-REASON | CE-124 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-124 §5.4 [원문 무번호] `MktFcstEditableDivision` / 없음 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-124) |
-| WK-DMF0003-1118 | X-REASON | CE-125 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-125 §5.4 [원문 무번호] `MktFcstUserEditDivision` / @sesUserId 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물  |  | 1 (CE-125) |
-| WK-DMF0003-1119 | X-REASON | CE-126 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-126 §5.4 [원문 무번호] `MktFcstWsPlannerYn` / @sesUserId 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-126) |
-| WK-DMF0003-1120 | X-REASON | CE-127 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-127 §5.4 [원문 무번호] `BizType` / 없음 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-127) |
-| WK-DMF0003-1121 | X-REASON | CF-03 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CF-03 §6 dtSave 행 중 그리드 실재+AS_FROM_SITE 일치(bAsCompare)만 dtSaveFinal 승계 / I 저장이 기존 행 키와 같으면 제외 /…  dtSave→dtSave |  | 1 (CF-03) |
-| WK-DMF0003-1122 | X-REASON | CF-101 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CF-101 §6.2 [원문 무번호] 트리거 / MSG_ID 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CF-101) |
-| WK-DMF0003-1123 | X-REASON | CG-102 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-102 §7.1 [원문 무번호] Plant Site 필수 / ✗ 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-102) |
-| WK-DMF0003-1124 | X-REASON | CG-103 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-103 §7.1 [원문 무번호] 중복키 Plant 포함 / ✗ 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-103) |
-| WK-DMF0003-1125 | X-REASON | CG-105 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-105 §7.1 [원문 무번호] Project 필드 / **비활성** 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-105) |
-| WK-DMF0003-1126 | X-REASON | CG-107 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-107 §7.1 [원문 무번호] Cell Qty / **40만** 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-107) |
-| WK-DMF0003-1127 | X-REASON | CG-108 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-108 §7.1 [원문 무번호] checkInvalidExec / ✗ 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-108) |
-| WK-DMF0003-1128 | X-REASON | CG-109 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-109 §7.1 [원문 무번호] Energy/Cell 컬럼 / ✗ 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-109) |
-| WK-DMF0003-1129 | X-REASON | CG-111 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-111 §7.1 [원문 무번호] Bucket 기본 / Weekly 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-111) |
-| WK-DMF0003-1130 | X-REASON | CG-112 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-112 §7.1 [원문 무번호] **편집 가능** / ✗ 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-112) |
-| WK-DMF0003-1131 | X-REASON | CG-114 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-114 §7.3 [원문 무번호] 상위(선택) / 조건 해당없음 — 표 헤더 원천 `상세분석서_v2.0.md` L228 = §7.3 표 헤더 행(상위(선택) · 조건 · 하위(종속) · 유형 ·  |  | 1 (CG-114) |
-| WK-DMF0003-1132 | X-REASON | CG-115 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-115 §7.3 [원문 무번호] CUST_FCST / 전 division 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-115) |
-| WK-DMF0003-1133 | X-REASON | CG-117 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-117 §7.3 [원문 무번호] **MKT_FCST_RP** / **Division 82 한정** 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당 |  | 1 (CG-117) |
-| WK-DMF0003-1134 | X-REASON | CG-120 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-120 §7.3 [원문 무번호] TMM_FCST / 81 계열, TMM_MEASURE_ADMIN 등록자 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 |  | 1 (CG-120) |
-| WK-DMF0003-1135 | X-REASON | CG-121 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-121 §7.3 [원문 무번호] CUST_FCST_ORG / (비활성, E20241126 합의) 해당없음 — AS-IS 비활성 원천 `상세분석서_v2.0.md` L236 = CUST_FCST_O |  | 1 (CG-121) |
-| WK-DMF0003-1136 | X-REASON | CH-101 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CH-101 §8 [원문 무번호] POPUP / SP 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CH-101) |
-| WK-DMF0003-1137 | X-REASON | CH-104 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CH-104 §8 [원문 무번호] SSP Sync / (SP 없음) 제외 — SSP Sync 범위 제외 — SSP Sync 는 구현 대상에서 제외(사용자 확정 2026-08-15). 표시/색상 축(E |  | 1 (CH-104) |
-| WK-DMF0003-1138 | X-REASON | CH-107 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CH-107 §8 [원문 무번호] Project/Item/Owner byDivision / 콤보/팝업 SP 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물  |  | 1 (CH-107) |
-| WK-DMF0003-1139 | X-REASON | E00 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — E00 §0 정본 vs 구본 차이 — git diff --no-index 실측  정본 선택 근거(폴더본 7,143줄 — diff = DMF0003_정본전환_diff_20260812.md). 구현 산출 |  | 1 (E00) |
-| WK-DMF0003-1140 | X-REASON | E01-4 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — E01-4 §1.4 InitSaveDataTable (L758~800)  WinForms 로컬 DataTable(dtSave/dtSaveFinal) 구조 — TO-BE 는 EditTracker+uti |  | 1 (E01-4) |
-| WK-DMF0003-1141 | X-REASON | HANDLER:FindButton | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — HANDLER:FindButton AS-IS `DMF0003_MktFcst.cs:805` (라이브 3행) · **사문(빈 몸통)**  사문 래퍼(3행 — FindData 위임). TO-BE handl |  | 1 (HANDLER:FindButton) |
-| WK-DMF0003-1142 | X-REASON | HANDLER:InsertButton | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — HANDLER:InsertButton AS-IS `DMF0003_MktFcst.cs:811` (라이브 3행) · **사문(빈 몸통)**  사문 래퍼(3행 — InsertRow 위임) 제외 |  | 1 (HANDLER:InsertButton) |
-| WK-DMF0003-1143 | X-REASON | HANDLER:SaveButton | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — HANDLER:SaveButton AS-IS `DMF0003_MktFcst.cs:1340` (라이브 3행) · **사문(빈 몸통)**  사문 래퍼(3행 — SaveData 위임) 제외 |  | 1 (HANDLER:SaveButton) |
-| WK-DMF0003-1144 | X-REASON | HANDLER:spdMain_TopChange | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — HANDLER:spdMain_TopChange AS-IS `DMF0003_MktFcst.cs:5621` (라이브 5행)  FarPoint SmartColMerge 재적용 전용 — Wijmo wrapp |  | 1 (HANDLER:spdMain_TopChange) |
-| WK-DMF0003-1145 | X-REASON | MODAL:ImagePopUp | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — MODAL:ImagePopUp AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 해당없음 — 모달 아님 AS-IS `DMF0003_MktFcst.cs` L555/L558 `siM |  | 1 (MODAL:ImagePopUp) |
-| WK-DMF0003-1146 | X-REASON | MODAL:ShowDialog | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — MODAL:ShowDialog AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 해당없음 — 메서드명 AS-IS 15회 전부 `popup.ShowDialog()` 형태 = Win |  | 1 (MODAL:ShowDialog) |
-| WK-DMF0003-1147 | D1 | 4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — 4: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1148 | D1 | 7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — 7: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (7) |
-| WK-DMF0003-1149 | D1 | 8 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — 8: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1150 | D1 | 81 Plant Site 편집 후보 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — 81 Plant Site 편집 후보: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (81 Plant Site 편집 후보) |
-| WK-DMF0003-1151 | D1 | 8주 잠금(40 Monthly) | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — 8주 잠금(40 Monthly): 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (8주 잠금(40 Monthly)) |
-| WK-DMF0003-1152 | D1 | CB-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CB-01: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CB-01) |
-| WK-DMF0003-1153 | D1 | CB-02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CB-02: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CB-02) |
-| WK-DMF0003-1154 | D1 | CB-102 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CB-102: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CB-102) |
-| WK-DMF0003-1155 | D1 | CB-103 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CB-103: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CB-103) |
-| WK-DMF0003-1156 | D1 | CB-104 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CB-104: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CB-104) |
-| WK-DMF0003-1157 | D1 | CF-106 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CF-106: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CF-106) |
-| WK-DMF0003-1158 | D1 | CF-112 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CF-112: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CF-112) |
-| WK-DMF0003-1159 | D1 | CG-113 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CG-113: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CG-113) |
-| WK-DMF0003-1160 | D1 | CH-08 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CH-08: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CH-08) |
-| WK-DMF0003-1161 | D1 | CI-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CI-07: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CI-07) |
-| WK-DMF0003-1162 | D1 | CJ-04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CJ-04: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CJ-04) |
-| WK-DMF0003-1163 | D1 | CJ-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CJ-05: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CJ-05) |
-| WK-DMF0003-1164 | D1 | CRUD:E03:EDIT | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CRUD:E03:EDIT: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E03:EDIT) |
-| WK-DMF0003-1165 | D1 | CRUD:E03:SAVE | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — CRUD:E03:SAVE: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E03:SAVE) |
-| WK-DMF0003-1166 | D1 | DMF0003_1_MktFcst.EditButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — DMF0003_1_MktFcst.EditButton: 진입점 집계 — D1 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 155 (ACT:DMF0003_1_MktFcst.EditButton:981:1 A) |
-| WK-DMF0003-1167 | D1 | E03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — E03: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (E03) |
-| WK-DMF0003-1168 | D1 | E03-1 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — E03-1: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (E03-1) |
-| WK-DMF0003-1169 | D1 | HANDLER:EditButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — HANDLER:EditButton: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:EditButton) |
-| WK-DMF0003-1170 | D1 | HANDLER:spdMain_CellClick | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — HANDLER:spdMain_CellClick: 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_CellClick) |
-| WK-DMF0003-1171 | D1 | 행잠금: bucket×past 셀 잠금 (#28~33, #71~87) | 사람 판정 / AS-IS 원문 확인 → 재판정 | D1 기대값 확정 — 행잠금: bucket×past 셀 잠금 (#28~33, #71~87): 행 집계 — D1 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (행잠금: bucket×past 셀 잠금 (#28~33, #71~87)) |
-| WK-DMF0003-1172 | D3 | 4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — 4: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1173 | D3 | 7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — 7: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (7) |
-| WK-DMF0003-1174 | D3 | 8 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — 8: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1175 | D3 | 81 Plant Site 편집 후보 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — 81 Plant Site 편집 후보: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (81 Plant Site 편집 후보) |
-| WK-DMF0003-1176 | D3 | 8주 잠금(40 Monthly) | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — 8주 잠금(40 Monthly): 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (8주 잠금(40 Monthly)) |
-| WK-DMF0003-1177 | D3 | CB-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CB-01: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CB-01) |
-| WK-DMF0003-1178 | D3 | CB-02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CB-02: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CB-02) |
-| WK-DMF0003-1179 | D3 | CB-102 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CB-102: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CB-102) |
-| WK-DMF0003-1180 | D3 | CB-103 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CB-103: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CB-103) |
-| WK-DMF0003-1181 | D3 | CB-104 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CB-104: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CB-104) |
-| WK-DMF0003-1182 | D3 | CF-106 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CF-106: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CF-106) |
-| WK-DMF0003-1183 | D3 | CF-112 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CF-112: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CF-112) |
-| WK-DMF0003-1184 | D3 | CG-113 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CG-113: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CG-113) |
-| WK-DMF0003-1185 | D3 | CH-08 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CH-08: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CH-08) |
-| WK-DMF0003-1186 | D3 | CI-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CI-07: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CI-07) |
-| WK-DMF0003-1187 | D3 | CJ-04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CJ-04: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CJ-04) |
-| WK-DMF0003-1188 | D3 | CJ-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CJ-05: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CJ-05) |
-| WK-DMF0003-1189 | D3 | CRUD:E03:EDIT | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CRUD:E03:EDIT: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E03:EDIT) |
-| WK-DMF0003-1190 | D3 | CRUD:E03:SAVE | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — CRUD:E03:SAVE: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E03:SAVE) |
-| WK-DMF0003-1191 | D3 | DMF0003_1_MktFcst.EditButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — DMF0003_1_MktFcst.EditButton: 진입점 집계 — D3 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 155 (ACT:DMF0003_1_MktFcst.EditButton:981:1 A) |
-| WK-DMF0003-1192 | D3 | E03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — E03: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (E03) |
-| WK-DMF0003-1193 | D3 | E03-1 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — E03-1: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (E03-1) |
-| WK-DMF0003-1194 | D3 | HANDLER:EditButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — HANDLER:EditButton: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:EditButton) |
-| WK-DMF0003-1195 | D3 | HANDLER:spdMain_CellClick | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — HANDLER:spdMain_CellClick: 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_CellClick) |
-| WK-DMF0003-1196 | D3 | 행잠금: bucket×past 셀 잠금 (#28~33, #71~87) | 사람 판정 / AS-IS 원문 확인 → 재판정 | D3 기대값 확정 — 행잠금: bucket×past 셀 잠금 (#28~33, #71~87): 행 집계 — D3 38요소: NOT_RUN:38 (미실행 요소가 남아 판정필요) |  | 1 (행잠금: bucket×past 셀 잠금 (#28~33, #71~87)) |
-| WK-DMF0003-1197 | D4 | 130 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — 130: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (130) |
-| WK-DMF0003-1198 | D4 | 7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — 7: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (7) |
-| WK-DMF0003-1199 | D4 | 8 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — 8: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1200 | D4 | CB-02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — CB-02: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (CB-02) |
-| WK-DMF0003-1201 | D4 | CB-104 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — CB-104: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (CB-104) |
-| WK-DMF0003-1202 | D4 | CG-113 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — CG-113: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (CG-113) |
-| WK-DMF0003-1203 | D4 | CI-10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — CI-10: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (CI-10) |
-| WK-DMF0003-1204 | D4 | CJ-04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — CJ-04: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (CJ-04) |
-| WK-DMF0003-1205 | D4 | CK-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — CK-06: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (CK-06) |
-| WK-DMF0003-1206 | D4 | COMMON:UC-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — COMMON:UC-01: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-01) |
-| WK-DMF0003-1207 | D4 | COMMON:UC-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — COMMON:UC-03: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-03) |
-| WK-DMF0003-1208 | D4 | CRUD:E03:EDIT | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — CRUD:E03:EDIT: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E03:EDIT) |
-| WK-DMF0003-1209 | D4 | CRUD:E03:EXCEL | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — CRUD:E03:EXCEL: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E03:EXCEL) |
-| WK-DMF0003-1210 | D4 | CRUD:E03:INSERT | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — CRUD:E03:INSERT: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E03:INSERT) |
-| WK-DMF0003-1211 | D4 | E01-1 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — E01-1: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (E01-1) |
-| WK-DMF0003-1212 | D4 | E03-3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — E03-3: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (E03-3) |
-| WK-DMF0003-1213 | D4 | HANDLER:InsertRow | 사람 판정 / AS-IS 원문 확인 → 재판정 | D4 기대값 확정 — HANDLER:InsertRow: 행 집계 — D4 5요소: NOT_RUN:5 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:InsertRow) |
-| WK-DMF0003-1214 | D5 | 12 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — 12: 행 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 1 (12) |
-| WK-DMF0003-1215 | D5 | 73 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — 73: 행 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 1 (73) |
-| WK-DMF0003-1216 | D5 | BizType / CustomsHandbook / FcstType / I | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — BizType / CustomsHandbook / FcstType / Incoterms /: 행 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 1 (BizType / CustomsHandbook / FcstType / I) |
-| WK-DMF0003-1217 | D5 | COMMON:UC-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — COMMON:UC-05: 행 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-05) |
-| WK-DMF0003-1218 | D5 | DMF0003_1_MktFcst.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — DMF0003_1_MktFcst.CreateSpread: 진입점 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 10 (ACT:DMF0003_1_MktFcst.CreateSpread:529:1) |
-| WK-DMF0003-1219 | D5 | DMF0003_1_MktFcst.SetSpreadColumn | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — DMF0003_1_MktFcst.SetSpreadColumn: 진입점 집계 — D5 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-1220 | D5 | DMF0003_1_MktFcst.SetSpreadHeaderSpan | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan: 진입점 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 53 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1221 | D5 | DMF0003_1_MktFcst.SetSpreadHeaderSpan_SU | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan_SUB1: 진입점 집계 — D5 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요) |  | 52 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1222 | D5 | E04-3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — E04-3: 행 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 1 (E04-3) |
-| WK-DMF0003-1223 | D5 | EndCustomerByDivision40Team | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — EndCustomerByDivision40Team: 행 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 1 (EndCustomerByDivision40Team) |
-| WK-DMF0003-1224 | D5 | EndCustomerByDivisionDeptAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — EndCustomerByDivisionDeptAuth: 행 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 1 (EndCustomerByDivisionDeptAuth) |
-| WK-DMF0003-1225 | D5 | Measure | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — Measure: 행 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 1 (Measure) |
-| WK-DMF0003-1226 | D5 | SiteByEndCustomer | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — SiteByEndCustomer: 행 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 1 (SiteByEndCustomer) |
-| WK-DMF0003-1227 | D5 | TeambyDivisionAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | D5 기대값 확정 — TeambyDivisionAuth: 행 집계 — D5 46요소: NOT_RUN:46 (미실행 요소가 남아 판정필요) |  | 1 (TeambyDivisionAuth) |
-| WK-DMF0003-1228 | E1 | 18 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E1 기대값 확정 — 18: 행 집계 — E1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (18) |
-| WK-DMF0003-1229 | E1 | 19 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E1 기대값 확정 — 19: 행 집계 — E1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (19) |
-| WK-DMF0003-1230 | E1 | CI-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E1 기대값 확정 — CI-06: 행 집계 — E1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (CI-06) |
-| WK-DMF0003-1231 | E1 | E04-5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E1 기대값 확정 — E04-5: 행 집계 — E1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (E04-5) |
-| WK-DMF0003-1232 | E1 | Events | 사람 판정 / AS-IS 원문 확인 → 재판정 | E1 기대값 확정 — Events: 행 집계 — E1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (Events) |
-| WK-DMF0003-1233 | E1 | HANDLER:spdMain_ClipboardPasted | 사람 판정 / AS-IS 원문 확인 → 재판정 | E1 기대값 확정 — HANDLER:spdMain_ClipboardPasted: 행 집계 — E1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_ClipboardPasted) |
-| WK-DMF0003-1234 | E1 | HANDLER:spdMain_EditChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | E1 기대값 확정 — HANDLER:spdMain_EditChange: 행 집계 — E1 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_EditChange) |
-| WK-DMF0003-1235 | E2 | 날짜기간 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E2 기대값 확정 — 날짜기간: 행 집계 — E2 1요소: NOPATH:1 (미실행 요소가 남아 판정필요) |  | 1 (날짜기간) |
-| WK-DMF0003-1236 | E3 | 10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 10: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (10) |
-| WK-DMF0003-1237 | E3 | 10/12/14 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 10/12/14: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (10/12/14) |
-| WK-DMF0003-1238 | E3 | 106 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 106: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (106) |
-| WK-DMF0003-1239 | E3 | 130 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 130: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (130) |
-| WK-DMF0003-1240 | E3 | 15 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 15: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (15) |
-| WK-DMF0003-1241 | E3 | 16 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 16: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (16) |
-| WK-DMF0003-1242 | E3 | 26/27/28 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 26/27/28: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (26/27/28) |
-| WK-DMF0003-1243 | E3 | 30 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 30: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (30) |
-| WK-DMF0003-1244 | E3 | 31 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 31: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (31) |
-| WK-DMF0003-1245 | E3 | 32 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 32: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (32) |
-| WK-DMF0003-1246 | E3 | 36 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 36: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (36) |
-| WK-DMF0003-1247 | E3 | 37/43 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 37/43: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (37/43) |
-| WK-DMF0003-1248 | E3 | 4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 4: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1249 | E3 | 40 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 40: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (40) |
-| WK-DMF0003-1250 | E3 | 6 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 6: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1251 | E3 | 7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 7: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1252 | E3 | 73 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 73: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (73) |
-| WK-DMF0003-1253 | E3 | 95 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 95: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (95) |
-| WK-DMF0003-1254 | E3 | 99/122 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 99/122: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (99/122) |
-| WK-DMF0003-1255 | E3 | CF-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — CF-05: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (CF-05) |
-| WK-DMF0003-1256 | E3 | CG-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — CG-01: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (CG-01) |
-| WK-DMF0003-1257 | E3 | CH-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — CH-01: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (CH-01) |
-| WK-DMF0003-1258 | E3 | E04-5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — E04-5: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (E04-5) |
-| WK-DMF0003-1259 | E3 | E05-3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — E05-3: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (E05-3) |
-| WK-DMF0003-1260 | E3 | E07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — E07: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (E07) |
-| WK-DMF0003-1261 | E3 | Grid입력 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — Grid입력: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (Grid입력) |
-| WK-DMF0003-1262 | E3 | Validation | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — Validation: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (Validation) |
-| WK-DMF0003-1263 | E3 | `utils/mkt-fcst.validate.ts` | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — `utils/mkt-fcst.validate.ts`: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (`utils/mkt-fcst.validate.ts`) |
-| WK-DMF0003-1264 | E3 | — | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — —: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (—) |
-| WK-DMF0003-1265 | E3 | 기타(사전검증분기) | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 기타(사전검증분기): 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (기타(사전검증분기)) |
-| WK-DMF0003-1266 | E3 | 날짜기간 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 날짜기간: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (날짜기간) |
-| WK-DMF0003-1267 | E3 | 모드분기 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 모드분기: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (모드분기) |
-| WK-DMF0003-1268 | E3 | 사업부분기(40/81/82) | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 사업부분기(40/81/82): 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (사업부분기(40/81/82)) |
-| WK-DMF0003-1269 | E3 | 숫자값검증 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 숫자값검증: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (숫자값검증) |
-| WK-DMF0003-1270 | E3 | 중복체크 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 중복체크: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (중복체크) |
-| WK-DMF0003-1271 | E3 | 필수값 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 필수값: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (필수값) |
-| WK-DMF0003-1272 | E3 | 확인메시지 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — 확인메시지: 행 집계 — E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (확인메시지) |
-| WK-DMF0003-1273 | E4 | 10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 10: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (10) |
-| WK-DMF0003-1274 | E4 | 138 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 138: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (138) |
-| WK-DMF0003-1275 | E4 | 140 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 140: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (140) |
-| WK-DMF0003-1276 | E4 | 141/150 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 141/150: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (141/150) |
-| WK-DMF0003-1277 | E4 | 144 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 144: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (144) |
-| WK-DMF0003-1278 | E4 | 145 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 145: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (145) |
-| WK-DMF0003-1279 | E4 | 146 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 146: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (146) |
-| WK-DMF0003-1280 | E4 | 148 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 148: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (148) |
-| WK-DMF0003-1281 | E4 | 149 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 149: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (149) |
-| WK-DMF0003-1282 | E4 | 15 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 15: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (15) |
-| WK-DMF0003-1283 | E4 | 16 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 16: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (16) |
-| WK-DMF0003-1284 | E4 | 4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 4: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1285 | E4 | 6 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 6: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1286 | E4 | 7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 7: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1287 | E4 | 99/122 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 99/122: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (99/122) |
-| WK-DMF0003-1288 | E4 | CF-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — CF-06: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (CF-06) |
-| WK-DMF0003-1289 | E4 | DMF0003_1_MktFcst.SetSaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — DMF0003_1_MktFcst.SetSaveData: 진입점 집계 — E4 3요소: NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 50 (ACT:DMF0003_1_MktFcst.SetSaveData:4651:2) |
-| WK-DMF0003-1290 | E4 | DMF0003_1_MktFcst.SetSaveDataRemove | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — DMF0003_1_MktFcst.SetSaveDataRemove: 진입점 집계 — E4 1요소: NOT_RUN:1 (미실행 요소가 남아 판정필요) |  | 30 (ACT:DMF0003_1_MktFcst.SetSaveDataRemove:) |
-| WK-DMF0003-1291 | E4 | DMF0003_1_MktFcst.SetSaveSheetColor | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — DMF0003_1_MktFcst.SetSaveSheetColor: 진입점 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.SetSaveSheetColor:) |
-| WK-DMF0003-1292 | E4 | DMF0003_1_MktFcst.SetSpreadColumn | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — DMF0003_1_MktFcst.SetSpreadColumn: 진입점 집계 — E4 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.SetSpreadColumn:50) |
-| WK-DMF0003-1293 | E4 | DMF0003_1_MktFcst.SetSpreadHeaderSpan | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan: 진입점 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 53 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1294 | E4 | DMF0003_1_MktFcst.SetSpreadHeaderSpan_SU | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan_SUB1: 진입점 집계 — E4 2요소: NOT_RUN:2 (미실행 요소가 남아 판정필요) |  | 52 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1295 | E4 | E04-5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — E04-5: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (E04-5) |
-| WK-DMF0003-1296 | E4 | E07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — E07: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (E07) |
-| WK-DMF0003-1297 | E4 | Grid입력 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — Grid입력: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (Grid입력) |
-| WK-DMF0003-1298 | E4 | Validation | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — Validation: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (Validation) |
-| WK-DMF0003-1299 | E4 | `utils/mkt-fcst.validate.ts` | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — `utils/mkt-fcst.validate.ts`: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (`utils/mkt-fcst.validate.ts`) |
-| WK-DMF0003-1300 | E4 | 기타(사전검증분기) | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 기타(사전검증분기): 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (기타(사전검증분기)) |
-| WK-DMF0003-1301 | E4 | 날짜기간 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 날짜기간: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (날짜기간) |
-| WK-DMF0003-1302 | E4 | 모드분기 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 모드분기: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (모드분기) |
-| WK-DMF0003-1303 | E4 | 사업부분기(40/81/82) | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 사업부분기(40/81/82): 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (사업부분기(40/81/82)) |
-| WK-DMF0003-1304 | E4 | 중복체크 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 중복체크: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (중복체크) |
-| WK-DMF0003-1305 | E4 | 필수값 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 필수값: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (필수값) |
-| WK-DMF0003-1306 | E4 | 확인메시지 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E4 기대값 확정 — 확인메시지: 행 집계 — E4 99요소: NOT_RUN:99 (미실행 요소가 남아 판정필요) |  | 1 (확인메시지) |
-| WK-DMF0003-1307 | E5 | 12 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E5 기대값 확정 — 12: 행 집계 — E5 5요소: NOPATH:5 (미실행 요소가 남아 판정필요) |  | 1 (12) |
-| WK-DMF0003-1308 | E5 | 73 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E5 기대값 확정 — 73: 행 집계 — E5 5요소: NOPATH:5 (미실행 요소가 남아 판정필요) |  | 1 (73) |
-| WK-DMF0003-1309 | E5 | BizType / CustomsHandbook / FcstType / I | 사람 판정 / AS-IS 원문 확인 → 재판정 | E5 기대값 확정 — BizType / CustomsHandbook / FcstType / Incoterms /: 행 집계 — E5 5요소: NOPATH:5 (미실행 요소가 남아 판정필요) |  | 1 (BizType / CustomsHandbook / FcstType / I) |
-| WK-DMF0003-1310 | E5 | COMMON:UC-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E5 기대값 확정 — COMMON:UC-05: 행 집계 — E5 5요소: NOPATH:5 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-05) |
-| WK-DMF0003-1311 | E5 | E04-3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | E5 기대값 확정 — E04-3: 행 집계 — E5 5요소: NOPATH:5 (미실행 요소가 남아 판정필요) |  | 1 (E04-3) |
-| WK-DMF0003-1312 | E5 | EndCustomerByDivision40Team | 사람 판정 / AS-IS 원문 확인 → 재판정 | E5 기대값 확정 — EndCustomerByDivision40Team: 행 집계 — E5 5요소: NOPATH:5 (미실행 요소가 남아 판정필요) |  | 1 (EndCustomerByDivision40Team) |
-| WK-DMF0003-1313 | E5 | EndCustomerByDivisionDeptAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | E5 기대값 확정 — EndCustomerByDivisionDeptAuth: 행 집계 — E5 5요소: NOPATH:5 (미실행 요소가 남아 판정필요) |  | 1 (EndCustomerByDivisionDeptAuth) |
-| WK-DMF0003-1314 | E5 | Measure | 사람 판정 / AS-IS 원문 확인 → 재판정 | E5 기대값 확정 — Measure: 행 집계 — E5 5요소: NOPATH:5 (미실행 요소가 남아 판정필요) |  | 1 (Measure) |
-| WK-DMF0003-1315 | E5 | SiteByEndCustomer | 사람 판정 / AS-IS 원문 확인 → 재판정 | E5 기대값 확정 — SiteByEndCustomer: 행 집계 — E5 5요소: NOPATH:5 (미실행 요소가 남아 판정필요) |  | 1 (SiteByEndCustomer) |
-| WK-DMF0003-1316 | E5 | TeambyDivisionAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | E5 기대값 확정 — TeambyDivisionAuth: 행 집계 — E5 5요소: NOPATH:5 (미실행 요소가 남아 판정필요) |  | 1 (TeambyDivisionAuth) |
-| WK-DMF0003-1317 | A1 | 15 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — 15: 행 집계 — A1 18요소: REVIEW:18 |  | 0 () |
-| WK-DMF0003-1318 | A1 | 2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — 2: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (2) |
-| WK-DMF0003-1319 | A1 | 34 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — 34: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (34) |
-| WK-DMF0003-1320 | A1 | 6 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — 6: 행 집계 — A1 18요소: REVIEW:18 |  | 0 () |
-| WK-DMF0003-1321 | A1 | 6. HTTP E2E | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — 6. HTTP E2E: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (6. HTTP E2E) |
-| WK-DMF0003-1322 | A1 | AS_FROM_SITE | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — AS_FROM_SITE: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (AS_FROM_SITE) |
-| WK-DMF0003-1323 | A1 | CA-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CA-07: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CA-07) |
-| WK-DMF0003-1324 | A1 | CD-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CD-03: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CD-03) |
-| WK-DMF0003-1325 | A1 | CE-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CE-05: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CE-05) |
-| WK-DMF0003-1326 | A1 | CF-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CF-05: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CF-05) |
-| WK-DMF0003-1327 | A1 | CF-102 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CF-102: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CF-102) |
-| WK-DMF0003-1328 | A1 | CF-103 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CF-103: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CF-103) |
-| WK-DMF0003-1329 | A1 | CF-104 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CF-104: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CF-104) |
-| WK-DMF0003-1330 | A1 | CF-105 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CF-105: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CF-105) |
-| WK-DMF0003-1331 | A1 | CG-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CG-07: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CG-07) |
-| WK-DMF0003-1332 | A1 | CH-09 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CH-09: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CH-09) |
-| WK-DMF0003-1333 | A1 | CI-02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CI-02: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CI-02) |
-| WK-DMF0003-1334 | A1 | CI-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CI-07: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CI-07) |
-| WK-DMF0003-1335 | A1 | CK-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CK-06: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CK-06) |
-| WK-DMF0003-1336 | A1 | CK-10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CK-10: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CK-10) |
-| WK-DMF0003-1337 | A1 | COMMON:UC-02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — COMMON:UC-02: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (COMMON:UC-02) |
-| WK-DMF0003-1338 | A1 | COMMON:UC-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — COMMON:UC-03: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (COMMON:UC-03) |
-| WK-DMF0003-1339 | A1 | COMMON:UC-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — COMMON:UC-06: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (COMMON:UC-06) |
-| WK-DMF0003-1340 | A1 | COMMON:UC-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — COMMON:UC-07: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (COMMON:UC-07) |
-| WK-DMF0003-1341 | A1 | CRUD:E02:SEARCH | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CRUD:E02:SEARCH: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (CRUD:E02:SEARCH) |
-| WK-DMF0003-1342 | A1 | DMF0000_GET_MASTER_CHG_POPUP | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — DMF0000_GET_MASTER_CHG_POPUP: 골든 비교 케이스 없음(DMF0000_GET_MASTER_CHG_POPUP — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케 |  | 49 (CH-108 ACT:DMF0003_MatsterChgPopup.FindB) |
-| WK-DMF0003-1343 | A1 | DMF0003_CustDemandAnalysis.FindDataMain | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — DMF0003_CustDemandAnalysis.FindDataMain: 진입점 집계 — A1 18요소: REVIEW:18 |  | 1 (ACT:DMF0003_CustDemandAnalysis.FindDataM) |
-| WK-DMF0003-1344 | A1 | DMF0003_GET_BUCKET_TYPE_CODE | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — DMF0003_GET_BUCKET_TYPE_CODE: 골든 비교 케이스 없음(DMF0003_GET_BUCKET_TYPE_CODE — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케 |  | 1 (CK-04) |
-| WK-DMF0003-1345 | A1 | DMF0003_MktFcst.Draw | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — DMF0003_MktFcst.Draw: 진입점 집계 — A1 18요소: REVIEW:18 |  | 1 (ACT:DMF0003_MktFcst.Draw:1961:8) |
-| WK-DMF0003-1346 | A1 | DMF0003_SspSyncComparePopUp.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — DMF0003_SspSyncComparePopUp.FindData: 진입점 집계 — A1 18요소: REVIEW:18 |  | 1 (ACT:DMF0003_SspSyncComparePopUp.FindData) |
-| WK-DMF0003-1347 | A1 | DMF0003_SspSyncPopUp.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — DMF0003_SspSyncPopUp.FindData: 진입점 집계 — A1 18요소: REVIEW:18 |  | 1 (ACT:DMF0003_SspSyncPopUp.FindData) |
-| WK-DMF0003-1348 | A1 | E01-1 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — E01-1: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (E01-1) |
-| WK-DMF0003-1349 | A1 | E02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — E02: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (E02) |
-| WK-DMF0003-1350 | A1 | HANDLER:FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:FindData: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (HANDLER:FindData) |
-| WK-DMF0003-1351 | A1 | HANDLER:OnShown | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:OnShown: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (HANDLER:OnShown) |
-| WK-DMF0003-1352 | A1 | HANDLER:btnItemId_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:btnItemId_Click: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (HANDLER:btnItemId_Click) |
-| WK-DMF0003-1353 | A1 | HANDLER:btnOwner_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:btnOwner_Click: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (HANDLER:btnOwner_Click) |
-| WK-DMF0003-1354 | A1 | HANDLER:btnProject_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:btnProject_Click: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (HANDLER:btnProject_Click) |
-| WK-DMF0003-1355 | A1 | HANDLER:spdMain_CellClick | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:spdMain_CellClick: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (HANDLER:spdMain_CellClick) |
-| WK-DMF0003-1356 | A1 | PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_ | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE: 골든 비교 케이스 없음(PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE — 팝업·보조 SP 는 |  | 46 (ACT:DMF0003_MatsterChgPopup.FindButton A) |
-| WK-DMF0003-1357 | A1 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_REF | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_REF: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_REF — 팝업·보조 SP 는 golden_ca |  | 1 (ACT:DMF0003_1_MktFcst.CAR_REF_DATA:6602:) |
-| WK-DMF0003-1358 | A1 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC — 팝업 |  | 1 (ACT:DMF0003_1_MktFcst.PSI_FindData:6968:) |
-| WK-DMF0003-1359 | A1 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DATA: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DATA — 팝업·보조 SP 는 |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-1360 | A1 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT — 팝업·보조  |  | 1 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
-| WK-DMF0003-1361 | A1 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT — 팝업 |  | 1 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
-| WK-DMF0003-1362 | A1 | PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPA | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPARE_POPUP: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPARE_POPUP — 팝업·보 |  | 3 (CH-105 CK-05 ACT:DMF0003_1_MktFcst.spdMa) |
-| WK-DMF0003-1363 | A1 | PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA — 팝업·보조 SP 는 golden_case |  | 297 (CK-01 ACT:DMF0003_1_MktFcst.FindButton A) |
-| WK-DMF0003-1364 | A1 | PKG_DMF0003.P_DMF0003_GET_PRPOPUP | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_PRPOPUP: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_PRPOPUP — 팝업·보조 SP 는 golden_cases.csv 에 FE 실 |  | 42 (CH-102 CK-11 ACT:DMF0003_PRPopup.FindDat) |
-| WK-DMF0003-1365 | A1 | PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POP | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POPUP: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POPUP — 팝업·보조 SP 는 golde |  | 35 (CH-103 ACT:DMF0003_PRHistoryPopup.FindDa) |
-| WK-DMF0003-1366 | A1 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE — 팝업·보조 SP 는 golden_cases. |  | 288 (CK-03 ACT:DMF0003_1_MktFcst.FindButton A) |
-| WK-DMF0003-1367 | A1 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_C | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_CAR: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_CAR — 팝업·보조 SP 는 golde |  | 107 (ACT:DMF0003_1_MktFcst.FindButton ACT:DMF) |
-| WK-DMF0003-1368 | A1 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_P | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_PSI: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_PSI — 팝업·보조 SP 는 golde |  | 107 (ACT:DMF0003_1_MktFcst.FindButton ACT:DMF) |
-| WK-DMF0003-1369 | A1 | SCM0001_GET_BIZ_TYPE_BY_DIVISION | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — SCM0001_GET_BIZ_TYPE_BY_DIVISION: 골든 비교 케이스 없음(SCM0001_GET_BIZ_TYPE_BY_DIVISION — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 |  | 1 (CK-08) |
-| WK-DMF0003-1370 | A1 | SCM0001_GET_LOOKUP_VALUES | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — SCM0001_GET_LOOKUP_VALUES: 골든 비교 케이스 없음(SCM0001_GET_LOOKUP_VALUES — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가  |  | 1 (CK-07) |
-| WK-DMF0003-1371 | A1 | UP_FX | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — UP_FX: 골든 비교 케이스 없음(UP_FX — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요) |  | 1 (CD-10) |
-| WK-DMF0003-1372 | A1 | `components/MktFcstForm.tsx` | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — `components/MktFcstForm.tsx`: 행 집계 — A1 18요소: REVIEW:18 |  | 1 (`components/MktFcstForm.tsx`) |
-| WK-DMF0003-1373 | A1 | — | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — —: 행 집계 — A1 18요소: REVIEW:18 |  | 0 () |
-| WK-DMF0003-1374 | A6 | 34 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — 34: 행 집계 — A6 12요소: NOT_RUN:12 (미실행 요소가 남아 판정필요) |  | 1 (34) |
-| WK-DMF0003-1375 | A6 | 6 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — 6: 행 집계 — A6 12요소: NOT_RUN:12 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1376 | A6 | CK-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — CK-06: 행 집계 — A6 12요소: NOT_RUN:12 (미실행 요소가 남아 판정필요) |  | 1 (CK-06) |
-| WK-DMF0003-1377 | A6 | CRUD:E02:SEARCH | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — CRUD:E02:SEARCH: 행 집계 — A6 12요소: NOT_RUN:12 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E02:SEARCH) |
-| WK-DMF0003-1378 | A6 | DMF0003_CustDemandAnalysis.FindDataMain | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — DMF0003_CustDemandAnalysis.FindDataMain: 진입점 집계 — A6 12요소: NOT_RUN:12 (미실행 요소가 남아 판정필요) |  | 1 (ACT:DMF0003_CustDemandAnalysis.FindDataM) |
-| WK-DMF0003-1379 | A6 | DMF0003_SspSyncComparePopUp.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — DMF0003_SspSyncComparePopUp.FindData: 진입점 집계 — A6 12요소: NOT_RUN:12 (미실행 요소가 남아 판정필요) |  | 1 (ACT:DMF0003_SspSyncComparePopUp.FindData) |
-| WK-DMF0003-1380 | A6 | DMF0003_SspSyncPopUp.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — DMF0003_SspSyncPopUp.FindData: 진입점 집계 — A6 12요소: NOT_RUN:12 (미실행 요소가 남아 판정필요) |  | 1 (ACT:DMF0003_SspSyncPopUp.FindData) |
-| WK-DMF0003-1381 | A6 | E02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — E02: 행 집계 — A6 12요소: NOT_RUN:12 (미실행 요소가 남아 판정필요) |  | 1 (E02) |
-| WK-DMF0003-1382 | A6 | HANDLER:FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — HANDLER:FindData: 행 집계 — A6 12요소: NOT_RUN:12 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:FindData) |
-| WK-DMF0003-1383 | G1 | 15 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — 15: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1384 | G1 | 2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — 2: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (2) |
-| WK-DMF0003-1385 | G1 | 34 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — 34: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (34) |
-| WK-DMF0003-1386 | G1 | 6 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — 6: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1387 | G1 | 6. HTTP E2E | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — 6. HTTP E2E: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (6. HTTP E2E) |
-| WK-DMF0003-1388 | G1 | AS_FROM_SITE | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — AS_FROM_SITE: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (AS_FROM_SITE) |
-| WK-DMF0003-1389 | G1 | CA-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CA-07: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CA-07) |
-| WK-DMF0003-1390 | G1 | CD-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CD-03: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CD-03) |
-| WK-DMF0003-1391 | G1 | CD-10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CD-10: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CD-10) |
-| WK-DMF0003-1392 | G1 | CE-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CE-05: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CE-05) |
-| WK-DMF0003-1393 | G1 | CF-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CF-05: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CF-05) |
-| WK-DMF0003-1394 | G1 | CF-102 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CF-102: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CF-102) |
-| WK-DMF0003-1395 | G1 | CF-103 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CF-103: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CF-103) |
-| WK-DMF0003-1396 | G1 | CF-104 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CF-104: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CF-104) |
-| WK-DMF0003-1397 | G1 | CF-105 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CF-105: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CF-105) |
-| WK-DMF0003-1398 | G1 | CG-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CG-07: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CG-07) |
-| WK-DMF0003-1399 | G1 | CH-09 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CH-09: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CH-09) |
-| WK-DMF0003-1400 | G1 | CI-02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CI-02: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CI-02) |
-| WK-DMF0003-1401 | G1 | CI-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CI-07: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CI-07) |
-| WK-DMF0003-1402 | G1 | CK-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CK-01: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CK-01) |
-| WK-DMF0003-1403 | G1 | CK-10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CK-10: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CK-10) |
-| WK-DMF0003-1404 | G1 | COMMON:UC-02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — COMMON:UC-02: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-02) |
-| WK-DMF0003-1405 | G1 | COMMON:UC-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — COMMON:UC-03: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-03) |
-| WK-DMF0003-1406 | G1 | COMMON:UC-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — COMMON:UC-06: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-06) |
-| WK-DMF0003-1407 | G1 | COMMON:UC-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — COMMON:UC-07: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-07) |
-| WK-DMF0003-1408 | G1 | CRUD:E02:SEARCH | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — CRUD:E02:SEARCH: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CRUD:E02:SEARCH) |
-| WK-DMF0003-1409 | G1 | E01-1 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — E01-1: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (E01-1) |
-| WK-DMF0003-1410 | G1 | E02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — E02: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (E02) |
-| WK-DMF0003-1411 | G1 | HANDLER:OnShown | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — HANDLER:OnShown: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:OnShown) |
-| WK-DMF0003-1412 | G1 | HANDLER:btnItemId_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — HANDLER:btnItemId_Click: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:btnItemId_Click) |
-| WK-DMF0003-1413 | G1 | HANDLER:btnOwner_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — HANDLER:btnOwner_Click: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:btnOwner_Click) |
-| WK-DMF0003-1414 | G1 | HANDLER:btnProject_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — HANDLER:btnProject_Click: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:btnProject_Click) |
-| WK-DMF0003-1415 | G1 | HANDLER:spdMain_CellClick | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — HANDLER:spdMain_CellClick: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:spdMain_CellClick) |
-| WK-DMF0003-1416 | G1 | `components/MktFcstForm.tsx` | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — `components/MktFcstForm.tsx`: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (`components/MktFcstForm.tsx`) |
-| WK-DMF0003-1417 | G1 | — | 사람 판정 / AS-IS 원문 확인 → 재판정 | G1 기대값 확정 — —: 행 집계 — G1 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 0 () |
-| WK-DMF0003-1418 | G6 | CD-10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G6 기대값 확정 — CD-10: 행 집계 — G6 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CD-10) |
-| WK-DMF0003-1419 | G6 | CK-10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G6 기대값 확정 — CK-10: 행 집계 — G6 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (CK-10) |
-| WK-DMF0003-1420 | G6 | COMMON:UC-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G6 기대값 확정 — COMMON:UC-06: 행 집계 — G6 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (COMMON:UC-06) |
-| WK-DMF0003-1421 | G6 | E01-1 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G6 기대값 확정 — E01-1: 행 집계 — G6 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (E01-1) |
-| WK-DMF0003-1422 | G6 | HANDLER:btnItemId_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | G6 기대값 확정 — HANDLER:btnItemId_Click: 행 집계 — G6 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:btnItemId_Click) |
-| WK-DMF0003-1423 | G6 | HANDLER:btnOwner_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | G6 기대값 확정 — HANDLER:btnOwner_Click: 행 집계 — G6 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:btnOwner_Click) |
-| WK-DMF0003-1424 | G6 | HANDLER:btnProject_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | G6 기대값 확정 — HANDLER:btnProject_Click: 행 집계 — G6 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (HANDLER:btnProject_Click) |
-| WK-DMF0003-1425 | G6 | `components/MktFcstForm.tsx` | 사람 판정 / AS-IS 원문 확인 → 재판정 | G6 기대값 확정 — `components/MktFcstForm.tsx`: 행 집계 — G6 18요소: NOT_RUN:18 (미실행 요소가 남아 판정필요) |  | 1 (`components/MktFcstForm.tsx`) |
-| WK-DMF0003-1426 | X-LOC | 10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 10: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (10) |
-| WK-DMF0003-1427 | X-LOC | 2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 2: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (2) |
-| WK-DMF0003-1428 | X-LOC | 26/27/28 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 26/27/28: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (26/27/28) |
-| WK-DMF0003-1429 | X-LOC | 3. 배선 체인 L7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 3. 배선 체인 L7: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (3. 배선 체인 L7) |
-| WK-DMF0003-1430 | X-LOC | 34 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 34: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (34) |
-| WK-DMF0003-1431 | X-LOC | 4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 4: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (4) |
-| WK-DMF0003-1432 | X-LOC | 5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 5: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (5) |
-| WK-DMF0003-1433 | X-LOC | 6 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 6: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (6) |
-| WK-DMF0003-1434 | X-LOC | 6. HTTP E2E | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 6. HTTP E2E: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (6. HTTP E2E) |
-| WK-DMF0003-1435 | X-LOC | 7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 7: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (7) |
-| WK-DMF0003-1436 | X-LOC | 7. 콤보 파라미터 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 7. 콤보 파라미터: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (7. 콤보 파라미터) |
-| WK-DMF0003-1437 | X-LOC | 73 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 73: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (73) |
-| WK-DMF0003-1438 | X-LOC | 8 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 8: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (8) |
-| WK-DMF0003-1439 | X-LOC | 8. 콤보 호출지점 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 8. 콤보 호출지점: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (8. 콤보 호출지점) |
-| WK-DMF0003-1440 | X-LOC | 81 Plant Site 편집 후보 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 81 Plant Site 편집 후보: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (81 Plant Site 편집 후보) |
-| WK-DMF0003-1441 | X-LOC | 8주 잠금(40 Monthly) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 8주 잠금(40 Monthly): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (8주 잠금(40 Monthly)) |
-| WK-DMF0003-1442 | X-LOC | 9 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 9: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (9) |
-| WK-DMF0003-1443 | X-LOC | AS_FROM_SITE | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — AS_FROM_SITE: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (AS_FROM_SITE) |
-| WK-DMF0003-1444 | X-LOC | BizType / CustomsHandbook / FcstType / I | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — BizType / CustomsHandbook / FcstType / Incoterms /: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (BizType / CustomsHandbook / FcstType / I) |
-| WK-DMF0003-1445 | X-LOC | Div40 Sales Site 편집 후보 (`endCustomer='HP | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — Div40 Sales Site 편집 후보 (`endCustomer='HP'`): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (Div40 Sales Site 편집 후보 (`endCustomer='HP) |
-| WK-DMF0003-1446 | X-LOC | EndCustomerByDivision40Team | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — EndCustomerByDivision40Team: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (EndCustomerByDivision40Team) |
-| WK-DMF0003-1447 | X-LOC | EndCustomerByDivisionDeptAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — EndCustomerByDivisionDeptAuth: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (EndCustomerByDivisionDeptAuth) |
-| WK-DMF0003-1448 | X-LOC | Events | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — Events: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (Events) |
-| WK-DMF0003-1449 | X-LOC | Expressions | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — Expressions: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (Expressions) |
-| WK-DMF0003-1450 | X-LOC | Measure | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — Measure: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (Measure) |
-| WK-DMF0003-1451 | X-LOC | PlantByDivisionCompany | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — PlantByDivisionCompany: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (PlantByDivisionCompany) |
-| WK-DMF0003-1452 | X-LOC | PlantSite 필수(81만) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — PlantSite 필수(81만): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (PlantSite 필수(81만)) |
-| WK-DMF0003-1453 | X-LOC | PlantSiteByItem | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — PlantSiteByItem: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (PlantSiteByItem) |
-| WK-DMF0003-1454 | X-LOC | Popup | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — Popup: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (Popup) |
-| WK-DMF0003-1455 | X-LOC | SiteByEndCustomer | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — SiteByEndCustomer: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (SiteByEndCustomer) |
-| WK-DMF0003-1456 | X-LOC | SiteByEndCustomerAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — SiteByEndCustomerAuth: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (SiteByEndCustomerAuth) |
-| WK-DMF0003-1457 | X-LOC | SspSync(40 & MKT_FCST_RP) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — SspSync(40 & MKT_FCST_RP): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (SspSync(40 & MKT_FCST_RP)) |
-| WK-DMF0003-1458 | X-LOC | TeambyDivisionAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — TeambyDivisionAuth: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (TeambyDivisionAuth) |
-| WK-DMF0003-1459 | X-LOC | VMI_YN/STD_DIO 표시(82만) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — VMI_YN/STD_DIO 표시(82만): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (VMI_YN/STD_DIO 표시(82만)) |
-| WK-DMF0003-1460 | X-LOC | `Substring(0,2)=="81"` / `=="82"` / else | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — `Substring(0,2)=="81"` / `=="82"` / else(40): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (`Substring(0,2)=="81"` / `=="82"` / else) |
-| WK-DMF0003-1461 | X-LOC | `__asis-mapping__.md` | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — `__asis-mapping__.md`: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (`__asis-mapping__.md`) |
-| WK-DMF0003-1462 | X-LOC | `_artifacts/_apply_corporate/40_dmf0003_ | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — `_artifacts/_apply_corporate/40_dmf0003_i18n_regis: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (`_artifacts/_apply_corporate/40_dmf0003_) |
-| WK-DMF0003-1463 | X-LOC | `components/modals/{PrModal,PrHistoryMod | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — `components/modals/{PrModal,PrHistoryModal,SspSync: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (`components/modals/{PrModal,PrHistoryMod) |
-| WK-DMF0003-1464 | X-LOC | `public/locales/{KO,EN,CN}.json` | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — `public/locales/{KO,EN,CN}.json`: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (`public/locales/{KO,EN,CN}.json`) |
-| WK-DMF0003-1465 | X-LOC | iDailyQty/iRemnant 분배 (#103/104/107/108/ | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iDailyQty/iRemnant 분배 (#103/104/107/108/110): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iDailyQty/iRemnant 분배 (#103/104/107/108/) |
-| WK-DMF0003-1466 | X-LOC | iLastWeeklySum 과거합 (#115/116/117) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iLastWeeklySum 과거합 (#115/116/117): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iLastWeeklySum 과거합 (#115/116/117)) |
-| WK-DMF0003-1467 | X-LOC | iMonthlySum 누적/세팅 (#98/99/112/127) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iMonthlySum 누적/세팅 (#98/99/112/127): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iMonthlySum 누적/세팅 (#98/99/112/127)) |
-| WK-DMF0003-1468 | X-LOC | iMonthlySum-iLastWeeklySum 분배 (#118/119) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iMonthlySum-iLastWeeklySum 분배 (#118/119): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iMonthlySum-iLastWeeklySum 분배 (#118/119)) |
-| WK-DMF0003-1469 | X-LOC | iWeeklySum 누적/세팅 (#96/97/122/125) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iWeeklySum 누적/세팅 (#96/97/122/125): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iWeeklySum 누적/세팅 (#96/97/122/125)) |
-| WK-DMF0003-1470 | X-LOC | iWkSum_Sync 강제상향 (#102/105/106) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iWkSum_Sync 강제상향 (#102/105/106): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iWkSum_Sync 강제상향 (#102/105/106)) |
-| WK-DMF0003-1471 | X-LOC | 중복키 81=+PlantSite / 82=제외 / 40=Customer4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 중복키 81=+PlantSite / 82=제외 / 40=Customer40계열: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (중복키 81=+PlantSite / 82=제외 / 40=Customer4) |
-| WK-DMF0003-1472 | X-LOC | 키 컬럼 40=Customer40/ScmSiteId40/ItemId40  | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 키 컬럼 40=Customer40/ScmSiteId40/ItemId40 vs 81·82=P: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (키 컬럼 40=Customer40/ScmSiteId40/ItemId40 ) |
-| WK-DMF0003-1473 | X-ROW | 1 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 1: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 0 () |
-| WK-DMF0003-1474 | X-ROW | 2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 2: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 0 () |
-| WK-DMF0003-1475 | X-ROW | 20 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 20: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (20) |
-| WK-DMF0003-1476 | X-ROW | 21 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 21: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (21) |
-| WK-DMF0003-1477 | X-ROW | 24 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 24: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (24) |
-| WK-DMF0003-1478 | X-ROW | 25 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 25: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (25) |
-| WK-DMF0003-1479 | X-ROW | 26 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 26: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (26) |
-| WK-DMF0003-1480 | X-ROW | 3 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 3: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 0 () |
-| WK-DMF0003-1481 | X-ROW | 5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 5: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 0 () |
-| WK-DMF0003-1482 | X-ROW | C-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-01: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-01) |
-| WK-DMF0003-1483 | X-ROW | C-02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-02: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-02) |
-| WK-DMF0003-1484 | X-ROW | C-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-03: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-03) |
-| WK-DMF0003-1485 | X-ROW | C-04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-04: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-04) |
-| WK-DMF0003-1486 | X-ROW | C-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-05: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-05) |
-| WK-DMF0003-1487 | X-ROW | C-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-06: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-06) |
-| WK-DMF0003-1488 | X-ROW | C-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-07: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-07) |
-| WK-DMF0003-1489 | X-ROW | C-08 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-08: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-08) |
-| WK-DMF0003-1490 | X-ROW | C-09 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-09: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-09) |
-| WK-DMF0003-1491 | X-ROW | C-10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-10: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-10) |
-| WK-DMF0003-1492 | X-ROW | C-105 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-105: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-105) |
-| WK-DMF0003-1493 | X-ROW | C-107 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-107: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-107) |
-| WK-DMF0003-1494 | X-ROW | C-109 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-109: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-109) |
-| WK-DMF0003-1495 | X-ROW | C-11 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-11: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-11) |
-| WK-DMF0003-1496 | X-ROW | C-110 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-110: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-110) |
-| WK-DMF0003-1497 | X-ROW | C-111 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-111: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-111) |
-| WK-DMF0003-1498 | X-ROW | C-112 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-112: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-112) |
-| WK-DMF0003-1499 | X-ROW | C-12 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-12: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-12) |
-| WK-DMF0003-1500 | X-ROW | C-120 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-120: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-120) |
-| WK-DMF0003-1501 | X-ROW | C-123 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-123: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-123) |
-| WK-DMF0003-1502 | X-ROW | C-13 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — C-13: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (C-13) |
-| WK-DMF0003-1503 | X-ROW | CA-101 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CA-101: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CA-101) |
-| WK-DMF0003-1504 | X-ROW | CA-117 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CA-117: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CA-117) |
-| WK-DMF0003-1505 | X-ROW | CB-101 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CB-101: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CB-101) |
-| WK-DMF0003-1506 | X-ROW | CC-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CC-01: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CC-01) |
-| WK-DMF0003-1507 | X-ROW | CC-02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CC-02: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CC-02) |
-| WK-DMF0003-1508 | X-ROW | CC-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CC-03: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CC-03) |
-| WK-DMF0003-1509 | X-ROW | CC-04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CC-04: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CC-04) |
-| WK-DMF0003-1510 | X-ROW | CC-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CC-06: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CC-06) |
-| WK-DMF0003-1511 | X-ROW | CC-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CC-07: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CC-07) |
-| WK-DMF0003-1512 | X-ROW | CC-08 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CC-08: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CC-08) |
-| WK-DMF0003-1513 | X-ROW | CC-103 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CC-103: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CC-103) |
-| WK-DMF0003-1514 | X-ROW | CD-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CD-01: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CD-01) |
-| WK-DMF0003-1515 | X-ROW | CD-04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CD-04: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CD-04) |
-| WK-DMF0003-1516 | X-ROW | CD-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CD-06: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CD-06) |
-| WK-DMF0003-1517 | X-ROW | CD-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CD-07: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CD-07) |
-| WK-DMF0003-1518 | X-ROW | CD-11 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CD-11: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CD-11) |
-| WK-DMF0003-1519 | X-ROW | CE-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CE-01: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CE-01) |
-| WK-DMF0003-1520 | X-ROW | CE-103 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CE-103: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CE-103) |
-| WK-DMF0003-1521 | X-ROW | CE-108 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CE-108: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CE-108) |
-| WK-DMF0003-1522 | X-ROW | CE-109 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CE-109: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CE-109) |
-| WK-DMF0003-1523 | X-ROW | CE-111 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CE-111: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CE-111) |
-| WK-DMF0003-1524 | X-ROW | CE-112 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CE-112: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CE-112) |
-| WK-DMF0003-1525 | X-ROW | CE-113 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CE-113: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CE-113) |
-| WK-DMF0003-1526 | X-ROW | CE-114 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CE-114: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CE-114) |
-| WK-DMF0003-1527 | X-ROW | CG-04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CG-04: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CG-04) |
-| WK-DMF0003-1528 | X-ROW | CG-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CG-06: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CG-06) |
-| WK-DMF0003-1529 | X-ROW | CG-101 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CG-101: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CG-101) |
-| WK-DMF0003-1530 | X-ROW | CG-104 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CG-104: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CG-104) |
-| WK-DMF0003-1531 | X-ROW | CG-106 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CG-106: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CG-106) |
-| WK-DMF0003-1532 | X-ROW | CG-110 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CG-110: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CG-110) |
-| WK-DMF0003-1533 | X-ROW | CG-116 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CG-116: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CG-116) |
-| WK-DMF0003-1534 | X-ROW | CG-118 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CG-118: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CG-118) |
-| WK-DMF0003-1535 | X-ROW | CG-119 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CG-119: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CG-119) |
-| WK-DMF0003-1536 | X-ROW | CH-04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CH-04: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CH-04) |
-| WK-DMF0003-1537 | X-ROW | CH-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CH-05: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CH-05) |
-| WK-DMF0003-1538 | X-ROW | CH-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CH-06: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CH-06) |
-| WK-DMF0003-1539 | X-ROW | CI-01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CI-01: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CI-01) |
-| WK-DMF0003-1540 | X-ROW | CI-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CI-03: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CI-03) |
-| WK-DMF0003-1541 | X-ROW | CI-04 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CI-04: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CI-04) |
-| WK-DMF0003-1542 | X-ROW | CI-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CI-05: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CI-05) |
-| WK-DMF0003-1543 | X-ROW | CJ-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — CJ-03: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (CJ-03) |
-| WK-DMF0003-1544 | X-ROW | DMF0003_1_MktFcst.CAR_PROPERTY | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.CAR_PROPERTY: 진입점 집계 3검사 — NOT_RUN:2 · PASS:1 (미실행 검사가 남아 판정필요) |  | 13 (ACT:DMF0003_1_MktFcst.CAR_PROPERTY ACT:D) |
-| WK-DMF0003-1545 | X-ROW | DMF0003_1_MktFcst.CAR_REF_DATA | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.CAR_REF_DATA: 진입점 집계 5검사 — NOT_RUN:3 · PASS:1 · REVIEW:1 |  | 43 (ACT:DMF0003_1_MktFcst.CAR_REF_DATA ACT:D) |
-| WK-DMF0003-1546 | X-ROW | DMF0003_1_MktFcst.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.CreateSpread: 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.CreateSpread) |
-| WK-DMF0003-1547 | X-ROW | DMF0003_1_MktFcst.DefineProperty | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.DefineProperty: 진입점 집계 7검사 — NOT_RUN:5 · NOPATH:2 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_1_MktFcst.DefineProperty:483) |
-| WK-DMF0003-1548 | X-ROW | DMF0003_1_MktFcst.EditButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.EditButton: 진입점 집계 8검사 — NOT_RUN:8 (미실행 검사가 남아 판정필요) |  | 11 (ACT:DMF0003_1_MktFcst.EditButton ACT:DMF) |
-| WK-DMF0003-1549 | X-ROW | DMF0003_1_MktFcst.ExcelButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.ExcelButton: 진입점 동작 재현 시나리오 필요 — 문장 종류 CALL_EXT/ENTRY/EXPR/LOCAL/THROW/UI_MISC/UI_PROP, 연결된 요소 검사 |  | 15 (ACT:DMF0003_1_MktFcst.ExcelButton ACT:DM) |
-| WK-DMF0003-1550 | X-ROW | DMF0003_1_MktFcst.FindButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.FindButton: 진입점 집계 12검사 — NOT_RUN:8 · REVIEW:4 |  | 1 (ACT:DMF0003_1_MktFcst.FindButton) |
-| WK-DMF0003-1551 | X-ROW | DMF0003_1_MktFcst.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.FindData: 진입점 집계 42검사 — NOT_RUN:32 · REVIEW:4 · PASS:4 · NOPATH:1 · TODO:1 |  | 14 (ACT:DMF0003_1_MktFcst.FindData:1453:2 AC) |
-| WK-DMF0003-1552 | X-ROW | DMF0003_1_MktFcst.FirstWeeked | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.FirstWeeked: 진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/ENTRY/EXPR/LOCAL/RETURN, 연결된 요소 검사 없음 |  | 8 (ACT:DMF0003_1_MktFcst.FirstWeeked ACT:DM) |
-| WK-DMF0003-1553 | X-ROW | DMF0003_1_MktFcst.GetBizTypebyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetBizTypebyDivision: 진입점 집계 5검사 — NOT_RUN:2 · NOPATH:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetBizTypebyDivisi) |
-| WK-DMF0003-1554 | X-ROW | DMF0003_1_MktFcst.GetBucketType | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetBucketType: 진입점 집계 5검사 — NOPATH:2 · NOT_RUN:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetBucketType) |
-| WK-DMF0003-1555 | X-ROW | DMF0003_1_MktFcst.GetCustomerbyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetCustomerbyDivision: 진입점 집계 5검사 — NOPATH:2 · NOT_RUN:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetCustomerbyDivis) |
-| WK-DMF0003-1556 | X-ROW | DMF0003_1_MktFcst.GetCustomsHandbook | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetCustomsHandbook: 진입점 집계 5검사 — NOPATH:2 · NOT_RUN:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetCustomsHandbook) |
-| WK-DMF0003-1557 | X-ROW | DMF0003_1_MktFcst.GetDayRange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetDayRange: 진입점 집계 5검사 — NOPATH:2 · NOT_RUN:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetDayRange) |
-| WK-DMF0003-1558 | X-ROW | DMF0003_1_MktFcst.GetDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetDivision: 진입점 집계 5검사 — NOT_RUN:2 · PASS:1 · NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetDivision) |
-| WK-DMF0003-1559 | X-ROW | DMF0003_1_MktFcst.GetEdiSender | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetEdiSender: 진입점 집계 5검사 — NOPATH:2 · NOT_RUN:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetEdiSender) |
-| WK-DMF0003-1560 | X-ROW | DMF0003_1_MktFcst.GetFirstWed | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetFirstWed: 진입점 집계 2검사 — NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetFirstWed) |
-| WK-DMF0003-1561 | X-ROW | DMF0003_1_MktFcst.GetIncotermsType | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetIncotermsType: 진입점 집계 7검사 — NOPATH:3 · TODO:2 · NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetIncotermsType) |
-| WK-DMF0003-1562 | X-ROW | DMF0003_1_MktFcst.GetItemType | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetItemType: 진입점 집계 5검사 — NOT_RUN:2 · NOPATH:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetItemType) |
-| WK-DMF0003-1563 | X-ROW | DMF0003_1_MktFcst.GetItemType2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetItemType2: 진입점 집계 5검사 — NOT_RUN:2 · NOPATH:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetItemType2) |
-| WK-DMF0003-1564 | X-ROW | DMF0003_1_MktFcst.GetPlantSitebyEndCusto | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetPlantSitebyEndCustomer: 진입점 집계 5검사 — NOPATH:2 · NOT_RUN:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetPlantSitebyEndC) |
-| WK-DMF0003-1565 | X-ROW | DMF0003_1_MktFcst.GetScmSitebyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetScmSitebyDivision: 진입점 집계 5검사 — NOT_RUN:2 · NOPATH:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetScmSitebyDivisi) |
-| WK-DMF0003-1566 | X-ROW | DMF0003_1_MktFcst.GetTeambyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetTeambyDivision: 진입점 집계 5검사 — NOT_RUN:2 · NOPATH:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetTeambyDivision) |
-| WK-DMF0003-1567 | X-ROW | DMF0003_1_MktFcst.GetWeekNumber | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.GetWeekNumber: 진입점 집계 2검사 — NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.GetWeekNumber) |
-| WK-DMF0003-1568 | X-ROW | DMF0003_1_MktFcst.InitControls | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.InitControls: 진입점 집계 46검사 — NOT_RUN:42 · NOPATH:4 (미실행 검사가 남아 판정필요) |  | 35 (ACT:DMF0003_1_MktFcst.InitControls:365:1) |
-| WK-DMF0003-1569 | X-ROW | DMF0003_1_MktFcst.InitSaveDataTable | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.InitSaveDataTable: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.InitSaveDataTable) |
-| WK-DMF0003-1570 | X-ROW | DMF0003_1_MktFcst.InitSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.InitSpread: 진입점 집계 5검사 — NOT_RUN:4 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.InitSpread) |
-| WK-DMF0003-1571 | X-ROW | DMF0003_1_MktFcst.InitSpreadFooterSum | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.InitSpreadFooterSum: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.InitSpreadFooterSu) |
-| WK-DMF0003-1572 | X-ROW | DMF0003_1_MktFcst.InitSpread_Car | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.InitSpread_Car: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.InitSpread_Car ACT) |
-| WK-DMF0003-1573 | X-ROW | DMF0003_1_MktFcst.InsertButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.InsertButton: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.InsertButton) |
-| WK-DMF0003-1574 | X-ROW | DMF0003_1_MktFcst.InsertRow | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.InsertRow: 진입점 집계 41검사 — NOT_RUN:38 · NOPATH:3 (미실행 검사가 남아 판정필요) |  | 203 (ACT:DMF0003_1_MktFcst.InsertRow ACT:DMF0) |
-| WK-DMF0003-1575 | X-ROW | DMF0003_1_MktFcst.OnShown | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.OnShown: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 9 (ACT:DMF0003_1_MktFcst.OnShown ACT:DMF000) |
-| WK-DMF0003-1576 | X-ROW | DMF0003_1_MktFcst.PSI_FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.PSI_FindData: 진입점 집계 9검사 — NOT_RUN:7 · PASS:1 · REVIEW:1 |  | 62 (ACT:DMF0003_1_MktFcst.PSI_FindData ACT:D) |
-| WK-DMF0003-1577 | X-ROW | DMF0003_1_MktFcst.SaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.SaveData: 진입점 집계 22검사 — NOT_RUN:13 · PASS:5 · NOPATH:4 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_1_MktFcst.SaveData:1803:88 A) |
-| WK-DMF0003-1578 | X-ROW | DMF0003_1_MktFcst.SetSaveDataRemove | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.SetSaveDataRemove: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.SetSaveDataRemove) |
-| WK-DMF0003-1579 | X-ROW | DMF0003_1_MktFcst.SetSaveSheetColor | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.SetSaveSheetColor: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.SetSaveSheetColor ) |
-| WK-DMF0003-1580 | X-ROW | DMF0003_1_MktFcst.SetSpreadColumn | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.SetSpreadColumn: 진입점 집계 18검사 — NOT_RUN:18 (미실행 검사가 남아 판정필요) |  | 15 (ACT:DMF0003_1_MktFcst.SetSpreadColumn AC) |
-| WK-DMF0003-1581 | X-ROW | DMF0003_1_MktFcst.SetSpreadHeaderSpan | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan: 진입점 집계 6검사 — NOT_RUN:6 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1582 | X-ROW | DMF0003_1_MktFcst.SetSpreadHeaderSpan_SU | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.SetSpreadHeaderSpan_SUB1: 진입점 집계 18검사 — NOT_RUN:12 · REVIEW:6 |  | 1 (ACT:DMF0003_1_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1583 | X-ROW | DMF0003_1_MktFcst.ValidationCheck | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.ValidationCheck: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_1_MktFcst.ValidationCheck AC) |
-| WK-DMF0003-1584 | X-ROW | DMF0003_1_MktFcst.btnCalculation_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.btnCalculation_Click: 진입점 집계 7검사 — NOT_RUN:7 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.btnCalculation_Cli) |
-| WK-DMF0003-1585 | X-ROW | DMF0003_1_MktFcst.btnColumn_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.btnColumn_Click: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.btnColumn_Click:49) |
-| WK-DMF0003-1586 | X-ROW | DMF0003_1_MktFcst.btnExcelUpload_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.btnExcelUpload_Click: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.btnExcelUpload_Cli) |
-| WK-DMF0003-1587 | X-ROW | DMF0003_1_MktFcst.btnIncotermsChg_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.btnIncotermsChg_Click: 진입점 집계 4검사 — NOT_RUN:2 · NOPATH:2 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.btnIncotermsChg_Cl) |
-| WK-DMF0003-1588 | X-ROW | DMF0003_1_MktFcst.btnItemId_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.btnItemId_Click: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.btnItemId_Click:49) |
-| WK-DMF0003-1589 | X-ROW | DMF0003_1_MktFcst.btnMeasure_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.btnMeasure_Click: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.btnMeasure_Click:4) |
-| WK-DMF0003-1590 | X-ROW | DMF0003_1_MktFcst.btnOwner_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.btnOwner_Click: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.btnOwner_Click:568) |
-| WK-DMF0003-1591 | X-ROW | DMF0003_1_MktFcst.btnProject_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.btnProject_Click: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_1_MktFcst.btnProject_Click:4) |
-| WK-DMF0003-1592 | X-ROW | DMF0003_1_MktFcst.btnUpDown_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.btnUpDown_Click: 진입점 집계 3검사 — NOT_RUN:2 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_1_MktFcst.btnUpDown_Click:68) |
-| WK-DMF0003-1593 | X-ROW | DMF0003_1_MktFcst.cboAS_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.cboAS_CheckedChanged: 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.cboAS_CheckedChang) |
-| WK-DMF0003-1594 | X-ROW | DMF0003_1_MktFcst.cboBucketType_Selected | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.cboBucketType_SelectedIndexChang: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.cboBucketType_Sele) |
-| WK-DMF0003-1595 | X-ROW | DMF0003_1_MktFcst.cboDivision_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.cboDivision_SelectedIndexChanged: 진입점 집계 16검사 — NOT_RUN:9 · REVIEW:3 · NOPATH:2 · TODO:2 |  | 5 (ACT:DMF0003_1_MktFcst.cboDivision_Select) |
-| WK-DMF0003-1596 | X-ROW | DMF0003_1_MktFcst.chkColor_CheckedChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.chkColor_CheckedChanged: 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.chkColor_CheckedCh) |
-| WK-DMF0003-1597 | X-ROW | DMF0003_1_MktFcst.chkSum_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.chkSum_CheckedChanged: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.chkSum_CheckedChan) |
-| WK-DMF0003-1598 | X-ROW | DMF0003_1_MktFcst.clbCustomer_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.clbCustomer_SelectedIndexChanged: 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.clbCustomer_Select) |
-| WK-DMF0003-1599 | X-ROW | DMF0003_1_MktFcst.clbTeam_SelectedIndexC | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.clbTeam_SelectedIndexChanged: 진입점 집계 9검사 — NOT_RUN:5 · NOPATH:2 · TODO:2 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_1_MktFcst.clbTeam_SelectedIn) |
-| WK-DMF0003-1600 | X-ROW | DMF0003_1_MktFcst.cmbCarMaker_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.cmbCarMaker_SelectedIndexChanged: 진입점 집계 6검사 — NOT_RUN:5 · PASS:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.cmbCarMaker_Select) |
-| WK-DMF0003-1601 | X-ROW | DMF0003_1_MktFcst.contextMenuStrip1_Item | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.contextMenuStrip1_ItemClicked: 진입점 집계 6검사 — NOPATH:4 · NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 119 (ACT:DMF0003_1_MktFcst.contextMenuStrip1_) |
-| WK-DMF0003-1602 | X-ROW | DMF0003_1_MktFcst.fnValidation | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.fnValidation: 진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/DATA_OP/ENTRY/EXPR/FLOW/LOCAL/RETURN/STATE_RESET,  |  | 164 (ACT:DMF0003_1_MktFcst.fnValidation ACT:D) |
-| WK-DMF0003-1603 | X-ROW | DMF0003_1_MktFcst.getDayOfWeek | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.getDayOfWeek: 진입점 집계 2검사 — NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.getDayOfWeek) |
-| WK-DMF0003-1604 | X-ROW | DMF0003_1_MktFcst.spdMain_CellClick | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdMain_CellClick: 진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/COMBO_DATA/ENTRY/EXPR/GRID_COMBO/LOCAL, 연결된 요 |  | 20 (ACT:DMF0003_1_MktFcst.spdMain_CellClick ) |
-| WK-DMF0003-1605 | X-ROW | DMF0003_1_MktFcst.spdMain_CellDoubleClic | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdMain_CellDoubleClick: 진입점 집계 30검사 — NOT_RUN:18 · REVIEW:5 · NOPATH:5 · PASS:2 |  | 39 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-1606 | X-ROW | DMF0003_1_MktFcst.spdMain_Changed | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdMain_Changed: 진입점 집계 32검사 — NOT_RUN:28 · REVIEW:3 · NOPATH:1 |  | 33 (ACT:DMF0003_1_MktFcst.spdMain_Changed:33) |
-| WK-DMF0003-1607 | X-ROW | DMF0003_1_MktFcst.spdMain_ClipboardPaste | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdMain_ClipboardPasted: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.spdMain_ClipboardP) |
-| WK-DMF0003-1608 | X-ROW | DMF0003_1_MktFcst.spdMain_ComboSelChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdMain_ComboSelChange: 진입점 집계 8검사 — NOT_RUN:4 · NOPATH:3 · TODO:1 (미실행 검사가 남아 판정필요) |  | 36 (ACT:DMF0003_1_MktFcst.spdMain_ComboSelCh) |
-| WK-DMF0003-1609 | X-ROW | DMF0003_1_MktFcst.spdMain_EditChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdMain_EditChange: 진입점 동작 재현 시나리오 필요 — 문장 종류 ENTRY/EXPR/FLAG/RETURN, 연결된 요소 검사 없음 |  | 4 (ACT:DMF0003_1_MktFcst.spdMain_EditChange) |
-| WK-DMF0003-1610 | X-ROW | DMF0003_1_MktFcst.spdMain_KeyUp | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdMain_KeyUp: 진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/CALL_EXT/ENTRY/EXPR/FLAG/RETURN, 연결된 요소 검사 없음 |  | 9 (ACT:DMF0003_1_MktFcst.spdMain_KeyUp ACT:) |
-| WK-DMF0003-1611 | X-ROW | DMF0003_1_MktFcst.spdMain_TopChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdMain_TopChange: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.spdMain_TopChange ) |
-| WK-DMF0003-1612 | X-ROW | DMF0003_1_MktFcst.spdSub1_CellClick | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdSub1_CellClick: 진입점 집계 12검사 — NOT_RUN:10 · PASS:1 · REVIEW:1 |  | 100 (ACT:DMF0003_1_MktFcst.spdSub1_CellClick ) |
-| WK-DMF0003-1613 | X-ROW | DMF0003_1_MktFcst.spdSub1_TopChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdSub1_TopChange: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.spdSub1_TopChange ) |
-| WK-DMF0003-1614 | X-ROW | DMF0003_1_MktFcst.splitContainer2_Double | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.splitContainer2_DoubleClick: 진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/ENTRY/UI_PROP, 연결된 요소 검사 없음 |  | 4 (ACT:DMF0003_1_MktFcst.splitContainer2_Do) |
-| WK-DMF0003-1615 | X-ROW | DMF0003_1_MktFcst.txtMarketShare_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.txtMarketShare_Click: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.txtMarketShare_Cli) |
-| WK-DMF0003-1616 | X-ROW | DMF0003_1_MktFcst.txtMarketShare_KeyDown | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.txtMarketShare_KeyDown: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_1_MktFcst.txtMarketShare_Key) |
-| WK-DMF0003-1617 | X-ROW | DMF0003_CustDemandAnalysis..ctor | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis..ctor: 진입점 집계 2검사 — NOPATH:1 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_CustDemandAnalysis..ctor:98:) |
-| WK-DMF0003-1618 | X-ROW | DMF0003_CustDemandAnalysis.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.CreateSpread: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_CustDemandAnalysis.CreateSpr) |
-| WK-DMF0003-1619 | X-ROW | DMF0003_CustDemandAnalysis.DMF0003_CustD | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.DMF0003_CustDemandAnaly: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_CustDemandAnalysis.DMF0003_C) |
-| WK-DMF0003-1620 | X-ROW | DMF0003_CustDemandAnalysis.DefinePropert | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.DefineProperty: 진입점 집계 3검사 — NOT_RUN:2 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_CustDemandAnalysis.DefinePro) |
-| WK-DMF0003-1621 | X-ROW | DMF0003_CustDemandAnalysis.Dispose | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.Dispose: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_CustDemandAnalysis.Dispose:1) |
-| WK-DMF0003-1622 | X-ROW | DMF0003_CustDemandAnalysis.EditButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.EditButton: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_CustDemandAnalysis.EditButto) |
-| WK-DMF0003-1623 | X-ROW | DMF0003_CustDemandAnalysis.FindDataMain | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.FindDataMain: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_CustDemandAnalysis.FindDataM) |
-| WK-DMF0003-1624 | X-ROW | DMF0003_CustDemandAnalysis.Form_Load | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.Form_Load: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 31 (ACT:DMF0003_CustDemandAnalysis.Form_Load) |
-| WK-DMF0003-1625 | X-ROW | DMF0003_CustDemandAnalysis.GetSLOC | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.GetSLOC: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_CustDemandAnalysis.GetSLOC A) |
-| WK-DMF0003-1626 | X-ROW | DMF0003_CustDemandAnalysis.GetSPlant | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.GetSPlant: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_CustDemandAnalysis.GetSPlant) |
-| WK-DMF0003-1627 | X-ROW | DMF0003_CustDemandAnalysis.GetSplit | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.GetSplit: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_CustDemandAnalysis.GetSplit ) |
-| WK-DMF0003-1628 | X-ROW | DMF0003_CustDemandAnalysis.InitControls | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.InitControls: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_CustDemandAnalysis.InitContr) |
-| WK-DMF0003-1629 | X-ROW | DMF0003_CustDemandAnalysis.InitSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.InitSpread: 진입점 집계 62검사 — NOT_RUN:62 (미실행 검사가 남아 판정필요) |  | 42 (ACT:DMF0003_CustDemandAnalysis.InitSprea) |
-| WK-DMF0003-1630 | X-ROW | DMF0003_CustDemandAnalysis.SaveButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.SaveButton: 진입점 집계 5검사 — NOT_RUN:3 · NOPATH:2 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_CustDemandAnalysis.SaveButto) |
-| WK-DMF0003-1631 | X-ROW | DMF0003_CustDemandAnalysis.SaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.SaveData: 진입점 집계 8검사 — NOT_RUN:5 · NOPATH:2 · PASS:1 (미실행 검사가 남아 판정필요) |  | 82 (ACT:DMF0003_CustDemandAnalysis.SaveData:) |
-| WK-DMF0003-1632 | X-ROW | DMF0003_CustDemandAnalysis.Select_DpInit | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.Select_DpInit_Data: 진입점 집계 11검사 — NOT_RUN:9 · PASS:1 · REVIEW:1 |  | 55 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
-| WK-DMF0003-1633 | X-ROW | DMF0003_CustDemandAnalysis.Select_DpResu | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.Select_DpResult_Data: 진입점 집계 11검사 — NOT_RUN:9 · PASS:1 · REVIEW:1 |  | 54 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
-| WK-DMF0003-1634 | X-ROW | DMF0003_CustDemandAnalysis.Select_In_De_ | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.Select_In_De_Demand: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 24 (ACT:DMF0003_CustDemandAnalysis.Select_In) |
-| WK-DMF0003-1635 | X-ROW | DMF0003_CustDemandAnalysis.SetSpreadHead | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.SetSpreadHeaderSpan: 진입점 집계 55검사 — NOT_RUN:55 (미실행 검사가 남아 판정필요) |  | 17 (ACT:DMF0003_CustDemandAnalysis.SetSpread) |
-| WK-DMF0003-1636 | X-ROW | DMF0003_CustDemandAnalysis.btnButtonList | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.btnButtonList_UsrButton: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_CustDemandAnalysis.btnButton) |
-| WK-DMF0003-1637 | X-ROW | DMF0003_CustDemandAnalysis.sheetSetting | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.sheetSetting: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_CustDemandAnalysis.sheetSett) |
-| WK-DMF0003-1638 | X-ROW | DMF0003_CustDemandAnalysis.spdMain_CellC | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.spdMain_CellClick: 진입점 집계 5검사 — NOT_RUN:5 (미실행 검사가 남아 판정필요) |  | 38 (ACT:DMF0003_CustDemandAnalysis.spdMain_C) |
-| WK-DMF0003-1639 | X-ROW | DMF0003_CustDemandAnalysis.spdMain_Combo | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.spdMain_ComboCloseUp: 진입점 집계 15검사 — NOT_RUN:15 (미실행 검사가 남아 판정필요) |  | 42 (ACT:DMF0003_CustDemandAnalysis.spdMain_C) |
-| WK-DMF0003-1640 | X-ROW | DMF0003_CustDemandAnalysis.spdMain_KeyUp | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.spdMain_KeyUp: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_CustDemandAnalysis.spdMain_K) |
-| WK-DMF0003-1641 | X-ROW | DMF0003_CustDemandAnalysis.spdMain_Leave | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.spdMain_LeaveCell: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_CustDemandAnalysis.spdMain_L) |
-| WK-DMF0003-1642 | X-ROW | DMF0003_MatsterChgPopup..ctor | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup..ctor: 진입점 집계 2검사 — NOPATH:1 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_MatsterChgPopup..ctor:129:1 ) |
-| WK-DMF0003-1643 | X-ROW | DMF0003_MatsterChgPopup.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.CreateSpread: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_MatsterChgPopup.CreateSpread) |
-| WK-DMF0003-1644 | X-ROW | DMF0003_MatsterChgPopup.Dispose | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.Dispose: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_MatsterChgPopup.Dispose:16:1) |
-| WK-DMF0003-1645 | X-ROW | DMF0003_MatsterChgPopup.FindButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.FindButton: 진입점 집계 7검사 — NOT_RUN:5 · REVIEW:2 |  | 2 (ACT:DMF0003_MatsterChgPopup.FindButton A) |
-| WK-DMF0003-1646 | X-ROW | DMF0003_MatsterChgPopup.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.FindData: 진입점 집계 16검사 — NOT_RUN:12 · REVIEW:2 · NOPATH:1 · PASS:1 |  | 45 (ACT:DMF0003_MatsterChgPopup.FindData:315) |
-| WK-DMF0003-1647 | X-ROW | DMF0003_MatsterChgPopup.Form_Load | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.Form_Load: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 17 (ACT:DMF0003_MatsterChgPopup.Form_Load AC) |
-| WK-DMF0003-1648 | X-ROW | DMF0003_MatsterChgPopup.GetLookupValues | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.GetLookupValues: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_MatsterChgPopup.GetLookupVal) |
-| WK-DMF0003-1649 | X-ROW | DMF0003_MatsterChgPopup.GetSpdTitle | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.GetSpdTitle: 진입점 집계 6검사 — NOT_RUN:3 · NOPATH:1 · TODO:1 · PASS:1 (미실행 검사가 남아 판정필요) |  | 10 (ACT:DMF0003_MatsterChgPopup.GetSpdTitle:) |
-| WK-DMF0003-1650 | X-ROW | DMF0003_MatsterChgPopup.InitControls | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.InitControls: 진입점 집계 20검사 — NOT_RUN:18 · NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요) |  | 31 (ACT:DMF0003_MatsterChgPopup.InitControls) |
-| WK-DMF0003-1651 | X-ROW | DMF0003_MatsterChgPopup.InitEvent | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.InitEvent: 진입점 집계 3검사 — NOT_RUN:2 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_MatsterChgPopup.InitEvent AC) |
-| WK-DMF0003-1652 | X-ROW | DMF0003_MatsterChgPopup.InitSaveDataTabl | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.InitSaveDataTable: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 15 (ACT:DMF0003_MatsterChgPopup.InitSaveData) |
-| WK-DMF0003-1653 | X-ROW | DMF0003_MatsterChgPopup.InitSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.InitSpread: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_MatsterChgPopup.InitSpread A) |
-| WK-DMF0003-1654 | X-ROW | DMF0003_MatsterChgPopup.SaveButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.SaveButton: 진입점 집계 7검사 — NOT_RUN:5 · NOPATH:2 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_MatsterChgPopup.SaveButton:3) |
-| WK-DMF0003-1655 | X-ROW | DMF0003_MatsterChgPopup.SaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.SaveData: 진입점 집계 15검사 — NOT_RUN:10 · NOPATH:4 · PASS:1 (미실행 검사가 남아 판정필요) |  | 103 (ACT:DMF0003_MatsterChgPopup.SaveData:408) |
-| WK-DMF0003-1656 | X-ROW | DMF0003_MatsterChgPopup.btnButtonList_Us | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.btnButtonList_UsrButtonLis: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_MatsterChgPopup.btnButtonLis) |
-| WK-DMF0003-1657 | X-ROW | DMF0003_MatsterChgPopup.fnValidation | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.fnValidation: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 42 (ACT:DMF0003_MatsterChgPopup.fnValidation) |
-| WK-DMF0003-1658 | X-ROW | DMF0003_MatsterChgPopup.fnValidation2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.fnValidation2: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 33 (ACT:DMF0003_MatsterChgPopup.fnValidation) |
-| WK-DMF0003-1659 | X-ROW | DMF0003_MatsterChgPopup.spdMain_CellClic | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.spdMain_CellClick: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 11 (ACT:DMF0003_MatsterChgPopup.spdMain_Cell) |
-| WK-DMF0003-1660 | X-ROW | DMF0003_MatsterChgPopup.spdMain_Changed | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MatsterChgPopup.spdMain_Changed: 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 54 (ACT:DMF0003_MatsterChgPopup.spdMain_Chan) |
-| WK-DMF0003-1661 | X-ROW | DMF0003_MktFcst..ctor | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst..ctor: 진입점 집계 2검사 — NOPATH:1 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_MktFcst..ctor:295:1 ACT:DMF0) |
-| WK-DMF0003-1662 | X-ROW | DMF0003_MktFcst.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.CreateSpread: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_MktFcst.CreateSpread ACT:DMF) |
-| WK-DMF0003-1663 | X-ROW | DMF0003_MktFcst.DefineProperty | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.DefineProperty: 진입점 집계 9검사 — NOT_RUN:7 · NOPATH:2 (미실행 검사가 남아 판정필요) |  | 21 (ACT:DMF0003_MktFcst.DefineProperty:567:1) |
-| WK-DMF0003-1664 | X-ROW | DMF0003_MktFcst.DeleteButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.DeleteButton: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.DeleteButton:818:1 A) |
-| WK-DMF0003-1665 | X-ROW | DMF0003_MktFcst.Dispose | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.Dispose: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_MktFcst.Dispose:16:1 ACT:DMF) |
-| WK-DMF0003-1666 | X-ROW | DMF0003_MktFcst.Draw | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.Draw: 진입점 집계 2검사 — NOPATH:1 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 124 (ACT:DMF0003_MktFcst.Draw ACT:DMF0003_Mkt) |
-| WK-DMF0003-1667 | X-ROW | DMF0003_MktFcst.EditButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.EditButton: 진입점 집계 18검사 — NOT_RUN:18 (미실행 검사가 남아 판정필요) |  | 201 (ACT:DMF0003_MktFcst.EditButton:826:1 ACT) |
-| WK-DMF0003-1668 | X-ROW | DMF0003_MktFcst.ExcelButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.ExcelButton: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 15 (ACT:DMF0003_MktFcst.ExcelButton ACT:DMF0) |
-| WK-DMF0003-1669 | X-ROW | DMF0003_MktFcst.FindButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.FindButton: 진입점 집계 7검사 — NOT_RUN:5 · REVIEW:2 |  | 2 (ACT:DMF0003_MktFcst.FindButton ACT:DMF00) |
-| WK-DMF0003-1670 | X-ROW | DMF0003_MktFcst.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.FindData: 진입점 집계 33검사 — NOT_RUN:27 · REVIEW:2 · PASS:2 · NOPATH:1 · TODO:1 |  | 59 (ACT:DMF0003_MktFcst.FindData:1675:1 ACT:) |
-| WK-DMF0003-1671 | X-ROW | DMF0003_MktFcst.Form_Load | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.Form_Load: 진입점 집계 6검사 — NOT_RUN:4 · NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요) |  | 13 (ACT:DMF0003_MktFcst.Form_Load:304:1 ACT:) |
-| WK-DMF0003-1672 | X-ROW | DMF0003_MktFcst.GetBizTypebyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetBizTypebyDivision: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_MktFcst.GetBizTypebyDivision) |
-| WK-DMF0003-1673 | X-ROW | DMF0003_MktFcst.GetBucketType | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetBucketType: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_MktFcst.GetBucketType ACT:DM) |
-| WK-DMF0003-1674 | X-ROW | DMF0003_MktFcst.GetCustomerbyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetCustomerbyDivision: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_MktFcst.GetCustomerbyDivisio) |
-| WK-DMF0003-1675 | X-ROW | DMF0003_MktFcst.GetCustomsHandbook | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetCustomsHandbook: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_MktFcst.GetCustomsHandbook A) |
-| WK-DMF0003-1676 | X-ROW | DMF0003_MktFcst.GetDayRange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetDayRange: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_MktFcst.GetDayRange ACT:DMF0) |
-| WK-DMF0003-1677 | X-ROW | DMF0003_MktFcst.GetDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetDivision: 진입점 집계 4검사 — NOT_RUN:3 · PASS:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_MktFcst.GetDivision ACT:DMF0) |
-| WK-DMF0003-1678 | X-ROW | DMF0003_MktFcst.GetEdiSender | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetEdiSender: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_MktFcst.GetEdiSender ACT:DMF) |
-| WK-DMF0003-1679 | X-ROW | DMF0003_MktFcst.GetFcstType | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetFcstType: 진입점 집계 6검사 — NOT_RUN:3 · NOPATH:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 11 (ACT:DMF0003_MktFcst.GetFcstType:6980:1 A) |
-| WK-DMF0003-1680 | X-ROW | DMF0003_MktFcst.GetIncotermsType | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetIncotermsType: 진입점 집계 6검사 — NOT_RUN:3 · NOPATH:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_MktFcst.GetIncotermsType ACT) |
-| WK-DMF0003-1681 | X-ROW | DMF0003_MktFcst.GetItemType | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetItemType: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_MktFcst.GetItemType ACT:DMF0) |
-| WK-DMF0003-1682 | X-ROW | DMF0003_MktFcst.GetItemType2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetItemType2: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_MktFcst.GetItemType2 ACT:DMF) |
-| WK-DMF0003-1683 | X-ROW | DMF0003_MktFcst.GetLookupValues | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetLookupValues: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_MktFcst.GetLookupValues ACT:) |
-| WK-DMF0003-1684 | X-ROW | DMF0003_MktFcst.GetPlantSitebyEndCustome | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetPlantSitebyEndCustomer: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 9 (ACT:DMF0003_MktFcst.GetPlantSitebyEndCus) |
-| WK-DMF0003-1685 | X-ROW | DMF0003_MktFcst.GetSalesSite | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetSalesSite: 진입점 집계 8검사 — NOT_RUN:3 · NOPATH:3 · TODO:2 (미실행 검사가 남아 판정필요) |  | 11 (ACT:DMF0003_MktFcst.GetSalesSite:7024:1 ) |
-| WK-DMF0003-1686 | X-ROW | DMF0003_MktFcst.GetSalesSite40 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetSalesSite40: 진입점 집계 8검사 — NOT_RUN:3 · NOPATH:3 · TODO:2 (미실행 검사가 남아 판정필요) |  | 11 (ACT:DMF0003_MktFcst.GetSalesSite40:7049:) |
-| WK-DMF0003-1687 | X-ROW | DMF0003_MktFcst.GetScmSitebyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetScmSitebyDivision: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 9 (ACT:DMF0003_MktFcst.GetScmSitebyDivision) |
-| WK-DMF0003-1688 | X-ROW | DMF0003_MktFcst.GetSpdTitle | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetSpdTitle: 진입점 집계 8검사 — NOT_RUN:3 · NOPATH:2 · TODO:2 · PASS:1 (미실행 검사가 남아 판정필요) |  | 10 (ACT:DMF0003_MktFcst.GetSpdTitle:6338:1 A) |
-| WK-DMF0003-1689 | X-ROW | DMF0003_MktFcst.GetTeambyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetTeambyDivision: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_MktFcst.GetTeambyDivision AC) |
-| WK-DMF0003-1690 | X-ROW | DMF0003_MktFcst.GetWeekNumber | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.GetWeekNumber: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 10 (ACT:DMF0003_MktFcst.GetWeekNumber ACT:DM) |
-| WK-DMF0003-1691 | X-ROW | DMF0003_MktFcst.InitControls | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.InitControls: 진입점 집계 43검사 — NOT_RUN:40 · NOPATH:3 (미실행 검사가 남아 판정필요) |  | 53 (ACT:DMF0003_MktFcst.InitControls:427:1 A) |
-| WK-DMF0003-1692 | X-ROW | DMF0003_MktFcst.InitSaveDataTable | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.InitSaveDataTable: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 34 (ACT:DMF0003_MktFcst.InitSaveDataTable AC) |
-| WK-DMF0003-1693 | X-ROW | DMF0003_MktFcst.InitSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.InitSpread: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_MktFcst.InitSpread ACT:DMF00) |
-| WK-DMF0003-1694 | X-ROW | DMF0003_MktFcst.InitSpreadFooterSum | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.InitSpreadFooterSum: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 11 (ACT:DMF0003_MktFcst.InitSpreadFooterSum ) |
-| WK-DMF0003-1695 | X-ROW | DMF0003_MktFcst.InsertButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.InsertButton: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_MktFcst.InsertButton ACT:DMF) |
-| WK-DMF0003-1696 | X-ROW | DMF0003_MktFcst.InsertRow | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.InsertRow: 진입점 집계 58검사 — NOT_RUN:48 · NOPATH:9 · TODO:1 (미실행 검사가 남아 판정필요) |  | 232 (ACT:DMF0003_MktFcst.InsertRow ACT:DMF000) |
-| WK-DMF0003-1697 | X-ROW | DMF0003_MktFcst.OnShown | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.OnShown: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_MktFcst.OnShown ACT:DMF0003_) |
-| WK-DMF0003-1698 | X-ROW | DMF0003_MktFcst.SaveButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.SaveButton: 진입점 집계 7검사 — NOT_RUN:5 · NOPATH:2 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_MktFcst.SaveButton:1342:1) |
-| WK-DMF0003-1699 | X-ROW | DMF0003_MktFcst.SaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.SaveData: 진입점 집계 21검사 — NOT_RUN:12 · NOPATH:5 · PASS:3 · TODO:1 (미실행 검사가 남아 판정필요) |  | 127 (ACT:DMF0003_MktFcst.SaveData:2222:1 ACT:) |
-| WK-DMF0003-1700 | X-ROW | DMF0003_MktFcst.SetChangeControl | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.SetChangeControl: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 29 (ACT:DMF0003_MktFcst.SetChangeControl ACT) |
-| WK-DMF0003-1701 | X-ROW | DMF0003_MktFcst.SetSaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.SetSaveData: 진입점 집계 7검사 — NOT_RUN:7 (미실행 검사가 남아 판정필요) |  | 65 (ACT:DMF0003_MktFcst.SetSaveData:5399:1 A) |
-| WK-DMF0003-1702 | X-ROW | DMF0003_MktFcst.SetSaveDataRemove | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.SetSaveDataRemove: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 42 (ACT:DMF0003_MktFcst.SetSaveDataRemove AC) |
-| WK-DMF0003-1703 | X-ROW | DMF0003_MktFcst.SetSaveSheetColor | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.SetSaveSheetColor: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_MktFcst.SetSaveSheetColor AC) |
-| WK-DMF0003-1704 | X-ROW | DMF0003_MktFcst.SetSpreadColumn | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.SetSpreadColumn: 진입점 집계 13검사 — NOT_RUN:13 (미실행 검사가 남아 판정필요) |  | 41 (ACT:DMF0003_MktFcst.SetSpreadColumn ACT:) |
-| WK-DMF0003-1705 | X-ROW | DMF0003_MktFcst.SetSpreadHeaderSpan | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.SetSpreadHeaderSpan: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 55 (ACT:DMF0003_MktFcst.SetSpreadHeaderSpan ) |
-| WK-DMF0003-1706 | X-ROW | DMF0003_MktFcst.ValidationCheck | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.ValidationCheck: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_MktFcst.ValidationCheck ACT:) |
-| WK-DMF0003-1707 | X-ROW | DMF0003_MktFcst.btnColumn_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.btnColumn_Click: 진입점 집계 6검사 — NOT_RUN:5 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_MktFcst.btnColumn_Click:5752) |
-| WK-DMF0003-1708 | X-ROW | DMF0003_MktFcst.btnIncotermsChg_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.btnIncotermsChg_Click: 진입점 집계 7검사 — NOT_RUN:5 · NOPATH:2 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_MktFcst.btnIncotermsChg_Clic) |
-| WK-DMF0003-1709 | X-ROW | DMF0003_MktFcst.btnItemId_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.btnItemId_Click: 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 13 (ACT:DMF0003_MktFcst.btnItemId_Click:5727) |
-| WK-DMF0003-1710 | X-ROW | DMF0003_MktFcst.btnMeasure_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.btnMeasure_Click: 진입점 집계 6검사 — NOT_RUN:5 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_MktFcst.btnMeasure_Click:576) |
-| WK-DMF0003-1711 | X-ROW | DMF0003_MktFcst.btnOwner_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.btnOwner_Click: 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_MktFcst.btnOwner_Click:6452:) |
-| WK-DMF0003-1712 | X-ROW | DMF0003_MktFcst.btnProject_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.btnProject_Click: 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 13 (ACT:DMF0003_MktFcst.btnProject_Click:570) |
-| WK-DMF0003-1713 | X-ROW | DMF0003_MktFcst.cboAS_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.cboAS_CheckedChanged: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_MktFcst.cboAS_CheckedChanged) |
-| WK-DMF0003-1714 | X-ROW | DMF0003_MktFcst.cboBucketType_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.cboBucketType_Click: 진입점 집계 5검사 — NOT_RUN:5 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_MktFcst.cboBucketType_Click:) |
-| WK-DMF0003-1715 | X-ROW | DMF0003_MktFcst.cboBucketType_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.cboBucketType_SelectedIndexChanged: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 24 (ACT:DMF0003_MktFcst.cboBucketType_Select) |
-| WK-DMF0003-1716 | X-ROW | DMF0003_MktFcst.cboDivision_SelectedInde | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.cboDivision_SelectedIndexChanged: 진입점 집계 8검사 — NOT_RUN:8 (미실행 검사가 남아 판정필요) |  | 53 (ACT:DMF0003_MktFcst.cboDivision_Selected) |
-| WK-DMF0003-1717 | X-ROW | DMF0003_MktFcst.chkColor_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.chkColor_CheckedChanged: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_MktFcst.chkColor_CheckedChan) |
-| WK-DMF0003-1718 | X-ROW | DMF0003_MktFcst.chkSum_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.chkSum_CheckedChanged: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_MktFcst.chkSum_CheckedChange) |
-| WK-DMF0003-1719 | X-ROW | DMF0003_MktFcst.clbCustomer_SelectedInde | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.clbCustomer_SelectedIndexChanged: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_MktFcst.clbCustomer_Selected) |
-| WK-DMF0003-1720 | X-ROW | DMF0003_MktFcst.clbTeam_SelectedIndexCha | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.clbTeam_SelectedIndexChanged: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_MktFcst.clbTeam_SelectedInde) |
-| WK-DMF0003-1721 | X-ROW | DMF0003_MktFcst.contextMenuStrip1_ItemCl | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.contextMenuStrip1_ItemClicked: 진입점 집계 9검사 — NOT_RUN:5 · NOPATH:4 (미실행 검사가 남아 판정필요) |  | 119 (ACT:DMF0003_MktFcst.contextMenuStrip1_It) |
-| WK-DMF0003-1722 | X-ROW | DMF0003_MktFcst.fnValidation | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.fnValidation: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 167 (ACT:DMF0003_MktFcst.fnValidation ACT:DMF) |
-| WK-DMF0003-1723 | X-ROW | DMF0003_MktFcst.getDayOfWeek | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.getDayOfWeek: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_MktFcst.getDayOfWeek ACT:DMF) |
-| WK-DMF0003-1724 | X-ROW | DMF0003_MktFcst.spdMain_CellClick | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.spdMain_CellClick: 진입점 집계 3검사 — NOPATH:1 · TODO:1 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 44 (ACT:DMF0003_MktFcst.spdMain_CellClick AC) |
-| WK-DMF0003-1725 | X-ROW | DMF0003_MktFcst.spdMain_CellDoubleClick | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.spdMain_CellDoubleClick: 진입점 집계 21검사 — NOT_RUN:13 · NOPATH:7 · PASS:1 (미실행 검사가 남아 판정필요) |  | 187 (ACT:DMF0003_MktFcst.spdMain_CellDoubleCl) |
-| WK-DMF0003-1726 | X-ROW | DMF0003_MktFcst.spdMain_Changed | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.spdMain_Changed: 진입점 집계 30검사 — NOT_RUN:29 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 527 (ACT:DMF0003_MktFcst.spdMain_Changed:3946) |
-| WK-DMF0003-1727 | X-ROW | DMF0003_MktFcst.spdMain_ClipboardPasted | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.spdMain_ClipboardPasted: 진입점 집계 10검사 — NOT_RUN:8 · NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요) |  | 45 (ACT:DMF0003_MktFcst.spdMain_ClipboardPas) |
-| WK-DMF0003-1728 | X-ROW | DMF0003_MktFcst.spdMain_ComboSelChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.spdMain_ComboSelChange: 진입점 집계 21검사 — NOT_RUN:15 · NOPATH:4 · TODO:2 (미실행 검사가 남아 판정필요) |  | 158 (ACT:DMF0003_MktFcst.spdMain_ComboSelChan) |
-| WK-DMF0003-1729 | X-ROW | DMF0003_MktFcst.spdMain_EditChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.spdMain_EditChange: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_MktFcst.spdMain_EditChange A) |
-| WK-DMF0003-1730 | X-ROW | DMF0003_MktFcst.spdMain_KeyUp | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.spdMain_KeyUp: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 31 (ACT:DMF0003_MktFcst.spdMain_KeyUp ACT:DM) |
-| WK-DMF0003-1731 | X-ROW | DMF0003_MktFcst.spdMain_TopChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_MktFcst.spdMain_TopChange: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_MktFcst.spdMain_TopChange AC) |
-| WK-DMF0003-1732 | X-ROW | DMF0003_PRHistoryPopup..ctor | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRHistoryPopup..ctor: 진입점 집계 2검사 — NOPATH:1 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_PRHistoryPopup..ctor:77:1 AC) |
-| WK-DMF0003-1733 | X-ROW | DMF0003_PRHistoryPopup.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRHistoryPopup.CreateSpread: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_PRHistoryPopup.CreateSpread ) |
-| WK-DMF0003-1734 | X-ROW | DMF0003_PRHistoryPopup.Dispose | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRHistoryPopup.Dispose: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_PRHistoryPopup.Dispose:16:1 ) |
-| WK-DMF0003-1735 | X-ROW | DMF0003_PRHistoryPopup.FindDataMain | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRHistoryPopup.FindDataMain: 진입점 집계 7검사 — NOT_RUN:5 · REVIEW:1 · PASS:1 |  | 34 (ACT:DMF0003_PRHistoryPopup.FindDataMain ) |
-| WK-DMF0003-1736 | X-ROW | DMF0003_PRHistoryPopup.Form_Load | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRHistoryPopup.Form_Load: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 20 (ACT:DMF0003_PRHistoryPopup.Form_Load ACT) |
-| WK-DMF0003-1737 | X-ROW | DMF0003_PRHistoryPopup.InitSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRHistoryPopup.InitSpread: 진입점 집계 46검사 — NOT_RUN:46 (미실행 검사가 남아 판정필요) |  | 14 (ACT:DMF0003_PRHistoryPopup.InitSpread AC) |
-| WK-DMF0003-1738 | X-ROW | DMF0003_PRHistoryPopup.SetChangeRequestI | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRHistoryPopup.SetChangeRequestInfo: 진입점 집계 16검사 — NOT_RUN:16 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_PRHistoryPopup.SetChangeRequ) |
-| WK-DMF0003-1739 | X-ROW | DMF0003_PRHistoryPopup.btnButtonList_Usr | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRHistoryPopup.btnButtonList_UsrButtonList: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_PRHistoryPopup.btnButtonList) |
-| WK-DMF0003-1740 | X-ROW | DMF0003_PRHistoryPopup.spdMain_CellClick | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRHistoryPopup.spdMain_CellClick: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_PRHistoryPopup.spdMain_CellC) |
-| WK-DMF0003-1741 | X-ROW | DMF0003_PRPopup..ctor | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup..ctor: 진입점 집계 2검사 — NOPATH:1 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_PRPopup..ctor:100:1 ACT:DMF0) |
-| WK-DMF0003-1742 | X-ROW | DMF0003_PRPopup.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.CreateSpread: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_PRPopup.CreateSpread ACT:DMF) |
-| WK-DMF0003-1743 | X-ROW | DMF0003_PRPopup.DefineProperty | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.DefineProperty: 진입점 집계 3검사 — NOT_RUN:2 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_PRPopup.DefineProperty ACT:D) |
-| WK-DMF0003-1744 | X-ROW | DMF0003_PRPopup.Dispose | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.Dispose: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_PRPopup.Dispose:16:1 ACT:DMF) |
-| WK-DMF0003-1745 | X-ROW | DMF0003_PRPopup.EditButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.EditButton: 진입점 집계 13검사 — NOT_RUN:13 (미실행 검사가 남아 판정필요) |  | 16 (ACT:DMF0003_PRPopup.EditButton:253:1 ACT) |
-| WK-DMF0003-1746 | X-ROW | DMF0003_PRPopup.FindDataMain | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.FindDataMain: 진입점 집계 8검사 — NOT_RUN:6 · REVIEW:1 · PASS:1 |  | 39 (ACT:DMF0003_PRPopup.FindDataMain ACT:DMF) |
-| WK-DMF0003-1747 | X-ROW | DMF0003_PRPopup.Form_Load | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.Form_Load: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 22 (ACT:DMF0003_PRPopup.Form_Load ACT:DMF000) |
-| WK-DMF0003-1748 | X-ROW | DMF0003_PRPopup.GetSLOC | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.GetSLOC: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_PRPopup.GetSLOC ACT:DMF0003_) |
-| WK-DMF0003-1749 | X-ROW | DMF0003_PRPopup.GetSPlant | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.GetSPlant: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_PRPopup.GetSPlant ACT:DMF000) |
-| WK-DMF0003-1750 | X-ROW | DMF0003_PRPopup.GetSplit | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.GetSplit: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_PRPopup.GetSplit ACT:DMF0003) |
-| WK-DMF0003-1751 | X-ROW | DMF0003_PRPopup.InitSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.InitSpread: 진입점 집계 74검사 — NOT_RUN:74 (미실행 검사가 남아 판정필요) |  | 19 (ACT:DMF0003_PRPopup.InitSpread ACT:DMF00) |
-| WK-DMF0003-1752 | X-ROW | DMF0003_PRPopup.SaveButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.SaveButton: 진입점 집계 6검사 — NOT_RUN:4 · NOPATH:2 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_PRPopup.SaveButton:299:1) |
-| WK-DMF0003-1753 | X-ROW | DMF0003_PRPopup.SaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.SaveData: 진입점 집계 14검사 — NOT_RUN:10 · NOPATH:2 · PASS:2 (미실행 검사가 남아 판정필요) |  | 87 (ACT:DMF0003_PRPopup.SaveData:307:1 ACT:D) |
-| WK-DMF0003-1754 | X-ROW | DMF0003_PRPopup.SetChangeRequestInfo | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.SetChangeRequestInfo: 진입점 집계 26검사 — NOT_RUN:23 · NOPATH:3 (미실행 검사가 남아 판정필요) |  | 13 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
-| WK-DMF0003-1755 | X-ROW | DMF0003_PRPopup.btnButtonList_UsrButtonL | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.btnButtonList_UsrButtonList_Click_: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_PRPopup.btnButtonList_UsrBut) |
-| WK-DMF0003-1756 | X-ROW | DMF0003_PRPopup.spdMain_Changed | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.spdMain_Changed: 진입점 집계 18검사 — NOT_RUN:12 · NOPATH:6 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_PRPopup.spdMain_Changed:558:) |
-| WK-DMF0003-1757 | X-ROW | DMF0003_SspSyncComparePopUp..ctor | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncComparePopUp..ctor: 진입점 집계 2검사 — NOPATH:1 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_SspSyncComparePopUp..ctor:83) |
-| WK-DMF0003-1758 | X-ROW | DMF0003_SspSyncComparePopUp.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncComparePopUp.CreateSpread: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_SspSyncComparePopUp.CreateSp) |
-| WK-DMF0003-1759 | X-ROW | DMF0003_SspSyncComparePopUp.DefineProper | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncComparePopUp.DefineProperty: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_SspSyncComparePopUp.DefinePr) |
-| WK-DMF0003-1760 | X-ROW | DMF0003_SspSyncComparePopUp.Dispose | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncComparePopUp.Dispose: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_SspSyncComparePopUp.Dispose:) |
-| WK-DMF0003-1761 | X-ROW | DMF0003_SspSyncComparePopUp.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncComparePopUp.FindData: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_SspSyncComparePopUp.FindData) |
-| WK-DMF0003-1762 | X-ROW | DMF0003_SspSyncComparePopUp.Form_Load | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncComparePopUp.Form_Load: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_SspSyncComparePopUp.Form_Loa) |
-| WK-DMF0003-1763 | X-ROW | DMF0003_SspSyncComparePopUp.InitSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncComparePopUp.InitSpread: 진입점 집계 58검사 — NOT_RUN:58 (미실행 검사가 남아 판정필요) |  | 15 (ACT:DMF0003_SspSyncComparePopUp.InitSpre) |
-| WK-DMF0003-1764 | X-ROW | DMF0003_SspSyncComparePopUp.LoadData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncComparePopUp.LoadData: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_SspSyncComparePopUp.LoadData) |
-| WK-DMF0003-1765 | X-ROW | DMF0003_SspSyncComparePopUp.spdMain_TopC | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncComparePopUp.spdMain_TopChange: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_SspSyncComparePopUp.spdMain_) |
-| WK-DMF0003-1766 | X-ROW | DMF0003_SspSyncPopUp..ctor | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncPopUp..ctor: 진입점 집계 2검사 — NOPATH:1 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_SspSyncPopUp..ctor:78:1 ACT:) |
-| WK-DMF0003-1767 | X-ROW | DMF0003_SspSyncPopUp.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncPopUp.CreateSpread: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_SspSyncPopUp.CreateSpread AC) |
-| WK-DMF0003-1768 | X-ROW | DMF0003_SspSyncPopUp.DefineProperty | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncPopUp.DefineProperty: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_SspSyncPopUp.DefineProperty ) |
-| WK-DMF0003-1769 | X-ROW | DMF0003_SspSyncPopUp.Dispose | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncPopUp.Dispose: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_SspSyncPopUp.Dispose:16:1 AC) |
-| WK-DMF0003-1770 | X-ROW | DMF0003_SspSyncPopUp.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncPopUp.FindData: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_SspSyncPopUp.FindData ACT:DM) |
-| WK-DMF0003-1771 | X-ROW | DMF0003_SspSyncPopUp.Form_Load | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncPopUp.Form_Load: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_SspSyncPopUp.Form_Load ACT:D) |
-| WK-DMF0003-1772 | X-ROW | DMF0003_SspSyncPopUp.InitSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncPopUp.InitSpread: 진입점 집계 50검사 — NOT_RUN:50 (미실행 검사가 남아 판정필요) |  | 14 (ACT:DMF0003_SspSyncPopUp.InitSpread ACT:) |
-| WK-DMF0003-1773 | X-ROW | DMF0003_SspSyncPopUp.LoadData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncPopUp.LoadData: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_SspSyncPopUp.LoadData ACT:DM) |
-| WK-DMF0003-1774 | X-ROW | DMF0003_SspSyncPopUp.spdMain_TopChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_SspSyncPopUp.spdMain_TopChange: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_SspSyncPopUp.spdMain_TopChan) |
-| WK-DMF0003-1775 | X-ROW | DMF0003_T_MktFcst..ctor | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst..ctor: 진입점 집계 2검사 — NOPATH:1 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_T_MktFcst..ctor:245:1 ACT:DM) |
-| WK-DMF0003-1776 | X-ROW | DMF0003_T_MktFcst.CreateSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.CreateSpread: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_T_MktFcst.CreateSpread ACT:D) |
-| WK-DMF0003-1777 | X-ROW | DMF0003_T_MktFcst.DefineProperty | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.DefineProperty: 진입점 집계 9검사 — NOT_RUN:7 · NOPATH:2 (미실행 검사가 남아 판정필요) |  | 21 (ACT:DMF0003_T_MktFcst.DefineProperty:407) |
-| WK-DMF0003-1778 | X-ROW | DMF0003_T_MktFcst.DeleteButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.DeleteButton: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.DeleteButton:655:1) |
-| WK-DMF0003-1779 | X-ROW | DMF0003_T_MktFcst.Dispose | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.Dispose: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_T_MktFcst.Dispose:16:1 ACT:D) |
-| WK-DMF0003-1780 | X-ROW | DMF0003_T_MktFcst.EditButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.EditButton: 진입점 집계 7검사 — NOT_RUN:7 (미실행 검사가 남아 판정필요) |  | 172 (ACT:DMF0003_T_MktFcst.EditButton ACT:DMF) |
-| WK-DMF0003-1781 | X-ROW | DMF0003_T_MktFcst.FindButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.FindButton: 진입점 집계 7검사 — NOT_RUN:5 · REVIEW:2 |  | 2 (ACT:DMF0003_T_MktFcst.FindButton ACT:DMF) |
-| WK-DMF0003-1782 | X-ROW | DMF0003_T_MktFcst.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.FindData: 진입점 집계 35검사 — NOT_RUN:29 · REVIEW:2 · PASS:2 · NOPATH:1 · TODO:1 |  | 121 (ACT:DMF0003_T_MktFcst.FindData:1085:1 AC) |
-| WK-DMF0003-1783 | X-ROW | DMF0003_T_MktFcst.Form_Load | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.Form_Load: 진입점 집계 6검사 — NOT_RUN:4 · NOPATH:1 · TODO:1 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_T_MktFcst.Form_Load:254:1 AC) |
-| WK-DMF0003-1784 | X-ROW | DMF0003_T_MktFcst.GetBizTypebyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetBizTypebyDivision: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_T_MktFcst.GetBizTypebyDivisi) |
-| WK-DMF0003-1785 | X-ROW | DMF0003_T_MktFcst.GetBucketType | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetBucketType: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_T_MktFcst.GetBucketType ACT:) |
-| WK-DMF0003-1786 | X-ROW | DMF0003_T_MktFcst.GetCustomerbyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetCustomerbyDivision: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_T_MktFcst.GetCustomerbyDivis) |
-| WK-DMF0003-1787 | X-ROW | DMF0003_T_MktFcst.GetCustomsHandbook | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetCustomsHandbook: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_T_MktFcst.GetCustomsHandbook) |
-| WK-DMF0003-1788 | X-ROW | DMF0003_T_MktFcst.GetDayRange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetDayRange: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_T_MktFcst.GetDayRange ACT:DM) |
-| WK-DMF0003-1789 | X-ROW | DMF0003_T_MktFcst.GetDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetDivision: 진입점 집계 4검사 — NOT_RUN:3 · PASS:1 (미실행 검사가 남아 판정필요) |  | 6 (ACT:DMF0003_T_MktFcst.GetDivision ACT:DM) |
-| WK-DMF0003-1790 | X-ROW | DMF0003_T_MktFcst.GetEdiSender | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetEdiSender: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_T_MktFcst.GetEdiSender ACT:D) |
-| WK-DMF0003-1791 | X-ROW | DMF0003_T_MktFcst.GetFcstType | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetFcstType: 진입점 집계 6검사 — NOT_RUN:3 · NOPATH:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 11 (ACT:DMF0003_T_MktFcst.GetFcstType:5597:1) |
-| WK-DMF0003-1792 | X-ROW | DMF0003_T_MktFcst.GetIncotermsType | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetIncotermsType: 진입점 집계 6검사 — NOT_RUN:3 · NOPATH:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_T_MktFcst.GetIncotermsType A) |
-| WK-DMF0003-1793 | X-ROW | DMF0003_T_MktFcst.GetItemType | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetItemType: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_T_MktFcst.GetItemType ACT:DM) |
-| WK-DMF0003-1794 | X-ROW | DMF0003_T_MktFcst.GetItemType2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetItemType2: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_T_MktFcst.GetItemType2 ACT:D) |
-| WK-DMF0003-1795 | X-ROW | DMF0003_T_MktFcst.GetPlantSitebyEndCusto | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetPlantSitebyEndCustomer: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 9 (ACT:DMF0003_T_MktFcst.GetPlantSitebyEndC) |
-| WK-DMF0003-1796 | X-ROW | DMF0003_T_MktFcst.GetSalesSite | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetSalesSite: 진입점 집계 8검사 — NOPATH:3 · NOT_RUN:3 · TODO:2 (미실행 검사가 남아 판정필요) |  | 11 (ACT:DMF0003_T_MktFcst.GetSalesSite:5641:) |
-| WK-DMF0003-1797 | X-ROW | DMF0003_T_MktFcst.GetSalesSite40 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetSalesSite40: 진입점 집계 8검사 — NOT_RUN:3 · NOPATH:3 · TODO:2 (미실행 검사가 남아 판정필요) |  | 11 (ACT:DMF0003_T_MktFcst.GetSalesSite40:566) |
-| WK-DMF0003-1798 | X-ROW | DMF0003_T_MktFcst.GetScmSitebyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetScmSitebyDivision: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 9 (ACT:DMF0003_T_MktFcst.GetScmSitebyDivisi) |
-| WK-DMF0003-1799 | X-ROW | DMF0003_T_MktFcst.GetSpdTitle | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetSpdTitle: 진입점 집계 8검사 — NOT_RUN:3 · NOPATH:2 · TODO:2 · PASS:1 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_T_MktFcst.GetSpdTitle:5081:1) |
-| WK-DMF0003-1800 | X-ROW | DMF0003_T_MktFcst.GetTeambyDivision | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetTeambyDivision: 진입점 집계 4검사 — NOT_RUN:3 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_T_MktFcst.GetTeambyDivision ) |
-| WK-DMF0003-1801 | X-ROW | DMF0003_T_MktFcst.GetWeekNumber | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.GetWeekNumber: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 10 (ACT:DMF0003_T_MktFcst.GetWeekNumber ACT:) |
-| WK-DMF0003-1802 | X-ROW | DMF0003_T_MktFcst.InitControls | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.InitControls: 진입점 집계 43검사 — NOT_RUN:40 · NOPATH:3 (미실행 검사가 남아 판정필요) |  | 51 (ACT:DMF0003_T_MktFcst.InitControls:300:1) |
-| WK-DMF0003-1803 | X-ROW | DMF0003_T_MktFcst.InitSaveDataTable | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.InitSaveDataTable: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 33 (ACT:DMF0003_T_MktFcst.InitSaveDataTable ) |
-| WK-DMF0003-1804 | X-ROW | DMF0003_T_MktFcst.InitSpread | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.InitSpread: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_T_MktFcst.InitSpread ACT:DMF) |
-| WK-DMF0003-1805 | X-ROW | DMF0003_T_MktFcst.InitSpreadFooterSum | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.InitSpreadFooterSum: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 11 (ACT:DMF0003_T_MktFcst.InitSpreadFooterSu) |
-| WK-DMF0003-1806 | X-ROW | DMF0003_T_MktFcst.InsertButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.InsertButton: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_T_MktFcst.InsertButton ACT:D) |
-| WK-DMF0003-1807 | X-ROW | DMF0003_T_MktFcst.InsertRow | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.InsertRow: 진입점 집계 42검사 — NOT_RUN:39 · NOPATH:3 (미실행 검사가 남아 판정필요) |  | 203 (ACT:DMF0003_T_MktFcst.InsertRow ACT:DMF0) |
-| WK-DMF0003-1808 | X-ROW | DMF0003_T_MktFcst.OnShown | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.OnShown: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 9 (ACT:DMF0003_T_MktFcst.OnShown ACT:DMF000) |
-| WK-DMF0003-1809 | X-ROW | DMF0003_T_MktFcst.SaveButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.SaveButton: 진입점 집계 7검사 — NOT_RUN:5 · NOPATH:2 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_T_MktFcst.SaveButton:1065:1) |
-| WK-DMF0003-1810 | X-ROW | DMF0003_T_MktFcst.SaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.SaveData: 진입점 집계 20검사 — NOT_RUN:13 · NOPATH:4 · PASS:3 (미실행 검사가 남아 판정필요) |  | 102 (ACT:DMF0003_T_MktFcst.SaveData:1422:1 AC) |
-| WK-DMF0003-1811 | X-ROW | DMF0003_T_MktFcst.SetSaveData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.SetSaveData: 진입점 집계 7검사 — NOT_RUN:7 (미실행 검사가 남아 판정필요) |  | 65 (ACT:DMF0003_T_MktFcst.SetSaveData:4208:1) |
-| WK-DMF0003-1812 | X-ROW | DMF0003_T_MktFcst.SetSaveDataRemove | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.SetSaveDataRemove: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 42 (ACT:DMF0003_T_MktFcst.SetSaveDataRemove ) |
-| WK-DMF0003-1813 | X-ROW | DMF0003_T_MktFcst.SetSaveSheetColor | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.SetSaveSheetColor: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_T_MktFcst.SetSaveSheetColor ) |
-| WK-DMF0003-1814 | X-ROW | DMF0003_T_MktFcst.SetSpreadColumn | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.SetSpreadColumn: 진입점 집계 13검사 — NOT_RUN:13 (미실행 검사가 남아 판정필요) |  | 41 (ACT:DMF0003_T_MktFcst.SetSpreadColumn AC) |
-| WK-DMF0003-1815 | X-ROW | DMF0003_T_MktFcst.SetSpreadHeaderSpan | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.SetSpreadHeaderSpan: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 55 (ACT:DMF0003_T_MktFcst.SetSpreadHeaderSpa) |
-| WK-DMF0003-1816 | X-ROW | DMF0003_T_MktFcst.ValidationCheck | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.ValidationCheck: 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 7 (ACT:DMF0003_T_MktFcst.ValidationCheck AC) |
-| WK-DMF0003-1817 | X-ROW | DMF0003_T_MktFcst.btnColumn_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.btnColumn_Click: 진입점 집계 6검사 — NOT_RUN:5 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_T_MktFcst.btnColumn_Click:45) |
-| WK-DMF0003-1818 | X-ROW | DMF0003_T_MktFcst.btnIncotermsChg_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.btnIncotermsChg_Click: 진입점 집계 7검사 — NOT_RUN:5 · NOPATH:2 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_T_MktFcst.btnIncotermsChg_Cl) |
-| WK-DMF0003-1819 | X-ROW | DMF0003_T_MktFcst.btnItemId_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.btnItemId_Click: 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 13 (ACT:DMF0003_T_MktFcst.btnItemId_Click:44) |
-| WK-DMF0003-1820 | X-ROW | DMF0003_T_MktFcst.btnMeasure_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.btnMeasure_Click: 진입점 집계 6검사 — NOT_RUN:5 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_T_MktFcst.btnMeasure_Click:4) |
-| WK-DMF0003-1821 | X-ROW | DMF0003_T_MktFcst.btnOwner_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.btnOwner_Click: 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_T_MktFcst.btnOwner_Click:519) |
-| WK-DMF0003-1822 | X-ROW | DMF0003_T_MktFcst.btnProject_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.btnProject_Click: 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 13 (ACT:DMF0003_T_MktFcst.btnProject_Click:4) |
-| WK-DMF0003-1823 | X-ROW | DMF0003_T_MktFcst.cboAS_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.cboAS_CheckedChanged: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_T_MktFcst.cboAS_CheckedChang) |
-| WK-DMF0003-1824 | X-ROW | DMF0003_T_MktFcst.cboBucketType_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.cboBucketType_Click: 진입점 집계 5검사 — NOT_RUN:5 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_T_MktFcst.cboBucketType_Clic) |
-| WK-DMF0003-1825 | X-ROW | DMF0003_T_MktFcst.cboBucketType_Selected | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.cboBucketType_SelectedIndexChang: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 21 (ACT:DMF0003_T_MktFcst.cboBucketType_Sele) |
-| WK-DMF0003-1826 | X-ROW | DMF0003_T_MktFcst.cboDivision_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.cboDivision_SelectedIndexChanged: 진입점 집계 16검사 — NOT_RUN:12 · NOPATH:2 · TODO:2 (미실행 검사가 남아 판정필요) |  | 52 (ACT:DMF0003_T_MktFcst.cboDivision_Select) |
-| WK-DMF0003-1827 | X-ROW | DMF0003_T_MktFcst.chkColor_CheckedChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.chkColor_CheckedChanged: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_T_MktFcst.chkColor_CheckedCh) |
-| WK-DMF0003-1828 | X-ROW | DMF0003_T_MktFcst.chkSum_CheckedChanged | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.chkSum_CheckedChanged: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 3 (ACT:DMF0003_T_MktFcst.chkSum_CheckedChan) |
-| WK-DMF0003-1829 | X-ROW | DMF0003_T_MktFcst.clbCustomer_SelectedIn | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.clbCustomer_SelectedIndexChanged: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 5 (ACT:DMF0003_T_MktFcst.clbCustomer_Select) |
-| WK-DMF0003-1830 | X-ROW | DMF0003_T_MktFcst.clbTeam_SelectedIndexC | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.clbTeam_SelectedIndexChanged: 진입점 집계 7검사 — NOT_RUN:3 · NOPATH:2 · TODO:2 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_T_MktFcst.clbTeam_SelectedIn) |
-| WK-DMF0003-1831 | X-ROW | DMF0003_T_MktFcst.contextMenuStrip1_Item | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.contextMenuStrip1_ItemClicked: 진입점 집계 9검사 — NOT_RUN:5 · NOPATH:4 (미실행 검사가 남아 판정필요) |  | 119 (ACT:DMF0003_T_MktFcst.contextMenuStrip1_) |
-| WK-DMF0003-1832 | X-ROW | DMF0003_T_MktFcst.fnValidation | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.fnValidation: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 164 (ACT:DMF0003_T_MktFcst.fnValidation ACT:D) |
-| WK-DMF0003-1833 | X-ROW | DMF0003_T_MktFcst.getDayOfWeek | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.getDayOfWeek: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_T_MktFcst.getDayOfWeek ACT:D) |
-| WK-DMF0003-1834 | X-ROW | DMF0003_T_MktFcst.spdMain_CellClick | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.spdMain_CellClick: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 20 (ACT:DMF0003_T_MktFcst.spdMain_CellClick ) |
-| WK-DMF0003-1835 | X-ROW | DMF0003_T_MktFcst.spdMain_CellDoubleClic | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.spdMain_CellDoubleClick: 진입점 집계 21검사 — NOT_RUN:13 · NOPATH:7 · PASS:1 (미실행 검사가 남아 판정필요) |  | 177 (ACT:DMF0003_T_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-1836 | X-ROW | DMF0003_T_MktFcst.spdMain_Changed | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.spdMain_Changed: 진입점 집계 30검사 — NOT_RUN:29 · NOPATH:1 (미실행 검사가 남아 판정필요) |  | 527 (ACT:DMF0003_T_MktFcst.spdMain_Changed:27) |
-| WK-DMF0003-1837 | X-ROW | DMF0003_T_MktFcst.spdMain_ClipboardPaste | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.spdMain_ClipboardPasted: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 15 (ACT:DMF0003_T_MktFcst.spdMain_ClipboardP) |
-| WK-DMF0003-1838 | X-ROW | DMF0003_T_MktFcst.spdMain_ComboSelChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.spdMain_ComboSelChange: 진입점 집계 6검사 — NOPATH:3 · NOT_RUN:2 · TODO:1 (미실행 검사가 남아 판정필요) |  | 95 (ACT:DMF0003_T_MktFcst.spdMain_ComboSelCh) |
-| WK-DMF0003-1839 | X-ROW | DMF0003_T_MktFcst.spdMain_EditChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.spdMain_EditChange: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_T_MktFcst.spdMain_EditChange) |
-| WK-DMF0003-1840 | X-ROW | DMF0003_T_MktFcst.spdMain_KeyUp | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.spdMain_KeyUp: 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 9 (ACT:DMF0003_T_MktFcst.spdMain_KeyUp ACT:) |
-| WK-DMF0003-1841 | X-ROW | DMF0003_T_MktFcst.spdMain_TopChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_T_MktFcst.spdMain_TopChange: 진입점 집계 2검사 — NOT_RUN:2 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_T_MktFcst.spdMain_TopChange ) |
-| WK-DMF0003-1842 | X-ROW | E01 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — E01: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (E01) |
-| WK-DMF0003-1843 | X-ROW | E01-2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — E01-2: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (E01-2) |
-| WK-DMF0003-1844 | X-ROW | E05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — E05: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (E05) |
-| WK-DMF0003-1845 | X-ROW | E05-1 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — E05-1: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (E05-1) |
-| WK-DMF0003-1846 | X-ROW | E08 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — E08: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (E08) |
-| WK-DMF0003-1847 | X-ROW | E09 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — E09: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (E09) |
-| WK-DMF0003-1848 | X-ROW | HANDLER:Form_Load | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — HANDLER:Form_Load: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (HANDLER:Form_Load) |
-| WK-DMF0003-1849 | X-ROW | HANDLER:btnColumn_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — HANDLER:btnColumn_Click: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (HANDLER:btnColumn_Click) |
-| WK-DMF0003-1850 | X-ROW | HANDLER:btnMeasure_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — HANDLER:btnMeasure_Click: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (HANDLER:btnMeasure_Click) |
-| WK-DMF0003-1851 | X-ROW | PlantSite 필수(81만) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — PlantSite 필수(81만): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (PlantSite 필수(81만)) |
-| WK-DMF0003-1852 | X-ROW | SUM헤더 (#1~5) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — SUM헤더 (#1~5): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (SUM헤더 (#1~5)) |
-| WK-DMF0003-1853 | X-ROW | SspSync(40 & MKT_FCST_RP) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — SspSync(40 & MKT_FCST_RP): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (SspSync(40 & MKT_FCST_RP)) |
-| WK-DMF0003-1854 | X-ROW | VMI_YN/STD_DIO 표시(82만) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — VMI_YN/STD_DIO 표시(82만): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (VMI_YN/STD_DIO 표시(82만)) |
-| WK-DMF0003-1855 | X-ROW | `Substring(0,2)=="81"` / `=="82"` / else | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — `Substring(0,2)=="81"` / `=="82"` / else(40): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (`Substring(0,2)=="81"` / `=="82"` / else) |
-| WK-DMF0003-1856 | X-ROW | `__asis-mapping__.md` | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — `__asis-mapping__.md`: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (`__asis-mapping__.md`) |
-| WK-DMF0003-1857 | X-ROW | `_artifacts/_apply_corporate/40_dmf0003_ | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — `_artifacts/_apply_corporate/40_dmf0003_i18n_regis: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (`_artifacts/_apply_corporate/40_dmf0003_) |
-| WK-DMF0003-1858 | X-ROW | `components/MktFcstGrid.tsx` | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — `components/MktFcstGrid.tsx`: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (`components/MktFcstGrid.tsx`) |
-| WK-DMF0003-1859 | X-ROW | `public/locales/{KO,EN,CN}.json` | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — `public/locales/{KO,EN,CN}.json`: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (`public/locales/{KO,EN,CN}.json`) |
-| WK-DMF0003-1860 | X-ROW | `utils/mkt-fcst.division.ts` | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — `utils/mkt-fcst.division.ts`: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (`utils/mkt-fcst.division.ts`) |
-| WK-DMF0003-1861 | X-ROW | `utils/mkt-fcst.prContext.ts` | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — `utils/mkt-fcst.prContext.ts`: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (`utils/mkt-fcst.prContext.ts`) |
-| WK-DMF0003-1862 | X-ROW | iDailyQty/iRemnant 분배 (#103/104/107/108/ | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — iDailyQty/iRemnant 분배 (#103/104/107/108/110): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (iDailyQty/iRemnant 분배 (#103/104/107/108/) |
-| WK-DMF0003-1863 | X-ROW | iLastWeeklySum 과거합 (#115/116/117) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — iLastWeeklySum 과거합 (#115/116/117): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (iLastWeeklySum 과거합 (#115/116/117)) |
-| WK-DMF0003-1864 | X-ROW | iMonthlySum 누적/세팅 (#98/99/112/127) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — iMonthlySum 누적/세팅 (#98/99/112/127): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (iMonthlySum 누적/세팅 (#98/99/112/127)) |
-| WK-DMF0003-1865 | X-ROW | iMonthlySum-iLastWeeklySum 분배 (#118/119) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — iMonthlySum-iLastWeeklySum 분배 (#118/119): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (iMonthlySum-iLastWeeklySum 분배 (#118/119)) |
-| WK-DMF0003-1866 | X-ROW | iWeeklySum 누적/세팅 (#96/97/122/125) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — iWeeklySum 누적/세팅 (#96/97/122/125): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (iWeeklySum 누적/세팅 (#96/97/122/125)) |
-| WK-DMF0003-1867 | X-ROW | iWkSum_Sync 강제상향 (#102/105/106) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — iWkSum_Sync 강제상향 (#102/105/106): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (iWkSum_Sync 강제상향 (#102/105/106)) |
-| WK-DMF0003-1868 | X-ROW | 중복키 81=+PlantSite / 82=제외 / 40=Customer4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 중복키 81=+PlantSite / 82=제외 / 40=Customer40계열: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (중복키 81=+PlantSite / 82=제외 / 40=Customer4) |
-| WK-DMF0003-1869 | X-ROW | 키 컬럼 40=Customer40/ScmSiteId40/ItemId40  | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 키 컬럼 40=Customer40/ScmSiteId40/ItemId40 vs 81·82=P: 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (키 컬럼 40=Customer40/ScmSiteId40/ItemId40 ) |
-| WK-DMF0003-1870 | X-ROW | 합계변수: iWeeklySum/iMonthlySum (#96~127, 일 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — 합계변수: iWeeklySum/iMonthlySum (#96~127, 일↔주↔월): 진입점 동작 재현 시나리오 필요 — 문장 종류 , 연결된 요소 검사 없음 |  | 1 (합계변수: iWeeklySum/iMonthlySum (#96~127, 일) |
-| WK-DMF0003-1871 | G5 | 13 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — 13: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (13) |
-| WK-DMF0003-1872 | G5 | 2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — 2: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (2) |
-| WK-DMF0003-1873 | G5 | CF-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — CF-05: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (CF-05) |
-| WK-DMF0003-1874 | G5 | CF-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — CF-06: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (CF-06) |
-| WK-DMF0003-1875 | G5 | CH-102 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — CH-102: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (CH-102) |
-| WK-DMF0003-1876 | G5 | CH-103 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — CH-103: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (CH-103) |
-| WK-DMF0003-1877 | G5 | CH-105 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — CH-105: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (CH-105) |
-| WK-DMF0003-1878 | G5 | CH-108 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — CH-108: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (CH-108) |
-| WK-DMF0003-1879 | G5 | CK-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — CK-05: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (CK-05) |
-| WK-DMF0003-1880 | G5 | CK-11 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — CK-11: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (CK-11) |
-| WK-DMF0003-1881 | G5 | DMF0003_1_MktFcst.spdMain_CellDoubleClic | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — DMF0003_1_MktFcst.spdMain_CellDoubleClick: 진입점 집계 — G5 4요소: NOPATH:4 (미실행 요소가 남아 판정필요) |  | 189 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-1882 | G5 | E04-4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — E04-4: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (E04-4) |
-| WK-DMF0003-1883 | G5 | E04-5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — E04-5: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (E04-5) |
-| WK-DMF0003-1884 | G5 | E06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — E06: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (E06) |
-| WK-DMF0003-1885 | G5 | Popup | 사람 판정 / AS-IS 원문 확인 → 재판정 | G5 기대값 확정 — Popup: 행 집계 — G5 19요소: NOPATH:19 (미실행 요소가 남아 판정필요) |  | 1 (Popup) |
-| WK-DMF0003-1886 | H6 | 13 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — 13: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (13) |
-| WK-DMF0003-1887 | H6 | 2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — 2: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (2) |
-| WK-DMF0003-1888 | H6 | CF-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — CF-05: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (CF-05) |
-| WK-DMF0003-1889 | H6 | CF-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — CF-06: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (CF-06) |
-| WK-DMF0003-1890 | H6 | CH-102 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — CH-102: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (CH-102) |
-| WK-DMF0003-1891 | H6 | CH-103 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — CH-103: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (CH-103) |
-| WK-DMF0003-1892 | H6 | CH-105 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — CH-105: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (CH-105) |
-| WK-DMF0003-1893 | H6 | CH-108 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — CH-108: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (CH-108) |
-| WK-DMF0003-1894 | H6 | CK-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — CK-05: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (CK-05) |
-| WK-DMF0003-1895 | H6 | CK-11 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — CK-11: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (CK-11) |
-| WK-DMF0003-1896 | H6 | DMF0003_1_MktFcst.spdMain_CellDoubleClic | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — DMF0003_1_MktFcst.spdMain_CellDoubleClick: 진입점 집계 — H6 4요소: NOT_RUN:3 · NOPATH:1 (미실행 요소가 남아 판정필요) |  | 189 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-1897 | H6 | E04-4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — E04-4: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (E04-4) |
-| WK-DMF0003-1898 | H6 | E04-5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — E04-5: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (E04-5) |
-| WK-DMF0003-1899 | H6 | E06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — E06: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (E06) |
-| WK-DMF0003-1900 | H6 | Popup | 사람 판정 / AS-IS 원문 확인 → 재판정 | H6 기대값 확정 — Popup: 행 집계 — H6 19요소: NOPATH:16 · NOT_RUN:3 (미실행 요소가 남아 판정필요) |  | 1 (Popup) |
-| WK-DMF0003-1901 | M4 | 13 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — 13: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (13) |
-| WK-DMF0003-1902 | M4 | 2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — 2: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (2) |
-| WK-DMF0003-1903 | M4 | CF-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — CF-05: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (CF-05) |
-| WK-DMF0003-1904 | M4 | CF-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — CF-06: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (CF-06) |
-| WK-DMF0003-1905 | M4 | CH-102 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — CH-102: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (CH-102) |
-| WK-DMF0003-1906 | M4 | CH-103 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — CH-103: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (CH-103) |
-| WK-DMF0003-1907 | M4 | CH-105 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — CH-105: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (CH-105) |
-| WK-DMF0003-1908 | M4 | CH-108 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — CH-108: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (CH-108) |
-| WK-DMF0003-1909 | M4 | CK-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — CK-05: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (CK-05) |
-| WK-DMF0003-1910 | M4 | CK-11 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — CK-11: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (CK-11) |
-| WK-DMF0003-1911 | M4 | DMF0003_1_MktFcst.spdMain_CellDoubleClic | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — DMF0003_1_MktFcst.spdMain_CellDoubleClick: 진입점 집계 — M4 8요소: NOT_RUN:8 (미실행 요소가 남아 판정필요) |  | 189 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
-| WK-DMF0003-1912 | M4 | E04-4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — E04-4: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (E04-4) |
-| WK-DMF0003-1913 | M4 | E04-5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — E04-5: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (E04-5) |
-| WK-DMF0003-1914 | M4 | E06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — E06: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (E06) |
-| WK-DMF0003-1915 | M4 | Popup | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — Popup: 행 집계 — M4 23요소: NOT_RUN:23 (미실행 요소가 남아 판정필요) |  | 1 (Popup) |
+| WK-DMF0003-0199 | B1 | AS_FROM_SITE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL AS_FROM_SITE | 있음(SHEET_COLUMNS) | 2 (AS_FROM_SITE ACT:DMF0003_MktFcst.InsertR) |
+| WK-DMF0003-0200 | B1 | C | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL C | 있음(FE 소스) | 1 (C-118) |
+| WK-DMF0003-0201 | B1 | D | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL D | 있음(FE 소스) | 1 (AS_FROM_SITE) |
+| WK-DMF0003-0202 | B1 | DIVISION_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL DIVISION_ID | 있음(SHEET_COLUMNS) | 1 (AS_FROM_SITE) |
+| WK-DMF0003-0203 | B1 | END_CUSTOMER / End Customer | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL END_CUSTOMER / End Customer | 있음(SHEET_COLUMNS) | 1 (EndCustomerByDivisionDeptAuth) |
+| WK-DMF0003-0204 | B1 | PLANT_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL PLANT_SITE_ID | 있음(SHEET_COLUMNS) | 3 (PlantByDivisionCompany PlantSiteByItem 7) |
+| WK-DMF0003-0205 | B1 | S | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL S | 있음(FE 소스) | 2 (ACT:DMF0003_MktFcst.InsertRow:2597:36 AC) |
+| WK-DMF0003-0206 | B1 | SCM_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 COL SCM_SITE_ID | 있음(SHEET_COLUMNS) | 1 (SiteByEndCustomerAuth) |
+| WK-DMF0003-0207 | B1 | SLOC | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 PCOL SLOC | 판단불가(대상 단위 PCOL) | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
+| WK-DMF0003-0208 | B1 | STORAGE_PLANT_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B1(_verify.spec(@verify)) → 대상 PCOL STORAGE_PLANT_ID | 판단불가(대상 단위 PCOL) | 1 (ACT:DMF0003_PRPopup.spdMain_Changed:566:) |
+| WK-DMF0003-0209 | B2 | AS_FROM_SITE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL AS_FROM_SITE | 있음(SHEET_COLUMNS) | 2 (AS_FROM_SITE ACT:DMF0003_MktFcst.InsertR) |
+| WK-DMF0003-0210 | B2 | C | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL C | 있음(FE 소스) | 1 (C-118) |
+| WK-DMF0003-0211 | B2 | D | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL D | 있음(FE 소스) | 1 (AS_FROM_SITE) |
+| WK-DMF0003-0212 | B2 | DIVISION_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL DIVISION_ID | 있음(SHEET_COLUMNS) | 1 (AS_FROM_SITE) |
+| WK-DMF0003-0213 | B2 | END_CUSTOMER / End Customer | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL END_CUSTOMER / End Customer | 있음(SHEET_COLUMNS) | 1 (EndCustomerByDivisionDeptAuth) |
+| WK-DMF0003-0214 | B2 | PLANT_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL PLANT_SITE_ID | 있음(SHEET_COLUMNS) | 3 (PlantByDivisionCompany PlantSiteByItem 7) |
+| WK-DMF0003-0215 | B2 | S | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL S | 있음(FE 소스) | 2 (ACT:DMF0003_MktFcst.InsertRow:2597:36 AC) |
+| WK-DMF0003-0216 | B2 | SCM_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 COL SCM_SITE_ID | 있음(SHEET_COLUMNS) | 1 (SiteByEndCustomerAuth) |
+| WK-DMF0003-0217 | B2 | SLOC | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 PCOL SLOC | 판단불가(대상 단위 PCOL) | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
+| WK-DMF0003-0218 | B2 | STORAGE_PLANT_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B2(_verify.spec(@verify)) → 대상 PCOL STORAGE_PLANT_ID | 판단불가(대상 단위 PCOL) | 1 (ACT:DMF0003_PRPopup.spdMain_Changed:566:) |
+| WK-DMF0003-0219 | B3 | AS_FROM_SITE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B3(combo_oracle order_check — AS-IS ORDER B) → 대상 COL AS_FROM_SITE | 있음(SHEET_COLUMNS) | 8 (CD-03 ACT:DMF0003_MktFcst.InsertRow:2615) |
+| WK-DMF0003-0220 | B3 | D | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B3(combo_oracle order_check — AS-IS ORDER B) → 대상 COL D | 있음(FE 소스) | 1 (CD-03) |
+| WK-DMF0003-0221 | B3 | DIVISION_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B3(combo_oracle order_check — AS-IS ORDER B) → 대상 COL DIVISION_ID | 있음(SHEET_COLUMNS) | 1 (CD-03) |
+| WK-DMF0003-0222 | B3 | FCST_TYPE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B3(combo_oracle order_check — AS-IS ORDER B) → 대상 COL FCST_TYPE | 있음(SHEET_COLUMNS) | 9 (ACT:DMF0003_1_MktFcst.GetFcstType ACT:DM) |
+| WK-DMF0003-0223 | B3 | N | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B3(combo_oracle order_check — AS-IS ORDER B) → 대상 COL N | 있음(FE 소스) | 13 (6 ACT:DMF0003_1_MktFcst.GetSalesSite ACT) |
+| WK-DMF0003-0224 | B3 | P | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B3(combo_oracle order_check — AS-IS ORDER B) → 대상 COL P | 있음(FE 소스) | 3 (ACT:DMF0003_1_MktFcst.GetIncotermsType:6) |
+| WK-DMF0003-0225 | B3 | S | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B3(combo_oracle order_check — AS-IS ORDER B) → 대상 COL S | 있음(FE 소스) | 6 (CD-08 6 ACT:DMF0003_MktFcst.GetSalesSite) |
+| WK-DMF0003-0226 | B3 | SCM_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B3(combo_oracle order_check — AS-IS ORDER B) → 대상 COL SCM_SITE_ID | 있음(SHEET_COLUMNS) | 1 (CD-08) |
+| WK-DMF0003-0227 | B3 | cboAS / AS | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B3(combo_oracle order_check — AS-IS ORDER B) → 대상 COND cboAS / AS | 있음(FE 소스) | 8 (ACT:DMF0003_1_MktFcst.GetSalesSite ACT:D) |
+| WK-DMF0003-0228 | B3 | drpPeriod / Period | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B3(combo_oracle order_check — AS-IS ORDER B) → 대상 COND drpPeriod / Period | 있음(FE 소스) | 10 (ACT:DMF0003_1_MktFcst.GetSpdTitle ACT:DM) |
+| WK-DMF0003-0229 | B4 | AS_FROM_SITE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL AS_FROM_SITE | 있음(SHEET_COLUMNS) | 10 (CD-03 AS_FROM_SITE ACT:DMF0003_MktFcst.I) |
+| WK-DMF0003-0230 | B4 | C | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL C | 있음(FE 소스) | 1 (C-118) |
+| WK-DMF0003-0231 | B4 | D | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL D | 있음(FE 소스) | 2 (CD-03 AS_FROM_SITE) |
+| WK-DMF0003-0232 | B4 | DIVISION_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL DIVISION_ID | 있음(SHEET_COLUMNS) | 2 (CD-03 AS_FROM_SITE) |
+| WK-DMF0003-0233 | B4 | END_CUSTOMER / End Customer | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL END_CUSTOMER / End Customer | 있음(SHEET_COLUMNS) | 1 (EndCustomerByDivisionDeptAuth) |
+| WK-DMF0003-0234 | B4 | FCST_TYPE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL FCST_TYPE | 있음(SHEET_COLUMNS) | 9 (ACT:DMF0003_1_MktFcst.GetFcstType ACT:DM) |
+| WK-DMF0003-0235 | B4 | N | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL N | 있음(FE 소스) | 13 (6 ACT:DMF0003_1_MktFcst.GetSalesSite ACT) |
+| WK-DMF0003-0236 | B4 | P | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL P | 있음(FE 소스) | 3 (ACT:DMF0003_1_MktFcst.GetIncotermsType:6) |
+| WK-DMF0003-0237 | B4 | PLANT_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL PLANT_SITE_ID | 있음(SHEET_COLUMNS) | 3 (PlantByDivisionCompany PlantSiteByItem 7) |
+| WK-DMF0003-0238 | B4 | S | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL S | 있음(FE 소스) | 8 (CD-08 6 ACT:DMF0003_MktFcst.GetSalesSite) |
+| WK-DMF0003-0239 | B4 | SCM_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COL SCM_SITE_ID | 있음(SHEET_COLUMNS) | 2 (CD-08 SiteByEndCustomerAuth) |
+| WK-DMF0003-0240 | B4 | SLOC | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 PCOL SLOC | 판단불가(대상 단위 PCOL) | 2 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
+| WK-DMF0003-0241 | B4 | STORAGE_PLANT_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 PCOL STORAGE_PLANT_ID | 판단불가(대상 단위 PCOL) | 1 (ACT:DMF0003_PRPopup.spdMain_Changed:566:) |
+| WK-DMF0003-0242 | B4 | cboAS / AS | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COND cboAS / AS | 있음(FE 소스) | 8 (ACT:DMF0003_1_MktFcst.GetSalesSite ACT:D) |
+| WK-DMF0003-0243 | B4 | drpPeriod / Period | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 B4(combo_oracle.py(W1)) → 대상 COND drpPeriod / Period | 있음(FE 소스) | 10 (ACT:DMF0003_1_MktFcst.GetSpdTitle ACT:DM) |
+| WK-DMF0003-0244 | DB-SYN | DMF0000_GET_MASTER_CHG_POPUP | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP DMF0000_GET_MASTER_CHG_POPUP | 없음(PROC_M 대응 없음) | 5 (CH-108 ACT:DMF0003_MatsterChgPopup.FindD) |
+| WK-DMF0003-0245 | DB-SYN | DMF0003_GET_BUCKET_TYPE_CODE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP DMF0003_GET_BUCKET_TYPE_CODE | 없음(PROC_M 대응 없음) | 7 (CK-04 ACT:DMF0003_1_MktFcst.GetBucketTyp) |
+| WK-DMF0003-0246 | DB-SYN | DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE | 없음(PROC_M 대응 없음) | 2 (ACT:DMF0003_MatsterChgPopup.SaveData:529) |
+| WK-DMF0003-0247 | DB-SYN | SCM0001_GET_BIZ_TYPE_BY_DIVISION | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_BIZ_TYPE_BY_DIVISION | 없음(PROC_M 대응 없음) | 7 (CK-08 ACT:DMF0003_1_MktFcst.GetBizTypeby) |
+| WK-DMF0003-0248 | DB-SYN | SCM0001_GET_CUSTOMER_BY_DIVISION | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_CUSTOMER_BY_DIVISION | 없음(PROC_M 대응 없음) | 6 (ACT:DMF0003_1_MktFcst.GetCustomerbyDivis) |
+| WK-DMF0003-0249 | DB-SYN | SCM0001_GET_LOOKUP_VALUES | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_LOOKUP_VALUES | 없음(PROC_M 대응 없음) | 15 (CK-07 ACT:DMF0003_1_MktFcst.GetItemType:) |
+| WK-DMF0003-0250 | DB-SYN | SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER | 없음(PROC_M 대응 없음) | 6 (ACT:DMF0003_1_MktFcst.GetPlantSitebyEndC) |
+| WK-DMF0003-0251 | DB-SYN | SCM0001_GET_SITE_BY_DIVISION | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_SITE_BY_DIVISION | 없음(PROC_M 대응 없음) | 6 (ACT:DMF0003_1_MktFcst.GetScmSitebyDivisi) |
+| WK-DMF0003-0252 | DB-SYN | SCM0001_GET_TEAM_BY_DIVISION | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 DB-SYN(syn_check.py·fixture dberr) → 대상 SP SCM0001_GET_TEAM_BY_DIVISION | 없음(PROC_M 대응 없음) | 6 (ACT:DMF0003_1_MktFcst.GetTeambyDivision:) |
+| WK-DMF0003-0253 | G4 | btnCalculation | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnCalculation | 없음 | 6 (ACT:DMF0003_1_MktFcst.InitControls:473:6) |
+| WK-DMF0003-0254 | G4 | btnColumn | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnColumn | 없음 | 4 (ACT:DMF0003_1_MktFcst.InitControls:465:5) |
+| WK-DMF0003-0255 | G4 | btnIncotermsChg | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnIncotermsChg | 있음(FE 소스) | 24 (ACT:DMF0003_1_MktFcst.DefineProperty ACT) |
+| WK-DMF0003-0256 | G4 | btnItemId | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnItemId | 없음 | 1 (HANDLER:btnItemId_Click) |
+| WK-DMF0003-0257 | G4 | btnMeasure | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnMeasure | 없음 | 4 (ACT:DMF0003_1_MktFcst.InitControls:466:5) |
+| WK-DMF0003-0258 | G4 | btnOwner | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnOwner | 없음 | 1 (HANDLER:btnOwner_Click) |
+| WK-DMF0003-0259 | G4 | btnProject | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnProject | 없음 | 10 (HANDLER:btnProject_Click ACT:DMF0003_1_M) |
+| WK-DMF0003-0260 | G4 | btnUpDown | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) + 구 | 검사기 연결 G4(smoke 화면 열림(labels)·_verify) → 대상 BTN btnUpDown | 없음 | 5 (ACT:DMF0003_1_MktFcst.InitSpread ACT:DMF) |
+| WK-DMF0003-0261 | E2 | YYYYMMDD | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E2(_verify.spec(@verify)) → 대상 COL YYYYMMDD | 있음(SHEET_COLUMNS) | 1 (111) |
+| WK-DMF0003-0262 | E5 | AS_FROM_SITE | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL AS_FROM_SITE | 있음(SHEET_COLUMNS) | 1 (AS_FROM_SITE) |
+| WK-DMF0003-0263 | E5 | C | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL C | 있음(FE 소스) | 1 (C-118) |
+| WK-DMF0003-0264 | E5 | D | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL D | 있음(FE 소스) | 1 (AS_FROM_SITE) |
+| WK-DMF0003-0265 | E5 | DIVISION_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL DIVISION_ID | 있음(SHEET_COLUMNS) | 1 (AS_FROM_SITE) |
+| WK-DMF0003-0266 | E5 | END_CUSTOMER / End Customer | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL END_CUSTOMER / End Customer | 있음(SHEET_COLUMNS) | 1 (EndCustomerByDivisionDeptAuth) |
+| WK-DMF0003-0267 | E5 | PLANT_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL PLANT_SITE_ID | 있음(SHEET_COLUMNS) | 3 (PlantByDivisionCompany PlantSiteByItem 7) |
+| WK-DMF0003-0268 | E5 | SCM_SITE_ID | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 E5(_verify.spec(@verify)) → 대상 COL SCM_SITE_ID | 있음(SHEET_COLUMNS) | 1 (SiteByEndCustomerAuth) |
+| WK-DMF0003-0269 | G03-WIRE | DMF0003 화면 | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G03-WIRE(check.js G03) → 대상 SCREEN DMF0003 화면 | 판단불가(대상 단위 SCREEN) | 56 (ACT:DMF0003_1_MktFcst..ctor ACT:DMF0003_) |
+| WK-DMF0003-0270 | G5 | DMF0003_SspSyncComparePopUp | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(popup_args_check.py · _verify.spec(@veri) → 대상 POPUP DMF0003_SspSyncComparePopUp | 판단불가(대상 단위 POPUP) | 6 (CA-114 MODAL:DMF0003_SspSyncComparePopUp) |
+| WK-DMF0003-0271 | G5 | DMF0003_SspSyncPopUp | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(popup_args_check.py · _verify.spec(@veri) → 대상 POPUP DMF0003_SspSyncPopUp | 판단불가(대상 단위 POPUP) | 6 (MODAL:DMF0003_SspSyncPopUp MODAL:SspSync) |
+| WK-DMF0003-0272 | G5 | cboBucketType / Bucket / Bucket Type | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(popup_args_check.py · _verify.spec(@veri) → 대상 COND cboBucketType / Bucket / Bucket Type | 있음(FE 소스) | 6 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0273 | G5 | clbDivision / Division | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 G5(popup_args_check.py · _verify.spec(@veri) → 대상 COND clbDivision / Division | 있음(FE 소스) | 16 (ACT:DMF0003_1_MktFcst.btnColumn_Click:49) |
+| WK-DMF0003-0274 | H6 | DMF0003_SspSyncComparePopUp | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 POPUP DMF0003_SspSyncComparePopUp | 판단불가(대상 단위 POPUP) | 6 (CA-114 MODAL:DMF0003_SspSyncComparePopUp) |
+| WK-DMF0003-0275 | H6 | DMF0003_SspSyncPopUp | 하네스(ledger.py 원장 항목 생성 또는 @trace 확장) | 검사기 연결 H6(_verify.spec(@verify)·smoke popup) → 대상 POPUP DMF0003_SspSyncPopUp | 판단불가(대상 단위 POPUP) | 6 (MODAL:DMF0003_SspSyncPopUp MODAL:SspSync) |
+
+## W6 검증 실행 (25)
+
+| ID | 검사 | 대상 | 담당 | 할 일 | TO-BE 흔적 | 대조표 행 |
+|---|---|---|---|---|---|---|
+| WK-DMF0003-0276 | G4 | cboBucketType / Bucket / Bucket Type | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — cboBucketType / Bucket / Bucket Type · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 15 (ACT:DMF0003_1_MktFcst.DefineProperty ACT) |
+| WK-DMF0003-0277 | G4 | cboCellQty / Cell Qty | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — cboCellQty / Cell Qty · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 12 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
+| WK-DMF0003-0278 | G4 | chkColor / Color | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — chkColor / Color · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
+| WK-DMF0003-0279 | G4 | chkSum / Sum | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — chkSum / Sum · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
+| WK-DMF0003-0280 | G4 | clbBizType / Biz Type | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbBizType / Biz Type · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 11 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
+| WK-DMF0003-0281 | G4 | clbCustomer / End Customer / Customer | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbCustomer / End Customer / Customer · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 11 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
+| WK-DMF0003-0282 | G4 | clbDivision / Division | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbDivision / Division · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 61 (ACT:DMF0003_1_MktFcst.DefineProperty ACT) |
+| WK-DMF0003-0283 | G4 | clbEDISender / Sender Code / EDISender | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbEDISender / Sender Code / EDISender · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 8 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
+| WK-DMF0003-0284 | G4 | clbEndCustomer / End Customer | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbEndCustomer / End Customer · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 5 (ACT:DMF0003_MatsterChgPopup.InitControls) |
+| WK-DMF0003-0285 | G4 | clbItemType / Item Type | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbItemType / Item Type · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 5 (ACT:DMF0003_1_MktFcst.InitControls:462:5) |
+| WK-DMF0003-0286 | G4 | clbPlantSite / Plant Site | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbPlantSite / Plant Site · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
+| WK-DMF0003-0287 | G4 | clbSalesSite / Sales Site | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbSalesSite / Sales Site · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 10 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
+| WK-DMF0003-0288 | G4 | clbTeam / Team | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — clbTeam / Team · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 18 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
+| WK-DMF0003-0289 | G4 | drpPeriod / Period | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — drpPeriod / Period · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.FindData:1482:16 A) |
+| WK-DMF0003-0290 | G4 | drpPeriod1 / ▼ PERIOD: / Period1 | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — drpPeriod1 / ▼ PERIOD: / Period1 · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 2 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
+| WK-DMF0003-0291 | G4 | drpPeriodPSI / PERIOD / Period PSI | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — drpPeriodPSI / PERIOD / Period PSI · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 4 (ACT:DMF0003_1_MktFcst.InitControls ACT:D) |
+| WK-DMF0003-0292 | G4 | drpPeriodSimulation / SIMULATION / Perio | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — drpPeriodSimulation / SIMULATION / Period Simulati · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 3 (ACT:DMF0003_1_MktFcst.InitControls:456:5) |
+| WK-DMF0003-0293 | G4 | txtMarketShare / ▼ 당사 M/S(%): / Market S | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — txtMarketShare / ▼ 당사 M/S(%): / Market Share · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 2 (ACT:DMF0003_1_MktFcst.txtMarketShare_Cli) |
+| WK-DMF0003-0294 | G4 | txtPrHeader / PR Header / Pr Header | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — txtPrHeader / PR Header / Pr Header · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 2 (ACT:DMF0003_PRPopup.EditButton:293:16 AC) |
+| WK-DMF0003-0295 | G4 | txtProject / Project | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — txtProject / Project · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 2 (ACT:DMF0003_MatsterChgPopup.InitControls) |
+| WK-DMF0003-0296 | G4 | txtRequestNo / Request No | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | G4 실행 — txtRequestNo / Request No · 검사기 있음(smoke 화면 열림(labels)·_verify) — 실행 필요: smoke |  | 1 (ACT:DMF0003_PRPopup.SetChangeRequestInfo) |
+| WK-DMF0003-0297 | SC1 | DMF0003 화면 | E2E(mapping_trace.py 재실행 / smoke 스펙 생성·실 | SC1 실행 — DMF0003 화면 · 검사기 있음(check.js SC1·smoke 기준표 순서) — 실행 필요: smoke |  | 8 (E01-1 CD-10 CK-10 COMMON:UC-06 `componen) |
+| WK-DMF0003-0298 | H6 | cboBucketType / Bucket / Bucket Type | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | H6 실행 — cboBucketType / Bucket / Bucket Type · 검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0299 | H6 | clbDivision / Division | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | H6 실행 — clbDivision / Division · 검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke |  | 16 (ACT:DMF0003_1_MktFcst.btnColumn_Click:49) |
+| WK-DMF0003-0300 | H6 | drpPeriod / Period | E2E(smoke 스펙 생성·실행(🧪 E2E smoke) / @verif | H6 실행 — drpPeriod / Period · 검사기 있음(_verify.spec(@verify)·smoke popup) — 실행 필요: smoke |  | 5 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+
+## W7 기대값 확정 (184)
+
+| ID | 검사 | 대상 | 담당 | 할 일 | TO-BE 흔적 | 대조표 행 |
+|---|---|---|---|---|---|---|
+| WK-DMF0003-0301 | X-REASON | C-101 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — C-101 §0.1 [원문 무번호] 계통 / 방식 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (C-101) |
+| WK-DMF0003-0302 | X-REASON | C-108 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — C-108 §0.2 [원문 무번호] 이벤트 / 81/82 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (C-108) |
+| WK-DMF0003-0303 | X-REASON | CA-06 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-06 §1 필수 컬럼 부재 — 81*: 9종(+PlantSiteId) / 82: 8종 / 40: 8종(40 계열 키) / MSG00113 차단  AS-IS 는 컬럼셋팅으로 필수 컬럼 제거 가능한 |  | 1 (CA-06) |
+| WK-DMF0003-0304 | X-REASON | CA-102 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-102 §1 [원문 무번호] DMF0003_1 / (별도 소스) 해당없음 범위 제외 — `DMF0003_1`/`DMF0003_T` 는 별도 메뉴(사용자 확정 2026-08-15). 본 대사표 대 |  | 1 (CA-102) |
+| WK-DMF0003-0305 | X-REASON | CA-103 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-103 §1 [원문 무번호] DMF0003_T / (별도 소스) 해당없음 범위 제외 — `DMF0003_1`/`DMF0003_T` 는 별도 메뉴(사용자 확정 2026-08-15). 본 대사표 대 |  | 1 (CA-103) |
+| WK-DMF0003-0306 | X-REASON | CA-104 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-104 §1 [원문 무번호] 화면 ID / DMF0003 (MktFcst / 시장예측) 해당없음 문서 머리말(화면 메타정보) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CA-104) |
+| WK-DMF0003-0307 | X-REASON | CA-105 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-105 §1 [원문 무번호] 도메인 / Demand (수요) 해당없음 문서 머리말(화면 메타정보) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CA-105) |
+| WK-DMF0003-0308 | X-REASON | CA-106 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-106 §1 [원문 무번호] 메뉴 / Demand > Demand Plan > MKT FCST 해당없음 문서 머리말(화면 메타정보) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없 |  | 1 (CA-106) |
+| WK-DMF0003-0309 | X-REASON | CA-107 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-107 §1 [원문 무번호] TO-BE FE / `nscm-fe/features/demand/src/pages/mkt-fcst/` 해당없음 문서 머리말(화면 메타정보) — 요구사항 행이 아님.  |  | 1 (CA-107) |
+| WK-DMF0003-0310 | X-REASON | CA-109 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-109 §1 [원문 무번호] 편집 가능 / **Division 82 만** (회의 확정 2026-07-07, 실 데이터 확인) 해당없음 문서 머리말(화면 메타정보) — 요구사항 행이 아님. `- |  | 1 (CA-109) |
+| WK-DMF0003-0311 | X-REASON | CA-110 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-110 §1 [원문 무번호] POPUP / AS-IS Class 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CA-110) |
+| WK-DMF0003-0312 | X-REASON | CA-112 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-112 §1 [원문 무번호] PR History / `DMF0003_PRHistoryPopup` 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없 |  | 1 (CA-112) |
+| WK-DMF0003-0313 | X-REASON | CA-113 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CA-113 §1 [원문 무번호] SSP Sync / `DMF0003_SspSyncPopUp` 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CA-113) |
+| WK-DMF0003-0314 | X-REASON | CC-101 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CC-101 §3.1 [원문 무번호] 컨트롤 / 담긴 LAYER (Control 바인딩) 해당없음 — 표 헤더 원천 `DMF0003_MktFcst_상세분석서_v2.0.md` L69 = 표 헤더 행(컨 |  | 1 (CC-101) |
+| WK-DMF0003-0315 | X-REASON | CE-101 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-101 §5.1 [원문 무번호] 논리 컬럼 / 40 전용 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-101) |
+| WK-DMF0003-0316 | X-REASON | CE-102 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-102 §5.1 [원문 무번호] Div* / `DIVISION_ID40` 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-102) |
+| WK-DMF0003-0317 | X-REASON | CE-104 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-104 §5.1 [원문 무번호] Sales Site* / `SCM_SITE_ID40` 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-104) |
+| WK-DMF0003-0318 | X-REASON | CE-105 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-105 §5.1 [원문 무번호] Model* / `ITEM_ID40` 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-105) |
+| WK-DMF0003-0319 | X-REASON | CE-106 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-106 §5.1 [원문 무번호] Plant Site* / — 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-106) |
+| WK-DMF0003-0320 | X-REASON | CE-107 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-107 §5.1 [원문 무번호] Energy/Cell / — 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-107) |
+| WK-DMF0003-0321 | X-REASON | CE-122 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-122 §5.4 [원문 무번호] 콤보 SQL_ID / 바인드 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-122) |
+| WK-DMF0003-0322 | X-REASON | CE-123 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-123 §5.4 [원문 무번호] `MktFcstEditMeasure` / @divisionId 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-123) |
+| WK-DMF0003-0323 | X-REASON | CE-124 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-124 §5.4 [원문 무번호] `MktFcstEditableDivision` / 없음 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-124) |
+| WK-DMF0003-0324 | X-REASON | CE-125 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-125 §5.4 [원문 무번호] `MktFcstUserEditDivision` / @sesUserId 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물  |  | 1 (CE-125) |
+| WK-DMF0003-0325 | X-REASON | CE-126 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-126 §5.4 [원문 무번호] `MktFcstWsPlannerYn` / @sesUserId 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-126) |
+| WK-DMF0003-0326 | X-REASON | CE-127 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CE-127 §5.4 [원문 무번호] `BizType` / 없음 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CE-127) |
+| WK-DMF0003-0327 | X-REASON | CF-03 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CF-03 §6 dtSave 행 중 그리드 실재+AS_FROM_SITE 일치(bAsCompare)만 dtSaveFinal 승계 / I 저장이 기존 행 키와 같으면 제외 /…  dtSave→dtSave |  | 1 (CF-03) |
+| WK-DMF0003-0328 | X-REASON | CF-101 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CF-101 §6.2 [원문 무번호] 트리거 / MSG_ID 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CF-101) |
+| WK-DMF0003-0329 | X-REASON | CG-102 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-102 §7.1 [원문 무번호] Plant Site 필수 / ✗ 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-102) |
+| WK-DMF0003-0330 | X-REASON | CG-103 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-103 §7.1 [원문 무번호] 중복키 Plant 포함 / ✗ 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-103) |
+| WK-DMF0003-0331 | X-REASON | CG-105 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-105 §7.1 [원문 무번호] Project 필드 / **비활성** 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-105) |
+| WK-DMF0003-0332 | X-REASON | CG-107 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-107 §7.1 [원문 무번호] Cell Qty / **40만** 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-107) |
+| WK-DMF0003-0333 | X-REASON | CG-108 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-108 §7.1 [원문 무번호] checkInvalidExec / ✗ 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-108) |
+| WK-DMF0003-0334 | X-REASON | CG-109 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-109 §7.1 [원문 무번호] Energy/Cell 컬럼 / ✗ 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-109) |
+| WK-DMF0003-0335 | X-REASON | CG-111 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-111 §7.1 [원문 무번호] Bucket 기본 / Weekly 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-111) |
+| WK-DMF0003-0336 | X-REASON | CG-112 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-112 §7.1 [원문 무번호] **편집 가능** / ✗ 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-112) |
+| WK-DMF0003-0337 | X-REASON | CG-114 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-114 §7.3 [원문 무번호] 상위(선택) / 조건 해당없음 — 표 헤더 원천 `상세분석서_v2.0.md` L228 = §7.3 표 헤더 행(상위(선택) · 조건 · 하위(종속) · 유형 ·  |  | 1 (CG-114) |
+| WK-DMF0003-0338 | X-REASON | CG-115 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-115 §7.3 [원문 무번호] CUST_FCST / 전 division 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CG-115) |
+| WK-DMF0003-0339 | X-REASON | CG-117 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-117 §7.3 [원문 무번호] **MKT_FCST_RP** / **Division 82 한정** 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당 |  | 1 (CG-117) |
+| WK-DMF0003-0340 | X-REASON | CG-120 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-120 §7.3 [원문 무번호] TMM_FCST / 81 계열, TMM_MEASURE_ADMIN 등록자 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 |  | 1 (CG-120) |
+| WK-DMF0003-0341 | X-REASON | CG-121 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CG-121 §7.3 [원문 무번호] CUST_FCST_ORG / (비활성, E20241126 합의) 해당없음 — AS-IS 비활성 원천 `상세분석서_v2.0.md` L236 = CUST_FCST_O |  | 1 (CG-121) |
+| WK-DMF0003-0342 | X-REASON | CH-101 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CH-101 §8 [원문 무번호] POPUP / SP 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 해당없음 |  | 1 (CH-101) |
+| WK-DMF0003-0343 | X-REASON | CH-104 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CH-104 §8 [원문 무번호] SSP Sync / (SP 없음) 제외 — SSP Sync 범위 제외 — SSP Sync 는 구현 대상에서 제외(사용자 확정 2026-08-15). 표시/색상 축(E |  | 1 (CH-104) |
+| WK-DMF0003-0344 | X-REASON | CH-107 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — CH-107 §8 [원문 무번호] Project/Item/Owner byDivision / 콤보/팝업 SP 해당없음 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물  |  | 1 (CH-107) |
+| WK-DMF0003-0345 | X-REASON | E00 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — E00 §0 정본 vs 구본 차이 — git diff --no-index 실측  정본 선택 근거(폴더본 7,143줄 — diff = DMF0003_정본전환_diff_20260812.md). 구현 산출 |  | 1 (E00) |
+| WK-DMF0003-0346 | X-REASON | E01-4 | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — E01-4 §1.4 InitSaveDataTable (L758~800)  WinForms 로컬 DataTable(dtSave/dtSaveFinal) 구조 — TO-BE 는 EditTracker+uti |  | 1 (E01-4) |
+| WK-DMF0003-0347 | X-REASON | HANDLER:FindButton | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — HANDLER:FindButton AS-IS `DMF0003_MktFcst.cs:805` (라이브 3행) · **사문(빈 몸통)**  사문 래퍼(3행 — FindData 위임). TO-BE handl |  | 1 (HANDLER:FindButton) |
+| WK-DMF0003-0348 | X-REASON | HANDLER:InsertButton | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — HANDLER:InsertButton AS-IS `DMF0003_MktFcst.cs:811` (라이브 3행) · **사문(빈 몸통)**  사문 래퍼(3행 — InsertRow 위임) 제외 |  | 1 (HANDLER:InsertButton) |
+| WK-DMF0003-0349 | X-REASON | HANDLER:SaveButton | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — HANDLER:SaveButton AS-IS `DMF0003_MktFcst.cs:1340` (라이브 3행) · **사문(빈 몸통)**  사문 래퍼(3행 — SaveData 위임) 제외 |  | 1 (HANDLER:SaveButton) |
+| WK-DMF0003-0350 | X-REASON | HANDLER:spdMain_TopChange | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — HANDLER:spdMain_TopChange AS-IS `DMF0003_MktFcst.cs:5621` (라이브 5행)  FarPoint SmartColMerge 재적용 전용 — Wijmo wrapp |  | 1 (HANDLER:spdMain_TopChange) |
+| WK-DMF0003-0351 | X-REASON | MODAL:ImagePopUp | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — MODAL:ImagePopUp AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 해당없음 — 모달 아님 AS-IS `DMF0003_MktFcst.cs` L555/L558 `siM |  | 1 (MODAL:ImagePopUp) |
+| WK-DMF0003-0352 | X-REASON | MODAL:ShowDialog | 대조표(사유 열: 룰·지시·AS-IS 원문·이동 위치) | 제외·해당없음 사유 근거 보강 — MODAL:ShowDialog AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 해당없음 — 메서드명 AS-IS 15회 전부 `popup.ShowDialog()` 형태 = Win |  | 1 (MODAL:ShowDialog) |
+| WK-DMF0003-0353 | E3 | D | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — D: 검증 엔진이 실행됐으나 이 대상(COL D)을 판정하지 못함 — 필수 입력 검증 시나리오 수동 확인 또는 엔진 확장 |  | 1 (E04-1) |
+| WK-DMF0003-0354 | E3 | I | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — I: 검증 엔진이 실행됐으나 이 대상(COL I)을 판정하지 못함 — 필수 입력 검증 시나리오 수동 확인 또는 엔진 확장 |  | 3 (CF-01 CF-02 CG-02) |
+| WK-DMF0003-0355 | E3 | L | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — L: 검증 엔진이 실행됐으나 이 대상(COL L)을 판정하지 못함 — 필수 입력 검증 시나리오 수동 확인 또는 엔진 확장 |  | 1 (17) |
+| WK-DMF0003-0356 | E3 | M | 사람 판정 / AS-IS 원문 확인 → 재판정 | E3 기대값 확정 — M: 검증 엔진이 실행됐으나 이 대상(COL M)을 판정하지 못함 — 필수 입력 검증 시나리오 수동 확인 또는 엔진 확장 |  | 1 (E04-1) |
+| WK-DMF0003-0357 | A1 | 15 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — 15: 행 집계 — 대조표 15 'ValidationCheck' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비교 케이스 없음(UP_FX — 팝업·보조 SP 는 g |  | 0 () |
+| WK-DMF0003-0358 | A1 | 2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — 2: 행 집계 — 대조표 2 "InitSpread(sType) 5곳 — CreateSpread·Division변경='LO" 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX —  |  | 1 (2) |
+| WK-DMF0003-0359 | A1 | 34 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — 34: 행 집계 — 대조표 34 'FindData data_start_pos<0' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비교 케이스 없음(UP_FX — 팝업 |  | 1 (34) |
+| WK-DMF0003-0360 | A1 | 6 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — 6: 행 집계 — 대조표 6 '공통 콤보 PARAM5 W/S 플래그 — GetSalesSite40(L7047~7066) ' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX —  |  | 0 () |
+| WK-DMF0003-0361 | A1 | 6. HTTP E2E | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — 6. HTTP E2E: 행 집계 — 대조표 6. HTTP E2E '일반 행 M 왕복 생략' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비교 케이스 없음(UP_FX |  | 1 (6. HTTP E2E) |
+| WK-DMF0003-0362 | A1 | AS_FROM_SITE | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — AS_FROM_SITE: 행 집계 — 대조표 AS_FROM_SITE 'param1' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비교 케이스 없음(UP_FX — 팝 |  | 1 (AS_FROM_SITE) |
+| WK-DMF0003-0363 | A1 | CA-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CA-07: 행 집계 — 대조표 CA-07 '§1 dt8Week 없음(조회 선행 안 함) / MSG00259 차단' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비 |  | 1 (CA-07) |
+| WK-DMF0003-0364 | A1 | CD-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CD-03: 행 집계 — 대조표 CD-03 '§4 AS_FROM_SITE / `AS_FROM_SITE`(division)' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX —  |  | 1 (CD-03) |
+| WK-DMF0003-0365 | A1 | CE-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CE-05: 행 집계 — 대조표 CE-05 '§5 조회 컬럼 강제 / [E20260402] W/S 권한 진입 시 GET_SPREAD_T' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소:  |  | 1 (CE-05) |
+| WK-DMF0003-0366 | A1 | CF-05 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CF-05: 행 집계 — 대조표 CF-05 '§6 저장 성공(Tables 없음) / MSG00004(건수) + 재조회 + viewpor' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소:  |  | 1 (CF-05) |
+| WK-DMF0003-0367 | A1 | CF-102 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CF-102: 행 집계 — 대조표 CF-102 '§6.2 [원문 무번호] 조회 / MSG00097' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비교 케이스 없음( |  | 1 (CF-102) |
+| WK-DMF0003-0368 | A1 | CF-103 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CF-103: 행 집계 — 대조표 CF-103 '§6.2 [원문 무번호] 조회 / MSG00108' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비교 케이스 없음( |  | 1 (CF-103) |
+| WK-DMF0003-0369 | A1 | CF-104 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CF-104: 행 집계 — 대조표 CF-104 '§6.2 [원문 무번호] 조회 / MSG00164' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비교 케이스 없음( |  | 1 (CF-104) |
+| WK-DMF0003-0370 | A1 | CF-105 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CF-105: 행 집계 — 대조표 CF-105 '§6.2 [원문 무번호] 조회 / MSG00665' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비교 케이스 없음( |  | 1 (CF-105) |
+| WK-DMF0003-0371 | A1 | CG-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CG-07: 행 집계 — 대조표 CG-07 "§7 버킷 배분 / 주→일: 요일비트(기본 '0000010'=FRI) 균등+잔여 마지막, " 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소:  |  | 1 (CG-07) |
+| WK-DMF0003-0372 | A1 | CH-09 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CH-09: 행 집계 — 대조표 CH-09 '§8 캐스케이드 / Division→Team→EndCustomer→SalesSite(+Pl' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소:  |  | 1 (CH-09) |
+| WK-DMF0003-0373 | A1 | CI-02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CI-02: 행 집계 — 대조표 CI-02 '§9 당주 라인 / 초록 BevelBorder — count≥2 시 [E20250313] ' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소:  |  | 1 (CI-02) |
+| WK-DMF0003-0374 | A1 | CI-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CI-07: 행 집계 — 대조표 CI-07 '§9 저장 후 / Action 클리어 + UnLockColor + 행 재잠금(빨강 계열)' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: U |  | 1 (CI-07) |
+| WK-DMF0003-0375 | A1 | CK-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CK-06: 행 집계 — 대조표 CK-06 '§11 DM.PR_GET_DAY_RANGE / 기간 기본값' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비교 케이스  |  | 1 (CK-06) |
+| WK-DMF0003-0376 | A1 | CK-10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CK-10: 행 집계 — 대조표 CK-10 '§11 DataService.GetDMInnerTable / 조회조건 콤보 8축(§1.1-' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소:  |  | 1 (CK-10) |
+| WK-DMF0003-0377 | A1 | COMMON:UC-02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — COMMON:UC-02: 행 집계 — 대조표 COMMON:UC-02 "데이터 수정 중 다른 데이터 조회 시도 = '수정 중인 데이터가 있습니다. 새로 조회하시겠" 의 A1 18요소: REVIEW:17 · PASS |  | 1 (COMMON:UC-02) |
+| WK-DMF0003-0378 | A1 | COMMON:UC-03 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — COMMON:UC-03: 행 집계 — 대조표 COMMON:UC-03 '컬럼 추가/제외(Column/Measure 설정) 적용 시 기존 조회 데이터 Reset 후' 의 A1 18요소: REVIEW:17 · PASS |  | 1 (COMMON:UC-03) |
+| WK-DMF0003-0379 | A1 | COMMON:UC-06 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — COMMON:UC-06: 행 집계 — 대조표 COMMON:UC-06 'Key-in 조회조건 = 콤마 구분 다중 입력 시 전건 조회 (1st 행8)' 의 A1 18요소: REVIEW:17 · PASS:1 · FAI |  | 1 (COMMON:UC-06) |
+| WK-DMF0003-0380 | A1 | COMMON:UC-07 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — COMMON:UC-07: 행 집계 — 대조표 COMMON:UC-07 '필터가 걸린 상태에서 재조회해도 조회되고 **필터도 그대로 적용** (rebindFilte' 의 A1 18요소: REVIEW:17 · PASS |  | 1 (COMMON:UC-07) |
+| WK-DMF0003-0381 | A1 | CRUD:E02:SEARCH | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — CRUD:E02:SEARCH: 행 집계 — 대조표 CRUD:E02:SEARCH '[SEARCH] §2 FindData — 조회 (FindButton L805 → FindD' 의 A1 18요소: REVIEW:17  |  | 1 (CRUD:E02:SEARCH) |
+| WK-DMF0003-0382 | A1 | DMF0000_GET_MASTER_CHG_POPUP | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — DMF0000_GET_MASTER_CHG_POPUP: 골든 비교 케이스 없음(DMF0000_GET_MASTER_CHG_POPUP — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케 |  | 49 (CH-108 ACT:DMF0003_MatsterChgPopup.FindB) |
+| WK-DMF0003-0383 | A1 | DMF0003_CustDemandAnalysis.FindDataMain | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — DMF0003_CustDemandAnalysis.FindDataMain: 진입점 집계 — 대조표 DMF0003_CustDemandAnalysis.FindDataMain 의 A1 18요소: REVIEW:17 · P |  | 1 (ACT:DMF0003_CustDemandAnalysis.FindDataM) |
+| WK-DMF0003-0384 | A1 | DMF0003_MktFcst.Draw | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — DMF0003_MktFcst.Draw: 진입점 집계 — 대조표 DMF0003_MktFcst.Draw 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비교 케이스 없음( |  | 1 (ACT:DMF0003_MktFcst.Draw:1961:8) |
+| WK-DMF0003-0385 | A1 | DMF0003_SspSyncComparePopUp.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — DMF0003_SspSyncComparePopUp.FindData: 진입점 집계 — 대조표 DMF0003_SspSyncComparePopUp.FindData 의 A1 18요소: REVIEW:17 · PASS:1  |  | 1 (ACT:DMF0003_SspSyncComparePopUp.FindData) |
+| WK-DMF0003-0386 | A1 | DMF0003_SspSyncPopUp.FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — DMF0003_SspSyncPopUp.FindData: 진입점 집계 — 대조표 DMF0003_SspSyncPopUp.FindData 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_ |  | 1 (ACT:DMF0003_SspSyncPopUp.FindData) |
+| WK-DMF0003-0387 | A1 | E01-1 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — E01-1: 행 집계 — 대조표 E01-1 '§1.1 InitControls (L422~563) — 조회조건 콤보 로딩·기본값' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX |  | 1 (E01-1) |
+| WK-DMF0003-0388 | A1 | E02 | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — E02: 행 집계 — 대조표 E02 '§2 FindData — 조회 (FindButton L805 → FindData L1673' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_F |  | 1 (E02) |
+| WK-DMF0003-0389 | A1 | HANDLER:FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:FindData: 행 집계 — 대조표 HANDLER:FindData 'AS-IS `DMF0003_MktFcst.cs:1673` (라이브 80행)' 의 A1 18요소: REVIEW:17 · PASS: |  | 1 (HANDLER:FindData) |
+| WK-DMF0003-0390 | A1 | HANDLER:OnShown | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:OnShown: 행 집계 — 대조표 HANDLER:OnShown 'AS-IS `DMF0003_MktFcst.cs:332` (라이브 12행)' 의 A1 18요소: REVIEW:17 · PASS:1 · |  | 1 (HANDLER:OnShown) |
+| WK-DMF0003-0391 | A1 | HANDLER:btnItemId_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:btnItemId_Click: 행 집계 — 대조표 HANDLER:btnItemId_Click 'AS-IS `DMF0003_MktFcst.cs:5725` (라이브 17행)' 의 A1 18요소: REV |  | 1 (HANDLER:btnItemId_Click) |
+| WK-DMF0003-0392 | A1 | HANDLER:btnOwner_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:btnOwner_Click: 행 집계 — 대조표 HANDLER:btnOwner_Click 'AS-IS `DMF0003_MktFcst.cs:6449` (라이브 14행)' 의 A1 18요소: REVIE |  | 1 (HANDLER:btnOwner_Click) |
+| WK-DMF0003-0393 | A1 | HANDLER:btnProject_Click | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:btnProject_Click: 행 집계 — 대조표 HANDLER:btnProject_Click 'AS-IS `DMF0003_MktFcst.cs:5702` (라이브 17행)' 의 A1 18요소: R |  | 1 (HANDLER:btnProject_Click) |
+| WK-DMF0003-0394 | A1 | HANDLER:spdMain_CellClick | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — HANDLER:spdMain_CellClick: 행 집계 — 대조표 HANDLER:spdMain_CellClick 'AS-IS `DMF0003_MktFcst.cs:6596` (라이브 74행)' 의 A1 18요소: |  | 1 (HANDLER:spdMain_CellClick) |
+| WK-DMF0003-0395 | A1 | PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_ | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE: 골든 비교 케이스 없음(PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE — 팝업·보조 SP 는 |  | 46 (ACT:DMF0003_MatsterChgPopup.FindButton A) |
+| WK-DMF0003-0396 | A1 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_REF | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_REF: golden SKIP AS-IS -1행 ↔ TO-BE -1행: Doc/golden/DMF0003/DMF0003_GET_DM_ANL_CAR |  | 1 (ACT:DMF0003_1_MktFcst.CAR_REF_DATA:6602:) |
+| WK-DMF0003-0397 | A1 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC: golden SKIP AS-IS -1행 ↔ TO-BE -1행: Doc/golden/DMF0003/DMF0003_GET_D |  | 1 (ACT:DMF0003_1_MktFcst.PSI_FindData:6968:) |
+| WK-DMF0003-0398 | A1 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DATA: golden SKIP AS-IS -1행 ↔ TO-BE -1행: Doc/golden/DMF0003/DMF0003_GET_DM_AN |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0399 | A1 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT — 팝업·보조  |  | 1 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
+| WK-DMF0003-0400 | A1 | PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT — 팝업 |  | 1 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
+| WK-DMF0003-0401 | A1 | PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPA | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPARE_POPUP: golden SKIP AS-IS -1행 ↔ TO-BE -1행: Doc/golden/DMF0003/DMF0003_GET_MK |  | 3 (CH-105 CK-05 ACT:DMF0003_1_MktFcst.spdMa) |
+| WK-DMF0003-0402 | A1 | PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA: golden SKIP AS-IS -1행 ↔ TO-BE -1행: Doc/golden/DMF0003/DMF0003_GET_MKT_FCST_DA |  | 297 (CK-01 ACT:DMF0003_1_MktFcst.FindButton A) |
+| WK-DMF0003-0403 | A1 | PKG_DMF0003.P_DMF0003_GET_PRPOPUP | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_PRPOPUP: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_PRPOPUP — 팝업·보조 SP 는 golden_cases.csv 에 FE 실 |  | 42 (CH-102 CK-11 ACT:DMF0003_PRPopup.FindDat) |
+| WK-DMF0003-0404 | A1 | PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POP | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POPUP: 골든 비교 케이스 없음(PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POPUP — 팝업·보조 SP 는 golde |  | 35 (CH-103 ACT:DMF0003_PRHistoryPopup.FindDa) |
+| WK-DMF0003-0405 | A1 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE: golden SKIP AS-IS -1행 ↔ TO-BE -1행: Doc/golden/DMF0003/DMF0003_GET_SPREAD_TITLE |  | 288 (CK-03 ACT:DMF0003_1_MktFcst.FindButton A) |
+| WK-DMF0003-0406 | A1 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_C | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_CAR: golden SKIP AS-IS -1행 ↔ TO-BE -1행: Doc/golden/DMF0003/DMF0003_GET_SPREAD_T |  | 107 (ACT:DMF0003_1_MktFcst.FindButton ACT:DMF) |
+| WK-DMF0003-0407 | A1 | PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_P | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_PSI: golden SKIP AS-IS -1행 ↔ TO-BE -1행: Doc/golden/DMF0003/DMF0003_GET_SPREAD_T |  | 107 (ACT:DMF0003_1_MktFcst.FindButton ACT:DMF) |
+| WK-DMF0003-0408 | A1 | SCM0001_GET_BIZ_TYPE_BY_DIVISION | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — SCM0001_GET_BIZ_TYPE_BY_DIVISION: golden SKIP AS-IS -1행 ↔ TO-BE -1행: Doc/golden/DMF0003/SCM0001_GET_BIZ_TYPE_BY_DIVISI |  | 1 (CK-08) |
+| WK-DMF0003-0409 | A1 | SCM0001_GET_LOOKUP_VALUES | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — SCM0001_GET_LOOKUP_VALUES: golden SKIP AS-IS -1행 ↔ TO-BE -1행: Doc/golden/DMF0003/SCM0001_GET_LOOKUP_VALUES.md — 파라미터 미 |  | 1 (CK-07) |
+| WK-DMF0003-0410 | A1 | UP_FX | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — UP_FX: 골든 비교 케이스 없음(UP_FX — 팝업·보조 SP 는 golden_cases.csv 에 FE 실전송 파라미터로 케이스 추가 필요) |  | 1 (CD-10) |
+| WK-DMF0003-0411 | A1 | `components/MktFcstForm.tsx` | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — `components/MktFcstForm.tsx`: 행 집계 — 대조표 `components/MktFcstForm.tsx` '수정' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP |  | 1 (`components/MktFcstForm.tsx`) |
+| WK-DMF0003-0412 | A1 | — | 사람 판정 / AS-IS 원문 확인 → 재판정 | A1 기대값 확정 — —: 행 집계 — 대조표 — '(저장대상 0)' 의 A1 18요소: REVIEW:17 · PASS:1 · FAIL 요소: UP_FX — 골든 비교 케이스 없음(UP_FX — 팝업·보조 SP 는 golden_cas |  | 0 () |
+| WK-DMF0003-0413 | A6 | DMF0000_GET_MASTER_CHG_POPUP | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — DMF0000_GET_MASTER_CHG_POPUP: 원장 V-8ebef86c SP / 정렬대조 REVIEW TO-BE 프로시저 배선(PROC_M) 없음 — 대응 프로시저 확인 / 실측[T-a66fd0c8]: D |  | 49 (CH-108 ACT:DMF0003_MatsterChgPopup.FindB) |
+| WK-DMF0003-0414 | A6 | SCM0001_GET_BIZ_TYPE_BY_DIVISION | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — SCM0001_GET_BIZ_TYPE_BY_DIVISION: 원장 V-41134236 SP / 정렬대조 REVIEW TO-BE 프로시저 배선(PROC_M) 없음 — 대응 프로시저 확인 / 실측[T-12a5dc5d |  | 1 (CK-08) |
+| WK-DMF0003-0415 | A6 | SCM0001_GET_LOOKUP_VALUES | 사람 판정 / AS-IS 원문 확인 → 재판정 | A6 기대값 확정 — SCM0001_GET_LOOKUP_VALUES: 원장 V-3b78e8ca SP / 정렬대조 REVIEW TO-BE 프로시저 배선(PROC_M) 없음 — 대응 프로시저 확인 / 실측[T-2dcb07ce]: SCM0 |  | 1 (CK-07) |
+| WK-DMF0003-0416 | X-LOC | 10 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 10: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (10) |
+| WK-DMF0003-0417 | X-LOC | 2 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 2: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (2) |
+| WK-DMF0003-0418 | X-LOC | 26/27/28 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 26/27/28: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (26/27/28) |
+| WK-DMF0003-0419 | X-LOC | 3. 배선 체인 L7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 3. 배선 체인 L7: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (3. 배선 체인 L7) |
+| WK-DMF0003-0420 | X-LOC | 34 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 34: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (34) |
+| WK-DMF0003-0421 | X-LOC | 4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 4: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (4) |
+| WK-DMF0003-0422 | X-LOC | 5 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 5: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (5) |
+| WK-DMF0003-0423 | X-LOC | 6 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 6: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (6) |
+| WK-DMF0003-0424 | X-LOC | 6. HTTP E2E | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 6. HTTP E2E: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (6. HTTP E2E) |
+| WK-DMF0003-0425 | X-LOC | 7 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 7: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (7) |
+| WK-DMF0003-0426 | X-LOC | 7. 콤보 파라미터 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 7. 콤보 파라미터: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (7. 콤보 파라미터) |
+| WK-DMF0003-0427 | X-LOC | 73 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 73: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (73) |
+| WK-DMF0003-0428 | X-LOC | 8 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 8: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (8) |
+| WK-DMF0003-0429 | X-LOC | 8. 콤보 호출지점 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 8. 콤보 호출지점: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (8. 콤보 호출지점) |
+| WK-DMF0003-0430 | X-LOC | 81 Plant Site 편집 후보 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 81 Plant Site 편집 후보: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (81 Plant Site 편집 후보) |
+| WK-DMF0003-0431 | X-LOC | 8주 잠금(40 Monthly) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 8주 잠금(40 Monthly): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (8주 잠금(40 Monthly)) |
+| WK-DMF0003-0432 | X-LOC | 9 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 9: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (9) |
+| WK-DMF0003-0433 | X-LOC | AS_FROM_SITE | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — AS_FROM_SITE: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (AS_FROM_SITE) |
+| WK-DMF0003-0434 | X-LOC | BizType / CustomsHandbook / FcstType / I | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — BizType / CustomsHandbook / FcstType / Incoterms /: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (BizType / CustomsHandbook / FcstType / I) |
+| WK-DMF0003-0435 | X-LOC | Div40 Sales Site 편집 후보 (`endCustomer='HP | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — Div40 Sales Site 편집 후보 (`endCustomer='HP'`): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (Div40 Sales Site 편집 후보 (`endCustomer='HP) |
+| WK-DMF0003-0436 | X-LOC | EndCustomerByDivision40Team | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — EndCustomerByDivision40Team: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (EndCustomerByDivision40Team) |
+| WK-DMF0003-0437 | X-LOC | EndCustomerByDivisionDeptAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — EndCustomerByDivisionDeptAuth: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (EndCustomerByDivisionDeptAuth) |
+| WK-DMF0003-0438 | X-LOC | Events | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — Events: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (Events) |
+| WK-DMF0003-0439 | X-LOC | Expressions | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — Expressions: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (Expressions) |
+| WK-DMF0003-0440 | X-LOC | Measure | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — Measure: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (Measure) |
+| WK-DMF0003-0441 | X-LOC | PlantByDivisionCompany | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — PlantByDivisionCompany: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (PlantByDivisionCompany) |
+| WK-DMF0003-0442 | X-LOC | PlantSite 필수(81만) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — PlantSite 필수(81만): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (PlantSite 필수(81만)) |
+| WK-DMF0003-0443 | X-LOC | PlantSiteByItem | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — PlantSiteByItem: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (PlantSiteByItem) |
+| WK-DMF0003-0444 | X-LOC | Popup | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — Popup: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (Popup) |
+| WK-DMF0003-0445 | X-LOC | SiteByEndCustomer | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — SiteByEndCustomer: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (SiteByEndCustomer) |
+| WK-DMF0003-0446 | X-LOC | SiteByEndCustomerAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — SiteByEndCustomerAuth: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (SiteByEndCustomerAuth) |
+| WK-DMF0003-0447 | X-LOC | SspSync(40 & MKT_FCST_RP) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — SspSync(40 & MKT_FCST_RP): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (SspSync(40 & MKT_FCST_RP)) |
+| WK-DMF0003-0448 | X-LOC | TeambyDivisionAuth | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — TeambyDivisionAuth: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (TeambyDivisionAuth) |
+| WK-DMF0003-0449 | X-LOC | VMI_YN/STD_DIO 표시(82만) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — VMI_YN/STD_DIO 표시(82만): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (VMI_YN/STD_DIO 표시(82만)) |
+| WK-DMF0003-0450 | X-LOC | `Substring(0,2)=="81"` / `=="82"` / else | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — `Substring(0,2)=="81"` / `=="82"` / else(40): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (`Substring(0,2)=="81"` / `=="82"` / else) |
+| WK-DMF0003-0451 | X-LOC | `__asis-mapping__.md` | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — `__asis-mapping__.md`: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (`__asis-mapping__.md`) |
+| WK-DMF0003-0452 | X-LOC | `_artifacts/_apply_corporate/40_dmf0003_ | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — `_artifacts/_apply_corporate/40_dmf0003_i18n_regis: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (`_artifacts/_apply_corporate/40_dmf0003_) |
+| WK-DMF0003-0453 | X-LOC | `components/modals/{PrModal,PrHistoryMod | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — `components/modals/{PrModal,PrHistoryModal,SspSync: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (`components/modals/{PrModal,PrHistoryMod) |
+| WK-DMF0003-0454 | X-LOC | `public/locales/{KO,EN,CN}.json` | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — `public/locales/{KO,EN,CN}.json`: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (`public/locales/{KO,EN,CN}.json`) |
+| WK-DMF0003-0455 | X-LOC | iDailyQty/iRemnant 분배 (#103/104/107/108/ | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iDailyQty/iRemnant 분배 (#103/104/107/108/110): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iDailyQty/iRemnant 분배 (#103/104/107/108/) |
+| WK-DMF0003-0456 | X-LOC | iLastWeeklySum 과거합 (#115/116/117) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iLastWeeklySum 과거합 (#115/116/117): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iLastWeeklySum 과거합 (#115/116/117)) |
+| WK-DMF0003-0457 | X-LOC | iMonthlySum 누적/세팅 (#98/99/112/127) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iMonthlySum 누적/세팅 (#98/99/112/127): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iMonthlySum 누적/세팅 (#98/99/112/127)) |
+| WK-DMF0003-0458 | X-LOC | iMonthlySum-iLastWeeklySum 분배 (#118/119) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iMonthlySum-iLastWeeklySum 분배 (#118/119): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iMonthlySum-iLastWeeklySum 분배 (#118/119)) |
+| WK-DMF0003-0459 | X-LOC | iWeeklySum 누적/세팅 (#96/97/122/125) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iWeeklySum 누적/세팅 (#96/97/122/125): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iWeeklySum 누적/세팅 (#96/97/122/125)) |
+| WK-DMF0003-0460 | X-LOC | iWkSum_Sync 강제상향 (#102/105/106) | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — iWkSum_Sync 강제상향 (#102/105/106): 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (iWkSum_Sync 강제상향 (#102/105/106)) |
+| WK-DMF0003-0461 | X-LOC | 중복키 81=+PlantSite / 82=제외 / 40=Customer4 | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 중복키 81=+PlantSite / 82=제외 / 40=Customer40계열: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (중복키 81=+PlantSite / 82=제외 / 40=Customer4) |
+| WK-DMF0003-0462 | X-LOC | 키 컬럼 40=Customer40/ScmSiteId40/ItemId40  | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-LOC 기대값 확정 — 키 컬럼 40=Customer40/ScmSiteId40/ItemId40 vs 81·82=P: 이 표에 구현 위치 열이 없고 행에도 파일 참조 없음 — 구현 위치 기입(대조표 서술 보강) 필요 |  | 1 (키 컬럼 40=Customer40/ScmSiteId40/ItemId40 ) |
+| WK-DMF0003-0463 | X-ROW | DMF0003_1_MktFcst.CAR_REF_DATA | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.CAR_REF_DATA: 진입점 집계 7검사 — NA:3 · PASS:3 · REVIEW:1 |  | 43 (ACT:DMF0003_1_MktFcst.CAR_REF_DATA ACT:D) |
+| WK-DMF0003-0464 | X-ROW | DMF0003_1_MktFcst.ExcelButton | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.ExcelButton: 진입점 동작 재현 시나리오 필요 — 문장 종류 CALL_EXT/ENTRY/EXPR/LOCAL/THROW/UI_MISC/UI_PROP, 연결된 요소 검사 |  | 15 (ACT:DMF0003_1_MktFcst.ExcelButton ACT:DM) |
+| WK-DMF0003-0465 | X-ROW | DMF0003_1_MktFcst.FirstWeeked | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.FirstWeeked: 진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/ENTRY/EXPR/LOCAL/RETURN, 연결된 요소 검사 없음 |  | 8 (ACT:DMF0003_1_MktFcst.FirstWeeked ACT:DM) |
+| WK-DMF0003-0466 | X-ROW | DMF0003_1_MktFcst.PSI_FindData | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.PSI_FindData: 진입점 집계 12검사 — NA:8 · PASS:3 · REVIEW:1 |  | 62 (ACT:DMF0003_1_MktFcst.PSI_FindData ACT:D) |
+| WK-DMF0003-0467 | X-ROW | DMF0003_1_MktFcst.fnValidation | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.fnValidation: 진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/DATA_OP/ENTRY/EXPR/FLOW/LOCAL/RETURN/STATE_RESET,  |  | 164 (ACT:DMF0003_1_MktFcst.fnValidation ACT:D) |
+| WK-DMF0003-0468 | X-ROW | DMF0003_1_MktFcst.spdMain_EditChange | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdMain_EditChange: 진입점 동작 재현 시나리오 필요 — 문장 종류 ENTRY/EXPR/FLAG/RETURN, 연결된 요소 검사 없음 |  | 4 (ACT:DMF0003_1_MktFcst.spdMain_EditChange) |
+| WK-DMF0003-0469 | X-ROW | DMF0003_1_MktFcst.spdMain_KeyUp | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.spdMain_KeyUp: 진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/CALL_EXT/ENTRY/EXPR/FLAG/RETURN, 연결된 요소 검사 없음 |  | 9 (ACT:DMF0003_1_MktFcst.spdMain_KeyUp ACT:) |
+| WK-DMF0003-0470 | X-ROW | DMF0003_1_MktFcst.splitContainer2_Double | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_1_MktFcst.splitContainer2_DoubleClick: 진입점 동작 재현 시나리오 필요 — 문장 종류 BRANCH/ENTRY/UI_PROP, 연결된 요소 검사 없음 |  | 4 (ACT:DMF0003_1_MktFcst.splitContainer2_Do) |
+| WK-DMF0003-0471 | X-ROW | DMF0003_CustDemandAnalysis.Select_DpInit | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.Select_DpInit_Data: 진입점 집계 13검사 — NA:9 · PASS:3 · REVIEW:1 |  | 55 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
+| WK-DMF0003-0472 | X-ROW | DMF0003_CustDemandAnalysis.Select_DpResu | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_CustDemandAnalysis.Select_DpResult_Data: 진입점 집계 13검사 — NA:9 · PASS:3 · REVIEW:1 |  | 54 (ACT:DMF0003_CustDemandAnalysis.Select_Dp) |
+| WK-DMF0003-0473 | X-ROW | DMF0003_PRHistoryPopup.FindDataMain | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRHistoryPopup.FindDataMain: 진입점 집계 8검사 — PASS:4 · NA:3 · REVIEW:1 |  | 34 (ACT:DMF0003_PRHistoryPopup.FindDataMain ) |
+| WK-DMF0003-0474 | X-ROW | DMF0003_PRPopup.FindDataMain | 사람 판정 / AS-IS 원문 확인 → 재판정 | X-ROW 기대값 확정 — DMF0003_PRPopup.FindDataMain: 진입점 집계 10검사 — NA:5 · PASS:4 · REVIEW:1 |  | 39 (ACT:DMF0003_PRPopup.FindDataMain ACT:DMF) |
+| WK-DMF0003-0475 | M4 | DMF0003_MatsterChgPopup | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — DMF0003_MatsterChgPopup: 검증 엔진이 실행됐으나 이 대상(POPUP DMF0003_MatsterChgPopup)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔진 확장 |  | 1 (CA-116) |
+| WK-DMF0003-0476 | M4 | DMF0003_MktFcst | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — DMF0003_MktFcst: 검증 엔진이 실행됐으나 이 대상(POPUP DMF0003_MktFcst)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔진 확장 |  | 3 (HANDLER:spdMain_CellDoubleClick HANDLER:) |
+| WK-DMF0003-0477 | M4 | DMF0003_PRHistoryPopup | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — DMF0003_PRHistoryPopup: 검증 엔진이 실행됐으나 이 대상(POPUP DMF0003_PRHistoryPopup)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔진 확장 |  | 1 (MODAL:PrHistoryModal) |
+| WK-DMF0003-0478 | M4 | DMF0003_PRPopup | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — DMF0003_PRPopup: 검증 엔진이 실행됐으나 이 대상(POPUP DMF0003_PRPopup)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔진 확장 |  | 2 (CA-111 MODAL:PrModal) |
+| WK-DMF0003-0479 | M4 | DMF0003_SspSyncComparePopUp | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — DMF0003_SspSyncComparePopUp: 검증 엔진이 실행됐으나 이 대상(POPUP DMF0003_SspSyncComparePopUp)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔 |  | 6 (CA-114 MODAL:DMF0003_SspSyncComparePopUp) |
+| WK-DMF0003-0480 | M4 | DMF0003_SspSyncPopUp | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — DMF0003_SspSyncPopUp: 검증 엔진이 실행됐으나 이 대상(POPUP DMF0003_SspSyncPopUp)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔진 확장 |  | 3 (MODAL:DMF0003_SspSyncPopUp MODAL:SspSync) |
+| WK-DMF0003-0481 | M4 | DMF0003_T_MktFcst | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — DMF0003_T_MktFcst: 검증 엔진이 실행됐으나 이 대상(POPUP DMF0003_T_MktFcst)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔진 확장 |  | 1 (ACT:DMF0003_T_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0482 | M4 | cboBucketType / Bucket / Bucket Type | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — cboBucketType / Bucket / Bucket Type: 검증 엔진이 실행됐으나 이 대상(COND cboBucketType)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔진 확장 |  | 6 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0483 | M4 | clbDivision / Division | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — clbDivision / Division: 검증 엔진이 실행됐으나 이 대상(COND clbDivision)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔진 확장 |  | 10 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0484 | M4 | drpPeriod / Period | 사람 판정 / AS-IS 원문 확인 → 재판정 | M4 기대값 확정 — drpPeriod / Period: 검증 엔진이 실행됐으나 이 대상(COND drpPeriod)을 판정하지 못함 — 팝업 선택값 반영 시나리오 수동 확인 또는 엔진 확장 |  | 5 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+
+## W9 도구 오류 (446)
+
+| ID | 검사 | 대상 | 담당 | 할 일 | TO-BE 흔적 | 대조표 행 |
+|---|---|---|---|---|---|---|
+| WK-DMF0003-0485 | D3 | 4 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 4 'FCST_TYPE 편집 콤보 분기(L2587~2605) — W/S=EDIT_MODE 6종 ' 의 D3 337요소: ERROR:323 · NA:14 |  | 0 () |
+| WK-DMF0003-0486 | D3 | 7 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 7 'SCP Planner 차단 — Edit 82·40(L828~834) / Insert 81(' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (7) |
+| WK-DMF0003-0487 | D3 | 8 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 8 'SCP 시간창(81) — LOOKUP SCP_PLANNER_EDIT_FLAG 행 0=차단 ' 의 D3 337요소: ERROR:323 · NA:14 |  | 0 () |
+| WK-DMF0003-0488 | D3 | 81 Plant Site 편집 후보 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 81 Plant Site 편집 후보 '표시 콤보 그대로(전 27~107행, Project/Item 무관)' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (81 Plant Site 편집 후보) |
+| WK-DMF0003-0489 | D3 | 8주 잠금(40 Monthly) | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 8주 잠금(40 Monthly) 'L974~981' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (8주 잠금(40 Monthly)) |
+| WK-DMF0003-0490 | D3 | APPLICATION | 하네스·환경 | D3 도구 오류 — 원장 V-c1e5840f ASIS / 원장 V-7b50f3f3 ASIS / 원장 V-9ad3875f ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2037:98 ) |
+| WK-DMF0003-0491 | D3 | APPLICATION,APPLICATION | 하네스·환경 | D3 도구 오류 — 원장 V-c1e5840f |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2037:98) |
+| WK-DMF0003-0492 | D3 | APPLICATION,APPLICATION | 하네스·환경 | D3 도구 오류 — 원장 V-7b50f3f3 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2729:116) |
+| WK-DMF0003-0493 | D3 | APPLICATION,APPLICATION | 하네스·환경 | D3 도구 오류 — 원장 V-9ad3875f |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1785:98) |
+| WK-DMF0003-0494 | D3 | AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-8adca92a ASIS / 원장 V-83bae784 ASIS / 원장 V-efba9423 ASIS / 원장 V-45197a47 ASIS / 원장 V-290df333 ASIS / 원장 V-c3e777c1  |  | 21 (CC-05 CE-02 CK-09 Expressions 행잠금: AS_FR) |
+| WK-DMF0003-0495 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-8adca92a |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2062:122) |
+| WK-DMF0003-0496 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-83bae784 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2753:140) |
+| WK-DMF0003-0497 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-efba9423 |  | 1 (ACT:DMF0003_MktFcst.spdMain_ClipboardPas) |
+| WK-DMF0003-0498 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-45197a47 |  | 1 (ACT:DMF0003_MktFcst.spdMain_ClipboardPas) |
+| WK-DMF0003-0499 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-290df333 |  | 1 (ACT:DMF0003_MktFcst.spdMain_ClipboardPas) |
+| WK-DMF0003-0500 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-c3e777c1 |  | 1 (ACT:DMF0003_MktFcst.spdMain_ComboSelChan) |
+| WK-DMF0003-0501 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-cc8245e8 |  | 1 (ACT:DMF0003_MktFcst.spdMain_ComboSelChan) |
+| WK-DMF0003-0502 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-da039d81 |  | 1 (ACT:DMF0003_MktFcst.spdMain_ComboSelChan) |
+| WK-DMF0003-0503 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-b06cffd3 |  | 1 (ACT:DMF0003_MktFcst.spdMain_ComboSelChan) |
+| WK-DMF0003-0504 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-27f5021d |  | 1 (ACT:DMF0003_MktFcst.spdMain_ComboSelChan) |
+| WK-DMF0003-0505 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-874d43fc |  | 1 (ACT:DMF0003_MktFcst.spdMain_ComboSelChan) |
+| WK-DMF0003-0506 | D3 | AS_FROM_SITE,AS_FROM_SITE | 하네스·환경 | D3 도구 오류 — 원장 V-8bd3375a |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1810:122) |
+| WK-DMF0003-0507 | D3 | B,B | 하네스·환경 | D3 도구 오류 — 원장 V-56edef85 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1260:94) |
+| WK-DMF0003-0508 | D3 | B,B | 하네스·환경 | D3 도구 오류 — 원장 V-d3ba6e94 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2011:72) |
+| WK-DMF0003-0509 | D3 | B,B | 하네스·환경 | D3 도구 오류 — 원장 V-bf936681 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1154:119) |
+| WK-DMF0003-0510 | D3 | B,B | 하네스·환경 | D3 도구 오류 — 원장 V-0f0bb749 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2703:90) |
+| WK-DMF0003-0511 | D3 | B,B | 하네스·환경 | D3 도구 오류 — 원장 V-4d33e385 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:929:94) |
+| WK-DMF0003-0512 | D3 | B,B | 하네스·환경 | D3 도구 오류 — 원장 V-17763ed7 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1759:72) |
+| WK-DMF0003-0513 | D3 | C | 하네스·환경 | D3 도구 오류 — 원장 V-fe246f47 ASIS / 원장 V-b353fe2c ASIS / 원장 V-d2791862 ASIS / 원장 V-2359ec1e ASIS / 원장 V-a95deb70 ASIS / 원장 V-73c6fd81  |  | 2 (C-121 ACT:DMF0003_MktFcst.EditButton) |
+| WK-DMF0003-0514 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-ddcacf1c |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1258:92) |
+| WK-DMF0003-0515 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-8e7a9a97 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1262:96) |
+| WK-DMF0003-0516 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-59b71925 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1264:98) |
+| WK-DMF0003-0517 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-b4773799 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1266:10) |
+| WK-DMF0003-0518 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-4de91be7 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1268:10) |
+| WK-DMF0003-0519 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-2faa75a6 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2015:76) |
+| WK-DMF0003-0520 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-63194b1d |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2017:78) |
+| WK-DMF0003-0521 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-d55c3916 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2047:108) |
+| WK-DMF0003-0522 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-f40a5f02 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1152:117) |
+| WK-DMF0003-0523 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-59d2a932 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1156:121) |
+| WK-DMF0003-0524 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-7524d13d |  | 1 (ACT:DMF0003_MktFcst.EditButton:1158:123) |
+| WK-DMF0003-0525 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-c0a4c475 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1160:125) |
+| WK-DMF0003-0526 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-09b04e56 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1162:127) |
+| WK-DMF0003-0527 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-a180d8ae |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2707:94) |
+| WK-DMF0003-0528 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-5359e84b |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2709:96) |
+| WK-DMF0003-0529 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-8af8affc |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2739:126) |
+| WK-DMF0003-0530 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-4956e6e6 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:927:92) |
+| WK-DMF0003-0531 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-4d17b0d5 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:931:96) |
+| WK-DMF0003-0532 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-97ada01f |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:933:98) |
+| WK-DMF0003-0533 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-63cfc909 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:935:100) |
+| WK-DMF0003-0534 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-87f88578 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:937:102) |
+| WK-DMF0003-0535 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-f76911b7 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1763:76) |
+| WK-DMF0003-0536 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-03a60f79 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1765:78) |
+| WK-DMF0003-0537 | D3 | C,C | 하네스·환경 | D3 도구 오류 — 원장 V-e21e9aac |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1795:108) |
+| WK-DMF0003-0538 | D3 | CB-01 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CB-01 "§2 `EDIT_FLAG != 'Y'` 행 = Measure 이후 전열 잠금 / L1132" 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CB-01) |
+| WK-DMF0003-0539 | D3 | CB-02 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CB-02 '§2 Measure 컬럼까지(키 영역) 전 행 잠금 — Insert 행만 예외 / L112' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CB-02) |
+| WK-DMF0003-0540 | D3 | CB-102 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CB-102 '§2 [원문 무번호] Daily / 과거(<당주월요일) 잠금' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CB-102) |
+| WK-DMF0003-0541 | D3 | CB-103 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CB-103 '§2 [원문 무번호] Weekly / 전부 잠금' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CB-103) |
+| WK-DMF0003-0542 | D3 | CB-104 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CB-104 '§2 [원문 무번호] Monthly / 전부 잠금 (40: 조건부 — MONTH_NAME ' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CB-104) |
+| WK-DMF0003-0543 | D3 | CELL_PER_MODULE | 하네스·환경 | D3 도구 오류 — 원장 V-1621dcee ASIS |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2772:152) |
+| WK-DMF0003-0544 | D3 | CELL_PER_MODULE,CELL_PER_MODULE | 하네스·환경 | D3 도구 오류 — 원장 V-1621dcee |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2772:152) |
+| WK-DMF0003-0545 | D3 | CF-106 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CF-106 '§6.2 [원문 무번호] 셀편집/저장 / MSG00429' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CF-106) |
+| WK-DMF0003-0546 | D3 | CF-112 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CF-112 '§6.2 [원문 무번호] 편집게이트 / MSG00448' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CF-112) |
+| WK-DMF0003-0547 | D3 | CG-113 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CG-113 '§7.1 [원문 무번호] 8주 잠금(Monthly) / ✓' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CG-113) |
+| WK-DMF0003-0548 | D3 | CH-08 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CH-08 '§8 버킷 변경(편집모드) / EditButton 2회 재호출로 잠금 재계산' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CH-08) |
+| WK-DMF0003-0549 | D3 | CI-07 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CI-07 '§9 저장 후 / Action 클리어 + UnLockColor + 행 재잠금(빨강 계열)' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CI-07) |
+| WK-DMF0003-0550 | D3 | CJ-04 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CJ-04 '§10 SCP Planner / 82·40 편집 차단(MSG00096) / 81* 시간 게' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CJ-04) |
+| WK-DMF0003-0551 | D3 | CJ-05 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CJ-05 '§10 그 외(Viewer 등) / Master Chg 숨김·편집 버튼 BaseForm 권' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CJ-05) |
+| WK-DMF0003-0552 | D3 | CRUD:E03:EDIT | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CRUD:E03:EDIT '[EDIT] §3.1 EditButton — 편집 게이트 8종 + 잠금 (수기 추가)' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CRUD:E03:EDIT) |
+| WK-DMF0003-0553 | D3 | CRUD:E03:SAVE | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 CRUD:E03:SAVE '[SAVE] §3 편집/저장' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (CRUD:E03:SAVE) |
+| WK-DMF0003-0554 | D3 | CUST_GROUP | 하네스·환경 | D3 도구 오류 — 원장 V-dc2429f1 ASIS / 원장 V-8b7dd565 ASIS / 원장 V-e60700a4 ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2031:92 ) |
+| WK-DMF0003-0555 | D3 | CUST_GROUP,CUST_GROUP | 하네스·환경 | D3 도구 오류 — 원장 V-dc2429f1 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2031:92) |
+| WK-DMF0003-0556 | D3 | CUST_GROUP,CUST_GROUP | 하네스·환경 | D3 도구 오류 — 원장 V-8b7dd565 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2723:110) |
+| WK-DMF0003-0557 | D3 | CUST_GROUP,CUST_GROUP | 하네스·환경 | D3 도구 오류 — 원장 V-e60700a4 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1779:92) |
+| WK-DMF0003-0558 | D3 | CUST_GROUP_DTL | 하네스·환경 | D3 도구 오류 — 원장 V-7482b962 ASIS / 원장 V-e8e56091 ASIS / 원장 V-c8eacf2c ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2033:94 ) |
+| WK-DMF0003-0559 | D3 | CUST_GROUP_DTL,CUST_GROUP_DTL | 하네스·환경 | D3 도구 오류 — 원장 V-7482b962 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2033:94) |
+| WK-DMF0003-0560 | D3 | CUST_GROUP_DTL,CUST_GROUP_DTL | 하네스·환경 | D3 도구 오류 — 원장 V-e8e56091 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2725:112) |
+| WK-DMF0003-0561 | D3 | CUST_GROUP_DTL,CUST_GROUP_DTL | 하네스·환경 | D3 도구 오류 — 원장 V-c8eacf2c |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1781:94) |
+| WK-DMF0003-0562 | D3 | D | 하네스·환경 | D3 도구 오류 — 원장 V-fe246f47 ASIS / 원장 V-b353fe2c ASIS / 원장 V-d2791862 ASIS / 원장 V-2359ec1e ASIS / 원장 V-a95deb70 ASIS / 원장 V-73c6fd81  |  | 5 (AS_FROM_SITE ACT:DMF0003_1_MktFcst.Inser) |
+| WK-DMF0003-0563 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-b7b45899 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1358:15) |
+| WK-DMF0003-0564 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-05b94e31 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1360:15) |
+| WK-DMF0003-0565 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-a2f2c5cd |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2007:68) |
+| WK-DMF0003-0566 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-aa4efd05 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2009:70) |
+| WK-DMF0003-0567 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-50c8b70e |  | 1 (ACT:DMF0003_MktFcst.EditButton:1276:183) |
+| WK-DMF0003-0568 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-3feb475f |  | 1 (ACT:DMF0003_MktFcst.EditButton:1278:184) |
+| WK-DMF0003-0569 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-cdc8bdc7 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2699:86) |
+| WK-DMF0003-0570 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-7714e1db |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2701:88) |
+| WK-DMF0003-0571 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-70f40d41 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:1027:15) |
+| WK-DMF0003-0572 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-f4485f37 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:1029:15) |
+| WK-DMF0003-0573 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-b779578f |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1755:68) |
+| WK-DMF0003-0574 | D3 | D,D | 하네스·환경 | D3 도구 오류 — 원장 V-abe68dd0 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1757:70) |
+| WK-DMF0003-0575 | D3 | DMF0003_1_MktFcst.EditButton | 하네스·환경 | D3 도구 오류 — 원장 V-e02c99cc ASIS / 원장 V-fe246f47 ASIS / 원장 V-b353fe2c ASIS / 원장 V-d2791862 ASIS / 원장 V-2359ec1e ASIS / 원장 V-a95deb70  |  | 114 (ACT:DMF0003_1_MktFcst.EditButton:981:1 A) |
+| WK-DMF0003-0576 | D3 | DMS_CUSTOMER | 하네스·환경 | D3 도구 오류 — 원장 V-ab6fbabb ASIS / 원장 V-c1ddf067 ASIS / 원장 V-c3c0fb17 ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2059:120) |
+| WK-DMF0003-0577 | D3 | DMS_CUSTOMER,DMS_CUSTOMER | 하네스·환경 | D3 도구 오류 — 원장 V-ab6fbabb |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2059:120) |
+| WK-DMF0003-0578 | D3 | DMS_CUSTOMER,DMS_CUSTOMER | 하네스·환경 | D3 도구 오류 — 원장 V-c1ddf067 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2751:138) |
+| WK-DMF0003-0579 | D3 | DMS_CUSTOMER,DMS_CUSTOMER | 하네스·환경 | D3 도구 오류 — 원장 V-c3c0fb17 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1807:120) |
+| WK-DMF0003-0580 | D3 | DMS_SALES | 하네스·환경 | D3 도구 오류 — 원장 V-6f84b26d ASIS / 원장 V-304fe1dd ASIS / 원장 V-b95448ee ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2057:118) |
+| WK-DMF0003-0581 | D3 | DMS_SALES,DMS_SALES | 하네스·환경 | D3 도구 오류 — 원장 V-6f84b26d |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2057:118) |
+| WK-DMF0003-0582 | D3 | DMS_SALES,DMS_SALES | 하네스·환경 | D3 도구 오류 — 원장 V-304fe1dd |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2749:136) |
+| WK-DMF0003-0583 | D3 | DMS_SALES,DMS_SALES | 하네스·환경 | D3 도구 오류 — 원장 V-b95448ee |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1805:118) |
+| WK-DMF0003-0584 | D3 | E03 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 E03 '§3 편집/저장' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (E03) |
+| WK-DMF0003-0585 | D3 | E03-1 | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 E03-1 '§3.1 EditButton (L824~1338) — 편집 게이트 8종 + 잠금 매트릭스' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (E03-1) |
+| WK-DMF0003-0586 | D3 | FORECAST_INFO_BIZ_TYPE | 하네스·환경 | D3 도구 오류 — 원장 V-1a0ac536 ASIS / 원장 V-953d1969 ASIS / 원장 V-7f105184 ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2045:106) |
+| WK-DMF0003-0587 | D3 | FORECAST_INFO_BIZ_TYPE,FORECAST_INFO_BIZ | 하네스·환경 | D3 도구 오류 — 원장 V-1a0ac536 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2045:106) |
+| WK-DMF0003-0588 | D3 | FORECAST_INFO_BIZ_TYPE,FORECAST_INFO_BIZ | 하네스·환경 | D3 도구 오류 — 원장 V-953d1969 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2737:124) |
+| WK-DMF0003-0589 | D3 | FORECAST_INFO_BIZ_TYPE,FORECAST_INFO_BIZ | 하네스·환경 | D3 도구 오류 — 원장 V-7f105184 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1793:106) |
+| WK-DMF0003-0590 | D3 | FORECAST_INFO_CELL_MODEL | 하네스·환경 | D3 도구 오류 — 원장 V-6b279cab ASIS / 원장 V-1ccdbc21 ASIS / 원장 V-3bafa148 ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2049:110) |
+| WK-DMF0003-0591 | D3 | FORECAST_INFO_CELL_MODEL,FORECAST_INFO_C | 하네스·환경 | D3 도구 오류 — 원장 V-6b279cab |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2049:110) |
+| WK-DMF0003-0592 | D3 | FORECAST_INFO_CELL_MODEL,FORECAST_INFO_C | 하네스·환경 | D3 도구 오류 — 원장 V-1ccdbc21 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2741:128) |
+| WK-DMF0003-0593 | D3 | FORECAST_INFO_CELL_MODEL,FORECAST_INFO_C | 하네스·환경 | D3 도구 오류 — 원장 V-3bafa148 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1797:110) |
+| WK-DMF0003-0594 | D3 | FORECAST_INFO_CELL_PACK_COUNT | 하네스·환경 | D3 도구 오류 — 원장 V-fde698d2 ASIS / 원장 V-7d6bfd84 ASIS / 원장 V-74e8f0cb ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2051:112) |
+| WK-DMF0003-0595 | D3 | FORECAST_INFO_CELL_PACK_COUNT,FORECAST_I | 하네스·환경 | D3 도구 오류 — 원장 V-fde698d2 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2051:112) |
+| WK-DMF0003-0596 | D3 | FORECAST_INFO_CELL_PACK_COUNT,FORECAST_I | 하네스·환경 | D3 도구 오류 — 원장 V-7d6bfd84 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2743:130) |
+| WK-DMF0003-0597 | D3 | FORECAST_INFO_CELL_PACK_COUNT,FORECAST_I | 하네스·환경 | D3 도구 오류 — 원장 V-74e8f0cb |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1799:112) |
+| WK-DMF0003-0598 | D3 | FORECAST_INFO_SPEC | 하네스·환경 | D3 도구 오류 — 원장 V-c2565891 ASIS / 원장 V-876e0bf3 ASIS / 원장 V-6b3dd6ec ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2053:114) |
+| WK-DMF0003-0599 | D3 | FORECAST_INFO_SPEC,FORECAST_INFO_SPEC | 하네스·환경 | D3 도구 오류 — 원장 V-c2565891 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2053:114) |
+| WK-DMF0003-0600 | D3 | FORECAST_INFO_SPEC,FORECAST_INFO_SPEC | 하네스·환경 | D3 도구 오류 — 원장 V-876e0bf3 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2745:132) |
+| WK-DMF0003-0601 | D3 | FORECAST_INFO_SPEC,FORECAST_INFO_SPEC | 하네스·환경 | D3 도구 오류 — 원장 V-6b3dd6ec |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1801:114) |
+| WK-DMF0003-0602 | D3 | HANDLER:EditButton | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 HANDLER:EditButton 'AS-IS `DMF0003_MktFcst.cs:824` (라이브 358행)' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (HANDLER:EditButton) |
+| WK-DMF0003-0603 | D3 | HANDLER:spdMain_CellClick | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 HANDLER:spdMain_CellClick 'AS-IS `DMF0003_MktFcst.cs:6596` (라이브 74행)' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (HANDLER:spdMain_CellClick) |
+| WK-DMF0003-0604 | D3 | I | 하네스·환경 | D3 도구 오류 — 원장 V-fe246f47 ASIS / 원장 V-b353fe2c ASIS / 원장 V-d2791862 ASIS / 원장 V-2359ec1e ASIS / 원장 V-a95deb70 ASIS / 원장 V-73c6fd81  |  | 1 (CB-03) |
+| WK-DMF0003-0605 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-a014037a |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1272:10) |
+| WK-DMF0003-0606 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-7682f168 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1274:10) |
+| WK-DMF0003-0607 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-166be135 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1276:11) |
+| WK-DMF0003-0608 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-88f8db86 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1278:11) |
+| WK-DMF0003-0609 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-54ec32a7 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2025:86) |
+| WK-DMF0003-0610 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-33809d50 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2029:90) |
+| WK-DMF0003-0611 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-ee2a3066 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1166:131) |
+| WK-DMF0003-0612 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-0d11918d |  | 1 (ACT:DMF0003_MktFcst.EditButton:1168:133) |
+| WK-DMF0003-0613 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-7be03afd |  | 1 (ACT:DMF0003_MktFcst.EditButton:1170:135) |
+| WK-DMF0003-0614 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-515b90e1 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1172:137) |
+| WK-DMF0003-0615 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-d043b644 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2717:104) |
+| WK-DMF0003-0616 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-db252de3 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2721:108) |
+| WK-DMF0003-0617 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-8eb96889 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:941:106) |
+| WK-DMF0003-0618 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-98fd1c90 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:943:108) |
+| WK-DMF0003-0619 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-09492de9 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:945:110) |
+| WK-DMF0003-0620 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-ef5c6db2 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:947:112) |
+| WK-DMF0003-0621 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-a5f8cbb2 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1773:86) |
+| WK-DMF0003-0622 | D3 | I,I | 하네스·환경 | D3 도구 오류 — 원장 V-446ccd1d |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1777:90) |
+| WK-DMF0003-0623 | D3 | ITEM_DETAIL,ITEM_DETAIL | 하네스·환경 | D3 도구 오류 — 원장 V-4ab35b8f |  | 1 (ACT:DMF0003_PRPopup.EditButton:288:13) |
+| WK-DMF0003-0624 | D3 | L | 하네스·환경 | D3 도구 오류 — 원장 V-e02c99cc ASIS / 원장 V-fe246f47 ASIS / 원장 V-b353fe2c ASIS / 원장 V-d2791862 ASIS / 원장 V-2359ec1e ASIS / 원장 V-a95deb70  |  | 0 () |
+| WK-DMF0003-0625 | D3 | LAST_UPDATED_BY | 하네스·환경 | D3 도구 오류 — 원장 V-37dd4981 ASIS / 원장 V-26ae99a5 ASIS / 원장 V-39a45714 ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2067:126) |
+| WK-DMF0003-0626 | D3 | LAST_UPDATED_BY,LAST_UPDATED_BY | 하네스·환경 | D3 도구 오류 — 원장 V-37dd4981 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2067:126) |
+| WK-DMF0003-0627 | D3 | LAST_UPDATED_BY,LAST_UPDATED_BY | 하네스·환경 | D3 도구 오류 — 원장 V-26ae99a5 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2757:144) |
+| WK-DMF0003-0628 | D3 | LAST_UPDATED_BY,LAST_UPDATED_BY | 하네스·환경 | D3 도구 오류 — 원장 V-39a45714 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1815:126) |
+| WK-DMF0003-0629 | D3 | LAST_UPDATE_DATE | 하네스·환경 | D3 도구 오류 — 원장 V-e726e67a ASIS / 원장 V-549592c2 ASIS / 원장 V-a8df6e72 ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2065:124) |
+| WK-DMF0003-0630 | D3 | LAST_UPDATE_DATE,LAST_UPDATE_DATE | 하네스·환경 | D3 도구 오류 — 원장 V-e726e67a |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2065:124) |
+| WK-DMF0003-0631 | D3 | LAST_UPDATE_DATE,LAST_UPDATE_DATE | 하네스·환경 | D3 도구 오류 — 원장 V-549592c2 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2755:142) |
+| WK-DMF0003-0632 | D3 | LAST_UPDATE_DATE,LAST_UPDATE_DATE | 하네스·환경 | D3 도구 오류 — 원장 V-a8df6e72 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1813:124) |
+| WK-DMF0003-0633 | D3 | M | 하네스·환경 | D3 도구 오류 — 원장 V-923ceeea |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1229:77) |
+| WK-DMF0003-0634 | D3 | M | 하네스·환경 | D3 도구 오류 — 원장 V-47b03baf |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1241:80) |
+| WK-DMF0003-0635 | D3 | M | 하네스·환경 | D3 도구 오류 — 원장 V-f6a0831e |  | 1 (ACT:DMF0003_1_MktFcst.SetSaveSheetColor:) |
+| WK-DMF0003-0636 | D3 | M | 하네스·환경 | D3 도구 오류 — 원장 V-f1589f84 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1123:102) |
+| WK-DMF0003-0637 | D3 | M | 하네스·환경 | D3 도구 오류 — 원장 V-cae033ec |  | 1 (ACT:DMF0003_MktFcst.EditButton:1135:105) |
+| WK-DMF0003-0638 | D3 | M | 하네스·환경 | D3 도구 오류 — 원장 V-6e91fcb5 |  | 1 (ACT:DMF0003_MktFcst.SetSaveSheetColor:25) |
+| WK-DMF0003-0639 | D3 | M | 하네스·환경 | D3 도구 오류 — 원장 V-2a4b00ba |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:898:77) |
+| WK-DMF0003-0640 | D3 | M | 하네스·환경 | D3 도구 오류 — 원장 V-bc4c3710 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:910:80) |
+| WK-DMF0003-0641 | D3 | M | 하네스·환경 | D3 도구 오류 — 원장 V-c37ca3d9 |  | 1 (ACT:DMF0003_T_MktFcst.SetSaveSheetColor:) |
+| WK-DMF0003-0642 | D3 | M,M | 하네스·환경 | D3 도구 오류 — 원장 V-3c2166e2 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1270:10) |
+| WK-DMF0003-0643 | D3 | M,M | 하네스·환경 | D3 도구 오류 — 원장 V-c2feb605 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1289:12) |
+| WK-DMF0003-0644 | D3 | M,M | 하네스·환경 | D3 도구 오류 — 원장 V-b4dc5013 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2074:132) |
+| WK-DMF0003-0645 | D3 | M,M | 하네스·환경 | D3 도구 오류 — 원장 V-cfcd3347 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1164:129) |
+| WK-DMF0003-0646 | D3 | M,M | 하네스·환경 | D3 도구 오류 — 원장 V-07ca623b |  | 1 (ACT:DMF0003_MktFcst.EditButton:1182:146) |
+| WK-DMF0003-0647 | D3 | M,M | 하네스·환경 | D3 도구 오류 — 원장 V-6af15637 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2776:154) |
+| WK-DMF0003-0648 | D3 | M,M | 하네스·환경 | D3 도구 오류 — 원장 V-75d4c341 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:939:104) |
+| WK-DMF0003-0649 | D3 | M,M | 하네스·환경 | D3 도구 오류 — 원장 V-3e6b0f11 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:958:121) |
+| WK-DMF0003-0650 | D3 | M,M | 하네스·환경 | D3 도구 오류 — 원장 V-cbfe83de |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1822:132) |
+| WK-DMF0003-0651 | D3 | MDM_PROJECT_NAME | 하네스·환경 | D3 도구 오류 — 원장 V-1587ee70 ASIS / 원장 V-2f0e9b96 ASIS / 원장 V-8463daaa ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2041:102) |
+| WK-DMF0003-0652 | D3 | MDM_PROJECT_NAME,MDM_PROJECT_NAME | 하네스·환경 | D3 도구 오류 — 원장 V-1587ee70 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2041:102) |
+| WK-DMF0003-0653 | D3 | MDM_PROJECT_NAME,MDM_PROJECT_NAME | 하네스·환경 | D3 도구 오류 — 원장 V-2f0e9b96 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2733:120) |
+| WK-DMF0003-0654 | D3 | MDM_PROJECT_NAME,MDM_PROJECT_NAME | 하네스·환경 | D3 도구 오류 — 원장 V-8463daaa |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1789:102) |
+| WK-DMF0003-0655 | D3 | MIN_CAPACITY | 하네스·환경 | D3 도구 오류 — 원장 V-d8c533b2 ASIS / 원장 V-9a3b2871 ASIS / 원장 V-797bbb3b ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2043:104) |
+| WK-DMF0003-0656 | D3 | MIN_CAPACITY,MIN_CAPACITY | 하네스·환경 | D3 도구 오류 — 원장 V-d8c533b2 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2043:104) |
+| WK-DMF0003-0657 | D3 | MIN_CAPACITY,MIN_CAPACITY | 하네스·환경 | D3 도구 오류 — 원장 V-9a3b2871 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2735:122) |
+| WK-DMF0003-0658 | D3 | MIN_CAPACITY,MIN_CAPACITY | 하네스·환경 | D3 도구 오류 — 원장 V-797bbb3b |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1791:104) |
+| WK-DMF0003-0659 | D3 | N | 하네스·환경 | D3 도구 오류 — 원장 V-fe246f47 ASIS / 원장 V-b353fe2c ASIS / 원장 V-2359ec1e ASIS / 원장 V-a95deb70 ASIS / 원장 V-7019746f ASIS / 원장 V-b30ca865  |  | 1 (8. 콤보 호출지점) |
+| WK-DMF0003-0660 | D3 | N,N | 하네스·환경 | D3 도구 오류 — 원장 V-f0b410d7 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1281:11) |
+| WK-DMF0003-0661 | D3 | N,N | 하네스·환경 | D3 도구 오류 — 원장 V-c30fec7f |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2027:88) |
+| WK-DMF0003-0662 | D3 | N,N | 하네스·환경 | D3 도구 오류 — 원장 V-d67f74db |  | 1 (ACT:DMF0003_MatsterChgPopup.FindData:368) |
+| WK-DMF0003-0663 | D3 | N,N | 하네스·환경 | D3 도구 오류 — 원장 V-f2e50b8e |  | 1 (ACT:DMF0003_MatsterChgPopup.FindData:378) |
+| WK-DMF0003-0664 | D3 | N,N | 하네스·환경 | D3 도구 오류 — 원장 V-32d39889 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1174:139) |
+| WK-DMF0003-0665 | D3 | N,N | 하네스·환경 | D3 도구 오류 — 원장 V-6d3c7fea |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2719:106) |
+| WK-DMF0003-0666 | D3 | N,N | 하네스·환경 | D3 도구 오류 — 원장 V-3ba00d4d |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:950:114) |
+| WK-DMF0003-0667 | D3 | N,N | 하네스·환경 | D3 도구 오류 — 원장 V-daab0ac3 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1775:88) |
+| WK-DMF0003-0668 | D3 | O,O | 하네스·환경 | D3 도구 오류 — 원장 V-a7579352 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1287:12) |
+| WK-DMF0003-0669 | D3 | O,O | 하네스·환경 | D3 도구 오류 — 원장 V-e0ffd49e |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2035:96) |
+| WK-DMF0003-0670 | D3 | O,O | 하네스·환경 | D3 도구 오류 — 원장 V-d4262f2e |  | 1 (ACT:DMF0003_MktFcst.EditButton:1180:145) |
+| WK-DMF0003-0671 | D3 | O,O | 하네스·환경 | D3 도구 오류 — 원장 V-0a6b0691 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2727:114) |
+| WK-DMF0003-0672 | D3 | O,O | 하네스·환경 | D3 도구 오류 — 원장 V-b4ac837a |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:956:120) |
+| WK-DMF0003-0673 | D3 | O,O | 하네스·환경 | D3 도구 오류 — 원장 V-6c15e79b |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1783:96) |
+| WK-DMF0003-0674 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-dc390b61 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1252:86) |
+| WK-DMF0003-0675 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-c9669037 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1254:88) |
+| WK-DMF0003-0676 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-c7ccd43b |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1256:90) |
+| WK-DMF0003-0677 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-7bdbd6d0 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1283:11) |
+| WK-DMF0003-0678 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-9193addf |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2019:80) |
+| WK-DMF0003-0679 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-d53c6ae6 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2021:82) |
+| WK-DMF0003-0680 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-2dc69a1b |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2023:84) |
+| WK-DMF0003-0681 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-8ebc3c14 |  | 1 (ACT:DMF0003_1_MktFcst.spdMain_ComboSelCh) |
+| WK-DMF0003-0682 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-0a9160b8 |  | 1 (ACT:DMF0003_1_MktFcst.spdMain_ComboSelCh) |
+| WK-DMF0003-0683 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-39c2d781 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1146:111) |
+| WK-DMF0003-0684 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-926ff93d |  | 1 (ACT:DMF0003_MktFcst.EditButton:1148:113) |
+| WK-DMF0003-0685 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-584e0413 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1150:115) |
+| WK-DMF0003-0686 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-b5c0ad21 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1176:141) |
+| WK-DMF0003-0687 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-730de1b9 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2711:98) |
+| WK-DMF0003-0688 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-2110536c |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2713:100) |
+| WK-DMF0003-0689 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-89ac8b6d |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2715:102) |
+| WK-DMF0003-0690 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-ed9fec71 |  | 1 (ACT:DMF0003_MktFcst.spdMain_ComboSelChan) |
+| WK-DMF0003-0691 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-36410e7c |  | 1 (ACT:DMF0003_MktFcst.spdMain_ComboSelChan) |
+| WK-DMF0003-0692 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-7dd150df |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:921:86) |
+| WK-DMF0003-0693 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-f7cf66a3 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:923:88) |
+| WK-DMF0003-0694 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-af52d789 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:925:90) |
+| WK-DMF0003-0695 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-0cb8eb0f |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:952:116) |
+| WK-DMF0003-0696 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-00a09a36 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1767:80) |
+| WK-DMF0003-0697 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-1b4734bc |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1769:82) |
+| WK-DMF0003-0698 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-4e171cab |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1771:84) |
+| WK-DMF0003-0699 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-0c98dbb9 |  | 1 (ACT:DMF0003_T_MktFcst.spdMain_ComboSelCh) |
+| WK-DMF0003-0700 | D3 | P,P | 하네스·환경 | D3 도구 오류 — 원장 V-7b68644b |  | 1 (ACT:DMF0003_T_MktFcst.spdMain_ComboSelCh) |
+| WK-DMF0003-0701 | D3 | PROJECT_S_OP_REPORT | 하네스·환경 | D3 도구 오류 — 원장 V-e2707edd ASIS |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2766:150) |
+| WK-DMF0003-0702 | D3 | PROJECT_S_OP_REPORT,PROJECT_S_OP_REPORT | 하네스·환경 | D3 도구 오류 — 원장 V-e2707edd |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2766:150) |
+| WK-DMF0003-0703 | D3 | QTY,QTY | 하네스·환경 | D3 도구 오류 — 원장 V-12ebb440 |  | 1 (ACT:DMF0003_PRPopup.EditButton:284:10) |
+| WK-DMF0003-0704 | D3 | ROUTE | 하네스·환경 | D3 도구 오류 — 원장 V-44a53f04 ASIS / 원장 V-d4931f4a ASIS / 원장 V-315aa4be ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2039:100) |
+| WK-DMF0003-0705 | D3 | ROUTE,ROUTE | 하네스·환경 | D3 도구 오류 — 원장 V-44a53f04 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2039:100) |
+| WK-DMF0003-0706 | D3 | ROUTE,ROUTE | 하네스·환경 | D3 도구 오류 — 원장 V-d4931f4a |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2731:118) |
+| WK-DMF0003-0707 | D3 | ROUTE,ROUTE | 하네스·환경 | D3 도구 오류 — 원장 V-315aa4be |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1787:100) |
+| WK-DMF0003-0708 | D3 | S | 하네스·환경 | D3 도구 오류 — 원장 V-e02c99cc ASIS / 원장 V-fe246f47 ASIS / 원장 V-b353fe2c ASIS / 원장 V-2359ec1e ASIS / 원장 V-a95deb70 ASIS / 원장 V-7019746f  |  | 17 (CB-04 행잠금: 좌측 상세컬럼 read-only (#8~27, #34) |
+| WK-DMF0003-0709 | D3 | S,S | 하네스·환경 | D3 도구 오류 — 원장 V-16bbd632 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1248:84) |
+| WK-DMF0003-0710 | D3 | S,S | 하네스·환경 | D3 도구 오류 — 원장 V-b96ff5de |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2013:74) |
+| WK-DMF0003-0711 | D3 | S,S | 하네스·환경 | D3 도구 오류 — 원장 V-dc88aad2 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1142:109) |
+| WK-DMF0003-0712 | D3 | S,S | 하네스·환경 | D3 도구 오류 — 원장 V-b0744595 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2705:92) |
+| WK-DMF0003-0713 | D3 | S,S | 하네스·환경 | D3 도구 오류 — 원장 V-f225b76a |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:917:84) |
+| WK-DMF0003-0714 | D3 | S,S | 하네스·환경 | D3 도구 오류 — 원장 V-f08f1944 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1761:74) |
+| WK-DMF0003-0715 | D3 | SENDER_CODE | 하네스·환경 | D3 도구 오류 — 원장 V-45ed9f11 ASIS / 원장 V-72c1306b ASIS / 원장 V-faf4ab4f ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2069:128) |
+| WK-DMF0003-0716 | D3 | SENDER_CODE,SENDER_CODE | 하네스·환경 | D3 도구 오류 — 원장 V-45ed9f11 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2069:128) |
+| WK-DMF0003-0717 | D3 | SENDER_CODE,SENDER_CODE | 하네스·환경 | D3 도구 오류 — 원장 V-72c1306b |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2759:146) |
+| WK-DMF0003-0718 | D3 | SENDER_CODE,SENDER_CODE | 하네스·환경 | D3 도구 오류 — 원장 V-faf4ab4f |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1817:128) |
+| WK-DMF0003-0719 | D3 | SENDER_NAME | 하네스·환경 | D3 도구 오류 — 원장 V-b993bc6f ASIS / 원장 V-eb2a75af ASIS / 원장 V-aa4cf0cf ASIS |  | 3 (ACT:DMF0003_1_MktFcst.InsertRow:2071:130) |
+| WK-DMF0003-0720 | D3 | SENDER_NAME,SENDER_NAME | 하네스·환경 | D3 도구 오류 — 원장 V-b993bc6f |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2071:130) |
+| WK-DMF0003-0721 | D3 | SENDER_NAME,SENDER_NAME | 하네스·환경 | D3 도구 오류 — 원장 V-eb2a75af |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2761:148) |
+| WK-DMF0003-0722 | D3 | SENDER_NAME,SENDER_NAME | 하네스·환경 | D3 도구 오류 — 원장 V-aa4cf0cf |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1819:130) |
+| WK-DMF0003-0723 | D3 | SLOC,SLOC | 하네스·환경 | D3 도구 오류 — 원장 V-f9c6560e |  | 1 (ACT:DMF0003_PRPopup.EditButton:287:12) |
+| WK-DMF0003-0724 | D3 | STORAGE_PLANT_ID,STORAGE_PLANT_ID | 하네스·환경 | D3 도구 오류 — 원장 V-f7d8d34a |  | 1 (ACT:DMF0003_PRPopup.EditButton:286:11) |
+| WK-DMF0003-0725 | D3 | T,T | 하네스·환경 | D3 도구 오류 — 원장 V-59888984 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2780:156) |
+| WK-DMF0003-0726 | D3 | T,T | 하네스·환경 | D3 도구 오류 — 원장 V-26bf0089 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2782:158) |
+| WK-DMF0003-0727 | D3 | VMI_YN | 하네스·환경 | D3 도구 오류 — 원장 V-d7d3b5b1 ASIS / 원장 V-49eee9e9 ASIS / 원장 V-87e9d4d4 ASIS / 원장 V-c5fe28bc ASIS / 원장 V-ec3359b9 ASIS / 원장 V-202e969e  |  | 9 (ACT:DMF0003_1_MktFcst.EditButton:1284:11) |
+| WK-DMF0003-0728 | D3 | VMI_YN,VMI_YN | 하네스·환경 | D3 도구 오류 — 원장 V-d7d3b5b1 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1285:11) |
+| WK-DMF0003-0729 | D3 | VMI_YN,VMI_YN | 하네스·환경 | D3 도구 오류 — 원장 V-49eee9e9 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2055:116) |
+| WK-DMF0003-0730 | D3 | VMI_YN,VMI_YN | 하네스·환경 | D3 도구 오류 — 원장 V-87e9d4d4 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1178:143) |
+| WK-DMF0003-0731 | D3 | VMI_YN,VMI_YN | 하네스·환경 | D3 도구 오류 — 원장 V-c5fe28bc |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2747:134) |
+| WK-DMF0003-0732 | D3 | VMI_YN,VMI_YN | 하네스·환경 | D3 도구 오류 — 원장 V-ec3359b9 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:954:118) |
+| WK-DMF0003-0733 | D3 | VMI_YN,VMI_YN | 하네스·환경 | D3 도구 오류 — 원장 V-202e969e |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1803:116) |
+| WK-DMF0003-0734 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-fe246f47 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1067:28) |
+| WK-DMF0003-0735 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-b353fe2c |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1070:29) |
+| WK-DMF0003-0736 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-d2791862 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1077:32) |
+| WK-DMF0003-0737 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-2359ec1e |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1094:40) |
+| WK-DMF0003-0738 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-a95deb70 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1117:41) |
+| WK-DMF0003-0739 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-73c6fd81 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1162:48) |
+| WK-DMF0003-0740 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-7019746f |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1173:53) |
+| WK-DMF0003-0741 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-b30ca865 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1184:60) |
+| WK-DMF0003-0742 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-9246e2ba |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1189:61) |
+| WK-DMF0003-0743 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-262143f7 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1202:66) |
+| WK-DMF0003-0744 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-b914db02 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1209:71) |
+| WK-DMF0003-0745 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-36cc166f |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1216:73) |
+| WK-DMF0003-0746 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-e131c740 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1220:75) |
+| WK-DMF0003-0747 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-eef42fc4 |  | 1 (ACT:DMF0003_MktFcst.EditButton:969:53) |
+| WK-DMF0003-0748 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-570caa63 |  | 1 (ACT:DMF0003_MktFcst.EditButton:972:54) |
+| WK-DMF0003-0749 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-601ad0f6 |  | 1 (ACT:DMF0003_MktFcst.EditButton:979:57) |
+| WK-DMF0003-0750 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-8ea7b603 |  | 1 (ACT:DMF0003_MktFcst.EditButton:996:65) |
+| WK-DMF0003-0751 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-a45cf7ca |  | 1 (ACT:DMF0003_MktFcst.EditButton:1015:66) |
+| WK-DMF0003-0752 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-ff8fc653 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1056:73) |
+| WK-DMF0003-0753 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-5cc00db3 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1067:78) |
+| WK-DMF0003-0754 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-f3f70d4f |  | 1 (ACT:DMF0003_MktFcst.EditButton:1078:85) |
+| WK-DMF0003-0755 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-4208921b |  | 1 (ACT:DMF0003_MktFcst.EditButton:1083:86) |
+| WK-DMF0003-0756 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-e1ffe08b |  | 1 (ACT:DMF0003_MktFcst.EditButton:1096:91) |
+| WK-DMF0003-0757 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-d751ede6 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1103:96) |
+| WK-DMF0003-0758 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-7d454ee2 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1110:98) |
+| WK-DMF0003-0759 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-130d5ee6 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1114:100) |
+| WK-DMF0003-0760 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-0fbc4744 |  | 1 (ACT:DMF0003_PRPopup.EditButton:277:7) |
+| WK-DMF0003-0761 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-635c1ae8 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:744:28) |
+| WK-DMF0003-0762 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-3c21f451 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:747:29) |
+| WK-DMF0003-0763 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-0f50b711 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:754:32) |
+| WK-DMF0003-0764 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-4ea3cc38 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:771:40) |
+| WK-DMF0003-0765 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-a2845e5d |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:790:41) |
+| WK-DMF0003-0766 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-d94f914a |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:831:48) |
+| WK-DMF0003-0767 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-21d378d2 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:842:53) |
+| WK-DMF0003-0768 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-635e3fc3 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:853:60) |
+| WK-DMF0003-0769 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-423c6ea9 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:858:61) |
+| WK-DMF0003-0770 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-60513c78 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:871:66) |
+| WK-DMF0003-0771 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-30a3d52f |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:878:71) |
+| WK-DMF0003-0772 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-fbf917c0 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:885:73) |
+| WK-DMF0003-0773 | D3 | siMain.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-bb127f34 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:889:75) |
+| WK-DMF0003-0774 | D3 | siMain.LockColumn2 | 하네스·환경 | D3 도구 오류 — 원장 V-0c4c2f3c |  | 1 (ACT:DMF0003_1_MktFcst.FindData:1548:55) |
+| WK-DMF0003-0775 | D3 | siMain.LockColumn2 | 하네스·환경 | D3 도구 오류 — 원장 V-c3e4cd87 |  | 1 (ACT:DMF0003_MktFcst.Draw:1964:11) |
+| WK-DMF0003-0776 | D3 | siMain.LockColumn2 | 하네스·환경 | D3 도구 오류 — 원장 V-915ea95f |  | 1 (ACT:DMF0003_T_MktFcst.FindData:1245:55) |
+| WK-DMF0003-0777 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-133152e4 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1308:13) |
+| WK-DMF0003-0778 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-86a9f4c2 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1343:14) |
+| WK-DMF0003-0779 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-ce1cd2c4 |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1348:15) |
+| WK-DMF0003-0780 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-d5f70cac |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1353:15) |
+| WK-DMF0003-0781 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-625cb52f |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2099:146) |
+| WK-DMF0003-0782 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-f4723303 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2138:163) |
+| WK-DMF0003-0783 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-7e69335a |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2149:168) |
+| WK-DMF0003-0784 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-6cdf8abb |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2169:169) |
+| WK-DMF0003-0785 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-1bd6779f |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2211:176) |
+| WK-DMF0003-0786 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-5715e58e |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2223:181) |
+| WK-DMF0003-0787 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-18ad8a47 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2235:187) |
+| WK-DMF0003-0788 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-a3f93e4d |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2239:188) |
+| WK-DMF0003-0789 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-661afcfa |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2252:193) |
+| WK-DMF0003-0790 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-266b7220 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2258:197) |
+| WK-DMF0003-0791 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-cb550c14 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2264:199) |
+| WK-DMF0003-0792 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-4a610f27 |  | 1 (ACT:DMF0003_1_MktFcst.InsertRow:2268:201) |
+| WK-DMF0003-0793 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-29e51e93 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1201:156) |
+| WK-DMF0003-0794 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-ee05b17a |  | 1 (ACT:DMF0003_MktFcst.EditButton:1261:175) |
+| WK-DMF0003-0795 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-df684fd8 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1266:178) |
+| WK-DMF0003-0796 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-f068f538 |  | 1 (ACT:DMF0003_MktFcst.EditButton:1271:181) |
+| WK-DMF0003-0797 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-f5ef4e2d |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2808:172) |
+| WK-DMF0003-0798 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-529e8ca1 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2875:192) |
+| WK-DMF0003-0799 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-de989b8a |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2886:197) |
+| WK-DMF0003-0800 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-0fed9bf1 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2906:198) |
+| WK-DMF0003-0801 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-bd6f610d |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2948:205) |
+| WK-DMF0003-0802 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-bcccddb0 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2960:210) |
+| WK-DMF0003-0803 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-104dd1ca |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2972:216) |
+| WK-DMF0003-0804 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-2c5f6008 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2976:217) |
+| WK-DMF0003-0805 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-86f2572f |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2989:222) |
+| WK-DMF0003-0806 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-ac16584b |  | 1 (ACT:DMF0003_MktFcst.InsertRow:2995:226) |
+| WK-DMF0003-0807 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-a7841ae6 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:3001:228) |
+| WK-DMF0003-0808 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-80192542 |  | 1 (ACT:DMF0003_MktFcst.InsertRow:3005:230) |
+| WK-DMF0003-0809 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-ce5d3598 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:977:131) |
+| WK-DMF0003-0810 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-2e9bcafb |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:1012:14) |
+| WK-DMF0003-0811 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-3eaa14ed |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:1017:15) |
+| WK-DMF0003-0812 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-85e6f102 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:1022:15) |
+| WK-DMF0003-0813 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-abe85a5e |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1847:146) |
+| WK-DMF0003-0814 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-70145bff |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1886:163) |
+| WK-DMF0003-0815 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-93d35e00 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1897:168) |
+| WK-DMF0003-0816 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-d92ce79f |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1917:169) |
+| WK-DMF0003-0817 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-2046c2f3 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1959:176) |
+| WK-DMF0003-0818 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-a6998535 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1971:181) |
+| WK-DMF0003-0819 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-92262a39 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1983:187) |
+| WK-DMF0003-0820 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-f46c7b05 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:1987:188) |
+| WK-DMF0003-0821 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-c11dc891 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:2000:193) |
+| WK-DMF0003-0822 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-06fb9282 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:2006:197) |
+| WK-DMF0003-0823 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-3d287f1e |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:2012:199) |
+| WK-DMF0003-0824 | D3 | siMain.LockRange | 하네스·환경 | D3 도구 오류 — 원장 V-79996ab8 |  | 1 (ACT:DMF0003_T_MktFcst.InsertRow:2016:201) |
+| WK-DMF0003-0825 | D3 | siMain.SwitchLock | 하네스·환경 | D3 도구 오류 — 원장 V-e02c99cc |  | 1 (ACT:DMF0003_1_MktFcst.EditButton:1048:18) |
+| WK-DMF0003-0826 | D3 | siMain.SwitchLock | 하네스·환경 | D3 도구 오류 — 원장 V-2b2292a8 |  | 1 (ACT:DMF0003_MktFcst.EditButton:948:42) |
+| WK-DMF0003-0827 | D3 | siMain.SwitchLock | 하네스·환경 | D3 도구 오류 — 원장 V-45e191cd |  | 1 (ACT:DMF0003_PRPopup.EditButton:275:6) |
+| WK-DMF0003-0828 | D3 | siMain.SwitchLock | 하네스·환경 | D3 도구 오류 — 원장 V-963e0463 |  | 1 (ACT:DMF0003_T_MktFcst.EditButton:725:18) |
+| WK-DMF0003-0829 | D3 | siSub1.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-966eb005 |  | 1 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0830 | D3 | siSub1.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-f5c7de0c |  | 1 (ACT:DMF0003_1_MktFcst.spdSub1_CellClick:) |
+| WK-DMF0003-0831 | D3 | siSub1.LockColumn | 하네스·환경 | D3 도구 오류 — 원장 V-a98167bc |  | 1 (ACT:DMF0003_1_MktFcst.spdSub1_CellClick:) |
+| WK-DMF0003-0832 | D3 | 행잠금: bucket×past 셀 잠금 (#28~33, #71~87) | 하네스·환경 | D3 도구 오류 — 행 집계 — 대조표 행잠금: bucket×past 셀 잠금 (#28~33, #71~87) '~23' 의 D3 337요소: ERROR:323 · NA:14 |  | 1 (행잠금: bucket×past 셀 잠금 (#28~33, #71~87)) |
+| WK-DMF0003-0833 | E3 | 10 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 10 'SAVE p_authority 16번째 (L2421~2441)' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (10) |
+| WK-DMF0003-0834 | E3 | 10/12/14 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 10/12/14 'L802/814/826' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (10/12/14) |
+| WK-DMF0003-0835 | E3 | 106 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 106 'L4335' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (106) |
+| WK-DMF0003-0836 | E3 | 130 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 130 'L5401' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (130) |
+| WK-DMF0003-0837 | E3 | 15 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 15 'ValidationCheck' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (15) |
+| WK-DMF0003-0838 | E3 | 16 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 16 'fnValidation' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (16) |
+| WK-DMF0003-0839 | E3 | 26/27/28 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 26/27/28 'ExportExcel 사전검증(myarray/FrozenColumnCount)+MSG000' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (26/27/28) |
+| WK-DMF0003-0840 | E3 | 30 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 30 'L1213' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (30) |
+| WK-DMF0003-0841 | E3 | 31 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 31 'L1224' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (31) |
+| WK-DMF0003-0842 | E3 | 32 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 32 'L1230' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (32) |
+| WK-DMF0003-0843 | E3 | 36 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 36 'L1493' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (36) |
+| WK-DMF0003-0844 | E3 | 37/43 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 37/43 'L1499/L1660' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (37/43) |
+| WK-DMF0003-0845 | E3 | 4 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 4 'FCST_TYPE 편집 콤보 분기(L2587~2605) — W/S=EDIT_MODE 6종 ' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 0 () |
+| WK-DMF0003-0846 | E3 | 40 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 40 'L1569' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (40) |
+| WK-DMF0003-0847 | E3 | 6 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 6 '공통 콤보 PARAM5 W/S 플래그 — GetSalesSite40(L7047~7066) ' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 0 () |
+| WK-DMF0003-0848 | E3 | 7 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 7 'SCP Planner 차단 — Edit 82·40(L828~834) / Insert 81(' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 0 () |
+| WK-DMF0003-0849 | E3 | 73 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 73 'MSG00472 FcstType 코드 검증' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (73) |
+| WK-DMF0003-0850 | E3 | 95 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 95 'L3253' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (95) |
+| WK-DMF0003-0851 | E3 | 99/122 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 99/122 'iWeeklySum<iWkSum_Sync / iValidation>1 (내부 분기)' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (99/122) |
+| WK-DMF0003-0852 | E3 | CF-05 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 CF-05 '§6 저장 성공(Tables 없음) / MSG00004(건수) + 재조회 + viewpor' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (CF-05) |
+| WK-DMF0003-0853 | E3 | CG-01 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 CG-01 '§7 수량 셀 수정 시 필수값 빈값 — Division/Project(81*·82)/End' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (CG-01) |
+| WK-DMF0003-0854 | E3 | CH-01 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 CH-01 '§8 division 미선택 / MSG00097' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (CH-01) |
+| WK-DMF0003-0855 | E3 | E04-5 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 E04-5 '§4.5 spdMain_KeyUp (L5636~5700) / EditChange (L648' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (E04-5) |
+| WK-DMF0003-0856 | E3 | E05-3 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 E05-3 '§5.3 화면 내 검증 메시지 전수 (활성 기준)' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (E05-3) |
+| WK-DMF0003-0857 | E3 | E07 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 E07 '§7 fnValidation (L5887~6273)' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (E07) |
+| WK-DMF0003-0858 | E3 | Grid입력 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 Grid입력 '1' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (Grid입력) |
+| WK-DMF0003-0859 | E3 | Validation | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 Validation '**152**' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (Validation) |
+| WK-DMF0003-0860 | E3 | `utils/mkt-fcst.validate.ts` | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 `utils/mkt-fcst.validate.ts` '신규' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (`utils/mkt-fcst.validate.ts`) |
+| WK-DMF0003-0861 | E3 | — | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 — '(저장대상 0)' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (—) |
+| WK-DMF0003-0862 | E3 | 기타(사전검증분기) | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 기타(사전검증분기) '25' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (기타(사전검증분기)) |
+| WK-DMF0003-0863 | E3 | 날짜기간 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 날짜기간 '2' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (날짜기간) |
+| WK-DMF0003-0864 | E3 | 모드분기 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 모드분기 '1' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (모드분기) |
+| WK-DMF0003-0865 | E3 | 사업부분기(40/81/82) | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 사업부분기(40/81/82) '113' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (사업부분기(40/81/82)) |
+| WK-DMF0003-0866 | E3 | 숫자값검증 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 숫자값검증 '1' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (숫자값검증) |
+| WK-DMF0003-0867 | E3 | 중복체크 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 중복체크 '3' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (중복체크) |
+| WK-DMF0003-0868 | E3 | 필수값 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 필수값 '4' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (필수값) |
+| WK-DMF0003-0869 | E3 | 확인메시지 | 하네스·환경 | E3 도구 오류 — 행 집계 — 대조표 확인메시지 '2' 의 E3 4요소: NOT_RUN:4 (미실행 요소가 남아 판정필요) |  | 1 (확인메시지) |
+| WK-DMF0003-0870 | G1 | clbTeam / Team | 하네스·환경 | G1 도구 오류 — 원장 V-3478aadf SEARCH |  | 11 (ACT:DMF0003_1_MktFcst.FindData ACT:DMF00) |
+| WK-DMF0003-0871 | X-ROW | DMF0003_1_MktFcst.CreateSpread | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 4검사 — NOT_RUN:3 · PASS:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.CreateSpread) |
+| WK-DMF0003-0872 | X-ROW | DMF0003_1_MktFcst.EditButton | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 58검사 — ERROR:44 · NA:12 · NOT_RUN:1 · PASS:1 |  | 11 (ACT:DMF0003_1_MktFcst.EditButton ACT:DMF) |
+| WK-DMF0003-0873 | X-ROW | DMF0003_1_MktFcst.InsertRow | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 99검사 — ERROR:64 · NA:32 · PASS:3 |  | 203 (ACT:DMF0003_1_MktFcst.InsertRow ACT:DMF0) |
+| WK-DMF0003-0874 | X-ROW | DMF0003_1_MktFcst.SetSaveDataRemove | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 3검사 — NA:2 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.SetSaveDataRemove) |
+| WK-DMF0003-0875 | X-ROW | DMF0003_1_MktFcst.SetSaveSheetColor | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 5검사 — NA:3 · NOT_RUN:1 · ERROR:1 |  | 3 (ACT:DMF0003_1_MktFcst.SetSaveSheetColor ) |
+| WK-DMF0003-0876 | X-ROW | DMF0003_1_MktFcst.SetSpreadColumn | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 19검사 — NA:15 · NOT_RUN:3 · PASS:1 (미실행 검사가 남아 판정필요) |  | 15 (ACT:DMF0003_1_MktFcst.SetSpreadColumn AC) |
+| WK-DMF0003-0877 | X-ROW | DMF0003_1_MktFcst.btnCalculation_Click | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 9검사 — NA:7 · NOT_RUN:1 · PASS:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.btnCalculation_Cli) |
+| WK-DMF0003-0878 | X-ROW | DMF0003_1_MktFcst.cboAS_CheckedChanged | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 4검사 — NOT_RUN:3 · PASS:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.cboAS_CheckedChang) |
+| WK-DMF0003-0879 | X-ROW | DMF0003_1_MktFcst.cboBucketType_Selected | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 9검사 — NA:8 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 4 (ACT:DMF0003_1_MktFcst.cboBucketType_Sele) |
+| WK-DMF0003-0880 | X-ROW | DMF0003_1_MktFcst.chkColor_CheckedChange | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 4검사 — NOT_RUN:4 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.chkColor_CheckedCh) |
+| WK-DMF0003-0881 | X-ROW | DMF0003_1_MktFcst.chkSum_CheckedChanged | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 3검사 — NOT_RUN:3 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.chkSum_CheckedChan) |
+| WK-DMF0003-0882 | X-ROW | DMF0003_1_MktFcst.clbCustomer_SelectedIn | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 4검사 — NOT_RUN:3 · PASS:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.clbCustomer_Select) |
+| WK-DMF0003-0883 | X-ROW | DMF0003_1_MktFcst.cmbCarMaker_SelectedIn | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 6검사 — NOT_RUN:3 · PASS:2 · NA:1 (미실행 검사가 남아 판정필요) |  | 2 (ACT:DMF0003_1_MktFcst.cmbCarMaker_Select) |
+| WK-DMF0003-0884 | X-ROW | DMF0003_1_MktFcst.spdMain_CellDoubleClic | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 54검사 — NA:27 · PASS:8 · NOT_RUN:7 · ERROR:6 · NOPATH:4 · REVIEW:2 |  | 39 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0885 | X-ROW | DMF0003_1_MktFcst.spdMain_ComboSelChange | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 34검사 — NA:27 · PASS:5 · ERROR:2 |  | 36 (ACT:DMF0003_1_MktFcst.spdMain_ComboSelCh) |
+| WK-DMF0003-0886 | X-ROW | DMF0003_1_MktFcst.spdSub1_CellClick | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 22검사 — NA:16 · ERROR:3 · PASS:2 · REVIEW:1 |  | 100 (ACT:DMF0003_1_MktFcst.spdSub1_CellClick ) |
+| WK-DMF0003-0887 | X-ROW | DMF0003_1_MktFcst.txtMarketShare_Click | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 3검사 — NA:2 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 1 (ACT:DMF0003_1_MktFcst.txtMarketShare_Cli) |
+| WK-DMF0003-0888 | X-ROW | DMF0003_1_MktFcst.txtMarketShare_KeyDown | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 1검사 — NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 12 (ACT:DMF0003_1_MktFcst.txtMarketShare_Key) |
+| WK-DMF0003-0889 | X-ROW | DMF0003_MatsterChgPopup.InitControls | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 20검사 — PASS:8 · NA:7 · NOT_RUN:5 (미실행 검사가 남아 판정필요) |  | 31 (ACT:DMF0003_MatsterChgPopup.InitControls) |
+| WK-DMF0003-0890 | X-ROW | DMF0003_MktFcst.Draw | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 6검사 — NA:4 · ERROR:1 · NOPATH:1 |  | 124 (ACT:DMF0003_MktFcst.Draw ACT:DMF0003_Mkt) |
+| WK-DMF0003-0891 | X-ROW | DMF0003_MktFcst.EditButton | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 73검사 — ERROR:46 · NA:26 · PASS:1 |  | 201 (ACT:DMF0003_MktFcst.EditButton:826:1 ACT) |
+| WK-DMF0003-0892 | X-ROW | DMF0003_MktFcst.Form_Load | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 6검사 — PASS:3 · NA:2 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 13 (ACT:DMF0003_MktFcst.Form_Load:304:1 ACT:) |
+| WK-DMF0003-0893 | X-ROW | DMF0003_MktFcst.InsertRow | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 124검사 — ERROR:70 · NA:43 · NOPATH:7 · PASS:4 |  | 232 (ACT:DMF0003_MktFcst.InsertRow ACT:DMF000) |
+| WK-DMF0003-0894 | X-ROW | DMF0003_MktFcst.SetSaveSheetColor | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 3검사 — NA:2 · ERROR:1 |  | 7 (ACT:DMF0003_MktFcst.SetSaveSheetColor AC) |
+| WK-DMF0003-0895 | X-ROW | DMF0003_MktFcst.spdMain_ClipboardPasted | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 27검사 — NA:21 · ERROR:4 · NOPATH:2 |  | 45 (ACT:DMF0003_MktFcst.spdMain_ClipboardPas) |
+| WK-DMF0003-0896 | X-ROW | DMF0003_MktFcst.spdMain_ComboSelChange | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 76검사 — NA:59 · ERROR:9 · PASS:6 · NOPATH:2 |  | 158 (ACT:DMF0003_MktFcst.spdMain_ComboSelChan) |
+| WK-DMF0003-0897 | X-ROW | DMF0003_PRPopup.EditButton | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 20검사 — NA:12 · ERROR:6 · NOT_RUN:1 · PASS:1 |  | 16 (ACT:DMF0003_PRPopup.EditButton:253:1 ACT) |
+| WK-DMF0003-0898 | X-ROW | DMF0003_T_MktFcst.EditButton | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 57검사 — ERROR:43 · NA:13 · PASS:1 |  | 172 (ACT:DMF0003_T_MktFcst.EditButton ACT:DMF) |
+| WK-DMF0003-0899 | X-ROW | DMF0003_T_MktFcst.Form_Load | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 6검사 — PASS:3 · NA:2 · NOT_RUN:1 (미실행 검사가 남아 판정필요) |  | 8 (ACT:DMF0003_T_MktFcst.Form_Load:254:1 AC) |
+| WK-DMF0003-0900 | X-ROW | DMF0003_T_MktFcst.InsertRow | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 100검사 — ERROR:64 · NA:33 · PASS:3 |  | 203 (ACT:DMF0003_T_MktFcst.InsertRow ACT:DMF0) |
+| WK-DMF0003-0901 | X-ROW | DMF0003_T_MktFcst.SetSaveSheetColor | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 3검사 — NA:2 · ERROR:1 |  | 7 (ACT:DMF0003_T_MktFcst.SetSaveSheetColor ) |
+| WK-DMF0003-0902 | X-ROW | DMF0003_T_MktFcst.spdMain_ComboSelChange | 하네스·환경 | X-ROW 도구 오류 — 진입점 집계 32검사 — NA:25 · PASS:5 · ERROR:2 |  | 95 (ACT:DMF0003_T_MktFcst.spdMain_ComboSelCh) |
+| WK-DMF0003-0903 | M4 | 13 | 하네스·환경 | M4 도구 오류 — 실측[T-3886d727]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (13) |
+| WK-DMF0003-0904 | M4 | 2 | 하네스·환경 | M4 도구 오류 — 실측[T-df7ac738]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (2) |
+| WK-DMF0003-0905 | M4 | C | 하네스·환경 | M4 도구 오류 — 실측[T-ceb71894]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 2 (C-119 HANDLER:spdMain_KeyUp) |
+| WK-DMF0003-0906 | M4 | CF-05 | 하네스·환경 | M4 도구 오류 — 실측[T-1e579633]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (CF-05) |
+| WK-DMF0003-0907 | M4 | CF-06 | 하네스·환경 | M4 도구 오류 — 실측[T-886806bb]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (CF-06) |
+| WK-DMF0003-0908 | M4 | CH-102 | 하네스·환경 | M4 도구 오류 — 실측[T-993ac48a]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (CH-102) |
+| WK-DMF0003-0909 | M4 | CH-103 | 하네스·환경 | M4 도구 오류 — 실측[T-3393430d]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (CH-103) |
+| WK-DMF0003-0910 | M4 | CH-105 | 하네스·환경 | M4 도구 오류 — 실측[T-ef68876f]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (CH-105) |
+| WK-DMF0003-0911 | M4 | CH-108 | 하네스·환경 | M4 도구 오류 — 실측[T-1a494435]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (CH-108) |
+| WK-DMF0003-0912 | M4 | CK-05 | 하네스·환경 | M4 도구 오류 — 실측[T-3bc174bd]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (CK-05) |
+| WK-DMF0003-0913 | M4 | CK-11 | 하네스·환경 | M4 도구 오류 — 실측[T-898c7c30]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (CK-11) |
+| WK-DMF0003-0914 | M4 | DMF0003_1_MktFcst.spdMain_CellDoubleClic | 하네스·환경 | M4 도구 오류 — 진입점 집계 — 대조표 DMF0003_1_MktFcst.spdMain_CellDoubleClick 의 M4 8요소: NOT_RUN:4 · ERROR:4 |  | 179 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0915 | M4 | E04-4 | 하네스·환경 | M4 도구 오류 — 행 집계 — 대조표 E04-4 '§4.4 spdMain_CellDoubleClick (L3604~3942)' 의 M4 23요소: ERROR:13 · NOT_RUN:10 |  | 1 (E04-4) |
+| WK-DMF0003-0916 | M4 | E04-5 | 하네스·환경 | M4 도구 오류 — 실측[T-6ff008c7]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (E04-5) |
+| WK-DMF0003-0917 | M4 | E06 | 하네스·환경 | M4 도구 오류 — 실측[T-2b273d39]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (E06) |
+| WK-DMF0003-0918 | M4 | GAP / GAP (ⓒ-ⓓ | 하네스·환경 | M4 도구 오류 — 실측[T-ac910c47]: [검사기 미검증] GAP: P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 5 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0919 | M4 | I | 하네스·환경 | M4 도구 오류 — 실측[T-b98120bf]: [검사기 미검증] I: P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (CG-05) |
+| WK-DMF0003-0920 | M4 | M | 하네스·환경 | M4 도구 오류 — 실측[T-4bfadbee]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (MODAL:MeasureSelectModal) |
+| WK-DMF0003-0921 | M4 | MKT_DP / ⓓMKT FCST(DP | 하네스·환경 | M4 도구 오류 — 실측[T-4e6a1c42]: [검사기 미검증] MKT_DP: P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 2 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0922 | M4 | N | 하네스·환경 | M4 도구 오류 — 실측[T-15ae852c]: [검사기 미검증] N: P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0923 | M4 | Popup | 하네스·환경 | M4 도구 오류 — 실측[T-1a262ebb]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 1 (Popup) |
+| WK-DMF0003-0924 | M4 | RESULT / ⓒResult (ⓐ+ⓑ | 하네스·환경 | M4 도구 오류 — 실측[T-f5510b1a]: [검사기 미검증] RESULT: P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 3 (ACT:DMF0003_1_MktFcst.spdMain_CellDouble) |
+| WK-DMF0003-0925 | M4 | btnColumn | 하네스·환경 | M4 도구 오류 — 실측[T-8428ba37]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 0 () |
+| WK-DMF0003-0926 | M4 | btnIncotermsChg | 하네스·환경 | M4 도구 오류 — 실측[T-1357a08d]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 0 () |
+| WK-DMF0003-0927 | M4 | btnItemId | 하네스·환경 | M4 도구 오류 — 실측[T-f587be53]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 0 () |
+| WK-DMF0003-0928 | M4 | btnMeasure | 하네스·환경 | M4 도구 오류 — 실측[T-d70926d8]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 0 () |
+| WK-DMF0003-0929 | M4 | btnOwner | 하네스·환경 | M4 도구 오류 — 실측[T-74d236e2]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 0 () |
+| WK-DMF0003-0930 | M4 | btnProject | 하네스·환경 | M4 도구 오류 — 실측[T-15cb1ca6]: [검사기 미검증] P 셀 위치 확인 불가 — 팝업에서 가져온 값이 행에 하나도 반영되지 않음 |  | 0 () |

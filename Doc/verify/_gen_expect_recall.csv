@@ -1,0 +1,145 @@
+﻿file,menu_id,rule,name,hand_keys,state,auto_keys_same_screen
+scenario_expect.csv,DMF0072,E2,없는 날짜 저장 차단,E2|baddate|VALID_START_DATE,재현,35
+scenario_expect.csv,DMF0049,E3,Version 없이 저장 차단,E3|blank-save,재현,64
+scenario_expect.csv,DMF0042,C4,신규 행 있을 때 Bucket 변경 차단,C4|dirty|bucket,재현,48
+scenario_expect.csv,DMF0020,D3,편집 불가 사업부 LOC 더블클릭 안내,,패턴 없음,51
+scenario_expect.csv,DMF0005,E3,Owner 입력 시 Team 자동 생성 금지,,패턴 없음,53
+scenario_expect.csv,DMF0042,H10,신규 행 있을 때 다른 기능 MSG00680,H10|dirty|setprice,재현,48
+scenario_expect.csv,DMF0004,G1,하단 조회 인자 = 조회조건 Active,,패턴 없음,61
+scenario_expect.csv,DMF0082,F4,Bucket 반복 전환 조회 SQL 오류 0,F4|toggle|bucket,재현,54
+scenario_expect.csv,DMF0082,M3,Exchange Rate 수정 후 Close 폐기,,패턴 없음,54
+scenario_expect.csv,SYS0006,B1,API Type 콤보,B1|iscombo|apitype,미재현,17
+scenario_expect.csv,DMF0082,D4,과거 버전 Insert 숨김,,패턴 없음,54
+scenario_expect.csv,DMF0082,D4,대조 Current Insert 보임,,패턴 없음,54
+scenario_expect.csv,DMF0035,G4,Plan Type 위치 Div 우측,,패턴 없음,20
+scenario_expect.csv,SYS0015,F1,기존 행 Delete → D 저장 요청,F1|delete-D,재현,8
+scenario_expect.csv,DMF0082,M1,Excel Form 동작(CR-095),M1|formdl,재현,54
+scenario_expect.csv,DMF0074,M1,Excel Form 동작(CR-095),M1|formdl,재현,10
+scenario_expect.csv,DMF0014,M1,Excel Form 동작(CR-095),M1|formdl,재현,17
+scenario_expect.csv,DMF0045,D2,신규 행 Frozen 구간 잠금,,패턴 없음,8
+scenario_expect.csv,DMF0020,D1,Currency 첫 편집 안내,,패턴 없음,51
+scenario_expect.csv,DMF0005,F6,KWH 소수값 저장 요청 유지,F6|decimal|KWH,재현,53
+scenario_expect.csv,SYS0016,K5,Notice Content 리치 편집기,,패턴 없음,5
+scenario_expect.csv,DMF0014,H10,조회 중 로딩 토스트 없음,H10|noload,재현,17
+scenario_expect.csv,DMF0004,D4,Customer 탭 Rep Y 있으면 신규 N,,패턴 없음,61
+scenario_expect.csv,DMF0004,D4,Customer 탭 Rep Y 없으면 신규 Y,,패턴 없음,61
+scenario_expect.csv,DMF0082,C1,FCST Type 후보 Div 40 W/S 제외,C1|gridcands|FCST_TYPE,재현,54
+scenario_expect.csv,DMF0082,C1,FCST Type 후보 = 서버 콤보(Div 81 W/S),C1|gridcands|FCST_TYPE,재현,54
+scenario_expect.csv,DMF0005,F3,VMI LT 입력 → 같은 사이트·모델 행 동반 갱신,F3|samekey|VMI_LT,재현,53
+scenario_expect.csv,DMF0005,C3,Cell/Car ÷ Cell/Module 정수 아님 → 안내·세 칸 비움,C3|clear|CELL_PER_CAR>CELL_PER_CAR + C3|clear|CELL_PER_CAR>CELL_PER_MODULE + C3|clear|CELL_PER_CAR>MODULE_PER_CAR,재현,53
+scenario_expect.csv,DMF0005,C3,Cell/Car ÷ Cell/Module 나누어떨어짐 → 몫 표시,C3|clear-ok|CELL_PER_CAR,재현,53
+scenario_expect.csv,DMF0042,D6,선택 행 위로 Insert,D6|insertat,재현,48
+scenario_expect.csv,DMF0068,D6,선택 행 위로 Insert,D6|insertat,재현,6
+scenario_expect.csv,SYS0015,F2,기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I,F2|mod-ins,재현,8
+scenario_expect.csv,SYS0014,A2,Division Name 칸 = 코드+이름 형식,C1|gridcands|UNIT_ID,재현,9
+scenario_expect.csv,DMF0005,C3,Owner 입력 시 입력해 둔 Team 유지,,패턴 없음,53
+scenario_expect.csv,DMF0006,E3,기존 행 Model 공란 + 다른 칸 수정 저장(결정 대기),,패턴 없음,23
+scenario_expect.csv,SYS0017,C5,Receiver 사용자 더블클릭 추가/제거·저장 반영,,패턴 없음,29
+scenario_expect.csv,DMF0003,D2,일자 칸 잠금 경계 = 이번 주 월요일(Daily),,패턴 없음,57
+scenario_expect.csv,SCP0007,D4,조회 전 Insert 행 To Site 후보·City 매핑,C1|gridcands|TO_SITE_CODE,재현,40
+scenario_expect.csv,DMF0005,F3,Team 붙여넣기 → 코드·명칭 동반,F3|paste|TEAM_NAME,미재현,53
+scenario_expect.csv,SYS0017,D4,Message 탭 행추가 가능,,패턴 없음,29
+scenario_expect.csv,DMF0082,D2,Monthly MKT_FCST 는 M+3 기준월 이하 잠김·이후 편집,,패턴 없음,54
+scenario_expect.csv,DMF0082,D2,Monthly LOC 는 당월부터 편집,,패턴 없음,54
+scenario_expect.csv,DMF0082,D2,Weekly MKT_FCST 는 당주부터 편집(M+4 동결 없음),,패턴 없음,54
+scenario_expect.csv,DMF0003,D2,값 있는 편집 구간 수량 셀 편집,D2|dynval-edit,재현,57
+scenario_expect.csv,DMF0044,D2,Biz Plan Cutoff Data: Business_Plan 전 구간 편집,,패턴 없음,57
+scenario_expect.csv,DMF0044,D2,Biz Plan Cutoff Data: Unit Price(LOC) 전 구간 편집,,패턴 없음,57
+scenario_expect.csv,DMF0044,D2,Biz Plan Cutoff Data: MKT_FCST 는 편집 불가,,패턴 없음,57
+scenario_expect.csv,DMF0021,H2,당주 구분선(rail) = 조회 응답 THIS_YYYYMMWW,H2|rail,재현,41
+scenario_expect.csv,DMF0003,H2,당주 구분선(rail) = 이번 주(Weekly),H2|rail,재현,57
+scenario_expect.csv,DMF0004,H7,포커스 그리드 Excel 다운로드 = 하단 그리드,,패턴 없음,61
+scenario_expect.csv,DMF0005,E5,Sales Site 선택 → Company 자동·Plant 후보 종속,C1|gridcands|SALES_PLANT,재현,53
+scenario_expect.csv,DMF0082,E4,판가 있는 주 MKT_FCST 입력 저장 → 단가 필수 오탐 없음,,패턴 없음,54
+scenario_expect.csv,DMF0042,D1,신규 행 Sales Site·Model 입력 → Team·End Customer·Energy 자동,C3|popfill|ITEM_ID40,재현,48
+scenario_expect.csv,SYS0002,D1,신규 사용자 선택 → SSO 부서 자동,,패턴 없음,18
+scenario_expect.csv,DMF0005,F5,VMI LT 같은 키 2행 실저장 → SQL 오류 없음·복원,F3|samekey|VMI_LT,재현,53
+scenario_expect.csv,DMF0003,F9,[구조] Weekly MKT_FCST_RP 주 칸 입력 저장 본문,,패턴 없음,57
+scenario_expect.csv,DMF0082,F6,[구조] Div 40 Weekly MKT_FCST 주 칸 입력 저장 본문,,패턴 없음,54
+scenario_expect.csv,DMF0003,E4,기존 행 수량 수정 저장 → Project Code 필수 오탐 없음,E4|req-fp,재현,57
+scenario_expect.csv,DMF0082,F9,Weekly MKT_FCST 주 입력 → 기본 요일(40 월요일) 1일 전량,,패턴 없음,54
+scenario_expect.csv,DMF0082,F6,Monthly MKT_FCST 월 입력 → 주별 일자 분배·합계 보존,,패턴 없음,54
+scenario_expect.csv,DMF0082,F9,[변이] Weekly 합계 36 기대(FAIL 기대),,패턴 없음,54
+scenario_expect.csv,DMF0082,F6,Monthly LOC 당월 칸 저장 → 이번 주 월요일 이후 일자만,,패턴 없음,54
+scenario_expect.csv,DMF0082,F2,Weekly VMI_In_Req 주 입력 → 버킷 요일 1일 저장,,패턴 없음,54
+scenario_expect.csv,DMF0082,F6,Monthly LOC 당월 칸 실저장 → 이번 주 월요일 이전 판가 불변·이후 반영,,패턴 없음,54
+scenario_expect.csv,DMF0082,F7,LOC 실저장 → Sales Price(SCM_MST_FUTURE_PRICE) 동기화,,패턴 없음,54
+scenario_expect.csv,DMF0004,F1,신규 Sales Site 실저장 → 조회조건 콤보 즉시 노출,C3|popfill|CITY_NAME,미재현,61
+scenario_expect.csv,DMF0082,M1,[구조] Excel Form 양식 저장(Div 81),,패턴 없음,54
+scenario_expect.csv,DMF0004,A1,Ingeteam_RE_REU 거래처 2행 · NEC_US_SDG Country/City 이름 표시,,패턴 없음,61
+scenario_expect.csv,DMF0049,F3,신규 행 콤보 칸 붙여넣기 — 후보 값 반영,F3|paste|BIZ_TYPE,재현,64
+scenario_expect.csv,DMF0049,F3,신규 행 콤보 칸 붙여넣기 — 후보 밖 값 거부,F3|paste-reject|BIZ_TYPE,재현,64
+scenario_expect.csv,DMF0049,F3,신규 행 콤보 칸 직접 입력 — 후보 값 반영(붙여넣기 대조),,패턴 없음,64
+scenario_expect.csv,DMF0044,E1,Cutoff 정수부 21자리 입력 저장 → 서버 자릿수 초과 차단,,패턴 없음,57
+scenario_expect.csv,DMF0082,N1,Div 40 판가 없는 주차 MKT_FCST 수량 실저장 → Unit Price 차단,,패턴 없음,54
+scenario_expect.csv,DMF0043,MS1,월 합계 100 아님 저장 → MSG01306 + (YYYY-MM: 합계) 덧붙임,,패턴 없음,16
+scenario_expect.csv,DMF0042,M2,Replace 자료 없는 버전 → 사전 중단 안내(원장 변경 없음),,패턴 없음,48
+scenario_expect.csv,DMF0020,E4,52주 안 수량 있는 키 LOC 0 저장 → 판가 삭제 차단,,패턴 없음,51
+scenario_expect.csv,DMF0021,D3,신규 ETC 행 Team 저장 → 재조회 표시 = 저장값,C3|popfill|PROJECT_CODE + C3|popfill|TEAM_NAME,미재현,41
+scenario_expect.csv,SCP0028,I1,CN 언어 조회 건수 총/건 표기,I1|lang-cn-count,재현,19
+scenario_expect.csv,SCP0028,I1,KO 변경 없이 저장 → KO 수정사항 없음 알림,I1|lang-ko-save,재현,19
+scenario_expect.csv,DMF0021,E4,신규 행 Project 뒤 Team 팝업 → 저장 시 Project 필수 오탐 없음,C3|popfill|PROJECT_CODE + C3|popfill|TEAM_NAME + E4|req-fp,재현,41
+scenario_expect.csv,DMF0082,F6,필수 칸 제외 개인화 → Div 81 필수 칸 자동 표시·저장 값 변형 0,,패턴 없음,54
+scenario_expect.csv,DMF0074,G1,Excel Upload 저장 → Version Current·자동 재조회에 올린 값 표시,,패턴 없음,10
+scenario_expect.csv,SCP0007,F1,조회 전 Insert 행 저장 — 요청/차단 실측,,패턴 없음,40
+scenario_expect.csv,DMF0003,F9,Partial Week 주 입력 → 일자 배분(행 요일 플래그),,패턴 없음,57
+scenario_expect.csv,DMF0003,F9,Partial Week 주 입력 → 기본 요일 · 그 주에 없으면 마지막 날(요일 플래그 0000000),,패턴 없음,57
+scenario_expect.csv,DMF0020,D1,기존 LOC 행 Currency 변경 → 묶음 행 통화 복사·이번 주 이후 재환산,,패턴 없음,51
+scenario_expect.csv,DMF0082,F6,필수 칸 제외 개인화 사용자 → 필수 칸 자동 표시·저장 본문 필수 값 유지(값 변형 0),,패턴 없음,54
+scenario_expect.csv,DMF0021,E4,이번 주 Sales Plan Cutoff(SP_W) 없음 → RTF[R+P] 저장 차단(MSG00473),,패턴 없음,41
+scenario_expect.csv,SCP0028,E4,KO Increment > Lot Size 저장 → KO 검증 문구,I1|lang-ko-save,재현,19
+scenario_expect.csv,DMF0021,K2,사업부 40→81→40 전환 뒤 40 필수 칸(End Customer) 재표시,F4|toggle|div|colvis,재현,41
+scenario_expect.csv,DMF0004,E4,Customer 탭 구코드 Sold-To/Ship-To 신규 저장 → 서버 차단(NERP_CONV_MASTER),,패턴 없음,61
+scenario_expect.csv,DMF0049,MS1,같은 키 신규 세트 저장 → 중복 키 13줄 문구,,패턴 없음,64
+scenario_expect.csv,DMF0043,MS1,한 달 전체 빈칸(값 있는 달 11개) 저장 → MSG01306 + (n/12) 덧붙임,,패턴 없음,16
+scenario_expect.csv,DMF0008,M2,Status Update 결과 CODE=-1 → 오류 문구 표시(완료 아님),,패턴 없음,10
+scenario_expect.csv,DMF0008,M2,Status Update 서버 500 → 오류 표시(완료 아님),,패턴 없음,10
+scenario_expect.csv,DMF0008,M2,Status Update 결과 SUCCESS → 완료 안내,,패턴 없음,10
+doc_ui_expect.csv,DMF0020,,Price Batch Input,K4|docui|btn_hidden|pricebatchinput,미재현,0
+doc_ui_expect.csv,DMF0020,,Price Batch Input,K4|docui|btn_hidden|pricebatchinput,미재현,0
+doc_ui_expect.csv,DMF0044,,Delete,K4|docui|btn_hidden|delete,미재현,0
+doc_ui_expect.csv,DMF0044,,Delete,K4|docui|btn_shown|delete,미재현,0
+doc_ui_expect.csv,DMF0044,,Insert,K4|docui|btn_hidden|insert,미재현,0
+doc_ui_expect.csv,DMF0005,,Model Code Change,K4|docui|btn_enabled|modelcodechange,미재현,0
+doc_ui_expect.csv,DMF0082,,AS FROM SITE,K4|docui|col_hidden|asfromsite,미재현,0
+doc_ui_expect.csv,DMF0082,,Cust Group Dtl,K4|docui|col_hidden|custgroupdtl,미재현,0
+doc_ui_expect.csv,DMF0035,,Version,K4|docui|col_shown|version,미재현,0
+source_expect.csv,DMF0049,E4,,SRC|PKG_DMF0049|absent|구코드 COMPANY_ID,생성 안 함,0
+source_expect.csv,SYS0014,E3,,SRC|PKG_SYS0014|present|LEFT\s+(OUTER\s+)?JOIN\s+(SCM_MGR\.)?SCM,생성 안 함,0
+source_expect.csv,DMF0003,F4,,SRC|PKG_DMF0003|present|B\.PLANT_SITE_ID\s*=\s*A\.V_PLANT_SITE_I,생성 안 함,0
+source_expect.csv,DMF0044,H8,,SRC|PKG_DMF0044|present|FM999999999990\.000,생성 안 함,0
+source_expect.csv,DMF0005,F4,,"SRC|PKG_DMF0005|present|NVL\(A\.ETL_DEPT_ID,\s*'/'\)\s*<>",생성 안 함,0
+source_expect.csv,DMF0003,F4,,SRC|PKG_DMF0003|present|SCM_MGR\.PR_DM_PLN_MKT_FCST_QTY_BALANCE_,생성 안 함,0
+source_expect.csv,SYS0010,E3,,"SRC|PKG_NSCM_UI_COM_LOOKUP|present|SYSTEM_ADM[\s\S]{0,800}?ORDER\s+BY[^;]{0",생성 안 함,0
+source_expect.csv,DMF0044,F4,,SRC|PKG_DMF0044|present|\bP_DMF0044_MOBILE_REPORT_CREATE\s*\(,생성 안 함,0
+source_expect.csv,DMF0044,F4,,"SRC|PKG_DMF0044|present|V_EXISTS\s*=\s*1\s*THEN[\s\S]{0,200}?P_D",생성 안 함,0
+text_expect.csv,DMF0035,,Sum 행 라벨,A6|text|sum행라벨,생성 안 함,0
+text_expect.csv,DMF0035,,Measure MKT FCST[R+P],A6|text|measuremktfcst[r+p],생성 안 함,0
+text_expect.csv,DMF0040,,합계 행 라벨,A6|text|합계행라벨,생성 안 함,0
+text_expect.csv,DMF0008,,최종 갱신 Last Update Start,A6|text|최종갱신lastupdatestart,생성 안 함,0
+text_expect.csv,DMF0008,,최종 갱신 Last Update End,A6|text|최종갱신lastupdateend,생성 안 함,0
+text_expect.csv,DMF0008,,최종 갱신 Updated by,A6|text|최종갱신updatedby,생성 안 함,0
+text_expect.csv,DMF0003,,Partial Week 머리글 +,A6|text|partialweek머리글+,생성 안 함,0
+text_expect.csv,DMF0040,,Measure Version 명칭,A6|text|measureversion명칭,생성 안 함,0
+sum_toggle_expect.csv,DMF0048,,Sum,G7|sum|sum,재현,1
+sum_toggle_expect.csv,DMF0035,,Sum,G7|sum|sum,재현,1
+sum_toggle_expect.csv,DMF0035,,Qty,G7|sum|qty,미재현,1
+sum_toggle_expect.csv,DMF0043,,Discard,G7|sum|discard,미재현,0
+sum_toggle_expect.csv,DMF0043,,History,G7|sum|history,미재현,0
+num_format_expect.csv,DMF0053,,"^[WMDY]?_?\d{6,8}$","A2|numfmt|^[WMDY]?_?\D{6,8}$",생성 안 함,0
+num_format_expect.csv,DMF0003,,"^[WMDY]?_?\d{6,8}$","A2|numfmt|^[WMDY]?_?\D{6,8}$",생성 안 함,0
+num_format_expect.csv,DMF0003,,"^[WMDY]?_?\d{6,8}$","A2|numfmt|^[WMDY]?_?\D{6,8}$",생성 안 함,0
+num_format_expect.csv,DMF0053,,"^[WMDY]?_?\d{6,8}$","A2|numfmt|^[WMDY]?_?\D{6,8}$",생성 안 함,0
+period_color_expect.csv,DMF0003,,,H2|period|gray_actual,생성 안 함,0
+period_color_expect.csv,DMF0040,,,H2|period|all_white,생성 안 함,0
+period_color_expect.csv,DMF0021,,,H2|period|actual_color,생성 안 함,0
+period_color_expect.csv,DMF0049,,,H2|period|gray_actual,생성 안 함,0
+zero_display_expect.csv,DMF0005,,^VMI_LT$|^SCP_VMI_LT$,H8|zero|^VMI_LT$|^SCP_VMI_LT$,생성 안 함,0
+zero_display_expect.csv,DMF0044,,"^[WMDY]?_?\d{6,8}$","H8|zero|^[WMDY]?_?\D{6,8}$",생성 안 함,0
+removed_buttons.csv,DMF0040,,Measure Setting,K4|removed|measuresetting,생성 안 함,0
+cond_equiv_expect.csv,DMF0005,,Owner,G1|condequiv|owner,생성 안 함,0
+display_sort_expect.csv,DMF0048,,Team,G3|dispsort|team,생성 안 함,0
+display_sort_expect.csv,DMF0048,,End Customer,G3|dispsort|endcustomer,생성 안 함,0
+display_sort_expect.csv,DMF0048,,Sales Site,G3|dispsort|salessite,생성 안 함,0
+display_sort_expect.csv,DMF0048,,Plant Site,G3|dispsort|plantsite,생성 안 함,0
+excel_form_expect.csv,DMF0074,,,M1|form2row,생성 안 함,0

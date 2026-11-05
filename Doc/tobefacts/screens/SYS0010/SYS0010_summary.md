@@ -14,7 +14,7 @@
 | features/admin/src/pages/lookup/index.ts | index | 2 |
 | features/admin/src/pages/lookup/lookup.constants.ts | constants | 14 |
 | features/admin/src/pages/lookup/Lookup.module.scss | style | 90 |
-| features/admin/src/pages/lookup/Lookup.tsx | page | 324 |
+| features/admin/src/pages/lookup/Lookup.tsx | page | 333 |
 | features/admin/src/pages/lookup/lookup.utils.test.ts | test | 75 |
 | features/admin/src/pages/lookup/lookup.utils.ts | other | 175 |
 | features/admin/src/pages/lookup/useLookupStore.ts | store | 195 |
@@ -26,8 +26,8 @@
 | (useTabLookupQueries) | hook | 1 | Y | LookupForm.tsx:24 |
 | (useTabComboQueries) | hook | 1 | Y | LookupForm.tsx:32 |
 | /admin/menu/SYS0010/search-conditions | http | 1 | Y | LookupForm.tsx:39 |
-| SYS0010/lookupMaster//call-proc | hook | 2 | Y | Lookup.tsx:63 Lookup.tsx:82 |
-| SYS0010/lookupDetail//call-proc | hook | 2 | Y | Lookup.tsx:74 Lookup.tsx:92 |
+| SYS0010/lookupMaster//call-proc | hook | 2 | Y | Lookup.tsx:71 Lookup.tsx:90 |
+| SYS0010/lookupDetail//call-proc | hook | 2 | Y | Lookup.tsx:82 Lookup.tsx:100 |
 | /admin/menu/SYS0010/column | http | 2 | Y | useLookupStore.ts:138 useLookupStore.ts:141 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -45,7 +45,7 @@
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/admin/src/pages/lookup/components/LookupForm.tsx | 95 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/admin/src/pages/lookup/components/LookupForm.tsx | 118 |
 | DataGrid | gotFocus | handleGotFocus | jsx | features/admin/src/pages/lookup/components/LookupMasterGrid.tsx | 59 |
-| LookupForm | onSubmit | handleSubmit | jsx | features/admin/src/pages/lookup/Lookup.tsx | 276 |
+| LookupForm | onSubmit | handleSubmit | jsx | features/admin/src/pages/lookup/Lookup.tsx | 284 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -87,8 +87,8 @@
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | .catch(() => { | features/admin/src/pages/lookup/Lookup.tsx | 128 |
-| code | }); | features/admin/src/pages/lookup/Lookup.tsx | 130 |
+| code | .catch(() => { | features/admin/src/pages/lookup/Lookup.tsx | 136 |
+| code | }); | features/admin/src/pages/lookup/Lookup.tsx | 138 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

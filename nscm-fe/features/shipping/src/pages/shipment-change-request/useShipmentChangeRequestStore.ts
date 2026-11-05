@@ -33,6 +33,10 @@ type StaticColumnsBySheet = {
 interface State {
   initialized: boolean;
   searchCondition: SearchCondition;
+  // 저장된 조회조건에서 Period(fromYyyymmdd/toYyyymmdd)를 복원했는지 표식.
+  //   true 면 mount 기본값 산출(initPeriodDefault→fetchDayRange)이 복원값을 덮지 않는다
+  //   (F6 conditionIncludeKeys 로 저장한 Shipment Date 가 재진입 시 기본 30일로 되돌아가던 것 방지).
+  periodRestored: boolean;
   filters: FiltersBySheet;
   openSearchArea: boolean;
   requestInfo: RequestInfo;
@@ -46,8 +50,12 @@ interface Action {
   setPeriod: (fromYyyymmdd: string, toYyyymmdd: string) => void;
   // GAP-08: mount 시 Period 기본값(30일) 세팅. Plan Type 변경 시 재계산 + 그리드 clear.
   initPeriodDefault: () => void;
-  /** AS-IS GetDayRange 등가 — 캘린더(영업일/타임존) 기준 SP 산출. dayjs 근사 금지(design 02 §5.4). */
-  fetchDayRange: (fromDate: string) => Promise<void>;
+  /**
+   * AS-IS GetDayRange 등가 — 캘린더(영업일/타임존) 기준 SP 산출. dayjs 근사 금지(design 02 §5.4).
+   *   force=true 면 periodRestored(복원 Period) 가드를 무시하고 강제로 재산출한다 — Plan Type 변경
+   *   cascade 처럼 사용자가 명시적으로 기간 재계산을 의도한 경로 전용. 기본(false)은 복원값을 보존한다.
+   */
+  fetchDayRange: (fromDate: string, force?: boolean) => Promise<void>;
   changePlanType: (changeType: string) => void;
   setFilter: () => void;
   clearFilters: () => void;
@@ -118,6 +126,7 @@ const emptyStaticColumns: StaticColumnsBySheet = {
 const initState: State = {
   initialized: false,
   searchCondition: initSearch,
+  periodRestored: false,
   filters: {},
   openSearchArea: true,
   requestInfo: emptyRequestInfo,
@@ -154,9 +163,19 @@ export const useShipmentChangeRequestStore = createPersistedStoreWithTab<State &
     //     (종전 `set(initState)` 는 filters 까지 날려 F10 이 그리드까지 비웠다.)
     //   · staticColumns/initialized 는 MotherStore 가 별도 보존하므로 함께 유지한다.
     //   · Period 는 initSearch 에서 ''이므로 삭제만 되지 않도록 기본값을 재산출한다.
+    //   · 요청정보는 "삭제"가 아니라 "초기화"다 — 세션 축(Requestor/Dept)은 유지하고 편집필드
+    //     (Approval/Title/Change Reason/Reason Detail)만 비운다(clearRequestInfo 와 동일 규약).
+    //     종전엔 initState 의 emptyRequestInfo 로 Requestor/Dept 까지 전부 비워 삭제처럼 보였다
+    //     (사용자 신고 2026-10-28).
     reset: () => {
-      const { filters, staticColumns, initialized } = get();
-      set({ ...initState, filters, staticColumns, initialized });
+      const { filters, staticColumns, initialized, requestInfo } = get();
+      set({
+        ...initState,
+        filters,
+        staticColumns,
+        initialized,
+        requestInfo: { ...emptyRequestInfo, ...sessionRequestFields(requestInfo) },
+      });
       // Plan Type 기준 30일 기본값 재산출(SCM0001_GET_SCP_DAY_PERIOD SP — fetchDayRange, 아래 참조).
       get().initPeriodDefault();
     },
@@ -177,7 +196,10 @@ export const useShipmentChangeRequestStore = createPersistedStoreWithTab<State &
     //   OUT o_rc1 1행 1열 "YYYYMMDD:YYYYMMDD"). SCM_SYS_CALENDAR_M 기준이라 dayjs 근사로는 경계가 어긋난다.
     //   timeZone: 세션 TZ 를 보낸다 — SP 가 fromDate 공란이면 FN_MULTY_TIME(P_TIMEZONE) 으로 '오늘'을 잡는다.
     //   자매 SSP0200 useShipmentChangeRequestPlanStore.fetchDayRange 와 동일 배선(design 02 §5.4).
-    fetchDayRange: async fromDate => {
+    fetchDayRange: async (fromDate, force = false) => {
+      // 복원된 Period(F6 저장분)가 있으면 mount 기본값 산출로 덮지 않는다 — restore 와 이 비동기
+      //   SP 호출의 완료 순서에 무관하게 복원값이 이긴다. force(=Plan Type cascade)는 가드를 넘긴다.
+      if (!force && get().periodRestored) return;
       try {
         const res = await apiClient.post<Record<string, Record<string, string>[]>>(
           `/${MENU_ID}/${SHEETS.MAIN}/${BTN_DAY_PERIOD}/call-proc`,
@@ -192,6 +214,8 @@ export const useShipmentChangeRequestStore = createPersistedStoreWithTab<State &
         const raw = first ? String(Object.values(first)[0] ?? '') : '';
         const [from, to] = raw.split(':');
         if (!from || !to) return;
+        // await 사이에 restore 가 periodRestored 를 세웠을 수 있다 — 쓰기 직전 재확인(느린 SP 대비).
+        if (!force && get().periodRestored) return;
         set(state => {
           state.searchCondition.fromYyyymmdd = from;
           state.searchCondition.toYyyymmdd = to;
@@ -210,7 +234,8 @@ export const useShipmentChangeRequestStore = createPersistedStoreWithTab<State &
         state.requestInfo = { ...emptyRequestInfo, ...sessionRequestFields(get().requestInfo) };
       });
       // Period 기본값 SP 재산출 — 'P' 면 fromDate=오늘+9D, 그 외 ''(SP 가 세션TZ '오늘'). set() 이후 비동기 갱신.
-      void get().fetchDayRange(periodFromBase(changeType));
+      //   force=true: 사용자가 Plan Type 을 바꾼 명시 재계산이므로 복원 Period 가드를 넘어 항상 갱신한다.
+      void get().fetchDayRange(periodFromBase(changeType), true);
     },
     setFilter: () => {
       set(state => {
@@ -332,8 +357,12 @@ export const useShipmentChangeRequestStore = createPersistedStoreWithTab<State &
                 (restored as Record<string, unknown>)[paramNm] = paramCtn;
               }
             }
+            // Shipment Date(기간)까지 복원됐으면 periodRestored 를 세워 mount 기본값 산출이 덮지 않게 한다
+            //   (F6 는 conditionIncludeKeys=['fromYyyymmdd','toYyyymmdd'] opt-in 으로 날짜를 저장한다).
+            const periodRestored = !!(restored.fromYyyymmdd && restored.toYyyymmdd);
             set(state => {
               state.searchCondition = { ...get().searchCondition, ...restored };
+              if (periodRestored) state.periodRestored = true;
             });
           }
         } catch {

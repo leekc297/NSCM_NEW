@@ -10,8 +10,14 @@ export type MENU_ID = typeof MENU_ID;
 export enum SHEETS {
   // 메인 조회 — PKG_SCP0018.P_SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL (미배포, convert-sp 후속)
   MAIN = 'main',
-  // 동적 시간축(캘린더 3단 헤더) — PKG_SCP0009.P_SCP0009_GET_SHEET_CALENDAR_3SPAN[_ISO] (미배포)
+  // 동적 시간축(캘린더 3단 헤더, NotISO) — PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN
+  //   (Daily/Weekly/Monthly 버킷. 최상단=월, W_는 월 경계서 분할).
   SPREAD_TITLE = 'spreadTitle',
+  // Only Weekly(WEEKLY_ISO) 전용 ISO 캘린더 — PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO
+  //   (연속 ISO 주차 + 최상단=날짜범위 MMDD_LABEL_NAME, AS-IS SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO 이식).
+  //   AS-IS 와 동일하게 Only Weekly 일 때만 이 시트를 호출한다(SCP0018...cs:992). 매핑 등록 =
+  //   .atlas/gscm-design/SCP0018/design/06_register_spread_title_iso.sql.
+  SPREAD_TITLE_ISO = 'spreadTitleIso',
 }
 
 /** admin UI Category Setup SHEET_NAME — SCM_MST_SHEET_COLUMNS 실측 등록명(24행) 그대로. */
@@ -50,10 +56,12 @@ export const LBL = {
   SEARCH: 'LBL00112',
   DIVISION: 'LBL00001',
   OPERATION_GROUP: 'LBL00027',
-  MODEL: 'LBL00669',
+  // Model/Nickname — SCP0018.md 조회조건 정리(v0.5) 변경=O: 명칭 Model -> Model/Nickname + 팝업
+  //   ItemByDivisionModal -> MaterialByDivisionModal(COM0013). LBL00618 = Model/Nickname(DB 실측).
+  MODEL_NICKNAME: 'LBL00618',
   ELECTRODE: 'LBL00038',
   BUCKET: 'LBL00710',
-  VERSION: 'LBL00606',
+  VERSION: 'LBL00606', // Version (참조용 — 화면 표기는 'Ver.' 하드코딩. DB/번들 'Ver.' 미등록 약어, SCP0016/FG 동일)
   // 확인 필요(02_search-combo.md §7#3) — LBL00013 vs 공용 PeriodField LBL00505 중복.
   //   전용 라벨(LBL00013)을 채택 — 공용 PeriodField 재사용 여부는 __asis-mapping__.md 에 기록.
   PERIOD: 'LBL00013',

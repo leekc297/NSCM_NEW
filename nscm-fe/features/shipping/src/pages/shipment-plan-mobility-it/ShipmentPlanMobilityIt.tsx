@@ -371,8 +371,12 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
     byKey: new Map(),
   });
   const mainRows = useMemo<MainRow[]>(() => {
+    // Packer 행 타입은 MainRow 필수 필드가 없어 단언이 필요하다. 배포 빌드에서는 식이 이미 MainRow[] 로 풀려
+    //   `as MainRow[]` 가 no-unnecessary-type-assertion 에 걸리므로 unknown 을 거쳐 양쪽 다 통과시킨다.
     if (mainSheet === 'packer')
-      return (isPackerPast ? (packerPastData?.o_rc1 ?? []) : (packerData?.o_rc1 ?? [])) as MainRow[];
+      return (isPackerPast
+        ? (packerPastData?.o_rc1 ?? [])
+        : (packerData?.o_rc1 ?? [])) as unknown as MainRow[];
     const cache = mainSumRowsCacheRef.current;
     if (cache.data !== mainData) {
       cache.data = mainData;
@@ -609,7 +613,7 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
   // ── mount — keep-alive 잔여 filters 무효화 + 컬럼/Measure 메타 1회 fetch ──
   useEffect(() => {
     clearFilters();
-    // Result Type 기본 = 시트별 상위 2개(AS-IS). persist 로 비어 있으면 채운다(기존 세션 대비).
+    // Result Type 기본 = 시트별 상위 2개(CODE 정렬 순 Main=[E,O] / Packer=[P,S]). persist 로 비어 있으면 채운다.
     if (sc.resultTypes.length === 0) {
       set({
         resultTypes: [
@@ -980,7 +984,7 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
           });
           return;
         }
-        // Shipment Date 형식 검증 (AS-IS GetERPInterface L6498 DateTime.TryParse → MSG00049 / TO-BE MSG01081).
+        // Shipment Date 형식 검증 (AS-IS GetERPInterface L6498 DateTime.TryParse → MSG00049 / TO-BE MSG00611).
         //   유효하지 않은 날짜면 차단. 빈값은 위에서 이미 처리.
         if (!dayjs(str(row.SHIPMENT_DATE)).isValid()) {
           void setAlert({
@@ -1263,7 +1267,7 @@ export const ShipmentPlanMobilityIt = ({ tabId, title }: PageProps<MENU_ID>) => 
         if (holdYmd > releaseYmd) {
           void setAlert({
             type: 'alert',
-            content: t(MSG.PERIOD_ORDER, '__Invalid period (start > end).'),
+            content: t(MSG.HOLD_DATE_ORDER, '_The start date can not be later than the end date.'),
           });
           return;
         }

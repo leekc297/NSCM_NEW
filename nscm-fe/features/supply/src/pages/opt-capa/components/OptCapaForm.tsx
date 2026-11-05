@@ -163,32 +163,14 @@ export const OptCapaForm = ({
           {singleField(LBL.PLAN_GROUP, 'Plan Group', sc.planGrId, planGroupOptions, code =>
             setSearchParams({ planGrId: code || ALL })
           )}
-          {/* S-3 Period — 공용 `PeriodField` 기본 라벨 `LBL00505` 는 DB·번들 모두 0건이라
-              (design 02 §5 M-2) `LBL00013` 을 **명시 전달**한다. 공용 컴포넌트 기본값 수정은
-              Hard Boundary 위반이므로 건드리지 않는다. 값 형식 `YYYYMM` = SP 계약과 동일. */}
-          <PeriodField
-            gridSize={3}
-            mode='month'
-            label={t(LBL.PERIOD, 'Period')}
-            start={sc.fromYyyymm}
-            end={sc.toYyyymm}
-            onChange={(start, end) => setSearchParams({ fromYyyymm: start, toYyyymm: end })}
-          />
-          {/* Bucket(Day/Week) — **No Work 탭 전용**(AS-IS 는 활성 시트 No Work 일 때만 노출). Week 선택 시
-              조회는 `noWorkWeek` SP 로 라우팅되고 그리드는 Date·Day of Week·Valid·Fix 컬럼을 숨긴다
-              (`OptCapa` querySheet / `NO_WORK_WEEK_HIDDEN_COLUMNS`). LBL 미존재라 리터럴 라벨을 쓴다. */}
-          {activeSheet === SHEETS.NO_WORK &&
-            singleField('Bucket', 'Bucket', sc.bucket, BUCKET_OPTIONS, code =>
-              setSearchParams({ bucket: (code as BUCKET) || BUCKET.DAY })
-            )}
-          {/* S-4 Plant — 변경 시 Line 을 비운다(AS-IS `ClbPlant_SelectedIndexChanged` → `RefreshLine`). */}
+           {/* S-4 Plant — 변경 시 Line 을 비운다(AS-IS `ClbPlant_SelectedIndexChanged` → `RefreshLine`). */}
           {multiField(LBL.PLANT, 'Plant', sc.plantIds, plantOptions, codes =>
             setSearchParams({ plantIds: codes, lineIds: [] })
           )}
           {/* S-5 Line — 하위 종속 없음. **Line 변경은 그리드를 비우지 않는다**(AS-IS 비대칭, V2-16). */}
           {multiField(LBL.LINE, 'Line', sc.lineIds, lineOptions, codes =>
             setSearchParams({ lineIds: codes })
-          )}
+          )}       
           {/* S-6 Model/Nickname — 갭분석 C-06 : 조회조건 표준(SCP v0.5)대로 AS-IS Nick Name · Model 두 칸을
               한 칸(LBL00618) + 메1 팝업(Material by Division)으로 합쳤다. 값은 조회 인자 itemId 로 보내고
               조회 프로시저가 코드 · 별칭 부분 일치 · 쉼표 복수 · 대소문자 무시로 처리한다.
@@ -209,9 +191,8 @@ export const OptCapaForm = ({
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onModelSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onModelSearch}
                       />
                     ),
                   }}
@@ -221,6 +202,25 @@ export const OptCapaForm = ({
               )}
             />
           </Grid>
+          {/* S-3 Period — 공용 `PeriodField` 기본 라벨 `LBL00505` 는 DB·번들 모두 0건이라
+              (design 02 §5 M-2) `LBL00013` 을 **명시 전달**한다. 공용 컴포넌트 기본값 수정은
+              Hard Boundary 위반이므로 건드리지 않는다. 값 형식 `YYYYMM` = SP 계약과 동일. */}
+          <PeriodField
+            gridSize={3}
+            mode='month'
+            label={t(LBL.PERIOD, 'Period')}
+            start={sc.fromYyyymm}
+            end={sc.toYyyymm}
+            onChange={(start, end) => setSearchParams({ fromYyyymm: start, toYyyymm: end })}
+          />
+          {/* Bucket(Day/Week) — **No Work 탭 전용**(AS-IS 는 활성 시트 No Work 일 때만 노출). Week 선택 시
+              조회는 `noWorkWeek` SP 로 라우팅되고 그리드는 Date·Day of Week·Valid·Fix 컬럼을 숨긴다
+              (`OptCapa` querySheet / `NO_WORK_WEEK_HIDDEN_COLUMNS`). LBL 미존재라 리터럴 라벨을 쓴다. */}
+          {activeSheet === SHEETS.NO_WORK &&
+            singleField('Bucket', 'Bucket', sc.bucket, BUCKET_OPTIONS, code =>
+              setSearchParams({ bucket: (code as BUCKET) || BUCKET.DAY })
+            )}
+         
         </>
       }
     />

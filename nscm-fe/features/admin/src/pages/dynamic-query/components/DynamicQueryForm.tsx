@@ -39,7 +39,6 @@ export const DynamicQueryForm = ({ onSearch }: Props) => {
                   fullWidth
                   value={searchCondition.reportName}
                   onChange={e => setSearchCondition({ reportName: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -54,7 +53,6 @@ export const DynamicQueryForm = ({ onSearch }: Props) => {
                   fullWidth
                   value={searchCondition.description}
                   onChange={e => setSearchCondition({ description: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

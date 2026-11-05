@@ -150,10 +150,13 @@ export const InventoryTrend = ({ tabId, title }: PageProps<MENU_ID>) => {
       />
       {/* Material 검색 — 공용 MaterialByDivisionModal(메1, COM0013). division 컨텍스트, 콤마 다중.
           scpModuleType=호출 화면 ID(SCP0101) — SP 의 Operation Group 분기 기준.
+          multiDivision: Division 조회조건이 다중선택('81,40' 콤마결합)이라 팝업도 멀티 컨트롤로 표시(disabled 미러).
+            끄면 단일 드롭다운에 콤마문자열이 매칭 안 돼 라벨이 비어 보임.
           빈 반환 시 기존값 유지(AS-IS cs:983~988). */}
       <MaterialByDivisionModal
         open={openItem}
         modalClose={() => setOpenItem(false)}
+        multiDivision
         setSelectedValue={itemIds => {
           if (itemIds) setSearchParams({ itemId: itemIds });
         }}

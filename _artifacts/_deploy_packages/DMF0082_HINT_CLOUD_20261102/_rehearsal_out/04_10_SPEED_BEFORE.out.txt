@@ -1,0 +1,24 @@
+
+BEFORE 시작 2026-11-02 11:06:01 · user=minyonglee1 · 20261101~20270430 · BODY LAST_DDL 2026-11-02 11:05:27
+BEFORE div40 #1 proc 8.28s fetch 6.58s rows=7721 cols=432
+BEFORE div40 #2 proc 9.13s fetch 6.33s rows=7721 cols=432
+BEFORE div40 #3 proc 8.66s fetch 6.4s rows=7721 cols=432
+BEFORE div81 #1 proc 12.34s fetch 7.8s rows=8042 cols=432
+BEFORE div81 #2 proc 12.64s fetch 7.77s rows=8042 cols=432
+BEFORE div81 #3 proc 13.59s fetch 9.31s rows=8042 cols=432
+BEFORE div82 #1 proc 30.56s fetch 18.73s rows=16251 cols=432
+BEFORE div82 #2 proc 33.27s fetch 17.14s rows=16251 cols=432
+BEFORE div82 #3 proc 30.22s fetch 17.85s rows=16251 cols=432
+BEFORE 끝 2026-11-02 11:10:18
+
+LABEL | DIV | RUN_NO | PROC_SEC | FETCH_SEC | TOTAL_SEC | ROW_CNT | COL_CNT | RES_HASH | ERR
+BEFORE | 40 | 1 | 8.28 | 6.58 | 14.86 | 7721 | 432 | 3579402258916 | 
+BEFORE | 40 | 2 | 9.13 | 6.33 | 15.46 | 7721 | 432 | 3579402258916 | 
+BEFORE | 40 | 3 | 8.66 | 6.4 | 15.06 | 7721 | 432 | 3579402258916 | 
+BEFORE | 81 | 1 | 12.34 | 7.8 | 20.14 | 8042 | 432 | 3799489563548 | 
+BEFORE | 81 | 2 | 12.64 | 7.77 | 20.41 | 8042 | 432 | 3799489563548 | 
+BEFORE | 81 | 3 | 13.59 | 9.31 | 22.9 | 8042 | 432 | 3799489563548 | 
+BEFORE | 82 | 1 | 30.56 | 18.73 | 49.29 | 16251 | 432 | 7611167638306 | 
+BEFORE | 82 | 2 | 33.27 | 17.14 | 50.41 | 16251 | 432 | 7611167638306 | 
+BEFORE | 82 | 3 | 30.22 | 17.85 | 48.07 | 16251 | 432 | 7611167638306 | 
+(9 rows)

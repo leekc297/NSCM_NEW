@@ -39,7 +39,11 @@ interface ProjectByDivisionModalProps {
     // DMF0003 (2026-10-22): Biz Type 코드 반환 — 호출 화면의 BIZ_TYPE 칸이 코드 콤보라 4번째
     //   bizTypeName(명칭)으로는 채울 수 없다. COM0005 응답(o_rc1)에 BIZ_TYPE 이 실려 있다.
     //   additive → 미사용 호출부 회귀 없음.
-    bizType?: string
+    bizType?: string,
+    // DMF0045 (2026-10-30): End Customer 자동 채움 — AS-IS Project 팝업(DMF0045 cs 1305)이 선택 프로젝트의
+    //   END_CUSTOMER 를 채운다. 공용 반환에 없어 미반영이던 것을 9번째 positional 로 추가한다. 팝업 결과행
+    //   (COM0005 o_rc1)에 END_CUSTOMER 가 실려 있다(P_COM0005_GET_PROJECT_BY_DIVISION_POPUP L542). 미사용 호출부는 무시 → 회귀 0.
+    endCustomer?: string
   ) => void;
   preSearchParams: ProcRequest<MODAL_PROJECT_BY_DIVISION, MODAL_SHEET_PROJECT_BY_DIVISION>;
   // ⭐ 2026-07-03 — cell/Form 호출 모두 동일 5개 조건 표시 + preSearchParams 그대로 사용 (사용자 요구).
@@ -160,7 +164,9 @@ export const ProjectByDivisionModal = ({
       selections.length === 1 ? ((firstSelection?.DEPT_ID as string) ?? undefined) : undefined,
       selections.length === 1 ? ((firstSelection?.DEPT_NAME_KO as string) ?? undefined) : undefined,
       // Biz Type 코드도 단건 선택일 때만 넘긴다.
-      selections.length === 1 ? ((firstSelection?.BIZ_TYPE as string) ?? undefined) : undefined
+      selections.length === 1 ? ((firstSelection?.BIZ_TYPE as string) ?? undefined) : undefined,
+      // End Customer 도 단건 선택일 때만 넘긴다(AS-IS DMF0045 cs 1305).
+      selections.length === 1 ? ((firstSelection?.END_CUSTOMER as string) ?? undefined) : undefined
     );
     modalClose();
   };
@@ -188,7 +194,8 @@ export const ProjectByDivisionModal = ({
       (dataItem as Record<string, unknown>).PROJECT_OWNER as string | undefined,
       (dataItem as Record<string, unknown>).DEPT_ID as string | undefined,
       (dataItem as Record<string, unknown>).DEPT_NAME_KO as string | undefined,
-      (dataItem as Record<string, unknown>).BIZ_TYPE as string | undefined
+      (dataItem as Record<string, unknown>).BIZ_TYPE as string | undefined,
+      (dataItem as Record<string, unknown>).END_CUSTOMER as string | undefined
     );
     modalClose();
   };

@@ -1,0 +1,15 @@
+PKG_DMF0082: [('PACKAGE', 'VALID', '2026-10-09 13:38:31'), ('PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')]
+PKG_DMF0082_1104: [('PACKAGE', 'VALID', '2026-11-04 16:00:18'), ('PACKAGE BODY', 'VALID', '2026-11-04 18:40:47')]
+=== cur4_k0101_82 env=['zioui1', 'localhost', '2026-11-04 18:41:59'] period=20261101~20270430 A=PKG_DMF0082 B=PKG_DMF0082_1104 users=k0101 divs=82 scen=['current', 'filters'] gtt=True
+--- k0101 div82 표본 {'site': 'NextEra_US_PHX', 'item_full': 'ETD1551AFB3A-XBA', 'cust': 'G-26-033', 'biz': None, 'project': 'G-26-033', 'owner': 'YEEUN CHO', 'team': '58187671', 'plant': None, 'sender': None, 'item': 'D1551'} 버전 {'MF_W': 'MF_W_20261027_V001', 'SF_W': None, 'SP_W': 'SP_W_20261029_V001', 'MF_D': 'MF_D_20261026_V001'}
+18:42:37 k0101 div82 Current                                  PASS rows= 16156 A  23.92s B  47.12s
+18:46:44 k0101 div82 Current site=NextEra_US_PHX              PASS rows=  7617 A  11.98s B  11.05s
+18:48:23 k0101 div82 Current item=D1551                       PASS rows= 12818 A  20.95s B  23.49s
+18:51:13 k0101 div82 Current cust=G-26-033                    PASS rows=     0 A   1.93s B   2.09s  ⚠ 0행(미실증)
+18:51:18 k0101 div82 Current project=G-26-033                 PASS rows=   444 A   3.60s B   3.69s
+18:51:31 k0101 div82 Current owner=YEEUN CHO                  PASS rows= 11048 A  16.86s B  21.85s
+18:54:19 k0101 div82 Current team=58187671                    PASS rows= 11815 A  17.17s B  29.86s
+18:57:03 k0101 div82 Current sender=NOSUCH                    PASS rows=     0 A  14.13s B  12.69s  ⚠ 0행(미실증)
+18:57:45 k0101 div82 Current qty=Y                            PASS rows=   704 A  15.13s B  17.00s
+
+=== 시나리오 9 · FAIL 0 · 미실증 2

@@ -96,9 +96,10 @@ export const CustomerFcstMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       DIVISION_ID: searchParams.divisionId,
       SUMMARY_BUCKET_TYPE: searchParams.bucketType,
       MEASURE_GROUP: 'CUST_FCST',
-      // MEASURE 는 기본값을 넣지 않는다 — 사용자가 셀 콤보(CustFcstMeasure)에서 고른다(AS-IS InsertRow 도
-      //   콤보만 붙이고 값은 비움). 종전 하드코딩 'Customer Fcst' 는 콤보 값('Customer FCST')과 대소문자가
-      //   달라 목록에 없는 값이 그대로 저장됐다. 미선택 저장은 메타 필수(INPUT_TP_CD=IM) 검증이 막는다.
+      // MEASURE 기본값 = 'Customer FCST' (사용자 요청 2026-10-28). 셀 콤보(CustFcstMeasure) 코드와 대소문자까지
+      //   같아야 한다 — 종전 하드코딩 'Customer Fcst' 는 콤보 값과 달라 목록에 없는 값이 그대로 저장됐다
+      //   (10-27 에 빈 값으로 바꿨다가 기본값을 다시 넣음). 다른 Measure 는 셀 콤보에서 바꾼다.
+      MEASURE: 'Customer FCST',
       EDI_FCST_YN: 'Y',
       VALID_YN: 'Y',
       ...dateBindings,

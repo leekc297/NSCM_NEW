@@ -265,9 +265,9 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
       isHidden={!openSearchArea}
       onSearch={onSearch}
       // 필드 배치 — AS-IS SCP0010 조회조건 순서(화면 대조, 사용자 지시 2026-10-12)를 그대로 따른다.
-      //   상시: Div*/OperationGroup*/FromSite/ToSite/Model/Electrode/Bucket (AS-IS row1~2).
-      //   접힘(extraConditions): PlanDate*/PlanType*/Seq*/Period*/Sum (AS-IS row3) — 2줄 초과분을
-      //   접고펼침으로 분리(SCP0013 ProductionPlanLineForm 동일 패턴). ALL/W26/W52 는 SP 미배포로 범위 밖.
+      //   Div*/OperationGroup*/FromSite/ToSite/Model/Electrode/Bucket/Sum (AS-IS row1~2) +
+      //   PlanDate*/PlanType*/Seq*/Period* (AS-IS row3). 접고펼침 없이 모두 항상 보이게 둔다(SCP0009·SCP0013
+      //   동일, 사용자 지시 2026-11-02). ALL/W26/W52 는 SP 미배포로 범위 밖.
       conditions={
         <>
           {/* Division* — 무필터, EE 제외 없음(design 02 §2.1) */}
@@ -317,12 +317,12 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' onClick={onItemSearch} />}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -379,29 +379,29 @@ export const ShipmentPlanSemiForm = ({ onSearch, onItemSearch }: Props) => {
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.SUM, '_Sum')}
+              label={' '}
               labelAlign='right'
               render={() => (
-                <Checkbox checked={sc.chkSum} onChange={checked => set({ chkSum: checked })} />
+                <Checkbox
+                  labelText={t(LBL.SUM, '_Sum')}
+                  checked={sc.chkSum}
+                  onChange={checked => set({ chkSum: checked })}
+                />
               )}
             />
           </Grid>
-        </>
-      }
-      extraConditions={
-        <>
+
           {/* Plan Date → Type → Seq — AS-IS UsrCombo 단일선택 필수 종속 콤보(design 02 §2.6). 공용
               PlanVersionCascade(종속 콤보 + 공유 캐스케이더). combined 단일 입력칸(기본) — 클릭하면
               date→type→seq 컬럼 팝업으로 경로 선택, 상위 변경 시 하위 초기화. 자동선택(최신 type·최대 seq)은
-              위 effect 가 그대로 채운다. 입력칸 고정폭 190px + 라벨(140) 수용 size=3 래퍼(SCP0013 동일,
-              사용자 지시 2026-10-21). */}
+              위 effect 가 그대로 채운다. 입력칸 고정폭을 주지 않아 같은 commonStyles.formItem 필드 칼럼을
+              채우는 다른 조회조건과 가로폭을 맞춘다(사용자 지시 2026-10-30). size=3 래퍼. */}
           <Grid size={3}>
             <PlanVersionCascade
               variant='horizontal'
               labelAlign='right'
               formItemClassName={commonStyles.formItem}
-              label='Plan Date/Type/Seq'
-              inputWidth='190px'
+              label={t(LBL.PLAN_VERSION, '_Plan Date/Type/Seq')}
               levels={planVersionLevels}
               divisionId={sc.divisionId}
               value={planVersionValue}

@@ -368,14 +368,12 @@ export const ShipmentPlanAutoEssForm = ({
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -388,10 +386,14 @@ export const ShipmentPlanAutoEssForm = ({
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.SUM, '_Sum')}
+              label={' '}
               labelAlign='right'
               render={() => (
-                <Checkbox checked={sc.chkSum} onChange={checked => set({ chkSum: checked })} />
+                <Checkbox
+                  labelText={t(LBL.SUM, '_Sum')}
+                  checked={sc.chkSum}
+                  onChange={checked => set({ chkSum: checked })}
+                />
               )}
             />
           </Grid>

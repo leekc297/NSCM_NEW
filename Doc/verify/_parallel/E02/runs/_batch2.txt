@@ -1,0 +1,19 @@
+  1 passed (1.1m)
+/c/Projects/NSCM/Doc/verify/_parallel/E02/runs/DMF0005_N1_224456
+  1 passed (51.1s)
+/c/Projects/NSCM/Doc/verify/_parallel/E02/runs/DMF0005_N2_224613
+  1 passed (52.7s)
+/c/Projects/NSCM/Doc/verify/_parallel/E02/runs/DMF0005_N3_224711
+    [chromium] › eg_popup.spec.ts:865:9 › @eg-popup MAIN DMF0005 #0 DM0002_ItembyDivisionPopupEx COND:btnItemId 
+/c/Projects/NSCM/Doc/verify/_parallel/E02/runs/DMF0005_N4_224819
+    [chromium] › eg_popup.spec.ts:865:9 › @eg-popup PICK DMF0005 #3 SCM0002_ProjectbyDivisionPopup CELL:PROJECT_CODE 
+/c/Projects/NSCM/Doc/verify/_parallel/E02/runs/DMF0005_N5_225447
+[FAIL] 다른 E2E 실행이 진행 중입니다 — PID 85392 · 시작 2026-10-31T14:01:20Z (29890921분 전) · 인자 "verify DMF0005 (E02 부하 중지 보류)"
+       끝나기를 기다리거나 그 프로세스를 종료한 뒤 다시 실행하세요. (잠금: C:\Projects\NSCM\Doc\e2e\_run.lock)
+[PRE] BE 로그 말미 HikariPool 타임아웃 0건
+[LOCK] DMF0005 사용 중 — 실행 안 함
+[FAIL] 다른 E2E 실행이 진행 중입니다 — PID 85392 · 시작 2026-10-31T14:01:20Z (29890922분 전) · 인자 "verify DMF0005 (E02 부하 중지 보류)"
+       끝나기를 기다리거나 그 프로세스를 종료한 뒤 다시 실행하세요. (잠금: C:\Projects\NSCM\Doc\e2e\_run.lock)
+[PRE] BE 로그 말미 HikariPool 타임아웃 0건
+[LOCK] DMF0005 사용 중 — 실행 안 함
+BATCH2_END

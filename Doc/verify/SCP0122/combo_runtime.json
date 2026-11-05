@@ -1,0 +1,591 @@
+{
+ "at": "2026-11-04T09:53:19.729Z",
+ "search": {
+  "Div": {
+   "label": "Div",
+   "opts": [
+    "81 Automotive Battery",
+    "40 Mobility & IT Battery",
+    "82 ESS Battery",
+    "EE Electrode",
+    "81_UC Automotive Battery(UC)",
+    "EE_UC Electrode(UC)",
+    "81_HM Automotive Battery(HM)",
+    "EE_HM Electrode(HM)",
+    "81_ST Automotive Battery(ST)",
+    "EE_ST Electrode(ST)",
+    "81_HD Automotive Battery(HD)",
+    "EE_HD Electrode(HD)",
+    "81_HG Automotive Battery(HG)",
+    "EE_HG Electrode(HG)"
+   ],
+   "multi": false,
+   "sel": [
+    "81 Automotive Battery"
+   ]
+  },
+  "Plan Group": {
+   "label": "Plan Group",
+   "opts": [
+    "E62B_E63F",
+    "E72B",
+    "E79C",
+    "E81A_NB",
+    "E81B_E85A",
+    "E85A_E81B_DIO",
+    "E90B",
+    "E129A_E128A",
+    "E161A",
+    "H5.5",
+    "H5.5A_WA",
+    "L10D",
+    "LV9.8A_H07",
+    "LV15AB",
+    "RFx_Sim"
+   ],
+   "multi": false,
+   "sel": [
+    "E62B_E63F"
+   ]
+  },
+  "Process": {
+   "label": "Process",
+   "opts": [
+    "SCP 엔진 최적화 프로세스"
+   ],
+   "multi": false,
+   "sel": [
+    "SCP 엔진 최적화 프로세스"
+   ]
+  }
+ },
+ "grid": {
+  "OPMZ_ACTV_NAME": {
+   "header": "Activity Name",
+   "newRow": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "A001",
+      "v": "Master Validation"
+     },
+     {
+      "c": "A002",
+      "v": "Create Plan ID"
+     },
+     {
+      "c": "A003",
+      "v": "Engine Run"
+     },
+     {
+      "c": "A004",
+      "v": "Plan Out Review and Amend"
+     },
+     {
+      "c": "A005",
+      "v": "FP Target I/F"
+     },
+     {
+      "c": "A006",
+      "v": "Release"
+     },
+     {
+      "c": "A007",
+      "v": "Input Constraint"
+     },
+     {
+      "c": "A008",
+      "v": "Constraint Validation"
+     },
+     {
+      "c": "A009",
+      "v": "Ship Plan Semi Cut-Off (To Packer)"
+     }
+    ],
+    "disp": [
+     "Master Validation",
+     "Create Plan ID",
+     "Engine Run",
+     "Plan Out Review and Amend",
+     "FP Target I/F",
+     "Release",
+     "Input Constraint",
+     "Constraint Validation",
+     "Ship Plan Semi Cut-Off (To Packer)"
+    ],
+    "editing": true
+   },
+   "newCtx": {
+    "DIVISION_ID": "81"
+   },
+   "existing": {
+    "valuePath": "CODE",
+    "displayPath": "NAME",
+    "items": [
+     {
+      "c": "A001",
+      "v": "Master Validation"
+     },
+     {
+      "c": "A002",
+      "v": "Create Plan ID"
+     },
+     {
+      "c": "A003",
+      "v": "Engine Run"
+     },
+     {
+      "c": "A004",
+      "v": "Plan Out Review and Amend"
+     },
+     {
+      "c": "A005",
+      "v": "FP Target I/F"
+     },
+     {
+      "c": "A006",
+      "v": "Release"
+     },
+     {
+      "c": "A007",
+      "v": "Input Constraint"
+     },
+     {
+      "c": "A008",
+      "v": "Constraint Validation"
+     },
+     {
+      "c": "A009",
+      "v": "Ship Plan Semi Cut-Off (To Packer)"
+     }
+    ],
+    "disp": [
+     "Master Validation",
+     "Create Plan ID",
+     "Engine Run",
+     "Plan Out Review and Amend",
+     "FP Target I/F",
+     "Release",
+     "Input Constraint",
+     "Constraint Validation",
+     "Ship Plan Semi Cut-Off (To Packer)"
+    ],
+    "editing": true
+   },
+   "exCtx": {
+    "DIVISION_ID": "81"
+   }
+  }
+ },
+ "combos": [
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"LookupCommon\",\"lookupType\":\"'OPMZ_PRS_CD'\",\"mnuId\":\"SCP0122\"}",
+   "status": 200,
+   "n": 1,
+   "keys": [
+    "CODE",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "P001",
+     "v": "SCP 엔진 최적화 프로세스"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"ActivityCode\",\"mnuId\":\"SCP0122\"}",
+   "status": 200,
+   "n": 9,
+   "keys": [
+    "CODE",
+    "AUTO_YN",
+    "CONFIRM_YN",
+    "PROGRAM_NAME",
+    "LINK_UI_TYPE",
+    "OPTION_YN",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "A001",
+     "v": "Master Validation"
+    },
+    {
+     "c": "A002",
+     "v": "Create Plan ID"
+    },
+    {
+     "c": "A003",
+     "v": "Engine Run"
+    },
+    {
+     "c": "A004",
+     "v": "Plan Out Review and Amend"
+    },
+    {
+     "c": "A005",
+     "v": "FP Target I/F"
+    },
+    {
+     "c": "A006",
+     "v": "Release"
+    },
+    {
+     "c": "A007",
+     "v": "Input Constraint"
+    },
+    {
+     "c": "A008",
+     "v": "Constraint Validation"
+    },
+    {
+     "c": "A009",
+     "v": "Ship Plan Semi Cut-Off (To Packer)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"PlanGroup_SCP_ALL\",\"mnuId\":\"SCP0122\"}",
+   "status": 200,
+   "n": 46,
+   "keys": [
+    "CODE",
+    "DIVISION_ID",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "PG0014",
+     "v": "18650"
+    },
+    {
+     "c": "PG0029",
+     "v": "18650_OC"
+    },
+    {
+     "c": "PG0020",
+     "v": "21700_IM_NJ"
+    },
+    {
+     "c": "PG0021",
+     "v": "21700_IM_OC"
+    },
+    {
+     "c": "PG0015",
+     "v": "21700_Non_IM_NJ"
+    },
+    {
+     "c": "PG0019",
+     "v": "21700_Non_IM_NJ_CFC"
+    },
+    {
+     "c": "PG0017",
+     "v": "21700_Non_IM_OC"
+    },
+    {
+     "c": "PG0016",
+     "v": "21700_Non_IM_OC_CFC"
+    },
+    {
+     "c": "PG0001",
+     "v": "E129A_E128A"
+    },
+    {
+     "c": "PG0002",
+     "v": "E161A"
+    },
+    {
+     "c": "PG0003",
+     "v": "E62B_E63F"
+    },
+    {
+     "c": "PG0005",
+     "v": "E72B"
+    },
+    {
+     "c": "PG0061",
+     "v": "E79C"
+    },
+    {
+     "c": "PG0006",
+     "v": "E81A_NB"
+    },
+    {
+     "c": "PG0007",
+     "v": "E81B_E85A"
+    },
+    {
+     "c": "PG0008",
+     "v": "E85A_E81B_DIO"
+    },
+    {
+     "c": "PG0022",
+     "v": "E90B"
+    },
+    {
+     "c": "PG0057",
+     "v": "ESAZ"
+    },
+    {
+     "c": "PG0024",
+     "v": "ESNA"
+    },
+    {
+     "c": "PG0025",
+     "v": "ESNB"
+    },
+    {
+     "c": "PG0059",
+     "v": "ESNB_ESS"
+    },
+    {
+     "c": "PG0027",
+     "v": "ESNJ"
+    },
+    {
+     "c": "PG0052",
+     "v": "ESNJ_POUCH"
+    },
+    {
+     "c": "PG0028",
+     "v": "ESOC"
+    },
+    {
+     "c": "PG0042",
+     "v": "ESOC_ELECBIZ"
+    },
+    {
+     "c": "PG0043",
+     "v": "ESOC_NFF"
+    },
+    {
+     "c": "PG0054",
+     "v": "ESS_NAM"
+    },
+    {
+     "c": "PG0035",
+     "v": "ESS_NB"
+    },
+    {
+     "c": "PG0034",
+     "v": "ESWA_EBEJ"
+    },
+    {
+     "c": "PG0026",
+     "v": "ESWA_ED"
+    },
+    {
+     "c": "PG0060",
+     "v": "ESWA_ESS"
+    },
+    {
+     "c": "PG0030",
+     "v": "GM1_A"
+    },
+    {
+     "c": "PG0033",
+     "v": "GM1_E"
+    },
+    {
+     "c": "PG0009",
+     "v": "H5.5"
+    },
+    {
+     "c": "PG0053",
+     "v": "H5.5A_WA"
+    },
+    {
+     "c": "PG0062",
+     "v": "HG_E81C_E69B"
+    },
+    {
+     "c": "PG0012",
+     "v": "L10D"
+    },
+    {
+     "c": "PG0010",
+     "v": "LV15AB"
+    },
+    {
+     "c": "PG0011",
+     "v": "LV9.8A_H07"
+    },
+    {
+     "c": "PG0036",
+     "v": "Micro_Cyl"
+    },
+    {
+     "c": "PG0055",
+     "v": "NFF_AZ"
+    },
+    {
+     "c": "PG0056",
+     "v": "NFF_OC"
+    },
+    {
+     "c": "PG0037",
+     "v": "P_Non_NT"
+    },
+    {
+     "c": "PG0038",
+     "v": "P_NT"
+    },
+    {
+     "c": "PG0063",
+     "v": "RFx_Sim"
+    },
+    {
+     "c": "PG0058",
+     "v": "Test"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo",
+   "body": "{\"comboId\":\"Division_SCP\",\"mnuId\":\"SCP0122\"}",
+   "status": 200,
+   "n": 14,
+   "keys": [
+    "CREATED_BY",
+    "ATTRIBUTE3",
+    "ATTRIBUTE10",
+    "LAST_UPDATED_BY",
+    "ATTRIBUTE2",
+    "ATTRIBUTE1",
+    "DAILY_PLAN_PERIOD",
+    "CREATION_DATE",
+    "ATTRIBUTE9",
+    "ATTRIBUTE8",
+    "LAST_UPDATE_DATE",
+    "ATTRIBUTE7",
+    "ATTRIBUTE6",
+    "ATTRIBUTE5",
+    "NAME",
+    "ATTRIBUTE4",
+    "CODE",
+    "VALID_YN"
+   ],
+   "rows": [
+    {
+     "c": "81",
+     "v": "81 Automotive Battery"
+    },
+    {
+     "c": "40",
+     "v": "40 Mobility & IT Battery"
+    },
+    {
+     "c": "82",
+     "v": "82 ESS Battery"
+    },
+    {
+     "c": "EE",
+     "v": "EE Electrode"
+    },
+    {
+     "c": "81_UC",
+     "v": "81_UC Automotive Battery(UC)"
+    },
+    {
+     "c": "EE_UC",
+     "v": "EE_UC Electrode(UC)"
+    },
+    {
+     "c": "81_HM",
+     "v": "81_HM Automotive Battery(HM)"
+    },
+    {
+     "c": "EE_HM",
+     "v": "EE_HM Electrode(HM)"
+    },
+    {
+     "c": "81_ST",
+     "v": "81_ST Automotive Battery(ST)"
+    },
+    {
+     "c": "EE_ST",
+     "v": "EE_ST Electrode(ST)"
+    },
+    {
+     "c": "81_HD",
+     "v": "81_HD Automotive Battery(HD)"
+    },
+    {
+     "c": "EE_HD",
+     "v": "EE_HD Electrode(HD)"
+    },
+    {
+     "c": "81_HG",
+     "v": "81_HG Automotive Battery(HG)"
+    },
+    {
+     "c": "EE_HG",
+     "v": "EE_HG Electrode(HG)"
+    }
+   ],
+   "user": "minyonglee1"
+  },
+  {
+   "url": "http://127.0.0.1:5173/api/admin/combo?src=grid",
+   "body": "{\"comboId\":\"ActivityCode\",\"mnuId\":\"SCP0122\",\"sheetName\":\"'Plan Activity Mgmt'\",\"validYn\":\"'Y'\"}",
+   "status": 200,
+   "n": 9,
+   "keys": [
+    "CODE",
+    "AUTO_YN",
+    "CONFIRM_YN",
+    "PROGRAM_NAME",
+    "LINK_UI_TYPE",
+    "OPTION_YN",
+    "NAME"
+   ],
+   "rows": [
+    {
+     "c": "A001",
+     "v": "Master Validation"
+    },
+    {
+     "c": "A002",
+     "v": "Create Plan ID"
+    },
+    {
+     "c": "A003",
+     "v": "Engine Run"
+    },
+    {
+     "c": "A004",
+     "v": "Plan Out Review and Amend"
+    },
+    {
+     "c": "A005",
+     "v": "FP Target I/F"
+    },
+    {
+     "c": "A006",
+     "v": "Release"
+    },
+    {
+     "c": "A007",
+     "v": "Input Constraint"
+    },
+    {
+     "c": "A008",
+     "v": "Constraint Validation"
+    },
+    {
+     "c": "A009",
+     "v": "Ship Plan Semi Cut-Off (To Packer)"
+    }
+   ],
+   "user": "minyonglee1"
+  }
+ ]
+}

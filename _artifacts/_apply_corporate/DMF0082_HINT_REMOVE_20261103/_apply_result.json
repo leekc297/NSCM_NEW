@@ -1,0 +1,48 @@
+{
+ "at": "2026-11-03 14:26:59",
+ "before": {
+  "ddl": "2026-11-03 13:44:43",
+  "md5": "422a185f3c1d3ba2a9a159d7f2a446e7",
+  "lines": 17949
+ },
+ "after": {
+  "ddl": "2026-11-03 14:26:56",
+  "status": "VALID",
+  "md5": "019f707bd14398b5de4ee4556f841607",
+  "lines": 17948
+ },
+ "pairs": [
+  [
+   "H1 TEMP_SITE_ITEM_ALL FULL(F)",
+   1
+  ],
+  [
+   "H2 T_LAST_DATA_SETUP_FCST FULL(A) USE_HASH(A)",
+   1
+  ],
+  [
+   "H3 FUTURE_PRICE 1 read",
+   1
+  ],
+  [
+   "H4 CFM_SELLING_PRICE hint replace",
+   1
+  ],
+  [
+   "H5 MF_SP load",
+   1
+  ],
+  [
+   "H6a final dynamic SQL placeholder",
+   1
+  ],
+  [
+   "H6b PARALLEL(8) only for 82",
+   1
+  ]
+ ],
+ "invalid": [
+  85,
+  85
+ ]
+}

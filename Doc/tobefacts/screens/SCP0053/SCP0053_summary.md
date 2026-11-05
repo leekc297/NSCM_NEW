@@ -1,31 +1,32 @@
 # SCP0053 — To-Be Fact Pack 요약
 
-- page_key: `supply/scp-bom` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 11 · 엔드포인트 호출 5 (미해결 0, 주석 속 1) · 이벤트 18 · 컴포넌트 사용 27 · 하드코딩 컬럼 0 · 메시지 15
+- page_key: `supply/scp-bom` · feature: supply · As-is Fact Pack 있음
+- 파일 12 · 엔드포인트 호출 5 (미해결 0, 주석 속 1) · 이벤트 16 · 컴포넌트 사용 27 · 하드코딩 컬럼 0 · 메시지 15
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | component | 209 |
-| features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | component | 160 |
+| features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | component | 213 |
+| features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | component | 177 |
 | features/supply/src/pages/scp-bom/hooks/useScpBomValidation.ts | hook | 35 |
 | features/supply/src/pages/scp-bom/index.ts | index | 2 |
-| features/supply/src/pages/scp-bom/scp-bom.constants.ts | constants | 89 |
+| features/supply/src/pages/scp-bom/scp-bom.constants.ts | constants | 85 |
 | features/supply/src/pages/scp-bom/scp-bom.types.ts | types | 17 |
-| features/supply/src/pages/scp-bom/ScpBom.tsx | page | 199 |
-| features/supply/src/pages/scp-bom/useScpBomStore.ts | store | 171 |
+| features/supply/src/pages/scp-bom/ScpBom.tsx | page | 212 |
+| features/supply/src/pages/scp-bom/useScpBomStore.ts | store | 175 |
 | features/supply/src/pages/scp-bom/utils/scp-bom.editLock.ts | util | 20 |
 | features/supply/src/pages/scp-bom/utils/scp-bom.save.ts | util | 92 |
+| features/supply/src/pages/scp-bom/utils/scp-bom.scpYn.ts | util | 37 |
 | features/supply/src/pages/scp-bom/__asis-mapping__.md | mapping | 138 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 1 | Y | ScpBomForm.tsx:53 |
-| SCP0053/SCP BOM//call-proc | hook | 1 | Y | ScpBom.tsx:62 |
-| /admin/menu/SCP0053/column | http | 1 | Y | useScpBomStore.ts:118 |
-| /admin/menu/SCP0053/search-conditions | http | 1 | Y | useScpBomStore.ts:148 |
+| SCP0053/SCP BOM//call-proc | hook | 1 | Y | ScpBom.tsx:63 |
+| /admin/menu/SCP0053/column | http | 1 | Y | useScpBomStore.ts:119 |
+| /admin/menu/SCP0053/search-conditions | http | 1 | Y | useScpBomStore.ts:152 |
 | /SCP0053/SCP BOM/SAVE/call-proc | http | 1 | Y | scp-bom.save.ts:67 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -34,24 +35,22 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 74 |
-| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,String | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 94 |
-| CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 119 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 148 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 149 |
-| FunctionSearchIcon | onClick | onModelSearch | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 143 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 165 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 166 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 182 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 183 |
-| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 199 |
+| SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 83 |
+| CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,String | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 102 |
+| CustomDropdown | onChange | <arrow> set,pickMulti | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 127 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 155 |
+| Button | onClick | onModelSearch | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 151 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 171 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 187 |
+| Checkbox | onChange | <arrow> set | jsx | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 203 |
 | g | updatedLayout | apply | addHandler | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 71 |
 | g | formatItem | handler | addHandler | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 89 |
 | g | beginningEdit | handler | addHandler | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 107 |
 | g | pastingCell | handler | addHandler | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 125 |
-| ScpBomForm | onSearch | handleSearch | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 161 |
-| ScpBomForm | onModelSearch | <arrow> setOpenMaterial | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 162 |
-| ScpBomForm | onDivisionAuth | setDivisionAuth | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 163 |
+| g | formatItem | handler | addHandler | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 141 |
+| ScpBomForm | onSearch | handleSearch | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 174 |
+| ScpBomForm | onModelSearch | <arrow> setOpenMaterial | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 175 |
+| ScpBomForm | onDivisionAuth | setDivisionAuth | jsx | features/supply/src/pages/scp-bom/ScpBom.tsx | 176 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -90,7 +89,7 @@
 | MSG01332 | 1 |
 | MSG00097 | 1 |
 | MSG00672 | 1 |
-| MSG00006 | 1 |
+| MSG00003 | 1 |
 | MSG00004 | 1 |
 
 ## 8. 주석 속 As-is 참조
@@ -99,21 +98,23 @@
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | 최신 운영 소스와 다를 수 있어 보류. 복원 시 아래 disabled 주석 해제 + onChange 를 () => undefined 로 되돌림. | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 87 |
-| code | useEffect(() => { | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 133 |
-| code | if (!g) return; | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 135 |
-| code | const handler = (sender: FlexGrid, e: FormatItemEventArgs) => { | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 136 |
-| code | if (e.panel.cellType !== CellType.Cell) return; | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 137 |
-| code | e.cell.style.backgroundColor = isRowLocked(row) ? ROW_LOCK_BG : ''; | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 139 |
-| code | }; | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 140 |
-| code | g.formatItem.addHandler(handler); | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 141 |
-| code | g.invalidate(); | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 142 |
-| code | return () => g.formatItem?.removeHandler(handler); | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 143 |
-| code | }, [gridRef, rows]); | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 144 |
+| code | 개인화 복원(restoreSearchConditions)으로 들어온 유효 divisionId 는 그대로 둔다(옵션에 있으면 early return). | features/supply/src/pages/scp-bom/components/ScpBomForm.tsx | 72 |
+| code | useEffect(() => { | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 150 |
+| code | if (!g) return; | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 152 |
+| code | const handler = (sender: FlexGrid, e: FormatItemEventArgs) => { | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 153 |
+| code | if (e.panel.cellType !== CellType.Cell) return; | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 154 |
+| code | e.cell.style.backgroundColor = isRowLocked(row) ? ROW_LOCK_BG : ''; | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 156 |
+| code | }; | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 157 |
+| code | g.formatItem.addHandler(handler); | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 158 |
+| code | g.invalidate(); | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 159 |
+| code | return () => g.formatItem?.removeHandler(handler); | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 160 |
+| code | }, [gridRef, rows]); | features/supply/src/pages/scp-bom/components/ScpBomGrid.tsx | 161 |
 | code | import { useScpBomValidation } from './hooks/useScpBomValidation'; | features/supply/src/pages/scp-bom/ScpBom.tsx | 21 |
-| code | const { validateSearch } = useScpBomValidation(); // V1 가드 임시 비활성 (2026-10-07) | features/supply/src/pages/scp-bom/ScpBom.tsx | 36 |
-| code | if (!validateSearch(sc)) return; | features/supply/src/pages/scp-bom/ScpBom.tsx | 89 |
-| endpoint | ui-dynamic-property-management — admin SCM_MST_SHEET_COLUMNS 동적 fetch(실측 27행, design 03 §1). | features/supply/src/pages/scp-bom/useScpBomStore.ts | 19 |
+| code | const { validateSearch } = useScpBomValidation(); // V1 가드 임시 비활성 (2026-10-07) | features/supply/src/pages/scp-bom/ScpBom.tsx | 37 |
+| code | if (!validateSearch(sc)) return; | features/supply/src/pages/scp-bom/ScpBom.tsx | 90 |
+| endpoint | ui-dynamic-property-management — admin SCM_MST_SHEET_COLUMNS 동적 fetch(실측 27행, design 03 §1). | features/supply/src/pages/scp-bom/useScpBomStore.ts | 20 |
+| code | const parentKey = (r: Row) => `${s(r.DIVISION_ID)}\|${s(r.PARENT_ITEM_ID)}`; | features/supply/src/pages/scp-bom/utils/scp-bom.scpYn.ts | 9 |
+| code | if (yCount !== 1) hits.push(pk.split('\|')[1] ?? ''); | features/supply/src/pages/scp-bom/utils/scp-bom.scpYn.ts | 31 |
 
 ## 10. __asis-mapping__.md 상태
 - 구현: 8

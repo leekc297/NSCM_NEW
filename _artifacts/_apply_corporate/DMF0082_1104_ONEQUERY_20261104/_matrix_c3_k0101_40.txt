@@ -1,0 +1,16 @@
+PKG_DMF0082: [('PACKAGE', 'VALID', '2026-10-09 13:38:31'), ('PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')]
+PKG_DMF0082_1104: [('PACKAGE', 'VALID', '2026-11-04 16:00:18'), ('PACKAGE BODY', 'VALID', '2026-11-04 17:39:23')]
+=== c3_k0101_40 env=['zioui1', 'localhost', '2026-11-04 17:39:43'] period=20261101~20270430 A=PKG_DMF0082 B=PKG_DMF0082_1104 users=k0101 divs=40 scen=['current', 'filters'] gtt=True
+--- k0101 div40 표본 {'site': 'Lenovo_HK_HKG', 'item_full': 'MCCM348014A3', 'cust': 'Lenovo', 'biz': 'CELL', 'project': 'Lenovo', 'owner': 'Lia Yun', 'team': '58520274', 'plant': None, 'sender': None, 'item': 'CM348'} 버전 {'MF_W': 'MF_W_20261027_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20261104_V001', 'MF_D': 'MF_D_20261026_V001'}
+17:39:56 k0101 div40 Current                                  PASS rows=  7019 A   5.89s B   5.66s
+17:41:17 k0101 div40 Current site=Lenovo_HK_HKG               PASS rows=   468 A   1.10s B   0.94s
+17:41:22 k0101 div40 Current item=CM348                       PASS rows=   953 A   1.41s B   1.24s
+17:41:36 k0101 div40 Current cust=Lenovo                      PASS rows=  1392 A   1.23s B   1.14s
+17:41:45 k0101 div40 Current biz=CELL                         PASS rows=  5173 A   3.52s B   4.38s
+17:42:44 k0101 div40 Current project=Lenovo                   PASS rows=  1392 A   1.39s B   1.37s
+17:42:54 k0101 div40 Current owner=Lia Yun                    PASS rows=  1401 A   1.33s B   1.37s
+17:43:03 k0101 div40 Current team=58520274                    PASS rows=  2183 A   2.18s B   2.40s
+17:43:30 k0101 div40 Current sender=NOSUCH                    PASS rows=     0 A   3.18s B   2.57s  ⚠ 0행(미실증)
+17:43:41 k0101 div40 Current qty=Y                            PASS rows=  1118 A   3.64s B   3.76s
+
+=== 시나리오 10 · FAIL 0 · 미실증 1

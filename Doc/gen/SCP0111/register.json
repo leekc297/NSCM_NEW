@@ -1,0 +1,107 @@
+{
+  "menuId": "SCP0111",
+  "screenName": "IntegrationPSI",
+  "feature": "supply",
+  "pageDir": "integration-psi",
+  "routePath": "supply/integration-psi",
+  "sheets": [
+    {
+      "sheetName": "Integration PSI",
+      "rule": "META+코드연결",
+      "columns": 24,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "<field:dtPeriod>",
+        "SetChangedPeriod",
+        "SetCalendar",
+        "EditButton",
+        "SaveData",
+        "_defaultDataModel_Changed"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0111.P_",
+      "sheet": "Integration PSI",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0111_GET_ESS_PACK_LINE",
+      "asis_sp": "SCP0111_GET_ESS_PACK_LINE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetEssPackLineAll"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE",
+      "sheet": "Integration PSI",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0111_GET_INTEGRATION_PSI",
+      "asis_sp": "SCP0111_GET_INTEGRATION_PSI",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+      "sheet": "Integration PSI",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DM0003_GET_BUCKET_TYPE_CODE",
+      "asis_sp": "DM0003_GET_BUCKET_TYPE_CODE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetBucketType"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0111.P_DM0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "Integration PSI",
+      "btn": "SEARCH",
+      "allowed_gap": "공통코드 콤보 → 등록 콤보ID(useTabComboQueries)"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+      "asis_sp": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0111.P_SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+      "sheet": "Integration PSI",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0111_SAVE_INTEGRATION_PSI",
+      "asis_sp": "SCP0111_SAVE_INTEGRATION_PSI",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0111.P_SCP0111_SAVE_INTEGRATION_PSI",
+      "sheet": "Integration PSI",
+      "btn": "SAVE"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

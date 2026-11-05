@@ -1,46 +1,45 @@
-﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref
-DIVISION_ID,Y,UNKNOWN,UNKNOWN,,,,
-TEAM_ID,Y,UNKNOWN,UNKNOWN,,,,
-END_CUSTOMER,Y,UNKNOWN,UNKNOWN,,,,
-SOLDTO_CUSTOMER,Y,UNKNOWN,UNKNOWN,,,,
-COUNTRY_NAME,Y,UNKNOWN,UNKNOWN,,,,
-CITY_NAME,Y,UNKNOWN,UNKNOWN,,,,
-SCM_SITE_ID,Y,UNKNOWN,UNKNOWN,,,,
-ITEM_ID,Y,UNKNOWN,UNKNOWN,,,,
-ITEM_NAME,Y,UNKNOWN,UNKNOWN,,,,
-NICK_NAME,Y,UNKNOWN,UNKNOWN,,,,
-INCOTERMS,Y,UNKNOWN,UNKNOWN,,,,
-ITEM_TYPE,Y,UNKNOWN,UNKNOWN,,,,
-FCST_TYPE,Y,UNKNOWN,UNKNOWN,,,,
-DOM_EXP,Y,UNKNOWN,UNKNOWN,,,,
-CUST_GROUP,Y,UNKNOWN,UNKNOWN,,,,
-CUST_GROUP_DTL,Y,UNKNOWN,UNKNOWN,,,,
-OWNER,Y,UNKNOWN,UNKNOWN,,,,
-APPLICATION,Y,UNKNOWN,UNKNOWN,,,,
-ROUTE,Y,UNKNOWN,UNKNOWN,,,,
-MDM_PROJECT_NAME,Y,UNKNOWN,UNKNOWN,,,,
-MIN_CAPACITY,Y,UNKNOWN,UNKNOWN,,,,
-FORECAST_INFO_BIZ_TYPE,Y,UNKNOWN,UNKNOWN,,,,
-CELL_TYPE,Y,UNKNOWN,UNKNOWN,,,,
-FORECAST_INFO_CELL_MODEL,Y,UNKNOWN,UNKNOWN,,,,
-FORECAST_INFO_CELL_PACK_COUNT,Y,UNKNOWN,UNKNOWN,,,,
-FORECAST_INFO_ALL,Y,UNKNOWN,UNKNOWN,,,,
-FORECAST_INFO_SPEC,Y,UNKNOWN,UNKNOWN,,,,
-FORECAST_INFOR_VERSION,Y,UNKNOWN,UNKNOWN,,,,
-CELL_MODEL_NICK_NAME,Y,UNKNOWN,UNKNOWN,,,,
-VMI_YN,Y,UNKNOWN,UNKNOWN,,,,
-DMS_SALES,Y,UNKNOWN,UNKNOWN,,,,
-DMS_CUSTOMER,Y,UNKNOWN,UNKNOWN,,,,
-AS_FROM_SITE,Y,UNKNOWN,UNKNOWN,,,,
-LAST_UPDATE_DATE,Y,UNKNOWN,UNKNOWN,,,,
-LAST_UPDATED_BY,Y,UNKNOWN,UNKNOWN,,,,
-SENDER_NAME,Y,UNKNOWN,UNKNOWN,,,,
-CELL_PROD_SITE_ID,Y,UNKNOWN,UNKNOWN,,,,
-CURRENCY,Y,UNKNOWN,UNKNOWN,,,,
-VERSION_NO,N,UNKNOWN,UNKNOWN,,,,
-MEASURE_GROUP,N,UNKNOWN,UNKNOWN,,,,
-BUCKET,N,UNKNOWN,UNKNOWN,,,,
-EDIT_FLAG,N,UNKNOWN,UNKNOWN,,,,
-SORT_KEY,N,UNKNOWN,UNKNOWN,,,,
-MEASURE,N,COND,COND,"잠금 when if (sAction == CAppSetting.StringI) (SetLockRange:9253) | 잠금 when if (sColName == ""MEASURE"") (spdMain_Changed:5657)","잠금 when if (sAction == CAppSetting.StringI) (SetLockRange:9253) | 잠금 when if (sColName == ""MEASURE"") (spdMain_Changed:5657)",,
-P,,COND,COND,"해제 when if (sDivision != null && sDivision != """" && sDivision.Substring(0, 2) == ""81"") (spdMain_ComboSelChange:8250) | 잠금 when else of (sDivision != null && sDivision != """" && sDivision.Substring(0, 2) == ""81"") (spdMain_ComboSelChange:8252)","해제 when if (sDivision != null && sDivision != """" && sDivision.Substring(0, 2) == ""81"") (spdMain_ComboSelChange:8250) | 잠금 when else of (sDivision != null && sDivision != """" && sDivision.Substring(0, 2) == ""81"") (spdMain_ComboSelChange:8252)",,
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+DIVISION_ID,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+TEAM_ID,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+END_CUSTOMER,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+SOLDTO_CUSTOMER,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+COUNTRY_NAME,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+CITY_NAME,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+SCM_SITE_ID,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+ITEM_ID,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+ITEM_NAME,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+NICK_NAME,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+INCOTERMS,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+ITEM_TYPE,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+FCST_TYPE,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+DOM_EXP,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+CUST_GROUP,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+CUST_GROUP_DTL,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+OWNER,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+APPLICATION,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+ROUTE,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+MDM_PROJECT_NAME,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+MIN_CAPACITY,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+FORECAST_INFO_BIZ_TYPE,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+CELL_TYPE,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+FORECAST_INFO_CELL_MODEL,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+FORECAST_INFO_CELL_PACK_COUNT,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+FORECAST_INFO_ALL,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+FORECAST_INFO_SPEC,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+FORECAST_INFOR_VERSION,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+CELL_MODEL_NICK_NAME,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+VMI_YN,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+DMS_SALES,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+DMS_CUSTOMER,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+AS_FROM_SITE,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+LAST_UPDATE_DATE,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+LAST_UPDATED_BY,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+SENDER_NAME,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+CELL_PROD_SITE_ID,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+CURRENCY,Y,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+VERSION_NO,N,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+MEASURE_GROUP,N,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+BUCKET,N,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+EDIT_FLAG,N,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+SORT_KEY,N,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice
+MEASURE,N,UNKNOWN,UNKNOWN,"해석 못 한 잠금: InsertRow:2751 siMain.LockRange2(iActRow, siMain.GetColumnIndex(sColName),  · SetLockRange:9253 siMain.LockRange2(iRow, siMain.GetColumnIndex(DefColumns.MEA · SetLockRange:9261 siMain.LockRange2(iRow, idx, iRow, idx, bLockFlag, true)",EditButton SwitchLock 없음(편집 모드 모델 아님),,,,FcstNPrice

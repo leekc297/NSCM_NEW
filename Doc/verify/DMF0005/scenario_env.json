@@ -1,0 +1,159 @@
+{
+ "menu_id": "DMF0005",
+ "asis_id": "DMF0005",
+ "area": "DM",
+ "generated": "2026-11-05 06:14:38",
+ "division_cond": {
+  "present": true,
+  "labels": [
+   "Division"
+  ]
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "DM Admin": "hongjae.kim",
+   "DM Planner": "eunah.koo",
+   "DM Viewer": "yooah.chung",
+   "SCP Planner": "dodae"
+  },
+  "81": {
+   "DM Admin": "jiwon.park",
+   "DM Planner": "bpark416",
+   "DM Planner (W/S)": "jaehyeok",
+   "DM Viewer": "park6151",
+   "SCP Planner": "bottle"
+  },
+  "82": {
+   "DM Admin": "wonqthanq",
+   "DM Planner": "ys_cho",
+   "DM Planner (W/S)": "miyeong.lee",
+   "DM Viewer": "yeonjusung",
+   "SCP Planner": "coeogus"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "40",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 최다 40(23칸 · 분포 {'82': 14, '40': 23})"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [
+   "DELETE",
+   "INSERT",
+   "MODEL_CHANGE",
+   "SAVE",
+   "SEARCH"
+  ],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [],
+ "popup_conds": [],
+ "bucket_cond": "",
+ "observed": {
+  "source": "e2e_results.json 2026-11-03 00:00 · 행 수 근거 118행",
+  "max_rows_after_search": 15674,
+  "zero_row_failures": [
+   {
+    "row_id": "V-44c10b42",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-84cb0129",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-9764feab",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-34119286",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-4e87eea1",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-58b8b086",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-ef249ac7",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-4bc8644d",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-ae787200",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-35a5ce2e",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-456083d6",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-975b58b4",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-2363aa5f",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-4c6c99bf",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-10ff15b8",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-ae6a5c8a",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-5b9e6910",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-4ada19b8",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-2fbb4b34",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   },
+   {
+    "row_id": "V-b1ac7dc4",
+    "via": "팝업 셀 해석 불가 또는 조회 0행 (col=-)"
+   }
+  ],
+  "zero_row_count": 24
+ },
+ "warnings": []
+}

@@ -1,0 +1,3 @@
+﻿side,target,lookup_type,result,why,ref
+신규행,SALES_PLANT,"PlantByDivisionCompany,SALES_PLANT",ERROR,"SEGMENT1 기준 · [확인 대상] 다른 원천이 섞인 콤보 — 기준 코드에 없는 후보 45건: ['AA00', 'AB00', 'AC00', 'AH00', 'AJ00', 'AK00', 'AP00', 'AV00']",DMF0005_SaleSite_PjtModelMapping.cs:2728 ← DMF0005_SaleSite_PjtModelMapping.cs:2693
+기존행,SALES_PLANT,"PlantByDivisionCompany,SALES_PLANT",ERROR,"SEGMENT1 기준 · [확인 대상] 다른 원천이 섞인 콤보 — 기준 코드에 없는 후보 45건: ['AA00', 'AB00', 'AC00', 'AH00', 'AJ00', 'AK00', 'AP00', 'AV00']",DMF0005_SaleSite_PjtModelMapping.cs:2728 ← DMF0005_SaleSite_PjtModelMapping.cs:2693

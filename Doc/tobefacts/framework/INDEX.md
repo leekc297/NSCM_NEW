@@ -1,14 +1,14 @@
-# To-Be 프레임워크·공통 카탈로그 (TobeFacts framework.js 2026-10-22)
+# To-Be 프레임워크·공통 카탈로그 (TobeFacts framework.js 2026-11-04)
 
-원천: packages/foundation/src · packages/shared/src · features/master/src/components · apps/web/src/mdi — export 509건. 사용 수 = features/*/src/pages 의 import 등장 횟수. As-is 대응 = tools/Harness/rules 사전.
+원천: packages/foundation/src · packages/shared/src · features/master/src/components · apps/web/src/mdi — export 515건. 사용 수 = features/*/src/pages 의 import 등장 횟수. As-is 대응 = tools/Harness/rules 사전.
 
 | 파일 | 종류 | 건수 | 많이 쓰는 것 |
 |---|---|---|---|
-| [components.md](components.md) | component | 69 | AtlasBridge, MDIContainer, MDITabs, RouterSync, ViewContainer, PeriodField, ItemByDivisionModal, MaterialByDivisionModal |
-| [hooks.md](hooks.md) | hook | 26 | useTabActivation, useViewReload, useIsBusy, useCascadeFields, useTabComboQueries, useTabProcQuery, useTabBtnPermissions, useTabid |
+| [components.md](components.md) | component | 71 | AtlasBridge, MDIContainer, MDITabs, RouterSync, ViewContainer, MaterialByDivisionModal, PeriodField, ProjectByDivisionModal |
+| [hooks.md](hooks.md) | hook | 27 | useTabActivation, useViewReload, useIsBusy, useCascadeFields, useTabComboQueries, useTabProcQuery, useTabBtnPermissions, useTabid |
 | [stores.md](stores.md) | store | 27 | useMDIStore, useContributeVersionModalStore, useCustomerModalStore, useContributeRateModalStore, useItemByDivisionModalStore, useItemByPlantSiteModalStore, useMaterialByDivisionModalStore, useModelByDivisionPopupStore |
 | [apis.md](apis.md) | namespace-object, class | 9 | EditTracker, CustomMergeManager, ColumnInsertMergeManager, GridUtils, GridAction, DynamicColumnManager, idbPersister, REQUEST_CHK_COLUMN |
-| [utils.md](utils.md) | function, constant, value, enum | 270 | MAX_MOUNTED_TABS, MDI_TAB_MODE, resetView, resolveView, CRUD_TYPE, CRUD_MSG, API_CONFIG, CACHE_MAX_AGE |
+| [utils.md](utils.md) | function, constant, value, enum | 273 | MAX_MOUNTED_TABS, MDI_TAB_MODE, resetView, resolveView, CRUD_TYPE, CRUD_MSG, API_CONFIG, CACHE_MAX_AGE |
 | [types.md](types.md) | type | 108 | AnyPage, AnyTab, MdiTabMode, RawFlexGridColumnConfig, PageProps, HotkeyConfig, ComboResponse, FlexGridColumnConfig |
 
 ## 화면 개발 표준 (카탈로그 적용 규칙)

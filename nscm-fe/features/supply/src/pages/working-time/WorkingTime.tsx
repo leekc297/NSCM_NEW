@@ -3,6 +3,7 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
+import dayjs from '@foundation/dayjs';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
 import { type EditTracker } from '@foundation/utils';
@@ -16,6 +17,7 @@ import { WorkingTimeInputModal } from './components/WorkingTimeInputModal';
 import { useWorkingTimeStore } from './useWorkingTimeStore';
 import {
   DAY_WEEK,
+  MAX_PERIOD_DAYS,
   MENU_ID,
   MSG,
   RESPONSE_SET,
@@ -121,6 +123,19 @@ export const WorkingTime = ({ tabId, title }: PageProps<MENU_ID>) => {
     // 기간 역전 차단 (from > to)
     if (Number(searchParams.startYyyymmdd) > Number(searchParams.endYyyymmdd)) {
       void setAlert({ type: 'alert', content: t(MSG.INVALID_FORMAT, '_Invalid period (start > end).') });
+      return false;
+    }
+    // 기간 상한 초과 차단 (To > From + MAX_PERIOD_DAYS)
+    const from = dayjs(searchParams.startYyyymmdd, 'YYYYMMDD');
+    const to = dayjs(searchParams.endYyyymmdd, 'YYYYMMDD');
+    if (to.diff(from, 'day') > MAX_PERIOD_DAYS) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_MAX, '_Maximum Period is From Date + {0}.').replace(
+          '{0}',
+          String(MAX_PERIOD_DAYS)
+        ),
+      });
       return false;
     }
     return true;

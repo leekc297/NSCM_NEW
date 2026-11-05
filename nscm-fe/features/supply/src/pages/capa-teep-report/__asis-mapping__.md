@@ -1,5 +1,11 @@
 # SCP0107 CAPA TEEP Report — AS-IS ↔ TO-BE 매핑 매트릭스
 
+> **[사후 변경 2026-10-29]** 사용자 확정으로 **Insert/Delete 버튼을 제거**했다(종전 goal D-2 번복 — 조회
+> 전용이라 두 버튼 미노출, AS-IS 미파리티). 아래 본문에서 `handleInsert`/`handleDelete`·`MSG01044`/`MSG01045`·
+> `hotkeyConfig.insert/delete` alert 핸들러·`BTN_MPG INSERT/DELETE 실등록`을 가리키는 서술(#7·#8·L-12·L-14·
+> UC-01·UC-04 등)은 **그 시점 기준이며 현재 무효**다 — FE 는 `insert/delete=false`(핸들러·상수 삭제),
+> 메타는 INSERT/DELETE 미등록. 상세: `design/07_validation-audit.md §2`·`design/05_register.sql 3)·3b)`.
+
 > `convert-react` iter-1 산출(2026-09-25) + **iter-2 개정**(2026-09-25 — `react-gap-audit` iter-1 issues
 > R-02·R-03·R-04·R-05·R-06·R-07 반영. 개정 지점은 본문에 `iter-2 R-xx` 로 표기).
 > AS-IS 백본 항목 **100% 매핑**이 게이트다(convert-core §2.1 #11).

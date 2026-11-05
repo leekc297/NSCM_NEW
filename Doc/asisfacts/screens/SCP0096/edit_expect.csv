@@ -1,0 +1,8 @@
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+DIVISION_ID,Y,NONE,N,,잠금 (EditButton:291),,기존행 SCP0096_Shipment_Working_Day_OSP:291 LockColumn,,Shipment Working Day OSP
+PLANT_SITE_ID,Y,NONE,N,,잠금 (EditButton:291),,기존행 SCP0096_Shipment_Working_Day_OSP:291 LockColumn,,Shipment Working Day OSP
+PLANT_SITE_NAME,Y,NONE,N,,잠금 (EditButton:291),,기존행 SCP0096_Shipment_Working_Day_OSP:291 LockColumn,,Shipment Working Day OSP
+WORKING_TIME_DEFAULT,Y,NONE,Y,,,,,,Shipment Working Day OSP
+LAST_INPUT_DATE,Y,NONE,N,,잠금 (EditButton:292),,기존행 SCP0096_Shipment_Working_Day_OSP:292 LockColumn,,Shipment Working Day OSP
+MEASURE,Y,NONE,N,,잠금 (EditButton:292),,기존행 SCP0096_Shipment_Working_Day_OSP:292 LockColumn,,Shipment Working Day OSP
+<DYNAMIC:LOOP>,,NONE,COND,,"RULES:[{""g"": ""(SELF~\""^W_\"" || SELF~\""^M_\"")"", ""lock"": ""Y"", ""ref"": ""SetLockSumColumn:408""}]",,기존행 SCP0096_Shipment_Working_Day_OSP:408 LockColumn,,Shipment Working Day OSP

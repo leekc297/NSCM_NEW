@@ -23,6 +23,7 @@ import {
   LBL,
   MENU_ID,
   MSG,
+  PACK_DASH_DATE_COLUMNS,
   RESPONSE_KEY,
   SHEETS,
   TAB_INDEX,
@@ -32,6 +33,13 @@ import styles from './StockOspPage.module.scss';
 import { useStockOspStore } from './useStockOspStore';
 import { isHoldRow } from './utils/stock-osp.editLock';
 import { buildSavePayload, callSavePack } from './utils/stock-osp.save';
+
+// 날짜값(YYYYMMDD / YYYY-MM-DD HH:mm:ss 등) → 'YYYY-MM-DD'. 8자리가 안 되면 원값 유지.
+const toDashDate = (v: unknown): unknown => {
+  const raw = typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+  const d = raw.replace(/[^0-9]/g, '').slice(0, 8);
+  return d.length === 8 ? `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}` : v;
+};
 
 // AS-IS GSCM.SCP.Forms.UIL SCP0041_StockOSP — 2 시트(Osp Stock 조회 / Pack Hold Stock HOLD행 편집).
 //   설계: .atlas/gscm-design/SCP0041/design/00~03 · convert-flow/{goal,plan}.md. 매핑: __asis-mapping__.md.
@@ -93,7 +101,16 @@ export const StockOspPage = ({ tabId, title }: PageProps<MENU_ID>) => {
   });
 
   const ospRows = useMemo<OspStockRow[]>(() => ospData?.[RESPONSE_KEY] ?? [], [ospData]);
-  const packRows = useMemo<PackHoldStockRow[]>(() => packData?.[RESPONSE_KEY] ?? [], [packData]);
+  // Pack 날짜 3컬럼은 YYYY-MM-DD 문자열로 맞춰 그리드 표시와 엑셀이 같은 값을 쓰게 한다(저장은 toYmd 로 8자리 변환).
+  const packRows = useMemo<PackHoldStockRow[]>(
+    () =>
+      (packData?.[RESPONSE_KEY] ?? []).map(r => {
+        const row = { ...r } as Record<string, unknown>;
+        for (const key of PACK_DASH_DATE_COLUMNS) row[key] = toDashDate(row[key]);
+        return row as PackHoldStockRow;
+      }),
+    [packData]
+  );
 
   // mount 1회 admin 컬럼 메타 fetch(양 시트) + keep-alive 탭 stale filters 자동발사 방지.
   //   + 개인화 조회조건 복원(F6 저장분, 1회) — 저장분 있으면 폼에 적용, 없으면 기본값 유지. 형제 파리티.

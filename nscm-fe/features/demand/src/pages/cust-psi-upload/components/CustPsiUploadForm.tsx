@@ -150,14 +150,10 @@ export const CustPsiUploadForm = ({
                         appearance='outlined'
                         priority='normal'
                         disabled={isDivRestricted}
-                        iconComponent={
-                          <FunctionSearchIcon
-                            appearance='lined'
-                            onClick={() => {
-                              if (!isDivRestricted) setOpenPrjByDivisionModal(true);
-                            }}
-                          />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={() => {
+                          if (!isDivRestricted) setOpenPrjByDivisionModal(true);
+                        }}
                       />
                     ),
                   }}
@@ -213,12 +209,8 @@ export const CustPsiUploadForm = ({
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon
-                            appearance='lined'
-                            onClick={() => setOpenModelByDivisionModal(true)}
-                          />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={() => setOpenModelByDivisionModal(true)}
                       />
                     ),
                   }}

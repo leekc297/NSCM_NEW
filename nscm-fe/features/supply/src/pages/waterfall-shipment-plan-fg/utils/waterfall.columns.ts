@@ -1,7 +1,7 @@
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 
 import {
-  type BUCKET_TYPE,
+  BUCKET_TYPE,
   FORCED_AXIS,
   PERIOD_COLUMN_REGEX,
   scaleOf,
@@ -35,9 +35,10 @@ export interface WaterfallTitleRow {
 export interface DynColMeta {
   binding: string;
   kind: DynKind;
-  large: string; // 1단 라벨 (LARGE_CLASS_LABEL_NAME = 월)
-  small: string; // 2단 라벨 (SMALL_CLASS_LABEL_NAME = 주 / ISO 는 MMDD_LABEL_NAME)
-  leaf: string; // 3단 라벨 (COLUMN_LABEL_NAME = 일)
+  large: string; // NotISO 1단 라벨 (LARGE_CLASS_LABEL_NAME = 월)
+  small: string; // NotISO 2단 라벨 (SMALL_CLASS_LABEL_NAME = 주)
+  leaf: string; // NotISO 3단(일) / ISO 2단(주차) 라벨 (COLUMN_LABEL_NAME)
+  mmdd: string; // ISO 1단 라벨 (MMDD_LABEL_NAME = 주차 날짜범위 'MM.DD ~ MM.DD')
   dayCode: string; // 주말 헤더색 판정용 ('SAT'/'SUN'/'')
   sort: number;
   seq: number;
@@ -107,7 +108,7 @@ export const buildStaticColumns = ({
     .filter((c): c is RawFlexGridColumnConfig => c !== undefined);
 };
 
-/** 기간 컬럼 메타 — TITLE SP 순서(= AS-IS 스프레드 컬럼 순서) 유지. ISO 는 MMDD_LABEL_NAME 을 2단 라벨로. */
+/** 기간 컬럼 메타 — TITLE SP 순서(= AS-IS 스프레드 컬럼 순서) 유지. ISO 는 mmdd(날짜범위) 별도 보존. */
 export const buildDynColMetas = (periodRows: WaterfallTitleRow[]): DynColMeta[] =>
   periodRows
     .map((row, seq) => {
@@ -118,8 +119,9 @@ export const buildDynColMetas = (periodRows: WaterfallTitleRow[]): DynColMeta[] 
         binding,
         kind,
         large: str(row.LARGE_CLASS_LABEL_NAME),
-        small: str(row.SMALL_CLASS_LABEL_NAME) || str(row.MMDD_LABEL_NAME),
+        small: str(row.SMALL_CLASS_LABEL_NAME),
         leaf: str(row.COLUMN_LABEL_NAME),
+        mmdd: str(row.MMDD_LABEL_NAME),
         dayCode: str(row.DAY_CODE),
         sort: num(row.SORT_ORDER_NO),
         seq,
@@ -140,8 +142,13 @@ export interface DynamicColumnInput {
 }
 
 /**
- * 3단 동적 컬럼 그룹 (1단 월 → 2단 주차/SUM → 3단 일자/SUM) — design 03 §3 R5.
- *   라벨은 TITLE SP 제공값(LARGE/SMALL/COLUMN_LABEL) 그대로, 합계 컬럼의 leaf 는 'SUM'.
+ * 3단 동적 컬럼 그룹 — design 03 §3 R5.
+ *   NotISO : 1단 월(LARGE) → 2단 주차(SMALL)/SUM → 3단 일자(COLUMN_LABEL)/SUM.
+ *   ISO(Only Weekly) : 월 병합 없이 ISO 주차마다 독립 컬럼. 각 컬럼이 자기 3단 span 을 가진다 —
+ *     1단 날짜범위(MMDD_LABEL_NAME 'MM.DD ~ MM.DD') · 2단 주차(COLUMN_LABEL_NAME 'W45') · 3단 'SUM'.
+ *     AS-IS InitSpreadDateColumnISO(SCP0016.cs:389-429) 1:1 — row0=cMMDD_LABEL_NAME, row1=cCOLUMN_LABEL_NAME,
+ *     row2=리터럴 "SUM". 자매 SCP0018 ISO 브랜치 미러. 합계 ISO SP 컬럼은 W_..._ISO 하나뿐(월 미분할).
+ *   라벨은 TITLE SP 제공값 그대로, 합계 컬럼의 3단 leaf 는 'SUM'.
  *   주의: 컬럼 정의에 height 를 넣지 않는다 — headerRowHeight prop 단일 출처(#93).
  */
 export const buildDynamicColumns = ({
@@ -151,12 +158,47 @@ export const buildDynamicColumns = ({
   scale,
 }: DynamicColumnInput): FlexGridColumnConfig[] => {
   if (metas.length === 0) return [];
+  const format = scale > 0 ? `#,##0.${'0'.repeat(scale)}` : '#,##0';
+
+  // Only Weekly(WEEKLY_ISO) — ISO 주차(W_..._ISO)만 독립 컬럼으로 (월 병합 안 함, AS-IS 등가).
+  if (bucket === BUCKET_TYPE.WEEKLY_ISO) {
+    return metas
+      .filter(m => m.kind === 'W' && isIsoWeek(m.binding))
+      .map(m => ({
+        header: m.mmdd || m.large || m.small || m.binding, // 1단 날짜범위(MMDD)
+        align: 'center' as const,
+        visible: true,
+        columns: [
+          {
+            header: m.leaf || m.small || 'SUM', // 2단 주차(W45)
+            align: 'center' as const,
+            visible: true,
+            columns: [
+              {
+                binding: m.binding,
+                header: 'SUM', // 3단 리터럴 SUM (AS-IS cs:428)
+                align: 'right' as const,
+                format,
+                // 1단 헤더가 날짜범위("MM.DD ~ MM.DD")라 폭이 좁으면 눌린다 — AS-IS colWidth=100(cs:418).
+                width: 100,
+                allowDragging: false,
+                allowMerging: false,
+                allowResizing: true,
+                allowSorting: false,
+                visible: baseVisibleOf(bucket, chkSum, m.kind, isIsoWeek(m.binding)),
+                _display: true,
+              },
+            ],
+          },
+        ],
+      }));
+  }
+
   type LeafCol = FlexGridColumnConfig & { binding: string };
   type SubGroup = { order: number; cols: LeafCol[] };
   type LargeBucket = { label: string; order: number; subs: Map<string, SubGroup> };
 
   const largeMap = new Map<string, LargeBucket>();
-  const format = scale > 0 ? `#,##0.${'0'.repeat(scale)}` : '#,##0';
 
   metas.forEach((m, idx) => {
     const largeKey = largeKeyOf(m.binding);

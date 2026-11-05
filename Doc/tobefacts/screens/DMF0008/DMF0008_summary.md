@@ -1,7 +1,7 @@
 # DMF0008 — To-Be Fact Pack 요약
 
-- page_key: `master/erp-edi-master` · feature: master · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 15 · 엔드포인트 호출 10 (미해결 1, 주석 속 0) · 이벤트 16 · 컴포넌트 사용 42 · 하드코딩 컬럼 0 · 메시지 20
+- page_key: `master/erp-edi-master` · feature: master · As-is Fact Pack 있음
+- 파일 15 · 엔드포인트 호출 10 (미해결 1, 주석 속 0) · 이벤트 16 · 컴포넌트 사용 43 · 하드코딩 컬럼 0 · 메시지 21
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
@@ -11,14 +11,14 @@
 | features/master/src/pages/erp-edi-master/components/ErpEdiMasterForm.tsx | component | 93 |
 | features/master/src/pages/erp-edi-master/components/ErpEdiMasterRepairGrid.tsx | component | 104 |
 | features/master/src/pages/erp-edi-master/components/ErpEdiMasterSalesSiteGrid.tsx | component | 230 |
-| features/master/src/pages/erp-edi-master/components/ErpEdiMasterSspmGrid.tsx | component | 231 |
+| features/master/src/pages/erp-edi-master/components/ErpEdiMasterSspmGrid.tsx | component | 235 |
 | features/master/src/pages/erp-edi-master/components/ErpEdiMasterSummaryGrid.tsx | component | 71 |
 | features/master/src/pages/erp-edi-master/erp-edi-master.constants.ts | constants | 66 |
 | features/master/src/pages/erp-edi-master/erp-edi-master.empty-rows.ts | other | 105 |
 | features/master/src/pages/erp-edi-master/erp-edi-master.types.ts | types | 15 |
 | features/master/src/pages/erp-edi-master/erp-edi-master.utils.ts | other | 80 |
 | features/master/src/pages/erp-edi-master/ErpEdiMaster.module.scss | style | 208 |
-| features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | page | 677 |
+| features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | page | 694 |
 | features/master/src/pages/erp-edi-master/index.ts | index | 2 |
 | features/master/src/pages/erp-edi-master/useErpEdiMasterStore.ts | store | 346 |
 | features/master/src/pages/erp-edi-master/__asis-mapping__.md | mapping | 161 |
@@ -27,13 +27,13 @@
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 1 | Y | ErpEdiMasterForm.tsx:28 |
-| DMF0008/summary//call-proc | hook | 1 | Y | ErpEdiMaster.tsx:133 |
-| DMF0008/repair//call-proc | hook | 1 | Y | ErpEdiMaster.tsx:141 |
-| DMF0008/salesSite//call-proc | hook | 1 | Y | ErpEdiMaster.tsx:153 |
-| DMF0008/sspm//call-proc | hook | 1 | Y | ErpEdiMaster.tsx:165 |
-| DMF0008/updateHistory//call-proc | hook | 1 | Y | ErpEdiMaster.tsx:175 |
-| /DMF0008/main/STATUS_UPDATE/call-proc | http | 1 | Y | ErpEdiMaster.tsx:241 |
-| /DMF0008/{route}/SAVE/call-proc | http | 1 | N | ErpEdiMaster.tsx:457 |
+| DMF0008/summary//call-proc | hook | 1 | Y | ErpEdiMaster.tsx:136 |
+| DMF0008/repair//call-proc | hook | 1 | Y | ErpEdiMaster.tsx:144 |
+| DMF0008/salesSite//call-proc | hook | 1 | Y | ErpEdiMaster.tsx:156 |
+| DMF0008/sspm//call-proc | hook | 1 | Y | ErpEdiMaster.tsx:168 |
+| DMF0008/updateHistory//call-proc | hook | 1 | Y | ErpEdiMaster.tsx:178 |
+| /DMF0008/main/STATUS_UPDATE/call-proc | http | 1 | Y | ErpEdiMaster.tsx:254 |
+| /DMF0008/{route}/SAVE/call-proc | http | 1 | N | ErpEdiMaster.tsx:472 |
 | /admin/menu/DMF0008/column | http | 1 | Y | useErpEdiMasterStore.ts:295 |
 | /admin/menu/DMF0008/search-conditions | http | 1 | Y | useErpEdiMasterStore.ts:319 |
 
@@ -61,13 +61,13 @@
 | DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/master/src/pages/erp-edi-master/components/ErpEdiMasterSalesSiteGrid.tsx | 209 |
 | grid | beginningEdit | handleBeginningEdit | addHandler | features/master/src/pages/erp-edi-master/components/ErpEdiMasterSspmGrid.tsx | 85 |
 | grid | pastingCell | handleBeginningEdit | addHandler | features/master/src/pages/erp-edi-master/components/ErpEdiMasterSspmGrid.tsx | 87 |
-| DataGrid | formatItem | handleFormatItem | jsx | features/master/src/pages/erp-edi-master/components/ErpEdiMasterSspmGrid.tsx | 169 |
-| DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/master/src/pages/erp-edi-master/components/ErpEdiMasterSspmGrid.tsx | 170 |
-| div | onClickCapture | <arrow> setFocusedSheet | jsx | features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | 590 |
-| ErpEdiMasterSummaryGrid | onDblClick | handleSummaryDoubleClick | jsx | features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | 602 |
-| div | onClickCapture | <arrow> setFocusedSheet | jsx | features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | 612 |
-| ErpEdiMasterRepairGrid | onDblClick | handleRepairDoubleClick | jsx | features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | 631 |
-| div | onClickCapture | <arrow> setFocusedSheet | jsx | features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | 644 |
+| DataGrid | formatItem | handleFormatItem | jsx | features/master/src/pages/erp-edi-master/components/ErpEdiMasterSspmGrid.tsx | 171 |
+| DataGrid | cellEditEnded | handleCellEditEnded | jsx | features/master/src/pages/erp-edi-master/components/ErpEdiMasterSspmGrid.tsx | 172 |
+| div | onClickCapture | <arrow> setFocusedSheet | jsx | features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | 605 |
+| ErpEdiMasterSummaryGrid | onDblClick | handleSummaryDoubleClick | jsx | features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | 617 |
+| div | onClickCapture | <arrow> setFocusedSheet | jsx | features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | 627 |
+| ErpEdiMasterRepairGrid | onDblClick | handleRepairDoubleClick | jsx | features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | 646 |
+| div | onClickCapture | <arrow> setFocusedSheet | jsx | features/master/src/pages/erp-edi-master/ErpEdiMaster.tsx | 659 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -97,6 +97,7 @@
 | TabWrapper | 1 |
 | ErpEdiMasterSalesSiteGrid | 1 |
 | ErpEdiMasterSspmGrid | 1 |
+| ProgressIndicator | 1 |
 
 ## 6. 하드코딩 Grid 컬럼
 (없음)
@@ -115,6 +116,7 @@
 | MSG00605 | 1 |
 | MSG00108 | 1 |
 | MSG00164 | 1 |
+| MSG00033 | 1 |
 | MSG00096 | 1 |
 | MSG00113 | 1 |
 | MSG00618 | 3 |
@@ -122,7 +124,7 @@
 | MSG00004 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0004(6), DMF0008(2)
+- 화면ID: DMF0004(6), DMF0008(2), DMF0005(1)
 - SP/PKG: DMF0000_GET_UPDATE_HISTORY(4), DMF0008_GET_SALES_SITE(3), DMF0008_GET_EDI_MST_SUMMARY(2), DMF0008_GET_EDI_MST_REPAIR(2), DMF0008_GET_SALES_SITE_PROJECT_MODEL(1), P_MESSAGE_CURSOR(1), DMF0008_SAVE_SALES_SITE_EDI_REPAIR(1), DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR(1), PR_DM_DNM_EDI_CALLOFF_STATUS(1), P_DMF0008_GET_EDI_MST_REPAIR(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

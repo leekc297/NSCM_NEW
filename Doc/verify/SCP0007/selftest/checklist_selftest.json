@@ -1,0 +1,31 @@
+{
+ "menu_id": "SCP0007",
+ "generated": "2026-10-28 16:52:52",
+ "kinds": [
+  "C2"
+ ],
+ "report": [
+  {
+   "kind": "C2",
+   "target": "*",
+   "detail": "콤보 후보 고정+첫 후보 누락(원천 값에 따른 후보 재구성 안 함) — dataMap 7개",
+   "verdict": "미검출",
+   "why": "주입했는데 3행 PASS 유지(검사기 결함): [V-05550393] TO_SITE PLANT 'CN00732500_40-P' → INCOTERMS_SSP 후보 10·편집=true / SALES 'APRO_KR_ANY' → 후보 10·편집=false · 편집 분기 후보 10 ↔ AS- | [V-3fb6d815] TO_SITE PLANT 'CN00732500_40-P' → INCOTERMS_SSP 후보 10·편집=true / SALES 'APRO_KR_ANY' → 후보 10·편집=false · 편집 분기 후보 10 ↔ AS- | [T-07a4cc84] TO_SITE PLANT 'CN00732500_40-P' → INCOTERMS 후보 10·편집=false / SALES 'APRO_KR_ANY' → 후보 10·편집=true · 편집 분기 후보 10 ↔ AS-IS d",
+   "rows": [
+    "V-05550393",
+    "V-3fb6d815",
+    "T-751cc7d9",
+    "T-07a4cc84",
+    "T-94768d46",
+    "T-886e7afe",
+    "T-8ffb271e",
+    "T-fa2da7d9",
+    "T-23891fa5",
+    "T-4411a3ae",
+    "T-ea39d7b2",
+    "T-8d54c2b8",
+    "T-82cd3d5c"
+   ]
+  }
+ ]
+}

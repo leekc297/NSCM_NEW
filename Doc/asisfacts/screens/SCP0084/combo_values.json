@@ -1,0 +1,137 @@
+{
+ "screen": "SCP0084",
+ "generated": "2026-11-05 06:24:52",
+ "vars": {
+  "dtMyDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Division",
+   "targets": [
+    "SEARCH:cboDivision"
+   ],
+   "ref": "SCP0084_LongTermStock.cs:149 ← SCP0084_LongTermStock.cs:40",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtPlantByGroup": {
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "code": "PlantByGroup1",
+   "targets": [
+    "SEARCH:clbPlant"
+   ],
+   "ref": "SCP0084_LongTermStock.cs:181 ← SCP0084_LongTermStock.cs:42",
+   "rows": [
+    {
+     "CODE": "AZ00",
+     "NAME": "AZ Arizona Mobile Prod"
+    },
+    {
+     "CODE": "GM00",
+     "NAME": "GM Ohio Auto Prod"
+    },
+    {
+     "CODE": "GM01",
+     "NAME": "GM Tennessee Auto Prod"
+    },
+    {
+     "CODE": "HD00",
+     "NAME": "HD Ohio Auto/ESS Prod"
+    },
+    {
+     "CODE": "HG00",
+     "NAME": "HG Georgia Auto Prod"
+    },
+    {
+     "CODE": "HM00",
+     "NAME": "HM Karawang Auto Prod"
+    },
+    {
+     "CODE": "HQ06",
+     "NAME": "HQ OC1 Mobile Prod"
+    },
+    {
+     "CODE": "HQ07",
+     "NAME": "HQ OC1 Auto Prod"
+    },
+    {
+     "CODE": "HQ08",
+     "NAME": "HQ OC1 ESS Prod"
+    },
+    {
+     "CODE": "HQ10",
+     "NAME": "HQ OC2 Mobile Prod"
+    },
+    {
+     "CODE": "HQ11",
+     "NAME": "HQ OC2 Auto Prod"
+    },
+    {
+     "CODE": "MI00",
+     "NAME": "MI Michigan Holland Auto Prod"
+    },
+    {
+     "CODE": "MI01",
+     "NAME": "MI Michigan Holland ESS Prod"
+    },
+    {
+     "CODE": "MI02",
+     "NAME": "MI Michigan LS Auto/ESS Prod"
+    },
+    {
+     "CODE": "MI03",
+     "NAME": "MI Michigan HP Auto Prod"
+    },
+    {
+     "CODE": "MI04",
+     "NAME": "MI Arizona Phoenix ESS Prod"
+    },
+    {
+     "CODE": "NA00",
+     "NAME": "NA Nanjing Auto Prod"
+    },
+    {
+     "CODE": "NB01",
+     "NAME": "NB Nanjing Auto Prod"
+    },
+    {
+     "CODE": "NB02",
+     "NAME": "NB Nanjing ESS Prod"
+    },
+    {
+     "CODE": "NJ01",
+     "NAME": "NJ Nanjing Mobile Prod"
+    },
+    {
+     "CODE": "NJ02",
+     "NAME": "NJ Nanjing ESS Prod"
+    },
+    {
+     "CODE": "ST00",
+     "NAME": "OT Ontario Auto/ESS Prod"
+    },
+    {
+     "CODE": "VP_GM01",
+     "NAME": "virtual plant(GM01)"
+    },
+    {
+     "CODE": "VP_HD00",
+     "NAME": "virtual plant(HD00)"
+    },
+    {
+     "CODE": "VP_MI02",
+     "NAME": "virtual plant(MI02)"
+    },
+    {
+     "CODE": "VP_ST00",
+     "NAME": "virtual plant(ST00)"
+    },
+    {
+     "CODE": "WA00",
+     "NAME": "WA WRO Auto Prod"
+    },
+    {
+     "CODE": "WA01",
+     "NAME": "WA WRO ESS Prod"
+    }
+   ]
+  }
+ }
+}

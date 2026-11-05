@@ -51,6 +51,7 @@ export const LongTermStockForm = ({ onSearch }: Props) => {
   const set = useLongTermStockStore(state => state.setSearchParams);
   const openSearchArea = useLongTermStockStore(state => state.isOpenSearchArea);
   const setNoDivisionAuth = useLongTermStockStore(state => state.setNoDivisionAuth);
+  const setAuthDivisions = useLongTermStockStore(state => state.setAuthDivisions);
 
   // Division = Division_SCP(권한필터 SQL 내장, @mnuId='SCP0084') / Plant = PlantByGroup1_SCP_ALL
   //   (권한무시 전체, 파라미터 없음). Plant 는 서버 재조회형이 아니라 전체를 1회 받아 클라 필터한다
@@ -132,15 +133,27 @@ export const LongTermStockForm = ({ onSearch }: Props) => {
 
   // Plant 클라 cascade 필터 — 선택 division 의 DIVISION_ID 만 남긴다(재조회 없음). Division
   //   미선택(ALL) 이면 전체 노출(AS-IS 빈 IN → 전체 재현, design 02 §4 상위 미선택 정책).
+  // 기존 로직 주석 보존 (2026-10-22) 시작
+  // const plantOptions = useMemo(() => {
+  //   const selected = toSelectedSet(sc.divisionId);
+  //   const filtered = (plantsAllRaw ?? []).filter(r => {
+  //     if (str(r.CODE).trim() === '') return false;
+  //     if (selected.size === 0) return true;
+  //     return selected.has(str(r.DIVISION_ID));
+  //   });
+  //   return toOptions(filtered);
+  // }, [plantsAllRaw, sc.divisionId]);
+  // 기존 로직 주석 보존 (2026-10-22) 끝
+  // Division ALL이면 Division 콤보 후보(권한, EE 제외) 전체로 필터 (AS-IS cs:175~179)
   const plantOptions = useMemo(() => {
     const selected = toSelectedSet(sc.divisionId);
+    const allowed = selected.size > 0 ? selected : new Set(divisionOptions.map(o => o.value));
     const filtered = (plantsAllRaw ?? []).filter(r => {
       if (str(r.CODE).trim() === '') return false;
-      if (selected.size === 0) return true;
-      return selected.has(str(r.DIVISION_ID));
+      return allowed.has(str(r.DIVISION_ID));
     });
     return toOptions(filtered);
-  }, [plantsAllRaw, sc.divisionId]);
+  }, [plantsAllRaw, sc.divisionId, divisionOptions]);
 
   // Division 권한 게이트(R8, cs:146~147) — Division_SCP 결과 0건이면 조회영역 disable + MSG00097.
   const noDivisionAuth = divisionsRaw !== undefined && divisionOptions.length === 0;
@@ -153,6 +166,13 @@ export const LongTermStockForm = ({ onSearch }: Props) => {
   useEffect(() => {
     setNoDivisionAuth(noDivisionAuth);
   }, [noDivisionAuth, setNoDivisionAuth]);
+
+  // 권한 Division 코드를 스토어에 동기화 — setFilters 가 'ALL' 을 이 코드 열거로 펼쳐 조회한다
+  //   (권한 밖 division 누수 차단, useLongTermStockStore setFilters 주석 참조).
+  const authDivisionKey = divisionOptions.map(o => o.value).join(',');
+  useEffect(() => {
+    setAuthDivisions(authDivisionKey ? authDivisionKey.split(',') : []);
+  }, [authDivisionKey, setAuthDivisions]);
 
   return (
     <SearchArea

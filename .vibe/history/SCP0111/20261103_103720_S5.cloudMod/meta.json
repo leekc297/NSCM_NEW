@@ -1,0 +1,17 @@
+{
+  "id": "SCP0111",
+  "task": "S5.cloudMod",
+  "scope": "none",
+  "note": "cloud_pkg.py SCP0111 --mode auto",
+  "start": "2026-11-03T10:37:20+09:00",
+  "end": "2026-11-03T10:37:37+09:00",
+  "exit": 0,
+  "sources": [],
+  "source": "menu",
+  "label": "클라우드 이관 패키지(수정본) — 직전 이관 이후 바뀐 것만 · 범위 = 작업 모드(DB MODE: DB·META / UI/DB MODE: + FE·BE)",
+  "text": "",
+  "user": "gyucheol_lee",
+  "host": "P2605LN0006",
+  "afterMode": "end",
+  "changed": []
+}

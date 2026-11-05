@@ -54,20 +54,29 @@ export const DemandGroupMasterForm = ({ onSearch }: DemandGroupMasterFormProps) 
     [operationGroupRows]
   );
 
-  // AS-IS cboOperationGroup 은 RemoveAt(2) 후 바인딩만 하고 SelectedIndex 를 -1 로 돌리지 않아
-  // WinForms 기본 동작대로 첫 항목(Pack)이 항상 선택돼 있다(cs:201-204). 동일하게 최초 로드 시 1회 기본값 반영.
+  // AS-IS cboDivision / cboOperationGroup 은 바인딩 후 SelectedIndex 를 -1 로 돌리지 않아 각각 첫 항목이
+  // 항상 선택돼 있다(Division='81' cs:166-197 / OperationGroup=Pack cs:201-204). 최초 로드 시 1회 기본값
+  // 반영하되, 비어 있는 조건을 **한 번의 setSearchParams 로 함께** 세팅한다.
+  //   금지: Division 과 OperationGroup 을 분리된 effect 로 세팅하지 말 것 — 두 콤보가 같은 렌더에서 로드되면
+  //   operationGroup effect 가 먼저 'P' 를 넣은 뒤, division effect 의 setSearchParams({divisionId}) 가
+  //   store 의 division-변경 리셋을 타 operationGroup 을 '' 로 되돌린다. 그 사이 재렌더가 없어
+  //   operationGroup effect 의 dep(searchParams.operationGroup)이 ''→'' 로 불변이라 재실행되지 않고
+  //   기본값이 빈 채로 남는다(개발서버 프로덕션 빌드 실사고 2026-10-29. 로컬은 StrictMode/로딩 타이밍에 가려짐).
+  //   한 호출에 둘을 넘기면 store 가 그 필드를 리셋에서 보존한다(useDemandGroupMasterStore 참조).
   useEffect(() => {
-    if (searchParams.operationGroup || operationGroupOptions.length === 0) return;
-    setSearchParams({ operationGroup: String(operationGroupOptions[0].value ?? '') });
-  }, [operationGroupOptions, searchParams.operationGroup, setSearchParams]);
-
-  // AS-IS cboDivision 도 동일하게 SelectedIndex 를 -1 로 돌리지 않아, '81' 포함만 남기고
-  // CODE Asc 정렬한 리스트의 첫 항목('81')이 항상 선택돼 있다(cs:166-197). 조회를 쏘는 게 아니라
-  // 콤보 기본값만 반영 — 최초 로드 시 1회.
-  useEffect(() => {
-    if (searchParams.divisionId || divisionOptions.length === 0) return;
-    setSearchParams({ divisionId: String(divisionOptions[0].value ?? '') });
-  }, [divisionOptions, searchParams.divisionId, setSearchParams]);
+    if (divisionOptions.length === 0 || operationGroupOptions.length === 0) return;
+    const patch: { divisionId?: string; operationGroup?: string } = {};
+    if (!searchParams.divisionId) patch.divisionId = String(divisionOptions[0].value ?? '');
+    if (!searchParams.operationGroup)
+      patch.operationGroup = String(operationGroupOptions[0].value ?? '');
+    if (patch.divisionId !== undefined || patch.operationGroup !== undefined) setSearchParams(patch);
+  }, [
+    divisionOptions,
+    operationGroupOptions,
+    searchParams.divisionId,
+    searchParams.operationGroup,
+    setSearchParams,
+  ]);
 
   // L1: 조회가능 Division 권한 0건이면 조회영역 비활성(AS-IS SetDivisionAuthCheck cs L194-195).
   const isAuthDenied = divisionOptions.length === 0;
@@ -111,7 +120,13 @@ export const DemandGroupMasterForm = ({ onSearch }: DemandGroupMasterFormProps) 
                     disabled={isAuthDenied}
                     value={searchParams.operationGroup}
                     options={operationGroupOptions}
-                    onChange={(_, value) => setSearchParams({ operationGroup: value })}
+                    onChange={(_, value) => {
+                      // Operation Group 변경도 그리드를 초기화하므로 Division 과 같이 편집중이면 확인 후 바꾼다.
+                      void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+                        if (!ok) return;
+                        setSearchParams({ operationGroup: value });
+                      });
+                    }}
                   />
                 )}
               />
@@ -128,7 +143,6 @@ export const DemandGroupMasterForm = ({ onSearch }: DemandGroupMasterFormProps) 
                     disabled={isAuthDenied}
                     value={searchParams.groupName}
                     onChange={e => setSearchParams({ groupName: e.target.value })}
-                    onKeyDown={e => e.key === 'Enter' && onSearch()}
                   />
                 )}
               />

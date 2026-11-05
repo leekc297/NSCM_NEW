@@ -15,7 +15,8 @@
 5. **정직 보고**: 검증 미실행·미확인·환경 파손은 PASS 가 아니라 **ERROR** 로 보고 (hook #126). 완료는 스스로 선언하지 않는다 — 게이트 통과 증빙 첨부.
 6. **DB 작업 = 새로고침한 최신 원문 기준** (hook #152, 실행 hook 으로 강제). 운영/사내 DB 적용은 승인된 절차(T18)만.
 7. **파괴적 Git 작업**(force-push / filter-branch / reset --hard) 전 사용자 승인 의무.
-8. **보완 = DB 객체 수정 우선** (사용자 상시 지시 2026-10-15). 가능하면 PKG/SP/메타 등 DB 객체로 해결한다. FE(`nscm-fe`)·BE(`nscm-be`) 수정이 필요하면 **직접 수정하지 않고 가이드만 제공**(파일:라인 · 변경 전/후 · 이유 · 검증법).
+8. **보완 = DB 객체 수정 우선** (사용자 상시 지시 2026-10-15). 가능하면 PKG/SP/메타 등 DB 객체로 해결한다. FE(`nscm-fe`)·BE(`nscm-be`) 직접 수정 여부는 **Vibe_Manager 환경설정 작업 모드**(`tools/Harness/harness.json` repairScope, 2026-11-02)를 따른다: **UI/DB MODE**(DB_FE) = 직접 수정 / **DB MODE**(DB_ONLY) = 직접 수정 금지, 가이드만(파일:라인 · 변경 전/후 · 이유 · 검증법 — 실행 hook `check-work-mode` 가 차단). CheckList 는 모드와 무관하게 전체 수행.
+9. **감·예측 답변 금지** (사용자 상시 지시 2026-10-31 · 룰/hook/하네스 공통, hook #126 §0-1). 수치·진행율·소요 시간·원인·결과를 감이나 예측으로 답하지 않는다. 답은 이번에 실행한 측정·로그·파일·DB 조회 결과만 인용하고 그 출처와 시각을 함께 적는다. 측정하지 못했으면 '미측정'이라고 쓰고 측정 방법을 제시한다. '~할 것으로 기대', '약 N분', 'N% 쯤' 같은 추정 표현과, 원인을 확인하지 않은 단정을 금지한다. 진행율은 분모·분자를 명시한 실측값만 쓴다(정합검증 = tools/Harness/verify/doc_proof.py 출력).
 
 ## 2. 응답 모드 (속도 ↔ 누락 0 양립의 핵심)
 | 모드 | 판별 | 행동 |
@@ -43,7 +44,7 @@ Step 4  T01/T01M 이면 Read: Doc/_rules_consolidation/UI_MANDATORY_CHECKLIST.md
 ①상대경로 import(alias 사용) ②feature 간 직접 import ③`console.log`/`System.out.println` ④`any` ⑤inline style ⑥Controller 에서 SQL 직접 ⑦`@Autowired` 필드 주입 ⑧하드코딩 SQL ID ⑨`ResponseEntity` 직접(→`successResponseEntity`) ⑩MSSQL 키워드 잔존(DATEADD/CHARINDEX/STRING_SPLIT/GETDATE/ISNULL/IIF/N'/NOLOCK) ⑪As-Is `validation.md`/`expressions.md` 1건이라도 누락(`__asis-mapping__.md` 필수).
 
 ## 5. 실행 hook (`.claude/settings.json` — AI 의지와 무관하게 자동 차단)
-`block-dev-commands`(Bash) · `check-rules-read`(Write/Edit 전 — 필수 hook 미열람 시 차단, 2026-10-12 신설) · `check-dbeaver-sql` · `check-notnull-insert` · `check-fe-import` · `check-ui-gates` · `check-meta-sql` · `check-db-fresh-source`(Write/Edit 후) · `attach-context`(프롬프트 키워드 → 룰 자동 첨부, LITE 판별 포함). 상세 `.claude/hooks/README.md`.
+`block-dev-commands`(Bash) · `check-work-mode`(Write/Edit/Bash 전 — DB MODE 에서 FE·BE 수정 차단, 2026-11-02 신설) · `check-rules-read`(Write/Edit 전 — 필수 hook 미열람 시 차단, 2026-10-12 신설) · `check-dbeaver-sql` · `check-notnull-insert` · `check-fe-import` · `check-ui-gates` · `check-meta-sql` · `check-db-fresh-source`(Write/Edit 후) · `attach-context`(프롬프트 키워드 → 룰 자동 첨부, LITE 판별 포함). 상세 `.claude/hooks/README.md`.
 
 ## 6. 구 CLAUDE.md 섹션 → 이동 위치
 | 구 섹션 | 지금 위치 |

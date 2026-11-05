@@ -1,0 +1,93 @@
+{
+ "menu_id": "DMF0035",
+ "asis_id": "DMF0035",
+ "area": "DM",
+ "generated": "2026-11-05 06:14:38",
+ "division_cond": {
+  "present": true,
+  "labels": [
+   "Division*"
+  ]
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "DM Admin": "hongjae.kim",
+   "DM Planner": "eunah.koo",
+   "DM Viewer": "yooah.chung",
+   "SCP Planner": "dodae"
+  },
+  "81": {
+   "DM Admin": "jiwon.park",
+   "DM Planner": "bpark416",
+   "DM Planner (W/S)": "jaehyeok",
+   "DM Viewer": "park6151",
+   "SCP Planner": "bottle"
+  },
+  "82": {
+   "DM Admin": "wonqthanq",
+   "DM Planner": "ys_cho",
+   "DM Planner (W/S)": "miyeong.lee",
+   "DM Viewer": "yeonjusung",
+   "SCP Planner": "coeogus"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "40",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 최다 40(60칸 · 분포 {'40': 60, '82': 6})"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [
+   "SAVE",
+   "SEARCH"
+  ],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [
+  {
+   "label": "Version",
+   "source": "AS-IS controls 라벨 *"
+  },
+  {
+   "label": "Period",
+   "source": "AS-IS controls 라벨 *"
+  },
+  {
+   "label": "Division",
+   "source": "AS-IS controls 라벨 *"
+  }
+ ],
+ "popup_conds": [
+  {
+   "label": "Version*",
+   "popup": "",
+   "source": "AS-IS controls 라벨"
+  }
+ ],
+ "bucket_cond": "Bucket",
+ "observed": {
+  "source": "e2e_results.json 없음",
+  "max_rows_after_search": null,
+  "zero_row_failures": []
+ },
+ "warnings": []
+}

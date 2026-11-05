@@ -864,6 +864,9 @@ interface ProjectFieldProps extends PopupFieldProps {
   // 체크박스 선택 모드(재기동 시 선택값 carry 없음).
   multiCheckbox?: boolean;
   disabled?: boolean; // ⭐ division 기준 비활성 (예: DMF0048 Division='40' → Project 비활성)
+  // 라벨 코드 override. 기본은 LBL00507('Project'). 화면별 다른 표기 전용(예: DMF0045 = LBL00012 'PJT').
+  //   미지정 시 기존 동작 유지(타 화면 영향 없음).
+  labelCode?: string;
 }
 export const ProjectField = (props: ProjectFieldProps) => {
   const L = useL();
@@ -879,12 +882,13 @@ export const ProjectField = (props: ProjectFieldProps) => {
     gridSize,
     multiCheckbox,
     disabled,
+    labelCode,
   } = props;
   return (
     <Grid size={gridSize ?? 4}>
       <FormItem
         className={commonStyles.formItem}
-        label={L('LBL00507', 'Project')}
+        label={L(labelCode ?? 'LBL00507', 'Project')}
         labelAlign='right'
         render={() => (
           <PopupSearchInput

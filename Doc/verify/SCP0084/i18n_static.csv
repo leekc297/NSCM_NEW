@@ -1,0 +1,11 @@
+﻿menu_id,kind,where,text
+SCP0084,FE,nscm-fe/features/supply/src/pages/long-term-stock/long-term-stock.constants.ts:46,비대상
+SCP0084,FE,nscm-fe/features/supply/src/pages/long-term-stock/long-term-stock.constants.ts:47,장기 징후
+SCP0084,FE,nscm-fe/features/supply/src/pages/long-term-stock/long-term-stock.constants.ts:48,장기
+SCP0084,FE,nscm-fe/features/supply/src/pages/long-term-stock/hooks/useLongTermStockValidation.ts:19,"${t(LBL.MONTH, 'Month')}: ${t('MSG00013', '_필수 입력 항목입니다.')}"
+SCP0084,DB,PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK,저장품
+SCP0084,DB,PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK,원부자재
+SCP0084,DB,PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK,상품
+SCP0084,DB,PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK,반제품
+SCP0084,DB,PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK,제품
+SCP0084,DUP,"MSG00002,MSG00606",[EN] Saved successfully.

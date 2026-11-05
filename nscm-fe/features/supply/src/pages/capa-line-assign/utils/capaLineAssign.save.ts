@@ -119,8 +119,19 @@ export const buildAssignSavePayload = (
   return payload;
 };
 
-/** `SOP_DT` 는 그리드에 `YYYY-MM-DD` 로 있고 저장은 `YYYYMMDD` 8자리다(cs:5194-5204 / S-8). */
+/**
+ * `SOP_DT` 는 저장 시 `YYYYMMDD` 8자리다(cs:5194-5204 / S-8).
+ * 주의: 시트마다 셀 컨트롤 타입이 다르다 — SOP_ASSEMBLY 는 `FPDateText`(마스크 텍스트 → 문자열),
+ *   SOP_ELTR 는 `FPDate`(InputDate 달력 → JS Date 객체)다. Date 는 `str()` 가 ''로 떨어뜨려
+ *   날짜를 입력해도 빈값이 전송되던 버그가 있어, Date 를 먼저 YYYYMMDD 로 정형한다.
+ */
 export const toSopDate = (value: unknown): string => {
+  if (value instanceof Date)
+    return (
+      `${value.getFullYear()}` +
+      `${String(value.getMonth() + 1).padStart(2, '0')}` +
+      `${String(value.getDate()).padStart(2, '0')}`
+    );
   const digits = str(value).replace(/-/g, '');
   return digits.length >= 8 ? digits.slice(0, 8) : '';
 };

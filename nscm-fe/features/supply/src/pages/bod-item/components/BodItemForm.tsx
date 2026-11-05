@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
@@ -36,6 +38,7 @@ export const BodItemForm = ({ onSearch, onOpenItemSearch, showPlanGroup }: BodIt
 
   const searchParams = useBodItemStore(state => state.searchParams);
   const setSearchParams = useBodItemStore(state => state.setSearchParams);
+  const setAllowedDivisionIds = useBodItemStore(state => state.setAllowedDivisionIds);
   const openSearchArea = useBodItemStore(state => state.isOpenSearchArea);
 
   const [divisions, sites, planGroups, incoterms, transModes] = useTabComboQueries({
@@ -47,6 +50,18 @@ export const BodItemForm = ({ onSearch, onOpenItemSearch, showPlanGroup }: BodIt
       { comboId: COMBO_ID.LOOKUP_COMMON, lookupType: LOOKUP_TYPE.TRANSPORT_MODE, mnuId: MENU_ID },
     ],
   });
+
+  // Division_SCP 는 EE(전극) 사업부 포함 → ATTRIBUTE3='EE' 제외(AS-IS GetDivisionWithoutEE).
+  const divisionOptions =
+    divisions
+      ?.filter(item => item.ATTRIBUTE3 !== 'EE')
+      .map(item => ({ label: item.NAME, value: item.CODE })) ?? [];
+  // 권한 Division 코드를 스토어에 동기화 — setFilters 가 'ALL' 을 이 코드 열거로 펼쳐 조회한다
+  //   (Form Search·툴바 SEARCH 핫키 모두 handleSearch→setFilters 로 수렴, useBodItemStore 참조).
+  const allowedDivisionIdsKey = divisionOptions.map(option => option.value).join(',');
+  useEffect(() => {
+    setAllowedDivisionIds(allowedDivisionIdsKey ? allowedDivisionIdsKey.split(',') : []);
+  }, [allowedDivisionIdsKey, setAllowedDivisionIds]);
 
   return (
     <SearchArea
@@ -67,12 +82,7 @@ export const BodItemForm = ({ onSearch, onOpenItemSearch, showPlanGroup }: BodIt
                   multiple
                   allOption
                   value={searchParams.divisionId}
-                  // Division_SCP 는 EE(전극) 사업부 포함 → ATTRIBUTE3='EE' 제외(AS-IS GetDivisionWithoutEE).
-                  options={
-                    divisions
-                      ?.filter(item => item.ATTRIBUTE3 !== 'EE')
-                      .map(item => ({ label: item.NAME, value: item.CODE })) ?? []
-                  }
+                  options={divisionOptions}
                   onChange={(_, option) => setSearchParams({ divisionId: option })}
                 />
               )}

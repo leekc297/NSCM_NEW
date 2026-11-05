@@ -1,0 +1,89 @@
+{
+  "menuId": "SCP0084",
+  "screenName": "LongTermStock",
+  "feature": "supply",
+  "pageDir": "long-term-stock",
+  "routePath": "supply/long-term-stock",
+  "sheets": [
+    {
+      "sheetName": "Long Term Stock",
+      "rule": "META+코드연결",
+      "columns": 59,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "SCP.SCP0084_GET_LONG_TERM_STOCK",
+      "asis_sp": "SCP0084_GET_LONG_TERM_STOCK",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "Find_Data"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK",
+      "sheet": "Long Term Stock",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0084_GET_MONTH_RANGE",
+      "asis_sp": "SCP0084_GET_MONTH_RANGE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetMonthRange"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0084.P_SCP0084_GET_MONTH_RANGE",
+      "sheet": "Long Term Stock",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "biz:AppService.GeneralRunProcedureCustomTable",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "SaveData_Memo"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0084.P_",
+      "sheet": "Long Term Stock",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP\\Report\\SCP0084_LongTermStock#SaveLongTermStockMemo",
+      "asis_sp": "SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET",
+      "status": "MATCH_PATTERN",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData_Memo"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0084.P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET",
+      "sheet": "Long Term Stock",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SCP.PR_SCM_SYS_LOG_BATCH",
+      "asis_sp": "PR_SCM_SYS_LOG_BATCH",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton",
+        "button:ExcelButton"
+      ],
+      "methods": [
+        "SCM_SYS_LOG_BATCH"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0084.P_PR_SCM_SYS_LOG_BATCH",
+      "sheet": "Long Term Stock",
+      "btn": "ACTION",
+      "allowed_gap": "화면 사용 로그 → BE 공통(Aspect/LogController) — 화면 코드 대응 없음"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

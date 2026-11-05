@@ -442,13 +442,15 @@ export const SalesPlanForm = ({
           />
           <Grid size={9}>
             <FormItem
-              label={t('LBL00687', '_Sum')}
+              label={' '}
               labelAlign='right'
               className={commonStyles.formItem}
               render={() => (
-                <div className={commonStyles.customCheckbox}>
-                  <Checkbox checked={sc.sumYn} onChange={checked => set({ sumYn: checked })} />
-                </div>
+                <Checkbox
+                  labelText={t('LBL00687', '_Sum')}
+                  checked={sc.sumYn}
+                  onChange={checked => set({ sumYn: checked })}
+                />
               )}
             />
           </Grid>

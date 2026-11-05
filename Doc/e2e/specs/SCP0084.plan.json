@@ -1,0 +1,453 @@
+{
+  "id": "SCP0084",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0084",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Plant",
+    "Long Term Type",
+    "Month"
+  ],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "LongTermStock",
+  "routePath": "supply/long-term-stock",
+  "asisName": "LongTermStock",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "Div → Div. · 명칭",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant",
+      "lbl": "LBL00030",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlant",
+      "tobeLabel": "Plant",
+      "catalog": "Plant → Plant",
+      "labels": [
+        "Plant"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "longTermType",
+      "label": "Long Term Type",
+      "lbl": "LBL00067",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboLongTermType",
+      "tobeLabel": "Long Term Type",
+      "catalog": "Long Term Type → Long Term Type",
+      "labels": [
+        "Long Term Type"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "monthPicker",
+      "label": "Month",
+      "lbl": "LBL00066",
+      "kind": "single",
+      "component": "DatePickerCalendar",
+      "comboId": "",
+      "popup": false,
+      "asis": "monthPicker",
+      "tobeLabel": "Month",
+      "catalog": "Month → Month · [검토: 기존유지 or Period로 변경]",
+      "labels": [
+        "Month"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "Long-term stock",
+  "asisMapping": "features\\supply\\src\\pages\\long-term-stock\\__asis-mapping__.md",
+  "buttons": [],
+  "mainSheets": [
+    {
+      "name": "Long Term Stock",
+      "key": "LONG_TERM_STOCK",
+      "labels": [
+        "Amount",
+        "AMOUNT KRW",
+        "Amount",
+        "CHARG",
+        "Currency",
+        "Devaluation Age",
+        "DIV",
+        "Q'ty(Cell)",
+        "Q'ty(All)",
+        "Exchange Rate",
+        "소진방안 유형",
+        "소진방안 상",
+        "EXTH_TP_CTN",
+        "GPLM Cell Conversion factor",
+        "GPLM Cell Model",
+        "Material",
+        "Description",
+        "Item Type",
+        "Unit",
+        "MDM class_Lv1",
+        "MDM class_Lv2",
+        "MDM class_Lv3",
+        "MDM class_Lv4",
+        "Amount(KRW)",
+        "Amount(KRW)",
+        "Quantity",
+        "Quantity",
+        "Long term Type",
+        "MDM Project Nick name",
+        "Memo",
+        "No usage in 3M",
+        "발생사유 유형",
+        "Test OCC_RSN_CD",
+        "발생사유 상세",
+        "PIC",
+        "Plant Site",
+        "Plant",
+        "Material Group",
+        "Process Group",
+        "QTY_1"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "SCP0084_GET_LONG_TERM_STOCK",
+      "sheet": "Long Term Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0084.P_SCP0084_GET_LONG_TERM_STOCK",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0084_GET_MONTH_RANGE",
+      "sheet": "Long Term Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0084.P_SCP0084_GET_MONTH_RANGE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Long Term Stock",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0084.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET",
+      "sheet": "Long Term Stock",
+      "btn": "SAVE",
+      "status": "MATCH_PATTERN",
+      "candidate": "PKG_SCP0084.P_SCP0084_SAVE_LONG_TERM_STOCK_MEMO_ROW_DATASET",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "PR_SCM_SYS_LOG_BATCH",
+      "sheet": "Long Term Stock",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0084.P_PR_SCM_SYS_LOG_BATCH",
+      "entries": [
+        "button:SaveButton",
+        "button:ExcelButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Long Term Stock": {
+      "40": [
+        "YY.MM",
+        "DIV",
+        "Plant Site",
+        "Plant",
+        "Material",
+        "Description",
+        "Unit",
+        "Long term Type",
+        "Item Type",
+        "Process Group",
+        "Material Group",
+        "GPLM Cell Model",
+        "MDM Project Nick name",
+        "Extra Spec",
+        "GPLM Cell Conversion factor",
+        "MDM class_Lv1",
+        "MDM class_Lv2",
+        "MDM class_Lv3",
+        "MDM class_Lv4",
+        "Valuation class",
+        "Devaluation Age",
+        "Quantity",
+        "Amount(KRW)",
+        "Unit Price(KRW)",
+        "Currency",
+        "Amount",
+        "Unit Price",
+        "Exchange Rate",
+        "Memo",
+        "PIC",
+        "발생사유 유형",
+        "발생사유 상세",
+        "소진방안 유형",
+        "소진방안 상",
+        "QTY_1",
+        "QTY_2",
+        "QTY_3",
+        "QTY_4",
+        "QTY_5",
+        "QTY_6"
+      ],
+      "81": [
+        "YY.MM",
+        "DIV",
+        "Plant Site",
+        "Plant",
+        "Material",
+        "Description",
+        "Unit",
+        "Long term Type",
+        "Item Type",
+        "Process Group",
+        "Material Group",
+        "GPLM Cell Model",
+        "MDM Project Nick name",
+        "Extra Spec",
+        "GPLM Cell Conversion factor",
+        "MDM class_Lv1",
+        "MDM class_Lv2",
+        "MDM class_Lv3",
+        "MDM class_Lv4",
+        "Valuation class",
+        "Devaluation Age",
+        "Quantity",
+        "Amount(KRW)",
+        "Unit Price(KRW)",
+        "Currency",
+        "Amount",
+        "Unit Price",
+        "Exchange Rate",
+        "Memo",
+        "PIC",
+        "발생사유 유형",
+        "발생사유 상세",
+        "소진방안 유형",
+        "소진방안 상",
+        "QTY_1",
+        "QTY_2",
+        "QTY_3",
+        "QTY_4",
+        "QTY_5",
+        "QTY_6"
+      ],
+      "82": [
+        "YY.MM",
+        "DIV",
+        "Plant Site",
+        "Plant",
+        "Material",
+        "Description",
+        "Unit",
+        "Long term Type",
+        "Item Type",
+        "Process Group",
+        "Material Group",
+        "GPLM Cell Model",
+        "MDM Project Nick name",
+        "Extra Spec",
+        "GPLM Cell Conversion factor",
+        "MDM class_Lv1",
+        "MDM class_Lv2",
+        "MDM class_Lv3",
+        "MDM class_Lv4",
+        "Valuation class",
+        "Devaluation Age",
+        "Quantity",
+        "Amount(KRW)",
+        "Unit Price(KRW)",
+        "Currency",
+        "Amount",
+        "Unit Price",
+        "Exchange Rate",
+        "Memo",
+        "PIC",
+        "발생사유 유형",
+        "발생사유 상세",
+        "소진방안 유형",
+        "소진방안 상",
+        "QTY_1",
+        "QTY_2",
+        "QTY_3",
+        "QTY_4",
+        "QTY_5",
+        "QTY_6"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SAVE",
+        "SEARCH"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SAVE",
+      "SEARCH"
+    ],
+    "CAPA Planner": [
+      "SEARCH",
+      "SAVE"
+    ],
+    "DM ADMIN": [
+      "SEARCH",
+      "SAVE"
+    ],
+    "DM Planner": [
+      "SAVE",
+      "SEARCH"
+    ],
+    "DM Planner (W/S)": [
+      "SAVE",
+      "SEARCH"
+    ],
+    "DM Viewer": [
+      "SAVE",
+      "SEARCH"
+    ],
+    "FP Planner": [
+      "SAVE",
+      "SEARCH"
+    ],
+    "FP Viewer": [
+      "SEARCH",
+      "SAVE"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "SAVE"
+    ],
+    "SCM Viewer": [
+      "SEARCH",
+      "SAVE"
+    ],
+    "SCP Planner": [
+      "SAVE",
+      "SEARCH"
+    ],
+    "SCP Tester": [
+      "SEARCH",
+      "SAVE"
+    ]
+  },
+  "menuBtnCodes": [
+    "SAVE",
+    "SEARCH"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

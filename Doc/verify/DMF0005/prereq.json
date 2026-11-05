@@ -1,0 +1,71 @@
+{
+ "menu_id": "DMF0005",
+ "asis_id": "DMF0005",
+ "generated": "2026-11-02 17:39:19",
+ "rc": 0,
+ "items": [
+  {
+   "key": "db",
+   "what": "DB 접속(AS-IS MSSQL · TO-BE Oracle)",
+   "status": "OK",
+   "producer": "tools/DbConn/probe.py",
+   "evidence": "전부 접속"
+  },
+  {
+   "key": "asis_pack",
+   "what": "AS-IS Fact Pack(DMF0005)",
+   "status": "OK",
+   "producer": "tools/AsisFacts/pack.ps1",
+   "evidence": "controls.csv, actions.csv, files.csv, endpoints.csv 있음"
+  },
+  {
+   "key": "tobe_meta",
+   "what": "TO-BE DB 메타(Doc/tobefacts/db)",
+   "status": "OK",
+   "producer": "tools/DbConn/export_tobe_meta.py",
+   "evidence": "3.8시간 전 export(기준 12시간)"
+  },
+  {
+   "key": "tobe_index",
+   "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
+   "status": "OK",
+   "producer": "tools/TobeFacts/run.ps1",
+   "evidence": "nscm-fe\\features\\master\\src\\pages\\sales-site-project-model · 인덱스 최신"
+  },
+  {
+   "key": "mapping_md",
+   "what": "FE 대조표(__asis-mapping__.md)",
+   "status": "MANUAL",
+   "producer": "화면 개발 시 작성(하네스 gen.js 초안 = Doc/gen/<ID>)",
+   "evidence": "nscm-fe\\features\\master\\src\\pages\\sales-site-project-model 에 대조표 없음 — 대조표 행 검사 0건(AS-IS 액션 기준만 검사). 화면 담당이 작성해야 함(자동 생성·덮어쓰기 금지)"
+  },
+  {
+   "key": "golden",
+   "what": "골든 케이스(golden_cases.csv)",
+   "status": "OK",
+   "producer": "tools/DbConn/gen_golden_cases.py",
+   "evidence": "7건 있음 · TO-BE PROC 미매칭 3건(DMF0005:SCM0001_GET_LOOKUP_VALUES, DMF0005:UP_FX_GETCOMMONDATALIST_DM, DMF0005:SCM0001_GET_SITE_INFO_BY_DIVISION) — golden.py 가 SKIP(사람이 tobe_proc 지정)"
+  },
+  {
+   "key": "e2e_plan",
+   "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
+   "status": "OK",
+   "producer": "tools/Harness/gen.js",
+   "evidence": "있음"
+  },
+  {
+   "key": "e2e_spec",
+   "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
+   "status": "DONE",
+   "producer": "tools/E2E/gen-e2e.js <ID>",
+   "evidence": "rc=0 · 2s · DMF0005 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: k0101 DMF0005 → DMF0005 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행)"
+  },
+  {
+   "key": "smoke",
+   "what": "smoke 결과(Doc/e2e/results/_summary.csv)",
+   "status": "OK",
+   "producer": "tools/E2E/run-e2e.cmd smoke",
+   "evidence": "3건 · 마지막 smoke 10-31 13:30 (FE 소스보다 최신)"
+  }
+ ]
+}

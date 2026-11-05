@@ -6,7 +6,13 @@ import { CRUD_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useSaveWithValidation, useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import {
+  useInvalidateCombos,
+  useSaveWithValidation,
+  useTabBtnPermissions,
+  useTabComboQueries,
+  useTabProcQuery,
+} from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore } from '@shared/stores';
 
@@ -55,6 +61,7 @@ export const DemandGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   const { saveWithValidation } = useSaveWithValidation();
+  const invalidateCombos = useInvalidateCombos();
   const { validateGroupMaster, validateModelList } = useDemandGroupMasterValidation();
   const { setToast, setAlert } = useMessageStore.getState();
 
@@ -181,6 +188,10 @@ export const DemandGroupMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
       if (succeeded) {
         setToast({ type: 'success', message: t(MSG.SAVED, '_성공적으로 저장되었습니다.') });
+        // Group Master(좌)가 바뀌면 Model List(우) GROUP_ID 셀 드롭다운 후보(GROUP_MASTER 콤보)도
+        //   최신화해야 한다 — MDI keep-alive 라 이 화면은 리마운트되지 않아 방금 등록/삭제/변경한 그룹이
+        //   드롭다운에 반영되지 않는다(새로고침해야만 갱신되던 문제, 2026-10-29).
+        if (mainDirty.length) await invalidateCombos([COMBO_ID.GROUP_MASTER]);
         // 저장 성공 후 재조회 — filters 불변이므로 refetch 직접 호출 허용(nscm-patterns §5-1 예외).
         await Promise.all([refetchGroup(), refetchModel()]);
       }

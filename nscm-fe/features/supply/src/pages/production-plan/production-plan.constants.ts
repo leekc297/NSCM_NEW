@@ -131,6 +131,7 @@ export const LBL = {
   MATERIAL: 'LBL00021', // Material (메1 MaterialByDivisionModal 픽커 → item_id)
   MODEL_NICKNAME: 'LBL00618', // Model/Nickname (메1 MaterialByDivisionModal 픽커 → nick_name)
   PLAN_DATE: 'LBL00039', // Plan Date
+  PLAN_VERSION: 'LBL01220', // Plan Date/Type/Seq
   PLAN_TYPE: 'LBL00040', // Plan Type
   SEQ: 'LBL00041', // Seq.
   PERIOD: 'LBL00013', // Period (구 LBL_PERIOD 미등록)

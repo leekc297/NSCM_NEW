@@ -1,0 +1,6 @@
+﻿method,line,api,scope,locked,lock_expr,columns,expand,cond,guard,control,raw
+EditButton,289,SwitchLock,MODE,TOGGLE,,,,,"if (fps != null) ▸ if (fps.Name == ""spdMain"")",siMain,siMain.SwitchLock()
+EditButton,291,LockColumn,ALL_ROWS,Y,,DIVISION_ID;PLANT_SITE_ID;PLANT_SITE_NAME,RANGE,,"if (fps != null) ▸ if (fps.Name == ""spdMain"")",siMain,"siMain.LockColumn(siMain.GetColumnIndex(DefColumns.DIVISION_ID), siMain.GetColumnIndex(DefColumns.PLANT_SITE_NAME), true)"
+EditButton,292,LockColumn,ALL_ROWS,Y,,LAST_INPUT_DATE;MEASURE,RANGE,,"if (fps != null) ▸ if (fps.Name == ""spdMain"")",siMain,"siMain.LockColumn(siMain.GetColumnIndex(DefColumns.LAST_INPUT_DATE), siMain.GetColumnIndex(DefColumns.MEASURE), true)"
+SetLockSumColumn,408,LockColumn,ALL_ROWS,Y,,<DYNAMIC:LOOP>,DYNAMIC,"(SELF~""^W_"" || SELF~""^M_"")","for (iCol <= spreadInfo.GetMaxColumnIndex()) ▸ if (spreadInfo.GetColumnTag(iCol).IndexOf(""W_"") == 0 || spreadInfo.GetColumnTag(iCol).IndexOf(""M_"") == 0)",spreadInfo,"spreadInfo.LockColumn(iCol, true)"
+FindData_Main,475,LockColumn,ALL_ROWS,Y,,DIVISION_ID;PLANT_SITE_ID;PLANT_SITE_NAME;WORKING_TIME_DEFAULT;LAST_INPUT_DATE;MEASURE,ALL,,try,siMain,"siMain.LockColumn(0, siMain.GetMaxColumnIndex(), true)"

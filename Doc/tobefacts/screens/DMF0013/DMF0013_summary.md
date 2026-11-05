@@ -1,6 +1,6 @@
 # DMF0013 — To-Be Fact Pack 요약
 
-- page_key: `demand/cust-psi-upload` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `demand/cust-psi-upload` · feature: demand · As-is Fact Pack 있음
 - 파일 11 · 엔드포인트 호출 9 (미해결 0, 주석 속 2) · 이벤트 27 · 컴포넌트 사용 45 · 하드코딩 컬럼 5 · 메시지 22
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 5건
 
@@ -9,7 +9,7 @@
 |---|---|---|
 | features/demand/src/pages/cust-psi-upload/components/CustPsiTemplateModal.module.scss | component | 40 |
 | features/demand/src/pages/cust-psi-upload/components/CustPsiTemplateModal.tsx | component | 274 |
-| features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | component | 258 |
+| features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | component | 250 |
 | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadGrid.tsx | component | 348 |
 | features/demand/src/pages/cust-psi-upload/cust-psi-upload.constant.ts | constants | 206 |
 | features/demand/src/pages/cust-psi-upload/cust-psi-upload.types.ts | types | 67 |
@@ -51,13 +51,13 @@
 | EndCustomerField | onChange | <arrow> setSearchParams,values.join | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 108 |
 | SalesSiteField | onChange | <arrow> setSearchParams,values.join | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 123 |
 | PlantSiteField | onChange | <arrow> setSearchParams,v.join | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 131 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 164 |
-| FunctionSearchIcon | onClick | <arrow> setOpenPrjByDivisionModal | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 156 |
-| PeriodField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 176 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 186 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 225 |
-| FunctionSearchIcon | onClick | <arrow> setOpenModelByDivisionModal | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 219 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 243 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 160 |
+| Button | onClick | <arrow> setOpenPrjByDivisionModal | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 154 |
+| PeriodField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 172 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 182 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 217 |
+| Button | onClick | <arrow> setOpenModelByDivisionModal | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 213 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadForm.tsx | 235 |
 | g | formatItem | formatHandler | addHandler | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadGrid.tsx | 217 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadGrid.tsx | 228 |
 | g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/cust-psi-upload/components/CustPsiUploadGrid.tsx | 237 |

@@ -1,19 +1,21 @@
 # SCP0120 — To-Be Fact Pack 요약
 
-- page_key: `supply/constraint-mgmt` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 13 · 엔드포인트 호출 9 (미해결 0, 주석 속 0) · 이벤트 10 · 컴포넌트 사용 22 · 하드코딩 컬럼 0 · 메시지 14
+- page_key: `supply/constraint-mgmt` · feature: supply · As-is Fact Pack 있음
+- 파일 15 · 엔드포인트 호출 9 (미해결 0, 주석 속 0) · 이벤트 15 · 컴포넌트 사용 31 · 하드코딩 컬럼 0 · 메시지 17
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
+| features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.module.scss | component | 29 |
+| features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | component | 128 |
 | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtDetailGrid.tsx | component | 63 |
 | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | component | 119 |
-| features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtMasterGrid.tsx | component | 89 |
-| features/supply/src/pages/constraint-mgmt/constraint-mgmt.constants.ts | constants | 135 |
+| features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtMasterGrid.tsx | component | 110 |
+| features/supply/src/pages/constraint-mgmt/constraint-mgmt.constants.ts | constants | 142 |
 | features/supply/src/pages/constraint-mgmt/constraint-mgmt.types.ts | types | 26 |
 | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.module.scss | style | 59 |
-| features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | page | 471 |
+| features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | page | 512 |
 | features/supply/src/pages/constraint-mgmt/index.ts | index | 2 |
 | features/supply/src/pages/constraint-mgmt/useConstraintMgmtStore.ts | store | 251 |
 | features/supply/src/pages/constraint-mgmt/utils/constraintMgmt.editGuard.ts | util | 71 |
@@ -24,9 +26,9 @@
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 2 | Y | ConstraintMgmtForm.tsx:26 ConstraintMgmt.tsx:95 |
-| SCP0120/lookupMaster//call-proc | hook | 2 | Y | ConstraintMgmt.tsx:104 ConstraintMgmt.tsx:179 |
-| SCP0120/lookupDetail//call-proc | hook | 2 | Y | ConstraintMgmt.tsx:116 ConstraintMgmt.tsx:191 |
+| (useTabComboQueries) | hook | 2 | Y | ConstraintMgmtForm.tsx:26 ConstraintMgmt.tsx:101 |
+| SCP0120/lookupMaster//call-proc | hook | 2 | Y | ConstraintMgmt.tsx:110 ConstraintMgmt.tsx:185 |
+| SCP0120/lookupDetail//call-proc | hook | 2 | Y | ConstraintMgmt.tsx:122 ConstraintMgmt.tsx:197 |
 | /admin/menu/SCP0120/search-conditions | http | 1 | Y | useConstraintMgmtStore.ts:117 |
 | /admin/menu/SCP0120/column | http | 2 | Y | useConstraintMgmtStore.ts:198 useConstraintMgmtStore.ts:201 |
 
@@ -39,13 +41,18 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
+| InputField | onChange | <arrow> setCount,e.target.value.replace | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 94 |
+| InputField | onKeyDown | <arrow> e.preventDefault,handleSubmit | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 95 |
+| Button | onClick | handleSubmit | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 113 |
+| Button | onClick | modalClose | jsx | features/supply/src/pages/constraint-mgmt/components/BulkInsertModal.tsx | 120 |
 | DataGrid | gotFocus | handleGotFocus | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtDetailGrid.tsx | 59 |
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | 34 |
 | InputField | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | 51 |
 | CustomDropdown | onChange | <arrow> setSearchParams,String(picked??'').split(',').filter,String(picked??'').split,String,value.toUpperCase | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | 81 |
 | CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtForm.tsx | 109 |
-| DataGrid | gotFocus | handleGotFocus | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtMasterGrid.tsx | 84 |
-| ConstraintMgmtForm | onSearch | handleSearch | jsx | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | 423 |
+| DataGrid | gotFocus | handleGotFocus | jsx | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtMasterGrid.tsx | 104 |
+| ConstraintMgmtForm | onSearch | handleSearch | jsx | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | 456 |
+| BulkInsertModal | onConfirm | handleBulkInsert | jsx | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | 507 |
 | grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/constraint-mgmt/utils/constraintMgmt.editGuard.ts | 56 |
 | grid | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/constraint-mgmt/utils/constraintMgmt.editGuard.ts | 57 |
 | grid | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/constraint-mgmt/utils/constraintMgmt.editGuard.ts | 58 |
@@ -53,13 +60,16 @@
 ## 5. 컴포넌트 사용 집계
 | component | count |
 |---|---|
+| FormItem | 5 |
+| InputField | 3 |
 | Grid | 3 |
-| FormItem | 3 |
+| Button | 2 |
 | DataGrid | 2 |
 | CustomDropdown | 2 |
 | Panel | 2 |
+| CustomDialog | 1 |
+| ControlConfirmIcon | 1 |
 | SearchArea | 1 |
-| InputField | 1 |
 | MainTitle | 1 |
 | ConstraintMgmtForm | 1 |
 | SubTitle | 1 |
@@ -68,6 +78,7 @@
 | PanelSeparator | 1 |
 | TitleArea | 1 |
 | ConstraintMgmtDetailGrid | 1 |
+| BulkInsertModal | 1 |
 
 ## 6. 하드코딩 Grid 컬럼
 (없음)
@@ -80,6 +91,8 @@
 | LBL00007 | 1 |
 | LBL00637 | 1 |
 | LBL00112 | 1 |
+| LBL00359 | 1 |
+| LBL00107 | 1 |
 | MSG00672 | 1 |
 | MSG00004 | 1 |
 | MSG00429 | 1 |
@@ -89,6 +102,7 @@
 | MSG00096 | 1 |
 | MSG00460 | 1 |
 | MSG01059 | 1 |
+| MSG00050 | 1 |
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: SYS0010(4), SCP0120(2), SCP0122(1)
@@ -96,9 +110,10 @@
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| code | 조회권한 게이트는 핸들러 안에 둔다 — SearchArea 의 조회 버튼에는 권한 검사가 없어 hotkeyConfig 만 막으면 그 버튼으로 그대로 조회된다(공용 컴포넌트라 경계 밖이라 못 고친다). AS-IS R-29 도 CanSelect 불통과 시 안내 후 return 이다. | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | 230 |
-| code | if (findDuplicateRow(payload, masterRows)) return alertDuplicate(); | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | 328 |
-| code | return alertDuplicate(); | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | 331 |
+| code | if (canEditRef.current && GridUtils.isEditableCell(grid, hitTest.row, hitTest.col)) return; | features/supply/src/pages/constraint-mgmt/components/ConstraintMgmtMasterGrid.tsx | 68 |
+| code | 조회권한 게이트는 핸들러 안에 둔다 — SearchArea 의 조회 버튼에는 권한 검사가 없어 hotkeyConfig 만 막으면 그 버튼으로 그대로 조회된다(공용 컴포넌트라 경계 밖이라 못 고친다). AS-IS R-29 도 CanSelect 불통과 시 안내 후 return 이다. | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | 236 |
+| code | if (findDuplicateRow(payload, masterRows)) return alertDuplicate(); | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | 355 |
+| code | return alertDuplicate(); | features/supply/src/pages/constraint-mgmt/ConstraintMgmt.tsx | 358 |
 | code | const buildDuplicateKey = (row: DuplicateCheckRow): string => | features/supply/src/pages/constraint-mgmt/utils/constraintMgmt.utils.ts | 120 |
 | code | DUPLICATE_KEY_COLUMNS.map(col => String(row[col] ?? '').toUpperCase()).join('\|\|'); | features/supply/src/pages/constraint-mgmt/utils/constraintMgmt.utils.ts | 121 |
 | code | const key = buildDuplicateKey(row); | features/supply/src/pages/constraint-mgmt/utils/constraintMgmt.utils.ts | 148 |

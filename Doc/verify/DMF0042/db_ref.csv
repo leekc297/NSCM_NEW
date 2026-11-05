@@ -1,0 +1,12 @@
+﻿kind,target,result,why
+TB_FX,PKG_DMF0042,PASS,TB_FX_* 참조 0
+NULL_RULE,PKG_DMF0042,PASS,'/' 적재 5칸 전부 NOT NULL 칸
+JSON_SHORT,PKG_DMF0042,ERROR,"[확인 대상] PKG_DMF0042 RETURNING CLOB 없는 JSON 생성 10곳(본문 줄 [43, 167, 264, 347, 464, 602]) — 대량이면 ORA-40478"
+SELECT_INTO,PKG_DMF0042,ERROR,"[확인 대상] PKG_DMF0042 빈 결과 처리 없는 단건 SELECT INTO 3곳: 줄5153:V_LOG_MESSAGE, 줄5179:V_LOG_MESSAGE, 줄5205:V_LOG_MESSAGE — 기준 데이터 없으면 ORA-01403"
+EMPTY_EQ,PKG_DMF0042,PASS,PKG_DMF0042 빈 문자열 직접 비교 0
+LIKE_NULL,PKG_DMF0042,ERROR,"[확인 대상] PKG_DMF0042 가드 없는 LIKE 2곳 — 칸이 NULL 인 행이 조건 때문에 탈락 가능: ['T1.ITEM_ID~S@1980', 'T1.NICK_NAME~S@1981']"
+TEAM_SRC,PKG_DMF0042,PASS,PKG_DMF0042 OWNER 경유 없음 · SCM_MST_SITE_ITEM 참조
+ATTR9,TeambyDivisionAuth,PASS,콤보 SQL 'TeambyDivisionAuth' 실존
+ATTR9,EndCustomerByDivisionDeptAuth,PASS,콤보 SQL 'EndCustomerByDivisionDeptAuth' 실존
+ATTR9,SiteByEndCustomerAuth,PASS,콤보 SQL 'SiteByEndCustomerAuth' 실존
+LABEL_AMP,FORECAST_INFO_SPEC.라벨,PASS,FORECAST_INFO_SPEC 라벨 라벨 'Spec & Version' = AS-IS

@@ -396,12 +396,12 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
                 <Button
                   appearance='outlined'
                   priority='normal'
-                  iconComponent={<FunctionSearchIcon appearance='lined' onClick={onPopup} />}
+                  iconComponent={<FunctionSearchIcon appearance='lined' />}
+                  onClick={onPopup}
                 />
               ),
             }}
             onChange={e => onChange(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleSearch()}
           />
         )}
       />
@@ -423,7 +423,6 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
             fullWidth
             value={value}
             onChange={e => onChange(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleSearch()}
           />
         )}
       />

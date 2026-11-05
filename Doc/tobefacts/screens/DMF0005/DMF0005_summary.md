@@ -1,7 +1,7 @@
 # DMF0005 — To-Be Fact Pack 요약
 
-- page_key: `master/sales-site-project-model` · feature: master · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 17 · 엔드포인트 호출 10 (미해결 3, 주석 속 0) · 이벤트 31 · 컴포넌트 사용 63 · 하드코딩 컬럼 3 · 메시지 20
+- page_key: `master/sales-site-project-model` · feature: master · As-is Fact Pack 있음
+- 파일 17 · 엔드포인트 호출 10 (미해결 3, 주석 속 0) · 이벤트 38 · 컴포넌트 사용 63 · 하드코딩 컬럼 3 · 메시지 26
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 3건
 
 ## 1. 파일
@@ -10,18 +10,18 @@
 | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.module.scss | style | 37 |
 | features/master/src/pages/sales-site-project-model/componenets/ModelCodeChangeModal.tsx | page | 211 |
 | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.module.scss | style | 41 |
-| features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | page | 439 |
-| features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | page | 459 |
+| features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | page | 427 |
+| features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | page | 650 |
 | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelPurchaseGrid.tsx | page | 125 |
 | features/master/src/pages/sales-site-project-model/index.ts | index | 2 |
-| features/master/src/pages/sales-site-project-model/sales-site-project-model.constants.ts | constants | 106 |
+| features/master/src/pages/sales-site-project-model/sales-site-project-model.constants.ts | constants | 131 |
 | features/master/src/pages/sales-site-project-model/sales-site-project-model.editBaseline.ts | other | 103 |
 | features/master/src/pages/sales-site-project-model/sales-site-project-model.gridCombos.ts | other | 285 |
 | features/master/src/pages/sales-site-project-model/sales-site-project-model.salesCompanyGuard.ts | other | 675 |
 | features/master/src/pages/sales-site-project-model/sales-site-project-model.scpGuard.ts | other | 83 |
 | features/master/src/pages/sales-site-project-model/sales-site-project-model.siteInfo.ts | other | 48 |
 | features/master/src/pages/sales-site-project-model/SalesSiteProjectModel.module.scss | style | 21 |
-| features/master/src/pages/sales-site-project-model/SalesSiteProjectModel.tsx | page | 320 |
+| features/master/src/pages/sales-site-project-model/SalesSiteProjectModel.tsx | page | 326 |
 | features/master/src/pages/sales-site-project-model/useSalesSiteProjectModelSave.ts | hook | 84 |
 | features/master/src/pages/sales-site-project-model/useSalesSiteProjectModelStore.ts | store | 164 |
 
@@ -57,18 +57,25 @@
 | CustomDropdown | onChange | <arrow> setSearchParams,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 208 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 239 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 271 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 305 |
-| FunctionSearchIcon | onClick | <arrow> setOpenProjectByDivisionModal | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 299 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 335 |
-| FunctionSearchIcon | onClick | <arrow> setOpenItemByDivisionModal | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 329 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 364 |
-| FunctionSearchIcon | onClick | <arrow> setOpenOwnerByDivisionModal | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 358 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 388 |
-| Checkbox | onChange | <arrow> setActiveTab,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 401 |
-| grid | copying | handleCopying | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 165 |
-| grid | pastedCell | handlePastedTeam | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 166 |
-| grid.hostElement | keydown | handleClearTeam | addEventListener | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 167 |
-| DataGrid | gotFocus | handleFocus | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 391 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 301 |
+| Button | onClick | <arrow> setOpenProjectByDivisionModal | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 297 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 327 |
+| Button | onClick | <arrow> setOpenItemByDivisionModal | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 323 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 352 |
+| Button | onClick | <arrow> setOpenOwnerByDivisionModal | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 348 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 376 |
+| Checkbox | onChange | <arrow> setActiveTab,setOpenPurchaseGrid | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelForm.tsx | 389 |
+| grid | copying | handleCopying | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 167 |
+| grid | pastedCell | handlePastedTeam | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 168 |
+| grid.hostElement | keydown | handleClearTeam | addEventListener | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 169 |
+| grid | cellEditEnded | handleEditEnded | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 269 |
+| grid | pasted | handlePasted | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 270 |
+| grid | cellEditEnded | handleVmiEditEnded | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 350 |
+| grid | pasted | handleVmiPasted | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 351 |
+| grid | beginningEdit | cancelIfLocked | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 562 |
+| grid | pastingCell | cancelIfLocked | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 563 |
+| grid | formatItem | unmarkLocked | addHandler | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 564 |
+| DataGrid | gotFocus | handleFocus | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelGrid.tsx | 582 |
 | DataGrid | gotFocus | handleFocus | jsx | features/master/src/pages/sales-site-project-model/componenets/SalesSiteProjectModelPurchaseGrid.tsx | 104 |
 | grid | cellEditEnded | handler | addHandler | features/master/src/pages/sales-site-project-model/sales-site-project-model.editBaseline.ts | 92 |
 | grid | pastedCell | handler | addHandler | features/master/src/pages/sales-site-project-model/sales-site-project-model.editBaseline.ts | 93 |
@@ -77,7 +84,7 @@
 | grid | cellEditEnded | editEndedHandler | addHandler | features/master/src/pages/sales-site-project-model/sales-site-project-model.salesCompanyGuard.ts | 663 |
 | grid | pastedCell | editEndedHandler | addHandler | features/master/src/pages/sales-site-project-model/sales-site-project-model.salesCompanyGuard.ts | 664 |
 | grid | updatedLayout | updatedLayoutHandler | addHandler | features/master/src/pages/sales-site-project-model/sales-site-project-model.salesCompanyGuard.ts | 665 |
-| SalesSiteProjectModelForm | onSubmit | handleSubmit | jsx | features/master/src/pages/sales-site-project-model/SalesSiteProjectModel.tsx | 277 |
+| SalesSiteProjectModelForm | onSubmit | handleSubmit | jsx | features/master/src/pages/sales-site-project-model/SalesSiteProjectModel.tsx | 283 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -123,6 +130,7 @@
 |---|---|
 | LBL00674 | 1 |
 | MSG00014 | 1 |
+| MSG00004 | 2 |
 | LBL00121 | 1 |
 | LBL00108 | 1 |
 | LBL00111 | 1 |
@@ -137,13 +145,17 @@
 | LBL00082 | 1 |
 | LBL00007 | 1 |
 | LBL00316 | 1 |
+| MSG01192 | 1 |
+| MSG01148 | 1 |
 | MSG00096 | 1 |
+| MSG00613 | 1 |
+| MSG00614 | 1 |
 | MSG00003 | 2 |
 | MSG00002 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0005(6), COM0008(3), DMF0006(2), DMF0007(2), COM0004(1), DMF0042(1)
-- SP/PKG: PKG_DMF0005(3), SCM0001_GET_SITE_INFO_BY_DIVISION(2), P_DMF0005_SAVE_MODEL_CHANGE_POPUP(1), DMF0005_SAVE_MODEL_CHANGE_POPUP(1), P_DATA(1), P_USER_ID(1), PR_CHECK_MNU_BTN_AUTH(1)
+- 화면ID: DMF0005(7), COM0008(3), DMF0006(2), DMF0007(2), DMF0042(1)
+- SP/PKG: PKG_DMF0005(5), SCM0001_GET_SITE_INFO_BY_DIVISION(2), P_DMF0005_SAVE_MODEL_CHANGE_POPUP(1), DMF0005_SAVE_MODEL_CHANGE_POPUP(1), P_DATA(1), P_USER_ID(1), PR_CHECK_MNU_BTN_AUTH(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|

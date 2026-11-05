@@ -1,0 +1,24 @@
+# SCP0111 메타 보완 — 사내 적용 기록 (2026-10-29)
+
+- DB: ZIOUI1 (SERVER_HOST=localhost, 59.19.252.148:2521) · 접속 system → CURRENT_SCHEMA=SCM_MGR
+- 착수 조회 2026-10-29 11:21 · 사전 실행(ROLLBACK) 12:08:34 · 적용 COMMIT 2026-10-29 12:10:15 (`apply_20261029.log`)
+- 클라우드 패키지: `_artifacts/_deploy_packages/SCP0111_META_CLOUD_20261029/01_SCP0111_META_CLOUD.sql` (사내 ROLLBACK 모사: PRECHECK OK · 재실행 0행 · VERIFY 1/1/2/6)
+
+| # | 작업 | 대상 | 행 | 파일 |
+|---|---|---|---|---|
+| 1 | INSERT(MERGE) | SCM_ADM_MNU_BTN_MPG_M (SCP0111, essPackLine, SEARCH → SCP0111_essPackLine_SEARCH) | 1 | 01_SCP0111_META.sql |
+| 2 | INSERT NOT EXISTS | SCM_ADM_MSG_M MSG01477 KO/EN/CN (AS-IS cs:1217 Operation Lookup 불일치) | 3 | 01_SCP0111_META.sql |
+| 3 | INSERT NOT EXISTS | SCM_ADM_MSG_M MSG01478 KO/EN/CN (AS-IS cs:2052-2055 수량 불일치 + {0}~{4}) | 3 | 01_SCP0111_META.sql |
+
+## 검증
+- FRESH-GATE: API_M URL·PROC_M 2행·ALL_ARGUMENTS(O_RC 1/O_RESULT_CURSOR 2)·BTN_MPG 부재·MSG 대역 max=MSG01476 → 통과
+- BE 해석 경로 `PKG_NSCM_UI_COMM.PR_GET_PROC_INFO_LIST('SCP0111','essPackLine','SEARCH')` → PROC_M 2행 반환
+- SP 직접 실행 `P_SCP0111_GET_ESS_PACK_LINE` → o_rc 34행 · 결과 CODE=0
+- 미실행: BE HTTP call-proc 왕복(로컬 셸 네트워크 지연으로 확인 불가) · FE 화면 E2E(FE 미배선)
+
+## 되돌리기
+```sql
+DELETE FROM SCM_MGR.SCM_ADM_MNU_BTN_MPG_M WHERE MNU_ID='SCP0111' AND SHT_NM='essPackLine' AND MNU_BTN_CD='SEARCH';
+DELETE FROM SCM_MGR.SCM_ADM_MSG_M WHERE MSG_ID IN ('MSG01477','MSG01478') AND MSG_DESC LIKE 'SCP0111 %';
+COMMIT;
+```

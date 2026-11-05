@@ -1,0 +1,2 @@
+﻿menu_id,name,steps,msg_re,no_save,no_editor,rule,source,user,pattern_id,basis,key
+SCP0083,[자동] 조회조건 콤보 3종 = 콤보,iscombo:Division;iscombo:Plan;iscombo:Version,,,,B1,"자동 생성 P21 · AS-IS controls 콤보 Division, Plan, Version",,P21,"AS-IS controls 콤보 Division, Plan, Version",B1|iscombo|division + B1|iscombo|plan + B1|iscombo|version

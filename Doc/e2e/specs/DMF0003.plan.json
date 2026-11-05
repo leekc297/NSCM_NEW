@@ -1,0 +1,1459 @@
+{
+  "id": "DMF0003",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "DMF0003",
+  "divCascade": [],
+  "divLabels": [
+    "Div.",
+    "Division"
+  ],
+  "condOrder": [],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "MktFcst",
+  "routePath": "demand/mkt-fcst",
+  "asisName": "1_MktFcst",
+  "fields": [
+    {
+      "key": "color",
+      "label": "Color",
+      "lbl": "LBL00688",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkColor",
+      "tobeLabel": "Color",
+      "catalog": "Color → (없음) · 공통기능화 검토",
+      "labels": [
+        "Color"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "as",
+      "label": "AS",
+      "lbl": "LBL00685",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboAS",
+      "tobeLabel": "AS",
+      "catalog": "AS → (없음) · 공통기능화 검토",
+      "labels": [
+        "AS"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "checkInvalidExec",
+      "label": "check Invalid Exec",
+      "lbl": "",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "checkInvalidExec",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "check Invalid Exec"
+      ],
+      "excluded": true,
+      "excludedWhy": "As-is 숨김: layoutControlItem11.Visibility = Never (designer.cs)"
+    },
+    {
+      "key": "qty",
+      "label": ".",
+      "lbl": "",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboQty",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemTypes",
+      "label": "Item Type",
+      "lbl": "LBL00068",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "ItemType",
+      "popup": false,
+      "asis": "clbItemType",
+      "tobeLabel": "Item Type",
+      "catalog": "Item Type → Item Type",
+      "labels": [
+        "Item Type"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "sumYn",
+      "label": "Sum",
+      "lbl": "LBL00687",
+      "kind": "check",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkSum",
+      "tobeLabel": "Sum",
+      "catalog": "",
+      "labels": [
+        "Sum"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant Site",
+      "lbl": "LBL00005",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlantSite",
+      "tobeLabel": "Plant Site",
+      "catalog": "Plant Site → Plant Site",
+      "labels": [
+        "Plant Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "projectCodes",
+      "label": "Project",
+      "lbl": "LBL00617",
+      "kind": "popup",
+      "component": "ProjectField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtProject",
+      "tobeLabel": "Project",
+      "catalog": "Project → PJT · 명칭",
+      "labels": [
+        "PJT",
+        "Project"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "bucketType",
+      "label": "Bucket",
+      "lbl": "LBL00710",
+      "kind": "single",
+      "component": "BucketField",
+      "comboId": "BucketType",
+      "popup": false,
+      "asis": "cboBucketType",
+      "tobeLabel": "Bucket",
+      "catalog": "Bucket → Bucket",
+      "labels": [
+        "Bucket"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod",
+      "tobeLabel": "Period",
+      "catalog": "Period → Period",
+      "labels": [
+        "Period",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "salesSiteIds",
+      "label": "Sales Site",
+      "lbl": "LBL00011",
+      "kind": "multi",
+      "component": "SalesSiteField",
+      "comboId": "SalesSite",
+      "popup": false,
+      "asis": "clbSalesSite",
+      "tobeLabel": "Sales Site",
+      "catalog": "Sales Site → Sales Site",
+      "labels": [
+        "Sales Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model / Nickname",
+      "lbl": "LBL00618",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId",
+      "tobeLabel": "Model/Nickname",
+      "catalog": "Model / Nickname → Model/Nickname · 명칭",
+      "labels": [
+        "Model/Nickname",
+        "Model / Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "bizType",
+      "label": "Biz Type",
+      "lbl": "LBL00085",
+      "kind": "single",
+      "component": "BizTypeField",
+      "comboId": "BizTypeByDivision",
+      "popup": false,
+      "asis": "clbBizType",
+      "tobeLabel": "Biz. Type",
+      "catalog": "Biz Type → Biz. Type · 명칭",
+      "labels": [
+        "Biz. Type",
+        "Biz Type"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "endCustomer",
+      "label": "End Customer",
+      "lbl": "LBL00080",
+      "kind": "multi",
+      "component": "EndCustomerField",
+      "comboId": "EndCustomerByDivision",
+      "popup": false,
+      "asis": "clbCustomer",
+      "tobeLabel": "End Customer",
+      "catalog": "End Customer → End Customer",
+      "labels": [
+        "End Customer"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "teamIds",
+      "label": "Team",
+      "lbl": "LBL00502",
+      "kind": "multi",
+      "component": "TeamField",
+      "comboId": "TeambyDivision",
+      "popup": false,
+      "asis": "clbTeam",
+      "tobeLabel": "",
+      "catalog": "Team → Team",
+      "labels": [
+        "Team"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "divisionIds",
+      "label": "Division",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div.",
+        "Division"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "owners",
+      "label": "Owner",
+      "lbl": "LBL00082",
+      "kind": "popup",
+      "component": "OwnerField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtOwner",
+      "tobeLabel": "Owner",
+      "catalog": "Owner → Owner",
+      "labels": [
+        "Owner"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "cellQty",
+      "label": ".",
+      "lbl": "",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboCellQty",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "senderCodes",
+      "label": "Sender Code",
+      "lbl": "LBL00090",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "SenderCode",
+      "popup": false,
+      "asis": "clbEDISender",
+      "tobeLabel": "Sender Code",
+      "catalog": "Sender Code → Sender Code",
+      "labels": [
+        "Sender Code"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "periodPsi",
+      "label": "PERIOD",
+      "lbl": "LBL00013",
+      "kind": "single",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriodPSI",
+      "tobeLabel": "Period",
+      "catalog": "Period → Period",
+      "labels": [
+        "Period",
+        "PERIOD",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "periodSimulation",
+      "label": "SIMULATION",
+      "lbl": "LBL01119",
+      "kind": "single",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriodSimulation",
+      "tobeLabel": "Simulation",
+      "catalog": "",
+      "labels": [
+        "Simulation",
+        "SIMULATION",
+        "From",
+        "To",
+        "Period",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "▼ PERIOD:",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod1",
+      "tobeLabel": "Period",
+      "catalog": "Period → Period",
+      "labels": [
+        "Period",
+        "▼ PERIOD:",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "bizPerCar",
+      "label": "▼ BIZ수량 PER CAR:",
+      "lbl": "",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtBizPerCar",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "▼ BIZ수량 PER CAR:"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "marketShare",
+      "label": "▼ 당사 M/S(%):",
+      "lbl": "",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtMarketShare",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "▼ 당사 M/S(%):",
+        "▼ 당사 M",
+        "S(%):"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "cmbCarMaker",
+      "label": "▼ 제조사: ",
+      "lbl": "",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cmbCarMaker",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "▼ 제조사:"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "cmbCarModel",
+      "label": "▼ 모델명:",
+      "lbl": "",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cmbCarModel",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "▼ 모델명:"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "cmbBizType",
+      "label": "▼ BIZ TYPE:",
+      "lbl": "LBL00085",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cmbBizType",
+      "tobeLabel": "Biz. Type",
+      "catalog": "Biz Type → Biz. Type · 명칭",
+      "labels": [
+        "Biz. Type",
+        "▼ BIZ TYPE:"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": {
+    "rows": 1,
+    "spans": 37,
+    "literals": [
+      "SUM",
+      "ⓑ(SUM)",
+      "Customer",
+      "LGES",
+      "Analysis of demand changes by factors",
+      "ⓒResult (ⓐ+ⓑ)",
+      "ⓓMKT.FCST (DP)",
+      "GAP (ⓒ-ⓓ)"
+    ],
+    "maxRowPx": 32
+  },
+  "catalogScreen": "MKT FCST",
+  "asisMapping": "features\\demand\\src\\pages\\mkt-fcst\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "incotermsChg",
+      "label": "Master Chg",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnIncotermsChg"
+    },
+    {
+      "key": "measure",
+      "label": "Measure",
+      "lbl": "LBL00310",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    },
+    {
+      "key": "column",
+      "label": "Column",
+      "lbl": "LBL00711",
+      "kind": "subtitle-custom",
+      "tobe": "COLUMN_SETUP",
+      "asis": "btnColumn"
+    },
+    {
+      "key": "findPsi",
+      "label": "실행",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnFindPSI"
+    },
+    {
+      "key": "report",
+      "label": "Report",
+      "lbl": "LBL00718",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnReport"
+    },
+    {
+      "key": "excelUpload",
+      "label": "Excel Upload",
+      "lbl": "LBL00346",
+      "kind": "subtitle-custom",
+      "tobe": "EXCEL_UPLOAD",
+      "asis": "btnExcelUpload"
+    },
+    {
+      "key": "calculation",
+      "label": "실행",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnCalculation"
+    },
+    {
+      "key": "upDown",
+      "label": "Up Down",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnUpDown"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Car Fcst",
+      "key": "CAR_FCST",
+      "labels": [
+        "대분류",
+        "소분류"
+      ]
+    },
+    {
+      "name": "Customer Demand Analysis",
+      "key": "CUSTOMER_DEMAND_ANALYSIS",
+      "labels": [
+        "수요/운영",
+        "상세내용",
+        "귀책여부",
+        "입력기한",
+        "증감반영수요",
+        "증감물량",
+        "고객수요계획",
+        "PROJECT_CODE",
+        "상세변동요인",
+        "YYYYMM"
+      ]
+    },
+    {
+      "name": "Mkt Fcst",
+      "key": "MKT_FCST",
+      "labels": [
+        "Application",
+        "AS From Site",
+        "AS_YN",
+        "ATTR1",
+        "Biz Type",
+        "BUCKET",
+        "Cell Model Nick Name",
+        "Cell/Car",
+        "Cell/Module",
+        "Cell Quantity",
+        "Product Group",
+        "City",
+        "Country",
+        "Cust Group",
+        "Cust Group Detail",
+        "Department",
+        "Department",
+        "Division*",
+        "Division*",
+        "End Cust.(Report)",
+        "Sold-To Cust.(Report)",
+        "Customs Handbook*",
+        "Edit Flag",
+        "End Customer",
+        "End Customer*",
+        "Energy(KWH)",
+        "FCST Type*",
+        "Spec & Version",
+        "Biz Type",
+        "Cell Model",
+        "Cell Pack Count",
+        "Product Group",
+        "Model Spec",
+        "Model Version",
+        "Group Id",
+        "Incoterms*",
+        "Model*",
+        "Model*",
+        "Model Name",
+        "Item Type"
+      ]
+    },
+    {
+      "name": "PSI",
+      "key": "PSI",
+      "labels": [
+        "DIVISION_ID",
+        "ⓐCust.FCST(EDI/RPA)",
+        "End Customer",
+        "GAP (ⓒ-ⓓ)",
+        "Delivery issue",
+        "Measure",
+        "ⓓMKT FCST(DP)",
+        "Model Mix",
+        "Production issue",
+        "Project Code*",
+        "PROJECT",
+        "ⓒResult (ⓐ+ⓑ)",
+        "Sales issue",
+        "ⓑ(SUM)",
+        "Supply Issue",
+        "Sales Allocation",
+        "YYYYMM"
+      ]
+    }
+  ],
+  "popupSheets": [
+    "History Popup",
+    "PR Popup",
+    "SSP Sync Popup"
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": true,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Car Fcst",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_DMF0003.P_",
+      "entries": []
+    },
+    {
+      "sp": "DMF0003_GET_MKT_FCST_DATA",
+      "sheet": "Mkt Fcst",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0003_SAVE_MKT_FCST",
+      "sheet": "Car Fcst",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_SAVE_MKT_FCST",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_DM_ANL_MKT_PSI_DATA",
+      "sheet": "Mkt Fcst",
+      "btn": "DM_ANL_MKT_PSI_DATA",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DATA",
+      "entries": [
+        "event:this.spdSub1.CellClick",
+        "event:this.spdMain.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_MKT_FCST_COMPARE_POPUP",
+      "sheet": "History Popup",
+      "btn": "MKT_FCST_COMPARE_POPUP",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPARE_POPUP",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.spdMain.KeyUp"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_DIVISION",
+      "sheet": "Car Fcst",
+      "btn": "DIVISION",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_SCM0001_GET_DIVISION",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_SITE_BY_DIVISION",
+      "sheet": "Car Fcst",
+      "btn": "SITE_BY_DIVISION",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_SCM0001_GET_SITE_BY_DIVISION",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER",
+      "sheet": "Customer Demand Analysis",
+      "btn": "PLANT_SITE_BY_END_CUSTOMER",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "PR_GET_DAY_RANGE",
+      "sheet": "Car Fcst",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_PR_GET_DAY_RANGE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_SPREAD_TITLE_PSI",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_PSI",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_SPREAD_TITLE_CAR",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_CAR",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "Car Fcst",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_BUCKET_TYPE_CODE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_LOOKUP_VALUES",
+      "sheet": "Car Fcst",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_SCM0001_GET_LOOKUP_VALUES",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_TEAM_BY_DIVISION",
+      "sheet": "Car Fcst",
+      "btn": "TEAM_BY_DIVISION",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_SCM0001_GET_TEAM_BY_DIVISION",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_CUSTOMER_BY_DIVISION",
+      "sheet": "Customer Demand Analysis",
+      "btn": "CUSTOMER_BY_DIVISION",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_SCM0001_GET_CUSTOMER_BY_DIVISION",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+      "sheet": "Car Fcst",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+      "entries": [
+        "event:this.spdMain.ComboSelChange",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged"
+      ]
+    },
+    {
+      "sp": "UP_FX_GETCOMMONDATALIST_DM",
+      "sheet": "(combo)",
+      "btn": "(콤보ID 등록)",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_UP_FX_GETCOMMONDATALIST_DM",
+      "entries": [
+        "event:this.cboAS.CheckedChanged",
+        "event:this.clbCustomer.SelectedIndexChanged",
+        "event:this.spdMain.ClipboardPasted",
+        "event:this.spdMain.ComboSelChange",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:InsertButton",
+        "event:cboBucketType.SelectedIndexChanged",
+        "event:this.cboBucketType.SelectedIndexChanged",
+        "button:EditButton",
+        "button:SaveButton",
+        "unreached:(진입점 미연결)",
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:dsdm.Changed"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_DM_ANL_CAR_REF",
+      "sheet": "Car Fcst",
+      "btn": "DM_ANL_CAR_REF",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_REF",
+      "entries": [
+        "event:this.btnCalculation.Click"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_DM_ANL_CAR_PROPERTY",
+      "sheet": "Car Fcst",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_PROPERTY",
+      "entries": [
+        "event:this.cmbCarMaker.SelectedIndexChanged",
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC",
+      "sheet": "Mkt Fcst",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC",
+      "entries": [
+        "event:this.btnFindPSI.Click"
+      ]
+    },
+    {
+      "sp": "DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL",
+      "sheet": "Car Fcst",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_DM_ANL_MKT_PSI_DPINIT",
+      "sheet": "Mkt Fcst",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT",
+      "sheet": "Mkt Fcst",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0000_GET_MASTER_CHG_POPUP",
+      "sheet": "History Popup",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0000_GET_MASTER_CHG_POPUP",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE",
+      "sheet": "Car Fcst",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0000_GET_COMMON_SPREAD_TITLE",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_PR_HISTORY_POPUP",
+      "sheet": "History Popup",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POPUP",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0003_SAVE_PRPOPUP",
+      "sheet": "Car Fcst",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_SAVE_PRPOPUP",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0003_GET_PRPOPUP",
+      "sheet": "History Popup",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0003.P_DMF0003_GET_PRPOPUP",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Car Fcst": {
+      "40": [],
+      "81": [],
+      "82": []
+    },
+    "Customer Demand Analysis": {
+      "40": [],
+      "81": [
+        "고객수요계획",
+        "PROJECT_CODE",
+        "YYYYMM",
+        "증감물량",
+        "귀책여부",
+        "수요/운영",
+        "상세변동요인",
+        "상세내용",
+        "증감반영수요",
+        "입력기한"
+      ],
+      "82": []
+    },
+    "Mkt Fcst": {
+      "40": [
+        "Div*",
+        "End Customer*",
+        "Sales Site*",
+        "Model*",
+        "Cust Group",
+        "Cust Group Detail",
+        "Application",
+        "Channel",
+        "Project Name",
+        "Min Capacity",
+        "Biz Type",
+        "Product Group",
+        "Cell Model",
+        "Cell Pack Count",
+        "Spec & Version",
+        "Model Spec",
+        "Model Version",
+        "Cell Model Nick Name",
+        "Sold-To Cust.(Report)",
+        "End Cust.(Report)"
+      ],
+      "81": [],
+      "82": [
+        "Energy(KWH)",
+        "Cell Quantity"
+      ]
+    },
+    "PSI": {
+      "40": [],
+      "81": [],
+      "82": []
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": {
+    "titles": [
+      {
+        "sp": "DMF0003_GET_SPREAD_TITLE",
+        "members": [
+          "GetSpdTitle"
+        ]
+      }
+    ],
+    "dbLoop": [],
+    "titleSheets": [
+      "spreadTitle"
+    ],
+    "titlePairs": [
+      {
+        "sheet": "spreadTitle",
+        "btn": "SEARCH"
+      }
+    ],
+    "staticBindings": [
+      "MAJOR_CAT",
+      "MINOR_CAT",
+      "MKT_FCST",
+      "PROJECT_CODE",
+      "YYYYMM",
+      "IN_DE_VOL",
+      "IMPUTATION_YN",
+      "DEMAND_OPERATION",
+      "VARIATION_FACTOR",
+      "DESC",
+      "IN_DE_DEMAND",
+      "IN_DDAY",
+      "DIVISION_ID",
+      "DIVISION_ID40",
+      "DEPT_ID",
+      "DEPT_NAME_KO",
+      "TEAM_ID",
+      "TEAM_NAME_KO",
+      "PROJECT_S_OP_REPORT",
+      "END_CUSTOMER",
+      "END_CUSTOMER40",
+      "BIZ_TYPE",
+      "SOLDTO_CUSTOMER",
+      "COUNTRY_NAME",
+      "CITY_NAME",
+      "SCM_SITE_ID",
+      "SCM_SITE_ID40",
+      "PROJECT_NAME",
+      "PROJECT_STATUS",
+      "PROJECT_OWNER",
+      "GROUP_ID",
+      "ITEM_ID",
+      "ITEM_ID40",
+      "ITEM_NAME",
+      "NICK_NAME",
+      "INCOTERMS",
+      "ITEM_TYPE",
+      "FCST_TYPE",
+      "DOM_EXP",
+      "PLANT_SITE_ID",
+      "CUST_GROUP",
+      "CUST_GROUP_DTL",
+      "OWNER",
+      "APPLICATION",
+      "ROUTE",
+      "MDM_PROJECT_NAME",
+      "MIN_CAPACITY",
+      "FORECAST_INFO_BIZ_TYPE",
+      "FORECAST_INFO_PRODUCT_GROUP",
+      "CELL_TYPE",
+      "FORECAST_INFO_CELL_MODEL",
+      "FORECAST_INFO_CELL_PACK_COUNT",
+      "FORECAST_INFO_ALL",
+      "FORECAST_INFO_SPEC",
+      "FORECAST_INFOR_VERSION",
+      "CELL_MODEL_NICK_NAME",
+      "VMI_YN",
+      "CELL_PER_CAR",
+      "CELL_PER_MODULE",
+      "MODULE_PER_CAR",
+      "ENERGE",
+      "CELL_QUANTITY",
+      "EDIT_FLAG",
+      "DMS_SALES",
+      "DMS_CUSTOMER",
+      "NEW_FLAG",
+      "BUCKET",
+      "MEASURE_GROUP",
+      "ATTR1",
+      "VMI_STD_DIO",
+      "AS_YN",
+      "SORT_KEY",
+      "AS_FROM_SITE",
+      "LAST_UPDATE_DATE",
+      "LAST_UPDATED_BY",
+      "SENDER_NAME",
+      "MEASURE",
+      "EDI_QTY",
+      "SUM",
+      "PRODUCT",
+      "SALE",
+      "INVENTORY",
+      "TIME_ADJUST",
+      "MODEL_MIX",
+      "SUPPLY_ISSUE",
+      "RESULT",
+      "MKT_DP",
+      "GAP"
+    ]
+  },
+  "sample": {
+    "div": "82",
+    "item": "ETD1551AFB3A-XBA",
+    "site": "FPL_US_PHX",
+    "project": "G-25-166",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "k0101",
+      "name": "",
+      "groups": [
+        "DM ADMIN",
+        "SYSTEM ADMIN"
+      ],
+      "divisions": [
+        "82"
+      ],
+      "roles": {},
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "DM ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.DM",
+      "tobeGroups": [
+        "ADMIN",
+        "DM ADMIN",
+        "DM Planner",
+        "DM Planner (W/S)",
+        "FP Viewer",
+        "GUEST",
+        "JV Planner",
+        "SCM PI Admin",
+        "SCP Planner",
+        "SSP Viewer"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH",
+        "DELETE",
+        "EXCEL",
+        "INSERT",
+        "MEASURE_SELECT",
+        "COLUMN_SETUP",
+        "SAVE"
+      ],
+      "matrix": [
+        "DM ADMIN/81:MKT_FCST",
+        "DM ADMIN/81_HD:MKT_FCST",
+        "DM ADMIN/81_HG:MKT_FCST",
+        "DM ADMIN/81_HM:MKT_FCST",
+        "DM ADMIN/81_ST:MKT_FCST",
+        "DM ADMIN/81_UC:MKT_FCST"
+      ],
+      "expectedDivs": [
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40",
+        "EE_UC",
+        "82",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "81_UC"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SEARCH",
+      "DELETE",
+      "EXCEL",
+      "INSERT",
+      "MEASURE_SELECT",
+      "COLUMN_SETUP",
+      "SAVE"
+    ],
+    "CAPA Planner": [
+      "SAVE",
+      "MEASURE_SELECT",
+      "DELETE",
+      "COLUMN_SETUP",
+      "INSERT",
+      "SEARCH",
+      "EXCEL"
+    ],
+    "DEMAND_USER": [
+      "EXCEL",
+      "DELETE",
+      "COLUMN_SETUP",
+      "SEARCH",
+      "INSERT",
+      "SAVE",
+      "MEASURE_SELECT"
+    ],
+    "DM ADMIN": [
+      "SEARCH",
+      "SAVE",
+      "MEASURE_SELECT",
+      "INSERT",
+      "EXCEL",
+      "DELETE",
+      "COLUMN_SETUP"
+    ],
+    "DM Planner": [
+      "SEARCH",
+      "SAVE",
+      "MEASURE_SELECT",
+      "INSERT",
+      "EXCEL",
+      "DELETE",
+      "COLUMN_SETUP"
+    ],
+    "DM Planner (W/S)": [
+      "EXCEL",
+      "SEARCH",
+      "SAVE",
+      "MEASURE_SELECT",
+      "INSERT",
+      "DELETE",
+      "COLUMN_SETUP"
+    ],
+    "DM Viewer": [
+      "INSERT",
+      "DELETE",
+      "SEARCH",
+      "MEASURE_SELECT",
+      "EXCEL",
+      "COLUMN_SETUP",
+      "SAVE"
+    ],
+    "FP Planner": [
+      "COLUMN_SETUP",
+      "SAVE",
+      "INSERT",
+      "SEARCH",
+      "DELETE",
+      "MEASURE_SELECT",
+      "EXCEL"
+    ],
+    "FP Viewer": [
+      "INSERT",
+      "EXCEL",
+      "MEASURE_SELECT",
+      "DELETE",
+      "SEARCH",
+      "COLUMN_SETUP",
+      "SAVE"
+    ],
+    "GUEST": [
+      "COLUMN_SETUP",
+      "DELETE",
+      "EXCEL",
+      "INSERT",
+      "MEASURE_SELECT",
+      "SAVE",
+      "SEARCH"
+    ],
+    "JV Planner": [
+      "INSERT",
+      "COLUMN_SETUP",
+      "SAVE",
+      "EXCEL",
+      "SEARCH",
+      "DELETE",
+      "MEASURE_SELECT"
+    ],
+    "SCM PI Admin": [
+      "DELETE",
+      "SAVE",
+      "EXCEL",
+      "INSERT",
+      "COLUMN_SETUP",
+      "MEASURE_SELECT",
+      "SEARCH"
+    ],
+    "SCM Viewer": [
+      "MEASURE_SELECT",
+      "SEARCH",
+      "SAVE",
+      "COLUMN_SETUP",
+      "INSERT",
+      "DELETE",
+      "EXCEL"
+    ],
+    "SCP Planner": [
+      "SEARCH",
+      "SAVE",
+      "MEASURE_SELECT",
+      "INSERT",
+      "EXCEL",
+      "COLUMN_SETUP",
+      "DELETE"
+    ],
+    "SCP Tester": [
+      "SAVE",
+      "INSERT",
+      "SEARCH",
+      "COLUMN_SETUP",
+      "EXCEL",
+      "DELETE",
+      "MEASURE_SELECT"
+    ],
+    "SSP ADMIN": [
+      "EXCEL",
+      "COLUMN_SETUP",
+      "DELETE",
+      "INSERT",
+      "MEASURE_SELECT",
+      "SAVE",
+      "SEARCH"
+    ],
+    "SSP Planner": [
+      "SEARCH",
+      "MEASURE_SELECT",
+      "DELETE",
+      "INSERT",
+      "SAVE",
+      "EXCEL",
+      "COLUMN_SETUP"
+    ],
+    "SSP Viewer": [
+      "SAVE",
+      "INSERT",
+      "SEARCH",
+      "EXCEL",
+      "DELETE",
+      "COLUMN_SETUP",
+      "MEASURE_SELECT"
+    ]
+  },
+  "menuBtnCodes": [
+    "SEARCH",
+    "DELETE",
+    "EXCEL",
+    "INSERT",
+    "MEASURE_SELECT",
+    "COLUMN_SETUP",
+    "SAVE"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

@@ -1,0 +1,16 @@
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+CUTOFF_DATE,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock
+DIR,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock
+PLANT_ID,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock
+SITE_DESCRIPTION,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock
+PROD_ID,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock
+NICK_NAME,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock
+INSPECTION_ID,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock
+QTY,Y,NONE,COND,,"RULES:[{""g"": """", ""lock"": ""Y"", ""ref"": ""EditButton:281""}, {""g"": ""COL(DIR)==\""HOLD\"""", ""lock"": ""N"", ""ref"": ""EditButton:294""}, {""g"": ""!(COL(DIR)==\""HOLD\"")"", ""lock"": ""Y"", ""ref"": ""EditButton:300""}]",,기존행 SCP0041_StockOSP:281 LockRange | 기존행 SCP0041_StockOSP:294 LockRange | 기존행 SCP0041_StockOSP:300 LockRange,,Pack Hold Stock
+DATE_FINISH_REAL,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock
+DATE_FORECAST_START,Y,NONE,COND,,"RULES:[{""g"": """", ""lock"": ""Y"", ""ref"": ""EditButton:281""}, {""g"": ""COL(DIR)==\""HOLD\"""", ""lock"": ""N"", ""ref"": ""EditButton:295""}, {""g"": ""!(COL(DIR)==\""HOLD\"")"", ""lock"": ""Y"", ""ref"": ""EditButton:301""}]",,기존행 SCP0041_StockOSP:281 LockRange | 기존행 SCP0041_StockOSP:295 LockRange | 기존행 SCP0041_StockOSP:301 LockRange,,Pack Hold Stock
+DATE_FORECAST_FINISH,Y,NONE,COND,,"RULES:[{""g"": """", ""lock"": ""Y"", ""ref"": ""EditButton:281""}, {""g"": ""COL(DIR)==\""HOLD\"""", ""lock"": ""N"", ""ref"": ""EditButton:296""}, {""g"": ""!(COL(DIR)==\""HOLD\"")"", ""lock"": ""Y"", ""ref"": ""EditButton:302""}]",,기존행 SCP0041_StockOSP:281 LockRange | 기존행 SCP0041_StockOSP:296 LockRange | 기존행 SCP0041_StockOSP:302 LockRange,,Pack Hold Stock
+REQUSET_USER,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock
+CREATION_DATE,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock
+MODIFIER,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock
+MODIFIER_DATE,Y,NONE,N,,잠금 (EditButton:281),,기존행 SCP0041_StockOSP:281 LockRange,,Pack Hold Stock

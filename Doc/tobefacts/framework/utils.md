@@ -1,4 +1,4 @@
-# utils (270)
+# utils (273)
 
 사용 수 내림차순. **신규 화면은 여기 있는 것만 쓴다** — 없으면 사전(map_control.csv) 보완 제안이 먼저(룰 23).
 
@@ -37,38 +37,39 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **CRUD_TYPE** | `@foundation/constants` | 63 |  |  |
-| **CRUD_MSG** | `@foundation/constants` | 16 |  | CRUD 흐름에서 공통으로 사용하는 메시지 정의입니다. |
+| **CRUD_TYPE** | `@foundation/constants` | 67 |  |  |
+| **CRUD_MSG** | `@foundation/constants` | 19 |  | CRUD 흐름에서 공통으로 사용하는 메시지 정의입니다. |
 | **API_CONFIG** | `@foundation/constants` | 1 |  |  |
 | **CACHE_MAX_AGE** | `@foundation/lib` | 0 |  | 캐시 유지시간(8시간). gcTime 과 PersistQueryClientProvider 의 persist maxAge 를 동일하게 유지해야 영속화가 정상 동작한다(react-query: persist 하려면 gcTime >= maxAge 필요). P |
 | **NEGATIVE_TEXT_COLOR** | `@foundation/utils` | 0 |  | 음수 셀 = 빨간 글자 — 그리드 공통 규약 (REQ:CHAT-20260820-6). mkt-fcst / demand-manager / contribute-view / sales-reports / etc-sales-reports 가 각자 같은 코드를  |
 | **ROUTE_PATHS** | `@foundation/constants` | 0 |  | 라우트 경로 상수 화면(mnuId)별 경로 매핑은 DB 로 이관됨 — SCM_ADM_MNU_M.ROUTE_PATH (세션 메뉴 응답의 menu.routePath 를 viewRegistry.resolveView 가 해석). 여기에는 메뉴 데이터가 아닌  |
 | **ROW_NO_BINDING** | `@foundation/utils` | 0 |  | No 컬럼/헤더 — SYS0011 그리드 공통 (사용자 요구 2026-06-28), 팝업(*Modal.tsx) 그리드 공통 적용 // (2026-09-03)으로 foundation 으로 승격. // · 체크박스 없는 그리드: rowHeader 인덱스  |
 | **VOLATILE_QUERY_OPTIONS** | `@foundation/lib` | 0 |  | 콤보/룩업 전용 캐시 정책 — useCustomQueryClient 의 콤보/룩업 훅에서 스프레드한다. staleTime: 0 = 화면을 새로 열 때(fresh mount)마다 다시 받는다. MDI 는 keep-alive 라 이미 열린 탭은 리마운트되 |
-| **CELL_INPUT_EDIT_TYPE** | `@foundation/constants` | 63 |  |  |
-| **CELL_CONTROL_TYPE** | `@foundation/constants` | 38 |  |  |
-| **BUTTON_TYPE** | `@foundation/constants` | 13 |  |  |
+| **CELL_INPUT_EDIT_TYPE** | `@foundation/constants` | 70 |  |  |
+| **CELL_CONTROL_TYPE** | `@foundation/constants` | 42 |  |  |
+| **BUTTON_TYPE** | `@foundation/constants` | 14 |  |  |
 | **Hotkeys** | `@foundation/models` | 0 |  |  |
 | **HTTP_STATUS** | `@foundation/constants` | 0 |  |  |
-| **safeString** | `@foundation/utils` | 40 |  | unknown 값을 표시·비교용 문자열로 안전 변환. 왜 필요한가 — SP 커서 행의 값 타입은 `unknown`(또는 WijmoPrimitive) 이라 `String(v ?? '')` 를 쓰면 린트 규칙 `no-base-to-string` 이 막는다 |
+| **safeString** | `@foundation/utils` | 50 |  | unknown 값을 표시·비교용 문자열로 안전 변환. 왜 필요한가 — SP 커서 행의 값 타입은 `unknown`(또는 WijmoPrimitive) 이라 `String(v ?? '')` 를 쓰면 린트 규칙 `no-base-to-string` 이 막는다 |
 | **attachRowNoHeader** | `@foundation/utils` | 22 |  | (체크박스 없는 그리드) 기존 rowHeader 순번(1,2,3…) 컬럼의 좌상단 코너 헤더(TopLeft 패널)에 // 'No' 라벨 추가. CellType.TopLeft 로 코너 셀 직접 타겟 (formatItem 1회 부착 가드 + invalid |
-| **buildNoColumn** | `@foundation/utils` | 14 |  | (체크박스 그리드) No 데이터 컬럼 — itemsSource 의 ROW_NO 값 표시. |
-| **withRowNo** | `@foundation/utils` | 14 |  | itemsSource 각 행에 ROW_NO(=index+1) 주입 (읽기전용 그리드라 무해). |
-| **isInsertRow** | `@foundation/utils` | 10 |  | 신규 입력행(CRUD_TYPE='I') 판정 — 값이 같아도 인접 행과 병합하지 않기 위한 공통 가드. // 병합되면 owner(상단 행)가 편집을 대표해 기존 행이 함께 바뀌는 문제로 이어진다. // mkt-fcst/sales-plan 등 Hiera |
-| **toGridNumber** | `@foundation/utils` | 10 |  | 셀 표시값 → 숫자. 콤마 제거, 숫자가 아니면 0 (문자/코드 컬럼은 자연히 음수 판정에서 빠진다). |
-| **paintNegativeText** | `@foundation/utils` | 8 |  | 음수면 빨간 글자, 아니면 원복. 필수: 음수가 아닐 때 반드시 지운다 — Wijmo 는 셀 DOM 을 재사용하므로 칠하기만 하면 스크롤 뒤 엉뚱한 셀에 색이 남는다. 필수: important 로 넣는다 — 편집/잠금 셀 클래스(.wj-cell-edi |
+| **toGridNumber** | `@foundation/utils` | 19 |  | 셀 표시값 → 숫자. 콤마 제거, 숫자가 아니면 0 (문자/코드 컬럼은 자연히 음수 판정에서 빠진다). |
+| **buildNoColumn** | `@foundation/utils` | 17 |  | (체크박스 그리드) No 데이터 컬럼 — itemsSource 의 ROW_NO 값 표시. |
+| **paintNegativeText** | `@foundation/utils` | 17 |  | 음수면 빨간 글자, 아니면 원복. 필수: 음수가 아닐 때 반드시 지운다 — Wijmo 는 셀 DOM 을 재사용하므로 칠하기만 하면 스크롤 뒤 엉뚱한 셀에 색이 남는다. 필수: important 로 넣는다 — 편집/잠금 셀 클래스(.wj-cell-edi |
+| **withRowNo** | `@foundation/utils` | 17 |  | itemsSource 각 행에 ROW_NO(=index+1) 주입 (읽기전용 그리드라 무해). |
+| **isInsertRow** | `@foundation/utils` | 11 |  | 신규 입력행(CRUD_TYPE='I') 판정 — 값이 같아도 인접 행과 병합하지 않기 위한 공통 가드. // 병합되면 owner(상단 행)가 편집을 대표해 기존 행이 함께 바뀌는 문제로 이어진다. // mkt-fcst/sales-plan 등 Hiera |
+| **sessionTimeZone** | `@foundation/utils` | 10 |  | SP 의 `p_time_zone`(또는 콤보 `@timeZone`) 인자로 보낼 사용자 타임존 코드. AS-IS 는 로그인 때 `TB_FX_User.TimeZone` 을 `UserInfoContext` 에 담아 모든 저장 SP 에 `p_time_zon |
 | **keepRowVisibleUnderFilter** | `@foundation/utils` | 6 |  | 필터가 걸린 상태에서 추가한 신규행이 화면에서 사라지는 문제 보정. FlexGridFilter._filter 는 `grid._newAddedRowsSet`(WeakSet) 에 든 행을 조건 검사 없이 통과시킨다 — 편집한 행이 필터 때문에 눈앞에서 사 |
+| **ensureTopLeftMergeManager** | `@foundation/utils` | 4 |  |  |
 | **parseComboFilterBindings** | `@foundation/utils` | 4 |  | 셀 콤보 행 단위 필터 조건 (컬럼 메타 ATTRIBUTE2) 을 파싱한다. 문법: `'행컬럼:콤보컬럼'`, 조건이 여럿이면 콤마로 잇는다. 예) `'DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER'` 형식에  |
-| **ensureTopLeftMergeManager** | `@foundation/utils` | 2 |  |  |
-| **rebindFilterColumns** | `@foundation/utils` | 2 |  | columnGroups 재대입으로 버려진 Column 을 붙들고 있는 필터를 현재 컬럼에 다시 묶는다. wijmo 의 `set columnGroups(e){ this.columns.clear(); this._grpHdl.createColumnGroup |
+| **buildLeafColumnDataMap** | `@foundation/utils` | 2 |  | 콤보 컬럼의 DataMap 을 만든다 — 행 파라미터(PARAM10='D')면 getRowParamDataMap, 아니면 getDataMap. toLeafColumn 이 컬럼 config 에 dataMap 을 굽는 것과 같은 판정이다. 공용 DataG |
 | **stripRequiredMark** | `@foundation/utils` | 2 |  | 라벨 끝 필수표시(`*`)를 떼어낸 표시용 라벨. |
-| **buildLeafColumnDataMap** | `@foundation/utils` | 1 |  | 콤보 컬럼의 DataMap 을 만든다 — 행 파라미터(PARAM10='D')면 getRowParamDataMap, 아니면 getDataMap. toLeafColumn 이 컬럼 config 에 dataMap 을 굽는 것과 같은 판정이다. 공용 DataG |
 | **captureGridFilter** | `@foundation/utils` | 1 |  | 조회로 데이터가 다시 실리기 직전의 컬럼 필터를 떠 둔다 (restoreGridFilter 와 한 쌍). wijmo 는 `itemsSourceChanged` 에서 필터를 통째로 비운다(FlexGridFilter 생성자가 clear 를 직접 건다). 이 |
 | **captureGridSort** | `@foundation/utils` | 1 |  | `itemsSource` 가 새 배열로 갈리기 직전, 사용자가 헤더 클릭으로 건 정렬을 떠 둔다 (`restoreGridSort` 와 한 쌍 — `captureGridFilter`/`restoreGridFilter` 의 정렬판). wijmo `Flex |
 | **clearCellValue** | `@foundation/utils` | 1 |  | 상위 콤보 변경 등으로 하위 셀을 ''(빈값)으로 비우면서 수정상태(M)를 정확히 갱신한다 (DataGrid clearStaleComboCellsHandler 와 같은 규약 — 화면 cascade 에서 재사용). 이미 빈 셀은 건드리지 않는다(불필요한 |
 | **filterComboRowsByRowItem** | `@foundation/utils` | 1 |  | 행 컨텍스트로 콤보 후보를 좁힌다 — 드롭다운 후보와 값 유효성 판정의 **단일 기준**. 표시(getDataMap)와 상위 변경 시 하위 값 정리(comboCascade)가 같은 함수를 써야 "드롭다운에 뜨는 값 = 셀에 남을 수 있는 값" 불변식이 |
 | **getInsertAnchor** | `@foundation/utils` | 1 |  | `pinInsertedRow` 로 등록해 둔 앵커를 조회한다 — 이 행이 아직 저장 전 신규행이고 pin 이 걸려 있으면 그 앵커 객체를, 아니면 `undefined` 를 돌려준다. 용도: 화면이 자체적으로 행 배열을 재정렬해야 하는 경우(예: for |
 | **isRowParamCombo** | `@foundation/utils` | 1 |  | 행 파라미터 콤보 판정 — 컬럼 메타 PARAM10(ATTRIBUTE10) 이 'D' 인 콤보 컬럼. D 면 PARAM2 오른쪽이 "콤보 결과 컬럼명" 이 아니라 "콤보 SQL 바인드명" 으로 해석된다. 같은 슬롯에 두 문법이 겹치므로 판정이 곧 해석 |
+| **rebindFilterColumns** | `@foundation/utils` | 1 |  | columnGroups 재대입으로 버려진 Column 을 붙들고 있는 필터를 현재 컬럼에 다시 묶는다. wijmo 의 `set columnGroups(e){ this.columns.clear(); this._grpHdl.createColumnGroup |
 | **restoreGridFilter** | `@foundation/utils` | 1 |  | captureGridFilter 로 떠 둔 필터를 새로 실린 데이터 위에 다시 적용한다. 지금 그리드에 없는 컬럼의 필터는 버린다. wijmo 는 binding 으로 컬럼을 못 찾으면 화면에 없는 Column 을 즉석에서 만들어 필터를 붙이는데(set |
 | **restoreGridSort** | `@foundation/utils` | 1 |  | `captureGridSort` 로 떠 둔 정렬을 새로 실린 데이터 위에 다시 적용한다. 지금 그리드에 없는 컬럼을 가리키는 정렬은 버린다 — division 전환처럼 컬럼 구성이 바뀌는 조회에서 존재하지 않는 컬럼을 정렬 대상으로 복원하면 보이지도  |
 | **rowParamValues** | `@foundation/utils` | 1 |  | 행 파라미터 콤보의 SQL 바인드 값 — PARAM2 의 `행컬럼:바인드명` 을 바인드명 기준으로 접는다. 한 바인드명에 행 컬럼을 여러 개 걸 수 있다. 같은 뜻의 값이 division 에 따라 다른 컬럼으로 내려오는 경우가 있어서다 — End Cu |
@@ -116,9 +117,9 @@ props/params:
 | **rowParamValue** | `@foundation/utils` | 0 |  | 행 파라미터 값 정규화 — 조회 파라미터와 조합 키가 같은 규칙을 쓰도록 한 곳에 둔다. |
 | **setQueryErrorHandler** | `@foundation/lib` | 0 |  |  |
 | **shouldPersistQuery** | `@foundation/lib` | 0 |  | IndexedDB 영속 대상 필터(PersistQueryClientProvider 의 dehydrateOptions). 기본 규칙(성공한 쿼리만 영속)은 유지하고, 콤보/룩업만 제외한다. 제외하지 않으면 새로고침해도 옛날 콤보가 복원돼 위 staleT |
-| **apiClient** | `@foundation/apis` | 277 |  |  |
-| **i18n** | `@foundation/lib` | 16 |  |  |
-| **queryClient** | `@foundation/lib` | 9 |  |  |
+| **apiClient** | `@foundation/apis` | 306 |  |  |
+| **i18n** | `@foundation/lib` | 17 |  |  |
+| **queryClient** | `@foundation/lib` | 11 |  |  |
 | **mockApiClient** | `@foundation/apis` | 0 |  |  |
 | **primary** | `@foundation/styles` | 0 |  |  |
 | **secondary** | `@foundation/styles` | 0 |  |  |
@@ -134,6 +135,12 @@ props/params:
 
 ```ts
 (grid: FlexGrid, label: string): void
+```
+
+### toGridNumber  <sub>packages/foundation/src/utils/gridNegativeText.ts:19</sub>
+
+```ts
+(value: unknown): number
 ```
 
 ### buildNoColumn  <sub>packages/foundation/src/utils/gridRowNo.ts:16</sub>
@@ -206,64 +213,6 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### withRowNo  <sub>packages/foundation/src/utils/gridRowNo.ts:31</sub>
-
-```ts
-<T extends object>(rows: T[]): (T & { ROW_NO: number; })[]
-```
-
-props/params:
-
-- `length: number — Gets or sets the length of the array. This is a number one higher than the highest index in the array.`
-- `toString: () => string — Returns a string representation of an array.`
-- `toLocaleString: { (): string; (locales: string`
-- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
-- `pop: () => T — Removes the last element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
-- `push: (...items: T[]) => number — Appends new elements to the end of an array, and returns the new length of the array.`
-- `concat: { (...items: ConcatArray<T>[]): T[]; (...items: (T`
-- `ConcatArray<T>)[]): T[]; } — Combines two or more arrays. This method returns a new array without modifying any existing arrays.`
-- `join: (separator?: string) => string — Adds all the elements of an array into a string, separated by the specified separator string.`
-- `reverse: () => T[] — Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array.`
-- `shift: () => T — Removes the first element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
-- `slice: (start?: number, end?: number) => T[] — Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array. For example, -2 r`
-- `sort: (compareFn?: (a: T, b: T) => number) => T[] — Sorts an array in place. This method mutates the array and returns a reference to the same array.`
-- `splice: { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: numbe — Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.`
-- `unshift: (...items: T[]) => number — Inserts new elements at the start of an array, and returns the new length of the array.`
-- `indexOf: (searchElement: T, fromIndex?: number) => number — Returns the index of the first occurrence of a value in an array, or -1 if it is not present.`
-- `lastIndexOf: (searchElement: T, fromIndex?: number) => number — Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.`
-- `every: { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S,  — Determines whether all the members of an array satisfy the specified test.`
-- `some: (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any) =>  — Determines whether the specified callback function returns true for any element of an array.`
-- `forEach: (callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => vo — Performs the specified action for each element in an array.`
-- `map: <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[ — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
-- `filter: { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S,  — Returns the elements of an array that meet the condition specified in a callback function.`
-- `reduce: { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array:  — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
-- `reduceRight: { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array:  — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
-- `find: { <S extends T>(predicate: (value: T, index: number, obj: T[]) => value is S, th — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
-- `findIndex: (predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any) => nu — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
-- `fill: (value: T, start?: number, end?: number) => T[] — Changes all array elements from `start` to `end` index to a static `value` and returns the modified array`
-- `copyWithin: (target: number, start: number, end?: number) => T[] — Returns the this object after copying a section of the array identified by start and end to the same array starting at position target`
-- `entries: () => ArrayIterator<[number, T]> — Returns an iterable of key, value pairs for every entry in the array`
-- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
-- `values: () => ArrayIterator<T> — Returns an iterable of values in the array`
-- `includes: (searchElement: T, fromIndex?: number) => boolean — Determines whether an array includes a certain element, returning true or false as appropriate.`
-- `flatMap: <U, This = undefined>(callback: (this: This, value: T, index: number, array: T[] — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
-- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
-- `at: (index: number) => T — Returns the item located at the specified index.`
-- `__@iterator@896: () => ArrayIterator<T> — Iterator`
-- `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
-
-### isInsertRow  <sub>packages/foundation/src/utils/mergeManager.ts:15</sub>
-
-```ts
-(item: Record<string, unknown>): boolean
-```
-
-### toGridNumber  <sub>packages/foundation/src/utils/gridNegativeText.ts:19</sub>
-
-```ts
-(value: unknown): number
-```
-
 ### paintNegativeText  <sub>packages/foundation/src/utils/gridNegativeText.ts:38</sub>
 
 ```ts
@@ -333,10 +282,68 @@ props/params:
 - `getAttributeNS: (namespace: string, localName: string) => string — The **`getAttributeNS()`** method of the Element interface returns the string value of the attribute with the specified namespace and name. [MDN Reference](http`
 - `getAttributeNames: () => string[] — The **`getAttributeNames()`** method of the array. [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/getAttributeNames)`
 
+### withRowNo  <sub>packages/foundation/src/utils/gridRowNo.ts:31</sub>
+
+```ts
+<T extends object>(rows: T[]): (T & { ROW_NO: number; })[]
+```
+
+props/params:
+
+- `length: number — Gets or sets the length of the array. This is a number one higher than the highest index in the array.`
+- `toString: () => string — Returns a string representation of an array.`
+- `toLocaleString: { (): string; (locales: string`
+- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
+- `pop: () => T — Removes the last element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `push: (...items: T[]) => number — Appends new elements to the end of an array, and returns the new length of the array.`
+- `concat: { (...items: ConcatArray<T>[]): T[]; (...items: (T`
+- `ConcatArray<T>)[]): T[]; } — Combines two or more arrays. This method returns a new array without modifying any existing arrays.`
+- `join: (separator?: string) => string — Adds all the elements of an array into a string, separated by the specified separator string.`
+- `reverse: () => T[] — Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array.`
+- `shift: () => T — Removes the first element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `slice: (start?: number, end?: number) => T[] — Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array. For example, -2 r`
+- `sort: (compareFn?: (a: T, b: T) => number) => T[] — Sorts an array in place. This method mutates the array and returns a reference to the same array.`
+- `splice: { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: numbe — Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.`
+- `unshift: (...items: T[]) => number — Inserts new elements at the start of an array, and returns the new length of the array.`
+- `indexOf: (searchElement: T, fromIndex?: number) => number — Returns the index of the first occurrence of a value in an array, or -1 if it is not present.`
+- `lastIndexOf: (searchElement: T, fromIndex?: number) => number — Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.`
+- `every: { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S,  — Determines whether all the members of an array satisfy the specified test.`
+- `some: (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any) =>  — Determines whether the specified callback function returns true for any element of an array.`
+- `forEach: (callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => vo — Performs the specified action for each element in an array.`
+- `map: <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[ — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
+- `filter: { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S,  — Returns the elements of an array that meet the condition specified in a callback function.`
+- `reduce: { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array:  — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
+- `reduceRight: { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array:  — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
+- `find: { <S extends T>(predicate: (value: T, index: number, obj: T[]) => value is S, th — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
+- `findIndex: (predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any) => nu — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
+- `fill: (value: T, start?: number, end?: number) => T[] — Changes all array elements from `start` to `end` index to a static `value` and returns the modified array`
+- `copyWithin: (target: number, start: number, end?: number) => T[] — Returns the this object after copying a section of the array identified by start and end to the same array starting at position target`
+- `entries: () => ArrayIterator<[number, T]> — Returns an iterable of key, value pairs for every entry in the array`
+- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
+- `values: () => ArrayIterator<T> — Returns an iterable of values in the array`
+- `includes: (searchElement: T, fromIndex?: number) => boolean — Determines whether an array includes a certain element, returning true or false as appropriate.`
+- `flatMap: <U, This = undefined>(callback: (this: This, value: T, index: number, array: T[] — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
+- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
+- `at: (index: number) => T — Returns the item located at the specified index.`
+- `__@iterator@896: () => ArrayIterator<T> — Iterator`
+- `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
+
+### isInsertRow  <sub>packages/foundation/src/utils/mergeManager.ts:15</sub>
+
+```ts
+(item: Record<string, unknown>): boolean
+```
+
 ### keepRowVisibleUnderFilter  <sub>packages/foundation/src/utils/gridAction.ts:49</sub>
 
 ```ts
 <T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, row: T): void
+```
+
+### ensureTopLeftMergeManager  <sub>packages/foundation/src/utils/mergeManager.ts:38</sub>
+
+```ts
+(grid: FlexGrid): void
 ```
 
 ### parseComboFilterBindings  <sub>packages/foundation/src/utils/columnMapping.ts:137</sub>
@@ -409,16 +416,10 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### ensureTopLeftMergeManager  <sub>packages/foundation/src/utils/mergeManager.ts:38</sub>
+### buildLeafColumnDataMap  <sub>packages/foundation/src/utils/columnMapping.ts:638</sub>
 
 ```ts
-(grid: FlexGrid): void
-```
-
-### rebindFilterColumns  <sub>packages/foundation/src/utils/gridAction.ts:91</sub>
-
-```ts
-<T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, gridFilter?: any): boolean
+(column: RawFlexGridColumnConfig): any
 ```
 
 ### stripRequiredMark  <sub>packages/foundation/src/utils/columnMapping.ts:655</sub>
@@ -490,12 +491,6 @@ props/params:
 - `RegExp, replaceValue: string): string; (searchValue: st — Replace all instances of a substring in a string, using a regular expression or search string.`
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
-
-### buildLeafColumnDataMap  <sub>packages/foundation/src/utils/columnMapping.ts:638</sub>
-
-```ts
-(column: RawFlexGridColumnConfig): any
-```
 
 ### captureGridFilter  <sub>packages/foundation/src/utils/gridAction.ts:138</sub>
 
@@ -570,6 +565,12 @@ props/params:
 
 ```ts
 (column: RawFlexGridColumnConfig): boolean
+```
+
+### rebindFilterColumns  <sub>packages/foundation/src/utils/gridAction.ts:91</sub>
+
+```ts
+<T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>, gridFilter?: any): boolean
 ```
 
 ### restoreGridFilter  <sub>packages/foundation/src/utils/gridAction.ts:158</sub>
@@ -1141,7 +1142,7 @@ props/params:
 - `toISOString: () => string — Returns a date as a string value in ISO format.`
 - `toJSON: (key?: any) => string — Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization.`
 - `getVarDate: () => VarDate`
-- `__@toPrimitive@2348: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
+- `__@toPrimitive@2355: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
 
 ### formatDateTime  <sub>packages/foundation/src/utils/date.ts:9</sub>
 
@@ -1198,7 +1199,7 @@ props/params:
 - `toISOString: () => string — Returns a date as a string value in ISO format.`
 - `toJSON: (key?: any) => string — Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization.`
 - `getVarDate: () => VarDate`
-- `__@toPrimitive@2348: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
+- `__@toPrimitive@2355: { (hint: "default"): string; (hint: "string"): string; (hint: "number"): number; — Converts a Date object to a string. Converts a Date object to a number. Converts a Date object to a string or number.`
 
 ### formatNumber  <sub>packages/foundation/src/utils/number.ts:5</sub>
 
@@ -1980,19 +1981,19 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **MSG** | `features/master/src/components` | 235 |  | AS-IS SaveData 검증 메시지(cs L1114/1128/1206/1213/1219 그대로). |
-| **MSG** | `features/master/src/components` | 235 |  |  |
-| **COMBO** | `features/master/src/components` | 100 |  | 조회조건 cascade 콤보(6단, DB 실측 확정 — 전부 이미 등록돼 있음, 2026-09-22 ora.py). // AS-IS Data_SCP.Common(...)="_SCP" / Data.Common(...)=무접미(scp-combo-sqlid |
+| **MSG** | `features/master/src/components` | 246 |  | AS-IS SaveData 검증 메시지(cs L1114/1128/1206/1213/1219 그대로). |
+| **MSG** | `features/master/src/components` | 246 |  |  |
+| **COMBO** | `features/master/src/components` | 118 |  | 조회조건 cascade 콤보(6단, DB 실측 확정 — 전부 이미 등록돼 있음, 2026-09-22 ora.py). // AS-IS Data_SCP.Common(...)="_SCP" / Data.Common(...)=무접미(scp-combo-sqlid |
 | **REPORT_TYPE** | `features/master/src/components` | 6 |  |  |
 | **MODAL_OWNER** | `features/master/src/components` | 2 |  |  |
 | **DYN_MONTH_PREFIX** | `features/master/src/components` | 1 |  | 동적 PIVOT 월 컬럼 prefix(AS-IS 'M_' 접두, SP1 SELECT 'M_'+A.YYYYMM 그대로). |
+| **FP_INSTANCE_ENDPOINT** | `features/master/src/components` | 1 |  |  |
 | **ITEM_MODAL_CONDITION** | `features/master/src/components` | 1 |  | 팝업 검색조건 식별자 — visibleConditions prop 으로 호출 화면별 노출을 고른다. (문자열 리터럴 대신 이 상수를 쓸 것 — 오타는 "조건이 조용히 사라짐" 으로만 드러난다.) |
 | **AUTH_GROUP** | `features/master/src/components` | 0 |  | PlannerTypeLogic(cs L936-995)이 비교하는 그룹명. AS-IS는 SCP_CAPA_bool 판정에 'SCP Planner'와 // 'CAPA Planner'를 OR로 동일 취급하나, TO-BE SCM_ADM_USER_GR_M에 'C |
 | **CALENDAR_MONTHS_SPAN** | `features/master/src/components` | 0 |  | AS-IS SP1(@p_end_month = DATEADD(MM,41,today)) — 당월 포함 42개월(0~41개월 뒤까지) 조회. |
 | **CASCADE_LEVELS** | `features/master/src/components` | 0 |  | 등록된 cascade 단계. code/name 은 그 단계가 콤보에서 읽는 컬럼이며, 몇 번째 단계로 쓰이든 항상 이 이름 그대로다. 마지막 단계만 CODE / NAME 으로 읽던 규약은 없앴다 - 콤보 SQL 은 전 단계를 풀네임 컬럼으로 내려준다. |
 | **DEFAULT_ITEM_MODAL_CONDITIONS** | `features/master/src/components` | 0 |  | visibleConditions 미지정 시 기본 노출 세트 = 기존 동작 그대로(회귀 0). Item Type 은 신설 조건이라 기본 세트에서 빠진다 — 원하는 화면만 명시적으로 켠다. |
 | **DEFAULT_ITEM_TYPE** | `features/master/src/components` | 0 |  | Item Type 조건의 기본 선택값 — AS-IS 'Model by DivisionPopup' 이 Product 로 열리는 것과 동등. ⚠ 'ItemType' 콤보가 이 값을 CODE 로 주는지 NAME 으로 주는지는 admin 메타에 달렸다. 둘  |
-| **FP_INSTANCE_ENDPOINT** | `features/master/src/components` | 0 |  |  |
 | **ITEM_BY_PLANT_SITE_COLUMNS** | `features/master/src/components` | 0 |  |  |
 | **ITEM_TYPE_ALL** | `features/master/src/components` | 0 |  | Item Type 조건의 '전체' 값. CustomDropdown 의 allOption(단일 선택)은 value 가 빈 문자열이라 그 규약을 그대로 따른다. |
 | **MNU_ID** | `features/master/src/components` | 0 |  | PKG_SCP0049 admin 등록 실측(2026-09-22, ora.py SCM_ADM_API_M/SCM_ADM_MNU_BTN_MPG_M) — // newModel(SEARCH/SAVE)·mailSend(SAVE) 모두 MNU_ID='SCP0049 |
@@ -2047,14 +2048,14 @@ props/params:
 | **SMALL_DIVISION_WILDCARD** | `features/master/src/components` | 0 |  | 좁은 조회에서 "조건 없음"을 뜻하는 값. 넓은 조회는 빈 문자열을 조건 없음으로 받지만 좁은 쪽은 규약이 다르다. project/item 조건이 AND (EXISTS (... WHERE D.PROJECT_CODE LIKE P.TOKEN \|\| '% |
 | **VERSION_ACTION** | `features/master/src/components` | 0 |  |  |
 | **SHEET_INDEX** | `features/master/src/components` | 50 |  |  |
-| **buildComboOptions** | `features/master/src/components` | 16 |  | 콤보 행을 좁혀 드롭다운 옵션으로. 규칙은 이 파일 헤더 참조. division 은 축 이름이 고정이라 편의로 따로 받는다. 아예 안 넘기면 그 축이 없는 것으로 본다 - DIVISION_ID 컬럼을 내려주지 않는 FilterMyDivision 이 그 |
+| **buildComboOptions** | `features/master/src/components` | 15 |  | 콤보 행을 좁혀 드롭다운 옵션으로. 규칙은 이 파일 헤더 참조. division 은 축 이름이 고정이라 편의로 따로 받는다. 아예 안 넘기면 그 축이 없는 것으로 본다 - DIVISION_ID 컬럼을 내려주지 않는 FilterMyDivision 이 그 |
 | **toSelectedCodes** | `features/master/src/components` | 9 |  | 실제로 고른 코드만 남긴다. 전체선택('ALL')과 전체해제는 필터상 같다 - 둘 다 빈 배열이 되어 그 축이 미적용된다 (GetDMInnerTable 진입부의 'ALL' -> '' 치환과 같은 결과). |
 | **buildSalesSiteOptions** | `features/master/src/components` | 1 |  | 'SalesSite' 콤보 -> Sales Site 드롭다운 옵션. |
 | **logSearchReset** | `features/master/src/components` | 1 |  | // [reset] 상위 조회조건 변경 -> 하위 값 재세팅 // |
 | **blankValue** | `features/master/src/components` | 0 |  | 하위 단계 초기화 값 — 배열 필드면 빈 배열, 문자열 필드면 'ALL'. 둘 다 필터 미적용이다. |
 | **buildCapaAuthContext** | `features/master/src/components` | 0 |  | LoadAuthority(cs L309-403) + PlannerTypeLogic(cs L936-995, division 스코프)를 합쳐 화면이 한 번에 // 쓸 컨텍스트로 만든다. divisionId 는 검색에 실제 사용된 division(폼의 현재 |
 | **buildCapaMonthColumns** | `features/master/src/components` | 0 |  | 월 목록 → DataGrid dynamicColumns(binding=M_YYYYMM, PRIORITY 1~9 편집). |
-| **buildCapaNewModelColumns** | `features/master/src/components` | 0 |  | InitSpread(cs L484-546) 고정 컬럼 그대로 — SP 미배포라 admin 메타 대신 이 파일에 직접 정의 // (ProjectRouteListSaveModal 의 buildProjectRouteListSaveColumns 와 동일한 e |
+| **buildCapaNewModelColumns** | `features/master/src/components` | 0 |  | InitSpread(cs L484-546) 고정 컬럼 — SP 미배포라 admin 메타 대신 이 파일에 직접 정의 // (ProjectRouteListSaveModal 의 buildProjectRouteListSaveColumns 와 동일한 escap |
 | **buildEndCustomerOptions** | `features/master/src/components` | 0 |  | 'EndCustomer' 콤보 -> End Customer 드롭다운 옵션. |
 | **callTransfer** | `features/master/src/components` | 0 |  |  |
 | **callVersionAction** | `features/master/src/components` | 0 |  |  |
@@ -2306,7 +2307,7 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
-### buildCapaNewModelColumns  <sub>features/master/src/components/capaNewModelPopup/capa-new-model-popup.constants.ts:126</sub>
+### buildCapaNewModelColumns  <sub>features/master/src/components/capaNewModelPopup/capa-new-model-popup.constants.ts:128</sub>
 
 ```ts
 (isGroupElectrode: boolean): RawFlexGridColumnConfig[]
@@ -2877,26 +2878,30 @@ props/params:
 | **STANDARD_COLORS** | `@shared/components` | 0 |  | 표준 색 (엑셀 "표준 색" 행). |
 | **THEME_COLORS** | `@shared/components` | 0 |  | 개인화 색 선택 팔레트/hex 유틸 (ColorPickerButton 전용). // 테마 색 기준 행 (Office 유사 10색) — 각 열마다 명도(tint/shade) 변형을 생성한다. |
 | **VARIANT_LEVELS** | `@shared/components` | 0 |  | 테마색 그리드 명도 레벨. 0 = 기준행, +값 = tint(밝게), -값 = shade(어둡게). |
-| **SHEETS** | `@shared/components` | 585 |  |  |
-| **SHEETS** | `@shared/components` | 585 |  |  |
-| **SHEETS** | `@shared/components` | 585 |  |  |
-| **RESPONSE_SET** | `@shared/components` | 94 |  |  |
-| **RESPONSE_SET** | `@shared/components` | 94 |  |  |
-| **RESPONSE_SET** | `@shared/components` | 94 |  |  |
+| **SHEETS** | `@shared/components` | 616 |  |  |
+| **SHEETS** | `@shared/components` | 616 |  |  |
+| **SHEETS** | `@shared/components` | 616 |  |  |
+| **RESPONSE_SET** | `@shared/components` | 95 |  |  |
+| **RESPONSE_SET** | `@shared/components` | 95 |  |  |
+| **RESPONSE_SET** | `@shared/components` | 95 |  |  |
 | **MoveType** | `@shared/components` | 0 |  |  |
-| **createPersistedStoreWithTab** | `@shared/stores` | 136 |  | 탭 내부 페이지 스토어 선언시 사용. 현재 오픈된 tabId에 따른 멀티톤 인스턴스 생성. use...Store.getState() 사용 불가. 영속화하지 않는다(sessionStorage 미저장). - 탭 전환 시 상태 유지는 MDI keep-ali |
-| **confirmIfDirtyKey** | `@shared/stores` | 69 |  | dirty 면 상황에 맞는 confirm 을 띄우고 사용자의 선택을 반환한다. dirty 아니면 즉시 true. 사용처: 조회 실행 전(SubTitle/SearchArea), MDI 탭 닫기 전, 다이얼로그 닫기 전. 확인을 누르면 등록된 변경을 실제 |
-| **tabDirtyKey** | `@shared/stores` | 69 |  | MDI 탭 단위 키 (TabIdContext 의 tabId) |
-| **saveTitleSet** | `@shared/components` | 31 |  | 컬럼/Measure 개인화 영구 저장(SCM_MST_TITLESET_USER) — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset). ⚠️ 모든 값은 같은 길이의 '^' delim 문자열 — 순서가 곧 컬럼 대응 (SP 는 |
-| **createPersistedStore** | `@shared/stores` | 21 |  | 전역 스토어 선언시 사용. 싱글톤 스토어 빌더 use...Store.getState() 사용 가능 |
-| **toColumnLayoutSettings** | `@shared/components` | 20 |  | 화면 grid 메타(SHEET_COLUMNS) → 팝업 initialSettings/defaultSettings 변환. titleSet SP 계약(COLUMN_NAME/COLUMN_LABEL)에는 width/color 가 없으므로, 팝업의 Width  |
+| **createPersistedStoreWithTab** | `@shared/stores` | 138 |  | 탭 내부 페이지 스토어 선언시 사용. 현재 오픈된 tabId에 따른 멀티톤 인스턴스 생성. use...Store.getState() 사용 불가. 영속화하지 않는다(sessionStorage 미저장). - 탭 전환 시 상태 유지는 MDI keep-ali |
+| **confirmIfDirtyKey** | `@shared/stores` | 67 |  | dirty 면 상황에 맞는 confirm 을 띄우고 사용자의 선택을 반환한다. dirty 아니면 즉시 true. 사용처: 조회 실행 전(SubTitle/SearchArea), MDI 탭 닫기 전, 다이얼로그 닫기 전. 확인을 누르면 등록된 변경을 실제 |
+| **tabDirtyKey** | `@shared/stores` | 67 |  | MDI 탭 단위 키 (TabIdContext 의 tabId) |
+| **saveTitleSet** | `@shared/components` | 36 |  | 컬럼/Measure 개인화 영구 저장(SCM_MST_TITLESET_USER) — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset). ⚠️ 모든 값은 같은 길이의 '^' delim 문자열 — 순서가 곧 컬럼 대응 (SP 는 |
+| **createPersistedStore** | `@shared/stores` | 22 |  | 전역 스토어 선언시 사용. 싱글톤 스토어 빌더 use...Store.getState() 사용 가능 |
+| **toColumnLayoutSettings** | `@shared/components` | 22 |  | 화면 grid 메타(SHEET_COLUMNS) → 팝업 initialSettings/defaultSettings 변환. titleSet SP 계약(COLUMN_NAME/COLUMN_LABEL)에는 width/color 가 없으므로, 팝업의 Width  |
 | **buildSavePayload** | `@shared/components` | 18 |  | 저장 payload 구성 — 표시 컬럼 1..n → 숨김 컬럼 후행 → 비표시 0. hiddenNames = 팝업 dual list 에서 감춘 컬럼(MEASURE 등). 사용자가 좌/우로 옮길 수 없으므로 USER_FLAG 를 항상 'Y' 로 고정한다 |
-| **fetchTitleSet** | `@shared/components` | 4 |  | 컬럼/Measure 개인화 조회 — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset/search). ⭐ 화면별 `{menuId}/titleSet/SEARCH/call-proc` 을 쓰면 SCM_ADM_MNU_BTN_MPG_ |
+| **formatTotalCases** | `@shared/hooks` | 6 |  | TitleArea `totalCases` 에 넘길 건수 — 천 단위 쉼표(12345 → '12,345'). 디자인 시스템은 totalCases 를 서식 없이 그대로 그린다(타입은 number 지만 렌더는 children 출력뿐). 그래서 쉼표를 붙인  |
+| **fetchTitleSet** | `@shared/components` | 5 |  | 컬럼/Measure 개인화 조회 — 공용 엔드포인트(POST /admin/menu/{mnuId}/titleset/search). ⭐ 화면별 `{menuId}/titleSet/SEARCH/call-proc` 을 쓰면 SCM_ADM_MNU_BTN_MPG_ |
 | **applyGridLayout** | `@shared/components` | 3 |  | admin 컬럼 메타 위에 사용자 레이아웃(표시/순서/폭)을 덮어쓴다. sales-future-price `applyLayoutToColumns` 와 동일 계약을 공통화한 것: - 레이아웃에 있는 컬럼: visible = USER_FLAG, 폭 ove |
 | **fetchGridLayout** | `@shared/components` | 3 |  | 저장된 레이아웃 조회 + 파싱. `null` = 없음/실패 → 적용하지 않음(admin 메타 그대로). |
 | **isoWeeksOfMonth** | `@shared/lib` | 2 |  | yyyymm 의 ISO 주 분해 — 달력 순서, 월경계 주는 "월내 기여 일수"만 계상. 주 태그의 yyyymm 은 항상 입력 월 (GET_SPREAD_TITLE 월경계 분할 규약과 동일). |
+| **registerDirtyCheck** | `@shared/stores` | 2 |  | dirty 판정 함수를 키들에 등록한다. 반환된 함수로 해제(그리드 언마운트 시). 같은 그리드가 tab 키와 scope 키(다이얼로그 안일 때)에 동시 등록될 수 있다 — 다이얼로그의 편집분도 "탭을 닫으면 사라지는 변경" 이므로 탭 집계에 포함하는 |
+| **registerDirtyReset** | `@shared/stores` | 2 |  | 미저장 변경 되돌리기 함수를 키들에 등록한다. 등록 규약은 registerDirtyCheck 과 동일. confirm 에서 사용자가 "확인"(= 버리고 진행)을 누르면 이 함수들이 호출된다. 그리드는 DataGrid 가 자동 등록하므로, 화면은 그리드 |
 | **distributeMonthToWeeks** | `@shared/lib` | 1 |  | 룰1 — 월 수량 → 주별 배분. perDay = trunc(monthQty / 월 총일수) → 주별 = perDay × 주 월내일수. 끝자리(monthQty − Σ주별)는 마지막 주에 +/- 가산 (음수 포함 — 총합 = monthQty 보존). u |
 | **distributeWeekToDays** | `@shared/lib` | 1 |  | 룰2 — 주 수량 → 주내 일 배분. applicableMask(7bit SUN-first) 의 적용요일에 trunc 균등 배분 + 잔여 = 마지막 적용일. 적용요일이 하나도 없으면(마스크 없음·전부 0·주 범위 밖) 월요일(dow===1)에 전량 — |
+| **sortOptionsBy** | `@shared/components` | 1 |  |  |
 | **applyLevel** | `@shared/components` | 0 |  |  |
 | **attachGridContextMenu** | `@shared/components` | 0 |  | 그리드에 컨텍스트 메뉴를 설치한다. 반환 함수로 해제. 허용 영역: 컬럼 헤더(그룹 헤더 포함) / 데이터 셀. rowHeader(No·상태)·corner·빈 영역은 브라우저 기본 메뉴를 유지한다. |
 | **buildDefaultRows** | `@shared/components` | 0 |  | Default(리셋) 버튼용 행 구성 — DB 의 컬럼 기본 셋팅(SCM_MST_SHEET_COLUMNS) 그대로. buildInitialRows 와의 차이: 저장된 개인화를 일절 반영하지 않는다. 금지: Default 경로에서 buildInitial |
@@ -2931,8 +2936,6 @@ props/params:
 | **parseGridLayout** | `@shared/components` | 0 |  | TitleSet 응답 → 레이아웃 행 파싱. ⭐ 사용자 저장값(USER_* 별칭) 우선 — 관리자쪽(COLUMN_WIDTH/SORT_ORDER_NO)만 읽으면 저장한 값이 영원히 안 보인다 (ColumnLayoutModal mapBeRow 와 동일 계 |
 | **parseWidth** | `@shared/components` | 0 |  |  |
 | **pushRecentColor** | `@shared/components` | 0 |  |  |
-| **registerDirtyCheck** | `@shared/stores` | 0 |  | dirty 판정 함수를 키들에 등록한다. 반환된 함수로 해제(그리드 언마운트 시). 같은 그리드가 tab 키와 scope 키(다이얼로그 안일 때)에 동시 등록될 수 있다 — 다이얼로그의 편집분도 "탭을 닫으면 사라지는 변경" 이므로 탭 집계에 포함하는 |
-| **registerDirtyReset** | `@shared/stores` | 0 |  | 미저장 변경 되돌리기 함수를 키들에 등록한다. 등록 규약은 registerDirtyCheck 과 동일. confirm 에서 사용자가 "확인"(= 버리고 진행)을 누르면 이 함수들이 호출된다. 그리드는 DataGrid 가 자동 등록하므로, 화면은 그리드 |
 | **registerStore** | `@shared/stores` | 0 |  | 스토어가 자신을 등록할 때 사용할 함수 |
 | **registerViewActions** | `@shared/stores` | 0 |  |  |
 | **reorderRows** | `@shared/components` | 0 |  |  |
@@ -2949,9 +2952,9 @@ props/params:
 | **unpivotWideRows** | `@shared/components` | 0 |  | wide(PIVOT 커서: 축 컬럼 + D_/W_/M_ 기간 컬럼들) → long(행당 기간 1값) 변환. waterfall SP 커서를 OLAP PivotEngine 계약(long-format)으로 바꾸는 표준 유틸. |
 | **unregisterViewActions** | `@shared/stores` | 0 |  |  |
 | **DialogScopeContext** | `@shared/stores` | 1 |  | 현재 서브트리가 속한 다이얼로그 스코프 id. 페이지 최상위(다이얼로그 밖)는 root 스코프로 취급하며 null. CustomDialog가 자신의 스코프 id로 Provider를 씌운다. |
+| **MenuIdContext** | `@shared/stores` | 1 |  | 현재 탭 화면의 mnuId(= 화면 코드, 예 'DMF0003'). ViewContainer 가 탭마다 Provider 로 심는다. 콤보 SQL(SCM_ADM_CMBO_SQL_M)의 |
+| **TabIdContext** | `@shared/stores` | 1 |  |  |
 | **listFilter** | `@shared/components` | 0 |  | MUI 기본 목록 필터(대소문자 무시, 부분일치). CustomDropdown 의 두 곳(filterOptions 와 // handleSelectAll)에서 같은 기준을 써야 '목록에 보이는 것'과 'SELECT ALL 이 고르는 것'이 // 어긋나지 |
-| **MenuIdContext** | `@shared/stores` | 0 |  | 현재 탭 화면의 mnuId(= 화면 코드, 예 'DMF0003'). ViewContainer 가 탭마다 Provider 로 심는다. 콤보 SQL(SCM_ADM_CMBO_SQL_M)의 |
-| **TabIdContext** | `@shared/stores` | 0 |  |  |
 
 ### createPersistedStoreWithTab  <sub>packages/shared/src/stores/createStore.ts:82</sub>
 
@@ -3208,6 +3211,22 @@ props/params:
 - `__@iterator@896: () => ArrayIterator<ColumnLayoutRow> — Iterator`
 - `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
+### formatTotalCases  <sub>packages/shared/src/hooks/useTitleAreaLanguage.ts:23</sub>
+
+```ts
+(value: number): number
+```
+
+props/params:
+
+- `toString: (radix?: number) => string — Returns a string representation of an object.`
+- `toFixed: (fractionDigits?: number) => string — Returns a string representing a number in fixed-point notation.`
+- `toExponential: (fractionDigits?: number) => string — Returns a string containing a number represented in exponential notation.`
+- `toPrecision: (precision?: number) => string — Returns a string containing a number represented either in exponential or fixed-point notation with a specified number of digits.`
+- `valueOf: () => number — Returns the primitive value of the specified object.`
+- `toLocaleString: { (locales?: string`
+- `string[], options?: NumberFormatOptions): string; (locales — Converts a number to a string by using the current or specified locale.`
+
 ### fetchTitleSet  <sub>packages/shared/src/components/organisms/data-grid/titleSetApi.ts:31</sub>
 
 ```ts
@@ -3349,6 +3368,98 @@ props/params:
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
 
+### registerDirtyCheck  <sub>packages/shared/src/stores/useDirtyRegistry.ts:54</sub>
+
+```ts
+(keys: string[], check: DirtyCheck): () => void
+```
+
+props/params:
+
+- `length: number — Gets or sets the length of the array. This is a number one higher than the highest index in the array.`
+- `toString: () => string — Returns a string representation of an array.`
+- `toLocaleString: { (): string; (locales: string`
+- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
+- `pop: () => string — Removes the last element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `push: (...items: string[]) => number — Appends new elements to the end of an array, and returns the new length of the array.`
+- `concat: { (...items: ConcatArray<string>[]): string[]; (...items: (string`
+- `ConcatArray< — Combines two or more arrays. This method returns a new array without modifying any existing arrays.`
+- `join: (separator?: string) => string — Adds all the elements of an array into a string, separated by the specified separator string.`
+- `reverse: () => string[] — Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array.`
+- `shift: () => string — Removes the first element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `slice: (start?: number, end?: number) => string[] — Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array. For example, -2 r`
+- `sort: (compareFn?: (a: string, b: string) => number) => string[] — Sorts an array in place. This method mutates the array and returns a reference to the same array.`
+- `splice: { (start: number, deleteCount?: number): string[]; (start: number, deleteCount:  — Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.`
+- `unshift: (...items: string[]) => number — Inserts new elements at the start of an array, and returns the new length of the array.`
+- `indexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the first occurrence of a value in an array, or -1 if it is not present.`
+- `lastIndexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.`
+- `every: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Determines whether all the members of an array satisfy the specified test.`
+- `some: (predicate: (value: string, index: number, array: string[]) => unknown, thisArg? — Determines whether the specified callback function returns true for any element of an array.`
+- `forEach: (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?:  — Performs the specified action for each element in an array.`
+- `map: <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?:  — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
+- `filter: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Returns the elements of an array that meet the condition specified in a callback function.`
+- `reduce: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
+- `reduceRight: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
+- `find: { <S extends string>(predicate: (value: string, index: number, obj: string[]) => — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
+- `findIndex: (predicate: (value: string, index: number, obj: string[]) => unknown, thisArg?:  — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
+- `fill: (value: string, start?: number, end?: number) => string[] — Changes all array elements from `start` to `end` index to a static `value` and returns the modified array`
+- `copyWithin: (target: number, start: number, end?: number) => string[] — Returns the this object after copying a section of the array identified by start and end to the same array starting at position target`
+- `entries: () => ArrayIterator<[number, string]> — Returns an iterable of key, value pairs for every entry in the array`
+- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
+- `values: () => ArrayIterator<string> — Returns an iterable of values in the array`
+- `includes: (searchElement: string, fromIndex?: number) => boolean — Determines whether an array includes a certain element, returning true or false as appropriate.`
+- `flatMap: <U, This = undefined>(callback: (this: This, value: string, index: number, array — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
+- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
+- `at: (index: number) => string — Returns the item located at the specified index.`
+- `__@iterator@896: () => ArrayIterator<string> — Iterator`
+- `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
+
+### registerDirtyReset  <sub>packages/shared/src/stores/useDirtyRegistry.ts:64</sub>
+
+```ts
+(keys: string[], reset: DirtyReset): () => void
+```
+
+props/params:
+
+- `length: number — Gets or sets the length of the array. This is a number one higher than the highest index in the array.`
+- `toString: () => string — Returns a string representation of an array.`
+- `toLocaleString: { (): string; (locales: string`
+- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
+- `pop: () => string — Removes the last element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `push: (...items: string[]) => number — Appends new elements to the end of an array, and returns the new length of the array.`
+- `concat: { (...items: ConcatArray<string>[]): string[]; (...items: (string`
+- `ConcatArray< — Combines two or more arrays. This method returns a new array without modifying any existing arrays.`
+- `join: (separator?: string) => string — Adds all the elements of an array into a string, separated by the specified separator string.`
+- `reverse: () => string[] — Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array.`
+- `shift: () => string — Removes the first element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `slice: (start?: number, end?: number) => string[] — Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array. For example, -2 r`
+- `sort: (compareFn?: (a: string, b: string) => number) => string[] — Sorts an array in place. This method mutates the array and returns a reference to the same array.`
+- `splice: { (start: number, deleteCount?: number): string[]; (start: number, deleteCount:  — Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.`
+- `unshift: (...items: string[]) => number — Inserts new elements at the start of an array, and returns the new length of the array.`
+- `indexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the first occurrence of a value in an array, or -1 if it is not present.`
+- `lastIndexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.`
+- `every: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Determines whether all the members of an array satisfy the specified test.`
+- `some: (predicate: (value: string, index: number, array: string[]) => unknown, thisArg? — Determines whether the specified callback function returns true for any element of an array.`
+- `forEach: (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?:  — Performs the specified action for each element in an array.`
+- `map: <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?:  — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
+- `filter: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Returns the elements of an array that meet the condition specified in a callback function.`
+- `reduce: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
+- `reduceRight: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
+- `find: { <S extends string>(predicate: (value: string, index: number, obj: string[]) => — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
+- `findIndex: (predicate: (value: string, index: number, obj: string[]) => unknown, thisArg?:  — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
+- `fill: (value: string, start?: number, end?: number) => string[] — Changes all array elements from `start` to `end` index to a static `value` and returns the modified array`
+- `copyWithin: (target: number, start: number, end?: number) => string[] — Returns the this object after copying a section of the array identified by start and end to the same array starting at position target`
+- `entries: () => ArrayIterator<[number, string]> — Returns an iterable of key, value pairs for every entry in the array`
+- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
+- `values: () => ArrayIterator<string> — Returns an iterable of values in the array`
+- `includes: (searchElement: string, fromIndex?: number) => boolean — Determines whether an array includes a certain element, returning true or false as appropriate.`
+- `flatMap: <U, This = undefined>(callback: (this: This, value: string, index: number, array — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
+- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
+- `at: (index: number) => string — Returns the item located at the specified index.`
+- `__@iterator@896: () => ArrayIterator<string> — Iterator`
+- `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
+
 ### distributeMonthToWeeks  <sub>packages/shared/src/lib/bucket-distribution.ts:69</sub>
 
 ```ts
@@ -3380,6 +3491,52 @@ props/params:
 - `valueOf: () => number — Returns the primitive value of the specified object.`
 - `toLocaleString: { (locales?: string`
 - `string[], options?: NumberFormatOptions): string; (locales — Converts a number to a string by using the current or specified locale.`
+
+### sortOptionsBy  <sub>packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx:203</sub>
+
+```ts
+<T extends { value: string; label?: unknown; }>(opts: T[], sortBy?: "label"): T[]
+```
+
+props/params:
+
+- `length: number — Gets or sets the length of the array. This is a number one higher than the highest index in the array.`
+- `toString: () => string — Returns a string representation of an array.`
+- `toLocaleString: { (): string; (locales: string`
+- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
+- `pop: () => T — Removes the last element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `push: (...items: T[]) => number — Appends new elements to the end of an array, and returns the new length of the array.`
+- `concat: { (...items: ConcatArray<T>[]): T[]; (...items: (T`
+- `ConcatArray<T>)[]): T[]; } — Combines two or more arrays. This method returns a new array without modifying any existing arrays.`
+- `join: (separator?: string) => string — Adds all the elements of an array into a string, separated by the specified separator string.`
+- `reverse: () => T[] — Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array.`
+- `shift: () => T — Removes the first element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
+- `slice: (start?: number, end?: number) => T[] — Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array. For example, -2 r`
+- `sort: (compareFn?: (a: T, b: T) => number) => T[] — Sorts an array in place. This method mutates the array and returns a reference to the same array.`
+- `splice: { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: numbe — Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.`
+- `unshift: (...items: T[]) => number — Inserts new elements at the start of an array, and returns the new length of the array.`
+- `indexOf: (searchElement: T, fromIndex?: number) => number — Returns the index of the first occurrence of a value in an array, or -1 if it is not present.`
+- `lastIndexOf: (searchElement: T, fromIndex?: number) => number — Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.`
+- `every: { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S,  — Determines whether all the members of an array satisfy the specified test.`
+- `some: (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any) =>  — Determines whether the specified callback function returns true for any element of an array.`
+- `forEach: (callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => vo — Performs the specified action for each element in an array.`
+- `map: <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[ — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
+- `filter: { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S,  — Returns the elements of an array that meet the condition specified in a callback function.`
+- `reduce: { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array:  — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
+- `reduceRight: { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array:  — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
+- `find: { <S extends T>(predicate: (value: T, index: number, obj: T[]) => value is S, th — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
+- `findIndex: (predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any) => nu — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
+- `fill: (value: T, start?: number, end?: number) => T[] — Changes all array elements from `start` to `end` index to a static `value` and returns the modified array`
+- `copyWithin: (target: number, start: number, end?: number) => T[] — Returns the this object after copying a section of the array identified by start and end to the same array starting at position target`
+- `entries: () => ArrayIterator<[number, T]> — Returns an iterable of key, value pairs for every entry in the array`
+- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
+- `values: () => ArrayIterator<T> — Returns an iterable of values in the array`
+- `includes: (searchElement: T, fromIndex?: number) => boolean — Determines whether an array includes a certain element, returning true or false as appropriate.`
+- `flatMap: <U, This = undefined>(callback: (this: This, value: T, index: number, array: T[] — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
+- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
+- `at: (index: number) => T — Returns the item located at the specified index.`
+- `__@iterator@896: () => ArrayIterator<T> — Iterator`
+- `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
 ### applyLevel  <sub>packages/shared/src/components/molecules/colorPickerButton/colorUtils.ts:87</sub>
 
@@ -4845,98 +5002,6 @@ props/params:
 - `RegExp, replaceValue: string): string; (searchValue: st — Replace all instances of a substring in a string, using a regular expression or search string.`
 - `at: (index: number) => string — Returns a new String consisting of the single UTF-16 code unit located at the specified index.`
 - `__@iterator@896: () => StringIterator<string> — Iterator`
-
-### registerDirtyCheck  <sub>packages/shared/src/stores/useDirtyRegistry.ts:54</sub>
-
-```ts
-(keys: string[], check: DirtyCheck): () => void
-```
-
-props/params:
-
-- `length: number — Gets or sets the length of the array. This is a number one higher than the highest index in the array.`
-- `toString: () => string — Returns a string representation of an array.`
-- `toLocaleString: { (): string; (locales: string`
-- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
-- `pop: () => string — Removes the last element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
-- `push: (...items: string[]) => number — Appends new elements to the end of an array, and returns the new length of the array.`
-- `concat: { (...items: ConcatArray<string>[]): string[]; (...items: (string`
-- `ConcatArray< — Combines two or more arrays. This method returns a new array without modifying any existing arrays.`
-- `join: (separator?: string) => string — Adds all the elements of an array into a string, separated by the specified separator string.`
-- `reverse: () => string[] — Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array.`
-- `shift: () => string — Removes the first element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
-- `slice: (start?: number, end?: number) => string[] — Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array. For example, -2 r`
-- `sort: (compareFn?: (a: string, b: string) => number) => string[] — Sorts an array in place. This method mutates the array and returns a reference to the same array.`
-- `splice: { (start: number, deleteCount?: number): string[]; (start: number, deleteCount:  — Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.`
-- `unshift: (...items: string[]) => number — Inserts new elements at the start of an array, and returns the new length of the array.`
-- `indexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the first occurrence of a value in an array, or -1 if it is not present.`
-- `lastIndexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.`
-- `every: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Determines whether all the members of an array satisfy the specified test.`
-- `some: (predicate: (value: string, index: number, array: string[]) => unknown, thisArg? — Determines whether the specified callback function returns true for any element of an array.`
-- `forEach: (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?:  — Performs the specified action for each element in an array.`
-- `map: <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?:  — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
-- `filter: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Returns the elements of an array that meet the condition specified in a callback function.`
-- `reduce: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
-- `reduceRight: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
-- `find: { <S extends string>(predicate: (value: string, index: number, obj: string[]) => — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
-- `findIndex: (predicate: (value: string, index: number, obj: string[]) => unknown, thisArg?:  — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
-- `fill: (value: string, start?: number, end?: number) => string[] — Changes all array elements from `start` to `end` index to a static `value` and returns the modified array`
-- `copyWithin: (target: number, start: number, end?: number) => string[] — Returns the this object after copying a section of the array identified by start and end to the same array starting at position target`
-- `entries: () => ArrayIterator<[number, string]> — Returns an iterable of key, value pairs for every entry in the array`
-- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
-- `values: () => ArrayIterator<string> — Returns an iterable of values in the array`
-- `includes: (searchElement: string, fromIndex?: number) => boolean — Determines whether an array includes a certain element, returning true or false as appropriate.`
-- `flatMap: <U, This = undefined>(callback: (this: This, value: string, index: number, array — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
-- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
-- `at: (index: number) => string — Returns the item located at the specified index.`
-- `__@iterator@896: () => ArrayIterator<string> — Iterator`
-- `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
-
-### registerDirtyReset  <sub>packages/shared/src/stores/useDirtyRegistry.ts:64</sub>
-
-```ts
-(keys: string[], reset: DirtyReset): () => void
-```
-
-props/params:
-
-- `length: number — Gets or sets the length of the array. This is a number one higher than the highest index in the array.`
-- `toString: () => string — Returns a string representation of an array.`
-- `toLocaleString: { (): string; (locales: string`
-- `string[], options?: NumberFormatOptions & DateT — Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.`
-- `pop: () => string — Removes the last element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
-- `push: (...items: string[]) => number — Appends new elements to the end of an array, and returns the new length of the array.`
-- `concat: { (...items: ConcatArray<string>[]): string[]; (...items: (string`
-- `ConcatArray< — Combines two or more arrays. This method returns a new array without modifying any existing arrays.`
-- `join: (separator?: string) => string — Adds all the elements of an array into a string, separated by the specified separator string.`
-- `reverse: () => string[] — Reverses the elements in an array in place. This method mutates the array and returns a reference to the same array.`
-- `shift: () => string — Removes the first element from an array and returns it. If the array is empty, undefined is returned and the array is not modified.`
-- `slice: (start?: number, end?: number) => string[] — Returns a copy of a section of an array. For both start and end, a negative index can be used to indicate an offset from the end of the array. For example, -2 r`
-- `sort: (compareFn?: (a: string, b: string) => number) => string[] — Sorts an array in place. This method mutates the array and returns a reference to the same array.`
-- `splice: { (start: number, deleteCount?: number): string[]; (start: number, deleteCount:  — Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.`
-- `unshift: (...items: string[]) => number — Inserts new elements at the start of an array, and returns the new length of the array.`
-- `indexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the first occurrence of a value in an array, or -1 if it is not present.`
-- `lastIndexOf: (searchElement: string, fromIndex?: number) => number — Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.`
-- `every: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Determines whether all the members of an array satisfy the specified test.`
-- `some: (predicate: (value: string, index: number, array: string[]) => unknown, thisArg? — Determines whether the specified callback function returns true for any element of an array.`
-- `forEach: (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?:  — Performs the specified action for each element in an array.`
-- `map: <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?:  — Calls a defined callback function on each element of an array, and returns an array that contains the results.`
-- `filter: { <S extends string>(predicate: (value: string, index: number, array: string[])  — Returns the elements of an array that meet the condition specified in a callback function.`
-- `reduce: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as `
-- `reduceRight: { (callbackfn: (previousValue: string, currentValue: string, currentIndex: numbe — Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result`
-- `find: { <S extends string>(predicate: (value: string, index: number, obj: string[]) => — Returns the value of the first element in the array where predicate is true, and undefined otherwise.`
-- `findIndex: (predicate: (value: string, index: number, obj: string[]) => unknown, thisArg?:  — Returns the index of the first element in the array where predicate is true, and -1 otherwise.`
-- `fill: (value: string, start?: number, end?: number) => string[] — Changes all array elements from `start` to `end` index to a static `value` and returns the modified array`
-- `copyWithin: (target: number, start: number, end?: number) => string[] — Returns the this object after copying a section of the array identified by start and end to the same array starting at position target`
-- `entries: () => ArrayIterator<[number, string]> — Returns an iterable of key, value pairs for every entry in the array`
-- `keys: () => ArrayIterator<number> — Returns an iterable of keys in the array`
-- `values: () => ArrayIterator<string> — Returns an iterable of values in the array`
-- `includes: (searchElement: string, fromIndex?: number) => boolean — Determines whether an array includes a certain element, returning true or false as appropriate.`
-- `flatMap: <U, This = undefined>(callback: (this: This, value: string, index: number, array — Calls a defined callback function on each element of an array. Then, flattens the result into a new array. This is identical to a map followed by flat with dept`
-- `flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[] — Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.`
-- `at: (index: number) => string — Returns the item located at the specified index.`
-- `__@iterator@896: () => ArrayIterator<string> — Iterator`
-- `__@unscopables@898: { [x: number]: boolean; length?: boolean; toString?: boolean; toLocaleString?: b — Is an object whose properties have the value 'true' when they will be absent when used in a 'with' statement.`
 
 ### registerStore  <sub>packages/shared/src/stores/storeRegistry.ts:5</sub>
 

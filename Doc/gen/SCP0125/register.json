@@ -1,0 +1,249 @@
+{
+  "menuId": "SCP0125",
+  "screenName": "Workbench",
+  "feature": "supply",
+  "pageDir": "workbench",
+  "routePath": "supply/workbench",
+  "sheets": [
+    {
+      "sheetName": "Elec. Demand",
+      "rule": "META+코드연결",
+      "columns": 18,
+      "popup": false
+    },
+    {
+      "sheetName": "MKT FCST",
+      "rule": "META+코드연결",
+      "columns": 22,
+      "popup": false
+    },
+    {
+      "sheetName": "STOCK",
+      "rule": "META+코드연결",
+      "columns": 22,
+      "popup": false
+    },
+    {
+      "sheetName": "Stock(2nd OCV)",
+      "rule": "META+코드연결",
+      "columns": 19,
+      "popup": false
+    },
+    {
+      "sheetName": "Stock(Elec. Plant)",
+      "rule": "META+코드연결",
+      "columns": 21,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "<field:dtFcstType>",
+        "<field:dtIncoterms>",
+        "<field:dtStockType>",
+        "<field:dtDivision_GM>",
+        "<field:dtBefore_YN>"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_",
+      "sheet": "Elec. Demand",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_GET_SEARCH_INFO",
+      "asis_sp": "SCP0125_GET_SEARCH_INFO",
+      "status": "MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "GetSearchInfo"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_GET_SEARCH_INFO",
+      "sheet": "Elec. Demand",
+      "btn": "SEARCH_INFO",
+      "allowed_gap": "사용자별 조회조건 저장/복원(G1) → /admin/menu/{MENU}/search-conditions (store fetchStaticColumns 내장)"
+    },
+    {
+      "asis_endpoint": "{?string.Empty}",
+      "asis_sp": "",
+      "status": "UNRESOLVED",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_",
+      "sheet": "Elec. Demand",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_GET_MKT_FCST_ADJ",
+      "asis_sp": "SCP0125_GET_MKT_FCST_ADJ",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_GET_MKT_FCST_ADJ",
+      "sheet": "MKT FCST",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_GET_STOCK_ADJ",
+      "asis_sp": "SCP0125_GET_STOCK_ADJ",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ADJ",
+      "sheet": "STOCK",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_GET_STOCK_ADJ_UC",
+      "asis_sp": "SCP0125_GET_STOCK_ADJ_UC",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ADJ_UC",
+      "sheet": "STOCK",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_GET_STOCK_ELEC_PLNT",
+      "asis_sp": "SCP0125_GET_STOCK_ELEC_PLNT",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ELEC_PLNT",
+      "sheet": "STOCK",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_GET_STOCK_ELEC_PLNT_UC",
+      "asis_sp": "SCP0125_GET_STOCK_ELEC_PLNT_UC",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_ELEC_PLNT_UC",
+      "sheet": "STOCK",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_GET_MKT_FCST_ELEC_DEMAND",
+      "asis_sp": "SCP0125_GET_MKT_FCST_ELEC_DEMAND",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_GET_MKT_FCST_ELEC_DEMAND",
+      "sheet": "MKT FCST",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_GET_STOCK_SECOND_OCV",
+      "asis_sp": "SCP0125_GET_STOCK_SECOND_OCV",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_GET_STOCK_SECOND_OCV",
+      "sheet": "STOCK",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_SAVE_MKT_FCST_ADJ",
+      "asis_sp": "SCP0125_SAVE_MKT_FCST_ADJ",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "Save_Data"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_SAVE_MKT_FCST_ADJ",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_SAVE_STOCK_ADJ",
+      "asis_sp": "SCP0125_SAVE_STOCK_ADJ",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "Save_Data"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_SAVE_STOCK_ADJ",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+      "asis_sp": "SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "Save_Data"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_SAVE_MKT_FCST_ELEC_DEMAND",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0125_SAVE_STOCK_SECOND_OCV",
+      "asis_sp": "SCP0125_SAVE_STOCK_SECOND_OCV",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "Save_SecondOcv"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0125.P_SCP0125_SAVE_STOCK_SECOND_OCV",
+      "sheet": "Elec. Demand",
+      "btn": "SAVE"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

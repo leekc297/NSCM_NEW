@@ -3,6 +3,31 @@
   "mode": "admin",
   "modeSource": "users.json screens",
   "menuId": "SCP0096",
+  "divCascade": [],
+  "divLabels": [
+    "Div",
+    "Division"
+  ],
+  "condOrder": [
+    "Div",
+    "Plant Site",
+    "Period"
+  ],
+  "condGone": [
+    {
+      "name": "Day of the week",
+      "usage": "BUTTON_AREA"
+    },
+    {
+      "name": "Input Value",
+      "usage": "BUTTON_AREA"
+    },
+    {
+      "name": "Input",
+      "usage": "BUTTON_AREA"
+    }
+  ],
+  "condNotUse": [],
   "page": "ShipmentWorkingDayOsp",
   "routePath": "supply/supply-master/shipment-working-day-osp",
   "asisName": "Shipment_Working_Day_OSP",
@@ -39,6 +64,7 @@
       "tobeLabel": "Division",
       "catalog": "",
       "labels": [
+        "Div",
         "Division"
       ],
       "excluded": false,
@@ -73,8 +99,8 @@
       "tobeLabel": "Input Value",
       "catalog": "Input Value → - · 공통기능화 검토",
       "labels": [
-        "-",
-        "Input Value"
+        "Input Value",
+        "-"
       ],
       "excluded": false,
       "excludedWhy": ""
@@ -91,8 +117,8 @@
       "tobeLabel": "Day of the week",
       "catalog": "Day of the week → - · 공통기능화 검토",
       "labels": [
-        "-",
-        "Day of the week"
+        "Day of the week",
+        "-"
       ],
       "excluded": false,
       "excludedWhy": ""
@@ -109,7 +135,7 @@
     ],
     "maxRowPx": 32
   },
-  "catalogScreen": "Shipment Working Day (OSP)",
+  "catalogScreen": "Shipment Working Day(OSP)",
   "asisMapping": "features\\supply\\src\\pages\\shipment-working-day-osp\\__asis-mapping__.md",
   "buttons": [
     {
@@ -265,97 +291,126 @@
   },
   "accounts": [
     {
-      "id": "jaeuk.shin",
-      "name": "",
+      "id": "jooyong026",
+      "name": "강주용",
       "groups": [
-        "SCP ADMIN",
-        "SYSTEM ADMIN"
+        "ADMIN"
       ],
       "divisions": [
         "40"
       ],
-      "roles": {},
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
       "roleNote": "ADMIN",
       "admin": true,
       "adminOf": [
         "SCP ADMIN"
       ],
       "screenGroup": "",
-      "source": "users.json",
+      "source": "users.json areas.SCP",
       "tobeGroups": [
         "ADMIN",
-        "DM ADMIN",
-        "FP Planner",
-        "FP Viewer",
         "GUEST",
-        "JV Planner",
-        "SCM PI Admin",
-        "SCM Viewer",
-        "SCP Planner",
-        "SCP Tester",
-        "SSP Planner",
-        "SSP Viewer"
+        "SSP Planner"
       ],
       "menuAccess": "Y",
       "expectedBtns": [
+        "EDIT",
         "SEARCH",
-        "SAVE",
-        "EDIT"
+        "SAVE"
       ],
-      "matrix": []
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40"
+      ]
     },
     {
-      "id": "hongjae.kim",
-      "name": "김홍재 선임",
+      "id": "lucky-alex",
+      "name": "박현철",
       "groups": [
-        "DM Admin"
+        "SCP Tester"
       ],
       "divisions": [
         "40"
       ],
       "roles": {
-        "40": "DM Admin"
+        "40": "SCP Tester",
+        "81": "SCP Tester",
+        "82": "SCP Tester"
       },
       "roleNote": "권한 없음 대표",
       "admin": false,
       "adminOf": [],
       "screenGroup": "",
-      "source": "users.json",
+      "source": "users.json areas.SCP",
       "tobeGroups": [
-        "DM ADMIN",
-        "DM Planner",
-        "GUEST"
+        "DM Viewer",
+        "FP Viewer",
+        "GUEST",
+        "SCM Viewer",
+        "SCP Tester",
+        "SSP ADMIN",
+        "SSP Planner",
+        "SSP Viewer"
       ],
-      "menuAccess": "N",
-      "expectedBtns": [],
-      "matrix": []
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_UC",
+        "81_UC",
+        "82",
+        "EE",
+        "EE_HM",
+        "81",
+        "40",
+        "81_HM"
+      ]
     }
   ],
   "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
-      "SEARCH",
-      "SAVE",
-      "EDIT"
-    ],
-    "SCM PI Admin": [
       "EDIT",
       "SEARCH",
       "SAVE"
     ],
+    "SCM PI Admin": [
+      "SAVE",
+      "SEARCH",
+      "EDIT"
+    ],
     "SCM Viewer": [
+      "SAVE",
       "SEARCH"
     ],
     "SCP Planner": [
-      "EDIT",
+      "SEARCH",
       "SAVE",
-      "SEARCH"
+      "EDIT"
     ]
   },
   "menuBtnCodes": [
+    "EDIT",
     "SEARCH",
-    "SAVE",
-    "EDIT"
+    "SAVE"
   ],
   "menuAuth": "menu.csv",
   "authSource": {

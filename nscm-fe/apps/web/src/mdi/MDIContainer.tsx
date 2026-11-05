@@ -33,6 +33,8 @@ export const MDIContainer = ({ mirrorRouteOnMount = true }: MDIContainerProps) =
   const tabs = useMDIStore(state => state.tabs);
   const activeIndex = useMDIStore(state => state.activeIndex);
   const progress = useUIStore(state => state.progress);
+  // 전체보기 조회 시 스피너가 전체화면 뷰(position:fixed, z-index 1200) 뒤로 가려지는 것 보정 — 아래 .spinner 참고.
+  const pageFullscreen = useUIStore(state => state.pageFullscreen);
 
   const isBusy = useIsBusy([tabs[activeIndex].tabId]);
 
@@ -45,7 +47,12 @@ export const MDIContainer = ({ mirrorRouteOnMount = true }: MDIContainerProps) =
         <ViewContainer />
         <ToastMessage />
         <Alert />
-        <div className={clsx(styles.spinner, { [styles.open]: isBusy })}>
+        <div
+          className={clsx(styles.spinner, {
+            [styles.open]: isBusy,
+            [styles.fullscreen]: pageFullscreen,
+          })}
+        >
           <ProgressIndicator shape='circular' open={!!isBusy} />
         </div>
       </div>

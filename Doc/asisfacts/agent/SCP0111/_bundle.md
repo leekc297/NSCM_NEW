@@ -1,0 +1,449 @@
+﻿# SCP0111 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.csproj | 37 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs | 06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.csproj | 2136 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.csproj | 989 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| event:_defaultDataModel.Changed | _defaultDataModel_Changed | 1980 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| event:cboDivision.SelectedIndexChanged | CboDivision_SelectedIndexChanged > SetChangedPeriod | 287 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| event:cboDivision.SelectedIndexChanged | CboDivision_SelectedIndexChanged > SetChangedPeriod | 288 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| event:cboPlanDate.SelectedIndexChanged | CboPlanDate_SelectedIndexChanged > SetChangedPeriod | 287 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| event:cboPlanDate.SelectedIndexChanged | CboPlanDate_SelectedIndexChanged > SetChangedPeriod | 288 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| event:cboPlanDate.SelectedIndexChanged | CboPlanDate_SelectedIndexChanged > InitSpread > SetCalendar | 345 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| event:cboPlanType.SelectedIndexChanged | CboPlanType_SelectedIndexChanged > SetChangedPeriod | 287 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| event:cboPlanType.SelectedIndexChanged | CboPlanType_SelectedIndexChanged > SetChangedPeriod | 288 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| button:EditButton | EditButton | 554 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| button:EditButton | EditButton | 622 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+| button:FindButton | FindButton > FindData_Main > InitSpread > SetCalendar | 345 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| button:FindButton | FindButton > FindData_Main | 874 | SCP.SCP0111_GET_INTEGRATION_PSI | MATCH | SP SCP0111_GET_INTEGRATION_PSI |
+| button:SaveButton | SaveButton > SaveData > FindData_Main > InitSpread > SetCalendar | 345 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| button:SaveButton | SaveButton > SaveData > FindData_Main | 874 | SCP.SCP0111_GET_INTEGRATION_PSI | MATCH | SP SCP0111_GET_INTEGRATION_PSI |
+| button:SaveButton | SaveButton > SaveData | 1154 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| button:SaveButton | SaveButton > SaveData | 1205 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+| button:SaveButton | SaveButton > SaveData | 1242 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| button:SaveButton | SaveButton > SaveData | 1379 | SCP.SCP0111_SAVE_INTEGRATION_PSI_ADMIN | MATCH | SP SCP0111_SAVE_INTEGRATION_PSI_ADMIN |
+| button:SaveButton | SaveButton > SaveData | 1511 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| button:SaveButton | SaveButton > SaveData | 1637 | SCP.SCP0111_SAVE_INTEGRATION_PSI | MATCH | SP SCP0111_SAVE_INTEGRATION_PSI |
+| event:this.Load | Form_Load > InitControls > SetChangedPeriod | 287 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > InitControls > SetChangedPeriod | 288 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > CreateSpread > InitSpread > SetCalendar | 345 | biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH |  |
+| event:this.Load | Form_Load > GetEssPackLineAll | 490 | SCP.SCP0111_GET_ESS_PACK_LINE | MATCH | SP SCP0111_GET_ESS_PACK_LINE |
+| event:this.Load | Form_Load > InitControls > GetBucketType | 1095 | DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | SP DM0003_GET_BUCKET_TYPE_CODE |
+| unreached:(진입점 미연결) | <field:dtPeriod> | 66 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=CalendarMonth] | BIZ_MATCH | 8 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_SYS_CALENDAR_M |
+| biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH | 3 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | 1 | SP DM0003_GET_BUCKET_TYPE_CODE | EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
+| SCP.SCP0111_GET_ESS_PACK_LINE | MATCH | 1 | SP SCP0111_GET_ESS_PACK_LINE | EXEC:SCP0111_GET_ESS_PACK_LINE, SELECT:SCM_MST_LINE_OSP, SELECT:SCM_MST_SITE |  |
+| SCP.SCP0111_GET_INTEGRATION_PSI | MATCH | 1 | SP SCP0111_GET_INTEGRATION_PSI | EXEC:SCP0111_GET_INTEGRATION_PSI, SELECT:SCP_ANL_PSI_INTEGRATION, SELECT:SCP_MST_FINAL_ITEM, INSERT:#SCP_ANL_PSI_INTEGRATION_ITEM, SELECT:SCM_MST_ITEM_SN, REF:STRING_SPLIT, DYNAMIC@SCP0111_GET_INTEGRATION_PSI |  |
+| SCP.SCP0111_SAVE_INTEGRATION_PSI | MATCH | 1 | SP SCP0111_SAVE_INTEGRATION_PSI | EXEC:SCP0111_SAVE_INTEGRATION_PSI, REF:FN_GET_LOOKUP_VALUE, INSERT:#ELEC_PLANT, SELECT:SCM_MST_SITE, INSERT:#CELL_ELEC_PLANT_MAPPING, SELECT:#ELEC_PLANT, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SCP_ANL_PSI_INTEGRATION, UPDATE:SCP_ANL_PSI_INTEGRATION, UPDATE:X, SELECT:SCP_ANL_PSI_INTEGRATION, SELECT:SCP_MST_BOM_ELEC, SELECT:SCM_MST_YIELD_VER_H_V, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:#CELL_ELEC_PLANT_MAPPING, SELECT:SCP_MST_CELL_PROD_ASSY_MAP, SELECT:SCP_MST_FINAL_ITEM, SELECT:SCP_MST_FORMATION, SELECT:SCM_ADM_LOOKUP_MASTER, INSERT:#TMP_SCP_ANL_PSI_INTEGRATION_230, SELECT:#TMP_SCP_ANL_PSI_INTEGRATION_230, INSERT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V_230, INSERT:#TMP_SCP_ANL_PSI_INTEGRATION_CELL, SELECT:SCM_MST_MODEL_FINAL_ITEM_BOM_V, SELECT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V_230, SELECT:#TMP_SCP_ANL_PSI_INTEGRATION_CELL, SELECT:SCM_MST_BOM_EFFECTIVE_SN_V, SELECT:SCM_MST_ITEM_SN, INSERT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V, SELECT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V, SELECT:SCP_MST_TACT_TIME_OSP, INSERT:#TMP_YIELD_VER_H_V_A, INSERT:#TMP_SCP_ANL_PSI_INTEGRATION_530, SELECT:#TMP_YIELD_VER_H_V_A, SELECT:#TMP_SCP_ANL_PSI_INTEGRATION_530, INSERT:#TMP_TCO_NO_CA2_ITEM_PROD, SELECT:#TMP_TCO_NO_CA2_ITEM_PROD, INSERT:#TMP_PSI_INTEGRATION_750_SMALL, SELECT:SCP_MST_FORMATION_V, SELECT:#TMP_PSI_INTEGRATION_750_SMALL, INSERT:#TMP_PSI_INTEGRATION_350_SMALL, SELECT:#TMP_PSI_INTEGRATION_350_SMALL, INSERT:#TEM_SCP_ANL_PSI_INTEGRATION_350, SELECT:#TEM_SCP_ANL_PSI_INTEGRATION_350, CREATE:#TMP_PSI_INTEGRATION_230_ITEM_SMALL, INSERT:#TMP_PSI_INTEGRATION_230_ITEM_SMALL, SELECT:#TMP_PSI_INTEGRATION_230_ITEM_SMALL, INSERT:#TMP_PSI_INTEGRATION_SMALL_230, SELECT:#TMP_PSI_INTEGRATION_SMALL_230, INSERT:#TMP_PSI_INTEGRATION_SMALL_330, SELECT:#TMP_PSI_INTEGRATION_SMALL_330, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_CODE_LOOKUP_VALUE |  |
+| SCP.SCP0111_SAVE_INTEGRATION_PSI_ADMIN | MATCH | 1 | SP SCP0111_SAVE_INTEGRATION_PSI_ADMIN | EXEC:SCP0111_SAVE_INTEGRATION_PSI_ADMIN, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SCP_ANL_PSI_INTEGRATION, UPDATE:SCP_ANL_PSI_INTEGRATION, INSERT:SCP_ANL_PSI_INTEGRATION, INSERT:SCM_SYS_LOG_BATCH |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| EditButton | TheOne.Security.FoxUserInfoContext.Current | NowGroupID |
+| EditButton | dtMultiChildItem.Rows[i] | NAME |
+| InsertRow | TheOne.Security.FoxUserInfoContext.Current | NowGroupID |
+| RefreshPlanDate | dtPlanTypeFN.Rows[i] | PLANDATE |
+| SaveData | TheOne.Security.FoxUserInfoContext.Current | NowGroupID |
+| SaveData | dtTemp.Rows[0] | CODE |
+| SaveData | dtToMonth.Rows[k] | CODE |
+| SaveData | dtMonth.Rows[k] | CODE |
+| SetChangedPeriod | dtPeriod.Rows[0] | CODE |
+| SetChangedPeriod | dtScpPlanPeriod.Rows[0] | HORIZON_END_DATE |
+| spdMain_CellClick | dtLine.Rows[i] | NAME, CODE |
+| spdMain_CellClick | drLine | CODE, NAME |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| GetCheckedListValue | SetChangedPeriod:249, SetChangedPeriod:250, RefreshPlanDate:403, RefreshPlanType:438, RefreshPlanType:439, RefreshPlanSeq:448, RefreshPlanSeq:449, RefreshPlanSeq:450 | CString.GetCheckedListValue | CODE |
+| DataBind | SetChangedPeriod:290, SetChangedPeriod:291 | UsrComboBox.DataBind | CODE, NAME |
+| SetSheetHeaderColumn | InitSpread:333 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| SaveData | SaveButton:816 | PersonalSettingPopup.SaveData | DefaultGroupID, Default_GroupID, Language, TimeZone, USER_ID |
+| OnShown | OnShown:1932 | BaseForm.OnShown | NowGroupID, USER_ID |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this | Load | Form_Load | .ctor:167 |
+| this.btnNickName | Click | BtnNickName_Click | InitEvent:360 |
+| this.btnItemId | Click | BtnItemId_Click | InitEvent:362 |
+| this.spdMain | CellDoubleClick | SpdMain_CellDoubleClick | InitEvent:363 |
+| this.spdMain | TopChange | SpdMain_TopChange | InitEvent:364 |
+| this.spdMain | CellClick | spdMain_CellClick | InitEvent:365 |
+| cboDivision | SelectedIndexChanged | CboDivision_SelectedIndexChanged | InitEvent:367 |
+| cboPlanDate | SelectedIndexChanged | CboPlanDate_SelectedIndexChanged | InitEvent:368 |
+| cboPlanType | SelectedIndexChanged | CboPlanType_SelectedIndexChanged | InitEvent:369 |
+| _defaultDataModel | Changed | _defaultDataModel_Changed | InitEvent:374 |
+
+## 6. 컨트롤 (41개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 12 | lblCombo1, lblCellItem, PlanDate, layoutControlItem3, lblItemId, layoutControlItem1, layoutControlItem4, lblNickName, layoutControlItem2, PlanType, layoutControlItem5, layoutControlItem6 |
+| EmptySpaceItem | 11 | emptySpaceItem2, emptySpaceItem1, emptySpaceItem4, emptySpaceItem5, emptySpaceItem6, emptySpaceItem9, emptySpaceItem10, emptySpaceItem8, emptySpaceItem3, emptySpaceItem7, emptySpaceItem11 |
+| UsrButton | 4 | usrButton1, btnNickName, btnCellItem_Id, btnItemId |
+| UsrMultiLineEditor | 3 | txtNickName, txtCellItemId, txtItemId |
+| UsrCombo | 3 | cboDivision, cboPlanDate, cboPlanType |
+| UsrComboBox | 2 | cmbToMonth, cmbFromMonth |
+| UsrConditionPanel | 1 | pnlCondition |
+| UsrLayoutControl | 1 | usrLayoutControl2 |
+| UsrCheckBox | 1 | chkQty |
+| LayoutControlGroup | 1 | layoutControlGroup2 |
+| SheetView | 1 | spdMain_Sheet1 |
+| FpSpread | 1 | spdMain |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 196 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 24 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.SCM_MST_SHEET_MEASURE | 7 | dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv |
+| dbo.SCM_MST_TITLESET_USER | 7 | dbmeta_dbo_SCM_MST_TITLESET_USER.csv |
+| dbo.TB_FX_Favorite | 5 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 4 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 19 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (0건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SCP0111 | Integration PSI | 22/0 | 22/0 | 22/0 | 22/0 | 22/0 | 22/0 | 22/0 | 22/0 | 22/0 | 22/0 | 22/0 | 22/0 | 22/0 | 22/0 |
+| SCM_MST_SHEET_MEASURE | SCP0111 | Integration PSI | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 | 7/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + DB루프(코드) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Integration PSI
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:333
+- 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): SetSpreadColumn
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| SetCalendar |  | 354 | DB루프 | AddNumColumn | {?a.Field<string>(DefMain.YYYYMM_NAME)} | {?a.Field<string>(DefMain.YYYYMM)} | foreach(a in dtCalendar.AsEnumerable()) |
+| SetSpreadColumn |  | 392 | 표시/라벨 변경 | set:Visible | Visible = {?false} |  | for(iCol <= siObj.GetMaxColumnIndex()) ⟫ if(siObj.GetColumnTag(iCol).IndexOf("D_") == 0 \|\| siObj.GetColumnTag(iCol).IndexOf("W_") == 0) |
+| SetSpreadColumn |  | 396 | 표시/라벨 변경 | set:Visible | Visible = {?true} |  | for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(siObj.GetColumnTag(iCol).IndexOf("D_") == 0 \|\| siObj.GetColumnTag(iCol).IndexOf("W_") == 0) ⟫ if(siObj.GetColumnTag(iCol).IndexOf("M_") == 0) |
+| SetVisibleSheetColumns |  | 1069 | 표시/라벨 변경 | SetVisibleSheetColumn | {?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} \|\| {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} |  | if(siMain.OF.IsEditMode) |
+| SetVisibleSheetColumns |  | 1070 | 표시/라벨 변경 | SetVisibleSheetColumn | {?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} \|\| {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} |  | if(siMain.OF.IsEditMode) |
+| SetVisibleSheetColumns |  | 1072 | 표시/라벨 변경 | SetVisibleSheetColumn | {?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} \|\| {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} |  | if(siMain.OF.IsEditMode) |
+| SetVisibleSheetColumns |  | 1073 | 표시/라벨 변경 | SetVisibleSheetColumn | {?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} \|\| {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} |  | if(siMain.OF.IsEditMode) |
+| SetVisibleSheetColumns |  | 1078 | 표시/라벨 변경 | SetVisibleSheetColumn | {?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} \|\| {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} |  | else!(siMain.OF.IsEditMode) |
+| SetVisibleSheetColumns |  | 1079 | 표시/라벨 변경 | SetVisibleSheetColumn | {?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} \|\| {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} |  | else!(siMain.OF.IsEditMode) |
+| SetVisibleSheetColumns |  | 1081 | 표시/라벨 변경 | SetVisibleSheetColumn | {?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} \|\| {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} |  | else!(siMain.OF.IsEditMode) |
+| SetVisibleSheetColumns |  | 1082 | 표시/라벨 변경 | SetVisibleSheetColumn | {?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} \|\| {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} |  | else!(siMain.OF.IsEditMode) |
+| InitializeComponent |  | 858 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 859 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 860 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 861 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Integration PSI | META+코드연결 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 | 22 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (16 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","<field:dtPeriod>","66","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetChangedPeriod","287","derived","biz","CommonData.CommonDataList [code=CalendarMonth]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.CalendarMonth:Type.CalendarMonth] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetChangedPeriod","288","derived","biz","CommonData.CommonDataList [code=CalendarMonth]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.CalendarMonth:Type.CalendarMonth] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetCalendar","345","derived","biz","CommonData.CommonDataList [code=CalendarMonth]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.CalendarMonth:Type.CalendarMonth] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","GetEssPackLineAll","490","ctor","fox","SCP.SCP0111_GET_ESS_PACK_LINE","SCP.SCP0111_GET_ESS_PACK_LINE","MATCH","SP SCP0111_GET_ESS_PACK_LINE","EXEC:SCP0111_GET_ESS_PACK_LINE, SELECT:SCM_MST_LINE_OSP, SELECT:SCM_MST_SITE","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","EditButton","554","derived","biz","CommonData.CommonDataList [code=CalendarMonth]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.CalendarMonth:Type.CalendarMonth] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","EditButton","622","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","FindData_Main","874","ctor","fox","SCP.SCP0111_GET_INTEGRATION_PSI","SCP.SCP0111_GET_INTEGRATION_PSI","MATCH","SP SCP0111_GET_INTEGRATION_PSI","EXEC:SCP0111_GET_INTEGRATION_PSI, SELECT:SCP_ANL_PSI_INTEGRATION, SELECT:SCP_MST_FINAL_ITEM, INSERT:#SCP_ANL_PSI_INTEGRATION_ITEM, SELECT:SCM_MST_ITEM_SN, REF:STRING_SPLIT, DYNAMIC@SCP0111_GET_INTEGRATION_PSI","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","GetBucketType","1095","ctor","fox","DM.DM0003_GET_BUCKET_TYPE_CODE","DM.DM0003_GET_BUCKET_TYPE_CODE","MATCH","SP DM0003_GET_BUCKET_TYPE_CODE","EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1154","derived","biz","CommonData.CommonDataList [code=CalendarMonth]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.CalendarMonth:Type.CalendarMonth] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1205","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1242","derived","biz","CommonData.CommonDataList [code=CalendarMonth]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.CalendarMonth:Type.CalendarMonth] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1379","ctor","fox","SCP.SCP0111_SAVE_INTEGRATION_PSI_ADMIN","SCP.SCP0111_SAVE_INTEGRATION_PSI_ADMIN","MATCH","SP SCP0111_SAVE_INTEGRATION_PSI_ADMIN","EXEC:SCP0111_SAVE_INTEGRATION_PSI_ADMIN, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SCP_ANL_PSI_INTEGRATION, UPDATE:SCP_ANL_PSI_INTEGRATION, INSERT:SCP_ANL_PSI_INTEGRATION, INSERT:SCM_SYS_LOG_BATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1511","derived","biz","CommonData.CommonDataList [code=CalendarMonth]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.CalendarMonth:Type.CalendarMonth] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1637","ctor","fox","SCP.SCP0111_SAVE_INTEGRATION_PSI","SCP.SCP0111_SAVE_INTEGRATION_PSI","MATCH","SP SCP0111_SAVE_INTEGRATION_PSI","EXEC:SCP0111_SAVE_INTEGRATION_PSI, REF:FN_GET_LOOKUP_VALUE, INSERT:#ELEC_PLANT, SELECT:SCM_MST_SITE, INSERT:#CELL_ELEC_PLANT_MAPPING, SELECT:#ELEC_PLANT, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SCP_ANL_PSI_INTEGRATION, UPDATE:SCP_ANL_PSI_INTEGRATION, UPDATE:X, SELECT:SCP_ANL_PSI_INTEGRATION, SELECT:SCP_MST_BOM_ELEC, SELECT:SCM_MST_YIELD_VER_H_V, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:#CELL_ELEC_PLANT_MAPPING, SELECT:SCP_MST_CELL_PROD_ASSY_MAP, SELECT:SCP_MST_FINAL_ITEM, SELECT:SCP_MST_FORMATION, SELECT:SCM_ADM_LOOKUP_MASTER, INSERT:#TMP_SCP_ANL_PSI_INTEGRATION_230, SELECT:#TMP_SCP_ANL_PSI_INTEGRATION_230, INSERT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V_230, INSERT:#TMP_SCP_ANL_PSI_INTEGRATION_CELL, SELECT:SCM_MST_MODEL_FINAL_ITEM_BOM_V, SELECT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V_230, SELECT:#TMP_SCP_ANL_PSI_INTEGRATION_CELL, SELECT:SCM_MST_BOM_EFFECTIVE_SN_V, SELECT:SCM_MST_ITEM_SN, INSERT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V, SELECT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V, SELECT:SCP_MST_TACT_TIME_OSP, INSERT:#TMP_YIELD_VER_H_V_A, INSERT:#TMP_SCP_ANL_PSI_INTEGRATION_530, SELECT:#TMP_YIELD_VER_H_V_A, SELECT:#TMP_SCP_ANL_PSI_INTEGRATION_530, INSERT:#TMP_TCO_NO_CA2_ITEM_PROD, SELECT:#TMP_TCO_NO_CA2_ITEM_PROD, INSERT:#TMP_PSI_INTEGRATION_750_SMALL, SELECT:SCP_MST_FORMATION_V, SELECT:#TMP_PSI_INTEGRATION_750_SMALL, INSERT:#TMP_PSI_INTEGRATION_350_SMALL, SELECT:#TMP_PSI_INTEGRATION_350_SMALL, INSERT:#TEM_SCP_ANL_PSI_INTEGRATION_350, SELECT:#TEM_SCP_ANL_PSI_INTEGRATION_350, CREATE:#TMP_PSI_INTEGRATION_230_ITEM_SMALL, INSERT:#TMP_PSI_INTEGRATION_230_ITEM_SMALL, SELECT:#TMP_PSI_INTEGRATION_230_ITEM_SMALL, INSERT:#TMP_PSI_INTEGRATION_SMALL_230, SELECT:#TMP_PSI_INTEGRATION_SMALL_230, INSERT:#TMP_PSI_INTEGRATION_SMALL_330, SELECT:#TMP_PSI_INTEGRATION_SMALL_330, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_CODE_LOOKUP_VALUE","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","_defaultDataModel_Changed","1980","derived","biz","CommonData.CommonDataList [code=CalendarMonth]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.CalendarMonth:Type.CalendarMonth] > Data.CallBizCommonData",""
+```
+
+### FILE flow.csv (26 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","this.Load","Form_Load > GetEssPackLineAll","GetEssPackLineAll","490","SCP.SCP0111_GET_ESS_PACK_LINE","MATCH","SP SCP0111_GET_ESS_PACK_LINE","EXEC:SCP0111_GET_ESS_PACK_LINE, SELECT:SCM_MST_LINE_OSP, SELECT:SCM_MST_SITE"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","this.Load","Form_Load > CreateSpread > InitSpread > SetCalendar","SetCalendar","345","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","this.Load","Form_Load > InitControls > GetBucketType","GetBucketType","1095","DM.DM0003_GET_BUCKET_TYPE_CODE","MATCH","SP DM0003_GET_BUCKET_TYPE_CODE","EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","this.Load","Form_Load > InitControls > SetChangedPeriod","SetChangedPeriod","287","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","this.Load","Form_Load > InitControls > SetChangedPeriod","SetChangedPeriod","288","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","cboDivision.SelectedIndexChanged","CboDivision_SelectedIndexChanged > SetChangedPeriod","SetChangedPeriod","287","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","cboDivision.SelectedIndexChanged","CboDivision_SelectedIndexChanged > SetChangedPeriod","SetChangedPeriod","288","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","cboPlanDate.SelectedIndexChanged","CboPlanDate_SelectedIndexChanged > InitSpread > SetCalendar","SetCalendar","345","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","cboPlanDate.SelectedIndexChanged","CboPlanDate_SelectedIndexChanged > SetChangedPeriod","SetChangedPeriod","287","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","cboPlanDate.SelectedIndexChanged","CboPlanDate_SelectedIndexChanged > SetChangedPeriod","SetChangedPeriod","288","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","cboPlanType.SelectedIndexChanged","CboPlanType_SelectedIndexChanged > SetChangedPeriod","SetChangedPeriod","287","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","cboPlanType.SelectedIndexChanged","CboPlanType_SelectedIndexChanged > SetChangedPeriod","SetChangedPeriod","288","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","event","_defaultDataModel.Changed","_defaultDataModel_Changed","_defaultDataModel_Changed","1980","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","FindButton","FindButton > FindData_Main","FindData_Main","874","SCP.SCP0111_GET_INTEGRATION_PSI","MATCH","SP SCP0111_GET_INTEGRATION_PSI","EXEC:SCP0111_GET_INTEGRATION_PSI, SELECT:SCP_ANL_PSI_INTEGRATION, SELECT:SCP_MST_FINAL_ITEM, INSERT:#SCP_ANL_PSI_INTEGRATION_ITEM, SELECT:SCM_MST_ITEM_SN, REF:STRING_SPLIT, DYNAMIC@SCP0111_GET_INTEGRATION_PSI"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","FindButton","FindButton > FindData_Main > InitSpread > SetCalendar","SetCalendar","345","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","EditButton","EditButton","EditButton","554","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","EditButton","EditButton","EditButton","622","biz:CommonData.CommonDataList [code=LookupCommon]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","SaveButton","SaveButton > SaveData","SaveData","1379","SCP.SCP0111_SAVE_INTEGRATION_PSI_ADMIN","MATCH","SP SCP0111_SAVE_INTEGRATION_PSI_ADMIN","EXEC:SCP0111_SAVE_INTEGRATION_PSI_ADMIN, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, SELECT:SCP_ANL_PSI_INTEGRATION, UPDATE:SCP_ANL_PSI_INTEGRATION, INSERT:SCP_ANL_PSI_INTEGRATION, INSERT:SCM_SYS_LOG_BATCH"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","SaveButton","SaveButton > SaveData","SaveData","1637","SCP.SCP0111_SAVE_INTEGRATION_PSI","MATCH","SP SCP0111_SAVE_INTEGRATION_PSI","EXEC:SCP0111_SAVE_INTEGRATION_PSI, REF:FN_GET_LOOKUP_VALUE, INSERT:#ELEC_PLANT, SELECT:SCM_MST_SITE, INSERT:#CELL_ELEC_PLANT_MAPPING, SELECT:#ELEC_PLANT, EXEC:PR_SCM_SYS_LOG_BATCH, REF:SCM_ARR_SPL_CNT, REF:SCM_ARR_SPL_VAL, INSERT:SCP_ANL_PSI_INTEGRATION, UPDATE:SCP_ANL_PSI_INTEGRATION, UPDATE:X, SELECT:SCP_ANL_PSI_INTEGRATION, SELECT:SCP_MST_BOM_ELEC, SELECT:SCM_MST_YIELD_VER_H_V, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL, SELECT:#CELL_ELEC_PLANT_MAPPING, SELECT:SCP_MST_CELL_PROD_ASSY_MAP, SELECT:SCP_MST_FINAL_ITEM, SELECT:SCP_MST_FORMATION, SELECT:SCM_ADM_LOOKUP_MASTER, INSERT:#TMP_SCP_ANL_PSI_INTEGRATION_230, SELECT:#TMP_SCP_ANL_PSI_INTEGRATION_230, INSERT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V_230, INSERT:#TMP_SCP_ANL_PSI_INTEGRATION_CELL, SELECT:SCM_MST_MODEL_FINAL_ITEM_BOM_V, SELECT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V_230, SELECT:#TMP_SCP_ANL_PSI_INTEGRATION_CELL, SELECT:SCM_MST_BOM_EFFECTIVE_SN_V, SELECT:SCM_MST_ITEM_SN, INSERT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V, SELECT:#TMP_PSI_INTEGRATION_YIELD_VER_H_V, SELECT:SCP_MST_TACT_TIME_OSP, INSERT:#TMP_YIELD_VER_H_V_A, INSERT:#TMP_SCP_ANL_PSI_INTEGRATION_530, SELECT:#TMP_YIELD_VER_H_V_A, SELECT:#TMP_SCP_ANL_PSI_INTEGRATION_530, INSERT:#TMP_TCO_NO_CA2_ITEM_PROD, SELECT:#TMP_TCO_NO_CA2_ITEM_PROD, INSERT:#TMP_PSI_INTEGRATION_750_SMALL, SELECT:SCP_MST_FORMATION_V, SELECT:#TMP_PSI_INTEGRATION_750_SMALL, INSERT:#TMP_PSI_INTEGRATION_350_SMALL, SELECT:#TMP_PSI_INTEGRATION_350_SMALL, INSERT:#TEM_SCP_ANL_PSI_INTEGRATION_350, SELECT:#TEM_SCP_ANL_PSI_INTEGRATION_350, CREATE:#TMP_PSI_INTEGRATION_230_ITEM_SMALL, INSERT:#TMP_PSI_INTEGRATION_230_ITEM_SMALL, SELECT:#TMP_PSI_INTEGRATION_230_ITEM_SMALL, INSERT:#TMP_PSI_INTEGRATION_SMALL_230, SELECT:#TMP_PSI_INTEGRATION_SMALL_230, INSERT:#TMP_PSI_INTEGRATION_SMALL_330, SELECT:#TMP_PSI_INTEGRATION_SMALL_330, INSERT:SCM_SYS_LOG_BATCH, SELECT:SCM_CODE_LOOKUP_VALUE"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","SaveButton","SaveButton > SaveData","SaveData","1154","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","SaveButton","SaveButton > SaveData","SaveData","1242","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","SaveButton","SaveButton > SaveData","SaveData","1511","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","SaveButton","SaveButton > SaveData","SaveData","1205","biz:CommonData.CommonDataList [code=LookupCommon]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","SaveButton","SaveButton > SaveData > FindData_Main","FindData_Main","874","SCP.SCP0111_GET_INTEGRATION_PSI","MATCH","SP SCP0111_GET_INTEGRATION_PSI","EXEC:SCP0111_GET_INTEGRATION_PSI, SELECT:SCP_ANL_PSI_INTEGRATION, SELECT:SCP_MST_FINAL_ITEM, INSERT:#SCP_ANL_PSI_INTEGRATION_ITEM, SELECT:SCM_MST_ITEM_SN, REF:STRING_SPLIT, DYNAMIC@SCP0111_GET_INTEGRATION_PSI"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","button","SaveButton","SaveButton > SaveData > FindData_Main > InitSpread > SetCalendar","SetCalendar","345","biz:CommonData.CommonDataList [code=CalendarMonth]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","unreached","(진입점 미연결)","<field:dtPeriod>","<field:dtPeriod>","66","biz:CommonData.CommonDataList [code=LookupCommon]","BIZ_MATCH","",""
+```
+
+### FILE events.csv (10 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI",".ctor","167","this","Load","Form_Load","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitEvent","360","this.btnNickName","Click","BtnNickName_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitEvent","362","this.btnItemId","Click","BtnItemId_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitEvent","363","this.spdMain","CellDoubleClick","SpdMain_CellDoubleClick","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitEvent","364","this.spdMain","TopChange","SpdMain_TopChange","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitEvent","365","this.spdMain","CellClick","spdMain_CellClick","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitEvent","367","cboDivision","SelectedIndexChanged","CboDivision_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitEvent","368","cboPlanDate","SelectedIndexChanged","CboPlanDate_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitEvent","369","cboPlanType","SelectedIndexChanged","CboPlanType_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitEvent","374","_defaultDataModel","Changed","_defaultDataModel_Changed","+="
+```
+
+### FILE controls.csv (41 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","usrButton1","GSCM.Windows.Forms.Controls.UsrButton","","33"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","pnlCondition","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","34"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","pnlCondition","35"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","cmbToMonth","GSCM.Windows.Forms.Controls.UsrComboBox","usrLayoutControl2","36"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","cmbFromMonth","GSCM.Windows.Forms.Controls.UsrComboBox","usrLayoutControl2","37"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","txtNickName","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","38"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","btnNickName","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","39"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","btnCellItem_Id","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","40"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","txtCellItemId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","41"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","cboDivision","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","42"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","cboPlanDate","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","43"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","cboPlanType","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","44"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","txtItemId","GSCM.Windows.Forms.Controls.UsrMultiLineEditor","usrLayoutControl2","45"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","btnItemId","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","46"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","chkQty","GSCM.Windows.Forms.Controls.UsrCheckBox","usrLayoutControl2","47"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","48"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","lblCombo1","DevExpress.XtraLayout.LayoutControlItem","","49"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","lblCellItem","DevExpress.XtraLayout.LayoutControlItem","","50"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","PlanDate","DevExpress.XtraLayout.LayoutControlItem","","51"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","emptySpaceItem2","DevExpress.XtraLayout.EmptySpaceItem","","52"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","layoutControlItem3","DevExpress.XtraLayout.LayoutControlItem","","53"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","lblItemId","DevExpress.XtraLayout.LayoutControlItem","","54"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","layoutControlItem1","DevExpress.XtraLayout.LayoutControlItem","","55"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","56"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","57"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","emptySpaceItem4","DevExpress.XtraLayout.EmptySpaceItem","","58"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","emptySpaceItem5","DevExpress.XtraLayout.EmptySpaceItem","","59"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","lblNickName","DevExpress.XtraLayout.LayoutControlItem","","60"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","emptySpaceItem6","DevExpress.XtraLayout.EmptySpaceItem","","61"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","emptySpaceItem9","DevExpress.XtraLayout.EmptySpaceItem","","62"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","emptySpaceItem10","DevExpress.XtraLayout.EmptySpaceItem","","63"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","emptySpaceItem8","DevExpress.XtraLayout.EmptySpaceItem","","64"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","emptySpaceItem3","DevExpress.XtraLayout.EmptySpaceItem","","65"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","emptySpaceItem7","DevExpress.XtraLayout.EmptySpaceItem","","66"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","emptySpaceItem11","DevExpress.XtraLayout.EmptySpaceItem","","67"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","layoutControlItem2","DevExpress.XtraLayout.LayoutControlItem","","68"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","PlanType","DevExpress.XtraLayout.LayoutControlItem","","69"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","layoutControlItem5","DevExpress.XtraLayout.LayoutControlItem","","70"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","layoutControlItem6","DevExpress.XtraLayout.LayoutControlItem","","71"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","72"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","spdMain","FarPoint.Win.Spread.FpSpread","this","73"
+```
+
+### FILE props.csv (75 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","138","usrButton1","Size","new System.Drawing.Size(75, 23)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","147","pnlCondition","Dock","System.Windows.Forms.DockStyle.Top"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","151","pnlCondition","Size","new System.Drawing.Size(2021, 112)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","153","pnlCondition","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","170","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","176","usrLayoutControl2","Size","new System.Drawing.Size(2021, 112)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","178","usrLayoutControl2","Text","""usrLayoutControl2"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","187","cmbToMonth","Size","new System.Drawing.Size(103, 26)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","197","cmbFromMonth","Size","new System.Drawing.Size(103, 26)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","230","txtNickName","Size","new System.Drawing.Size(227, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","264","btnNickName","Size","new System.Drawing.Size(37, 23)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","300","btnCellItem_Id","Size","new System.Drawing.Size(37, 23)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","305","btnCellItem_Id","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","338","txtCellItemId","Size","new System.Drawing.Size(223, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","373","cboDivision","Size","new System.Drawing.Size(218, 26)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","410","cboPlanDate","Size","new System.Drawing.Size(207, 26)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","447","cboPlanType","Size","new System.Drawing.Size(205, 26)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","450","cboPlanType","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","483","txtItemId","Size","new System.Drawing.Size(292, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","517","btnItemId","Size","new System.Drawing.Size(37, 23)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","553","chkQty","Size","new System.Drawing.Size(309, 38)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","556","chkQty","Text","""Qty < 0"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","589","layoutControlGroup2","Size","new System.Drawing.Size(2021, 112)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","594","lblCombo1","Control","this.cboDivision"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","600","lblCombo1","Size","new System.Drawing.Size(300, 38)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","602","lblCombo1","Text","""Division*"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","609","lblCellItem","Control","this.txtCellItemId"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","615","lblCellItem","Size","new System.Drawing.Size(315, 38)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","617","lblCellItem","Text","""Cell Model"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","624","PlanDate","Control","this.cboPlanDate"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","630","PlanDate","Size","new System.Drawing.Size(300, 44)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","632","PlanDate","Text","""Plan-date*"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","643","emptySpaceItem2","Size","new System.Drawing.Size(43, 53)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","644","emptySpaceItem2","Text","""emptySpaceItem3"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","649","layoutControlItem3","Control","this.btnNickName"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","654","layoutControlItem3","Size","new System.Drawing.Size(43, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","661","lblItemId","Control","this.txtItemId"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","667","lblItemId","Size","new System.Drawing.Size(350, 38)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","669","lblItemId","Text","""Model"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","676","layoutControlItem1","Control","this.btnItemId"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","682","layoutControlItem1","Size","new System.Drawing.Size(43, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","684","layoutControlItem1","Text","""layoutControlItem3"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","690","layoutControlItem4","Control","this.btnCellItem_Id"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","695","layoutControlItem4","Size","new System.Drawing.Size(43, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","706","emptySpaceItem1","Size","new System.Drawing.Size(188, 82)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","714","emptySpaceItem4","Size","new System.Drawing.Size(319, 36)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","722","emptySpaceItem5","Size","new System.Drawing.Size(43, 53)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","727","lblNickName","Control","this.txtNickName"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","732","lblNickName","Size","new System.Drawing.Size(322, 38)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","734","lblNickName","Text","""Nick Name"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","744","emptySpaceItem6","Size","new System.Drawing.Size(10, 82)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","752","emptySpaceItem9","Size","new System.Drawing.Size(38, 82)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","760","emptySpaceItem10","Size","new System.Drawing.Size(10, 82)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","768","emptySpaceItem8","Size","new System.Drawing.Size(10, 82)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","776","emptySpaceItem3","Size","new System.Drawing.Size(43, 53)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","784","emptySpaceItem7","Size","new System.Drawing.Size(319, 46)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","792","emptySpaceItem11","Size","new System.Drawing.Size(60, 44)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","797","layoutControlItem2","Control","this.cmbFromMonth"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","802","layoutControlItem2","Size","new System.Drawing.Size(161, 44)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","804","layoutControlItem2","Text","""Period"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","809","PlanType","Control","this.cboPlanType"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","815","PlanType","Size","new System.Drawing.Size(290, 44)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","817","PlanType","Text","""Plan-type"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","825","layoutControlItem5","Control","this.cmbToMonth"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","830","layoutControlItem5","Size","new System.Drawing.Size(161, 44)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","832","layoutControlItem5","Text",""" ~"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","837","layoutControlItem6","Control","this.chkQty"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","840","layoutControlItem6","Size","new System.Drawing.Size(315, 44)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","887","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","893","spdMain","Size","new System.Drawing.Size(2021, 865)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","905","this","Text","""Integration PSI"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetSpreadColumn","392","siObj.ActiveSheet.Columns[iCol]","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetSpreadColumn","396","siObj.ActiveSheet.Columns[iCol]","Visible","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","BtnNickName_Click","1887","txtNickName","Text","sNickName"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","BtnItemId_Click","1926","txtItemId","Text","sItemId"
+```
+
+### FILE grid_effective.csv (24 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Integration PSI","META+코드연결","BOH_QTY","BOH","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","CELL_CF","Cell Coversion Factor","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","CELL_ITEM_ID","Cell Model","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","CELL_MODEL_NICK_NAME","Cell Model Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","COMPANY_ID","Company","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","DIVISION_ID","Division","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","INCOTERMS","Incoterms","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","ITEM_ID","Model","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","LINE_ID","Line","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","MEASURE","MEASURE","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","MEASURE_COLOR","MEASURE_COLOR","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Integration PSI","META+코드연결","MEASURE_LABEL","Measure","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","MEASURE_ORDER_NO","MEASURE_ORDER_NO","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"Integration PSI","META+코드연결","NICK_NAME","Nick Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","OPERATION_GROUP","Operation","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","PLAN_TYPE","Plan Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","PLANT_ID","Plant","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","PLANT_ID_DESCRIPTION","Plant","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","SEQ_FLAG","SEQ_FLAG","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","TO_PRODUCT","To Product","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","TO_SITE","To Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","TO_SITE_DESCRIPTION","To Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","UOM","UOM","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Integration PSI","META+코드연결","VALUE_TYPE","Valuation Type","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (22 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","CreateSpread","299","Integration PSI","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Integration PSI ¦ Integration PSI ¦ 1 ¦ 1 ¦ 35","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 1 ¦ 1 ¦ 35"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","CreateSpread","300","Integration PSI","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?spdMain.ActiveSheetIndex}","","","spdMain.Name ¦ spdMain.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","CreateSpread","301","Integration PSI","SHEET","ChangeSheet","EXPR","","","","","","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitSpread","312","Integration PSI","SHEET","InitSheet","HARDCODED","","","","Integration PSI","","","SpdSheet.shtMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitSpread","333","Integration PSI","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{p:spdInfo} ¦ 1","siObj,iColumnHeaderRowCount","","spdInfo ¦ 1"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InitSpread","336","Integration PSI","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)}","","","siMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetCalendar","354","","COLUMN","AddNumColumn","DB_DRIVEN","{?a.Field<string>(DefMain.YYYYMM_NAME)}","{?a.Field<string>(DefMain.YYYYMM)}","","{?a.Field<string>(DefMain.YYYYMM_NAME)} ¦ {?a.Field<string>(DefMain.YYYYMM)} ¦ {?FPMerge.None} ¦ 75 ¦ {?true}","sHeaderText,sFieldName,merge,fWidth,bVisible","foreach(a in dtCalendar.AsEnumerable())","sYYYYMM_NAME ¦ sYYYYMM ¦ FPMerge.None ¦ 75 ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetSpreadColumn","392","","OVERRIDE","set:Visible","EXPR","","","","{?false}","Visible","for(iCol <= siObj.GetMaxColumnIndex()) ⟫ if(siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetSpreadColumn","396","","OVERRIDE","set:Visible","EXPR","","","","{?true}","Visible","for(iCol <= siObj.GetMaxColumnIndex()) ⟫ else!(siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0) ⟫ if(siObj.GetColumnTag(iCol).IndexOf(""M_"") == 0)","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","EditButton","545","","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?fps.ActiveSheetIndex}","","if(spdMain != null)","spdMain.Name ¦ fps.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetVisibleSheetColumns","1069","","OVERRIDE","SetVisibleSheetColumn","HARDCODED","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ SEQ_FLAG ¦ 60 ¦ {?true}","si,columnName,columnWidth,visible","if(siMain.OF.IsEditMode)","siMain ¦ DefMain.SEQ_FLAG ¦ 60 ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetVisibleSheetColumns","1070","","OVERRIDE","SetVisibleSheetColumn","HARDCODED","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ MEASURE ¦ 80 ¦ {?true}","si,columnName,columnWidth,visible","if(siMain.OF.IsEditMode)","siMain ¦ DefMain.MEASURE ¦ 80 ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetVisibleSheetColumns","1072","","OVERRIDE","SetVisibleSheetColumn","HARDCODED","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ PLANT_ID ¦ 65 ¦ {?true}","si,columnName,columnWidth,visible","if(siMain.OF.IsEditMode)","siMain ¦ DefMain.PLANT_ID ¦ 65 ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetVisibleSheetColumns","1073","","OVERRIDE","SetVisibleSheetColumn","HARDCODED","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ TO_SITE ¦ 75 ¦ {?true}","si,columnName,columnWidth,visible","if(siMain.OF.IsEditMode)","siMain ¦ DefMain.TO_SITE ¦ 75 ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetVisibleSheetColumns","1078","","OVERRIDE","SetVisibleSheetColumn","HARDCODED","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ SEQ_FLAG ¦ 0 ¦ {?false}","si,columnName,columnWidth,visible","else!(siMain.OF.IsEditMode)","siMain ¦ DefMain.SEQ_FLAG ¦ 0 ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetVisibleSheetColumns","1079","","OVERRIDE","SetVisibleSheetColumn","HARDCODED","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ MEASURE ¦ 0 ¦ {?false}","si,columnName,columnWidth,visible","else!(siMain.OF.IsEditMode)","siMain ¦ DefMain.MEASURE ¦ 0 ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetVisibleSheetColumns","1081","","OVERRIDE","SetVisibleSheetColumn","HARDCODED","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ PLANT_ID ¦ 0 ¦ {?true}","si,columnName,columnWidth,visible","else!(siMain.OF.IsEditMode)","siMain ¦ DefMain.PLANT_ID ¦ 0 ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetVisibleSheetColumns","1082","","OVERRIDE","SetVisibleSheetColumn","HARDCODED","","","","{?GetSheetInfo(spdMain.Name, spdMain.ActiveSheetIndex)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ TO_SITE ¦ 0 ¦ {?true}","si,columnName,columnWidth,visible","else!(siMain.OF.IsEditMode)","siMain ¦ DefMain.TO_SITE ¦ 0 ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","858","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","859","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","860","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.Designer.cs","SCP0111_IntegrationPSI","InitializeComponent","861","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (18 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetChangedPeriod","258","dtPeriod.Rows[0]","CODE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SetChangedPeriod","273","dtScpPlanPeriod.Rows[0]","HORIZON_END_DATE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","RefreshPlanDate","418","dtPlanTypeFN.Rows[i]","PLANDATE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","RefreshPlanDate","422","dtPlanTypeFN.Rows[i]","PLANDATE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","EditButton","559","TheOne.Security.FoxUserInfoContext.Current","NowGroupID","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","EditButton","629","dtMultiChildItem.Rows[i]","NAME","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","InsertRow","960","TheOne.Security.FoxUserInfoContext.Current","NowGroupID","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1159","TheOne.Security.FoxUserInfoContext.Current","NowGroupID","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1213","dtTemp.Rows[0]","CODE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1247","dtToMonth.Rows[k]","CODE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1298","dtMonth.Rows[k]","CODE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1332","dtMonth.Rows[k]","CODE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1516","dtToMonth.Rows[k]","CODE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","SaveData","1587","dtMonth.Rows[k]","CODE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","spdMain_CellClick","1781","dtLine.Rows[i]","NAME","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","spdMain_CellClick","1781","dtLine.Rows[i]","CODE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","spdMain_CellClick","1785","drLine","CODE","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Analysis\SCP0111_IntegrationPSI\SCP0111_IntegrationPSI.cs","SCP0111_IntegrationPSI","spdMain_CellClick","1786","drLine","NAME","[]"
+```
+
+### FILE commented_calls.csv (0 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+```

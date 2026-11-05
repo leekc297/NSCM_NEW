@@ -77,7 +77,6 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
                   fullWidth
                   value={sc.userId}
                   onChange={e => setSc({ userId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -92,7 +91,6 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
                   fullWidth
                   value={sc.department}
                   onChange={e => setSc({ department: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

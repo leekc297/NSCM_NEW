@@ -11,6 +11,18 @@ const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
 
 /**
+ * 콤보 NAME 에서 `코드 + " "` 접두를 제거해 순수 명칭만 남긴다
+ * (AS-IS `SetSpreadNameToCode`, cs:1764 / cs:1797-1800 — "Code + ' ' Name 형태에서 Name 으로 변경").
+ *
+ * 콤보 SP 는 NAME 을 `"A3000 Assembly"`(코드+공백+명칭)로 실어 온다. AS-IS 는 그리드 셀 명칭에
+ * 넣기 전에 이 접두를 떼어 셀에는 명칭("Assembly")만 보인다. 조회조건 콤보(`clbSite`/`clbOperation`)는
+ * 반대로 `dtSiteAll`/`dtOperationAll`(`ChangeColumnNameToCodeName` → NAME="코드 명칭")를 그대로 쓰므로
+ * 거기서는 떼지 않는다 — strip 은 그리드 셀 경로(값·명칭후보)에만 적용한다.
+ */
+const stripCodePrefix = (code: string, name: string): string =>
+  code && name.startsWith(`${code} `) ? name.slice(code.length + 1) : name;
+
+/**
  * 그리드 셀 콤보 — 단일 출처 (design 03 §0.4·§3.2·§5.6 B-2~B-6).
  *
  * AS-IS 는 셀 콤보를 메타가 아니라 C# `SheetUtils.SetComboDataRow` 60+ 호출로 런타임 주입한다(X-F).
@@ -42,14 +54,17 @@ const codesOf = (rows: ComboRow[], key: string): string[] => {
   return [...seen].sort((a, b) => a.localeCompare(b));
 };
 
-/** 명칭 후보 — 코드 축과 같은 필터를 쓰되 표시값(`*_NAME`)을 돌려준다. */
+/**
+ * 명칭 후보 — 코드 축과 같은 필터를 쓰되 표시값(`*_NAME`)을 돌려준다.
+ * AS-IS `dtOperationSpreadName`/`dt*SpreadName`(cs:1800)처럼 `코드 + " "` 접두를 뗀 순수 명칭이다.
+ */
 const namesOf = (rows: ComboRow[], idKey: string, nameKey: string): string[] => {
   const seen = new Set<string>();
   for (const row of rows) {
     const code = str(row[idKey]);
     const name = str(row[nameKey]);
     if (!code || code === EMPTY_CODE || !name) continue;
-    seen.add(name);
+    seen.add(stripCodePrefix(code, name));
   }
   return [...seen].sort((a, b) => a.localeCompare(b));
 };
@@ -197,13 +212,17 @@ export const syncCodeAndName = (
     }
     const hit = scoped.find(r => str(r[pair.masterId]) === id);
     if (!hit) return [];
-    row[pair.name] = str(hit[pair.masterName]);
+    // AS-IS `SetSpreadNameToCode`(cs:2815) — 셀 명칭은 `코드 + " "` 접두를 뗀 순수 명칭이다.
+    row[pair.name] = stripCodePrefix(str(hit[pair.masterId]), str(hit[pair.masterName]));
     return [pair.name];
   }
 
   const name = str(row[pair.name]);
   if (!name) return [];
-  const hit = scoped.find(r => str(r[pair.masterName]) === name);
+  // 셀 명칭 후보가 strip 된 값이므로(namesOf) 역세팅 비교도 strip 된 명칭 기준이다.
+  const hit = scoped.find(
+    r => stripCodePrefix(str(r[pair.masterId]), str(r[pair.masterName])) === name
+  );
   if (!hit) return [];
   row[pair.id] = str(hit[pair.masterId]);
   return [pair.id];

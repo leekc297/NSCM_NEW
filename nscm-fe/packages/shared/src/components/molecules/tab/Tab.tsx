@@ -14,6 +14,11 @@ interface TabWrapperProps {
   children: ReactElement | ReactElement[];
   activeTabIndex?: number;
   setActiveTabIndex?: (index: number) => void;
+  /**
+   * 탭 줄에서 탭 버튼들 오른쪽에 표시할 보조 영역(표시 전용).
+   * 주의: 이 값은 persist key(= 탭 label)와 무관하다 — 여기 넣은 텍스트가 바뀌어도 그리드가 remount 되지 않는다.
+   */
+  rightSlot?: ReactNode;
 }
 
 interface TabItemProps {
@@ -31,6 +36,7 @@ export const TabWrapper = ({
   persist,
   activeTabIndex,
   setActiveTabIndex,
+  rightSlot,
 }: TabWrapperProps) => {
   const { t } = useTranslation();
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -67,6 +73,7 @@ export const TabWrapper = ({
               </button>
             );
         })}
+        {rightSlot && <div className={styles.rightSlot}>{rightSlot}</div>}
         <div>
           {clearOthers && <button onClick={clearOthers}>{t('LBL00364', '_다른 탭 닫기')}</button>}
           {clearAll && <button onClick={clearAll}>{t('LBL00365', '_모든 탭 닫기')}</button>}

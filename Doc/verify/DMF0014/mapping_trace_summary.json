@@ -1,0 +1,212 @@
+{
+ "version": 2,
+ "menu_id": "DMF0014",
+ "asis_id": "DMF0014",
+ "generated": "2026-11-03T10:33:07",
+ "mapping_file": "",
+ "rows": 590,
+ "fe_rows": 0,
+ "action_rows": 590,
+ "fe_page": "",
+ "fe_mapping_missing": false,
+ "verdict": {
+  "미검증": 578,
+  "검증완료": 12
+ },
+ "instances": 214,
+ "instance_result": {
+  "NOPATH": 7,
+  "ERROR": 53,
+  "NOT_RUN": 133,
+  "NA": 13,
+  "REVIEW": 5,
+  "PASS": 3
+ },
+ "by_layer": {
+  "동적 생성·조회": {
+   "NOPATH": 1,
+   "ERROR": 19,
+   "NOT_RUN": 26,
+   "NA": 5,
+   "REVIEW": 5
+  },
+  "정적 디자인": {
+   "ERROR": 3,
+   "NOT_RUN": 23,
+   "NOPATH": 1
+  },
+  "편집·검증": {
+   "ERROR": 5,
+   "NOT_RUN": 35
+  },
+  "CRUD": {
+   "NOT_RUN": 4
+  },
+  "DB 실행·접근": {
+   "NOT_RUN": 4,
+   "PASS": 3,
+   "ERROR": 1,
+   "NA": 1,
+   "NOPATH": 1
+  },
+  "콤보 후보": {
+   "NOT_RUN": 8,
+   "NA": 6,
+   "NOPATH": 4
+  },
+  "Cascade": {
+   "NOT_RUN": 15,
+   "ERROR": 23
+  },
+  "공통 기능": {
+   "NOT_RUN": 1
+  },
+  "권한": {
+   "NOT_RUN": 1
+  },
+  "팝업": {
+   "NOT_RUN": 16,
+   "ERROR": 2,
+   "NA": 1
+  }
+ },
+ "by_check": {
+  "A1": {
+   "REVIEW": 2
+  },
+  "A10": {
+   "NOT_RUN": 1
+  },
+  "A5": {
+   "ERROR": 1,
+   "NOT_RUN": 1
+  },
+  "A6": {
+   "NOT_RUN": 2
+  },
+  "B3": {
+   "NOT_RUN": 4,
+   "NA": 3,
+   "NOPATH": 2
+  },
+  "B4": {
+   "NOT_RUN": 4,
+   "NA": 3,
+   "NOPATH": 2
+  },
+  "C1": {
+   "NOT_RUN": 7
+  },
+  "C2": {
+   "ERROR": 7,
+   "NOT_RUN": 4
+  },
+  "C3": {
+   "ERROR": 9,
+   "NOT_RUN": 3
+  },
+  "C6": {
+   "ERROR": 7,
+   "NOT_RUN": 1
+  },
+  "D1": {
+   "ERROR": 1,
+   "NOT_RUN": 1
+  },
+  "D3": {
+   "ERROR": 1,
+   "NOT_RUN": 5
+  },
+  "D5": {
+   "ERROR": 1,
+   "NOT_RUN": 1
+  },
+  "D6": {
+   "NOT_RUN": 1
+  },
+  "DB-SYN": {
+   "PASS": 3,
+   "NA": 1,
+   "NOPATH": 1
+  },
+  "E4": {
+   "NOT_RUN": 27,
+   "ERROR": 2
+  },
+  "F1": {
+   "NOT_RUN": 1
+  },
+  "F2": {
+   "NOT_RUN": 1
+  },
+  "F4": {
+   "NOT_RUN": 4,
+   "ERROR": 1
+  },
+  "F5": {
+   "NOT_RUN": 1
+  },
+  "F6": {
+   "NOT_RUN": 1
+  },
+  "G03-WIRE": {
+   "NOPATH": 1
+  },
+  "G1": {
+   "NOT_RUN": 14
+  },
+  "G4": {
+   "NOT_RUN": 8,
+   "NOPATH": 1
+  },
+  "G5": {
+   "NOT_RUN": 7,
+   "ERROR": 1
+  },
+  "G6": {
+   "NOT_RUN": 8
+  },
+  "H2": {
+   "ERROR": 1,
+   "NOT_RUN": 12
+  },
+  "H5": {
+   "ERROR": 1,
+   "NOT_RUN": 1
+  },
+  "H6": {
+   "NOT_RUN": 7,
+   "ERROR": 1
+  },
+  "I1": {
+   "NOT_RUN": 1
+  },
+  "J2": {
+   "NOT_RUN": 1
+  },
+  "K4": {
+   "NOT_RUN": 1
+  },
+  "M3": {
+   "NOT_RUN": 2
+  },
+  "M4": {
+   "NA": 1
+  },
+  "X-REOPEN": {
+   "NOT_RUN": 1
+  },
+  "X-ROW": {
+   "ERROR": 19,
+   "NA": 5,
+   "REVIEW": 3
+  }
+ },
+ "todo_checks": {},
+ "unverified_reasons": {
+  "NOPATH": 22,
+  "ERROR": 511,
+  "NOT_RUN": 1203,
+  "REVIEW": 119
+ }
+}

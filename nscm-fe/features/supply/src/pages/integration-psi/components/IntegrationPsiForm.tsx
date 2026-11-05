@@ -83,6 +83,7 @@ export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
   const sc = useIntegrationPsiStore(s => s.searchCondition);
   const set = useIntegrationPsiStore(s => s.setSearchCondition);
   const setDivision = useIntegrationPsiStore(s => s.setDivision);
+  const setPlanDate = useIntegrationPsiStore(s => s.setPlanDate);
   const openSearchArea = useIntegrationPsiStore(s => s.openSearchArea);
 
   const tabId = useTabid();
@@ -230,12 +231,12 @@ export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
                 <Button
                   appearance='outlined'
                   priority='normal'
-                  iconComponent={<FunctionSearchIcon appearance='lined' onClick={onPopup} />}
+                  iconComponent={<FunctionSearchIcon appearance='lined' />}
+                  onClick={onPopup}
                 />
               ),
             }}
             onChange={e => onChange(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && onSearch()}
           />
         )}
       />
@@ -287,7 +288,6 @@ export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
                   fullWidth
                   value={sc.cellItemId}
                   onChange={e => set({ cellItemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -300,13 +300,18 @@ export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
             t(LBL.PLAN_DATE, '_Plan-date'),
             sc.planStartYyyymmdd,
             planDateOptions,
-            // PlanDate 변경 = 기간을 그 PlanDate 기준 기본값(시작월 ~ 시작월+(기본개월수-1))으로 **동기 재설정**
-            //   (AS-IS SetChangedPeriod 무조건 재계산 cs:1859→293~294). 종전엔 from/to 를 '' 로 비우고 별도
-            //   effect 가 다시 채웠는데, 같은 '월'의 다른 PlanDate 로 바꾸면 effect deps(fromMonth)가 안 바뀌어
-            //   비운 채 남아 Period 칸이 비고 줄어들어 보였다(2026-10-19 수정). 여기서 바로 채워 빈 전이를 없앤다.
+            // PlanDate 변경 = 기간을 그 PlanDate 기준 기본값(시작월 ~ 시작월+(기본개월수-1))으로 **동기 재설정** +
+            //   **그리드 초기화**(사용자 지시 2026-10-30, setPlanDate 가 filters clear). AS-IS SetChangedPeriod
+            //   무조건 재계산(cs:1859→293~294) + 조회결과 clear(ClearDataSource) 파리티. 종전엔 period 만 재설정하고
+            //   그리드는 이전 PlanDate 조회결과가 남아 조건과 어긋났다(사용자 신고 2026-10-30).
+            //   편집중(dirty)이면 그리드 clear 가 미저장 신규행/수정을 날리므로 MSG00704 confirm 후에만 실행한다
+            //   (Division 변경과 동일 가드 — commit 51d4e9fa 패턴). 취소 시 controlled 콤보가 이전 PlanDate 로 복귀.
             v => {
-              const fm = v.slice(0, 6);
-              set({ planStartYyyymmdd: v, fromYyyymm: fm, toYyyymm: addMonths(fm, periodCount - 1) });
+              void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+                if (!ok) return;
+                const fm = v.slice(0, 6);
+                setPlanDate(v, fm, addMonths(fm, periodCount - 1));
+              });
             },
             true
           )}
@@ -319,10 +324,14 @@ export const IntegrationPsiForm = ({ onSearch, onItemSearch }: Props) => {
           <Grid size={3} sx={{ alignSelf: 'center' }}>
             <FormItem
               className={commonStyles.formItem}
-              label={t(LBL.QTY, '_Qty < 0')}
+              label={' '}
               labelAlign='right'
               render={() => (
-                <Checkbox checked={sc.qtyYn} onChange={checked => set({ qtyYn: checked })} />
+                <Checkbox
+                  labelText={t(LBL.QTY, '_Qty < 0')}
+                  checked={sc.qtyYn}
+                  onChange={checked => set({ qtyYn: checked })}
+                />
               )}
             />
           </Grid>

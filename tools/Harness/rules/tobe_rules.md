@@ -24,8 +24,9 @@
 | BE 표준(Controller/Service/MyBatis) | `_tobe/11_be_controller_service.md`, `04_BE_RULES.md` | forbidden F08/F09(scope java — check.js 는 FE 폴더만 봄) | 후보(BE 체크 미연결) |
 | MSSQL→Oracle 치환 | `02-db-sql.md`, `project_db_migration_rules` | forbidden F07(scope sql) · 기존 `check-dbeaver-sql.ps1` | 기존 hook |
 | i18n MSG/LBL 코드 | `_categories/07_i18n_msg.md` | forbidden F12(미확정 코드) · map_field.csv lbl | 판정 |
+| SCP·SSP 라벨 명칭 변경(Valid→Active · 조회조건·그리드·팝업 그리드 일괄) | KEEP `H21` · `40_SEARCH_COND.md` 명칭 변경 룰 · `confirmed_requirements.csv CR-092`(사용자 지시 2026-10-30) | **label_alias.csv**(scope·asis_label·tobe_label) → check.js LB1(소스 라벨 리터럴 · FINAL BLOCK)/LB2(TO-BE 메타 · WARN) · judge H5_CR092(AS-IS Valid↔TO-BE Active=PASS)/CR092_LEFT(TO-BE 잔존=CR-092 FAIL) · `_trace.spec` H5(COL·PCOL, labelalias.ts) · mapping_trace E3 | 판정 |
 
 ## 룰 추가 절차
-1. 어떤 CSV 가 맞는지 고른다: 매핑(map_*) / 허용(allowed_gaps) / 금지(forbidden).
+1. 어떤 CSV 가 맞는지 고른다: 매핑(map_*) / 허용(allowed_gaps) / 금지(forbidden) / 명칭 변경(label_alias — AS-IS 라벨 → TO-BE 라벨, scope 로 도메인 한정).
 2. 한 줄 추가 → `node gen.js <ID>` 재생성과 `node check.js --page …` 둘 다 바로 반영.
 3. 문서(_tobe/_dev_rules)에는 "판정: forbidden F16" 처럼 판정 위치를 적는다. 판정 위치가 없는 룰은 "후보" 다.

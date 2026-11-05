@@ -67,7 +67,8 @@ export const MSG = {
   SAVED: 'MSG00002',
   // 저장 실패 — 저장 오류 alert 전용. (AS-IS MSG00006 는 TO-BE 미등록 → 같은 문구 MSG00003, KO/EN/CN)
   SAVE_FAILED: 'MSG00003',
-  // 복수 Project 동일그룹 금지 — AS-IS 리터럴(SCM_ADM_MSG_M 미등록). 다국어 신규 등록 필요(04 확인필요/I-04).
-  //   미등록 상태라 fallback 문구(AS-IS 한글 리터럴)로 노출 — 기존 화면의 t(key,'_fallback') 관례.
-  MULTI_PROJECT_SAME_GROUP: 'MSG_SCP0110_MULTI_PROJECT',
+  // 복수 Project 동일그룹 금지 — AS-IS 하드코딩 리터럴(SCP0110_GroupModelMapping.cs:841/857)을 MSG 코드화.
+  //   SCM_ADM_MSG_M 등록(2026-11-02): KO/EN/CN 3행, CN=EN(영어 — MSG00002 선례). t(code) 가 DB 등록
+  //   문구를 언어별로 반환한다(미등록 시 validation 훅의 fallback 한글 리터럴로 노출).
+  MULTI_PROJECT_SAME_GROUP: 'MSG01479',
 } as const;

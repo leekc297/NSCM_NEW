@@ -36,6 +36,9 @@ def main():
         return 0
     cfg = json.load(open(E2E_CFG, encoding='utf-8-sig'))
     user = cfg.get('forceAccount') or cfg.get('defaultAccount')
+    if spec.get('mode') == 'editonly':  # 기존행 수정·원복만 — 삭제 정리 없음(잔존은 save_residue.py)
+        print(f'{mid}: editonly — 삭제 정리 대상 없음')
+        return 0
     if spec.get('mode') == 'keyset':
         return keyset_cleanup(mid, spec, user, dry)
     marker = cfg.get('crudMarker', 'E2E_')

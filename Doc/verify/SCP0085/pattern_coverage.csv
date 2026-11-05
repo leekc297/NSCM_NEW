@@ -1,0 +1,30 @@
+﻿pattern_id,rule,title,state,generated,consumed,hand_replaced,auth_dropped,ledger_rows,results,doc_rows_linked,why_not,applies_when
+P01,I1,KO 언어 · 무변경 저장 → KO 알림,미적용,0,0,0,0,0,,2,SAVE 버튼 없음,TO-BE btn_auth SAVE
+P02,I1,CN 언어 조회 건수 총/건 표기(CR-063),적용·미측정,1,1,0,0,0,,1,,TO-BE btn_auth SEARCH
+P03,H10,조회 중 Loading 토스트 없음,적용·미측정,1,1,0,0,0,,1,,TO-BE btn_auth SEARCH
+P04,M1,Excel Form 동작(CR-095),미적용,0,0,0,0,0,,1,Excel Form 버튼 없음(AS-IS Text · btn_auth FORM_DATA),AS-IS 버튼 글자 'Excel Form' 또는 btn_auth FORM_DATA
+P05,D6,선택 행 위로 Insert(CR-015),미적용,0,0,0,0,0,,2,INSERT 버튼 없음,TO-BE btn_auth INSERT
+P06,F1,기존 행 Delete → D 저장 요청,미적용,0,0,0,0,0,,1,DELETE 버튼 없음,btn_auth DELETE · AS-IS DeleteButton 본문 있음 · 삭제가 신규 행 전용(guard == StringI) 아님
+P07,C1,신규 행 셀 콤보 후보,미적용,0,0,0,0,0,,4,신규 행 편집 콤보 칸 없음(sheet_columns FPComboBox · INPUT_TP_CD O/M/IO/IM),sheet_columns 신규 행 편집(INPUT_TP_CD O/M/IO/IM) FPComboBox 칸
+P08,F3,신규 행 콤보 붙여넣기 — 후보 값 반영,미적용,0,0,0,0,0,,1,신규 행 편집 콤보 칸 없음(sheet_columns FPComboBox · INPUT_TP_CD O/M/IO/IM),P07 과 같음
+P09,F3,신규 행 콤보 붙여넣기 — 후보 밖 값 거부,미적용,0,0,0,0,0,,1,신규 행 편집 콤보 칸 없음(sheet_columns FPComboBox · INPUT_TP_CD O/M/IO/IM),P07 과 같음
+P10,F3,신규 행 콤보 직접 입력 — 후보 값 반영,미적용,0,0,0,0,0,,0,신규 행 편집 콤보 칸 없음(sheet_columns FPComboBox · INPUT_TP_CD O/M/IO/IM),P07 과 같음
+P11,F6,소수 자릿수 저장 요청 유지,미적용,0,0,0,0,0,,1,cell_rules.csv 없음(소수 자릿수 사실 없음),AS-IS cell_rules decimals>0 · 기존 행 편집 숫자 칸
+P12,E4,기존 행 수정 저장 → 필수 칸 오탐 없음(DM-215),미적용,0,0,0,0,0,,1,SAVE 없음,btn_auth SAVE · 기존 행 편집 숫자/글자 칸(없으면 AS-IS 동적 기간 칸)
+P13,E3,빈 신규 행 저장 → 필수 안내·저장 요청 0,미적용,0,0,0,0,0,,1,INSERT·SAVE 버튼 둘 다 있어야 함,btn_auth INSERT·SAVE · 필수 칸(M/IM) 또는 AS-IS 저장 메서드의 빈값 검사 메시지(가장 안쪽 조건 · 성공/확인 문구 제외)
+P14,C4,신규 행 있을 때 조회조건 변경 차단,미적용,0,0,0,0,0,,1,AS-IS 이벤트 핸들러에 신규 행(FlagI/StringI) 검사 메시지 없음 · 기능 버튼 없음,AS-IS 이벤트 핸들러 MESSAGE 의 guard == FlagI/StringI · 조회조건 컨트롤
+P15,H10,신규 행·편집 중 기능 버튼 차단 안내(DM-52),미적용,0,0,0,0,0,,1,AS-IS 이벤트 핸들러에 신규 행(FlagI/StringI) 검사 메시지 없음 · 기능 버튼 없음,AS-IS 이벤트 핸들러 MESSAGE 의 guard == FlagI/StringI · 버튼 컨트롤(또는 기능 버튼 — TO-BE 확정 규칙 O2)
+P16,C3,나머지(%) 조건 → 안내·칸 비움,미적용,0,0,0,0,0,,1,cell_clear.csv 없음,AS-IS cell_clear cond 에 % (정수 배수 검사)
+P17,C3,나누어떨어짐 → 몫 표시,미적용,0,0,0,0,0,,1,cell_clear.csv 없음,P16 · cell_clear refilled=Y
+P18,H2,당주 구분선 = 이번 주,미적용,0,0,0,0,0,,2,AS-IS 동적 기간 칸(W_/M_/D_ 접두 검사) 없음,AS-IS W_ 접두 동적 칸 검사
+P19,D2,값 있는 편집 구간 수량 셀 편집,미적용,0,0,0,0,0,,1,AS-IS 동적 기간 칸(W_/M_/D_ 접두 검사) 없음,AS-IS W_/M_/D_ 접두 동적 칸 검사 · btn_auth SAVE
+P20,F4,컬럼 재구성 조회조건 반복 전환 SQL 오류 0,미적용,0,0,0,0,0,,1,컬럼을 다시 만드는 조회조건(SetSpreadColumn 호출 핸들러) 없음,AS-IS Combo/Radio 조회조건 핸들러가 SetSpreadColumn/InitSpread/SetSheet 호출
+P21,B1,조회조건 콤보 = 콤보,적용·미측정,1,1,0,0,0,,0,,SCP·SSP = 조회조건 기준표 TO-BE 선택 조건 / 그 외 AS-IS UsrCombo·CheckedList 라벨
+P22,E2,없는 날짜 저장 차단,미적용,0,0,0,0,0,,1,INSERT·SAVE 버튼 둘 다 있어야 함,btn_auth INSERT·SAVE · 신규 행 편집 날짜 칸
+P23,F2,기존 행 수정 + 신규 행 동시 저장 → M·I,미적용,0,0,0,0,0,,1,INSERT·SAVE 버튼 둘 다 있어야 함,btn_auth INSERT·SAVE · 기존 행 편집 글자 칸
+P24,C3,팝업 셀 선택 → 연쇄 칸 채움,미적용,0,0,0,0,0,,1,AS-IS 더블클릭 팝업 뒤 다른 칸 채움 없음(또는 신규 행 편집 칸 아님),"AS-IS CellDoubleClick e.Column==X 아래 POPUP → SetText/SetValue(e.Row, Y)"
+P25,F3,같은 키 묶음 동반 갱신,미적용,0,0,0,0,0,,2,AS-IS 변경 핸들러의 같은 키 행 동반 갱신 없음,"AS-IS *_Changed e.Column==X ▸ for 행 ▸ 키 일치 ▸ SetValue(i, X, v)"
+P26,K4,칸 보임/숨김 = AS-IS Division 조건,적용·미측정,2,2,0,0,0,,0,,AS-IS grid_code Visible 계열 · 조건 사슬이 Division 술어만 · 보임·숨김 짝 · TO-BE 라벨 1종
+P27,K4,버튼 보임/숨김 = AS-IS Division 조건,미적용,0,0,0,0,0,,0,,AS-IS 버튼 Visible Division 조건 · TO-BE btn_auth 에 같은 버튼 코드
+P28,G7,Sum 체크 = 재조회 없이 합계 칸 토글,미적용,0,0,0,0,0,,2,AS-IS chkSum(Sum) 없음,AS-IS chkSum CheckedChanged · 서버 경로 없음 · .Visible = chkSum.Checked · 첫 상태 미체크
+P30,K2,Division 왕복 전환 뒤 칸 노출 = AS-IS 메타,미적용,0,0,0,0,0,,1,일부 Division 칸 중 AS-IS 기본 표시 · TO-BE 숨김 불가 칸 없음(화면 Division []),AS-IS SCM_MST_SHEET_COLUMNS 일부 Division 칸 · 조회조건 Division · Division 고정 화면 아님

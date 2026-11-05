@@ -1,0 +1,19 @@
+[
+ {
+  "screen": "DMF0044",
+  "call": 1,
+  "cls": "DMF0044_United_VersionPopup",
+  "trig": "BTN:btnSPVer",
+  "check": "OPEN",
+  "egs": [
+   "EG441",
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "AS-IS btnSPVer_Click 팝업(DMF0044_United_VersionPopup) 열림",
+  "actual": "BTN: 버튼 [SP Ver/SPVer] 비노출 — 화면 버튼 []",
+  "basis": "DMF0044_Sales_Reports.cs:1151",
+  "at": "2026-10-31T12:25:41.366Z",
+  "mut": ""
+ }
+]

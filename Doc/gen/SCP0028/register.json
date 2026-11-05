@@ -1,0 +1,94 @@
+{
+  "menuId": "SCP0028",
+  "screenName": "Shipment_Lot_Size",
+  "feature": "shipping",
+  "pageDir": "shipment-lot-size",
+  "routePath": "shipping/shipment-lot-size",
+  "sheets": [
+    {
+      "sheetName": "Shipment Lot Size",
+      "rule": "META+코드연결",
+      "columns": 18,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "<field:dtTransMode>",
+        "InitControls",
+        "SetChangedControl"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0028.P_",
+      "sheet": "Shipment Lot Size",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "<field:dtYesOrNo>",
+        "InitControls"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0028.P_",
+      "sheet": "Shipment Lot Size",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0028_GET_SHIPMENT_LOT_SIZE",
+      "asis_sp": "SCP0028_GET_SHIPMENT_LOT_SIZE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnDelete.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE",
+      "sheet": "Shipment Lot Size",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+      "asis_sp": "SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnInput.Click"
+      ],
+      "methods": [
+        "FindInput"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0028.P_SCP0028_GET_SHIPMENT_LOT_SIZE_INPUT",
+      "sheet": "Shipment Lot Size",
+      "btn": "SHIPMENT_LOT_SIZE_INPUT"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+      "asis_sp": "SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnDelete.Click",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindDelete",
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0028.P_SCP0028_SAVE_SHIPMENT_LOT_SIZE",
+      "sheet": "Shipment Lot Size",
+      "btn": "SAVE"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

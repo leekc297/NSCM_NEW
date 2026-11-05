@@ -1,0 +1,45 @@
+PKG_DMF0082: [('PACKAGE', 'VALID', '2026-10-09 13:38:31'), ('PACKAGE BODY', 'VALID', '2026-11-04 14:48:42')]
+PKG_DMF0082_1104: [('PACKAGE', 'VALID', '2026-11-04 16:00:18'), ('PACKAGE BODY', 'VALID', '2026-11-05 04:38:45')]
+=== ver13 env=['zioui1', 'localhost', '2026-11-05 04:39:26'] period=20261101~20270430 A=PKG_DMF0082 B=PKG_DMF0082_1104 users=k0101,minyonglee1 divs=40,81,82 scen=['ver', 'multi'] gtt=True
+--- k0101 div40 표본 {'site': 'Lenovo_HK_HKG', 'item_full': 'MCCM348014A3', 'cust': 'Lenovo', 'biz': 'CELL', 'project': 'Lenovo', 'owner': 'Lia Yun', 'team': '58520274', 'plant': None, 'sender': None, 'item': 'CM348'} 버전 {'MF_W': 'MF_W_20260921_V001', 'SF_W': 'SF_W_20260824_V001', 'SP_W': 'SP_W_20260820_V002', 'MF_D': 'MF_D_20260827_V001'}
+04:39:53 k0101 div40 MF_W MF_W_20260921_V001                  PASS rows=     3 A   1.63s B   0.88s
+04:40:00 k0101 div40 SF_W SF_W_20260824_V001                  PASS rows=  1764 A 452.91s B   2.47s
+04:47:51 k0101 div40 SP_W SP_W_20260820_V002                  PASS rows=  1179 A 127.01s B   1.65s
+04:50:13 k0101 div40 MF_D MF_D_20260827_V001                  PASS rows=  1728 A 454.85s B   2.15s
+04:58:05 k0101 div40 Current,MF_W_20260921_V001               PASS rows=  7022 A   6.76s B   4.34s
+04:59:03 k0101 div40 Current,SP_W_20260820_V002               PASS rows=  8196 A 143.17s B   6.60s
+--- k0101 div81 표본 {'site': 'BMW_US_SPA', 'item_full': 'ACHP2005I-A1', 'cust': 'A18BW2003', 'biz': 'CELL', 'project': 'A18BW2003', 'owner': 'BYUNGCHANG PARK', 'team': '70000347', 'plant': 'WA00-P', 'sender': None, 'item': 'HP200'} 버전 {'MF_W': 'MF_W_20260825_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20260826_V002', 'MF_D': 'MF_D_20260827_V001'}
+05:02:59 k0101 div81 MF_W MF_W_20260825_V001                  PASS rows=   438 A 526.09s B   2.33s
+05:12:00 k0101 div81 SF_W SF_W_20261028_V001                  PASS rows=     0 A   2.58s B   1.86s  ⚠ 0행(미실증)
+05:12:15 k0101 div81 SP_W SP_W_20260826_V002                  PASS rows=   540 A   4.59s B   2.22s
+05:12:38 k0101 div81 MF_D MF_D_20260827_V001                  PASS rows=     0 A   3.21s B   2.29s  ⚠ 0행(미실증)
+05:12:53 k0101 div81 Current,MF_W_20260825_V001               PASS rows=  8157 A 508.68s B   7.97s
+05:22:42 k0101 div81 Current,SP_W_20260826_V002               PASS rows=  7855 A  11.48s B   8.14s
+--- k0101 div82 표본 {'site': 'NextEra_US_PHX', 'item_full': 'ETD1551AFB3A-XBA', 'cust': 'G-26-033', 'biz': None, 'project': 'G-26-033', 'owner': 'YEEUN CHO', 'team': '58187671', 'plant': None, 'sender': None, 'item': 'D1551'} 버전 {'MF_W': 'MF_W_20260825_V001', 'SF_W': None, 'SP_W': 'SP_W_20260827_V001', 'MF_D': 'MF_D_20260827_V001'}
+05:25:01 k0101 div82 MF_W MF_W_20260825_V001                  PASS rows=   260 A 556.45s B   1.87s
+05:34:33 k0101 div82 SP_W SP_W_20260827_V001                  PASS rows=   690 A   3.95s B   2.44s
+05:34:56 k0101 div82 MF_D MF_D_20260827_V001                  PASS rows=     0 A   2.96s B   1.55s  ⚠ 0행(미실증)
+05:35:12 k0101 div82 Current,MF_W_20260825_V001               PASS rows= 16417 A 577.83s B  20.46s
+05:47:55 k0101 div82 Current,SP_W_20260827_V001               PASS rows= 16798 A  23.64s B  19.77s
+--- minyonglee1 div40 표본 {'site': 'Lenovo_HK_HKG', 'item_full': 'MCCM348014A3', 'cust': 'Lenovo', 'biz': 'CELL', 'project': 'Lenovo', 'owner': 'Lia Yun', 'team': '58520274', 'plant': None, 'sender': None, 'item': 'CM348'} 버전 {'MF_W': 'MF_W_20260921_V001', 'SF_W': 'SF_W_20260824_V001', 'SP_W': 'SP_W_20260820_V002', 'MF_D': 'MF_D_20260827_V001'}
+05:52:42 minyonglee1 div40 MF_W MF_W_20260921_V001                  PASS rows=     5 A   2.12s B   0.98s
+05:52:50 minyonglee1 div40 SF_W SF_W_20260824_V001                  PASS rows=  2380 A 455.96s B   3.29s  (동률 순서 차이: cur1)
+06:00:55 minyonglee1 div40 SP_W SP_W_20260820_V002                  PASS rows=  1179 A 127.68s B   2.36s  (동률 순서 차이: cur1)
+06:03:21 minyonglee1 div40 MF_D MF_D_20260827_V001                  PASS rows=  2344 A 453.62s B   3.18s  (동률 순서 차이: cur1)
+06:11:16 minyonglee1 div40 Current,MF_W_20260921_V001               PASS rows=  7624 A  68.54s B   7.37s  (동률 순서 차이: cur1)
+06:13:53 minyonglee1 div40 Current,SP_W_20260820_V002               PASS rows=  8796 A 195.78s B   8.81s  (동률 순서 차이: cur1)
+--- minyonglee1 div81 표본 {'site': 'BMW_US_SPA', 'item_full': 'ACHP2005I-A1', 'cust': 'A18BW2003', 'biz': 'CELL', 'project': 'A18BW2003', 'owner': 'BYUNGCHANG PARK', 'team': '70000347', 'plant': 'WA00-P', 'sender': None, 'item': 'HP200'} 버전 {'MF_W': 'MF_W_20260825_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20260826_V002', 'MF_D': 'MF_D_20260827_V001'}
+06:19:14 minyonglee1 div81 MF_W MF_W_20260825_V001                  PASS rows=   436 A 463.97s B   2.53s
+06:27:20 minyonglee1 div81 SF_W SF_W_20261028_V001                  PASS rows=     0 A  15.62s B   1.78s  ⚠ 0행(미실증)
+06:27:54 minyonglee1 div81 SP_W SP_W_20260826_V002                  PASS rows=   540 A   4.34s B   2.50s
+06:28:24 minyonglee1 div81 MF_D MF_D_20260827_V001                  PASS rows=     0 A   2.90s B   1.61s  ⚠ 0행(미실증)
+06:28:43 minyonglee1 div81 Current,MF_W_20260825_V001               PASS rows=  8337 A 468.90s B  13.76s
+06:38:10 minyonglee1 div81 Current,SP_W_20260826_V002               PASS rows=  7988 A  14.07s B  13.37s
+--- minyonglee1 div82 표본 {'site': 'NextEra_US_PHX', 'item_full': 'ETD1551AFB3A-XBA', 'cust': 'G-26-033', 'biz': None, 'project': 'G-26-033', 'owner': 'YEEUN CHO', 'team': '58187671', 'plant': None, 'sender': None, 'item': 'D1551'} 버전 {'MF_W': 'MF_W_20260825_V001', 'SF_W': None, 'SP_W': 'SP_W_20260827_V001', 'MF_D': 'MF_D_20260827_V001'}
+06:41:04 minyonglee1 div82 MF_W MF_W_20260825_V001                  PASS rows=   280 A 558.17s B   1.86s
+06:50:39 minyonglee1 div82 SP_W SP_W_20260827_V001                  PASS rows=   690 A   4.31s B   2.54s
+06:51:07 minyonglee1 div82 MF_D MF_D_20260827_V001                  PASS rows=     0 A   3.03s B   1.65s  ⚠ 0행(미실증)
+06:51:27 minyonglee1 div82 Current,MF_W_20260825_V001               PASS rows= 16533 A 591.63s B  27.36s
+07:04:53 minyonglee1 div82 Current,SP_W_20260827_V001               PASS rows= 16894 A  31.56s B  28.69s
+
+=== 시나리오 34 · FAIL 0 · 미실증 6

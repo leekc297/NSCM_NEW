@@ -55,19 +55,7 @@ export const ShipmentModelPicForm = ({
   const clearFilters = useShipmentModelPicStore(s => s.clearFilters);
   const openSearchArea = useShipmentModelPicStore(s => s.openSearchArea);
 
-  // Model/User 입력칸 Enter 는 SearchArea 버튼 경로를 타지 않으므로 **여기서** 같은 두 가드를 건다(A-3):
-  //   ① 권한(onSearch 가 undefined 면 아무 동작 없음) ② 미저장 변경 confirm.
-  //   ②가 없으면 Enter 만 편집분을 조용히 덮어쓴다(버튼·F5 는 SearchArea 가 이미 감싼다 — SearchArea.tsx:113).
-  //   dirtyKey 는 페이지 화면이라 항상 tab 스코프다(팝업 안이면 scopeDirtyKey 지만 이 화면은 페이지).
-  //   공용 `handleSearch` 에는 confirm 을 넣지 않는다 — 버튼 경로에서 확인창이 두 번 뜬다.
   const tabId = useTabid();
-  const handleEnterSearch = onSearch
-    ? () => {
-        void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
-          if (ok) onSearch();
-        });
-      }
-    : undefined;
 
   // From Site = PlantSiteByDivision @divisionId. 선택 division 을 넘겨 서버 cascade(design 02 §3
   //   재조회 방식). division 변경 시 param 이 바뀌어 자동 재조회. 값 raw, 인용은 getCombo funnel.
@@ -227,7 +215,6 @@ export const ShipmentModelPicForm = ({
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && handleEnterSearch?.()}
                 />
               )}
             />
@@ -245,7 +232,6 @@ export const ShipmentModelPicForm = ({
                   fullWidth
                   value={sc.userId}
                   onChange={e => set({ userId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && handleEnterSearch?.()}
                 />
               )}
             />

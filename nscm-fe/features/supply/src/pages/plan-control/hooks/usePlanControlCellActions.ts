@@ -432,6 +432,10 @@ export const usePlanControlCellActions = ({
 
   // E06 CellDoubleClick — A003 행이면 Status 조회 + 폴링 시작, 그 외에는 선택행 초기화(AS-IS -1).
   //   초기화를 빠뜨리면 폴링이 엉뚱한 행을 갱신한다.
+  //   예외(사용자 지시 2026-11-02, AS-IS 대비 의도적 개선): Plan ID 콤보 셀 자체를 더블클릭하면
+  //   AS-IS 와 똑같이 "Select Plan ID." 경고부터 뜨는 게 원래 동작(cs:1260-1288 은 컬럼 구분이 없다)이지만,
+  //   아직 값을 고르지도 않았는데 경고가 먼저 뜨는 게 사용자 눈엔 "콤보가 고장났다"로 보인다 — Plan ID
+  //   컬럼만 빼서 Wijmo 기본 편집진입(더블클릭 → 콤보 오픈)이 그대로 동작하게 둔다. 다른 컬럼은 AS-IS 그대로.
   const handleGridDoubleClick = useCallback(
     (mouseEvent: MouseEvent) => {
       const grid = gridRef.current;
@@ -439,6 +443,7 @@ export const usePlanControlCellActions = ({
       if (rows.length <= 0) return; // B39
       const hit = grid.hitTest(mouseEvent);
       if (hit.cellType !== CellType.Cell || hit.row < 0) return;
+      if (grid.columns[hit.col]?.binding === ACTION_COLUMN.PLAN_ID) return;
       const row = rowAt(grid, hit.row);
       if (!row) return;
       // B40

@@ -1,0 +1,157 @@
+{
+"EG007": {
+"how": "계정 순회: 그 계정 자동 Div 조회 결과 행 Division 값 ⊆ 메뉴 권한 부문(UNIT_AUTH×MNU_MPG)",
+"todo": "건수=원장 COUNT 대조는 화면별 원장 테이블 필요(integration: cleanup_spec tables 활용)"
+},
+"EG022": {
+"how": "Div 후보 전체 순회: Measure 설정 창 후보(Invisible∪Visible) = SCM_MST_SHEET_MEASURE(VALID·USER_SELECTABLE·Div 포함) · AS-IS dbmeta 차이는 facts_auth_db measure 로 판정필요 기록"
+},
+"EG024": {
+"how": "A→B→A 전환 후 조회: 복귀 헤더 동일(동적 제외) + 메타 Div 전용 컬럼 잔존·누락(같은 계정 Div 간 차이만 비교)"
+},
+"EG032": {
+"how": "TITLESET_USER 보유·미보유 계정쌍을 같은 Div 로 조회, AS-IS sort_rules 정적 키 단조 여부",
+"todo": "혼합 정렬(입력일+SORT_ORDER_NO) 동적 규칙 해석"
+},
+"EG061": {
+"how": "계정별 조회조건 후보 덤프 ↔ AS-IS BigFilter(@GROUP_ID·@USER_ID 그룹 합집합) 실행 = 조회조건 부분",
+"todo": "셀 후보(W/S·Site 유형·ETC 행)는 신규행 행 값 조합 필요 — 미구현",
+"force": "미완"
+},
+"EG065": {
+"how": "REQ_NO_DISPLAY 제외 그룹 ∩ 신청 목록(PKG_SYS0011 프로시저 실행, 호출 불가 시 ERROR + 본문 커서 SQL 직접 실행)",
+"force": "구현",
+"todo": "DB 정적 대조+변이만. 실화면은 PKG_SYS0011 본체 INVALID(ORA-04063)로 미측정"
+},
+"EG067": {
+"how": "룩업 시간창 기대(그룹×Div×Measure×요일·시각·LIMIT) ↔ 그 Measure 행 입력 칸 편집",
+"todo": "시간창 반대 구간은 SYSDATE 고정 불가로 미측정 · FCST Type 조건은 셀 후보 미구현"
+},
+"EG086": {
+"force": "미완",
+"how": "Sales Site 유형별 Measure 셀 후보 — 신규행에 유형별 Site 를 넣는 경로(팝업·행 값 조합) 미구현",
+"todo": "AS-IS SetCellTypeCombo guard → Site 속성 DB 분류 → 신규행 Site 지정 후 candidates 대조",
+"menu": "DMF0003 DMF0082"
+},
+"EG109": {
+"how": "AS-IS InsertButton GROUP guard MESSAGE ↔ 계정별 Insert 클릭(신규행 수·알림). 합집합 판정: 차단 그룹만 가진 계정만 차단. 버튼 숨김 = CR-070 허용"
+},
+"EG113": {
+"how": "EG376 과 같은 측정(룩업 기대 ↔ 편집)",
+"todo": "마감 후 저장 차단 메시지 = 서버 PKG 판정이라 실저장 필요(메인 세션)"
+},
+"EG123": {
+"how": "edit_expect RULES(행 값 COL·DIV guard) 평가 ↔ 셀 편집을 계정별 대조",
+"todo": "Measure 후보 제한(콤보)·FCST Type 권한 필터는 EG086 미구현과 같음"
+},
+"EG124": {
+"how": "edit_expect RULES 그룹 합집합·행 값(EDIT_FLAG·DEPT 결과 컬럼) 평가 ↔ 편집 계정별",
+"todo": "담당 부서 행 = SP 가 내는 EDIT_FLAG 로만 간접 측정, 행 DEPT↔계정 소속 직접 비교 없음"
+},
+"EG126": {
+"how": "정렬 설정 + 선택 행 후 Insert: 정렬 유지 · AS-IS InsertButton 선택 행 기준이면 신규행 ≤ 선택 행"
+},
+"EG140": {
+"how": "getMergedRange 로 병합 범위 찾아 중간 행 선택 후 Insert → 신규행 ≤ 범위 맨 위"
+},
+"EG160": {
+"how": "Div 후보 전체: Column 설정 창 '*' 표시 = SHEET_COLUMNS USER_SELECTABLE_FLAG=N(Div 포함)",
+"todo": "저장 검증 집합(컬럼별 공란 저장) 3자 대조 = 실저장 경로 필요(메인 세션)"
+},
+"EG212": {
+"how": "Div 후보 전체 전환 구간 응답 401·403 수집"
+},
+"EG231": {
+"force": "불가",
+"how": "삭제 저장 전후 연계 테이블 행 수 — 실저장 금지 지시로 이 작업에서 불가",
+"todo": "메인 세션 실저장 필요(integration.md)",
+"menu": "DMF0044 SYS0014"
+},
+"EG242": {
+"force": "불가",
+"how": "신규 저장 루트 행 감사 칸 — 실저장 금지 지시로 이 작업에서 불가",
+"todo": "메인 세션 실저장 필요(save_audit backs 전 테이블 확대 · integration.md)",
+"menu": "DMF0043"
+},
+"EG257": {
+"how": "A→B→A 조회 본문 Division 값 = 선택 + 조회 전 헤더 재구성(AS-IS 변경 이벤트 InitSpread 류 있을 때 FAIL 가능)"
+},
+"EG271": {
+"how": "AS-IS Enabled 문장(guard 정규형) ↔ Div 후보 전체 칸 disabled"
+},
+"EG275": {
+"how": "AS-IS Visible/Visibility 문장 ↔ Div 후보 전체 칸 노출 · 그룹 guard 는 계정 순회",
+"todo": "라벨 미대응은 ERROR 로 남김(대조표 필요) · Module 다중/단일 사양 미측정"
+},
+"EG294": {
+"how": "AS-IS Year·Version 초기값 문장(DateTime.Now.Year·빈값) 평가 ↔ Div 별 칸 값"
+},
+"EG315": {
+"how": "AS-IS ColumnHeaderSpan 문장 유무 ↔ TO-BE 헤더 getMergedRange 병합 수",
+"force": "구현",
+"todo": "DMF0003 측정 PASS 는 제외된 실행 r3(21:48 이전 코드) · SYS0002 는 AS-IS 문장 없음 NA · 재측정·변이(hdr_flat) 전"
+},
+"EG319": {
+"how": "EG140 과 같은 프로브(Insert 위치 ≤ 병합 그룹 맨 위)"
+},
+"EG365": {
+"how": "계정 순회: 자동 선택 Div ∈ 후보·단일 권한이면 그 값 · 직전 계정 Div 잔존 여부"
+},
+"EG366": {
+"how": "계정 순회: Div 후보 ↔ 메뉴 권한 그룹의 부문 권한(USE_YN Y) · AS-IS MyDivision 실행 교차"
+},
+"EG367": {
+"how": "계정·Div 별 조회조건 후보 ↔ AS-IS BigFilter(그룹 합집합) — 대응 칸 없으면 판정필요",
+"force": "미완",
+"todo": "r7 덤프는 가상 스크롤로 후보 12~13건만 읽혀 대조 무효(FAIL 13건 허위 → 폐기). 콤보 응답 전체로 스펙 수정(미실행) · AS-IS 권한표에 없는 계정 다수 = ERROR"
+},
+"EG368": {
+"how": "계정 순회: 조회 행 Division ⊆ 권한 부문",
+"todo": "건수=원장 대조는 EG007 과 같음"
+},
+"EG369": {
+"how": "AS-IS 버튼 Visible/Enabled guard(Div·GROUP) ↔ Div·계정 순회 + CR-070 PR_GET_MNU_BTN_AUTH_DIV ↔ 공통버튼",
+"todo": "Data Type 등 CTL 조건은 값 전환 경로 미구현(평가 불가 ERROR)"
+},
+"EG372": {
+"how": "운영 AS-IS DB dbo.TB_FX_GroupMenuAuth(UseYN Y) ↔ SCM_ADM_USER_GR_MNU_MPG_M 메뉴별 그룹 집합(전 공통 메뉴) · 변이 = 차이 1건 주입 FAIL·동일화 PASS(DB 대조 항목이라 화면 없음)",
+"todo": ".env.asis 접속처가 운영본인지 사용자 확인 · 버튼 권한 표는 AS-IS 대응 없음"
+},
+"EG373": {
+"how": "EG109 측정 중 차단 그룹만 가진 계정의 Insert 알림 유무"
+},
+"EG374": {
+"how": "계정 순회: 진입 직후·조회 후 Save/Insert/Delete ↔ PR_GET_MNU_BTN_AUTH_DIV(자동 선택 Div)"
+},
+"EG376": {
+"how": "그룹×Div×Measure 룩업 + 사내 SYSDATE 요일·시각 + LIMIT → 기대, Measure 행 입력 칸 편집 대조",
+"todo": "반대 구간 미측정 · 저장 차단 메시지는 실저장(메인 세션)"
+},
+"EG377": {
+"how": "edit_expect RULES ↔ 편집을 그룹 조합별 계정 전수"
+},
+"EG378": {
+"how": "EG377 과 같은 측정(행 값 Div·사이트 유형 guard)",
+"todo": "유형별 표본 행 탐색 40행 안 — 유형 커버리지 미보장"
+},
+"EG380": {
+"how": "GUEST 전용 실계정 로그인 후 첫 화면 = Auth Request. 세션 변조 판정은 BE 판정 대신 못해 폐기",
+"todo": "명부에 GUEST 전용 계정 없음 — users.json 등록 필요",
+"force": "미완"
+},
+"EG382": {
+"how": "세션 메뉴 트리 ↔ 그룹×메뉴 권한 · 메뉴 권한 없는 계정 직접 URL",
+"todo": "직접 접근 허용(라우트 가드 없음)의 결함 여부 사용자 결정"
+},
+"EG395": {
+"how": "PKG 안 계정 리터럴 0(블록·줄 주석 제외) + 설정 저장 직후 그리드 비움(POST 미전송)",
+"todo": "계정 리터럴만 정적 변이 입증. 설정 저장 직후 비움은 r5 ERROR(저장 요청 0건) → 스펙 수정 후 재측정 전 · 저장 구성 표시는 실저장",
+"force": "구현"
+},
+"EG402": {
+"how": "EG022 와 같은 측정(진입 직후 조회 전 설정 창 후보 = 자동 Div 기준 포함)"
+},
+"EG411": {
+"how": "EG374 와 같은 측정(조회 전 노출 ↔ 자동 Div 권한)"
+}
+}

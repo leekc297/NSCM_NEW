@@ -1,0 +1,13 @@
+[PRE 21:47:15] BE=401 FE=200
+[PRE] BE 로그 말미 HikariPool 타임아웃 0건
+[INFO] 이전 잠금(PID 80944, 2026-10-31T12:38:58.865Z) 의 프로세스가 없어 무시합니다
+[LOCK] verify DMF0005 · 슬롯 0 · 시작 21:47:24
+[END 21:49:24] rc=0
+[BE] 말미 HikariPool 타임아웃 0건 · 401 0건
+  ok 1 [chromium] › eg_popup.spec.ts:666:9 › @eg-popup MAIN DMF0005 #0 DM0002_ItembyDivisionPopupEx COND:btnItemId (1.0m)
+  ok 2 [chromium] › eg_popup.spec.ts:666:9 › @eg-popup MAIN DMF0005 #1 DM0020_OwnerbyDivisionPopup COND:btnOwner (19.8s)
+
+  Slow test file: [chromium] › eg_popup.spec.ts (1.4m)
+  Consider splitting slow test files to speed up parallel execution
+  2 passed (1.9m)
+/c/Projects/NSCM/Doc/verify/_parallel/E02/runs/DMF0005_c_214713

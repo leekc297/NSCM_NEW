@@ -1,0 +1,199 @@
+{
+ "screen": "SCP0041",
+ "generated": "2026-10-31 13:07:46",
+ "vars": {
+  "dtDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP",
+   "code": "Division",
+   "targets": [
+    "SEARCH:cboDivision"
+   ],
+   "ref": "SCP0041_StockOSP.cs:146 ← SCP0041_StockOSP.cs:48",
+   "unresolved": "실행 중에만 정해지는 인자: @Param1, @Param2"
+  },
+  "dtStatus": {
+   "sp": "SCM0001_GET_LOOKUP_VALUES",
+   "code": "",
+   "targets": [
+    "SEARCH:cboStatus"
+   ],
+   "ref": "SCP0041_StockOSP.cs:150 ← SCP0041_StockOSP.cs:148",
+   "rows": [
+    {
+     "CODE": "HOLD",
+     "NAME": "Hold"
+    },
+    {
+     "CODE": "RELEASE",
+     "NAME": "Release"
+    }
+   ]
+  },
+  "dtPlantSiteByDivision": {
+   "sp": "UP_FX_GetCommonDataList_SCP_ALL",
+   "code": "PlantSiteByDivisionOSP1",
+   "targets": [
+    "SEARCH:clbPlantSite"
+   ],
+   "ref": "SCP0041_StockOSP.cs:535 ← SCP0041_StockOSP.cs:50",
+   "rows": [
+    {
+     "CODE": "CN00249500-P",
+     "NAME": "CN00249500-P"
+    },
+    {
+     "CODE": "CN00254300_40-P",
+     "NAME": "CN00254300_40-P"
+    },
+    {
+     "CODE": "CN003256_40-A",
+     "NAME": "CN003256_40-A"
+    },
+    {
+     "CODE": "CN003256_40-P",
+     "NAME": "CN003256_40-P"
+    },
+    {
+     "CODE": "CN00732500_40-P",
+     "NAME": "CN00732500_40-P"
+    },
+    {
+     "CODE": "CN00742000_40-P",
+     "NAME": "CN00742000_40-P"
+    },
+    {
+     "CODE": "CN02072800_40-P",
+     "NAME": "CN02072800_40-P"
+    },
+    {
+     "CODE": "CN05104100_82-P",
+     "NAME": "CN05104100_82-P"
+    },
+    {
+     "CODE": "IN00142000_40-P",
+     "NAME": "IN00142000_40-P"
+    },
+    {
+     "CODE": "KR00496300_40-P",
+     "NAME": "KR00496300_40-P"
+    },
+    {
+     "CODE": "KR00697200_82-P",
+     "NAME": "KR00697200_82-P"
+    },
+    {
+     "CODE": "KR00781800_40-P",
+     "NAME": "KR00781800_40-P"
+    },
+    {
+     "CODE": "KR00797800_40-P",
+     "NAME": "KR00797800_40-P"
+    },
+    {
+     "CODE": "KR00797800-P",
+     "NAME": "KR00797800-P"
+    },
+    {
+     "CODE": "KR00995200_40-P",
+     "NAME": "KR00995200_40-P"
+    },
+    {
+     "CODE": "KR01297200_40-P",
+     "NAME": "KR01297200_40-P"
+    },
+    {
+     "CODE": "KR02045500-P",
+     "NAME": "KR02045500-P"
+    },
+    {
+     "CODE": "KR02092100_40-A",
+     "NAME": "KR02092100_40-A"
+    },
+    {
+     "CODE": "KR02092100_40-P",
+     "NAME": "KR02092100_40-P"
+    },
+    {
+     "CODE": "KR02149300_40-A",
+     "NAME": "KR02149300_40-A"
+    },
+    {
+     "CODE": "KR02239900_81-P",
+     "NAME": "KR02239900_81-P"
+    },
+    {
+     "CODE": "KR02265100_40_KR-P",
+     "NAME": "KR02265100_40_KR-P"
+    },
+    {
+     "CODE": "KR02265100_40-P",
+     "NAME": "KR02265100_40-P"
+    },
+    {
+     "CODE": "KR02607600_40-P",
+     "NAME": "KR02607600_40-P"
+    },
+    {
+     "CODE": "KR03346900_40-P",
+     "NAME": "KR03346900_40-P"
+    },
+    {
+     "CODE": "KR04179400_40-E",
+     "NAME": "KR04179400_40-E"
+    },
+    {
+     "CODE": "KR04595000_40-P",
+     "NAME": "KR04595000_40-P"
+    },
+    {
+     "CODE": "KR04851000-P",
+     "NAME": "KR04851000-P"
+    },
+    {
+     "CODE": "KR32625300_82-P",
+     "NAME": "KR32625300_82-P"
+    },
+    {
+     "CODE": "KR40408500_40-P",
+     "NAME": "KR40408500_40-P"
+    },
+    {
+     "CODE": "PL01279700_40-P",
+     "NAME": "PL01279700_40-P"
+    },
+    {
+     "CODE": "PL01279700_82-P",
+     "NAME": "PL01279700_82-P"
+    },
+    {
+     "CODE": "TW00177500_40-P",
+     "NAME": "TW00177500_40-P"
+    },
+    {
+     "CODE": "TW00222700_40-P",
+     "NAME": "TW00222700_40-P"
+    },
+    {
+     "CODE": "US02182600_82-P",
+     "NAME": "US02182600_82-P"
+    },
+    {
+     "CODE": "US02279100_82-P",
+     "NAME": "US02279100_82-P"
+    },
+    {
+     "CODE": "US02562600_82-P",
+     "NAME": "US02562600_82-P"
+    },
+    {
+     "CODE": "US02565900_82-P",
+     "NAME": "US02565900_82-P"
+    },
+    {
+     "CODE": "VN00188600_40-P",
+     "NAME": "VN00188600_40-P"
+    }
+   ]
+  }
+ }
+}

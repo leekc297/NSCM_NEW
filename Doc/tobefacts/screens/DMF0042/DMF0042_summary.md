@@ -1,6 +1,6 @@
 # DMF0042 — To-Be Fact Pack 요약
 
-- page_key: `demand/business-plan` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `demand/business-plan` · feature: demand · As-is Fact Pack 있음
 - 파일 39 · 엔드포인트 호출 25 (미해결 1, 주석 속 2) · 이벤트 62 · 컴포넌트 사용 84 · 하드코딩 컬럼 8 · 메시지 61
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 8건
 
@@ -13,8 +13,8 @@
 | features/demand/src/pages/business-plan/BusinessPlan.tsx | page | 700 |
 | features/demand/src/pages/business-plan/components/BusinessPlanForm.module.scss | component | 8 |
 | features/demand/src/pages/business-plan/components/BusinessPlanForm.tsx | component | 430 |
-| features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | component | 1142 |
-| features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | component | 308 |
+| features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | component | 1145 |
+| features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | component | 311 |
 | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.module.scss | component | 38 |
 | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | component | 847 |
 | features/demand/src/pages/business-plan/components/modals/exchangeRateModalStore.ts | store | 33 |
@@ -30,7 +30,7 @@
 | features/demand/src/pages/business-plan/utils/business-plan.api.test.ts | test | 84 |
 | features/demand/src/pages/business-plan/utils/business-plan.api.ts | api | 269 |
 | features/demand/src/pages/business-plan/utils/business-plan.division.test.ts | test | 119 |
-| features/demand/src/pages/business-plan/utils/business-plan.division.ts | util | 170 |
+| features/demand/src/pages/business-plan/utils/business-plan.division.ts | util | 174 |
 | features/demand/src/pages/business-plan/utils/business-plan.editLock.test.ts | test | 65 |
 | features/demand/src/pages/business-plan/utils/business-plan.editLock.ts | util | 291 |
 | features/demand/src/pages/business-plan/utils/business-plan.exchangePeriod.ts | util | 31 |
@@ -108,8 +108,8 @@
 | g | updatedLayout | applyHeaderHeight | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 997 |
 | g | updatedLayout | applyDynVisibility | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1047 |
 | f | filterApplied | onFilterApplied | addHandler | features/demand/src/pages/business-plan/components/BusinessPlanGrid.tsx | 1110 |
-| ColumnLayoutModal | onSave | <arrow> onSettingChanged,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | 206 |
-| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,alertSaveFailed | jsx | features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | 253 |
+| ColumnLayoutModal | onSave | <arrow> onSettingChanged,applyColumnLayout,settings.map,settings.filter,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,columnType:TITLESET_COLUMN_TYPE,rows:visible.map((s,i)=>({name:s.COLUMN_NAME,sortOrderNo:i+1,colWidth:s.COL_WIDTH,cellColor:s.CELL_COLOR,textColor:s.TEXT_COLOR,})),}).then,saveTitleSet | jsx | features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | 209 |
+| MeasureSelectModal | onApply | <arrow> applyVisibleMeasures,staticMeasures.map,saveTitleSet({menuId:MENU_ID,sheetName:SHEETS.MAIN,//Measure개인화—폭/색은대상이아니라미전달(빈값으로저장됨).columnType:TITLESET_MEASURE_TYPE,rows:selected.map((name,i)=>({name,sortOrderNo:i+1})),}).then,saveTitleSet,selected.map,alertSaveFailed | jsx | features/demand/src/pages/business-plan/components/BusinessPlanModals.tsx | 256 |
 | g | formatItem | formatHandler | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 400 |
 | g | cellEditEnded | cellEditEndedHandler | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 441 |
 | g | pastedCell | pastedHandler | addHandler | features/demand/src/pages/business-plan/components/modals/ExchangeRateModal.tsx | 445 |
@@ -234,7 +234,7 @@
 | LBL00024 | 2 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0042(20), DMF0021(9), DMF0082(6), DMF0003(4), DMF0020(2), DM0020(1), SYS0004(1)
+- 화면ID: DMF0042(20), DMF0021(10), DMF0082(6), DMF0003(4), DMF0020(2), DM0020(1), SYS0004(1), DMF0005(1)
 - SP/PKG: PR_GET_DAY_RANGE(6), DMF0042_GET_SPREAD_TITLE(6), P_DMF0042_SAVE_DM_PLN_BP_FCST(6), DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA(5), DMF0042_GET_DM_MDF_VERSION(5), P_QTY_YN(3), PKG_DMF0042(3), P_USERINFO(3), DMF0042_SAVE_DM_BP_EXCHANGE_RATE(3), P_CATE(2), DMF0042_SAVE_DM_PLN_BP_REPLACE_BY_CUTOFF(2), P_CREATED_BY(2), P_DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV(2), P_UNIT_ENERGY(2), DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA(1), P_DMF0042_SAVE_DM_BP_EXCHANGE_RATE(1), DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF(1), DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION(1), P_FROM(1), P_BUCKET(1), P_NOW_YYYYMMDD(1), DMF0002_GET_TITLESET_POPUP(1), P_DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF(1), PR_DM_PLN_VERSION_CREATE(1), DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE(1), P_LAST_UPDATED_BY(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |

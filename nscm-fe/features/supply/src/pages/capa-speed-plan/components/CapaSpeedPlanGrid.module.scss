@@ -4,4 +4,15 @@
 //   셀 단위 클래스라 편집가능 셀(.wj-cell-editable) 표시보다 우선하지 않게 기본 배경만 바꾼다.
 .measureRow {
   background-color: rgb(220 220 220);
+
+  // Wijmo 교차행 `.wj-cell.wj-alt`(_grid.scss:528, 명시도 0,0,2,0)가 `.measureRow`(0,0,1,0)를 이겨
+  //   교차행 measure 셀의 회색이 얼룩무늬에 덮인다(사용자 지적 2026-10-28: Tact Time 색이 한 칸 걸러 빠짐).
+  //   alt 를 포함해 되박아 회색을 유지하되 **편집가능 셀(.wj-cell-editable, 노란 하이라이트 0,0,2,0)은
+  //   제외**한다 — 안 그러면 교차행의 편집가능 measure 셀이 노랑 대신 회색이 된다(편집가능=노랑 우선,
+  //   사용자 요건 2026-10-28). `:not(.wj-cell-editable)` 로 비편집 교차행 measure 셀만 0,0,4,0 로 회색을
+  //   되박는다. 편집 셀은 이 규칙에 안 걸려 `.wj-cell-editable`(0,0,2,0)이 alt 를 이겨 노랑 유지.
+  //   선택/변경 하이라이트(.wj-state-selected / .cell-changed)도 그대로 둔다.
+  &:global(.wj-cell.wj-alt:not(.wj-cell-editable)) {
+    background-color: rgb(220 220 220);
+  }
 }

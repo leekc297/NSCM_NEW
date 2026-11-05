@@ -1,0 +1,161 @@
+{
+ "id": "SCP0057",
+ "asis": "SCP0057",
+ "at": "2026-11-05 05:47:14",
+ "has_asis": true,
+ "tobe_cols": 13,
+ "buttons": [],
+ "env": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "patterns": {
+  "p_lang": {
+   "rows": 0,
+   "why_not": [
+    "SAVE 버튼 없음",
+    "SEARCH 버튼 없음"
+   ]
+  },
+  "p_formdl": {
+   "rows": 0,
+   "why_not": [
+    "Excel Form 버튼 없음(AS-IS Text · btn_auth FORM_DATA)"
+   ]
+  },
+  "p_insertat": {
+   "rows": 0,
+   "why_not": [
+    "INSERT 버튼 없음"
+   ]
+  },
+  "p_delete": {
+   "rows": 0,
+   "why_not": [
+    "DELETE 버튼 없음"
+   ]
+  },
+  "p_combo": {
+   "rows": 0,
+   "why_not": [
+    "신규 행 편집 콤보 칸 없음(sheet_columns FPComboBox · INPUT_TP_CD O/M/IO/IM)"
+   ]
+  },
+  "p_decimal": {
+   "rows": 0,
+   "why_not": [
+    "cell_rules.csv 없음(소수 자릿수 사실 없음)"
+   ]
+  },
+  "p_reqfp": {
+   "rows": 0,
+   "why_not": [
+    "SAVE 없음"
+   ]
+  },
+  "p_blank_save": {
+   "rows": 0,
+   "why_not": [
+    "INSERT·SAVE 버튼 둘 다 있어야 함"
+   ]
+  },
+  "p_dirty": {
+   "rows": 7,
+   "why_not": []
+  },
+  "p_clear": {
+   "rows": 0,
+   "why_not": [
+    "cell_clear.csv 없음"
+   ]
+  },
+  "p_dyn": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_toggle": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_iscombo": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_baddate": {
+   "rows": 0,
+   "why_not": [
+    "INSERT·SAVE 버튼 둘 다 있어야 함"
+   ]
+  },
+  "p_modins": {
+   "rows": 0,
+   "why_not": [
+    "INSERT·SAVE 버튼 둘 다 있어야 함"
+   ]
+  },
+  "p_popfill": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 더블클릭 팝업 뒤 다른 칸 채움 없음(또는 신규 행 편집 칸 아님)"
+   ]
+  },
+  "p_samekey": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 변경 핸들러의 같은 키 행 동반 갱신 없음"
+   ]
+  },
+  "p_colvis": {
+   "rows": 0,
+   "why_not": [
+    "316 표시 값 없음((division == \"40\"))",
+    "1012 표시 값 없음(chkSum.Checked)",
+    "1028 표시 값 없음(chkSum.Checked)",
+    "CELL_TYPE_GROUP_CODE 제외 — 같은 칸 대입에 Division 아닌 술어(InitSpread:304 Division 아닌 술어 spdInfo.SheetName == \"Line\")",
+    "ELECTRODE_TYPE 제외 — 같은 칸 대입에 Division 아닌 술어(InitSpread:301 Division 아닌 술어 spdInfo.SheetName == \"Line\")",
+    "ORIGIN_DIVISION_ID 제외 — 같은 칸 대입에 Division 아닌 술어(InitSpread:300 Division 아닌 술어 spdInfo.SheetName == \"Line\")"
+   ]
+  },
+  "p_btnvis": {
+   "rows": 0,
+   "why_not": []
+  },
+  "p_sumtoggle": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_divroundtrip": {
+   "rows": 0,
+   "why_not": [
+    "일부 Division 칸 중 AS-IS 기본 표시 · TO-BE 숨김 불가 칸 없음(화면 Division [])"
+   ]
+  }
+ },
+ "auth_drop": [
+  "P15 [자동] 편집 중 W 실행 → MSG00680(DM-52 일반 규칙) — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P15 [자동] 편집 중 W52 실행 → MSG00680(DM-52 일반 규칙) — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P15 [자동] 편집 중 W26 실행 → MSG00680(DM-52 일반 규칙) — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P15 [자동] 편집 중 Load% 실행 → MSG00680(DM-52 일반 규 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P15 [자동] 편집 중 Unfix 실행 → MSG00680(DM-52 일반 규 — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P15 [자동] 편집 중 Fix 실행 → MSG00680(DM-52 일반 규칙) — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)",
+  "P15 [자동] 편집 중 NEW 실행 → MSG00680(DM-52 일반 규칙) — 기본 계정 minyonglee1 그룹에 INSERT 권한 없음(btn_auth use_yn=Y)"
+ ],
+ "files": {
+  "scenario_expect.csv": {
+   "rows": 3,
+   "used": 3
+  },
+  "doc_ui_expect.csv": {
+   "rows": 0,
+   "used": 0
+  },
+  "sum_toggle_expect.csv": {
+   "rows": 1,
+   "used": 1
+  }
+ },
+ "rows": 4,
+ "rows_used": 4,
+ "dup_of_hand": 0
+}

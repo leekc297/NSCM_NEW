@@ -39,10 +39,14 @@ export const TactTimeExceptGrid = ({
   const { t } = useTranslation();
   const setToast = useMessageStore.getState().setToast;
   // 모드별 계산 컬럼(Packer=TACT_TIME, Plant=DAILY_CAPACITY)은 메타가 O 여도 조회전용으로 표시한다.
+  // NICK_NAME 도 AS-IS 잠금 컬럼이라 조회전용으로 표시한다.
   const columns = useMemo(
     () =>
       buildColumns(EXCEPT_COLUMNS, adminColumns).map(c =>
-        (c.colNm === 'TACT_TIME' || c.colNm === 'DAILY_CAPACITY') &&
+        // 기존 로직 주석 보존 (2026-10-27) 시작
+        // (c.colNm === 'TACT_TIME' || c.colNm === 'DAILY_CAPACITY') &&
+        // 기존 로직 주석 보존 (2026-10-27) 끝
+        (c.colNm === 'TACT_TIME' || c.colNm === 'DAILY_CAPACITY' || c.colNm === 'NICK_NAME') &&
         !isExceptCellEditable(c.colNm, parentMode)
           ? { ...c, inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY }
           : c
@@ -83,7 +87,12 @@ export const TactTimeExceptGrid = ({
         row[key] = value;
       };
       if (binding === 'DAILY_CAPACITY') {
-        setCell('TACT_TIME', deriveTactTimeFromDaily(row.DAILY_CAPACITY));
+        // 기존 로직 주석 보존 (2026-10-27) 시작
+        // setCell('TACT_TIME', deriveTactTimeFromDaily(row.DAILY_CAPACITY));
+        // 기존 로직 주석 보존 (2026-10-27) 끝
+        // DAILY_CAPACITY 0 이면 TACT_TIME 유지(AS-IS 동일).
+        const derived = deriveTactTimeFromDaily(row.DAILY_CAPACITY);
+        if (derived !== null) setCell('TACT_TIME', derived);
       }
       if (binding === 'TACT_TIME') {
         const { value, clamped } = clampTactTime(row.TACT_TIME, MAX_TACT_TIME_FALLBACK);

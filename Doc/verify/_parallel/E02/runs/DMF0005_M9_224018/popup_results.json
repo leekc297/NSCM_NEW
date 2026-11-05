@@ -1,0 +1,18 @@
+[
+ {
+  "screen": "DMF0005",
+  "call": 3,
+  "cls": "SCM0002_ProjectbyDivisionPopup",
+  "trig": "CELL:PROJECT_CODE",
+  "check": "PICK",
+  "egs": [
+   "EG093"
+  ],
+  "result": "ERROR",
+  "expected": "선택 시험",
+  "actual": "CELL: 컬럼 PROJECT_CODE 이 현재 그리드에 없음(바인딩 34개 — Division·개인화·시트 차이 가능)",
+  "basis": "",
+  "at": "2026-10-31T13:41:19.545Z",
+  "mut": "multisel"
+ }
+]

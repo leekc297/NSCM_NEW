@@ -1,0 +1,26 @@
+﻿menu_id,sheet,column,label,asis_halign,asis_ref,tobe_program,tobe_sheet,tobe_halign,tobe_source,verdict,note
+SCP0111,,a.Field<string>(DefMain.YYYYMM),a.Field<string>(DefMain.YYYYMM_NAME),,SCP0111_IntegrationPSI.cs:354,,,,대응 메타 시트 없음,NA,AS-IS 정렬 근거 없음
+SCP0111,Integration PSI,BOH_QTY,BOH,R,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,R,메타 SCP0111/Integration PSI,PASS,AS-IS right ↔ TO-BE right
+SCP0111,Integration PSI,CELL_CF,Cell Coversion Factor,R,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,R,메타 SCP0111/Integration PSI,PASS,AS-IS right ↔ TO-BE right
+SCP0111,Integration PSI,CELL_ITEM_ID,Cell Model,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,CELL_MODEL_NICK_NAME,Cell Model Nick Name,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,COMPANY_ID,Company,C,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,C,메타 SCP0111/Integration PSI,PASS,AS-IS center ↔ TO-BE center
+SCP0111,Integration PSI,DIVISION_ID,Division,C,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,C,메타 SCP0111/Integration PSI,PASS,AS-IS center ↔ TO-BE center
+SCP0111,Integration PSI,INCOTERMS,Incoterms,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,ITEM_ID,Model,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,LINE_ID,Line,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,MEASURE,MEASURE,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,MEASURE_COLOR,MEASURE_COLOR,C,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,C,메타 SCP0111/Integration PSI,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0111,Integration PSI,MEASURE_LABEL,Measure,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,MEASURE_ORDER_NO,MEASURE_ORDER_NO,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,NA,숨김 컬럼(VISIBLE_FLAG=N) — 표시 정렬 대상 아님
+SCP0111,Integration PSI,NICK_NAME,Nick Name,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,OPERATION_GROUP,Operation,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,PLANT_ID,Plant,C,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,C,메타 SCP0111/Integration PSI,PASS,AS-IS center ↔ TO-BE center
+SCP0111,Integration PSI,PLANT_ID_DESCRIPTION,Plant,C,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,C,메타 SCP0111/Integration PSI,PASS,AS-IS center ↔ TO-BE center
+SCP0111,Integration PSI,PLAN_TYPE,Plan Type,C,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,C,메타 SCP0111/Integration PSI,PASS,AS-IS center ↔ TO-BE center
+SCP0111,Integration PSI,SEQ_FLAG,SEQ_FLAG,C,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,C,메타 SCP0111/Integration PSI,PASS,AS-IS center ↔ TO-BE center
+SCP0111,Integration PSI,TO_PRODUCT,To Product,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,TO_SITE,To Site,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,TO_SITE_DESCRIPTION,To Site,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left
+SCP0111,Integration PSI,UOM,UOM,C,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,C,메타 SCP0111/Integration PSI,PASS,AS-IS center ↔ TO-BE center
+SCP0111,Integration PSI,VALUE_TYPE,Valuation Type,L,META SCM_MST_SHEET_COLUMNS(SCP0111/Integration PSI),SCP0111,Integration PSI,L,메타 SCP0111/Integration PSI,PASS,AS-IS left ↔ TO-BE left

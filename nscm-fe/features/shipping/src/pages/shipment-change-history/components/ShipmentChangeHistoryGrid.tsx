@@ -3,6 +3,7 @@ import { AllowMerging, CellType, DataMap, type FlexGrid as FlexGridType } from '
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useEffect, useMemo } from 'react';
 
+import { CELL_CONTROL_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { GridUtils } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
@@ -13,11 +14,13 @@ import {
   CHANGE_REASON_COLUMN,
   CURRENT_ROW_BG,
   FCST_TYPE_COLUMN,
+  HIGHLIGHT_START_COLUMN,
   LAST_SEQ_COLUMN,
   LAST_SEQ_CURRENT,
   LOOKUP_TYPE,
   MAIN_COLUMNS,
   MENU_ID,
+  NEGATIVE_NUMBER_COLOR,
   REQUEST_NO_COLUMN,
 } from '../shipment-change-history.constants';
 import type { MainRow } from '../shipment-change-history.types';
@@ -47,6 +50,15 @@ export const ShipmentChangeHistoryGrid = ({
   onRequestNoClick,
 }: Props) => {
   const columns = useMemo(() => buildColumns(MAIN_COLUMNS, adminColumns), [adminColumns]);
+
+  // AS-IS FPNumber NegativeRed 재현 대상(design 03 FPNumber 컬럼) — formatItem 에서 음수면 빨간 글자.
+  const numberColumns = useMemo(
+    () =>
+      new Set(
+        columns.filter(c => c.cellCtrlObjTpCd === CELL_CONTROL_TYPE.NUMBER).map(c => c.colNm)
+      ),
+    [columns]
+  );
 
   // DIVISION_ID 셀 콤보(Division) @토큰(@mnuId) 해소 — 인용은 getCombo funnel(nscm-patterns §3.3).
   const comboParams = useMemo(() => ({ mnuId: `'${MENU_ID}'` }), []);
@@ -87,16 +99,31 @@ export const ShipmentChangeHistoryGrid = ({
     const reasonCol = g.columns.getColumn(CHANGE_REASON_COLUMN);
     if (reasonCol) reasonCol.dataMap = changeReasonMap;
 
-    // chkCurrent 행 강조(design 03 §3 #6/#10) — LAST_SEQ='C'(현재값) 행을 SEQ~마지막열 LightSkyBlue.
-    //   체크/해제 공통으로 'C' 행을 강조(필터링은 페이지가 displayRows 로 처리). 셀 DOM 재사용 대비 항상 재설정.
+    // chkCurrent 행 강조(design 03 §3 #6/#10) — LAST_SEQ='C'(현재값) 행을 SEQ 컬럼~마지막열만 LightSkyBlue.
+    //   AS-IS SetBGColor(i, GetColumnIndex(SEQ), GetMaxColumnIndex()) 범위 재현 — 좌측 고정 7열(DIVISION_ID~
+    //   CONFIRM_ID)은 강조 제외. 체크/해제 공통으로 'C' 행을 강조(필터링은 페이지가 displayRows 로 처리).
+    //   셀 DOM 재사용 대비 항상 재설정.
+    const seqColIndex = g.columns.getColumn(HIGHLIGHT_START_COLUMN)?.index ?? 0;
     const formatItemHandler = (
       sender: FlexGridType,
       e: { panel: unknown; row: number; col: number; cell: HTMLElement }
     ) => {
       if (e.panel !== sender.cells) return;
       const row = sender.rows[e.row]?.dataItem as Record<string, unknown> | undefined;
+      const isCurrentRow = !!row && str(row[LAST_SEQ_COLUMN]) === LAST_SEQ_CURRENT;
       e.cell.style.backgroundColor =
-        row && str(row[LAST_SEQ_COLUMN]) === LAST_SEQ_CURRENT ? CURRENT_ROW_BG : '';
+        isCurrentRow && e.col >= seqColIndex ? CURRENT_ROW_BG : '';
+
+      // AS-IS FPNumber NegativeRed 재현(SpreadInfo.cs:4143) — FPNumber 컬럼 값이 음수인 셀만 빨간 글자.
+      //   값은 숫자/문자 혼재(QTY=number, VARIABLE_DATE="-4"·빈값 "-") — 콤마 제거 후 Number 파싱, 음수만.
+      //   "-"(빈값)은 NaN 이라 제외. DOM 셀 재사용 대비 음수 아니면 색 원복(기본 글자색).
+      const binding = sender.columns[e.col]?.binding ?? '';
+      let isNegativeNumber = false;
+      if (numberColumns.has(binding)) {
+        const n = Number(str(row?.[binding]).replace(/,/g, ''));
+        isNegativeNumber = Number.isFinite(n) && n < 0;
+      }
+      e.cell.style.color = isNegativeNumber ? NEGATIVE_NUMBER_COLOR : '';
 
       // REQUEST_NO 이미지셀 어포던스(design 03 §3-4 — AS-IS cellTypeImage 돋보기 아이콘, cs:248-252/339).
       //   공용 DataGrid 의 팝업 아이콘(wj-cell-popup)은 `!isReadOnly && isEditableCell` 게이트라 이 화면
@@ -137,7 +164,7 @@ export const ShipmentChangeHistoryGrid = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns, fcstTypeMap, changeReasonMap]);
+  }, [columns, numberColumns, fcstTypeMap, changeReasonMap]);
 
   return (
     <DataGrid

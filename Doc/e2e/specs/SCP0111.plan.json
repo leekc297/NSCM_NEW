@@ -1,0 +1,553 @@
+{
+  "id": "SCP0111",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0111",
+  "divCascade": [
+    [
+      "Plan Date"
+    ],
+    [
+      "Plan Type",
+      "Plan-type"
+    ]
+  ],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Plan Date",
+    "Model/Nickname",
+    "Cell Model",
+    "Period",
+    "Qty ＜ 0"
+  ],
+  "condGone": [],
+  "condNotUse": [
+    {
+      "asis": "cboPlanDate",
+      "key": "planDate",
+      "labels": [
+        "Plan Date"
+      ]
+    },
+    {
+      "asis": "cboPlanType",
+      "key": "planType",
+      "labels": [
+        "Plan Type",
+        "Plan-type"
+      ]
+    }
+  ],
+  "page": "IntegrationPsi",
+  "routePath": "supply/integration-psi",
+  "asisName": "IntegrationPSI",
+  "fields": [
+    {
+      "key": "cmbToMonth",
+      "label": " ~",
+      "lbl": "",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cmbToMonth",
+      "tobeLabel": "",
+      "catalog": "",
+      "labels": [
+        "~"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "Div → Div. · 명칭",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "planDate",
+      "label": "Plan Date",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanDate",
+      "tobeLabel": "Plan Date",
+      "catalog": "Plan date → Plan Date",
+      "labels": [
+        "Plan Date"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "planType",
+      "label": "Plan-type",
+      "lbl": "LBL00040",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanType",
+      "tobeLabel": "Plan Type",
+      "catalog": "",
+      "labels": [
+        "Plan Type",
+        "Plan-type"
+      ],
+      "excluded": true,
+      "excludedWhy": "As-is 숨김: PlanType.Visibility = Never (designer.cs)"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId",
+      "tobeLabel": "Model",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "cellItemId",
+      "label": "Cell Model",
+      "lbl": "LBL00051",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtCellItemId",
+      "tobeLabel": "Cell Model",
+      "catalog": "Cell Model → Cell Model",
+      "labels": [
+        "Cell Model"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "cmbFromMonth",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cmbFromMonth",
+      "tobeLabel": "Period",
+      "catalog": "Period → Period",
+      "labels": [
+        "Period"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "qty",
+      "label": "Qty ＜ 0",
+      "lbl": "LBL00689",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkQty",
+      "tobeLabel": "Qty ≥ 0",
+      "catalog": "Qty ＜ 0 → (없음) · 공통기능화 검토",
+      "labels": [
+        "Qty ＜ 0",
+        "Qty ≥ 0"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "Integration PSI",
+  "asisMapping": "features\\supply\\src\\pages\\integration-psi\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "nickName",
+      "label": "Nick Name",
+      "lbl": "LBL00767",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnNickName"
+    },
+    {
+      "key": "cellItemId",
+      "label": "Cell Item Id",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnCellItem_Id"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Integration PSI",
+      "key": "INTEGRATION_PSI",
+      "labels": [
+        "BOH",
+        "Cell Coversion Factor",
+        "Cell Model",
+        "Cell Model Nick Name",
+        "Company",
+        "Division",
+        "Incoterms",
+        "Model",
+        "Line",
+        "MEASURE",
+        "MEASURE_COLOR",
+        "Measure",
+        "MEASURE_ORDER_NO",
+        "Nick Name",
+        "Operation",
+        "Plan Type",
+        "Plant",
+        "Plant",
+        "SEQ_FLAG",
+        "To Product",
+        "To Site",
+        "To Site",
+        "UOM",
+        "Valuation Type"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Integration PSI",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0111.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0111_GET_ESS_PACK_LINE",
+      "sheet": "Integration PSI",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SCP0111_GET_INTEGRATION_PSI",
+      "sheet": "Integration PSI",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0111.P_SCP0111_GET_INTEGRATION_PSI",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DM0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "Integration PSI",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0111.P_DM0003_GET_BUCKET_TYPE_CODE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+      "sheet": "Integration PSI",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0111.P_SCP0111_SAVE_INTEGRATION_PSI_ADMIN",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0111_SAVE_INTEGRATION_PSI",
+      "sheet": "Integration PSI",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0111.P_SCP0111_SAVE_INTEGRATION_PSI",
+      "entries": [
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Integration PSI": {
+      "40": [
+        "Plan Type",
+        "Div",
+        "Operation",
+        "Cell Model Nick Name",
+        "Cell Model",
+        "Nick Name",
+        "Model",
+        "Cell Coversion Factor",
+        "Company",
+        "Plant",
+        "Measure",
+        "To Product",
+        "Valuation Type",
+        "Line",
+        "To Site",
+        "Incoterms",
+        "BOH",
+        "UOM",
+        "SEQ_FLAG",
+        "MEASURE",
+        "Plant",
+        "To Site"
+      ],
+      "81": [
+        "Plan Type",
+        "Div",
+        "Operation",
+        "Cell Model Nick Name",
+        "Cell Model",
+        "Nick Name",
+        "Model",
+        "Cell Coversion Factor",
+        "Company",
+        "Plant",
+        "Measure",
+        "To Product",
+        "Valuation Type",
+        "Line",
+        "To Site",
+        "Incoterms",
+        "BOH",
+        "UOM",
+        "SEQ_FLAG",
+        "MEASURE",
+        "Plant",
+        "To Site"
+      ],
+      "82": [
+        "Plan Type",
+        "Div",
+        "Operation",
+        "Cell Model Nick Name",
+        "Cell Model",
+        "Nick Name",
+        "Model",
+        "Cell Coversion Factor",
+        "Company",
+        "Plant",
+        "Measure",
+        "To Product",
+        "Valuation Type",
+        "Line",
+        "To Site",
+        "Incoterms",
+        "BOH",
+        "UOM",
+        "SEQ_FLAG",
+        "MEASURE",
+        "Plant",
+        "To Site"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": {
+    "titles": [],
+    "dbLoop": [
+      "SetCalendar:354"
+    ],
+    "titleSheets": [],
+    "titlePairs": [],
+    "staticBindings": [
+      "PLAN_TYPE",
+      "DIVISION_ID",
+      "OPERATION_GROUP",
+      "CELL_MODEL_NICK_NAME",
+      "CELL_ITEM_ID",
+      "NICK_NAME",
+      "ITEM_ID",
+      "CELL_CF",
+      "COMPANY_ID",
+      "PLANT_ID_DESCRIPTION",
+      "MEASURE_LABEL",
+      "TO_PRODUCT",
+      "VALUE_TYPE",
+      "LINE_ID",
+      "TO_SITE_DESCRIPTION",
+      "INCOTERMS",
+      "BOH_QTY",
+      "UOM",
+      "SEQ_FLAG",
+      "MEASURE_COLOR",
+      "MEASURE",
+      "MEASURE_ORDER_NO",
+      "PLANT_ID",
+      "TO_SITE"
+    ]
+  },
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH",
+        "SAVEDETAIL",
+        "SAVE",
+        "INSERT",
+        "EXCEL",
+        "EDIT",
+        "DELETE"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SEARCH",
+      "SAVEDETAIL",
+      "SAVE",
+      "INSERT",
+      "EXCEL",
+      "EDIT",
+      "DELETE"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "SAVEDETAIL",
+      "DELETE",
+      "EXCEL",
+      "EDIT",
+      "SAVE",
+      "INSERT"
+    ],
+    "SCM Viewer": [
+      "SEARCH",
+      "INSERT",
+      "EXCEL",
+      "DELETE",
+      "SAVEDETAIL",
+      "SAVE"
+    ],
+    "SCP Planner": [
+      "SEARCH",
+      "SAVEDETAIL",
+      "SAVE",
+      "INSERT",
+      "EXCEL",
+      "EDIT",
+      "DELETE"
+    ],
+    "SCP Tester": [
+      "SEARCH",
+      "DELETE",
+      "EXCEL",
+      "SAVE",
+      "INSERT",
+      "SAVEDETAIL"
+    ]
+  },
+  "menuBtnCodes": [
+    "SEARCH",
+    "SAVEDETAIL",
+    "SAVE",
+    "INSERT",
+    "EXCEL",
+    "EDIT",
+    "DELETE"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

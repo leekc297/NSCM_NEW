@@ -1,0 +1,155 @@
+{
+ "id": "DMF0044",
+ "asis": "DMF0044",
+ "at": "2026-11-05 05:47:12",
+ "has_asis": true,
+ "tobe_cols": 52,
+ "buttons": [
+  "ACTION",
+  "ACTION_BP",
+  "COLUMN_SETUP",
+  "DELETE",
+  "EXCEL",
+  "EXCHANGE_RATE",
+  "EXRATE_SAVE",
+  "INSERT",
+  "MEASURE_SELECT",
+  "SAVE",
+  "SAVE_CF",
+  "SEARCH",
+  "SEARCH_DATA",
+  "SP_VER",
+  "TEXTBOX",
+  "TITLE",
+  "TRANSFER"
+ ],
+ "env": {
+  "division": "40",
+  "user": "Div=40;DM Admin",
+  "basis": "override 사용자 지시 2026-11-04 06:03 — DMF0042·DMF0044·DMF0049 = Division 40 전용"
+ },
+ "patterns": {
+  "p_lang": {
+   "rows": 3,
+   "why_not": []
+  },
+  "p_formdl": {
+   "rows": 0,
+   "why_not": [
+    "Excel Form 버튼 없음(AS-IS Text · btn_auth FORM_DATA)"
+   ]
+  },
+  "p_insertat": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_delete": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_combo": {
+   "rows": 56,
+   "why_not": []
+  },
+  "p_decimal": {
+   "rows": 0,
+   "why_not": [
+    "cell_rules.csv 없음(소수 자릿수 사실 없음)"
+   ]
+  },
+  "p_reqfp": {
+   "rows": 0,
+   "why_not": [
+    "기존 행 편집 숫자·글자 칸 없음"
+   ]
+  },
+  "p_blank_save": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_dirty": {
+   "rows": 2,
+   "why_not": []
+  },
+  "p_clear": {
+   "rows": 0,
+   "why_not": [
+    "cell_clear.csv 없음"
+   ]
+  },
+  "p_dyn": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 동적 기간 칸(W_/M_/D_ 접두 검사) 없음"
+   ]
+  },
+  "p_toggle": {
+   "rows": 2,
+   "why_not": []
+  },
+  "p_iscombo": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_baddate": {
+   "rows": 0,
+   "why_not": [
+    "신규 행 편집 날짜 칸 없음"
+   ]
+  },
+  "p_modins": {
+   "rows": 0,
+   "why_not": [
+    "기존 행 편집 글자 칸 없음"
+   ]
+  },
+  "p_popfill": {
+   "rows": 1,
+   "why_not": []
+  },
+  "p_samekey": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS 변경 핸들러의 같은 키 행 동반 갱신 없음"
+   ]
+  },
+  "p_colvis": {
+   "rows": 0,
+   "why_not": []
+  },
+  "p_btnvis": {
+   "rows": 0,
+   "why_not": []
+  },
+  "p_sumtoggle": {
+   "rows": 0,
+   "why_not": [
+    "AS-IS chkSum(Sum) 없음"
+   ]
+  },
+  "p_divroundtrip": {
+   "rows": 0,
+   "why_not": [
+    "Division 고정 화면(override 40) — 전환 시험 불가"
+   ]
+  }
+ },
+ "auth_drop": [],
+ "files": {
+  "scenario_expect.csv": {
+   "rows": 68,
+   "used": 68
+  },
+  "doc_ui_expect.csv": {
+   "rows": 0,
+   "used": 0
+  },
+  "sum_toggle_expect.csv": {
+   "rows": 0,
+   "used": 0
+  }
+ },
+ "rows": 68,
+ "rows_used": 68,
+ "dup_of_hand": 0
+}

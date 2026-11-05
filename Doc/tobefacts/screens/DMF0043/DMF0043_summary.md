@@ -1,18 +1,18 @@
 # DMF0043 — To-Be Fact Pack 요약
 
-- page_key: `master/contribute-view` · feature: master · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 16 · 엔드포인트 호출 10 (미해결 0, 주석 속 2) · 이벤트 21 · 컴포넌트 사용 48 · 하드코딩 컬럼 7 · 메시지 24
+- page_key: `master/contribute-view` · feature: master · As-is Fact Pack 있음
+- 파일 16 · 엔드포인트 호출 10 (미해결 0, 주석 속 2) · 이벤트 21 · 컴포넌트 사용 48 · 하드코딩 컬럼 7 · 메시지 25
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 7건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/master/src/pages/contribute-view/components/ContributeViewForm.module.scss | component | 48 |
-| features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | component | 258 |
+| features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | component | 257 |
 | features/master/src/pages/contribute-view/components/ContributeViewGrid.module.scss | component | 13 |
 | features/master/src/pages/contribute-view/components/ContributeViewGrid.tsx | component | 187 |
 | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.module.scss | component | 174 |
-| features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | component | 371 |
+| features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | component | 375 |
 | features/master/src/pages/contribute-view/components/modals/contributeVersionModalStore.ts | store | 35 |
 | features/master/src/pages/contribute-view/contribute-view.constants.ts | constants | 59 |
 | features/master/src/pages/contribute-view/ContributeView.module.scss | style | 17 |
@@ -45,20 +45,20 @@
 |---|---|---|---|---|---|
 | SearchArea | onSearch | onSearch | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 132 |
 | CustomDropdown | onChange | <arrow> yearOptions.find,String,setSearchParams,String(opt?.NAME2??opt?.NAME??'').substring | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 145 |
-| InputField | onDoubleClick | onOpenVersionPopup | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 185 |
-| FunctionSearchIcon | onClick | onOpenVersionPopup | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 180 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 203 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 217 |
-| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 235 |
-| Checkbox | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 246 |
+| InputField | onDoubleClick | onOpenVersionPopup | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 184 |
+| Button | onClick | onOpenVersionPopup | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 180 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 202 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 216 |
+| CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 234 |
+| Checkbox | onChange | <arrow> setSearchParams | jsx | features/master/src/pages/contribute-view/components/ContributeViewForm.tsx | 245 |
 | DataGrid | formatItem | onFormatItem | jsx | features/master/src/pages/contribute-view/components/ContributeViewGrid.tsx | 183 |
-| g.hostElement? | dblclick | onDbl | addEventListener | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 233 |
-| SearchArea | onSearch | onSearch | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 263 |
-| CustomDropdown | onChange | <arrow> setVersionType | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 292 |
-| PeriodField | onChange | <arrow> setPeriod,dayjs,start.slice,end.slice | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 304 |
-| InputField | onChange | <arrow> setDescription | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 319 |
-| Button | onClick | handleConfirm | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 356 |
-| Button | onClick | onClose | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 363 |
+| g.hostElement? | dblclick | onDbl | addEventListener | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 237 |
+| SearchArea | onSearch | onSearch | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 267 |
+| CustomDropdown | onChange | <arrow> setVersionType | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 296 |
+| PeriodField | onChange | <arrow> setPeriod,dayjs,start.slice,end.slice | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 308 |
+| InputField | onChange | <arrow> setDescription | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 323 |
+| Button | onClick | handleConfirm | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 360 |
+| Button | onClick | onClose | jsx | features/master/src/pages/contribute-view/components/modals/ContributeVersionModal.tsx | 367 |
 | ContributeViewForm | onSearch | <arrow> handleSearch | jsx | features/master/src/pages/contribute-view/ContributeView.tsx | 209 |
 | ContributeViewForm | onOpenVersionPopup | <arrow> setVersionPopupOpen | jsx | features/master/src/pages/contribute-view/ContributeView.tsx | 210 |
 | ContributeVersionModal | onClose | <arrow> setVersionPopupOpen | jsx | features/master/src/pages/contribute-view/ContributeView.tsx | 227 |
@@ -112,6 +112,7 @@
 | LBL00087 | 1 |
 | LBL00657 | 1 |
 | LBL00654 | 1 |
+| MSG00701 | 1 |
 | LBL00674 | 1 |
 | LBL00664 | 1 |
 | LBL00001 | 1 |

@@ -1,19 +1,19 @@
 # SCP0080 — To-Be Fact Pack 요약
 
-- page_key: `supply/group-code-management` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 13 · 엔드포인트 호출 9 (미해결 0, 주석 속 3) · 이벤트 22 · 컴포넌트 사용 30 · 하드코딩 컬럼 2 · 메시지 19
+- page_key: `supply/group-code-management` · feature: supply · As-is Fact Pack 있음
+- 파일 13 · 엔드포인트 호출 9 (미해결 0, 주석 속 3) · 이벤트 21 · 컴포넌트 사용 30 · 하드코딩 컬럼 2 · 메시지 18
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 2건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | component | 222 |
+| features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | component | 220 |
 | features/supply/src/pages/group-code-management/components/GroupCodeManagementGrid.tsx | component | 277 |
-| features/supply/src/pages/group-code-management/components/GroupCodeRtfGubunModal.module.scss | component | 18 |
+| features/supply/src/pages/group-code-management/components/GroupCodeRtfGubunModal.module.scss | component | 21 |
 | features/supply/src/pages/group-code-management/components/GroupCodeRtfGubunModal.tsx | component | 153 |
 | features/supply/src/pages/group-code-management/group-code-management.constants.ts | constants | 113 |
 | features/supply/src/pages/group-code-management/group-code-management.types.ts | types | 50 |
-| features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | page | 340 |
+| features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | page | 362 |
 | features/supply/src/pages/group-code-management/hooks/useGroupCodePicCheck.ts | hook | 47 |
 | features/supply/src/pages/group-code-management/index.ts | index | 2 |
 | features/supply/src/pages/group-code-management/useGroupCodeManagementStore.ts | store | 189 |
@@ -29,8 +29,8 @@
 | SCP0080/main//call-proc | hook | 1 | Y | GroupCodeManagement.tsx:78 |
 | /SCP0080/main/SAVE/call-proc | http | 1 | Y | GroupCodeManagement.tsx:113 |
 | /SCP0080/main/PIC_CHECK/call-proc | http | 1 | Y | useGroupCodePicCheck.ts:26 |
-| /admin/menu/SCP0080/column | http | 2 | Y | useGroupCodeManagementStore.ts:121 useGroupCodeManagementStore.ts:181 |
-| /admin/menu/SCP0080/search-conditions | http | 1 | Y | useGroupCodeManagementStore.ts:140 |
+| /admin/menu/SCP0080/column | http | 2 | Y | useGroupCodeManagementStore.ts:66 useGroupCodeManagementStore.ts:133 |
+| /admin/menu/SCP0080/search-conditions | http | 1 | Y | useGroupCodeManagementStore.ts:152 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -41,10 +41,9 @@
 | SearchArea | onSearch | noDivisionAuth ? undefined : onSearch | jsx | features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | 93 |
 | CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision | jsx | features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | 110 |
 | CustomDropdown | onChange | <arrow> set,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | 137 |
-| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | 175 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | 176 |
-| FunctionSearchIcon | onClick | onItemSearch | jsx | features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | 170 |
-| CustomDropdown | onChange | <arrow> String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase,set,sel.has | jsx | features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | 199 |
+| InputField | onChange | <arrow> set | jsx | features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | 174 |
+| Button | onClick | onItemSearch | jsx | features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | 170 |
+| CustomDropdown | onChange | <arrow> String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase,set,sel.has | jsx | features/supply/src/pages/group-code-management/components/GroupCodeManagementForm.tsx | 197 |
 | g | formatItem | formatItemHandler | addHandler | features/supply/src/pages/group-code-management/components/GroupCodeManagementGrid.tsx | 128 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/group-code-management/components/GroupCodeManagementGrid.tsx | 145 |
 | g | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/group-code-management/components/GroupCodeManagementGrid.tsx | 154 |
@@ -55,11 +54,11 @@
 | g | updatedLayout | applyCellMerge | addHandler | features/supply/src/pages/group-code-management/components/GroupCodeManagementGrid.tsx | 222 |
 | Button | onClick | handleSubmit | jsx | features/supply/src/pages/group-code-management/components/GroupCodeRtfGubunModal.tsx | 138 |
 | Button | onClick | modalClose | jsx | features/supply/src/pages/group-code-management/components/GroupCodeRtfGubunModal.tsx | 145 |
-| GroupCodeManagementForm | onSearch | handleSearch | jsx | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 279 |
-| GroupCodeManagementForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 279 |
-| GroupCodeManagementGrid | onPicCellDblClick | handlePicCellDblClick | jsx | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 300 |
-| GroupCodeManagementGrid | onPicCellEdited | handlePicCellEdited | jsx | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 301 |
-| GroupCodeManagementGrid | onRtfCellDblClick | handleRtfCellDblClick | jsx | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 302 |
+| GroupCodeManagementForm | onSearch | handleSearch | jsx | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 301 |
+| GroupCodeManagementForm | onItemSearch | <arrow> setOpenItem | jsx | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 301 |
+| GroupCodeManagementGrid | onPicCellDblClick | handlePicCellDblClick | jsx | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 322 |
+| GroupCodeManagementGrid | onPicCellEdited | handlePicCellEdited | jsx | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 323 |
+| GroupCodeManagementGrid | onRtfCellDblClick | handleRtfCellDblClick | jsx | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 324 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -93,10 +92,10 @@
 ## 7. 메시지 코드
 | code | count |
 |---|---|
-| LBL00669 | 2 |
 | LBL00112 | 1 |
 | LBL00001 | 1 |
 | LBL00009 | 1 |
+| LBL00669 | 1 |
 | LBL00618 | 1 |
 | LBL01156 | 1 |
 | LBL01077 | 1 |
@@ -122,7 +121,8 @@
 | jsx | 본 화면 그리드는 FlexGrid<GroupCodeRow> 제네릭에 직접 대입하므로 원자값 인덱스가 필수). | features/supply/src/pages/group-code-management/group-code-management.types.ts | 42 |
 | endpoint | ui-dynamic-property-management §3 — Menu Button 권한 동적 fetch (하드코딩 금지) | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 71 |
 | endpoint | 진입 시 1회 admin 컬럼 메타 + 저장 조회조건 fetch (초기화 가드). | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 94 |
-| code | INSERT/DELETE 는 AS-IS 무동작(NO-OP) — false·키생략 금지, 명시적 () => undefined. | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 256 |
+| code | eslint-disable-next-line no-await-in-loop -- 순차 검증(동일 picId 재확인 중복요청 방지 목적 Set) | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 182 |
+| code | INSERT/DELETE 는 AS-IS 무동작(NO-OP) — false·키생략 금지, 명시적 () => undefined. | features/supply/src/pages/group-code-management/GroupCodeManagement.tsx | 278 |
 
 ## 10. __asis-mapping__.md 상태
 - (매핑 파일 없음)

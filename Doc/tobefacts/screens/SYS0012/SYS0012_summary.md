@@ -1,7 +1,7 @@
 # SYS0012 — To-Be Fact Pack 요약
 
 - page_key: `authority/auth-approval` · feature: authority · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 10 · 엔드포인트 호출 6 (미해결 0, 주석 속 0) · 이벤트 15 · 컴포넌트 사용 26 · 하드코딩 컬럼 0 · 메시지 32
+- 파일 10 · 엔드포인트 호출 6 (미해결 0, 주석 속 0) · 이벤트 13 · 컴포넌트 사용 26 · 하드코딩 컬럼 0 · 메시지 32
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
 ## 1. 파일
@@ -11,7 +11,7 @@
 | features/authority/src/pages/auth-approval/auth-approval.types.ts | types | 34 |
 | features/authority/src/pages/auth-approval/AuthApproval.tsx | page | 236 |
 | features/authority/src/pages/auth-approval/components/AuthApprovalForm.module.scss | component | 35 |
-| features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | component | 130 |
+| features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | component | 128 |
 | features/authority/src/pages/auth-approval/components/AuthApprovalGrid.tsx | component | 58 |
 | features/authority/src/pages/auth-approval/components/AuthRejectPopup.module.scss | component | 19 |
 | features/authority/src/pages/auth-approval/components/AuthRejectPopup.tsx | component | 89 |
@@ -39,11 +39,9 @@
 | SearchArea | onSearch | onSearch | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | 50 |
 | CustomDropdown | onChange | <arrow> setSc | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | 63 |
 | InputField | onChange | <arrow> setSc | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | 79 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | 80 |
-| InputField | onChange | <arrow> setSc | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | 94 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | 95 |
-| CustomDropdown | onChange | <arrow> setSc | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | 110 |
-| PeriodField | onChange | <arrow> setSc | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | 123 |
+| InputField | onChange | <arrow> setSc | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | 93 |
+| CustomDropdown | onChange | <arrow> setSc | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | 108 |
+| PeriodField | onChange | <arrow> setSc | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalForm.tsx | 121 |
 | DataGrid | selectionChanged | onSelectionchange | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalGrid.tsx | 53 |
 | DataGrid | formatItem | handleFormatItem | jsx | features/authority/src/pages/auth-approval/components/AuthApprovalGrid.tsx | 54 |
 | InputField | onChange | <arrow> setReason | jsx | features/authority/src/pages/auth-approval/components/AuthRejectPopup.tsx | 60 |

@@ -1,13 +1,13 @@
 # SCP0005 — To-Be Fact Pack 요약
 
-- page_key: `shipping/distribution-route` · feature: shipping · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 18 · 엔드포인트 호출 8 (미해결 2, 주석 속 1) · 이벤트 31 · 컴포넌트 사용 47 · 하드코딩 컬럼 3 · 메시지 31
+- page_key: `shipping/distribution-route` · feature: shipping · As-is Fact Pack 있음
+- 파일 18 · 엔드포인트 호출 8 (미해결 2, 주석 속 1) · 이벤트 27 · 컴포넌트 사용 47 · 하드코딩 컬럼 3 · 메시지 31
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 3건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | component | 187 |
+| features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | component | 181 |
 | features/shipping/src/pages/distribution-route/components/DistributionRouteGrid.tsx | component | 270 |
 | features/shipping/src/pages/distribution-route/components/modals/ExcelUploadModal.module.scss | component | 47 |
 | features/shipping/src/pages/distribution-route/components/modals/ExcelUploadModal.tsx | component | 296 |
@@ -48,17 +48,13 @@
 |---|---|---|---|---|---|
 | SearchArea | onSearch | onSearch | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 53 |
 | InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 66 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 67 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 93 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 94 |
-| FunctionSearchIcon | onClick | onFromSearch | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 88 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 110 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 111 |
-| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 137 |
-| InputField | onKeyDown | <arrow> onSearch | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 138 |
-| FunctionSearchIcon | onClick | onToSearch | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 132 |
-| CustomDropdown | onChange | <arrow> set | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 157 |
-| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 177 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 91 |
+| Button | onClick | onFromSearch | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 87 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 107 |
+| InputField | onChange | <arrow> set | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 132 |
+| Button | onClick | onToSearch | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 128 |
+| CustomDropdown | onChange | <arrow> set | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 151 |
+| CustomDropdown | onChange | <arrow> set,String | jsx | features/shipping/src/pages/distribution-route/components/DistributionRouteForm.tsx | 171 |
 | g | beginningEdit | beginningEditHandler | addHandler | features/shipping/src/pages/distribution-route/components/DistributionRouteGrid.tsx | 102 |
 | g | cellEditEnded | cellEditEndedHandler | addHandler | features/shipping/src/pages/distribution-route/components/DistributionRouteGrid.tsx | 185 |
 | g | pastedCell | cellEditEndedHandler | addHandler | features/shipping/src/pages/distribution-route/components/DistributionRouteGrid.tsx | 186 |

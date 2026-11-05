@@ -244,6 +244,13 @@ export const useShipmentRequestElectrodeStore = createPersistedStoreWithTab<
       const newStockDetailFilters: ProcRequest<MENU_ID, SHEETS.STOCK_DETAIL> = {
         divisionId: sp.divisionId,
         companyId: sp.companyId,
+        // 재고상세 SP(P_SSP0022_GET_STOCK_DETAIL)는 PLAN_START_YYYYMMDD 등가가 가드 없는 필수 조건이라 상단
+        //   조회조건의 Plan Date 를 반드시 넘긴다 — 누락하면 P_PLAN_START_YYYYMMDD=NULL → 항상 0행(2026-10-28
+        //   FE 배선 갭 교정). Plant(From Site)/Cell Type 도 AS-IS FindData_Detail(cs:2466-2470)과 동일하게
+        //   상단 필터값을 함께 전달해 등가(둘 다 비면 SP 가 NULL/ALL 가드로 전체 조회).
+        planStartYyyymmdd: sp.planDate,
+        plantId: joinComma(sp.plantSiteIds),
+        cellType: joinComma(sp.cellTypes),
         modelId: sp.modelId2,
         itemId: sp.itemId2,
         lotId: sp.lotId,
@@ -309,6 +316,13 @@ export const useShipmentRequestElectrodeStore = createPersistedStoreWithTab<
       const newStockDetailFilters: ProcRequest<MENU_ID, SHEETS.STOCK_DETAIL> = {
         divisionId: sp.divisionId,
         companyId: sp.companyId,
+        // 재고상세 SP(P_SSP0022_GET_STOCK_DETAIL)는 PLAN_START_YYYYMMDD 등가가 가드 없는 필수 조건이라 상단
+        //   조회조건의 Plan Date 를 반드시 넘긴다 — 누락하면 P_PLAN_START_YYYYMMDD=NULL → 항상 0행(2026-10-28
+        //   FE 배선 갭 교정). Plant(From Site)/Cell Type 도 AS-IS FindData_Detail(cs:2466-2470)과 동일하게
+        //   상단 필터값을 함께 전달해 등가(둘 다 비면 SP 가 NULL/ALL 가드로 전체 조회).
+        planStartYyyymmdd: sp.planDate,
+        plantId: joinComma(sp.plantSiteIds),
+        cellType: joinComma(sp.cellTypes),
         modelId: sp.modelId2,
         itemId: sp.itemId2,
         lotId: sp.lotId,

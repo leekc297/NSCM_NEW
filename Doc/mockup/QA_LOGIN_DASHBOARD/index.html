@@ -1,0 +1,271 @@
+<meta name="dash-one-writer">
+<style>
+.qa { display: flex; flex-direction: column; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.qa-head { display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+.qa-title { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); }
+.qa-take { margin: 0; font-size: var(--cds-font-size-body); color: var(--color-fg); max-width: 62rem; line-height: 1.6; }
+.qa .qa-take b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.qa-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); gap: var(--cds-gap-md); }
+.qa-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+.qa-tile-lb { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.qa-tile-v { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; line-height: 1.15; }
+.qa-tile-s { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.qa-tile.is-warn .qa-tile-v { color: var(--color-warn); }
+.qa-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: var(--cds-gap-md); }
+.qa-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+.qa-card.is-wide { grid-column: 1 / -1; }
+.qa-card h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+.qa-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.5; }
+.qa .qa-note b { font-weight: 600; color: var(--color-fg); }
+.qa-legend { display: flex; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.qa-legend span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+.qa-sw { width: 0.625rem; height: 0.625rem; border-radius: 2px; display: inline-block; }
+.qa-chart { position: relative; min-height: 240px; }
+.qa-chart svg { display: block; }
+.qa-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; z-index: 2; }
+.qa-tip .t { color: var(--cds-text-secondary); margin-bottom: 2px; }
+.qa-tip .r { display: flex; align-items: center; gap: var(--cds-gap-xs); font-variant-numeric: tabular-nums; }
+.qa-tbl-box { overflow: auto; max-height: 26rem; }
+.qa-tbl { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.qa-tbl th { position: sticky; top: 0; background: var(--color-panel); text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.qa-tbl td { padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.qa-tbl th.n, .qa-tbl td.n { text-align: right; }
+.qa-tbl td.wrap { white-space: normal; min-width: 12rem; }
+.qa-bar { display: inline-block; height: 0.5rem; border-radius: 2px; vertical-align: middle; margin-left: var(--cds-gap-xs); }
+.qa-pill { display: inline-block; padding: 0 var(--cds-pad-sm); border-radius: 999px; border: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); }
+.qa-pill.is-out { color: var(--color-fg-muted); }
+.qa-pill.is-in { color: var(--color-ok); }
+[data-dash-source-state=empty] { color: transparent; }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+</style>
+
+<div class="qa">
+  <header class="qa-head">
+    <h1 class="qa-title" id="top">NSCM QA 접속 현황</h1>
+    <p class="qa-take">
+      2026-11-04 <b data-draw="kpi" data-source="kpi" data-field="FIRST" data-row="0">—</b> ~ <b data-draw="kpi" data-source="kpi" data-field="LAST" data-row="0">—</b> 사이에
+      <b data-draw="kpi" data-source="kpi" data-field="USERS" data-row="0">—</b>명이 <b data-draw="kpi" data-source="kpi" data-field="LOGINS" data-row="0">—</b>회 로그인했습니다.
+      로그인의 <b data-draw="kpi" data-source="kpi" data-field="TOP_SHARE" data-row="0">—</b>%가 <b data-draw="kpi" data-source="kpi" data-field="TOP_USER" data-row="0">—</b> 계정에서 나왔고,
+      이 계정은 서로 다른 IP <b data-draw="kpi" data-source="kpi" data-field="TOP_IP" data-row="0">—</b>개에서 접속했습니다.
+    </p>
+  </header>
+
+  <section class="qa-tiles" aria-label="오늘 요약">
+    <div class="qa-tile"><span class="qa-tile-lb">접속 사용자</span><span class="qa-tile-v" data-draw="kpi" data-source="kpi" data-field="USERS" data-row="0">—</span><span class="qa-tile-s">오늘 로그인한 계정 수</span></div>
+    <div class="qa-tile"><span class="qa-tile-lb">로그인</span><span class="qa-tile-v" data-draw="kpi" data-source="kpi" data-field="LOGINS" data-row="0">—</span><span class="qa-tile-s">로그인 성공 횟수 (실패는 기록 안 됨)</span></div>
+    <div class="qa-tile"><span class="qa-tile-lb">로그아웃</span><span class="qa-tile-v" data-draw="kpi" data-source="kpi" data-field="LOGOUTS" data-row="0">—</span><span class="qa-tile-s">로그아웃 버튼을 누른 횟수</span></div>
+    <div class="qa-tile"><span class="qa-tile-lb">최종 로그인</span><span class="qa-tile-v" data-draw="kpi" data-source="kpi" data-field="LAST" data-row="0">—</span><span class="qa-tile-s" data-draw="kpi" data-source="kpi" data-field="LAST_USER" data-row="0">—</span></div>
+    <div class="qa-tile is-warn"><span class="qa-tile-lb">여러 IP에서 접속한 계정</span><span class="qa-tile-v" data-draw="kpi" data-source="kpi" data-field="MULTI_IP" data-row="0">—</span><span class="qa-tile-s">계정 공유 여부 확인 대상</span></div>
+  </section>
+
+  <section class="qa-grid">
+    <article class="qa-card" id="hourly">
+      <h2>시간대별 로그인 · 로그아웃</h2>
+      <p class="qa-note">붙여 넣은 상세 이력 <b data-draw="kpi" data-source="kpi" data-field="EVENTS_SHOWN" data-row="0">—</b>건 기준 (요약 기준 전체 <b data-draw="kpi" data-source="kpi" data-field="EVENTS_TOTAL" data-row="0">—</b>건). <b data-draw="kpi" data-source="kpi" data-field="EVENTS_FROM" data-row="0">—</b> 이전 이력은 메시지 글자 수 제한으로 잘려 빠졌습니다.</p>
+      <div class="qa-legend"><span><i class="qa-sw" data-sw="0"></i>로그인</span><span><i class="qa-sw" data-sw="1"></i>로그아웃</span></div>
+      <div class="qa-chart" data-draw="hourChart" data-source="hourly"></div>
+    </article>
+
+    <article class="qa-card" id="shared-ip">
+      <h2>같은 IP를 쓴 계정</h2>
+      <p class="qa-note">한 IP에서 두 개 이상의 계정이 접속한 경우입니다. 붙여 넣은 상세 이력 기준.</p>
+      <div class="qa-tbl-box">
+        <table class="qa-tbl" data-source="ips" data-row-key="CLIENT_IP">
+          <thead><tr><th data-field="CLIENT_IP">IP</th><th data-field="ACCOUNTS">계정</th><th class="n" data-field="ACCOUNT_CNT">계정 수</th><th class="n" data-field="EVENT_CNT">기록 수</th></tr></thead>
+          <tbody data-draw="ipsBody"></tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="qa-card is-wide" id="users">
+      <h2>사용자별 로그인</h2>
+      <p class="qa-note">오늘 로그인한 계정 전체. 로그인 횟수 순.</p>
+      <div class="qa-tbl-box">
+        <table class="qa-tbl" data-source="users" data-row-key="USER_ID">
+          <thead><tr>
+            <th data-field="USER_ID">사용자 ID</th><th data-field="USER_NM">이름</th><th data-field="DEPT_ID">부서</th>
+            <th class="n" data-field="LOGIN_CNT">로그인</th><th class="n" data-field="LOGOUT_CNT">로그아웃</th>
+            <th data-field="FIRST_LOGIN">최초 로그인</th><th data-field="LAST_LOGIN">최종 로그인</th><th class="n" data-field="IP_CNT">IP 수</th>
+          </tr></thead>
+          <tbody data-draw="usersBody"></tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="qa-card is-wide" id="events">
+      <h2>로그인 · 로그아웃 이력</h2>
+      <p class="qa-note">최근 순. 붙여 넣은 상세 이력 기준.</p>
+      <div class="qa-tbl-box">
+        <table class="qa-tbl" data-source="events" data-row-key="LOG_DTM,USER_ID">
+          <thead><tr><th data-field="LOG_DTM">시각</th><th data-field="LOG_TP_CD">구분</th><th data-field="USER_ID">사용자 ID</th><th data-field="USER_NM">이름</th><th data-field="CLIENT_IP">IP</th></tr></thead>
+          <tbody data-draw="eventsBody"></tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+</div>
+
+<script>
+const num = (x) => Number(x) || 0;
+
+dash.calc('kpi', {
+  title: '오늘 접속 요약',
+  description: '사용자별 로그인 요약에서 합계·최초·최종을, 상세 이력에서 붙여 넣은 건수를 셉니다.',
+  inputs: ['users', 'events'],
+  fn: (users, events) => {
+    const logins = users.reduce((a, r) => a + (Number(r.LOGIN_CNT) || 0), 0);
+    const logouts = users.reduce((a, r) => a + (Number(r.LOGOUT_CNT) || 0), 0);
+    const top = users.slice().sort((a, b) => (Number(b.LOGIN_CNT) || 0) - (Number(a.LOGIN_CNT) || 0))[0] || {};
+    const firsts = users.map((r) => r.FIRST_LOGIN).filter(Boolean).sort();
+    const lasts = users.map((r) => r.LAST_LOGIN).filter(Boolean).sort();
+    const lastRow = users.find((r) => r.LAST_LOGIN === lasts[lasts.length - 1]) || {};
+    const evDt = events.map((r) => r.LOG_DTM).filter(Boolean).sort();
+    return [{
+      USERS: users.length, LOGINS: logins, LOGOUTS: logouts,
+      FIRST: (firsts[0] || '').slice(11, 16), LAST: (lasts[lasts.length - 1] || '').slice(11, 16),
+      LAST_USER: lastRow.USER_NM ? lastRow.USER_NM + ' (' + lastRow.USER_ID + ')' : '',
+      MULTI_IP: users.filter((r) => (Number(r.IP_CNT) || 0) > 1).length,
+      TOP_USER: top.USER_ID || '', TOP_IP: Number(top.IP_CNT) || 0,
+      TOP_SHARE: logins ? Math.round((Number(top.LOGIN_CNT) || 0) / logins * 100) : 0,
+      EVENTS_SHOWN: events.length, EVENTS_TOTAL: logins + logouts, EVENTS_FROM: (evDt[0] || '').slice(11, 16)
+    }];
+  }
+});
+
+dash.calc('hourly', {
+  title: '시간대별 로그인 수',
+  description: '상세 이력을 시(00~23) 단위로 묶어 로그인과 로그아웃을 셉니다.',
+  inputs: ['events'],
+  fn: (events) => {
+    const hs = events.map((r) => Number((r.LOG_DTM || '').slice(11, 13))).filter((h) => !isNaN(h));
+    if (!hs.length) return [];
+    const out = [];
+    for (let h = Math.min(...hs); h <= Math.max(...hs); h++) {
+      const at = events.filter((r) => Number((r.LOG_DTM || '').slice(11, 13)) === h);
+      out.push({ HOUR: String(h).padStart(2, '0'), LOGIN: at.filter((r) => r.LOG_TP_CD === 'LOGIN').length, LOGOUT: at.filter((r) => r.LOG_TP_CD === 'LOGOUT').length });
+    }
+    return out;
+  }
+});
+
+dash.calc('ips', {
+  title: '같은 IP를 쓴 계정',
+  description: '상세 이력을 IP별로 묶어 두 개 이상의 계정이 접속한 IP만 남깁니다.',
+  inputs: ['events'],
+  fn: (events) => {
+    const by = new Map();
+    events.forEach((r) => { const k = r.CLIENT_IP || ''; if (!by.has(k)) by.set(k, []); by.get(k).push(r); });
+    return [...by.entries()].map(([ip, rs]) => {
+      const ids = [...new Set(rs.map((r) => r.USER_ID))].sort();
+      return { CLIENT_IP: ip, ACCOUNTS: ids.join(', '), ACCOUNT_CNT: ids.length, EVENT_CNT: rs.length };
+    }).filter((r) => r.ACCOUNT_CNT > 1).sort((a, b) => b.ACCOUNT_CNT - a.ACCOUNT_CNT || b.EVENT_CNT - a.EVENT_CNT);
+  }
+});
+
+document.querySelectorAll('.qa-sw[data-sw]').forEach((el) => { el.style.background = dash.colors[Number(el.dataset.sw)]; });
+
+const fmtInt = d3.format(',');
+dash.draw('kpi', (el) => {
+  const k = dash.data('kpi');
+  const row = k.status === 'ok' && k.data && k.data[0];
+  const f = el.dataset.field;
+  if (!row || row[f] === undefined || row[f] === '') { el.textContent = '—'; return; }
+  const v = row[f];
+  if (typeof v === 'number') el.textContent = fmtInt(v);
+  else el.textContent = v;
+});
+
+const td = (tr, text, cls) => { const c = document.createElement('td'); c.textContent = text; if (cls) c.className = cls; tr.appendChild(c); return c; };
+const emptyRow = (tb, cols) => { const tr = document.createElement('tr'); const c = document.createElement('td'); c.colSpan = cols; c.textContent = '—'; tr.appendChild(c); tb.appendChild(tr); };
+
+dash.draw('usersBody', (tb) => {
+  const d = dash.data('users');
+  tb.replaceChildren();
+  if (d.status !== 'ok') { emptyRow(tb, 8); return; }
+  const rows = d.data.slice().sort((a, b) => num(b.LOGIN_CNT) - num(a.LOGIN_CNT) || String(a.USER_ID).localeCompare(String(b.USER_ID)));
+  const max = d3.max(rows, (r) => num(r.LOGIN_CNT)) || 1;
+  rows.forEach((r) => {
+    const tr = document.createElement('tr');
+    td(tr, r.USER_ID); td(tr, r.USER_NM); td(tr, r.DEPT_ID);
+    const c = td(tr, fmtInt(num(r.LOGIN_CNT)), 'n');
+    const bar = document.createElement('span'); bar.className = 'qa-bar';
+    bar.style.width = Math.max(2, num(r.LOGIN_CNT) / max * 64) + 'px'; bar.style.background = dash.colors[0];
+    c.appendChild(bar);
+    td(tr, fmtInt(num(r.LOGOUT_CNT)), 'n'); td(tr, r.FIRST_LOGIN); td(tr, r.LAST_LOGIN);
+    td(tr, fmtInt(num(r.IP_CNT)), 'n');
+    tb.appendChild(tr);
+  });
+});
+
+dash.draw('ipsBody', (tb) => {
+  const d = dash.data('ips');
+  tb.replaceChildren();
+  if (d.status !== 'ok' || !d.data.length) { emptyRow(tb, 4); return; }
+  d.data.forEach((r) => {
+    const tr = document.createElement('tr');
+    td(tr, r.CLIENT_IP); td(tr, r.ACCOUNTS, 'wrap'); td(tr, fmtInt(r.ACCOUNT_CNT), 'n'); td(tr, fmtInt(r.EVENT_CNT), 'n');
+    tb.appendChild(tr);
+  });
+});
+
+dash.draw('eventsBody', (tb) => {
+  const d = dash.data('events');
+  tb.replaceChildren();
+  if (d.status !== 'ok') { emptyRow(tb, 5); return; }
+  d.data.slice().sort((a, b) => String(b.LOG_DTM).localeCompare(String(a.LOG_DTM))).forEach((r) => {
+    const tr = document.createElement('tr');
+    td(tr, r.LOG_DTM);
+    const c = document.createElement('td'); const p = document.createElement('span');
+    p.className = 'qa-pill ' + (r.LOG_TP_CD === 'LOGIN' ? 'is-in' : 'is-out'); p.textContent = r.LOG_TP_CD;
+    c.appendChild(p); tr.appendChild(c);
+    td(tr, r.USER_ID); td(tr, r.USER_NM); td(tr, r.CLIENT_IP);
+    tb.appendChild(tr);
+  });
+});
+
+dash.draw('hourChart', (el) => {
+  const d = dash.data('hourly');
+  el.replaceChildren();
+  if (d.status !== 'ok' || !d.data.length) { el.textContent = ''; return; }
+  const rows = d.data;
+  const W = Math.max(280, el.clientWidth), H = 240, mt = 12, mb = 28;
+  const keys = ['LOGIN', 'LOGOUT'], names = { LOGIN: '로그인', LOGOUT: '로그아웃' };
+  const yMax = d3.max(rows, (r) => Math.max(r.LOGIN, r.LOGOUT)) || 1;
+  const y = d3.scaleLinear([0, yMax], [H - mb, mt]).nice();
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', '시간대별 로그인·로그아웃 막대 차트');
+  const ticks = y.ticks(Math.min(5, y.domain()[1])).filter((t) => Number.isInteger(t));
+  const probe = svg.append('text').attr('font-size', 11).text(fmtInt(d3.max(ticks)));
+  const ml = Math.ceil(probe.node().getComputedTextLength()) + 12; probe.remove();
+  const x0 = d3.scaleBand(rows.map((r) => r.HOUR), [ml, W - 4]).padding(0.25);
+  const x1 = d3.scaleBand(keys, [0, x0.bandwidth()]).padding(0.12);
+  const g = svg.append('g');
+  g.selectAll('line.grid').data(ticks).join('line').attr('x1', ml).attr('x2', W - 4).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).attr('stroke', 'var(--cds-chart-grid)').attr('stroke-width', 1);
+  g.selectAll('text.yt').data(ticks).join('text').attr('x', ml - 8).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => fmtInt(t));
+  g.append('line').attr('x1', ml).attr('x2', W - 4).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', 'var(--cds-chart-axis)');
+  g.selectAll('text.xt').data(rows).join('text').attr('x', (r) => x0(r.HOUR) + x0.bandwidth() / 2).attr('y', H - mb + 16).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((r) => r.HOUR + '시');
+  const bw = Math.min(32, x1.bandwidth());
+  const grp = g.selectAll('g.hr').data(rows).join('g').attr('transform', (r) => `translate(${x0(r.HOUR)},0)`);
+  grp.selectAll('rect').data((r) => keys.map((k) => ({ k, v: r[k] }))).join('rect')
+    .attr('x', (o) => x1(o.k) + (x1.bandwidth() - bw) / 2).attr('width', bw)
+    .attr('y', (o) => y(o.v)).attr('height', (o) => Math.max(0, y(0) - y(o.v)))
+    .attr('rx', 2).attr('fill', (o) => dash.colors[keys.indexOf(o.k)]);
+  const tip = document.createElement('div'); tip.className = 'qa-tip'; tip.hidden = true; el.appendChild(tip);
+  grp.append('rect').attr('x', 0).attr('y', mt).attr('width', x0.bandwidth()).attr('height', H - mb - mt).attr('fill', 'transparent')
+    .on('mousemove', function (ev, r) {
+      tip.replaceChildren();
+      const t = document.createElement('div'); t.className = 't'; t.textContent = r.HOUR + ':00 ~ ' + r.HOUR + ':59'; tip.appendChild(t);
+      keys.forEach((k, i) => {
+        const line = document.createElement('div'); line.className = 'r';
+        const sw = document.createElement('i'); sw.className = 'qa-sw'; sw.style.background = dash.colors[i];
+        const s = document.createElement('span'); s.textContent = names[k] + ' ' + fmtInt(r[k]) + '건';
+        line.append(sw, s); tip.appendChild(line);
+      });
+      tip.hidden = false;
+      const box = el.getBoundingClientRect();
+      let left = ev.clientX - box.left + 12; const top = ev.clientY - box.top + 12;
+      if (left + tip.offsetWidth > box.width) left = ev.clientX - box.left - tip.offsetWidth - 12;
+      tip.style.left = Math.max(0, left) + 'px'; tip.style.top = top + 'px';
+    })
+    .on('mouseleave', () => { tip.hidden = true; });
+});
+</script>

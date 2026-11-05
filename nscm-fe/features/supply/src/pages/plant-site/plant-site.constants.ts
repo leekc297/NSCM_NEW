@@ -69,11 +69,12 @@ export const MSG = {
   // R-06①: main 편집(dirty) 중 sub 편집 배타. TO-BE MSG00129 "Sheet-specific edit mode notice."
   MAIN_SUB_EDIT_NOTICE: 'MSG00129',
   // R-32: 편집 중인 시트 미저장 변경 시 하단 탭 전환 차단(하드 블록, Yes/No 아님 — AS-IS 캡처 실측).
-  // MSG00129(MAIN_SUB_EDIT_NOTICE)는 이 화면에서 이미 `{0}` 없는 문구로 쓰이는 중이라 재사용 금지
-  // (opt-capa.constants.ts 동일 사유). Workbench/opt-capa 의 MSG01149 재사용 대신, DB 최대 번호
-  // 실측(ora.py, 2026-09-28: MAX MSG01467, MSG99999 는 테스트용 sentinel 제외) 다음 번호로 신규
-  // 채번(05_register.sql [14]).
-  SHEET_CHANGE_BLOCKED: 'MSG01468',
+  // Workbench/opt-capa/formation/warehouse-capacity/scheduled-receipt 와 동일한 공용 MSG01149
+  // ("{0}를 수정 중이어서 시트를 변경 할 수 없습니다." — {0}=시트 라벨, KO/EN/CN 등록 완료)를 재사용한다.
+  // 과거 전용 채번 MSG01468 은 오류였다: 신규 채번 근거였던 "MAX=MSG01467" 실측이 틀려 MSG01468 은
+  // 이미 결재자 순서 안내("ⓘ결재자 순서 변경은 Drag & Drop...")로 선점돼 있었고, 05_register.sql [14]
+  // MERGE 가 WHEN NOT MATCHED 라 기존 행을 덮지 못해 탭 전환 시 그 엉뚱한 메시지가 떴다(2026-10-29).
+  SHEET_CHANGE_BLOCKED: 'MSG01149',
   // R-06②: 외주 site 는 Location 등록 불가. TO-BE MSG01183 "Outsourcing Vendor locations can not be registered."
   NO_LOCATION_FOR_OSP: 'MSG01183',
   // R-06③: 외주만 Location(OSP) 등록 가능. TO-BE MSG01235 "Only Outsourcing Vendors can register Location (OSP)."
@@ -86,7 +87,7 @@ export const MSG = {
   DUPLICATE_KEY: 'MSG00060',
   // R-33: 필수값 공백({0}=컬럼 라벨). TO-BE MSG00614 "The {0} value is required."
   REQUIRE_VALUE: 'MSG00614',
-  // R-31 §6-8② 교정: 붙여넣기 표시명이 콤보 후보에 없음({0}=컬럼 라벨). TO-BE MSG01079 "Not existing {0}."
+  // R-31 §6-8② 교정: 붙여넣기 표시명이 콤보 후보에 없음({0}=컬럼 라벨명, 예 Location). TO-BE MSG01079 "Not existing {0}."
   PASTE_NOT_FOUND: 'MSG01079',
   NO_CHANGE: 'MSG_NO_CHANGE', // 수정 내용 없음(프레임워크 fallback)
 } as const;

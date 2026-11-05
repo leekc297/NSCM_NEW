@@ -4,11 +4,15 @@ import { createPersistedStoreWithTab } from '@shared/stores';
 
 import { DEFAULT_INPUT_STATUS, MENU_ID, SHEETS } from './bod.constants';
 import type { SearchParamProps } from './bod.types';
+import { resolveDivisionQueryValue } from './bod.util';
 
 interface BodState {
   initialized: boolean;
   isOpenSearchArea: boolean;
   searchParams: SearchParamProps;
+  // 권한 Division 코드(BodForm 이 Division 콤보 로드 후 세팅) — setFilters 가 'ALL' 을 이 코드
+  //   열거로 펼쳐 조회한다(권한 밖 Division 누수 차단, 아래 setFilters 주석 참조).
+  allowedDivisionIds: string[];
   // BOD 메인 그리드 조회조건 전용 — SHEETS 전체 유니온으로 두면 countryCity/routeCnt request
   // 필드까지 합쳐져 divisionId 등 필수 접근이 깨진다(union 전체를 만족해야 하는 필드만 남음).
   filters?: ProcRequest<MENU_ID, SHEETS.BOD>;
@@ -19,6 +23,7 @@ interface BodAction {
   reset: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
+  setAllowedDivisionIds: (ids: string[]) => void;
   setFilters: () => void;
   fetchStaticColumns: () => Promise<void>;
 }
@@ -38,6 +43,7 @@ const initBodState: BodState = {
     // "전체"(미선택) 상태로 조회된다(SCP0007_BOD.cs L217-229) — 'Y' 고정 기본값은 불일치였다.
     validYn: '',
   },
+  allowedDivisionIds: [],
   staticColumn: [],
 };
 
@@ -70,9 +76,22 @@ export const useBodStore = createPersistedStoreWithTab<BodState & BodAction>(
         state.searchParams = next;
       });
     },
+    setAllowedDivisionIds: ids => {
+      set(state => {
+        state.allowedDivisionIds = ids;
+      });
+    },
+    // 조회조건을 filters 로 확정한다. Division 'ALL'(미조작 기본값)은 권한 Division 코드 열거로
+    //   펼쳐 보낸다 — 'ALL' 센티널을 그대로 보내면 조회 SP 가 무필터(DB 전체 Division)로 풀어 권한
+    //   밖까지 조회된다(bod.util.ts resolveDivisionQueryValue). 표시용 searchParams.divisionId 는
+    //   'ALL' 로 그대로 둔다. 검색 경로가 둘(BodForm Search 버튼·툴바 SEARCH 핫키)이라 양쪽이 모두
+    //   거치는 이 지점에서 중앙 처리한다.
     setFilters: () => {
       set(state => {
-        state.filters = { ...state.searchParams };
+        state.filters = {
+          ...state.searchParams,
+          divisionId: resolveDivisionQueryValue(state.searchParams.divisionId, state.allowedDivisionIds),
+        };
       });
     },
     // 컬럼 메타는 admin(SCM_MST_SHEET_COLUMNS)에서 동적 fetch — 하드코딩 금지(ui-category hook).

@@ -124,9 +124,8 @@ export const RequestInfoPanel = ({
                     appearance='outlined'
                     priority='normal'
                     disabled={!canEdit}
-                    iconComponent={
-                      <FunctionSearchIcon appearance='lined' onClick={onApprovalSearch} />
-                    }
+                    iconComponent={<FunctionSearchIcon appearance='lined' />}
+                    onClick={onApprovalSearch}
                   />
                 ) : undefined,
               }}
@@ -179,7 +178,9 @@ export const RequestInfoPanel = ({
       {/* Reason Detail* — 여러 줄 입력(textarea). AS-IS 사유 상세는 장문 입력 칸이다.
           필수: type='textarea'. InputField 는 type 으로 분기해 기본값('text')이면 size 별 고정 높이를
           걸어 multiline 만 줘서는 칸이 안 커지고 글자가 넘친다('textarea' 분기라야 height 가 먹는다,
-          sales-reports TextboxModal 선례). height 로 3줄 정도 높이를 준다. */}
+          sales-reports TextboxModal 선례). height 로 칸 높이를 준다.
+          필수: sx 로 textarea 를 칸 안에 가둔다. 없으면 textarea 가 줄 수만큼 늘어 overflow:hidden 고정
+          패널을 넘치고, 브라우저가 커서를 보이려고 패널을 스크롤해 화면이 밀려 올라간다. */}
       <Grid size={8}>
         <FormItem
           className={commonStyles.formItem}
@@ -191,6 +192,14 @@ export const RequestInfoPanel = ({
               type='textarea'
               fullWidth
               height={44}
+              sx={{
+                '& .MuiInputBase-root': { height: '100%' },
+                '& textarea': {
+                  height: '100% !important',
+                  minHeight: '0 !important',
+                  overflow: 'auto !important',
+                },
+              }}
               disabled={!canEdit}
               value={requestInfo.reasonDetail}
               onChange={e => onChange({ reasonDetail: e.target.value })}

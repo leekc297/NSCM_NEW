@@ -18,6 +18,7 @@ import {
   MSG,
   PERIOD_W52_OFFSET_DAYS,
   PLAN_TYPE_DEFAULT,
+  PLAN_TYPE_OPTIONS,
 } from '../global-psi-elec.constants';
 import { useGlobalPsiElecStore } from '../useGlobalPsiElecStore';
 
@@ -77,20 +78,9 @@ export const GlobalPsiElecForm = ({ onSearch, onMaterialSearch }: Props) => {
   const [planDates] = useTabComboQueries({
     filters: [{ comboId: COMBO.PLAN_DATE, divisionId: sc.divisionId }],
   });
-  // Report Type* — PlanType 콤보(AS-IS 전극 Report Type 이관, SCP_PLAN_VERSION_V.plan_type). division + plan_start 종속.
-  //   등록 SQL 실측(SCM_ADM_CMBO_SQL_M): WHERE division_id=@divisionId AND (@planStartYyyymmdd IS NULL OR
-  //   plan_start_yyyymmdd=@planStartYyyymmdd) — plan_type 목록이 날짜마다 다르다(예 div40: 최신주=PR/MA/FN,
-  //   그 이전=TE/PR/MA/FN). @planStartYyyymmdd 미전달 시 '' → Oracle '' IS NULL=TRUE → 전 날짜 합집합이 되어
-  //   Plan Date 를 바꿔도 목록이 안 좁혀진다. 두 토큰 모두 전달해 AS-IS 날짜 종속 재바인딩 재현.
-  const [reportTypes] = useTabComboQueries({
-    filters: [
-      {
-        comboId: COMBO.REPORT_TYPE,
-        divisionId: sc.divisionId,
-        planStartYyyymmdd: sc.planStartYyyymmdd,
-      },
-    ],
-  });
+  // Plan Type(Report Type*) — AS-IS InitPlanType()(SCP0095_GlobalPSI_Elec.cs L331~351)는 MA/FN 고정 2종을
+  //   코드에서 하드코딩하며 division·plan date 와 무관하다(날짜 변경 핸들러 L555~559 가 Plan Type 을 재적재하지
+  //   않음). 따라서 DB 콤보 재조회가 아니라 정적 옵션으로 재현한다(PLAN_TYPE_OPTIONS).
 
   // EE 전극만 유지(design 02 §2-1) — Division_SCP 가 ATTRIBUTE3 를 반환하므로 관대 가드 아님(no-op 회피).
   const divisionOptions = useMemo<Option[]>(
@@ -99,7 +89,7 @@ export const GlobalPsiElecForm = ({ onSearch, onMaterialSearch }: Props) => {
   );
   const companyOptions = toOptions(companies);
   const planDateOptions = toOptions(planDates);
-  const reportTypeOptions = toOptions(reportTypes);
+  const planTypeOptions = PLAN_TYPE_OPTIONS.map(o => ({ label: o.label, value: o.value }));
 
   const bucketOptions: Option[] = [
     { label: t(LBL.BUCKET_DAILY, 'Daily'), value: BUCKET_CODE.DAILY },
@@ -147,16 +137,8 @@ export const GlobalPsiElecForm = ({ onSearch, onMaterialSearch }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firstPlanDate, hasPlanDate]);
 
-  // Report Type 기본값 — AS-IS 는 첫 값이 아니라 'FN'(반영 09주 기준). 옵션(division 종속)에 현재 값이 없으면
-  //   FN 으로, FN 조차 없는 division 이면 첫 옵션으로 보정(빈값=SP 결과 0 방지).
-  useEffect(() => {
-    if (reportTypeOptions.length === 0) return;
-    const has = (v: string) => reportTypeOptions.some(o => o.value === v);
-    if (!has(sc.planType)) {
-      set({ planType: has(PLAN_TYPE_DEFAULT) ? PLAN_TYPE_DEFAULT : reportTypeOptions[0].value });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reportTypeOptions, sc.planType]);
+  // Plan Type 기본값은 store makeInitSearch 의 PLAN_TYPE_DEFAULT='FN'(AS-IS 마지막 행). 옵션이 고정 MA/FN 이라
+  //   항상 유효 → division 종속 보정 effect 불요(AS-IS 도 재적재 없음).
 
   const single = (
     labelText: string,
@@ -259,14 +241,12 @@ export const GlobalPsiElecForm = ({ onSearch, onMaterialSearch }: Props) => {
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onMaterialSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onMaterialSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -286,7 +266,7 @@ export const GlobalPsiElecForm = ({ onSearch, onMaterialSearch }: Props) => {
           {single(
             t(LBL.PLAN_TYPE, 'Plan Type'),
             sc.planType,
-            reportTypeOptions,
+            planTypeOptions,
             v => set({ planType: v || PLAN_TYPE_DEFAULT }),
             true,
             noDivisionAuth
@@ -315,7 +295,10 @@ export const GlobalPsiElecForm = ({ onSearch, onMaterialSearch }: Props) => {
               대략 열폭(140) - 라벨글자폭('Plan Type' ~63px) ≈ 77px 지점에서 시작한다 → pl 77px. */}
           <Grid size={12}>
             <Typography variant='caption' color='text.secondary' sx={{ pl: '77px' }}>
-              {t(MSG.REPORT_TYPE_GUIDE)}
+              {t(
+                MSG.REPORT_TYPE_GUIDE,
+                'Plan Type [MA : W0 PKG SE(MA) Plan, W-1 Elec FN Plan // FN W0 PKG FN Plan, W0 Elec FN Plan]'
+              )}
             </Typography>
           </Grid>
         </>

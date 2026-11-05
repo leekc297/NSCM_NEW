@@ -1,9 +1,10 @@
-// 자동 생성 — tools/E2E/gen-e2e.js (2026-10-22) · 원천: Doc/gen/SCP0096/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
+// 자동 생성 — tools/E2E/gen-e2e.js (2026-10-30) · 원천: Doc/gen/SCP0096/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
 import { test, expect } from '../../../tools/E2E/fixtures/test';
 import * as fs from 'node:fs';
 const PLAN = JSON.parse(fs.readFileSync(__dirname + '/SCP0096.plan.json', 'utf8'));
 const MENU = "SCP0096";
 import { crudCycle } from '../../../tools/E2E/lib/crud';
+import { divisionCascade } from '../../../tools/E2E/lib/cascade';
 
 test.describe.serial(`${MENU} Shipment_Working_Day_OSP CRUD @crud`, () => {
   test.use({ account: PLAN.sample.account || undefined });

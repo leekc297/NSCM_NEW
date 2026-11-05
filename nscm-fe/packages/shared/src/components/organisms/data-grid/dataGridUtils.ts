@@ -259,6 +259,18 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
     if (isNumber(value)) event.cell.textContent = value.toString();
   };
 
+  // 센티널 값 전역 숨김 — 셀 원본값이 정확히 '/' 하나뿐이면 표시만 공백으로 비운다.
+  //   AS-IS 가 두 값을 '/' 로 이어 붙이는 컬럼(전극타입 등)에서 양쪽이 다 비어 구분자만 남은
+  //   경우를 화면에서 공백으로 보이게 하는 공통 처리다. 정확 일치(=== '/')라 '3/5'·'2026/10/30'
+  //   같이 '/' 를 포함하는 정당한 값은 건드리지 않는다. 소스 데이터·저장 payload 는 '/' 그대로
+  //   유지하고(저장/조회 센티널이라 키가 어긋나면 안 됨) 표시 텍스트만 비운다.
+  //   setCellTooltip 보다 먼저 등록해야 툴팁도 비운 텍스트를 읽는다(formatPendingComboColumns 동일).
+  const formatSentinelColumns = (grid: FlexGrid<T>, event: FormatItemEventArgs) => {
+    if (event.panel.cellType !== CellType.Cell) return;
+    const value = grid.getCellData(event.row, event.col, false);
+    if (value === '/') event.cell.textContent = '';
+  };
+
   // RowHeader col 0(행번호 또는 체크박스) 셀에 선택 행 표시.
   //   grid.selection 은 "선택 anchor" 가 아니라 가장 최근 range 의 커서 이동 끝점 하나뿐이라
   //   다중 행 선택을 못 잡는다 - 드래그/Shift 연속 선택은 grid.selection 자체가 topRow~bottomRow
@@ -572,10 +584,10 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
       // 동적 컬럼은 select(-1,-1)+scrollIntoView(0,0) 리셋을 건너뛴다 — 그리드를 맨 앞으로
       //   끌어당기면 화면들이 이 헤더의 더블클릭에 쓰는 드릴다운의 뒤이은 dblclick hitTest 가
       //   앞쪽 컬럼을 집어 드릴다운이 깨진다.
-      if (!isDynamicColumn) {
+      /*if (!isDynamicColumn) {
         grid.select(-1, -1);
         grid.scrollIntoView(0, 0, true);
-      }
+      }*/
 
       // sortDescriptions 변경은 collectionView 내부적으로는 즉시 반영되지만, 화면 재도색은 별도다.
       //   select(-1,-1)+scrollIntoView(0,0) 가 정적 컬럼에선 이 재도색을 겸해 왔고(선택 이동 시
@@ -715,6 +727,7 @@ export const useDataGridUtils = <T extends WijmoRowItem = WijmoRowItem>() => {
     formatSortableColumns,
     formatPendingComboColumns,
     formatTextTypeColumns,
+    formatSentinelColumns,
     setEditableColumns,
     setMoveCellByTab,
     setMoveByMetakey,

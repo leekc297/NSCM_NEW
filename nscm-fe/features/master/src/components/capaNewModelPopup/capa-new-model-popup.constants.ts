@@ -121,18 +121,11 @@ export const DYN_MONTH_PREFIX = 'M_';
 // AS-IS SP1(@p_end_month = DATEADD(MM,41,today)) — 당월 포함 42개월(0~41개월 뒤까지) 조회.
 export const CALENDAR_MONTHS_SPAN = 41;
 
-// InitSpread(cs L484-546) 고정 컬럼 그대로 — SP 미배포라 admin 메타 대신 이 파일에 직접 정의
+// InitSpread(cs L484-546) 고정 컬럼 — SP 미배포라 admin 메타 대신 이 파일에 직접 정의
 //   (ProjectRouteListSaveModal 의 buildProjectRouteListSaveColumns 와 동일한 escape hatch).
+//   2026-11-02 사용자 결정으로 팝업을 조회 전용으로 전환 — AS-IS 첫 컬럼 CHK('Save' 저장 선택
+//   체크박스)는 삭제했다(저장 기능 제거, Mail Req 체크박스만 유지). 식별/월 컬럼은 전부 읽기전용.
 export const buildCapaNewModelColumns = (isGroupElectrode: boolean): RawFlexGridColumnConfig[] => [
-  {
-    colNm: DefColumns.CHK,
-    colLblNm: 'Save',
-    colWth: 50,
-    display: true,
-    visible: true,
-    horzAlgnCd: 'C',
-    cellCtrlObjTpCd: CELL_CONTROL_TYPE.CHECKBOX,
-  },
   { colNm: DefColumns.DIVISION_ID, colLblNm: 'Division', colWth: 60, display: true, visible: true },
   { colNm: DefColumns.COMPANY_ID, colLblNm: 'Company', colWth: 60, display: true, visible: false },
   { colNm: DefColumns.SITE_ID, colLblNm: 'Site', colWth: 60, display: true, visible: true },

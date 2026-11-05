@@ -164,21 +164,25 @@ export const MSG = {
   NO_SAVE_PERMISSION: 'MSG01125',
   SELECT_REQUIRED: 'MSG01122', // AS-IS MSG00093 "Select {0}."
   CONFIRM_RUN: 'MSG01456', // AS-IS MSG00183 "Do you want to run?"
-  CONFIRM_CONFIRM: 'MSG01457', // AS-IS MSG00184 "Do you want to confirm?"
+  CONFIRM_CONFIRM: 'MSG01197', // AS-IS MSG00184 "Do you want to confirm?"
   CONFIRM_RELEASE: 'MSG01438', // AS-IS MSG00465 "Do you want to release?"
   CONFIRM_RERUN: 'MSG01439', // AS-IS MSG00466 재실행 확인
   MASTER_VALIDATION_REQUIRED: 'MSG01441', // AS-IS MSG00469
   MASTER_VALIDATION_CRITICAL: 'MSG01442', // AS-IS MSG00470
   SAVE_FAILED: 'MSG00003',
   // 아래 6건은 AS-IS 가 코드 리터럴로만 갖고 있어 TO-BE 등가 코드가 0건이던 문구다(design 03 §3.5 /
-  //   01_layout §5 C-L1). iter-2 에 사용자 결정 B4 대로 SCM_ADM_MSG_M(KO/EN) + public/locales 양쪽에
-  //   신규 등록했다(05_register.sql B4 — 채번 근거 MAX(MSG_ID)='MSG01461').
-  PRE_ACTIVITY_NOT_DONE: 'MSG01462', // B11
-  PLAN_ID_ALREADY_PROCESSED: 'MSG01463', // B24
-  ENGINE_RUN_NOT_EXECUTED: 'MSG01464', // B30 · B37
-  SAVE_CONFIRMED: 'MSG01465', // 저장 성공 — confirm_yn='Y'
-  SAVE_EXECUTED: 'MSG01466', // 저장 성공 — A003·A004·A005·A009 + A002 팝업 Plan ID 생성(AS-IS "Executed.")
-  SAVE_RELEASED: 'MSG01467', // 저장 성공 — A006
+  //   01_layout §5 C-L1). 2026-11-02 실측(ora.py + public/locales): iter-2 가 썼던 MSG01462~67 은
+  //   실제로는 결재선/전주데이터복사 등 **무관한 기존 메시지가 이미 점유**하고 있었다(등록이 반영
+  //   안 됐거나 이후 다른 화면이 같은 번호를 먼저 썼음) — PRE_ACTIVITY_NOT_DONE 은 설상가상으로
+  //   CONFIRM_CONFIRM(MSG01197)과 동일 코드라 "이전 Activity 미완료" 자리에 "Confirm하시겠습니까?"가
+  //   떴다(실사용자 재현 확인). MAX(MSG_ID)='MSG01478' 재확인 후 MSG01479~84 로 재채번
+  //   (`design/08_fix_msg_code_collision.sql`, DB 미반영 — 적용 전까지 KO/EN/CN 번들 fallback 으로 동작).
+  PRE_ACTIVITY_NOT_DONE: 'MSG01479', // B11
+  PLAN_ID_ALREADY_PROCESSED: 'MSG01480', // B24
+  ENGINE_RUN_NOT_EXECUTED: 'MSG01481', // B30 · B37
+  SAVE_CONFIRMED: 'MSG01482', // 저장 성공 — confirm_yn='Y'
+  SAVE_EXECUTED: 'MSG01483', // 저장 성공 — A003·A004·A005·A009 + A002 팝업 Plan ID 생성(AS-IS "Executed.")
+  SAVE_RELEASED: 'MSG01484', // 저장 성공 — A006
   // A002 팝업 Frozen Period 검증 — 시작일 > 종료일 금지(AS-IS MSG00108, TO-BE 동일 코드 실재).
   INVALID_PERIOD: 'MSG00108',
 } as const;

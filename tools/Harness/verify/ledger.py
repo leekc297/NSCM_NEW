@@ -15,6 +15,7 @@ result 는 생성 시 NOT_RUN(미검증). 판정은 judge.py·E2E 결과 반입�
 import argparse
 import csv
 import hashlib
+import json
 import os
 import re
 import sys
@@ -29,10 +30,10 @@ COLS = ['row_id', 'source', 'family', 'rule_id', 'axis', 'area', 'target', 'cond
 # 축: 1 디자인·다국어 / 2 AS-IS 로직 / 3 SMOKE / 4 CRUD / 5 권한별 CRUD
 AXIS_BY_FAMILY = {'A': '3', 'B': '3', 'C': '2', 'D': '4', 'E': '4', 'F': '4', 'G': '3', 'H': '1', 'I': '1', 'J': '5', 'K': '3', 'L': '3', 'M': '4', 'N': '2'}
 # 화면 전체 단위로 항상 확인하는 규칙(요소별 행과 별개)
-SCREEN_RULES = ['A1', 'A2', 'A4', 'A5', 'F1', 'F2', 'F4', 'F5', 'F6', 'G3', 'H4', 'H7', 'I1', 'I2', 'I3', 'I4', 'J1', 'J2', 'K1', 'K2', 'K3', 'E6', 'L1']  # E6 셀 키 입력(IME·자동완성) 2026-10-28 — 입력 그리드 없으면 E2E 가 NA
+SCREEN_RULES = ['DB-SYN', 'K6', 'A1', 'A2', 'A4', 'A5', 'F1', 'F2', 'F4', 'F5', 'F6', 'G3', 'H4', 'H7', 'I1', 'I2', 'I3', 'I4', 'J1', 'J2', 'K1', 'K2', 'K3', 'E6', 'L1']  # E6 셀 키 입력(IME·자동완성) 2026-10-28 — 입력 그리드 없으면 E2E 가 NA
 # 조회조건 유형별 규칙
 SEARCH_COMBO_RULES = ['B1', 'B2', 'B3', 'B4', 'B6', 'B7', 'G1', 'G2', 'G4', 'G7', 'H5']  # G7 = 표시값 형식(combo_oracle) · B7 = 후보 갱신(b7_check + E2E) 2026-10-28
-SEARCH_TEXT_RULES = ['G1', 'G2', 'G4', 'G5', 'H5']
+SEARCH_TEXT_RULES = ['G1', 'G2', 'G4', 'G5', 'H5', 'G8', 'G9']  # G8 대소문자 무시 · G9 콤마 다중값(2026-10-30 SSP45 공통요건 7·8·13·14)
 SEARCH_CASCADE_PARENT = re.compile(r'^(div|division)$', re.I)  # 상위 조건(하위 리셋 대상) — 기준표 div_reset 열이 우선
 
 
@@ -59,11 +60,19 @@ def main():
     a = ap.parse_args()
     mid = a.menu_id.upper()
     asis_id = (a.asis or mid).upper()
+    sdir = P('Doc', 'asisfacts', 'screens', asis_id)  # 아래 F9 블록 등이 쓴다(2026-10-31 정의 전 참조로 Bucket 화면 원장 생성이 죽던 결함)
+    sys.path.insert(0, HERE); from asis_live import dead_methods, dead_sps, sp_base
+    dead = dead_methods(asis_id)  # 실행되지 않는 AS-IS 메서드 — 그 문장은 AS-IS 사실이 아니라 원장 행을 만들지 않는다(2026-10-30 SCP0041 SaveData · KEEP 9/E16)
+    dsp = dead_sps(asis_id)  # 호출이 전부 죽은 메서드 안에만 있는 SP — golden·정렬 SP 행도 만들지 않는다
+    gold = [g for g in read_csv(P('Doc', 'golden', 'golden_cases.csv')) if sp_base(g.get('asis_sp')) not in dsp]
+    if dead: print(f'  [INFO] 실행되지 않는 AS-IS 메서드 {len(dead)}개 문장 제외: ' + ', '.join(f'{c}.{m}' for c, m in sorted(dead))[:300])
     rules = {r['rule_id']: r for r in read_csv(os.path.join(HERE, 'detect_rules.csv'))}
     rows = []
     seen = set()
 
     def add(source, rule_id, target, condition='', expected='', asis_ref='', area='', oracle='', method='', defect_ref='', note='', family=''):
+        if note == '전용' and not asis_ref:  # 전용 검사는 3개 문서 결함 유형(_engine_gap.csv)에서 나왔다 — FAIL 계약의 기대값 출처(2026-11-02 근거 없어 FAIL 이 ERROR 로 내려감)
+            asis_ref = '결함원장 유형(Doc/verify/_engine_gap.csv)'
         r = rules.get(rule_id, {})
         fam = family or r.get('family', rule_id[:1])
         key = (source, rule_id, target, condition, asis_ref, defect_ref)
@@ -81,15 +90,243 @@ def main():
     for rule_id in SCREEN_RULES:
         add('RULE_SCREEN', rule_id, f'{mid} 화면', area='화면')
     # F8 감사 필드 · F7 저장 연계 — 저장 SP 가 있는 화면(golden SAVE 케이스)만 1행씩 (2026-10-27 · save_audit.py 판정)
-    if any(g.get('screen') == mid and g.get('kind') == 'SAVE' for g in read_csv(P('Doc', 'golden', 'golden_cases.csv'))):
+    has_save_proc = any((r.get('menu_id') or '').upper() == mid and r.get('proc') and re.search(r'SAVE|INS|UPD|DEL', r.get('btn') or '', re.I) and (r.get('use_yn') or 'Y') != 'N' for r in read_csv(P('Doc', 'tobefacts', 'db', 'proc_meta.csv')))
+    if has_save_proc:  # 골든 SAVE 케이스가 없어도 PROC_M 에 저장 배선이 있으면 대상(2026-10-31 SCP0096 등 F6·F7·F8 행 미생성 결함)
         add('RULE_SCREEN', 'F8', f'{mid} 저장 감사 필드', condition='CRUD 실제 저장 1건', area='저장',
             expected='저장 행 CREATED_BY·LAST_UPDATED_BY = 저장 계정 · CREATION_DATE·LAST_UPDATE_DATE = 저장 시각', method='E2E+DB')
         add('RULE_SCREEN', 'F7', f'{mid} 저장 연계 테이블', condition='CRUD 실제 저장 1건', area='저장',
             expected='AS-IS 저장 SP 가 신규행 경로(MERGE/INSERT)로 쓰는 업무 테이블에 TO-BE 저장도 행을 남김', method='E2E+DB')
 
+    # 저장 전후 DB 대조(엔진 갭 E05 · EG222·EG235·EG239·EG237 · 2026-10-31) — 수정 저장이 있는 화면
+    if has_save_proc:  # 골든 SAVE 케이스가 없어도 PROC_M 에 저장 배선이 있으면 대상(2026-10-31 SCP0096 등 F6·F7·F8 행 미생성 결함)
+        add('RULE_SCREEN', 'F6', f'{mid} 저장 행 수 불변', condition='기존행 수정 저장 1회', area='저장', expected='같은 키 수정은 기존 행을 고친다 — 업무 표 행 수 불변(중복 행 0)', method='E2E+DB')
+        add('RULE_SCREEN', 'F8', f'{mid} 수정 감사 컬럼', condition='기존행 수정 저장 1회', area='저장', expected='수정된 행 Created 불변 · LAST_UPDATE_DATE 갱신 · LAST_UPDATED_BY=저장 계정', method='E2E+DB')
+        add('RULE_SCREEN', 'F7', f'{mid} 저장 연계·이력 표', condition='기존행 수정 저장 1회', area='저장', expected='저장이 바꾼 표·행 수 실측 기록', method='E2E+DB')
+    # 화면 구성(EG029 Division별 컬럼·EG270·EG321·EG324 조회조건 겹침 · 2026-11-01)
+    # 상위 셀 변경 → 하위 셀 초기화(EG085 · 2026-11-01) — AS-IS 빈 값 대입 문장마다 1행(facts_cellclear)
+    for _x in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'cell_clear.csv')):
+        add('RULE_SCREEN', 'C2', f"{mid} 셀 초기화 {_x['src_col'] or _x['src']}→{_x['tgt_col'] or _x['tgt']}", condition=f"그리드 {_x['grid']} · 상수 {_x['src']}→{_x['tgt']}" + (' · 재채움' if _x['refilled'] else '') + (f" · 조건부: {_x['cond']}" if _x['cond'] else ''), area='그리드', expected='상위 셀 값을 바꾸면 하위 셀 값 초기화', asis_ref=_x['ref'], method='E2E', note='전용')
+    # 필수 컬럼(USER_SELECTABLE_FLAG=N) — 컬럼 설정 팝업 표시·빨간 표시·이동 차단(EG392·EG021 · 2026-11-02)
+    #   AS-IS 에 컬럼 설정 기능(TitleSet 팝업·btnColumn)이 있는 화면만 — 없는 화면(SCP0028·DMF0005 2026-11-02 실측: TO-BE 도 버튼 없음)은 대상 아님
+    _has_ts = any(re.search(r'TitleSet|btnColumn', (_x.get('raw') or '') + (_x.get('target') or '')) for _x in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'actions.csv')))
+    if _has_ts and any(_c.get('program_id', '').upper() == mid and _c.get('user_selectable_flag') == 'N' and _c.get('visible_flag') == 'Y' for _c in read_csv(P('Doc', 'tobefacts', 'db', 'sheet_columns.csv'))):
+        add('RULE_SCREEN', 'K2', f'{mid} 필수 컬럼 Visible', condition='컬럼 설정 팝업 목록', area='그리드', expected='USER_SELECTABLE_FLAG=N 컬럼은 Visible 목록', method='E2E', note='전용')
+        add('RULE_SCREEN', 'K2', f'{mid} 필수 컬럼 빨간 표시', condition='컬럼 설정 팝업 라벨 색', area='그리드', expected='필수 컬럼만 빨간 라벨', method='E2E', note='전용')
+        add('RULE_SCREEN', 'K2', f'{mid} 컬럼 설정 Default', condition='컬럼을 옮긴 뒤 Default', area='그리드', expected='Default 로 기본 표시 복원', method='E2E', note='전용')
+        add('RULE_SCREEN', 'K2', f'{mid} 컬럼 설정 무변경 Save', condition='변경 없이 Save', area='그리드', expected='요청 없이 닫힘(재조회 안 함)', method='E2E', note='전용')
+        add('RULE_SCREEN', 'K2', f'{mid} 컬럼 설정 즉시 반영', condition='컬럼을 빼고 Save → Default 로 원복', area='그리드', expected='Save 즉시 그리드 재구성', method='E2E', note='전용')
+        add('RULE_SCREEN', 'K2', f'{mid} 필수 컬럼 이동 차단', condition='필수 컬럼을 Invisible 로 이동 시도 · 대조군 이동', area='그리드', expected='이동 안 됨 · 안내 문구', method='E2E', note='전용')
+    add('RULE_SCREEN', 'A2', f'{mid} 편집기 표시값', condition='콤보 셀 편집기 열기', area='그리드', expected='편집기에도 Description · 코드 비노출', method='E2E', note='전용')
+    add('RULE_SCREEN', 'F6', f'{mid} 다른 셀 편집 값 유지', condition='수량 입력 뒤 다른 셀 편집', area='그리드', expected='입력 수량 유지', method='E2E', note='전용')
+    # 재조회 시 하위 시트 초기화(EG019 · 2026-11-02) — AS-IS 메인 조회 경로(하위 시트 자체 조회 제외)가 메인 외 시트를 비우는 화면만
+    _sub_clr = [x for x in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'actions.csv')) if re.match(r'(FindButton|FindData\w*|Search\w*)$', x.get('method') or '') and not re.search('Sub', x.get('method') or '') and re.search(r'\bsi(?!Main\b)\w+\.\w*(Clear|RowCount\s*=\s*0)|ClearDataSource\(\s*si(?!Main\b)\w+|\bspd(?!Main\b)\w+\.\w*(Clear|RowCount\s*=\s*0)|\bdt\w*Sub\w*\.Clear\(', x.get('raw') or '')]  # 하위 시트 원본 DataTable 비우기(DMF0004 dtSubBucket)
+    if _sub_clr:
+        add('RULE_SCREEN', 'A4', f'{mid} 재조회 하위 시트 초기화', condition='메인 행 선택으로 하위 시트 조회 → 다시 Search', area='그리드', expected='하위 시트 행 0(자동 재조회 없을 때)', asis_ref='; '.join(f"{_x['method']}:{_x['line']}" for _x in _sub_clr[:4]), method='E2E', note='전용')
+    add('RULE_SCREEN', 'D6', f'{mid} 정렬 상태 Insert', condition='컬럼 정렬 뒤 Insert', area='그리드', expected='정렬 유지 · Insert 행 편집 가능', method='E2E', note='전용')
+    add('RULE_SCREEN', 'D6', f'{mid} 필터 상태 Insert', condition='컬럼 필터 뒤 Insert', area='그리드', expected='필터 유지 · Insert 행 편집 가능', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H3', f'{mid} 계층 병합 중간 미병합', condition='Div·키 조회 뒤 병합 행 쌍', area='그리드', expected='앞 컬럼이 병합되면 같은 값인 후속 키 컬럼도 병합(중간 미병합 0)', method='E2E', note='전용')
+    add('RULE_SCREEN', 'D1', f'{mid} 병합 셀 입력', condition='병합 칸 더블클릭 입력', area='그리드', expected='병합 유지 상태로 입력 가능', method='E2E', note='전용')
+    add('RULE_SCREEN', 'F3', f'{mid} 병합 셀 붙여넣기', condition='병합 칸 붙여넣기', area='그리드', expected='붙여넣기 시 병합 셀 처리 정상', method='E2E', note='전용')
+    add('RULE_SCREEN', 'F5', f'{mid} 병합 셀 Delete 범위', condition='병합 칸 선택 후 Delete(저장 없음)', area='그리드', expected='병합 전체 행 D 표시', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H3', f'{mid} 입력 중 병합 해제', condition='신규 행에 옆 행과 같은 값', area='그리드', expected='입력 중 행은 기존 데이터와 병합되지 않음', method='E2E', note='전용')
+    add('RULE_SCREEN', 'F5', f'{mid} 원값 복원 상태 해제', condition='값 수정 뒤 원값 복원', area='그리드', expected='원값 복원 시 수정 상태 해제', method='E2E', note='전용')
+    add('RULE_SCREEN', 'E6', f'{mid} 텍스트 부분 선택 삭제', condition='텍스트 조건·셀 편집기에서 일부 선택 후 Delete·Backspace', area='그리드', expected='선택한 부분만 지워짐', method='E2E', note='전용')
+    add('RULE_SCREEN', 'D1', f'{mid} Insert 행 Div 변경 후보', condition='Insert 행 Division 변경', area='그리드', expected='Div 변경 가능 · 하위 후보 재구성', method='E2E', note='전용')
+    add('RULE_SCREEN', 'A10', f'{mid} 조회 전 합계 행', condition='진입 직후 조회 전 빈 그리드', area='그리드', expected='조회 전 Sum 행 미표시', method='E2E', note='전용')
+    add('RULE_SCREEN', 'N1', f'{mid} 기간 칸 이상값', condition='조회 결과 기간 칸', area='그리드', expected='달력에 없는 기간 값 0(20280001 등)', method='E2E', note='전용')
+    add('RULE_SCREEN', 'K1', f'{mid} 정렬 상태 Copy·Hide', condition='헤더 정렬 뒤 Copy·Hide', area='그리드', expected='정렬 유지 · Copy 값 일치 · Hide 동작', method='E2E', note='전용')
+    add('RULE_SCREEN', 'K3', f'{mid} 붙여넣기 코드 동반', condition='콤보 칸에 표시 이름 붙여넣기', area='그리드', expected='코드 값 동반', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H4', f'{mid} 헤더 높이 유지', condition='조회·Division 전환 전후', area='화면', expected='헤더 높이 동일', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H4', f'{mid} 불필요 스크롤', condition='조회 뒤', area='화면', expected='페이지·그리드 바깥 스크롤 없음', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H4', f'{mid} 헤더 글자 잘림', condition='조회 뒤 렌더된 헤더', area='화면', expected='헤더 글자 안 잘림', method='E2E', note='전용')
+    add('RULE_SCREEN', 'N1', f'{mid} 조건 후보 기호 일색', condition='조회조건 콤보 후보', area='화면', expected='후보가 기호(-,/) 일색 아님', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H9', f'{mid} 칸 폭 메타', condition='계정 개인화 없을 때 조회 뒤 칸 폭', area='그리드', expected='SHEET_COLUMNS 폭 ±10% · 자동 맞춤 없음', method='E2E', note='전용')
+    add('RULE_SCREEN', 'G1', f'{mid} ALL 상태 조회', condition='ALL 조건 그대로 조회', area='화면', expected='필수 안내 없이 조회', method='E2E', note='전용')
+    add('RULE_SCREEN', 'L2', f'{mid} 조건 입력 중 재렌더', condition='텍스트 조건 입력 중', area='화면', expected='그리드 재렌더·이동 없음', method='E2E', note='전용')
+    add('RULE_SCREEN', 'K1', f'{mid} 필터 편집기 항목', condition='값 필터 편집기', area='화면', expected='공란류 1개 · 고유값 전부', method='E2E', note='전용')
+    add('RULE_SCREEN', 'G6', f'{mid} 연속 조회 본문', condition='재조회·조건 변경 뒤 조회', area='화면', expected='바꾼 조건 외 인자 불변', method='E2E', note='전용')
+    sys.path.insert(0, HERE); import expect_rows as _ER  # 2026-11-04 W8-2: 손 기대 행 ∪ Doc/verify/<ID>/auto_expect 자동 행(손 행 우선)
+    _EXP = lambda n: _ER.load(n, mid, with_auto=os.environ.get('VERIFY_AUTO', '1') != '0')  # 자동 행 = 기본 켜짐(2026-11-05 사용자 지시) · VERIFY_AUTO=0 이면 끔
+    _ce = os.path.join(ROOT, 'Doc', 'verify', 'cond_equiv_expect.csv')
+    if True:  # 같은 대상의 이름·ID 조건(EG002) · 손 행 ∪ 자동 행(W8-2)
+        if True:
+            for _x in _EXP(os.path.basename(_ce)):
+                if _x['menu_id'] == mid:
+                    add('RULE_SCREEN', 'A1', f"{mid} 이름·ID 조건 {_x['label']}", condition=f"문서 {_x['source']} 이름과 ID 로 각각 조회", area='화면', expected='두 조회 건수 같음', method='E2E', note='전용')
+    _st = os.path.join(ROOT, 'Doc', 'verify', 'sum_toggle_expect.csv')
+    if True:  # 문서가 정한 Sum 체크박스(EG016) · 손 행 ∪ 자동 행(W8-2)
+        if True:
+            for _x in _EXP(os.path.basename(_st)):
+                if _x['menu_id'] == mid:
+                    add('RULE_SCREEN', 'A3', f"{mid} 체크박스 {_x['label']}", condition=f"문서 {_x['source']}", area='화면', expected={'toggle': '체크 시 합계 칸 표시·해제 시 숨김(재조회 없음)', 'immediate': '체크 즉시 조회 · 서로 배타'}.get(_x['mode'], '체크박스 없음'), method='E2E', note='전용')
+    _nf = os.path.join(ROOT, 'Doc', 'verify', 'num_format_expect.csv')
+    if True:  # 문서가 정한 숫자 표시 형식(EG351) · 손 행 ∪ 자동 행(W8-2)
+        if True:
+            for _x in _EXP(os.path.basename(_nf)):
+                if _x['menu_id'] == mid:
+                    add('RULE_SCREEN', 'H8', f"{mid} 숫자 형식 {_x['desc']}", condition=f"문서 {_x['source']} 표시 문구", area='그리드', expected=_x['desc'], method='E2E', note='전용')
+    _tx = os.path.join(ROOT, 'Doc', 'verify', 'text_expect.csv')
+    if True:  # 문서가 정한 표시 문구(EG329·EG331) · 손 행 ∪ 자동 행(W8-2)
+        if True:
+            for _x in _EXP(os.path.basename(_tx)):
+                if _x['menu_id'] == mid:
+                    add('RULE_SCREEN', 'H5', f"{mid} 표시 문구 {_x['name']}", condition=f"문서 {_x['source']} {_x['where']}", area='그리드', expected=_x['text'], method='E2E', note='전용')
+    _sn = os.path.join(ROOT, 'Doc', 'verify', 'scenario_expect.csv')
+    if True:  # 문서 단건 시나리오(EG094·EG120·EG150·EG155) · 손 행 ∪ 자동 행(W8-2)
+        if True:
+            for _x in _EXP(os.path.basename(_sn)):
+                if _x['menu_id'] == mid:
+                    add('RULE_SCREEN', _x['rule'], f"{mid} 시나리오 {_x['name']}", condition=f"문서 {_x['source']} {_x['steps']}", area='화면', expected=f"문구 {_x['msg_re'] or '없음'}{' · 저장 요청 0' if _x['no_save'] else ''}{' · 편집기 안 열림' if _x['no_editor'] else ''}", method='E2E', note='전용')
+    _pc = os.path.join(ROOT, 'Doc', 'verify', 'period_color_expect.csv')
+    if True:  # 문서가 화면별로 정한 실적 구간 색(EG310) · 손 행 ∪ 자동 행(W8-2)
+        if True:
+            for _x in _EXP(os.path.basename(_pc)):
+                if _x['menu_id'] == mid:
+                    add('RULE_SCREEN', 'H2', f'{mid} 실적 구간 색', condition=f"문서 {_x['source']} 기간 칸 색", area='그리드', expected={'gray_actual': '지난 칸 회색·앞으로 칸 회색 아님', 'all_white': '전 구간 회색 0', 'actual_color': '지난 칸 머리글·셀이 앞으로 칸과 구분'}.get(_x['mode'], _x['mode']), method='E2E', note='전용')
+    _zd = os.path.join(ROOT, 'Doc', 'verify', 'zero_display_expect.csv')
+    if True:  # 문서가 화면별로 정한 0·빈 값 표시(EG348) · 손 행 ∪ 자동 행(W8-2)
+        if True:
+            for _x in _EXP(os.path.basename(_zd)):
+                if _x['menu_id'] == mid:
+                    add('RULE_SCREEN', 'H8', f'{mid} 0 표시 규칙', condition=f"문서 {_x['source']} 값 0·빈 값 표시", area='그리드', expected='0 표시' if _x['zero_shows'] == '0' else '빈칸 표시', method='E2E', note='전용')
+    _du = os.path.join(ROOT, 'Doc', 'verify', 'doc_ui_expect.csv')
+    if True:  # 문서가 조건별로 정한 버튼·컬럼 노출(EG409·EG026) · 손 행 ∪ 자동 행(W8-2)
+        if True:
+            for _x in _EXP(os.path.basename(_du)):
+                if _x['menu_id'] == mid:
+                    add('RULE_SCREEN', 'K4' if _x['kind'].startswith('btn') else 'A5', f"{mid} 문서 노출 {_x['kind']} {_x['name']} [{_x['cond']}]", condition=f"문서 {_x['source']} · {_x['cond']}", area='화면', expected=f"{_x['name']} {_x['kind']}", method='E2E', note='전용')
+    _rb = os.path.join(ROOT, 'Doc', 'verify', 'removed_buttons.csv')
+    if True:  # 문서가 제거를 정한 버튼 — 노출되면 FAIL(EG371·EG400) · 손 행 ∪ 자동 행(W8-2)
+        if True:
+            for _x in _EXP(os.path.basename(_rb)):
+                if _x['menu_id'] == mid:
+                    add('RULE_SCREEN', 'K4', f"{mid} 제거 버튼 {_x['button']}", condition=f"문서 {_x['source']} 제거 결정", area='버튼', expected='노출 0', method='E2E', note='전용')
+    add('RULE_SCREEN', 'G6', f'{mid} 조회조건 초기값', condition='화면 진입 직후', area='조회조건', expected='Division 빈 칸 아님 · Year 현재 연도', method='E2E', note='전용')
+    add('RULE_SCREEN', 'G6', f'{mid} Division 변경 뒤 Version', condition='Division 변경 직후', area='조회조건', expected='Version 재구성 · 빈값 아님', method='E2E', note='전용')
+    add('RULE_SCREEN', 'D4', f'{mid} Insert 행 Division', condition='Insert 뒤 · 조회조건 Division 변경', area='그리드', expected='신규 행 Div = 조건 Div · 변경 뒤 미저장 행 0', method='E2E', note='전용')
+    add('RULE_SCREEN', 'K1', f'{mid} 동적 칸 정렬·필터', condition='동적 Bucket 칸 F3·F4·Copy', area='그리드', expected='정렬·필터 아이콘·Copy 동작', method='E2E', note='전용')
+    add('RULE_SCREEN', 'L1', f'{mid} 방향키 누적 지연', condition='방향키 반복 이동', area='그리드', expected='응답 저하 없음', method='E2E', note='전용')
+    add('RULE_SCREEN', 'E2', f'{mid} 기간 칸 글자 입력', condition='기간 칸에 글자 입력 후 조회', area='조회조건', expected='글자 거부 또는 형식 안내', method='E2E', note='전용')
+    add('RULE_SCREEN', 'E2', f'{mid} 기간 역전 조회', condition='From 을 To 보다 뒤로 두고 조회', area='조회조건', expected='안내 · 조회 요청 없음', method='E2E', note='전용')
+    add('RULE_SCREEN', 'F4', f'{mid} Division별 조회 오류', condition='Division 값마다 조회', area='그리드', expected='HTTP 오류·ORA 0', method='E2E', note='전용')
+    add('RULE_SCREEN', 'A2', f'{mid} 콤보 칸 이름 표시', condition='조회 결과 콤보 칸', area='그리드', expected='코드 대신 이름 표시', method='E2E', note='전용')
+    add('RULE_SCREEN', 'M2', f'{mid} 전용 버튼 확인창', condition='화면 전용 버튼 클릭(쓰기 요청 차단)', area='버튼', expected='확인 없이 쓰기 요청 안 나감', method='E2E', note='전용')
+    add('RULE_SCREEN', 'D1', f'{mid} 편집 모드 구분', condition='조회 직후 첫 기존 행', area='그리드', expected='Save 없으면 편집 불가 · Edit 버튼 없음', method='E2E', note='전용')
+    add('RULE_SCREEN', 'F3', f'{mid} 붙여넣기 후보 외 값', condition='콤보 칸에 후보 밖 값 붙여넣기', area='그리드', expected='후보 밖 값 거부', method='E2E', note='전용')
+    add('RULE_SCREEN', 'N1', f'{mid} 센티널 표시', condition='조회 결과 칸', area='그리드', expected="빈 값 센티널 '/' 화면 비노출", method='E2E', note='전용')
+    add('RULE_SCREEN', 'H8', f'{mid} 총 건수 천단위', condition='조회 결과 건수 문구', area='그리드', expected='총 건수 천단위 구분', method='E2E', note='전용')
+    add('RULE_SCREEN', 'A5', f'{mid} 컬럼 순서', condition='조회 후 그리드 컬럼 순서', area='그리드', expected='메인 그리드 컬럼 표시 순서 = AS-IS', method='E2E', note='전용')
+    add('RULE_SCREEN', 'J4', f'{mid} 메뉴 오픈', condition='메뉴 진입', area='화면', expected='404·요청 실패 0', method='E2E', note='전용')
+    add('RULE_SCREEN', 'J4', f'{mid} 탭 이름', condition='메뉴 진입 뒤 상단 탭', area='화면', expected='탭 이름 = 메뉴 등록 이름', method='E2E', note='전용')
+    add('RULE_SCREEN', 'G4', f'{mid} 돋보기 위치', condition='조회조건 돋보기 버튼', area='조회조건', expected='돋보기 버튼이 입력칸 안쪽', method='E2E', note='전용')
+    add('RULE_SCREEN', 'G2', f'{mid} 복수 선택 조회', condition='다중선택 조건에서 값 2개 선택', area='조회조건', expected='결과가 고른 값들만 · 둘 다 포함', method='E2E', note='전용')
+    add('RULE_SCREEN', 'B6', f'{mid} 단일 선택 조회', condition='단일선택 콤보 값 선택', area='조회조건', expected='결과가 고른 값만', method='E2E', note='전용')
+    add('RULE_SCREEN', 'G2', f'{mid} 전체 재선택 왕복', condition='전체 → 값 선택 → 다시 전체', area='조회조건', expected='처음 행 수로 복귀', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H7', f'{mid} Excel 컬럼 구성', condition='조회 후 Excel 다운로드 파일', area='Excel', expected='머리글 = 화면 표시 컬럼', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H7', f'{mid} Excel 코드 표시', condition='조회 후 Excel 다운로드 파일', area='Excel', expected='콤보 칸 = Name', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H7', f'{mid} Excel 틀 고정', condition='조회 후 Excel 다운로드 파일', area='Excel', expected='머리글 틀 고정', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H7', f'{mid} Excel 숫자 서식', condition='조회 후 Excel 다운로드 파일', area='Excel', expected='숫자 칸 서식 적용', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H4', f'{mid} 조회조건 겹침 1920', condition='폭 1920 조회조건 칸 위치', area='화면', expected='칸 겹침·화면 밖 넘침 없음', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H4', f'{mid} 조회조건 겹침 1366', condition='폭 1366 조회조건 칸 위치', area='화면', expected='칸 겹침·화면 밖 넘침 없음', method='E2E', note='전용')
+    _ge = P('Doc', 'asisfacts', 'screens', mid, 'grid_effective.csv')
+    if os.path.exists(_ge):
+        _gr = read_csv(_ge)
+        for _d in [k for k in (_gr[0].keys() if _gr else []) if re.fullmatch(r'[0-9]{2}', k or '')]:
+            for _sh in sorted({x.get('sheet') or '' for x in _gr if x.get('source') == 'META' or 'META' in (x.get('sheet_rule') or '')}):
+                add('RULE_SCREEN', 'A5', f'{mid} Division 컬럼 {_d}/{_sh}', condition=f'Div {_d} 선택 후 {_sh} 그리드 컬럼', area='그리드', expected='AS-IS Division 별 기본·필수 표시 · 숨김 비표시(선택 컬럼 제외)', method='E2E', note='전용')
+    # Excel 양식·업로드(EG420·EG421 · 2026-11-01)
+    add('RULE_SCREEN', 'M1', f'{mid} Excel 양식', condition='Excel Form 버튼 클릭', area='Excel', expected='팝업 없이 양식 파일 · 머리글 있음', method='E2E', note='전용')
+    add('RULE_SCREEN', 'E3', f'{mid} Excel 필수 칸 빈 업로드', condition='양식의 * 필수 칸을 비운 파일 업로드', area='Excel', expected='필수 안내 · 저장 안 됨', method='E2E', note='전용')
+    add('RULE_SCREEN', 'G5', f'{mid} Excel 양식 버킷', condition='조회 없이 양식 다운로드', area='Excel', expected='입력 버킷 = 메인 기간', method='E2E', note='전용')
+    add('RULE_SCREEN', 'H7', f'{mid} Excel 양식 2단 머리글', condition='양식 다운로드', area='Excel', expected='문서 지정 화면은 2단(병합) 머리글', method='E2E', note='전용')
+    add('RULE_SCREEN', 'M1', f'{mid} Excel 2단계 차단', condition='필수 칸 빈 파일 업로드 뒤 OK', area='Excel', expected='저장 요청 0 · 오류 행 차단 문구', method='E2E', note='전용')
+    add('RULE_SCREEN', 'M1', f'{mid} Excel 잘못된 업로드', condition='머리글 틀린 파일 업로드', area='Excel', expected='저장 요청 없이 안내 문구', method='E2E', note='전용')
+    # 필터 유지 재조회(EG383 · 2026-11-01)
+    add('RULE_SCREEN', 'K1', f'{mid} 필터 유지 재조회', condition='컬럼 필터 적용 → 조회 → 해제', area='그리드', expected='재조회 뒤 필터 유지 · 건수 표시 = 실제 행 · 해제하면 복원', method='E2E', note='전용')
+    # 합계 행 값(EG018 · 2026-11-01)
+    add('RULE_SCREEN', 'A3', f'{mid} 합계 값', condition='조회 후 합계 칸 ↔ 구성 행 합', area='그리드', expected='합계 칸 = 구성 행 합', method='E2E', note='전용')
+    # 기간 동적 컬럼(EG043 · 2026-11-01) — AS-IS 런타임 기간 칸이 있는 화면만
+    if read_csv(P('Doc', 'asisfacts', 'screens', mid, 'dyn_columns.csv')):  # 파일만 있고 행이 없는 화면(SCP0028)은 대상 아님 — '칸 0개' 허위 판정(2026-11-02)
+        add('RULE_SCREEN', 'A8', f'{mid} 기간 동적 컬럼', condition='조회 기간과 만들어진 기간 칸 대조', area='그리드', expected='기간 전 구간 칸 생성(데이터 유무 무관) · 중복·역순 없음', method='E2E', note='전용')
+    # 저장 세부 프로브(엔진 갭 EG186·EG181·EG221 · 2026-10-31)
+    if has_save_proc:
+        add('RULE_SCREEN', 'F1', f'{mid} 컬럼별 저장 왕복', condition='편집 가능 컬럼마다 값 변경→저장→재조회→원복', area='저장', expected='편집 가능 컬럼 전부 저장 값이 재조회에 그대로 반영 · 원복 확인', method='E2E+DB', note='전용')
+        add('RULE_SCREEN', 'F6', f'{mid} 빈값 저장', condition='값 있는 숫자 셀을 비워 저장', area='저장', expected='SQL 오류 없음 · 재조회 공란/0 · 같은 키 중복 행 0', method='E2E+DB', note='전용')
+        # 저장 경로(EG188·EG303·EG308·EG194·EG200 · 2026-10-31) — 가짜 응답으로 재므로 DB 무변경
+        add('RULE_SCREEN', 'F1', f'{mid} 저장 실패 처리', condition='수정 후 Save · 서버 실패 응답 강제', area='저장', expected='실패 문구 표시 · 성공 문구 금지', method='E2E', note='전용')
+        add('RULE_SCREEN', 'H10', f'{mid} 저장 취소 요청 없음', condition='수정 후 Save · 확인창 취소', area='저장', expected='취소하면 저장 요청 0 · 확인창 없으면 AS-IS 저장 경로 확인 코드와 대조', method='E2E', note='전용')
+        add('RULE_SCREEN', 'H11', f'{mid} 저장 중 로딩', condition='수정 후 Save · 응답 1.5초 지연', area='저장', expected='지연 동안 로딩 표시 · 응답 뒤 소멸', method='E2E', note='전용')
+        add('RULE_SCREEN', 'F2', f'{mid} 붙여넣기 저장 인식', condition='다른 행 값을 Ctrl+C·Ctrl+V 후 Save', area='저장', expected='붙여넣은 값이 변경으로 인식돼 저장 요청에 포함', method='E2E', note='전용')
+        # 신규행 검증(EG158 컬럼별 필수 공란·EG162 키 중복 · 2026-10-31) — 필수 = 메타 INPUT_TP_CD M·IM(단일 원천) · 가짜 응답으로 재므로 DB 무변경
+        _req = {}
+        for _c in read_csv(P('Doc', 'tobefacts', 'db', 'sheet_columns.csv')):
+            if _c.get('program_id', '').upper() == mid and _c.get('valid_yn', 'Y') != 'N' and (_c.get('input_tp_cd') or '') in ('M', 'IM'):
+                _req.setdefault((_c.get('sheet_name') or '', _c.get('column_name') or ''), _c.get('column_label_name') or '')
+        for (_sh, _col), _lb in sorted(_req.items()):
+            add('RULE_SCREEN', 'E3', f'{mid} 필수 공란 {_sh}.{_col}', condition=f'신규 행에서 {_col} 만 비우고 Save', area='저장', expected=f'저장 요청 없음 · 안내 문구 표시({_lb})', method='E2E', note='전용')
+        add('RULE_SCREEN', 'E4', f'{mid} 키 중복 신규행', condition='기존 행과 같은 값의 신규 행 Save', area='저장', expected='저장 전 또는 서버 중복 차단 · 안내 문구 표시', method='E2E', note='전용')
+        # 이력·2회 저장(EG235·EG240 · 2026-11-01) — 컬럼별 왕복의 저장 전·후·원복 후 DB 스냅샷
+        add('RULE_SCREEN', 'F7', f'{mid} 2회 저장 행 수', condition='같은 행 값 변경 저장 + 원복 저장', area='저장', expected='두 번째 저장도 같은 행 수정 · 업무 표 행 수 불변', method='E2E+DB', note='전용')
+        add('RULE_SCREEN', 'F8', f'{mid} 이력 행 값', condition='수정 저장 1회의 이력 행', area='저장', expected='이력 행 공통 컬럼 = 원장 변경 전 또는 변경 후 값', method='E2E+DB', note='전용')
+        # 입력 검증 저장(EG145·EG147·EG152·EG171·EG173·EG177 · 2026-11-01) — AS-IS cell_rules 근거 컬럼만 · 가짜 응답으로 재므로 DB 무변경
+        _cr_p = P('Doc', 'asisfacts', 'screens', mid, 'cell_rules.csv')
+        if os.path.exists(_cr_p):
+            _seen = set()
+            for _c in read_csv(_cr_p):
+                _col, _ty = _c.get('column') or '', (_c.get('cell_type') or '').upper()
+                if not _col or _col in _seen:
+                    continue
+                _seen.add(_col); _ref = _c.get('ref') or ''
+                if _ty in ('NUMBER', 'FPNUMBER', 'NUM'):
+                    if str(_c.get('min') or '').strip() not in ('',) and float(str(_c.get('min'))) >= 0:
+                        add('RULE_SCREEN', 'E1', f'{mid} 입력검증 음수 {_col}', condition=f'{_col} 에 음수 입력 후 Save', area='저장', expected=f"AS-IS 최소 {_c.get('min')} — 음수가 저장 요청에 실리면 안 됨", asis_ref=_ref, method='E2E', note='전용')
+                    if str(_c.get('decimals') or '').strip() not in ('', '0'):
+                        add('RULE_SCREEN', 'E1', f'{mid} 입력검증 소수 {_col}', condition=f'{_col} 에 소수 입력 후 Save', area='저장', expected=f"AS-IS 소수 {_c.get('decimals')}자리 — 소수값이 잘리지 않고 저장 요청에 실림", asis_ref=_ref, method='E2E', note='전용')
+                elif _ty in ('DATE', 'DATETIME'):
+                    add('RULE_SCREEN', 'E2', f'{mid} 입력검증 날짜 {_col}', condition=f'{_col} 에 없는 날짜 입력 후 Save', area='저장', expected='없는 날짜가 저장 요청에 실리면 안 됨', asis_ref=_ref, method='E2E', note='전용')
+                elif _ty == 'COMBO':
+                    add('RULE_SCREEN', 'E5', f'{mid} 입력검증 콤보키인 {_col}', condition=f'{_col} 에 후보 밖 값 키인 후 Save', area='저장', expected='후보 밖 값이 저장 요청에 실리면 안 됨', asis_ref=_ref, method='E2E', note='전용')
+                    add('RULE_SCREEN', 'E5', f'{mid} 입력검증 콤보붙여넣기 {_col}', condition=f'{_col} 에 후보 밖 값 붙여넣기 후 Save', area='저장', expected='후보 밖 값이 저장 요청에 실리면 안 됨', asis_ref=_ref, method='E2E', note='전용')
+        # 경계값·응답 시간(EG210·EG415 · 2026-11-01)
+        add('RULE_SCREEN', 'F4', f'{mid} 경계값 저장', condition='AS-IS 최대값으로 저장→재조회→원복', area='저장', expected='저장 오류 없음 · 재조회 값 일치', method='E2E+DB', note='전용')
+        add('RULE_SCREEN', 'L1', f'{mid} 저장 응답 시간', condition='컬럼별 왕복의 저장 요청 소요', area='저장', expected='저장 응답 3초 이내(문서 DM-75)', method='E2E', note='전용')
+        add('RULE_SCREEN', 'F1', f'{mid} 2행 동시 저장', condition='두 행의 같은 컬럼 수정 후 Save 1회', area='저장', expected='저장 1회로 두 행 모두 재조회에 반영 · 칸 밀림 없음 · 원복 확인', method='E2E+DB', note='전용')
+        add('RULE_SCREEN', 'F6', f'{mid} 0 값 저장', condition='값 있는 숫자 셀에 0 저장', area='저장', expected='SQL 오류 없음 · 재조회 값 0(또는 공란 표시) · 같은 키 중복 행 0', method='E2E+DB', note='전용')
+    # 1-c) 2026-10-30 WP9 — 종전 impl=N 규칙의 원장 행(검사기 신설): H11 로딩 표시 · C5 그리드 간 연동 · J3 권한별 편집 · H12 고정 컬럼 · G10 팝업 Enter · M2 특수 버튼 · F10 저장 원자성
+    #   (D2 = D1 동적 컬럼 COND 로 · B5 = B4 필터 원천 대조로 · A9 = 동적 헤더 검사 — 각각 기존 행이 맡는다)
+    add('RULE_SCREEN', 'H11', f'{mid} 화면', area='화면', expected='조회·저장 요청 중 로딩 표시(progressbar/스피너)가 보이고 완료 후 사라짐 · 서버 호출 중 무반응 0', method='E2E')
+    plan_p = P('Doc', 'e2e', 'specs', f'{mid}.plan.json')
+    try:
+        plan = json.load(open(plan_p, encoding='utf-8')) if os.path.exists(plan_p) else {}
+    except Exception:
+        plan = {}
+    if len(plan.get('mainSheets') or []) >= 2:
+        add('RULE_SCREEN', 'C5', f'{mid} 화면', area='화면', expected='상단 행 선택/더블클릭 → 하단 조회 요청 본문에 상단 행의 키 값이 실림(마스터-디테일 연동)', method='E2E')
+    fixed_cols = [c['column_name'] for c in read_csv(P('Doc', 'tobefacts', 'db', 'sheet_columns.csv')) if c.get('program_id', '').upper() == mid and (c.get('fixed_flag') or '').strip() == 'Y' and c.get('valid_yn', 'Y') != 'N']
+    add('RULE_SCREEN', 'H12', f'{mid} 화면', area='그리드', expected=(f"좌측 고정 컬럼 = SHEET_COLUMNS FIXED_FLAG=Y ({len(fixed_cols)}개: {', '.join(fixed_cols[:8])})" if fixed_cols else '좌측 고정 컬럼 = SHEET_COLUMNS FIXED_FLAG=Y 0개(고정 없음)'),
+        asis_ref=f"TO-BE SHEET_COLUMNS FIXED_FLAG · {mid}", method='META+E2E', note=json.dumps({'fixed': fixed_cols}, ensure_ascii=False))
+    add('RULE_SCREEN', 'J3', f'{mid} 화면', area='화면', expected='AS-IS 잠금 규칙에 GROUP 조건이 있는 컬럼 — 다른 권한 그룹 계정으로 로그인해도 그 계정의 AS-IS 기대와 편집 가능 여부가 같음', method='E2E', note='D1 RULES 에 GROUP 이 있는 컬럼만 · 계정 풀(plan.accounts)에서 admin 아닌 메뉴 접근 가능 계정 1개')
+    for f in plan.get('fields') or []:
+        if f.get('popup') and (f.get('kind') in ('text', 'popup', 'single') or re.search(r'text|popup', str(f.get('component') or ''), re.I)) and not f.get('excluded'):
+            add('SEARCH', 'G10', f"조회조건 {f.get('label') or f.get('asis')}", area='조회조건', expected='입력칸에서 Enter(한글 조합 중 제외) → 연결 팝업 열림(아이콘 클릭과 같음)', asis_ref=f"AS-IS {f.get('asis')} 팝업 연결 입력칸 · plan.json fields", method='E2E', note=json.dumps({'labels': f.get('labels') or [f.get('label')]}, ensure_ascii=False))
+    for b in plan.get('buttons') or []:
+        if b.get('kind') == 'subtitle-custom' and b.get('tobe'):
+            add('RULE_SCREEN', 'M2', f"{mid} 버튼 {b.get('label') or b.get('tobe')}", area='버튼', expected='클릭 시 요청(call-proc)·팝업·다운로드·메시지 중 하나가 5초 안에 발생 — 무반응 0', asis_ref=f"AS-IS {b.get('asis')} · TO-BE {b.get('tobe')}", method='E2E', note=json.dumps({'tobe': b.get('tobe'), 'label': b.get('label')}, ensure_ascii=False))
+    # F9 주/월 입력 수량의 일자 배분 — Bucket 조회조건(Weekly/Daily 전환)과 저장이 있고 동적 컬럼 패밀리가 있는 화면만(AS-IS DefaultBucketDay 룩업 · GAP-7 · GAPPI-4)
+    has_bucket = any(re.search(r'bucket', str(f.get('label') or '') + ' ' + ' '.join(f.get('labels') or []), re.I) for f in (plan.get('fields') or []))
+    if has_bucket and plan.get('hasSave') and os.path.exists(os.path.join(sdir, 'dyn_columns.csv')):
+        add('RULE_SCREEN', 'F1', f'{mid} 월 Bucket 합계', area='저장', condition='Bucket=Monthly 입력 → 저장 → Bucket=Daily 재조회', expected='그 달 일자 합계 = 입력값(분배 위치는 AS-IS 사실 없어 미판정)', method='E2E+DB', note='전용')
+        add('RULE_SCREEN', 'F9', f'{mid} 화면', area='저장', condition='Bucket=Weekly 입력 → 저장 → Bucket=Daily 재조회',
+            expected='주 Bucket 에 입력한 수량이 사업부 기본 요일(SCM_ADM_LOOKUP_MASTER_DETAIL DEFAULT_BUCKET_DAY · 그 요일이 주에 없으면 마지막 날) 1일에 전량 반영되고 주 합계 = 입력값',
+            asis_ref='AS-IS UP_FX_GetCommonDataList DefaultBucketDay(:3734) · 화면 FindData sDefaultDay', method='E2E+DB')
+    for pr in read_csv(P('Doc', 'tobefacts', 'db', 'proc_meta.csv')):
+        if pr.get('menu_id', '').upper() == mid and pr.get('proc') and re.search(r'SAVE|INS|UPD|DEL', pr.get('btn') or '', re.I):
+            add('SP', 'F10', pr['proc'], condition=f"{pr.get('sheet')}/{pr.get('btn')}", area='저장', expected='저장 PROC 와 1단계 하위 호출에 COMMIT·TRUNCATE·DDL·DBMS_STATS·자율 트랜잭션 0건(전체 1 거래 — 다건 저장 중 오류 시 부분 저장 0)', asis_ref=f"PROC_M {pr.get('sheet')}/{pr.get('btn')} → {pr['proc']}", method='STATIC+DB')
+
     # 1-b) 결과 정렬(A6) — AS-IS 가 정렬을 SQL(SP ORDER BY) 로 하는지 그리드/코드로 하는지(facts_sortrules.py → sort_rules.csv) · 조회 SP 마다 분기별 1행 (2026-10-26 사용자 지시)
     for s in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'sort_rules.csv')):
         if s.get('kind') == 'SQL':
+            if sp_base(s.get('sp')) in dsp: continue
             if re.search(r'(?i)_(SAVE|SET|INS|UPD|DEL|CHK|CHECK)', s.get('sp', '')) or (s.get('depth') or '0') != '0':
                 continue  # 저장류 SP · 서브쿼리(TOP) 정렬은 결과 순서 규칙이 아니다
             if s.get('keys'):
@@ -103,7 +340,7 @@ def main():
             add('ASIS', 'A6', s['raw'][:60], condition='', area='그리드', expected=f"AS-IS 화면 코드 정렬({s['kind']}) 재현 — 키 [{s['keys']}]", asis_ref=f"{s['file']}:{s['line']}", method='E2E')
 
     # 1-c) 컬럼별 결과 값(A7) — golden 조회 케이스마다 1행 (2026-10-27 · tools/DbConn/golden.py 가 <sp>.cols.csv 로 컬럼 채움·같은 키 불일치 판정)
-    for g in read_csv(P('Doc', 'golden', 'golden_cases.csv')):
+    for g in gold:
         if g.get('screen') == mid and g.get('kind') == 'GET':
             add('SP', 'A7', g['asis_sp'], condition='컬럼별 결과 값', area='조회',
                 expected='AS-IS 에 값이 있는 컬럼이 TO-BE 에서 전 행 공란이 아님(공란 컬럼 0) · 같은 키 행의 컬럼 값 일치',
@@ -138,6 +375,12 @@ def main():
             for rule_id in rules_:
                 if rule_id == 'G4':
                     continue  # 순서·표시 기준표가 없으므로 G4 는 만들지 않는다(H5 라벨 비교만)
+                if rule_id in ('G8', 'G9') and not re.match(r'Usr(TextBox|MultiLineEditor)', t):
+                    continue  # 대소문자·콤마 다중값은 텍스트 입력 조건만(체크박스·날짜·라디오 제외 · 2026-10-30 DMF0003 chkColor 등 NA 잡음)
+                if rule_id == 'G5':
+                    stem = re.sub(r'^(txt|usr|cbo|clb|chk|dtp)', '', c['name'], flags=re.I).lower()
+                    if not any(x['kind'] == 'POPUP' and stem and stem in ((x.get('raw') or '') + (x.get('guard') or '') + (x.get('method') or '')).lower() for x in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'actions.csv'))):
+                        continue  # 팝업 인자(G5)는 팝업을 여는 조건에만 — AS-IS POPUP 문장이 그 컨트롤을 언급해야 한다(2026-10-30 SCP0100 Period·Cell Qty·A/S 잡음)
                 add('SEARCH', rule_id, f'조회조건 {name}', expected=rules.get(rule_id, {}).get('how', ''), asis_ref=ref, area='조회조건')
             if SEARCH_CASCADE_PARENT.match(name or '') or re.search(r'division', c['name'], re.I):
                 add('SEARCH', 'C1', f'조회조건 {name}', expected='값 변경 시 하위 조건 후보 재구성·선택값 ALL 초기화(AS-IS SelectedIndexChanged)', asis_ref=ref, area='조회조건')
@@ -148,6 +391,13 @@ def main():
         ref = f"search_cond.csv {r.get('src_file', '')}#{r.get('src_row', '')} · AS-IS '{r.get('asis_name', '')}'({r.get('asis_type1', '')}/{r.get('asis_type2', '')}) {r.get('asis_note', '')}"
         exp_base = f"순서 {r.get('tobe_order')} · {r.get('tobe_type1')}/{r.get('tobe_type2')} · 기본 {r.get('tobe_note') or r.get('asis_note')}"
         for rule_id in (SEARCH_COMBO_RULES if typ.startswith('선택') else SEARCH_TEXT_RULES):
+            if rule_id in ('G8', 'G9') and not typ.startswith('텍스트'):
+                continue  # 텍스트 조건만(기준표 유형1 '텍스트') — 버튼·체크박스·라디오·달력 제외
+            t2 = (r.get('tobe_type2') or r.get('asis_type2') or '').strip()
+            if rule_id == 'G5' and not ('팝업' in ((r.get('asis_func') or '') + (r.get('tobe_func') or '')) or (r.get('tobe_popup_code') or r.get('asis_popup_code') or '').strip()):
+                continue  # 팝업 인자(G5)는 기준표가 팝업으로 정의한 조회조건에만(2026-10-30 SCP0100 Period·Cell Qty·A/S 잡음)
+            if rule_id == 'G9' and t2 and '다중' not in t2:
+                continue  # 콤마 다중값은 기준표 유형2 '다중' 조건만(2026-10-30 SCP0100 Cell Group '텍스트/단일' — AS-IS 도 콤마 다중 미지원, 사용자 판정 오류) · 유형2 미기재면 CR-040 기본 적용
             add('SEARCH', rule_id, f'조회조건 {name}', expected=f"{rules.get(rule_id, {}).get('how', '')} [{exp_base}]", asis_ref=ref, area='조회조건')
         if SEARCH_CASCADE_PARENT.match(name or '') or (r.get('div_reset') or '').upper() in ('Y', 'O'):
             add('SEARCH', 'C1', f'조회조건 {name}', expected='값 변경 시 하위 조건 후보 재구성·선택값 ALL 초기화(AS-IS SelectedIndexChanged)', asis_ref=ref, area='조회조건')
@@ -156,10 +406,35 @@ def main():
 
     # 3) 그리드 컬럼 — 기대값은 AS-IS 근거(facts_lockrules.py edit_expect.csv · facts_cellrules.py cell_rules.csv). TO-BE 메타는 '대상 목록'일 뿐 정답이 아니다
     sdir = P('Doc', 'asisfacts', 'screens', asis_id)
-    ee = {r['column']: r for r in read_csv(os.path.join(sdir, 'edit_expect.csv'))}
+    ee_rows = read_csv(os.path.join(sdir, 'edit_expect.csv'))
+    ee = {r['column']: r for r in ee_rows if not (r.get('control') or '')}
+    ee_ctl = {}
+    for r in ee_rows:
+        if r.get('control'):
+            ee_ctl.setdefault(r['column'], {})[r['control']] = r
+
+    def ee_for(col, sheet):
+        """시트별 편집 기대 — 잠금 문장의 스프레드 컨트롤(siMain·siExcept…) 토큰과 TO-BE 시트명을 맞춘다
+        (2026-10-29: SCP0020 siExcept 의 LINE_ID 신규행 잠금이 Plant/Packer/Tact Time 시트 D1 에 적용돼 허위 FAIL). 컨트롤 분리 정보가 없으면 통합 기대"""
+        by = ee_ctl.get(col, {})
+        # 규칙이 해석된 시트(edit_expect.sheet)가 있고 TO-BE 시트와 다르면 기대를 쓰지 않는다 — 같은 컬럼명(QTY)이 다른 시트에도 있을 때 교차 오염(2026-10-31 SCP0041)
+        base = ee.get(col, {})
+        es = re.sub(r'[^a-z0-9]', '', (base.get('sheet') or '').lower()) if base else ''
+        if base and es and sheet and es != re.sub(r'[^a-z0-9]', '', sheet.lower()):
+            return {}
+        if not by:
+            return base
+        sn = re.sub(r'[^a-z0-9]', '', (sheet or '').lower())
+        toks = {c: re.sub(r'^(si|spd|fp|sp)', '', c.lower()) for c in by}
+        hit = [c for c, t in toks.items() if t and t != 'main' and t in sn]
+        if hit:
+            return by[hit[0]]
+        main = [c for c, t in toks.items() if t == 'main'] or [c for c in by if c not in hit]
+        return by[main[0]] if main else ee.get(col, {})
     # 더블클릭 팝업으로만 입력하는 컬럼(AS-IS CellDoubleClick 의 'e.Column == GetColumnIndex(DefColumns.X)' 분기에서 팝업 호출) — 직접 편집 기대 아님
     popup_cols = {}
     for x in read_csv(os.path.join(sdir, 'actions.csv')):
+        if (x['class'], x['method']) in dead: continue
         if x['kind'] == 'POPUP' and 'DoubleClick' in x['method']:
             for c in re.findall(r'e\.Column\s*==\s*\w+\.GetColumnIndex\(\s*DefColumns\.([A-Z0-9_]+)', x['guard']):
                 popup_cols[c] = f"{os.path.basename(x['file'])}:{x['line']} {x['method']}"
@@ -177,7 +452,7 @@ def main():
         t = f"{sheet}.{col} ({c.get('column_label_name', '')})"
         ctl = c.get('cell_control_object_type_code', '')
         itp = c.get('input_tp_cd', '')
-        e = ee.get(col.upper(), {})
+        e = ee_for(col.upper(), sheet)
         rule = cr.get(col.upper(), {})
         tobe = f"TO-BE SHEET_COLUMNS {sheet}.{col} VISIBLE={c.get('visible_flag')} INPUT_TP_CD={itp or '-'} CELL={ctl or '-'}"
         if e.get('asis_visible') and e['asis_visible'] != c.get('visible_flag'):
@@ -185,15 +460,20 @@ def main():
         if c.get('visible_flag') != 'Y':
             continue
         for cond, k, kc in (('신규행', 'new_row', 'new_row_cond'), ('기존행', 'existing_row', 'existing_cond')):
+            if e and e[k] == 'NONE':
+                continue  # AS-IS 에 InsertButton 이 없는 화면 — 신규행 D1 행을 만들지 않는다(2026-10-31 SCP0041)
             if e and col.upper() in popup_cols and e[k] == 'Y':
                 add('COLUMN', 'D1', t, condition=cond, expected=f"팝업 입력(직접 편집 차단·더블클릭 팝업) — AS-IS {popup_cols[col.upper()]}",
                     asis_ref=f"{e.get('ref', '')} · {popup_cols[col.upper()]} · {tobe}", area='그리드')
+                # E7(2026-10-30 SSP45 공통요건 23): 팝업으로 고르는 셀에 직접 입력(key-in)이 열리면 잘못된 값은 되돌림/검증 메시지로 차단돼야 한다 — 직접 편집이 막혀 있으면 경로 없음(PASS)
+                add('COLUMN', 'E7', t, condition=cond, expected=f"팝업 입력 컬럼 Key-in 검증 — 직접 입력이 열리면 후보 밖 값은 되돌림 또는 검증 메시지(저장 차단) · 직접 입력 차단이면 대상 없음 — AS-IS {popup_cols[col.upper()]}",
+                    asis_ref=f"{e.get('ref', '')} · {popup_cols[col.upper()]} · {tobe}", area='그리드')
             elif e:
-                want = {'Y': '편집 가능', 'N': '잠금(편집 불가)', 'COND': '조건부',
-                        'UNKNOWN': '판정필요 — AS-IS 잠금 방식 미확정(변수 컬럼 잠금·Insert 방식 확인 필요)'}.get(e[k], e[k])
+                # 2026-10-30 v2: UNKNOWN = 잠금 해석 실패(검사기 한계) → '판정필요'(→NA) 가 아니라 note '[잠금 해석 실패]' → judge ERROR(W4 검사기 과제). 사유는 edit_expect *_cond
+                want = {'Y': '편집 가능', 'N': '잠금(편집 불가)', 'COND': '조건부', 'UNKNOWN': '잠금 해석 실패'}.get(e[k], e[k])
                 exp = f"{want}{(' — ' + e[kc]) if e.get(kc) else ''}{(' ※' + e['ambiguous']) if e.get('ambiguous') else ''}"
                 add('COLUMN', 'D1', t, condition=cond, expected=exp, asis_ref=f"{e.get('ref', '') or 'AS-IS 잠금 없음(편집 모드 기본 해제)'} · {tobe}", area='그리드',
-                    note='판정필요: 범위 경계 동률' if e.get('ambiguous') else '')
+                    note=('[잠금 해석 실패] ' + (e.get(kc) or 'AS-IS 잠금 문장 해석 불가')) if e[k] == 'UNKNOWN' else ('판정필요: 범위 경계 동률' if e.get('ambiguous') else ''))
             else:
                 add('COLUMN', 'D1', t, condition=cond, expected='AS-IS 편집 기대 없음(AS-IS 컬럼 아님 또는 facts_lockrules 미실행) — TO-BE 신설 컬럼이면 확정 규칙으로 판정', asis_ref=tobe, area='그리드', note='판정필요')
         if 'Combo' in ctl or rule.get('cell_type') == 'COMBO':
@@ -203,8 +483,11 @@ def main():
         if rule.get('cell_type') in ('COMBO', 'NUMBER', 'DATE', 'DATETIME', 'CHECK'):
             add('COLUMN', 'D5', t, expected=f"에디터 = AS-IS {rule['cell_type']}" + (f" (소수 {rule.get('decimals') or 0}자리)" if rule['cell_type'] == 'NUMBER' else ''),
                 asis_ref=f"{rule.get('ref')} · {tobe}", area='그리드')
+        # 특수 편집기(K5 · 2026-10-30 신설) — 표준 셀 타입(TEXT/COMBO/NUMBER/DATE/DATETIME/CHECK/FP 텍스트·날짜) 밖의 AS-IS 셀 타입은 입력·서식 동작을 직접 실측
+        if (rule.get('cell_type') or '') not in ('', 'TEXT', 'COMBO', 'NUMBER', 'DATE', 'DATETIME', 'CHECK', 'NUMBER_TEXT', 'FPTextBox', 'FPDateText'):
+            add('COLUMN', 'K5', t, expected=f"특수 편집기 AS-IS {rule['cell_type']} — 입력 값 보존·서식 동작 정상(에디터 열림·값 확정·재표시)", asis_ref=f"{rule.get('ref')} · {tobe}", area='그리드')
         if rule.get('cell_type') == 'NUMBER':
-            add('COLUMN', 'E1', t, expected=f"소수 {rule.get('decimals') or 0}자리 · 최소 {rule.get('min') or '-'} · 최대 {rule.get('max') or '-'} · 천단위 {rule.get('separator') or 'N'} — 규칙 밖 값 거부",
+            add('COLUMN', 'E1', t, expected=f"소수 {rule.get('decimals') or 0}자리{' · 정수만(소수·문자 거부)' if rule.get('fixed_point') == 'Y' else ''} · 최소 {rule.get('min') or '-'} · 최대 {rule.get('max') or '-'} · 천단위 {rule.get('separator') or 'N'} — 규칙 밖 값 거부",
                 asis_ref=f"{rule.get('ref')} · {tobe}", area='그리드')
             add('COLUMN', 'H8', t, expected=f"숫자 표시 = 천단위 {rule.get('separator') or 'N'} · 소수 {rule.get('decimals') or 0}자리", asis_ref=f"{rule.get('ref')} · {tobe}", area='그리드')
         elif re.search(r'Number|Num|Double|Int|Percent', ctl, re.I):
@@ -215,17 +498,57 @@ def main():
             dfmt = 'yyyy-MM-dd HH:mm:ss' if rule['cell_type'] == 'DATETIME' else 'yyyy-MM-dd'
             add('COLUMN', 'H8', t, expected=f"날짜 표시 = {dfmt}", asis_ref=f"{rule.get('ref')} · SpreadInfo.cs:4105-4135 · {tobe}", area='그리드')
         add('COLUMN', 'H2', t, expected='편집 가능=노랑 / 입력불가=흰색 (표준 3색)', asis_ref=tobe, area='그리드')
+        # H13 음수 글자색(2026-10-30 WP7) — AS-IS NumberCellType.NegativeRed=true(프레임워크 기본, cell_rules negative_red) ↔ TO-BE 그리드 formatter(paintNegativeText 류)
+        if rule.get('cell_type') == 'NUMBER' and rule.get('negative_red') == 'Y':
+            add('COLUMN', 'H13', t, expected='음수 값 셀 글자색 = 빨강(AS-IS NumberCellType.NegativeRed=true)', asis_ref=f"{rule.get('ref')} · {tobe}", area='그리드')
+
+    # 3-a) 런타임(동적) 컬럼 패밀리(2026-10-30 WP1 · 검사기 결함 T15) — SHEET_COLUMNS 메타에 없는 월/주 피벗 컬럼. facts_dyncols → dyn_columns.csv · 잠금 기대 = edit_expect '<DYNAMIC:…>' 행
+    #   target = "<시트>.<DYNAMIC:패밀리>" · note 에 binding 정규식(JSON) — _verify.spec 이 실행 시 대표 컬럼(값 있는 행·빈 행)을 골라 정적 컬럼과 같은 판정 함수로 측정
+    for dcol in read_csv(os.path.join(sdir, 'dyn_columns.csv')):
+        fam = dcol['family_id']; sheet = dcol.get('sheet') or (cols[0]['sheet_name'] if cols else '')
+        t = f"{sheet}.{fam} (동적 {dcol.get('loop_source', '')} 컬럼)"
+        dyn_note = json.dumps({'dyn': {'re': dcol.get('binding_regex', ''), 'family': fam, 'src': dcol.get('loop_source', '')}}, ensure_ascii=False)
+        tobe = f"TO-BE 런타임 피벗 컬럼(binding /{dcol.get('binding_regex', '')}/ · 메타 없음)"
+        ref0 = f"AS-IS {dcol.get('ref', '')} {dcol.get('api', '')}(루프 {dcol.get('loop_source', '')})"
+        e = ee_for(fam, sheet)
+        for cond, k, kc in (('신규행', 'new_row', 'new_row_cond'), ('기존행', 'existing_row', 'existing_cond')):
+            if e:
+                want = {'Y': '편집 가능', 'N': '잠금(편집 불가)', 'COND': '조건부', 'UNKNOWN': '잠금 해석 실패'}.get(e[k], e[k])
+                add('COLUMN', 'D1', t, condition=cond, expected=f"{want}{(' — ' + e[kc]) if e.get(kc) else ''}", asis_ref=f"{e.get('ref', '') or ref0} · {tobe}", area='그리드',
+                    note=dyn_note if e[k] != 'UNKNOWN' else dyn_note + ' [잠금 해석 실패] ' + (e.get(kc) or ''))
+            else:
+                add('COLUMN', 'D1', t, condition=cond, expected='AS-IS 동적 컬럼 잠금 기대 없음(편집 모드 기본 해제 가정) — 잠금 문장이 없으면 편집 가능', asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)
+        add('COLUMN', 'A9', t, expected='동적 컬럼 헤더 = 바인딩마다 존재·고유(빈 헤더 0 · 중복 0)', asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)  # 종전엔 H8 행에 결과를 덮어써 H8 판정까지 오염(2026-10-31)
+        ct = dcol.get('cell_type', '')
+        if ct in ('NUMBER', 'DATE', 'DATETIME', 'COMBO', 'CHECK'):
+            add('COLUMN', 'D5', t, expected=f"에디터 = AS-IS {ct}" + (f" (소수 {dcol.get('decimals') or 0}자리)" if ct == 'NUMBER' else ''), asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)
+        if ct == 'NUMBER':
+            add('COLUMN', 'E1', t, expected=f"소수 {dcol.get('decimals') or 0}자리{' · 정수만(소수·문자 거부)' if dcol.get('fixed_point') == 'Y' else ''} · 천단위 {dcol.get('separator') or 'N'} — 규칙 밖 값 거부", asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)
+            add('COLUMN', 'H8', t, expected=f"숫자 표시 = 천단위 {dcol.get('separator') or 'N'} · 소수 {dcol.get('decimals') or 0}자리", asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)
+            if dcol.get('negative_red') == 'Y':
+                add('COLUMN', 'H13', t, expected='음수 값 셀 글자색 = 빨강(AS-IS NumberCellType.NegativeRed=true)', asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)
+        add('COLUMN', 'H2', t, expected='편집 가능=노랑 / 입력불가=흰색 (표준 3색)', asis_ref=f"{ref0} · {tobe}", area='그리드', note=dyn_note)
 
     # 3-b) H1 가로 정렬 — AS-IS 그리드 컬럼(메타·코드 FPHAlign) 전 컬럼 (2026-10-27 · align_check.py 가 판정)
-    for c in read_csv(P('Doc', 'asisfacts', 'screens', mid, 'grid_columns_asis.csv')):
+    for c in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'grid_columns_asis.csv')):  # facts_gridcols 산출 = AS-IS ID 폴더(TO-BE≠AS-IS ID 화면은 mid 로 읽으면 빈 입력, 2026-10-28)
         if not (c.get('halign') or '').strip():
             continue
         add('COLUMN', 'H1', f"{c['sheet']}.{c['column']} ({c.get('label', '')})", condition='',
             expected=f"가로 정렬 = AS-IS {c['halign']}", asis_ref=c.get('ref', ''), area='그리드' if c.get('source') == 'META' else '팝업')
 
+    # 텍스트 조건 부분일치(EG245 · 2026-11-02) — 대소문자(G8)·콤마(G9)와 같은 대상 칸마다 1행
+    for _r in [r for r in rows if r['rule_id'] == 'G8' and r['source'] == 'SEARCH']:
+        _nm = re.sub(r'^조회조건\s*', '', _r['target']).strip()
+        add('RULE_SCREEN', 'G1', f'{mid} 텍스트 부분일치 {_nm}', condition='값의 일부만 입력해 조회', area='조회조건', expected='부분일치(Like) — 그 값을 가진 행 포함 · 조건 밖 행 0', method='E2E', note='전용')
     # 4) AS-IS 액션 — 현행(current)·공유(shared) 파일만(legacy 사본 제외)
     cur_files = {f['file'] for f in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'files.csv')) if f.get('variant') in ('current', 'shared')}
-    acts = [x for x in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'actions.csv')) if not cur_files or x['file'] in cur_files]
+    acts = [x for x in read_csv(P('Doc', 'asisfacts', 'screens', asis_id, 'actions.csv')) if (not cur_files or x['file'] in cur_files) and (x['class'], x['method']) not in dead]
+    # MS1(2026-10-28) — MESSAGE 문장 밖(LOCAL 변수 commMsgCode · BRANCH errCode 분기 등)에만 나오는 AS-IS MSG_ID 도 의미 대조 대상(SCP0007 MSG00043·MSG00106)
+    for x in acts:
+        if x['kind'] == 'MESSAGE': continue
+        for msg in sorted(set(re.findall(r'MSG\d{5}', (x.get('value') or '') + ' ' + (x.get('raw') or '')))):
+            add('MSG', 'MS1', msg, condition=f"{x['method']} 경로({x['kind']})", expected=f"AS-IS {msg} 문구와 같은 의미의 TO-BE MSG_ID 사용(ID 동일 여부 무관) · 같은 ID 를 TO-BE 가 다른 뜻으로 쓰면 오류",
+                asis_ref=f"{os.path.basename(x['file'])}:{x['line']} {x['class']}.{x['method']}", area='메시지', method='STATIC')
     for x in acts:
         k, m, line, cls = x['kind'], x['method'], x['line'], x['class']
         loc = f"{os.path.basename(x['file'])}:{line} {cls}.{m}"
@@ -243,7 +566,8 @@ def main():
             if 'Clipboard' in m:
                 add('ASIS', 'F3', ','.join(cnames) or tgt, condition=guard[:600], expected='붙여넣기 입력에도 같은 콤보·연쇄 적용', asis_ref=loc, area=area)
         elif k == 'GRID_SET' and re.search(r'ComboSel|Changed|Clipboard|SetCityCode|EditChange', m):
-            add('ASIS', 'C3', ','.join(cnames) or tgt, condition=guard[:600], expected=f"연쇄 자동 채움 {tgt}{val[:160]}", asis_ref=loc, area=area)
+            # 빈 값 대입은 '채움' 이 아니다(EG085 — 초기화 판정은 cell_clear 전용 행) · 2026-11-01 이전에는 비워야 정상인 칸을 '대상 빈 값' FAIL 로 보았다
+            if not re.search(r',\s*(""|string\.Empty|String\.Empty|null)\s*\)\s*$', val): add('ASIS', 'C3', ','.join(cnames) or tgt, condition=guard[:600], expected=f"연쇄 자동 채움 {tgt}{val[:160]}", asis_ref=loc, area=area)
             # 연쇄는 '값 변경' 때만 — 원천 편집기를 열었다 그냥 닫아도 대상이 초기화되면 결함(2026-10-23 SCP0007 From Site Esc → To Site 공란 실측)
             add('ASIS', 'C6', ','.join(cnames) or tgt, condition=guard[:600], expected='원천 셀을 값 변경 없이 편집 종료(Esc·Tab)하면 대상 셀 값 유지', asis_ref=loc, area=area)
         elif k == 'GRID_SET' and m == 'InsertButton':
@@ -252,9 +576,15 @@ def main():
             msg = (re.findall(r'MSG\d{5}', val) or ['(동적 메시지)'])[0]
             rule_id = 'D4' if m == 'InsertButton' else ('E4' if 'Save' in m else 'G1' if 'Find' in m else 'E4')
             add('ASIS', rule_id, msg, condition=guard[:600], expected=f"조건 충족 시 {msg} 와 같은 의미 메시지·처리 중단 {val[:120]}", asis_ref=loc, area='메시지')
+            if msg.startswith('MSG'):  # MS1(2026-10-28 사용자): ID 가 같은지가 아니라 같은 뜻의 TO-BE MSG_ID 를 쓰는지 — AS-IS·TO-BE 는 같은 ID 를 다른 문구에 쓴다(MSG00001 등)
+                add('MSG', 'MS1', msg, condition=f'{m} 경로', expected=f"AS-IS {msg} 문구와 같은 의미의 TO-BE MSG_ID 사용(ID 동일 여부 무관) · 같은 ID 를 TO-BE 가 다른 뜻으로 쓰면 오류", asis_ref=loc, area='메시지', method='STATIC')
         elif k == 'POPUP' and re.search(r'Popup|Form_Load|ShowDialog', tgt + val) and 'ProgressForm' not in tgt and 'prg.' not in tgt:
             add('ASIS', 'G5', tgt + val[:80], condition=guard[:600], expected=f"팝업 인자 = {val[:160]} (출처 셀/컨트롤 값 그대로 전달, 결과가 인자로 필터)", asis_ref=loc, area='팝업')
             add('ASIS', 'H6', tgt + val[:80], condition=guard[:600], expected='팝업 표준(확정 규칙 CR-005·C8): 버튼 순서 OK → CLOSE · 그리드 No. 컬럼 · 데이터 건수 표시', asis_ref=loc, area='팝업')
+            # M3 팝업 데이터 조회 — 팝업 생성 문장(new X(...))마다 1행. 2026-10-30 SCP0100 Measure 팝업 0건 미검출: AS-IS POPUP 에 G5·H6 행만 있어
+            #   조회 0건이 들어갈 자리가 없었다. 판정 = popup_data_check.py(개인화 팝업 Division 값별 DB 실행) · 그 밖의 팝업은 E2E M3 몫(없으면 NA W7)
+            if tgt.startswith('new '):
+                add('ASIS', 'M3', tgt + val[:80], condition=guard[:600], expected='팝업을 열면 AS-IS 와 같은 목록이 조회됨(행 1건 이상) — 화면 조회조건(Division 등)을 바꾼 뒤에도 AS-IS 가 그 조건을 팝업에 넘기지 않으면 목록 동일', asis_ref=loc, area='팝업')
         elif k == 'VALIDATE':
             rule_id = 'E3' if 'Required' in tgt else ('J1' if 'Auth' in tgt else 'E4')
             add('ASIS', rule_id, tgt, condition=guard[:600], expected=f"{tgt}{val[:120]} 와 같은 검증", asis_ref=loc, area='검증')
@@ -291,6 +621,8 @@ def main():
         if d['menu_id'] not in (mid, 'COMMON'):
             continue
         c = cls_rows.get((d['src'], d['no']), {})
+        if (c.get('status') or '') in ('DESIGN', 'INFO', 'REQ', 'SPLIT'):
+            continue  # 2026-11-03 SPLIT = 복합 문구 원 행(하위 행 '<no>-n' 으로 분할, EG015/EG430) · 2026-10-30: 설계 결정(GAP 제외)·빈 행·공통요건은 결함 행이 아니다 — DESIGN 은 design_decisions.csv(judge NA 근거) · REQ 는 확정 규칙(CONFIRMED)으로 들어간다
         ref = f"{d['src']}-{d['no']}"
         exp = c.get('expected') or d['test_result'][:300]
         rids = [x for x in (c.get('rule_ids') or '').split(';') if x.strip()] or ['UNCLASSIFIED']
@@ -308,6 +640,8 @@ def main():
         if d['menu_id'] in (mid, 'COMMON'):
             continue
         c = cls_rows.get((d['src'], d['no']), {})
+        if (c.get('status') or '') in ('DESIGN', 'INFO', 'REQ', 'SPLIT') or (c.get('generalize') or 'Y').strip().upper() == 'N':
+            continue  # 2026-10-30: 확장 원천(GAP·SSP45)은 분류의 generalize=Y(UI 공통 현상)만 다른 화면에 넣는다 — 화면 고유·업무·DB 행까지 넣으면 GENERAL 행이 수백 건 증폭(T5)
         # 화면 고유 결함(general_rule=N)도 오류 '유형'(규칙)은 같다 — 같은 규칙으로 이 화면의 같은 형태 오류를 찾는다(사용자 10-27: 두 시트 전 오류)
         gen = (c.get('general_rule') or '').strip().upper() == 'Y'
         ref = f"{d['src']}-{d['no']}"
@@ -321,7 +655,9 @@ def main():
     # 6) 확정 규칙 (전 화면)
     for r in read_csv(P('tools', 'Harness', 'rules', 'confirmed_requirements.csv')):
         scope = (r.get('scope') or 'ALL').upper()
-        if scope not in ('ALL', mid):
+        # 2026-10-30: scope 는 ';' 목록 + 접두(SCP/SSP/DMF/SYS = 화면 ID 앞 3자) 허용 — 기존 코드는 'SCP;SSP' 를 통째로 비교해 CR-071 이 어느 화면에도 CONFIRMED 행을 만들지 못했다
+        scopes = [s.strip() for s in scope.split(';') if s.strip()]
+        if not ('ALL' in scopes or mid in scopes or any(len(s) == 3 and mid.startswith(s) for s in scopes)):
             continue
         add('CONFIRMED', r.get('rule_id', 'O2'), r.get('target', ''), condition=r.get('condition', ''), expected=r.get('requirement', ''),
             asis_ref=f"확정규칙 {r.get('req_id', '')} (출처 {r.get('origin', '')})", area='확정규칙', oracle='O2', method=r.get('method', ''))

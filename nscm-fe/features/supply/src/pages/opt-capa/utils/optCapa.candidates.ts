@@ -20,8 +20,25 @@ import type { ComboOption, LineRow, LineTypeRow, OperationRow, PlantRow } from '
  * 범위가 둘 다 달라진다.
  */
 
-export const str = (value: unknown): string =>
-  typeof value === 'string' ? value : typeof value === 'number' ? String(value) : '';
+/**
+ * `FPDate`(캘린더) 컬럼은 `columnMapping.ts getDataType` 이 DATE 계열에 `dataType` 을 주지 않아
+ * Wijmo 가 타입추론할 샘플 행이 없으면(= 조회결과 0건 상태에서 Insert) `InputDate` 에디터가 커밋한
+ * **원본 `Date` 객체**가 그대로 셀 값에 남는다(`editTracker.ts:37` 의 `instanceof Date` 비교가
+ * 이 사실을 이미 전제한다). 이 분기가 없으면 `Date` 는 string/number 가 아니라 `''` 로 떨어져
+ * {@link toStoredDateValue} 가 공백 저장 → DB `NOT NULL` 컬럼에서 ORA-01400 이 난다(2026-10-28 실사고,
+ * SCP0126 Ramp-up(Interval) START_DATE).
+ */
+export const str = (value: unknown): string => {
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number') return String(value);
+  if (value instanceof Date) {
+    const y = value.getFullYear();
+    const m = String(value.getMonth() + 1).padStart(2, '0');
+    const d = String(value.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+  return '';
+};
 
 /** 다중선택 값이 ALL 인가 — sentinel 또는 미선택(빈 배열)은 AS-IS `UsrCheckedList2` 의 ALL 이다. */
 export const isAllSelected = (values: readonly string[]): boolean =>

@@ -1,0 +1,108 @@
+{
+  "menuId": "SCP0041",
+  "screenName": "StockOSP",
+  "feature": "supply",
+  "pageDir": "stock-osp",
+  "routePath": "supply/stock-osp",
+  "sheets": [
+    {
+      "sheetName": "Osp Stock",
+      "rule": "META+코드연결",
+      "columns": 14,
+      "popup": false
+    },
+    {
+      "sheetName": "Pack Hold Stock",
+      "rule": "META+코드연결",
+      "columns": 15,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_LOOKUP_VALUES",
+      "asis_sp": "SCM0001_GET_LOOKUP_VALUES",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetLookupData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0041.P_SCM0001_GET_LOOKUP_VALUES",
+      "sheet": "Osp Stock",
+      "btn": "SEARCH",
+      "allowed_gap": "공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0040_SAVE_CHARACTERISTIC_CAPA",
+      "asis_sp": "SCP0040_SAVE_CHARACTERISTIC_CAPA",
+      "status": "MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0041.P_SCP0040_SAVE_CHARACTERISTIC_CAPA",
+      "sheet": "Osp Stock",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0041_SAVE_PACKER_HOLD_STOCK",
+      "asis_sp": "SCP0041_SAVE_PACKER_HOLD_STOCK",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveDataPacker"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0041.P_SCP0041_SAVE_PACKER_HOLD_STOCK",
+      "sheet": "Osp Stock",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "setPeriod"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0041.P_",
+      "sheet": "Osp Stock",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0041_GET_STOCK_OSP",
+      "asis_sp": "SCP0041_GET_STOCK_OSP",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0041.P_SCP0041_GET_STOCK_OSP",
+      "sheet": "Osp Stock",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0041_GET_PACK_HOLD_STOCK",
+      "asis_sp": "SCP0041_GET_PACK_HOLD_STOCK",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Pack"
+      ],
+      "tobe_pkg_candidate": "PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK",
+      "sheet": "Pack Hold Stock",
+      "btn": "SEARCH"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

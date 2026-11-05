@@ -302,12 +302,15 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
     <Grid size={3} className={commonStyles.customGrid}>
       <FormItem
         className={commonStyles.formItem}
-        label={labelText}
+        label={' '}
         labelAlign='right'
         render={() => (
-          <div className={commonStyles.customCheckbox}>
-            <Checkbox checked={checked} onChange={onToggle} disabled={noDivisionAuth} />
-          </div>
+          <Checkbox
+            labelText={labelText}
+            checked={checked}
+            onChange={onToggle}
+            disabled={noDivisionAuth}
+          />
         )}
       />
     </Grid>
@@ -352,14 +355,12 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -381,14 +382,12 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onNickNameSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onNickNameSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ nickName: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -417,23 +416,23 @@ export const GlobalPsiForm = ({ onSearch, onItemSearch, onNickNameSearch }: Prop
             false,
             noDivisionAuth
           )}
-         
-        </>
-      }
-      extraConditions={
-        <>
-          {/* Row3(extra) — Plan Date / Plan Type / Seq(cascade, 모두 필수) / Period(필수) — SEMI 배열 정렬(사용자 지시 2026-10-19).
+          {/* Row2 의 남은 6칸을 비워 그 줄을 유지한다. 아래 Plan 버전이 Bucket 옆으로 올라오지 않게 하는 칸이다. */}
+          <Grid size={6} />
+
+          {/* Row3 — Plan Date / Plan Type / Seq(cascade, 모두 필수) / Period(필수) / Sum. 접고펼침 없이 항상 보이게
+              둔다(SCP0009·SCP0013 동일, 사용자 지시 2026-11-02). extraConditions 를 넘기지 않아 펼치기 버튼도 없다.
+              SEMI 배열 정렬(사용자 지시 2026-10-19).
               공용 CascadeDropdown(종속 콤보 트리) — 자매 SCP0013 과 동일. combined 단일 입력칸(기본) — 클릭하면
-              date→type→seq 컬럼 팝업으로 경로 선택, 상위 변경 시 하위 초기화. 입력칸 고정폭 190px + 라벨(140)
-              수용 size=3 래퍼(SCP0013 동일, 사용자 지시 2026-10-21).
+              date→type→seq 컬럼 팝업으로 경로 선택, 상위 변경 시 하위 초기화. 입력칸 고정폭을 주지 않아 같은
+              commonStyles.formItem 필드 칼럼을 채우는 다른 조회조건과 가로폭을 맞춘다(사용자 지시 2026-10-30).
+              size=3 래퍼.
               자동선택(첫 date, 첫 type, 첫 seq), Period W52 재계산은 기존 effect(selectPlanDate 포함)가 그대로 처리한다. */}
           <Grid size={3}>
             <CascadeDropdown
               variant='horizontal'
               labelAlign='right'
               formItemClassName={commonStyles.formItem}
-              label='Plan Date/Type/Seq'
-              inputWidth='190px'
+              label={t(LBL.PLAN_VERSION, '_Plan Date/Type/Seq')}
               tree={planVersionTree}
               levels={[
                 { name: 'planDate', label: t(LBL.PLAN_DATE, '_Plan Date'), required: true },

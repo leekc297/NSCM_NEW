@@ -18,6 +18,7 @@ import {
   LAST_SEQ_COLUMN,
   LAST_SEQ_CURRENT,
   LBL,
+  MAX_PERIOD_LABEL,
   MENU_ID,
   MSG,
   SHEETS,
@@ -28,6 +29,15 @@ import { useShipmentChangeHistoryStore } from './useShipmentChangeHistoryStore';
 
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+
+// FPDate(날짜 전용) 컬럼 — DB SCM_MST_SHEET_COLUMNS 실측(2026-11-02)상 SSP0019 의 FPDate 는 이 2개뿐
+//   (나머지 날짜 3개 REQUEST/APPROVAL/LAST_UPDATE_DATE 는 FPDateTime = 시간 표시 유지). design 03 원천은
+//   CONVERT(DATE, YYYYMMDD) = 순수 날짜다. SP 가 Oracle DATE 를 'YYYY-MM-DD 00:00:00' 문자열로 직렬화해
+//   내려주고, 그리드 날짜 포맷은 Date 타입 셀에만 적용돼 문자열은 시분초까지 노출된다 → 날짜 전용 컬럼의
+//   시간부를 떼어 날짜만 표시한다(사용자 지시 2026-11-02 "shipment date 값에 초단위 안 나와야").
+const DATE_ONLY_COLUMNS = ['SHIPMENT_DATE', 'BEFORE_SHIPMENT_DATE'] as const;
+const dateOnly = (v: unknown): unknown =>
+  typeof v === 'string' && /^\d{4}-\d{2}-\d{2}[ T]/.test(v) ? v.slice(0, 10) : v;
 
 // AS-IS GSCM.SSP.Plan.UIL SSP0019_ShipmentChangeHistory — 단일 그리드(spdMain) 출하 변경 이력 조회.
 //   설계: .atlas/gscm-design/SSP0019/design/00~03 + convert-flow goal/plan. 도메인 SSP(features/shipping).
@@ -72,7 +82,14 @@ export const ShipmentChangeHistory = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.MAIN],
   });
 
-  const rows = useMemo<MainRow[]>(() => (data?.o_rc1 ?? []) as unknown as MainRow[], [data]);
+  const rows = useMemo<MainRow[]>(() => {
+    const raw = (data?.o_rc1 ?? []) as unknown as Record<string, unknown>[];
+    return raw.map(r => {
+      const next = { ...r };
+      for (const c of DATE_ONLY_COLUMNS) next[c] = dateOnly(next[c]);
+      return next;
+    }) as unknown as MainRow[];
+  }, [data]);
 
   // chkCurrent 토글(design 03 §3 SetCheckRow) — 체크 시 LAST_SEQ='C'(현재값) 행만 표시, 해제 시 전행.
   //   강조(LightSkyBlue)는 두 상태 공통으로 그리드 formatItem 이 'C' 행에 적용. 서버 재조회 없는 클라 토글.
@@ -145,6 +162,20 @@ export const ShipmentChangeHistory = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({
         type: 'alert',
         content: t(MSG.INVALID_PERIOD, '_Invalid period (start > end).'),
+      });
+      return;
+    }
+    // 최대 조회기간(Check_PeriodDate, DateUtil.cs:174-178) — To 가 From+1년+7일 이상이면 차단(과다조회 방지).
+    //   AS-IS: nDate2 >= date1.AddYears(1).AddDays(7) → MSG00172. 날짜 파싱은 Form.toDate 와 동일 ISO 슬라이스.
+    const toIso = (v: string) => `${v.slice(0, 4)}-${v.slice(4, 6)}-${v.slice(6, 8)}`;
+    const maxToExclusive = dayjs(toIso(from)).add(1, 'year').add(7, 'day');
+    if (!dayjs(toIso(to)).isBefore(maxToExclusive, 'day')) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.MAX_PERIOD, '_Maximum Period is From Date + {0}.').replace(
+          '{0}',
+          MAX_PERIOD_LABEL
+        ),
       });
       return;
     }
@@ -231,7 +262,10 @@ export const ShipmentChangeHistory = ({ tabId, title }: PageProps<MENU_ID>) => {
         }}
       />
 
-      {/* REQUEST_NO 이미지셀 드릴다운 — SCM0002 요청 상세(SP 미배포로 상세 유예, design 03 §3-4). */}
+      {/* REQUEST_NO(=CHANGE_REQ_NO) 이미지셀 드릴다운 — Request Info 팝업(design 03 §3-4, AS-IS SCM0002
+          _ShipmentPlanRequestPopup 충실 이식). 로컬 ShipmentPlanRequestModal 이 SSP0003 proc 를 호출
+          (/SSP0019/main/GET_REQ_DRAFTING/call-proc → P_SSP0003_GET_DRAFTING). 버튼/권한은 design/08_register
+          로 등록(운영 메타·사용자 실행). 자매 SSP0012/SSP0015 동형. */}
       <ShipmentPlanRequestModal
         open={requestNo !== null}
         modalClose={() => setRequestNo(null)}

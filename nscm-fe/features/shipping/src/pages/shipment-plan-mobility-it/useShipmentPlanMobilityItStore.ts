@@ -91,8 +91,9 @@ interface Action {
   restoreSearchConditions: () => Promise<void>;
 }
 
-// AS-IS clbResultType 기본 체크 = 상위 2개(SetItemChecked(0),(1), .cs L1653-1663).
-//   Main[P,O,E]→[P,O] / Packer 전용 lookup [P,S]→[P,S](= Plan + Result(PSCM), 2개 전부).
+// AS-IS clbResultType 기본 체크 = 정렬 후 상위 2개(SetItemChecked(0),(1), .cs L1653-1663).
+//   AS-IS 는 CODE 알파벳 정렬(DataService.cs:4601) 후 인덱스 0,1 을 체크하므로 실제 체크는 [E,O].
+//   Main = RESULT_TYPE_BY_SHEET.MAIN([E,O,P,R]) 상위 2 → [E,O] / Packer 전용 lookup [P,S]→[P,S](2개 전부).
 const defaultResultTypes = (sheet: MainSheet): string[] =>
   (sheet === 'packer' ? RESULT_TYPE_BY_SHEET.PACKER : RESULT_TYPE_BY_SHEET.MAIN).slice(0, 2);
 

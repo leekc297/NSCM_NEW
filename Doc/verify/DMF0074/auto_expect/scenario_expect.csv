@@ -1,0 +1,6 @@
+﻿menu_id,name,steps,msg_re,no_save,no_editor,rule,source,user,pattern_id,basis,key
+DMF0074,[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림,lang:KO;search;save,[가-힣].*(수정|변경|없습니다),Y,,I1,자동 생성 P01 · btn_auth SAVE,,P01,btn_auth SAVE,I1|lang-ko-save
+DMF0074,[자동] CN 언어 조회 건수 총/건 표기,"lang:CN;search;pagetext:(总|共|合计)\s*[\d,]+\s*(条|行|件|个)",,,,I1,자동 생성 P02 · btn_auth SEARCH,,P02,btn_auth SEARCH,I1|lang-cn-count
+DMF0074,[자동] 조회 중 Loading 토스트 없음,noload,,,,H10,자동 생성 P03 · btn_auth SEARCH,,P03,btn_auth SEARCH,H10|noload
+DMF0074,[자동] Division 반복 전환 조회 SQL 오류 0,cond:Division=@other;search;cond:Division=@other;search;cond:Division=@other;search,,,,F4,자동 생성 P20 · AS-IS clbDivisions_SelectedIndexChanged:576 컬럼 재구성,,P20,AS-IS clbDivisions_SelectedIndexChanged:576 컬럼 재구성,F4|toggle|div
+DMF0074,[자동] 조회조건 콤보 5종 = 콤보,iscombo:End\ Customer;iscombo:Sales\ Site;iscombo:Team;iscombo:Plant\ Site;iscombo:Division,,,,B1,"자동 생성 P21 · AS-IS controls 콤보 End Customer, Sales Site, Team, Plant Site, Division",,P21,"AS-IS controls 콤보 End Customer, Sales Site, Team, Plant Site, Division",B1|iscombo|division + B1|iscombo|end\customer + B1|iscombo|plant\site + B1|iscombo|sales\site + B1|iscombo|team

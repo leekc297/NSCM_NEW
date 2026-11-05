@@ -1,4 +1,4 @@
-rule_id,family,name,oracle,method,expected_source,how
+﻿rule_id,family,name,oracle,method,expected_source,how
 A1,A,조회 건수 AS-IS 일치,O1,E2E,FE 실제 조회 인자→param_map→AS-IS SP 동시 실행(golden),같은 조건 조회 결과 행수·키 집합 비교(차이 행 목록 증거)
 A2,A,코드 컬럼 표시값=Name,O1,E2E+META,AS-IS 콤보·코드 컬럼 표시 규칙(CELL_COMBO_DATA_TYPE·dataMap),그리드·Excel 셀 표시값이 코드가 아닌 Name 인지(dataMap 보유 컬럼 전수)
 A3,A,합계·소계 행 값,O1,E2E,AS-IS Sum/Subtotal 표현식,Sum 행 존재·공란 아님·구성 행 합과 일치
@@ -31,7 +31,7 @@ G1,G,조회조건 결과 반영,O1+O3,E2E,조건 값,조건 변경 후 결과 �
 G2,G,ALL 재선택·다중선택·콤마 키인,O1+O2,E2E,확정 요구·AS-IS,ALL→Y→ALL 재조회 정상 · 다중 선택/콤마 다중 입력 결과 반영
 G3,G,조회조건 저장·복원,O2,E2E,공통 규칙(Period 저장 제외),F6 저장→새 탭 복원 값 일치 · Period 비저장 · ALL 복원
 G4,G,조회조건 표시·활성·크기,O1+O2,STATIC+E2E,search_cond.csv·AS-IS Visible/Enabled·Div 분기,Div별 표시/비활성 · 크기 · 위치가 기준과 일치
-G5,G,팝업 조건 연동,O1+O2,E2E,AS-IS 팝업 호출 인자(텍스트·Period·Div·From/To),메인 입력값·기간이 팝업 조건으로 전달 · 고정 조건 수정 불가 · 결과가 인자로 필터됨
+G5,G,팝업 조건 연동,O1+O2,STATIC+E2E,AS-IS 팝업 호출 인자(텍스트·Period·Div·From/To),메인 입력값·기간이 팝업 조건으로 전달 · 고정 조건 수정 불가 · 결과가 인자로 필터됨
 H1,H,정렬(가로 정렬),O1,STATIC+META,AS-IS 컬럼 HAlign·HORIZONTAL_ALIGN_CODE,컬럼 정렬 = AS-IS
 H2,H,배경·글자색 규칙,O1+O2,E2E,AS-IS SetBGColor/SetFGColor + 표준 3색,입력불가=흰색·편집=노랑·구간색 규칙 일치
 H3,H,셀 병합,O1+O2,E2E,AS-IS FPMerge·확정 요구,병합 대상 컬럼·조건 일치 · 입력 중 병합 해제
@@ -81,3 +81,14 @@ K5,K,특수 편집기 동작(리치텍스트 등),O2,E2E,공통 컴포넌트,서
 L2,L,입력 중 불필요 재렌더·깜박임 0,O2,E2E,공통,조회조건·셀 입력 중 그리드 이동·깜박임 0
 M4,M,팝업 상태·선택값 반영,O1+O2,E2E,AS-IS 팝업 로직,팝업 선택값 즉시 셀 반영 · Close 후 재오픈 시 미저장 편집 초기화
 C6,C,무변경 편집 종료 시 연쇄 미발동,O1,E2E,AS-IS ComboSelChange·Changed 는 값 변경 때만 발동,원천 셀 편집기를 열었다 값 변경 없이 닫으면(Esc·Tab) 대상 셀 값이 그대로 — 초기화되면 결함
+MS1,M,메시지 의미 대조(AS-IS MSG_ID → 같은 뜻의 TO-BE MSG_ID),O1,STATIC,AS-IS TB_FX_MessageInfo 문구 ↔ TO-BE SCM_ADM_MSG_M 문구(msgmap) · TO-BE FE/PKG 사용 ID,"AS-IS 메시지와 같은 의미의 TO-BE MSG_ID 를 사용(ID 동일 여부 무관) · 같은 ID 가 TO-BE 에서 다른 뜻이면 오류"
+DB-SYN,A,DB 객체·메타·시노님 오류(앱 계정 접근),O3,STATIC+E2E,syn_check.py(PROC·COMBO·META) · syn_fix.py · E2E fixture dberr,BE 계정(SCMP_APP)이 쓰는 PKG·테이블/뷰·시노님·권한이 있고 VALID 하며 메뉴·PROC_M·SHEET_COLUMNS 메타가 있어야 테스트가 돈다 — 없거나 오류면 차단(조치 필요 1번 + CheckList 재작성 요청)
+K6,K,상단·하단 그리드 연동(상단 클릭/더블클릭 → 하단 조회) 시 상단 안정,O3,E2E,사용자 지시 2026-10-29(SCP0020 상단 깜빡임),상단 행 클릭/더블클릭으로 하단을 조회할 때 상단 그리드가 재조회·재렌더(깜빡임)·행 비움 없이 유지
+G9,G,텍스트 조회조건 콤마 다중값 입력 조회,O1+O2,E2E,확정 요구(CR-040)·SSP45REQ-8/14 공통요건·AS-IS 복수 입력 처리,"텍스트 조건에 a,b 입력 → 두 값 모두 조회·결과가 그 값들만 · 팝업 조회조건도 같음(공통 컴포넌트)"
+E7,E,팝업 입력 컬럼 Key-in 값 검증,O1+O2,E2E,SSP45REQ-23 공통요건·AS-IS 팝업 셀 직접 입력 처리,팝업으로 고르는 셀에 직접 입력한 잘못된 값(후보 밖 코드)은 되돌리거나 검증 메시지로 차단 — 저장까지 흘러가지 않음
+F9,F,주/월 입력 수량의 일자(Bucket) 배분 규칙,O1,E2E+DB,AS-IS 배분 로직(요일 정보·DEFAULT_BUCKET_DAY·마지막 날 폴백) · GAP F-08,주/월 버킷에 입력한 수량이 AS-IS 규칙대로 일자에 배분·저장되는지(Daily 펼침 · 저장 YYYYMMDD 대조)
+F10,F,저장 트랜잭션 원자성(내부 COMMIT·자율 트랜잭션 0),O1+O3,STATIC+DB,AS-IS 저장 전체 1 거래 · 사내 DB USER_SOURCE,화면 저장 SP 와 하위 호출에 COMMIT·TRUNCATE·DDL·통계 수집 등 암묵 확정 0건 · 다건 저장 중 1행 오류면 앞 행 원장·이력 변경 0행
+H11,H,처리 중 로딩 표시(스피너),O2,E2E,공통 UI 규칙 · GAP 자체결함 3·7·16,조회·저장·배치 실행 등 서버 호출 중 스피너가 표시되고 완료·오류 시 사라짐 — 장기 실행 버튼 클릭 후 무반응 0
+H12,H,그리드 좌측 고정 컬럼 = META FIXED_FLAG,O1+O2,META+E2E,SHEET_COLUMNS FIXED_FLAG · AS-IS 고정 컬럼,FIXED_FLAG=Y 마지막 컬럼까지 좌측 고정 · 가로 스크롤 시 유지 · 컬럼 셋팅에 포함
+G10,G,팝업 연결 텍스트 조회조건 Enter → 팝업 열기,O1+O2,E2E,AS-IS 팝업 연결 입력칸 Enter 처리 · GAP DMF0072 F-09·DMF0074 F-07,팝업이 연결된 조회조건 입력칸에서 Enter(한글 조합 중 제외) 시 그 팝업이 열리고(아이콘 클릭과 같은 동작) 입력값은 팝업 조건으로 전달(G5) — Enter 무동작이면 FAIL
+H13,H,음수 글자색 빨강,O1,E2E,AS-IS NumberCellType.NegativeRed=true(SpreadInfo.cs:4369 프레임워크 기본) · cell_rules negative_red,"숫자 컬럼(정적·동적 피벗)의 음수 값 셀 글자색이 빨강 — 표본 없으면 편집 가능 셀에 -1 입력해 측정 후 복원"

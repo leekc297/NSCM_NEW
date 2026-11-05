@@ -68,9 +68,9 @@
 | D00-4b-008 | §4b SpdMain_CellClick / event / spdMain.CellClick | components/ShipmentChangeHistoryGrid.tsx:104-114 | REQUEST_NO 값 존재 가드 → onRequestNoClick 드릴다운 | 구현 |
 | D00-4b-009 | §4b SpdMain_TopChange / event / spdMain.TopChange | components/ShipmentChangeHistoryGrid.tsx:139 | allowMerging=All(스크롤 병합 유지, CustomMergeManager) | 구현 |
 | D00-4b-010 | §4b clbDivision_SelectedIndexChanged / event / clbDivision.SelectedIndexChanged | components/ShipmentChangeHistoryForm.tsx:109-119,60-63 | handleDivisionChange 하위콤보 초기화 + EE 분기 + divisionCsv 재조회 | 구현 |
-| D00-4e-001 | §4e SCM0002_ShipmentPlanRequestPopup / ShowDialog | components/modals/ShipmentPlanRequestModal.tsx:15-42 + ShipmentChangeHistory.tsx:194-198 | REQUEST_NO 드릴다운 모달(트리거·가드·파라미터 구현, 상세는 SP 배포 후 유예) | 구현 |
-| D00-4e-002 | §4e SCM0002_ItembyDivisionPopup / ShowDialog | components/modals/ItemByDivisionModal.tsx:43-195 + ShipmentChangeHistory.tsx:182-191 | Item by Division 팝업(로컬, division/scmSite/itemId 사전필터) | 구현 |
-| D00-4e-003 | §4e GSCM.Windows.Forms.UI.ProgressForm / Show | components/modals/ItemByDivisionModal.tsx:155-160 | 공용 로딩(ProgressIndicator/useTabProcQuery isLoading — 별도 팝업 불요) | 구현 |
+| D00-4e-001 | §4e SCM0002_ShipmentPlanRequestPopup / ShowDialog | components/modals/ShipmentPlanRequestModal.tsx:127-189 + ShipmentChangeHistory.tsx:253-257 | REQUEST_NO 드릴다운 모달 — 트리거·가드·파라미터·상세(SSP0003 proc P_SSP0003_GET_DRAFTING, 요청폼+Confirmed/Change 비교그리드) 구현 완료(2026-10-29, 상세 유예 해소) | 구현 |
+| D00-4e-002 | §4e SCM0002_ItembyDivisionPopup / ShowDialog | ShipmentChangeHistory.tsx:235-247 (공용 MaterialByDivisionModal) | Model/Nickname 조회조건 팝업 — 사용자 지시 2026-10-14 로 로컬 ItemByDivisionModal → 공용 MaterialByDivisionModal(COM0013) 교체(의도적 드리프트, §7) | 구현 |
+| D00-4e-003 | §4e GSCM.Windows.Forms.UI.ProgressForm / Show | (공용 useTabProcQuery isLoading) | 공용 로딩(ProgressIndicator/useTabProcQuery isLoading — 별도 팝업 불요) | 구현 |
 
 ## CRUD·모달 매트릭스 (2026-08-07 축 — MAIN UI 와 모달의 CRUD 누락 0)
 
@@ -81,9 +81,9 @@
 | CRUD:D00-4b-004:EDIT | [EDIT] §4b EditButton / toolbarOverride / Edit | — | EditButton 토글 어포던스 자체는 전 화면 미이식 결정(asis_to_tobe.md §11, 2026-09-23) — 단 기존행 재편집 시 잠금 범위 재현 여부는 별도 검증 필요 | 제외 |
 | CRUD:D00-4b-005:INSERT | [INSERT] §4b InsertButton / toolbarOverride / Insert | ShipmentChangeHistory.tsx:139 | 조회전용 inquiry — AS-IS NO-OP 공백, hotkeyConfig.insert=false·DB 버튼메타 SEARCH 만 등록 | 해당없음 |
 | CRUD:D00-4b-006:SAVE | [SAVE] §4b SaveButton / toolbarOverride / Save | ShipmentChangeHistory.tsx:141 | 조회전용 inquiry — AS-IS NO-OP 공백, hotkeyConfig.save=false·DB 버튼메타 SEARCH 만 등록 | 해당없음 |
-| MODAL:ItemByDivisionModal | FE 실존 모달 (components/modals/ItemByDivisionModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/modals/ItemByDivisionModal.tsx:43-195 + ShipmentChangeHistory.tsx:182-191 | AS-IS SCM0002_ItembyDivisionPopup(Model 조회조건) 로컬 복사 — division/scmSite/itemId 사전필터 | 구현 |
-| MODAL:ShipmentPlanRequestModal | FE 실존 모달 (components/modals/ShipmentPlanRequestModal.tsx) — 분석 md 근거 확인 필요(FE 단독이면 사유 기입) | components/modals/ShipmentPlanRequestModal.tsx:15-42 + ShipmentChangeHistory.tsx:194-198 | AS-IS SCM0002_ShipmentPlanRequestPopup(REQUEST_NO 드릴다운) 로컬 — 트리거·가드·파라미터 구현, 상세는 SP 배포 후 유예 | 구현 |
-| MODAL:ShowDialog | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 | components/modals/ItemByDivisionModal.tsx:107-193 + components/modals/ShipmentPlanRequestModal.tsx:17-41 | AS-IS 두 ShowDialog(ItembyDivision/ShipmentPlanRequest) → CustomDialog 모달 2종 | 구현 |
+| MODAL:ItemByDivisionModal | Model/Nickname 조회조건 팝업 — 공용 MaterialByDivisionModal 로 교체(로컬 ItemByDivisionModal 제거) | ShipmentChangeHistory.tsx:235-247 | AS-IS SCM0002_ItembyDivisionPopup → 공용 MaterialByDivisionModal(COM0013, PKG_SCM0002) 교체(사용자 지시 2026-10-14, 의도적 드리프트 §7) | 구현 |
+| MODAL:ShipmentPlanRequestModal | FE 실존 모달 (components/modals/ShipmentPlanRequestModal.tsx) | components/modals/ShipmentPlanRequestModal.tsx:127-189 + ShipmentChangeHistory.tsx:253-257 | AS-IS SCM0002_ShipmentPlanRequestPopup(REQUEST_NO 드릴다운) 로컬 이식 — 트리거·가드·파라미터·상세(SSP0003 proc) 구현 완료(2026-10-29, 유예 해소) | 구현 |
+| MODAL:ShowDialog | AS-IS 팝업 (분석 md) — TO-BE 모달 구현 위치 기입 의무 | ShipmentChangeHistory.tsx:235-247(MaterialByDivisionModal) + components/modals/ShipmentPlanRequestModal.tsx:127-189 | AS-IS 두 ShowDialog(ItembyDivision→공용 MaterialByDivisionModal / ShipmentPlanRequest→로컬 모달) | 구현 |
 
 ## UI 공통(통합테스트) 체크 축 (2026-08-12 — 전 화면 상시 6항목)
 
@@ -145,7 +145,7 @@
 | AS-IS | TO-BE | 축 |
 |---|---|---|
 | SCM0002_ItembyDivisionPopup (Model, 221) | 공용 `MaterialByDivisionModal`(COM0013) — **의도적 드리프트**, 아래 §7 | popup |
-| SCM0002_ShipmentPlanRequestPopup (REQUEST_NO 드릴다운, 207) | `components/modals/ShipmentPlanRequestModal`(로컬, SP 미배포로 상세 유예) | popup |
+| SCM0002_ShipmentPlanRequestPopup (REQUEST_NO 드릴다운, 207) | `components/modals/ShipmentPlanRequestModal`(로컬, SSP0003 proc P_SSP0003_GET_DRAFTING — 상세 구현 완료 2026-10-29) | popup |
 | ProgressForm (376) | 공용 로딩(별도 팝업 불요) | - |
 
 ## 5. SP 계약
@@ -155,11 +155,11 @@
 | SSP0019_GET_SHIPMENT_CHANGE_HISTORY (12파라미터, 47컬럼 반환) | `PKG_SSP0019.P_SSP0019_GET_SHIPMENT_CHANGE_HISTORY` | **배포됨** — ALL_PROCEDURES 실측 2026-10-14(종전 '미배포' 기록은 스테일) |
 | SCM0002_GET_ITEM_BY_DIVISION_POPUP (Model 팝업) | — 미사용. 팝업을 공용 `MaterialByDivisionModal`(`PKG_SCM0002.P_SCM0002_GET_MATERIAL_BY_DIVISION`)로 교체 | **의도적 드리프트** — §7 |
 
-## 6. 미이식/유예 (정직 보고)
+## 6. 미이식/유예 (정직 보고) — 2026-10-29 갱신
 
-- REQUEST_NO 드릴다운 상세 데이터: SCM0002 별도 팝업 전환 + SP 배포 대상 — 트리거·가드·파라미터까지 구현, 상세 convert-sp 유예.
-- 셀콤보 코드→명 표시(FCST_TYPE/CHANGE_REASON_CODE): dataMap 주입 배선 완비, 런타임 표시는 SP 배포 후 브라우저 실검증(사용자 축).
-- 기본 조회기간 1개월 방향(from=오늘/to=오늘+1개월): GET_DATE_RANGE_1MONTH SP 미접근으로 브라우저 실검증 대상(사용자 축).
+- ~~REQUEST_NO 드릴다운 상세 데이터: 상세 convert-sp 유예~~ → **해소(2026-10-29)**: 로컬 `ShipmentPlanRequestModal` 이 SSP0003 proc(P_SSP0003_GET_DRAFTING)로 요청폼 8필드 + Confirmed/Change 비교그리드를 조회·렌더. 버튼/권한 `08_register_confirm_detail_btn_auth.sql` 사용자 DB 적용 확인.
+- ~~셀콤보 코드→명 표시(FCST_TYPE/CHANGE_REASON_CODE): 런타임 사용자 축~~ → **해소(2026-10-28)**: PKG_SSP0019 배포 후 브라우저에서 명 표시 실렌더 확인.
+- 기본 조회기간 1개월 방향(from=오늘/to=오늘+1개월): GET_DATE_RANGE_1MONTH SP 미접근으로 브라우저 실검증 대상(사용자 축) — **잔여**.
 
 ## 7. 의도적 드리프트 — Model/Nickname 팝업 교체 (사용자 지시 2026-10-14)
 

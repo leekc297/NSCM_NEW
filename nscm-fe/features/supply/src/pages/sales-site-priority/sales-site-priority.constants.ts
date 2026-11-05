@@ -30,17 +30,16 @@ export const COMBO = {
   // PlanGroup — 2026-09-26 재확인 시 신규 등록 확인됨(design 시점엔 미등록). DIVISION_ID 반환 —
   //   필터 방식(PARAM10 미지정)과 부합. 화면 전용 division 클라 필터(design 02 §2-2)는 FE 재현.
   PLAN_GROUP: 'PlanGroup',
-  // ScmSite/ValidYn 메타 리터럴은 SCM_ADM_CMBO_SQL_M 미등록(확인 필요, design 03 §1.1) —
-  //   convert-react 세션 재확인(2026-09-26)도 0 rows. 후보로 등록된 SiteMasterAll_SCP/YesOrNo 를
-  //   의미 대조(convert-core §2.6) 후 잠정 배선한다(§ 확인 필요, __asis-mapping__.md 명시).
-  SITE: 'SiteMasterAll_SCP',
+  // ScmSite — AS-IS SCP0128_GET_SEARCH_INFO 결과셋#2(SALES VALID + PLANT 전체)를 그대로 포팅한
+  //   콤보(DIVISION_ID 반환, FN_ASIS_SORT_KEY 정렬, SCM_ADM_CMBO_SQL_M 에 USE_YN=Y 로 실배포, ora.py 실측).
+  //   그리드 셀 콤보(CELL_COMBO_DATA_TYPE='ScmSite')가 이미 이 콤보를 쓰므로 PLANT 를 포함한다.
+  //   조회조건 콤보는 iter-2 에서 SiteMasterAll_SCP(@siteType='SALES')로 배선돼 PLANT 가 빠졌었다(갭 항목 B)
+  //   -> div40 PLANT 사이트(HQ06-A/NJ01-A, 우선순위 실데이터 존재)가 조회조건에서 안 떴다. 그리드 셀과
+  //   동일한 ScmSite 로 통일해 AS-IS(dtScmSiteAll 단일 소스가 리스트박스+셀 공용)와 등가로 맞춘다.
+  //   ScmSite 는 DIVISION_ID 를 반환하므로 조회조건은 클라 cascade 필터로 좁힌다(filterSiteByDivision).
+  SITE: 'ScmSite',
   VALID: 'YesOrNo',
 } as const;
-
-// Site 콤보(SiteMasterAll_SCP) 필수 파라미터 — @siteType. AS-IS 원문 미확보로 화면코드값 확정 불가
-//   (확인 필요) — 관대형 게이트가 아니라 정확 매칭 파라미터라 빈 문자열이면 0행이 된다.
-//   design 03 §1.1 후보 SQL 실측 기준 'SALES'(화면명 Sales Site Priority)로 잠정 지정, 확인 필요.
-export const SITE_TYPE = 'SALES';
 
 // AS-IS Validation MSG (design 00 §4a). AS-IS 번호 그대로 쓰지 않는다 — 문구 기준 SCM_ADM_MSG_M
 //   역조회 TO-BE 코드(hook #114). 실측(2026-09-26, LANG_CD EN) — 전건 아래 매핑으로 확인.
@@ -68,8 +67,11 @@ export const LBL = {
   // Item ID — SCM_ADM_MSG_M 미등록(design 02 §4.5 확인 필요). 등록 전까지 defaultValue 로만 표기.
 } as const;
 
-// Valid(cboValid) 조회조건 — AS-IS 는 필수값(MSG00001 대상), ALL 센티널 없음(design 02 §2-4).
-export const VALID_DEFAULT = 'Y';
+// Active(cboValid) 조회조건 — AS-IS 는 Y/N/ALL(`DataBind(YesOrNo, true)`)이고 기본 ALL 이다
+//   (SCP0131_SalesSitePriority.cs:170-171 — `cboValid.SelectedValue = "Y"` 는 주석처리됨).
+//   검색 시 ALL→'' 로 p_valid_yn 에 빈값을 보내 전체 조회(.cs:412,419 `pValidYn = ALL ? "" : sValidYn`).
+//   단일 콤보 allOption 의 ALL sentinel 값은 ''(CustomDropdown SINGLE_ALL_OPTION.value) → 기본 ''.
+export const VALID_DEFAULT = ''; // '' = ALL (전체, AS-IS 기본값)
 
 // 필수 컬럼 라벨 '*' 7칸(design 03 §1) — DIVISION_ID 는 항상잠금이라 편집화면에서 검증 대상 아님.
 //   VALID_YN 은 validations#1 이 필수로 검사하나 라벨 '*' 없음(§1 불일치 — design 03 §6#8) —

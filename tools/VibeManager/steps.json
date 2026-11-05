@@ -143,6 +143,17 @@
       "detail": "TobeFacts(FE+BE) 로 같은 스키마의 Fact 를 뽑고, 룰은 CSV 사전으로 관리.",
       "tasks": [
         {
+          "id": "S2.genI18n",
+          "requireServers": [
+            8080
+          ],
+          "title": "다국어 JSON 재생성 (pnpm gen 내용 — gen:icons + gen:i18n, 로컬 BE 메시지만 · pnpm 미사용)",
+          "kind": "python",
+          "script": "${root}/tools/Env/fe_gen_i18n.py",
+          "args": [],
+          "title_en": "Regenerate i18n JSON (pnpm gen equivalent — local BE messages only, no pnpm)"
+        },
+        {
           "id": "S2.probe",
           "title": "DB 접속 점검 (asis MSSQL / tobe Oracle) — probe.py",
           "kind": "python",
@@ -244,6 +255,25 @@
       "detail": "Fact Pack → 분석서 5종 + 업무분석서·화면설계서·단위테스트. 게이트 total PASS.",
       "tasks": [
         {
+          "id": "S3.prep",
+          "title": "문서 사전 준비 — TO-BE 파싱·메타를 최신으로(생성 절차 없이 · 다른 PC 에서 만든 UI 포함) (prereq.py --docs)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/prereq.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--docs"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Docs prep — refresh TO-BE parse·meta (no build step · includes UI built on another PC)"
+        },
+        {
           "id": "S3.agent",
           "title": "Agent 실행 — 화면ID",
           "kind": "powershell",
@@ -296,7 +326,7 @@
         },
         {
           "id": "S3.xlsx",
-          "title": "문서 Excel 생성 — 화면ID (make_docs.py → 설계서·분석서·GAP·TestCases4, 팀 양식)",
+          "title": "문서 Excel 생성 — 화면ID (make_docs.py → 설계서·분석서·TestCases4, 팀 양식)",
           "kind": "python",
           "script": "${root}/tools/Docs/make_docs.py",
           "args": [
@@ -315,7 +345,7 @@
             "file": "${root}/Doc/documents/${input:id}",
             "label": "Excel"
           },
-          "title_en": "Generate Excel docs — ID (make_docs.py → design · analysis · GAP · TestCases4, team format)"
+          "title_en": "Generate Excel docs — ID (make_docs.py → design · analysis · TestCases4, team format)"
         },
         {
           "id": "S3.xlsxopen",
@@ -363,61 +393,9 @@
     },
     {
       "id": "S4",
-      "title": "4. GAP 분석",
+      "title": "4. 골든 테스트 (GAP 분석 폐지 2026-10-30 — CheckList 로 대체)",
       "detail": "As-is Fact ↔ To-Be Fact 대사. COVERED/INTENDED/MISSING/UNMAPPED + 대시보드.",
       "tasks": [
-        {
-          "id": "S4.run",
-          "title": "GAP 전 화면 실행 → Doc/gap",
-          "kind": "node",
-          "script": "${harnessDir}/gap.js",
-          "gate": {
-            "type": "csvRows",
-            "file": "${gapDir}/_summary.csv",
-            "min": 1,
-            "label": "GAP 요약"
-          },
-          "title_en": "Run GAP for all screens → Doc/gap"
-        },
-        {
-          "id": "S4.one",
-          "title": "GAP 실행 — 화면ID",
-          "kind": "node",
-          "script": "${harnessDir}/gap.js",
-          "splitArgs": true,
-          "args": [
-            "${input:ids}"
-          ],
-          "inputs": [
-            {
-              "name": "ids",
-              "prompt": "화면ID (공백으로 여러 개)",
-              "default": "DMF0045"
-            }
-          ],
-          "title_en": "Run GAP — ID"
-        },
-        {
-          "id": "S4.dash",
-          "title": "GAP 대시보드 열기 (index.html)",
-          "kind": "browser",
-          "path": "${gapDir}/index.html",
-          "title_en": "Open GAP dashboard (index.html)"
-        },
-        {
-          "id": "S4.open",
-          "title": "GAP 결과 CSV — 화면ID",
-          "kind": "open",
-          "path": "${gapDir}/${input:id}_gap.csv",
-          "inputs": [
-            {
-              "name": "id",
-              "prompt": "화면ID",
-              "default": "DMF0045"
-            }
-          ],
-          "title_en": "GAP result CSV — ID"
-        },
         {
           "id": "S4.goldgen",
           "title": "골든 케이스 생성 (As-is SP ↔ To-Be PROC 짝) — gen_golden_cases.py",
@@ -467,7 +445,7 @@
           "title_en": "Open golden results (Doc/golden/_summary.md)"
         }
       ],
-      "title_en": "4. GAP Analysis"
+      "title_en": "4. Golden test (GAP analysis retired 2026-10-30 — replaced by CheckList)"
     },
     {
       "id": "S5",
@@ -894,6 +872,83 @@
             }
           ],
           "title_en": "Open Definition of Done — ID (DOD.md)"
+        },
+        {
+          "id": "S5.cloudMod",
+          "title": "클라우드 이관 패키지(수정본) — 이관 완료 표시 이후 바뀐 것 전부 · 범위 = 작업 모드(DB MODE: DB·META / UI/DB MODE: + FE·BE)",
+          "kind": "python",
+          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
+          "args": [
+            "${input:id}",
+            "--mode",
+            "auto"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "SCP0100"
+            }
+          ],
+          "title_en": "Cloud package — modified only (scope follows work mode)"
+        },
+        {
+          "id": "S5.cloudFull",
+          "title": "클라우드 이관 패키지(전체) — 화면 소유 전부 · 범위 = 작업 모드(DB MODE: DB·META / UI/DB MODE: + FE·BE)",
+          "kind": "python",
+          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
+          "args": [
+            "${input:id}",
+            "--mode",
+            "auto",
+            "--full"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "SCP0100"
+            }
+          ],
+          "title_en": "Cloud package — full (scope follows work mode)"
+        },
+        {
+          "id": "S5.cloudApplied",
+          "title": "클라우드 이관 완료 표시 — 마지막 생성 패키지를 이관 기준선으로 확정 · 범위 = 작업 모드",
+          "kind": "python",
+          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
+          "args": [
+            "${input:id}",
+            "--mode",
+            "auto",
+            "--applied"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "SCP0100"
+            }
+          ],
+          "title_en": "Mark cloud package applied (moves the baseline)"
+        },
+        {
+          "id": "S5.cloudStage",
+          "title": "클라우드 이관 파일 사전 생성(작업 모드 기준 수정본·전체) · 생성/보완 끝 단계",
+          "kind": "python",
+          "script": "${root}/tools/CloudPkg/cloud_pkg.py",
+          "args": [
+            "${input:id}",
+            "--stage"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "SCP0100"
+            }
+          ],
+          "title_en": "Pre-build cloud packages (modified + full, scope follows work mode)"
         }
       ],
       "title_en": "5. New UI Development (Harness)"
@@ -1043,7 +1098,10 @@
         },
         {
           "id": "S7.smoke",
-          "requireServers": [8080, 5173],
+          "requireServers": [
+            8080,
+            5173
+          ],
           "title": "E2E 스모크 실행 (run-e2e.cmd smoke <ID>) — FE/BE 미기동 시 자동 기동 — 모드 선택",
           "kind": "cmd",
           "script": "${e2eDir}/run-e2e.cmd",
@@ -1089,7 +1147,10 @@
         },
         {
           "id": "S7.crud",
-          "requireServers": [8080, 5173],
+          "requireServers": [
+            8080,
+            5173
+          ],
           "title": "E2E CRUD 실행 (run-e2e.cmd crud) — 테스트 데이터 생성/삭제 — 모드 선택",
           "kind": "cmd",
           "script": "${e2eDir}/run-e2e.cmd",
@@ -1130,7 +1191,10 @@
         },
         {
           "id": "S7.auth",
-          "requireServers": [8080, 5173],
+          "requireServers": [
+            8080,
+            5173
+          ],
           "title": "E2E 권한·Division 매트릭스 실행 (run-e2e.cmd auth) — 모드 선택",
           "kind": "cmd",
           "script": "${e2eDir}/run-e2e.cmd",
@@ -1171,7 +1235,10 @@
         },
         {
           "id": "S7.authcrud",
-          "requireServers": [8080, 5173],
+          "requireServers": [
+            8080,
+            5173
+          ],
           "title": "E2E 권한별 CRUD 실행 (run-e2e.cmd authcrud) — 계정별 btn_auth 기대 ↔ Save/편집/CRUD — 모드 선택",
           "kind": "cmd",
           "script": "${e2eDir}/run-e2e.cmd",
@@ -1212,13 +1279,26 @@
         },
         {
           "id": "S7.all",
-          "requireServers": [8080, 5173],
+          "requireServers": [
+            8080,
+            5173
+          ],
           "title": "E2E 전체 4단계 (smoke·crud·auth·authcrud) — 화면ID (run-e2e.cmd all ID…) — 모드 선택",
           "kind": "cmd",
           "script": "${e2eDir}/run-e2e.cmd",
           "splitArgs": true,
-          "splitKinds": ["smoke", "crud", "auth", "authcrud"],
-          "splitTitles": { "smoke": "스모크 (화면·조회·컬럼)", "crud": "CRUD (실제 저장·원복 / 마커 행)", "auth": "권한 (접근·버튼·Division)", "authcrud": "권한별 CRUD" },
+          "splitKinds": [
+            "smoke",
+            "crud",
+            "auth",
+            "authcrud"
+          ],
+          "splitTitles": {
+            "smoke": "스모크 (화면·조회·컬럼)",
+            "crud": "CRUD (실제 저장·원복 / 마커 행)",
+            "auth": "권한 (접근·버튼·Division)",
+            "authcrud": "권한별 CRUD"
+          },
           "args": [
             "all",
             "${input:ids}",
@@ -1285,7 +1365,7 @@
     },
     {
       "id": "S8",
-      "title": "8. 화면 정합검증 (AS-IS vs TO-BE → 정합검증서 · 보완대상목록)",
+      "title": "8. UI CheckList (AS-IS vs TO-BE → CheckList · ActionItemList)",
       "tasks": [
         {
           "id": "S8.verify",
@@ -1293,7 +1373,7 @@
             8080,
             5173
           ],
-          "title": "화면 정합검증 전체 — 사실 보강→원장→E2E(@verify)→판정→정합검증서·보완대상 xlsx (보완 적용은 안 함)",
+          "title": "UI CheckList 전체 — 사실 보강→원장→E2E(@verify)→판정→CheckList·ActionItemList xlsx (보완 적용은 안 함)",
           "kind": "python",
           "script": "${harnessDir}/verify/run_verify.py",
           "splitArgs": true,
@@ -1311,7 +1391,7 @@
         },
         {
           "id": "S8.verifyStatic",
-          "title": "화면 정합검증 (E2E 없이) — 서버 없이 정적·메타 판정만, E2E 행은 미검증으로 표시",
+          "title": "UI CheckList (E2E 없이) — 서버 없이 정적·메타 판정만, E2E 행은 미검증으로 표시",
           "kind": "python",
           "script": "${harnessDir}/verify/run_verify.py",
           "splitArgs": true,
@@ -1329,8 +1409,48 @@
           "title_en": "Screen verification without E2E (static·meta only)"
         },
         {
+          "id": "S8.report",
+          "title": "테스트결과서 — 직전 UI CheckList 결과를 그룹(영역 → 검사 규칙 → 항목)별 테스트 내역·결과 Excel 로(실패 상세·캡처·실행 테스트 포함 · 새로 측정하지 않음)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/make_test_report.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Test result report — group the latest UI CheckList result (area → rule → item) into a readable Excel with details·captures·executed tests (no re-measurement)"
+        },
+        {
+          "id": "S8.verifyIfStale",
+          "requireServers": [
+            8080,
+            5173
+          ],
+          "title": "CheckList — 최신이 아닐 때만 실행 (FE 소스·PKG DDL·화면 메타가 직전 CheckList 이후 바뀌었거나 결과 없음 → run_verify · 최신이면 건너뜀) — 보완 메뉴 첫 단계",
+          "kind": "python",
+          "script": "${harnessDir}/verify/verify_if_stale.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (예 SCP0007)",
+              "default": "SCP0007"
+            }
+          ],
+          "title_en": "Verification if stale — run_verify only when FE source·PKG DDL·screen meta changed since the last verification (first step of Fix menus)"
+        },
+        {
           "id": "S8.scope",
-          "title": "보완 범위 설정 (repairScope: DB_ONLY = DB 만 / DB_FE = DB + 화면 FE · 공통 컴포넌트는 항상 가이드만)",
+          "title": "작업 모드 설정 (DB = DB MODE: DB·META 만, FE·BE 는 가이드 / UIDB = UI/DB MODE: 제약 없음)",
           "kind": "python",
           "script": "${harnessDir}/verify/set_scope.py",
           "splitArgs": true,
@@ -1340,11 +1460,11 @@
           "inputs": [
             {
               "name": "scope",
-              "prompt": "보완 범위 DB_ONLY 또는 DB_FE (비우면 현재 값만 표시)",
-              "default": "DB_ONLY"
+              "prompt": "작업 모드 DB 또는 UIDB (비우면 현재 값만 표시)",
+              "default": ""
             }
           ],
-          "title_en": "Set repair scope (repairScope: DB_ONLY / DB_FE)"
+          "title_en": "Set work mode (DB / UIDB)"
         },
         {
           "id": "S8.defects",
@@ -1355,11 +1475,27 @@
           "title_en": "Re-import human unit-test defect ledgers → Doc/verify/defects_baseline.csv"
         },
         {
+          "id": "S8.sources",
+          "title": "원천 xlsx 3개(DM 단위테스트 · GAP 분석 종합 · SCP&SSP DMF0045) → Doc/verify/sources MD+CSV+이미지 (누락 0 보고)",
+          "kind": "python",
+          "script": "${harnessDir}/verify/sources_extract.py",
+          "args": [],
+          "title_en": "Extract 3 source xlsx (DM unit test · GAP analysis · SCP&SSP DMF0045) → Doc/verify/sources MD+CSV+images"
+        },
+        {
+          "id": "S8.merge",
+          "title": "원천 분류 병합 — sources/_classified → defects_baseline·defects_classified 확장 + design_decisions.csv",
+          "kind": "python",
+          "script": "${harnessDir}/verify/defects_sources_merge.py",
+          "args": [],
+          "title_en": "Merge classified sources → defects_baseline/classified + design_decisions.csv"
+        },
+        {
           "id": "S8.folder",
-          "title": "정합검증서·보완대상 폴더 열기 (Doc/화면분석서)",
+          "title": "CheckList·ActionItemList 폴더 열기 (Doc/CheckList)",
           "kind": "open",
-          "path": "${root}/Doc/화면분석서",
-          "title_en": "Open verification documents folder"
+          "path": "${root}/Doc/CheckList",
+          "title_en": "Open CheckList folder"
         }
       ],
       "title_en": "8. Screen verification (AS-IS vs TO-BE → verification sheet · fix list)"

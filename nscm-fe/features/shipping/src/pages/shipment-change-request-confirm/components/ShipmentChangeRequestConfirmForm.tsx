@@ -52,15 +52,20 @@ export const ShipmentChangeRequestConfirmForm = ({ onSearch, onRequestorSearch, 
 
   // From Site = FromSiteByDivisionOspPack @divisionId(='40'). Division 40 고정이라 param 변경 없으나 규약상 실음.
   const fromSiteFilter: ComboParam = { comboId: COMBO.FROM_SITE, divisionId: sc.divisionId };
-  const [fromSites] = useTabComboQueries({ filters: [fromSiteFilter] });
+  // Division = MyDivision(라벨 표시 전용). 값은 '40' 고정·disabled 라 조회엔 안 쓰지만, AS-IS
+  //   clbDivision 처럼 CODE 가 아닌 NAME('40 Mobility & IT Battery')을 보여주려 가져온다(SSP0201 동일).
+  const [divisions, fromSites] = useTabComboQueries({ filters: [COMBO.DIVISION, fromSiteFilter] });
   const [changeStatus] = useTabLookupQueries({ filters: [{ lookupType: LOOKUP.CHANGE_REQ_STATUS }] });
   const [changeTypes] = useTabLookupQueries({ filters: [{ lookupType: LOOKUP.CHANGE_REQ_TYPE }] });
 
   const fromSiteOptions = toOptions(fromSites);
   const statusOptions = toOptions(changeStatus);
   const changeTypeOptions = toOptions(changeTypes);
-  // Division 은 '40' 고정 단일값 — 콤보 조회 없이 상수 옵션만.
-  const divisionOptions: Option[] = [{ label: sc.divisionId, value: sc.divisionId }];
+  // Division 라벨은 MyDivision NAME 을 쓴다(EE 제외, combo-semantic-parity §2.6). 값은 여전히 '40'
+  //   고정·disabled. 조회 실패/미반환 시 '40' 상수로 폴백해 종전 동작을 지킨다.
+  const divisionRows = (divisions ?? []).filter(r => str(r.ATTRIBUTE3) !== 'EE');
+  const divisionOptions: Option[] =
+    divisionRows.length > 0 ? toOptions(divisionRows) : [{ label: sc.divisionId, value: sc.divisionId }];
 
   return (
     <SearchArea
@@ -156,14 +161,12 @@ export const ShipmentChangeRequestConfirmForm = ({ onSearch, onRequestorSearch, 
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onRequestorSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onRequestorSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ requestId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -185,14 +188,12 @@ export const ShipmentChangeRequestConfirmForm = ({ onSearch, onRequestorSearch, 
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

@@ -7,7 +7,12 @@ import type { HotkeyConfig, PageProps } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useProcMutation, useSaveWithValidation, useTabProcQuery } from '@shared/hooks';
+import {
+  useProcMutation,
+  useSaveWithValidation,
+  useTabLookupQueries,
+  useTabProcQuery,
+} from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore } from '@shared/stores';
 
@@ -15,7 +20,7 @@ import { TactTimeExceptGrid } from './components/TactTimeExceptGrid';
 import { TactTimeForm } from './components/TactTimeForm';
 import { TactTimeMainGrid } from './components/TactTimeMainGrid';
 import { useTactTimeValidation } from './hooks/useTactTimeValidation';
-import { MENU_ID, MSG, SHEETS, TACT_MODE } from './tact-time.constants';
+import { MENU_ID, MSG, OPERATION_GROUP_LOOKUP, SHEETS, TACT_MODE } from './tact-time.constants';
 import type { ExceptRow, MainRow, PackerRow, PlantRow } from './tact-time.types';
 import styles from './TactTime.module.scss';
 import { useTactTimeStore } from './useTactTimeStore';
@@ -49,6 +54,14 @@ export const TactTime = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const sc = useTactTimeStore(s => s.searchCondition);
   const setSearchCondition = useTactTimeStore(s => s.setSearchCondition);
+  // Model 팝업 Operation Group 표시 라벨 (TactTimeForm 과 같은 lookup 캐시)
+  const [operationGroups] = useTabLookupQueries({ filters: [OPERATION_GROUP_LOOKUP] });
+  const operationGroupLabel = useMemo(() => {
+    const hit = (operationGroups ?? []).find(
+      r => (r as Record<string, unknown>).CODE === sc.operationGroupId
+    ) as Record<string, unknown> | undefined;
+    return typeof hit?.NAME === 'string' && hit.NAME ? hit.NAME : sc.operationGroupId;
+  }, [operationGroups, sc.operationGroupId]);
   const filters = useTactTimeStore(s => s.filters);
   const setFilter = useTactTimeStore(s => s.setFilter);
   const setExceptFilter = useTactTimeStore(s => s.setExceptFilter);
@@ -321,10 +334,13 @@ export const TactTime = ({ tabId, title }: PageProps<MENU_ID>) => {
         setSelectedValue={items => setSearchCondition({ itemId: items })}
         preSearchParams={{
           divisionId: sc.divisionId,
-          operationGroup: '',
+          // operationGroup: '',
+          // 조회조건 Operation Group 을 팝업에 상속
+          operationGroup: sc.operationGroupId,
           scpModuleType: MENU_ID,
           itemId: sc.itemId,
         }}
+        operationGroupLabel={operationGroupLabel}
       />
     </>
   );

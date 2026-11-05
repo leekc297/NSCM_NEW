@@ -1,0 +1,12 @@
+E2E AT 2026-10-28T17:12:50
+== T1 세트 174 와 같은 키로 신규 저장: payload 37행 · 원장 13341 → 13341
+   MSG: GDW에 데이터를 전송할때는 Sales Report에 ETC Report가 포함되어 전송됩니다. Sales Report 테이블 기준으로 중복되는 값이 발생했습니다. / VERSION_NO_ : R_S_20261002_V001_C / DIVISION_ID_ : 40 / DEPARTMENT_ID_ : 58691249 / DEPT_ID_ : 70090866 / ITEM_ID_ : MCMM726078A1 / MEASURE_ : LOC / YYYYMMDD_ : 20260101 / CURRENCY_ : USD / COMPANY_ID_ : HQ00 / END_CUST_REPORT_ : IM / CUST_REPORT_ : IM팀 Others / PRODUCT_GROUP_ : 원통형 / COUNTRY_KR_NAME_ :  /  / 데이터 저장 시 중복되지 않아야하는 값은 / Division, Department, Team, Model, Measure, YYYYMM, Currency, Company Id, End Cust.(Report), Cust. (Report), Product Gr.(Report), Country Name / 저장하시려는 데이터를 다시 한번 확인하시기 바
+== T2 Cust.(Report)=ZZ_DUPTEST 로 신규 저장: payload 37행 · 원장 13341 → 13341
+   MSG: GDW에 데이터를 전송할때는 Sales Report에 ETC Report가 포함되어 전송됩니다. Sales Report 테이블 기준으로 중복되는 값이 발생했습니다. / VERSION_NO_ : R_S_20261002_V001_C / DIVISION_ID_ : 40 / DEPARTMENT_ID_ : 58691249 / DEPT_ID_ : 70090866 / ITEM_ID_ : MCMM726078A1 / MEASURE_ : LOC / YYYYMMDD_ : 20260101 / CURRENCY_ : USD / COMPANY_ID_ : HQ00 / END_CUST_REPORT_ : IM / CUST_REPORT_ : ZZ_DUPTEST / PRODUCT_GROUP_ : 원통형 / COUNTRY_KR_NAME_ :  /  / 데이터 저장 시 중복되지 않아야하는 값은 / Division, Department, Team, Model, Measure, YYYYMM, Currency, Company Id, End Cust.(Report), Cust. (Report), Product Gr.(Report), Country Name / 저장하시려는 데이터를 다시 한번 확인하시기 바
+== 정리: 원장 0행 · 이력 0행 삭제 → 원장 13341행
+   LOG ('17:12:50', 'START', None)
+   LOG ('17:12:51', 'END', 'input_count: 0')
+   LOG ('17:12:51', 'START', None)
+   LOG ('17:12:51', 'DUPICATION_INVALID', None)
+   LOG ('17:12:51', 'DUPICATION_INVALID', None)
+   LOG ('17:12:51', 'END', 'input_count: 0')

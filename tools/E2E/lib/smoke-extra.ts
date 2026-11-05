@@ -13,11 +13,81 @@ import * as fs from 'node:fs';
 import type { Locator, TestInfo } from '@playwright/test';
 import type { Nscm, ProcCall } from './nscm';
 import { CFG, FE } from './nscm';
+import { probe } from './probe';
 
 export type Verdict = 'OK' | 'FAIL' | 'WARN' | 'NA' | 'ERROR';
 export type Item = { name: string; kind: string; verdict: Verdict; note: string };
-type Field = { label: string; labels?: string[]; component?: string; kind?: string; excluded?: boolean; excludedWhy?: string; asis?: string; popup?: boolean; required?: boolean };
-export type SmokePlan = { menuId?: string; fields: Field[]; sample?: { div?: string; item?: string; project?: string; site?: string }; condOrder?: string[]; condGone?: Array<{ name: string; usage: string }> };
+type Field = { label: string; labels?: string[]; component?: string; kind?: string; excluded?: boolean; excludedWhy?: string; asis?: string; popup?: boolean; required?: boolean; key?: string };
+export type SmokePlan = { menuId?: string; fields: Field[]; sample?: { div?: string; item?: string; project?: string; site?: string }; condOrder?: string[]; condGone?: Array<{ name: string; usage: string }>; condNotUse?: Array<{ asis: string; key: string; labels: string[] }> };
+
+/**
+ * 남아 있는 다이얼로그를 '저장 없이' 닫는다 (2026-11-05 T57). 닫기 수단 우선순위:
+ *   ① Cancel/취소/Close/닫기 버튼 → ② 머리의 X(CustomDialogContent 의 ControlCloseIcon — button 이 아니라 onClick 달린 SVG, cursor:pointer, 다이얼로그 상단 우측)
+ *   → ③ 버튼이 Confirm/확인/OK 하나뿐인 알림이면 그 버튼 → ④ Escape.
+ *   Save/저장/Default/OK(다른 버튼과 함께 있을 때) 는 절대 누르지 않는다 — Column Setting 모달에서 nscm.closeAlert('ok') 가 'Save' 를 눌러 사용자 컬럼 설정을 덮어쓸 수 있다.
+ * 반환: 닫은 수단('Cancel'|'X'|'Confirm'|'Escape' · 여러 개면 '+' 연결), 아무것도 없었으면 '', 끝까지 남으면 '열림: <머리글>'.
+ * reportOnly=true 면 닫기 시도 후 남은 다이얼로그를 '열림: …' 로 보고(Search Area 단계의 가림 요소 판정용).
+ */
+export async function closeDialogSafely(nscm: Nscm, page: import('@playwright/test').Page, reportOnly = false): Promise<string> {
+  const used: string[] = [];
+  const visibleDlg = () => page.locator('[role="dialog"]:visible, [role="alertdialog"]:visible, .MuiDialog-paper:visible').last();
+  for (let k = 0; k < 3; k++) {
+    const dlg = visibleDlg();
+    if (!(await dlg.isVisible({ timeout: 300 }).catch(() => false))) break;
+    const title = ((await dlg.innerText().catch(() => '')).trim().split('\n')[0] || '').slice(0, 40);
+    const cancel = dlg.getByRole('button', { name: /^(Cancel|취소|Close|닫기)$/i }).first();
+    let how = '';
+    if (await cancel.isVisible().catch(() => false)) { await cancel.click({ timeout: 3_000 }).catch(() => undefined); how = 'Cancel'; }
+    else {
+      // ② 머리 X: 다이얼로그 상단 56px 안에서 cursor:pointer 인 svg 중 가장 오른쪽 — React 위임 리스너라 네이티브 click 이벤트로 닿는다
+      const hit = await dlg.evaluate(d => {
+        const r = d.getBoundingClientRect(); const svgs = Array.from(d.querySelectorAll('svg')) as SVGElement[];
+        const cand = svgs.filter(s => { const b = s.getBoundingClientRect(); return b.width > 0 && b.top < r.top + 56 && getComputedStyle(s).cursor === 'pointer'; })
+          .sort((a, b) => b.getBoundingClientRect().right - a.getBoundingClientRect().right)[0];
+        if (!cand) return false; cand.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window })); return true;
+      }).catch(() => false);
+      if (hit) how = 'X';
+      else {
+        const btns = dlg.getByRole('button'); const n = await btns.count().catch(() => 0);
+        const only = n === 1 ? btns.first() : null;
+        if (only && /^(Confirm|확인|OK|Yes|예)$/i.test(((await only.innerText().catch(() => '')) || '').trim())) { await only.click({ timeout: 3_000 }).catch(() => undefined); how = 'Confirm'; }
+        else { await page.keyboard.press('Escape'); how = 'Escape'; }
+      }
+    }
+    await page.waitForTimeout(600);
+    if (await dlg.isVisible({ timeout: 300 }).catch(() => false)) {
+      if (how === 'Escape' || k === 2) return `열림: '${title}' (${[...used, how].join('+')} 무반응)`;
+      // X/Cancel 이 안 먹으면 다음 루프에서 다른 수단을 시도하지 않고 바로 보고 — 같은 다이얼로그에 Save 류를 누르는 일이 없도록
+      return `열림: '${title}' (${[...used, how].join('+')} 무반응)`;
+    }
+    used.push(how);
+  }
+  if (!used.length) return reportOnly ? '' : '';
+  return used.join('+');
+}
+
+/** 조회조건 칸의 현재 표시값(입력값·선택 칩·라디오) — Condition 저장 복원·Reset 화면값 유지 판정용(2026-10-30 G3). 못 찾으면 null */
+async function condSnapshot(nscm: Nscm, plan: SmokePlan, tag: string): Promise<Map<string, string>> {
+  const out = new Map<string, string>(); let k = 0;
+  for (const f of plan.fields || []) {
+    if (f.excluded) continue;
+    const labels = (f.labels && f.labels.length ? f.labels : [f.label]).filter(Boolean);
+    const c = await findCond(nscm, labels, `${tag}${k++}`).catch(() => null);
+    if (!c) continue;
+    const v = await c.root.evaluate((root: HTMLElement) => {
+      const clean = (s: string) => (s || '').replace(/[​ ]/g, '').trim();
+      const chips = [...root.querySelectorAll('.MuiChip-label, [class*="chip"], [class*="Chip"]')].map(e => clean((e as HTMLElement).innerText)).filter(Boolean);
+      if (chips.length) return chips.join('|');
+      const ins = [...root.querySelectorAll('input:not([type="hidden"]), textarea')] as HTMLInputElement[];
+      const checked = ins.filter(i => (i.type === 'radio' || i.type === 'checkbox') && i.checked).map(i => i.value || i.id || 'on');
+      if (checked.length) return checked.join('|');
+      return ins.map(i => clean(i.value)).filter(Boolean).join('|');
+    }).catch(() => '');
+    out.set(f.key || f.label, v);
+  }
+  return out;
+}
+const nk = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
 const ERR = /ORA-|PLS-|Exception|오류|error|실패|fail/i;
 const FATAL = /Assertion failed|Uncaught|is not a function|Cannot read propert|Unknown property/i;
@@ -46,12 +116,15 @@ export async function findCond(nscm: Nscm, labels: string[], tag: string): Promi
   //   라벨 글자만으로 찾으면 라디오 선택지('Search Level')·콤보 표시값까지 걸려 옆 칸을 잡는다 → FormItem 칸의 '라벨 트랙' 글자로만 매칭한다.
   return page.evaluate(({ labels, tag }) => {
     const nrm = (s: string) => String(s || '').toLowerCase().replace(/[​ ]/g, '').replace(/^\s*\*+|\*+\s*$/g, '').replace(/[^a-z0-9가-힣]/g, '');
-    const want = labels.map(nrm).filter(Boolean);
+    const alias: Record<string, string> = { div: 'division', division: 'div' };  // 'Div.'↔'Division' 라벨 별칭(2026-10-29 SCP0041 '상위 조회조건 [Division] 칸 없음' 허위 FAIL)
+    const want = labels.flatMap(l => { const n = nrm(l); return alias[n] ? [n, alias[n]] : [n]; }).filter(Boolean);
     const vis = (e: Element) => { const r = (e as HTMLElement).getBoundingClientRect(); return r.width > 0 && r.height > 0 && (e as HTMLElement).offsetParent !== null; };
     const outside = (e: Element) => !e.closest('.wj-flexgrid, [role="dialog"], [role="alertdialog"], .MuiDialog-root, header, nav, [class*="_tab_"]');
     const items = Array.from(document.querySelectorAll('[class*="_formItem_"], [class*="formItem"]')).filter(e => e.children.length >= 2 && vis(e) && outside(e) && !e.parentElement?.closest('[class*="_formItem_"]'));
     // 후보 우선순위대로(기준표 To-Be 명칭 → LBL 문구 → As-is 라벨) — 같은 화면에 비슷한 이름(라디오 'Search Mode' vs 콤보 'Search Level')이 있을 때 앞 후보가 이긴다
-    const ordered = want.flatMap(w => items.filter(b => nrm(((b.firstElementChild as HTMLElement).innerText) || '') === w && !b.hasAttribute('data-e2e-cond')));
+    let ordered = want.flatMap(w => items.filter(b => nrm(((b.firstElementChild as HTMLElement).innerText) || '') === w && !b.hasAttribute('data-e2e-cond')));
+    // 앞선 탐색이 남긴 표시 때문에 같은 칸을 못 찾으면 '칸 없음' 허위 FAIL 이 된다(2026-11-01 SCP0028 Valid·Model) — 표시된 칸도 다시 쓴다
+    if (!ordered.length) ordered = want.flatMap(w => items.filter(b => nrm(((b.firstElementChild as HTMLElement).innerText) || '') === w));
     for (const box of ordered) {
       const labTrack = box.firstElementChild as HTMLElement;
       const ctlPart = box.children[1] as HTMLElement; const ctl = ctlPart.querySelector('[role="combobox"], input[type="checkbox"], input[type="radio"], input:not([type="hidden"]), textarea');
@@ -65,8 +138,37 @@ export async function findCond(nscm: Nscm, labels: string[], tag: string): Promi
       const tr = ((target.closest('.MuiCheckbox-root, .MuiRadio-root, .MuiInputBase-root, .MuiAutocomplete-root') as HTMLElement) || target).getBoundingClientRect();
       return { kind, label: (labTrack.innerText || '').replace(/[​\n]/g, ' ').trim(), labelRight: Math.round(lr.right), ctlLeft: Math.round(tr.left), top: Math.round(lr.top), left: Math.round(lr.left) };
     }
+    // 라벨 없는 체크박스/라디오 칸(hook #154: 왼쪽 라벨 열 + 컨트롤 · FormItem 1자식) — 컨트롤 라벨(MuiFormControlLabel) 텍스트로 찾는다(2026-10-29 SCP0100 Cell Qty·A/S '칸 없음')
+    for (const w of want) {
+      const lab = Array.from(document.querySelectorAll('label')).find(l => !l.closest('.wj-flexgrid, [role="dialog"], .MuiDialog-root') && vis(l) && nrm((l as HTMLElement).innerText || '') === w && !!l.querySelector('input[type="checkbox"], input[type="radio"]') && !l.hasAttribute('data-e2e-cond'));
+      if (lab) {
+        lab.setAttribute('data-e2e-cond', tag);
+        const inp = lab.querySelector('input') as HTMLElement; const lr = lab.getBoundingClientRect(); const tr = inp.getBoundingClientRect();
+        return { kind: inp.getAttribute('type') === 'radio' ? 'radio' : 'checkbox', label: ((lab as HTMLElement).innerText || '').trim(), labelRight: Math.round(lr.right), ctlLeft: Math.round(tr.left), top: Math.round(lr.top), left: Math.round(lr.left) };
+      }
+    }
     return null;
   }, { labels, tag }).then(r => (r ? Object.assign(r, { root: page.locator(`[data-e2e-cond="${tag}"]`).first() }) : null)).catch(() => null);
+}
+
+/** 조회조건 칸 찾기 + 모드 전환: 기본 모드에서 안 보이는 조건(SCP0100 'Search Mode' 라디오 = Search Level / Detail 전용 칸)은 조회영역 라디오를 바꿔 가며 다시 찾는다(2026-10-29).
+ *  드러나지 않은 토글은 원래 선택으로 되돌린다(다른 조건 측정에 영향 없게). */
+export async function findCondAny(nscm: Nscm, labels: string[], tag: string): Promise<Awaited<ReturnType<typeof findCond>>> {
+  const first = await findCond(nscm, labels, tag); if (first) return first;
+  const page = nscm.page;
+  const radios = page.locator('[class*="_formItem_"] input[type="radio"], [class*="formItem"] input[type="radio"]');
+  const n = Math.min(await radios.count().catch(() => 0), 16);
+  for (let i = 0; i < n; i++) {
+    const r = radios.nth(i);
+    if (await r.isChecked().catch(() => true)) continue;
+    if (await r.evaluate(e => !!e.closest('.wj-flexgrid, [role="dialog"], .MuiDialog-root')).catch(() => true)) continue;
+    const grp = await r.getAttribute('name').catch(() => null);
+    const prev = grp ? page.locator(`input[type="radio"][name="${grp}"]:checked`).first() : null;
+    await r.click({ timeout: 3_000, force: true }).catch(() => undefined); await page.waitForTimeout(400);
+    const box = await findCond(nscm, labels, tag); if (box) return box;
+    if (prev && await prev.count().catch(() => 0)) { await prev.click({ timeout: 3_000, force: true }).catch(() => undefined); await page.waitForTimeout(200); }
+  }
+  return null;
 }
 
 /** 콤보에서 현재 값과 다른 옵션 하나 선택(ALL/SELECT ALL 제외). 반환: 고른 옵션 글자('' = 못 고름) */
@@ -214,11 +316,34 @@ export async function commonCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan): 
   const savedCount = async () => page.evaluate(async u => { try { const r = await fetch(u, { credentials: 'include' }); if (!r.ok) return -1; const j = await r.json(); if (Array.isArray(j)) return j.length; const arr = j && typeof j === 'object' ? Object.values(j as Record<string, unknown>).find(v => Array.isArray(v)) : null; return Array.isArray(arr) ? arr.length : (j && j.data == null ? 0 : -1); } catch { return -1; } }, condApi);
   const backup = plan.menuId ? await page.evaluate(async u => { try { const r = await fetch(u, { credentials: 'include' }); if (!r.ok) return { ok: false, rows: [] as Array<{ paramNm: string; paramCtn: string }> }; const j = await r.json(); const d = Array.isArray(j) ? j : (j && typeof j === 'object' ? Object.values(j as Record<string, unknown>).find(v => Array.isArray(v)) : null) || []; return { ok: true, rows: (d as Array<Record<string, unknown>>).map(x => ({ paramNm: String(x.paramNm ?? ''), paramCtn: String(x.paramCtn ?? '') })).filter(x => x.paramNm) }; } catch { return { ok: false, rows: [] as Array<{ paramNm: string; paramCtn: string }> }; } }, condApi) : { ok: false, rows: [] };
   // 4) Condition(F6) 저장 → '조회 조건이 저장되었습니다' 알림(실패 문구면 FAIL)
+  const snapBefore = await condSnapshot(nscm, plan, 'cs0_');  // 저장 직전 화면 조건값(복원·Reset 유지 판정 기준)
   { const b = await nscm.visibleFirst(page.getByRole('button', { name: /^Condition(\(F6\))?$/i }));
     if (!b) add('Condition(F6) 조회조건 저장', 'NA', '버튼 없음');
     else { await b.click({ timeout: 5_000 }).catch(() => undefined); const a = await waitAlert(nscm); await closeVisibleDialogs(nscm);
       const n = await savedCount(); // 저장 결과를 DB 에서 다시 읽어 확인(알림만 믿지 않음)
       add('Condition(F6) 조회조건 저장', !a || /실패|fail|error|오류/i.test(a) ? 'FAIL' : n === 0 ? 'WARN' : 'OK', `${a ? `알림 '${a.replace(/\s+/g, ' ').slice(0, 60)}'` : '저장 결과 알림 없음'} · 저장 행 ${n < 0 ? '조회 실패' : n}`); } }
+      // 2026-10-30 SSP45 공통요건 11 · CR-029: Condition 저장에 기간(Period·From/To Date 등) 조건은 저장되지 않아야 한다 — 저장된 paramNm 을 DB 에서 다시 읽어 기간 키 유무로 판정(judge: 'condition' 이름 → G3)
+      const savedKeys = await page.evaluate(async u => { try { const r = await fetch(u, { credentials: 'include' }); if (!r.ok) return null; const j = await r.json(); const arr = Array.isArray(j) ? j : (j && typeof j === 'object' ? (Object.values(j as Record<string, unknown>).find(v => Array.isArray(v)) as unknown[] | undefined) : undefined); return (arr || []).map(x => String((x as Record<string, unknown>).paramNm ?? (x as Record<string, unknown>).PARAM_NM ?? (x as Record<string, unknown>).param_nm ?? '')); } catch { return null; } }, condApi);
+      if (savedKeys) { const per = savedKeys.filter(k => /period|from.?(dt|date)$|to.?(dt|date)$|start.?(dt|date)|end.?(dt|date)|ymd|yyyymm|yyyyww|week|month|plan.?date|cutoff/i.test(k));
+        add('Condition(F6) Period 비저장(기간 조건 제외)', per.length ? 'FAIL' : savedKeys.length ? 'OK' : 'WARN', per.length ? `기간 키 저장됨: ${per.slice(0, 5).join(', ')} (공통 요건 11 · CR-029: 기간 조건은 저장 제외)` : savedKeys.length ? `저장 키 ${savedKeys.length}개 중 기간 키 0 (${savedKeys.slice(0, 6).join(', ')})` : '저장 키 없음 — 판정 재료 없음');
+        // 2026-10-30 G3: AS-IS ConditionNotUseList(화면이 저장에서 뺀 조건 — SCP0111 PlanDate·PlanType) 가 TO-BE 저장 키에 있으면 FAIL
+        const notUse = plan.condNotUse || [];
+        if (notUse.length) {
+          const hit = notUse.filter(n => { const keys = [n.key, ...(n.labels || []), n.asis.replace(/^(cbo|clb|txt|chk|dt|usr)/, '')].map(nk).filter(Boolean); return savedKeys.some(k => keys.some(x => nk(k) === x || nk(k).includes(x) || x.includes(nk(k)))); });
+          add('Condition(F6) 제외 조건 비저장(AS-IS ConditionNotUseList)', hit.length ? 'FAIL' : 'OK', hit.length ? `AS-IS 가 저장에서 제외한 조건이 저장됨: ${hit.map(h => h.asis + (h.key ? '→' + h.key : '')).join(', ')} (BaseForm OnClickConditionButton ConditionNotUseList) — TO-BE SubTitle hotkeyConfig.condition/personalizeCondition 저장 대상에서 제외 필요` : `제외 조건 ${notUse.map(n => n.asis).join(', ')} 저장 키에 없음(저장 키 ${savedKeys.length})`);
+        }
+        // 2026-10-30 G3: 저장 → 화면 재진입 → 저장 키에 해당하는 조건값이 복원되는지(AS-IS Form_Load 개인 조회조건 복원)
+        if (savedKeys.length && plan.menuId) {
+          await nscm.openScreen(plan.menuId).catch(() => undefined); await page.waitForTimeout(1_500); await closeVisibleDialogs(nscm);
+          const snapAfter = await condSnapshot(nscm, plan, 'cs1_');
+          const diffs: string[] = []; let compared = 0;
+          for (const [key, v0] of snapBefore) {
+            if (!v0) continue; if (!savedKeys.some(k => nk(k) === nk(key) || nk(k).includes(nk(key)) || nk(key).includes(nk(k)))) continue;
+            compared++; const v1 = snapAfter.get(key) ?? ''; if (v1 !== v0) diffs.push(`${key}: '${v0.slice(0, 30)}' → '${v1.slice(0, 30)}'`);
+          }
+          add('Condition(F6) 저장 복원(재진입)', !compared ? 'WARN' : diffs.length ? 'FAIL' : 'OK', !compared ? `저장 키(${savedKeys.slice(0, 5).join(', ')})에 대응하는 화면 조건값을 찾지 못해 복원 비교 불가` : diffs.length ? `재진입 후 복원 안 됨: ${diffs.slice(0, 4).join(' · ')} (FE 조회조건 복원 effect·conditionsRestored 플래그 확인)` : `저장 조건 ${compared}개 재진입 후 그대로 복원`);
+        }
+      }
   // 5) Reset Condition(F10) → 확인(Confirm) → 초기화 알림 → 저장 행 0
   { const b = await nscm.visibleFirst(page.getByRole('button', { name: /^Reset Condition(\(F10\))?$/i }));
     if (!b) add('Reset Condition(F10) 조회조건 초기화', 'NA', '버튼 없음');
@@ -226,7 +351,11 @@ export async function commonCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan): 
       const dq = await nscm.visibleFirst(page.locator('[role="dialog"], [role="alertdialog"]'), 20);
       if (dq) { const ok = dq.getByRole('button', { name: /^(Confirm|확인|OK|Yes|예)$/i }).first(); await ok.click({ timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(500); }
       const a = await waitAlert(nscm); await closeVisibleDialogs(nscm); const n = await savedCount();
-      add('Reset Condition(F10) 조회조건 초기화', !q || (a && /실패|fail|error|오류/i.test(a)) ? 'FAIL' : n > 0 ? 'FAIL' : 'OK', `확인 '${(q || '').replace(/\s+/g, ' ').slice(0, 40)}' → 결과 '${(a || '').replace(/\s+/g, ' ').slice(0, 40)}' · 남은 저장 행 ${n < 0 ? '조회 실패' : n}`); } }
+      add('Reset Condition(F10) 조회조건 초기화', !q || (a && /실패|fail|error|오류/i.test(a)) ? 'FAIL' : n > 0 ? 'FAIL' : 'OK', `확인 '${(q || '').replace(/\s+/g, ' ').slice(0, 40)}' → 결과 '${(a || '').replace(/\s+/g, ' ').slice(0, 40)}' · 남은 저장 행 ${n < 0 ? '조회 실패' : n}`);
+      // 2026-10-30 G3(사용자 결정 AS-IS 대로): Reset 은 서버 저장본만 삭제(BaseForm ResetPanelCondition) — 화면 입력값·Division 이 지워지면 FAIL
+      const snapR = await condSnapshot(nscm, plan, 'rs_');
+      const wiped = [...snapBefore].filter(([key, v0]) => v0 && (snapR.get(key) ?? '') === '').map(([key, v0]) => `${key}('${v0.slice(0, 24)}')`);
+      add('Reset Condition(F10) 화면값 유지(AS-IS 서버 저장본만 삭제)', wiped.length ? 'FAIL' : snapBefore.size ? 'OK' : 'WARN', wiped.length ? `Reset 뒤 화면 조건값이 지워짐: ${wiped.slice(0, 5).join(', ')} — AS-IS ResetPanelCondition 은 저장본만 삭제(화면값 유지) · TO-BE handleResetCondition/resetConditionValues 가 화면 상태까지 초기화` : snapBefore.size ? `화면 조건값 ${snapBefore.size}개 유지` : '비교할 조건값 없음'); } }
   // 4·5 후처리 — 기존 저장 조회조건 복원(있었던 경우만). 실패하면 ERROR 로 남겨 사람이 복원하게 한다
   if (backup.ok && backup.rows.length) {
     const st = await page.evaluate(async ({ u, rows }) => { try { const r = await fetch(u, { method: 'POST', credentials: 'include', headers: { 'content-type': 'application/json' }, body: JSON.stringify(rows) }); return r.status; } catch { return 0; } }, { u: condApi, rows: backup.rows });
@@ -237,7 +366,8 @@ export async function commonCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan): 
     if (!holder) add('Excel 다운로드', 'NA', '버튼 없음');
     else if (!hasGrid) add('Excel 다운로드', 'NA', '그리드 없음');
     else { const dl = page.waitForEvent('download', { timeout: 60_000 }).catch(() => null); await holder.click({ timeout: 5_000 }).catch(() => undefined); const d = await dl;
-      if (!d) add('Excel 다운로드', 'FAIL', '60초 안에 파일 다운로드 없음');
+      // 2026-11-05 T57: 다운로드 대신 알림(0건 가드 '조회된 데이터가 없습니다' 등)이 뜨면 그 문구를 근거로 남기고 닫는다 — 열린 채 두면 뒤 Search Area 클릭이 백드롭에 막혀 ERROR(SCP0084 11-05 05:38 실측)
+      if (!d) { const at = await nscm.alertText(); if (at) { add('Excel 다운로드', 'FAIL', `다운로드 없음 — 알림 '${at.replace(/\s+/g, ' ').slice(0, 80)}'`); await closeDialogSafely(nscm, page); } else add('Excel 다운로드', 'FAIL', '60초 안에 파일 다운로드 없음'); }
       else { const fn = d.suggestedFilename(); const p = await d.path().catch(() => null); let size = 0; try { size = p ? fs.statSync(p).size : 0; } catch { size = 0; }
         add('Excel 다운로드', /\.xlsx$/i.test(fn) && size > 0 ? 'OK' : 'FAIL', `'${fn}' ${size}B`);
         await d.delete().catch(() => undefined); } } } // 받은 xlsx(zip) 는 판정 후 삭제 — 남겨 두면 결과 첨부 단계에서 zip 판독 오류가 났다(2026-10-23 실측)
@@ -247,18 +377,29 @@ export async function commonCycle(nscm: Nscm, info: TestInfo, plan: SmokePlan): 
     else { await b.click({ timeout: 5_000 }).catch(() => undefined); let dlg: Locator | null = null; const until = Date.now() + 6_000; while (!dlg && Date.now() < until) { dlg = await nscm.visibleFirst(page.locator('[role="dialog"], .MuiDialog-paper, [role="presentation"] .MuiPaper-root'), 20); if (!dlg) await page.waitForTimeout(300); }
       const open = !!dlg; const txt = dlg ? (await dlg.innerText().catch(() => '')).slice(0, 4000) : '';
       const noCol = /No Column/i.test(txt);
-      if (dlg) { const cancel = dlg.getByRole('button', { name: /^(Cancel|취소|Close|닫기)$/i }).first(); if (await cancel.isVisible().catch(() => false)) await cancel.click().catch(() => undefined); else await page.keyboard.press('Escape'); }
-      add('Columns 컬럼 설정', !open ? 'FAIL' : noCol ? 'FAIL' : 'OK', !open ? '클릭 후 설정 창이 열리지 않음' : noCol ? "설정 창 목록 'No Column'(fallbackColumns 누락 — check.js H02)" : '설정 창 열림·닫힘'); } }
+      // 2026-11-05 T57: Column Setting 모달(CustomDialog)은 Cancel 버튼이 없고 Escape 로도 안 닫힌다 — 머리의 X(onClick 달린 SVG, button 아님)를 눌러 닫고 닫힘을 확인한다. Save/OK 는 절대 누르지 않는다(사용자 컬럼 설정 덮어쓰기 금지)
+      const closed = dlg ? await closeDialogSafely(nscm, page) : '';
+      add('Columns 컬럼 설정', !open ? 'FAIL' : noCol ? 'FAIL' : 'OK', !open ? '클릭 후 설정 창이 열리지 않음' : noCol ? "설정 창 목록 'No Column'(fallbackColumns 누락 — check.js H02)" : `설정 창 열림·닫힘(${closed || '닫기 실패 — 뒤 단계 가림'})`); } }
   // 8) Search Area 스위치(MainTitle) — 끄면 조회영역 숨김 · 켜면 다시 보임
   // MainTitle(titleAreaWrapper) 의 MUI Switch(label 'Search Area' = LBL00324) — 2026-10-23 DOM 실측
   { const sw = (await nscm.visibleFirst(page.locator('[class*="titleAreaWrapper"] .MuiSwitch-root'))) || (await nscm.visibleFirst(page.getByRole('switch', { name: /Search Area|조회\s*영역/i }))) || (await nscm.visibleFirst(page.getByLabel(/^\s*_?(Search Area|조회\s*영역)\s*$/i))) || (await nscm.visibleFirst(page.locator('label').filter({ hasText: /Search Area|조회\s*영역/i }).locator('input[type="checkbox"]')));
     if (!sw) add('Search Area 조회영역 토글', 'NA', '스위치 없음');
     // SearchArea 는 isHidden 이어도 언마운트하지 않고 MUI Collapse 로 접는다 → 표시 = 조회조건 칸을 감싼 Collapse 들의 높이가 모두 > 5px
     else { const shown = async () => page.evaluate(() => { const fi = Array.from(document.querySelectorAll('[class*="_formItem_"]')).find(e => !e.closest('[role="dialog"], .wj-flexgrid') && (e as HTMLElement).offsetParent !== null); if (!fi) return false; for (let p = fi.parentElement; p; p = p.parentElement) if (p.classList.contains('MuiCollapse-root') && p.getBoundingClientRect().height <= 5) return false; return true; }).catch(() => false);
-      const vis0 = await shown(); await sw.click({ force: true, timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(900);
-      const vis1 = await shown(); await sw.click({ force: true, timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(900);
-      const vis2 = await shown();
-      add('Search Area 조회영역 토글', vis0 && !vis1 && vis2 ? 'OK' : vis0 === vis1 ? 'ERROR' : 'FAIL', vis0 === vis1 ? `스위치 클릭 후 조회영역 변화 감지 못함(${vis0}→${vis1}→${vis2}) — 자동 판정 불가, 수동 확인 필요` : `조회영역(조회조건 칸) 표시 ${vis0}→${vis1}→${vis2}`); } }
+      // 2026-11-05 T57: 앞 단계가 남긴 다이얼로그(Excel 0건 알림 · Column Setting 모달)가 있으면 force 클릭이 백드롭에 떨어져 '변화 없음' ERROR 가 났다(SCP0084·DMF0082·SCP0100 실측).
+      //   → 먼저 남은 다이얼로그를 X/Cancel 로만 닫고(Save·OK 금지), 그래도 남으면 가림 요소를 명시한 ERROR. 클릭은 스위치 input 에 직접 하고 checked 변화를 함께 기록해 '스위치 무반응' 과 '접힘 무반응(화면 결함)' 을 가른다.
+      const blocker = await closeDialogSafely(nscm, page, true);
+      if (blocker.startsWith('열림:')) add('Search Area 조회영역 토글', 'ERROR', `가림 요소 — ${blocker} (닫기 실패) · 스위치 미측정`);
+      else { const inp = sw.locator('input[type="checkbox"]').first(); const tgt = (await inp.count().catch(() => 0)) ? inp : sw;
+        const checked = async () => tgt.evaluate(e => (e as HTMLInputElement).checked ?? (e.getAttribute('aria-checked') === 'true')).catch(() => null);
+        const c0 = await checked(); const vis0 = await shown(); await tgt.click({ force: true, timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(900);
+        const c1 = await checked(); const vis1 = await shown(); await tgt.click({ force: true, timeout: 5_000 }).catch(() => undefined); await page.waitForTimeout(900);
+        const c2 = await checked(); const vis2 = await shown();
+        const swMoved = c0 !== c1; const sw3 = `스위치 ${c0}→${c1}→${c2}`;
+        add('Search Area 조회영역 토글', vis0 && !vis1 && vis2 ? 'OK' : !swMoved ? 'ERROR' : 'FAIL',
+          vis0 && !vis1 && vis2 ? `조회영역(조회조건 칸) 표시 ${vis0}→${vis1}→${vis2} · ${sw3}`
+            : !swMoved ? `스위치 클릭에 상태 변화 없음(${sw3}) — 가림/포커스 문제 의심 · 조회영역 ${vis0}→${vis1}→${vis2}`
+            : `스위치는 바뀌었으나(${sw3}) 조회영역이 접히지/펼쳐지지 않음 ${vis0}→${vis1}→${vis2} — isHidden 배선 결함 의심`); } } }
   // 9) Manual(F1) — 공통 GridAction.getManual 은 현재 TODO(console.error 자리표시) → 동작 없음을 그대로 기록(화면 결함 아님)
   { const b = await nscm.visibleFirst(page.getByRole('button', { name: /^Manual(\(F1\))?$/i }));
     if (!b) add('Manual(F1)', 'NA', '버튼 없음');
@@ -311,4 +452,154 @@ export function record(info: TestInfo, type: 'cond' | 'common', items: Item[]) {
   const c = (v: Verdict) => items.filter(i => i.verdict === v).length;
   info.annotations.push({ type: `${type}sum`, description: `${c('OK')}/${judged.length} OK · FAIL ${c('FAIL')} · WARN ${c('WARN')} · ERROR ${c('ERROR')} · NA ${c('NA')}` });
   return { ok: c('OK'), total: judged.length, fail: c('FAIL'), warn: c('WARN'), error: c('ERROR') };
+}
+
+/** 조회조건 팝업 칸(돋보기) 값 고르기 — 팝업 그리드에서 조건에 맞는 첫 행 더블클릭. skipRe 에 맞는 행은 건너뛴다(예 Current) · 고른 행 글자를 돌려준다(2026-11-03 Version 조건) */
+export async function pickFromPopup(nscm: Nscm, label: string, skipRe = ''): Promise<string> {
+  const p = nscm.page; const it = p.locator('[class*="_formItem_"]').filter({ hasText: new RegExp(`^\\*?\\s*(?:[A-Za-z]+\\s+)?${label}`, 'i') }).first();
+  if (!(await it.count().catch(() => 0))) { if (process.env.E2E_RESULTS) await p.screenshot({ path: `${process.env.E2E_RESULTS}/pop_noitem_${label.replace(/\W/g, '')}.png` }).catch(() => undefined); return ''; }
+  const btn = it.locator('button').last(); await btn.click({ timeout: 5_000 }).catch(() => undefined); await p.waitForTimeout(1_200);
+  const dlg = p.locator('[role="dialog"]:visible').last(); if (!(await dlg.count().catch(() => 0))) { if (process.env.E2E_RESULTS) await p.screenshot({ path: `${process.env.E2E_RESULTS}/pop_nodlg_${label.replace(/\W/g, '')}.png` }).catch(() => undefined); return ''; }
+  const srch = dlg.getByRole('button', { name: /^Search/i }).first(); if (await srch.isVisible().catch(() => false)) { await srch.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForLoadState('networkidle', { timeout: 30_000 }).catch(() => undefined); await p.waitForTimeout(800); }
+  const findRow = () => p.evaluate(`(() => { const el = [...document.querySelectorAll('[role="dialog"] .wj-flexgrid')].filter(e => e.offsetParent !== null).pop(); const c = el && el['$WJ-CTRL']; if (!c) return null; const skip = ${JSON.stringify(skipRe)} ? new RegExp(${JSON.stringify(skipRe)}, 'i') : null; for (let r = 0; r < Math.min(c.rows.length, 50); r++) { let t = ''; for (let i = 0; i < c.columns.length; i++) if (c.columns[i].visible !== false) t += String(c.getCellData(r, i, true) ?? '') + ' '; if (skip && skip.test(t)) continue; for (let i = 0; i < c.columns.length; i++) { const e2 = c.cells.getCellElement(r, i); if (e2 && c.columns[i].visible !== false && c.columns[i].binding) { const q = e2.getBoundingClientRect(); if (q.width > 10) return { x: q.left + q.width / 2, y: q.top + q.height / 2, t: t.trim().slice(0, 60) }; } } } return null; })()`).catch(() => null) as Promise<{ x: number; y: number; t: string } | null>;
+  let tgt = await findRow();
+  if (!tgt && skipRe) { const inp = dlg.locator('input:not([type="hidden"])').filter({ hasNot: p.locator('[role="combobox"]') }); const n = await inp.count().catch(() => 0); for (let k = 0; k < n; k++) { const q = inp.nth(k); const v = await q.inputValue().catch(() => ''); const m = /^(\d{4})([.\-\/]?)(\d{2})(.*)$/.exec(v); if (!m) continue; await q.fill(`${+m[1] - 1}${m[2]}${m[3]}${m[4]}`, { timeout: 3_000 }).catch(() => undefined); await q.press('Tab').catch(() => undefined); break; } if (await srch.isVisible().catch(() => false)) { await srch.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForLoadState('networkidle', { timeout: 30_000 }).catch(() => undefined); await p.waitForTimeout(800); } tgt = await findRow(); }
+  if (!tgt) { if (process.env.E2E_RESULTS) await p.screenshot({ path: `${process.env.E2E_RESULTS}/pop_fail_${label.replace(/\W/g, '')}.png` }).catch(() => undefined); await p.keyboard.press('Escape').catch(() => undefined); return ''; }
+  await p.mouse.dblclick(tgt.x, tgt.y); await p.waitForTimeout(700);
+  if (await p.locator('[role="dialog"]:visible .wj-flexgrid').count().catch(() => 0)) { const ok = p.locator('[role="dialog"]:visible').last().getByRole('button', { name: /^(OK|확인|Select|선택|Apply|적용)$/i }).first(); if (await ok.isVisible().catch(() => false)) { await ok.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(600); } }
+  return tgt.t;
+}
+
+/** 조회조건 콤보를 라벨로 찾아 값 선택 — 라벨이 맞는 칸 우선, 없으면 다른 칸 후보에서 찾는다(문서 조건별 시험 공용) */
+const COND_OPT = '.MuiAutocomplete-popper [role="option"], [role="listbox"] [role="option"]';
+export async function setCondByLabel(nscm: Nscm, label: string, val: string): Promise<boolean> {
+  const p = nscm.page; if (/^@pop/.test(val)) { const skip = val.split(':')[1] || ''; return !!(await pickFromPopup(nscm, label, skip)); }
+  if (val === '@other') return setCondOther(nscm, label); /* 2026-11-04 W8-2 자동 시나리오: 그 라벨 조건을 현재와 다른 후보로 */
+  const run = async () => { const items = p.locator('[class*="_formItem_"]'); const nI = await items.count().catch(() => 0); const re = new RegExp(`^\\s*${val.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|$)`, 'i'); const lre = new RegExp(`^\\*?\\s*${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'i'); const order: number[] = []; for (let i = 0; i < nI; i++) { const t = ((await items.nth(i).innerText().catch(() => '')) || '').trim(); if (lre.test(t)) order.unshift(i); else order.push(i); } for (const i of order) { const cb = items.nth(i).locator('[role="combobox"]').first(); if (!(await cb.isVisible().catch(() => false))) continue; await cb.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(350); const o = p.locator(COND_OPT).filter({ hasText: re }).first(); if (await o.isVisible().catch(() => false)) { await o.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(700); await nscm.clearDialogs(); return true; } await p.keyboard.press('Escape').catch(() => undefined); await p.waitForTimeout(120); } const rd = p.locator('label, [role="radio"]').filter({ hasText: re }).first(); if (await rd.isVisible().catch(() => false)) { await rd.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(700); await nscm.clearDialogs(); return true; } return false; };
+  return run();
+}
+
+/** 그 라벨 조회조건을 현재 값과 다른 첫 후보로 바꾼다(콤보 · 라디오) — 생성기가 실제 후보 값을 모를 때(W8-2 · 2026-11-04). 바꿨으면 true */
+export async function setCondOther(nscm: Nscm, label: string): Promise<boolean> {
+  const p = nscm.page; const lre = new RegExp(`^\\*?\\s*${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'i');
+  const items = p.locator('[class*="_formItem_"], [class*="formItem"]'); const nI = await items.count().catch(() => 0);
+  for (let i = 0; i < nI; i++) {
+    const it = items.nth(i); const t = ((await it.innerText().catch(() => '')) || '').trim(); if (!lre.test(t)) continue;
+    const rads = it.locator('input[type="radio"]'); const nR = await rads.count().catch(() => 0);
+    if (nR > 1) { for (let k = 0; k < nR; k++) { const r = rads.nth(k); if (!(await r.isChecked().catch(() => true))) { await r.check({ force: true, timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(700); await nscm.clearDialogs(); return true; } } return false; }
+    const cb = it.locator('[role="combobox"]').first(); if (!(await cb.isVisible().catch(() => false))) continue;
+    const cur = ((await cb.inputValue().catch(() => '')) || (await cb.innerText().catch(() => '')) || '').trim();
+    await cb.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(350);
+    const opts = p.locator(COND_OPT); const nO = await opts.count().catch(() => 0);
+    for (let k = 0; k < nO; k++) { const o = opts.nth(k); const ot = ((await o.innerText().catch(() => '')) || '').trim(); if (ot && ot !== cur && !(await o.getAttribute('aria-selected').then(v => v === 'true').catch(() => false))) { await o.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(700); await nscm.clearDialogs(); return true; } }
+    await p.keyboard.press('Escape').catch(() => undefined); return false;
+  }
+  return false;
+}
+
+/** 조회조건 기간 시작일을 months 개월 앞으로(키 입력) — 지난 기간 칸이 필요한 시험용. 바꾼 칸 수를 돌려준다(2026-11-03 EG310) */
+export async function widenFrom(p: Nscm['page'], months: number): Promise<number> {
+  const n = await p.evaluate(() => {
+    document.querySelectorAll('[data-e2e-from]').forEach(e => e.removeAttribute('data-e2e-from')); let k = 0;
+    for (const it of Array.from(document.querySelectorAll('[class*="formItem"]')) as HTMLElement[]) {
+      if (it.offsetParent === null || it.closest('[role="dialog"], .wj-flexgrid')) continue;
+      const ins = Array.from(it.querySelectorAll('input:not([type="hidden"])')) as HTMLInputElement[];
+      if (ins.length >= 2 && /^\d{4}[.\-\/]?\d{2}/.test(ins[0].value || '')) it.setAttribute('data-e2e-from', String(k++));
+    }
+    return k;
+  }).catch(() => 0);
+  let done = 0;
+  for (let k = 0; k < n; k++) {
+    const inp = p.locator(`[data-e2e-from="${k}"]`).first().locator('input:not([type="hidden"])').nth(0);
+    const v = await inp.inputValue().catch(() => ''); const m = /^(\d{4})([.\-\/]?)(\d{2})(.*)$/.exec(v); if (!m) continue;
+    const t = +m[1] * 12 + (+m[3] - 1) - months; const nv = `${Math.floor(t / 12)}${m[2]}${String(t % 12 + 1).padStart(2, '0')}${m[4]}`;
+    await inp.fill(nv, { timeout: 3_000 }).catch(() => undefined); await inp.press('Tab').catch(() => undefined); done++;
+  }
+  return done;
+}
+
+/** 기본 조회가 0행이면 실제 화면 후보로 대안 조회를 시도한다 — ① Division 후보 순회 ② 기간(period) 시작 2년 앞으로. 행이 생기는 첫 조건에서 멈춘다(2026-10-31 SCP0041 기본 조회 0행 → 전 검사 ERROR).
+ *  사전 데이터셋을 쓰지 않는다(화면 콤보 후보·실데이터만). 결과 via 는 증거용 경로 설명 */
+const ENSURE_MEMO = new Map<string, { via: string; years?: number; div?: string; none?: boolean }>();
+export async function ensureRows(nscm: Nscm, maxDiv = 3, key = 'default'): Promise<{ rows: number; via: string }> {
+  const p = nscm.page;
+  let rows = await probe.rowCount(p);
+  if (rows > 0) return { rows, via: '기본 조회' };
+  const searchCount = async () => { const b0 = nscm.calls.length; await nscm.search().catch(() => undefined); await probe.waitRows(p, 25_000).catch(() => undefined); await nscm.clearDialogs().catch(() => undefined); const n = await probe.rowCount(p); const body = (nscm.calls.slice(b0).find(c => /SEARCH/i.test(c.btn))?.body || '').replace(/\s+/g, '').slice(0, 140); console.log(`[ensureRows] 시도 → ${n}행 · 본문 ${body}`); return n; };  // 25s: Div 40 7,849행이 12s 안에 안 차서 0행으로 읽었다(2026-10-31 r8 진단)
+  // 기간 칸 = 입력 2개 이상 + 첫 입력값이 날짜인 FormItem 전부(Hold 기간·Cutoff 기간처럼 여러 개일 수 있다 — 2026-10-31 SCP0041 Pack Hold 는 Cutoff 까지 넓혀야 행이 나온다)
+  const widenAll = async (years: number): Promise<string[]> => {
+    const n = await p.evaluate(() => {
+      document.querySelectorAll('[data-e2e-period]').forEach(e => e.removeAttribute('data-e2e-period'));
+      let k = 0;
+      for (const it of Array.from(document.querySelectorAll('[class*="_formItem_"], [class*="formItem"]')) as HTMLElement[]) {
+        if (it.offsetParent === null || it.closest('[role="dialog"], .wj-flexgrid')) continue;
+        const ins = Array.from(it.querySelectorAll('input:not([type="hidden"])')) as HTMLInputElement[];
+        if (ins.length >= 2 && /^\d{4}[.\-\/]?\d{2}[.\-\/]?\d{2}/.test(ins[0].value || '')) it.setAttribute('data-e2e-period', String(k++));
+      }
+      return k;
+    }).catch(() => 0);
+    const done: string[] = [];
+    for (let k = 0; k < n; k++) {
+      const ins = p.locator(`[data-e2e-period="${k}"]`).first().locator('input:not([type="hidden"])');
+      const v1 = await ins.nth(0).inputValue().catch(() => ''); const m = /^(\d{4})/.exec(v1); if (!m) continue;
+      const nv = String(new Date().getFullYear() - years) + v1.slice(4);
+      await ins.nth(0).fill(nv, { timeout: 3_000 }).catch(() => undefined); await ins.nth(0).press('Tab').catch(() => undefined);
+      done.push(nv);
+    }
+    return done;
+  };
+  // 메모 — 같은 화면에서 이미 찾은 조건은 바로 재적용 · 못 찾았으면 재시도 생략(테스트마다 3~4분 낭비 방지)
+  // 메모 키 = 화면 + 현재 시트(마지막 조회 sheet) — 다른 탭에서 '대안 없음' 을 기록해 이 탭의 재시도까지 막던 결함(2026-10-31 SCP0041 trace 전 테스트 0행)
+  const curSheet = [...nscm.calls].reverse().find(c => /SEARCH/i.test(c.btn))?.sheet || '';
+  key = `${key}|${curSheet}`;
+  const memo = ENSURE_MEMO.get(key);
+  if (memo) {
+    if (memo.none) return { rows, via: `기본 조회 0행 · 대안 전부 0행(이전 시도 ${memo.via} · 재시도 생략)` };
+    if (memo.years) await widenAll(memo.years);
+    if (memo.div) await nscm.setDivision(memo.div).catch(() => false);
+    rows = await searchCount();
+    return { rows, via: `${memo.via} (메모 재적용 → ${rows}행)` };
+  }
+  const tried: string[] = [];
+  // ① 모든 기간 칸의 시작을 2년 → 5년 앞으로(현재 Division 유지)
+  let widened = 0;
+  for (const years of [2, 5]) {
+    const did = await widenAll(years).catch(() => [] as string[]);
+    if (!did.length) break;
+    widened = years; rows = await searchCount(); tried.push(`기간 ${years}년 확대(${did.join(',')}~):${rows}행`);
+    if (rows > 0) { const via = `기간 ${years}년 확대 대안 조회(${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, years }); return { rows, via }; }
+  }
+  // ② Division 후보 순회(확대된 기간 유지)
+  try {
+    const combo = await nscm.visibleFirst(p.getByRole('combobox'));
+    if (combo) {
+      await combo.click({ timeout: 3_000 }).catch(() => undefined);
+      const opts = await p.getByRole('option').allInnerTexts().catch(() => [] as string[]);
+      await p.keyboard.press('Escape').catch(() => undefined);
+      for (const o of opts.slice(0, maxDiv)) {
+        const code = (o.trim().split(/\s+/)[0] || '').replace(/[^A-Za-z0-9_]/g, '');
+        if (!code || /^all$/i.test(code)) continue;
+        if (!(await nscm.setDivision(code))) continue;
+        if (widened) await widenAll(widened);  // Division 변경이 기간을 기본값으로 되돌리는 화면(C1 연쇄) — 확대 기간 재적용(2026-10-31 SCP0041 r7)
+        rows = await searchCount(); tried.push(`Div ${code}${widened ? '+기간' : ''}:${rows}행`);
+        if (rows > 0) { const via = `Division '${code}'${widened ? ` + 기간 ${widened}년 확대` : ''} 대안 조회(${tried.join(' · ')})`; ENSURE_MEMO.set(key, { via, years: widened || undefined, div: code }); return { rows, via }; }
+      }
+    }
+  } catch { /* Division 순회 실패 */ }
+  const via = `기본 조회 0행 · 대안 ${tried.join(' · ') || '없음'} 전부 0행`;
+  ENSURE_MEMO.set(key, { via, none: true });
+  return { rows, via };
+}
+
+/** 화면 안 탭(시트) 클릭 — role=tab → button → 텍스트 순. 전환 못 하면 false(측정 경로 없음 → 호출부가 ERROR) */
+export async function clickSheetTab(nscm: Nscm, name: string): Promise<boolean> {
+  const p = nscm.page; const rx = new RegExp(`^\\s*${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'i');
+  for (const el of [p.getByRole('tab', { name: rx }).first(), p.getByRole('button', { name: rx }).first(), p.getByText(rx).first()]) {
+    if (await el.isVisible({ timeout: 1_200 }).catch(() => false)) { await el.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(800); return true; }
+  }
+  // 탭이 아니라 체크박스로 여는 하단 그리드(DMF0005 Detail → Purchase · 2026-11-02 172행 미측정) — 켜서 보이는 그리드가 늘면 그 시트로 본다
+  const grids = () => p.evaluate(() => [...document.querySelectorAll('.wj-flexgrid')].filter(e => (e as HTMLElement).offsetParent !== null).length).catch(() => 0) as Promise<number>;
+  const g0 = await grids(); if (g0 >= 2) return true; /* 탭 없이 이미 열린 하단 그리드 — 호출부가 pickGrid 로 그 시트 컬럼을 가진 그리드를 고른다(DMF0005 Purchase · 2026-11-02) */ const boxes = p.locator('[class*="_formItem_"] input[type="checkbox"], [class*="SubTitle" i] input[type="checkbox"], [class*="subTitle" i] input[type="checkbox"]'); const nb = await boxes.count().catch(() => 0);
+  for (let k = 0; k < nb; k++) { const b = boxes.nth(k); if (!(await b.isVisible().catch(() => false)) || await b.isChecked().catch(() => true)) continue; await b.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(1_000); if ((await grids()) > g0) return true; await b.click({ timeout: 3_000 }).catch(() => undefined); await p.waitForTimeout(400); }
+  return false;
 }

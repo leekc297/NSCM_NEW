@@ -1,0 +1,219 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-10-31T05:51:20+09:00",
+ "producer": "run_verify",
+ "id": "SCP0096",
+ "skip_e2e": false,
+ "started": "2026-10-31 05:27:50",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-9ce92210",
+   "class": "F5",
+   "msg": "SCP0096 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-31 05:45"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-d255e233",
+   "class": "G3",
+   "msg": "SCP0096 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E smoke/auth 요약"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-6ff7c5a4",
+   "class": "F10",
+   "msg": "PKG_SCP0096.P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC f10_check (ZIOUI1 ALL_SOURCE 저장 PROC 본문)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-f8a41f6a",
+   "class": "B8",
+   "msg": "조회조건 Sales Site·End Customer·Sold to Customer·Plant Site·Team 콤보",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-31 05:45"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-eb47f8fe",
+   "class": "C4",
+   "msg": "[DMF0082 결함 일반화] 그리드 Measure 필터(MEASURE Filter) × Division(DIVISION_ID) 변경 재조회 · 건수 표시",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-463fdd38",
+   "class": "B8",
+   "msg": "Team 컬럼(MKT FCST 조회·신규행)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-31 05:45"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-ad49a504",
+   "class": "G4",
+   "msg": "D00-1-010 · §1 usrConditionPanel1 / UsrConditionPanel",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d83840e6",
+   "class": "C4",
+   "msg": "cboDivision / Division / Div",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-31 05:45"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-a8c0dab9",
+   "class": "F5",
+   "msg": "SCP0096 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @trace @10-31 05:45"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-d2b44fb5",
+   "class": "G4",
+   "msg": "COMMON:UC-06 · Key-in 조회조건 콤마 다중 입력 전건 조회",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-bf85a2e4",
+   "class": "X-ROW",
+   "msg": "SCP0096_Shipment_Working_Day_OSP.DefineProperty",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-342ea234",
+   "class": "X-ROW",
+   "msg": "SCP0096_Shipment_Working_Day_OSP.FindButton",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-7312ac1d",
+   "class": "X-ROW",
+   "msg": "SCP0096_Shipment_Working_Day_OSP.FindData_Main",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-eee5a30e",
+   "class": "X-ROW",
+   "msg": "SCP0096_Shipment_Working_Day_OSP.InitControls",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "summary": {
+  "rows": 1268,
+  "PASS": 584,
+  "FAIL": 14,
+  "판정필요": 22,
+  "미검증": 17,
+  "해당없음": 631,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 474,
+   "없음(판정 대기)": 22,
+   "기계(상속·집계)": 753,
+   "출처 미기록": 2,
+   "없음(미검증)": 17
+  },
+  "fail_listed": 14,
+  "coverage": {
+   "rules": 77,
+   "measured": 122,
+   "not_run_error": 17,
+   "na": 230,
+   "suspect_na100": []
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0096_ShipmentWorkingDayOsp_CheckList_v25.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0096_ShipmentWorkingDayOsp_ActionItemList_v25.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0096/e2e_results.json"
+  }
+ ],
+ "note": ""
+}

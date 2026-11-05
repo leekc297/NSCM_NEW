@@ -1,0 +1,7 @@
+// QUERY/OPEN 액션셀 — 클릭 가능한 링크형 셀(read-only 그리드 위 유일 인터랙션).
+.actionCell {
+  cursor: pointer;
+  color: #1976d2;
+  text-decoration: underline;
+  font-weight: 500;
+}

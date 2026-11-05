@@ -1,0 +1,148 @@
+{
+ "schema": "vibe-result/1",
+ "ts": "2026-10-31T04:53:49+09:00",
+ "producer": "run_verify",
+ "id": "SCP0100",
+ "skip_e2e": false,
+ "started": "2026-10-31 03:33:54",
+ "state": "completed",
+ "verdict": "fail",
+ "issues": [
+  {
+   "id": "V-1ccb0af5",
+   "class": "G10",
+   "msg": "조회조건 Project",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-31 04:47"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-79e8ee99",
+   "class": "M3",
+   "msg": "new SCM0002_TitleSetForm_Popup(\"SCP0100\", measure, false)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC+DB popup_data_check (AS-IS 개인화 팝업 ↔ TO-BE 메타 조회 Division 별 행수)"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-99600f06",
+   "class": "B7",
+   "msg": "[DMF0082 결함 유형] Team(DEPT_ID) 셀 콤보 표시값",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-31 04:47"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-9d825c01",
+   "class": "B7",
+   "msg": "[DMF0003 결함 유형] Team 정보(DEPT_ID)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "E2E @verify @10-31 04:47"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-ed3e710d",
+   "class": "G10",
+   "msg": "[DMF0072 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Model/Nickname Popup 열기(Div 40 은 Project 제외)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "V-4a29ec3f",
+   "class": "G10",
+   "msg": "[DMF0074 결함 일반화] 조회조건 Project(PROJECT) · Model/Nickname(MODEL) 입력칸 Enter 키 → Project Popup · Item Popup 열기 · Model 팝업 사전 조건 activeFlag 미전달(사용 중지 모델 포함)",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "규칙 판정 상속"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-4e7ab4b4",
+   "class": "H10",
+   "msg": "SCP0100 화면",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "STATIC mapping_trace"
+    }
+   ],
+   "grade": "hard"
+  },
+  {
+   "id": "T-16a5dc90",
+   "class": "X-ROW",
+   "msg": "SCP0100_Global_PSI_Report.btnMeasure_Click",
+   "evidence": [
+    {
+     "kind": "exec",
+     "ref": "기계(상속·집계)"
+    }
+   ],
+   "grade": "hard"
+  }
+ ],
+ "summary": {
+  "rows": 1658,
+  "PASS": 532,
+  "FAIL": 8,
+  "판정필요": 47,
+  "미검증": 135,
+  "해당없음": 936,
+  "AI판단만_강등": 0,
+  "grade": {
+   "기계": 765,
+   "없음(미검증)": 135,
+   "없음(판정 대기)": 47,
+   "사람": 5,
+   "기계(상속·집계)": 704,
+   "출처 미기록": 2
+  },
+  "fail_listed": 8,
+  "coverage": {
+   "rules": 78,
+   "measured": 202,
+   "not_run_error": 108,
+   "na": 419,
+   "suspect_na100": []
+  }
+ },
+ "docs": {
+  "CheckList": "Doc/CheckList/SCP0100_GlobalPsiNew_CheckList_v22.xlsx",
+  "ActionItemList": "Doc/CheckList/SCP0100_GlobalPsiNew_ActionItemList_v22.xlsx"
+ },
+ "evidence": [
+  {
+   "kind": "exec",
+   "ref": "tools/Harness/verify/run_verify.py"
+  },
+  {
+   "kind": "test",
+   "ref": "Doc/verify/SCP0100/e2e_results.json"
+  }
+ ],
+ "note": ""
+}

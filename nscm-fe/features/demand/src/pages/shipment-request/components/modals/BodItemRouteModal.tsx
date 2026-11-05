@@ -11,21 +11,20 @@
  * 주의: 팝업 컬럼도 admin 메타 단일 원천(memory popup-grid-columns-admin-meta). SCM_MST_SHEET_COLUMNS
  *   PROGRAM_ID='DMF0045' SHEET_NAME='bodPopup' — FE 하드코딩 컬럼 배열 금지(register.sql 등록 대상).
  */
-import { CellType, HeadersVisibility, SelectionMode, type FlexGrid } from '@mescius/wijmo.grid';
+import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { GridUtils, buildNoColumn, withRowNo } from '@foundation/utils';
-import { CustomDialog, DataGrid, ResultArea, SearchArea } from '@shared/components';
+import { CustomDialog, DataGrid, ResultArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
+import { Button, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
-import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
-import { BOD_POPUP_TITLE_KEY, LBL, MENU_ID, MSG_NO_ROWS_SELECTED, SHEETS } from '../../shipment-request.constants';
+import type { MENU_ID} from '../../shipment-request.constants';
+import { BOD_POPUP_TITLE_KEY, LBL, MSG_NO_ROWS_SELECTED, SHEETS } from '../../shipment-request.constants';
 import type { BodItemReturn, BodPopupRow } from '../../shipment-request.types';
 
 import styles from './BodItemRouteModal.module.scss';
@@ -43,81 +42,109 @@ interface Props {
   };
 }
 
+// [ROLLBACK:dmf0045-bod-popup-use-scp0030 · 2026-10-29] ──────────────────────────────────────────────
+//   사용자 지시(2026-10-29): DMF0045 TR_MODE 팝업을 SCP0030 BOD ID 팝업과 "동일하게 동작"하도록 그 백엔드를
+//   그대로 재사용한다(일단 동작 우선, 세부 매핑은 후속). SCP0030 BOD 팝업 = 배포 완료:
+//     · 조회 : /SCP0030/bodPopup/SEARCH/call-proc → PKG_SCP0030.P_SCP0030_GET_BOD_POPUP
+//              (내부에서 PKG_SCM0002.P_SCM0002_GET_BODITEM_FOR_SUPPLY_POPUP 호출, IN = divisionId/itemId)
+//     · 권한 : 호출자(attackgo 등) SCP0030 메뉴·bodPopup/SEARCH 권한 보유(DB 실측 2026-10-29)
+//   주의: SCP0030/bodPopup 은 admin 컬럼메타가 DB 에 없다(SCP0030 FE 도 하드코딩) → 아래 POPUP_COLUMNS 를
+//     SCP0030 GetBodItemModal 과 동일하게 하드코딩한다(이 팝업 한정 예외). 반환은 FROM_SITE_NAME/TO_SITE_NAME
+//     (사이트 '명')·TRANSPORT_MODE·INCOTERMS·BOD_ID 중심이라 END_CUSTOMER/Team 은 안 채워진다(A안 수용).
+//   롤백: BOD_SRC_MENU 를 MENU_ID 로 되돌리고, 하드코딩 POPUP_COLUMNS 를 admin 메타 fetch(popupColumns)로
+//     원복, filters/toSelection 을 원래 DMF0046 컬럼명으로 되돌린다.
+const BOD_SRC_MENU = 'SCP0030';
+
+// SCP0030 GetBodItemModal 과 동일 컬럼셋(SCM0002_GetBODItemPopup / supply BOD) — 반환 커서(o_rc1)와 1:1.
+const POPUP_COLUMNS: RawFlexGridColumnConfig[] = [
+  { colNm: 'FROM_SITE_NAME', colLblNm: 'From Site', colWth: 150, horzAlgnCd: 'L', visible: true, display: true },
+  { colNm: 'TO_SITE_NAME', colLblNm: 'To Site', colWth: 150, horzAlgnCd: 'L', visible: true, display: true },
+  { colNm: 'ITEM_ID', colLblNm: 'Model', colWth: 130, horzAlgnCd: 'L', visible: true, display: true },
+  { colNm: 'PRIORITY', colLblNm: 'Priority', colWth: 70, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'INCOTERMS', colLblNm: 'Incoterms', colWth: 80, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'TRANSPORT_MODE', colLblNm: 'Trans Mode', colWth: 90, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'BOD_ITEM_VALID', colLblNm: 'BOD Item Valid', colWth: 90, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'DAYS_MON', colLblNm: 'Mon', sClsLblNm: 'Voyage', colWth: 45, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'DAYS_TUE', colLblNm: 'Tue', sClsLblNm: 'Voyage', colWth: 45, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'DAYS_WED', colLblNm: 'Wed', sClsLblNm: 'Voyage', colWth: 45, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'DAYS_THU', colLblNm: 'Thu', sClsLblNm: 'Voyage', colWth: 45, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'DAYS_FRI', colLblNm: 'Fri', sClsLblNm: 'Voyage', colWth: 45, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'DAYS_SAT', colLblNm: 'Sat', sClsLblNm: 'Voyage', colWth: 45, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'DAYS_SUN', colLblNm: 'Sun', sClsLblNm: 'Voyage', colWth: 45, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'LEAD_TIME', colLblNm: 'L/T(Day)', colWth: 80, horzAlgnCd: 'R', visible: true, display: true },
+  { colNm: 'FROM_YYYYMMDD', colLblNm: 'From', colWth: 100, horzAlgnCd: 'C', visible: true, display: true },
+  { colNm: 'TO_YYYYMMDD', colLblNm: 'To', colWth: 100, horzAlgnCd: 'C', visible: true, display: true },
+];
+
 export const BodItemRouteModal = ({ open, modalClose, setSelectedValue, preSearchParams }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
   const gridRef = useRef<FlexGrid>(undefined);
   const gridFilterRef = useRef<FlexGridFilter | undefined>(undefined);
 
-  const [itemId, setItemId] = useState('');
   const [filters, setFilters] = useState<ProcRequest<MENU_ID, SHEETS.BOD_POPUP> | undefined>(
     undefined
   );
 
-  // 팝업 컬럼 admin 메타(SCM_MST_SHEET_COLUMNS bodPopup) — 모달 자기완결 fetch(부모 store 미확장).
-  //   BE 미응답/미등록 시 빈 배열 유지(하드코딩 fallback 금지 — 룰 #91).
-  const [popupColumns, setPopupColumns] = useState<RawFlexGridColumnConfig[]>([]);
-  useEffect(() => {
-    if (!open) return;
-    let alive = true;
-    void (async () => {
-      try {
-        const result = await apiClient.post<RawFlexGridColumnConfig[]>(
-          `/admin/menu/${MENU_ID}/column`,
-          { sheetNm: SHEETS.BOD_POPUP, divisionId: preSearchParams.divisionId }
-        );
-        if (alive) setPopupColumns(result.data.result ?? []);
-      } catch {
-        // silent — 메타 미응답 시 빈 목록 유지(console 금지 룰)
-      }
-    })();
-    return () => {
-      alive = false;
-    };
-  }, [open, preSearchParams.divisionId]);
+  // [ROLLBACK:dmf0045-bod-popup-use-scp0030] 컬럼 메타 = 하드코딩 POPUP_COLUMNS(SCP0030 동일, admin 메타 없음).
+  //   종전엔 /admin/menu/DMF0045/column 에서 fetch 했으나 SCP0030/bodPopup 은 메타가 없어 하드코딩으로 대체.
 
   useEffect(() => {
     if (!open) return;
-    setItemId(preSearchParams.itemId);
+    // [ROLLBACK:dmf0045-bod-popup-use-scp0030] SCP0030 SP(P_SCP0030_GET_BOD_POPUP) IN = divisionId/itemId.
+    //   planGroup 은 SP 가 안 쓰지만 SCP0030 FE 와 동형으로 함께 보낸다(빈값).
     setFilters({
       divisionId: preSearchParams.divisionId,
       itemId: preSearchParams.itemId,
-      fromYyyymmdd: preSearchParams.fromYyyymmdd,
-      programId: MENU_ID,
-    } as ProcRequest<MENU_ID, SHEETS.BOD_POPUP>);
+      planGroup: '',
+    } as never);
     // 열릴 때만 초기화 — 열려 있는 동안 상위 값 변화로 입력을 덮지 않는다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   const { data, isLoading, isFetching } = useTabProcQuery<MENU_ID, SHEETS.BOD_POPUP>({
-    menuId: MENU_ID,
+    // [ROLLBACK:dmf0045-bod-popup-use-scp0030] 조회를 /SCP0030/bodPopup/SEARCH/call-proc 로 보낸다.
+    menuId: BOD_SRC_MENU as never,
     sheetName: SHEETS.BOD_POPUP,
-    tabId: `${MENU_ID}_BodItemRouteModal`,
+    tabId: `${BOD_SRC_MENU}_DMF0045_BodItemRouteModal`,
     filters,
     enabled: open && !!filters,
   });
   const loading = isLoading || isFetching;
 
-  const rows = useMemo(() => withRowNo((data?.o_rc1 ?? []) as unknown as BodPopupRow[]), [data]);
-  const staticColumns = useMemo(
-    () => [buildNoColumn(t(LBL.NO, '_No')), ...popupColumns],
-    [t, popupColumns]
+  // [ROLLBACK:dmf0045-bod-popup-use-scp0030] SCP0030 GetBodItemModal 동일 — From/To(YYYYMMDD)는 date-only 정규화.
+  const rows = useMemo(
+    () =>
+      withRowNo(
+        (data?.o_rc1 ?? []).map(row => {
+          const r = row as unknown as { FROM_YYYYMMDD?: string; TO_YYYYMMDD?: string };
+          return {
+            ...row,
+            FROM_YYYYMMDD: (r.FROM_YYYYMMDD ?? '').slice(0, 10),
+            TO_YYYYMMDD: (r.TO_YYYYMMDD ?? '').slice(0, 10),
+          };
+        }) as unknown as BodPopupRow[]
+      ),
+    [data]
   );
+  // [ROLLBACK:dmf0045-bod-popup-use-scp0030] 하드코딩 POPUP_COLUMNS 사용(admin 메타 fetch 대체).
+  const staticColumns = useMemo(() => [buildNoColumn(t(LBL.NO, '_No')), ...POPUP_COLUMNS], [t]);
 
-  const handleSearch = () => {
-    setFilters(prev => ({ ...(prev ?? {}), itemId }) as ProcRequest<MENU_ID, SHEETS.BOD_POPUP>);
+  // [ROLLBACK:dmf0045-bod-popup-use-scp0030] SCP0030 BOD 팝업 반환 컬럼 → c_* 매핑.
+  //   SCP0030(supply)은 사이트 '명'(FROM_SITE_NAME/TO_SITE_NAME)을 주고 END_CUSTOMER/DEPT 는 반환하지 않는다
+  //   → 그 2칸은 ''(A안 수용). 원복 시 DMF0046 컬럼명(FROM_SITE/TO_SITE/…/END_CUSTOMER/DEPT_NAME_KO)으로.
+  const toSelection = (row: BodPopupRow): BodItemReturn => {
+    const r = row as unknown as Record<string, string | undefined>;
+    return {
+      c_FROM_SITE: r.FROM_SITE_NAME ?? '',
+      c_TO_SITE: r.TO_SITE_NAME ?? '',
+      c_INCOTERMS: r.INCOTERMS ?? '',
+      c_TRANSPORT_MODE: r.TRANSPORT_MODE ?? '',
+      c_BOD_ID: r.BOD_ID ?? '',
+      c_END_CUSTOMER: '',
+      c_DEPT_NAME_KO: '',
+    };
   };
-
-  // AS-IS OKButtonClick 그리드 행 → c_* 반환 매핑(design 03 §3 근거표). 호출 화면은 이 계약만 안다.
-  const toSelection = (row: BodPopupRow): BodItemReturn => ({
-    c_FROM_SITE: row.FROM_SITE,
-    c_TO_SITE: row.TO_SITE,
-    c_INCOTERMS: row.INCOTERMS,
-    c_TRANSPORT_MODE: row.TRANSPORT_MODE,
-    c_BOD_ID: row.BOD_ID,
-    c_END_CUSTOMER: row.END_CUSTOMER,
-    c_DEPT_NAME_KO: row.DEPT_NAME_KO,
-  });
 
   const handleSubmit = () => {
     const grid = gridRef.current;
@@ -148,7 +175,7 @@ export const BodItemRouteModal = ({ open, modalClose, setSelectedValue, preSearc
 
   return (
     <CustomDialog
-      size={1400}
+      size={750}
       type='modaless'
       position='basic'
       open={open}
@@ -161,36 +188,9 @@ export const BodItemRouteModal = ({ open, modalClose, setSelectedValue, preSearc
         </div>
       }
       customContentArea={
+        // [ROLLBACK:dmf0045-bod-popup-use-scp0030] SCP0030 GetBodItemModal 과 동일 레이아웃 — 검색영역 없이
+        //   그리드만(division/item 은 preSearchParams 로 열 때 자동조회). 원복 시 SearchArea(Div/Model/Search) 복원.
         <div className={styles.dialogContentWrapper}>
-          <SearchArea
-            searchButtonLabel={t(LBL.SEARCH_POPUP, '_Search')}
-            onSearch={handleSearch}
-            conditions={
-              <>
-                <Grid size={4}>
-                  <FormItem
-                    label={t(LBL.DIVISION, '_Div')}
-                    labelAlign='right'
-                    render={() => <InputField fullWidth disabled value={preSearchParams.divisionId} />}
-                  />
-                </Grid>
-                <Grid size={4}>
-                  <FormItem
-                    label={t(LBL.MODEL, '_Model')}
-                    labelAlign='right'
-                    render={() => (
-                      <InputField
-                        fullWidth
-                        value={itemId}
-                        onChange={e => setItemId(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && handleSearch()}
-                      />
-                    )}
-                  />
-                </Grid>
-              </>
-            }
-          />
           <div className={styles.gridWrapper}>
             <ProgressIndicator
               shape='circular'
@@ -203,9 +203,8 @@ export const BodItemRouteModal = ({ open, modalClose, setSelectedValue, preSearc
                 gridRef={gridRef}
                 gridFilterRef={gridFilterRef}
                 isReadOnly
-                headersVisibility={HeadersVisibility.Column}
-                // 다건 선택 = ListBox(grid.selectedItems 다건 반환). AS-IS CHK 체크박스 컬럼 대체.
-                selectionMode={SelectionMode.ListBox}
+                // [ROLLBACK:dmf0045-bod-popup-use-scp0030] SCP0030 GetBodItemModal 과 동일 — 체크박스 다건 선택.
+                useCheckbox
                 staticColumns={staticColumns}
                 itemsSource={rows as unknown as WijmoRowItem[]}
                 dblClick={handleDblClick}

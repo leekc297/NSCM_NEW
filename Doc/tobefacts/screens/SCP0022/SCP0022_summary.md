@@ -1,6 +1,6 @@
 # SCP0022 — To-Be Fact Pack 요약
 
-- page_key: `supply/formation` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `supply/formation` · feature: supply · As-is Fact Pack 있음
 - 파일 10 · 엔드포인트 호출 9 (미해결 0, 주석 속 1) · 이벤트 22 · 컴포넌트 사용 29 · 하드코딩 컬럼 0 · 메시지 21
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 
@@ -9,7 +9,7 @@
 |---|---|---|
 | features/supply/src/pages/formation/components/FormationExceptGrid.tsx | component | 130 |
 | features/supply/src/pages/formation/components/FormationExceptLtGrid.tsx | component | 121 |
-| features/supply/src/pages/formation/components/FormationForm.tsx | component | 171 |
+| features/supply/src/pages/formation/components/FormationForm.tsx | component | 167 |
 | features/supply/src/pages/formation/components/FormationGrid.tsx | component | 146 |
 | features/supply/src/pages/formation/formation.constants.ts | constants | 132 |
 | features/supply/src/pages/formation/Formation.module.scss | style | 48 |
@@ -50,8 +50,8 @@
 | SearchArea | onSearch | onSearch | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 83 |
 | CustomDropdown | onChange | <arrow> confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setSearchParams | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 96 |
 | CustomDropdown | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 119 |
-| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 148 |
-| FunctionSearchIcon | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 142 |
+| InputField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 144 |
+| Button | onClick | <arrow> setOpenItemModal | jsx | features/supply/src/pages/formation/components/FormationForm.tsx | 140 |
 | DataGrid | gotFocus | <arrow> setActiveTab | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 138 |
 | DataGrid | initialized | attachNumberInputBlock | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 139 |
 | DataGrid | beginningEdit | handleBeginEdit | jsx | features/supply/src/pages/formation/components/FormationGrid.tsx | 140 |

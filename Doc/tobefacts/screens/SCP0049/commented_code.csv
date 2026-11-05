@@ -1,3 +1,6 @@
 ﻿"page_key","menu_id","file","line","kind","snippet"
-"supply/capa","SCP0049","features/supply/src/pages/capa/Capa.tsx","42","code","SCP0049 CAPA (Capacity) — 편집형 동적 pivot 화면(신규 전환 2026-09-26). 조회 = PKG_SCP0049.P_GET_CAPA / 저장 = P_SAVE_CAPA(^-bulk). EDIT 모드 토글 미이식(편집=beginningEdit 종합식). INSERT/DELETE = 명시적 무동작(() => undefined, R4·R5). 헤더 요약 5종 = o_rc2/o_rc3(R14)."
+"supply/capa","SCP0049","features/supply/src/pages/capa/capa.constants.ts","127","code","REQUEST_CHK 편집 허용 행(03 §3 L4 cs:563-566). 26.10.19 TO -BE MailReq 안쓰는다고 해서 false 처리. export const REQUEST_CHK_LOSS_CODES = ['LA001', 'LA002', 'LA003'] as const;"
+"supply/capa","SCP0049","features/supply/src/pages/capa/Capa.tsx","56","code","SCP0049 CAPA (Capacity) — 편집형 동적 pivot 화면(신규 전환 2026-09-26). 조회 = PKG_SCP0049.P_GET_CAPA / 저장 = P_SAVE_CAPA(^-bulk). EDIT 모드 토글 미이식(편집=beginningEdit 종합식). INSERT/DELETE = 명시적 무동작(() => undefined, R4·R5). 헤더 요약 5종 = o_rc2/o_rc3(R14)."
+"supply/capa","SCP0049","features/supply/src/pages/capa/Capa.tsx","403","code","INSERT/DELETE = 명시적 무동작(R4·R5 — false·키생략 금지). => INSERT/DELETE 삭제 EDIT 미등록(§11). SEARCH/SAVE 실핸들러."
 "supply/capa","SCP0049","features/supply/src/pages/capa/capa.types.ts","6","jsx","WijmoRowItem 확장(전역 index = WijmoPrimitive) — DataGrid<CapaRow>/EditTracker<CapaRow> 제약 충족."
+"supply/capa","SCP0049","features/supply/src/pages/capa/utils/capa.editLock.ts","233","code","return (REQUEST_CHK_LOSS_CODES as readonly string[]).includes(String(row.LOSS_CODE ?? '')); -- 26.10.19 TO-BE MailReq 안쓰는다고 해서 false 처리."

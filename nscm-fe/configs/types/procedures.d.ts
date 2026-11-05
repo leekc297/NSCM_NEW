@@ -136,6 +136,9 @@ interface RawProcedureMap extends Base {
       request: {
         divisionId: string;
         companyId: string;
+        planStartYyyymmdd: string; // P_PLAN_START_YYYYMMDD — 재고상세 SP 의 가드 없는 필수 등가 조건(누락 시 항상 0행)
+        plantId: string; // P_PLANT_ID(From Site, 콤마·'ALL' 가드, AS-IS FindData_Detail cs:2469)
+        cellType: string; // P_CELL_TYPE(콤마·'ALL' 가드, AS-IS cs:2470)
         modelId: string;
         itemId: string;
         lotId: string;
@@ -6078,6 +6081,26 @@ interface RawProcedureMap extends Base {
         };
       };
     };
+    // Only Weekly(WEEKLY_ISO) 전용 — P_SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO. 응답 계약은 spreadTitle 과
+    //   동일하나 W_ 행이 연속 ISO 주차(월 미분할)이고 MMDD_LABEL_NAME 에 날짜범위("MM.DD ~ MM.DD")가 채워진다.
+    spreadTitleIso: {
+      request: {
+        startYyyymmdd: string; // p_start_yyyymmdd
+        endYyyymmdd: string; // p_end_yyyymmdd
+        userId: string; // p_user_id
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          MMDD_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
   };
 
   /**
@@ -7755,13 +7778,15 @@ interface RawProcedureMap extends Base {
    * 아래 계약은 SP 파라미터명(spCalls 정적 확인)·SHEET_COLUMNS 31행 실측(design 03 §1) 기준
    * best-evidence 다 — SCP0129/SCP0130 선례와 동일하게 "확인 필요" 항목을 주석으로 남긴다.
    *   GET  main(WhCapa) = SCP.SCP0133_GET_WAREHOUSE_CAPACITY(9파라미터, design 03 §4.2).
-   *     Warehouse Item Mapping 전용 GET SP 없음 — 조회 경로 자체가 확인 필요(design 03 §6-9).
+   *   GET  itemMapping = SCP.SCP0133_GET_WAREHOUSE_ITEM_MAPPING(gap-resolve iter-2 G2/G17 ora.py 실측
+   *     배포 확인 — main 과 동일 9파라미터 + O_RC1, 응답 16컬럼은 design 03 §1.2 실측).
    *   GET  searchInfo = SCP.SCP0133_GET_SEARCH_INFO(파라미터 없음, 반환 컬럼 미상 — 확인 필요,
    *     저장 직후/시트 전환 시 재호출 용도 추정, design 03 §4.1). 이 activity 는 배선하지 않는다
    *     (SP 본문·반환 계약 자체가 미확인 — convert-sp 후속에서 확정 후 연결).
    *   SAVE main(WhCapa) = SCP.SCP0133_SAVE_WAREHOUSE_CAPACITY(16파라미터, p_pre_* 5개 포함).
    *   SAVE itemMapping = SCP.SCP0133_SAVE_WAREHOUSE_ITEM_MAPPING(15파라미터, p_pre_* 4개 포함).
-   *   PKG_SCP0133 는 TO-BE 미배포(all_objects 0건, goal.md ② — convert-sp 백로그).
+   *   PKG_SCP0133 는 TO-BE 배포 확인됨(gap-resolve iter-2 G2 ora.py ALL_PROCEDURES 실측, 5개 SP 전건
+   *     실재 — iter-1 "미배포" 판정은 뒤집혔다).
    */
   SCP0133: {
     main: {
@@ -7786,6 +7811,40 @@ interface RawProcedureMap extends Base {
           FROM_YYYYMMDD: string;
           TO_YYYYMMDD: string;
           MAX_CAPA: string;
+          VALUE_DESCRIPTION: string;
+          VALID_YN: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          LAST_UPDATED_BY: string;
+          LAST_UPDATE_DATE: string;
+          PRE_KEY_VALUES: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    itemMapping: {
+      request: {
+        divisionId: string; // 1 p_division_id
+        opmzPlanGrId: string; // 2 p_opmz_plan_gr_id (콤마 결합 다중, comboId 미확정 — 확인 필요)
+        siteId: string; // 3 p_site_id (콤마 결합 다중, comboId 미확정 — 확인 필요)
+        stage: string; // 4 p_stage (콤마 결합 다중, lookup 후보 OPMZ_STAGE_CD — 확인 필요)
+        whNm: string; // 5 p_wh_nm (콤마 결합 다중, 원천 미상 — 확인 필요)
+        fromYyyymmdd: string; // 6 p_from_yyyymmdd
+        toYyyymmdd: string; // 7 p_to_yyyymmdd
+        itemId: string; // 8 p_item_id (Item ID 팝업 결과)
+        validYn: string; // 9 p_valid_yn
+      };
+      response: {
+        o_rc1: {
+          DIVISION_ID: string;
+          OPMZ_PLAN_GR_ID: string;
+          WH_NM: string;
+          SCM_SITE_ID: string;
+          STAGE: string;
+          ITEM_ID: string;
+          STOR_PER: string;
+          STOR_LOC: string;
+          STOR_LOC_NAME: string;
           VALUE_DESCRIPTION: string;
           VALID_YN: string;
           CREATED_BY: string;
@@ -8482,7 +8541,7 @@ interface RawProcedureMap extends Base {
    * AS-IS SSP0017_InventoryRaw(GSCM.SSP.Plan.UIL) — 단일 FpSpread(spdMain) 조회 전용 화면.
    * 전 컬럼 조회직후 편집잠금(LockColumn), Insert/Delete/Edit/Save 전부 NO-OP.
    * SHEETS (전부 SEARCH — 저장 없음):
-   * - `main` SSP.SSP0017_GET_INVENTORY_RAW — MISSING(convert-sp 후속, all_objects 0건 실측).
+   * - `main` SSP.SSP0017_GET_INVENTORY_RAW — 배포 확인(런타임 SEARCH 200, o_rc1 31컬럼 반환).
    *   AS-IS IN 9개(division/plant_site/item_id/inventory_type/plan_start_yyyymmdd/user_id/
    *   program_id/sheet_name/language) 중 user_id/program_id/sheet_name/language 는 BE 세션·
    *   라우트 자동 주입이라 FE request 에는 5개(실 조회조건)만 싣는다(DMF0004 SalesSite 표준).
@@ -8493,33 +8552,46 @@ interface RawProcedureMap extends Base {
       request: {
         divisionId: string; // p_division_id ("40" 고정, disabled)
         plantSite: string; // p_plant_site (다중 콤마, Division EE 분기 콤보 2종)
-        itemId: string; // p_item_id (ItemByDivisionModal 반환)
+        itemId: string; // p_item_id (공용 MaterialByDivisionModal 반환)
         inventoryType: string; // p_inventory_type (LookupCommon INV_TYPE)
-        planStartYyyymmdd: string; // p_plan_start_yyyymmdd (필수 — 콤보 SQL_ID 확인 필요, design 02 §2 주1)
+        planStartYyyymmdd: string; // p_plan_start_yyyymmdd (필수 — 콤보 PlanDateShip, design 02 §2 해소)
       };
       response: {
+        // design/03_grid-columns.md §1 — SCM_MST_SHEET_COLUMNS(PROGRAM_ID='SSP0017',
+        //   SHEET_NAME='Inventory Raw(Mobility & IT)') 실측 31컬럼(SORT_ORDER_NO 1~31) 그대로.
+        //   그리드는 admin 컬럼메타 구동이라 아래는 SP OUT 계약(SSOT) 반영이며 화면 하드코딩이 아니다.
         o_rc1: {
-          DIVISION_ID: string;
-          CUTOFF_YYYYMMDD: string;
-          SRCE_DIVS_CD: string;
-          STOCK_TYPE: string;
-          STOCK_TYPE_NAME: string;
-          PROJECT_CODE: string;
-          NICK_NAME: string;
-          ITEM_ID: string;
-          INCOTERMS: string;
-          FROM_SITE_ID: string;
-          SCM_SITE_ID: string;
-          LOCATION_CODE: string; // Elec. Plant 전용(lookup OPMZ_LOCATION_CODE SEGMENT3='Y')
-          INV_DATE: string;
-          QTY: string | number;
-          CHG_QTY: string | number;
-          CHG_RSN: string;
-          CHG_TYPE: string;
-          LAST_UPDATED_BY: string;
-          LAST_UPDATE_DATE: string;
-          PRE_CHG_QTY: string | number;
-          PRE_CHG_RSN: string;
+          DIVISION_ID: string; // 1 Div
+          PLANT_SITE: string; // 2 Plant Site
+          INVENTORY_TYPE: string; // 3 Inventory Type (FPComboBox LookupCommon INV_TYPE)
+          MODEL: string; // 4 Model
+          NICK_NAME: string; // 5 Nick Name
+          LOT_ID: string; // 6 Lot ID
+          LOT: string; // 7 Lot
+          PRODUCTION_DATE: string; // 8 Production Date (FPDate)
+          BUILDING: string; // 9 Building
+          PALLET_ID: string; // 10 Pallet ID
+          VALTAGE: string; // 11 Valtage (AS-IS 라벨 오탈자 그대로)
+          CAPACITY: string; // 12 Capacity
+          SOC: string; // 13 SOC
+          INVENTORY_STATUS: string; // 14 Inventory Status (FPComboBox OWMS_STOCK_STATUS)
+          ROUTE: string; // 15 Route
+          ROUTE_NAME: string; // 16 Route Name (hidden, VISIBLE_FLAG='N')
+          ROUTE_TYPE: string; // 17 Route Type (hidden, VISIBLE_FLAG='N')
+          OPERATION: string; // 18 Operation
+          OPERATION_NAME: string; // 19 Operation Name (hidden, VISIBLE_FLAG='N')
+          LINE: string; // 20 Line
+          CURRENT_OP_START_DATE: string; // 21 Current OP Start Date (FPDateText)
+          REMAIN_LEAD_TIME: string | number; // 22 Remain Lead Time(Day) (FPNumber)
+          EXP_FORMATION_END_DATE: string; // 23 Exp. Formation End Date (FPDateText)
+          HOLD_YN: string; // 24 Hold YN
+          SPECIAL_YN: string; // 25 Special YN (Footer 합계 시작 기준 컬럼)
+          STOCK_QTY: string | number; // 26 Stock Qty (FPNumber, Footer 합계)
+          AVAILABLE_QTY: string | number; // 27 Available Qty (FPNumber, Footer 합계)
+          HOLD_QTY: string | number; // 28 Hold Qty (FPNumber, Footer 합계)
+          LONG_QTY: string | number; // 29 Long-Term Qty (FPNumber, hidden, Footer 합계)
+          EXPIRATION_QTY: string | number; // 30 Expiration Qty (FPNumber, Footer 합계 — NULL→0 보정은 화면단)
+          CUSTOMER: string; // 31 Customer (Footer 합계 제외 기준 컬럼)
           [key: string]: string | number;
         };
       };
@@ -9236,14 +9308,14 @@ interface RawProcedureMap extends Base {
    *
    * 시트 = `GetDivisionTypeName(_division_type)` (Electrode -> ELTR / Cell·Module·Pack -> ASSEMBLY).
    * 탭 UI 없음(`TabStripPolicy=Never`). SHEETS (전부 SEARCH — **저장 SP 가 존재하지 않는다**, design 03 §4.4):
-   * - `ASSEMBLY`    SCP.SCP0107_GET_CAPA_TEEP_ASSEMBLY (IN 13 / OUT 커서 1)
-   * - `ELTR`        SCP.SCP0107_GET_CAPA_TEEP_ELTR     (IN 13 동일 / OUT 커서 1)
-   * - `spreadTitle` SCP.SCP0104_GET_SPREAD_TITLE       (SCP0104~0108 공용 — 동적 월/연 헤더)
+   * - `ASSEMBLY`    PKG_SCP0107.P_SCP0107_GET_CAPA_TEEP_ASSEMBLY (IN 13 / OUT 커서 2 — O_RC1·O_RESULT_CURSOR)
+   * - `ELTR`        PKG_SCP0107.P_SCP0107_GET_CAPA_TEEP_ELTR     (IN 13 동일 / OUT 커서 2 동일)
+   * - `spreadTitle` PKG_SCP0107.P_SCP0107_GET_SPREAD_TITLE       (SCP0107 자체 proc — 동적 월/연 헤더)
    *
-   * 주의: `PKG_SCP0107`·`PKG_SCP0104` **미배포**(ALL_OBJECTS 0건, ora.py 2026-09-25) — 아래 request 키는
-   *   AS-IS SP IN 순서(design 02 §5.5) + 이 레포 camelCase↔`P_SNAKE` 컨벤션으로 도출한 것이다. 배포 후
-   *   `all_arguments` 실측으로 `convert-sp` 가 확정한다. OUT 커서 이름도 미확정이라 화면은
-   *   `utils/capaTeepReport.cursors.ts` 의 fallback chain 으로 읽는다(hook #80).
+   * 주의: `PKG_SCP0107`·`PKG_SCP0104` 배포·VALID(ALL_OBJECTS PACKAGE+BODY 4행 VALID, ora.py 2026-10-29).
+   *   아래 request 키는 `all_arguments` 실측(IN 13, camelCase↔`P_SNAKE`)과 1:1 확정됐다. OUT 은 2 커서
+   *   (`O_RC1`=데이터 / `O_RESULT_CURSOR`=상태)이며 화면은 `utils/capaTeepReport.cursors.ts` 의
+   *   fallback chain 으로 첫 데이터 커서(O_RC1)를 읽는다(hook #80).
    * 주의: **`p_prog_stat`·`p_nick_name`·`p_from_yyyymm` 이 없다** — 자매 SCP0106 파라미터를 복사하지 말 것.
    *   기간 기준은 SP 가 `p_version` 에서 `DATEADD(MM,1,...)` 로 재계산한다(design 03 §2.1).
    */

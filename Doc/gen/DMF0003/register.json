@@ -1,0 +1,562 @@
+{
+  "menuId": "DMF0003",
+  "screenName": "1_MktFcst",
+  "feature": "demand",
+  "pageDir": "mkt-fcst",
+  "routePath": "demand/mkt-fcst",
+  "sheets": [
+    {
+      "sheetName": "Car Fcst",
+      "rule": "META+코드연결",
+      "columns": 2,
+      "popup": false
+    },
+    {
+      "sheetName": "Customer Demand Analysis",
+      "rule": "META+코드연결",
+      "columns": 10,
+      "popup": false
+    },
+    {
+      "sheetName": "History Popup",
+      "rule": "코드 하드코딩 전용(메타 없음)",
+      "columns": 10,
+      "popup": true
+    },
+    {
+      "sheetName": "Mkt Fcst",
+      "rule": "META+코드연결",
+      "columns": 66,
+      "popup": false
+    },
+    {
+      "sheetName": "PR Popup",
+      "rule": "코드 하드코딩 전용(메타 없음)",
+      "columns": 15,
+      "popup": true
+    },
+    {
+      "sheetName": "PSI",
+      "rule": "META+코드연결",
+      "columns": 17,
+      "popup": false
+    },
+    {
+      "sheetName": "SSP Sync Popup",
+      "rule": "코드 하드코딩 전용(메타 없음)",
+      "columns": 15,
+      "popup": true
+    },
+    {
+      "sheetName": "spreadTitle",
+      "rule": "동적 헤더(기간 컬럼) — DMF0003_GET_SPREAD_TITLE",
+      "columns": 0,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "Form_Load",
+        "InitControls",
+        "FindData",
+        "InsertRow",
+        "cboDivision_SelectedIndexChanged",
+        "clbTeam_SelectedIndexChanged",
+        "spdMain_ComboSelChange",
+        "spdMain_Changed",
+        "spdMain_ClipboardPasted",
+        "spdMain_CellClick",
+        "SaveData",
+        "<field:dtSLOC>"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_",
+      "sheet": "Car Fcst",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_MKT_FCST_DATA",
+      "asis_sp": "DMF0003_GET_MKT_FCST_DATA",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA",
+      "sheet": "Mkt Fcst",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_SAVE_MKT_FCST",
+      "asis_sp": "DMF0003_SAVE_MKT_FCST",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_SAVE_MKT_FCST",
+      "sheet": "Car Fcst",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_DM_ANL_MKT_PSI_DATA",
+      "asis_sp": "DMF0003_GET_DM_ANL_MKT_PSI_DATA",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdSub1.CellClick",
+        "event:this.spdMain.CellDoubleClick"
+      ],
+      "methods": [
+        "spdMain_CellDoubleClick",
+        "spdSub1_CellClick"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DATA",
+      "sheet": "Mkt Fcst",
+      "btn": "DM_ANL_MKT_PSI_DATA"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_MKT_FCST_COMPARE_POPUP",
+      "asis_sp": "DMF0003_GET_MKT_FCST_COMPARE_POPUP",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.spdMain.KeyUp"
+      ],
+      "methods": [
+        "spdMain_CellDoubleClick"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPARE_POPUP",
+      "sheet": "History Popup",
+      "btn": "MKT_FCST_COMPARE_POPUP"
+    },
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_DIVISION",
+      "asis_sp": "SCM0001_GET_DIVISION",
+      "status": "MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "GetDivision"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_SCM0001_GET_DIVISION",
+      "sheet": "Car Fcst",
+      "btn": "DIVISION",
+      "allowed_gap": "공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
+    },
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_SITE_BY_DIVISION",
+      "asis_sp": "SCM0001_GET_SITE_BY_DIVISION",
+      "status": "MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "GetScmSitebyDivision"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_SCM0001_GET_SITE_BY_DIVISION",
+      "sheet": "Car Fcst",
+      "btn": "SITE_BY_DIVISION",
+      "allowed_gap": "공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
+    },
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER",
+      "asis_sp": "SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER",
+      "status": "MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "GetPlantSitebyEndCustomer"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER",
+      "sheet": "Customer Demand Analysis",
+      "btn": "PLANT_SITE_BY_END_CUSTOMER",
+      "allowed_gap": "공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
+    },
+    {
+      "asis_endpoint": "DM.PR_GET_DAY_RANGE",
+      "asis_sp": "PR_GET_DAY_RANGE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetDayRange"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_PR_GET_DAY_RANGE",
+      "sheet": "Car Fcst",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_SPREAD_TITLE",
+      "asis_sp": "DMF0003_GET_SPREAD_TITLE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSpdTitle"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "allowed_gap": "그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_SPREAD_TITLE_PSI",
+      "asis_sp": "DMF0003_GET_SPREAD_TITLE_PSI",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSpdTitle_PSI"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_PSI",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_SPREAD_TITLE_CAR",
+      "asis_sp": "DMF0003_GET_SPREAD_TITLE_CAR",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSpdTitle_Car"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_CAR",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_BUCKET_TYPE_CODE",
+      "asis_sp": "DMF0003_GET_BUCKET_TYPE_CODE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetBucketType"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "Car Fcst",
+      "btn": "SEARCH",
+      "allowed_gap": "공통코드 콤보 → 등록 콤보ID(useTabComboQueries)"
+    },
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_LOOKUP_VALUES",
+      "asis_sp": "SCM0001_GET_LOOKUP_VALUES",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load",
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "GetItemType",
+        "GetItemType2",
+        "GetLookupValues"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_SCM0001_GET_LOOKUP_VALUES",
+      "sheet": "Car Fcst",
+      "btn": "SEARCH",
+      "allowed_gap": "공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
+    },
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_TEAM_BY_DIVISION",
+      "asis_sp": "SCM0001_GET_TEAM_BY_DIVISION",
+      "status": "MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "GetTeambyDivision"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_SCM0001_GET_TEAM_BY_DIVISION",
+      "sheet": "Car Fcst",
+      "btn": "TEAM_BY_DIVISION",
+      "allowed_gap": "공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
+    },
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_CUSTOMER_BY_DIVISION",
+      "asis_sp": "SCM0001_GET_CUSTOMER_BY_DIVISION",
+      "status": "MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "GetCustomerbyDivision"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_SCM0001_GET_CUSTOMER_BY_DIVISION",
+      "sheet": "Customer Demand Analysis",
+      "btn": "CUSTOMER_BY_DIVISION",
+      "allowed_gap": "공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
+    },
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+      "asis_sp": "SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdMain.ComboSelChange",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged"
+      ],
+      "methods": [
+        "GetBizTypebyDivision"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_SCM0001_GET_BIZ_TYPE_BY_DIVISION",
+      "sheet": "Car Fcst",
+      "btn": "SEARCH",
+      "allowed_gap": "공통코드 콤보 → 등록 콤보ID(useTabComboQueries)"
+    },
+    {
+      "asis_endpoint": "DM.UP_FX_GetCommonDataList_DM",
+      "asis_sp": "UP_FX_GETCOMMONDATALIST_DM",
+      "status": "MATCH",
+      "entries": [
+        "event:this.cboAS.CheckedChanged",
+        "event:this.clbCustomer.SelectedIndexChanged",
+        "event:this.spdMain.ClipboardPasted",
+        "event:this.spdMain.ComboSelChange",
+        "event:this.Load",
+        "event:clbDivision.SelectedIndexChanged",
+        "button:InsertButton",
+        "event:cboBucketType.SelectedIndexChanged",
+        "event:this.cboBucketType.SelectedIndexChanged",
+        "button:EditButton",
+        "button:SaveButton",
+        "unreached:(진입점 미연결)",
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:dsdm.Changed"
+      ],
+      "methods": [
+        "GetFcstType",
+        "GetIncotermsType",
+        "GetSalesSite",
+        "GetSalesSite40",
+        "GetCustomsHandbook",
+        "GetEdiSender",
+        "EditButton",
+        "InsertRow",
+        "spdMain_ComboSelChange",
+        "spdMain_ClipboardPasted",
+        "GetLookupValues",
+        "GetSPlant",
+        "GetSLOC"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_UP_FX_GETCOMMONDATALIST_DM",
+      "sheet": "(combo)",
+      "btn": "(콤보ID 등록)",
+      "allowed_gap": "공통 콤보 조회 → useTabComboQueries(콤보ID 등록)"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_DM_ANL_CAR_REF",
+      "asis_sp": "DMF0003_GET_DM_ANL_CAR_REF",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnCalculation.Click"
+      ],
+      "methods": [
+        "CAR_REF_DATA"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_REF",
+      "sheet": "Car Fcst",
+      "btn": "DM_ANL_CAR_REF"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_DM_ANL_CAR_PROPERTY",
+      "asis_sp": "DMF0003_GET_DM_ANL_CAR_PROPERTY",
+      "status": "MATCH",
+      "entries": [
+        "event:this.cmbCarMaker.SelectedIndexChanged",
+        "event:this.Load"
+      ],
+      "methods": [
+        "CAR_PROPERTY",
+        "cmbCarMaker_SelectedIndexChanged"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_PROPERTY",
+      "sheet": "Car Fcst",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC",
+      "asis_sp": "DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnFindPSI.Click"
+      ],
+      "methods": [
+        "PSI_FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC",
+      "sheet": "Mkt Fcst",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL",
+      "asis_sp": "DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL",
+      "sheet": "Car Fcst",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_DM_ANL_MKT_PSI_DPINIT",
+      "asis_sp": "DMF0003_GET_DM_ANL_MKT_PSI_DPINIT",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "Select_DpInit_Data"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT",
+      "sheet": "Mkt Fcst",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT",
+      "asis_sp": "DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "Select_DpResult_Data"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT",
+      "sheet": "Mkt Fcst",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0000_GET_MASTER_CHG_POPUP",
+      "asis_sp": "DMF0000_GET_MASTER_CHG_POPUP",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0000_GET_MASTER_CHG_POPUP",
+      "sheet": "History Popup",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE",
+      "asis_sp": "DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_SAVE_MKT_FCST_PK_DATA_UPDATE",
+      "sheet": "Car Fcst",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "DM.DMF0000_GET_COMMON_SPREAD_TITLE",
+      "asis_sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSpdTitle"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0000_GET_COMMON_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "allowed_gap": "그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_PR_HISTORY_POPUP",
+      "asis_sp": "DMF0003_GET_PR_HISTORY_POPUP",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "FindDataMain"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POPUP",
+      "sheet": "History Popup",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_SAVE_PRPOPUP",
+      "asis_sp": "DMF0003_SAVE_PRPOPUP",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_SAVE_PRPOPUP",
+      "sheet": "Car Fcst",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "DM.DMF0003_GET_PRPOPUP",
+      "asis_sp": "DMF0003_GET_PRPOPUP",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "event:this.Load",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindDataMain"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0003.P_DMF0003_GET_PRPOPUP",
+      "sheet": "History Popup",
+      "btn": "SEARCH"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

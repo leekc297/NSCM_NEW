@@ -181,15 +181,17 @@ export const CustFcstWaterfallForm = ({
       onSearch={onSubmit}
       sx={{
         flexShrink: 0,
-        // 기간이 아닌 칸의 최소폭(공통 290px) 해제 — 이 화면은 2행에 기간 필드가 둘(Input Date / Period)이라
-        //   공통 조회조건 그리드의 칸 최소폭 합(290+388+388+290 + 간격 + 버튼)이 페이지 최소폭 1460px 을
-        //   넘어, 전체화면이 아닐 때 조회조건만 오른쪽으로 튀어나와 아래 그리드와 끝선이 어긋났다(2026-10-27).
-        //   기간 칸은 공통 388px 바닥(:has periodSplit)을 그대로 두어 날짜 겹침을 막고, 나머지 칸만 남는 폭에
-        //   맞춰 줄게 한다. 넓은 화면에서는 칸 배분(각 3칸)이 그대로라 모양이 바뀌지 않는다.
-        //   공통 규칙(.css-xxx > .MuiGrid-root)보다 특이도가 높아 !important 없이 이긴다.
-        //   주의: 근본 원인은 공통 SearchArea(cf8a4526f)의 칸 최소폭 + min-content 설정이다. 공통 쪽에서
-        //   콘텐츠 영역이 조회조건 폭만큼 넓어지게 고쳐지면 이 덮어쓰기는 지워도 된다.
-        '& .MuiGrid-container > .MuiGrid-root:not(:has([class*="periodSplit"]))': { minWidth: 0 },
+        // 이 화면만 라벨 칸을 140 → 100 으로 줄이고 기간 칸 최소폭도 388 → 348(라벨 100 + 간격 7 + 피커 241)로
+        //   맞춘다(2026-10-28). 2행에 기간 필드가 둘(Input Date / Period)이라 공통 그대로면 기간 칸 둘이
+        //   776px 을 먼저 가져가, 메뉴를 연 좁은 창(viewInner 1460)에서 Div·Biz.Type·Sales Site·Bucket 의
+        //   입력칸이 50px 남짓까지 줄었다. 라벨 100 은 가장 긴 라벨(End Customer ~90px)이 한 줄에 들어가는 폭이고,
+        //   모든 칸에 같은 값이라 윗줄/아랫줄 입력칸 시작점은 그대로 맞는다.
+        //   두 규칙 모두 공통(common-styles .formItem, SearchArea :has(periodSplit))보다 특이도가 높아
+        //   !important 가 필요 없다.
+        '& .MuiGrid-container [class*="formItem"]': {
+          gridTemplateColumns: 'minmax(70px, 100px) auto',
+        },
+        '& .MuiGrid-container > .MuiGrid-root:has([class*="periodSplit"])': { minWidth: '348px' },
       }}
       conditions={
         <>

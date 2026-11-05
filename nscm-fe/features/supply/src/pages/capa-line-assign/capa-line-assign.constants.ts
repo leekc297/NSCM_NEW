@@ -266,11 +266,6 @@ export const ELTR_INSERT_LOCKED_COLUMN = COLUMN.NICK_NAME;
  */
 export const ROW_SOURCE_LINE_POPUP = '_fromLinePopup';
 
-/** 편집모드·기존행에서도 편집 가능한 Assign 컬럼(G19·G20). ELTR 의 `LANE_QTY` 는 그 시트에만 있다. */
-export const ASSIGN_ALWAYS_EDITABLE_COLUMNS: readonly string[] = [COLUMN.VALID_YN, COLUMN.LANE_QTY];
-/** SOP 는 이 둘만 편집 가능(G22~G24). */
-export const SOP_EDITABLE_COLUMNS: readonly string[] = [COLUMN.VALID_YN, COLUMN.SOP_DT];
-
 /**
  * 편집모드에서만 노출되는 컬럼 (AS-IS `SetVisibleSheetColumns` cs:4371-4493 / design 03 §3.6 X-F).
  *
@@ -511,16 +506,16 @@ export const FALLBACK_LABEL = {
 } as const;
 
 /**
- * 탭 라벨 끝에 붙이는 현재 Division 모드 접미 (사용자 지시 2026-10-21).
+ * 탭 줄(탭 버튼 오른쪽, TabWrapper rightSlot)에 표시하는 현재 Division 모드 텍스트 (사용자 지시 2026-10-28).
  *
  * AS-IS 는 탭이 `Line Assign`/`SOP` 2개뿐이고 Division Type(Electrode/Cell/Module-Pack)은 조회조건
- * 라디오(`rgrpDivisionType`)로만 전환해, 탭 라벨만으로는 지금 어느 모드인지 알 수 없다. TO-BE 도 같은
- * 구조라 **시트명 2분류**(Electrode→`ELTR`, Cell·Module-Pack→`ASSEMBLY`)를 접미로 붙여 구별한다 —
- * 조회·저장 라우팅에는 영향이 없는 표시 전용이다.
+ * 라디오(`rgrpDivisionType`)로만 전환해, 탭만으로는 지금 어느 모드인지 알 수 없다. 시트명 2분류
+ * (Electrode→`ELTR`, Cell·Module-Pack→`ASSEMBLY`)를 텍스트로 보여 구별한다 — 표시 전용.
+ * 주의: 탭 라벨에는 넣지 않는다 — 라벨은 `TabWrapper` 의 persist div key 라 바뀌면 그리드가 remount 된다.
  */
-export const TAB_MODE_SUFFIX = {
-  ELTR: '-ELTR',
-  ASSEMBLY: '-ASSEMBLY',
+export const TAB_MODE_LABEL = {
+  ELTR: 'ELTR',
+  ASSEMBLY: 'ASSEMBLY',
 } as const;
 
 /** Plan Type 파생 표시(design 02 §5.2 S04) — `BIZ_PLAN_USE_YN='Y' ? 'BP' : 'RP'`, 기본 `'RP'`. */
@@ -528,6 +523,24 @@ export const PLAN_TYPE = { BIZ: 'BP', ROLLING: 'RP' } as const;
 
 /** 컬럼 개인화(titleSet) 3점 일치 키 — 조회·저장·복원이 전부 이 값을 쓴다(hook #115, §5-9). */
 export const TITLESET_COLUMN_TYPE = 'C' as const;
+
+/**
+ * Column Setting 팝업에서 감출 컬럼 — AS-IS SCM002_CAPAColumnPopup 이 SCP0104 에서
+ *   Rows[].Height=0 으로 물리적으로 가리던 ID/NAME 컬럼과 동일(cs:349-357). 공용 ColumnLayoutModal
+ *   에 화면 전용으로 넘긴다(MEASURE 와 같은 처리 — 목록에서만 빼고 그리드에는 유지).
+ *   주의: AS-IS 는 PLANT_NAME/FACTORY_NAME/LINE_NAME/OPERATION_NAME 은 가리지 않으므로 제외한다.
+ */
+export const COLUMN_SETTING_HIDDEN_COLUMNS = [
+  'SITE_ID',
+  'SITE_NAME',
+  'COMPANY_ID',
+  'COMPANY_NAME',
+  'PLANT_ID',
+  'FACTORY_ID',
+  'LINE_ID',
+  'ITEM_ID',
+  'OPERATION_ID',
+] as const;
 
 /** SubTitle/Excel 파일명. */
 export const EXCEL_FILE_NAME = 'CapaLineAssign';

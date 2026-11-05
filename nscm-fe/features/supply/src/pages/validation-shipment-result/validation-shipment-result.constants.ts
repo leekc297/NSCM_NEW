@@ -52,10 +52,11 @@ export const MSG = {
 
 // 조회조건 라벨(SCM_ADM_MSG_M 실측 — design 02 §4.5). 존재 6 / Result Date 는 결합 LBL 미존재로 영문 fallback.
 export const LBL = {
-  DIVISION: 'LBL00001', // Division (표준 LBL00001)
+  DIVISION: 'LBL00001', // Div (LBL00001 실측 KO 'Div'/EN·CN 'Div.' — AS-IS 하우스 컨벤션)
   PLANT_SITE: 'LBL00005', // Plant Site
   SALES_SITE: 'LBL00011', // Sales Site
   PROJECT: 'LBL00617', // Project
+  PJT: 'LBL00012', // PJT (전용 'PJT' 라벨 — 공유 LBL00617 Project 와 구분, 사용자 지시 2026-10-29)
   MODEL: 'LBL00669', // Model
   RESULT_TYPE: 'LBL00052', // Type
   SEARCH: 'LBL00112', // Search (표준 LBL00112)

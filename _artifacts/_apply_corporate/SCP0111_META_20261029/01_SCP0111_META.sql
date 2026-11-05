@@ -1,0 +1,51 @@
+-- =====================================================================================
+-- SCP0111 Integration PSI — 메타데이터 보완 (2026-10-29)
+--   DB: ZIOUI1 (SCM_MGR) · 기준 조회 2026-10-29 11:2x (ALL_ARGUMENTS·PROC_M·API_M·BTN_MPG·MSG_M 실측)
+--   멱등: BTN_MPG = MERGE(PK MNU_ID,SHT_NM,MNU_BTN_CD) / MSG_M = INSERT NOT EXISTS(MSG_ID,LANG_CD — PK 없음)
+--   감사 4컬럼 = 'admin'/SYSDATE (hook #98 §1.1)
+--
+-- [1] ESS Pack Line 조회 배선 — BTN_MPG 1행
+--   현황: API_M 'SCP0111_essPackLine_SEARCH' (URL PKG_SCP0111.P_SCP0111_GET_ESS_PACK_LINE) + PROC_M 2행
+--         (o_rc1 CURSOR 100 / O_RESULT_CURSOR PROC_RESULT 101 = ALL_ARGUMENTS O_RC 1 / O_RESULT_CURSOR 2 정합)
+--         은 있으나 SCM_ADM_MNU_BTN_MPG_M 에 (SCP0111, essPackLine, SEARCH) 행이 없어
+--         PKG_NSCM_UI_COMM.PR_GET_PROC_INFO_LIST(BTN_MPG ⨝ API_M) 가 NO_DATA → call-proc 불가.
+--   AS-IS: GetEssPackLineAll → SCP0111_GET_ESS_PACK_LINE (신규행 LINE_ID 셀콤보 분기 A, ESS div82·Pack)
+--   SP 직접 실행 실측: o_rc 34행 · 결과 CODE=0 'S'
+--
+-- [2] 화면 메시지 2건 신규 채번 (MSG 1000 대역, 사내 대역 max = MSG01476 실측)
+--   AS-IS 리터럴(카탈로그 코드 아님) — 같은 문구 원장 부재 확인(hook #114 문구 대조) → 신규
+--   MSG01477 ← SCP0111_IntegrationPSI.cs:1217 "OPERATION_GROUP이 Lookup에 없는 값입니다. "
+--   MSG01478 ← SCP0111_IntegrationPSI.cs:2052-2055 / 2121-2124 "수량 불일치!!" + 상세 3줄({0}~{4})
+-- =====================================================================================
+
+MERGE INTO SCM_MGR.SCM_ADM_MNU_BTN_MPG_M T
+USING (SELECT 'SCP0111' MNU_ID, 'essPackLine' SHT_NM, 'SEARCH' MNU_BTN_CD,
+              'SCP0111_essPackLine_SEARCH' API_ID FROM DUAL) S
+   ON (T.MNU_ID = S.MNU_ID AND T.SHT_NM = S.SHT_NM AND T.MNU_BTN_CD = S.MNU_BTN_CD)
+ WHEN NOT MATCHED THEN
+      INSERT (MNU_ID, SHT_NM, MNU_BTN_CD, API_ID, USE_YN,
+              CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+      VALUES (S.MNU_ID, S.SHT_NM, S.MNU_BTN_CD, S.API_ID, 'Y',
+              'admin', SYSDATE, 'admin', SYSDATE);
+
+INSERT INTO SCM_MGR.SCM_ADM_MSG_M (MSG_ID, LANG_CD, MSG_NM, MSG_DESC, MSG_TP_CD, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'MSG01477', 'KO', 'OPERATION_GROUP이 Lookup에 없는 값입니다. Pack / Cell / Electrode 중 하나로 입력하세요.', 'SCP0111 저장 — Operation 표시명 Lookup 불일치 (AS-IS cs:1217)', 'MSG', 'Y', 'admin', SYSDATE, 'admin', SYSDATE FROM DUAL
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_MSG_M WHERE MSG_ID = 'MSG01477' AND LANG_CD = 'KO');
+INSERT INTO SCM_MGR.SCM_ADM_MSG_M (MSG_ID, LANG_CD, MSG_NM, MSG_DESC, MSG_TP_CD, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'MSG01477', 'EN', 'OPERATION_GROUP is not a value in the Lookup. Enter one of Pack / Cell / Electrode.', 'SCP0111 저장 — Operation 표시명 Lookup 불일치 (AS-IS cs:1217)', 'MSG', 'Y', 'admin', SYSDATE, 'admin', SYSDATE FROM DUAL
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_MSG_M WHERE MSG_ID = 'MSG01477' AND LANG_CD = 'EN');
+INSERT INTO SCM_MGR.SCM_ADM_MSG_M (MSG_ID, LANG_CD, MSG_NM, MSG_DESC, MSG_TP_CD, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'MSG01477', 'CN', 'OPERATION_GROUP 不是 Lookup 中的值。请输入 Pack / Cell / Electrode 之一。', 'SCP0111 저장 — Operation 표시명 Lookup 불일치 (AS-IS cs:1217)', 'MSG', 'Y', 'admin', SYSDATE, 'admin', SYSDATE FROM DUAL
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_MSG_M WHERE MSG_ID = 'MSG01477' AND LANG_CD = 'CN');
+
+INSERT INTO SCM_MGR.SCM_ADM_MSG_M (MSG_ID, LANG_CD, MSG_NM, MSG_DESC, MSG_TP_CD, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'MSG01478', 'KO', '수량 불일치!! {0} Prod plan Qty : {1} / {2} In-house moving Qty : {3} / {2} In-house moving Qty Should be {4}', 'SCP0111 ESS 파생검증 — PROD_PLAN×CELL_CF ≠ IN_HOUSE_MOVING (AS-IS cs:2052-2055)', 'MSG', 'Y', 'admin', SYSDATE, 'admin', SYSDATE FROM DUAL
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_MSG_M WHERE MSG_ID = 'MSG01478' AND LANG_CD = 'KO');
+INSERT INTO SCM_MGR.SCM_ADM_MSG_M (MSG_ID, LANG_CD, MSG_NM, MSG_DESC, MSG_TP_CD, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'MSG01478', 'EN', 'Quantity mismatch!! {0} Prod plan Qty : {1} / {2} In-house moving Qty : {3} / {2} In-house moving Qty Should be {4}', 'SCP0111 ESS 파생검증 — PROD_PLAN×CELL_CF ≠ IN_HOUSE_MOVING (AS-IS cs:2052-2055)', 'MSG', 'Y', 'admin', SYSDATE, 'admin', SYSDATE FROM DUAL
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_MSG_M WHERE MSG_ID = 'MSG01478' AND LANG_CD = 'EN');
+INSERT INTO SCM_MGR.SCM_ADM_MSG_M (MSG_ID, LANG_CD, MSG_NM, MSG_DESC, MSG_TP_CD, USE_YN, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE)
+SELECT 'MSG01478', 'CN', '数量不一致!! {0} Prod plan Qty : {1} / {2} In-house moving Qty : {3} / {2} In-house moving Qty Should be {4}', 'SCP0111 ESS 파생검증 — PROD_PLAN×CELL_CF ≠ IN_HOUSE_MOVING (AS-IS cs:2052-2055)', 'MSG', 'Y', 'admin', SYSDATE, 'admin', SYSDATE FROM DUAL
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_MGR.SCM_ADM_MSG_M WHERE MSG_ID = 'MSG01478' AND LANG_CD = 'CN');
+
+COMMIT;

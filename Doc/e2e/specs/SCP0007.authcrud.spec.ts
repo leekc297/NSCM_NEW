@@ -1,9 +1,10 @@
-// 자동 생성 — tools/E2E/gen-e2e.js (2026-10-26) · 원천: Doc/gen/SCP0007/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
+// 자동 생성 — tools/E2E/gen-e2e.js (2026-10-29) · 원천: Doc/gen/SCP0007/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
 import { test, expect } from '../../../tools/E2E/fixtures/test';
 import * as fs from 'node:fs';
 const PLAN = JSON.parse(fs.readFileSync(__dirname + '/SCP0007.plan.json', 'utf8'));
 const MENU = "SCP0007";
 import { crudCycle } from '../../../tools/E2E/lib/crud';
+import { divisionCascade } from '../../../tools/E2E/lib/cascade';
 
 // 계정별 권한 CRUD — 기대 권한은 To-Be 메타(그룹 소속 user_group_user.csv × 버튼 권한 btn_auth.csv), 데이터셋 그룹은 표기만. 로그인은 비밀번호 없는 /user/login(id)
 const CODES: string[] = PLAN.menuBtnCodes || [];
@@ -21,9 +22,24 @@ for (const acc of PLAN.accounts) {
       if (!r.authorized || r.notFound) { expect.soft(acc.menuAccess, `[${acc.id}] 메뉴 권한 있음(user_group_menu) 인데 접근 불가 (authorized=${r.authorized} notFound=${r.notFound})`).not.toBe('Y'); return; }
       // 메뉴 권한 없는 계정도 URL 직접 접근으로는 열린다(To-Be FE 라우트 가드 없음) → 기록하고, 버튼·편집은 '없어야 함' 으로 계속 검증
       if (acc.menuAccess === 'N') test.info().annotations.push({ type: 'gap', description: `메뉴 권한(user_group_menu) 없는 계정이 /view/${MENU} 직접 접근으로 열림` });
-      const div = (acc.divisions && acc.divisions[0]) || PLAN.sample.div; if (div) await nscm.setDivision(div);
-      const calls = await nscm.search(); for (const c of calls) expect.soft(c.status, `[${acc.id}] call-proc ${c.sheet}/${c.btn}`).toBeLessThan(400);
-      const out = await crudCycle(nscm, test.info(), PLAN, MARK);
+      // 2026-10-27: division 모드(사용자가 화면 지정) = 계정이 대표하는 Division 마다 CASCADE → 조회 → CRUD. 그 외 모드 = 첫 Division 1회(CASCADE 확인 포함)
+      const divs: string[] = (PLAN.mode === 'division' ? (acc.divisions && acc.divisions.length ? acc.divisions : [PLAN.sample.div]) : [(acc.divisions && acc.divisions[0]) || PLAN.sample.div]).filter(Boolean);
+      test.setTimeout(120_000 + Math.max(1, divs.length) * 420_000);
+      let out: any = null;
+      for (const div of divs) {
+        const cas = await divisionCascade(nscm, test.info(), PLAN, acc, div);
+        if (acc.expectedDivs) expect.soft(cas.leak, `[${acc.id} ${div}] Division 후보 ⊆ 계정 Division 권한(unit_auth) — 권한 밖 Division 노출 0`).toEqual([]);
+        if (cas.divListed !== null) expect.soft(cas.divListed, `[${acc.id}] 대표 Division ${div} 가 Division 후보에 있음`).toBeTruthy();
+        for (const d of cas.deps) expect.soft(d.count, `[${acc.id} ${div}] Division 연동 조회조건 [${d.label}] 후보 1건 이상(CASCADE)`).toBeGreaterThan(0);
+        const calls = await nscm.search(); for (const c of calls) expect.soft(c.status, `[${acc.id} ${div}] call-proc ${c.sheet}/${c.btn}`).toBeLessThan(400);
+        const alert = await nscm.alertText(); if (alert) await nscm.closeAlert();
+        const divVals = (await nscm.gridColumnValues('DIVISION')).concat(await nscm.gridColumnValues('DIVISION_ID')).concat(await nscm.gridColumnValues('Division'));
+        if (divVals.length) expect.soft(divVals.every(v => !v || v.startsWith(div)), `[${acc.id} ${div}] 조회 결과 DIVISION 값 = 선택 Division`).toBeTruthy();
+        const o = await crudCycle(nscm, test.info(), PLAN, MARK + (divs.length > 1 ? div.replace(/[^A-Za-z0-9]/g, '') : ''));
+        test.info().annotations.push({ type: 'authcrud', description: `${acc.id} div=${div} mode=${o.mode} save=${o.saveVisible} insert=${o.insertVisible} delete=${o.deleteVisible} editable=${o.editable} saved=${o.saved} found=${o.found} cleaned=${o.cleaned} restored=${o.restored}` });
+        out = out ? Object.assign({}, out, { saved: out.saved && o.saved, found: out.found && o.found, cleaned: out.cleaned && o.cleaned, restored: out.restored && o.restored, saveCalls: out.saveCalls + o.saveCalls, saveErrors: out.saveErrors.concat(o.saveErrors) }) : o;
+      }
+      if (!out) return;
       // 버튼 노출 ↔ 기대
       if (expSave != null) expect.soft(out.saveVisible, `[${acc.id} ${G.join('/')}] btn_auth SAVE=${expSave ? 'Y' : 'N'} → Save 버튼 ${expSave ? '노출' : '비노출'}`).toBe(expSave);
       if (expIns != null) expect.soft(out.insertVisible, `[${acc.id}] btn_auth INSERT=${expIns ? 'Y' : 'N'} → Insert 버튼`).toBe(expIns);

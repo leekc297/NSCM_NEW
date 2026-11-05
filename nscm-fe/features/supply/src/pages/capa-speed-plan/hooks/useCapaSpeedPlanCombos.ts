@@ -7,7 +7,6 @@ import {
   DIVISION_TYPE,
   MENU_ID,
   SHEET_BY_DIVISION_TYPE,
-  SHEET_STATUS,
   SHOP_GROUP_ID,
 } from '../capa-speed-plan.constants';
 import type { ComboOption, ComboRow } from '../capa-speed-plan.types';
@@ -239,6 +238,12 @@ export const useCapaSpeedPlanCombos = (): CapaSpeedPlanCombos => {
   /**
    * Status 기본선택 = 그 버전의 현재 진행상태(`GetIndexByCode`, 없으면 첫 행 — cs:1097~1106).
    * Status 후보는 `currProgressStatus` 로 좁혀지므로 두 값이 같은 effect 에서 결정돼야 흔들리지 않는다.
+   *
+   * dep 에 `sc.progressStatus` 를 포함한다 — Div 변경 시 `setDivision` 이 progressStatus 를 `''` 로
+   *   비우는데, 바뀐 Division 의 현재 진행상태가 이전과 같으면(둘 다 Current) currProgressStatus·
+   *   statusOptions 가 값/참조 그대로라 이 effect 가 안 돌아 Status 가 빈 채로 남는다(사용자 지적
+   *   2026-10-27). progressStatus 를 관찰하면 `''` 로 바뀔 때 effect 가 다시 돌아 기본값을 채운다.
+   *   유효값일 땐 아래 `some(...)` 가드가 조기 반환하므로 사용자 선택 덮어쓰기·무한루프는 없다.
    */
   useEffect(() => {
     setDerivedVersionInfo(planType, currProgressStatus);
@@ -247,7 +252,7 @@ export const useCapaSpeedPlanCombos = (): CapaSpeedPlanCombos => {
     const preferred = statusOptions.find(option => option.value === currProgressStatus);
     setSearchCondition({ progressStatus: (preferred ?? statusOptions[0]).value });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [planType, currProgressStatus, statusOptions]);
+  }, [planType, currProgressStatus, statusOptions, sc.progressStatus]);
 
   /**
    * GET SP payload (15 파라미터, AS-IS `SetQueryInfoGet` cs:2233~2257).
@@ -280,8 +285,9 @@ export const useCapaSpeedPlanCombos = (): CapaSpeedPlanCombos => {
     p_sheet_name: SHEET_BY_DIVISION_TYPE[sc.divisionType],
     // 14 p_user_id       — BE @LoginUser 주입(세션). 15 debug_mode
     debug_mode: 'F',
-    // AS-IS QueryId 접미(`_sheet_status`)에 대응 — SP 변형 선택자. convert-sp 가 PKG 분기를 받는다
-    p_sheet_status: SHEET_STATUS[sc.progressStatus] ?? '',
+    // CURRENT/CUTOFF 분기는 서버가 p_prog_stat 로 가른다(PKG_SCP0105 BODY: P_PROG_STAT IN ('0','-')
+    //   -> CURRENT, else CUTOFF). AS-IS QueryId 접미(`_sheet_status`)를 모사하던 p_sheet_status 는
+    //   배포된 SCM_ADM_PROC_M 계약에 없어 call-proc 이 버리던 죽은 키라 제거했다(V4-02).
   });
 
   return {

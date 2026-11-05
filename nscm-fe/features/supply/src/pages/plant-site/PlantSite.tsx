@@ -306,11 +306,27 @@ export const PlantSite = ({ tabId, title }: PageProps<MENU_ID>) => {
         if (error) {
           void setAlert({
             type: 'alert',
-            content: t(error.code, '_필수 입력값을 확인하세요.', { 0: error.args?.[0] ?? '' }),
+            // DB 메시지 자리표시는 `{0}` 이라 i18next 보간(`{{ }}`)이 채우지 않는다 — 직접 치환한다.
+            content: t(error.code, '_{0} 값은 필수 입력입니다.').replace('{0}', error.args?.[0] ?? ''),
           });
           return;
         }
-        saveWithValidation(src.filter(item => item.CRUD_TYPE), staticColumns.location, mutateLocation);
+        // 조회 SP(P_SCP0001_GET_LOCATION)는 DIVISION_ID/SCM_SITE_ID/PLANT_ID 를 내려주지 않는데 저장 SP MERGE
+        //   UPDATE 는 SCM_SITE_ID/PLANT_ID 를 받은 값으로 덮어쓴다. 기존행 수정 저장 시 NULL 로 덮여 행이 Site 조회에서
+        //   빠졌다(2026-10-28 HQ07-A PANCAKE_INV). 신규행과 같이 상단 선택 행(selectedSite) 값으로 채운다.
+        const locationSaveData = src
+          .filter(item => item.CRUD_TYPE)
+          .map(item =>
+            selectedSite
+              ? {
+                  ...item,
+                  DIVISION_ID: selectedSite.divisionId,
+                  SCM_SITE_ID: selectedSite.scmSiteId,
+                  PLANT_ID: selectedSite.plantId,
+                }
+              : item
+          );
+        saveWithValidation(locationSaveData, staticColumns.location, mutateLocation);
         break;
       }
       case SHEET_INDEX.CUSTOMER: {

@@ -9,14 +9,14 @@
 |---|---|---|
 | features/master/src/components/projectByDivisionModal/project-by-division-modal.constants.ts | constants | 8 |
 | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.module.scss | style | 42 |
-| features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | page | 399 |
+| features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | page | 413 |
 | features/master/src/components/projectByDivisionModal/projectByDivisionModalStore.ts | store | 43 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 2 | Y | ProjectByDivisionModal.tsx:72 ProjectByDivisionModal.tsx:83 |
-| COM0005/projectByDivision//call-proc | hook | 1 | Y | ProjectByDivisionModal.tsx:91 |
+| (useTabComboQueries) | hook | 2 | Y | ProjectByDivisionModal.tsx:80 ProjectByDivisionModal.tsx:91 |
+| COM0005/projectByDivision//call-proc | hook | 1 | Y | ProjectByDivisionModal.tsx:99 |
 | /admin/menu/COM0005/column | http | 1 | Y | projectByDivisionModalStore.ts:29 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -25,11 +25,11 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | handleSearch | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 239 |
-| InputField | onChange | <arrow> setProjectCode | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 338 |
-| InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 339 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 384 |
-| Button | onClick | modalClose | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 391 |
+| SearchArea | onSearch | handleSearch | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 253 |
+| InputField | onChange | <arrow> setProjectCode | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 352 |
+| InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 353 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 398 |
+| Button | onClick | modalClose | jsx | features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx | 405 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -62,8 +62,8 @@
 | LBL00012 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: COM0005(3), DMF0020(1), DMF0021(1), DMF0082(1)
-- SP/PKG: (없음)
+- 화면ID: COM0005(5), DMF0045(2), DMF0020(1), DMF0021(1), DMF0003(1), DMF0082(1)
+- SP/PKG: P_COM0005_GET_PROJECT_BY_DIVISION_POPUP(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)
 

@@ -1,0 +1,30 @@
+[
+ {
+  "screen": "DMF0005",
+  "call": 0,
+  "cls": "DM0002_ItembyDivisionPopupEx",
+  "trig": "COND:Model / Nickname",
+  "check": "MAIN_EXC",
+  "egs": [],
+  "result": "ERROR",
+  "expected": "측정 완료",
+  "actual": "[검사기 예외] Error: page.evaluate: SyntaxError: Invalid regular expression: missing / at eval (<anonymous>) at UtilityScript.evaluate (<anonymous>:234:30) at UtilityScript.<anonymous> (<anonymous>:1:44)",
+  "basis": "",
+  "at": "2026-10-31T12:48:24.833Z",
+  "mut": ""
+ },
+ {
+  "screen": "DMF0005",
+  "call": 1,
+  "cls": "DM0020_OwnerbyDivisionPopup",
+  "trig": "COND:Owner",
+  "check": "MAIN_EXC",
+  "egs": [],
+  "result": "ERROR",
+  "expected": "측정 완료",
+  "actual": "[검사기 예외] Error: page.evaluate: SyntaxError: Invalid regular expression: missing / at eval (<anonymous>) at UtilityScript.evaluate (<anonymous>:234:30) at UtilityScript.<anonymous> (<anonymous>:1:44)",
+  "basis": "",
+  "at": "2026-10-31T12:49:21.760Z",
+  "mut": ""
+ }
+]

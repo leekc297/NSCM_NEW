@@ -1,0 +1,32 @@
+{
+ "menu_id": "DMF0005",
+ "generated": "2026-11-02 21:08:53",
+ "F8": {
+  "verdict": "PASS",
+  "note": "감사 컬럼 = 저장 계정·저장 시각 (CREATED_BY=minyonglee1 · CREATION_DATE=2026-10-25 04:53:15 · LAST_UPDATED_BY=minyonglee1 · LAST_UPDATE_DATE=2026-10-25 04:53:15) · SCM_MST_SITE_ITEM 1행"
+ },
+ "F7": {
+  "verdict": "PASS",
+  "asis_sp": "DMF0005_GET_SALES_SITE_MODEL_PRODUCTION",
+  "asis_insert_tables": [],
+  "asis_update_only": [],
+  "tobe_written": [
+   "SCM_MST_SITE_ITEM",
+   "SCM_MST_SITE_ITEM_H"
+  ],
+  "tobe_extra": [
+   "SCM_MST_SITE_ITEM",
+   "SCM_MST_SITE_ITEM_H"
+  ],
+  "note": "AS-IS 신규행 경로 테이블  모두 기록 · TO-BE 에만 기록(참고 — AS-IS 트리거·다른 경로 여부 확인): SCM_MST_SITE_ITEM, SCM_MST_SITE_ITEM_H"
+ },
+ "run": {
+  "cleanup_sql": "Doc\\verify\\DMF0005\\cleanup\\cleanup_20261025_045757.sql",
+  "account": "minyonglee1",
+  "saved_at": "2026-10-25 04:50:34",
+  "tables": {
+   "SCM_MST_SITE_ITEM": 1,
+   "SCM_MST_SITE_ITEM_H": 1
+  }
+ }
+}

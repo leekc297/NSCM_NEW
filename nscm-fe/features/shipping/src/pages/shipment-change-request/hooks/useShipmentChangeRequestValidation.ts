@@ -106,9 +106,9 @@ export const useShipmentChangeRequestValidation = () => {
     (() => {
       const rows = (shipPeriodDay ?? []) as Record<string, unknown>[];
       const dayOf = (code: string): number | undefined => {
-        const r = rows.find(x => str(x.CODE ?? (x as Record<string, unknown>).SEGMENT1).trim() === code);
+        const r = rows.find(x => str(x.CODE ?? (x).SEGMENT1).trim() === code);
         if (!r) return undefined;
-        const raw = str(r.NAME ?? (r as Record<string, unknown>).SEGMENT2 ?? '');
+        const raw = str(r.NAME ?? (r).SEGMENT2 ?? '');
         const n = Number(raw.replace(/,/g, ''));
         return raw.trim() && Number.isFinite(n) ? n : undefined;
       };

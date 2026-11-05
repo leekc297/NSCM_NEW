@@ -1,10 +1,33 @@
+import { useCallback, useRef, useState } from 'react';
+
+import { apiClient } from '@foundation/apis';
 import type { ComboResponse } from '@foundation/models';
 import { useTabComboQueryResults } from '@shared/hooks';
 
-import { CELL_COMBO_COLUMNS, COMBO } from '../shipment-change-request.constants';
+import {
+  CELL_COMBO_COLUMNS,
+  COMBO,
+  END_CUSTOMER_EMPTY_CODE,
+} from '../shipment-change-request.constants';
+
+/** 행 파라미터 콤보(End Customer) 캐시 키 — 값이 하나라도 비면 빈 키(조회 안 함, 자매 SSP0200 과 동일). */
+const KEY_SEP = '||';
+const keyOf = (parts: string[]): string => (parts.every(Boolean) ? parts.join(KEY_SEP) : '');
+
+/** 후보 0행이면 '-' 단일행을 합성한다(AS-IS cs:6665~6675, 자매 SSP0200 과 동일). */
+const withEmptyFallback = (raw: ComboResponse[]): ComboResponse[] =>
+  raw.length > 0
+    ? raw
+    : [{ CODE: END_CUSTOMER_EMPTY_CODE, NAME: END_CUSTOMER_EMPTY_CODE } as ComboResponse];
+
+export interface EndCustomerKeys {
+  divisionId: string;
+  scmSiteId: string;
+  itemId: string;
+}
 
 /**
- * 그리드1 셀 콤보 dataMap 공급 — `FROM_SITE_DESCRIPTION` / `TO_SITE_DESCRIPTION`.
+ * 그리드1 셀 콤보 dataMap 공급 — `FROM_SITE_DESCRIPTION` / `TO_SITE_DESCRIPTION` / `END_CUSTOMER`.
  *
  * **왜 필요한가(사용자 신고 2026-10-13 "Insert 하면 From Site 에 데이터가 안 들어간다")**
  *   `buildCopiedRow` 는 AS-IS(cs:2443~2444)대로 **코드값**(`FROM_SITE`/`TO_SITE`)을 복사해
@@ -28,6 +51,17 @@ export interface CellComboResult {
   dataMaps: Record<string, ComboResponse[] | undefined>;
   /** 사이트 콤보 조회 중 여부. */
   loading: boolean;
+  /**
+   * End Customer 후보 재조회(행 파라미터, AS-IS setEndCustomer cs:5731~5748 의 TO-BE 등가).
+   *   1건이면 호출부가 그 코드를 셀에 자동대입할 수 있도록 원본 후보를 돌려준다. 캐시 적중(같은 키
+   *   재요청)이면 `undefined` 를 돌려 자동확정을 반복하지 않는다(자매 SSP0200 `loadEndCustomer` 와 동일 규약).
+   */
+  loadEndCustomer: (keys: EndCustomerKeys) => Promise<ComboResponse[] | undefined>;
+  /**
+   * End Customer 셀 포커스 — 자동확정 없이 그 행 키로 dataMap 슬롯만 맞춘다. 키가 비면(item/To Site
+   *   미설정) 슬롯을 즉시 비워 이전 행 후보가 남지 않게 한다.
+   */
+  focusEndCustomerRow: (keys: EndCustomerKeys) => void;
 }
 
 export const useShipmentChangeRequestCellCombos = (divisionId: string): CellComboResult => {
@@ -38,11 +72,64 @@ export const useShipmentChangeRequestCellCombos = (divisionId: string): CellComb
     ],
   });
 
+  const [endCustomer, setEndCustomer] = useState<{ key: string; rows: ComboResponse[] }>({
+    key: '',
+    rows: [],
+  });
+  const inFlightKeyRef = useRef('');
+
+  const loadEndCustomer = useCallback(
+    async ({
+      divisionId: div,
+      scmSiteId,
+      itemId,
+    }: EndCustomerKeys): Promise<ComboResponse[] | undefined> => {
+      const key = keyOf([div, scmSiteId, itemId]);
+      if (!key || key === endCustomer.key || key === inFlightKeyRef.current) return undefined;
+      inFlightKeyRef.current = key;
+      try {
+        // @param5='P' — SSP0201(Packer) 분기 상수(COMBO.CELL_END_CUSTOMER 주석 참조, 자매 SSP0200 은 '').
+        const rows = await apiClient.getCombo({
+          comboId: COMBO.CELL_END_CUSTOMER,
+          divisionId: div,
+          scmSiteId,
+          itemId,
+          param5: 'P',
+        });
+        const raw = rows ?? [];
+        setEndCustomer({ key, rows: withEmptyFallback(raw) });
+        return raw;
+      } catch {
+        setEndCustomer({ key, rows: [] });
+        return undefined;
+      } finally {
+        inFlightKeyRef.current = '';
+      }
+    },
+    [endCustomer.key]
+  );
+
+  const focusEndCustomerRow = useCallback(
+    ({ divisionId: div, scmSiteId, itemId }: EndCustomerKeys): void => {
+      const key = keyOf([div, scmSiteId, itemId]);
+      if (!key) {
+        if (endCustomer.key) setEndCustomer({ key: '', rows: [] });
+        return;
+      }
+      if (key === endCustomer.key || key === inFlightKeyRef.current) return;
+      void loadEndCustomer({ divisionId: div, scmSiteId, itemId });
+    },
+    [endCustomer.key, loadEndCustomer]
+  );
+
   return {
     dataMaps: {
       [CELL_COMBO_COLUMNS.FROM_SITE_DESCRIPTION]: results[0]?.data,
       [CELL_COMBO_COLUMNS.TO_SITE_DESCRIPTION]: results[1]?.data,
+      [CELL_COMBO_COLUMNS.END_CUSTOMER]: endCustomer.key ? endCustomer.rows : undefined,
     },
     loading: !!results[0]?.isFetching || !!results[1]?.isFetching,
+    loadEndCustomer,
+    focusEndCustomerRow,
   };
 };

@@ -1,0 +1,9 @@
+﻿menu_id,name,steps,msg_re,no_save,no_editor,rule,source,user,pattern_id,basis,key
+SYS0015,[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림,lang:KO;search;save,[가-힣].*(수정|변경|없습니다),Y,,I1,자동 생성 P01 · btn_auth SAVE,,P01,btn_auth SAVE,I1|lang-ko-save
+SYS0015,[자동] CN 언어 조회 건수 총/건 표기,"lang:CN;search;pagetext:(总|共|合计)\s*[\d,]+\s*(条|行|件|个)",,,,I1,자동 생성 P02 · btn_auth SEARCH,,P02,btn_auth SEARCH,I1|lang-cn-count
+SYS0015,[자동] 조회 중 Loading 토스트 없음,noload,,,,H10,자동 생성 P03 · btn_auth SEARCH,,P03,btn_auth SEARCH,H10|noload
+SYS0015,[자동] 선택 행 위로 Insert,search;insertat:3,,,,D6,자동 생성 P05 · btn_auth INSERT · D6 확정 요구(O2),,P05,btn_auth INSERT · D6 확정 요구(O2),D6|insertat
+SYS0015,[자동] 기존 행 Delete → D 저장 요청,"search;delrow;save;savehas:CRUD[^,]{0,8}D",,,,F1,자동 생성 P06 · btn_auth DELETE · AS-IS DeleteButton 150,,P06,btn_auth DELETE · AS-IS DeleteButton 150,F1|delete-D
+SYS0015,[자동] 기존 행 PROGRAM_NAME 수정 저장 → 입력된 필수 칸 오탐 없음,search;type:PROGRAM_NAME=E2E;btn:Save;nomsgre:필수|required|mandatory,,,,E4,자동 생성 P12 · sheet_columns main.PROGRAM_NAME M · 필수 오탐 유형(DM-215),,P12,sheet_columns main.PROGRAM_NAME M · 필수 오탐 유형(DM-215),E4|req-fp
+SYS0015,[자동] 빈 신규 행 저장 → 필수 안내·저장 요청 0,search0;insert;save,필수|required|mandatory,Y,,E3,"자동 생성 P13 · sheet_columns 필수 4칸(PROGRAM_ID, PROGRAM_NAME, PROGRAM_PATH, CLASS_NAME)",,P13,"sheet_columns 필수 4칸(PROGRAM_ID, PROGRAM_NAME, PROGRAM_PATH, CLASS_NAME)",E3|blank-save
+SYS0015,[자동] 기존행 수정 + 신규행 동시 Save 1회 → 요청에 M·I,"search;type:PROGRAM_NAME=E2E_SCN;insert;type:PROGRAM_ID=E2E_SCN_I;type:PROGRAM_NAME=E2E_SCN_I;type:PROGRAM_PATH=E2E_SCN_I;type:CLASS_NAME=E2E_SCN_I;save;savehas:CRUD[^,]{0,8}M;savehas:CRUD[^,]{0,8}I",,,,F2,자동 생성 P23 · sheet_columns 편집 PROGRAM_NAME · 필수 4칸,,P23,sheet_columns 편집 PROGRAM_NAME · 필수 4칸,F2|mod-ins

@@ -1,0 +1,13 @@
+﻿kind,target,result,why
+TB_FX,PKG_DMF0021,PASS,TB_FX_* 참조 0
+EMPTY_EQ,PKG_DMF0021,PASS,PKG_DMF0021 빈 문자열 직접 비교 0
+LIKE_NULL,PKG_DMF0021,ERROR,[확인 대상] PKG_DMF0021 가드 없는 LIKE 1곳 — 칸이 NULL 인 행이 조건 때문에 탈락 가능: ['B.BIZ_TYPE~C@1035']
+TEAM_SRC,PKG_DMF0021,PASS,PKG_DMF0021 OWNER 경유 없음 · SCM_MST_SITE_ITEM 참조
+ATTR9,EndCustomerByDivisionDeptAuth,PASS,콤보 SQL 'EndCustomerByDivisionDeptAuth' 실존
+ATTR9,EndCustomerByDivision40,PASS,콤보 SQL 'EndCustomerByDivision40' 실존
+ATTR9,SiteByEndCustomerAuth,PASS,콤보 SQL 'SiteByEndCustomerAuth' 실존
+LABEL_AMP,FORECAST_INFO_ALL.라벨,PASS,FORECAST_INFO_ALL 라벨 라벨 'Spec & Version' = AS-IS
+LABEL_AMP,FORECAST_INFO_ALL.소분류,PASS,FORECAST_INFO_ALL 소분류 라벨 'Spec & Version' = AS-IS
+LABEL_AMP,FORECAST_INFO_ALL.대분류,PASS,FORECAST_INFO_ALL 대분류 라벨 'Spec & Version' = AS-IS
+TEAM_VAL,DMF0021,PASS,Team 값 = SITE_ITEM.DEPT_ID 1153행 일치(원장 없음 0)
+TEAM_VAL,DMF0021.팀명,PASS,부서 코드 있는 1153행 팀명 표시

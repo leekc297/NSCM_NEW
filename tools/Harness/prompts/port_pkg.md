@@ -30,3 +30,13 @@
 ## 하지 말 것
 - As-is 에 없는 로직 추가/"개선" — 차이가 필요하면 NOTES 에 사유. 주석 처리된 As-is 코드 이식 금지.
 - 결과셋 컬럼 생략/이름 변경, O_RESULT_CURSOR 규약(CODE/MSG/EVENT) 변경.
+
+## 정렬(ORDER BY) — CR-075 (사용자 판정 2026-10-28, check-pkg P42)
+- 그리드에 표시되는 조회 PROC(PROC_M 의 sheet 가 SHEET_COLUMNS 메타를 가진 시트)는 **반드시 ORDER BY** 를 가진다. AS-IS SP 에 ORDER BY 가 없었더라도(테이블 순) TO-BE 는 화면 키 컬럼 순으로 결정적 순서를 만든다.
+- AS-IS SP 의 ORDER BY 키·분기(가드)는 그대로 옮긴다(`Doc/asisfacts/screens/<ID>/sort_rules.csv`). 그리드/코드 정렬(SmartColMerge·SetSort)이 있으면 같은 키를 SQL ORDER BY 로 옮긴다.
+- 빈 값 정렬 위치: MSSQL 은 `''` 를 맨 앞, Oracle 은 NULL 을 맨 뒤(NULLS LAST)에 둔다 → ORDER BY 의 문자 키마다 `NULLS FIRST`(또는 `NVL(col,'/')`)를 붙여 AS-IS 와 같은 순서를 만든다. (SCP0007 CUSTOMER 빈 값 110행 실측 2026-10-28)
+- 룩업·집계·저장 PROC(비그리드 시트, 결과 1행)은 대상이 아니다 — PKG_NOTES 에 사유를 적는다.
+
+## 감·예측 답변 금지 (사용자 상시 지시 2026-10-31 · hook #126 §0-1)
+
+수치·진행율·소요 시간·원인·결과를 감이나 예측으로 답하지 않는다. 답은 이번에 실행한 측정·로그·파일·DB 조회 결과만 인용하고 그 출처와 시각을 함께 적는다. 측정하지 못했으면 '미측정'이라고 쓰고 측정 방법을 제시한다. '~할 것으로 기대', '약 N분', 'N% 쯤' 같은 추정 표현과, 원인을 확인하지 않은 단정을 금지한다. 진행율은 분모·분자를 명시한 실측값만 쓴다(정합검증 = tools/Harness/verify/doc_proof.py 출력).

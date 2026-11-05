@@ -1,0 +1,78 @@
+{
+ "menu_id": "SCP0028",
+ "asis_id": "SCP0028",
+ "generated": "2026-11-02 13:51:02",
+ "rc": 0,
+ "items": [
+  {
+   "key": "db",
+   "what": "DB 접속(AS-IS MSSQL · TO-BE Oracle)",
+   "status": "OK",
+   "producer": "tools/DbConn/probe.py",
+   "evidence": "전부 접속"
+  },
+  {
+   "key": "asis_pack",
+   "what": "AS-IS Fact Pack(SCP0028)",
+   "status": "OK",
+   "producer": "tools/AsisFacts/pack.ps1",
+   "evidence": "controls.csv, actions.csv, files.csv, endpoints.csv 있음"
+  },
+  {
+   "key": "tobe_meta",
+   "what": "TO-BE DB 메타(Doc/tobefacts/db)",
+   "status": "DONE",
+   "producer": "tools/DbConn/export_tobe_meta.py",
+   "evidence": "18시간 지난 메타 → 다시 export · rc=0 · 21s · _meta.csv 1440행 proc_params.csv 8074행 sheet_columns.csv 16372행 sheet_measures.csv 1568행 combo_sql.csv 743행 menu.csv 208행 msg_master.csv 4964행 btn_auth.csv 13451행 user_group.csv 23행 user_group_user.csv 13089행 user_group_menu.csv 2004행 users.csv 8612행 division.csv 14행 unit_auth.csv 25062행 tables.csv 5301행 columns.csv 15522행 procs_catalog.csv 1872행 완료: C:\\Projects\\NSCM\\Doc\\tobefacts\\db (성공 17 / 실패 0)"
+  },
+  {
+   "key": "tobe_index",
+   "what": "TO-BE 화면 인덱스(Doc/tobefacts/screens)",
+   "status": "OK",
+   "producer": "tools/TobeFacts/run.ps1",
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\shipment-lot-size · 인덱스 최신"
+  },
+  {
+   "key": "mapping_md",
+   "what": "FE 대조표(__asis-mapping__.md)",
+   "status": "OK",
+   "producer": "화면 개발 시 작성(하네스 gen.js 초안 = Doc/gen/<ID>)",
+   "evidence": "nscm-fe\\features\\shipping\\src\\pages\\shipment-lot-size\\__asis-mapping__.md"
+  },
+  {
+   "key": "search_cond",
+   "what": "조회조건 기준표(search_cond.csv)",
+   "status": "MANUAL",
+   "producer": "tools/Harness/refs/build_search_cond.py(원천 = 사용자 xlsx)",
+   "evidence": "기준표 xlsx 에 이 화면 행 없음 — 조회조건 순서·라벨(CR-071)은 AS-IS 기준으로만 판정. 기준표 xlsx 보강 후 build_search_cond.py"
+  },
+  {
+   "key": "golden",
+   "what": "골든 케이스(golden_cases.csv)",
+   "status": "OK",
+   "producer": "tools/DbConn/gen_golden_cases.py",
+   "evidence": "3건 있음"
+  },
+  {
+   "key": "e2e_plan",
+   "what": "E2E plan(Doc/gen/<ID>/e2e_plan.json)",
+   "status": "OK",
+   "producer": "tools/Harness/gen.js",
+   "evidence": "있음"
+  },
+  {
+   "key": "e2e_spec",
+   "what": "E2E 스펙(Doc/e2e/specs/<ID>.*)",
+   "status": "DONE",
+   "producer": "tools/E2E/gen-e2e.js <ID>",
+   "evidence": "rc=0 · 1s · SCP0028 테스트 모드 single (기본 single(사용자 미지정 · Division 조회조건 있음)) → 계정 1: jooyong026 SCP0028 → SCP0028 smoke/crud(save)/auth(1계정)/authcrud(기대 있음 1계정) 메타컬럼 Y 스펙 1화면 × 4(smoke·crud·auth·authcrud) → C:\\Projects\\NSCM\\Doc\\e2e\\specs (계정×DIV 매트릭스 1행)"
+  },
+  {
+   "key": "smoke",
+   "what": "smoke 결과(Doc/e2e/results/_summary.csv)",
+   "status": "OK",
+   "producer": "tools/E2E/run-e2e.cmd smoke",
+   "evidence": "3건 · 마지막 smoke 11-01 01:19 (FE 소스보다 최신)"
+  }
+ ]
+}

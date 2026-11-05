@@ -155,7 +155,8 @@ export const ProductionPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) =>
       return false;
     }
     if (sc.versionNos.length === 0) {
-      void setAlert({ type: 'alert', content: requiredMsg(t(LBL.VERSION, '_Version')) });
+      // 라벨 'Ver.' 하드코딩(조회조건 라벨과 일치, 사용자 지시 2026-11-02 / SCP0016 패턴) — DB/번들 미등록 약어.
+      void setAlert({ type: 'alert', content: requiredMsg('Ver.') });
       return false;
     }
     if (!sc.fromYyyymmdd || !sc.toYyyymmdd) {

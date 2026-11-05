@@ -1,0 +1,106 @@
+{
+ "menu_id": "SSP0200",
+ "asis_id": "SSP0200",
+ "area": "SSP",
+ "generated": "2026-11-05 06:14:41",
+ "division_cond": {
+  "present": true,
+  "labels": [
+   "Div"
+  ]
+ },
+ "divisions_meta": [
+  "40",
+  "81",
+  "82",
+  "EE"
+ ],
+ "divisions_accounts": {
+  "40": {
+   "SSP Planner": "jinhuannj",
+   "SSP Viewer": "kijung03.kim"
+  },
+  "81": {
+   "SSP Planner": "iqromoh",
+   "SSP Viewer": "caizedan"
+  },
+  "82": {
+   "SSP Planner": "hoseoknam",
+   "SSP Viewer": "caizedan"
+  }
+ },
+ "fixed_division": null,
+ "default": {
+  "division": "",
+  "user": "",
+  "basis": "sheet_columns 단일 Division 칸 없음 → 기본 계정·기본 조건"
+ },
+ "default_account": {
+  "user": "minyonglee1",
+  "groups": [
+   "ADMIN",
+   "DM ADMIN",
+   "DM Planner",
+   "DM Planner (W/S)",
+   "DM Viewer",
+   "GUEST",
+   "JV Planner",
+   "SCM PI Admin",
+   "SCP Planner"
+  ],
+  "buttons": [
+   "DELETE",
+   "DELETE_SHIPMENT_REQUEST_DRAFTING",
+   "DELETE_SHIPMENT_REQUEST_DRAFTING_BY_CONFIRM",
+   "EDIT",
+   "ERP_ERROR_CONFIRM",
+   "ERP_IFSEQ_MERGE",
+   "EXCEL",
+   "GET_CHANGE_REQ_NO",
+   "GET_ERP_SO_NO_CNT",
+   "GET_ORDER_DETAIL",
+   "GET_SCP_DAY_PERIOD",
+   "GET_SHIPMENT_STATUS",
+   "INSERT",
+   "SAVE",
+   "SAVE_SHIPMENT_REQUEST_COMPLETE",
+   "SAVE_SHIPMENT_REQUEST_DRAFTING",
+   "SEARCH",
+   "SEARCH_NEW",
+   "USER_CHECK"
+  ],
+  "source": "user_group_user.csv · btn_auth.csv(use_yn=Y)"
+ },
+ "required_conds": [
+  {
+   "label": "Approval",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Title",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Change Reason",
+   "source": "search_cond.csv"
+  },
+  {
+   "label": "Reason Detail",
+   "source": "search_cond.csv"
+  }
+ ],
+ "popup_conds": [
+  {
+   "label": "Model/Nickname",
+   "popup": "메1",
+   "source": "search_cond.csv"
+  }
+ ],
+ "bucket_cond": "",
+ "observed": {
+  "source": "e2e_results.json 없음",
+  "max_rows_after_search": null,
+  "zero_row_failures": []
+ },
+ "warnings": []
+}

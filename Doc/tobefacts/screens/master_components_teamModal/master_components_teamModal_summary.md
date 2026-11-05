@@ -9,13 +9,13 @@
 |---|---|---|
 | features/master/src/components/teamModal/team-modal.constants.ts | constants | 8 |
 | features/master/src/components/teamModal/TeamModal.module.scss | style | 20 |
-| features/master/src/components/teamModal/TeamModal.tsx | page | 211 |
+| features/master/src/components/teamModal/TeamModal.tsx | page | 209 |
 | features/master/src/components/teamModal/teamModalStore.ts | store | 41 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| COM0009/team//call-proc | hook | 1 | Y | TeamModal.tsx:61 |
+| COM0009/team//call-proc | hook | 1 | Y | TeamModal.tsx:62 |
 | /admin/menu/COM0009/column | http | 1 | Y | teamModalStore.ts:27 |
 
 ## 3. procedures.d.ts 등재 시트
@@ -24,11 +24,11 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| SearchArea | onSearch | handleSearch | jsx | features/master/src/components/teamModal/TeamModal.tsx | 147 |
-| InputField | onChange | <arrow> setTeamInput | jsx | features/master/src/components/teamModal/TeamModal.tsx | 157 |
-| InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/teamModal/TeamModal.tsx | 158 |
-| Button | onClick | handleSubmit | jsx | features/master/src/components/teamModal/TeamModal.tsx | 196 |
-| Button | onClick | modalClose | jsx | features/master/src/components/teamModal/TeamModal.tsx | 203 |
+| SearchArea | onSearch | handleSearch | jsx | features/master/src/components/teamModal/TeamModal.tsx | 145 |
+| InputField | onChange | <arrow> setTeamInput | jsx | features/master/src/components/teamModal/TeamModal.tsx | 155 |
+| InputField | onKeyDown | <arrow> handleSearch | jsx | features/master/src/components/teamModal/TeamModal.tsx | 156 |
+| Button | onClick | handleSubmit | jsx | features/master/src/components/teamModal/TeamModal.tsx | 194 |
+| Button | onClick | modalClose | jsx | features/master/src/components/teamModal/TeamModal.tsx | 201 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -57,7 +57,7 @@
 
 ## 8. 주석 속 As-is 참조
 - 화면ID: COM0009(2), DMF0082(1)
-- SP/PKG: P_DIVISION_ID(1)
+- SP/PKG: P_DIVISION_ID(1), P_COM0009_GET_TEAM_POPUP(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 (없음)
 

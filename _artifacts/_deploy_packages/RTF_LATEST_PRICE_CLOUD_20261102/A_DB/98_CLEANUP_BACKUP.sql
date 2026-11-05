@@ -1,0 +1,14 @@
+-- 98_CLEANUP (after deciding to keep or after rollback) drops the source backup table. Rollback is impossible afterwards.
+SET SERVEROUTPUT ON SIZE UNLIMITED
+DECLARE
+    n PLS_INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO n FROM USER_TABLES WHERE TABLE_NAME = 'ZB_RTFLP_SRC_20261102';
+    IF n = 1 THEN
+        EXECUTE IMMEDIATE 'DROP TABLE ZB_RTFLP_SRC_20261102 PURGE';
+        DBMS_OUTPUT.PUT_LINE('DROPPED ZB_RTFLP_SRC_20261102');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('SKIP - no ZB_RTFLP_SRC_20261102');
+    END IF;
+END;
+/

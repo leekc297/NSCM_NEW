@@ -138,8 +138,10 @@ export const ConfirmDetailPanel = ({
       <Grid size={4} />
 
       {/* Reason Detail (읽기전용) — 전폭. AS-IS `txtReasonDetail.Multiline = true`(Designer:953).
-          필수: type='textarea' — InputField 는 type 으로 분기해 기본값('text')이면 size 별 고정 높이를
-          걸어 multiline 만으로는 칸이 안 커진다(SSP0200/SSP0201 과 동일 처리). */}
+          type='textarea' 는 multiline 인데 행 상한이 없으면 저장된 사유 줄수만큼 상자가 커져 고정 폼
+          패널 밖으로 삐져나온다(SSP0201 동일 신고 2026-11-02). rows={2} 로 2줄 고정 + 초과분 네이티브
+          스크롤로 막는다. design-system 이 textarea 입력에 minHeight 72px 를 강제해 rows 만으로는
+          상자가 2줄로 안 줄어들어 sx 로 바닥값을 푼다(ie=deepmerge 라 나머지 입력 스타일 보존). */}
       <Grid size={8}>
         <FormItem
           className={commonStyles.formItem}
@@ -149,9 +151,10 @@ export const ConfirmDetailPanel = ({
             <InputField
               type='textarea'
               fullWidth
-              height={44}
+              rows={2}
               disabled
               value={detail.reasonDetail}
+              sx={{ '.MuiInputBase-input': { minHeight: 'unset' } }}
             />
           )}
         />
@@ -160,7 +163,11 @@ export const ConfirmDetailPanel = ({
       <Grid size={4} />
 
       {/* Reject Reason — 유일 입력 필드(반려/자기반려 사유, B4). 행 선택 전에는 비활성.
-          AS-IS 는 이 칸만 ReadOnly 가 아니고, Multiline 도 없어 단행이다(Designer:1004~1006). */}
+          AS-IS 는 이 칸만 ReadOnly 가 아니고, Multiline 도 없어 단행이다(Designer:1004~1006).
+          길이 제한 1000: 저장 SP(PKG_SSP0202 P_SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM BODY:827/835)는
+          입력 사유를 헤더 SSP_ANL_SHIP_CONFIRM_CHG_REQ.REJECT_REASON(VARCHAR2(1000 CHAR), AS-IS
+          nvarchar(1000) 동일)에만 쓴다 — SSP0003 과 달리 per-row ATTRIBUTE3(150)에는 쓰지 않아
+          바인딩 제한이 1000 이다. 공용 기본 maxLength 500 을 DB 컬럼 길이(1000)에 맞춘다. */}
       <Grid size={8}>
         <FormItem
           className={commonStyles.formItem}
@@ -171,6 +178,7 @@ export const ConfirmDetailPanel = ({
             <InputField
               size='small'
               fullWidth
+              limited={1000}
               disabled={!rejectEnabled}
               value={rejectReason}
               onChange={e => onRejectReasonChange(e.target.value)}

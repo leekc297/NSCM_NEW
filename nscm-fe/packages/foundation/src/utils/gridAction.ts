@@ -1379,7 +1379,14 @@ export const GridAction = {
           };
 
           const dataType = flatColumnGroups[col]._ctrlType;
-          xlsxCell.isDate = dataType === CELL_CONTROL_TYPE.DATE; // TODO: CELL_CONTROL_TYPE DATE 타입 추가 시 조건 변경 필요 - 강민재
+          // 날짜 컬럼(FPDate)이라도 셀 값이 실제 Date 객체일 때만 isDate 를 켠다.
+          //   날짜 컬럼 값은 BE JSON 특성상 거의 항상 'YYYY-MM-DD' 문자열인데(getDataType 에 DATE
+          //   매핑이 없어 Wijmo 가 Date 로 강제하지 않는다), isDate=true 이면 변환기가 그 문자열을
+          //   new Date() 로 UTC 파싱해 로컬 오프셋만큼 어긋난 날짜 시리얼(예: 46234.375)로 쓰고
+          //   날짜 서식도 못 붙여 Excel 에 원시 숫자로 보인다. 문자열은 isDate 를 끄고 텍스트 그대로
+          //   내보낸다(화면 표시와 동일). 실제 Date 값만 종전처럼 날짜 셀로 변환된다.
+          xlsxCell.isDate =
+            dataType === CELL_CONTROL_TYPE.DATE && xlsxCell.value instanceof Date;
           xlsxCell.isNumber = dataType === CELL_CONTROL_TYPE.NUMBER;
 
           // 컬럼 전용 엑셀 서식(opt-in) — 변환기가 컬럼 format 에서 만든 서식을 그대로 덮어쓴다.

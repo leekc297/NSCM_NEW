@@ -22,7 +22,7 @@ import {
 } from '../utils/waterfall.columns';
 import { derivePeriodSums } from '../utils/waterfall.derive';
 import { WaterfallMergeManager } from '../utils/waterfall.merge';
-import { baseVisibleOf, dynKindOf, isIsoWeek, largeKeyOf, rankOf } from '../utils/waterfall.periods';
+import { baseVisibleOf, dynKindOf, isIsoWeek } from '../utils/waterfall.periods';
 import {
   BUCKET_TYPE,
   HEADER_COLORS,
@@ -58,18 +58,31 @@ export const WaterfallShipmentPlanFgGrid = ({
   // 셀 콤보 파라미터 — 메타 CMBO 토큰(@mnuId). 셀 콤보 0건이나 공용 규약대로 전달.
   const comboParams = useMemo(() => ({ mnuId: quoteComboParam(MENU_ID) }), []);
 
-  // 기간칼럼 헤더(공용 캘린더 3span) — filters 세팅 후 enabled.
+  // Bucket=Only Weekly 는 캘린더 헤더를 ISO 전용 proc(연속 ISO 주차 + 날짜범위 MMDD)으로 받는다
+  //   — AS-IS 가 WeeklyISO 일 때만 SCP0009_GET_SHEET_CALENDAR_3SPAN_ISO 를 호출하는 것과 등가(cs:1263-1268).
+  //   그 외 버킷은 NotISO spreadTitle 사용. 둘 중 bucket 에 맞는 쿼리만 enable 한다(자매 SCP0018 미러).
+  const isWeeklyIso = bucket === BUCKET_TYPE.WEEKLY_ISO;
+
+  // 기간칼럼 헤더(공용 캘린더 3span, NotISO) — filters 세팅 후 + 비(非)WeeklyISO 일 때만 enabled.
   const { data: titleData } = useTabProcQuery<MENU_ID, SHEETS.TITLE>({
     menuId: MENU_ID,
     sheetName: SHEETS.TITLE,
     tabId,
     filters: filters[SHEETS.TITLE],
-    enabled: !!filters[SHEETS.TITLE],
+    enabled: !!filters[SHEETS.TITLE] && !isWeeklyIso,
+  });
+  // ISO 캘린더 헤더(Only Weekly 전용) — WeeklyISO 일 때만 enabled.
+  const { data: titleIsoData } = useTabProcQuery<MENU_ID, SHEETS.TITLE_ISO>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.TITLE_ISO,
+    tabId,
+    filters: filters[SHEETS.TITLE_ISO],
+    enabled: !!filters[SHEETS.TITLE_ISO] && isWeeklyIso,
   });
 
   const titleRows = useMemo<WaterfallTitleRow[]>(
-    () => (titleData?.o_rc1 ?? []) as WaterfallTitleRow[],
-    [titleData?.o_rc1]
+    () => ((isWeeklyIso ? titleIsoData?.o_rc1 : titleData?.o_rc1) ?? []) as WaterfallTitleRow[],
+    [isWeeklyIso, titleData?.o_rc1, titleIsoData?.o_rc1]
   );
 
   const { staticRows, periodRows } = useMemo(() => splitTitleRows(titleRows), [titleRows]);
@@ -216,7 +229,13 @@ export const WaterfallShipmentPlanFgGrid = ({
   }, [gridRef, data]);
 
   // ── 헤더 더블클릭 드릴다운 (R10, AS-IS SpdMain_CellDoubleClick + WeeklyISO 가드 buttonGuard #1) ──
-  //   상위(월/주) 헤더 더블클릭 = 그 그룹의 하위 rank 컬럼 접기/펼치기. WeeklyISO 면 무동작(주별만 표시).
+  //   자매 SCP0017 ProductionPlanWaterfallGrid dblClickHandler 1:1. 종전엔 largeKeyOf(=yyyymm, 월)로
+  //   하위를 모아 M_(월) 더블클릭 시 그 달의 W_ 뿐 아니라 D_(일)까지 한 번에 펼쳐졌다(사용자 신고:
+  //   Monthly 에서 SUM 더블클릭 시 Daily 까지 보임). 월 키 매칭 대신 표시순서(g.columns)를 걸어 클릭한
+  //   헤더의 구간(다음 동급/상위 경계 전까지)만 토글한다 — 한 단계씩 드릴다운(AS-IS 주석 cs:1059-1098 등가).
+  //     M_ 헤더 = 그 달 구간(다음 M_ 전까지) W_ 토글 + 보이는 D_ 접기(hideOnly) /
+  //     W_ 헤더 = 그 주 구간(다음 W_/M_ 전까지) D_ 토글.
+  //   WeeklyISO 면 무동작(주별만 표시 — design 03 §2.4 buttonGuard #1).
   useEffect(() => {
     const g = gridRef.current;
     if (!g?.hostElement) return;
@@ -227,17 +246,33 @@ export const WaterfallShipmentPlanFgGrid = ({
       if (hit.cellType !== CellType.ColumnHeader) return;
       const clicked = g.columns[hit.col]?.binding ?? '';
       const clickedKind = dynKindOf(clicked);
-      const clickedRank = rankOf(clickedKind);
-      if (clickedRank === null || clickedRank >= 2) return; // leaf(일)는 접을 하위 없음
-      const groupKey = largeKeyOf(clicked);
-      // 같은 월 그룹의 더 하위 rank 컬럼(현재 보이는지로 토글) 접기/펼치기
-      const childBindings = dynBindings.filter(b => {
-        const rk = rankOf(dynKindOf(b));
-        return rk !== null && rk > clickedRank && largeKeyOf(b) === groupKey;
-      });
-      if (childBindings.length === 0) return;
-      const anyVisible = childBindings.some(b => g.columns.getColumn(b)?.visible ?? false);
-      childBindings.forEach(b => drillVisRef.current.set(b, !anyVisible));
+      if (clickedKind !== 'M' && clickedKind !== 'W') return; // leaf(일)는 접을 하위 없음
+      // 표시순서의 동적 바인딩만 추려 클릭 헤더 뒤 구간을 walk.
+      const dyn: string[] = [];
+      for (let i = 0; i < g.columns.length; i += 1) {
+        const b = g.columns[i].binding ?? '';
+        if (dynKindOf(b) !== null) dyn.push(b);
+      }
+      const idx = dyn.indexOf(clicked);
+      if (idx < 0) return;
+      const flip = (target: string, hideOnly: boolean) => {
+        const col = g.columns.getColumn(target);
+        if (!col) return;
+        if (hideOnly && !col.visible) return; // M 드릴: 보이는 D_ 만 접는다(AS-IS 동일)
+        drillVisRef.current.set(target, hideOnly ? false : !col.visible);
+      };
+      for (let i = idx + 1; i < dyn.length; i += 1) {
+        const t = dyn[i];
+        const tk = dynKindOf(t);
+        if (clickedKind === 'M') {
+          if (tk === 'M') break;
+          if (tk === 'W') flip(t, false);
+          else if (tk === 'D') flip(t, true);
+        } else {
+          if (tk === 'W' || tk === 'M') break;
+          if (tk === 'D') flip(t, false);
+        }
+      }
       applyDynVisibilityRef.current?.();
     };
     host.addEventListener('dblclick', onDblClick);

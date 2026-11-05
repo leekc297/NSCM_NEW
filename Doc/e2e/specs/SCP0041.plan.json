@@ -1,0 +1,563 @@
+{
+  "id": "SCP0041",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "SCP0041",
+  "divCascade": [
+    [
+      "Plant Site"
+    ]
+  ],
+  "divLabels": [
+    "Div",
+    "Div."
+  ],
+  "condOrder": [
+    "Div",
+    "Plant Site",
+    "Model/Nickname",
+    "관리번호",
+    "Inventory Date",
+    "Cutoff Date",
+    "Status"
+  ],
+  "condGone": [
+    {
+      "name": "Upload",
+      "usage": "BUTTON_AREA"
+    },
+    {
+      "name": "Excel Form",
+      "usage": "BUTTON_AREA"
+    }
+  ],
+  "condNotUse": [],
+  "page": "StockOsp",
+  "routePath": "supply/stock-osp",
+  "asisName": "StockOSP",
+  "fields": [
+    {
+      "key": "divisionId",
+      "label": "Div",
+      "lbl": "LBL00001",
+      "kind": "single",
+      "component": "DivisionField",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "cboDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div",
+        "Div."
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant Site",
+      "lbl": "LBL00005",
+      "kind": "multi",
+      "component": "PlantSiteField",
+      "comboId": "PlantSitebyEndCustomer",
+      "popup": false,
+      "asis": "clbPlantSite",
+      "tobeLabel": "Plant Site",
+      "catalog": "",
+      "labels": [
+        "Plant Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model/Nickname",
+      "lbl": "LBL00669",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId",
+      "tobeLabel": "Model",
+      "catalog": "",
+      "labels": [
+        "Model/Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "inspection",
+      "label": "Inspection",
+      "lbl": "LBL01086",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtInspection",
+      "tobeLabel": "Inspection",
+      "catalog": "",
+      "labels": [
+        "Inspection"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "period",
+      "label": "Inventory Date",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendar",
+      "tobeLabel": "Period",
+      "catalog": "",
+      "labels": [
+        "Inventory Date",
+        "Period",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "calendarCutoff",
+      "label": "Cutoff Date",
+      "lbl": "LBL00029",
+      "kind": "single",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendarCutoff",
+      "tobeLabel": "Cutoff Date",
+      "catalog": "",
+      "labels": [
+        "Cutoff Date",
+        "From",
+        "To",
+        "Period",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "status",
+      "label": "Status",
+      "lbl": "LBL00014",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboStatus",
+      "tobeLabel": "Status",
+      "catalog": "",
+      "labels": [
+        "Status"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": null,
+  "catalogScreen": "Stock OSP",
+  "asisMapping": "features\\supply\\src\\pages\\stock-osp\\__asis-mapping__.md",
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "excelUpload",
+      "label": "Upload",
+      "lbl": "LBL01130",
+      "kind": "subtitle-custom",
+      "tobe": "EXCEL_UPLOAD",
+      "asis": "btnExcelUpload"
+    },
+    {
+      "key": "formDown",
+      "label": "Excel Form",
+      "lbl": "LBL00762",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "formDown"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Osp Stock",
+      "key": "OSP_STOCK",
+      "labels": [
+        "Valuation Type",
+        "Cell From Site",
+        "Box",
+        "Comment",
+        "Created By",
+        "Creation Date",
+        "Division*",
+        "Model*",
+        "Last Update Date",
+        "Last Updated By",
+        "Nick Name",
+        "Qty*",
+        "Plant Site*",
+        "Date*"
+      ]
+    },
+    {
+      "name": "Pack Hold Stock",
+      "key": "PACK_HOLD_STOCK",
+      "labels": [
+        "Create Date",
+        "Cutoff Date",
+        "실제 완료일",
+        "예상 완료일",
+        "예상 시작일",
+        "Status",
+        "관리번호",
+        "수정자",
+        "Change Date",
+        "Nick Name",
+        "PLANT",
+        "Model",
+        "수량",
+        "변경점 신청자",
+        "Plant Site"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "procs": [
+    {
+      "sp": "SCM0001_GET_LOOKUP_VALUES",
+      "sheet": "Osp Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0041.P_SCM0001_GET_LOOKUP_VALUES",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "SCP0040_SAVE_CHARACTERISTIC_CAPA",
+      "sheet": "Osp Stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0041.P_SCP0040_SAVE_CHARACTERISTIC_CAPA",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "SCP0041_SAVE_PACKER_HOLD_STOCK",
+      "sheet": "Osp Stock",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0041.P_SCP0041_SAVE_PACKER_HOLD_STOCK",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Osp Stock",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0041.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCP0041_GET_STOCK_OSP",
+      "sheet": "Osp Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0041.P_SCP0041_GET_STOCK_OSP",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "SCP0041_GET_PACK_HOLD_STOCK",
+      "sheet": "Pack Hold Stock",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0041.P_SCP0041_GET_PACK_HOLD_STOCK",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Osp Stock": {
+      "40": [
+        "Div*",
+        "Plant Site*",
+        "Model*",
+        "Nick Name",
+        "Date*",
+        "Valuation Type",
+        "Qty*",
+        "Cell From Site",
+        "Comment",
+        "Box",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "81": [
+        "Div*",
+        "Plant Site*",
+        "Model*",
+        "Nick Name",
+        "Date*",
+        "Valuation Type",
+        "Qty*",
+        "Cell From Site",
+        "Comment",
+        "Box",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ],
+      "82": [
+        "Div*",
+        "Plant Site*",
+        "Model*",
+        "Nick Name",
+        "Date*",
+        "Valuation Type",
+        "Qty*",
+        "Cell From Site",
+        "Comment",
+        "Box",
+        "Created By",
+        "Creation Date",
+        "Last Updated By",
+        "Last Update Date"
+      ]
+    },
+    "Pack Hold Stock": {
+      "40": [
+        "Cutoff Date",
+        "Status",
+        "PLANT",
+        "Plant Site",
+        "Model",
+        "Nick Name",
+        "관리번호",
+        "수량",
+        "실제 완료일",
+        "예상 시작일",
+        "예상 완료일",
+        "변경점 신청자",
+        "Create Date",
+        "수정자",
+        "Change Date"
+      ],
+      "81": [
+        "Cutoff Date",
+        "Status",
+        "PLANT",
+        "Plant Site",
+        "Model",
+        "Nick Name",
+        "관리번호",
+        "수량",
+        "실제 완료일",
+        "예상 시작일",
+        "예상 완료일",
+        "변경점 신청자",
+        "Create Date",
+        "수정자",
+        "Change Date"
+      ],
+      "82": [
+        "Cutoff Date",
+        "Status",
+        "PLANT",
+        "Plant Site",
+        "Model",
+        "Nick Name",
+        "관리번호",
+        "수량",
+        "실제 완료일",
+        "예상 시작일",
+        "예상 완료일",
+        "변경점 신청자",
+        "Create Date",
+        "수정자",
+        "Change Date"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jooyong026",
+      "name": "강주용",
+      "groups": [
+        "ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "ADMIN",
+        "81": "ADMIN",
+        "82": "ADMIN"
+      },
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.SCP",
+      "tobeGroups": [
+        "ADMIN",
+        "GUEST",
+        "SSP Planner"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH",
+        "FORM_DATA",
+        "UPLOAD_SAVE",
+        "UPLOAD",
+        "SAVE"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "EE_ST",
+        "EE_UC",
+        "EE_HM",
+        "EE_HG",
+        "EE_HD",
+        "82",
+        "81_UC",
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40",
+        "EE"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SEARCH",
+      "FORM_DATA",
+      "UPLOAD_SAVE",
+      "UPLOAD",
+      "SAVE"
+    ],
+    "CAPA Planner": [
+      "UPLOAD",
+      "FORM_DATA",
+      "SEARCH",
+      "UPLOAD_SAVE",
+      "SAVE"
+    ],
+    "FP Planner": [
+      "SEARCH",
+      "FORM_DATA",
+      "UPLOAD_SAVE",
+      "UPLOAD",
+      "SAVE"
+    ],
+    "FP Viewer": [
+      "UPLOAD_SAVE",
+      "FORM_DATA",
+      "SEARCH",
+      "UPLOAD",
+      "SAVE"
+    ],
+    "SCM PI Admin": [
+      "UPLOAD_SAVE",
+      "FORM_DATA",
+      "SEARCH",
+      "UPLOAD",
+      "SAVE"
+    ],
+    "SCP Planner": [
+      "UPLOAD_SAVE",
+      "SEARCH",
+      "FORM_DATA",
+      "UPLOAD",
+      "SAVE"
+    ],
+    "SCP Tester": [
+      "FORM_DATA",
+      "SEARCH",
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "SAVE"
+    ],
+    "SSP ADMIN": [
+      "SEARCH",
+      "UPLOAD",
+      "UPLOAD_SAVE",
+      "FORM_DATA",
+      "SAVE"
+    ],
+    "SSP Planner": [
+      "UPLOAD",
+      "FORM_DATA",
+      "SEARCH",
+      "UPLOAD_SAVE",
+      "SAVE"
+    ],
+    "SSP Viewer": [
+      "UPLOAD",
+      "SEARCH",
+      "FORM_DATA",
+      "UPLOAD_SAVE",
+      "SAVE"
+    ]
+  },
+  "menuBtnCodes": [
+    "SEARCH",
+    "FORM_DATA",
+    "UPLOAD_SAVE",
+    "UPLOAD",
+    "SAVE"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

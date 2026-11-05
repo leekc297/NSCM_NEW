@@ -1,8 +1,9 @@
-// 자동 생성 — tools/E2E/gen-e2e.js (2026-10-22) · 원천: Doc/gen/SCP0122/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
+// 자동 생성 — tools/E2E/gen-e2e.js (2026-11-04) · 원천: Doc/gen/SCP0122/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
 import { test, expect } from '../../../tools/E2E/fixtures/test';
 import * as fs from 'node:fs';
 const PLAN = JSON.parse(fs.readFileSync(__dirname + '/SCP0122.plan.json', 'utf8'));
 const MENU = "SCP0122";
+import { conditionCycle, commonCycle, record } from '../../../tools/E2E/lib/smoke-extra';
 
 test.describe(`${MENU} PlanActivityMgmt 스모크 @smoke`, () => {
   test.use({ account: PLAN.sample.account || undefined });
@@ -92,5 +93,27 @@ test.describe(`${MENU} PlanActivityMgmt 스모크 @smoke`, () => {
     }
     await nscm.snapshot(`${MENU}_searched`);
     test.info().annotations.push({ type: 'calls', description: JSON.stringify(calls.map(c => [c.sheet, c.btn, c.status, c.rows, c.ms])) });
+    // 2026-10-23 사용자 지시: 다국어 미적용(코드 미등록 → '_기본문구' 노출) = 오류 — 조회조건 펼침·조회 후 보이는 글자 전체
+    { const u = await nscm.untranslatedTexts();
+      test.info().annotations.push({ type: 'i18n', description: u.length ? `'_' 노출 ${u.length}: ${u.slice(0, 15).join(' | ')}` : "'_' 노출 0" });
+      expect.soft(u.length, `다국어 미적용 '_' 노출 0 — ${u.slice(0, 8).join(' | ')} (SCM_ADM_MSG_M 에 코드 등록 또는 기존 LBL/MSG 재사용 · 하네스 I18N1)`).toBe(0); }
+  });
+  // 2026-10-23 사용자 지시: 조회조건 각각의 동작 · 공통 기능 동작 (lib/smoke-extra.ts) — 결과는 cond:/common: 어노테이션 → _summary · 대조표(recon) 열
+  test('조회조건 동작 — 조건별 값 변경 → 조회 · 기준표 순서 · Checkbox/Radio 디자인', async ({ nscm }) => {
+    test.setTimeout(1_200_000);
+    const r = await nscm.openScreen(MENU); expect(r.authorized, '권한 안내 없이 열림').toBeTruthy();
+    const items = await conditionCycle(nscm, test.info(), PLAN);
+    const s = record(test.info(), 'cond', items);
+    await nscm.snapshot(`${MENU}_cond`);
+    expect.soft(s.fail, `조회조건 동작 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);
+    expect.soft(s.error, `조회조건 판정 불가(ERROR) ${s.error}: ${items.filter(i => i.verdict === 'ERROR').map(i => i.name).join(', ')}`).toBe(0);
+  });
+  test('공통 기능 — Search·F5·Sort·Filter·Condition·Reset Condition·Excel·Columns·Search Area·Manual', async ({ nscm }) => {
+    test.setTimeout(600_000);
+    const r = await nscm.openScreen(MENU); expect(r.authorized, '권한 안내 없이 열림').toBeTruthy();
+    const items = await commonCycle(nscm, test.info(), PLAN);
+    const s = record(test.info(), 'common', items);
+    await nscm.snapshot(`${MENU}_common`);
+    expect.soft(s.fail, `공통 기능 FAIL ${s.fail}: ${items.filter(i => i.verdict === 'FAIL').map(i => i.name).join(', ')}`).toBe(0);
   });
 });

@@ -1,31 +1,33 @@
 # SCP0019 — To-Be Fact Pack 요약
 
-- page_key: `supply/working-time` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
-- 파일 9 · 엔드포인트 호출 6 (미해결 0, 주석 속 1) · 이벤트 14 · 컴포넌트 사용 21 · 하드코딩 컬럼 3 · 메시지 18
+- page_key: `supply/working-time` · feature: supply · As-is Fact Pack 있음
+- 파일 11 · 엔드포인트 호출 6 (미해결 0, 주석 속 1) · 이벤트 20 · 컴포넌트 사용 24 · 하드코딩 컬럼 3 · 메시지 22
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 3건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
-| features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | component | 230 |
-| features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | component | 325 |
+| features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | component | 183 |
+| features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | component | 454 |
+| features/supply/src/pages/working-time/components/WorkingTimeInputModal.module.scss | component | 13 |
+| features/supply/src/pages/working-time/components/WorkingTimeInputModal.tsx | component | 135 |
 | features/supply/src/pages/working-time/index.ts | index | 2 |
-| features/supply/src/pages/working-time/useWorkingTimeStore.ts | store | 193 |
-| features/supply/src/pages/working-time/working-time.constants.ts | constants | 130 |
-| features/supply/src/pages/working-time/working-time.dynamic-columns.ts | other | 39 |
-| features/supply/src/pages/working-time/working-time.types.ts | types | 84 |
-| features/supply/src/pages/working-time/WorkingTime.tsx | page | 329 |
-| features/supply/src/pages/working-time/__asis-mapping__.md | mapping | 149 |
+| features/supply/src/pages/working-time/useWorkingTimeStore.ts | store | 196 |
+| features/supply/src/pages/working-time/working-time.constants.ts | constants | 158 |
+| features/supply/src/pages/working-time/working-time.dynamic-columns.ts | other | 89 |
+| features/supply/src/pages/working-time/working-time.types.ts | types | 85 |
+| features/supply/src/pages/working-time/WorkingTime.tsx | page | 433 |
+| features/supply/src/pages/working-time/__asis-mapping__.md | mapping | 150 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
-| (useTabComboQueries) | hook | 1 | Y | WorkingTimeForm.tsx:49 |
-| (useTabLookupQueries) | hook | 1 | Y | WorkingTimeForm.tsx:52 |
-| /admin/menu/SCP0019/column | http | 1 | Y | useWorkingTimeStore.ts:144 |
-| /admin/menu/SCP0019/search-conditions | http | 1 | Y | useWorkingTimeStore.ts:169 |
-| SCP0019/Working Time//call-proc | hook | 1 | Y | WorkingTime.tsx:64 |
-| /SCP0019/Working Time/SAVE/call-proc | http | 1 | Y | WorkingTime.tsx:197 |
+| (useTabComboQueries) | hook | 1 | Y | WorkingTimeForm.tsx:48 |
+| (useTabLookupQueries) | hook | 1 | Y | WorkingTimeInputModal.tsx:41 |
+| /admin/menu/SCP0019/column | http | 1 | Y | useWorkingTimeStore.ts:147 |
+| /admin/menu/SCP0019/search-conditions | http | 1 | Y | useWorkingTimeStore.ts:172 |
+| SCP0019/Working Time//call-proc | hook | 1 | Y | WorkingTime.tsx:73 |
+| /SCP0019/Working Time/SAVE/call-proc | http | 1 | Y | WorkingTime.tsx:244 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -33,20 +35,26 @@
 ## 4. 이벤트 배선
 | element | event | handler | via | file | line |
 |---|---|---|---|---|---|
-| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | 108 |
-| SearchArea | onSearch | onSubmit | jsx | features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | 127 |
-| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,onDivisionChange | jsx | features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | 141 |
-| CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | 177 |
-| PeriodField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | 189 |
-| InputField | onChange | <arrow> e.target.value.replace,setSearchParams | jsx | features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | 205 |
-| Button | onClick | onInput | jsx | features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | 220 |
-| g | formatItem | formatHandler | addHandler | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 206 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 221 |
-| g | updatedLayout | onLayout | addHandler | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 271 |
-| f | filterApplied | onFilterApplied | addHandler | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 301 |
-| WorkingTimeForm | onSubmit | handleSearch | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 305 |
-| WorkingTimeForm | onDivisionChange | resetGrid | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 306 |
-| WorkingTimeForm | onInput | handleInputValue | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 307 |
+| CustomDropdown | onChange | <arrow> onPick,String(picked??'').split(',').filter,String(picked??'').split,String,v.toUpperCase | jsx | features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | 107 |
+| SearchArea | onSearch | onSubmit | jsx | features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | 126 |
+| CustomDropdown | onChange | <arrow> String,confirmIfDirtyKey(tabDirtyKey(tabId),'search').then,confirmIfDirtyKey,tabDirtyKey,setDivision,onDivisionChange | jsx | features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | 140 |
+| PeriodField | onChange | <arrow> setSearchParams | jsx | features/supply/src/pages/working-time/components/WorkingTimeForm.tsx | 171 |
+| g | formatItem | formatHandler | addHandler | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 253 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 268 |
+| g | cellEditEnding | rangeGuardHandler | addHandler | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 283 |
+| el | beforeinput | guardDefaultMaxOnInput | addEventListener | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 322 |
+| g | prepareCellForEdit | prepareEditHandler | addHandler | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 324 |
+| g | updatedLayout | onLayout | addHandler | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 384 |
+| f | filterApplied | onFilterApplied | addHandler | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 428 |
+| CustomDropdown | onChange | <arrow> setDayWeekCode,String | jsx | features/supply/src/pages/working-time/components/WorkingTimeInputModal.tsx | 88 |
+| InputField | onChange | <arrow> setInputValue,e.target.value.replace | jsx | features/supply/src/pages/working-time/components/WorkingTimeInputModal.tsx | 107 |
+| InputField | onKeyDown | <arrow> handleOk | jsx | features/supply/src/pages/working-time/components/WorkingTimeInputModal.tsx | 108 |
+| Button | onClick | handleOk | jsx | features/supply/src/pages/working-time/components/WorkingTimeInputModal.tsx | 120 |
+| Button | onClick | onClose | jsx | features/supply/src/pages/working-time/components/WorkingTimeInputModal.tsx | 127 |
+| WorkingTimeForm | onSubmit | handleSearch | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 401 |
+| WorkingTimeForm | onDivisionChange | resetGrid | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 402 |
+| WorkingTimeInputModal | onClose | <arrow> setInputModalOpen | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 427 |
+| WorkingTimeInputModal | onConfirm | handleInputConfirm | jsx | features/supply/src/pages/working-time/WorkingTime.tsx | 428 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -54,22 +62,24 @@
 | Grid | 5 |
 | FormItem | 4 |
 | CustomDropdown | 3 |
+| Button | 2 |
 | SearchArea | 1 |
 | PeriodField | 1 |
-| InputField | 1 |
-| Button | 1 |
 | DataGrid | 1 |
+| CustomDialog | 1 |
+| InputField | 1 |
 | MainTitle | 1 |
 | WorkingTimeForm | 1 |
 | SubTitle | 1 |
 | WorkingTimeGrid | 1 |
+| WorkingTimeInputModal | 1 |
 
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| mergedColumns | col.colNm | col.colLblNm \|\| col.colNm | col.colWth ?? 100 | col.visible !== false |  |  | object | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 74 |
-| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 100 |
-| leaf | dc.binding | dc.dayLabel \|\| dc.binding.slice(2) | 100 | true |  |  | object | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 126 |
+| mergedColumns | col.colNm | col.colLblNm \|\| col.colNm | col.colWth ?? 100 | col.visible !== false |  |  | object | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 85 |
+| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 112 |
+| leaf | dc.binding | dc.dayLabel \|\| dc.binding.slice(2) | 100 | true |  |  | object | features/supply/src/pages/working-time/components/WorkingTimeGrid.tsx | 139 |
 
 ## 7. 메시지 코드
 | code | count |
@@ -82,24 +92,30 @@
 | LBL01067 | 1 |
 | LBL00013 | 1 |
 | LBL01084 | 1 |
-| LBL00872 | 1 |
-| MSG00135 | 1 |
+| LBL00716 | 1 |
+| LBL00627 | 1 |
+| MSG00662 | 1 |
+| MSG00097 | 1 |
 | MSG00004 | 1 |
-| MSG00134 | 1 |
-| MSG00050 | 1 |
-| MSG00203 | 1 |
+| MSG01153 | 1 |
+| MSG01082 | 1 |
+| MSG00108 | 1 |
+| MSG01187 | 1 |
+| MSG01037 | 1 |
 | MSG00137 | 1 |
 | MSG00002 | 1 |
 | MSG00618 | 1 |
 | MSG00152 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: DMF0014(9), SCP0019(4), DMF0021(2), DMF0044(1), SCM0008(1), SCP0025(1), DMF0048(1)
-- SP/PKG: PKG_SCP0019(8), P_SCP0019_GET_WORKING_TIME(4), P_SCP0019_SAVE_WORKING_TIME_ROW(3), P_USER_ID(1)
+- 화면ID: DMF0014(7), SCP0019(6), SCP0096(6), DMF0021(2), DMF0044(1), SCM0008(1), SCP0020(1), SCP0025(1), DMF0048(1), SCP0098(1)
+- SP/PKG: PKG_SCP0019(8), P_SCP0019_GET_WORKING_TIME(4), P_SCP0019_SAVE_WORKING_TIME_ROW(3), P_USER_ID(3), SCM0001_GET_SCP_MONTH_PERIOD(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
-| endpoint | ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 14행, admin 즉시 반영). | features/supply/src/pages/working-time/useWorkingTimeStore.ts | 141 |
+| endpoint | ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 14행, admin 즉시 반영). | features/supply/src/pages/working-time/useWorkingTimeStore.ts | 144 |
+| code | return buildDynDayColumns(sidecar?.length ? sidecar : deriveDayColumnMeta(rows)); | features/supply/src/pages/working-time/WorkingTime.tsx | 93 |
+| code | 셀엔 들어가되 저장에서 차단. 첫 위반에서 MSG00203 표시 후 저장 중단(AS-IS GMessageBox+return 파리티). | features/supply/src/pages/working-time/WorkingTime.tsx | 196 |
 
 ## 10. __asis-mapping__.md 상태
 - 구현: 48
@@ -139,7 +155,7 @@
 | D00-3-017 | §3 Visible= / Columns[iCol].Visible = chkSum.Checked (SUM 토글) | SUM 열은 chkSum 정적 hidden(D00-1-005)에 종속 — 컨트롤 비노출이라 토글 불가, SUM 표시는 기본값 고정(01_layout §3). TO-BE 미이식 | 제외 |
 | D00-3-020 | §3 Visible= / Columns[iCol].Visible = chkSum.Checked (SUM 토글) | SUM 열은 chkSum 정적 hidden(D00-1-005)에 종속 — 컨트롤 비노출이라 토글 불가, SUM 표시 기본값 고정(01_layout §3). TO-BE 미이식 | 제외 |
 | D00-3-023 | §3 LockColumn / (iCol, true) 정보시트 컬럼 잠금 | AS-IS spreadInfo(제목/헤더 시트) 편집 불가 = TO-BE 는 헤더가 columnGroups 표현 전용(편집 대상 아님, Grid:147-151) — 구조적으로 편집 불가 | 제외 |
-| D00-3-027 | §3 SetBGColor / (i,j,i,j, InvalidColor) 검증 실패 셀 색(0~7) | AS-IS 셀 검증실패 배경색 표기 — TO-BE 는 범위 검증을 값입력 시점 alert(MSG00203 OUT_OF_RANGE, Page:260-263)로 선차단해 잘못된 값이 셀에 기입되지 않음. 사후 셀-색 검증 경로 불필요(무해 미이식) | 제외 |
-| D00-3-028 | §3 SetBGColor / (i,j,i,j, InvalidColor) 검증 실패 셀 색(0~1440) | AS-IS 셀 검증실패 배경색 표기(분 단위 0~1440) — TO-BE 는 값입력 시점 범위 alert(Page:260-263 DAY_MIN~DAY_MAX)로 선차단. 사후 셀-색 검증 경로 불필요(무해 미이식) | 제외 |
+| D00-3-027 | §3 SetBGColor / (i,j,i,j, InvalidColor) 검증 실패 셀 색(0~7) | AS-IS 는 저장 범위검증 실패 셀을 InvalidColor 로 표기(cs:839) — TO-BE 는 저장시점 범위검증(Page:167-180)에서 MSG.OUT_OF_RANGE alert + 저장 중단만 하고 셀 배경색은 미표기(무해 미이식, 저위험 잔여) | 제외 |
+| D00-3-028 | §3 SetBGColor / (i,j,i,j, InvalidColor) 검증 실패 셀 색(0~1440) | AS-IS 저장 범위검증 실패 셀 InvalidColor 표기(cs:848, 분 단위 0~1440) — TO-BE 저장시점 alert(Page:167-180)로 대응, 셀 배경색 미표기(무해 미이식, 저위험 잔여) | 제외 |
 | D00-3-037 | §3 SetDblClickColumnShowHide / (sender, e) 더블클릭 컬럼 토글 | 더블클릭 컬럼 접기/펼치기 — AS-IS 부가기능(핵심 조회/편집/저장 무관), 전 화면 pivot 편의기능 미이식(D00-2-009 동일 신호). 향후 요구 시 재설계 | 제외 |
 

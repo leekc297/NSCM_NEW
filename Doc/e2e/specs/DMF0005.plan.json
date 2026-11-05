@@ -1,0 +1,875 @@
+{
+  "id": "DMF0005",
+  "mode": "single",
+  "modeSource": "기본 single(사용자 미지정 · Division 조회조건 있음)",
+  "menuId": "DMF0005",
+  "divCascade": [],
+  "divLabels": [
+    "Div.",
+    "Division"
+  ],
+  "condOrder": [],
+  "condGone": [],
+  "condNotUse": [],
+  "page": "SalesSiteProjectModel",
+  "routePath": "demand/sales-site-project-model",
+  "asisName": "SaleSite_PjtModelMapping",
+  "fields": [
+    {
+      "key": "projectInfo",
+      "label": "Project Null",
+      "lbl": "",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkProjectInfo",
+      "tobeLabel": "",
+      "catalog": "Project Null → (없음) · 공통기능화 검토",
+      "labels": [
+        "Project Null"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "itemIds",
+      "label": "Model / Nickname",
+      "lbl": "LBL00618",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId",
+      "tobeLabel": "Model/Nickname",
+      "catalog": "Model / Nickname → Model/Nickname · 명칭",
+      "labels": [
+        "Model/Nickname",
+        "Model / Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "projectCodes",
+      "label": "Project",
+      "lbl": "LBL00617",
+      "kind": "popup",
+      "component": "ProjectField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtProject",
+      "tobeLabel": "Project",
+      "catalog": "Project → PJT · 명칭",
+      "labels": [
+        "PJT",
+        "Project"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "endCustomer",
+      "label": "End Customer",
+      "lbl": "LBL00080",
+      "kind": "multi",
+      "component": "EndCustomerField",
+      "comboId": "EndCustomerByDivision",
+      "popup": false,
+      "asis": "clbEndCustomer",
+      "tobeLabel": "End Customer",
+      "catalog": "End Customer → End Customer",
+      "labels": [
+        "End Customer"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "teamIds",
+      "label": "Team",
+      "lbl": "LBL00502",
+      "kind": "multi",
+      "component": "TeamField",
+      "comboId": "TeambyDivision",
+      "popup": false,
+      "asis": "clbTeam",
+      "tobeLabel": "",
+      "catalog": "Team → Team",
+      "labels": [
+        "Team"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "salesSiteIds",
+      "label": "Sales Site",
+      "lbl": "LBL00011",
+      "kind": "multi",
+      "component": "SalesSiteField",
+      "comboId": "SalesSite",
+      "popup": false,
+      "asis": "clbSalesSite",
+      "tobeLabel": "Sales Site",
+      "catalog": "Sales Site → Sales Site",
+      "labels": [
+        "Sales Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "endCust",
+      "label": "End Customer(Report) Null",
+      "lbl": "",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkEndCust",
+      "tobeLabel": "",
+      "catalog": "End Customer(Report) Null → (없음) · 공통기능화 검토",
+      "labels": [
+        "End Customer(Report) Null"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "detail",
+      "label": "Detail",
+      "lbl": "LBL00316",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkDetail",
+      "tobeLabel": "Detail",
+      "catalog": "",
+      "labels": [
+        "Detail"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "useYn",
+      "label": "Active",
+      "lbl": "LBL00007",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboActive",
+      "tobeLabel": "Active",
+      "catalog": "Active → Active",
+      "labels": [
+        "Active"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "divisionIds",
+      "label": "Division",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision",
+      "tobeLabel": "Div.",
+      "catalog": "",
+      "labels": [
+        "Div.",
+        "Division"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    },
+    {
+      "key": "owners",
+      "label": "Owner",
+      "lbl": "LBL00082",
+      "kind": "popup",
+      "component": "OwnerField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtOwner",
+      "tobeLabel": "Owner",
+      "catalog": "Owner → Owner",
+      "labels": [
+        "Owner"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
+    }
+  ],
+  "sheetMap": {},
+  "condCols": [],
+  "condLabels": [],
+  "headerSpec": {
+    "rows": 1,
+    "spans": 5,
+    "literals": [],
+    "maxRowPx": 32
+  },
+  "catalogScreen": "Sales Site Project Model",
+  "asisMapping": "",
+  "buttons": [
+    {
+      "key": "modelChange",
+      "label": "Model Code change",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnModelChange"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "Production",
+      "key": "PRODUCTION",
+      "labels": [
+        "MDM Active",
+        "대체/유사모델",
+        "Application*",
+        "Sold-to Cust.(Report)",
+        "End Cust.(Report)",
+        "Destination",
+        "Cell Model",
+        "BPMS Exist",
+        "양극재",
+        "Cell Name",
+        "Cell/Car",
+        "Cell/Module",
+        "Cell Prod. Site (S&OP Report)",
+        "Product Group",
+        "Cell Type*",
+        "Cell Type*",
+        "CHANGE REASON",
+        "CONSENSUS",
+        "ESS Subsidiary*",
+        "MKT*",
+        "SCM*",
+        "Org.Name (Report)",
+        "Currency*",
+        "End Customer (Report)",
+        "Cust Group*",
+        "Cust Group Detail",
+        "Customer Model",
+        "Team",
+        "Team(Sales)",
+        "Team",
+        "Description",
+        "Division*",
+        "EDI Incoterms",
+        "EDI Leadtime",
+        "Edit Flag",
+        "Edit Flag",
+        "Edit Flag",
+        "End Customer",
+        "End Customer*",
+        "Energy(Wh)"
+      ]
+    },
+    {
+      "name": "Purchase",
+      "key": "PURCHASE",
+      "labels": [
+        "양극재",
+        "BPMS Exist",
+        "Cell/Car",
+        "Cell/Module",
+        "Cell Type*",
+        "Cell Type*",
+        "Currency",
+        "Customer Model",
+        "Division",
+        "EDI Incoterms",
+        "EDI Leadtime",
+        "Edit Flag",
+        "Model Type",
+        "Model",
+        "Item Type",
+        "KWh/Cell*",
+        "Update Date",
+        "Update By",
+        "Liablity(Week)",
+        "Module/Car",
+        "Module variant",
+        "Nick Name",
+        "Owner Name",
+        "Project Code",
+        "Project",
+        "Project Status",
+        "Sales Company*",
+        "Sales Sync",
+        "Sales Plant*",
+        "Sales Site",
+        "Owner*",
+        "Active"
+      ]
+    }
+  ],
+  "popupSheets": [
+    "Sales Site Project Model Popup"
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": true,
+  "procs": [
+    {
+      "sp": "",
+      "sheet": "Production",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_DMF0005.P_",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "Production",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_DMF0005.P_",
+      "entries": []
+    },
+    {
+      "sp": "SCM0001_GET_LOOKUP_VALUES",
+      "sheet": "Production",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_SCM0001_GET_LOOKUP_VALUES",
+      "entries": [
+        "event:this.Load",
+        "button:InsertButton"
+      ]
+    },
+    {
+      "sp": "DMF0005_GET_SALES_SITE_MODEL_PRODUCTION",
+      "sheet": "Production",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_DMF0005_GET_SALES_SITE_MODEL_PRODUCTION",
+      "entries": [
+        "event:this.btnModelChange.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0005_GET_SALES_SITE_MODEL_PURCHASE",
+      "sheet": "Purchase",
+      "btn": "SALES_SITE_MODEL_PURCHASE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_DMF0005_GET_SALES_SITE_MODEL_PURCHASE",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION",
+      "sheet": "Production",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "UP_FX_GETCOMMONDATALIST_DM",
+      "sheet": "(combo)",
+      "btn": "(콤보ID 등록)",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_UP_FX_GETCOMMONDATALIST_DM",
+      "entries": [
+        "event:this.spdMain.ClipboardPasted",
+        "event:this.spdMain.CellClick",
+        "event:this.spdMain.ComboSelChange",
+        "event:this.spdSub.ClipboardPasted",
+        "event:this.spdSub.ComboSelChange",
+        "button:InsertButton"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_SITE_INFO_BY_DIVISION",
+      "sheet": "Sales Site Project Model Popup",
+      "btn": "SITE_INFO_BY_DIVISION",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_SCM0001_GET_SITE_INFO_BY_DIVISION",
+      "entries": [
+        "event:this.spdMain.ComboSelChange"
+      ]
+    },
+    {
+      "sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_DMF0000_GET_COMMON_SPREAD_TITLE",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnModelChange.Click",
+        "event:this.Load",
+        "event:this.clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "UP_FX_GetComboDataList",
+      "sheet": "Production",
+      "btn": "ACTION",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_UP_FX_GETCOMBODATALIST",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0005_SAVE_MODEL_CHANGE_POPUP",
+      "sheet": "Production",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0005.P_DMF0005_SAVE_MODEL_CHANGE_POPUP",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "Production": {
+      "40": [
+        "Div.",
+        "Org.Name (Report)",
+        "Team",
+        "Team(Sales)",
+        "Team ID",
+        "Team ID",
+        "Cust Group*",
+        "Cust Group",
+        "End Customer*",
+        "End Customer",
+        "End Customer",
+        "End Customer (Report)",
+        "Owner Name",
+        "Owner",
+        "Owner(Sales)",
+        "Owner(PM)",
+        "Sold-To",
+        "Sold-To",
+        "Rep Ship-To",
+        "Rep Ship-To",
+        "Sold-To Customer",
+        "Sold-To Customer",
+        "Sales Site*",
+        "Sales Site",
+        "Sales Site",
+        "Project Code",
+        "Project",
+        "Cell Prod. Site (S&OP Report)",
+        "Project Status",
+        "Project Owner",
+        "Sales Sync",
+        "Item Type",
+        "Product Group",
+        "Product Group",
+        "Model Type",
+        "Model",
+        "Model Name",
+        "Energy(Wh)",
+        "Energy(Wh)",
+        "Production Process*"
+      ],
+      "81": [
+        "Div.",
+        "Org.Name (Report)",
+        "Team(Sales)",
+        "Team ID",
+        "Team ID",
+        "Cust Group",
+        "End Customer",
+        "End Customer",
+        "End Customer (Report)",
+        "Owner Name",
+        "Owner",
+        "Owner(Sales)",
+        "Owner(PM)",
+        "Sold-To",
+        "Sold-To",
+        "Rep Ship-To",
+        "Rep Ship-To",
+        "Sold-To Customer",
+        "Sales Site",
+        "Sales Site",
+        "Project Code",
+        "Project",
+        "Project Status",
+        "Project Owner",
+        "Sales Sync",
+        "Item Type",
+        "Product Group",
+        "Model Type",
+        "Model",
+        "Model Name",
+        "Energy(Wh)",
+        "Production Process",
+        "Cell Type",
+        "Cell Type",
+        "KWh/Cell",
+        "Cell/Car",
+        "Cell/Module",
+        "Module/Car",
+        "Customer Model",
+        "Sales Company"
+      ],
+      "82": [
+        "Div.",
+        "Org.Name (Report)",
+        "Team(Sales)",
+        "Team(Sales)",
+        "Team ID",
+        "Team ID",
+        "Cust Group",
+        "End Customer",
+        "End Customer",
+        "End Customer (Report)",
+        "Owner Name",
+        "Owner(Sales)*",
+        "Owner",
+        "Owner(Sales)",
+        "Owner(PM)*",
+        "Owner(PM)",
+        "Sold-To",
+        "Sold-To",
+        "Rep Ship-To",
+        "Rep Ship-To",
+        "Sold-To Customer",
+        "Sales Site",
+        "Sales Site",
+        "Project Code",
+        "Project",
+        "Project Status",
+        "Project Owner",
+        "Sales Sync*",
+        "Sales Sync",
+        "Item Type",
+        "Product Group",
+        "Model Type",
+        "Model",
+        "Model Name",
+        "Energy(Wh)",
+        "Production Process",
+        "Cell Type",
+        "Cell Type*",
+        "Cell Type",
+        "KWh/Cell"
+      ]
+    },
+    "Purchase": {
+      "40": [
+        "Div.",
+        "Sales Site",
+        "Project Code",
+        "Project",
+        "Project Status",
+        "Sales Sync",
+        "Item Type",
+        "Model Type",
+        "Model",
+        "Cell Type",
+        "Cell Type",
+        "KWh/Cell",
+        "Cell/Car",
+        "Cell/Module",
+        "Module/Car",
+        "Customer Model",
+        "Sales Company",
+        "Sales Plant",
+        "Nick Name",
+        "BPMS Exist",
+        "Owner Name",
+        "Owner",
+        "Liablity(Week)",
+        "Currency",
+        "EDI Incoterms",
+        "EDI Leadtime",
+        "Active",
+        "양극재",
+        "Module variant",
+        "Update Date",
+        "Update By"
+      ],
+      "81": [
+        "Div.",
+        "Sales Site",
+        "Project Code",
+        "Project",
+        "Project Status",
+        "Sales Sync",
+        "Item Type",
+        "Model Type",
+        "Model",
+        "Cell Type",
+        "Cell Type",
+        "KWh/Cell",
+        "Cell/Car",
+        "Cell/Module",
+        "Module/Car",
+        "Customer Model",
+        "Sales Company",
+        "Sales Plant",
+        "Nick Name",
+        "BPMS Exist",
+        "Owner Name",
+        "Owner",
+        "Liablity(Week)",
+        "Currency",
+        "EDI Incoterms",
+        "EDI Leadtime",
+        "Active",
+        "양극재",
+        "Module variant",
+        "Update Date",
+        "Update By"
+      ],
+      "82": [
+        "Div.",
+        "Sales Site",
+        "Project Code",
+        "Project",
+        "Project Status",
+        "Sales Sync",
+        "Item Type",
+        "Model Type",
+        "Model",
+        "Cell Type",
+        "Cell Type*",
+        "Cell Type",
+        "KWh/Cell",
+        "Cell/Car",
+        "Cell/Module",
+        "Module/Car",
+        "Customer Model",
+        "Sales Company",
+        "Sales Plant",
+        "Nick Name",
+        "BPMS Exist",
+        "Owner Name",
+        "Owner",
+        "Liablity(Week)",
+        "Currency",
+        "EDI Incoterms",
+        "EDI Leadtime",
+        "Active",
+        "양극재",
+        "Module variant",
+        "Update Date",
+        "Update By"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": null,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "k0101",
+      "name": "",
+      "groups": [
+        "DM ADMIN",
+        "SYSTEM ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {},
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "DM ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json areas.DM",
+      "tobeGroups": [
+        "ADMIN",
+        "DM ADMIN",
+        "DM Planner",
+        "DM Planner (W/S)",
+        "FP Viewer",
+        "GUEST",
+        "JV Planner",
+        "SCM PI Admin",
+        "SCP Planner",
+        "SSP Viewer"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SAVE",
+        "DELETE",
+        "INSERT",
+        "MODEL_CHANGE",
+        "SEARCH"
+      ],
+      "matrix": [],
+      "expectedDivs": [
+        "81_ST",
+        "81_HM",
+        "81_HG",
+        "81_HD",
+        "81",
+        "40",
+        "EE_UC",
+        "82",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "81_UC"
+      ]
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SAVE",
+      "DELETE",
+      "INSERT",
+      "MODEL_CHANGE",
+      "SEARCH"
+    ],
+    "CAPA Planner": [
+      "SAVE",
+      "DELETE",
+      "INSERT",
+      "SEARCH",
+      "MODEL_CHANGE"
+    ],
+    "DM ADMIN": [
+      "SAVE",
+      "INSERT",
+      "DELETE",
+      "MODEL_CHANGE",
+      "SEARCH"
+    ],
+    "DM Planner": [
+      "SAVE",
+      "SEARCH",
+      "DELETE",
+      "INSERT",
+      "MODEL_CHANGE"
+    ],
+    "DM Planner (W/S)": [
+      "SAVE",
+      "MODEL_CHANGE",
+      "SEARCH",
+      "INSERT",
+      "DELETE"
+    ],
+    "DM Viewer": [
+      "SAVE",
+      "INSERT",
+      "SEARCH",
+      "DELETE",
+      "MODEL_CHANGE"
+    ],
+    "FP Planner": [
+      "SAVE",
+      "MODEL_CHANGE",
+      "DELETE",
+      "SEARCH",
+      "INSERT"
+    ],
+    "FP Viewer": [
+      "SAVE",
+      "INSERT",
+      "SEARCH",
+      "DELETE",
+      "MODEL_CHANGE"
+    ],
+    "JV Planner": [
+      "SAVE",
+      "SEARCH",
+      "INSERT",
+      "MODEL_CHANGE",
+      "DELETE"
+    ],
+    "SCM PI Admin": [
+      "SAVE",
+      "INSERT",
+      "MODEL_CHANGE",
+      "SEARCH",
+      "DELETE"
+    ],
+    "SCM Viewer": [
+      "SAVE",
+      "MODEL_CHANGE",
+      "SEARCH",
+      "DELETE",
+      "INSERT"
+    ],
+    "SCP Planner": [
+      "SAVE",
+      "DELETE",
+      "MODEL_CHANGE",
+      "INSERT",
+      "SEARCH"
+    ],
+    "SCP Tester": [
+      "SAVE",
+      "DELETE",
+      "SEARCH",
+      "MODEL_CHANGE",
+      "INSERT"
+    ],
+    "SSP ADMIN": [
+      "SAVE",
+      "INSERT",
+      "DELETE",
+      "SEARCH",
+      "MODEL_CHANGE"
+    ],
+    "SSP Planner": [
+      "SAVE",
+      "MODEL_CHANGE",
+      "DELETE",
+      "INSERT",
+      "SEARCH"
+    ],
+    "SSP Viewer": [
+      "SAVE",
+      "DELETE",
+      "SEARCH",
+      "MODEL_CHANGE",
+      "INSERT"
+    ]
+  },
+  "menuBtnCodes": [
+    "SAVE",
+    "DELETE",
+    "INSERT",
+    "MODEL_CHANGE",
+    "SEARCH"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

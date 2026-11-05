@@ -224,7 +224,6 @@ export const ShipmentChangeRequestConfirmSsp0003Form = ({
                     ),
                   }}
                   onChange={e => set({ requestId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -253,7 +252,6 @@ export const ShipmentChangeRequestConfirmSsp0003Form = ({
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

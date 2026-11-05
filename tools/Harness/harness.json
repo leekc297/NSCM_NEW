@@ -12,6 +12,6 @@
   "dbconnDir": "C:\\Projects\\NSCM\\tools\\DbConn",
   "vibeRulesDir": "C:\\Projects\\NSCM\\tools\\VibeManager\\rules",
   "verifyDir": "C:\\Projects\\NSCM\\Doc\\verify",
-  "repairScope": "DB_FE",
-  "repairScopeNote": "보완 적용 범위 — 2026-10-26 사용자 지시: 'FE 는 가이드만' 룰 해제(기본 DB_FE). DB_ONLY 는 필요할 때만 사용. 공통 컴포넌트(@shared/@foundation)는 여전히 변경 전 확인."
+  "repairScope": "DB_ONLY",
+  "repairScopeNote": "작업 모드 단일 원천(Vibe_Manager 환경설정 🧭 작업 모드 · set_scope.py) — DB_FE = UI/DB MODE: 제약 없이 개발·수정, Git Download & Merge 로컬 소스 보호, 클라우드 이관 DB+FE·BE / DB_ONLY = DB MODE: DB·META 만 개발·수정, FE·BE 는 가이드만, Git Download & Merge 로컬 소스 보호 안 함, 클라우드 이관 DB 만. CheckList 는 모드 무관 전체 수행. 공통 컴포넌트(@shared/@foundation)는 변경 전 확인."
 }

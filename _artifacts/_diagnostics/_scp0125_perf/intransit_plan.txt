@@ -1,0 +1,325 @@
+PLAN_TABLE_OUTPUT
+EXPLAINED SQL STATEMENT:
+------------------------
+INSERT INTO GT_0125_INTRANSIT_V ( DIVISION_ID , RESULT_TYPE , ITEM_ID , 
+TO_SCM_SITE_ID , FROM_SCM_SITE_ID , FINAL_INCOTERMS , ETA_DATE , 
+DELIVERY_QTY , PROJECT_CODE ) SELECT DIVISION_ID , RESULT_TYPE , 
+ITEM_ID , TO_SCM_SITE_ID , FROM_SCM_SITE_ID , FINAL_INCOTERMS , 
+ETA_DATE , DELIVERY_QTY , PROJECT_CODE FROM SCM_DNM_INTRANSIT_V WHERE 
+RESULT_TYPE IN ('I', 'C') AND TO_SCM_SITE_ID IS NOT NULL AND 
+DIVISION_ID = :B2 AND RESULT_DATE = :B1
+ 
+Plan hash value: 3132617811
+ 
+--------------------------------------------------------------------------------------------------------
+| Id  | Operation                                            | Name                            | Rows  |
+--------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT                                     |                                 |       |
+|   1 |  LOAD TABLE CONVENTIONAL                             | GT_0125_INTRANSIT_V             |       |
+|*  2 |   FILTER                                             |                                 |       |
+|*  3 |    HASH JOIN RIGHT OUTER                             |                                 | 47334 |
+|   4 |     VIEW                                             |                                 | 15491 |
+|   5 |      SORT GROUP BY                                   |                                 | 15491 |
+|   6 |       NESTED LOOPS                                   |                                 |    68 |
+|   7 |        NESTED LOOPS                                  |                                 |    68 |
+|   8 |         VIEW                                         | VW_GBF_6                        |     1 |
+|   9 |          SORT GROUP BY                               |                                 |     1 |
+|* 10 |           TABLE ACCESS BY INDEX ROWID BATCHED        | SCM_ADM_LOOKUP_MASTER_DETAIL    |     1 |
+|* 11 |            INDEX RANGE SCAN                          | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |     2 |
+|* 12 |         INDEX RANGE SCAN                             | IDX04_SCM_MST_SITE_ITEM         |    21 |
+|* 13 |        TABLE ACCESS BY INDEX ROWID                   | SCM_MST_SITE_ITEM               |    68 |
+|* 14 |     VIEW                                             |                                 | 47334 |
+|  15 |      SORT UNIQUE                                     |                                 | 47334 |
+|  16 |       UNION-ALL                                      |                                 | 47334 |
+|* 17 |        HASH JOIN RIGHT OUTER                         |                                 | 25792 |
+|  18 |         VIEW                                         |                                 | 14314 |
+|  19 |          SORT GROUP BY                               |                                 | 14314 |
+|  20 |           VIEW                                       | SCP_MST_BOD_N_V                 | 14314 |
+|  21 |            HASH UNIQUE                               |                                 | 14314 |
+|  22 |             UNION-ALL                                |                                 | 14314 |
+|* 23 |              HASH JOIN                               |                                 | 13556 |
+|  24 |               TABLE ACCESS FULL                      | SCP_MST_DISTRIBUTION_ROUTE      |  7988 |
+|  25 |               NESTED LOOPS                           |                                 | 13556 |
+|* 26 |                HASH JOIN RIGHT OUTER                 |                                 | 13556 |
+|* 27 |                 TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|* 28 |                  INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|* 29 |                 HASH JOIN RIGHT OUTER                |                                 | 13556 |
+|* 30 |                  TABLE ACCESS BY INDEX ROWID BATCHED | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|* 31 |                   INDEX RANGE SCAN                   | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|* 32 |                  HASH JOIN                           |                                 | 13556 |
+|* 33 |                   TABLE ACCESS FULL                  | SCM_MST_SITE                    |  2919 |
+|* 34 |                   TABLE ACCESS FULL                  | SCP_MST_BOD                     | 14121 |
+|* 35 |                INDEX UNIQUE SCAN                     | PK_SCM_MST_SITE                 |     1 |
+|* 36 |              HASH JOIN                               |                                 |   758 |
+|  37 |               NESTED LOOPS                           |                                 |   758 |
+|* 38 |                HASH JOIN RIGHT OUTER                 |                                 |   758 |
+|* 39 |                 TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|* 40 |                  INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|* 41 |                 HASH JOIN RIGHT OUTER                |                                 |   758 |
+|* 42 |                  TABLE ACCESS BY INDEX ROWID BATCHED | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|* 43 |                   INDEX RANGE SCAN                   | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|* 44 |                  HASH JOIN                           |                                 |   758 |
+|  45 |                   TABLE ACCESS BY INDEX ROWID BATCHED| SCM_MST_SITE                    |   115 |
+|* 46 |                    INDEX RANGE SCAN                  | IDX02_SCM_MST_SITE              |   115 |
+|* 47 |                   TABLE ACCESS FULL                  | SCP_MST_BOD                     | 14121 |
+|* 48 |                INDEX UNIQUE SCAN                     | PK_SCM_MST_SITE                 |     1 |
+|  49 |               TABLE ACCESS FULL                      | SCP_MST_DISTRIBUTION_ROUTE      |  7988 |
+|* 50 |         HASH JOIN RIGHT OUTER                        |                                 | 25792 |
+|  51 |          VIEW                                        | SCP_MST_BOD_N_V                 | 14314 |
+|  52 |           SORT UNIQUE                                |                                 | 14314 |
+|  53 |            UNION-ALL                                 |                                 | 14314 |
+|* 54 |             HASH JOIN                                |                                 | 13556 |
+|  55 |              TABLE ACCESS FULL                       | SCP_MST_DISTRIBUTION_ROUTE      |  7988 |
+|  56 |              NESTED LOOPS                            |                                 | 13556 |
+|* 57 |               HASH JOIN RIGHT OUTER                  |                                 | 13556 |
+|* 58 |                TABLE ACCESS BY INDEX ROWID BATCHED   | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|* 59 |                 INDEX RANGE SCAN                     | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|* 60 |                HASH JOIN RIGHT OUTER                 |                                 | 13556 |
+|* 61 |                 TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|* 62 |                  INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|* 63 |                 HASH JOIN                            |                                 | 13556 |
+|* 64 |                  TABLE ACCESS FULL                   | SCM_MST_SITE                    |  2919 |
+|* 65 |                  TABLE ACCESS FULL                   | SCP_MST_BOD                     | 14121 |
+|* 66 |               INDEX UNIQUE SCAN                      | PK_SCM_MST_SITE                 |     1 |
+|* 67 |             HASH JOIN                                |                                 |   758 |
+|  68 |              NESTED LOOPS                            |                                 |   758 |
+|* 69 |               HASH JOIN RIGHT OUTER                  |                                 |   758 |
+|* 70 |                TABLE ACCESS BY INDEX ROWID BATCHED   | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|* 71 |                 INDEX RANGE SCAN                     | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|* 72 |                HASH JOIN RIGHT OUTER                 |                                 |   758 |
+|* 73 |                 TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|* 74 |                  INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|* 75 |                 HASH JOIN                            |                                 |   758 |
+|  76 |                  TABLE ACCESS BY INDEX ROWID BATCHED | SCM_MST_SITE                    |   115 |
+|* 77 |                   INDEX RANGE SCAN                   | IDX02_SCM_MST_SITE              |   115 |
+|* 78 |                  TABLE ACCESS FULL                   | SCP_MST_BOD                     | 14121 |
+|* 79 |               INDEX UNIQUE SCAN                      | PK_SCM_MST_SITE                 |     1 |
+|  80 |              TABLE ACCESS FULL                       | SCP_MST_DISTRIBUTION_ROUTE      |  7988 |
+|* 81 |          HASH JOIN                                   |                                 | 25792 |
+|* 82 |           INDEX FAST FULL SCAN                       | IDX04_SCM_MST_SITE              |  2662 |
+|* 83 |           TABLE ACCESS FULL                          | SCM_DNM_INTRANSIT_C             | 29456 |
+|* 84 |        HASH JOIN RIGHT OUTER                         |                                 | 21541 |
+|  85 |         VIEW                                         |                                 | 14314 |
+|  86 |          SORT GROUP BY                               |                                 | 14314 |
+|  87 |           VIEW                                       | SCP_MST_BOD_N_V                 | 14314 |
+|  88 |            HASH UNIQUE                               |                                 | 14314 |
+|  89 |             UNION-ALL                                |                                 | 14314 |
+|* 90 |              HASH JOIN                               |                                 | 13556 |
+|  91 |               TABLE ACCESS FULL                      | SCP_MST_DISTRIBUTION_ROUTE      |  7988 |
+|  92 |               NESTED LOOPS                           |                                 | 13556 |
+|* 93 |                HASH JOIN RIGHT OUTER                 |                                 | 13556 |
+|* 94 |                 TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|* 95 |                  INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|* 96 |                 HASH JOIN RIGHT OUTER                |                                 | 13556 |
+|* 97 |                  TABLE ACCESS BY INDEX ROWID BATCHED | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|* 98 |                   INDEX RANGE SCAN                   | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|* 99 |                  HASH JOIN                           |                                 | 13556 |
+|*100 |                   TABLE ACCESS FULL                  | SCM_MST_SITE                    |  2919 |
+|*101 |                   TABLE ACCESS FULL                  | SCP_MST_BOD                     | 14121 |
+|*102 |                INDEX UNIQUE SCAN                     | PK_SCM_MST_SITE                 |     1 |
+|*103 |              HASH JOIN                               |                                 |   758 |
+| 104 |               NESTED LOOPS                           |                                 |   758 |
+|*105 |                HASH JOIN RIGHT OUTER                 |                                 |   758 |
+|*106 |                 TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|*107 |                  INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|*108 |                 HASH JOIN RIGHT OUTER                |                                 |   758 |
+|*109 |                  TABLE ACCESS BY INDEX ROWID BATCHED | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|*110 |                   INDEX RANGE SCAN                   | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|*111 |                  HASH JOIN                           |                                 |   758 |
+| 112 |                   TABLE ACCESS BY INDEX ROWID BATCHED| SCM_MST_SITE                    |   115 |
+|*113 |                    INDEX RANGE SCAN                  | IDX02_SCM_MST_SITE              |   115 |
+|*114 |                   TABLE ACCESS FULL                  | SCP_MST_BOD                     | 14121 |
+|*115 |                INDEX UNIQUE SCAN                     | PK_SCM_MST_SITE                 |     1 |
+| 116 |               TABLE ACCESS FULL                      | SCP_MST_DISTRIBUTION_ROUTE      |  7988 |
+|*117 |         HASH JOIN RIGHT OUTER                        |                                 | 21541 |
+| 118 |          VIEW                                        | SCP_MST_BOD_N_V                 | 14314 |
+| 119 |           SORT UNIQUE                                |                                 | 14314 |
+| 120 |            UNION-ALL                                 |                                 | 14314 |
+|*121 |             HASH JOIN                                |                                 | 13556 |
+| 122 |              TABLE ACCESS FULL                       | SCP_MST_DISTRIBUTION_ROUTE      |  7988 |
+| 123 |              NESTED LOOPS                            |                                 | 13556 |
+|*124 |               HASH JOIN RIGHT OUTER                  |                                 | 13556 |
+|*125 |                TABLE ACCESS BY INDEX ROWID BATCHED   | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|*126 |                 INDEX RANGE SCAN                     | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|*127 |                HASH JOIN RIGHT OUTER                 |                                 | 13556 |
+|*128 |                 TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|*129 |                  INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|*130 |                 HASH JOIN                            |                                 | 13556 |
+|*131 |                  TABLE ACCESS FULL                   | SCM_MST_SITE                    |  2919 |
+|*132 |                  TABLE ACCESS FULL                   | SCP_MST_BOD                     | 14121 |
+|*133 |               INDEX UNIQUE SCAN                      | PK_SCM_MST_SITE                 |     1 |
+|*134 |             HASH JOIN                                |                                 |   758 |
+| 135 |              NESTED LOOPS                            |                                 |   758 |
+|*136 |               HASH JOIN RIGHT OUTER                  |                                 |   758 |
+|*137 |                TABLE ACCESS BY INDEX ROWID BATCHED   | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|*138 |                 INDEX RANGE SCAN                     | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|*139 |                HASH JOIN RIGHT OUTER                 |                                 |   758 |
+|*140 |                 TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |    24 |
+|*141 |                  INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |    32 |
+|*142 |                 HASH JOIN                            |                                 |   758 |
+| 143 |                  TABLE ACCESS BY INDEX ROWID BATCHED | SCM_MST_SITE                    |   115 |
+|*144 |                   INDEX RANGE SCAN                   | IDX02_SCM_MST_SITE              |   115 |
+|*145 |                  TABLE ACCESS FULL                   | SCP_MST_BOD                     | 14121 |
+|*146 |               INDEX UNIQUE SCAN                      | PK_SCM_MST_SITE                 |     1 |
+| 147 |              TABLE ACCESS FULL                       | SCP_MST_DISTRIBUTION_ROUTE      |  7988 |
+|*148 |          HASH JOIN                                   |                                 | 21541 |
+|*149 |           INDEX FAST FULL SCAN                       | IDX04_SCM_MST_SITE              |  2668 |
+|*150 |           TABLE ACCESS FULL                          | SCM_DNM_INTRANSIT_C             | 24549 |
+|*151 |        COUNT STOPKEY                                 |                                 |       |
+| 152 |         VIEW                                         |                                 |     1 |
+|*153 |          SORT ORDER BY STOPKEY                       |                                 |     1 |
+| 154 |           NESTED LOOPS                               |                                 |     1 |
+| 155 |            NESTED LOOPS                              |                                 |     1 |
+|*156 |             TABLE ACCESS FULL                        | SCM_MST_SITE_ITEM_PRIORITY      |     1 |
+|*157 |             INDEX UNIQUE SCAN                        | PK_SCM_MST_SITE                 |     1 |
+|*158 |            TABLE ACCESS BY INDEX ROWID               | SCM_MST_SITE                    |     1 |
+| 159 |        WINDOW SORT                                   |                                 |     1 |
+|*160 |         FILTER                                       |                                 |       |
+|*161 |          HASH JOIN                                   |                                 |  6515 |
+|*162 |           TABLE ACCESS FULL                          | SCM_MST_VMI_INT_SLOC            |    32 |
+| 163 |           TABLE ACCESS FULL                          | SCM_DNM_STOCK                   |    11M|
+|*164 |    TABLE ACCESS BY INDEX ROWID BATCHED               | SCM_MST_SITE                    |     1 |
+|*165 |     INDEX SKIP SCAN                                  | IDX04_SCM_MST_SITE              |     1 |
+--------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - filter(("A"."FROM_SCM_SITE_ID" IS NULL OR  IS NOT NULL))
+   3 - access("A"."DIVISION_ID"="B"."DIVISION_ID" AND "A"."TO_SCM_SITE_ID"="B"."SCM_SITE_ID" 
+              AND "A"."ITEM_ID"="B"."ITEM_ID")
+  10 - filter("B"."VALID_YN"='Y')
+  11 - access("B"."LOOKUP_TYPE"='VMI_LT_SITE' AND "B"."SEGMENT1"=:B2)
+  12 - access("A"."DIVISION_ID"=:B2 AND "A"."SCM_SITE_ID"="ITEM_1")
+  13 - filter("A"."VALID_YN"='Y')
+  14 - filter(("A"."TO_SCM_SITE_ID" IS NOT NULL AND "A"."DIVISION_ID"=:B2 AND 
+              "A"."RESULT_DATE"=:B1 AND "A"."PLANT_ID"<>"FN_GET_LOOKUP_VALUE"('SCM_DNM_INTRANSIT_V','WarrantyP
+              lant')))
+  17 - access("D"."DIVISION_ID"="A"."DIVISION_ID" AND "D"."FROM_SITE"="A"."FROM_SCM_SITE_ID" 
+              AND "D"."TO_SITE"="A"."TO_SCM_SITE_ID" AND "D"."TRANSPORT_MODE"="A"."TRANSPORT_MODE")
+  23 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+  26 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  27 - filter("VALID_YN"='Y')
+  28 - access("LOOKUP_TYPE"='INCOTERMS')
+  29 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  30 - filter("VALID_YN"='Y')
+  31 - access("LOOKUP_TYPE"='INCOTERMS')
+  32 - access("B"."DIVISION_ID"="S"."DIVISION_ID" AND "B"."TO_SITE"="S"."SCM_SITE_ID")
+  33 - filter("S"."SITE_TYPE"='SALES')
+  34 - filter("B"."VALID_YN"='Y')
+  35 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+  36 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+  38 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  39 - filter("VALID_YN"='Y')
+  40 - access("LOOKUP_TYPE"='INCOTERMS')
+  41 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  42 - filter("VALID_YN"='Y')
+  43 - access("LOOKUP_TYPE"='INCOTERMS')
+  44 - access("B"."TO_SITE"="S"."SCM_SITE_ID")
+  46 - access("S"."SITE_TYPE"='PLANT')
+  47 - filter("B"."VALID_YN"='Y')
+  48 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+  50 - access("C"."DIVISION_ID"="A"."DIVISION_ID" AND "C"."FROM_SITE"="A"."FROM_SCM_SITE_ID" 
+              AND "C"."TO_SITE"="A"."TO_SCM_SITE_ID" AND "C"."INCOTERMS"="A"."FINAL_INCOTERMS" AND 
+              "C"."TRANSPORT_MODE"="A"."TRANSPORT_MODE")
+       filter(("C"."FROM_YYYYMMDD"<="A"."PLANT_ISSUE_DATE" AND 
+              "C"."TO_YYYYMMDD">="A"."PLANT_ISSUE_DATE"))
+  54 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+  57 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  58 - filter("VALID_YN"='Y')
+  59 - access("LOOKUP_TYPE"='INCOTERMS')
+  60 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  61 - filter("VALID_YN"='Y')
+  62 - access("LOOKUP_TYPE"='INCOTERMS')
+  63 - access("B"."DIVISION_ID"="S"."DIVISION_ID" AND "B"."TO_SITE"="S"."SCM_SITE_ID")
+  64 - filter("S"."SITE_TYPE"='SALES')
+  65 - filter("B"."VALID_YN"='Y')
+  66 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+  67 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+  69 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  70 - filter("VALID_YN"='Y')
+  71 - access("LOOKUP_TYPE"='INCOTERMS')
+  72 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  73 - filter("VALID_YN"='Y')
+  74 - access("LOOKUP_TYPE"='INCOTERMS')
+  75 - access("B"."TO_SITE"="S"."SCM_SITE_ID")
+  77 - access("S"."SITE_TYPE"='PLANT')
+  78 - filter("B"."VALID_YN"='Y')
+  79 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+  81 - access("DIVISION_ID"="A"."DIVISION_ID" AND "SCM_SITE_ID"="A"."TO_SCM_SITE_ID")
+  82 - filter(("VALID_YN"='Y' AND INTERNAL_FUNCTION("SITE_TYPE")))
+  83 - filter(("A"."RESULT_TYPE"='I' AND "A"."TO_SCM_SITE_ID" IS NOT NULL AND 
+              "A"."VALID_YN"='Y'))
+  84 - access("D"."DIVISION_ID"="A"."DIVISION_ID" AND "D"."FROM_SITE"="A"."FROM_SCM_SITE_ID" 
+              AND "D"."TO_SITE"="A"."TO_SCM_SITE_ID" AND "D"."TRANSPORT_MODE"="A"."TRANSPORT_MODE")
+  90 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+  93 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  94 - filter("VALID_YN"='Y')
+  95 - access("LOOKUP_TYPE"='INCOTERMS')
+  96 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  97 - filter("VALID_YN"='Y')
+  98 - access("LOOKUP_TYPE"='INCOTERMS')
+  99 - access("B"."DIVISION_ID"="S"."DIVISION_ID" AND "B"."TO_SITE"="S"."SCM_SITE_ID")
+ 100 - filter("S"."SITE_TYPE"='SALES')
+ 101 - filter("B"."VALID_YN"='Y')
+ 102 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+ 103 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+ 105 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+ 106 - filter("VALID_YN"='Y')
+ 107 - access("LOOKUP_TYPE"='INCOTERMS')
+ 108 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+ 109 - filter("VALID_YN"='Y')
+ 110 - access("LOOKUP_TYPE"='INCOTERMS')
+ 111 - access("B"."TO_SITE"="S"."SCM_SITE_ID")
+ 113 - access("S"."SITE_TYPE"='PLANT')
+ 114 - filter("B"."VALID_YN"='Y')
+ 115 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+ 117 - access("C"."DIVISION_ID"="A"."DIVISION_ID" AND "C"."FROM_SITE"="A"."FROM_SCM_SITE_ID" 
+              AND "C"."TO_SITE"="A"."TO_SCM_SITE_ID" AND "C"."INCOTERMS"="A"."FINAL_INCOTERMS" AND 
+              "C"."TRANSPORT_MODE"="A"."TRANSPORT_MODE")
+       filter(("C"."FROM_YYYYMMDD"<="A"."PLANT_ISSUE_DATE" AND 
+              "C"."TO_YYYYMMDD">="A"."PLANT_ISSUE_DATE"))
+ 121 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+ 124 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+ 125 - filter("VALID_YN"='Y')
+ 126 - access("LOOKUP_TYPE"='INCOTERMS')
+ 127 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+ 128 - filter("VALID_YN"='Y')
+ 129 - access("LOOKUP_TYPE"='INCOTERMS')
+ 130 - access("B"."DIVISION_ID"="S"."DIVISION_ID" AND "B"."TO_SITE"="S"."SCM_SITE_ID")
+ 131 - filter("S"."SITE_TYPE"='SALES')
+ 132 - filter("B"."VALID_YN"='Y')
+ 133 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+ 134 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+ 136 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+ 137 - filter("VALID_YN"='Y')
+ 138 - access("LOOKUP_TYPE"='INCOTERMS')
+ 139 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+ 140 - filter("VALID_YN"='Y')
+ 141 - access("LOOKUP_TYPE"='INCOTERMS')
+ 142 - access("B"."TO_SITE"="S"."SCM_SITE_ID")
+ 144 - access("S"."SITE_TYPE"='PLANT')
+ 145 - filter("B"."VALID_YN"='Y')
+ 146 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+ 148 - access("DIVISION_ID"="A"."DIVISION_ID" AND "SCM_SITE_ID"="A"."TO_SCM_SITE_ID")
+ 149 - filter("VALID_YN"='Y')
+ 150 - filter(("A"."RESULT_TYPE"='C' AND "A"."TO_SCM_SITE_ID" IS NOT NULL AND 
+              "A"."VALID_YN"='Y'))
+ 151 - filter(ROWNUM=1)
+ 153 - filter(ROWNUM=1)
+ 156 - filter(("SA"."ITEM_ID"=:B1 AND "SA"."DIVISION_ID"=:B2 AND "SA"."PRIORITY"=1 AND 
+              "SA"."VALID_YN"='Y' AND "SA"."TO_YYYYMMDD">=TO_CHAR(SYSDATE@!,'YYYYMMDD') AND 
+              "SA"."FROM_YYYYMMDD"<=TO_CHAR(SYSDATE@!,'YYYYMMDD')))
+ 157 - access("SB"."DIVISION_ID"=:B1 AND "SA"."PLANT_SITE_ID"="SB"."SCM_SITE_ID")
+       filter("SA"."DIVISION_ID"="SB"."DIVISION_ID")
+ 158 - filter(("SB"."SITE_TYPE"='PLANT' AND "SB"."OPERATION_GROUP"<>'W' AND 
+              "SB"."VALID_YN"='Y'))
+ 160 - filter(NULL IS NOT NULL)
+ 161 - access("A"."DIVISION_ID"="B"."DIVISION_ID" AND "A"."PLANT_ID"="B"."PLANT_ID" AND 
+              "A"."STORAGE_ID"="B"."STORAGE_ID")
+ 162 - filter("B"."VALID_YN"='Y')
+ 164 - filter(NVL("OPERATION_GROUP",'*')<>'W')
+ 165 - access("SCM_SITE_ID"=:B1)
+       filter("SCM_SITE_ID"=:B1)
+ 
+---

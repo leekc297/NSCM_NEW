@@ -1,0 +1,17 @@
+{
+ "tag": "c1",
+ "env": [
+  "zioui1",
+  "localhost",
+  "2026-11-04 17:04:06"
+ ],
+ "results": [
+  {
+   "user": "k0101",
+   "div": "40",
+   "scen": "Current",
+   "ok": false,
+   "error": "ORA-20001: [PKG_DMF0082_1104] ORA-00918: SORT_ORDER_NO: column ambiguously specified - appears in  and \nORA-06512: at \"SCM_MGR.PKG_DMF0082_1104\", line 2501\nORA-06512: at \"SCM_MGR.PKG_DMF0082_1104\", line 7550\nORA-06512: at line 1"
+  }
+ ]
+}

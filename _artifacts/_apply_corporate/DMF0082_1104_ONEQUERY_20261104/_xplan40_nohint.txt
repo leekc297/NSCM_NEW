@@ -1,0 +1,135 @@
+== S2-CUR-40 nohint rows 134
+   0 p  -1 INSERT STATEMENT                                                                                card=1 cost=94
+   1 p   0  TEMP TABLE TRANSFORMATION                                                                      card=None cost=None
+   2 p   1   LOAD AS SELECT (CURSOR DURATION MEMORY) SYS_TEMP_0FD9D9C3A_49C63B                             card=None cost=None
+   3 p   2    UNION-ALL                                                                                    card=5 cost=None
+   4 p   3     HASH JOIN RIGHT OUTER                                                                       card=1 cost=17
+   5 p   4      TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_T_LAST_DATA_SETUP_FCST                      card=1 cost=0
+   6 p   5       INDEX RANGE SCAN IX_GT82_LDS_FCST_PERF                                                    card=1 cost=0
+   7 p   4      NESTED LOOPS                                                                               card=1 cost=17
+   8 p   7       MERGE JOIN CARTESIAN                                                                      card=1 cost=6
+   9 p   8        MERGE JOIN CARTESIAN                                                                     card=1 cost=4
+  10 p   9         TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE                                        card=1 cost=2
+  11 p   9         BUFFER SORT                                                                             card=1 cost=2
+  12 p  11          TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM                                            card=1 cost=2
+  13 p   8        BUFFER SORT                                                                              card=1 cost=4
+  14 p  13         TABLE ACCESS FULL GT_DMF0082_T_WS_FCST                                                  card=1 cost=2
+  15 p   7       TABLE ACCESS BY INDEX ROWID BATCHED DM_PLN_CFM_MKT_DEMAND_PLAN                            card=1 cost=11
+  16 p  15        INDEX RANGE SCAN PK_DM_PLN_CFM_MKT_DEMAND_PLAN                                           card=1 cost=10
+  17 p   3     HASH JOIN RIGHT OUTER                                                                       card=1 cost=17
+  18 p  17      TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_T_LAST_DATA_SETUP_FCST                      card=1 cost=0
+  19 p  18       INDEX RANGE SCAN IX_GT82_LDS_FCST_PERF                                                    card=1 cost=0
+  20 p  17      NESTED LOOPS                                                                               card=1 cost=17
+  21 p  20       MERGE JOIN CARTESIAN                                                                      card=1 cost=6
+  22 p  21        MERGE JOIN CARTESIAN                                                                     card=1 cost=4
+  23 p  22         TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE                                        card=1 cost=2
+  24 p  22         BUFFER SORT                                                                             card=1 cost=2
+  25 p  24          TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM                                            card=1 cost=2
+  26 p  21        BUFFER SORT                                                                              card=1 cost=4
+  27 p  26         TABLE ACCESS FULL GT_DMF0082_T_WS_FCST                                                  card=1 cost=2
+  28 p  20       TABLE ACCESS BY INDEX ROWID BATCHED DM_PLN_CFM_MKT_DEMAND_PLAN                            card=1 cost=11
+  29 p  28        INDEX RANGE SCAN PK_DM_PLN_CFM_MKT_DEMAND_PLAN                                           card=1 cost=10
+  30 p   3     VIEW                                                                                        card=1 cost=10
+  31 p  30      WINDOW SORT                                                                                card=1 cost=10
+  32 p  31       NESTED LOOPS                                                                              card=1 cost=9
+  33 p  32        MERGE JOIN CARTESIAN                                                                     card=1 cost=6
+  34 p  33         MERGE JOIN CARTESIAN                                                                    card=1 cost=4
+  35 p  34          TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE                                       card=1 cost=2
+  36 p  34          BUFFER SORT                                                                            card=1 cost=2
+  37 p  36           TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM                                           card=1 cost=2
+  38 p  33         BUFFER SORT                                                                             card=1 cost=4
+  39 p  38          SORT UNIQUE                                                                            card=1 cost=2
+  40 p  39           TABLE ACCESS FULL GT_DMF0082_T_WS_FCST                                                card=1 cost=2
+  41 p  32        TABLE ACCESS BY INDEX ROWID BATCHED DM_PLN_CFM_SELLING_PRICE                             card=1 cost=3
+  42 p  41         INDEX RANGE SCAN IDX07_DM_PLN_CFM_SELLING_PRICE                                         card=1 cost=2
+  43 p   3     FILTER                                                                                      card=None cost=None
+  44 p  43      HASH JOIN RIGHT OUTER                                                                      card=1 cost=10
+  45 p  44       TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_T_LAST_DATA_SETUP_FCST                     card=1 cost=0
+  46 p  45        INDEX RANGE SCAN IX_GT82_LDS_FCST_PERF                                                   card=1 cost=0
+  47 p  44       NESTED LOOPS                                                                              card=1 cost=10
+  48 p  47        MERGE JOIN CARTESIAN                                                                     card=1 cost=6
+  49 p  48         MERGE JOIN CARTESIAN                                                                    card=1 cost=4
+  50 p  49          TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE                                       card=1 cost=2
+  51 p  49          BUFFER SORT                                                                            card=1 cost=2
+  52 p  51           TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM                                           card=1 cost=2
+  53 p  48         BUFFER SORT                                                                             card=1 cost=4
+  54 p  53          TABLE ACCESS FULL GT_DMF0082_T_WS_FCST                                                 card=1 cost=2
+  55 p  47        TABLE ACCESS BY INDEX ROWID BATCHED DM_PLN_SALES_PLAN_RESULT                             card=1 cost=4
+  56 p  55         INDEX RANGE SCAN PK_DM_PLN_SALES_PLAN_RESULT                                            card=1 cost=3
+  57 p   3     FILTER                                                                                      card=None cost=None
+  58 p  57      NESTED LOOPS                                                                               card=1 cost=10
+  59 p  58       MERGE JOIN CARTESIAN                                                                      card=1 cost=6
+  60 p  59        MERGE JOIN CARTESIAN                                                                     card=1 cost=4
+  61 p  60         TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE                                        card=1 cost=2
+  62 p  60         BUFFER SORT                                                                             card=1 cost=2
+  63 p  62          TABLE ACCESS FULL GT_DMF0082_TEMP_SITE_ITEM                                            card=1 cost=2
+  64 p  59        BUFFER SORT                                                                              card=1 cost=4
+  65 p  64         TABLE ACCESS FULL GT_DMF0082_T_WS_FCST                                                  card=1 cost=2
+  66 p  58       TABLE ACCESS BY INDEX ROWID BATCHED DM_PLN_MKT_FCST_RESULT                                card=1 cost=4
+  67 p  66        INDEX RANGE SCAN PK_DM_PLN_MKT_FCST_RESULT                                               card=1 cost=3
+  68 p   1   LOAD AS SELECT (CURSOR DURATION MEMORY) SYS_TEMP_0FD9D9C3B_49C63B                             card=None cost=None
+  69 p  68    HASH JOIN RIGHT OUTER                                                                        card=5 cost=29
+  70 p  69     VIEW                                                                                        card=1 cost=8
+  71 p  70      FILTER                                                                                     card=None cost=None
+  72 p  71       HASH GROUP BY                                                                             card=1 cost=8
+  73 p  72        VIEW  VW_DAG_0                                                                           card=1 cost=7
+  74 p  73         HASH GROUP BY                                                                           card=1 cost=7
+  75 p  74          VIEW                                                                                   card=5 cost=6
+  76 p  75           TABLE ACCESS FULL SYS_TEMP_0FD9D9C3A_49C63B                                           card=5 cost=6
+  77 p  69     HASH JOIN RIGHT OUTER                                                                       card=5 cost=21
+  78 p  77      VIEW                                                                                       card=1 cost=8
+  79 p  78       FILTER                                                                                    card=None cost=None
+  80 p  79        HASH GROUP BY                                                                            card=1 cost=8
+  81 p  80         VIEW  VW_DAG_1                                                                          card=1 cost=7
+  82 p  81          HASH GROUP BY                                                                          card=1 cost=7
+  83 p  82           VIEW                                                                                  card=5 cost=6
+  84 p  83            TABLE ACCESS FULL SYS_TEMP_0FD9D9C3A_49C63B                                          card=5 cost=6
+  85 p  77      HASH JOIN RIGHT OUTER                                                                      card=5 cost=13
+  86 p  85       VIEW                                                                                      card=1 cost=7
+  87 p  86        HASH GROUP BY                                                                            card=1 cost=7
+  88 p  87         VIEW                                                                                    card=5 cost=6
+  89 p  88          TABLE ACCESS FULL SYS_TEMP_0FD9D9C3A_49C63B                                            card=5 cost=6
+  90 p  85       VIEW                                                                                      card=5 cost=6
+  91 p  90        TABLE ACCESS FULL SYS_TEMP_0FD9D9C3A_49C63B                                              card=5 cost=6
+  92 p   1   LOAD TABLE CONVENTIONAL  GT_DMF0082_TEMP_FCST_N_PRICE                                         card=None cost=None
+  93 p  92    FILTER                                                                                       card=None cost=None
+  94 p  93     FILTER                                                                                      card=None cost=None
+  95 p  94      HASH JOIN RIGHT ANTI                                                                       card=1 cost=13
+  96 p  95       TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE                                          card=1 cost=2
+  97 p  95       NESTED LOOPS SEMI                                                                         card=1 cost=11
+  98 p  97        NESTED LOOPS SEMI                                                                        card=1 cost=11
+  99 p  98         VIEW                                                                                    card=7 cost=11
+ 100 p  99          UNION-ALL                                                                              card=7 cost=None
+ 101 p 100           VIEW                                                                                  card=5 cost=4
+ 102 p 101            TABLE ACCESS FULL SYS_TEMP_0FD9D9C3B_49C63B                                          card=5 cost=4
+ 103 p 100           VIEW                                                                                  card=2 cost=7
+ 104 p 103            UNION-ALL                                                                            card=2 cost=None
+ 105 p 104             SORT GROUP BY                                                                       card=1 cost=None
+ 106 p 105              FILTER                                                                             card=None cost=None
+ 107 p 106               MERGE JOIN CARTESIAN                                                              card=1 cost=6
+ 108 p 107                TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE                                 card=1 cost=2
+ 109 p 107                BUFFER SORT                                                                      card=5 cost=5
+ 110 p 109                 VIEW                                                                            card=5 cost=4
+ 111 p 110                  TABLE ACCESS FULL SYS_TEMP_0FD9D9C3B_49C63B                                    card=5 cost=4
+ 112 p 104             SORT GROUP BY                                                                       card=1 cost=7
+ 113 p 112              MERGE JOIN CARTESIAN                                                               card=1 cost=6
+ 114 p 113               TABLE ACCESS FULL GT_DMF0082_TEMP_SELECT_MEASURE                                  card=1 cost=2
+ 115 p 113               BUFFER SORT                                                                       card=5 cost=5
+ 116 p 115                VIEW                                                                             card=5 cost=4
+ 117 p 116                 TABLE ACCESS FULL SYS_TEMP_0FD9D9C3B_49C63B                                     card=5 cost=4
+ 118 p  98         TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN                              card=1 cost=0
+ 119 p 118          INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01                                          card=1 cost=0
+ 120 p  97        TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN                               card=1 cost=0
+ 121 p 120         INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01                                           card=1 cost=0
+ 122 p  94      INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01                                              card=1 cost=1
+ 123 p  94      INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01                                              card=1 cost=1
+ 124 p  94      INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01                                              card=1 cost=1
+ 125 p  94      INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01                                              card=1 cost=1
+ 126 p  93     TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN                                  card=1 cost=1
+ 127 p 126      INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01                                              card=1 cost=1
+ 128 p  93     TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN                                  card=1 cost=1
+ 129 p 128      INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01                                              card=1 cost=1
+ 130 p  93     TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN                                  card=1 cost=1
+ 131 p 130      INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01                                              card=1 cost=1
+ 132 p  93     TABLE ACCESS BY INDEX ROWID BATCHED GT_DMF0082_PARAM_TOKEN                                  card=1 cost=1
+ 133 p 132      INDEX RANGE SCAN IX_GT_DMF0082_PARAM_TOKEN_01                                              card=1 cost=1

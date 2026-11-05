@@ -10,7 +10,9 @@
 //                        나머지 5종은 흰색이나 잠금(표시 전용).
 //     R3 행 액션 게이트: 셀 편집·팝업은 action='I'(신규) 또는 조회행 변경('M') — 조회영역 기본 read-only는
 //                       canEdit(hasButton EDIT)이 mount 1회로 담당(#2 LockColumn 446 / convert-core §2.4).
-//     R4 SHIP_FROZEN : 행별 frozen 카운트만큼 선두 D_ 컬럼 잠금(마감 일자 편집 금지, cs 654-693).
+//     R4 Frozen(D_)  : 기존행=행별 SHIP_FROZEN(From Site별) 카운트만큼 선두 D_ 잠금(cs 654-693).
+//                       신규행(I)=From Site 미선택이라 SHIP_FROZEN 없음 → AS-IS 처럼 '오늘+10일' 이전 D_ 잠금
+//                       (cs 1012-1047 Today.AddDays(10)). isInsertFrozenDay / insertFrozenCutoffYmd.
 //     R5 Insert 정적 : 신규행에서 편집 대상 정적 컬럼만 개방(#12-14/#18 LockRange) — 그 외 자동 read-only.
 import { BUCKET_TYPE, EDITABLE_MEASURE, INPUT_MEASURE_WHITELIST } from '../shipment-request.constants';
 import type { ShipmentRequestRow } from '../shipment-request.types';
@@ -57,6 +59,19 @@ export const isFrozenLeadingDay = (
   return idx >= 0 && idx < frozen;
 };
 
+// 신규행(Insert) 마감(frozen) D_ 판정 — 신규행은 From Site 미선택이라 SHIP_FROZEN(행별=From Site별)을
+//   못 쓴다. AS-IS 는 그 대신 일괄 '오늘+10일' 커트라인 이전 D_ 일자를 잠근다(cs 1012-1047: Today.AddDays(10)
+//   → iResultCol LockRange). binding 'D_yyyymmdd' 의 일자가 cutoff(yyyymmdd) 미만이면 frozen.
+//   cutoff(todayPlus10Ymd)는 호출측이 dayjs().add(10,'day').format('YYYYMMDD') 로 계산해 넘긴다(순수 함수 유지,
+//   D_ 바인딩 생성 포맷과 동일 기준). AS-IS 와 동일하게 Daily(D_)에만 적용한다(cs 1030 이 D_ 컬럼만 커트라인
+//   비교 — Weekly/Monthly 신규행엔 +10 잠금 없음). cutoff 가 yyyymmdd 형식이 아니면 잠그지 않는다(안전측).
+export const isInsertFrozenDay = (binding: string, todayPlus10Ymd: string): boolean => {
+  const m = /^D_(\d{8})$/.exec(binding);
+  if (!m) return false;
+  if (!/^\d{8}$/.test(todayPlus10Ymd)) return false;
+  return m[1] < todayPlus10Ymd;
+};
+
 // 동적 셀(M_/W_/D_) 편집 가능 여부 — R1(버킷)×R2(measure)×R3(행 액션)×R4(frozen) 종합.
 //   formatItem(음영/편집색) + beginningEdit(cancel) 공유. calendar cutoff 없음(위 헤더 참조).
 export const evalShipmentDynCell = (params: {
@@ -64,16 +79,23 @@ export const evalShipmentDynCell = (params: {
   row: ShipmentRequestRow | undefined;
   bucketType: BUCKET_TYPE;
   dOrderedDayBindings: readonly string[];
+  // 신규행(Insert) 오늘+10일 D_ frozen cutoff(yyyymmdd) — AS-IS cs 1022. 호출측이 계산해 넘긴다.
+  insertFrozenCutoffYmd: string;
 }): DynCellState => {
-  const { binding, row, bucketType, dOrderedDayBindings } = params;
+  const { binding, row, bucketType, dOrderedDayBindings, insertFrozenCutoffYmd } = params;
   const kind = dynKindOf(binding);
   if (!kind) return LOCKED;
 
   const measure = typeof row?.MEASURE === 'string' ? row.MEASURE : '';
   const inputMeasure = isInputMeasure(measure);
-  // R4 SHIP_FROZEN — 선두 D_(마감 일자) 판정. AS-IS cs 486/540 은 마감 구간을 전 measure 행에
-  //   회색(242,242,242)+잠금으로 칠한다 → 음영(shaded)에 포함한다(Daily D_ 에만 해당).
-  const frozen = isFrozenLeadingDay(binding, row, dOrderedDayBindings);
+  const action = typeof row?.CRUD_TYPE === 'string' ? row.CRUD_TYPE : '';
+  // R4 마감(frozen) D_ 판정 — AS-IS cs 486/540 은 마감 구간을 전 measure 행에 회색(242,242,242)+잠금으로 칠한다
+  //   → 음영(shaded)에 포함(Daily D_ 에만 해당). 기존행: SHIP_FROZEN(From Site별) 선두 D_(cs 540).
+  //   신규행(I): From Site 미선택이라 SHIP_FROZEN 이 없어, AS-IS 처럼 '오늘+10일' 이전 D_ 를 잠근다(cs 1022·1042).
+  const frozen =
+    action === 'I'
+      ? isInsertFrozenDay(binding, insertFrozenCutoffYmd)
+      : isFrozenLeadingDay(binding, row, dOrderedDayBindings);
   // 음영(Gray): 입력목록 밖(집계/시스템) measure 행 OR 마감(frozen) D_ 셀.
   const shaded = !inputMeasure || frozen;
 
@@ -84,8 +106,7 @@ export const evalShipmentDynCell = (params: {
   // R2' 편집 measure 게이트 — 입력행 중에서도 실제 값셀 편집은 SHIP_REQ 만(AS-IS EditButton cs 543·545).
   //   나머지 입력 measure(SHIP_PLAN/RTF/RTF_SCP/SCP_PLAN/SCP_SHIP_PLAN)는 흰색이나 잠금(표시 전용).
   if (measure !== EDITABLE_MEASURE) return { editable: false, shaded };
-  // R3 행 액션 게이트 — 신규(I)/변경대상(M) 행만.
-  const action = typeof row?.CRUD_TYPE === 'string' ? row.CRUD_TYPE : '';
+  // R3 행 액션 게이트 — 신규(I)/변경대상(M) 행만(action 은 위에서 선언). 삭제행(D)은 편집 불가.
   if (action === 'D') return { editable: false, shaded };
   // R4 — 마감(frozen) 선두 D_ 는 잠금+회색(위 shaded 에 반영됨).
   if (frozen) return { editable: false, shaded };

@@ -1,28 +1,19 @@
 // CAPA New Model 팝업(AS-IS SCP0049_CAPANewModelPopup) — Division~Operation 6단 계층 조건으로
-//   Model/Item × Line × 월(Lane Qty/Priority) 후보를 조회해 일괄 등록·담당자 메일요청한다.
+//   Model/Item × Line × 월(Lane Qty/Priority) 후보를 조회해 담당자에게 등록 요청 메일을 보낸다.
 //   SCP0049_CAPA(본가 화면)·SCP0201_CAPA·SCP0006_ProjectRoute(Plant Assign 더블클릭) 3개 AS-IS
 //   화면이 공유하는 팝업이라 공용 컴포넌트로 둔다(capa-new-model-popup.constants.ts 헤더 참고).
 //
-// 진행 상태(2026-09-22): PKG_SCP0049 Oracle 배포 확인(ora.py, VALID) + admin 등록 확인 후 SP 3종
-//   전부 연결 완료. 저장(SaveData, cs L997-1230)은 AS-IS 가 **체크된 행 × 색상마킹된(변경) 셀**
-//   단위로 payload 를 조립한다(행 전체가 아니라 dirty 셀마다 한 엔트리) — EditTracker.getOriginalValues()
-//   가 셀 단위 변경 기록을 그대로 들고 있어 동일하게 재현한다.
-//
-// 권한별 행/셀 잠금(EditButton, cs L565-837, 2026-09-22 사용자 결정 A안 — 서버판정 아닌 AS-IS 그대로
-//   클라 복제): SP #5/#6(LoadAuthority 원본 데이터, capa-new-model-popup.constants.ts 헤더 참고)은
-//   2026-09-29 실 SP 에 연결됐다 — #6=PKG_SYS0011.P_SYS0011_GET_MY_AUTH_DATA(기등록 재사용),
-//   #5=PR_UI_FP01886_AUTHORITY_REQUEST(SCP0049/fpInstance call-proc 신규 등록). 조회 실패·미권한이면
-//   빈 배열로 폴백해 SCM PI Admin·행 책임자(USER_ID_1~10)가 아닌 한 전 행이 잠긴 것으로 보인다
-//   (AS-IS bPartAuthority=false 와 동일한 안전한 기본값).
-import { toggleClass } from '@mescius/wijmo';
-import type { CellRangeEventArgs, FlexGrid, FormatItemEventArgs } from '@mescius/wijmo.grid';
-import { CellType } from '@mescius/wijmo.grid';
+// 2026-11-02 사용자 결정 — 이 팝업을 조회 전용으로 전환했다. AS-IS 의 저장(SaveData)·CHK('Save')
+//   선택 체크박스·권한별 행/셀 편집잠금(EditButton/LoadAuthority)은 전부 제거하고, 그리드는 Mail Req
+//   체크박스를 제외한 모든 셀을 읽기전용으로 둔다. 남는 쓰기 동작은 Mail Request(담당자 등록요청
+//   메일) 하나뿐이다. 편집/저장/권한판정이 사라져 capaNewModelPopup.editLock.ts 는 더 이상 쓰이지
+//   않는다(향후 SCP0049/SCP0201 편집 화면을 구축하면 그 로직을 되살린다).
+import type { CellRangeEventArgs, FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
-import type { EditTracker } from '@foundation/utils';
-import { GridUtils, safeString } from '@foundation/utils';
+import { safeString } from '@foundation/utils';
 import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
@@ -36,26 +27,14 @@ import {
   buildCapaNewModelColumns,
   COMBO,
   DefColumns,
-  DYN_MONTH_PREFIX,
   excludeEeDivision,
-  FP_INSTANCE_ENDPOINT,
   MNU_ID,
   MSG,
-  MY_AUTH_LIST_ENDPOINT,
   REQUEST_CHK_COLUMN,
   SHEET_MAIL_SEND,
   SHEET_NEW_MODEL,
 } from './capa-new-model-popup.constants';
 import { buildCapaMonthColumns } from './capaNewModelPopup.calendar';
-import {
-  buildCapaAuthContext,
-  type CapaAuthListRow,
-  type CapaFpInstanceRow,
-  hasLaneQtyCandidate,
-  isAlwaysEditableBinding,
-  isLockedIdentityBinding,
-  resolveCapaRowEditability,
-} from './capaNewModelPopup.editLock';
 import styles from './CapaNewModelPopup.module.scss';
 
 export type CapaNewModelRow = WijmoRowItem;
@@ -92,7 +71,6 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
 
   const gridRef = useRef<FlexGrid<CapaNewModelRow>>();
   const gridFilterRef = useRef<FlexGridFilter>();
-  const editTrackerRef = useRef<EditTracker<CapaNewModelRow>>();
 
   // 조회조건 6단 cascade(AS-IS SetChangedControl/ClbXxx_SelectedIndexChanged, cs L1364-1438) —
   //   각 단계 선택 즉시 하위 단계를 재조회한다(react-query 가 파라미터 변경으로 자동 처리).
@@ -143,74 +121,6 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
     ],
     enabled: !!divisionId,
   });
-  // SaveData E2000(Dam Mixing) LANE_QTY 존재 검증용(cs L1100-1121) — 파라미터 없이 전체 1회 로드.
-  const [laneQtyRows] = useTabComboQueries({ filters: [COMBO.LANE_QTY_OF_LINE_ASSIGN] });
-  // EditButton 권한판정용(cs L333-338, LoadAuthority) — 둘 다 화면 전용 아닌 공용/등록 콤보.
-  const [myGroupsRaw] = useTabComboQueries({ filters: [COMBO.MY_GROUPS] });
-  const [operGroupRows] = useTabComboQueries({ filters: [COMBO.OPER_GROUP_BY_CAPA] });
-
-  // LoadAuthority(cs L309-403) 원본 데이터 2종 — 실 SP 연결(2026-09-29, capa-new-model-popup.constants.ts
-  //   MY_AUTH_LIST_ENDPOINT/FP_INSTANCE_ENDPOINT 헤더 참고). 조회 실패/미권한(403)이면 빈 배열 → 전 행
-  //   잠금이라는 안전한 기본값(AS-IS bPartAuthority=false 와 동일). 팝업이 열릴 때 1회 조회한다.
-  const [myAuthList, setMyAuthList] = useState<CapaAuthListRow[]>([]);
-  const [fpInstanceRows, setFpInstanceRows] = useState<CapaFpInstanceRow[]>([]);
-  const [searchedDivisionId, setSearchedDivisionId] = useState('');
-
-  useEffect(() => {
-    if (!open) return;
-    // SP #6: SYS0011/myAuthorityList(call-proc — 세션 미주입이라 sesUserId 직접 전달). SP 는 USER_GR_ID 를
-    //   반환하므로 CapaAuthListRow.GROUP_ID 로 매핑한다(USER_GR_ID==USER_GR_NM, 값이 AUTH_GROUP 과 동일).
-    void (async () => {
-      try {
-        const res = await apiClient.post<{ o_rc?: Array<Record<string, unknown>> }>(
-          `/${MY_AUTH_LIST_ENDPOINT.mnuId}/${MY_AUTH_LIST_ENDPOINT.shtNm}/SEARCH/call-proc`,
-          { sesUserId: sessionUserId ?? '' }
-        );
-        const rows = res.data?.result?.o_rc ?? [];
-        setMyAuthList(
-          rows.map(r => ({
-            GROUP_ID: r.USER_GR_ID,
-            APPROVAL_RESULT: r.APPROVAL_RESULT,
-            DIVISION_ID: r.DIVISION_ID,
-          }))
-        );
-      } catch {
-        setMyAuthList([]);
-      }
-    })();
-    // SP #5: SCP0049/fpInstance(call-proc — 라우터 SP, PROC_M 20파라미터 등록). call-proc 은 세션
-    //   미주입이라 sesUserId(→P_USER_ID)·altUserId 를 직접 전송. AS-IS SELECT_MAIN 분기 재현
-    //   (call-proc2 는 CustomAuthorizationManager 화이트리스트 밖이라 403 — 06_register SQL 헤더 참고).
-    void (async () => {
-      try {
-        const res = await apiClient.post<{ o_rc?: CapaFpInstanceRow[] }>(
-          `/${FP_INSTANCE_ENDPOINT.mnuId}/${FP_INSTANCE_ENDPOINT.shtNm}/SEARCH/call-proc`,
-          {
-            sysType: 'SELECT',
-            sysFlag: 'SELECT_MAIN',
-            sesUserId: sessionUserId ?? '',
-            altUserId: sessionUserId ?? '',
-          }
-        );
-        setFpInstanceRows(res.data?.result?.o_rc ?? []);
-      } catch {
-        setFpInstanceRows([]);
-      }
-    })();
-  }, [open, sessionUserId]);
-
-  // PlannerTypeLogic(cs L936-995) — 조회에 실제 사용된 division 기준(폼의 현재값이 아니다).
-  const authCtx = useMemo(
-    () =>
-      buildCapaAuthContext(
-        myAuthList,
-        fpInstanceRows,
-        (myGroupsRaw ?? []).map(g => safeString(g.CODE)),
-        (operGroupRows ?? []).map(r => safeString(r.CODE)),
-        searchedDivisionId
-      ),
-    [myAuthList, fpInstanceRows, myGroupsRaw, operGroupRows, searchedDivisionId]
-  );
 
   // 팝업이 열릴 때마다 호출 화면 파라미터로 초기화(AS-IS LoadData, cs L235-248).
   useEffect(() => {
@@ -252,9 +162,6 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
       });
       return;
     }
-    // PlannerTypeLogic(cs L925)이 조회 시점 division 으로 재판정하는 것과 동일 — 폼 값이 그 뒤에
-    // 바뀌어도(재검색 전까지) 권한판정은 이 검색에 쓰인 division 을 기준으로 고정한다.
-    setSearchedDivisionId(divisionId);
     setLoading(true);
     try {
       const res = await apiClient.post<{ o_rc?: CapaNewModelRow[] }>(
@@ -280,243 +187,28 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
     }
   };
 
-  // shtMain_Changed(cs L1440-1467) — CHK/REQUEST_CHK 아닌 셀이 바뀌면 그 행 CHK 를 자동 체크.
-  const handleCellEdit = (grid: FlexGrid<CapaNewModelRow>, e: CellRangeEventArgs) => {
-    const binding = grid.columns[e.col]?.binding;
-    const dataItem = GridUtils.getRow(grid, e.row);
-    if (!binding || !dataItem) return;
-    if (binding === DefColumns.CHK || binding === DefColumns.REQUEST_CHK) return;
-
-    const record = dataItem as Record<string, unknown>;
-    if (record.CRUD_TYPE === 'M' && record[DefColumns.CHK] !== true) {
-      editTrackerRef.current?.storeChange(dataItem, DefColumns.CHK, record[DefColumns.CHK] as string, true);
-      record[DefColumns.CHK] = true;
-      GridUtils.refreshRow(grid, e.row);
-    }
-  };
-
-  // EditButton(cs L565-837) — AS-IS 의 Edit 토글 버튼 개념은 쓰지 않는다(SCP0006 과 같은 "상시편집"
-  //   구조 — 검색 직후 이미 권한별로 언락된 상태를 그대로 재현, cs FindData 의 finally 가 매 검색마다
-  //   bEdit_Mode=false→OnClickEditButton() 으로 자동 재계산하던 것과 동일 타이밍). rows/authCtx 가
-  //   바뀔 때마다 핸들러를 다시 걸고(이전 핸들러는 정리), 이 시점엔 gridRef.current 가 이미 초기화돼
-  //   있다(그리드는 팝업이 열리자마자 마운트되고, 이 effect 는 최초 검색으로 rows 가 채워진 뒤에야
-  //   실행되므로 mount 순서 걱정이 없다).
+  // 조회 전용(2026-11-02) — Mail Req(REQUEST_CHK) 체크박스만 편집 가능하고 나머지 셀은 전부 잠근다.
+  //   grid.isReadOnly 는 전 셀을 잠가 Mail Req 까지 막으므로, 셀 단위로 beginningEdit/pastingCell 을
+  //   취소하는 방식을 쓴다. rows 가 채워진 뒤 핸들러를 다시 건다(이전 핸들러는 정리).
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
 
-    const rowEditability = (row: CapaNewModelRow) =>
-      resolveCapaRowEditability(
-        row as Record<string, unknown>,
-        sessionUserId ?? '',
-        isGroupElectrode,
-        authCtx,
-        hasLaneQtyCandidate(row as Record<string, unknown>, laneQtyRows ?? [])
-      );
-
-    const beginningEditHandler = (
+    const lockHandler = (
       g: FlexGrid<CapaNewModelRow>,
       e: CellRangeEventArgs & { cancel: boolean }
     ) => {
       const binding = g.columns[e.col]?.binding ?? '';
-      if (isAlwaysEditableBinding(binding)) return;
-      if (isLockedIdentityBinding(binding)) {
-        e.cancel = true;
-        return;
-      }
-      const row = GridUtils.getRow(g, e.row);
-      if (!row) {
-        e.cancel = true;
-        return;
-      }
-      const editability = rowEditability(row);
-      e.cancel = binding === DefColumns.LANE_QTY ? !editability.laneQtyEditable : !editability.rowEditable;
+      if (binding !== DefColumns.REQUEST_CHK) e.cancel = true;
     };
-    grid.beginningEdit.addHandler(beginningEditHandler);
-    grid.pastingCell.addHandler(beginningEditHandler as never);
-
-    const formatHandler = (g: FlexGrid<CapaNewModelRow>, e: FormatItemEventArgs) => {
-      if (e.panel.cellType !== CellType.Cell) return;
-      const binding = e.getColumn().binding ?? '';
-      if (isLockedIdentityBinding(binding)) return;
-      const row = e.getRow().dataItem as CapaNewModelRow | undefined;
-      if (!row) return;
-      const editable = isAlwaysEditableBinding(binding)
-        ? true
-        : binding === DefColumns.LANE_QTY
-          ? rowEditability(row).laneQtyEditable
-          : rowEditability(row).rowEditable;
-      toggleClass(e.cell, 'wj-cell-editable', editable);
-    };
-    grid.formatItem.addHandler(formatHandler);
-    grid.invalidate();
+    grid.beginningEdit.addHandler(lockHandler);
+    grid.pastingCell.addHandler(lockHandler as never);
 
     return () => {
-      grid.beginningEdit.removeHandler(beginningEditHandler);
-      grid.pastingCell.removeHandler(beginningEditHandler as never);
-      grid.formatItem.removeHandler(formatHandler);
+      grid.beginningEdit.removeHandler(lockHandler);
+      grid.pastingCell.removeHandler(lockHandler as never);
     };
-  }, [rows, authCtx, isGroupElectrode, laneQtyRows, sessionUserId]);
-
-  // 검증 실패 msgId 별 기본 문구(번역 미등록 시 폴백).
-  const SAVE_VALIDATION_DEFAULT_TEXT: Partial<Record<string, string>> = {
-    [MSG.NO_CHANGE]: '_수정한 내용이 없습니다.',
-    [MSG.LANE_QTY_REQUIRED]:
-      '_Lane QTY 값 확인이 필요합니다. Lane QTY 값이 없을 경우, FP Planner에게 등록 요청하시기 바랍니다.',
-    [MSG.PRIORITY_RANGE]: '_{0}~{1} 사이의 수를 입력하세요.',
-  };
-
-  interface SaveEntry {
-    activeFlag: string;
-    divisionId: string;
-    companyId: string;
-    siteId: string;
-    plantId: string;
-    factoryId: string;
-    operationId: string;
-    itemId: string;
-    lineId: string;
-    electrodeType: string;
-    dayName: string;
-    dayQty: string;
-    laneQty: string;
-    dataType: 'LANE_QTY_DATA' | 'PRIORITY_DATA';
-  }
-
-  // SaveData(cs L997-1230) — 체크된 행 × 색상마킹(변경)된 셀 단위로 엔트리를 만든다(행 전체가
-  //   아니다). EditTracker.getOriginalValues() 가 셀 단위 변경 기록(원본값이 남은 binding)을
-  //   그대로 갖고 있어 AS-IS 의 colorName=="Red" 판정과 동등하다. LANE_QTY 셀은
-  //   dataType=LANE_QTY_DATA, 월(M_YYYYMM) 셀은 dataType=PRIORITY_DATA(1~9 범위 검증).
-  //   E2000 라인은 그 행에 변경 셀이 하나라도 있으면 현재 LANE_QTY 가 후보 목록에 있어야 한다
-  //   (cs L1100-1121, 매 dirty 셀마다 재검증하지만 결과는 행 1회 판정과 동일해 1회만 수행).
-  const buildSaveEntries = (): { ok: true; entries: SaveEntry[] } | { ok: false; msgId: string; msgArgs?: string[] } => {
-    const originals = editTrackerRef.current?.getOriginalValues();
-    if (!originals || originals.size === 0) return { ok: false, msgId: MSG.NO_CHANGE };
-
-    const entries: SaveEntry[] = [];
-
-    for (const [row, editItem] of originals) {
-      const rec = row as Record<string, unknown>;
-      if (rec[DefColumns.CHK] !== true) continue;
-
-      const dirtyBindings = Object.keys(editItem).filter(
-        b => b === DefColumns.LANE_QTY || /^M_\d{6}$/.test(b)
-      );
-      if (dirtyBindings.length === 0) continue;
-
-      const opId = safeString(rec[DefColumns.OPERATION_ID]);
-      const laneQty = safeString(rec[DefColumns.LANE_QTY]);
-      if (opId === 'E2000') {
-        const matched = (laneQtyRows ?? []).some(
-          l =>
-            safeString(l.DIVISION_ID) === safeString(rec[DefColumns.DIVISION_ID]) &&
-            safeString(l.ITEM_ID) === safeString(rec[DefColumns.ITEM_ID]) &&
-            safeString(l.LINE_ID) === safeString(rec[DefColumns.LINE_ID]) &&
-            safeString(l.ELECTRODE_TYPE) === safeString(rec[DefColumns.ELECTRODE_TYPE]) &&
-            safeString(l.CODE) === laneQty
-        );
-        if (!matched) return { ok: false, msgId: MSG.LANE_QTY_REQUIRED };
-      }
-
-      for (const binding of dirtyBindings) {
-        const dayQty = safeString(rec[binding]);
-        const isLaneQty = binding === DefColumns.LANE_QTY;
-        if (!isLaneQty && (Number(dayQty) < 1 || Number(dayQty) > 9)) {
-          return { ok: false, msgId: MSG.PRIORITY_RANGE, msgArgs: ['1', '9'] };
-        }
-        entries.push({
-          activeFlag: safeString(rec.CRUD_TYPE) || 'M',
-          divisionId: safeString(rec[DefColumns.DIVISION_ID]),
-          companyId: safeString(rec[DefColumns.COMPANY_ID]),
-          siteId: safeString(rec[DefColumns.SITE_ID]),
-          plantId: safeString(rec[DefColumns.PLANT_ID]),
-          factoryId: safeString(rec[DefColumns.FACTORY_ID]),
-          operationId: opId,
-          itemId: safeString(rec[DefColumns.ITEM_ID]),
-          lineId: safeString(rec[DefColumns.LINE_ID]),
-          electrodeType: safeString(rec[DefColumns.ELECTRODE_TYPE]),
-          dayName: isLaneQty ? 'LANE_QTY' : binding.replace(DYN_MONTH_PREFIX, ''),
-          dayQty,
-          laneQty,
-          dataType: isLaneQty ? 'LANE_QTY_DATA' : 'PRIORITY_DATA',
-        });
-      }
-    }
-
-    if (entries.length === 0) return { ok: false, msgId: MSG.NO_CHANGE };
-    return { ok: true, entries };
-  };
-
-  const handleSave = async () => {
-    const grid = gridRef.current;
-    if (!grid) return;
-    grid.finishEditing();
-
-    const v = buildSaveEntries();
-    if (!v.ok) {
-      let content = t(v.msgId, SAVE_VALIDATION_DEFAULT_TEXT[v.msgId] ?? '_저장 검증 실패');
-      v.msgArgs?.forEach((arg, i) => {
-        content = content.replace(`{${i}}`, arg);
-      });
-      void setAlert({ type: 'alert', content });
-      return;
-    }
-
-    const acc: Record<keyof SaveEntry, string[]> = {
-      activeFlag: [],
-      divisionId: [],
-      companyId: [],
-      siteId: [],
-      plantId: [],
-      factoryId: [],
-      operationId: [],
-      itemId: [],
-      lineId: [],
-      electrodeType: [],
-      dayName: [],
-      dayQty: [],
-      laneQty: [],
-      dataType: [],
-    };
-    for (const e of v.entries) (Object.keys(acc) as (keyof SaveEntry)[]).forEach(k => acc[k].push(e[k]));
-
-    const payload: Record<string, string> = { todayYyyymmdd: todayYyyymmdd(), updateId: sessionUserId ?? '' };
-    for (const [k, arr] of Object.entries(acc)) payload[k] = arr.join('^');
-
-    try {
-      const res = await apiClient.post<{ o_rc?: Array<{ RESULT_CODE?: string; RESULT_CNT?: number }> }>(
-        `/${MNU_ID}/${SHEET_NEW_MODEL}/SAVE/call-proc`,
-        payload
-      );
-      const result = res.data?.result?.o_rc?.[0];
-      if (result?.RESULT_CODE === 'S') {
-        editTrackerRef.current?.clearChanges();
-        // AS-IS Set_RefreshAfterSave(cs L1538) — 저장 성공 후 SAVE 체크 해제 + action(CRUD) 초기화.
-        //   dirty 셀 하이라이트는 위 clearChanges(invalidate)가 지운다. Mail(REQUEST_CHK)은 건드리지
-        //   않는다(별도 RequestData 축). CRUD_TYPE 은 재편집 시 EditTracker 가 다시 'M' 로 마킹한다.
-        const savedSource = (grid.collectionView?.sourceCollection ?? []) as unknown as Record<
-          string,
-          unknown
-        >[];
-        savedSource.forEach(r => {
-          if (r[DefColumns.CHK] === true) r[DefColumns.CHK] = false;
-          if (r.CRUD_TYPE === 'M') r.CRUD_TYPE = undefined;
-        });
-        grid.collectionView?.refresh();
-        void setToast({
-          type: 'success',
-          message: t(MSG.SAVE_RESULT, '_{0}개의 데이터가 저장되었습니다.').replace(
-            '{0}',
-            safeString(result.RESULT_CNT)
-          ),
-        });
-      } else {
-        void setAlert({ type: 'alert', content: t(MSG.SAVE_ERROR, '_실행중 에러가 발생했습니다.') });
-      }
-    } catch {
-      void setAlert({ type: 'alert', content: t(MSG.SAVE_ERROR, '_실행중 에러가 발생했습니다.') });
-    }
-  };
+  }, [rows]);
 
   // RequestData(cs L1236-1334) — REQUEST_CHK 체크된 행 단위(셀 단위 아님)로 담당자 등록 요청
   //   메일을 보낸다. loss_code 는 AS-IS 하드코딩 "LA001" 그대로.
@@ -750,11 +442,15 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
               <DataGrid<CapaNewModelRow>
                 gridRef={gridRef}
                 gridFilterRef={gridFilterRef}
-                editTrackerRef={editTrackerRef}
                 itemsSource={rows}
                 staticColumns={staticColumns}
                 dynamicColumns={dynamicColumns}
-                cellEditEnded={handleCellEdit}
+                // 조회 전용 — SAVE 자동 잠금 opt-out(Mail Req 체크박스는 열어둬야 함), 수정상태 컬럼
+                //   숨김, Mail Req 선택은 저장 대상이 아니므로 이탈 가드에서 제외. 셀 잠금은 위
+                //   useEffect 의 beginningEdit 핸들러가 Mail Req 외 전 셀에서 처리한다.
+                saveAuth={false}
+                hideStatusColumn
+                excludeFromDirtyCheck
               />
             </ResultArea>
           </div>
@@ -765,13 +461,6 @@ export const CapaNewModelPopup = ({ open, onClose, params }: Props) => {
               size='medium'
               buttonLabel='Mail Request'
               onClick={() => void handleRequest()}
-            />
-            <Button
-              appearance='contained'
-              priority='primary'
-              size='medium'
-              buttonLabel='Save'
-              onClick={() => void handleSave()}
             />
             <Button
               appearance='outlined'

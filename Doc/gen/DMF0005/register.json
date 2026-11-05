@@ -1,0 +1,226 @@
+{
+  "menuId": "DMF0005",
+  "screenName": "SaleSite_PjtModelMapping",
+  "feature": "demand",
+  "pageDir": "sales-site-project-model",
+  "routePath": "demand/sales-site-project-model",
+  "sheets": [
+    {
+      "sheetName": "Production",
+      "rule": "META+코드연결",
+      "columns": 85,
+      "popup": false
+    },
+    {
+      "sheetName": "Purchase",
+      "rule": "META+코드연결",
+      "columns": 32,
+      "popup": false
+    },
+    {
+      "sheetName": "Sales Site Project Model Popup",
+      "rule": "코드 하드코딩 전용(메타 없음)",
+      "columns": 2,
+      "popup": true
+    },
+    {
+      "sheetName": "spreadTitle",
+      "rule": "동적 헤더 메타",
+      "columns": 0,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [
+        "unreached:(진입점 미연결)"
+      ],
+      "methods": [
+        "<field:dtYesOrNo>"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0005.P_",
+      "sheet": "Production",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": [
+        "InitControls",
+        "DefineProperty",
+        "InsertRow",
+        "spdMain_Changed",
+        "spdSub_Changed",
+        "spdMain_CellClick",
+        "spdSub_CellClick",
+        "spdMain_ComboSelChange",
+        "spdSub_ComboSelChange",
+        "spdMain_ClipboardPasted",
+        "spdSub_ClipboardPasted"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0005.P_",
+      "sheet": "Production",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_LOOKUP_VALUES",
+      "asis_sp": "SCM0001_GET_LOOKUP_VALUES",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load",
+        "button:InsertButton"
+      ],
+      "methods": [
+        "ActiveCell",
+        "GetItemType"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0005.P_SCM0001_GET_LOOKUP_VALUES",
+      "sheet": "Production",
+      "btn": "SEARCH",
+      "allowed_gap": "공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
+    },
+    {
+      "asis_endpoint": "DM.DMF0005_GET_SALES_SITE_MODEL_PRODUCTION",
+      "asis_sp": "DMF0005_GET_SALES_SITE_MODEL_PRODUCTION",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnModelChange.Click",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0005.P_DMF0005_GET_SALES_SITE_MODEL_PRODUCTION",
+      "sheet": "Production",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0005_GET_SALES_SITE_MODEL_PURCHASE",
+      "asis_sp": "DMF0005_GET_SALES_SITE_MODEL_PURCHASE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "FindData_Sub"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0005.P_DMF0005_GET_SALES_SITE_MODEL_PURCHASE",
+      "sheet": "Purchase",
+      "btn": "SALES_SITE_MODEL_PURCHASE"
+    },
+    {
+      "asis_endpoint": "DM.DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION",
+      "asis_sp": "DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION",
+      "status": "MATCH",
+      "entries": [
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0005.P_DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION",
+      "sheet": "Production",
+      "btn": "SAVE"
+    },
+    {
+      "asis_endpoint": "DM.UP_FX_GetCommonDataList_DM",
+      "asis_sp": "UP_FX_GETCOMMONDATALIST_DM",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdMain.ClipboardPasted",
+        "event:this.spdMain.CellClick",
+        "event:this.spdMain.ComboSelChange",
+        "event:this.spdSub.ClipboardPasted",
+        "event:this.spdSub.ComboSelChange",
+        "button:InsertButton"
+      ],
+      "methods": [
+        "InsertRow",
+        "spdMain_ComboSelChange",
+        "spdSub_ComboSelChange",
+        "spdMain_CellClick",
+        "spdMain_ClipboardPasted",
+        "spdSub_ClipboardPasted",
+        "Get_DDL_SSPM_CRGE_ORG_NM",
+        "Get_DDL_SSPM_CUST_ENG_NM",
+        "GetCommonDataList_DM"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0005.P_UP_FX_GETCOMMONDATALIST_DM",
+      "sheet": "(combo)",
+      "btn": "(콤보ID 등록)",
+      "allowed_gap": "공통 콤보 조회 → useTabComboQueries(콤보ID 등록)"
+    },
+    {
+      "asis_endpoint": "SCM.SCM0001_GET_SITE_INFO_BY_DIVISION",
+      "asis_sp": "SCM0001_GET_SITE_INFO_BY_DIVISION",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdMain.ComboSelChange"
+      ],
+      "methods": [
+        "GetScmSiteInfobyDivision"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0005.P_SCM0001_GET_SITE_INFO_BY_DIVISION",
+      "sheet": "Sales Site Project Model Popup",
+      "btn": "SITE_INFO_BY_DIVISION",
+      "allowed_gap": "공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
+    },
+    {
+      "asis_endpoint": "DM.DMF0000_GET_COMMON_SPREAD_TITLE",
+      "asis_sp": "DMF0000_GET_COMMON_SPREAD_TITLE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdMain.CellDoubleClick",
+        "event:this.btnModelChange.Click",
+        "event:this.Load",
+        "event:this.clbDivision.SelectedIndexChanged",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "GetSpdTitle"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0005.P_DMF0000_GET_COMMON_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "allowed_gap": "그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+    },
+    {
+      "asis_endpoint": "DM.UP_FX_GetComboDataList",
+      "asis_sp": "UP_FX_GetComboDataList",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetCombo"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0005.P_UP_FX_GETCOMBODATALIST",
+      "sheet": "Production",
+      "btn": "ACTION"
+    },
+    {
+      "asis_endpoint": "DM.DMF0005_SAVE_MODEL_CHANGE_POPUP",
+      "asis_sp": "DMF0005_SAVE_MODEL_CHANGE_POPUP",
+      "status": "MATCH",
+      "entries": [
+        "event:this.btnButtonList.UsrButtonList_Click_Detected",
+        "button:SaveButton"
+      ],
+      "methods": [
+        "SaveData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0005.P_DMF0005_SAVE_MODEL_CHANGE_POPUP",
+      "sheet": "Production",
+      "btn": "SAVE"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

@@ -177,6 +177,22 @@ export const OptCapaGrid = ({
     const grid = gridRef.current;
     if (!grid) return;
 
+    /**
+     * Yield(Elec.) `YYYYMM`(Month) 컬럼 — 공용 `columnMapping.getEditor` 는 메타 `FPDateMonth` 를
+     * `FPDate` 와 같은 달력 피커(`InputDate`, 'yyyy-MM-dd')로 묶어 **일(day)까지 고를 수 있다**
+     * (DMF0009 Production `START_YM`/`END_YM` 도 같은 메타를 공유하므로 공용 파일을 고치면 그 화면도
+     * 바뀐다 — 이 화면만 바꾸기 위해 여기서 **이 화면 한정**으로 그리드 컬럼을 직접 덮어쓴다).
+     * 달력 대신 `0000-00` 마스크 텍스트(연-월 6자리, 요일/일자 입력 칸 자체가 없음)로 바꾼다.
+     */
+    if (sheet === SHEETS.YLD_ELEC) {
+      const monthColumn = grid.getColumn(COLUMN.YYYYMM);
+      if (monthColumn) {
+        monthColumn.format = 'yyyy-MM';
+        monthColumn.mask = '0000-00';
+        monthColumn.editor = null;
+      }
+    }
+
     const rowOf = (index: number): GridRow | undefined =>
       grid.rows[index]?.dataItem as GridRow | undefined;
 

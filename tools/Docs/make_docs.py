@@ -6,7 +6,7 @@
   산출 (기존 파일은 덮어쓰지 않고 버전 +1):
     Doc/화면설계서/{ID}_{Name}_화면설계서_v{N}.0.xlsx   8시트 (개요·전체흐름·LAYOUT·조회조건·버튼·GRID·EVENT·VALIDATION·API·SP)
     Doc/화면분석서/{ID}_{Name}_UI분석서_v{N}.0.xlsx     10시트 (개요·전체흐름·VALIDATION취합·MATRIX_Division·MATRIX_권한·MATRIX_Measure·MATRIX_Bucket·가시성·SP_LOOKUP_콤보·이전소스_차이점)
-    Doc/화면분석서/{ID}_{Name}_GAP분석서_v{N}.0.xlsx    3시트 (요약·GAP 전체·조치 필요)
+    (GAP분석서 — 2026-10-30 폐지, CheckList 로 대체 · 생성 안 함)
     Doc/단위테스트/{ID}_{Name}_TestCases4_v{N}.0.xlsx   사용자 흐름형(make_testcases.py — 팀 34열 + 흐름·대상 열, Division 별 작업 화면만 Division 시트) · 원천 없으면 구 unit_test.md 양식
     Doc/화면분석서/{ID}_{Name}_대조표_v{N}.0.xlsx     4시트 (화면·시트·SP 대조 = Doc/recon CSV 의 이 화면 행 · AS-IS↔TO-BE 매핑 = 페이지 __asis-mapping__.md) — 2026-10-21 사용자 요청
 
@@ -17,6 +17,7 @@
 """
 import sys, os, re, csv, json, datetime, glob
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
+sys.path.insert(0, HERE); import doc_archive  # noqa: E402
 try:
     import openpyxl
     from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -193,7 +194,7 @@ class Src:
         self.endpoints = read_csv(os.path.join(self.pack, 'endpoints.csv')); self.validations = read_csv(os.path.join(self.pack, 'validations.csv'))
         self.expressions = read_csv(os.path.join(self.pack, 'expressions.csv')); self.grid = read_csv(os.path.join(self.pack, 'grid_effective.csv'))
         self.popups = read_csv(os.path.join(self.pack, 'popups.csv')); self.files = read_csv(os.path.join(self.pack, 'files.csv')); self.flow = read_csv(os.path.join(self.pack, 'flow.csv'))
-        self.gap = read_csv(os.path.join(ROOT, 'Doc', 'gap', f'{ID}_gap.csv'))
+        self.gap = []  # 2026-10-30 GAP 분석 폐지 — Doc/gap 을 읽지 않음
         self.menu = read_csv(os.path.join(self.db, 'menu.csv')); self.proc_meta = [r for r in read_csv(os.path.join(self.db, 'proc_meta.csv')) if r.get('menu_id', '').upper() == ID]
         self.sheet_cols = [r for r in read_csv(os.path.join(self.db, 'sheet_columns.csv')) if r.get('program_id', '').upper() == ID]
         self.sheet_meas = [r for r in read_csv(os.path.join(self.db, 'sheet_measures.csv')) if (r.get('program_id') or r.get('menu_id') or '').upper() == ID]
@@ -216,6 +217,15 @@ class Src:
             seen.add(cur.get('mnu_id')); path.insert(0, cur.get('mnu_desc') or cur.get('mnu_id')); up = cur.get('uppr_mnu_id'); cur = next((m for m in self.menu if m.get('mnu_id') == up), None)
         self.menu_path = ' > '.join(path)
         self.page_dir = f"nscm-fe/features/{self.reg['feature']}/src/pages/{self.reg['pageDir']}" if self.reg.get('feature') else ''
+        if self.page_dir and not os.path.isdir(os.path.join(ROOT, self.page_dir)):
+            self.page_dir = ''  # register.json 의 폴더가 실제로 없음(생성 초안의 feature 추정 ≠ 실제 배치, 2026-10-28 DMF0004 demand↔master) → 인덱스로
+        if not self.page_dir:  # 생성 절차(Doc/gen/<ID>/register.json) 없이 만든 UI(다른 PC 작업분 등) — TO-BE 파싱 인덱스로 페이지 폴더를 찾는다(2026-10-28)
+            ix = os.path.join(ROOT, 'Doc', 'tobefacts', 'screens', '_index.csv')
+            if os.path.exists(ix):
+                for r in csv.DictReader(open(ix, encoding='utf-8-sig')):
+                    pd_ = f"nscm-fe/features/{r.get('feature', '')}/src/pages/{r.get('page_dir', '')}"
+                    if (r.get('menu_id') or '').upper() == ID and r.get('feature') and os.path.isdir(os.path.join(ROOT, pd_)):
+                        self.page_dir = pd_; break
         self.cur_files = [f for f in self.files if f.get('variant') == 'current']
         self.divisions = [c for c in (self.grid[0].keys() if self.grid else []) if c not in ('sheet', 'sheet_rule', 'column', 'label', 'source')]
         self.has_agent = bool(self.md['analysis'] or self.md['screen_design'])
@@ -247,12 +257,8 @@ class Src:
 
 # ── 공통 블록 ───────────────────────────────────────────────────────────────────
 def next_version(folder, prefix):
-    os.makedirs(folder, exist_ok=True)
-    vers = [0]
-    for f in glob.glob(os.path.join(folder, prefix + '_v*.xlsx')):
-        m = re.search(r'_v(\d+)(?:\.\d+)?\.xlsx$', f)
-        if m: vers.append(int(m.group(1)))
-    return max(vers) + 1
+    # 2026-10-28: old/ 까지 세어 이전 버전을 옮긴 뒤에도 번호가 이어진다(tools/Docs/doc_archive.py)
+    return doc_archive.next_version(folder, prefix)
 
 def block_overview(sb, S, doc_kind):
     sb.title(f'{S.ID} ({S.name}) {doc_kind}', f'작성 {TODAY} · 원천: 현행 소스 분석 자료 + 운영 메타(메뉴·SP 배선·그리드 컬럼) · 이 문서는 사람이 읽는 사본이며 변경 시 분석 자료를 먼저 갱신합니다')
@@ -615,14 +621,15 @@ def build_recon(S):
 
 # ── 실행 ────────────────────────────────────────────────────────────────────────
 def save(wb, folder, prefix):
-    v = next_version(folder, prefix); out = os.path.join(folder, f'{prefix}_v{v}.0.xlsx'); wb.save(out); return out
+    v = next_version(folder, prefix); out = os.path.join(folder, f'{prefix}_v{v}.0.xlsx'); wb.save(out)
+    doc_archive.archive_previous(out)  # 같은 UI·같은 문서의 이전 버전 → <폴더>/old/ (2026-10-28 사용자)
+    return out
 for ID in IDS:
     S = Src(ID); nm = S.safe_name(); made = []
     if not S.has_agent: print(f'[{ID}] 문서 생성(S3.agent) 산출 MD 없음 — 분석 자료(Fact Pack)·운영 메타·GAP 만으로 작성합니다 (설계서·분석서 일부 시트는 "원천 없음" 표기)')
     made.append(save(build_design(S), OUT_DESIGN, f'{ID}_{nm}_화면설계서'))
     made.append(save(build_analysis(S), OUT_ANALYSIS, f'{ID}_{nm}_UI분석서'))
-    if S.gap: made.append(save(build_gap(S), OUT_ANALYSIS, f'{ID}_{nm}_GAP분석서'))
-    else: print(f'[{ID}] GAP 원천 없음(Doc/gap/{ID}_gap.csv) — GAP분석서 생략')
+    # 2026-10-30 사용자: GAP 분석 폐지(CheckList 로 대체) — GAP분석서 생성 중단(build_gap 은 이력 보존용으로 남김)
     rc = build_recon(S)
     if rc: made.append(save(rc, OUT_ANALYSIS, f'{ID}_{nm}_대조표'))
     else: print(f'[{ID}] 대조 원천 없음(Doc/recon 행·__asis-mapping__.md) — 대조표 생략')

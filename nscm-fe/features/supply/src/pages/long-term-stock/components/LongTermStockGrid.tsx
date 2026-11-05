@@ -1,16 +1,21 @@
 import {
   AllowMerging,
+  type CellRange,
   CellType,
   type CellRangeEventArgs,
   type FlexGrid,
   type FormatItemEventArgs,
+  type GridPanel,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef, type MutableRefObject } from 'react';
+import { useCallback, useEffect, useRef, type MutableRefObject } from 'react';
 
+import { CustomMergeManager, ensureTopLeftMergeManager } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
-import { COL, MEMO_EDITABLE_BG, MERGE_COLUMNS } from '../long-term-stock.constants';
+// 기존 import 주석 보존 (2026-10-22)
+// import { COL, MEMO_EDITABLE_BG, MERGE_COLUMNS } from '../long-term-stock.constants';
+import { COL, MEMO_EDITABLE_BG } from '../long-term-stock.constants';
 import type { LongTermStockRow } from '../long-term-stock.types';
 import { useLongTermStockStore } from '../useLongTermStockStore';
 
@@ -22,8 +27,42 @@ interface Props {
   editable: boolean;
 }
 
+// AS-IS SmartColMerge(Restricted): 좌측에 병합 안 되는 셀(빈 값, MEMO)이 있으면 그 뒤 컬럼은 모두 분할
+//   공용 누적키는 빈 값과 병합 제외 컬럼을 통과시키므로 그 앞에서 끊는다(inventory-trend 선례)
+class LongTermStockMergeManager extends CustomMergeManager<LongTermStockRow> {
+  override getMergedRange(
+    panel: GridPanel,
+    currentRow: number,
+    currentCol: number
+  ): CellRange | null {
+    if (
+      panel.cellType === CellType.Cell &&
+      currentRow >= 0 &&
+      currentRow < panel.rows.length &&
+      currentCol >= 0 &&
+      currentCol < panel.columns.length
+    ) {
+      for (let c = 0; c <= currentCol; c++) {
+        const column = panel.columns[c];
+        if (!column?.visible) continue;
+        if (!column.allowMerging) return null;
+        const value: unknown = panel.getCellData(currentRow, c, false);
+        if (value === null || value === undefined || (typeof value === 'string' && value.trim() === ''))
+          return null;
+      }
+    }
+    return super.getMergedRange(panel, currentRow, currentCol);
+  }
+}
+
 export const LongTermStockGrid = ({ gridRef, gridFilterRef, data, editable }: Props) => {
   const staticColumns = useLongTermStockStore(state => state.staticColumns);
+
+  // 분할 경계 병합 매니저로 교체 후 코너 병합 재적용
+  const handleInitialized = useCallback((grid: FlexGrid<LongTermStockRow>) => {
+    grid.mergeManager = new LongTermStockMergeManager(grid);
+    ensureTopLeftMergeManager(grid);
+  }, []);
 
   // beginningEdit/formatItem 클로저가 최신 editable 을 참조하도록 ref 로 보관(재등록 없이 최신값).
   const editableRef = useRef(editable);
@@ -34,10 +73,20 @@ export const LongTermStockGrid = ({ gridRef, gridFilterRef, data, editable }: Pr
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
+    // 기존 로직 주석 보존 (2026-10-22) 시작
+    // const apply = () => {
+    //   for (const col of g.columns) {
+    //     if (!col.binding) continue;
+    //     col.allowMerging = MERGE_COLUMNS.has(col.binding);
+    //   }
+    // };
+    // 기존 로직 주석 보존 (2026-10-22) 끝
+    // AS-IS SmartColMerge 계단식 병합: 전 컬럼 대상, 좌측 누적값이 같을 때만 병합(CustomMergeManager)
+    // MEMO 는 편집 컬럼이라 병합 제외(병합 블록 편집 시 여러 행이 함께 바뀌는 것 방지)
     const apply = () => {
       for (const col of g.columns) {
         if (!col.binding) continue;
-        col.allowMerging = MERGE_COLUMNS.has(col.binding);
+        col.allowMerging = col.binding !== COL.MEMO;
       }
     };
     g.updatedLayout.addHandler(apply);
@@ -89,6 +138,7 @@ export const LongTermStockGrid = ({ gridRef, gridFilterRef, data, editable }: Pr
     <DataGrid<LongTermStockRow>
       gridRef={gridRef}
       gridFilterRef={gridFilterRef}
+      initialized={handleInitialized}
       itemsSource={data}
       staticColumns={staticColumns}
       // 다단 병합헤더(Exchange/KRW/Local)는 메타 LARGE/SMALL_CLASS_LABEL 구동(자동). SmartColMerge

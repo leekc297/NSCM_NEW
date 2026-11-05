@@ -129,13 +129,18 @@ export const CapaLineAssignGrid = ({
     const rowOf = (index: number): GridRow | undefined =>
       grid.rows[index]?.dataItem as GridRow | undefined;
 
-    const editableAt = (col: number, row: number): boolean =>
-      isAssignCellEditable({
-        binding: grid.columns[col]?.binding ?? '',
+    const editableAt = (col: number, row: number): boolean => {
+      // `_inputEditType`(= admin INPUT_TP_CD) 은 공용 게이트와 같은 출처(GridUtils.getColumn)에서 읽는다 —
+      //   grid.columns[col] 은 leaf 매핑 전 Wijmo 컬럼이라 이 메타 필드가 없다.
+      const column = GridUtils.getColumn(grid, col);
+      return isAssignCellEditable({
+        binding: column?.binding ?? grid.columns[col]?.binding ?? '',
         row: rowOf(row),
         editMode: editModeRef.current,
         isEltr,
+        inputEditType: column?._inputEditType,
       });
+    };
 
     // (b) 편집가능 셀 배경 — 편집 가능일 때만 클래스, 그 외는 반드시 해제(회색 일괄칠 금지).
     const formatItemHandler = (
@@ -157,10 +162,10 @@ export const CapaLineAssignGrid = ({
       const column = sender.columns[e.col];
       const binding = column?.binding ?? '';
       const row = rowOf(e.row);
-      // SOP 그리드와 동일하게 **양방향 지정**한다(GAP-10). 공용 `defaultEditHandler` 가 먼저 등록되므로
-      //   편집 가능일 때 false 로 되돌리지 않으면 메타 `INPUT_TP_CD='S'` 판정이 그대로 남아 AS-IS 가
-      //   신규행에서 열어주는 고정블록(G18 `isInsertMode=false`, cs:3985)이 잠긴 채로 남는다.
-      //   두 그리드 모두 **화면 판정(`isAssignCellEditable`/`isSopCellEditable`)이 정본**이다.
+      // 공용 `defaultEditHandler` 가 먼저 등록되므로 **양방향 지정**한다(GAP-10) — 편집 가능일 때
+      //   `e.cancel=false` 로 명시 복원해야 공용 판정에 덮이지 않는다. `isAssignCellEditable` 은 이제
+      //   admin 메타(`_inputEditType`)를 정본으로 읽어 공용 게이트와 같은 의미이며(사용자 결정 2026-10-28),
+      //   동적 기간컬럼·ELTR NICK_NAME 팝업경로(G43)만 화면이 추가로 override 한다.
       e.cancel = !editableAt(e.col, e.row);
       if (e.cancel) return;
       if (!row) return;

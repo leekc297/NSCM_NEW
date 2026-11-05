@@ -1,0 +1,1 @@
+export { ShipmentWorkingDayOsp } from './ShipmentWorkingDayOsp';

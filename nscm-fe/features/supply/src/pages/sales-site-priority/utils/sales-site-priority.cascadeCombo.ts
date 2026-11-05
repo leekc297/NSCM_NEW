@@ -51,6 +51,23 @@ export const resolveSiteDivisionParam = (divisionId: string): string => {
   return EE_DIVISION_ALIAS[divisionId] ?? divisionId;
 };
 
+// 조회조건 Site 콤보(ScmSite, DIVISION_ID 반환) 클라 cascade 필터 — AS-IS RefreshSiteByDivision
+//   (.cs:254-268)과 동일: division==='EE' -> 81/40/82 합집합, 그 외 -> GetDivisionChecked 매핑값.
+//   resolveSiteDivisionParam 이 그 집합(콤마 목록)을 돌려주므로 멤버십으로 좁힌다. ScmSite 는 동일
+//   SCM_SITE_ID 가 여러 division 에 존재할 수 있어(EE 합집합 시) CODE 로 중복을 제거한다(드롭다운 1건).
+export const filterSiteByDivision = (
+  rows: CascadeComboSource[],
+  divisionId: string
+): CascadeComboSource[] => {
+  const allowed = new Set(resolveSiteDivisionParam(divisionId).split(','));
+  const seen = new Set<string>();
+  return rows.filter(r => {
+    if (!allowed.has(r.DIVISION_ID) || seen.has(r.CODE)) return false;
+    seen.add(r.CODE);
+    return true;
+  });
+};
+
 export const toOptions = (rows: CascadeComboSource[]): { label: string; value: string }[] =>
   rows.map(r => ({ label: r.NAME || r.CODE, value: r.CODE }));
 

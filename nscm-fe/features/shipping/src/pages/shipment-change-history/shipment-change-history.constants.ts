@@ -58,12 +58,33 @@ export const CELL_DIVISION_COLUMN = 'DIVISION_ID';
 // REQUEST_NO 이미지셀 드릴다운(design 03 §3-4 / 00 §4d 가드 2건) — 값 존재 시 클릭하면 SCM0002 요청 상세 팝업.
 export const REQUEST_NO_COLUMN = 'REQUEST_NO';
 
+// REQUEST_NO(=CHANGE_REQ_NO) 드릴다운 Request Info 팝업(ShipmentPlanRequestModal) 버튼 코드 — SHEETS.MAIN 에 매핑.
+//   AS-IS SCM0002_ShipmentPlanRequestPopup(SCM0002.cs:240) = 조회 SP SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING.
+//   호출: /SSP0019/main/GET_REQ_DRAFTING/call-proc → P_SSP0003_GET_DRAFTING(= PKG_SSP0003.P_SSP0003_GET_REQ_DRAFTING,
+//   CHANGE_REQ_NO 키라 화면 비종속·SSP0003 등록분 배포 완료). 버튼/권한 등록은 design/08_register(운영 메타·사용자 실행).
+//   자매 동형: SSP0012 ShipmentRequestDetailModal / SSP0015 ShipmentChangeRequestDraftingModal(동일 proc).
+export const REQ_DRAFTING_BTN = 'GET_REQ_DRAFTING';
+
 // chkCurrent(현재값만 보기) 행 판정 키(hidden) + 현재값 코드(design 03 §1 #47 / §3 SetCheckRow).
 export const LAST_SEQ_COLUMN = 'LAST_SEQ';
 export const LAST_SEQ_CURRENT = 'C';
 
-// chkCurrent 강조색 — AS-IS SetBGColor(LightSkyBlue alpha80, design 03 §3 #6/#10).
-export const CURRENT_ROW_BG = 'rgba(135, 206, 250, 0.8)';
+// chkCurrent 강조색 — AS-IS SetBGColor(i, SEQ..MaxCol, Color.FromArgb(80, Color.LightSkyBlue), cs:471/487).
+//   LightSkyBlue=RGB(135,206,250), FromArgb 첫 인자 80 은 알파(0~255) → 80/255≈0.314. (설계 03 §3 "alpha80"
+//   표기는 255 기준 값이지 80% 가 아니다 — 흰 배경 위 31% 불투명도로 옅게 깔리는 AS-IS 색과 1:1.)
+export const CURRENT_ROW_BG = 'rgba(135, 206, 250, 0.314)';
+
+// AS-IS FPNumber 셀 음수-빨강 재현 — 프레임워크 SpreadInfo.cs:4143 이 모든 NumberCellType 에
+//   NegativeRed=true 를 걸어(SpreadExtension.cs:38 동일) FPNumber 컬럼 음수값을 빨간 글자로 렌더한다.
+//   TO-BE Wijmo 는 기본 미적용이라 등가로 재현(사용자 지시 2026-11-02, 이 화면 한정). 색은 FarPoint
+//   NegativeRed 기본값 Color.Red(#FF0000). 대상 = FPNumber 전 컬럼(SEQ/QTY/BEFORE_QTY/VARIABLE_DATE/
+//   VARIABLE_QTY) 중 값이 음수인 셀. 실제 음수가 나는 건 사실상 VARIABLE_DATE(일수 차)지만 AS-IS 기전 그대로.
+export const NEGATIVE_NUMBER_COLOR = '#FF0000';
+
+// chkCurrent 강조 시작 컬럼(design 03 §3 #6/#10) — AS-IS SetBGColor(i, GetColumnIndex(SEQ), GetMaxColumnIndex())
+//   는 SEQ 컬럼부터 마지막열까지만 칠한다. 좌측 고정 7열(DIVISION_ID~CONFIRM_ID)은 강조 제외.
+//   formatItem 이 이 컬럼의 인덱스 이상인 셀만 배경색을 준다.
+export const HIGHLIGHT_START_COLUMN = 'SEQ';
 
 // Freeze 경계 컬럼 수(design 03 §3-1, AS-IS Freeze(0, CONFIRM_ID+1) = DIVISION_ID~CONFIRM_ID 7열).
 //   실제 고정은 SCM_MST_SHEET_COLUMNS.FIXED_FLAG='Y'(SORT_ORDER_NO 1~7) 메타로 구동(CLAUDE §2 체크4 — FE 리터럴
@@ -84,12 +105,21 @@ export const DIVISION_ALL = 'ALL';
 //   NO_DIVISION_AUTH = MSG00667("No authority assigned.") — 권한 division 0건 게이트(design 01 §2#1). AS-IS
 //     SetDivisionAuthCheck 는 MSG00097 을 쓰나 TO-BE MSG00097 문구는 "Please select Division." 라 의도가 다르다
 //     -> 자매 shipment-semi-dept-day 확정대로 MSG00667 로 매핑(번호가 아니라 문구, 메모리 hook#114 선례).
-//   INVALID_PERIOD = MSG00219("Invalid period (start > end).") — 기간 역전(Check_PeriodDate 등가, design 02 §4).
+//   INVALID_PERIOD = MSG00108 — 기간 역전(from > to, Check_PeriodDate 등가, design 02 §4).
+//     AS-IS DateUtil(nDate1>nDate2) 도 MSG00108 사용. MSG00219 는 TO-BE locale 3개 언어 모두 미등록이라
+//     fallback 영문이 노출됐었다 -> 등록된 MSG00108(KO/EN/CN 전건)로 교체(07_validation-audit V3).
 //     기간 공백은 CRUD_MSG.REQUIRED_FIELD('{0} value is required.')로 안내(MSG00134 는 TO-BE 미등록).
 export const MSG = {
   NO_DIVISION_AUTH: 'MSG00667', // "No authority assigned." (권한 division 0건)
-  INVALID_PERIOD: 'MSG00219', // "Invalid period (start > end)." (기간 역전)
+  INVALID_PERIOD: 'MSG00108', // 기간 역전 — KO "조회 기간이 잘못되었습니다 (시작일 > 종료일)." 등 3개 언어 등록
+  // 최대 조회기간 초과(Check_PeriodDate, DateUtil.cs:174-178) — To >= From+1년+7일이면 차단.
+  //   "Maximum Period is From Date + {0}." / "최대 조회일은 From Date + {0} 입니다." (DB 등록 KO/EN/CN, USE_YN='Y').
+  MAX_PERIOD: 'MSG00172',
 } as const;
+
+// 최대 조회기간 메시지 {0} 치환값 — AS-IS DateUtil.cs:177 이 하드코딩 (364+7).ToString() = '371' 을 넘긴다.
+//   (실제 경계는 달력상 from+1년+7일이라 372~373일이지만, 표시값은 AS-IS 그대로 371 유지.)
+export const MAX_PERIOD_LABEL = '371';
 
 // LBL 코드 (design 02 §4.5 — 전건 기존 등록, 신규 0). 조회조건 라벨.
 export const LBL = {
@@ -97,7 +127,9 @@ export const LBL = {
   FROM_SITE: 'LBL00022',
   TO_SITE: 'LBL00023',
   INCOTERMS: 'LBL00024',
-  TRANS_MODE: 'LBL00025',
+  // LBL01221 'TransportMode'(KO/EN/CN 전건·USE_YN='Y' 실측 2026-11-02) — AS-IS 런타임 표시문구와 일치.
+  //   기존 LBL00025 는 'Trans Mode'(띄어쓰기)라 교체. 사용자가 LBL01221 등록 후 지정(design 02 §7-3 확인건 해소).
+  TRANS_MODE: 'LBL01221',
   SHIPMENT_DATE: 'LBL01115',
   // 입력값이 ITEM_ID 와 NICK_NAME 양쪽에 LIKE 매칭되므로(팝업 SP 실측) 라벨도 둘을 모두 알린다.
   //   LBL00618 'Model/Nickname' — SCM_ADM_MSG_M KO/EN/CN 전건 등록·USE_YN='Y' 실측(2026-10-14)이라
@@ -108,8 +140,7 @@ export const LBL = {
   CURRENT: 'LBL01065',
   SEARCH: 'LBL00112', // 메인 SearchArea 조회 버튼
   // Model/Nickname 팝업 내부 라벨(SEARCH_POPUP/ITEM_POPUP/NO/OK/CLOSE)은 공용 MaterialByDivisionModal 로
-  //   교체하면서 그 컴포넌트 소관이 되어 제거. REQUEST_NO 는 ShipmentPlanRequestModal 이 계속 쓴다.
-  REQUEST_NO: 'LBL00744',
+  //   교체하면서 그 컴포넌트 소관이 되어 제거. REQUEST_NO 드릴다운 상세 라벨은 ShipmentPlanRequestModal 소관이라 제거.
 } as const;
 
 // 컬럼 메타 fallback (design 03 §1 — DB SCM_MST_SHEET_COLUMNS 47행 실측, SORT_ORDER_NO 순).

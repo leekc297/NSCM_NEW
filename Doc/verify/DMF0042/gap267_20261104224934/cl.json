@@ -1,0 +1,9 @@
+[
+ {
+  "row_id": "V-861ce5c9",
+  "result": "PASS",
+  "evidence": "zz실측 Set Price 실행: 기대대로 · 저장 요청 1 · 편집기 null · 계정 hongjae.kim(Div=40;DM Admin) → search:0행·신규0·호출1·요청47 → srvguard:7568행·신규0·호출3·요청57 → 서버 전송 1건(사전 확인 0건(SELECT 0 FROM DUAL)) → 문구 'S' → 끝:0행·신규0·호출5·요청58 · 문서 GAP-267 실측(gap267_setprice_run.py · 정기 체인 제외)",
+  "tobe_ref": "E2E @verify 시나리오",
+  "cond": "a60e8f5e"
+ }
+]

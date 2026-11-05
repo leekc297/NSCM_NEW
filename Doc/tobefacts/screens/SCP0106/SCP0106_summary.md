@@ -1,6 +1,6 @@
 # SCP0106 — To-Be Fact Pack 요약
 
-- page_key: `supply/capa-loss-plan` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
+- page_key: `supply/capa-loss-plan` · feature: supply · As-is Fact Pack 있음
 - 파일 21 · 엔드포인트 호출 7 (미해결 0, 주석 속 2) · 이벤트 30 · 컴포넌트 사용 58 · 하드코딩 컬럼 1 · 메시지 28
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 1건
 
@@ -11,7 +11,7 @@
 | features/supply/src/pages/capa-loss-plan/capa-loss-plan.types.ts | types | 175 |
 | features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx | page | 351 |
 | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanColumnModal.tsx | component | 79 |
-| features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | component | 446 |
+| features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | component | 445 |
 | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.module.scss | component | 26 |
 | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | component | 343 |
 | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanItemPopup.tsx | component | 56 |
@@ -67,8 +67,8 @@
 | CustomDropdown | onChange | <arrow> setSearchCondition,String | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 376 |
 | InputField | onChange | <arrow> setSearchCondition | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 404 |
 | InputField | onDoubleClick | onOpenItemPopup | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 405 |
-| FunctionSearchIcon | onClick | onOpenItemPopup | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 413 |
-| Checkbox | onChange | <arrow> setSearchCondition,Boolean | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 435 |
+| Button | onClick | onOpenItemPopup | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 413 |
+| Checkbox | onChange | <arrow> setSearchCondition,Boolean | jsx | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanForm.tsx | 434 |
 | grid | formatItem | formatItemHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 192 |
 | grid | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 209 |
 | grid | pastingCell | pastingCellHandler | addHandler | features/supply/src/pages/capa-loss-plan/components/CapaLossPlanGrid.tsx | 220 |

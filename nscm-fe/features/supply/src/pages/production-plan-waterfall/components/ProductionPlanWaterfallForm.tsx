@@ -140,19 +140,28 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
   // allOption=false 면 목록에 SELECT ALL 항목을 빼 다중선택만 허용한다(기본 true).
   //   빈 선택을 'ALL' sentinel 로 내보내는 것은 스토어 규약(빈 배열 → 필터 없음)이라 유지한다 —
   //   이는 선택 가능한 항목이 아니라 미선택 표현이므로 SELECT ALL 노출과 무관하다.
+  // placeholder: 미선택일 때 필드에 보일 문구. 인자를 주지 않으면(undefined) CustomDropdown 다중선택
+  //   기본('ALL')이 그대로 쓰여 "All" 로 보인다(PlantSite/Electrode 등 전체=ALL 이 정상인 조건).
+  //   빈값('')을 주면 미선택이 공백으로 보인다(Version 처럼 AS-IS 초기값이 빈값인 조건).
+  //   주의: placeholder 는 '값이 있을 때만' 넘긴다(아래 조건부 스프레드). undefined 를 prop 으로 그대로
+  //   넘기면 CustomDropdown 내부의 {...props} 재스프레드가 기본 'ALL' 을 undefined 로 덮어써 PlantSite/
+  //   Electrode 까지 공백이 된다 — 키 자체를 빼야 기본값이 유지된다.
   const multi = (
     labelText: string,
     value: string[],
     options: Option[],
     onPick: (codes: string[]) => void,
     disabled?: boolean,
-    allOption = true
+    allOption = true,
+    required?: boolean,
+    placeholder?: string
   ) => (
     <Grid size={3}>
       <FormItem
         className={commonStyles.formItem}
         label={labelText}
         labelAlign='right'
+        required={required}
         render={() => (
           <CustomDropdown
             multiple
@@ -163,6 +172,7 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
             disabled={disabled || noDivisionAuth}
             value={value.length ? value.join(',') : 'ALL'}
             options={options}
+            {...(placeholder !== undefined ? { placeholder } : {})}
             onChange={(_, picked) =>
               onPick(String(picked ?? '').split(',').filter(v => v !== '' && v.toUpperCase() !== 'ALL'))
             }
@@ -240,8 +250,7 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
             !isEe
           )}
 
-          {/* Row1 — Material(팝업) / Model/Nickname(팝업) / Version* / Period* (사용자 지정 배치) */}
-          {/* 주의: 사용자 지정으로 3줄을 항상 펼쳐 보이게 extraConditions(접힘 토글) 대신 conditions 한 곳에 모두 둔다. */}
+          {/* Row1 — Material(팝업) / Model/Nickname(팝업) / Version* / Period* */}
           {/* Material(txtItemId) — 팝업 검색(btnItemId → MaterialByDivisionModal). AS-IS lblItemId.Text="Material". */}
           <Grid size={3}>
             <FormItem
@@ -259,12 +268,12 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' onClick={onModelSearch} />}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onModelSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ modelId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -287,20 +296,24 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
                       <Button
                         appearance='outlined'
                         priority='normal'
-                        iconComponent={<FunctionSearchIcon appearance='lined' onClick={onNickNameSearch} />}
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onNickNameSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ nickName: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
           </Grid>
           {/* Version — AS-IS 체크리스트 단일 UI 이나 Gap 시 2건 필요(design 02 §7-3) → 다중 허용.
-              단, AS-IS Version 콤보는 ALL 없음(setListBox blnAllFlag=false, SCP0017.cs L1302) → allOption=false.
-              변경 시 Period 재산정(AS-IS CboVersion_SelectedIndexChanged → GetDayRange, G2) — setVersions 경유. */}
-          {multi(t(LBL.VERSION, '_Version'), sc.versionNos, versionOptions, setVersions, undefined, false)}
+              변경 시 Period 재산정(AS-IS CboVersion_SelectedIndexChanged → GetDayRange, G2) — setVersions 경유.
+              표시 규약(사용자 결정 2026-11-02): ALL 은 선택 가능(allOption=true, SELECT ALL 선택 시 전 항목 =
+              표준 SRCH-06)하되, AS-IS 초기값이 빈값(setListBox blnAllFlag=false, SCP0017.cs L1302)이므로
+              placeholder='' 로 미선택을 공백 표시한다(자매 SCP0018 과 동일 패턴 — 다중선택 기본 'ALL' 표시 억제).
+              미선택 조회는 필수값 게이트(versionNos.length===0)로 차단되므로 공백 초기값과 양립한다. */}
+          {/* 라벨 'Ver.' 는 하드코딩(사용자 지시 2026-11-02, SCP0016 패턴 일치) — DB/번들 미등록 약어, KO/EN/CN 동일 표기라 i18n 불요. */}
+          {multi('Ver.', sc.versionNos, versionOptions, setVersions, undefined, true, true, '')}
           <PeriodField
             gridSize={3}
             start={sc.fromYyyymmdd}
@@ -308,8 +321,13 @@ export const ProductionPlanWaterfallForm = ({ onSearch, onModelSearch, onNickNam
             onChange={(start, end) => set({ fromYyyymmdd: start, toYyyymmdd: end })}
             label={t(LBL.PERIOD, '_Period')}
           />
-
-          {/* Row2 — Bucket / Line / 체크박스(Sum / All / Gap) (사용자 지정 배치) */}
+        </>
+      }
+      extraConditions={
+        <>
+          {/* 접기 영역 — Row2(Bucket / Line / 체크박스 Sum·All·Gap) + UOM(조건부).
+              SRCH-02(size 3 기준 8칸 초과 → extraConditions 분리) · 설계 02 §5 / 05 runtime-parity 근거.
+              필수값(Division·OpGroup·Version·Period)과 자주 쓰는 조건은 위 conditions 에 상시 노출. */}
           {/* Bucket 변경 = AS-IS InitSpread_2 → InitSheet: 그리드(데이터+헤더) 비우고 재조회 요구(setBucket). */}
           {single(t(LBL.BUCKET, '_Bucket'), sc.bucket, bucketOptions, v =>
             setBucket(v as BUCKET_TYPE)

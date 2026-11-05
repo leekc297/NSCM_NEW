@@ -218,12 +218,8 @@ export const SafetyStockForm = ({ tabId }: SafetyStockFormProps) => {
                         <Button
                           appearance='outlined'
                           priority='normal'
-                          iconComponent={
-                            <FunctionSearchIcon
-                              appearance='lined'
-                              onClick={() => setOpenItemModal(true)}
-                            />
-                          }
+                          iconComponent={<FunctionSearchIcon appearance='lined' />}
+                          onClick={() => setOpenItemModal(true)}
                         />
                       ),
                     }}

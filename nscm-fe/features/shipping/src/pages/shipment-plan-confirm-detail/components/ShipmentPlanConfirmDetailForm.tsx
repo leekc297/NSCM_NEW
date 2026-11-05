@@ -49,6 +49,7 @@ export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props)
   const sc = useShipmentPlanConfirmDetailStore(s => s.searchCondition);
   const set = useShipmentPlanConfirmDetailStore(s => s.setSearchCondition);
   const setDivisions = useShipmentPlanConfirmDetailStore(s => s.setDivisions);
+  const setDivisionCodes = useShipmentPlanConfirmDetailStore(s => s.setDivisionCodes);
   const setPeriod = useShipmentPlanConfirmDetailStore(s => s.setPeriod);
   const openSearchArea = useShipmentPlanConfirmDetailStore(s => s.openSearchArea);
   const hasDivisionAuth = useShipmentPlanConfirmDetailStore(s => s.hasDivisionAuth);
@@ -99,6 +100,14 @@ export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props)
   // L1 권한 게이트(design 01 §2): MyDivision(EE 제외) 0건이면 조회영역 disable + 안내(MSG00667 "No authority assigned.").
   const divisionsLoaded = divisions !== undefined;
   const noAuth = divisionsLoaded && divisionOptions.length === 0;
+
+  // 권한 division 코드 전체(EE 제외) store 반영 — Div=ALL 전개 원천(GET 필터·Model 팝업).
+  //   Form 은 조회영역 접힘 시 언마운트되므로 page(Model 팝업)가 쓰도록 store 에 올린다.
+  useEffect(() => {
+    if (!divisionsLoaded) return;
+    setDivisionCodes(divisionOptions.map(o => o.value));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [divisionsLoaded, divisions]);
   useEffect(() => {
     if (!divisionsLoaded) return;
     setDivisionAuth(!noAuth);
@@ -129,6 +138,7 @@ export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props)
               render={() => (
                 <CustomDropdown
                   multiple
+                  allOption
                   useClearIcon
                   limitTags={1}
                   sortBy='label'
@@ -193,14 +203,12 @@ export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props)
                         appearance='outlined'
                         priority='normal'
                         disabled={disabled}
-                        iconComponent={
-                          <FunctionSearchIcon appearance='lined' onClick={onItemSearch} />
-                        }
+                        iconComponent={<FunctionSearchIcon appearance='lined' />}
+                        onClick={onItemSearch}
                       />
                     ),
                   }}
                   onChange={e => set({ itemId: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -228,7 +236,6 @@ export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props)
                   disabled={disabled}
                   value={sc.soldToParty}
                   onChange={e => set({ soldToParty: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />
@@ -246,7 +253,6 @@ export const ShipmentPlanConfirmDetailForm = ({ onSearch, onItemSearch }: Props)
                   disabled={disabled}
                   value={sc.shipToParty}
                   onChange={e => set({ shipToParty: e.target.value })}
-                  onKeyDown={e => e.key === 'Enter' && onSearch()}
                 />
               )}
             />

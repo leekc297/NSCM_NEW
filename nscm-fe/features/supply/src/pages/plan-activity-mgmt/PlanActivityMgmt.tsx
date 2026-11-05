@@ -15,7 +15,12 @@ import { PlanActivityMgmtGrid } from './components/PlanActivityMgmtGrid';
 import { MENU_ID, MSG, SHEETS } from './plan-activity-mgmt.constants';
 import type { PlanActivityMgmtRow } from './plan-activity-mgmt.types';
 import { usePlanActivityMgmtStore } from './usePlanActivityMgmtStore';
-import { buildSavePayload, hasDuplicateNewRow, str } from './utils/plan-activity-mgmt.util';
+import {
+  buildSavePayload,
+  hasDuplicateActvSeq,
+  hasDuplicateNewRow,
+  str,
+} from './utils/plan-activity-mgmt.util';
 
 export const PlanActivityMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
@@ -135,6 +140,19 @@ export const PlanActivityMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
     );
     const existingRows = source.filter(row => !(row as Record<string, unknown>).CRUD_TYPE);
     if (existingRows.length > 0 && newRows.length > 0 && hasDuplicateNewRow(newRows, existingRows)) {
+      void useMessageStore.getState().setAlert({
+        type: 'alert',
+        content: t(MSG.DUPLICATE, '_There are duplicate entries among the newly entered data.'),
+      });
+      return;
+    }
+
+    // Act Seq 중복체크 — DB에 ACTV_SEQ 유니크 제약이 없어(AS-IS도 동일) FE에서 선차단(사용자 요청 2026-11-02).
+    //   삭제표시(D)된 행은 저장 후 사라지므로 제외하고, 남는 행끼리 PRS_CD+PLAN_GR_ID+ACTV_SEQ 중복을 본다.
+    const activeRows = source.filter(
+      row => (row as Record<string, unknown>).CRUD_TYPE !== CRUD_TYPE.DELETE
+    );
+    if (hasDuplicateActvSeq(activeRows)) {
       void useMessageStore.getState().setAlert({
         type: 'alert',
         content: t(MSG.DUPLICATE, '_There are duplicate entries among the newly entered data.'),

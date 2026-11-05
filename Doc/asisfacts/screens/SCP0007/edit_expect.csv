@@ -1,40 +1,40 @@
-﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref
-DIVISION_ID,Y,COND,N,잠금 when if (strSel_Division!=null && strSel_Division.Length==2),,,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:411 LockRange
-CUSTOMER,Y,N,N,,,,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:414 LockRange
-FROM_SITE_CODE,Y,Y,N,,,,기존행 SCP0007_BOD:453 LockColumn
-FROM_CITY,Y,N,N,,,,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:415 LockRange
-TO_SITE_CODE,Y,Y,N,,,,기존행 SCP0007_BOD:453 LockColumn
-TO_CITY,Y,N,N,,,,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:416 LockRange
-VMI_YN,Y,Y,N,,,,기존행 SCP0007_BOD:453 LockColumn
-INCOTERMS,Y,COND,COND,"잠금 when if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1415) | 해제 when else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1423)","잠금 when if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1415) | 해제 when else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1423)",,기존행 SCP0007_BOD:453 LockColumn
-INCOTERMS_SSP,Y,COND,COND,"해제 when if (boolEditChange == true) (EditButton:482) | 잠금 when else of (boolEditChange == true) (EditButton:488) | 잠금 when else of (strTO_SITE_TYPE == ""PLANT"") (EditButton:496) | 해제 when if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1418) | 잠금 when else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1427)","해제 when if (boolEditChange == true) (EditButton:482) | 잠금 when else of (boolEditChange == true) (EditButton:488) | 잠금 when else of (strTO_SITE_TYPE == ""PLANT"") (EditButton:496) | 해제 when if (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1418) | 잠금 when else of (!string.IsNullOrEmpty(strTO_SITE_TYPE) && strTO_SITE_TYPE == ""PLANT"") (SetCityCode:1427)",,
-SAFETY_STOCK,N,COND,COND,"잠금 when if (siMain.ActiveSheet.GetText(i, siMain.GetColumnIndex(DefColumns.VMI_YN)).ToString() != ""Y"") (EditButton:462) | 해제 when if (dr[DefColumns.VMI_YN.ToLower()].ToString() == ""Y"") (SetCityCode:1433) | 잠금 when else of (dr[DefColumns.VMI_YN.ToLower()].ToString() == ""Y"") (SetCityCode:1437) | 해제 when if (svmiYn == ""Y"") (SpdMain_ClipboardPasted:1263) | 잠금 when else of (svmiYn == ""Y"") (SpdMain_ClipboardPasted:1265) | 해제 when if (svmiYn == ""Y"") (SpdMain_ComboSelChange:1184) | 잠금 when else of (svmiYn == ""Y"") (SpdMain_ComboSelChange:1186)","잠금 when if (siMain.ActiveSheet.GetText(i, siMain.GetColumnIndex(DefColumns.VMI_YN)).ToString() != ""Y"") (EditButton:462) | 해제 when if (dr[DefColumns.VMI_YN.ToLower()].ToString() == ""Y"") (SetCityCode:1433) | 잠금 when else of (dr[DefColumns.VMI_YN.ToLower()].ToString() == ""Y"") (SetCityCode:1437) | 해제 when if (svmiYn == ""Y"") (SpdMain_ClipboardPasted:1263) | 잠금 when else of (svmiYn == ""Y"") (SpdMain_ClipboardPasted:1265) | 해제 when if (svmiYn == ""Y"") (SpdMain_ComboSelChange:1184) | 잠금 when else of (svmiYn == ""Y"") (SpdMain_ComboSelChange:1186)",,신규행 SCP0007_BOD:417 LockRange
-PRIORITY,Y,Y,Y,,,,
-ROUTE_CNT,Y,N,N,,,,기존행 SCP0007_BOD:454 LockColumn | 신규행 SCP0007_BOD:418 LockRange
-TRANSPORT_MODE,Y,Y,N,,,,기존행 SCP0007_BOD:454 LockColumn
-ROUTE_ID,Y,N,Y,,,,신규행 SCP0007_BOD:419 LockRange
-LT_TYPE,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-DAYS_MON,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-DAYS_TUE,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-DAYS_WED,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-DAYS_THU,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-DAYS_FRI,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-DAYS_SAT,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-DAYS_SUN,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-LEAD_TIME,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-DIS_TOTAL_LEAD_TIME,Y,N,N,,,,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-BEFORE_LEAD_TIME,N,N,N,,,정렬번호 25 동률(BOD_ID) — 범위 경계 포함 여부 확정 불가,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-BOD_ID,Y,N,N,,,정렬번호 25 동률(BEFORE_LEAD_TIME) — 범위 경계 포함 여부 확정 불가,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange
-AFTER_LEAD_TIME,Y,Y,Y,,,,
-FROM_YYYYMMDD,Y,Y,Y,,,,
-REMARKS,Y,Y,Y,,,,
-TO_YYYYMMDD,Y,Y,Y,,,,
-BOD_VALID,Y,Y,Y,,,,
-ROUTE_VALID,Y,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
-CREATED_BY,Y,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
-CREATION_DATE,Y,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
-LAST_UPDATED_BY,Y,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
-LAST_UPDATE_DATE,Y,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
-FROM_COUNTRY,N,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
-TO_COUNTRY,N,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
-ROUTE_CHK,N,N,N,,,,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange
+﻿column,asis_visible,new_row,existing_row,new_row_cond,existing_cond,ambiguous,ref,control,sheet
+DIVISION_ID,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"") && RAW(strSel_Division!=null) && RAW(strSel_Division.Length==2)"", ""lock"": ""Y"", ""ref"": ""InsertButton:411""}]",잠금 (EditButton:453),,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:411 LockRange,,BOD
+CUSTOMER,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:414""}]",잠금 (EditButton:453),,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:414 LockRange,,BOD
+FROM_SITE_CODE,Y,Y,N,,잠금 (EditButton:453),,기존행 SCP0007_BOD:453 LockColumn,,BOD
+FROM_CITY,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:415""}]",잠금 (EditButton:453),,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:415 LockRange,,BOD
+TO_SITE_CODE,Y,Y,N,,잠금 (EditButton:453),,기존행 SCP0007_BOD:453 LockColumn,,BOD
+TO_CITY,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:416""}]",잠금 (EditButton:453),,기존행 SCP0007_BOD:453 LockColumn | 신규행 SCP0007_BOD:416 LockRange,,BOD
+VMI_YN,Y,Y,N,,잠금 (EditButton:453),,기존행 SCP0007_BOD:453 LockColumn,,BOD
+INCOTERMS,Y,Y,N,,잠금 (EditButton:453),,기존행 SCP0007_BOD:453 LockColumn,,BOD
+INCOTERMS_SSP,Y,Y,COND,,"RULES:[{""g"": ""RAW(drsTo.Length > 0) && RAW(strTO_SITE_TYPE == \""PLANT\"")"", ""lock"": ""N"", ""ref"": ""EditButton:482""}, {""g"": ""RAW(drsTo.Length > 0) && !(RAW(strTO_SITE_TYPE == \""PLANT\""))"", ""lock"": ""Y"", ""ref"": ""EditButton:496""}]",,기존행 SCP0007_BOD:482 LockRange | 기존행 SCP0007_BOD:488 LockRange | 기존행 SCP0007_BOD:496 LockRange,,BOD
+SAFETY_STOCK,N,COND,COND,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:417""}]","RULES:[{""g"": ""COL(VMI_YN)!=\""Y\"""", ""lock"": ""Y"", ""ref"": ""EditButton:462""}]",,기존행 SCP0007_BOD:462 LockRange | 신규행 SCP0007_BOD:417 LockRange,,BOD
+PRIORITY,Y,Y,Y,,,,,,BOD
+ROUTE_CNT,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:418""}]",잠금 (EditButton:454),,기존행 SCP0007_BOD:454 LockColumn | 신규행 SCP0007_BOD:418 LockRange,,BOD
+TRANSPORT_MODE,Y,Y,N,,잠금 (EditButton:454),,기존행 SCP0007_BOD:454 LockColumn,,BOD
+ROUTE_ID,Y,COND,Y,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",,,신규행 SCP0007_BOD:419 LockRange,,BOD
+LT_TYPE,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+DAYS_MON,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+DAYS_TUE,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+DAYS_WED,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+DAYS_THU,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+DAYS_FRI,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+DAYS_SAT,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+DAYS_SUN,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+LEAD_TIME,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+DIS_TOTAL_LEAD_TIME,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+BEFORE_LEAD_TIME,N,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),정렬번호 25 동률(BOD_ID) — 범위 경계 포함 여부 확정 불가,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+BOD_ID,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:419""}]",잠금 (EditButton:455),정렬번호 25 동률(BEFORE_LEAD_TIME) — 범위 경계 포함 여부 확정 불가,기존행 SCP0007_BOD:455 LockColumn | 신규행 SCP0007_BOD:419 LockRange,,BOD
+AFTER_LEAD_TIME,Y,Y,Y,,,,,,BOD
+FROM_YYYYMMDD,Y,Y,Y,,,,,,BOD
+REMARKS,Y,Y,Y,,,,,,BOD
+TO_YYYYMMDD,Y,Y,Y,,,,,,BOD
+BOD_VALID,Y,Y,Y,,,,,,BOD
+ROUTE_VALID,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:420""}]",잠금 (EditButton:456),,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange,,BOD
+CREATED_BY,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:420""}]",잠금 (EditButton:456),,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange,,BOD
+CREATION_DATE,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:420""}]",잠금 (EditButton:456),,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange,,BOD
+LAST_UPDATED_BY,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:420""}]",잠금 (EditButton:456),,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange,,BOD
+LAST_UPDATE_DATE,Y,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:420""}]",잠금 (EditButton:456),,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange,,BOD
+FROM_COUNTRY,N,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:420""}]",잠금 (EditButton:456),,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange,,BOD
+TO_COUNTRY,N,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:420""}]",잠금 (EditButton:456),,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange,,BOD
+ROUTE_CHK,N,COND,N,"RULES:[{""g"": ""!(RAW(strSel_InputStatus == \""R\"")) && RAW(strSel_InputStatus == \""C\"")"", ""lock"": ""Y"", ""ref"": ""InsertButton:420""}]",잠금 (EditButton:456),,기존행 SCP0007_BOD:456 LockColumn | 신규행 SCP0007_BOD:420 LockRange,,BOD

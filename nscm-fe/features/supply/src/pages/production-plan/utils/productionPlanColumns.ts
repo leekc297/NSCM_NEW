@@ -102,7 +102,7 @@ export const buildPivotColumns = (
     });
   }
 
-  return [...months.values()].map<FlexGridColumnConfig>(month => {
+  const monthParts = [...months.values()].map(month => {
     // const weekGroups = [...month.weeks.values()];
     // 월 SUM(M_) 묶음을 그 달 맨 앞에 둔다(AS-IS 월 SUM 왼쪽).
     const monthSum = month.weeks.get('SUM');
@@ -115,7 +115,16 @@ export const buildPivotColumns = (
       weekGroups.length === 1 &&
       weekGroups[0].leaves.length === allLeaves.length &&
       weekGroups[0].leaves.every(l => l.header === weekGroups[0].label);
-    if (isSingleTier) return { header: month.label, align: 'center', columns: allLeaves };
+    return { month, weekGroups, allLeaves, isSingleTier };
+  });
+  // 2단 축약은 전 월이 SUM 하나뿐일 때만 — 3단 달과 섞이면 년월 칸이 늘어나고 SUM 이 작아진다.
+  const allSingleTier = monthParts.every(p => p.isSingleTier);
+
+  return monthParts.map<FlexGridColumnConfig>(({ month, weekGroups, allLeaves }) => {
+    // 기존 로직 주석 보존 (2026-10-28) 시작: 달마다 개별로 2단 축약
+    // if (isSingleTier) return { header: month.label, align: 'center', columns: allLeaves };
+    // 기존 로직 주석 보존 (2026-10-28) 끝
+    if (allSingleTier) return { header: month.label, align: 'center', columns: allLeaves };
     return {
       header: month.label,
       align: 'center',

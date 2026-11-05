@@ -1,6 +1,6 @@
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 
 import _ from '@foundation/lodash';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
@@ -21,6 +21,7 @@ import { TitleArea } from '@shared/lges';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 import { useMessageStore } from '@shared/stores';
 
+import { BulkInsertModal } from './components/BulkInsertModal';
 import { ConstraintMgmtDetailGrid } from './components/ConstraintMgmtDetailGrid';
 import { ConstraintMgmtForm } from './components/ConstraintMgmtForm';
 import { ConstraintMgmtMasterGrid } from './components/ConstraintMgmtMasterGrid';
@@ -81,7 +82,8 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
   const clearDetail = useConstraintMgmtStore(state => state.clearDetail);
   const fetchStaticColumns = useConstraintMgmtStore(state => state.fetchStaticColumns);
   const restoreSearchParams = useConstraintMgmtStore(state => state.restoreSearchParams);
-
+  // Bulk Insert 팝업 열림 여부.
+  const [openBulkInsertModal, setOpenBulkInsertModal] = useState(false);
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
   /**
    * 편집 가능은 기본값이고 "누가 편집할 수 있는가"만 화면 오픈 시 1회 판정한다
@@ -282,6 +284,27 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
     GridAction.addRow(masterGridRef.current, { ...EMPTY_MASTER_ROW, CRUD_TYPE: 'I' });
   };
 
+  const handleOpenBulkInsert  = () => {
+    if(!mainLookupType) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.SELECT_LOOKUP_TYPE, '_Please select a Lookup Type first.'),
+      });
+      return;
+    }
+    setOpenBulkInsertModal(true);
+  };
+  
+  const handleBulkInsert = (count: number) => {
+    if(!detailGridRef.current) return;
+    const rows =Array.from({length: count}, () => ({
+      ...EMPTY_DETAIL_ROW,
+      LOOKUP_TYPE: mainLookupType,
+      CRUD_TYPE: 'I',
+    }));
+    GridAction.addRowSet(detailGridRef.current, rows);
+  };
+
   /**
    * 삭제는 AS-IS DeleteButton(cs:333~341, spdMain/spdSub 판별 후 siMain/siSub.Delete())과
    * 동형으로 신규행·기존행 모두 삭제한다(2026-09-29 사용자 지시로 decisions.md Q-01 "신규행만"
@@ -411,6 +434,12 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
+   // 화면 전용 버튼. Insert 와 같은 권한으로 노출한다.
+  const customButtons =
+    canEdit && hasButton('INSERT')
+      ? [{ label: 'Bulk Insert', action: handleOpenBulkInsert }]
+      : [];
+
   // 건수는 영역별 제목 줄에 따로 표시한다 — 상단 툴바 줄이 곧 Lookup Type 제목 줄이라
   // 포커스에 따라 숫자가 바뀌면 제목과 어긋난다. 하단은 Plan Group 필터 "후" 행 수다.
   const masterCount = masterRows.length;
@@ -436,6 +465,7 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
         excelFileName='ConstraintMgmt'
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
+        customButtons={customButtons}
       />
       {/* AS-IS SplitContainer 는 Orientation=Horizontal = 상/하 분할이다 — 이름대로 'horizontal'
           을 주면 좌우로 갈라진다. 406/658 = 61.7% 라 62:38 로 둔다. */}
@@ -470,6 +500,12 @@ export const ConstraintMgmt = ({ tabId, title }: PageProps<MENU_ID>) => {
           </div>
         </Panel>
       </PanelGroup>
+      <BulkInsertModal
+        open={openBulkInsertModal}
+        modalClose={() => setOpenBulkInsertModal(false)}
+        lookupType={mainLookupType}
+        onConfirm={handleBulkInsert}
+      />
     </>
   );
 };

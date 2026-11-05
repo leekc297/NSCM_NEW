@@ -292,6 +292,7 @@ def main():
     ap.add_argument('--base'); ap.add_argument('--target'); ap.add_argument('--tip', help='비교 대상 커밋(기본 <remote>/<branch>) — 회차 재현 시험용'); ap.add_argument('--work', help='로컬 파일을 읽고 쓰는 폴더(기본 = --fe). 사본 시험용'); ap.add_argument('--summary'); ap.add_argument('--no-fetch', action='store_true')
     g = ap.add_mutually_exclusive_group(required=True); g.add_argument('--dry-run', action='store_true'); g.add_argument('--apply', action='store_true')
     g.add_argument('--upload-prepare', action='store_true', help='Source Upload(UI) 준비 — 선택 파일별로 올릴 내용(전체/내 작업분만)을 --out 에 만든다')
+    ap.add_argument('--overwrite-local', action='store_true', help='DB MODE — 로컬 소스를 보호하지 않는다: 공통에 있는 파일은 내 편집본도 공통 원문으로 덮어쓰고, 공통이 지운 파일은 내 편집본도 삭제한다. 공통에 없는 로컬 전용 파일은 유지')
     ap.add_argument('--keys', help='--upload-prepare: procedures.d.ts 에서 올릴 메뉴 키(쉼표) — 보통 화면 ID. 없으면 내 블록 전부')
     ap.add_argument('--files-from', help='--upload-prepare: 올릴 파일 목록(nscm-fe 기준 상대경로, 줄 단위)'); ap.add_argument('--out', help='--upload-prepare: 결과 폴더')
     a = ap.parse_args()
@@ -322,16 +323,46 @@ def main():
     tip_info = git.out('log', '-1', '--format=%h %cd %an %s', '--date=format:%Y-%m-%d %H:%M', tip).strip()
     ncommits = int(git.out('rev-list', '--count', f'{base}..{tip}').strip() or 0)
     print(f'기준선 {base[:9]} → 최신 {tip_info} · 신규 커밋 {ncommits}{"" if anc else " · ⚠ 기준선이 조상 아님(force-push 재작성)"}')
-    if base == tip: print('✅ 새 변경 없음'); finish(0, ok=True, tip=tip, base=base, counts={}, changed=0)
+    # DB MODE(--overwrite-local) 는 공통 새 커밋이 없어도 내 편집본을 공통 원문으로 되돌려야 하므로 여기서 끝내지 않는다
+    if base == tip and not a.overwrite_local: print('✅ 새 변경 없음'); finish(0, ok=True, tip=tip, base=base, counts={}, changed=0)
     diff = git.out('diff', '--name-status', '--no-renames', base, tip, '--', *[prefix + s for s in SCOPE])
     changes = []
     for line in diff.split('\n'):
         if not line.strip(): continue
         st, _, p = line.partition('\t'); changes.append((st[0], p[len(prefix):]))
     print(f'대상 {len(changes)}건 분류 중 …', flush=True)
-    hist = History(git, prefix, base, tip)
+    hist = None if a.overwrite_local else History(git, prefix, base, tip)
     plan = []  # dict(rel, status, cls, action, note, data)
-    for st, rel in changes:
+    if a.overwrite_local:
+        # DB MODE: 판정 없이 공통 최신 트리 기준으로 맞춘다 — 로컬 보호 안 함. ls-tree 로 blob id 를 한 번에 받아 파일별 프로세스 호출을 피한다
+        print('⚠ DB MODE — 로컬 소스 보호 안 함: 내 편집본도 공통 원문으로 덮어씁니다', flush=True)
+        status_of = dict((rel, st) for st, rel in changes)
+        tree = {}
+        for rec in git.run('ls-tree', '-r', '-z', tip, '--', *[prefix + s for s in SCOPE]).stdout.split(b'\0'):
+            if not rec: continue
+            meta, _, pth = rec.partition(b'\t')
+            kind, sha = meta.decode().split()[1:3]
+            if kind == 'blob': tree[pth.decode('utf-8')[len(prefix):]] = sha
+        for rel, sha in tree.items():
+            lb = rfile(os.path.join(work, rel)); nb = git.blob(sha); st = status_of.get(rel, '-')
+            it = {'rel': rel, 'st': st, 'local': lb, 'common': nb, 'note': '', 'data': None}
+            if lb is None: it.update(cls='공통 파일 — 로컬 부재', action='write')
+            elif norm(lb) == norm(nb): it.update(cls='동일', action='none')
+            elif st != '-': it.update(cls='공통 변경분 — 공통 원문 적용(로컬 보호 안 함)', action='write')
+            else: it.update(cls='로컬만 다름 — 공통 원문으로 복원(로컬 보호 안 함)', action='write')
+            plan.append(it)
+        for st, rel in changes:
+            if st == 'D' and rel not in tree:
+                lb = rfile(os.path.join(work, rel))
+                plan.append({'rel': rel, 'st': st, 'local': lb, 'common': None, 'note': '', 'data': None, 'cls': '공통 삭제 — 로컬 삭제(로컬 보호 안 함)' if lb is not None else '삭제 — 이미 없음', 'action': 'delete' if lb is not None else 'none'})
+        known = set(tree) | {r for s, r in changes if s == 'D'}
+        for sc in SCOPE:
+            for dp, dns, fns in os.walk(os.path.join(work, sc)):
+                dns[:] = [d for d in dns if d not in ('node_modules', '.turbo', 'dist', '.next', '_sync_test')]
+                for fn in fns:
+                    rel = os.path.relpath(os.path.join(dp, fn), work).replace(os.sep, '/')
+                    if rel not in known: plan.append({'rel': rel, 'st': '-', 'local': None, 'common': None, 'note': '', 'data': None, 'cls': '로컬 전용(공통에 없음) — 유지', 'action': 'keep'})
+    for st, rel in ([] if a.overwrite_local else changes):
         lb = rfile(os.path.join(work, rel))
         bb = git.blob_at(base, prefix + rel); nb = git.blob_at(tip, prefix + rel)
         ln, bn, nn = norm(lb), norm(bb), norm(nb)
@@ -392,13 +423,16 @@ def main():
     for k, v in sorted(counts.items(), key=lambda kv: -kv[1]): print(f'  {v:5d}  {k}')
     print(f'  → 적용: 공통 채택/신규 {act["write"]} · 병합 {act["merge"]} · 삭제 {act["delete"]} · 로컬 유지 {act["keep"]} · 변경 없음 {act["none"]} · 결정 대기 {len(pend)}')
     summary.update(tip=tip, tip_info=tip_info, base=base, ancestor=anc, commits=ncommits, changed=len(changes), counts=dict(counts), actions=dict(act), pending=len(pend))
+    if a.overwrite_local:  # 메뉴가 '새 변경 없음' 을 판단하는 값 = 실제로 바뀌는 파일 수
+        summary.update(changed=act['write'] + act['delete'], overwrite_local=True, local_only=counts.get('로컬 전용(공통에 없음) — 유지', 0))
 
     def report(path, applied, backup_dir=None, verify=None):
         L = [f'# 공통소스 다운로드 & 병합 {"회차 보고" if applied else "미리보기(dry-run)"} — {now:%Y-%m-%d %H:%M}', '',
              f'- 원천: remote `{a.remote}` ({git.out("config", "--get", f"remote.{a.remote}.url", check=False).strip()}) · push URL `no_push` 확인 — 푸시 없음',
              f'- 기준선 `{base[:9]}` → **{"신규 기준선" if applied else "최신"} `{tip[:9]}`** ({tip_info})' + ('' if anc else ' · ⚠ 기준선이 조상 아님(force-push 재작성)'),
              f'- 공통 신규 커밋 {ncommits}건 · 대상(apps·features·packages·public·configs) 변경 {len(changes)}건 (이름변경은 삭제+신규로 풀어 집계)',
-             '- 판정 = 내용 대조(개행·BOM 정규화) · 로컬이 공통 이력본과 일치하면 공통 채택, 내 편집본이면 유지/3-way(base = 로컬이 실제 출발한 공통 판본)', '',
+             ('- ⚠ **DB MODE — 로컬 소스 보호 안 함**: 공통 최신 트리 기준으로 다른 파일은 내 편집본도 공통 원문으로 덮어쓴다 · 공통이 지운 파일은 삭제 · 공통에 없는 로컬 전용 파일은 유지' if a.overwrite_local else
+              '- 판정 = 내용 대조(개행·BOM 정규화) · 로컬이 공통 이력본과 일치하면 공통 채택, 내 편집본이면 유지/3-way(base = 로컬이 실제 출발한 공통 판본)'), '',
              '## 분류·처리 결과', '', '| 구분 | 건수 | 처리 |', '|---|---:|---|']
         name = {'write': '공통 원문 적용', 'merge': '병합본 적용', 'delete': '삭제', 'keep': '로컬 유지', 'none': '변경 없음'}
         groups = OrderedDict()

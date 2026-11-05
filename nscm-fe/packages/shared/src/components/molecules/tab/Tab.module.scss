@@ -38,6 +38,16 @@
   }
 }
 
+// 탭 버튼들 오른쪽 보조 텍스트(표시 전용) — 탭 줄 높이에 맞춰 세로 가운데.
+.rightSlot {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  margin-left: 8px;
+  color: #5B5C5B;
+  font-size: 12px;
+}
+
 .contentArea{
   height: 0;
   flex-grow: 1;

@@ -2,7 +2,6 @@ import {
   MaterialByDivisionModal,
   PeriodField,
   ProjectField,
-  buildComboOptions,
 } from 'features/master/src/components';
 import { useEffect, useRef, useState } from 'react';
 
@@ -17,7 +16,11 @@ import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 import { BUCKET_TYPE, DIVISION, MENU_ID } from '../shipment-request.constants';
 import { useShipmentRequestStore } from '../useShipmentRequestStore';
 import { isDiv40 } from '../utils/shipment-request.division';
-import { BUCKET_LOOKUP_TYPE, SEARCH_COMBO } from '../utils/shipment-request.searchCombos';
+import {
+  BUCKET_LOOKUP_TYPE,
+  SEARCH_COMBO,
+  buildOrderedComboOptions,
+} from '../utils/shipment-request.searchCombos';
 
 // AS-IS DMF0045_ShipmentRequest 조회조건 (design 02 §1 영역2 인벤토리 — cs OnShown/InitCombo 실측).
 //   칸-콤보 대응표 (SCM_ADM_CMBO_SQL_M / LOOKUP 등록 SQL_ID — memory search-condition-combo-header):
@@ -106,15 +109,15 @@ export const ShipmentRequestForm = ({
   //   40 을 제거한다(design 02 §2.1). DMF0045 는 40 미지원이고 컬럼 메타도 82/81/81_UC 만 등록돼,
   //   40 을 노출하면 선택 시 컬럼 0행 → fallback 없는 그리드가 완전 공백이 된다.
   //   Division(MyDivision)은 DIVISION_ID 미출력 root 라 축 없음.
-  const divisionOptions = buildComboOptions(divisions).filter(o => o.value !== DIVISION.MOBILITY);
+  const divisionOptions = buildOrderedComboOptions(divisions).filter(o => o.value !== DIVISION.MOBILITY);
 
   // Team/EndCustomer/SalesSite/PlantSite 는 서버가 @파라미터로 이미 좁혀 CODE/NAME 만 내려주므로
   //   클라 축을 걸지 않는다 — 걸면 DIVISION_ID 부재로 엄격매칭에서 전 행이 잘려 옵션 0건이 된다
   //   (bigFilterCombo 헤더 "재조회 응답에는 축을 걸지 말 것").
-  const teamOptions = buildComboOptions(teams);
-  const endCustomerOptions = buildComboOptions(endCustomers);
-  const salesSiteOptions = buildComboOptions(salesSites);
-  const plantSiteOptions = buildComboOptions(plantSites);
+  const teamOptions = buildOrderedComboOptions(teams);
+  const endCustomerOptions = buildOrderedComboOptions(endCustomers);
+  const salesSiteOptions = buildOrderedComboOptions(salesSites);
+  const plantSiteOptions = buildOrderedComboOptions(plantSites);
 
   // Bucket 옵션 — CMBO CODE 풀워드(DAILY/WEEKLY/MONTHLY) → 첫 글자 enum 매핑 + 정적 fallback.
   const bucketLabelKey: Record<string, string> = {
@@ -187,7 +190,7 @@ export const ShipmentRequestForm = ({
       onSearch={onSearch}
       conditions={
         <>
-          {/* Row 1 — Division*(단일) / Team / End Customer / Sales Site */}
+          {/* Row 1 — Division*(단일) / Team / End Customer / Period (사용자 지시 2026-10-29) */}
           {/* Division 변경 = 검색조건(Div·기간 제외) + 그리드 초기화 (store setDivision + onDivisionChange,
               TO-BE 공통 요건 — AS-IS clbDivision_SelectedIndexChanged 의 Team/EC/Site/Plant 재조회 +
               Project/Item 클리어 + InitSpread 를 포함하며 Bucket/Sum 까지 초기값으로 되돌린다).
@@ -229,18 +232,22 @@ export const ShipmentRequestForm = ({
             endCustomerOptions,
             v => set({ endCustomers: v, scmSiteIds: [] }, 'endCustomer')
           )}
+          {/* Period* — 사용자 지시 2026-10-29: 접기 영역에서 Row1 4번째 칸으로 승격(항상 표시).
+              오늘~오늘+55일 store init 고정. AS-IS drpPeriod.Enabled=false(Designer.cs:515,
+              design 01 §2 L2 / design 02 §4) 입력 잠금 재현(disabled). 값 8주 기본 고정. */}
+          <PeriodField
+            gridSize={3}
+            start={sc.startYyyymmdd}
+            end={sc.endYyyymmdd}
+            disabled
+            onChange={(start, end) => set({ startYyyymmdd: start, endYyyymmdd: end })}
+          />
+          {/* Row 2 — Sales Site / PJT*(40 비활성) / Model·Nickname / From Site(40 비활성)
+              사용자 지시 2026-10-29: Sales Site 를 Row1→Row2 선두로, Plant Site 를 Row2 마지막(From Site)으로. */}
           {multiField('LBL00011', 'Sales Site', sc.scmSiteIds, salesSiteOptions, v =>
             set({ scmSiteIds: v })
           )}
-          {/* Row 2 — Plant Site(40 비활성) / Project*(40 비활성) / Model·Nickname / Bucket* */}
-          {multiField(
-            'LBL00005',
-            'Plant Site',
-            sc.plantSiteIds,
-            plantSiteOptions,
-            v => set({ plantSiteIds: v }),
-            { disabled: div40 }
-          )}
+          {/* Project → 'PJT' 표기(LBL00012, 사용자 지시 2026-10-29). ProjectField labelCode override. */}
           <ProjectField
             gridSize={3}
             value={sc.projectCodes}
@@ -252,6 +259,7 @@ export const ShipmentRequestForm = ({
             projectCodes={sc.projectCodes}
             disabled={div40}
             multiCheckbox
+            labelCode='LBL00012'
           />
           {/* Model/Nickname — SSP0014 정합(사용자 지시 2026-10-23): 공용 MaterialByDivisionModal
               (COM0013, SCM0002_MaterialByDivisionPopup)로 교체(종전 ItemField/ItemByDivisionModal).
@@ -318,6 +326,24 @@ export const ShipmentRequestForm = ({
               itemId: sc.itemIds.join(','),
             }}
           />
+          {/* From Site(=AS-IS Plant Site, LBL00022 표기, 사용자 지시 2026-10-29) / 40 비활성.
+              콤보 원천·동작은 Plant Site 그대로(SEARCH_COMBO.plantSite), 표시 라벨만 From Site. */}
+          {multiField(
+            'LBL00022',
+            'From Site',
+            sc.plantSiteIds,
+            plantSiteOptions,
+            v => set({ plantSiteIds: v }),
+            { disabled: div40 }
+          )}
+        </>
+      }
+      // 기본 2줄(Row 1-2) 노출, Bucket(Row 3)만 펼침/접기(chevron) — MktFcst(mkt-fcst) 동일 패턴.
+      //   SearchArea 가 extraConditions 존재 시 chevron(↓/↑) 토글을 자동 노출(기본 접힘).
+      //   사용자 지시 2026-10-29: 접기 영역을 Period → Bucket 으로 교체(Period 는 Row1 로 승격).
+      extraConditions={
+        <>
+          {/* Row 3(접기) — Bucket. 기본값 Daily(OnShown cs:179 강제). AS-IS cboBucketType. */}
           <Grid size={3}>
             <FormItem
               label={t('LBL00710', '_Bucket')}
@@ -333,21 +359,6 @@ export const ShipmentRequestForm = ({
               )}
             />
           </Grid>
-        </>
-      }
-      // 기본 2줄(Row 1-2) 노출, Period(Row 3)만 펼침/접기(chevron) — MktFcst(mkt-fcst) 동일 패턴.
-      //   SearchArea 가 extraConditions 존재 시 chevron(↓/↑) 토글을 자동 노출(기본 접힘).
-      extraConditions={
-        <>
-          {/* Row 3 — Period* (오늘~오늘+55일, store init 고정). AS-IS drpPeriod.Enabled=false
-              (Designer.cs:515, design 01 §2 L2 / design 02 §4) — 입력 잠금 재현(disabled). 값은 8주 기본 고정. */}
-          <PeriodField
-            gridSize={3}
-            start={sc.startYyyymmdd}
-            end={sc.endYyyymmdd}
-            disabled
-            onChange={(start, end) => set({ startYyyymmdd: start, endYyyymmdd: end })}
-          />
         </>
       }
     />

@@ -2,7 +2,7 @@
  "version": 2,
  "menu_id": "SCP0111",
  "asis_id": "SCP0111",
- "generated": "2026-10-26T12:55:10",
+ "generated": "2026-11-05T07:58:30",
  "mapping_file": "nscm-fe\\features\\supply\\src\\pages\\integration-psi\\__asis-mapping__.md",
  "rows": 974,
  "fe_rows": 20,
@@ -10,61 +10,65 @@
  "fe_page": "nscm-fe\\features\\supply\\src\\pages\\integration-psi",
  "fe_mapping_missing": false,
  "verdict": {
-  "미검증": 770,
-  "검증완료": 204
+  "FAIL": 475,
+  "미검증": 106,
+  "검증완료": 365,
+  "해당없음": 28
  },
- "instances": 217,
+ "instances": 269,
  "instance_result": {
-  "REVIEW": 78,
-  "NOT_RUN": 50,
-  "PASS": 4,
-  "NOPATH": 14,
-  "NA": 69,
-  "TODO": 2
+  "REVIEW": 28,
+  "FAIL": 31,
+  "PASS": 50,
+  "NOPATH": 7,
+  "NA": 140,
+  "WARN": 1,
+  "ERROR": 12
  },
  "by_layer": {
   "동적 생성·조회": {
-   "REVIEW": 64,
-   "NOT_RUN": 14,
-   "NOPATH": 1
+   "REVIEW": 28,
+   "FAIL": 12,
+   "PASS": 15,
+   "NA": 14,
+   "WARN": 1,
+   "ERROR": 11
   },
   "DB 실행·접근": {
-   "NOT_RUN": 10,
-   "PASS": 3,
-   "NOPATH": 7
+   "PASS": 6,
+   "NOPATH": 5,
+   "FAIL": 5,
+   "NA": 2
   },
   "권한": {
-   "NOT_RUN": 1
+   "PASS": 2
   },
   "CRUD": {
-   "NOT_RUN": 2,
-   "NOPATH": 2
+   "FAIL": 4
   },
   "편집·검증": {
-   "NA": 29,
-   "NOT_RUN": 14,
-   "REVIEW": 6
+   "NA": 64,
+   "FAIL": 4,
+   "PASS": 17
   },
   "정적 디자인": {
-   "NOT_RUN": 5,
-   "PASS": 1,
-   "NA": 17,
+   "FAIL": 6,
+   "NA": 19,
    "NOPATH": 2
   },
   "콤보 후보": {
-   "REVIEW": 8,
-   "NOPATH": 2,
-   "TODO": 2
+   "NA": 12
   },
   "공통 기능": {
-   "NOT_RUN": 1
-  },
-  "Cascade": {
-   "NA": 20,
-   "NOT_RUN": 3
+   "ERROR": 1
   },
   "팝업": {
-   "NA": 3
+   "PASS": 7,
+   "NA": 10
+  },
+  "Cascade": {
+   "NA": 19,
+   "PASS": 3
   }
  },
  "by_check": {
@@ -72,39 +76,44 @@
    "REVIEW": 5
   },
   "A10": {
-   "NOT_RUN": 1
+   "PASS": 1
   },
   "A5": {
    "NA": 2
   },
   "A6": {
-   "NOT_RUN": 3
+   "FAIL": 2,
+   "REVIEW": 1
   },
   "B3": {
-   "REVIEW": 4,
-   "TODO": 2
+   "NA": 6
   },
   "B4": {
-   "REVIEW": 4,
-   "NOPATH": 2
+   "NA": 6
   },
   "C1": {
-   "NOT_RUN": 3
+   "PASS": 2,
+   "NA": 1
   },
   "C2": {
-   "NA": 5
+   "NA": 4
   },
   "C3": {
-   "NA": 10
+   "NA": 9
+  },
+  "C4": {
+   "PASS": 1,
+   "NA": 1
   },
   "C6": {
-   "NA": 5
+   "NA": 4
   },
   "D1": {
-   "NA": 3
+   "NA": 4
   },
   "D3": {
-   "NA": 12
+   "PASS": 17,
+   "NA": 16
   },
   "D4": {
    "NA": 2
@@ -113,74 +122,83 @@
    "NA": 2
   },
   "D6": {
-   "NOT_RUN": 1
+   "FAIL": 1
   },
   "DB-SYN": {
-   "PASS": 3,
-   "NOPATH": 7
+   "PASS": 4,
+   "NOPATH": 5
   },
   "E3": {
-   "NA": 10
+   "NA": 11
   },
   "E4": {
-   "NOT_RUN": 13,
-   "REVIEW": 6
+   "NA": 29,
+   "FAIL": 3
   },
   "F1": {
-   "NOT_RUN": 1
+   "FAIL": 1
   },
   "F2": {
-   "NOPATH": 1
+   "FAIL": 1
   },
   "F4": {
-   "NOT_RUN": 10
+   "PASS": 2,
+   "FAIL": 5,
+   "NA": 2
   },
   "F5": {
-   "NOT_RUN": 1
+   "FAIL": 1
   },
   "F6": {
-   "NOPATH": 1
+   "FAIL": 1
   },
   "G03-WIRE": {
-   "NOPATH": 1
+   "WARN": 1
   },
   "G1": {
-   "REVIEW": 3,
-   "NOT_RUN": 6
+   "PASS": 7,
+   "NA": 4
   },
   "G4": {
-   "NOT_RUN": 3,
+   "FAIL": 3,
    "NOPATH": 2
   },
   "G5": {
-   "NA": 1
+   "PASS": 7
   },
   "G6": {
-   "NOT_RUN": 3
+   "PASS": 2,
+   "NA": 1
   },
   "H10": {
-   "PASS": 1
+   "FAIL": 1
   },
   "H2": {
-   "NA": 13
+   "NA": 15
   },
   "H4": {
-   "NOT_RUN": 1
+   "FAIL": 1
   },
   "H5": {
    "NA": 2
   },
   "H6": {
-   "NA": 1
+   "NA": 7
   },
   "I1": {
-   "NOT_RUN": 1
+   "FAIL": 1
+  },
+  "J1": {
+   "PASS": 1
   },
   "J2": {
-   "NOT_RUN": 1
+   "PASS": 1
   },
   "K4": {
-   "NOT_RUN": 1
+   "ERROR": 1
+  },
+  "M3": {
+   "NA": 2
   },
   "M4": {
    "NA": 1
@@ -189,19 +207,21 @@
    "REVIEW": 20
   },
   "X-REOPEN": {
-   "NOT_RUN": 1
+   "FAIL": 1
   },
   "X-ROW": {
-   "REVIEW": 36
+   "NA": 9,
+   "ERROR": 11,
+   "PASS": 5,
+   "FAIL": 9,
+   "REVIEW": 2
   }
  },
- "todo_checks": {
-  "B3": 6
- },
+ "todo_checks": {},
  "unverified_reasons": {
-  "REVIEW": 358,
-  "NOT_RUN": 1856,
-  "NOPATH": 792,
-  "TODO": 6
+  "REVIEW": 44,
+  "WARN": 10,
+  "ERROR": 60,
+  "NOPATH": 5
  }
 }
