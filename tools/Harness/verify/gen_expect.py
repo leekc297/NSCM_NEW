@@ -349,7 +349,7 @@ def p_reqfp(S):
         return [], ['기존 행 편집 숫자·글자 칸 없음']
     col = pick['column_name'].upper()
     v = '1' if ctype_kind(pick) == 'number' else 'E2E'
-    return [row(S, 'P12', 'E4', f'기존 행 {col} 수정 저장 → 입력된 필수 칸 오탐 없음', f'{S.prefix(pick)}search;type:{col}={v};btn:Save;nomsgre:필수|required|mandatory', f"sheet_columns {pick['sheet_name']}.{col} {pick['input_tp_cd']} · 필수 오탐 유형(DM-215)")], []
+    return [row(S, 'P12', 'E4', f'기존 행 {col} 수정 저장 → 입력된 필수 칸 오탐 없음', f'{S.prefix(pick)}search;type:{col}={v}@~edit;btn:Save;nomsgre:필수|required|mandatory', f"sheet_columns {pick['sheet_name']}.{col} {pick['input_tp_cd']} · 필수 오탐 유형(DM-215)")], []
 
 
 def p_blank_save(S):
@@ -482,18 +482,37 @@ def dyn_families(S):
     return fam
 
 
+def _w_hidden(S):
+    """W_ 접두 검사 가드 아래 Visible 대입이 전부 false 면 '숨김 대입 N건' 문자열, 아니면 ''(보이게 하는 대입·Visible 대입 없음 = 표시 가능)"""
+    vis = []
+    for a in S.actions:
+        g = a['guard'] or ''
+        if '"W_"' not in g:
+            continue
+        inner = g.split(' ▸ ')[-1]
+        if inner.startswith('else of') or '"W_"' not in inner:
+            continue  # else 가지 = W_ 아님
+        m = re.search(r'\.Visible\s*=\s*(true|false)', a['raw'] or '')
+        if m:
+            vis.append(m.group(1))
+    return f"Visible=false {len(vis)}건" if vis and all(v == 'false' for v in vis) else ''
+
+
 def p_dyn(S):
     fam = dyn_families(S)
     if not fam:
         return [], ['AS-IS 동적 기간 칸(W_/M_/D_ 접두 검사) 없음']
-    out = []
+    out, why = [], []
     bucket = next((v for v in S.label.values() if re.search(r'bucket', v, re.I)), '')
-    if 'W' in fam:
+    w_hidden = _w_hidden(S)
+    if 'W' in fam and w_hidden:
+        why.append(f'AS-IS W_ 칸 = 숨김 대입만({w_hidden}) — 주간 칸 미표시 화면(2026-11-05 SCP0111 H2 ERROR)')
+    if 'W' in fam and not w_hidden:
         pre = f'{S.prefix()}' + (f'cond:{bucket}=Weekly;' if bucket else '')
         out.append(row(S, 'P18', 'H2', '당주 구분선(rail) = 이번 주(Weekly)', f'{pre}search;rail:W@mon', f'AS-IS W_ 칸 접두 검사 {fam["W"]}건' + (f' · 조회조건 {bucket}' if bucket else '')))
     if 'SAVE' in S.btn_codes:
         out.append(row(S, 'P19', 'D2', '값 있는 편집 구간 수량 셀 편집', f'{S.prefix()}search;type:@DYNVAL=123;cell:~,@LAST=123', f'AS-IS 동적 칸 {dict(fam)} · SAVE'))
-    return out, []
+    return out, why
 
 
 def p_toggle(S):

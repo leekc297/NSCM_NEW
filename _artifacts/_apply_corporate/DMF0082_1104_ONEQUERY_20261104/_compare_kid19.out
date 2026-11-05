@@ -1,0 +1,105 @@
+PKG_DMF0082_1104A: [('PACKAGE', 'VALID', '2026-11-05 11:42:04'), ('PACKAGE BODY', 'VALID', '2026-11-05 11:42:07')]
+PKG_DMF0082_1104B: [('PACKAGE', 'VALID', '2026-11-05 11:48:18'), ('PACKAGE BODY', 'VALID', '2026-11-05 11:48:18')]
+=== kid19 env=['zioui1', 'localhost', '2026-11-05 11:49:25'] period=20261101~20270430 A=PKG_DMF0082_1104A B=PKG_DMF0082_1104B users=k0101,minyonglee1 divs=40,81,82 scen=['current', 'ver', 'multi', 'filters'] gtt=True
+--- k0101 div40 표본 {'site': 'Lenovo_HK_HKG', 'item_full': 'MCCM348014A3', 'cust': 'Lenovo', 'biz': 'CELL', 'project': 'Lenovo', 'owner': 'Lia Yun', 'team': '58520274', 'plant': None, 'sender': None, 'item': 'CM348'} 버전 {'MF_W': 'MF_W_20260921_V001', 'SF_W': 'SF_W_20260824_V001', 'SP_W': 'SP_W_20260820_V002', 'MF_D': 'MF_D_20260827_V001'}
+11:49:51 k0101 div40 Current                                  PASS rows=  7019 A   3.73s B   4.25s  (동률 순서 차이: cur1)
+11:51:16 k0101 div40 MF_W MF_W_20260921_V001                  PASS rows=     3 A   2.11s B   0.92s
+11:51:24 k0101 div40 SF_W SF_W_20260824_V001                  PASS rows=  1764 A   2.24s B   2.36s  (동률 순서 차이: cur1)
+11:51:45 k0101 div40 SP_W SP_W_20260820_V002                  PASS rows=  1179 A   1.54s B   1.61s  (동률 순서 차이: cur1)
+11:52:03 k0101 div40 MF_D MF_D_20260827_V001                  PASS rows=  1728 A   1.94s B   1.99s  (동률 순서 차이: cur1)
+11:52:23 k0101 div40 Current,MF_W_20260921_V001               PASS rows=  7022 A   3.86s B   4.30s  (동률 순서 차이: cur1)
+11:53:25 k0101 div40 Current,SP_W_20260820_V002               PASS rows=  8196 A   4.77s B   5.20s  (동률 순서 차이: cur1)
+11:54:36 k0101 div40 Current site=Lenovo_HK_HKG               PASS rows=   468 A   1.23s B   1.24s
+11:54:40 k0101 div40 Current item=CM348                       PASS rows=   953 A   1.35s B   1.38s  (동률 순서 차이: cur1)
+11:54:50 k0101 div40 Current cust=Lenovo                      PASS rows=  1392 A   1.34s B   1.38s
+11:54:58 k0101 div40 Current biz=CELL                         PASS rows=  5173 A   3.23s B   3.49s  (동률 순서 차이: cur1)
+11:55:45 k0101 div40 Current project=Lenovo                   PASS rows=  1392 A   1.54s B   1.58s
+11:55:54 k0101 div40 Current owner=Lia Yun                    PASS rows=  1401 A   1.55s B   1.57s
+11:56:02 k0101 div40 Current team=58520274                    PASS rows=  2183 A   2.18s B   2.24s  (동률 순서 차이: cur1)
+11:56:25 k0101 div40 Current sender=NOSUCH                    PASS rows=     0 A   2.36s B   2.35s  ⚠ 0행(미실증)
+11:56:34 k0101 div40 Current qty=Y                            PASS rows=  1118 A   3.76s B   3.71s  (동률 순서 차이: cur1)
+--- k0101 div81 표본 {'site': 'BMW_US_SPA', 'item_full': 'ACHP2005I-A1', 'cust': 'A18BW2003', 'biz': 'CELL', 'project': 'A18BW2003', 'owner': 'BYUNGCHANG PARK', 'team': '70000347', 'plant': 'WA00-P', 'sender': None, 'item': 'HP200'} 버전 {'MF_W': 'MF_W_20260825_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20260826_V002', 'MF_D': 'MF_D_20260827_V001'}
+11:57:20 k0101 div81 Current                                  PASS rows=  7909 A   5.84s B   6.72s
+11:58:43 k0101 div81 MF_W MF_W_20260825_V001                  PASS rows=   438 A   3.25s B   1.88s
+11:59:01 k0101 div81 SF_W SF_W_20261028_V001                  PASS rows=     0 A   1.40s B   1.43s  ⚠ 0행(미실증)
+11:59:15 k0101 div81 SP_W SP_W_20260826_V002                  PASS rows=   540 A   1.84s B   1.85s
+11:59:33 k0101 div81 MF_D MF_D_20260827_V001                  PASS rows=     0 A   1.42s B   1.44s  ⚠ 0행(미실증)
+11:59:46 k0101 div81 Current,MF_W_20260825_V001               PASS rows=  8157 A   7.30s B   8.86s
+12:01:12 k0101 div81 Current,SP_W_20260826_V002               PASS rows=  7855 A   7.66s B   8.73s
+12:02:40 k0101 div81 Current site=BMW_US_SPA                  PASS rows=   389 A   1.95s B   1.97s
+12:02:49 k0101 div81 Current item=HP200                       PASS rows=   416 A   1.44s B   1.48s
+12:02:55 k0101 div81 Current cust=A18BW2003                   PASS rows=     0 A   1.81s B   1.64s  ⚠ 0행(미실증)
+12:02:59 k0101 div81 Current biz=CELL                         PASS rows=   140 A   1.73s B   1.75s
+12:03:04 k0101 div81 Current project=A18BW2003                PASS rows=  1343 A   2.92s B   3.03s
+12:03:26 k0101 div81 Current owner=BYUNGCHANG PARK            PASS rows=  1601 A   3.16s B   3.24s
+12:03:47 k0101 div81 Current team=70000347                    PASS rows=  2909 A   3.86s B   4.47s
+12:04:24 k0101 div81 Current plant=WA00-P                     PASS rows=  5192 A   5.01s B   5.43s
+12:05:26 k0101 div81 Current sender=NOSUCH                    PASS rows=     0 A   3.42s B   3.40s  ⚠ 0행(미실증)
+12:05:43 k0101 div81 Current qty=Y                            PASS rows=   700 A   5.18s B   5.18s
+--- k0101 div82 표본 {'site': 'NextEra_US_PHX', 'item_full': 'ETD1551AFB3A-XBA', 'cust': 'G-26-033', 'biz': None, 'project': 'G-26-033', 'owner': 'YEEUN CHO', 'team': '58187671', 'plant': None, 'sender': None, 'item': 'D1551'} 버전 {'MF_W': 'MF_W_20260825_V001', 'SF_W': None, 'SP_W': 'SP_W_20260827_V001', 'MF_D': 'MF_D_20260827_V001'}
+12:06:48 k0101 div82 Current                                  PASS rows= 16157 A  12.24s B  13.59s  (동률 순서 차이: cur1)
+12:10:03 k0101 div82 MF_W MF_W_20260825_V001                  PASS rows=   260 A   3.14s B   1.87s
+12:10:23 k0101 div82 SP_W SP_W_20260827_V001                  PASS rows=   690 A   2.11s B   2.06s
+12:10:46 k0101 div82 MF_D MF_D_20260827_V001                  PASS rows=     0 A   1.49s B   1.47s  ⚠ 0행(미실증)
+12:11:02 k0101 div82 Current,MF_W_20260825_V001               PASS rows= 16417 A  13.22s B  14.89s  (동률 순서 차이: cur1)
+12:14:04 k0101 div82 Current,SP_W_20260827_V001               PASS rows= 16798 A  13.75s B  14.96s  (동률 순서 차이: cur1)
+12:17:08 k0101 div82 Current site=NextEra_US_PHX              PASS rows=  7617 A   7.08s B   7.80s
+12:18:32 k0101 div82 Current item=D1551                       PASS rows= 12818 A   9.67s B  11.07s
+12:20:45 k0101 div82 Current cust=G-26-033                    PASS rows=     0 A   3.03s B   3.00s  ⚠ 0행(미실증)
+12:20:52 k0101 div82 Current project=G-26-033                 PASS rows=   444 A   4.21s B   4.29s
+12:21:05 k0101 div82 Current owner=YEEUN CHO                  PASS rows= 11048 A  10.02s B  11.06s
+12:23:16 k0101 div82 Current team=58187671                    PASS rows= 11815 A  10.29s B  11.25s
+12:25:27 k0101 div82 Current sender=NOSUCH                    PASS rows=     0 A   6.07s B   5.98s  ⚠ 0행(미실증)
+12:25:52 k0101 div82 Current qty=Y                            PASS rows=   705 A   9.82s B   9.62s
+--- minyonglee1 div40 표본 {'site': 'Lenovo_HK_HKG', 'item_full': 'MCCM348014A3', 'cust': 'Lenovo', 'biz': 'CELL', 'project': 'Lenovo', 'owner': 'Lia Yun', 'team': '58520274', 'plant': None, 'sender': None, 'item': 'CM348'} 버전 {'MF_W': 'MF_W_20260921_V001', 'SF_W': 'SF_W_20260824_V001', 'SP_W': 'SP_W_20260820_V002', 'MF_D': 'MF_D_20260827_V001'}
+12:27:02 minyonglee1 div40 Current                                  PASS rows=  7619 A   6.66s B   7.58s  (동률 순서 차이: cur1)
+12:28:12 minyonglee1 div40 MF_W MF_W_20260921_V001                  PASS rows=     5 A   2.16s B   1.06s
+12:28:21 minyonglee1 div40 SF_W SF_W_20260824_V001                  PASS rows=  2380 A   3.11s B   3.82s  (동률 순서 차이: cur1)
+12:28:47 minyonglee1 div40 SP_W SP_W_20260820_V002                  PASS rows=  1179 A   2.28s B   2.62s  (동률 순서 차이: cur1)
+12:29:10 minyonglee1 div40 MF_D MF_D_20260827_V001                  PASS rows=  2344 A   2.96s B   3.60s  (동률 순서 차이: cur1)
+12:29:36 minyonglee1 div40 Current,MF_W_20260921_V001               PASS rows=  7624 A   7.00s B   9.18s  (동률 순서 차이: cur1)
+12:30:52 minyonglee1 div40 Current,SP_W_20260820_V002               PASS rows=  8796 A   8.14s B  10.78s  (동률 순서 차이: cur1)
+12:32:18 minyonglee1 div40 Current site=Lenovo_HK_HKG               PASS rows=   468 A   1.45s B   1.58s
+12:32:24 minyonglee1 div40 Current item=CM348                       PASS rows=  1071 A   1.90s B   2.21s  (동률 순서 차이: cur1)
+12:32:36 minyonglee1 div40 Current cust=Lenovo                      PASS rows=  1392 A   1.73s B   1.90s
+12:32:45 minyonglee1 div40 Current biz=CELL                         PASS rows=  5655 A   5.56s B   7.71s  (동률 순서 차이: cur1)
+12:33:41 minyonglee1 div40 Current project=Lenovo                   PASS rows=  1392 A   1.89s B   2.10s
+12:33:50 minyonglee1 div40 Current owner=Lia Yun                    PASS rows=  1401 A   1.93s B   2.13s
+12:34:00 minyonglee1 div40 Current team=58520274                    PASS rows=  2439 A   3.32s B   4.07s  (동률 순서 차이: cur1)
+12:34:25 minyonglee1 div40 Current sender=NOSUCH                    PASS rows=     0 A   2.52s B   2.55s  ⚠ 0행(미실증)
+12:34:35 minyonglee1 div40 Current qty=Y                            PASS rows=  1718 A   4.43s B   4.73s  (동률 순서 차이: cur1)
+--- minyonglee1 div81 표본 {'site': 'BMW_US_SPA', 'item_full': 'ACHP2005I-A1', 'cust': 'A18BW2003', 'biz': 'CELL', 'project': 'A18BW2003', 'owner': 'BYUNGCHANG PARK', 'team': '70000347', 'plant': 'WA00-P', 'sender': None, 'item': 'HP200'} 버전 {'MF_W': 'MF_W_20260825_V001', 'SF_W': 'SF_W_20261028_V001', 'SP_W': 'SP_W_20260826_V002', 'MF_D': 'MF_D_20260827_V001'}
+12:35:34 minyonglee1 div81 Current                                  PASS rows=  8042 A  12.35s B  11.15s
+12:37:15 minyonglee1 div81 MF_W MF_W_20260825_V001                  PASS rows=   436 A   3.78s B   2.46s
+12:37:38 minyonglee1 div81 SF_W SF_W_20261028_V001                  PASS rows=     0 A   1.51s B   1.55s  ⚠ 0행(미실증)
+12:37:52 minyonglee1 div81 SP_W SP_W_20260826_V002                  PASS rows=   540 A   2.48s B   2.30s
+12:38:15 minyonglee1 div81 MF_D MF_D_20260827_V001                  PASS rows=     0 A   1.55s B   1.59s  ⚠ 0행(미실증)
+12:38:29 minyonglee1 div81 Current,MF_W_20260825_V001               PASS rows=  8337 A  13.77s B  14.31s
+12:40:17 minyonglee1 div81 Current,SP_W_20260826_V002               PASS rows=  7988 A  12.94s B  14.85s
+12:42:04 minyonglee1 div81 Current site=BMW_US_SPA                  PASS rows=   387 A   2.35s B   2.26s
+12:42:13 minyonglee1 div81 Current item=HP200                       PASS rows=   430 A   1.91s B   1.87s
+12:42:20 minyonglee1 div81 Current cust=A18BW2003                   PASS rows=     0 A   1.75s B   1.76s  ⚠ 0행(미실증)
+12:42:25 minyonglee1 div81 Current biz=CELL                         PASS rows=   146 A   1.97s B   1.92s
+12:42:30 minyonglee1 div81 Current project=A18BW2003                PASS rows=  1337 A   4.16s B   3.85s
+12:42:52 minyonglee1 div81 Current owner=BYUNGCHANG PARK            PASS rows=  1623 A   4.62s B   4.25s
+12:43:17 minyonglee1 div81 Current team=70000347                    PASS rows=  2883 A   6.34s B   5.64s
+12:43:58 minyonglee1 div81 Current plant=WA00-P                     PASS rows=  5257 A   9.39s B   8.53s
+12:45:13 minyonglee1 div81 Current sender=NOSUCH                    PASS rows=     0 A   3.61s B   3.59s  ⚠ 0행(미실증)
+12:45:32 minyonglee1 div81 Current qty=Y                            PASS rows=  1004 A   6.54s B   6.11s
+--- minyonglee1 div82 표본 {'site': 'NextEra_US_PHX', 'item_full': 'ETD1551AFB3A-XBA', 'cust': 'G-26-033', 'biz': None, 'project': 'G-26-033', 'owner': 'YEEUN CHO', 'team': '58187671', 'plant': None, 'sender': None, 'item': 'D1551'} 버전 {'MF_W': 'MF_W_20260825_V001', 'SF_W': None, 'SP_W': 'SP_W_20260827_V001', 'MF_D': 'MF_D_20260827_V001'}
+12:46:59 minyonglee1 div82 Current                                  PASS rows= 16253 A  20.37s B  23.09s
+12:50:29 minyonglee1 div82 MF_W MF_W_20260825_V001                  PASS rows=   280 A   1.78s B   1.94s
+12:50:47 minyonglee1 div82 SP_W SP_W_20260827_V001                  PASS rows=   690 A   2.52s B   2.66s
+12:51:10 minyonglee1 div82 MF_D MF_D_20260827_V001                  PASS rows=     0 A   1.59s B   1.58s  ⚠ 0행(미실증)
+12:51:27 minyonglee1 div82 Current,MF_W_20260825_V001               PASS rows= 16533 A  21.91s B  27.69s
+12:54:50 minyonglee1 div82 Current,SP_W_20260827_V001               PASS rows= 16894 A  21.96s B  31.21s
+12:58:53 minyonglee1 div82 Current site=NextEra_US_PHX              PASS rows=  7671 A  11.05s B  15.16s
+13:00:37 minyonglee1 div82 Current item=D1551                       PASS rows= 12901 A  16.82s B  23.84s
+13:03:37 minyonglee1 div82 Current cust=G-26-033                    PASS rows=     0 A   2.92s B   2.92s  ⚠ 0행(미실증)
+13:03:45 minyonglee1 div82 Current project=G-26-033                 PASS rows=   444 A   4.41s B   4.72s
+13:04:00 minyonglee1 div82 Current owner=YEEUN CHO                  PASS rows= 11101 A  15.44s B  21.83s
+13:06:48 minyonglee1 div82 Current team=58187671                    PASS rows= 11873 A  16.52s B  22.89s
+13:09:50 minyonglee1 div82 Current sender=NOSUCH                    PASS rows=     0 A   6.23s B   6.20s  ⚠ 0행(미실증)
+13:10:20 minyonglee1 div82 Current qty=Y                            PASS rows=   875 A  10.33s B  10.52s
+
+=== 시나리오 94 · FAIL 0 · 미실증 16

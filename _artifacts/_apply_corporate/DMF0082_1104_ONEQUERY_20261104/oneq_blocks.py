@@ -442,21 +442,48 @@ def s2_fcst_n_price_current(div='ALL', cur_gate=False):
          "", "EXISTS"),
     ):
         d_where = "" if outer_cols is None else "        AND    EXISTS (SELECT 1 FROM WS D WHERE D.FCST_TYPE = A.FCST_TYPE)\n"
+        # [E20261105-DMF0082ONEQUERY-PWNARROW] 11-05 실측(minyonglee1/82 trc id 46): 이 arm 의 윈도 정렬이 C(SITE_ITEM) 속성 36열을 실은 넓은 행
+        #   462,723행(size 395MB · pw 49,983 블록 TEMP 스필) 로 8.6s = S2-82 12.6s 의 68%. 윈도 파티션 8키(DIV·PROJECT·SITE·ITEM·DOM_EXP·FCST_TYPE·INCOTERMS·MEASURE)
+        #   가 C 조인 키(DIV·PROJECT·SITE·ITEM + C.ITEM_VALID_YN) 를 모두 포함하므로 C 조인은 '파티션 통째 필터' — 윈도를 C 없이 좁은 행으로 계산한 뒤
+        #   4키 유일(기준선 게이트: 4키 유일 = 6키 유일) 인 C 를 바깥에서 1:1 INNER JOIN 해 속성 열을 붙여도 행 집합·윈도 값 모두 동일(힌트 없음 · #129 ②).
+        #   MEA(B.MEASURE 유일)·WS(FCST_TYPE) 조인도 파티션 키 함수지만 B 는 좁은 열(MEASURE_GROUP·SORT_ORDER_NO) 이라 안쪽에 그대로 둔다.
+        c_rejoin = ("        INNER JOIN SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM C\n"
+                    "            ON  C.DIVISION_ID  = X.DIVISION_ID\n"
+                    "            AND C.PROJECT_CODE = X.PROJECT_CODE\n"
+                    "            AND C.SCM_SITE_ID  = X.SCM_SITE_ID\n"
+                    "            AND C.ITEM_ID      = X.ITEM_ID\n"
+                    "            AND C.ITEM_VALID_YN = 'Y'")
         price.append(f"""        /* ── {name} ── */
         SELECT {FNP_COLS}
+        FROM (
+        SELECT X.DIVISION_ID, X.PROJECT_CODE, X.END_CUSTOMER, X.SCM_SITE_ID, X.ITEM_ID, X.DOM_EXP, X.FCST_TYPE, X.INCOTERMS
+             , X.MEASURE
+             , X.PLANT_SITE_ID, X.CELL_PROD_SITE_ID, X.YYYYMMDD
+             , X.QTY
+             , X.MEASURE_GROUP
+             , {C_SEL}
+             , X.SORT_ORDER_NO
+             , C.ENERGE, C.CELL_QUANTITY
+             , X.AS_FROM_SITE
+             , X.CREATE_DATE
+             , X.LAST_UPDATED_BY
+             , X.SENDER_CODE, X.SENDER_NAME, C.PROJECT_S_OP_REPORT
+             , X.CURRENCY
+             , X.VERSION_NO
+             , X.CUTOFF_YYYYMMDD
+             , X.NOTATION
+             , X.X_ONEREAD_YMD
         FROM (
         SELECT A.DIVISION_ID, A.PROJECT_CODE, {ec} AS END_CUSTOMER, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS
              , A.MEASURE
              , A.PLANT_SITE_ID, {cp} AS CELL_PROD_SITE_ID, A.YYYYMMDD
              , CAST(NVL(A.PRICE, 0) AS NUMBER(30,10)) AS QTY
              , B.MEASURE_GROUP
-             , {C_SEL}
              , B.SORT_ORDER_NO
-             , C.ENERGE, C.CELL_QUANTITY
              , ' ' AS AS_FROM_SITE
              , MAX(CASE WHEN A.YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd THEN A.CREATION_DATE END) OVER (PARTITION BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, A.MEASURE) AS CREATE_DATE
              , MAX(CASE WHEN A.YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd THEN A.LAST_UPDATED_BY END) OVER (PARTITION BY A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, A.MEASURE) AS LAST_UPDATED_BY
-             , CAST(NULL AS VARCHAR2(50)) AS SENDER_CODE, CAST(NULL AS VARCHAR2(200)) AS SENDER_NAME, C.PROJECT_S_OP_REPORT
+             , CAST(NULL AS VARCHAR2(50)) AS SENDER_CODE, CAST(NULL AS VARCHAR2(200)) AS SENDER_NAME
              , A.CURRENCY
              , 'Current' AS VERSION_NO
              , CAST(NULL AS VARCHAR2(8)) AS CUTOFF_YYYYMMDD
@@ -465,10 +492,11 @@ def s2_fcst_n_price_current(div='ALL', cur_gate=False):
         FROM   {src} A
         INNER JOIN MEA B
             ON  B.MEASURE = A.MEASURE
-{C_JOIN_VALID}
 {d_part}        WHERE  {dv}
 {d_where}        AND    A.DIVISION_ID = p_division_id
         AND    A.YYYYMMDD BETWEEN LEAST(V_TO_RESULT, p_from_yyyymmdd) AND GREATEST(V_TO_YYYYMMDD, p_to_yyyymmdd)
+        ) X
+{c_rejoin}
         ) WHERE X_ONEREAD_YMD BETWEEN V_TO_RESULT AND V_TO_YYYYMMDD""")
     tag = {'81': ('A1', 'A5', 'A6', 'A8', 'A9'), '82': ('A1', 'A6', 'A8', 'A9'), '40': ('A2', 'A7', 'A8', 'A9')}.get(div)   # A3/A4 는 A1/A2 에 병합
     allarms = arms[:5] + price + arms[5:]

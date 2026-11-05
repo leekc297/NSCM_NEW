@@ -161,3 +161,9 @@
   - 함정: `nscm.closeAlert('ok')` 로 닫으면 Column Setting 모달의 **Save** 를 눌러 사용자 컬럼 설정을 덮어쓴다(저장 없는 닫기 수단이 필요).
 - 대응(11-05 smoke-extra.ts): `closeDialogSafely()` 신설 — Cancel/취소/Close → 머리 X(상단 56px 안 cursor:pointer SVG 중 최우측, 네이티브 click 이벤트) → 단일 Confirm 알림 → Escape 순, Save/OK/Default 금지. Excel 단계는 다운로드 없을 때 알림 문구를 근거로 남기고 닫음 · Columns 단계는 닫힘 여부를 근거에 기록 · Search Area 단계는 먼저 잔존 다이얼로그를 닫고(실패 시 '가림 요소' ERROR), 스위치 input 을 클릭해 checked 변화(스위치 무반응 ERROR)와 Collapse 변화(접힘 무반응 FAIL)를 분리 판정.
 - 교훈: 공통 기능 사이클의 각 단계는 자기가 연 다이얼로그를 닫았는지 확인하고 넘어간다. '자동 판정 불가' ERROR 를 낼 때는 가림 요소·스위치 상태처럼 원인을 가를 수 있는 사실을 함께 남긴다.
+
+## T58 (11-05) run_verify 동적 포트 고갈 게이트가 netstat 줄 수로 셈 → Bound 소켓 고갈을 못 봄 → E2E 무의미 실행
+- 증상: 11-05 13:15 SCP0111 시나리오 단독 실행 = 화면 빈 페이지·'search:no grid' ERROR, 13:24·13:28 재실행 = Chromium `ERR_CONNECTION_FAILED`(localhost:8080 dev-login · 127.0.0.1:5173). curl 은 응답(FE 200).
+- 원인(실측 13:33:49): Get-NetTCPConnection 전체 16,535 중 SMSNotifier(PID 4992) 16,161 — **전부 Bound 상태**. `netstat -an -p TCP` 는 Bound 를 안 보여 184줄 → 게이트(≥14000) 통과.
+- 대응(11-05): run_verify.py 게이트 = `powershell (Get-NetTCPConnection).Count`(Bound 포함 · 13:36 실측 16,530 · 1회 약 77초) · 실패 때만 netstat 대체(출처 표기).
+- 교훈: 자원 고갈 게이트는 고갈을 일으키는 상태(Bound)를 포함해 세는 수단으로 실측 검증한 뒤 쓴다. 'E2E 결과가 전부 연결 오류·빈 화면' 이면 결과를 버리고 게이트부터 의심한다.

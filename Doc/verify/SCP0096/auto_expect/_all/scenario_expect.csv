@@ -2,7 +2,7 @@
 SCP0096,[자동] KO 언어 · 변경 없이 저장 → KO 수정사항 없음 알림,lang:KO;search;save,[가-힣].*(수정|변경|없습니다),Y,,I1,자동 생성 P01 · btn_auth SAVE,,P01,btn_auth SAVE,I1|lang-ko-save
 SCP0096,[자동] CN 언어 조회 건수 총/건 표기,"lang:CN;search;pagetext:(总|共|合计)\s*[\d,]+\s*(条|行|件|个)",,,,I1,자동 생성 P02 · btn_auth SEARCH,,P02,btn_auth SEARCH,I1|lang-cn-count
 SCP0096,[자동] 조회 중 Loading 토스트 없음,noload,,,,H10,자동 생성 P03 · btn_auth SEARCH,,P03,btn_auth SEARCH,H10|noload
-SCP0096,[자동] 기존 행 WORKING_TIME_DEFAULT 수정 저장 → 입력된 필수 칸 오탐 없음,search;type:WORKING_TIME_DEFAULT=1;btn:Save;nomsgre:필수|required|mandatory,,,,E4,자동 생성 P12 · sheet_columns Shipment Working Day OSP.WORKING_TIME_DEFAULT O · 필수 오탐 유형(DM-215),,P12,sheet_columns Shipment Working Day OSP.WORKING_TIME_DEFAULT O · 필수 오탐 유형(DM-215),E4|req-fp
+SCP0096,[자동] 기존 행 WORKING_TIME_DEFAULT 수정 저장 → 입력된 필수 칸 오탐 없음,search;type:WORKING_TIME_DEFAULT=1@~edit;btn:Save;nomsgre:필수|required|mandatory,,,,E4,자동 생성 P12 · sheet_columns Shipment Working Day OSP.WORKING_TIME_DEFAULT O · 필수 오탐 유형(DM-215),,P12,sheet_columns Shipment Working Day OSP.WORKING_TIME_DEFAULT O · 필수 오탐 유형(DM-215),E4|req-fp
 SCP0096,[자동] 당주 구분선(rail) = 이번 주(Weekly),search;rail:W@mon,,,,H2,자동 생성 P18 · AS-IS W_ 칸 접두 검사 4건,,P18,AS-IS W_ 칸 접두 검사 4건,H2|rail
 SCP0096,[자동] 값 있는 편집 구간 수량 셀 편집,"search;type:@DYNVAL=123;cell:~,@LAST=123",,,,D2,"자동 생성 P19 · AS-IS 동적 칸 {'D': 53, 'W': 4, 'M': 3} · SAVE",,P19,"AS-IS 동적 칸 {'D': 53, 'W': 4, 'M': 3} · SAVE",D2|dynval-edit
 SCP0096,[자동] 조회조건 콤보 2종 = 콤보,iscombo:Div;iscombo:Plant\ Site,,,,B1,"자동 생성 P21 · 조회조건 기준표(search_cond.csv) TO-BE 선택 Div, Plant Site",,P21,"조회조건 기준표(search_cond.csv) TO-BE 선택 Div, Plant Site",B1|iscombo|div + B1|iscombo|plant\site

@@ -25,6 +25,11 @@ S3_PLSQL = r"""    /* [E20261104-DMF0082ONEQUERY] S3 — 편집권한·MF_SP·�
         V_CNT      NUMBER;
         V_LU_KEYS  VARCHAR2(4100 CHAR);
         V_DISPK    VARCHAR2(32767);
+        -- [E20261105-DMF0082ONEQUERY-KIDPIVOT] 피벗 그룹 키(V_COLUMN + SORT_ORDER_NO) 를 정수 KID_ 로 압축 — 사용자 제안(2026-11-05 "pivot 전에 pivot 에 맞도록 group")
+        V_PK       VARCHAR2(32767);   -- 피벗 그룹 키 열 목록(= V_COLUMN ∪ SORT_ORDER_NO · 중복 제거)
+        V_GX       VARCHAR2(32767);   -- arm GROUP BY 에만 있고 PK 에 없는 열(V_GB − PK · 예: EDIT_FLAG)
+        V_REST     VARCHAR2(32767);   -- DISPK 가 KID_ 외에 실을 열(GX ∪ NOTATION·MEASURE·YYYYMM·YYYYMMWW·WEEK_END_YN·MONTH_END_YN·BUCKET_KEY)
+        V_KJOIN    VARCHAR2(32767);   -- DISP↔KEYS NULL 안전 등가(SYS_OP_MAP_NONNULL · 해시 조인 가능 · NULL↔값 충돌 없음)
         V_QF       CONSTANT VARCHAR2(200) := q'{((X.MEASURE NOT IN ('SCM_FCST','FCST_GAP') AND X.QTY <> 0) OR X.MEASURE IN ('SCM_FCST','FCST_GAP'))}';
         V_K10      CONSTANT VARCHAR2(400) := q'{NVL(X.DIVISION_ID,'/'), NVL(X.PROJECT_CODE,'/'), NVL(X.END_CUSTOMER,'/'), NVL(X.SCM_SITE_ID,'/'), NVL(X.ITEM_ID,'/'), NVL(X.DOM_EXP,'/'), NVL(X.FCST_TYPE,'/'), NVL(X.INCOTERMS,'/'), NVL(X.PLANT_SITE_ID,'/'), NVL(X.CELL_PROD_SITE_ID,'/')}';
         V_K8T      CONSTANT VARCHAR2(400) := q'{NVL(X.DIVISION_ID,'~'), NVL(X.PROJECT_CODE,'~'), NVL(X.END_CUSTOMER,'~'), NVL(X.SCM_SITE_ID,'~'), NVL(X.ITEM_ID,'~'), NVL(X.DOM_EXP,'~'), NVL(X.FCST_TYPE,'~'), NVL(X.INCOTERMS,'~')}';
@@ -588,6 +593,7 @@ S3_PLSQL = r"""    /* [E20261104-DMF0082ONEQUERY] S3 — 편집권한·MF_SP·�
         --   원문과 같은 윈도(PARTITION BY 행 키 원시 열 = NULL 끼리 같은 그룹)를 계산하고 RID_ 단일 키로 되돌려 붙인다.
         --   (apply #7 의 키마다 2식 NULL-안전 등가 조인은 minyonglee1/82 실측 HASH JOIN 450s(쓰기 0) 로 폐기 · 넓은 행 윈도판은 TEMP 300MB)
         IF V_HAS_LU THEN
+            -- (11-05 apply #16/#17 실험·원복) 44열 PARTITION 을 길이접두 SHA-256(LUK_) 로 바꿔 봤으나 해시 계산 CPU 8s(SRCA 적재 1.7→9.7s) > 윈도 절감 1s(6.2→5.3s · TEMP 스필 270MB 잔존) 로 폐기.
             V_Q := V_Q || CHR(10) || ', LUW AS (SELECT X.RID_'
                 || ', MAX(X.CREATE_DATE) OVER (PARTITION BY ' || V_LU_KEYS || ') AS LU_DATE_'
                 || ', MAX(X.LAST_UPDATED_BY) KEEP (DENSE_RANK LAST ORDER BY X.CREATE_DATE NULLS FIRST) OVER (PARTITION BY ' || V_LU_KEYS || ') AS LU_BY_'
@@ -617,57 +623,89 @@ S3_PLSQL = r"""    /* [E20261104-DMF0082ONEQUERY] S3 — 편집권한·MF_SP·�
         V_Q := V_Q || CHR(10) || ', DISP AS (SELECT ' || V_DISPK || ', SUM(X.QTY) AS QTY, COUNT(*) AS CNT_ FROM ' || V_PREV
             || ' X WHERE ' || V_QF || ' GROUP BY ' || V_DISPK || ')';
 
-        -- 최종 5 arm + PIVOT (L5273~5321 과 같은 식 · 입력만 DISP)
-        --   (apply #9 에서 PIVOT 을 명시 GROUP BY + SUM(CASE WHEN PIVOT_BUCKET='x') 360개로 바꿔 실측 — fetch k0101/82 8.4s→28.1s · minyonglee1/82 14.1s→29.2s 악화라 PIVOT 유지)
+        -- [E20261105-DMF0082ONEQUERY-KIDPIVOT] KEYS/DISPK — 피벗 그룹 키 압축 (사용자 제안 2026-11-05 "pivot 전에 pivot 에 맞도록 group 처리")
+        --   11-05 실측(minyonglee1/82 trc id 128): SORT GROUP BY PIVOT 입력 990,454행은 이미 (키,버킷) 유일이라 행 수는 못 줄이고, 그룹 키가 표시 44열(≈360B/행)이라
+        --   TEMP 355MB(pw 45,378) 스필 정렬 11.6s. 키를 KID_(정수) 로 바꾸면 정렬 행 ≈ 40B. 등가: KID_ ↔ (V_COLUMN ∪ SORT_ORDER_NO) 1:1(DISTINCT + ROWNUM) 이므로
+        --   arm GROUP BY(KID_ + V_GB−PK + …)·PIVOT 그룹이 원문과 같은 분할 · 값 식 원문 그대로 · DISP↔KEYS 조인은 SYS_OP_MAP_NONNULL 등가(NULL=NULL · 값 충돌 없음 · 해시 조인).
+        --   (apply #9 에서 PIVOT 을 SUM(CASE) 360개로 바꾼 실측은 fetch 악화라 PIVOT 자체는 유지)
+        DECLARE
+            tok VARCHAR2(200); src VARCHAR2(32767);
+            PROCEDURE addtok(p_list IN OUT VARCHAR2, p_tok VARCHAR2) IS
+            BEGIN
+                IF INSTR(',' || p_list || ',', ',' || p_tok || ',') = 0 THEN
+                    p_list := CASE WHEN p_list IS NULL THEN p_tok ELSE p_list || ',' || p_tok END;
+                END IF;
+            END;
+        BEGIN
+            src := REPLACE(V_COLUMN, ' ', '') || ',SORT_ORDER_NO';
+            FOR i IN 1 .. REGEXP_COUNT(src, '[^,]+') LOOP addtok(V_PK, REGEXP_SUBSTR(src, '[^,]+', 1, i)); END LOOP;
+            src := REPLACE(V_GB, ' ', '');
+            FOR i IN 1 .. REGEXP_COUNT(src, '[^,]+') LOOP
+                tok := REGEXP_SUBSTR(src, '[^,]+', 1, i);
+                IF INSTR(',' || V_PK || ',', ',' || tok || ',') = 0 THEN addtok(V_GX, tok); END IF;
+            END LOOP;
+            V_REST := V_GX;
+            src := 'NOTATION,MEASURE,YYYYMM,YYYYMMWW,WEEK_END_YN,MONTH_END_YN,BUCKET_KEY';
+            FOR i IN 1 .. REGEXP_COUNT(src, '[^,]+') LOOP addtok(V_REST, REGEXP_SUBSTR(src, '[^,]+', 1, i)); END LOOP;
+            FOR i IN 1 .. REGEXP_COUNT(V_PK, '[^,]+') LOOP
+                tok := REGEXP_SUBSTR(V_PK, '[^,]+', 1, i);
+                V_KJOIN := V_KJOIN || CASE WHEN V_KJOIN IS NULL THEN '' ELSE ' AND ' END || 'SYS_OP_MAP_NONNULL(D.' || tok || ') = SYS_OP_MAP_NONNULL(K.' || tok || ')';
+            END LOOP;
+        END;
+        V_Q := V_Q || CHR(10) || ', KEYS AS (SELECT ROWNUM AS KID_, K.* FROM (SELECT DISTINCT ' || REPLACE(V_PK, ',', ', ') || ' FROM DISP) K)'
+            || CHR(10) || ', DISPK AS (SELECT K.KID_, D.' || REPLACE(V_REST, ',', ', D.') || ', D.QTY, D.CNT_ FROM DISP D JOIN KEYS K ON ' || V_KJOIN || ')';
+
+        -- 최종 5 arm + PIVOT (L5273~5321 과 같은 식 · 입력 DISPK · 그룹 키 = KID_ (+ V_GB−PK) · 피벗 뒤 KEYS 로 표시 열 복원)
         V_Q := V_Q || q'{
     SELECT [@V_COLUMN]
     , ([@V_QTY_SUM]) AS QTY
     , [@V_PV_COL_LIST]
     FROM (
-        SELECT [@V_COLUMN], SORT_ORDER_NO, 'D_' || BUCKET_KEY AS PIVOT_BUCKET, QTY
-        FROM DISP
+        SELECT KID_, 'D_' || BUCKET_KEY AS PIVOT_BUCKET, QTY
+        FROM DISPK
 
         UNION ALL
 
-        SELECT [@V_COLUMN], SORT_ORDER_NO, 'W_' || YYYYMMWW AS PIVOT_BUCKET
+        SELECT KID_, 'W_' || YYYYMMWW AS PIVOT_BUCKET
              , CASE WHEN MEASURE IN ('BALANCE','VMI_Inv','AS_Inv')
                     THEN CASE WHEN WEEK_END_YN = 'Y' THEN SUM(QTY) ELSE 0 END
                     ELSE SUM(QTY) END AS QTY
-        FROM DISP
+        FROM DISPK
         WHERE MEASURE NOT IN ('KRW','USD','LOC')
         [@V_GROUPBY], NOTATION, YYYYMMWW, WEEK_END_YN, MEASURE
 
         UNION ALL
 
-        SELECT [@V_COLUMN], SORT_ORDER_NO, 'W_' || YYYYMMWW AS PIVOT_BUCKET, SUM(QTY) / SUM(CNT_) AS QTY
-        FROM DISP
+        SELECT KID_, 'W_' || YYYYMMWW AS PIVOT_BUCKET, SUM(QTY) / SUM(CNT_) AS QTY
+        FROM DISPK
         WHERE MEASURE IN ('KRW','USD','LOC')
         [@V_GROUPBY], NOTATION, YYYYMMWW
 
         UNION ALL
 
-        SELECT [@V_COLUMN], SORT_ORDER_NO, 'M_' || YYYYMM AS PIVOT_BUCKET
+        SELECT KID_, 'M_' || YYYYMM AS PIVOT_BUCKET
              , CASE WHEN MEASURE IN ('BALANCE','VMI_Inv','AS_Inv')
                     THEN CASE WHEN MONTH_END_YN = 'Y' THEN SUM(QTY) ELSE 0 END
                     ELSE SUM(QTY) END AS QTY
-        FROM DISP
+        FROM DISPK
         WHERE MEASURE NOT IN ('KRW','USD','LOC')
         [@V_GROUPBY], NOTATION, YYYYMM, MONTH_END_YN, MEASURE
 
         UNION ALL
 
-        SELECT [@V_COLUMN], SORT_ORDER_NO, 'M_' || YYYYMM AS PIVOT_BUCKET, SUM(QTY) / SUM(CNT_) AS QTY
-        FROM DISP
+        SELECT KID_, 'M_' || YYYYMM AS PIVOT_BUCKET, SUM(QTY) / SUM(CNT_) AS QTY
+        FROM DISPK
         WHERE MEASURE IN ('KRW','USD','LOC')
         [@V_GROUPBY], NOTATION, YYYYMM
     ) SRC
-    PIVOT (SUM(QTY) FOR PIVOT_BUCKET IN ( [@V_PV_LIST] ))
+    PIVOT (SUM(QTY) FOR PIVOT_BUCKET IN ( [@V_PV_LIST] )) P
+    JOIN KEYS K ON K.KID_ = P.KID_
     [@V_ORDERBY]}';
 
         V_Q := REPLACE(V_Q, '[@V_QTY_SUM]',     V_QTY_SUM);
         V_Q := REPLACE(V_Q, '[@V_PV_COL_LIST]', V_PV_COL_LIST);
         V_Q := REPLACE(V_Q, '[@V_PV_LIST]',     V_PV_LIST);
-        V_Q := REPLACE(V_Q, '[@V_GROUPBY]',     V_GROUPBY);
+        V_Q := REPLACE(V_Q, '[@V_GROUPBY]',     ' GROUP BY KID_' || CASE WHEN V_GX IS NOT NULL THEN ', ' || REPLACE(V_GX, ',', ', ') END);
         V_Q := REPLACE(V_Q, '[@V_COLUMN]',      V_COLUMN);
         V_Q := REPLACE(V_Q, '[@V_ORDERBY]',     V_ORDERBY);
         V_Q := REPLACE(V_Q, '[DV]',    LIT(p_division_id));

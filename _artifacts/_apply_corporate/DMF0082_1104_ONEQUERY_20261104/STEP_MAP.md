@@ -38,7 +38,7 @@
 | L1559~1687 | A2 수요 40 INSERT ALL 출력 분기 | S2 `BASE` arm A2 (LD = CTE `LD`) | B/D LEFT JOIN + HIT 조건 = INNER JOIN |
 | L1693~1748 / L1750~1805 | A3/A4 MKT_FCST_PP | **apply #12 (23:29)**: A1/A2 에 병합 — 같은 원장·같은 WHERE 를 1회 읽고 측정값 매핑 `M(AM→BM, PP)`(= MEA DISTINCT MEASURE 자기매핑 ∪ 'MKT_FCST'→'MKT_FCST_PP' 1행) 등가조인 · MEASURE 출력 `CASE WHEN M.PP='Y' THEN 'MKT_FCST_PP' ELSE (A1/A2 식) END` | 구 형태 `A.MEASURE='MKT_FCST' AND B.MEASURE='MKT_FCST_PP'`(키 없는 교차조인)는 옵티마이저가 MEA 1행 추정 → GTT 카티션 → 원장 PK 행별 NL(원본 L1750 `1kr5k368wpvrj` 109회 1,709s · 1104 minyonglee1/40 59.5s, 23:11 실측) — 행 다중도 등가: #1 = A×B(B.MEASURE=A.MEASURE) = A×M(N,DISTINCT)×B(M.BM) · #3 = A(MKT_FCST)×B(PP) = A×M(Y,1)×B(PP) · LU/LD/NOTATION 은 두 arm 동일 |
 | L1816~1866 | A5 81 금액 | S2 arm A5 (`p_division_id LIKE '81%'`) | |
-| L1871~2052 / L2054~2156 | A6/A7 판가 1회 읽기 | S2 arm A6/A7 (윈도 형태 그대로 · 힌트 L2071 제거) | D: 81 JOIN / 40 EXISTS 원문 유지 |
+| L1871~2052 / L2054~2156 | A6/A7 판가 1회 읽기 | S2 arm A6/A7 (윈도 식 원문 그대로 · 힌트 L2071 제거) · ⭐11-05 apply #15 PWNARROW: 윈도를 C(SITE_ITEM) 없이 좁은 행으로 계산 후 4키 유일 C 를 바깥 1:1 INNER JOIN(파티션 8키 ⊇ C 조인 키 → 행 집합·윈도 값 동일) | D: 81 JOIN / 40 EXISTS 원문 유지 · 82 S2 12.6→6.3s |
 | L2160~2264 | A8 실적 | S2 arm A8 | |
 | L2273~2361 | A9 CUST 종속 실적 | S2 arm A9 (힌트 L2285 제거) | |
 | L3707~3730 | CURRENCY MERGE 1차(9키 MAX) | S2 CTE `LOC9` + `CUR` COALESCE 1순위 | |

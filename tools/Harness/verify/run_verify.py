@@ -221,11 +221,21 @@ def main():
                 import shutil
                 shutil.rmtree(shots_dir, ignore_errors=True)
             # 동적 포트 고갈이면 E2E·DB 가 전부 네트워크 오류로 무너져 측정이 무의미하다(2026-10-29·11-01 SMSNotifier 소켓 16,000+ 재발)
+            #   2026-11-05: netstat 은 Bound 소켓을 안 보여 준다(SMSNotifier 16,161개 전부 Bound · netstat 184줄 → 게이트 통과 → Chromium ERR_CONNECTION_FAILED)
+            #   → Get-NetTCPConnection 전체 수(Bound 포함)를 기준으로 하고, 실패할 때만 netstat 으로 대체
+            ns, src = -1, 'Get-NetTCPConnection'
             try:
-                ns = subprocess.run(['netstat', '-an', '-p', 'TCP'], capture_output=True, text=True, timeout=60, errors='replace').stdout.count('\n')
+                o = subprocess.run(['powershell', '-NoProfile', '-Command', '(Get-NetTCPConnection).Count'], capture_output=True, text=True, timeout=180, errors='replace').stdout.strip()
+                ns = int(o.splitlines()[-1]) if o else -1
             except Exception:
                 ns = -1
-            print(f'[INFO] TCP 항목 {ns}개(netstat)', flush=True)
+            if ns < 0:
+                src = 'netstat(Bound 미포함)'
+                try:
+                    ns = subprocess.run(['netstat', '-an', '-p', 'TCP'], capture_output=True, text=True, timeout=60, errors='replace').stdout.count('\n')
+                except Exception:
+                    ns = -1
+            print(f'[INFO] TCP 항목 {ns}개({src})', flush=True)
             if ns >= 14000:
                 print(f'[FAIL] 동적 포트 고갈 의심 — TCP {ns}개. E2E 를 시작하지 않는다. 점유 프로세스 확인(Get-NetTCPConnection · 사내 보안 에이전트는 임의 종료 금지)', flush=True)
                 return 5

@@ -1,7 +1,7 @@
 {
  "id": "SCP0111",
  "asis": "SCP0111",
- "at": "2026-11-05 06:11:51",
+ "at": "2026-11-05 13:13:11",
  "has_asis": true,
  "tobe_cols": 22,
  "buttons": [
@@ -72,8 +72,10 @@
    ]
   },
   "p_dyn": {
-   "rows": 2,
-   "why_not": []
+   "rows": 1,
+   "why_not": [
+    "AS-IS W_ 칸 = 숨김 대입만(Visible=false 1건) — 주간 칸 미표시 화면(2026-11-05 SCP0111 H2 ERROR)"
+   ]
   },
   "p_toggle": {
    "rows": 0,
@@ -133,8 +135,8 @@
  "auth_drop": [],
  "files": {
   "scenario_expect.csv": {
-   "rows": 9,
-   "used": 9
+   "rows": 8,
+   "used": 8
   },
   "doc_ui_expect.csv": {
    "rows": 0,
@@ -145,7 +147,7 @@
    "used": 0
   }
  },
- "rows": 9,
- "rows_used": 9,
+ "rows": 8,
+ "rows_used": 8,
  "dup_of_hand": 0
 }
